@@ -35,7 +35,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"

@@ -33,7 +33,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 
 extern gboolean g_bUseOpenGL;
 
@@ -44,6 +44,34 @@ static GHashTable *s_hDeskletDecorationsTable = NULL;  // table des decorations 
 static GHashTable *s_hAnimationsTable = NULL;  // table des animations disponibles.
 static GHashTable *s_hDialogDecoratorTable = NULL;  // table des decorateurs de dialogues disponibles.
 static GHashTable *s_hDataRendererTable = NULL;  // table des rendus de donnees disponibles.
+static GHashTable *s_hHidingEffectTable = NULL;  // table des effets de cachage des docks.
+
+typedef struct _CairoBackendMgr CairoBackendMgr;
+struct _CairoBackendMgr {
+	GHashTable *pTable;
+	gpointer (*get_backend) (CairoBackendMgr *pBackendMgr, const gchar *cName);
+	gpointer (*select_backend) (CairoBackendMgr *pBackendMgr, const gchar *cName, gpointer data);
+	void (*register_backend) (CairoBackendMgr *pBackendMgr, const gchar *cName, gpointer pBackend);
+	void (*remove_backend) (const gchar *cName);
+	};
+
+gpointer _get_backend (CairoBackendMgr *pBackendMgr, const gchar *cName)
+{
+	gpointer pBackend = NULL;
+	if (cName != NULL)
+		pBackend = g_hash_table_lookup (pBackendMgr->pTable, cName);
+	return pBackend;
+}
+
+void _register_backend (CairoBackendMgr *pBackendMgr, const gchar *cName, gpointer pBackend)
+{
+	g_hash_table_insert (pBackendMgr->pTable, g_strdup (cName), pBackend);
+}
+
+void _remove_backend (CairoBackendMgr *pBackendMgr, const gchar *cName)
+{
+	g_hash_table_remove (pBackendMgr->pTable, cName);
+}
 
 
 CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean bForMainDock)
@@ -185,7 +213,28 @@ void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName)
 	g_hash_table_remove (s_hDataRendererTable, cRendererName);
 }
 
-void cairo_dock_init_renderer_manager (void)
+
+CairoDockHidingEffect *cairo_dock_get_hiding_effect (const gchar *cHidingEffect)
+{
+	if (cHidingEffect != NULL)
+		return g_hash_table_lookup (s_hHidingEffectTable, cHidingEffect);
+	else
+		return NULL;
+}
+
+void cairo_dock_register_hiding_effect (const gchar *cHidingEffect, CairoDockHidingEffect *pEffect)
+{
+	cd_message ("%s (%s)", __func__, cHidingEffect);
+	g_hash_table_insert (s_hHidingEffectTable, g_strdup (cHidingEffect), pEffect);
+}
+
+void cairo_dock_remove_hiding_effect (const gchar *cHidingEffect)
+{
+	g_hash_table_remove (s_hHidingEffectTable, cHidingEffect);
+}
+
+
+void cairo_dock_init_backends_manager (void)
 {
 	g_return_if_fail (s_hRendererTable == NULL);
 	cd_message ("");
@@ -224,6 +273,11 @@ void cairo_dock_init_renderer_manager (void)
 		g_str_equal,
 		g_free,
 		NULL);
+	
+	s_hHidingEffectTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		g_free);
 }
 
 

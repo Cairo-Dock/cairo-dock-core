@@ -193,8 +193,7 @@ struct _CairoDesklet {
 *@return TRUE if the container is a desklet.
 */
 #define CAIRO_DOCK_IS_DESKLET(pContainer) (pContainer != NULL && CAIRO_CONTAINER(pContainer)->iType == CAIRO_DOCK_TYPE_DESKLET)
-/**
-* Cast a Container into a Desklet.
+/** Cast a Container into a Desklet.
 *@param pContainer the container.
 *@return the desklet.
 */
@@ -256,7 +255,7 @@ GtkWidget *cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesk
 *@param pDesklet the desklet.
 */
 void cairo_dock_hide_desklet (CairoDesklet *pDesklet);
-/** * Show a desklet, and give it the focus.
+/** Show a desklet, and give it the focus.
 *@param pDesklet the desklet.
 */
 void cairo_dock_show_desklet (CairoDesklet *pDesklet);

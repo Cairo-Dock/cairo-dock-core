@@ -42,20 +42,18 @@ G_BEGIN_DECLS
 /// Definition of a function that runs through all desklets.
 typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, gpointer data);
 
-struct _CairoDialogManager {
+struct _CairoDeskletManager {
 	CairoDockManager mgr;
 	CairoDesklet* (*create_desklet) (Icon *pIcon, CairoDeskletAttribute *pAttributes);
 	void (*destroy_desklet) (CairoDesklet *pDesklet);
 	
-	void (*place_dialog) (CairoDialog *pDialog);
-	void (*set_icon) (CairoDialog *pDialog, const gchar *cImageFilePath);
-	void (*set_icon_surface) (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
-	void (*free) (CairoDialog *pDialog);
-	GList *pDialogList;  // sinon il faut les fonctions ci-dessous.
-	void (*replace_all) (void);
-	void (*unreference) (CairoDialog *pDialog);  // a ce moment-la, free() n'est plus utile.
-	void (*icon_has_dialog) (Icon *pIcon);
-	gboolean (*remove_dialog_if_any_full) (Icon *icon, gboolean bAll);
+	void (*foreach_desklet) (CairoDockForeachDeskletFunc pCallback, gpointer user_data);
+	void (*reload_desklets_decorations) (gboolean bDefaultThemeOnly);
+	void (*set_all_desklets_visible) (gboolean bOnWidgetLayerToo);
+	void (*set_desklets_visibility_to_default) (void);
+	void (*get_desklet_by_Xid) (Window Xid);
+	
+	void (*find_clicked_icon_in_desklet) (CairoDesklet *pDesklet);
 	} ;
 
 void cairo_dock_init_desklet_manager (void);
@@ -70,7 +68,7 @@ void cairo_dock_unload_desklet_buttons (void);
 */
 CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, CairoDeskletAttribute *pAttributes);
 
-/** Destroy a desklet. 
+/** Destroy a desklet.
 *@param pDesklet a desklet.
 */
 void cairo_dock_destroy_desklet (CairoDesklet *pDesklet);

@@ -32,7 +32,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-modules.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gauge.h"

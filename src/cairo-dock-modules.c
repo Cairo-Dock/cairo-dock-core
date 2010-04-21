@@ -72,28 +72,6 @@ static GHashTable *s_hInternalModuleTable = NULL;
 static int s_iMaxOrder = 0;
 static GList *s_AutoLoadedModules = NULL;
 
-static void _entered_help_once (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile)
-{
-	gchar *cHelpDir = g_strdup_printf ("%s/.help", g_cCairoDockDataDir);
-	gchar *cHelpHistory = g_strdup_printf ("%s/entered-once", cHelpDir);
-	if (! g_file_test (cHelpDir, G_FILE_TEST_EXISTS))
-	{
-		if (g_mkdir (cHelpDir, 7*8*8+7*8+5) != 0)
-		{
-			cd_warning ("couldn't create directory %s", cHelpDir);
-			return;
-		}
-	}
-	if (! g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
-	{
-		g_file_set_contents (cHelpHistory,
-			"1",
-			-1,
-			NULL);
-	}
-	g_free (cHelpHistory);
-	g_free (cHelpDir);
-}
 
 void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 {
@@ -122,34 +100,6 @@ void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
 			g_error_free (erreur);
 		}
 	}
-	
-	//\________________ ceci est un vilain hack ... mais je trouvais ca lourd de compiler un truc qui n'a aucun code, et puis comme ca on a l'aide meme sans les plug-ins.
-	CairoDockModule *pHelpModule = g_new0 (CairoDockModule, 1);
-	CairoDockVisitCard *pVisitCard = g_new0 (CairoDockVisitCard, 1);
-	pHelpModule->pVisitCard = pVisitCard;
-	pVisitCard->cModuleName = "Help";
-	pVisitCard->cTitle = _("Help");
-	pVisitCard->iMajorVersionNeeded = 2;
-	pVisitCard->iMinorVersionNeeded = 0;
-	pVisitCard->iMicroVersionNeeded = 0;
-	pVisitCard->cPreviewFilePath = NULL;
-	pVisitCard->cGettextDomain = NULL;
-	pVisitCard->cDockVersionOnCompilation = CAIRO_DOCK_VERSION;
-	pVisitCard->cUserDataDir = "help";
-	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR;
-	pVisitCard->cConfFileName = "help.conf";
-	pVisitCard->cModuleVersion = "0.0.9";
-	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
-	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.svg";
-	pVisitCard->iSizeOfConfig = 0;
-	pVisitCard->iSizeOfData = 0;
-	pVisitCard->cDescription = N_("A useful FAQ which also contains a lot of hints.\nRoll your mouse over a sentence to make helpful popups appear.");
-	pVisitCard->cAuthor = "Fabounet";
-	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
-	pHelpModule->pInterface->load_custom_widget = _entered_help_once;
-	g_hash_table_insert (s_hModuleTable, (gpointer)pHelpModule->pVisitCard->cModuleName, pHelpModule);
-	cairo_dock_activate_module (pHelpModule, NULL);
-	pHelpModule->fLastLoadingTime = time (NULL) + 1e7;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
 }
 
 

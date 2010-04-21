@@ -76,8 +76,8 @@ zone size = 800;5
 #{This is only usefull if you do not already use auto-hide and if your Window Manager allows the dock in front of fullscreen windows (which is rare).}
 auto quick hide = false
 
-#l-[Move down;Fade out;OpenGL] Effect when the dock hides itself:
-hide effect = 0
+#L-[Move down;Fade out;Zoom out] Effect used to hide the dock:
+hide_effect = Move down
 
 #F-[Sub-docks' visibility;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
 frame_sub =

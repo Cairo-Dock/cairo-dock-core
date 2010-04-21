@@ -375,6 +375,8 @@ typedef struct _CairoDataRendererTextZone CairoDataRendererTextZone;
 
 typedef struct _CairoDockAnimationRecord CairoDockAnimationRecord;
 
+typedef struct _CairoDockHidingEffect CairoDockHidingEffect;
+
 typedef struct _CairoDockTransition CairoDockTransition;
 
 typedef struct _CairoDockTask CairoDockTask;

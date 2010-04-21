@@ -18,8 +18,8 @@
 */
 
 
-#ifndef __CAIRO_DOCK_RENDERER_MANAGER__
-#define  __CAIRO_DOCK_RENDERER_MANAGER__
+#ifndef __CAIRO_DOCK_BACKENDS_MANAGER__
+#define  __CAIRO_DOCK_BACKENDS_MANAGER__
 
 #include <glib.h>
 
@@ -57,8 +57,12 @@ CairoDataRendererNewFunc cairo_dock_get_data_renderer_entry_point (const gchar *
 void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererNewFunc pFunc);
 void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName);
 
+CairoDockHidingEffect *cairo_dock_get_hiding_effect (const gchar *cHidingEffect);
+void cairo_dock_register_hiding_effect (const gchar *cHidingEffect, CairoDockHidingEffect *pEffect);
+void cairo_dock_remove_hiding_effect (const gchar *cHidingEffect);
 
-void cairo_dock_init_renderer_manager (void);
+
+void cairo_dock_init_backends_manager (void);
 
 void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName);
 void cairo_dock_set_default_renderer (CairoDock *pDock);

@@ -356,7 +356,7 @@ egg_virtual_accelerator_name (guint                  accelerator_key,
   static const gchar text_super[] = "<Super>";
   static const gchar text_hyper[] = "<Hyper>";
   guint l;
-  gchar *keyval_name;
+  const gchar *keyval_name;
   gchar *accelerator;
 
   accelerator_mods &= EGG_VIRTUAL_MODIFIER_MASK;
@@ -654,12 +654,12 @@ egg_keymap_get_modmap (GdkKeymap *keymap)
 
 
 int *egg_keystring_to_keysyms (gchar *accelerator, int *iNbKeys)
-	{
-		int i = 0, iNbKeyMax = 10;  // on limite a 10, c'est bien assez.
-		gint *pKeySyms = g_new0 (int, iNbKeyMax);
-		gchar *cKeyName;
-		
-		guint keyval;
+{
+	int i = 0, iNbKeyMax = 10;  // on limite a 10, c'est bien assez.
+	gint *pKeySyms = g_new0 (int, iNbKeyMax);
+	const gchar *cKeyName;
+	
+	guint keyval;
 	GdkModifierType mods;
 	gint len;
 	gboolean bad_keyval;

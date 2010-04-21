@@ -63,8 +63,14 @@ struct _CairoDockTransition {
 	cairo_t *pIconContext;  // attention a bien detruire la transition
 	/// Container of the Icon.
 	CairoContainer *pContainer;  // si l'un de ces 2 parametres change !
-	} ;
+	};
 
+struct _CairoDockHidingEffect {
+	void (*pre_render) (CairoDock *pDock, cairo_t *pCairoContext);
+	void (*post_render) (CairoDock *pDock, cairo_t *pCairoContext);
+	void (*init) (CairoDock *pDock);
+	};
+	
 #define CAIRO_DOCK_MIN_SLOW_DELTA_T 90
 
 /** Say if a container is currently animated.

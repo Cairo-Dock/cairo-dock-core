@@ -258,10 +258,9 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock);
 /** Load a set of .desktop files that define icons, and build the corresponding tree of docks.
 * All the icons are created and placed inside their dock, which is created if necessary.
 * In the end, each dock is computed and placed on the screen.
-* @param pMainDock a dock, needed to have an initial cairo context (because icons are created before their container).
 * @param cDirectory a folder containing some .desktop files.
 */
-void cairo_dock_build_docks_tree_with_desktop_files (CairoDock *pMainDock, gchar *cDirectory);
+void cairo_dock_build_docks_tree_with_desktop_files (gchar *cDirectory);
 
 
 /** Insert an icon into a dock.
@@ -284,7 +283,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 */
 #define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, myIcons.iSeparateIcons, NULL)
 
-/** Detach an icon from its dock, removing the unnecessary separators. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but loose its dialogs. Do nothing if the icon doesn't exist inside the dock.
+/** Detach an icon from its dock, removing the unnecessary separators. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but looses its dialogs. Do nothing if the icon doesn't exist inside the dock.
 *@param icon the icon to detach.
 *@param pDock the dock containing the icon.
 *@param bCheckUnusedSeparator TRUE to check and remove unnecessary separators.

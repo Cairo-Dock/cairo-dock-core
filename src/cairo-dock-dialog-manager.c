@@ -38,7 +38,7 @@
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-dialogs.h"

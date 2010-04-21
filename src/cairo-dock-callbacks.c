@@ -39,7 +39,6 @@
 #include <gtk/gtkgl.h>
 #include <GL/glu.h>
 
-#include "cairo-dock-menu.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-load.h"
@@ -61,7 +60,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
@@ -74,6 +73,7 @@
 #include "cairo-dock-callbacks.h"
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
+extern CairoDockHidingEffect *g_pHidingBackend;
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
 static int s_iClickX, s_iClickY;  // coordonnees du clic dans le dock, pour pouvoir initialiser le deplacement apres un seuil.
@@ -84,9 +84,6 @@ static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son conten
 static CairoFlyingContainer *s_pFlyingContainer = NULL;
 
 extern CairoDock *g_pMainDock;
-extern gboolean g_bKeepAbove;
-
-extern cairo_surface_t *g_pBackgroundSurfaceFull[2];
 
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bLocked;
@@ -104,117 +101,6 @@ void cairo_dock_freeze_docks (gboolean bFreeze)
 	s_bFrozenDock = bFreeze;
 }
 
-
-static void _pre_render_hiding_dock (CairoDock *pDock, cairo_t *pCairoContext)
-{
-	if (myAccessibility.iHideEffect == 0)
-	{
-		int N = (pDock->bIsHiding ? mySystem.iHideNbSteps : mySystem.iUnhideNbSteps);
-		int k = (1 - pDock->fHideOffset) * N;
-		double a = pow (1./pDock->iMaxDockHeight, 1./N);  // le dernier step est un ecart d'environ 1 pixel.
-		double dy = pDock->iMaxDockHeight * pow (a, k) * (pDock->container.bDirectionUp ? 1 : -1);
-		g_print ("dy = %.3f\n", dy);
-		if (pCairoContext != NULL)
-		{
-			if (pDock->container.bIsHorizontal)
-				cairo_translate (pCairoContext, 0., dy);
-			else
-				cairo_translate (pCairoContext, dy, 0.);
-		}
-		else
-		{
-			if (pDock->container.bIsHorizontal)
-				glTranslatef (0., -dy, 0.);
-			else
-				glTranslatef (dy, 0., 0.);
-		}
-	}
-	else if (myAccessibility.iHideEffect == 2)
-	{
-		if (pDock->iFboId != 0)
-		{
-			// on attache la texture au FBO.
-			glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, pDock->iFboId);  // on redirige sur notre FBO.
-			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
-				GL_COLOR_ATTACHMENT0_EXT,
-				GL_TEXTURE_2D,
-				pDock->iRedirectedTexture,
-				0);  // attach the texture to FBO color attachment point.
-			
-			GLenum status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
-			if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
-			{
-				cd_warning ("FBO not ready");
-				return;
-			}
-			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
-		}
-	}
-}
-
-static void _post_render_hiding_dock (CairoDock *pDock, cairo_t *pCairoContext)
-{
-	if (myAccessibility.iHideEffect == 1)
-	{
-		double fAlpha = 1 - pDock->fHideOffset;
-		if (pCairoContext != NULL)
-		{
-			cairo_rectangle (pCairoContext,
-				0,
-				0,
-				pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight, pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth);
-			cairo_set_line_width (pCairoContext, 0);
-			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
-			cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1. - fAlpha);
-			cairo_fill (pCairoContext);
-		}
-		else
-		{
-			glAccum (GL_LOAD, fAlpha);
-			glAccum (GL_RETURN, 1.0);
-		}
-	}
-	else if (myAccessibility.iHideEffect == 2)
-	{
-		if (pDock->iFboId != 0)
-		{
-			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
-			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
-				GL_COLOR_ATTACHMENT0_EXT,
-				GL_TEXTURE_2D,
-				0,
-				0);  // on detache la texture (precaution).
-			// dessin dans notre fenetre.
-			_cairo_dock_enable_texture ();
-			_cairo_dock_set_blend_source ();
-			
-			int iWidth, iHeight;  // taille de la texture
-			if (pDock->container.bIsHorizontal)
-			{
-				iWidth = pDock->container.iWidth;
-				iHeight = pDock->container.iHeight;
-			}
-			else
-			{
-				iWidth = pDock->container.iHeight;
-				iHeight = pDock->container.iWidth;
-			}
-			glLoadIdentity ();
-			glTranslatef (iWidth/2, 0., - iHeight/2);
-			
-			glScalef (1 - pDock->fHideOffset, 1 - pDock->fHideOffset, 1.);
-			glTranslatef (0., iHeight/2, - iHeight/2);
-			
-			glScalef (1., -1., 1.);
-			_cairo_dock_apply_texture_at_size_with_alpha (pDock->iRedirectedTexture, iWidth, iHeight, 1.);
-			
-			glLoadIdentity ();
-			
-			_cairo_dock_disable_texture ();
-		}
-	}
-}
-
 gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
 {
 	if (! pCairoContext)  // on n'a pas mis le rendu cairo ici a cause du rendu optimise.
@@ -223,21 +109,13 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 		
 		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 		
-		/**if (pDock->fHideOffset != 0 && myAccessibility.iHideEffect == 0)
-		{
-			double dy = pDock->iMaxDockHeight * pDock->fHideOffset * (pDock->container.bDirectionUp ? -1 : 1);
-			if (pDock->container.bIsHorizontal)
-				glTranslatef (0., dy, 0.);
-			else
-				glTranslatef (-dy, 0., 0.);
-		}*/
-		if (pDock->fHideOffset != 0)
-			_pre_render_hiding_dock (pDock, NULL);
+		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
+			g_pHidingBackend->pre_render (pDock, NULL);
 		
 		pDock->pRenderer->render_opengl (pDock);
 		
-		if (pDock->fHideOffset != 0)
-			_post_render_hiding_dock (pDock, NULL);
+		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render)
+			g_pHidingBackend->post_render (pDock, NULL);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -304,16 +182,16 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 					cairo_translate (pCairoContext, dy, 0.);
 			}*/
 			
-			if (pDock->fHideOffset != 0)
-				_pre_render_hiding_dock (pDock, pCairoContext);
+			if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
+				g_pHidingBackend->pre_render (pDock, pCairoContext);
 			
 			if (pDock->pRenderer->render_optimized != NULL)
 				pDock->pRenderer->render_optimized (pCairoContext, pDock, &pExpose->area);
 			else
 				pDock->pRenderer->render (pCairoContext, pDock);
 			
-			if (pDock->fHideOffset != 0)
-				_post_render_hiding_dock (pDock, pCairoContext);
+			if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render)
+				g_pHidingBackend->post_render (pDock, pCairoContext);
 			
 			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 			
@@ -335,21 +213,13 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	}
 	else
 	{
-		/**if (pDock->fHideOffset != 0 && myAccessibility.iHideEffect == 0)
-		{
-			double dy = pDock->iMaxDockHeight * pDock->fHideOffset * (pDock->container.bDirectionUp ? 1 : -1);
-			if (pDock->container.bIsHorizontal)
-				cairo_translate (pCairoContext, 0., dy);
-			else
-				cairo_translate (pCairoContext, dy, 0.);
-		}*/
-		if (pDock->fHideOffset != 0)
-			_pre_render_hiding_dock (pDock, pCairoContext);
+		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
+			g_pHidingBackend->pre_render (pDock, pCairoContext);
 		
 		pDock->pRenderer->render (pCairoContext, pDock);
 		
-		if (pDock->fHideOffset != 0)
-			_post_render_hiding_dock (pDock, pCairoContext);
+		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render)
+			g_pHidingBackend->post_render (pDock, pCairoContext);
 		
 		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 	}
@@ -1047,234 +917,6 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 }
 
 
-static int _compare_zorder (Icon *icon1, Icon *icon2)  // classe par z-order decroissant.
-{
-	if (icon1->iStackOrder < icon2->iStackOrder)
-		return -1;
-	else if (icon1->iStackOrder > icon2->iStackOrder)
-		return 1;
-	else
-		return 0;
-}
-static void _cairo_dock_hide_show_in_class_subdock (Icon *icon)
-{
-	Icon *pIcon;
-	GList *ic;
-	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-	{
-		pIcon = ic->data;
-		if (pIcon->Xid != 0 && ! pIcon->bIsHidden)  // par defaut on cache tout.
-		{
-			break;
-		}
-	}
-	
-	if (ic != NULL)  // au moins une fenetre est visible, on cache tout.
-	{
-		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-		{
-			pIcon = ic->data;
-			if (pIcon->Xid != 0 && ! pIcon->bIsHidden)
-			{
-				cairo_dock_minimize_xwindow (pIcon->Xid);
-			}
-		}
-	}
-	else  // on montre tout, dans l'ordre du z-order.
-	{
-		GList *pZOrderList = NULL;
-		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-		{
-			pIcon = ic->data;
-			if (pIcon->Xid != 0)
-				pZOrderList = g_list_insert_sorted (pZOrderList, pIcon, (GCompareFunc) _compare_zorder);
-		}
-		for (ic = pZOrderList; ic != NULL; ic = ic->next)
-		{
-			pIcon = ic->data;
-			cairo_dock_show_xwindow (pIcon->Xid);
-		}
-		g_list_free (pZOrderList);
-	}
-}
-
-/**static void _cairo_dock_show_prev_next_in_class_subdock (Icon *icon, gboolean bNext)
-{
-	Icon *pActiveIcon = cairo_dock_get_current_active_icon ();
-	Icon *pNextIcon;
-	if (pActiveIcon != NULL)
-	{
-		if (bNext)
-		{
-			pNextIcon = cairo_dock_get_next_icon (icon->pSubDock->icons, pActiveIcon);
-			if (pNextIcon == NULL)  // pas trouvee ou derniere de la liste.
-				pNextIcon = cairo_dock_get_first_icon (icon->pSubDock->icons);
-		}
-		else
-		{
-			pNextIcon = cairo_dock_get_previous_icon (icon->pSubDock->icons, pActiveIcon);
-			if (pNextIcon == NULL)  // pas trouvee ou premiere de la liste.
-				pNextIcon = cairo_dock_get_last_icon (icon->pSubDock->icons);
-		}
-	}
-	else
-	{
-		pNextIcon = cairo_dock_get_first_icon (icon->pSubDock->icons);
-	}
-	if (pNextIcon != NULL)
-		cairo_dock_show_xwindow (pNextIcon->Xid);
-}*/
-static void _cairo_dock_show_prev_next_in_subdock (Icon *icon, gboolean bNext)
-{
-	Window xActiveId = cairo_dock_get_current_active_window ();
-	GList *ic;
-	Icon *pIcon;
-	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-	{
-		pIcon = ic->data;
-		if (pIcon->Xid == xActiveId)
-			break;
-	}
-	if (ic == NULL)
-		ic = icon->pSubDock->icons;
-	
-	GList *ic2 = ic;
-	do
-	{
-		ic2 = (bNext ? cairo_dock_get_next_element (ic2, icon->pSubDock->icons) : cairo_dock_get_previous_element (ic2, icon->pSubDock->icons));
-		pIcon = ic2->data;
-		if (CAIRO_DOCK_IS_APPLI (pIcon))
-		{
-			cairo_dock_show_xwindow (pIcon->Xid);
-			break;
-		}
-	} while (ic2 != ic);
-}
-
-static void _cairo_dock_close_all_in_class_subdock (Icon *icon)
-{
-	Icon *pIcon;
-	GList *ic;
-	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-	{
-		pIcon = ic->data;
-		if (pIcon->Xid != 0)
-		{
-			cairo_dock_close_xwindow (pIcon->Xid);
-		}
-	}
-}
-
-
-gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
-{
-	//g_print ("+ %s (%s)\n", __func__, icon ? icon->cName : "no icon");
-	if (icon == NULL)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	if (icon->pSubDock != NULL && (myAccessibility.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (pDock->container.pWidget)) && ! (iButtonState & GDK_SHIFT_MASK))  // icone de sous-dock a montrer au clic.
-	{
-		cairo_dock_show_subdock (icon, pDock);
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-	}
-	else if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))  // URI : on lance ou on monte.
-	{
-		cd_debug (" uri launcher");
-		gboolean bIsMounted = FALSE;
-		if (icon->iVolumeID > 0)
-		{
-			gchar *cActivationURI = cairo_dock_fm_is_mounted (icon->cBaseURI, &bIsMounted);
-			g_free (cActivationURI);
-		}
-		if (icon->iVolumeID > 0 && ! bIsMounted)
-		{
-			int answer = cairo_dock_ask_question_and_wait (_("Do you want to mount this device?"), icon, CAIRO_CONTAINER (pDock));
-			if (answer != GTK_RESPONSE_YES)
-			{
-				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-			}
-			cairo_dock_fm_mount (icon, CAIRO_CONTAINER (pDock));
-		}
-		else
-			cairo_dock_fm_launch_uri (icon->cCommand);
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-	}
-	else if (CAIRO_DOCK_IS_APPLI (icon) && ! ((iButtonState & GDK_SHIFT_MASK) && CAIRO_DOCK_IS_LAUNCHER (icon)) && ! CAIRO_DOCK_IS_APPLET (icon))  // une icone d'appli ou d'inhibiteur (hors applet) mais sans le shift+clic : on cache ou on montre.
-	{
-		cd_debug (" appli");
-		if (cairo_dock_get_current_active_window () == icon->Xid && myTaskBar.bMinimizeOnClick)  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
-			cairo_dock_minimize_xwindow (icon->Xid);
-		else
-			cairo_dock_show_xwindow (icon->Xid);
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-	}
-	else if (CAIRO_DOCK_IS_LAUNCHER (icon))
-	{
-		//g_print ("+ launcher\n");
-		if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on cache ou on montre.
-		{
-			if (! myAccessibility.bShowSubDockOnClick)
-			{
-				_cairo_dock_hide_show_in_class_subdock (icon);
-			}
-			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-		}
-		else if (icon->cCommand != NULL && strcmp (icon->cCommand, "none") != 0)  // finalement, on lance la commande.
-		{
-			if (pDock->iRefCount != 0)
-			{
-				Icon *pMainIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-				if (CAIRO_DOCK_IS_APPLET (pMainIcon))
-					return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-			}
-			
-			gboolean bSuccess = FALSE;
-			if (*icon->cCommand == '<')
-			{
-				bSuccess = cairo_dock_simulate_key_sequence (icon->cCommand);
-				if (!bSuccess)
-					bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
-			}
-			else
-			{
-				bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
-				if (! bSuccess)
-					bSuccess = cairo_dock_simulate_key_sequence (icon->cCommand);
-			}
-			if (! bSuccess)
-			{
-				cairo_dock_request_icon_animation (icon, pDock, "blink", 1);  // 1 clignotement si echec
-			}
-			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-		}
-	}
-	else
-		cd_debug ("no action here");
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-}
-
-
-gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock)
-{
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bCloseAppliOnMiddleClick && ! CAIRO_DOCK_IS_APPLET (icon))
-	{
-		cairo_dock_close_xwindow (icon->Xid);
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-	}
-	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon) && icon->pSubDock != NULL)  // icone de repertoire.
-	{
-		cairo_dock_fm_launch_uri (icon->cCommand);
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-	}
-	if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
-	{
-		// On ferme tout.
-		_cairo_dock_close_all_in_class_subdock (icon);
-		
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-}
-
 gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton, CairoDock *pDock)
 {
 	//g_print ("+ %s (%d/%d, %x)\n", __func__, pButton->type, pButton->button, pWidget);
@@ -1441,20 +1083,6 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 }
 
 
-gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, int iDirection)
-{
-	if (CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_IS_CONTAINER_LAUNCHER (icon))  // on emule un alt+tab sur la liste des applis du sous-dock.
-	{
-		_cairo_dock_show_prev_next_in_subdock (icon, iDirection == GDK_SCROLL_DOWN);
-	}
-	else if (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL)
-	{
-		Icon *pNextIcon = cairo_dock_get_prev_next_classmate_icon (icon, iDirection == GDK_SCROLL_DOWN);
-		if (pNextIcon != NULL)
-			cairo_dock_show_xwindow (pNextIcon->Xid);
-	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-}
 gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, CairoDock *pDock)
 {
 	if (pScroll->direction != GDK_SCROLL_UP && pScroll->direction != GDK_SCROLL_DOWN)  // on degage les scrolls horizontaux.
@@ -1714,86 +1342,6 @@ gboolean cairo_dock_on_drag_drop (GtkWidget *pWidget, GdkDragContext *dc, gint x
 	GdkAtom target = gtk_drag_dest_find_target (pWidget, dc, NULL);
 	gtk_drag_get_data (pWidget, dc, target, time);
 	return TRUE;  // in a drop zone.
-}
-
-gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)
-{
-	if (! CAIRO_DOCK_IS_DOCK (pContainer))
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	
-	CairoDock *pDock = CAIRO_DOCK (pContainer);
-	CairoDock *pReceivingDock = pDock;
-	if (g_str_has_suffix (cReceivedData, ".desktop"))  // ajout d'un nouveau lanceur si on a lache sur ou entre 2 lanceurs.
-	{
-		if ((myIcons.iSeparateIcons == 1 || myIcons.iSeparateIcons == 3) && CAIRO_DOCK_IS_NORMAL_APPLI (icon))
-			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		if ((myIcons.iSeparateIcons == 2 || myIcons.iSeparateIcons == 3) && CAIRO_DOCK_IS_APPLET (icon))
-			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		if (fOrder == CAIRO_DOCK_LAST_ORDER && icon && icon->pSubDock != NULL)  // on a lache sur une icone de sous-dock => on l'ajoute dans le sous-dock.
-		{
-			pReceivingDock = icon->pSubDock;
-		}
-	}
-	else  // c'est un fichier.
-	{
-		if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
-		{
-			if (CAIRO_DOCK_IS_LAUNCHER (icon))
-			{
-				if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
-				{
-					if (icon->pSubDock != NULL || icon->iVolumeID != 0)  // on le lache sur un repertoire ou un point de montage.
-					{
-						cairo_dock_fm_move_into_directory (cReceivedData, icon, pContainer);
-						return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-					}
-					else  // on le lache sur un fichier.
-					{
-						return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-					}
-				}
-				else if (CAIRO_DOCK_IS_CONTAINER_LAUNCHER (icon))  // on le lache sur un sous-dock de lanceurs.
-				{
-					pReceivingDock = icon->pSubDock;
-				}
-				else  // on le lache sur un lanceur.
-				{
-					gchar *cPath = NULL;
-					if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
-					{
-						cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
-					}
-					gchar *cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cPath ? cPath : cReceivedData);
-					cd_message ("will open the file with the command '%s'...\n", cCommand);
-					g_spawn_command_line_async (cCommand, NULL);
-					g_free (cPath);
-					g_free (cCommand);
-					cairo_dock_request_icon_animation (icon, pDock, "blink", 2);
-					return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-				}
-			}
-			else  // on le lache sur autre chose qu'un lanceur.
-			{
-				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-			}
-		}
-		else  // on a lache a cote.
-		{
-			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-			if (CAIRO_DOCK_IS_URI_LAUNCHER (pPointingIcon))  // on a lache dans un dock qui est un repertoire, on copie donc le fichier dedans.
-			{
-				cairo_dock_fm_move_into_directory (cReceivedData, icon, pContainer);
-				return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-			}
-		}
-	}
-
-	if (g_bLocked)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	
-	cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
-	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 

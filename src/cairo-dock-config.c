@@ -47,8 +47,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-themes-manager.h"
-#include "cairo-dock-renderer-manager.h"
-#include "cairo-dock-menu.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-X-utilities.h"
@@ -87,6 +86,7 @@ extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
+extern CairoDockHidingEffect *g_pHidingBackend;
 
 static gboolean s_bLoading = FALSE;
 
@@ -602,7 +602,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	if (pDock->icons == NULL)
 	{
 		pDock->fFlatDockWidth = - myIcons.iIconGap;  // car on ne le connaissait pas encore au moment de la creation du dock.
-		cairo_dock_build_docks_tree_with_desktop_files (pDock, g_cCurrentLaunchersPath);
+		cairo_dock_build_docks_tree_with_desktop_files (g_cCurrentLaunchersPath);
 	}
 	else
 	{
@@ -656,6 +656,8 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	g_free (cRaiseDockShortcutOld);
 	
 	//\___________________ On gere le changement dans la visibilite.
+	g_pHidingBackend = cairo_dock_get_hiding_effect (myAccessibility.cHideEffect);
+	
 	if (pDock->bAutoHide)
 	{
 		pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;  // le 'configure' mettra a jour la zone d'input.

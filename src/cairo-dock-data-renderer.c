@@ -22,7 +22,7 @@
 #include <math.h>
 
 #include "cairo-dock-log.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-animations.h"

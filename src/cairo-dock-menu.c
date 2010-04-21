@@ -59,7 +59,7 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-menu.h"
 

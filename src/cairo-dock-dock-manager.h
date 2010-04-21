@@ -34,6 +34,13 @@ G_BEGIN_DECLS
 * Each Dock has a name that is unique. A Dock can be a sub-dock or a root-dock, whether there exists an icon that points on it or not, but there is no fundamental difference between both.
 */
 
+struct _CairoDockDockManager {
+	CairoDockManager mgr;
+	CairoDock *(*cairo_dock_create_dock) (const gchar *cDockName, const gchar *cRendererName);
+	
+	} ;
+
+
 void cairo_dock_init_dock_manager (void);
 
 

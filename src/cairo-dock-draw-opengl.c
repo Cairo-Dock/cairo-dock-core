@@ -48,7 +48,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-indicators.h"

@@ -45,7 +45,7 @@
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-container.h"
@@ -56,7 +56,7 @@
 
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
-
+extern CairoDockHidingEffect *g_pHidingBackend;
 
 static gboolean _render_fade_out_dock (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
 {
@@ -714,9 +714,6 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 	//g_print ("%s (%d)\n", __func__, pDock->container.bInside);
 	if (! pDock->bIsHiding && ! pDock->container.bInside)  // rien de plus desagreable que le dock qui se cache quand on est dedans.
 	{
-		if (g_bUseOpenGL && myAccessibility.iHideEffect == 2)
-			cairo_dock_create_redirect_texture_for_dock (pDock);
-		
 		pDock->bIsShowing = FALSE;
 		pDock->bIsHiding = TRUE;
 		
@@ -729,6 +726,9 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 				0);
 			pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;
 		}
+		
+		if (g_pHidingBackend != NULL && g_pHidingBackend->init)
+			g_pHidingBackend->init (pDock);
 		
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
@@ -755,8 +755,8 @@ void cairo_dock_start_showing (CairoDock *pDock)
 			pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
 		}
 		
-		if (g_bUseOpenGL && myAccessibility.iHideEffect == 2)
-			cairo_dock_create_redirect_texture_for_dock (pDock);
+		if (g_pHidingBackend != NULL && g_pHidingBackend->init)
+			g_pHidingBackend->init (pDock);
 		
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
@@ -789,7 +789,7 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 	cairo_dock_start_icon_animation (pIcon, pDock);
 }
 
-void cairo_dock_request_attention (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
+void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
 {
 	cairo_dock_stop_icon_animation (pIcon);
 	pIcon->bIsDemandingAttention = TRUE;
@@ -808,7 +808,7 @@ void cairo_dock_request_attention (Icon *pIcon, CairoDock *pDock, const gchar *c
 	cairo_dock_mark_icon_as_clicked (pIcon);  // pour eviter qu'un simple survol ne stoppe l'animation.
 }
 
-void cairo_dock_stop_attention (Icon *pIcon, CairoDock *pDock)
+void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 {
 	pIcon->bIsDemandingAttention = FALSE;
 	cairo_dock_stop_icon_animation (pIcon);

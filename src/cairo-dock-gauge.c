@@ -96,7 +96,7 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gauge.h"

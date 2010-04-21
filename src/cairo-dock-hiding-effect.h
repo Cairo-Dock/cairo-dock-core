@@ -18,42 +18,16 @@
 */
 
 
-#ifndef __CAIRO_DOCK_ACCESSIBILITY__
-#define  __CAIRO_DOCK_ACCESSIBILITY__
+#ifndef __CAIRO_DOCK_HIDING_EFFECT__
+#define  __CAIRO_DOCK_HIDING_EFFECT__
 
-#include <glib.h>
-
+#include <gtk/gtk.h>
 #include "cairo-dock-struct.h"
-#include "cairo-dock-config.h"
-
-typedef struct _CairoConfigAccessibility CairoConfigAccessibility;
-
-#ifndef _INTERNAL_MODULE_
-extern CairoConfigAccessibility myAccessibility;
-#endif
 G_BEGIN_DECLS
 
-struct _CairoConfigAccessibility {
-	gboolean bReserveSpace;
-	gboolean bAutoHide;
-	gboolean bAutoHideOnFullScreen;
-	gboolean bAutoHideOnOverlap;
-	gboolean bPopUp;
-	gboolean bPopUpOnScreenBorder;
-	gint iMaxAuthorizedWidth;
-	gchar *cRaiseDockShortcut;
-	gint iUnhideDockDelay;
-	gint iLeaveSubDockDelay;
-	gint iShowSubDockDelay;
-	gboolean bShowSubDockOnClick;
-	gboolean bExtendedMode;
-	gint iVisibleZoneWidth, iVisibleZoneHeight;
-	gboolean bLockIcons;
-	gboolean bLockAll;
-	gchar *cHideEffect;
-	} ;
 
-DEFINE_PRE_INIT (Accessibility);
+void cairo_dock_register_hiding_effects (void);
+
 
 G_END_DECLS
 #endif

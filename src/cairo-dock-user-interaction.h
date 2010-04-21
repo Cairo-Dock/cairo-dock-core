@@ -18,30 +18,22 @@
 */
 
 
-#ifndef __CAIRO_DOCK_HIDDEN_DOCK__
-#define  __CAIRO_DOCK_HIDDEN_DOCK__
+#ifndef __CAIRO_DOCK_USER_INTERACTION__
+#define  __CAIRO_DOCK_USER_INTERACTION__
 
-#include <glib.h>
-
+#include <gtk/gtk.h>
 #include "cairo-dock-struct.h"
-#include "cairo-dock-config.h"
-
-
-typedef struct _CairoConfigHiddenDock CairoConfigHiddenDock;
-#ifndef _INTERNAL_MODULE_
-extern CairoConfigHiddenDock myHiddenDock;
-#endif
 G_BEGIN_DECLS
 
-struct _CairoConfigHiddenDock {
-	gchar *cVisibleZoneImageFile;
-	gint iVisibleZoneWidth, iVisibleZoneHeight;
-	gdouble fVisibleZoneAlpha;
-	gboolean bReverseVisibleImage;
-	} ;
 
+gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState);
 
-DEFINE_PRE_INIT (HiddenDock);
+gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock);
+
+gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, int iDirection);
+
+gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer);
+
 
 G_END_DECLS
 #endif

@@ -27,6 +27,7 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-application-facility.h"
@@ -36,6 +37,7 @@
 
 CairoConfigAccessibility myAccessibility;
 extern CairoDock *g_pMainDock;
+extern CairoDockHidingEffect *g_pHidingBackend;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAccessibility)
 {
@@ -134,7 +136,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	
 	pAccessibility->bPopUpOnScreenBorder = ! cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop in corner only", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 	
-	pAccessibility->iHideEffect = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "hide effect", &bFlushConfFileNeeded, 0, NULL, NULL);
+	pAccessibility->cHideEffect = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "hide_effect", &bFlushConfFileNeeded, "move-down", NULL, NULL);
 	
 	//\____________________ sous-docks.
 	pAccessibility->iLeaveSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "leaving delay", &bFlushConfFileNeeded, 330, "System", NULL);
@@ -152,6 +154,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 static void reset_config (CairoConfigAccessibility *pAccessibility)
 {
 	g_free (pAccessibility->cRaiseDockShortcut);
+	g_free (pAccessibility->cHideEffect);
 }
 
 
@@ -275,6 +278,15 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		{
 			pDock->bAutoHideInitialValue = pDock->bAutoHide = pAccessibility->bAutoHide;
 			cairo_dock_start_hiding (pDock);
+		}
+	}
+	
+	if (cairo_dock_strings_differ (pAccessibility->cHideEffect, pPrevAccessibility->cHideEffect))
+	{
+		g_pHidingBackend = cairo_dock_get_hiding_effect (pAccessibility->cHideEffect);
+		if (pDock && (pDock->bIsShowing || pDock->bIsHiding) && g_pHidingBackend && g_pHidingBackend->init)
+		{
+			g_pHidingBackend->init (pDock);
 		}
 	}
 }

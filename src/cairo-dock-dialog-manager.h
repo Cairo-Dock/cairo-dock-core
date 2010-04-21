@@ -40,6 +40,21 @@ G_BEGIN_DECLS
 * - if you want to pop up only 1 dialog at once on a given icon, use \ref cairo_dock_remove_dialog_if_any before you pop up your dialog.
 */
 
+struct _CairoDialogManager {
+	CairoDockManager mgr;
+	CairoDialog* (*build_dialog) (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer);
+	void (*destroy_desklet) (CairoDesklet *pDesklet);
+	
+	void (*place_dialog) (CairoDialog *pDialog);
+	void (*set_icon) (CairoDialog *pDialog, const gchar *cImageFilePath);
+	void (*set_icon_surface) (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
+	void (*free) (CairoDialog *pDialog);
+	GList *pDialogList;  // sinon il faut les fonctions ci-dessous.
+	void (*replace_all) (void);
+	void (*unreference) (CairoDialog *pDialog);  // a ce moment-la, free() n'est plus utile.
+	void (*icon_has_dialog) (Icon *pIcon);
+	gboolean (*remove_dialog_if_any_full) (Icon *icon, gboolean bAll);
+	} ;
 
 void cairo_dock_init_dialog_manager (void);
 void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonOkImage, gchar *cButtonCancelImage);

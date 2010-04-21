@@ -53,7 +53,7 @@
 #include "cairo-dock-icons.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
@@ -327,7 +327,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 }
 
 
-void cairo_dock_build_docks_tree_with_desktop_files (CairoDock *pMainDock, gchar *cDirectory)
+void cairo_dock_build_docks_tree_with_desktop_files (gchar *cDirectory)
 {
 	cd_message ("%s (%s)", __func__, cDirectory);
 	GDir *dir = g_dir_open (cDirectory, 0, NULL);

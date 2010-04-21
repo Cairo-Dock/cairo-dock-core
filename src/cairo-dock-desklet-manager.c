@@ -45,11 +45,10 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-menu.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-animations.h"
@@ -626,8 +625,8 @@ CairoDesklet *cairo_dock_get_desklet_by_Xid (Window Xid)
 static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 {
 	GLuint selectBuf[4];
-    GLint hits=0;
-    GLint viewport[4];
+	GLint hits=0;
+	GLint viewport[4];
 	
 	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pDesklet->container.pWidget);
 	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pDesklet->container.pWidget);

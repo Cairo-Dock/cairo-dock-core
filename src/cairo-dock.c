@@ -101,7 +101,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-file-manager.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
@@ -122,6 +122,8 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-indicator-manager.h"
+#include "cairo-dock-user-interaction.h"
+#include "cairo-dock-hiding-effect.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 
@@ -159,6 +161,8 @@ CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
 CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 //int g_iDamageEvent = 0;
+
+CairoDockHidingEffect *g_pHidingBackend = NULL;
 
 gboolean g_bEasterEggs = FALSE;
 gboolean g_bLocked = FALSE;
@@ -220,6 +224,59 @@ static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, 
 		g_main_loop_quit (pBlockingLoop);
 	}
 	return FALSE;  // TRUE <=> ne pas detruire la fenetre.
+}
+
+static void _entered_help_once (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile)
+{
+	gchar *cHelpDir = g_strdup_printf ("%s/.help", g_cCairoDockDataDir);
+	gchar *cHelpHistory = g_strdup_printf ("%s/entered-once", cHelpDir);
+	if (! g_file_test (cHelpDir, G_FILE_TEST_EXISTS))
+	{
+		if (g_mkdir (cHelpDir, 7*8*8+7*8+5) != 0)
+		{
+			cd_warning ("couldn't create directory %s", cHelpDir);
+			return;
+		}
+	}
+	if (! g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
+	{
+		g_file_set_contents (cHelpHistory,
+			"1",
+			-1,
+			NULL);
+	}
+	g_free (cHelpHistory);
+	g_free (cHelpDir);
+}
+static void _register_help_module (void)
+{
+	//\________________ ceci est un vilain hack ... mais je trouvais ca lourd de compiler un truc qui n'a aucun code, et puis comme ca on a l'aide meme sans les plug-ins.
+	CairoDockModule *pHelpModule = g_new0 (CairoDockModule, 1);
+	CairoDockVisitCard *pVisitCard = g_new0 (CairoDockVisitCard, 1);
+	pHelpModule->pVisitCard = pVisitCard;
+	pVisitCard->cModuleName = "Help";
+	pVisitCard->cTitle = _("Help");
+	pVisitCard->iMajorVersionNeeded = 2;
+	pVisitCard->iMinorVersionNeeded = 0;
+	pVisitCard->iMicroVersionNeeded = 0;
+	pVisitCard->cPreviewFilePath = NULL;
+	pVisitCard->cGettextDomain = NULL;
+	pVisitCard->cDockVersionOnCompilation = CAIRO_DOCK_VERSION;
+	pVisitCard->cUserDataDir = "help";
+	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR;
+	pVisitCard->cConfFileName = "help.conf";
+	pVisitCard->cModuleVersion = "0.0.9";
+	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
+	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.svg";
+	pVisitCard->iSizeOfConfig = 0;
+	pVisitCard->iSizeOfData = 0;
+	pVisitCard->cDescription = N_("A useful FAQ which also contains a lot of hints.\nRoll your mouse over a sentence to make helpful popups appear.");
+	pVisitCard->cAuthor = "Fabounet";
+	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
+	pHelpModule->pInterface->load_custom_widget = _entered_help_once;
+	cairo_dock_register_module (pHelpModule);
+	cairo_dock_activate_module (pHelpModule, NULL);
+	pHelpModule->fLastLoadingTime = time (NULL) + 1e7;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
 }
 
 #define _create_dir_or_die(cDirPath) do {\
@@ -431,8 +488,8 @@ int main (int argc, char** argv)
 	//\___________________ On initialise le gestionnaire de dialogues.
 	cairo_dock_init_dialog_manager ();
 	
-	//\___________________ On initialise le gestionnaire de vues.
-	cairo_dock_init_renderer_manager ();
+	//\___________________ On initialise le gestionnaire de backends (vues, etc).
+	cairo_dock_init_backends_manager ();
 	
 	//\___________________ On initialise le gestionnaire des indicateurs.
 	cairo_dock_init_indicator_manager ();
@@ -455,6 +512,8 @@ int main (int argc, char** argv)
 	//\___________________ On enregistre les rendus de donnees.
 	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge);
 	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
+	
+	cairo_dock_register_hiding_effects ();
 	
 	//\___________________ On enregistre les notifications de base.
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
@@ -528,6 +587,8 @@ int main (int argc, char** argv)
 	else
 		cairo_dock_initialize_module_manager (NULL);
 	
+	_register_help_module ();
+	
 	if (!bSafeMode && cairo_dock_get_nb_modules () <= 1)  // le module Help est inclus de base.
 	{
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
@@ -545,17 +606,16 @@ int main (int argc, char** argv)
 	//\___________________ On enregistre nos notifications.
 	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
 		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
-		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_SCROLL_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_scroll_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);  /// app ?
-	
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification (CAIRO_DOCK_BUILD_CONTAINER_MENU,
 		(CairoDockNotificationFunc) cairo_dock_notification_build_container_menu,
 		CAIRO_DOCK_RUN_FIRST, NULL);

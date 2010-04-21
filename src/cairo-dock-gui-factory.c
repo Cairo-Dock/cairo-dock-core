@@ -37,7 +37,7 @@
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-load.h"

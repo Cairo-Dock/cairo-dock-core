@@ -47,7 +47,7 @@
 #include "cairo-dock-icons.h"
 #include "cairo-dock-separator-factory.h"
 #include "cairo-dock-launcher-factory.h"
-#include "cairo-dock-renderer-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
@@ -289,11 +289,7 @@ static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pD
 	if (pDock->container.bInside)
 		return FALSE;
 		
-	Icon *pPointedIcon;
-	///pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-	///if (pPointedIcon == NULL || pPointedIcon->pSubDock != pChildDock)
-		pPointedIcon = cairo_dock_get_icon_with_subdock (pDock->icons, pChildDock);
-
+	Icon *pPointedIcon = cairo_dock_get_icon_with_subdock (pDock->icons, pChildDock);
 	if (pPointedIcon != NULL)
 	{
 		//g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);
