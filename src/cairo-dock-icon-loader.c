@@ -58,21 +58,16 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-icon-loader.h"
 
 #define CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME "default-icon-appli.svg"
 
 extern CairoDock *g_pMainDock;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 
 extern gchar *g_cCurrentThemePath;
 
-/**extern CairoDockImageBuffer g_pIndicatorBuffer;
-extern CairoDockImageBuffer g_pActiveIndicatorBuffer;
-extern CairoDockImageBuffer g_pClassIndicatorBuffer;*/
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
-extern CairoDockImageBuffer g_pBoxAboveBuffer;
-extern CairoDockImageBuffer g_pBoxBelowBuffer;
 
 extern gboolean g_bUseOpenGL;
 
@@ -81,10 +76,7 @@ static void cairo_dock_load_appli (Icon *icon, int iWidth, int iHeight);
 static void cairo_dock_load_applet (Icon *icon, int iWidth, int iHeight);
 static void cairo_dock_load_separator (Icon *icon, int iWidth, int iHeight);
 
-static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, int w, int h, cairo_t *pCairoContext);
-static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, int w, int h, cairo_t *pCairoContext);
-static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, int w, int h, cairo_t *pCairoContext);
-
+const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est juste pour realiser la transition entre le chiffre en conf, et un nom (limitation du panneau de conf).
 
   //////////////
  /// LOADER ///
@@ -434,175 +426,6 @@ void cairo_dock_reload_one_icon_buffer_in_dock (Icon *icon, CairoDock *pDock)
 }
 
 
-  ///////////////
- /// MANAGER ///
-///////////////
-
-void cairo_dock_load_icons_background_surface (const gchar *cImagePath, double fMaxScale)
-{
-	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
-	
-	int iSize = MAX (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
-	if (iSize == 0)
-		iSize = 48;
-	iSize *= fMaxScale;
-	cairo_dock_load_image_buffer (&g_pIconBackgroundBuffer,
-		cImagePath,
-		iSize,
-		iSize,
-		CAIRO_DOCK_FILL_SPACE);
-}
-
-static void cairo_dock_load_box_surface (double fMaxScale)
-{
-	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
-	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
-	
-	int iSize = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
-	if (iSize == 0)
-		iSize = 48;
-	iSize *= fMaxScale;
-	
-	gchar *cUserPath = cairo_dock_generate_file_path ("box-front.png");
-	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
-	{
-		g_free (cUserPath);
-		cUserPath = NULL;
-	}
-	cairo_dock_load_image_buffer (&g_pBoxAboveBuffer,
-		cUserPath ? cUserPath : CAIRO_DOCK_SHARE_DATA_DIR"/box-front.png",
-		iSize,
-		iSize,
-		CAIRO_DOCK_FILL_SPACE);
-	
-	cUserPath = cairo_dock_generate_file_path ("box-back.png");
-	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
-	{
-		g_free (cUserPath);
-		cUserPath = NULL;
-	}
-	cairo_dock_load_image_buffer (&g_pBoxBelowBuffer,
-		CAIRO_DOCK_SHARE_DATA_DIR"/box-back.png",
-		iSize,
-		iSize,
-		CAIRO_DOCK_FILL_SPACE);
-}
-
-/**void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, double fMaxScale, double fIndicatorRatio)
-{
-	cairo_dock_unload_image_buffer (&g_pIndicatorBuffer);
-	
-	double fLauncherWidth = (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
-	double fLauncherHeight = (myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
-	double fScale = (myIndicators.bLinkIndicatorWithIcon ? fMaxScale : 1.) * fIndicatorRatio;
-	
-	cairo_dock_load_image_buffer (&g_pIndicatorBuffer,
-		cIndicatorImagePath,
-		fLauncherWidth * fScale,
-		fLauncherHeight * fScale,
-		CAIRO_DOCK_KEEP_RATIO);
-}
-
-void cairo_dock_load_active_window_indicator (const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor)
-{
-	cairo_dock_unload_image_buffer (&g_pActiveIndicatorBuffer);
-	
-	int iWidth = MAX (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
-	int iHeight = MAX (myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI], myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI]);
-	if (iWidth == 0)
-		iWidth = 48;
-	if (iHeight == 0)
-		iHeight = 48;
-	iWidth *= fMaxScale;
-	iHeight *= fMaxScale;
-	
-	if (cImagePath != NULL)
-	{
-		cairo_dock_load_image_buffer (&g_pActiveIndicatorBuffer,
-			cImagePath,
-			iWidth,
-			iHeight,
-			CAIRO_DOCK_FILL_SPACE);
-	}
-	else if (fActiveColor[3] > 0)
-	{
-		cairo_surface_t *pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
-		cairo_t *pCairoContext = cairo_create (pSurface);
-		
-		fCornerRadius = MIN (fCornerRadius, (iWidth - fLineWidth) / 2);
-		double fFrameWidth = iWidth - (2 * fCornerRadius + fLineWidth);
-		double fFrameHeight = iHeight - 2 * fLineWidth;
-		double fDockOffsetX = fCornerRadius + fLineWidth/2;
-		double fDockOffsetY = fLineWidth/2;
-		cairo_dock_draw_frame (pCairoContext, fCornerRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, 1, 0., CAIRO_DOCK_HORIZONTAL);
-		
-		cairo_set_source_rgba (pCairoContext, fActiveColor[0], fActiveColor[1], fActiveColor[2], fActiveColor[3]);
-		if (fLineWidth > 0)
-		{
-			cairo_set_line_width (pCairoContext, fLineWidth);
-			cairo_stroke (pCairoContext);
-		}
-		else
-		{
-			cairo_fill (pCairoContext);
-		}
-		cairo_destroy (pCairoContext);
-		
-		cairo_dock_load_image_buffer_from_surface (&g_pActiveIndicatorBuffer,
-			pSurface,
-			iWidth,
-			iHeight);
-	}
-}
-
-void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, double fMaxScale)
-{
-	cairo_dock_unload_image_buffer (&g_pClassIndicatorBuffer);
-	
-	double fLauncherWidth = (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
-	double fLauncherHeight = (myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
-	
-	cairo_dock_load_image_buffer (&g_pClassIndicatorBuffer,
-		cIndicatorImagePath,
-		fLauncherWidth/3,
-		fLauncherHeight/3,
-		CAIRO_DOCK_KEEP_RATIO);
-}*/
-
-void cairo_dock_init_icon_manager (void)
-{
-	memset (&g_pIconBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&g_pBoxAboveBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&g_pBoxBelowBuffer, 0, sizeof (CairoDockImageBuffer));
-}
-
-void cairo_dock_load_icon_textures (void)
-{
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
-	
-	cairo_dock_load_icons_background_surface (myIcons.cBackgroundImagePath, fMaxScale);
-	
-	/**cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? myIndicators.cIndicatorImagePath : NULL, fMaxScale, myIndicators.fIndicatorRatio);
-	
-	cairo_dock_load_active_window_indicator (myIndicators.cActiveIndicatorImagePath, fMaxScale, myIndicators.iActiveCornerRadius, myIndicators.iActiveLineWidth, myIndicators.fActiveColor);
-	
-	cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? myIndicators.cClassIndicatorImagePath : NULL, fMaxScale);*/
-	
-	cairo_dock_load_box_surface (fMaxScale);  /// a deplacer...
-}
-
-void cairo_dock_unload_icon_textures (void)
-{
-	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
-	/**cairo_dock_unload_image_buffer (&g_pIndicatorBuffer);
-	cairo_dock_unload_image_buffer (&g_pActiveIndicatorBuffer);
-	cairo_dock_unload_image_buffer (&g_pClassIndicatorBuffer);*/
-	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
-	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);  /// a deplacer...
-}
-
-
-
 void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 {
 	if (g_bUseOpenGL)
@@ -623,6 +446,57 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 }
 
 
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void cairo_dock_load_icons_background_surface (const gchar *cImagePath, double fMaxScale)
+{
+	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
+	
+	int iSize = MAX (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
+	if (iSize == 0)
+		iSize = 48;
+	iSize *= fMaxScale;
+	cairo_dock_load_image_buffer (&g_pIconBackgroundBuffer,
+		cImagePath,
+		iSize,
+		iSize,
+		CAIRO_DOCK_FILL_SPACE);
+}
+
+void cairo_dock_init_icon_manager (void)
+{
+	memset (&g_pIconBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
+}
+
+static void _load_renderer (const gchar *cRenderername, CairoIconContainerRenderer *pRenderer, gpointer data)
+{
+	if (pRenderer && pRenderer->load)
+		pRenderer->load ();
+}
+void cairo_dock_load_icon_textures (void)
+{
+	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
+	
+	cairo_dock_load_icons_background_surface (myIcons.cBackgroundImagePath, fMaxScale);
+	
+	cairo_dock_foreach_icon_container_renderer ((GHFunc)_load_renderer, NULL);
+}
+
+static void _unload_renderer (const gchar *cRenderername, CairoIconContainerRenderer *pRenderer, gpointer data)
+{
+	if (pRenderer && pRenderer->unload)
+		pRenderer->unload ();
+}
+void cairo_dock_unload_icon_textures (void)
+{
+	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
+	
+	cairo_dock_foreach_icon_container_renderer ((GHFunc)_unload_renderer, NULL);
+}
+
+
   ///////////////////////
  /// CONTAINER ICONS ///
 ///////////////////////
@@ -630,15 +504,19 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 {
 	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->pIconBuffer != NULL || pIcon->iIconTexture != 0));
+	
+	CairoIconContainerRenderer *pRenderer = cairo_dock_get_icon_container_renderer (pIcon->cClass != NULL ? "Stack" : s_cRendererNames[pIcon->iSubdockViewType]);
+	if (pRenderer == NULL)
+		return;
 	g_print ("%s (%s)\n", __func__, pIcon->cName);
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);
 	
-	//\______________ On efface le dessin existant.
 	cairo_t *pCairoContext = NULL;
-	if (pIcon->iIconTexture != 0)  // dessin opengl
+	if (pIcon->iIconTexture != 0 && pRenderer->render_opengl)  // dessin opengl
 	{
+		//\______________ On efface le dessin existant.
 		if (! cairo_dock_begin_draw_icon (pIcon, CAIRO_CONTAINER (pDock), 0))
 			return ;
 		
@@ -663,9 +541,17 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 			_cairo_dock_set_alpha (1.);
 		}
 		_cairo_dock_set_blend_alpha ();
+		
+		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
+		pRenderer->render_opengl (pIcon, w, h);
+		
+		//\______________ On finit le dessin.
+		_cairo_dock_disable_texture ();
+		cairo_dock_end_draw_icon (pIcon, CAIRO_CONTAINER (pDock));
 	}
-	else if (pIcon->pIconBuffer != NULL)  // dessin cairo
+	else if (pIcon->pIconBuffer != NULL && pRenderer->render != NULL)  // dessin cairo
 	{
+		//\______________ On efface le dessin existant.
 		pCairoContext = cairo_create (pIcon->pIconBuffer);
 		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 		
@@ -688,40 +574,11 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 			cairo_dock_erase_cairo_context (pCairoContext);
 		}
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-	}
-	else
-		return ;
-	
-	//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
-	if (pIcon->cClass != NULL)
-		_cairo_dock_draw_subdock_content_as_stack (pIcon, w, h, pCairoContext);
-	else
-	{
-		switch (pIcon->iSubdockViewType)
-		{
-			case 1 :
-				_cairo_dock_draw_subdock_content_as_emblem (pIcon, w, h, pCairoContext);
-			break;
-			case 2:
-				_cairo_dock_draw_subdock_content_as_stack (pIcon, w, h, pCairoContext);
-			break;
-			case 3:
-				_cairo_dock_draw_subdock_content_as_box (pIcon, w, h, pCairoContext);
-			break;
-			default:
-				cd_warning ("invalid sub-dock content view for %s", pIcon->cName);
-			break;
-		}
-	}
-	
-	//\______________ On finit le dessin.
-	if (pIcon->iIconTexture != 0)
-	{
-		_cairo_dock_disable_texture ();
-		cairo_dock_end_draw_icon (pIcon, CAIRO_CONTAINER (pDock));
-	}
-	else
-	{
+		
+		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
+		pRenderer->render (pIcon, w, h, pCairoContext);
+		
+		//\______________ On finit le dessin.
 		if (g_bUseOpenGL)
 			cairo_dock_update_icon_texture (pIcon);
 		else
@@ -729,8 +586,6 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		cairo_destroy (pCairoContext);
 	}
 }
-
-
 
 
 
@@ -878,167 +733,5 @@ static void cairo_dock_load_separator (Icon *icon, int iWidth, int iHeight)
 		icon->pIconBuffer = cairo_dock_create_separator_surface (
 			iWidth,
 			iHeight);
-	}
-}
-
-
-
-static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
-{
-	//\______________ On dessine les 4 premieres icones du sous-dock en embleme.
-	CairoEmblem e;
-	memset (&e, 0, sizeof (CairoEmblem));
-	e.fScale = .5;
-	int i;
-	Icon *icon;
-	GList *ic;
-	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next, i++)
-	{
-		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
-		{
-			i --;
-			continue;
-		}
-		e.iPosition = i;
-		if (pCairoContext == NULL)
-		{
-			e.iTexture = icon->iIconTexture;
-			_cairo_dock_apply_emblem_texture (&e, w, h);
-		}
-		else
-		{
-			e.pSurface = icon->pIconBuffer;
-			cairo_dock_get_icon_extent (icon, CAIRO_CONTAINER (pIcon->pSubDock), &e.iWidth, &e.iHeight);
-			
-			cairo_save (pCairoContext);
-			_cairo_dock_apply_emblem_surface (&e, w, h, pCairoContext);
-			cairo_restore (pCairoContext);
-		}
-	}
-}
-
-static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
-{
-	//\______________ On dessine les 4 premieres icones du sous-dock en pile.
-	CairoEmblem e;
-	memset (&e, 0, sizeof (CairoEmblem));
-	e.fScale = .8;
-	int i;
-	Icon *icon;
-	GList *ic;
-	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
-	{
-		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
-		{
-			i --;
-			continue;
-		}
-		switch (i)
-		{
-			case 0:
-				e.iPosition = CAIRO_DOCK_EMBLEM_UPPER_RIGHT;
-			break;
-			case 1:
-				if (ic->next == NULL)
-					e.iPosition = CAIRO_DOCK_EMBLEM_LOWER_LEFT;
-				else
-					e.iPosition = CAIRO_DOCK_EMBLEM_MIDDLE;
-			break;
-			case 2:
-				e.iPosition = CAIRO_DOCK_EMBLEM_LOWER_LEFT;
-			break;
-			default : break;
-		}
-		if (pIcon->iIconTexture != 0)
-		{
-			e.iTexture = icon->iIconTexture;
-			_cairo_dock_apply_emblem_texture (&e, w, h);
-		}
-		else
-		{
-			e.pSurface = icon->pIconBuffer;
-			cairo_dock_get_icon_extent (icon, CAIRO_CONTAINER (pIcon->pSubDock), &e.iWidth, &e.iHeight);
-			
-			cairo_save (pCairoContext);
-			_cairo_dock_apply_emblem_surface (&e, w, h, pCairoContext);
-			cairo_restore (pCairoContext);
-		}
-	}
-}
-
-static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, int w, int h, cairo_t *pCairoContext)
-{
-	g_print ("%s (%dx%d)\n", __func__, w, h);
-	if (pCairoContext)
-	{
-		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-		cairo_save (pCairoContext);
-		cairo_scale(pCairoContext,
-			(double) w / g_pBoxBelowBuffer.iWidth,
-			(double) h / g_pBoxBelowBuffer.iHeight);
-		cairo_set_source_surface (pCairoContext,
-			g_pBoxBelowBuffer.pSurface,
-			0.,
-			0.);
-		cairo_paint (pCairoContext);
-		cairo_restore (pCairoContext);
-		
-		cairo_save (pCairoContext);
-		cairo_scale(pCairoContext,
-			.8,
-			.8);
-		int i;
-		Icon *icon;
-		GList *ic;
-		for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
-		{
-			icon = ic->data;
-			if (CAIRO_DOCK_IS_SEPARATOR (icon))
-			{
-				i --;
-				continue;
-			}
-			
-			cairo_set_source_surface (pCairoContext,
-				icon->pIconBuffer,
-				.1*w,
-				.1*i*h);
-			cairo_paint (pCairoContext);
-		}
-		cairo_restore (pCairoContext);
-		
-		cairo_scale(pCairoContext,
-			(double) w / g_pBoxAboveBuffer.iWidth,
-			(double) h / g_pBoxAboveBuffer.iHeight);
-		cairo_set_source_surface (pCairoContext,
-			g_pBoxAboveBuffer.pSurface,
-			0.,
-			0.);
-		cairo_paint (pCairoContext);
-	}
-	else
-	{
-		_cairo_dock_set_blend_source ();
-		_cairo_dock_apply_texture_at_size (g_pBoxBelowBuffer.iTexture, w, h);
-		
-		_cairo_dock_set_blend_alpha ();
-		int i;
-		Icon *icon;
-		GList *ic;
-		for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
-		{
-			icon = ic->data;
-			if (CAIRO_DOCK_IS_SEPARATOR (icon))
-			{
-				i --;
-				continue;
-			}
-			glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
-			_cairo_dock_apply_current_texture_at_size_with_offset (.8*w, .8*h, 0., .1*(1-i)*h);
-		}
-		
-		_cairo_dock_apply_texture_at_size (g_pBoxAboveBuffer.iTexture, w, h);
 	}
 }

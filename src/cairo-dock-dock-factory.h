@@ -254,15 +254,6 @@ void cairo_dock_free_dock (CairoDock *pDock);
 */
 void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock);
 
-
-/** Load a set of .desktop files that define icons, and build the corresponding tree of docks.
-* All the icons are created and placed inside their dock, which is created if necessary.
-* In the end, each dock is computed and placed on the screen.
-* @param cDirectory a folder containing some .desktop files.
-*/
-void cairo_dock_build_docks_tree_with_desktop_files (gchar *cDirectory);
-
-
 /** Insert an icon into a dock.
 * Do nothing if the icon already exists inside the dock.
 * @param icon the icon to be inserted. It should have been filled beforehand.

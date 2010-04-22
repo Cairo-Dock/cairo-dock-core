@@ -45,6 +45,7 @@ static GHashTable *s_hAnimationsTable = NULL;  // table des animations disponibl
 static GHashTable *s_hDialogDecoratorTable = NULL;  // table des decorateurs de dialogues disponibles.
 static GHashTable *s_hDataRendererTable = NULL;  // table des rendus de donnees disponibles.
 static GHashTable *s_hHidingEffectTable = NULL;  // table des effets de cachage des docks.
+static GHashTable *s_hIconContainerTable = NULL;  // table des rendus d'icones de container.
 
 typedef struct _CairoBackendMgr CairoBackendMgr;
 struct _CairoBackendMgr {
@@ -234,6 +235,31 @@ void cairo_dock_remove_hiding_effect (const gchar *cHidingEffect)
 }
 
 
+CairoIconContainerRenderer *cairo_dock_get_icon_container_renderer (const gchar *cRendererName)
+{
+	if (cRendererName != NULL)
+		return g_hash_table_lookup (s_hIconContainerTable, cRendererName);
+	else
+		return NULL;
+}
+
+void cairo_dock_register_icon_container_renderer (const gchar *cRendererName, CairoIconContainerRenderer *pRenderer)
+{
+	cd_message ("%s (%s)", __func__, cRendererName);
+	g_hash_table_insert (s_hIconContainerTable, g_strdup (cRendererName), pRenderer);
+}
+
+void cairo_dock_remove_icon_container_renderer (const gchar *cRendererName)
+{
+	g_hash_table_remove (s_hIconContainerTable, cRendererName);
+}
+
+void cairo_dock_foreach_icon_container_renderer (GHFunc pCallback, gpointer data)
+{
+	g_hash_table_foreach (s_hIconContainerTable, pCallback, data);
+}
+
+
 void cairo_dock_init_backends_manager (void)
 {
 	g_return_if_fail (s_hRendererTable == NULL);
@@ -275,6 +301,11 @@ void cairo_dock_init_backends_manager (void)
 		NULL);
 	
 	s_hHidingEffectTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		g_free);
+	
+	s_hIconContainerTable = g_hash_table_new_full (g_str_hash,
 		g_str_equal,
 		g_free,
 		g_free);

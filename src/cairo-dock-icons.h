@@ -494,6 +494,7 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 
 /** Make an icon always visible, even when the dock is hidden.
 *@param icon an icon.
+*@param bAlwaysVisible whether the icon is always visible or not.
 */
 #define cairo_dock_set_icon_always_visible(icon, bAlwaysVisible) ((bAlwaysVisible)->bStatic = bAlwaysVisible)
 

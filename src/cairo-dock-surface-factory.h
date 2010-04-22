@@ -126,11 +126,8 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 /** Create a surface from raw data of an X icon. The biggest icon possible is taken. The ratio is kept, and the surface will fill the space with transparency if necessary.
 *@param pXIconBuffer raw data of the icon.
 *@param iBufferNbElements number of elements in the buffer.
-*@param fConstraintWidth desired width of the icon.
-*@param fConstraintHeight desired height of the icon.
-*@param fMaxScale maximum zoom of the icon.
-*@param fWidth will be filled with the resulting width of the surface.
-*@param fHeight will be filled with the resulting height of the surface.
+*@param iWidth will be filled with the resulting width of the surface.
+*@param iHeight will be filled with the resulting height of the surface.
 *@return the newly allocated surface.
 */
 cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, int iWidth, int iHeight);

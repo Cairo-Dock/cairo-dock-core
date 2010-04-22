@@ -308,8 +308,8 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 	else if (iWindowPositionY > g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - iNewHeight + pDock->iMaxIconHeight)
 		iWindowPositionY = g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - iNewHeight + pDock->iMaxIconHeight;
 	
-	*iNewPositionX = iWindowPositionX + pDock->iScreenOffsetX;
-	*iNewPositionY = iWindowPositionY + pDock->iScreenOffsetY;
+	*iNewPositionX = iWindowPositionX + 0*pDock->iScreenOffsetX;
+	*iNewPositionY = iWindowPositionY + 0*pDock->iScreenOffsetY;
 }
 
 static gboolean _move_resize_dock (CairoDock *pDock)

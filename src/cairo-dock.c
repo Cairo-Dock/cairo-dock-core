@@ -124,6 +124,7 @@
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-hiding-effect.h"
+#include "cairo-dock-icon-container.h"
 
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 
@@ -509,11 +510,13 @@ int main (int argc, char** argv)
 		g_iDesktopEnv = cairo_dock_guess_environment ();
 	cd_debug ("environnement de bureau : %d", g_iDesktopEnv);
 	
-	//\___________________ On enregistre les rendus de donnees.
+	//\___________________ On enregistre les implementations.
 	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge);
 	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
 	
 	cairo_dock_register_hiding_effects ();
+	
+	cairo_dock_register_icon_container_renderers ();
 	
 	//\___________________ On enregistre les notifications de base.
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,

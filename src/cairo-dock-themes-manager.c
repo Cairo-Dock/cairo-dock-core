@@ -36,7 +36,7 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-gauge.h"
+//#include "cairo-dock-gauge.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-task.h"

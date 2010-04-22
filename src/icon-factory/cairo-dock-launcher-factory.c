@@ -268,7 +268,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	}
 	if (icon->iNbSubIcons != 0)
 	{
-		icon->iSubdockViewType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "render", NULL);
+		icon->iSubdockViewType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "render", NULL);  // on a besoin d'un entier dans le panneau de conf pour pouvoir degriser des options selon le rendu choisi. De plus c'est utile aussi pour Animated Icons...
 	}
 
 	gboolean bPreventFromInhibating = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.

@@ -107,7 +107,7 @@ typedef void (*CairoIconContainerUnloadFunc) (void);
 typedef void (*CairoIconContainerRenderFunc) (Icon *pIcon, int w, int h, cairo_t *pCairoContext);
 typedef void (*CairoIconContainerRenderOpenGLFunc) (Icon *pIcon, int w, int h);
 
-struct _CairoIconContainerRendererInterface {
+struct _CairoIconContainerRenderer {
 	CairoIconContainerLoadFunc load;
 	CairoIconContainerUnloadFunc unload;
 	CairoIconContainerRenderFunc render;

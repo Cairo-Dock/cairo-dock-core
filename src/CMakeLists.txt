@@ -1,5 +1,6 @@
 
 add_subdirectory(icon-factory)
+add_subdirectory(implementations)
 
 SET(cairo-dock_SRCS
 	cairo-dock-struct.h
@@ -26,10 +27,8 @@ SET(cairo-dock_SRCS
 	cairo-dock-animations.c 			cairo-dock-animations.h
 	cairo-dock-notifications.c 			cairo-dock-notifications.h
 	cairo-dock-backends-manager.c 		cairo-dock-backends-manager.h
-	cairo-dock-hiding-effect.c	 		cairo-dock-hiding-effect.h
 	cairo-dock-data-renderer.c 			cairo-dock-data-renderer.h
 	cairo-dock-file-manager.c 			cairo-dock-file-manager.h
-	cairo-dock-gio-vfs.c 				cairo-dock-gio-vfs.h
 	cairo-dock-themes-manager.c 		cairo-dock-themes-manager.h
 	cairo-dock-class-manager.c 			cairo-dock-class-manager.h
 	cairo-dock-X-manager.c 				cairo-dock-X-manager.h
@@ -50,8 +49,6 @@ SET(cairo-dock_SRCS
 	cairo-dock-emblem.c 				cairo-dock-emblem.h
 	cairo-dock-task.c 					cairo-dock-task.h
 	cairo-dock-dock-facility.c 			cairo-dock-dock-facility.h
-	cairo-dock-gauge.c 					cairo-dock-gauge.h
-	cairo-dock-graph.c 					cairo-dock-graph.h
 	cairo-dock-internal-position.c 		cairo-dock-internal-position.h
 	cairo-dock-internal-accessibility.c cairo-dock-internal-accessibility.h
 	cairo-dock-internal-system.c 		cairo-dock-internal-system.h
@@ -66,6 +63,7 @@ SET(cairo-dock_SRCS
 	cairo-dock-config.c 				cairo-dock-config.h 
 	texture-gradation.h
 	texture-blur.h
+	
 	cairo-dock.c
 	cairo-dock-default-view.c 			cairo-dock-default-view.h
 	cairo-dock-menu.c 				cairo-dock-menu.h 
@@ -82,13 +80,16 @@ SET(cairo-dock_SRCS
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${XEXTEND_INCLUDE_DIRS}
-	icon-factory)
+	${CMAKE_SOURCE_DIR}/src
+	icon-factory
+	implementations)
 
 # Make sure the linker can find the libraries.
 link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${XEXTEND_LIBRARY_DIRS}
-	icon-factory)
+	icon-factory
+	implementations)
 
 # Add executable that is built from the source files.
 add_executable(${PROJECT_NAME}
@@ -99,7 +100,8 @@ target_link_libraries(${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${LIBCRYPT_LIBS}
-	icon-factory)
+	icon-factory
+	implementations)
 
 # install the program once it is built.
 install(
@@ -110,7 +112,54 @@ install(
 ########### install files ###############
 
 install(FILES cairo-dock.h DESTINATION ${includedir}/cairo-dock)
-install(FILES cairo-dock-struct.h 	cairo-dock-callbacks.h 	cairo-dock-dbus.h 	cairo-dock-draw.h 	cairo-dock-config.h 	cairo-dock-load.h 	cairo-dock-icons.h 	cairo-dock-icon-loader.h 	cairo-dock-indicator-manager.h 		cairo-dock-modules.h 	cairo-dock-global-variables.h 	cairo-dock-applications-manager.h 	cairo-dock-launcher-manager.h 	cairo-dock-separator-manager.h 	cairo-dock-applet-manager.h 	cairo-dock-application-facility.h 	cairo-dock-keyfile-utilities.h 	cairo-dock-dock-factory.h 	cairo-dock-themes-manager.h 	cairo-dock-animations.h 	cairo-dock-notifications.h 	cairo-dock-dialog-factory.h 	cairo-dock-dialog-manager.h 	cairo-dock-surface-factory.h 	cairo-dock-backends-manager.h 	cairo-dock-data-renderer.h 	cairo-dock-default-view.h 	cairo-dock-applet-facility.h 	cairo-dock-file-manager.h 	cairo-dock-keybinder.h 	cairo-dock-desklet-manager.h 	cairo-dock-desklet-factory.h 	cairo-dock-log.h 	cairo-dock-X-utilities.h 	cairo-dock-X-manager.h 	cairo-dock-gauge.h 	cairo-dock-dock-manager.h 	cairo-dock-class-manager.h 	cairo-dock-emblem.h 	cairo-dock-applet-single-instance.h 	cairo-dock-applet-multi-instance.h 	cairo-dock-applet-canvas.h 	cairo-dock-flying-container.h 	cairo-dock-graph.h 	cairo-dock-opengl.h 	cairo-dock-draw-opengl.h 	cairo-dock-particle-system.h 	cairo-dock-gui-factory.h 	cairo-dock-gui-manager.h 	cairo-dock-internal-position.h 	cairo-dock-internal-accessibility.h 	cairo-dock-internal-system.h 	cairo-dock-internal-taskbar.h 	 	cairo-dock-internal-dialogs.h 	cairo-dock-internal-indicators.h 	cairo-dock-internal-views.h 	cairo-dock-internal-labels.h 	cairo-dock-internal-desklets.h 	cairo-dock-internal-background.h 	cairo-dock-internal-icons.h 	cairo-dock-data-renderer.h 	cairo-dock-dock-facility.h 	cairo-dock-task.h 	cairo-dock-container.h 	cairo-dock-menu.h cairo-dock-user-interaction.h cairo-dock-gio-vfs.h DESTINATION ${includedir}/cairo-dock/cairo-dock)
+install(FILES
+	cairo-dock-struct.h 			cairo-dock-global-variables.h
+	cairo-dock-icons.h 			cairo-dock-icon-loader.h
+	cairo-dock-applications-manager.h 	cairo-dock-launcher-manager.h
+	cairo-dock-separator-manager.h 	cairo-dock-applet-manager.h
+	cairo-dock-backends-manager.h		cairo-dock-notifications.h
+	
+	cairo-dock-data-renderer.h
+	cairo-dock-dock-manager.h		
+	cairo-dock-desklet-manager.h
+	cairo-dock-dialog-manager.h
+	cairo-dock-indicator-manager.h
+	cairo-dock-themes-manager.h
+	cairo-dock-gui-manager.h
+	cairo-dock-file-manager.h
+	cairo-dock-X-manager.h
+	cairo-dock-class-manager.h
+	cairo-dock-opengl.h
+	cairo-dock-load.h
+	cairo-dock-config.h
+	cairo-dock-modules.h
+	cairo-dock-container.h
+	cairo-dock-dock-factory.h		cairo-dock-callbacks.h
+	cairo-dock-desklet-factory.h
+	cairo-dock-dialog-factory.h
+	cairo-dock-flying-container.h
+	
+	cairo-dock-applet-multi-instance.h 	cairo-dock-applet-single-instance.h
+	cairo-dock-applet-canvas.h		cairo-dock-applet-facility.h
+	
+	cairo-dock-internal-position.h 	cairo-dock-internal-accessibility.h
+	cairo-dock-internal-system.h 		cairo-dock-internal-taskbar.h
+	cairo-dock-internal-dialogs.h 	cairo-dock-internal-indicators.h
+	cairo-dock-internal-views.h 		cairo-dock-internal-labels.h
+	cairo-dock-internal-desklets.h 	cairo-dock-internal-background.h
+	cairo-dock-internal-icons.h
+	
+	cairo-dock-draw.h				cairo-dock-draw-opengl.h
+	cairo-dock-particle-system.h		cairo-dock-emblem.h
+	cairo-dock-X-utilities.h		cairo-dock-dbus.h
+	cairo-dock-keyfile-utilities.h	cairo-dock-surface-factory.h
+	cairo-dock-log.h				cairo-dock-keybinder.h
+	cairo-dock-application-facility.h	cairo-dock-dock-facility.h
+	cairo-dock-task.h
+	cairo-dock-animations.h
+	cairo-dock-gui-factory.h
+	
+	DESTINATION ${includedir}/cairo-dock/cairo-dock)
 
 
 

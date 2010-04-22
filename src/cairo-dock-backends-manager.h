@@ -61,6 +61,10 @@ CairoDockHidingEffect *cairo_dock_get_hiding_effect (const gchar *cHidingEffect)
 void cairo_dock_register_hiding_effect (const gchar *cHidingEffect, CairoDockHidingEffect *pEffect);
 void cairo_dock_remove_hiding_effect (const gchar *cHidingEffect);
 
+CairoIconContainerRenderer *cairo_dock_get_icon_container_renderer (const gchar *cRendererName);
+void cairo_dock_register_icon_container_renderer (const gchar *cRendererName, CairoIconContainerRenderer *pRenderer);
+void cairo_dock_remove_icon_container_renderer (const gchar *cRendererName);
+void cairo_dock_foreach_icon_container_renderer (GHFunc pCallback, gpointer data);
 
 void cairo_dock_init_backends_manager (void);
 

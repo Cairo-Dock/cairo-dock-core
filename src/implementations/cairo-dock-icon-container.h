@@ -18,15 +18,16 @@
 */
 
 
-#ifndef __CAIRO_DOCK_HIDING_EFFECT__
-#define  __CAIRO_DOCK_HIDING_EFFECT__
+#ifndef __CAIRO_DOCK_ICON_CONTAINER__
+#define  __CAIRO_DOCK_ICON_CONTAINER__
 
-#include <gtk/gtk.h>
-#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-icon-container.h This class implements the rendering interface for icons pointing on a sub-dock.
+*/
 
-void cairo_dock_register_hiding_effects (void);
+void cairo_dock_register_icon_container_renderers (void);
 
 
 G_END_DECLS

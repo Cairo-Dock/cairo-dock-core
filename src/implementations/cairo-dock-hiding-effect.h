@@ -1,4 +1,4 @@
-/**
+/*
 * This file is a part of the Cairo-Dock project
 *
 * Copyright : (C) see the 'copyright' file.
@@ -18,17 +18,20 @@
 */
 
 
-#ifndef __CAIRO_DOCK_GIO_VFS__
-#define  __CAIRO_DOCK_GIO_VFS__
+#ifndef __CAIRO_DOCK_HIDING_EFFECT__
+#define  __CAIRO_DOCK_HIDING_EFFECT__
 
-#include "cairo-dock-file-manager.h"
+#include <gtk/gtk.h>
+#include "cairo-dock-struct.h"
+G_BEGIN_DECLS
 
-gboolean cairo_dock_gio_vfs_init (void);
+/**
+*@file cairo-dock-hiding-effect.h This class implements the rendering interface for hiding docks.
+*/
 
-/** Fill the backend with gio/gvfs fonctions, if possible.
- *@param  pVFSBackend The backend structure to fill up 
- *@return TRUE if all went well, FALSE if gio/gvfs is not available
- */
-gboolean cairo_dock_gio_vfs_fill_backend(CairoDockDesktopEnvBackend *pVFSBackend);
 
+void cairo_dock_register_hiding_effects (void);
+
+
+G_END_DECLS
 #endif

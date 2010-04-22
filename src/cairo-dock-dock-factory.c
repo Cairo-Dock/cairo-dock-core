@@ -327,40 +327,6 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 }
 
 
-void cairo_dock_build_docks_tree_with_desktop_files (gchar *cDirectory)
-{
-	cd_message ("%s (%s)", __func__, cDirectory);
-	GDir *dir = g_dir_open (cDirectory, 0, NULL);
-	g_return_if_fail (dir != NULL);
-
-	Icon* icon;
-	const gchar *cFileName;
-	CairoDock *pParentDock;
-
-	while ((cFileName = g_dir_read_name (dir)) != NULL)
-	{
-		if (g_str_has_suffix (cFileName, ".desktop"))
-		{
-			icon = cairo_dock_create_icon_from_desktop_file (cFileName);
-			if (!icon || icon->cParentDockName == NULL)
-			{
-				cd_warning ("the desktop file '%s/%s' is invalid !\n you should probably remove it.", cDirectory, cFileName);
-				g_free (icon);
-				continue;
-			}
-			
-			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-			if (pParentDock != NULL)  // a priori toujours vrai.
-			{
-				cairo_dock_insert_icon_in_dock_full (icon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
-				/// synchroniser icon->pSubDock avec pParentDock ?...
-			}
-		}
-	}
-	g_dir_close (dir);
-}
-
-
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc)
 {
 	g_return_if_fail (icon != NULL);
@@ -569,7 +535,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 		cairo_dock_update_conf_file_with_active_modules ();
 		cairo_dock_mark_theme_as_modified (TRUE);
 	}  // rien a faire pour les separateurs automatiques.
-
+	
 	//\___________________ On detache l'icone du dock.
 	if (pDock != NULL)
 		cairo_dock_detach_icon_from_dock (icon, pDock, bCheckUnusedSeparator);

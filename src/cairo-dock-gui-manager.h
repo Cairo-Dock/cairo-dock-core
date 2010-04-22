@@ -22,7 +22,6 @@
 #define  __CAIRO_DOCK_GUI_MANAGER__
 
 #include <gtk/gtk.h>
-///#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 /** @file cairo-dock-gui-manager.h This class manages the config panels of Cairo-Dock.

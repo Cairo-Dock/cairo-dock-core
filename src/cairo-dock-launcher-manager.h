@@ -41,6 +41,12 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
 */
 Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName);
 
+/** Load a set of .desktop files that define icons, and build the corresponding tree of docks.
+* All the icons are created and placed inside their dock, which is created if necessary.
+* @param cDirectory a folder containing some .desktop files.
+*/
+void cairo_dock_build_docks_tree_with_desktop_files (const gchar *cDirectory);
+
 
 /** Reload completely a launcher. It handles all the side-effects like modifying the class, the sub-dock's view, the container, etc.
  * @param icon the launcher Icon to reload.

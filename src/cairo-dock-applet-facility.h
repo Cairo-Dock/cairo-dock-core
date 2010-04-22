@@ -22,8 +22,6 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-modules.h"
-#include "cairo-dock-menu.h"
-#include "cairo-dock-applet-factory.h"
 G_BEGIN_DECLS
 
 /**

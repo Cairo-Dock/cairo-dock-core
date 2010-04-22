@@ -246,6 +246,55 @@ static void _post_render_zoom (CairoDock *pDock, cairo_t *pCairoContext)
 	}
 }
 
+static void _post_render_folding (CairoDock *pDock, cairo_t *pCairoContext)
+{
+	if (pCairoContext != NULL)
+		return ;
+	
+	if (pDock->iFboId == 0)
+		return ;
+	
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+	glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+		GL_COLOR_ATTACHMENT0_EXT,
+		GL_TEXTURE_2D,
+		0,
+		0);  // on detache la texture (precaution).
+	// dessin dans notre fenetre.
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_source ();
+	
+	int iWidth, iHeight;  // taille de la texture
+	if (pDock->container.bIsHorizontal)
+	{
+		iWidth = pDock->container.iWidth;
+		iHeight = pDock->container.iHeight;
+	}
+	else
+	{
+		iWidth = pDock->container.iHeight;
+		iHeight = pDock->container.iWidth;
+	}
+	
+	/// Xbas = x^(1+2t)
+	/// Xhaut = x^(1+t/2)
+	///Y = max (0, 1 - (2-x²)t)
+	/// dessin de la texture de 1 (en y=Y) a t (en y=0)
+	glPushMatrix ();
+	glLoadIdentity ();
+	glTranslatef (iWidth/2, 0., - iHeight/2);
+	
+	glScalef (1 - pDock->fHideOffset, 1 - pDock->fHideOffset, 1.);
+	glTranslatef (0., iHeight/2, - iHeight/2);
+	
+	glScalef (1., -1., 1.);
+	_cairo_dock_apply_texture_at_size_with_alpha (pDock->iRedirectedTexture, iWidth, iHeight, 1.);
+	
+	glPopMatrix ();
+	
+	_cairo_dock_disable_texture ();
+}
+
 
 void cairo_dock_register_hiding_effects (void)
 {
@@ -266,4 +315,3 @@ void cairo_dock_register_hiding_effects (void)
 	p->init = _init_opengl;
 	cairo_dock_register_hiding_effect ("Zoom out", p);
 }
-

@@ -72,9 +72,8 @@
 #include <cairo-dock/cairo-dock-class-manager.h>
 #include <cairo-dock/cairo-dock-dock-manager.h>
 #include <cairo-dock/cairo-dock-desklet-manager.h>
-#include <cairo-dock/cairo-dock-renderer-manager.h>
+#include <cairo-dock/cairo-dock-backends-manager.h>
 #include <cairo-dock/cairo-dock-file-manager.h>
-#include <cairo-dock/cairo-dock-gio-vfs.h>
 // GUI.
 #include <cairo-dock/cairo-dock-themes-manager.h>
 #include <cairo-dock/cairo-dock-gui-manager.h>
@@ -96,8 +95,8 @@
 #include <cairo-dock/cairo-dock-applet-canvas.h>
 // classes presque independantes de CD.
 #include <cairo-dock/cairo-dock-data-renderer.h>
-#include <cairo-dock/cairo-dock-graph.h>
-#include <cairo-dock/cairo-dock-gauge.h>
+#include <implementations/cairo-dock-graph.h>
+#include <implementations/cairo-dock-gauge.h>
 #include <cairo-dock/cairo-dock-notifications.h>
 #include <cairo-dock/cairo-dock-surface-factory.h>
 #include <cairo-dock/cairo-dock-X-utilities.h>
