@@ -2,6 +2,7 @@ add_subdirectory(default-theme)
 add_subdirectory(gauges)
 add_subdirectory(emblems)
 add_subdirectory(explosion)
+add_subdirectory(man)
 
 
 ########### install files ###############
