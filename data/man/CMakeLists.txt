@@ -1,5 +1,5 @@
 INSTALL(FILES cairo-dock_en.1.gz
-        DESTINATION "share/man/man1"
+        DESTINATION "${mandir}/man1"
         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ RENAME cairo-dock.1.gz)
 
 ############## Man pages ################ =>  # doesn't work... #
