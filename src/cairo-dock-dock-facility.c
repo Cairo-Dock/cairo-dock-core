@@ -695,7 +695,7 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		{
 			icon = ic->data;
 			//if (ic == pIconList)
-			//	g_print ("fX : %.2f - %.2f\n", icon->fX, offset);
+			//	cd_debug ("fX : %.2f - %.2f\n", icon->fX, offset);
 			icon->fX -= offset;
 		}
 	}
@@ -810,7 +810,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 			///pDock->fDecorationsOffsetX = - pDock->container.iWidth / 2;  // on fixe les decorations.
 			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && pDock->iMagnitudeIndex > 0 && ! pDock->bIconIsFlyingAway)
 			{
-				g_print ("on force a quitter (iRefCount:%d)\n", pDock->iRefCount);
+				cd_debug ("on force a quitter (iRefCount:%d)\n", pDock->iRefCount);
 				if (pDock->iRefCount > 0 && myAccessibility.iLeaveSubDockDelay > 0)
 					pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
 				else

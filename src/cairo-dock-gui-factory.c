@@ -707,7 +707,7 @@ static void _cairo_dock_toggle_control_button (GtkCheckButton *pButton, gpointer
 	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
 	{
 		w = c->data;
-		g_print (" %d/%d -> %d\n", i, iNbWidgets, bActive);
+		cd_debug (" %d/%d -> %d\n", i, iNbWidgets, bActive);
 		gtk_widget_set_sensitive (w, bActive);
 	}
 	
@@ -2458,13 +2458,13 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						cValue = cValueList[l];
 						if (! g_ascii_isdigit (*cValue))  // ancien format.
 						{
-							g_print ("old format\n");
+							cd_debug ("old format\n");
 							int k;
 							for (k = 0; k < iNbPossibleValues; k ++)  // on cherche la correspondance.
 							{
 								if (strcmp (cValue, pAuthorizedValuesList[k]) == 0)
 								{
-									g_print (" correspondance %s <-> %d\n", cValue, k);
+									cd_debug (" correspondance %s <-> %d\n", cValue, k);
 									g_free (cValueList[l]);
 									cValueList[l] = g_strdup_printf ("%d", k);
 									cValue = cValueList[l];
@@ -2853,10 +2853,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					if (iNbControlledWidgets > 0 && pControlContainer != NULL)
 					{
-						g_print ("ctrl\n");
+						cd_debug ("ctrl\n");
 						if (pControlContainer == pGroupBox)
 						{
-							g_print ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
+							cd_debug ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
 							iNbControlledWidgets --;
 							if (iFirstSensitiveWidget > 0)
 								iFirstSensitiveWidget --;
@@ -2864,14 +2864,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							GtkWidget *w = pExternFrame;
 							if (iFirstSensitiveWidget == 0 && iNbSensitiveWidgets > 0)
 							{
-								g_print (" => sensitive\n");
+								cd_debug (" => sensitive\n");
 								iNbSensitiveWidgets --;
 								if (GTK_IS_EXPANDER (w))
 									gtk_expander_set_expanded (GTK_EXPANDER (w), TRUE);
 							}
 							else
 							{
-								g_print (" => unsensitive\n");
+								cd_debug (" => unsensitive\n");
 								if (!GTK_IS_EXPANDER (w))
 									gtk_widget_set_sensitive (w, FALSE);
 							}
@@ -3336,7 +3336,7 @@ void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTab
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
 		gboolean bReturn;
 		g_signal_emit_by_name (pCombo, "changed", NULL, &bReturn);
-		g_print ("%s found \n", cActiveTheme);
+		cd_debug ("%s found \n", cActiveTheme);
 	}
 }
 

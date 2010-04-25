@@ -1072,7 +1072,7 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 		Display *display = gdk_x11_get_default_xdisplay ();
 		icon->iBackingPixmap = XCompositeNameWindowPixmap (display, Xid);
 		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
-		g_print ("backing pixmap : %d ; iDamageHandle : %d\n", icon->iBackingPixmap, icon->iDamageHandle);*/
+		cd_debug ("backing pixmap : %d ; iDamageHandle : %d\n", icon->iBackingPixmap, icon->iDamageHandle);*/
 	}
 	#endif
 	

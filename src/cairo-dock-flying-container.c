@@ -332,7 +332,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
 		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
 	}
-	/*g_print ("%s (%d;%d %dx%d)\n", __func__ pFlyingContainer->container.iWindowPositionX,
+	/*cd_debug ("%s (%d;%d %dx%d)\n", __func__ pFlyingContainer->container.iWindowPositionX,
 		pFlyingContainer->container.iWindowPositionY,
 		pFlyingContainer->container.iWidth,
 		pFlyingContainer->container.iHeight);*/

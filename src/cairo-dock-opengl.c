@@ -420,7 +420,7 @@ void cairo_dock_create_icon_pbuffer (void)
 		g_openglConfig.iIconPbufferWidth = iWidth;
 		g_openglConfig.iIconPbufferHeight = iHeight;
 		
-		g_print ("activating pbuffer, usually buggy drivers will crash here ...");
+		cd_debug ("activating pbuffer, usually buggy drivers will crash here ...");
 		if (g_openglConfig.iconPbuffer != 0 && g_openglConfig.iconContext != 0 && glXMakeCurrent (XDisplay, g_openglConfig.iconPbuffer, g_openglConfig.iconContext))
 		{
 			glMatrixMode(GL_PROJECTION);
@@ -436,7 +436,7 @@ void cairo_dock_create_icon_pbuffer (void)
 			glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 			glClearDepth (1.0f);
 		}
-		g_print (" ok, they are fine enough.\n");
+		cd_debug (" ok, they are fine enough.\n");
 	}
 }
 
@@ -730,7 +730,7 @@ static void _cairo_dock_post_initialize_opengl_backend (GtkWidget* pWidget, gpoi
 		glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, fMaximumAnistropy);
 	}
 	
-	g_print ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - Anisotroy filtering level max : %.1f\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
+	cd_debug ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - Anisotroy filtering level max : %.1f\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
 		g_openglConfig.bNonPowerOfTwoAvailable,
 		g_openglConfig.bFboAvailable,
 		!g_openglConfig.bIndirectRendering,

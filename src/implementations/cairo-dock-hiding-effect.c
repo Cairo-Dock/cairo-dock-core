@@ -131,7 +131,7 @@ static void _post_render_fade_out (CairoDock *pDock, cairo_t *pCairoContext)
 	else if (g_openglConfig.bStencilBufferAvailable)
 	{
 		glAccum (GL_LOAD, fAlpha*fAlpha);
-		g_print ("%.2f\n", fAlpha*fAlpha);
+		cd_debug ("%.2f\n", fAlpha*fAlpha);
 		glAccum (GL_RETURN, 1.0);
 	}
 	else if (pDock->iFboId != 0)

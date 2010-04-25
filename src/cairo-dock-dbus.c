@@ -163,7 +163,7 @@ static void _on_detect_application (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 }
 static void _free_detect_application (gpointer *data)
 {
-	g_print ("free data\n");
+	cd_debug ("free data\n");
 	g_free (data[2]);
 	g_free (data);
 }

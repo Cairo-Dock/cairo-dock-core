@@ -232,7 +232,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 			/*else if (event.type == g_iDamageEvent + XDamageNotify)
 			{
 				XDamageNotifyEvent *e = (XDamageNotifyEvent *) &event;
-				g_print ("window %s has been damaged (%d;%d %dx%d)\n", e->drawable, e->area.x, e->area.y, e->area.width, e->area.height);
+				cd_debug ("window %s has been damaged (%d;%d %dx%d)\n", e->drawable, e->area.x, e->area.y, e->area.width, e->area.height);
 				// e->drawable is the window ID of the damaged window
 				// e->geometry is the geometry of the damaged window	
 				// e->area     is the bounding rect for the damaged area	
@@ -241,7 +241,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 				XDamageSubtract (s_XDisplay, e->damage, None, None);
 			}
 			else
-				g_print ("  type : %d (%d); window : %d\n", event.type, XDamageNotify, Xid);*/
+				cd_debug ("  type : %d (%d); window : %d\n", event.type, XDamageNotify, Xid);*/
 		}  // fin d'evenement sur une fenetre.
 	}
 	if (XEventsQueued (s_XDisplay, QueuedAlready) != 0)

@@ -416,14 +416,14 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		
 		if (pGroupDescription->cInternalModule)
 		{
-			g_print ("%s : bouton emprunte a %s\n", pGroupDescription->cGroupName, pGroupDescription->cInternalModule);
+			cd_debug ("%s : bouton emprunte a %s\n", pGroupDescription->cGroupName, pGroupDescription->cInternalModule);
 			pInternalGroupDescription = cairo_dock_find_module_description (pGroupDescription->cInternalModule);
 			if (pInternalGroupDescription != NULL)
 				pGroupBox = gtk_widget_get_parent (pInternalGroupDescription->pActivateButton);
 			else
 				continue;
 			pLabel = pInternalGroupDescription->pLabel;
-			g_print ("ok, found pGroupBox\n");
+			cd_debug ("ok, found pGroupBox\n");
 		}
 		else
 		{
@@ -1813,11 +1813,11 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 			G_CALLBACK (on_delete_main_gui),
 			pBlockingLoop);
 		
-		g_print ("debut de boucle bloquante ...\n");
+		cd_debug ("debut de boucle bloquante ...\n");
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();
-		g_print ("fin de boucle bloquante\n");
+		cd_debug ("fin de boucle bloquante\n");
 		
 		g_main_loop_unref (pBlockingLoop);
 	}

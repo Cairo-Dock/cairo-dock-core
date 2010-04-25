@@ -117,7 +117,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	
 	//\_______________ on decompresse l'archive.
 	gchar *cCommand = g_strdup_printf ("tar xf%c \"%s\" -C \"%s\"", (g_str_has_suffix (cArchivePath, "bz2") ? 'j' : 'z'), cArchivePath, cExtractTo);
-	g_print ("tar : %s\n", cCommand);
+	cd_debug ("tar : %s\n", cCommand);
 	int r = system (cCommand);
 	if (r != 0)
 	{
@@ -151,7 +151,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	CURL *handle = curl_easy_init( );
 	
 	gchar *cURL = g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName);
-	g_print ("cURL : %s\n", cURL);
+	cd_debug ("cURL : %s\n", cURL);
 	FILE *f = fopen (cTmpFilePath, "wb");
 	g_return_val_if_fail (f, NULL);
 	curl_easy_setopt (handle, CURLOPT_URL, cURL);
@@ -213,7 +213,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	//\_______________ On l'extrait si c'est une archive.
 	if (cTmpFilePath != NULL && cExtractTo != NULL)
 	{
-		g_print ("uncompressing ...\n");
+		cd_debug ("uncompressing ...\n");
 		gchar *cPath = cairo_dock_uncompress_file (cTmpFilePath, cExtractTo, cDistantFileName);
 		g_remove (cTmpFilePath);
 		g_free (cTmpFilePath);
@@ -555,13 +555,13 @@ GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar 
 	{
 		int iMajorVersion=0, iMinorVersion=0, iMicroVersion=0;
 		cairo_dock_get_version_from_string (cContent+4, &iMajorVersion, &iMinorVersion, &iMicroVersion);
-		g_print ("%d/%d/%d\n", iMajorVersion, iMinorVersion, iMicroVersion);
+		cd_debug ("%d/%d/%d\n", iMajorVersion, iMinorVersion, iMicroVersion);
 		if (iMajorVersion > g_iMajorVersion ||
 			(iMajorVersion == g_iMajorVersion &&
 				(iMinorVersion > g_iMinorVersion ||
 					(iMinorVersion == g_iMinorVersion && iMicroVersion > g_iMicroVersion))))
 		{
-			g_print ("A new version is available !\n>>>\n%d.%d.%d\n<<<\n", iMajorVersion, iMinorVersion, iMicroVersion);
+			cd_debug ("A new version is available !\n>>>\n%d.%d.%d\n<<<\n", iMajorVersion, iMinorVersion, iMicroVersion);
 		}
 	}
 	
@@ -895,14 +895,14 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 	gchar *cNewThemePath = NULL;
 	if (*cPackagePath == '/' || strncmp (cPackagePath, "file://", 7) == 0)  // paquet en local.
 	{
-		g_print (" paquet local\n");
+		cd_debug (" paquet local\n");
 		gchar *cFilePath = (*cPackagePath == '/' ? g_strdup (cPackagePath) : g_filename_from_uri (cPackagePath, NULL, NULL));
 		cNewThemePath = cairo_dock_uncompress_file (cFilePath, g_cThemesDirPath, NULL);
 		g_free (cFilePath);
 	}
 	else  // paquet distant.
 	{
-		g_print (" paquet distant\n");
+		cd_debug (" paquet distant\n");
 		gchar *str = strrchr (cPackagePath, '/');
 		if (str != NULL)
 		{

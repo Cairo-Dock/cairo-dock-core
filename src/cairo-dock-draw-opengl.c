@@ -736,7 +736,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 
 GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight)
 {
-	/*g_print ("%dx%d\n", iWidth, iHeight);
+	/*cd_debug ("%dx%d\n", iWidth, iHeight);
 	int i;
 	guint pixel, alpha, red, green, blue;
 	float fAlphaFactor;
@@ -754,7 +754,7 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 		green *= fAlphaFactor;
 		blue *= fAlphaFactor;
 		pPixelBuffer2[i] = (pixel & 0xFF000000) + (red << 16) + (green << 8) + (blue << 0);
-		g_print ("\\%o\\%o\\%o\\%o", red, green, blue, alpha);
+		cd_debug ("\\%o\\%o\\%o\\%o", red, green, blue, alpha);
 	}
 	pTextureRaw = pPixelBuffer2;*/
 	GLuint iTexture = 0;
@@ -1664,7 +1664,7 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 	size_t size = iconv (cd,
 		&cPool, &inbytesleft,
 		&outbuf, &outbytesleft);
-	g_print ("%d bytes left, %d bytes written => '%s'\n", inbytesleft, outbytesleft, outbuf0);
+	cd_debug ("%d bytes left, %d bytes written => '%s'\n", inbytesleft, outbytesleft, outbuf0);
 	g_free (inbuf0);
 	cPool = outbuf0;
 	iconv_close (cd);*/

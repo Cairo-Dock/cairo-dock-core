@@ -52,7 +52,7 @@ extern gboolean g_bUseOpenGL;
 
 static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
 {
-	g_print ("pas de alt+f4\n");
+	cd_debug ("pas de alt+f4\n");
 	return TRUE;  // on empeche les ALT+F4 malheureux.
 }
 

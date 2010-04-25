@@ -471,7 +471,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	{
 		pMinimalConfig->fOrder = ++ s_iMaxOrder;
 		g_key_file_set_double (pKeyFile, "Icon", "order", pMinimalConfig->fOrder);
-		g_print ("set order to %.1f\n", pMinimalConfig->fOrder);
+		cd_debug ("set order to %.1f\n", pMinimalConfig->fOrder);
 		cairo_dock_write_keys_to_file (pKeyFile, cInstanceConfFilePath);
 	}
 	else
@@ -1031,7 +1031,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		if (pModule->bCanDetach && pMinimalConfig->bIsDetached)
 		{
 			pDesklet = cairo_dock_create_desklet (NULL, &pMinimalConfig->deskletAttribute);
-			/*g_print ("transparence du desklet...\n");
+			/*cd_debug ("transparence du desklet...\n");
 			while (gtk_events_pending ())  // pour la transparence initiale.
 				gtk_main_iteration ();*/
 			pContainer = CAIRO_CONTAINER (pDesklet);

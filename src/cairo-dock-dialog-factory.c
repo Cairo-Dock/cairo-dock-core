@@ -484,7 +484,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 			FALSE,
 			0);
 		cd_debug (" pack -> ref = %d", pAttribute->pInteractiveWidget->object.parent_instance.ref_count);
-		g_print ("grab focus\n");
+		cd_debug ("grab focus\n");
 		gtk_window_present (GTK_WINDOW (pDialog->container.pWidget));
 		gtk_widget_grab_focus (pDialog->pInteractiveWidget);
 	}

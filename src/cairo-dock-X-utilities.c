@@ -329,7 +329,7 @@ void cairo_dock_show_hide_desktop (gboolean bShow)
 	xClientMessage.xclient.data.l[3] = 2;
 	xClientMessage.xclient.data.l[4] = 0;
 	
-	g_print ("%s (%d)\n", __func__, bShow);
+	cd_debug ("%s (%d)\n", __func__, bShow);
 	XSendEvent (s_XDisplay,
 		root,
 		False,

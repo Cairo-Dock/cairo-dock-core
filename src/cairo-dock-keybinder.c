@@ -329,7 +329,7 @@ cd_keybinder_unbind (const char           *keystring,
 
 		bindings = g_slist_remove (bindings, binding);
 		
-		g_print (" --- remove key binding '%s'\n", binding->keystring);
+		cd_debug (" --- remove key binding '%s'\n", binding->keystring);
 		g_free (binding->keystring);
 		g_free (binding);
 		break;

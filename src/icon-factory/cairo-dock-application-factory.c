@@ -156,7 +156,7 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 			{
 				/*Window iPropWindow;
 				XGetTransientForHint (s_XDisplay, Xid, &iPropWindow);
-				g_print ("%s\n", gdk_x11_get_xatom_name (iPropWindow));*/
+				cd_debug ("%s\n", gdk_x11_get_xatom_name (iPropWindow));*/
 				Window XMainAppliWindow = _cairo_dock_get_parent_window (Xid);
 				if (XMainAppliWindow != 0)
 				{

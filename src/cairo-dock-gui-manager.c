@@ -216,7 +216,7 @@ void cairo_dock_update_desklet_detached_state_in_gui (CairoDockModuleInstance *p
 
 void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 {
-	g_print ("%s (%s)\n", __func__, cMessage);
+	cd_debug ("%s (%s)\n", __func__, cMessage);
 	GtkWidget *pStatusBar;
 	if (pWindow != NULL)
 	{
@@ -318,7 +318,7 @@ void cairo_dock_close_gui (void)
 
 static gboolean on_delete_generic_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()\n", __func__);
 	if (pBlockingLoop != NULL && g_main_loop_is_running (pBlockingLoop))
 	{
 		g_main_loop_quit (pBlockingLoop);
@@ -372,7 +372,7 @@ static void on_click_generic_apply (GtkButton *button, GtkWidget *pWindow)
 
 static void on_click_generic_quit (GtkButton *button, GtkWidget *pWindow)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()\n", __func__);
 	GMainLoop *pBlockingLoop = g_object_get_data (G_OBJECT (pWindow), "loop");
 	
 	gboolean bReturn;
@@ -525,11 +525,11 @@ gboolean cairo_dock_build_generic_gui (const gchar *cConfFilePath, const gchar *
 			G_CALLBACK (on_delete_generic_gui),
 			pBlockingLoop);
 
-		g_print ("debut de boucle bloquante ...\n");
+		cd_debug ("debut de boucle bloquante ...\n");
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();
-		g_print ("fin de boucle bloquante\n");
+		cd_debug ("fin de boucle bloquante\n");
 		
 		g_main_loop_unref (pBlockingLoop);
 		g_object_set_data (G_OBJECT (pMainWindow), "loop", NULL);

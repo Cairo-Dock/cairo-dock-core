@@ -340,7 +340,7 @@ static gboolean on_unmap_desklet (GtkWidget* pWidget,
 	GdkEvent *pEvent,
 	CairoDesklet *pDesklet)
 {
-	g_print ("unmap desklet (bAllowMinimize:%d)\n", pDesklet->bAllowMinimize);
+	cd_debug ("unmap desklet (bAllowMinimize:%d)\n", pDesklet->bAllowMinimize);
 	Window Xid = GDK_WINDOW_XID (pWidget->window);
 	if (cairo_dock_window_is_utility (Xid))  // sur la couche des widgets, on ne fait rien.
 		return FALSE;
@@ -349,7 +349,7 @@ static gboolean on_unmap_desklet (GtkWidget* pWidget,
 		if (pDesklet->pUnmapTimer)
 		{
 			double fElapsedTime = g_timer_elapsed (pDesklet->pUnmapTimer, NULL);
-			g_print ("fElapsedTime : %fms\n", fElapsedTime);
+			cd_debug ("fElapsedTime : %fms\n", fElapsedTime);
 			g_timer_destroy (pDesklet->pUnmapTimer);
 			pDesklet->pUnmapTimer = NULL;
 			if (fElapsedTime < .2)
@@ -427,14 +427,14 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 			}
 			else if (pDesklet->making_transparent)
 			{
-				g_print ("pDesklet->making_transparent\n");
+				cd_debug ("pDesklet->making_transparent\n");
 				pDesklet->making_transparent = FALSE;
 				if (pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y > pDesklet->container.iHeight - myDesklets.iDeskletButtonSize)  // on verifie qu'on est encore dedans.
 				{
 					Icon *icon = pDesklet->pIcon;
 					g_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
 					pDesklet->bNoInput = ! pDesklet->bNoInput;
-					g_print ("no input : %d (%s)\n", pDesklet->bNoInput, icon->pModuleInstance->cConfFilePath);
+					cd_debug ("no input : %d (%s)\n", pDesklet->bNoInput, icon->pModuleInstance->cConfFilePath);
 					cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 						G_TYPE_BOOLEAN, "Desklet", "no input", pDesklet->bNoInput,
 						G_TYPE_INVALID);
@@ -844,12 +844,12 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 			
 			int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
 			cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
-			g_print (">>> on fixe le desklet sur le bureau (%d,%d,%d) (cur : %d,%d,%d)\n", iNumDesktop, iNumViewportX, iNumViewportY, iCurrentDesktop, iCurrentViewportX, iCurrentViewportY);
+			cd_debug (">>> on fixe le desklet sur le bureau (%d,%d,%d) (cur : %d,%d,%d)\n", iNumDesktop, iNumViewportX, iNumViewportY, iCurrentDesktop, iCurrentViewportX, iCurrentViewportY);
 			
 			iNumViewportX -= iCurrentViewportX;
 			iNumViewportY -= iCurrentViewportY;
 			
-			g_print ("on le place en %d + %d\n", iNumViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iAbsolutePositionX);
+			cd_debug ("on le place en %d + %d\n", iNumViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iAbsolutePositionX);
 			cairo_dock_move_xwindow_to_absolute_position (Xid, iNumDesktop, iNumViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + iAbsolutePositionX, iNumViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + iAbsolutePositionY);
 		}
 	}
@@ -1038,7 +1038,7 @@ void cairo_dock_zoom_out_desklet (CairoDesklet *pDesklet)
 
 static void _cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve)
 {
-	g_print ("%s (%d)\n", __func__, bReserve);
+	cd_debug ("%s (%d)\n", __func__, bReserve);
 	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
 	int left=0, right=0, top=0, bottom=0;
 	int left_start_y=0, left_end_y=0, right_start_y=0, right_end_y=0, top_start_x=0, top_end_x=0, bottom_start_x=0, bottom_end_x=0;
@@ -1188,7 +1188,7 @@ void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky)
 		int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
 		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
 		iNumDesktop = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY;
-		g_print (">>> on colle ce desklet sur le bureau %d\n", iNumDesktop);
+		cd_debug (">>> on colle ce desklet sur le bureau %d\n", iNumDesktop);
 	}
 	
 	//\_________________ On enregistre le nouvel etat.

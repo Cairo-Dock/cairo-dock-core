@@ -586,7 +586,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin).
 	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 	{
-		g_print ("not really outside (%d;%d)\n", (int)pEvent->x, (int)pEvent->y);
+		cd_debug ("not really outside (%d;%d)\n", (int)pEvent->x, (int)pEvent->y);
 		return FALSE;
 	}
 	
@@ -613,7 +613,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	else if (pDock->iSidLeaveDemand != 0 && pEvent != NULL)  // sortie naturelle et deja une sortie en attente.
 	{
-		g_print ("une sortie est deja programmee\n");
+		cd_debug ("une sortie est deja programmee\n");
 		return TRUE;
 	}
 	pDock->iSidLeaveDemand = 0;
@@ -657,7 +657,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	//\_______________ On gere le drag d'une icone hors du dock.
 	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
 	{
-		g_print ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
+		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
 		//if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
 		//	return ;
@@ -666,7 +666,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		g_return_val_if_fail (pOriginDock != NULL, TRUE);
 		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
-			g_print (" on detache l'icone\n");
+			cd_debug (" on detache l'icone\n");
 			pOriginDock->bIconIsFlyingAway = TRUE;
 			gchar *cParentDockName = s_pIconClicked->cParentDockName;
 			s_pIconClicked->cParentDockName = NULL;
@@ -762,7 +762,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		cairo_dock_start_growing (pDock);
 		if (pDock->bIsHiding || cairo_dock_is_hidden (pDock))  // on (re)monte.
 		{
-			g_print ("  on etait deja dedans\n");
+			cd_debug ("  on etait deja dedans\n");
 			cairo_dock_start_showing (pDock);
 		}
 		return FALSE;
@@ -795,7 +795,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			double t = tv.tv_sec + tv.tv_usec * 1e-6;
 			if (t - s_pFlyingContainer->fCreationTime > 1)  // on empeche le cas ou enlever l'icone fait augmenter le ratio du dock, et donc sa hauteur, et nous fait rentrer dedans des qu'on sort l'icone.
 			{
-				g_print ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
+				cd_debug ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
 				cairo_dock_free_flying_container (s_pFlyingContainer);
 				cairo_dock_stop_icon_animation (pFlyingIcon);
 				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
@@ -831,11 +831,11 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	{
 		//g_print (">>> we've just entered the dock, pointed icon becomes NULL\n");
 		//if (s_pIconClicked != NULL)
-		//	g_print (">>> on est rentre par un clic ! (KDE:%d)\n", g_iDesktopEnv == CAIRO_DOCK_KDE);
+		//	cd_debug (">>> on est rentre par un clic ! (KDE:%d)\n", g_iDesktopEnv == CAIRO_DOCK_KDE);
 		if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 			icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
 		//else
-		//	g_print (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
+		//	cd_debug (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
 	}
 	
 	// on lance le grossissement.
@@ -899,7 +899,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
-	g_print ("on a appuye sur une touche (%d)\n", pKey->keyval);
+	cd_debug ("on a appuye sur une touche (%d)\n", pKey->keyval);
 	if (pKey->type == GDK_KEY_PRESS)
 	{
 		cairo_dock_notify (CAIRO_DOCK_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
@@ -1010,7 +1010,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					
 					if (s_pFlyingContainer != NULL)
 					{
-						g_print ("on relache l'icone volante\n");
+						cd_debug ("on relache l'icone volante\n");
 						if (pDock->container.bInside)
 						{
 							//g_print ("  on la remet dans son dock d'origine\n");
@@ -1247,7 +1247,7 @@ static gboolean s_bWaitForData = FALSE;
 
 void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint time, CairoDock *pDock)
 {
-	g_print ("%s (%dx%d, %d, %d)\n", __func__, x, y, time, pDock->container.bInside);
+	cd_debug ("%s (%dx%d, %d, %d)\n", __func__, x, y, time, pDock->container.bInside);
 	if (cairo_dock_is_hidden (pDock))  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
 		return ;
 	//\_________________ On recupere l'URI.
@@ -1263,7 +1263,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	{
 		s_bWaitForData = FALSE;
 		gdk_drag_status (dc, GDK_ACTION_COPY, time);
-		g_print ("drag info : <%s>\n", cReceivedData);
+		cd_debug ("drag info : <%s>\n", cReceivedData);
 		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;
 		if (g_str_has_suffix (cReceivedData, ".desktop")/** || g_str_has_suffix (cReceivedData, ".sh")*/)
 			pDock->fAvoidingMouseMargin = .5;  // on ne sera jamais dessus.
@@ -1352,13 +1352,13 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 	//\_________________ On simule les evenements souris habituels.
 	if (! pDock->bIsDragging)
 	{
-		g_print ("start dragging\n");
+		cd_debug ("start dragging\n");
 		pDock->bIsDragging = TRUE;
 		
 		/*GdkAtom gdkAtom = gdk_drag_get_selection (dc);
 		Atom xAtom = gdk_x11_atom_to_xatom (gdkAtom);
 		Window Xid = GDK_WINDOW_XID (dc->source_window);
-		g_print (" <%s>\n", cairo_dock_get_property_name_on_xwindow (Xid, xAtom));*/
+		cd_debug (" <%s>\n", cairo_dock_get_property_name_on_xwindow (Xid, xAtom));*/
 		
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify (CAIRO_DOCK_START_DRAG_DATA, pDock, &bStartAnimation);
@@ -1374,7 +1374,7 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 		{
 			gtk_drag_get_data (pWidget, dc, target, time);
 			s_bWaitForData = TRUE;
-			g_print ("get-data envoye\n");
+			cd_debug ("get-data envoye\n");
 		}*/
 		
 		cairo_dock_on_enter_notify (pWidget, NULL, pDock);  // ne sera effectif que la 1ere fois a chaque entree dans un dock.
@@ -1444,7 +1444,7 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 
 void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock)
 {
-	g_print ("stop dragging1\n");
+	cd_debug ("stop dragging1\n");
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if ((icon && icon->pSubDock) || pDock->iRefCount > 0)  // on retarde l'evenement, car il arrive avant le leave-event, et donc le sous-dock se cache avant qu'on puisse y entrer.
 	{
@@ -1453,7 +1453,7 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 			gtk_main_iteration ();
 		cd_debug (">>> pDock->container.bInside : %d", pDock->container.bInside);
 	}
-	g_print ("stop dragging2\n");
+	cd_debug ("stop dragging2\n");
 	s_bWaitForData = FALSE;
 	pDock->bIsDragging = FALSE;
 	pDock->bCanDrop = FALSE;

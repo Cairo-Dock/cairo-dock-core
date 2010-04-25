@@ -76,21 +76,21 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	cairo_dock_get_integer_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, pIcons->iIconsTypesList, 3, NULL, "Cairo Dock", NULL);  // on le recupere meme si on ne separe pas les icones, pour le panneau de conf simple.
 	if (pIcons->iIconsTypesList[0] == 0 && pIcons->iIconsTypesList[1] == 0)  // old format.
 	{
-		g_print ("icon's type order : old format\n");
+		cd_debug ("icon's type order : old format\n");
 		gchar **cIconsTypesList = cairo_dock_get_string_list_key_value (pKeyFile, "Icons", "icon's type order", &bFlushConfFileNeeded, &length, NULL, "Cairo Dock", NULL);
 		
 		if (cIconsTypesList != NULL && length > 0)
 		{
-			g_print (" conversion ...\n");
+			cd_debug (" conversion ...\n");
 			unsigned int i, j;
 			for (i = 0; i < length; i ++)
 			{
-				g_print (" %d) %s\n", i, cIconsTypesList[i]);
+				cd_debug (" %d) %s\n", i, cIconsTypesList[i]);
 				for (j = 0; j < ((CAIRO_DOCK_NB_TYPES + 1) / 2); j ++)
 				{
 					if (strcmp (cIconsTypesList[i], s_cIconTypeNames[j]) == 0)
 					{
-						g_print ("   => %d\n", j);
+						cd_debug ("   => %d\n", j);
 						pIcons->tIconTypeOrder[2*j] = 2 * i;
 					}
 				}
@@ -101,7 +101,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 		pIcons->iIconsTypesList[0] = pIcons->tIconTypeOrder[2*0]/2;
 		pIcons->iIconsTypesList[1] = pIcons->tIconTypeOrder[2*1]/2;
 		pIcons->iIconsTypesList[2] = pIcons->tIconTypeOrder[2*2]/2;
-		g_print ("mise a jour avec {%d;%d;%d}\n", pIcons->iIconsTypesList[0], pIcons->iIconsTypesList[1], pIcons->iIconsTypesList[2]);
+		cd_debug ("mise a jour avec {%d;%d;%d}\n", pIcons->iIconsTypesList[0], pIcons->iIconsTypesList[1], pIcons->iIconsTypesList[2]);
 		g_key_file_set_integer_list (pKeyFile, "Icons", "icon's type order", pIcons->iIconsTypesList, 3);
 		bFlushConfFileNeeded = TRUE;
 	}

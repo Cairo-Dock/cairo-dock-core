@@ -292,7 +292,7 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, CairoContainer *pContainer
 		pIcon = CAIRO_DESKLET (pContainer)->pIcon;
 	
 	int answer = cairo_dock_ask_question_and_wait (_("Quit Cairo-Dock?"), pIcon, pContainer);
-	g_print ("quit : %d (yes:%d)\n", answer, GTK_RESPONSE_YES);
+	cd_debug ("quit : %d (yes:%d)\n", answer, GTK_RESPONSE_YES);
 	if (answer == GTK_RESPONSE_YES)
 		gtk_main_quit ();
 }
@@ -783,7 +783,7 @@ static void _cairo_dock_rename_file (GtkMenuItem *pMenuItem, gpointer *data)
 
 static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, gpointer *data)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()\n", __func__);
 	Icon *icon = data[0];
 	CairoContainer *pContainer= data[1];
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
@@ -890,7 +890,7 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 	g_return_if_fail (icon->Xid != 0 && icon->cClass != NULL);
 	
 	// on trouve le .desktop du programme.
-	g_print ("%s (%s)\n", __func__, icon->cClass);
+	cd_debug ("%s (%s)\n", __func__, icon->cClass);
 	gchar *cDesktopFilePath = g_strdup_printf ("/usr/share/applications/%s.desktop", icon->cClass);
 	if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))  // on n'a pas trouve la, on cherche chez KDE.
 	{

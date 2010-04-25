@@ -508,7 +508,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	CairoIconContainerRenderer *pRenderer = cairo_dock_get_icon_container_renderer (pIcon->cClass != NULL ? "Stack" : s_cRendererNames[pIcon->iSubdockViewType]);
 	if (pRenderer == NULL)
 		return;
-	g_print ("%s (%s)\n", __func__, pIcon->cName);
+	cd_debug ("%s (%s)\n", __func__, pIcon->cName);
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);
@@ -610,7 +610,7 @@ static void cairo_dock_load_launcher (Icon *icon, int iWidth, int iHeight)
 	}
 	else if (icon->pSubDock != NULL && icon->cClass != NULL && icon->cDesktopFileName == NULL)  // icone pointant sur une classe (epouvantail).
 	{
-		g_print ("c'est un epouvantail\n");
+		cd_debug ("c'est un epouvantail\n");
 		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
 			iWidth,
 			iHeight);
@@ -694,7 +694,7 @@ static void cairo_dock_load_appli (Icon *icon, int iWidth, int iHeight)
 		icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, iWidth, iHeight);
 	if (icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
 	{
-		g_print ("%s (%ld) doesn't define any icon, we set the default one.\n", icon->cName, icon->Xid);
+		cd_debug ("%s (%ld) doesn't define any icon, we set the default one.\n", icon->cName, icon->Xid);
 		gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
 		if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
 		{

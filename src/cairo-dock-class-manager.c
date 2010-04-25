@@ -794,7 +794,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer. (c'est souvent lorsqu'on ferme toutes une classe d'un coup. donc les animations sont pratiquement dans le meme etat, donc la derniere icone en est aussi a la fin, donc on ne verrait de toute facon aucune animation.
 			{
-				g_print ("inutile de re-inserer l'icone restante\n");
+				cd_debug ("inutile de re-inserer l'icone restante\n");
 				cairo_dock_free_icon (pLastClassIcon);
 				cairo_dock_update_dock_size (pFakeParentDock);
 				cairo_dock_calculate_dock_icons (pFakeParentDock);

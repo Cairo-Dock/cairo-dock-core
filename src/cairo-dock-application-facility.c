@@ -101,7 +101,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			}
 			/*if (pDock->bAutoHide && bForceDemand)
 			{
-				g_print ("force dock to raise\n");
+				cd_debug ("force dock to raise\n");
 				cairo_dock_emit_enter_signal (pDock);
 			}*/
 		}

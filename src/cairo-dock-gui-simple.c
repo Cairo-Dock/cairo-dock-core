@@ -186,7 +186,7 @@ static gboolean on_apply_theme_simple (gpointer data)
 	//\_______________ On importe le theme.
 	cairo_dock_set_status_message_printf (NULL, _("Importing theme %s ..."), cNewThemeName);
 	gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
-	g_print ("bThemeImported : %d\n", bThemeImported);
+	cd_debug ("bThemeImported : %d\n", bThemeImported);
 	
 	//\_______________ On le charge.
 	if (bThemeImported)
@@ -198,7 +198,7 @@ static gboolean on_apply_theme_simple (gpointer data)
 	cairo_dock_set_status_message (s_pSimpleConfigWindow, "");
 	
 	//\_______________ On recharge la fenetre.
-	g_print ("reload\n");
+	cd_debug ("reload\n");
 	cConfFilePath = _make_simple_conf_file ();
 	g_free (cConfFilePath);
 	cairo_dock_reload_generic_gui (s_pSimpleConfigWindow);
@@ -432,7 +432,7 @@ static GtkWidget * show_main_gui (void)
 
 static gboolean on_apply_config_module_simple (gpointer data)
 {
-	g_print ("%s (%s)\n", __func__, s_cCurrentModuleName);
+	cd_debug ("%s (%s)\n", __func__, s_cCurrentModuleName);
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (s_cCurrentModuleName);
 	if (pModule != NULL)
 	{
@@ -629,7 +629,7 @@ static gboolean _test_one_module_name (GtkTreeModel *model, GtkTreePath *path, G
 {
 	gchar *cResult = NULL;
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_RESULT, &cResult, -1);
-	g_print ("- %s !\n", cResult
+	cd_debug ("- %s !\n", cResult
 	);
 	if (cResult && strcmp (data[0], cResult) == 0)
 	{

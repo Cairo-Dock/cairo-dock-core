@@ -795,7 +795,7 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 {
 	if (pIcon != NULL && cairo_dock_icon_is_being_removed (pIcon))  // icone en cours de suppression.
 	{
-		g_print ("dialog skipped for %s (%.2f)\n", pIcon->cName, pIcon->fInsertRemoveFactor);
+		cd_debug ("dialog skipped for %s (%.2f)\n", pIcon->cName, pIcon->fInsertRemoveFactor);
 		return NULL;
 	}
 	
@@ -926,7 +926,7 @@ static void _cairo_dock_get_answer_from_dialog (int iClickedButton, GtkWidget *p
 }
 static gboolean _cairo_dock_dialog_destroyed (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
-	g_print ("dialogue detruit, on sort de la boucle\n");
+	cd_debug ("dialogue detruit, on sort de la boucle\n");
 	gtk_window_set_modal (GTK_WINDOW (pWidget), FALSE);
 	if (g_main_loop_is_running (pBlockingLoop))
 		g_main_loop_quit (pBlockingLoop);
@@ -963,11 +963,11 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		{
 			cairo_dock_pop_up (CAIRO_DOCK (pContainer));
 		}
-		g_print ("debut de boucle bloquante ...\n");
+		cd_debug ("debut de boucle bloquante ...\n");
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();
-		g_print ("fin de boucle bloquante -> %d\n", iClickedButton);
+		cd_debug ("fin de boucle bloquante -> %d\n", iClickedButton);
 		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_pop_down (CAIRO_DOCK (pContainer));
 		if (CAIRO_DOCK_IS_DOCK (pContainer)/* && ! pDock->container.bInside*/)
@@ -1105,7 +1105,7 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog)
 
 void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()\n", __func__);
 	if (! GTK_WIDGET_VISIBLE (pDialog->container.pWidget))
 	{
 		if (pDialog->pInteractiveWidget != NULL)

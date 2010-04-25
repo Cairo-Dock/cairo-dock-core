@@ -236,7 +236,7 @@ void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFil
 	if (pConfKeyFile == NULL)
 		return ;
 
-	g_print ("%s (%s)\n", __func__,cConfFilePath );
+	cd_debug ("%s (%s)\n", __func__,cConfFilePath );
 	cairo_dock_replace_key_values (pConfKeyFile, pValidKeyFile, bUseFileKeys, iIdentifier);
 
 	cairo_dock_write_keys_to_file (pConfKeyFile, cConfFilePath);
@@ -250,7 +250,7 @@ void cairo_dock_replace_keys_by_identifier (const gchar *cConfFilePath, gchar *c
 	if (pReplacementKeyFile == NULL)
 		return ;
 	
-	g_print ("%s (%s <- %s, '%c')\n", __func__, cConfFilePath, cReplacementConfFilePath, iIdentifier);
+	cd_debug ("%s (%s <- %s, '%c')\n", __func__, cConfFilePath, cReplacementConfFilePath, iIdentifier);
 	cairo_dock_replace_values_in_conf_file (cConfFilePath, pReplacementKeyFile, TRUE, iIdentifier);
 
 	g_key_file_free (pReplacementKeyFile);
