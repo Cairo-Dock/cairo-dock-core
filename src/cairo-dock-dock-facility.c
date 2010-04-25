@@ -603,6 +603,7 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		}
 		
 		icon->fY = (bDirectionUp ? iHeight - myBackground.iDockLineWidth - myBackground.iFrameMargin - icon->fScale * icon->fHeight : myBackground.iDockLineWidth + myBackground.iFrameMargin);
+		//g_print ("%s fY : %d; %.2f\n", icon->cName, iHeight, icon->fHeight);
 		
 		//\_______________ Si on avait deja defini l'icone pointee, on peut placer l'icone courante par rapport a la precedente.
 		if (pointed_ic != NULL)

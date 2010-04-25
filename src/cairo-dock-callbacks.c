@@ -1120,9 +1120,11 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		iNewY = pEvent->x;
 	}
 	
+	gboolean bSizeUpdated = FALSE;
 	if (pDock->container.iWindowPositionX == 0 && pDock->container.iWindowPositionY == 0 && !cairo_dock_quick_hide_is_activated ())  // ce cas arrive au debut. Il peut eventuellement arriver apres aussi, ca n'est pas un probleme.
 	{
 		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+		bSizeUpdated = TRUE;
 		pDock->container.iWidth = iNewWidth;
 		pDock->container.iHeight = iNewHeight;
 		pDock->container.iWindowPositionX = iNewX;
@@ -1133,9 +1135,9 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		}
 	}
 	
-	if ((iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight) && iNewWidth > 1)  // changement de taille
+	if ((iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight || bSizeUpdated) && iNewWidth > 1)  // changement de taille
 	{
-		//g_print ("-> %dx%d\n", iNewWidth, iNewHeight);
+		//g_print ("--------------------------------> %dx%d\n", iNewWidth, iNewHeight);
 		pDock->container.iWidth = iNewWidth;
 		pDock->container.iHeight = iNewHeight;
 		pDock->container.iWindowPositionX = iNewX;

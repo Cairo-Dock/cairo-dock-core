@@ -619,7 +619,6 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	if (pFirstDrawnElement == NULL)
 		return;
 	
-	glPushMatrix ();
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
 	do
@@ -635,7 +634,6 @@ static void cd_render_opengl_default (CairoDock *pDock)
 		
 		ic = cairo_dock_get_next_element (ic, pDock->icons);
 	} while (ic != pFirstDrawnElement);
-	glPopMatrix ();
 	//glDisable (GL_LIGHTING);
 }
 
