@@ -769,7 +769,7 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	cd_message ("%s (%s, %d)", __func__, pIcon->cName, pIcon->iAnimationState);
 	
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST &&
-		(cairo_dock_icon_is_being_inserted_or_removed (pIcon) || cairo_dock_animation_will_be_visible (pDock)))
+		(cairo_dock_icon_is_being_inserted_or_removed (pIcon) || pIcon->bIsDemandingAttention  || cairo_dock_animation_will_be_visible (pDock)))
 	{
 		//g_print ("  c'est parti\n");
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
@@ -806,6 +806,7 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 	
 	cairo_dock_request_icon_animation (pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_mark_icon_as_clicked (pIcon);  // pour eviter qu'un simple survol ne stoppe l'animation.
+	
 }
 
 void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
