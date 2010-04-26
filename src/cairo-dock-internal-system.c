@@ -85,9 +85,19 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	pSystem->cActiveModuleList = cairo_dock_get_string_list_key_value (pKeyFile, "System", "modules", &bFlushConfFileNeeded, &length, NULL, "Applets", "modules_0");
 	
 	pSystem->iConnectionTimeout = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn timeout", &bFlushConfFileNeeded, 5, NULL, NULL);
-	pSystem->iConnectiontMaxTime = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn max time", &bFlushConfFileNeeded, 120, NULL, NULL);
-	pSystem->iConnectiontNbRetries = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn retry", &bFlushConfFileNeeded, 0, NULL, NULL);
-	
+	pSystem->iConnectionMaxTime = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn max time", &bFlushConfFileNeeded, 120, NULL, NULL);
+	///pSystem->iConnectionNbRetries = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn retry", &bFlushConfFileNeeded, 0, NULL, NULL);
+	///#i-[0;5] Number of retries:
+	///#{If an error occurs during downloading a theme, it will retry this number of times before giving up.}
+	///conn retry = 0
+	if (cairo_dock_get_boolean_key_value (pKeyFile, "System", "conn use proxy", &bFlushConfFileNeeded, FALSE, NULL, NULL))
+	{
+		pSystem->cConnectionProxy = cairo_dock_get_string_key_value (pKeyFile, "System", "conn proxy", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		pSystem->iConnectionPort = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn port", &bFlushConfFileNeeded, 0, NULL, NULL);
+		pSystem->cConnectionUser = cairo_dock_get_string_key_value (pKeyFile, "System", "conn user", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		gchar *cPasswd = cairo_dock_get_string_key_value (pKeyFile, "System", "conn passwd", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		cairo_dock_decrypt_string (cPasswd, &pSystem->cConnectionPasswd);
+	}
 	return bFlushConfFileNeeded;
 }
 
@@ -95,6 +105,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 static void reset_config (CairoConfigSystem *pSystem)
 {
 	g_free (pSystem->cActiveModuleList);
+	g_free (pSystem->cConnectionProxy);
+	g_free (pSystem->cConnectionUser);
+	g_free (pSystem->cConnectionPasswd);
 }
 
 

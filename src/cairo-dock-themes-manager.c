@@ -129,11 +129,32 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	return cResultPath;
 }
 
-static size_t write_data (gpointer buffer, size_t size, size_t nmemb, FILE *fd)
+static inline CURL *_init_curl_connection (const gchar *cURL)
+{
+	CURL *handle = curl_easy_init ();
+	curl_easy_setopt (handle, CURLOPT_URL, cURL);
+	if (mySystem.cConnectionProxy != NULL)
+	{
+		curl_easy_setopt (handle, CURLOPT_PROXY, mySystem.cConnectionProxy);
+		if (mySystem.iConnectionPort != 0)
+			curl_easy_setopt (handle, CURLOPT_PROXYPORT, mySystem.iConnectionPort);
+		if (mySystem.cConnectionUser != NULL)
+		{
+			curl_easy_setopt (handle, CURLOPT_PROXYUSERNAME, mySystem.cConnectionUser);
+			if (mySystem.cConnectionPasswd != NULL)
+				curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, mySystem.cConnectionPasswd);
+		}
+	}
+	curl_easy_setopt (handle, CURLOPT_TIMEOUT, mySystem.iConnectionMaxTime);
+	curl_easy_setopt (handle, CURLOPT_CONNECTTIMEOUT, mySystem.iConnectionTimeout);
+	curl_easy_setopt (handle, CURLOPT_NOSIGNAL, 1);  // With CURLOPT_NOSIGNAL set non-zero, curl will not use any signals; sinon curl se vautre apres le timeout, meme si le download s'est bien passe !
+	return handle;
+}
+
+static size_t _write_data_to_file (gpointer buffer, size_t size, size_t nmemb, FILE *fd)
 {
 	return fwrite (buffer, size, nmemb, fd);
 }
-
 gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GError **erreur)
 {
 	//g_print ("%s (%s, %s, %s, %s)\n", __func__, cServerAdress, cDistantFilePath, cDistantFileName, cExtractTo);
@@ -148,22 +169,14 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	}
 	
 	//\_______________ On lance le download.
-	CURL *handle = curl_easy_init( );
-	
 	gchar *cURL = g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName);
 	cd_debug ("cURL : %s\n", cURL);
 	FILE *f = fopen (cTmpFilePath, "wb");
 	g_return_val_if_fail (f, NULL);
-	curl_easy_setopt (handle, CURLOPT_URL, cURL);
-	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
+	
+	CURL *handle = _init_curl_connection (cURL);
+	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, _write_data_to_file);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, f);
-	//curl_easy_setopt (handle, CURLOPT_PROXY, "proxyname");
-	//curl_easy_setopt (handle, CURLOPT_PROXYPORT, 123);
-	//curl_easy_setopt (handle, CURLOPT_PROXYUSERNAME, "username");
-	//curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, "password");
-	curl_easy_setopt (handle, CURLOPT_TIMEOUT, mySystem.iConnectiontMaxTime);
-	curl_easy_setopt (handle, CURLOPT_CONNECTTIMEOUT, mySystem.iConnectionTimeout);
-	curl_easy_setopt (handle, CURLOPT_NOSIGNAL, 1);  // With CURLOPT_NOSIGNAL set non-zero, curl will not use any signals; sinon curl se vautre apres le timeout, meme si le download s'est bien passe !
 	
 	CURLcode r = curl_easy_perform (handle);
 	
@@ -265,9 +278,68 @@ CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const
 	return pTask;
 }
 
+
+static size_t _write_data_to_buffer (gpointer buffer, size_t size, size_t nmemb, GList **list_ptr)
+{
+	GList *pList = *list_ptr;
+	*list_ptr = g_list_prepend (*list_ptr, g_strndup (buffer, size * nmemb));
+	return size * nmemb;
+}
 gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GError **erreur)
 {
-	GError *tmp_erreur = NULL;
+	//\_______________ On lance le download.
+	gchar *cURL = g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName);
+	cd_debug ("getting data from '%s' ...", cURL);
+	
+	CURL *handle = _init_curl_connection (cURL);
+	curl_easy_setopt (handle, CURLOPT_WRITEFUNCTION, (curl_write_callback)_write_data_to_buffer);
+	gpointer *pointer_to_list = g_new0 (gpointer, 1);
+	curl_easy_setopt (handle, CURLOPT_WRITEDATA, pointer_to_list);
+	
+	CURLcode r = curl_easy_perform (handle);
+	
+	if (r != CURLE_OK)
+	{
+		cd_warning ("an error occured while downloading '%s' : %s", cURL, curl_easy_strerror (r));
+		g_free (pointer_to_list);
+		pointer_to_list = NULL;
+	}
+	
+	curl_easy_cleanup (handle);
+	g_free (cURL);
+	
+	gchar *cContent = NULL;
+	if (pointer_to_list != NULL)
+	{
+		GList *l, *pList = *pointer_to_list;
+		int n = 0;
+		for (l = pList; l != NULL; l = l->next)
+		{
+			if (l->data != NULL)
+				n += strlen (l->data);
+		}
+		
+		if (n != 0)
+		{
+			cContent = g_new0 (char, n+1);
+			char *ptr = cContent;
+			for (l = g_list_last (pList); l != NULL; l = l->prev)
+			{
+				if (l->data != NULL)
+				{
+					n = strlen (l->data);
+					memcpy (ptr, l->data, n);
+					ptr += n;
+					g_free (l->data);
+				}
+			}
+		}
+		g_list_free (pList);
+		g_free (pointer_to_list);
+	}
+	
+	return cContent;
+	/**GError *tmp_erreur = NULL;
 	gchar *cTmpFilePath = cairo_dock_download_file (cServerAdress, cDistantFilePath, cDistantFileName, NULL, &tmp_erreur);
 	if (tmp_erreur != NULL)
 	{
@@ -291,7 +363,7 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 	
 	g_remove (cTmpFilePath);
 	g_free (cTmpFilePath);
-	return cContent;
+	return cContent;*/
 }
 
 

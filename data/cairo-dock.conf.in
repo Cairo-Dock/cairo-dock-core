@@ -271,6 +271,7 @@ config transparency = false
 
 #X-[Connection to the themes' server;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-connection.svg]
 frame_conn =
+
 #i-[1;20] Connection timeout to the themes' server :
 #{Maximum time in seconds that you allow the connection to the server to take. This only limits the connection phase,  once the dock has connected this option is of no more use.}
 conn timeout = 5
@@ -279,10 +280,23 @@ conn timeout = 5
 #{Maximum time in seconds that you allow the whole operation to last. Some themes can be up to a few MB.}
 conn max time = 120
 
-#i-[0;5] Number of retries:
-#{If an error occurs during downloading a theme, it will retry this number of times before giving up.}
-conn retry = 0
+#B-[4] Are you behind a proxy ?
+#{Use this option if you connect to the Internet through a proxy.}
+conn use proxy = false
 
+#s- Proxy name :
+conn proxy =
+
+#i- Port :
+conn port = 0
+
+#s- User :
+#{Let empty if you don't need to log-in to the proxy with a user/password.}
+conn user =
+
+#p- Password :
+#{Let empty if you don't need to log-in to the proxy with a user/password.}
+conn user =
 
 modules=
 

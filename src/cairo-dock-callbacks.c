@@ -976,7 +976,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							cairo_dock_insert_icon_in_dock (s_pIconClicked, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 							cairo_dock_start_icon_animation (s_pIconClicked, pDock);
 						}
-
+						
 						Icon *prev_icon, *next_icon;
 						if (icon->fXAtRest > s_pIconClicked->fXAtRest)
 						{

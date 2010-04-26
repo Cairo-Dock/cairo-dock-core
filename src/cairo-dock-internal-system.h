@@ -52,8 +52,13 @@ struct _CairoConfigSystem {
 	gboolean bConfigPanelTransparency;
 	gint iFadeOutNbSteps;
 	gint iConnectionTimeout;
-	gint iConnectiontMaxTime;
-	gint iConnectiontNbRetries;
+	gint iConnectionMaxTime;
+	///gint iConnectionNbRetries;
+	gchar *cConnectionProxy;
+	gint iConnectionPort;
+	gchar *cConnectionUser;
+	gchar *cConnectionPasswd;
+	
 	} ;
 
 DEFINE_PRE_INIT (System);

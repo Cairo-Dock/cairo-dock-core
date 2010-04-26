@@ -827,6 +827,49 @@ static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_render
 	g_free (cModuleName);
 }
 
+static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, CairoDockModule *pModule)
+{
+	if (pModule->pInstancesList == NULL)
+		return;
+	CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
+	if (pModuleInstance)
+		cairo_dock_show_module_instance_gui (pModuleInstance, -1);
+	else
+		cairo_dock_show_module_gui (pModule->pVisitCard->cModuleName);
+}
+static void _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer *data)
+{
+	if (pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)
+	{
+		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (pTreeView);
+		GtkTreeModel *pModel;
+		GtkTreeIter iter;
+		if (! gtk_tree_selection_get_selected (pSelection, &pModel, &iter))
+			return ;
+		
+		gchar *cModuleName = NULL;
+		gtk_tree_model_get (pModel, &iter,
+			CAIRO_DOCK_MODEL_RESULT, &cModuleName, -1);
+		CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
+		if (pModule == NULL)
+			return ;
+		
+		GtkWidget *pMenu = gtk_menu_new ();
+		
+		cairo_dock_add_in_menu_with_stock_and_data (_("Configure this applet"), GTK_STOCK_PROPERTIES, (GFunc)_cairo_dock_initiate_config_module, pMenu, pModule);
+		
+		gtk_widget_show_all (pMenu);
+		gtk_menu_popup (GTK_MENU (pMenu),
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			1,
+			gtk_get_current_event_time ());
+	}
+	return ;
+}
+
 #define _build_list_for_gui(pListStore, cEmptyItem, pHashTable, pHFunction) do { \
 	if (pListStore != NULL)\
 		g_object_unref (pListStore);\
@@ -2115,6 +2158,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
 				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
 				gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (pOneWidget), TRUE);
+				g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_module_tree_view), data);
 				GtkTreeViewColumn* col;
 				// case a cocher
 				rend = gtk_cell_renderer_toggle_new ();
