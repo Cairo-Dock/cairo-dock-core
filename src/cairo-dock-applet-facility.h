@@ -621,7 +621,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_STOP_DEMANDING_ATTENTION \
 	do {\
 		if (myDock) \
-			cairo_dock_stop_attention (myIcon, myDock); } while (0)
+			cairo_dock_stop_icon_attention (myIcon, myDock); } while (0)
 
 
 /** Get the dimension allocated to the surface/texture of the applet's icon.
