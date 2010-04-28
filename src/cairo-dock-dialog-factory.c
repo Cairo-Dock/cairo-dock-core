@@ -283,8 +283,8 @@ static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cTe
 {
 	if (cText == NULL)
 		return NULL;
-	//g_print ("%x;%x\n", pTextDescription, pSourceContext);
-	cairo_surface_t *pTextBuffer = cairo_dock_create_surface_from_text_full (cText,
+
+	return cairo_dock_create_surface_from_text_full (cText,
 		(pTextDescription ? pTextDescription : &myDialogs.dialogTextDescription),
 		1.,
 		0,
@@ -292,7 +292,6 @@ static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cTe
 		iTextHeight,
 		NULL,
 		NULL);
-	return pTextBuffer;
 }
 
 static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cImageFilePath, int iNbFrames, Icon *pIcon, CairoContainer *pContainer, int iDesiredSize, int *iIconSize)

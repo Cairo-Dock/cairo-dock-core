@@ -790,7 +790,10 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	pango_layout_set_font_description (pLayout, pDesc);
 	pango_font_description_free (pDesc);
 	
-	pango_layout_set_markup (pLayout, cText, -1);
+	if (pLabelDescription->bUseMarkup)
+		pango_layout_set_markup (pLayout, cText, -1);
+	else
+		pango_layout_set_text (pLayout, cText, -1);
 	
 	//\_________________ On cree une surface aux dimensions du texte.
 	PangoRectangle ink, log;

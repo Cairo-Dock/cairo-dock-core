@@ -88,6 +88,8 @@ struct _CairoDockLabelDescription {
 	gboolean bOutlined;
 	/// margin around the text, it is also the dimension of the frame if available.
 	gint iMargin;
+	/// whether to use Pango markups or not (markups are html-like marks, like <b>...</b>; using markups force you to escape some characters like "&" -> "&amp;")
+	gboolean bUseMarkup;
 };
 
 

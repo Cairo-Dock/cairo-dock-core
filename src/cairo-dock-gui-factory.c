@@ -1741,6 +1741,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							dgettext (pModule->pVisitCard->cGettextDomain,
 								pModule->pVisitCard->cDescription));
 						pLabel = gtk_label_new (cDescription);
+						gtk_label_set_use_markup (GTK_LABEL (pLabel), TRUE);
 						gtk_widget_set (pLabel, "width-request", 500, NULL);  // CAIRO_DOCK_PREVIEW_WIDTH
 						gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
 						gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
