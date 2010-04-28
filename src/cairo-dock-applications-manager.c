@@ -502,16 +502,18 @@ static void _on_change_window_state (Icon *icon)
 		#ifdef HAVE_XEXTEND
 		if (myTaskBar.iMinimizedWindowRenderType == 1 && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
 		{
+			if (icon->iBackingPixmap != 0)
+				XFreePixmap (s_XDisplay, icon->iBackingPixmap);
 			if (! icon->bIsHidden)  // fenetre mappee => BackingPixmap disponible.
 			{
-				if (icon->iBackingPixmap != 0)
-					XFreePixmap (s_XDisplay, icon->iBackingPixmap);
 				if (myTaskBar.iMinimizedWindowRenderType == 1)
 					icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
 				else
 					icon->iBackingPixmap = 0;
 				cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 			}
+			else  // pas de thumbnail pour les fenetres minimisees sous X.
+				icon->iBackingPixmap = 0;
 			// on redessine avec ou sans la miniature.
 			cairo_dock_reload_one_icon_buffer_in_dock (icon, pParentDock ? pParentDock : g_pMainDock);
 			if (pParentDock)
@@ -1067,7 +1069,7 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	
 	//\____________ On remplit ses buffers.
 	#ifdef HAVE_XEXTEND
-	if (myTaskBar.iMinimizedWindowRenderType == 1)
+	if (myTaskBar.iMinimizedWindowRenderType == 1 && ! icon->bIsHidden)
 	{
 		Display *display = gdk_x11_get_default_xdisplay ();
 		icon->iBackingPixmap = XCompositeNameWindowPixmap (display, Xid);
@@ -1247,6 +1249,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth,
 		cd_warning ("No thumbnail available.\nEither the WM doesn't support this functionnality, or the window was minimized when the dock has been launched.");
 		return NULL;
 	}
+	
 	cd_debug ("window pixmap : %dx%d", gdk_pixbuf_get_width (pPixbuf), gdk_pixbuf_get_height (pPixbuf));
 	double fWidth, fHeight;
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_pixbuf (pPixbuf,

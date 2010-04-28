@@ -31,7 +31,7 @@ GKeyFile *cairo_dock_open_key_file (const gchar *cConfFilePath)
 	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
 	if (erreur != NULL)
 	{
-		cd_warning (erreur->message);
+		cd_debug ("while trying to load %s : %s", cConfFilePath, erreur->message);  // on ne met pas de warning car un fichier de conf peut ne pas exister la 1ere fois.
 		g_error_free (erreur);
 		g_key_file_free (pKeyFile);
 		return NULL;

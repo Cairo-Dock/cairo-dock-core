@@ -542,6 +542,8 @@ static gboolean _cairo_dock_dialog_auto_delete (CairoDialog *pDialog)
 {
 	if (pDialog != NULL)
 	{
+		if (pDialog->action_on_answer != NULL)
+			pDialog->action_on_answer (-2, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);  // -2 <=> Escape.
 		pDialog->iSidTimer = 0;
 		cairo_dock_dialog_unreference (pDialog);  // on pourrait eventuellement faire un fondu avant.
 	}

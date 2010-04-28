@@ -72,14 +72,14 @@ gboolean cairo_dock_dialog_reference (CairoDialog *pDialog);
 */
 gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog);
 
-/** Unreference the dialogs pointed by an icon.
+/** Unreference the dialogs pointing on an icon.
 *@param icon the icon you want to delete all dialogs from.
 *@param bAll whether all dialogs should be removed or only the one that don't have interaction with the user.
 *@returns TRUE if at least one dialog has been unreferenced.
 */
 gboolean cairo_dock_remove_dialog_if_any_full (Icon *icon, gboolean bAll);
 
-/** Unreference all the dialogs pointed by an icon.
+/** Unreference all the dialogs pointing on an icon.
 *@param icon the icon you want to delete all dialogs from.
 *@returns TRUE if at least one dialog has been unreferenced.
 */
@@ -152,8 +152,7 @@ CairoDialog *cairo_dock_show_temporary_dialog (const gchar *cText, Icon *pIcon, 
 CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength);
 
 /** Pop up a dialog with a question and 2 buttons ok/cancel.
-* When the user make its choice, the callback is called with the value "yes" if he clicked on "ok", and with "no" if he clicked on "cancel".
-* The dialog is unreferenced after that, so if you want to keep it alive, you have to reference it in the callback.
+* The dialog is unreferenced after the user has answered, so if you want to keep it alive, you have to reference it in the callback.
 *@param cText the message to display.
 *@param pIcon the icon that will hold the dialog.
 *@param pContainer the container of the icon.
@@ -166,8 +165,7 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 CairoDialog *cairo_dock_show_dialog_with_question (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
 
 /** Pop up a dialog with a text entry and 2 buttons ok/cancel.
-* When the user make its choice, the callback is called with the value of the entry if he clicked on "ok", and with "" if he clicked on "cancel".
-* The dialog is unreferenced after that, so if you want to keep it alive, you have to reference it in the callback.
+* The dialog is unreferenced after the user has answered, so if you want to keep it alive, you have to reference it in the callback.
 *@param cText the message to display.
 *@param pIcon the icon that will hold the dialog.
 *@param pContainer the container of the icon.
@@ -181,8 +179,7 @@ CairoDialog *cairo_dock_show_dialog_with_question (const gchar *cText, Icon *pIc
 CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, const gchar *cTextForEntry, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
 
 /** Pop up a dialog with an horizontal scale between 0 and fMaxValue and 2 buttons ok/cancel.
-* When the user make its choice, the callback is called with the value of the scale in a text form if he clicked on "ok", and with "-1" if he clicked on "cancel".
-* The dialog is unreferenced after that, so if you want to keep it alive, you have to reference it in the callback.
+* The dialog is unreferenced after the user has answered, so if you want to keep it alive, you have to reference it in the callback.
 *@param cText the message to display.
 *@param pIcon the icon that will hold the dialog.
 *@param pContainer the container of the icon.
