@@ -109,13 +109,13 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 		
 		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 		
-		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
-			g_pHidingBackend->pre_render (pDock, NULL);
+		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render_opengl)
+			g_pHidingBackend->pre_render_opengl (pDock);
 		
 		pDock->pRenderer->render_opengl (pDock);
 		
-		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render)
-			g_pHidingBackend->post_render (pDock, NULL);
+		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render_opengl)
+			g_pHidingBackend->post_render_opengl (pDock);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

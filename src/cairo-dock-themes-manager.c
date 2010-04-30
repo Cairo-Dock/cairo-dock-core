@@ -279,18 +279,24 @@ CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const
 }
 
 
+gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GError **erreur)
+{
+	gchar *cURL = g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName);
+	gchar *cContent = cairo_dock_get_url_data (cURL, erreur);
+	g_free (cURL);
+	return cContent;
+}
+
 static size_t _write_data_to_buffer (gpointer buffer, size_t size, size_t nmemb, GList **list_ptr)
 {
 	GList *pList = *list_ptr;
 	*list_ptr = g_list_prepend (*list_ptr, g_strndup (buffer, size * nmemb));
 	return size * nmemb;
 }
-gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GError **erreur)
+gchar *cairo_dock_get_url_data (const gchar *cURL, GError **erreur)
 {
 	//\_______________ On lance le download.
-	gchar *cURL = g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName);
 	cd_debug ("getting data from '%s' ...", cURL);
-	
 	CURL *handle = _init_curl_connection (cURL);
 	curl_easy_setopt (handle, CURLOPT_WRITEFUNCTION, (curl_write_callback)_write_data_to_buffer);
 	gpointer *pointer_to_list = g_new0 (gpointer, 1);
@@ -306,8 +312,8 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 	}
 	
 	curl_easy_cleanup (handle);
-	g_free (cURL);
 	
+	//\_______________ On recupere les donnees.
 	gchar *cContent = NULL;
 	if (pointer_to_list != NULL)
 	{
@@ -339,31 +345,6 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 	}
 	
 	return cContent;
-	/**GError *tmp_erreur = NULL;
-	gchar *cTmpFilePath = cairo_dock_download_file (cServerAdress, cDistantFilePath, cDistantFileName, NULL, &tmp_erreur);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
-		return NULL;
-	}
-
-	gchar *cContent = NULL;
-	gsize length = 0;
-	g_file_get_contents (cTmpFilePath, &cContent, &length, &tmp_erreur);
-	if (tmp_erreur != NULL)
-	{
-		cd_warning ("while opening the downloaded file '%s/%s/%s' : %s\n check that your connection is alive, or retry later", cServerAdress, cDistantFilePath, cDistantFileName, tmp_erreur->message);
-		g_propagate_error (erreur, tmp_erreur);
-	}
-	else if (cContent == NULL)
-	{
-		cd_warning ("couldn't retrieve info from '%s/%s/%s'\n check that your connection is alive, or retry later", cServerAdress, cDistantFilePath, cDistantFileName);
-		g_set_error (erreur, 1, 1, "couldn't retrieve info from '%s/%s/%s'\n check that your connection is alive, or retry later", cServerAdress, cDistantFilePath, cDistantFileName);
-	}
-	
-	g_remove (cTmpFilePath);
-	g_free (cTmpFilePath);
-	return cContent;*/
 }
 
 

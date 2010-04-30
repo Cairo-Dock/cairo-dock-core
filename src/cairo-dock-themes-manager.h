@@ -109,6 +109,13 @@ CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const
 */
 gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GError **erreur);
 
+/** Retrieve the data of a distant URL.
+*@param cURL distant adress to get data from.
+*@param erreur an error.
+*@return the data. Free the string after using it.
+*/
+gchar *cairo_dock_get_url_data (const gchar *cURL, GError **erreur);
+
 /** Asynchronously retrieve the content of a distant text file. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the content of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
 *@param cServerAdress adress of the server.
 *@param cDistantFilePath path of the file on the server.

@@ -66,8 +66,11 @@ struct _CairoDockTransition {
 	};
 
 struct _CairoDockHidingEffect {
+	const gchar *cDisplayedName;
 	void (*pre_render) (CairoDock *pDock, cairo_t *pCairoContext);
+	void (*pre_render_opengl) (CairoDock *pDock);
 	void (*post_render) (CairoDock *pDock, cairo_t *pCairoContext);
+	void (*post_render_opengl) (CairoDock *pDock);
 	void (*init) (CairoDock *pDock);
 	};
 	
