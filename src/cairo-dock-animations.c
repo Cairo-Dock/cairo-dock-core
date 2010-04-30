@@ -414,7 +414,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 	{
 		pIcon = ic->data;
 		next_ic = ic->next;
-		if (pIcon->fInsertRemoveFactor == 0.05)
+		if (pIcon->fInsertRemoveFactor == (gdouble)0.05)
 		{
 			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);
 			if (bIsAppli && pIcon->iLastCheckTime != -1)  // c'est une icone d'appli non vieille qui disparait, elle s'est probablement cachee => on la detache juste.
@@ -441,7 +441,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				cairo_dock_update_dock_size (pDock);  // si on le fait avant le free, le dock se fige (mais continue a tourner)...
 			}
 		}
-		else if (pIcon->fInsertRemoveFactor == -0.05)
+		else if (pIcon->fInsertRemoveFactor == (gdouble)-0.05)
 		{
 			pIcon->fInsertRemoveFactor = 0;  // cela n'arrete pas l'animation, qui peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
 			bRecalculateIcons = TRUE;
