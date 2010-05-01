@@ -78,19 +78,17 @@ void cairo_dock_init_dialog_manager (void)
 
 static inline cairo_surface_t *_cairo_dock_load_button_icon (const gchar *cButtonImage, const gchar *cDefaultButtonImage)
 {
-	//g_print ("%s (%d ; %d)\n", __func__, myDialogs.iDialogButtonWidth, myDialogs.iDialogButtonHeight);
-	cairo_surface_t *pButtonSurface = cairo_dock_create_surface_from_image_simple (cButtonImage,
-		myDialogs.iDialogButtonWidth,
-		myDialogs.iDialogButtonHeight);
+	cairo_surface_t *pButtonSurface = NULL;
+	if (cButtonImage != NULL)
+		pButtonSurface = cairo_dock_create_surface_from_image_simple (cButtonImage,
+			myDialogs.iDialogButtonWidth,
+			myDialogs.iDialogButtonHeight);
 
 	if (pButtonSurface == NULL)
 	{
-		gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, cDefaultButtonImage);
-		//g_print ("  on charge %s par defaut\n", cIconPath);
-		pButtonSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
+		pButtonSurface = cairo_dock_create_surface_from_image_simple (cDefaultButtonImage,
 			myDialogs.iDialogButtonWidth,
 			myDialogs.iDialogButtonHeight);
-		g_free (cIconPath);
 	}
 
 	return pButtonSurface;
@@ -107,11 +105,11 @@ void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonO
 	//g_print ("%s (%s ; %s)\n", __func__, cButtonOkImage, cButtonCancelImage);
 	if (s_pButtonOkSurface != NULL)
 		cairo_surface_destroy (s_pButtonOkSurface);
-	s_pButtonOkSurface = _cairo_dock_load_button_icon (cButtonOkImage, "cairo-dock-ok.svg");
+	s_pButtonOkSurface = _cairo_dock_load_button_icon (cButtonOkImage, CAIRO_DOCK_SHARE_DATA_DIR"/cairo-dock-ok.svg");
 
 	if (s_pButtonCancelSurface != NULL)
 		cairo_surface_destroy (s_pButtonCancelSurface);
-	s_pButtonCancelSurface = _cairo_dock_load_button_icon (cButtonCancelImage, "cairo-dock-cancel.svg");
+	s_pButtonCancelSurface = _cairo_dock_load_button_icon (cButtonCancelImage, CAIRO_DOCK_SHARE_DATA_DIR"/cairo-dock-cancel.svg");
 	
 	if (0 && g_bUseOpenGL)
 	{

@@ -148,7 +148,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		{
 			// on laisse transparent
 		}
-		else if (cairo_dock_is_hidden (pDock))
+		else if (cairo_dock_is_hidden (pDock) && (g_pHidingBackend == NULL || !g_pHidingBackend->bCanDisplayHiddenDock))
 		{
 			cairo_dock_render_hidden_dock_opengl (pDock);
 		}
@@ -169,7 +169,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	
 	if (pExpose->area.x + pExpose->area.y != 0)  // x et/ou y sont > 0.
 	{
-		if (! cairo_dock_is_hidden (pDock))
+		if (! cairo_dock_is_hidden (pDock) || (g_pHidingBackend != NULL && g_pHidingBackend->bCanDisplayHiddenDock))
 		{
 			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &pExpose->area, NULL);
 			
@@ -207,7 +207,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	{
 		
 	}
-	else if (cairo_dock_is_hidden (pDock))
+	else if (cairo_dock_is_hidden (pDock) && (g_pHidingBackend == NULL || !g_pHidingBackend->bCanDisplayHiddenDock))
 	{
 		cairo_dock_render_hidden_dock (pCairoContext, pDock);
 	}
@@ -697,7 +697,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		//g_print ("%s (auto-hide:%d)\n", __func__, pDock->bAutoHide);
 		if (pDock->bAutoHide)
 		{
-			pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 0.001 : 0.);
+			///pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 0.001 : 0.);
 			cairo_dock_start_hiding (pDock);
 		}
 	}

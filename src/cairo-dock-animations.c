@@ -382,7 +382,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 		}
 		
 		pDock->pRenderer->calculate_icons (pDock);
-		pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
+		///pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
 		cairo_dock_allow_entrance (pDock);
 		
 		cairo_dock_replace_all_dialogs ();

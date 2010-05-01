@@ -495,13 +495,14 @@ void cairo_dock_update_dialog_decorator_list_for_gui (void)
 
 
 static int iNbAnimation = 0;
-int cairo_dock_register_animation (const gchar *cAnimation, const gchar *cDisplayedName)
+int cairo_dock_register_animation (const gchar *cAnimation, const gchar *cDisplayedName, gboolean bIsEffect)
 {
 	cd_message ("%s (%s)", __func__, cAnimation);
 	iNbAnimation ++;
 	CairoDockAnimationRecord *pRecord = g_new (CairoDockAnimationRecord, 1);
 	pRecord->id = iNbAnimation;
 	pRecord->cDisplayedName = cDisplayedName;
+	pRecord->bIsEffect = bIsEffect;
 	g_hash_table_insert (s_hAnimationsTable, g_strdup (cAnimation), pRecord);
 	return iNbAnimation;
 }
@@ -528,4 +529,9 @@ const gchar *cairo_dock_get_animation_displayed_name (const gchar *cAnimation)
 void cairo_dock_unregister_animation (const gchar *cAnimation)
 {
 	g_hash_table_remove (s_hAnimationsTable, cAnimation);
+}
+
+void cairo_dock_foreach_animation (GHFunc pHFunction, gpointer data)
+{
+	g_hash_table_foreach (s_hAnimationsTable, pHFunction, data);
 }

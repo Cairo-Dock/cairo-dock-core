@@ -57,6 +57,7 @@ extern gchar *g_cExtrasDirPath;
 extern gchar *g_cThemesDirPath;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
+extern gboolean g_bUseOpenGL;
 
 static GtkListStore *s_pRendererListStore = NULL;
 static GtkListStore *s_pDecorationsListStore = NULL;
@@ -829,9 +830,7 @@ static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_render
 
 static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, CairoDockModule *pModule)
 {
-	if (pModule->pInstancesList == NULL)
-		return;
-	CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
+	CairoDockModuleInstance *pModuleInstance = (pModule->pInstancesList ? pModule->pInstancesList->data : NULL);
 	if (pModuleInstance)
 		cairo_dock_show_module_instance_gui (pModuleInstance, -1);
 	else
@@ -916,6 +915,7 @@ void cairo_dock_build_desklet_decorations_list_for_applet_gui (GHashTable *pHash
 {
 	_build_list_for_gui (s_pDecorationsListStore2, "default", pHashTable, _cairo_dock_add_one_decoration_item);
 }
+
 static void _cairo_dock_add_one_animation_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
@@ -930,6 +930,25 @@ static void _cairo_dock_add_one_animation_item (const gchar *cName, CairoDockAni
 void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable)
 {
 	_build_list_for_gui (s_pAnimationsListStore, "", pHashTable, _cairo_dock_add_one_animation_item);
+}
+
+static void _add_one_animation_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
+{
+	if (!pRecord->bIsEffect)
+		_cairo_dock_add_one_animation_item (cName, pRecord, pModele);
+}
+static void _add_one_effect_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
+{
+	if (pRecord->bIsEffect)
+		_cairo_dock_add_one_animation_item (cName, pRecord, pModele);
+}
+static GtkListStore * _cairo_dock_build_animations_effect_list_for_gui (gboolean bEffectOnly)
+{
+	GtkListStore *pListStore = _allocate_new_model ();
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pListStore), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
+	_cairo_dock_add_one_animation_item ("", NULL, pListStore);
+	cairo_dock_foreach_animation ((GHFunc) (bEffectOnly ? _add_one_effect_item : _add_one_animation_item), pListStore);
+	return pListStore;
 }
 
 static void _cairo_dock_add_one_dialog_decorator_item (const gchar *cName, CairoDialogDecorator *pDecorator, GtkListStore *pModele)
@@ -1734,7 +1753,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
 					if (pModule != NULL)
 					{
-						gchar *cDescription = g_strdup_printf ("%s (v%s) by %s\n%s",
+						gchar *cDescription = g_strdup_printf ("<i>%s (v%s) by %s</i>\n%s",
 							pModule->pVisitCard->cModuleName,
 							pModule->pVisitCard->cModuleVersion,
 							pModule->pVisitCard->cAuthor,
@@ -2055,6 +2074,47 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_add_combo_from_modele (s_pAnimationsListStore, FALSE, FALSE);
 			break ;
 			
+			case CAIRO_DOCK_WIDGET_ANIMATION_DOUBLE_LIST :  // liste des animations/effets.
+				length = 0;
+				gchar **cValues = g_key_file_get_string_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
+				
+				GtkWidget *box = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				GtkWidget *label = gtk_label_new (_("Animation:"));
+				gtk_box_pack_start(GTK_BOX (box), label, FALSE, FALSE, 0);
+				modele = _cairo_dock_build_animations_effect_list_for_gui (FALSE);
+				
+				pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));
+				rend = gtk_cell_renderer_text_new ();
+				gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
+				gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				
+				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
+				gtk_box_pack_start (GTK_BOX (box), pOneWidget, FALSE, FALSE, 0);
+				if (_cairo_dock_find_iter_from_name (modele, cValues[0], &iter, FALSE))
+					gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
+				
+				if (g_bUseOpenGL)
+				{
+					label = gtk_vseparator_new ();
+					gtk_widget_set_size_request (label, 20, 1);
+					gtk_box_pack_start(GTK_BOX (box), label, FALSE, FALSE, 0);
+					label = gtk_label_new (_("Effects:"));
+					gtk_box_pack_start(GTK_BOX (box), label, FALSE, FALSE, 0);
+					modele = _cairo_dock_build_animations_effect_list_for_gui (TRUE);
+					
+					pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));
+					rend = gtk_cell_renderer_text_new ();
+					gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
+					gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+					
+					pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
+					gtk_box_pack_start (GTK_BOX (box), pOneWidget, FALSE, FALSE, 0);
+					if (_cairo_dock_find_iter_from_name (modele, cValues[1], &iter, FALSE))
+						gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
+				}
+				_pack_in_widget_box (box);
+			break ;
+			
 			case CAIRO_DOCK_WIDGET_DIALOG_DECORATOR_LIST :  // liste des decorateurs de dialogue.
 				_add_combo_from_modele (s_pDialogDecoratorListStore, FALSE, FALSE);
 			break ;
@@ -2172,7 +2232,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "pixbuf", CAIRO_DOCK_MODEL_ICON, NULL);
 				// nom
 				rend = gtk_cell_renderer_text_new ();
-				col = gtk_tree_view_column_new_with_attributes (_("module"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				col = gtk_tree_view_column_new_with_attributes (_("plug-in"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_module_name, NULL, NULL);
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
@@ -2768,7 +2828,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break;
 
 			case CAIRO_DOCK_WIDGET_EMPTY_WIDGET :  // container pour widget personnalise.
-				pOneWidget = gtk_hbox_new (0, FALSE);
+				pOneWidget = gtk_hbox_new (FALSE, 0);
 				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
 				gtk_box_pack_start(GTK_BOX (pFrameVBox != NULL ? pFrameVBox : pGroupBox),
 					pOneWidget,
@@ -3187,20 +3247,31 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 	}
 	else if (GTK_IS_COMBO_BOX (pOneWidget))
 	{
+		gchar **tValues = g_new0 (gchar*, iNbElements+1);
 		GtkTreeIter iter;
-		gchar *cValue =  NULL;
-		if (GTK_IS_COMBO_BOX_ENTRY (pOneWidget))
+		gchar *cValue;
+		for (pList = pSubWidgetList; pList != NULL; pList = pList->next)
 		{
-			cValue = gtk_combo_box_get_active_text (GTK_COMBO_BOX (pOneWidget));
+			pOneWidget = pList->data;
+			cValue = NULL;
+			if (GTK_IS_COMBO_BOX_ENTRY (pOneWidget))
+			{
+				cValue = gtk_combo_box_get_active_text (GTK_COMBO_BOX (pOneWidget));
+			}
+			else if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (pOneWidget), &iter))
+			{
+				GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
+				if (model != NULL)
+					gtk_tree_model_get (model, &iter, CAIRO_DOCK_MODEL_RESULT, &cValue, -1);
+			}
+			tValues[i] = (cValue ? cValue : g_strdup(""));
+			i ++;
 		}
-		else if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (pOneWidget), &iter))
-		{
-			GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
-			if (model != NULL)
-				gtk_tree_model_get (model, &iter, CAIRO_DOCK_MODEL_RESULT, &cValue, -1);
-		}
-		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, (cValue != NULL ? cValue : ""));
-		g_free (cValue);
+		if (iNbElements > 1)
+			g_key_file_set_string_list (pKeyFile, cGroupName, cKeyName, (const gchar * const *)tValues, iNbElements);
+		else
+			g_key_file_set_string (pKeyFile, cGroupName, cKeyName, tValues[0]);
+		g_strfreev (tValues);
 	}
 	else if (GTK_IS_FONT_BUTTON (pOneWidget))
 	{

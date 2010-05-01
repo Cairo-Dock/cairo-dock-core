@@ -1101,7 +1101,7 @@ msgid ""
 "None     : Don't show opened windows in the dock.\n"
 "MacOSX   : Mix applications with its launcher, show other windows only if "
 "they are minimized.\n"
-"Windows7 : Mix applications with its launcher, show all others windows and "
+"KDE : Mix applications with its launcher, show all others windows and "
 "group windows togather in sub-dock.\n"
 "Gnome    : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
@@ -1120,7 +1120,7 @@ msgid "MacOSX"
 msgstr ""
 
 #: ../data/messages:59
-msgid "Windows7"
+msgid "KDE"
 msgstr ""
 
 #: ../data/messages:61

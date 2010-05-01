@@ -14,7 +14,7 @@ screen border = 0
 #F-[Visibility of the main dock;@pkgdatadir@/icon-visibility.svg]
 frame_visi =
 
-#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;0;0;Automatically hide the dock;0;0;Automatically hide when a window is maximized;0;0;Pop-up on shortcut;1;1] Visibility:
+#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Keep the dock below windows;0;0;Automatically hide the dock;0;0;Automatically hide when a window overlaps the dock;0;0;Pop-up on shortcut;1;1] Visibility:
 #{Prevent windows from overlapping the dock: reserve space at the edge of the screen for the dock.
 #Auto-hide: the dock will automatically hide itself outside of the screen when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
 #Keep the dock below windows: the dock will pop-up on the foreground when you place the mouse on its screen border.
@@ -36,25 +36,25 @@ show_on_click = 0
 #F-[Taskbar;@pkgdatadir@/icon-taskbar.png]
 frame_task =
 
-#l-[None;MacOSX;Windows7;Gnome] Behaviour of the Taskbar:
+#l-[None;MacOSX;KDE;Gnome] Behaviour of the Taskbar:
 #{None     : Don't show opened windows in the dock.
 #MacOSX   : Mix applications with its launcher, show other windows only if they are minimized.
-#Windows7 : Mix applications with its launcher, show all others windows and group windows togather in sub-dock.
+#KDE : Mix applications with its launcher, show all others windows and group windows togather in sub-dock.
 #Gnome    : Separate the taskbar from the launchers and only show windows that are on the current desktop.}
 taskbar = 2
 
 
-#F[Animations;@pkgdatadir@/icon-movment.png]
+#F[Icons' animations and effects;@pkgdatadir@/icon-movment.png]
 frame_anim=
 
-#m[Animated icons] Configure icons' animations.
-config_anim = 
+#z On mouse hover:
+anim_hover=
 
-#M[icon effects] Configure icons' special effects (requires OpenGL).
-config_effect = 
+#z On click:
+anim_click=
 
-#M[illusion] Configure icons' animations on appearing/disappearing (require OpenGL capacity).
-config_illusion = 
+#l On appearance/disappearance:
+anim_disappear=
 
 
 #[@pkgdatadir@/icon-appearance.svg]
@@ -73,7 +73,7 @@ icon size = 2
 #v
 sev_order=
 
-#B+ Separate the different types of icons?
+#B Separate the different types of icons?
 #{This will separate launchers, application, and applets from each others. Separators will be automatically inserted then.}
 separate icons = true
 

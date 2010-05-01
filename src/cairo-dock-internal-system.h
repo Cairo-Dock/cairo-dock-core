@@ -38,7 +38,7 @@ struct _CairoConfigSystem {
 	gdouble fLabelAlphaThreshold;
 	gboolean bTextAlwaysHorizontal;
 	gint iUnfoldingDuration;
-	gboolean bAnimateOnAutoHide;
+	gboolean bAnimateOnAutoHide_deprecated;
 	gint iGrowUpInterval, iShrinkDownInterval;
 	gint iHideNbSteps, iUnhideNbSteps;
 	gdouble fRefreshInterval;

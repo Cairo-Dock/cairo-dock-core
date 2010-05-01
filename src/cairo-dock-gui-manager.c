@@ -351,6 +351,28 @@ static void on_click_generic_apply (GtkButton *button, GtkWidget *pWindow)
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	g_return_if_fail (pKeyFile != NULL);
 	
+	gchar *cConfModuleName = g_object_get_data (G_OBJECT (pWindow), "module");
+	if (cConfModuleName != NULL)
+	{
+		CairoDockModule *pModule = cairo_dock_find_module_from_name (cConfModuleName);
+		if (pModule != NULL)
+		{
+			CairoDockModuleInstance *pModuleInstance;
+			GList *i;
+			for (i = pModule->pInstancesList; i != NULL; i = i->next)
+			{
+				pModuleInstance = i->data;
+				if (strcmp (cConfFilePath, pModuleInstance->cConfFilePath) == 0)
+					break;
+			}
+			if (i != NULL)
+			{
+				if (pModule->pInterface->save_custom_widget != NULL)
+					pModule->pInterface->save_custom_widget (pModuleInstance, pKeyFile);
+			}
+		}
+	}
+	
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
 	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
 	g_key_file_free (pKeyFile);

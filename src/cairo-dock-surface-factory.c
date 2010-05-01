@@ -404,6 +404,11 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 		}
 		fclose (fd);
 	}
+	else
+	{
+		cd_warning ("This file (%s) doesn't exist or is not readable.", cImagePath);
+		return NULL;
+	}
 	if (! bIsSVG && ! bIsPNG && ! bIsXPM)  // sinon en desespoir de cause on se base sur l'extension.
 	{
 		//cd_debug ("  on se base sur l'extension en desespoir de cause.");

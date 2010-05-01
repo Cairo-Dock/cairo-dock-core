@@ -85,6 +85,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_THEME_SELECTOR='R',
 	/// list of available animations.
 	CAIRO_DOCK_WIDGET_ANIMATION_LIST='a',
+	/// list of available animations.
+	CAIRO_DOCK_WIDGET_ANIMATION_DOUBLE_LIST='z',
 	/// list of available dialog decorators.
 	CAIRO_DOCK_WIDGET_DIALOG_DECORATOR_LIST='t',
 	/// list of available desklet decorations.

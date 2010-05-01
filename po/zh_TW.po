@@ -1122,14 +1122,14 @@ msgid ""
 "None     : Don't show opened windows in the dock.\n"
 "MacOSX   : Mix applications with its launcher, show other windows only if "
 "they are minimized.\n"
-"Windows7 : Mix applications with its launcher, show all others windows and "
+"KDE : Mix applications with its launcher, show all others windows and "
 "group windows togather in sub-dock.\n"
 "Gnome    : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
 "備註：不要在Dock上顯示已經開啟的視窗。\n"
 "MacOSX:混合應用程式與快速啟動，假如這些視窗都最小化後，只有顯示其他未最小化的視窗。\n"
-"Windows7：混合應用程式與快速啟動，顯示全部的視窗與群組視窗在一個子Dock當中。\n"
+"KDE：混合應用程式與快速啟動，顯示全部的視窗與群組視窗在一個子Dock當中。\n"
 "Gnome：與工作列上的快速啟動分離，只顯示那些在目前桌面上的應用程式。"
 
 #: ../data/messages:53
@@ -1145,8 +1145,8 @@ msgid "MacOSX"
 msgstr "MacOSX"
 
 #: ../data/messages:59
-msgid "Windows7"
-msgstr "Windows7"
+msgid "KDE"
+msgstr "KDE"
 
 #: ../data/messages:61
 msgid "Gnome"

@@ -248,6 +248,10 @@ which opera > /dev/null && opera %s ",
 		g_free (cCommand);
 	}
 }
+static void _cairo_dock_show_third_party_applets (GtkMenuItem *pMenuItem, gpointer data)
+{
+	_launch_url ("http://www.glx-dock.org/mc_album.php?a=4");
+}
 
 static void _cairo_dock_present_help (GtkMenuItem *pMenuItem, gpointer data)
 {
@@ -389,6 +393,13 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Cair
 		pSubMenu,
 		NULL);
 	gtk_widget_set_tooltip_text (pMenuItem, _("There are no problems, only solutions (and a lot of useful hints!)"));
+	
+	pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Get more applets!"),
+		GTK_STOCK_ADD,
+		(GFunc)_cairo_dock_show_third_party_applets,
+		pSubMenu,
+		NULL);
+	gtk_widget_set_tooltip_text (pMenuItem, _("Third-party applets provide integration with many programs, like Pidgin"));
 	
 	cairo_dock_add_in_menu_with_stock_and_data (_("About"),
 		GTK_STOCK_ABOUT,

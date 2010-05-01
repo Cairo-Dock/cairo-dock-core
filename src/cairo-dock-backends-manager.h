@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 struct _CairoDockAnimationRecord {
 	gint id;
 	const gchar *cDisplayedName;
+	gboolean bIsEffect;
 	};
 
 CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean bForMainDock);
@@ -95,11 +96,12 @@ void cairo_dock_update_animations_list_for_gui (void);
 void cairo_dock_update_dialog_decorator_list_for_gui (void);
 
 
-int cairo_dock_register_animation (const gchar *cAnimation, const gchar *cDisplayedName);
+int cairo_dock_register_animation (const gchar *cAnimation, const gchar *cDisplayedName, gboolean bIsEffect);
 void cairo_dock_free_animation_record (CairoDockAnimationRecord *pRecord);
 int cairo_dock_get_animation_id (const gchar *cAnimation);
 const gchar *cairo_dock_get_animation_displayed_name (const gchar *cAnimation);
 void cairo_dock_unregister_animation (const gchar *cAnimation);
+void cairo_dock_foreach_animation (GHFunc pHFunction, gpointer data);
 
 
 #define CAIRO_CONTAINER_IS_OPENGL(pContainer) (g_bUseOpenGL && ((CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->pRenderer->render_opengl) || (CAIRO_DOCK_IS_DESKLET (pContainer) && CAIRO_DESKLET (pContainer)->pRenderer && CAIRO_DESKLET (pContainer)->pRenderer->render_opengl)))

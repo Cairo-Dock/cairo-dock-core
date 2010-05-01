@@ -208,6 +208,67 @@ static void _post_render_fade_out_opengl (CairoDock *pDock)
 	}
 }
 
+  //////////////////////
+ // SEMI TRANSPARENT //
+//////////////////////
+
+static void _post_render_semi_transparent (CairoDock *pDock, cairo_t *pCairoContext)
+{
+	double fAlpha = .7*pDock->fHideOffset;
+	cairo_rectangle (pCairoContext,
+		0,
+		0,
+		pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight, pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth);
+	cairo_set_line_width (pCairoContext, 0);
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
+	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, fAlpha);
+	cairo_fill (pCairoContext);
+}
+
+static void _post_render_semi_transparent_opengl (CairoDock *pDock)
+{
+	double fAlpha = 1 - .7*pDock->fHideOffset;
+	if (g_openglConfig.bStencilBufferAvailable)
+	{
+		glAccum (GL_LOAD, fAlpha);
+		glAccum (GL_RETURN, 1.0);
+	}
+	else if (pDock->iFboId != 0)
+	{
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+			GL_COLOR_ATTACHMENT0_EXT,
+			GL_TEXTURE_2D,
+			0,
+			0);  // on detache la texture (precaution).
+		// dessin dans notre fenetre.
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_source ();
+		_cairo_dock_set_blend_alpha ();
+		
+		int iWidth, iHeight;  // taille de la texture
+		if (pDock->container.bIsHorizontal)
+		{
+			iWidth = pDock->container.iWidth;
+			iHeight = pDock->container.iHeight;
+		}
+		else
+		{
+			iWidth = pDock->container.iHeight;
+			iHeight = pDock->container.iWidth;
+		}
+		
+		glPushMatrix ();
+		glLoadIdentity ();
+		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+		glScalef (1., -1., 1.);
+		_cairo_dock_apply_texture_at_size_with_alpha (pDock->iRedirectedTexture, iWidth, iHeight, fAlpha);
+		glPopMatrix ();
+		
+		_cairo_dock_disable_texture ();
+	}
+}
+
   //////////////
  // ZOOM OUT //
 //////////////
@@ -322,7 +383,7 @@ static void _post_render_suck_up_opengl (CairoDock *pDock)
 	GLfloat coords[NB_POINTS*1*8];
 	GLfloat vertices[NB_POINTS*1*8];
 	int i, j, n=0;
-	double x, x_, t = t = pDock->fHideOffset;
+	double x, x_, t = pDock->fHideOffset;
 	for (i = 0; i < NB_POINTS; i ++)
 	{
 		for (j = 0; j < 2-1; j ++)
@@ -368,6 +429,118 @@ static void _post_render_suck_up_opengl (CairoDock *pDock)
 	_cairo_dock_disable_texture ();
 }
 
+  /////////////
+ // FOLDING //
+/////////////
+
+static void _pre_render_folding (CairoDock *pDock, cairo_t *pCairoContext)
+{
+	double z = (1-pDock->fHideOffset) * (1-pDock->fHideOffset);
+	int iWidth, iHeight;
+	if (pDock->container.bIsHorizontal)
+	{
+		iWidth = pDock->container.iWidth;
+		iHeight = pDock->container.iHeight;
+	}
+	else
+	{
+		iWidth = pDock->container.iHeight;
+		iHeight = pDock->container.iWidth;
+	}
+	cairo_translate (pCairoContext, iWidth/2, iHeight);
+	cairo_scale (pCairoContext, z, 1.);
+	cairo_translate (pCairoContext, -iWidth/2, -iHeight);
+}
+
+static void _post_render_folding_opengl (CairoDock *pDock)
+{
+	if (pDock->iFboId == 0)
+		return ;
+	
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+	glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+		GL_COLOR_ATTACHMENT0_EXT,
+		GL_TEXTURE_2D,
+		0,
+		0);  // on detache la texture (precaution).
+	// dessin dans notre fenetre.
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_alpha ();
+	_cairo_dock_set_alpha (1.);
+	
+	int iWidth, iHeight;  // taille de la texture
+	if (pDock->container.bIsHorizontal)
+	{
+		iWidth = pDock->container.iWidth;
+		iHeight = pDock->container.iHeight;
+	}
+	else
+	{
+		iWidth = pDock->container.iHeight;
+		iHeight = pDock->container.iWidth;
+	}
+	
+	cairo_dock_set_perspective_view (pDock);
+	glPushMatrix ();
+	//glLoadIdentity ();
+	//glTranslatef (iWidth/2, 0., 0.);
+	glTranslatef (0., -iHeight/2, 0.);
+	
+	GLfloat coords[NB_POINTS*1*8];
+	GLfloat vertices[NB_POINTS*1*12];
+	int i, j, n=0;
+	double x, x_, t = pDock->fHideOffset;
+	t = t* (t);
+	for (i = 0; i < NB_POINTS; i ++)
+	{
+		x = (double)i/NB_POINTS;
+		x_ = (double)(i+1)/NB_POINTS;
+		coords[8*n+0] = x;  // haut gauche
+		coords[8*n+1] = 1.;
+		coords[8*n+2] = x_;  // haut droit
+		coords[8*n+3] = 1.;
+		coords[8*n+4] = x_;  // bas droit
+		coords[8*n+5] = 0.;
+		coords[8*n+6] = x;  // bas gauche
+		coords[8*n+7] = 0.;
+		
+		vertices[12*n+0] = (x-.5) * (1-t);
+		vertices[12*n+1] = 1.;
+		vertices[12*n+2] = (i&1 ? -t : 0.);
+		
+		vertices[12*n+3] = (x_-.5) * (1-t);
+		vertices[12*n+4] = 1.;
+		vertices[12*n+5] = (i&1 ? 0. : -t);
+		
+		vertices[12*n+6] = (x_-.5) * (1-t);
+		vertices[12*n+7] = 0.;
+		vertices[12*n+8] = (i&1 ? 0. : -t);
+		
+		vertices[12*n+9] = (x-.5) * (1-t);
+		vertices[12*n+10] = 0.;
+		vertices[12*n+11] = (i&1 ? -t : 0.);
+		
+		n ++;
+	}
+	
+	glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState (GL_VERTEX_ARRAY);
+	
+	glScalef (iWidth, iHeight, iHeight/6);
+	glBindTexture (GL_TEXTURE_2D, pDock->iRedirectedTexture);
+	glTexCoordPointer (2, GL_FLOAT, 2 * sizeof(GLfloat), coords);
+	glVertexPointer (3, GL_FLOAT, 3 * sizeof(GLfloat), vertices);
+	glDrawArrays (GL_QUADS, 0, n * 4);
+	
+	glDisableClientState (GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState (GL_VERTEX_ARRAY);
+	
+	cairo_dock_set_ortho_view (pDock);
+	glPopMatrix ();
+	
+	_cairo_dock_disable_texture ();
+}
+
 void cairo_dock_register_hiding_effects (void)
 {
 	CairoDockHidingEffect *p;
@@ -386,6 +559,15 @@ void cairo_dock_register_hiding_effects (void)
 	cairo_dock_register_hiding_effect ("Fade out", p);
 	
 	p = g_new0 (CairoDockHidingEffect, 1);
+	p->cDisplayedName = _("Semi transparent");
+	p->init = _init_fade_out;
+	p->pre_render_opengl = _pre_render_fade_out_opengl;
+	p->post_render = _post_render_semi_transparent;
+	p->post_render_opengl = _post_render_semi_transparent_opengl;
+	p->bCanDisplayHiddenDock = TRUE;
+	cairo_dock_register_hiding_effect ("Semi transparent", p);
+	
+	p = g_new0 (CairoDockHidingEffect, 1);
 	p->cDisplayedName = _("Zoom out");
 	p->init = _init_opengl;
 	p->pre_render = _pre_render_zoom;
@@ -400,4 +582,12 @@ void cairo_dock_register_hiding_effects (void)
 	p->pre_render_opengl = _pre_render_opengl;
 	p->post_render_opengl = _post_render_suck_up_opengl;
 	cairo_dock_register_hiding_effect ("Suck up", p);
+	
+	p = g_new0 (CairoDockHidingEffect, 1);
+	p->cDisplayedName = _("Folding");
+	p->init = _init_opengl;
+	p->pre_render = _pre_render_folding;
+	p->pre_render_opengl = _pre_render_opengl;
+	p->post_render_opengl = _post_render_folding_opengl;
+	cairo_dock_register_hiding_effect ("Folding", p);
 }

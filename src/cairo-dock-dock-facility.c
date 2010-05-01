@@ -351,13 +351,6 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
 	return ;
 }
 
-void cairo_dock_place_root_dock (CairoDock *pDock)
-{
-	//g_print ("%s ()\n", __func__);
-	pDock->fFoldingFactor = (pDock->bAutoHide && pDock->iRefCount == 0 && mySystem.bAnimateOnAutoHide ? .99 : 0.);
-	cairo_dock_move_resize_dock (pDock);
-}
-
 
   ///////////////////
  /// INPUT SHAPE ///
