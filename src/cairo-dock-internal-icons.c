@@ -243,10 +243,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	if (pIcons->iSeparatorType >= CAIRO_DOCK_NB_SEPARATOR_TYPES)  // nouveau parametre, avant il etait dans dock-rendering.
 	{
 		pIcons->iSeparatorType = 0;  // ce qui suit est tres moche, mais c'est pour eviter d'avoir a repasser derriere tous les themes.
-		gchar *cRenderingConfFile = g_strdup_printf ("%s/plug-ins/rendering/rendering.conf", g_cCurrentThemePath);
 		gchar *cMainDockDefaultRendererName = g_key_file_get_string (pKeyFile, "Views", "main dock view", NULL);
-		if (cMainDockDefaultRendererName && (strcmp (cMainDockDefaultRendererName, "3D plane") == 0 || strcmp (cMainDockDefaultRendererName, "curve") == 0))
+		if (cMainDockDefaultRendererName && (strcmp (cMainDockDefaultRendererName, "3D plane") == 0 || strcmp (cMainDockDefaultRendererName, "Curve") == 0))
 		{
+			gchar *cRenderingConfFile = g_strdup_printf ("%s/plug-ins/rendering/rendering.conf", g_cCurrentThemePath);
 			GKeyFile *keyfile = cairo_dock_open_key_file (cRenderingConfFile);
 			g_free (cRenderingConfFile);
 			if (keyfile == NULL)
@@ -254,13 +254,29 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 			else
 			{
 				gsize length=0;
-				pIcons->iSeparatorType = g_key_file_get_integer (keyfile, "Inclinated Plane", "draw separator", NULL);
+				if (strcmp (cMainDockDefaultRendererName, "3D plane") == 0)
+				{
+					pIcons->iSeparatorType = g_key_file_get_integer (keyfile, "Inclinated Plane", "draw separator", NULL);
+				}
+				else
+				{
+					pIcons->iSeparatorType = g_key_file_get_integer (keyfile, "Curve", "draw curve separator", NULL);
+				}
 				double *color = g_key_file_get_double_list (keyfile, "Inclinated Plane", "separator color", &length, NULL);
-				memcpy (pIcons->fSeparatorColor, color, 4*sizeof (gdouble));
+				if (length > 0)
+					memcpy (pIcons->fSeparatorColor, color, length*sizeof (gdouble));
+				else
+				{
+					pIcons->fSeparatorColor[0] = pIcons->fSeparatorColor[1] = pIcons->fSeparatorColor[2] = .9;
+				}
+				if (length < 4)
+					pIcons->fSeparatorColor[3] = 1.;
 				g_key_file_free (keyfile);
 			}
 		}
 		g_key_file_set_integer (pKeyFile, "Icons", "separator type", pIcons->iSeparatorType);
+		g_key_file_set_double_list (pKeyFile, "Icons", "separator color", pIcons->fSeparatorColor, 4);
+		g_free (cMainDockDefaultRendererName);
 	}
 	else
 	{

@@ -919,10 +919,13 @@ gchar *cairo_dock_get_theme_path_for_gauge (const gchar *cAppletConfFilePath, GK
 {
 	gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
 	if (cChosenThemeName == NULL)
-		return g_strdup ("Turbo-night-fuel");
+		cChosenThemeName = g_strdup ("Turbo-night-fuel");
 	
 	CairoDockThemeType iType = cairo_dock_extract_theme_type_from_name (cChosenThemeName);
 	gchar *cGaugePath = cairo_dock_get_gauge_theme_path (cChosenThemeName, iType);
+	
+	if (cGaugePath == NULL)  // theme introuvable.
+		cGaugePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR"/Turbo-night-fuel");
 	
 	if (iType != CAIRO_DOCK_ANY_THEME)
 	{

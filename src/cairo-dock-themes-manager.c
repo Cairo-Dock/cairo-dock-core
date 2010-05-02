@@ -138,11 +138,16 @@ static inline CURL *_init_curl_connection (const gchar *cURL)
 		curl_easy_setopt (handle, CURLOPT_PROXY, mySystem.cConnectionProxy);
 		if (mySystem.iConnectionPort != 0)
 			curl_easy_setopt (handle, CURLOPT_PROXYPORT, mySystem.iConnectionPort);
-		if (mySystem.cConnectionUser != NULL)
+		if (mySystem.cConnectionUser != NULL && mySystem.
+			cConnectionPasswd != NULL)
 		{
-			curl_easy_setopt (handle, CURLOPT_PROXYUSERNAME, mySystem.cConnectionUser);
+			gchar *cUserPwd = g_strdup_printf ("%s:%s", mySystem.cConnectionUser, mySystem.
+			cConnectionPasswd);
+			curl_easy_setopt (handle, CURLOPT_PROXYUSERPWD, cUserPwd);
+			g_free (cUserPwd);
+			/*curl_easy_setopt (handle, CURLOPT_PROXYUSERNAME, mySystem.cConnectionUser);
 			if (mySystem.cConnectionPasswd != NULL)
-				curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, mySystem.cConnectionPasswd);
+				curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, mySystem.cConnectionPasswd);*/  // a partir de libcurl 7.19.1, donc apres Jaunty
 		}
 	}
 	curl_easy_setopt (handle, CURLOPT_TIMEOUT, mySystem.iConnectionMaxTime);
