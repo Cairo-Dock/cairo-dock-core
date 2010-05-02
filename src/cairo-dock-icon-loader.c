@@ -117,8 +117,16 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, gdouble fMaxScale, gboolean bI
 	//\______________ on charge la surface/texture de l'icone.
 	if (CAIRO_DOCK_IS_LAUNCHER (icon))  // c'est un lanceur.
 	{
-		icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
-		icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
+		if (CAIRO_DOCK_IS_FAKE_LAUNCHER (icon))
+		{
+			icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI];
+			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLI];
+		}
+		else
+		{
+			icon->fWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+			icon->fHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
+		}
 		
 		w = (bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
 		h = (bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
@@ -595,7 +603,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 
 static void cairo_dock_load_launcher (Icon *icon, int iWidth, int iHeight)
 {
-	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
+	if (icon->pSubDock != NULL && (icon->iSubdockViewType != 0 || (icon->cClass != NULL && !myIndicators.bUseClassIndic)))  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 	{
 		icon->pIconBuffer = cairo_dock_create_blank_surface (iWidth, iHeight);
 	}

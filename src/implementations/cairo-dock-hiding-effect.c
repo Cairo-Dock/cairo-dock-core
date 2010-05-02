@@ -214,7 +214,7 @@ static void _post_render_fade_out_opengl (CairoDock *pDock)
 
 static void _post_render_semi_transparent (CairoDock *pDock, cairo_t *pCairoContext)
 {
-	double fAlpha = .7*pDock->fHideOffset;
+	double fAlpha = .75*pDock->fHideOffset;
 	cairo_rectangle (pCairoContext,
 		0,
 		0,
@@ -227,7 +227,7 @@ static void _post_render_semi_transparent (CairoDock *pDock, cairo_t *pCairoCont
 
 static void _post_render_semi_transparent_opengl (CairoDock *pDock)
 {
-	double fAlpha = 1 - .7*pDock->fHideOffset;
+	double fAlpha = 1 - .75*pDock->fHideOffset;
 	if (g_openglConfig.bStencilBufferAvailable)
 	{
 		glAccum (GL_LOAD, fAlpha);
@@ -480,7 +480,7 @@ static void _post_render_folding_opengl (CairoDock *pDock)
 		iHeight = pDock->container.iWidth;
 	}
 	
-	cairo_dock_set_perspective_view (pDock);
+	cairo_dock_set_perspective_view (CAIRO_CONTAINER (pDock));
 	glPushMatrix ();
 	//glLoadIdentity ();
 	//glTranslatef (iWidth/2, 0., 0.);
@@ -535,7 +535,7 @@ static void _post_render_folding_opengl (CairoDock *pDock)
 	glDisableClientState (GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState (GL_VERTEX_ARRAY);
 	
-	cairo_dock_set_ortho_view (pDock);
+	cairo_dock_set_ortho_view (CAIRO_CONTAINER (pDock));
 	glPopMatrix ();
 	
 	_cairo_dock_disable_texture ();

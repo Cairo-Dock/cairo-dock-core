@@ -58,6 +58,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-internal-position.h"
 #include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-container.h"
@@ -366,7 +367,7 @@ static void _cairo_dock_draw_one_subdock_icon (const gchar *cDockName, CairoDock
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		if (icon->pSubDock != NULL && icon->iSubdockViewType != 0 && CAIRO_DOCK_IS_LAUNCHER (icon) && icon->iSidRedrawSubdockContent == 0)  // icone de sous-dock ou de repertoire ou de classe.
+		if (icon->pSubDock != NULL && (icon->iSubdockViewType != 0 || (icon->cClass != NULL && !myIndicators.bUseClassIndic)) && CAIRO_DOCK_IS_LAUNCHER (icon) && icon->iSidRedrawSubdockContent == 0)  // icone de sous-dock ou de repertoire ou de classe.
 		{
 			cairo_dock_draw_subdock_content_on_icon (icon, pDock);
 		}
