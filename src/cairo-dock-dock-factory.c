@@ -256,9 +256,10 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	
 	g_free (pDock->cRendererName);
 	
-	glDeleteFramebuffersEXT (1, &pDock->iFboId);
-	
-	_cairo_dock_delete_texture (pDock->iRedirectedTexture);
+	if (pDock->iFboId != 0)
+		glDeleteFramebuffersEXT (1, &pDock->iFboId);
+	if (pDock->iRedirectedTexture != 0)
+		_cairo_dock_delete_texture (pDock->iRedirectedTexture);
 	
 	g_free (pDock);
 }
