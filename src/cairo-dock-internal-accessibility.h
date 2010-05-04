@@ -38,6 +38,7 @@ struct _CairoConfigAccessibility {
 	gboolean bAutoHide;
 	gboolean bAutoHideOnFullScreen;
 	gboolean bAutoHideOnOverlap;
+	gboolean bAutoHideOnAnyOverlap;
 	gboolean bPopUp;
 	gboolean bPopUpOnScreenBorder;
 	gint iMaxAuthorizedWidth;

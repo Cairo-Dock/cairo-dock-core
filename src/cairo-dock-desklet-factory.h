@@ -188,7 +188,7 @@ struct _CairoDesklet {
 	guint time;  // date du clic.
 };
 
-/** Say if a Container is a desklet.
+/** Say if a Container is a Desklet.
 *@param pContainer the container.
 *@return TRUE if the container is a desklet.
 */

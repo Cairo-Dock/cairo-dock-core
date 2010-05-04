@@ -107,6 +107,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 		}
 	}
 	g_free (cShortkey);
+	pAccessibility->bAutoHideOnAnyOverlap = pAccessibility->bPopUp;
+	pAccessibility->bPopUp = FALSE;
 	
 	//\____________________ Autres parametres.
 	pAccessibility->iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max_authorized_width", &bFlushConfFileNeeded, 0, "Position", NULL);  // obsolete, cache en conf.

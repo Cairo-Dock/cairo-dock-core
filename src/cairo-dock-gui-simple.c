@@ -212,6 +212,8 @@ static gchar * _make_simple_conf_file (void)
 	
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on_click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
 	
+	g_key_file_set_string (pSimpleKeyFile, "Behavior", "hide_effect", myAccessibility.cHideEffect);
+	
 	int iTaskbarType;
 	if (! myTaskBar.bShowAppli)
 		iTaskbarType = 0;
@@ -420,6 +422,10 @@ static gboolean on_apply_config_simple (gpointer data)
 	
 	int iVisibility = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "visibility", NULL);
 	g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
+	
+	gchar *cHideEffect = g_key_file_get_string (pSimpleKeyFile, "Behavior", "hide_effect", NULL);
+	g_key_file_set_string (pKeyFile, "Accessibility", "hide_effect", cHideEffect);
+	g_free (cHideEffect);
 	
 	gboolean bShowOnClick = (g_key_file_get_integer (pSimpleKeyFile, "Behavior", "show_on_click", NULL) == 1);
 	g_key_file_set_boolean (pKeyFile, "Accessibility", "show on click", bShowOnClick);
