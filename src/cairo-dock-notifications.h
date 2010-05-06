@@ -136,7 +136,7 @@ typedef enum {
 	
 	/// notification called when the desktop is shown/hidden. data:NULL.
 	CAIRO_DOCK_DESKTOP_VISIBILITY_CHANGED,
-	/// notification called when the menu is being built on a container. data : {CairoContainer, GtkMenu}
+	/// notification called when the menu is being built on a container. data : {Icon, CairoContainer, GtkMenu, gboolean*}
 	CAIRO_DOCK_BUILD_CONTAINER_MENU,
 	
 	/// notification called when an icon's sub-dock is starting to (un)fold. data : {Icon}

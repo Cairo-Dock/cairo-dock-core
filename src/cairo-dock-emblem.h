@@ -62,7 +62,7 @@ struct _CairoEmblem {
 /** Create an emblem from an image, that suits the given icon and container. If the image is given by its sole name, it is searched inside the current theme root folder.
 *@param cImageFile an image.
 *@param pIcon an icon.
-*@param pContainer its container.
+*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@return the newly allocated emblem.
 */
 CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, CairoContainer *pContainer);
@@ -72,7 +72,7 @@ CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, Cairo
 *@param iSurfaceWidth width of the surface, 0 means it has the same width as the icon.
 *@param iSurfaceHeight height of the surface, 0 means it has the same height as the icon.
 *@param pIcon an icon.
-*@param pContainer its container.
+*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@return the newly allocated emblem.
 */
 CairoEmblem *cairo_dock_make_emblem_from_surface (cairo_surface_t *pSurface, int iSurfaceWidth, int iSurfaceHeight, Icon *pIcon, CairoContainer *pContainer);
@@ -80,7 +80,7 @@ CairoEmblem *cairo_dock_make_emblem_from_surface (cairo_surface_t *pSurface, int
 /** Create an emblem from an existing texture. The texture is appropriated by the emblem, so if you free it with \ref cairo_dock_free_emblem, it will also free the texture. Use g_free to destroy the emblem if you don't want the texture to be destroyed with.
 *@param iTexture a texture.
 *@param pIcon an icon.
-*@param pContainer its container.
+*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@return the newly allocated emblem.
 */
 CairoEmblem *cairo_dock_make_emblem_from_texture (GLuint iTexture, Icon *pIcon, CairoContainer *pContainer);
@@ -103,7 +103,7 @@ void _cairo_dock_apply_emblem_surface (CairoEmblem *pEmblem, int w, int h, cairo
 /** Permanently draw an emblem on an icon.
 *@param pEmblem the emblem
 *@param pIcon an icon
-*@param pContainer its container
+*@param pContainer its container, or NULL if the icon is not yet inside a container
 */
 void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoContainer *pContainer);
 

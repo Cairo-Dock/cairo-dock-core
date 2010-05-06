@@ -93,14 +93,14 @@ void cairo_dock_destroy_icon_fbo (void);
 
 /** Initiate an OpenGL drawing session on an icon's texture.
 *@param pIcon the icon on which to draw.
-*@param pContainer its container.
+*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@param iRenderingMode rendering mode. 0:normal, 1:don't clear the current texture, so that the drawing will be superimposed on it, 2:keep the current icon texture unchanged for all the drawing (the drawing is made on another texture).
 *@return TRUE if you can proceed to the drawing, FALSE if an error occured.
 */
 gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode);
 /** Finish an OpenGL drawing session on an icon.
 *@param pIcon the icon on which to draw.
-*@param pContainer its container.
+*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@return TRUE if you can proceed to the drawing, FALSE if an error occured.
 */
 void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);

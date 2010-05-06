@@ -519,8 +519,21 @@ gpointer cairo_dock_dbus_get_property_as_boxed (DBusGProxy *pDbusProxy, const gc
 	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
 	if (G_VALUE_HOLDS_BOXED (&v))
 	{
-		gpointer p = g_value_get_boxed (&v);
+		gpointer p = g_value_get_boxed (&v);  // meme remarque.
 		return p;
+	}
+	else
+		return NULL;
+}
+
+gchar **cairo_dock_dbus_get_property_as_string_list (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+{
+	GValue v = G_VALUE_INIT;
+	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	if (G_VALUE_HOLDS_BOXED(&v))
+	{
+		gchar **s = (gchar**)g_value_get_boxed (&v);  // meme remarque.
+		return s;
 	}
 	else
 		return NULL;

@@ -377,7 +377,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 					pIcon->fInsertRemoveFactor = - 0.05;
 			}
 			
-			if (! pIcon->bIsDemandingAttention)
+			if (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible)
 				cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
 		}
 		
@@ -807,6 +807,16 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 	cairo_dock_request_icon_animation (pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_mark_icon_as_clicked (pIcon);  // pour eviter qu'un simple survol ne stoppe l'animation.
 	
+	// on reporte la demande d'attention recursivement vers le bas.
+	if (pDock->iRefCount > 0)
+	{
+		CairoDock *pParentDock = NULL;
+		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
+		if (pPointingIcon != NULL)
+		{
+			cairo_dock_request_icon_attention (pPointingIcon, pParentDock, cAnimation, iNbRounds);
+		}
+	}
 }
 
 void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
@@ -814,6 +824,27 @@ void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 	pIcon->bIsDemandingAttention = FALSE;
 	cairo_dock_stop_icon_animation (pIcon);
 	cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
+	
+	// on stoppe la demande d'attention recursivement vers le bas.
+	if (pDock->iRefCount > 0)
+	{
+		GList *ic;
+		for (ic = pDock->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon->bIsDemandingAttention)
+				break;
+		}
+		if (ic == NULL)  // plus aucune animation dans ce dock.
+		{
+			CairoDock *pParentDock = NULL;
+			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
+			if (pPointingIcon != NULL)
+			{
+				cairo_dock_stop_icon_attention (pPointingIcon, pParentDock);
+			}
+		}
+	}
 }
 
 

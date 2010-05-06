@@ -302,7 +302,7 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, CairoContainer *pContainer
 }
 
 
-gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, CairoContainer *pContainer, GtkWidget *menu)
+gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu, gboolean *bDiscardMenu)
 {
 	//\_________________________ On ajoute le sous-menu Cairo-Dock, toujours present.
 	GtkWidget *pMenuItem, *image;

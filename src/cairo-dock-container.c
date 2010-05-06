@@ -207,7 +207,7 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
 	GdkRectangle rect;
 	cairo_dock_compute_icon_area (icon, pContainer, &rect);
 	
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_is_hidden (CAIRO_DOCK (pContainer)) && ! icon->bIsDemandingAttention)  // inutile de redessiner.
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_is_hidden (CAIRO_DOCK (pContainer)) && ! icon->bIsDemandingAttention && ! icon->bAlwaysVisible)  // inutile de redessiner.
 		return ;
 	_redraw_container_area (pContainer, &rect);
 }
@@ -366,6 +366,8 @@ static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 }
 void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer)
 {
+	if (menu == NULL)
+		return;
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		if (g_signal_handler_find (menu,
@@ -433,12 +435,17 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	
 	//\_________________________ On construit le menu.
 	GtkWidget *menu = gtk_menu_new ();
-	s_pMenu = menu;
 	
 	//\_________________________ On passe la main a ceux qui veulent y rajouter des choses.
-	cairo_dock_notify (CAIRO_DOCK_BUILD_CONTAINER_MENU, pContainer, menu);
+	gboolean bDiscardMenu = FALSE;
+	cairo_dock_notify (CAIRO_DOCK_BUILD_CONTAINER_MENU, icon, pContainer, menu, &bDiscardMenu);
+	if (bDiscardMenu)
+	{
+		gtk_widget_destroy (menu);
+		return NULL;
+	}
 	
 	cairo_dock_notify (CAIRO_DOCK_BUILD_ICON_MENU, icon, pContainer, menu);
-	
+	s_pMenu = menu;
 	return menu;
 }

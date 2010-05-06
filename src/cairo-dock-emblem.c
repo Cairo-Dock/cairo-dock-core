@@ -53,7 +53,7 @@ CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, Cairo
 	//\___________ On cree la surface/texture a cette taille.
 	cairo_surface_t *pEmblemSurface = cairo_dock_create_surface_from_image_simple (cImageFile, pEmblem->iWidth, pEmblem->iHeight);
 	
-	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pEmblemSurface)
+	if (g_bUseOpenGL && pEmblemSurface)
 	{
 		pEmblem->iTexture = cairo_dock_create_texture_from_surface (pEmblemSurface);
 		cairo_surface_destroy (pEmblemSurface);

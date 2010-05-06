@@ -459,7 +459,6 @@ void cairo_dock_destroy_icon_pbuffer (void)
 
 gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode)
 {
-	g_return_val_if_fail (pContainer != NULL, FALSE);
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
@@ -473,6 +472,8 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 	else if (g_openglConfig.iFboId != 0)
 	{
 		// on attache la texture au FBO.
+		int iWidth, iHeight;
+		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 		if (pContainer == NULL)
 			pContainer = CAIRO_CONTAINER (g_pMainDock);
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
@@ -495,10 +496,6 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 		}
 		
 		// on se positionne au milieu.
-		int iWidth, iHeight;
-		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
-		///g_print ("draw %dx%d texture on a %dx%d viewport\n", iWidth, iHeight, pContainer->iWidth, pContainer->iHeight);
-		//glViewport ((pContainer->iWidth - iWidth)/2, (pContainer->iHeight - iHeight)/2, iWidth, iHeight);
 		cairo_dock_set_ortho_view (pContainer);
 		glLoadIdentity ();
 		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);

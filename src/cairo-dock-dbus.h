@@ -164,6 +164,8 @@ gchar *cairo_dock_dbus_get_property_as_object_path (DBusGProxy *pDbusProxy, cons
 
 gpointer cairo_dock_dbus_get_property_as_boxed (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
 
+gchar **cairo_dock_dbus_get_property_as_string_list (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty);
+
 
 GHashTable *cairo_dock_dbus_get_all_properties (DBusGProxy *pDbusProxy, const gchar *cInterface);
 
