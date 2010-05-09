@@ -49,6 +49,7 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-X-utilities.h"
 #include "cairo-dock-dialog-factory.h"
 
 extern CairoDock *g_pMainDock;
@@ -135,6 +136,20 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 		}
 		
 		cairo_dock_notify (CAIRO_DOCK_RENDER_DIALOG, pDialog, pCairoContext);
+		
+		if (pDialog->fAppearanceCounter < 1.)
+		{
+			double fAlpha = pDialog->fAppearanceCounter * pDialog->fAppearanceCounter;
+			cairo_rectangle (pCairoContext,
+				0,
+				0,
+				pDialog->container.iWidth,
+				pDialog->container.iHeight);
+			cairo_set_line_width (pCairoContext, 0);
+			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
+			cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1. - fAlpha);
+			cairo_fill (pCairoContext);
+		}
 		
 		cairo_destroy (pCairoContext);
 	}
@@ -346,6 +361,12 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = _cairo_dock_create_empty_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
 	pDialog->pIcon = pIcon;
+	if (pAttribute->bForceAbove)
+	{
+		gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
+		Window Xid = GDK_WINDOW_XID (pDialog->container.pWidget->window);
+		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
+	}
 	
 	//\________________ On cree la surface du message.
 	if (pAttribute->cText != NULL)
@@ -511,6 +532,8 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		G_CALLBACK (on_unmap_dialog),
 		pDialog);
 	
+	cairo_dock_launch_animation (CAIRO_CONTAINER (pDialog));
+	
 	return pDialog;
 }
 
@@ -522,17 +545,18 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	if (pDialog->iSidTimer > 0)
 	{
 		g_source_remove (pDialog->iSidTimer);
-		pDialog->iSidTimer = 0;
 	}
 	if (pDialog->iSidAnimateIcon > 0)
 	{
 		g_source_remove (pDialog->iSidAnimateIcon);
-		pDialog->iSidAnimateIcon = 0;
 	}
 	if (pDialog->iSidAnimateText > 0)
 	{
 		g_source_remove (pDialog->iSidAnimateText);
-		pDialog->iSidAnimateText = 0;
+	}
+	if (pDialog->container.iSidGLAnimation > 0)
+	{
+		g_source_remove (pDialog->container.iSidGLAnimation);
 	}
 	
 	cd_debug ("");
@@ -602,7 +626,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 				dy = 0;
 			else if (cairo_dock_is_hidden (pDock))
-					dy = pDock->container.iHeight - MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
+					dy = pDock->container.iHeight/** - MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight)*/;
 			else
 				dy = pDock->container.iHeight - pDock->iMinDockHeight;
 			if (pDock->container.bIsHorizontal)
@@ -628,8 +652,8 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			{
 				*iX = pDock->container.iWindowPositionX +
 					pDock->iMaxDockWidth/2 -
-					MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth)/2 + 
-					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
+					/**MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth)*/pDock->iMaxDockWidth/2 + 
+					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * pDock->iMaxDockWidth/**MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth)*/;
 				//cd_debug ("placement sur un dock cache -> %d", *iX);
 			}
 			else

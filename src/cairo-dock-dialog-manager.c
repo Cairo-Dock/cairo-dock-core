@@ -552,12 +552,15 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 {
 	g_return_val_if_fail (pAttribute != NULL, NULL);
 	
-	Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
-	if (pActiveAppli && pActiveAppli->bIsFullScreen && cairo_dock_appli_is_on_current_desktop (pActiveAppli))
-	///if (cairo_dock_search_window_covering_dock (g_pMainDock, FALSE, TRUE) != NULL)
+	if (!pAttribute->bForceAbove)
 	{
-		cd_debug ("skip dialog since a fullscreen window would mask it");
-		return NULL;
+		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+		if (pActiveAppli && pActiveAppli->bIsFullScreen && cairo_dock_appli_is_on_current_desktop (pActiveAppli))
+		///if (cairo_dock_search_window_covering_dock (g_pMainDock, FALSE, TRUE) != NULL)
+		{
+			cd_debug ("skip dialog since a fullscreen window would mask it");
+			return NULL;
+		}
 	}
 	cd_debug ("%s (%s, %s, %x, %x, %x (%x;%x))", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pTextDescription, pIcon, pContainer);
 	
@@ -959,17 +962,17 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 			G_CALLBACK (_cairo_dock_dialog_destroyed),
 			pBlockingLoop);
 		
-		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
+		/**if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 		{
 			cairo_dock_pop_up (CAIRO_DOCK (pContainer));
-		}
+		}*/
 		cd_debug ("debut de boucle bloquante ...\n");
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();
 		cd_debug ("fin de boucle bloquante -> %d\n", iClickedButton);
-		if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
-			cairo_dock_pop_down (CAIRO_DOCK (pContainer));
+		/*if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
+			cairo_dock_pop_down (CAIRO_DOCK (pContainer));*/
 		if (CAIRO_DOCK_IS_DOCK (pContainer)/* && ! pDock->container.bInside*/)
 		{
 			cd_message ("on force a quitter");

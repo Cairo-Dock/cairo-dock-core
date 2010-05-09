@@ -106,6 +106,8 @@ struct _CairoDialogAttribute {
 	
 	/// whether the dialog should be transparent to mouse input.
 	gboolean bNoInput;
+	/// whether to pop-up the dialog in front of al other windows, including fullscreen windows.
+	gboolean bForceAbove;
 };
 
 struct _CairoDialogButton {
@@ -169,6 +171,7 @@ struct _CairoDialog {
 	GdkBitmap* pShapeBitmap;
 	GTimer *pUnmapTimer;
 	gboolean bPositionForced;
+	gdouble fAppearanceCounter;
 };
 
 #define CAIRO_DIALOG_MIN_SIZE 20

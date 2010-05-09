@@ -563,7 +563,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param ... values to be written in the string.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON_PRINTF(cQuickInfoFormat, ...) \
-	cairo_dock_set_quick_info_full (myIcon, myContainer, cQuickInfoFormat, ##__VA_ARGS__)
+	cairo_dock_set_quick_info_printf (myIcon, myContainer, cQuickInfoFormat, ##__VA_ARGS__)
 
 /** Write the time in hours-minutes as a quick-info on the applet's icon.
 *@param iTimeInSeconds the time in seconds.

@@ -484,7 +484,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	//\___________________ On garde une trace de certains parametres.
 	gchar *cRaiseDockShortcutOld = myAccessibility.cRaiseDockShortcut;
 	myAccessibility.cRaiseDockShortcut = NULL;
-	gboolean bPopUpOld = myAccessibility.bPopUp;  // FALSE initialement.
+	///gboolean bPopUpOld = myAccessibility.bPopUp;  // FALSE initialement.
 	gboolean bUseFakeTransparencyOld = mySystem.bUseFakeTransparency;  // FALSE initialement.
 	gboolean bGroupAppliByClassOld = myTaskBar.bGroupAppliByClass;  // FALSE initialement.
 	gboolean bHideVisibleApplisOld = myTaskBar.bHideVisibleApplis;
@@ -574,7 +574,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_load_icon_textures ();
 	cairo_dock_load_indicator_textures ();
 	
-	cairo_dock_load_visible_zone (pDock, myBackground.cVisibleZoneImageFile, myAccessibility.iVisibleZoneWidth, myAccessibility.iVisibleZoneHeight, myBackground.fVisibleZoneAlpha);
+	///cairo_dock_load_visible_zone (pDock, myBackground.cVisibleZoneImageFile, myAccessibility.iVisibleZoneWidth, myAccessibility.iVisibleZoneHeight, myBackground.fVisibleZoneAlpha);
 	
 	///cairo_dock_create_icon_pbuffer ();
 	cairo_dock_create_icon_fbo ();
@@ -685,7 +685,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
 	}
 	
-	if (myAccessibility.bPopUp)
+	/**if (myAccessibility.bPopUp)
 	{
 		cairo_dock_start_polling_screen_edge (pDock);
 		if (! bPopUpOld)
@@ -701,6 +701,14 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_stop_polling_screen_edge ();
 		if (bPopUpOld)
 			cairo_dock_set_docks_on_top_layer (FALSE);
+	}*/
+	if (myAccessibility.bAutoHide || myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnAnyOverlap)
+	{
+		cairo_dock_start_polling_screen_edge (pDock);
+	}
+	else
+	{
+		cairo_dock_stop_polling_screen_edge ();
 	}
 	
 	pDock->container.iMouseX = 0;  // on se place hors du dock initialement.

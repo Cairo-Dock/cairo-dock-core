@@ -203,9 +203,9 @@ void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, CairoContainer *pC
 	int hours = iTimeInSeconds / 3600;
 	int minutes = (iTimeInSeconds % 3600) / 60;
 	if (hours != 0)
-		cairo_dock_set_quick_info_full (pIcon, pContainer, "%dh%02d", hours, abs (minutes));
+		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%dh%02d", hours, abs (minutes));
 	else
-		cairo_dock_set_quick_info_full (pIcon, pContainer, "%dmn", minutes);
+		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%dmn", minutes);
 }
 
 void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds)
@@ -214,9 +214,9 @@ void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, CairoContainer 
 	int secondes = iTimeInSeconds % 60;
 	cd_debug ("%s (%d:%d)\n", __func__, minutes, secondes);
 	if (minutes != 0)
-		cairo_dock_set_quick_info_full (pIcon, pContainer, "%d:%02d", minutes, abs (secondes));
+		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%d:%02d", minutes, abs (secondes));
 	else
-		cairo_dock_set_quick_info_full (pIcon, pContainer, "%s0:%02d", (secondes < 0 ? "-" : ""), abs (secondes));
+		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%s0:%02d", (secondes < 0 ? "-" : ""), abs (secondes));
 }
 
 gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes)

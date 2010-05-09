@@ -50,6 +50,7 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
@@ -71,6 +72,7 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bKeepAbove;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static GHashTable *s_hDocksTable = NULL;  // table des docks existant.
 static int s_iSidPollScreenEdge = 0;
@@ -110,8 +112,8 @@ CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendere
 	
 	if (g_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), g_bKeepAbove);
-	if (myAccessibility.bPopUp)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+	/**if (myAccessibility.bPopUp)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);*/
 	if (mySystem.bUseFakeTransparency)
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 	
@@ -638,7 +640,7 @@ static void _cairo_dock_quick_hide_one_root_dock (const gchar *cDockName, CairoD
 	{
 		pDock->bAutoHideInitialValue = pDock->bAutoHide;
 		pDock->bAutoHide = TRUE;
-		pDock->bEntranceDisabled = TRUE;
+		///pDock->bEntranceDisabled = TRUE;
 		if (!pDock->container.bInside)  // on ne cache pas le dock si l'on change par exemple de bureau via le switcher ou un clic sur une appli.
 			cairo_dock_emit_leave_signal (pDock);
 	}
@@ -760,11 +762,59 @@ void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bRelo
 }
 
 
+static gboolean _cairo_dock_poll_screen_edge (gpointer data)  // thanks to Smidgey for the pop-up patch !
+{
+	static int iPrevPointerX = -1, iPrevPointerY = -1;
+	gint iMousePosX, iMousePosY;
 
+	//if (!pDock->bPopped)
+	{
+		gdk_display_get_pointer(gdk_display_get_default(), NULL, &iMousePosX, &iMousePosY, NULL);
+		if (iPrevPointerX == iMousePosX && iPrevPointerY == iMousePosY)
+			return TRUE;
+		
+		iPrevPointerX = iMousePosX;
+		iPrevPointerY = iMousePosY;
+		
+		CairoDockPositionType iScreenBorder1 = CAIRO_DOCK_INSIDE_SCREEN, iScreenBorder2 = CAIRO_DOCK_INSIDE_SCREEN;
+		if (iMousePosY == 0)
+		{
+			iScreenBorder1 = CAIRO_DOCK_TOP;
+		}
+		else if (iMousePosY + 1 == g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
+		{
+			iScreenBorder1 = CAIRO_DOCK_BOTTOM;
+		}
+		if (iMousePosX == 0)
+		{
+			iScreenBorder2 = CAIRO_DOCK_LEFT;
+		}
+		else if (iMousePosX + 1 == g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
+		{
+			iScreenBorder2 = CAIRO_DOCK_RIGHT;
+		}
+		if (iScreenBorder1 == CAIRO_DOCK_INSIDE_SCREEN && iScreenBorder2 == CAIRO_DOCK_INSIDE_SCREEN)
+			return TRUE;
+		if ((iScreenBorder1 != CAIRO_DOCK_INSIDE_SCREEN && iScreenBorder2 != CAIRO_DOCK_INSIDE_SCREEN) || myAccessibility.bPopUpOnScreenBorder)
+		{
+			//g_print ("POP\n");
+			Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+			if (! pActiveAppli || ! pActiveAppli->bIsFullScreen)  // ce test est la pour parer aux WM qui laissent passer des fenetres en avant-plan alors qu'une fenetre plein ecran est presente (Compiz ...). c'est particulierement penible pendant son Starcraft du soir.
+			{
+				if (iScreenBorder1 != CAIRO_DOCK_INSIDE_SCREEN)
+					cairo_dock_unhide_root_docks_on_screen_edge (iScreenBorder1);
+				if (iScreenBorder2 != CAIRO_DOCK_INSIDE_SCREEN)
+					cairo_dock_unhide_root_docks_on_screen_edge (iScreenBorder2);
+			}
+		}
+	}
+	
+	return TRUE;
+}
 void cairo_dock_start_polling_screen_edge (CairoDock *pMainDock)
 {
 	if (s_iSidPollScreenEdge == 0)
-		s_iSidPollScreenEdge = g_timeout_add (333, (GSourceFunc) cairo_dock_poll_screen_edge, (gpointer) pMainDock);
+		s_iSidPollScreenEdge = g_timeout_add (250, (GSourceFunc) _cairo_dock_poll_screen_edge, (gpointer) pMainDock);
 }
 void cairo_dock_stop_polling_screen_edge (void)
 {
@@ -775,7 +825,7 @@ void cairo_dock_stop_polling_screen_edge (void)
 	}
 }
 
-static void _cairo_dock_pop_up_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+/**static void _cairo_dock_pop_up_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount > 0)
 		return ;
@@ -793,6 +843,50 @@ static void _cairo_dock_pop_up_one_root_dock (gchar *cDockName, CairoDock *pDock
 void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_pop_up_one_root_dock, GINT_TO_POINTER (iScreenBorder));
+}*/
+
+static gboolean _cairo_dock_hide_back_dock (CairoDock *pDock)
+{
+	g_print ("hide back\n");
+	cairo_dock_start_hiding (pDock);
+	pDock->iSidHideBack = 0;
+	return FALSE;
+}
+static gboolean _cairo_dock_unhide_dock_delayed (CairoDock *pDock)
+{
+	g_print ("unhide delayed\n");
+	cairo_dock_start_showing (pDock);
+	if (pDock->iSidHideBack == 0)  // on se recachera dans 2s si on n'est pas entre dans le dock entre-temps.
+		pDock->iSidHideBack = g_timeout_add (2000, (GSourceFunc) _cairo_dock_hide_back_dock, (gpointer) pDock);
+	pDock->iSidUnhideDelayed = 0;
+	return FALSE;
+}
+static void _cairo_dock_unhide_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	if (pDock->iRefCount > 0)
+		return ;
+	CairoDockPositionType iScreenBorder = GPOINTER_TO_INT (data);
+	
+	CairoDockPositionType iDockScreenBorder = (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp));
+	if (iDockScreenBorder == iScreenBorder && cairo_dock_is_hidden (pDock))  // c'est notre bord d'ecran et le dock est courammment cache.
+	{
+		g_print ("%s will unhide\n", cDockName);
+		if (myAccessibility.iUnhideDockDelay != 0)  // on programme une apparition.
+		{
+			if (pDock->iSidUnhideDelayed == 0)
+				pDock->iSidUnhideDelayed = g_timeout_add (myAccessibility.iUnhideDockDelay, (GSourceFunc) _cairo_dock_unhide_dock_delayed, (gpointer) pDock);
+		}
+		else  // on montre le dock tout de suite.
+		{
+			cairo_dock_start_showing (pDock);
+			if (pDock->iSidHideBack == 0)  // on se recachera dans 2s si on n'est pas entre dans le dock entre-temps.
+				pDock->iSidHideBack = g_timeout_add (2000, (GSourceFunc) _cairo_dock_hide_back_dock, (gpointer) pDock);
+		}
+	}
+}
+void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder)
+{
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_unhide_one_root_dock, GINT_TO_POINTER (iScreenBorder));
 }
 
 static void _cairo_dock_set_one_dock_on_top_layer (gchar *cDockName, CairoDock *pDock, gpointer data)

@@ -1585,7 +1585,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	gpointer *pGroupKeyWidget;
 	int i, j;
 	guint k, iNbElements;
-	int iNumPage=0, iPresentedNumPage=0;
 	char iElementType;
 	gboolean bValue, *bValueList;
 	int iValue, iMinValue, iMaxValue, *iValueList;
@@ -2361,7 +2360,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						iSelectedItem = atoi (cValue);
 					gchar *cResult = (bNumberedList ? g_new0 (gchar , 10) : NULL);
 					int dk = (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE ? 3 : 1);
-					iNbControlledWidgets = 0;
+					if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE)
+						iNbControlledWidgets = 0;
 					for (k = 0; pAuthorizedValuesList[k] != NULL; k += dk)  // on ajoute toutes les chaines possibles a la combo.
 					{
 						GtkTreeIter iter;
@@ -2420,6 +2420,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						{
 							data[2] = GINT_TO_POINTER (iNbControlledWidgets);
 							g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo_selective), data);
+							//g_print ("CONTROL : %d,%d,%d\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
 						}
 						//g_print (" pControlContainer:%x\n", pControlContainer);
 					}

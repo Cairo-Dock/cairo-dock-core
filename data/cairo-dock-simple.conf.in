@@ -14,16 +14,15 @@ screen border = 0
 #F-[Visibility of the main dock;@pkgdatadir@/icon-visibility.svg]
 frame_visi =
 
-#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Hide the dock whenever it overlaps a window;1;1;Automatically hide the dock;1;1;Hide the dock when it overlaps the current window;1;1;Pop-up on shortcut;2;1] Visibility:
+#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Automatically hide the dock;1;1;Hide the dock whenever it overlaps a window;1;1;Hide the dock when it overlaps the current window;1;1;Pop-up on shortcut;2;1] Visibility:
 #{Prevent windows from overlapping the dock: reserve space at the edge of the screen for the dock.
-#Auto-hide: the dock will automatically hide itself outside of the screen when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
-#Keep the dock below windows: the dock will pop-up on the foreground when you place the mouse on its screen border.
+#Auto-hide: when the dock is hidden, place the mouse on the screen's border to call it back.
 #Pop-up on shortcut : When you press the shortcut, the dock will pop-up at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 visibility = 1
 
 #L-[Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
 #{The last effect requires opengl.}
-hide_effect = Suck up
+hide effect = Move down
 
 #k- Keyboard shortcut to pop-up the dock:
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}

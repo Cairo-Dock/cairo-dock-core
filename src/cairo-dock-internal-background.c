@@ -94,11 +94,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 		pBackground->fStripesAngle = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes angle", &bFlushConfFileNeeded, 90., NULL, NULL);
 	}
 	
+	/**
 	// zone de rappel.
 	pBackground->cVisibleZoneImageFile = cairo_dock_get_string_key_value (pKeyFile, "Background", "callback image", &bFlushConfFileNeeded, NULL, "Hidden dock", "callback image");
-	
 	pBackground->fVisibleZoneAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "callback alpha", &bFlushConfFileNeeded, 0.5, "Hidden dock", "alpha");
-	pBackground->bReverseVisibleImage = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "callback reverse", &bFlushConfFileNeeded, TRUE, "Hidden dock", "reverse visible image");
+	pBackground->bReverseVisibleImage = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "callback reverse", &bFlushConfFileNeeded, TRUE, "Hidden dock", "reverse visible image");*/
 	
 	// mouvements.
 	int iMovementType;
@@ -132,7 +132,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 static void reset_config (CairoConfigBackground *pBackground)
 {
 	g_free (pBackground->cBackgroundImageFile);
-	g_free (pBackground->cVisibleZoneImageFile);
+	///g_free (pBackground->cVisibleZoneImageFile);
 }
 
 
@@ -140,10 +140,10 @@ static void reload (CairoConfigBackground *pPrevBackground, CairoConfigBackgroun
 {
 	CairoDock *pDock = g_pMainDock;
 	
-	if (cairo_dock_strings_differ (pPrevBackground->cVisibleZoneImageFile, pBackground->cVisibleZoneImageFile))
+	/**if (cairo_dock_strings_differ (pPrevBackground->cVisibleZoneImageFile, pBackground->cVisibleZoneImageFile))
 	{
 		cairo_dock_load_visible_zone (pDock, pBackground->cVisibleZoneImageFile, myAccessibility.iVisibleZoneWidth, myAccessibility.iVisibleZoneHeight, pBackground->fVisibleZoneAlpha);
-	}
+	}*/
 	
 	g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.

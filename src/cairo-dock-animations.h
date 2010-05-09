@@ -88,15 +88,15 @@ struct _CairoDockHidingEffect {
 #define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || (pDock)->fHideOffset < 1)))
 
 
-/** Pop up a Dock above other windows, if docks are in mode "keep below other windows"; otherwise do nothing.
+/* Pop up a Dock above other windows, if docks are in mode "keep below other windows"; otherwise do nothing.
 *@param pDock the dock.
 */
-void cairo_dock_pop_up (CairoDock *pDock);
+///void cairo_dock_pop_up (CairoDock *pDock);
 
-/** Make a Dock pop down, keeping it below other windows, if this mode is activated in config.
+/* Make a Dock pop down, keeping it below other windows, if this mode is activated in config.
 *@param pDock the dock.
 */
-gboolean cairo_dock_pop_down (CairoDock *pDock);
+///gboolean cairo_dock_pop_down (CairoDock *pDock);
 
 
 gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex);

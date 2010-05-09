@@ -642,6 +642,7 @@ static void cairo_dock_load_appli (Icon *icon, int iWidth, int iHeight)
 	GLuint iPrevTexture = icon->iIconTexture;
 	icon->pIconBuffer = NULL;
 	icon->iIconTexture = 0;
+	//g_print ("%s (%dx%d / %ld)\n", __func__, iWidth, iHeight, icon->iBackingPixmap);
 	if (myTaskBar.iMinimizedWindowRenderType == 1 && icon->bIsHidden && icon->iBackingPixmap != 0)
 	{
 		// on cree la miniature.

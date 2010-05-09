@@ -169,18 +169,9 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	
 	if (pExpose->area.x + pExpose->area.y != 0)  // x et/ou y sont > 0.
 	{
-		if (! cairo_dock_is_hidden (pDock) || (g_pHidingBackend != NULL && g_pHidingBackend->bCanDisplayHiddenDock))
+		//if (! cairo_dock_is_hidden (pDock) || (g_pHidingBackend != NULL && g_pHidingBackend->bCanDisplayHiddenDock))
 		{
 			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &pExpose->area, NULL);
-			
-			/**if (pDock->fHideOffset != 0 && myAccessibility.iHideEffect == 0)
-			{
-				double dy = pDock->iMaxDockHeight * pDock->fHideOffset * (pDock->container.bDirectionUp ? 1 : -1);
-				if (pDock->container.bIsHorizontal)
-					cairo_translate (pCairoContext, 0., dy);
-				else
-					cairo_translate (pCairoContext, dy, 0.);
-			}*/
 			
 			if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
 				g_pHidingBackend->pre_render (pDock, pCairoContext);
@@ -715,7 +706,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%d; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->iInputState, pEvent);
+	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%x; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
@@ -723,13 +714,14 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}
 	
+	/**
 	// on retarde l'entree en auto-hide.
 	if (myAccessibility.iUnhideDockDelay != 0 && pDock->iRefCount == 0 && pDock->bAutoHide && pEvent != NULL)  // vraie rentree dans un main dock en auto-hide => on retarde.
 	{
 		if (pDock->iSidUnhideDemand == 0)
 			pDock->iSidUnhideDemand = g_timeout_add (myAccessibility.iUnhideDockDelay, (GSourceFunc) cairo_dock_emit_enter_signal, pDock);
 		return FALSE;
-	}
+	}*/
 	pDock->iSidUnhideDemand = 0;
 	
 	// stop les timers.
@@ -806,6 +798,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		}
 	}
 	
+	/**
 	// on repasse au premier plan.
 	if (myAccessibility.bPopUp && pDock->iRefCount == 0)
 	{
@@ -816,6 +809,12 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			g_source_remove(pDock->iSidPopDown);
 			pDock->iSidPopDown = 0;
 		}
+	}*/
+	if (pDock->iSidHideBack != 0)
+	{
+		g_print ("remove hide back timeout\n");
+		g_source_remove(pDock->iSidHideBack);
+		pDock->iSidHideBack = 0;
 	}
 	
 	// si on etait en auto-hide, on commence a monter.
@@ -847,7 +846,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 /// This function checks for the mouse cursor's position. If the mouse
 /// cursor touches the edge of the screen upon which the dock is resting,
 /// then the dock will pop up over other windows...
-gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey for the pop-up patch !
+/**gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey for the pop-up patch !
 {
 	static int iPrevPointerX = -1, iPrevPointerY = -1;
 	gint iMousePosX, iMousePosY;
@@ -893,7 +892,7 @@ gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey fo
 	}
 	
 	return myAccessibility.bPopUp;
-}
+}*/
 
 gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
@@ -1120,8 +1119,13 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		iNewY = pEvent->x;
 	}
 	
-	gboolean bSizeUpdated = FALSE;
-	if (pDock->container.iWindowPositionX == 0 && pDock->container.iWindowPositionY == 0 && !cairo_dock_quick_hide_is_activated ())  // ce cas arrive au debut. Il peut eventuellement arriver apres aussi, ca n'est pas un probleme.
+	gboolean bSizeUpdated = (iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight);
+	gboolean bPositionUpdated = (pDock->container.iWindowPositionX != iNewX || pDock->container.iWindowPositionY != iNewY);
+	pDock->container.iWidth = iNewWidth;
+	pDock->container.iHeight = iNewHeight;
+	pDock->container.iWindowPositionX = iNewX;
+	pDock->container.iWindowPositionY = iNewY;
+	/**if (pDock->container.iWindowPositionX == 0 && pDock->container.iWindowPositionY == 0 && !cairo_dock_quick_hide_is_activated ())  // ce cas arrive au debut. Il peut eventuellement arriver apres aussi, ca n'est pas un probleme.
 	{
 		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
 		bSizeUpdated = TRUE;
@@ -1133,15 +1137,11 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		{
 			cairo_dock_activate_temporary_auto_hide ();
 		}
-	}
+	}*/
 	
-	if ((iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight || bSizeUpdated) && iNewWidth > 1)  // changement de taille
+	if (bSizeUpdated && iNewWidth > 1)  // changement de taille
 	{
 		//g_print ("--------------------------------> %dx%d\n", iNewWidth, iNewHeight);
-		pDock->container.iWidth = iNewWidth;
-		pDock->container.iHeight = iNewHeight;
-		pDock->container.iWindowPositionX = iNewX;
-		pDock->container.iWindowPositionY = iNewY;
 		
 		if (pDock->container.bIsHorizontal)
 			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
@@ -1228,14 +1228,46 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		
 		cairo_dock_replace_all_dialogs ();
 	}
-	else if (pDock->container.iWindowPositionX != iNewX || pDock->container.iWindowPositionY != iNewY)  // changement de position.
+	else if (bPositionUpdated)  // changement de position.
 	{
-		pDock->container.iWindowPositionX = iNewX;
-		pDock->container.iWindowPositionY = iNewY;
 		//g_print ("configure x,y\n");
 		cairo_dock_trigger_set_WM_icons_geometry (pDock);  // changement de position de la fenetre du dock => on replace les icones.
 		
 		cairo_dock_replace_all_dialogs ();
+	}
+	
+	if (pDock->iRefCount > 0 && (bSizeUpdated || bPositionUpdated))
+	{
+		if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnAnyOverlap)
+		{
+			if (myAccessibility.bAutoHideOnOverlap)
+			{
+				Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+				if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
+				{
+					if (!cairo_dock_quick_hide_is_activated ())
+						cairo_dock_activate_temporary_auto_hide ();
+				}
+				else
+				{
+					if (cairo_dock_quick_hide_is_activated ())
+						cairo_dock_deactivate_temporary_auto_hide ();
+				}
+			}
+			else if (myAccessibility.bAutoHideOnAnyOverlap)
+			{
+				if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
+				{
+					if (!cairo_dock_quick_hide_is_activated ())
+						cairo_dock_activate_temporary_auto_hide ();
+				}
+				else
+				{
+					if (cairo_dock_quick_hide_is_activated ())
+						cairo_dock_deactivate_temporary_auto_hide ();
+				}
+			}
+		}
 	}
 	
 	gtk_widget_queue_draw (pWidget);
@@ -1422,8 +1454,8 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 		}
 		else if (pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
-			w = MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
-			h = MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
+			w = /**MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth)*/pDock->iMaxDockWidth;
+			h = /**MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight)*/0;
 			
 			if (X <= -w/2 || X >= w/2)
 				return FALSE;  // on n'accepte pas le drop.

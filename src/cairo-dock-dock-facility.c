@@ -356,10 +356,11 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
  /// INPUT SHAPE ///
 ///////////////////
 
-GdkBitmap *cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
+static GdkBitmap *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
 {
 	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
+	g_print ("%s (%dx%d / %dx%d)\n", __func__, w, h, W, H);
 	
 	GdkBitmap *pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
 		pDock->container.bIsHorizontal ? W : H,
@@ -370,24 +371,27 @@ GdkBitmap *cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
 	cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
 	cairo_paint (pCairoContext);
-	cairo_set_source_rgba (pCairoContext, 1., 1., 1., 1.);
-	if (pDock->container.bIsHorizontal)
+	if (w != 0 && h != 0)
 	{
-		cairo_rectangle (pCairoContext,
-			(W - w) / 2,  // centre en x.
-			pDock->container.bDirectionUp ? H - h : 0,
-			w,
-			h);
+		if (pDock->container.bIsHorizontal)
+		{
+			cairo_rectangle (pCairoContext,
+				(W - w) / 2,  // centre en x.
+				pDock->container.bDirectionUp ? H - h : 0,
+				w,
+				h);
+		}
+		else
+		{
+			cairo_rectangle (pCairoContext,
+				pDock->container.bDirectionUp ? H - h : 0,
+				(W - w) / 2,  // centre en x.
+				h,
+				w);
+		}
+		cairo_set_source_rgba (pCairoContext, 1., 1., 1., 1.);
+		cairo_fill (pCairoContext);
 	}
-	else
-	{
-		cairo_rectangle (pCairoContext,
-			pDock->container.bDirectionUp ? H - h : 0,
-			(W - w) / 2,  // centre en x.
-			h,
-			w);
-	}
-	cairo_fill (pCairoContext);
 	cairo_destroy (pCairoContext);
 
 	return pShapeBitmap;
@@ -412,8 +416,10 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	int H = pDock->iMaxDockHeight;
 	int w = pDock->iMinDockWidth;
 	int h = pDock->iMinDockHeight;
-	int w_ = MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
-	int h_ = MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
+	///int w_ = MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth);
+	///int h_ = MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight);
+	int w_ = 1;
+	int h_ = 1;
 	
 	//\_______________ on verifie que les conditions sont toujours remplies.
 	if (w == 0 || h == 0 || pDock->iRefCount > 0 || W == 0 || H == 0)
@@ -431,9 +437,9 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	}
 	
 	//\_______________ on cree les zones.
-	pDock->pShapeBitmap = cairo_dock_create_input_shape (pDock, w, h);
+	pDock->pShapeBitmap = _cairo_dock_create_input_shape (pDock, w, h);
 	
-	pDock->pHiddenShapeBitmap = cairo_dock_create_input_shape (pDock, w_, h_);
+	pDock->pHiddenShapeBitmap = _cairo_dock_create_input_shape (pDock, w_, h_);
 }
 
 
@@ -991,7 +997,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	}
 	//g_print ("  -> Gap %d;%d -> W(%d;%d) (%d)\n", pSubDock->iGapX, pSubDock->iGapY, pSubDock->container.iWindowPositionX, pSubDock->container.iWindowPositionY, pSubDock->container.bIsHorizontal);
 	
-	gtk_window_set_keep_above (GTK_WINDOW (pSubDock->container.pWidget), myAccessibility.bPopUp);
+	///gtk_window_set_keep_above (GTK_WINDOW (pSubDock->container.pWidget), myAccessibility.bPopUp);
 	
 	cairo_dock_replace_all_dialogs ();
 }

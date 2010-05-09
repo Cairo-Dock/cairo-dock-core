@@ -64,22 +64,22 @@ int cairo_dock_get_nb_dialog_windows (void)
 
 void cairo_dock_dialog_window_destroyed (void)
 {
-	iNbConfigDialogs --;
+	/**iNbConfigDialogs --;
 	if (iNbConfigDialogs <= 0)
 	{
 		iNbConfigDialogs = 0;
 		if (g_pMainDock != NULL)  // peut arriver au 1er lancement.
 			cairo_dock_pop_down (g_pMainDock);
-	}
+	}*/
 	//g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
 }
 
 void cairo_dock_dialog_window_created (void)
 {
-	iNbConfigDialogs ++;
+	/**iNbConfigDialogs ++;
 	//g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
 	if (g_pMainDock != NULL && cairo_dock_search_window_covering_dock (g_pMainDock, FALSE, TRUE) == NULL)  // peut etre NULL au 1er lancement.
-		cairo_dock_pop_up (g_pMainDock);
+		cairo_dock_pop_up (g_pMainDock);*/
 }
 
 

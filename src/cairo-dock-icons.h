@@ -511,7 +511,7 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContain
 *@param cIconNameFormat the new label of the icon, in a 'printf' way.
 *@param ... data to be inserted into the string.
 */
-void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...);
+void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...) G_GNUC_PRINTF (3, 4);
 
 /** Set the quick-info of an icon. This is a small text (a few characters) that is superimposed on the icon.
 *@param pIcon the icon.
@@ -526,7 +526,7 @@ void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const g
 *@param cQuickInfoFormat the text of the quick-info, in a 'printf' way.
 *@param ... data to be inserted into the string.
 */
-void cairo_dock_set_quick_info_full (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...);
+void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...) G_GNUC_PRINTF (3, 4);
 
 /** Clear the quick-info of an icon.
 *@param pIcon the icon.

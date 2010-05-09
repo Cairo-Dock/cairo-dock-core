@@ -79,17 +79,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 		pSystem->bUseFakeTransparency = TRUE;
 	pSystem->bConfigPanelTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "config transparency", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
-	pSystem->iFadeOutNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "fade out nb steps", &bFlushConfFileNeeded, 15, NULL, NULL);
-	
 	gsize length=0;
 	pSystem->cActiveModuleList = cairo_dock_get_string_list_key_value (pKeyFile, "System", "modules", &bFlushConfFileNeeded, &length, NULL, "Applets", "modules_0");
 	
 	pSystem->iConnectionTimeout = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn timeout", &bFlushConfFileNeeded, 5, NULL, NULL);
 	pSystem->iConnectionMaxTime = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn max time", &bFlushConfFileNeeded, 120, NULL, NULL);
-	///pSystem->iConnectionNbRetries = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn retry", &bFlushConfFileNeeded, 0, NULL, NULL);
-	///#i-[0;5] Number of retries:
-	///#{If an error occurs during downloading a theme, it will retry this number of times before giving up.}
-	///conn retry = 0
 	if (cairo_dock_get_boolean_key_value (pKeyFile, "System", "conn use proxy", &bFlushConfFileNeeded, FALSE, NULL, NULL))
 	{
 		pSystem->cConnectionProxy = cairo_dock_get_string_key_value (pKeyFile, "System", "conn proxy", &bFlushConfFileNeeded, NULL, NULL, NULL);

@@ -1,4 +1,4 @@
-#@VERSION@
+#!en;@VERSION@
 ######## This is the conf file of Cairo-Dock, released under the GPL.##########
 ######## It is parsed by cairo-dock to automatically generate an appropriate GUI,##########
 ######## so don't mess into it, except if you know what you're doing ! ;-)##########
@@ -9,7 +9,6 @@
 frame_pos =
 
 #l-[bottom;top;right;left] Choose which border of the screen the dock will be placed on:
-#{Icons will scroll according to what positioning model is selected. The dock can of course can be positioned anywhere on the screen. Here we specify this relative position.}
 screen border = 0
 
 #e-[0.;1.;left;right] Relative alignment:
@@ -30,10 +29,11 @@ y gap = 0
 frame_xin =
 
 #B- Use Xinerama?
+#{This option is to use if you have a dual-screen and use Xinerama to manage them.}
 xinerama = false
 
 #i-[0;12] Number of the screen where the dock should be located:
-#{starting from 0}
+#{0 is the first screen.}
 num screen = 0
 
 
@@ -42,16 +42,14 @@ num screen = 0
 #F-[Visibility of the main dock;gtk-find]
 frame_visi =
 
-#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Hide the dock whenever it overlaps a window;1;2;Automatically hide the dock;1;2;Hide the dock when it overlaps the current window;1;2;Pop-up on shortcut;4;1] Visibility:
+#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Automatically hide the dock;1;2;Hide the dock whenever it overlaps a window;1;2;Hide the dock when it overlaps the current window;1;2;Pop-up on shortcut;4;1] Visibility:
 #{Prevent windows from overlapping the dock: reserve space at the edge of the screen for the dock.
-#Auto-hide: the dock will automatically hide itself outside of the screen when the mouse leaves it. Instead, it will show a zone where placing the mouse will trigger the dock and make it re-appear.
-#Keep the dock below windows: the dock will pop-up on the foreground when you place the mouse on its screen border.
+#Auto-hide: when the dock is hidden, place the mouse on the screen's border to call it back.
 #Pop-up on shortcut : When you press the shortcut, the dock will pop-up at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 visibility = 1
 
 #L-[Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
-#{The last effect requires opengl.}
-hide_effect = Suck up
+hide effect = Move down
 
 #i-[0;1000] Delay before the dock unhides itself:
 #{in ms. 0 means no delay.}
@@ -72,28 +70,24 @@ max_authorized_width = 0
 #b- Stretch the dock to always fill the screen
 extended = false
 
-#j-[1;1600] Size of the callback zone (width x height, in pixels):
-#{Placing the mouse into it will make the dock re-appear.}
-zone size = 800;5
-
 #b- Automatically hide the dock when a window becomes full screen?
 #{This is only usefull if you do not already use auto-hide and if your Window Manager allows the dock in front of fullscreen windows (which is rare).}
 auto quick hide = false
 
-#F-[Sub-docks' visibility;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-subdock.png]
+#F-[Sub-docks' visibility;@pkgdatadir@/icon-subdock.png]
 frame_sub =
 
-#b- Click to show sub-docks
-#{Otherwise they will appear when you hover over the icon pointing to it.}
-show on click = false
-
-#i- Delay before leaving or entering a sub-dock takes effect:
-#{in ms.}
-leaving delay = 250
+#Y-[Appear on mouse over;1;1;Appear on click;0;0] Visibility:
+#{they will appear either when you click or when you linger over the icon pointing on it.}
+show_on_click = 0
 
 #i- Delay before displaying a sub-dock:
-#{in ms. Unused if you activate the click to show sub-docks.}
+#{in ms.}
 show delay = 300
+
+#i- Delay before leaving a sub-dock takes effect:
+#{in ms.}
+leaving delay = 250
 
 lock icons = false
 lock all = false
@@ -105,7 +99,7 @@ lock all = false
 frame1 =
 
 #b- Show currently opened applications in the dock?
-#{Cairo-Dock will then replace your taskbar. It is recommended to remove any other taskbars and to not force the dock type to normal.}
+#{Cairo-Dock will then act as your taskbar. It is recommended to remove any other taskbars.}
 show applications = true
 
 #b- Only show icons whose windows are minimised
@@ -136,7 +130,7 @@ overwrite xicon = true
 
 #s- 		Except the following classes:
 #{Enter the class of the applications, separated by a semi-colon ';'}
-overwrite exception = pidgin;xchat;amsn;gimp-2.6
+overwrite exception = pidgin;xchat;amsn;gimp
 
 #Y-[Make the icon transparent;1;1;Show a window's thumbnail;0;0;Draw it bent backwards;0;0] How to draw minimised windows ?
 #{A composite manager is required to display the thumbnail.
@@ -189,7 +183,7 @@ animation on demands attention = rotate
 
 [System]
 
-#F-[Animations speed;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-movment.png]
+#X-[Animations speed;@pkgdatadir@/icon-movment.png]
 frame_mov =
 
 #B- Animate sub-docks when they appear
@@ -208,9 +202,8 @@ grow nb steps = 10
 #I-[4;40;fast;slow] ...
 shrink nb steps = 8
 
-#I-[4;40;fast;slow] Number of steps in the fade out animation:
-#{This is the animation when the dock goes below a window. The higher the value, the slower it will be}
-fade out nb steps = 15
+#v
+sep_unhide =
 
 #I-[4;40;fast;slow] Number of steps in the auto-hide animation (move up/move down):
 #{The more there are, the slower it will be}
@@ -218,7 +211,7 @@ move up nb steps = 10
 #I-[4;40;fast;slow] ...
 move down nb steps = 16
 
-#F-[Refresh rate;gtk-execute]
+#X-[Refresh rate;gtk-execute]
 frame_cpu =
 
 #i-[5;40] Refresh rate when mouving cursor into the dock :
@@ -237,7 +230,7 @@ cairo anim freq = 25
 #{The transparency gradation pattern will then be re-calculated in real time. May need more CPU power.}
 dynamic reflection = false
 
-#F-[Label readability;gtk-underline]
+#X-[Label readability;gtk-underline]
 frame_label =
 
 #b- Should the labels always be horizontal, even when dock is vertical?
@@ -250,13 +243,7 @@ alpha threshold = 10.
 #m[Captions] Configure labels appearence.
 config_labels = 
 
-#F-[Files;gtk-file]
-frame_file =
-
-#b- Show hidden files?
-show hidden files = false
-
-#F-[Composition;gtk-clear]
+#X-[Composition;gtk-clear]
 frame_fake =
 #b- Emulate composition with fake transparency?
 #{Only use this if you don't run a composite manager like Compiz, xcompmgr, etc and have a black background around your dock. For aesthetic reasons, the dock will be kept under other windows.}
@@ -266,7 +253,13 @@ fake transparency = false
 #{You need to re-open the panel. It is deactivated by default on KDE.}
 config transparency = false
 
-#X-[Connection to the themes' server;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-connection.svg]
+#X-[Files;gtk-file]
+frame_file =
+
+#b- Show hidden files?
+show hidden files = false
+
+#X-[Connection to the themes' server;gtk-network]
 frame_conn =
 
 #i-[1;20] Connection timeout to the themes' server :
@@ -317,7 +310,7 @@ image alpha = 1
 #b+ Repeat image as a pattern to fill background?
 repeat image = true
 
-#F+[Colour gradation;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-gradation.png]
+#F+[Colour gradation;@pkgdatadir@/icon-gradation.png]
 #{Use a colour gradation.}
 frame3 = 
 
@@ -338,7 +331,7 @@ number of stripes = 0
 #f+[0;1] Percentage of the bright colour:
 stripes width = 0.2
 
-#F+[External Frame;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-frame.png]
+#F+[External Frame;@pkgdatadir@/icon-frame.png]
 frame_frame =
 #i+[0;30] Corner radius :
 #{in pixels.}
@@ -358,28 +351,7 @@ frame margin = 2
 #b+ Are the bottom left and right corners rounded?
 rounded bottom corner = true
 
-#F+
-frame_frame_ =
-
-#F[Hidden dock;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-hidden-dock.svg]
-#{Configure the dock's appearence when hidden.}
-hidden_dock = 
-
-#S+ Filename of an image to put on :
-#{This is what you see when the dock hides itselfs. Any format is allowed. Leave this field empty to have an invisible zone.}
-callback image = background-cairo-dock.svg
-
-#e+[0;1;Transparent;Opaque] Transparency of the image :
-callback alpha = 0.5
-
-#b+ Rotate the image when the dock is on top/left/right?
-#{Use it when the image is an arrow pointing to the center of the screen for exemple.}
-callback reverse = true
-
-#m[Accessibility] Configure the auto-hide behaviour.
-config_hidden = 
-
-#X+[Background movement;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-mouse.svg]
+#X+[Background movement;@pkgdatadir@/icon-mouse.svg]
 frame_mouse = 
 
 #Y+[No;0;0;Follow the mouse;1;1;Link with the mouse;1;1] Move the background image along with the cursor?
@@ -414,7 +386,7 @@ relative icon size = .8
 
 [Dialogs]
 
-#F+[Bubble;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-bubble.png]
+#F+[Bubble;@pkgdatadir@/icon-bubble.png]
 frame_bubble =
 
 #C+ Background colour of the bubble:
@@ -442,7 +414,7 @@ outlined = false
 #c+ Text color:
 text color = 0.0; 0.0; 0.0
 
-#F+[Buttons;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-buttons.png]
+#F+[Buttons;@pkgdatadir@/icon-buttons.png]
 frame_button =
 
 #j+[10;64] Size of buttons in the info-bubbles (width x height) :
@@ -536,7 +508,7 @@ default icon directory =
 #{Any format allowed; leave this field empty if you don't want to use an image as background.}
 icons bg =
 
-#F+[Zoom effect;@prefix@/@DATADIRNAME@/@PACKAGE@/icon-wave.png]
+#F+[Zoom effect;@pkgdatadir@/icon-wave.png]
 frame_shape =
 #f+[1;5] Maximum zoom of the icons :
 #{set to 1 if you don't want the icons to zoom when you hover over them.}

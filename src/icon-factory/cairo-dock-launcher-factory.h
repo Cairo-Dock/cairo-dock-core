@@ -53,7 +53,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
  * @param cSubDockRendererName filled with the renderer name of the sub-dock, if the icon will hold one.
  * @return the newly created icon.
  */
-Icon * cairo_dock_new_launcher_icon (const gchar *cDesktopFileName, gchar **cSubDockRendererName);
+G_GNUC_MALLOC Icon * cairo_dock_new_launcher_icon (const gchar *cDesktopFileName, gchar **cSubDockRendererName);
 
 
 G_END_DECLS

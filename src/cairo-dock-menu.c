@@ -56,6 +56,7 @@
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-keyfile-utilities.h"
@@ -852,15 +853,39 @@ static void _cairo_dock_close_appli (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-
 	if (CAIRO_DOCK_IS_APPLI (icon))
 		cairo_dock_close_xwindow (icon->Xid);
+}
+static void _cairo_dock_remove_custom_appli_icon (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	if (! CAIRO_DOCK_IS_APPLI (icon))
+		return;
+	gchar *cCustomIcon = g_strdup_printf ("%s/%s/%s.png", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, icon->cClass);
+	if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+	{
+		g_free (cCustomIcon);
+		cCustomIcon = g_strdup_printf ("%s/%s/%s.svg", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, icon->cClass);
+		if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+		{
+			g_free (cCustomIcon);
+			cCustomIcon = NULL;
+		}
+	}
+	if (cCustomIcon != NULL)
+	{
+		gchar *cCommand = g_strdup_printf ("rm -f \"%s\"", cCustomIcon);
+		int r = system (cCommand);
+		g_free (cCommand);
+		cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
+		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
+	}
 }
 static void _cairo_dock_kill_appli (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-
 	if (CAIRO_DOCK_IS_APPLI (icon))
 		cairo_dock_kill_xwindow (icon->Xid);
 }
@@ -1348,6 +1373,25 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		_add_entry_in_menu (bIsAbove ? _("Don't keep above") : _("Keep above"), bIsAbove ? GTK_STOCK_GOTO_BOTTOM : GTK_STOCK_GOTO_TOP, _cairo_dock_change_window_above, pSubMenuOtherActions);
 		
 		_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
+		
+		if (myTaskBar.bOverWriteXIcons)
+		{
+			gchar *cCustomIcon = g_strdup_printf ("%s/%s/%s.png", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, icon->cClass);
+			if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+			{
+				g_free (cCustomIcon);
+				cCustomIcon = g_strdup_printf ("%s/%s/%s.svg", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, icon->cClass);
+				if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+				{
+					g_free (cCustomIcon);
+					cCustomIcon = NULL;
+				}
+			}
+			if (cCustomIcon != NULL)
+			{
+				_add_entry_in_menu (_("Remove custom icon"), GTK_STOCK_REMOVE, _cairo_dock_remove_custom_appli_icon, pSubMenuOtherActions);
+			}
+		}
 		
 		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
 		

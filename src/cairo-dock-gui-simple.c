@@ -198,9 +198,9 @@ static gchar * _make_simple_conf_file (void)
 	gboolean iVisibility;
 	if (myAccessibility.bReserveSpace)
 		iVisibility = 1;
-	else if (myAccessibility.bPopUp)
-		iVisibility = 2;
 	else if (myAccessibility.bAutoHide)
+		iVisibility = 2;
+	else if (myAccessibility.bAutoHideOnAnyOverlap)
 		iVisibility = 3;
 	else if (myAccessibility.bAutoHideOnOverlap)
 		iVisibility = 4;
@@ -210,9 +210,9 @@ static gchar * _make_simple_conf_file (void)
 		iVisibility = 0;
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", iVisibility);
 	
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on_click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
 	
-	g_key_file_set_string (pSimpleKeyFile, "Behavior", "hide_effect", myAccessibility.cHideEffect);
+	g_key_file_set_string (pSimpleKeyFile, "Behavior", "hide effect", myAccessibility.cHideEffect);
 	
 	int iTaskbarType;
 	if (! myTaskBar.bShowAppli)
@@ -423,12 +423,12 @@ static gboolean on_apply_config_simple (gpointer data)
 	int iVisibility = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "visibility", NULL);
 	g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
 	
-	gchar *cHideEffect = g_key_file_get_string (pSimpleKeyFile, "Behavior", "hide_effect", NULL);
-	g_key_file_set_string (pKeyFile, "Accessibility", "hide_effect", cHideEffect);
+	gchar *cHideEffect = g_key_file_get_string (pSimpleKeyFile, "Behavior", "hide effect", NULL);
+	g_key_file_set_string (pKeyFile, "Accessibility", "hide effect", cHideEffect);
 	g_free (cHideEffect);
 	
-	gboolean bShowOnClick = (g_key_file_get_integer (pSimpleKeyFile, "Behavior", "show_on_click", NULL) == 1);
-	g_key_file_set_boolean (pKeyFile, "Accessibility", "show on click", bShowOnClick);
+	int iShowOnClick = (g_key_file_get_integer (pSimpleKeyFile, "Behavior", "show_on_click", NULL) == 1);
+	g_key_file_set_integer (pKeyFile, "Accessibility", "show on click", iShowOnClick);
 	
 	int iTaskbarType = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "taskbar", NULL);
 	if (iTaskbarType != s_iTaskbarType)
@@ -513,8 +513,11 @@ static gboolean on_apply_config_simple (gpointer data)
 			if (pModule != NULL && pModule->pInstancesList != NULL)
 			{
 				pModuleInstanceAnim = pModule->pInstancesList->data;
+				const gchar *cAnimation = _get_animation_number (cOnClick[0]);
 				cairo_dock_update_conf_file (pModuleInstanceAnim->cConfFilePath,
-					G_TYPE_STRING, "Global", "click launchers", _get_animation_number (cOnClick[0]),
+					G_TYPE_STRING, "Global", "click launchers", cAnimation,
+					G_TYPE_STRING, "Global", "click applis", cAnimation,
+					G_TYPE_STRING, "Global", "click applets", cAnimation,
 					G_TYPE_INVALID);
 			}
 		}
@@ -524,8 +527,11 @@ static gboolean on_apply_config_simple (gpointer data)
 			if (pModule != NULL && pModule->pInstancesList != NULL)
 			{
 				pModuleInstanceEffect = pModule->pInstancesList->data;
+				const gchar *cAnimation = _get_effect_number (cOnClick[1]);
 				cairo_dock_update_conf_file (pModuleInstanceEffect->cConfFilePath,
-					G_TYPE_STRING, "Global", "click launchers", _get_effect_number (cOnClick[1]),
+					G_TYPE_STRING, "Global", "click launchers", cAnimation,
+					G_TYPE_STRING, "Global", "click applis", cAnimation,
+					G_TYPE_STRING, "Global", "click applets", cAnimation,
 					G_TYPE_INVALID);
 			}
 		}

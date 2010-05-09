@@ -113,7 +113,7 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-void cairo_dock_pop_up (CairoDock *pDock)
+/**void cairo_dock_pop_up (CairoDock *pDock)
 {
 	//g_print ("%s (%d)\n", __func__, pDock->bPopped);
 	if (! pDock->bPopped && myAccessibility.bPopUp)
@@ -163,7 +163,7 @@ gboolean cairo_dock_pop_down (CairoDock *pDock)
 	}
 	pDock->iSidPopDown = 0;
 	return FALSE;
-}
+}*/
 
 
 gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex)  // merci a Robrob pour le patch !
@@ -287,9 +287,10 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 			if (! pDock->container.bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
 			{
 				//g_print ("rideau !\n");
+				/**
 				//\__________________ On repasse derriere si on etait devant.
 				if (pDock->bPopped)
-					cairo_dock_pop_down (pDock);
+					cairo_dock_pop_down (pDock);*/
 				
 				//\__________________ On se redimensionne en taille normale.
 				if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
@@ -314,7 +315,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				{
 					if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
 					{
-						//g_print ("+++ input shape hidden on end shrinking\n");
+						g_print ("+++ input shape hidden on end shrinking\n");
 						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 							NULL,
 							0,
@@ -358,36 +359,60 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex > 0)  // on retarde le cachage du dock pour apercevoir les effets.
 		return TRUE;
 	
-	pDock->fHideOffset += 1./mySystem.iHideNbSteps;
-	if (pDock->fHideOffset > .99)
+	if (pDock->fHideOffset < 1)
 	{
-		pDock->fHideOffset = 1;
-		
-		//g_print ("on arrete le cachage\n");
-		Icon *pIcon;
-		GList *ic;
-		for (ic = pDock->icons; ic != NULL; ic = ic->next)
+		pDock->fHideOffset += 1./mySystem.iHideNbSteps;
+		if (pDock->fHideOffset > .99)  // fin d'anim.
 		{
-			pIcon = ic->data;
-			if (pIcon->fInsertRemoveFactor != 0)  // on accelere l'animation d'apparition/disparition.
+			pDock->fHideOffset = 1;
+			
+			//g_print ("on arrete le cachage\n");
+			gboolean bVisibleIconsPresent = FALSE;
+			Icon *pIcon;
+			GList *ic;
+			for (ic = pDock->icons; ic != NULL; ic = ic->next)
 			{
-				if (pIcon->fInsertRemoveFactor > 0)
-					pIcon->fInsertRemoveFactor = 0.05;
+				pIcon = ic->data;
+				if (pIcon->fInsertRemoveFactor != 0)  // on accelere l'animation d'apparition/disparition.
+				{
+					if (pIcon->fInsertRemoveFactor > 0)
+						pIcon->fInsertRemoveFactor = 0.05;
+					else
+						pIcon->fInsertRemoveFactor = - 0.05;
+				}
+				
+				if (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible)
+					cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
 				else
-					pIcon->fInsertRemoveFactor = - 0.05;
+					bVisibleIconsPresent = TRUE;
 			}
 			
-			if (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible)
-				cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
+			pDock->pRenderer->calculate_icons (pDock);
+			///pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
+			cairo_dock_allow_entrance (pDock);
+			
+			cairo_dock_replace_all_dialogs ();
+			
+			if (bVisibleIconsPresent)  // il y'a des icones a montrer progressivement, on reste dans la boucle.
+			{
+				pDock->fPostHideOffset = 0.05;
+				return TRUE;
+			}
+			else
+			{
+				pDock->fPostHideOffset = 1;  // pour que les icones demandant l'attention plus tard soient visibles.
+				return FALSE;
+			}
 		}
-		
-		pDock->pRenderer->calculate_icons (pDock);
-		///pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
-		cairo_dock_allow_entrance (pDock);
-		
-		cairo_dock_replace_all_dialogs ();
-		
-		return FALSE;
+	}
+	else if (pDock->fPostHideOffset > 0 && pDock->fPostHideOffset < 1)
+	{
+		pDock->fPostHideOffset += 1./mySystem.iHideNbSteps;
+		if (pDock->fPostHideOffset > .99)
+		{
+			pDock->fPostHideOffset = 1.;
+			return FALSE;
+		}
 	}
 	return TRUE;
 }
@@ -624,6 +649,48 @@ static gboolean _cairo_flying_container_animation_loop (CairoFlyingContainer *pF
 		return TRUE;
 }
 
+static gboolean _cairo_dialog_animation_loop (CairoDialog *pDialog)
+{
+	gboolean bContinue = FALSE;
+	
+	gboolean bUpdateSlowAnimation = FALSE;
+	pDialog->container.iAnimationStep ++;
+	if (pDialog->container.iAnimationStep * pDialog->container.iAnimationDeltaT >= CAIRO_DOCK_MIN_SLOW_DELTA_T)
+	{
+		bUpdateSlowAnimation = TRUE;
+		pDialog->container.iAnimationStep = 0;
+		pDialog->container.bKeepSlowAnimation = FALSE;
+	}
+	
+	if (pDialog->fAppearanceCounter < 1)
+	{
+		pDialog->fAppearanceCounter += .08;
+		if (pDialog->fAppearanceCounter > .99)
+		{
+			pDialog->fAppearanceCounter = 1.;
+		}
+		else
+		{
+			bContinue = TRUE;
+		}
+	}
+	
+	if (bUpdateSlowAnimation)
+	{
+		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDialog), CAIRO_DOCK_UPDATE_DIALOG_SLOW, pDialog, &pDialog->container.bKeepSlowAnimation);
+	}
+	
+	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDialog), CAIRO_DOCK_UPDATE_DIALOG, pDialog, &bContinue);
+	
+	cairo_dock_redraw_container (CAIRO_CONTAINER (pDialog));
+	if (! bContinue && ! pDialog->container.bKeepSlowAnimation)
+	{
+		pDialog->container.iSidGLAnimation = 0;
+		return FALSE;
+	}
+	else
+		return TRUE;
+}
 
 static gboolean _cairo_default_container_animation_loop (CairoContainer *pContainer)
 {
@@ -677,7 +744,7 @@ void cairo_dock_launch_animation (CairoContainer *pContainer)
 				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_flying_container_animation_loop, pContainer);
 			break ;
 			case CAIRO_DOCK_TYPE_DIALOG:
-				cd_warning ("Dialogs has no animation capability yet");
+				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_dialog_animation_loop, pContainer);
 			break;
 			default :
 				pContainer->iSidGLAnimation = g_timeout_add (iAnimationDeltaT, (GSourceFunc)_cairo_default_container_animation_loop, pContainer);
@@ -719,7 +786,7 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 		
 		if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
 		{
-			//g_print ("+++ input shape hidden on start hiding\n");
+			g_print ("+++ input shape hidden on start hiding\n");
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				pDock->pHiddenShapeBitmap,
 				0,
@@ -743,7 +810,7 @@ void cairo_dock_start_showing (CairoDock *pDock)
 		
 		if (pDock->pShapeBitmap && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
-			//g_print ("+++ input shape at rest on start showing\n");
+			g_print ("+++ input shape at rest on start showing\n");
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
 				0,

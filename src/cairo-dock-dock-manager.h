@@ -168,6 +168,7 @@ void cairo_dock_start_polling_screen_edge (CairoDock *pMainDock);
 void cairo_dock_stop_polling_screen_edge (void);
 void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
 void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly);
+void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
 
 void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
 

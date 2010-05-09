@@ -81,8 +81,8 @@ include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${XEXTEND_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src
-	icon-factory
-	implementations)
+	${CMAKE_SOURCE_DIR}/src/icon-factory
+	${CMAKE_SOURCE_DIR}/src/implementations)
 
 # Make sure the linker can find the libraries.
 link_directories(

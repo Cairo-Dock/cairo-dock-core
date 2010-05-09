@@ -119,6 +119,8 @@ typedef enum {
 	
 	/// notification called when a Dialog is updated in the fast rendering loop.
 	CAIRO_DOCK_UPDATE_DIALOG,
+	/// notification called when a Dialog is updated in the slow rendering loop.
+	CAIRO_DOCK_UPDATE_DIALOG_SLOW,
 	/// notification called when a Dialog is rendered.
 	CAIRO_DOCK_RENDER_DIALOG,
 	

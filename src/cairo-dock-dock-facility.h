@@ -88,10 +88,6 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 void cairo_dock_move_resize_dock (CairoDock *pDock);
 #define cairo_dock_place_root_dock cairo_dock_move_resize_dock
 
-/* Cree une zone d'input d'une taille donnee pour un dock.
-*/
-GdkBitmap *cairo_dock_create_input_shape (CairoDock *pDock, int w, int h);
-
 /* Met a jour les zones d'input d'un dock.
 */
 void cairo_dock_update_input_shape (CairoDock *pDock);

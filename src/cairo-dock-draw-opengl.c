@@ -607,7 +607,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 	cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 	
-	if (g_pVisibleZoneBuffer.iTexture != 0)
+	/**if (g_pVisibleZoneBuffer.iTexture != 0)
 	{
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_over ();
@@ -639,35 +639,33 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 		_cairo_dock_apply_texture_at_size (g_pVisibleZoneBuffer.iTexture, w, h);
 		
 		_cairo_dock_disable_texture ();
-	}
+	}*/
 	
 	//\_____________________ on dessine les icones demandant l'attention.
-	//if (myTaskBar.cAnimationOnDemandsAttention)
+	GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
+	if (pFirstDrawnElement == NULL)
+		return;
+	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
+	
+	double y;
+	Icon *icon;
+	GList *ic = pFirstDrawnElement;
+	do
 	{
-		GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
-		if (pFirstDrawnElement == NULL)
-			return;
-		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-		
-		double y;
-		Icon *icon;
-		GList *ic = pFirstDrawnElement;
-		do
+		icon = ic->data;
+		if (icon->bIsDemandingAttention || icon->bAlwaysVisible)
 		{
-			icon = ic->data;
-			if (icon->bIsDemandingAttention || icon->bAlwaysVisible)
-			{
-				//g_print ("%s : %d (%d)\n", icon->cName, icon->bIsDemandingAttention, icon->Xid);
-				y = icon->fDrawY;
-				icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
-				glPushMatrix ();
-				cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
-				glPopMatrix ();
-				icon->fDrawY = y;
-			}
-			ic = cairo_dock_get_next_element (ic, pDock->icons);
-		} while (ic != pFirstDrawnElement);
-	}
+			//g_print ("%s : %d (%d)\n", icon->cName, icon->bIsDemandingAttention, icon->Xid);
+			y = icon->fDrawY;
+			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
+			glPushMatrix ();
+			icon->fAlpha = pDock->fPostHideOffset;
+			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
+			glPopMatrix ();
+			icon->fDrawY = y;
+		}
+		ic = cairo_dock_get_next_element (ic, pDock->icons);
+	} while (ic != pFirstDrawnElement);
 }
 
 

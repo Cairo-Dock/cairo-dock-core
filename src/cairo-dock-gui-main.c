@@ -34,10 +34,7 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-launcher-factory.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-views.h"
+#include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-file-manager.h"
@@ -827,7 +824,9 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	attr.cText = dgettext (pGroupDescription->cGettextDomain, cDescription != NULL ? cDescription : pGroupDescription->cDescription);
 	attr.cImageFilePath = pGroupDescription->cIcon;
 	attr.bNoInput = TRUE;
+	myDialogs.dialogTextDescription.bUseMarkup = TRUE;
 	s_pDialog = cairo_dock_build_dialog (&attr, pIcon, CAIRO_CONTAINER (pDock));
+	myDialogs.dialogTextDescription.bUseMarkup = FALSE;
 	
 	cairo_dock_dialog_reference (s_pDialog);
 	

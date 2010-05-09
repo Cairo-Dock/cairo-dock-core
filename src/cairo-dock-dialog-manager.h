@@ -121,7 +121,7 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 *@param ... arguments to insert in the message, in a printf way.
 *@return the newly created dialog, visible, with a reference of 1.
 */
-CairoDialog *cairo_dock_show_temporary_dialog_with_icon_printf (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...);
+CairoDialog *cairo_dock_show_temporary_dialog_with_icon_printf (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...) G_GNUC_PRINTF (1, 6);
 
 /** Pop up a dialog with a message, and a limited duration, and an icon in the margin.
 *@param cText the message to display.

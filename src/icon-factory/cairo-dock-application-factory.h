@@ -33,7 +33,7 @@ void cairo_dock_initialize_application_factory (Display *pXDisplay);
 *@param XParentWindow ID of the parent window set if the child window has been ignored but is demanding the attention.
 *@return the newly allocated icon.
 */
-Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow);
+G_GNUC_MALLOC Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow);
 
 
 G_END_DECLS

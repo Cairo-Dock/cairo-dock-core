@@ -47,9 +47,9 @@ struct _CairoConfigBackground {
 	gdouble fStripesColorBright[4];
 	gdouble fStripesColorDark[4];
 	gdouble fStripesAngle;
-	gchar *cVisibleZoneImageFile;
+	/**gchar *cVisibleZoneImageFile;
 	gdouble fVisibleZoneAlpha;
-	gboolean bReverseVisibleImage;
+	gboolean bReverseVisibleImage;*/
 	gdouble fDecorationSpeed;
 	gboolean bDecorationsFollowMouse;
 	};

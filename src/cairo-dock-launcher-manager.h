@@ -56,7 +56,7 @@ void cairo_dock_reload_launcher (Icon *icon);
 
 gchar *cairo_dock_launch_command_sync (const gchar *cCommand);
 
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...);
+gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...) G_GNUC_PRINTF (1, 3);
 gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory);
 #define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL)
 

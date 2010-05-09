@@ -89,7 +89,7 @@ static gpointer _cairo_dock_fm_launch_uri_threaded (gchar *cURI)
 }
 gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->launch_uri != NULL)
+	if (s_pEnvBackend != NULL && s_pEnvBackend->launch_uri != NULL && cURI != NULL)
 	{
 		//s_pEnvBackend->launch_uri (cURI);
 		GError *erreur = NULL;

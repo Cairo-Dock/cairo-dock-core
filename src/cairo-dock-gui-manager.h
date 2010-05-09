@@ -93,7 +93,7 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage);
 @param cFormat the message, in a printf-like format
 @param ... arguments of the format.
 */
-void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...);
+void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...) G_GNUC_PRINTF (2, 3);
 
 
 /** Register a GUI backend to be the current one.

@@ -325,7 +325,7 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 				Window iPropWindow;
 				XGetTransientForHint (s_XDisplay, XActiveWindow, &iPropWindow);
 				icon = g_hash_table_lookup (s_hXWindowTable, &iPropWindow);
-				g_print ("*** la fenetre parente est : %s\n", icon?icon->cName:"aucune");
+				//g_print ("*** la fenetre parente est : %s\n", icon?icon->cName:"aucune");
 			}
 			if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la nouvelle fenetre active nous gene.
 			{
@@ -463,32 +463,6 @@ static void _on_change_window_state (Icon *icon)
 			}
 		}
 	}
-	/**if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
-	{
-		if ((bIsMaximized != icon->bIsMaximized) ||
-			((bIsMaximized || bIsFullScreen) && bIsHidden != icon->bIsHidden) ||
-			(bIsFullScreen != icon->bIsFullScreen))  // changement dans l'etat.
-		{
-			icon->bIsMaximized = bIsMaximized;
-			icon->bIsFullScreen = bIsFullScreen;
-			icon->bIsHidden = bIsHidden;
-			
-			if ( ((bIsMaximized && ! bIsHidden && myAccessibility.bAutoHideOnMaximized) || (bIsFullScreen && ! bIsHidden && myAccessibility.bAutoHideOnFullScreen)) && ! cairo_dock_quick_hide_is_activated ())
-			{
-				cd_message (" => %s devient genante", CAIRO_DOCK_IS_APPLI (icon) ? icon->cName : "une fenetre");
-				if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_hovers_dock (icon, g_pMainDock))
-					cairo_dock_activate_temporary_auto_hide ();
-			}
-			else if ((! bIsMaximized || ! myAccessibility.bAutoHideOnMaximized || bIsHidden) && (! bIsFullScreen || ! myAccessibility.bAutoHideOnFullScreen || bIsHidden) && cairo_dock_quick_hide_is_activated ())
-			{
-				if (cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
-				{
-					cd_message (" => plus aucune fenetre genante");
-					cairo_dock_deactivate_temporary_auto_hide ();
-				}
-			}
-		}
-	}*/
 	
 	icon->bIsMaximized = bIsMaximized;
 	icon->bIsFullScreen = bIsFullScreen;
@@ -564,22 +538,17 @@ static void _on_change_window_state (Icon *icon)
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 		}
 		
-		// miniature (on le fait apres l'avoir inseree/detachee, car comme �a dans le cas ou on l'enleve du dock apres l'avoir deminimisee, l'icone est marquee comme en cours de suppression, et donc on ne recharge pas son icone. Sinon l'image change pendant la transition, ce qui est pas top. Comme ca ne change pas la taille de l'icone dans le dock, on peut faire ca apres l'avoir inseree.
+		// miniature (on le fait apres l'avoir inseree/detachee, car comme ca dans le cas ou on l'enleve du dock apres l'avoir deminimisee, l'icone est marquee comme en cours de suppression, et donc on ne recharge pas son icone. Sinon l'image change pendant la transition, ce qui est pas top. Comme ca ne change pas la taille de l'icone dans le dock, on peut faire ca apres l'avoir inseree.
 		#ifdef HAVE_XEXTEND
 		if (myTaskBar.iMinimizedWindowRenderType == 1 && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
 		{
-			if (icon->iBackingPixmap != 0)
-				XFreePixmap (s_XDisplay, icon->iBackingPixmap);
 			if (! icon->bIsHidden)  // fenetre mappee => BackingPixmap disponible.
 			{
-				if (myTaskBar.iMinimizedWindowRenderType == 1)
-					icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
-				else
-					icon->iBackingPixmap = 0;
+				if (icon->iBackingPixmap != 0)
+					XFreePixmap (s_XDisplay, icon->iBackingPixmap);
+				icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
 				cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 			}
-			else  // pas de thumbnail pour les fenetres minimisees sous X.
-				icon->iBackingPixmap = 0;
 			// on redessine avec ou sans la miniature.
 			cairo_dock_reload_one_icon_buffer_in_dock (icon, pParentDock ? pParentDock : g_pMainDock);
 			if (pParentDock)
@@ -617,26 +586,6 @@ static void _on_change_window_desktop (Icon *icon)
 			}
 		}
 	}
-	/**if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
-	{
-		if (! cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop == -1 || icon->iNumDesktop == g_desktopGeometry.iCurrentDesktop))  // l'appli arrive sur le bureau courant.
-		{
-			gpointer data[3] = {GINT_TO_POINTER (myAccessibility.bAutoHideOnMaximized), GINT_TO_POINTER (myAccessibility.bAutoHideOnFullScreen), g_pMainDock};
-			if (_cairo_dock_window_is_on_our_way (&Xid, icon, data))  // on s'assure qu'en plus d'etre sur le bureau courant, elle est aussi sur le viewport courant.
-			{
-				cd_message (" => cela nous gene");
-				cairo_dock_activate_temporary_auto_hide ();
-			}
-		}
-		else if (cairo_dock_quick_hide_is_activated () && (icon->iNumDesktop != -1 && icon->iNumDesktop != g_desktopGeometry.iCurrentDesktop))  // l'appli quitte sur le bureau courant.
-		{
-			if (cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
-			{
-				cd_message (" => plus aucune fenetre genante");
-				cairo_dock_deactivate_temporary_auto_hide ();
-			}
-		}
-	}*/
 	if (myAccessibility.bAutoHideOnAnyOverlap)
 	{
 		if (! cairo_dock_quick_hide_is_activated ())
@@ -697,18 +646,6 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 				gtk_widget_queue_draw (pParentDock->container.pWidget);
 		}
 		
-		/** // auto-hide sur appli maximisee/plein-ecran
-		if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
-		{
-			if (cairo_dock_quick_hide_is_activated ())
-			{
-				if (cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)
-				{
-					cd_message (" chgt de viewport => plus aucune fenetre genante");
-					cairo_dock_deactivate_temporary_auto_hide ();
-				}
-			}
-		}*/
 		if (myAccessibility.bAutoHideOnAnyOverlap)
 		{
 			if (cairo_dock_quick_hide_is_activated ())
@@ -732,15 +669,6 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 				cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		
-		/** // auto-hide sur appli maximisee/plein-ecran
-		if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))  // cette fenetre peut provoquer l'auto-hide.
-		{
-			if (! cairo_dock_quick_hide_is_activated ())
-			{
-				cd_message (" sur le viewport courant => cela nous gene");
-				cairo_dock_activate_temporary_auto_hide ();
-			}
-		}*/
 		if (myAccessibility.bAutoHideOnAnyOverlap)
 		{
 			if (cairo_dock_appli_overlaps_dock (icon, g_pMainDock))  // cette fenetre peut provoquer l'auto-hide.
@@ -1089,10 +1017,13 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 				cairo_dock_activate_temporary_auto_hide ();
 			}
 		}
-		else
+	}
+	else if (myAccessibility.bAutoHideOnAnyOverlap)
+	{
+		if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
 		{
-			if (cairo_dock_quick_hide_is_activated ())
-				cairo_dock_deactivate_temporary_auto_hide ();
+			if (!cairo_dock_quick_hide_is_activated ())
+				cairo_dock_activate_temporary_auto_hide ();
 		}
 	}
 	
@@ -1202,8 +1133,8 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	#ifdef HAVE_XEXTEND
 	if (myTaskBar.iMinimizedWindowRenderType == 1 && ! icon->bIsHidden)
 	{
-		Display *display = gdk_x11_get_default_xdisplay ();
-		icon->iBackingPixmap = XCompositeNameWindowPixmap (display, Xid);
+		//Display *display = gdk_x11_get_default_xdisplay ();
+		icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
 		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
 		cd_debug ("backing pixmap : %d ; iDamageHandle : %d\n", icon->iBackingPixmap, icon->iDamageHandle);*/
 	}

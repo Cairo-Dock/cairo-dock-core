@@ -713,7 +713,7 @@ void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const g
 		fMaxScale);
 }
 
-void cairo_dock_set_quick_info_full (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...)
+void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...)
 {
 	va_list args;
 	va_start (args, cQuickInfoFormat);

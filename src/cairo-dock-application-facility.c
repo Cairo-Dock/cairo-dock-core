@@ -92,12 +92,12 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		{
 			if (bForceDemand || cairo_dock_search_window_covering_dock (pDock, FALSE, TRUE) == NULL)
 			{
-				if (pDock->iSidPopDown != 0)
+				/**if (pDock->iSidPopDown != 0)
 				{
 					g_source_remove(pDock->iSidPopDown);
 					pDock->iSidPopDown = 0;
 				}
-				cairo_dock_pop_up (pDock);
+				cairo_dock_pop_up (pDock);*/
 			}
 			/*if (pDock->bAutoHide && bForceDemand)
 			{
@@ -169,7 +169,7 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 		cairo_dock_stop_icon_animation (icon);  // arrete l'animation precedemment lancee par la demande.
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
 	}
-	if (! pDock->container.bInside)
+	/**if (! pDock->container.bInside)
 	{
 		//g_print ("pop down the dock\n");
 		cairo_dock_pop_down (pDock);
@@ -179,7 +179,7 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 			//g_print ("force dock to auto-hide\n");
 			cairo_dock_emit_leave_signal (pDock);
 		}
-	}
+	}*/
 }
 void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 {

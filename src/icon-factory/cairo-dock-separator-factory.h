@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 *@param iSeparatorType the type of separator (CAIRO_DOCK_SEPARATOR12, CAIRO_DOCK_SEPARATOR23 or any other odd number)
 *@return the newly allocated icon.
 */
-Icon *cairo_dock_new_separator_icon (int iSeparatorType);
+G_GNUC_MALLOC Icon *cairo_dock_new_separator_icon (int iSeparatorType);
 
 
 G_END_DECLS

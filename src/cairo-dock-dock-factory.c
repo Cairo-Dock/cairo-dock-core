@@ -101,6 +101,7 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 	pDock->container.iMouseX = -1; // utile ?
 	pDock->container.iMouseY = -1;
 	pDock->fMagnitudeMax = 1.;
+	pDock->fPostHideOffset = 1.;
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
 	//\__________________ On cree la fenetre GTK.
@@ -226,8 +227,10 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 
 void cairo_dock_free_dock (CairoDock *pDock)
 {
-	if (pDock->iSidPopDown != 0)
-		g_source_remove (pDock->iSidPopDown);
+	if (pDock->iSidUnhideDelayed != 0)
+		g_source_remove (pDock->iSidUnhideDelayed);
+	if (pDock->iSidHideBack != 0)
+		g_source_remove (pDock->iSidHideBack);
 	if (pDock->iSidMoveResize != 0)
 		g_source_remove (pDock->iSidMoveResize);
 	if (pDock->iSidLeaveDemand != 0)
@@ -284,8 +287,8 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 		pDock->iScreenOffsetY = pParentDock->iScreenOffsetY;
 		if (g_bKeepAbove)
 			gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), FALSE);
-		if (myAccessibility.bPopUp)
-			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
+		/**if (myAccessibility.bPopUp)
+			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);*/
 		gtk_window_set_title (GTK_WINDOW (pDock->container.pWidget), "cairo-dock-sub");
 		
 		pDock->bAutoHide = FALSE;

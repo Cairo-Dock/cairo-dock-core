@@ -148,13 +148,15 @@ struct _CairoDock {
 	gdouble fAvoidingMouseMargin;// marge d'evitement de la souris, en fraction de la largeur d'an icon (entre 0 et 0.5)
 	GList *pFirstDrawnElement;// pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche.
 	gdouble fDecorationsOffsetX;// decalage des decorations pour les faire suivre la souris.
-	/// counter for the fade out effect.
+	// counter for the fade out effect.
 	gint iFadeCounter;
-	/// direction of the fade out effect.
+	// direction of the fade out effect.
 	gboolean bFadeInOut;
-	/// state of the input shape.
 	/// counter for auto-hide.
 	gdouble fHideOffset;
+	/// counter for the post-hiding animation for icons always visible.
+	gdouble fPostHideOffset;
+	
 	
 	/// Whether the dock is in a popped up state or not.
 	gboolean bPopped;
@@ -181,13 +183,15 @@ struct _CairoDock {
 	/// Source ID for window resizing.
 	guint iSidMoveResize;
 	/// Source ID for window popping down to the bottom layer.
-	guint iSidPopDown;
+	guint iSidUnhideDelayed;
 	/// Source ID of the timer that delays the "leave" event.
 	guint iSidLeaveDemand;
 	/// Source ID for pending update of WM icons geometry.
 	guint iSidUpdateWMIcons;
-	/// Source ID of the timer that delays the "event" event with auto-hide.
+	/// Source ID of the timer that delays the "show" event with auto-hide.
 	guint iSidUnhideDemand;
+	/// Source ID for hiding back the dock.
+	//guint iSidHideBack;
 	
 	//\_______________ Renderer and fields set by it.
 	// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
@@ -227,7 +231,8 @@ struct _CairoDock {
 	gboolean bWMIconsNeedUpdate;
 	GLuint iRedirectedTexture;
 	GLuint iFboId;
-	gchar reserved[8];
+	guint iSidHideBack;
+	gchar reserved[4];
 };
 
 

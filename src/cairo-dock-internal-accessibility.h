@@ -39,7 +39,7 @@ struct _CairoConfigAccessibility {
 	gboolean bAutoHideOnFullScreen;
 	gboolean bAutoHideOnOverlap;
 	gboolean bAutoHideOnAnyOverlap;
-	gboolean bPopUp;
+	///gboolean bPopUp;
 	gboolean bPopUpOnScreenBorder;
 	gint iMaxAuthorizedWidth;
 	gchar *cRaiseDockShortcut;
@@ -48,7 +48,7 @@ struct _CairoConfigAccessibility {
 	gint iShowSubDockDelay;
 	gboolean bShowSubDockOnClick;
 	gboolean bExtendedMode;
-	gint iVisibleZoneWidth, iVisibleZoneHeight;
+	///gint iVisibleZoneWidth, iVisibleZoneHeight;
 	gboolean bLockIcons;
 	gboolean bLockAll;
 	gchar *cHideEffect;
