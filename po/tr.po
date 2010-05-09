@@ -110,7 +110,7 @@ msgstr "Güncellendi"
 msgid "You must try the theme before you can rate it."
 msgstr "Temayı oylamadan önce denemelisin."
 
-#: ../src/cairo-dock-gui-factory.c:1364
+#: ../src/cairo-dock-gui-factory.c:1363
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -121,60 +121,60 @@ msgstr ""
 "Dock'un bu özelliklerinden yararlanmak için aynı sürümün yüklendiğinden emin "
 "ol."
 
-#: ../src/cairo-dock-gui-factory.c:1373
+#: ../src/cairo-dock-gui-factory.c:1372
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2021
+#: ../src/cairo-dock-gui-factory.c:2020
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Temalar listeleniyor '%s' ..."
 
-#: ../src/cairo-dock-gui-factory.c:2081
+#: ../src/cairo-dock-gui-factory.c:2080
 msgid "Animation:"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2100
+#: ../src/cairo-dock-gui-factory.c:2099
 msgid "Effects:"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2234
+#: ../src/cairo-dock-gui-factory.c:2233
 #, fuzzy
 msgid "plug-in"
 msgstr "Eklenti"
 
-#: ../src/cairo-dock-gui-factory.c:2240
+#: ../src/cairo-dock-gui-factory.c:2239
 msgid "category"
 msgstr "kategori"
 
-#: ../src/cairo-dock-gui-factory.c:2283
+#: ../src/cairo-dock-gui-factory.c:2282
 msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
-#: ../src/cairo-dock-gui-factory.c:2643
+#: ../src/cairo-dock-gui-factory.c:2642
 msgid "state"
 msgstr "konum"
 
-#: ../src/cairo-dock-gui-factory.c:2649
+#: ../src/cairo-dock-gui-factory.c:2648
 msgid "Theme"
 msgstr "tema"
 
-#: ../src/cairo-dock-gui-factory.c:2662
+#: ../src/cairo-dock-gui-factory.c:2661
 msgid "Rating"
 msgstr "beğeni"
 
-#: ../src/cairo-dock-gui-factory.c:2668
+#: ../src/cairo-dock-gui-factory.c:2667
 msgid "Sobriety"
 msgstr "itidal"
 
-#: ../src/cairo-dock-gui-factory.c:2754
+#: ../src/cairo-dock-gui-factory.c:2753
 msgid "link"
 msgstr "bağlantı"
 
-#: ../src/cairo-dock-gui-factory.c:2807
+#: ../src/cairo-dock-gui-factory.c:2806
 msgid "Grab"
 msgstr "yakala"
 
@@ -349,12 +349,12 @@ msgstr ""
 msgid "Manage Themes"
 msgstr "Temaları yönet"
 
-#: ../src/cairo-dock-internal-accessibility.c:323
+#: ../src/cairo-dock-internal-accessibility.c:330
 #: ../src/cairo-dock-menu.c:1494
 msgid "Visibility"
 msgstr "Görünürlük"
 
-#: ../src/cairo-dock-internal-accessibility.c:325
+#: ../src/cairo-dock-internal-accessibility.c:332
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"

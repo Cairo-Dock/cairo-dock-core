@@ -113,7 +113,7 @@ msgstr "Aggiornato"
 msgid "You must try the theme before you can rate it."
 msgstr "Devi provare il tema prima di potergli assegnare un punteggio"
 
-#: ../src/cairo-dock-gui-factory.c:1364
+#: ../src/cairo-dock-gui-factory.c:1363
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Assicurati di installarlo nella stessa versione della dock per usufruire "
 "delle sue funzionalità."
 
-#: ../src/cairo-dock-gui-factory.c:1373
+#: ../src/cairo-dock-gui-factory.c:1372
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -133,55 +133,55 @@ msgstr ""
 "Il plugin '%s' non è attivo.\n"
 "Attivarlo ora?"
 
-#: ../src/cairo-dock-gui-factory.c:2021
+#: ../src/cairo-dock-gui-factory.c:2020
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Elenco dei temi in '%s' ..."
 
-#: ../src/cairo-dock-gui-factory.c:2081
+#: ../src/cairo-dock-gui-factory.c:2080
 #, fuzzy
 msgid "Animation:"
 msgstr "Animazioni"
 
-#: ../src/cairo-dock-gui-factory.c:2100
+#: ../src/cairo-dock-gui-factory.c:2099
 #, fuzzy
 msgid "Effects:"
 msgstr "Espelli"
 
-#: ../src/cairo-dock-gui-factory.c:2234
+#: ../src/cairo-dock-gui-factory.c:2233
 #, fuzzy
 msgid "plug-in"
 msgstr "Plugin"
 
-#: ../src/cairo-dock-gui-factory.c:2240
+#: ../src/cairo-dock-gui-factory.c:2239
 msgid "category"
 msgstr "categoria"
 
-#: ../src/cairo-dock-gui-factory.c:2283
+#: ../src/cairo-dock-gui-factory.c:2282
 msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Clicca su di un'applet per averne un'anteprima e una sua descrizione"
 
-#: ../src/cairo-dock-gui-factory.c:2643
+#: ../src/cairo-dock-gui-factory.c:2642
 msgid "state"
 msgstr "stato"
 
-#: ../src/cairo-dock-gui-factory.c:2649
+#: ../src/cairo-dock-gui-factory.c:2648
 msgid "Theme"
 msgstr "tema"
 
-#: ../src/cairo-dock-gui-factory.c:2662
+#: ../src/cairo-dock-gui-factory.c:2661
 msgid "Rating"
 msgstr "Valutazione"
 
-#: ../src/cairo-dock-gui-factory.c:2668
+#: ../src/cairo-dock-gui-factory.c:2667
 msgid "Sobriety"
 msgstr "sobrietà"
 
-#: ../src/cairo-dock-gui-factory.c:2754
+#: ../src/cairo-dock-gui-factory.c:2753
 msgid "link"
 msgstr "collegamento"
 
-#: ../src/cairo-dock-gui-factory.c:2807
+#: ../src/cairo-dock-gui-factory.c:2806
 msgid "Grab"
 msgstr "cattura"
 
@@ -363,12 +363,12 @@ msgstr ""
 msgid "Manage Themes"
 msgstr "Gestione dei Temi"
 
-#: ../src/cairo-dock-internal-accessibility.c:323
+#: ../src/cairo-dock-internal-accessibility.c:330
 #: ../src/cairo-dock-menu.c:1494
 msgid "Visibility"
 msgstr "Visibilità"
 
-#: ../src/cairo-dock-internal-accessibility.c:325
+#: ../src/cairo-dock-internal-accessibility.c:332
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"

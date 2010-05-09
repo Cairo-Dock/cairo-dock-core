@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-03-25 16:33+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"PO-Revision-Date: 2010-05-09 14:21+0100\n"
+"Last-Translator: Fabounet <fabounet@users.berlios.de>\n"
 "Language-Team: Cairo-Dock <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -63,7 +63,7 @@ msgstr "Le montage de %s a échoué"
 #: ../src/cairo-dock-file-manager.c:587
 #, c-format
 msgid "Failed to unmount %s"
-msgstr "échec au démontage de %s"
+msgstr "Echec au démontage de %s"
 
 #: ../src/cairo-dock-gui-factory.c:764
 msgid "_Custom Icons_"
@@ -117,7 +117,7 @@ msgstr "Mis à jour"
 msgid "You must try the theme before you can rate it."
 msgstr "Vous devez essayer le thème avant de pouvoir le noter."
 
-#: ../src/cairo-dock-gui-factory.c:1364
+#: ../src/cairo-dock-gui-factory.c:1363
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -128,7 +128,7 @@ msgstr ""
 "Assurez-vous de l'installer dans la même version que le dock pour en "
 "profiter."
 
-#: ../src/cairo-dock-gui-factory.c:1373
+#: ../src/cairo-dock-gui-factory.c:1372
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -137,57 +137,54 @@ msgstr ""
 "Le plug-in '%s' n'est pas actif.\n"
 "L'activer maintenant?"
 
-#: ../src/cairo-dock-gui-factory.c:2021
+#: ../src/cairo-dock-gui-factory.c:2020
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "En cours de listage des themes dans '%s' ..."
 
-#: ../src/cairo-dock-gui-factory.c:2081
-#, fuzzy
+#: ../src/cairo-dock-gui-factory.c:2080
 msgid "Animation:"
-msgstr "Animations"
+msgstr "Animations :"
 
-#: ../src/cairo-dock-gui-factory.c:2100
-#, fuzzy
+#: ../src/cairo-dock-gui-factory.c:2099
 msgid "Effects:"
-msgstr "Éjecter"
+msgstr "Effets :"
 
-#: ../src/cairo-dock-gui-factory.c:2234
-#, fuzzy
+#: ../src/cairo-dock-gui-factory.c:2233
 msgid "plug-in"
 msgstr "Plug-in"
 
-#: ../src/cairo-dock-gui-factory.c:2240
+#: ../src/cairo-dock-gui-factory.c:2239
 msgid "category"
 msgstr "catégorie"
 
-#: ../src/cairo-dock-gui-factory.c:2283
+#: ../src/cairo-dock-gui-factory.c:2282
 msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Cliquez sur une applet de la liste afin d'obtenir un aperçu et sa "
 "description."
 
-#: ../src/cairo-dock-gui-factory.c:2643
+#: ../src/cairo-dock-gui-factory.c:2642
 msgid "state"
 msgstr "État"
 
-#: ../src/cairo-dock-gui-factory.c:2649
+#: ../src/cairo-dock-gui-factory.c:2648
 msgid "Theme"
 msgstr "Thème"
 
-#: ../src/cairo-dock-gui-factory.c:2662
+#: ../src/cairo-dock-gui-factory.c:2661
 msgid "Rating"
 msgstr "Note"
 
-#: ../src/cairo-dock-gui-factory.c:2668
+#: ../src/cairo-dock-gui-factory.c:2667
 msgid "Sobriety"
 msgstr "sobriété"
 
-#: ../src/cairo-dock-gui-factory.c:2754
+#: ../src/cairo-dock-gui-factory.c:2753
 msgid "link"
 msgstr "lien"
 
-#: ../src/cairo-dock-gui-factory.c:2807
+#: ../src/cairo-dock-gui-factory.c:2806
 msgid "Grab"
 msgstr "Saisir"
 
@@ -369,12 +366,12 @@ msgstr ""
 msgid "Manage Themes"
 msgstr "Gérer les thèmes"
 
-#: ../src/cairo-dock-internal-accessibility.c:323
+#: ../src/cairo-dock-internal-accessibility.c:330
 #: ../src/cairo-dock-menu.c:1494
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: ../src/cairo-dock-internal-accessibility.c:325
+#: ../src/cairo-dock-internal-accessibility.c:332
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -629,13 +626,14 @@ msgstr ""
 "conseils utiles !)"
 
 #: ../src/cairo-dock-menu.c:398
-#, fuzzy
 msgid "Get more applets!"
-msgstr "Autres applets"
+msgstr "Plus d'applets !"
 
 #: ../src/cairo-dock-menu.c:403
 msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
+"Les applets tierce-party fournissent une intégration avec de nombreux "
+"programmes, tel Pidgin"
 
 #: ../src/cairo-dock-menu.c:405
 msgid "About"
@@ -841,7 +839,7 @@ msgstr "Toujours devant"
 
 #: ../src/cairo-dock-menu.c:1392
 msgid "Remove custom icon"
-msgstr ""
+msgstr "Enlever l'icône personnalisée"
 
 #: ../src/cairo-dock-menu.c:1396
 msgid "Kill"
@@ -1133,7 +1131,6 @@ msgid "Visibility of the main dock"
 msgstr "Visibilité du dock principal"
 
 #: ../data/messages:19 ../data/messages:193
-#, fuzzy
 msgid ""
 "Prevent windows from overlapping the dock: reserve space at the edge of the "
 "screen for the dock.\n"
@@ -1145,11 +1142,8 @@ msgid ""
 msgstr ""
 "Empêcher les fenêtres de recouvrir le dock : réserve l'espace pour le dock "
 "au bord de l'écran.\n"
-"Masquer automatiquement : le dock se cachera automatiquement hors de l'écran "
-"lorsque la souris en sort. A la place, une zone de rappel sera visible, et "
-"rentrer la souris dedans le fera ré-apparaître.\n"
-"Garder le dock sous les fenêtres : le dock apparaîtra à l'avant-plan lorsque "
-"vous toucherez le bord de l'écran avec la souris.\n"
+"Masquer automatiquement : lorsque le dock est caché, placer la souris sur le "
+"bord de l'écran le fera ré-apparaître.\n"
 "Apparaître au raccourci clavier : lorsque vous presserez le raccourci, le "
 "dock apparaîtra à la position de la souris. Le reste du temps, il restera "
 "invisible, agissant comme un menu."
@@ -1169,11 +1163,11 @@ msgstr "Masquer automatiquement le dock"
 
 #: ../data/messages:29 ../data/messages:203
 msgid "Hide the dock whenever it overlaps a window"
-msgstr ""
+msgstr "Cacher le dock dés qu'il chevauche une fenêtre"
 
 #: ../data/messages:31 ../data/messages:205
 msgid "Hide the dock when it overlaps the current window"
-msgstr ""
+msgstr "Cacher le dock dés qu'il chevauche la fenêtre active"
 
 #: ../data/messages:33 ../data/messages:207
 msgid "Pop-up on shortcut"
@@ -1184,31 +1178,28 @@ msgid "The last effect requires opengl."
 msgstr ""
 
 #: ../data/messages:37 ../data/messages:209
-#, fuzzy
 msgid "Effect used to hide the dock:"
-msgstr "Retourner au dock"
+msgstr "Effet utilisé pour cacher le dock :"
 
 #: ../data/messages:39 ../data/messages:211
 msgid "Move down"
-msgstr ""
+msgstr "Descendre"
 
 #: ../data/messages:41 ../data/messages:213
 msgid "Fade out"
-msgstr ""
+msgstr "Fondu"
 
 #: ../data/messages:43 ../data/messages:215
-#, fuzzy
 msgid "Semi transparent"
-msgstr "Transparent"
+msgstr "Semi-transparent"
 
 #: ../data/messages:45 ../data/messages:217
-#, fuzzy
 msgid "Zoom out"
-msgstr "Effet d'agrandissement"
+msgstr "Zoom"
 
 #: ../data/messages:47 ../data/messages:219
 msgid "Folding"
-msgstr ""
+msgstr "Pliage"
 
 #: ../data/messages:49 ../data/messages:227
 msgid ""
@@ -1284,20 +1275,19 @@ msgstr "Gnome"
 
 #: ../data/messages:77
 msgid "Icons' animations and effects"
-msgstr ""
+msgstr "Animations et effets des icônes"
 
 #: ../data/messages:79
-#, fuzzy
 msgid "On mouse hover:"
-msgstr "Apparait au passage de la souris"
+msgstr "Au passage de la souris :"
 
 #: ../data/messages:81
 msgid "On click:"
-msgstr ""
+msgstr "Au clic :"
 
 #: ../data/messages:83
 msgid "On appearance/disappearance:"
-msgstr ""
+msgstr "A l'apparition/disparition :"
 
 #: ../data/messages:89 ../data/messages:647
 msgid ""
@@ -1494,6 +1484,8 @@ msgid ""
 "This option is to use if you have a dual-screen and use Xinerama to manage "
 "them."
 msgstr ""
+"Cette option est à utiliser si vous avez un double-écran et que vous "
+"utilisez Xinerama pour les gérer."
 
 #: ../data/messages:183
 msgid "Use Xinerama?"
@@ -1501,7 +1493,7 @@ msgstr "Utiliser Xinerama ?"
 
 #: ../data/messages:185
 msgid "0 is the first screen."
-msgstr ""
+msgstr "0 est le premier écran."
 
 #: ../data/messages:187 ../data/messages:1361
 msgid "Number of the screen where the dock should be located:"
@@ -1559,7 +1551,6 @@ msgid "Delay before displaying a sub-dock:"
 msgstr "Délai avant l'affichage d'un sous-dock :"
 
 #: ../data/messages:255
-#, fuzzy
 msgid "Delay before leaving a sub-dock takes effect:"
 msgstr "Délai avant de sortir effectivement d'un sous-dock :"
 
@@ -1568,13 +1559,12 @@ msgid "TaskBar"
 msgstr "Barre des tâches"
 
 #: ../data/messages:261
-#, fuzzy
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
 msgstr ""
-"Cairo-Dock remplacera votre barre des tâches. Il est recommandé d'enlever "
-"les autres barres des tâches et de ne pas forcer le type du dock à 'normal'."
+"Cairo-Dock agira comme votre barre des tâches. Il est recommandé d'enlever "
+"les autres barres des tâches."
 
 #: ../data/messages:263
 msgid "Show currently opened applications in the dock?"
@@ -1932,28 +1922,28 @@ msgstr "Temps maximum pour télécharger un thème :"
 
 #: ../data/messages:429
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr ""
+msgstr "Utilisez cette option si vous vous connectez à Internet via un proxy."
 
 #: ../data/messages:431
 msgid "Are you behind a proxy ?"
-msgstr ""
+msgstr "Etes-vous derrière un proxy ?"
 
 #: ../data/messages:433
 msgid "Proxy name :"
-msgstr ""
+msgstr "Nom du proxy ;"
 
 #: ../data/messages:435
 msgid "Port :"
-msgstr ""
+msgstr "Port :"
 
 #: ../data/messages:437 ../data/messages:441
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
-msgstr ""
+msgstr "Laissez vide si vous n'avez pas besoin de vous authentifier au proxy."
 
 #: ../data/messages:439 ../data/messages:443
 msgid "Password :"
-msgstr ""
+msgstr "Mot de pase :"
 
 #: ../data/messages:447
 msgid "Fill the background with:"
@@ -2435,24 +2425,20 @@ msgstr ""
 "physiques. Les séparateurs plats peuvent différer selon la vue utilisée."
 
 #: ../data/messages:715
-#, fuzzy
 msgid "How to draw the separators?"
-msgstr "Comment puis-je ajouter un séparateur ?"
+msgstr "Comment représenter les séparateurs ?"
 
 #: ../data/messages:717
-#, fuzzy
 msgid "Use an image."
 msgstr "Utiliser une image"
 
 #: ../data/messages:719
-#, fuzzy
 msgid "Flat separator"
-msgstr "Ajouter un séparateur"
+msgstr "Séparateur plat"
 
 #: ../data/messages:721
-#, fuzzy
 msgid "Physical separator"
-msgstr "Ajouter un séparateur"
+msgstr "Séparateur physique"
 
 #: ../data/messages:723
 msgid "If you don't provide one, blanks will be used."
@@ -2638,9 +2624,8 @@ msgid "How to show that several icons are grouped :"
 msgstr "Comment indiquer que plusieurs icônes sont groupées:"
 
 #: ../data/messages:817
-#, fuzzy
 msgid "Draw an image"
-msgstr "Utiliser une image"
+msgstr "Dessiner une image"
 
 #: ../data/messages:819
 msgid "Draw the sub-dock's icons as a stack"

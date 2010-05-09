@@ -110,7 +110,7 @@ msgstr "已更新"
 msgid "You must try the theme before you can rate it."
 msgstr "在您想要評等一個主題之前，您必須先試用過它。"
 
-#: ../src/cairo-dock-gui-factory.c:1364
+#: ../src/cairo-dock-gui-factory.c:1363
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -120,7 +120,7 @@ msgstr ""
 "找不到模組「%s」。\n"
 "請確定您安裝的是和 Cairo-Dock 同一個版本來享受這些特殊功能。"
 
-#: ../src/cairo-dock-gui-factory.c:1373
+#: ../src/cairo-dock-gui-factory.c:1372
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -129,55 +129,55 @@ msgstr ""
 "這個 %s 增效模組沒有啟用。\n"
 "要現在啟用它嗎？"
 
-#: ../src/cairo-dock-gui-factory.c:2021
+#: ../src/cairo-dock-gui-factory.c:2020
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "在 '%s' 顯示主題"
 
-#: ../src/cairo-dock-gui-factory.c:2081
+#: ../src/cairo-dock-gui-factory.c:2080
 #, fuzzy
 msgid "Animation:"
 msgstr "動畫"
 
-#: ../src/cairo-dock-gui-factory.c:2100
+#: ../src/cairo-dock-gui-factory.c:2099
 #, fuzzy
 msgid "Effects:"
 msgstr "退出"
 
-#: ../src/cairo-dock-gui-factory.c:2234
+#: ../src/cairo-dock-gui-factory.c:2233
 #, fuzzy
 msgid "plug-in"
 msgstr "增效模組(Plug-in)"
 
-#: ../src/cairo-dock-gui-factory.c:2240
+#: ../src/cairo-dock-gui-factory.c:2239
 msgid "category"
 msgstr "分類"
 
-#: ../src/cairo-dock-gui-factory.c:2283
+#: ../src/cairo-dock-gui-factory.c:2282
 msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "為了有一個應用程式的縮圖預覽，請在小程式圖示上面點擊。"
 
-#: ../src/cairo-dock-gui-factory.c:2643
+#: ../src/cairo-dock-gui-factory.c:2642
 msgid "state"
 msgstr "狀態"
 
-#: ../src/cairo-dock-gui-factory.c:2649
+#: ../src/cairo-dock-gui-factory.c:2648
 msgid "Theme"
 msgstr "主題"
 
-#: ../src/cairo-dock-gui-factory.c:2662
+#: ../src/cairo-dock-gui-factory.c:2661
 msgid "Rating"
 msgstr "評分"
 
-#: ../src/cairo-dock-gui-factory.c:2668
+#: ../src/cairo-dock-gui-factory.c:2667
 msgid "Sobriety"
 msgstr "平均"
 
-#: ../src/cairo-dock-gui-factory.c:2754
+#: ../src/cairo-dock-gui-factory.c:2753
 msgid "link"
 msgstr "連結"
 
-#: ../src/cairo-dock-gui-factory.c:2807
+#: ../src/cairo-dock-gui-factory.c:2806
 msgid "Grab"
 msgstr "抓取"
 
@@ -352,12 +352,12 @@ msgstr ""
 msgid "Manage Themes"
 msgstr "管理佈景主題"
 
-#: ../src/cairo-dock-internal-accessibility.c:323
+#: ../src/cairo-dock-internal-accessibility.c:330
 #: ../src/cairo-dock-menu.c:1494
 msgid "Visibility"
 msgstr "可見度"
 
-#: ../src/cairo-dock-internal-accessibility.c:325
+#: ../src/cairo-dock-internal-accessibility.c:332
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"

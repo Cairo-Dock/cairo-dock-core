@@ -103,66 +103,66 @@ msgstr ""
 msgid "You must try the theme before you can rate it."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1364
+#: ../src/cairo-dock-gui-factory.c:1363
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
 "Be sure to install it with the same version as the dock to enjoy these features."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:1373
+#: ../src/cairo-dock-gui-factory.c:1372
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2021
+#: ../src/cairo-dock-gui-factory.c:2020
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2081
+#: ../src/cairo-dock-gui-factory.c:2080
 msgid "Animation:"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2100
+#: ../src/cairo-dock-gui-factory.c:2099
 msgid "Effects:"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2234
+#: ../src/cairo-dock-gui-factory.c:2233
 msgid "plug-in"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2240
+#: ../src/cairo-dock-gui-factory.c:2239
 msgid "category"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2283
+#: ../src/cairo-dock-gui-factory.c:2282
 msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2643
+#: ../src/cairo-dock-gui-factory.c:2642
 msgid "state"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2649
+#: ../src/cairo-dock-gui-factory.c:2648
 msgid "Theme"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2662
+#: ../src/cairo-dock-gui-factory.c:2661
 msgid "Rating"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2668
+#: ../src/cairo-dock-gui-factory.c:2667
 msgid "Sobriety"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2754
+#: ../src/cairo-dock-gui-factory.c:2753
 msgid "link"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2807
+#: ../src/cairo-dock-gui-factory.c:2806
 msgid "Grab"
 msgstr ""
 
@@ -320,12 +320,12 @@ msgstr ""
 msgid "Manage Themes"
 msgstr ""
 
-#: ../src/cairo-dock-internal-accessibility.c:323
+#: ../src/cairo-dock-internal-accessibility.c:330
 #: ../src/cairo-dock-menu.c:1494
 msgid "Visibility"
 msgstr ""
 
-#: ../src/cairo-dock-internal-accessibility.c:325
+#: ../src/cairo-dock-internal-accessibility.c:332
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"

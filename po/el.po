@@ -113,7 +113,7 @@ msgstr "Ενημερωμένο"
 msgid "You must try the theme before you can rate it."
 msgstr "Πρέπει να δοκιμάσετε το θέμα πριν το αξιολογήσετε"
 
-#: ../src/cairo-dock-gui-factory.c:1364
+#: ../src/cairo-dock-gui-factory.c:1363
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Βεβαιωθείτε ότι το έχετε εγκαταστήσει με την ίδια έκδοση όπως το dock για να "
 "απολαύσετε αυτές τις λειτουργίες."
 
-#: ../src/cairo-dock-gui-factory.c:1373
+#: ../src/cairo-dock-gui-factory.c:1372
 #, fuzzy, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -134,55 +134,55 @@ msgstr ""
 "Βεβαιωθείτε ότι το έχετε ενεργοποιήσει για να απολαύσετε αυτές τις "
 "λειτουργίες."
 
-#: ../src/cairo-dock-gui-factory.c:2021
+#: ../src/cairo-dock-gui-factory.c:2020
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2081
+#: ../src/cairo-dock-gui-factory.c:2080
 #, fuzzy
 msgid "Animation:"
 msgstr "Κινούμενα γραφικά"
 
-#: ../src/cairo-dock-gui-factory.c:2100
+#: ../src/cairo-dock-gui-factory.c:2099
 #, fuzzy
 msgid "Effects:"
 msgstr "Εξαγωγή"
 
-#: ../src/cairo-dock-gui-factory.c:2234
+#: ../src/cairo-dock-gui-factory.c:2233
 #, fuzzy
 msgid "plug-in"
 msgstr "Πρόσθετο"
 
-#: ../src/cairo-dock-gui-factory.c:2240
+#: ../src/cairo-dock-gui-factory.c:2239
 msgid "category"
 msgstr "Κατηγορία"
 
-#: ../src/cairo-dock-gui-factory.c:2283
+#: ../src/cairo-dock-gui-factory.c:2282
 msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2643
+#: ../src/cairo-dock-gui-factory.c:2642
 msgid "state"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2649
+#: ../src/cairo-dock-gui-factory.c:2648
 msgid "Theme"
 msgstr "Θέμα"
 
-#: ../src/cairo-dock-gui-factory.c:2662
+#: ../src/cairo-dock-gui-factory.c:2661
 msgid "Rating"
 msgstr "Αξιολόγηση"
 
-#: ../src/cairo-dock-gui-factory.c:2668
+#: ../src/cairo-dock-gui-factory.c:2667
 msgid "Sobriety"
 msgstr ""
 
-#: ../src/cairo-dock-gui-factory.c:2754
+#: ../src/cairo-dock-gui-factory.c:2753
 msgid "link"
 msgstr "σύνδεσμος"
 
-#: ../src/cairo-dock-gui-factory.c:2807
+#: ../src/cairo-dock-gui-factory.c:2806
 msgid "Grab"
 msgstr "αρπαγή"
 
@@ -351,12 +351,12 @@ msgstr ""
 msgid "Manage Themes"
 msgstr "Διαχείριση θεμάτων"
 
-#: ../src/cairo-dock-internal-accessibility.c:323
+#: ../src/cairo-dock-internal-accessibility.c:330
 #: ../src/cairo-dock-menu.c:1494
 msgid "Visibility"
 msgstr "Ορατότητα"
 
-#: ../src/cairo-dock-internal-accessibility.c:325
+#: ../src/cairo-dock-internal-accessibility.c:332
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"

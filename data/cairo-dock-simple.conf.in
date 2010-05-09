@@ -21,7 +21,6 @@ frame_visi =
 visibility = 1
 
 #L-[Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
-#{The last effect requires opengl.}
 hide effect = Move down
 
 #k- Keyboard shortcut to pop-up the dock:
