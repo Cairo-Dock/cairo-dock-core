@@ -360,7 +360,7 @@ static GdkBitmap *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h
 {
 	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
-	g_print ("%s (%dx%d / %dx%d)\n", __func__, w, h, W, H);
+	//g_print ("%s (%dx%d / %dx%d)\n", __func__, w, h, W, H);
 	
 	GdkBitmap *pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
 		pDock->container.bIsHorizontal ? W : H,

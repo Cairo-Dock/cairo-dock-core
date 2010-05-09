@@ -1251,7 +1251,7 @@ static void _cairo_dock_render_state (GtkTreeViewColumn *tree_column, GtkCellRen
 		g_object_set (cell, "text", cState, NULL);
 	}
 }
-static GtkListStore *_make_note_list_store (void)
+static GtkListStore *_make_rate_list_store (void)
 {
 	GString *s = g_string_sized_new (CD_MAX_RATING*4+1);
 	GtkListStore *note_list = gtk_list_store_new (2, G_TYPE_INT, G_TYPE_STRING);
@@ -1297,19 +1297,19 @@ static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gch
 	} while (1);
 	//g_print ("iRating : %d\n", iRating);
 	
-	gchar /** *cDisplayedName = NULL, */*cThemeName = NULL;
+	gchar *cThemeName = NULL;
 	gint iState;
 	gtk_tree_model_get (model, &it,
-		///CAIRO_DOCK_MODEL_NAME, &cDisplayedName,
 		CAIRO_DOCK_MODEL_RESULT, &cThemeName,
 		CAIRO_DOCK_MODEL_STATE, &iState, -1);
-	g_return_if_fail (/**cDisplayedName != NULL && */cThemeName != NULL);
+	g_return_if_fail (cThemeName != NULL);
+	cairo_dock_extract_theme_type_from_name (cThemeName);
 	//g_print ("theme : %s / %s\n", cThemeName, cDisplayedName);
 	
 	gchar *cRatingDir = g_strdup_printf ("%s/.rating", g_cThemesDirPath);  // il y'a un probleme ici, on ne connait pas le repertoire utilisateur des themes. donc ce code ne marche que pour les themes du dock (et n'est utilise que pour ca)
 	gchar *cRatingFile = g_strdup_printf ("%s/%s", cRatingDir, cThemeName);
 	//g_print ("on ecrit dans %s\n", cRatingFile);
-	if (iState == CAIRO_DOCK_USER_THEME || iState == CAIRO_DOCK_LOCAL_THEME/**strncmp (cDisplayedName, CAIRO_DOCK_PREFIX_NET_THEME, strlen (CAIRO_DOCK_PREFIX_NET_THEME)) != 0*/ || g_file_test (cRatingFile, G_FILE_TEST_EXISTS))  // ca n'est pas un theme distant, ou l'utilisateur a deja vote auparavant pour ce theme.
+	if (iState == CAIRO_DOCK_USER_THEME || iState == CAIRO_DOCK_LOCAL_THEME || g_file_test (cRatingFile, G_FILE_TEST_EXISTS))  // ca n'est pas un theme distant, ou l'utilisateur a deja vote auparavant pour ce theme.
 	{
 		if (!g_file_test (cRatingDir, G_FILE_TEST_IS_DIR))
 		{
@@ -1339,7 +1339,6 @@ static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gch
 		else
 			cairo_dock_show_general_message (_("You must try the theme before you can rate it."), 3000);
 	}
-	///g_free (cDisplayedName);
 	g_free (cThemeName);
 	g_free (cRatingFile);
 	g_free (cRatingDir);
@@ -2650,7 +2649,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				// note
-				GtkListStore *note_list = _make_note_list_store ();
+				GtkListStore *note_list = _make_rate_list_store ();
 				rend = gtk_cell_renderer_combo_new ();
 				g_object_set (G_OBJECT (rend),
 					"text-column", 1,
@@ -3255,15 +3254,12 @@ static void _cairo_dock_get_each_widget_value (gpointer *data, GKeyFile *pKeyFil
 		{
 			pOneWidget = pList->data;
 			cValue = NULL;
-			if (GTK_IS_COMBO_BOX_ENTRY (pOneWidget))
+			GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));  // toutes nos combo sont crees avec un modele.
+			if (model != NULL && gtk_combo_box_get_active_iter (GTK_COMBO_BOX (pOneWidget), &iter))
+				gtk_tree_model_get (model, &iter, CAIRO_DOCK_MODEL_RESULT, &cValue, -1);
+			if (cValue == NULL && GTK_IS_COMBO_BOX_ENTRY (pOneWidget))  // dans le cas d'une combo-entry, si on a entre un nouveau text, il n'y a pas d'active-iter, donc il faut recuperer le texte entre.
 			{
 				cValue = gtk_combo_box_get_active_text (GTK_COMBO_BOX (pOneWidget));
-			}
-			else if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (pOneWidget), &iter))
-			{
-				GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
-				if (model != NULL)
-					gtk_tree_model_get (model, &iter, CAIRO_DOCK_MODEL_RESULT, &cValue, -1);
 			}
 			tValues[i] = (cValue ? cValue : g_strdup(""));
 			i ++;

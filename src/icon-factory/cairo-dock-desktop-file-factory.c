@@ -249,6 +249,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_script (const gchar *cURI, c
 	gchar *cFilePath = (*cURI == '/' ? g_strdup (cURI) : g_filename_from_uri (cURI, NULL, NULL));
 	g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", cFilePath);
 	g_free (cFilePath);
+	g_key_file_set_boolean (pKeyFile, "Desktop Entry", "Terminal", TRUE);
 	
 	//\___________________ On lui choisit un nom de fichier tel qu'il n'y ait pas de collision.
 	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename ("script-launcher.desktop", g_cCurrentLaunchersPath);
