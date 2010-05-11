@@ -240,13 +240,13 @@ static void _post_render_move_down_opengl (CairoDock *pDock)
 
 static void _init_fade_out (CairoDock *pDock)
 {
-	if (g_bUseOpenGL && ! g_openglConfig.bStencilBufferAvailable)
+	if (g_bUseOpenGL && ! g_openglConfig.bAccumBufferAvailable)
 		cairo_dock_create_redirect_texture_for_dock (pDock);
 }
 
 static void _pre_render_fade_out_opengl (CairoDock *pDock)
 {
-	if (! g_openglConfig.bStencilBufferAvailable && pDock->iFboId != 0)  // pas de glAccum.
+	if (! g_openglConfig.bAccumBufferAvailable && pDock->iFboId != 0)  // pas de glAccum.
 	{
 		_pre_render_opengl (pDock);
 	}
@@ -268,7 +268,7 @@ static void _post_render_fade_out (CairoDock *pDock, cairo_t *pCairoContext)
 static void _post_render_fade_out_opengl (CairoDock *pDock)
 {
 	double fAlpha = 1 - pDock->fHideOffset;
-	if (g_openglConfig.bStencilBufferAvailable)
+	if (g_openglConfig.bAccumBufferAvailable)
 	{
 		glAccum (GL_LOAD, fAlpha*fAlpha);
 		glAccum (GL_RETURN, 1.0);
@@ -329,7 +329,7 @@ static void _post_render_semi_transparent (CairoDock *pDock, cairo_t *pCairoCont
 static void _post_render_semi_transparent_opengl (CairoDock *pDock)
 {
 	double fAlpha = 1 - .75*pDock->fHideOffset;
-	if (g_openglConfig.bStencilBufferAvailable)
+	if (g_openglConfig.bAccumBufferAvailable)
 	{
 		glAccum (GL_LOAD, fAlpha);
 		glAccum (GL_RETURN, 1.0);

@@ -166,20 +166,28 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, gdouble fMaxScale, gboolean bI
 	//\______________ Si rien charge, on met une image par defaut.
 	if (icon->pIconBuffer == pPrevSurface || icon->pIconBuffer == NULL)
 	{
-		gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
-		if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+		if (CAIRO_DOCK_IS_APPLET (icon))  // pour les applets, plutot que de mettre un "?" on met l'icone par defaut.
 		{
-			g_free (cIconPath);
-			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
+			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath,
+				w,
+				h);
 		}
-		CairoDockIconType iType = cairo_dock_get_icon_type  (icon);
-		/// A FAIRE : verifier qu'on peut enlever le test sur fMaxScale ...
-		icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
-		icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
-		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
-			w,
-			h);
-		g_free (cIconPath);
+		else
+		{
+			gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
+			if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cIconPath);
+				cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
+			}
+			CairoDockIconType iType = cairo_dock_get_icon_type  (icon);
+			icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
+			icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
+			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+				w,
+				h);
+			g_free (cIconPath);
+		}
 	}
 	cd_debug ("%s (%s) -> %.2fx%.2f", __func__, icon->cName, icon->fWidth, icon->fHeight);
 	

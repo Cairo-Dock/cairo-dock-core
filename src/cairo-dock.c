@@ -121,6 +121,7 @@
 #include "cairo-dock-default-view.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-internal-system.h"
+#include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-hiding-effect.h"
@@ -780,7 +781,9 @@ int main (int argc, char** argv)
 			else
 			{
 				Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
+				myDialogs.dialogTextDescription.bUseMarkup = TRUE;
 				cairo_dock_show_temporary_dialog_with_default_icon (gettext (cChangeLogMessage), pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
+				myDialogs.dialogTextDescription.bUseMarkup = FALSE;
 			}
 			g_free (cChangeLogMessage);
 		}

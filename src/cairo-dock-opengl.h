@@ -41,6 +41,7 @@ struct _CairoDockGLConfig {
 	gboolean bIndirectRendering;
 	gboolean bAlphaAvailable;
 	gboolean bStencilBufferAvailable;
+	gboolean bAccumBufferAvailable;
 	gboolean bFboAvailable;
 	gboolean bNonPowerOfTwoAvailable;
 	gboolean bTextureFromPixmapAvailable;

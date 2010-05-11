@@ -847,14 +847,14 @@ void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenB
 
 static gboolean _cairo_dock_hide_back_dock (CairoDock *pDock)
 {
-	g_print ("hide back\n");
+	//g_print ("hide back\n");
 	cairo_dock_start_hiding (pDock);
 	pDock->iSidHideBack = 0;
 	return FALSE;
 }
 static gboolean _cairo_dock_unhide_dock_delayed (CairoDock *pDock)
 {
-	g_print ("unhide delayed\n");
+	//g_print ("unhide delayed\n");
 	cairo_dock_start_showing (pDock);
 	if (pDock->iSidHideBack == 0)  // on se recachera dans 2s si on n'est pas entre dans le dock entre-temps.
 		pDock->iSidHideBack = g_timeout_add (2000, (GSourceFunc) _cairo_dock_hide_back_dock, (gpointer) pDock);
@@ -870,7 +870,7 @@ static void _cairo_dock_unhide_one_root_dock (gchar *cDockName, CairoDock *pDock
 	CairoDockPositionType iDockScreenBorder = (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp));
 	if (iDockScreenBorder == iScreenBorder && cairo_dock_is_hidden (pDock))  // c'est notre bord d'ecran et le dock est courammment cache.
 	{
-		g_print ("%s will unhide\n", cDockName);
+		//g_print ("%s will unhide\n", cDockName);
 		if (myAccessibility.iUnhideDockDelay != 0)  // on programme une apparition.
 		{
 			if (pDock->iSidUnhideDelayed == 0)

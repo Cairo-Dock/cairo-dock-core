@@ -4,7 +4,12 @@ add_subdirectory(plug-ins)
 
 ########### install files ###############
 
-install(FILES  cairo-dock.conf 	active.png 	indicator.png 	 DESTINATION ${pkgdatadir}/themes/_default_ )
+install(FILES
+	cairo-dock.conf
+	active.png
+	bg.svg
+	indicator.png
+	DESTINATION ${pkgdatadir}/themes/_default_ )
 
 
 

@@ -315,7 +315,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				{
 					if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
 					{
-						g_print ("+++ input shape hidden on end shrinking\n");
+						//g_print ("+++ input shape hidden on end shrinking\n");
 						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 							NULL,
 							0,
@@ -786,7 +786,7 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 		
 		if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
 		{
-			g_print ("+++ input shape hidden on start hiding\n");
+			//g_print ("+++ input shape hidden on start hiding\n");
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				pDock->pHiddenShapeBitmap,
 				0,
@@ -810,7 +810,7 @@ void cairo_dock_start_showing (CairoDock *pDock)
 		
 		if (pDock->pShapeBitmap && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
-			g_print ("+++ input shape at rest on start showing\n");
+			//g_print ("+++ input shape at rest on start showing\n");
 			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
 				NULL,
 				0,
