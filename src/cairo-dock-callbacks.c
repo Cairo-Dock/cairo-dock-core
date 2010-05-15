@@ -1133,7 +1133,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 	pDock->container.iHeight = iNewHeight;
 	pDock->container.iWindowPositionX = iNewX;
 	pDock->container.iWindowPositionY = iNewY;
-	/**if (pDock->container.iWindowPositionX == 0 && pDock->container.iWindowPositionY == 0 && !cairo_dock_quick_hide_is_activated ())  // ce cas arrive au debut. Il peut eventuellement arriver apres aussi, ca n'est pas un probleme.
+	/**if (pDock->container.iWindowPositionX == 0 && pDock->container.iWindowPositionY == 0 && !cairo_dock_is_temporary_hidden (pDock))  // ce cas arrive au debut. Il peut eventuellement arriver apres aussi, ca n'est pas un probleme.
 	{
 		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
 		bSizeUpdated = TRUE;
@@ -1253,12 +1253,12 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
 				if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
 				{
-					if (!cairo_dock_quick_hide_is_activated ())
+					if (!cairo_dock_is_temporary_hidden (pDock))
 						cairo_dock_activate_temporary_auto_hide ();
 				}
 				else
 				{
-					if (cairo_dock_quick_hide_is_activated ())
+					if (cairo_dock_is_temporary_hidden (pDock))
 						cairo_dock_deactivate_temporary_auto_hide ();
 				}
 			}
@@ -1266,12 +1266,12 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			{
 				if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
 				{
-					if (!cairo_dock_quick_hide_is_activated ())
+					if (!cairo_dock_is_temporary_hidden (pDock))
 						cairo_dock_activate_temporary_auto_hide ();
 				}
 				else
 				{
-					if (cairo_dock_quick_hide_is_activated ())
+					if (cairo_dock_is_temporary_hidden (pDock))
 						cairo_dock_deactivate_temporary_auto_hide ();
 				}
 			}

@@ -430,12 +430,15 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 	GList *c = g_list_find (children, pKeyBox);
 	g_return_if_fail (c != NULL);
 	
+	g_print ("%d widgets controles\n", iNbWidgets);
 	GtkWidget *w;
-	int i;
-	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
+	int i=0;
+	for (c = c->next; c != NULL && i < iNbWidgets; c = c->next)
 	{
 		w = c->data;
 		//g_print (" %d/%d -> %d\n", i, iNbWidgets, i == iNumItem);
+		if (GTK_IS_ALIGNMENT (w))
+			continue;
 		if (GTK_IS_EXPANDER (w))
 		{
 			gtk_expander_set_expanded (GTK_EXPANDER (w), i == iNumItem);
@@ -444,6 +447,7 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 		{
 			gtk_widget_set_sensitive (w, i == iNumItem);
 		}
+		i ++;
 	}
 	
 	g_list_free (children);
@@ -470,13 +474,17 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	GList *c = g_list_find (children, pKeyBox);
 	g_return_if_fail (c != NULL);
 	
+	g_print ("%d widgets controles (%d au total)\n", iNbWidgets, g_list_length (children));
 	GtkWidget *w;
-	int i;
-	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
+	int i = 0;
+	for (c = c->next; c != NULL && i < iNbWidgets; c = c->next)
 	{
 		w = c->data;
-		//g_print ("%d in ]%d;%d[\n", i, iOrder1, iOrder1 + iOrder2);
+		g_print ("%d in ]%d;%d[ ; %d\n", i, iOrder1, iOrder1 + iOrder2, GTK_IS_ALIGNMENT (w));
+		if (GTK_IS_ALIGNMENT (w))
+			continue;
 		gtk_widget_set_sensitive (w, i >= iOrder1 - 1 && i < iOrder1 + iOrder2 - 1);
+		i ++;
 	}
 	
 	g_list_free (children);
@@ -2987,7 +2995,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 			case CAIRO_DOCK_WIDGET_SEPARATOR :  // separateur.
 			{
-				GtkWidget *pAlign = gtk_alignment_new (.5, 0., 0.8, 0.);
+				GtkWidget *pAlign = gtk_alignment_new (.5, .5, 0.8, 1.);
+				gtk_widget_set (pAlign, "height-request", 12, NULL);
 				pOneWidget = gtk_hseparator_new ();
 				gtk_container_add (GTK_CONTAINER (pAlign), pOneWidget);
 				gtk_box_pack_start (GTK_BOX (pFrameVBox != NULL ? pFrameVBox : pGroupBox),

@@ -92,6 +92,44 @@ CairoDock *cairo_dock_search_dock_from_name (const gchar *cDockName);
 */
 Icon *cairo_dock_search_icon_pointing_on_dock (CairoDock *pDock, CairoDock **pParentDock);
 
+// renvoie un nom de dock unique; cPrefix peut etre NULL.
+gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
+gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
+
+CairoDock *cairo_dock_alter_dock_name (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
+
+/** Rename a dock. Update the container's name of all of its icons.
+*@param cDockName name of the dock.
+*@param pDock the dock (optional).
+*@param cNewName the new name.
+*/
+void cairo_dock_rename_dock (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
+
+/** Execute an action on all icons.
+*@param pFunction the action.
+*@param pUserData data passed to the callback.
+*/
+void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+
+/** Execute an action on all icons being inside a dock.
+*@param pFunction the action.
+*@param pUserData data passed to the callback.
+*/
+void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+
+/** Execute an action on all icons being inside a desklet.
+*@param pFunction the action.
+*@param pUserData data passed to the callback.
+*/
+void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+
+/** Execute an action on all docks.
+*@param pFunction the action.
+*@param pUserData data passed to the callback.
+*/
+void cairo_dock_foreach_docks (GHFunc pFunction, gpointer pUserData);
+
+
 
 void cairo_dock_search_max_decorations_size (int *iWidth, int *iHeight);
 
@@ -111,15 +149,6 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
 void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo);
 
 void cairo_dock_draw_subdock_icons (void);
-
-CairoDock *cairo_dock_alter_dock_name (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
-
-/** Rename a dock. Update the container's name of all of its icons.
-*@param cDockName name of the dock.
-*@param pDock the dock (optional).
-*@param cNewName the new name.
-*/
-void cairo_dock_rename_dock (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
 
 void cairo_dock_reset_all_views (void);
 void cairo_dock_set_all_views_to_default (int iDockType);
@@ -158,48 +187,18 @@ void cairo_dock_stop_quick_hide (void);
 void cairo_dock_allow_entrance (CairoDock *pDock);
 void cairo_dock_disable_entrance (CairoDock *pDock);
 gboolean cairo_dock_entrance_is_allowed (CairoDock *pDock);
-gboolean cairo_dock_quick_hide_is_activated (void);
-
+#define cairo_dock_is_temporary_hidden(pDock) (pDock)->bTemporaryHidden
 
 void cairo_dock_synchronize_one_sub_dock_position (CairoDock *pSubDock, CairoDock *pDock, gboolean bReloadBuffersIfNecessary);
 void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bReloadBuffersIfNecessary);
 
 void cairo_dock_start_polling_screen_edge (CairoDock *pMainDock);
 void cairo_dock_stop_polling_screen_edge (void);
-void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
-void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly);
 void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
+/**void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
+void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly);*/
 
 void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
-
-
-// renvoie un nom de dock unique; cPrefix peut etre NULL.
-gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
-gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
-
-/** Execute an action on all icons.
-*@param pFunction the action.
-*@param pUserData data passed to the callback.
-*/
-void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData);
-
-/** Execute an action on all icons being inside a dock.
-*@param pFunction the action.
-*@param pUserData data passed to the callback.
-*/
-void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
-
-/** Execute an action on all icons being inside a desklet.
-*@param pFunction the action.
-*@param pUserData data passed to the callback.
-*/
-void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, gpointer pUserData);
-
-/** Execute an action on all docks.
-*@param pFunction the action.
-*@param pUserData data passed to the callback.
-*/
-void cairo_dock_foreach_docks (GHFunc pFunction, gpointer pUserData);
 
 
 G_END_DECLS

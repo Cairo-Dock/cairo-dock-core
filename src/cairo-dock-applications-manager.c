@@ -153,17 +153,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				/// redessiner les inhibiteurs ?...
 			}
 			
-			
-			/**if (cairo_dock_quick_hide_is_activated () && ((icon->bIsFullScreen && ! icon->bIsHidden && myAccessibility.bAutoHideOnFullScreen) || (icon->bIsMaximized && ! icon->bIsHidden && myAccessibility.bAutoHideOnMaximized)))  // cette fenetre peut avoir gene.
-			{
-				/// le faire pour tous les docks principaux ...
-				if (cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL)  // on regarde si une autre gene encore.
-				{
-					cd_message (" => plus aucune fenetre genante");
-					cairo_dock_deactivate_temporary_auto_hide ();
-				}
-			}*/
-			if (myAccessibility.bAutoHideOnAnyOverlap && cairo_dock_quick_hide_is_activated ())
+			if (myAccessibility.bAutoHideOnAnyOverlap && cairo_dock_is_temporary_hidden (g_pMainDock))
 			{
 				/// le faire pour tous les docks principaux ...
 				if (cairo_dock_search_window_overlapping_dock (g_pMainDock) == NULL)  // on regarde si une autre gene encore.
@@ -228,7 +218,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 				}
 				/**if ((myAccessibility.bAutoHideOnMaximized && icon->bIsMaximized && ! icon->bIsHidden) || (myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen && ! icon->bIsHidden))
 				{
-					if (! cairo_dock_quick_hide_is_activated ())
+					if (! cairo_dock_is_temporary_hidden (pDock))
 					{
 						if (cairo_dock_xwindow_is_on_current_desktop (Xid) && cairo_dock_appli_hovers_dock (icon, pDock))
 						{
@@ -239,7 +229,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 				}*/
 				if (myAccessibility.bAutoHideOnAnyOverlap)
 				{
-					if (! cairo_dock_quick_hide_is_activated ())
+					if (! cairo_dock_is_temporary_hidden (pDock))
 					{
 						if (cairo_dock_xwindow_is_on_current_desktop (Xid) && cairo_dock_appli_overlaps_dock (icon, pDock))
 						{
@@ -332,12 +322,12 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 			}
 			if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la nouvelle fenetre active nous gene.
 			{
-				if (!cairo_dock_quick_hide_is_activated ())
+				if (!cairo_dock_is_temporary_hidden (g_pMainDock))
 					cairo_dock_activate_temporary_auto_hide ();
 			}
 			else
 			{
-				if (cairo_dock_quick_hide_is_activated ())
+				if (cairo_dock_is_temporary_hidden (g_pMainDock))
 					cairo_dock_deactivate_temporary_auto_hide ();
 			}
 		}
@@ -367,15 +357,15 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
 		if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
 		{
-			if (!cairo_dock_quick_hide_is_activated ())
+			if (!cairo_dock_is_temporary_hidden (pDock))
 				cairo_dock_activate_temporary_auto_hide ();
 		}
 		else
 		{
-			if (cairo_dock_quick_hide_is_activated ())
+			if (cairo_dock_is_temporary_hidden (pDock))
 				cairo_dock_deactivate_temporary_auto_hide ();
 		}
-		/**if (cairo_dock_quick_hide_is_activated ())
+		/**if (cairo_dock_is_temporary_hidden (pDock))
 		{
 			if (cairo_dock_search_window_overlapping_dock (pDock) == NULL)
 			{
@@ -394,7 +384,7 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 	}
 	if (myAccessibility.bAutoHideOnAnyOverlap)
 	{
-		if (cairo_dock_quick_hide_is_activated ())
+		if (cairo_dock_is_temporary_hidden (pDock))
 		{
 			if (cairo_dock_search_window_overlapping_dock (pDock) == NULL)
 			{
@@ -455,12 +445,12 @@ static void _on_change_window_state (Icon *icon)
 				icon->bIsHidden = bIsHidden;
 				if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la fenetre active nous gene.
 				{
-					if (!cairo_dock_quick_hide_is_activated ())
+					if (!cairo_dock_is_temporary_hidden (g_pMainDock))
 						cairo_dock_activate_temporary_auto_hide ();
 				}
 				else
 				{
-					if (cairo_dock_quick_hide_is_activated ())
+					if (cairo_dock_is_temporary_hidden (g_pMainDock))
 						cairo_dock_deactivate_temporary_auto_hide ();
 				}
 			}
@@ -480,13 +470,13 @@ static void _on_change_window_state (Icon *icon)
 		
 		if (myAccessibility.bAutoHideOnAnyOverlap)
 		{
-			if (! bIsHidden && ! cairo_dock_quick_hide_is_activated ())
+			if (! bIsHidden && ! cairo_dock_is_temporary_hidden (g_pMainDock))
 			{
 				cd_message (" => %s devient genante", CAIRO_DOCK_IS_APPLI (icon) ? icon->cName : "une fenetre");
 				if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_overlaps_dock (icon, g_pMainDock))
 					cairo_dock_activate_temporary_auto_hide ();
 			}
-			else if (bIsHidden && cairo_dock_quick_hide_is_activated ())
+			else if (bIsHidden && cairo_dock_is_temporary_hidden (g_pMainDock))
 			{
 				if (cairo_dock_search_window_overlapping_dock (g_pMainDock) == NULL)
 				{
@@ -579,19 +569,19 @@ static void _on_change_window_desktop (Icon *icon)
 		{
 			if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la fenetre active nous gene.
 			{
-				if (!cairo_dock_quick_hide_is_activated ())
+				if (!cairo_dock_is_temporary_hidden (g_pMainDock))
 					cairo_dock_activate_temporary_auto_hide ();
 			}
 			else
 			{
-				if (cairo_dock_quick_hide_is_activated ())
+				if (cairo_dock_is_temporary_hidden (g_pMainDock))
 					cairo_dock_deactivate_temporary_auto_hide ();
 			}
 		}
 	}
 	if (myAccessibility.bAutoHideOnAnyOverlap)
 	{
-		if (! cairo_dock_quick_hide_is_activated ())
+		if (! cairo_dock_is_temporary_hidden (g_pMainDock))
 		{
 			if ((icon->iNumDesktop == -1 || icon->iNumDesktop == g_desktopGeometry.iCurrentDesktop) && icon->iViewPortX == g_desktopGeometry.iCurrentViewportX && icon->iViewPortY == g_desktopGeometry.iCurrentViewportY)  // l'appli arrive sur le bureau courant.
 			{
@@ -651,7 +641,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		
 		if (myAccessibility.bAutoHideOnAnyOverlap)
 		{
-			if (cairo_dock_quick_hide_is_activated ())
+			if (cairo_dock_is_temporary_hidden (g_pMainDock))
 			{
 				if (cairo_dock_search_window_overlapping_dock (g_pMainDock) == NULL)
 				{
@@ -676,7 +666,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		{
 			if (cairo_dock_appli_overlaps_dock (icon, g_pMainDock))  // cette fenetre peut provoquer l'auto-hide.
 			{
-				if (! cairo_dock_quick_hide_is_activated ())
+				if (! cairo_dock_is_temporary_hidden (g_pMainDock))
 				{
 					cd_message (" sur le viewport courant => cela nous gene");
 					cairo_dock_activate_temporary_auto_hide ();
@@ -684,7 +674,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 			}
 			else  // ne gene pas/plus.
 			{
-				if (cairo_dock_quick_hide_is_activated ())
+				if (cairo_dock_is_temporary_hidden (g_pMainDock))
 				{
 					if (cairo_dock_search_window_overlapping_dock (g_pMainDock) == NULL)
 					{
@@ -703,12 +693,12 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		{
 			if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la fenetre active nous gene.
 			{
-				if (!cairo_dock_quick_hide_is_activated ())
+				if (!cairo_dock_is_temporary_hidden (g_pMainDock))
 					cairo_dock_activate_temporary_auto_hide ();
 			}
 			else
 			{
-				if (cairo_dock_quick_hide_is_activated ())
+				if (cairo_dock_is_temporary_hidden (g_pMainDock))
 					cairo_dock_deactivate_temporary_auto_hide ();
 			}
 		}
@@ -981,7 +971,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 			
 			if (myAccessibility.bAutoHideOnAnyOverlap)
 			{
-				if (! cairo_dock_quick_hide_is_activated () && cairo_dock_appli_is_on_current_desktop (pIcon))
+				if (! cairo_dock_is_temporary_hidden (pDock) && cairo_dock_appli_is_on_current_desktop (pIcon))
 				{
 					if (cairo_dock_appli_overlaps_dock (pIcon, pDock))
 					{
@@ -1005,7 +995,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
 		if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
 		{
-			if (!cairo_dock_quick_hide_is_activated ())
+			if (!cairo_dock_is_temporary_hidden (pDock))
 			{
 				cairo_dock_activate_temporary_auto_hide ();
 			}
@@ -1015,7 +1005,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	{
 		if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
 		{
-			if (!cairo_dock_quick_hide_is_activated ())
+			if (!cairo_dock_is_temporary_hidden (pDock))
 				cairo_dock_activate_temporary_auto_hide ();
 		}
 	}
@@ -1091,7 +1081,7 @@ void cairo_dock_stop_application_manager (void)
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_reset_appli_table_iter, NULL);  // libere toutes les icones d'appli.
 	cairo_dock_update_dock_size (g_pMainDock);
 	
-	if (cairo_dock_quick_hide_is_activated ())
+	if (cairo_dock_is_temporary_hidden (g_pMainDock))
 		cairo_dock_deactivate_temporary_auto_hide ();
 }
 
