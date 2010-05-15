@@ -34,7 +34,7 @@
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-load.h"
-#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-icon-loader.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
@@ -204,14 +204,7 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 		}
 		
 		pDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
-		if (pDock != NULL)
-		{
-			cairo_dock_reload_one_icon_buffer_in_dock (pAppliIcon, pDock);
-		}
-		else
-		{
-			cairo_dock_fill_one_icon_buffer (pAppliIcon, (1 + myIcons.fAmplitude), g_pMainDock->container.bIsHorizontal, g_pMainDock->container.bDirectionUp);
-		}
+		cairo_dock_reload_icon_image (pAppliIcon, CAIRO_CONTAINER (pDock));
 	}
 	
 	return TRUE;
@@ -441,15 +434,7 @@ void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon)
 				//	break ;
 			}
 			pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
-			if (pParentDock != NULL)
-			{
-				cd_message ("on recharge l'icone de l'appli %s", pIcon->cName);
-				cairo_dock_reload_one_icon_buffer_in_dock (pIcon, pParentDock);
-			}
-			else
-			{
-				cairo_dock_reload_one_icon_buffer_in_dock (pIcon, g_pMainDock);
-			}
+			cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pParentDock));  /// question : pourquoi le faire pour toutes les icones ?...
 		}
 		if (bNeedsRedraw)
 			gtk_widget_queue_draw (g_pMainDock->container.pWidget);  /// pDock->pRenderer->calculate_icons (pDock); ?...

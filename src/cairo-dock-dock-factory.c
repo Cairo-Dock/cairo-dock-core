@@ -367,7 +367,12 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	pDock->icons = g_list_insert_sorted (pDock->icons,
 		icon,
 		pCompareFunc);
-
+	
+	if (icon->fWidth == 0)
+	{
+		cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
+	}
+	
 	icon->fWidth *= pDock->container.fRatio;
 	icon->fHeight *= pDock->container.fRatio;
 

@@ -31,19 +31,26 @@ G_BEGIN_DECLS
 *@file cairo-dock-icon-loader.h This class loads the icons and manages the associated ressources.
 */
 
+
+/** Search the path of an icon into the defined icons themes. It also handles the '~' caracter in paths.
+ * @param cFileName name of the icon file.
+ * @return the complete path of the icon, or NULL if not found.
+ */
+gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
+
 /* Cree la surface de reflection d'une icone (pour cairo).
 *@param pIcon l'icone.
 *@param pContainer le container de l'icone.
 */
 void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer);
 
-/**Fill the image buffer (surface & texture) of a given icon, according to its type. Set its size accordingly, and fills the reflection buffer for cairo.
-*@param icon the icon.
-*@param fMaxScale maximum zoom.
-*@param bIsHorizontal TRUE if the icon will be in a horizontal container (needed for the cairo reflect).
-*@param bDirectionUp TRUE if the icon will be in a up container (needed for the cairo reflect).
+void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon);
+
+/**Fill the image buffer (surface & texture) of a given icon, according to its type. Set its size if necessary, and fills the reflection buffer for cairo.
+*@param pIcon the icon.
+*@param pContainer its container.
 */
-void cairo_dock_fill_one_icon_buffer (Icon *icon, gdouble fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp);
+void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer);
 
 /**Cut an UTF-8 or ASCII string to n characters, and add '...' to the end in cas it was effectively cut. If n is negative, it will remove the last |n| characters. It manages correctly UTF-8 strings.
 *@param cString the string.
@@ -56,29 +63,25 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
 *@param icon the icon.
 *@param pTextDescription desctiption of the text rendering.
 */
-void cairo_dock_fill_one_text_buffer (Icon *icon, CairoDockLabelDescription *pTextDescription);
+void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDescription);
 
 /**Fill the quick-info buffer (surface & texture) of a given icon, according to a text description.
 *@param icon the icon.
 *@param pTextDescription desctiption of the text rendering.
 *@param fMaxScale maximum zoom.
 */
-void cairo_dock_fill_one_quick_info_buffer (Icon *icon, CairoDockLabelDescription *pTextDescription, double fMaxScale);
-
-void cairo_dock_fill_icon_buffers (Icon *icon, double fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp);
-#define cairo_dock_fill_icon_buffers_for_desklet(pIcon) cairo_dock_fill_icon_buffers (pIcon, 1, CAIRO_DOCK_HORIZONTAL, TRUE)
-#define cairo_dock_fill_icon_buffers_for_dock(pIcon, pDock) cairo_dock_fill_icon_buffers (pIcon, 1 + myIcons.fAmplitude, pDock->container.bIsHorizontal, pDock->container.bDirectionUp)
+void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTextDescription, double fMaxScale);
 
 /** Fill all the buffers (surfaces & textures) of a given icon, according to its type. Set its size accordingly, and fills the reflection buffer for cairo. Label and quick-info are loaded with the current global text description.
 *@param pIcon the icon.
 *@param pContainer its container.
 */
-void cairo_dock_load_one_icon_from_scratch (Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer);
 
 void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpointer data);
 #define cairo_dock_load_buffers_in_one_dock(pDock) cairo_dock_reload_buffers_in_dock (NULL, pDock, GINT_TO_POINTER (TRUE))
 
-void cairo_dock_reload_one_icon_buffer_in_dock (Icon *icon, CairoDock *pDock);
+void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer);
 
 
 

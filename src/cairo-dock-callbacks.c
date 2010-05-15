@@ -79,7 +79,7 @@ static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a
 static int s_iClickX, s_iClickY;  // coordonnees du clic dans le dock, pour pouvoir initialiser le deplacement apres un seuil.
 static CairoDock *s_pLastPointedDock = NULL;  // pour savoir quand on passe d'un dock a un autre.
 static int s_iSidShowSubDockDemand = 0;
-static int s_iSidShowAppliForDrop = 0;
+static int s_iSidActionOnDragHover = 0;
 static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
 static CairoFlyingContainer *s_pFlyingContainer = NULL;
 
@@ -236,11 +236,19 @@ static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 
 	return FALSE;
 }
-static gboolean _cairo_dock_show_xwindow_for_drop (gpointer data)
+static void _search_icon (Icon *icon, CairoContainer *pContainer, gpointer *data)
 {
-	Window Xid = GPOINTER_TO_INT (data);
-	cairo_dock_show_xwindow (Xid);
-	s_iSidShowAppliForDrop = 0;
+	if (icon == data[0])
+		data[1] = icon;
+}
+static gboolean _cairo_dock_action_on_drag_hover (Icon *pIcon)
+{
+	gpointer data[2] = {pIcon, NULL};
+	cairo_dock_foreach_icons_in_docks ((CairoDockForeachIconFunc)_search_icon, data);  // on verifie que l'icone ne s'est pas faite effacee entre-temps?
+	pIcon = data[1];
+	if (pIcon && pIcon->action_on_drag_hover)
+		pIcon->action_on_drag_hover (pIcon);
+	s_iSidActionOnDragHover = 0;
 	return FALSE;
 }
 void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock)
@@ -255,16 +263,16 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		s_pDockShowingSubDock = NULL;
 	}
 	
-	if (pDock->bIsDragging && s_iSidShowAppliForDrop != 0)
+	if (s_iSidActionOnDragHover != 0)
 	{
 		//cd_debug ("on annule la demande de montrage d'appli");
-		g_source_remove (s_iSidShowAppliForDrop);
-		s_iSidShowAppliForDrop = 0;
+		g_source_remove (s_iSidActionOnDragHover);
+		s_iSidActionOnDragHover = 0;
 	}
 	cairo_dock_replace_all_dialogs ();
-	if (pDock->bIsDragging && CAIRO_DOCK_IS_APPLI (pPointedIcon))
+	if (pDock->bIsDragging && pPointedIcon && pPointedIcon->action_on_drag_hover)
 	{
-		s_iSidShowAppliForDrop = g_timeout_add (500, (GSourceFunc) _cairo_dock_show_xwindow_for_drop, GINT_TO_POINTER (pPointedIcon->Xid));
+		s_iSidActionOnDragHover = g_timeout_add (600, (GSourceFunc) _cairo_dock_action_on_drag_hover, pPointedIcon);
 	}
 	
 	//g_print ("%x/%x , %x, %x\n", pDock, s_pLastPointedDock, pLastPointedIcon, pLastPointedIcon?pLastPointedIcon->pSubDock:NULL);
@@ -812,7 +820,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}*/
 	if (pDock->iSidHideBack != 0)
 	{
-		g_print ("remove hide back timeout\n");
+		//g_print ("remove hide back timeout\n");
 		g_source_remove(pDock->iSidHideBack);
 		pDock->iSidHideBack = 0;
 	}
@@ -1310,6 +1318,14 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	//cairo_dock_stop_marking_icons (pDock);
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fAvoidingMouseMargin = 0;
+	
+	//\_________________ On arrete le timer.
+	if (s_iSidActionOnDragHover != 0)
+	{
+		//cd_debug ("on annule la demande de montrage d'appli");
+		g_source_remove (s_iSidActionOnDragHover);
+		s_iSidActionOnDragHover = 0;
+	}
 	
 	//\_________________ On calcule la position a laquelle on l'a lache.
 	cd_message (">>> cReceivedData : '%s'", cReceivedData);

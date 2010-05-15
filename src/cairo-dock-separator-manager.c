@@ -36,10 +36,11 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-separator-factory.h"
+#include "cairo-dock-icon-loader.h"
 #include "cairo-dock-separator-manager.h"
 
 
-cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
+static cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
 {
 	cairo_surface_t *pNewSurface = NULL;
 	if (myIcons.cSeparatorImage == NULL)
@@ -84,6 +85,31 @@ cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
 }
 
 
+static void _load_separator (Icon *icon)
+{
+	int iWidth = icon->iImageWidth;
+	int iHeight = icon->iImageHeight;
+	
+	if (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL)
+	{
+		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
+		if (cIconPath != NULL && *cIconPath != '\0')
+		{
+			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+				iWidth,
+				iHeight);
+		}
+		g_free (cIconPath);
+	}
+	else
+	{
+		icon->pIconBuffer = cairo_dock_create_separator_surface (
+			iWidth,
+			iHeight);
+	}
+}
+
+
 Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
@@ -92,9 +118,10 @@ Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 	
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_separator_icon (iSeparatorType);
+	icon->load_image = _load_separator;
 	
 	//\____________ On remplit ses buffers.
-	cairo_dock_fill_icon_buffers_for_dock (icon, pDock);
+	cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
 
 	return icon;
 }

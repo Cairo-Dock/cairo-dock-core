@@ -61,8 +61,6 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-icon-loader.h"
 
-#define CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME "default-icon-appli.svg"
-
 extern CairoDock *g_pMainDock;
 
 extern gchar *g_cCurrentThemePath;
@@ -71,18 +69,247 @@ extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
 extern gboolean g_bUseOpenGL;
 
-static void cairo_dock_load_launcher (Icon *icon, int iWidth, int iHeight);
-static void cairo_dock_load_appli (Icon *icon, int iWidth, int iHeight);
-static void cairo_dock_load_applet (Icon *icon, int iWidth, int iHeight);
-static void cairo_dock_load_separator (Icon *icon, int iWidth, int iHeight);
-
-const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est juste pour realiser la transition entre le chiffre en conf, et un nom (limitation du panneau de conf).
+const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est juste pour realiser la transition entre le chiffre en conf, et un nom (limitation du panneau de conf). On garde le numero pour savoir rapidement sur laquelle on set.
 
   //////////////
  /// LOADER ///
 //////////////
 
-void cairo_dock_fill_one_icon_buffer (Icon *icon, gdouble fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp)
+gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
+{
+	g_return_val_if_fail (cFileName != NULL, NULL);
+	
+	//\_______________________ cas faciles : l'entree est deja un chemin.
+	if (*cFileName == '~')
+	{
+		return g_strdup_printf ("%s%s", g_getenv ("HOME"), cFileName+1);
+	}
+	
+	if (*cFileName == '/')
+	{
+		return g_strdup (cFileName);
+	}
+	
+	//\_______________________ On determine si le suffixe et une version sont presents ou non.
+	g_return_val_if_fail (myIcons.pDefaultIconDirectory != NULL, NULL);
+	
+	GString *sIconPath = g_string_new ("");
+	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
+	gboolean bAddSuffix=FALSE, bFileFound=FALSE, bHasVersion=FALSE;
+	GtkIconInfo* pIconInfo = NULL;
+	int i, j;
+	gchar *str = strrchr (cFileName, '.');
+	bAddSuffix = (str == NULL || ! g_ascii_isalpha (*(str+1)));  // exemple : firefox-3.0
+	bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)) && str-1 != cFileName);  // doit finir par x.y, x et y ayant autant de chiffres que l'on veut.
+	
+	//\_______________________ On parcourt les themes disponibles, en testant tous les suffixes connus.
+	for (i = 0; i < myIcons.iNbIconPlaces && ! bFileFound; i ++)
+	{
+		if (myIcons.pDefaultIconDirectory[2*i] != NULL)  // repertoire.
+		{
+			//g_print ("on recherche %s dans le repertoire %s\n", sIconPath->str, myIcons.pDefaultIconDirectory[2*i]);
+			j = 0;
+			while (! bFileFound && (cSuffixTab[j] != NULL || ! bAddSuffix))
+			{
+				g_string_printf (sIconPath, "%s/%s", (gchar *)myIcons.pDefaultIconDirectory[2*i], cFileName);
+				if (bAddSuffix)
+					g_string_append_printf (sIconPath, "%s", cSuffixTab[j]);
+				//g_print ("  -> %s\n", sIconPath->str);
+				if ( g_file_test (sIconPath->str, G_FILE_TEST_EXISTS) )
+					bFileFound = TRUE;
+				j ++;
+				if (! bAddSuffix)
+					break;
+			}
+		}
+		else  // theme d'icones.
+		{
+			g_string_assign (sIconPath, cFileName);
+			if (! bAddSuffix)  // on vire le suffixe pour chercher tous les formats dans le theme d'icones.
+			{
+				gchar *str = strrchr (sIconPath->str, '.');
+				if (str != NULL)
+					*str = '\0';
+			}
+			//g_print ("on recherche %s dans le theme d'icones\n", sIconPath->str);
+			GtkIconTheme *pIconTheme;
+			if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
+				pIconTheme = myIcons.pDefaultIconDirectory[2*i+1];
+			else
+				pIconTheme = gtk_icon_theme_get_default ();
+			pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (pIconTheme),
+				sIconPath->str,
+				128,
+				GTK_ICON_LOOKUP_FORCE_SVG);
+			if (pIconInfo != NULL)
+			{
+				g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
+				bFileFound = TRUE;
+				gtk_icon_info_free (pIconInfo);
+			}
+		}
+	}
+	
+	//\_______________________ si rien trouve, on cherche sans le numero de version.
+	if (! bFileFound && bHasVersion)
+	{
+		cd_debug ("on cherche sans le numero de version...");
+		g_string_assign (sIconPath, cFileName);
+		gchar *str = strrchr (sIconPath->str, '.');
+		str --;  // on sait que c'est un digit.
+		str --;
+		while ((g_ascii_isdigit (*str) || *str == '.' || *str == '-') && (str != sIconPath->str))
+			str --;
+		if (str != sIconPath->str)
+		{
+			*(str+1) = '\0';
+			cd_debug (" on cherche '%s'...\n", sIconPath->str);
+			gchar *cPath = cairo_dock_search_icon_s_path (sIconPath->str);
+			if (cPath != NULL)
+			{
+				bFileFound = TRUE;
+				g_string_assign (sIconPath, cPath);
+				g_free (cPath);
+			}
+		}
+	}
+	
+	if (! bFileFound)
+	{
+		g_string_free (sIconPath, TRUE);
+		return NULL;
+	}
+	
+	gchar *cIconPath = sIconPath->str;
+	g_string_free (sIconPath, FALSE);
+	return cIconPath;
+}
+
+static void _set_icon_size_generic (CairoContainer *pContainer, Icon *icon)
+{
+	CairoDockIconType iType = cairo_dock_get_icon_type (icon);
+	if (CAIRO_DOCK_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
+	{
+		if (icon->fWidth == 0)
+			icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
+		if (icon->fHeight == 0)
+			icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
+	}
+	else
+	{
+		icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
+		icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
+	}
+}
+
+void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
+{
+	if (! pContainer)
+		pContainer = CAIRO_CONTAINER (g_pMainDock);
+	// taille de l'icone dans le container (hors ratio).
+	if (pContainer->set_icon_size)
+		pContainer->set_icon_size (pContainer, icon);
+	else
+		_set_icon_size_generic (pContainer, icon);
+	// la taille que devra avoir la texture s'en deduit.
+	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	icon->iImageWidth = (pContainer->bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
+	icon->iImageHeight = (pContainer->bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
+}
+
+void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
+{
+	if (icon->fWidth == 0 || icon->iImageWidth == 0)
+	{
+		cairo_dock_set_icon_size (pContainer, icon);
+	}
+	
+	//\______________ on reset les buffers (on garde la surface/texture actuelle pour les emblemes).
+	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
+	GLuint iPrevTexture = icon->iIconTexture;
+	
+	if (icon->pReflectionBuffer != NULL)
+	{
+		cairo_surface_destroy (icon->pReflectionBuffer);
+		icon->pReflectionBuffer = NULL;
+	}
+	
+	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
+	{
+		if (pPrevSurface != NULL)
+			cairo_surface_destroy (pPrevSurface);
+		icon->pIconBuffer = NULL;
+		if (iPrevTexture != 0)
+			_cairo_dock_delete_texture (iPrevTexture);
+		icon->iIconTexture = 0;
+		return;
+	}
+	
+	//\______________ on charge la surface/texture.
+	if (icon->load_image)
+		icon->load_image (icon);
+	
+	//\______________ Si rien charge, on met une image par defaut.
+	if ((icon->pIconBuffer == pPrevSurface || icon->pIconBuffer == NULL) &&
+		(icon->iIconTexture == iPrevTexture || icon->iIconTexture == 0))
+	{
+		gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
+		if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+		{
+			g_free (cIconPath);
+			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
+		}
+		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+			icon->iImageWidth,
+			icon->iImageHeight);
+		g_free (cIconPath);
+	}
+	cd_debug ("%s (%s) -> %.2fx%.2f", __func__, icon->cName, icon->fWidth, icon->fHeight);
+	
+	//\_____________ On met le background de l'icone si necessaire
+	if (icon->pIconBuffer != NULL && g_pIconBackgroundBuffer.pSurface != NULL && ! CAIRO_DOCK_IS_SEPARATOR (icon))
+	{
+		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
+		cairo_scale(pCairoIconBGContext,
+			icon->iImageWidth / g_pIconBackgroundBuffer.iWidth,
+			icon->iImageHeight / g_pIconBackgroundBuffer.iHeight);
+		cairo_set_source_surface (pCairoIconBGContext,
+			g_pIconBackgroundBuffer.pSurface,
+			0.,
+			0.);
+		cairo_set_operator (pCairoIconBGContext, CAIRO_OPERATOR_DEST_OVER);
+		cairo_paint (pCairoIconBGContext);
+		cairo_destroy (pCairoIconBGContext);
+	}
+	
+	//\______________ le reflet en mode cairo.
+	if (! g_bUseOpenGL && myIcons.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_IS_APPLET (icon) && icon->cFileName == NULL))
+	{
+		icon->pReflectionBuffer = cairo_dock_create_reflection_surface (icon->pIconBuffer,
+			icon->iImageWidth,
+			icon->iImageHeight,
+			myIcons.fReflectSize * cairo_dock_get_max_scale (pContainer),
+			myIcons.fAlbedo,
+			pContainer ? pContainer->bIsHorizontal : TRUE,
+			pContainer ? pContainer->bDirectionUp : TRUE);
+	}
+	
+	//\______________ on charge la texture si elle ne l'a pas ete.
+	if (g_bUseOpenGL && (icon->iIconTexture == iPrevTexture || icon->iIconTexture == 0))
+	{
+		icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
+	}
+	
+	//\______________ on libere maintenant les anciennes ressources.
+	if (pPrevSurface != NULL)
+		cairo_surface_destroy (pPrevSurface);
+	if (iPrevTexture != 0)
+		_cairo_dock_delete_texture (iPrevTexture);
+	
+}
+
+
+/**void cairo_dock_fill_one_icon_buffer (Icon *icon, gdouble fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp)
 {
 	//g_print ("%s (%s, %d, %.2f, %s)\n", __func__, icon->cName, icon->iType, fMaxScale, icon->cFileName);
 	if (cairo_dock_icon_is_being_removed (icon))  // si la fenetre est en train de se faire degager du dock, pas la peine de mettre a jour son icone. /// A voir pour les icones d'appli ...
@@ -166,35 +393,24 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, gdouble fMaxScale, gboolean bI
 	//\______________ Si rien charge, on met une image par defaut.
 	if (icon->pIconBuffer == pPrevSurface || icon->pIconBuffer == NULL)
 	{
-		if (CAIRO_DOCK_IS_APPLET (icon))  // pour les applets, plutot que de mettre un "?" on met l'icone par defaut.
+		gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
+		if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
 		{
-			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath,
-				w,
-				h);
-		}
-		else
-		{
-			gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
-			if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
-			{
-				g_free (cIconPath);
-				cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
-			}
-			CairoDockIconType iType = cairo_dock_get_icon_type  (icon);
-			icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
-			icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
-			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
-				w,
-				h);
 			g_free (cIconPath);
+			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
 		}
+		CairoDockIconType iType = cairo_dock_get_icon_type  (icon);
+		icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
+		icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
+		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+			w,
+			h);
+		g_free (cIconPath);
 	}
 	cd_debug ("%s (%s) -> %.2fx%.2f", __func__, icon->cName, icon->fWidth, icon->fHeight);
 	
 	//\_____________ On met le background de l'icone si necessaire
-	if (icon->pIconBuffer != NULL &&
-		g_pIconBackgroundBuffer.pSurface != NULL &&
-		(! CAIRO_DOCK_IS_SEPARATOR (icon)/* && (myIcons.bBgForApplets || ! CAIRO_DOCK_IS_APPLET(pIcon))*/))
+	if (icon->pIconBuffer != NULL && g_pIconBackgroundBuffer.pSurface != NULL && ! CAIRO_DOCK_IS_SEPARATOR (icon))
 	{
 		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
 		cairo_scale(pCairoIconBGContext,
@@ -232,7 +448,7 @@ void cairo_dock_fill_one_icon_buffer (Icon *icon, gdouble fMaxScale, gboolean bI
 	if (iPrevTexture != 0)
 		_cairo_dock_delete_texture (iPrevTexture);
 	//g_print ("%s (%s, %x, %.1fx%.1f) ->%d\n", __func__, icon->cName, icon->pIconBuffer, icon->fWidth, icon->fHeight, icon->iIconTexture);
-}
+}*/
 
 
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l'UTF-8
@@ -314,7 +530,7 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l
 	return cTruncatedName;
 }
 
-void cairo_dock_fill_one_text_buffer (Icon *icon, CairoDockLabelDescription *pTextDescription)
+void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDescription)
 {
 	//g_print ("%s (%s, %d)\n", __func__, cLabelPolice, iLabelSize);
 	cairo_surface_destroy (icon->pTextBuffer);
@@ -348,7 +564,7 @@ void cairo_dock_fill_one_text_buffer (Icon *icon, CairoDockLabelDescription *pTe
 	}
 }
 
-void cairo_dock_fill_one_quick_info_buffer (Icon *icon, CairoDockLabelDescription *pTextDescription, double fMaxScale)
+void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTextDescription, double fMaxScale)
 {
 	cairo_surface_destroy (icon->pQuickInfoBuffer);
 	icon->pQuickInfoBuffer = NULL;
@@ -374,17 +590,26 @@ void cairo_dock_fill_one_quick_info_buffer (Icon *icon, CairoDockLabelDescriptio
 }
 
 
-
-void cairo_dock_fill_icon_buffers (Icon *icon, double fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp)
+void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 {
-	cairo_dock_fill_one_icon_buffer (icon, fMaxScale, bIsHorizontal, bDirectionUp);
+	cairo_dock_load_icon_image (pIcon, pContainer);
 
-	cairo_dock_fill_one_text_buffer (icon, &myLabels.iconTextDescription);
+	cairo_dock_load_icon_text (pIcon, &myLabels.iconTextDescription);
 
-	cairo_dock_fill_one_quick_info_buffer (icon, &myLabels.quickInfoTextDescription, fMaxScale);
+	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	cairo_dock_load_icon_quickinfo (pIcon, &myLabels.quickInfoTextDescription, fMaxScale);
 }
 
-void cairo_dock_load_one_icon_from_scratch (Icon *pIcon, CairoContainer *pContainer)
+/**void cairo_dock_fill_icon_buffers (Icon *icon, double fMaxScale, gboolean bIsHorizontal, gboolean bDirectionUp)
+{
+	cairo_dock_load_icon_image (icon, fMaxScale, bIsHorizontal, bDirectionUp);
+
+	cairo_dock_load_icon_text (icon, &myLabels.iconTextDescription);
+
+	cairo_dock_load_icon_quickinfo (icon, &myLabels.quickInfoTextDescription, fMaxScale);
+}
+
+void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 {
 	g_return_if_fail (pIcon != NULL);
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
@@ -396,7 +621,7 @@ void cairo_dock_load_one_icon_from_scratch (Icon *pIcon, CairoContainer *pContai
 	{
 		cairo_dock_fill_icon_buffers_for_desklet (pIcon);
 	}
-}
+}*/
 
 void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
@@ -418,9 +643,9 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 		}
 		else
 		{
-			icon->fWidth /= pDock->container.fRatio;
-			icon->fHeight /= pDock->container.fRatio;
-			cairo_dock_fill_icon_buffers_for_dock (icon, pDock);
+			icon->fWidth = 0;
+			icon->fHeight = 0;
+			cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
 			icon->fWidth *= pDock->container.fRatio;
 			icon->fHeight *= pDock->container.fRatio;
 		}
@@ -432,15 +657,20 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 	pDock->fFlatDockWidth = (int) fFlatDockWidth;  /// (int) n'est plus tellement necessaire ...
 }
 
-void cairo_dock_reload_one_icon_buffer_in_dock (Icon *icon, CairoDock *pDock)
+void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer)
 {
-	icon->fWidth /= pDock->container.fRatio;
-	icon->fHeight /= pDock->container.fRatio;
-	cairo_dock_fill_icon_buffers_for_dock (icon, pDock);
-	icon->fWidth *= pDock->container.fRatio;
-	icon->fHeight *= pDock->container.fRatio;
+	if (pContainer)
+	{
+		icon->fWidth /= pContainer->fRatio;
+		icon->fHeight /= pContainer->fRatio;
+	}
+	cairo_dock_load_icon_image (icon, pContainer);
+	if (pContainer)
+	{
+		icon->fWidth *= pContainer->fRatio;
+		icon->fHeight *= pContainer->fRatio;
+	}
 }
-
 
 void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 {
@@ -600,155 +830,5 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		else
 			cairo_dock_add_reflection_to_icon (pIcon, CAIRO_CONTAINER (pDock));
 		cairo_destroy (pCairoContext);
-	}
-}
-
-
-
-  //////////////////////
- /// IMPLEMENTATION ///
-//////////////////////
-
-static void cairo_dock_load_launcher (Icon *icon, int iWidth, int iHeight)
-{
-	if (icon->pSubDock != NULL && (icon->iSubdockViewType != 0 || (icon->cClass != NULL && !myIndicators.bUseClassIndic)))  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
-	{
-		icon->pIconBuffer = cairo_dock_create_blank_surface (iWidth, iHeight);
-	}
-	else if (icon->cFileName)  // icone possedant une image, on affiche celle-ci.
-	{
-		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
-		if (cIconPath != NULL && *cIconPath != '\0')
-		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
-			iWidth,
-			iHeight);
-		g_free (cIconPath);
-	}
-	else if (icon->pSubDock != NULL && icon->cClass != NULL && icon->cDesktopFileName == NULL)  // icone pointant sur une classe (epouvantail).
-	{
-		cd_debug ("c'est un epouvantail\n");
-		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
-			iWidth,
-			iHeight);
-		if (icon->pIconBuffer == NULL)  // aucun inhibiteur ou aucune image correspondant a cette classe, on cherche a copier une des icones d'appli de cette classe.
-		{
-			const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
-			if (pApplis != NULL)
-			{
-				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
-				icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pOneIcon,
-					iWidth,
-					iHeight);
-			}
-		}
-	}
-}
-
-static void cairo_dock_load_appli (Icon *icon, int iWidth, int iHeight)
-{
-	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
-	GLuint iPrevTexture = icon->iIconTexture;
-	icon->pIconBuffer = NULL;
-	icon->iIconTexture = 0;
-	//g_print ("%s (%dx%d / %ld)\n", __func__, iWidth, iHeight, icon->iBackingPixmap);
-	if (myTaskBar.iMinimizedWindowRenderType == 1 && icon->bIsHidden && icon->iBackingPixmap != 0)
-	{
-		// on cree la miniature.
-		if (g_bUseOpenGL)
-		{
-			icon->iIconTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);
-			//g_print ("opengl thumbnail : %d\n", icon->iIconTexture);
-		}
-		if (icon->iIconTexture == 0)
-		{
-			icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap,
-				iWidth,
-				iHeight);
-			if (g_bUseOpenGL)
-				icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
-		}
-		// on affiche l'image precedente en embleme.
-		if (icon->iIconTexture != 0 && iPrevTexture != 0)
-		{
-			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-			if (pParentDock)  // le dessin de l'embleme utilise cairo_dock_get_icon_extent()
-			{
-				icon->fWidth *= pParentDock->container.fRatio;
-				icon->fHeight *= pParentDock->container.fRatio;
-			}
-			CairoEmblem *e = cairo_dock_make_emblem_from_texture (iPrevTexture,icon, CAIRO_CONTAINER (pParentDock));
-			cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
-			cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
-			g_free (e);  // on n'utilise pas cairo_dock_free_emblem pour ne pas detruire la texture avec.
-			if (pParentDock)
-			{
-				icon->fWidth /= pParentDock->container.fRatio;
-				icon->fHeight /= pParentDock->container.fRatio;
-			}
-		}
-		else if (icon->pIconBuffer != NULL && pPrevSurface != NULL)
-		{
-			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-			if (pParentDock)  // le dessin de l'embleme utilise cairo_dock_get_icon_extent()
-			{
-				icon->fWidth *= pParentDock->container.fRatio;
-				icon->fHeight *= pParentDock->container.fRatio;
-			}
-			CairoEmblem *e = cairo_dock_make_emblem_from_surface (pPrevSurface, 0, 0, icon, CAIRO_CONTAINER (pParentDock));
-			cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
-			cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
-			g_free (e);  // meme remarque.
-			if (pParentDock)
-			{
-				icon->fWidth /= pParentDock->container.fRatio;
-				icon->fHeight /= pParentDock->container.fRatio;
-			}
-		}
-	}
-	if (icon->pIconBuffer == NULL && myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
-		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, iWidth, iHeight);
-	if (icon->pIconBuffer == NULL)
-		icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, iWidth, iHeight);
-	if (icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
-	{
-		cd_debug ("%s (%ld) doesn't define any icon, we set the default one.\n", icon->cName, icon->Xid);
-		gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
-		if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
-		{
-			g_free (cIconPath);
-			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
-		}
-		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
-			iWidth,
-			iHeight);
-		g_free (cIconPath);
-	}
-}
-
-static void cairo_dock_load_applet (Icon *icon, int iWidth, int iHeight)
-{
-	icon->pIconBuffer = cairo_dock_create_applet_surface (icon->cFileName,
-		iWidth,
-		iHeight);
-}
-
-static void cairo_dock_load_separator (Icon *icon, int iWidth, int iHeight)
-{
-	if (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL)
-	{
-		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
-		if (cIconPath != NULL && *cIconPath != '\0')
-		{
-			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
-				iWidth,
-				iHeight);
-		}
-		g_free (cIconPath);
-	}
-	else
-	{
-		icon->pIconBuffer = cairo_dock_create_separator_surface (
-			iWidth,
-			iHeight);
 	}
 }

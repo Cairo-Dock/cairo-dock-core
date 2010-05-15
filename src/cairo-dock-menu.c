@@ -878,7 +878,7 @@ static void _cairo_dock_remove_custom_appli_icon (GtkMenuItem *pMenuItem, gpoint
 		gchar *cCommand = g_strdup_printf ("rm -f \"%s\"", cCustomIcon);
 		int r = system (cCommand);
 		g_free (cCommand);
-		cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
+		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
 		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
 	}
 }
@@ -1306,37 +1306,41 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		//\_________________________ On rajoute des actions de modifications sur le dock.
 		if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DOCK (pContainer) && icon && cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER))
 		{
-			pMenuItem = gtk_separator_menu_item_new ();
-			gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
-	
-			pMenuItem = _add_entry_in_menu (_("Add"), GTK_STOCK_ADD, NULL, menu);
-			GtkWidget *pSubMenuAdd = gtk_menu_new ();
-			gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);
-			
-			_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, pSubMenuAdd);
-			
-			_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, pSubMenuAdd);
-			
-			pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
-			gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it on the dock."));
-		
-			if (icon->cDesktopFileName != NULL && icon->cParentDockName != NULL)  // possede un .desktop.
+			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
+			if (!pPointingIcon || ! CAIRO_DOCK_IS_APPLET (pPointingIcon))
 			{
 				pMenuItem = gtk_separator_menu_item_new ();
-				gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
-			
-				pMenuItem = _add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Remove this separator") : _("Remove this launcher"), GTK_STOCK_REMOVE, _cairo_dock_remove_launcher, menu);
-				gtk_widget_set_tooltip_text (pMenuItem, _("You can remove a launcher by dragging it out of the dock with the mouse ."));
-			
-				_add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Modify this separator") : _("Modify this launcher"), GTK_STOCK_EDIT, _cairo_dock_modify_launcher, menu);
+				gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
+		
+				pMenuItem = _add_entry_in_menu (_("Add"), GTK_STOCK_ADD, NULL, menu);
+				GtkWidget *pSubMenuAdd = gtk_menu_new ();
+				gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);
 				
-				pMenuItem = _add_entry_in_menu (_("Move to another dock"), GTK_STOCK_JUMP_TO, NULL, menu);
-				GtkWidget *pSubMenuDocks = gtk_menu_new ();
-				gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuDocks);
-				g_object_set_data (G_OBJECT (pSubMenuDocks), "launcher", icon);
-				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("New main dock"), GTK_STOCK_NEW, (GFunc)_cairo_dock_move_launcher_to_dock, pSubMenuDocks, NULL);
-				g_object_set_data (G_OBJECT (pMenuItem), "launcher", icon);
-				cairo_dock_foreach_docks ((GHFunc) _add_one_dock_to_menu, pSubMenuDocks);
+				_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_container, pSubMenuAdd);
+				
+				_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, pSubMenuAdd);
+				
+				pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
+				gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it on the dock."));
+			
+				if (icon->cDesktopFileName != NULL && icon->cParentDockName != NULL)  // possede un .desktop.
+				{
+					pMenuItem = gtk_separator_menu_item_new ();
+					gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+				
+					pMenuItem = _add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Remove this separator") : _("Remove this launcher"), GTK_STOCK_REMOVE, _cairo_dock_remove_launcher, menu);
+					gtk_widget_set_tooltip_text (pMenuItem, _("You can remove a launcher by dragging it out of the dock with the mouse ."));
+				
+					_add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Modify this separator") : _("Modify this launcher"), GTK_STOCK_EDIT, _cairo_dock_modify_launcher, menu);
+					
+					pMenuItem = _add_entry_in_menu (_("Move to another dock"), GTK_STOCK_JUMP_TO, NULL, menu);
+					GtkWidget *pSubMenuDocks = gtk_menu_new ();
+					gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuDocks);
+					g_object_set_data (G_OBJECT (pSubMenuDocks), "launcher", icon);
+					pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("New main dock"), GTK_STOCK_NEW, (GFunc)_cairo_dock_move_launcher_to_dock, pSubMenuDocks, NULL);
+					g_object_set_data (G_OBJECT (pMenuItem), "launcher", icon);
+					cairo_dock_foreach_docks ((GHFunc) _add_one_dock_to_menu, pSubMenuDocks);
+				}
 			}
 		}
 	}

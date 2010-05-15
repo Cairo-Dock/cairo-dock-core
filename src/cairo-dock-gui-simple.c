@@ -49,6 +49,11 @@
 #define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1024
 #define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 700
 #define CAIRO_DOCK_SIMPLE_CONF_FILE "cairo-dock-simple.conf"
+#define ICON_HUGE 60
+#define ICON_BIG 56
+#define ICON_MEDIUM 48
+#define ICON_SMALL 42
+#define ICON_TINY 36
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
 static GtkWidget *s_pSimpleConfigModuleWindow = NULL;
@@ -322,11 +327,11 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIcons.cIconTheme);
 	
 	int iIconSize;
-	if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= 42)  // icones toutes petites.
+	if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= ICON_TINY+2)  // icones toutes petites.
 		iIconSize = 0;
-	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] >= 54)  // icones tres grandes.
+	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] >= ICON_HUGE-2)  // icones tres grandes.
 		iIconSize = 4;
-	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= 48)
+	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= ICON_MEDIUM)
 	{
 		if (myIcons.fAmplitude >= 2)  // icones petites.
 			iIconSize = 1;
@@ -565,32 +570,32 @@ static gboolean on_apply_config_simple (gpointer data)
 		switch (iIconSize)
 		{
 			case 0:  // tres petites
-				iLauncherSize = 42;
+				iLauncherSize = ICON_TINY;
 				fMaxScale = 2.2;
 				iIconGap = 5;
 				fReflectSize = .4;
 			break;
 			case 1:  // petites
-				iLauncherSize = 44;
+				iLauncherSize = ICON_SMALL;
 				fMaxScale = 2.;
 				iIconGap = 4;
 				fReflectSize = .4;
 			break;
 			case 2:  // moyennes
-				iLauncherSize = 48;
+				iLauncherSize = ICON_MEDIUM;
 				fMaxScale = 1.7;
 				iIconGap = 2;
 				fReflectSize = .5;
 			break;
 			case 3:  // grandes
 			default:
-				iLauncherSize = 52;
+				iLauncherSize = ICON_BIG;
 				fMaxScale = 1.5;
 				iIconGap = 2;
 				fReflectSize = .6;
 			break;
 			case 4:  // tres grandes
-				iLauncherSize = 56;
+				iLauncherSize = ICON_HUGE;
 				fMaxScale = 1.3;
 				iIconGap = 2;
 				fReflectSize = .6;

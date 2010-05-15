@@ -155,6 +155,8 @@ CD_APPLET_DEFINE_PROTO \
 	pInterface->reset_data = CD_APPLET_RESET_DATA_FUNC;\
 	pInterface->read_conf_file = CD_APPLET_READ_CONFIG_FUNC;
 
+#define CD_APPLET_REDEFINE_TITLE(_cTitle) pVisitCard->cTitle = N_(_cTitle);
+
 /** Fin de la fonction de pre-initialisation de l'applet.
 */
 #define CD_APPLET_DEFINE_END \

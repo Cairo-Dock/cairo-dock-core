@@ -50,6 +50,10 @@ typedef enum {
 	CAIRO_DOCK_NB_CONTAINER_TYPES
 	} CairoDockTypeContainer;
 
+struct _CairoContainerInterface {
+	void (*set_icon_size) (CairoContainer *pContainer, Icon *icon);
+	};
+
 /// Definition of a Container, whom derive Dock, Desklet, Dialog and FlyingContainer. 
 struct _CairoContainer {
 	/// type of container.
@@ -95,6 +99,7 @@ struct _CairoContainer {
 	gboolean bKeepSlowAnimation;
 	/// counter for the animation loop.
 	gint iAnimationStep;
+	void (*set_icon_size) (CairoContainer *pContainer, Icon *icon);
 };
 
 /// Get the Container part of a pointer.

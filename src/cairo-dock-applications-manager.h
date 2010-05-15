@@ -109,11 +109,5 @@ void cairo_dock_foreach_applis_on_viewport (CairoDockForeachIconFunc pFunction, 
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
 
 
-
-cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth, int iHeight);
-
-cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, int iWidth, int iHeight);
-
-
 G_END_DECLS
 #endif

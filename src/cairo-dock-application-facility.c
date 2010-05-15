@@ -43,6 +43,7 @@
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-container.h"
@@ -50,6 +51,7 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-application-facility.h"
 
 extern CairoDock *g_pMainDock;
@@ -294,6 +296,54 @@ gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
 	return FALSE;
 }
 
+
+static void _load_class_icon (Icon *icon)
+{
+	int iWidth = icon->iImageWidth;
+	int iHeight = icon->iImageHeight;
+	if (icon->pSubDock != NULL && !myIndicators.bUseClassIndic)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
+	{
+		icon->pIconBuffer = cairo_dock_create_blank_surface (iWidth, iHeight);
+	}
+	else
+	{
+		g_print ("** surface from class\n");
+		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
+			iWidth,
+			iHeight);
+		if (icon->pIconBuffer == NULL)  // aucun inhibiteur ou aucune image correspondant a cette classe, on cherche a copier une des icones d'appli de cette classe.
+		{
+			const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
+			if (pApplis != NULL)
+			{
+				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
+				g_print ("** duplicaete from %s\n", icon->cName);
+				icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pOneIcon,
+					iWidth,
+					iHeight);
+			}
+		}
+	}
+}
+static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, CairoDock *pClassMateParentDock, CairoDock *pClassDock)
+{
+	Icon *pFakeClassIcon = g_new0 (Icon, 1);
+	pFakeClassIcon->load_image = _load_class_icon;
+	pFakeClassIcon->iType = pSameClassIcon->iType;
+	
+	pFakeClassIcon->cName = g_strdup (pSameClassIcon->cClass);
+	pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
+	pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
+	pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
+	pFakeClassIcon->fWidth = pSameClassIcon->fWidth / pClassMateParentDock->container.fRatio;
+	pFakeClassIcon->fHeight = pSameClassIcon->fHeight / pClassMateParentDock->container.fRatio;
+	pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
+	pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
+	pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;
+	pFakeClassIcon->pSubDock = pClassDock;
+	return pFakeClassIcon;
+}
+
 static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoDock *pMainDock)
 {
 	cd_message ("%s (%s)", __func__, icon->cName);
@@ -370,21 +420,10 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				//\______________ On cree une icone de paille.
 				cd_debug (" on cree un fake...");
 				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);  // c'est en fait le main dock.
-				Icon *pFakeClassIcon = g_new0 (Icon, 1);
-				pFakeClassIcon->cName = g_strdup (pSameClassIcon->cClass);
-				pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
-				pFakeClassIcon->iType = pSameClassIcon->iType;
-				pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
-				pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
-				pFakeClassIcon->fWidth = pSameClassIcon->fWidth / pClassMateParentDock->container.fRatio;
-				pFakeClassIcon->fHeight = pSameClassIcon->fHeight / pClassMateParentDock->container.fRatio;
-				pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
-				pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
-				pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;
-				pFakeClassIcon->pSubDock = pParentDock;  // grace a cela ce sera un lanceur.
+				Icon *pFakeClassIcon = cairo_dock_create_icon_for_class_subdock (pSameClassIcon, pClassMateParentDock, pParentDock);
 				
 				//\______________ On la charge.
-				cairo_dock_load_one_icon_from_scratch (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
+				cairo_dock_load_icon_buffers (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
 				
 				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
 				cd_debug (" on detache %s pour la passer dans le sous-dock de sa classe", pSameClassIcon->cName);

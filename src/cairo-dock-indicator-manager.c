@@ -58,6 +58,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-icon-loader.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-indicator-manager.h"
 
@@ -215,6 +216,22 @@ void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, Cairo
 		pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
 	{
 		cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL, fMaxScale);
+		
+		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
+		{
+			Icon *icon;
+			GList *ic;
+			for (ic = pDock->icons; ic != NULL; ic = ic->next)
+			{
+				icon = ic->data;
+				if (CAIRO_DOCK_IS_FAKE_LAUNCHER (icon))
+				{
+					cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
+					if (!pIndicators->bUseClassIndic)
+						cairo_dock_draw_subdock_content_on_icon (icon, pDock);
+				}
+			}
+		}
 	}
 	
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.

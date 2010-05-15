@@ -51,122 +51,13 @@
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-launcher-manager.h"
 
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
 extern int g_iNbNonStickyLaunchers;
-
-gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
-{
-	g_return_val_if_fail (cFileName != NULL, NULL);
-	
-	//\_______________________ cas faciles : l'entree est deja un chemin.
-	if (*cFileName == '~')
-	{
-		return g_strdup_printf ("%s%s", g_getenv ("HOME"), cFileName+1);
-	}
-	
-	if (*cFileName == '/')
-	{
-		return g_strdup (cFileName);
-	}
-	
-	//\_______________________ On determine si le suffixe et une version sont presents ou non.
-	g_return_val_if_fail (myIcons.pDefaultIconDirectory != NULL, NULL);
-	
-	GString *sIconPath = g_string_new ("");
-	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
-	gboolean bAddSuffix=FALSE, bFileFound=FALSE, bHasVersion=FALSE;
-	GtkIconInfo* pIconInfo = NULL;
-	int i, j;
-	gchar *str = strrchr (cFileName, '.');
-	bAddSuffix = (str == NULL || ! g_ascii_isalpha (*(str+1)));  // exemple : firefox-3.0
-	bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)) && str-1 != cFileName);  // doit finir par x.y, x et y ayant autant de chiffres que l'on veut.
-	
-	//\_______________________ On parcourt les themes disponibles, en testant tous les suffixes connus.
-	for (i = 0; i < myIcons.iNbIconPlaces && ! bFileFound; i ++)
-	{
-		if (myIcons.pDefaultIconDirectory[2*i] != NULL)  // repertoire.
-		{
-			//g_print ("on recherche %s dans le repertoire %s\n", sIconPath->str, myIcons.pDefaultIconDirectory[2*i]);
-			j = 0;
-			while (! bFileFound && (cSuffixTab[j] != NULL || ! bAddSuffix))
-			{
-				g_string_printf (sIconPath, "%s/%s", (gchar *)myIcons.pDefaultIconDirectory[2*i], cFileName);
-				if (bAddSuffix)
-					g_string_append_printf (sIconPath, "%s", cSuffixTab[j]);
-				//g_print ("  -> %s\n", sIconPath->str);
-				if ( g_file_test (sIconPath->str, G_FILE_TEST_EXISTS) )
-					bFileFound = TRUE;
-				j ++;
-				if (! bAddSuffix)
-					break;
-			}
-		}
-		else  // theme d'icones.
-		{
-			g_string_assign (sIconPath, cFileName);
-			if (! bAddSuffix)  // on vire le suffixe pour chercher tous les formats dans le theme d'icones.
-			{
-				gchar *str = strrchr (sIconPath->str, '.');
-				if (str != NULL)
-					*str = '\0';
-			}
-			//g_print ("on recherche %s dans le theme d'icones\n", sIconPath->str);
-			GtkIconTheme *pIconTheme;
-			if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
-				pIconTheme = myIcons.pDefaultIconDirectory[2*i+1];
-			else
-				pIconTheme = gtk_icon_theme_get_default ();
-			pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (pIconTheme),
-				sIconPath->str,
-				128,
-				GTK_ICON_LOOKUP_FORCE_SVG);
-			if (pIconInfo != NULL)
-			{
-				g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
-				bFileFound = TRUE;
-				gtk_icon_info_free (pIconInfo);
-			}
-		}
-	}
-	
-	//\_______________________ si rien trouve, on cherche sans le numero de version.
-	if (! bFileFound && bHasVersion)
-	{
-		cd_debug ("on cherche sans le numero de version...");
-		g_string_assign (sIconPath, cFileName);
-		gchar *str = strrchr (sIconPath->str, '.');
-		str --;  // on sait que c'est un digit.
-		str --;
-		while ((g_ascii_isdigit (*str) || *str == '.' || *str == '-') && (str != sIconPath->str))
-			str --;
-		if (str != sIconPath->str)
-		{
-			*(str+1) = '\0';
-			cd_debug (" on cherche '%s'...\n", sIconPath->str);
-			gchar *cPath = cairo_dock_search_icon_s_path (sIconPath->str);
-			if (cPath != NULL)
-			{
-				bFileFound = TRUE;
-				g_string_assign (sIconPath, cPath);
-				g_free (cPath);
-			}
-		}
-	}
-	
-	if (! bFileFound)
-	{
-		g_string_free (sIconPath, TRUE);
-		return NULL;
-	}
-	
-	gchar *cIconPath = sIconPath->str;
-	g_string_free (sIconPath, FALSE);
-	return cIconPath;
-}
 
 
 static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
@@ -217,6 +108,44 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 	return pParentDock;
 }
 
+static void _load_launcher (Icon *icon)
+{
+	int iWidth = icon->iImageWidth;
+	int iHeight = icon->iImageHeight;
+	
+	if (icon->pSubDock != NULL && (icon->iSubdockViewType != 0/** || (icon->cClass != NULL && !myIndicators.bUseClassIndic)*/))  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
+	{
+		icon->pIconBuffer = cairo_dock_create_blank_surface (iWidth, iHeight);
+	}
+	else if (icon->cFileName)  // icone possedant une image, on affiche celle-ci.
+	{
+		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
+		if (cIconPath != NULL && *cIconPath != '\0')
+		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+			iWidth,
+			iHeight);
+		g_free (cIconPath);
+	}
+	/**else if (icon->pSubDock != NULL && icon->cClass != NULL && icon->cDesktopFileName == NULL)  // icone pointant sur une classe (epouvantail).
+	{
+		cd_debug ("c'est un epouvantail\n");
+		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
+			iWidth,
+			iHeight);
+		if (icon->pIconBuffer == NULL)  // aucun inhibiteur ou aucune image correspondant a cette classe, on cherche a copier une des icones d'appli de cette classe.
+		{
+			const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
+			if (pApplis != NULL)
+			{
+				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
+				icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pOneIcon,
+					iWidth,
+					iHeight);
+			}
+		}
+	}*/
+}
+
 Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 {
 	//g_print ("%s (%s)\n", __func__, cDesktopFileName);
@@ -224,6 +153,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	//\____________ On cree l'icone.
 	gchar *cRendererName = NULL;
 	Icon *icon = cairo_dock_new_launcher_icon (cDesktopFileName, &cRendererName);
+	icon->load_image = _load_launcher;
 	g_return_val_if_fail (icon != NULL, NULL);
 	
 	//\____________ On gere son dock et sous-dock.
@@ -231,7 +161,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	g_free (cRendererName);
 	
 	//\____________ On remplit ses buffers.
-	cairo_dock_fill_icon_buffers_for_dock (icon, pParentDock);
+	cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pParentDock));
 	
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
 	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
@@ -243,6 +173,27 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	}
 	
 	return icon;
+}
+
+
+Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *cCommand, gchar *cQuickInfo, double fOrder)
+{
+	//\____________ On cree l'icone.
+	gchar *cRendererName = NULL;
+	Icon *pIcon = g_new0 (Icon, 1);
+	pIcon->cName = cName;
+	pIcon->cFileName = cFileName;
+	pIcon->cQuickInfo = cQuickInfo;
+	pIcon->fOrder = fOrder;
+	pIcon->fScale = 1.;
+	pIcon->fAlpha = 1.;
+	pIcon->fWidthFactor = 1.;
+	pIcon->fHeightFactor = 1.;
+	pIcon->cCommand = cCommand ? cCommand : g_strdup ("none");
+	///pIcon->cDesktopFileName = g_strdup ("none");
+	pIcon->load_image = _load_launcher;
+	
+	return pIcon;
 }
 
 
@@ -386,7 +337,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 	else
 	{
-		cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
+		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
 	}
 	
 	//g_print ("icon : %.1fx%.1f", icon->fWidth, icon->fHeight);

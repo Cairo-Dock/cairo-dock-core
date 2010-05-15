@@ -60,9 +60,12 @@
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-emblem.h"
 #include "cairo-dock-applications-manager.h"
 
 #define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 200
+#define CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME "default-icon-appli.svg"
 
 extern CairoDock *g_pMainDock;
 
@@ -549,8 +552,8 @@ static void _on_change_window_state (Icon *icon)
 				icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
 				cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 			}
-			// on redessine avec ou sans la miniature.
-			cairo_dock_reload_one_icon_buffer_in_dock (icon, pParentDock ? pParentDock : g_pMainDock);
+			// on redessine avec ou sans la miniature, suivant le nouvel etat.
+			cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pParentDock));
 			if (pParentDock)
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 		}
@@ -736,7 +739,7 @@ static void _on_change_window_name (Icon *icon, CairoDock *pDock, gboolean bSear
 			g_free (icon->cName);
 			icon->cName = cName;
 			
-			cairo_dock_fill_one_text_buffer (icon, &myLabels.iconTextDescription);
+			cairo_dock_load_icon_text (icon, &myLabels.iconTextDescription);
 			
 			cairo_dock_update_name_on_inhibators (icon->cClass, icon->Xid, icon->cName);
 		}
@@ -749,7 +752,7 @@ static void _on_change_window_icon (Icon *icon, CairoDock *pDock)
 {
 	if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 	{
-		cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
+		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
 		if (pDock->iRefCount != 0)
 			cairo_dock_trigger_redraw_subdock_content (pDock);
 		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
@@ -781,7 +784,7 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 			//g_print ("%s change son icone\n", icon->cName);
 			if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
 			{
-				cairo_dock_reload_one_icon_buffer_in_dock (icon, pDock);
+				cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
 				if (pDock->iRefCount != 0)
 					cairo_dock_trigger_redraw_subdock_content (pDock);
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
@@ -976,16 +979,6 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 				cairo_dock_prevent_inhibated_class (pIcon);
 			}
 			
-			/**if ((myAccessibility.bAutoHideOnMaximized && pIcon->bIsMaximized) || (myAccessibility.bAutoHideOnFullScreen && pIcon->bIsFullScreen))
-			{
-				if (! cairo_dock_quick_hide_is_activated () && cairo_dock_appli_is_on_current_desktop (pIcon))
-				{
-					if (cairo_dock_appli_hovers_dock (pIcon, pDock))
-					{
-						cairo_dock_activate_temporary_auto_hide ();
-					}
-				}
-			}*/
 			if (myAccessibility.bAutoHideOnAnyOverlap)
 			{
 				if (! cairo_dock_quick_hide_is_activated () && cairo_dock_appli_is_on_current_desktop (pIcon))
@@ -1105,52 +1098,6 @@ void cairo_dock_stop_application_manager (void)
 gboolean cairo_dock_application_manager_is_running (void)
 {
 	return s_bAppliManagerIsRunning;
-}
-
-
-Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
-{
-	//\__________________ On cree l'icone.
-	Window XParentWindow = 0;
-	Icon *icon = cairo_dock_new_appli_icon (Xid, &XParentWindow);
-	if (XParentWindow != 0 && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
-	{
-		Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XParentWindow);
-		if (pParentIcon != NULL)
-		{
-			cd_debug ("%s requiert votre attention indirectement !", pParentIcon->cName);
-			cairo_dock_appli_demands_attention (pParentIcon);
-		}
-		else
-			cd_debug ("ce dialogue est bien bruyant ! (%d)", XParentWindow);
-	}
-	
-	if (icon == NULL)
-		return NULL;
-	icon->bHasIndicator = myTaskBar.bDrawIndicatorOnAppli;
-	
-	//\____________ On remplit ses buffers.
-	#ifdef HAVE_XEXTEND
-	if (myTaskBar.iMinimizedWindowRenderType == 1 && ! icon->bIsHidden)
-	{
-		//Display *display = gdk_x11_get_default_xdisplay ();
-		icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
-		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
-		cd_debug ("backing pixmap : %d ; iDamageHandle : %d\n", icon->iBackingPixmap, icon->iDamageHandle);*/
-	}
-	#endif
-	
-	cairo_dock_fill_icon_buffers_for_dock (icon, pDock);
-	
-	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
-	{
-		cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
-	}
-	
-	//\____________ On enregistre l'appli et on commence a la surveiller.
-	cairo_dock_register_appli (icon);
-
-	return icon;
 }
 
 
@@ -1300,9 +1247,11 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 }
 
 
+  /////////////////////////////
+ // Applis manager : icones //
+/////////////////////////////
 
-
-cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth, int iHeight)
+static cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth, int iHeight)
 {
 	g_return_val_if_fail (Xid > 0, NULL);
 	GdkPixbuf *pPixbuf = cairo_dock_get_pixbuf_from_pixmap (Xid, TRUE);
@@ -1324,7 +1273,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth,
 	return pSurface;
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, int iWidth, int iHeight)
+static cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, int iWidth, int iHeight)
 {
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
@@ -1417,4 +1366,141 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, int iWidth,
 		}
 		return NULL;
 	}
+}
+
+static void _load_appli (Icon *icon)
+{
+	int iWidth = icon->iImageWidth;
+	int iHeight = icon->iImageHeight;
+	
+	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
+	GLuint iPrevTexture = icon->iIconTexture;
+	icon->pIconBuffer = NULL;
+	icon->iIconTexture = 0;
+	//g_print ("%s (%dx%d / %ld)\n", __func__, iWidth, iHeight, icon->iBackingPixmap);
+	if (myTaskBar.iMinimizedWindowRenderType == 1 && icon->bIsHidden && icon->iBackingPixmap != 0)
+	{
+		// on cree la miniature.
+		if (g_bUseOpenGL)
+		{
+			icon->iIconTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);
+			//g_print ("opengl thumbnail : %d\n", icon->iIconTexture);
+		}
+		if (icon->iIconTexture == 0)
+		{
+			icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap,
+				iWidth,
+				iHeight);
+			if (g_bUseOpenGL)
+				icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
+		}
+		// on affiche l'image precedente en embleme.
+		if (icon->iIconTexture != 0 && iPrevTexture != 0)
+		{
+			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+			if (pParentDock)  // le dessin de l'embleme utilise cairo_dock_get_icon_extent()
+			{
+				icon->fWidth *= pParentDock->container.fRatio;
+				icon->fHeight *= pParentDock->container.fRatio;
+			}
+			CairoEmblem *e = cairo_dock_make_emblem_from_texture (iPrevTexture,icon, CAIRO_CONTAINER (pParentDock));
+			cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
+			cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
+			g_free (e);  // on n'utilise pas cairo_dock_free_emblem pour ne pas detruire la texture avec.
+			if (pParentDock)
+			{
+				icon->fWidth /= pParentDock->container.fRatio;
+				icon->fHeight /= pParentDock->container.fRatio;
+			}
+		}
+		else if (icon->pIconBuffer != NULL && pPrevSurface != NULL)
+		{
+			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+			if (pParentDock)  // le dessin de l'embleme utilise cairo_dock_get_icon_extent()
+			{
+				icon->fWidth *= pParentDock->container.fRatio;
+				icon->fHeight *= pParentDock->container.fRatio;
+			}
+			CairoEmblem *e = cairo_dock_make_emblem_from_surface (pPrevSurface, 0, 0, icon, CAIRO_CONTAINER (pParentDock));
+			cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
+			cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
+			g_free (e);  // meme remarque.
+			if (pParentDock)
+			{
+				icon->fWidth /= pParentDock->container.fRatio;
+				icon->fHeight /= pParentDock->container.fRatio;
+			}
+		}
+	}
+	if (icon->pIconBuffer == NULL && myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
+		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, iWidth, iHeight);
+	if (icon->pIconBuffer == NULL)
+		icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, iWidth, iHeight);
+	if (icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
+	{
+		cd_debug ("%s (%ld) doesn't define any icon, we set the default one.\n", icon->cName, icon->Xid);
+		gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+		if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+		{
+			g_free (cIconPath);
+			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+		}
+		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+			iWidth,
+			iHeight);
+		g_free (cIconPath);
+	}
+}
+
+static void _show_appli_for_drop (Icon *pIcon)
+{
+	cairo_dock_show_xwindow (pIcon->Xid);
+}
+
+Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
+{
+	//\__________________ On cree l'icone.
+	Window XParentWindow = 0;
+	Icon *icon = cairo_dock_new_appli_icon (Xid, &XParentWindow);
+	
+	if (XParentWindow != 0 && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
+	{
+		Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XParentWindow);
+		if (pParentIcon != NULL)
+		{
+			cd_debug ("%s requiert votre attention indirectement !", pParentIcon->cName);
+			cairo_dock_appli_demands_attention (pParentIcon);
+		}
+		else
+			cd_debug ("ce dialogue est bien bruyant ! (%d)", XParentWindow);
+	}
+	
+	if (icon == NULL)
+		return NULL;
+	icon->load_image = _load_appli;
+	icon->action_on_drag_hover = _show_appli_for_drop;
+	icon->bHasIndicator = myTaskBar.bDrawIndicatorOnAppli;
+	
+	//\____________ On remplit ses buffers.
+	#ifdef HAVE_XEXTEND
+	if (myTaskBar.iMinimizedWindowRenderType == 1 && ! icon->bIsHidden)
+	{
+		//Display *display = gdk_x11_get_default_xdisplay ();
+		icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
+		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
+		cd_debug ("backing pixmap : %d ; iDamageHandle : %d\n", icon->iBackingPixmap, icon->iDamageHandle);*/
+	}
+	#endif
+	
+	cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
+	
+	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
+	{
+		cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
+	}
+	
+	//\____________ On enregistre l'appli et on commence a la surveiller.
+	cairo_dock_register_appli (icon);
+
+	return icon;
 }

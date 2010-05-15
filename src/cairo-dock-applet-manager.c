@@ -24,7 +24,7 @@
 
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-icon-loader.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
@@ -35,7 +35,7 @@
 #include "cairo-dock-applet-manager.h"
 
 
-cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, int iWidth, int iHeight)
+static cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, int iWidth, int iHeight)
 {
 	cairo_surface_t *pNewSurface;
 	if (cIconFileName == NULL)
@@ -56,20 +56,31 @@ cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, i
 }
 
 
+static void _load_applet (Icon *icon)
+{
+	int iWidth = icon->iImageWidth;
+	int iHeight = icon->iImageHeight;
+	//g_print ("%s : %dx%d\n", icon->cName, iWidth, iHeight);
+	icon->pIconBuffer = cairo_dock_create_applet_surface (icon->cFileName,
+		iWidth,
+		iHeight);
+	if (icon->pIconBuffer == NULL && icon->pModuleInstance != NULL)  // une image inexistante a ete definie en conf => on met l'icone par defaut.
+	{
+		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath,
+			iWidth,
+			iHeight);
+	}
+}
+
 Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance, CairoContainer *pContainer)
+
 {
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_applet_icon (pMinimalConfig, pModuleInstance);
+	icon->load_image = _load_applet;
 	
 	//\____________ On remplit ses buffers.
-	if (CAIRO_DOCK_IS_DOCK (pContainer))
-	{
-		CairoDock *pDock = CAIRO_DOCK (pContainer);
-		cairo_dock_fill_icon_buffers_for_dock (icon, pDock);
-	}
-	else
-	{
-		cairo_dock_fill_icon_buffers_for_desklet (icon);  // ne cree rien si w ou h < 0.
-	}
+	cairo_dock_load_icon_buffers (icon, pContainer);  // ne cree rien si w ou h < 0.
+	
 	return icon;
 }

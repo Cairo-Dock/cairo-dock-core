@@ -1020,7 +1020,7 @@ static gboolean _redraw_subdock_content (Icon *pIcon)
 		CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 		if (pDock != NULL)
 		{
-			cairo_dock_reload_one_icon_buffer_in_dock (pIcon, pDock);
+			cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
 			cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
 		}
 	}

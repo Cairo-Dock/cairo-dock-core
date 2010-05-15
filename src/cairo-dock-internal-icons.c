@@ -36,6 +36,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-themes-manager.h"
+#include "cairo-dock-indicator-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-icons.h"
 
@@ -421,7 +422,9 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		cairo_dock_unload_icon_textures ();
+		cairo_dock_unload_indicator_textures ();
 		cairo_dock_load_icon_textures ();
+		cairo_dock_load_indicator_textures ();
 	}
 	
 	g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;

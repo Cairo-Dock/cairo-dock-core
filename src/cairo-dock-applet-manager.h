@@ -25,17 +25,6 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
-
-/* Cree une surface cairo qui pourra servir de zone de dessin pour une applet.
-*@param cIconFileName le nom d'un fichier image a appliquer sur la surface, ou NULL pour creer une surface vide.
-*@param fMaxScale le zoom max auquel sera soumis la surface.
-*@param fWidth largeur de la surface obtenue.
-*@param fHeight hauteur de la surface obtenue.
-*@return la surface nouvellement generee.
-*/
-cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, int iWidth, int iHeight);
-
-
 /* Cree une icone destinee a une applet.
 *@param pContainer le container ou sera inseree ulterieurement cette icone.
 *@param iWidth la largeur desiree de l'icone.

@@ -71,6 +71,11 @@ typedef enum {
 	CAIRO_DOCK_NB_SORT_ON_FILE
 	} CairoDockFMSortType;
 
+struct _IconInterface {
+	void (*load_image) (Icon *icon);
+	};
+
+
 /// Definition of an Icon.
 struct _Icon {
 	//\____________ Definition.
@@ -138,9 +143,11 @@ struct _Icon {
 	
 	// Applet.
 	CairoDockModuleInstance *pModuleInstance;
+	CairoDockModuleInstance *pLinkedApplet;
 	
 	//\____________ Buffers.
-	gdouble fWidth, fHeight;
+	gdouble fWidth, fHeight;  // taille dans le container.
+	gint iImageWidth, iImageHeight;  // taille de la surface/texture telle qu'elle a ete creee.
 	cairo_surface_t* pIconBuffer;
 	GLuint iIconTexture;
 	cairo_surface_t* pReflectionBuffer;
@@ -152,6 +159,9 @@ struct _Icon {
 	gint iQuickInfoWidth, iQuickInfoHeight;
 	cairo_surface_t* pQuickInfoBuffer;
 	GLuint iQuickInfoTexture;
+	
+	void (*load_image) (Icon *icon);
+	void (*action_on_drag_hover) (Icon *icon);
 	
 	//\____________ Parametres de dessin, definis par la vue/les animations.
 	gdouble fXMin, fXMax;  // Abscisse extremale gauche/droite que the icon atteindra (variable avec la vague).
@@ -176,6 +186,8 @@ struct _Icon {
 	gboolean bBeingRemovedByCairo;  // devrait etre dans pDataSlot...
 	
 	guint iSidRedrawSubdockContent;
+	
+	gpointer reserved[4];
 };
 
 /// Definition of a function that runs through all icons.

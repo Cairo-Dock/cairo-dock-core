@@ -351,7 +351,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 					int r = system (cCommand);
 					g_free (cCommand);
 					
-					cairo_dock_reload_one_icon_buffer_in_dock (icon, CAIRO_DOCK (pContainer));
+					cairo_dock_reload_icon_image (icon, pContainer);
 					cairo_dock_redraw_icon (icon, pContainer);
 				}
 				return CAIRO_DOCK_LET_PASS_NOTIFICATION;

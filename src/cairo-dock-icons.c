@@ -132,14 +132,18 @@ void cairo_dock_free_icon (Icon *icon)
 
 CairoDockIconType cairo_dock_get_icon_type (Icon *icon)
 {
-	if (CAIRO_DOCK_IS_APPLI (icon))
+	int iType = icon->iType % (CAIRO_DOCK_NB_TYPES+1);
+	if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		iType = CAIRO_DOCK_SEPARATOR12;
+	return iType;
+	/**if (CAIRO_DOCK_IS_APPLI (icon))
 		return CAIRO_DOCK_APPLI;
 	else if (CAIRO_DOCK_IS_APPLET (icon))
 		return CAIRO_DOCK_APPLET;
 	else if (CAIRO_DOCK_IS_SEPARATOR (icon))
 		return CAIRO_DOCK_SEPARATOR12;
 	else
-		return CAIRO_DOCK_LAUNCHER;
+		return CAIRO_DOCK_LAUNCHER;*/
 }
 
 
@@ -682,7 +686,7 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContain
 	
 	g_free (cUniqueName);
 	
-	cairo_dock_fill_one_text_buffer(
+	cairo_dock_load_icon_text(
 		pIcon,
 		&myLabels.iconTextDescription);
 }
@@ -708,7 +712,7 @@ void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const g
 	}
 	
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	cairo_dock_fill_one_quick_info_buffer (pIcon,
+	cairo_dock_load_icon_quickinfo (pIcon,
 		&myLabels.quickInfoTextDescription,
 		fMaxScale);
 }

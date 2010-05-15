@@ -174,7 +174,7 @@ gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDista
 	}
 	
 	//\_______________ On lance le download.
-	gchar *cURL = g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName);
+	gchar *cURL = (cServerAdress ? g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName) : g_strdup (cDistantFileName));
 	cd_debug ("cURL : %s\n", cURL);
 	FILE *f = fopen (cTmpFilePath, "wb");
 	g_return_val_if_fail (f, NULL);

@@ -491,7 +491,13 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 		GLenum status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
 		if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
 		{
-			cd_warning ("FBO not ready");
+			cd_warning ("FBO not ready for %s (tex:%d)", pIcon->cName, pIcon->iIconTexture);
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+				GL_COLOR_ATTACHMENT0_EXT,
+				GL_TEXTURE_2D,
+				0,
+				0);
 			return FALSE;
 		}
 		

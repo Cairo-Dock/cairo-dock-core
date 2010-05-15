@@ -306,8 +306,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 {
 	if (s_pEnvBackend == NULL || s_pEnvBackend->get_file_info == NULL)
 		return NULL;
-	Icon *pNewIcon = g_new0 (Icon, 1);
-	pNewIcon->iType = CAIRO_DOCK_LAUNCHER;
+	Icon *pNewIcon = cairo_dock_create_dummy_launcher (NULL, NULL, NULL, NULL, 0);
 	pNewIcon->cBaseURI = g_strdup (cURI);
 	gboolean bIsDirectory;
 	s_pEnvBackend->get_file_info (cURI, &pNewIcon->cName, &pNewIcon->cCommand, &pNewIcon->cFileName, &bIsDirectory, &pNewIcon->iVolumeID, &pNewIcon->fOrder, iFileSortType);
@@ -348,7 +347,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 			}
 		}
 	}
-	cairo_dock_load_one_icon_from_scratch (pNewIcon, pContainer);
+	cairo_dock_load_icon_buffers (pNewIcon, pContainer);
 
 	return pNewIcon;
 }

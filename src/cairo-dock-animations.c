@@ -447,7 +447,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				cd_message ("cette (%s) appli est toujours valide, on la detache juste", pIcon->cName);
 				pIcon->fInsertRemoveFactor = 0.;  // on le fait avant le reload, sinon l'icone n'est pas rechargee.
 				if (!pIcon->bIsHidden && myTaskBar.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
-					cairo_dock_reload_one_icon_buffer_in_dock (pIcon, pDock);
+					cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
 				cairo_dock_detach_appli (pIcon);
 			}
 			else
@@ -459,7 +459,10 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				{
 					gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pDock, pIcon->cClass);
 					if (bEmptyClassSubDock)
+					{
+						cairo_dock_free_icon (pIcon);
 						return FALSE;
+					}
 				}
 				
 				cairo_dock_free_icon (pIcon);

@@ -399,6 +399,8 @@ CairoDock *cairo_dock_alter_dock_name (const gchar *cDockName, CairoDock *pDock,
 
 void cairo_dock_rename_dock (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName)
 {
+	if (cDockName == NULL)
+		cDockName = cairo_dock_search_dock_name (pDock);
 	pDock = cairo_dock_alter_dock_name (cDockName, pDock, cNewName);
 	g_return_if_fail (pDock != NULL);
 	
@@ -661,6 +663,7 @@ void cairo_dock_quick_hide_all_docks (void)
 		s_bTemporaryAutoHide = TRUE;
 		s_bQuickHide = TRUE;
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_quick_hide_one_root_dock, NULL);
+		cairo_dock_start_polling_screen_edge (g_pMainDock);
 	}
 }
 
@@ -695,13 +698,18 @@ void cairo_dock_deactivate_temporary_auto_hide (void)
 void cairo_dock_stop_quick_hide (void)
 {
 	cd_message ("");
-	if (s_bTemporaryAutoHide && s_bQuickHide)
+	if (s_bQuickHide)
 	{
-		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
-		if (!_cairo_dock_appli_is_on_our_way (pActiveAppli, g_pMainDock))
+		if (! myAccessibility.bAutoHide && ! myAccessibility.bAutoHideOnOverlap &&  !myAccessibility.bAutoHideOnAnyOverlap)
+			cairo_dock_stop_polling_screen_edge ();
+		if (s_bTemporaryAutoHide)
 		{
-			s_bTemporaryAutoHide = FALSE;
-			g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_quick_hide_one_root_dock, NULL);
+			Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+			if (!_cairo_dock_appli_is_on_our_way (pActiveAppli, g_pMainDock))
+			{
+				s_bTemporaryAutoHide = FALSE;
+				g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_quick_hide_one_root_dock, NULL);
+			}
 		}
 	}
 	/**if (s_bTemporaryAutoHide && s_bQuickHide && ((!myAccessibility.bAutoHideOnOurWay && !myAccessibility.bAutoHideOnFullScreen) || cairo_dock_search_window_on_our_way (g_pMainDock, myAccessibility.bAutoHideOnMaximized, myAccessibility.bAutoHideOnFullScreen) == NULL))

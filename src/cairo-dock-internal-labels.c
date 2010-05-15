@@ -162,9 +162,9 @@ static void reset_config (CairoConfigLabels *pLabels)
 
 static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, CairoConfigLabels *pLabels)
 {
-	cairo_dock_fill_one_text_buffer (pIcon, &pLabels->iconTextDescription);
+	cairo_dock_load_icon_text (pIcon, &pLabels->iconTextDescription);
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	cairo_dock_fill_one_quick_info_buffer (pIcon, &pLabels->quickInfoTextDescription, fMaxScale);
+	cairo_dock_load_icon_quickinfo (pIcon, &pLabels->quickInfoTextDescription, fMaxScale);
 }
 static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
