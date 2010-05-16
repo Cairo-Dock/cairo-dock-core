@@ -88,8 +88,8 @@ include_directories(
 link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${XEXTEND_LIBRARY_DIRS}
-	icon-factory
-	implementations)
+	${CMAKE_SOURCE_DIR}/src/icon-factory
+	${CMAKE_SOURCE_DIR}/src/implementations)
 
 # Add executable that is built from the source files.
 add_executable(${PROJECT_NAME}

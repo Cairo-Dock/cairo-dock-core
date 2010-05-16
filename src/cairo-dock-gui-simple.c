@@ -215,7 +215,7 @@ static gchar * _make_simple_conf_file (void)
 		iVisibility = 0;
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", iVisibility);
 	
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on_click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
 	
 	g_key_file_set_string (pSimpleKeyFile, "Behavior", "hide effect", myAccessibility.cHideEffect);
 	
@@ -306,10 +306,21 @@ static gchar * _make_simple_conf_file (void)
 	const gchar *cOnMouseHover[2] = {s_cHoverAnim, s_cHoverEffect};
 	const gchar *cOnClick[2] = {s_cClickAnim, s_cClickEffect};
 	
-	g_key_file_set_string_list (pSimpleKeyFile, "Behavior", "anim_hover", cOnMouseHover, 2);
+	if (g_bUseOpenGL)
+		g_key_file_set_string_list (pSimpleKeyFile, "Behavior", "anim_hover", cOnMouseHover, 2);
+	else
+	{
+		g_key_file_remove_comment (pSimpleKeyFile, "Behavior", "anim_hover", NULL);
+		g_key_file_remove_key (pSimpleKeyFile, "Behavior", "anim_hover", NULL);
+	}
 	g_key_file_set_string_list (pSimpleKeyFile, "Behavior", "anim_click", cOnClick, 2);
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "anim_disappear", s_iEffectOnDisappearance);
-	
+	if (g_bUseOpenGL)
+		g_key_file_set_integer (pSimpleKeyFile, "Behavior", "anim_disappear", s_iEffectOnDisappearance);
+	else
+	{
+		g_key_file_remove_comment (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
+		g_key_file_remove_key (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
+	}
 	if (g_bUseOpenGL)
 	{
 		gchar *cComment = g_key_file_get_comment (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
@@ -433,7 +444,7 @@ static gboolean on_apply_config_simple (gpointer data)
 	g_free (cHideEffect);
 	
 	int iShowOnClick = (g_key_file_get_integer (pSimpleKeyFile, "Behavior", "show_on_click", NULL) == 1);
-	g_key_file_set_integer (pKeyFile, "Accessibility", "show on click", iShowOnClick);
+	g_key_file_set_integer (pKeyFile, "Accessibility", "show_on_click", iShowOnClick);
 	
 	int iTaskbarType = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "taskbar", NULL);
 	if (iTaskbarType != s_iTaskbarType)
@@ -478,7 +489,9 @@ static gboolean on_apply_config_simple (gpointer data)
 	gsize length;
 	gchar **cOnMouseHover = g_key_file_get_string_list (pSimpleKeyFile, "Behavior", "anim_hover", &length, NULL);
 	gchar **cOnClick = g_key_file_get_string_list (pSimpleKeyFile, "Behavior", "anim_click", &length, NULL);
-	int iEffectOnDisappearance = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
+	int iEffectOnDisappearance = -1;
+	if (g_key_file_has_key (pSimpleKeyFile, "Behavior", "anim_disappear", NULL))
+		iEffectOnDisappearance = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
 	
 	CairoDockModule *pModule;
 	CairoDockModuleInstance *pModuleInstanceAnim = NULL;

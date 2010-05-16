@@ -576,11 +576,11 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}
 	
-	if (pDock->iSidUnhideDemand != 0)
+	/**if (pDock->iSidUnhideDemand != 0)
 	{
 		g_source_remove (pDock->iSidUnhideDemand);
 		pDock->iSidUnhideDemand = 0;
-	}
+	}*/
 	
 	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin).
 	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
@@ -730,7 +730,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			pDock->iSidUnhideDemand = g_timeout_add (myAccessibility.iUnhideDockDelay, (GSourceFunc) cairo_dock_emit_enter_signal, pDock);
 		return FALSE;
 	}*/
-	pDock->iSidUnhideDemand = 0;
+	///pDock->iSidUnhideDemand = 0;
 	
 	// stop les timers.
 	if (pDock->iSidLeaveDemand != 0)
@@ -851,56 +851,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	return TRUE;
 }
 
-/// This function checks for the mouse cursor's position. If the mouse
-/// cursor touches the edge of the screen upon which the dock is resting,
-/// then the dock will pop up over other windows...
-/**gboolean cairo_dock_poll_screen_edge (CairoDock *pDock)  // thanks to Smidgey for the pop-up patch !
-{
-	static int iPrevPointerX = -1, iPrevPointerY = -1;
-	gint iMousePosX, iMousePosY;
-	
-	if (!pDock->bPopped)
-	{
-		gdk_display_get_pointer(gdk_display_get_default(), NULL, &iMousePosX, &iMousePosY, NULL);
-		if (iPrevPointerX == iMousePosX && iPrevPointerY == iMousePosY)
-			return myAccessibility.bPopUp;
-		
-		iPrevPointerX = iMousePosX;
-		iPrevPointerY = iMousePosY;
-		
-		CairoDockPositionType iScreenBorder1 = CAIRO_DOCK_INSIDE_SCREEN, iScreenBorder2 = CAIRO_DOCK_INSIDE_SCREEN;
-		if (iMousePosY == 0)
-		{
-			iScreenBorder1 = CAIRO_DOCK_TOP;
-		}
-		else if (iMousePosY + 1 == g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
-		{
-			iScreenBorder1 = CAIRO_DOCK_BOTTOM;
-		}
-		if (iMousePosX == 0)
-		{
-			iScreenBorder2 = CAIRO_DOCK_LEFT;
-		}
-		else if (iMousePosX + 1 == g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
-		{
-			iScreenBorder2 = CAIRO_DOCK_RIGHT;
-		}
-		if (iScreenBorder1 == CAIRO_DOCK_INSIDE_SCREEN && iScreenBorder2 == CAIRO_DOCK_INSIDE_SCREEN)
-			return myAccessibility.bPopUp;
-		if ((iScreenBorder1 != CAIRO_DOCK_INSIDE_SCREEN && iScreenBorder2 != CAIRO_DOCK_INSIDE_SCREEN) || myAccessibility.bPopUpOnScreenBorder)
-		{
-			if (cairo_dock_search_window_covering_dock (pDock, FALSE, TRUE) == NULL)  // ce test est la pour parer aux WM qui laissent passer des fenetres en avant-plan alors qu'une fenetre plein ecran est presente (Compiz ...). c'est particulierement penible pendant son Starcraft du soir.
-			{
-				if (iScreenBorder1 != CAIRO_DOCK_INSIDE_SCREEN)
-					cairo_dock_pop_up_root_docks_on_screen_edge (iScreenBorder1);
-				if (iScreenBorder2 != CAIRO_DOCK_INSIDE_SCREEN)
-					cairo_dock_pop_up_root_docks_on_screen_edge (iScreenBorder2);
-			}
-		}
-	}
-	
-	return myAccessibility.bPopUp;
-}*/
 
 gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,

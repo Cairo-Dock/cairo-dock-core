@@ -188,10 +188,8 @@ struct _CairoDock {
 	guint iSidLeaveDemand;
 	/// Source ID for pending update of WM icons geometry.
 	guint iSidUpdateWMIcons;
-	/// Source ID of the timer that delays the "show" event with auto-hide.
-	guint iSidUnhideDemand;
 	/// Source ID for hiding back the dock.
-	//guint iSidHideBack;
+	guint iSidHideBack;
 	
 	//\_______________ Renderer and fields set by it.
 	// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
@@ -231,8 +229,7 @@ struct _CairoDock {
 	gboolean bWMIconsNeedUpdate;
 	GLuint iRedirectedTexture;
 	GLuint iFboId;
-	guint iSidHideBack;
-	gchar reserved[4];
+	gpointer reserved[2];
 };
 
 

@@ -235,8 +235,8 @@ void cairo_dock_free_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidMoveResize);
 	if (pDock->iSidLeaveDemand != 0)
 		g_source_remove (pDock->iSidLeaveDemand);
-	if (pDock->iSidUnhideDemand != 0)
-		g_source_remove (pDock->iSidUnhideDemand);
+	///if (pDock->iSidUnhideDemand != 0)
+	///	g_source_remove (pDock->iSidUnhideDemand);
 	if (pDock->iSidUpdateWMIcons != 0)
 		g_source_remove (pDock->iSidUpdateWMIcons);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);

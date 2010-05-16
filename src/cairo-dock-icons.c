@@ -448,7 +448,7 @@ Icon *cairo_dock_get_icon_with_module (GList *pIconList, CairoDockModule *pModul
 
 void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight)
 {
-	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	/**double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	double fRatio = (CAIRO_DOCK_IS_DOCK (pContainer) ? pContainer->fRatio : 1.);  // on ne tient pas compte de l'effet de zoom initial du desklet.
 	if (!pContainer || pContainer->bIsHorizontal)
 	{
@@ -459,7 +459,9 @@ void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *i
 	{
 		*iHeight = (int) (pIcon->fWidth / fRatio * fMaxScale);
 		*iWidth = (int) (pIcon->fHeight / fRatio * fMaxScale);
-	}
+	}*/
+	*iWidth = pIcon->iImageWidth;
+	*iHeight = pIcon->iImageHeight;
 }
 
 void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY)

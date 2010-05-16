@@ -643,8 +643,7 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 		}
 		else
 		{
-			icon->fWidth = 0;
-			icon->fHeight = 0;
+			cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
 			cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
 			icon->fWidth *= pDock->container.fRatio;
 			icon->fHeight *= pDock->container.fRatio;

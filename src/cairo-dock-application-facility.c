@@ -307,7 +307,7 @@ static void _load_class_icon (Icon *icon)
 	}
 	else
 	{
-		g_print ("** surface from class\n");
+		g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
 			iWidth,
 			iHeight);
@@ -317,7 +317,7 @@ static void _load_class_icon (Icon *icon)
 			if (pApplis != NULL)
 			{
 				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
-				g_print ("** duplicaete from %s\n", icon->cName);
+				g_print ("  load from %s (%dx%d)\n", pOneIcon->cName, iWidth, iHeight);
 				icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pOneIcon,
 					iWidth,
 					iHeight);
