@@ -26,6 +26,8 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+// exportee pour que le launcher manager puisse charger des .desktop de separateurs.
+cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight);
 
 /** Create an icon that will act as a separator.
 *@param iSeparatorType the type of separator (CAIRO_DOCK_SEPARATOR12, CAIRO_DOCK_SEPARATOR23 or any other odd number)

@@ -763,39 +763,6 @@ void cairo_dock_quick_hide_all_docks (void)
 	}
 }
 
-static void _cairo_dock_temporary_hide_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
-{
-	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden)
-	{
-		pDock->bTemporaryHidden = TRUE;
-		pDock->bAutoHide = TRUE;
-		if (!pDock->container.bInside)  // on ne declenche pas le cachage lorsque l'on change par exemple de bureau via le switcher ou un clic sur une appli.
-			cairo_dock_emit_leave_signal (pDock);  // un cairo_dock_start_hiding ne cacherait pas les sous-docks.
-	}
-}
-void cairo_dock_activate_temporary_auto_hide (void)
-{
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_temporary_hide_one_root_dock, NULL);
-}
-
-static void _cairo_dock_stop_temporary_hide_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
-{
-	if (pDock->iRefCount == 0 && pDock->bTemporaryHidden && ! s_bQuickHide)
-	{
-		pDock->bTemporaryHidden = FALSE;
-		pDock->bAutoHide = FALSE;
-		
-		if (! pDock->container.bInside)  // on le fait re-apparaitre.
-		{
-			cairo_dock_start_showing (pDock);
-		}
-	}
-}
-void cairo_dock_deactivate_temporary_auto_hide (void)
-{
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_temporary_hide_one_root_dock, NULL);
-}
-
 static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden && pDock->bAutoHide)
@@ -833,6 +800,31 @@ void cairo_dock_disable_entrance (CairoDock *pDock)
 gboolean cairo_dock_entrance_is_allowed (CairoDock *pDock)
 {
 	return (! pDock->bEntranceDisabled);
+}
+
+void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
+{
+	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden)
+	{
+		pDock->bTemporaryHidden = TRUE;
+		pDock->bAutoHide = TRUE;
+		if (!pDock->container.bInside)  // on ne declenche pas le cachage lorsque l'on change par exemple de bureau via le switcher ou un clic sur une appli.
+			cairo_dock_emit_leave_signal (pDock);  // un cairo_dock_start_hiding ne cacherait pas les sous-docks.
+	}
+}
+
+void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock)
+{
+	if (pDock->iRefCount == 0 && pDock->bTemporaryHidden && ! s_bQuickHide)
+	{
+		pDock->bTemporaryHidden = FALSE;
+		pDock->bAutoHide = FALSE;
+		
+		if (! pDock->container.bInside)  // on le fait re-apparaitre.
+		{
+			cairo_dock_start_showing (pDock);
+		}
+	}
 }
 
 
@@ -931,62 +923,6 @@ static gboolean _cairo_dock_poll_screen_edge (gpointer data)  // thanks to Smidg
 	
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_unhide_root_dock_on_mouse_hit, mouse);
 	
-	/**static int iPrevPointerX = -1, iPrevPointerY = -1;
-	gint iMousePosX, iMousePosY;
-	
-	/// le faire pour tous les docks, et ne recuperer le pointeur que si l'un est cache...
-	//if (!pDock->bAutoHide)
-	{
-		gdk_display_get_pointer(gdk_display_get_default(), NULL, &iMousePosX, &iMousePosY, NULL);
-		if (iPrevPointerX == iMousePosX && iPrevPointerY == iMousePosY)
-			return TRUE;
-		
-		iPrevPointerX = iMousePosX;
-		iPrevPointerY = iMousePosY;
-		
-		CairoDockPositionType iScreenBorder1 = CAIRO_DOCK_INSIDE_SCREEN, iScreenBorder2 = CAIRO_DOCK_INSIDE_SCREEN;
-		if (iMousePosY == 0)
-		{
-			iScreenBorder1 = CAIRO_DOCK_TOP;
-		}
-		else if (iMousePosY + 1 == g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
-		{
-			iScreenBorder1 = CAIRO_DOCK_BOTTOM;
-		}
-		if (iMousePosX == 0)
-		{
-			iScreenBorder2 = CAIRO_DOCK_LEFT;
-		}
-		else if (iMousePosX + 1 == g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
-		{
-			iScreenBorder2 = CAIRO_DOCK_RIGHT;
-		}
-		if (iScreenBorder1 == CAIRO_DOCK_INSIDE_SCREEN && iScreenBorder2 == CAIRO_DOCK_INSIDE_SCREEN)
-			return TRUE;
-		
-		switch (myAccessibility.iCallbackMethod)
-		{
-			case 0:
-			break;
-			case 1:
-				int x1 = 
-			break;
-			case 2:
-				if (iScreenBorder1 == CAIRO_DOCK_INSIDE_SCREEN || iScreenBorder2 == CAIRO_DOCK_INSIDE_SCREEN)
-					return TRUE;
-			break;
-		}
-		
-		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
-		if (! pActiveAppli || ! pActiveAppli->bIsFullScreen)  // ce test est la pour parer aux WM qui laissent passer des fenetres en avant-plan alors qu'une fenetre plein ecran est presente (Compiz ...). c'est particulierement penible pendant son Starcraft du soir.
-		{
-			if (iScreenBorder1 != CAIRO_DOCK_INSIDE_SCREEN)
-				cairo_dock_unhide_root_docks_on_screen_edge (iScreenBorder1);
-			if (iScreenBorder2 != CAIRO_DOCK_INSIDE_SCREEN)
-				cairo_dock_unhide_root_docks_on_screen_edge (iScreenBorder2);
-		}
-	}
-	*/
 	return TRUE;
 }
 void cairo_dock_start_polling_screen_edge (CairoDock *pMainDock)

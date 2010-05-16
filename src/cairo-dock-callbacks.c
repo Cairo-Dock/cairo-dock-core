@@ -1093,7 +1093,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		pDock->container.iWindowPositionY = iNewY;
 		if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
 		{
-			cairo_dock_activate_temporary_auto_hide ();
+			cairo_dock_activate_temporary_auto_hide (pDock);
 		}
 	}*/
 	
@@ -1204,12 +1204,12 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
 				{
 					if (!cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_activate_temporary_auto_hide ();
+						cairo_dock_activate_temporary_auto_hide (pDock);
 				}
 				else
 				{
 					if (cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_deactivate_temporary_auto_hide ();
+						cairo_dock_deactivate_temporary_auto_hide (pDock);
 				}
 			}
 			else if (myAccessibility.bAutoHideOnAnyOverlap)
@@ -1217,12 +1217,12 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
 				{
 					if (!cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_activate_temporary_auto_hide ();
+						cairo_dock_activate_temporary_auto_hide (pDock);
 				}
 				else
 				{
 					if (cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_deactivate_temporary_auto_hide ();
+						cairo_dock_deactivate_temporary_auto_hide (pDock);
 				}
 			}
 		}

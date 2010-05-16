@@ -56,6 +56,10 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock);
 // Applis manager : access
 #define _cairo_dock_appli_is_on_our_way(icon, pDock) (icon != NULL && cairo_dock_appli_is_on_current_desktop (icon) &&  ((myAccessibility.bAutoHideOnFullScreen && icon->bIsFullScreen) || (myAccessibility.bAutoHideOnOverlap && cairo_dock_appli_overlaps_dock (icon, pDock))))
 
+void cairo_dock_temporary_auto_hide_docks (Icon *icon);
+void cairo_dock_temporary_auto_hide_docks_for_any_window (void);
+
+
 /** Get the icon of an application whose window covers entirely a dock, or NULL if none. If both parameters are FALSE, check for all windows.
 *@param pDock the dock to test.
 *@param bMaximizedWindow check for maximized windows only.

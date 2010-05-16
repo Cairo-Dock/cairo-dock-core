@@ -40,7 +40,7 @@
 #include "cairo-dock-separator-manager.h"
 
 
-static cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
 {
 	cairo_surface_t *pNewSurface = NULL;
 	if (myIcons.cSeparatorImage == NULL)
@@ -90,7 +90,7 @@ static void _load_separator (Icon *icon)
 	int iWidth = icon->iImageWidth;
 	int iHeight = icon->iImageHeight;
 	
-	if (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL)
+	/**if (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL)
 	{
 		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
 		if (cIconPath != NULL && *cIconPath != '\0')
@@ -101,7 +101,7 @@ static void _load_separator (Icon *icon)
 		}
 		g_free (cIconPath);
 	}
-	else
+	else*/
 	{
 		icon->pIconBuffer = cairo_dock_create_separator_surface (
 			iWidth,

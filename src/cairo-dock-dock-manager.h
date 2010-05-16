@@ -180,13 +180,13 @@ void cairo_dock_redraw_root_docks (gboolean bExceptMainDock);
 void cairo_dock_reposition_root_docks (gboolean bExceptMainDock);
 
 
-void cairo_dock_activate_temporary_auto_hide (void);
 void cairo_dock_quick_hide_all_docks (void);
-void cairo_dock_deactivate_temporary_auto_hide (void);
 void cairo_dock_stop_quick_hide (void);
 void cairo_dock_allow_entrance (CairoDock *pDock);
 void cairo_dock_disable_entrance (CairoDock *pDock);
 gboolean cairo_dock_entrance_is_allowed (CairoDock *pDock);
+void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock);
+void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock);
 #define cairo_dock_is_temporary_hidden(pDock) (pDock)->bTemporaryHidden
 
 void cairo_dock_synchronize_one_sub_dock_position (CairoDock *pSubDock, CairoDock *pDock, gboolean bReloadBuffersIfNecessary);

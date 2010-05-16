@@ -52,6 +52,7 @@
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-separator-manager.h"
 #include "cairo-dock-launcher-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -146,6 +147,31 @@ static void _load_launcher (Icon *icon)
 	}*/
 }
 
+static void _load_user_separator (Icon *icon)
+{
+	int iWidth = icon->iImageWidth;
+	int iHeight = icon->iImageHeight;
+	
+	icon->pIconBuffer = NULL;
+	if (icon->cFileName != NULL)
+	{
+		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
+		if (cIconPath != NULL && *cIconPath != '\0')
+		{
+			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+				iWidth,
+				iHeight);
+		}
+		g_free (cIconPath);
+	}
+	if (icon->pIconBuffer == NULL)
+	{
+		icon->pIconBuffer = cairo_dock_create_separator_surface (
+			iWidth,
+			iHeight);
+	}
+}
+
 Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 {
 	//g_print ("%s (%s)\n", __func__, cDesktopFileName);
@@ -153,8 +179,14 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	//\____________ On cree l'icone.
 	gchar *cRendererName = NULL;
 	Icon *icon = cairo_dock_new_launcher_icon (cDesktopFileName, &cRendererName);
-	icon->load_image = _load_launcher;
 	g_return_val_if_fail (icon != NULL, NULL);
+	
+	if (icon->cCommand == NULL && icon->cBaseURI == NULL && icon->iNbSubIcons == 0)  // ce sera un separateur.
+	{
+		icon->load_image = _load_user_separator;
+	}
+	else
+		icon->load_image = _load_launcher;
 	
 	//\____________ On gere son dock et sous-dock.
 	CairoDock *pParentDock = _cairo_dock_handle_container (icon, cRendererName);

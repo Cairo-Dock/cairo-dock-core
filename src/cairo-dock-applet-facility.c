@@ -59,10 +59,9 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 	if (pIcon != NULL &&
 		pIcon->pIconBuffer != NULL &&
 		g_pIconBackgroundBuffer.pSurface != NULL &&
-		(! CAIRO_DOCK_IS_SEPARATOR (pIcon)/* && (myIcons.bBgForApplets || ! CAIRO_DOCK_IS_APPLET(pIcon))*/))
+		(! CAIRO_DOCK_IS_SEPARATOR (pIcon)))
 	{
-		cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
-
+		//cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
 		cairo_save (pIconContext);
 		int iWidth, iHeight;
 		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
@@ -312,7 +311,7 @@ void cairo_dock_play_sound (const gchar *cSoundPath)
 	cd_debug ("%s (%s)", __func__, cSoundPath);
 	if (cSoundPath == NULL)
 	{
-		cd_warning ("No sound to play, halt.");
+		cd_warning ("No sound to play, skip.");
 		return;
 	}
 	
