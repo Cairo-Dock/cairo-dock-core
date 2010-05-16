@@ -185,6 +185,22 @@ static void reset_config (CairoConfigAccessibility *pAccessibility)
 }
 
 
+static void _show_all_docks (const gchar *cName, CairoDock *pDock, Icon *icon)
+{
+	if (pDock->iRefCount > 0)
+		return;
+	pDock->bTemporaryHidden = FALSE;
+	pDock->bAutoHide = FALSE;
+	cairo_dock_start_showing (pDock);
+}
+static void _hide_all_docks (const gchar *cName, CairoDock *pDock, Icon *icon)
+{
+	if (pDock->iRefCount > 0)
+		return;
+	pDock->bTemporaryHidden = FALSE;
+	pDock->bAutoHide = TRUE;
+	cairo_dock_start_hiding (pDock);
+}
 #define _bind_key(cShortcut) \
 	do { if (! cd_keybinder_bind (cShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL)) { \
 		g_free (cShortcut); \
@@ -231,15 +247,6 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		cairo_dock_set_all_views_to_default (1);  // 1 <=> tous les docks racines. met a jour la taille et reserve l'espace.
 	}
 	
-	/**
-	//\_______________ Zone de rappel.
-	if (pAccessibility->iVisibleZoneWidth != pPrevAccessibility->iVisibleZoneWidth ||
-		pAccessibility->iVisibleZoneHeight != pPrevAccessibility->iVisibleZoneHeight)
-	{
-		// on replace tous les docks racines (c'est bourrin, on pourrait juste le faire pour ceux qui ont l'auto-hide).
-		cairo_dock_reposition_root_docks (FALSE);  // FALSE <=> main dock inclus.
-	}*/
-	
 	//\_______________ Reserve Spave.
 	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace)
 		cairo_dock_reserve_space_for_all_root_docks (pAccessibility->bReserveSpace);
@@ -247,7 +254,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	/**
 	//\_______________ Pop-up.
 	if (pAccessibility->bPopUp)
-		cairo_dock_start_polling_screen_edge (pDock);
+		cairo_dock_start_polling_screen_edge ();
 	else
 		cairo_dock_stop_polling_screen_edge ();
 	if (! pAccessibility->bPopUp && pPrevAccessibility->bPopUp)
@@ -278,47 +285,27 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 			{
 				Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
 				cairo_dock_temporary_auto_hide_docks (pActiveAppli);
-				/**if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
-				{
-					if (!cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_activate_temporary_auto_hide (pDock);
-				}
-				else
-				{
-					if (cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_deactivate_temporary_auto_hide (pDock);
-				}*/
 			}
 			else if (pAccessibility->bAutoHideOnAnyOverlap)
 			{
 				cairo_dock_temporary_auto_hide_docks_for_any_window ();
-				/**if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
-				{
-					if (!cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_activate_temporary_auto_hide (pDock);
-				}
-				else
-				{
-					if (cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_deactivate_temporary_auto_hide (pDock);
-				}*/
 			}
 			else if (pAccessibility->bAutoHide)
 			{
 				pDock->bTemporaryHidden = FALSE;
 				pDock->bAutoHide = TRUE;
-				cairo_dock_start_hiding (pDock);
+				cairo_dock_foreach_docks ((GHFunc)_hide_all_docks, NULL);
 			}
 			else
 			{
 				pDock->bTemporaryHidden = FALSE;
 				pDock->bAutoHide = FALSE;
-				cairo_dock_start_showing (pDock);
+				cairo_dock_foreach_docks ((GHFunc)_show_all_docks, NULL);
 			}
 			
 			if (myAccessibility.bAutoHide || myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnAnyOverlap)
 			{
-				cairo_dock_start_polling_screen_edge (pDock);
+				cairo_dock_start_polling_screen_edge ();
 			}
 			else
 			{

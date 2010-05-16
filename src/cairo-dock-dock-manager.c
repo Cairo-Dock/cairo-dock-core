@@ -611,6 +611,9 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 	else
 		pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
 	
+	if (pDock->bAutoHide)
+		cairo_dock_start_polling_screen_edge ();
+	
 	if (myPosition.bUseXinerama)
 	{
 		int iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
@@ -759,7 +762,7 @@ void cairo_dock_quick_hide_all_docks (void)
 	{
 		s_bQuickHide = TRUE;
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_quick_hide_one_root_dock, NULL);
-		cairo_dock_start_polling_screen_edge (g_pMainDock);
+		cairo_dock_start_polling_screen_edge ();
 	}
 }
 
@@ -890,8 +893,8 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (const gchar *cDockName, C
 		break;
 		case 1:
 		{
-			int x1 = pDock->container.iWindowPositionX + MIN (10, pDock->container.iWidth/3);  // on evite les coins, car c'est en fait le but de cette option (les coins peuvent etre utilises par le WM pour declencher des actions).
-			int x2 = pDock->container.iWindowPositionX + pDock->container.iWidth - MIN (10, pDock->container.iWidth/3);
+			int x1 = pDock->container.iWindowPositionX + MIN (15, pDock->container.iWidth/3);  // on evite les coins, car c'est en fait le but de cette option (les coins peuvent etre utilises par le WM pour declencher des actions).
+			int x2 = pDock->container.iWindowPositionX + pDock->container.iWidth - MIN (15, pDock->container.iWidth/3);
 			if (x < x1 || x > x2)
 				return;
 		}
@@ -925,10 +928,10 @@ static gboolean _cairo_dock_poll_screen_edge (gpointer data)  // thanks to Smidg
 	
 	return TRUE;
 }
-void cairo_dock_start_polling_screen_edge (CairoDock *pMainDock)
+void cairo_dock_start_polling_screen_edge (void)
 {
 	if (s_iSidPollScreenEdge == 0)
-		s_iSidPollScreenEdge = g_timeout_add (250, (GSourceFunc) _cairo_dock_poll_screen_edge, (gpointer) pMainDock);
+		s_iSidPollScreenEdge = g_timeout_add (250, (GSourceFunc) _cairo_dock_poll_screen_edge, NULL);
 }
 
 void cairo_dock_stop_polling_screen_edge (void)

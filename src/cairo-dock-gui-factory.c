@@ -430,7 +430,7 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 	GList *c = g_list_find (children, pKeyBox);
 	g_return_if_fail (c != NULL);
 	
-	g_print ("%d widgets controles\n", iNbWidgets);
+	//g_print ("%d widgets controles\n", iNbWidgets);
 	GtkWidget *w;
 	int i=0;
 	for (c = c->next; c != NULL && i < iNbWidgets; c = c->next)
@@ -474,13 +474,13 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	GList *c = g_list_find (children, pKeyBox);
 	g_return_if_fail (c != NULL);
 	
-	g_print ("%d widgets controles (%d au total)\n", iNbWidgets, g_list_length (children));
+	//g_print ("%d widgets controles (%d au total)\n", iNbWidgets, g_list_length (children));
 	GtkWidget *w;
 	int i = 0;
 	for (c = c->next; c != NULL && i < iNbWidgets; c = c->next)
 	{
 		w = c->data;
-		g_print ("%d in ]%d;%d[ ; %d\n", i, iOrder1, iOrder1 + iOrder2, GTK_IS_ALIGNMENT (w));
+		//g_print ("%d in ]%d;%d[ ; %d\n", i, iOrder1, iOrder1 + iOrder2, GTK_IS_ALIGNMENT (w));
 		if (GTK_IS_ALIGNMENT (w))
 			continue;
 		gtk_widget_set_sensitive (w, i >= iOrder1 - 1 && i < iOrder1 + iOrder2 - 1);

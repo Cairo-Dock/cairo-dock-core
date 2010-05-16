@@ -27,7 +27,6 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
 #define _INTERNAL_MODULE_
@@ -126,23 +125,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	pLabels->quickInfoTextDescription.iSize = 12;
 	pLabels->quickInfoTextDescription.iWeight = PANGO_WEIGHT_HEAVY;
 	pLabels->quickInfoTextDescription.iStyle = PANGO_STYLE_NORMAL;
-	myDialogs.dialogTextDescription.iMargin = 0;
 	
 	gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
 	if (! bUseBackgroundForLabel)
 		pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas dessine.
-	
-	/*if (myDialogs.bHomogeneous)
-	{
-		myDialogs.dialogTextDescription.iSize = pLabels->iconTextDescription.iSize;
-		if (myDialogs.dialogTextDescription.iSize == 0)
-			myDialogs.dialogTextDescription.iSize = 14;
-		g_free (myDialogs.dialogTextDescription.cFont);
-		myDialogs.dialogTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
-		myDialogs.dialogTextDescription.iWeight = pLabels->iconTextDescription.iWeight;
-		myDialogs.dialogTextDescription.iStyle = pLabels->iconTextDescription.iStyle;
-		myDialogs.dialogTextDescription.fBackgroundColor[3] = 0;
-	}*/
 	
 	pLabels->iLabelSize = (pLabels->iconTextDescription.iSize != 0 ?
 		pLabels->iconTextDescription.iSize +

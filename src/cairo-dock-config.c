@@ -687,7 +687,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	
 	/**if (myAccessibility.bPopUp)
 	{
-		cairo_dock_start_polling_screen_edge (pDock);
+		cairo_dock_start_polling_screen_edge ();
 		if (! bPopUpOld)
 		{
 			if (cairo_dock_get_nb_dialog_windows () == 0)
@@ -704,7 +704,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	}*/
 	if (myAccessibility.bAutoHide || myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnAnyOverlap)
 	{
-		cairo_dock_start_polling_screen_edge (pDock);
+		cairo_dock_start_polling_screen_edge ();
 	}
 	else
 	{

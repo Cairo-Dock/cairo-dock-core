@@ -192,7 +192,7 @@ void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock);
 void cairo_dock_synchronize_one_sub_dock_position (CairoDock *pSubDock, CairoDock *pDock, gboolean bReloadBuffersIfNecessary);
 void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bReloadBuffersIfNecessary);
 
-void cairo_dock_start_polling_screen_edge (CairoDock *pMainDock);
+void cairo_dock_start_polling_screen_edge (void);
 void cairo_dock_stop_polling_screen_edge (void);
 void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
 /**void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);

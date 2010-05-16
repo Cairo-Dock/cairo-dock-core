@@ -298,7 +298,7 @@ static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cTe
 {
 	if (cText == NULL)
 		return NULL;
-
+	
 	return cairo_dock_create_surface_from_text_full (cText,
 		(pTextDescription ? pTextDescription : &myDialogs.dialogTextDescription),
 		1.,

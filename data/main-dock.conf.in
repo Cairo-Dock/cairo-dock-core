@@ -10,7 +10,6 @@
 frame1 =
 
 #l-[bottom;top;right;left] Choose the screen border relative to which the dock will be positioned:
-#{Icons will scroll according to what positioning model is selected. The dock can of course can be positioned anywhere on the screen. Here we specify this relative position.}
 screen border = 0
 
 #e-[0.;1.] Relative alignment:
