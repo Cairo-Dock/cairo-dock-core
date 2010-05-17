@@ -569,7 +569,7 @@ static void _on_change_window_state (Icon *icon)
 		if (myAccessibility.bAutoHideOnAnyOverlap)
 		{
 			if (!icon->bIsHidden)  // la fenetre reapparait.
-				cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap, NULL);
+				cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap, icon);
 			else  // la fenetre se cache.
 				cairo_dock_foreach_docks ((GHFunc)_show_if_no_overlapping_window, NULL);
 			/**if (! bIsHidden && ! cairo_dock_is_temporary_hidden (g_pMainDock))
