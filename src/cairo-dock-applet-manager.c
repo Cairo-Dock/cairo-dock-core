@@ -80,7 +80,8 @@ Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalC
 	icon->load_image = _load_applet;
 	
 	//\____________ On remplit ses buffers.
-	cairo_dock_load_icon_buffers (icon, pContainer);  // ne cree rien si w ou h < 0.
+	if (pContainer != NULL)
+		cairo_dock_load_icon_buffers (icon, pContainer);  // ne cree rien si w ou h < 0.
 	
 	return icon;
 }

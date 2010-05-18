@@ -47,7 +47,7 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon);
 
 /**Fill the image buffer (surface & texture) of a given icon, according to its type. Set its size if necessary, and fills the reflection buffer for cairo.
-*@param pIcon the icon.
+*@param icon the icon.
 *@param pContainer its container.
 */
 void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer);

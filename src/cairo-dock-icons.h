@@ -100,6 +100,7 @@ struct _Icon {
 	CairoDock *pSubDock;
 	/// Order of the icon amongst the other icons of its group.
 	gdouble fOrder;
+	
 	gint iSpecificDesktop;
 	gint iSubdockViewType;
 	/// a hint to indicate the icon should be kept static (no animation like bouncing).

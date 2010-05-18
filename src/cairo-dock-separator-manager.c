@@ -52,32 +52,11 @@ cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
 	else
 	{
 		gchar *cImagePath = cairo_dock_generate_file_path (myIcons.cSeparatorImage);
-		/**double fRotationAngle;  // on est obligé de faire la rotation maintenant plutot que pendant le dessin, a cause du reflet a charger en cairo.
-		if (! myIcons.bRevolveSeparator)
-			fRotationAngle = 0;
-		else if (bIsHorizontal)
-			if (bDirectionUp)
-				fRotationAngle = 0;
-			else
-				fRotationAngle = G_PI;
-		else
-			if (bDirectionUp)
-				fRotationAngle = -G_PI/2;
-			else
-				fRotationAngle = G_PI/2;*/
 		
 		pNewSurface = cairo_dock_create_surface_from_image_simple (cImagePath,
 			iWidth,
 			iHeight);
-		/**if (fRotationAngle != 0)  /// le faire pendant le dessin ...
-		{
-			cairo_surface_t *pNewSurfaceRotated = cairo_dock_rotate_surface (pNewSurface, pSourceContext,
-			iWidth,
-			iHeight,
-			fRotationAngle);
-			cairo_surface_destroy (pNewSurface);
-			pNewSurface = pNewSurfaceRotated;
-		}*/
+		
 		g_free (cImagePath);
 	}
 	
@@ -90,23 +69,9 @@ static void _load_separator (Icon *icon)
 	int iWidth = icon->iImageWidth;
 	int iHeight = icon->iImageHeight;
 	
-	/**if (CAIRO_DOCK_IS_USER_SEPARATOR (icon) && icon->cFileName != NULL)
-	{
-		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
-		if (cIconPath != NULL && *cIconPath != '\0')
-		{
-			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
-				iWidth,
-				iHeight);
-		}
-		g_free (cIconPath);
-	}
-	else*/
-	{
-		icon->pIconBuffer = cairo_dock_create_separator_surface (
-			iWidth,
-			iHeight);
-	}
+	icon->pIconBuffer = cairo_dock_create_separator_surface (
+		iWidth,
+		iHeight);
 }
 
 
@@ -121,7 +86,8 @@ Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 	icon->load_image = _load_separator;
 	
 	//\____________ On remplit ses buffers.
-	cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
+	if (pDock)
+		cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
 
 	return icon;
 }

@@ -753,7 +753,7 @@ static void _list_icon_theme_in_dir (const gchar *cDirPath, GHashTable *pHashTab
 			gchar *cName = g_key_file_get_string (pKeyFile, "Icon Theme", "Name", NULL);
 			if (cName != NULL)
 			{
-				g_hash_table_insert (pHashTable, cName, g_strdup (cName));
+				g_hash_table_insert (pHashTable, cName, g_strdup (cFileName));
 			}
 		}
 		
@@ -1017,7 +1017,7 @@ static void cairo_dock_build_dock_list_for_gui (void)
 	cairo_dock_foreach_docks ((GHFunc) _cairo_dock_add_one_dock_item, s_pDocksListStore);
 }
 
-static void _cairo_dock_add_one_icon_theme_item (const gchar *cName, const gchar *cDisplayedName, GtkListStore *pModele)
+static void _cairo_dock_add_one_icon_theme_item (const gchar *cDisplayedName, const gchar *cFolderName, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
@@ -1025,7 +1025,7 @@ static void _cairo_dock_add_one_icon_theme_item (const gchar *cName, const gchar
 	//g_print ("+ %s (%s)\n", cName, cDisplayedName);
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
 		CAIRO_DOCK_MODEL_NAME, cDisplayedName,
-		CAIRO_DOCK_MODEL_RESULT, cName,
+		CAIRO_DOCK_MODEL_RESULT, cFolderName,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
 		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
 }

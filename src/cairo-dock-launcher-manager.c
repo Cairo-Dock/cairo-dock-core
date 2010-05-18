@@ -114,7 +114,7 @@ static void _load_launcher (Icon *icon)
 	int iWidth = icon->iImageWidth;
 	int iHeight = icon->iImageHeight;
 	
-	if (icon->pSubDock != NULL && (icon->iSubdockViewType != 0/** || (icon->cClass != NULL && !myIndicators.bUseClassIndic)*/))  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
+	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 	{
 		icon->pIconBuffer = cairo_dock_create_blank_surface (iWidth, iHeight);
 	}
@@ -127,24 +127,6 @@ static void _load_launcher (Icon *icon)
 			iHeight);
 		g_free (cIconPath);
 	}
-	/**else if (icon->pSubDock != NULL && icon->cClass != NULL && icon->cDesktopFileName == NULL)  // icone pointant sur une classe (epouvantail).
-	{
-		cd_debug ("c'est un epouvantail\n");
-		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
-			iWidth,
-			iHeight);
-		if (icon->pIconBuffer == NULL)  // aucun inhibiteur ou aucune image correspondant a cette classe, on cherche a copier une des icones d'appli de cette classe.
-		{
-			const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
-			if (pApplis != NULL)
-			{
-				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
-				icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pOneIcon,
-					iWidth,
-					iHeight);
-			}
-		}
-	}*/
 }
 
 static void _load_user_separator (Icon *icon)

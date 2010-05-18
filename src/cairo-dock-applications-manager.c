@@ -81,9 +81,6 @@ static int s_iTime = 1;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
 static Window s_iCurrentActiveWindow = 0;
 static Atom s_aNetWmState;
 static Atom s_aNetWmDesktop;
-static Atom s_aNetShowingDesktop;
-static Atom s_aRootMapID;
-static Atom s_aNetNbDesktops;
 static Atom s_aNetWmName;
 static Atom s_aUtf8String;
 static Atom s_aWmName;
@@ -92,7 +89,6 @@ static Atom s_aNetWmIcon;
 static Atom s_aWmHints;
 
 static void cairo_dock_blacklist_appli (Window Xid);
-///static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpointer *data);
 
   //////////////////////////
  // Appli manager : core //
@@ -273,14 +269,6 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 			
 			if (myAccessibility.bAutoHideOnAnyOverlap)
 				cairo_dock_foreach_docks ((GHFunc)_show_if_no_overlapping_window, NULL);
-			/**if (myAccessibility.bAutoHideOnAnyOverlap && cairo_dock_is_temporary_hidden (g_pMainDock))
-			{
-				if (cairo_dock_search_window_overlapping_dock (g_pMainDock) == NULL)  // on regarde si une autre gene encore.
-				{
-					cd_message (" => plus aucune fenetre genante");
-					cairo_dock_deactivate_temporary_auto_hide (pDock);
-				}
-			}*/
 		}
 		else
 		{
@@ -339,14 +327,6 @@ static void _on_update_applis_list (CairoDock *pDock)
 				if (myAccessibility.bAutoHideOnAnyOverlap)
 				{
 					cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap, icon);
-					/**if (! cairo_dock_is_temporary_hidden (pDock))
-					{
-						if (cairo_dock_xwindow_is_on_current_desktop (Xid) && cairo_dock_appli_overlaps_dock (icon, pDock))
-						{
-							cd_message (" cette nouvelle fenetre empiete sur notre dock");
-							cairo_dock_activate_temporary_auto_hide (pDock);
-						}
-					}*/
 				}
 			}
 			else
@@ -431,16 +411,6 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 				//g_print ("*** la fenetre parente est : %s\n", icon?icon->cName:"aucune");
 			}
 			cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, icon);
-			/**if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la nouvelle fenetre active nous gene.
-			{
-				if (!cairo_dock_is_temporary_hidden (g_pMainDock))
-					cairo_dock_activate_temporary_auto_hide (pDock);
-			}
-			else
-			{
-				if (cairo_dock_is_temporary_hidden (g_pMainDock))
-					cairo_dock_deactivate_temporary_auto_hide (pDock);
-			}*/
 		}
 		
 		// notification xklavier.
@@ -467,36 +437,10 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 	{
 		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
 		cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, pActiveAppli);
-		/**if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
-		{
-			if (!cairo_dock_is_temporary_hidden (pDock))
-				cairo_dock_activate_temporary_auto_hide (pDock);
-		}
-		else
-		{
-			if (cairo_dock_is_temporary_hidden (pDock))
-				cairo_dock_deactivate_temporary_auto_hide (pDock);
-		}*/
 	}
 	if (myAccessibility.bAutoHideOnAnyOverlap)
 	{
 		cairo_dock_foreach_docks ((GHFunc)_hide_if_any_overlap_or_show, NULL);
-		/**if (cairo_dock_is_temporary_hidden (pDock))
-		{
-			if (cairo_dock_search_window_overlapping_dock (pDock) == NULL)
-			{
-				cd_message (" => plus aucune fenetre genante");
-				cairo_dock_deactivate_temporary_auto_hide (pDock);
-			}
-		}
-		else
-		{
-			if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
-			{
-				cd_message (" => une fenetre est genante");
-				cairo_dock_activate_temporary_auto_hide (pDock);
-			}
-		}*/
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -541,16 +485,6 @@ static void _on_change_window_state (Icon *icon)
 				icon->bIsFullScreen = bIsFullScreen;
 				icon->bIsHidden = bIsHidden;
 				cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, NULL);
-				/**if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la fenetre active nous gene.
-				{
-					if (!cairo_dock_is_temporary_hidden (g_pMainDock))
-						cairo_dock_activate_temporary_auto_hide (pDock);
-				}
-				else
-				{
-					if (cairo_dock_is_temporary_hidden (g_pMainDock))
-						cairo_dock_deactivate_temporary_auto_hide (pDock);
-				}*/
 			}
 		}
 	}
@@ -572,20 +506,6 @@ static void _on_change_window_state (Icon *icon)
 				cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap, icon);
 			else  // la fenetre se cache.
 				cairo_dock_foreach_docks ((GHFunc)_show_if_no_overlapping_window, NULL);
-			/**if (! bIsHidden && ! cairo_dock_is_temporary_hidden (g_pMainDock))
-			{
-				cd_message (" => %s devient genante", CAIRO_DOCK_IS_APPLI (icon) ? icon->cName : "une fenetre");
-				if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_overlaps_dock (icon, g_pMainDock))
-					cairo_dock_activate_temporary_auto_hide (pDock);
-			}
-			else if (bIsHidden && cairo_dock_is_temporary_hidden (g_pMainDock))
-			{
-				if (cairo_dock_search_window_overlapping_dock (g_pMainDock) == NULL)
-				{
-					cd_message (" => plus aucune fenetre genante");
-					cairo_dock_deactivate_temporary_auto_hide (pDock);
-				}
-			}*/
 		}
 		
 		// affichage des applis minimisees.
@@ -670,16 +590,6 @@ static void _on_change_window_desktop (Icon *icon)
 		if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change de bureau.
 		{
 			cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, NULL);
-			/**if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la fenetre active nous gene.
-			{
-				if (!cairo_dock_is_temporary_hidden (g_pMainDock))
-					cairo_dock_activate_temporary_auto_hide (pDock);
-			}
-			else
-			{
-				if (cairo_dock_is_temporary_hidden (g_pMainDock))
-					cairo_dock_deactivate_temporary_auto_hide (pDock);
-			}*/
 		}
 	}
 	if (myAccessibility.bAutoHideOnAnyOverlap)
@@ -692,25 +602,6 @@ static void _on_change_window_desktop (Icon *icon)
 		{
 			cairo_dock_foreach_docks ((GHFunc)_show_if_no_overlapping_window, NULL);
 		}
-		/**if (! cairo_dock_is_temporary_hidden (g_pMainDock))
-		{
-			if ((icon->iNumDesktop == -1 || icon->iNumDesktop == g_desktopGeometry.iCurrentDesktop) && icon->iViewPortX == g_desktopGeometry.iCurrentViewportX && icon->iViewPortY == g_desktopGeometry.iCurrentViewportY)  // l'appli arrive sur le bureau courant.
-			{
-				if (cairo_dock_appli_overlaps_dock (icon, g_pMainDock))
-				{
-					cd_message (" => cela nous gene");
-					cairo_dock_activate_temporary_auto_hide (pDock);
-				}
-			}
-		}
-		else if (icon->iNumDesktop != -1 && icon->iNumDesktop != g_desktopGeometry.iCurrentDesktop)  // l'appli quitte sur le bureau courant.
-		{
-			if (cairo_dock_search_window_overlapping_dock (g_pMainDock) == NULL)
-			{
-				cd_message (" => plus aucune fenetre genante");
-				cairo_dock_deactivate_temporary_auto_hide (pDock);
-			}
-		}*/
 	}
 }
 
@@ -753,14 +644,6 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		if (myAccessibility.bAutoHideOnAnyOverlap)
 		{
 			cairo_dock_foreach_docks ((GHFunc)_show_if_no_overlapping_window, icon);
-			/**if (cairo_dock_is_temporary_hidden (g_pMainDock))
-			{
-				if (cairo_dock_search_window_overlapping_dock (g_pMainDock) == NULL)
-				{
-					cd_message (" chgt de viewport => plus aucune fenetre genante");
-					cairo_dock_deactivate_temporary_auto_hide (pDock);
-				}
-			}*/
 		}
 	}
 	else  // elle est sur le bureau.
@@ -777,25 +660,6 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		if (myAccessibility.bAutoHideOnAnyOverlap)
 		{
 			cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap_or_show_if_no_overlapping_window, icon);
-			/**if (cairo_dock_appli_overlaps_dock (icon, g_pMainDock))  // cette fenetre peut provoquer l'auto-hide.
-			{
-				if (! cairo_dock_is_temporary_hidden (g_pMainDock))
-				{
-					cd_message (" sur le viewport courant => cela nous gene");
-					cairo_dock_activate_temporary_auto_hide (pDock);
-				}
-			}
-			else  // ne gene pas/plus.
-			{
-				if (cairo_dock_is_temporary_hidden (g_pMainDock))
-				{
-					if (cairo_dock_search_window_overlapping_dock (g_pMainDock) == NULL)
-					{
-						cd_message (" chgt de viewport => plus aucune fenetre genante");
-						cairo_dock_deactivate_temporary_auto_hide (pDock);
-					}
-				}
-			}*/
 		}
 	}
 	
@@ -805,16 +669,6 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change de bureau.
 		{
 			cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, icon);
-			/**if (_cairo_dock_appli_is_on_our_way (icon, g_pMainDock))  // la fenetre active nous gene.
-			{
-				if (!cairo_dock_is_temporary_hidden (g_pMainDock))
-					cairo_dock_activate_temporary_auto_hide (pDock);
-			}
-			else
-			{
-				if (cairo_dock_is_temporary_hidden (g_pMainDock))
-					cairo_dock_deactivate_temporary_auto_hide (pDock);
-			}*/
 		}
 	}
 }
@@ -961,9 +815,6 @@ void cairo_dock_initialize_application_manager (Display *pDisplay)
 	s_aNetWmIcon 			= XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
 	s_aWmHints 				= XInternAtom (s_XDisplay, "WM_HINTS", False);
 	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
-	s_aNetShowingDesktop 	= XInternAtom (s_XDisplay, "_NET_SHOWING_DESKTOP", False);
-	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
-	s_aNetNbDesktops		= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
 	cairo_dock_initialize_application_factory (pDisplay);
 }
 
@@ -1082,18 +933,6 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 			{
 				cairo_dock_prevent_inhibated_class (pIcon);
 			}
-			
-			/*if (myAccessibility.bAutoHideOnAnyOverlap)
-			{
-				cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap, icon);
-				if (! cairo_dock_is_temporary_hidden (pDock) && cairo_dock_appli_is_on_current_desktop (pIcon))
-				{
-					if (cairo_dock_appli_overlaps_dock (pIcon, pDock))
-					{
-						cairo_dock_activate_temporary_auto_hide (pDock);
-					}
-				}
-			}*/
 		}
 		else
 			cairo_dock_blacklist_appli (Xid);
@@ -1109,22 +948,10 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	{
 		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
 		cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, pActiveAppli);
-		/**if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
-		{
-			if (!cairo_dock_is_temporary_hidden (pDock))
-			{
-				cairo_dock_activate_temporary_auto_hide (pDock);
-			}
-		}*/
 	}
 	else if (myAccessibility.bAutoHideOnAnyOverlap)
 	{
 		cairo_dock_foreach_docks ((GHFunc)_hide_if_any_overlap, NULL);
-		/**if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
-		{
-			if (!cairo_dock_is_temporary_hidden (pDock))
-				cairo_dock_activate_temporary_auto_hide (pDock);
-		}*/
 	}
 	
 	s_bAppliManagerIsRunning = TRUE;
@@ -1199,8 +1026,6 @@ void cairo_dock_stop_application_manager (void)
 	cairo_dock_update_dock_size (g_pMainDock);
 	
 	cairo_dock_foreach_docks ((GHFunc)_unhide_all_docks, NULL);
-	/**if (cairo_dock_is_temporary_hidden (g_pMainDock))
-		cairo_dock_deactivate_temporary_auto_hide (pDock);*/
 }
 
 gboolean cairo_dock_application_manager_is_running (void)
@@ -1481,6 +1306,8 @@ static void _load_appli (Icon *icon)
 	int iWidth = icon->iImageWidth;
 	int iHeight = icon->iImageHeight;
 	
+	if (cairo_dock_icon_is_being_removed (icon))
+		return ;
 	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
 	GLuint iPrevTexture = icon->iIconTexture;
 	icon->pIconBuffer = NULL;
@@ -1600,11 +1427,13 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	}
 	#endif
 	
-	cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
-	
-	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
+	if (pDock)
 	{
-		cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
+		cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
+		if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
+		{
+			cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
+		}
 	}
 	
 	//\____________ On enregistre l'appli et on commence a la surveiller.
@@ -1612,3 +1441,31 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 
 	return icon;
 }
+
+
+gchar *cairo_dock_get_appli_command (Window Xid)
+{
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements = 0;
+	gulong *pPidBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, XInternAtom (s_XDisplay, "_NET_WM_PID", False), 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pPidBuffer);
+	
+	gchar *cCommand = NULL;
+	if (iBufferNbElements > 0)
+	{
+		guint iPid = *pPidBuffer;
+		gchar *cFilePath = g_strdup_printf ("/proc/%d/cmdline", iPid);
+		gsize length = 0;
+		gchar *cContent = NULL;
+		g_file_get_contents (cFilePath,
+			&cCommand,  // contient des '\0' entre les arguments.
+			&length,
+			NULL);
+		g_free (cFilePath);
+	}
+	if (pPidBuffer != NULL)
+		XFree (pPidBuffer);
+	return cCommand;
+}
+

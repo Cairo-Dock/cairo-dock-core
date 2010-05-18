@@ -576,12 +576,6 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}
 	
-	/**if (pDock->iSidUnhideDemand != 0)
-	{
-		g_source_remove (pDock->iSidUnhideDemand);
-		pDock->iSidUnhideDemand = 0;
-	}*/
-	
 	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin).
 	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 	{
@@ -722,16 +716,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}
 	
-	/**
-	// on retarde l'entree en auto-hide.
-	if (myAccessibility.iUnhideDockDelay != 0 && pDock->iRefCount == 0 && pDock->bAutoHide && pEvent != NULL)  // vraie rentree dans un main dock en auto-hide => on retarde.
-	{
-		if (pDock->iSidUnhideDemand == 0)
-			pDock->iSidUnhideDemand = g_timeout_add (myAccessibility.iUnhideDockDelay, (GSourceFunc) cairo_dock_emit_enter_signal, pDock);
-		return FALSE;
-	}*/
-	///pDock->iSidUnhideDemand = 0;
-	
 	// stop les timers.
 	if (pDock->iSidLeaveDemand != 0)
 	{
@@ -856,7 +840,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
-	cd_debug ("on a appuye sur une touche (%d)\n", pKey->keyval);
+	cd_debug ("on a appuye sur une touche (%d)", pKey->keyval);
 	if (pKey->type == GDK_KEY_PRESS)
 	{
 		cairo_dock_notify (CAIRO_DOCK_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
@@ -967,7 +951,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					
 					if (s_pFlyingContainer != NULL)
 					{
-						cd_debug ("on relache l'icone volante\n");
+						cd_debug ("on relache l'icone volante");
 						if (pDock->container.bInside)
 						{
 							//g_print ("  on la remet dans son dock d'origine\n");
@@ -1083,19 +1067,6 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 	pDock->container.iHeight = iNewHeight;
 	pDock->container.iWindowPositionX = iNewX;
 	pDock->container.iWindowPositionY = iNewY;
-	/**if (pDock->container.iWindowPositionX == 0 && pDock->container.iWindowPositionY == 0 && !cairo_dock_is_temporary_hidden (pDock))  // ce cas arrive au debut. Il peut eventuellement arriver apres aussi, ca n'est pas un probleme.
-	{
-		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
-		bSizeUpdated = TRUE;
-		pDock->container.iWidth = iNewWidth;
-		pDock->container.iHeight = iNewHeight;
-		pDock->container.iWindowPositionX = iNewX;
-		pDock->container.iWindowPositionY = iNewY;
-		if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
-		{
-			cairo_dock_activate_temporary_auto_hide (pDock);
-		}
-	}*/
 	
 	if (bSizeUpdated && iNewWidth > 1)  // changement de taille
 	{
@@ -1239,7 +1210,7 @@ static gboolean s_bWaitForData = FALSE;
 
 void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint time, CairoDock *pDock)
 {
-	cd_debug ("%s (%dx%d, %d, %d)\n", __func__, x, y, time, pDock->container.bInside);
+	cd_debug ("%s (%dx%d, %d, %d)", __func__, x, y, time, pDock->container.bInside);
 	if (cairo_dock_is_hidden (pDock))  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
 		return ;
 	//\_________________ On recupere l'URI.
@@ -1347,12 +1318,12 @@ gboolean cairo_dock_on_drag_drop (GtkWidget *pWidget, GdkDragContext *dc, gint x
 
 gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint time, CairoDock *pDock)
 {
-	//g_print ("%s (%d;%d, %d)\n", __func__, x, y, time);
+	g_print ("%s (%d;%d, %d)\n", __func__, x, y, time);
 	
 	//\_________________ On simule les evenements souris habituels.
 	if (! pDock->bIsDragging)
 	{
-		cd_debug ("start dragging\n");
+		g_print ("start dragging\n");
 		pDock->bIsDragging = TRUE;
 		
 		/*GdkAtom gdkAtom = gdk_drag_get_selection (dc);
@@ -1398,46 +1369,30 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 	}
 	int w, h;
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
-	///if (!icon || !icon->pSubDock)
+	if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
 	{
-		if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
+		w = pDock->iMinDockWidth;
+		h = pDock->iMinDockHeight;
+		
+		if (X <= -w/2 || X >= w/2)
+			return FALSE;  // on n'accepte pas le drop.
+		if (pDock->container.bDirectionUp)
 		{
-			w = pDock->iMinDockWidth;
-			h = pDock->iMinDockHeight;
-			
-			if (X <= -w/2 || X >= w/2)
+			if (Y < pDock->container.iHeight - h || Y >= pDock->container.iHeight)
 				return FALSE;  // on n'accepte pas le drop.
-			if (pDock->container.bDirectionUp)
-			{
-				if (Y <= pDock->container.iHeight - h || Y >= pDock->container.iHeight)
-					return FALSE;  // on n'accepte pas le drop.
-			}
-			else
-			{
-				if (Y < 0 || Y > h)
-					return FALSE;  // on n'accepte pas le drop.
-			}
 		}
-		else if (pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
+		else
 		{
-			w = /**MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth)*/pDock->iMaxDockWidth;
-			h = /**MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight)*/0;
-			
-			if (X <= -w/2 || X >= w/2)
+			if (Y < 0 || Y > h)
 				return FALSE;  // on n'accepte pas le drop.
-			if (pDock->container.bDirectionUp)
-			{
-				if (Y <= pDock->container.iHeight - h || Y >= pDock->container.iHeight)
-					return FALSE;  // on n'accepte pas le drop.
-			}
-			else
-			{
-				if (Y < 0 || Y > h)
-					return FALSE;  // on n'accepte pas le drop.
-			}
 		}
 	}
+	else if (pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
+	{
+		return FALSE;  // on n'accepte pas le drop.
+	}
 	
+	g_print ("take the drop\n");
 	gdk_drag_status (dc, GDK_ACTION_COPY, time);
 	return TRUE;  // on accepte le drop.
 }

@@ -391,7 +391,7 @@ void cairo_dock_search_max_decorations_size (int *iWidth, int *iHeight)
 {
 	int data[2] = {0, 0};
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_get_one_decoration_size, &data);
-	cd_message ("  decorations max : %dx%d", data[0], data[1]);
+	cd_debug ("  decorations max : %dx%d", data[0], data[1]);
 	*iWidth = data[0];
 	*iHeight = data[1];
 }
@@ -529,7 +529,6 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 		return;
 	
 	cairo_dock_prevent_dock_from_out_of_screen (pDock);
-	cd_debug ("%s (%d;%d)\n", __func__, pDock->iGapX, pDock->iGapY);
 	if (pDock->bIsMainDock)
 	{
 		cairo_dock_update_conf_file_with_position (g_cConfFile, pDock->iGapX, pDock->iGapY);
@@ -943,26 +942,6 @@ void cairo_dock_stop_polling_screen_edge (void)
 	}
 }
 
-/**static void _cairo_dock_pop_up_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
-{
-	if (pDock->iRefCount > 0)
-		return ;
-	CairoDockPositionType iScreenBorder = GPOINTER_TO_INT (data);
-	
-	CairoDockPositionType iDockScreenBorder = (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp));
-	if (iDockScreenBorder == iScreenBorder)
-	{
-		cd_debug ("%s passe en avant-plan", cDockName);
-		cairo_dock_pop_up (pDock);
-		if (pDock->iSidPopDown == 0)
-			pDock->iSidPopDown = g_timeout_add (2000, (GSourceFunc) cairo_dock_pop_down, (gpointer) pDock);  // au cas ou on serait pas dedans.
-	}
-}
-void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder)
-{
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_pop_up_one_root_dock, GINT_TO_POINTER (iScreenBorder));
-}*/
-
 static void _cairo_dock_unhide_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount > 0)
@@ -1001,6 +980,26 @@ void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenB
 void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_set_one_dock_on_top_layer, GINT_TO_POINTER (bRootDocksOnly));
+}
+
+static void _cairo_dock_pop_up_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	if (pDock->iRefCount > 0)
+		return ;
+	CairoDockPositionType iScreenBorder = GPOINTER_TO_INT (data);
+	
+	CairoDockPositionType iDockScreenBorder = (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp));
+	if (iDockScreenBorder == iScreenBorder)
+	{
+		cd_debug ("%s passe en avant-plan", cDockName);
+		cairo_dock_pop_up (pDock);
+		if (pDock->iSidPopDown == 0)
+			pDock->iSidPopDown = g_timeout_add (2000, (GSourceFunc) cairo_dock_pop_down, (gpointer) pDock);  // au cas ou on serait pas dedans.
+	}
+}
+void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder)
+{
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_pop_up_one_root_dock, GINT_TO_POINTER (iScreenBorder));
 }*/
 
 static void _cairo_dock_reserve_space_for_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)

@@ -57,7 +57,7 @@ hide effect = Move down
 #l-[Hit the screen's border;Hit where the dock is;Hit the screen's corner] How to call the dock back:
 callback = 0
 
-#i-[0;1000] Delay before the dock unhides itself:
+#i-[0;1500] Delay before the dock unhides itself:
 #{in ms. 0 means no delay.}
 unhide delay = 0
 
