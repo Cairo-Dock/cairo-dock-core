@@ -261,7 +261,7 @@ GtkWidget *cairo_dock_show_main_gui (void)
 	GtkWidget *pWindow = NULL;
 	if (s_pGuiBackend && s_pGuiBackend->show_main_gui)
 		pWindow = s_pGuiBackend->show_main_gui ();
-	if (pWindow && g_pMainDock != NULL && ! myAccessibility.bReserveSpace)  // evitons d'empieter sur le dock.
+	if (pWindow && g_pMainDock != NULL)  // evitons d'empieter sur le dock.
 	{
 		if (g_pMainDock->container.bIsHorizontal)
 		{

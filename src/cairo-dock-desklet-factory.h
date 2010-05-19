@@ -52,7 +52,7 @@ typedef enum {
 	CAIRO_DESKLET_ON_WIDGET_LAYER,
 	/// prevent other windows form overlapping it
 	CAIRO_DESKLET_RESERVE_SPACE
-	} CairoDeskletAccessibility;
+	} CairoDeskletVisibility;
 
 /// Decoration of a Desklet.
 struct _CairoDeskletDecoration {
@@ -81,7 +81,7 @@ struct _CairoDeskletAttribute {
 	gint iDepthRotationX;
 	gchar *cDecorationTheme;
 	CairoDeskletDecoration *pUserDecoration;
-	CairoDeskletAccessibility iAccessibility;
+	CairoDeskletVisibility iVisibility;
 	gboolean bOnAllDesktops;
 	gint iNumDesktop;
 	gboolean bNoInput;
@@ -268,10 +268,10 @@ void cairo_dock_zoom_out_desklet (CairoDesklet *pDesklet);
 
 /** Set a desklet's accessibility. For Widget Layer, the WM must support it and the correct rule must be set up in the WM (for instance for Compiz : class=Cairo-dock & type=utility). The function automatically sets up the rule for Compiz (if Dbus is activated).
 *@param pDesklet the desklet.
-*@param iAccessibility the new accessibility.
+*@param iVisibility the new accessibility.
 *@param bSaveState whether to save the new state in the conf file.
 */
-void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletAccessibility iAccessibility, gboolean bSaveState);
+void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibility iVisibility, gboolean bSaveState);
 
 /** Set a desklet sticky (i.e. visible on all desktops), or not. In case the desklet is set unsticky, its current desktop/viewport is saved.
 *@param pDesklet the desklet.

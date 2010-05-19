@@ -193,7 +193,7 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 *@param menu the menu.
 *@param pContainer the container that was clicked.
 */
-void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer);
+void cairo_dock_popup_menu_on_container (GtkMenu *menu, CairoContainer *pContainer);
 
 /** Add an entry to a given menu.
 *@param cLabel label of the entry
@@ -207,8 +207,9 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 /** Build the main menu of a Container.
 *@param icon the icon that was left-clicked, or NULL if none.
 *@param pContainer the container that was left-clicked.
+*@return the menu.
 */
-GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
+GtkMenu *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
 
 
 G_END_DECLS

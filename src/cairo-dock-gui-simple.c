@@ -200,20 +200,7 @@ static gchar * _make_simple_conf_file (void)
 	CairoDockPositionType iScreenBorder = (g_pMainDock ? ((! g_pMainDock->container.bIsHorizontal) << 1) | (! g_pMainDock->container.bDirectionUp) : 0);
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", iScreenBorder);
 	
-	gboolean iVisibility;
-	if (myAccessibility.bReserveSpace)
-		iVisibility = 1;
-	else if (myAccessibility.bAutoHide)
-		iVisibility = 2;
-	else if (myAccessibility.bAutoHideOnAnyOverlap)
-		iVisibility = 3;
-	else if (myAccessibility.bAutoHideOnOverlap)
-		iVisibility = 4;
-	else if (myAccessibility.cRaiseDockShortcut)
-		iVisibility = 5;
-	else
-		iVisibility = 0;
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", iVisibility);
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", myAccessibility.iVisibility);
 	
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on_click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
 	

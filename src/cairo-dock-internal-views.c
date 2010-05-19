@@ -65,7 +65,7 @@ static void reload (CairoConfigViews *pPrevViews, CairoConfigViews *pViews)
 	{
 		cairo_dock_set_all_views_to_default (1);  // met a jour la taille des docks principaux.
 		cairo_dock_redraw_root_docks (FALSE);  // FALSE <=> main dock inclus.
-		cairo_dock_reserve_space_for_all_root_docks (myAccessibility.bReserveSpace);
+		///cairo_dock_reserve_space_for_all_root_docks (myAccessibility.bReserveSpace);
 	}
 	
 	if (cairo_dock_strings_differ (pPrevViews->cSubDockDefaultRendererName, pViews->cSubDockDefaultRendererName) ||

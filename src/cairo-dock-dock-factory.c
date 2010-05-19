@@ -267,67 +267,58 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	g_free (pDock);
 }
 
-void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
+void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock)
 {
-	pDock->iRefCount ++;
-	if (pDock->iRefCount == 1)  // il devient un sous-dock.
+	CairoDockPositionType iScreenBorder = ((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp);
+	cd_debug ("sub-dock's position : %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
+	pDock->container.bIsHorizontal = pParentDock->container.bIsHorizontal;
+	pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
+	if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
 	{
-		if (pParentDock == NULL)
-			pParentDock = g_pMainDock;
-		CairoDockPositionType iScreenBorder = ((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp);
-		cd_debug ("sub-dock's position : %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
-		pDock->container.bIsHorizontal = pParentDock->container.bIsHorizontal;
-		pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
-		if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
-		{
-			cd_debug ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
-			cairo_dock_reload_reflects_in_dock (pDock);
-		}
-		pDock->iScreenOffsetX = pParentDock->iScreenOffsetX;
-		pDock->iScreenOffsetY = pParentDock->iScreenOffsetY;
-		if (g_bKeepAbove)
-			gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), FALSE);
-		/**if (myAccessibility.bPopUp)
-			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);*/
-		gtk_window_set_title (GTK_WINDOW (pDock->container.pWidget), "cairo-dock-sub");
-		
-		pDock->bAutoHide = FALSE;
-		double fPrevRatio = pDock->container.fRatio;
-		pDock->container.fRatio = MIN (pDock->container.fRatio, myViews.fSubDockSizeRatio);
-		
-		Icon *icon;
-		GList *ic;
-		pDock->fFlatDockWidth = - myIcons.iIconGap;
-		for (ic = pDock->icons; ic != NULL; ic = ic->next)
-		{
-			icon = ic->data;
-			icon->fWidth *= pDock->container.fRatio / fPrevRatio;
-			icon->fHeight *= pDock->container.fRatio / fPrevRatio;
-			pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
-		}
-		pDock->iMaxIconHeight *= pDock->container.fRatio / fPrevRatio;
-
-		cairo_dock_set_default_renderer (pDock);
-		
-		if (pDock->pShapeBitmap != NULL)
-		{
-			g_object_unref ((gpointer) pDock->pShapeBitmap);
-			pDock->pShapeBitmap = NULL;
-			if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
-			{
-				gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-					NULL,
-					0,
-					0);
-				pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
-			}
-		}
-		gtk_widget_hide (pDock->container.pWidget);
-		cairo_dock_update_dock_size (pDock);
-		
-		const gchar *cDockName = cairo_dock_search_dock_name (pDock);
-		cairo_dock_remove_root_dock_config (cDockName);
+		cd_debug ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
+		cairo_dock_reload_reflects_in_dock (pDock);
 	}
+	pDock->iScreenOffsetX = pParentDock->iScreenOffsetX;
+	pDock->iScreenOffsetY = pParentDock->iScreenOffsetY;
+	if (g_bKeepAbove)
+		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), FALSE);
+	/**if (myAccessibility.bPopUp)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);*/
+	gtk_window_set_title (GTK_WINDOW (pDock->container.pWidget), "cairo-dock-sub");
+	
+	pDock->bAutoHide = FALSE;
+	double fPrevRatio = pDock->container.fRatio;
+	pDock->container.fRatio = MIN (pDock->container.fRatio, myViews.fSubDockSizeRatio);
+	
+	Icon *icon;
+	GList *ic;
+	pDock->fFlatDockWidth = - myIcons.iIconGap;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		icon->fWidth *= pDock->container.fRatio / fPrevRatio;
+		icon->fHeight *= pDock->container.fRatio / fPrevRatio;
+		pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
+	}
+	pDock->iMaxIconHeight *= pDock->container.fRatio / fPrevRatio;
+
+	cairo_dock_set_default_renderer (pDock);
+	
+	if (pDock->pShapeBitmap != NULL)
+	{
+		g_object_unref ((gpointer) pDock->pShapeBitmap);
+		pDock->pShapeBitmap = NULL;
+		if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
+		{
+			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
+				NULL,
+				0,
+				0);
+			pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
+		}
+	}
+	gtk_widget_hide (pDock->container.pWidget);
+	cairo_dock_update_dock_size (pDock);
 }
 
 
@@ -417,7 +408,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
 
-	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))
+	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	
 	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.

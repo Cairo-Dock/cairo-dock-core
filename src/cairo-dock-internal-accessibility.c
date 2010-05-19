@@ -44,83 +44,74 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	gboolean bFlushConfFileNeeded = FALSE;
 	
 	//\____________________ Visibilite
-	int iAccessibility = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "visibility", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour pouvoir intercepter le cas ou la cle n'existe pas.
+	int iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "visibility", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour pouvoir intercepter le cas ou la cle n'existe pas.
 	gboolean bRaiseOnShortcut = FALSE;
 	
 	gchar *cShortkey = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "raise shortcut", &bFlushConfFileNeeded, NULL, "Position", NULL);
 	
 	pAccessibility->cHideEffect = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "hide effect", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	
-	if (iAccessibility == -1)  // option nouvelle.
+	if (iVisibility == -1)  // option nouvelle 2.1.3
 	{
-		pAccessibility->bReserveSpace = g_key_file_get_boolean (pKeyFile, "Accessibility", "reserve space", NULL);
-		if (! pAccessibility->bReserveSpace)
+		if (g_key_file_get_boolean (pKeyFile, "Accessibility", "reserve space", NULL))
+			iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+		else if (g_key_file_get_boolean (pKeyFile, "Accessibility", "pop-up", NULL))  // on force au nouveau mode.
 		{
-			pAccessibility->bAutoHideOnAnyOverlap = g_key_file_get_boolean (pKeyFile, "Accessibility", "pop-up", NULL);
-			if (! pAccessibility->bAutoHideOnAnyOverlap)
-			{
-				pAccessibility->bAutoHide = g_key_file_get_boolean (pKeyFile, "Accessibility", "auto-hide", NULL);
-				if (! pAccessibility->bAutoHide)
-				{
-					pAccessibility->bAutoHideOnOverlap = g_key_file_get_boolean (pKeyFile, "Accessibility", "auto quick hide on max", NULL);
-					if (pAccessibility->bAutoHideOnOverlap)
-						iAccessibility = 4;
-					else if (cShortkey)
-					{
-						iAccessibility = 5;
-						pAccessibility->cRaiseDockShortcut = cShortkey;
-						cShortkey = NULL;
-					}
-				}
-				else
-					iAccessibility = 2;
-			}
-			else
-				iAccessibility = 3;
+			iVisibility = CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY;
+			pAccessibility->cHideEffect = g_strdup_printf ("Fade out");  // on force a "fade out" pour garder le meme effet.
+			g_key_file_set_string (pKeyFile, "Accessibility", "hide effect", pAccessibility->cHideEffect);
+		}
+		else if (g_key_file_get_boolean (pKeyFile, "Accessibility", "auto-hide", NULL))
+			iVisibility = CAIRO_DOCK_VISI_AUTO_HIDE;
+		else if (g_key_file_get_boolean (pKeyFile, "Accessibility", "auto quick hide on max", NULL))
+			iVisibility = CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY;
+		else if (cShortkey)
+		{
+			iVisibility = CAIRO_DOCK_VISI_SHORTKEY;
+			pAccessibility->cRaiseDockShortcut = cShortkey;
+			cShortkey = NULL;
 		}
 		else
-			iAccessibility = 1;
-		g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iAccessibility);
+			iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+		
+		g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
 	}
 	else
 	{
-		if (pAccessibility->cHideEffect == NULL)  // nouvelle option, il y'a eu intervertion 2/3.
+		if (pAccessibility->cHideEffect == NULL)  // nouvelle option 2.2.0, cela a change l'ordre du menu.
 		{
-			if (iAccessibility == 2)
+			// avant c'etait : KEEP_ABOVE, RESERVE, KEEP_BELOW, AUTO_HIDE,       HIDE_ON_MAXIMIZED,   SHORTKEY
+			// mtn c'est     : KEEP_ABOVE, RESERVE, KEEP_BELOW, HIDE_ON_OVERLAP, HIDE_ON_OVERLAP_ANY, AUTO_HIDE, VISI_SHORTKEY,
+			if (iVisibility == 2)  // on force au nouveau mode.
 			{
-				iAccessibility = 3;
-				g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iAccessibility);
+				iVisibility = CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY;
+				pAccessibility->cHideEffect = g_strdup_printf ("Fade out");  // on force a "fade out" pour garder le meme effet.
+				g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
+				g_key_file_set_string (pKeyFile, "Accessibility", "hide effect", pAccessibility->cHideEffect);
 			}
-			else if (iAccessibility == 3)
+			else if (iVisibility == 3)
 			{
-				iAccessibility = 2;
-				g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iAccessibility);
+				iVisibility = CAIRO_DOCK_VISI_AUTO_HIDE;
+				g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
+			}
+			else if (iVisibility == 4)
+			{
+				iVisibility = CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY;
+				g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
+			}
+			else if (iVisibility == 5)
+			{
+				iVisibility = CAIRO_DOCK_VISI_SHORTKEY;
+				g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
 			}
 		}
-		switch (iAccessibility)
+		if (iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 		{
-			case 0 :
-			default :
-			break;
-			case 1:
-				pAccessibility->bReserveSpace = TRUE;
-			break;
-			case 2 :
-				pAccessibility->bAutoHide = TRUE;
-			break;
-			case 3 :
-				pAccessibility->bAutoHideOnAnyOverlap = TRUE;
-			break;
-			case 4 :
-				pAccessibility->bAutoHideOnOverlap = TRUE;
-			break;
-			case 5 :
-				pAccessibility->cRaiseDockShortcut = cShortkey;
-				cShortkey = NULL;
-			break;
-			
+			pAccessibility->cRaiseDockShortcut = cShortkey;
+			cShortkey = NULL;
 		}
 	}
+	pAccessibility->iVisibility = iVisibility;
 	g_free (cShortkey);
 	if (pAccessibility->cHideEffect == NULL) 
 	{
@@ -128,7 +119,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 		g_key_file_set_string (pKeyFile, "Accessibility", "hide effect", pAccessibility->cHideEffect);
 	}
 	
-	pAccessibility->iCallbackMethod = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "callback", &bFlushConfFileNeeded, 0, NULL, NULL); 
+	pAccessibility->iCallbackMethod = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "callback", &bFlushConfFileNeeded, 0, NULL, NULL);
 	
 	//\____________________ Autres parametres.
 	pAccessibility->iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max_authorized_width", &bFlushConfFileNeeded, 0, "Position", NULL);  // obsolete, cache en conf.
@@ -137,26 +128,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	pAccessibility->iUnhideDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "unhide delay", &bFlushConfFileNeeded, 0, NULL, NULL);
 	
 	pAccessibility->bAutoHideOnFullScreen = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto quick hide", &bFlushConfFileNeeded, FALSE, "TaskBar", NULL);
-	
-	/**cairo_dock_get_size_key_value (pKeyFile, "Accessibility", "zone size", &bFlushConfFileNeeded, 0, "Hidden dock", "zone size", &pAccessibility->iVisibleZoneWidth, &pAccessibility->iVisibleZoneHeight);
-	if (pAccessibility->iVisibleZoneWidth == 0)
-	{
-		pAccessibility->iVisibleZoneWidth = g_key_file_get_integer (pKeyFile, "Hidden dock", "zone width", NULL);
-		pAccessibility->iVisibleZoneHeight = g_key_file_get_integer (pKeyFile, "Hidden dock", "zone height", NULL);
-		if (pAccessibility->iVisibleZoneWidth == 0)
-		{
-			pAccessibility->iVisibleZoneWidth = g_key_file_get_integer (pKeyFile, "Background", "zone width", NULL);
-			pAccessibility->iVisibleZoneHeight = g_key_file_get_integer (pKeyFile, "Background", "zone height", NULL);
-		}
-		int iSize[2] = {pAccessibility->iVisibleZoneWidth, pAccessibility->iVisibleZoneHeight};
-		g_key_file_set_integer_list (pKeyFile, "Accessibility", "zone size", iSize, 2);
-	}
-	if (pAccessibility->iVisibleZoneWidth < 50)
-		pAccessibility->iVisibleZoneWidth = 50;
-	if (pAccessibility->iVisibleZoneHeight == 0)
-		pAccessibility->iVisibleZoneHeight = 2;*/
-	
-	///pAccessibility->bPopUpOnScreenBorder = ! cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "pop in corner only", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 	
 	//\____________________ sous-docks.
 	pAccessibility->iLeaveSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "leaving delay", &bFlushConfFileNeeded, 330, "System", NULL);
@@ -206,38 +177,48 @@ static void _hide_all_docks (const gchar *cName, CairoDock *pDock, Icon *icon)
 		g_free (cShortcut); \
 		cShortcut = NULL; } } while (0)
 
+static void _init_hiding (CairoDock *pDock, gpointer data)
+{
+	if (pDock->bIsShowing || pDock->bIsHiding)
+	{
+		g_pHidingBackend->init (pDock);
+	}
+}
 static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAccessibility *pAccessibility)
 {
 	CairoDock *pDock = g_pMainDock;
 	
+	if (! pDock)
+	{
+		if (pPrevAccessibility->cRaiseDockShortcut != NULL)
+			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
+		return ;
+	}
+	
 	//\_______________ Shortcut.
 	if (pAccessibility->cRaiseDockShortcut != NULL)
 	{
-		if (pPrevAccessibility->cRaiseDockShortcut == NULL || strcmp (pAccessibility->cRaiseDockShortcut, pPrevAccessibility->cRaiseDockShortcut) != 0)
+		if (pPrevAccessibility->cRaiseDockShortcut == NULL || strcmp (pAccessibility->cRaiseDockShortcut, pPrevAccessibility->cRaiseDockShortcut) != 0)  // le raccourci a change.
 		{
 			if (pPrevAccessibility->cRaiseDockShortcut != NULL)
 				cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-			if (! cd_keybinder_bind (pAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))
+			if (! cd_keybinder_bind (pAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))  // le bind n'a pas pu se faire.
 			{
 				g_free (pAccessibility->cRaiseDockShortcut);
 				pAccessibility->cRaiseDockShortcut = NULL;
+				
+				cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
 			}
 		}
 	}
-	else
+	else if (pPrevAccessibility->cRaiseDockShortcut != NULL) // plus d eraccourci
 	{
-		if (pPrevAccessibility->cRaiseDockShortcut != NULL)
+		
 		{
 			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-			cairo_dock_place_root_dock (pDock);
-			gtk_widget_show (pDock->container.pWidget);
+			
+			cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
 		}
-	}
-	if (pAccessibility->cRaiseDockShortcut != NULL)
-	{
-		pAccessibility->bReserveSpace = FALSE;
-		///pAccessibility->bPopUp = FALSE;
-		pAccessibility->bAutoHide = FALSE;
 	}
 	
 	//\_______________ Max Size.
@@ -247,11 +228,24 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		cairo_dock_set_all_views_to_default (1);  // 1 <=> tous les docks racines. met a jour la taille et reserve l'espace.
 	}
 	
-	//\_______________ Reserve Spave.
-	if (pAccessibility->bReserveSpace != pPrevAccessibility->bReserveSpace)
-		cairo_dock_reserve_space_for_all_root_docks (pAccessibility->bReserveSpace);
+	//\_______________ Hiding effect.
+	if (cairo_dock_strings_differ (pAccessibility->cHideEffect, pPrevAccessibility->cHideEffect))
+	{
+		g_pHidingBackend = cairo_dock_get_hiding_effect (pAccessibility->cHideEffect);
+		if (g_pHidingBackend && g_pHidingBackend->init)
+		{
+			cairo_dock_foreach_root_docks ((GFunc)_init_hiding, NULL);  // si le dock est en cours d'animation, comme le backend est nouveau, il n'a donc pas ete initialise au debut de l'animation => on le fait ici.
+		}
+	}
 	
-	/**
+	cairo_dock_set_dock_visibility (pDock, pAccessibility->iVisibility);
+	/*
+	//\_______________ Reserve Spave.
+	gboolean bReserveSpace = (pAccessibility->iVisibility == CAIRO_DOCK_VISI_RESERVE);
+	gboolean bReserveSpace0 = (pPrevAccessibility->iVisibility == CAIRO_DOCK_VISI_RESERVE);
+	if (bReserveSpace != bReserveSpace0)
+		cairo_dock_reserve_space_for_dock (pDock, bReserveSpace);
+	
 	//\_______________ Pop-up.
 	if (pAccessibility->bPopUp)
 		cairo_dock_start_polling_screen_edge ();
@@ -262,18 +256,9 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		cairo_dock_set_docks_on_top_layer (FALSE);  // FALSE <=> all docks.
 	}
 	else if (pAccessibility->bPopUp && ! pPrevAccessibility->bPopUp)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.*/
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
 	
 	//\_______________ Auto-Hide
-	if (cairo_dock_strings_differ (pAccessibility->cHideEffect, pPrevAccessibility->cHideEffect))
-	{
-		g_pHidingBackend = cairo_dock_get_hiding_effect (pAccessibility->cHideEffect);
-		if (pDock && (pDock->bIsShowing || pDock->bIsHiding) && g_pHidingBackend && g_pHidingBackend->init)
-		{
-			g_pHidingBackend->init (pDock);
-		}
-	}
-	
 	if (pDock)
 	{
 		if (pAccessibility->bAutoHideOnFullScreen != pPrevAccessibility->bAutoHideOnFullScreen ||
@@ -283,24 +268,23 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 		{
 			if (pAccessibility->bAutoHideOnOverlap || pAccessibility->bAutoHideOnFullScreen)
 			{
-				Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
-				cairo_dock_temporary_auto_hide_docks (pActiveAppli);
+				cairo_dock_hide_show_if_current_window_is_on_our_way (pDock);
 			}
 			else if (pAccessibility->bAutoHideOnAnyOverlap)
 			{
-				cairo_dock_temporary_auto_hide_docks_for_any_window ();
+				cairo_dock_hide_if_any_window_overlap_or_show (pDock);
 			}
 			else if (pAccessibility->bAutoHide)
 			{
 				pDock->bTemporaryHidden = FALSE;
 				pDock->bAutoHide = TRUE;
-				cairo_dock_foreach_docks ((GHFunc)_hide_all_docks, NULL);
+				cairo_dock_start_hiding (pDock);
 			}
 			else
 			{
 				pDock->bTemporaryHidden = FALSE;
 				pDock->bAutoHide = FALSE;
-				cairo_dock_foreach_docks ((GHFunc)_show_all_docks, NULL);
+				cairo_dock_start_hiding (pDock);
 			}
 			
 			if (myAccessibility.bAutoHide || myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnAnyOverlap)
@@ -312,7 +296,7 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 				cairo_dock_stop_polling_screen_edge ();
 			}
 		}
-	}
+	}*/
 }
 
 
@@ -335,3 +319,16 @@ DEFINE_PRE_INIT (Accessibility)
 	pModule->pConfig = &myAccessibility;
 	pModule->pData = NULL;
 }
+
+/*
+IMHO, you can't assume in the spec that the dock/panel will be on the top of the screen.
+Even if you set up things like this by default, the user is likely to move it, break your assumption, and then report a bug because it won't work as expected. I don't imagine you would reply him "it's your fault, you shouldn't have moved the gnome-panel". ^^
+
+"our own indicators would not support that"
+Well they'd better support it, to handle the case where the user places its gnome-panel at the bottom of the screen.
+They just have to send the position of the gnome-panel, which is probably available as a property of the panel, or through a gconf call.
+
+The parameter should also be used by each application, so that they can place their menu; I believe the Qt/GTK framework can mask this thing.
+
+Fabounet.
+*/

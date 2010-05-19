@@ -480,9 +480,9 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 	else if (pButton->button == 3 && pButton->type == GDK_BUTTON_PRESS)  // clique droit.
 	{
 		Icon *pClickedIcon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
-		GtkWidget *menu = cairo_dock_build_menu (pClickedIcon, CAIRO_CONTAINER (pDesklet));  // genere un CAIRO_DOCK_BUILD_ICON_MENU.
-		gtk_widget_show_all (menu);
-		gtk_menu_popup (GTK_MENU (menu),
+		GtkMenu *menu = cairo_dock_build_menu (pClickedIcon, CAIRO_CONTAINER (pDesklet));  // genere un CAIRO_DOCK_BUILD_ICON_MENU.
+		gtk_widget_show_all (GTK_WIDGET (menu));
+		gtk_menu_popup (menu,
 			NULL,
 			NULL,
 			NULL,
@@ -801,7 +801,7 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 
 void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute)
 {
-	//g_print ("%s (%dx%d ; (%d,%d) ; %d)\n", __func__, pAttribute->iDeskletWidth, pAttribute->iDeskletHeight, pAttribute->iDeskletPositionX, pAttribute->iDeskletPositionY, pAttribute->iAccessibility);
+	//g_print ("%s (%dx%d ; (%d,%d) ; %d)\n", __func__, pAttribute->iDeskletWidth, pAttribute->iDeskletHeight, pAttribute->iDeskletPositionX, pAttribute->iDeskletPositionY, pAttribute->iVisibility);
 	if (pAttribute->bDeskletUseSize && (pAttribute->iDeskletWidth != pDesklet->container.iWidth || pAttribute->iDeskletHeight != pDesklet->container.iHeight))
 	{
 		pDesklet->iDesiredWidth = pAttribute->iDeskletWidth;
@@ -824,7 +824,7 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 			iAbsolutePositionY);
 	//g_print (" let's place the deklet at (%d;%d)", iAbsolutePositionX, iAbsolutePositionY);
 
-	cairo_dock_set_desklet_accessibility (pDesklet, pAttribute->iAccessibility, FALSE);
+	cairo_dock_set_desklet_accessibility (pDesklet, pAttribute->iVisibility, FALSE);
 	
 	if (pAttribute->bOnAllDesktops)
 	{
@@ -1084,21 +1084,21 @@ static void _cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gbool
 
 //for compiz fusion "widget layer"
 //set behaviour in compiz to: (class=Cairo-dock & type=utility)
-void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletAccessibility iAccessibility, gboolean bSaveState)
+void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibility iVisibility, gboolean bSaveState)
 {
-	//g_print ("%s (%d)\n", __func__, iAccessibility);
+	//g_print ("%s (%d)\n", __func__, iVisibility);
 	
 	//\_________________ On applique la nouvelle accessibilite.
-	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->container.pWidget), iAccessibility == CAIRO_DESKLET_KEEP_BELOW);
-	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->container.pWidget), iAccessibility == CAIRO_DESKLET_KEEP_ABOVE);
+	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_BELOW);
+	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_ABOVE);
 
 	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
-	if (iAccessibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
+	if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");  // le hide-show le fait deconner completement, il perd son skip_task_bar ! au moins sous KDE3.
 	else
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
 	
-	if (iAccessibility == CAIRO_DESKLET_RESERVE_SPACE)
+	if (iVisibility == CAIRO_DESKLET_RESERVE_SPACE)
 	{
 		if (! pDesklet->bSpaceReserved)
 			_cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);  // sinon inutile de le refaire, s'il y'a un changement de taille ce sera fait lors du configure-event.
@@ -1112,11 +1112,11 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletA
 	Icon *icon = pDesklet->pIcon;
 	if (bSaveState && CAIRO_DOCK_IS_APPLET (icon))
 		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
-			G_TYPE_INT, "Desklet", "accessibility", iAccessibility,
+			G_TYPE_INT, "Desklet", "accessibility", iVisibility,
 			G_TYPE_INVALID);
 	
 	//\_________________ On verifie que la regle de Compiz est correcte.
-	if (iAccessibility == CAIRO_DESKLET_ON_WIDGET_LAYER && bSaveState)
+	if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER && bSaveState)
 	{
 		// pour activer le plug-in, recuperer la liste, y rajouter widget-layer, puis envoyer :
 		//dbus-send --print-reply --type=method_call  --dest=org.freedesktop.compiz  /org/freedesktop/compiz/core/allscreens/active_plugins  org.freedesktop.compiz.get

@@ -287,9 +287,11 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 			if (! pDock->container.bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
 			{
 				//g_print ("rideau !\n");
-				/**
+				
 				//\__________________ On repasse derriere si on etait devant.
-				if (pDock->bPopped)
+				if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW)
+					gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+				/**if (pDock->bPopped)
 					cairo_dock_pop_down (pDock);*/
 				
 				//\__________________ On se redimensionne en taille normale.

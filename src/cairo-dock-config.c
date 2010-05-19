@@ -506,7 +506,6 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	pDock->iGapY = myPosition.iGapY;
 	
 	pDock->fAlign = myPosition.fAlign;
-	pDock->bAutoHide = myAccessibility.bAutoHide;
 	
 	gboolean bGroupOrderChanged;
 	if (tIconTypeOrderOld[CAIRO_DOCK_LAUNCHER] != myIcons.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] ||
@@ -649,7 +648,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		if (cRaiseDockShortcutOld != NULL)
 		{
 			cd_keybinder_unbind (cRaiseDockShortcutOld, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-			cairo_dock_place_root_dock (pDock);
+			cairo_dock_move_resize_dock (pDock);
 			gtk_widget_show (pDock->container.pWidget);
 		}
 	}
@@ -670,20 +669,22 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	
 	cairo_dock_hide_show_launchers_on_other_desktops (pDock);
 	
-	myAccessibility.bReserveSpace = myAccessibility.bReserveSpace && (myAccessibility.cRaiseDockShortcut == NULL);
-	cairo_dock_reserve_space_for_all_root_docks (myAccessibility.bReserveSpace);
-
+	/**myAccessibility.bReserveSpace = myAccessibility.bReserveSpace && (myAccessibility.cRaiseDockShortcut == NULL);
+	cairo_dock_reserve_space_for_all_root_docks (myAccessibility.bReserveSpace);*/
+	
+	cairo_dock_set_dock_visibility (pDock, myAccessibility.iVisibility);
+	
 	cairo_dock_load_background_decorations (pDock);
 
-	cairo_dock_place_root_dock (pDock);
-	if (mySystem.bUseFakeTransparency && ! bUseFakeTransparencyOld)
+	cairo_dock_move_resize_dock (pDock);
+	/**if (mySystem.bUseFakeTransparency && ! bUseFakeTransparencyOld)
 	{
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);  // le main dock ayant ete cree avant, il n'a pas herite de ce parametre.
 	}
 	else if (! mySystem.bUseFakeTransparency && bUseFakeTransparencyOld)
 	{
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
-	}
+	}*/
 	
 	/**if (myAccessibility.bPopUp)
 	{
@@ -701,7 +702,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		cairo_dock_stop_polling_screen_edge ();
 		if (bPopUpOld)
 			cairo_dock_set_docks_on_top_layer (FALSE);
-	}*/
+	}
 	if (myAccessibility.bAutoHide || myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnAnyOverlap)
 	{
 		cairo_dock_start_polling_screen_edge ();
@@ -709,7 +710,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	else
 	{
 		cairo_dock_stop_polling_screen_edge ();
-	}
+	}*/
 	
 	pDock->container.iMouseX = 0;  // on se place hors du dock initialement.
 	pDock->container.iMouseY = 0;

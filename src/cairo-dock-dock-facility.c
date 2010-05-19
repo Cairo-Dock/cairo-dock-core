@@ -184,7 +184,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	
 	cairo_dock_update_background_decorations_if_necessary (pDock, pDock->iDecorationsWidth, pDock->iDecorationsHeight);
 	
-	if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace && ! pDock->bAutoHide && iPrevMaxDockHeight != pDock->iMaxDockHeight)
+	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE && ! pDock->bAutoHide && iPrevMaxDockHeight != pDock->iMaxDockHeight)
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 }
 

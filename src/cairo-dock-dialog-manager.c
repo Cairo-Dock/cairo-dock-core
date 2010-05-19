@@ -687,7 +687,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	{
 		cairo_dock_set_dialog_orientation (pDialog, pContainer);
 		
-		if (pDialog->container.bIsHorizontal)
+		if (pDialog->bSideDialog)
 		{
 			if (! pDialog->container.bInside)
 			{

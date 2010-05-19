@@ -592,7 +592,7 @@ static void _cairo_dock_set_one_desklet_visibility_to_default (CairoDesklet *pDe
 		GKeyFile *pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
 		g_key_file_free (pKeyFile);
 		
-		cairo_dock_set_desklet_accessibility (pDesklet, pMinimalConfig->deskletAttribute.iAccessibility, FALSE);
+		cairo_dock_set_desklet_accessibility (pDesklet, pMinimalConfig->deskletAttribute.iVisibility, FALSE);
 	}
 	pDesklet->bAllowMinimize = FALSE;  /// utile ?...
 }

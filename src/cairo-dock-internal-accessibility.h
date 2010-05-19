@@ -34,23 +34,27 @@ extern CairoConfigAccessibility myAccessibility;
 G_BEGIN_DECLS
 
 struct _CairoConfigAccessibility {
-	gboolean bReserveSpace;
+	/**gboolean bReserveSpace;
 	gboolean bAutoHide;
-	gboolean bAutoHideOnFullScreen;
 	gboolean bAutoHideOnOverlap;
-	gboolean bAutoHideOnAnyOverlap;
+	gboolean bAutoHideOnAnyOverlap;*/
 	///gboolean bPopUp;
+	// Root dock visibility
+	CairoDockVisibility iVisibility;
+	gchar *cHideEffect;
 	gint iCallbackMethod;
-	gint iMaxAuthorizedWidth;
 	gchar *cRaiseDockShortcut;
 	gint iUnhideDockDelay;
+	//Sub-Dock visibility
+	gboolean bShowSubDockOnClick;
 	gint iLeaveSubDockDelay;
 	gint iShowSubDockDelay;
-	gboolean bShowSubDockOnClick;
+	// others
+	gboolean bAutoHideOnFullScreen;
+	gint iMaxAuthorizedWidth;
 	gboolean bExtendedMode;
 	gboolean bLockIcons;
 	gboolean bLockAll;
-	gchar *cHideEffect;
 	} ;
 
 DEFINE_PRE_INIT (Accessibility);

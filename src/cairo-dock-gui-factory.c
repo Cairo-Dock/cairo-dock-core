@@ -770,7 +770,7 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 		g_free,
 		g_free);
 	gchar *cName = g_strdup (N_("_Custom Icons_"));
-	g_hash_table_insert (pHashTable, cName, g_strdup (gettext (cName)));
+	g_hash_table_insert (pHashTable, g_strdup (gettext (cName)), cName);
 	
 	int i;
 	for (i = 0; cDirs[i] != NULL; i ++)

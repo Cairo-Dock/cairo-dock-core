@@ -118,10 +118,10 @@ static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *
 	}
 }
 
-static void _show_if_no_overlapping_window (const gchar *cName, CairoDock *pDock, gpointer data)
+static void _show_if_no_overlapping_window (CairoDock *pDock, gpointer data)
 {
-	if (pDock->iRefCount > 0)
-		return;
+	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
+		return ;
 	if (cairo_dock_is_temporary_hidden (pDock))
 	{
 		if (cairo_dock_search_window_overlapping_dock (pDock) == NULL)
@@ -131,10 +131,10 @@ static void _show_if_no_overlapping_window (const gchar *cName, CairoDock *pDock
 	}
 }
 
-static void _hide_if_any_overlap (const gchar *cName, CairoDock *pDock, gpointer data)
+static void _hide_if_any_overlap (CairoDock *pDock, gpointer data)
 {
-	if (pDock->iRefCount > 0)
-		return;
+	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
+		return ;
 	if (!cairo_dock_is_temporary_hidden (pDock))
 	{
 		if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
@@ -145,10 +145,10 @@ static void _hide_if_any_overlap (const gchar *cName, CairoDock *pDock, gpointer
 	}
 }
 
-static void _hide_if_any_overlap_or_show (const gchar *cName, CairoDock *pDock, gpointer data)
+static void _hide_if_any_overlap_or_show (CairoDock *pDock, gpointer data)
 {
-	if (pDock->iRefCount > 0)
-		return;
+	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
+		return ;
 	if (cairo_dock_is_temporary_hidden (pDock))
 	{
 		if (cairo_dock_search_window_overlapping_dock (pDock) == NULL)
@@ -165,10 +165,10 @@ static void _hide_if_any_overlap_or_show (const gchar *cName, CairoDock *pDock, 
 	}
 }
 
-static void _hide_if_overlap (const gchar *cName, CairoDock *pDock, Icon *icon)
+static void _hide_if_overlap (CairoDock *pDock, Icon *icon)
 {
-	if (pDock->iRefCount > 0)
-		return;
+	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
+		return ;
 	if (! cairo_dock_is_temporary_hidden (pDock))
 	{
 		if (cairo_dock_appli_is_on_current_desktop (icon) && cairo_dock_appli_overlaps_dock (icon, pDock))
@@ -178,10 +178,10 @@ static void _hide_if_overlap (const gchar *cName, CairoDock *pDock, Icon *icon)
 	}
 }
 
-static void _hide_if_overlap_or_show_if_no_overlapping_window (const gchar *cName, CairoDock *pDock, Icon *icon)
+static void _hide_if_overlap_or_show_if_no_overlapping_window (CairoDock *pDock, Icon *icon)
 {
-	if (pDock->iRefCount > 0)
-		return;
+	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
+		return ;
 	if (cairo_dock_appli_overlaps_dock (icon, pDock))  // cette fenetre peut provoquer l'auto-hide.
 	{
 		if (! cairo_dock_is_temporary_hidden (pDock))
@@ -201,18 +201,16 @@ static void _hide_if_overlap_or_show_if_no_overlapping_window (const gchar *cNam
 	}
 }
 
-static void _unhide_all_docks (const gchar *cName, CairoDock *pDock, Icon *icon)
+static void _unhide_all_docks (CairoDock *pDock, Icon *icon)
 {
-	if (pDock->iRefCount > 0)
-		return;
 	if (cairo_dock_is_temporary_hidden (pDock))
 		cairo_dock_deactivate_temporary_auto_hide (pDock);
 }
 
-static void _hide_show_if_on_our_way (const gchar *cName, CairoDock *pDock, Icon *icon)
+static void _hide_show_if_on_our_way (CairoDock *pDock, Icon *icon)
 {
-	if (pDock->iRefCount > 0)
-		return;
+	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && ! myAccessibility.bAutoHideOnFullScreen)
+		return ;
 	if (_cairo_dock_appli_is_on_our_way (icon, pDock))  // la nouvelle fenetre active nous gene.
 	{
 		if (!cairo_dock_is_temporary_hidden (pDock))
@@ -225,14 +223,15 @@ static void _hide_show_if_on_our_way (const gchar *cName, CairoDock *pDock, Icon
 	}
 }
 
-void cairo_dock_temporary_auto_hide_docks (Icon *icon)
+void cairo_dock_hide_show_if_current_window_is_on_our_way (CairoDock *pDock)
 {
-	cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, icon);
+	Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+	_hide_show_if_on_our_way (pDock, pActiveAppli);
 }
 
-void cairo_dock_temporary_auto_hide_docks_for_any_window (void)
+void cairo_dock_hide_if_any_window_overlap_or_show (CairoDock *pDock)
 {
-	cairo_dock_foreach_docks ((GHFunc)_hide_if_any_overlap_or_show, NULL);
+	_hide_if_any_overlap_or_show (pDock, NULL);
 }
 
 
@@ -267,8 +266,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 				/// redessiner les inhibiteurs ?...
 			}
 			
-			if (myAccessibility.bAutoHideOnAnyOverlap)
-				cairo_dock_foreach_docks ((GHFunc)_show_if_no_overlapping_window, NULL);
+			cairo_dock_foreach_root_docks ((GFunc)_show_if_no_overlapping_window, NULL);
 		}
 		else
 		{
@@ -324,10 +322,8 @@ static void _on_update_applis_list (CairoDock *pDock)
 					cairo_dock_prevent_inhibated_class (icon);
 				}
 				
-				if (myAccessibility.bAutoHideOnAnyOverlap)
-				{
-					cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap, icon);
-				}
+				// visibilite
+				cairo_dock_foreach_root_docks ((GFunc)_hide_if_overlap, icon);
 			}
 			else
 				cairo_dock_blacklist_appli (Xid);
@@ -401,17 +397,14 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 		s_iCurrentActiveWindow = XActiveWindow;
 		
 		// on gere le masquage du dock.
-		if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+		if (! CAIRO_DOCK_IS_APPLI (icon))
 		{
-			if (! CAIRO_DOCK_IS_APPLI (icon))
-			{
-				Window iPropWindow;
-				XGetTransientForHint (s_XDisplay, XActiveWindow, &iPropWindow);
-				icon = g_hash_table_lookup (s_hXWindowTable, &iPropWindow);
-				//g_print ("*** la fenetre parente est : %s\n", icon?icon->cName:"aucune");
-			}
-			cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, icon);
+			Window iPropWindow;
+			XGetTransientForHint (s_XDisplay, XActiveWindow, &iPropWindow);
+			icon = g_hash_table_lookup (s_hXWindowTable, &iPropWindow);
+			//g_print ("*** la fenetre parente est : %s\n", icon?icon->cName:"aucune");
 		}
+		cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, icon);
 		
 		// notification xklavier.
 		if (bForceKbdStateRefresh)  // si on active une fenetre n'ayant pas de focus clavier, on n'aura pas d'evenement kbd_changed, pourtant en interne le clavier changera. du coup si apres on revient sur une fenetre qui a un focus clavier, il risque de ne pas y avoir de changement de clavier, et donc encore une fois pas d'evenement ! pour palier a ce, on considere que les fenetres avec focus clavier sont celles presentes en barre des taches. On decide de generer un evenement lorsqu'on revient sur une fenetre avec focus, a partir d'une fenetre sans focus (mettre a jour le clavier pour une fenetre sans focus n'a pas grand interet, autant le laisser inchange).
@@ -432,16 +425,12 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 	
 	cairo_dock_hide_show_launchers_on_other_desktops(pDock);
 	
-	// masquage du dock.
-	if (myAccessibility.bAutoHideOnFullScreen || myAccessibility.bAutoHideOnOverlap)
-	{
-		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
-		cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, pActiveAppli);
-	}
-	if (myAccessibility.bAutoHideOnAnyOverlap)
-	{
-		cairo_dock_foreach_docks ((GHFunc)_hide_if_any_overlap_or_show, NULL);
-	}
+	// visibilite
+	Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+	cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, pActiveAppli);
+	
+	cairo_dock_foreach_root_docks ((GFunc)_hide_if_any_overlap_or_show, NULL);
+	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
@@ -476,16 +465,13 @@ static void _on_change_window_state (Icon *icon)
 	}
 	
 	// masquage du dock.
-	if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+	if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change d'etat.
 	{
-		if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change d'etat.
+		if ((bIsHidden != icon->bIsHidden) || (bIsFullScreen != icon->bIsFullScreen))  // si c'est l'etat maximise qui a change, on le verra au changement de dimensions.
 		{
-			if ((bIsHidden != icon->bIsHidden) || (bIsFullScreen != icon->bIsFullScreen))  // si c'est l'etat maximise qui a change, on le verra au changement de dimensions.
-			{
-				icon->bIsFullScreen = bIsFullScreen;
-				icon->bIsHidden = bIsHidden;
-				cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, NULL);
-			}
+			icon->bIsFullScreen = bIsFullScreen;
+			icon->bIsHidden = bIsHidden;
+			cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, NULL);
 		}
 	}
 	
@@ -500,13 +486,11 @@ static void _on_change_window_state (Icon *icon)
 		cd_message ("  changement de visibilite -> %d", bIsHidden);
 		icon->bIsHidden = bIsHidden;
 		
-		if (myAccessibility.bAutoHideOnAnyOverlap)
-		{
-			if (!icon->bIsHidden)  // la fenetre reapparait.
-				cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap, icon);
-			else  // la fenetre se cache.
-				cairo_dock_foreach_docks ((GHFunc)_show_if_no_overlapping_window, NULL);
-		}
+		// visibilite
+		if (!icon->bIsHidden)  // la fenetre reapparait.
+			cairo_dock_foreach_root_docks ((GFunc)_hide_if_overlap, icon);
+		else  // la fenetre se cache.
+			cairo_dock_foreach_root_docks ((GFunc)_show_if_no_overlapping_window, NULL);
 		
 		// affichage des applis minimisees.
 		if (g_bUseOpenGL && myTaskBar.iMinimizedWindowRenderType == 2)
@@ -584,24 +568,19 @@ static void _on_change_window_desktop (Icon *icon)
 		_cairo_dock_hide_show_windows_on_other_desktops (&Xid, icon, g_pMainDock);  // si elle vient sur notre bureau, elle n'est pas forcement sur le meme viewport, donc il faut le verifier.
 	}
 	
-	// masquage du dock.
-	if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+	// visibilite
+	if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change de bureau.
 	{
-		if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change de bureau.
-		{
-			cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, NULL);
-		}
+		cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, NULL);
 	}
-	if (myAccessibility.bAutoHideOnAnyOverlap)
+	
+	if ((icon->iNumDesktop == -1 || icon->iNumDesktop == g_desktopGeometry.iCurrentDesktop) && icon->iViewPortX == g_desktopGeometry.iCurrentViewportX && icon->iViewPortY == g_desktopGeometry.iCurrentViewportY)  // petite optimisation : si l'appli arrive sur le bureau courant, on peut se contenter de ne verifier qu'elle.
 	{
-		if ((icon->iNumDesktop == -1 || icon->iNumDesktop == g_desktopGeometry.iCurrentDesktop) && icon->iViewPortX == g_desktopGeometry.iCurrentViewportX && icon->iViewPortY == g_desktopGeometry.iCurrentViewportY)  // petite optimisation : si l'appli arrive sur le bureau courant, on peut se contenter de ne verifier qu'elle.
-		{
-			cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap, icon);
-		}
-		else  // la fenetre n'est plus sur le bureau courant.
-		{
-			cairo_dock_foreach_docks ((GHFunc)_show_if_no_overlapping_window, NULL);
-		}
+		cairo_dock_foreach_root_docks ((GFunc)_hide_if_overlap, icon);
+	}
+	else  // la fenetre n'est plus sur le bureau courant.
+	{
+		cairo_dock_foreach_root_docks ((GFunc)_show_if_no_overlapping_window, NULL);
 	}
 }
 
@@ -641,10 +620,8 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 				gtk_widget_queue_draw (pParentDock->container.pWidget);
 		}
 		
-		if (myAccessibility.bAutoHideOnAnyOverlap)
-		{
-			cairo_dock_foreach_docks ((GHFunc)_show_if_no_overlapping_window, icon);
-		}
+		// visibilite
+		cairo_dock_foreach_root_docks ((GFunc)_show_if_no_overlapping_window, icon);
 	}
 	else  // elle est sur le bureau.
 	{
@@ -657,19 +634,14 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 				cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		
-		if (myAccessibility.bAutoHideOnAnyOverlap)
-		{
-			cairo_dock_foreach_docks ((GHFunc)_hide_if_overlap_or_show_if_no_overlapping_window, icon);
-		}
+		// visibilite
+		cairo_dock_foreach_root_docks ((GFunc)_hide_if_overlap_or_show_if_no_overlapping_window, icon);
 	}
 	
 	// masquage du dock.
-	if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+	if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change de bureau.
 	{
-		if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change de bureau.
-		{
-			cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, icon);
-		}
+		cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, icon);
 	}
 }
 
@@ -944,15 +916,10 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		cairo_dock_update_dock_size (pDock);
 	
 	// masquage du dock, une fois que sa taille est correcte.
-	if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
-	{
-		Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
-		cairo_dock_foreach_docks ((GHFunc)_hide_show_if_on_our_way, pActiveAppli);
-	}
-	else if (myAccessibility.bAutoHideOnAnyOverlap)
-	{
-		cairo_dock_foreach_docks ((GHFunc)_hide_if_any_overlap, NULL);
-	}
+	Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+	cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, pActiveAppli);
+	
+	cairo_dock_foreach_root_docks ((GFunc)_hide_if_any_overlap, NULL);
 	
 	s_bAppliManagerIsRunning = TRUE;
 }
@@ -1025,7 +992,7 @@ void cairo_dock_stop_application_manager (void)
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_reset_appli_table_iter, NULL);  // libere toutes les icones d'appli.
 	cairo_dock_update_dock_size (g_pMainDock);
 	
-	cairo_dock_foreach_docks ((GHFunc)_unhide_all_docks, NULL);
+	cairo_dock_foreach_root_docks ((GFunc)_unhide_all_docks, NULL);
 }
 
 gboolean cairo_dock_application_manager_is_running (void)

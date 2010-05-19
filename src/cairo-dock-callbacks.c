@@ -708,7 +708,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%x; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
+	g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%x; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
@@ -726,6 +726,12 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	{
 		g_source_remove (s_iSidShowSubDockDemand);
 		s_iSidShowSubDockDemand = 0;
+	}
+	if (pDock->iSidHideBack != 0)
+	{
+		g_print ("remove hide back timeout\n");
+		g_source_remove(pDock->iSidHideBack);
+		pDock->iSidHideBack = 0;
 	}
 	
 	// input shape desactivee, le dock devient actif.
@@ -790,23 +796,17 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		}
 	}
 	
-	/**
 	// on repasse au premier plan.
-	if (myAccessibility.bPopUp && pDock->iRefCount == 0)
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && pDock->iRefCount == 0)
 	{
-		cairo_dock_pop_up (pDock);
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
+		/**cairo_dock_pop_up (pDock);
 		//If the dock window is entered, and there is a pending drop below event then it should be cancelled
 		if (pDock->iSidPopDown != 0)
 		{
 			g_source_remove(pDock->iSidPopDown);
 			pDock->iSidPopDown = 0;
-		}
-	}*/
-	if (pDock->iSidHideBack != 0)
-	{
-		//g_print ("remove hide back timeout\n");
-		g_source_remove(pDock->iSidHideBack);
-		pDock->iSidHideBack = 0;
+		}*/
 	}
 	
 	// si on etait en auto-hide, on commence a monter.
@@ -1010,7 +1010,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	}
 	else if (pButton->button == 3 && pButton->type == GDK_BUTTON_PRESS)  // clique droit.
 	{
-		GtkWidget *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
+		GtkMenu *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
 		
 		cairo_dock_popup_menu_on_container (menu, CAIRO_CONTAINER (pDock));
 	}
@@ -1167,34 +1167,31 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 	
 	if (pDock->iRefCount > 0 && (bSizeUpdated || bPositionUpdated))
 	{
-		if (myAccessibility.bAutoHideOnOverlap || myAccessibility.bAutoHideOnAnyOverlap)
+		if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
 		{
-			if (myAccessibility.bAutoHideOnOverlap)
+			Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
+			if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
 			{
-				Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
-				if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
-				{
-					if (!cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_activate_temporary_auto_hide (pDock);
-				}
-				else
-				{
-					if (cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_deactivate_temporary_auto_hide (pDock);
-				}
+				if (!cairo_dock_is_temporary_hidden (pDock))
+					cairo_dock_activate_temporary_auto_hide (pDock);
 			}
-			else if (myAccessibility.bAutoHideOnAnyOverlap)
+			else
 			{
-				if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
-				{
-					if (!cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_activate_temporary_auto_hide (pDock);
-				}
-				else
-				{
-					if (cairo_dock_is_temporary_hidden (pDock))
-						cairo_dock_deactivate_temporary_auto_hide (pDock);
-				}
+				if (cairo_dock_is_temporary_hidden (pDock))
+					cairo_dock_deactivate_temporary_auto_hide (pDock);
+			}
+		}
+		else if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
+		{
+			if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
+			{
+				if (!cairo_dock_is_temporary_hidden (pDock))
+					cairo_dock_activate_temporary_auto_hide (pDock);
+			}
+			else
+			{
+				if (cairo_dock_is_temporary_hidden (pDock))
+					cairo_dock_deactivate_temporary_auto_hide (pDock);
 			}
 		}
 	}

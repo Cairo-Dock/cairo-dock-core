@@ -29,13 +29,18 @@ y gap = 0
 #v
 sep_other =
 
-#b- Activate auto-hide?
-#{The dock will automatically hide itself when the mouse leaves it and will show a callback zone instead. Place the mouse into this zone to make the dock reappear.}
-auto-hide = false
-
 #i[0;12] Number of the screen where the dock should be located:
 #{starting from 0}
 num screen = 0
+
+#F-[Visibility of the dock;gtk-find]
+frame_visi =
+
+#l-[Always on top;Reserve space for the dock;Keep the dock below;Hide the dock when it overlaps the current window;Hide the dock whenever it overlaps any window;Keep the dock hidden;Pop-up on shortcut] Visibility:
+#{Modes are sorted from the most intrusive to the less intrusive.
+#When the dock is hidden or below a window, place the mouse on the screen's border to call it back.
+#When the dock pops up on shortcut, it will appear at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+visibility = 4
 
 
 #[@prefix@/@DATADIRNAME@/@PACKAGE@/icon-views.png]

@@ -361,6 +361,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = _cairo_dock_create_empty_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
 	pDialog->pIcon = pIcon;
+	pDialog->container.bIsHorizontal = TRUE;
 	if (pAttribute->bForceAbove)
 	{
 		gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
@@ -604,7 +605,7 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 }
 
 
-static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, CairoDockTypeHorizontality *bIsHorizontal, gboolean *bDirectionUp, double fAlign)
+static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, gboolean *bIsHorizontal, gboolean *bDirectionUp, double fAlign)
 {
 	g_return_if_fail (pIcon != NULL && pContainer != NULL);
 	//g_print ("%s (%.2f, %.2f)\n", __func__, pIcon->fXAtRest, pIcon->fDrawX);
@@ -689,7 +690,7 @@ void cairo_dock_set_dialog_orientation (CairoDialog *pDialog, CairoContainer *pC
 {
 	if (pContainer != NULL && pDialog->pIcon != NULL)
 	{
-		_cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->container.bIsHorizontal, &pDialog->container.bDirectionUp, pDialog->fAlign);
+		_cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bSideDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);
 		
 	}
 	else

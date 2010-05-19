@@ -13,11 +13,11 @@ screen border = 0
 #F-[Visibility of the main dock;@pkgdatadir@/icon-visibility.svg]
 frame_visi =
 
-#Y-[Always on top;0;0;Prevent windows from overlapping the dock;0;0;Automatically hide the dock;1;1;Hide the dock whenever it overlaps a window;1;1;Hide the dock when it overlaps the current window;1;1;Pop-up on shortcut;2;1] Visibility:
-#{Prevent windows from overlapping the dock: reserve space at the edge of the screen for the dock.
-#Auto-hide: when the dock is hidden, place the mouse on the screen's border to call it back.
-#Pop-up on shortcut : When you press the shortcut, the dock will pop-up at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
-visibility = 1
+#Y-[Always on top;0;0;Reserve space for the dock;0;0;Keep the dock below;0;0;Hide the dock when it overlaps the current window;1;1;Hide the dock whenever it overlaps any window;1;1;Keep the dock hidden;1;1;Pop-up on shortcut;2;1] Visibility:
+#{Modes are sorted from the most intrusive to the less intrusive.
+#When the dock is hidden or below a window, place the mouse on the screen's border to call it back.
+#When the dock pops up on shortcut, it will appear at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+visibility = 4
 
 #L-[Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
 hide effect = Move down

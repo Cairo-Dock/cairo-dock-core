@@ -172,6 +172,7 @@ struct _CairoDialog {
 	GTimer *pUnmapTimer;
 	gboolean bPositionForced;
 	gdouble fAppearanceCounter;
+	gboolean bSideDialog;
 };
 
 #define CAIRO_DIALOG_MIN_SIZE 20

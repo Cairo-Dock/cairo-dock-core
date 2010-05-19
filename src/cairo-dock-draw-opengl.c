@@ -659,7 +659,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 			y = icon->fDrawY;
 			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
 			glPushMatrix ();
-			icon->fAlpha = pDock->fPostHideOffset;
+			icon->fAlpha = pDock->fPostHideOffset * pDock->fPostHideOffset;
 			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
 			glPopMatrix ();
 			icon->fDrawY = y;

@@ -51,6 +51,13 @@ void cairo_dock_init_dock_manager (void);
 */
 CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendererName);
 
+/** Increase by 1 the number of pointing icons. If the dock was a root dock, it becomes a sub-dock.
+* @param pDock a dock.
+* @param pParentDock its parent dock, if it becomes a sub-dock, otherwise it can be NULL.
+*/
+void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock);
+
+
 /** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
 * @param pIconList a list of icons that will be loaded and inserted into the new dock.
 * @param cDockName desired name for the new dock.
@@ -129,6 +136,12 @@ void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, g
 */
 void cairo_dock_foreach_docks (GHFunc pFunction, gpointer pUserData);
 
+/** Execute an action on all main docks.
+*@param pFunction the action.
+*@param pUserData data passed to the callback.
+*/
+void cairo_dock_foreach_root_docks (GFunc pFunction, gpointer pUserData);
+
 
 
 void cairo_dock_search_max_decorations_size (int *iWidth, int *iHeight);
@@ -198,7 +211,9 @@ void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenB
 /**void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
 void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly);*/
 
-void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
+///void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
+
+void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisibility);
 
 
 G_END_DECLS

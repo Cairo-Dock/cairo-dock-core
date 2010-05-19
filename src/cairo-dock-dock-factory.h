@@ -102,6 +102,17 @@ typedef enum {
 	CAIRO_DOCK_INPUT_HIDDEN
 	} CairoDockInputState;
 
+typedef enum {
+	CAIRO_DOCK_VISI_KEEP_ABOVE,
+	CAIRO_DOCK_VISI_RESERVE,
+	CAIRO_DOCK_VISI_KEEP_BELOW,
+	CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP,
+	CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY,
+	CAIRO_DOCK_VISI_AUTO_HIDE,
+	CAIRO_DOCK_VISI_SHORTKEY,
+	CAIRO_DOCK_NB_VISI
+	} CairoDockVisibility;
+
 /// Definition of a Dock, which derives from a Container.
 struct _CairoDock {
 	/// container.
@@ -117,8 +128,8 @@ struct _CairoDock {
 	gint iGapX;  // ecart de la fenetre par rapport au bord de l'ecran.
 	gint iGapY;  // decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
 	gdouble fAlign;  // alignment, between 0 and 1, on the screen's edge.
-	/// whether the dock automatically hides itself or not.
-	gboolean bAutoHide;
+	/// visibility.
+	CairoDockVisibility iVisibility;
 	/// Horizontal offset of the screen where the dock lives, according to Xinerama.
 	gint iScreenOffsetX;
 	/// Vertical offset of the screen where the dock lives, according to Xinerama.
@@ -140,6 +151,7 @@ struct _CairoDock {
 	gint iRightMargin;
 
 	//\_______________ current state of the dock.
+	gboolean bAutoHide;  // auto-hide activated.
 	gint iScrollOffset;  // pour faire defiler les icones avec la molette.
 	gint iMagnitudeIndex;  // indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO_DOCK_NB_MAX_ITERATIONS).
 	/// (un)folding factor, between 0(unfolded) to 1(folded). It's up to the renderer on how to make use of it.
@@ -250,11 +262,7 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName);
 
 void cairo_dock_free_dock (CairoDock *pDock);
 
-/** Increase by 1 the number of pointing icons. If the dock was a root dock, it becomes a sub-dock.
-* @param pDock a dock.
-* @param pParentDock its parent dock, if it becomes a sub-dock, otherwise it can be NULL.
-*/
-void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock);
+void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock);
 
 /** Insert an icon into a dock.
 * Do nothing if the icon already exists inside the dock.

@@ -588,7 +588,7 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	g_free (pIcon->cParentDockName);
 	pIcon->cParentDockName = cCurrentDockName;
 	
-	//\_________________________ on recharge l'icone.
+	//\_________________________ on recharge l'icone, ce qui va creer le dock.
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (pIcon))
 	{
 		cairo_dock_reload_launcher (pIcon);
@@ -1127,9 +1127,9 @@ static void _cairo_dock_move_class_to_current_desktop (GtkMenuItem *pMenuItem, g
  ///////////////// LES OPERATIONS SUR LES DESKLETS /////////////////
 ///////////////////////////////////////////////////////////////////
 
-static inline void _cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletAccessibility iAccessibility)
+static inline void _cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibility iVisibility)
 {
-	cairo_dock_set_desklet_accessibility (pDesklet, iAccessibility, TRUE);  // TRUE <=> save state in conf.
+	cairo_dock_set_desklet_accessibility (pDesklet, iVisibility, TRUE);  // TRUE <=> save state in conf.
 }
 static void _cairo_dock_keep_below (GtkCheckMenuItem *pMenuItem, gpointer *data)
 {

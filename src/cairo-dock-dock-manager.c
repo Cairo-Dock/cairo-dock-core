@@ -75,8 +75,10 @@ extern gboolean g_bKeepAbove;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static GHashTable *s_hDocksTable = NULL;  // table des docks existant.
-static int s_iSidPollScreenEdge = 0;
-
+static guint s_iSidPollScreenEdge = 0;
+static int s_iNbPolls = 0;
+static GList *s_pRootDockList = NULL;
+static gboolean s_bQuickHide = FALSE;
 
 void cairo_dock_init_dock_manager (void)
 {
@@ -124,14 +126,34 @@ CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendere
 		g_pMainDock = pDock;
 	}
 	g_hash_table_insert (s_hDocksTable, g_strdup (cDockName), pDock);
+	s_pRootDockList = g_list_prepend (s_pRootDockList, pDock);
 	
 	//\__________________ On le positionne si ce n'est pas le main dock.
 	if (! pDock->bIsMainDock)
 	{
 		if (cairo_dock_get_root_dock_position (cDockName, pDock))
-			cairo_dock_place_root_dock (pDock);
+			cairo_dock_move_resize_dock (pDock);
 	}
 	return pDock;
+}
+
+void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
+{
+	pDock->iRefCount ++;
+	
+	if (pDock->iRefCount == 1)  // il devient un sous-dock.
+	{
+		if (pParentDock == NULL)
+			pParentDock = g_pMainDock;
+		cairo_dock_make_sub_dock (pDock, pParentDock);
+		
+		const gchar *cDockName = cairo_dock_search_dock_name (pDock);
+		cairo_dock_remove_root_dock_config (cDockName);
+		
+		pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+		
+		s_pRootDockList = g_list_remove (s_pRootDockList, pDock);
+	}
 }
 
 CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDockName, CairoDock *pParentDock)
@@ -140,7 +162,7 @@ CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDoc
 	g_return_val_if_fail (pSubDock != NULL, NULL);
 	
 	cairo_dock_reference_dock (pSubDock, pParentDock);  // on le fait tout de suite pour avoir la bonne reference avant le 'load'.
-
+	
 	pSubDock->icons = pIconList;
 	if (pIconList != NULL)
 	{
@@ -184,6 +206,15 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 	
 	cairo_dock_free_dock (pDock);
 	
+	/// stop poll ...
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP ||
+		pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY ||
+		pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE ||
+		pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW)
+	{
+		cairo_dock_stop_polling_screen_edge ();
+	}
+	
 	cairo_dock_trigger_refresh_launcher_gui ();
 }
 
@@ -198,6 +229,16 @@ void cairo_dock_reset_docks_table (void)
 	g_pMainDock = NULL;
 }
 
+static void _cairo_dock_stop_polling_screen_edge (void)
+{
+	if (s_iSidPollScreenEdge != 0)
+	{
+		g_source_remove (s_iSidPollScreenEdge);
+		s_iSidPollScreenEdge = 0;
+	}
+	s_iNbPolls = 0;
+}
+
 void cairo_dock_free_all_docks (void)
 {
 	if (g_pMainDock == NULL)
@@ -207,8 +248,10 @@ void cairo_dock_free_all_docks (void)
 	
 	cairo_dock_reset_class_table ();  // enleve aussi les inhibiteurs.
 	cairo_dock_stop_application_manager ();
-	cairo_dock_stop_polling_screen_edge ();
-
+	
+	_cairo_dock_stop_polling_screen_edge ();
+	s_bQuickHide = FALSE;
+	
 	cairo_dock_reset_docks_table ();  // detruit tous les docks, vide la table, et met le main-dock a NULL.
 	
 	cairo_dock_unload_additionnal_textures ();
@@ -379,6 +422,11 @@ void cairo_dock_foreach_docks (GHFunc pFunction, gpointer data)
 	g_hash_table_foreach (s_hDocksTable, pFunction, data);
 }
 
+void cairo_dock_foreach_root_docks (GFunc pFunction, gpointer data)
+{
+	g_list_foreach (s_pRootDockList, pFunction, data);
+}
+
 
 static void _cairo_dock_get_one_decoration_size (gchar *cDockName, CairoDock *pDock, int *data)
 {
@@ -511,7 +559,7 @@ static void _cairo_dock_set_one_dock_view_to_default (gchar *cDockName, CairoDoc
 		cairo_dock_set_default_renderer (pDock);
 		cairo_dock_update_dock_size (pDock);
 		pDock->pRenderer->calculate_icons (pDock);
-		if (pDock->iRefCount == 0 && myAccessibility.bReserveSpace)
+		if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)
 			cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	}
 }
@@ -554,12 +602,13 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 	g_return_val_if_fail (cDockName != NULL && pDock != NULL, FALSE);
 	if (pDock->iRefCount > 0)
 		return FALSE;
-	if (strcmp (cDockName, "cairo-dock") == 0)
+	if (strcmp (cDockName, "cairo-dock") == 0 || pDock->bIsMainDock)
 		return TRUE;
 	
+	//\______________ On verifie la presence du fichier de conf associe.
 	//g_print ("%s (%s)\n", __func__, cDockName);
-	gchar *cConfFilePath = (pDock->bIsMainDock ? NULL : g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName));
-	if (! g_file_test (cConfFilePath ? cConfFilePath : g_cConfFile, G_FILE_TEST_EXISTS))
+	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
+	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // pas encore de fichier de conf pour ce dock.
 	{
 		pDock->container.bIsHorizontal = g_pMainDock->container.bIsHorizontal;
 		pDock->container.bDirectionUp = g_pMainDock->container.bDirectionUp;
@@ -569,13 +618,16 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 		return FALSE;
 	}
 	
+	//\______________ On ouvre le fichier de conf.
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath ? cConfFilePath : g_cConfFile);
 	if (pKeyFile == NULL)
 	{
-		cd_warning ("no conf file !");
+		cd_warning ("wrong conf file (%s) !", cConfFilePath);
 		g_free (cConfFilePath);
 		return FALSE;
 	}
+	
+	//\______________ Position.
 	gboolean bFlushConfFileNeeded = FALSE;
 	pDock->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);
 	pDock->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);
@@ -605,14 +657,6 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 	
 	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 	
-	if (pDock->bIsMainDock)
-		pDock->bAutoHide = (cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "visibility", &bFlushConfFileNeeded, FALSE, NULL, NULL) == 3);
-	else
-		pDock->bAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "Position", "auto-hide", &bFlushConfFileNeeded, FALSE, "Auto-Hide", "auto-hide");
-	
-	if (pDock->bAutoHide)
-		cairo_dock_start_polling_screen_edge ();
-	
 	if (myPosition.bUseXinerama)
 	{
 		int iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
@@ -622,6 +666,15 @@ gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *p
 	else
 		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
 	
+	//\______________ Visibilite.
+	CairoDockVisibility iVisibility;
+	if (pDock->bIsMainDock)
+		iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "visibility", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	else
+		iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Position", "visibility", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	cairo_dock_set_dock_visibility (pDock, iVisibility);
+	
+	//\______________ Vue.
 	g_free (pDock->cRendererName);
 	pDock->cRendererName = cairo_dock_get_string_key_value (pKeyFile, "Views", "main dock view", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	
@@ -653,15 +706,17 @@ gchar *cairo_dock_add_root_dock_config (const gchar *cDockName)
 	int r = system (cCommand);
 	g_free (cCommand);
 	
-	// on placera le nouveau dock a l'oppose du main dock.
+	// on placera le nouveau dock a l'oppose du main dock, meme ecran et meme visibilite.
 	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cValidDockName);
 	cairo_dock_update_conf_file (cDesktopFilePath,
-		G_TYPE_INT,
-		"Position",
-		"screen border",
+		G_TYPE_INT, "Position", "screen border",
 		(g_pMainDock->container.bIsHorizontal ?
 			(g_pMainDock->container.bDirectionUp ? 1 : 0) :
 			(g_pMainDock->container.bDirectionUp ? 3 : 2)),
+		G_TYPE_INT, "Position", "visibility",
+		g_pMainDock->iVisibility,
+		G_TYPE_INT, "Position", "num screen",
+		g_pMainDock->iNumScreen,
 		G_TYPE_INVALID);
 	g_free (cDesktopFilePath);
 	
@@ -679,8 +734,8 @@ void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock)
 	cairo_dock_update_dock_size (pDock);
 	cairo_dock_calculate_dock_icons (pDock);
 	
-	cairo_dock_place_root_dock (pDock);
-	if (myAccessibility.bReserveSpace)
+	cairo_dock_move_resize_dock (pDock);
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	gtk_widget_queue_draw (pDock->container.pWidget);
 }
@@ -703,7 +758,7 @@ static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoD
 	{
 		cairo_dock_get_root_dock_position (cDockName, pDock);  // relit toute la conf.
 		cairo_dock_update_dock_size (pDock);  // la taille max du dock depend de la taille de l'ecran, donc on recalcule son ratio.
-		cairo_dock_place_root_dock (pDock);
+		cairo_dock_move_resize_dock (pDock);
 		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 }
@@ -745,8 +800,6 @@ void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bRelo
  // VISIBILITY //
 ////////////////
 
-static gboolean s_bQuickHide = FALSE;
-
 static void _cairo_dock_quick_hide_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0)
@@ -782,8 +835,7 @@ void cairo_dock_stop_quick_hide (void)
 	if (s_bQuickHide)
 	{
 		s_bQuickHide = FALSE;
-		if (! myAccessibility.bAutoHide && ! myAccessibility.bAutoHideOnOverlap &&  !myAccessibility.bAutoHideOnAnyOverlap)
-			cairo_dock_stop_polling_screen_edge ();
+		cairo_dock_stop_polling_screen_edge ();
 		
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_quick_hide_one_root_dock, NULL);
 	}
@@ -832,24 +884,33 @@ void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock)
 
 static gboolean _cairo_dock_hide_back_dock (CairoDock *pDock)
 {
-	//g_print ("hide back\n");
-	cairo_dock_start_hiding (pDock);
+	g_print ("hide back\n");
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->container.bInside)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+	else if (pDock->bAutoHide)
+		cairo_dock_start_hiding (pDock);
 	pDock->iSidHideBack = 0;
 	return FALSE;
 }
 static gboolean _cairo_dock_unhide_dock_delayed (CairoDock *pDock)
 {
-	//g_print ("unhide delayed\n");
-	cairo_dock_start_showing (pDock);
+	if (pDock->container.bInside)
+		return FALSE;
+	g_print ("let's show this dock (%d)\n", pDock->bIsMainDock);
+	if (pDock->bAutoHide)
+		cairo_dock_start_showing (pDock);
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
+	
 	if (pDock->iSidHideBack == 0)  // on se recachera dans 2s si on n'est pas entre dans le dock entre-temps.
 		pDock->iSidHideBack = g_timeout_add (2000, (GSourceFunc) _cairo_dock_hide_back_dock, (gpointer) pDock);
 	pDock->iSidUnhideDelayed = 0;
 	return FALSE;
 }
-static void _cairo_dock_unhide_root_dock_on_mouse_hit (const gchar *cDockName, CairoDock *pDock, int *pMouse)
+static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pMouse)
 {
 	static int iPrevPointerX = -1, iPrevPointerY = -1;
-	if (pDock->iRefCount > 0 || ! pDock->bAutoHide)
+	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW)
 		return;
 	
 	gint x, y;
@@ -904,7 +965,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (const gchar *cDockName, C
 		break;
 	}
 	
-	//g_print ("%s will unhide\n", cDockName);
+	g_print (" dock will be shown (%d)\n", pDock->bIsMainDock);
 	if (myAccessibility.iUnhideDockDelay != 0)  // on programme une apparition.
 	{
 		if (pDock->iSidUnhideDelayed == 0)
@@ -912,9 +973,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (const gchar *cDockName, C
 	}
 	else  // on montre le dock tout de suite.
 	{
-		cairo_dock_start_showing (pDock);
-		if (pDock->iSidHideBack == 0)  // on se recachera dans 2s si on n'est pas entre dans le dock entre-temps.
-			pDock->iSidHideBack = g_timeout_add (2000, (GSourceFunc) _cairo_dock_hide_back_dock, (gpointer) pDock);
+		_cairo_dock_unhide_dock_delayed (pDock);
 	}
 }
 
@@ -923,51 +982,26 @@ static gboolean _cairo_dock_poll_screen_edge (gpointer data)  // thanks to Smidg
 	static int mouse[4];
 	mouse[0] = FALSE;
 	
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_unhide_root_dock_on_mouse_hit, mouse);
+	g_list_foreach (s_pRootDockList, (GFunc) _cairo_dock_unhide_root_dock_on_mouse_hit, mouse);
 	
 	return TRUE;
 }
 void cairo_dock_start_polling_screen_edge (void)
 {
+	s_iNbPolls ++;
+	g_print ("%s (%d)\n", __func__, s_iNbPolls);
 	if (s_iSidPollScreenEdge == 0)
 		s_iSidPollScreenEdge = g_timeout_add (250, (GSourceFunc) _cairo_dock_poll_screen_edge, NULL);
 }
 
 void cairo_dock_stop_polling_screen_edge (void)
 {
-	if (s_iSidPollScreenEdge != 0)
+	g_print ("%s (%d)\n", __func__, s_iNbPolls);
+	s_iNbPolls --;
+	if (s_iNbPolls <= 0)
 	{
-		g_source_remove (s_iSidPollScreenEdge);
-		s_iSidPollScreenEdge = 0;
+		_cairo_dock_stop_polling_screen_edge ();  // remet tout a 0.
 	}
-}
-
-static void _cairo_dock_unhide_one_root_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
-{
-	if (pDock->iRefCount > 0)
-		return ;
-	CairoDockPositionType iScreenBorder = GPOINTER_TO_INT (data);
-	
-	CairoDockPositionType iDockScreenBorder = (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp));
-	if (iDockScreenBorder == iScreenBorder && cairo_dock_is_hidden (pDock))  // c'est notre bord d'ecran et le dock est courammment cache.
-	{
-		//g_print ("%s will unhide\n", cDockName);
-		if (myAccessibility.iUnhideDockDelay != 0)  // on programme une apparition.
-		{
-			if (pDock->iSidUnhideDelayed == 0)
-				pDock->iSidUnhideDelayed = g_timeout_add (myAccessibility.iUnhideDockDelay, (GSourceFunc) _cairo_dock_unhide_dock_delayed, (gpointer) pDock);
-		}
-		else  // on montre le dock tout de suite.
-		{
-			cairo_dock_start_showing (pDock);
-			if (pDock->iSidHideBack == 0)  // on se recachera dans 2s si on n'est pas entre dans le dock entre-temps.
-				pDock->iSidHideBack = g_timeout_add (2000, (GSourceFunc) _cairo_dock_hide_back_dock, (gpointer) pDock);
-		}
-	}
-}
-void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder)
-{
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_unhide_one_root_dock, GINT_TO_POINTER (iScreenBorder));
 }
 
 /**static void _cairo_dock_set_one_dock_on_top_layer (gchar *cDockName, CairoDock *pDock, gpointer data)
@@ -1002,7 +1036,7 @@ void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenB
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_pop_up_one_root_dock, GINT_TO_POINTER (iScreenBorder));
 }*/
 
-static void _cairo_dock_reserve_space_for_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+/**static void _cairo_dock_reserve_space_for_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0)
 		cairo_dock_reserve_space_for_dock (pDock, GPOINTER_TO_INT (data));
@@ -1010,4 +1044,67 @@ static void _cairo_dock_reserve_space_for_one_dock (gchar *cDockName, CairoDock 
 void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_reserve_space_for_one_dock, GINT_TO_POINTER (bReserve));
+}*/
+
+void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisibility)
+{
+	//\_______________ jeu de parametres.
+	gboolean bReserveSpace = (iVisibility == CAIRO_DOCK_VISI_RESERVE);
+	gboolean bKeepBelow = (iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW);
+	gboolean bAutoHideOnOverlap = (iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP);
+	gboolean bAutoHideOnAnyOverlap = (iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY);
+	gboolean bAutoHide = (iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE);
+	
+	gboolean bReserveSpace0 = (pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE);
+	gboolean bKeepBelow0 = (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW);
+	gboolean bAutoHideOnOverlap0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP);
+	gboolean bAutoHideOnAnyOverlap0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY);
+	gboolean bAutoHide0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE);
+	
+	pDock->iVisibility = iVisibility;
+	
+	//\_______________ changement dans le Reserve Space.
+	if (bReserveSpace != bReserveSpace0)
+		cairo_dock_reserve_space_for_dock (pDock, bReserveSpace);
+	
+	//\_______________ changement dans le Keep below.
+	if (bKeepBelow != bKeepBelow0)
+	{
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), bKeepBelow);
+	}
+	
+	//\_______________ changement dans l'Auto-Hide
+	if (bAutoHideOnOverlap != bAutoHideOnOverlap0 ||
+		bAutoHideOnAnyOverlap != bAutoHideOnAnyOverlap0 ||
+		bAutoHide != bAutoHide0)
+	{
+		if (bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+		{
+			cairo_dock_hide_show_if_current_window_is_on_our_way (pDock);
+		}
+		else if (bAutoHideOnAnyOverlap)
+		{
+			cairo_dock_hide_if_any_window_overlap_or_show (pDock);
+		}
+		else if (bAutoHide)
+		{
+			pDock->bTemporaryHidden = FALSE;
+			pDock->bAutoHide = TRUE;
+			cairo_dock_start_hiding (pDock);
+		}
+		else
+		{
+			pDock->bTemporaryHidden = FALSE;
+			pDock->bAutoHide = FALSE;
+			cairo_dock_start_showing (pDock);
+		}
+	}
+	
+	//\_______________ on arrete/demarre la scrutation des bords.
+	gboolean bIsPolling = (bAutoHide0 || bAutoHideOnOverlap0 || bAutoHideOnAnyOverlap0 || bKeepBelow0);
+	gboolean bShouldPoll = (bAutoHide || bAutoHideOnOverlap || bAutoHideOnAnyOverlap || bKeepBelow);
+	if (bIsPolling && ! bShouldPoll)
+		cairo_dock_stop_polling_screen_edge ();
+	else if (!bIsPolling && bShouldPoll)
+		cairo_dock_start_polling_screen_edge ();
 }
