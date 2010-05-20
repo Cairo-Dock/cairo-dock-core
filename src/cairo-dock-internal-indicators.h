@@ -44,8 +44,8 @@ struct _CairoConfigIndicators {
 	gchar *cIndicatorImagePath;
 	gboolean bIndicatorAbove;
 	gdouble fIndicatorRatio;
-	gboolean bLinkIndicatorWithIcon;
-	gint iIndicatorDeltaY;
+	gboolean bIndicatorOnIcon;
+	gdouble fIndicatorDeltaY;
 	gboolean bRotateWithDock;
 	// grouped indicator.
 	gchar *cClassIndicatorImagePath;

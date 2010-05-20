@@ -180,7 +180,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		_cairo_dock_compute_dialog_sizes (pDialog);
 	}
 
-	if (iWidth != pEvent->width || iHeight != pEvent->height)
+	if (iWidth != pEvent->width || iHeight != pEvent->height || (pDialog->bNoInput && ! pDialog->pShapeBitmap))
 	{
 		if ((pEvent->width != CAIRO_DIALOG_MIN_SIZE || pEvent->height != CAIRO_DIALOG_MIN_SIZE) && (pEvent->width < iWidth || pEvent->height < iHeight))
 		{
@@ -195,6 +195,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		
 		if (pDialog->bNoInput)
 		{
+			g_print ("set transparent dialog\n");
 			if (pDialog->pShapeBitmap != NULL)
 				g_object_unref ((gpointer) pDialog->pShapeBitmap);
 			pDialog->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
@@ -205,8 +206,14 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 			cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
 			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
 			cairo_paint (pCairoContext);
+			cairo_set_source_rgba (pCairoContext, 1.0f, 1.0f, 1.0f, 1.0f);
+			cairo_rectangle (pCairoContext,
+				0,
+				0,
+				1,
+				1);
+			cairo_fill (pCairoContext);  // workaround sur un bug de X...
 			cairo_destroy (pCairoContext);
-			
 			gtk_widget_input_shape_combine_mask (pDialog->container.pWidget,
 				pDialog->pShapeBitmap,
 				0,

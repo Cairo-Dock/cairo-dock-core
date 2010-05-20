@@ -51,6 +51,7 @@
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-labels.h"
+#include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-load.h"
@@ -499,9 +500,10 @@ void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRe
 	double fReflectSize = 0;
 	if (pContainer->bUseReflect)
 	{
-		fReflectSize = myIcons.fReflectSize * icon->fScale * fabs (icon->fHeightFactor) + icon->fDeltaYReflection;
+		fReflectSize = myIcons.fReflectSize * icon->fScale * fabs (icon->fHeightFactor) + icon->fDeltaYReflection + myBackground.iFrameMargin;  // un peu moyen le iFrameMargin mais bon ...
 	}
-	fReflectSize = MAX (fReflectSize, myIndicators.iIndicatorDeltaY);
+	if (! myIndicators.bIndicatorOnIcon)
+		fReflectSize = MAX (fReflectSize, myIndicators.fIndicatorDeltaY * icon->fHeight);
 	
 	double fX = icon->fDrawX;
 	fX += icon->fWidth * icon->fScale * (1 - fabs (icon->fWidthFactor))/2 + icon->fGlideOffset * icon->fWidth * icon->fScale;

@@ -52,9 +52,42 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	
 	pIndicators->fIndicatorRatio = cairo_dock_get_double_key_value (pKeyFile, "Indicators", "indicator ratio", &bFlushConfFileNeeded, 1., "Icons", NULL);
 	
-	pIndicators->bLinkIndicatorWithIcon = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "link indicator", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
-	
-	pIndicators->iIndicatorDeltaY = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "indicator deltaY", &bFlushConfFileNeeded, 2, "Icons", NULL);
+	pIndicators->bIndicatorOnIcon = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "indicator on icon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	pIndicators->fIndicatorDeltaY = cairo_dock_get_double_key_value (pKeyFile, "Indicators", "indicator offset", &bFlushConfFileNeeded, 11, NULL, NULL);
+	if (pIndicators->fIndicatorDeltaY > 10)  // nouvelle option.
+	{
+		double iIndicatorDeltaY = g_key_file_get_integer (pKeyFile, "Indicators", "indicator deltaY", NULL);
+		double z = g_key_file_get_double (pKeyFile, "Icons", "zoom max", NULL);
+		if (z != 0)
+			iIndicatorDeltaY /= z;
+		pIndicators->bIndicatorOnIcon = g_key_file_get_boolean (pKeyFile, "Indicators", "link indicator", NULL);
+		if (iIndicatorDeltaY > 6)  // en general cela signifie que l'indicateur est sur le dock.
+			pIndicators->bIndicatorOnIcon = FALSE;
+		else if (iIndicatorDeltaY < 3)  // en general cela signifie que l'indicateur est sur l'icone.
+			pIndicators->bIndicatorOnIcon = TRUE;  // sinon on garde le comportement d'avant.
+		
+		int w, hi=0;  // on va se baser sur la taille des lanceurs.
+		cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "launcher ", bFlushConfFileNeeded, w, hi);  
+		if (hi < 1)
+			hi = 48;
+		if (pIndicators->bIndicatorOnIcon)  // decalage vers le haut et zoom avec l'icone.
+		{
+			// on la recupere comme ca car on n'est pas forcement encore passe dans le groupe "Icons".
+			pIndicators->fIndicatorDeltaY = (double)iIndicatorDeltaY / hi;
+			g_print ("icones : %d, deltaY : %d\n", hi, (int)iIndicatorDeltaY);
+		}
+		else  // decalage vers le bas sans zoom.
+		{
+			double hr, hb, l;
+			hr = hi * g_key_file_get_double (pKeyFile, "Icons", "field depth", NULL);
+			hb = g_key_file_get_integer (pKeyFile, "Background", "frame margin", NULL);
+			l = g_key_file_get_integer (pKeyFile, "Background", "line width", NULL);
+			pIndicators->fIndicatorDeltaY = (double)iIndicatorDeltaY / (hr + hb + l/2);
+		}
+		g_print ("recuperation de l'indicateur : %.3f, %d\n", pIndicators->fIndicatorDeltaY, pIndicators->bIndicatorOnIcon);
+		g_key_file_set_double (pKeyFile, "Indicators", "indicator offset", pIndicators->fIndicatorDeltaY);
+		g_key_file_set_boolean (pKeyFile, "Indicators", "indicator on icon", pIndicators->bIndicatorOnIcon);
+	}
 	
 	pIndicators->bRotateWithDock = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "rotate indicator", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	

@@ -203,6 +203,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 		cairo_dock_remove_root_dock_config (cDockName);
 	
 	g_hash_table_remove (s_hDocksTable, cDockName);
+	s_pRootDockList = g_list_remove (s_pRootDockList, pDock);
 	
 	cairo_dock_free_dock (pDock);
 	
@@ -226,6 +227,8 @@ static gboolean _cairo_dock_free_one_dock (gchar *cDockName, CairoDock *pDock, g
 void cairo_dock_reset_docks_table (void)
 {
 	g_hash_table_foreach_remove (s_hDocksTable, (GHRFunc) _cairo_dock_free_one_dock, NULL);  // pour pouvoir enlever les elements tout en parcourant la table.
+	g_list_free (s_pRootDockList);
+	s_pRootDockList = NULL;
 	g_pMainDock = NULL;
 }
 

@@ -650,16 +650,18 @@ indicator above = true
 #{You can choose to make the indicator smaller or bigger than the icons. The bigger the value is, the bigger the indicator is. 1 means the indicator will have the same size as the icons.}
 indicator ratio = 1.
 
-#i+[-100;64] Vertical offset :
-#{in pixels. You can use this parameter to adjust the indicator's vertical position.}
-indicator deltaY = 2
+#e+[-0.2;1.2] Vertical offset :
+#{Relatively to the icons' size. You can use this parameter to adjust the indicator's vertical position.
+#If the indicator is linked to the icon, the offset will be upwards, otherwise downwards.}
+indicator offset = -0.03
 
 #b+ Link the indicator with its icon?
-#{It will then be resized like the icon, move like the icon, etc. Otherwise it will be drawn directly on the dock.}
-link indicator = true
+#{If the indicator is linked to the icon, it will then be zoomed like the icon and the offset will be upwards.
+#Otherwise it will be drawn directly on the dock and the offset will be downwards.}
+indicator on icon = true
 
 #b+ Rotate the indicator with dock?
-#{Use it to make the indicator rotate according to the position of the dock (top/bottom/right/left)}
+#{Use it to make the indicator follow the orientation of the dock (top/bottom/right/left).}
 rotate indicator = true
 
 

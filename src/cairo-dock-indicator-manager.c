@@ -47,6 +47,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
@@ -96,7 +97,7 @@ static inline void cairo_dock_load_task_indicator (const gchar *cIndicatorImageP
 	
 	double fLauncherWidth = (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
 	double fLauncherHeight = (myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIcons.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
-	double fScale = (myIndicators.bLinkIndicatorWithIcon ? fMaxScale : 1.) * fIndicatorRatio;
+	double fScale = (myIndicators.bIndicatorOnIcon ? fMaxScale : 1.) * fIndicatorRatio;
 	
 	cairo_dock_load_image_buffer (&s_indicatorBuffer,
 		cIndicatorImagePath,
@@ -194,7 +195,7 @@ void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, Cairo
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath) ||
-		pPrevIndicators->bLinkIndicatorWithIcon != pIndicators->bLinkIndicatorWithIcon ||
+		pPrevIndicators->bIndicatorOnIcon != pIndicators->bIndicatorOnIcon ||
 		pPrevIndicators->fIndicatorRatio != pIndicators->fIndicatorRatio)
 	{
 		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, fMaxScale, pIndicators->fIndicatorRatio);
@@ -242,14 +243,49 @@ void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, Cairo
  /// RENDERING ///
 /////////////////
 
-static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
+static inline double _compute_delta_y (Icon *icon, double py, gboolean bOnIcon, double fRatio)
 {
-	glPushMatrix ();
+	double dy;
+	if (bOnIcon)  // decalage vers le haut et zoom avec l'icone.
+		dy = py * icon->fHeight * icon->fScale;
+	else  // decalage vers le bas sans zoom.
+		dy = - py * (myIcons.fReflectSize * fRatio + myBackground.iFrameMargin + .5*myBackground.iDockLineWidth);
+	return dy;
+}
+
+static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, CairoDock *pDock)
+{
+	gboolean bIsHorizontal = pDock->container.bIsHorizontal;
+	gboolean bDirectionUp = pDock->container.bDirectionUp;
+	double fRatio = pDock->container.fRatio;
 	if (! myIndicators.bRotateWithDock)
 		bDirectionUp = bIsHorizontal = TRUE;
 	
+	//\__________________ On calcule l'offset et le zoom.
+	double w = s_indicatorBuffer.iWidth;
+	double h = s_indicatorBuffer.iHeight;
+	double fMaxScale = cairo_dock_get_max_scale (pDock);
+	double z = (myIndicators.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
+	double fY = _compute_delta_y (icon, myIndicators.fIndicatorDeltaY, myIndicators.bIndicatorOnIcon, fRatio);
+	fY += - icon->fHeight * icon->fScale/2 + h*z/2;  // a 0, le bas de l'indicateur correspond au bas de l'icone.
+	
 	//\__________________ On place l'indicateur.
-	double z = 1 + myIcons.fAmplitude;
+	glPushMatrix ();
+	if (bIsHorizontal)
+	{
+		if (! bDirectionUp)
+			fY = - fY;
+		glTranslatef (0., fY, 0.);
+	}
+	else
+	{
+		if (bDirectionUp)
+			fY = - fY;
+		glTranslatef (fY, 0., 0.);
+		glRotatef (90, 0., 0., 1.);
+	}
+	glScalef (w * z, (bDirectionUp ? 1:-1) * h * z, 1.);
+	/**double z = 1 + myIcons.fAmplitude;
 	double w = s_indicatorBuffer.iWidth;
 	double h = s_indicatorBuffer.iHeight;
 	double dy = myIndicators.iIndicatorDeltaY / z;
@@ -297,7 +333,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, gboolean bIsHor
 			glRotatef (90, 0., 0., 1.);
 			glScalef (w * fRatio * 1., (bDirectionUp ? 1:-1) * h * fRatio * 1., 1.);
 		}
-	}
+	}*/
 	
 	//\__________________ On dessine l'indicateur.
 	cairo_dock_draw_texture_with_alpha (s_indicatorBuffer.iTexture, 1., 1., 1.);
@@ -343,13 +379,46 @@ static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bIsHor
 	glPopMatrix ();
 }
 
-static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
+static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext)
 {
-	cairo_save (pCairoContext);
-	double z = 1 + myIcons.fAmplitude;
+	gboolean bIsHorizontal = pDock->container.bIsHorizontal;
+	gboolean bDirectionUp = pDock->container.bDirectionUp;
+	double fRatio = pDock->container.fRatio;
+	if (! myIndicators.bRotateWithDock)
+		bDirectionUp = bIsHorizontal = TRUE;
+	
+	//\__________________ On calcule l'offset et le zoom.
 	double w = s_indicatorBuffer.iWidth;
 	double h = s_indicatorBuffer.iHeight;
-	double dy = myIndicators.iIndicatorDeltaY / z;
+	double fMaxScale = cairo_dock_get_max_scale (pDock);
+	double z = (myIndicators.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
+	double fY = - _compute_delta_y (icon, myIndicators.fIndicatorDeltaY, myIndicators.bIndicatorOnIcon, fRatio);  // a 0, le bas de l'indicateur correspond au bas de l'icone.
+	
+	//\__________________ On place l'indicateur.
+	cairo_save (pCairoContext);
+	if (bIsHorizontal)
+	{
+		cairo_translate (pCairoContext,
+			icon->fWidth * icon->fScale / 2 - w * z/2,
+			(bDirectionUp ?
+				icon->fHeight * icon->fScale - h * z + fY :
+				- fY));
+		cairo_scale (pCairoContext,
+			z,
+			z);
+	}
+	else
+	{
+		cairo_translate (pCairoContext,
+			(bDirectionUp ?
+				icon->fHeight * icon->fScale - h * z + fY :
+				- fY),
+			icon->fWidth * icon->fScale / 2 - (w * z/2));
+		cairo_scale (pCairoContext,
+			z,
+			z);
+	}
+	/**double dy = myIndicators.iIndicatorDeltaY / z;
 	if (myIndicators.bLinkIndicatorWithIcon)
 	{
 		w /= z;
@@ -401,7 +470,7 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, cairo_t *pCairoContext
 				fRatio,
 				fRatio);
 		}
-	}
+	}*/
 	
 	cairo_dock_draw_surface (pCairoContext, s_indicatorBuffer.pSurface, w, h, bDirectionUp, bIsHorizontal, 1.);
 	cairo_restore (pCairoContext);
@@ -484,7 +553,7 @@ static gboolean cairo_dock_pre_render_indicator_notification (gpointer pUserData
 	{
 		if (icon->bHasIndicator && ! myIndicators.bIndicatorAbove && s_indicatorBuffer.pSurface != NULL)
 		{
-			_cairo_dock_draw_appli_indicator (icon, pCairoContext, pDock->container.bIsHorizontal, pDock->container.fRatio, pDock->container.bDirectionUp);
+			_cairo_dock_draw_appli_indicator (icon, pDock, pCairoContext);
 		}
 		
 		if (bIsActive && s_activeIndicatorBuffer.pSurface != NULL)
@@ -497,7 +566,7 @@ static gboolean cairo_dock_pre_render_indicator_notification (gpointer pUserData
 		if (icon->bHasIndicator && ! myIndicators.bIndicatorAbove)
 		{
 			//glPushMatrix ();
-			_cairo_dock_draw_appli_indicator_opengl (icon, pDock->container.bIsHorizontal, pDock->container.fRatio, pDock->container.bDirectionUp);
+			_cairo_dock_draw_appli_indicator_opengl (icon, pDock);
 			//glPopMatrix ();
 		}
 		
@@ -523,7 +592,7 @@ static gboolean cairo_dock_render_indicator_notification (gpointer pUserData, Ic
 		}
 		if (icon->bHasIndicator && myIndicators.bIndicatorAbove && s_indicatorBuffer.pSurface != NULL)
 		{
-			_cairo_dock_draw_appli_indicator (icon, pCairoContext, pDock->container.bIsHorizontal, pDock->container.fRatio, pDock->container.bDirectionUp);
+			_cairo_dock_draw_appli_indicator (icon, pDock, pCairoContext);
 		}
 		if (icon->pSubDock != NULL && icon->cClass != NULL && s_classIndicatorBuffer.pSurface != NULL && icon->Xid == 0)  // le dernier test est de la paranoia.
 		{
@@ -536,7 +605,7 @@ static gboolean cairo_dock_render_indicator_notification (gpointer pUserData, Ic
 		{
 			//glPushMatrix ();
 			//glTranslatef (0., 0., icon->fHeight * (1+myIcons.fAmplitude) -1);  // avant-plan
-			_cairo_dock_draw_appli_indicator_opengl (icon, pDock->container.bIsHorizontal, pDock->container.fRatio, pDock->container.bDirectionUp);
+			_cairo_dock_draw_appli_indicator_opengl (icon, pDock);
 			//glPopMatrix ();
 		}
 		if (bIsActive)

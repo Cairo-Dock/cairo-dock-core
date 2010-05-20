@@ -313,9 +313,10 @@ static void _post_render_fade_out_opengl (CairoDock *pDock)
  // SEMI TRANSPARENT //
 //////////////////////
 
+#define CD_SEMI_ALPHA .25
 static void _post_render_semi_transparent (CairoDock *pDock, cairo_t *pCairoContext)
 {
-	double fAlpha = .75*pDock->fHideOffset;
+	double fAlpha = (1 - CD_SEMI_ALPHA)*pDock->fHideOffset;
 	cairo_rectangle (pCairoContext,
 		0,
 		0,
@@ -328,7 +329,7 @@ static void _post_render_semi_transparent (CairoDock *pDock, cairo_t *pCairoCont
 
 static void _post_render_semi_transparent_opengl (CairoDock *pDock)
 {
-	double fAlpha = 1 - .75*pDock->fHideOffset;
+	double fAlpha = 1 - (1 - CD_SEMI_ALPHA)*pDock->fHideOffset;
 	if (g_openglConfig.bAccumBufferAvailable)
 	{
 		glAccum (GL_LOAD, fAlpha);
