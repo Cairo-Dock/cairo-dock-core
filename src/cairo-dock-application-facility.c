@@ -81,7 +81,9 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		}
 		if (pDialog && bForceDemand)
 		{
-			cd_debug ("force dialog on top");
+			cd_debug ("force dock and dialog on top");
+			if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && pDock->bIsBelow)
+				cairo_dock_pop_up (pDock);
 			gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
 			Window Xid = GDK_WINDOW_XID (pDialog->container.pWidget->window);
 			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
@@ -92,20 +94,11 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 	{
 		if (pDock->iRefCount == 0)
 		{
-			if (bForceDemand || cairo_dock_search_window_covering_dock (pDock, FALSE, TRUE) == NULL)
+			if (bForceDemand/** && cairo_dock_search_window_covering_dock (pDock, FALSE, TRUE) == NULL*/)
 			{
-				/**if (pDock->iSidPopDown != 0)
-				{
-					g_source_remove(pDock->iSidPopDown);
-					pDock->iSidPopDown = 0;
-				}
-				cairo_dock_pop_up (pDock);*/
+				if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && pDock->bIsBelow)
+					cairo_dock_pop_up (pDock);
 			}
-			/*if (pDock->bAutoHide && bForceDemand)
-			{
-				cd_debug ("force dock to raise\n");
-				cairo_dock_emit_enter_signal (pDock);
-			}*/
 		}
 		else if (bForceDemand)
 		{
@@ -115,7 +108,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			if (pParentDock)
 				cairo_dock_show_subdock (pPointedIcon, pParentDock);
 		}
-		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10000);
+		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
 	}
 }
@@ -171,17 +164,8 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 		cairo_dock_stop_icon_animation (icon);  // arrete l'animation precedemment lancee par la demande.
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
 	}
-	/**if (! pDock->container.bInside)
-	{
-		//g_print ("pop down the dock\n");
+	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow && ! pDock->container.bInside)
 		cairo_dock_pop_down (pDock);
-		
-		if (pDock->bAutoHide)
-		{
-			//g_print ("force dock to auto-hide\n");
-			cairo_dock_emit_leave_signal (pDock);
-		}
-	}*/
 }
 void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 {

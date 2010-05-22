@@ -94,30 +94,25 @@
  * \n
  * \section install_sec Installation
  *
- * The installation is very easy. In a terminal, copy-paste the following commands :
+ * The installation is very easy and uses cmake. In a terminal, copy-paste the following commands :
  * \code
  *   ### grab the sources of the core
  *   mkdir CD && cd CD
- *   mkdir core plug-ins
- *   cd core
  *   bzr checkout --lightweight lp:cairo-dock-core
  *   ### compil the dock and install it
- *   cd cairo-dock
- *   autoreconf -isf && ./configure --prefix=/usr && make
+ *   cd cairo-dock-core
+ *   cmake CMakeLists.txt  -DCMAKE_INSTALL_PREFIX=/usr
+ *   make
  *   sudo make install
  *   ### grab the sources of the plug-ins
- *   cd ../../plug-ins
+ *   cd ..
  *   bzr checkout --lightweight lp:cairo-dock-plug-ins
  *   ### compil the stable plug-ins and install them
- *   cd cairo-dock-plug-ins
- *   autoreconf -isf && ./configure --prefix=/usr && make
- *   sudo make install
- *   ### compile the unstable plug-ins : for each unstable plug-in, do:
- *   cd name_of_the_plugin
- *   autoreconf -isf && ./configure --prefix=/usr && make
+ *   cmake CMakeLists.txt  -DCMAKE_INSTALL_PREFIX=/usr
+ *   make
  *   sudo make install
  * \endcode
- * You can compil and install any plug-in individually by using the same commands in its own folder.
+ * To install unstable applets, add some -Denable-xxx=yes to the cmake command, where xxx is the lower-case name of the applet.
  * 
  * 
  * \n

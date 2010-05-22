@@ -195,7 +195,6 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		
 		if (pDialog->bNoInput)
 		{
-			g_print ("set transparent dialog\n");
 			if (pDialog->pShapeBitmap != NULL)
 				g_object_unref ((gpointer) pDialog->pShapeBitmap);
 			pDialog->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,

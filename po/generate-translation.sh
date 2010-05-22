@@ -2,9 +2,9 @@
 # Thanks to Jiro Kawada for his help !
 
 if test "$1" = "all"; then
-	export sources="../*/src/*.[ch] ../*/data/messages"
+	export sources="../*/src/*.[ch] ../*/data/messages"  # plug-ins
 else
-	export sources="../src/*.[ch] ../data/messages"
+	export sources="../src/*.[ch] ../src/*/*.[ch] ../data/messages"  # core
 fi
 
 #sed -i 's/\"More precisely/\/\* xgettext:no-c-format \*\/ \"More precisely/g' ../data/messages

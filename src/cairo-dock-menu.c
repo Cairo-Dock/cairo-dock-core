@@ -529,7 +529,7 @@ static void cairo_dock_add_main_dock (GtkMenuItem *pMenuItem, gpointer *data)
 	CairoDock *pDock = cairo_dock_create_dock (cDockName, NULL);
 	cairo_dock_reload_one_root_dock (cDockName, pDock);
 	
-	cairo_dock_show_temporary_dialog_with_icon (_("The new dock has been created.\nNow move some launchers or applets into it by right-clicking on the icon -> move to another dock"), NULL, CAIRO_CONTAINER (g_pMainDock), 6000, NULL);  // on le place pas sur le nouveau dock, car sa fenetre n'est pas encore bien placee (0,0).
+	cairo_dock_show_general_message (_("The new dock has been created.\nNow move some launchers or applets into it by right-clicking on the icon -> move to another dock"), 8000);  // on le place pas sur le nouveau dock, car sa fenetre n'est pas encore bien placee (0,0).
 }
 
 static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
@@ -546,7 +546,7 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	
 	if (icon->cDesktopFileName == NULL || strcmp (icon->cDesktopFileName, "none") == 0)
 	{
-		cairo_dock_show_temporary_dialog_with_icon (_("This icon doesn't have a desktop file."), icon, CAIRO_CONTAINER (pDock), 4000, "same icon");
+		cairo_dock_show_temporary_dialog_with_icon (_("Sorry, this icon doesn't have a configuration file."), icon, CAIRO_CONTAINER (pDock), 4000, "same icon");
 		return ;
 	}
 	
@@ -584,6 +584,10 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	{
 		cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
 	}
+	
+	CairoDock *pNewDock = cairo_dock_search_dock_from_name (cValidDockName);
+	if (pNewDock && pNewDock->icons && pNewDock->icons->next == NULL)  // le dock vient d'etre cree avec cette icone.
+		cairo_dock_show_general_message (_("The new dock has been created.\nYou can customize it by right-clicking on it -> cairo-dock -> configure this dock."), 8000);  // on le place pas sur le nouveau dock, car sa fenetre n'est pas encore bien placee (0,0).
 	g_free (cValidDockName);
 }
 

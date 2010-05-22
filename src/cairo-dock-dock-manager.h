@@ -167,19 +167,32 @@ void cairo_dock_reset_all_views (void);
 void cairo_dock_set_all_views_to_default (int iDockType);
 
 
-/* Ecrit les ecarts en x et en y d'un dock racine dans son fichier de conf.
-*@param pDock the dock.
-*/
 void cairo_dock_write_root_dock_gaps (CairoDock *pDock);
 
+/** Reload the config of a root dock and update it accordingly.
+*@param cDockName name of the dock.
+*@param pDock the dock.
+*/
 void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock);
 
+/** Delete the config of a root dock. Doesn't delete the dock (use \ref cairo_dock_destroy_dock for that), but if it was empty, it won't be created the next time you restart Cairo-Dock.
+*@param cDockName name of the dock.
+*/
 void cairo_dock_remove_root_dock_config (const gchar *cDockName);
 
+/** Add a config for a new root dock. Doens't create the dock (use \ref cairo_dock_create_dock for that).
+*@return the name for the new dock, to be passed to \ref cairo_dock_create_dock.
+*/
 gchar *cairo_dock_add_root_dock_config (void);
 
+/* Redraw all the root docks.
+*@param bExceptMainDock whether to redraw the main dock too.
+*/
 void cairo_dock_redraw_root_docks (gboolean bExceptMainDock);
 
+/* Reposition all the root docks.
+*@param bExceptMainDock whether to redraw the main dock too.
+*/
 void cairo_dock_reposition_root_docks (gboolean bExceptMainDock);
 
 
@@ -198,11 +211,11 @@ void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bRelo
 void cairo_dock_start_polling_screen_edge (void);
 void cairo_dock_stop_polling_screen_edge (void);
 void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
-/**void cairo_dock_pop_up_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
-void cairo_dock_set_docks_on_top_layer (gboolean bRootDocksOnly);*/
 
-///void cairo_dock_reserve_space_for_all_root_docks (gboolean bReserve);
-
+/** Set the visibility of a root dock. Perform all the necessary actions.
+*@param pDock a root dock.
+*@param iVisibility its new visibility.
+*/
 void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisibility);
 
 

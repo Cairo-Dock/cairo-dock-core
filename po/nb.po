@@ -64,7 +64,7 @@ msgstr "Avmontering av %s mislyktes"
 msgid "_Custom Icons_"
 msgstr "_Egendefinerte ikoner_"
 
-#: ../src/cairo-dock-gui-factory.c:866 ../src/cairo-dock-menu.c:1445
+#: ../src/cairo-dock-gui-factory.c:866 ../src/cairo-dock-menu.c:1452
 msgid "Configure this applet"
 msgstr "Konfigurer dette miniprogrammet"
 
@@ -361,12 +361,12 @@ msgstr ""
 msgid "Manage Themes"
 msgstr "Behandle drakter"
 
-#: ../src/cairo-dock-internal-accessibility.c:280
-#: ../src/cairo-dock-menu.c:1478
+#: ../src/cairo-dock-internal-accessibility.c:277
+#: ../src/cairo-dock-menu.c:1485
 msgid "Visibility"
 msgstr "Synlighet"
 
-#: ../src/cairo-dock-internal-accessibility.c:282
+#: ../src/cairo-dock-internal-accessibility.c:279
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -451,12 +451,11 @@ msgstr "Etiketter"
 msgid "Define icon caption and quick-info style."
 msgstr "Bestem ikonetikettenes stil og beskrivelse"
 
-#: ../src/cairo-dock-internal-position.c:123 ../data/messages:145
-#: ../data/messages:1341
+#: ../src/cairo-dock-internal-position.c:132 ../data/messages:145
 msgid "Position"
 msgstr "Plassering"
 
-#: ../src/cairo-dock-internal-position.c:125
+#: ../src/cairo-dock-internal-position.c:134
 msgid "Set the position of the main dock."
 msgstr "Bestem hovedsamlevinduets plassering."
 
@@ -644,11 +643,26 @@ msgstr ""
 "Ønsker du å re-sende ikonene i denne beholderen til samlevinduet?\n"
 "(Ikonene vil ellers bli tapt)"
 
-#: ../src/cairo-dock-menu.c:546
-msgid "This icon doesn't have a desktop file."
+#: ../src/cairo-dock-menu.c:532
+msgid ""
+"The new dock has been created.\n"
+"Now move some launchers or applets into it by right-clicking on the icon -> "
+"move to another dock"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:549
+#, fuzzy
+msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Dette ikonet har ingen skrivebordsfil."
 
-#: ../src/cairo-dock-menu.c:735
+#: ../src/cairo-dock-menu.c:590
+msgid ""
+"The new dock has been created.\n"
+"You can customize it by right-clicking on it -> cairo-dock -> configure this "
+"dock."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:742
 #, c-format
 msgid ""
 "You're about deleting this file\n"
@@ -659,7 +673,7 @@ msgstr ""
 "  (%s)\n"
 "fra harddisken. Er du sikker?"
 
-#: ../src/cairo-dock-menu.c:744
+#: ../src/cairo-dock-menu.c:751
 msgid ""
 "Warning: could not delete this file.\n"
 "Please check file permissions."
@@ -667,11 +681,11 @@ msgstr ""
 "Advarsel: kunne ikke slette denne filen.\n"
 "Vennligst kontroller filens rettigheter."
 
-#: ../src/cairo-dock-menu.c:763
+#: ../src/cairo-dock-menu.c:770
 msgid "Rename to:"
 msgstr "Gi nytt navn:"
 
-#: ../src/cairo-dock-menu.c:770
+#: ../src/cairo-dock-menu.c:777
 #, c-format
 msgid ""
 "Warning: could not rename %s.\n"
@@ -682,14 +696,14 @@ msgstr ""
 "Vennligst kontroller filens rettigheter \n"
 "og at det nye navnet ikke allerede finnes."
 
-#: ../src/cairo-dock-menu.c:811
+#: ../src/cairo-dock-menu.c:818
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
 "Du er i ferd med å fjerne dette miniprogrammet (%s) fra samlevinduet. Er du "
 "sikker?"
 
-#: ../src/cairo-dock-menu.c:946
+#: ../src/cairo-dock-menu.c:953
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -697,244 +711,244 @@ msgstr ""
 "Beklager, den tilhørende beskrivelsesfilen ble ikke funnet.\n"
 "Vurder å dra og slippe starteren fra applikasjonsmenyen."
 
-#: ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:1185
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Flytt alle til skrivebord %d - flate %d"
 
-#: ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:1185
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Flytt til skrivebord %d - flate %d"
 
-#: ../src/cairo-dock-menu.c:1180
+#: ../src/cairo-dock-menu.c:1187
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Flytt alle til skrivebord %d"
 
-#: ../src/cairo-dock-menu.c:1180
+#: ../src/cairo-dock-menu.c:1187
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Flytt til skrivebord %d"
 
-#: ../src/cairo-dock-menu.c:1182
+#: ../src/cairo-dock-menu.c:1189
 #, c-format
 msgid "Move all to face %d"
 msgstr "Flytt alle til flate %d"
 
-#: ../src/cairo-dock-menu.c:1182
+#: ../src/cairo-dock-menu.c:1189
 #, c-format
 msgid "Move to face %d"
 msgstr "Flytt til flate %d"
 
-#: ../src/cairo-dock-menu.c:1219
+#: ../src/cairo-dock-menu.c:1226
 msgid "Add"
 msgstr "Legg til"
 
-#: ../src/cairo-dock-menu.c:1223
+#: ../src/cairo-dock-menu.c:1230
 msgid "Add a sub-dock"
 msgstr "Legg til i under-samlevindu"
 
-#: ../src/cairo-dock-menu.c:1225
+#: ../src/cairo-dock-menu.c:1232
 #, fuzzy
 msgid "Add a main dock"
 msgstr "Et nytt hovedsamlevindu"
 
-#: ../src/cairo-dock-menu.c:1227
+#: ../src/cairo-dock-menu.c:1234
 msgid "Add a separator"
 msgstr "Legg til separator"
 
-#: ../src/cairo-dock-menu.c:1229
+#: ../src/cairo-dock-menu.c:1236
 msgid "Add a custom launcher"
 msgstr "Legg til egendefinert oppstarter"
 
-#: ../src/cairo-dock-menu.c:1230
+#: ../src/cairo-dock-menu.c:1237
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
 "Vanligvis vil du trekke en oppstarter fra menyen og slippe den på "
 "samlevinduet."
 
-#: ../src/cairo-dock-menu.c:1267
+#: ../src/cairo-dock-menu.c:1274
 msgid "Unmount"
 msgstr "Avmonter"
 
-#: ../src/cairo-dock-menu.c:1267
+#: ../src/cairo-dock-menu.c:1274
 msgid "Mount"
 msgstr "Monter"
 
-#: ../src/cairo-dock-menu.c:1273
+#: ../src/cairo-dock-menu.c:1280
 msgid "Eject"
 msgstr "Løs ut"
 
-#: ../src/cairo-dock-menu.c:1282
+#: ../src/cairo-dock-menu.c:1289
 msgid "Delete this file"
 msgstr "Slett denne filen"
 
-#: ../src/cairo-dock-menu.c:1286
+#: ../src/cairo-dock-menu.c:1293
 msgid "Rename this file"
 msgstr "Gi nytt navn til denne filen"
 
-#: ../src/cairo-dock-menu.c:1290
+#: ../src/cairo-dock-menu.c:1297
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: ../src/cairo-dock-menu.c:1311
+#: ../src/cairo-dock-menu.c:1318
 msgid "Remove this separator"
 msgstr "Fjern denne separatoren"
 
-#: ../src/cairo-dock-menu.c:1311
+#: ../src/cairo-dock-menu.c:1318
 msgid "Remove this launcher"
 msgstr "Fjern denne oppstarteren"
 
-#: ../src/cairo-dock-menu.c:1312
+#: ../src/cairo-dock-menu.c:1319
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 "Du kan fjerne en oppstarter ved å trekke den ut av samlevinduet med musen."
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1321
 msgid "Modify this separator"
 msgstr "Endre denne seperatoren"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1321
 msgid "Modify this launcher"
 msgstr "Endre denne oppstarteren"
 
-#: ../src/cairo-dock-menu.c:1316 ../src/cairo-dock-menu.c:1461
+#: ../src/cairo-dock-menu.c:1323 ../src/cairo-dock-menu.c:1468
 msgid "Move to another dock"
 msgstr "Flytt til et annet samlevindu"
 
-#: ../src/cairo-dock-menu.c:1320 ../src/cairo-dock-menu.c:1465
+#: ../src/cairo-dock-menu.c:1327 ../src/cairo-dock-menu.c:1472
 msgid "New main dock"
 msgstr "Et nytt hovedsamlevindu"
 
-#: ../src/cairo-dock-menu.c:1334 ../src/cairo-dock-menu.c:1408
+#: ../src/cairo-dock-menu.c:1341 ../src/cairo-dock-menu.c:1415
 msgid "Other actions"
 msgstr "Andre handlinger"
 
-#: ../src/cairo-dock-menu.c:1339
+#: ../src/cairo-dock-menu.c:1346
 msgid "Move to this desktop"
 msgstr "Flytt til dette skrivebordet"
 
-#: ../src/cairo-dock-menu.c:1353
+#: ../src/cairo-dock-menu.c:1360
 msgid "Not Fullscreen"
 msgstr "Ikke fullskjerm"
 
-#: ../src/cairo-dock-menu.c:1353
+#: ../src/cairo-dock-menu.c:1360
 msgid "Fullscreen"
 msgstr "Fullskjerm"
 
-#: ../src/cairo-dock-menu.c:1357
+#: ../src/cairo-dock-menu.c:1364
 msgid "Don't keep above"
 msgstr "Ikke behold ovenpå"
 
-#: ../src/cairo-dock-menu.c:1357
+#: ../src/cairo-dock-menu.c:1364
 msgid "Keep above"
 msgstr "Behold ovenpå"
 
-#: ../src/cairo-dock-menu.c:1376
+#: ../src/cairo-dock-menu.c:1383
 msgid "Remove custom icon"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1380
+#: ../src/cairo-dock-menu.c:1387
 msgid "Kill"
 msgstr "Drep"
 
-#: ../src/cairo-dock-menu.c:1385
+#: ../src/cairo-dock-menu.c:1392
 msgid "Launch a new (Shift+clic)"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1390
+#: ../src/cairo-dock-menu.c:1397
 msgid "Make it a launcher"
 msgstr "Gjør til oppstarter"
 
-#: ../src/cairo-dock-menu.c:1393
+#: ../src/cairo-dock-menu.c:1400
 msgid "Show"
 msgstr "Vis"
 
-#: ../src/cairo-dock-menu.c:1395
+#: ../src/cairo-dock-menu.c:1402
 msgid "Unmaximise"
 msgstr "Gjenopprett"
 
-#: ../src/cairo-dock-menu.c:1395
+#: ../src/cairo-dock-menu.c:1402
 msgid "Maximise"
 msgstr "Maksimer"
 
-#: ../src/cairo-dock-menu.c:1398
+#: ../src/cairo-dock-menu.c:1405
 msgid "Minimise"
 msgstr "Minimer"
 
-#: ../src/cairo-dock-menu.c:1400
+#: ../src/cairo-dock-menu.c:1407
 msgid "Close (middle-click)"
 msgstr "Lukk (midt-klikk)"
 
-#: ../src/cairo-dock-menu.c:1413
+#: ../src/cairo-dock-menu.c:1420
 msgid "Move all to this desktop"
 msgstr "Flytt alle til dette skrivebordet"
 
-#: ../src/cairo-dock-menu.c:1419
+#: ../src/cairo-dock-menu.c:1426
 msgid "Launch new"
 msgstr "Start ny"
 
-#: ../src/cairo-dock-menu.c:1422
+#: ../src/cairo-dock-menu.c:1429
 msgid "Show all"
 msgstr "Vis alt"
 
-#: ../src/cairo-dock-menu.c:1424
+#: ../src/cairo-dock-menu.c:1431
 msgid "Minimise all"
 msgstr "Minimaliser alle"
 
-#: ../src/cairo-dock-menu.c:1426
+#: ../src/cairo-dock-menu.c:1433
 msgid "Close all"
 msgstr "Lukk alle"
 
-#: ../src/cairo-dock-menu.c:1449
+#: ../src/cairo-dock-menu.c:1456
 msgid "Detach this applet"
 msgstr "Løsne dette miniprogrammet"
 
-#: ../src/cairo-dock-menu.c:1449
+#: ../src/cairo-dock-menu.c:1456
 msgid "Return to the dock"
 msgstr "Returner til samlevindu"
 
-#: ../src/cairo-dock-menu.c:1452
+#: ../src/cairo-dock-menu.c:1459
 msgid "Remove this applet"
 msgstr "Fjern dette miniprogrammet"
 
-#: ../src/cairo-dock-menu.c:1456
+#: ../src/cairo-dock-menu.c:1463
 msgid "Launch another instance of this applet"
 msgstr "Start en ny instans av dette miniprogrammet"
 
-#: ../src/cairo-dock-menu.c:1493
+#: ../src/cairo-dock-menu.c:1500
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-menu.c:1499 ../data/messages:21 ../data/messages:195
+#: ../src/cairo-dock-menu.c:1506 ../data/messages:21 ../data/messages:195
 #: ../data/messages:1379
 msgid "Always on top"
 msgstr "Alltid øverst"
 
-#: ../src/cairo-dock-menu.c:1506
+#: ../src/cairo-dock-menu.c:1513
 msgid "Always below"
 msgstr "Alltid under"
 
-#: ../src/cairo-dock-menu.c:1519
+#: ../src/cairo-dock-menu.c:1526
 msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Sett oppførsel i Compiz til: (name=cairo-dock & type=utility)"
 
-#: ../src/cairo-dock-menu.c:1521
+#: ../src/cairo-dock-menu.c:1528
 msgid "Reserve space"
 msgstr "Reserver plass"
 
-#: ../src/cairo-dock-menu.c:1528
+#: ../src/cairo-dock-menu.c:1535
 msgid "On all desktops"
 msgstr "På alle skrivebord"
 
-#: ../src/cairo-dock-menu.c:1534
+#: ../src/cairo-dock-menu.c:1541
 msgid "Lock position"
 msgstr "Lås posisjon"
 
-#: ../src/cairo-dock-struct.h:453
+#: ../src/cairo-dock-struct.h:448
 msgid "Default"
 msgstr "standard"
 
@@ -1053,7 +1067,32 @@ msgstr ""
 "Den har blitt gjenopprettet, men hvis feilen skjer igjen vennligst rapporter "
 "det på http://glx-dock.org"
 
-#: ../data/messages:1
+#: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:37
+#: ../data/messages:211
+msgid "Move down"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:610 ../data/messages:39
+#: ../data/messages:213
+msgid "Fade out"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:41
+#: ../data/messages:215
+msgid "Semi transparent"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:43
+#: ../data/messages:217
+msgid "Zoom out"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:45
+#: ../data/messages:219
+msgid "Folding"
+msgstr ""
+
+#: ../data/messages:1 ../data/messages:1341
 msgid "Behavior"
 msgstr "Oppførsel"
 
@@ -1130,26 +1169,6 @@ msgstr "Popup vindu ved snarvei"
 #, fuzzy
 msgid "Effect used to hide the dock:"
 msgstr "Returner til samlevindu"
-
-#: ../data/messages:37 ../data/messages:211
-msgid "Move down"
-msgstr ""
-
-#: ../data/messages:39 ../data/messages:213
-msgid "Fade out"
-msgstr ""
-
-#: ../data/messages:41 ../data/messages:215
-msgid "Semi transparent"
-msgstr ""
-
-#: ../data/messages:43 ../data/messages:217
-msgid "Zoom out"
-msgstr ""
-
-#: ../data/messages:45 ../data/messages:219
-msgid "Folding"
-msgstr ""
 
 #: ../data/messages:47 ../data/messages:239
 msgid ""

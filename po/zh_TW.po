@@ -62,7 +62,7 @@ msgstr "卸載 %s 失敗"
 msgid "_Custom Icons_"
 msgstr "_自定義圖示_"
 
-#: ../src/cairo-dock-gui-factory.c:866 ../src/cairo-dock-menu.c:1445
+#: ../src/cairo-dock-gui-factory.c:866 ../src/cairo-dock-menu.c:1452
 msgid "Configure this applet"
 msgstr "設置這個小程式"
 
@@ -352,12 +352,12 @@ msgstr ""
 msgid "Manage Themes"
 msgstr "管理佈景主題"
 
-#: ../src/cairo-dock-internal-accessibility.c:280
-#: ../src/cairo-dock-menu.c:1478
+#: ../src/cairo-dock-internal-accessibility.c:277
+#: ../src/cairo-dock-menu.c:1485
 msgid "Visibility"
 msgstr "可見度"
 
-#: ../src/cairo-dock-internal-accessibility.c:282
+#: ../src/cairo-dock-internal-accessibility.c:279
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -444,12 +444,11 @@ msgstr "標籤"
 msgid "Define icon caption and quick-info style."
 msgstr "定義圖示標籤與快速訊息的風格"
 
-#: ../src/cairo-dock-internal-position.c:123 ../data/messages:145
-#: ../data/messages:1341
+#: ../src/cairo-dock-internal-position.c:132 ../data/messages:145
 msgid "Position"
 msgstr "位置"
 
-#: ../src/cairo-dock-internal-position.c:125
+#: ../src/cairo-dock-internal-position.c:134
 msgid "Set the position of the main dock."
 msgstr "設定主Dock上的位置"
 
@@ -630,11 +629,26 @@ msgid ""
 "(otherwise they will be destroyed)"
 msgstr "您真的要重新傳送這個圖示到Dock上？"
 
-#: ../src/cairo-dock-menu.c:546
-msgid "This icon doesn't have a desktop file."
+#: ../src/cairo-dock-menu.c:532
+msgid ""
+"The new dock has been created.\n"
+"Now move some launchers or applets into it by right-clicking on the icon -> "
+"move to another dock"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:549
+#, fuzzy
+msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "這個圖示沒有一個桌面檔案"
 
-#: ../src/cairo-dock-menu.c:735
+#: ../src/cairo-dock-menu.c:590
+msgid ""
+"The new dock has been created.\n"
+"You can customize it by right-clicking on it -> cairo-dock -> configure this "
+"dock."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:742
 #, c-format
 msgid ""
 "You're about deleting this file\n"
@@ -645,7 +659,7 @@ msgstr ""
 "  (%s)\n"
 "刪除此檔案。確定嗎？"
 
-#: ../src/cairo-dock-menu.c:744
+#: ../src/cairo-dock-menu.c:751
 msgid ""
 "Warning: could not delete this file.\n"
 "Please check file permissions."
@@ -653,11 +667,11 @@ msgstr ""
 "請注意：無法夠刪除此檔案。\n"
 "請檢查您對它是否擁有寫入的權力。"
 
-#: ../src/cairo-dock-menu.c:763
+#: ../src/cairo-dock-menu.c:770
 msgid "Rename to:"
 msgstr "更改名稱為："
 
-#: ../src/cairo-dock-menu.c:770
+#: ../src/cairo-dock-menu.c:777
 #, c-format
 msgid ""
 "Warning: could not rename %s.\n"
@@ -668,12 +682,12 @@ msgstr ""
 "請檢查您是否有寫入權限。\n"
 " 並且不能有另外一個檔案與新的名稱相同。"
 
-#: ../src/cairo-dock-menu.c:811
+#: ../src/cairo-dock-menu.c:818
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "您要從Dock當中刪除 (%s) 這個小程式，確定嗎？"
 
-#: ../src/cairo-dock-menu.c:946
+#: ../src/cairo-dock-menu.c:953
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -682,241 +696,241 @@ msgstr ""
 "可考慮用滑鼠 [拖 - 放] 的功能從應用程式選單上，拉應用程式到Dock上，用以建立快"
 "速啟動。"
 
-#: ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:1185
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "移動全部到桌面 %d - 第 %d 面"
 
-#: ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:1185
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "移動到桌面 %d - 第 %d 面"
 
-#: ../src/cairo-dock-menu.c:1180
+#: ../src/cairo-dock-menu.c:1187
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "全部移動到桌面 %d"
 
-#: ../src/cairo-dock-menu.c:1180
+#: ../src/cairo-dock-menu.c:1187
 #, c-format
 msgid "Move to desktop %d"
 msgstr "移動到桌面 %d"
 
-#: ../src/cairo-dock-menu.c:1182
+#: ../src/cairo-dock-menu.c:1189
 #, c-format
 msgid "Move all to face %d"
 msgstr "全部移動到第 %d 桌面"
 
-#: ../src/cairo-dock-menu.c:1182
+#: ../src/cairo-dock-menu.c:1189
 #, c-format
 msgid "Move to face %d"
 msgstr "移動到第 %d 桌面"
 
-#: ../src/cairo-dock-menu.c:1219
+#: ../src/cairo-dock-menu.c:1226
 msgid "Add"
 msgstr "新增"
 
-#: ../src/cairo-dock-menu.c:1223
+#: ../src/cairo-dock-menu.c:1230
 msgid "Add a sub-dock"
 msgstr "增加一個子Dock"
 
-#: ../src/cairo-dock-menu.c:1225
+#: ../src/cairo-dock-menu.c:1232
 #, fuzzy
 msgid "Add a main dock"
 msgstr "一個新的主要Dock"
 
-#: ../src/cairo-dock-menu.c:1227
+#: ../src/cairo-dock-menu.c:1234
 msgid "Add a separator"
 msgstr "增加一個分隔圖"
 
-#: ../src/cairo-dock-menu.c:1229
+#: ../src/cairo-dock-menu.c:1236
 msgid "Add a custom launcher"
 msgstr "增加一個自定義的快速啟動"
 
-#: ../src/cairo-dock-menu.c:1230
+#: ../src/cairo-dock-menu.c:1237
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr "通常您可以從應用程式選單上拉一個應用程式到Dock上面，來建立快速啟動。"
 
-#: ../src/cairo-dock-menu.c:1267
+#: ../src/cairo-dock-menu.c:1274
 msgid "Unmount"
 msgstr "解除掛載"
 
-#: ../src/cairo-dock-menu.c:1267
+#: ../src/cairo-dock-menu.c:1274
 msgid "Mount"
 msgstr "掛載"
 
-#: ../src/cairo-dock-menu.c:1273
+#: ../src/cairo-dock-menu.c:1280
 msgid "Eject"
 msgstr "退出"
 
-#: ../src/cairo-dock-menu.c:1282
+#: ../src/cairo-dock-menu.c:1289
 msgid "Delete this file"
 msgstr "刪除這個檔案"
 
-#: ../src/cairo-dock-menu.c:1286
+#: ../src/cairo-dock-menu.c:1293
 msgid "Rename this file"
 msgstr "對這個檔案更名"
 
-#: ../src/cairo-dock-menu.c:1290
+#: ../src/cairo-dock-menu.c:1297
 msgid "Properties"
 msgstr "內容"
 
-#: ../src/cairo-dock-menu.c:1311
+#: ../src/cairo-dock-menu.c:1318
 msgid "Remove this separator"
 msgstr "移除這個分隔圖"
 
-#: ../src/cairo-dock-menu.c:1311
+#: ../src/cairo-dock-menu.c:1318
 msgid "Remove this launcher"
 msgstr "移除這個快速啟動"
 
-#: ../src/cairo-dock-menu.c:1312
+#: ../src/cairo-dock-menu.c:1319
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr "您可以用滑鼠拖離一個快速啟動，離開Dock之後就可以刪除。"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1321
 msgid "Modify this separator"
 msgstr "修改這個分隔圖"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1321
 msgid "Modify this launcher"
 msgstr "修改這個快速啟動"
 
-#: ../src/cairo-dock-menu.c:1316 ../src/cairo-dock-menu.c:1461
+#: ../src/cairo-dock-menu.c:1323 ../src/cairo-dock-menu.c:1468
 msgid "Move to another dock"
 msgstr "移動到其他的Dock"
 
-#: ../src/cairo-dock-menu.c:1320 ../src/cairo-dock-menu.c:1465
+#: ../src/cairo-dock-menu.c:1327 ../src/cairo-dock-menu.c:1472
 msgid "New main dock"
 msgstr "一個新的主要Dock"
 
-#: ../src/cairo-dock-menu.c:1334 ../src/cairo-dock-menu.c:1408
+#: ../src/cairo-dock-menu.c:1341 ../src/cairo-dock-menu.c:1415
 msgid "Other actions"
 msgstr "其他的動作"
 
-#: ../src/cairo-dock-menu.c:1339
+#: ../src/cairo-dock-menu.c:1346
 msgid "Move to this desktop"
 msgstr "移動到這個桌面"
 
-#: ../src/cairo-dock-menu.c:1353
+#: ../src/cairo-dock-menu.c:1360
 msgid "Not Fullscreen"
 msgstr "沒有全螢幕"
 
-#: ../src/cairo-dock-menu.c:1353
+#: ../src/cairo-dock-menu.c:1360
 msgid "Fullscreen"
 msgstr "全螢幕"
 
-#: ../src/cairo-dock-menu.c:1357
+#: ../src/cairo-dock-menu.c:1364
 msgid "Don't keep above"
 msgstr "不要保持在最上層視窗"
 
-#: ../src/cairo-dock-menu.c:1357
+#: ../src/cairo-dock-menu.c:1364
 msgid "Keep above"
 msgstr "保持在最上層視窗"
 
-#: ../src/cairo-dock-menu.c:1376
+#: ../src/cairo-dock-menu.c:1383
 msgid "Remove custom icon"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1380
+#: ../src/cairo-dock-menu.c:1387
 msgid "Kill"
 msgstr "強行中止 (Kill)"
 
-#: ../src/cairo-dock-menu.c:1385
+#: ../src/cairo-dock-menu.c:1392
 msgid "Launch a new (Shift+clic)"
 msgstr "啟動一個新的( Shift + click )"
 
-#: ../src/cairo-dock-menu.c:1390
+#: ../src/cairo-dock-menu.c:1397
 msgid "Make it a launcher"
 msgstr "建立一個快速啟動"
 
-#: ../src/cairo-dock-menu.c:1393
+#: ../src/cairo-dock-menu.c:1400
 msgid "Show"
 msgstr "顯示"
 
-#: ../src/cairo-dock-menu.c:1395
+#: ../src/cairo-dock-menu.c:1402
 msgid "Unmaximise"
 msgstr "解除最大化"
 
-#: ../src/cairo-dock-menu.c:1395
+#: ../src/cairo-dock-menu.c:1402
 msgid "Maximise"
 msgstr "放到最大"
 
-#: ../src/cairo-dock-menu.c:1398
+#: ../src/cairo-dock-menu.c:1405
 msgid "Minimise"
 msgstr "縮到最小"
 
-#: ../src/cairo-dock-menu.c:1400
+#: ../src/cairo-dock-menu.c:1407
 msgid "Close (middle-click)"
 msgstr "關閉（滑鼠中鍵點擊）"
 
-#: ../src/cairo-dock-menu.c:1413
+#: ../src/cairo-dock-menu.c:1420
 msgid "Move all to this desktop"
 msgstr "全部移動到這個桌面"
 
-#: ../src/cairo-dock-menu.c:1419
+#: ../src/cairo-dock-menu.c:1426
 msgid "Launch new"
 msgstr "新的快速啟動"
 
-#: ../src/cairo-dock-menu.c:1422
+#: ../src/cairo-dock-menu.c:1429
 msgid "Show all"
 msgstr "顯示全部"
 
-#: ../src/cairo-dock-menu.c:1424
+#: ../src/cairo-dock-menu.c:1431
 msgid "Minimise all"
 msgstr "全部縮到最小"
 
-#: ../src/cairo-dock-menu.c:1426
+#: ../src/cairo-dock-menu.c:1433
 msgid "Close all"
 msgstr "全部關閉"
 
-#: ../src/cairo-dock-menu.c:1449
+#: ../src/cairo-dock-menu.c:1456
 msgid "Detach this applet"
 msgstr "分離這個小程式"
 
-#: ../src/cairo-dock-menu.c:1449
+#: ../src/cairo-dock-menu.c:1456
 msgid "Return to the dock"
 msgstr "回到Dock上"
 
-#: ../src/cairo-dock-menu.c:1452
+#: ../src/cairo-dock-menu.c:1459
 msgid "Remove this applet"
 msgstr "移除這個小程式"
 
-#: ../src/cairo-dock-menu.c:1456
+#: ../src/cairo-dock-menu.c:1463
 msgid "Launch another instance of this applet"
 msgstr "快速複製與這個小程式相同的小程式"
 
-#: ../src/cairo-dock-menu.c:1493
+#: ../src/cairo-dock-menu.c:1500
 msgid "Normal"
 msgstr "普通"
 
-#: ../src/cairo-dock-menu.c:1499 ../data/messages:21 ../data/messages:195
+#: ../src/cairo-dock-menu.c:1506 ../data/messages:21 ../data/messages:195
 #: ../data/messages:1379
 msgid "Always on top"
 msgstr "永遠在最上層"
 
-#: ../src/cairo-dock-menu.c:1506
+#: ../src/cairo-dock-menu.c:1513
 msgid "Always below"
 msgstr "永遠在最下層"
 
-#: ../src/cairo-dock-menu.c:1519
+#: ../src/cairo-dock-menu.c:1526
 msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "設定動作方式在Compiz到(name=cairo-dock & type=utility)"
 
-#: ../src/cairo-dock-menu.c:1521
+#: ../src/cairo-dock-menu.c:1528
 msgid "Reserve space"
 msgstr "保留空間"
 
-#: ../src/cairo-dock-menu.c:1528
+#: ../src/cairo-dock-menu.c:1535
 msgid "On all desktops"
 msgstr "放在所有桌面上"
 
-#: ../src/cairo-dock-menu.c:1534
+#: ../src/cairo-dock-menu.c:1541
 msgid "Lock position"
 msgstr "鎖定位置"
 
-#: ../src/cairo-dock-struct.h:453
+#: ../src/cairo-dock-struct.h:448
 msgid "Default"
 msgstr "預設值"
 
@@ -1049,7 +1063,34 @@ msgstr ""
 "這個 %s 模組遇到了問題。\n"
 "他已經恢復成功，假如它再度發生，請回報此問題到 http://glx-dock.org 。"
 
-#: ../data/messages:1
+#: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:37
+#: ../data/messages:211
+msgid "Move down"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:610 ../data/messages:39
+#: ../data/messages:213
+msgid "Fade out"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:41
+#: ../data/messages:215
+#, fuzzy
+msgid "Semi transparent"
+msgstr "透明度"
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:43
+#: ../data/messages:217
+#, fuzzy
+msgid "Zoom out"
+msgstr "縮放效果"
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:45
+#: ../data/messages:219
+msgid "Folding"
+msgstr ""
+
+#: ../data/messages:1 ../data/messages:1341
 msgid "Behavior"
 msgstr "動作方式"
 
@@ -1136,28 +1177,6 @@ msgstr "以捷徑鍵跳躍顯示"
 #, fuzzy
 msgid "Effect used to hide the dock:"
 msgstr "回到Dock上"
-
-#: ../data/messages:37 ../data/messages:211
-msgid "Move down"
-msgstr ""
-
-#: ../data/messages:39 ../data/messages:213
-msgid "Fade out"
-msgstr ""
-
-#: ../data/messages:41 ../data/messages:215
-#, fuzzy
-msgid "Semi transparent"
-msgstr "透明度"
-
-#: ../data/messages:43 ../data/messages:217
-#, fuzzy
-msgid "Zoom out"
-msgstr "縮放效果"
-
-#: ../data/messages:45 ../data/messages:219
-msgid "Folding"
-msgstr ""
 
 #: ../data/messages:47 ../data/messages:239
 msgid ""

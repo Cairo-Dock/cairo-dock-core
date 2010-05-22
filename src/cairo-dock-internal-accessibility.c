@@ -231,14 +231,11 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 			}
 		}
 	}
-	else if (pPrevAccessibility->cRaiseDockShortcut != NULL) // plus d eraccourci
-	{
+	else if (pPrevAccessibility->cRaiseDockShortcut != NULL) // plus de raccourci
+{
+		cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
 		
-		{
-			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-			
-			cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
-		}
+		cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
 	}
 	
 	//\_______________ Max Size.

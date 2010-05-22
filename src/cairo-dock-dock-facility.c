@@ -310,6 +310,7 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 	
 	*iNewPositionX = iWindowPositionX + pDock->iScreenOffsetX;
 	*iNewPositionY = iWindowPositionY + pDock->iScreenOffsetY;
+	g_print ("POSITION : %d+%d ; %d+%d\n", iWindowPositionX, pDock->iScreenOffsetX, iWindowPositionY, pDock->iScreenOffsetY);
 }
 
 static gboolean _move_resize_dock (CairoDock *pDock)

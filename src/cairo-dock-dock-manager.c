@@ -82,6 +82,10 @@ static gboolean s_bQuickHide = FALSE;
 
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock);
 
+  /////////////
+ // MANAGER //
+/////////////
+
 void cairo_dock_init_dock_manager (void)
 {
 	cd_message ("");
@@ -131,7 +135,7 @@ CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendere
 	//\__________________ On le positionne si ce n'est pas le main dock.
 	if (! pDock->bIsMainDock)
 	{
-		if (cairo_dock_read_root_dock_config (cDockName, pDock))
+		if (cairo_dock_read_root_dock_config (cDockName, pDock))  // si pas de config (sub-dock ou config inexistante), se contente de lui mettre la meme position et renvoit FALSE.
 			cairo_dock_move_resize_dock (pDock);
 	}
 	return pDock;
@@ -150,7 +154,7 @@ void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
 		const gchar *cDockName = cairo_dock_search_dock_name (pDock);
 		cairo_dock_remove_root_dock_config (cDockName);
 		
-		pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+		cairo_dock_set_dock_visibility (pDock, CAIRO_DOCK_VISI_KEEP_ABOVE);  // si la visibilite n'avait pas ete mise (sub-dock), ne fera rien (vu que la visibilite par defaut est KEEP_ABOVE).
 		
 		s_pRootDockList = g_list_remove (s_pRootDockList, pDock);
 	}
@@ -573,6 +577,9 @@ void cairo_dock_set_all_views_to_default (int iDockType)
 }
 
 
+  //////////////////////
+ // ROOT DOCK CONFIG //
+//////////////////////
 
 void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 {
@@ -632,10 +639,10 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	
 	//\______________ Position.
 	gboolean bFlushConfFileNeeded = FALSE;
-	pDock->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);
-	pDock->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);
+	pDock->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "x gap", &bFlushConfFileNeeded, 0, "Position", NULL);
+	pDock->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "y gap", &bFlushConfFileNeeded, 0, "Position", NULL);
 	
-	CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Position", "screen border", &bFlushConfFileNeeded, 0, NULL, NULL);
+	CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "screen border", &bFlushConfFileNeeded, 0, "Position", NULL);
 	
 	switch (iScreenBorder)
 	{
@@ -658,28 +665,33 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 		break;
 	}
 	
-	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
+	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Behavior", "alignment", &bFlushConfFileNeeded, 0.5, "Position", NULL);
 	
+	g_print ("READ CONFIG %s (%d)\n", cDockName, myPosition.bUseXinerama);
 	if (myPosition.bUseXinerama)
 	{
-		int iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
+		int iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "num screen", &bFlushConfFileNeeded, 0, "Position", NULL);
 		pDock->iNumScreen = iNumScreen;
 		cairo_dock_get_screen_offsets (iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
 	}
 	else
 		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+	g_print ("-> offset : %d;%d\n", pDock->iScreenOffsetX, pDock->iScreenOffsetY);
 	
 	//\______________ Visibilite.
-	CairoDockVisibility iVisibility;
-	if (pDock->bIsMainDock)
-		iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "visibility", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-	else
-		iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Position", "visibility", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	CairoDockVisibility iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "visibility", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 	cairo_dock_set_dock_visibility (pDock, iVisibility);
 	
 	//\______________ Vue.
 	g_free (pDock->cRendererName);
 	pDock->cRendererName = cairo_dock_get_string_key_value (pKeyFile, "Appearance", "main dock view", &bFlushConfFileNeeded, NULL, "Views", NULL);
+	
+	if (! bFlushConfFileNeeded)
+		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION);
+	if (bFlushConfFileNeeded)
+	{
+		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE);
+	}
 	
 	g_key_file_free (pKeyFile);
 	
@@ -743,23 +755,31 @@ void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock)
 	gtk_widget_queue_draw (pDock->container.pWidget);
 }
 
-static void _cairo_dock_redraw_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_redraw_one_root_dock (CairoDock *pDock, gpointer data)
 {
-	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
+	if (! (data && pDock->bIsMainDock))
 	{
 		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 }
 void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
 {
-	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_redraw_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
+	g_list_foreach (s_pRootDockList, (GFunc)_cairo_dock_redraw_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
 }
 
 static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
 	{
-		cairo_dock_read_root_dock_config (cDockName, pDock);  // relit toute la conf.
+		if (!pDock->bIsMainDock)
+			cairo_dock_read_root_dock_config (cDockName, pDock);  // relit toute la conf.
+		else
+		{
+			if (myPosition.bUseXinerama)
+				cairo_dock_get_screen_offsets (pDock->iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
+			else
+				pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+		}
 		cairo_dock_update_dock_size (pDock);  // la taille max du dock depend de la taille de l'ecran, donc on recalcule son ratio.
 		cairo_dock_move_resize_dock (pDock);
 		gtk_widget_queue_draw (pDock->container.pWidget);
@@ -935,6 +955,8 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 	}
 	else  // le pointeur a ete recupere auparavant.
 	{
+		if (pMouse[3])  // position inchangee.
+			return;
 		x = pMouse[1];
 		y = pMouse[2];
 	}

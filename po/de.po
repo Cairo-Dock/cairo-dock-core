@@ -66,7 +66,7 @@ msgstr "Aushängen von %s fehlgeschlagen"
 msgid "_Custom Icons_"
 msgstr "_Benutzerdefinierte Icons_"
 
-#: ../src/cairo-dock-gui-factory.c:866 ../src/cairo-dock-menu.c:1445
+#: ../src/cairo-dock-gui-factory.c:866 ../src/cairo-dock-menu.c:1452
 msgid "Configure this applet"
 msgstr "Minianwendung konfigurieren"
 
@@ -365,12 +365,12 @@ msgstr ""
 msgid "Manage Themes"
 msgstr "Themen verwalten"
 
-#: ../src/cairo-dock-internal-accessibility.c:280
-#: ../src/cairo-dock-menu.c:1478
+#: ../src/cairo-dock-internal-accessibility.c:277
+#: ../src/cairo-dock-menu.c:1485
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
-#: ../src/cairo-dock-internal-accessibility.c:282
+#: ../src/cairo-dock-internal-accessibility.c:279
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -459,12 +459,11 @@ msgstr "Beschriftungen"
 msgid "Define icon caption and quick-info style."
 msgstr "Stil der Symbolbeschriftungen und Schnellinfos festlegen"
 
-#: ../src/cairo-dock-internal-position.c:123 ../data/messages:145
-#: ../data/messages:1341
+#: ../src/cairo-dock-internal-position.c:132 ../data/messages:145
 msgid "Position"
 msgstr "Position"
 
-#: ../src/cairo-dock-internal-position.c:125
+#: ../src/cairo-dock-internal-position.c:134
 msgid "Set the position of the main dock."
 msgstr "Position des Hauptdocks wählen"
 
@@ -655,11 +654,26 @@ msgstr ""
 "Möchten Sie die Symbole aus diesem Container in das Dock verschieben?\n"
 " (anderfalls werden sie gelöscht)"
 
-#: ../src/cairo-dock-menu.c:546
-msgid "This icon doesn't have a desktop file."
+#: ../src/cairo-dock-menu.c:532
+msgid ""
+"The new dock has been created.\n"
+"Now move some launchers or applets into it by right-clicking on the icon -> "
+"move to another dock"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:549
+#, fuzzy
+msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Das Icon verfügt über kein Desktop File."
 
-#: ../src/cairo-dock-menu.c:735
+#: ../src/cairo-dock-menu.c:590
+msgid ""
+"The new dock has been created.\n"
+"You can customize it by right-clicking on it -> cairo-dock -> configure this "
+"dock."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:742
 #, c-format
 msgid ""
 "You're about deleting this file\n"
@@ -670,7 +684,7 @@ msgstr ""
 "  (%s)\n"
 "von der Festplatte gelöscht werden?"
 
-#: ../src/cairo-dock-menu.c:744
+#: ../src/cairo-dock-menu.c:751
 msgid ""
 "Warning: could not delete this file.\n"
 "Please check file permissions."
@@ -678,11 +692,11 @@ msgstr ""
 "Achtung: die Datei konnte nicht gelöscht werden.\n"
 "Prüfen Sie, ob Sie die Schreibrechte dafür besitzen."
 
-#: ../src/cairo-dock-menu.c:763
+#: ../src/cairo-dock-menu.c:770
 msgid "Rename to:"
 msgstr "Umbenennen in:"
 
-#: ../src/cairo-dock-menu.c:770
+#: ../src/cairo-dock-menu.c:777
 #, c-format
 msgid ""
 "Warning: could not rename %s.\n"
@@ -693,12 +707,12 @@ msgstr ""
 "Prüfen Sie, ob Sie die Schreibrechte dafür besitzen\n"
 " und dass der neue Name nicht bereits existiert."
 
-#: ../src/cairo-dock-menu.c:811
+#: ../src/cairo-dock-menu.c:818
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Soll die Minianwendung (%s) aus dem Dock entfernt werden?"
 
-#: ../src/cairo-dock-menu.c:946
+#: ../src/cairo-dock-menu.c:953
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -706,243 +720,243 @@ msgstr ""
 "Entschuldigung, aber das Programm konnte nicht gestartet werden.\n"
 "Versuchen Sie den Starter per Drag und Drop hinzuzufügen."
 
-#: ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:1185
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Alle auf Arbeitsfläche %d - Ansicht %d verschieben"
 
-#: ../src/cairo-dock-menu.c:1178
+#: ../src/cairo-dock-menu.c:1185
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Auf Arbeitsfläche %d - Ansicht %d verschieben"
 
-#: ../src/cairo-dock-menu.c:1180
+#: ../src/cairo-dock-menu.c:1187
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Verschiebe alles auf Arbeitsfläche %d"
 
-#: ../src/cairo-dock-menu.c:1180
+#: ../src/cairo-dock-menu.c:1187
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Verschiebe auf Arbeitsfläche %d"
 
-#: ../src/cairo-dock-menu.c:1182
+#: ../src/cairo-dock-menu.c:1189
 #, c-format
 msgid "Move all to face %d"
 msgstr "Alle in Ansicht %d verschieben"
 
-#: ../src/cairo-dock-menu.c:1182
+#: ../src/cairo-dock-menu.c:1189
 #, c-format
 msgid "Move to face %d"
 msgstr "In Ansicht %d verschieben"
 
-#: ../src/cairo-dock-menu.c:1219
+#: ../src/cairo-dock-menu.c:1226
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: ../src/cairo-dock-menu.c:1223
+#: ../src/cairo-dock-menu.c:1230
 msgid "Add a sub-dock"
 msgstr "Sub-Dock hinzufügen"
 
-#: ../src/cairo-dock-menu.c:1225
+#: ../src/cairo-dock-menu.c:1232
 #, fuzzy
 msgid "Add a main dock"
 msgstr "Neues Hauptdock"
 
-#: ../src/cairo-dock-menu.c:1227
+#: ../src/cairo-dock-menu.c:1234
 msgid "Add a separator"
 msgstr "Trennsymbol hinzufügen"
 
-#: ../src/cairo-dock-menu.c:1229
+#: ../src/cairo-dock-menu.c:1236
 msgid "Add a custom launcher"
 msgstr "Einen eigenen Starter hinzufügen"
 
-#: ../src/cairo-dock-menu.c:1230
+#: ../src/cairo-dock-menu.c:1237
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr "Normalerweise würden Sie einen Starter per Drag und Drop hinzufügen"
 
-#: ../src/cairo-dock-menu.c:1267
+#: ../src/cairo-dock-menu.c:1274
 msgid "Unmount"
 msgstr "Aushängen"
 
-#: ../src/cairo-dock-menu.c:1267
+#: ../src/cairo-dock-menu.c:1274
 msgid "Mount"
 msgstr "Einhängen"
 
-#: ../src/cairo-dock-menu.c:1273
+#: ../src/cairo-dock-menu.c:1280
 msgid "Eject"
 msgstr "Auswerfen"
 
-#: ../src/cairo-dock-menu.c:1282
+#: ../src/cairo-dock-menu.c:1289
 msgid "Delete this file"
 msgstr "Datei löschen"
 
-#: ../src/cairo-dock-menu.c:1286
+#: ../src/cairo-dock-menu.c:1293
 msgid "Rename this file"
 msgstr "Datei umbenennen"
 
-#: ../src/cairo-dock-menu.c:1290
+#: ../src/cairo-dock-menu.c:1297
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: ../src/cairo-dock-menu.c:1311
+#: ../src/cairo-dock-menu.c:1318
 msgid "Remove this separator"
 msgstr "Trennsymbol entfernen"
 
-#: ../src/cairo-dock-menu.c:1311
+#: ../src/cairo-dock-menu.c:1318
 msgid "Remove this launcher"
 msgstr "Starter entfernen"
 
-#: ../src/cairo-dock-menu.c:1312
+#: ../src/cairo-dock-menu.c:1319
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 "Sie können einen Starter aus dem Dock entfernen in dem sie ihn aus dem Dock "
 "ziehen."
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1321
 msgid "Modify this separator"
 msgstr "Trennsymbol ändern"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1321
 msgid "Modify this launcher"
 msgstr "Diesen Starter modifizieren"
 
-#: ../src/cairo-dock-menu.c:1316 ../src/cairo-dock-menu.c:1461
+#: ../src/cairo-dock-menu.c:1323 ../src/cairo-dock-menu.c:1468
 msgid "Move to another dock"
 msgstr "In anderes Dock einfügen"
 
-#: ../src/cairo-dock-menu.c:1320 ../src/cairo-dock-menu.c:1465
+#: ../src/cairo-dock-menu.c:1327 ../src/cairo-dock-menu.c:1472
 msgid "New main dock"
 msgstr "Neues Hauptdock"
 
-#: ../src/cairo-dock-menu.c:1334 ../src/cairo-dock-menu.c:1408
+#: ../src/cairo-dock-menu.c:1341 ../src/cairo-dock-menu.c:1415
 msgid "Other actions"
 msgstr "Andere Aktionen"
 
-#: ../src/cairo-dock-menu.c:1339
+#: ../src/cairo-dock-menu.c:1346
 msgid "Move to this desktop"
 msgstr "Auf diese Arbeitsfläche verschieben"
 
-#: ../src/cairo-dock-menu.c:1353
+#: ../src/cairo-dock-menu.c:1360
 msgid "Not Fullscreen"
 msgstr "Kein Vollbild"
 
-#: ../src/cairo-dock-menu.c:1353
+#: ../src/cairo-dock-menu.c:1360
 msgid "Fullscreen"
 msgstr "Vollbild"
 
-#: ../src/cairo-dock-menu.c:1357
+#: ../src/cairo-dock-menu.c:1364
 msgid "Don't keep above"
 msgstr "Nicht im Vordergrund halten"
 
-#: ../src/cairo-dock-menu.c:1357
+#: ../src/cairo-dock-menu.c:1364
 msgid "Keep above"
 msgstr "Im Vordergrund halten"
 
-#: ../src/cairo-dock-menu.c:1376
+#: ../src/cairo-dock-menu.c:1383
 msgid "Remove custom icon"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1380
+#: ../src/cairo-dock-menu.c:1387
 msgid "Kill"
 msgstr "Beenden erzwingen"
 
-#: ../src/cairo-dock-menu.c:1385
+#: ../src/cairo-dock-menu.c:1392
 msgid "Launch a new (Shift+clic)"
 msgstr "Neue Instanz öffnen (Shift+Klick)"
 
-#: ../src/cairo-dock-menu.c:1390
+#: ../src/cairo-dock-menu.c:1397
 msgid "Make it a launcher"
 msgstr "In einen Starter umwandeln"
 
-#: ../src/cairo-dock-menu.c:1393
+#: ../src/cairo-dock-menu.c:1400
 msgid "Show"
 msgstr "Anzeigen"
 
-#: ../src/cairo-dock-menu.c:1395
+#: ../src/cairo-dock-menu.c:1402
 msgid "Unmaximise"
 msgstr "Maximierung aufheben"
 
-#: ../src/cairo-dock-menu.c:1395
+#: ../src/cairo-dock-menu.c:1402
 msgid "Maximise"
 msgstr "Maximieren"
 
-#: ../src/cairo-dock-menu.c:1398
+#: ../src/cairo-dock-menu.c:1405
 msgid "Minimise"
 msgstr "Minimieren"
 
-#: ../src/cairo-dock-menu.c:1400
+#: ../src/cairo-dock-menu.c:1407
 msgid "Close (middle-click)"
 msgstr "Schließen (Mittlere Maustaste)"
 
-#: ../src/cairo-dock-menu.c:1413
+#: ../src/cairo-dock-menu.c:1420
 msgid "Move all to this desktop"
 msgstr "Alle auf diese Arbeitsfläche verschieben"
 
-#: ../src/cairo-dock-menu.c:1419
+#: ../src/cairo-dock-menu.c:1426
 msgid "Launch new"
 msgstr "Neu starten"
 
-#: ../src/cairo-dock-menu.c:1422
+#: ../src/cairo-dock-menu.c:1429
 msgid "Show all"
 msgstr "Alle anzeigen"
 
-#: ../src/cairo-dock-menu.c:1424
+#: ../src/cairo-dock-menu.c:1431
 msgid "Minimise all"
 msgstr "Alle minimieren"
 
-#: ../src/cairo-dock-menu.c:1426
+#: ../src/cairo-dock-menu.c:1433
 msgid "Close all"
 msgstr "Alle schließen"
 
-#: ../src/cairo-dock-menu.c:1449
+#: ../src/cairo-dock-menu.c:1456
 msgid "Detach this applet"
 msgstr "Minianwendung herauslösen"
 
-#: ../src/cairo-dock-menu.c:1449
+#: ../src/cairo-dock-menu.c:1456
 msgid "Return to the dock"
 msgstr "Zurück an das Dock binden"
 
-#: ../src/cairo-dock-menu.c:1452
+#: ../src/cairo-dock-menu.c:1459
 msgid "Remove this applet"
 msgstr "Minianwendung entfernen"
 
-#: ../src/cairo-dock-menu.c:1456
+#: ../src/cairo-dock-menu.c:1463
 msgid "Launch another instance of this applet"
 msgstr "Eine weitere Instanz dieser Minianwendung starten"
 
-#: ../src/cairo-dock-menu.c:1493
+#: ../src/cairo-dock-menu.c:1500
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-menu.c:1499 ../data/messages:21 ../data/messages:195
+#: ../src/cairo-dock-menu.c:1506 ../data/messages:21 ../data/messages:195
 #: ../data/messages:1379
 msgid "Always on top"
 msgstr "Immer im Vordergrund"
 
-#: ../src/cairo-dock-menu.c:1506
+#: ../src/cairo-dock-menu.c:1513
 msgid "Always below"
 msgstr "Immer im Hintergrund"
 
-#: ../src/cairo-dock-menu.c:1519
+#: ../src/cairo-dock-menu.c:1526
 msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Verhalten in Compiz auf (name=cairo-dock & type=utility) festlegen"
 
-#: ../src/cairo-dock-menu.c:1521
+#: ../src/cairo-dock-menu.c:1528
 msgid "Reserve space"
 msgstr "Platz reservieren"
 
-#: ../src/cairo-dock-menu.c:1528
+#: ../src/cairo-dock-menu.c:1535
 msgid "On all desktops"
 msgstr "Auf alle Arbeitsflächen"
 
-#: ../src/cairo-dock-menu.c:1534
+#: ../src/cairo-dock-menu.c:1541
 msgid "Lock position"
 msgstr "Position sperren"
 
-#: ../src/cairo-dock-struct.h:453
+#: ../src/cairo-dock-struct.h:448
 msgid "Default"
 msgstr "Standard"
 
@@ -1081,7 +1095,34 @@ msgstr ""
 "auftreten, würden wir Sie bitten uns einen Fehlerbericht unter http://cairo-"
 "dock.org/ zukommen zu lassen."
 
-#: ../data/messages:1
+#: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:37
+#: ../data/messages:211
+msgid "Move down"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:610 ../data/messages:39
+#: ../data/messages:213
+msgid "Fade out"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:41
+#: ../data/messages:215
+#, fuzzy
+msgid "Semi transparent"
+msgstr "Transparent"
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:43
+#: ../data/messages:217
+#, fuzzy
+msgid "Zoom out"
+msgstr "Zoom Effekt"
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:45
+#: ../data/messages:219
+msgid "Folding"
+msgstr ""
+
+#: ../data/messages:1 ../data/messages:1341
 msgid "Behavior"
 msgstr "Verhalten"
 
@@ -1160,28 +1201,6 @@ msgstr "Anzeige nach Tastenkürzel"
 #, fuzzy
 msgid "Effect used to hide the dock:"
 msgstr "Zurück an das Dock binden"
-
-#: ../data/messages:37 ../data/messages:211
-msgid "Move down"
-msgstr ""
-
-#: ../data/messages:39 ../data/messages:213
-msgid "Fade out"
-msgstr ""
-
-#: ../data/messages:41 ../data/messages:215
-#, fuzzy
-msgid "Semi transparent"
-msgstr "Transparent"
-
-#: ../data/messages:43 ../data/messages:217
-#, fuzzy
-msgid "Zoom out"
-msgstr "Zoom Effekt"
-
-#: ../data/messages:45 ../data/messages:219
-msgid "Folding"
-msgstr ""
 
 #: ../data/messages:47 ../data/messages:239
 msgid ""

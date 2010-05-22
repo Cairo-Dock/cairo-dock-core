@@ -65,13 +65,21 @@ struct _CairoDockTransition {
 	CairoContainer *pContainer;  // si l'un de ces 2 parametres change !
 	};
 
+/// Definition of a Hiding Effect backend (used to provide an animation when the docks hides/shows itself).
 struct _CairoDockHidingEffect {
+	/// translated name of the effect
 	const gchar *cDisplayedName;
+	/// whether the backend can display the dock even when it's hidden
 	gboolean bCanDisplayHiddenDock;
+	/// function called before the icons are drawn (cairo)
 	void (*pre_render) (CairoDock *pDock, double fOffset, cairo_t *pCairoContext);
+	/// function called before the icons are drawn (opengl)
 	void (*pre_render_opengl) (CairoDock *pDock, double fOffset);
+	/// function called afer the icons are drawn (cairo)
 	void (*post_render) (CairoDock *pDock, double fOffset, cairo_t *pCairoContext);
+	/// function called afer the icons are drawn (opengl)
 	void (*post_render_opengl) (CairoDock *pDock, double fOffset);
+	/// function called when the animation is started.
 	void (*init) (CairoDock *pDock);
 	};
 	
@@ -88,12 +96,12 @@ struct _CairoDockHidingEffect {
 #define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || (pDock)->fHideOffset < 1)))
 
 
-/* Pop up a Dock above other windows, if docks are in mode "keep below other windows"; otherwise do nothing.
+/** Pop up a Dock above other windows, if it is in mode "keep below other windows"; otherwise do nothing.
 *@param pDock the dock.
 */
 void cairo_dock_pop_up (CairoDock *pDock);
 
-/* Make a Dock pop down, keeping it below other windows, if this mode is activated in config.
+/** Pop down a Dock below other windows, if it is in mode "keep below other windows"; otherwise do nothing.
 *@param pDock the dock.
 */
 void cairo_dock_pop_down (CairoDock *pDock);

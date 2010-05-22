@@ -100,6 +100,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 			CAIRO_DOCK_UPDATE_DOCK,
 			(CairoDockNotificationFunc) _update_fade_out_dock,
 			NULL);
+		pDock->iFadeCounter = 0;
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 		g_print ("set above\n");
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);  // keep above
@@ -900,7 +901,7 @@ void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 			}
 		}
 	}
-	else if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow)
+	else if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow && ! pDock->container.bInside)
 	{
 		cairo_dock_pop_down (pDock);
 	}

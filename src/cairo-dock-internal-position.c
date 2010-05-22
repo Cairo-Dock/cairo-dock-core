@@ -24,12 +24,14 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-internal-accessibility.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-position.h"
 
 CairoConfigPosition myPosition;
 extern CairoDock *g_pMainDock;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigPosition *pPosition)
 {
@@ -67,14 +69,21 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 		pDock->iNumScreen = pPosition->iNumScreen;
 		cairo_dock_get_screen_offsets (pPosition->iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
 	}
-	else
+	else  // on n'utilise pas Xinerama.
 	{
 		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+		if (pPrevPosition->bUseXinerama)  // mais on l'utilisait avant, il faut donc recuperer les dimensions de l'ecran.
+		{
+			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		}
 	}
 	
-	if (pPosition->bUseXinerama != pPrevPosition->bUseXinerama || pPosition->iNumScreen != pPrevPosition->iNumScreen)
+	if (pPosition->bUseXinerama != pPrevPosition->bUseXinerama)
 	{
-		cairo_dock_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock.
+		cairo_dock_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock, puisque c'est fait apres.
 	}
 	
 	CairoDockTypeHorizontality bWasHorizontal = pDock->container.bIsHorizontal;

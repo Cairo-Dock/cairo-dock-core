@@ -55,7 +55,7 @@ typedef enum {
 #define CAIRO_DOCK_CATEGORY_ACCESSORY CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY
 #define CAIRO_DOCK_CATEGORY_CONTROLER CAIRO_DOCK_CATEGORY_APPLET_CONTROLER
 
-/// Definition of the visit card of a module.
+/// Definition of the visit card of a module. Contains everything that is statically defined for a module.
 struct _CairoDockVisitCard {
 	/// nom du module qui servira a l'identifier.
 	const gchar *cModuleName;
@@ -113,7 +113,7 @@ struct _CairoDockModuleInterface {
 	void		(* save_custom_widget)	(CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 };
 
-/// Definition of an instance of a module.
+/// Definition of an instance of a module. A module can be instanciated several times.
 struct _CairoDockModuleInstance {
 	/// the module this instance represents.
 	CairoDockModule *pModule;
@@ -144,7 +144,7 @@ typedef gboolean (* CairoDockModulePreInit) (CairoDockVisitCard *pVisitCard, Cai
 struct _CairoDockModule {
 	/// path to the .so file.
 	gchar *cSoFilePath;
-	/// internal structure of the .so file, containing pointers to the module's functions.
+	/// internal structure of the .so file, once it has been opened.
 	GModule *pModule;
 	/// interface of the module.
 	CairoDockModuleInterface *pInterface;

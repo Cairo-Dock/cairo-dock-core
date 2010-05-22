@@ -4,7 +4,7 @@
 ######## so don't mess into it, except if you know what you're doing ! ;-)##########
 
 #[@pkgdatadir@/icon-behavior.svg]
-[Position]
+[Behavior]
 
 #F-[Position on the screen;gtk-fullscreen]
 frame1 =
