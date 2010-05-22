@@ -57,52 +57,30 @@
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
 extern CairoDockHidingEffect *g_pHidingBackend;
+extern CairoDockHidingEffect *g_pKeepingBelowBackend;
+extern CairoDockGLConfig g_openglConfig;
 
-static gboolean _render_fade_out_dock (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
-{
-	double fAlpha = (double) pDock->iFadeCounter / mySystem.iFadeOutNbSteps;
-	if (pCairoContext != NULL)
-	{
-		cairo_rectangle (pCairoContext,
-			0,
-			0,
-			pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight, pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth);
-		cairo_set_line_width (pCairoContext, 0);
-		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
-		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1. - fAlpha);
-		cairo_fill (pCairoContext);
-	}
-	else
-	{
-		glAccum (GL_LOAD, fAlpha);
-		glAccum (GL_RETURN, 1.0);
-	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-}
 static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gboolean *bContinueAnimation)
 {
-	pDock->iFadeCounter += (pDock->bFadeInOut ? -1 : 1);  // fade out, puis fade in.
+	pDock->iFadeCounter += (pDock->bFadeInOut ? 1 : -1);  // fade out, puis fade in.
 	
-	if (pDock->iFadeCounter == 0)
+	if (pDock->iFadeCounter >= mySystem.iHideNbSteps)
 	{
 		pDock->bFadeInOut = FALSE;
-		cd_debug ("set below");
+		g_print ("set below\n");
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
-		// si fenetre maximisee, on met direct iFadeCounter au max.
-		if (cairo_dock_search_window_covering_dock (pDock, FALSE, FALSE) != NULL)
-			pDock->iFadeCounter = mySystem.iFadeOutNbSteps;
+		// si fenetre maximisee, on met direct iFadeCounter a 0.  // malheureusement X met du temps a faire passer le dock derriere, et ca donne un "sursaut" :-/
+		///if (cairo_dock_search_window_covering_dock (pDock, FALSE, FALSE) != NULL)
+		///	pDock->iFadeCounter = 0;
 	}
 	
-	if (pDock->iFadeCounter < mySystem.iFadeOutNbSteps)
+	//g_print ("pDock->iFadeCounter : %d\n", pDock->iFadeCounter);
+	if (pDock->iFadeCounter > 0)
 	{
 		*bContinueAnimation = TRUE;
 	}
 	else
 	{
-		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
-			CAIRO_DOCK_RENDER_DOCK,
-			(CairoDockNotificationFunc) _render_fade_out_dock,
-			NULL);
 		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
 			CAIRO_DOCK_UPDATE_DOCK,
 			(CairoDockNotificationFunc) _update_fade_out_dock,
@@ -113,57 +91,51 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-/**void cairo_dock_pop_up (CairoDock *pDock)
+void cairo_dock_pop_up (CairoDock *pDock)
 {
-	//g_print ("%s (%d)\n", __func__, pDock->bPopped);
-	if (! pDock->bPopped && myAccessibility.bPopUp)
+	g_print ("%s (%d)\n", __func__, pDock->bIsBelow);
+	if (pDock->bIsBelow)
 	{
-		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
-			CAIRO_DOCK_RENDER_DOCK,
-			(CairoDockNotificationFunc) _render_fade_out_dock,
-			NULL);
 		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
 			CAIRO_DOCK_UPDATE_DOCK,
 			(CairoDockNotificationFunc) _update_fade_out_dock,
 			NULL);
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		cd_debug ("set above");
-		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), TRUE);
-		pDock->bPopped = TRUE;
+		g_print ("set above\n");
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);  // keep above
+		pDock->bIsBelow = FALSE;
 	}
 }
 
-gboolean cairo_dock_pop_down (CairoDock *pDock)
+void cairo_dock_pop_down (CairoDock *pDock)
 {
-	//g_print ("%s (%d)\n", __func__, pDock->bPopped);
-	if (pDock->bIsMainDock && cairo_dock_get_nb_dialog_windows () != 0)
-		return FALSE;
-	if (pDock->bPopped && myAccessibility.bPopUp && ! pDock->container.bInside)
+	g_print ("%s (%d, %d)\n", __func__, pDock->bIsBelow, pDock->container.bInside);
+	/**if (pDock->bIsMainDock && cairo_dock_get_nb_dialog_windows () != 0)
+		return FALSE;*/
+	if (! pDock->bIsBelow && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->container.bInside)
 	{
-		if (cairo_dock_search_window_covering_dock (pDock, FALSE, FALSE) != NULL)
+		if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
 		{
-			pDock->iFadeCounter = mySystem.iFadeOutNbSteps;
+			pDock->iFadeCounter = 0;
 			pDock->bFadeInOut = TRUE;
-			cairo_dock_register_notification_on_container (CAIRO_CONTAINER (pDock),
-				CAIRO_DOCK_RENDER_DOCK,
-				(CairoDockNotificationFunc) _render_fade_out_dock,
-				CAIRO_DOCK_RUN_AFTER, NULL);
 			cairo_dock_register_notification_on_container (CAIRO_CONTAINER (pDock),
 				CAIRO_DOCK_UPDATE_DOCK,
 				(CairoDockNotificationFunc) _update_fade_out_dock,
 				CAIRO_DOCK_RUN_FIRST, NULL);
+			if (g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->init)
+				g_pKeepingBelowBackend->init (pDock);
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 		}
 		else
 		{
-			cd_debug ("set below");
+			g_print ("set below\n");
 			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		}
-		pDock->bPopped = FALSE;
+		pDock->bIsBelow = TRUE;
 	}
-	pDock->iSidPopDown = 0;
-	return FALSE;
-}*/
+	///pDock->iSidPopDown = 0;
+	///return FALSE;
+}
 
 
 gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex)  // merci a Robrob pour le patch !
@@ -289,10 +261,9 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				//g_print ("rideau !\n");
 				
 				//\__________________ On repasse derriere si on etait devant.
-				if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW)
-					gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
-				/**if (pDock->bPopped)
-					cairo_dock_pop_down (pDock);*/
+				g_print ("fin d'animation (%d)\n", pDock->bIsBelow);
+				if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow)
+					cairo_dock_pop_down (pDock);
 				
 				//\__________________ On se redimensionne en taille normale.
 				if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
@@ -529,6 +500,7 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	}
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	gboolean bIconIsAnimating;
+	gboolean bNoMoreDemandingAttention = FALSE;
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -557,10 +529,19 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 		{
 			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
 			if (icon->bIsDemandingAttention)
+			{
 				icon->bIsDemandingAttention = FALSE;
+				bNoMoreDemandingAttention = TRUE;
+			}
 		}
 	}
 	bContinue |= pDock->container.bKeepSlowAnimation;
+	
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && bNoMoreDemandingAttention && ! pDock->bIsBelow && ! pDock->container.bInside)
+	{
+		g_print ("plus de raison d'etre devant\n");
+		cairo_dock_pop_down (pDock);
+	}
 	
 	if (! _cairo_dock_handle_inserting_removing_icons (pDock))
 	{
@@ -889,6 +870,8 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 			cairo_dock_request_icon_attention (pPointingIcon, pParentDock, cAnimation, iNbRounds);
 		}
 	}
+	else if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && pDock->bIsBelow)
+		cairo_dock_pop_up (pDock);
 }
 
 void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
@@ -916,6 +899,10 @@ void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 				cairo_dock_stop_icon_attention (pPointingIcon, pParentDock);
 			}
 		}
+	}
+	else if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow)
+	{
+		cairo_dock_pop_down (pDock);
 	}
 }
 

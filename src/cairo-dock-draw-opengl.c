@@ -72,9 +72,6 @@ extern GLuint g_pGradationTexture[2];
 
 extern CairoDock *g_pMainDock;
 
-/**extern CairoDockImageBuffer g_pIndicatorBuffer;
-extern CairoDockImageBuffer g_pActiveIndicatorBuffer;
-extern CairoDockImageBuffer g_pClassIndicatorBuffer;*/
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
@@ -607,13 +604,13 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
 	cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 	
-	/**if (g_pVisibleZoneBuffer.iTexture != 0)
+	if (g_pVisibleZoneBuffer.iTexture != 0)
 	{
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_over ();
-		_cairo_dock_set_alpha (myBackground.fVisibleZoneAlpha);
-		int w = MIN (myAccessibility.iVisibleZoneWidth, pDock->container.iWidth);
-		int h = MIN (myAccessibility.iVisibleZoneHeight, pDock->container.iHeight);
+		//_cairo_dock_set_alpha (myBackground.fVisibleZoneAlpha);
+		int w = MIN (myAccessibility.iZoneWidth, pDock->container.iWidth);
+		int h = MIN (myAccessibility.iZoneHeight, pDock->container.iHeight);
 		cd_debug ("%s (%dx%d)", __func__, w, h);
 		
 		if (pDock->container.bIsHorizontal)
@@ -633,13 +630,13 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 		
 		if (! pDock->container.bIsHorizontal)
 			glRotatef (90., 0, 0, 1);
-		if (! pDock->container.bDirectionUp && myBackground.bReverseVisibleImage)
+		if (! pDock->container.bDirectionUp && /**myBackground.bReverseVisibleImage*/TRUE)
 			glScalef (1., -1., 1.);
 		
 		_cairo_dock_apply_texture_at_size (g_pVisibleZoneBuffer.iTexture, w, h);
 		
 		_cairo_dock_disable_texture ();
-	}*/
+	}
 	
 	//\_____________________ on dessine les icones demandant l'attention.
 	GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);

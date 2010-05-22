@@ -91,6 +91,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	
 	pIndicators->bRotateWithDock = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "rotate indicator", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
+	pIndicators->bDrawIndicatorOnAppli = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "indic on appli", &bFlushConfFileNeeded, FALSE, "TaskBar", NULL);
+	
 	//\__________________ On recupere l'indicateur de fenetre active.
 	int iIndicType = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active indic type", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour pouvoir intercepter le cas ou la cle n'existe pas.
 	

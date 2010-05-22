@@ -27,10 +27,7 @@
 #include <cairo.h>
 
 #include "../config.h"
-#include "cairo-dock-draw.h"
 #include "cairo-dock-icons.h"
-#include "cairo-dock-load.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
@@ -40,10 +37,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-file-manager.h"
-#include "cairo-dock-callbacks.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-internal-accessibility.h"

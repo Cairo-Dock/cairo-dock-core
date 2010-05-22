@@ -171,7 +171,7 @@ struct _CairoDock {
 	
 	
 	/// Whether the dock is in a popped up state or not.
-	gboolean bPopped;
+	gboolean bIsBelow;
 	/// whether the menu is visible (to keep the dock on high position).
 	gboolean bMenuVisible;
 	/// whether the user is dragging something over the dock.

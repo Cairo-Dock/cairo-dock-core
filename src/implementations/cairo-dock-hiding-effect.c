@@ -39,38 +39,12 @@
 #include <gtk/gtkgl.h>
 #include <GL/glu.h>
 
-#include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-load.h"
-#include "cairo-dock-icons.h"
-#include "cairo-dock-applications-manager.h"
-#include "cairo-dock-application-facility.h"
-#include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-config.h"
-#include "cairo-dock-container.h"
-#include "cairo-dock-dock-facility.h"
-#include "cairo-dock-notifications.h"
-#include "cairo-dock-themes-manager.h"
-#include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-dock-manager.h"
-#include "cairo-dock-keybinder.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-flying-container.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-backends-manager.h"
-#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-background.h"
-#include "cairo-dock-class-manager.h"
-#include "cairo-dock-X-manager.h"
-#include "cairo-dock-X-utilities.h"
-#include "cairo-dock-X-manager.h"
-#include "cairo-dock-callbacks.h"
+#include "cairo-dock-backends-manager.h"
 
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
@@ -81,7 +55,7 @@ static void _init_opengl (CairoDock *pDock)
 		cairo_dock_create_redirect_texture_for_dock (pDock);
 }
 
-static void _pre_render_opengl (CairoDock *pDock)
+static void _pre_render_opengl (CairoDock *pDock, double fOffset)
 {
 	if (pDock->iFboId == 0)
 		return ;
@@ -107,17 +81,17 @@ static void _pre_render_opengl (CairoDock *pDock)
  // MOVE DOWN //
 ///////////////
 
-static inline double _compute_y_offset (CairoDock *pDock)
+static inline double _compute_y_offset (CairoDock *pDock, double fOffset)
 {
 	int N = (pDock->bIsHiding ? mySystem.iHideNbSteps : mySystem.iUnhideNbSteps);
-	int k = (1 - pDock->fHideOffset) * N;
+	int k = (1 - fOffset) * N;
 	double a = pow (1./pDock->iMaxDockHeight, 1./N);  // le dernier step est un ecart d'environ 1 pixel.
 	return pDock->iMaxDockHeight * pow (a, k) * (pDock->container.bDirectionUp ? 1 : -1);
 }
 
-static void _pre_render_move_down (CairoDock *pDock, cairo_t *pCairoContext)
+static void _pre_render_move_down (CairoDock *pDock, double fOffset, cairo_t *pCairoContext)
 {
-	double dy = _compute_y_offset (pDock);
+	double dy = _compute_y_offset (pDock, fOffset);
 	if (pDock->container.bIsHorizontal)
 		cairo_translate (pCairoContext, 0., dy);
 	else
@@ -134,7 +108,7 @@ static void _pre_render_move_down (CairoDock *pDock, cairo_t *pCairoContext)
 }*/
 
 #define NB_POINTS 11  // 5 carres de part et d'autre.
-static void _post_render_move_down_opengl (CairoDock *pDock)
+static void _post_render_move_down_opengl (CairoDock *pDock, double fOffset)
 {
 	if (pDock->iFboId == 0)
 		return ;
@@ -183,7 +157,7 @@ static void _post_render_move_down_opengl (CairoDock *pDock)
 	GLfloat coords[NB_POINTS*1*8];
 	GLfloat vertices[NB_POINTS*1*8];
 	int i, j, n=0;
-	double x, x_, t = pDock->fHideOffset;
+	double x, x_, t = fOffset;
 	for (i = 0; i < NB_POINTS; i ++)
 	{
 		for (j = 0; j < 2-1; j ++)
@@ -244,17 +218,17 @@ static void _init_fade_out (CairoDock *pDock)
 		cairo_dock_create_redirect_texture_for_dock (pDock);
 }
 
-static void _pre_render_fade_out_opengl (CairoDock *pDock)
+static void _pre_render_fade_out_opengl (CairoDock *pDock, double fOffset)
 {
 	if (! g_openglConfig.bAccumBufferAvailable && pDock->iFboId != 0)  // pas de glAccum.
 	{
-		_pre_render_opengl (pDock);
+		_pre_render_opengl (pDock, fOffset);
 	}
 }
 
-static void _post_render_fade_out (CairoDock *pDock, cairo_t *pCairoContext)
+static void _post_render_fade_out (CairoDock *pDock, double fOffset, cairo_t *pCairoContext)
 {
-	double fAlpha = 1 - pDock->fHideOffset;
+	double fAlpha = 1 - fOffset;
 	cairo_rectangle (pCairoContext,
 		0,
 		0,
@@ -265,9 +239,9 @@ static void _post_render_fade_out (CairoDock *pDock, cairo_t *pCairoContext)
 	cairo_fill (pCairoContext);
 }
 
-static void _post_render_fade_out_opengl (CairoDock *pDock)
+static void _post_render_fade_out_opengl (CairoDock *pDock, double fOffset)
 {
-	double fAlpha = 1 - pDock->fHideOffset;
+	double fAlpha = 1 - fOffset;
 	if (g_openglConfig.bAccumBufferAvailable)
 	{
 		glAccum (GL_LOAD, fAlpha*fAlpha);
@@ -283,8 +257,7 @@ static void _post_render_fade_out_opengl (CairoDock *pDock)
 			0);  // on detache la texture (precaution).
 		// dessin dans notre fenetre.
 		_cairo_dock_enable_texture ();
-		_cairo_dock_set_blend_source ();
-		_cairo_dock_set_blend_alpha ();
+		_cairo_dock_set_blend_alpha ();  // le moins pire des 3.
 		
 		int iWidth, iHeight;  // taille de la texture
 		if (pDock->container.bIsHorizontal)
@@ -314,9 +287,9 @@ static void _post_render_fade_out_opengl (CairoDock *pDock)
 //////////////////////
 
 #define CD_SEMI_ALPHA .25
-static void _post_render_semi_transparent (CairoDock *pDock, cairo_t *pCairoContext)
+static void _post_render_semi_transparent (CairoDock *pDock, double fOffset, cairo_t *pCairoContext)
 {
-	double fAlpha = (1 - CD_SEMI_ALPHA)*pDock->fHideOffset;
+	double fAlpha = (1 - CD_SEMI_ALPHA)*fOffset;
 	cairo_rectangle (pCairoContext,
 		0,
 		0,
@@ -327,9 +300,9 @@ static void _post_render_semi_transparent (CairoDock *pDock, cairo_t *pCairoCont
 	cairo_fill (pCairoContext);
 }
 
-static void _post_render_semi_transparent_opengl (CairoDock *pDock)
+static void _post_render_semi_transparent_opengl (CairoDock *pDock, double fOffset)
 {
-	double fAlpha = 1 - (1 - CD_SEMI_ALPHA)*pDock->fHideOffset;
+	double fAlpha = 1 - (1 - CD_SEMI_ALPHA)*fOffset;
 	if (g_openglConfig.bAccumBufferAvailable)
 	{
 		glAccum (GL_LOAD, fAlpha);
@@ -375,17 +348,17 @@ static void _post_render_semi_transparent_opengl (CairoDock *pDock)
  // ZOOM OUT //
 //////////////
 
-static inline double _compute_zoom (CairoDock *pDock)
+static inline double _compute_zoom (CairoDock *pDock, double fOffset)
 {
 	int N = (pDock->bIsHiding ? mySystem.iHideNbSteps : mySystem.iUnhideNbSteps);
-	int k = pDock->fHideOffset * N;
+	int k = fOffset * N;
 	double a = pow (1./pDock->iMaxDockHeight, 1./N);  // le premier step est un ecart d'environ 1 pixels.
 	return 1 - pow (a, N - k);
 }
 
-static void _pre_render_zoom (CairoDock *pDock, cairo_t *pCairoContext)
+static void _pre_render_zoom (CairoDock *pDock, double fOffset, cairo_t *pCairoContext)
 {
-	double z = _compute_zoom (pDock);
+	double z = _compute_zoom (pDock, fOffset);
 	int iWidth, iHeight;
 	iWidth = pDock->container.iWidth;
 	iHeight = pDock->container.iHeight;
@@ -422,7 +395,7 @@ static void _pre_render_zoom (CairoDock *pDock, cairo_t *pCairoContext)
 	}
 }
 
-static void _post_render_zoom_opengl (CairoDock *pDock)
+static void _post_render_zoom_opengl (CairoDock *pDock, double fOffset)
 {
 	if (pDock->iFboId == 0)
 		return ;
@@ -437,7 +410,7 @@ static void _post_render_zoom_opengl (CairoDock *pDock)
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_source ();
 	
-	double z = _compute_zoom (pDock);
+	double z = _compute_zoom (pDock, fOffset);
 	glPushMatrix ();
 	glLoadIdentity ();
 	
@@ -489,9 +462,9 @@ static void _post_render_zoom_opengl (CairoDock *pDock)
  // FOLDING //
 /////////////
 
-static void _pre_render_folding (CairoDock *pDock, cairo_t *pCairoContext)
+static void _pre_render_folding (CairoDock *pDock, double fOffset, cairo_t *pCairoContext)
 {
-	double z = (1-pDock->fHideOffset) * (1-pDock->fHideOffset);
+	double z = (1 - fOffset) * (1 - fOffset);
 	int iWidth, iHeight;
 	if (pDock->container.bIsHorizontal)
 	{
@@ -512,7 +485,7 @@ static void _pre_render_folding (CairoDock *pDock, cairo_t *pCairoContext)
 }
 
 #define NB_POINTS2 20  // 20 points de pliage.
-static void _post_render_folding_opengl (CairoDock *pDock)
+static void _post_render_folding_opengl (CairoDock *pDock, double fOffset)
 {
 	if (pDock->iFboId == 0)
 		return ;
@@ -564,7 +537,7 @@ static void _post_render_folding_opengl (CairoDock *pDock)
 	GLfloat coords[NB_POINTS2*1*8];
 	GLfloat vertices[NB_POINTS2*1*12];
 	int i, j, n=0;
-	double x, x_, t = pDock->fHideOffset;
+	double x, x_, t = fOffset;
 	t = t* (t);
 	for (i = 0; i < NB_POINTS2; i ++)
 	{

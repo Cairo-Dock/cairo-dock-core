@@ -42,7 +42,7 @@ num screen = 0
 #F-[Visibility of the main dock;gtk-find]
 frame_visi =
 
-#Y-[Always on top;0;0;Reserve space for the dock;0;0;Keep the dock below;2;2;Hide the dock when it overlaps the current window;1;3;Hide the dock whenever it overlaps any window;1;3;Keep the dock hidden;1;3;Pop-up on shortcut;4;1] Visibility:
+#Y-[Always on top;0;0;Reserve space for the dock;0;0;Keep the dock below;2;4;Hide the dock when it overlaps the current window;1;5;Hide the dock whenever it overlaps any window;1;5;Keep the dock hidden;1;5;Pop-up on shortcut;6;1] Visibility:
 #{Modes are sorted from the most intrusive to the less intrusive.
 #When the dock is hidden or below a window, place the mouse on the screen's border to call it back.
 #When the dock pops up on shortcut, it will appear at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
@@ -54,8 +54,14 @@ sep_visi =
 #L-[Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
 hide effect = Move down
 
-#l-[Hit the screen's border;Hit where the dock is;Hit the screen's corner] How to call the dock back:
+#l-[Hit the screen's border;Hit where the dock is;Hit the screen's corner;Hit a zone] How to call the dock back:
 callback = 0
+
+#j-[2;999] Size of the zone :
+zone size = 80;10
+
+#S- Image to display on the zone :
+callback image = 
 
 #i-[0;1500] Delay before the dock unhides itself:
 #{in ms. 0 means no delay.}
@@ -142,10 +148,6 @@ minimized = 1
 
 #e-[0;.6;Opaque;Transparent] Transparency of icons whose window is minimised:
 visibility alpha = 0.35
-
-#b- Display an indicator even when the icon is not a launcher ?
-#{The indicator is drawn on active launchers, but you may want to display it on applications too.}
-indic on appli = false
 
 #a- Play a short animation of the icon when its window becomes active
 animation on active window = wobbly
@@ -630,7 +632,7 @@ active line width = 3
 active corner radius = 6
 
 #v
-sep_ind =
+sep_active =
 
 #b+ Draw indicator above the icon?
 active frame position = true
@@ -643,12 +645,12 @@ frame_launch =
 #{Indicators are drawn on launchers icons to show that they have already been launched. Leave blank to use the default one.}
 indicator image = 
 
-#b+ Draw indicator above the icon?
-indicator above = true
+#b- Display an indicator on application icons too ?
+#{The indicator is drawn on active launchers, but you may want to display it on applications too.}
+indic on appli = false
 
-#e+[0.1;1.5;smaller;bigger] Indicator size ratio :
-#{You can choose to make the indicator smaller or bigger than the icons. The bigger the value is, the bigger the indicator is. 1 means the indicator will have the same size as the icons.}
-indicator ratio = 1.
+#v
+sep_ind =
 
 #e+[-0.2;1.2] Vertical offset :
 #{Relatively to the icons' size. You can use this parameter to adjust the indicator's vertical position.
@@ -660,9 +662,16 @@ indicator offset = -0.03
 #Otherwise it will be drawn directly on the dock and the offset will be downwards.}
 indicator on icon = true
 
+#e+[0.1;1.5;smaller;bigger] Indicator size ratio :
+#{You can choose to make the indicator smaller or bigger than the icons. The bigger the value is, the bigger the indicator is. 1 means the indicator will have the same size as the icons.}
+indicator ratio = 1.
+
 #b+ Rotate the indicator with dock?
 #{Use it to make the indicator follow the orientation of the dock (top/bottom/right/left).}
 rotate indicator = true
+
+#b+ Draw indicator above the icon?
+indicator above = true
 
 
 #F+[Indicator of grouped windows]

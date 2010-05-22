@@ -68,10 +68,10 @@ struct _CairoDockTransition {
 struct _CairoDockHidingEffect {
 	const gchar *cDisplayedName;
 	gboolean bCanDisplayHiddenDock;
-	void (*pre_render) (CairoDock *pDock, cairo_t *pCairoContext);
-	void (*pre_render_opengl) (CairoDock *pDock);
-	void (*post_render) (CairoDock *pDock, cairo_t *pCairoContext);
-	void (*post_render_opengl) (CairoDock *pDock);
+	void (*pre_render) (CairoDock *pDock, double fOffset, cairo_t *pCairoContext);
+	void (*pre_render_opengl) (CairoDock *pDock, double fOffset);
+	void (*post_render) (CairoDock *pDock, double fOffset, cairo_t *pCairoContext);
+	void (*post_render_opengl) (CairoDock *pDock, double fOffset);
 	void (*init) (CairoDock *pDock);
 	};
 	
@@ -91,12 +91,12 @@ struct _CairoDockHidingEffect {
 /* Pop up a Dock above other windows, if docks are in mode "keep below other windows"; otherwise do nothing.
 *@param pDock the dock.
 */
-///void cairo_dock_pop_up (CairoDock *pDock);
+void cairo_dock_pop_up (CairoDock *pDock);
 
 /* Make a Dock pop down, keeping it below other windows, if this mode is activated in config.
 *@param pDock the dock.
 */
-///gboolean cairo_dock_pop_down (CairoDock *pDock);
+void cairo_dock_pop_down (CairoDock *pDock);
 
 
 gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex);

@@ -149,7 +149,7 @@ CairoDockImageBuffer g_pIndicatorBuffer;
 CairoDockImageBuffer g_pActiveIndicatorBuffer;
 CairoDockImageBuffer g_pClassIndicatorBuffer;
 CairoDockImageBuffer g_pIconBackgroundBuffer;
-///CairoDockImageBuffer g_pVisibleZoneBuffer;
+CairoDockImageBuffer g_pVisibleZoneBuffer;
 CairoDockImageBuffer g_pBoxAboveBuffer;
 CairoDockImageBuffer g_pBoxBelowBuffer;
 
@@ -165,6 +165,7 @@ CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 //int g_iDamageEvent = 0;
 
 CairoDockHidingEffect *g_pHidingBackend = NULL;
+CairoDockHidingEffect *g_pKeepingBelowBackend = NULL;
 
 gboolean g_bEasterEggs = FALSE;
 gboolean g_bLocked = FALSE;
@@ -516,6 +517,7 @@ int main (int argc, char** argv)
 	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
 	
 	cairo_dock_register_hiding_effects ();
+	g_pKeepingBelowBackend = cairo_dock_get_hiding_effect ("Fade out");
 	
 	cairo_dock_register_icon_container_renderers ();
 	

@@ -34,15 +34,13 @@ extern CairoConfigAccessibility myAccessibility;
 G_BEGIN_DECLS
 
 struct _CairoConfigAccessibility {
-	/**gboolean bReserveSpace;
-	gboolean bAutoHide;
-	gboolean bAutoHideOnOverlap;
-	gboolean bAutoHideOnAnyOverlap;*/
-	///gboolean bPopUp;
 	// Root dock visibility
 	CairoDockVisibility iVisibility;
 	gchar *cHideEffect;
 	gint iCallbackMethod;
+	gint iZoneWidth, iZoneHeight;
+	gchar *cZoneImage;
+	gdouble fZoneAlpha;
 	gchar *cRaiseDockShortcut;
 	gint iUnhideDockDelay;
 	//Sub-Dock visibility

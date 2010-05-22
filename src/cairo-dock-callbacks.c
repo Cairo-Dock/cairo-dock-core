@@ -74,6 +74,7 @@
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockHidingEffect *g_pHidingBackend;
+extern CairoDockHidingEffect *g_pKeepingBelowBackend;
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
 static int s_iClickX, s_iClickY;  // coordonnees du clic dans le dock, pour pouvoir initialiser le deplacement apres un seuil.
@@ -110,12 +111,18 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 		
 		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render_opengl)
-			g_pHidingBackend->pre_render_opengl (pDock);
+			g_pHidingBackend->pre_render_opengl (pDock, pDock->fHideOffset);
+		
+		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->pre_render_opengl)
+			g_pKeepingBelowBackend->pre_render_opengl (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps);
 		
 		pDock->pRenderer->render_opengl (pDock);
 		
 		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render_opengl)
-			g_pHidingBackend->post_render_opengl (pDock);
+			g_pHidingBackend->post_render_opengl (pDock, pDock->fHideOffset);
+		
+		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render_opengl)
+			g_pKeepingBelowBackend->post_render_opengl (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -174,7 +181,10 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &pExpose->area, NULL);
 			
 			if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
-				g_pHidingBackend->pre_render (pDock, pCairoContext);
+				g_pHidingBackend->pre_render (pDock, pDock->fHideOffset, pCairoContext);
+			
+			if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->pre_render)
+				g_pKeepingBelowBackend->pre_render (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps, pCairoContext);
 			
 			if (pDock->pRenderer->render_optimized != NULL)
 				pDock->pRenderer->render_optimized (pCairoContext, pDock, &pExpose->area);
@@ -182,7 +192,10 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 				pDock->pRenderer->render (pCairoContext, pDock);
 			
 			if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render)
-				g_pHidingBackend->post_render (pDock, pCairoContext);
+				g_pHidingBackend->post_render (pDock, pDock->fHideOffset, pCairoContext);
+		
+			if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
+				g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps, pCairoContext);
 			
 			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 			
@@ -205,12 +218,18 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	else
 	{
 		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
-			g_pHidingBackend->pre_render (pDock, pCairoContext);
+			g_pHidingBackend->pre_render (pDock, pDock->fHideOffset, pCairoContext);
+		
+		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->pre_render)
+			g_pKeepingBelowBackend->pre_render (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps, pCairoContext);
 		
 		pDock->pRenderer->render (pCairoContext, pDock);
 		
 		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render)
-			g_pHidingBackend->post_render (pDock, pCairoContext);
+			g_pHidingBackend->post_render (pDock, pDock->fHideOffset, pCairoContext);
+		
+		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
+			g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps, pCairoContext);
 		
 		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
 	}
@@ -708,7 +727,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%x; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
+	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%x; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
 	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
@@ -796,17 +815,10 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		}
 	}
 	
-	// on repasse au premier plan.
-	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && pDock->iRefCount == 0)
+	// si on etait derriere, on repasse au premier plan.
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && pDock->bIsBelow && pDock->iRefCount == 0)
 	{
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
-		/**cairo_dock_pop_up (pDock);
-		//If the dock window is entered, and there is a pending drop below event then it should be cancelled
-		if (pDock->iSidPopDown != 0)
-		{
-			g_source_remove(pDock->iSidPopDown);
-			pDock->iSidPopDown = 0;
-		}*/
+		cairo_dock_pop_up (pDock);
 	}
 	
 	// si on etait en auto-hide, on commence a monter.
@@ -1010,7 +1022,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	}
 	else if (pButton->button == 3 && pButton->type == GDK_BUTTON_PRESS)  // clique droit.
 	{
-		GtkMenu *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
+		GtkWidget *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
 		
 		cairo_dock_popup_menu_on_container (menu, CAIRO_CONTAINER (pDock));
 	}

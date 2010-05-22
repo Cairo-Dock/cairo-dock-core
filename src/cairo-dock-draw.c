@@ -54,9 +54,6 @@
 
 
 extern CairoDockImageBuffer g_pDockBackgroundBuffer;
-/**extern CairoDockImageBuffer g_pIndicatorBuffer;
-extern CairoDockImageBuffer g_pActiveIndicatorBuffer;
-extern CairoDockImageBuffer g_pClassIndicatorBuffer;*/
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
@@ -1086,11 +1083,11 @@ void cairo_dock_draw_surface (cairo_t *pCairoContext, cairo_surface_t *pSurface,
 void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	//\_____________________ on dessine la zone de rappel.
-	/**if (g_pVisibleZoneBuffer.pSurface != NULL)
+	if (g_pVisibleZoneBuffer.pSurface != NULL)
 	{
 		cairo_save (pCairoContext);
-		int w = MIN (myAccessibility.iVisibleZoneWidth, pDock->container.iWidth);
-		int h = MIN (myAccessibility.iVisibleZoneHeight, pDock->container.iHeight);
+		int w = MIN (myAccessibility.iZoneWidth, pDock->container.iWidth);
+		int h = MIN (myAccessibility.iZoneHeight, pDock->container.iHeight);
 		
 		if (pDock->container.bIsHorizontal)
 		{
@@ -1109,11 +1106,11 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 		cairo_dock_draw_surface (pCairoContext, g_pVisibleZoneBuffer.pSurface,
 			w,
 			h,
-			(myBackground.bReverseVisibleImage ? pDock->container.bDirectionUp : TRUE),
+			(TRUE/**myBackground.bReverseVisibleImage*/ ? pDock->container.bDirectionUp : TRUE),
 			pDock->container.bIsHorizontal,
-			myBackground.fVisibleZoneAlpha);
+			1./**myBackground.fVisibleZoneAlpha*/);
 		cairo_restore (pCairoContext);
-	}*/
+	}
 	
 	//\_____________________ on dessine les icones demandant l'attention.
 	GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);

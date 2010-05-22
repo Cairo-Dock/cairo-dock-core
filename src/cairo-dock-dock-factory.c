@@ -282,8 +282,6 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock)
 	pDock->iScreenOffsetY = pParentDock->iScreenOffsetY;
 	if (g_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), FALSE);
-	/**if (myAccessibility.bPopUp)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);*/
 	gtk_window_set_title (GTK_WINDOW (pDock->container.pWidget), "cairo-dock-sub");
 	
 	pDock->bAutoHide = FALSE;

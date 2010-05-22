@@ -35,7 +35,6 @@ G_BEGIN_DECLS
 
 struct _CairoConfigTaskBar {
 	gboolean bShowAppli;
-	///gboolean bUniquePid;
 	gboolean bGroupAppliByClass;
 	gint iAppliMaxNameLength;
 	gboolean bMinimizeOnClick;
@@ -53,7 +52,6 @@ struct _CairoConfigTaskBar {
 	gchar *cOverwriteException;
 	gchar *cGroupException;
 	gchar *cForceDemandsAttention;
-	gboolean bDrawIndicatorOnAppli;
 	} ;
 
 

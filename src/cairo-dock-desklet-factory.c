@@ -480,9 +480,9 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 	else if (pButton->button == 3 && pButton->type == GDK_BUTTON_PRESS)  // clique droit.
 	{
 		Icon *pClickedIcon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
-		GtkMenu *menu = cairo_dock_build_menu (pClickedIcon, CAIRO_CONTAINER (pDesklet));  // genere un CAIRO_DOCK_BUILD_ICON_MENU.
-		gtk_widget_show_all (GTK_WIDGET (menu));
-		gtk_menu_popup (menu,
+		GtkWidget *menu = cairo_dock_build_menu (pClickedIcon, CAIRO_CONTAINER (pDesklet));  // genere un CAIRO_DOCK_BUILD_ICON_MENU.
+		gtk_widget_show_all (menu);
+		gtk_menu_popup (GTK_MENU (menu),
 			NULL,
 			NULL,
 			NULL,

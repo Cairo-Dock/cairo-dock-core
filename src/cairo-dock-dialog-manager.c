@@ -614,7 +614,6 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 	//g_print ("%s (Ybulle:%d; width:%d)\n", __func__, pDialog->container.iWindowPositionY, pDialog->container.iWidth);
 	g_return_if_fail (pDialog->container.iWindowPositionY > 0);
 
-	Icon *icon;
 	CairoDialog *pDialogOnOurWay;
 
 	double fXLeft = 0, fXRight = g_desktopGeometry.iXScreenWidth[pDialog->container.bIsHorizontal];

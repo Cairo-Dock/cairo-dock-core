@@ -173,7 +173,7 @@ void cairo_dock_load_indicator_textures (void)
 {
 	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
 	
-	cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? myIndicators.cIndicatorImagePath : NULL, fMaxScale, myIndicators.fIndicatorRatio);
+	cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myIndicators.bDrawIndicatorOnAppli) ? myIndicators.cIndicatorImagePath : NULL, fMaxScale, myIndicators.fIndicatorRatio);
 	
 	cairo_dock_load_active_window_indicator (myIndicators.cActiveIndicatorImagePath, fMaxScale, myIndicators.iActiveCornerRadius, myIndicators.iActiveLineWidth, myIndicators.fActiveColor);
 	
@@ -189,6 +189,10 @@ void cairo_dock_unload_indicator_textures (void)
 }
 
 
+static void _set_indicator (Icon *pIcon, CairoContainer *pContainer, gpointer data)
+{
+	pIcon->bHasIndicator = GPOINTER_TO_INT (data);
+}
 void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicators *pIndicators)
 {
 	CairoDock *pDock = g_pMainDock;
@@ -198,7 +202,7 @@ void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, Cairo
 		pPrevIndicators->bIndicatorOnIcon != pIndicators->bIndicatorOnIcon ||
 		pPrevIndicators->fIndicatorRatio != pIndicators->fIndicatorRatio)
 	{
-		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myTaskBar.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, fMaxScale, pIndicators->fIndicatorRatio);
+		cairo_dock_load_task_indicator (myTaskBar.bShowAppli && (myTaskBar.bMixLauncherAppli || myIndicators.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, fMaxScale, pIndicators->fIndicatorRatio);
 	}
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) ||
@@ -234,6 +238,14 @@ void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, Cairo
 			}
 		}
 	}
+	
+	if (cairo_dock_application_manager_is_running () &&
+		pPrevIndicators->bDrawIndicatorOnAppli != pIndicators->bDrawIndicatorOnAppli)
+	{
+		cairo_dock_foreach_applis ((CairoDockForeachIconFunc) _set_indicator, FALSE, GINT_TO_POINTER (pIndicators->bDrawIndicatorOnAppli));
+		gtk_widget_queue_draw (pDock->container.pWidget);
+	}
+	
 	
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
 }

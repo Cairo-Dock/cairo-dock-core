@@ -634,12 +634,12 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 				dy = 0;
 			else if (cairo_dock_is_hidden (pDock))
-					dy = pDock->container.iHeight/** - MIN (myAccessibility.iVisibleZoneHeight, pDock->iMaxDockHeight)*/;
+					dy = pDock->container.iHeight;
 			else
 				dy = pDock->container.iHeight - pDock->iMinDockHeight;
 			if (pDock->container.bIsHorizontal)
 			{
-				*bRight = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
+				*bRight = (pIcon ? pIcon->fXAtRest > pDock->fFlatDockWidth / 2 : TRUE);
 				*bDirectionUp = pDock->container.bDirectionUp;
 				
 				//g_print ("y = %d + %d\n", pDock->container.iWindowPositionY, dy);
@@ -652,22 +652,20 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			else
 			{
 				*bRight = (pDock->container.iWindowPositionY < g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
-				*bDirectionUp = (pIcon->fXAtRest > pDock->fFlatDockWidth / 2);
+				*bDirectionUp = (pIcon ? pIcon->fXAtRest > pDock->fFlatDockWidth / 2 : TRUE);
 				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight) + (pDock->container.bDirectionUp ? dy : -dy);
 			}
 			
 			if (cairo_dock_is_hidden (pDock))
 			{
 				*iX = pDock->container.iWindowPositionX +
-					pDock->iMaxDockWidth/2 -
-					/**MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth)*/pDock->iMaxDockWidth/2 + 
-					(pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * pDock->iMaxDockWidth/**MIN (myAccessibility.iVisibleZoneWidth, pDock->iMaxDockWidth)*/;
+					(pIcon ? (pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * pDock->iMaxDockWidth : 0);
 				//cd_debug ("placement sur un dock cache -> %d", *iX);
 			}
 			else
 			{
 				*iX = pDock->container.iWindowPositionX +
-					pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign));
+					(pIcon ? pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign)) : 0);
 			}
 		}
 	}

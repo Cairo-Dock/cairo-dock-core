@@ -364,7 +364,7 @@ static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 		NULL,
 		pDock);*/
 }
-void cairo_dock_popup_menu_on_container (GtkMenu *menu, CairoContainer *pContainer)
+void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer)
 {
 	if (menu == NULL)
 		return;
@@ -386,7 +386,7 @@ void cairo_dock_popup_menu_on_container (GtkMenu *menu, CairoContainer *pContain
 		CAIRO_DOCK (pContainer)->bMenuVisible = TRUE;
 	}
 	
-	gtk_widget_show_all (menu);
+	gtk_widget_show_all (GTK_WIDGET (menu));
 
 	gtk_menu_popup (GTK_MENU (menu),
 		NULL,
@@ -423,18 +423,18 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 }
 
 
-GtkMenu *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
+GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 {
-	static GtkMenu *s_pMenu = NULL;
+	static GtkWidget *s_pMenu = NULL;
 	if (s_pMenu != NULL)
 	{
-		gtk_widget_destroy (s_pMenu);
+		gtk_widget_destroy (GTK_WIDGET (s_pMenu));
 		s_pMenu = NULL;
 	}
 	g_return_val_if_fail (pContainer != NULL, NULL);
 	
 	//\_________________________ On construit le menu.
-	GtkMenu *menu = gtk_menu_new ();
+	GtkWidget *menu = gtk_menu_new ();
 	
 	//\_________________________ On passe la main a ceux qui veulent y rajouter des choses.
 	gboolean bDiscardMenu = FALSE;

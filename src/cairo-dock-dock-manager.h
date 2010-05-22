@@ -172,21 +172,11 @@ void cairo_dock_set_all_views_to_default (int iDockType);
 */
 void cairo_dock_write_root_dock_gaps (CairoDock *pDock);
 
-/* Recupere le positionnement complet d'un dock racine a partir de son fichier de conf.
-*@param cDockName nom du dock.
-*@param pDock the dock.
-*@return TRUE si la position a ete mise a jour.
-*/
-gboolean cairo_dock_get_root_dock_position (const gchar *cDockName, CairoDock *pDock);
-
 void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock);
 
-/* Supprime le fichier de conf d'un dock racine.
-*@param cDockName le nom du dock.
-*/
 void cairo_dock_remove_root_dock_config (const gchar *cDockName);
 
-gchar *cairo_dock_add_root_dock_config (const gchar *cDockName);
+gchar *cairo_dock_add_root_dock_config (void);
 
 void cairo_dock_redraw_root_docks (gboolean bExceptMainDock);
 

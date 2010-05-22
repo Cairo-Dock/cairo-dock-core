@@ -63,8 +63,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 	
 	
 	// representation
-	pTaskBar->bDrawIndicatorOnAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "indic on appli", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-	
 	pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	pTaskBar->cOverwriteException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "overwrite exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
 	if (pTaskBar->cOverwriteException)
@@ -74,7 +72,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigTaskBar *pTaskBar)
 			pTaskBar->cOverwriteException[i] = g_ascii_tolower (pTaskBar->cOverwriteException[i]);
 	}
 	
-	///pTaskBar->bShowThumbnail = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "window thumbnail", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	pTaskBar->iMinimizedWindowRenderType = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "minimized", &bFlushConfFileNeeded, -1, NULL, NULL);
 	if (pTaskBar->iMinimizedWindowRenderType == -1)  // anciens parametres.
 	{
@@ -126,17 +123,13 @@ static void reset_config (CairoConfigTaskBar *pTaskBar)
 	g_free (pTaskBar->cForceDemandsAttention);
 }
 
-static void _set_indicator (Icon *pIcon, CairoContainer *pContainer, gpointer data)
-{
-	pIcon->bHasIndicator = GPOINTER_TO_INT (data);
-}
+
 static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskBar)
 {
 	CairoDock *pDock = g_pMainDock;
 	
 	gboolean bUpdateSize = FALSE;
-	if (/**pPrevTaskBar->bUniquePid != pTaskBar->bUniquePid ||*/
-		pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass ||
+	if (pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass ||
 		pPrevTaskBar->bHideVisibleApplis != pTaskBar->bHideVisibleApplis ||
 		pPrevTaskBar->bAppliOnCurrentDesktopOnly != pTaskBar->bAppliOnCurrentDesktopOnly ||
 		pPrevTaskBar->bMixLauncherAppli != pTaskBar->bMixLauncherAppli ||
@@ -151,13 +144,6 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 		bUpdateSize = TRUE;
 	}
 	
-	if (cairo_dock_application_manager_is_running () &&
-		pPrevTaskBar->bDrawIndicatorOnAppli != pTaskBar->bDrawIndicatorOnAppli)
-	{
-		cairo_dock_foreach_applis ((CairoDockForeachIconFunc) _set_indicator, FALSE, GINT_TO_POINTER (pTaskBar->bDrawIndicatorOnAppli));
-		gtk_widget_queue_draw (pDock->container.pWidget);
-	}
-	
 	if (! cairo_dock_application_manager_is_running () && pTaskBar->bShowAppli)  // maintenant on veut voir les applis !
 	{
 		cairo_dock_start_application_manager (pDock);  // va inserer le separateur si necessaire.
@@ -165,13 +151,6 @@ static void reload (CairoConfigTaskBar *pPrevTaskBar, CairoConfigTaskBar *pTaskB
 	}
 	else
 		gtk_widget_queue_draw (pDock->container.pWidget);  // pour le fVisibleAlpha
-	
-	/**if (pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli ||
-		pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass)
-	{
-		double fMaxScale = cairo_dock_get_max_scale (pDock);
-		cairo_dock_load_class_indicator (pTaskBar->bShowAppli && pTaskBar->bGroupAppliByClass ? myIndicators.cClassIndicatorImagePath : NULL, fMaxScale);
-	}*/
 	
 	if (bUpdateSize)
 	{

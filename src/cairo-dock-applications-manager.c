@@ -58,6 +58,7 @@
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-internal-labels.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-launcher-manager.h"
@@ -1381,7 +1382,7 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 		return NULL;
 	icon->load_image = _load_appli;
 	icon->action_on_drag_hover = _show_appli_for_drop;
-	icon->bHasIndicator = myTaskBar.bDrawIndicatorOnAppli;
+	icon->bHasIndicator = myIndicators.bDrawIndicatorOnAppli;
 	
 	//\____________ On remplit ses buffers.
 	#ifdef HAVE_XEXTEND
