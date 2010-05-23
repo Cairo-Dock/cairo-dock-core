@@ -486,7 +486,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
 			//pDock->fAvoidingMouseMargin = .5;
 			pDock->iAvoidingMouseIconType = s_pIconClicked->iType;  // on pourrait le faire lors du clic aussi.
-			s_pIconClicked->fScale = 1 + myIcons.fAmplitude;
+			s_pIconClicked->fScale = 1 + myIcons.fAmplitude * pDock->fMagnitudeMax;
 			s_pIconClicked->fDrawX = pDock->container.iMouseX  - s_pIconClicked->fWidth * s_pIconClicked->fScale / 2;
 			s_pIconClicked->fDrawY = pDock->container.iMouseY - s_pIconClicked->fHeight * s_pIconClicked->fScale / 2 ;
 			s_pIconClicked->fAlpha = 0.75;

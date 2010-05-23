@@ -1078,25 +1078,28 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 		bAutoHideOnAnyOverlap != bAutoHideOnAnyOverlap0 ||
 		bAutoHide != bAutoHide0)
 	{
-		if (bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
-		{
-			cairo_dock_hide_show_if_current_window_is_on_our_way (pDock);
-		}
-		else if (bAutoHideOnAnyOverlap)
-		{
-			cairo_dock_hide_if_any_window_overlap_or_show (pDock);
-		}
-		else if (bAutoHide)
+		if (bAutoHide)
 		{
 			pDock->bTemporaryHidden = FALSE;
 			pDock->bAutoHide = TRUE;
 			cairo_dock_start_hiding (pDock);
 		}
+		else if (bAutoHideOnAnyOverlap)
+		{
+			cairo_dock_hide_if_any_window_overlap_or_show (pDock);
+		}
 		else
 		{
-			pDock->bTemporaryHidden = FALSE;
-			pDock->bAutoHide = FALSE;
-			cairo_dock_start_showing (pDock);
+			if (! bAutoHideOnOverlap)
+			{
+				pDock->bTemporaryHidden = FALSE;
+				pDock->bAutoHide = FALSE;
+				cairo_dock_start_showing (pDock);
+			}
+			if (bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
+			{
+				cairo_dock_hide_show_if_current_window_is_on_our_way (pDock);
+			}
 		}
 	}
 	

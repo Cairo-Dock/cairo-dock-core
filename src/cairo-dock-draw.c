@@ -644,7 +644,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		{
 			fPhase = G_PI;
 		}
-		fGlideScale = (1 + fDockMagnitude * myIcons.fAmplitude * sin (fPhase)) / icon->fScale;  // c'est un peu hacky ... il faudrait passer l'icone precedente en parametre ...
+		fGlideScale = (1 + fDockMagnitude * pDock->fMagnitudeMax * myIcons.fAmplitude * sin (fPhase)) / icon->fScale;  // c'est un peu hacky ... il faudrait passer l'icone precedente en parametre ...
 		if (bDirectionUp)
 		{
 			if (bIsHorizontal)
@@ -721,7 +721,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
-	if (bUseText && icon->pTextBuffer != NULL && (icon->fScale > 1.01 || myIcons.fAmplitude == 0) && (! myLabels.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
+	if (bUseText && icon->pTextBuffer != NULL && (icon->fScale > 1.01 || myIcons.fAmplitude == 0 || pDock->fMagnitudeMax == 0) && (! myLabels.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		cairo_save (pCairoContext);
 		
@@ -763,7 +763,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 				floor (fOffsetX));
 		}
 		double fMagnitude;
-		if (myLabels.bLabelForPointedIconOnly)
+		if (myLabels.bLabelForPointedIconOnly || pDock->fMagnitudeMax == 0.)
 		{
 			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / myIcons.fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
 		}

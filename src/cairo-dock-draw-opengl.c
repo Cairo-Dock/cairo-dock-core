@@ -418,7 +418,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	//\_____________________ On se place au centre de l'icone.
 	double fX=0, fY=0;
-	_compute_icon_coordinate (icon, CAIRO_CONTAINER (pDock), fDockMagnitude, &fX, &fY);
+	_compute_icon_coordinate (icon, CAIRO_CONTAINER (pDock), fDockMagnitude * pDock->fMagnitudeMax, &fX, &fY);
 	
 	glPushMatrix ();
 	if (pDock->container.bIsHorizontal)
@@ -532,7 +532,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
 	glPopMatrix ();  // retour au debut de la fonction.
-	if (bUseText && icon->iLabelTexture != 0 && (icon->fScale > 1.01 || myIcons.fAmplitude == 0) && (! myLabels.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
+	if (bUseText && icon->iLabelTexture != 0 && (icon->fScale > 1.01 || myIcons.fAmplitude == 0 || pDock->fMagnitudeMax == 0) && (! myLabels.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		glPushMatrix ();
 		if (pDock->container.bIsHorizontal)
@@ -572,7 +572,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		}
 		
 		double fMagnitude;
-		if (myLabels.bLabelForPointedIconOnly)
+		if (myLabels.bLabelForPointedIconOnly ||pDock->fMagnitudeMax == 0.)
 		{
 			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / myIcons.fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
 		}

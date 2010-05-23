@@ -255,13 +255,13 @@ void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, Cairo
  /// RENDERING ///
 /////////////////
 
-static inline double _compute_delta_y (Icon *icon, double py, gboolean bOnIcon, double fRatio)
+static inline double _compute_delta_y (Icon *icon, double py, gboolean bOnIcon, double fRatio, gboolean bUseReflect)
 {
 	double dy;
 	if (bOnIcon)  // decalage vers le haut et zoom avec l'icone.
 		dy = py * icon->fHeight * icon->fScale;
 	else  // decalage vers le bas sans zoom.
-		dy = - py * (myIcons.fReflectSize * fRatio + myBackground.iFrameMargin + .5*myBackground.iDockLineWidth);
+		dy = - py * ((bUseReflect ? myIcons.fReflectSize * fRatio : 0.) + myBackground.iFrameMargin + .5*myBackground.iDockLineWidth);
 	return dy;
 }
 
@@ -278,7 +278,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, CairoDock *pDoc
 	double h = s_indicatorBuffer.iHeight;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	double z = (myIndicators.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
-	double fY = _compute_delta_y (icon, myIndicators.fIndicatorDeltaY, myIndicators.bIndicatorOnIcon, fRatio);
+	double fY = _compute_delta_y (icon, myIndicators.fIndicatorDeltaY, myIndicators.bIndicatorOnIcon, fRatio, pDock->container.bUseReflect);
 	fY += - icon->fHeight * icon->fScale/2 + h*z/2;  // a 0, le bas de l'indicateur correspond au bas de l'icone.
 	
 	//\__________________ On place l'indicateur.
@@ -404,7 +404,7 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cair
 	double h = s_indicatorBuffer.iHeight;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	double z = (myIndicators.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
-	double fY = - _compute_delta_y (icon, myIndicators.fIndicatorDeltaY, myIndicators.bIndicatorOnIcon, fRatio);  // a 0, le bas de l'indicateur correspond au bas de l'icone.
+	double fY = - _compute_delta_y (icon, myIndicators.fIndicatorDeltaY, myIndicators.bIndicatorOnIcon, fRatio, pDock->container.bUseReflect);  // a 0, le bas de l'indicateur correspond au bas de l'icone.
 	
 	//\__________________ On place l'indicateur.
 	cairo_save (pCairoContext);

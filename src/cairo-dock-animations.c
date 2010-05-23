@@ -262,7 +262,6 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				//g_print ("rideau !\n");
 				
 				//\__________________ On repasse derriere si on etait devant.
-				g_print ("fin d'animation (%d)\n", pDock->bIsBelow);
 				if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow)
 					cairo_dock_pop_down (pDock);
 				
@@ -765,7 +764,6 @@ void cairo_dock_start_growing (CairoDock *pDock)
 
 void cairo_dock_start_hiding (CairoDock *pDock)
 {
-	//g_print ("%s (%d)\n", __func__, pDock->container.bInside);
 	if (! pDock->bIsHiding && ! pDock->container.bInside)  // rien de plus desagreable que le dock qui se cache quand on est dedans.
 	{
 		pDock->bIsShowing = FALSE;
@@ -790,6 +788,7 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 
 void cairo_dock_start_showing (CairoDock *pDock)
 {
+	g_print ("%s (%d)\n", __func__, pDock->bIsShowing);
 	if (! pDock->bIsShowing)  // on lance l'animation.
 	{
 		pDock->bIsShowing = TRUE;
