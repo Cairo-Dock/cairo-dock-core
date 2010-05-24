@@ -165,33 +165,33 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 	switch (iOrientation)
 	{
 		case CAIRO_DOCK_ORIENTATION_HFLIP :
-			cd_debug ("orientation : HFLIP\n");
+			cd_debug ("orientation : HFLIP");
 			cairo_scale (pCairoContext, -1., 1.);
 		break ;
 		case CAIRO_DOCK_ORIENTATION_ROT_180 :
-			cd_debug ("orientation : ROT_180\n");
+			cd_debug ("orientation : ROT_180");
 			cairo_rotate (pCairoContext, G_PI);
 		break ;
 		case CAIRO_DOCK_ORIENTATION_VFLIP :
-			cd_debug ("orientation : VFLIP\n");
+			cd_debug ("orientation : VFLIP");
 			cairo_scale (pCairoContext, 1., -1.);
 		break ;
 		case CAIRO_DOCK_ORIENTATION_ROT_90_HFLIP :
-			cd_debug ("orientation : ROT_90_HFLIP\n");
+			cd_debug ("orientation : ROT_90_HFLIP");
 			cairo_scale (pCairoContext, -1., 1.);
 			cairo_rotate (pCairoContext, + G_PI/2);
 		break ;
 		case CAIRO_DOCK_ORIENTATION_ROT_90 :
-			cd_debug ("orientation : ROT_90\n");
+			cd_debug ("orientation : ROT_90");
 			cairo_rotate (pCairoContext, + G_PI/2);
 		break ;
 		case CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP :
-			cd_debug ("orientation : ROT_90_VFLIP\n");
+			cd_debug ("orientation : ROT_90_VFLIP");
 			cairo_scale (pCairoContext, 1., -1.);
 			cairo_rotate (pCairoContext, + G_PI/2);
 		break ;
 		case CAIRO_DOCK_ORIENTATION_ROT_270 :
-			cd_debug ("orientation : ROT_270\n");
+			cd_debug ("orientation : ROT_270");
 			cairo_rotate (pCairoContext, - G_PI/2);
 		break ;
 		default :
@@ -786,6 +786,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	
 	//\_________________ On ecrit le texte dans un calque Pango.
 	PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
+	PangoRectangle ink, log;
 	
 	PangoFontDescription *pDesc = pango_font_description_new ();
 	pango_font_description_set_absolute_size (pDesc, fMaxScale * pLabelDescription->iSize * PANGO_SCALE);
@@ -795,21 +796,31 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	pango_layout_set_font_description (pLayout, pDesc);
 	pango_font_description_free (pDesc);
 	
+	pango_layout_set_text (pLayout, "|", -1);  // donne la hauteur max des lettres.
+	pango_layout_get_pixel_extents (pLayout, &ink, &log);
+	int iMaxSize = ink.height;
+	
 	if (pLabelDescription->bUseMarkup)
 		pango_layout_set_markup (pLayout, cText, -1);
 	else
 		pango_layout_set_text (pLayout, cText, -1);
 	
 	//\_________________ On cree une surface aux dimensions du texte.
-	PangoRectangle ink, log;
 	pango_layout_get_pixel_extents (pLayout, &ink, &log);
 	
+	gboolean bDrawBackground = (pLabelDescription->fBackgroundColor != NULL && pLabelDescription->fBackgroundColor[3] > 0);
+	double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/3));  // permet d'avoir un rayon meme si on n'a pas de marge.
 	int iOutlineMargin = 2*pLabelDescription->iMargin + (pLabelDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
 	double fZoomX = ((iMaxWidth != 0 && ink.width + iOutlineMargin > iMaxWidth) ? 1.*iMaxWidth / (ink.width + iOutlineMargin) : 1.);
 	
-	*iTextWidth = (ink.width + iOutlineMargin) * fZoomX;
-	*iTextHeight = ink.height + iOutlineMargin + 0; // +1 car certaines polices "debordent".
-	//Test du zoom en W ET H *iTextHeight = (ink.height + 2 + 1) * fZoom; 
+	*iTextWidth = (ink.width + iOutlineMargin) * fZoomX;  // le texte + la marge de chaque cote.
+	if (bDrawBackground)  // quand on trace le cadre, on evite qu'avec des petits textes genre "1" on obtienne un fond tout rond.
+	{
+		*iTextWidth = MAX (*iTextWidth, 2 * fRadius + 10);
+		if (iMaxWidth != 0 && *iTextWidth > iMaxWidth)
+			*iTextWidth = iMaxWidth;
+	}
+	*iTextHeight = MAX (iMaxSize, ink.height) + iOutlineMargin + 0; // +1 car certaines polices "debordent".
 	
 	cairo_surface_t* pNewSurface = cairo_dock_create_blank_surface (
 		*iTextWidth,
@@ -817,21 +828,23 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	cairo_t* pCairoContext = cairo_create (pNewSurface);
 	
 	//\_________________ On dessine le fond.
-	if (pLabelDescription->fBackgroundColor != NULL && pLabelDescription->fBackgroundColor[3] > 0)  // non transparent.
+	if (bDrawBackground)  // non transparent.
 	{
 		cairo_save (pCairoContext);
-		double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/3));  // permet d'avoir un rayon meme si on n'a pas de marge.
-		double fLineWidth = 0.;
-		double fFrameWidth = *iTextWidth - 2 * fRadius - fLineWidth;
-		double fFrameHeight = *iTextHeight - fLineWidth;
-		cairo_dock_draw_rounded_rectangle (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight);
+		double fFrameWidth = *iTextWidth - 2 * fRadius;
+		double fFrameHeight = *iTextHeight;
+		cairo_dock_draw_rounded_rectangle (pCairoContext, fRadius, 0., fFrameWidth, fFrameHeight);
 		cairo_set_source_rgba (pCairoContext, pLabelDescription->fBackgroundColor[0], pLabelDescription->fBackgroundColor[1], pLabelDescription->fBackgroundColor[2], pLabelDescription->fBackgroundColor[3]);
 		cairo_fill (pCairoContext);
 		cairo_restore(pCairoContext);
 	}
 	
 	//g_print ("%s : ink = %d;%d\n", cText, (int) ink.x, (int) ink.y);
-	cairo_translate (pCairoContext, -ink.x*fZoomX + iOutlineMargin/2, -ink.y + iOutlineMargin/2);  // meme remarque pour le +1.
+	int dx = (*iTextWidth - ink.width * fZoomX)/2;  // pour se centrer.
+	int dy = (*iTextHeight - ink.height)/2;  // pour se centrer.
+	cairo_translate (pCairoContext,
+		-ink.x*fZoomX + dx,
+		-ink.y + dy);  // meme remarque pour le +1.
 	
 	//\_________________ On dessine les contours du texte.
 	if (pLabelDescription->bOutlined)

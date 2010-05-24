@@ -219,10 +219,25 @@ void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 
 void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 {
-	if (icon->fWidth == 0 || icon->iImageWidth == 0)
+	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
+	{
+		if (icon->pIconBuffer != NULL)
+			cairo_surface_destroy (icon->pIconBuffer);
+		icon->pIconBuffer = NULL;
+		if (icon->iIconTexture != 0)
+			_cairo_dock_delete_texture (icon->iIconTexture);
+		icon->iIconTexture = 0;
+		if (icon->pReflectionBuffer != NULL)
+			cairo_surface_destroy (icon->pReflectionBuffer);
+		icon->pReflectionBuffer = NULL;
+		return;
+	}
+	
+	if (icon->fWidth == 0 || icon->iImageWidth <= 0)
 	{
 		cairo_dock_set_icon_size (pContainer, icon);
 	}
+	//g_print ("%s (%.2fx%.2f ; %dx%d)\n", __func__, icon->fWidth, icon->fHeight, icon->iImageWidth, icon->iImageHeight);
 	
 	//\______________ on reset les buffers (on garde la surface/texture actuelle pour les emblemes).
 	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
@@ -232,17 +247,6 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	{
 		cairo_surface_destroy (icon->pReflectionBuffer);
 		icon->pReflectionBuffer = NULL;
-	}
-	
-	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
-	{
-		if (pPrevSurface != NULL)
-			cairo_surface_destroy (pPrevSurface);
-		icon->pIconBuffer = NULL;
-		if (iPrevTexture != 0)
-			_cairo_dock_delete_texture (iPrevTexture);
-		icon->iIconTexture = 0;
-		return;
 	}
 	
 	//\______________ on charge la surface/texture.
@@ -390,7 +394,6 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l
 
 void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDescription)
 {
-	//g_print ("%s (%s, %d)\n", __func__, cLabelPolice, iLabelSize);
 	cairo_surface_destroy (icon->pTextBuffer);
 	icon->pTextBuffer = NULL;
 	if (icon->iLabelTexture != 0)
@@ -589,7 +592,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	CairoIconContainerRenderer *pRenderer = cairo_dock_get_icon_container_renderer (pIcon->cClass != NULL ? "Stack" : s_cRendererNames[pIcon->iSubdockViewType]);
 	if (pRenderer == NULL)
 		return;
-	cd_debug ("%s (%s)\n", __func__, pIcon->cName);
+	cd_debug ("%s (%s)", __func__, pIcon->cName);
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);

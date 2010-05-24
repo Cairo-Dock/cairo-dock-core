@@ -263,11 +263,11 @@ void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock)
 	int x, y;  // position du point invariant du dock.
 	x = pDock->container.iWindowPositionX +  pDock->container.iWidth * pDock->fAlign;
 	y = (pDock->container.bDirectionUp ? pDock->container.iWindowPositionY + pDock->container.iHeight : pDock->container.iWindowPositionY);
-	cd_debug ("%s (%d;%d)", __func__, x, y);
+	//cd_debug ("%s (%d;%d)", __func__, x, y);
 	
 	pDock->iGapX = x - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
 	pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - y : y);
-	cd_debug (" -> (%d;%d)", pDock->iGapX, pDock->iGapY);
+	//cd_debug (" -> (%d;%d)", pDock->iGapX, pDock->iGapY);
 	
 	if (pDock->iGapX < - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal]/2)
 		pDock->iGapX = - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal]/2;
@@ -310,7 +310,7 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 	
 	*iNewPositionX = iWindowPositionX + pDock->iScreenOffsetX;
 	*iNewPositionY = iWindowPositionY + pDock->iScreenOffsetY;
-	g_print ("POSITION : %d+%d ; %d+%d\n", iWindowPositionX, pDock->iScreenOffsetX, iWindowPositionY, pDock->iScreenOffsetY);
+	//g_print ("POSITION : %d+%d ; %d+%d\n", iWindowPositionX, pDock->iScreenOffsetX, iWindowPositionY, pDock->iScreenOffsetY);
 }
 
 static gboolean _move_resize_dock (CairoDock *pDock)
