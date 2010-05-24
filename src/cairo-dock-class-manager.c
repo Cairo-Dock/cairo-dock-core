@@ -1058,7 +1058,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 			for (ic = g_list_last (g_pMainDock->icons); ic != NULL; ic = ic->prev)
 			{
 				icon = ic->data;
-				if (icon->iType == CAIRO_DOCK_LAUNCHER)
+				if (icon->iType == CAIRO_DOCK_LAUNCHER && ! CAIRO_DOCK_IS_SEPARATOR (icon))
 					break;
 			}
 			if (ic != NULL)  // on a trouve une icone de lanceur.
@@ -1158,4 +1158,3 @@ void cairo_dock_reorder_classes (void)
 	int iMaxOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 1);
 	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_reorder_one_class, &iMaxOrder);
 }
-

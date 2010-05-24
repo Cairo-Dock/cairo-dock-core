@@ -325,13 +325,14 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIcons.cIconTheme);
 	
 	int iIconSize;
-	if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= ICON_TINY+2)  // icones toutes petites.
+	int s = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	if (s <= ICON_TINY+2)  // icones toutes petites.
 		iIconSize = 0;
-	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] >= ICON_HUGE-2)  // icones tres grandes.
+	else if (s >= ICON_HUGE-2)  // icones tres grandes.
 		iIconSize = 4;
-	else if (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] <= ICON_MEDIUM)
+	else if (s <= ICON_MEDIUM)
 	{
-		if (myIcons.fAmplitude >= 2)  // icones petites.
+		if (myIcons.fAmplitude >= 2 || s <= ICON_SMALL)  // icones petites.
 			iIconSize = 1;
 		else
 			iIconSize = 2;  // moyennes.
@@ -606,7 +607,9 @@ static gboolean on_apply_config_simple (gpointer data)
 		g_key_file_set_integer_list (pKeyFile, "Icons", "launcher size", tab, 2);
 		g_key_file_set_integer_list (pKeyFile, "Icons", "appli size", tab, 2);
 		g_key_file_set_integer_list (pKeyFile, "Icons", "applet size", tab, 2);
-		/// hauteur des separateurs ?...
+		tab[0] = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
+		g_key_file_set_integer_list (pKeyFile, "Icons", "separator size", tab, 2);
+		
 		g_key_file_set_double (pKeyFile, "Icons", "zoom max", fMaxScale);
 		g_key_file_set_double (pKeyFile, "Icons", "field depth", fReflectSize);
 		g_key_file_set_integer (pKeyFile, "Icons", "icon gap", iIconGap);
