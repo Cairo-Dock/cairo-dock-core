@@ -917,11 +917,12 @@ static gboolean _cairo_dock_hide_back_dock (CairoDock *pDock)
 }
 static gboolean _cairo_dock_unhide_dock_delayed (CairoDock *pDock)
 {
-	if (pDock->container.bInside)
+	if (pDock->container.bInside)  // on est deja dedans, inutile de le re-montrer.
 	{
 		pDock->iSidUnhideDelayed = 0;
 		return FALSE;
 	}
+	
 	g_print ("let's show this dock (%d)\n", pDock->bIsMainDock);
 	if (pDock->bAutoHide)
 		cairo_dock_start_showing (pDock);
@@ -939,6 +940,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW)
 		return;
 	
+	//\________________ On recupere la position du pointeur.
 	gint x, y;
 	if (! pMouse[0])  // pas encore recupere le pointeur.
 	{
@@ -971,39 +973,55 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 		y = g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - 1 - y;
 	}
 	
-	
+	//\________________ On verifie les conditions.
 	int x1, x2;
+	gboolean bShow = FALSE;
 	switch (myAccessibility.iCallbackMethod)
 	{
 		case 0:
 		default:
 			if (y != 0)
-				return;
+				break;
+			bShow = TRUE;
 		break;
 		case 1:
 			if (y != 0)
-				return;
+				break;
 			x1 = pDock->container.iWindowPositionX + MIN (15, pDock->container.iWidth/3);  // on evite les coins, car c'est en fait le but de cette option (les coins peuvent etre utilises par le WM pour declencher des actions).
 			x2 = pDock->container.iWindowPositionX + pDock->container.iWidth - MIN (15, pDock->container.iWidth/3);
 			if (x < x1 || x > x2)
-				return;
+				break;
+			bShow = TRUE;
 		break;
 		case 2:
 			if (y != 0)
-				return;
+				break;
 			if (x > 0 && x < g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - 1)
-				return ;
+				break ;
+			bShow = TRUE;
 		break;
 		case 3:
 			if (y > myAccessibility.iZoneHeight)
-				return;
+				break;
 			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - myAccessibility.iZoneWidth)/2;  // on evite les coins, car c'est en fait le but de cette option (les coins peuvent etre utilises par le WM pour declencher des actions).
 			x2 = x1 + myAccessibility.iZoneWidth;
 			if (x < x1 || x > x2)
-				return;
+				break;
+			bShow = TRUE;
 		break;
 	}
 	
+	if (! bShow)
+	{
+		if (pDock->iSidUnhideDelayed != 0)
+		{
+			g_source_remove (pDock->iSidUnhideDelayed);
+			pDock->iSidUnhideDelayed = 0;
+		}
+		return;
+	}
+	
+	//\________________ On montre ou on programme le montrage du dock.
 	g_print (" dock will be shown (%d)\n", pDock->bIsMainDock);
 	if (myAccessibility.iUnhideDockDelay != 0)  // on programme une apparition.
 	{
