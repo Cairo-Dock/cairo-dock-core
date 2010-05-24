@@ -764,6 +764,7 @@ void cairo_dock_start_growing (CairoDock *pDock)
 
 void cairo_dock_start_hiding (CairoDock *pDock)
 {
+	g_print ("%s (%d)\n", __func__, pDock->bIsHiding);
 	if (! pDock->bIsHiding && ! pDock->container.bInside)  // rien de plus desagreable que le dock qui se cache quand on est dedans.
 	{
 		pDock->bIsShowing = FALSE;

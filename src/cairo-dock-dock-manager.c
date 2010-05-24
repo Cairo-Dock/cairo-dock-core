@@ -883,6 +883,7 @@ void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
 {
 	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden)
 	{
+		g_print ("hide\n");
 		pDock->bTemporaryHidden = TRUE;
 		pDock->bAutoHide = TRUE;
 		if (!pDock->container.bInside)  // on ne declenche pas le cachage lorsque l'on change par exemple de bureau via le switcher ou un clic sur une appli.
@@ -892,6 +893,7 @@ void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
 
 void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock)
 {
+	g_print ("%s ()\n", __func__);
 	if (pDock->iRefCount == 0 && pDock->bTemporaryHidden && ! s_bQuickHide)
 	{
 		pDock->bTemporaryHidden = FALSE;
