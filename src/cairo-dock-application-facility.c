@@ -257,7 +257,7 @@ gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
 		{
 			iDockWidth = pDock->iMinDockWidth;
 			iDockHeight = pDock->iMinDockHeight;
-			iDockX = pDock->container.iWindowPositionX + (pDock->container.iWidth - iDockWidth);
+			iDockX = pDock->container.iWindowPositionX + (pDock->container.iWidth - iDockWidth)/2;
 			iDockY = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
 		}
 		else
@@ -265,7 +265,7 @@ gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
 			iDockWidth = pDock->iMinDockHeight;
 			iDockHeight = pDock->iMinDockWidth;
 			iDockX = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
-			iDockY = pDock->container.iWindowPositionX + (pDock->container.iWidth - iDockWidth);
+			iDockY = pDock->container.iWindowPositionX + (pDock->container.iWidth - iDockWidth)/2;
 		}
 		
 		if (! pIcon->bIsHidden && pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX && pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY)
