@@ -523,6 +523,15 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 		
 		if (icon->pSubDock != NULL && icon->cClass == NULL)
 		{
+			Icon *pSubIcon;
+			GList *ic = icon->pSubDock->icons, *next_ic;
+			while (ic != NULL)
+			{
+				pSubIcon = ic->data;
+				next_ic = ic->next;  // si l'icone se fait enlever, on perdrait le fil.
+				cairo_dock_remove_icon_from_dock_full (icon->pSubDock, pSubIcon, FALSE);  // pour enlever du theme les launceurs et applets contenus dans le sous-dock.
+				ic = next_ic;
+			}
 			cairo_dock_destroy_dock (icon->pSubDock, icon->cName);
 			icon->pSubDock = NULL;
 		}
@@ -611,9 +620,9 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 	}
 	gchar *cNewDesktopFileName;
 	if (cExternDesktopFileURI != NULL)
-		cNewDesktopFileName= cairo_dock_add_desktop_file_from_uri (cPath ? cPath : cExternDesktopFileURI, cDockName, fOrder, &erreur);
+		cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cPath ? cPath : cExternDesktopFileURI, cDockName, fOrder, &erreur);
 	else
-		cNewDesktopFileName= cairo_dock_add_desktop_file_from_type (iType, cDockName, fOrder, &erreur);
+		cNewDesktopFileName = cairo_dock_add_desktop_file_from_type (iType, cDockName, fOrder, &erreur);
 	g_free (cPath);
 	if (erreur != NULL)
 	{
@@ -621,7 +630,13 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 		g_error_free (erreur);
 		return NULL;
 	}
-
+	
+	//\_________________ On verifie ici l'unicite du sous-dock.
+	if (iType == CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER && cExternDesktopFileURI == NULL)
+	{
+		
+	}
+	
 	//\_________________ On charge ce nouveau lanceur.
 	Icon *pNewIcon = NULL;
 	if (cNewDesktopFileName != NULL)

@@ -107,8 +107,8 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock);
 
 typedef void (*CairoIconContainerLoadFunc) (void);
 typedef void (*CairoIconContainerUnloadFunc) (void);
-typedef void (*CairoIconContainerRenderFunc) (Icon *pIcon, int w, int h, cairo_t *pCairoContext);
-typedef void (*CairoIconContainerRenderOpenGLFunc) (Icon *pIcon, int w, int h);
+typedef void (*CairoIconContainerRenderFunc) (Icon *pIcon, CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext);
+typedef void (*CairoIconContainerRenderOpenGLFunc) (Icon *pIcon, CairoContainer *pContainer, int w, int h);
 
 struct _CairoIconContainerRenderer {
 	CairoIconContainerLoadFunc load;

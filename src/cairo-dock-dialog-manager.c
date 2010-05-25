@@ -686,7 +686,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	{
 		cairo_dock_set_dialog_orientation (pDialog, pContainer);
 		
-		if (pDialog->bSideDialog)
+		if (pDialog->bTopBottomDialog)
 		{
 			if (! pDialog->container.bInside)
 			{
@@ -703,11 +703,13 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 			pDialog->iAimedY = tmp;
 			if (! pDialog->container.bInside)
 			{
-				pDialog->container.iWindowPositionX = (pDialog->bRight ? pDialog->iAimedX - pDialog->fAlign * pDialog->iBubbleWidth : pDialog->iAimedX - pDialog->container.iWidth + pDialog->fAlign * pDialog->iBubbleWidth);
+				/**pDialog->container.iWindowPositionX = (pDialog->bRight ? pDialog->iAimedX - pDialog->fAlign * pDialog->iBubbleWidth : pDialog->iAimedX - pDialog->container.iWidth + pDialog->fAlign * pDialog->iBubbleWidth);
+				pDialog->container.iWindowPositionY = (pDialog->container.bDirectionUp ? pDialog->iAimedY - (pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iMinBottomGap) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.*/
+				pDialog->container.iWindowPositionX = (pDialog->bRight ? pDialog->iAimedX - pDialog->container.iWidth : pDialog->iAimedX);
 				pDialog->container.iWindowPositionY = (pDialog->container.bDirectionUp ? pDialog->iAimedY - (pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iMinBottomGap) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.
 			}
 		}
-		//g_print (" => position : (%d;%d)\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY);
+		//g_print (" => position : (%d;%d) -> (%d;%d)\n", pDialog->iAimedX, pDialog->iAimedY, pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY);
 		int iOldDistance = pDialog->iDistanceToDock;
 		pDialog->iDistanceToDock = (pDialog->container.bDirectionUp ? pDialog->iAimedY - pDialog->container.iWindowPositionY - (pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin) : pDialog->container.iWindowPositionY - pDialog->iAimedY);
 		if (! pDialog->container.bDirectionUp)  // iPositionY est encore la position du coin haut gauche de la bulle et non de la fenetre.

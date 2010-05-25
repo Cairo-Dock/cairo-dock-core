@@ -667,7 +667,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return TRUE;
 	
 	//\_______________ On gere le drag d'une icone hors du dock.
-	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked) || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
+	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! g_bLocked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
 	{
 		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
@@ -1279,7 +1279,8 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 					gtk_drag_finish (dc, FALSE, FALSE, time);
 					return ;
 				}
-				fMargin = 0.5;  // on ne sera jamais dessus.
+				///fMargin = 0.5;  // on ne sera jamais dessus.
+				fMargin = 0.25;
 			}
 			else  // sinon on le lance si on est sur l'icone, et on l'ajoute autrement.
 				fMargin = 0.25;

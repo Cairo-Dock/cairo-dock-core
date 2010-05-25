@@ -488,7 +488,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 {
 	//\___________________ On determine l'ordre d'insertion suivant l'endroit du clique.
 	double fOrder;
-	///if (CAIRO_DOCK_IS_LAUNCHER (icon))
+	if (icon != NULL)
 	{
 		if (pDock->container.iMouseX < icon->fDrawX + icon->fWidth * icon->fScale / 2)  // a gauche.
 		{
@@ -501,8 +501,8 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 			fOrder = (next_icon != NULL ? (icon->fOrder + next_icon->fOrder) / 2 : icon->fOrder + 1);
 		}
 	}
-	/**else
-		fOrder = CAIRO_DOCK_LAST_ORDER;*/
+	else
+		fOrder = CAIRO_DOCK_LAST_ORDER;
 	
 	//\___________________ On cree et on charge l'icone a partir d'un des templates.
 	Icon *pNewIcon = cairo_dock_add_new_launcher_by_type (iLauncherType, pDock, fOrder);

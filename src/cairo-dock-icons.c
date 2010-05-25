@@ -690,9 +690,7 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContain
 	
 	g_free (cUniqueName);
 	
-	cairo_dock_load_icon_text(
-		pIcon,
-		&myLabels.iconTextDescription);
+	cairo_dock_load_icon_text (pIcon, &myLabels.iconTextDescription);
 }
 
 void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...)

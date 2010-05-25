@@ -553,20 +553,27 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		}
 		
 		double dx = .5 * (icon->iTextWidth & 1);  // on decale la texture pour la coller sur la grille des coordonnees entieres.
+		double dy = .5 * (icon->iTextHeight & 1);
 		if (! pDock->container.bIsHorizontal && mySystem.bTextAlwaysHorizontal)
 		{
-			glTranslatef (ceil (-icon->fHeight * icon->fScale/2 - (pDock->container.bDirectionUp ? myLabels.iLabelSize : (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin + 1) + dx,
-				floor ((icon->fWidth * icon->fScale + icon->iTextHeight) / 2) + dx,
+			fOffsetX = MIN (0, icon->fDrawY + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2);
+			/**glTranslatef (ceil (-icon->fHeight * icon->fScale/2 - (pDock->container.bDirectionUp ? myLabels.iLabelSize : (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) + icon->iTextWidth / 2 - myLabels.iconTextDescription.iMargin + 1) + dx,
+				floor ((icon->fWidth * icon->fScale + icon->iTextHeight) / 2) + dy,
+				0.);*/
+			glTranslatef (ceil (- fOffsetX) + dx,
+				floor ((icon->fWidth * icon->fScale + icon->iTextHeight) / 2) + dy,
 				0.);
 		}
 		else if (pDock->container.bIsHorizontal)
 		{
-			glTranslatef (floor (fOffsetX) + dx, floor ((pDock->container.bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myLabels.iLabelSize - icon->iTextHeight / 2)) + dx, 0.);
+			glTranslatef (floor (fOffsetX) + dx,
+				floor ((pDock->container.bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myLabels.iLabelSize - icon->iTextHeight / 2)) + dy,
+				0.);
 		}
 		else
 		{
 			glTranslatef (floor ((pDock->container.bDirectionUp ? -.5:.5) * (icon->fHeight * icon->fScale + icon->iTextHeight)) + dx,
-				floor (fOffsetX) + dx,
+				floor (fOffsetX) + dy,
 				0.);
 			glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
 		}

@@ -731,7 +731,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		else
 			cairo_translate (pCairoContext, floor (icon->fDrawY), floor (icon->fDrawX + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1)));
 		
-		double fOffsetX = (icon->fWidthFactor * icon->fWidth * icon->fScale - icon->iTextWidth) / 2;
+		double fOffsetX = (/**icon->fWidthFactor * */icon->fWidth * icon->fScale - icon->iTextWidth) / 2;
 		if (fOffsetX < - icon->fDrawX)
 			fOffsetX = - icon->fDrawX;
 		else if (icon->fDrawX + fOffsetX + icon->iTextWidth > iWidth)
@@ -742,9 +742,12 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		
 		if (! bIsHorizontal && mySystem.bTextAlwaysHorizontal)
 		{
+			if (fOffsetX < - icon->fDrawY)
+				fOffsetX = - icon->fDrawY;
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				floor ((pDock->container.bDirectionUp ? -myLabels.iLabelSize : - (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) - myLabels.iconTextDescription.iMargin + 1),
+				/**floor ((pDock->container.bDirectionUp ? -myLabels.iLabelSize : - (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) - myLabels.iconTextDescription.iMargin + 1),*/
+				floor (fOffsetX),
 				0.);
 		}
 		else if (bIsHorizontal)

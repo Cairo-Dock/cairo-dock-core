@@ -627,7 +627,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		_cairo_dock_set_blend_alpha ();
 		
 		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
-		pRenderer->render_opengl (pIcon, w, h);
+		pRenderer->render_opengl (pIcon, CAIRO_CONTAINER (pDock), w, h);
 		
 		//\______________ On finit le dessin.
 		_cairo_dock_disable_texture ();
@@ -660,7 +660,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 		
 		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
-		pRenderer->render (pIcon, w, h, pCairoContext);
+		pRenderer->render (pIcon, CAIRO_CONTAINER (pDock), w, h, pCairoContext);
 		
 		//\______________ On finit le dessin.
 		if (g_bUseOpenGL)

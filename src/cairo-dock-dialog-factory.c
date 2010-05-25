@@ -156,6 +156,30 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	return FALSE;
 }
 
+static void _cairo_dock_set_dialog_input_shape (CairoDialog *pDialog)
+{
+	pDialog->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
+		pDialog->container.iWidth,
+		pDialog->container.iHeight,
+		1);
+	cairo_t *pCairoContext = gdk_cairo_create (pDialog->pShapeBitmap);
+	cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+	cairo_paint (pCairoContext);
+	cairo_set_source_rgba (pCairoContext, 1.0f, 1.0f, 1.0f, 1.0f);
+	cairo_rectangle (pCairoContext,
+		0,
+		0,
+		1,
+		1);
+	cairo_fill (pCairoContext);  // workaround sur un bug de X...
+	cairo_destroy (pCairoContext);
+	gtk_widget_input_shape_combine_mask (pDialog->container.pWidget,
+		pDialog->pShapeBitmap,
+		0,
+		0);
+}
+
 static gboolean on_configure_dialog (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
@@ -195,28 +219,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		
 		if (pDialog->bNoInput)
 		{
-			if (pDialog->pShapeBitmap != NULL)
-				g_object_unref ((gpointer) pDialog->pShapeBitmap);
-			pDialog->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
-				pEvent->width,
-				pEvent->height,
-				1);
-			cairo_t *pCairoContext = gdk_cairo_create (pDialog->pShapeBitmap);
-			cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
-			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-			cairo_paint (pCairoContext);
-			cairo_set_source_rgba (pCairoContext, 1.0f, 1.0f, 1.0f, 1.0f);
-			cairo_rectangle (pCairoContext,
-				0,
-				0,
-				1,
-				1);
-			cairo_fill (pCairoContext);  // workaround sur un bug de X...
-			cairo_destroy (pCairoContext);
-			gtk_widget_input_shape_combine_mask (pDialog->container.pWidget,
-				pDialog->pShapeBitmap,
-				0,
-				0);
+			_cairo_dock_set_dialog_input_shape (pDialog);
 		}
 	}
 	else if (pEvent->y != pDialog->container.iWindowPositionY && !pDialog->bPositionForced)
@@ -523,6 +526,12 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		pDialog->pTipWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iMinBottomGap + pDialog->iBottomMargin, TRUE);
 	else
 		pDialog->pTopWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, TRUE);
+	
+	if (pDialog->bNoInput)
+	{
+		_cairo_dock_set_dialog_input_shape (pDialog);
+	}
+	
 	gtk_widget_show_all (pDialog->container.pWidget);
 	
 	//\________________ On connecte les signaux utiles.
@@ -650,9 +659,13 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			}
 			else
 			{
-				*bRight = (pDock->container.iWindowPositionY < g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bRight = (pDock->container.iWindowPositionY > g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon ? pIcon->fXAtRest > pDock->fFlatDockWidth / 2 : TRUE);
-				*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight) + (pDock->container.bDirectionUp ? dy : -dy);
+				///*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight) + (pDock->container.bDirectionUp ? dy : -dy);
+				*iY = (pDock->container.bDirectionUp ?
+					pDock->container.iWindowPositionY + dy :
+					pDock->container.iWindowPositionY + pDock->container.iHeight - dy);
+				//g_print ("dock vertical -> y=%d, right = %d\n", *iY, *bRight);
 			}
 			
 			if (cairo_dock_is_hidden (pDock))
@@ -665,6 +678,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			{
 				*iX = pDock->container.iWindowPositionX +
 					(pIcon ? pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign)) : 0);
+				//g_print ("dock not hidden -> x=%d\n", *iX);
 			}
 		}
 	}
@@ -694,8 +708,7 @@ void cairo_dock_set_dialog_orientation (CairoDialog *pDialog, CairoContainer *pC
 {
 	if (pContainer != NULL && pDialog->pIcon != NULL)
 	{
-		_cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bSideDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);
-		
+		_cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bTopBottomDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);		
 	}
 	else
 	{
