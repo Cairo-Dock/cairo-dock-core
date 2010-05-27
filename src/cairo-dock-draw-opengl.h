@@ -200,9 +200,42 @@ void cairo_dock_apply_icon_texture (Icon *pIcon);
 void cairo_dock_apply_icon_texture_at_current_size (Icon *pIcon, CairoContainer *pContainer);
 void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer);
 
-  ///////////////
- // DRAW PATH //
-///////////////
+
+  /////////////
+ // GL PATH //
+/////////////
+
+struct _CairoDockGLPath {
+	int iNbPoints;
+	GLfloat *pVertices;
+	int iCurrentPt;
+	};
+
+CairoDockGLPath *cairo_dock_new_gl_path (int iNbVertices, double x0, double y0);
+
+void cairo_dock_free_gl_path (CairoDockGLPath *pPath);
+
+void cairo_dock_gl_path_line_to (CairoDockGLPath *pPath, GLfloat x, GLfloat y);
+
+void cairo_dock_gl_path_rel_line_to (CairoDockGLPath *pPath, GLfloat dx, GLfloat dy);
+
+void cairo_dock_gl_path_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3);
+
+void cairo_dock_gl_path_rel_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat dx1, GLfloat dy1, GLfloat dx2, GLfloat dy2, GLfloat dx3, GLfloat dy3);
+
+void cairo_dock_gl_path_simple_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
+
+void cairo_dock_gl_path_rel_simple_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat dx1, GLfloat dy1, GLfloat dx2, GLfloat dy2);
+
+void cairo_dock_gl_path_arc_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat xc, GLfloat yc, double cone);
+
+void cairo_dock_close_gl_path (CairoDockGLPath *pPath);
+
+void cairo_dock_gl_path_move_to (CairoDockGLPath *pPath, double x0, double y0);
+
+void cairo_dock_stroke_gl_path (CairoDockGLPath *pPath, gboolean bFill);
+
+
 #define _CAIRO_DOCK_PATH_DIM 2
 #define _cairo_dock_define_static_vertex_tab(iNbVertices) static GLfloat pVertexTab[(iNbVertices) * _CAIRO_DOCK_PATH_DIM]
 #define _cairo_dock_return_vertex_tab(...) return pVertexTab
@@ -235,9 +268,9 @@ GLfloat *cairo_dock_generate_string_path_opengl (CairoDock *pDock, gboolean bIsL
 void cairo_dock_draw_string_opengl (CairoDock *pDock, double fStringLineWidth, gboolean bIsLoop, gboolean bForceConstantSeparator);
 
 
-  //////////
- // TEXT //
-//////////
+  /////////////
+ // GL FONT //
+/////////////
 
 /** Create a texture from a text. The text is drawn in white, so that you can later colorize it with a mere glColor.
 *@param cText the text

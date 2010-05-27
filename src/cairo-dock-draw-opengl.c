@@ -1096,7 +1096,7 @@ const GLfloat *cairo_dock_generate_rectangle_path (double fDockWidth, double fFr
 	_cairo_dock_return_vertex_tab ();
 }
 
-#define P(t,p,q,s) ((1-t) * (1-t) * p + 2 * t * (1-t) * q + t * t * s)
+#define Bezier2(t,p,q,s) ((1-t) * (1-t) * p + 2 * t * (1-t) * q + t * t * s)
 void cairo_dock_add_simple_curved_subpath_opengl (GLfloat *pVertexTab, int iNbPts, double x0, double y0, double x1, double y1, double x2, double y2)
 {
 	double t;
@@ -1105,10 +1105,10 @@ void cairo_dock_add_simple_curved_subpath_opengl (GLfloat *pVertexTab, int iNbPt
 	{
 		t = 1.*i/iNbPts;  // [0;1[
 		_cairo_dock_set_vertex_xy (i,
-			P(t, x0, x1, x2),
-			P(t, y0, y1, y2));
-		//vx(i) = P(t, x0, x1, x2);
-		//vy(i) = P(t, y0, y1, y2);
+			Bezier2(t, x0, x1, x2),
+			Bezier2(t, y0, y1, y2));
+		//vx(i) = Bezier2(t, x0, x1, x2);
+		//vy(i) = Bezier2(t, y0, y1, y2);
 	}
 }
 #define NB_PTS_SIMPLE_CURVE 20
@@ -1162,10 +1162,10 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 		for (t=0; t<=1; t+=.05, i++) // bas gauche.
 		{
 			_cairo_dock_set_vertex_xy (i,
-				P(t, x0, x1, x2),
-				P(t, y0, y1, y2));
-			//vx(i) = P(t, x0, x1, x2);
-			//vy(i) = P(t, y0, y1, y2);
+				Bezier2(t, x0, x1, x2),
+				Bezier2(t, y0, y1, y2));
+			//vx(i) = Bezier2(t, x0, x1, x2);
+			//vy(i) = Bezier2(t, y0, y1, y2);
 		}
 		
 		double x3 = x0, y3 = y0;
@@ -1177,10 +1177,10 @@ GLfloat *cairo_dock_generate_trapeze_path (double fDockWidth, double fFrameHeigh
 		for (t=0; t<=1; t+=.05, i++) // bas gauche.
 		{
 			_cairo_dock_set_vertex_xy (i,
-				P(t, x0, x1, x2),
-				P(t, y0, y1, y2));
-			//vx(i) = P(t, x0, x1, x2);
-			//vy(i) = P(t, y0, y1, y2);
+				Bezier2(t, x0, x1, x2),
+				Bezier2(t, y0, y1, y2));
+			//vx(i) = Bezier2(t, x0, x1, x2);
+			//vy(i) = Bezier2(t, y0, y1, y2);
 		}
 	}
 	else
@@ -1455,6 +1455,163 @@ void cairo_dock_draw_rounded_rectangle_opengl (double fRadius, double fLineWidth
 }
 
 
+  ///////////////
+ /// GL PATH ///
+///////////////
+
+#define _CD_PATH_DIM 2
+#define _cd_gl_path_set_nth_vertex_x(pPath, _x, i) pPath->pVertices[_CD_PATH_DIM*(i)] = _x
+#define _cd_gl_path_set_nth_vertex_y(pPath, _y, i) pPath->pVertices[_CD_PATH_DIM*(i)+1] = _y
+#define _cd_gl_path_set_vertex_x(pPath, _x) _cd_gl_path_set_nth_vertex_x (pPath, _x, pPath->iCurrentPt)
+#define _cd_gl_path_set_vertex_y(pPath, _y) _cd_gl_path_set_nth_vertex_y (pPath, _y, pPath->iCurrentPt)
+#define _cd_gl_path_set_current_vertex(pPath, _x, _y) do {\
+	_cd_gl_path_set_vertex_x(pPath, _x);\
+	_cd_gl_path_set_vertex_y(pPath, _y); } while (0)
+#define _cd_gl_path_get_nth_vertex_x(pPath, i) pPath->pVertices[_CAIRO_DOCK_PATH_DIM*(i)]
+#define _cd_gl_path_get_nth_vertex_y(pPath, i) pPath->pVertices[_CAIRO_DOCK_PATH_DIM*(i)+1]
+#define _cd_gl_path_get_current_vertex_x(pPath) _cd_gl_path_get_nth_vertex_x (pPath, pPath->iCurrentPt-1)
+#define _cd_gl_path_get_current_vertex_y(pPath) _cd_gl_path_get_nth_vertex_y (pPath, pPath->iCurrentPt-1)
+
+CairoDockGLPath *cairo_dock_new_gl_path (int iNbVertices, double x0, double y0)
+{
+	CairoDockGLPath *pPath = g_new0 (CairoDockGLPath, 1);
+	pPath->pVertices = g_new0 (GLfloat, (iNbVertices+1) * _CD_PATH_DIM);  // +1 = securite
+	pPath->iNbPoints = iNbVertices;
+	_cd_gl_path_set_current_vertex (pPath, x0, y0);
+	pPath->iCurrentPt ++;
+	return pPath;
+}
+
+void cairo_dock_free_gl_path (CairoDockGLPath *pPath)
+{
+	if (!pPath)
+		return;
+	g_free (pPath->pVertices);
+	g_free (pPath);
+}
+
+void cairo_dock_gl_path_line_to (CairoDockGLPath *pPath, GLfloat x, GLfloat y)
+{
+	g_return_if_fail (pPath->iCurrentPt < pPath->iNbPoints);
+	_cd_gl_path_set_current_vertex (pPath, x, y);
+	pPath->iCurrentPt ++;
+}
+
+void cairo_dock_gl_path_rel_line_to (CairoDockGLPath *pPath, GLfloat dx, GLfloat dy)
+{
+	cairo_dock_gl_path_line_to (pPath,
+		_cd_gl_path_get_current_vertex_x (pPath) + dx,
+		_cd_gl_path_get_current_vertex_y (pPath) + dy);
+}
+
+void cairo_dock_gl_path_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3)
+{
+	g_return_if_fail (pPath->iCurrentPt + iNbPoints <= pPath->iNbPoints);
+	GLfloat x0, y0;
+	x0 = _cd_gl_path_get_current_vertex_x (pPath);
+	y0 = _cd_gl_path_get_current_vertex_y (pPath);
+	double t;
+	int i;
+	for (i = 0; i < iNbPoints; i ++)
+	{
+		t = (double)(i+1)/iNbPoints;  // [0;1]
+		_cd_gl_path_set_nth_vertex_x (pPath, Bezier (x0, x1, x2, x3, t), pPath->iCurrentPt + i);
+		_cd_gl_path_set_nth_vertex_y (pPath, Bezier (y0, y1, y2, y3, t), pPath->iCurrentPt + i);
+	}
+	pPath->iCurrentPt += iNbPoints;
+}
+
+void cairo_dock_gl_path_rel_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat dx1, GLfloat dy1, GLfloat dx2, GLfloat dy2, GLfloat dx3, GLfloat dy3)
+{
+	GLfloat x0, y0;
+	x0 = _cd_gl_path_get_current_vertex_x (pPath);
+	y0 = _cd_gl_path_get_current_vertex_y (pPath);
+	cairo_dock_gl_path_curve_to (pPath, iNbPoints, x0 + dx1, y0 + dy1, x0 + dx2, y0 + dy2, x0 + dx3, y0 + dy3);
+}
+
+void cairo_dock_gl_path_simple_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
+{
+	g_return_if_fail (pPath->iCurrentPt + iNbPoints <= pPath->iNbPoints);
+	GLfloat x0, y0;
+	x0 = _cd_gl_path_get_current_vertex_x (pPath);
+	y0 = _cd_gl_path_get_current_vertex_y (pPath);
+	double t;
+	int i;
+	for (i = 0; i < iNbPoints; i ++)
+	{
+		t = (double)(i+1)/iNbPoints;  // [0;1]
+		_cd_gl_path_set_nth_vertex_x (pPath, Bezier2 (x0, x1, x2, t), pPath->iCurrentPt + i);
+		_cd_gl_path_set_nth_vertex_y (pPath, Bezier2 (y0, y1, y2, t), pPath->iCurrentPt + i);
+	}
+	pPath->iCurrentPt += iNbPoints;
+}
+
+void cairo_dock_gl_path_rel_simple_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat dx1, GLfloat dy1, GLfloat dx2, GLfloat dy2)
+{
+	GLfloat x0, y0;
+	x0 = _cd_gl_path_get_current_vertex_x (pPath);
+	y0 = _cd_gl_path_get_current_vertex_y (pPath);
+	cairo_dock_gl_path_simple_curve_to (pPath, iNbPoints, x0 + dx1, y0 + dy1, x0 + dx2, y0 + dy2);
+}
+
+void cairo_dock_gl_path_arc_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat xc, GLfloat yc, double cone)
+{
+	g_return_if_fail (pPath->iCurrentPt + iNbPoints <= pPath->iNbPoints);
+	GLfloat x0, y0;
+	x0 = _cd_gl_path_get_current_vertex_x (pPath);
+	y0 = _cd_gl_path_get_current_vertex_y (pPath);
+	double teta0 = atan2 (y0 - yc, x0 - xc);
+	double r = sqrt ((x0 - xc) * (x0 - xc) + (y0 - yc) * (y0 - yc));
+	double t;
+	int i;
+	for (i = 0; i < iNbPoints; i ++)
+	{
+		t = teta0 + (double)(i+1)/iNbPoints * (cone - teta0);  // [teta0, teta0+cone]
+		_cd_gl_path_set_nth_vertex_x (pPath, xc + r * cos (t), pPath->iCurrentPt + i);
+		_cd_gl_path_set_nth_vertex_y (pPath, xc + r * sin (t), pPath->iCurrentPt + i);
+	}
+	pPath->iCurrentPt += iNbPoints;
+}
+
+void cairo_dock_close_gl_path (CairoDockGLPath *pPath)
+{
+	g_return_if_fail (pPath->iCurrentPt < pPath->iNbPoints);
+	double x0, y0;
+	x0 = _cd_gl_path_get_nth_vertex_x (pPath, 0);
+	y0 = _cd_gl_path_get_nth_vertex_y (pPath, 0);
+	_cd_gl_path_set_current_vertex (pPath, x0, y0);
+	pPath->iCurrentPt ++;
+}
+
+void cairo_dock_gl_path_move_to (CairoDockGLPath *pPath, double x0, double y0)
+{
+	pPath->iCurrentPt = 0;
+	_cd_gl_path_set_current_vertex (pPath, x0, y0);
+	pPath->iCurrentPt ++;
+}
+
+void cairo_dock_stroke_gl_path (CairoDockGLPath *pPath, gboolean bFill)
+{
+	glPolygonMode (GL_FRONT, bFill ? GL_FILL : GL_LINE);
+	glEnable (GL_LINE_SMOOTH);
+	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+	//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable (GL_BLEND);
+	
+	//glLineWidth(fLineWidth);
+	//glColor4f (fLineColor[0], fLineColor[1], fLineColor[2], fLineColor[3]); // Et sa couleur.
+	
+	glEnableClientState (GL_VERTEX_ARRAY);
+	glVertexPointer (_CD_PATH_DIM, GL_FLOAT, 0, pPath->pVertices);
+	glDrawArrays (bFill ? GL_POLYGON : GL_LINE_STRIP, 0, pPath->iCurrentPt);  // GL_LINE_LOOP / GL_POLYGON
+	glDisableClientState (GL_VERTEX_ARRAY);
+	
+	glDisable (GL_LINE_SMOOTH);
+	glDisable (GL_BLEND);
+}
+
+
+
 // A utiliser un jour.
 
 typedef struct _CairoAnimatedImage {
@@ -1561,7 +1718,10 @@ void cairo_dock_add_curved_subpath_opengl (CairoDockOpenglPath *pVertexPath, int
 }
 
 
-
+  ///////////////
+ /// GL FONT ///
+///////////////
+ 
 GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gchar *cFontDescription, cairo_t* pSourceContext, int *iWidth, int *iHeight)
 {
 	g_return_val_if_fail (cText != NULL && cFontDescription != NULL, 0);

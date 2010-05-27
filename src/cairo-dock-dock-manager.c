@@ -602,7 +602,10 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 			g_free (cCommand);
 		}
 		
-		cairo_dock_update_conf_file_with_position (cConfFilePath, pDock->iGapX, pDock->iGapY);
+		cairo_dock_update_conf_file (cConfFilePath,
+			G_TYPE_INT, "Appearance", "x gap", pDock->iGapX,
+			G_TYPE_INT, "Appearance", "y gap", pDock->iGapY,
+			G_TYPE_INVALID);
 		g_free (cConfFilePath);
 	}
 }
