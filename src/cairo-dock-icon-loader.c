@@ -490,7 +490,8 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 		
 		//g_print (" =size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);
 		fFlatDockWidth += myIcons.iIconGap + icon->fWidth;
-		pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
+		if (! CAIRO_DOCK_IS_SEPARATOR (icon))
+			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
 	}
 	pDock->fFlatDockWidth = (int) fFlatDockWidth;  /// (int) n'est plus tellement necessaire ...
 }

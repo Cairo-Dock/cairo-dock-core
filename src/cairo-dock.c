@@ -794,25 +794,6 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	/*g_print ("\n2eme DOCK PRINCIPAL AVEC 1 ICONE : BORD TRONQUE EN VERTICAL\n\n");
-	g_print ("\nPLAN 3D NE PREND PAS TOUT L'ECRAN\n\n");
-	g_print ("\nBATTERIE VERS 100%% (?)\n\n");
-	
-	g_print ("\nINDICATEURS EN HAUT (RETOURNES) ET CAIRO\n\n");
-	g_print ("=> AUTO-HIDE WHEN SWITCHING DESKTOP IN CAIRO MODE\n");
-	g_print ("PREVUE EN VUE PARABOLIQUE\n");
-	g_print ("MP AVEC CERTAINS NOMS D'ALBUM/ARTISTE (ACCENT?)\n");
-	
-	g_print ("\nTEXTURE FROM PIXMAP\n\n");
-	g_print ("\nNOUVELLE INSTANCE COPIEE SUR LA 1ERE\n\n");
-	g_print ("\nJAUGES : LOGO\n\n");*/
-	
-	/*if (strcmp((cairo_dock_launch_command_sync ("date +%m%d")), "0101") == 0)
-	{
-		Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
-		cairo_dock_show_temporary_dialog_with_default_icon ("Happy New Year every body !\n\tThe Cairo-Dock Team", pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
-	}*/
-	
 	gtk_main ();
 	
 	signal (SIGSEGV, NULL);  // Segmentation violation

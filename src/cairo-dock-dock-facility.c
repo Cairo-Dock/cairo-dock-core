@@ -98,7 +98,6 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	int iPrevMaxDockHeight = pDock->iMaxDockHeight;
 	int iPrevMaxDockWidth = pDock->iMaxDockWidth;
 	
-	
 	if (pDock->container.fRatio != 0/* && pDock->container.fRatio != 1*/)  // on remet leur taille reelle aux icones, sinon le calcul de max_dock_size sera biaise.
 	{
 		GList *ic;
@@ -111,8 +110,11 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 			icon->fWidth /= pDock->container.fRatio;
 			icon->fHeight /= pDock->container.fRatio;
 			pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
-			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
+			if (! CAIRO_DOCK_IS_SEPARATOR (icon))
+				pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
 		}
+		if (pDock->iMaxIconHeight == 0)
+			pDock->iMaxIconHeight = 10;
 		pDock->container.fRatio = 1.;
 	}
 	pDock->pRenderer->compute_size (pDock);
@@ -735,7 +737,7 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 	///int iExtraHeight = (pDock->bAtBottom ? 0 : myLabels.iLabelSize);
 	int iExtraHeight = 0;  /// il faudrait voir si on a un sous-dock ou un dialogue au dessus :-/
 	int iMouseX = pDock->container.iMouseX;
-	int iMouseY = pDock->container.iMouseY;
+	int iMouseY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->container.iMouseY : pDock->container.iMouseY);
 	//g_print ("%s (%dx%d, %dx%d, %f)\n", __func__, iMouseX, iMouseY, iWidth, iHeight, pDock->fFoldingFactor);
 
 	//\_______________ On regarde si le curseur est dans le dock ou pas, et on joue sur la taille des icones en consequence.
@@ -758,7 +760,7 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 				iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
 		}
 	}
-	else if ((pDock->container.bDirectionUp && iMouseY >= iExtraHeight && iMouseY < iHeight) || (!pDock->container.bDirectionUp && iMouseY >= 0 && iMouseY < iHeight - iExtraHeight))  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
+	else if (iMouseY >= 0 && iMouseY < iHeight)  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
 	{
 		//g_print ("on est dedans en x et en y (iMouseX=%d => x_abs=%d ; iMouseY=%d/%d)\n", iMouseX, x_abs, iMouseY, iHeight);
 		//pDock->container.bInside = TRUE;
@@ -780,6 +782,11 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 			if (cairo_dock_entrance_is_allowed (pDock) && ((pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp) || pDock->bIsShrinkingDown) && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN && (pDock->iInputState != CAIRO_DOCK_INPUT_AT_REST || pDock->bIsDragging))  // on est dedans et la taille des icones est non maximale bien que le dock ne soit pas en train de grossir, cependant on respecte l'etat 'cache', et l'etat repos.
 			{
 				//g_print ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee (%d;%d)\n", pDock->iMagnitudeIndex, pDock->container.bInside);
+				if (pDock->iRefCount != 0 && !pDock->container.bInside)
+				{
+					
+					break;
+				}
 				//pDock->container.bInside = TRUE;
 				///if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->container.iWidth != pDock->iMaxDockWidth || pDock->container.iHeight != pDock->iMaxDockHeight) || (!pDock->container.bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->container.bInside ajoute pour le bug du chgt de bureau.
 				if ((pDock->iMagnitudeIndex == 0 && pDock->iRefCount == 0 && ! pDock->bAutoHide) || !pDock->container.bInside)
@@ -804,7 +811,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 		break ;
 
 		case CAIRO_DOCK_MOUSE_OUTSIDE :
-			//g_print ("en dehors du dock (bIsShrinkingDown:%d;bIsGrowingUp:%d;iMagnitudeIndex:%d;bAtBottom:%d)\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp, pDock->iMagnitudeIndex, pDock->bAtBottom);
+			//g_print ("en dehors du dock (bIsShrinkingDown:%d;bIsGrowingUp:%d;iMagnitudeIndex:%d)\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
 			///pDock->fDecorationsOffsetX = - pDock->container.iWidth / 2;  // on fixe les decorations.
 			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && pDock->iMagnitudeIndex > 0 && ! pDock->bIconIsFlyingAway)
 			{
@@ -956,6 +963,8 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	}
 	
 	pSubDock->pRenderer->set_subdock_position (pPointedIcon, pParentDock);
+	if (pParentDock->fMagnitudeMax == 0)  // son input shape n'est pas la taille max mais iMinDockHeight.
+		pSubDock->iGapY -= (pParentDock->container.iHeight - pParentDock->iMinDockHeight);
 	
 	if (pSubDock->icons != NULL)
 	{

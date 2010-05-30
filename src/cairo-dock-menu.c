@@ -341,13 +341,6 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 
 	if (! cairo_dock_is_locked ())
 	{
-		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Configure"),
-			GTK_STOCK_PREFERENCES,
-			(GFunc)_cairo_dock_edit_and_reload_conf,
-			pSubMenu,
-			NULL);
-		gtk_widget_set_tooltip_text (pMenuItem, _("Configure behaviour, appearance, and applets."));
-		
 		if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bIsMainDock && CAIRO_DOCK (pContainer)->iRefCount == 0)
 		{
 			pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Configure this dock"),
@@ -355,8 +348,15 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 				(GFunc)_cairo_dock_configure_root_dock,
 				pSubMenu,
 				CAIRO_DOCK (pContainer));
-			gtk_widget_set_tooltip_text (pMenuItem, _("Customize the position, visibility and view of this main dock."));
+			gtk_widget_set_tooltip_text (pMenuItem, _("Customize the position, visibility and appearance of this main dock."));
 		}
+		
+		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Configure"),
+			GTK_STOCK_PREFERENCES,
+			(GFunc)_cairo_dock_edit_and_reload_conf,
+			pSubMenu,
+			NULL);
+		gtk_widget_set_tooltip_text (pMenuItem, _("Configure behaviour, appearance, and applets."));
 		
 		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Manage themes"), 
 			CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg",

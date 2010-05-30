@@ -105,6 +105,6 @@ void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, const gc
 		pSeparatorIcon->fWidth *= pDock->container.fRatio;
 		pSeparatorIcon->fHeight *= pDock->container.fRatio;
 		pDock->fFlatDockWidth += myIcons.iIconGap + pSeparatorIcon->fWidth;
-		pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pSeparatorIcon->fHeight);
+		///pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pSeparatorIcon->fHeight);
 	}
 }

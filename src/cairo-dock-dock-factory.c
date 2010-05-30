@@ -363,7 +363,8 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	icon->fHeight *= pDock->container.fRatio;
 
 	pDock->fFlatDockWidth += myIcons.iIconGap + icon->fWidth;
-	pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
+	if (! CAIRO_DOCK_IS_SEPARATOR (icon))
+		pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
 
 	//\______________ On insere un separateur si necessaire.
 	if (bSeparatorNeeded)
@@ -458,7 +459,8 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		for (ic = pDock->icons; ic != NULL; ic = ic->next)
 		{
 			pOtherIcon = ic->data;
-			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pOtherIcon->fHeight);
+			if (! CAIRO_DOCK_IS_SEPARATOR (pOtherIcon))
+				pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pOtherIcon->fHeight);
 		}
 	}
 
