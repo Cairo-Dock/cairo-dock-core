@@ -428,10 +428,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 		if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 		{
 			//g_print ("+++ input shape active on update input shape\n");
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				NULL,
-				0,
-				0);
+			cairo_dock_set_input_shape_active (pDock);
 			pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 		}
 		return ;
@@ -734,7 +731,7 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 {
 	CairoDockMousePositionType iMousePositionType;
 	int iWidth = pDock->container.iWidth;
-	int iHeight = pDock->container.iHeight;
+	int iHeight = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
 	///int iExtraHeight = (pDock->bAtBottom ? 0 : myLabels.iLabelSize);
 	int iExtraHeight = 0;  /// il faudrait voir si on a un sous-dock ou un dialogue au dessus :-/
 	int iMouseX = pDock->container.iMouseX;

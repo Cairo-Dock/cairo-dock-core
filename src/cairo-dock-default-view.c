@@ -38,6 +38,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-opengl-path.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-background.h"
@@ -536,9 +537,6 @@ static void _cairo_dock_draw_separator_opengl (Icon *icon, CairoDock *pDock, dou
 
 static void cd_render_opengl_default (CairoDock *pDock)
 {
-	GLsizei w = pDock->container.iWidth;
-	GLsizei h = pDock->container.iHeight;
-	
 	//\_____________ On definit notre rectangle.
 	double fLineWidth = myBackground.iDockLineWidth;
 	double fMargin = myBackground.iFrameMargin;
@@ -547,7 +545,6 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	double fDockWidth;
 	double fFrameHeight = pDock->iDecorationsHeight + fLineWidth;
 	
-	int sens;
 	double fDockOffsetX, fDockOffsetY;  // Offset du coin haut gauche du cadre.
 	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
 	if (pFirstDrawnElement == NULL)
@@ -555,47 +552,55 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
 		fDockWidth = pDock->container.iWidth - fExtraWidth;
-		fDockOffsetX = fRadius + fLineWidth / 2;
+		fDockOffsetX = fLineWidth / 2;
 	}
 	else
 	{
 		fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
 		Icon *pFirstIcon = pFirstDrawnElement->data;
-		fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX + 0 - fMargin : fRadius + fLineWidth / 2);
-		if (fDockOffsetX - (fRadius + fLineWidth / 2) < 0)
-			fDockOffsetX = fRadius + fLineWidth / 2;
-		if (fDockOffsetX + fDockWidth + (fRadius + fLineWidth / 2) > pDock->container.iWidth)
-			fDockWidth = pDock->container.iWidth - fDockOffsetX - (fRadius + fLineWidth / 2);
+		fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX + 0 - fMargin - fRadius : fLineWidth / 2);
+		if (fDockOffsetX - fLineWidth/2 < 0)
+			fDockOffsetX = fLineWidth / 2;
+		if (fDockOffsetX + fDockWidth + (2*fRadius + fLineWidth) > pDock->container.iWidth)
+			fDockWidth = pDock->container.iWidth - fDockOffsetX - (2*fRadius + fLineWidth);
 	}
 	
-	if ((pDock->container.bIsHorizontal && ! pDock->container.bDirectionUp) || (! pDock->container.bIsHorizontal && pDock->container.bDirectionUp))
-		fDockOffsetY = pDock->container.iHeight - .5 * fLineWidth;
-	else
-		fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;
+	fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;
 	
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	
 	//\_____________ On genere les coordonnees du contour.
-	int iNbVertex;
-	const GLfloat *pVertexTab = cairo_dock_generate_rectangle_path (fDockWidth, fFrameHeight, fRadius, myBackground.bRoundedBottomCorner, &iNbVertex);
+	const CairoDockGLPath *pFramePath = cairo_dock_generate_rectangle_path (fDockWidth, fFrameHeight, fRadius, myBackground.bRoundedBottomCorner);
 	
-	if (! pDock->container.bIsHorizontal)
-		fDockOffsetX = pDock->container.iWidth - fDockOffsetX + fRadius;
-	else
-		fDockOffsetX = fDockOffsetX - fRadius;
-	
-	//\_____________ On trace le fond en texturant par des triangles.
+	//\_____________ On remplit avec le fond.
 	glPushMatrix ();
-	cairo_dock_draw_frame_background_opengl (g_pDockBackgroundBuffer.iTexture, fDockWidth+2*fRadius, fFrameHeight, fDockOffsetX, fDockOffsetY, pVertexTab, iNbVertex, pDock->container.bIsHorizontal, pDock->container.bDirectionUp, pDock->fDecorationsOffsetX);
+	cairo_dock_set_container_orientation_opengl (CAIRO_CONTAINER (pDock));
+	glTranslatef (fDockOffsetX + (fDockWidth+2*fRadius)/2,
+		fDockOffsetY - fFrameHeight/2,
+		0.);
+	
+	/*int i;
+	for (i = 0; i < pFramePath->iCurrentPt; i++)
+	{
+		pFramePath->pVertices[2*i] /= fDockWidth + fExtraWidth;
+		pFramePath->pVertices[2*i+1] /= fFrameHeight;
+	}
+	glScalef (fDockWidth + fExtraWidth, fFrameHeight, 1.);
+	cairo_dock_gl_path_set_extent (pFramePath, 1, 1);*/
+	cairo_dock_fill_gl_path (pFramePath, g_pDockBackgroundBuffer.iTexture);
 	
 	//\_____________ On trace le contour.
 	if (fLineWidth != 0)
-		cairo_dock_draw_current_path_opengl (fLineWidth, myBackground.fLineColor, iNbVertex);
+	{
+		glLineWidth (fLineWidth);
+		glColor4f (myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		cairo_dock_stroke_gl_path (pFramePath, TRUE);
+	}
 	glPopMatrix ();
 	
 	//\_____________ On dessine la ficelle.
 	if (myIcons.iStringLineWidth > 0)
-		cairo_dock_draw_string_opengl (pDock, myIcons.iStringLineWidth, FALSE, FALSE);
+		cairo_dock_draw_string_opengl (pDock, myIcons.iStringLineWidth, FALSE, myIcons.bConstantSeparatorSize);
 	
 	
 	//\_____________ On dessine les icones.

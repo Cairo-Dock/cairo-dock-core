@@ -603,8 +603,8 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 		}
 		
 		cairo_dock_update_conf_file (cConfFilePath,
-			G_TYPE_INT, "Appearance", "x gap", pDock->iGapX,
-			G_TYPE_INT, "Appearance", "y gap", pDock->iGapY,
+			G_TYPE_INT, "Behavior", "x gap", pDock->iGapX,
+			G_TYPE_INT, "Behavior", "y gap", pDock->iGapY,
 			G_TYPE_INVALID);
 		g_free (cConfFilePath);
 	}
@@ -670,7 +670,6 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	
 	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Behavior", "alignment", &bFlushConfFileNeeded, 0.5, "Position", NULL);
 	
-	g_print ("READ CONFIG %s (%d)\n", cDockName, myPosition.bUseXinerama);
 	if (myPosition.bUseXinerama)
 	{
 		int iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "num screen", &bFlushConfFileNeeded, 0, "Position", NULL);
@@ -679,7 +678,6 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	}
 	else
 		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
-	g_print ("-> offset : %d;%d\n", pDock->iScreenOffsetX, pDock->iScreenOffsetY);
 	
 	//\______________ Visibilite.
 	CairoDockVisibility iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "visibility", &bFlushConfFileNeeded, FALSE, "Position", NULL);

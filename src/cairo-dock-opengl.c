@@ -145,8 +145,8 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 		GLX_ALPHA_SIZE, 		1,
 		GLX_STENCIL_SIZE, 	1,
 		/// a tester ...
-		(g_bEasterEggs ? GLX_SAMPLE_BUFFERS_ARB : None), 1,
-		GLX_SAMPLES_ARB, 2,
+		GLX_SAMPLE_BUFFERS_ARB, 1,
+		GLX_SAMPLES_ARB, 4,
 		/*GL_MULTISAMPLEBUFFERS, 	1,
 		GL_MULTISAMPLESAMPLES, 	2,*/
 		None};

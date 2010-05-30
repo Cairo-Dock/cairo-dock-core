@@ -47,14 +47,16 @@
 #include <cairo-dock/cairo-dock-dialog-factory.h>
 #include <cairo-dock/cairo-dock-desklet-factory.h>
 #include <cairo-dock/cairo-dock-dock-factory.h>
-// actions et comportement des containers.
+#include <cairo-dock/cairo-dock-callbacks.h>
+// dessin
 #include <cairo-dock/cairo-dock-opengl.h>
+#include <cairo-dock/cairo-dock-opengl-path.h>
+#include <cairo-dock/cairo-dock-opengl-font.h>
 #include <cairo-dock/cairo-dock-draw-opengl.h>
 #include <cairo-dock/cairo-dock-draw.h>
 #include <cairo-dock/cairo-dock-emblem.h>
 #include <cairo-dock/cairo-dock-dock-facility.h>
 #include <cairo-dock/cairo-dock-animations.h>
-#include <cairo-dock/cairo-dock-callbacks.h>
 // chargeurs d'icone.
 #include <cairo-dock/cairo-dock-applications-manager.h>
 #include <cairo-dock/cairo-dock-applet-manager.h>

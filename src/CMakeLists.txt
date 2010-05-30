@@ -33,6 +33,8 @@ SET(cairo-dock_SRCS
 	cairo-dock-class-manager.c 			cairo-dock-class-manager.h
 	cairo-dock-X-manager.c 				cairo-dock-X-manager.h
 	cairo-dock-opengl.c 				cairo-dock-opengl.h
+	cairo-dock-opengl-path.c 			cairo-dock-opengl-path.h
+	cairo-dock-opengl-font.c 			cairo-dock-opengl-font.h
 	cairo-dock-gui-manager.c 			cairo-dock-gui-manager.h
 	cairo-dock-gui-factory.c 			cairo-dock-gui-factory.h
 	cairo-dock-load.c 					cairo-dock-load.h 
@@ -143,14 +145,15 @@ install(FILES
 	cairo-dock-applet-canvas.h		cairo-dock-applet-facility.h
 	
 	cairo-dock-internal-position.h 	cairo-dock-internal-accessibility.h
-	cairo-dock-internal-system.h 		cairo-dock-internal-taskbar.h
+	cairo-dock-internal-system.h 	cairo-dock-internal-taskbar.h
 	cairo-dock-internal-dialogs.h 	cairo-dock-internal-indicators.h
-	cairo-dock-internal-views.h 		cairo-dock-internal-labels.h
+	cairo-dock-internal-views.h 	cairo-dock-internal-labels.h
 	cairo-dock-internal-desklets.h 	cairo-dock-internal-background.h
 	cairo-dock-internal-icons.h
 	
 	cairo-dock-draw.h				cairo-dock-draw-opengl.h
-	cairo-dock-particle-system.h		cairo-dock-emblem.h
+	cairo-dock-opengl-path.h 		cairo-dock-opengl-font.h 
+	cairo-dock-particle-system.h	cairo-dock-emblem.h
 	cairo-dock-X-utilities.h		cairo-dock-dbus.h
 	cairo-dock-keyfile-utilities.h	cairo-dock-surface-factory.h
 	cairo-dock-log.h				cairo-dock-keybinder.h

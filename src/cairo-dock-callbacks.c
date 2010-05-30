@@ -93,7 +93,7 @@ static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
 static gboolean s_bIconDragged = FALSE;
 
-#define _xy_is_really_outside(x, y, pDock) (pDock->container.bIsHorizontal ? (x < 0 || x >= pDock->container.iWidth || y < 0 || y >= pDock->container.iHeight) : (y < 0 || y >= pDock->container.iWidth || x < 0 || x >= pDock->container.iHeight))
+#define _xy_is_really_outside(x, y, pDock) (pDock->container.bIsHorizontal ? (x < 0 || x >= pDock->container.iWidth || y < 0 || y >= (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight)) : (y < 0 || y >= pDock->container.iWidth || x < 0 || x >= (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight)))
 #define _mouse_is_really_outside(pDock) (pDock->container.iMouseX <= 0 || pDock->container.iMouseX >= pDock->container.iWidth || pDock->container.iMouseY <= 0 || pDock->container.iMouseY >= pDock->container.iHeight)
 #define CD_CLICK_ZONE 5
 
@@ -598,7 +598,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin).
 	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 	{
-		cd_debug ("not really outside (%d;%d)\n", (int)pEvent->x, (int)pEvent->y);
+		//g_print ("not really outside (%d;%d ; %d/%d)\n", (int)pEvent->x, (int)pEvent->y, pDock->iMaxDockHeight, pDock->iMinDockHeight);
 		return FALSE;
 	}
 	
@@ -757,10 +757,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if ((pDock->pShapeBitmap || pDock->pHiddenShapeBitmap) && pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 	{
 		//g_print ("+++ input shape active on enter\n");
-		gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-			NULL,
-			0,
-			0);
+		cairo_dock_set_input_shape_active (pDock);
 	}
 	pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 	
@@ -1092,30 +1089,16 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			pDock->container.iMouseX = 0;
 		//g_print ("x,y : %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
 		
-		// les dimensions ont change, il faut remettre l'input shape a la bonne place.
+		// les dimensions ont change, il faut remettre l'input shape a la bonne place (le bitmap a ete recalcule auparavant dans cairo_dock_update_input_shape).
 		if (pDock->pHiddenShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
 			//g_print ("+++ input shape hidden on configure\n");
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				NULL,
-				0,
-				0);
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				pDock->pHiddenShapeBitmap,
-				0,
-				0);
+			cairo_dock_set_input_shape_hidden (pDock);
 		}
 		else if (pDock->pShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
 		{
 			//g_print ("+++ input shape at rest on configure\n");
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				NULL,
-				0,
-				0);
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				pDock->pShapeBitmap,
-				0,
-				0);
+			cairo_dock_set_input_shape_at_rest (pDock);
 		}
 		
 		if (g_bUseOpenGL)

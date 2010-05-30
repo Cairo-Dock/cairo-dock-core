@@ -92,6 +92,21 @@ void cairo_dock_move_resize_dock (CairoDock *pDock);
 */
 void cairo_dock_update_input_shape (CairoDock *pDock);
 
+#define cairo_dock_set_input_shape_active(pDock) do {\
+	g_print ("pDock->fMagnitudeMax : %.2f\n", pDock->fMagnitudeMax);if (pDock->fMagnitudeMax != 0)\
+		gtk_widget_input_shape_combine_mask (pDock->container.pWidget, NULL, 0, 0);\
+	else\
+		gtk_widget_input_shape_combine_mask (pDock->container.pWidget, pDock->pShapeBitmap, 0, 0);\
+	} while (0)
+#define cairo_dock_set_input_shape_at_rest(pDock) do {\
+	gtk_widget_input_shape_combine_mask (pDock->container.pWidget, NULL, 0, 0);\
+	gtk_widget_input_shape_combine_mask (pDock->container.pWidget, pDock->pShapeBitmap, 0, 0);\
+	} while (0)
+#define cairo_dock_set_input_shape_hidden(pDock) do {\
+	gtk_widget_input_shape_combine_mask (pDock->container.pWidget, NULL, 0, 0);\
+	gtk_widget_input_shape_combine_mask (pDock->container.pWidget, pDock->pHiddenShapeBitmap, 0, 0);\
+	} while (0)
+
 /** Pop up a sub-dock.
 *@param pPointedIcon icon pointing on the sub-dock.
 *@param pParentDock dock containing the icon.

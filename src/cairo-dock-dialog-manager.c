@@ -776,7 +776,7 @@ void cairo_dock_replace_all_dialogs (void)
 		pDialog = ic->data;
 		
 		pIcon = pDialog->pIcon;
-		if (pIcon != NULL && GTK_WIDGET_VISIBLE (pDialog->container.pWidget)) // on ne replace pas les dialogues en cours de destruction ou caches.
+		if (pIcon != NULL && GTK_WIDGET_VISIBLE (pDialog->container.pWidget) && pDialog->pInteractiveWidget == NULL) // on ne replace pas les dialogues en cours de destruction ou caches.
 		{
 			pContainer = cairo_dock_search_container_from_icon (pIcon);
 			//if (CAIRO_DOCK_IS_DOCK (pContainer))

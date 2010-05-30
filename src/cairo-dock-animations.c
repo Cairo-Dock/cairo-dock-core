@@ -249,7 +249,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 		if (! pDock->bIsShrinkingDown)
 			return FALSE;
 		
-		cairo_dock_replace_all_dialogs ();
+		///cairo_dock_replace_all_dialogs ();
 	}
 
 	if (pDock->iMagnitudeIndex == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1))  // on est arrive en bas.
@@ -266,25 +266,18 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 					cairo_dock_pop_down (pDock);
 				
 				//\__________________ On se redimensionne en taille normale.
-				if (! (pDock->bAutoHide && pDock->iRefCount == 0) && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
+				if (! pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
 				{
 					//g_print ("taille normale (%x; %d)\n", pDock->pShapeBitmap , pDock->iInputState);
 					if (pDock->pShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_AT_REST)
 					{
 						//g_print ("+++ input shape at rest on end shrinking\n");
-						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-							NULL,
-							0,
-							0);
-						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-							pDock->pShapeBitmap,
-							0,
-							0);
+						cairo_dock_set_input_shape_at_rest (pDock);
 						pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
-						cairo_dock_replace_all_dialogs ();
+						///cairo_dock_replace_all_dialogs ();
 					}
 				}
-				else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
+				/**else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
 				{
 					if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
 					{
@@ -299,7 +292,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 							0);
 						pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;
 					}
-				}
+				}*/
 				
 				//\__________________ On se cache si sous-dock.
 				if (pDock->iRefCount > 0)
@@ -319,6 +312,8 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 		{
 			cairo_dock_calculate_dock_icons (pDock);
 		}*/
+		if (!pDock->bIsGrowingUp)
+			cairo_dock_replace_all_dialogs ();
 		return (!pDock->bIsGrowingUp && (pDock->fDecorationsOffsetX != 0 || (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)));
 	}
 	else
@@ -773,10 +768,7 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 		if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
 		{
 			//g_print ("+++ input shape hidden on start hiding\n");
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				pDock->pHiddenShapeBitmap,
-				0,
-				0);
+			cairo_dock_set_input_shape_hidden (pDock);
 			pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;
 		}
 		
@@ -798,14 +790,7 @@ void cairo_dock_start_showing (CairoDock *pDock)
 		if (pDock->pShapeBitmap && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
 			//g_print ("+++ input shape at rest on start showing\n");
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				NULL,
-				0,
-				0);
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				pDock->pShapeBitmap,
-				0,
-				0);
+			cairo_dock_set_input_shape_at_rest (pDock);
 			pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
 		}
 		

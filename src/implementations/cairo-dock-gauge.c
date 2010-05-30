@@ -91,6 +91,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-opengl-font.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-dock-factory.h"

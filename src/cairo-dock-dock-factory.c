@@ -308,10 +308,7 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock)
 		pDock->pShapeBitmap = NULL;
 		if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 		{
-			gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-				NULL,
-				0,
-				0);
+			cairo_dock_set_input_shape_active (pDock);
 			pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 		}
 	}

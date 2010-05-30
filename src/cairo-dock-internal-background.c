@@ -100,6 +100,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 	pBackground->fVisibleZoneAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "callback alpha", &bFlushConfFileNeeded, 0.5, "Hidden dock", "alpha");
 	pBackground->bReverseVisibleImage = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "callback reverse", &bFlushConfFileNeeded, TRUE, "Hidden dock", "reverse visible image");*/
 	
+	/**
 	// mouvements.
 	int iMovementType;
 	if (! g_key_file_has_key (pKeyFile, "Background", "move bg", NULL))  // anciennes valeurs.
@@ -123,7 +124,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 	{
 		pBackground->fDecorationSpeed = cairo_dock_get_double_key_value (pKeyFile, "Background", "decorations speed", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 		pBackground->bDecorationsFollowMouse = (iMovementType == 2);
-	}
+	}*/
 	
 	return bFlushConfFileNeeded;
 }
