@@ -127,55 +127,29 @@
 #include "cairo-dock-hiding-effect.h"
 #include "cairo-dock-icon-container.h"
 
-CairoDock *g_pMainDock;  // pointeur sur le dock principal.
+extern gchar *g_cCairoDockDataDir;
 
-gchar *g_cCairoDockDataDir = NULL;  // le repertoire racine contenant tout.
-gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
-gchar *g_cExtrasDirPath = NULL;  // le chemin vers le repertoire des extra.
-gchar *g_cThemesDirPath = NULL;  // le chemin vers le repertoire des themes.
-gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs du theme courant.
-gchar *g_cCurrentIconsPath = NULL;  // le chemin vers le repertoire des icones du theme courant.
-gchar *g_cCurrentPlugInsPath = NULL;  // le chemin vers le repertoire des plug-ins du theme courant.
-gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
-gchar *g_cThemeServerAdress = NULL;
-int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
+extern gchar *g_cThemeServerAdress;
+extern gchar *g_cConfFile;
+extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
-CairoDockDesktopGeometry g_desktopGeometry;
+extern CairoDock *g_pMainDock;
 
-int g_iNbNonStickyLaunchers = 0;
+extern gboolean g_bKeepAbove;
+extern gboolean g_bSticky;
 
-CairoDockImageBuffer g_pDockBackgroundBuffer;
-CairoDockImageBuffer g_pIndicatorBuffer;
-CairoDockImageBuffer g_pActiveIndicatorBuffer;
-CairoDockImageBuffer g_pClassIndicatorBuffer;
-CairoDockImageBuffer g_pIconBackgroundBuffer;
-CairoDockImageBuffer g_pVisibleZoneBuffer;
-CairoDockImageBuffer g_pBoxAboveBuffer;
-CairoDockImageBuffer g_pBoxBelowBuffer;
+extern gboolean g_bUseGlitz;
+extern gboolean g_bUseOpenGL;
+extern CairoDockDesktopEnv g_iDesktopEnv;
+extern gboolean g_bEasterEggs;
+extern gboolean g_bLocked;
 
-gboolean g_bKeepAbove = FALSE;
-gboolean g_bSticky = TRUE;
-
-gboolean g_bUseGlitz = FALSE;
-gboolean g_bVerbose = FALSE;
-
-CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
-
-CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
+extern CairoDockGLConfig g_openglConfig;
+extern CairoDockHidingEffect *g_pKeepingBelowBackend;
+extern CairoDockModuleInstance *g_pCurrentModule;
 //int g_iDamageEvent = 0;
 
-CairoDockHidingEffect *g_pHidingBackend = NULL;
-CairoDockHidingEffect *g_pKeepingBelowBackend = NULL;
-
-gboolean g_bEasterEggs = FALSE;
-gboolean g_bLocked = FALSE;
-
-CairoDockGLConfig g_openglConfig;
-gboolean g_bUseOpenGL = FALSE;
 gboolean g_bForceCairo = FALSE;
-GLuint g_pGradationTexture[2]={0, 0};
-
-CairoDockModuleInstance *g_pCurrentModule = NULL;
 
 static gchar *s_cLaunchCommand = NULL;
 
@@ -314,15 +288,6 @@ int main (int argc, char** argv)
 	cd_log_set_level(0);
 	
 	gtk_init (&argc, &argv);
-	
-	memset (&g_pDockBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&g_pIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&g_pActiveIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&g_pClassIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&g_pIconBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
-	///memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&g_pBoxAboveBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&g_pBoxBelowBuffer, 0, sizeof (CairoDockImageBuffer));
 	
 	GError *erreur = NULL;
 	
@@ -479,9 +444,6 @@ int main (int argc, char** argv)
 	 //// LIB ////
 	/////////////
 	
-	//\___________________ On initialise les numeros de version.
-	cairo_dock_get_version_from_string (CAIRO_DOCK_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
-
 	//\___________________ On initialise le gestionnaire de docks (a faire en 1er).
 	cairo_dock_init_dock_manager ();
 	

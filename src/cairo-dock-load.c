@@ -64,6 +64,8 @@
 
 #define CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME "default-icon-appli.svg"
 
+GLuint g_pGradationTexture[2]={0, 0};
+
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
@@ -206,19 +208,6 @@ void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage)
   ///////////////////////
  /// DOCK BACKGROUND ///
 ///////////////////////
-
-void cairo_dock_load_visible_zone (const gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha)
-{
-	cairo_dock_unload_image_buffer (&g_pVisibleZoneBuffer);
-	
-	cairo_dock_load_image_buffer_full (&g_pVisibleZoneBuffer,
-		cVisibleZoneImageFile,
-		iVisibleZoneWidth,
-		iVisibleZoneHeight,
-		CAIRO_DOCK_FILL_SPACE,
-		fVisibleZoneAlpha);
-}
-
 
 static cairo_surface_t *_cairo_dock_make_stripes_background (int iStripesWidth, int iStripesHeight)
 {
@@ -516,7 +505,6 @@ void cairo_dock_unload_additionnal_textures (void)
 {
 	cd_debug ("");
 	cairo_dock_unload_image_buffer (&g_pDockBackgroundBuffer);
-	cairo_dock_unload_image_buffer (&g_pVisibleZoneBuffer);
 	cairo_dock_unload_desklet_buttons ();
 	cairo_dock_unload_dialog_buttons ();
 	cairo_dock_unload_icon_textures ();

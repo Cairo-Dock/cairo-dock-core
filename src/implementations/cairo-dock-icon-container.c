@@ -43,14 +43,15 @@
 
 #define CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME "default-icon-appli.svg"
 
+CairoDockImageBuffer g_pBoxAboveBuffer;
+CairoDockImageBuffer g_pBoxBelowBuffer;
+
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
 extern gchar *g_cCurrentThemePath;
 
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
-extern CairoDockImageBuffer g_pBoxAboveBuffer;
-extern CairoDockImageBuffer g_pBoxBelowBuffer;
 
 extern gboolean g_bUseOpenGL;
 

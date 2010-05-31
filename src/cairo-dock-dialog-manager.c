@@ -56,8 +56,6 @@
 
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
-extern gboolean g_bSticky;
-extern gboolean g_bKeepAbove;
 extern gboolean g_bUseOpenGL;
 
 static GSList *s_pDialogList = NULL;

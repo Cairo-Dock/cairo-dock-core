@@ -511,7 +511,7 @@ void cairo_dock_register_default_launcher_gui_backend (void)
 {
 	CairoDockLauncherGuiBackend *pBackend = g_new0 (CairoDockLauncherGuiBackend, 1);
 	
-	pBackend->show_gui 		= show_gui;
+	pBackend->show_gui 	= show_gui;
 	pBackend->refresh_gui 	= refresh_gui;
 	
 	cairo_dock_register_launcher_gui_backend (pBackend);

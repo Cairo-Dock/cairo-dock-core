@@ -61,12 +61,10 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-icon-loader.h"
 
+CairoDockImageBuffer g_pIconBackgroundBuffer;
+
 extern CairoDock *g_pMainDock;
-
 extern gchar *g_cCurrentThemePath;
-
-extern CairoDockImageBuffer g_pIconBackgroundBuffer;
-
 extern gboolean g_bUseOpenGL;
 
 const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est juste pour realiser la transition entre le chiffre en conf, et un nom (limitation du panneau de conf). On garde le numero pour savoir rapidement sur laquelle on set.

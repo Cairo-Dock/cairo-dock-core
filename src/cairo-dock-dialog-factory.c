@@ -54,8 +54,6 @@
 
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
-extern gboolean g_bSticky;
-extern gboolean g_bKeepAbove;
 extern gboolean g_bUseOpenGL;
 
 #define _drawn_text_width(pDialog) (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth ? pDialog->iMaxTextWidth : pDialog->iTextWidth)

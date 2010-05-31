@@ -78,12 +78,15 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-config.h"
 
+CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
+gboolean g_bEasterEggs = FALSE;
+gboolean g_bLocked = FALSE;
+
 extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentLaunchersPath;
 extern CairoDockImageBuffer g_pDockBackgroundBuffer;
-extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 extern CairoDockHidingEffect *g_pHidingBackend;

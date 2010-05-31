@@ -54,9 +54,8 @@
 
 #define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 200
 
+CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDock *g_pMainDock;
-
-extern CairoDockDesktopGeometry g_desktopGeometry;
 
 extern gboolean g_bUseOpenGL;
 //extern int g_iDamageEvent;
@@ -97,7 +96,7 @@ static gboolean _on_change_current_desktop_viewport (void)
 	cairo_dock_notify (CAIRO_DOCK_DESKTOP_CHANGED);
 	
 	// on gere le cas delicat de X qui nous fait sortir du dock.
-	if (! pDock->bIsShrinkingDown && ! pDock->bIsGrowingUp)
+	if (pDock && ! pDock->bIsShrinkingDown && ! pDock->bIsGrowingUp)
 	{
 		if (pDock->container.bIsHorizontal)
 			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);

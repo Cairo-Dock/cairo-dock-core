@@ -301,7 +301,7 @@ cd_keybinder_bind (const char           *keystring,
 	if (success) {
 		bindings = g_slist_prepend (bindings, binding);
 	} else {
-		cd_warning ("couldnt bind %s", keystring);
+		cd_warning ("Couldn't bind %s\n This shortkey is probably already used by another applet or another application", keystring);
 		g_free (binding->keystring);
 		g_free (binding);
 	}

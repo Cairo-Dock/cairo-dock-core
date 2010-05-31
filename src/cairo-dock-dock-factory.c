@@ -84,8 +84,10 @@ extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bKeepAbove;
 
 extern CairoDockGLConfig g_openglConfig;
-extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
+#ifdef HAVE_GLITZ
+extern gboolean g_bUseGlitz;
+#endif
 
 
 CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
@@ -235,8 +237,6 @@ void cairo_dock_free_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidMoveResize);
 	if (pDock->iSidLeaveDemand != 0)
 		g_source_remove (pDock->iSidLeaveDemand);
-	///if (pDock->iSidUnhideDemand != 0)
-	///	g_source_remove (pDock->iSidUnhideDemand);
 	if (pDock->iSidUpdateWMIcons != 0)
 		g_source_remove (pDock->iSidUpdateWMIcons);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);
@@ -258,6 +258,8 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	}
 	
 	g_free (pDock->cRendererName);
+	
+	cairo_dock_unload_image_buffer (&pDock->backgroundBuffer);
 	
 	if (pDock->iFboId != 0)
 		glDeleteFramebuffersEXT (1, &pDock->iFboId);

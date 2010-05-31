@@ -118,8 +118,6 @@ void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
 void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
 
 
-void cairo_dock_load_visible_zone (const gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha);
-
 void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, int iNewDecorationsWidth, int iNewDecorationsHeight);
 
 void cairo_dock_load_background_decorations (CairoDock *pDock);

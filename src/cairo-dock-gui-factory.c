@@ -67,6 +67,12 @@ static GtkListStore *s_pDialogDecoratorListStore = NULL;
 static GtkListStore *s_pGaugeListStore = NULL;
 static GtkListStore *s_pDocksListStore = NULL;
 static GtkListStore *s_pIconThemeListStore = NULL;
+typedef struct {
+	GtkWidget *pControlContainer;  // widget contenant le widget de controle et les widgets controles.
+	int iFirstSensitiveWidget;
+	int iNbControlledWidgets;
+	int iNbSensitiveWidgets;
+	} CDControlWidget;
 
 #define _allocate_new_model(...)\
 	gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_INT, G_TYPE_INT)
@@ -416,6 +422,7 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 	GtkTreeModel *model = gtk_combo_box_get_model (widget);
 	g_return_if_fail (model != NULL);
 	
+	//g_print ("%s ()\n", __func__);
 	GtkTreeIter iter;
 	if (!gtk_combo_box_get_active_iter (widget, &iter))
 		return ;
@@ -452,6 +459,34 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 	
 	g_list_free (children);
 }
+
+static GList *_activate_sub_widgets (GList *children, int iNbControlledWidgets, gboolean bSensitive)
+{
+	g_print ("%s (%d, %d)\n", __func__, iNbControlledWidgets, bSensitive);
+	GList *c = children;
+	GtkWidget *w;
+	int i = 0, iNbControlSubWidgets;
+	while (c != NULL && i < iNbControlledWidgets)
+	{
+		w = c->data;
+		//g_print ("%d in ]%d;%d[ ; %d\n", i, iOrder1, iOrder1 + iOrder2, GTK_IS_ALIGNMENT (w));
+		if (GTK_IS_ALIGNMENT (w))  // les separateurs sont dans un alignement.
+			continue;
+		gtk_widget_set_sensitive (w, bSensitive);
+		
+		iNbControlSubWidgets = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (w), "nb-ctrl-widgets"));
+		if (iNbControlSubWidgets > 0)  // ce widget en controle d'autres.
+		{
+			c = _activate_sub_widgets (c, iNbControlSubWidgets, bSensitive);
+		}
+		else  // il est tout seul, on passe juste a la suite.
+		{
+			c = c->next;
+		}
+		i ++;
+	}
+	return c;
+}
 static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox *widget, gpointer *data)
 {
 	GtkTreeModel *model = gtk_combo_box_get_model (widget);
@@ -469,21 +504,47 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	GtkWidget *parent = data[1];
 	GtkWidget *pKeyBox = data[0];
 	int iNbWidgets = GPOINTER_TO_INT (data[2]);
-	//g_print ("%s (%d, %d / %d)\n", __func__, iOrder1, iOrder2, iNbWidgets);
+	g_print ("%s (%d, %d / %d)\n", __func__, iOrder1, iOrder2, iNbWidgets);
 	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
 	GList *c = g_list_find (children, pKeyBox);
 	g_return_if_fail (c != NULL);
 	
-	//g_print ("%d widgets controles (%d au total)\n", iNbWidgets, g_list_length (children));
+	g_print ("%d widgets controles (%d au total)\n", iNbWidgets, g_list_length (children));
 	GtkWidget *w;
-	int i = 0;
-	for (c = c->next; c != NULL && i < iNbWidgets; c = c->next)
+	int i = 0, iNbControlSubWidgets;
+	gboolean bSensitive;
+	c = c->next;
+	while (c != NULL && i < iNbWidgets)
 	{
 		w = c->data;
-		//g_print ("%d in ]%d;%d[ ; %d\n", i, iOrder1, iOrder1 + iOrder2, GTK_IS_ALIGNMENT (w));
-		if (GTK_IS_ALIGNMENT (w))
+		g_print (" %d in [%d;%d] ; %d\n", i, iOrder1-1, iOrder1 + iOrder2-1, GTK_IS_ALIGNMENT (w));
+		if (GTK_IS_ALIGNMENT (w))  // les separateurs sont dans un alignement.
+		{
+			c = c->next;
 			continue;
-		gtk_widget_set_sensitive (w, i >= iOrder1 - 1 && i < iOrder1 + iOrder2 - 1);
+		}
+		bSensitive = (i >= iOrder1 - 1 && i < iOrder1 + iOrder2 - 1);
+		gtk_widget_set_sensitive (w, bSensitive);
+		
+		iNbControlSubWidgets = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (w), "nb-ctrl-widgets"));
+		if (iNbControlSubWidgets > 0)
+		{
+			g_print ("  ce widget en controle %d autres\n", iNbControlSubWidgets);
+			c = _activate_sub_widgets (c->next, iNbControlSubWidgets, bSensitive);
+			if (bSensitive)
+			{
+				gboolean bReturn;
+				GtkWidget *sw = g_object_get_data (G_OBJECT (w), "one-widget");
+				if (GTK_IS_CHECK_BUTTON (sw))
+					g_signal_emit_by_name (sw, "toggled", NULL, &bReturn);
+				else if (GTK_IS_COMBO_BOX (sw))
+					g_signal_emit_by_name (sw, "changed", NULL, &bReturn);
+			}
+		}
+		else
+		{
+			c = c->next;
+		}
 		i ++;
 	}
 	
@@ -669,7 +730,7 @@ static void _cairo_dock_key_grab_class (GtkButton *button, gpointer *data)
 	gchar *cResult = NULL; // NON CE N'EST PAS MA MOYENNE DE POINT !!!!
 	if (str != NULL)
 	{
-		// WM_CLASS(STRING) = "gnome-terminal", "Gnome-terminal" \\ => utiliser le 2è
+		// WM_CLASS(STRING) = "gnome-terminal", "Gnome-terminal" \\ => utiliser le 2eme
 		str = strchr (str, ',');
 		str += 3;
 		gchar *max = strchr (str, '"'); // on pointe le 2e "
@@ -792,7 +853,7 @@ static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pMod
 		memset (&iter, 0, sizeof (GtkTreeIter));
 		gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-			CAIRO_DOCK_MODEL_NAME, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cModuleName),  /// cTitle ?...
+			CAIRO_DOCK_MODEL_NAME, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cTitle),
 			CAIRO_DOCK_MODEL_RESULT, cModuleName,
 			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cDescription),
 			CAIRO_DOCK_MODEL_IMAGE, pModule->pVisitCard->cPreviewFilePath,
@@ -1586,7 +1647,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	GtkWidget *pBackButton;
-	GtkWidget *pControlContainer = NULL;
+	///GtkWidget *pControlContainer=NULL;
+	GList *pControlWidgets = NULL;
 	int iFirstSensitiveWidget = 0, iNbControlledWidgets = 0, iNbSensitiveWidgets = 0;
 	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *cTipString, **pAuthorizedValuesList, *cSmallGroupIcon=NULL, *cDisplayedGroupName=NULL;  // ne pas effacer 'cTipString' et 'cUsefulComment', ils pointent dans cKeyComment.
 	gpointer *pGroupKeyWidget;
@@ -1607,7 +1669,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	pGroupBox = NULL;
 	pFrame = NULL;
 	pFrameVBox = NULL;
-	pControlContainer = NULL;
 	cGroupComment  = g_key_file_get_comment (pKeyFile, cGroupName, NULL, NULL);
 	if (cGroupComment != NULL)
 	{
@@ -1722,21 +1783,23 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			{
 				gtk_widget_set_tooltip_text (pKeyBox, dgettext (cGettextDomain, cTipString));
 			}
-			if (iNbControlledWidgets > 0 && pControlContainer != NULL)
+			///if (iNbControlledWidgets > 0 && pControlContainer != NULL)
+			if (pControlWidgets != NULL)
 			{
+				CDControlWidget *cw = pControlWidgets->data;
 				//g_print ("ctrl (%d widgets)\n", iNbControlledWidgets);
-				if (pControlContainer == (pFrameVBox ? pFrameVBox : pGroupBox))
+				if (cw->pControlContainer == (pFrameVBox ? pFrameVBox : pGroupBox))
 				{
 					//g_print ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
-					iNbControlledWidgets --;
-					if (iFirstSensitiveWidget > 0)
-						iFirstSensitiveWidget --;
+					cw->iNbControlledWidgets --;
+					if (cw->iFirstSensitiveWidget > 0)
+						cw->iFirstSensitiveWidget --;
 					
 					GtkWidget *w = (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox);
-					if (iFirstSensitiveWidget == 0 && iNbSensitiveWidgets > 0)
+					if (cw->iFirstSensitiveWidget == 0 && cw->iNbSensitiveWidgets > 0)  // on est dans la zone des widgets sensitifs.
 					{
 						//g_print (" => sensitive\n");
-						iNbSensitiveWidgets --;
+						cw->iNbSensitiveWidgets --;
 						if (GTK_IS_EXPANDER (w))
 							gtk_expander_set_expanded (GTK_EXPANDER (w), TRUE);
 					}
@@ -1745,6 +1808,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						//g_print (" => unsensitive\n");
 						if (!GTK_IS_EXPANDER (w))
 							gtk_widget_set_sensitive (w, FALSE);
+					}
+					if (cw->iFirstSensitiveWidget == 0 && cw->iNbControlledWidgets == 0)
+					{
+						pControlWidgets = g_list_delete_link (pControlWidgets, pControlWidgets);
+						g_free (cw);
 					}
 				}
 			}
@@ -1821,21 +1889,28 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					{
 						_allocate_new_buffer;
 						data[0] = pKeyBox;
-						data[1] = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
+						data[1] = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
 						if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
 							iNbControlledWidgets = g_ascii_strtod (pAuthorizedValuesList[0], NULL);
 						else
 							iNbControlledWidgets = 1;
 						data[2] = GINT_TO_POINTER (iNbControlledWidgets);
 						g_signal_connect (G_OBJECT (pOneWidget), "toggled", G_CALLBACK(_cairo_dock_toggle_control_button), data);
+						
+						g_object_set_data (G_OBJECT (pKeyBox), "nb-ctrl-widgets", GINT_TO_POINTER (iNbControlledWidgets));
+						g_object_set_data (G_OBJECT (pKeyBox), "one-widget", pOneWidget);
+						
 						if (! bValue)  // les widgets suivants seront inactifs.
 						{
-							iNbSensitiveWidgets = 0;
-							iFirstSensitiveWidget = 1;
-							pControlContainer = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
-						}
-						else
-							iNbControlledWidgets = 0;
+							CDControlWidget *cw = g_new0 (CDControlWidget, 1);
+							pControlWidgets = g_list_prepend (pControlWidgets, cw);
+							cw->iNbSensitiveWidgets = 0;
+							cw->iNbControlledWidgets = iNbControlledWidgets;
+							cw->iFirstSensitiveWidget = 1;
+							cw->pControlContainer = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
+						}  // sinon le widget suivant est sensitif, donc rien a faire.
+						///else
+						///	iNbControlledWidgets = 0;
 					}
 					
 					_pack_subwidget (pOneWidget);
@@ -2132,7 +2207,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				_allocate_new_buffer;
 				data[0] = pKeyBox;
-				data[1] = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
+				data[1] = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
 				iNbControlledWidgets = 9;
 				data[2] = GINT_TO_POINTER (iNbControlledWidgets);
 				iNbControlledWidgets --;  // car dans cette fonction, on ne compte pas le separateur.
@@ -2145,14 +2220,17 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					gchar *cName = NULL;
 					gtk_tree_model_get (model, &iter,
 						CAIRO_DOCK_MODEL_RESULT, &cName, -1);
-					if (! cName || strcmp (cName, "personnal") != 0)
+					if (! cName || strcmp (cName, "personnal") != 0)  // widgets suivants inactifs.
 					{
-						iNbSensitiveWidgets = 0;
-						iFirstSensitiveWidget = 1;
-						pControlContainer = pFrameVBox != NULL ? pFrameVBox : pGroupBox;
+						CDControlWidget *cw = g_new0 (CDControlWidget, 1);
+						pControlWidgets = g_list_prepend (pControlWidgets, cw);
+						cw->iNbControlledWidgets = iNbControlledWidgets;
+						cw->iNbSensitiveWidgets = 0;
+						cw->iFirstSensitiveWidget = 1;
+						cw->pControlContainer = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
 					}
-					else
-						iNbControlledWidgets = 0;
+					///else  // widgets sensitifs donc rien a faire.
+					///	iNbControlledWidgets = 0;
 					g_free (cName);
 				}
 			}
@@ -2338,8 +2416,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY :  // a list of strings with possibility to select a non-existing one.
 				if ((iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE) && pAuthorizedValuesList == NULL)
 				{
-					pControlContainer = NULL;
-					iNbControlledWidgets = 0;
+					///pControlContainer = NULL;
+					///iNbControlledWidgets = 0;
 					break;
 				}
 				cValue = g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, NULL, NULL);  // nous permet de recuperer les ';' aussi.
@@ -2410,10 +2488,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
 					if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE)
 					{
-						pControlContainer = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
 						_allocate_new_buffer;
 						data[0] = pKeyBox;
-						data[1] = pControlContainer;
+						data[1] = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
 						if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST)
 						{
 							iNbControlledWidgets = k;
@@ -2429,6 +2506,14 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_control_combo_selective), data);
 							//g_print ("CONTROL : %d,%d,%d\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
 						}
+						g_object_set_data (G_OBJECT (pKeyBox), "nb-ctrl-widgets", GINT_TO_POINTER (iNbControlledWidgets));
+						g_object_set_data (G_OBJECT (pKeyBox), "one-widget", pOneWidget);
+						CDControlWidget *cw = g_new0 (CDControlWidget, 1);
+						pControlWidgets = g_list_prepend (pControlWidgets, cw);
+						cw->pControlContainer = (pFrameVBox != NULL ? pFrameVBox : pGroupBox);
+						cw->iNbControlledWidgets = iNbControlledWidgets;
+						cw->iFirstSensitiveWidget = iFirstSensitiveWidget;
+						cw->iNbSensitiveWidgets = iNbSensitiveWidgets;
 						//g_print (" pControlContainer:%x\n", pControlContainer);
 					}
 				}
@@ -2964,21 +3049,23 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						g_free (cValue);
 					
 					
-					if (iNbControlledWidgets > 0 && pControlContainer != NULL)
+					///if (iNbControlledWidgets > 0 && pControlContainer != NULL)
+					if (pControlWidgets != NULL)
 					{
 						cd_debug ("ctrl\n");
-						if (pControlContainer == pGroupBox)
+						CDControlWidget *cw = pControlWidgets->data;
+						if (cw->pControlContainer == pGroupBox)
 						{
-							cd_debug ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", iNbControlledWidgets, iFirstSensitiveWidget, iNbSensitiveWidgets);
-							iNbControlledWidgets --;
-							if (iFirstSensitiveWidget > 0)
-								iFirstSensitiveWidget --;
+							cd_debug ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", cw->iNbControlledWidgets, cw->iFirstSensitiveWidget, cw->iNbSensitiveWidgets);
+							cw->iNbControlledWidgets --;
+							if (cw->iFirstSensitiveWidget > 0)
+								cw->iFirstSensitiveWidget --;
 							
 							GtkWidget *w = pExternFrame;
-							if (iFirstSensitiveWidget == 0 && iNbSensitiveWidgets > 0)
+							if (cw->iFirstSensitiveWidget == 0 && cw->iNbSensitiveWidgets > 0)
 							{
 								cd_debug (" => sensitive\n");
-								iNbSensitiveWidgets --;
+								cw->iNbSensitiveWidgets --;
 								if (GTK_IS_EXPANDER (w))
 									gtk_expander_set_expanded (GTK_EXPANDER (w), TRUE);
 							}
@@ -3039,7 +3126,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	g_free (cGroupComment);  // cSmallGroupIcon et cDisplayedGroupName pointaient dessus.
 	g_free (pKeyList);  // on libere juste la liste de chaines, pas les chaines a l'interieur.
 	
-	if (iNbControlledWidgets > 0)
+	if (pControlWidgets != NULL)
 		cd_warning ("this conf file has an invalid combo list somewhere !");
 	
 	return pGroupBox;

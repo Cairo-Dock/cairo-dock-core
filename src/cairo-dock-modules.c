@@ -53,6 +53,8 @@
 #include "cairo-dock-internal-views.h"
 #include "cairo-dock-modules.h"
 
+CairoDockModuleInstance *g_pCurrentModule = NULL;
+
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
@@ -1017,7 +1019,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	CairoDesklet *pDesklet = NULL;
 	Icon *pIcon = NULL;
 	
-	if (pMinimalConfig->iDesiredIconWidth > 0)  // le module a une icone, c'est donc une applet.
+	if (pMinimalConfig->iDesiredIconWidth > -1)  // le module a une icone, c'est donc une applet.
 	{
 		pInstance->bCanDetach = pMinimalConfig->deskletAttribute.iDeskletWidth > 0;
 		pModule->bCanDetach = pInstance->bCanDetach;  // pas encore clair ...

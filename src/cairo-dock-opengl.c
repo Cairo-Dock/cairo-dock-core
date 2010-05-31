@@ -38,8 +38,9 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-opengl.h"
 
-extern CairoDockGLConfig g_openglConfig;
-extern gboolean g_bUseOpenGL;
+CairoDockGLConfig g_openglConfig;
+gboolean g_bUseOpenGL = FALSE;
+
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;

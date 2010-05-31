@@ -62,10 +62,11 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-icons.h"
 
+int g_iNbNonStickyLaunchers = 0;
+
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gchar *g_cCurrentLaunchersPath;
 extern gboolean g_bUseOpenGL;
-extern int g_iNbNonStickyLaunchers;
 
 static GList *s_DetachedLaunchersList = NULL;
 

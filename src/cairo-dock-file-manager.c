@@ -35,7 +35,7 @@
 #include "cairo-dock-X-utilities.h"  // cairo_dock_property_is_present_on_root
 #include "cairo-dock-file-manager.h"
 
-extern CairoDockDesktopEnv g_iDesktopEnv;
+CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
 static CairoDockDesktopEnvBackend *s_pEnvBackend = NULL;
 

@@ -42,7 +42,7 @@ num screen = 0
 #F-[Visibility of the main dock;gtk-find]
 frame_visi =
 
-#Y-[Always on top;0;0;Reserve space for the dock;0;0;Keep the dock below;2;4;Hide the dock when it overlaps the current window;1;5;Hide the dock whenever it overlaps any window;1;5;Keep the dock hidden;1;5;Pop-up on shortcut;6;1] Visibility:
+#Y-[Always on top;0;0;Reserve space for the dock;0;0;Keep the dock below;2;2;Hide the dock when it overlaps the current window;1;3;Hide the dock whenever it overlaps any window;1;3;Keep the dock hidden;1;3;Pop-up on shortcut;4;1] Visibility:
 #{Modes are sorted from the most intrusive to the less intrusive.
 #When the dock is hidden or below a window, place the mouse on the screen's border to call it back.
 #When the dock pops up on shortcut, it will appear at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
@@ -54,7 +54,11 @@ sep_visi =
 #L-[Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
 hide effect = Move down
 
-#l-[Hit the screen's border;Hit where the dock is;Hit the screen's corner;Hit a zone] How to call the dock back:
+#i-[0;1500] Delay before the dock unhides itself:
+#{in ms. 0 means no delay.}
+unhide delay = 0
+
+#Y-[Hit the screen's border;0;0;Hit where the dock is;0;0;Hit the screen's corner;0;0;Hit a zone;1;2] How to call the dock back:
 callback = 0
 
 #j-[2;999] Size of the zone :
@@ -62,10 +66,6 @@ zone size = 80;10
 
 #S- Image to display on the zone :
 callback image = 
-
-#i-[0;1500] Delay before the dock unhides itself:
-#{in ms. 0 means no delay.}
-unhide delay = 0
 
 #k- Keyboard shortcut to pop-up the dock:
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}

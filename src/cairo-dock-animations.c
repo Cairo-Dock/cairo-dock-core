@@ -54,10 +54,11 @@
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-animations.h"
 
+CairoDockHidingEffect *g_pHidingBackend = NULL;
+CairoDockHidingEffect *g_pKeepingBelowBackend = NULL;
+
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
-extern CairoDockHidingEffect *g_pHidingBackend;
-extern CairoDockHidingEffect *g_pKeepingBelowBackend;
 extern CairoDockGLConfig g_openglConfig;
 
 static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gboolean *bContinueAnimation)
@@ -67,7 +68,7 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 	if (pDock->iFadeCounter >= mySystem.iHideNbSteps)
 	{
 		pDock->bFadeInOut = FALSE;
-		g_print ("set below\n");
+		//g_print ("set below\n");
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		// si fenetre maximisee, on met direct iFadeCounter a 0.  // malheureusement X met du temps a faire passer le dock derriere, et ca donne un "sursaut" :-/
 		///if (cairo_dock_search_window_covering_dock (pDock, FALSE, FALSE) != NULL)
@@ -93,7 +94,7 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 
 void cairo_dock_pop_up (CairoDock *pDock)
 {
-	g_print ("%s (%d)\n", __func__, pDock->bIsBelow);
+	//g_print ("%s (%d)\n", __func__, pDock->bIsBelow);
 	if (pDock->bIsBelow)
 	{
 		cairo_dock_remove_notification_func_on_container (CAIRO_CONTAINER (pDock),
@@ -102,7 +103,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 			NULL);
 		pDock->iFadeCounter = 0;
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		g_print ("set above\n");
+		//g_print ("set above\n");
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);  // keep above
 		pDock->bIsBelow = FALSE;
 	}
@@ -110,7 +111,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 
 void cairo_dock_pop_down (CairoDock *pDock)
 {
-	g_print ("%s (%d, %d)\n", __func__, pDock->bIsBelow, pDock->container.bInside);
+	//g_print ("%s (%d, %d)\n", __func__, pDock->bIsBelow, pDock->container.bInside);
 	/**if (pDock->bIsMainDock && cairo_dock_get_nb_dialog_windows () != 0)
 		return FALSE;*/
 	if (! pDock->bIsBelow && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->container.bInside)
@@ -129,7 +130,7 @@ void cairo_dock_pop_down (CairoDock *pDock)
 		}
 		else
 		{
-			g_print ("set below\n");
+			//g_print ("set below\n");
 			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 		}
 		pDock->bIsBelow = TRUE;
@@ -534,7 +535,7 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	
 	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && bNoMoreDemandingAttention && ! pDock->bIsBelow && ! pDock->container.bInside)
 	{
-		g_print ("plus de raison d'etre devant\n");
+		//g_print ("plus de raison d'etre devant\n");
 		cairo_dock_pop_down (pDock);
 	}
 	
@@ -759,7 +760,7 @@ void cairo_dock_start_growing (CairoDock *pDock)
 
 void cairo_dock_start_hiding (CairoDock *pDock)
 {
-	g_print ("%s (%d)\n", __func__, pDock->bIsHiding);
+	//g_print ("%s (%d)\n", __func__, pDock->bIsHiding);
 	if (! pDock->bIsHiding && ! pDock->container.bInside)  // rien de plus desagreable que le dock qui se cache quand on est dedans.
 	{
 		pDock->bIsShowing = FALSE;
@@ -781,7 +782,7 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 
 void cairo_dock_start_showing (CairoDock *pDock)
 {
-	g_print ("%s (%d)\n", __func__, pDock->bIsShowing);
+	//g_print ("%s (%d)\n", __func__, pDock->bIsShowing);
 	if (! pDock->bIsShowing)  // on lance l'animation.
 	{
 		pDock->bIsShowing = TRUE;

@@ -43,6 +43,10 @@ struct _CairoDockDockManager {
 
 void cairo_dock_init_dock_manager (void);
 
+void cairo_dock_load_visible_zone (const gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha);
+
+void cairo_dock_reset_docks_table (void);
+
 
 /** Create a new root dock.
 * @param cDockName name of the dock, used to identify it quickly. If the name is already used, the corresponding dock is returned.
@@ -72,8 +76,6 @@ CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDoc
 */
 void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName);
 
-
-void cairo_dock_reset_docks_table (void);
 
 /** Destroy all docks and all icons contained inside, and free all allocated ressources. Applets and Taskbar are stopped beforehand.
 */

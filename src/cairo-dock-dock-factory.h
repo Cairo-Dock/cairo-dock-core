@@ -25,6 +25,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-load.h"
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
@@ -214,17 +215,17 @@ struct _CairoDock {
 	gboolean bCanDrop;
 	/// set by the view to say if the mouse is currently on icons, on the egde, or outside of icons.
 	CairoDockMousePositionType iMousePositionType;
-	/// minimum width of the dock.
+	/// width of the dock at rest.
 	gint iMinDockWidth;
-	/// minimum height of the dock.
+	/// height of the dock at rest.
 	gint iMinDockHeight;
 	/// maximum width of the dock.
 	gint iMaxDockWidth;
 	/// maximum height of the dock.
 	gint iMaxDockHeight;
-	/// width of background decorations.
+	/// width of background decorations, set by the renderer.
 	gint iDecorationsWidth;
-	/// height of background decorations.
+	/// height of background decorations, set by the renderer.
 	gint iDecorationsHeight;
 	/// maximal magnitude of the zoom, between 0 and 1.
 	gdouble fMagnitudeMax;
@@ -241,6 +242,8 @@ struct _CairoDock {
 	gboolean bWMIconsNeedUpdate;
 	GLuint iRedirectedTexture;
 	GLuint iFboId;
+	
+	CairoDockImageBuffer backgroundBuffer;
 	gpointer reserved[2];
 };
 

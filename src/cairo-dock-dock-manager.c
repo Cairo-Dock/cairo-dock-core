@@ -68,10 +68,13 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-manager.h"
 
-extern CairoDock *g_pMainDock;
+CairoDock *g_pMainDock;  // pointeur sur le dock principal.
+gboolean g_bKeepAbove = FALSE;
+CairoDockImageBuffer g_pVisibleZoneBuffer;
+CairoDockImageBuffer g_pDockBackgroundBuffer;  /// a virer
+
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
-extern gboolean g_bKeepAbove;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static GHashTable *s_hDocksTable = NULL;  // table des docks existant.
@@ -95,11 +98,46 @@ void cairo_dock_init_dock_manager (void)
 			g_str_equal,
 			g_free,
 			NULL);  // donc on peut utiliser g_hash_table_remove plutot que g_hash_table_steal.
-	
+		
 		cairo_dock_register_notification (CAIRO_DOCK_RENDER_DOCK,
 			(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
 			CAIRO_DOCK_RUN_FIRST, NULL);
-		}
+	}
+	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&g_pDockBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));  /// a virer ...
+	
+	g_pMainDock = NULL;
+}
+
+// LOAD //
+void cairo_dock_load_visible_zone (const gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha)
+{
+	cairo_dock_unload_image_buffer (&g_pVisibleZoneBuffer);
+	
+	cairo_dock_load_image_buffer_full (&g_pVisibleZoneBuffer,
+		cVisibleZoneImageFile,
+		iVisibleZoneWidth,
+		iVisibleZoneHeight,
+		CAIRO_DOCK_FILL_SPACE,
+		fVisibleZoneAlpha);
+}
+
+
+// UNLOAD //
+static gboolean _cairo_dock_free_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	cairo_dock_free_dock (pDock);
+	return TRUE;
+}
+void cairo_dock_reset_docks_table (void)
+{
+	g_hash_table_foreach_remove (s_hDocksTable, (GHRFunc) _cairo_dock_free_one_dock, NULL);  // pour pouvoir enlever les elements tout en parcourant la table.
+	g_pMainDock = NULL;
+	
+	g_list_free (s_pRootDockList);
+	s_pRootDockList = NULL;
+	
+	cairo_dock_unload_image_buffer (&g_pVisibleZoneBuffer);
 }
 
 
@@ -223,18 +261,6 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 	cairo_dock_trigger_refresh_launcher_gui ();
 }
 
-static gboolean _cairo_dock_free_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
-{
-	cairo_dock_free_dock (pDock);
-	return TRUE;
-}
-void cairo_dock_reset_docks_table (void)
-{
-	g_hash_table_foreach_remove (s_hDocksTable, (GHRFunc) _cairo_dock_free_one_dock, NULL);  // pour pouvoir enlever les elements tout en parcourant la table.
-	g_list_free (s_pRootDockList);
-	s_pRootDockList = NULL;
-	g_pMainDock = NULL;
-}
 
 static void _cairo_dock_stop_polling_screen_edge (void)
 {
@@ -1049,14 +1075,14 @@ static gboolean _cairo_dock_poll_screen_edge (gpointer data)  // thanks to Smidg
 void cairo_dock_start_polling_screen_edge (void)
 {
 	s_iNbPolls ++;
-	g_print ("%s (%d)\n", __func__, s_iNbPolls);
+	cd_debug ("%s (%d)", __func__, s_iNbPolls);
 	if (s_iSidPollScreenEdge == 0)
 		s_iSidPollScreenEdge = g_timeout_add (200, (GSourceFunc) _cairo_dock_poll_screen_edge, NULL);
 }
 
 void cairo_dock_stop_polling_screen_edge (void)
 {
-	g_print ("%s (%d)\n", __func__, s_iNbPolls);
+	cd_debug ("%s (%d)", __func__, s_iNbPolls);
 	s_iNbPolls --;
 	if (s_iNbPolls <= 0)
 	{

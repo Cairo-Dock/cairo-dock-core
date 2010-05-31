@@ -42,11 +42,10 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-container.h"
 
+gboolean g_bSticky = TRUE;
+gboolean g_bUseGlitz = FALSE;
+
 extern CairoDock *g_pMainDock;
-
-extern gboolean g_bSticky;
-
-extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
 
 

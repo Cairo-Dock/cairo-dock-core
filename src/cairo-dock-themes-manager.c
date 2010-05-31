@@ -49,16 +49,17 @@
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "list.conf"
 
-extern gchar *g_cCairoDockDataDir;
-extern gchar *g_cCurrentThemePath;
-extern gchar *g_cExtrasDirPath;
-extern gchar *g_cThemesDirPath;
-extern gchar *g_cCurrentLaunchersPath;
-extern gchar *g_cCurrentIconsPath;
-extern gchar *g_cCurrentPlugInsPath;
-extern gchar *g_cThemeServerAdress;
-extern gchar *g_cConfFile;
-extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
+gchar *g_cCairoDockDataDir = NULL;  // le repertoire racine contenant tout.
+gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
+gchar *g_cExtrasDirPath = NULL;  // le chemin vers le repertoire des extra.
+gchar *g_cThemesDirPath = NULL;  // le chemin vers le repertoire des themes.
+gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs du theme courant.
+gchar *g_cCurrentIconsPath = NULL;  // le chemin vers le repertoire des icones du theme courant.
+gchar *g_cCurrentPlugInsPath = NULL;  // le chemin vers le repertoire des plug-ins du theme courant.
+gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
+gchar *g_cThemeServerAdress = NULL;
+int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
+
 
 extern CairoDock *g_pMainDock;
 extern gboolean g_bEasterEggs;
@@ -1267,6 +1268,7 @@ void cairo_dock_load_current_theme (void)
 
 void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath)
 {
+	//\___________________ On initialise les chemins de l'appli.
 	g_cCairoDockDataDir = cRootDataDirPath;  // le repertoire racine contenant tout.
 	_check_dir (g_cCairoDockDataDir);
 	g_cCurrentThemePath = cCurrentThemeDirPath;  // le chemin vers le repertoire du theme courant.
@@ -1284,5 +1286,9 @@ void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar 
 	_check_dir (g_cCurrentPlugInsPath);
 	g_cConfFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
 	
+	//\___________________ On initialise le gestionnaire de download.
 	curl_global_init (CURL_GLOBAL_DEFAULT);
+	
+	//\___________________ On initialise les numeros de version.
+	cairo_dock_get_version_from_string (CAIRO_DOCK_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
 }

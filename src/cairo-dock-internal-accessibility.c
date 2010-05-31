@@ -137,7 +137,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 		if (pAccessibility->iZoneHeight < 2)
 			pAccessibility->iZoneHeight = 2;
 		pAccessibility->cZoneImage = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "callback image", &bFlushConfFileNeeded, 0, "Background", NULL);
-		pAccessibility->fZoneAlpha = .6;
+		pAccessibility->fZoneAlpha = 1.;  // on laisse l'utilisateur definir la transparence qu'il souhaite directement dans l'image.
 	}
 	
 	//\____________________ Autres parametres.

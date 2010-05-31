@@ -1551,7 +1551,7 @@ msgstr "Image à afficher sur la zone :"
 
 #: ../data/messages:235
 msgid "in ms. 0 means no delay."
-msgstr "en ms. Indiquez 0 pour enlever le délai."
+msgstr "en ms. Mettez 0 pour n'avoir aucun délai."
 
 #: ../data/messages:237
 msgid "Delay before the dock unhides itself:"
