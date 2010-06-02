@@ -55,9 +55,7 @@
 #define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 200
 
 CairoDockDesktopGeometry g_desktopGeometry;
-extern CairoDock *g_pMainDock;
-
-extern gboolean g_bUseOpenGL;
+extern CairoContainer *g_pPrimaryContainer;
 //extern int g_iDamageEvent;
 
 static Display *s_XDisplay = NULL;
@@ -88,26 +86,12 @@ static inline void _cairo_dock_retrieve_current_desktop_and_viewport (void)
 
 static gboolean _on_change_current_desktop_viewport (void)
 {
-	CairoDock *pDock = g_pMainDock;
-	
 	_cairo_dock_retrieve_current_desktop_and_viewport ();
 	
 	// on propage la notification.
 	cairo_dock_notify (CAIRO_DOCK_DESKTOP_CHANGED);
 	
-	// on gere le cas delicat de X qui nous fait sortir du dock.
-	if (pDock && ! pDock->bIsShrinkingDown && ! pDock->bIsGrowingUp)
-	{
-		if (pDock->container.bIsHorizontal)
-			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
-		else
-			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
-		//g_print ("on met a jour de force\n");
-		cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
-		if (pDock->container.bInside)
-			return TRUE;
-		//g_print (">>> %d;%d, %dx%d\n", pDock->container.iMouseX, pDock->container.iMouseY,pDock->container.iWidth,  pDock->container.iHeight);
-	}
+	// on gere le cas delicat de X qui nous fait sortir du dock plus tard.
 	return FALSE;
 }
 
@@ -125,11 +109,6 @@ static void _on_change_desktop_geometry (void)
 	{
 		cd_message ("resolution alteree");
 		
-		/*if (myPosition.bUseXinerama)
-		{
-			cairo_dock_get_screen_offsets (myPosition.iNumScreen, &g_pMainDock->iScreenOffsetX, &g_pMainDock->iScreenOffsetY);  /// on le fait ici pour avoir g_desktopGeometry.iScreenWidth et g_desktopGeometry.iScreenHeight, mais il faudrait en faire un parametre par dock...
-		}*/
-		
 		cairo_dock_reposition_root_docks (FALSE);  // main dock compris. Se charge de Xinerama.
 	}
 	
@@ -139,13 +118,20 @@ static void _on_change_desktop_geometry (void)
 	cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);
 }
 
+static void _check_mouse_outside (CairoDock *pDock, gpointer data)
+{
+	if (pDock->container.bIsHorizontal)
+		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
+	else
+		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
+	cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
+}
 static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 {
 	static XEvent event;
 	static gboolean bCheckMouseIsOutside = FALSE;
 	
-	CairoDock *pDock = g_pMainDock;
-	if (!pDock)  // peut arriver en cours de chargement d'un theme.
+	if (!g_pPrimaryContainer)  // peut arriver en cours de chargement d'un theme.
 		return TRUE;
 	
 	long event_mask = 0xFFFFFFFF;  // on les recupere tous, ca vide la pile au fur et a mesure plutot que tout a la fin.
@@ -156,11 +142,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 	{
 		//g_print ("bCheckMouseIsOutside\n");
 		bCheckMouseIsOutside = FALSE;
-		if (pDock->container.bIsHorizontal)
-			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
-		else
-			gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
-		cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
+		cairo_dock_foreach_root_docks ((GFunc)_check_mouse_outside, NULL);
 	}
 	
 	while (XCheckMaskEvent (s_XDisplay, event_mask, &event))
@@ -186,6 +168,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 				else if (event.xproperty.atom == s_aNetCurrentDesktop || event.xproperty.atom == s_aNetDesktopViewport)
 				{
 					bCheckMouseIsOutside = _on_change_current_desktop_viewport ();  // -> CAIRO_DOCK_DESKTOP_CHANGED
+					bCheckMouseIsOutside = TRUE;  // au prochain passage, on testera que X ne nous a pas fait sortir du dock sans raison.
 				}
 				else if (event.xproperty.atom == s_aNetNbDesktops)
 				{

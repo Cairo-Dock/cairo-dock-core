@@ -105,40 +105,79 @@ fi
 #set_value "System"		"modules"				"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
 
 set_current_conf_file "plug-ins/Animated-icons/Animated-icons.conf"
-set_value "Rotation"	"color"					"1;1;1;0"
-
-set_current_conf_file "plug-ins/mail/mail.conf"
-set_value_on_all_groups		"username"				""
-set_value_on_all_groups		"password"				""
-
-set_current_conf_file "plug-ins/slider/slider.conf"
-set_value "Configuration"	"directory"				""
-
-set_current_conf_file "plug-ins/stack/stack.conf"
-set_value "Configuration"	"stack dir"				""
+set_value "Rotation"	"color"							"1;1;1;0"
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
 set_value "Configuration"	"persistent"				""
+
+set_current_conf_file "plug-ins/clock/clock.conf"
+set_value "Icon"				"name"					""
+desklet = get_value "Desklet" "initially detached"
+if test $desklet = "false"; then
+	set_value "Configuration"		"show date"			2
+	set_value "Configuration"		"show seconds"		false
+fi
 
 set_current_conf_file "plug-ins/dustbin/dustbin.conf"
 set_value "Module"		"additionnal directories"		""
 set_value "Module"		"alternative file browser"		""
 
+set_current_conf_file "plug-ins/GMenu/GMenu.conf"
+set_value "Icon"			"name"						"Applications Menu"
+set_value "Configuration"	"has icons"					true
+set_value "Configuration"	"show recent"				true
+
+set_current_conf_file "plug-ins/mail/mail.conf"
+set_value_on_all_groups		"username"					""
+set_value_on_all_groups		"password"					""
+
 set_current_conf_file "plug-ins/Quick Browser/quick-browser.conf"
-set_value "Configuration"		"dir path"			"~"
+set_value "Icon"			"name"						""
+set_value "Configuration"	"dir path"					""
+
+set_current_conf_file "plug-ins/dock-rendering/rendering.conf"
+set_value "Inclinated Plane" "vanishing point"			300
+set_value "Curve"			"curvature"					70
+set_value "Parabolic"		"curvature"					".3"
+set_value "Parabolic"		"ratio"						5
+set_value "SimpleSlide"		"simple_iconGapX"			50	
+set_value "SimpleSlide"		"simple_fScaleMax"			"1.5"
+set_value "SimpleSlide"		"simple_arrowShift"			0
+set_value "SimpleSlide"		"simple_arrowHeight"		15
+set_value "SimpleSlide"		"simple_arrowWidth"			30
+
+set_current_conf_file "plug-ins/RSSreader/RSSreader.conf"
+set_value "Icon"			"name"						""
+set_value "Configuration"	"url_rss_feed"				""
 
 set_current_conf_file "plug-ins/shortcuts/shortcuts.conf"
-set_value "Module"			"list network"			false
-set_value "Module"			"use separator"			false
-set_value "Module"			"disk usage"			4
-set_value "Module"			"check interval"		10
+set_value "Module"			"list network"				false
+set_value "Module"			"use separator"				false
+set_value "Module"			"disk usage"				4
+set_value "Module"			"check interval"			10
 
-set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
-set_value "Configuration"	"initial gamma"				0
+set_current_conf_file "plug-ins/slider/slider.conf"
+set_value "Configuration"	"directory"					""
+
+set_current_conf_file "plug-ins/stack/stack.conf"
+set_value "Configuration"	"stack dir"					""
+
+set_current_conf_file "plug-ins/switcher/switcher.conf"
+set_value "Icon"			"name"						""
+set_value "Configuration"	"preserve ratio"			false
+
+set_current_conf_file "plug-ins/weather/weather.conf"
+set_value "Icon"			"name"						""
+set_value "Configuration"	"nb days"					5
+set_value "Configuration"	"check interval"			15
+set_value "Configuration"	"IS units"					true
 
 set_current_conf_file "plug-ins/weblets/weblets.conf"
 set_value "Configuration"	"weblet URI"				"http://www.google.com"
 set_value "Configuration"	"uri list"				""
+
+set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
+set_value "Configuration"	"initial gamma"				0
 
 echo ""
 echo "le theme a ete mis a jour."

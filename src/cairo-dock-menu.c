@@ -310,11 +310,8 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, CairoContainer *pContainer
 	//cairo_dock_on_delete (pDock->container.pWidget, NULL, pDock);
 	Icon *pIcon = NULL;
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
-	{
-		pIcon = cairo_dock_get_dialogless_icon ();
-		pContainer = CAIRO_CONTAINER (g_pMainDock);
-	}
-	else
+		pIcon = cairo_dock_get_dialogless_icon (CAIRO_DOCK (pContainer));
+	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
 		pIcon = CAIRO_DESKLET (pContainer)->pIcon;
 	
 	int answer = cairo_dock_ask_question_and_wait (_("Quit Cairo-Dock?"), pIcon, pContainer);
@@ -476,7 +473,10 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 				bDestroyIcons = FALSE;
 		}
 		if (!bDestroyIcons)
-			cairo_dock_remove_icons_from_dock (icon->pSubDock, g_pMainDock, CAIRO_DOCK_MAIN_DOCK_NAME);
+		{
+			const gchar *cDockName = cairo_dock_search_dock_name (pDock);
+			cairo_dock_remove_icons_from_dock (icon->pSubDock, pDock, cDockName);
+		}
 		cairo_dock_destroy_dock (icon->pSubDock, (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL ? icon->cClass : icon->cName));
 		icon->pSubDock = NULL;
 	}
@@ -954,7 +954,7 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 	if (cDesktopFilePath != NULL)
 	{
 		cd_message ("found desktop file : %s\n", cDesktopFilePath);
-		cairo_dock_add_new_launcher_by_uri (cDesktopFilePath, g_pMainDock, CAIRO_DOCK_LAST_ORDER);
+		cairo_dock_add_new_launcher_by_uri (cDesktopFilePath, g_pMainDock, CAIRO_DOCK_LAST_ORDER);  // on l'ajoute dans le main dock.
 	}
 	else
 	{
@@ -1442,7 +1442,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		_add_entry_in_menu (_("Close all"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-close.png", _cairo_dock_close_class, menu);
 	}
 	
-	if (g_pMainDock != NULL && (CAIRO_DOCK_IS_APPLET (icon) || CAIRO_DOCK_IS_DESKLET (pContainer)))
+	if (CAIRO_DOCK_IS_APPLET (icon) || CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		Icon *pIconModule;
 		if (CAIRO_DOCK_IS_APPLET (icon))

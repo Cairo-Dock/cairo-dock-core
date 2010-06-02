@@ -109,15 +109,17 @@ struct _CairoContainer {
  // WINDOW //
 ///////////
 
-GtkWidget *cairo_dock_create_container_window_full (gboolean bOpenGLWindow);
+GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow);
 
-/** Create a GTK window that fits a CairoContainer (with transparency among others).
+/** Initialize a Container : create a GTK window with transparency and OpenGL support.
 *@return the newly allocated GTK window.
 */
-#define cairo_dock_create_container_window(...) cairo_dock_create_container_window_full (TRUE)
-/** Same as above, but without an OpenGL context.
+#define cairo_dock_init_container(pContainer) cairo_dock_init_container_full (pContainer, TRUE)
+/** Same as above, but with no OpenGL support.
  */
-#define cairo_dock_create_container_window_no_opengl(...) cairo_dock_create_container_window_full (FALSE)
+#define cairo_dock_init_container_no_opengl(pContainer) cairo_dock_init_container_full (pContainer, FALSE)
+
+void cairo_dock_finish_container (CairoContainer *pContainer);
 
 /** Apply the scren colormap to a window, providing it transparency.
 *@param pWidget a GTK window.

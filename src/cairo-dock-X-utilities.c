@@ -41,7 +41,6 @@
 #include "cairo-dock-X-utilities.h"
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
-extern CairoDock *g_pMainDock;
 
 static gboolean s_bUseXComposite = TRUE;
 static gboolean s_bUseXTest = TRUE;

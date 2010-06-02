@@ -79,7 +79,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName);
 
 /** Destroy all docks and all icons contained inside, and free all allocated ressources. Applets and Taskbar are stopped beforehand.
 */
-void cairo_dock_free_all_docks (void);
+void cairo_dock_free_all (void);
 
 
 /** Search the name of a Dock. It does a linear search in the table of Docks.

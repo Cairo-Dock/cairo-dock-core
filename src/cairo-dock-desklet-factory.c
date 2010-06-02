@@ -697,8 +697,7 @@ CairoDesklet *cairo_dock_new_desklet (void)
 	pDesklet->container.bDirectionUp = TRUE;
 	pDesklet->container.fRatio = 1;
 	
-	GtkWidget* pWindow = cairo_dock_create_container_window ();
-	pDesklet->container.pWidget = pWindow;
+	GtkWidget* pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDesklet));
 	
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-desklet");
 	gtk_widget_add_events( pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_FOCUS_CHANGE_MASK);
@@ -765,14 +764,11 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 		g_source_remove (pDesklet->iSidWriteSize);
 	if (pDesklet->iSidWritePosition != 0)
 		g_source_remove (pDesklet->iSidWritePosition);
-	if (pDesklet->container.iSidGLAnimation != 0)
-		g_source_remove (pDesklet->container.iSidGLAnimation);
 	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_STOP_DESKLET, pDesklet);
 	
 	cairo_dock_steal_interactive_widget_from_desklet (pDesklet);
 
-	gtk_widget_destroy (pDesklet->container.pWidget);
-	pDesklet->container.pWidget = NULL;
+	cairo_dock_finish_container (CAIRO_CONTAINER (pDesklet));
 	
 	if (pDesklet->pRenderer != NULL)
 	{

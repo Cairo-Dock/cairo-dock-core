@@ -66,7 +66,6 @@
 
 GLuint g_pGradationTexture[2]={0, 0};
 
-extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
 extern gchar *g_cCurrentThemePath;

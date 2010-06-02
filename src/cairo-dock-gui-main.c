@@ -1067,19 +1067,12 @@ static void on_click_activate_given_group (GtkToggleButton *button, CairoDockGro
 static void on_click_activate_current_group (GtkToggleButton *button, gpointer *data)
 {
 	CairoDockGroupDescription *pGroupDescription = s_pCurrentGroup;
+	on_click_activate_given_group (button, pGroupDescription);
 	
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
-	g_return_if_fail (pModule != NULL);
-	if (pModule->pInstancesList == NULL)
+	if (pGroupDescription->pActivateButton != NULL)  // on repercute le changement sur le bouton d'activation du groupe.
 	{
-		cairo_dock_activate_module_and_load (pGroupDescription->cGroupName);
-	}
-	else
-	{
-		cairo_dock_deactivate_module_and_unload (pGroupDescription->cGroupName);
-	}
-	if (pGroupDescription->pActivateButton != NULL)
-	{
+		CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
+		g_return_if_fail (pModule != NULL);
 		g_signal_handlers_block_by_func (pGroupDescription->pActivateButton, on_click_activate_given_group, pGroupDescription);
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), pModule->pInstancesList != NULL);
 		g_signal_handlers_unblock_by_func (pGroupDescription->pActivateButton, on_click_activate_given_group, pGroupDescription);

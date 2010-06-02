@@ -41,7 +41,7 @@
 CairoDockGLConfig g_openglConfig;
 gboolean g_bUseOpenGL = FALSE;
 
-extern CairoDock *g_pMainDock;
+extern CairoContainer *g_pPrimaryContainer;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bEasterEggs;
@@ -476,7 +476,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 		int iWidth, iHeight;
 		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 		if (pContainer == NULL)
-			pContainer = CAIRO_CONTAINER (g_pMainDock);
+			pContainer = g_pPrimaryContainer;
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
 		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pContainer->pWidget);
 		if (! gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
@@ -784,8 +784,8 @@ static void _reset_opengl_context (GtkWidget* pWidget, gpointer data)
 }
 void cairo_dock_set_gl_capabilities (GtkWidget *pWindow)
 {
-	gboolean bFirstContainer = (! g_pMainDock || ! g_pMainDock->container.pWidget);
-	GdkGLContext *pMainGlContext = (bFirstContainer ? NULL : gtk_widget_get_gl_context (g_pMainDock->container.pWidget));  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
+	gboolean bFirstContainer = (! g_pPrimaryContainer || ! g_pPrimaryContainer->pWidget);
+	GdkGLContext *pMainGlContext = (bFirstContainer ? NULL : gtk_widget_get_gl_context (g_pPrimaryContainer->pWidget));  // NULL si on est en train de creer la fenetre du main dock, ce qui nous convient.
 	gtk_widget_set_gl_capability (pWindow,
 		g_openglConfig.pGlConfig,
 		pMainGlContext,  // on partage les ressources entre les contextes.

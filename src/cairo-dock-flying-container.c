@@ -294,7 +294,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	g_return_val_if_fail (pFlyingIcon != NULL, NULL);
 	CairoFlyingContainer * pFlyingContainer = g_new0 (CairoFlyingContainer, 1);
 	pFlyingContainer->container.iType = CAIRO_DOCK_TYPE_FLYING_CONTAINER;
-	GtkWidget* pWindow = cairo_dock_create_container_window ();
+	GtkWidget* pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pFlyingContainer));
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
 	pFlyingContainer->container.pWidget = pWindow;
@@ -385,9 +385,7 @@ void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, C
 void cairo_dock_free_flying_container (CairoFlyingContainer *pFlyingContainer)
 {
 	cd_debug ("%s ()", __func__);
-	gtk_widget_destroy (pFlyingContainer->container.pWidget);  // enleve les signaux.
-	if (pFlyingContainer->container.iSidGLAnimation != 0)
-		g_source_remove (pFlyingContainer->container.iSidGLAnimation);
+	cairo_dock_finish_container (CAIRO_CONTAINER (pFlyingContainer));
 	g_free (pFlyingContainer);
 }
 

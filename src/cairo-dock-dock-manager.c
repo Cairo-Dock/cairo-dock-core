@@ -162,7 +162,7 @@ CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendere
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 	
 	//\__________________ On l'enregistre.
-	if (g_hash_table_size (s_hDocksTable) == 0)  // c'est le 1er (on pourrait aussi se baser sur son nom).
+	if (g_hash_table_size (s_hDocksTable) == 0)  // c'est le 1er.
 	{
 		pDock->bIsMainDock = TRUE;
 		g_pMainDock = pDock;
@@ -226,7 +226,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 	if (pDock == NULL)
 		return;
 	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
-	if (pDock->bIsMainDock)  // utiliser cairo_dock_free_all_docks ().
+	if (pDock->bIsMainDock)  // utiliser cairo_dock_free_all ().
 		return;
 	pDock->iRefCount --;
 	if (pDock->iRefCount > 0)
@@ -272,7 +272,7 @@ static void _cairo_dock_stop_polling_screen_edge (void)
 	s_iNbPolls = 0;
 }
 
-void cairo_dock_free_all_docks (void)
+void cairo_dock_free_all (void)
 {
 	if (g_pMainDock == NULL)
 		return ;

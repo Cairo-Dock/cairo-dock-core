@@ -77,8 +77,6 @@
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-factory.h"
 
-extern CairoDock *g_pMainDock;
-
 extern gchar *g_cCurrentLaunchersPath;
 
 extern gboolean g_bKeepAbove;
@@ -107,7 +105,7 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
 	//\__________________ On cree la fenetre GTK.
-	GtkWidget *pWindow = cairo_dock_create_container_window ();
+	GtkWidget *pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDock));
 	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 0);
 	pDock->container.pWidget = pWindow;
 	
@@ -240,14 +238,12 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	if (pDock->iSidUpdateWMIcons != 0)
 		g_source_remove (pDock->iSidUpdateWMIcons);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);
-	if (pDock->container.iSidGLAnimation != 0)
-		g_source_remove (pDock->container.iSidGLAnimation);
-
+	
 	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
 	g_list_free (pDock->icons);
 	pDock->icons = NULL;
 	
-	gtk_widget_destroy (pDock->container.pWidget);
+	cairo_dock_finish_container (CAIRO_CONTAINER (pDock));
 	
 	if (pDock->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDock->pShapeBitmap);

@@ -45,17 +45,17 @@
 gboolean g_bSticky = TRUE;
 gboolean g_bUseGlitz = FALSE;
 
-extern CairoDock *g_pMainDock;
+CairoContainer *g_pPrimaryContainer = NULL;
 extern gboolean g_bUseOpenGL;
 
 
 static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
 {
-	cd_debug ("pas de alt+f4\n");
+	cd_debug ("pas de alt+f4");
 	return TRUE;  // on empeche les ALT+F4 malheureux.
 }
 
-GtkWidget *cairo_dock_create_container_window_full (gboolean bOpenGLWindow)
+GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow)
 {
 	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	
@@ -78,9 +78,28 @@ GtkWidget *cairo_dock_create_container_window_full (gboolean bOpenGLWindow)
 	gtk_widget_set_app_paintable (pWindow, TRUE);
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (pWindow), TRUE);
+	
+	if (g_pPrimaryContainer == NULL)
+	{
+		g_print ("*** first container\n");
+		g_pPrimaryContainer = pContainer;
+	}
+	pContainer->pWidget = pWindow;
 	return pWindow;
 }
 
+void cairo_dock_finish_container (CairoContainer *pContainer)
+{
+	gtk_widget_destroy (pContainer->pWidget);  // enleve les signaux.
+	pContainer->pWidget = NULL;
+	if (pContainer->iSidGLAnimation != 0)
+	{
+		g_source_remove (pContainer->iSidGLAnimation);
+		pContainer->iSidGLAnimation = 0;
+	}
+	if (g_pPrimaryContainer == pContainer)
+		g_pPrimaryContainer = NULL;
+}
 
 void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
 {

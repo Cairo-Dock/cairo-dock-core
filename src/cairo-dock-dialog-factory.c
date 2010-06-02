@@ -52,7 +52,6 @@
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-dialog-factory.h"
 
-extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
 
@@ -285,7 +284,7 @@ static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 
 	//\________________ On construit la fenetre du dialogue.
 	//GtkWidget* pWindow = gtk_window_new (bInteractiveWindow ? GTK_WINDOW_TOPLEVEL : GTK_WINDOW_POPUP);  // les popups ne prennent pas le focus. En fait, ils ne sont meme pas controles par le WM.
-	GtkWidget* pWindow = cairo_dock_create_container_window_no_opengl ();
+	GtkWidget* pWindow = cairo_dock_init_container_no_opengl (CAIRO_CONTAINER (pDialog));
 	
 	pDialog->container.pWidget = pWindow;
 
@@ -568,10 +567,6 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	{
 		g_source_remove (pDialog->iSidAnimateText);
 	}
-	if (pDialog->container.iSidGLAnimation > 0)
-	{
-		g_source_remove (pDialog->container.iSidGLAnimation);
-	}
 	
 	cd_debug ("");
 
@@ -601,7 +596,7 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 		g_free (pDialog->pButtons);
 	}
 	
-	gtk_widget_destroy (pDialog->container.pWidget);  // detruit aussi le widget interactif.
+	cairo_dock_finish_container (CAIRO_CONTAINER (pDialog));
 	
 	if (pDialog->pUnmapTimer != NULL)
 		g_timer_destroy (pDialog->pUnmapTimer);

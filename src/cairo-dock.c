@@ -762,7 +762,7 @@ int main (int argc, char** argv)
 	signal (SIGFPE, NULL);  // Floating-point exception
 	signal (SIGILL, NULL);  // Illegal instruction
 	signal (SIGABRT, NULL);
-	cairo_dock_free_all_docks ();
+	cairo_dock_free_all ();
 	
 	rsvg_term ();
 	xmlCleanupParser ();

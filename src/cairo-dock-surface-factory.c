@@ -30,7 +30,7 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-surface-factory.h"
 
-extern CairoDock *g_pMainDock;
+extern CairoContainer *g_pPrimaryContainer;
 extern gboolean g_bUseOpenGL;
 
 static cairo_t *s_pSourceContext = NULL;
@@ -125,8 +125,8 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 #define _get_source_context(...) \
 	__extension__ ({\
 	if (s_pSourceContext == NULL) {\
-		if (g_pMainDock != NULL)\
-			s_pSourceContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock)); }\
+		if (g_pPrimaryContainer != NULL)\
+			s_pSourceContext = cairo_dock_create_drawing_context_generic (g_pPrimaryContainer); }\
 	s_pSourceContext; })
 #define _destroy_source_context(...) do {\
 	if (s_pSourceContext != NULL) {\
@@ -211,7 +211,7 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, int iWidth, int iHeight)
 {
 	cairo_t *pSourceContext = _get_source_context ();
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 
 	//\____________________ On recupere la plus grosse des icones presentes dans le tampon (meilleur rendu).
 	int iIndex = 0, iBestIndex = 0;
@@ -782,7 +782,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 {
 	g_return_val_if_fail (cText != NULL && pLabelDescription != NULL, NULL);
 	cairo_t *pSourceContext = _get_source_context ();
-	g_return_val_if_fail (cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	
 	//\_________________ On ecrit le texte dans un calque Pango.
 	PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);

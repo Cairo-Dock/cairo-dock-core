@@ -240,11 +240,13 @@ int cairo_dock_ask_question_and_wait (const gchar *cQuestion, Icon *pIcon, Cairo
 */
 gboolean cairo_dock_icon_has_dialog (Icon *pIcon);
 
-/** Search the "the best icon possible" to hold a general dialog.
-*@return an icon, never NULL except if the dock is.
+/** Search the "the best icon possible" for a Dock to hold a general dialog.
+*@param pDock a dock (NULL to search inside the main dock).
+*@return an Icon, or NULL if the dock is empty.
 */
-Icon *cairo_dock_get_dialogless_icon (void);
+Icon *cairo_dock_get_dialogless_icon_full (CairoDock *pDock);
 
+#define cairo_dock_get_dialogless_icon(...) cairo_dock_get_dialogless_icon_full (NULL)
 
 /** Pop up a dialog, pointing on "the best icon possible". This allows to display a general message.
 *@param cMessage the message.
