@@ -98,7 +98,7 @@ static inline cairo_surface_t *_cairo_dock_load_button_icon (const gchar *cButto
 		iTexture = cairo_dock_create_texture_from_surface (pSurface);\
 	else\
 		iTexture = 0; } while (0)
-void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonOkImage, gchar *cButtonCancelImage)
+void cairo_dock_load_dialog_buttons (gchar *cButtonOkImage, gchar *cButtonCancelImage)
 {
 	//g_print ("%s (%s ; %s)\n", __func__, cButtonOkImage, cButtonCancelImage);
 	if (s_pButtonOkSurface != NULL)
@@ -566,7 +566,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	CairoDialog *pDialog = cairo_dock_new_dialog (pAttribute, pIcon, pContainer);
 	s_pDialogList = g_slist_prepend (s_pDialogList, pDialog);
 	if (pDialog->iNbButtons != 0 && (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL))
-		cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDialog), myDialogs.cButtonOkImage, myDialogs.cButtonCancelImage);
+		cairo_dock_load_dialog_buttons (myDialogs.cButtonOkImage, myDialogs.cButtonCancelImage);
 	
 	//\________________ on le place parmi les autres.
 	cairo_dock_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.

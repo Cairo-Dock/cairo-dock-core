@@ -84,7 +84,7 @@ static int s_iSidActionOnDragHover = 0;
 static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
 static CairoFlyingContainer *s_pFlyingContainer = NULL;
 
-extern CairoDock *g_pMainDock;
+extern CairoDock *g_pMainDock;  // pour le raise-on-shortcut
 
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bLocked;

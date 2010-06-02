@@ -261,7 +261,7 @@ GtkWidget *cairo_dock_show_main_gui (void)
 	GtkWidget *pWindow = NULL;
 	if (s_pGuiBackend && s_pGuiBackend->show_main_gui)
 		pWindow = s_pGuiBackend->show_main_gui ();
-	if (pWindow && g_pMainDock != NULL)  // evitons d'empieter sur le dock.
+	if (pWindow && g_pMainDock != NULL)  // evitons d'empieter sur le main dock.
 	{
 		if (g_pMainDock->container.bIsHorizontal)
 		{
@@ -279,17 +279,6 @@ GtkWidget *cairo_dock_show_main_gui (void)
 		}
 	}
 	
-	gchar *cModeFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, ".config-mode");
-	if (! g_file_test (cModeFile, G_FILE_TEST_EXISTS))
-	{
-		g_file_set_contents (cModeFile,
-			"0",
-			-1,
-			NULL);
-		Icon *pIcon = cairo_dock_get_dialogless_icon ();
-		cairo_dock_show_temporary_dialog_with_default_icon (_("This is the simple configuration panel of Cairo-Dock.\n After you get familiar with it, and if you want to customise your theme\n, you can switch to an advanced mode.\n You can switch from a mode to another at any time."), pIcon, CAIRO_CONTAINER (g_pMainDock), 15000);
-	}
-	g_free (cModeFile);
 	return pWindow;
 }
 

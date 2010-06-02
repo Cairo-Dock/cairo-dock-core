@@ -143,7 +143,7 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 		}
 		else if (bForceDemand)  // appli pas affichee, mais on veut tout de même etre notifie.
 		{
-			Icon *pOneIcon = cairo_dock_get_dialogless_icon ();
+			Icon *pOneIcon = cairo_dock_get_dialogless_icon ();  // on prend une icone dans le main dock.
 			if (pOneIcon != NULL)
 				_cairo_dock_appli_demands_attention (pOneIcon, g_pMainDock, bForceDemand, icon);
 		}

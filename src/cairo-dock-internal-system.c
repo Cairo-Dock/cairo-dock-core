@@ -29,7 +29,6 @@
 #include "cairo-dock-internal-system.h"
 
 CairoConfigSystem mySystem;
-extern CairoDock *g_pMainDock;
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
@@ -82,7 +81,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	gsize length=0;
 	pSystem->cActiveModuleList = cairo_dock_get_string_list_key_value (pKeyFile, "System", "modules", &bFlushConfFileNeeded, &length, NULL, "Applets", "modules_0");
 	
-	pSystem->iConnectionTimeout = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn timeout", &bFlushConfFileNeeded, 5, NULL, NULL);
+	pSystem->iConnectionTimeout = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn timeout", &bFlushConfFileNeeded, 7, NULL, NULL);
 	pSystem->iConnectionMaxTime = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn max time", &bFlushConfFileNeeded, 120, NULL, NULL);
 	if (cairo_dock_get_boolean_key_value (pKeyFile, "System", "conn use proxy", &bFlushConfFileNeeded, FALSE, NULL, NULL))
 	{
@@ -105,19 +104,21 @@ static void reset_config (CairoConfigSystem *pSystem)
 }
 
 
+static void _set_below (CairoDock *pDock, gpointer data)
+{
+	gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), GPOINTER_TO_INT (data));
+}
 static void reload (CairoConfigSystem *pPrevSystem, CairoConfigSystem *pSystem)
 {
-	CairoDock *pDock = g_pMainDock;
-	
 	//\_______________ Fake Transparency.
 	if (pSystem->bUseFakeTransparency && ! pPrevSystem->bUseFakeTransparency)
 	{
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (TRUE));
 		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
 	}
 	else if (! pSystem->bUseFakeTransparency && pPrevSystem->bUseFakeTransparency)
 	{
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);
+		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (FALSE));
 		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
 		g_pFakeTransparencyDesktopBg = NULL;
 	}

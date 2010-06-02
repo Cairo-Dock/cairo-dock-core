@@ -32,7 +32,6 @@
 #include "cairo-dock-internal-desklets.h"
 
 CairoConfigDesklets myDesklets;
-extern CairoDock *g_pMainDock;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDesklets *pDesklets)
 {
@@ -81,7 +80,6 @@ static void reset_config (CairoConfigDesklets *pDesklets)
 
 static void reload (CairoConfigDesklets *pPrevDesklets, CairoConfigDesklets *pDesklets)
 {
-	CairoDock *pDock = g_pMainDock;
 	if (cairo_dock_strings_differ (pPrevDesklets->cRotateButtonImage, pDesklets->cRotateButtonImage) ||
 		cairo_dock_strings_differ (pPrevDesklets->cRetachButtonImage, pDesklets->cRetachButtonImage) ||
 		cairo_dock_strings_differ (pPrevDesklets->cDepthRotateButtonImage, pDesklets->cDepthRotateButtonImage) ||

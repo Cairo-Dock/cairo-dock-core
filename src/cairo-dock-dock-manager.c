@@ -672,8 +672,8 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	pDock->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "y gap", &bFlushConfFileNeeded, 0, "Position", NULL);
 	
 	CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "screen border", &bFlushConfFileNeeded, 0, "Position", NULL);
-	
-	switch (iScreenBorder)
+	cairo_dock_set_dock_orientation (pDock, iScreenBorder);
+	/**switch (iScreenBorder)
 	{
 		case CAIRO_DOCK_BOTTOM :
 		default :
@@ -692,7 +692,7 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
 			pDock->container.bDirectionUp = FALSE;
 		break;
-	}
+	}*/
 	
 	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Behavior", "alignment", &bFlushConfFileNeeded, 0.5, "Position", NULL);
 	
@@ -843,6 +843,35 @@ void cairo_dock_synchronize_sub_docks_position (CairoDock *pDock, gboolean bRelo
 		if (icon->pSubDock != NULL)
 			cairo_dock_synchronize_one_sub_dock_position (icon->pSubDock, pDock, bReloadBuffersIfNecessary);
 	}
+}
+
+void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScreenBorder)
+{
+	CairoDockTypeHorizontality bWasHorizontal = pDock->container.bIsHorizontal;
+	gboolean bWasDirectionUp = pDock->container.bDirectionUp;
+	switch (iScreenBorder)
+	{
+		case CAIRO_DOCK_BOTTOM :
+			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
+			pDock->container.bDirectionUp = TRUE;
+		break;
+		case CAIRO_DOCK_TOP :
+			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
+			pDock->container.bDirectionUp = FALSE;
+		break;
+		case CAIRO_DOCK_RIGHT :
+			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
+			pDock->container.bDirectionUp = TRUE;
+		break;
+		case CAIRO_DOCK_LEFT :
+			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
+			pDock->container.bDirectionUp = FALSE;
+		break;
+	}
+	if (bWasHorizontal != pDock->container.bIsHorizontal)
+		cairo_dock_update_dock_size (pDock);  // si bHorizonalDock a change, la taille max (associee a l'ecran) a change aussi.
+	cairo_dock_synchronize_sub_docks_position (pDock, FALSE);  // synchronize l'orientation et l'offset Xinerama des sous-docks ainsi que les reflets cairo.
+	
 }
 
 

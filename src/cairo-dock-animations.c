@@ -58,7 +58,6 @@ CairoDockHidingEffect *g_pHidingBackend = NULL;
 CairoDockHidingEffect *g_pKeepingBelowBackend = NULL;
 
 extern gboolean g_bUseOpenGL;
-extern CairoDock *g_pMainDock;
 extern CairoDockGLConfig g_openglConfig;
 
 static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gboolean *bContinueAnimation)

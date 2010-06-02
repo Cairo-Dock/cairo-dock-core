@@ -57,7 +57,7 @@ struct _CairoDialogManager {
 	} ;
 
 void cairo_dock_init_dialog_manager (void);
-void cairo_dock_load_dialog_buttons (CairoContainer *pContainer, gchar *cButtonOkImage, gchar *cButtonCancelImage);
+void cairo_dock_load_dialog_buttons (gchar *cButtonOkImage, gchar *cButtonCancelImage);
 void cairo_dock_unload_dialog_buttons (void);
 
 /** Increase by 1 the reference of a dialog. Use #cairo_dock_dialog_unreference when you're done, so that the dialog can be destroyed.

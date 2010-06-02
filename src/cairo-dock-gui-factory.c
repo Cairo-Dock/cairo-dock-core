@@ -52,7 +52,7 @@
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
 
-extern CairoDock *g_pMainDock;
+extern CairoContainer *g_pPrimaryContainer;
 extern gchar *g_cExtrasDirPath;
 extern gchar *g_cThemesDirPath;
 extern gchar *g_cConfFile;
@@ -882,7 +882,7 @@ static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_render
 	/// passer en gras ?...
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-	if (g_pMainDock == NULL)
+	if (g_pPrimaryContainer == NULL)
 	{
 		cairo_dock_add_remove_element_to_key (g_cConfFile, "System", "modules", cModuleName, bState);
 	}

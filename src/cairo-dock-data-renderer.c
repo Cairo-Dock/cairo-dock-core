@@ -35,7 +35,7 @@
 #include "cairo-dock-data-renderer.h"
 
 extern gboolean g_bUseOpenGL;
-extern CairoDock *g_pMainDock;
+extern CairoContainer *g_pPrimaryContainer;
 
 #define cairo_dock_set_data_renderer_on_icon(pIcon, pRenderer) (pIcon)->pDataRenderer = pRenderer
 #define cairo_dock_get_icon_data_renderer(pIcon) (pIcon)->pDataRenderer
@@ -64,7 +64,7 @@ CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 	CairoDataRendererNewFunc init = cairo_dock_get_data_renderer_entry_point (cRendererName);
 	g_return_val_if_fail (init != NULL, NULL);
 	
-	if (g_pMainDock && s_pFont == NULL)
+	if (g_pPrimaryContainer && s_pFont == NULL)
 	{
 		_init_data_renderer_font ();
 	}

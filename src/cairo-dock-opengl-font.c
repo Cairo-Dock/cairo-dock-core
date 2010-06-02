@@ -53,7 +53,7 @@
 
 extern GLuint g_pGradationTexture[2];
 
-extern CairoDock *g_pMainDock;
+extern CairoContainer *g_pPrimaryContainer;
 
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
@@ -133,7 +133,7 @@ CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int
 
 CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, int first, int count)
 {
-	g_return_val_if_fail (g_pMainDock != NULL && count > 0, NULL);
+	g_return_val_if_fail (g_pPrimaryContainer != NULL && count > 0, NULL);
 	if (first < 32)  // 32 = ' '
 	{
 		count -= (32 - first);
@@ -174,7 +174,7 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 	iconv_close (cd);*/
 	
 	int iWidth, iHeight;
-	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (g_pPrimaryContainer);
 	GLuint iTexture = cairo_dock_create_texture_from_text_simple (cPool, cFontDescription, pCairoContext, &iWidth, &iHeight);
 	cairo_destroy (pCairoContext);
 	g_free (cPool);

@@ -33,7 +33,6 @@
 #include "cairo-dock-internal-labels.h"
 
 CairoConfigLabels myLabels;
-extern CairoDock *g_pMainDock;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 {
@@ -158,7 +157,6 @@ static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpo
 }
 static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 {
-	CairoDock *pDock = g_pMainDock;
 	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, pLabels);
 	
 	if (pPrevLabels->iLabelSize != pLabels->iLabelSize)

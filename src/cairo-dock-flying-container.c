@@ -54,7 +54,7 @@
 #define HAND_HEIGHT 50
 #define EXPLOSION_NB_FRAMES 10
 
-extern CairoDock *g_pMainDock;
+extern CairoContainer *g_pPrimaryContainer;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
@@ -243,8 +243,8 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 		gdk_gl_drawable_gl_end (pGlDrawable);
 		if (! pFlyingContainer->pIcon)  // plus d'icone, le container va se faire detruire sous peu, on repasse donc sur un contexte qui a plus d'avenir, sinon cela peut invalider les fonctions qui font appel a OpenGL sans definir de contexte (genre cairo_dock_create_texture_from_surface).
 		{
-			GdkGLContext *pGlContext = gtk_widget_get_gl_context (g_pMainDock->container.pWidget);
-			GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (g_pMainDock->container.pWidget);
+			GdkGLContext *pGlContext = gtk_widget_get_gl_context (g_pPrimaryContainer->pWidget);
+			GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (g_pPrimaryContainer->pWidget);
 			if (gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
 				gdk_gl_drawable_gl_end (pGlDrawable);
 		}

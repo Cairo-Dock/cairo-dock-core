@@ -89,7 +89,8 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 	CairoDockTypeHorizontality bWasHorizontal = pDock->container.bIsHorizontal;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
-		switch (pPosition->iScreenBorder)
+		cairo_dock_set_dock_orientation (pDock, pPosition->iScreenBorder);
+		/**switch (pPosition->iScreenBorder)
 		{
 			case CAIRO_DOCK_BOTTOM :
 				pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
@@ -110,7 +111,7 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 		}
 		cairo_dock_update_dock_size (pDock);  // si bHorizonalDock a change, la taille max a change aussi.
 		cairo_dock_synchronize_sub_docks_position (pDock, FALSE);
-		cairo_dock_reload_buffers_in_all_docks (TRUE);
+		cairo_dock_reload_buffers_in_all_docks (TRUE);*/
 	}
 	else
 		cairo_dock_update_dock_size (pDock);  // si l'ecran a change, la taille max a change aussi.
@@ -119,7 +120,7 @@ static void reload (CairoConfigPosition *pPrevPosition, CairoConfigPosition *pPo
 	pDock->iGapY = pPosition->iGapY;
 	pDock->fAlign = pPosition->fAlign;
 	cairo_dock_calculate_dock_icons (pDock);
-	cairo_dock_place_root_dock (pDock);
+	cairo_dock_move_resize_dock (pDock);
 	if (bWasHorizontal != pDock->container.bIsHorizontal)
 		pDock->container.iWidth --;  // la taille dans le referentiel du dock ne change pas meme si on change d'horizontalite, par contre la taille de la fenetre change. On introduit donc un biais ici pour forcer le configure-event a faire son travail, sinon ca fausse le redraw.
 	gtk_widget_queue_draw (pDock->container.pWidget);

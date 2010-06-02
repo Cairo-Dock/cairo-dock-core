@@ -36,10 +36,12 @@
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-internal-views.h"
+#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-position.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-themes-manager.h"
+#include "cairo-dock-applications-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-simple.h"
@@ -71,7 +73,6 @@ static int s_iEffectOnDisappearance = -1;
 
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
-extern CairoDock *g_pMainDock;
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bUseOpenGL;
 
@@ -197,8 +198,7 @@ static gchar * _make_simple_conf_file (void)
 	}
 	
 	// comportement
-	CairoDockPositionType iScreenBorder = (g_pMainDock ? ((! g_pMainDock->container.bIsHorizontal) << 1) | (! g_pMainDock->container.bDirectionUp) : 0);
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", iScreenBorder);
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", myPosition.iScreenBorder);
 	
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", myAccessibility.iVisibility);
 	
@@ -698,6 +698,23 @@ static GtkWidget * show_main_gui (void)
 		0);
 	gtk_box_reorder_child (GTK_BOX (pButtonsHBox), pSwitchButton, 1);
 	gtk_widget_show_all (pSwitchButton);
+	
+	//\_____________ Petit message la 1ere fois.
+	gchar *cModeFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, ".config-mode");
+	if (! g_file_test (cModeFile, G_FILE_TEST_EXISTS))
+	{
+		g_file_set_contents (cModeFile,
+			"0",
+			-1,
+			NULL);
+		Icon *pIcon = cairo_dock_get_current_active_icon ();
+		if (pIcon == NULL || pIcon->cParentDockName == NULL || cairo_dock_icon_is_being_removed (pIcon))
+			pIcon = cairo_dock_get_dialogless_icon ();
+		CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
+		cairo_dock_show_temporary_dialog_with_default_icon (_("This is the simple configuration panel of Cairo-Dock.\n After you get familiar with it, and if you want to customise your theme\n, you can switch to an advanced mode.\n You can switch from a mode to another at any time."), pIcon, CAIRO_CONTAINER (pDock), 15000);
+	}
+	g_free (cModeFile);
+	
 	return s_pSimpleConfigWindow;
 }
 

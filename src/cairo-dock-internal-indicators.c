@@ -31,7 +31,6 @@
 #include "cairo-dock-internal-indicators.h"
 
 CairoConfigIndicators myIndicators;
-extern CairoDock *g_pMainDock;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicators)
 {
@@ -160,35 +159,6 @@ static void reset_config (CairoConfigIndicators *pIndicators)
 static void reload (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicators *pIndicators)
 {
 	cairo_dock_reload_indicators (pPrevIndicators, pIndicators);
-	/**CairoDock *pDock = g_pMainDock;
-	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	
-	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath) ||
-		pPrevIndicators->bLinkIndicatorWithIcon != pIndicators->bLinkIndicatorWithIcon ||
-		pPrevIndicators->fIndicatorRatio != pIndicators->fIndicatorRatio)
-	{
-		cairo_dock_load_task_indicator (pIndicators->cIndicatorImagePath, fMaxScale, pIndicators->fIndicatorRatio);
-	}
-	
-	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) ||
-		pPrevIndicators->iActiveCornerRadius != pIndicators->iActiveCornerRadius ||
-		pPrevIndicators->iActiveLineWidth != pIndicators->iActiveLineWidth ||
-		cairo_dock_colors_differ (pPrevIndicators->fActiveColor, pIndicators->fActiveColor))
-	{
-		cairo_dock_load_active_window_indicator (pIndicators->cActiveIndicatorImagePath,
-			fMaxScale,
-			pIndicators->iActiveCornerRadius,
-			pIndicators->iActiveLineWidth,
-			pIndicators->fActiveColor);
-	}
-	
-	if (cairo_dock_strings_differ (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath) ||
-		pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
-	{
-		cairo_dock_load_class_indicator (pIndicators->cClassIndicatorImagePath, fMaxScale);
-	}
-	
-	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.*/
 }
 
 

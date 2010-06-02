@@ -195,8 +195,7 @@ static void _set_indicator (Icon *pIcon, CairoContainer *pContainer, gpointer da
 }
 void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicators *pIndicators)
 {
-	CairoDock *pDock = g_pMainDock;
-	double fMaxScale = cairo_dock_get_max_scale (pDock);
+	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath) ||
 		pPrevIndicators->bIndicatorOnIcon != pIndicators->bIndicatorOnIcon ||
@@ -222,18 +221,18 @@ void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, Cairo
 	{
 		cairo_dock_load_class_indicator (myTaskBar.bShowAppli && myTaskBar.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL, fMaxScale);
 		
-		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
+		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic && g_pMainDock)  // on recharge les icones pointant sur une classe (qui sont dans le main dock).
 		{
 			Icon *icon;
 			GList *ic;
-			for (ic = pDock->icons; ic != NULL; ic = ic->next)
+			for (ic = g_pMainDock->icons; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
 				if (CAIRO_DOCK_IS_FAKE_LAUNCHER (icon))
 				{
-					cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
+					cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (g_pMainDock));
 					if (!pIndicators->bUseClassIndic)
-						cairo_dock_draw_subdock_content_on_icon (icon, pDock);
+						cairo_dock_draw_subdock_content_on_icon (icon, g_pMainDock);
 				}
 			}
 		}
@@ -243,11 +242,9 @@ void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, Cairo
 		pPrevIndicators->bDrawIndicatorOnAppli != pIndicators->bDrawIndicatorOnAppli)
 	{
 		cairo_dock_foreach_applis ((CairoDockForeachIconFunc) _set_indicator, FALSE, GINT_TO_POINTER (pIndicators->bDrawIndicatorOnAppli));
-		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 	
-	
-	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
+	cairo_dock_redraw_root_docks (FALSE);  // tous les docks (main dock et les autres qui peuvent contenir des applets avec un indicateur).
 }
 
 

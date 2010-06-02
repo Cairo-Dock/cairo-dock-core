@@ -27,7 +27,6 @@
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-dialogs.h"
 
-extern CairoDock *g_pMainDock;
 CairoConfigDialogs myDialogs;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
@@ -106,24 +105,13 @@ static void reset_config (CairoConfigDialogs *pDialogs)
 
 static void reload (CairoConfigDialogs *pPrevDialogs, CairoConfigDialogs *pDialogs)
 {
-	CairoDock *pDock = g_pMainDock;
-	
 	if (cairo_dock_strings_differ (pPrevDialogs->cButtonOkImage, pDialogs->cButtonOkImage) ||
 		cairo_dock_strings_differ (pPrevDialogs->cButtonCancelImage, pDialogs->cButtonCancelImage) ||
 		pPrevDialogs->iDialogIconSize != pDialogs->iDialogIconSize)
 	{
 		cairo_dock_unload_dialog_buttons ();
-		cairo_dock_load_dialog_buttons (CAIRO_CONTAINER (pDock), pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
+		cairo_dock_load_dialog_buttons (pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
 	}
-	/*if (pDialogs->bHomogeneous)
-	{
-		pDialogs->dialogTextDescription.iSize = myLabels.iconTextDescription.iSize;
-		if (pDialogs->dialogTextDescription.iSize == 0)
-			pDialogs->dialogTextDescription.iSize = 14;
-		pDialogs->dialogTextDescription.cFont = g_strdup (myLabels.iconTextDescription.cFont);
-		pDialogs->dialogTextDescription.iWeight = myLabels.iconTextDescription.iWeight;
-		pDialogs->dialogTextDescription.iStyle = myLabels.iconTextDescription.iStyle;
-	}*/
 }
 
 

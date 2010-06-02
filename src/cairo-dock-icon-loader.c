@@ -203,7 +203,11 @@ static void _set_icon_size_generic (CairoContainer *pContainer, Icon *icon)
 void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 {
 	if (! pContainer)
-		pContainer = CAIRO_CONTAINER (g_pMainDock);
+	{
+		///pContainer = CAIRO_CONTAINER (g_pMainDock);
+		g_print ("icone dans aucun container => pas chargee\n");
+		return;
+	}
 	// taille de l'icone dans le container (hors ratio).
 	if (pContainer->set_icon_size)
 		pContainer->set_icon_size (pContainer, icon);

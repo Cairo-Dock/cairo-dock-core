@@ -82,9 +82,6 @@ CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 gboolean g_bEasterEggs = FALSE;
 gboolean g_bLocked = FALSE;
 
-extern CairoDock *g_pMainDock;
-extern gchar *g_cCurrentThemePath;
-extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentLaunchersPath;
 extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 extern gboolean g_bUseOpenGL;

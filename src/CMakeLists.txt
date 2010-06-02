@@ -1,6 +1,7 @@
 
 add_subdirectory(icon-factory)
 add_subdirectory(implementations)
+#add_subdirectory(gldit)
 
 SET(core_lib_SRCS
 	cairo-dock-struct.h
@@ -105,6 +106,7 @@ target_link_libraries(${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${LIBCRYPT_LIBS}
+#	"gldit"
 	icon-factory
 	implementations)
 

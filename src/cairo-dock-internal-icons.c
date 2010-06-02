@@ -335,11 +335,31 @@ static void reset_config (CairoConfigIcons *pIcons)
 	g_free (pIcons->cIconTheme);
 }
 
+static void _remove_separators (const gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	cairo_dock_remove_automatic_separators (pDock);
+}
+static void _insert_separators (const gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	cairo_dock_insert_separators_in_dock (pDock);
+}
+static void _calculate_icons (const gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	cairo_dock_calculate_dock_icons (pDock);
+}
+static void _reorder_icons (const gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	cairo_dock_remove_automatic_separators (pDock);
 
+	if (GPOINTER_TO_INT (data) && pDock->bIsMainDock)
+	{
+		cairo_dock_reorder_classes ();  // on re-ordonne les applis a cote des lanceurs/applets.
+	}
+	pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
+}
 static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 {
-	CairoDock *pDock = g_pMainDock;
-	double fMaxScale = cairo_dock_get_max_scale (pDock);
+	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
 	gboolean bInsertSeparators = FALSE;
 	
 	gboolean bGroupOrderChanged;
@@ -354,14 +374,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	if (bGroupOrderChanged)
 	{
 		bInsertSeparators = TRUE;  // on enleve les separateurs avant de re-ordonner.
-		cairo_dock_remove_automatic_separators (pDock);
-		
-		if (pPrevIcons->iSeparateIcons && ! pIcons->iSeparateIcons)
-		{
-			cairo_dock_reorder_classes ();  // on re-ordonne les applis a cote des lanceurs/applets.
-		}
-		
-		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
+		cairo_dock_foreach_docks ((GHFunc)_reorder_icons, GINT_TO_POINTER (pPrevIcons->iSeparateIcons && ! pIcons->iSeparateIcons));
 	}
 	
 	if ((pPrevIcons->iSeparateIcons && ! pIcons->iSeparateIcons) ||
@@ -371,7 +384,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		bInsertSeparators = TRUE;
-		cairo_dock_remove_automatic_separators (pDock);
+		cairo_dock_foreach_docks ((GHFunc)_remove_separators, NULL);
 	}
 	
 	gboolean bThemeChanged = cairo_dock_strings_differ (pIcons->cIconTheme, pPrevIcons->cIconTheme);
@@ -409,12 +422,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	
 	if (bInsertSeparators)
 	{
-		cairo_dock_insert_separators_in_dock (pDock);
-	}
-	
-	if (pPrevIcons->iSeparatorType != pIcons->iSeparatorType)
-	{
-		cairo_dock_update_dock_size (pDock);  // le chargement des separateurs plats se fait dans le calcul de max dock size.
+		cairo_dock_foreach_docks ((GHFunc)_insert_separators, NULL);
 	}
 	
 	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
@@ -428,8 +436,8 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	}
 	
 	g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;
-	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.
-	cairo_dock_calculate_dock_icons (pDock);
+	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks; le chargement des separateurs plats se fait dans le calcul de max dock size.
+	cairo_dock_foreach_docks ((GHFunc)_calculate_icons, NULL);
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
 }
 

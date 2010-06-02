@@ -64,7 +64,7 @@
 
 extern GLuint g_pGradationTexture[2];
 
-extern CairoDock *g_pMainDock;
+extern CairoContainer *g_pPrimaryContainer;
 
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
@@ -641,7 +641,7 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 
 GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, double *fImageWidth, double *fImageHeight)
 {
-	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pMainDock->container.pWidget), 0);
+	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pPrimaryContainer->pWidget), 0);
 	double fWidth=0, fHeight=0;
 	if (cImageFile == NULL)
 		return 0;
@@ -651,7 +651,7 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, doubl
 	else
 		cImagePath = cairo_dock_generate_file_path (cImageFile);
 	
-	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (g_pMainDock));
+	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (g_pPrimaryContainer);
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
 		1.,
 		0., 0.,
