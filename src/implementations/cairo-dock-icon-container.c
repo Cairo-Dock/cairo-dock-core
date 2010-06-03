@@ -31,7 +31,7 @@
 
 #include <gtk/gtkgl.h>
 
-#include "../config.h"
+#include "../../config.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"

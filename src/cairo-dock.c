@@ -109,6 +109,7 @@
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-launcher.h"
+#include "cairo-dock-gui-switch.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-load.h"
@@ -123,13 +124,16 @@
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-dialogs.h"
 #include "cairo-dock-indicator-manager.h"
+#include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-hiding-effect.h"
 #include "cairo-dock-icon-container.h"
 
+#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"  // "http://themes.cairo-dock.vef.fr"
+#define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
+
 extern gchar *g_cCairoDockDataDir;
 
-extern gchar *g_cThemeServerAdress;
 extern gchar *g_cConfFile;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
@@ -142,7 +146,6 @@ extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 extern gboolean g_bEasterEggs;
-extern gboolean g_bLocked;
 
 extern CairoDockGLConfig g_openglConfig;
 extern CairoDockHidingEffect *g_pKeepingBelowBackend;
@@ -150,6 +153,7 @@ extern CairoDockModuleInstance *g_pCurrentModule;
 //int g_iDamageEvent = 0;
 
 gboolean g_bForceCairo = FALSE;
+gboolean g_bLocked;
 
 static gchar *s_cLaunchCommand = NULL;
 
@@ -293,7 +297,7 @@ int main (int argc, char** argv)
 	
 	//\___________________ On recupere quelques options.
 	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE;
-	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL;
+	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	GOptionEntry TableDesOptions[] =
 	{
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
@@ -353,7 +357,7 @@ int main (int argc, char** argv)
 			&g_bEasterEggs,
 			"for debugging purpose only. Some hidden and still unstable options will be activated.", NULL},
 		{"server", 'S', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
-			&g_cThemeServerAdress,
+			&cThemeServerAdress,
 			"address of a server containing additional themes. This will overwrite the default server address.", NULL},
 		{"locked", 'k', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bLocked,
@@ -438,7 +442,7 @@ int main (int argc, char** argv)
 	gchar *cExtraDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_EXTRAS_DIR, NULL);
 	gchar *cThemesDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_THEMES_DIR, NULL);
 	gchar *cCurrentThemeDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_CURRENT_THEME_NAME, NULL);
-	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath);
+	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath, cThemeServerAdress ? cThemeServerAdress : g_strdup (CAIRO_DOCK_THEME_SERVER));
 	
 	  /////////////
 	 //// LIB ////
@@ -475,8 +479,8 @@ int main (int argc, char** argv)
 	cd_debug ("environnement de bureau : %d", g_iDesktopEnv);
 	
 	//\___________________ On enregistre les implementations.
-	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge);
-	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph);
+	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge, "gauges", "Turbo-night-fuel");
+	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph, NULL, NULL);
 	
 	cairo_dock_register_hiding_effects ();
 	g_pKeepingBelowBackend = cairo_dock_get_hiding_effect ("Fade out");
@@ -653,6 +657,12 @@ int main (int argc, char** argv)
 	}
 	else
 		cairo_dock_load_current_theme ();
+	
+	if (g_bLocked)
+	{
+		myAccessibility.bLockIcons = TRUE;
+		myAccessibility.bLockAll = TRUE;
+	}
 	
 	//\___________________ On affiche un petit message de bienvenue.
 	if (bFirstLaunch)

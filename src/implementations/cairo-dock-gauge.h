@@ -81,13 +81,13 @@ struct _CairoGaugeAttribute {
 
 Gauge *cairo_dock_new_gauge (void);
 
-
+/**
 GHashTable *cairo_dock_list_available_gauges (void);
 
 gchar *cairo_dock_get_gauge_theme_path (const gchar *cThemeName, CairoDockThemeType iType);
 
 gchar *cairo_dock_get_theme_path_for_gauge (const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName);
-
+*/
 
 G_END_DECLS
 #endif

@@ -330,7 +330,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 				gchar *ext = strrchr (cReceivedData, '.');
 				if (!ext)
 					return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-				if (strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0)
+				if ((strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0) && !myAccessibility.bLockAll && ! myAccessibility.bLockIcons)
 				{
 					if (!myTaskBar.bOverWriteXIcons)
 					{
@@ -372,7 +372,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 		}
 	}
 
-	if (g_bLocked)
+	if (g_bLocked || myAccessibility.bLockAll)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);

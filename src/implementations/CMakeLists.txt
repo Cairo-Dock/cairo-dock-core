@@ -13,7 +13,7 @@ link_directories(
 
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
-	${CMAKE_SOURCE_DIR}/src
+	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/icon-factory)
 
 ########### install files ###############

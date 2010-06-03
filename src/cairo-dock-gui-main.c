@@ -41,6 +41,7 @@
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-gui-switch.h"
 #include "cairo-dock-gui-main.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32

@@ -28,7 +28,7 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "../config.h"
+#include "../../config.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"

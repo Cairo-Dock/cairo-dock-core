@@ -44,6 +44,7 @@
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
+#include "cairo-dock-gui-switch.h"
 #include "cairo-dock-gui-simple.h"
 
 #define CAIRO_DOCK_PREVIEW_WIDTH 200

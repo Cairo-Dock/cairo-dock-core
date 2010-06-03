@@ -87,19 +87,16 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
-#include "../config.h"
+#include "../../config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl-font.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-dock-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gauge.h"
 
 #define CAIRO_DOCK_GAUGES_DIR "gauges"
@@ -906,7 +903,7 @@ GHashTable *cairo_dock_list_available_gauges (void)
 	return pGaugeTable;
 }
 
-
+/**
 gchar *cairo_dock_get_gauge_theme_path (const gchar *cThemeName, CairoDockThemeType iType)  // utile pour DBus aussi.
 {
 	const gchar *cGaugeShareDir = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR;
@@ -937,7 +934,7 @@ gchar *cairo_dock_get_theme_path_for_gauge (const gchar *cAppletConfFilePath, GK
 	g_free (cChosenThemeName);
 	return cGaugePath;
 }
-
+*/
 
 /// deprecated ... to be added in the DataRenderer API.
 void cairo_dock_add_watermark_on_gauge (Gauge *pGauge, gchar *cImagePath, double fAlpha)
