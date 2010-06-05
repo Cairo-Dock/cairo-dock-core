@@ -4,7 +4,6 @@ libdir = @libdir@
 includedir = @includedir@
 pluginsdir=@libdir@/@PACKAGE@
 pluginsdatadir=@datadir@/@PACKAGE@/plug-ins
-themesdir=@datadir@/@PACKAGE@/themes
 
 Name: cairo-dock
 Description: An eye-candy fully animated and configurable dock.

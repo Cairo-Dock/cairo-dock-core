@@ -33,11 +33,6 @@ G_BEGIN_DECLS
 * The class offers a high level of abstraction that allows to manipulate themes without having to care their location, version, etc.
 */
 
-#define CAIRO_DOCK_LOCAL_EXTRAS_DIR "extras"
-#define CAIRO_DOCK_LAUNCHERS_DIR "launchers"
-#define CAIRO_DOCK_PLUG_INS_DIR "plug-ins"
-#define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
-
 /// Types of themes.
 typedef enum {
 	CAIRO_DOCK_LOCAL_THEME=0,
@@ -70,11 +65,6 @@ struct _CairoDockTheme {
 	/// date of latest changes in the theme.
 	gint iLastModifDate;
 };
-
-/** Destroy a theme and free all its allocated memory.
-*@param pTheme the theme.
-*/
-void cairo_dock_free_theme (CairoDockTheme *pTheme);
 
 
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName);
@@ -127,6 +117,15 @@ gchar *cairo_dock_get_url_data (const gchar *cURL, GError **erreur);
 CairoDockTask *cairo_dock_get_distant_file_content_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GFunc pCallback, gpointer data);
 
 
+  ////////////////
+ // THEMES API //
+////////////////
+
+/** Destroy a theme and free all its allocated memory.
+*@param pTheme the theme.
+*/
+void cairo_dock_free_theme (CairoDockTheme *pTheme);
+
 GHashTable *cairo_dock_list_local_themes (const gchar *cThemesDir, GHashTable *hProvidedTable, gboolean bUpdateThemeValidity, GError **erreur);
 
 GHashTable *cairo_dock_list_net_themes (const gchar *cServerAdress, const gchar *cDirectory, const gchar *cListFileName, GHashTable *hProvidedTable, GError **erreur);
@@ -159,6 +158,10 @@ CairoDockTask *cairo_dock_list_themes_async (const gchar *cShareThemesDir, const
 */
 gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareThemesDir, const gchar *cUserThemesDir, const gchar *cDistantThemesDir, CairoDockThemeType iGivenType);
 
+
+  /////////////////////////
+ // DOCK THEMES HELPERS //
+/////////////////////////
 
 void cairo_dock_mark_theme_as_modified (gboolean bModified);
 gboolean cairo_dock_theme_need_save (void);

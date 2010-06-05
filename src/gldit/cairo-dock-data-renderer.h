@@ -291,5 +291,8 @@ gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, cons
 gchar *cairo_dock_get_theme_path_for_data_renderer (const gchar *cRendererName, const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName);
 
 
+void cairo_dock_register_built_in_data_renderers (void);
+
+
 G_END_DECLS
 #endif

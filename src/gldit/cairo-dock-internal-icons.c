@@ -41,7 +41,8 @@
 
 CairoConfigIcons myIcons;
 extern CairoDock *g_pMainDock;
-extern gchar *g_cCurrentThemePath;
+extern gchar *g_cCurrentThemePath;  // pour recuperer les anciens types de separateurs de rendering.conf
+extern gchar *g_cCurrentIconsPath;
 extern gboolean g_bUseOpenGL;
 extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 
@@ -184,7 +185,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	}
 	else if (strncmp (pIcons->cIconTheme, "_LocalTheme_", 12) == 0 || strncmp (pIcons->cIconTheme, "_ThemeDirectory_", 16) == 0 || strncmp (pIcons->cIconTheme, "_Custom Icons_", 14) == 0)
 	{
-		pIcons->pDefaultIconDirectory[2*j] = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		pIcons->pDefaultIconDirectory[2*j] = g_strdup (g_cCurrentIconsPath);
 		j ++;
 		bLocalIconsUsed = TRUE;
 	}
@@ -197,7 +198,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	
 	if (! bLocalIconsUsed)
 	{
-		pIcons->pDefaultIconDirectory[2*j] = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+		pIcons->pDefaultIconDirectory[2*j] = g_strdup (g_cCurrentIconsPath);
 		j ++;
 	}
 	if (! bDefaultThemeUsed)

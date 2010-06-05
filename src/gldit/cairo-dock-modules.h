@@ -55,50 +55,59 @@ typedef enum {
 #define CAIRO_DOCK_CATEGORY_ACCESSORY CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY
 #define CAIRO_DOCK_CATEGORY_CONTROLER CAIRO_DOCK_CATEGORY_APPLET_CONTROLER
 
+typedef enum {
+	CAIRO_DOCK_MODULE_IS_PLUGIN 	= 0,
+	CAIRO_DOCK_MODULE_CAN_DOCK 		= 1<<0,
+	CAIRO_DOCK_MODULE_CAN_DESKLET 	= 1<<1,
+	CAIRO_DOCK_MODULE_CAN_OTHERS 	= 1<<2
+} CairoDockModuleContainerType;
+	
+
 /// Definition of the visit card of a module. Contains everything that is statically defined for a module.
 struct _CairoDockVisitCard {
-	/// nom du module qui servira a l'identifier.
+	// nom du module qui servira a l'identifier.
 	const gchar *cModuleName;
-	/// numero de version majeure de cairo-dock necessaire au bon fonctionnement du module.
+	// numero de version majeure de cairo-dock necessaire au bon fonctionnement du module.
 	gint iMajorVersionNeeded;
-	/// numero de version mineure de cairo-dock necessaire au bon fonctionnement du module.
+	// numero de version mineure de cairo-dock necessaire au bon fonctionnement du module.
 	gint iMinorVersionNeeded;
-	/// numero de version micro de cairo-dock necessaire au bon fonctionnement du module.
+	// numero de version micro de cairo-dock necessaire au bon fonctionnement du module.
 	gint iMicroVersionNeeded;
-	/// chemin d'une image de previsualisation.
+	// chemin d'une image de previsualisation.
 	const gchar *cPreviewFilePath;
-	/// Nom du domaine pour la traduction du module par 'gettext'.
+	// Nom du domaine pour la traduction du module par 'gettext'.
 	const gchar *cGettextDomain;
-	/// Version du dock pour laquelle a ete compilee le module.
+	// Version du dock pour laquelle a ete compilee le module.
 	const gchar *cDockVersionOnCompilation;
-	/// version courante du module.
+	// version courante du module.
 	const gchar *cModuleVersion;
-	/// repertoire du plug-in cote utilisateur.
+	// repertoire du plug-in cote utilisateur.
 	const gchar *cUserDataDir;
-	/// repertoire d'installation du plug-in.
+	// repertoire d'installation du plug-in.
 	const gchar *cShareDataDir;
-	/// nom de son fichier de conf.
+	// nom de son fichier de conf.
 	const gchar *cConfFileName;
-	/// categorie de l'applet.
+	// categorie de l'applet.
 	CairoDockModuleCategory iCategory;
-	/// chemin d'une image pour l'icone du module dans le panneau de conf du dock.
+	// chemin d'une image pour l'icone du module dans le panneau de conf du dock.
 	const gchar *cIconFilePath;
-	/// taille de la structure contenant la config du module.
+	// taille de la structure contenant la config du module.
 	gint iSizeOfConfig;
-	/// taille de la structure contenant les donnees du module.
+	// taille de la structure contenant les donnees du module.
 	gint iSizeOfData;
-	/// VRAI ssi le plug-in peut etre instancie plusiers fois.
+	// VRAI ssi le plug-in peut etre instancie plusiers fois.
 	gboolean bMultiInstance;
-	/// description et mode d'emploi succint.
+	// description et mode d'emploi succint.
 	const gchar *cDescription;
-	/// auteur/pseudo
+	// auteur/pseudo
 	const gchar *cAuthor;
-	/// nom d'un module interne auquel ce module se rattache, ou NULL si aucun.
+	// nom d'un module interne auquel ce module se rattache, ou NULL si aucun.
 	const gchar *cInternalModule;
-	/// nom du module tel qu'affiche a l'utilisateur.
+	// nom du module tel qu'affiche a l'utilisateur.
 	const gchar *cTitle;
-	/// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
-	char reserved[4];
+	CairoDockModuleContainerType iContainerType;
+	// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
+	char reserved[16];
 };
 
 /// Definition of the interface of a module.
@@ -329,6 +338,9 @@ void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const 
 #define cairo_dock_module_is_auto_loaded(pModule) (pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL)
 
 int cairo_dock_get_nb_modules (void);
+
+const gchar *cairo_dock_get_modules_dir (void);
+
 
 G_END_DECLS
 #endif

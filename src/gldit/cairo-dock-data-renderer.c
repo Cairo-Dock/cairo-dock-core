@@ -35,6 +35,8 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-gauge.h"
+#include "cairo-dock-graph.h"
 #include "cairo-dock-data-renderer.h"
 
 extern gboolean g_bUseOpenGL;
@@ -515,4 +517,11 @@ gchar *cairo_dock_get_theme_path_for_data_renderer (const gchar *cRendererName, 
 	cd_debug ("Theme de la jauge : %s", cGaugePath);
 	g_free (cChosenThemeName);
 	return cGaugePath;
+}
+
+
+void cairo_dock_register_built_in_data_renderers (void)
+{
+	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge, "gauges", "Turbo-night-fuel");
+	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph, NULL, NULL);
 }

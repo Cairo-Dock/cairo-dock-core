@@ -43,7 +43,7 @@ target_link_libraries (${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${LIBCRYPT_LIBS}
-	gldit
+	gldi
 	icon-factory
 	implementations)
 

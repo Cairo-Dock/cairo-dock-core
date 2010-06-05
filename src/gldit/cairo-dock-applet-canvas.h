@@ -145,7 +145,8 @@ CD_APPLET_DEFINE_PROTO \
 	pVisitCard->iSizeOfData = sizeof (AppletData);\
 	pVisitCard->cAuthor = _cAuthor;\
 	pVisitCard->cDescription = _cDescription;\
-	pVisitCard->cTitle = _cName;
+	pVisitCard->cTitle = _cName;\
+	pVisitCard->iContainerType = CAIRO_DOCK_MODULE_CAN_DOCK | CAIRO_DOCK_MODULE_CAN_DESKLET;
 
 #define CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 	pInterface->initModule = CD_APPLET_INIT_FUNC;\
@@ -156,6 +157,8 @@ CD_APPLET_DEFINE_PROTO \
 	pInterface->read_conf_file = CD_APPLET_READ_CONFIG_FUNC;
 
 #define CD_APPLET_REDEFINE_TITLE(_cTitle) pVisitCard->cTitle = N_(_cTitle);
+
+#define CD_APPLET_SET_CONTAINER_TYPE(x) pVisitCard->iContainerType = x;
 
 /** Fin de la fonction de pre-initialisation de l'applet.
 */
@@ -169,12 +172,6 @@ CD_APPLET_DEFINE_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iApp
 CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 CD_APPLET_DEFINE_END
 
-// deprecated
-#define CD_APPLET_PRE_INIT_BEGIN CD_APPLET_DEFINE_BEGIN
-#define CD_APPLET_PRE_INIT_END CD_APPLET_DEFINE_END
-// end of deprecated
-
-#define CD_APPLET_CAN_DETACH TRUE
 
 #define CD_APPLET_ATTACH_TO_INTERNAL_MODULE(cInternalModuleName) cairo_dock_attach_to_another_module (pVisitCard, cInternalModuleName)
 

@@ -79,6 +79,7 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
+extern gchar *g_cCurrentIconsPath;
 
 extern gboolean g_bLocked;
 extern gboolean g_bForceCairo;
@@ -861,11 +862,11 @@ static void _cairo_dock_remove_custom_appli_icon (GtkMenuItem *pMenuItem, gpoint
 	CairoDock *pDock = data[1];
 	if (! CAIRO_DOCK_IS_APPLI (icon))
 		return;
-	gchar *cCustomIcon = g_strdup_printf ("%s/%s/%s.png", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, icon->cClass);
+	gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, icon->cClass);
 	if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
 	{
 		g_free (cCustomIcon);
-		cCustomIcon = g_strdup_printf ("%s/%s/%s.svg", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, icon->cClass);
+		cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, icon->cClass);
 		if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
 		{
 			g_free (cCustomIcon);
@@ -1376,11 +1377,11 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 		if (myTaskBar.bOverWriteXIcons)
 		{
-			gchar *cCustomIcon = g_strdup_printf ("%s/%s/%s.png", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, icon->cClass);
+			gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, icon->cClass);
 			if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
 			{
 				g_free (cCustomIcon);
-				cCustomIcon = g_strdup_printf ("%s/%s/%s.svg", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR, icon->cClass);
+				cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, icon->cClass);
 				if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
 				{
 					g_free (cCustomIcon);

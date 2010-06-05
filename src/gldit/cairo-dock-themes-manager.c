@@ -60,17 +60,9 @@ int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
 extern CairoDock *g_pMainDock;
 
-
-void cairo_dock_free_theme (CairoDockTheme *pTheme)
-{
-	if (pTheme == NULL)
-		return ;
-	g_free (pTheme->cThemePath);
-	g_free (pTheme->cAuthor);
-	g_free (pTheme->cDisplayedName);
-	g_free (pTheme);
-}
-
+  ////////////////////
+ /// DOWNLOAD API ///
+////////////////////
 
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName)
 {
@@ -350,7 +342,6 @@ gchar *cairo_dock_get_url_data (const gchar *cURL, GError **erreur)
 	return cContent;
 }
 
-
 static void _dl_file_readme (gpointer *pSharedMemory)
 {
 	GError *erreur = NULL;
@@ -391,7 +382,19 @@ CairoDockTask *cairo_dock_get_distant_file_content_async (const gchar *cServerAd
 	return pTask;
 }
 
+  //////////////////
+ /// THEMES API ///
+//////////////////
 
+void cairo_dock_free_theme (CairoDockTheme *pTheme)
+{
+	if (pTheme == NULL)
+		return ;
+	g_free (pTheme->cThemePath);
+	g_free (pTheme->cAuthor);
+	g_free (pTheme->cDisplayedName);
+	g_free (pTheme);
+}
 
 static inline int _get_theme_rating (const gchar *cThemesDir, const gchar *cThemeName)
 {
@@ -747,7 +750,7 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 		cThemePath = NULL;
 	}
 	
-	if (cShareThemesDir != NULL && /*iType != CAIRO_DOCK_DISTANT_THEME && iType != CAIRO_DOCK_NEW_THEME && */iType != CAIRO_DOCK_UPDATED_THEME)
+	if (cShareThemesDir != NULL && iType != CAIRO_DOCK_UPDATED_THEME)
 	{
 		cThemePath = g_strdup_printf ("%s/%s", cShareThemesDir, cThemeName);
 		if (g_file_test (cThemePath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
@@ -789,6 +792,14 @@ gchar *cairo_dock_get_theme_path (const gchar *cThemeName, const gchar *cShareTh
 }
 
 
+  ///////////////////////////
+ /// DOCK THEMES HELPERS ///
+///////////////////////////
+
+#define CAIRO_DOCK_LOCAL_EXTRAS_DIR "extras"
+#define CAIRO_DOCK_LAUNCHERS_DIR "launchers"
+#define CAIRO_DOCK_PLUG_INS_DIR "plug-ins"
+#define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
 
 void cairo_dock_mark_theme_as_modified (gboolean bModified)
 {
@@ -820,7 +831,6 @@ gboolean cairo_dock_theme_need_save (void)
 	g_free (cContent);
 	return bNeedSave;
 }
-
 
 
 CairoDockThemeType cairo_dock_extract_theme_type_from_name (const gchar *cThemeName)
@@ -1276,6 +1286,7 @@ void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar 
 	_check_dir (g_cExtrasDirPath);
 	g_cThemesDirPath = cThemesDirPath;  // le chemin vers le repertoire des themes.
 	_check_dir (g_cThemesDirPath);
+	s_cThemeServerAdress = cThemeServerAdress;
 	
 	g_cCurrentLaunchersPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
 	_check_dir (g_cCurrentLaunchersPath);

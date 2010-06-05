@@ -128,11 +128,13 @@
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-hiding-effect.h"
 #include "cairo-dock-icon-container.h"
+#include "cairo-dock-data-renderer.h"
 
 #define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"  // "http://themes.cairo-dock.vef.fr"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
 
 extern gchar *g_cCairoDockDataDir;
+extern gchar *g_cCurrentThemePath;
 
 extern gchar *g_cConfFile;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
@@ -259,11 +261,6 @@ static void _register_help_module (void)
 	cairo_dock_activate_module (pHelpModule, NULL);
 	pHelpModule->fLastLoadingTime = time (NULL) + 1e7;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
 }
-
-#define _create_dir_or_die(cDirPath) do {\
-	if (g_mkdir (cDirPath, 7*8*8+7*8+7) != 0) {\
-		cd_warning ("couldn't create directory %s", cDirPath);\
-		return 1; } } while (0)
 
 int main (int argc, char** argv)
 {
@@ -479,9 +476,7 @@ int main (int argc, char** argv)
 	cd_debug ("environnement de bureau : %d", g_iDesktopEnv);
 	
 	//\___________________ On enregistre les implementations.
-	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge, "gauges", "Turbo-night-fuel");
-	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph, NULL, NULL);
-	
+	cairo_dock_register_built_in_data_renderers ();
 	cairo_dock_register_hiding_effects ();
 	g_pKeepingBelowBackend = cairo_dock_get_hiding_effect ("Fade out");
 	
@@ -547,7 +542,7 @@ int main (int argc, char** argv)
 	//\___________________ On initialise le gestionnaire de modules et on pre-charge les modules existant (il faut le faire apres savoir si on utilise l'OpenGL).
 	if (g_module_supported () && ! bSafeMode)
 	{
-		cairo_dock_initialize_module_manager (CAIRO_DOCK_MODULES_DIR);
+		cairo_dock_initialize_module_manager (cairo_dock_get_modules_dir ());
 		
 		if (cUserDefinedModuleDir != NULL)
 		{
@@ -559,14 +554,14 @@ int main (int argc, char** argv)
 	else
 		cairo_dock_initialize_module_manager (NULL);
 	
-	_register_help_module ();
-	
-	if (!bSafeMode && cairo_dock_get_nb_modules () <= 1)  // le module Help est inclus de base.
+	if (!bSafeMode && cairo_dock_get_nb_modules () == 0)
 	{
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
 		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
 		exit (0);
 	}
+	
+	_register_help_module ();
 	
 	//\___________________ On definit le backend des GUI.
 	cairo_dock_load_user_gui_backend ();
@@ -647,7 +642,7 @@ int main (int argc, char** argv)
 	cd_message ("loading theme ...");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))
 	{
-		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s\"/* \"%s/%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCairoDockDataDir, CAIRO_DOCK_CURRENT_THEME_NAME);
+		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCurrentThemePath);
 		cd_message (cCommand);
 		int r = system (cCommand);
 		g_free (cCommand);

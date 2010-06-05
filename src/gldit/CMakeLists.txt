@@ -82,19 +82,24 @@ include_directories(
 link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${XEXTEND_LIBRARY_DIRS}
+	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/implementations)
 
-add_library ("gldit" SHARED ${core_lib_SRCS})
+add_library ("gldi" SHARED ${core_lib_SRCS})
 
 # Link the executable to the librairies.
-target_link_libraries("gldit"
+target_link_libraries("gldi"
 	${PACKAGE_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${LIBCRYPT_LIBS}
 	icon-factory
 	implementations)
 
+
+configure_file (gldi.pc.in gldi.pc)
+install (FILES  gldi.pc DESTINATION ${libdir}/pkgconfig)
+install (FILES  libgldi.so DESTINATION ${libdir})
 
 ########### install files ###############
 

@@ -21,9 +21,8 @@
 #ifndef __CAIRO_DOCK_GAUGE__
 #define  __CAIRO_DOCK_GAUGE__
 
-#include "cairo-dock-struct.h"
-#include "cairo-dock-data-renderer.h"
-#include "cairo-dock-themes-manager.h"
+//#include "cairo-dock-struct.h"
+//#include "cairo-dock-data-renderer.h"
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 G_BEGIN_DECLS

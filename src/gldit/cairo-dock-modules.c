@@ -426,58 +426,64 @@ void cairo_dock_unregister_module (const gchar *cModuleName)
 GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)
 {
 	g_return_val_if_fail (pInstance != NULL, NULL);
-	// on ouvre son fichier de conf.
+	//\____________________ on ouvre son fichier de conf.
 	if (pInstance->cConfFilePath == NULL)  // aucun fichier de conf (xxx-integration par exemple).
 		return NULL;
 	gchar *cInstanceConfFilePath = pInstance->cConfFilePath;
 	CairoDockModule *pModule = pInstance->pModule;
 	
-	GError *erreur = NULL;
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
 	if (pKeyFile == NULL)  // fichier illisible.
 		return NULL;
 	
-	if (! g_key_file_has_group (pKeyFile, "Icon"))  // ce module n'a pas d'icone, ce n'est donc pas une applet.
+	if (pInstance->pModule->pVisitCard->iContainerType == CAIRO_DOCK_MODULE_IS_PLUGIN)  // ce module n'a pas d'icone (ce n'est pas une applet).
 	{
 		return pKeyFile;
 	}
 	
-	// on recupere les parametres de l'icone.
-	gboolean bUseless;
-	cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
-	if (pMinimalConfig->iDesiredIconWidth == 0)
-		pMinimalConfig->iDesiredIconWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
-	if (pMinimalConfig->iDesiredIconWidth == 0)
-		pMinimalConfig->iDesiredIconWidth = 48;
-	if (pMinimalConfig->iDesiredIconHeight == 0)
-		pMinimalConfig->iDesiredIconHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
-	if (pMinimalConfig->iDesiredIconHeight == 0)
-		pMinimalConfig->iDesiredIconHeight = 48;
-	
-	pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
-	pMinimalConfig->cIconFileName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "icon", NULL, NULL, NULL, NULL);
-	pMinimalConfig->fOrder = cairo_dock_get_double_key_value (pKeyFile, "Icon", "order", NULL, CAIRO_DOCK_LAST_ORDER, NULL, NULL);
-	if (pMinimalConfig->fOrder == CAIRO_DOCK_LAST_ORDER)
+	//\____________________ on recupere les parametres de l'icone.
+	if (pInstance->pModule->pVisitCard->iContainerType & CAIRO_DOCK_MODULE_CAN_DOCK)  // l'applet peut aller dans un dock.
 	{
-		pMinimalConfig->fOrder = ++ s_iMaxOrder;
-		g_key_file_set_double (pKeyFile, "Icon", "order", pMinimalConfig->fOrder);
-		cd_debug ("set order to %.1f\n", pMinimalConfig->fOrder);
-		cairo_dock_write_keys_to_file (pKeyFile, cInstanceConfFilePath);
+		gboolean bUseless;
+		cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
+		if (pMinimalConfig->iDesiredIconWidth == 0)
+			pMinimalConfig->iDesiredIconWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
+		if (pMinimalConfig->iDesiredIconWidth == 0)
+			pMinimalConfig->iDesiredIconWidth = 48;
+		if (pMinimalConfig->iDesiredIconHeight == 0)
+			pMinimalConfig->iDesiredIconHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
+		if (pMinimalConfig->iDesiredIconHeight == 0)
+			pMinimalConfig->iDesiredIconHeight = 48;
+		
+		pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
+		pMinimalConfig->cIconFileName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "icon", NULL, NULL, NULL, NULL);
+		pMinimalConfig->fOrder = cairo_dock_get_double_key_value (pKeyFile, "Icon", "order", NULL, CAIRO_DOCK_LAST_ORDER, NULL, NULL);
+		if (pMinimalConfig->fOrder == CAIRO_DOCK_LAST_ORDER)
+		{
+			pMinimalConfig->fOrder = ++ s_iMaxOrder;
+			g_key_file_set_double (pKeyFile, "Icon", "order", pMinimalConfig->fOrder);
+			cd_debug ("set order to %.1f\n", pMinimalConfig->fOrder);
+			cairo_dock_write_keys_to_file (pKeyFile, cInstanceConfFilePath);
+		}
+		else
+		{
+			s_iMaxOrder = MAX (s_iMaxOrder, pMinimalConfig->fOrder);
+		}
+		pMinimalConfig->cDockName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "dock name", NULL, NULL, NULL, NULL);
+		pMinimalConfig->bAlwaysVisible = g_key_file_get_boolean (pKeyFile, "Icon", "always visi", NULL);
 	}
-	else
-	{
-		s_iMaxOrder = MAX (s_iMaxOrder, pMinimalConfig->fOrder);
-	}
-	pMinimalConfig->cDockName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "dock name", NULL, NULL, NULL, NULL);
-	pMinimalConfig->bAlwaysVisible = g_key_file_get_boolean (pKeyFile, "Icon", "always visi", NULL);
 	
-	// on recupere les parametres de son desklet.
-	CairoDeskletAttribute *pDeskletAttribute = &pMinimalConfig->deskletAttribute;
-	if (g_key_file_has_group (pKeyFile, "Desklet"))  // cette applet peut se detacher.
+	//\____________________ on recupere les parametres de son desklet.
+	if (pInstance->pModule->pVisitCard->iContainerType & CAIRO_DOCK_MODULE_CAN_DESKLET)  // l'applet peut aller dans un desklet.
 	{
-		pMinimalConfig->bIsDetached = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "initially detached", NULL, FALSE, NULL, NULL);
+		CairoDeskletAttribute *pDeskletAttribute = &pMinimalConfig->deskletAttribute;
+		if (pInstance->pModule->pVisitCard->iContainerType & CAIRO_DOCK_MODULE_CAN_DOCK)
+			pMinimalConfig->bIsDetached = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "initially detached", NULL, FALSE, NULL, NULL);
+		else
+			pMinimalConfig->bIsDetached = TRUE;
 		pDeskletAttribute->bDeskletUseSize = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "use size", NULL, TRUE, NULL, NULL);
 		
+		gboolean bUseless;
 		cairo_dock_get_size_key_value_helper (pKeyFile, "Desklet", "", bUseless, pDeskletAttribute->iDeskletWidth, pDeskletAttribute->iDeskletHeight);
 		//g_print ("desklet : %dx%d\n", pDeskletAttribute->iDeskletWidth, pDeskletAttribute->iDeskletHeight);
 		if (pDeskletAttribute->iDeskletWidth == 0)
@@ -521,6 +527,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 			pDeskletAttribute->cDecorationTheme = cDecorationTheme;
 		}
 	}
+	
 	return pKeyFile;
 }
 
@@ -619,7 +626,8 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
 		pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
 		
-		if (pMinimalConfig->iDesiredIconWidth > 0)  // c'est une applet.
+		///if (pMinimalConfig->iDesiredIconWidth > 0)  // c'est une applet.
+		if (pInstance->pModule->pVisitCard->iContainerType != CAIRO_DOCK_MODULE_IS_PLUGIN)  // c'est une applet.
 		{
 			//\______________ On met a jour les champs 'nom' et 'image' de l'icone.
 			if (pIcon != NULL)
@@ -1005,7 +1013,8 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	CairoDesklet *pDesklet = NULL;
 	Icon *pIcon = NULL;
 	
-	if (pMinimalConfig->iDesiredIconWidth > 0)  // le module a une icone, c'est donc une applet.
+	///if (pMinimalConfig->iDesiredIconWidth > 0)  // le module a une icone, c'est donc une applet.
+	if (pInstance->pModule->pVisitCard->iContainerType != CAIRO_DOCK_MODULE_IS_PLUGIN)  // le module a une icone (c'est une applet).
 	{
 		pInstance->bCanDetach = pMinimalConfig->deskletAttribute.iDeskletWidth > 0;
 		pModule->bCanDetach = pInstance->bCanDetach;  // pas encore clair ...
@@ -1221,17 +1230,22 @@ void cairo_dock_add_module_instance (CairoDockModule *pModule)
 void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance)
 {
 	//g_return_if_fail (pInstance->pDesklet == NULL);
-	//\__________________ On enregistre l'etat 'detache'.
+	//\__________________ On recupere l'etat actuel.
 	gboolean bIsDetached = (pInstance->pDesklet != NULL);
-	cairo_dock_update_conf_file (pInstance->cConfFilePath,
-		G_TYPE_BOOLEAN, "Desklet", "initially detached", !bIsDetached,
-		G_TYPE_INVALID);
-	//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
-	cairo_dock_update_desklet_detached_state_in_gui (pInstance, !bIsDetached);
-	//\__________________ On detache l'applet.
-	cairo_dock_reload_module_instance (pInstance, TRUE);
-	if (pInstance->pDesklet)  // on a bien detache l'applet.
-		cairo_dock_zoom_out_desklet (pInstance->pDesklet);
+	if ((bIsDetached && pInstance->pModule->pVisitCard->iContainerType & CAIRO_DOCK_MODULE_CAN_DOCK) ||
+		(!bIsDetached && pInstance->pModule->pVisitCard->iContainerType & CAIRO_DOCK_MODULE_CAN_DESKLET))
+	{
+		//\__________________ On enregistre l'etat 'detache'.
+		cairo_dock_update_conf_file (pInstance->cConfFilePath,
+			G_TYPE_BOOLEAN, "Desklet", "initially detached", !bIsDetached,
+			G_TYPE_INVALID);
+		//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
+		cairo_dock_update_desklet_detached_state_in_gui (pInstance, !bIsDetached);
+		//\__________________ On detache l'applet.
+		cairo_dock_reload_module_instance (pInstance, TRUE);
+		if (pInstance->pDesklet)  // on a bien detache l'applet.
+			cairo_dock_zoom_out_desklet (pInstance->pDesklet);
+	}
 }
 
 void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pInstance, int iCenterX, int iCenterY)
@@ -1445,4 +1459,10 @@ void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const 
 int cairo_dock_get_nb_modules (void)
 {
 	return g_hash_table_size (s_hModuleTable);
+}
+
+
+const gchar *cairo_dock_get_modules_dir (void)
+{
+	return CAIRO_DOCK_MODULES_DIR;
 }

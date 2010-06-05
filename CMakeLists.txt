@@ -93,6 +93,8 @@ set (CAIRO_DOCK_LOCALE_DIR ${datadir}/locale)
 set (CAIRO_DOCK_THEMES_DIR "themes")
 set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 
+set (GLDI_SHARE_DATA_DIR ${pkgdatadir})
+
 ########### file generation ###############
 
 configure_file (config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
@@ -105,35 +107,7 @@ configure_file ("cmake_uninstall.cmake.in" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_un
 
 ########### install files ###############
 
-install(FILES cairo-dock-package-theme launch-cairo-dock-with-delay
-        DESTINATION ${bindir}
-        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+install (FILES cairo-dock-package-theme launch-cairo-dock-with-delay
+	DESTINATION ${bindir}
+	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 install (FILES  cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
-
-#original Makefile.am contents follow:
-
-##dnl Process this file with automake to produce Makefile.in
-#
-#
-#SUBDIRS = . src po data
-#
-#
-#pkgconfigdir = $(libdir)/pkgconfig
-#pkgconfig_DATA = cairo-dock.pc
-#
-#
-#dist_bin_SCRIPTS = \
-#	cairo-dock-package-theme\
-#	launch-cairo-dock-after-compiz
-#
-#
-#EXTRA_DIST = \
-#	intltool-extract.in\
-#	intltool-merge.in\
-#	intltool-update.in\
-#	LICENSE\
-#	LGPL-2\
-#	ChangeLog\
-#	copyright
-
-# ${CMAKE_CURRENT_BIN_DIR} or ${CMAKE_CURRENT_SOURCE_DIR}
