@@ -8,6 +8,7 @@ SET(icon_SRCS
 )
 
 add_library(icon-factory STATIC ${icon_SRCS})
+add_definitions (-fPIC)
 
 link_directories(
 	${PACKAGE_LIBRARY_DIRS})

@@ -7,6 +7,7 @@ SET(impl_SRCS
 )
 
 add_library(implementations STATIC ${impl_SRCS})
+add_definitions (-fPIC)
 
 link_directories(
 	${PACKAGE_LIBRARY_DIRS})

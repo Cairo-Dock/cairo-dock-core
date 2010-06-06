@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export CAIRO_DOCK_DIR "~/.config/cairo-dock"
+export CAIRO_DOCK_DIR="$HOME/.config/cairo-dock"
 
 if test "x$1" = "x"; then
 	export CURRENT_THEME_DIR="$CAIRO_DOCK_DIR/current_theme"
@@ -10,7 +10,7 @@ else
 fi
 
 if test ! -d "$CURRENT_THEME_DIR"; then
-	echo "wrong theme path"
+	echo "wrong theme path ($CURRENT_THEME_DIR)"
 	exit 1
 fi
 
@@ -91,51 +91,61 @@ set_value "System"		"conn use proxy"		false
 set_value "System"		"conn timeout"			7
 set_value "Dialogs"		"custom"				false
 set_value "Labels"		"custom"				false
-modules = get_value "System" "modules"
+modules=`get_value "System" "modules"`
 echo $modules | grep "icon effects"
-if test $? == 1; then
-	modules = "${modules};icon effects"
+if test $? = 1; then
+	modules="${modules};icon effects"
 	set_value "System" "modules" "$modules"
 fi
 echo $modules | grep "illusion"
-if test $? == 1; then
-	modules = "${modules};illusion"
+if test $? = 1; then
+	modules="${modules};illusion"
+	set_value "System" "modules" "$modules"
+fi
+echo $modules | grep "Dbus"
+if test $? = 1; then
+	modules="${modules};Dbus"
 	set_value "System" "modules" "$modules"
 fi
 #set_value "System"		"modules"				"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
 
 set_current_conf_file "plug-ins/Animated-icons/Animated-icons.conf"
-set_value "Rotation"	"color"							"1;1;1;0"
+set_value "Rotation"		"color"						"1;1;1;0"
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
 set_value "Configuration"	"persistent"				""
 
 set_current_conf_file "plug-ins/clock/clock.conf"
-set_value "Icon"				"name"					""
-desklet = get_value "Desklet" "initially detached"
-if test $desklet = "false"; then
-	set_value "Configuration"		"show date"			2
-	set_value "Configuration"		"show seconds"		false
+set_value "Icon"			"name"						""
+desklet=`get_value "Desklet" "initially detached"`
+if test "$desklet" = "false"; then
+	set_value "Module"		"show date"					2
+	set_value "Module"		"show seconds"				false
 fi
 
 set_current_conf_file "plug-ins/dustbin/dustbin.conf"
-set_value "Module"		"additionnal directories"		""
-set_value "Module"		"alternative file browser"		""
+set_value "Icon"			"name"						"Dustbin"
+set_value "Module"			"additionnal directories"	""
+set_value "Module"			"alternative file browser"	""
 
 set_current_conf_file "plug-ins/GMenu/GMenu.conf"
 set_value "Icon"			"name"						"Applications Menu"
 set_value "Configuration"	"has icons"					true
 set_value "Configuration"	"show recent"				true
 
+set_current_conf_file "plug-ins/logout/logout.conf"
+set_value "Icon"			"name"						"Log-out"
+set_value "Configuration"	"invert"					true
+
 set_current_conf_file "plug-ins/mail/mail.conf"
 set_value_on_all_groups		"username"					""
 set_value_on_all_groups		"password"					""
 
-set_current_conf_file "plug-ins/Quick Browser/quick-browser.conf"
+set_current_conf_file "plug-ins/quick-browser/quick-browser.conf"
 set_value "Icon"			"name"						""
 set_value "Configuration"	"dir path"					""
 
-set_current_conf_file "plug-ins/dock-rendering/rendering.conf"
+set_current_conf_file "plug-ins/rendering/rendering.conf"
 set_value "Inclinated Plane" "vanishing point"			300
 set_value "Curve"			"curvature"					70
 set_value "Parabolic"		"curvature"					".3"
@@ -145,6 +155,7 @@ set_value "SimpleSlide"		"simple_fScaleMax"			"1.5"
 set_value "SimpleSlide"		"simple_arrowShift"			0
 set_value "SimpleSlide"		"simple_arrowHeight"		15
 set_value "SimpleSlide"		"simple_arrowWidth"			30
+set_value "SimpleSlide"		"simple_wide_grid"			true
 
 set_current_conf_file "plug-ins/RSSreader/RSSreader.conf"
 set_value "Icon"			"name"						""
@@ -165,6 +176,7 @@ set_value "Configuration"	"stack dir"					""
 set_current_conf_file "plug-ins/switcher/switcher.conf"
 set_value "Icon"			"name"						""
 set_value "Configuration"	"preserve ratio"			false
+set_value "Configuration"	"Draw Windows"				true
 
 set_current_conf_file "plug-ins/weather/weather.conf"
 set_value "Icon"			"name"						""
@@ -173,8 +185,8 @@ set_value "Configuration"	"check interval"			15
 set_value "Configuration"	"IS units"					true
 
 set_current_conf_file "plug-ins/weblets/weblets.conf"
-set_value "Configuration"	"weblet URI"				"http://www.google.com"
-set_value "Configuration"	"uri list"				""
+set_value "Configuration"	"weblet URI"				"http:\/\/www.google.com"
+set_value "Configuration"	"uri list"					""
 
 set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
 set_value "Configuration"	"initial gamma"				0

@@ -538,7 +538,7 @@ static void cairo_dock_add_main_dock (GtkMenuItem *pMenuItem, gpointer *data)
 	CairoDock *pDock = cairo_dock_create_dock (cDockName, NULL);
 	cairo_dock_reload_one_root_dock (cDockName, pDock);
 	
-	cairo_dock_show_general_message (_("The new dock has been created.\nNow move some launchers or applets into it by right-clicking on the icon -> move to another dock"), 8000);  // on le place pas sur le nouveau dock, car sa fenetre n'est pas encore bien placee (0,0).
+	cairo_dock_show_general_message (_("The new dock has been created.\nNow move some launchers or applets into it by right-clicking on the icon -> move to another dock"), 10000);  // on le place pas sur le nouveau dock, car sa fenetre n'est pas encore bien placee (0,0).
 }
 
 static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)

@@ -328,7 +328,7 @@ void cairo_dock_load_dock_background (CairoDock *pDock)
 	int iWidth = pDock->iDecorationsWidth;
 	int iHeight = pDock->iDecorationsHeight;
 	
-	if (pDock->bGlobalBg)
+	if (pDock->bGlobalBg || pDock->iRefCount > 0)
 	{
 		_cairo_dock_load_default_background (&pDock->backgroundBuffer, iWidth, iHeight);
 	}

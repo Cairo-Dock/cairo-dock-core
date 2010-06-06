@@ -743,13 +743,13 @@ gchar *cairo_dock_add_root_dock_config (void)
 	
 	// on placera le nouveau dock a l'oppose du main dock, meme ecran et meme visibilite.
 	cairo_dock_update_conf_file (cConfFilePath,
-		G_TYPE_INT, "Position", "screen border",
+		G_TYPE_INT, "Behavior", "screen border",
 		(g_pMainDock->container.bIsHorizontal ?
 			(g_pMainDock->container.bDirectionUp ? 1 : 0) :
 			(g_pMainDock->container.bDirectionUp ? 3 : 2)),
-		G_TYPE_INT, "Position", "visibility",
+		G_TYPE_INT, "Behavior", "visibility",
 		g_pMainDock->iVisibility,
-		G_TYPE_INT, "Position", "num screen",
+		G_TYPE_INT, "Behavior", "num screen",
 		g_pMainDock->iNumScreen,
 		G_TYPE_INVALID);
 	g_free (cConfFilePath);

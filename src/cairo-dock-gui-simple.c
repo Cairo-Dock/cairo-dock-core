@@ -66,10 +66,10 @@ static const  gchar *s_cCurrentModuleName = NULL;
 static int s_iIconSize;
 static int s_iTaskbarType;
 static gboolean s_bSeparateIcons;
-static const gchar *s_cHoverAnim = "";
-static const gchar *s_cHoverEffect = "";
-static const gchar *s_cClickAnim = "";
-static const gchar *s_cClickEffect = "";
+static gchar *s_cHoverAnim = NULL;
+static gchar *s_cHoverEffect = NULL;
+static gchar *s_cClickAnim = NULL;
+static gchar *s_cClickEffect = NULL;
 static int s_iEffectOnDisappearance = -1;
 
 extern gchar *g_cConfFile;
@@ -83,26 +83,26 @@ extern gboolean g_bUseOpenGL;
 		cairo_dock_reload_internal_module_from_keyfile (pInternalModule, pKeyFile);\
 	} while (0)
 
-static const gchar *_get_animation_name (int i)
+static gchar *_get_animation_name (int i)
 {
 	switch (i)
 	{
 		case 0:
-			return "bounce";
+			return g_strdup ("bounce");
 		case 1:
-			return "rotate";
+			return g_strdup ("rotate");
 		case 2:
-			return "blink";
+			return g_strdup ("blink");
 		case 3:
-			return "pulse";
+			return g_strdup ("pulse");
 		case 4:
-			return "wobbly";
+			return g_strdup ("wobbly");
 		case 5:
-			return "wave";
+			return g_strdup ("wave");
 		case 6:
-			return "spot";
+			return g_strdup ("spot");
 		default:
-		return "";
+		return g_strdup ("");
 	}
 }
 static const gchar *_get_animation_number (const gchar *s)
@@ -131,24 +131,24 @@ static const gchar *_get_animation_number (const gchar *s)
 		return "6";
 	return "";
 }
-static const gchar *_get_effect_name (int i)
+static gchar *_get_effect_name (int i)
 {
 	switch (i)
 	{
 		case 0:
-			return "fire";
+			return g_strdup ("fire");
 		case 1:
-			return "stars";
+			return g_strdup ("stars");
 		case 2:
-			return "rain";
+			return g_strdup ("rain");
 		case 3:
-			return "snow";
+			return g_strdup ("snow");
 		case 4:
-			return "storm";
+			return g_strdup ("storm");
 		case 5:
-			return "firework";
+			return g_strdup ("firework");
 		default:
-		return "";
+		return g_strdup ("");
 	}
 }
 static const gchar *_get_effect_number (const gchar *s)
@@ -287,9 +287,13 @@ static gchar * _make_simple_conf_file (void)
 		}
 	}
 	
+	g_free (s_cHoverAnim);
 	s_cHoverAnim = _get_animation_name (iAnimOnMouseHover);
+	g_free (s_cHoverEffect);
 	s_cHoverEffect = _get_effect_name (iEffectOnMouseHover);
+	g_free (s_cClickAnim);
 	s_cClickAnim = _get_animation_name (iAnimOnClick);
+	g_free (s_cClickEffect);
 	s_cClickEffect = _get_effect_name (iEffectOnClick);
 	const gchar *cOnMouseHover[2] = {s_cHoverAnim, s_cHoverEffect};
 	const gchar *cOnClick[2] = {s_cClickAnim, s_cClickEffect};
@@ -499,6 +503,8 @@ static gboolean on_apply_config_simple (gpointer data)
 					G_TYPE_STRING, "Global", "hover effects", _get_animation_number (cOnMouseHover[0]),
 					G_TYPE_INVALID);
 			}
+			g_free (s_cHoverAnim);
+			s_cHoverAnim = g_strdup (cOnMouseHover[0]);
 		}
 		if (cOnMouseHover[1] && strcmp (cOnMouseHover[1], s_cHoverEffect) != 0)
 		{
@@ -510,6 +516,8 @@ static gboolean on_apply_config_simple (gpointer data)
 					G_TYPE_STRING, "Global", "effects", _get_effect_number (cOnMouseHover[1]),
 					G_TYPE_INVALID);
 			}
+			g_free (s_cHoverEffect);
+			s_cHoverEffect = g_strdup (cOnMouseHover[1]);
 		}
 	}
 	if (cOnClick && cOnClick[0])
@@ -527,6 +535,8 @@ static gboolean on_apply_config_simple (gpointer data)
 					G_TYPE_STRING, "Global", "click applets", cAnimation,
 					G_TYPE_INVALID);
 			}
+			g_free (s_cClickAnim);
+			s_cClickAnim = g_strdup (cOnClick[0]);
 		}
 		if (cOnClick[1] && strcmp (cOnClick[1], s_cClickEffect) != 0)
 		{
@@ -541,6 +551,8 @@ static gboolean on_apply_config_simple (gpointer data)
 					G_TYPE_STRING, "Global", "click applets", cAnimation,
 					G_TYPE_INVALID);
 			}
+			g_free (s_cClickEffect);
+			s_cClickEffect = g_strdup (cOnClick[1]);
 		}
 	}
 	if (iEffectOnDisappearance != s_iEffectOnDisappearance)

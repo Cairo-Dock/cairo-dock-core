@@ -423,7 +423,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	if (pDock == NULL || g_list_find (pDock->icons, icon) == NULL)  // elle est deja detachee.
 		return FALSE;
 
-	cd_message ("%s (%s)", __func__, icon->cName);
+	cd_message ("%s (%s,  %d)", __func__, icon->cName, bCheckUnusedSeparator);
 	g_free (icon->cParentDockName);
 	icon->cParentDockName = NULL;
 	
@@ -507,6 +507,11 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator)
 {
 	g_return_if_fail (icon != NULL);
+	
+	//\___________________ On detache l'icone du dock.
+	if (pDock != NULL)
+		cairo_dock_detach_icon_from_dock (icon, pDock, bCheckUnusedSeparator);  // on le fait maintenant, pour que l'icone ait son type correct, et ne soit pas confondue avec un separateur
+	
 	//\___________________ On effectue les taches de fermeture de l'icone suivant son type.
 	gboolean bNormalAppli = CAIRO_DOCK_IS_NORMAL_APPLI (icon);  // on le recupere la dans le cas d'une applet controlant une appli, car apres s'etre fait deinstanciee, elle n'est plus une applet, et est alors consideree comme une appli normale (on veut garder son Xid lors du detachement du dock).
 	if (icon->cDesktopFileName != NULL)
@@ -542,10 +547,6 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 		cairo_dock_update_conf_file_with_active_modules ();
 		cairo_dock_mark_theme_as_modified (TRUE);
 	}  // rien a faire pour les separateurs automatiques.
-	
-	//\___________________ On detache l'icone du dock.
-	if (pDock != NULL)
-		cairo_dock_detach_icon_from_dock (icon, pDock, bCheckUnusedSeparator);
 	
 	if (bNormalAppli)
 	{
