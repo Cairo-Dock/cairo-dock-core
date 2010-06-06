@@ -862,9 +862,9 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 
 void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 {
-	pIcon->bIsDemandingAttention = FALSE;
 	cairo_dock_stop_icon_animation (pIcon);
-	cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
+	cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));  // a faire avant, lorsque l'icone est encore en mode demande d'attention.
+	pIcon->bIsDemandingAttention = FALSE;
 	
 	// on stoppe la demande d'attention recursivement vers le bas.
 	if (pDock->iRefCount > 0)

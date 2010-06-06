@@ -51,7 +51,6 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-default-view.h"
 
-extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
 static GLuint s_iFlatSeparatorTexture = 0;
@@ -587,7 +586,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	}
 	glScalef (fDockWidth + fExtraWidth, fFrameHeight, 1.);
 	cairo_dock_gl_path_set_extent (pFramePath, 1, 1);*/
-	cairo_dock_fill_gl_path (pFramePath, g_pDockBackgroundBuffer.iTexture);
+	cairo_dock_fill_gl_path (pFramePath, pDock->backgroundBuffer.iTexture);
 	
 	//\_____________ On trace le contour.
 	if (fLineWidth != 0)

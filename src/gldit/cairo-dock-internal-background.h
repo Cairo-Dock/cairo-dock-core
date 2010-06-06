@@ -34,11 +34,13 @@ extern CairoConfigBackground myBackground;
 G_BEGIN_DECLS
 
 struct _CairoConfigBackground {
+	// frame
 	gint iDockRadius;
 	gint iDockLineWidth;
 	gint iFrameMargin;
 	gdouble fLineColor[4];
 	gboolean bRoundedBottomCorner;
+	// background
 	gchar *cBackgroundImageFile;
 	gdouble fBackgroundImageAlpha;
 	gboolean bBackgroundImageRepeat;
@@ -50,8 +52,8 @@ struct _CairoConfigBackground {
 	/**gchar *cVisibleZoneImageFile;
 	gdouble fVisibleZoneAlpha;
 	gboolean bReverseVisibleImage;*/
-	gdouble fDecorationSpeed;
-	gboolean bDecorationsFollowMouse;
+	/**gdouble fDecorationSpeed;
+	gboolean bDecorationsFollowMouse;*/
 	};
 
 #define g_iDockLineWidth myBackground.iDockLineWidth

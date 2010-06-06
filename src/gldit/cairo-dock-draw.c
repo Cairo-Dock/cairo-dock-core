@@ -52,8 +52,6 @@
 #include "cairo-dock-draw-opengl.h"  // pour cairo_dock_render_one_icon
 #include "cairo-dock-draw.h"
 
-
-extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
@@ -302,11 +300,11 @@ double cairo_dock_draw_frame (cairo_t *pCairoContext, double fRadius, double fLi
 void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *pDock, double fOffsetY, double fOffsetX, double fWidth)
 {
 	//g_print ("%.2f\n", pDock->fDecorationsOffsetX);
-	if (g_pDockBackgroundBuffer.pSurface == NULL)
+	if (pDock->backgroundBuffer.pSurface == NULL)
 		return ;
 	cairo_save (pCairoContext);
 	
-	if (myBackground.cBackgroundImageFile && !myBackground.bBackgroundImageRepeat)  /// g_pBackgroundSurfaceFull != NULL
+	/**if (myBackground.cBackgroundImageFile && !myBackground.bBackgroundImageRepeat)  /// g_pBackgroundSurfaceFull != NULL
 	{
 		double f = (myBackground.fDecorationSpeed || myBackground.bDecorationsFollowMouse ? .5 : 0.);
 		if (pDock->container.bIsHorizontal)
@@ -314,22 +312,22 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 		else
 			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed - pDock->container.iWidth * f);
 		
-		cairo_dock_draw_surface (pCairoContext, g_pDockBackgroundBuffer.pSurface, g_pDockBackgroundBuffer.iWidth, g_pDockBackgroundBuffer.iHeight, pDock->container.bDirectionUp, pDock->container.bIsHorizontal, -1.);  // -1 <=> fill_preserve
+		cairo_dock_draw_surface (pCairoContext, pDock->backgroundBuffer.pSurface, pDock->backgroundBuffer.iWidth, pDock->backgroundBuffer.iHeight, pDock->container.bDirectionUp, pDock->container.bIsHorizontal, -1.);  // -1 <=> fill_preserve
 	}
-	else
+	else*/
 	{
 		if (pDock->container.bIsHorizontal)
 		{
-			cairo_translate (pCairoContext, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed + fOffsetX, fOffsetY);
-			cairo_scale (pCairoContext, fWidth / g_pDockBackgroundBuffer.iWidth, 1. * pDock->iDecorationsHeight / g_pDockBackgroundBuffer.iHeight);  // pDock->container.iWidth
+			cairo_translate (pCairoContext, /**pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed */fOffsetX, fOffsetY);
+			cairo_scale (pCairoContext, (double)fWidth / pDock->backgroundBuffer.iWidth, (double)pDock->iDecorationsHeight / pDock->backgroundBuffer.iHeight);  // pDock->container.iWidth
 		}
 		else
 		{
-			cairo_translate (pCairoContext, fOffsetY, pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed + fOffsetX);
-			cairo_scale (pCairoContext, 1. * pDock->iDecorationsHeight / g_pDockBackgroundBuffer.iHeight, 1. * fWidth / g_pDockBackgroundBuffer.iWidth);
+			cairo_translate (pCairoContext, fOffsetY, /**pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed + */fOffsetX);
+			cairo_scale (pCairoContext, (double)pDock->iDecorationsHeight / pDock->backgroundBuffer.iHeight, (double)fWidth / pDock->backgroundBuffer.iWidth);
 		}
 		
-		cairo_dock_draw_surface (pCairoContext, g_pDockBackgroundBuffer.pSurface, g_pDockBackgroundBuffer.iWidth, g_pDockBackgroundBuffer.iHeight, pDock->container.bDirectionUp, pDock->container.bIsHorizontal, -1.);  // -1 <=> fill_preserve
+		cairo_dock_draw_surface (pCairoContext, pDock->backgroundBuffer.pSurface, pDock->backgroundBuffer.iWidth, pDock->backgroundBuffer.iHeight, pDock->container.bDirectionUp, pDock->container.bIsHorizontal, -1.);  // -1 <=> fill_preserve
 	}
 	cairo_restore (pCairoContext);
 }

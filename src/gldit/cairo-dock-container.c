@@ -207,7 +207,7 @@ static inline void _redraw_container_area (CairoContainer *pContainer, GdkRectan
 		pArea->height = pContainer->iHeight - pArea->y;
 	else if (! pContainer->bIsHorizontal && pArea->x + pArea->width > pContainer->iHeight)
 		pArea->width = pContainer->iHeight - pArea->x;
-	//g_print ("rect (%d;%d) (%dx%d)\n", pArea->x, pArea->y, pArea->width, pArea->height);
+	
 	if (pArea->width > 0 && pArea->height > 0)
 		gdk_window_invalidate_rect (pContainer->pWidget->window, pArea, FALSE);
 }

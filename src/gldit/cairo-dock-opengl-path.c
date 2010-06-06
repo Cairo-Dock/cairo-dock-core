@@ -275,8 +275,10 @@ const CairoDockGLPath *cairo_dock_generate_rectangle_path (double fFrameWidth, d
 	if (pPath == NULL)
 		pPath = cairo_dock_new_gl_path ((iNbPoins1Round+1)*4+1, w+r, h, fTotalWidth, fTotalHeight);  // on commence au coin haut droit pour avoir une bonne triangulation du polygone, et en raisonnant par rapport au centre du rectangle.
 	else
+	{
 		cairo_dock_gl_path_move_to (pPath, w+r, h);
-	
+		cairo_dock_gl_path_set_extent (pPath, fTotalWidth, fTotalHeight);
+	}
 	//cairo_dock_gl_path_move_to (pPath, 0., h+r);
 	//cairo_dock_gl_path_rel_line_to (pPath, -w, 0.);
 	
@@ -284,10 +286,17 @@ const CairoDockGLPath *cairo_dock_generate_rectangle_path (double fFrameWidth, d
 	
 	cairo_dock_gl_path_arc (pPath, iNbPoins1Round, -w,  h, r, G_PI/2,  +G_PI/2);  // coin haut gauche.
 	
-	cairo_dock_gl_path_arc (pPath, iNbPoins1Round, -w, -h, r, G_PI,    +G_PI/2);  // coin bas gauche.
-	
-	cairo_dock_gl_path_arc (pPath, iNbPoins1Round,  w, -h, r, -G_PI/2, +G_PI/2);  // coin bas droit.
-	
+	if (bRoundedBottomCorner)
+	{
+		cairo_dock_gl_path_arc (pPath, iNbPoins1Round, -w, -h, r, G_PI,    +G_PI/2);  // coin bas gauche.
+		
+		cairo_dock_gl_path_arc (pPath, iNbPoins1Round,  w, -h, r, -G_PI/2, +G_PI/2);  // coin bas droit.
+	}
+	else
+	{
+		cairo_dock_gl_path_rel_line_to (pPath, 0., - (fFrameHeight + r));
+		cairo_dock_gl_path_rel_line_to (pPath, fTotalWidth, 0.);
+	}
 	//cairo_dock_gl_path_arc (pPath, iNbPoins1Round, w, h, r, 0.,     +G_PI/2);  // coin haut droit.
 	
 	return pPath;

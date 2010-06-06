@@ -81,7 +81,6 @@ CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 gboolean g_bEasterEggs = FALSE;
 
 extern gchar *g_cCurrentLaunchersPath;
-extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 extern CairoDockHidingEffect *g_pHidingBackend;
@@ -505,8 +504,6 @@ void cairo_dock_load_config (const gchar *cConfFilePath, CairoDock *pMainDock)
 	cairo_dock_create_icon_fbo ();
 	
 	//\___________________ On charge les lanceurs.
-	///g_pDockBackgroundBuffer.iWidth = 1e4;  // inutile de mettre a jour les decorations maintenant.
-	///g_pDockBackgroundBuffer.iHeight = 1e4;  /// virer ce hack ...
 	pMainDock->fFlatDockWidth = - myIcons.iIconGap;  // car on ne le connaissait pas encore au moment de sa creation .
 	cairo_dock_build_docks_tree_with_desktop_files (g_cCurrentLaunchersPath);
 	
@@ -692,8 +689,6 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	if ((iSeparateIconsOld && ! myIcons.iSeparateIcons) || bGroupOrderChanged)
 		cairo_dock_remove_automatic_separators (pDock);
 		
-	g_pDockBackgroundBuffer.iWidth = 1e4;  // inutile de mettre a jour les decorations maintenant.
-	g_pDockBackgroundBuffer.iHeight = 1e4;
 	if (pDock->icons == NULL)
 	{
 		pDock->fFlatDockWidth = - myIcons.iIconGap;  // car on ne le connaissait pas encore au moment de la creation du dock.
@@ -767,7 +762,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	
 	cairo_dock_set_dock_visibility (pDock, myAccessibility.iVisibility);
 	
-	cairo_dock_load_background_decorations (pDock);
+	///cairo_dock_load_background_decorations (pDock);
 
 	cairo_dock_move_resize_dock (pDock);
 	

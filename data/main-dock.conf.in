@@ -52,3 +52,23 @@ frame_view =
 #n Choose the view for this dock :/
 #{Leave it empty to use the same view as the main dock.}
 main dock view = 
+
+
+#F[Background;gtk-orientation-portrait]
+frame_bg =
+
+#Y+[Same as main dock;0;0;Image;1;2;Colour gradation;3;2] Fill the background with:
+fill bg = 0
+
+#S+ Image filename to use as a background :
+#{Any format allowed; if empty, the colour gradation will be used as a fall back.}
+background image = 
+
+#b+ Repeat image as a pattern to fill background?
+repeat image = true
+
+#C+ Bright colour:
+stripes color bright = 0.933; 0.933; 0.925; 0.4
+
+#C+ Dark colour:
+stripes color dark = 0.827; 0.843; 0.811; 0.6

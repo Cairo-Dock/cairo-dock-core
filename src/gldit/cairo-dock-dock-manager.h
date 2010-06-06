@@ -145,9 +145,6 @@ void cairo_dock_foreach_docks (GHFunc pFunction, gpointer pUserData);
 void cairo_dock_foreach_root_docks (GFunc pFunction, gpointer pUserData);
 
 
-
-void cairo_dock_search_max_decorations_size (int *iWidth, int *iHeight);
-
 /** Recursively hides all the parent docks of a sub-dock.
 *@param pDock the (sub)dock.
 */

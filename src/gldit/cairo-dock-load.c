@@ -70,8 +70,6 @@ extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 
 extern gchar *g_cCurrentThemePath;
 
-extern CairoDockImageBuffer g_pDockBackgroundBuffer;
-
 extern GLuint g_pGradationTexture[2];
 
 extern gboolean g_bUseOpenGL;
@@ -207,69 +205,70 @@ void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage)
  /// DOCK BACKGROUND ///
 ///////////////////////
 
-static cairo_surface_t *_cairo_dock_make_stripes_background (int iStripesWidth, int iStripesHeight)
+static cairo_surface_t *_cairo_dock_make_stripes_background (int iWidth, int iHeight, double *fStripesColorBright, double *fStripesColorDark, int iNbStripes, double fStripesWidth, double fStripesAngle)
 {
 	cairo_pattern_t *pStripesPattern;
-	double fWidth = (myBackground.iNbStripes > 0 ? 200. : iStripesWidth);
-	if (fabs (myBackground.fStripesAngle) != 90)
+	double fWidth = iWidth;
+	if (fabs (fStripesAngle) != 90)
 		pStripesPattern = cairo_pattern_create_linear (0.0f,
 			0.0f,
-			fWidth,
-			fWidth * tan (myBackground.fStripesAngle * G_PI/180.));
+			iWidth,
+			iWidth * tan (fStripesAngle * G_PI/180.));
 	else
 		pStripesPattern = cairo_pattern_create_linear (0.0f,
 			0.0f,
 			0.,
-			(myBackground.fStripesAngle == 90) ? iStripesHeight : - iStripesHeight);
+			(fStripesAngle == 90) ? iHeight : - iHeight);
 	g_return_val_if_fail (cairo_pattern_status (pStripesPattern) == CAIRO_STATUS_SUCCESS, NULL);
 
 	cairo_pattern_set_extend (pStripesPattern, CAIRO_EXTEND_REPEAT);
 
-	if (myBackground.iNbStripes > 0)
+	if (iNbStripes > 0)
 	{
 		gdouble fStep;
-		double fStripesGap = 1. / (myBackground.iNbStripes);  // ecart entre 2 rayures foncees.
-		for (fStep = 0.0f; fStep < 1.0f; fStep += fStripesGap)
+		int i;
+		for (i = 0; i < iNbStripes+1; i ++)
 		{
+			fStep = (double)i / iNbStripes;
 			cairo_pattern_add_color_stop_rgba (pStripesPattern,
-				fStep - myBackground.fStripesWidth / 2,
-				myBackground.fStripesColorBright[0],
-				myBackground.fStripesColorBright[1],
-				myBackground.fStripesColorBright[2],
-				myBackground.fStripesColorBright[3]);
+				fStep - fStripesWidth / 2.,
+				fStripesColorBright[0],
+				fStripesColorBright[1],
+				fStripesColorBright[2],
+				fStripesColorBright[3]);
 			cairo_pattern_add_color_stop_rgba (pStripesPattern,
 				fStep,
-				myBackground.fStripesColorDark[0],
-				myBackground.fStripesColorDark[1],
-				myBackground.fStripesColorDark[2],
-				myBackground.fStripesColorDark[3]);
+				fStripesColorDark[0],
+				fStripesColorDark[1],
+				fStripesColorDark[2],
+				fStripesColorDark[3]);
 			cairo_pattern_add_color_stop_rgba (pStripesPattern,
-				fStep + myBackground.fStripesWidth / 2,
-				myBackground.fStripesColorBright[0],
-				myBackground.fStripesColorBright[1],
-				myBackground.fStripesColorBright[2],
-				myBackground.fStripesColorBright[3]);
+				fStep + fStripesWidth / 2.,
+				fStripesColorBright[0],
+				fStripesColorBright[1],
+				fStripesColorBright[2],
+				fStripesColorBright[3]);
 		}
 	}
 	else
 	{
 		cairo_pattern_add_color_stop_rgba (pStripesPattern,
 			0.,
-			myBackground.fStripesColorDark[0],
-			myBackground.fStripesColorDark[1],
-			myBackground.fStripesColorDark[2],
-			myBackground.fStripesColorDark[3]);
+			fStripesColorDark[0],
+			fStripesColorDark[1],
+			fStripesColorDark[2],
+			fStripesColorDark[3]);
 		cairo_pattern_add_color_stop_rgba (pStripesPattern,
 			1.,
-			myBackground.fStripesColorBright[0],
-			myBackground.fStripesColorBright[1],
-			myBackground.fStripesColorBright[2],
-			myBackground.fStripesColorBright[3]);
+			fStripesColorBright[0],
+			fStripesColorBright[1],
+			fStripesColorBright[2],
+			fStripesColorBright[3]);
 	}
 
 	cairo_surface_t *pNewSurface = cairo_dock_create_blank_surface (
-		iStripesWidth,
-		iStripesHeight);
+			iWidth,
+			iHeight);
 	cairo_t *pImageContext = cairo_create (pNewSurface);
 	cairo_set_source (pImageContext, pStripesPattern);
 	cairo_paint (pImageContext);
@@ -279,66 +278,86 @@ static cairo_surface_t *_cairo_dock_make_stripes_background (int iStripesWidth, 
 	
 	return pNewSurface;
 }
-void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, int iNewDecorationsWidth, int iNewDecorationsHeight)
+static void _cairo_dock_load_default_background (CairoDockImageBuffer *pImage, int iWidth, int iHeight)
 {
-	//g_print ("%s (%dx%d) [%.2fx%.2f]\n", __func__, iNewDecorationsWidth, iNewDecorationsHeight, g_fBackgroundImageWidth, g_fBackgroundImageHeight);
-	int k = (myBackground.fDecorationSpeed || myBackground.bDecorationsFollowMouse ? 2 : 1);
-	if (k * iNewDecorationsWidth > g_pDockBackgroundBuffer.iWidth || iNewDecorationsHeight > g_pDockBackgroundBuffer.iHeight)
+	//g_print ("%s (%s, %d)\n", __func__, myBackground.cBackgroundImageFile, myBackground.bBackgroundImageRepeat);
+	if (myBackground.cBackgroundImageFile != NULL)
 	{
-		cairo_dock_unload_image_buffer (&g_pDockBackgroundBuffer);
-		int iWidth, iHeight;
-		if (myBackground.cBackgroundImageFile != NULL)
+		if (myBackground.bBackgroundImageRepeat)
 		{
-			if (myBackground.bBackgroundImageRepeat)
-			{
-				iWidth = MAX (g_pDockBackgroundBuffer.iWidth, k * iNewDecorationsWidth);
-				iHeight = MAX (g_pDockBackgroundBuffer.iHeight, iNewDecorationsHeight);
-				cairo_surface_t *pBgSurface = cairo_dock_create_surface_from_pattern (myBackground.cBackgroundImageFile,
-					iWidth,
-					iHeight,
-					myBackground.fBackgroundImageAlpha);
-				cairo_dock_load_image_buffer_from_surface (&g_pDockBackgroundBuffer,
-					pBgSurface,
-					iWidth,
-					iHeight);
-			}
-			else
-			{
-				iWidth = MAX (g_pDockBackgroundBuffer.iWidth, iNewDecorationsWidth);
-				iHeight = MAX (g_pDockBackgroundBuffer.iHeight, iNewDecorationsHeight);
-				cairo_dock_load_image_buffer_full (&g_pDockBackgroundBuffer,
-					myBackground.cBackgroundImageFile,
-					iWidth,
-					iHeight,
-					CAIRO_DOCK_FILL_SPACE,
-					myBackground.fBackgroundImageAlpha);
-			}
-		}
-		else
-		{
-			iWidth = MAX (g_pDockBackgroundBuffer.iWidth, k * iNewDecorationsWidth);
-			iHeight = MAX (g_pDockBackgroundBuffer.iHeight, iNewDecorationsHeight);
-			cairo_surface_t *pBgSurface = _cairo_dock_make_stripes_background (
+			cairo_surface_t *pBgSurface = cairo_dock_create_surface_from_pattern (myBackground.cBackgroundImageFile,
 				iWidth,
-				iHeight);
-			cairo_dock_load_image_buffer_from_surface (&g_pDockBackgroundBuffer,
+				iHeight,
+				myBackground.fBackgroundImageAlpha);
+			cairo_dock_load_image_buffer_from_surface (pImage,
 				pBgSurface,
 				iWidth,
 				iHeight);
 		}
-		//cd_debug ("  MaJ des decorations du fond -> %dx%d", iWidth, iHeight);
+		else
+		{
+			cairo_dock_load_image_buffer_full (pImage,
+				myBackground.cBackgroundImageFile,
+				iWidth,
+				iHeight,
+				CAIRO_DOCK_FILL_SPACE,
+				myBackground.fBackgroundImageAlpha);
+		}
+	}
+	if (pImage->pSurface == NULL)
+	{
+		cairo_surface_t *pBgSurface = _cairo_dock_make_stripes_background (
+			iWidth,
+			iHeight,
+			myBackground.fStripesColorBright,
+			myBackground.fStripesColorDark,
+			myBackground.iNbStripes,
+			myBackground.fStripesWidth,
+			myBackground.fStripesAngle);
+		cairo_dock_load_image_buffer_from_surface (pImage,
+			pBgSurface,
+			iWidth,
+			iHeight);
 	}
 }
 
-void cairo_dock_load_background_decorations (CairoDock *pDock)
+void cairo_dock_load_dock_background (CairoDock *pDock)
 {
-	int iWidth, iHeight;
-	cairo_dock_search_max_decorations_size (&iWidth, &iHeight);
+	cairo_dock_unload_image_buffer (&pDock->backgroundBuffer);
 	
-	g_pDockBackgroundBuffer.iWidth = 0;
-	g_pDockBackgroundBuffer.iHeight = 0;
-	cairo_dock_update_background_decorations_if_necessary (pDock, iWidth, iHeight);
+	int iWidth = pDock->iDecorationsWidth;
+	int iHeight = pDock->iDecorationsHeight;
+	
+	if (pDock->bGlobalBg)
+	{
+		_cairo_dock_load_default_background (&pDock->backgroundBuffer, iWidth, iHeight);
+	}
+	else if (pDock->cBgImagePath != NULL)
+	{
+		cairo_dock_load_image_buffer (&pDock->backgroundBuffer, pDock->cBgImagePath, iWidth, iHeight, CAIRO_DOCK_FILL_SPACE);
+	}
+	if (pDock->backgroundBuffer.pSurface == NULL)
+	{
+		cairo_surface_t *pSurface = _cairo_dock_make_stripes_background (iWidth, iHeight, pDock->fBgColorBright, pDock->fBgColorDark, 0, 0., 90);
+		cairo_dock_load_image_buffer_from_surface (&pDock->backgroundBuffer, pSurface, iWidth, iHeight);
+	}
 }
+
+static gboolean _load_background_idle (CairoDock *pDock)
+{
+	cairo_dock_load_dock_background (pDock);
+	
+	pDock->iSidLoadBg = 0;
+	return FALSE;
+}
+void cairo_dock_trigger_load_dock_background (CairoDock *pDock)
+{
+	if (pDock->iDecorationsWidth == pDock->backgroundBuffer.iWidth && pDock->iDecorationsHeight == pDock->backgroundBuffer.iHeight)  // mise a jour inutile.
+		return;
+	if (pDock->iSidLoadBg == 0)
+		pDock->iSidLoadBg = g_idle_add ((GSourceFunc)_load_background_idle, pDock);
+}
+
 
   //////////////////
  /// DESKTOP BG ///
@@ -503,7 +522,6 @@ void cairo_dock_reload_desktop_background (void)
 void cairo_dock_unload_additionnal_textures (void)
 {
 	cd_debug ("");
-	cairo_dock_unload_image_buffer (&g_pDockBackgroundBuffer);
 	if (s_pDesktopBg)  // on decharge le desktop-bg de force.
 	{
 		_destroy_bg (s_pDesktopBg);  // detruit ses ressources immediatement, mais pas le pointeur.

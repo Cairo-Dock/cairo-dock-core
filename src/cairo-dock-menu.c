@@ -64,7 +64,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-menu.h"
 
-#define CAIRO_DOCK_CONF_PANEL_WIDTH 800
+#define CAIRO_DOCK_CONF_PANEL_WIDTH 1000
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 600
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 600
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 350

@@ -3074,6 +3074,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 								if (!GTK_IS_EXPANDER (w))
 									gtk_widget_set_sensitive (w, FALSE);
 							}
+							if (cw->iFirstSensitiveWidget == 0 && cw->iNbControlledWidgets == 0)
+							{
+								pControlWidgets = g_list_delete_link (pControlWidgets, pControlWidgets);
+								g_free (cw);
+							}
 						}
 					}
 				}

@@ -33,7 +33,6 @@
 #include "cairo-dock-internal-background.h"
 
 CairoConfigBackground myBackground;
-extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 
 static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackground)
 {
@@ -69,7 +68,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 	}
 	
 	// image de fond.
-	pBackground->cBackgroundImageFile = cBgImage;
+	pBackground->cBackgroundImageFile = cairo_dock_generate_file_path (cBgImage);
+	g_free (cBgImage);
+	
 	pBackground->fBackgroundImageAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "image alpha", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 
 	pBackground->bBackgroundImageRepeat = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "repeat image", &bFlushConfFileNeeded, FALSE, NULL, NULL);
@@ -135,16 +136,21 @@ static void reset_config (CairoConfigBackground *pBackground)
 }
 
 
-static void _calculate_icons (CairoDock *pDock, gpointer data)
+static void _reload_bg (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	cairo_dock_calculate_dock_icons (pDock);
+	cairo_dock_update_dock_size (pDock);
+	if (pDock->iRefCount == 0)
+	{
+		cairo_dock_load_dock_background (pDock);  // pour forcer le chargement du fond.
+		cairo_dock_calculate_dock_icons (pDock);
+		gtk_widget_queue_draw (pDock->container.pWidget);
+	}
+	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)
+		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 }
 static void reload (CairoConfigBackground *pPrevBackground, CairoConfigBackground *pBackground)
 {
-	g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;
-	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks.
-	cairo_dock_foreach_root_docks ((GFunc)_calculate_icons, NULL);
-	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
+	cairo_dock_foreach_docks ((GHFunc)_reload_bg, NULL);
 }
 
 

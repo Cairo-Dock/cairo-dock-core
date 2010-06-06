@@ -71,7 +71,6 @@
 CairoDock *g_pMainDock;  // pointeur sur le dock principal.
 gboolean g_bKeepAbove = FALSE;
 CairoDockImageBuffer g_pVisibleZoneBuffer;
-CairoDockImageBuffer g_pDockBackgroundBuffer;  /// a virer
 
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
@@ -104,7 +103,6 @@ void cairo_dock_init_dock_manager (void)
 			CAIRO_DOCK_RUN_FIRST, NULL);
 	}
 	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&g_pDockBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));  /// a virer ...
 	
 	g_pMainDock = NULL;
 }
@@ -166,6 +164,7 @@ CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendere
 	{
 		pDock->bIsMainDock = TRUE;
 		g_pMainDock = pDock;
+		pDock->bGlobalBg = TRUE;
 	}
 	g_hash_table_insert (s_hDocksTable, g_strdup (cDockName), pDock);
 	s_pRootDockList = g_list_prepend (s_pRootDockList, pDock);
@@ -461,23 +460,6 @@ void cairo_dock_foreach_root_docks (GFunc pFunction, gpointer data)
 }
 
 
-static void _cairo_dock_get_one_decoration_size (gchar *cDockName, CairoDock *pDock, int *data)
-{
-	if (pDock->iDecorationsWidth > data[0])
-		data[0] = pDock->iDecorationsWidth;
-	if (pDock->iDecorationsHeight > data[1])
-		data[1] = pDock->iDecorationsHeight;
-}
-void cairo_dock_search_max_decorations_size (int *iWidth, int *iHeight)
-{
-	int data[2] = {0, 0};
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_get_one_decoration_size, &data);
-	cd_debug ("  decorations max : %dx%d", data[0], data[1]);
-	*iWidth = data[0];
-	*iHeight = data[1];
-}
-
-
 static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pDock, CairoDock *pChildDock)
 {
 	if (pDock->container.bInside)
@@ -673,26 +655,6 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	
 	CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "screen border", &bFlushConfFileNeeded, 0, "Position", NULL);
 	cairo_dock_set_dock_orientation (pDock, iScreenBorder);
-	/**switch (iScreenBorder)
-	{
-		case CAIRO_DOCK_BOTTOM :
-		default :
-			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-			pDock->container.bDirectionUp = TRUE;
-		break;
-		case CAIRO_DOCK_TOP :
-			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-			pDock->container.bDirectionUp = FALSE;
-		break;
-		case CAIRO_DOCK_RIGHT :
-			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
-			pDock->container.bDirectionUp = TRUE;
-		break;
-		case CAIRO_DOCK_LEFT :
-			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
-			pDock->container.bDirectionUp = FALSE;
-		break;
-	}*/
 	
 	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Behavior", "alignment", &bFlushConfFileNeeded, 0.5, "Position", NULL);
 	
@@ -713,6 +675,37 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	g_free (pDock->cRendererName);
 	pDock->cRendererName = cairo_dock_get_string_key_value (pKeyFile, "Appearance", "main dock view", &bFlushConfFileNeeded, NULL, "Views", NULL);
 	
+	//\______________ Background.
+	int iBgType = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "fill bg", &bFlushConfFileNeeded, 0, NULL, NULL);
+	
+	pDock->bGlobalBg = (iBgType == 0);
+	
+	if (!pDock->bGlobalBg)
+	{
+		if (iBgType == 1)
+		{
+			gchar *cBgImage = cairo_dock_get_string_key_value (pKeyFile, "Appearance", "background image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+			g_free (pDock->cBgImagePath);
+			if (cBgImage != NULL)
+			{
+				pDock->cBgImagePath = cairo_dock_generate_file_path (cBgImage);
+				g_free (cBgImage);
+			}
+			else
+				pDock->cBgImagePath = NULL;
+			
+			pDock->bBgImageRepeat = cairo_dock_get_boolean_key_value (pKeyFile, "Appearance", "repeat image", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+		}
+		// on recupere la couleur tout le temps pour avoir un plan B.
+		double couleur[4] = {.7, .7, 1., .7};
+		cairo_dock_get_double_list_key_value (pKeyFile, "Appearance", "stripes color dark", &bFlushConfFileNeeded, pDock->fBgColorDark, 4, couleur, NULL, NULL);
+		
+		double couleur2[4] = {.7, .9, .7, .4};
+		cairo_dock_get_double_list_key_value (pKeyFile, "Appearance", "stripes color bright", &bFlushConfFileNeeded, pDock->fBgColorBright, 4, couleur2, NULL, NULL);
+	}
+	
+	
+	//\______________ On met a jour le fichier de conf.
 	if (! bFlushConfFileNeeded)
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION);
 	if (bFlushConfFileNeeded)
@@ -721,7 +714,6 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	}
 	
 	g_key_file_free (pKeyFile);
-	
 	g_free (cConfFilePath);
 	return TRUE;
 }
@@ -770,8 +762,8 @@ void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock)
 	cairo_dock_read_root_dock_config (cDockName, pDock);
 	
 	cairo_dock_load_buffers_in_one_dock (pDock);  // recharge les icones et les applets.
-	///cairo_dock_synchronize_sub_docks_orientation (pDock, TRUE);
 	
+	pDock->backgroundBuffer.iWidth ++;  // pour forcer le chargement du fond.
 	cairo_dock_set_default_renderer (pDock);
 	cairo_dock_update_dock_size (pDock);
 	cairo_dock_calculate_dock_icons (pDock);

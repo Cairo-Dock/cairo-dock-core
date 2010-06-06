@@ -156,14 +156,14 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 {
 	if (CAIRO_DOCK_IS_APPLET (icon))
 		return ;
-	icon->bIsDemandingAttention = FALSE;
 	if (myTaskBar.bDemandsAttentionWithDialog)
 		cairo_dock_remove_dialog_if_any (icon);
 	if (myTaskBar.cAnimationOnDemandsAttention)
 	{
 		cairo_dock_stop_icon_animation (icon);  // arrete l'animation precedemment lancee par la demande.
-		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
+		gtk_widget_queue_draw (pDock->container.pWidget);  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
 	}
+	icon->bIsDemandingAttention = FALSE;
 	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow && ! pDock->container.bInside)
 		cairo_dock_pop_down (pDock);
 }

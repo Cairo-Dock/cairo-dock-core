@@ -243,8 +243,23 @@ struct _CairoDock {
 	GLuint iRedirectedTexture;
 	GLuint iFboId;
 	
+	//\_______________ background.
+	/// whether the dock should use the global background parameters.
+	gboolean bGlobalBg;
+	/// path to an image, or NULL
+	gchar *cBgImagePath;
+	/// whether to repeat the image as a pattern, or to stretch it to fill the dock.
+	gboolean bBgImageRepeat;
+	/// first color of the gradation
+	gdouble fBgColorBright[4];
+	/// second color of the gradation
+	gdouble fBgColorDark[4];
+	/// Background image buffer of the dock.
 	CairoDockImageBuffer backgroundBuffer;
-	gpointer reserved[2];
+	/// Source ID for loading the background.
+	guint iSidLoadBg;
+	
+	gchar reserved[16];
 };
 
 

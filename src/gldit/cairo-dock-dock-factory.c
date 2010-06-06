@@ -237,6 +237,8 @@ void cairo_dock_free_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidLeaveDemand);
 	if (pDock->iSidUpdateWMIcons != 0)
 		g_source_remove (pDock->iSidUpdateWMIcons);
+	if (pDock->iSidLoadBg != 0)
+		g_source_remove (pDock->iSidLoadBg);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);
 	
 	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
@@ -255,6 +257,7 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	
 	g_free (pDock->cRendererName);
 	
+	g_free (pDock->cBgImagePath);
 	cairo_dock_unload_image_buffer (&pDock->backgroundBuffer);
 	
 	if (pDock->iFboId != 0)

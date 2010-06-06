@@ -31,10 +31,6 @@ extern gchar *g_cConfFile;
 /// Le chemin vers le repertoire racine.
 extern gchar *g_cCairoDockDataDir;
 
-/// zone de rappel.
-extern CairoDockImageBuffer g_pVisibleZoneBuffer;
-/// background
-extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 /// indicateur de tache
 extern CairoDockImageBuffer g_pIndicatorBuffer;
 /// boite

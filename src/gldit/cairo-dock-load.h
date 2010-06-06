@@ -118,9 +118,10 @@ void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
 void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
 
 
-void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, int iNewDecorationsWidth, int iNewDecorationsHeight);
+///void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, int iNewDecorationsWidth, int iNewDecorationsHeight);
 
-void cairo_dock_load_background_decorations (CairoDock *pDock);
+void cairo_dock_load_dock_background (CairoDock *pDock);
+void cairo_dock_trigger_load_dock_background (CairoDock *pDock);
 
 
 CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo);

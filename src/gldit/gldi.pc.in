@@ -1,0 +1,13 @@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = @libdir@
+includedir = @includedir@
+pluginsdir=@libdir@/@PACKAGE@
+pluginsdatadir=@datadir@/@PACKAGE@/plug-ins
+
+Name: gldit
+Description: OpenGL Desktop Interface. A library to build eye-candy interfaces for the desktop.
+Requires: gtk+-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gtkglext-1.0 @xextend_required@ @glitz_required@ @libgio_required@
+Libs: -L${libdir} -lgldi
+Cflags: -I${includedir}/cairo-dock -I${includedir}/cairo-dock/cairo-dock -I${includedir}/cairo-dock/icon-factory
+Version: @VERSION@

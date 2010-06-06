@@ -44,7 +44,6 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentThemePath;  // pour recuperer les anciens types de separateurs de rendering.conf
 extern gchar *g_cCurrentIconsPath;
 extern gboolean g_bUseOpenGL;
-extern CairoDockImageBuffer g_pDockBackgroundBuffer;
 
 
 static const gchar * s_cIconTypeNames[(CAIRO_DOCK_NB_TYPES+1)/2] = {"launchers", "applications", "applets"};
@@ -416,7 +415,6 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		bThemeChanged ||
 		bIconBackgroundImagesChanged)  // oui on ne fait pas dans la finesse.
 	{
-		g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;  // pour mettre a jour les decorations.
 		cairo_dock_reload_buffers_in_all_docks (TRUE);  // TRUE <=> y compris les applets.
 	}
 	
@@ -435,7 +433,6 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 		cairo_dock_load_indicator_textures ();
 	}
 	
-	g_pDockBackgroundBuffer.iWidth = g_pDockBackgroundBuffer.iHeight = 0.;
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks; le chargement des separateurs plats se fait dans le calcul de max dock size.
 	cairo_dock_foreach_docks ((GHFunc)_calculate_icons, NULL);
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.

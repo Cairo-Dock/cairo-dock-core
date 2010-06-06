@@ -514,7 +514,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	}
 	
 	//\_______________ On asservit les decorations au curseur.
-	if (pDock->container.bInside)
+	/**if (pDock->container.bInside)
 	{
 		if (myBackground.bDecorationsFollowMouse)
 		{
@@ -546,7 +546,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 				}
 			}
 		}
-	}
+	}*/
 	
 	//\_______________ On gere le changement d'icone.
 	gboolean bStartAnimation = FALSE;
