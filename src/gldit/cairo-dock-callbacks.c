@@ -92,8 +92,13 @@ static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
 static gboolean s_bIconDragged = FALSE;
 
-#define _xy_is_really_outside(x, y, pDock) (pDock->container.bIsHorizontal ? (x < 0 || x >= pDock->container.iWidth || y < 0 || y >= (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight)) : (y < 0 || y >= pDock->container.iWidth || x < 0 || x >= (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight)))
-#define _mouse_is_really_outside(pDock) (pDock->container.iMouseX <= 0 || pDock->container.iMouseX >= pDock->container.iWidth || pDock->container.iMouseY <= 0 || pDock->container.iMouseY >= pDock->container.iHeight)
+#define _mouse_is_really_outside(pDock) (pDock->container.iMouseX <= 0 ||\
+	pDock->container.iMouseX >= pDock->container.iWidth ||\
+	(pDock->container.bDirectionUp ?\
+		(pDock->container.iMouseY > pDock->container.iHeight ||\
+		pDock->container.iMouseY <= (pDock->fMagnitudeMax != 0 ? 0 : pDock->container.iHeight - pDock->iMinDockHeight)) :\
+		(pDock->container.iMouseY < 0 ||\
+		pDock->container.iMouseY >= (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight))))
 #define CD_CLICK_ZONE 5
 
 void cairo_dock_freeze_docks (gboolean bFreeze)
@@ -595,10 +600,23 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin).
-	if (pEvent && !_xy_is_really_outside (pEvent->x, pEvent->y, pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
+	if (pEvent)
 	{
-		//g_print ("not really outside (%d;%d ; %d/%d)\n", (int)pEvent->x, (int)pEvent->y, pDock->iMaxDockHeight, pDock->iMinDockHeight);
-		return FALSE;
+		if (pDock->container.bIsHorizontal)
+		{
+			pDock->container.iMouseX = pEvent->x;
+			pDock->container.iMouseY = pEvent->y;
+		}
+		else
+		{
+			pDock->container.iMouseX = pEvent->y;
+			pDock->container.iMouseY = pEvent->x;
+		}
+		if (!_mouse_is_really_outside(pDock))
+		{
+			//g_print ("not really outside (%d;%d ; %d/%d)\n", (int)pEvent->x, (int)pEvent->y, pDock->iMaxDockHeight, pDock->iMinDockHeight);
+			return FALSE;
+		}
 	}
 	
 	//\_______________ On retarde la sortie.
@@ -624,7 +642,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	else if (pDock->iSidLeaveDemand != 0 && pEvent != NULL)  // sortie naturelle et deja une sortie en attente.
 	{
-		cd_debug ("une sortie est deja programmee\n");
+		//g_print ("une sortie est deja programmee\n");
 		return TRUE;
 	}
 	pDock->iSidLeaveDemand = 0;
@@ -747,7 +765,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	if (pDock->iSidHideBack != 0)
 	{
-		g_print ("remove hide back timeout\n");
+		//g_print ("remove hide back timeout\n");
 		g_source_remove(pDock->iSidHideBack);
 		pDock->iSidHideBack = 0;
 	}
@@ -1159,7 +1177,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		cairo_dock_replace_all_dialogs ();
 	}
 	
-	if (pDock->iRefCount > 0 && (bSizeUpdated || bPositionUpdated))
+	if (pDock->iRefCount == 0 && (bSizeUpdated || bPositionUpdated))
 	{
 		if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
 		{

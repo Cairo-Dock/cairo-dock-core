@@ -928,7 +928,7 @@ void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
 {
 	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden)
 	{
-		g_print ("hide\n");
+		//g_print ("hide\n");
 		pDock->bTemporaryHidden = TRUE;
 		pDock->bAutoHide = TRUE;
 		if (!pDock->container.bInside)  // on ne declenche pas le cachage lorsque l'on change par exemple de bureau via le switcher ou un clic sur une appli.
@@ -938,7 +938,7 @@ void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
 
 void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	if (pDock->iRefCount == 0 && pDock->bTemporaryHidden && ! s_bQuickHide)
 	{
 		pDock->bTemporaryHidden = FALSE;
@@ -954,7 +954,7 @@ void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock)
 
 static gboolean _cairo_dock_hide_back_dock (CairoDock *pDock)
 {
-	g_print ("hide back\n");
+	//g_print ("hide back\n");
 	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->container.bInside)
 		cairo_dock_pop_down (pDock);
 	else if (pDock->bAutoHide)
@@ -970,7 +970,7 @@ static gboolean _cairo_dock_unhide_dock_delayed (CairoDock *pDock)
 		return FALSE;
 	}
 	
-	g_print ("let's show this dock (%d)\n", pDock->bIsMainDock);
+	//g_print ("let's show this dock (%d)\n", pDock->bIsMainDock);
 	if (pDock->bAutoHide)
 		cairo_dock_start_showing (pDock);
 	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW)
@@ -1069,7 +1069,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 	}
 	
 	//\________________ On montre ou on programme le montrage du dock.
-	g_print (" dock will be shown (%d)\n", pDock->bIsMainDock);
+	//g_print (" dock will be shown (%d)\n", pDock->bIsMainDock);
 	if (myAccessibility.iUnhideDockDelay != 0)  // on programme une apparition.
 	{
 		if (pDock->iSidUnhideDelayed == 0)

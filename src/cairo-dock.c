@@ -554,15 +554,6 @@ int main (int argc, char** argv)
 	else
 		cairo_dock_initialize_module_manager (NULL);
 	
-	if (!bSafeMode && cairo_dock_get_nb_modules () == 0)
-	{
-		Icon *pIcon = cairo_dock_get_dialogless_icon ();
-		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
-		exit (0);
-	}
-	
-	_register_help_module ();
-	
 	//\___________________ On definit le backend des GUI.
 	cairo_dock_load_user_gui_backend ();
 	cairo_dock_register_default_launcher_gui_backend ();
@@ -594,7 +585,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		_cairo_dock_set_signal_interception ();
 	
-	//\___________________ On charge le dernier theme ou on demande a l'utilisateur d'en choisir un.
+	//\___________________ mode maintenance.
 	if (bMaintenance)
 	{
 		if (cExcludeModule != NULL)
@@ -639,6 +630,7 @@ int main (int argc, char** argv)
 		}
 	}
 	
+	//\___________________ On charge le dernier theme.
 	cd_message ("loading theme ...");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))
 	{
@@ -658,6 +650,15 @@ int main (int argc, char** argv)
 		myAccessibility.bLockIcons = TRUE;
 		myAccessibility.bLockAll = TRUE;
 	}
+	
+	if (!bSafeMode && cairo_dock_get_nb_modules () == 0)
+	{
+		Icon *pIcon = cairo_dock_get_dialogless_icon ();
+		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
+		exit (0);
+	}
+	
+	_register_help_module ();
 	
 	//\___________________ On affiche un petit message de bienvenue.
 	if (bFirstLaunch)

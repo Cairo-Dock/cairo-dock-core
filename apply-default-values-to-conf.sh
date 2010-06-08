@@ -146,7 +146,7 @@ set_value "Icon"			"name"						""
 set_value "Configuration"	"dir path"					""
 
 set_current_conf_file "plug-ins/rendering/rendering.conf"
-set_value "Inclinated Plane" "vanishing point"			300
+set_value "Inclinated Plane" "vanishing point y"		300
 set_value "Curve"			"curvature"					70
 set_value "Parabolic"		"curvature"					".3"
 set_value "Parabolic"		"ratio"						5

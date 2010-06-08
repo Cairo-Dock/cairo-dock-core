@@ -100,14 +100,14 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 					cairo_dock_pop_up (pDock);
 			}
 		}
-		else if (bForceDemand)
+		/**else if (bForceDemand)
 		{
 			cd_debug ("force sub-dock to raise\n");
 			CairoDock *pParentDock = NULL;
 			Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			if (pParentDock)
 				cairo_dock_show_subdock (pPointedIcon, pParentDock);
-		}
+		}*/
 		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
 	}

@@ -549,10 +549,13 @@ static void _on_change_window_state (Icon *icon)
 				icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
 				cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 			}
-			// on redessine avec ou sans la miniature, suivant le nouvel etat.
-			cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pParentDock));
-			if (pParentDock)
-				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
+			else
+			{
+				// on redessine avec ou sans la miniature, suivant le nouvel etat.
+				cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pParentDock));
+				if (pParentDock)
+					cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
+			}
 		}
 		#endif
 	}
@@ -1403,6 +1406,8 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 			cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
 		}
 	}
+	else
+		g_print ("%s is not loaded\n", icon->cName);
 	
 	//\____________ On enregistre l'appli et on commence a la surveiller.
 	cairo_dock_register_appli (icon);
