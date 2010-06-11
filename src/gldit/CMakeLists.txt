@@ -97,7 +97,7 @@ target_link_libraries("gldi"
 	implementations)
 
 
-configure_file (gldi.pc.in gldi.pc)
+configure_file (gldi.pc.in ${CMAKE_CURRENT_SOURCE_DIR}/gldi.pc)
 install (FILES  gldi.pc DESTINATION ${libdir}/pkgconfig)
 install (FILES  libgldi.so DESTINATION ${libdir})
 

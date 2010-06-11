@@ -39,3 +39,4 @@ CMakeCache.txt
 cairo-dock-extract-message
 _CPack_Packages/
 data/messages
+src/gldit/gldi.pc
