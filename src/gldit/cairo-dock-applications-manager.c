@@ -549,13 +549,10 @@ static void _on_change_window_state (Icon *icon)
 				icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
 				cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 			}
-			else
-			{
-				// on redessine avec ou sans la miniature, suivant le nouvel etat.
-				cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pParentDock));
-				if (pParentDock)
-					cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
-			}
+			// on redessine avec ou sans la miniature, suivant le nouvel etat.
+			cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pParentDock));
+			if (pParentDock)
+				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
 		}
 		#endif
 	}
@@ -1363,6 +1360,12 @@ static void _show_appli_for_drop (Icon *pIcon)
 	cairo_dock_show_xwindow (pIcon->Xid);
 }
 
+static gboolean _delete_appli (Icon *pIcon)
+{
+	cairo_dock_unregister_appli (pIcon);
+	return FALSE;
+}
+
 Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 {
 	//\__________________ On cree l'icone.
@@ -1383,8 +1386,9 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	
 	if (icon == NULL)
 		return NULL;
-	icon->load_image = _load_appli;
-	icon->action_on_drag_hover = _show_appli_for_drop;
+	icon->iface.load_image = _load_appli;
+	icon->iface.action_on_drag_hover = _show_appli_for_drop;
+	icon->iface.on_delete = _delete_appli;
 	icon->bHasIndicator = myIndicators.bDrawIndicatorOnAppli;
 	
 	//\____________ On remplit ses buffers.

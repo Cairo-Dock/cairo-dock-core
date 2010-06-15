@@ -23,6 +23,7 @@
 
 #include <glib.h>
 
+#include "cairo-dock-icons.h"
 G_BEGIN_DECLS
 
 /**
@@ -48,7 +49,7 @@ void cairo_dock_remove_html_spaces (gchar *cString);
 *@param fOrder order of the icon inside the dock.
 *@param erreur an error filled if something went wrong.
 */
-gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur);
+gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconType iType, GError **erreur);
 
 /** Create and add an empty default desktop file for a given type.
 *@param iLauncherType type of the icon it will represent : launcher, file, container icon, separator.
@@ -56,7 +57,7 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 *@param fOrder order of the icon inside the dock.
 *@param erreur an error filled if something went wrong.
 */
-gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, GError **erreur);
+gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconType iGroup, GError **erreur);
 
 
 void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockDesktopFileType iLauncherType);

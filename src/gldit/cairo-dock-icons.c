@@ -776,7 +776,7 @@ static CairoDock * _cairo_dock_detach_launcher(Icon *pIcon)
 }
 static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, CairoContainer *pContainer, CairoDock *pMainDock)
 {
-	if(icon && CAIRO_DOCK_IS_LAUNCHER(icon))
+	if (CAIRO_DOCK_IS_LAUNCHER(icon))
 	{
 		cd_debug ("%s (%s, iNumViewport=%d)", __func__, icon->cName, icon->iSpecificDesktop);
 		CairoDock *pParentDock = NULL;

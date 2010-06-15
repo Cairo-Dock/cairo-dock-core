@@ -41,7 +41,7 @@ G_BEGIN_DECLS
 * Icons are sorted by the (group, order) pair; the group is also the initial type of the icon.
 */
 
-/// Definition if the groups of icons.
+/// Definition of the groups of icons.
 typedef enum {
 	CAIRO_DOCK_LAUNCHER = 0,
 	CAIRO_DOCK_SEPARATOR12,
@@ -50,6 +50,19 @@ typedef enum {
 	CAIRO_DOCK_APPLET,
 	CAIRO_DOCK_NB_TYPES
 	} CairoDockIconType;
+
+/// Definition of the type of icons.
+typedef enum {
+	CAIRO_DOCK_ICON_TYPE_LAUNCHER = 0,
+	CAIRO_DOCK_ICON_TYPE_FILE = 0,
+	CAIRO_DOCK_ICON_TYPE_CONTAINER = 0,
+	CAIRO_DOCK_ICON_TYPE_SEPARATOR,
+	CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER,
+	CAIRO_DOCK_ICON_TYPE_APPLI,
+	CAIRO_DOCK_ICON_TYPE_APPLET,
+	CAIRO_DOCK_ICON_TYPE_OTHER,
+	CAIRO_DOCK_NB_ICON_TYPES
+	} CairoDockIconTrueType;
 
 /// Animation state of an icon, sorted by priority.
 typedef enum {
@@ -71,8 +84,14 @@ typedef enum {
 	CAIRO_DOCK_NB_SORT_ON_FILE
 	} CairoDockFMSortType;
 
+/// Icon's interface
 struct _IconInterface {
+	/// function that loads the icon surface (and optionnally texture).
 	void (*load_image) (Icon *icon);
+	/// function called when the icon is deleted from the current theme.
+	gboolean (*on_delete) (Icon *icon);
+	/// function called when the user drag something over the icon for more than 500ms.
+	void (*action_on_drag_hover) (Icon *icon);
 	};
 
 
@@ -81,6 +100,7 @@ struct _Icon {
 	//\____________ Definition.
 	/// group of the icon.
 	CairoDockIconType iType;
+	IconInterface iface;
 	GPtrArray *pNotificationsTab;
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	
@@ -161,9 +181,6 @@ struct _Icon {
 	cairo_surface_t* pQuickInfoBuffer;
 	GLuint iQuickInfoTexture;
 	
-	void (*load_image) (Icon *icon);
-	void (*action_on_drag_hover) (Icon *icon);
-	
 	//\____________ Parametres de dessin, definis par la vue/les animations.
 	gdouble fXMin, fXMax;  // Abscisse extremale gauche/droite que the icon atteindra (variable avec la vague).
 	gdouble fXAtRest;  // Abscisse de the icon au repos.
@@ -188,12 +205,21 @@ struct _Icon {
 	
 	guint iSidRedrawSubdockContent;
 	
-	gpointer reserved[4];
+	CairoDockIconTrueType iTrueType;
+	gpointer reserved[3];
 };
 
 /// Definition of a function that runs through all icons.
 typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
 
+
+#define CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_LAUNCHER)
+#define CAIRO_DOCK_ICON_TYPE_IS_FILE(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_FILE)
+#define CAIRO_DOCK_ICON_TYPE_IS_CONTAINER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER)
+#define CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_SEPARATOR)
+#define CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER)
+#define CAIRO_DOCK_ICON_TYPE_IS_APPLI(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_APPLI)
+#define CAIRO_DOCK_ICON_TYPE_IS_APPLET(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_APPLET)
 
 /** TRUE if the icon is a launcher (a real launcher with a command or an URI, or a container icon, or even a fake launcher).
 *@param icon an icon.

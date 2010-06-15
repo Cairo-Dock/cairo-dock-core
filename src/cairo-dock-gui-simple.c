@@ -42,6 +42,7 @@
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-backends-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-switch.h"
@@ -677,6 +678,112 @@ static void on_destroy_config_simple (gpointer data)
 	s_pSimpleConfigWindow = NULL;
 }
 
+static void _cairo_dock_add_one_animation_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
+{
+	GtkTreeIter iter;
+	memset (&iter, 0, sizeof (GtkTreeIter));
+	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
+	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
+		CAIRO_DOCK_MODEL_NAME, (pRecord && pRecord->cDisplayedName != NULL && *pRecord->cDisplayedName != '\0' ? pRecord->cDisplayedName : cName),
+		CAIRO_DOCK_MODEL_RESULT, cName, -1);
+}
+static void _add_one_animation_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
+{
+	if (!pRecord->bIsEffect)
+		_cairo_dock_add_one_animation_item (cName, pRecord, pModele);
+}
+static void _add_one_effect_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
+{
+	if (pRecord->bIsEffect)
+		_cairo_dock_add_one_animation_item (cName, pRecord, pModele);
+}
+static void _make_double_anim_widget (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, const gchar *cLabel)
+{
+	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, cGroupName, cKeyName);
+	g_return_if_fail (myWidget != NULL);
+	
+	gsize length = 0;
+	gchar **cValues = g_key_file_get_string_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
+	
+	GtkWidget *box = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	gtk_box_pack_end (GTK_BOX (myWidget->pKeyBox), box, FALSE, FALSE, 0);
+	
+	GtkWidget *pLabel = gtk_label_new (_("Animation:"));
+	gtk_box_pack_start (GTK_BOX (box), pLabel, FALSE, FALSE, 0);
+	
+	GtkWidget *pOneWidget = cairo_dock_gui_make_combo (FALSE);
+	GtkTreeModel *modele = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
+	_cairo_dock_add_one_animation_item ("", NULL, GTK_LIST_STORE (modele));
+	cairo_dock_foreach_animation ((GHFunc) _add_one_animation_item, modele);
+	gtk_box_pack_start (GTK_BOX (box), pOneWidget, FALSE, FALSE, 0);
+	cairo_dock_gui_select_in_combo (pOneWidget, cValues[0]);
+	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);
+	
+	if (g_bUseOpenGL)
+	{
+		pLabel = gtk_vseparator_new ();
+		gtk_widget_set_size_request (pLabel, 20, 1);
+		gtk_box_pack_start (GTK_BOX (box), pLabel, FALSE, FALSE, 0);
+		
+		pLabel = gtk_label_new (_("Effects:"));
+		gtk_box_pack_start (GTK_BOX (box), pLabel, FALSE, FALSE, 0);
+		
+		pOneWidget = cairo_dock_gui_make_combo (FALSE);
+		modele = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
+		_cairo_dock_add_one_animation_item ("", NULL, GTK_LIST_STORE (modele));
+		cairo_dock_foreach_animation ((GHFunc) _add_one_effect_item, modele);
+		gtk_box_pack_start (GTK_BOX (box), pOneWidget, FALSE, FALSE, 0);
+		cairo_dock_gui_select_in_combo (pOneWidget, cValues[1]);
+		myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);
+	}
+	g_strfreev (cValues);
+}
+static void _make_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
+{
+	_make_double_anim_widget (pSimpleConfigWindow, pKeyFile, "Behavior", "anim_hover", _("On mouse hover:"));
+	_make_double_anim_widget (pSimpleConfigWindow, pKeyFile, "Behavior", "anim_click", _("On click:"));
+}
+
+/**static void _save_double_anim_widget (GtkWidget *pSimpleConfigWindow, const gchar *cGroupName, const gchar *cKeyName, GKeyFile *pKeyFile)
+{
+	GtkWidget *myWidget = cairo_dock_get_widget_by_name (pSimpleConfigWindow, cGroupName, cKeyName);
+	g_return_if_fail (myWidget != NULL);
+	
+	GList *children = gtk_container_get_children (GTK_CONTAINER (myWidget));
+	g_return_if_fail (children != NULL && children->next != NULL);
+	GtkWidget *box = children->next->data;
+	g_list_free (children);
+	children = gtk_container_get_children (GTK_CONTAINER (box));
+	g_return_if_fail (children != NULL && children->next != NULL);
+	
+	gchar *tValues[2];
+	GList *w = children->next;
+	GtkWidget *pOneWidget = w->data;
+	gchar *cValue = cairo_dock_gui_get_active_row_in_combo (pOneWidget);
+	tValues[0] = (cValue ? cValue : g_strdup(""));
+	
+	if (g_bUseOpenGL && g_list_length (w) >= 3)
+	{
+		w = w->next->next->next;
+		pOneWidget = w->data;
+		cValue = cairo_dock_gui_get_active_row_in_combo (pOneWidget);
+		tValues[1] = (cValue ? cValue : g_strdup(""));
+		g_key_file_set_string_list (pKeyFile, cGroupName, cKeyName, (const gchar * const *)tValues, 2);
+		g_free (tValues[1]);
+	}
+	else
+	{
+		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, tValues[0]);
+	}
+	g_free (tValues[0]);
+	g_list_free (children);
+}
+static void _save_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
+{
+	_save_double_anim_widget (pSimpleConfigWindow, "Behavior", "anim_hover", pKeyFile);
+	_save_double_anim_widget (pSimpleConfigWindow, "Behavior", "anim_click", pKeyFile);
+}*/
+
 static GtkWidget * show_main_gui (void)
 {
 	if (s_pSimpleConfigWindow != NULL)
@@ -689,14 +796,15 @@ static GtkWidget * show_main_gui (void)
 	gchar *cConfFilePath = _make_simple_conf_file ();
 	
 	//\_____________ On construit la fenetre.
-	cairo_dock_build_generic_gui (cConfFilePath,
+	s_pSimpleConfigWindow = cairo_dock_build_generic_gui_full (cConfFilePath,
 		NULL,
 		_("Cairo-Dock configuration"),
 		CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
 		(CairoDockApplyConfigFunc) on_apply_config_simple,
 		NULL,
 		(GFreeFunc) on_destroy_config_simple,
-		&s_pSimpleConfigWindow);
+		_make_widgets,
+		NULL/**_save_widgets*/);
 	
 	//\_____________ On ajoute un bouton "mode avance".
 	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
@@ -959,10 +1067,10 @@ static void deactivate_module_in_gui (const gchar *cModuleName)
 	GSList *pCurrentWidgetList = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "widget-list");
 	g_return_if_fail (pCurrentWidgetList != NULL);
 	
-	GSList *pWidgetList = cairo_dock_find_widgets_from_name (pCurrentWidgetList, "Add-ons", "modules");
-	g_return_if_fail (pWidgetList != NULL);
+	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pCurrentWidgetList, "Add-ons", "modules");
+	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	
-	GtkWidget *pTreeView = pWidgetList->data;
+	GtkWidget *pTreeView = pGroupKeyWidget->pSubWidgetList->data;
 	
 	GtkTreeModel *pModele = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
 	gboolean bFound = FALSE;
@@ -978,12 +1086,10 @@ static void deactivate_module_in_gui (const gchar *cModuleName)
 	}
 }
 
-static GSList *get_widgets_from_name (const gchar *cGroupName, const gchar *cKeyName)
+static CairoDockGroupKeyWidget *get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
 {
 	g_return_val_if_fail (s_pSimpleConfigModuleWindow != NULL, NULL);
-	GSList *pCurrentModuleWidgetList = g_object_get_data (G_OBJECT (s_pSimpleConfigModuleWindow), "widget-list");
-	g_return_val_if_fail (pCurrentModuleWidgetList != NULL, NULL);
-	return cairo_dock_find_widgets_from_name (pCurrentModuleWidgetList, cGroupName, cKeyName);
+	return cairo_dock_gui_find_group_key_widget (s_pSimpleConfigModuleWindow, cGroupName, cKeyName);
 }
 
 static void close_gui (void)
@@ -1028,7 +1134,7 @@ void cairo_dock_register_simple_gui_backend (void)
 	pBackend->set_status_message_on_gui = set_status_message_on_gui;
 	pBackend->module_is_opened 			= module_is_opened;
 	pBackend->deactivate_module_in_gui 	= deactivate_module_in_gui;
-	pBackend->get_widgets_from_name 	= get_widgets_from_name;
+	pBackend->get_widget_from_name 		= get_widget_from_name;
 	pBackend->close_gui 				= close_gui;
 	
 	cairo_dock_register_gui_backend (pBackend);

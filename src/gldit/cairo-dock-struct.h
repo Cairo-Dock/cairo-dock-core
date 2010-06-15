@@ -341,6 +341,7 @@ typedef struct _CairoDeskletDecoration CairoDeskletDecoration;
 typedef struct _CairoDialogRenderer CairoDialogRenderer;
 typedef struct _CairoDialogDecorator CairoDialogDecorator;
 
+typedef struct _IconInterface IconInterface;
 typedef struct _Icon Icon;
 typedef struct _CairoContainer CairoContainer;
 typedef struct _CairoDock CairoDock;
@@ -381,19 +382,21 @@ typedef struct _CairoDockTask CairoDockTask;
 
 typedef struct _CairoDockTheme CairoDockTheme;
 
+typedef struct _CairoDockGroupKeyWidget CairoDockGroupKeyWidget;
+
+typedef struct _CairoDockGLConfig CairoDockGLConfig;
+
 typedef struct _CairoDockGLFont CairoDockGLFont;
 
 typedef struct _CairoDockGLPath CairoDockGLPath;
+
+typedef struct _CairoDockDesktopGeometry CairoDockDesktopGeometry;
 
 typedef struct _CairoDockDesktopBackground CairoDockDesktopBackground;
 
 typedef struct _CairoDockImageBuffer CairoDockImageBuffer;
 
 typedef struct _CairoEmblem CairoEmblem;
-
-typedef struct _CairoDockGLConfig CairoDockGLConfig;
-
-typedef struct _CairoDockDesktopGeometry CairoDockDesktopGeometry;
 
 
 

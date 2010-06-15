@@ -58,5 +58,5 @@ package = false
 #F[List of your personal themes]
 frame1=
 
-#x[../@CAIRO_DOCK_THEMES_DIR@] Delete from the list themes that you don't need anymore :
+#_ Delete from the list themes that you don't need anymore :
 deleted themes = 

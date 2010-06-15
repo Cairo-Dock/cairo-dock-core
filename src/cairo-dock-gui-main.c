@@ -48,7 +48,7 @@
 #define CAIRO_DOCK_CATEGORY_ICON_SIZE 32
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW 4
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN 3
-#define CAIRO_DOCK_GUI_MARGIN 6
+#define CAIRO_DOCK_FRAME_MARGIN 6
 #define CAIRO_DOCK_TABLE_MARGIN 12
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 1150
 #define CAIRO_DOCK_CONF_PANEL_WIDTH_MIN 800
@@ -248,8 +248,8 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 	//g_print ("%s ()\n", __func__);
 	if (sBuffer == NULL)
 		sBuffer = g_string_new ("");
-	gpointer *pGroupKeyWidget;
-	GList *pSubWidgetList;
+	CairoDockGroupKeyWidget *pGroupKeyWidget;
+	GSList *pSubWidgetList;
 	GtkWidget *pLabel, *pKeyBox, *pVBox, *pFrame, *pCurrentFrame = NULL, *pExpander;
 	const gchar *cDescription;
 	gchar *cToolTip = NULL;
@@ -262,14 +262,13 @@ void cairo_dock_apply_filter_on_group_widget (gchar **pKeyWords, gboolean bAllWo
 	{
 		bFound = FALSE;
 		pGroupKeyWidget = w->data;
-		//g_print ("widget : %s - %s\n", pGroupKeyWidget[0], pGroupKeyWidget[1]);
-		pSubWidgetList = pGroupKeyWidget[2];
+		pSubWidgetList = pGroupKeyWidget->pSubWidgetList;
 		if (pSubWidgetList == NULL)
 			continue;
-		pLabel = pGroupKeyWidget[4];
+		pLabel = pGroupKeyWidget->pLabel;
 		if (pLabel == NULL)
 			continue;
-		pKeyBox = pGroupKeyWidget[5];
+		pKeyBox = pGroupKeyWidget->pKeyBox;
 		if (pKeyBox == NULL)
 			continue;
 		pVBox = gtk_widget_get_parent (pKeyBox);
@@ -1236,7 +1235,7 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 	g_free (cLabel2);
 	
 	GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 1.);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_GUI_MARGIN, 0);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_FRAME_MARGIN, 0);
 	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
 	gtk_tool_button_set_label_widget (GTK_TOOL_BUTTON (pWidget), pAlign);
 	
@@ -1290,7 +1289,7 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 		return pGroupDescription;
 	
 	//\____________ On construit le bouton du groupe.
-	GtkWidget *pGroupHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pGroupHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	
 	pGroupDescription->pActivateButton = gtk_check_button_new ();
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), iActivation);
@@ -1312,7 +1311,7 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 	g_signal_connect (G_OBJECT (pGroupButton), "enter", G_CALLBACK(on_enter_group_button), pGroupDescription);
 	g_signal_connect (G_OBJECT (pGroupButton), "leave", G_CALLBACK(on_leave_group_button), NULL);
 	
-	GtkWidget *pButtonHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pButtonHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	GtkWidget *pImage = _make_image (cIconPath, CAIRO_DOCK_GROUP_ICON_SIZE);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox), pImage, FALSE, FALSE, 0);
 	pGroupDescription->pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, cTitle));
@@ -1424,7 +1423,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		return s_pMainWindow;
 	}
 	s_pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	//gtk_container_set_border_width (s_pMainWindow, CAIRO_DOCK_GUI_MARGIN);
+	//gtk_container_set_border_width (s_pMainWindow, CAIRO_DOCK_FRAME_MARGIN);
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
 	gtk_window_set_icon_from_file (GTK_WINDOW (s_pMainWindow), cIconPath, NULL);
 	g_free (cIconPath);
@@ -1449,8 +1448,8 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		s_iPreviewWidth = CAIRO_DOCK_PREVIEW_WIDTH_MIN;
 		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN;
 	}
-	GtkWidget *pCategoriesVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-	gtk_widget_set_size_request (pCategoriesVBox, s_iPreviewWidth+2*CAIRO_DOCK_GUI_MARGIN, CAIRO_DOCK_PREVIEW_HEIGHT);
+	GtkWidget *pCategoriesVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	gtk_widget_set_size_request (pCategoriesVBox, s_iPreviewWidth+2*CAIRO_DOCK_FRAME_MARGIN, CAIRO_DOCK_PREVIEW_HEIGHT);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pCategoriesVBox,
 		FALSE,
@@ -1489,7 +1488,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		
 	//\_____________ On construit les boutons de chaque categorie.
 	GtkWidget *pCategoriesFrame = gtk_frame_new (NULL);
-	gtk_container_set_border_width (GTK_CONTAINER (pCategoriesFrame), CAIRO_DOCK_GUI_MARGIN);
+	gtk_container_set_border_width (GTK_CONTAINER (pCategoriesFrame), CAIRO_DOCK_FRAME_MARGIN);
 	gtk_frame_set_shadow_type (GTK_FRAME (pCategoriesFrame), GTK_SHADOW_OUT);
 	
 	GtkWidget *pLabel;
@@ -1540,7 +1539,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
 		
 		pCategoryWidget->pFrame = gtk_frame_new (NULL);
-		gtk_container_set_border_width (GTK_CONTAINER (pCategoryWidget->pFrame), CAIRO_DOCK_GUI_MARGIN);
+		gtk_container_set_border_width (GTK_CONTAINER (pCategoryWidget->pFrame), CAIRO_DOCK_FRAME_MARGIN);
 		gtk_frame_set_shadow_type (GTK_FRAME (pCategoryWidget->pFrame), GTK_SHADOW_OUT);
 		
 		pLabel = gtk_label_new (NULL);
@@ -1552,8 +1551,8 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		pCategoryWidget->pTable = gtk_table_new (1,
 			s_iNbButtonsByRow,
 			TRUE);
-		gtk_table_set_row_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_GUI_MARGIN);
-		gtk_table_set_col_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_GUI_MARGIN);
+		gtk_table_set_row_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
+		gtk_table_set_col_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
 		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pFrame),
 			pCategoryWidget->pTable);
 		gtk_box_pack_start (GTK_BOX (s_pGroupsVBox),
@@ -1622,7 +1621,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	// frame
 	GtkWidget *pFilterFrame = gtk_frame_new (NULL);
 	cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Filter"));
-	GtkWidget *pFilterLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pFilterLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
 	gtk_container_add (GTK_CONTAINER (pFilterLabelContainer), pImage);
 	
@@ -1632,7 +1631,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gtk_container_add (GTK_CONTAINER (pFilterLabelContainer), pLabel);
 	
 	gtk_frame_set_label_widget (GTK_FRAME (pFilterFrame), pFilterLabelContainer);
-	gtk_container_set_border_width (GTK_CONTAINER (pFilterFrame), CAIRO_DOCK_GUI_MARGIN);
+	gtk_container_set_border_width (GTK_CONTAINER (pFilterFrame), CAIRO_DOCK_FRAME_MARGIN);
 	gtk_frame_set_shadow_type (GTK_FRAME (pFilterFrame), GTK_SHADOW_OUT);
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		pFilterFrame,
@@ -1640,11 +1639,11 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		FALSE,
 		0);
 	
-	GtkWidget *pOptionVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pOptionVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_container_add (GTK_CONTAINER (pFilterFrame), pOptionVBox);
 	
 	// entree de texte
-	GtkWidget *pFilterBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pFilterBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pOptionVBox),
 		pFilterBox,
 		FALSE,
@@ -1703,7 +1702,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	
 	//\_____________ On ajoute le cadre d'activation du module.
 	s_pGroupFrame = gtk_frame_new ("pouet");
-	gtk_container_set_border_width (GTK_CONTAINER (s_pGroupFrame), CAIRO_DOCK_GUI_MARGIN);
+	gtk_container_set_border_width (GTK_CONTAINER (s_pGroupFrame), CAIRO_DOCK_FRAME_MARGIN);
 	gtk_frame_set_shadow_type (GTK_FRAME (s_pGroupFrame), GTK_SHADOW_OUT);
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		s_pGroupFrame,
@@ -1716,7 +1715,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gtk_widget_show_all (s_pActivateButton);
 	
 	//\_____________ On ajoute la zone de prevue.
-	GtkWidget *pInfoVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pInfoVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		pInfoVBox,
 		FALSE,
@@ -1727,7 +1726,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gtk_container_add (GTK_CONTAINER (pInfoVBox), s_pPreviewImage);
 	
 	//\_____________ On ajoute les boutons.
-	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_end (GTK_BOX (pVBox),
 		pButtonsHBox,
 		FALSE,
@@ -1990,7 +1989,7 @@ static void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
 		pWidget,
 		TRUE,
 		TRUE,
-		CAIRO_DOCK_GUI_MARGIN);
+		CAIRO_DOCK_FRAME_MARGIN);
 	gtk_widget_show_all (pWidget);
 }
 
@@ -2458,21 +2457,21 @@ static void set_status_message_on_gui (const gchar *cMessage)
 	gtk_statusbar_push (GTK_STATUSBAR (s_pStatusBar), 0, cMessage);
 }
 
-static GSList *get_widgets_from_name (const gchar *cGroupName, const gchar *cKeyName)
+static CairoDockGroupKeyWidget *get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
 {
 	g_return_val_if_fail (s_pCurrentWidgetList != NULL, NULL);
-	GSList *pList = cairo_dock_find_widgets_from_name (s_pCurrentWidgetList, cGroupName, cKeyName);
-	if (pList == NULL && s_pExtraCurrentWidgetList != NULL)
+	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (s_pCurrentWidgetList, cGroupName, cKeyName);
+	if (pGroupKeyWidget == NULL && s_pExtraCurrentWidgetList != NULL)
 	{
 		GSList *l;
 		for (l = s_pExtraCurrentWidgetList; l != NULL; l = l->next)
 		{
-			pList = cairo_dock_find_widgets_from_name (l->data, cGroupName, cKeyName);
-			if (pList != NULL)
+			pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (l->data, cGroupName, cKeyName);
+			if (pGroupKeyWidget != NULL)
 				break ;
 		}
 	}
-	return pList;
+	return pGroupKeyWidget;
 }
 
 static void close_gui (void)
@@ -2487,14 +2486,14 @@ void cairo_dock_register_main_gui_backend (void)
 {
 	CairoDockGuiBackend *pBackend = g_new0 (CairoDockGuiBackend, 1);
 	
-	pBackend->show_main_gui 		= show_main_gui;
+	pBackend->show_main_gui 			= show_main_gui;
 	pBackend->show_module_instance_gui 	= show_module_instance_gui;
-	pBackend->show_module_gui 		= show_module_gui;
+	pBackend->show_module_gui 			= show_module_gui;
 	pBackend->set_status_message_on_gui = set_status_message_on_gui;
-	pBackend->module_is_opened 		= module_is_opened;
+	pBackend->module_is_opened 			= module_is_opened;
 	pBackend->deactivate_module_in_gui 	= deactivate_module_in_gui;
-	pBackend->get_widgets_from_name 	= get_widgets_from_name;
-	pBackend->close_gui 			= close_gui;
+	pBackend->get_widget_from_name 		= get_widget_from_name;
+	pBackend->close_gui 				= close_gui;
 	
 	cairo_dock_register_gui_backend (pBackend);
 }

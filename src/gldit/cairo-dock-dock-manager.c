@@ -227,14 +227,19 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 	cd_debug ("%s (%s, %d)", __func__, cDockName, pDock->iRefCount);
 	if (pDock->bIsMainDock)  // utiliser cairo_dock_free_all ().
 		return;
-	pDock->iRefCount --;
-	if (pDock->iRefCount > 0)
-		return ;
 	if (cairo_dock_search_dock_from_name (cDockName) != pDock)
 	{
 		cDockName = cairo_dock_search_dock_name (pDock);
+		if (cDockName == NULL)
+		{
+			cd_warning ("this dock doesn't exist any more !");
+			return ;
+		}
 		cd_warning ("dock's name mismatch !\nThe real name is %s", cDockName);
 	}
+	pDock->iRefCount --;
+	if (pDock->iRefCount > 0)
+		return ;
 	
 	Icon *pPointedIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 	if (pPointedIcon != NULL)

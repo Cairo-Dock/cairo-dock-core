@@ -512,48 +512,13 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 	if (pDock != NULL)
 		cairo_dock_detach_icon_from_dock (icon, pDock, bCheckUnusedSeparator);  // on le fait maintenant, pour que l'icone ait son type correct, et ne soit pas confondue avec un separateur
 	
-	//\___________________ On effectue les taches de fermeture de l'icone suivant son type.
-	gboolean bNormalAppli = CAIRO_DOCK_IS_NORMAL_APPLI (icon);  // on le recupere la dans le cas d'une applet controlant une appli, car apres s'etre fait deinstanciee, elle n'est plus une applet, et est alors consideree comme une appli normale (on veut garder son Xid lors du detachement du dock).
-	if (icon->cDesktopFileName != NULL)
+	//\___________________ On supprime l'icone du theme courant.
+	if (icon->iface.on_delete)
 	{
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-		g_remove (cDesktopFilePath);
-		g_free (cDesktopFilePath);
-		cairo_dock_mark_theme_as_modified (TRUE);
-
-		if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))
-		{
-			cairo_dock_fm_remove_monitor (icon);
-		}
-		
-		if (icon->pSubDock != NULL && icon->cClass == NULL)
-		{
-			Icon *pSubIcon;
-			GList *ic = icon->pSubDock->icons, *next_ic;
-			while (ic != NULL)
-			{
-				pSubIcon = ic->data;
-				next_ic = ic->next;  // si l'icone se fait enlever, on perdrait le fil.
-				cairo_dock_remove_icon_from_dock_full (icon->pSubDock, pSubIcon, FALSE);  // pour enlever du theme les launceurs et applets contenus dans le sous-dock.
-				ic = next_ic;
-			}
-			cairo_dock_destroy_dock (icon->pSubDock, icon->cName);
-			icon->pSubDock = NULL;
-		}
+		gboolean r = icon->iface.on_delete (icon);
+		if (r)
+			cairo_dock_mark_theme_as_modified (TRUE);
 	}
-	else if (CAIRO_DOCK_IS_APPLET (icon))
-	{
-		cairo_dock_deinstanciate_module (icon->pModuleInstance);  // desactive l'instance du module -> n'est plus une applet.
-		cairo_dock_update_conf_file_with_active_modules ();
-		cairo_dock_mark_theme_as_modified (TRUE);
-	}  // rien a faire pour les separateurs automatiques.
-	
-	if (bNormalAppli)
-	{
-		cairo_dock_unregister_appli (icon);  // -> n'est plus une appli.
-	}
-	else  // cas d'une applet controlant une appli, elle devient du coup une appli normale, ce qu'on ne veut pas.
-		icon->cDesktopFileName = g_strdup("");
 }
 
 
@@ -601,7 +566,7 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 }
 
 
-Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder)
+Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder, CairoDockIconType iGroup)
 {
 	//\_________________ On ajoute un fichier desktop dans le repertoire des lanceurs du theme courant.
 	gchar *cPath = NULL;
@@ -621,9 +586,9 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 	}
 	gchar *cNewDesktopFileName;
 	if (cExternDesktopFileURI != NULL)
-		cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cPath ? cPath : cExternDesktopFileURI, cDockName, fOrder, &erreur);
+		cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cPath ? cPath : cExternDesktopFileURI, cDockName, fOrder, iGroup, &erreur);
 	else
-		cNewDesktopFileName = cairo_dock_add_desktop_file_from_type (iType, cDockName, fOrder, &erreur);
+		cNewDesktopFileName = cairo_dock_add_desktop_file_from_type (iType, cDockName, fOrder, iGroup, &erreur);
 	g_free (cPath);
 	if (erreur != NULL)
 	{

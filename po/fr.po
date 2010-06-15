@@ -2760,7 +2760,7 @@ msgstr "Nom du sous-dock :"
 #: ../data/messages:871 ../data/messages:899 ../data/messages:1455
 #: ../data/messages:1483
 msgid "How to render the icon :"
-msgstr "Comment puis-je réordonner mes icônes ?"
+msgstr "Comment dessiner l'icône :"
 
 #: ../data/messages:873 ../data/messages:901 ../data/messages:1457
 #: ../data/messages:1485
@@ -2780,7 +2780,7 @@ msgstr "Afficher le contenu du sous-dock comme une pile"
 #: ../data/messages:879 ../data/messages:907 ../data/messages:1463
 #: ../data/messages:1491
 msgid "Draw sub-dock's content inside a box"
-msgstr "Affiché le contenu du sous-dock dans une boite"
+msgstr "Afficher le contenu du sous-dock dans une boite"
 
 #: ../data/messages:881 ../data/messages:909 ../data/messages:1297
 #: ../data/messages:1465 ../data/messages:1493 ../data/messages:1537

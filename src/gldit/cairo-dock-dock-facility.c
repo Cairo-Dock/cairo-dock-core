@@ -645,7 +645,7 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		
 		if (iWidth > 0 && icon->fInsertRemoveFactor != 0)
 		{
-			if (!icon->bPointed)
+			if (pointed_ic != ic)  // bPointed peut etre false a l'extremite droite.
 				offset += (icon->fWidth * (fScale - icon->fScale)) * (pointed_ic == NULL ? 1 : -1);
 			else
 				offset += (2*(fXMiddle - x_abs) * (fScale - icon->fScale)) * (pointed_ic == NULL ? 1 : -1);

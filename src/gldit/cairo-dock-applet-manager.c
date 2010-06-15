@@ -72,12 +72,25 @@ static void _load_applet (Icon *icon)
 	}
 }
 
+static gboolean _delete_applet (Icon *icon)
+{
+	if (icon->pModuleInstance != NULL)
+	{
+		cairo_dock_deinstanciate_module (icon->pModuleInstance);  // desactive l'instance du module -> n'est plus une applet.
+		cairo_dock_update_conf_file_with_active_modules ();
+		icon->cDesktopFileName = g_strdup("");  // cas d'une applet controlant une appli, elle devient du coup une appli normale, ce qu'on ne veut pas.
+		return TRUE;
+	}
+	return FALSE;
+}
+
 Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance, CairoContainer *pContainer)
 
 {
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_applet_icon (pMinimalConfig, pModuleInstance);
-	icon->load_image = _load_applet;
+	icon->iface.load_image = _load_applet;
+	icon->iface.on_delete = _delete_applet;
 	
 	//\____________ On remplit ses buffers.
 	if (pContainer != NULL)

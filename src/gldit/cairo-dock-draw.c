@@ -105,7 +105,12 @@ cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContai
 	if (mySystem.bUseFakeTransparency)
 	{
 		if (g_pFakeTransparencyDesktopBg && g_pFakeTransparencyDesktopBg->pSurface)
-			cairo_set_source_surface (pCairoContext, g_pFakeTransparencyDesktopBg->pSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
+		{
+			if (pContainer->bIsHorizontal)
+				cairo_set_source_surface (pCairoContext, g_pFakeTransparencyDesktopBg->pSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
+			else
+				cairo_set_source_surface (pCairoContext, g_pFakeTransparencyDesktopBg->pSurface, - pContainer->iWindowPositionY, - pContainer->iWindowPositionX);
+		}
 		else
 			cairo_set_source_rgba (pCairoContext, 0.8, 0.8, 0.8, 0.0);
 	}
@@ -136,7 +141,12 @@ cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, 
 	if (mySystem.bUseFakeTransparency)
 	{
 		if (g_pFakeTransparencyDesktopBg && g_pFakeTransparencyDesktopBg->pSurface)
-			cairo_set_source_surface (pCairoContext, g_pFakeTransparencyDesktopBg->pSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
+		{
+			if (pContainer->bIsHorizontal)
+				cairo_set_source_surface (pCairoContext, g_pFakeTransparencyDesktopBg->pSurface, - pContainer->iWindowPositionX, - pContainer->iWindowPositionY);
+			else
+				cairo_set_source_surface (pCairoContext, g_pFakeTransparencyDesktopBg->pSurface, - pContainer->iWindowPositionY, - pContainer->iWindowPositionX);
+		}
 		else
 			cairo_set_source_rgba (pCairoContext, 0.8, 0.8, 0.8, 0.0);
 	}

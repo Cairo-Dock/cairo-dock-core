@@ -75,6 +75,7 @@ SET(core_lib_SRCS
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${XEXTEND_INCLUDE_DIRS}
+	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/implementations)
 

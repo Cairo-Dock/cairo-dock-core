@@ -51,6 +51,7 @@ G_BEGIN_DECLS
 * 
 */
 
+#define CAIRO_DOCK_GUI_MARGIN 4
 
 /// Types of widgets that Cairo-Dock can automatically build.
 typedef enum {
@@ -79,7 +80,7 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_THEME_LIST='h',
 	/// same but with a combo-entry to let the user enter any text.
 	CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY='H',
-	/// list of user dock themes, with a check button to select several themes.
+	// deprecated
 	CAIRO_DOCK_WIDGET_USER_THEME_SELECTOR='x',
 	/// list of dock themes, sortable by name, rating, and sobriety.
 	CAIRO_DOCK_WIDGET_THEME_SELECTOR='R',
@@ -140,7 +141,7 @@ typedef enum {
 	/// a tree view, where lines are numbered and can be selected or not.
 	CAIRO_DOCK_WIDGET_TREE_VIEW_MULTI_CHOICE='V',
 	
-	/// an empty GtkContainer, to use by applets that want to build custom widgets.
+	/// an empty GtkContainer, in case you need to build custom widgets.
 	CAIRO_DOCK_WIDGET_EMPTY_WIDGET='_',
 	/// a simple text label.
 	CAIRO_DOCK_WIDGET_TEXT_LABEL='>',
@@ -157,7 +158,7 @@ typedef enum {
 	CAIRO_DOCK_NB_GUI_WIDGETS
 	} CairoDockGUIWidgetType;
 	
-
+/// Model used for combo-box and tree-view. CAIRO_DOCK_MODEL_NAME is the name as displayed in the widget, and CAIRO_DOCK_MODEL_RESULT is the resulting string effectively written in the config file.
 typedef enum {
 	CAIRO_DOCK_MODEL_NAME = 0,
 	CAIRO_DOCK_MODEL_RESULT,
@@ -171,6 +172,15 @@ typedef enum {
 	CAIRO_DOCK_MODEL_NB_COLUMNS
 	} CairoDockGUIModelColumns;
 
+/// Definition of a widget corresponding to a given (group;key) pair.
+struct _CairoDockGroupKeyWidget {
+	gchar *cGroupName;
+	gchar *cKeyName;
+	GSList *pSubWidgetList;
+	gchar *cOriginalConfFilePath;
+	GtkWidget *pLabel;
+	GtkWidget *pKeyBox;
+	};
 
 void cairo_dock_build_renderer_list_for_gui (GHashTable *pHashTable);
 void cairo_dock_build_desklet_decorations_list_for_gui (GHashTable *pHashTable);
@@ -179,7 +189,7 @@ void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable);
 void cairo_dock_build_dialog_decorator_list_for_gui (GHashTable *pHashTable);
 
 
-void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data);
+void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data);  // exportee pour pouvoir desactiver la callback.
 
 gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, guint *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString);
 
@@ -195,12 +205,30 @@ void cairo_dock_update_keyfile_from_widget_list (GKeyFile *pKeyFile, GSList *pWi
 void cairo_dock_free_generated_widget_list (GSList *pWidgetList);
 
 
-GSList *cairo_dock_find_widgets_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
-GtkWidget *cairo_dock_find_widget_from_name (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
+  ///////////////
+ // utilities //
+///////////////
 
-void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTable, gchar *cActiveTheme);
-void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, const gchar *cActiveElement);
+void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, const gchar *cActiveElement);  // utile pour les applets.
 
+GtkWidget *cairo_dock_gui_make_tree_view (void);
+
+GtkWidget *cairo_dock_gui_make_combo (gboolean bWithEntry);
+
+void cairo_dock_gui_select_in_combo (GtkWidget *pOneWidget, const gchar *cValue);
+
+gchar **cairo_dock_gui_get_active_rows_in_tree_view (GtkWidget *pOneWidget, gboolean bSelectedRows, int *iNbElements);
+
+gchar *cairo_dock_gui_get_active_row_in_combo (GtkWidget *pOneWidget);
+
+
+CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
+
+CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget (GtkWidget *pWindow, const gchar *cGroupName, const gchar *cKeyName);
+
+#define cairo_dock_gui_get_widgets(pGroupKeyWidget) (pGroupKeyWidget)->pSubWidgetList
+#define cairo_dock_gui_get_first_widget(pGroupKeyWidget) (pGroupKeyWidget)->pSubWidgetList->data
+#define cairo_dock_gui_add_widget(pGroupKeyWidget, pOneWidget) (pGroupKeyWidget)->pSubWidgetList = g_slist_append ((pGroupKeyWidget)->pSubWidgetList, pOneWidget)
 
 G_END_DECLS
 #endif

@@ -271,8 +271,12 @@ void cairo_dock_reload_module (CairoDockModule *module, gboolean bReloadAppletCo
 
 void cairo_dock_deactivate_all_modules (void);
 
+// activate_module or reload, update_dock, redraw, write
 void cairo_dock_activate_module_and_load (const gchar *cModuleName);
+// deinstanciate_module, remove icon, free_icon, write
 void cairo_dock_deactivate_module_instance_and_unload (CairoDockModuleInstance *pInstance);
+
+// deinstanciate_each_module, write
 void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName);
 
 void cairo_dock_configure_module_instance (GtkWindow *pParentWindow, CairoDockModuleInstance *pModuleInstance, GError **erreur);

@@ -298,6 +298,11 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		g_free (cOldCommand);
 	}
 	
+	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "group", NULL))
+	{
+		icon->iType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "group", NULL);
+	}
+	
 	int iSpecificDesktop = g_key_file_get_integer (pKeyFile, "Desktop Entry", "ShowOnViewport", NULL);
 	if (iSpecificDesktop != 0 && icon->iSpecificDesktop == 0)
 	{
@@ -322,6 +327,15 @@ Icon * cairo_dock_new_launcher_icon (const gchar *cDesktopFileName, gchar **cSub
 	//\____________ On recupere les infos de son .desktop.
 	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon, cSubDockRendererName);
 	g_return_val_if_fail (icon->cDesktopFileName != NULL, NULL);
+	
+	if (icon->cBaseURI != NULL)
+		icon->iTrueType = CAIRO_DOCK_ICON_TYPE_FILE;
+	else if (icon->cCommand != NULL)
+		icon->iTrueType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
+	else if (icon->iNbSubIcons != 0)
+		icon->iTrueType = CAIRO_DOCK_ICON_TYPE_CONTAINER;
+	else
+		icon->iTrueType = CAIRO_DOCK_ICON_TYPE_SEPARATOR;
 	
 	return icon;
 }

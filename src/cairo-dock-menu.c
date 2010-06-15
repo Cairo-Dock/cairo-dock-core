@@ -125,20 +125,14 @@ static void _cairo_dock_configure_root_dock (GtkMenuItem *pMenuItem, CairoDock *
 		gtk_widget_destroy (s_pRootDockConfigWindow);
 	
 	gchar *cTitle = g_strdup_printf (_("Configuration of the '%s' dock"), cDockName);
-	gboolean config_ok = cairo_dock_build_generic_gui (cConfFilePath,
+	s_pRootDockConfigWindow = cairo_dock_build_generic_gui (cConfFilePath,
 		NULL,
 		cTitle,
 		CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT,
 		(CairoDockApplyConfigFunc) on_apply_config_root_dock,
 		(gpointer)cDockName,
-		(GFreeFunc) on_destroy_root_dock,
-		&s_pRootDockConfigWindow);
+		(GFreeFunc) on_destroy_root_dock);
 	g_free (cTitle);
-	
-	if (config_ok)
-	{
-		cairo_dock_reload_one_root_dock (cDockName, pDock);
-	}
 	
 	g_free (cConfFilePath);
 }
@@ -506,7 +500,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 		fOrder = CAIRO_DOCK_LAST_ORDER;
 	
 	//\___________________ On cree et on charge l'icone a partir d'un des templates.
-	Icon *pNewIcon = cairo_dock_add_new_launcher_by_type (iLauncherType, pDock, fOrder);
+	Icon *pNewIcon = cairo_dock_add_new_launcher_by_type (iLauncherType, pDock, fOrder, (icon ? icon->iType : CAIRO_DOCK_LAUNCHER));
 	if (pNewIcon == NULL)
 	{
 		cd_warning ("Couldn't create create the icon.\nCheck that you have writing permissions on ~/.config/cairo-dock and its sub-folders");
@@ -1227,7 +1221,7 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer data)
 		g_string_free (sDesktop, TRUE);
 	}
 }
-static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSeparator)
+static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSeparator, gboolean bAddLauncher)
 {
 	GtkWidget *pMenuItem = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem);
@@ -1243,8 +1237,11 @@ static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSepar
 	if (bAddSeparator)
 		_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, pSubMenuAdd);
 	
-	pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
-	gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it on the dock."));
+	if (bAddLauncher)
+	{
+		pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
+		gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it on the dock."));
+	}
 }
 gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu)
 {
@@ -1262,7 +1259,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	{
 		if (! cairo_dock_is_locked ())
 		{
-			_add_add_entry (menu, data, FALSE);
+			_add_add_entry (menu, data, FALSE, TRUE);
 		}
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
@@ -1313,12 +1310,12 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		}
 		
 		//\_________________________ On rajoute des actions de modifications sur le dock.
-		if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DOCK (pContainer) && icon && cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER))
+		if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DOCK (pContainer) && icon && (cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER) || cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_APPLET)))
 		{
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
-			if (!pPointingIcon || ! CAIRO_DOCK_IS_APPLET (pPointingIcon))
+			if (!pPointingIcon || CAIRO_DOCK_IS_CONTAINER_LAUNCHER (pPointingIcon))
 			{
-				_add_add_entry (menu, data, ! CAIRO_DOCK_IS_SEPARATOR (icon));
+				_add_add_entry (menu, data, ! CAIRO_DOCK_IS_SEPARATOR (icon), cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER));
 			
 				if (icon->cDesktopFileName != NULL && icon->cParentDockName != NULL)  // possede un .desktop.
 				{

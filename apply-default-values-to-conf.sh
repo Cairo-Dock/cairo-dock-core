@@ -123,6 +123,9 @@ if test "$desklet" = "false"; then
 	set_value "Module"		"show seconds"				false
 fi
 
+set_current_conf_file "plug-ins/drop_indicator/drop_indicator.conf"
+set_value "Drag and drop indicator"	"speed" 			2
+
 set_current_conf_file "plug-ins/dustbin/dustbin.conf"
 set_value "Icon"			"name"						"Dustbin"
 set_value "Module"			"additionnal directories"	""

@@ -41,7 +41,7 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-launcher.h"
 
-#define CAIRO_DOCK_GUI_MARGIN 6
+#define CAIRO_DOCK_FRAME_MARGIN 6
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1000
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 500
 
@@ -400,7 +400,7 @@ static GtkWidget *show_gui (Icon *pIcon)
 	s_pLauncherWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_icon_from_file (GTK_WINDOW (s_pLauncherWindow), CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 	
-	GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_container_add (GTK_CONTAINER (s_pLauncherWindow), pMainVBox);
 	
 	s_pLauncherPane = gtk_hpaned_new ();
@@ -439,7 +439,7 @@ static GtkWidget *show_gui (Icon *pIcon)
 	gtk_paned_pack1 (GTK_PANED (s_pLauncherPane), s_pLauncherScrolledWindow, TRUE, FALSE);
 	
 	//\_____________ On ajoute les boutons.
-	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN*2);
+	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN*2);
 	gtk_box_pack_end (GTK_BOX (pMainVBox),
 		pButtonsHBox,
 		FALSE,

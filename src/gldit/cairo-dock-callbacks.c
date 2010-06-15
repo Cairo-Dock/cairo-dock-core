@@ -269,8 +269,8 @@ static gboolean _cairo_dock_action_on_drag_hover (Icon *pIcon)
 	gpointer data[2] = {pIcon, NULL};
 	cairo_dock_foreach_icons_in_docks ((CairoDockForeachIconFunc)_search_icon, data);  // on verifie que l'icone ne s'est pas faite effacee entre-temps?
 	pIcon = data[1];
-	if (pIcon && pIcon->action_on_drag_hover)
-		pIcon->action_on_drag_hover (pIcon);
+	if (pIcon && pIcon->iface.action_on_drag_hover)
+		pIcon->iface.action_on_drag_hover (pIcon);
 	s_iSidActionOnDragHover = 0;
 	return FALSE;
 }
@@ -293,7 +293,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		s_iSidActionOnDragHover = 0;
 	}
 	cairo_dock_replace_all_dialogs ();
-	if (pDock->bIsDragging && pPointedIcon && pPointedIcon->action_on_drag_hover)
+	if (pDock->bIsDragging && pPointedIcon && pPointedIcon->iface.action_on_drag_hover)
 	{
 		s_iSidActionOnDragHover = g_timeout_add (600, (GSourceFunc) _cairo_dock_action_on_drag_hover, pPointedIcon);
 	}

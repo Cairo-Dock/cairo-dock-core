@@ -81,7 +81,6 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	
 	if (g_pPrimaryContainer == NULL)
 	{
-		g_print ("*** first container\n");
 		g_pPrimaryContainer = pContainer;
 	}
 	pContainer->pWidget = pWindow;

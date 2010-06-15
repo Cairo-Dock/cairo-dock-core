@@ -95,6 +95,8 @@ struct _CairoContainer {
 	gboolean bUseReflect;
 	/// OpenGL context.
 	GLXContext glContext;
+	/// whether the GL context is an ortho or a perspective view.
+	gboolean bPerspectiveView;
 	/// TRUE if a slow animation is running.
 	gboolean bKeepSlowAnimation;
 	/// counter for the animation loop.

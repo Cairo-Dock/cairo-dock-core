@@ -48,10 +48,10 @@ taskbar = 2
 #F[Icons' animations and effects;@pkgdatadir@/icon-movment.png]
 frame_anim=
 
-#z On mouse hover:
+#_ On mouse hover:
 anim_hover=
 
-#z On click:
+#_ On click:
 anim_click=
 
 #l On appearance/disappearance:

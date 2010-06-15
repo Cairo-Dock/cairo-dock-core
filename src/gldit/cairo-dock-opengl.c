@@ -629,6 +629,7 @@ void cairo_dock_set_perspective_view (CairoContainer *pContainer)
 		h = pContainer->iWidth;
 	}
 	_cairo_dock_set_perspective_view (w, h);
+	pContainer->bPerspectiveView = TRUE;
 }
 
 void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, CairoContainer *pContainer)
@@ -666,6 +667,7 @@ void cairo_dock_set_ortho_view (CairoContainer *pContainer)
 		h = pContainer->iWidth;
 	}
 	_cairo_dock_set_ortho_view (w, h);
+	pContainer->bPerspectiveView = FALSE;
 }
 
 void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer)
@@ -682,28 +684,50 @@ void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer)
 		return ;
 	
 	glPushMatrix ();
+	gboolean bSetPerspective = pContainer->bPerspectiveView;
+	if (bSetPerspective)
+		cairo_dock_set_ortho_view (pContainer);
 	glLoadIdentity ();
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_source ();
 	_cairo_dock_set_alpha (1.);
 	glBindTexture (GL_TEXTURE_2D, g_pFakeTransparencyDesktopBg->iTexture);
 	
+	double x, y, w, h, W, H;
+	W = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+	H = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	if (pContainer->bIsHorizontal)
+	{
+		w = pContainer->iWidth;
+		h = pContainer->iHeight;
+		x = pContainer->iWindowPositionX;
+		y = pContainer->iWindowPositionY;
+	}
+	else
+	{
+		h = pContainer->iWidth;
+		w = pContainer->iHeight;
+		y = pContainer->iWindowPositionX;
+		x = pContainer->iWindowPositionY;
+	}
+	
 	glBegin(GL_QUADS);
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-	1.*(pContainer->iWindowPositionY + 0.)/g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (0., pContainer->iHeight, 0.);  // Top Left.
+	glTexCoord2f ((x + 0) / W, (y + 0) / H);
+	glVertex3f (0., h, 0.);  // Top Left.
 	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + 0.)/g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (pContainer->iWidth, pContainer->iHeight, 0.);  // Top Right
+	glTexCoord2f ((x + w) / W, (y + 0) / H);
+	glVertex3f (w, h, 0.);  // Top Right
 	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + pContainer->iWidth)/g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-	glVertex3f (pContainer->iWidth, 0., 0.);  // Bottom Right
+	glTexCoord2f ((x + w) / W, (y + h) / H);
+	glVertex3f (w, 0., 0.);  // Bottom Right
 	
-	glTexCoord2f (1.*(pContainer->iWindowPositionX + 0.)/g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], 1.*(pContainer->iWindowPositionY + pContainer->iHeight)/g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	glTexCoord2f ((x + 0.) / W, (y + h) / H);
 	glVertex3f (0., 0., 0.);  // Bottom Left
 	glEnd();
 	
 	_cairo_dock_disable_texture ();
+	if (bSetPerspective)
+		cairo_dock_set_perspective_view (pContainer);
 	glPopMatrix ();
 }
 

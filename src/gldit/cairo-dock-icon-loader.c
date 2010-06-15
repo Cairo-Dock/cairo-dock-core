@@ -252,8 +252,8 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	}
 	
 	//\______________ on charge la surface/texture.
-	if (icon->load_image)
-		icon->load_image (icon);
+	if (icon->iface.load_image)
+		icon->iface.load_image (icon);
 	
 	//\______________ Si rien charge, on met une image par defaut.
 	if ((icon->pIconBuffer == pPrevSurface || icon->pIconBuffer == NULL) &&

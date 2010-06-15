@@ -368,6 +368,22 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
 		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
 	}
+	if (CAIRO_DOCK_IS_SEPARATOR (icon) && myIcons.bRevolveSeparator)
+	{
+		if (pDock->container.bIsHorizontal)
+		{
+			if (! pDock->container.bDirectionUp)
+			{
+				glScalef (1., -1., 1.);
+			}
+		}
+		else
+		{
+			glRotatef (-90., 0., 0., 1.);
+			if (pDock->container.bDirectionUp)
+				glScalef (1., -1., 1.);
+		}
+	}
 	if (icon->iRotationX != 0)
 		glRotatef (icon->iRotationX, 1., 0., 0.);
 	if (icon->iRotationY != 0)

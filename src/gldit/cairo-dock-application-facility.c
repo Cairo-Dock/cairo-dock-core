@@ -312,7 +312,7 @@ static void _load_class_icon (Icon *icon)
 static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, CairoDock *pClassMateParentDock, CairoDock *pClassDock)
 {
 	Icon *pFakeClassIcon = g_new0 (Icon, 1);
-	pFakeClassIcon->load_image = _load_class_icon;
+	pFakeClassIcon->iface.load_image = _load_class_icon;
 	pFakeClassIcon->iType = pSameClassIcon->iType;
 	
 	pFakeClassIcon->cName = g_strdup (pSameClassIcon->cClass);

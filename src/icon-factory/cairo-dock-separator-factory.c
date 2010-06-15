@@ -37,6 +37,7 @@ Icon *cairo_dock_new_separator_icon (int iSeparatorType)
 	//\____________ On cree l'icone.
 	Icon *icon = g_new0 (Icon, 1);
 	icon->iType = iSeparatorType;
+	icon->iTrueType = CAIRO_DOCK_ICON_TYPE_SEPARATOR;
 	
 	return icon;
 }

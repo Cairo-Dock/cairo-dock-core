@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
+#include <glib/gstdio.h>
 
 #ifdef HAVE_GLITZ
 #include <gdk/gdkx.h>
@@ -167,6 +168,45 @@ static void _load_user_separator (Icon *icon)
 	}
 }
 
+static gboolean _delete_user_separator (Icon *icon)
+{
+	if (icon->cDesktopFileName != NULL)
+	{
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
+		g_remove (cDesktopFilePath);
+		g_free (cDesktopFilePath);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static gboolean _delete_launcher (Icon *icon)
+{
+	gboolean r = FALSE;
+	if (icon->cDesktopFileName != NULL)
+	{
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
+		g_remove (cDesktopFilePath);
+		g_free (cDesktopFilePath);
+		r = TRUE;
+	}
+	
+	if (icon->pSubDock != NULL && icon->cClass == NULL)
+	{
+		Icon *pSubIcon;
+		GList *ic;
+		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+		{
+			pSubIcon = ic->data;
+			if (pSubIcon->iface.on_delete)
+				r |= pSubIcon->iface.on_delete (pSubIcon);
+		}
+		cairo_dock_destroy_dock (icon->pSubDock, icon->cName);
+		icon->pSubDock = NULL;
+	}
+	return r;
+}
+
 Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 {
 	//g_print ("%s (%s)\n", __func__, cDesktopFileName);
@@ -178,10 +218,14 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	
 	if (icon->cCommand == NULL && icon->cBaseURI == NULL && icon->iNbSubIcons == 0)  // ce sera un separateur.
 	{
-		icon->load_image = _load_user_separator;
+		icon->iface.load_image = _load_user_separator;
+		icon->iface.on_delete = _delete_user_separator;
 	}
 	else
-		icon->load_image = _load_launcher;
+	{
+		icon->iface.load_image = _load_launcher;
+		icon->iface.on_delete = _delete_launcher;
+	}
 	
 	//\____________ On gere son dock et sous-dock.
 	CairoDock *pParentDock = _cairo_dock_handle_container (icon, cRendererName);
@@ -208,6 +252,8 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 	//\____________ On cree l'icone.
 	gchar *cRendererName = NULL;
 	Icon *pIcon = g_new0 (Icon, 1);
+	pIcon->iType = CAIRO_DOCK_LAUNCHER;
+	pIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
 	pIcon->cName = cName;
 	pIcon->cFileName = cFileName;
 	pIcon->cQuickInfo = cQuickInfo;
@@ -218,7 +264,7 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 	pIcon->fHeightFactor = 1.;
 	pIcon->cCommand = cCommand ? cCommand : g_strdup ("none");
 	///pIcon->cDesktopFileName = g_strdup ("none");
-	pIcon->load_image = _load_launcher;
+	pIcon->iface.load_image = _load_launcher;
 	
 	return pIcon;
 }

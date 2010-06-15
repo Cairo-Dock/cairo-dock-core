@@ -26,6 +26,7 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-icons.h"
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
@@ -338,7 +339,7 @@ void cairo_dock_remove_automatic_separators (CairoDock *pDock);
 */
 void cairo_dock_insert_separators_in_dock (CairoDock *pDock);
 
-Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder);
+Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder, CairoDockIconType iGroup);
 
 /** Add a launcher from a common desktop file : create and add the corresponding .desktop file with the others, load the corresponding icon, and insert it inside a dock with an animtion.
 *@param cExternDesktopFileURI path to a desktop file.
@@ -346,7 +347,7 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 *@param fOrder the order of the icon inside the dock.
 *@return the newly created Icon corresponding to the file, or NULL if an error occured.
 */
-#define cairo_dock_add_new_launcher_by_uri(cExternDesktopFileURI, pReceivingDock, fOrder) cairo_dock_add_new_launcher_by_uri_or_type (cExternDesktopFileURI, 0, pReceivingDock, fOrder);
+#define cairo_dock_add_new_launcher_by_uri(cExternDesktopFileURI, pReceivingDock, fOrder) cairo_dock_add_new_launcher_by_uri_or_type (cExternDesktopFileURI, 0, pReceivingDock, fOrder, CAIRO_DOCK_LAUNCHER)
 
 /** Add an empty default launcher of a given type : create and add the corresponding .desktop file with the others, load the corresponding icon, and insert it inside a dock with an animtion. The launcher is then suitable for being edited by the user to add real properties.
 *@param iType type of the launcher.
@@ -354,7 +355,7 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 *@param fOrder the order of the icon inside the dock.
 *@return the newly created Icon corresponding to the type, or NULL if an error occured.
 */
-#define cairo_dock_add_new_launcher_by_type(iType, pReceivingDock, fOrder) cairo_dock_add_new_launcher_by_uri_or_type (NULL, iType, pReceivingDock, fOrder);
+#define cairo_dock_add_new_launcher_by_type(iType, pReceivingDock, fOrder, iGroup) cairo_dock_add_new_launcher_by_uri_or_type (NULL, iType, pReceivingDock, fOrder, iGroup)
 
 /** Remove all icons from a dock (and its sub-docks). If the receiving dock is NULL, the icons are destroyed and removed from the current theme itself.
 *@param pDock a dock.
