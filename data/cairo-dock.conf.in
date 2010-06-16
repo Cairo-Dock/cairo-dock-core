@@ -640,7 +640,7 @@ indic on appli = false
 #v
 sep_ind =
 
-#e+[-0.2;1.2] Vertical offset :
+#e+[-1.2;1.2] Vertical offset :
 #{Relatively to the icons' size. You can use this parameter to adjust the indicator's vertical position.
 #If the indicator is linked to the icon, the offset will be upwards, otherwise downwards.}
 indicator offset = -0.03
