@@ -705,13 +705,13 @@ static void _show_group_or_category (gpointer pPlace)
 {
 	if (pPlace == NULL)
 		cairo_dock_show_all_categories ();
-	else if ((int)pPlace < 10)  // categorie.
+	else if (GPOINTER_TO_INT (pPlace) < 10)  // categorie.
 	{
 		if (pPlace == 0)
 			cairo_dock_show_all_categories ();
 		else
 		{
-			int iCategory = (int)pPlace - 1;
+			int iCategory = GPOINTER_TO_INT (pPlace) - 1;
 			cairo_dock_show_one_category (iCategory);
 		}
 	}

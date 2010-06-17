@@ -348,14 +348,19 @@ void cairo_dock_add_remove_element_to_key (const gchar *cConfFilePath, const gch
 }
 
 
-void cairo_dock_add_widget_to_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *ckeyName, const gchar *cInitialValue, gchar iWidgetType, const gchar *cDescription, const gchar *cTooltip)
+void cairo_dock_add_widget_to_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *ckeyName, const gchar *cInitialValue, CairoDockGUIWidgetType iWidgetType, const gchar *cAuthorizedValues, const gchar *cDescription, const gchar *cTooltip)
 {
 	g_key_file_set_string (pKeyFile, cGroupName, ckeyName, cInitialValue);
-	gchar *Comment = g_strdup_printf ("%c0 %s%s%s%s", iWidgetType, cDescription, cTooltip ? "\n{" : "", cTooltip ? cTooltip : "", cTooltip ? "}" : "");
+	gchar *Comment = g_strdup_printf ("%c0%s %s%s%s%s", iWidgetType, cAuthorizedValues ? cAuthorizedValues : "", cDescription, cTooltip ? "\n{" : "", cTooltip ? cTooltip : "", cTooltip ? "}" : "");
 	g_key_file_set_comment (pKeyFile, cGroupName, ckeyName, Comment, NULL);
 	g_free (Comment);
 }
 
+void cairo_dock_remove_group_key_from_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *ckeyName)
+{
+	g_key_file_remove_comment (pKeyFile, cGroupName, ckeyName, NULL);
+	g_key_file_remove_key (pKeyFile, cGroupName, ckeyName, NULL);
+}
 
 gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cNewGroupName)
 {

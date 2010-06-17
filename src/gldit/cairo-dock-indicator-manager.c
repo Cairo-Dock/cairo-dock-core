@@ -503,25 +503,25 @@ static void _cairo_dock_draw_class_indicator (cairo_t *pCairoContext, Icon *icon
 	{
 		if (bDirectionUp)
 			cairo_translate (pCairoContext,
-				icon->fWidth * icon->fScale - w * fRatio,
+				(icon->fWidth - w * fRatio) * icon->fScale,
 				0.);
 		else
 			cairo_translate (pCairoContext,
-				icon->fWidth * icon->fScale - w * fRatio,
-				icon->fHeight * icon->fScale - h * fRatio);
+				(icon->fWidth - w * fRatio) * icon->fScale,
+				(icon->fHeight - h * fRatio) * icon->fScale);
 	}
 	else
 	{
 		if (bDirectionUp)
 			cairo_translate (pCairoContext,
 				0.,
-				icon->fWidth * icon->fScale - w * fRatio);
+				(icon->fWidth - w * fRatio) * icon->fScale);
 		else
 			cairo_translate (pCairoContext,
-				icon->fHeight * icon->fScale - h * fRatio,
-				icon->fWidth * icon->fScale - w * fRatio);
+				(icon->fHeight - h * fRatio) * icon->fScale,
+				(icon->fWidth - w * fRatio) * icon->fScale);
 	}
-	cairo_scale (pCairoContext, fRatio, fRatio);
+	cairo_scale (pCairoContext, fRatio * icon->fScale, fRatio * icon->fScale);
 	cairo_dock_draw_surface (pCairoContext, s_classIndicatorBuffer.pSurface, w, h, bDirectionUp, bIsHorizontal, 1.);
 	cairo_restore (pCairoContext);
 }

@@ -460,6 +460,7 @@ void cairo_dock_destroy_icon_pbuffer (void)
 
 gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode)
 {
+	int iWidth, iHeight;
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
@@ -467,13 +468,14 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 		if (! gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
 			return FALSE;
 		
-		cairo_dock_set_ortho_view (pContainer);
+		///cairo_dock_set_ortho_view (pContainer);
+		iWidth = pContainer->iWidth;
+		iHeight = pContainer->iHeight;
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	else if (g_openglConfig.iFboId != 0)
 	{
 		// on attache la texture au FBO.
-		int iWidth, iHeight;
 		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 		if (pContainer == NULL)
 			pContainer = g_pPrimaryContainer;
@@ -503,9 +505,9 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 		}
 		
 		// on se positionne au milieu.
-		cairo_dock_set_ortho_view (pContainer);
+		/**cairo_dock_set_ortho_view (pContainer);
 		glLoadIdentity ();
-		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);*/
 		
 		if (iRenderingMode != 1)
 			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -520,6 +522,17 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 	}*/
 	else
 		return FALSE;
+	
+	if (pContainer->bPerspectiveView)
+	{
+		cairo_dock_set_ortho_view (pContainer);
+		g_openglConfig.bSetPerspective = TRUE;
+	}
+	else
+	{
+		glLoadIdentity ();
+		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+	}
 	
 	glColor4f(1., 1., 1., 1.);
 	
@@ -587,9 +600,11 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		y = (g_openglConfig.iIconPbufferHeight - iHeight)/2;
 	}*/
 		
-	if (CAIRO_DOCK_IS_DESKLET (pContainer))
+	///if (CAIRO_DOCK_IS_DESKLET (pContainer))
+	if (pContainer && g_openglConfig.bSetPerspective)
 	{
 		cairo_dock_set_perspective_view (pContainer);
+		g_openglConfig.bSetPerspective = FALSE;
 	}
 	
 	if (pContainer)
