@@ -110,7 +110,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 			icon->fWidth /= pDock->container.fRatio;
 			icon->fHeight /= pDock->container.fRatio;
 			pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
-			if (! CAIRO_DOCK_IS_SEPARATOR (icon))
+			if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 				pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
 		}
 		if (pDock->iMaxIconHeight == 0)
@@ -209,7 +209,6 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 	Window Xid = GDK_WINDOW_XID (pDock->container.pWidget->window);
 	int left=0, right=0, top=0, bottom=0;
 	int left_start_y=0, left_end_y=0, right_start_y=0, right_end_y=0, top_start_x=0, top_end_x=0, bottom_start_x=0, bottom_end_x=0;
-	int iHeight, iWidth;
 
 	if (bReserve)
 	{
@@ -247,7 +246,7 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 			{
 				left = h + pDock->iGapY;
 				left_start_y = x;
-				left_end_y = x + iWidth;
+				left_end_y = x + w;
 			}
 		}
 	}

@@ -1038,7 +1038,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 		for (ic = g_list_last (g_pMainDock->icons); ic != NULL; ic = ic->prev)
 		{
 			icon = ic->data;
-			if (icon->iType == CAIRO_DOCK_APPLI && ! cairo_dock_class_is_inhibated (icon->cClass))  // on verifie qu'elle n'est pas placé a cote de son lanceur, sinon cela cree des incoherences suivants que l'appli est lancee 2 fois ou pas.
+			if (CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) && ! cairo_dock_class_is_inhibated (icon->cClass))  // on verifie qu'elle n'est pas placé a cote de son lanceur, sinon cela cree des incoherences suivants que l'appli est lancee 2 fois ou pas.
 			{
 				break ;
 			}
@@ -1058,7 +1058,8 @@ void cairo_dock_set_class_order (Icon *pIcon)
 			for (ic = g_list_last (g_pMainDock->icons); ic != NULL; ic = ic->prev)
 			{
 				icon = ic->data;
-				if (icon->iType == CAIRO_DOCK_LAUNCHER && ! CAIRO_DOCK_IS_SEPARATOR (icon))
+				if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
+				///if (icon->iType == CAIRO_DOCK_LAUNCHER && ! CAIRO_DOCK_IS_SEPARATOR (icon))
 					break;
 			}
 			if (ic != NULL)  // on a trouve une icone de lanceur.

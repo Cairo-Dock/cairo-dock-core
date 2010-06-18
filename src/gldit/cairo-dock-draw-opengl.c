@@ -155,7 +155,7 @@ void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
 		}
 		glPushMatrix ();
 		double x0, y0, x1, y1;
-		double fScale = ((myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
+		double fScale = ((myIcons.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
 		double fReflectSize = MIN (myIcons.fReflectSize, pIcon->fHeight/pDock->container.fRatio*fScale);
 		double fReflectRatio = fReflectSize * pDock->container.fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
 		double fOffsetY = pIcon->fHeight * fScale/2 + fReflectSize * pDock->container.fRatio/2 + pIcon->fDeltaYReflection;
@@ -350,7 +350,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	//\_____________________ On positionne l'icone.
 	glPushMatrix ();
-	if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (icon))
+	if (myIcons.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
 		if (pDock->container.bIsHorizontal)
 		{
@@ -368,7 +368,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
 		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
 	}
-	if (CAIRO_DOCK_IS_SEPARATOR (icon) && myIcons.bRevolveSeparator)
+	if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIcons.bRevolveSeparator)
 	{
 		if (pDock->container.bIsHorizontal)
 		{

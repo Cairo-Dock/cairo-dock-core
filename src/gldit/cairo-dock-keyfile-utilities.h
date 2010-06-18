@@ -22,6 +22,8 @@
 #define  __CAIRO_DOCK_KEYFILE_UTILITIES__
 
 #include <glib.h>
+#include "cairo-dock-struct.h"
+#include "cairo-dock-gui-factory.h"
 G_BEGIN_DECLS
 
 
@@ -62,9 +64,14 @@ void cairo_dock_add_remove_element_to_key (const gchar *cConfFilePath, const gch
 
 /** Add a key to a conf file, so that it can be parsed by the GUI manager.
 */
-void cairo_dock_add_widget_to_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *ckeyName, const gchar *cInitialValue, gchar iWidgetType, const gchar *cDescription, const gchar *cTooltip);
+void cairo_dock_add_group_key_to_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *ckeyName, const gchar *cInitialValue, CairoDockGUIWidgetType iWidgetType, const gchar *cAuthorizedValues, const gchar *cDescription, const gchar *cTooltip);
 
+/** Remove a key from a conf file.
+*/
+void cairo_dock_remove_group_key_from_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *ckeyName);
 
+/* Change the name of a group in a conf file. Returns TRUE if changes have been made, FALSE otherwise.
+*/
 gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cNewGroupName);
 
 G_END_DECLS

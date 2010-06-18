@@ -86,7 +86,7 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_THEME_SELECTOR='R',
 	/// list of available animations.
 	CAIRO_DOCK_WIDGET_ANIMATION_LIST='a',
-	/// list of available animations.
+	// deprecated
 	CAIRO_DOCK_WIDGET_ANIMATION_DOUBLE_LIST='z',
 	/// list of available dialog decorators.
 	CAIRO_DOCK_WIDGET_DIALOG_DECORATOR_LIST='t',
@@ -217,7 +217,7 @@ GtkWidget *cairo_dock_gui_make_combo (gboolean bWithEntry);
 
 void cairo_dock_gui_select_in_combo (GtkWidget *pOneWidget, const gchar *cValue);
 
-gchar **cairo_dock_gui_get_active_rows_in_tree_view (GtkWidget *pOneWidget, gboolean bSelectedRows, int *iNbElements);
+gchar **cairo_dock_gui_get_active_rows_in_tree_view (GtkWidget *pOneWidget, gboolean bSelectedRows, gsize *iNbElements);
 
 gchar *cairo_dock_gui_get_active_row_in_combo (GtkWidget *pOneWidget);
 

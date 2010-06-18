@@ -49,6 +49,7 @@ struct _CairoDockGLConfig {
 	GLuint iRedirectedTexture;
 	gint iRedirectWidth, iRedirectHeight;
 	gboolean bRedirected;
+	gboolean bSetPerspective;
 	/**gboolean bPBufferAvailable;
 	gint iGlxMajor, iGlxMinor;
 	GLXPbuffer iconPbuffer;
