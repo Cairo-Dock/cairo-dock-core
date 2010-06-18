@@ -88,7 +88,7 @@
 
 #include <gtk/gtkgl.h>
 
-#include "../config.h"
+#include "config.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-callbacks.h"

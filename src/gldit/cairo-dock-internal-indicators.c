@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include "../../config.h"
+#include "../config.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-load.h"
 #include "cairo-dock-draw.h"

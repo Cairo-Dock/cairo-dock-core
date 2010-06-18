@@ -29,7 +29,7 @@
 #include <glib/gstdio.h>
 #include <gdk/gdkx.h>
 
-#include "../config.h"
+#include "config.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"

@@ -10,15 +10,8 @@ include (CheckSymbolExists)
 ########### project ###############
 
 project ("cairo-dock")
-set (VERSION "2.2.0-0beta2")
-set (CPACK_SOURCE_GENERATOR "TGZ")
-set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
-set (CPACK_SOURCE_IGNORE_FILES "/build/;/.bzr/;/.deps/;Makefile$;Makefile.in;.gmo$;/.libs/;.lo$;.la$;POTFILES;stamp-it;aclocal.m4;config.guess$;/config.h$;/config.h.in$;/config.log$;/config.status$;/config.sub$;/configure$;/depcomp$;/install-sh$;/libtool$;/ltmain.sh$;/missing$;/stamp-h1$;/compile;/CMakeFiles/;/_CPack_Packages/;/autom4te.cache/;/install_manifest.txt$;.tar.gz$;/CMakeCache.txt$;/cairo-dock$;/scripts/;/doc/;/data/themes.conf$;/data/cairo-dock.conf$;/data/main-dock.conf$;/data/cairo-dock-simple.conf$;/cairo-dock.pc$;.cmake$;~$;${CPACK_SOURCE_IGNORE_FILES}")
-include (CPack)  # a inclure apres les set.
-add_custom_target(dist
-    COMMAND bzr export ${CMAKE_PROJECT_NAME}-${VERSION}.tar.gz
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-#add_custom_target( dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)  # pour pouvoir l'appeler avec "make dist"
+set (VERSION "2.2.0-0beta1")
+
 add_definitions (-std=c99 -Wstrict-prototypes -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration) #-Wunreachable-code -Wno-unused-parameter -Wall 
 if (NOT ${CMAKE_BUILD_TYPE})
 	add_definitions (-O3)
@@ -28,10 +21,27 @@ add_definitions (-DCAIRO_DOCK_DEFAULT_ICON_NAME="default-icon.svg")
 add_definitions (-DCAIRO_DOCK_ICON="cairo-dock.svg")
 add_definitions (-DCAIRO_DOCK_LOGO="cairo-dock-logo.png")
 add_definitions (-DCAIRO_DOCK_DATA_DIR="cairo-dock")
-add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake_uninstall.cmake")
+add_custom_target (uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
+############ sources tarball ############
+
+set (CPACK_SOURCE_GENERATOR "TGZ")
+set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
+set (CPACK_SOURCE_IGNORE_FILES 
+	"/build/;/.bzr/;bzrignore$;/config.h$;/scripts/;/doc/;/misc/;/en_GB.po$;~$;${CPACK_SOURCE_IGNORE_FILES}")
+include (CPack)
+
+add_custom_target( dist
+	COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+add_custom_target(dist-bzr
+	COMMAND bzr export ${CMAKE_PROJECT_NAME}-${VERSION}.tar.gz
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 ########### global variables ###############
+
+if( WIN32 )
+	message(FATAL_ERROR "Cairo-Dock requires an air-conditioned room. Please close Windows!")
+endif( WIN32 )
 
 set (PACKAGE ${CMAKE_PROJECT_NAME})
 set (GETTEXT_PACKAGE ${PACKAGE})
@@ -40,7 +50,13 @@ set (exec_prefix ${prefix})
 set (datadir ${prefix}/share)
 set (pkgdatadir ${datadir}/cairo-dock)
 set (mandir ${datadir}/man)
-set (libdir ${prefix}/lib)
+
+if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+	set (libdir ${prefix}/lib64)
+else( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+	set (libdir ${prefix}/lib)
+endif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+
 set (includedir ${prefix}/include)
 set (bindir ${prefix}/bin)
 
@@ -97,17 +113,24 @@ set (GLDI_SHARE_DATA_DIR ${pkgdatadir})
 
 ########### file generation ###############
 
-configure_file (config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
-configure_file (data/cairo-dock.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock.conf)
-configure_file (data/cairo-dock-simple.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock-simple.conf)
-configure_file (data/main-dock.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/main-dock.conf)
-configure_file (data/themes.conf.in ${CMAKE_CURRENT_SOURCE_DIR}/data/themes.conf)
-configure_file (cairo-dock.pc.in ${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.pc)
-configure_file ("cmake_uninstall.cmake.in" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/cairo-dock.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock-simple.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/cairo-dock-simple.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/main-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/main-dock.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/themes.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/themes.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.pc.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY)
 
 ########### install files ###############
 
 install (FILES cairo-dock-package-theme launch-cairo-dock-with-delay
 	DESTINATION ${bindir}
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-install (FILES  cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
+
+###########     misc      ###############
+#set (CPACK_SOURCE_GENERATOR "TGZ")
+#set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
+#set (CPACK_SOURCE_IGNORE_FILES "/build/;/.bzr/;/.deps/;Makefile$;Makefile.in;.gmo$;/.libs/;.lo$;.la$;POTFILES;stamp-it;aclocal.m4;config.guess$;/config.h$;/config.h.in$;/config.log$;/config.status$;/config.sub$;/configure$;/depcomp$;/install-sh$;/libtool$;/ltmain.sh$;/missing$;/stamp-h1$;/compile;/CMakeFiles/;/_CPack_Packages/;/autom4te.cache/;/install_manifest.txt$;.tar.gz$;/CMakeCache.txt$;/cairo-dock$;/scripts/;/doc/;/data/themes.conf$;/data/cairo-dock.conf$;/data/main-dock.conf$;/data/cairo-dock-simple.conf$;/cairo-dock.pc$;.cmake$;~$;${CPACK_SOURCE_IGNORE_FILES}")
+#include (CPack)  # a inclure apres les set.
+#add_custom_target( dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)  # pour pouvoir l'appeler avec "make dist"

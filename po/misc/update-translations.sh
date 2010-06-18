@@ -3,7 +3,7 @@
 ###
 ### initialize all
 ###
-
+cd ..
 export CD_ALL="0"
 export CAIRO_DOCK_DIR=`pwd`/../..
 export CORE_DIR=${CAIRO_DOCK_DIR}/cairo-dock-core
@@ -24,8 +24,8 @@ do
 	esac
 done
 
-export CAIRO_DOCK_EXTRACT_MESSAGE=${CORE_DIR}/po/cairo-dock-extract-message
-export CAIRO_DOCK_GEN_TRANSLATION=${CORE_DIR}/po/generate-translation.sh
+export CAIRO_DOCK_EXTRACT_MESSAGE=${CORE_DIR}/po/misc/cairo-dock-extract-message
+export CAIRO_DOCK_GEN_TRANSLATION=${CORE_DIR}/po/misc/generate-translation.sh
 
 gcc `pkg-config --libs --cflags glib-2.0 cairo-dock` $CAIRO_DOCK_EXTRACT_MESSAGE.c -o $CAIRO_DOCK_EXTRACT_MESSAGE
 

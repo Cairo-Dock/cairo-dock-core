@@ -32,7 +32,7 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "../config.h"
+#include "config.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-draw.h"

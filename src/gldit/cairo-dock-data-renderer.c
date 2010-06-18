@@ -21,7 +21,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "../../config.h"
+#include "../config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-notifications.h"

@@ -28,7 +28,7 @@
 #include <GL/glx.h>
 #include <gdk/x11/gdkglx.h>
 
-#include "../../config.h"
+#include "../config.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-load.h"
