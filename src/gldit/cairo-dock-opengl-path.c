@@ -369,7 +369,7 @@ const CairoDockGLPath *cairo_dock_generate_trapeze_path (double fUpperFrameWidth
 
 
 #define _get_icon_center_x(icon) (icon->fDrawX + icon->fWidth * icon->fScale/2)
-#define _get_icon_center_y(icon) (icon->fDrawY + (bForceConstantSeparator && CAIRO_DOCK_IS_SEPARATOR (icon) ? icon->fHeight * (icon->fScale - .5) : icon->fHeight * icon->fScale/2))
+#define _get_icon_center_y(icon) (icon->fDrawY + (bForceConstantSeparator && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) ? icon->fHeight * (icon->fScale - .5) : icon->fHeight * icon->fScale/2))
 #define _get_icon_center(icon,x,y) do {\
 	if (pDock->container.bIsHorizontal) {\
 		x = _get_icon_center_x (icon);\

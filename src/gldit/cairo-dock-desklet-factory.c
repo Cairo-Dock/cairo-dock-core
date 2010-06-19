@@ -1184,7 +1184,7 @@ void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky)
 		int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
 		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
 		iNumDesktop = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY;
-		cd_debug (">>> on colle ce desklet sur le bureau %d\n", iNumDesktop);
+		cd_debug (">>> on colle ce desklet sur le bureau %d", iNumDesktop);
 	}
 	
 	//\_________________ On enregistre le nouvel etat.

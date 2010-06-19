@@ -686,7 +686,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	//\_______________ On gere le drag d'une icone hors du dock.
 	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
 	{
-		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d\n", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
+		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
 		//if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
 		//	return ;
@@ -695,7 +695,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		g_return_val_if_fail (pOriginDock != NULL, TRUE);
 		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
-			cd_debug (" on detache l'icone\n");
+			cd_debug (" on detache l'icone");
 			pOriginDock->bIconIsFlyingAway = TRUE;
 			gchar *cParentDockName = s_pIconClicked->cParentDockName;
 			s_pIconClicked->cParentDockName = NULL;

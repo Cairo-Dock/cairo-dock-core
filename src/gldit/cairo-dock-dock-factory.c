@@ -500,7 +500,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
 	
-	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_IS_APPLET (icon))
+	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
 		cairo_dock_trigger_refresh_launcher_gui ();
 	return TRUE;
 }

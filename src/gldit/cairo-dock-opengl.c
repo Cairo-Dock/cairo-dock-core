@@ -530,6 +530,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 	}
 	else
 	{
+		cairo_dock_set_ortho_view (pContainer);  // au demarrage, le contexte n'a pas encore de vue.
 		glLoadIdentity ();
 		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
 	}

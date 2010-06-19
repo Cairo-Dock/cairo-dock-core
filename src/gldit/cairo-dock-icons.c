@@ -134,9 +134,7 @@ void cairo_dock_free_icon (Icon *icon)
 
 CairoDockIconType cairo_dock_get_icon_type (Icon *icon)
 {
-	int iType = (icon->iType < CAIRO_DOCK_NB_TYPES ? icon->iType : 0);
-	if (CAIRO_DOCK_IS_SEPARATOR (icon))
-		iType = CAIRO_DOCK_SEPARATOR12;
+	int iType = (icon->iType < CAIRO_DOCK_NB_TYPES ? icon->iType : icon->iType & 1);
 	return iType;
 	/**if (CAIRO_DOCK_IS_APPLI (icon))
 		return CAIRO_DOCK_APPLI;
@@ -620,7 +618,7 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	
 	if (bForceUpdate)
 		cairo_dock_normalize_icons_order (pDock->icons, icon1->iType);
-	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon1) || CAIRO_DOCK_IS_USER_SEPARATOR (icon1) || CAIRO_DOCK_IS_APPLET (icon1))
+	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon1) || CAIRO_DOCK_IS_USER_SEPARATOR (icon1) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon1))
 		cairo_dock_trigger_refresh_launcher_gui ();
 }
 

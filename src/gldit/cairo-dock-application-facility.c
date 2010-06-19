@@ -154,7 +154,7 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 
 static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *pDock)
 {
-	if (CAIRO_DOCK_IS_APPLET (icon))
+	if (CAIRO_DOCK_IS_APPLET (icon))  // cf remarque plus haut.
 		return ;
 	if (myTaskBar.bDemandsAttentionWithDialog)
 		cairo_dock_remove_dialog_if_any (icon);
@@ -364,7 +364,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			else
 				cd_message ("  sous-dock de la classe %s existant", icon->cClass);
 			
-			if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.
+			if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.
 			{
 				if (pSameClassIcon->Xid != 0)  // actuellement l'inhibiteur inhibe 1 seule appli.
 				{

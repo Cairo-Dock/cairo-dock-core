@@ -186,7 +186,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 static void _set_icon_size_generic (CairoContainer *pContainer, Icon *icon)
 {
 	CairoDockIconType iType = cairo_dock_get_icon_type (icon);
-	if (CAIRO_DOCK_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
+	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
 	{
 		if (icon->fWidth == 0)
 			icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
@@ -273,7 +273,7 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	cd_debug ("%s (%s) -> %.2fx%.2f", __func__, icon->cName, icon->fWidth, icon->fHeight);
 	
 	//\_____________ On met le background de l'icone si necessaire
-	if (icon->pIconBuffer != NULL && g_pIconBackgroundBuffer.pSurface != NULL && ! CAIRO_DOCK_IS_SEPARATOR (icon))
+	if (icon->pIconBuffer != NULL && g_pIconBackgroundBuffer.pSurface != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
 		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
 		cairo_scale(pCairoIconBGContext,
@@ -289,7 +289,7 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	}
 	
 	//\______________ le reflet en mode cairo.
-	if (! g_bUseOpenGL && myIcons.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_IS_APPLET (icon) && icon->cFileName == NULL))
+	if (! g_bUseOpenGL && myIcons.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cFileName == NULL))
 	{
 		icon->pReflectionBuffer = cairo_dock_create_reflection_surface (icon->pIconBuffer,
 			icon->iImageWidth,
@@ -492,7 +492,7 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 		
 		//g_print (" =size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);
 		fFlatDockWidth += myIcons.iIconGap + icon->fWidth;
-		if (! CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
 	}
 	pDock->fFlatDockWidth = (int) fFlatDockWidth;  /// (int) n'est plus tellement necessaire ...

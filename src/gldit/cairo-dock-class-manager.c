@@ -559,7 +559,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 		{
 			pInhibatorIcon = pElement->data;
 			cd_debug ("  %s", pInhibatorIcon->cName);
-			if (! CAIRO_DOCK_IS_APPLET (pInhibatorIcon))
+			if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibatorIcon))
 			{
 				cd_message ("%s va fournir genereusement sa surface", pInhibatorIcon->cName);
 				return cairo_dock_duplicate_inhibator_surface_for_appli (pInhibatorIcon, iWidth, iHeight);
@@ -599,7 +599,7 @@ void cairo_dock_update_visibility_on_inhibators (const gchar *cClass, Window Xid
 			{
 				cd_message (" %s aussi se %s", pInhibatorIcon->cName, (bIsHidden ? "cache" : "montre"));
 				pInhibatorIcon->bIsHidden = bIsHidden;
-				if (! CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && myTaskBar.fVisibleAppliAlpha != 0)
+				if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibatorIcon) && myTaskBar.fVisibleAppliAlpha != 0)
 				{
 					CairoDock *pInhibhatorDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
 					pInhibatorIcon->fAlpha = 1;  // on triche un peu.
@@ -672,7 +672,7 @@ void cairo_dock_update_name_on_inhibators (const gchar *cClass, Window Xid, gcha
 				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
 				if (pParentDock != NULL)
 				{
-					if (! CAIRO_DOCK_IS_APPLET (pInhibatorIcon))
+					if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibatorIcon))
 					{
 						cd_message (" %s change son nom en %s", pInhibatorIcon->cName, cNewName);
 						if (pInhibatorIcon->cInitialName == NULL)
@@ -978,7 +978,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 		for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
 		{
 			pInhibatorIcon = ic->data;
-			if (CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && myIcons.iSeparateIcons)
+			if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibatorIcon) && myIcons.iSeparateIcons)
 				continue;
 			pDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
 			if (!pDock || !pDock->bIsMainDock)
@@ -1087,7 +1087,7 @@ static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *p
 	for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
 	{
 		pInhibatorIcon = ic->data;
-		if (CAIRO_DOCK_IS_APPLET (pInhibatorIcon) && myIcons.iSeparateIcons)
+		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibatorIcon) && myIcons.iSeparateIcons)
 			continue;
 		
 		pParentDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);

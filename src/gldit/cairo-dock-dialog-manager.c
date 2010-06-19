@@ -1064,14 +1064,14 @@ Icon *cairo_dock_get_dialogless_icon_full (CairoDock *pDock)
 		return pIcon;
 	
 	pIcon = cairo_dock_get_pointed_icon (pDock->icons);
-	if (pIcon != NULL && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! CAIRO_DOCK_IS_APPLET (pIcon) && ! cairo_dock_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
+	if (pIcon != NULL && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon) && ! cairo_dock_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
 		return pIcon;
 
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (! cairo_dock_icon_has_dialog (pIcon) && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! CAIRO_DOCK_IS_APPLET (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
+		if (! cairo_dock_icon_has_dialog (pIcon) && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
 			return pIcon;
 	}
 	

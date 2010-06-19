@@ -1055,7 +1055,8 @@ static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock,
 	if (pDock != NULL)  // peut etre NULL (entree vide)
 	{
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-		if (CAIRO_DOCK_IS_APPLET (pPointingIcon) || CAIRO_DOCK_IS_MULTI_APPLI (pPointingIcon) || CAIRO_DOCK_IS_URI_LAUNCHER (pPointingIcon))  // on evite les sous-docks d'applet, de classe, et de repertoire.
+		///if (CAIRO_DOCK_IS_APPLET (pPointingIcon) || CAIRO_DOCK_IS_MULTI_APPLI (pPointingIcon) || CAIRO_DOCK_IS_URI_LAUNCHER (pPointingIcon))  // on evite les sous-docks d'applet, de classe, et de repertoire.
+		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_FILE (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))  // on evite les sous-docks d'applet, de classe, et de repertoire.
 			return ;
 	}	
 	GtkTreeIter iter;
