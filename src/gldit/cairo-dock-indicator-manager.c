@@ -228,7 +228,7 @@ void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, Cairo
 			for (ic = g_pMainDock->icons; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
-				if (CAIRO_DOCK_IS_FAKE_LAUNCHER (icon))
+				if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 				{
 					cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (g_pMainDock));
 					if (!pIndicators->bUseClassIndic)
@@ -256,7 +256,7 @@ static inline double _compute_delta_y (Icon *icon, double py, gboolean bOnIcon, 
 {
 	double dy;
 	if (bOnIcon)  // decalage vers le haut et zoom avec l'icone.
-		dy = py * icon->fHeight * icon->fScale;
+		dy = py * icon->fHeight * icon->fScale + icon->fDeltaYReflection;
 	else  // decalage vers le bas sans zoom.
 		dy = - py * ((bUseReflect ? myIcons.fReflectSize * fRatio : 0.) + myBackground.iFrameMargin + .5*myBackground.iDockLineWidth);
 	return dy;

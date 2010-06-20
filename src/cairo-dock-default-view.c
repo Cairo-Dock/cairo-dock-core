@@ -593,6 +593,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	{
 		glLineWidth (fLineWidth);
 		glColor4f (myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		_cairo_dock_set_blend_alpha ();
 		cairo_dock_stroke_gl_path (pFramePath, TRUE);
 	}
 	glPopMatrix ();

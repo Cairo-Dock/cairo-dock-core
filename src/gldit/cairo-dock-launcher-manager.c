@@ -410,7 +410,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 	else
 	{
-		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
+		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pNewDock));
 	}
 	
 	//g_print ("icon : %.1fx%.1f", icon->fWidth, icon->fHeight);
@@ -446,6 +446,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	{
 		if (cairo_dock_strings_differ (cRendererName, icon->pSubDock->cRendererName))
 			cairo_dock_update_dock_size (icon->pSubDock);
+		cairo_dock_synchronize_one_sub_dock_orientation (pSubDock, pNewDock, TRUE);
 	}
 
 	//\_____________ On gere le changement de container ou d'ordre.

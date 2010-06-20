@@ -502,12 +502,12 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	GtkWidget *parent = data[1];
 	GtkWidget *pKeyBox = data[0];
 	int iNbWidgets = GPOINTER_TO_INT (data[2]);
-	g_print ("%s (%d, %d / %d)\n", __func__, iOrder1, iOrder2, iNbWidgets);
+	//g_print ("%s (%d, %d / %d)\n", __func__, iOrder1, iOrder2, iNbWidgets);
 	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
 	GList *c = g_list_find (children, pKeyBox);
 	g_return_if_fail (c != NULL);
 	
-	g_print ("%d widgets controles (%d au total)\n", iNbWidgets, g_list_length (children));
+	//g_print ("%d widgets controles (%d au total)\n", iNbWidgets, g_list_length (children));
 	GtkWidget *w;
 	int i = 0, iNbControlSubWidgets;
 	gboolean bSensitive;
@@ -515,7 +515,7 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	while (c != NULL && i < iNbWidgets)
 	{
 		w = c->data;
-		g_print (" %d in [%d;%d] ; %d\n", i, iOrder1-1, iOrder1 + iOrder2-1, GTK_IS_ALIGNMENT (w));
+		//g_print (" %d in [%d;%d] ; %d\n", i, iOrder1-1, iOrder1 + iOrder2-1, GTK_IS_ALIGNMENT (w));
 		if (GTK_IS_ALIGNMENT (w))  // les separateurs sont dans un alignement.
 		{
 			c = c->next;
@@ -527,7 +527,7 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 		iNbControlSubWidgets = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (w), "nb-ctrl-widgets"));
 		if (iNbControlSubWidgets > 0)
 		{
-			g_print ("  ce widget en controle %d autres\n", iNbControlSubWidgets);
+			//g_print ("  ce widget en controle %d autres\n", iNbControlSubWidgets);
 			c = _activate_sub_widgets (c->next, iNbControlSubWidgets, bSensitive);
 			if (bSensitive)
 			{
