@@ -134,7 +134,12 @@ void cairo_dock_free_icon (Icon *icon)
 
 CairoDockIconType cairo_dock_get_icon_type (Icon *icon)
 {
-	int iType = (icon->iType < CAIRO_DOCK_NB_TYPES ? icon->iType : icon->iType & 1);
+	int iType;
+	if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+		iType = CAIRO_DOCK_SEPARATOR12;
+	else
+		iType = (icon->iType < CAIRO_DOCK_NB_TYPES ? icon->iType : icon->iType & 1);
+	
 	return iType;
 	/**if (CAIRO_DOCK_IS_APPLI (icon))
 		return CAIRO_DOCK_APPLI;
