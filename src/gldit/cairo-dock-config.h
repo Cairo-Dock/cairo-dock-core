@@ -182,6 +182,7 @@ void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataTy
 */
 void cairo_dock_update_conf_file_with_position (const gchar *cConfFilePath, int x, int y);
 
+void cairo_dock_update_conf_file_with_active_modules (void);
 
 
 /** Get the 3 version numbers of a string.

@@ -430,7 +430,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	{
 		if (pSubDock != NULL && pSubDock != icon->pSubDock)  // ca n'est plus le meme container, on transvase ou on detruit.
 		{
-			cd_debug ("on transvase dans le nouveau sous-dock\n");
+			cd_debug ("on transvase dans le nouveau sous-dock");
 			if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))  // dans ce cas on ne transvase pas puisque le sous-dock est cree a partir du contenu du repertoire.
 				cairo_dock_destroy_dock (pSubDock, cName);
 			else

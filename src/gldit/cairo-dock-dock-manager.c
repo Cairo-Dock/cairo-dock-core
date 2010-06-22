@@ -712,7 +712,7 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	
 	//\______________ On met a jour le fichier de conf.
 	if (! bFlushConfFileNeeded)
-		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION);
+		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
 	if (bFlushConfFileNeeded)
 	{
 		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE);

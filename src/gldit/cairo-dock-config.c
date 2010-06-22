@@ -80,6 +80,7 @@ CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 gboolean g_bEasterEggs = FALSE;
 
 extern gchar *g_cCurrentLaunchersPath;
+extern gchar *g_cConfFile;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 extern CairoDockHidingEffect *g_pHidingBackend;
@@ -546,7 +547,7 @@ void cairo_dock_load_config (const gchar *cConfFilePath, CairoDock *pMainDock)
 	
 	//\___________________ On met a jour le fichier sur le disque si necessaire.
 	if (! bFlushConfFileNeeded)
-		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION);
+		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
 	if (bFlushConfFileNeeded)
 	{
 		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
@@ -797,7 +798,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	
 	//\___________________ On ecrit sur le disque si necessaire.
 	if (! bFlushConfFileNeeded)
-		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION);
+		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
 	if (bFlushConfFileNeeded)
 	{
 		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
@@ -875,6 +876,16 @@ void cairo_dock_update_conf_file_with_position (const gchar *cConfFilePath, int 
 		G_TYPE_INT, "Position", "x gap", x,
 		G_TYPE_INT, "Position", "y gap", y,
 		G_TYPE_INVALID);
+}
+
+void cairo_dock_update_conf_file_with_active_modules (void)
+{
+	gchar *cModuleNames = cairo_dock_list_active_modules ();
+	
+	cairo_dock_update_conf_file (g_cConfFile,
+		G_TYPE_STRING, "System", "modules", cModuleNames,
+		G_TYPE_INVALID);
+	g_free (cModuleNames);
 }
 
 

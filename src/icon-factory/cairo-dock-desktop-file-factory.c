@@ -320,7 +320,7 @@ void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDock
 	if (pKeyFile == NULL)
 		return ;
 
-	if (cairo_dock_conf_file_needs_update (pKeyFile, CAIRO_DOCK_VERSION))
+	if (cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION))
 	{
 		const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file_path (iLauncherType);
 		cd_debug ("%s (%s)", __func__, cTemplateFile);

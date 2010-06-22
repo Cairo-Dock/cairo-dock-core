@@ -1300,5 +1300,5 @@ void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar 
 	curl_global_init (CURL_GLOBAL_DEFAULT);
 	
 	//\___________________ On initialise les numeros de version.
-	cairo_dock_get_version_from_string (CAIRO_DOCK_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
+	cairo_dock_get_version_from_string (GLDI_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
 }
