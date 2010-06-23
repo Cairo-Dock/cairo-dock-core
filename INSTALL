@@ -9,12 +9,28 @@ make
 sudo make install
 -------------------------------------------------
 
+
+
 Notes :
 -------
 
-Install the dock first, and then compile the plug-ins.
+Install the dock first, and then compile the plug-ins. For more details, have a look at this webpage: http://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en
 
 If you choose to install in another folder than /usr, you must specify the same prefix for both core and plug-ins (and specify this folder in LD_LIBRARY_PATH and PKG_CONFIG_PATH).
+
+You can launch 'cmake' and 'make' commands from another directory, it's maybe cleaner: 
+-------------------------------------------------
+mkdir build/
+cd build/
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+make
+sudo make install
+-------------------------------------------------
+
+For 64bits (x86_64) architectures, the libraries are installed in a 'lib64' directory by default but it seems it can be a problem for some distributions (e.g.: ArchLinux). If you have a problem by launching Cairo-Dock, you can compile it (core and its plug-ins) with the flag "FORCE_NOT_LIB64":
+    $ cmake CMakeLists.txt -DCMAKE_INSTALL_PREFIX=/usr -DFORCE_NOT_LIB64=yes
+You can also force another prefix for this librairy directory with "LIB_SUFFIX" flag, e.g. for 'lib32' directory:
+    $ cmake CMakeLists.txt -DCMAKE_INSTALL_PREFIX=/usr -DLIB_SUFFIX=32
 
 <deprecated>
 If your libcairo is compiled with glitz support (that is, with --enable-glitz option), you can benefit from glitz hardware acceleration in cairo-dock too.
@@ -27,3 +43,14 @@ See the "Applets.stable" file in the "plug-ins" folder for an exhaustive list of
 To build the Cairo-Dock documentation, use the generate-doc.sh script in the 'doc' directory of the core.
 
 Thanks for using Cairo-Dock, hope you will enjoy it ! ^_^
+
+Website:        http://glx-dock.org/
+Project:        https://launchpad.net/cairo-dock
+Wiki:           http://wiki.glx-dock.org/
+Forum:          http://forum.glx-dock.org/
+Screenshots:    http://pics.glx-dock.org/
+Documentation:  http://doc.glx-dock.org/
+API DBus:       http://dbus.glx-dock.org/
+Applets extras: http://extras.glx-dock.org/
+Identi.ca:      http://identi.ca/cairodock
+Twitter:        http://twitter.com/cairodock
