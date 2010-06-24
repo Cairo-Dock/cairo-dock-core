@@ -688,7 +688,7 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 	g_list_free (pIconsList);
 	
 	if (bModuleWasRemoved)
-		cairo_dock_update_conf_file_with_active_modules ();
+		cairo_dock_write_active_modules ();
 }
 
 

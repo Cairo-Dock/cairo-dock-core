@@ -158,6 +158,10 @@ gboolean g_bForceCairo = FALSE;
 gboolean g_bLocked;
 
 static gchar *s_cLaunchCommand = NULL;
+static gchar *s_cLastVersion = NULL;
+gboolean g_bEnterHelpOnce = FALSE;
+static gchar *s_cDefaulBackend = NULL;
+static gboolean s_bTestComposite = TRUE;
 
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
@@ -211,25 +215,15 @@ static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, 
 
 static void _entered_help_once (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile)
 {
-	gchar *cHelpDir = g_strdup_printf ("%s/.help", g_cCairoDockDataDir);
-	gchar *cHelpHistory = g_strdup_printf ("%s/entered-once", cHelpDir);
-	if (! g_file_test (cHelpDir, G_FILE_TEST_EXISTS))
+	if (!g_bEnterHelpOnce)
 	{
-		if (g_mkdir (cHelpDir, 7*8*8+7*8+5) != 0)
-		{
-			cd_warning ("couldn't create directory %s", cHelpDir);
-			return;
-		}
+		g_bEnterHelpOnce = TRUE;
+		gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+		cairo_dock_update_conf_file (cConfFilePath,
+			G_TYPE_BOOLEAN, "Help", "entered once", g_bEnterHelpOnce,
+			G_TYPE_INVALID);
+		g_free (cConfFilePath);
 	}
-	if (! g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
-	{
-		g_file_set_contents (cHelpHistory,
-			"1",
-			-1,
-			NULL);
-	}
-	g_free (cHelpHistory);
-	g_free (cHelpDir);
 }
 static void _register_help_module (void)
 {
@@ -260,6 +254,63 @@ static void _register_help_module (void)
 	cairo_dock_register_module (pHelpModule);
 	cairo_dock_activate_module (pHelpModule, NULL);
 	pHelpModule->fLastLoadingTime = time (NULL) + 1e7;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
+}
+
+static void _toggle_remember_choice (GtkCheckButton *pButton, GtkWidget *pDialog)
+{
+	g_object_set_data (G_OBJECT (pDialog), "remember", GINT_TO_POINTER (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pButton))));
+}
+
+static void _cairo_dock_get_global_config (void)
+{
+	gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+	GKeyFile *pKeyFile = g_key_file_new ();
+	if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+	{
+		g_key_file_load_from_file (pKeyFile, cConfFilePath, 0, NULL);
+		s_cLastVersion = g_key_file_get_string (pKeyFile, "Launch", "last version", NULL);
+		s_cDefaulBackend = g_key_file_get_string (pKeyFile, "Launch", "default backend", NULL);
+		if (s_cDefaulBackend && *s_cDefaulBackend == '\0')
+		{
+			g_free (s_cDefaulBackend);
+			s_cDefaulBackend = NULL;
+		}
+		s_bTestComposite = g_key_file_get_boolean (pKeyFile, "Launch", "test composite", NULL);
+		g_bEnterHelpOnce = g_key_file_get_boolean (pKeyFile, "Help", "entered once", NULL);
+	}
+	else  // ancienne methode.
+	{
+		gchar *cLastVersionFilePath = g_strdup_printf ("%s/.cairo-dock-last-version", g_cCairoDockDataDir);
+		if (g_file_test (cLastVersionFilePath, G_FILE_TEST_EXISTS))
+		{
+			gsize length = 0;
+			g_file_get_contents (cLastVersionFilePath,
+				&s_cLastVersion,
+				&length,
+				NULL);
+		}
+		g_remove (cLastVersionFilePath);
+		g_free (cLastVersionFilePath);
+		g_key_file_set_string (pKeyFile, "Launch", "last version", s_cLastVersion);
+		
+		g_key_file_set_string (pKeyFile, "Launch", "default backend", "");
+		g_key_file_set_boolean (pKeyFile, "Launch", "test composite", TRUE);
+		
+		gchar *cHelpHistory = g_strdup_printf ("%s/.help/entered-once", g_cCairoDockDataDir);
+		if (g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
+		{
+			g_bEnterHelpOnce = TRUE;
+		}
+		gchar *cCommand = g_strdup_printf ("rm -rf \"%s/.help\"", g_cCairoDockDataDir);
+		int r = system (cCommand);
+		g_free (cCommand);
+		g_free (cHelpHistory);
+		g_key_file_set_boolean (pKeyFile, "Help", "entered once", g_bEnterHelpOnce);
+		
+		cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+	}
+	g_key_file_free (pKeyFile);
+	g_free (cConfFilePath);
 }
 
 int main (int argc, char** argv)
@@ -509,27 +560,57 @@ int main (int argc, char** argv)
 	 //// APP ////
 	/////////////
 	
+	//\___________________ On lit la config globale de l'appli.
+	_cairo_dock_get_global_config ();
+	
 	//\___________________ On initialise le support d'OpenGL.
 	gboolean bOpenGLok = FALSE;
 	if (bForceOpenGL || (! g_bForceCairo && ! g_bUseGlitz))
 		bOpenGLok = cairo_dock_initialize_opengl_backend (bToggleIndirectRendering, bForceOpenGL);
 	if (bOpenGLok && ! bForceOpenGL && ! bToggleIndirectRendering && ! cairo_dock_opengl_is_safe ())  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
 	{
-		GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock"),
-			NULL,
-			GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_STOCK_YES,
-			GTK_RESPONSE_YES,
-			GTK_STOCK_NO,
-			GTK_RESPONSE_NO,
-			NULL);
-		GtkWidget *label = gtk_label_new (_("OpenGL allows you to use the hardware acceleration, reducing the CPU load to the minimum.\nIt also allows some pretty visual effects similar to Compiz.\nHowever, some cards and/or their drivers don't fully support it, which may prevent the dock from running correctly.\nDo you want to activate OpenGL ?\n (To not show this dialog, launch the dock from the Application menu,\n  or with the -o option to force OpenGL and -c to force cairo.)"));
-		gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), label);
-		gtk_widget_show_all (dialog);
-		
-		gint iAnswer = gtk_dialog_run (GTK_DIALOG (dialog));  // lance sa propre main loop, c'est pourquoi on peut le faire avant le gtk_main().
-		gtk_widget_destroy (dialog);
-		if (iAnswer == GTK_RESPONSE_NO)
+		if (s_cDefaulBackend == NULL) // pas de backend par defaut defini.
+		{
+			GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock"),
+				NULL,
+				GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_STOCK_YES,
+				GTK_RESPONSE_YES,
+				GTK_STOCK_NO,
+				GTK_RESPONSE_NO,
+				NULL);
+			GtkWidget *label = gtk_label_new (_("OpenGL allows you to use the hardware acceleration, reducing the CPU load to the minimum.\nIt also allows some pretty visual effects similar to Compiz.\nHowever, some cards and/or their drivers don't fully support it, which may prevent the dock from running correctly.\nDo you want to activate OpenGL ?\n (To not show this dialog, launch the dock from the Application menu,\n  or with the -o option to force OpenGL and -c to force cairo.)"));
+			gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), label, FALSE, FALSE, 0);
+			
+			GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
+			gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), pAskBox, FALSE, FALSE, 0);
+			label = gtk_label_new (_("Remember this choice"));
+			GtkWidget *pCheckBox = gtk_check_button_new ();
+			gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
+			gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
+			g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), dialog);
+			
+			gtk_widget_show_all (dialog);
+			
+			gint iAnswer = gtk_dialog_run (GTK_DIALOG (dialog));  // lance sa propre main loop, c'est pourquoi on peut le faire avant le gtk_main().
+			gboolean bRememberChoice = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (dialog), "remember"));
+			gtk_widget_destroy (dialog);
+			if (iAnswer == GTK_RESPONSE_NO)
+			{
+				cairo_dock_deactivate_opengl ();
+			}
+			
+			if (bRememberChoice)  // l'utilisateur a defini le choix par defaut.
+			{
+				s_cDefaulBackend = g_strdup (iAnswer == GTK_RESPONSE_NO ? "cairo" : "opengl");
+				gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+				cairo_dock_update_conf_file (cConfFilePath,
+					G_TYPE_STRING, "Launch", "default backend", s_cDefaulBackend,
+					G_TYPE_INVALID);
+				g_free (cConfFilePath);
+			}
+		}
+		else if (strcmp (s_cDefaulBackend, "opengl") != 0)  // un backend par defaut qui n'est pas OpenGL.
 		{
 			cairo_dock_deactivate_opengl ();
 		}
@@ -660,11 +741,9 @@ int main (int argc, char** argv)
 	
 	_register_help_module ();
 	
-	//\___________________ On affiche un petit message de bienvenue.
-	if (bFirstLaunch)
+	//\___________________ On teste le composite.
+	if (s_bTestComposite)
 	{
-		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
-		
 		GdkScreen *pScreen = gdk_screen_get_default ();
 		if (! mySystem.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
 		{
@@ -674,19 +753,82 @@ int main (int argc, char** argv)
 			if (cPsef != NULL && *cPsef != '\0')  // "metacity" a ete trouve.
 			{
 				Icon *pIcon = cairo_dock_get_dialogless_icon ();
+				GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
+				GtkWidget *label = gtk_label_new (_("Don't ask me any more"));
+				GtkWidget *pCheckBox = gtk_check_button_new ();
+				gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
+				gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
+				g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), pAskBox);
+				int iClickedButton = cairo_dock_show_dialog_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., NULL, pAskBox);
 				
-				int iAnswer= cairo_dock_ask_question_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock));
-				if (iAnswer == GTK_RESPONSE_YES)
+				gboolean bRememberChoice = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pAskBox), "remember"));
+				gtk_widget_destroy (pAskBox);
+				if (bRememberChoice)
+				{
+					s_bTestComposite = FALSE;
+				}
+				///int iAnswer= cairo_dock_ask_question_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock));
+				if (iClickedButton == 0 || iClickedButton == -1)
 				{
 					int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
 					cairo_dock_show_dialog_with_question (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
 				}
+				
 			}
 			else  // sinon il a droit a un "message a caractere informatif".
 			{
 				cairo_dock_show_general_message (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it. This option is in the 'System' module of the configuration, at the bottom of the page."), 0);
 			}
 			g_free (cPsef);
+		}
+		else  // a priori peu utile de le retester, surtout que le composite risque de ne pas etre actif tout de suite au demarrage.
+		{
+			s_bTestComposite = FALSE;
+		}
+		
+		if (! s_bTestComposite)
+		{
+			gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+			cairo_dock_update_conf_file (cConfFilePath,
+				G_TYPE_BOOLEAN, "Launch", "test composite", s_bTestComposite,
+				G_TYPE_INVALID);
+			g_free (cConfFilePath);
+		}
+	}
+	
+	//\___________________ On affiche un petit message de bienvenue ou de changelog ou d'erreur.
+	gboolean bNewVersion = (s_cLastVersion == NULL || strcmp (s_cLastVersion, CAIRO_DOCK_VERSION) != 0);
+	if (bNewVersion)
+	{
+		gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+		cairo_dock_update_conf_file (cConfFilePath,
+			G_TYPE_STRING, "Launch", "last version", CAIRO_DOCK_VERSION,
+			G_TYPE_INVALID);
+		g_free (cConfFilePath);
+	}
+	
+	if (bFirstLaunch)  // tout premier lancement -> bienvenue !
+	{
+		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
+	}
+	else if (bNewVersion)  // nouvelle version -> changelog (si c'est le 1er lancement, inutile de dire ce qui est nouveau, et de plus on a deja le message de bienvenue).
+	{
+		gchar *cChangeLogFilePath = g_strdup_printf ("%s/ChangeLog.txt", CAIRO_DOCK_SHARE_DATA_DIR);
+		GKeyFile *pKeyFile = cairo_dock_open_key_file (cChangeLogFilePath);
+		g_key_file_load_from_file (pKeyFile, cChangeLogFilePath, 0, &erreur);  // pas de commentaire utile.
+		if (pKeyFile != NULL)
+		{
+			gchar *cKeyName = g_strdup_printf ("%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);  // version sans les "alpha", "beta", "rc", etc.
+			gchar *cChangeLogMessage = g_key_file_get_string (pKeyFile, "ChangeLog", cKeyName, NULL);
+			g_free (cKeyName);
+			if (cChangeLogMessage != NULL)
+			{
+				Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
+				myDialogs.dialogTextDescription.bUseMarkup = TRUE;
+				cairo_dock_show_temporary_dialog_with_default_icon (gettext (cChangeLogMessage), pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
+				myDialogs.dialogTextDescription.bUseMarkup = FALSE;
+				g_free (cChangeLogMessage);
+			}
 		}
 	}
 	else if (cExcludeModule != NULL && ! bMaintenance)
@@ -697,66 +839,6 @@ int main (int argc, char** argv)
 		Icon *icon = cairo_dock_get_dialogless_icon ();
 		cairo_dock_show_temporary_dialog_with_icon (cMessage, icon, CAIRO_CONTAINER (g_pMainDock), 15000., (pModule ? pModule->pVisitCard->cIconFilePath : NULL));
 		g_free (cMessage);
-	}
-	
-	//\___________________ On affiche le changelog en cas de nouvelle version.
-	gchar *cLastVersionFilePath = g_strdup_printf ("%s/.cairo-dock-last-version", g_cCairoDockDataDir);
-	gboolean bWriteChangeLog;
-	if (! g_file_test (cLastVersionFilePath, G_FILE_TEST_EXISTS))
-	{
-		bWriteChangeLog = TRUE;
-	}
-	else
-	{
-		gsize length = 0;
-		gchar *cContent = NULL;
-		g_file_get_contents (cLastVersionFilePath,
-			&cContent,
-			&length,
-			NULL);
-		if (length > 0 && strcmp (cContent, CAIRO_DOCK_VERSION) == 0)
-			bWriteChangeLog = FALSE;
-		else
-			bWriteChangeLog = TRUE;
-		g_free (cContent);
-	}
-
-	g_file_set_contents (cLastVersionFilePath,
-		CAIRO_DOCK_VERSION,
-		-1,
-		NULL);
-	g_free (cLastVersionFilePath);
-
-	if (bWriteChangeLog && ! bFirstLaunch)
-	{
-		gchar *cChangeLogFilePath = g_strdup_printf ("%s/ChangeLog.txt", CAIRO_DOCK_SHARE_DATA_DIR);
-		GKeyFile *pKeyFile = g_key_file_new ();
-		g_key_file_load_from_file (pKeyFile, cChangeLogFilePath, 0, &erreur);  // pas de commentaire utile.
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-			erreur = NULL;
-		}
-		else
-		{
-			gchar *cKeyName = g_strdup_printf ("%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);  // version sans les "alpha", "beta", "rc", etc.
-			gchar *cChangeLogMessage = g_key_file_get_string (pKeyFile, "ChangeLog", cKeyName, &erreur);
-			g_free (cKeyName);
-			if (erreur != NULL)
-			{
-				g_error_free (erreur);
-				erreur = NULL;
-			}
-			else
-			{
-				Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
-				myDialogs.dialogTextDescription.bUseMarkup = TRUE;
-				cairo_dock_show_temporary_dialog_with_default_icon (gettext (cChangeLogMessage), pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
-				myDialogs.dialogTextDescription.bUseMarkup = FALSE;
-			}
-			g_free (cChangeLogMessage);
-		}
 	}
 	
 	if (! bTesting)

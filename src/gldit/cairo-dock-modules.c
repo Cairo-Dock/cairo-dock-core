@@ -67,6 +67,7 @@ static GHashTable *s_hModuleTable = NULL;
 static GHashTable *s_hInternalModuleTable = NULL;
 static int s_iMaxOrder = 0;
 static GList *s_AutoLoadedModules = NULL;
+static guint s_iSidWriteModules = 0;
 
 
   ///////////////
@@ -1083,6 +1084,11 @@ static void _cairo_dock_deactivate_one_module (gchar *cModuleName, CairoDockModu
 void cairo_dock_deactivate_all_modules (void)
 {
 	g_hash_table_foreach (s_hModuleTable, (GHFunc) _cairo_dock_deactivate_one_module, NULL);
+	if (s_iSidWriteModules != 0)
+	{
+		g_source_remove (s_iSidWriteModules);
+		s_iSidWriteModules = 0;
+	}
 }
 
 
@@ -1123,10 +1129,11 @@ void cairo_dock_activate_module_and_load (const gchar *cModuleName)
 		}
 	}
 	
-	cairo_dock_update_conf_file_with_active_modules ();
+	cairo_dock_write_active_modules ();
 }
 
-void cairo_dock_deactivate_module_instance_and_unload (CairoDockModuleInstance *pInstance)
+// deinstanciate_module, remove icon, free_icon, write
+static void cairo_dock_deactivate_module_instance_and_unload (CairoDockModuleInstance *pInstance)
 {
 	g_return_if_fail (pInstance != NULL);
 	cd_message ("%s (%s)", __func__, pInstance->cConfFilePath);
@@ -1167,7 +1174,7 @@ void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName)
 		pElement = pNextElement;
 	}
 	
-	cairo_dock_update_conf_file_with_active_modules ();
+	cairo_dock_write_active_modules ();
 }
 
 
@@ -1455,4 +1462,26 @@ void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const 
 
         pInternalModule->pExternalModules = g_list_prepend (pInternalModule->pExternalModules, (gpointer)pVisitCard->cModuleName);
         pVisitCard->cInternalModule = cOtherModuleName;
+}
+
+
+static gboolean _write_modules (gpointer data)
+{
+	gchar *cModuleNames = cairo_dock_list_active_modules ();
+	
+	cairo_dock_update_conf_file (g_cConfFile,
+		G_TYPE_STRING, "System", "modules", cModuleNames,
+		G_TYPE_INVALID);
+	g_free (cModuleNames);
+}
+static gboolean _write_modules_idle (gpointer data)
+{
+	_write_modules (data);
+	s_iSidWriteModules = 0;
+	return FALSE;
+}
+void cairo_dock_write_active_modules (void)
+{
+	if (s_iSidWriteModules == 0)
+		s_iSidWriteModules = g_idle_add (_write_modules_idle, NULL);
 }

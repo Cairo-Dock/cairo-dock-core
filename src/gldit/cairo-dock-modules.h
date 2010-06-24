@@ -41,6 +41,17 @@ G_BEGIN_DECLS
 * Internal modules are just simplified version of modules, and are used internally by Cairo-Dock. As a special feature, a module can bind itself to an internal module, if its purpose is to complete it.
 */
 
+struct _CairoDockModuleMgr {
+	CairoDockManager mgr;
+	void 			(*foreach_module) 				(GHRFunc pCallback, gpointer user_data);
+	void 			(*foreach_module_in_alphabetical_order) 	(GCompareFunc pCallback, gpointer user_data);
+	CairoDockModule* 	(*find_module_from_name) 			(const gchar *cModuleName);
+	int 			(*get_nb_modules) 				(void);
+	const gchar* 	(*get_modules_dir) 				(void);
+	gchar* 		(*list_active_modules) 				(void);
+	void 			(*write_active_modules_cb) 			(void);
+};
+
 /// Categories a module can be in.
 typedef enum {
 	CAIRO_DOCK_CATEGORY_SYSTEM,
@@ -323,8 +334,6 @@ void cairo_dock_deactivate_all_modules (void);
 
 // activate_module or reload, update_dock, redraw, write
 void cairo_dock_activate_module_and_load (const gchar *cModuleName);
-// deinstanciate_module, remove icon, free_icon, write
-void cairo_dock_deactivate_module_instance_and_unload (CairoDockModuleInstance *pInstance);
 // deactivate_module_instance_and_unload all instances, write
 void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName);
 
@@ -350,6 +359,9 @@ void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance);
 	(pContainer)->pDataSlot[pInstance->iSlotID] = pData
 
 
+  //////////////////////
+ // INTERNAL MODULES //
+//////////////////////
 
 void cairo_dock_reload_internal_module_from_keyfile (CairoDockInternalModule *pModule, GKeyFile *pKeyFile);
 void cairo_dock_preload_internal_modules (GHashTable *pModuleTable);
@@ -366,6 +378,9 @@ gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile);
 void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pModuleInstance);
 
 void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const gchar *cOtherModuleName);
+
+
+void cairo_dock_write_active_modules (void);
 
 
 G_END_DECLS

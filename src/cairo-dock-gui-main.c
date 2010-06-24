@@ -60,6 +60,7 @@
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
+extern gboolean g_bEnterHelpOnce;
 
 struct _CairoDockCategoryWidgetTable {
 	GtkWidget *pFrame;
@@ -2355,8 +2356,7 @@ static GtkWidget * show_main_gui (void)
 	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
 	if (pModule != NULL)
 	{
-		gchar *cHelpHistory = g_strdup_printf ("%s/.help/entered-once", g_cCairoDockDataDir);
-		if (! g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
+		if (! g_bEnterHelpOnce)
 		{
 			Icon *pIcon = cairo_dock_get_dialogless_icon ();
 			cairo_dock_show_dialog_full (_("It appears that you've never entered the help module before.\nIf you are having difficulty configuring the dock, or if you want to customise it,\nthe Help module is here for you!\nWould you like to take a look at it now?"),

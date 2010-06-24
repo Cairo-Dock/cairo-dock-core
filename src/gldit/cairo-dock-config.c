@@ -878,16 +878,6 @@ void cairo_dock_update_conf_file_with_position (const gchar *cConfFilePath, int 
 		G_TYPE_INVALID);
 }
 
-void cairo_dock_update_conf_file_with_active_modules (void)
-{
-	gchar *cModuleNames = cairo_dock_list_active_modules ();
-	
-	cairo_dock_update_conf_file (g_cConfFile,
-		G_TYPE_STRING, "System", "modules", cModuleNames,
-		G_TYPE_INVALID);
-	g_free (cModuleNames);
-}
-
 
 void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion)
 {
