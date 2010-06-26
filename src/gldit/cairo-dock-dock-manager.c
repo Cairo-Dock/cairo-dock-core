@@ -549,7 +549,8 @@ static void _cairo_dock_draw_one_subdock_icon (const gchar *cDockName, CairoDock
 		icon = ic->data;
 		if (icon->pSubDock != NULL && (icon->iSubdockViewType != 0 || (icon->cClass != NULL && !myIndicators.bUseClassIndic)) && CAIRO_DOCK_IS_LAUNCHER (icon) && icon->iSidRedrawSubdockContent == 0)  // icone de sous-dock ou de repertoire ou de classe.
 		{
-			cairo_dock_draw_subdock_content_on_icon (icon, pDock);
+			cairo_dock_trigger_redraw_subdock_content_on_icon (icon);
+			///cairo_dock_draw_subdock_content_on_icon (icon, pDock);
 		}
 	}
 }

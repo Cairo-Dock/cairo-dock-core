@@ -1328,7 +1328,7 @@ gboolean cairo_dock_on_drag_drop (GtkWidget *pWidget, GdkDragContext *dc, gint x
 
 gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint time, CairoDock *pDock)
 {
-	g_print ("%s (%d;%d, %d)\n", __func__, x, y, time);
+	cd_debug ("%s (%d;%d, %d)", __func__, x, y, time);
 	
 	//\_________________ On simule les evenements souris habituels.
 	if (! pDock->bIsDragging)

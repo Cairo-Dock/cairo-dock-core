@@ -86,7 +86,7 @@ Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 	
 	//\____________ On remplit ses buffers.
 	if (pDock)
-		cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
+		cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
 
 	return icon;
 }

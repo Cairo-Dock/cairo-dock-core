@@ -1011,7 +1011,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 
 
 
-static gboolean _redraw_subdock_content (Icon *pIcon)
+static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 {
 	if (pIcon->pSubDock != NULL)
 	{
@@ -1038,7 +1038,13 @@ void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
 {
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || (pPointingIcon->cClass != NULL && ! myIndicators.bUseClassIndic)) && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
-		pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content, pPointingIcon);
+		pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content_idle, pPointingIcon);
+}
+
+void cairo_dock_trigger_redraw_subdock_content_on_icon (Icon *icon)
+{
+	if (icon->iSidRedrawSubdockContent == 0)
+		icon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content_idle, icon);
 }
 
 void cairo_dock_redraw_subdock_content (CairoDock *pDock)

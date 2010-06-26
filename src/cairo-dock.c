@@ -697,7 +697,7 @@ int main (int argc, char** argv)
 	
 	if (cExcludeModule != NULL)
 	{
-		g_print ("on enleve %s de '%s'\n", cExcludeModule, s_cLaunchCommand);
+		//g_print ("on enleve %s de '%s'\n", cExcludeModule, s_cLaunchCommand);
 		gchar *str = g_strstr_len (s_cLaunchCommand, -1, " -x ");
 		if (str)
 		{

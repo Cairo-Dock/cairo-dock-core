@@ -460,7 +460,7 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 
 static GList *_activate_sub_widgets (GList *children, int iNbControlledWidgets, gboolean bSensitive)
 {
-	g_print ("%s (%d, %d)\n", __func__, iNbControlledWidgets, bSensitive);
+	//g_print ("%s (%d, %d)\n", __func__, iNbControlledWidgets, bSensitive);
 	GList *c = children;
 	GtkWidget *w;
 	int i = 0, iNbControlSubWidgets;

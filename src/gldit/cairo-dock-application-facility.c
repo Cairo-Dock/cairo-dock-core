@@ -291,7 +291,7 @@ static void _load_class_icon (Icon *icon)
 	}
 	else
 	{
-		g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
+		//g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
 			iWidth,
 			iHeight);
@@ -301,7 +301,7 @@ static void _load_class_icon (Icon *icon)
 			if (pApplis != NULL)
 			{
 				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
-				g_print ("  load from %s (%dx%d)\n", pOneIcon->cName, iWidth, iHeight);
+				//g_print ("  load from %s (%dx%d)\n", pOneIcon->cName, iWidth, iHeight);
 				icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pOneIcon,
 					iWidth,
 					iHeight);
@@ -407,7 +407,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				Icon *pFakeClassIcon = cairo_dock_create_icon_for_class_subdock (pSameClassIcon, pClassMateParentDock, pParentDock);
 				
 				//\______________ On la charge.
-				cairo_dock_load_icon_buffers (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
+				cairo_dock_trigger_load_icon_buffers (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
 				
 				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
 				cd_debug (" on detache %s pour la passer dans le sous-dock de sa classe", pSameClassIcon->cName);

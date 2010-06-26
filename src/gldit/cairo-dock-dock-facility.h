@@ -163,6 +163,7 @@ GList *cairo_dock_get_first_drawn_element_linear (GList *icons);
 
 
 void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock);
+void cairo_dock_trigger_redraw_subdock_content_on_icon (Icon *icon);
 
 void cairo_dock_redraw_subdock_content (CairoDock *pDock);
 

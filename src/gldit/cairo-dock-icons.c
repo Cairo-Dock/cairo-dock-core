@@ -109,6 +109,8 @@ void cairo_dock_free_icon (Icon *icon)
 	cairo_dock_remove_dialog_if_any (icon);
 	if (icon->iSidRedrawSubdockContent != 0)
 		g_source_remove (icon->iSidRedrawSubdockContent);
+	if (icon->iSidLoadImage != 0)
+		g_source_remove (icon->iSidLoadImage);
 	if (icon->cBaseURI != NULL)
 		cairo_dock_fm_remove_monitor (icon);
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))

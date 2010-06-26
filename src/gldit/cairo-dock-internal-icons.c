@@ -340,6 +340,14 @@ static void _remove_separators (const gchar *cDockName, CairoDock *pDock, gpoint
 }
 static void _insert_separators (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
+	Icon *icon;
+	GList *ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)  // les separateurs utilisateurs ne sont pas recrees, on les recharge donc.
+	{
+		icon = ic->data;
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // il n'y a que des separateurs utilisateurs dans le dock en ce moment.
+			cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
+	}
 	cairo_dock_insert_separators_in_dock (pDock);
 }
 static void _calculate_icons (const gchar *cDockName, CairoDock *pDock, gpointer data)
@@ -377,7 +385,7 @@ static void reload (CairoConfigIcons *pPrevIcons, CairoConfigIcons *pIcons)
 	}
 	
 	if ((pPrevIcons->iSeparateIcons && ! pIcons->iSeparateIcons) ||
-		pPrevIcons->cSeparatorImage != pIcons->cSeparatorImage ||
+		cairo_dock_strings_differ (pPrevIcons->cSeparatorImage, pIcons->cSeparatorImage) ||
 		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] ||
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)

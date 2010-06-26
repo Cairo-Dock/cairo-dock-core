@@ -455,12 +455,45 @@ void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTex
 
 void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 {
+	if (pIcon->iSidLoadImage != 0)
+	{
+		g_source_remove (pIcon->iSidLoadImage);
+		pIcon->iSidLoadImage = 0;
+	}
+	
 	cairo_dock_load_icon_image (pIcon, pContainer);
 
 	cairo_dock_load_icon_text (pIcon, &myLabels.iconTextDescription);
 
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
 	cairo_dock_load_icon_quickinfo (pIcon, &myLabels.quickInfoTextDescription, fMaxScale);
+}
+
+static gboolean _load_icon_buffer_idle (Icon *pIcon)
+{
+	//g_print ("%s (%s; %dx%d; %.2fx%.2f; %x)\n", __func__, pIcon->cName, pIcon->iImageWidth, pIcon->iImageHeight, pIcon->fWidth, pIcon->fHeight, pIcon->pContainerForLoad);
+	pIcon->iSidLoadImage = 0;
+	
+	CairoContainer *pContainer = pIcon->pContainerForLoad;
+	cairo_dock_load_icon_image (pIcon, pContainer);
+
+	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	cairo_dock_load_icon_quickinfo (pIcon, &myLabels.quickInfoTextDescription, fMaxScale);
+	
+	cairo_dock_redraw_icon (pIcon, pContainer);
+	return FALSE;
+}
+void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
+{
+	cairo_dock_set_icon_size (pContainer, pIcon);
+	pIcon->pContainerForLoad = pContainer;
+	if (pIcon->iSidLoadImage == 0)
+	{
+		//g_print ("trigger load for %s (%x)\n", pIcon->cName, pContainer);
+		//cairo_dock_load_icon_buffers (pIcon, pContainer);
+		cairo_dock_load_icon_text (pIcon, &myLabels.iconTextDescription);  // la vue peut avoir besoin de connaitre la taille du texte.
+		pIcon->iSidLoadImage = g_idle_add ((GSourceFunc)_load_icon_buffer_idle, pIcon);
+	}
 }
 
 
@@ -484,8 +517,8 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 		}
 		else
 		{
-			cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
-			cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
+			///cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
+			cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));  // fait un set_icon_size
 			icon->fWidth *= pDock->container.fRatio;
 			icon->fHeight *= pDock->container.fRatio;
 		}

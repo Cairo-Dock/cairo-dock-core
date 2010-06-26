@@ -557,7 +557,10 @@ frame_sep =
 #j+[4;64] Icon size at rest (width x height) :
 separator size = 48;48
 
-#Y+[Use an image.;1;4;Flat separator;4;1;Physical separator;0;0] How to draw the separators?
+#b+ Force separator's image size to stay constant?
+force size = false
+
+#Y+[Use an image.;1;2;Flat separator;3;1;Physical separator;0;0] How to draw the separators?
 #{Only the default, 3D-plane and curve views support flat and physical separators. Flat separators are rendered differently according to the view.}
 separator type = 0
 
@@ -567,9 +570,6 @@ separator image = separateur.svg
 
 #b+ Make the separator's image revolve when dock is on top/on the left/on the right?
 revolve separator image = true
-
-#b+ Force separator's image size to stay constant?
-force size = false
 
 #C+ Colour of flat separators :
 separator color = 0.9;0.9;0.9;1.0

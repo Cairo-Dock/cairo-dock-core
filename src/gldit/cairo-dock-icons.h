@@ -204,6 +204,8 @@ struct _Icon {
 	gboolean bBeingRemovedByCairo;  // devrait etre dans pDataSlot...
 	
 	guint iSidRedrawSubdockContent;
+	guint iSidLoadImage;
+	CairoContainer *pContainerForLoad;
 	
 	CairoDockIconTrueType iTrueType;
 	gpointer reserved[3];

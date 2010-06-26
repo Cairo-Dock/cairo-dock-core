@@ -1353,6 +1353,13 @@ static void _load_appli (Icon *icon)
 			iHeight);
 		g_free (cIconPath);
 	}
+	
+	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
+	{
+		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+		if (pParentDock)
+			cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pParentDock), FALSE);
+	}
 }
 
 static void _show_appli_for_drop (Icon *pIcon)
@@ -1404,11 +1411,11 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	
 	if (pDock)
 	{
-		cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
-		if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
+		cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
+		/**if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
 		{
 			cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
-		}
+		}*/
 	}
 	else
 		g_print ("%s is not loaded\n", icon->cName);

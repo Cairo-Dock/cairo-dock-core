@@ -73,7 +73,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 		{
 			// on la recupere comme ca car on n'est pas forcement encore passe dans le groupe "Icons".
 			pIndicators->fIndicatorDeltaY = (double)iIndicatorDeltaY / hi;
-			g_print ("icones : %d, deltaY : %d\n", hi, (int)iIndicatorDeltaY);
+			//g_print ("icones : %d, deltaY : %d\n", hi, (int)iIndicatorDeltaY);
 		}
 		else  // decalage vers le bas sans zoom.
 		{
@@ -83,7 +83,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 			l = g_key_file_get_integer (pKeyFile, "Background", "line width", NULL);
 			pIndicators->fIndicatorDeltaY = (double)iIndicatorDeltaY / (hr + hb + l/2);
 		}
-		g_print ("recuperation de l'indicateur : %.3f, %d\n", pIndicators->fIndicatorDeltaY, pIndicators->bIndicatorOnIcon);
+		//g_print ("recuperation de l'indicateur : %.3f, %d\n", pIndicators->fIndicatorDeltaY, pIndicators->bIndicatorOnIcon);
 		g_key_file_set_double (pKeyFile, "Indicators", "indicator offset", pIndicators->fIndicatorDeltaY);
 		g_key_file_set_boolean (pKeyFile, "Indicators", "indicator on icon", pIndicators->bIndicatorOnIcon);
 	}
