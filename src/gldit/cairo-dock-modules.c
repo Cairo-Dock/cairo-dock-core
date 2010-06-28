@@ -117,12 +117,12 @@ CairoDockModule *cairo_dock_foreach_module (GHRFunc pCallback, gpointer user_dat
 
 static int _sort_module_by_alphabetical_order (CairoDockModule *m1, CairoDockModule *m2)
 {
-	if (!m1 || !m1->pVisitCard || !m1->pVisitCard->cModuleName)
+	if (!m1 || !m1->pVisitCard || !m1->pVisitCard->cTitle)
 		return 1;
-	if (!m2 || !m2->pVisitCard || !m2->pVisitCard->cModuleName)
+	if (!m2 || !m2->pVisitCard || !m2->pVisitCard->cTitle)
 		return -1;
-	return g_ascii_strncasecmp (dgettext (m1->pVisitCard->cGettextDomain, m1->pVisitCard->cModuleName),
-		dgettext (m2->pVisitCard->cGettextDomain, m2->pVisitCard->cModuleName),
+	return g_ascii_strncasecmp (dgettext (m1->pVisitCard->cGettextDomain, m1->pVisitCard->cTitle),
+		dgettext (m2->pVisitCard->cGettextDomain, m2->pVisitCard->cTitle),
 		-1);
 }
 CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc pCallback, gpointer user_data)

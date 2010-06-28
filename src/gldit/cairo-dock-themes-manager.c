@@ -45,6 +45,7 @@
 
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
 #define CAIRO_DOCK_DEFAULT_THEME_LIST_NAME "list.conf"
+#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes2.2"
 
 static gchar *s_cThemeServerAdress = NULL;
 
@@ -1050,7 +1051,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	else  // c'est un theme officiel.
 	{
 		cd_debug ("c'est un theme officiel");
-		cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, g_cThemesDirPath, CAIRO_DOCK_THEMES_DIR, CAIRO_DOCK_ANY_THEME);
+		cNewThemePath = cairo_dock_get_theme_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, g_cThemesDirPath, CAIRO_DOCK_DISTANT_THEMES_DIR, CAIRO_DOCK_ANY_THEME);
 	}
 	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
 	//g_print ("cNewThemePath : %s ; cNewThemeName : %s\n", cNewThemePath, cNewThemeName);
