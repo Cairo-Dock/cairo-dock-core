@@ -2418,7 +2418,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							iOrder1 = iOrder2 = k;
 						}
 						gtk_list_store_set (GTK_LIST_STORE (modele), &iter,
-							CAIRO_DOCK_MODEL_NAME, (bNumberedList ? dgettext (cGettextDomain, pAuthorizedValuesList[k]) : pAuthorizedValuesList[k]),
+							CAIRO_DOCK_MODEL_NAME, (iElementType != CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY ? dgettext (cGettextDomain, pAuthorizedValuesList[k]) : pAuthorizedValuesList[k]),
 							CAIRO_DOCK_MODEL_RESULT, (cResult != NULL ? cResult : pAuthorizedValuesList[k]),
 							CAIRO_DOCK_MODEL_ORDER, iOrder1,
 							CAIRO_DOCK_MODEL_ORDER2, iOrder2, -1);

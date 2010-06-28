@@ -8,7 +8,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.2\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2010-06-08 22:15+0000\n"
 "PO-Revision-Date: 2010-06-08 23:07+0000\n"
 "Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
 "Language-Team: Swedish\n"
@@ -25,31 +24,31 @@ msgstr ""
 msgid "Launcher configuration"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:125 ../data/messages:271
+#: ../src/cairo-dock-gui-main.c:126 ../data/messages:271
 msgid "Behaviour"
 msgstr "Beteende"
 
-#: ../src/cairo-dock-gui-main.c:126 ../data/messages:83 ../data/messages:1375
+#: ../src/cairo-dock-gui-main.c:127 ../data/messages:83 ../data/messages:1375
 msgid "Appearance"
 msgstr "Utseende"
 
-#: ../src/cairo-dock-gui-main.c:127
+#: ../src/cairo-dock-gui-main.c:128
 msgid "Accessories"
 msgstr "Tillbehör"
 
-#: ../src/cairo-dock-gui-main.c:128 ../src/gldit/cairo-dock-gui-factory.c:1232
+#: ../src/cairo-dock-gui-main.c:129 ../src/gldit/cairo-dock-gui-factory.c:1251
 msgid "Desktop"
 msgstr "Skrivbord"
 
-#: ../src/cairo-dock-gui-main.c:129
+#: ../src/cairo-dock-gui-main.c:130
 msgid "Controllers"
 msgstr "Styrelement"
 
-#: ../src/cairo-dock-gui-main.c:130
+#: ../src/cairo-dock-gui-main.c:131
 msgid "Plug-ins"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:131 ../src/cairo-dock-gui-main.c:1518
+#: ../src/cairo-dock-gui-main.c:132 ../src/cairo-dock-gui-main.c:1518
 #: ../data/messages:925 ../data/messages:1509
 msgid "All"
 msgstr ""
@@ -86,11 +85,11 @@ msgstr "Sök i beskrivning"
 msgid "Enable this module"
 msgstr "Aktivera denna modul"
 
-#: ../src/cairo-dock-gui-main.c:1801 ../src/cairo-dock.c:600
+#: ../src/cairo-dock-gui-main.c:1801 ../src/cairo-dock.c:681
 msgid "< Maintenance mode >"
 msgstr "< Underhållsläge >"
 
-#: ../src/cairo-dock-gui-main.c:1891 ../src/cairo-dock-gui-simple.c:694
+#: ../src/cairo-dock-gui-main.c:1891 ../src/cairo-dock-gui-simple.c:801
 msgid "Cairo-Dock configuration"
 msgstr "Inställning av Cairo-Dock"
 
@@ -112,7 +111,7 @@ msgstr "Detta driftläge '%s' är inte aktiverat."
 msgid "Do you want to enable it now?"
 msgstr "Vill Du aktivera det nu?"
 
-#: ../src/cairo-dock-gui-main.c:2363
+#: ../src/cairo-dock-gui-main.c:2362
 msgid ""
 "It appears that you've never entered the help module before.\n"
 "If you are having difficulty configuring the dock, or if you want to "
@@ -126,12 +125,28 @@ msgstr ""
 "så finns hjälp-modulen här.\n"
 "Vill du titta på en nu?"
 
-#: ../src/cairo-dock-gui-simple.c:388 ../src/cairo-dock-gui-themes.c:229
+#: ../src/cairo-dock-gui-simple.c:389 ../src/cairo-dock-gui-themes.c:311
 #, c-format
 msgid "Importing theme %s ..."
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:727
+#: ../src/cairo-dock-gui-simple.c:711
+msgid "Animation:"
+msgstr ""
+
+#: ../src/cairo-dock-gui-simple.c:728
+msgid "Effects:"
+msgstr ""
+
+#: ../src/cairo-dock-gui-simple.c:743 ../data/messages:77
+msgid "On mouse hover:"
+msgstr ""
+
+#: ../src/cairo-dock-gui-simple.c:744 ../data/messages:79
+msgid "On click:"
+msgstr ""
+
+#: ../src/cairo-dock-gui-simple.c:835
 msgid ""
 "This is the simple configuration panel of Cairo-Dock.\n"
 " After you get familiar with it, and if you want to customise your theme\n"
@@ -153,35 +168,35 @@ msgid ""
 "powerful tool to customise your current theme."
 msgstr ""
 
-#: ../src/cairo-dock-gui-themes.c:87
+#: ../src/cairo-dock-gui-themes.c:169
 msgid "Could not import the theme."
 msgstr ""
 
-#: ../src/cairo-dock-gui-themes.c:143
+#: ../src/cairo-dock-gui-themes.c:225
 msgid "The theme has been saved"
 msgstr ""
 
-#: ../src/cairo-dock-gui-themes.c:143
+#: ../src/cairo-dock-gui-themes.c:225
 msgid "The theme could not be saved"
 msgstr ""
 
-#: ../src/cairo-dock-gui-themes.c:169
+#: ../src/cairo-dock-gui-themes.c:251
 msgid "The theme has been deleted"
 msgstr ""
 
-#: ../src/cairo-dock-gui-themes.c:169
+#: ../src/cairo-dock-gui-themes.c:251
 msgid "The theme could not be deleted"
 msgstr ""
 
-#: ../src/cairo-dock-gui-themes.c:171
+#: ../src/cairo-dock-gui-themes.c:253
 msgid "The themes have been deleted"
 msgstr ""
 
-#: ../src/cairo-dock-gui-themes.c:171
+#: ../src/cairo-dock-gui-themes.c:253
 msgid "The themes could not be deleted"
 msgstr ""
 
-#: ../src/cairo-dock-gui-themes.c:221
+#: ../src/cairo-dock-gui-themes.c:303
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -190,151 +205,170 @@ msgstr ""
 "Du kommer att förlora ändringarna i det aktuella temat\n"
 "om du inte sparar dem innan du väljer ett nytt tema. Vill du fortsätta ändå?"
 
-#: ../src/cairo-dock-gui-themes.c:250
+#: ../src/cairo-dock-gui-themes.c:332
 msgid "Manage Themes"
 msgstr "Hantera teman"
+
+#: ../src/cairo-dock-internal-icons.c:452
+#: ../src/gldit/cairo-dock-internal-icons.c:452
+msgid "Provides various animations for your icons."
+msgstr "Den levererar många animationer till dina ikoner."
+
+#: ../src/cairo-dock-internal-icons.c:454
+#: ../src/gldit/cairo-dock-internal-icons.c:454 ../data/messages:85
+#: ../data/messages:633 ../data/messages:945
+msgid "Icons"
+msgstr "Ikoner"
+
+#: ../src/cairo-dock-internal-icons.c:456
+#: ../src/gldit/cairo-dock-internal-icons.c:456
+msgid ""
+"All about icons:\n"
+" size, reflection, icon theme,..."
+msgstr ""
+"Allt om ikoner:\n"
+" storlek, reflexer, ikon teman, ..."
 
 #: ../src/cairo-dock-menu.c:127
 #, c-format
 msgid "Configuration of the '%s' dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:212
+#: ../src/cairo-dock-menu.c:206
 msgid "Community site"
 msgstr "Cairo-Docks hemsida"
 
-#: ../src/cairo-dock-menu.c:213
+#: ../src/cairo-dock-menu.c:207
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:216
+#: ../src/cairo-dock-menu.c:210
 msgid "Development site"
 msgstr "Utvecklarnas hemsida"
 
-#: ../src/cairo-dock-menu.c:217
+#: ../src/cairo-dock-menu.c:211
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:220
+#: ../src/cairo-dock-menu.c:214
 msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:221 ../data/messages:1187
+#: ../src/cairo-dock-menu.c:215 ../data/messages:1187
 msgid "Other applets"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:230
+#: ../src/cairo-dock-menu.c:224
 msgid "Development"
 msgstr "Utveckling"
 
-#: ../src/cairo-dock-menu.c:236
+#: ../src/cairo-dock-menu.c:230
 msgid "Artwork"
 msgstr "Konstverk"
 
-#: ../src/cairo-dock-menu.c:240
+#: ../src/cairo-dock-menu.c:234
 msgid "Support"
 msgstr "Support"
 
-#: ../src/cairo-dock-menu.c:318
+#: ../src/cairo-dock-menu.c:312
 msgid "Quit Cairo-Dock?"
 msgstr "Avsluta Cairo-Dock?"
 
-#: ../src/cairo-dock-menu.c:344
+#: ../src/cairo-dock-menu.c:338
 msgid "Configure this dock"
 msgstr "Konfigurera dockan"
 
-#: ../src/cairo-dock-menu.c:349
+#: ../src/cairo-dock-menu.c:343
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:352
+#: ../src/cairo-dock-menu.c:346
 msgid "Configure"
 msgstr "Inställningar"
 
-#: ../src/cairo-dock-menu.c:357
+#: ../src/cairo-dock-menu.c:351
 msgid "Configure behaviour, appearance, and applets."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:359
+#: ../src/cairo-dock-menu.c:353
 msgid "Manage themes"
 msgstr "Hantera teman"
 
-#: ../src/cairo-dock-menu.c:364
+#: ../src/cairo-dock-menu.c:358
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:369
+#: ../src/cairo-dock-menu.c:363
 msgid "Unlock icons"
 msgstr "lås upp ikoner."
 
-#: ../src/cairo-dock-menu.c:369
+#: ../src/cairo-dock-menu.c:363
 msgid "Lock icons"
 msgstr "lås ikoner."
 
-#: ../src/cairo-dock-menu.c:373
+#: ../src/cairo-dock-menu.c:367
 msgid "This will (un)lock the position of the icons."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:377
+#: ../src/cairo-dock-menu.c:371
 msgid "Unlock dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:377
+#: ../src/cairo-dock-menu.c:371
 msgid "Lock dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:382
+#: ../src/cairo-dock-menu.c:376
 msgid "This will (un)lock the whole dock."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:387
+#: ../src/cairo-dock-menu.c:381
 msgid "Quick-Hide"
 msgstr "Dölj"
 
-#: ../src/cairo-dock-menu.c:392
+#: ../src/cairo-dock-menu.c:386
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:400
+#: ../src/cairo-dock-menu.c:394
 msgid "Launch Cairo-Dock on startup"
 msgstr "Starta Cairo-Dock vid uppstart"
 
-#: ../src/cairo-dock-menu.c:410 ../src/cairo-dock.c:241
+#: ../src/cairo-dock-menu.c:404 ../src/cairo-dock.c:235
 msgid "Help"
 msgstr "Hjälp"
 
-#: ../src/cairo-dock-menu.c:415
+#: ../src/cairo-dock-menu.c:409
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:417
+#: ../src/cairo-dock-menu.c:411
 msgid "Get more applets!"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:422
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+#: ../src/cairo-dock-menu.c:416
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:424
+#: ../src/cairo-dock-menu.c:418
 msgid "About"
 msgstr "Om"
 
-#: ../src/cairo-dock-menu.c:432
+#: ../src/cairo-dock-menu.c:426
 msgid "Quit"
 msgstr "Avsluta"
 
-#: ../src/cairo-dock-menu.c:456
+#: ../src/cairo-dock-menu.c:450
 msgid "separator"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:460
+#: ../src/cairo-dock-menu.c:454
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr "Ikonen (%s) kommer att tas bort från dockan. Är du säker?"
 
-#: ../src/cairo-dock-menu.c:471
+#: ../src/cairo-dock-menu.c:465
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -343,25 +377,25 @@ msgstr ""
 "Vill du placera ikonerna i behållaren på dockan igen\n"
 "(annars kommer de att tas bort)?"
 
-#: ../src/cairo-dock-menu.c:541
+#: ../src/cairo-dock-menu.c:535
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:558
+#: ../src/cairo-dock-menu.c:552
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:599
+#: ../src/cairo-dock-menu.c:593
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:751
+#: ../src/cairo-dock-menu.c:745
 #, c-format
 msgid ""
 "You're about deleting this file\n"
@@ -372,7 +406,7 @@ msgstr ""
 "(%s)\n"
 "kommer att raderas från datorn. Vill du fortsätta?"
 
-#: ../src/cairo-dock-menu.c:760
+#: ../src/cairo-dock-menu.c:754
 msgid ""
 "Warning: could not delete this file.\n"
 "Please check file permissions."
@@ -380,11 +414,11 @@ msgstr ""
 "Varning: kunde inte radera filen.\n"
 "Kontrollera att du har skrivrättigheter för den."
 
-#: ../src/cairo-dock-menu.c:779
+#: ../src/cairo-dock-menu.c:773
 msgid "Rename to:"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:786
+#: ../src/cairo-dock-menu.c:780
 #, c-format
 msgid ""
 "Warning: could not rename %s.\n"
@@ -395,12 +429,12 @@ msgstr ""
 "Kontrollera att du har skrivrättigheter för filen\n"
 "och att filen inte redan existerar."
 
-#: ../src/cairo-dock-menu.c:827
+#: ../src/cairo-dock-menu.c:821
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Programstartaren (%s) kommer att tas bort från docken. Är du säker?"
 
-#: ../src/cairo-dock-menu.c:962
+#: ../src/cairo-dock-menu.c:956
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -408,245 +442,245 @@ msgstr ""
 "Tyvärr, kunde inte hitta motsvarande beskrivningsfil.\n"
 "Överväg Drag-och-släpp av programstartaren från menyn Program."
 
-#: ../src/cairo-dock-menu.c:1194
+#: ../src/cairo-dock-menu.c:1188
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Flytta allt till skrivbord %d - yta %d"
 
-#: ../src/cairo-dock-menu.c:1194
+#: ../src/cairo-dock-menu.c:1188
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Flytta till skrivbord %d - yta %d"
 
-#: ../src/cairo-dock-menu.c:1196
+#: ../src/cairo-dock-menu.c:1190
 #, c-format
 msgid "Move all to desktop %d"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1196
+#: ../src/cairo-dock-menu.c:1190
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Flyyta till skrivbord %d"
 
-#: ../src/cairo-dock-menu.c:1198
+#: ../src/cairo-dock-menu.c:1192
 #, c-format
 msgid "Move all to face %d"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1198
+#: ../src/cairo-dock-menu.c:1192
 #, c-format
 msgid "Move to face %d"
 msgstr "Flytta till yta %d"
 
-#: ../src/cairo-dock-menu.c:1235
+#: ../src/cairo-dock-menu.c:1229
 msgid "Add"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1239
+#: ../src/cairo-dock-menu.c:1233
 msgid "Add a sub-dock"
 msgstr "Lägg till sub-docka"
 
-#: ../src/cairo-dock-menu.c:1241
+#: ../src/cairo-dock-menu.c:1235
 msgid "Add a main dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1244
+#: ../src/cairo-dock-menu.c:1238
 msgid "Add a separator"
 msgstr "Lägg till avgränsare"
 
-#: ../src/cairo-dock-menu.c:1246
+#: ../src/cairo-dock-menu.c:1242
 msgid "Add a custom launcher"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1247
+#: ../src/cairo-dock-menu.c:1243
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1284
+#: ../src/cairo-dock-menu.c:1281
 msgid "Unmount"
 msgstr "Avmontera"
 
-#: ../src/cairo-dock-menu.c:1284
+#: ../src/cairo-dock-menu.c:1281
 msgid "Mount"
 msgstr "Montera"
 
-#: ../src/cairo-dock-menu.c:1290
+#: ../src/cairo-dock-menu.c:1287
 msgid "Eject"
 msgstr "Mata ut"
 
-#: ../src/cairo-dock-menu.c:1299
+#: ../src/cairo-dock-menu.c:1296
 msgid "Delete this file"
 msgstr "Radera filen"
 
-#: ../src/cairo-dock-menu.c:1303
+#: ../src/cairo-dock-menu.c:1300
 msgid "Rename this file"
 msgstr "Byt namn på filen"
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1304
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: ../src/cairo-dock-menu.c:1328
+#: ../src/cairo-dock-menu.c:1325
 msgid "Modify this separator"
 msgstr "Redigera avgränsaren"
 
-#: ../src/cairo-dock-menu.c:1328
+#: ../src/cairo-dock-menu.c:1325
 msgid "Modify this launcher"
 msgstr "Redigera denna programstartare"
 
-#: ../src/cairo-dock-menu.c:1330
+#: ../src/cairo-dock-menu.c:1327
 msgid "Remove this separator"
 msgstr "Ta bort avgränsaren"
 
-#: ../src/cairo-dock-menu.c:1330
+#: ../src/cairo-dock-menu.c:1327
 msgid "Remove this launcher"
 msgstr "Ta bort"
 
-#: ../src/cairo-dock-menu.c:1331
+#: ../src/cairo-dock-menu.c:1328
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1333 ../src/cairo-dock-menu.c:1478
+#: ../src/cairo-dock-menu.c:1330 ../src/cairo-dock-menu.c:1475
 msgid "Move to another dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1337 ../src/cairo-dock-menu.c:1482
+#: ../src/cairo-dock-menu.c:1334 ../src/cairo-dock-menu.c:1479
 msgid "New main dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1351 ../src/cairo-dock-menu.c:1425
+#: ../src/cairo-dock-menu.c:1348 ../src/cairo-dock-menu.c:1422
 msgid "Other actions"
 msgstr "Andra aktiviteter"
 
-#: ../src/cairo-dock-menu.c:1356
+#: ../src/cairo-dock-menu.c:1353
 msgid "Move to this desktop"
 msgstr "Flytta till detta skrivbord"
 
-#: ../src/cairo-dock-menu.c:1370
+#: ../src/cairo-dock-menu.c:1367
 msgid "Not Fullscreen"
 msgstr "Återställ"
 
-#: ../src/cairo-dock-menu.c:1370
+#: ../src/cairo-dock-menu.c:1367
 msgid "Fullscreen"
 msgstr "Helskärm"
 
-#: ../src/cairo-dock-menu.c:1374
+#: ../src/cairo-dock-menu.c:1371
 msgid "Don't keep above"
 msgstr "Placera inte överst"
 
-#: ../src/cairo-dock-menu.c:1374
+#: ../src/cairo-dock-menu.c:1371
 msgid "Keep above"
 msgstr "Placera överst"
 
-#: ../src/cairo-dock-menu.c:1393
+#: ../src/cairo-dock-menu.c:1390
 msgid "Remove custom icon"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1397
+#: ../src/cairo-dock-menu.c:1394
 msgid "Kill"
 msgstr "Döda"
 
-#: ../src/cairo-dock-menu.c:1402
+#: ../src/cairo-dock-menu.c:1399
 msgid "Launch a new (Shift+clic)"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1407
+#: ../src/cairo-dock-menu.c:1404
 msgid "Make it a launcher"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1410
+#: ../src/cairo-dock-menu.c:1407
 msgid "Show"
 msgstr "Visa"
 
-#: ../src/cairo-dock-menu.c:1412
+#: ../src/cairo-dock-menu.c:1409
 msgid "Unmaximise"
 msgstr "Återställ"
 
-#: ../src/cairo-dock-menu.c:1412
+#: ../src/cairo-dock-menu.c:1409
 msgid "Maximise"
 msgstr "Maximera"
 
-#: ../src/cairo-dock-menu.c:1415
+#: ../src/cairo-dock-menu.c:1412
 msgid "Minimise"
 msgstr "Minimera"
 
-#: ../src/cairo-dock-menu.c:1417
+#: ../src/cairo-dock-menu.c:1414
 msgid "Close (middle-click)"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1430
+#: ../src/cairo-dock-menu.c:1427
 msgid "Move all to this desktop"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1436
+#: ../src/cairo-dock-menu.c:1433
 msgid "Launch new"
 msgstr "Starta ny"
 
-#: ../src/cairo-dock-menu.c:1439
+#: ../src/cairo-dock-menu.c:1436
 msgid "Show all"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1441
+#: ../src/cairo-dock-menu.c:1438
 msgid "Minimise all"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1443
+#: ../src/cairo-dock-menu.c:1440
 msgid "Close all"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1462 ../src/gldit/cairo-dock-gui-factory.c:926
+#: ../src/cairo-dock-menu.c:1459 ../src/gldit/cairo-dock-gui-factory.c:925
 msgid "Configure this applet"
 msgstr "Redigera"
 
-#: ../src/cairo-dock-menu.c:1466
+#: ../src/cairo-dock-menu.c:1463
 msgid "Detach this applet"
 msgstr "Koppla loss"
 
-#: ../src/cairo-dock-menu.c:1466
+#: ../src/cairo-dock-menu.c:1463
 msgid "Return to the dock"
 msgstr "Fäst vid dockan"
 
-#: ../src/cairo-dock-menu.c:1469
+#: ../src/cairo-dock-menu.c:1466
 msgid "Remove this applet"
 msgstr "Ta bort"
 
-#: ../src/cairo-dock-menu.c:1473
+#: ../src/cairo-dock-menu.c:1470
 msgid "Launch another instance of this applet"
 msgstr "Starta kopia"
 
-#: ../src/cairo-dock-menu.c:1495
+#: ../src/cairo-dock-menu.c:1492
 #: ../src/gldit/cairo-dock-internal-accessibility.c:277
 msgid "Visibility"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1510
+#: ../src/cairo-dock-menu.c:1507
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-menu.c:1516 ../data/messages:21 ../data/messages:195
+#: ../src/cairo-dock-menu.c:1513 ../data/messages:21 ../data/messages:195
 #: ../data/messages:1361
 msgid "Always on top"
 msgstr "Alltid överst"
 
-#: ../src/cairo-dock-menu.c:1523
+#: ../src/cairo-dock-menu.c:1520
 msgid "Always below"
 msgstr "Alltid under"
 
-#: ../src/cairo-dock-menu.c:1536
+#: ../src/cairo-dock-menu.c:1533
 msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "Ange beteendet i Compiz med: (name=cairo-dock & type=utility)"
 
-#: ../src/cairo-dock-menu.c:1538
+#: ../src/cairo-dock-menu.c:1535
 msgid "Reserve space"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1545
+#: ../src/cairo-dock-menu.c:1542
 msgid "On all desktops"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1551
+#: ../src/cairo-dock-menu.c:1548
 msgid "Lock position"
 msgstr ""
 
@@ -661,17 +695,17 @@ msgid ""
 "It is located in the 'Taskbar' module."
 msgstr ""
 
-#: ../src/cairo-dock.c:256
+#: ../src/cairo-dock.c:250
 msgid ""
 "A useful FAQ which also contains a lot of hints.\n"
 "Roll your mouse over a sentence to make helpful popups appear."
 msgstr ""
 
-#: ../src/cairo-dock.c:518
+#: ../src/cairo-dock.c:574
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Använd OpenGL för Cairo-Dock?"
 
-#: ../src/cairo-dock.c:526
+#: ../src/cairo-dock.c:582
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -693,7 +727,41 @@ msgstr ""
 "Program\n"
 "  eller med flaggan -o för OpenGL eller -c utan OpenGL.)"
 
-#: ../src/cairo-dock.c:666
+#: ../src/cairo-dock.c:587
+#, fuzzy
+msgid "Remember this choice"
+msgstr "Byt namn på filen"
+
+#: ../src/cairo-dock.c:757
+#, fuzzy
+msgid "Don't ask me any more"
+msgstr "Placera inte överst"
+
+#: ../src/cairo-dock.c:762
+msgid ""
+"To remove the black rectangle around the dock, you will need to activate a "
+"composite manager.\n"
+"For instance, this can be done by activating desktop effects, launching "
+"Compiz, or activating the composition in Metacity.\n"
+"I can perform this last operation for you. Do you want to proceed ?"
+msgstr ""
+
+#: ../src/cairo-dock.c:774
+msgid "Do you want to keep this setting?"
+msgstr ""
+
+#: ../src/cairo-dock.c:780
+msgid ""
+"To remove the black rectangle around the dock, you will need to activate a "
+"composite manager.\n"
+"For instance, this can be done by activating desktop effects, launching "
+"Compiz, or activating the composition in Metacity.\n"
+"If your machine can't support composition, Cairo-Dock can emulate it. This "
+"option is in the 'System' module of the configuration, at the bottom of the "
+"page."
+msgstr ""
+
+#: ../src/cairo-dock.c:812
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "A default and simple theme has been loaded.\n"
@@ -706,31 +774,7 @@ msgid ""
 "  (you can now click on this dialog to close it)"
 msgstr ""
 
-#: ../src/cairo-dock.c:678
-msgid ""
-"To remove the black rectangle around the dock, you will need to activate a "
-"composite manager.\n"
-"For instance, this can be done by activating desktop effects, launching "
-"Compiz, or activating the composition in Metacity.\n"
-"I can perform this last operation for you. Do you want to proceed ?"
-msgstr ""
-
-#: ../src/cairo-dock.c:682
-msgid "Do you want to keep this setting?"
-msgstr ""
-
-#: ../src/cairo-dock.c:687
-msgid ""
-"To remove the black rectangle around the dock, you will need to activate a "
-"composite manager.\n"
-"For instance, this can be done by activating desktop effects, launching "
-"Compiz, or activating the composition in Metacity.\n"
-"If your machine can't support composition, Cairo-Dock can emulate it. This "
-"option is in the 'System' module of the configuration, at the bottom of the "
-"page."
-msgstr ""
-
-#: ../src/cairo-dock.c:694
+#: ../src/cairo-dock.c:836
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -756,73 +800,73 @@ msgstr ""
 msgid "Applet's handbook"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-file-manager.c:522
-#: ../src/gldit/cairo-dock-file-manager.c:570
+#: ../src/gldit/cairo-dock-file-manager.c:530
+#: ../src/gldit/cairo-dock-file-manager.c:578
 #, c-format
 msgid "%s is now mounted"
 msgstr "%s är nu monterad"
 
-#: ../src/gldit/cairo-dock-file-manager.c:570
+#: ../src/gldit/cairo-dock-file-manager.c:578
 #, c-format
 msgid "%s is now unmounted"
 msgstr "%s är nu avmonterad"
 
-#: ../src/gldit/cairo-dock-file-manager.c:589
+#: ../src/gldit/cairo-dock-file-manager.c:597
 #, c-format
 msgid "failed to mount %s"
 msgstr "misslyckades med att montera %s"
 
-#: ../src/gldit/cairo-dock-file-manager.c:589
+#: ../src/gldit/cairo-dock-file-manager.c:597
 #, c-format
 msgid "Failed to unmount %s"
 msgstr "misslyckades med att avmontera %s"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:832
+#: ../src/gldit/cairo-dock-gui-factory.c:831
 msgid "_Custom Icons_"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1227
+#: ../src/gldit/cairo-dock-gui-factory.c:1246
 msgid "Accessory"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1237
+#: ../src/gldit/cairo-dock-gui-factory.c:1256
 msgid "Controller"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1242
+#: ../src/gldit/cairo-dock-gui-factory.c:1261
 msgid "Plug-in"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1273
+#: ../src/gldit/cairo-dock-gui-factory.c:1292
 msgid "rate me"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1293
+#: ../src/gldit/cairo-dock-gui-factory.c:1312
 msgid "Local"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1297
+#: ../src/gldit/cairo-dock-gui-factory.c:1316
 msgid "User"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1301
+#: ../src/gldit/cairo-dock-gui-factory.c:1320
 msgid "Net"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1305
+#: ../src/gldit/cairo-dock-gui-factory.c:1324
 msgid "New"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1310
+#: ../src/gldit/cairo-dock-gui-factory.c:1329
 msgid "Updated"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1406
-#: ../src/gldit/cairo-dock-gui-factory.c:1408
+#: ../src/gldit/cairo-dock-gui-factory.c:1425
+#: ../src/gldit/cairo-dock-gui-factory.c:1427
 msgid "You must try the theme before you can rate it."
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1431
+#: ../src/gldit/cairo-dock-gui-factory.c:1450
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -833,60 +877,51 @@ msgstr ""
 "Se till att installera samma version som Cairo-Dock har för att medge dessa "
 "egenskaper."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1440
+#: ../src/gldit/cairo-dock-gui-factory.c:1459
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2102
+#: ../src/gldit/cairo-dock-gui-factory.c:2125
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2162
-msgid "Animation:"
-msgstr ""
-
-#: ../src/gldit/cairo-dock-gui-factory.c:2181
-msgid "Effects:"
-msgstr ""
-
-#: ../src/gldit/cairo-dock-gui-factory.c:2318
+#: ../src/gldit/cairo-dock-gui-factory.c:2263
 msgid "plug-in"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2324
+#: ../src/gldit/cairo-dock-gui-factory.c:2269
 msgid "category"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2367
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+#: ../src/gldit/cairo-dock-gui-factory.c:2312
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2734
+#: ../src/gldit/cairo-dock-gui-factory.c:2679
 msgid "state"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2740
+#: ../src/gldit/cairo-dock-gui-factory.c:2685
 msgid "Theme"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2753
+#: ../src/gldit/cairo-dock-gui-factory.c:2698
 msgid "Rating"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2759
+#: ../src/gldit/cairo-dock-gui-factory.c:2704
 msgid "Sobriety"
 msgstr "avhållsamhet"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2845
+#: ../src/gldit/cairo-dock-gui-factory.c:2790
 msgid "link"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2898
+#: ../src/gldit/cairo-dock-gui-factory.c:2843
 msgid "Grab"
 msgstr "greppa"
 
@@ -933,23 +968,6 @@ msgstr "Dialogrutor"
 #: ../src/gldit/cairo-dock-internal-dialogs.c:123
 msgid "Configure text bubble appearance."
 msgstr "Ställ in utseendet på dialog-bubblorna."
-
-#: ../src/gldit/cairo-dock-internal-icons.c:444
-msgid "Provides various animations for your icons."
-msgstr "Den levererar många animationer till dina ikoner."
-
-#: ../src/gldit/cairo-dock-internal-icons.c:446 ../data/messages:85
-#: ../data/messages:633 ../data/messages:945
-msgid "Icons"
-msgstr "Ikoner"
-
-#: ../src/gldit/cairo-dock-internal-icons.c:448
-msgid ""
-"All about icons:\n"
-" size, reflection, icon theme,..."
-msgstr ""
-"Allt om ikoner:\n"
-" storlek, reflexer, ikon teman, ..."
 
 #: ../src/gldit/cairo-dock-internal-indicators.c:168 ../data/messages:751
 msgid "Indicators"
@@ -1012,28 +1030,28 @@ msgstr "Utseende"
 msgid "Select a view for each of your docks."
 msgstr "Välj ett utseende på var och en av dina dockar."
 
-#: ../src/gldit/cairo-dock-struct.h:451
+#: ../src/gldit/cairo-dock-struct.h:454
 msgid "Default"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-themes-manager.c:868
+#: ../src/gldit/cairo-dock-themes-manager.c:869
 #, c-format
 msgid "Are you sure you want to overwrite theme %s?"
 msgstr "Är du säker på att du vill skriva över tema %s?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:981
+#: ../src/gldit/cairo-dock-themes-manager.c:982
 #, c-format
 msgid ""
 "Could not access remote file %s/%s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
 
-#: ../src/gldit/cairo-dock-themes-manager.c:996
+#: ../src/gldit/cairo-dock-themes-manager.c:997
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "Är du säker på att du vill radera temat %s?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:998
+#: ../src/gldit/cairo-dock-themes-manager.c:999
 msgid "Are you sure you want to delete these themes?"
 msgstr ""
 
@@ -1202,14 +1220,6 @@ msgstr ""
 
 #: ../data/messages:75
 msgid "Icons' animations and effects"
-msgstr ""
-
-#: ../data/messages:77
-msgid "On mouse hover:"
-msgstr ""
-
-#: ../data/messages:79
-msgid "On click:"
 msgstr ""
 
 #: ../data/messages:81
@@ -2128,8 +2138,7 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:647
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:649
@@ -2239,44 +2248,44 @@ msgid "Icon size at rest (width x height) :"
 msgstr "Ikonstorlek i vila (bredd x höjd):"
 
 #: ../data/messages:703
+msgid "Force separator's image size to stay constant?"
+msgstr "Tvinga fast bildstorlek?"
+
+#: ../data/messages:705
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
 msgstr ""
 
-#: ../data/messages:705
+#: ../data/messages:707
 msgid "How to draw the separators?"
 msgstr ""
 
-#: ../data/messages:707
+#: ../data/messages:709
 msgid "Use an image."
 msgstr ""
 
-#: ../data/messages:709
+#: ../data/messages:711
 msgid "Flat separator"
 msgstr ""
 
-#: ../data/messages:711
+#: ../data/messages:713
 msgid "Physical separator"
 msgstr ""
 
-#: ../data/messages:713
+#: ../data/messages:715
 msgid "If you don't provide one, blanks will be used."
 msgstr "Om du inte anger något, kommer blanka att användas."
 
-#: ../data/messages:715
+#: ../data/messages:717
 msgid "Filename of an image to use for separators :"
 msgstr "Bild att använda som avgränsare:"
 
-#: ../data/messages:717
+#: ../data/messages:719
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr "Rotera bilden när dockan flyttas till andra skärmkanter?"
-
-#: ../data/messages:719
-msgid "Force separator's image size to stay constant?"
-msgstr "Tvinga fast bildstorlek?"
 
 #: ../data/messages:721
 msgid "Colour of flat separators :"
@@ -2429,8 +2438,8 @@ msgstr ""
 
 #: ../data/messages:801
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 
 #: ../data/messages:803
@@ -2749,8 +2758,8 @@ msgstr ""
 
 #: ../data/messages:973
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an explosion "
-"!"
+"Just drag and drop them out of the dock, they will disappear in an "
+"explosion !"
 msgstr ""
 
 #: ../data/messages:975
@@ -2765,8 +2774,8 @@ msgstr ""
 
 #: ../data/messages:979
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by type "
-": launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by "
+"type : launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -3117,8 +3126,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-"
-"dock/current_theme/icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
+"icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3191,9 +3200,9 @@ msgstr ""
 
 #: ../data/messages:1129
 msgid ""
-"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will "
-"no longer work. This applet lets you configure a shortcut to pop up the menu "
-"at the mouse's location."
+"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will no "
+"longer work. This applet lets you configure a shortcut to pop up the menu at "
+"the mouse's location."
 msgstr ""
 
 #: ../data/messages:1131
@@ -3331,11 +3340,10 @@ msgstr ""
 
 #: ../data/messages:1185
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components_list/panel, and replace its "
-"content with \"cairo-dock\". This will not launch the dock on start-up, but "
-"just prevent the gnome-panel from launching, so don't forget to add Cairo-"
-"Dock on startup.\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/"
+"required_components_list/panel, and replace its content with \"cairo-dock\". "
+"This will not launch the dock on start-up, but just prevent the gnome-panel "
+"from launching, so don't forget to add Cairo-Dock on startup.\n"
 "Then restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3354,8 +3362,8 @@ msgstr ""
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Cairo-Penguin, Weather, Netspeed, ...\n"
-"Right click on the applet's icon, and select «launch another instance». A "
-"new instance of this applet appears in the main dock.\n"
+"Right click on the applet's icon, and select «launch another instance». A new "
+"instance of this applet appears in the main dock.\n"
 "You can configure this new applet just like any other."
 msgstr ""
 
@@ -3436,16 +3444,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
-"window</b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
-"area</b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
-"browser</b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
+"b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
+"b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
+"b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
-"history</b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
+"b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3487,8 +3495,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1241
@@ -3602,8 +3610,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-"
-"dock.org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-dock."
+"org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3690,8 +3698,7 @@ msgid "Run in a terminal ?"
 msgstr ""
 
 #: ../data/messages:1327
-msgid ""
-"Choose the screen border relative to which the dock will be positioned:"
+msgid "Choose the screen border relative to which the dock will be positioned:"
 msgstr ""
 
 #: ../data/messages:1341
@@ -4017,8 +4024,8 @@ msgstr ""
 #: ../data/messages:1599
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
-":\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
+"you :\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4027,8 +4034,8 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
-":\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
+"you :\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4117,8 +4124,8 @@ msgstr ""
 #: ../data/messages:1611
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
-"!)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
+"that !)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4193,7 +4200,8 @@ msgstr ""
 #~ msgstr "Lägg till manuell startare"
 
 #~ msgid ""
-#~ "Don't forget you can drag a launcher from the menu and drop it in the dock !"
+#~ "Don't forget you can drag a launcher from the menu and drop it in the "
+#~ "dock !"
 #~ msgstr ""
 #~ "Glöm inte att du kan dra en startare från menyn och släppa den i dockan!"
 
@@ -4207,8 +4215,8 @@ msgstr ""
 #~ "You are running Cairo-Dock in safe mode.\n"
 #~ "Why ? Probably because a plug-in has messed into your dock,\n"
 #~ " or maybe your theme has got corrupted.\n"
-#~ "So, no plug-in will be available, and you can now save your current theme if "
-#~ "you want\n"
+#~ "So, no plug-in will be available, and you can now save your current theme "
+#~ "if you want\n"
 #~ " before you start using the dock.\n"
 #~ "Try with your current theme, if it works, it means a plug-in is wrong.\n"
 #~ "Otherwise, try with another theme.\n"
@@ -4227,24 +4235,24 @@ msgstr ""
 #~ "inte fungerar korrekt."
 
 #~ msgid ""
-#~ "The dock will automatically resize itself to fit this size. Set it to 0 to "
-#~ "make the dock fit the screen's size."
+#~ "The dock will automatically resize itself to fit this size. Set it to 0 "
+#~ "to make the dock fit the screen's size."
 #~ msgstr ""
 #~ "Dockan kommer att justera sin storlek automatiskt för att matcha angivet "
 #~ "värde. Sätt storlek till 0 för att anpassa storleken till skärmen."
 
 #~ msgid ""
-#~ "This will prevent other windows from overlapping the dock. It has no effect "
-#~ "if you defined the 'show/hide' shortcut below, cause then the dock behaves "
-#~ "like a menu."
+#~ "This will prevent other windows from overlapping the dock. It has no "
+#~ "effect if you defined the 'show/hide' shortcut below, cause then the dock "
+#~ "behaves like a menu."
 #~ msgstr ""
 #~ "Hindrar andra fönster från att överlappa dockan. Har ingen effekt om "
 #~ "tangentkombination för 'visa/dölj' angetts nedan."
 
 #~ msgid ""
 #~ "The dock will pop-up on the foreground when you place the mouse on its "
-#~ "screen border. This option is only useful if you don't want to reserve space "
-#~ "for the dock, nor to activate auto-hide."
+#~ "screen border. This option is only useful if you don't want to reserve "
+#~ "space for the dock, nor to activate auto-hide."
 #~ msgstr ""
 #~ "Dockan kommer att visas i förgrunden när musen placeras vid skärmkanten. "
 #~ "Endast användbart om ingen yta reserverats eller om dölj automatiskt är "
@@ -4254,9 +4262,9 @@ msgstr ""
 #~ msgstr "Gruppera program med samma PID?"
 
 #~ msgid ""
-#~ "This allows to group windows in some soft like Gimp, and to have only 1 icon "
-#~ "in the main dock.The 1st window will appear in the main dock, and the others "
-#~ "will be placed in a container associated with this 1st icon."
+#~ "This allows to group windows in some soft like Gimp, and to have only 1 "
+#~ "icon in the main dock.The 1st window will appear in the main dock, and "
+#~ "the others will be placed in a container associated with this 1st icon."
 #~ msgstr ""
 #~ "Detta gör att program som har flera fönster (t ex Gimp) kan visas med en "
 #~ "ikon i dockan. Övriga fönster visas i en behållare länkad till ikonen."
@@ -4269,10 +4277,12 @@ msgstr ""
 
 #~ msgid ""
 #~ "This is only usefull if don't already use the auto-hide, and if you don't "
-#~ "want to reserve the space for your dock nor let it below the other windows."
+#~ "want to reserve the space for your dock nor let it below the other "
+#~ "windows."
 #~ msgstr ""
 #~ "Detta är bara användbart om du inte använder dölj automatiskt och du inte "
-#~ "vill reservera yta för dockan samt vill placera dockan framför andra fönster."
+#~ "vill reservera yta för dockan samt vill placera dockan framför andra "
+#~ "fönster."
 
 #~ msgid "Automatically quick-hide the dock when a window becomes maximized ?"
 #~ msgstr "Dölj dockan automatiskt när ett fönster maximeras?"
@@ -4281,14 +4291,15 @@ msgstr ""
 #~ msgstr "Visa meddelande när ett program behöver din uppmärksamhet?"
 
 #~ msgid ""
-#~ "To the right, you can control the transparency of minimized windows, to the "
-#~ "left the transparency of visible windows. The more you go aside, the more "
-#~ "the concerned icons will be transparent; on the middle, icons are always "
-#~ "plain."
+#~ "To the right, you can control the transparency of minimized windows, to "
+#~ "the left the transparency of visible windows. The more you go aside, the "
+#~ "more the concerned icons will be transparent; on the middle, icons are "
+#~ "always plain."
 #~ msgstr ""
 #~ "Flytta åt höger för att göra ikonen för ett minimerat fönster mer "
-#~ "genomskinlig, flytta åt vänster för att göra ikonen för ett synligt fönster "
-#~ "mer genomskinlig. Sätt reglaget i mitten för att inaktivera genomskinlighet."
+#~ "genomskinlig, flytta åt vänster för att göra ikonen för ett synligt "
+#~ "fönster mer genomskinlig. Sätt reglaget i mitten för att inaktivera "
+#~ "genomskinlighet."
 
 #~ msgid "Movement parameters"
 #~ msgstr "Animeringar"
@@ -4303,11 +4314,12 @@ msgstr ""
 #~ msgstr "Bläddringsfaktor för bakgrundsdekorationer:"
 
 #~ msgid ""
-#~ "Otherwise the amount of movement of the decorations will only depend on the "
-#~ "direction of the cursor's movement, as if the decorations were \"gliding\"."
+#~ "Otherwise the amount of movement of the decorations will only depend on "
+#~ "the direction of the cursor's movement, as if the decorations were "
+#~ "\"gliding\"."
 #~ msgstr ""
-#~ "Annars beror dekorationernas rörelser enbart på musens rörelser, dvs det ser "
-#~ "ut som de \"glider\"."
+#~ "Annars beror dekorationernas rörelser enbart på musens rörelser, dvs det "
+#~ "ser ut som de \"glider\"."
 
 #~ msgid "Should the decorations be enslaved to the cursor ?"
 #~ msgstr "Lås dekorationer till musen?"
@@ -4319,8 +4331,8 @@ msgstr ""
 #~ msgstr "Visa etikett endast för aktuell ikon?"
 
 #~ msgid ""
-#~ "Use it when the image is an arrow pointing to the center of the screen for "
-#~ "exemple."
+#~ "Use it when the image is an arrow pointing to the center of the screen "
+#~ "for exemple."
 #~ msgstr "Använd om bilden är t ex en pil sm pekar in mot mitten av skärmen."
 
 #~ msgid "Bright color (red, green, blue, alpha) :"
@@ -4342,8 +4354,8 @@ msgstr ""
 #~ msgid ""
 #~ "1 pattern contains N stripes, so the width can be less or equal than 1/N."
 #~ msgstr ""
-#~ "Ett mönster innehåller N ränder, så bredden kan vara mindre eller lika med "
-#~ "1/N."
+#~ "Ett mönster innehåller N ränder, så bredden kan vara mindre eller lika "
+#~ "med 1/N."
 
 #~ msgid "Width of the stripes, in percentage of the pattern size :"
 #~ msgstr "Rändernas bredd i procent av mönsterstorleken:"
@@ -4369,21 +4381,21 @@ msgstr ""
 
 #~ msgid ""
 #~ "Separators are icons used to make a separation between different types of "
-#~ "icons. Cairo-dock can automatically add them between launchers, applis, and "
-#~ "applets."
+#~ "icons. Cairo-dock can automatically add them between launchers, applis, "
+#~ "and applets."
 #~ msgstr ""
-#~ "Avgränsare är bilder som används för att skilja olika typer av ikoner. Cairo-"
-#~ "Dock kan skapa avgränsare automatiskt."
+#~ "Avgränsare är bilder som används för att skilja olika typer av ikoner. "
+#~ "Cairo-Dock kan skapa avgränsare automatiskt."
 
 #~ msgid "Automatically add separators ?"
 #~ msgstr "Skapa avgränsare automatiskt?"
 
 #~ msgid ""
-#~ "This parameter will overwrite the previously defined order, to allow you to "
-#~ "mix applets and launchers into the dock."
+#~ "This parameter will overwrite the previously defined order, to allow you "
+#~ "to mix applets and launchers into the dock."
 #~ msgstr ""
-#~ "Denna inställning kan påverka tidigare angiven sortering för att applets och "
-#~ "startare ska kunna blandas i dockan."
+#~ "Denna inställning kan påverka tidigare angiven sortering för att applets "
+#~ "och startare ska kunna blandas i dockan."
 
 #~ msgid "Allow applets to be placed amongst launchers ?"
 #~ msgstr "Tillåt applets bland startare?"
@@ -4452,16 +4464,17 @@ msgstr ""
 #~ msgstr "Bild för låsning:"
 
 #~ msgid ""
-#~ "Use this option for exemple if the launcher launches a script in a terminal "
-#~ "but you don't want it to steal normal terminal's icons from the TaskBar, or "
-#~ "if you explicitely want to use the original icon of the TaskBar because it "
-#~ "provides some info, for exemple Pidgin's icons represent the avatar of the "
-#~ "contact."
+#~ "Use this option for exemple if the launcher launches a script in a "
+#~ "terminal but you don't want it to steal normal terminal's icons from the "
+#~ "TaskBar, or if you explicitely want to use the original icon of the "
+#~ "TaskBar because it provides some info, for exemple Pidgin's icons "
+#~ "represent the avatar of the contact."
 #~ msgstr ""
-#~ "Använd inställningen om startaren t ex kör ett skript i ett terminalfönster "
-#~ "men du vill inte stjäla terminalikonen från aktivitetsfältet eller om ikonen "
-#~ "i aktivitetsfältet innehåller speciell information som du vill använda dig "
-#~ "av (t ex så visar Pidgin status genom att byta ikonen i aktivitetsfältet)."
+#~ "Använd inställningen om startaren t ex kör ett skript i ett "
+#~ "terminalfönster men du vill inte stjäla terminalikonen från "
+#~ "aktivitetsfältet eller om ikonen i aktivitetsfältet innehåller speciell "
+#~ "information som du vill använda dig av (t ex så visar Pidgin status genom "
+#~ "att byta ikonen i aktivitetsfältet)."
 
 #~ msgid "unmounted"
 #~ msgstr "avmonterad"
@@ -4470,20 +4483,21 @@ msgstr ""
 #~ msgstr "avmontera"
 
 #~ msgid ""
-#~ "in percentage of the distance it can move at each step . After n steps, the "
-#~ "remaining distance will be reduced by (1-s)^n."
+#~ "in percentage of the distance it can move at each step . After n steps, "
+#~ "the remaining distance will be reduced by (1-s)^n."
 #~ msgstr ""
-#~ "I procent av avståndet för varje steg. Efter N steg minskas det återstående "
-#~ "avståndet med (1-s)^N."
+#~ "I procent av avståndet för varje steg. Efter N steg minskas det "
+#~ "återstående avståndet med (1-s)^N."
 
 #~ msgid "Mouse"
 #~ msgstr "Mus"
 
 #~ msgid ""
-#~ "If you put 0, this will make them scroll of exactly one icon each time. If "
-#~ "you put -1, the scroll wil be de-activated"
+#~ "If you put 0, this will make them scroll of exactly one icon each time. "
+#~ "If you put -1, the scroll wil be de-activated"
 #~ msgstr ""
-#~ "Ange 0 för att bläddra en ikon per mushjulssteg. Ange -1 för att inaktivera."
+#~ "Ange 0 för att bläddra en ikon per mushjulssteg. Ange -1 för att "
+#~ "inaktivera."
 
 #~ msgid "Amount of pixels the icons will scroll at each wheel scroll :"
 #~ msgstr "Antal platser ikonerna flyttas vid varje mushjulsteg:"
@@ -4501,8 +4515,8 @@ msgstr ""
 #~ msgstr "Välj användbara tillbehör!"
 
 #~ msgid ""
-#~ "Just check the box to activate a plug-in, or uncheck to deactivate it. Once "
-#~ "activated, you can use it and configure it."
+#~ "Just check the box to activate a plug-in, or uncheck to deactivate it. "
+#~ "Once activated, you can use it and configure it."
 #~ msgstr ""
 #~ "Markera för att aktivera. Klicka på Inställningar för att konfigurera "
 #~ "appleten."
@@ -4529,8 +4543,8 @@ msgstr ""
 #~ msgstr "Placera musen i zonen för att visa dockan."
 
 #~ msgid ""
-#~ "Any format allowed; let this field empty to have an invisible callback zone. "
-#~ "The callback zone is what you see when the dock hides itselfs."
+#~ "Any format allowed; let this field empty to have an invisible callback "
+#~ "zone. The callback zone is what you see when the dock hides itselfs."
 #~ msgstr "Alla format stöds: lämna tomt för att dölja aktiveringszonen."
 
 #~ msgid "Filename of an image to put on the callback zone :"
@@ -4539,8 +4553,10 @@ msgstr ""
 #~ msgid "Transparency of the callback zone :"
 #~ msgstr "Genomskinlighet för zonen:"
 
-#~ msgid "Rotate the callback zone's image when the dock is on top/left/right ?"
-#~ msgstr "Rotera bilden automatiskt när dockan flyttas till andra skärmkanter?"
+#~ msgid ""
+#~ "Rotate the callback zone's image when the dock is on top/left/right ?"
+#~ msgstr ""
+#~ "Rotera bilden automatiskt när dockan flyttas till andra skärmkanter?"
 
 #~ msgid "Wave's shape"
 #~ msgstr "Vågform"
@@ -4549,15 +4565,16 @@ msgstr ""
 #~ msgstr "Maximal zoom är 1+C"
 
 #~ msgid ""
-#~ "More precisely, it is the fraction of the max icon height that will be used "
-#~ "to draw reflect. So setting it to 0.33 will mean that 33% of the icons will "
-#~ "reflect on the ground, and the icons will be placed at the right distance "
-#~ "from the front border of the frame so that the reflect is fully visible."
+#~ "More precisely, it is the fraction of the max icon height that will be "
+#~ "used to draw reflect. So setting it to 0.33 will mean that 33% of the "
+#~ "icons will reflect on the ground, and the icons will be placed at the "
+#~ "right distance from the front border of the frame so that the reflect is "
+#~ "fully visible."
 #~ msgstr ""
 #~ "Mer exakt är det fraktionen av den maximala ikonstorleken som används för "
 #~ "att rita reflektioner. Värdet 0.33 betyder att 33% av ikonen kommer att "
-#~ "reflekteras på ytan och ikonen placeras på rätt avstånd från framkanten för "
-#~ "att visa reflektionen i sin helhet."
+#~ "reflekteras på ytan och ikonen placeras på rätt avstånd från framkanten "
+#~ "för att visa reflektionen i sin helhet."
 
 #~ msgid "Field depth of the view:"
 #~ msgstr "Fältdjup för vyn:"
@@ -4596,8 +4613,8 @@ msgstr ""
 #~ "Typically an arrow, that will be displayed when you try to drop a new "
 #~ "launcher into the dock. Let empty to use the default one."
 #~ msgstr ""
-#~ "Bild (oftast en pil) som  visas när en startare släpps i dockan. Lämna tomt "
-#~ "för att använda standardbild."
+#~ "Bild (oftast en pil) som  visas när en startare släpps i dockan. Lämna "
+#~ "tomt för att använda standardbild."
 
 #~ msgid "Easy Mode"
 #~ msgstr "Enkelt läge"
@@ -4636,12 +4653,12 @@ msgstr ""
 #~ msgstr "Fyll i denna programstartare"
 
 #~ msgid ""
-#~ "Icons will scroll according to what positioning model is selected. The dock "
-#~ "can of course can be positioned anywhere on the screen. Here we specify this "
-#~ "relative position."
+#~ "Icons will scroll according to what positioning model is selected. The "
+#~ "dock can of course can be positioned anywhere on the screen. Here we "
+#~ "specify this relative position."
 #~ msgstr ""
-#~ "Ikonerna kommer att bläddras enligt vald placering. Dockan kan placeras var "
-#~ "som helst på skärmen, bläddring sker i förhållande till detta."
+#~ "Ikonerna kommer att bläddras enligt vald placering. Dockan kan placeras "
+#~ "var som helst på skärmen, bläddring sker i förhållande till detta."
 
 #~ msgid "Size of the callback zone (width x height, in pixels):"
 #~ msgstr "Zonens storlek (bredd x höjd, i pixlar):"
@@ -4657,8 +4674,8 @@ msgstr ""
 #~ msgstr "i ms. Används inte om sub-dockor måste klickas för att visas."
 
 #~ msgid ""
-#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide is "
-#~ "not enabled or unfold acceleration is null."
+#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide "
+#~ "is not enabled or unfold acceleration is null."
 #~ msgstr ""
 #~ "Ikonen animeras när den visas/döljs. Används bara om dölj automatiskt "
 #~ "aktiverats och värdet är större än 0."
@@ -4679,7 +4696,8 @@ msgstr ""
 #~ "dock reappear."
 #~ msgstr ""
 #~ "Dockan kommer att döljas automatiskt när musen lämnar fönstret och en "
-#~ "aktiveringszon visas istället. För in musen i zonen för att visa dockan igen."
+#~ "aktiveringszon visas istället. För in musen i zonen för att visa dockan "
+#~ "igen."
 
 #~ msgid "Activate auto-hide?"
 #~ msgstr "Dölj automatiskt?"

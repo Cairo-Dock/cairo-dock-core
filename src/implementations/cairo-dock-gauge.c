@@ -144,6 +144,7 @@ static void _cairo_dock_init_gauge_image (const gchar *cImagePath, GaugeImage *p
 {
 	// chargement du fichier.
 	pGaugeImage->pSvgHandle = rsvg_handle_new_from_file (cImagePath, NULL);
+	g_return_if_fail (pGaugeImage->pSvgHandle != NULL);
 	
 	//On récupère la taille de l'image.
 	RsvgDimensionData SizeInfo;
