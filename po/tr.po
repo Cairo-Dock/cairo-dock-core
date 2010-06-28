@@ -7,13 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-05-17 14:54+0000\n"
-"Last-Translator: Angel Spy <melissadilara@yahoo.com>\n"
+"POT-Creation-Date: 2010-06-08 22:15+0000\n"
+"PO-Revision-Date: 2010-06-26 19:40+0000\n"
+"Last-Translator: eraydin <aydin@eraydin.net>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-20 05:12+0000\n"
+"X-Launchpad-Export-Date: 2010-06-27 03:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-gui-launcher.c:376
@@ -30,7 +31,7 @@ msgstr "Görünüm"
 
 #: ../src/cairo-dock-gui-main.c:127
 msgid "Accessories"
-msgstr "Yardımcı araçlar"
+msgstr "Donatılar"
 
 #: ../src/cairo-dock-gui-main.c:128 ../src/gldit/cairo-dock-gui-factory.c:1232
 msgid "Desktop"
@@ -55,11 +56,11 @@ msgstr "Kategoriler"
 
 #: ../src/cairo-dock-gui-main.c:1624
 msgid "Filter"
-msgstr "Filtre"
+msgstr "Filtrele"
 
 #: ../src/cairo-dock-gui-main.c:1675 ../data/messages:135
 msgid "Options"
-msgstr "Seçenekler"
+msgstr "Tercihler"
 
 #: ../src/cairo-dock-gui-main.c:1685
 msgid "All words"
@@ -124,7 +125,7 @@ msgstr ""
 #: ../src/cairo-dock-gui-simple.c:388 ../src/cairo-dock-gui-themes.c:229
 #, c-format
 msgid "Importing theme %s ..."
-msgstr "Tema ithal ediliyor %s..."
+msgstr "Tema yükleniyor... %s"
 
 #: ../src/cairo-dock-gui-simple.c:727
 msgid ""
@@ -192,9 +193,9 @@ msgid "Manage Themes"
 msgstr "Temaları yönet"
 
 #: ../src/cairo-dock-menu.c:127
-#, fuzzy, c-format
+#, c-format
 msgid "Configuration of the '%s' dock"
-msgstr "Dock için konum ayarlama '%s'"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:212
 msgid "Community site"
@@ -242,9 +243,8 @@ msgid "Configure this dock"
 msgstr "Bu docku kur"
 
 #: ../src/cairo-dock-menu.c:349
-#, fuzzy
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Bu ana dockun konumunu ayarla."
+msgstr "'%s' dock için ayarlar"
 
 #: ../src/cairo-dock-menu.c:352
 msgid "Configure"
@@ -293,11 +293,11 @@ msgstr "Hızlı-Gizle"
 
 #: ../src/cairo-dock-menu.c:392
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr ""
+msgstr "Fare ile üzerine gelene kadar gizle."
 
 #: ../src/cairo-dock-menu.c:400
 msgid "Launch Cairo-Dock on startup"
-msgstr ""
+msgstr "Cairo-Dock u başlangıçta başlat"
 
 #: ../src/cairo-dock-menu.c:410 ../src/cairo-dock.c:241
 msgid "Help"
@@ -312,7 +312,8 @@ msgid "Get more applets!"
 msgstr "Daha fazla uygulamacık al!"
 
 #: ../src/cairo-dock-menu.c:422
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -325,9 +326,8 @@ msgid "Quit"
 msgstr "Çık"
 
 #: ../src/cairo-dock-menu.c:456
-#, fuzzy
 msgid "separator"
-msgstr "Ayıraçlar"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:460
 #, c-format
@@ -349,9 +349,8 @@ msgid ""
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:558
-#, fuzzy
 msgid "Sorry, this icon doesn't have a configuration file."
-msgstr "Bu simgenin masaüstü dosyası yok."
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:599
 msgid ""
@@ -373,10 +372,12 @@ msgid ""
 "Warning: could not delete this file.\n"
 "Please check file permissions."
 msgstr ""
+"Uyarı: bu dosyayı silemezsiniz.\n"
+"Lütfen dosya öz niteliklerini gözden geçiriniz."
 
 #: ../src/cairo-dock-menu.c:779
 msgid "Rename to:"
-msgstr ""
+msgstr "Yeniden adlandır:"
 
 #: ../src/cairo-dock-menu.c:786
 #, c-format
@@ -436,9 +437,8 @@ msgid "Add a sub-dock"
 msgstr "Bir  alt-dock ekle"
 
 #: ../src/cairo-dock-menu.c:1241
-#, fuzzy
 msgid "Add a main dock"
-msgstr "Bir  alt-dock ekle"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1244
 msgid "Add a separator"
@@ -455,7 +455,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1284
 msgid "Unmount"
-msgstr ""
+msgstr "Bağı Kaldır"
 
 #: ../src/cairo-dock-menu.c:1284
 msgid "Mount"
@@ -516,7 +516,7 @@ msgstr "Bu masaüstüne taşı"
 
 #: ../src/cairo-dock-menu.c:1370
 msgid "Not Fullscreen"
-msgstr ""
+msgstr "Tam ekran değil"
 
 #: ../src/cairo-dock-menu.c:1370
 msgid "Fullscreen"
@@ -630,7 +630,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1538
 msgid "Reserve space"
-msgstr ""
+msgstr "Tutulmuş alan"
 
 #: ../src/cairo-dock-menu.c:1545
 msgid "On all desktops"
@@ -638,7 +638,7 @@ msgstr "Tüm masaüstlerinde"
 
 #: ../src/cairo-dock-menu.c:1551
 msgid "Lock position"
-msgstr ""
+msgstr "Konuma kilitle"
 
 #: ../src/cairo-dock-user-interaction.c:167
 msgid "Do you want to mount this device?"
@@ -848,7 +848,8 @@ msgid "category"
 msgstr "kategori"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2367
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2734
@@ -1410,9 +1411,8 @@ msgid "Hit a zone"
 msgstr ""
 
 #: ../data/messages:235
-#, fuzzy
 msgid "Size of the zone :"
-msgstr "Kabarcığın şekli:"
+msgstr ""
 
 #: ../data/messages:237
 msgid "Image to display on the zone :"
@@ -2087,7 +2087,8 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:647
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:649
@@ -2382,8 +2383,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:801
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:803
@@ -2696,8 +2697,8 @@ msgstr ""
 
 #: ../data/messages:973
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:975
@@ -2712,8 +2713,8 @@ msgstr ""
 
 #: ../data/messages:979
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -3064,8 +3065,8 @@ msgstr "Bazı uygulamalar için çirkin simgelerim var."
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3138,9 +3139,9 @@ msgstr "Ana menüyü nasıl eklerim?"
 
 #: ../data/messages:1129
 msgid ""
-"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will no "
-"longer work. This applet lets you configure a shortcut to pop up the menu at "
-"the mouse's location."
+"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will "
+"no longer work. This applet lets you configure a shortcut to pop up the menu "
+"at the mouse's location."
 msgstr ""
 
 #: ../data/messages:1131
@@ -3278,10 +3279,11 @@ msgstr ""
 
 #: ../data/messages:1185
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list/panel, and replace its content with \"cairo-dock\". "
-"This will not launch the dock on start-up, but just prevent the gnome-panel "
-"from launching, so don't forget to add Cairo-Dock on startup.\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list/panel, and replace its "
+"content with \"cairo-dock\". This will not launch the dock on start-up, but "
+"just prevent the gnome-panel from launching, so don't forget to add Cairo-"
+"Dock on startup.\n"
 "Then restart your session : the gnome-panel has not been started."
 msgstr ""
 
@@ -3300,8 +3302,8 @@ msgstr ""
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Cairo-Penguin, Weather, Netspeed, ...\n"
-"Right click on the applet's icon, and select «launch another instance». A new "
-"instance of this applet appears in the main dock.\n"
+"Right click on the applet's icon, and select «launch another instance». A "
+"new instance of this applet appears in the main dock.\n"
 "You can configure this new applet just like any other."
 msgstr ""
 
@@ -3382,16 +3384,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3433,8 +3435,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1241
@@ -3548,8 +3550,8 @@ msgstr "Projeye katıl!"
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3633,7 +3635,8 @@ msgid "Run in a terminal ?"
 msgstr ""
 
 #: ../data/messages:1327
-msgid "Choose the screen border relative to which the dock will be positioned:"
+msgid ""
+"Choose the screen border relative to which the dock will be positioned:"
 msgstr ""
 
 #: ../data/messages:1341
@@ -3649,9 +3652,8 @@ msgid "starting from 0"
 msgstr "0'dan başlıyor"
 
 #: ../data/messages:1355
-#, fuzzy
 msgid "Visibility of the dock"
-msgstr "Ana rıhtımın görünürlüğü"
+msgstr ""
 
 #: ../data/messages:1379
 msgid "Leave it empty to use the same view as the main dock."
@@ -3662,9 +3664,8 @@ msgid "Choose the view for this dock :/"
 msgstr ""
 
 #: ../data/messages:1387
-#, fuzzy
 msgid "Same as main dock"
-msgstr "Bir  alt-dock ekle"
+msgstr ""
 
 #: ../data/messages:1405
 msgid "Choose a theme"
@@ -3869,8 +3870,8 @@ msgstr ""
 #: ../data/messages:1599
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3951,8 +3952,8 @@ msgstr ""
 #: ../data/messages:1611
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4023,9 +4024,12 @@ msgid ""
 "better on any desktop."
 msgstr ""
 
-#, fuzzy
-#~ msgid "Quit Cairo-Desklet?"
-#~ msgstr "Cairo-Dock'tan çık ?"
+#~ msgid "module"
+#~ msgstr "modül"
+
+#, c-format
+#~ msgid "Importing theme %s..."
+#~ msgstr "Tema ithal ediliyor %s..."
 
 #~ msgid "Hidden Dock"
 #~ msgstr "Dock gizle"
@@ -4033,8 +4037,11 @@ msgstr ""
 #~ msgid "Define the appearance of the dock when it's hidden."
 #~ msgstr "Dock'un ne zaman belirip gizleneceğini tanımlayın."
 
-#~ msgid "Background movement"
-#~ msgstr "Arkaplan hareketi"
+#~ msgid "Undefined"
+#~ msgstr "Tanımlanmamış"
+
+#~ msgid "Do you want to monitor the content of this directory?"
+#~ msgstr "Dizin içeriğini takip etmek istiyor musunuz?"
 
 #~ msgid "Follow the mouse"
 #~ msgstr "Fareyi takip et"
@@ -4045,14 +4052,5 @@ msgstr ""
 #~ msgid "Automatically hide the dock"
 #~ msgstr "Rıhtımı otomatik olarak gizle"
 
-#~ msgid "module"
-#~ msgstr "modül"
-
-#~ msgid "Importing theme %s..."
-#~ msgstr "Tema ithal ediliyor %s..."
-
-#~ msgid "Undefined"
-#~ msgstr "Tanımlanmamış"
-
-#~ msgid "Do you want to monitor the content of this directory?"
-#~ msgstr "Dizin içeriğini takip etmek istiyor musunuz?"
+#~ msgid "Background movement"
+#~ msgstr "Arkaplan hareketi"
