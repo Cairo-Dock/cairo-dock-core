@@ -486,9 +486,10 @@ static void _cairo_dock_parse_theme_list (GKeyFile *pKeyFile, const gchar *cServ
 	g_return_if_fail (pGroupList != NULL);  // rien a charger dans la table, on quitte.
 	
 	// on parcourt la liste.
-	gchar *cThemeName, *cDate;
+	gchar *cThemeName, *cDate, *cDisplayedName, *cName, *cAuthor;
 	CairoDockTheme *pTheme;
 	CairoDockThemeType iType;
+	double fSize;
 	int iCreationDate, iLastModifDate, iLocalDate, iSobriety;
 	int last_modif, creation_date;
 	guint i;
@@ -498,6 +499,18 @@ static void _cairo_dock_parse_theme_list (GKeyFile *pKeyFile, const gchar *cServ
 		iCreationDate = g_key_file_get_integer (pKeyFile, cThemeName, "creation", NULL);
 		iLastModifDate = g_key_file_get_integer (pKeyFile, cThemeName, "last modif", NULL);
 		iSobriety = g_key_file_get_integer (pKeyFile, cThemeName, "sobriety", NULL);
+		fSize = g_key_file_get_double (pKeyFile, cThemeName, "size", NULL);
+		cAuthor = g_key_file_get_string (pKeyFile, cThemeName, "author", NULL);
+		if (cAuthor && *cAuthor == '\0')
+		{
+			g_free (cAuthor);
+			cAuthor = NULL;
+		}
+		cName = NULL;
+		if (g_key_file_has_key (pKeyFile, cThemeName, "name", NULL))
+		{
+			cName = g_key_file_get_string (pKeyFile, cThemeName, "name", NULL);
+		}
 		
 		// creation < 30j && pas sur le disque -> new
 		// sinon last modif < 30j && last use < last modif -> updated
@@ -534,6 +547,8 @@ static void _cairo_dock_parse_theme_list (GKeyFile *pKeyFile, const gchar *cServ
 			else
 				iLocalDate = atoi (cContent);
 			g_free (cContent);
+			g_free (cVersionFile);
+			
 			
 			if (iLocalDate < iLastModifDate)  // la copie locale est plus ancienne.
 			{
@@ -541,12 +556,14 @@ static void _cairo_dock_parse_theme_list (GKeyFile *pKeyFile, const gchar *cServ
 			}
 			else  // c'est deja la derniere version disponible, on en reste la.
 			{
-				g_free (cVersionFile);
-				g_free (cThemeName);
 				pSameTheme->iSobriety = iSobriety;  // par contre on en profite pour renseigner la sobriete.
+				g_free (pSameTheme->cDisplayedName);
+				pSameTheme->cDisplayedName = g_strdup_printf ("%s by %s", cName ? cName : cThemeName, (cAuthor ? cAuthor : "---"));
+				pSameTheme->cAuthor = cAuthor;
+				g_free (cName);
+				g_free (cThemeName);
 				continue;
 			}
-			g_free (cVersionFile);
 			
 			pTheme = pSameTheme;
 			g_free (pTheme->cThemePath);
@@ -567,22 +584,17 @@ static void _cairo_dock_parse_theme_list (GKeyFile *pKeyFile, const gchar *cServ
 			
 			pTheme = g_new0 (CairoDockTheme, 1);
 			g_hash_table_insert (pThemeTable, cThemeName, pTheme);
-			pTheme->iRating = g_key_file_get_integer (pKeyFile, cThemeName, "rating", NULL);  // // par contre on affiche la note que l'utilisateur avait precedemment etablie.
+			pTheme->iRating = g_key_file_get_integer (pKeyFile, cThemeName, "rating", NULL);  // par contre on affiche la note que l'utilisateur avait precedemment etablie.
 		}
 		
 		pTheme->cThemePath = g_strdup_printf ("%s/%s/%s", cServerAdress, cDirectory, cThemeName);
 		pTheme->iType = iType;
-		pTheme->fSize = g_key_file_get_double (pKeyFile, cThemeName, "size", NULL);
-		pTheme->cAuthor = g_key_file_get_string (pKeyFile, cThemeName, "author", NULL);
-		if (pTheme->cAuthor && *pTheme->cAuthor == '\0')
-		{
-			g_free (pTheme->cAuthor);
-			pTheme->cAuthor = NULL;
-		}
+		pTheme->fSize = fSize;
+		pTheme->cAuthor = cAuthor;
+		pTheme->cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", cName ? cName : cThemeName, (cAuthor ? cAuthor : "---"), fSize);
 		pTheme->iSobriety = iSobriety;
 		pTheme->iCreationDate = iCreationDate;
 		pTheme->iLastModifDate = iLastModifDate;
-		pTheme->cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", cThemeName, (pTheme->cAuthor ? pTheme->cAuthor : "---"), pTheme->fSize);
 	}
 	g_free (pGroupList);  // les noms des themes sont desormais dans la hash-table.
 }
