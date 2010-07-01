@@ -77,7 +77,7 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	
 	gtk_widget_set_app_paintable (pWindow, TRUE);
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
-	gtk_window_set_resizable (GTK_WINDOW (pWindow), TRUE);
+	///gtk_window_set_resizable (GTK_WINDOW (pWindow), TRUE);  // vrai par defaut.
 	
 	if (g_pPrimaryContainer == NULL)
 	{

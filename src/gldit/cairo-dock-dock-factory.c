@@ -450,6 +450,11 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	}
 	pDock->icons = g_list_remove (pDock->icons, icon);
 	pDock->fFlatDockWidth -= icon->fWidth + myIcons.iIconGap;
+	
+	if (pDock->iNbDrawnIcons != 0)
+	{
+		
+	}
 
 	//\___________________ Cette icone realisait peut-etre le max des hauteurs, comme on l'enleve on recalcule ce max.
 	Icon *pOtherIcon;

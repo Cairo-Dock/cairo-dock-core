@@ -332,18 +332,20 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 
 	if (iFileSortType == CAIRO_DOCK_FM_SORT_BY_NAME)
 	{
+		g_print (" new icon\n");
 		GList *pList = (CAIRO_DOCK_IS_DOCK (pContainer) ? CAIRO_DOCK (pContainer)->icons : CAIRO_DESKLET (pContainer)->icons);
 		GList *ic;
 		Icon *icon;
 		for (ic = pList; ic != NULL; ic = ic->next)
 		{
 			icon = ic->data;
-			if (icon->cName != NULL && strcmp (pNewIcon->cName, icon->cName) < 0)
+			if (icon->cName != NULL && strcmp (pNewIcon->cName, icon->cName) > 0)  // ordre croissant.
 			{
 				if (ic->prev != NULL)
 				{
 					Icon *prev_icon = ic->prev->data;
 					pNewIcon->fOrder = (icon->fOrder + prev_icon->fOrder) / 2;
+					g_print (" prev : %.2f\n", pNewIcon->fOrder);
 				}
 				else
 					pNewIcon->fOrder = icon->fOrder - 1;
@@ -354,6 +356,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 				pNewIcon->fOrder = icon->fOrder + 1;
 			}
 		}
+		g_print (" -> %.2f\n", pNewIcon->fOrder);
 	}
 	cairo_dock_trigger_load_icon_buffers (pNewIcon, pContainer);
 
@@ -377,12 +380,13 @@ void cairo_dock_fm_create_dock_from_directory (Icon *pIcon, CairoDock *pParentDo
 
 
 
-static Icon *cairo_dock_fm_alter_icon_if_necessary (Icon *pIcon, CairoContainer *pContainer)
+static Icon *cairo_dock_fm_alter_icon_if_necessary (Icon *pIcon, CairoContainer *pContainer, int iSortType)
 {
 	if (s_pEnvBackend == NULL)
 		return NULL;
 	cd_debug ("%s (%s)", __func__, pIcon->cBaseURI);
-	Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (pIcon->cBaseURI, pContainer, 0);  /// voir comment remonter a l'info iFileSortType ...
+	Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (pIcon->cBaseURI, pContainer, iSortType);
+	pNewIcon->fOrder = pIcon->fOrder;
 	g_return_val_if_fail (pNewIcon != NULL && pNewIcon->cName != NULL, NULL);
 
 	//g_print ("%s <-> %s (%s <-> <%s)\n", pIcon->cName, pNewIcon->cName, pIcon->cFileName, pNewIcon->cFileName);
@@ -437,7 +441,7 @@ static Icon *cairo_dock_fm_alter_icon_if_necessary (Icon *pIcon, CairoContainer 
 		return pIcon;
 	}
 }
-void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const gchar *cBaseURI, Icon *pIcon, CairoDockIconType iTypeOnCreation)
+void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const gchar *cBaseURI, Icon *pIcon, CairoDockIconType iTypeOnCreation, CairoDockFMSortType iSortingType)
 {
 	g_return_if_fail (cBaseURI != NULL && pIcon != NULL);
 	gchar *cURI = (g_strdup (cBaseURI));
@@ -502,10 +506,11 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 						//cairo_dock_free_icon (pSameIcon);
 					}
 				}
-				Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (cURI, (CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer), 0);  /// voir comment remonter a l'info iFileSortType ...
+				Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (cURI, (CAIRO_DOCK_IS_DOCK (pParentContainer) ? CAIRO_CONTAINER (pIcon->pSubDock) : pParentContainer), iSortingType);
 				if (pNewIcon == NULL)
 					return ;
 				pNewIcon->iType = iTypeOnCreation;
+				g_print (" + %d ; %.1f\n", pNewIcon->iType, pNewIcon->fOrder);
 
 				if (CAIRO_DOCK_IS_DOCK (pParentContainer))
 				{
@@ -564,7 +569,8 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 			
 			if (pConcernedIcon->iVolumeID > 0)
 				cairo_dock_remove_dialog_if_any (pConcernedIcon);  // on empeche la multiplication des dialogues de (de)montage.
-			Icon *pNewIcon = cairo_dock_fm_alter_icon_if_necessary (pConcernedIcon, pParentContainer);  // pConcernedIcon a ete remplacee et n'est donc peut-etre plus valide.
+			Icon *pNewIcon = cairo_dock_fm_alter_icon_if_necessary (pConcernedIcon, pParentContainer, iSortingType);
+			g_print (" = %d ; %.1f\n", pNewIcon->iType, pNewIcon->fOrder);  // pConcernedIcon a ete remplacee et n'est donc peut-etre plus valide.
 			
 			if (pNewIcon != NULL && pNewIcon->iVolumeID > 0)
 			{
@@ -585,12 +591,12 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 
 void cairo_dock_fm_action_on_file_event (CairoDockFMEventType iEventType, const gchar *cURI, Icon *pIcon)
 {
-	cairo_dock_fm_manage_event_on_file (iEventType, cURI, pIcon, CAIRO_DOCK_LAUNCHER);
+	cairo_dock_fm_manage_event_on_file (iEventType, cURI, pIcon, CAIRO_DOCK_LAUNCHER, CAIRO_DOCK_FM_SORT_BY_NAME);
 }
 
 void cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess, const gchar *cName, Icon *icon, CairoContainer *pContainer)
 {
-	cd_message ("%s (%s) : %d\n", __func__, (bMounting ? "mount" : "unmount"), bSuccess);  // en cas de demontage effectif, l'icone n'est plus valide !
+	cd_message ("%s (%s) : %d", __func__, (bMounting ? "mount" : "unmount"), bSuccess);  // en cas de demontage effectif, l'icone n'est plus valide !
 	if ((! bSuccess && pContainer != NULL) || icon == NULL)  // dans l'autre cas (succes), l'icone peut ne plus etre valide ! mais on s'en fout, puisqu'en cas de succes, il y'aura rechargement de l'icone, et donc on pourra balancer le message a ce moment-la.
 	{
 		///if (icon != NULL)

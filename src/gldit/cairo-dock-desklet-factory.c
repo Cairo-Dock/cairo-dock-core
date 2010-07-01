@@ -807,7 +807,10 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 			pAttribute->iDeskletHeight);
 	}
 	if (! pAttribute->bDeskletUseSize)
+	{
 		gtk_container_set_border_width (GTK_CONTAINER (pDesklet->container.pWidget), 0);
+		gtk_window_set_resizable (GTK_WINDOW(pDesklet->container.pWidget), FALSE);
+	}
 	
 	int iAbsolutePositionX = (pAttribute->iDeskletPositionX < 0 ? g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + pAttribute->iDeskletPositionX : pAttribute->iDeskletPositionX);
 	iAbsolutePositionX = MAX (0, MIN (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - pAttribute->iDeskletWidth, iAbsolutePositionX));

@@ -260,7 +260,9 @@ struct _CairoDock {
 	/// Source ID for loading the background.
 	guint iSidLoadBg;
 	
-	gchar reserved[16];
+	gint iNbDrawnIcons;
+	
+	gchar reserved[12];
 };
 
 

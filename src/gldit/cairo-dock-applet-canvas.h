@@ -160,6 +160,8 @@ CD_APPLET_DEFINE_PROTO \
 
 #define CD_APPLET_SET_CONTAINER_TYPE(x) pVisitCard->iContainerType = x;
 
+#define CD_APPLET_SET_UNRESIZABLE_DESKLET pVisitCard->bStaticDeskletSize = TRUE;
+
 /** Fin de la fonction de pre-initialisation de l'applet.
 */
 #define CD_APPLET_DEFINE_END \

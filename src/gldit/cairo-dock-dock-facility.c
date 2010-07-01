@@ -1013,23 +1013,18 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 
 static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 {
-	if (pIcon->pSubDock != NULL)
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	if (pDock != NULL)
 	{
-		CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
-		if (pDock != NULL)
+		if (pIcon->pSubDock != NULL)
 		{
 			cairo_dock_draw_subdock_content_on_icon (pIcon, pDock);
-			cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
 		}
-	}
-	else  // l'icone a pu perdre son sous-dock entre-temps (exemple : une classe d'appli contenant 2 icones, dont on enleve l'une des 2.
-	{
-		CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
-		if (pDock != NULL)
+		else  // l'icone a pu perdre son sous-dock entre-temps (exemple : une classe d'appli contenant 2 icones, dont on enleve l'une des 2.
 		{
 			cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
-			cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
 		}
+		cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
 	}
 	pIcon->iSidRedrawSubdockContent = 0;
 	return FALSE;
@@ -1037,8 +1032,12 @@ static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
 {
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || (pPointingIcon->cClass != NULL && ! myIndicators.bUseClassIndic)) && pPointingIcon->iSidRedrawSubdockContent == 0 && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
+	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || (pPointingIcon->cClass != NULL && ! myIndicators.bUseClassIndic)) && CAIRO_DOCK_IS_LAUNCHER (pPointingIcon))
+	{
+		if (pPointingIcon->iSidRedrawSubdockContent != 0)  // s'il y'a deja un redessin de prevu, on le passe a la fin de facon a ce qu'il ne se fasse  pas avant le redessin de l'icone responsable de ce trigger.
+			g_source_remove (pPointingIcon->iSidRedrawSubdockContent);
 		pPointingIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content_idle, pPointingIcon);
+	}
 }
 
 void cairo_dock_trigger_redraw_subdock_content_on_icon (Icon *icon)

@@ -117,8 +117,9 @@ struct _CairoDockVisitCard {
 	// nom du module tel qu'affiche a l'utilisateur.
 	const gchar *cTitle;
 	CairoDockModuleContainerType iContainerType;
+	gboolean bStaticDeskletSize;
 	// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
-	char reserved[16];
+	char reserved[12];
 };
 
 /// Definition of the interface of a module.
