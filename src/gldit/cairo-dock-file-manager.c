@@ -386,8 +386,8 @@ static Icon *cairo_dock_fm_alter_icon_if_necessary (Icon *pIcon, CairoContainer 
 		return NULL;
 	cd_debug ("%s (%s)", __func__, pIcon->cBaseURI);
 	Icon *pNewIcon = cairo_dock_fm_create_icon_from_URI (pIcon->cBaseURI, pContainer, iSortType);
-	pNewIcon->fOrder = pIcon->fOrder;
 	g_return_val_if_fail (pNewIcon != NULL && pNewIcon->cName != NULL, NULL);
+	pNewIcon->fOrder = pIcon->fOrder;
 
 	//g_print ("%s <-> %s (%s <-> <%s)\n", pIcon->cName, pNewIcon->cName, pIcon->cFileName, pNewIcon->cFileName);
 	if (pIcon->cName == NULL || strcmp (pIcon->cName, pNewIcon->cName) != 0 || pNewIcon->cFileName == NULL || strcmp (pIcon->cFileName, pNewIcon->cFileName) != 0 || pIcon->fOrder != pNewIcon->fOrder)
