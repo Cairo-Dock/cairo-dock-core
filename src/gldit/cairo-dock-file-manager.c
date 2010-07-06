@@ -570,7 +570,6 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 			if (pConcernedIcon->iVolumeID > 0)
 				cairo_dock_remove_dialog_if_any (pConcernedIcon);  // on empeche la multiplication des dialogues de (de)montage.
 			Icon *pNewIcon = cairo_dock_fm_alter_icon_if_necessary (pConcernedIcon, pParentContainer, iSortingType);
-			g_print (" = %d ; %.1f\n", pNewIcon->iType, pNewIcon->fOrder);  // pConcernedIcon a ete remplacee et n'est donc peut-etre plus valide.
 			
 			if (pNewIcon != NULL && pNewIcon->iVolumeID > 0)
 			{

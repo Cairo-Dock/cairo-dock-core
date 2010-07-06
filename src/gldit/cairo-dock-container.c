@@ -39,6 +39,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-notifications.h"
+#include "cairo-dock-animations.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-container.h"
 
@@ -213,7 +214,7 @@ static inline void _redraw_container_area (CairoContainer *pContainer, GdkRectan
 
 void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea)
 {
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_is_hidden (CAIRO_DOCK (pContainer)))  // inutile de redessiner.
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && ! cairo_dock_animation_will_be_visible (CAIRO_DOCK (pContainer)))  // inutile de redessiner.
 		return ;
 	_redraw_container_area (pContainer, pArea);
 }
@@ -224,7 +225,7 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
 	GdkRectangle rect;
 	cairo_dock_compute_icon_area (icon, pContainer, &rect);
 	
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_is_hidden (CAIRO_DOCK (pContainer)) && ! icon->bIsDemandingAttention && ! icon->bAlwaysVisible)  // inutile de redessiner.
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && (cairo_dock_is_hidden (CAIRO_DOCK (pContainer)) && ! icon->bIsDemandingAttention && ! icon->bAlwaysVisible) || (CAIRO_DOCK (pContainer)->iRefCount != 0 && ! GTK_WIDGET_VISIBLE (pContainer->pWidget)))  // inutile de redessiner.
 		return ;
 	_redraw_container_area (pContainer, &rect);
 }
@@ -367,6 +368,21 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 }
 
 
+gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const gchar *cSignal)
+{
+	static gboolean bReturn;
+	g_signal_emit_by_name (pContainer->pWidget, cSignal, NULL, &bReturn);
+	return FALSE;
+}
+gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer)
+{
+	return cairo_dock_emit_signal_on_container (pContainer, "leave-notify-event");
+}
+gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer)
+{
+	return cairo_dock_emit_signal_on_container (pContainer, "enter-notify-event");
+}
+
 
 static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 {
@@ -376,7 +392,7 @@ static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 	cd_message ("on force a quitter");
 	pDock->container.bInside = TRUE;
 	///pDock->bAtBottom = FALSE;
-	cairo_dock_emit_leave_signal (pDock);
+	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 	/*cairo_dock_on_leave_notify (pDock->container.pWidget,
 		NULL,
 		pDock);*/

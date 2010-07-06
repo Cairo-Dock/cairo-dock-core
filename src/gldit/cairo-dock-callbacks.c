@@ -574,21 +574,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	return FALSE;
 }
 
-gboolean cairo_dock_emit_signal_on_dock (CairoDock *pDock, const gchar *cSignal)
-{
-	static gboolean bReturn;
-	g_signal_emit_by_name (pDock->container.pWidget, cSignal, NULL, &bReturn);
-	return FALSE;
-}
-gboolean cairo_dock_emit_leave_signal (CairoDock *pDock)
-{
-	return cairo_dock_emit_signal_on_dock (pDock, "leave-notify-event");
-}
-gboolean cairo_dock_emit_enter_signal (CairoDock *pDock)
-{
-	return cairo_dock_emit_signal_on_dock (pDock, "enter-notify-event");
-}
-
 
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
@@ -1424,7 +1409,7 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 	pDock->bCanDrop = FALSE;
 	//cairo_dock_stop_marking_icons (pDock);
 	pDock->iAvoidingMouseIconType = -1;
-	cairo_dock_emit_leave_signal (pDock);
+	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 }
 
 

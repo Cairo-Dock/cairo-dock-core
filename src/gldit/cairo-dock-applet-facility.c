@@ -452,6 +452,7 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 			{
 				pOneIcon = ic->data;
 				cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				pOneIcon->cParentDockName = g_strdup (pIcon->cName);
 				cairo_dock_trigger_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
 			}
 			g_list_free (pIconsList);
@@ -498,6 +499,7 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 		}
 		cairo_dock_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
 		cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+		pOneIcon->cParentDockName = g_strdup (pIcon->cName);
 	}
 	else if (pInstance->pDesklet)
 	{
@@ -567,7 +569,7 @@ void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance
 			pIcon->pSubDock->icons = NULL;
 			pIcon->pSubDock->pFirstDrawnElement = NULL;
 		}
-		else
+		else  // precaution pas chere
 		{
 			cairo_dock_destroy_dock (pIcon->pSubDock, pIcon->cName);
 			pIcon->pSubDock = NULL;

@@ -51,7 +51,7 @@ void cairo_dock_register_service_name (const gchar *cServiceName);
 /** Say if the bus is available or not.
 *@return TRUE if the connection to the bus has been established.
 */
-gboolean cairo_dock_bdus_is_enabled (void);
+gboolean cairo_dock_dbus_is_enabled (void);
 
 /** Create a new proxy for the 'session' connection.
 *@param name a name on the bus.

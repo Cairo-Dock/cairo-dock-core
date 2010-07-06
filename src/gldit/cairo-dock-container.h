@@ -192,6 +192,9 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 #define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) : 1)
 
 
+gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const gchar *cSignal);
+gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer);
+gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer);
 
 /** Pop-up a menu on a container. In the case of a dock, it prevents this one from shrinking down.
 *@param menu the menu.

@@ -35,10 +35,6 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget, GdkEventMotion* pMotion, CairoDock *pDock);
 
 
-gboolean cairo_dock_emit_signal_on_dock (CairoDock *pDock, const gchar *cSignal);
-gboolean cairo_dock_emit_leave_signal (CairoDock *pDock);
-gboolean cairo_dock_emit_enter_signal (CairoDock *pDock);
-
 gboolean cairo_dock_poll_screen_edge (CairoDock *pDock);
 
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock);

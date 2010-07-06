@@ -476,7 +476,7 @@ static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pD
 		//g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);
 		if (pDock->iRefCount == 0)
 		{
-			cairo_dock_emit_leave_signal (pDock);
+			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 		}
 		else
 		{
@@ -879,7 +879,7 @@ static void _cairo_dock_quick_hide_one_root_dock (const gchar *cDockName, CairoD
 	if (pDock->iRefCount == 0)
 	{
 		pDock->bAutoHide = TRUE;
-		cairo_dock_emit_leave_signal (pDock);
+		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 	}
 }
 void cairo_dock_quick_hide_all_docks (void)
@@ -938,7 +938,7 @@ void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
 		pDock->bTemporaryHidden = TRUE;
 		pDock->bAutoHide = TRUE;
 		if (!pDock->container.bInside)  // on ne declenche pas le cachage lorsque l'on change par exemple de bureau via le switcher ou un clic sur une appli.
-			cairo_dock_emit_leave_signal (pDock);  // un cairo_dock_start_hiding ne cacherait pas les sous-docks.
+			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));  // un cairo_dock_start_hiding ne cacherait pas les sous-docks.
 	}
 }
 

@@ -762,56 +762,16 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_ALLOW_NO_CLICKABLE_DESKLET cairo_dock_allow_no_clickable_desklet (myDesklet)
 
 
-#define CD_APPLET_CREATE_MY_SUBDOCK(pIconsList, cRenderer) do { \
-	if (myIcon->cName == NULL) { \
-		CD_APPLET_SET_NAME_FOR_MY_ICON (myApplet->pModule->pVisitCard->cModuleName); } \
-	if (cairo_dock_check_unique_subdock_name (myIcon)) { \
-		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->cName); } \
-	myIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, myIcon->cName, myDock); \
-	cairo_dock_set_renderer (myIcon->pSubDock, cRenderer); \
-	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
-
-#define CD_APPLET_DESTROY_MY_SUBDOCK do { \
-	cairo_dock_destroy_dock (myIcon->pSubDock, myIcon->cName); \
-	myIcon->pSubDock = NULL; } while (0)
-
-/*#define CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK(pIconsList) do { \
-	if (myIcon->cName == NULL) { \
-		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->pModuleInstance->pModule->pVisitCard->cModuleName); }\
-	else { \
-		Icon *icon;\
-		GList *ic;\
-		for (ic = (pIconsList); ic != NULL; ic = ic->next) {\
-			icon = ic->data;\
-			if (icon->cParentDockName == NULL)\
-				icon->cParentDockName = g_strdup (myIcon->cName); } } \
-	myIcon->pSubDock->icons = (pIconsList); \
-	myIcon->pSubDock->pFirstDrawnElement = pIconsList; \
-	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \
-	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)*/
-
 /** Delete the list of icons of an applet (keep the subdock in dock mode).
 */
 #define CD_APPLET_DELETE_MY_ICONS_LIST cairo_dock_remove_all_icons_from_applet (myApplet)
-/*#define CD_APPLET_DELETE_MY_ICONS_LIST do {\
-	if (myDesklet && myDesklet->icons != NULL) {\
-		g_list_foreach (myDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);\
-		g_list_free (myDesklet->icons);\
-		myDesklet->icons = NULL; }\
-	if (myIcon->pSubDock != NULL) {\
-		if (myDesklet) {\
-			CD_APPLET_DESTROY_MY_SUBDOCK; }\
-		else {\
-			g_list_foreach (myIcon->pSubDock->icons, (GFunc) cairo_dock_free_icon, NULL);\
-			g_list_free (myIcon->pSubDock->icons);\
-			myIcon->pSubDock->icons = NULL;\
-			myIcon->pSubDock->pFirstDrawnElement = NULL; } } } while (0)*/
 
-/** Remove an icon from the list of icons of an applet.
+/** Remove an icon from the list of icons of an applet. The icon is destroyed and should not be used after that.
+*@param pIcon the icon to remove.
 */
 #define CD_APPLET_REMOVE_ICON_FROM_MY_ICONS_LIST(pIcon) cairo_dock_remove_icon_from_applet (myApplet, pIcon)
 
-/** Load a list of icons into an applet, with the given renderer for the sub-dock or the desklet).
+/** Load a list of icons into an applet, with the given renderer for the sub-dock or the desklet. The icons will be loaded automatically in an idle process.
 *@param pIconList a list of icons. It will belong to the applet's container after that.
 *@param cDockRendererName name of a renderer in case the applet is in dock mode.
 *@param cDeskletRendererName name of a renderer in case the applet is in desklet mode.
@@ -822,26 +782,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	if (myDesklet && myIcon->pIconBuffer != NULL)\
 		myDrawContext = cairo_create (myIcon->pIconBuffer); } while (0)
 
+/** Add an icon into an applet. The view previously set by CD_APPLET_LOAD_MY_ICONS_LIST will be used. The icon will be loaded automatically in an idle process.
+*@param pIcon an icon.
+*/
 #define CD_APPLET_ADD_ICON_IN_MY_ICONS_LIST(pIcon) cairo_dock_insert_icon_in_applet (myApplet, pIcon)
-
-/*#define CD_APPLET_LOAD_MY_ICONS_LIST(pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig) do {\
-	if (myDock) {\
-		if (myIcon->pSubDock == NULL) {\
-			if (pIconList != NULL) {\
-				CD_APPLET_CREATE_MY_SUBDOCK (pIconList, cDockRendererName); } }\
-		else {\
-			if (pIconList == NULL) {\
-				CD_APPLET_DESTROY_MY_SUBDOCK; }\
-			else {\
-				cairo_dock_set_renderer (myIcon->pSubDock, cDockRendererName); \
-				CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK (pIconList); } } }\
-	else {\
-		if (myIcon->pSubDock != NULL) {\
-			CD_APPLET_DESTROY_MY_SUBDOCK; }\
-		myDesklet->icons = pIconList;\
-		CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA (cDeskletRendererName, pDeskletRendererConfig);\
-		CAIRO_DOCK_REDRAW_MY_CONTAINER;\
-	} } while (0)*/
 
 /** Gets the list of icons of your applet. It is either the icons of your sub-dock or of your desklet.
 */
