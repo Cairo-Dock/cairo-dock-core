@@ -286,7 +286,7 @@ typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContaine
 *TRUE if the icon is an icon d'appli seulement.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_NORMAL_APPLI(icon) (CAIRO_DOCK_IS_APPLI (icon) && (icon)->cDesktopFileName == NULL && (icon)->pModuleInstance == NULL)
+#define CAIRO_DOCK_IS_NORMAL_APPLI(icon) (CAIRO_DOCK_IS_APPLI (icon) && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
 /**
 *TRUE if the icon is an icon d'applet detachable en desklet.
 *@param icon an icon.

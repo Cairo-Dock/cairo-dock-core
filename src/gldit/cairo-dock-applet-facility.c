@@ -40,6 +40,8 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-backends-manager.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cExtrasDirPath;
@@ -420,5 +422,155 @@ void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pIn
 	if (iClickedButton == 0 || iClickedButton == -1)  // bouton OK ou touche Entree.
 	{
 		cairo_dock_show_module_instance_gui (pModuleInstance, -1);
+	}
+}
+
+
+void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GList *pIconsList, const gchar *cDockRenderer, const gchar *cDeskletRenderer, gpointer pDeskletRendererData)
+{
+	Icon *pIcon = pInstance->pIcon;
+	g_return_if_fail (pIcon != NULL);
+	
+	CairoContainer *pContainer = pInstance->pContainer;
+	g_return_if_fail (pContainer != NULL);
+	
+	if (pInstance->pDock)
+	{
+		if (pIcon->pSubDock == NULL)
+		{
+			if (pIcon->cName == NULL)
+				cairo_dock_set_icon_name (pInstance->pModule->pVisitCard->cModuleName, pIcon, pContainer);
+			if (cairo_dock_check_unique_subdock_name (pIcon))
+				cairo_dock_set_icon_name (pIcon->cName, pIcon, pContainer);
+			pIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, pIcon->cName, pInstance->pDock);
+		}
+		else
+		{
+			Icon *pOneIcon;
+			GList *ic;
+			for (ic = pIconsList; ic != NULL; ic = ic->next)
+			{
+				pOneIcon = ic->data;
+				cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				cairo_dock_trigger_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
+			}
+			g_list_free (pIconsList);
+		}
+		cairo_dock_set_renderer (pIcon->pSubDock, cDockRenderer);
+		cairo_dock_update_dock_size (pIcon->pSubDock);
+	}
+	else if (pInstance->pDesklet)
+	{
+		if (pIcon->pSubDock != NULL)  // precaution.
+		{
+			cairo_dock_destroy_dock (pIcon->pSubDock, pIcon->cName);
+			pIcon->pSubDock = NULL;
+		}
+		pInstance->pDesklet->icons = g_list_concat (pInstance->pDesklet->icons, pIconsList);
+		cairo_dock_set_desklet_renderer_by_name (pInstance->pDesklet, cDeskletRenderer, (CairoDeskletRendererConfigPtr) pDeskletRendererData);
+		cairo_dock_redraw_container (pInstance->pContainer);
+	}
+}
+
+
+void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon)
+{
+	Icon *pIcon = pInstance->pIcon;
+	g_return_if_fail (pIcon != NULL);
+	
+	CairoContainer *pContainer = pInstance->pContainer;
+	g_return_if_fail (pContainer != NULL);
+	
+	if (pInstance->pDock)
+	{
+		if (pIcon->pSubDock == NULL)
+		{
+			if (pIcon->cName == NULL)
+				cairo_dock_set_icon_name (pInstance->pModule->pVisitCard->cModuleName, pIcon, pContainer);
+			if (cairo_dock_check_unique_subdock_name (pIcon))
+				cairo_dock_set_icon_name (pIcon->cName, pIcon, pContainer);
+			pIcon->pSubDock = cairo_dock_create_subdock_from_scratch (NULL, pIcon->cName, pInstance->pDock);
+		}
+		if (pOneIcon->fOrder == CAIRO_DOCK_LAST_ORDER)
+		{
+			Icon *pLastIcon = cairo_dock_get_last_icon (pIcon->pSubDock->icons);
+			pOneIcon->fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 0);
+		}
+		cairo_dock_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
+		cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+	}
+	else if (pInstance->pDesklet)
+	{
+		if (pIcon->pSubDock != NULL)  // precaution.
+		{
+			cairo_dock_destroy_dock (pIcon->pSubDock, pIcon->cName);
+			pIcon->pSubDock = NULL;
+		}
+		
+		if (pOneIcon->fOrder == CAIRO_DOCK_LAST_ORDER)
+		{
+			Icon *pLastIcon = cairo_dock_get_last_icon (pInstance->pDesklet->icons);
+			pOneIcon->fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 0);
+		}
+		cairo_dock_insert_icon_in_desklet (pOneIcon, pInstance->pDesklet);
+	}
+}
+
+void cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon)
+{
+	Icon *pIcon = pInstance->pIcon;
+	g_return_if_fail (pIcon != NULL);
+	
+	CairoContainer *pContainer = pInstance->pContainer;
+	g_return_if_fail (pContainer != NULL);
+	
+	if (pOneIcon == NULL)
+		return ;
+	
+	GList *pIconsList = (pInstance->pDock ? (pIcon->pSubDock ? pIcon->pSubDock->icons : NULL) : pInstance->pDesklet->icons);
+	if (pInstance->pDock)
+	{
+		if (pIcon->pSubDock != NULL)
+		{
+			cairo_dock_detach_icon_from_dock (pOneIcon, pIcon->pSubDock, FALSE);
+			cairo_dock_update_dock_size (pIcon->pSubDock);
+		}
+	}
+	else if (pInstance->pDesklet)
+	{
+		cairo_dock_detach_icon_from_desklet (pOneIcon, pInstance->pDesklet);
+	}
+	cairo_dock_free_icon (pOneIcon);
+}
+
+void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance)
+{
+	Icon *pIcon = pInstance->pIcon;
+	g_return_if_fail (pIcon != NULL);
+	
+	CairoContainer *pContainer = pInstance->pContainer;
+	g_return_if_fail (pContainer != NULL);
+	
+	if (pInstance->pDesklet && pInstance->pDesklet->icons != NULL)
+	{
+		g_list_foreach (pInstance->pDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);
+		g_list_free (pInstance->pDesklet->icons);
+		pInstance->pDesklet->icons = NULL;
+		cairo_dock_redraw_container (pInstance->pContainer);
+	}
+	if (pIcon->pSubDock != NULL)
+	{
+		if (pInstance->pDock)  // optimisation : on ne detruit pas le sous-dock.
+		{
+			g_list_foreach (pIcon->pSubDock->icons, (GFunc) cairo_dock_free_icon, NULL);
+			g_list_free (pIcon->pSubDock->icons);
+			pIcon->pSubDock->icons = NULL;
+			pIcon->pSubDock->pFirstDrawnElement = NULL;
+		}
+		else
+		{
+			cairo_dock_destroy_dock (pIcon->pSubDock, pIcon->cName);
+			pIcon->pSubDock = NULL;
+		}
 	}
 }

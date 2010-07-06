@@ -185,21 +185,11 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 
 static void _set_icon_size_generic (CairoContainer *pContainer, Icon *icon)
 {
-	CairoDockIconType iType = cairo_dock_get_icon_type (icon);
-	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
-	{
-		if (icon->fWidth == 0)
-			icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
-		if (icon->fHeight == 0)
-			icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
-	}
-	else
-	{
-		icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
-		icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
-	}
+	if (icon->fWidth == 0)
+		icon->fWidth = 48;
+	if (icon->fHeight == 0)
+		icon->fHeight = 48;
 }
-
 void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 {
 	if (! pContainer)
@@ -209,8 +199,8 @@ void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 		return;
 	}
 	// taille de l'icone dans le container (hors ratio).
-	if (pContainer->set_icon_size)
-		pContainer->set_icon_size (pContainer, icon);
+	if (pContainer->iface.set_icon_size)
+		pContainer->iface.set_icon_size (pContainer, icon);
 	else
 		_set_icon_size_generic (pContainer, icon);
 	// la taille que devra avoir la texture s'en deduit.

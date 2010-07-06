@@ -217,6 +217,13 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	int iIndex = 0, iBestIndex = 0;
 	while (iIndex + 2 < iBufferNbElements)
 	{
+		if (pXIconBuffer[iIndex] == 0 || pXIconBuffer[iIndex+1] == 0)  // precaution au cas ou un buffer foirreux nous serait retourne, on risque de boucler sans fin.
+		{
+			cd_warning ("This icon is broken !\nThis means that one of the current applications has sent a buggy icon to X.");
+			if (iIndex == 0)  // tout le buffer est a jeter.
+				return NULL;
+			break;
+		}
 		if (pXIconBuffer[iIndex] > pXIconBuffer[iBestIndex])
 			iBestIndex = iIndex;
 		iIndex += 2 + pXIconBuffer[iIndex] * pXIconBuffer[iIndex+1];

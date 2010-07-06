@@ -264,7 +264,7 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 	pIcon->fAlpha = 1.;
 	pIcon->fWidthFactor = 1.;
 	pIcon->fHeightFactor = 1.;
-	pIcon->cCommand = cCommand ? cCommand : g_strdup ("none");
+	pIcon->cCommand = cCommand ? cCommand : g_strdup ("none");  /// virer le 'none' ...
 	///pIcon->cDesktopFileName = g_strdup ("none");
 	pIcon->iface.load_image = _load_launcher;
 	

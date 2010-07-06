@@ -121,6 +121,13 @@ void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, CairoDockModuleInst
 
 void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pInteractiveWidget, CairoDockModuleInstance *pModuleInstance, CairoDialog *pDialog);
 
+void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pModuleInstance, GList *pIconsList, const gchar *cDockRenderer, const gchar *cDeskletRenderer, gpointer pDeskletRendererData);
+
+void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon);
+
+void cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pModuleInstance, Icon *icon);
+
+void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pModuleInstance);
 
 
   ////////////
@@ -378,7 +385,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_MY_CONFIG_CHANGED (pKeyFile != NULL)
 
-/** TRUE if the container type has changed.
+/** TRUE if the container type has changed (which can only happen if the config has changed).
 */
 #define CD_APPLET_MY_CONTAINER_TYPE_CHANGED (myApplet->pContainer == NULL || myApplet->pContainer->iType != pOldContainer->iType)
 
@@ -735,9 +742,11 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param pConfig configuration data for the renderer, or NULL.
 */
 #define CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA(cRendererName, pConfig) do { \
-	cairo_dock_set_desklet_renderer_by_name (myDesklet, cRendererName, CAIRO_DOCK_LOAD_ICONS_FOR_DESKLET, (CairoDeskletRendererConfigPtr) pConfig); \
+	cairo_dock_set_desklet_renderer_by_name (myDesklet, cRendererName, (CairoDeskletRendererConfigPtr) pConfig); \
+	if (myDrawContext) cairo_destroy (myDrawContext);\
 	if (myIcon->pIconBuffer != NULL)\
-		myDrawContext = cairo_create (myIcon->pIconBuffer); } while (0)
+		myDrawContext = cairo_create (myIcon->pIconBuffer);\
+	else myDrawContext = NULL; } while (0)
 
 /** Set a renderer to the applet's desklet and create myDrawContext. Call it at the beginning of init and also reload, to take into account the desklet's resizing.
 *@param cRendererName name of the renderer.
@@ -766,7 +775,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	cairo_dock_destroy_dock (myIcon->pSubDock, myIcon->cName); \
 	myIcon->pSubDock = NULL; } while (0)
 
-#define CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK(pIconsList) do { \
+/*#define CD_APPLET_LOAD_ICONS_IN_MY_SUBDOCK(pIconsList) do { \
 	if (myIcon->cName == NULL) { \
 		CD_APPLET_SET_NAME_FOR_MY_ICON (myIcon->pModuleInstance->pModule->pVisitCard->cModuleName); }\
 	else { \
@@ -779,11 +788,12 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	myIcon->pSubDock->icons = (pIconsList); \
 	myIcon->pSubDock->pFirstDrawnElement = pIconsList; \
 	cairo_dock_load_buffers_in_one_dock (myIcon->pSubDock); \
-	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)
+	cairo_dock_update_dock_size (myIcon->pSubDock); } while (0)*/
 
 /** Delete the list of icons of an applet (keep the subdock in dock mode).
 */
-#define CD_APPLET_DELETE_MY_ICONS_LIST do {\
+#define CD_APPLET_DELETE_MY_ICONS_LIST cairo_dock_remove_all_icons_from_applet (myApplet)
+/*#define CD_APPLET_DELETE_MY_ICONS_LIST do {\
 	if (myDesklet && myDesklet->icons != NULL) {\
 		g_list_foreach (myDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);\
 		g_list_free (myDesklet->icons);\
@@ -795,7 +805,11 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 			g_list_foreach (myIcon->pSubDock->icons, (GFunc) cairo_dock_free_icon, NULL);\
 			g_list_free (myIcon->pSubDock->icons);\
 			myIcon->pSubDock->icons = NULL;\
-			myIcon->pSubDock->pFirstDrawnElement = NULL; } } } while (0)
+			myIcon->pSubDock->pFirstDrawnElement = NULL; } } } while (0)*/
+
+/** Remove an icon from the list of icons of an applet.
+*/
+#define CD_APPLET_REMOVE_ICON_FROM_MY_ICONS_LIST(pIcon) cairo_dock_remove_icon_from_applet (myApplet, pIcon)
 
 /** Load a list of icons into an applet, with the given renderer for the sub-dock or the desklet).
 *@param pIconList a list of icons. It will belong to the applet's container after that.
@@ -804,6 +818,13 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param pDeskletRendererConfig possible configuration parameters for the desklet renderer.
 */
 #define CD_APPLET_LOAD_MY_ICONS_LIST(pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig) do {\
+	cairo_dock_insert_icons_in_applet (myApplet, pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig);\
+	if (myDesklet && myIcon->pIconBuffer != NULL)\
+		myDrawContext = cairo_create (myIcon->pIconBuffer); } while (0)
+
+#define CD_APPLET_ADD_ICON_IN_MY_ICONS_LIST(pIcon) cairo_dock_insert_icon_in_applet (myApplet, pIcon)
+
+/*#define CD_APPLET_LOAD_MY_ICONS_LIST(pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig) do {\
 	if (myDock) {\
 		if (myIcon->pSubDock == NULL) {\
 			if (pIconList != NULL) {\
@@ -820,15 +841,15 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 		myDesklet->icons = pIconList;\
 		CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA (cDeskletRendererName, pDeskletRendererConfig);\
 		CAIRO_DOCK_REDRAW_MY_CONTAINER;\
-	} } while (0)
+	} } while (0)*/
 
 /** Gets the list of icons of your applet. It is either the icons of your sub-dock or of your desklet.
 */
 #define CD_APPLET_MY_ICONS_LIST (myDock ? (myIcon->pSubDock ? myIcon->pSubDock->icons : NULL) : myDesklet->icons)
 /** Gets the container of the icons of your applet. It is either your sub-dock or your desklet.
 */
-#define CD_APPLET_MY_ICONS_LIST_CONTAINER (myDock && myIcon->pSubDock ? CAIRO_CONTAINER (myIcon->pSubDock) : myContainer)
-
+#define CD_APPLET_MY_ICONS_CONTAINER (myDock && myIcon->pSubDock ? CAIRO_CONTAINER (myIcon->pSubDock) : myContainer)
+#define CD_APPLET_MY_ICONS_LIST_CONTAINER CD_APPLET_MY_ICONS_CONTAINER
 
 //\_________________________________ TASKBAR
 /** Lets your applet control the window of an external program, instead of the Taskbar.

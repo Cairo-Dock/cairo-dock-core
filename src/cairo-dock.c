@@ -163,10 +163,77 @@ gboolean g_bEnterHelpOnce = FALSE;
 static gchar *s_cDefaulBackend = NULL;
 static gboolean s_bTestComposite = TRUE;
 
+
+static void _accept_metacity_composition (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
+{
+	if (iClickedButton == 1)  // clic explicite sur "cancel"
+	{
+		int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false");
+	}
+}
+static void _toggle_remember_choice (GtkCheckButton *pButton, GtkWidget *pDialog)
+{
+	g_object_set_data (G_OBJECT (pDialog), "remember", GINT_TO_POINTER (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pButton))));
+}
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
 	if (g_str_has_suffix (s_cLaunchCommand, " -m"))
 		s_cLaunchCommand[strlen (s_cLaunchCommand)-3] = '\0';  // on enleve le mode maintenance.
+	
+	//\___________________ On teste le composite maintenant (au demarrage, le composite manager peut ne pas etre lance).
+	if (s_bTestComposite)
+	{
+		GdkScreen *pScreen = gdk_screen_get_default ();
+		if (! mySystem.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
+		{
+			cd_warning ("no composite manager found");
+			// Si l'utilisateur utilise Metacity, on lui propose d'activer le composite.
+			gchar *cPsef = cairo_dock_launch_command_sync ("pgrep metacity");  // 'ps' ne marche pas, il faut le lancer dans un script :-/
+			if (cPsef != NULL && *cPsef != '\0')  // "metacity" a ete trouve.
+			{
+				Icon *pIcon = cairo_dock_get_dialogless_icon ();
+				GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
+				GtkWidget *label = gtk_label_new (_("Don't ask me any more"));
+				GtkWidget *pCheckBox = gtk_check_button_new ();
+				gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
+				gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
+				g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), pAskBox);
+				int iClickedButton = cairo_dock_show_dialog_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., NULL, pAskBox);
+				
+				gboolean bRememberChoice = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pAskBox), "remember"));
+				gtk_widget_destroy (pAskBox);
+				if (bRememberChoice)
+				{
+					s_bTestComposite = FALSE;
+				}
+				///int iAnswer= cairo_dock_ask_question_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock));
+				if (iClickedButton == 0 || iClickedButton == -1)
+				{
+					int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
+					cairo_dock_show_dialog_with_question (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
+				}
+				
+			}
+			else  // sinon il a droit a un "message a caractere informatif".
+			{
+				cairo_dock_show_general_message (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it. This option is in the 'System' module of the configuration, at the bottom of the page."), 0);
+			}
+			g_free (cPsef);
+		}
+		else  // a priori peu utile de le retester, surtout que le composite risque de ne pas etre actif tout de suite au demarrage.
+		{
+			s_bTestComposite = FALSE;
+		}
+		
+		if (! s_bTestComposite)
+		{
+			gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+			cairo_dock_update_conf_file (cConfFilePath,
+				G_TYPE_BOOLEAN, "Launch", "test composite", s_bTestComposite,
+				G_TYPE_INVALID);
+			g_free (cConfFilePath);
+		}
+	}
 	return FALSE;
 }
 static void _cairo_dock_intercept_signal (int signal)
@@ -193,14 +260,6 @@ static void _cairo_dock_set_signal_interception (void)
 	signal (SIGFPE, _cairo_dock_intercept_signal);  // Floating-point exception
 	signal (SIGILL, _cairo_dock_intercept_signal);  // Illegal instruction
 	signal (SIGABRT, _cairo_dock_intercept_signal);  // Abort
-}
-
-static void _accept_metacity_composition (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
-{
-	if (iClickedButton == 1)  // clic explicite sur "cancel"
-	{
-		int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false");
-	}
 }
 
 static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
@@ -254,11 +313,6 @@ static void _register_help_module (void)
 	cairo_dock_register_module (pHelpModule);
 	cairo_dock_activate_module (pHelpModule, NULL);
 	pHelpModule->fLastLoadingTime = time (NULL) + 1e7;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
-}
-
-static void _toggle_remember_choice (GtkCheckButton *pButton, GtkWidget *pDialog)
-{
-	g_object_set_data (G_OBJECT (pDialog), "remember", GINT_TO_POINTER (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pButton))));
 }
 
 static void _cairo_dock_get_global_config (void)
@@ -741,60 +795,6 @@ int main (int argc, char** argv)
 	
 	_register_help_module ();
 	
-	//\___________________ On teste le composite.
-	if (s_bTestComposite)
-	{
-		GdkScreen *pScreen = gdk_screen_get_default ();
-		if (! mySystem.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
-		{
-			cd_warning ("no composite manager found");
-			// Si l'utilisateur utilise Metacity, on lui propose d'activer le composite.
-			gchar *cPsef = cairo_dock_launch_command_sync ("pgrep metacity");  // 'ps' ne marche pas, il faut le lancer dans un script :-/
-			if (cPsef != NULL && *cPsef != '\0')  // "metacity" a ete trouve.
-			{
-				Icon *pIcon = cairo_dock_get_dialogless_icon ();
-				GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
-				GtkWidget *label = gtk_label_new (_("Don't ask me any more"));
-				GtkWidget *pCheckBox = gtk_check_button_new ();
-				gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
-				gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
-				g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), pAskBox);
-				int iClickedButton = cairo_dock_show_dialog_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., NULL, pAskBox);
-				
-				gboolean bRememberChoice = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pAskBox), "remember"));
-				gtk_widget_destroy (pAskBox);
-				if (bRememberChoice)
-				{
-					s_bTestComposite = FALSE;
-				}
-				///int iAnswer= cairo_dock_ask_question_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock));
-				if (iClickedButton == 0 || iClickedButton == -1)
-				{
-					int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
-					cairo_dock_show_dialog_with_question (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
-				}
-				
-			}
-			else  // sinon il a droit a un "message a caractere informatif".
-			{
-				cairo_dock_show_general_message (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it. This option is in the 'System' module of the configuration, at the bottom of the page."), 0);
-			}
-			g_free (cPsef);
-		}
-		else  // a priori peu utile de le retester, surtout que le composite risque de ne pas etre actif tout de suite au demarrage.
-		{
-			s_bTestComposite = FALSE;
-		}
-		
-		if (! s_bTestComposite)
-		{
-			gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
-			cairo_dock_update_conf_file (cConfFilePath,
-				G_TYPE_BOOLEAN, "Launch", "test composite", s_bTestComposite,
-				G_TYPE_INVALID);
-			g_free (cConfFilePath);
-		}
-	}
 	
 	//\___________________ On affiche un petit message de bienvenue ou de changelog ou d'erreur.
 	gboolean bNewVersion = (s_cLastVersion == NULL || strcmp (s_cLastVersion, CAIRO_DOCK_VERSION) != 0);

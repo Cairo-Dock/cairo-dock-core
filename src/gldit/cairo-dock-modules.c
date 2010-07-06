@@ -622,7 +622,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	}
 
 	//\____________________ On initialise l'instance.
-	if (pDock)
+	if (pDock)  //  on met la taille qu'elle aura une fois dans le dock.
 	{
 		pIcon->fWidth *= pDock->container.fRatio;
 		pIcon->fHeight *= pDock->container.fRatio;
@@ -637,26 +637,24 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		_cairo_dock_read_module_config (pKeyFile, pInstance);
 	
 	gboolean bCanInit = TRUE;
-	if (pDock)
+	pInstance->pDrawContext = NULL;
+	if (pDock && pIcon)  // applet dans un dock (dans un desklet, il faut attendre que l'applet ait mis une vue pour que l'icone soit chargee).
 	{
-		if (pIcon != NULL)
+		if (pIcon->pIconBuffer == NULL)
 		{
-			if (pIcon->pIconBuffer == NULL)
-			{
-				cd_warning ("icon's buffer is NULL, applet won't be able to draw to it !");
-				pInstance->pDrawContext = NULL;
-			}
-			else
-				pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
-			if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
-			{
-				cd_warning ("couldn't initialize drawing context, applet won't be able to draw itself !");
-				bCanInit = FALSE;
-			}
+			cd_warning ("icon's buffer is NULL, applet won't be able to draw to it !");
+			pInstance->pDrawContext = NULL;
+		}
+		else
+			pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
+		if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
+		{
+			cd_warning ("couldn't initialize drawing context, applet won't be able to draw itself !");
+			pInstance->pDrawContext = NULL;
+			bCanInit = FALSE;
 		}
 	}
-	else
-		pInstance->pDrawContext = NULL;
+	
 	if (bCanInit && pModule->pInterface->initModule)
 		pModule->pInterface->initModule (pInstance, pKeyFile);
 	
@@ -854,36 +852,26 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	}
 	
 	//\_______________________ On recharge la config.
+	gboolean bCanReload = TRUE;
 	if (pKeyFile != NULL)
 	{
 		_cairo_dock_read_module_config (pKeyFile, pInstance);
 	}
-	gboolean bCanReload = TRUE;
+	
 	if (pInstance->pDrawContext != NULL)
 	{
 		cairo_destroy (pInstance->pDrawContext);
-		//g_print ("on detruit le ctx de %s (%x)\n", pInstance->cConfFilePath, pInstance->pDrawContext);
+		pInstance->pDrawContext = NULL;
 	}
-	if (pInstance->pDock)
+	if (pIcon && pIcon->pIconBuffer)  // applet, on lui associe un contexte de dessin avant le reload.
 	{
-		//g_print ("dans un dock\n");
-		if (pInstance->pIcon->pIconBuffer == NULL)
-		{
-			cd_warning ("invalid applet's icon buffer");
-			pInstance->pDrawContext = NULL;
-		}
-		else
-			pInstance->pDrawContext = cairo_create (pInstance->pIcon->pIconBuffer);
+		pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
 		if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
 		{
 			cd_warning ("couldn't initialize drawing context, applet won't be reloaded !");
 			bCanReload = FALSE;
+			pInstance->pDrawContext = NULL;
 		}
-	}
-	else
-	{
-		//g_print ("dans un desklet\n");
-		pInstance->pDrawContext = NULL;
 	}
 
 	//\_______________________ On recharge l'instance.

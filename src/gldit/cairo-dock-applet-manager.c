@@ -70,6 +70,17 @@ static void _load_applet (Icon *icon)
 			iWidth,
 			iHeight);
 	}
+	/*if (icon->pIconBuffer != NULL && icon->pModuleInstance != NULL)
+	{
+		if (icon->pModuleInstance->pDrawContext != NULL)
+			cairo_destroy (icon->pModuleInstance->pDrawContext);
+		icon->pModuleInstance->pDrawContext = cairo_create (icon->pIconBuffer);
+		if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
+		{
+			cd_warning ("couldn't initialize drawing context, applet won't be reloaded !");
+			icon->pModuleInstance->pDrawContext = NULL;
+		}
+	}*/
 }
 
 static gboolean _delete_applet (Icon *icon)
@@ -78,7 +89,7 @@ static gboolean _delete_applet (Icon *icon)
 	{
 		cairo_dock_deinstanciate_module (icon->pModuleInstance);  // desactive l'instance du module -> n'est plus une applet valide.
 		cairo_dock_write_active_modules ();
-		icon->cDesktopFileName = g_strdup("");  // cas d'une applet controlant une appli, elle devient du coup une appli normale, ce qu'on ne veut pas.
+		///icon->cDesktopFileName = g_strdup("");  // cas d'une applet controlant une appli, elle devient du coup une appli normale, ce qu'on ne veut pas.
 		return TRUE;
 	}
 	return FALSE;

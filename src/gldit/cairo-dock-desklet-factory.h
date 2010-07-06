@@ -101,7 +101,7 @@ typedef gpointer (* CairoDeskletConfigureRendererFunc) (CairoDesklet *pDesklet, 
 typedef void (* CairoDeskletLoadRendererDataFunc) (CairoDesklet *pDesklet);
 typedef void (* CairoDeskletUpdateRendererDataFunc) (CairoDesklet *pDesklet, CairoDeskletRendererDataPtr pNewData);
 typedef void (* CairoDeskletFreeRendererDataFunc) (CairoDesklet *pDesklet);
-typedef void (* CairoDeskletLoadIconsFunc) (CairoDesklet *pDesklet);
+typedef void (* CairoDeskletCalculateIconsFunc) (CairoDesklet *pDesklet);
 /// Definition of a Desklet's renderer.
 struct _CairoDeskletRenderer {
 	/// rendering function with libcairo.
@@ -115,7 +115,7 @@ struct _CairoDeskletRenderer {
 	/// free all internal data of the renderer.
 	CairoDeskletFreeRendererDataFunc 	free_data;
 	/// define the icons' size and load them.
-	CairoDeskletLoadIconsFunc 			load_icons;
+	CairoDeskletCalculateIconsFunc 			calculate_icons;
 	/// function called on each iteration of the rendering loop.
 	CairoDeskletUpdateRendererDataFunc 	update;
 	/// optionnal rendering function with OpenGL that only draws the bounding boxes of the icons (for picking).
@@ -284,6 +284,13 @@ void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky);
 *@param bPositionLocked whether the position should be locked or not.
 */
 void cairo_dock_lock_desklet_position (CairoDesklet *pDesklet, gboolean bPositionLocked);
+
+
+void cairo_dock_update_desklet_icons (CairoDesklet *pDesklet);
+
+void cairo_dock_insert_icon_in_desklet (Icon *icon, CairoDesklet *pDesklet);
+
+gboolean cairo_dock_detach_icon_from_desklet (Icon *icon, CairoDesklet *pDesklet);
 
 
 G_END_DECLS

@@ -101,7 +101,7 @@ struct _CairoContainer {
 	gboolean bKeepSlowAnimation;
 	/// counter for the animation loop.
 	gint iAnimationStep;
-	void (*set_icon_size) (CairoContainer *pContainer, Icon *icon);
+	CairoContainerInterface iface;
 };
 
 /// Get the Container part of a pointer.

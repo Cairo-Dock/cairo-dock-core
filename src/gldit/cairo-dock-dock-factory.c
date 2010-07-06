@@ -88,6 +88,23 @@ extern gboolean g_bUseGlitz;
 #endif
 
 
+static void _cairo_dock_set_icon_size (CairoDock *pDock, Icon *icon)
+{
+	CairoDockIconType iType = cairo_dock_get_icon_type (icon);
+	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
+	{
+		if (icon->fWidth == 0)
+			icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
+		if (icon->fHeight == 0)
+			icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
+	}
+	else
+	{
+		icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
+		icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
+	}
+}
+
 CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 {
 	//\__________________ On cree un dock.
@@ -104,16 +121,16 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 	pDock->fPostHideOffset = 1.;
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
+	pDock->container.iface.set_icon_size = _cairo_dock_set_icon_size;
+	
 	//\__________________ On cree la fenetre GTK.
 	GtkWidget *pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDock));
-	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 0);
-	pDock->container.pWidget = pWindow;
-	
+	gtk_container_set_border_width (GTK_CONTAINER(pWindow), 0);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
-	
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
 	
+	//\__________________ On associe un renderer.
 	cairo_dock_set_renderer (pDock, cRendererName);
 	
 	//\__________________ On connecte les evenements a la fenetre.
@@ -354,6 +371,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	pDock->icons = g_list_insert_sorted (pDock->icons,
 		icon,
 		pCompareFunc);
+	icon->pContainerForLoad = CAIRO_CONTAINER (pDock);
 	
 	if (icon->fWidth == 0)
 	{
@@ -420,13 +438,34 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 
 gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator)
 {
-	if (pDock == NULL || g_list_find (pDock->icons, icon) == NULL)  // elle est deja detachee.
+	if (pDock == NULL)
 		return FALSE;
-
-	cd_message ("%s (%s,  %d)", __func__, icon->cName, bCheckUnusedSeparator);
+	
+	//\___________________ On trouve l'icone et ses 2 voisins.
+	GList *prev_ic = NULL, *ic, *next_ic;
+	Icon *pPrevIcon = NULL, *pNextIcon = NULL;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		if (ic -> data == icon)
+		{
+			prev_ic = ic->prev;
+			next_ic = ic->next;
+			if (prev_ic)
+				pPrevIcon = prev_ic->data;
+			if (next_ic)
+				pNextIcon = next_ic->data;
+			break;
+		}
+	}
+	if (ic == NULL)  // elle est deja detachee.
+		return FALSE;
+	
+	cd_message ("%s (%s)", __func__, icon->cName);
 	g_free (icon->cParentDockName);
 	icon->cParentDockName = NULL;
+	icon->pContainerForLoad = NULL;
 	
+	//\___________________ On stoppe ses animations.
 	cairo_dock_stop_icon_animation (icon);
 	
 	//\___________________ On desactive sa miniature.
@@ -435,6 +474,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		//cd_debug ("on desactive la miniature de %s (Xid : %lx)", icon->cName, icon->Xid);
 		cairo_dock_set_xicon_geometry (icon->Xid, 0, 0, 0, 0);
 	}
+	
 	//\___________________ On l'enleve de la liste.
 	if (pDock->pFirstDrawnElement != NULL && pDock->pFirstDrawnElement->data == icon)
 	{
@@ -448,25 +488,45 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 				pDock->pFirstDrawnElement = NULL;
 		}
 	}
-	pDock->icons = g_list_remove (pDock->icons, icon);
+	pDock->icons = g_list_delete_link (pDock->icons, ic);
+	ic = NULL;
 	pDock->fFlatDockWidth -= icon->fWidth + myIcons.iIconGap;
 	
-	if (pDock->iNbDrawnIcons != 0)
+	//\___________________ On enleve le separateur si c'est la derniere icone de son type.
+	if (bCheckUnusedSeparator && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
 	{
-		
+		if ((pPrevIcon == NULL || CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pNextIcon))
+		{
+			pDock->icons = g_list_delete_link (pDock->icons, next_ic);
+			next_ic = NULL;
+			pDock->fFlatDockWidth -= pNextIcon->fWidth + myIcons.iIconGap;
+			cairo_dock_free_icon (pNextIcon);
+			pNextIcon = NULL;
+		}
+		else if (pNextIcon == NULL && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon))
+		{
+			pDock->icons = g_list_delete_link (pDock->icons, prev_ic);
+			prev_ic = NULL;
+			pDock->fFlatDockWidth -= pPrevIcon->fWidth + myIcons.iIconGap;
+			cairo_dock_free_icon (pPrevIcon);
+			pPrevIcon = NULL;
+		}
 	}
-
+	
 	//\___________________ Cette icone realisait peut-etre le max des hauteurs, comme on l'enleve on recalcule ce max.
 	Icon *pOtherIcon;
-	GList *ic;
-	if (icon->fHeight == pDock->iMaxIconHeight)
+	if (icon->fHeight >= pDock->iMaxIconHeight)
 	{
 		pDock->iMaxIconHeight = 0;
 		for (ic = pDock->icons; ic != NULL; ic = ic->next)
 		{
 			pOtherIcon = ic->data;
 			if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pOtherIcon))
+			{
 				pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pOtherIcon->fHeight);
+				if (pOtherIcon->fHeight == icon->fHeight)  // on sait qu'on n'ira pas plus haut.
+					break;
+			}
 		}
 	}
 
@@ -475,7 +535,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	icon->fHeight /= pDock->container.fRatio;
 
 	//\___________________ On enleve le separateur si c'est la derniere icone de son type.
-	if (bCheckUnusedSeparator && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
+	/**if (bCheckUnusedSeparator && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
 	{
 		//g_print ("on cherche une icone de ce groupe : %d (%d)\n", icon->iType, cairo_dock_get_icon_order (icon));
 		Icon *pSameTypeIcon = cairo_dock_get_first_icon_of_order (pDock->icons, icon->iType);
@@ -498,13 +558,15 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		}
 		//else
 			//g_print ("il reste encore %s (%d, %d, %x)\n", pSameTypeIcon->cName, pSameTypeIcon->iType, cairo_dock_get_icon_order (pSameTypeIcon), pSameTypeIcon->pModuleInstance);
-	}
+	}*/
 	
-	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
+	//\___________________ On prevoit le redessin de l'icone pointant sur le sous-dock.
+	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
 		cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
 	
+	//\___________________ On prevoit le rafraichissement de la fenetre de config des lanceurs.
 	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
 		cairo_dock_trigger_refresh_launcher_gui ();
 	return TRUE;
@@ -638,7 +700,6 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 
 void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock, const gchar *cReceivingDockName)
 {
-	gboolean bModuleWasRemoved = FALSE;
 	GList *pIconsList = pDock->icons;
 	pDock->icons = NULL;
 	Icon *icon;
@@ -655,16 +716,12 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 
 		if (pReceivingDock == NULL || cReceivingDockName == NULL)  // alors on les jete.
 		{
-			if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon))
-			{
-				cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-				g_remove (cDesktopFilePath);
-				g_free (cDesktopFilePath);
-			}
-			else if (CAIRO_DOCK_IS_APPLET (icon))
+			if (icon->iface.on_delete)
+				icon->iface.on_delete (icon);  // efface le .desktop / ecrit les modules actifs.
+			
+			if (CAIRO_DOCK_IS_APPLET (icon))
 			{
 				cairo_dock_update_icon_s_container_name (icon, CAIRO_DOCK_MAIN_DOCK_NAME);  // on decide de les remettre dans le dock principal la prochaine fois qu'ils seront actives.
-				bModuleWasRemoved = TRUE;
 			}
 			cairo_dock_free_icon (icon);  // de-instancie l'applet.
 		}
@@ -691,9 +748,6 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 		cairo_dock_update_dock_size (pReceivingDock);
 
 	g_list_free (pIconsList);
-	
-	if (bModuleWasRemoved)
-		cairo_dock_write_active_modules ();
 }
 
 

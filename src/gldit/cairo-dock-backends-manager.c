@@ -367,7 +367,7 @@ void cairo_dock_set_default_renderer (CairoDock *pDock)
 }
 
 
-void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRenderer *pRenderer, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig)
+void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRenderer *pRenderer, CairoDeskletRendererConfigPtr pConfig)
 {
 	g_return_if_fail (pDesklet != NULL);
 	
@@ -386,20 +386,33 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 		if (pRenderer->configure != NULL)
 			pDesklet->pRendererData = pRenderer->configure (pDesklet, pConfig);
 		
-		if (bLoadIcons && pRenderer->load_icons != NULL)
-			pRenderer->load_icons (pDesklet);
+		if (pRenderer->calculate_icons != NULL)
+			pRenderer->calculate_icons (pDesklet);
+		
+		Icon* pIcon = pDesklet->pIcon;
+		if (pIcon)
+			cairo_dock_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));
+		
+		GList* ic;
+		for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			pIcon->iImageWidth = pIcon->fWidth;
+			pIcon->iImageHeight = pIcon->fHeight;
+			cairo_dock_trigger_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));
+		}
 		
 		if (pRenderer->load_data != NULL)
 			pRenderer->load_data (pDesklet);
 	}
 }
 
-void cairo_dock_set_desklet_renderer_by_name (CairoDesklet *pDesklet, const gchar *cRendererName, gboolean bLoadIcons, CairoDeskletRendererConfigPtr pConfig)
+void cairo_dock_set_desklet_renderer_by_name (CairoDesklet *pDesklet, const gchar *cRendererName, CairoDeskletRendererConfigPtr pConfig)
 {
-	cd_message ("%s (%s, %d)", __func__, cRendererName, bLoadIcons);
+	cd_message ("%s (%s)", __func__, cRendererName);
 	CairoDeskletRenderer *pRenderer = (cRendererName != NULL ? cairo_dock_get_desklet_renderer (cRendererName) : NULL);
 	
-	cairo_dock_set_desklet_renderer (pDesklet, pRenderer, bLoadIcons, pConfig);
+	cairo_dock_set_desklet_renderer (pDesklet, pRenderer, pConfig);
 }
 
 

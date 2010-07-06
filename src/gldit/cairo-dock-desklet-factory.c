@@ -177,8 +177,45 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 		
 		if (pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
 		{
-			//g_print ("RELOAD\n");
+			// on recalcule la vue du desklet a la nouvelle dimension.
+			CairoDeskletRenderer *pRenderer = pDesklet->pRenderer;
+			if (pRenderer)
+			{
+				// on calcule les icones et les parametres internes de la vue.
+				if (pRenderer->calculate_icons != NULL)
+					pRenderer->calculate_icons (pDesklet);
+				
+				// on recharge l'icone principale.
+				Icon* pIcon = pDesklet->pIcon;
+				if (pIcon)
+				{
+					pIcon->iImageWidth = pIcon->fWidth;
+					pIcon->iImageHeight = pIcon->fHeight;
+					if (pIcon->iImageWidth > 0)
+						cairo_dock_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));  // pas de trigger, car on veut pouvoir associer un contexte a l'icone principale tout de suite.
+				}
+				
+				// on recharge chaque icone.
+				GList* ic;
+				for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+				{
+					pIcon = ic->data;
+					if ((int)pIcon->fWidth != pIcon->iImageWidth || (int)pIcon->fHeight != pIcon->iImageHeight)
+					{
+						pIcon->iImageWidth = pIcon->fWidth;
+						pIcon->iImageHeight = pIcon->fHeight;
+						cairo_dock_trigger_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));
+					}
+				}
+				
+				// on recharge les buffers de la vue.
+				if (pRenderer->load_data != NULL)
+					pRenderer->load_data (pDesklet);
+			}
+			
+			// on recharge le module associe.
 			cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, FALSE);
+			
 			gtk_widget_queue_draw (pDesklet->container.pWidget);  // sinon on ne redessine que l'interieur.
 		}
 		
@@ -688,6 +725,13 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
  /// FACTORY ///
 ///////////////
 
+static void _cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
+{
+	CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
+	/**if (pDesklet->pRenderer && pDesklet->pRenderer->set_icon_size)
+		pDesklet->pRenderer->set_icon_size (pDesklet, icon);*/
+}
+
 CairoDesklet *cairo_dock_new_desklet (void)
 {
 	cd_message ("%s ()", __func__);
@@ -696,6 +740,9 @@ CairoDesklet *cairo_dock_new_desklet (void)
 	pDesklet->container.bIsHorizontal = TRUE;
 	pDesklet->container.bDirectionUp = TRUE;
 	pDesklet->container.fRatio = 1;
+	pDesklet->container.fRatio = 1;
+	
+	pDesklet->container.iface.set_icon_size = _cairo_dock_set_icon_size;
 	
 	GtkWidget* pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDesklet));
 	
@@ -1210,4 +1257,66 @@ void cairo_dock_lock_desklet_position (CairoDesklet *pDesklet, gboolean bPositio
 		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 			G_TYPE_BOOLEAN, "Desklet", "locked", pDesklet->bPositionLocked,
 			G_TYPE_INVALID);
+}
+
+
+void cairo_dock_update_desklet_icons (CairoDesklet *pDesklet)
+{
+	// compute icons size
+	if (pDesklet->pRenderer && pDesklet->pRenderer->calculate_icons != NULL)
+		pDesklet->pRenderer->calculate_icons (pDesklet);
+	
+	// trigger load if changed
+	Icon* pIcon = pDesklet->pIcon;
+	if (pIcon)
+		cairo_dock_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));
+	
+	GList* ic;
+	for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if ((int)pIcon->fWidth != pIcon->iImageWidth || (int)pIcon->fHeight != pIcon->iImageHeight)
+		{
+			pIcon->iImageWidth = pIcon->fWidth;
+			pIcon->iImageHeight = pIcon->fHeight;
+			cairo_dock_trigger_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));
+		}
+	}
+	
+	// redraw
+	cairo_dock_redraw_container (CAIRO_CONTAINER (pDesklet));
+}
+
+void cairo_dock_insert_icon_in_desklet (Icon *icon, CairoDesklet *pDesklet)
+{
+	g_return_if_fail (icon != NULL);
+	if (g_list_find (pDesklet->icons, icon) != NULL)  // elle est deja dans ce desklet.
+		return ;
+	
+	// insert icon
+	pDesklet->icons = g_list_insert_sorted (pDesklet->icons,
+		icon,
+		(GCompareFunc)cairo_dock_compare_icons_order);
+	icon->pContainerForLoad = CAIRO_CONTAINER (pDesklet);
+	
+	// calculate icons
+	cairo_dock_update_desklet_icons (pDesklet);
+}
+
+gboolean cairo_dock_detach_icon_from_desklet (Icon *icon, CairoDesklet *pDesklet)
+{
+	if (pDesklet == NULL)
+		return FALSE;
+	
+	GList *ic = g_list_find (pDesklet->icons, icon);
+	if (! ic)
+		return FALSE;
+	
+	// remove icon
+	pDesklet->icons = g_list_delete_link (pDesklet->icons, ic);
+	ic =  NULL;
+	icon->pContainerForLoad = NULL;
+	
+	// calculate icons
+	cairo_dock_update_desklet_icons (pDesklet);
 }

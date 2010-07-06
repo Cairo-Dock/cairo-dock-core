@@ -236,6 +236,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	
 	//\___________________ Parametres des separateurs.
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "separator ", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12]);
+	if (pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] == 0)
+		pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] = pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	if (pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] == 0)
+		pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] = pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
+	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] = MIN (pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER]);
+	
 	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR23] = pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
 	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR23] = pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12];
 	

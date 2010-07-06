@@ -344,6 +344,7 @@ typedef struct _CairoDialogDecorator CairoDialogDecorator;
 typedef struct _IconInterface IconInterface;
 typedef struct _Icon Icon;
 typedef struct _CairoContainer CairoContainer;
+typedef struct _CairoContainerInterface CairoContainerInterface;
 typedef struct _CairoDock CairoDock;
 typedef struct _CairoDesklet CairoDesklet;
 typedef struct _CairoDialog CairoDialog;
