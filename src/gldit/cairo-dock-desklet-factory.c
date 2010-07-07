@@ -569,8 +569,13 @@ static void on_drag_data_received_desklet (GtkWidget *pWidget, GdkDragContext *d
 	//g_print ("%s (%dx%d)\n", __func__, x, y);
 	
 	//\_________________ On recupere l'URI.
-	gchar *cReceivedData = (gchar *) selection_data->data;
+	gchar *cReceivedData = (gchar *) selection_data->data;  // gtk_selection_data_get_text
 	g_return_if_fail (cReceivedData != NULL);
+	int length = strlen (cReceivedData);
+	if (cReceivedData[length-1] == '\n')
+		cReceivedData[--length] = '\0';  // on vire le retour chariot final.
+	if (cReceivedData[length-1] == '\r')
+		cReceivedData[--length] = '\0';
 	
 	pDesklet->container.iMouseX = x;
 	pDesklet->container.iMouseY = y;

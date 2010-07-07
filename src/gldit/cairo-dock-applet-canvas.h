@@ -205,7 +205,6 @@ CD_APPLET_STOP_PROTO \
 /** Fin de la fonction d'arret de l'applet.
 */
 #define CD_APPLET_STOP_END \
-	cairo_dock_release_data_slot (myApplet); \
 	g_pCurrentModule = NULL;\
 }
 

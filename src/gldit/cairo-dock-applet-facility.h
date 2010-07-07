@@ -53,11 +53,10 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 *@param pIconContext the drawing context; is not altered by the function.
 *@param fValue the value representing a percentage, in [-1,1]. if negative, the gradation is inverted, and the absolute value is used.
 *@param pIcon the icon.
-*@param pContainer the container of the icon.
 */
-void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon);
 
-void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon);
 
 /** Apply a surface on the context of an icon, clearing it beforehand, and adding the reflect.
 *@param pIconContext the drawing context; is not altered by the function.
@@ -503,7 +502,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param fValue the value representing a percentage, in [-1,1]. If negative, the gradation is inverted, and the absolute value is used.
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_BAR(pSurface, fValue) do { \
-	cairo_dock_set_icon_surface_with_bar (myDrawContext, pSurface, fValue, myIcon, myContainer); \
+	cairo_dock_set_icon_surface_with_bar (myDrawContext, pSurface, fValue, myIcon); \
 	cairo_dock_add_reflection_to_icon (myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
@@ -792,8 +791,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_MY_ICONS_LIST (myDock ? (myIcon->pSubDock ? myIcon->pSubDock->icons : NULL) : myDesklet->icons)
 /** Gets the container of the icons of your applet. It is either your sub-dock or your desklet.
 */
-#define CD_APPLET_MY_ICONS_CONTAINER (myDock && myIcon->pSubDock ? CAIRO_CONTAINER (myIcon->pSubDock) : myContainer)
-#define CD_APPLET_MY_ICONS_LIST_CONTAINER CD_APPLET_MY_ICONS_CONTAINER
+#define CD_APPLET_MY_ICONS_LIST_CONTAINER (myDock && myIcon->pSubDock ? CAIRO_CONTAINER (myIcon->pSubDock) : myContainer)
 
 //\_________________________________ TASKBAR
 /** Lets your applet control the window of an external program, instead of the Taskbar.

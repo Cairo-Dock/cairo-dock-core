@@ -544,6 +544,8 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 	if (pIcon->pReflectionBuffer != NULL)
 		cairo_surface_destroy (pIcon->pReflectionBuffer);
 	
+	if (! pContainer->bUseReflect)
+		return;
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 	pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,

@@ -325,14 +325,8 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 	}
 	//g_print ("%s -> %s\n", cURI, pNewIcon->cFileName);
 
-	if (bIsDirectory)
-	{
-		cd_message ("  c'est un sous-repertoire");
-	}
-
 	if (iFileSortType == CAIRO_DOCK_FM_SORT_BY_NAME)
 	{
-		g_print (" new icon\n");
 		GList *pList = (CAIRO_DOCK_IS_DOCK (pContainer) ? CAIRO_DOCK (pContainer)->icons : CAIRO_DESKLET (pContainer)->icons);
 		GList *ic;
 		Icon *icon;
@@ -345,7 +339,6 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 				{
 					Icon *prev_icon = ic->prev->data;
 					pNewIcon->fOrder = (icon->fOrder + prev_icon->fOrder) / 2;
-					g_print (" prev : %.2f\n", pNewIcon->fOrder);
 				}
 				else
 					pNewIcon->fOrder = icon->fOrder - 1;
@@ -356,7 +349,6 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 				pNewIcon->fOrder = icon->fOrder + 1;
 			}
 		}
-		g_print (" -> %.2f\n", pNewIcon->fOrder);
 	}
 	cairo_dock_trigger_load_icon_buffers (pNewIcon, pContainer);
 

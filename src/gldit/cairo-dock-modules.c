@@ -694,6 +694,8 @@ static void _cairo_dock_stop_module_instance (CairoDockModuleInstance *pInstance
 	if (pInstance->pModule->pInterface->reset_config != NULL)
 		pInstance->pModule->pInterface->reset_config (pInstance);
 	
+	cairo_dock_release_data_slot (pInstance);
+	
 	if (pInstance->pDesklet)
 		cairo_dock_destroy_desklet (pInstance->pDesklet);
 	if (pInstance->pDrawContext != NULL)

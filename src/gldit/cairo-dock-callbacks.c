@@ -65,7 +65,6 @@
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-background.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-X-utilities.h"
@@ -517,41 +516,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		pDock->fAvoidingMouseMargin = .25;  // on peut dropper entre 2 icones ...
 		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;  // ... seulement entre 2 lanceurs.
 	}
-	
-	//\_______________ On asservit les decorations au curseur.
-	/**if (pDock->container.bInside)
-	{
-		if (myBackground.bDecorationsFollowMouse)
-		{
-			pDock->fDecorationsOffsetX = pDock->container.iMouseX - pDock->container.iWidth / 2;
-			//g_print ("fDecorationsOffsetX <- %.2f\n", pDock->fDecorationsOffsetX);
-		}
-		else
-		{
-			if (pDock->container.iMouseX > iLastMouseX)
-			{
-				pDock->fDecorationsOffsetX += 10;
-				if (pDock->fDecorationsOffsetX > pDock->container.iWidth / 2)
-				{
-					if (myBackground.cBackgroundImageFile && !myBackground.bBackgroundImageRepeat)
-						pDock->fDecorationsOffsetX -= pDock->container.iWidth;
-					else
-						pDock->fDecorationsOffsetX = pDock->container.iWidth / 2;
-				}
-			}
-			else
-			{
-				pDock->fDecorationsOffsetX -= 10;
-				if (pDock->fDecorationsOffsetX < - pDock->container.iWidth / 2)
-				{
-					if (myBackground.cBackgroundImageFile && !myBackground.bBackgroundImageRepeat)
-						pDock->fDecorationsOffsetX += pDock->container.iWidth;
-					else
-						pDock->fDecorationsOffsetX = - pDock->container.iWidth / 2;
-				}
-			}
-		}
-	}*/
 	
 	//\_______________ On gere le changement d'icone.
 	gboolean bStartAnimation = FALSE;

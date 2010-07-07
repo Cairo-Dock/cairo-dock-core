@@ -138,9 +138,9 @@ static void _load_launcher (Icon *icon)
 	{
 		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
 		if (cIconPath != NULL && *cIconPath != '\0')
-		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
-			iWidth,
-			iHeight);
+			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+				iWidth,
+				iHeight);
 		g_free (cIconPath);
 	}
 }

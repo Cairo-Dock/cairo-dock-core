@@ -133,7 +133,7 @@ void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePat
 	cairo_surface_destroy (pImageSurface);
 }
 
-void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon)
 {
 	g_return_if_fail (cairo_status (pIconContext) == CAIRO_STATUS_SUCCESS);
 	
@@ -152,16 +152,16 @@ void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_
 	}
 	
 	//\________________ On dessine la barre.
-	cairo_dock_draw_bar_on_icon (pIconContext, fValue, pIcon, pContainer);
+	cairo_dock_draw_bar_on_icon (pIconContext, fValue, pIcon);
 	
 	if (g_bUseOpenGL)
 		cairo_dock_update_icon_texture (pIcon);
 }
 
-void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon)
 {
-	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+	int iWidth = pIcon->iImageWidth;
+	int iHeight = pIcon->iImageHeight;
 	
 	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
 		0.,
