@@ -149,26 +149,57 @@ gboolean cairo_dock_fm_remove_monitor_full (const gchar *cURI, gboolean bDirecto
 
 
 
-gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer)
+gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->mount != NULL && iVolumeID > 0 && cURI != NULL)
 	{
-		s_pEnvBackend->mount (cURI, iVolumeID, pCallback, icon, pContainer);
+		s_pEnvBackend->mount (cURI, iVolumeID, pCallback, user_data);
 		return TRUE;
 	}
 	else
 		return FALSE;
 }
 
-gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer)
+gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->unmount != NULL && iVolumeID > 0 && cURI != NULL)
 	{
-		s_pEnvBackend->unmount (cURI, iVolumeID, pCallback, icon, pContainer);
+		s_pEnvBackend->unmount (cURI, iVolumeID, pCallback, user_data);
 		return TRUE;
 	}
 	else
 		return FALSE;
+}
+
+
+static void _cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess, const gchar *cName, const gchar *cUri, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoContainer *pContainer = data[1];
+	cd_message ("%s (%s) : %d", __func__, (bMounting ? "mount" : "unmount"), bSuccess);  // en cas de demontage effectif, l'icone n'est plus valide !
+	if ((! bSuccess && pContainer != NULL) || icon == NULL)  // dans l'autre cas (succes), l'icone peut ne plus etre valide ! mais on s'en fout, puisqu'en cas de succes, il y'aura rechargement de l'icone, et donc on pourra balancer le message a ce moment-la.
+	{
+		///if (icon != NULL)
+			cairo_dock_show_temporary_dialog_with_icon_printf (bMounting ? _("failed to mount %s") : _("Failed to unmount %s"), icon, pContainer, 4000, "same icon", cName);
+		///else
+		///	cairo_dock_show_general_message (cMessage, 4000);
+	}
+}
+
+gboolean cairo_dock_fm_mount (Icon *pIcon, CairoContainer *pContainer)
+{
+	gpointer *data = g_new0 (gpointer, 2);
+	data[0] = pIcon;
+	data[1] = pContainer;
+	return cairo_dock_fm_mount_full (pIcon->cBaseURI, pIcon->iVolumeID, (CairoDockFMMountCallback)_cairo_dock_fm_action_after_mounting, data);
+}
+
+gboolean cairo_dock_fm_unmount (Icon *pIcon, CairoContainer *pContainer)
+{
+	gpointer *data = g_new0 (gpointer, 2);
+	data[0] = pIcon;
+	data[1] = pContainer;
+	return cairo_dock_fm_unmount_full (pIcon->cBaseURI, pIcon->iVolumeID, (CairoDockFMMountCallback)_cairo_dock_fm_action_after_mounting, data);
 }
 
 gchar *cairo_dock_fm_is_mounted (const gchar *cURI, gboolean *bIsMounted)
@@ -583,18 +614,6 @@ void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const 
 void cairo_dock_fm_action_on_file_event (CairoDockFMEventType iEventType, const gchar *cURI, Icon *pIcon)
 {
 	cairo_dock_fm_manage_event_on_file (iEventType, cURI, pIcon, CAIRO_DOCK_LAUNCHER, CAIRO_DOCK_FM_SORT_BY_NAME);
-}
-
-void cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess, const gchar *cName, Icon *icon, CairoContainer *pContainer)
-{
-	cd_message ("%s (%s) : %d", __func__, (bMounting ? "mount" : "unmount"), bSuccess);  // en cas de demontage effectif, l'icone n'est plus valide !
-	if ((! bSuccess && pContainer != NULL) || icon == NULL)  // dans l'autre cas (succes), l'icone peut ne plus etre valide ! mais on s'en fout, puisqu'en cas de succes, il y'aura rechargement de l'icone, et donc on pourra balancer le message a ce moment-la.
-	{
-		///if (icon != NULL)
-			cairo_dock_show_temporary_dialog_with_icon_printf (bMounting ? _("failed to mount %s") : _("Failed to unmount %s"), icon, pContainer, 4000, "same icon", cName);
-		///else
-		///	cairo_dock_show_general_message (cMessage, 4000);
-	}
 }
 
 

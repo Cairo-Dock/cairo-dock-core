@@ -815,7 +815,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
-	cd_debug ("on a appuye sur une touche (%d)", pKey->keyval);
+	g_print ("on a appuye sur une touche (%d)\n", pKey->keyval);
 	if (pKey->type == GDK_KEY_PRESS)
 	{
 		cairo_dock_notify (CAIRO_DOCK_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);

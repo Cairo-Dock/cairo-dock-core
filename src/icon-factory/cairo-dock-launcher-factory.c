@@ -24,10 +24,12 @@
 #include "cairo-dock-icons.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-file-manager.h"
 #include "cairo-dock-launcher-factory.h"
 
 extern gchar *g_cCurrentLaunchersPath;
 extern int g_iNbNonStickyLaunchers;
+extern CairoDockDesktopEnv g_iDesktopEnv;
 
 gboolean cairo_dock_remove_version_from_string (gchar *cString)
 {
@@ -290,9 +292,15 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		gchar *cOldCommand = icon->cCommand;
 		const gchar *cTerm = g_getenv ("COLORTERM");
 		if (cTerm != NULL && strlen (cTerm) > 1)  // on filtre les cas COLORTERM=1 ou COLORTERM=y. ce qu'on veut c'est le nom d'un terminal.
-			icon->cCommand = g_strdup_printf ("$COLORTERM -e \"%s\"", cOldCommand);
+			icon->cCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cOldCommand);
+		else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
+			icon->cCommand = g_strdup_printf ("gnome-terminal -e \"%s\"", cOldCommand);
+		else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
+			icon->cCommand = g_strdup_printf ("xfce4-terminal -e \"%s\"", cOldCommand);
+		else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
+			icon->cCommand = g_strdup_printf ("konsole -e \"%s\"", cOldCommand);
 		else if (g_getenv ("TERM") != NULL)
-			icon->cCommand = g_strdup_printf ("$TERM -e \"%s\"", cOldCommand);
+			icon->cCommand = g_strdup_printf ("%s -e \"%s\"", g_getenv ("TERM"), cOldCommand);
 		else
 			icon->cCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
 		g_free (cOldCommand);

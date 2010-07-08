@@ -215,7 +215,7 @@ CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDoc
 			if (icon->cParentDockName == NULL)
 				icon->cParentDockName = g_strdup (cDockName);
 		}
-		cairo_dock_load_buffers_in_one_dock (pSubDock);
+		cairo_dock_load_buffers_in_one_dock (pSubDock);  // reload en idle.
 	}
 	return pSubDock;
 }

@@ -83,7 +83,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
 	CairoDialog *pDialog)
 {
-	//g_print ("%s (%dx%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight);
+	//g_print ("%s (%dx%d ; %d;%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight, pExpose->area.x, pExpose->area.y);
 	int x, y;
 	if (0 && g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
 	{
@@ -322,15 +322,18 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 	if (iDesiredSize == 0)
 		iDesiredSize = myDialogs.iDialogIconSize;
 	cairo_surface_t *pIconBuffer = NULL;
-	if (strcmp (cImageFilePath, "same icon") == 0 && pIcon != NULL && pContainer != NULL)
+	if (strcmp (cImageFilePath, "same icon") == 0)
 	{
-		if (pContainer == NULL)
-			pContainer = cairo_dock_search_container_from_icon (pIcon);
-		int iWidth, iHeight;
-		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
-		pIconBuffer = cairo_dock_duplicate_surface (pIcon->pIconBuffer,
-			iWidth, iHeight,
-			iDesiredSize, iDesiredSize);
+		if (pIcon && pIcon->pIconBuffer)
+		{
+			if (pContainer == NULL)
+				pContainer = cairo_dock_search_container_from_icon (pIcon);
+			int iWidth, iHeight;
+			cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+			pIconBuffer = cairo_dock_duplicate_surface (pIcon->pIconBuffer,
+				iWidth, iHeight,
+				iDesiredSize, iDesiredSize);
+		}
 	}
 	else
 	{

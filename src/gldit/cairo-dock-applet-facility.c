@@ -497,7 +497,7 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 			Icon *pLastIcon = cairo_dock_get_last_icon (pIcon->pSubDock->icons);
 			pOneIcon->fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 0);
 		}
-		cairo_dock_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
+		cairo_dock_trigger_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
 		cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 		pOneIcon->cParentDockName = g_strdup (pIcon->cName);
 	}

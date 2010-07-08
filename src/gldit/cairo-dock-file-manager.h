@@ -61,9 +61,9 @@ typedef gchar * (*CairoDockFMIsMountedFunc) (const gchar *cURI, gboolean *bIsMou
 typedef gboolean (*CairoDockFMCanEjectFunc) (const gchar *cURI);
 typedef gboolean (*CairoDockFMEjectDriveFunc) (const gchar *cURI);
 
-typedef void (*CairoDockFMMountCallback) (gboolean bMounting, gboolean bSuccess, const gchar *cName, Icon *icon, CairoContainer *pContainer);
-typedef void (*CairoDockFMMountFunc) (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
-typedef void (*CairoDockFMUnmountFunc) (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
+typedef void (*CairoDockFMMountCallback) (gboolean bMounting, gboolean bSuccess, const gchar *cName, const gchar *cUri, gpointer data);
+typedef void (*CairoDockFMMountFunc) (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data);
+typedef void (*CairoDockFMUnmountFunc) (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data);
 
 typedef void (*CairoDockFMMonitorCallback) (CairoDockFMEventType iEventType, const gchar *cURI, gpointer data);
 typedef void (*CairoDockFMAddMonitorFunc) (const gchar *cURI, gboolean bDirectory, CairoDockFMMonitorCallback pCallback, gpointer data);
@@ -139,17 +139,17 @@ gboolean cairo_dock_fm_remove_monitor_full (const gchar *cURI, gboolean bDirecto
 
 /** Mount a point.
 */
-gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
+gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data);
 /** Mount an icon representing an URI.
 */
-#define cairo_dock_fm_mount(icon, pContainer) cairo_dock_fm_mount_full (icon->cBaseURI, icon->iVolumeID, cairo_dock_fm_action_after_mounting, icon, pContainer)
+gboolean cairo_dock_fm_mount (Icon *icon, CairoContainer *pContainer);
 
 /** Unmount a point.
 */
-gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, Icon *icon, CairoContainer *pContainer);
+gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data);
 /** Unmount an icon representing an URI.
 */
-#define cairo_dock_fm_unmount(icon, pContainer) cairo_dock_fm_unmount_full (icon->cBaseURI, icon->iVolumeID, cairo_dock_fm_action_after_mounting, icon, pContainer)
+gboolean cairo_dock_fm_unmount (Icon *icon, CairoContainer *pContainer);
 
 /** Say if a point is currently mounted.
 */
@@ -212,8 +212,6 @@ void cairo_dock_fm_create_dock_from_directory (Icon *pIcon, CairoDock *pParentDo
 
 void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const gchar *cURI, Icon *pIcon, CairoDockIconType iTypeOnCreation, CairoDockFMSortType iSortingType);
 void cairo_dock_fm_action_on_file_event (CairoDockFMEventType iEventType, const gchar *cURI, Icon *pIcon);
-
-void cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess, const gchar *cName, Icon *icon, CairoContainer *pContainer);
 
 
 gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, CairoContainer *pContainer);
