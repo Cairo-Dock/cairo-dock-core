@@ -747,7 +747,7 @@ static void _cairo_dock_delete_file (GtkMenuItem *pMenuItem, gpointer *data)
 	g_free (question);
 	if (answer == GTK_RESPONSE_YES)
 	{
-		gboolean bSuccess = cairo_dock_fm_delete_file (icon->cCommand);
+		gboolean bSuccess = cairo_dock_fm_delete_file (icon->cCommand, FALSE);
 		if (! bSuccess)
 		{
 			cd_warning ("couldn't delete this file.\nCheck that you have writing rights on this file.\n");

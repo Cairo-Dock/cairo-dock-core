@@ -819,7 +819,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 				if (pDock->iRefCount > 0 && myAccessibility.iLeaveSubDockDelay > 0)
 					pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
 				else
-					cairo_dock_emit_leave_signal (pDock);
+					cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 			}
 		break ;
 	}

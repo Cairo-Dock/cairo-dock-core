@@ -59,6 +59,16 @@ GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_f
 	}
 }
 
+gsize cairo_dock_fm_measure_diretory (const gchar *cBaseURI, gint iCountType, gboolean bRecursive, gint *pCancel)
+{
+	if (s_pEnvBackend != NULL && s_pEnvBackend->measure_directory != NULL)
+	{
+		return s_pEnvBackend->measure_directory (cBaseURI, iCountType, bRecursive, pCancel);
+	}
+	else
+		return 0;
+}
+
 gboolean cairo_dock_fm_get_file_info (const gchar *cBaseURI, gchar **cName, gchar **cURI, gchar **cIconName, gboolean *bIsDirectory, int *iVolumeID, double *fOrder, CairoDockFMSortType iSortType)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->get_file_info != NULL)
@@ -227,11 +237,11 @@ gboolean cairo_dock_fm_eject_drive (const gchar *cURI)
 }
 
 
-gboolean cairo_dock_fm_delete_file (const gchar *cURI)
+gboolean cairo_dock_fm_delete_file (const gchar *cURI, gboolean bNoTrash)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->delete_file != NULL)
 	{
-		return s_pEnvBackend->delete_file (cURI);
+		return s_pEnvBackend->delete_file (cURI, bNoTrash);
 	}
 	else
 		return FALSE;
@@ -257,6 +267,17 @@ gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI)
 		return FALSE;
 }
 
+
+gboolean cairo_dock_fm_empty_trash (void)
+{
+	if (s_pEnvBackend != NULL && s_pEnvBackend->empty_trash != NULL)
+	{
+		s_pEnvBackend->empty_trash ();
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
 
 gchar *cairo_dock_fm_get_trash_path (const gchar *cNearURI, gchar **cFileInfoPath)
 {

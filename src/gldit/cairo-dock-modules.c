@@ -212,7 +212,7 @@ gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard)
 	{
 		cd_message ("directory %s doesn't exist, it will be added.", cUserDataDirPath);
 		
-		gchar *command = g_strdup_printf ("mkdir -p %s", cUserDataDirPath);
+		gchar *command = g_strdup_printf ("mkdir -p \"%s\"", cUserDataDirPath);
 		r = system (command);
 		g_free (command);
 	}
@@ -221,7 +221,7 @@ gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard)
 	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
 		cd_message ("no conf file %s, we will take the default one", cConfFilePath);
-		gchar *command = g_strdup_printf ("cp %s/%s %s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName, cConfFilePath);
+		gchar *command = g_strdup_printf ("cp \"%s/%s\" \"%s\"", pVisitCard->cShareDataDir, pVisitCard->cConfFileName, cConfFilePath);
 		r = system (command);
 		g_free (command);
 	}
@@ -1233,7 +1233,7 @@ void cairo_dock_add_module_instance (CairoDockModule *pModule)
 	gchar *cInstanceFilePath = g_strdup_printf ("%s-%d", pModule->cConfFilePath, iNbInstances);
 	if (! g_file_test (cInstanceFilePath, G_FILE_TEST_EXISTS))
 	{
-		gchar *cCommand = g_strdup_printf ("cp %s/%s %s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName, cInstanceFilePath);
+		gchar *cCommand = g_strdup_printf ("cp \"%s/%s\" \"%s\"", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName, cInstanceFilePath);
 		cd_debug (cCommand);
 		int r = system (cCommand);
 		g_free (cCommand);

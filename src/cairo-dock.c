@@ -464,7 +464,9 @@ int main (int argc, char** argv)
 		{"locked", 'k', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bLocked,
 			"lock the dock so that any modification is impossible for users.", NULL},
-		{NULL}
+		{NULL, 0, 0, 0,
+			NULL,
+			NULL, NULL}
 	};
 
 	GOptionContext *context = g_option_context_new ("Cairo-Dock");

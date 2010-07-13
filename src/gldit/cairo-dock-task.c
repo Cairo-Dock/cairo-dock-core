@@ -183,7 +183,7 @@ void cairo_dock_discard_task (CairoDockTask *pTask)
 		return ;
 	
 	cairo_dock_cancel_next_iteration (pTask);
-	pTask->bDiscard = TRUE;
+	g_atomic_int_set (&pTask->bDiscard, 1);
 	
 	if (pTask->iSidTimerUpdate == 0)
 		pTask->iSidTimerUpdate = g_idle_add ((GSourceFunc) _free_discarded_task, pTask);
