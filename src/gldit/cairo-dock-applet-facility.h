@@ -124,7 +124,7 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pModuleInstance
 
 void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon);
 
-void cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pModuleInstance, Icon *icon);
+gboolean cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pModuleInstance, Icon *icon);
 
 void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pModuleInstance);
 
@@ -766,7 +766,8 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_DELETE_MY_ICONS_LIST cairo_dock_remove_all_icons_from_applet (myApplet)
 
 /** Remove an icon from the list of icons of an applet. The icon is destroyed and should not be used after that.
-*@param pIcon the icon to remove.
+* @param pIcon the icon to remove.
+* @return whether the icon has been removed or not.
 */
 #define CD_APPLET_REMOVE_ICON_FROM_MY_ICONS_LIST(pIcon) cairo_dock_remove_icon_from_applet (myApplet, pIcon)
 

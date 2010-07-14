@@ -125,7 +125,10 @@ static gboolean _cairo_dock_one_shot_timer (CairoDockTask *pTask)
 void cairo_dock_launch_task_delayed (CairoDockTask *pTask, double fDelay)
 {
 	cairo_dock_cancel_next_iteration (pTask);
-	pTask->iSidTimer = g_timeout_add (fDelay, (GSourceFunc) _cairo_dock_one_shot_timer, pTask);
+	if (fDelay == 0)
+		pTask->iSidTimer = g_idle_add ((GSourceFunc) _cairo_dock_one_shot_timer, pTask);
+	else
+		pTask->iSidTimer = g_timeout_add (fDelay, (GSourceFunc) _cairo_dock_one_shot_timer, pTask);
 }
 
 

@@ -518,31 +518,33 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 	}
 }
 
-void cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon)
+gboolean cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon)
 {
 	Icon *pIcon = pInstance->pIcon;
-	g_return_if_fail (pIcon != NULL);
+	g_return_val_if_fail (pIcon != NULL, FALSE);
 	
 	CairoContainer *pContainer = pInstance->pContainer;
-	g_return_if_fail (pContainer != NULL);
+	g_return_val_if_fail (pContainer != NULL, FALSE);
 	
 	if (pOneIcon == NULL)
-		return ;
+		return FALSE;
 	
+	gboolean bRemoved = FALSE;
 	GList *pIconsList = (pInstance->pDock ? (pIcon->pSubDock ? pIcon->pSubDock->icons : NULL) : pInstance->pDesklet->icons);
 	if (pInstance->pDock)
 	{
 		if (pIcon->pSubDock != NULL)
 		{
-			cairo_dock_detach_icon_from_dock (pOneIcon, pIcon->pSubDock, FALSE);
+			bRemoved = cairo_dock_detach_icon_from_dock (pOneIcon, pIcon->pSubDock, FALSE);
 			cairo_dock_update_dock_size (pIcon->pSubDock);
 		}
 	}
 	else if (pInstance->pDesklet)
 	{
-		cairo_dock_detach_icon_from_desklet (pOneIcon, pInstance->pDesklet);
+		bRemoved = cairo_dock_detach_icon_from_desklet (pOneIcon, pInstance->pDesklet);
 	}
 	cairo_dock_free_icon (pOneIcon);
+	return bRemoved;
 }
 
 void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance)
