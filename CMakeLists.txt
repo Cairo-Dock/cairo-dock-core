@@ -120,6 +120,7 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock.conf.in ${CMAKE_CURR
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock-simple.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/cairo-dock-simple.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/main-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/main-dock.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/themes.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/themes.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/help.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/help.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.pc.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY)
 

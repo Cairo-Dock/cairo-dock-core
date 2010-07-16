@@ -107,6 +107,11 @@ typedef enum {
 	/// same but only if the module exists.
 	CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS='M',
 	
+	/// a button to launch a specific command.
+	CAIRO_DOCK_WIDGET_LAUNCH_COMMAND='Z',
+	/// a button to launch a specific command with a condition.
+	CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION='G',
+	
 	/// a text entry.
 	CAIRO_DOCK_WIDGET_STRING_ENTRY='s',
 	/// a text entry with a file selector.

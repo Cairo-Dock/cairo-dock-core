@@ -61,7 +61,6 @@ install (FILES
 	icon-all.svg
 	icon-extensions.svg
 	cairo-dock-animated.xpm
-	help.conf
 	icon-help.svg
 	icon-close.png
 	icon-restore.png
@@ -71,11 +70,16 @@ install (FILES
 	box-back.png
 	DESTINATION ${pkgdatadir})
 
+install (FILES help_scripts.sh
+	DESTINATION ${pkgdatadir}
+	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
 install (FILES
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.conf
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-simple.conf
 	${CMAKE_CURRENT_BINARY_DIR}/themes.conf
 	${CMAKE_CURRENT_BINARY_DIR}/main-dock.conf
+	${CMAKE_CURRENT_BINARY_DIR}/help.conf
 	DESTINATION ${pkgdatadir})
 
 install (FILES

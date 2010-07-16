@@ -1471,6 +1471,19 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	g_free (cMessage);
 }
 
+static void _cairo_dock_widget_launch_command (GtkButton *button, gpointer *data)
+{
+	GtkTreeView *pCombo = data[0];
+	GtkWindow *pDialog = data[1];
+	gchar *cCommandToLaunch = g_strdup (data[2]);
+	
+	gchar *cCommand = cairo_dock_launch_command_sync (cCommandToLaunch);
+	if (cCommand != NULL)
+		cd_debug ("%s: %s => %s\n", __func__, cCommandToLaunch, cCommand);
+	//g_free (cCommand);
+	//g_free (cCommandToLaunch);
+}
+
 #define _allocate_new_buffer\
 	data = g_new (gconstpointer, 3); \
 	g_ptr_array_add (pDataGarbage, data);
@@ -2349,6 +2362,42 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				g_signal_connect (G_OBJECT (pOneWidget),
 					"clicked",
 					G_CALLBACK (_cairo_dock_configure_module),
+					data);
+				_pack_subwidget (pOneWidget);
+			break ;
+			
+			case CAIRO_DOCK_WIDGET_LAUNCH_COMMAND :
+			case CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION :
+				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
+					break ;
+				const gchar *cFirstCommand = NULL;
+				cFirstCommand = pAuthorizedValuesList[0];
+				if (iElementType == CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION)
+				{
+					if (pAuthorizedValuesList[1] == NULL)
+					{ // condition without condition...
+						gtk_widget_set_sensitive (pLabel, FALSE);
+						break ;
+					}
+					gchar *cSecondCommand = pAuthorizedValuesList[1];
+					gchar *cCommand = cairo_dock_launch_command_sync (cSecondCommand);
+					cd_debug ("%s: %s => %s", __func__, cSecondCommand, cCommand);
+					if (cCommand == NULL || *cCommand == '0' || *cCommand == '\0')
+					{ // d'autres mauvaises conditions ?
+						gtk_widget_set_sensitive (pLabel, FALSE);
+						break ;
+					}
+					//g_free (cCommand); // pas de g_free s'il break?
+					//g_free (cSecondCommand);
+				}
+				pOneWidget = gtk_button_new_from_stock (GTK_STOCK_JUMP_TO);
+				_allocate_new_buffer;
+				data[0] = pOneWidget;
+				data[1] = pMainWindow;
+				data[2] = g_strdup (cFirstCommand);
+				g_signal_connect (G_OBJECT (pOneWidget),
+					"clicked",
+					G_CALLBACK (_cairo_dock_widget_launch_command),
 					data);
 				_pack_subwidget (pOneWidget);
 			break ;
