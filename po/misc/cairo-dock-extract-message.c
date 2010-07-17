@@ -211,6 +211,9 @@ main (int argc, char** argv)
 					case CAIRO_DOCK_WIDGET_TEXT_LABEL :
 					case CAIRO_DOCK_WIDGET_HANDBOOK :
 					case CAIRO_DOCK_WIDGET_SEPARATOR :
+					
+					case CAIRO_DOCK_WIDGET_LAUNCH_COMMAND :
+					case CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION :
 					break;
 					
 					case CAIRO_DOCK_WIDGET_HSCALE_INTEGER :
