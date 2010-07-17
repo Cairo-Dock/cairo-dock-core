@@ -340,6 +340,8 @@ void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName);
 
 // deactivate_module_instance_and_unload + remove file + rename last instance file
 void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance);
+// cp file
+gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule);
 // cp file + instanciate_module + update_dock_size
 void cairo_dock_add_module_instance (CairoDockModule *pModule);
 // update conf file + reload_module_instance

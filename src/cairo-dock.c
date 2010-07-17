@@ -589,7 +589,7 @@ int main (int argc, char** argv)
 	
 	cairo_dock_register_icon_container_renderers ();
 	
-	//\___________________ On enregistre les notifications de base.
+	//\___________________ On enregistre les notifications de base (avant les modules).
 	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
 		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);

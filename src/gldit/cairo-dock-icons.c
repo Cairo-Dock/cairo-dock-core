@@ -174,6 +174,13 @@ int cairo_dock_compare_icons_order (Icon *icon1, Icon *icon2)
 }
 int cairo_dock_compare_icons_name (Icon *icon1, Icon *icon2)
 {
+	int iOrder1 = cairo_dock_get_icon_order (icon1);
+	int iOrder2 = cairo_dock_get_icon_order (icon2);
+	if (iOrder1 < iOrder2)
+		return -1;
+	else if (iOrder1 > iOrder2)
+		return 1;
+	
 	if (icon1->cName == NULL)
 		return -1;
 	if (icon2->cName == NULL)
@@ -188,6 +195,13 @@ int cairo_dock_compare_icons_name (Icon *icon1, Icon *icon2)
 
 int cairo_dock_compare_icons_extension (Icon *icon1, Icon *icon2)
 {
+	int iOrder1 = cairo_dock_get_icon_order (icon1);
+	int iOrder2 = cairo_dock_get_icon_order (icon2);
+	if (iOrder1 < iOrder2)
+		return -1;
+	else if (iOrder1 > iOrder2)
+		return 1;
+	
 	if (icon1->cBaseURI == NULL)
 		return -1;
 	if (icon2->cBaseURI == NULL)

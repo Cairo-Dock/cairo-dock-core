@@ -314,6 +314,7 @@ static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, Cai
 	Icon *pFakeClassIcon = g_new0 (Icon, 1);
 	pFakeClassIcon->iface.load_image = _load_class_icon;
 	pFakeClassIcon->iType = pSameClassIcon->iType;
+	pFakeClassIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER;
 	
 	pFakeClassIcon->cName = g_strdup (pSameClassIcon->cClass);
 	pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);

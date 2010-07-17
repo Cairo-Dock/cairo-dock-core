@@ -124,6 +124,8 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pModuleInstance
 
 void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon);
 
+gboolean cairo_dock_detach_icon_from_applet (CairoDockModuleInstance *pModuleInstance, Icon *icon);
+
 gboolean cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pModuleInstance, Icon *icon);
 
 void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pModuleInstance);
@@ -767,9 +769,15 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** Remove an icon from the list of icons of an applet. The icon is destroyed and should not be used after that.
 * @param pIcon the icon to remove.
-* @return whether the icon has been removed or not.
+* @return whether the icon has been removed or not. In any case, the icon is freed.
 */
 #define CD_APPLET_REMOVE_ICON_FROM_MY_ICONS_LIST(pIcon) cairo_dock_remove_icon_from_applet (myApplet, pIcon)
+
+/** Detach an icon from the list of icons of an applet. The icon is not destroyed.
+* @param pIcon the icon to remove.
+* @return whether the icon has been removed or not.
+*/
+#define CD_APPLET_DETACH_ICON_FROM_MY_ICONS_LIST(pIcon) cairo_dock_detach_icon_from_applet (myApplet, pIcon)
 
 /** Load a list of icons into an applet, with the given renderer for the sub-dock or the desklet. The icons will be loaded automatically in an idle process.
 *@param pIconList a list of icons. It will belong to the applet's container after that.
@@ -787,15 +795,15 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_ADD_ICON_IN_MY_ICONS_LIST(pIcon) cairo_dock_insert_icon_in_applet (myApplet, pIcon)
 
-/** Gets the list of icons of your applet. It is either the icons of your sub-dock or of your desklet.
+/** Get the list of icons of your applet. It is either the icons of your sub-dock or of your desklet.
 */
 #define CD_APPLET_MY_ICONS_LIST (myDock ? (myIcon->pSubDock ? myIcon->pSubDock->icons : NULL) : myDesklet->icons)
-/** Gets the container of the icons of your applet. It is either your sub-dock or your desklet.
+/** Get the container of the icons of your applet. It is either your sub-dock or your desklet.
 */
 #define CD_APPLET_MY_ICONS_LIST_CONTAINER (myDock && myIcon->pSubDock ? CAIRO_CONTAINER (myIcon->pSubDock) : myContainer)
 
 //\_________________________________ TASKBAR
-/** Lets your applet control the window of an external program, instead of the Taskbar.
+/** Let your applet control the window of an external program, instead of the Taskbar.
  *\param cApplicationClass the class of the application you wish to control (in lower case), or NULL to stop controling any appli.
 */
 #define CD_APPLET_MANAGE_APPLICATION(cApplicationClass) do {\

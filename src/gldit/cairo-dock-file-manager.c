@@ -375,6 +375,8 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 		cairo_dock_free_icon (pNewIcon);
 		return NULL;
 	}
+	if (bIsDirectory)
+		pNewIcon->iVolumeID = -1;
 	//g_print ("%s -> %s\n", cURI, pNewIcon->cFileName);
 
 	if (iFileSortType == CAIRO_DOCK_FM_SORT_BY_NAME)

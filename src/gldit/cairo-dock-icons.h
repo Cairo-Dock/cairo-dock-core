@@ -143,8 +143,10 @@ struct _Icon {
 	gchar *cWorkingDirectory;
 	gchar *cBaseURI;
 	gint iVolumeID;
+	/** deprecated */
 	gint iNbSubIcons;  // nombre de fichiers max dans le cas d'un repertoire.
 	CairoDockFMSortType iSortSubIcons;  // ordre des icones dans le cas d'un repertoire.
+	/** fin deprecated */
 	
 	// Appli.
 	Window Xid;

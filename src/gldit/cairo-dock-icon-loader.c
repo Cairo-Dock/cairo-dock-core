@@ -465,12 +465,15 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 	pIcon->iSidLoadImage = 0;
 	
 	CairoContainer *pContainer = pIcon->pContainerForLoad;
-	cairo_dock_load_icon_image (pIcon, pContainer);
+	if (pContainer)
+	{
+		cairo_dock_load_icon_image (pIcon, pContainer);
 
-	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	cairo_dock_load_icon_quickinfo (pIcon, &myLabels.quickInfoTextDescription, fMaxScale);
-	
-	cairo_dock_redraw_icon (pIcon, pContainer);
+		double fMaxScale = cairo_dock_get_max_scale (pContainer);
+		cairo_dock_load_icon_quickinfo (pIcon, &myLabels.quickInfoTextDescription, fMaxScale);
+		
+		cairo_dock_redraw_icon (pIcon, pContainer);
+	}
 	return FALSE;
 }
 void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)

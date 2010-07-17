@@ -728,6 +728,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	CairoDesklet *pCurrentDesklet = pInstance->pDesklet;
 	pInstance->pDesklet = NULL;
 	gchar *cOldDockName = NULL;
+	gchar *cCurrentSubDockName = NULL;
 	
 	CairoContainer *pNewContainer = NULL;
 	CairoDock *pNewDock = NULL;
@@ -748,6 +749,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			//\______________ On met a jour les champs 'nom' et 'image' de l'icone.
 			if (pIcon != NULL)
 			{
+				cCurrentSubDockName = g_strdup (pIcon->cName);
 				// on gere le changement de nom de son sous-dock.
 				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->cName, pMinimalConfig->cLabel))
 				{
@@ -913,7 +915,13 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			gtk_widget_queue_draw (pCurrentContainer->pWidget);
 		}
 	}
+	if (pNewDesklet != NULL && pIcon && pIcon->pSubDock != NULL)
+	{
+		cairo_dock_destroy_dock (pIcon->pSubDock, cCurrentSubDockName);
+		pIcon->pSubDock = NULL;
+	}
 	g_free (cOldDockName);
+	g_free (cCurrentSubDockName);
 }
 
 
@@ -1222,6 +1230,28 @@ void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 	g_free (cConfFilePath);
 }
 
+gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
+{
+	gchar *cConfFilePath;
+	if (pModule->pInstancesList == NULL)  // module non encore instancie, on utilise la fonction qui cree le dossier du module ainsi que son fichier de conf.
+	{
+		cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
+	}
+	else  // on rajoute un n-ieme fichier de conf si necessaire.
+	{
+		int iNbInstances = g_list_length (pModule->pInstancesList);
+		cConfFilePath = g_strdup_printf ("%s-%d", pModule->cConfFilePath, iNbInstances);
+		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+		{
+			gchar *cCommand = g_strdup_printf ("cp \"%s/%s\" \"%s\"", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName, cConfFilePath);
+			cd_debug (cCommand);
+			int r = system (cCommand);
+			g_free (cCommand);
+		}
+	}
+	return cConfFilePath;
+}
+
 void cairo_dock_add_module_instance (CairoDockModule *pModule)
 {
 	if (pModule->pInstancesList == NULL)
@@ -1229,15 +1259,8 @@ void cairo_dock_add_module_instance (CairoDockModule *pModule)
 		cd_warning ("This module has not been instanciated yet");
 		return ;
 	}
-	int iNbInstances = g_list_length (pModule->pInstancesList);
-	gchar *cInstanceFilePath = g_strdup_printf ("%s-%d", pModule->cConfFilePath, iNbInstances);
-	if (! g_file_test (cInstanceFilePath, G_FILE_TEST_EXISTS))
-	{
-		gchar *cCommand = g_strdup_printf ("cp \"%s/%s\" \"%s\"", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName, cInstanceFilePath);
-		cd_debug (cCommand);
-		int r = system (cCommand);
-		g_free (cCommand);
-	}
+	
+	gchar *cInstanceFilePath = cairo_dock_add_module_conf_file (pModule);
 	
 	CairoDockModuleInstance *pNewInstance = cairo_dock_instanciate_module (pModule, cInstanceFilePath);  // prend le 'cInstanceFilePath'.
 	
