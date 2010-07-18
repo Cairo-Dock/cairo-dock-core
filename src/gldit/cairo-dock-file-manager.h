@@ -133,31 +133,18 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI);
 /** Add a monitor on an URI. It will be called each time a modification occurs on the file.
 */
 gboolean cairo_dock_fm_add_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI, CairoDockFMMonitorCallback pCallback, gpointer data);
-/** Add a monitor on an icon representing an URI.
-*/
-#define cairo_dock_fm_add_monitor(pIcon) cairo_dock_fm_add_monitor_full (pIcon->cBaseURI, (pIcon->pSubDock != NULL), (pIcon->iVolumeID != 0 ? pIcon->cCommand : NULL), (CairoDockFMMonitorCallback) cairo_dock_fm_action_on_file_event, (gpointer) pIcon)
 
 /** Remove a monitor on an URI.
 */
 gboolean cairo_dock_fm_remove_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI);
-/** Remove a monitor on an icon representing an URI.
-*/
-#define cairo_dock_fm_remove_monitor(pIcon) cairo_dock_fm_remove_monitor_full (pIcon->cBaseURI, (pIcon->pSubDock != NULL), (pIcon->iVolumeID != 0 ? pIcon->cCommand : NULL))
-
 
 /** Mount a point.
 */
 gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data);
-/** Mount an icon representing an URI.
-*/
-gboolean cairo_dock_fm_mount (Icon *icon, CairoContainer *pContainer);
 
 /** Unmount a point.
 */
 gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data);
-/** Unmount an icon representing an URI.
-*/
-gboolean cairo_dock_fm_unmount (Icon *icon, CairoContainer *pContainer);
 
 /** Say if a point is currently mounted.
 */
@@ -216,14 +203,6 @@ gboolean cairo_dock_fm_show_system_monitor (void);
 /** Create an Icon representing a given URI.
 */
 Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer, CairoDockFMSortType iFileSortType);
-
-/** Create a Dock with the list of icons representing a folder.
-*/
-void cairo_dock_fm_create_dock_from_directory (Icon *pIcon, CairoDock *pParentDock);
-
-
-void cairo_dock_fm_manage_event_on_file (CairoDockFMEventType iEventType, const gchar *cURI, Icon *pIcon, CairoDockIconType iTypeOnCreation, CairoDockFMSortType iSortingType);
-void cairo_dock_fm_action_on_file_event (CairoDockFMEventType iEventType, const gchar *cURI, Icon *pIcon);
 
 
 gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, CairoContainer *pContainer);

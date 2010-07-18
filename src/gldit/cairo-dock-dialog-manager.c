@@ -952,7 +952,8 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		(CairoDockActionOnAnswerFunc)_cairo_dock_get_answer_from_dialog,
 		(gpointer) data,
 		(GFreeFunc) NULL);
-
+	pDialog->fAppearanceCounter = 1.;
+	
 	if (pDialog != NULL)
 	{
 		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);

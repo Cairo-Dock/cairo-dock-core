@@ -683,10 +683,10 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 		{
 			cairo_dock_insert_icon_in_dock (pNewIcon, pReceivingDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 
-			if (CAIRO_DOCK_IS_URI_LAUNCHER (pNewIcon))
+			/**if (CAIRO_DOCK_IS_URI_LAUNCHER (pNewIcon))
 			{
 				cairo_dock_fm_add_monitor (pNewIcon);
-			}
+			}*/
 			
 			if (pNewIcon->pSubDock != NULL)
 				cairo_dock_trigger_redraw_subdock_content (pNewIcon->pSubDock);

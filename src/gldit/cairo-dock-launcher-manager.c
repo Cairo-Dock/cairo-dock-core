@@ -79,7 +79,7 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 		if (pChildDock && pChildDock->iRefCount > 0 && pChildDock != icon->pSubDock)  // un sous-dock de meme nom existe deja, on change le nom de l'icone.
 		{
 			gchar *cUniqueDockName = cairo_dock_get_unique_dock_name ("New sub-dock");
-			cd_warning ("A sub-dock with the same name (%s) already exists, we'll change it tp %s", icon->cName, cUniqueDockName);
+			cd_warning ("A sub-dock with the same name (%s) already exists, we'll change it to %s", icon->cName, cUniqueDockName);
 			gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 			cairo_dock_update_conf_file (cDesktopFilePath,
 				G_TYPE_STRING, "Desktop Entry", "Name", cUniqueDockName,
@@ -92,10 +92,7 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 		if (pChildDock == NULL)
 		{
 			cd_message ("le dock fils (%s) n'existe pas, on le cree avec la vue %s", icon->cName, cRendererName);
-			if (icon->cBaseURI == NULL)
-				icon->pSubDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cName, pParentDock);
-			else
-				cairo_dock_fm_create_dock_from_directory (icon, pParentDock);
+			icon->pSubDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cName, pParentDock);
 		}
 		else if (pChildDock != icon->pSubDock)
 		{
@@ -390,7 +387,6 @@ void cairo_dock_reload_launcher (Icon *icon)
 	gchar *cName = icon->cName;
 	icon->cName = NULL;
 	gchar *cRendererName = NULL;
-	int iNbSubIcons = icon->iNbSubIcons;
 	if (pSubDock != NULL)
 	{
 		cRendererName = pSubDock->cRendererName;

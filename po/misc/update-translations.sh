@@ -36,7 +36,7 @@ echo "extracting the messages of the core ..."
 cd ${CORE_DIR}
 if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 	rm -f data/messages
-	for c in data/*.conf* data/*.desktop
+	for c in data/*.conf data/*.desktop
 	do
 		#if test ${c:0:10} != "cairo-dock"; then  # on exclut les cairo-dock*.desktop
 			$CAIRO_DOCK_EXTRACT_MESSAGE $c
@@ -62,7 +62,7 @@ do
 			echo "  extracting sentences from $plugin ..."
 			if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 				rm -f data/messages
-				for c in data/*.conf*
+				for c in data/*.conf  # provoque un message d'erreur si le plug-in n'a pas de fichier de conf, ce qu'on peut ignorer.
 				do
 					$CAIRO_DOCK_EXTRACT_MESSAGE "$c"
 				done;

@@ -112,7 +112,7 @@ void cairo_dock_free_icon (Icon *icon)
 	if (icon->iSidLoadImage != 0)
 		g_source_remove (icon->iSidLoadImage);
 	if (icon->cBaseURI != NULL)
-		cairo_dock_fm_remove_monitor (icon);
+		cairo_dock_fm_remove_monitor_full (icon->cBaseURI, (icon->pSubDock != NULL), (icon->iVolumeID != 0 ? icon->cCommand : NULL));
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 		cairo_dock_unregister_appli (icon);
 	else if (icon->cClass != NULL)  // c'est un inhibiteur.

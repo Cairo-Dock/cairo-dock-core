@@ -192,26 +192,13 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	icon->fOrder = g_key_file_get_double (pKeyFile, "Desktop Entry", "Order", &erreur);
 	_print_error( cDesktopFileName, erreur);
 
-	icon->cBaseURI = g_key_file_get_string (pKeyFile, "Desktop Entry", "Base URI", NULL);
+	/**icon->cBaseURI = g_key_file_get_string (pKeyFile, "Desktop Entry", "Base URI", NULL);
 	if (icon->cBaseURI != NULL && *icon->cBaseURI == '\0')
 	{
 		g_free (icon->cBaseURI);
 		icon->cBaseURI = NULL;
 	}
-
-	icon->iVolumeID = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is mounting point", NULL);
-	/**if (icon->iVolumeID)  // les infos dans le .desktop ne sont pas a jour.
-	{
-		g_free (icon->cName);
-		icon->cName = NULL;
-		g_free (icon->cCommand);
-		icon->cCommand = NULL;
-		g_free (icon->cFileName);
-		icon->cFileName = NULL;
-
-		gboolean bIsDirectory;  // on n'ecrase pas le fait que ce soit un container ou pas, car c'est l'utilisateur qui l'a decide.
-		cairo_dock_fm_get_file_info (icon->cBaseURI, &icon->cName, &icon->cCommand, &icon->cFileName, &bIsDirectory, &icon->iVolumeID, &icon->fOrder, CAIRO_DOCK_FM_SORT_BY_NAME);  // son ordre nous importe peu ici, puisqu'il est definie par le champ 'Order'.
-	}*/
+	icon->iVolumeID = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is mounting point", NULL);*/
 	
 	g_free (icon->cParentDockName);
 	icon->cParentDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", &erreur);
@@ -243,30 +230,7 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	
 	if (icon->iNbSubIcons != 0 && icon->cName != NULL)
 	{
-		if (icon->cBaseURI != NULL)
-			icon->iSortSubIcons = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Sort files", NULL);
-		
 		*cSubDockRendererName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Renderer", NULL);
-		/**gchar *cRendererName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Renderer", NULL);
-		CairoDock *pChildDock = cairo_dock_search_dock_from_name (icon->cName);
-		if (pChildDock == NULL)
-		{
-			cd_message ("le dock fils (%s) n'existe pas, on le cree avec la vue %s", icon->cName, cRendererName);
-			if (icon->cBaseURI == NULL)
-				icon->pSubDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cName, pParentDock);
-			else
-				cairo_dock_fm_create_dock_from_directory (icon, pParentDock);
-		}
-		else
-		{
-			cairo_dock_reference_dock (pChildDock, pParentDock);
-			icon->pSubDock = pChildDock;
-			cd_message ("le dock devient un dock fils (%d, %d)", pChildDock->container.bIsHorizontal, pChildDock->container.bDirectionUp);
-		}
-		if (cRendererName != NULL && icon->pSubDock != NULL)
-			cairo_dock_set_renderer (icon->pSubDock, cRendererName);
-
-		g_free (cRendererName);*/
 	}
 	if (icon->iNbSubIcons != 0)
 	{

@@ -258,12 +258,6 @@ fake transparency = false
 #{You need to re-open the panel. It is deactivated by default on KDE.}
 config transparency = false
 
-#X-[Files;gtk-file]
-frame_file =
-
-#b- Show hidden files?
-show hidden files = false
-
 #X-[Connection to the themes' server;gtk-network]
 frame_conn =
 

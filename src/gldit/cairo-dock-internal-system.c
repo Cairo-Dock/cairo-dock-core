@@ -70,8 +70,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 	iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "cairo anim freq", &bFlushConfFileNeeded, 25, NULL, NULL);
 	pSystem->iCairoAnimationDeltaT = 1000. / iRefreshFrequency;
 	
-	pSystem->bShowHiddenFiles = cairo_dock_get_boolean_key_value (pKeyFile, "System", "show hidden files", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-
 	pSystem->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	if (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable)
 		pSystem->bUseFakeTransparency = TRUE;
@@ -125,11 +123,6 @@ static void reload (CairoConfigSystem *pPrevSystem, CairoConfigSystem *pSystem)
 	if (pSystem->bTextAlwaysHorizontal != pPrevSystem->bTextAlwaysHorizontal)
 	{
 		cairo_dock_reload_buffers_in_all_docks (TRUE);  // les modules aussi.
-	}
-	
-	if (pSystem->bShowHiddenFiles != pPrevSystem->bShowHiddenFiles)
-	{
-		/// re-ordonner les icones ayant un cURI != NULL;
 	}
 }
 
