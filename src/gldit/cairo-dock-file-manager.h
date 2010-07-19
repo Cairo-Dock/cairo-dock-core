@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 * - the various desktop-related tools.
 */
 
+/// Type of available Desktop Environments.
 typedef enum {
 	CAIRO_DOCK_UNKNOWN_ENV=0,
 	CAIRO_DOCK_GNOME,
@@ -39,7 +40,7 @@ typedef enum {
 	CAIRO_DOCK_NB_DESKTOPS
 	} CairoDockDesktopEnv;
 
-/// type of events that can occur to a file.
+/// Type of events that can occur to a file.
 typedef enum {
 	CAIRO_DOCK_FILE_MODIFIED=0,
 	CAIRO_DOCK_FILE_DELETED,

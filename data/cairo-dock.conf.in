@@ -285,7 +285,7 @@ conn user =
 
 #p- Password :
 #{Let empty if you don't need to log-in to the proxy with a user/password.}
-conn user =
+conn passwd =
 
 modules=
 
