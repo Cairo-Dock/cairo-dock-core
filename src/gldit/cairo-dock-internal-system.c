@@ -23,7 +23,6 @@
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-file-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-system.h"
 
@@ -133,7 +132,7 @@ DEFINE_PRE_INIT (System)
 	pModule->cTitle = N_("System");
 	pModule->cIcon = "icon-system.svg";
 	pModule->cDescription = N_("All of the parameters you will never want to tweak.");
-	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
+	pModule->iCategory = CAIRO_DOCK_CATEGORY_BEHAVIOR;
 	pModule->iSizeOfConfig = sizeof (CairoConfigSystem);
 	pModule->iSizeOfData = 0;
 	

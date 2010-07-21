@@ -33,7 +33,6 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-file-manager.h"
 #include "cairo-dock-desktop-file-factory.h"
 
 #define CAIRO_DOCK_LAUNCHER_CONF_FILE "launcher.desktop"
@@ -183,7 +182,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesk
 	return cNewDesktopFileName;
 }
 
-static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur)
+/**static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur)
 {
 	//\___________________ On recupere le type mime du fichier.
 	gchar *cIconName = NULL, *cName = NULL, *cRealURI = NULL;
@@ -193,13 +192,6 @@ static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, con
 	if (! cairo_dock_fm_get_file_info (cURI, &cName, &cRealURI, &cIconName, &bIsDirectory, &iVolumeID, &fUnusedOrder, 0) || cIconName == NULL)
 		return NULL;
 	cd_message (" -> cIconName : %s; bIsDirectory : %d; iVolumeID : %d\n", cIconName, bIsDirectory, iVolumeID);
-
-	/**if (bIsDirectory)
-	{
-		int answer = cairo_dock_ask_general_question_and_wait (_("Do you want to monitor the content of this directory?"));
-		if (answer != GTK_RESPONSE_YES)
-			bIsDirectory = FALSE;
-	}*/
 
 	//\___________________ On ouvre le patron.
 	const gchar *cDesktopFileTemplate = _cairo_dock_get_launcher_template_conf_file_path (CAIRO_DOCK_DESKTOP_FILE_FOR_FILE);
@@ -232,7 +224,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_file (const gchar *cURI, con
 	g_key_file_free (pKeyFile);
 
 	return cNewDesktopFileName;
-}
+}*/
 
 static gchar *_cairo_dock_generate_desktop_file_for_script (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur)
 {
@@ -284,7 +276,7 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 
 	//\_________________ On cree determine le type de lanceur et on ajoute un fichier desktop correspondant.
 	GError *tmp_erreur = NULL;
-	gchar *cNewDesktopFileName;
+	gchar *cNewDesktopFileName = NULL;
 	if (g_str_has_suffix (cURI, ".desktop"))  // lanceur.
 	{
 		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_launcher (cURI, cDockName, fOrder, iGroup, &tmp_erreur);
@@ -294,10 +286,10 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 		cd_message ("This file will be treated as a launcher, not as a file.\nIf this doesn't fit you, you should use the Stack applet, which is dedicated to file stacking.");
 		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_script (cURI, cDockName, fOrder, &tmp_erreur);
 	}
-	else  // fichier, repertoire ou point de montage.
+	/**else  // fichier, repertoire ou point de montage.
 	{
 		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_file (cURI, cDockName, fOrder, &tmp_erreur);
-	}
+	}*/
 
 	if (tmp_erreur != NULL)
 	{

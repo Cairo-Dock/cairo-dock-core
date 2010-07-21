@@ -125,10 +125,12 @@ extern gboolean g_bEasterEggs;
 static const gchar *s_cCategoriesDescription[2*(CAIRO_DOCK_NB_CATEGORY+1)] = {
 	N_("Behaviour"), "icon-behavior.svg",
 	N_("Appearance"), "icon-appearance.svg",
-	N_("Accessories"), "icon-accessories.svg",
+	N_("Files"), "icon-files.svg",
+	N_("Internet"), "icon-internet.svg",
 	N_("Desktop"), "icon-desktop.svg",
-	N_("Controllers"), "icon-controler.svg",
-	N_("Plug-ins"), "icon-extensions.svg",
+	N_("Accessories"), "icon-accessories.svg",
+	N_("System"), "icon-system.svg",
+	N_("Fun"), "icon-fun.svg",
 	N_("All"), "icon-all.svg" };
 
 static void cairo_dock_hide_all_categories (void);
@@ -706,7 +708,7 @@ static void _show_group_or_category (gpointer pPlace)
 {
 	if (pPlace == NULL)
 		cairo_dock_show_all_categories ();
-	else if (GPOINTER_TO_INT (pPlace) < 10)  // categorie.
+	else if (GPOINTER_TO_INT (pPlace) < CAIRO_DOCK_NB_CATEGORY+1)  // categorie.
 	{
 		if (pPlace == 0)
 			cairo_dock_show_all_categories ();

@@ -50,7 +50,6 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-emblem.h"
-#include "cairo-dock-file-manager.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-separator-manager.h"

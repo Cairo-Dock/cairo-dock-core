@@ -33,7 +33,6 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-icons.h"
-#include "cairo-dock-file-manager.h"
 #include "cairo-dock-modules.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"

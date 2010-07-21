@@ -53,7 +53,6 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keybinder.h"
@@ -796,8 +795,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (icon != NULL)
 	{
 		//g_print (">>> we've just entered the dock, pointed icon becomes NULL\n");
-		//if (s_pIconClicked != NULL)
-		//	cd_debug (">>> on est rentre par un clic ! (KDE:%d)\n", g_iDesktopEnv == CAIRO_DOCK_KDE);
 		if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 			icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
 		//else

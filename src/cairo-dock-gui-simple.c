@@ -744,45 +744,6 @@ static void _make_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
 	_make_double_anim_widget (pSimpleConfigWindow, pKeyFile, "Behavior", "anim_click", _("On click:"));
 }
 
-/**static void _save_double_anim_widget (GtkWidget *pSimpleConfigWindow, const gchar *cGroupName, const gchar *cKeyName, GKeyFile *pKeyFile)
-{
-	GtkWidget *myWidget = cairo_dock_get_widget_by_name (pSimpleConfigWindow, cGroupName, cKeyName);
-	g_return_if_fail (myWidget != NULL);
-	
-	GList *children = gtk_container_get_children (GTK_CONTAINER (myWidget));
-	g_return_if_fail (children != NULL && children->next != NULL);
-	GtkWidget *box = children->next->data;
-	g_list_free (children);
-	children = gtk_container_get_children (GTK_CONTAINER (box));
-	g_return_if_fail (children != NULL && children->next != NULL);
-	
-	gchar *tValues[2];
-	GList *w = children->next;
-	GtkWidget *pOneWidget = w->data;
-	gchar *cValue = cairo_dock_gui_get_active_row_in_combo (pOneWidget);
-	tValues[0] = (cValue ? cValue : g_strdup(""));
-	
-	if (g_bUseOpenGL && g_list_length (w) >= 3)
-	{
-		w = w->next->next->next;
-		pOneWidget = w->data;
-		cValue = cairo_dock_gui_get_active_row_in_combo (pOneWidget);
-		tValues[1] = (cValue ? cValue : g_strdup(""));
-		g_key_file_set_string_list (pKeyFile, cGroupName, cKeyName, (const gchar * const *)tValues, 2);
-		g_free (tValues[1]);
-	}
-	else
-	{
-		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, tValues[0]);
-	}
-	g_free (tValues[0]);
-	g_list_free (children);
-}
-static void _save_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
-{
-	_save_double_anim_widget (pSimpleConfigWindow, "Behavior", "anim_hover", pKeyFile);
-	_save_double_anim_widget (pSimpleConfigWindow, "Behavior", "anim_click", pKeyFile);
-}*/
 
 static GtkWidget * show_main_gui (void)
 {

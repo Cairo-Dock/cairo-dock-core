@@ -131,7 +131,7 @@ DEFINE_PRE_INIT (Position)
 	pModule->cTitle = N_("Position");
 	pModule->cIcon = "icon-position.svg";
 	pModule->cDescription = N_("Set the position of the main dock.");
-	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
+	pModule->iCategory = CAIRO_DOCK_CATEGORY_BEHAVIOR;
 	pModule->iSizeOfConfig = sizeof (CairoConfigPosition);
 	pModule->iSizeOfData = 0;
 	

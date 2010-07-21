@@ -99,7 +99,7 @@ struct _CairoDialogAttribute {
 	/// a function to free the data when the dialog is destroyed, or NULL.
 	GFreeFunc pFreeDataFunc;
 	
-	/// life time of the dialog, or 0 for an unlimited dialog.
+	/// life time of the dialog (in ms), or 0 for an unlimited dialog.
 	gint iTimeLength;
 	/// name of a decorator, or NULL to use the default one.
 	const gchar *cDecoratorName;

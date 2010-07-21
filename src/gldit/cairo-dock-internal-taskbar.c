@@ -167,7 +167,7 @@ DEFINE_PRE_INIT (TaskBar)
 	pModule->cTitle = N_("Taskbar");
 	pModule->cIcon = "icon-taskbar.png";
 	pModule->cDescription = N_("Display and interact with currently open windows.");
-	pModule->iCategory = CAIRO_DOCK_CATEGORY_SYSTEM;
+	pModule->iCategory = CAIRO_DOCK_CATEGORY_BEHAVIOR;
 	pModule->iSizeOfConfig = sizeof (CairoConfigTaskBar);
 	pModule->iSizeOfData = 0;
 	

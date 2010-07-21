@@ -54,7 +54,6 @@
 #include "cairo-dock-separator-factory.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-file-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"

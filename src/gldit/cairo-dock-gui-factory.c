@@ -842,7 +842,7 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, gpointer *data)
 {
 	int iCategory = GPOINTER_TO_INT (data[0]);
-	if (pModule->pVisitCard->iCategory == (CairoDockModuleCategory)iCategory || (iCategory == -1 && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_SYSTEM && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule)))
+	if (pModule->pVisitCard->iCategory == (CairoDockModuleCategory)iCategory || (iCategory == -1 && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule)))
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cIconFilePath, 32, 32, NULL);
@@ -1242,9 +1242,14 @@ static void _cairo_dock_render_category (GtkTreeViewColumn *tree_column, GtkCell
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_STATE, &iCategory, -1);
 	switch (iCategory)
 	{
-		case CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY:
-			cCategory = _("Accessory");
-			g_object_set (cell, "foreground", "#900009", NULL);  // rouge
+		case CAIRO_DOCK_CATEGORY_APPLET_FILES:
+			cCategory = _("Files");
+			g_object_set (cell, "foreground", "#004EA1", NULL);  // bleu
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+		case CAIRO_DOCK_CATEGORY_APPLET_INTERNET:
+			cCategory = _("Internet");
+			g_object_set (cell, "foreground", "#FF5555", NULL);  // orange
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_DESKTOP:
@@ -1252,15 +1257,23 @@ static void _cairo_dock_render_category (GtkTreeViewColumn *tree_column, GtkCell
 			g_object_set (cell, "foreground", "#116E08", NULL);  // vert
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
-		case CAIRO_DOCK_CATEGORY_APPLET_CONTROLER:
-			cCategory = _("Controller");
-			g_object_set (cell, "foreground", "#004EA1", NULL);  // bleu
+		case CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY:
+			cCategory = _("Accessory");
+			g_object_set (cell, "foreground", "#900009", NULL);  // rouge
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
-		case CAIRO_DOCK_CATEGORY_PLUG_IN:
-			cCategory = _("Plug-in");
+		case CAIRO_DOCK_CATEGORY_APPLET_SYSTEM:
+			cCategory = _("System");
 			g_object_set (cell, "foreground", "#A58B0D", NULL);  // jaune
 			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+		case CAIRO_DOCK_CATEGORY_APPLET_FUN:
+			cCategory = _("Fun");
+			g_object_set (cell, "foreground", "#FF55FF", NULL);  // rose
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+		default:
+			cd_warning ("incorrect category (%d)", iCategory);
 		break;
 	}
 	if (cCategory != NULL)
