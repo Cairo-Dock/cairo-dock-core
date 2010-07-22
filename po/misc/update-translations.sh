@@ -36,8 +36,8 @@ echo "extracting the messages of the core ..."
 cd ${CORE_DIR}
 if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 	rm -f data/messages
-	for c in data/*.conf data/*.desktop
-	do
+	for c in data/*.conf.in data/*.desktop
+	do # les .conf peuvent être dans un dossier build et il ne reste plus que des .conf.in.
 		#if test ${c:0:10} != "cairo-dock"; then  # on exclut les cairo-dock*.desktop
 			$CAIRO_DOCK_EXTRACT_MESSAGE $c
 		#fi
@@ -58,11 +58,12 @@ for plugin in *
 do
 	if test -d $plugin; then
 		cd $plugin
-		if test -e Makefile; then
+		#if test -e Makefile; then # peuvent être dans un autre dossier
+		if test -e CMakeLists.txt; then
 			echo "  extracting sentences from $plugin ..."
 			if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 				rm -f data/messages
-				for c in data/*.conf  # provoque un message d'erreur si le plug-in n'a pas de fichier de conf, ce qu'on peut ignorer.
+				for c in data/*.conf.in  # provoque un message d'erreur si le plug-in n'a pas de fichier de conf, ce qu'on peut ignorer.
 				do
 					$CAIRO_DOCK_EXTRACT_MESSAGE "$c"
 				done;

@@ -16,58 +16,61 @@ install (FILES
 	cairo-dock-ok.svg
 	cairo-dock-cancel.svg
 	# appli
-	launcher.desktop
-	container.desktop
-	separator.desktop
-	file.desktop
-	default-icon.svg
-	default-icon-appli.svg
-	default-indicator.png
-	default-class-indicator.svg
-	hand.svg
+	box-back.png
+	box-front.png
+	cairo-dock-animated.xpm
 	cairo-dock-logo.png
 	cairo-dock.svg
-	readme-default-view
-	preview-default.png
 	ChangeLog.txt
+	container.desktop
+	default-class-indicator.svg
+	default-icon-appli.svg
+	default-icon.svg
+	default-indicator.png
+	file.desktop
+	hand.svg
+	icon-accessories.svg
+	icon-all.svg
+	icon-appearance.svg
+	icon-background.svg
+	icon-behavior.svg
+	icon-bubble.png
+	icon-buttons.png
+	icon-close.png
+	icon-connection.svg
+	icon-controler.svg
+	icon-desklets.png
+	icon-desktop.svg
 	icon-dialogs.svg
+	icon-extensions.svg
+	icon-files.svg
+	icon-frame.png
+	icon-fun.svg
+	icon-gradation.png
+	icon-help.svg
+	icon-hidden-dock.svg
+	icon-icons.svg
+	icon-indicators.svg
+	icon-internet.svg
+	icon-labels.svg
+	icon-lock-icons.svg
+	icon-maximize.png
+	icon-minimize.png
+	icon-mouse.svg
+	icon-movment.png
+	icon-plug-ins.svg
+	icon-position.svg
+	icon-restore.png
+	icon-subdock.png
+	icon-system.svg
+	icon-taskbar.png
 	icon-views.svg
 	icon-visibility.svg
-	icon-labels.svg
-	icon-background.svg
-	icon-taskbar.png
-	icon-desklets.png
-	icon-system.svg
-	icon-indicators.svg
-	icon-gradation.png
-	icon-movment.png
-	icon-mouse.svg
-	icon-subdock.png
-	icon-frame.png
-	icon-buttons.png
-	icon-bubble.png
 	icon-wave.png
-	icon-icons.svg
-	icon-hidden-dock.svg
-	icon-lock-icons.svg
-	icon-position.svg
-	icon-behavior.svg
-	icon-appearance.svg
-	icon-accessories.svg
-	icon-desktop.svg
-	icon-controler.svg
-	icon-connection.svg
-	icon-plug-ins.svg
-	icon-all.svg
-	icon-extensions.svg
-	cairo-dock-animated.xpm
-	icon-help.svg
-	icon-close.png
-	icon-restore.png
-	icon-minimize.png
-	icon-maximize.png
-	box-front.png
-	box-back.png
+	launcher.desktop
+	preview-default.png
+	readme-default-view
+	separator.desktop
 	DESTINATION ${pkgdatadir})
 
 install (FILES help_scripts.sh
