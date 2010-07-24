@@ -6,13 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cairo-Dock II\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-06-10 18:25+0000\n"
+"POT-Creation-Date: 2010-07-22 02:09+0000\n"
+"PO-Revision-Date: 2010-07-23 18:33+0000\n"
 "Last-Translator: Maks Mokriev <mcree@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-06-11 03:40+0000\n"
+"X-Launchpad-Export-Date: 2010-07-24 03:53+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Country: Ukraine\n"
 "X-Poedit-Language: Ukrainian\n"
@@ -34,9 +35,8 @@ msgid "Files"
 msgstr "Файли"
 
 #: ../src/cairo-dock-gui-main.c:129 ../src/gldit/cairo-dock-gui-factory.c:1251
-#, fuzzy
 msgid "Internet"
-msgstr "Взаємодія"
+msgstr "Інтернет"
 
 #: ../src/cairo-dock-gui-main.c:130 ../src/gldit/cairo-dock-gui-factory.c:1256
 msgid "Desktop"
@@ -53,7 +53,7 @@ msgstr "Система"
 
 #: ../src/cairo-dock-gui-main.c:133 ../src/gldit/cairo-dock-gui-factory.c:1271
 msgid "Fun"
-msgstr ""
+msgstr "Веселий"
 
 #: ../src/cairo-dock-gui-main.c:134 ../src/cairo-dock-gui-main.c:1520
 #: ../data/messages:1495
@@ -343,7 +343,8 @@ msgid "Get more applets!"
 msgstr "Отримайте більше аплетів!"
 
 #: ../src/cairo-dock-menu.c:416
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Аплети третіх сторін забезпечують інтеграцію з різноманітними програмами, "
 "наприклад Pidgin"
@@ -641,9 +642,8 @@ msgstr ""
 "Він розташовується в модулі 'Панель задач'."
 
 #: ../src/cairo-dock.c:196
-#, fuzzy
 msgid "Don't ask me any more"
-msgstr "Не тримати поверх"
+msgstr "Не питати мене про це знову"
 
 #: ../src/cairo-dock.c:201
 msgid ""
@@ -716,9 +716,8 @@ msgstr ""
 "cairo.)"
 
 #: ../src/cairo-dock.c:643
-#, fuzzy
 msgid "Remember this choice"
-msgstr "Перейменувати цей файл"
+msgstr "Запам’ятати мій вибір"
 
 #: ../src/cairo-dock.c:814
 msgid ""
@@ -857,7 +856,8 @@ msgid "category"
 msgstr "категорія"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2338
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Натисніть на аплеті, щоб мати його попередній перегляд та опис."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2741
@@ -1850,12 +1850,12 @@ msgstr "Порт :"
 #: ../data/messages:441 ../data/messages:445
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
-msgstr "Залиште порожнім, якщо використовуєте авторизований вхід через проксі."
+msgstr ""
+"Залиште порожнім, якщо використовуєте авторизований вхід через проксі."
 
 #: ../data/messages:443
-#, fuzzy
 msgid "User :"
-msgstr "Користувач"
+msgstr "Користувач:"
 
 #: ../data/messages:447
 msgid "Password :"
@@ -2173,7 +2173,8 @@ msgid "Zoom effect"
 msgstr "Ефект наближення"
 
 #: ../data/messages:643
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Встановіть значення 1, якщо не бажаєте щоб значки збільшувалися при "
 "наведенні на них."
@@ -2500,8 +2501,8 @@ msgstr "більше"
 
 #: ../data/messages:797
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Використовуйте, щоб орієнтувати індикатор відносно положення панелі (згори, "
 "знизу, справа, зліва)."
@@ -2676,7 +2677,7 @@ msgstr ""
 #: ../data/messages:881 ../data/messages:889 ../data/messages:903
 #: ../data/messages:959
 msgid "Go to the «Icons» module."
-msgstr ""
+msgstr "Перейти до модуля «Значки»."
 
 #: ../data/messages:883
 msgid "How do I change an icon image?"
@@ -2725,8 +2726,8 @@ msgstr ""
 
 #: ../data/messages:895
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr "Просто захватіть та перетягніть його за панель і він зникне!"
 
 #: ../data/messages:897
@@ -2744,8 +2745,8 @@ msgstr ""
 
 #: ../data/messages:901
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 "В модулі \"Значки\" ви можете налаштувати стандартний розмір ваших значків "
@@ -2757,16 +2758,17 @@ msgid ""
 "I want to see a preview of opened applications by moving my cursor over its "
 "icon"
 msgstr ""
+"Я хочу бачити ескізи працюючих програм, коли проводжу курсором над їх значком"
 
 #: ../data/messages:907 ../data/messages:1035 ../data/messages:1167
 #: ../data/messages:1231 ../data/messages:1269 ../data/messages:1305
 #: ../data/messages:1309
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr ""
+msgstr "Порада: Якщо цей рядок сірий, то ця порада не для вас.:)"
 
 #: ../data/messages:909 ../data/messages:1037
 msgid "If you're using Compiz, you can click on this button:"
-msgstr ""
+msgstr "Якщо ви використовуєте Compiz, то можете клацнути на цій кнопці:"
 
 #: ../data/messages:911
 msgid "Dock"
@@ -2800,7 +2802,7 @@ msgstr ""
 
 #: ../data/messages:919 ../data/messages:927
 msgid "Go to the «Position» module."
-msgstr ""
+msgstr "Перейти до модуля «Місцерозташування»."
 
 #: ../data/messages:921
 msgid "How do I adjust the position of the dock above the Gnome-panel?"
@@ -2824,58 +2826,57 @@ msgid "The dock is hidden by the Gnome-panel"
 msgstr "Панель не видно через стандартну панель Gnome"
 
 #: ../data/messages:931
-#, fuzzy
 msgid ""
 "This is normal, because they are both «docks».\n"
 " You can either move the dock out of the panel, or launch it wih the command "
 "«cairo-dock --keep-above».\n"
 " But you can also (re)move the Gnome-Panel by doing a right click on it."
 msgstr ""
-"Це нормально, адже вони обидві є \"панелями\". Ви можете перетягнути Cairo-"
-"dock в інше місце, або запустити її з параметром “cairo-dock -–keep-above”."
+"Це нормально, оскільки вони обидві є панелями.\n"
+"Але ви можете розмістити її поверх іншої панелі але запустити з параметром "
+"«cairo-dock --keep-above».\n"
+"Окрім того, ви можете взагалі видалити або перемістити Gnome-панель в інше "
+"місце."
 
 #: ../data/messages:933
 msgid "I don’t want other windows covering the dock"
 msgstr "Я не хочу щоб вікна перекривали панель"
 
 #: ../data/messages:935
-#, fuzzy
 msgid "Tip: You can even do that with desklets: making a desklet's panel !."
 msgstr ""
-"Порада: ви можете навіть зробити це з десклетами, створивши панель демклетів!"
+"Порада: Ви можете зробити це зі всіма десклетами: спробуйте створити панель "
+"з десклетів!"
 
 #: ../data/messages:937
-#, fuzzy
 msgid ""
 "Just choose the corresponding option in the “Accessibility” module.\n"
 "This will reserve the space for the dock only."
 msgstr ""
-"Просто виберіть відповідну опцію в модулі \"Видимість\".\n"
-"Це зарезервує місце для панелі."
+"Прости помітьте відповідну опцію в модулі «Видимість».\n"
+"Це зарезервує місце тільки під панель."
 
 #: ../data/messages:939 ../data/messages:947
 msgid "Go to the «Accessibility» module."
-msgstr ""
+msgstr "Перейти в модуль «Видимість»"
 
 #: ../data/messages:941
 msgid "I don’t want that the dock covers windows"
 msgstr "Я не хочу щоб панель перекривала вікна"
 
 #: ../data/messages:943
-#, fuzzy
 msgid ""
 "Tip: You can choose to pop-up the dock only when the mouse hits the screen "
 "corner instead of the whole screen border.\n"
 "You can also set-up the size of the trigger zone, and even set an image to "
 "it."
 msgstr ""
-"Підказка: ви можете вибрати, щоб панель спливала тільки коли курсор "
-"потрапляє в куток екрану, а не проходить по його краю.\n"
-"Ви можете також встановити розмір зони реагування і навіть вказати "
-"зображення для неї."
+"Порада: Можна налаштувати так, щоб панель з’являлася тільки тоді, коли ви "
+"торкаєтеся кутка, а не всієї границі екрану.\n"
+"Крім того, ви можете змінити розмір зони реагування і навіть встановити для "
+"неї специфічне зображення."
 
 #: ../data/messages:945
-#, fuzzy
 msgid ""
 "Two choices are available in the “Accessibility” module:\n"
 " - either choose to “keep the dock below other windows”. The dock will then "
@@ -2883,24 +2884,23 @@ msgid ""
 " - or choose the auto-hide. The dock will then hide itself and reappear when "
 "you enter the trigger zone."
 msgstr ""
-"Два варіанти доступні в модулі \"Видимість\":\n"
-" - виберіть \"утримувати панель під вікнами\". Панель буде спливати тільки "
-"коли курсор миші підійде до краю екрану.\n"
-" - виберіть авто-приховування. Панель буде ховатися та спливати коли курсор "
-"попаде на зону реагування."
+"В модулі «Видимість» доступно два варіанти:\n"
+"- або вибрати режим \"Утримувати позаду\". У цьому випадку, панель буде "
+"з’являтися, якщо ви доторкнетеся до її границі.\n"
+"- або вибрати режим \"Утримувати прихованою\". Панель буде завжди прихованою "
+"та з’являтися тільки, якщо ви доторкнетеся до зони реагування."
 
 #: ../data/messages:949
 msgid "How can I add a separator?"
 msgstr "Як мені додати розділювач?"
 
 #: ../data/messages:951
-#, fuzzy
 msgid ""
 "Tip: if you choose to mix applets and launchers in the 'Icons' module, you "
 "can also place separators between applets then."
 msgstr ""
-"Порада: якщо ви виберете змішувати запущені програми та значки запуску в "
-"модулі 'Значки', ви також зможете розміщувати між програмами розділювачі."
+"Порада: Якщо ви встановити перемішування аплетів та значків запуску в модулі "
+"«Значки», то там також зможете налаштувати вигляд розділювачів між ними."
 
 #: ../data/messages:953
 msgid ""
@@ -2934,27 +2934,25 @@ msgid "How do I add a sub-dock?"
 msgstr "Як мені додати суб-панель?"
 
 #: ../data/messages:963
-#, fuzzy
 msgid ""
 "Tip: If you want to move an icon into another dock, right-click on it, go to "
 "'Move to', and choose the one you want in the list. You can do the same with "
 "applets as well, allowing you to group many applets in a sub-dock. You can "
 "also create new main docks this way."
 msgstr ""
-"Порада: для переміщення значка на іншу панель, зробіть на ньому праве "
-"клацання, перейдіть до 'Пересунути до' та виберіть потрібне місце зі списку. "
-"Ви можете робити теж саме з аплетами, також це дозволяє групувати багато "
-"аплетів в суб-панель. Ви також можете створити нову головну панель "
-"використовуючи цей підхід."
+"Порада: якщо ви хочете перемістити значок на іншу панель, то зробіть праве "
+"клацання на ньому, пункт меню «Перемістити на іншу панель» та виберіть ту, "
+"на яку потрібно перемістити. Теж саме можна робити  з аплетами, наприклад, "
+"щоб згрупувати їх всі в одну суб-панель. Таким же чином ви можете створювати "
+"нові панелі."
 
 #: ../data/messages:965
-#, fuzzy
 msgid ""
 "Just right-click on the dock, then select «Add a sub-dock». Fill the config "
 "panel with a name and image, then confirm."
 msgstr ""
-"Просто клацніть правою кнопкою на панелі та виберіть \"додати суб-панель\". "
-"Введіть яке-небудь ім'я для панелі та виберіть зображення, потім підтвердіть."
+"Просто зробіть праве клацання на панелі, потім виберіть «Додати суб-панель». "
+"Призначте ім’я та вигляд, а потім підтвердіть."
 
 #: ../data/messages:967
 msgid "How can I have many main docks?"
@@ -3007,7 +3005,7 @@ msgstr ""
 
 #: ../data/messages:979
 msgid "Go to the «Views» module."
-msgstr ""
+msgstr "Перейти о модуля «Види»."
 
 #: ../data/messages:981
 msgid "How can I change the background of my docks?"
@@ -3034,7 +3032,7 @@ msgstr ""
 
 #: ../data/messages:987
 msgid "Go to the «Background» module."
-msgstr ""
+msgstr "Перейти до модуля «Тло»"
 
 #: ../data/messages:989
 msgid "I find the dock too flashy, can it be more sober?"
@@ -3163,7 +3161,7 @@ msgstr ""
 
 #: ../data/messages:1021
 msgid "Go to the «Desklets» module."
-msgstr ""
+msgstr "Перейти до модуля «Десклети»."
 
 #: ../data/messages:1023
 msgid "How do I insert a desklet into the dock?"
@@ -3220,7 +3218,7 @@ msgstr ""
 #: ../data/messages:1047 ../data/messages:1055 ../data/messages:1063
 #: ../data/messages:1071 ../data/messages:1077
 msgid "Go to the «TaskBar» module."
-msgstr ""
+msgstr "Перейти до модуля «Панель задач»."
 
 #: ../data/messages:1049
 msgid ""
@@ -3238,7 +3236,6 @@ msgstr ""
 "можете скористатися колесом миші."
 
 #: ../data/messages:1053
-#, fuzzy
 msgid ""
 "In the «TaskBar» module, you can use the «Group windows from the same "
 "application in a sub-dock» option. Only a single icon will appear in the "
@@ -3246,9 +3243,10 @@ msgid ""
 "If there are several windows, they will be grouped together in a sub-dock "
 "above this icon."
 msgstr ""
-"Використовуйте опцію «Групувати по класу». При цьому в панелі буде видно "
-"всього один значок для таких програм, а всі решта будуть згруповані в суб-"
-"панель з цього значка."
+"В модулі «Панель задач» ви можете вибрати опцію «Згрупувати вікна однієї "
+"програми у суб-панель». При цьому на панелі з’явиться лише один значок. Якщо "
+"програма має кілька вікон, то всі вони будуть згруповані в суб-панелі під "
+"цим значком."
 
 #: ../data/messages:1057
 msgid "I have ugly icons for some applications."
@@ -3258,29 +3256,29 @@ msgstr "Деякі значки програм виглядають жахлив
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
 "Порада: Ви можете поставити власні значки для кожної програми. Просто "
 "помістіть значок з таким же іменем, що й клас програми в каталог, який "
-"використовується панеллю (стандартно це ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"використовується панеллю (стандартно це ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "Клас програми ви можете дізнатися набравши xprop в терміналі, а потім "
 "клацнувши на вікні програми."
 
 #: ../data/messages:1061
-#, fuzzy
 msgid ""
 "This is because X provides small icons for applications which look ugly when "
 "zoomed.\n"
 " In the «TaskBar» module, you can use the «Overwrite the X icon with the "
 "launchers' icon?» option to tell the dock not to use them."
 msgstr ""
-"Це через те, що X-сервер надає занадто маленькі значки, які не виглядають "
-"добре при наближенні. Використовуйте опцію «Замінити значки», щоб вони не "
-"використовувалися на панелі."
+"Це відбувається тому, що Х сервер надає занадто маленькі значки для програм, "
+"які виглядають жахливо при збільшенні.\n"
+"В модулі «Панель задач» ви можетевибрати опцію \"Замістити значки програм\", "
+"щоб панель не використовувала їх."
 
 #: ../data/messages:1065
 msgid ""
@@ -3298,7 +3296,6 @@ msgstr ""
 "значку."
 
 #: ../data/messages:1069
-#, fuzzy
 msgid ""
 "In the «TaskBar» module, you can use the «Mix launchers and applications» "
 "option.\n"
@@ -3307,10 +3304,12 @@ msgid ""
 "application is running.\n"
 "You can then act on the window as if it were a taskbar icon."
 msgstr ""
-"Використовуйте опцію «Об'єднати значки запуску з їх програмами».\n"
-"Коли програма запущена, і її значок запуску є на панелі, то на ньому буде "
-"відображено індикатор, які буде повідомляти вас про статус програми.\n"
-"Ви зможете взаємодіяти з цим значком так само, якби він був на панелі задач."
+"В модулі «Панель задач» ви можете використовувати опцію \"Об’єднати значки "
+"запуску з їх програмами\".\n"
+"Якщо програму запущено і якщо вона має свій значок на панелі, то на значку "
+"з’явиться індикатор, який означатиме, що програма зараз працює.\n"
+"При цьому ви зможете взаємодіяти зі значком так, якби він був на панелі "
+"задач."
 
 #: ../data/messages:1073
 msgid "I'm using Pidgin, and I want to see my friends' avatars."
@@ -3330,8 +3329,8 @@ msgstr ""
 "виключення для Pidgin, перед поточною опцією.\n"
 "Якщо ж вибрали опцію об'єднання значків з їх програмами, то вам потрібно "
 "змінити значок запуску Pidigin,\n"
-" та в його «Додаткових параметрах» встановити прапорець на видаленні значка з "
-"панелі задач."
+" та в його «Додаткових параметрах» встановити прапорець на видаленні значка "
+"з панелі задач."
 
 #: ../data/messages:1079
 msgid ""
@@ -3365,22 +3364,21 @@ msgstr "Чи можу я розмістити Головне меню на па�
 
 #: ../data/messages:1089
 msgid ""
-"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will no "
-"longer work. This applet lets you configure a shortcut to pop up the menu at "
-"the mouse's location."
+"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will "
+"no longer work. This applet lets you configure a shortcut to pop up the menu "
+"at the mouse's location."
 msgstr ""
 "Порада: Якщо ви повністю видалите панель Gnome, комбінація Alt+F1 більше не "
 "буде працювати. Цей аплет дозволяє налаштувати комбінації клавіш для "
 "відображення меню в позиції курсора миші."
 
 #: ../data/messages:1091
-#, fuzzy
 msgid "Enable the GMenu applet."
-msgstr "Так, активуйте аплет Gmenu."
+msgstr "Активуйту аплет GMenu."
 
 #: ../data/messages:1093 ../data/messages:1101
 msgid "Go to the «GMenu» module."
-msgstr ""
+msgstr "Перейти до модуля «GMenu»"
 
 #: ../data/messages:1095
 msgid "How can I add a simple «quick launch» panel?"
@@ -3392,9 +3390,9 @@ msgid ""
 "longer work. This applet lets you configure a shortcut to pop up the quick-"
 "launch dialog."
 msgstr ""
-"Порада: якщо ви приберете панель-Gnome, то комбінація «alt+F2» більше не буде "
-"спрацьовувати. Цей аплет допоможе вам налаштувати нову комбінацію клавіш для "
-"виклику швидкого запуску."
+"Порада: якщо ви приберете панель-Gnome, то комбінація «alt+F2» більше не "
+"буде спрацьовувати. Цей аплет допоможе вам налаштувати нову комбінацію "
+"клавіш для виклику швидкого запуску."
 
 #: ../data/messages:1099
 msgid ""
@@ -3404,9 +3402,8 @@ msgstr ""
 "значку."
 
 #: ../data/messages:1103
-#, fuzzy
 msgid "How can I add a Log-out icon?"
-msgstr "Чи є значок Завершення сеансу?"
+msgstr "Як мені додати значок завершити сеансу?"
 
 #: ../data/messages:1105
 msgid ""
@@ -3421,13 +3418,12 @@ msgstr ""
 "порядок або навіть призначити свої команди."
 
 #: ../data/messages:1107
-#, fuzzy
 msgid "Enable the «Log-out» applet."
-msgstr "Так, звичайно, просто активуйте аплет «Завершення сеансу»"
+msgstr "Активуйте аплет «Завершення сеансу»."
 
 #: ../data/messages:1109
 msgid "Go to the «Log-out» module."
-msgstr ""
+msgstr "Перейти до модуля «Завершення сеансу»"
 
 #: ../data/messages:1111
 msgid "How can I access the dustbin?"
@@ -3442,14 +3438,12 @@ msgstr ""
 "чином ви навіть можете від'єднати приєднаний том!"
 
 #: ../data/messages:1115
-#, fuzzy
 msgid "Simply enable the «Dustbin» applet."
-msgstr "Так, звичайно, просто активуйте аплет «Смітник»."
+msgstr "Просто активуйте аплет «Смітник»."
 
 #: ../data/messages:1117
-#, fuzzy
 msgid "Go to the «Dustbin» module."
-msgstr "Так, звичайно, просто активуйте аплет «Смітник»."
+msgstr "Перейти до аплету «Смітник»"
 
 #: ../data/messages:1119
 msgid "How can I access my mount points?"
@@ -3465,14 +3459,12 @@ msgstr ""
 "пункт «від'єднати»."
 
 #: ../data/messages:1123
-#, fuzzy
 msgid "Simply enable the «Shortcuts» applet."
-msgstr "Активуйте аплет «Швидкий доступ»."
+msgstr "Просто активуйте аплет «Ярлики»."
 
 #: ../data/messages:1125 ../data/messages:1133
-#, fuzzy
 msgid "Go to the «Shortcuts» module."
-msgstr "Активуйте аплет «Швидкий доступ»."
+msgstr "Перейти до аплету «Ярлики»"
 
 #: ../data/messages:1127
 msgid "How can I access my Nautilus bookmarks?"
@@ -3504,14 +3496,12 @@ msgstr ""
 "десклети."
 
 #: ../data/messages:1139
-#, fuzzy
 msgid "Simply enable the «showDesktop» applet."
-msgstr "Активуйте аплет «Показати стільницю»."
+msgstr "Просто активуйте аплет «Показати Стільницю»."
 
 #: ../data/messages:1141
-#, fuzzy
 msgid "Go to the «Show Desktop» module."
-msgstr "Активуйте аплет «Показати стільницю»."
+msgstr "Перейти до модуля  «Показати Стільницю»"
 
 #: ../data/messages:1143
 msgid "How can I add an easy-to-acces calendar?"
@@ -3527,7 +3517,7 @@ msgstr ""
 
 #: ../data/messages:1147
 msgid "Go to the «Clock» module."
-msgstr ""
+msgstr "Перейти до модуля «Годинник»"
 
 #: ../data/messages:1149
 msgid "How can I add the notification area (systray)?"
@@ -3552,7 +3542,7 @@ msgstr ""
 
 #: ../data/messages:1153
 msgid "Go to the «Systray» module."
-msgstr ""
+msgstr "Перейти до модуля «Systray»"
 
 #: ../data/messages:1155
 msgid ""
@@ -3577,7 +3567,7 @@ msgstr ""
 
 #: ../data/messages:1161
 msgid "Go to the «terminal» module."
-msgstr ""
+msgstr "Перейти до модуля «terminal»"
 
 #: ../data/messages:1163
 msgid "So then, how can I remove completely the gnome-panel?"
@@ -3585,25 +3575,27 @@ msgstr ""
 "Ну і в решті решт, як же мені повністю видалити стандартну панель Gnome?"
 
 #: ../data/messages:1165
-#, fuzzy
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list/panel, and replace its content with \"cairo-dock"
-"\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list/panel, and replace its "
+"content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Відкрийте gconf-editor, відредагуйте key /desktop/gnome/session/"
-"required_components_list/panel, замініть значення на \"cairo-dock\". Це не "
-"запускатиме панель при старті, але припинить запуск панелі гнома. Також не "
-"забудьте додати Cairo-Dock до автозапуску.\n"
-"Потім перезапустіть сесію: панель гнома не повинна завантажитися."
+"Відкрийте gconf-editor, відредагуйте ключ "
+"/desktop/gnome/session/required_components_list/panel, змінивши значення на "
+"\"cairo-dock\".\n"
+"Потім перезапустіть ваш сеанс: панель Gnome не запуститься, натомість "
+"повинен запуститися Cairo-dock (якщо ні, то ви можете додати панель до Авто-"
+"запуску)."
 
 #: ../data/messages:1169
 msgid ""
 "If you are on Gnome, you can click on this button in order to automatically "
 "modify this key:"
 msgstr ""
+"Якщо ви використовуєте Gnome, то ви можете клацнути на цій кнопці, щоб "
+"автоматично відредагувати ключ:"
 
 #: ../data/messages:1173
 msgid "How do I run the same applet multiple times?"
@@ -3623,8 +3615,8 @@ msgstr ""
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Cairo-Penguin, Weather, Netspeed, ...\n"
-"Right click on the applet's icon, and select «launch another instance». A new "
-"instance of this applet appears in the main dock.\n"
+"Right click on the applet's icon, and select «launch another instance». A "
+"new instance of this applet appears in the main dock.\n"
 "You can configure this new applet just like any other."
 msgstr ""
 "Деякі аплети можуть бути запущені кілька разів, наприклад: Годинник, Cairo-"
@@ -3645,8 +3637,8 @@ msgstr ""
 msgid ""
 "Move the folder containing your gauge to ~/.config/cairo-dock/extras/gauges"
 msgstr ""
-"Перемістіть каталог, в якому є ваш датчик в ~/.config/cairo-dock/extras/"
-"gauges і все!"
+"Перемістіть каталог, в якому є ваш датчик в ~/.config/cairo-"
+"dock/extras/gauges і все!"
 
 #: ../data/messages:1183
 msgid ""
@@ -3683,7 +3675,7 @@ msgstr ""
 
 #: ../data/messages:1193
 msgid "Go to the «Xgamma» module."
-msgstr ""
+msgstr "Перейти до модуля «Xgamma»"
 
 #: ../data/messages:1195
 msgid "How can I change the speaker volume quickly?"
@@ -3698,17 +3690,17 @@ msgstr ""
 
 #: ../data/messages:1199
 msgid "Go to the «AlsaMixer» module."
-msgstr ""
+msgstr "Перейти до модуля «AlsaMixer»"
 
 #: ../data/messages:1201
 msgid "How can I quickly switch to another desktop?"
 msgstr "Як мені швидко переключитися на іншу стільницю?"
 
 #: ../data/messages:1203
-#, fuzzy
 msgid "Tip: This applet even lets you add or remove quickly a desktop !"
 msgstr ""
-"Порада: Цей аплет також дозволить швидко додавати/видаляти робочі столи!"
+"Порада: За допомогою цього аплету ви зможете легко та швидко додавати або "
+"видаляти Стільниці!"
 
 #: ../data/messages:1205
 msgid ""
@@ -3722,36 +3714,35 @@ msgstr ""
 
 #: ../data/messages:1207
 msgid "Go to the «Switcher» module."
-msgstr ""
+msgstr "Перейти до модуля «Перемикач»"
 
 #: ../data/messages:1209
 msgid "How can I control my dock from the keyboard?"
 msgstr "Як мені управляти панеллю за допомогою клавіатури?"
 
 #: ../data/messages:1211
-#, fuzzy
 msgid ""
 "Tip: When you define a shortkey, try it before to be sure that it is not "
 "already used by another application!"
 msgstr ""
-"Порада: Коли визначите комбінацію клавіш, спочатку спробуйте її, щоб "
-"впевнитися, що вона не зайнята чим-небудь іншим."
+"Порада: Коли ви придумаєте комбінацію клавіш, спочатку випробуйте її, "
+"можливо вона вже використовується в іншій програмі."
 
 #: ../data/messages:1213
 msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3760,8 +3751,8 @@ msgstr ""
 "управляти ним клавішами вліво/вправо.\n"
 " – В аплеті <i>Terminal</i> можна налаштувати виклик <b>вікна терміналу</b>, "
 "в якому відразу можна почати друк.\n"
-" – В аплеті <i>Systray</i> можна налаштувати виклик <b>зони повідомлення</"
-"b>.\n"
+" – В аплеті <i>Systray</i> можна налаштувати виклик <b>зони "
+"повідомлення</b>.\n"
 " – В аплеті <i>Quick Browser</i> можна налаштувати виклик <b>меню веб-"
 "оглядача</b>, а в ньому перемішуватися за допомогою стрілок.\n"
 " – В аплеті <i>GMenu</i> можна налаштувати виклик меню <b>Програми</b>, а "
@@ -3814,22 +3805,24 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Вам потрібно включити композитність. Для цього ви можете запустити Compiz "
 "або xcmpmgr.\n"
 "Якщо ви використовуєте XFCE або KDE, то можете просто задіяти композитність "
 "в налаштуваннях менеджера вікон.\n"
 "Якщо ж ви користуєтеся Gnome, то можете задіяти Metacity таким чином:\n"
-"Відкрийте gconf-editor, встановіть ключ '/apps/metacity/general/"
-"compositing_manager' в значення 'true'."
+"Відкрийте gconf-editor, встановіть ключ "
+"'/apps/metacity/general/compositing_manager' в значення 'true'."
 
 #: ../data/messages:1233
 msgid ""
 "If you're on Gnome with Metacity (without Compiz), you can click on this "
 "button:"
 msgstr ""
+"Якщо ви використовуєте Gnome з Metacity (без Compiz), ви можете клацнути на "
+"цій кнопці:"
 
 #: ../data/messages:1235
 msgid "My machine is too old to run a composite manager."
@@ -3975,12 +3968,11 @@ msgstr ""
 
 #: ../data/messages:1271
 msgid "If you're on Gnome you can click on this button:"
-msgstr ""
+msgstr "Якщо ви використовуєте Gnome, ви можете клацнути на цій кнопці:"
 
 #: ../data/messages:1273
-#, fuzzy
 msgid "The Project"
-msgstr "Приєднатися до проекту!"
+msgstr "Наш проект"
 
 #: ../data/messages:1275
 msgid "Join the project!"
@@ -3990,8 +3982,8 @@ msgstr "Приєднатися до проекту!"
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -4012,9 +4004,8 @@ msgid ""
 msgstr "Якщо ви хочете розробити аплет, повну документацію можна знайти тут."
 
 #: ../data/messages:1281
-#, fuzzy
 msgid "Documentation"
-msgstr "документація"
+msgstr "Документація"
 
 #: ../data/messages:1283
 msgid ""
@@ -4039,12 +4030,11 @@ msgstr ""
 
 #: ../data/messages:1289
 msgid "Websites"
-msgstr ""
+msgstr "Веб-сайты"
 
 #: ../data/messages:1303
-#, fuzzy
 msgid "Repositories"
-msgstr "Аксесуари"
+msgstr "Репозиторії"
 
 #: ../data/messages:1307
 msgid ""
@@ -4053,6 +4043,10 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest stable version."
 msgstr ""
+"Якщо ви використовуєте Ubuntu, то можете додати стабільний репозиторій "
+"просто клацнувши на цій кнопці:\n"
+"Після цього вам знадобиться запустити менеджер оновлень, щоб встановити "
+"останню стабільну версію."
 
 #: ../data/messages:1311
 msgid ""
@@ -4061,9 +4055,14 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
+"Якщо ви використовуєте Ubuntu, то можете додати ще й щотижневий репозиторій "
+"(версія може бути нестабільною) просто клацнувши на цій кнопці:\n"
+"Після цього вам знадобиться запустити менеджер оновлень, щоб встановити "
+"останню щотижневу версію."
 
 #: ../data/messages:1317
-msgid "Choose the screen border relative to which the dock will be positioned:"
+msgid ""
+"Choose the screen border relative to which the dock will be positioned:"
 msgstr "Відносно якого боку екрану розташовувати панель:"
 
 #: ../data/messages:1331
@@ -4389,8 +4388,8 @@ msgid ""
 msgstr ""
 "v1.5.1:\n"
 " — Гілка 1.5 все так же молода, тому в цьому релізі багато багфіксів\n"
-" — Cairo Dock тепер перекладено на японську, дякуємо Jiro·Kawada за "
-"роботу !\n"
+" — Cairo Dock тепер перекладено на японську, дякуємо Jiro·Kawada за роботу "
+"!\n"
 " — З'явився новий режим виду - Райдуга\n"
 " — Cairo-Dock тепер став десклет менеджером !\n"
 " — більшість аплетів тепер можуть відкріплятися від панелі\n"
@@ -4555,8 +4554,8 @@ msgstr ""
 #: ../data/messages:1585
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4696,8 +4695,8 @@ msgstr ""
 #: ../data/messages:1597
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4808,79 +4807,29 @@ msgid ""
 " - A <b>new default theme</b> is also available; it should integrate itself "
 "better on any desktop."
 msgstr ""
-
-#~ msgid "Controllers"
-#~ msgstr "Датчики"
+"<b><span color='red'>GLX-Dock 2.2.0</span></b>\n"
+"- Додано 2 <b>нових режима видимості</b> та кілька <b>анімацій авто-"
+"приховування</b>.\n"
+"- Значки тепер можуть <b>відображатися навіть, якщо панель прихована</b> "
+"(Годинник, Системний монітор, програми, які вимагають уваги, тощо).\n"
+"- При наведенні на значок всередині суб-панелі, тепер він може відображатися "
+"<b>всередині коробки</b> з красивим ефектом відкриття.\n"
+"- Доступний <b>новий вид</b>: <u>Панель</u>.\n"
+"- <b>Моє Меню</b> та <b>Меню повідомлень</b> тепер доступні внизу панелі.\n"
+"- Аплет <b>Годинник</b> тепер має справжній <b>календар з управлінням "
+"задачами</b> (доступно лівим клацанням).\n"
+"- Тепер ви можете <b>блокувати екран</b> за допомогою аплету <b>Завершення "
+"сансу</b>.\n"
+"- <b>Десклети</b> тепер можуть бути <b>прозорими для миші</b>, щоб ви могли "
+"взаємодіяти з тим, що знаходиться за ними.\n"
+"- Дякуючи FBO було поліпшено підтримку <b>застарілих відео-карт</b>.\n"
+"- Оновлено <b>значки панелі налаштувань</b>, використано тему Танго-стиля, а "
+"також переглянуто їх місцерозташування.\n"
+"- Доступна <b>нова стандартна тема</b>; вона добре вписується в більшість "
+"стільниць."
 
 #~ msgid "Plug-ins"
 #~ msgstr "Додатки"
-
-#~ msgid "Controller"
-#~ msgstr "Контролер"
-
-#~ msgid "Plug-in"
-#~ msgstr "Додаток"
-
-#~ msgid "cPath="
-#~ msgstr "cPath="
-
-#~ msgid ""
-#~ "You're about deleting this file\n"
-#~ "  (%s)\n"
-#~ "from your hard-disk. Sure ?"
-#~ msgstr ""
-#~ "Ви збираєтеся видалити файл\n"
-#~ "  (%s)\n"
-#~ "з жорсткого диску. Ви впевнені?"
-
-#~ msgid ""
-#~ "Warning: could not delete this file.\n"
-#~ "Please check file permissions."
-#~ msgstr ""
-#~ "Увага: не вдалося видалити цей файл.\n"
-#~ "Переконайтеся, що ви маєте права на запис."
-
-#~ msgid "Rename to:"
-#~ msgstr "Перейменувати в:"
-
-#~ msgid ""
-#~ "Warning: could not rename %s.\n"
-#~ "Check file permissions \n"
-#~ "and that the new name does not already exist."
-#~ msgstr ""
-#~ "Увага: не вдалося перейменувати %s.\n"
-#~ "Впевніться, що ви маєте права на запис,\n"
-#~ " та нового імені вже не має на панелі."
-
-#~ msgid "Unmount"
-#~ msgstr "Від'єднати"
-
-#~ msgid "Mount"
-#~ msgstr "Приєднати"
-
-#~ msgid "Eject"
-#~ msgstr "Виштовхнути"
-
-#~ msgid "Delete this file"
-#~ msgstr "Видалити цей файл"
-
-#~ msgid "Rename this file"
-#~ msgstr "Перейменувати цей файл"
-
-#~ msgid "Properties"
-#~ msgstr "Властивості"
-
-#~ msgid "Do you want to mount this device?"
-#~ msgstr "Приєднати том?"
-
-#~ msgid "%s is now mounted"
-#~ msgstr "%s приєднаний"
-
-#~ msgid "%s is now unmounted"
-#~ msgstr "%s від'єднаний"
-
-#~ msgid "Show hidden files?"
-#~ msgstr "Показувати сховані файли?"
 
 #~ msgid "Hidden Dock"
 #~ msgstr "Прихована панель"
@@ -4891,12 +4840,22 @@ msgstr ""
 #~ msgid "Define the appearance of the dock when it's hidden."
 #~ msgstr "Як буде виглядати панель в прихованому стані."
 
+#, c-format
+#~ msgid ""
+#~ "You're about deleting this file\n"
+#~ "  (%s)\n"
+#~ "from your hard-disk. Sure ?"
+#~ msgstr ""
+#~ "Ви збираєтеся видалити файл\n"
+#~ "  (%s)\n"
+#~ "з жорсткого диску. Ви впевнені?"
+
 #~ msgid "Undefined"
 #~ msgstr "Не визначено"
 
 #~ msgid ""
-#~ "The option 'auto-hide on fullscreen window' is in conflict with the "
-#~ "option 'reserve space for dock',\n"
+#~ "The option 'auto-hide on fullscreen window' is in conflict with the option "
+#~ "'reserve space for dock',\n"
 #~ " it will be ignored"
 #~ msgstr ""
 #~ "Опція 'авто-приховування при повноекранному вікні' конфліктує з опцією "
@@ -4911,12 +4870,29 @@ msgstr ""
 #~ "Опція 'авто-приховування при розвернутому вікні' конфліктує з опцією "
 #~ "'резервувати місце під панель'"
 
+#~ msgid "Unmount"
+#~ msgstr "Від'єднати"
+
+#~ msgid "Mount"
+#~ msgstr "Приєднати"
+
+#~ msgid "Properties"
+#~ msgstr "Властивості"
+
+#~ msgid "Rename this file"
+#~ msgstr "Перейменувати цей файл"
+
+#~ msgid "Delete this file"
+#~ msgstr "Видалити цей файл"
+
 #~ msgid "Close"
 #~ msgstr "Закрити"
 
+#, c-format
 #~ msgid "Downloading file %s ..."
 #~ msgstr "Завантажую файл %s ..."
 
+#, c-format
 #~ msgid "couldn't get distant file %s"
 #~ msgstr "не вдалося отримати файл %s"
 
@@ -4924,13 +4900,13 @@ msgstr ""
 #~ msgstr "Перезавантажую тему ..."
 
 #~ msgid ""
-#~ "The dock will automatically hide itself outside of the scren when the "
-#~ "mouse leaves it. Instead, it will show a zone where placing the mouse "
-#~ "will trigger the dock and make it re-appear."
+#~ "The dock will automatically hide itself outside of the scren when the mouse "
+#~ "leaves it. Instead, it will show a zone where placing the mouse will trigger "
+#~ "the dock and make it re-appear."
 #~ msgstr ""
 #~ "Панель автоматично приховує себе за екраном, коли курсор покидає її межі. "
-#~ "Залишається лише зона реагування, панель з’явиться знову, якщо помістити "
-#~ "в цю зону курсор."
+#~ "Залишається лише зона реагування, панель з’явиться знову, якщо помістити в "
+#~ "цю зону курсор."
 
 #~ msgid "Auto-hide"
 #~ msgstr "Авто-приховування"
@@ -4946,8 +4922,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "This is only usefull if don't already use the auto-hide, and if you don't "
-#~ "want to reserve the space for your dock nor let it below the other "
-#~ "windows."
+#~ "want to reserve the space for your dock nor let it below the other windows."
 #~ msgstr ""
 #~ "Це корисно тільки якщо ви ще не задіяли авто-приховування і не хочете "
 #~ "резервувати місце для панелі не дозволяючи їй бути позаду інших вікон."
@@ -4955,12 +4930,25 @@ msgstr ""
 #~ msgid "You need a composite manager for it."
 #~ msgstr "Для цього вам знадобиться композитний менеджер."
 
+#, c-format
+#~ msgid "%s is now mounted"
+#~ msgstr "%s приєднаний"
+
+#, c-format
+#~ msgid "%s is now unmounted"
+#~ msgstr "%s від'єднаний"
+
+#~ msgid "Eject"
+#~ msgstr "Виштовхнути"
+
+#, c-format
 #~ msgid "couldn't get the list of themes for %s (no connection ?)"
 #~ msgstr "не вдалося отримати список тем для %s (чи включено інтернет?)"
 
 #~ msgid "Applying changes ..."
 #~ msgstr "Застосовуються зміни..."
 
+#, c-format
 #~ msgid "couldn't retrieve distant theme %s"
 #~ msgstr "не вдалося отримати тему %s"
 
@@ -4972,8 +4960,8 @@ msgstr ""
 #~ msgstr ""
 #~ "Додатків не знайдено.\n"
 #~ "Для ефективної роботи Cairo-Dock потрібно встановити додатки.\n"
-#~ "Вони включають в себе велику кількість цікавих функцій, анімації та "
-#~ "багато іншого,\n"
+#~ "Вони включають в себе велику кількість цікавих функцій, анімації та багато "
+#~ "іншого,\n"
 #~ " чого б ви точно не захотіли пропустити!"
 
 #~ msgid "Reserve space at the edge of the screen for the dock ?"
@@ -4983,26 +4971,26 @@ msgstr ""
 #~ msgstr "Налаштувати вид панелі в схованому стані."
 
 #~ msgid ""
-#~ "This allows to group windows in some soft like Gimp, and to have only 1 "
-#~ "icon in the main dock.The 1st window will appear in the main dock, and "
-#~ "the others will be placed in a container associated with this 1st icon."
+#~ "This allows to group windows in some soft like Gimp, and to have only 1 icon "
+#~ "in the main dock.The 1st window will appear in the main dock, and the others "
+#~ "will be placed in a container associated with this 1st icon."
 #~ msgstr ""
 #~ "Дозволить згрупувати програми, які мають багато вікон, як Gimp, в один "
-#~ "значок на панелі. Тільки перше вікно буде відображатися на панелі, а "
-#~ "решта будуть розміщені в контейнері асоційованому з першим значком."
+#~ "значок на панелі. Тільки перше вікно буде відображатися на панелі, а решта "
+#~ "будуть розміщені в контейнері асоційованому з першим значком."
 
 #~ msgid "Should the applications with same class be grouped in a sub-dock ?"
 #~ msgstr "Групувати програми з однаковим класом в суб-панель?"
 
 #~ msgid ""
-#~ "To the right, you can control the transparency of minimized windows, to "
-#~ "the left the transparency of visible windows. The more you go aside, the "
-#~ "more the concerned icons will be transparent; on the middle, icons are "
-#~ "always plain."
+#~ "To the right, you can control the transparency of minimized windows, to the "
+#~ "left the transparency of visible windows. The more you go aside, the more "
+#~ "the concerned icons will be transparent; on the middle, icons are always "
+#~ "plain."
 #~ msgstr ""
-#~ "Праве значення контролює прозорість значків згорнутих вікон, ліве — "
-#~ "видимих вікон. Чим далі ви будете двигатися в бік, тим більш прозорими "
-#~ "будуть залежні значки; на середині - значки будуть видимі завжди."
+#~ "Праве значення контролює прозорість значків згорнутих вікон, ліве — видимих "
+#~ "вікон. Чим далі ви будете двигатися в бік, тим більш прозорими будуть "
+#~ "залежні значки; на середині - значки будуть видимі завжди."
 
 #~ msgid "Movement parameters"
 #~ msgstr "Параметри руху"
@@ -5032,11 +5020,11 @@ msgstr ""
 #~ msgstr "Прозорість зображення:"
 
 #~ msgid ""
-#~ "Use it when the image is an arrow pointing to the center of the screen "
-#~ "for exemple."
+#~ "Use it when the image is an arrow pointing to the center of the screen for "
+#~ "exemple."
 #~ msgstr ""
-#~ "Використовуйте, наприклад, якщо у вас є зображення в вигляді стрілки, яка "
-#~ "б вказувала в центр панелі."
+#~ "Використовуйте, наприклад, якщо у вас є зображення в вигляді стрілки, яка б "
+#~ "вказувала в центр панелі."
 
 #~ msgid "Configure the auto-hide behaviour."
 #~ msgstr "Налаштувати поведінку авто-ховання."
@@ -5070,8 +5058,8 @@ msgstr ""
 #~ "for exemple Monospace, Purisa, ... Just write the font name wihtout any "
 #~ "number or so."
 #~ msgstr ""
-#~ "наприклад, Monospace, Purisa, ... Просто впишіть назву шрифту, без будь-"
-#~ "яких цифр та іншого."
+#~ "наприклад, Monospace, Purisa, ... Просто впишіть назву шрифту, без будь-яких "
+#~ "цифр та іншого."
 
 #~ msgid "Family of the font used for labels :"
 #~ msgstr "Шрифт, який використовується для підписів:"
@@ -5083,13 +5071,13 @@ msgstr ""
 #~ msgstr "Налаштувати читаність підписів."
 
 #~ msgid ""
-#~ "These are icons located in ~/.config/cairo-dock/current_theme/icons, "
-#~ "coming from the theme you choosed. If you use this option, the dock will "
-#~ "search here first, and then in the icons theme."
+#~ "These are icons located in ~/.config/cairo-dock/current_theme/icons, coming "
+#~ "from the theme you choosed. If you use this option, the dock will search "
+#~ "here first, and then in the icons theme."
 #~ msgstr ""
 #~ "Ці значки знаходяться в каталозі теми, яку ви вибрали ~/.config/cairo-"
-#~ "dock/current_theme/icons. Якщо ви задієте цю опцію, значки будуть "
-#~ "шукатися спочатку тут, а потім в решті тем."
+#~ "dock/current_theme/icons. Якщо ви задієте цю опцію, значки будуть шукатися "
+#~ "спочатку тут, а потім в решті тем."
 
 #~ msgid "Use local icons ?"
 #~ msgstr "Використовувати локальні значки?"
@@ -5099,8 +5087,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Separators are icons used to make a separation between different types of "
-#~ "icons. Cairo-dock can automatically add them between launchers, applis, "
-#~ "and applets."
+#~ "icons. Cairo-dock can automatically add them between launchers, applis, and "
+#~ "applets."
 #~ msgstr ""
 #~ "Розділювачі — це значки, які використовуються для розділення між різними "
 #~ "типами значків. Cairo-Dock вміє автоматично вставляти їх між значками "
@@ -5110,8 +5098,8 @@ msgstr ""
 #~ msgstr "Автоматично вставляти розділювачі?"
 
 #~ msgid ""
-#~ "This parameter will overwrite the previously defined order, to allow you "
-#~ "to mix applets and launchers into the dock."
+#~ "This parameter will overwrite the previously defined order, to allow you to "
+#~ "mix applets and launchers into the dock."
 #~ msgstr ""
 #~ "Це параметр перекриє попередній вибраний порядок, щоб дозволити вам "
 #~ "змішувати на панелі значки запуску та аплети."
@@ -5157,11 +5145,9 @@ msgstr ""
 #~ msgstr "Індикатор класу суб-панелі"
 
 #~ msgid ""
-#~ "Filename of an image to indicate that a class has been grouped in a "
-#~ "subdock :"
+#~ "Filename of an image to indicate that a class has been grouped in a subdock :"
 #~ msgstr ""
-#~ "Зображення для індикатора, який вказує, що клас було згруповано в суб-"
-#~ "панелі:"
+#~ "Зображення для індикатора, який вказує, що клас було згруповано в суб-панелі:"
 
 #~ msgid "Misc. Emblems"
 #~ msgstr "Різні емблеми"
@@ -5191,42 +5177,40 @@ msgstr ""
 #~ msgstr "Зображення для емблеми заблоковано:"
 
 #~ msgid ""
-#~ "In the “Icons” module, you can choose a <b>icon theme</b>. Enter a name "
-#~ "of a theme, for exemple : Human or Gartoon.\n"
+#~ "In the “Icons” module, you can choose a <b>icon theme</b>. Enter a name of a "
+#~ "theme, for exemple : Human or Gartoon.\n"
 #~ "You can even enter the path of a folder containing personnal icons.\n"
 #~ "You can enter many themes or folders, the dock will search for images in "
 #~ "them in the same order as you entered them.\n"
 #~ "If you let it empty, the default icon theme of your system wil be used."
 #~ msgstr ""
-#~ "В модулі 'Значки' ви можете вибрати <b>тему значків</b>. Введіть назву "
-#~ "теми, наприклад: Human або Gartoon.\n"
+#~ "В модулі 'Значки' ви можете вибрати <b>тему значків</b>. Введіть назву теми, "
+#~ "наприклад: Human або Gartoon.\n"
 #~ "Ви навіть можете ввести шлях до каталогу з вашими значками.\n"
-#~ "Або вказати декілька назв тем та каталогів, вони будуть переглянуті в "
-#~ "тому порядку, в якому ви їх ввели.\n"
+#~ "Або вказати декілька назв тем та каталогів, вони будуть переглянуті в тому "
+#~ "порядку, в якому ви їх ввели.\n"
 #~ "Якщо залишити порожнім, буде використана системна тема значків, яку ви "
 #~ "використовуєте зараз."
 
 #~ msgid ""
-#~ "Hint : if you use it, you don’t need to use the “keep the dock below "
-#~ "“option."
+#~ "Hint : if you use it, you don’t need to use the “keep the dock below “option."
 #~ msgstr ""
-#~ "Порада: якщо використовуєте цю опцію, непотрібно використовувати іншу "
-#~ "опцію «тримати позаду»."
+#~ "Порада: якщо використовуєте цю опцію, непотрібно використовувати іншу опцію "
+#~ "«тримати позаду»."
 
 #~ msgid ""
-#~ "Just use the option “reserve space for dock” in the “Accessibility” "
-#~ "module."
+#~ "Just use the option “reserve space for dock” in the “Accessibility” module."
 #~ msgstr ""
-#~ "Використовуйте опцію «Резервувати місце під панель» в модулі «Дод."
-#~ "Можливості»."
+#~ "Використовуйте опцію «Резервувати місце під панель» в модулі "
+#~ "«Дод.Можливості»."
 
 #~ msgid ""
-#~ "Hint : if you removed your gnome-panel, then the “alt+F2” shortkey does "
-#~ "not work anymore. This applet let you setup a shortcut to pop up the "
-#~ "quick-launch dialog."
+#~ "Hint : if you removed your gnome-panel, then the “alt+F2” shortkey does not "
+#~ "work anymore. This applet let you setup a shortcut to pop up the quick-"
+#~ "launch dialog."
 #~ msgstr ""
-#~ "Порада: Якщо ви повністю видалите панель Gnome, комбінація Alt+F2 більше "
-#~ "не буде працювати. Цей аплет дозволить налаштувати комбінацію клавіш для "
+#~ "Порада: Якщо ви повністю видалите панель Gnome, комбінація Alt+F2 більше не "
+#~ "буде працювати. Цей аплет дозволить налаштувати комбінацію клавіш для "
 #~ "відображення вікна швидкого запуску."
 
 #~ msgid "Help us !"
@@ -5239,8 +5223,8 @@ msgstr ""
 #~ msgstr "Рух тла"
 
 #~ msgid ""
-#~ "If an error occurs during downloading a theme, it will retry this number "
-#~ "of times before giving up."
+#~ "If an error occurs during downloading a theme, it will retry this number of "
+#~ "times before giving up."
 #~ msgstr ""
 #~ "Якщо під час завантаження теми виникає помилка, то вказуну кількість раз "
 #~ "буде зроблена спроба повторити процес."
@@ -5285,18 +5269,18 @@ msgstr ""
 #~ " - Почалася розробка додатку для KDE-інтеграції."
 
 #~ msgid ""
-#~ "This will prevent other windows from overlapping the dock. It has no "
-#~ "effect if you defined the 'show/hide' shortcut below, cause then the dock "
-#~ "behaves like a menu."
+#~ "This will prevent other windows from overlapping the dock. It has no effect "
+#~ "if you defined the 'show/hide' shortcut below, cause then the dock behaves "
+#~ "like a menu."
 #~ msgstr ""
-#~ "Це заборонить іншим вікнам перекривати панель. Не буде мати ефекту, якщо "
-#~ "ви задіяли режим автоматичного приховування, оскільки панель буде "
-#~ "поводити себе як меню."
+#~ "Це заборонить іншим вікнам перекривати панель. Не буде мати ефекту, якщо ви "
+#~ "задіяли режим автоматичного приховування, оскільки панель буде поводити себе "
+#~ "як меню."
 
 #~ msgid ""
 #~ "The dock will pop-up on the foreground when you place the mouse on its "
-#~ "screen border. This option is only useful if you don't want to reserve "
-#~ "space for the dock, nor to activate auto-hide."
+#~ "screen border. This option is only useful if you don't want to reserve space "
+#~ "for the dock, nor to activate auto-hide."
 #~ msgstr ""
 #~ "Панель буде спливати, при наведенні курсору на границю екрану. Цей режим "
 #~ "корисний тільки якщо ви не зарезервували місце під панель і не активували "
@@ -5314,20 +5298,55 @@ msgstr ""
 #~ msgid "module"
 #~ msgstr "модуль"
 
+#~ msgid "Plug-in"
+#~ msgstr "Додаток"
+
 #~ msgid "Draw the content of sub-docks on the icon pointing on it ?"
 #~ msgstr "Зображати контент суб-панелей на їх значках?"
 
+#, c-format
 #~ msgid "Importing theme %s..."
 #~ msgstr "Імпорт теми %s..."
 
+#~ msgid "cPath="
+#~ msgstr "cPath="
+
+#~ msgid "Do you want to mount this device?"
+#~ msgstr "Приєднати том?"
+
+#~ msgid "Controller"
+#~ msgstr "Контролер"
+
+#~ msgid "Controllers"
+#~ msgstr "Датчики"
+
 #~ msgid ""
-#~ "Icons will scroll according to what positioning model is selected. The "
-#~ "dock can of course can be positioned anywhere on the screen. Here we "
-#~ "specify this relative position."
+#~ "Warning: could not delete this file.\n"
+#~ "Please check file permissions."
 #~ msgstr ""
-#~ "Значки будуть прокручуватися відносно вибраної позиції панелі. Оскільки "
-#~ "вона може розташовуватися в будь-якому місці екрану і ми цим особливо "
-#~ "пишаємося."
+#~ "Увага: не вдалося видалити цей файл.\n"
+#~ "Переконайтеся, що ви маєте права на запис."
+
+#~ msgid "Rename to:"
+#~ msgstr "Перейменувати в:"
+
+#, c-format
+#~ msgid ""
+#~ "Warning: could not rename %s.\n"
+#~ "Check file permissions \n"
+#~ "and that the new name does not already exist."
+#~ msgstr ""
+#~ "Увага: не вдалося перейменувати %s.\n"
+#~ "Впевніться, що ви маєте права на запис,\n"
+#~ " та нового імені вже не має на панелі."
+
+#~ msgid ""
+#~ "Icons will scroll according to what positioning model is selected. The dock "
+#~ "can of course can be positioned anywhere on the screen. Here we specify this "
+#~ "relative position."
+#~ msgstr ""
+#~ "Значки будуть прокручуватися відносно вибраної позиції панелі. Оскільки вона "
+#~ "може розташовуватися в будь-якому місці екрану і ми цим особливо пишаємося."
 
 #~ msgid "Pop-up only if the mouse hits a screen corner"
 #~ msgstr "Спливати тільки якщо курсор проходить краєм екрану?"
@@ -5341,8 +5360,7 @@ msgstr ""
 #~ msgid ""
 #~ "Otherwise they will appear when you hover over the icon pointing to it."
 #~ msgstr ""
-#~ "Інакше, вона з'явиться тільки коли ви затримаєтеся над значком на деякий "
-#~ "час."
+#~ "Інакше, вона з'явиться тільки коли ви затримаєтеся над значком на деякий час."
 
 #~ msgid "Click to show sub-docks"
 #~ msgstr "Входити у суб-панель клацанням?"
@@ -5355,12 +5373,11 @@ msgstr ""
 #~ msgstr "Показувати індикатор подій, якщо значок не є значком запуску?"
 
 #~ msgid ""
-#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide "
-#~ "is not enabled or unfold acceleration is null."
+#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide is "
+#~ "not enabled or unfold acceleration is null."
 #~ msgstr ""
-#~ "При появі або хованні панель буде розкриватися. Не матиме ефекту, якщо "
-#~ "режим авто-ховання не задіяно або швидкість розкривання встановлено на "
-#~ "нуль."
+#~ "При появі або хованні панель буде розкриватися. Не матиме ефекту, якщо режим "
+#~ "авто-ховання не задіяно або швидкість розкривання встановлено на нуль."
 
 #~ msgid "Animate the dock when auto-hiding"
 #~ msgstr "Анімувати панель при авто-хованні?"
@@ -5374,6 +5391,9 @@ msgstr ""
 #~ msgid "Number of steps in the fade out animation:"
 #~ msgstr "Кількість кроків анімації поступового зникнення"
 
+#~ msgid "Show hidden files?"
+#~ msgstr "Показувати сховані файли?"
+
 #~ msgid "Number of retries:"
 #~ msgstr "Кількість спроб:"
 
@@ -5381,13 +5401,11 @@ msgstr ""
 #~ "This is what you see when the dock hides itselfs. Any format is allowed. "
 #~ "Leave this field empty to have an invisible zone."
 #~ msgstr ""
-#~ "Можна використовувати будь-який формат; залиште пустим, щоб зона "
-#~ "реагування була прозора. Зона реагування — це те, що ви бачите коли "
-#~ "панель схована."
+#~ "Можна використовувати будь-який формат; залиште пустим, щоб зона реагування "
+#~ "була прозора. Зона реагування — це те, що ви бачите коли панель схована."
 
 #~ msgid "Rotate the image when the dock is on top/left/right?"
-#~ msgstr ""
-#~ "Прокручувати зображення коли панель знаходиться зверху/зліва/справа?"
+#~ msgstr "Прокручувати зображення коли панель знаходиться зверху/зліва/справа?"
 
 #~ msgid "Move the background image along with the cursor?"
 #~ msgstr "Рухати зображення тла за курсором?"
@@ -5403,9 +5421,9 @@ msgstr ""
 #~ "show a callback zone instead. Place the mouse into this zone to make the "
 #~ "dock reappear."
 #~ msgstr ""
-#~ "Панель буде автоматично ховатися за краєм екрану, коли курсор залишає "
-#~ "межі панелі та залишить на екрані тільки зону реагування. Помістіть "
-#~ "курсор в цю зону і панель відразу ж з'явиться."
+#~ "Панель буде автоматично ховатися за краєм екрану, коли курсор залишає межі "
+#~ "панелі та залишить на екрані тільки зону реагування. Помістіть курсор в цю "
+#~ "зону і панель відразу ж з'явиться."
 
 #~ msgid "Activate auto-hide?"
 #~ msgstr "Активувати авто-приховування ?"
@@ -5414,16 +5432,15 @@ msgstr ""
 #~ msgstr "Слідкувати за вмістом теки?"
 
 #~ msgid ""
-#~ "Use this option if, e.g., the launcher executes a script in a terminal "
-#~ "but you do not want it to steal normal terminal icons from the TaskBar, "
-#~ "or if you explicitly want to use the original icon of the TaskBar because "
-#~ "it provides some info. E.g. Pidgin's icons represent your contacts' "
-#~ "avatars."
+#~ "Use this option if, e.g., the launcher executes a script in a terminal but "
+#~ "you do not want it to steal normal terminal icons from the TaskBar, or if "
+#~ "you explicitly want to use the original icon of the TaskBar because it "
+#~ "provides some info. E.g. Pidgin's icons represent your contacts' avatars."
 #~ msgstr ""
 #~ "Якщо ви відмітили опцію перемішування значків запуску та програм, то вона "
 #~ "відмінить цю опцію тільки для значків запуску. Це може знадобитися, "
-#~ "наприклад для значків запуску, які виконують скрипти в терміналі і ви б "
-#~ "не хотіли, щоб значок термінала видалився з панелі задач."
+#~ "наприклад для значків запуску, які виконують скрипти в терміналі і ви б не "
+#~ "хотіли, щоб значок термінала видалився з панелі задач."
 
 #~ msgid "Program class:"
 #~ msgstr "Клас програми:"

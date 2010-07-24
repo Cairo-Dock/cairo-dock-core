@@ -23,5 +23,5 @@ sed -i "/POT-Creation-Date/d" cairo-dock.pot
 
 # For lp translation tool
 if test -e 'en.po' -a -e 'en_GB.po'; then
-	cp en.po en_GB.po
+	ln -sf en_GB.po en.po
 fi

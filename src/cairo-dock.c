@@ -56,7 +56,7 @@
 **    great deal by sending me additional tweaked and optimized versions. I've
 **    now merged all that with my recent additions.
 **
-*********************** VERSION 0.1.0 and above (2007-2009)*********************
+*********************** VERSION 0.1.0 and above (2007-2010)*********************
 **
 ** author(s) :
 **     Fabrice Rey <fabounet@glx-dock.org>
@@ -301,7 +301,7 @@ static void _register_help_module (void)
 	pVisitCard->cUserDataDir = "help";
 	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR;
 	pVisitCard->cConfFileName = "help.conf";
-	pVisitCard->cModuleVersion = "0.1.0";
+	pVisitCard->cModuleVersion = "0.1.1";
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_BEHAVIOR;
 	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.svg";
 	pVisitCard->iSizeOfConfig = 0;
@@ -825,11 +825,13 @@ int main (int argc, char** argv)
 			g_free (cKeyName);
 			if (cChangeLogMessage != NULL)
 			{
+				gchar *cChangeLogMessageBeta = g_strdup_printf ("Hello Dear Beta Tester, How are you? :)\nThis is the third beta of the 2.2.0 release of Cairo-Dock. The stable version will be released soon!\nSo... don't be shy! Please report any bugs (crashes, graphical bugs, some details, wrong sentences, any suggestions, etc.)\nYou can report these bugs (or patches or other messages ;) ) on our forum (http://forum.glx-dock.org) or on LaunchPad (https://bugs.launchpad.net/cairo-dock/+filebug)\nBTW, you can also improve the project by helping our sympathetic translators (https://translations.launchpad.net/cairo-dock) or the devs team ;)\nThank you for your help !\n\n%s", gettext (cChangeLogMessage));
 				Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
 				myDialogs.dialogTextDescription.bUseMarkup = TRUE;
-				cairo_dock_show_temporary_dialog_with_default_icon (gettext (cChangeLogMessage), pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
+				cairo_dock_show_temporary_dialog_with_default_icon (cChangeLogMessageBeta, pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
 				myDialogs.dialogTextDescription.bUseMarkup = FALSE;
 				g_free (cChangeLogMessage);
+				g_free (cChangeLogMessageBeta);
 			}
 		}
 	}
