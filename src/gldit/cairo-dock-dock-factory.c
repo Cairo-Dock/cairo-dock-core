@@ -583,7 +583,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 	{
 		gboolean r = icon->iface.on_delete (icon);
 		if (r)
-			cairo_dock_mark_theme_as_modified (TRUE);
+			cairo_dock_mark_current_theme_as_modified (TRUE);
 	}
 }
 
@@ -673,7 +673,7 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 	Icon *pNewIcon = NULL;
 	if (cNewDesktopFileName != NULL)
 	{
-		cairo_dock_mark_theme_as_modified (TRUE);
+		cairo_dock_mark_current_theme_as_modified (TRUE);
 
 		pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName);
 		g_free (cNewDesktopFileName);

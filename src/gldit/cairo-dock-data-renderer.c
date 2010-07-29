@@ -35,6 +35,7 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-packages.h"
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-graph.h"
 #include "cairo-dock-data-renderer.h"
@@ -471,7 +472,7 @@ GHashTable *cairo_dock_list_available_themes_for_data_renderer (const gchar *cRe
 		return NULL;
 	gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName);
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
-	GHashTable *pGaugeTable = cairo_dock_list_themes (cGaugeShareDir, cGaugeUserDir, pRecord->cThemeDirName);
+	GHashTable *pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, cGaugeUserDir, pRecord->cThemeDirName);
 	
 	g_free (cGaugeShareDir);
 	g_free (cGaugeUserDir);
@@ -479,7 +480,7 @@ GHashTable *cairo_dock_list_available_themes_for_data_renderer (const gchar *cRe
 }
 
 
-gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, const gchar *cThemeName, CairoDockThemeType iType)  // utile pour DBus aussi.
+gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, const gchar *cThemeName, CairoDockPackageType iType)  // utile pour DBus aussi.
 {
 	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
 	g_return_val_if_fail (pRecord != NULL, NULL);
@@ -489,12 +490,12 @@ gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, cons
 	
 	const gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName);
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
-	gchar *cGaugePath = cairo_dock_get_theme_path (cThemeName, cGaugeShareDir, cGaugeUserDir, pRecord->cThemeDirName, iType);
+	gchar *cGaugePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, pRecord->cThemeDirName, iType);
 	g_free (cGaugeUserDir);
 	return cGaugePath;
 }
 
-gchar *cairo_dock_get_theme_path_for_data_renderer (const gchar *cRendererName, const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName)
+gchar *cairo_dock_get_package_path_for_data_renderer (const gchar *cRendererName, const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName)
 {
 	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
 	g_return_val_if_fail (pRecord != NULL, NULL);
@@ -503,13 +504,13 @@ gchar *cairo_dock_get_theme_path_for_data_renderer (const gchar *cRendererName, 
 	if (cChosenThemeName == NULL)
 		cChosenThemeName = g_strdup (pRecord->cDefaultTheme);
 	
-	CairoDockThemeType iType = cairo_dock_extract_theme_type_from_name (cChosenThemeName);
+	CairoDockPackageType iType = cairo_dock_extract_package_type_from_name (cChosenThemeName);
 	gchar *cGaugePath = cairo_dock_get_data_renderer_theme_path (cRendererName, cChosenThemeName, iType);
 	
 	if (cGaugePath == NULL)  // theme introuvable.
 		cGaugePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName, pRecord->cDefaultTheme);
 	
-	if (iType != CAIRO_DOCK_ANY_THEME)
+	if (iType != CAIRO_DOCK_ANY_PACKAGE)
 	{
 		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cChosenThemeName);
 		cairo_dock_write_keys_to_file (pKeyFile, cAppletConfFilePath);

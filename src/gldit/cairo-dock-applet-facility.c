@@ -28,7 +28,7 @@
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-themes-manager.h"
+#include "cairo-dock-packages.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-applet-factory.h"
 #include "cairo-dock-log.h"
@@ -263,10 +263,10 @@ gchar *cairo_dock_get_theme_path_for_module (const gchar *cAppletConfFilePath, G
 	gchar *cThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
 	
 	gchar *cUserThemesDir = (cExtraDirName != NULL ? g_strdup_printf ("%s/%s", g_cExtrasDirPath, cExtraDirName) : NULL);
-	CairoDockThemeType iType = cairo_dock_extract_theme_type_from_name (cThemeName);
-	gchar *cThemePath = cairo_dock_get_theme_path (cThemeName, cShareThemesDir, cUserThemesDir, cExtraDirName, iType);
+	CairoDockPackageType iType = cairo_dock_extract_package_type_from_name (cThemeName);
+	gchar *cThemePath = cairo_dock_get_package_path (cThemeName, cShareThemesDir, cUserThemesDir, cExtraDirName, iType);
 	
-	if (iType != CAIRO_DOCK_ANY_THEME)
+	if (iType != CAIRO_DOCK_ANY_PACKAGE)
 	{
 		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cThemeName);
 		cairo_dock_write_keys_to_file (pKeyFile, cAppletConfFilePath);

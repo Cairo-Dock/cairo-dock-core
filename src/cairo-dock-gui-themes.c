@@ -76,7 +76,7 @@ static gchar *cairo_dock_build_temporary_themes_conf_file (void)
 }
 
 
-static void _cairo_dock_fill_model_with_themes (const gchar *cThemeName, CairoDockTheme *pTheme, GtkListStore *pModele)
+static void _cairo_dock_fill_model_with_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
@@ -122,7 +122,7 @@ static void _make_widgets (GtkWidget *pThemeManager, GKeyFile *pKeyFile)
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 	
 	//\______________ On recupere les themes utilisateurs.
-	GHashTable *pThemeTable = cairo_dock_list_themes (NULL, g_cThemesDirPath, NULL);
+	GHashTable *pThemeTable = cairo_dock_list_packages (NULL, g_cThemesDirPath, NULL);
 
 	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_model_with_themes, pModel);
 	g_hash_table_destroy (pThemeTable);
@@ -205,7 +205,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 
 	if (cNewThemeName != NULL)
 	{
-		cairo_dock_extract_theme_type_from_name (cNewThemeName);
+		cairo_dock_extract_package_type_from_name (cNewThemeName);
 		
 		gboolean bSaveBehavior = g_key_file_get_boolean (pKeyFile, "Save", "save current behaviour", NULL);
 		gboolean bSaveLaunchers = g_key_file_get_boolean (pKeyFile, "Save", "save current launchers", NULL);
@@ -297,7 +297,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			cairo_dock_discard_task (s_pImportTask);
 		
 		//\___________________ On regarde si le theme courant est modifie.
-		gboolean bNeedSave = cairo_dock_theme_need_save ();
+		gboolean bNeedSave = cairo_dock_current_theme_need_save ();
 		if (bNeedSave)
 		{
 			int iAnswer = cairo_dock_ask_general_question_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"));
@@ -305,7 +305,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 			{
 				return FALSE;
 			}
-			cairo_dock_mark_theme_as_modified (FALSE);
+			cairo_dock_mark_current_theme_as_modified (FALSE);
 		}
 		
 		cairo_dock_set_status_message_printf (s_pThemeManager, _("Importing theme %s ..."), cNewThemeName);
@@ -328,7 +328,7 @@ void cairo_dock_manage_themes (void)
 	gchar *cInitConfFile = cairo_dock_build_temporary_themes_conf_file ();  // sera supprime a la destruction de la fenetre.
 	
 	//\___________________ On laisse l'utilisateur l'editer.
-	const gchar *cPresentedGroup = (cairo_dock_theme_need_save () ? "Save" : NULL);
+	const gchar *cPresentedGroup = (cairo_dock_current_theme_need_save () ? "Save" : NULL);
 	const gchar *cTitle = _("Manage Themes");
 	
 	s_pThemeManager = cairo_dock_build_generic_gui_full (cInitConfFile,

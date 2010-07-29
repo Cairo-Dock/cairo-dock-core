@@ -27,7 +27,6 @@ install (FILES
 	default-icon-appli.svg
 	default-icon.svg
 	default-indicator.png
-	file.desktop
 	hand.svg
 	icon-accessories.svg
 	icon-all.svg

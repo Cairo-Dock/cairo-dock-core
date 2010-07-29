@@ -196,10 +196,10 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	//\__________________ On recupere la classe.
 	XClassHint *pClassHint = XAllocClassHint ();
 	gchar *cClass = NULL;
-	if (XGetClassHint (s_XDisplay, Xid, pClassHint) != 0)
+	if (XGetClassHint (s_XDisplay, Xid, pClassHint) != 0 && pClassHint->res_class)
 	{
 		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", pClassHint->res_name, pClassHint->res_name, pClassHint->res_class, pClassHint->res_class);
-		if (pClassHint->res_class && strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && g_str_has_suffix (pClassHint->res_name, ".exe"))
+		if (strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && g_str_has_suffix (pClassHint->res_name, ".exe"))
 		{
 			cd_debug ("  wine application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
 			cClass = g_ascii_strdown (pClassHint->res_name, -1);
@@ -215,9 +215,16 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 			cClass[strlen (cClass) - 4] = '\0';
 		}
 		else
+		{
 			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // on la passe en minuscule, car certaines applis ont la bonne idee de donner des classes avec une majuscule ou non suivant les fenetres.
+		}
 		
 		cairo_dock_remove_version_from_string (cClass);  // on enleve les numeros de version (Openoffice.org-3.1)
+		
+		gchar *str = strchr (cClass, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
+		if (str != NULL)
+			*str = '\0';
+		cd_debug ("got an application with class '%s'", cClass);
 		
 		XFree (pClassHint->res_name);
 		XFree (pClassHint->res_class);
@@ -256,7 +263,7 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	icon->windowGeometry.y = iLocalPositionY;
 	icon->windowGeometry.width = iWidthExtent;
 	icon->windowGeometry.height = iHeightExtent;
-		
+	
 	cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);
 
 	return icon;

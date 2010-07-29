@@ -776,7 +776,7 @@ int main (int argc, char** argv)
 		int r = system (cCommand);
 		g_free (cCommand);
 		
-		cairo_dock_mark_theme_as_modified (FALSE);  // on ne proposera pas de sauvegarder ce theme.
+		cairo_dock_mark_current_theme_as_modified (FALSE);  // on ne proposera pas de sauvegarder ce theme.
 		cairo_dock_load_current_theme ();
 	}
 	else

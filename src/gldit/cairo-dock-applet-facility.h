@@ -275,7 +275,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_CONFIG_GET_GAUGE_THEME(cGroupName, cKeyName) \
 	__extension__ ({\
-	gchar *_cThemePath = cairo_dock_get_theme_path_for_data_renderer("gauge", CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, "Turbo-night-fuel");\
+	gchar *_cThemePath = cairo_dock_get_package_path_for_data_renderer("gauge", CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, "Turbo-night-fuel");\
 	if (_cThemePath == NULL) {\
 		const gchar *_cMessage = _("The gauge theme could not be found; a default gauge will be used instead.\nYou can change this by opening the configuration of this module. Do you want to do it now?");\
 		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\

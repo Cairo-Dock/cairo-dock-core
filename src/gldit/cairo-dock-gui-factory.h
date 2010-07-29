@@ -94,8 +94,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST='O',
 	/// same but with the 'default' choice too.
 	CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST_WITH_DEFAULT='o',
-	/// list of gauges themes.
-	CAIRO_DOCK_WIDGET_GAUGE_LIST='g',
+	// list of gauges themes.
+	//CAIRO_DOCK_WIDGET_GAUGE_LIST='g',
 	/// list of existing docks.
 	CAIRO_DOCK_WIDGET_DOCK_LIST='d',
 	/// list of installed icon themes.

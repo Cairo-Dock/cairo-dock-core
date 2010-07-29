@@ -511,7 +511,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	g_free (cDesktopFileName);
 	g_free (cName);
 	g_free (cRendererName);
-	cairo_dock_mark_theme_as_modified (TRUE);
+	cairo_dock_mark_current_theme_as_modified (TRUE);
 }
 
 

@@ -96,7 +96,7 @@
 #include <cairo-dock/cairo-dock-applet-facility.h>
 #include <cairo-dock/cairo-dock-applet-canvas.h>
 // classes presque independantes de CD.
-#include <cairo-dock/cairo-dock-data-renderer.h>
+#include <cairo-dock/cairo-dock-packages.h>
 #include <implementations/cairo-dock-graph.h>
 #include <implementations/cairo-dock-gauge.h>
 #include <cairo-dock/cairo-dock-notifications.h>

@@ -48,6 +48,7 @@ SET(core_lib_SRCS
 	cairo-dock-dbus.c 					cairo-dock-dbus.h 
 	cairo-dock-X-utilities.c 			cairo-dock-X-utilities.h
 	cairo-dock-keyfile-utilities.c 		cairo-dock-keyfile-utilities.h
+	cairo-dock-packages.c 				cairo-dock-packages.h
 	cairo-dock-particle-system.c 		cairo-dock-particle-system.h
 	cairo-dock-emblem.c 				cairo-dock-emblem.h
 	cairo-dock-task.c 					cairo-dock-task.h
@@ -112,6 +113,7 @@ install(FILES
 	cairo-dock-separator-manager.h 		cairo-dock-applet-manager.h
 	cairo-dock-backends-manager.h		cairo-dock-notifications.h
 	
+	cairo-dock-packages.h
 	cairo-dock-data-renderer.h
 	cairo-dock-dock-manager.h		
 	cairo-dock-desklet-manager.h

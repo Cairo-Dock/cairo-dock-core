@@ -381,7 +381,7 @@ typedef struct _CairoDockTransition CairoDockTransition;
 
 typedef struct _CairoDockTask CairoDockTask;
 
-typedef struct _CairoDockTheme CairoDockTheme;
+typedef struct _CairoDockPackage CairoDockPackage;
 
 typedef struct _CairoDockGroupKeyWidget CairoDockGroupKeyWidget;
 

@@ -371,7 +371,7 @@ CD_APPLET_ON_DROP_DATA_PROTO \
 CD_APPLET_ON_SCROLL_PROTO \
 { \
 	g_pCurrentModule = myApplet;\
-	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
+	if (pClickedIcon != NULL && (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet))) \
 	{
 /** Fin de la fonction de notification au scroll. Par defaut elle intercepte la notification si elle l'a recue.
 */

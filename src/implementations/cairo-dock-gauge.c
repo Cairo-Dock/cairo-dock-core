@@ -92,7 +92,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl-font.h"
-#include "cairo-dock-themes-manager.h"
+#include "cairo-dock-packages.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
@@ -893,34 +893,33 @@ Gauge *cairo_dock_new_gauge (void)
   /////////////////////////////////////////////////
  /////////////// LIST OF THEMES  /////////////////
 /////////////////////////////////////////////////
-GHashTable *cairo_dock_list_available_gauges (void)
+/*GHashTable *cairo_dock_list_available_gauges (void)
 {
 	gchar *cGaugeShareDir = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR);
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, CAIRO_DOCK_GAUGES_DIR);
-	GHashTable *pGaugeTable = cairo_dock_list_themes (cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR);
+	GHashTable *pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR);
 	
 	g_free (cGaugeShareDir);
 	g_free (cGaugeUserDir);
 	return pGaugeTable;
 }
 
-/**
-gchar *cairo_dock_get_gauge_theme_path (const gchar *cThemeName, CairoDockThemeType iType)  // utile pour DBus aussi.
+gchar *cairo_dock_get_gauge_theme_path (const gchar *cThemeName, CairoDockPackageType iType)  // utile pour DBus aussi.
 {
 	const gchar *cGaugeShareDir = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR;
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, CAIRO_DOCK_GAUGES_DIR);
-	gchar *cGaugePath = cairo_dock_get_theme_path (cThemeName, cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR, iType);
+	gchar *cGaugePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR, iType);
 	g_free (cGaugeUserDir);
 	return cGaugePath;
 }
 
-gchar *cairo_dock_get_theme_path_for_gauge (const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName)
+gchar *cairo_dock_get_package_path_for_gauge (const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName)
 {
 	gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
 	if (cChosenThemeName == NULL)
 		cChosenThemeName = g_strdup ("Turbo-night-fuel");
 	
-	CairoDockThemeType iType = cairo_dock_extract_theme_type_from_name (cChosenThemeName);
+	CairoDockPackageType iType = cairo_dock_extract_package_type_from_name (cChosenThemeName);
 	gchar *cGaugePath = cairo_dock_get_gauge_theme_path (cChosenThemeName, iType);
 	
 	if (cGaugePath == NULL)  // theme introuvable.

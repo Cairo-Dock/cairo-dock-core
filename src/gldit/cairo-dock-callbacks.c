@@ -51,7 +51,6 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
@@ -1003,9 +1002,9 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 		return FALSE;
 	}
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
-	if (icon != NULL)
+	///if (icon != NULL)
 	{
-		cairo_dock_notify (CAIRO_DOCK_SCROLL_ICON, icon, pDock, pScroll->direction);
+		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_SCROLL_ICON, icon, pDock, pScroll->direction);
 	}
 
 	return FALSE;

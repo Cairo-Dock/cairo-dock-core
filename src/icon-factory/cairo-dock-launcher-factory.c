@@ -116,6 +116,9 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
 				if (str != NULL)  // on prend apres.
 					cClass = str + 1;
+				str = strchr (cClass, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
+				if (str != NULL)
+					*str = '\0';
 			}
 			
 			if (*cClass != '\0')

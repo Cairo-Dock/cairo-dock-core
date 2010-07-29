@@ -1160,7 +1160,8 @@ static void on_toggle_hide_others (GtkCheckMenuItem *pMenuItem/**GtkToggleButton
 	bHideOther = gtk_check_menu_item_get_active (pMenuItem);
 	_trigger_current_filter ();
 }
-static void on_clear_filter (GtkButton *pButton, GtkEntry *pEntry)
+///static void on_clear_filter (GtkButton *pButton, GtkEntry *pEntry)
+static void on_clear_filter (GtkEntry *pEntry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer data)
 {
 	gtk_entry_set_text (pEntry, "");
 	//gpointer pCurrentPlace = cairo_dock_get_current_widget ();
@@ -1503,15 +1504,17 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		pCategoriesFrame,
-		FALSE,
-		FALSE,
+		TRUE,  /// FALSE
+		TRUE,  /// FALSE
 		0);
 	
 	s_pToolBar = gtk_toolbar_new ();
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (s_pToolBar), GTK_ORIENTATION_VERTICAL);
 	gtk_toolbar_set_style (GTK_TOOLBAR (s_pToolBar), GTK_TOOLBAR_BOTH_HORIZ);
-	gtk_toolbar_set_show_arrow (GTK_TOOLBAR (s_pToolBar), FALSE);
-	gtk_toolbar_set_icon_size (GTK_TOOLBAR (s_pToolBar), GTK_ICON_SIZE_LARGE_TOOLBAR);
+	gtk_toolbar_set_show_arrow (GTK_TOOLBAR (s_pToolBar), TRUE);  /// FALSE
+	//gtk_widget_set (s_pToolBar, "height-request", 300, NULL);
+	//g_object_set (s_pToolBar, "expand", TRUE, NULL);
+	///gtk_toolbar_set_icon_size (GTK_TOOLBAR (s_pToolBar), GTK_ICON_SIZE_LARGE_TOOLBAR);  /// GTK_ICON_SIZE_LARGE_TOOLBAR
 	gtk_container_add (GTK_CONTAINER (pCategoriesFrame), s_pToolBar);
 	
 	CairoDockCategoryWidgetTable *pCategoryWidget;
@@ -1659,16 +1662,10 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		FALSE,
 		FALSE,
 		0);
-	GtkWidget *pClearButton = gtk_button_new ();
-	_add_image_on_button (pClearButton,
-		GTK_STOCK_CLEAR,
-		16);
-	g_signal_connect (pClearButton, "clicked", G_CALLBACK (on_clear_filter), s_pFilterEntry);
-	gtk_box_pack_start (GTK_BOX (pFilterBox),
-		pClearButton,
-		TRUE,  // sinon le bouton est repousse en-dehors de la marge.
-		FALSE,
-		0);
+	
+	gtk_entry_set_icon_activatable (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, TRUE);
+	gtk_entry_set_icon_from_stock (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
+	g_signal_connect (s_pFilterEntry, "icon-press", G_CALLBACK (on_clear_filter), NULL);
 	
 	// options
 	_reset_filter_state ();

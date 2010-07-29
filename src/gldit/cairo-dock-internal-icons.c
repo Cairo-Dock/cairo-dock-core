@@ -34,7 +34,6 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-themes-manager.h"
 #include "cairo-dock-indicator-manager.h"
 #define _INTERNAL_MODULE_
 #include "cairo-dock-internal-icons.h"
