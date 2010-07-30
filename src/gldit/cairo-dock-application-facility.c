@@ -56,7 +56,7 @@
 
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
-
+extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
 
 static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
 {

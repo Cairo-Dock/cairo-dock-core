@@ -30,6 +30,8 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 /// Le chemin vers le repertoire racine.
 extern gchar *g_cCairoDockDataDir;
+/// version
+extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 /// indicateur de tache
 extern CairoDockImageBuffer g_pIndicatorBuffer;

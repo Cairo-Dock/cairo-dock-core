@@ -54,6 +54,7 @@
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
+extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
 
 #define _drawn_text_width(pDialog) (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth ? pDialog->iMaxTextWidth : pDialog->iTextWidth)
 

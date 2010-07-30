@@ -30,8 +30,8 @@
 
 #include "../config.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-dock-manager.h"
-#include "cairo-dock-gui-manager.h"
+//#include "cairo-dock-dock-manager.h"
+//#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-internal-system.h"
@@ -349,9 +349,9 @@ CairoDockTask *cairo_dock_get_distant_file_content_async (const gchar *cServerAd
 	return pTask;
 }
 
-  //////////////////
+  ////////////////////
  /// PACKAGES API ///
-//////////////////
+////////////////////
 
 void cairo_dock_free_package (CairoDockPackage *pPackage)
 {

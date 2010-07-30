@@ -26,7 +26,7 @@
 G_BEGIN_DECLS
 
 /**@file cairo-dock-packages.h This class provides a convenient way to deal with packages. A Package is a tarball (tar.gz) of a folder, located on a distant server, that can be installed locally.
-* Packages are listed on the server in a file named "list.conf". It's a group-key file starting with "#!CD" on the first line; each package is described in its own group.
+* Packages are listed on the server in a file named "list.conf". It's a group-key file starting with "#!CD" on the first line; each package is described in its own group. Packages are stored on the server in a folder that has the same name, and contains the tarball, a "readme" file, and a "preview" file.
 *
 * The class offers a high level of abstraction that allows to manipulate packages without having to care their location, version, etc.
 * It also provides convenient utility functions to get remote data.
@@ -163,8 +163,8 @@ CairoDockTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, c
 
 /** Look for a package with a given name into differente sources. If the package is found on the server and is not present on the disk, or is not up to date, then it is downloaded and the local path is returned.
 *@param cPackageName name of the package.
-*@param cSharePackagesDir path of a local folder containg packages or NULL.
-*@param cUserPackagesDir path of a user folder containg packages or NULL.
+*@param cSharePackagesDir path of a local folder containing packages or NULL.
+*@param cUserPackagesDir path of a user folder containing packages or NULL.
 *@param cDistantPackagesDir path of a distant folder containg packages or NULL.
 *@param iGivenType type of package, or CAIRO_DOCK_ANY_PACKAGE if any type of package should be considered.
 *@return a newly allocated string containing the complete local path of the package. If the package is distant, it is downloaded and extracted into this folder.

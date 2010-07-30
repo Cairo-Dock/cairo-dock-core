@@ -61,7 +61,7 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 	// Exec=toto-1.2
 	// Exec=toto -x -y
 	// Exec=/path/to/toto -x -y
-	// Exec=gksu toto
+	// Exec=gksu nautilus /
 	// Exec=gksu --description /usr/share/applications/synaptic.desktop /usr/sbin/synaptic
 	// Exec=wine "C:\Program Files\Starcraft\Starcraft.exe"
 	// Exec=wine "/path/to/prog.exe"
@@ -78,9 +78,26 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 			{
 				while (cClass[strlen(cClass)-1] == ' ')  // par securite on enleve les espaces en fin de ligne.
 					cClass[strlen(cClass)-1] = '\0';
-				str = strrchr (cClass, ' ');  // on cherche le dernier espace.
+				str = strchr (cClass, ' ');  // on cherche le premier espace.
 				if (str != NULL)  // on prend apres.
-					cClass = str + 1;
+				{
+					while (*str == ' ')
+						str ++;
+					cClass = str;
+				}  // la on a vire le gksu.
+				if (*cClass == '-')  // option, on prend le dernier argument de la commande.
+				{
+					str = strrchr (cClass, ' ');  // on cherche le dernier espace.
+					if (str != NULL)  // on prend apres.
+						cClass = str + 1;
+				}
+				else  // on prend le premier argument.
+				{
+					str = strchr (cClass, ' ');  // on cherche le premier espace.
+					if (str != NULL)  // on vire apres.
+						*str = '\0';
+				}
+				
 				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
 				if (str != NULL)  // on prend apres.
 					cClass = str + 1;
@@ -131,7 +148,11 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 		else
 		{
 			icon->cClass = g_ascii_strdown (cStartupWMClass, -1);
+			gchar *str = strchr (icon->cClass, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
+			if (str != NULL)
+				*str = '\0';
 		}
+		g_print ("class : '%s'\n", icon->cClass);
 		cairo_dock_remove_version_from_string (icon->cClass);
 	}
 	else

@@ -420,7 +420,7 @@ static void _cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleI
 	
 	gboolean bFlushConfFileNeeded = FALSE;
 	if (pInterface->read_conf_file != NULL)
-	{	
+	{
 		if (pInterface->reset_config != NULL)
 			pInterface->reset_config (pInstance);
 		if (pVisitCard->iSizeOfConfig != 0)

@@ -686,6 +686,11 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	cairo_dock_start_shrinking (pDock);  // on commence a faire diminuer la taille des icones.
 	
+	gboolean bStartAnimation = FALSE;
+	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_LEAVE_DOCK, pDock, &bStartAnimation);
+	if (bStartAnimation)
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+	
 	return TRUE;
 }
 

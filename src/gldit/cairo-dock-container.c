@@ -48,6 +48,7 @@ gboolean g_bUseGlitz = FALSE;
 
 CairoContainer *g_pPrimaryContainer = NULL;
 extern gboolean g_bUseOpenGL;
+extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
 
 
 static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
