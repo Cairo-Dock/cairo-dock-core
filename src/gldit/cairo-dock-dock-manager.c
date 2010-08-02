@@ -100,6 +100,9 @@ void cairo_dock_init_dock_manager (void)
 		cairo_dock_register_notification (CAIRO_DOCK_RENDER_DOCK,
 			(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
 			CAIRO_DOCK_RUN_FIRST, NULL);
+		cairo_dock_register_notification (CAIRO_DOCK_LEAVE_DOCK,
+			(CairoDockNotificationFunc) cairo_dock_on_leave_dock_notification,
+			CAIRO_DOCK_RUN_FIRST, NULL);
 	}
 	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
 	
