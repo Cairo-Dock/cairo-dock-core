@@ -142,7 +142,6 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 				icon->cClass = g_strdup (cClass);
 			else
 				icon->cClass = NULL;
-			cd_debug ("no class defined for the launcher %s\n we will assume that its class is '%s'", icon->cName, icon->cClass);
 			g_free (cDefaultClass);
 		}
 		else
@@ -152,8 +151,8 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 			if (str != NULL)
 				*str = '\0';
 		}
-		g_print ("class : '%s'\n", icon->cClass);
 		cairo_dock_remove_version_from_string (icon->cClass);
+		cd_debug ("class of the launcher %s : '%s'\n", icon->cName, icon->cClass);
 	}
 	else
 		icon->cClass = NULL;

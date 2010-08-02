@@ -286,7 +286,7 @@ static void _post_render_fade_out_opengl (CairoDock *pDock, double fOffset)
  // SEMI TRANSPARENT //
 //////////////////////
 
-#define CD_SEMI_ALPHA .25
+#define CD_SEMI_ALPHA .33
 static void _post_render_semi_transparent (CairoDock *pDock, double fOffset, cairo_t *pCairoContext)
 {
 	double fAlpha = (1 - CD_SEMI_ALPHA)*fOffset;

@@ -60,7 +60,7 @@ extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
 
 static void _cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 {
-	pDialog->iMessageWidth = pDialog->iIconSize + _drawn_text_width (pDialog) + (pDialog->iTextWidth != 0 ? 2 : 0) * CAIRO_DIALOG_TEXT_MARGIN;  // icone + marge + texte + marge.
+	pDialog->iMessageWidth = pDialog->iIconSize + _drawn_text_width (pDialog) + (pDialog->iTextWidth != 0 ? 2 : 0) * CAIRO_DIALOG_TEXT_MARGIN - pDialog->iIconOffsetX;  // icone + marge + texte + marge.
 	pDialog->iMessageHeight = MAX (pDialog->iIconSize, pDialog->iTextHeight) + (pDialog->pInteractiveWidget != NULL ? CAIRO_DIALOG_VGAP : 0);  // (icone/texte + marge) + widget + (marge + boutons) + pointe.
 	
 	if (pDialog->pButtons != NULL)

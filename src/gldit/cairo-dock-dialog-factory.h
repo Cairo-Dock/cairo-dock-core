@@ -69,10 +69,10 @@ struct _CairoDialogDecorator {
 	const gchar *cDisplayedName;
 };
 
-/// Definition of a generic callback of a dialog, called when the user clicks on a button. Buttons unmber starts wito 0, -1 means 'Return' and -2 means 'Escape'.
+/// Definition of a generic callback of a dialog, called when the user clicks on a button. Buttons are numbered from 0, -1 means 'Return' and -2 means 'Escape'.
 typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);
 
-/// Configuration attributes of a Dialog, which derives from a Container.
+/// Configuration attributes of a Dialog.
 struct _CairoDialogAttribute {
 	/// path to an image to display in the left margin, or NULL.
 	const gchar *cImageFilePath;
@@ -147,15 +147,16 @@ struct _CairoDialog {
 	cairo_surface_t* pIconBuffer;// surface representant the icon dans la marge a gauche du texte.
 	GLuint iIconTexture;
 	GtkWidget *pInteractiveWidget;// le widget d'interaction utilisateur (GtkEntry, GtkHScale, zone de dessin, etc).
-	int iNbButtons;// number of buttons.
+	gint iNbButtons;// number of buttons.
 	CairoDialogButton *pButtons;// List of buttons.
 	//\_____________________ Renderer
 	CairoDialogRenderer *pRenderer;// le moteur de rendu utilise pour dessiner the dialog.
 	gpointer pRendererData;// donnees pouvant etre utilisees par le moteur de rendu.
 	//\_____________________ Decorateur
 	CairoDialogDecorator *pDecorator;// le decorateur de fenetre.
-	int iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, iMinFrameWidth, iMinBottomGap;// taille que s'est reserve le decorateur.
+	gint iLeftMargin, iRightMargin, iTopMargin, iBottomMargin, iMinFrameWidth, iMinBottomGap;// taille que s'est reserve le decorateur.
 	gdouble fAlign;// alignement de la pointe.
+	gint iIconOffsetX, iIconOffsetY;// decalage de l'icone.
 	//\_____________________ Actions
 	CairoDockActionOnAnswerFunc action_on_answer;// fonction appelee au clique sur l'un des boutons.
 	gpointer pUserData;// donnees transmises a la fonction.

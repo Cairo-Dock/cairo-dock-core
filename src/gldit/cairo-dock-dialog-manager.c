@@ -354,7 +354,9 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 	if (pDialog->pIconBuffer != NULL)
 	{
 		x = pDialog->iLeftMargin;
-		y = (pDialog->container.bDirectionUp ? pDialog->iTopMargin : pDialog->container.iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
+		x = MAX (0, x - pDialog->iIconOffsetX);
+		y = (pDialog->container.bDirectionUp ? pDialog->iTopMargin : pDialog->container.iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight)) - pDialog->iIconOffsetX;
+		y = MAX (0, y - pDialog->iIconOffsetY);
 		if (pDialog->iNbFrames > 1)
 		{
 			cairo_save (pCairoContext);
@@ -377,7 +379,7 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 	
 	if (pDialog->pTextBuffer != NULL)
 	{
-		x = pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN;
+		x = pDialog->iLeftMargin + pDialog->iIconSize + CAIRO_DIALOG_TEXT_MARGIN - (pDialog->iIconSize != 0 ? pDialog->iIconOffsetX : 0);
 		y = (pDialog->container.bDirectionUp ? pDialog->iTopMargin : pDialog->container.iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
 		if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
 			y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
