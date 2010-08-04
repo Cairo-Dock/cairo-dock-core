@@ -107,10 +107,12 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 				cClass = str;  // on met deja la classe a "wine", c'est mieux que rien.
 				*(str+4) = '\0';
 				str += 5;
+				while (*str == ' ')  // on enleve les espaces supplementaires.
+					str ++;
 				gchar *exe = g_strstr_len (str, -1, ".exe");  // on cherche a isoler le nom de l'executable, puisque wine l'utilise dans le res_name.
 				if (exe)
 				{
-					*(exe+4) = '\0';
+					*exe = '\0';  // vire l'extension par la meme occasion.
 					gchar *slash = strrchr (str, '\\');
 					if (slash)
 						cClass = slash+1;
@@ -119,6 +121,8 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 						slash = strrchr (str, '/');
 						if (slash)
 							cClass = slash+1;
+						else
+							cClass = str;
 					}
 				}
 				cd_debug ("  special case : wine application => class = '%s'", cClass);
@@ -152,7 +156,7 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 				*str = '\0';
 		}
 		cairo_dock_remove_version_from_string (icon->cClass);
-		cd_debug ("class of the launcher %s : '%s'\n", icon->cName, icon->cClass);
+		cd_debug ("class of the launcher %s : '%s'", icon->cName, icon->cClass);
 	}
 	else
 		icon->cClass = NULL;

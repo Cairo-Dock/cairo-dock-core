@@ -101,8 +101,6 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 		}
 		if (cRendererName != NULL && icon->pSubDock != NULL)
 			cairo_dock_set_renderer (icon->pSubDock, cRendererName);
-		if (icon->pSubDock != NULL)
-			icon->pSubDock->iNbDrawnIcons = icon->iNbSubIcons;
 	}
 	
 	//\____________ On met a jour les infos dans le cas d'un point de montage.

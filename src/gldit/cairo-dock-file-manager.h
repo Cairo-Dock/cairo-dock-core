@@ -74,6 +74,7 @@ typedef void (*CairoDockFMRemoveMonitorFunc) (const gchar *cURI);
 typedef gboolean (*CairoDockFMDeleteFileFunc) (const gchar *cURI, gboolean bNoTrash);
 typedef gboolean (*CairoDockFMRenameFileFunc) (const gchar *cOldURI, const gchar *cNewName);
 typedef gboolean (*CairoDockFMMoveFileFunc) (const gchar *cURI, const gchar *cDirectoryURI);
+typedef GList * (*CairoDockFMListAppsForFileFunc) (const gchar *cURI);
 
 typedef gchar * (*CairoDockFMGetTrashFunc) (const gchar *cNearURI, gchar **cFileInfoPath);
 typedef void (*CairoDockFMEmptyTrashFunc) (void);
@@ -97,6 +98,7 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMDeleteFileFunc 		delete_file;
 	CairoDockFMRenameFileFunc 		rename;
 	CairoDockFMMoveFileFunc 		move;
+	CairoDockFMListAppsForFileFunc 	list_apps_for_file;
 	CairoDockFMEmptyTrashFunc		empty_trash;
 	CairoDockFMGetTrashFunc 		get_trash_path;
 	CairoDockFMGetDesktopFunc 		get_desktop_path;
@@ -154,6 +156,7 @@ gchar *cairo_dock_fm_is_mounted (const gchar *cURI, gboolean *bIsMounted);
 /** Say if a point can be ejected (like a CD player).
 */
 gboolean cairo_dock_fm_can_eject (const gchar *cURI);
+
 /** Eject a drive, like a CD player.
 */
 gboolean cairo_dock_fm_eject_drive (const gchar *cURI);
@@ -170,6 +173,10 @@ gboolean cairo_dock_fm_rename_file (const gchar *cOldURI, const gchar *cNewName)
 /** Move a file.
 */
 gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI);
+
+/** Get the list of applications that can open a given file. Returns a list of strings arrays : {name, displayed-name, command, icon}.
+*/
+GList *cairo_dock_fm_list_apps_for_file (const gchar *cURI);
 
 /** Empty the Trash.
 */

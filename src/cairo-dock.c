@@ -162,7 +162,7 @@ static gchar *s_cLastVersion = NULL;
 gboolean g_bEnterHelpOnce = FALSE;
 static gchar *s_cDefaulBackend = NULL;
 static gboolean s_bTestComposite = TRUE;
-
+static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 
 static void _accept_metacity_composition (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
 {
@@ -331,6 +331,7 @@ static void _cairo_dock_get_global_config (void)
 		}
 		s_bTestComposite = g_key_file_get_boolean (pKeyFile, "Launch", "test composite", NULL);
 		g_bEnterHelpOnce = g_key_file_get_boolean (pKeyFile, "Help", "entered once", NULL);
+		s_iGuiMode = g_key_file_get_integer (pKeyFile, "Gui", "mode", NULL);  // 0 si la cle n'est pas presente.
 	}
 	else  // ancienne methode.
 	{
@@ -360,6 +361,9 @@ static void _cairo_dock_get_global_config (void)
 		g_free (cCommand);
 		g_free (cHelpHistory);
 		g_key_file_set_boolean (pKeyFile, "Help", "entered once", g_bEnterHelpOnce);
+		
+		s_iGuiMode = 0;
+		g_key_file_set_integer (pKeyFile, "Gui", "mode", s_iGuiMode);
 		
 		cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
 	}
@@ -692,7 +696,7 @@ int main (int argc, char** argv)
 		cairo_dock_initialize_module_manager (NULL);
 	
 	//\___________________ On definit le backend des GUI.
-	cairo_dock_load_user_gui_backend ();
+	cairo_dock_load_user_gui_backend (s_iGuiMode);
 	cairo_dock_register_default_launcher_gui_backend ();
 	
 	//\___________________ On enregistre la vue par defaut.

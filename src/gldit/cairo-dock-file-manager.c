@@ -251,6 +251,15 @@ gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI)
 		return FALSE;
 }
 
+GList *cairo_dock_fm_list_apps_for_file (const gchar *cURI)
+{
+	if (s_pEnvBackend != NULL && s_pEnvBackend->list_apps_for_file != NULL)
+	{
+		return s_pEnvBackend->list_apps_for_file (cURI);
+	}
+	else
+		return NULL;
+}
 
 gboolean cairo_dock_fm_empty_trash (void)
 {

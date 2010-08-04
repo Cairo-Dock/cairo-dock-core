@@ -260,7 +260,7 @@ struct _CairoDock {
 	/// Source ID for loading the background.
 	guint iSidLoadBg;
 	
-	gint iNbDrawnIcons;
+	gboolean bPreventDraggingIcons;  // whether icons in the dock can be dragged with the mouse (inside and outside of the dock).
 	
 	gchar reserved[12];
 };

@@ -24,6 +24,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
+#include "cairo-dock-config.h"
 #include "cairo-dock-gui-main.h"
 #include "cairo-dock-gui-simple.h"
 #include "cairo-dock-gui-manager.h"
@@ -32,17 +33,9 @@
 extern gchar *g_cCairoDockDataDir;
 
 static gboolean s_bAdvancedMode = FALSE;
-void cairo_dock_load_user_gui_backend (void)
+void cairo_dock_load_user_gui_backend (int iMode)  // 0 = simple
 {
-	gchar *cModeFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, ".config-mode");
-	gsize length = 0;
-	gchar *cContent = NULL;
-	g_file_get_contents (cModeFile,
-		&cContent,
-		&length,
-		NULL);
-	
-	if (cContent && atoi (cContent) == 2)
+	if (iMode == 1)
 	{
 		cairo_dock_register_main_gui_backend ();
 		s_bAdvancedMode = TRUE;
@@ -52,27 +45,21 @@ void cairo_dock_load_user_gui_backend (void)
 		cairo_dock_register_simple_gui_backend ();
 		s_bAdvancedMode = FALSE;
 	}
-	g_free (cModeFile);
 }
 
 static void on_click_switch_mode (GtkButton *button, gpointer data)
 {
 	cairo_dock_close_gui ();
 	
-	s_bAdvancedMode = !s_bAdvancedMode;
-	gchar *cModeFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, ".config-mode");
-	gchar *cMode = g_strdup_printf ("%d", s_bAdvancedMode ? 2 : 0);
-	g_file_set_contents (cModeFile,
-		cMode,
-		-1,
-		NULL);
+	int iNewMode = (s_bAdvancedMode ? 0 : 1);
 	
-	if (s_bAdvancedMode)
-		cairo_dock_register_main_gui_backend ();
-	else
-		cairo_dock_register_simple_gui_backend ();
-	g_free (cMode);
-	g_free (cModeFile);
+	gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+	cairo_dock_update_conf_file (cConfFilePath,
+		G_TYPE_INT, "Gui", "mode", iNewMode,
+		G_TYPE_INVALID);
+	g_free (cConfFilePath);
+	
+	cairo_dock_load_user_gui_backend (iNewMode);
 	
 	cairo_dock_show_main_gui ();
 }

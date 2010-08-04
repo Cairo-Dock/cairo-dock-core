@@ -481,7 +481,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		fLastTime = pMotion->time;
 		
 		//\_______________ On tire l'icone cliquee.
-		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && (fabs (pMotion->x - s_iClickX) > CD_CLICK_ZONE || fabs (pMotion->y - s_iClickY) > CD_CLICK_ZONE))
+		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && (fabs (pMotion->x - s_iClickX) > CD_CLICK_ZONE || fabs (pMotion->y - s_iClickY) > CD_CLICK_ZONE) && ! pDock->bPreventDraggingIcons)
 		{
 			s_bIconDragged = TRUE;
 			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
@@ -521,7 +521,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	{
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 		
-		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
+		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && ! pDock->bPreventDraggingIcons)
 		{
 			_cairo_dock_make_icon_glide (pPointedIcon, s_pIconClicked, pDock);
 			bStartAnimation = TRUE;
@@ -562,7 +562,7 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	
 	//\_______________ On gere le drag d'une icone hors du dock.
-	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)
+	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && ! pDock->bPreventDraggingIcons)
 	{
 		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
@@ -885,7 +885,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
 						}
 					}
-					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll)  //  && icon->iType == s_pIconClicked->iType
+					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && ! pDock->bPreventDraggingIcons)  //  && icon->iType == s_pIconClicked->iType
 					{
 						//g_print ("deplacement de %s\n", s_pIconClicked->cName);
 						CairoDock *pOriginDock = CAIRO_DOCK (cairo_dock_search_container_from_icon (s_pIconClicked));

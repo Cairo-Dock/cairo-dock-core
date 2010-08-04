@@ -25,7 +25,7 @@
 G_BEGIN_DECLS
 
 
-void cairo_dock_load_user_gui_backend (void);
+void cairo_dock_load_user_gui_backend (int iMode);
 
 GtkWidget *cairo_dock_make_switch_gui_button (void);
 
