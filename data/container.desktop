@@ -18,7 +18,7 @@ Order=0
 #d Name of the container it belongs to:
 Container = 
 
-Nb subicons = 1
+Is container = true
 
 #n Name of the view used for the sub-dock :/
 Renderer = 

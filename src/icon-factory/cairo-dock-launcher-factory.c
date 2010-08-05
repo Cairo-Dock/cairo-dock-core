@@ -167,13 +167,14 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);\
 		g_error_free (erreur);\
 		erreur = NULL; }
-void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon, gchar **cSubDockRendererName)
+CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon, gchar **cSubDockRendererName)
 {
+	CairoDockIconTrueType iType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
 	GError *erreur = NULL;
 	gchar *cDesktopFilePath = (*cDesktopFileName == '/' ? g_strdup (cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cDesktopFileName));
 	//g_print ("%s (%s)\n", __func__, cDesktopFilePath);
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-	g_return_if_fail (pKeyFile != NULL);
+	g_return_val_if_fail (pKeyFile != NULL, iType);
 	
 	g_free (icon->cDesktopFileName);
 	icon->cDesktopFileName = g_strdup (cDesktopFileName);
@@ -236,33 +237,24 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 		icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
 	}
 	
-	gint iNbSubIcons = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Nb subicons", &erreur);
+	gboolean bIsContainer = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is container", &erreur);
 	if (erreur != NULL)
 	{
-		gboolean bIsContainer = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is container", NULL);
-		if (bIsContainer)
-			iNbSubIcons = 3;
+		gint iNbSubIcons = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Nb subicons", NULL);
+		if (iNbSubIcons != 0)
+			bIsContainer = TRUE;
 		g_error_free (erreur);
 		erreur = NULL;
 	}
-	switch (iNbSubIcons)
-	{
-		case 1 : icon->iNbSubIcons = 5; break;
-		case 2 : icon->iNbSubIcons = 10; break;
-		case 3 : icon->iNbSubIcons = 20; break;
-		case 4 : icon->iNbSubIcons = 30; break;
-		case 5 : icon->iNbSubIcons = 1e4; break;
-		default : icon->iNbSubIcons = 0; break;
-	}
 	
-	if (icon->iNbSubIcons != 0 && icon->cName != NULL)
+	if (bIsContainer && icon->cName != NULL)
 	{
 		*cSubDockRendererName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Renderer", NULL);
-	}
-	if (icon->iNbSubIcons != 0)
-	{
 		icon->iSubdockViewType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "render", NULL);  // on a besoin d'un entier dans le panneau de conf pour pouvoir degriser des options selon le rendu choisi. De plus c'est utile aussi pour Animated Icons...
+		iType = CAIRO_DOCK_ICON_TYPE_CONTAINER;
 	}
+	else
+		*cSubDockRendererName = NULL;
 
 	gboolean bPreventFromInhibating = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
 	if (bPreventFromInhibating)
@@ -313,7 +305,11 @@ void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName,
 	}
 	icon->iSpecificDesktop = iSpecificDesktop;
 	
+	if (icon->cCommand == NULL && icon->cName == NULL && ! bIsContainer)
+		iType = CAIRO_DOCK_ICON_TYPE_SEPARATOR;
+	
 	g_key_file_free (pKeyFile);
+	return iType;
 }
 
 
@@ -324,17 +320,8 @@ Icon * cairo_dock_new_launcher_icon (const gchar *cDesktopFileName, gchar **cSub
 	icon->iType = CAIRO_DOCK_LAUNCHER;
 	
 	//\____________ On recupere les infos de son .desktop.
-	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon, cSubDockRendererName);
+	icon->iTrueType = cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon, cSubDockRendererName);
 	g_return_val_if_fail (icon->cDesktopFileName != NULL, NULL);
-	
-	if (icon->cBaseURI != NULL)
-		icon->iTrueType = CAIRO_DOCK_ICON_TYPE_FILE;
-	else if (icon->cCommand != NULL)
-		icon->iTrueType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
-	else if (icon->iNbSubIcons != 0)
-		icon->iTrueType = CAIRO_DOCK_ICON_TYPE_CONTAINER;
-	else
-		icon->iTrueType = CAIRO_DOCK_ICON_TYPE_SEPARATOR;
 	
 	return icon;
 }

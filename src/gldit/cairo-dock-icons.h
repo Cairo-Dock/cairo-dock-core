@@ -75,15 +75,6 @@ typedef enum {
 	CAIRO_DOCK_NB_STATES
 	} CairoDockAnimationState;
 
-/// Type of sorting available on files.
-typedef enum {
-	CAIRO_DOCK_FM_SORT_BY_NAME=0,
-	CAIRO_DOCK_FM_SORT_BY_DATE,
-	CAIRO_DOCK_FM_SORT_BY_SIZE,
-	CAIRO_DOCK_FM_SORT_BY_TYPE,
-	CAIRO_DOCK_NB_SORT_ON_FILE
-	} CairoDockFMSortType;
-
 /// Icon's interface
 struct _IconInterface {
 	/// function that loads the icon surface (and optionnally texture).
@@ -143,10 +134,6 @@ struct _Icon {
 	gchar *cWorkingDirectory;
 	gchar *cBaseURI;
 	gint iVolumeID;
-	/** deprecated */
-	gint iNbSubIcons;  // nombre de fichiers max dans le cas d'un repertoire.
-	CairoDockFMSortType iSortSubIcons;  // ordre des icones dans le cas d'un repertoire.
-	/** fin deprecated */
 	
 	// Appli.
 	Window Xid;

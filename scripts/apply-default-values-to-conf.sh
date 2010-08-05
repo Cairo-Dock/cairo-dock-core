@@ -119,8 +119,8 @@ set_current_conf_file "plug-ins/clock/clock.conf"
 set_value "Icon"			"name"						""
 desklet=`get_value "Desklet" "initially detached"`
 if test "$desklet" = "false"; then
-	set_value "Module"		"show date"					2
-	set_value "Module"		"show seconds"				false
+	set_value "Configuration"	"show date"					2
+	set_value "Configuration"	"show seconds"				false
 fi
 
 set_current_conf_file "plug-ins/drop_indicator/drop_indicator.conf"
@@ -128,8 +128,8 @@ set_value "Drag and drop indicator"	"speed" 			2
 
 set_current_conf_file "plug-ins/dustbin/dustbin.conf"
 set_value "Icon"			"name"						"Dustbin"
-set_value "Module"			"additionnal directories"	""
-set_value "Module"			"alternative file browser"	""
+set_value "Configuration"	"additionnal directories"	""
+set_value "Configuration"	"alternative file browser"	""
 
 set_current_conf_file "plug-ins/GMenu/GMenu.conf"
 set_value "Icon"			"name"						"Applications Menu"
@@ -165,10 +165,10 @@ set_value "Icon"			"name"						""
 set_value "Configuration"	"url_rss_feed"				""
 
 set_current_conf_file "plug-ins/shortcuts/shortcuts.conf"
-set_value "Module"			"list network"				false
-set_value "Module"			"use separator"				false
-set_value "Module"			"disk usage"				4
-set_value "Module"			"check interval"			10
+set_value "Configuration"	"list network"				false
+set_value "Configuration"	"use separator"				false
+set_value "Configuration"	"disk usage"				4
+set_value "Configuration"	"check interval"			10
 
 set_current_conf_file "plug-ins/slider/slider.conf"
 set_value "Configuration"	"directory"					""
@@ -186,6 +186,7 @@ set_value "Icon"			"name"						""
 set_value "Configuration"	"nb days"					5
 set_value "Configuration"	"check interval"			15
 set_value "Configuration"	"IS units"					true
+set_value "Configuration"	"display temperature"			true
 
 set_current_conf_file "plug-ins/weblets/weblets.conf"
 set_value "Configuration"	"weblet URI"				"http:\/\/www.google.com"

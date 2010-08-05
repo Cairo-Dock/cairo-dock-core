@@ -13,7 +13,7 @@ Order=0
 #d Name of the container it belongs to:
 Container = 
 
-Nb subicons = 0
+Is container = false
 
 Renderer = 
 

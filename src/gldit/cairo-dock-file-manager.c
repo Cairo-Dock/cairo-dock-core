@@ -251,6 +251,16 @@ gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI)
 		return FALSE;
 }
 
+gboolean cairo_dock_fm_create_file (const gchar *cURI, gboolean bDirectory)
+{
+	if (s_pEnvBackend != NULL && s_pEnvBackend->create != NULL)
+	{
+		return s_pEnvBackend->create (cURI, bDirectory);
+	}
+	else
+		return FALSE;
+}
+
 GList *cairo_dock_fm_list_apps_for_file (const gchar *cURI)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->list_apps_for_file != NULL)

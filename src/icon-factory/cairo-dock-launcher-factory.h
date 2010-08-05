@@ -22,6 +22,7 @@
 #define  __CAIRO_DOCK_LAUNCHER_FACTORY__
 
 #include <glib.h>
+//#include "cairo-dock-icons.h"
 
 G_BEGIN_DECLS
 
@@ -45,8 +46,9 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass);
  * @param cDesktopFileName name or path of a desktop file. If it's a simple name, it will be taken in the "launchers" folder of the current theme.
  * @param icon the Icon to fill.
  * @param cSubDockRendererName filled with the renderer name of the sub-dock, if the icon will hold one.
+ * @return the type of the icon, guessed from the values of the desktop file.
  */
-void cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon, gchar **cSubDockRendererName);
+CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon, gchar **cSubDockRendererName);
 
 /** Create an Icon from a given desktop file. The resulting icon can directly be used inside a container. Class inhibating is handled.
  * @param cDesktopFileName name of the desktop file, present in the "launchers" folder of the current theme.

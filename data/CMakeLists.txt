@@ -22,7 +22,6 @@ install (FILES
 	cairo-dock-logo.png
 	cairo-dock.svg
 	ChangeLog.txt
-	container.desktop
 	default-class-indicator.svg
 	default-icon-appli.svg
 	default-icon.svg
@@ -67,9 +66,10 @@ install (FILES
 	icon-visibility.svg
 	icon-wave.png
 	launcher.desktop
+	container.desktop
+	separator.desktop
 	preview-default.png
 	readme-default-view
-	separator.desktop
 	DESTINATION ${pkgdatadir})
 
 install (FILES help_scripts.sh

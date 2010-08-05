@@ -31,7 +31,7 @@ Terminal = false
 #{If '0' the launcher will be displayed on every viewport.}
 ShowOnViewport = 0
 
-Nb subicons = 0
+Is container = false
 
 Renderer = 
 

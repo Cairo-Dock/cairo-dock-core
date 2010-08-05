@@ -48,6 +48,15 @@ typedef enum {
 	CAIRO_DOCK_NB_EVENT_ON_FILES
 	} CairoDockFMEventType;
 
+/// Type of sorting available on files.
+typedef enum {
+	CAIRO_DOCK_FM_SORT_BY_NAME=0,
+	CAIRO_DOCK_FM_SORT_BY_DATE,
+	CAIRO_DOCK_FM_SORT_BY_SIZE,
+	CAIRO_DOCK_FM_SORT_BY_TYPE,
+	CAIRO_DOCK_NB_SORT_ON_FILE
+	} CairoDockFMSortType;
+
 #define CAIRO_DOCK_FM_VFS_ROOT "_vfsroot_"
 #define CAIRO_DOCK_FM_NETWORK "_network_"
 #define CAIRO_DOCK_FM_TRASH "_trash_"
@@ -74,6 +83,7 @@ typedef void (*CairoDockFMRemoveMonitorFunc) (const gchar *cURI);
 typedef gboolean (*CairoDockFMDeleteFileFunc) (const gchar *cURI, gboolean bNoTrash);
 typedef gboolean (*CairoDockFMRenameFileFunc) (const gchar *cOldURI, const gchar *cNewName);
 typedef gboolean (*CairoDockFMMoveFileFunc) (const gchar *cURI, const gchar *cDirectoryURI);
+typedef gboolean (*CairoDockFMCreateFileFunc) (const gchar *cURI, gboolean bDirectory);
 typedef GList * (*CairoDockFMListAppsForFileFunc) (const gchar *cURI);
 
 typedef gchar * (*CairoDockFMGetTrashFunc) (const gchar *cNearURI, gchar **cFileInfoPath);
@@ -98,6 +108,7 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMDeleteFileFunc 		delete_file;
 	CairoDockFMRenameFileFunc 		rename;
 	CairoDockFMMoveFileFunc 		move;
+	CairoDockFMCreateFileFunc 		create;
 	CairoDockFMListAppsForFileFunc 	list_apps_for_file;
 	CairoDockFMEmptyTrashFunc		empty_trash;
 	CairoDockFMGetTrashFunc 		get_trash_path;
@@ -174,7 +185,11 @@ gboolean cairo_dock_fm_rename_file (const gchar *cOldURI, const gchar *cNewName)
 */
 gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI);
 
-/** Get the list of applications that can open a given file. Returns a list of strings arrays : {name, displayed-name, command, icon}.
+/** Create a new file.
+*/
+gboolean cairo_dock_fm_create_file (const gchar *cURI, gboolean bDirectory);
+
+/** Get the list of applications that can open a given file. Returns a list of strings arrays : {name, command, icon}.
 */
 GList *cairo_dock_fm_list_apps_for_file (const gchar *cURI);
 

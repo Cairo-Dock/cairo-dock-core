@@ -72,7 +72,7 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 	}
 	
 	//\____________ On cree son sous-dock si necessaire.
-	if (icon->iNbSubIcons != 0 && icon->cName != NULL)
+	if (icon->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER && icon->cName != NULL)
 	{
 		CairoDock *pChildDock = cairo_dock_search_dock_from_name (icon->cName);
 		if (pChildDock && pChildDock->iRefCount > 0 && pChildDock != icon->pSubDock)  // un sous-dock de meme nom existe deja, on change le nom de l'icone.
@@ -212,7 +212,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	Icon *icon = cairo_dock_new_launcher_icon (cDesktopFileName, &cRendererName);
 	g_return_val_if_fail (icon != NULL, NULL);
 	
-	if (icon->cCommand == NULL && icon->cBaseURI == NULL && icon->iNbSubIcons == 0)  // ce sera un separateur.
+	if (icon->iTrueType == CAIRO_DOCK_ICON_TYPE_SEPARATOR)
 	{
 		icon->iface.load_image = _load_user_separator;
 		icon->iface.on_delete = _delete_user_separator;

@@ -544,11 +544,15 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 	if (g_bUseOpenGL)
 		return ;
 	g_return_if_fail (pIcon != NULL && pContainer!= NULL);
-	if (pIcon->pReflectionBuffer != NULL)
-		cairo_surface_destroy (pIcon->pReflectionBuffer);
 	
+	if (pIcon->pReflectionBuffer != NULL)
+	{
+		cairo_surface_destroy (pIcon->pReflectionBuffer);
+		pIcon->pReflectionBuffer = NULL;
+	}
 	if (! pContainer->bUseReflect)
 		return;
+	
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
 	pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,
