@@ -1,4 +1,4 @@
-Modifications made on the SVN and BZR : Rev 2.0.8.1 => 2.0.9
+Modifications made on the SVN and BZR: Rev 2.0.8.1 => 2.0.9
 
 /* A bugs fixed version */
 
@@ -10,7 +10,7 @@ Fabounet :
    * Fixed a crash when a module stop
    * set the Widget Layer rule automatically
    * detection of composition
-   * metacity : automatically turn on composite
+   * metacity: automatically turn on composite
    * proposed to see the help if it has never been done
    * message when no plug-in
    * removed some print messages
@@ -49,15 +49,15 @@ Fabounet :
    * lock dock option works now for all icons
  * Themes :
    * added versionning for distant themes
-   * Default : correction in some conf files
+   * Default: correction in some conf files
    * fixed 1 crash when reloading theme
    * Improved the theme selector
    * TM handles .tar.bz2 and .tgz
  * Subdocks
    * fixed block bugs
    * correction of the sub-sub-docks bug
- * Xinerama : available for all root docks to take into account different screen sizes
- * XShape : correction 1 bug on fullscreen mode
+ * Xinerama: available for all root docks to take into account different screen sizes
+ * XShape: correction 1 bug on fullscreen mode
 
 
 
@@ -79,32 +79,133 @@ Matttbe :
 /* A bugs fixed version */
 
 Fabounet :
- * Miscellaneous :
-   * Fixed the fade out when the dock is below windows
-   * Fix window sizes (most WM didn't support well this feature)
-   * Correction of autostart when directory doesn't exist
- * Taskbar :
-   * Workaround for some windows
-   * Correction of a refresh bug
-   * Fixed the mix between apps and launchers
-   * Fixed a crash when moving some apps on other subdock
-   * Small correction on auto-hide
-   * Opengl text now handles extended ASCII (no crash)
-   * fixed wrong background position on icon disappearance
-   * fixed the bug on maximized window
- * Labels :
-   * Improvement of label's readability
- * Dialogues :
-   * Better dialogues placement on dock
-   * fixed dialogs placement with desklet
-   * make the dialog transient for the dock
- * Theme manager :
-   * theme manager panel can reload correctly
- * Second docks :
-   * Small correction for the second main dock
-   
+ * Miscellaneous
+   * animations and effects names are now translated
+   * fixed versionning for Dbus and Switcher
+ * Rendering :
+   * fixed a bug in rendering-caroussel
+   * fixed a bug on Slide view (wrong placement)
+   * correction on Slide view (some parameters didn't work)
+   * rewriting the equations on Slide's wave
+ * MusicPlayer :
+   * small bug-fix on MP if artist AND title is empty
+   * fixed a infinite loop when a player crash
+   * Fixed blank covers for Audacious
+   * modified the dowload of covers (Amazon has changed its API)
+   * prevent empty image from Amazon 
+ * Switcher :
+   * fixed a bug with windows list with Metacity
+ * weather :
+   * fixed the name when no connection at start
+ * Dbus :
+   * small bug fixes (stop signal)
+   * test if distant applet is not already launched
+   * fixed the DBus applet launching
+ * Cairo-Penguin :
+   * correction of a refresh bug
+ * shortcuts :
+   * handle the case of unmounted volume
+   * fixed a crash when removing the last bookmark
+ * Stack :
+   * fixed stack sub-dock on clic
+ * Clipper :
+   * fixed a crash
 
 
 Matttbe :
- * Updated translations
+ * Cairo-Penguin :
+   * Take the gtk icon as the others
+ * dnd2share :
+   * workaround for curl when a file contains a comma
+ * Update translations
  * Rename en_GB => en
+ * Little improvement with the config panel for Note and Mail
+
+
+Tofe :
+ * Mail :
+   * Fixed crash
+ 
+ ===========================
+ 
+ Rev 2.1.3-6 => 2.1.3-10-lucid
+
+/* A bugs fixed version */
+
+Core: 
+  * Fixed some bugs:
+    * Fixed a important crash when read several xml data
+    * LP: #521167 Cairo-dock crashes by theme changing
+    * Fixed a bug with desklets buttons
+    * Used icons of the system
+    * Fixed a bug when removing a container with OpenGL backend
+    * Fixed some typo on some define
+    * Fixed a little bug in the drag motion
+    * Reduced the disk access for SSD disk
+  * Used the official Ubuntu Lucid theme.
+
+Plug-ins
+ * New upstream release
+  * Fixed some bugs:
+    * LP: #455261 (Cannot Modify / Add Custom Launchers)
+    * LP: #449422 (Cairo-Dock resize problem)
+    * LP: #489349 (showDesktop Applet only seems to work
+           every second time you click on it)
+    * LP: #526742 (The system monitor plugin and netspeed
+           plugin inverts upside-down continuously)
+    * Dbus: Used the right DBus API of Cairo-Dock (2.1.3 stable)
+    * Used icons of the system
+    * alsaMixer: fixed a crash when read several xml data
+    * musicPlayer:
+    * Removed some annoying warnings
+    * Banshee-plugin: fixed some bugs due to the new version (1.4.0)
+
+ ===========================
+ 
+ Rev 2.1.3-10 => 2.2.0-0beta4
+ 
+Core
+ * Migrated from Autotools to CMake
+ * Use libcurl for file downloads
+ * OpenGL backend: migrated from Pbuffer to FBO.
+ * Added 2 new visibility modes
+ * Added hiding animations
+ * Removed files management from the core
+ * VFS backend: new methods added
+ * OpenGL backend: added a cairo-like API for paths
+ * Applet API: unified methods to handle icons in sub-docks and desklets
+ * Added ability to have several docks with independant configurations
+ * Icons that demand attention are visible even when the dock is hidden
+ * Icons are now loaded progressively for a faster startup
+ * Desklets: added ability to click behind desklets
+ * Labels: homogeneous spacing and better rendering in OpenGL
+ * Better guessing of launcher's class
+ * Config panel :
+  * Improved the simple config panel, new categories of applets in the advanced panel
+  * Added buttons to enable some features of Gnome/Compiz/etc.
+  * Added internet connection options
+ * Added a config file for startup options
+ * Added man pages
+ * Removed unwanted verbosity
+ * Updated translations
+
+Plug-ins
+
+ * Me-Menu: new applet that adds the Me-Menu inside the dock
+ * Messaging-Menu: new applet that adds the Messaging-Menu inside the dock
+ * Dock-rendering: added a new 'Panel' view
+ * DBus: added new methods to the API   added management of third-party applets through a repository
+ * Clock: horizontal packaging of time date
+ * Switcher: horizontal packaging of desktops
+ * Dnd2Share: added tiny-url ability
+ * Logout: added the ability to lock the screen
+ * Dustbin: handle trashes in all the volumes
+ * Shortcuts: display a message when unmounting and connecting disks, and fixed icons reordering
+ * MusicPlayer: added support for Guayadeque
+ * Switcher: added Exposé in the list of actions for middle-click
+ * Dialog-rendering: improved the 'tooltip' view
+ * Improved the integration with KDEand use gio for XFCE 4.6
+ * Mail: bug-fix in messages count
+ * Folders: new applet that adds file-managing abilities to the dock.
+ * Updated translations
+
