@@ -27,7 +27,4 @@ Renderer =
 #{If '0' the container will be displayed on every viewport.}
 ShowOnViewport = 0
 
-Base URI = 
-Is mounting point = false
-
 group = 0

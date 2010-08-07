@@ -45,6 +45,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-facility.h"
@@ -104,7 +105,7 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 	}
 	
 	//\____________ On met a jour les infos dans le cas d'un point de montage.
-	if (icon->iVolumeID)  // les infos dans le .desktop ne sont pas a jour.
+	/*if (icon->iVolumeID)  // les infos dans le .desktop ne sont pas a jour.
 	{
 		g_free (icon->cName);
 		icon->cName = NULL;
@@ -115,7 +116,7 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 
 		gboolean bIsDirectory;  // on n'ecrase pas le fait que ce soit un container ou pas, car c'est l'utilisateur qui l'a decide.
 		cairo_dock_fm_get_file_info (icon->cBaseURI, &icon->cName, &icon->cCommand, &icon->cFileName, &bIsDirectory, &icon->iVolumeID, &icon->fOrder, CAIRO_DOCK_FM_SORT_BY_NAME);  // son ordre nous importe peu ici, puisqu'il est definie par le champ 'Order'.
-	}
+	}*/
 	return pParentDock;
 }
 
@@ -347,7 +348,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 			}
 			g_free (cCommand);
 		}
-		if (icon->cBaseURI != NULL)  // on assure que ca reste un fichier.
+		/*if (icon->cBaseURI != NULL)  // on assure que ca reste un fichier.
 		{
 			gchar *cBaseURI = g_key_file_get_string (pKeyFile, "Desktop Entry", "Base URI", NULL);
 			if (cBaseURI == NULL || *cBaseURI == '\0')
@@ -357,7 +358,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 				cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
 			}
 			g_free (cBaseURI);
-		}
+		}*/
 		
 		g_key_file_free (pKeyFile);
 		g_free (cDesktopFilePath);
@@ -412,6 +413,9 @@ void cairo_dock_reload_launcher (Icon *icon)
 	
 	if (cName && ! icon->cName)
 		icon->cName = g_strdup (" ");
+	
+	if (cairo_dock_strings_differ (cName, icon->cName))
+		cairo_dock_load_icon_text (icon, &myLabels.iconTextDescription);
 	
 	//\_____________ On gere son sous-dock.
 	if (icon->Xid != 0)
