@@ -262,7 +262,9 @@ struct _CairoDock {
 	
 	gboolean bPreventDraggingIcons;  // whether icons in the dock can be dragged with the mouse (inside and outside of the dock).
 	
-	gchar reserved[12];
+	/// Source ID to destroy an empty main dock.
+	guint iSidDestroyEmptyDock;
+	gchar reserved[8];
 };
 
 

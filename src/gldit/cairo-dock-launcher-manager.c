@@ -458,9 +458,8 @@ void cairo_dock_reload_launcher (Icon *icon)
 		cairo_dock_detach_icon_from_dock (icon, pDock, TRUE);
 		if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
 		{
-			cd_message ("dock %s vide => a la poubelle", cPrevDockName);
-			cairo_dock_destroy_dock (pDock, cPrevDockName);
-			pDock = NULL;
+			///cairo_dock_destroy_dock (pDock, cPrevDockName);
+			pDock = NULL;  // se fera detruire automatiquement.
 		}
 		else
 		{

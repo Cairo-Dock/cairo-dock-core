@@ -255,6 +255,8 @@ void cairo_dock_free_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidUpdateWMIcons);
 	if (pDock->iSidLoadBg != 0)
 		g_source_remove (pDock->iSidLoadBg);
+	if (pDock->iSidDestroyEmptyDock != 0)
+		g_source_remove (pDock->iSidDestroyEmptyDock);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);
 	
 	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
@@ -421,7 +423,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	}
 	if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
-
+	
 	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	
@@ -435,6 +437,21 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 }
 
 
+static gboolean _destroy_empty_dock (CairoDock *pDock)
+{
+	const gchar *cDockName = cairo_dock_search_dock_name (pDock);  // safe meme si le dock n'existe plus.
+	g_return_val_if_fail (cDockName != NULL, FALSE);  // si NULL, cela signifie que le dock n'existe plus, donc on n'y touche pas. Ce cas ne devrait jamais arriver, c'est de la pure parano.
+	
+	if (pDock->bIconIsFlyingAway)
+		return TRUE;
+	pDock->iSidDestroyEmptyDock = 0;
+	if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // le dock est toujours a detruire.
+	{
+		g_print ("The dock '%s' is empty. No icon, no dock.\n", cDockName);
+		cairo_dock_destroy_dock (pDock, cDockName);
+	}
+	return FALSE;
+}
 gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator)
 {
 	if (pDock == NULL)
@@ -532,37 +549,18 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	//\___________________ On la remet a la taille normale en vue d'une reinsertion quelque part.
 	icon->fWidth /= pDock->container.fRatio;
 	icon->fHeight /= pDock->container.fRatio;
-
-	//\___________________ On enleve le separateur si c'est la derniere icone de son type.
-	/**if (bCheckUnusedSeparator && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
-	{
-		//g_print ("on cherche une icone de ce groupe : %d (%d)\n", icon->iType, cairo_dock_get_icon_order (icon));
-		Icon *pSameTypeIcon = cairo_dock_get_first_icon_of_order (pDock->icons, icon->iType);
-		if (pSameTypeIcon == NULL)
-		{
-			Icon * pSeparatorIcon = NULL;
-			int iOrder = cairo_dock_get_icon_order (icon);
-			//g_print ("plus d'icone de cet ordre : %d\n", iOrder);
-			if (iOrder > 1)
-				pSeparatorIcon = cairo_dock_get_first_icon_of_order (pDock->icons, iOrder - 1);
-			if (iOrder + 1 < CAIRO_DOCK_NB_TYPES && pSeparatorIcon == NULL)
-				pSeparatorIcon = cairo_dock_get_first_icon_of_order (pDock->icons, iOrder + 1);
-
-			if (pSeparatorIcon != NULL)
-			{
-				//g_print (" -> on enleve un separateur\n");
-				cairo_dock_detach_icon_from_dock (pSeparatorIcon, pDock, FALSE);
-				cairo_dock_free_icon (pSeparatorIcon);
-			}
-		}
-		//else
-			//g_print ("il reste encore %s (%d, %d, %x)\n", pSameTypeIcon->cName, pSameTypeIcon->iType, cairo_dock_get_icon_order (pSameTypeIcon), pSameTypeIcon->pModuleInstance);
-	}*/
 	
 	//\___________________ On prevoit le redessin de l'icone pointant sur le sous-dock.
 	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
 		cairo_dock_trigger_redraw_subdock_content (pDock);
+	}
+	
+	//\___________________ On prevoit la destruction du dock si c'est un dock principal qui devient vide.
+	if (pDock->iRefCount == 0 && pDock->icons == NULL && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
+	{
+		if (pDock->iSidDestroyEmptyDock == 0)
+			pDock->iSidDestroyEmptyDock = g_idle_add ((GSourceFunc) _destroy_empty_dock, pDock);  // on ne passe pas le nom du dock en parametre, car le dock peut se faire renommer (improbable, mais bon).
 	}
 	
 	//\___________________ On prevoit le rafraichissement de la fenetre de config des lanceurs.

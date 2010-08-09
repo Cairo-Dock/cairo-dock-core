@@ -179,8 +179,12 @@ void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock);
 */
 void cairo_dock_remove_root_dock_config (const gchar *cDockName);
 
-/** Add a config for a new root dock. Doens't create the dock (use \ref cairo_dock_create_dock for that).
-*@return the name for the new dock, to be passed to \ref cairo_dock_create_dock.
+/** Add a config file for a root dock. Does not create the dock (use \ref cairo_dock_create_dock for that). If the config file already exists, it is overwritten (use \ref cairo_dock_search_dock_from_name to check if the dock already exists).
+*/
+void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName);
+
+/** Add a config file for a new root dock. Does not create the dock (use \ref cairo_dock_create_dock for that).
+*@return the unique name for the new dock, to be passed to \ref cairo_dock_create_dock.
 */
 gchar *cairo_dock_add_root_dock_config (void);
 

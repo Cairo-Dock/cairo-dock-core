@@ -777,6 +777,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				pNewDock = cairo_dock_search_dock_from_name (cDockName);
 				if (pNewDock == NULL)  // c'est un nouveau dock.
 				{
+					cairo_dock_add_root_dock_config_for_name (cDockName);
 					pNewDock = cairo_dock_create_dock (cDockName, NULL);
 				}
 				pNewContainer = CAIRO_CONTAINER (pNewDock);
@@ -906,7 +907,8 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	{
 		if (pCurrentDock->iRefCount == 0 && pCurrentDock->icons == NULL && !pCurrentDock->bIsMainDock)  // dock principal vide.
 		{
-			cairo_dock_destroy_dock (pCurrentDock, cOldDockName);
+			///cairo_dock_destroy_dock (pCurrentDock, cOldDockName);
+			pCurrentDock = NULL;  // se fera detruire automatiquement.
 		}
 		else
 		{

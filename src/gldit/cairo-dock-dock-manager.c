@@ -298,7 +298,7 @@ void cairo_dock_free_all (void)
 
 
 
-static gboolean _cairo_dock_search_dock_name_from_subdock (gchar *cDockName, CairoDock *pDock, gpointer *data)
+static gboolean _check_dock_match (gchar *cDockName, CairoDock *pDock, gpointer *data)
 {
 	if (pDock == data[0])
 	{
@@ -313,7 +313,7 @@ const gchar *cairo_dock_search_dock_name (CairoDock *pDock)
 	gchar *cDockName = NULL;
 	gpointer data[2] = {pDock, &cDockName};
 
-	g_hash_table_find (s_hDocksTable, (GHRFunc)_cairo_dock_search_dock_name_from_subdock, data);
+	g_hash_table_find (s_hDocksTable, (GHRFunc)_check_dock_match, data);
 	return cDockName;
 }
 
@@ -738,13 +738,10 @@ void cairo_dock_remove_root_dock_config (const gchar *cDockName)
 	g_free (cConfFilePath);
 }
 
-gchar *cairo_dock_add_root_dock_config (void)
+void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName)
 {
-	// on genere un nom unique.
-	gchar *cValidDockName = cairo_dock_get_unique_dock_name (CAIRO_DOCK_MAIN_DOCK_NAME);  // meme nom que le main dock avec un numero en plus, plus facile pour les reperer.
-	
 	// on cree le fichier de conf a partir du template.
-	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cValidDockName);
+	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 	gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s'", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 	int r = system (cCommand);
 	g_free (cCommand);
@@ -761,6 +758,15 @@ gchar *cairo_dock_add_root_dock_config (void)
 		g_pMainDock->iNumScreen,
 		G_TYPE_INVALID);
 	g_free (cConfFilePath);
+}
+
+gchar *cairo_dock_add_root_dock_config (void)
+{
+	// on genere un nom unique.
+	gchar *cValidDockName = cairo_dock_get_unique_dock_name (CAIRO_DOCK_MAIN_DOCK_NAME);  // meme nom que le main dock avec un numero en plus, plus facile pour les reperer.
+	
+	// on genere un fichier de conf pour ce nom.
+	cairo_dock_add_root_dock_config_for_name (cValidDockName);
 	
 	return cValidDockName;
 }
