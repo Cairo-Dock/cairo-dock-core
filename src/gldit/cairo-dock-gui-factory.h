@@ -80,14 +80,10 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_THEME_LIST='h',
 	/// same but with a combo-entry to let the user enter any text.
 	CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY='H',
-	// deprecated
-	CAIRO_DOCK_WIDGET_USER_THEME_SELECTOR='x',
 	/// list of dock themes, sortable by name, rating, and sobriety.
 	CAIRO_DOCK_WIDGET_THEME_SELECTOR='R',
 	/// list of available animations.
 	CAIRO_DOCK_WIDGET_ANIMATION_LIST='a',
-	// deprecated
-	CAIRO_DOCK_WIDGET_ANIMATION_DOUBLE_LIST='z',
 	/// list of available dialog decorators.
 	CAIRO_DOCK_WIDGET_DIALOG_DECORATOR_LIST='t',
 	/// list of available desklet decorations.

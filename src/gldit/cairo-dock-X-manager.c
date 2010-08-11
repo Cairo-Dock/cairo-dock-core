@@ -129,7 +129,7 @@ static void _check_mouse_outside (CairoDock *pDock, gpointer data)
 static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 {
 	static XEvent event;
-	static gboolean bCheckMouseIsOutside = FALSE;
+	static gboolean s_iCheckMouseIsOutsideCount = 0;
 	
 	if (!g_pPrimaryContainer)  // peut arriver en cours de chargement d'un theme.
 		return TRUE;
@@ -138,12 +138,6 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 	Window Xid;
 	Window root = DefaultRootWindow (s_XDisplay);
 	Icon *icon;
-	if (bCheckMouseIsOutside)
-	{
-		//g_print ("bCheckMouseIsOutside\n");
-		bCheckMouseIsOutside = FALSE;
-		cairo_dock_foreach_root_docks ((GFunc)_check_mouse_outside, NULL);
-	}
 	
 	while (XCheckMaskEvent (s_XDisplay, event_mask, &event))
 	{
@@ -167,8 +161,8 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 				}
 				else if (event.xproperty.atom == s_aNetCurrentDesktop || event.xproperty.atom == s_aNetDesktopViewport)
 				{
-					bCheckMouseIsOutside = _on_change_current_desktop_viewport ();  // -> CAIRO_DOCK_DESKTOP_CHANGED
-					bCheckMouseIsOutside = TRUE;  // au prochain passage, on testera que X ne nous a pas fait sortir du dock sans raison.
+					_on_change_current_desktop_viewport ();  // -> CAIRO_DOCK_DESKTOP_CHANGED
+					s_iCheckMouseIsOutsideCount = 1;  // arrive a 3, on testera que X ne nous a pas fait sortir du dock sans raison.
 				}
 				else if (event.xproperty.atom == s_aNetNbDesktops)
 				{
@@ -230,6 +224,16 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 		XSync (s_XDisplay, True);  // True <=> discard.
 	//g_print ("XEventsQueued : %d\n", XEventsQueued (s_XDisplay, QueuedAfterFlush));  // QueuedAlready, QueuedAfterReading, QueuedAfterFlush
 	
+	if (s_iCheckMouseIsOutsideCount != 0)
+	{
+		s_iCheckMouseIsOutsideCount ++;  // arrive a 3, on testera que X ne nous a pas fait sortir du dock sans raison.
+		if (s_iCheckMouseIsOutsideCount > 3)
+		{
+			//g_print ("bCheckMouseIsOutside\n");
+			s_iCheckMouseIsOutsideCount = 0;
+			cairo_dock_foreach_root_docks ((GFunc)_check_mouse_outside, NULL);
+		}
+	}
 	return TRUE;
 }
 

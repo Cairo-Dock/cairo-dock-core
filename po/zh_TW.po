@@ -55,7 +55,7 @@ msgid "Fun"
 msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:134 ../src/cairo-dock-gui-main.c:1523
-#: ../data/messages:1523
+#: ../data/messages:1521
 msgid "All"
 msgstr "全部"
 
@@ -742,7 +742,7 @@ msgstr ""
 "希望您能喜歡這個軟體！\n"
 "  (現在您可以點擊該對話框關閉)"
 
-#: ../src/cairo-dock.c:844
+#: ../src/cairo-dock.c:842
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1040,7 +1040,7 @@ msgstr "動作方式"
 msgid "Position on the screen"
 msgstr "螢幕上的位置"
 
-#: ../data/messages:5 ../data/messages:149
+#: ../data/messages:5 ../data/messages:149 ../data/messages:1341
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr "選擇任何一個螢幕邊緣，Dock將會放在那邊："
 
@@ -1164,7 +1164,7 @@ msgstr ""
 msgid "Behaviour of the Taskbar:"
 msgstr "工具列的行為模式："
 
-#: ../data/messages:67 ../data/messages:1513
+#: ../data/messages:67 ../data/messages:1511
 msgid "None"
 msgstr "沒有"
 
@@ -1335,7 +1335,7 @@ msgstr ""
 msgid "Relative alignment:"
 msgstr "相對對齊"
 
-#: ../data/messages:167
+#: ../data/messages:167 ../data/messages:1355
 msgid "Offset from the screen's edge"
 msgstr "偏移位置設定到螢幕的邊緣"
 
@@ -1347,7 +1347,7 @@ msgstr ""
 "距離在螢幕邊緣絕對位置的間隔，以像數(pixels)為單位，您同時可以按住ALT或者是"
 "CTRL按鍵與滑鼠左鍵來移動Dock。"
 
-#: ../data/messages:171
+#: ../data/messages:171 ../data/messages:1359
 msgid "Lateral offset:"
 msgstr "側邊的偏移量："
 
@@ -3862,7 +3862,9 @@ msgid "DBus API"
 msgstr "DBus API"
 
 #: ../data/messages:1287
+#, fuzzy
 msgid ""
+"\n"
 "\n"
 "The Cairo-Dock Team"
 msgstr ""
@@ -3946,18 +3948,6 @@ msgid ""
 "system and reinstall 'cairo-dock' package."
 msgstr ""
 
-#: ../data/messages:1341
-msgid "Choose the screen border relative to which the dock will be positioned:"
-msgstr "選擇Dock要把他自己放到螢幕的那一個邊緣："
-
-#: ../data/messages:1355
-msgid "Position relative to the selected screen edge"
-msgstr "選擇對於螢幕邊緣的位置"
-
-#: ../data/messages:1359
-msgid "Lateral gap:"
-msgstr "側邊間隔"
-
 #: ../data/messages:1365
 msgid "starting from 0"
 msgstr "從 0 開始"
@@ -4038,121 +4028,117 @@ msgstr "列出您個人的個性化主題"
 msgid "Delete from the list themes that you don't need anymore :"
 msgstr "刪除您不再需要的主題："
 
-#: ../data/messages:1457 ../data/messages:1459 ../data/messages:1463
-#: ../data/messages:1465 ../data/messages:1493 ../data/messages:1543
-#: ../data/messages:1577
+#: ../data/messages:1457 ../data/messages:1459 ../data/messages:1461
+#: ../data/messages:1463 ../data/messages:1491 ../data/messages:1541
+#: ../data/messages:1575
 msgid "Desktop Entry"
 msgstr "桌面項目"
 
-#: ../data/messages:1461
-msgid "cPath="
-msgstr "路徑="
-
-#: ../data/messages:1467
+#: ../data/messages:1465
 msgid "Sub-dock's name :"
 msgstr "子dock的名稱："
 
-#: ../data/messages:1469 ../data/messages:1497
+#: ../data/messages:1467 ../data/messages:1495
 msgid "How to render the icon :"
 msgstr "要如何顯示圖示："
 
-#: ../data/messages:1471 ../data/messages:1499
+#: ../data/messages:1469 ../data/messages:1497
 msgid "Use an image"
 msgstr "使用圖示圖檔"
 
-#: ../data/messages:1473 ../data/messages:1501
+#: ../data/messages:1471 ../data/messages:1499
 msgid "Draw sub-dock's content as emblems"
 msgstr "平面展開顯示子Dock的圖示"
 
-#: ../data/messages:1475 ../data/messages:1503
+#: ../data/messages:1473 ../data/messages:1501
 msgid "Draw sub-dock's content as stack"
 msgstr "以堆疊的方式顯示子Dock的圖示"
 
-#: ../data/messages:1477 ../data/messages:1505
+#: ../data/messages:1475 ../data/messages:1503
 msgid "Draw sub-dock's content inside a box"
 msgstr "用小桌屜裝著子Dock內的圖示"
 
-#: ../data/messages:1479 ../data/messages:1507 ../data/messages:1551
-#: ../data/messages:1579
+#: ../data/messages:1477 ../data/messages:1505 ../data/messages:1549
+#: ../data/messages:1577
 msgid "Image's name or path :"
 msgstr "圖片的名稱或路徑："
 
-#: ../data/messages:1481 ../data/messages:1533 ../data/messages:1557
-#: ../data/messages:1581
+#: ../data/messages:1479 ../data/messages:1531 ../data/messages:1555
+#: ../data/messages:1579
 msgid "Extra parameters"
 msgstr "額外的參數："
 
-#: ../data/messages:1483 ../data/messages:1535 ../data/messages:1559
-#: ../data/messages:1583
+#: ../data/messages:1481 ../data/messages:1533 ../data/messages:1557
+#: ../data/messages:1581
 msgid "Order you want for this launcher among the others:"
 msgstr "您想要這個快速啟動在什麼位置："
 
-#: ../data/messages:1485 ../data/messages:1537 ../data/messages:1555
-#: ../data/messages:1585
+#: ../data/messages:1483 ../data/messages:1535 ../data/messages:1553
+#: ../data/messages:1583
 msgid "Name of the container it belongs to:"
 msgstr "要放置在哪個Dock當中："
 
-#: ../data/messages:1487
+#: ../data/messages:1485
 msgid "Name of the view used for the sub-dock :"
 msgstr "要給子 Dock 使用那一個外觀的名稱："
 
-#: ../data/messages:1489
+#: ../data/messages:1487
 msgid "If '0' the container will be displayed on every viewport."
 msgstr "假如設定為 0 ，每個視點上都會顯示子Dock。"
 
-#: ../data/messages:1491 ../data/messages:1541 ../data/messages:1575
+#: ../data/messages:1489 ../data/messages:1539 ../data/messages:1573
 msgid "Only show in this specific viewport"
 msgstr "只可以顯示在這個視點上"
 
-#: ../data/messages:1495 ../data/messages:1545
+#: ../data/messages:1493 ../data/messages:1543
 msgid "Launcher's name :"
 msgstr "快速啟動的名稱："
 
-#: ../data/messages:1509
+#: ../data/messages:1507
 msgid "URI of the file :"
 msgstr "檔案的URI："
 
-#: ../data/messages:1511
+#: ../data/messages:1509
 msgid "Number of files to list in the sub-dock :"
 msgstr "在子Dock當中列出的檔案數量："
 
-#: ../data/messages:1515
+#: ../data/messages:1513
 msgid "5"
 msgstr "5"
 
-#: ../data/messages:1517
+#: ../data/messages:1515
 msgid "10"
 msgstr "10"
 
-#: ../data/messages:1519
+#: ../data/messages:1517
 msgid "20"
 msgstr "20"
 
-#: ../data/messages:1521
+#: ../data/messages:1519
 msgid "30"
 msgstr "30"
 
-#: ../data/messages:1525
+#: ../data/messages:1523
 msgid "Sort files by :"
 msgstr "檔案排序採用："
 
-#: ../data/messages:1527
+#: ../data/messages:1525
 msgid "Name"
 msgstr "名稱"
 
-#: ../data/messages:1529
+#: ../data/messages:1527
 msgid "Size"
 msgstr "檔案大小"
 
-#: ../data/messages:1531
+#: ../data/messages:1529
 msgid "Date"
 msgstr "日期"
 
-#: ../data/messages:1539 ../data/messages:1573
+#: ../data/messages:1537 ../data/messages:1571
 msgid "If '0' the launcher will be displayed on every viewport."
 msgstr "假如為 0 ，快速啟動將會在每個視點上面顯示。"
 
-#: ../data/messages:1547
+#: ../data/messages:1545
 msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
@@ -4160,17 +4146,17 @@ msgstr ""
 "例如：nautilus --no-desktop ，gedit 等等。您甚至可以輸入鍵盤快速鍵，例如 "
 "<Alt>F1 、<Ctrl>c 、<Ctrl>v 等等。"
 
-#: ../data/messages:1549
+#: ../data/messages:1547
 msgid "Command to launch on click :"
 msgstr "點擊之後啟動的指令："
 
-#: ../data/messages:1553
+#: ../data/messages:1551
 msgid ""
 "If you write here a container's name that doesn't exist yet, a new one will "
 "be created, with this icon inside."
 msgstr "假如您輸入的名稱不存在，將會與圖示一起建立一個新的。"
 
-#: ../data/messages:1561
+#: ../data/messages:1559
 msgid ""
 "If you choosed to mix launcher and applis, this option will deactivate this "
 "behaviour for this launcher only. It can be useful for instance for a "
@@ -4181,11 +4167,11 @@ msgstr ""
 "的圖示顯示在工具列上面，這個選項將取消這個快速啟動的預設行為模式。這種方式在"
 "啟動一個終端機描述指令(Script)時挺有用。"
 
-#: ../data/messages:1563
+#: ../data/messages:1561
 msgid "Prevent this launcher from stealing appli from taskbar ?"
 msgstr "不要在快速啟動之後以這個圖示當作是已啟動的應用程式圖示？"
 
-#: ../data/messages:1565
+#: ../data/messages:1563
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -4196,24 +4182,24 @@ msgstr ""
 "放 的方式將快速啟動放到Dock裏面，幾乎肯定您不用去修改他。他已經在這個快速啟動"
 "上面定義了應用程式的級別，與可用的應用程式連結。"
 
-#: ../data/messages:1567
+#: ../data/messages:1565
 msgid "Class of the program :"
 msgstr "應用程式的級別："
 
-#: ../data/messages:1569
+#: ../data/messages:1567
 msgid "It will use 'xterm'."
 msgstr "他將會使用 xterm 。"
 
-#: ../data/messages:1571
+#: ../data/messages:1569
 msgid "Run in a terminal ?"
 msgstr "在終端機當中執行？"
 
-#: ../data/messages:1587
+#: ../data/messages:1585
 msgid "pouet"
 msgstr "pouet"
 
-#: ../data/messages:1589 ../data/messages:1591 ../data/messages:1593
-#: ../data/messages:1595
+#: ../data/messages:1587 ../data/messages:1589 ../data/messages:1591
+#: ../data/messages:1593
 msgid ""
 "v1.4.6.3 :\n"
 "Just to say :\n"
@@ -4225,7 +4211,7 @@ msgstr ""
 "*** 新年快樂 2008 ! ***\n"
 "the Cairo-Dock's team."
 
-#: ../data/messages:1597
+#: ../data/messages:1595
 msgid ""
 "v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
 "bring you :\n"
@@ -4258,7 +4244,7 @@ msgstr ""
 " - 以及蛋糕上的櫻桃(cherry on the cake)，一個新的主題( I,Cairo )！\n"
 "  現在，為什麼不試試看這個給Cairo-Dock的小程式呢？ :-)"
 
-#: ../data/messages:1599
+#: ../data/messages:1597
 msgid ""
 "v1.5.1 :\n"
 " - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
@@ -4277,7 +4263,7 @@ msgstr ""
 "  更多的小程式可以從Dock上面分離，\n"
 " 就像是真正的桌面小工具一樣。"
 
-#: ../data/messages:1601
+#: ../data/messages:1599
 msgid ""
 "v1.5.2.1 :\n"
 " - a lot of bug fixes, especially on desklets.\n"
@@ -4289,7 +4275,7 @@ msgstr ""
 " - 一個新的小程式：氣候(weather)！\n"
 " - Cairo-Dock現在已經完整的翻譯成為日文，感謝 Jiro Kawada！"
 
-#: ../data/messages:1603
+#: ../data/messages:1601
 msgid ""
 "v1.5.3.2 :\n"
 " - Themes have been deeply reviewed\n"
@@ -4313,7 +4299,7 @@ msgstr ""
 "  對了，我們仍然在研發一些東西\n"
 "  誰能夠幫助Cairo-Dock完整的整合入 KDE 當中呢？ ;-)"
 
-#: ../data/messages:1605
+#: ../data/messages:1603
 msgid ""
 "v1.5.4.2 : a huge release !\n"
 " - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
@@ -4337,7 +4323,7 @@ msgstr ""
 " - 新鮮的Dock主題：木材(Wood)。\n"
 " - 氣候小程式有3個更多的主題。"
 
-#: ../data/messages:1607
+#: ../data/messages:1605
 msgid ""
 "v1.5.5.4 :\n"
 " - Huge enhancements in the TaskBar :\n"
@@ -4364,7 +4350,7 @@ msgstr ""
 " - 單獨的Cairo-Dock上面可以有很多的Dock的能力\n"
 " - Cairo-Dock現在還沒有完整的融入 Gnome 2.22 ，但是很快的將會完成。 :-)"
 
-#: ../data/messages:1609
+#: ../data/messages:1607
 msgid ""
 "v1.5.6 :\n"
 " - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
@@ -4394,7 +4380,7 @@ msgstr ""
 " - Bug Fixes XGamma/Weather 。\n"
 " - 歡迎任何可以幫助我們將 Dock 融入 KDE ！"
 
-#: ../data/messages:1611
+#: ../data/messages:1609
 msgid ""
 "v1.6.0 :\n"
 " - A new view has appeared : Diapositive !\n"
@@ -4426,7 +4412,7 @@ msgstr ""
 " - Crash時自動載入\n"
 " - 當視窗最小化時顯示視窗真實的縮圖"
 
-#: ../data/messages:1613
+#: ../data/messages:1611
 msgid ""
 "v1.6.1 :\n"
 "Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
@@ -4446,7 +4432,7 @@ msgstr ""
 " - 開始翻譯到義大利文與中文。\n"
 " - 我們仍然希望有什麼人能夠幫助我們撰寫「KDE-融合」的增效模組 ^_^"
 
-#: ../data/messages:1615
+#: ../data/messages:1613
 msgid ""
 "v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
 " - 2 new applets have been released :\n"
@@ -4467,7 +4453,7 @@ msgstr ""
 " 所以可以將您的主題傳送給我們，我們可以發佈他們！ :-)\n"
 " - 我們仍然希望有什麼人能夠幫助我們撰寫「KDE-融合」的增效模組 ^_^"
 
-#: ../data/messages:1617
+#: ../data/messages:1615
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
@@ -4498,7 +4484,7 @@ msgstr ""
 " - 圖示被拖曳進 dock 時會移動地更平順。\n"
 " - Dock 現已譯成瑞典及部分譯成希臘語。"
 
-#: ../data/messages:1619
+#: ../data/messages:1617
 msgid ""
 "Cairo-Dock II\n"
 " - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
@@ -4520,7 +4506,7 @@ msgstr ""
 " - 新的小程式：信件、鍵盤指標、快速資料夾、卡通人物。\n"
 " - 很多的Bug被清理掉並且全部的增效模組都有更新。"
 
-#: ../data/messages:1621
+#: ../data/messages:1619
 msgid ""
 "2.0.5 :\n"
 " - This is mainly a bug-fix version\n"
@@ -4532,7 +4518,7 @@ msgstr ""
 " - 現在有了RB小程式。\n"
 " - 增加了功能在nalities的群組應用程式圖示。"
 
-#: ../data/messages:1623
+#: ../data/messages:1621
 msgid ""
 "2.1.0 : A really heavy version !\n"
 " - Control any music player with the MusicPlayer applet\n"
@@ -4561,7 +4547,7 @@ msgstr ""
 " - 最後，Cairo-Dock已經有了自己的PPA在LaunchPad上面，而完整的文件放置在 "
 "http://doc.glx-dock.org 。"
 
-#: ../data/messages:1625
+#: ../data/messages:1623
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
 " - This version corrects many bugs appeared with the v2.1.0 (sorry for "
@@ -4592,7 +4578,7 @@ msgstr ""
 "Dock 。\n"
 "    您甚至可以用任何的程式語言來寫小程式給 Dock！"
 
-#: ../data/messages:1627
+#: ../data/messages:1625
 msgid ""
 "2.1.2 : \n"
 " - The config panel has been improved again (new icons, more clear, better "
@@ -4621,7 +4607,7 @@ msgstr ""
 " - \"電子信件\"小程式能夠標示所有的已讀信件。\n"
 " - 一個\"KDE-加強\"計劃已經開始，我們歡迎任何可以實現這麼計劃的幫助！"
 
-#: ../data/messages:1629
+#: ../data/messages:1627
 msgid ""
 "GLX-Dock 2.1.3\n"
 " - A new and simplified configuration panel has been written\n"
@@ -4645,7 +4631,7 @@ msgstr ""
 " - Dnd2Share 現在可以直接以剪貼簿的內容發送。\n"
 " - 這個版本還修復了大量問題。"
 
-#: ../data/messages:1631
+#: ../data/messages:1629
 msgid ""
 "<b><span color='red'>GLX-Dock 2.2.0</span></b>\n"
 " - The dock has gained 2 <b>new visibility modes</b> and several <b>auto-"
@@ -4684,6 +4670,20 @@ msgstr ""
 "-  <b>設定面板的圖示</b> 現在已經更新過，有著更容易懂的圖示以及更簡單明瞭的佈"
 "局配置。\n"
 "- 一個 <b>新的預設主題</b> ；; 應該可以更好地整合在任何桌面上。"
+
+#, fuzzy
+#~ msgid "ocPath="
+#~ msgstr "路徑="
+
+#~ msgid ""
+#~ "Choose the screen border relative to which the dock will be positioned:"
+#~ msgstr "選擇Dock要把他自己放到螢幕的那一個邊緣："
+
+#~ msgid "Position relative to the selected screen edge"
+#~ msgstr "選擇對於螢幕邊緣的位置"
+
+#~ msgid "Lateral gap:"
+#~ msgstr "側邊間隔"
 
 #~ msgid "Controllers"
 #~ msgstr "控制台"

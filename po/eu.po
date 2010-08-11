@@ -56,7 +56,7 @@ msgid "Fun"
 msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:134 ../src/cairo-dock-gui-main.c:1523
-#: ../data/messages:1523
+#: ../data/messages:1521
 msgid "All"
 msgstr "Denak"
 
@@ -758,7 +758,7 @@ msgstr ""
 "Software hau gustuko izango duzula espero dugu!\n"
 "   (klik egin dezakezu elkarrizketa hau ixteko)"
 
-#: ../src/cairo-dock.c:844
+#: ../src/cairo-dock.c:842
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1062,7 +1062,7 @@ msgstr "Portaera"
 msgid "Position on the screen"
 msgstr "Kokatu pantailan"
 
-#: ../data/messages:5 ../data/messages:149
+#: ../data/messages:5 ../data/messages:149 ../data/messages:1341
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr "Aukeratu pantailako zein ertzetan kokatu docka"
 
@@ -1184,7 +1184,7 @@ msgstr ""
 msgid "Behaviour of the Taskbar:"
 msgstr "Ataza-barraren portaera"
 
-#: ../data/messages:67 ../data/messages:1513
+#: ../data/messages:67 ../data/messages:1511
 msgid "None"
 msgstr "Inon ere ez"
 
@@ -1361,7 +1361,7 @@ msgstr ""
 msgid "Relative alignment:"
 msgstr "lerrokatze erlatiboa:"
 
-#: ../data/messages:167
+#: ../data/messages:167 ../data/messages:1355
 msgid "Offset from the screen's edge"
 msgstr "Pantaila ertza arte desplazamendua"
 
@@ -1373,7 +1373,7 @@ msgstr ""
 "Pantailako ertzaren posizio absolutuarekiko tartea, pixeletan.  ALT edo CTRL "
 "teklak saguaren ezker botoiaz batera sakaturik docka mugi dezakezu."
 
-#: ../data/messages:171
+#: ../data/messages:171 ../data/messages:1359
 msgid "Lateral offset:"
 msgstr "Alboko desplazamendua:"
 
@@ -3701,6 +3701,7 @@ msgstr ""
 #: ../data/messages:1287
 msgid ""
 "\n"
+"\n"
 "The Cairo-Dock Team"
 msgstr ""
 
@@ -3778,18 +3779,6 @@ msgid ""
 "by clicking on this button:\n"
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
-msgstr ""
-
-#: ../data/messages:1341
-msgid "Choose the screen border relative to which the dock will be positioned:"
-msgstr ""
-
-#: ../data/messages:1355
-msgid "Position relative to the selected screen edge"
-msgstr ""
-
-#: ../data/messages:1359
-msgid "Lateral gap:"
 msgstr ""
 
 #: ../data/messages:1365
@@ -3870,137 +3859,133 @@ msgstr ""
 msgid "Delete from the list themes that you don't need anymore :"
 msgstr ""
 
-#: ../data/messages:1457 ../data/messages:1459 ../data/messages:1463
-#: ../data/messages:1465 ../data/messages:1493 ../data/messages:1543
-#: ../data/messages:1577
+#: ../data/messages:1457 ../data/messages:1459 ../data/messages:1461
+#: ../data/messages:1463 ../data/messages:1491 ../data/messages:1541
+#: ../data/messages:1575
 msgid "Desktop Entry"
 msgstr "Mahaigain sarrera"
 
-#: ../data/messages:1461
-msgid "cPath="
-msgstr ""
-
-#: ../data/messages:1467
+#: ../data/messages:1465
 msgid "Sub-dock's name :"
 msgstr "Azpi-dock izena:"
 
-#: ../data/messages:1469 ../data/messages:1497
+#: ../data/messages:1467 ../data/messages:1495
 msgid "How to render the icon :"
 msgstr "Nola errendatu ikonoa:"
 
-#: ../data/messages:1471 ../data/messages:1499
+#: ../data/messages:1469 ../data/messages:1497
 msgid "Use an image"
 msgstr "Erabili irudia"
 
-#: ../data/messages:1473 ../data/messages:1501
+#: ../data/messages:1471 ../data/messages:1499
 msgid "Draw sub-dock's content as emblems"
 msgstr "Marraztu azpi-dock edukia ikurrak bezala"
 
-#: ../data/messages:1475 ../data/messages:1503
+#: ../data/messages:1473 ../data/messages:1501
 msgid "Draw sub-dock's content as stack"
 msgstr "Marraztu azpi-dock edukia stack bezala"
 
-#: ../data/messages:1477 ../data/messages:1505
+#: ../data/messages:1475 ../data/messages:1503
 msgid "Draw sub-dock's content inside a box"
 msgstr "Marraztu azpi-dock edukia kutxa baten barruan"
 
-#: ../data/messages:1479 ../data/messages:1507 ../data/messages:1551
-#: ../data/messages:1579
+#: ../data/messages:1477 ../data/messages:1505 ../data/messages:1549
+#: ../data/messages:1577
 msgid "Image's name or path :"
 msgstr "Irudi izena edo bide-izena:"
 
-#: ../data/messages:1481 ../data/messages:1533 ../data/messages:1557
-#: ../data/messages:1581
+#: ../data/messages:1479 ../data/messages:1531 ../data/messages:1555
+#: ../data/messages:1579
 msgid "Extra parameters"
 msgstr "Extra parametroak"
 
-#: ../data/messages:1483 ../data/messages:1535 ../data/messages:1559
-#: ../data/messages:1583
+#: ../data/messages:1481 ../data/messages:1533 ../data/messages:1557
+#: ../data/messages:1581
 msgid "Order you want for this launcher among the others:"
 msgstr "Abiarazle honek besteekiko izan behar duen ordena:"
 
-#: ../data/messages:1485 ../data/messages:1537 ../data/messages:1555
-#: ../data/messages:1585
+#: ../data/messages:1483 ../data/messages:1535 ../data/messages:1553
+#: ../data/messages:1583
 msgid "Name of the container it belongs to:"
 msgstr ""
 
-#: ../data/messages:1487
+#: ../data/messages:1485
 msgid "Name of the view used for the sub-dock :"
 msgstr "Azpi-dockarekin erabilitako ikuspegiaren izena:"
 
-#: ../data/messages:1489
+#: ../data/messages:1487
 msgid "If '0' the container will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1491 ../data/messages:1541 ../data/messages:1575
+#: ../data/messages:1489 ../data/messages:1539 ../data/messages:1573
 msgid "Only show in this specific viewport"
 msgstr ""
 
-#: ../data/messages:1495 ../data/messages:1545
+#: ../data/messages:1493 ../data/messages:1543
 msgid "Launcher's name :"
 msgstr "Abiarazle izena:"
 
-#: ../data/messages:1509
+#: ../data/messages:1507
 msgid "URI of the file :"
 msgstr "Fitxategiaren URIa:"
 
-#: ../data/messages:1511
+#: ../data/messages:1509
 msgid "Number of files to list in the sub-dock :"
 msgstr "Azpi-dockean zerrendatuko diren fitxategien kopurua:"
 
-#: ../data/messages:1515
+#: ../data/messages:1513
 msgid "5"
 msgstr "5"
 
-#: ../data/messages:1517
+#: ../data/messages:1515
 msgid "10"
 msgstr "10"
 
-#: ../data/messages:1519
+#: ../data/messages:1517
 msgid "20"
 msgstr "20"
 
-#: ../data/messages:1521
+#: ../data/messages:1519
 msgid "30"
 msgstr "30"
 
-#: ../data/messages:1525
+#: ../data/messages:1523
 msgid "Sort files by :"
 msgstr "Ordenatu fitxategiak honen arabera :"
 
-#: ../data/messages:1527
+#: ../data/messages:1525
 msgid "Name"
 msgstr "Izena"
 
-#: ../data/messages:1529
+#: ../data/messages:1527
 msgid "Size"
 msgstr "Tamaina"
 
-#: ../data/messages:1531
+#: ../data/messages:1529
 msgid "Date"
 msgstr "Data"
 
-#: ../data/messages:1539 ../data/messages:1573
+#: ../data/messages:1537 ../data/messages:1571
 msgid "If '0' the launcher will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1547
+#: ../data/messages:1545
 msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
-#: ../data/messages:1549
+#: ../data/messages:1547
 msgid "Command to launch on click :"
 msgstr ""
 
-#: ../data/messages:1553
+#: ../data/messages:1551
 msgid ""
 "If you write here a container's name that doesn't exist yet, a new one will "
 "be created, with this icon inside."
 msgstr ""
 
-#: ../data/messages:1561
+#: ../data/messages:1559
 msgid ""
 "If you choosed to mix launcher and applis, this option will deactivate this "
 "behaviour for this launcher only. It can be useful for instance for a "
@@ -4008,11 +3993,11 @@ msgid ""
 "steal the Terminal's icon from the Taskbar."
 msgstr ""
 
-#: ../data/messages:1563
+#: ../data/messages:1561
 msgid "Prevent this launcher from stealing appli from taskbar ?"
 msgstr ""
 
-#: ../data/messages:1565
+#: ../data/messages:1563
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -4020,24 +4005,24 @@ msgid ""
 "program, which is useful to link the appli with its launcher."
 msgstr ""
 
-#: ../data/messages:1567
+#: ../data/messages:1565
 msgid "Class of the program :"
 msgstr ""
 
-#: ../data/messages:1569
+#: ../data/messages:1567
 msgid "It will use 'xterm'."
 msgstr ""
 
-#: ../data/messages:1571
+#: ../data/messages:1569
 msgid "Run in a terminal ?"
 msgstr ""
 
-#: ../data/messages:1587
+#: ../data/messages:1585
 msgid "pouet"
 msgstr ""
 
-#: ../data/messages:1589 ../data/messages:1591 ../data/messages:1593
-#: ../data/messages:1595
+#: ../data/messages:1587 ../data/messages:1589 ../data/messages:1591
+#: ../data/messages:1593
 msgid ""
 "v1.4.6.3 :\n"
 "Just to say :\n"
@@ -4045,7 +4030,7 @@ msgid ""
 "  the Cairo-Dock's team."
 msgstr ""
 
-#: ../data/messages:1597
+#: ../data/messages:1595
 msgid ""
 "v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
 "bring you :\n"
@@ -4065,7 +4050,7 @@ msgid ""
 "  Now, why not try to make an applet for Cairo-Dock ? ;-)"
 msgstr ""
 
-#: ../data/messages:1599
+#: ../data/messages:1597
 msgid ""
 "v1.5.1 :\n"
 " - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
@@ -4077,7 +4062,7 @@ msgid ""
 " and behave as real desklets."
 msgstr ""
 
-#: ../data/messages:1601
+#: ../data/messages:1599
 msgid ""
 "v1.5.2.1 :\n"
 " - a lot of bug fixes, especially on desklets.\n"
@@ -4085,7 +4070,7 @@ msgid ""
 " - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !"
 msgstr ""
 
-#: ../data/messages:1603
+#: ../data/messages:1601
 msgid ""
 "v1.5.3.2 :\n"
 " - Themes have been deeply reviewed\n"
@@ -4099,7 +4084,7 @@ msgid ""
 "  who could help cairo-dock to be well-integrated into KDE ;-)"
 msgstr ""
 
-#: ../data/messages:1605
+#: ../data/messages:1603
 msgid ""
 "v1.5.4.2 : a huge release !\n"
 " - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
@@ -4113,7 +4098,7 @@ msgid ""
 " - 3 more themes in Weather"
 msgstr ""
 
-#: ../data/messages:1607
+#: ../data/messages:1605
 msgid ""
 "v1.5.5.4 :\n"
 " - Huge enhancements in the TaskBar :\n"
@@ -4129,7 +4114,7 @@ msgid ""
 "soon ;-)"
 msgstr ""
 
-#: ../data/messages:1609
+#: ../data/messages:1607
 msgid ""
 "v1.5.6 :\n"
 " - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
@@ -4147,7 +4132,7 @@ msgid ""
 " - Any help would be welcome to integrate the dock into KDE !"
 msgstr ""
 
-#: ../data/messages:1611
+#: ../data/messages:1609
 msgid ""
 "v1.6.0 :\n"
 " - A new view has appeared : Diapositive !\n"
@@ -4166,7 +4151,7 @@ msgid ""
 " - Real window thumbnail when minimized."
 msgstr ""
 
-#: ../data/messages:1613
+#: ../data/messages:1611
 msgid ""
 "v1.6.1 :\n"
 "Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
@@ -4179,7 +4164,7 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 
-#: ../data/messages:1615
+#: ../data/messages:1613
 msgid ""
 "v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
 " - 2 new applets have been released :\n"
@@ -4192,7 +4177,7 @@ msgid ""
 "plug-in ^_^"
 msgstr ""
 
-#: ../data/messages:1617
+#: ../data/messages:1615
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
@@ -4210,7 +4195,7 @@ msgid ""
 " - The dock is now translated in Sweden and partially in Greek."
 msgstr ""
 
-#: ../data/messages:1619
+#: ../data/messages:1617
 msgid ""
 "Cairo-Dock II\n"
 " - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
@@ -4223,7 +4208,7 @@ msgid ""
 " - Lot of bug fixes and upgrades in all plug-ins."
 msgstr ""
 
-#: ../data/messages:1621
+#: ../data/messages:1619
 msgid ""
 "2.0.5 :\n"
 " - This is mainly a bug-fix version\n"
@@ -4231,7 +4216,7 @@ msgid ""
 " - Added functionnalities on grouped applications icons."
 msgstr ""
 
-#: ../data/messages:1623
+#: ../data/messages:1621
 msgid ""
 "2.1.0 : A really heavy version !\n"
 " - Control any music player with the MusicPlayer applet\n"
@@ -4248,7 +4233,7 @@ msgid ""
 "documentation on http://doc.glx-dock.org."
 msgstr ""
 
-#: ../data/messages:1625
+#: ../data/messages:1623
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
 " - This version corrects many bugs appeared with the v2.1.0 (sorry for "
@@ -4266,7 +4251,7 @@ msgid ""
 "    You can even write an applet in any language with it !"
 msgstr ""
 
-#: ../data/messages:1627
+#: ../data/messages:1625
 msgid ""
 "2.1.2 : \n"
 " - The config panel has been improved again (new icons, more clear, better "
@@ -4284,7 +4269,7 @@ msgid ""
 "to achieve it !"
 msgstr ""
 
-#: ../data/messages:1629
+#: ../data/messages:1627
 msgid ""
 "GLX-Dock 2.1.3\n"
 " - A new and simplified configuration panel has been written\n"
@@ -4299,7 +4284,7 @@ msgid ""
 " - This version also fixes a huge number of problems."
 msgstr ""
 
-#: ../data/messages:1631
+#: ../data/messages:1629
 msgid ""
 "<b><span color='red'>GLX-Dock 2.2.0</span></b>\n"
 " - The dock has gained 2 <b>new visibility modes</b> and several <b>auto-"

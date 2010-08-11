@@ -14,6 +14,103 @@ Written by Fabrice Rey (for any bug report, please mail me to fabounet_03@yahoo.
 
 #define write_message(m) fprintf (f, "_(\"%s\")\n\n", g_strescape (m, NULL))
 
+static gchar *_parse_key_comment (gchar *cKeyComment, char *iElementType, guint *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString)
+{
+	if (cKeyComment == NULL || *cKeyComment == '\0')
+		return NULL;
+	
+	gchar *cUsefulComment = cKeyComment;
+	while (*cUsefulComment == '#' || *cUsefulComment == ' ' || *cUsefulComment == '\n')  // on saute les # et les espaces.
+		cUsefulComment ++;
+	
+	int length = strlen (cUsefulComment);
+	while (cUsefulComment[length-1] == '\n')
+	{
+		cUsefulComment[length-1] = '\0';
+		length --;
+	}
+	
+	
+	//\______________ On recupere le type du widget.
+	*iElementType = *cUsefulComment;
+	cUsefulComment ++;
+	if (*cUsefulComment == '-' || *cUsefulComment == '+')
+		cUsefulComment ++;
+
+	//\______________ On recupere le nombre d'elements du widget.
+	*iNbElements = atoi (cUsefulComment);
+	if (*iNbElements == 0)
+		*iNbElements = 1;
+	while (g_ascii_isdigit (*cUsefulComment))  // on saute les chiffres.
+			cUsefulComment ++;
+	while (*cUsefulComment == ' ')  // on saute les espaces.
+		cUsefulComment ++;
+
+	//\______________ On recupere les valeurs autorisees.
+	if (*cUsefulComment == '[')
+	{
+		cUsefulComment ++;
+		gchar *cAuthorizedValuesChain = cUsefulComment;
+
+		while (*cUsefulComment != '\0' && *cUsefulComment != ']')
+			cUsefulComment ++;
+		g_return_val_if_fail (*cUsefulComment != '\0', NULL);
+		*cUsefulComment = '\0';
+		cUsefulComment ++;
+		while (*cUsefulComment == ' ')  // on saute les espaces.
+			cUsefulComment ++;
+		
+		if (*cAuthorizedValuesChain == '\0')  // rien, on prefere le savoir plutot que d'avoir une entree vide.
+			*pAuthorizedValuesList = g_new0 (gchar *, 1);
+		else
+			*pAuthorizedValuesList = g_strsplit (cAuthorizedValuesChain, ";", 0);
+	}
+	else
+	{
+		*pAuthorizedValuesList = NULL;
+	}
+	
+	//\______________ On recupere l'alignement.
+	int len = strlen (cUsefulComment);
+	if (cUsefulComment[len - 1] == '\n')
+	{
+		len --;
+		cUsefulComment[len] = '\0';
+	}
+	if (cUsefulComment[len - 1] == '/')
+	{
+		cUsefulComment[len - 1] = '\0';
+		*bAligned = FALSE;
+	}
+	else
+	{
+		*bAligned = TRUE;
+	}
+
+	//\______________ On recupere la bulle d'aide.
+	gchar *str = strchr (cUsefulComment, '{');
+	if (str != NULL && str != cUsefulComment)
+	{
+		if (*(str-1) == '\n')
+			*(str-1) ='\0';
+		else
+			*str = '\0';
+
+		str ++;
+		*cTipString = str;
+
+		str = strrchr (*cTipString, '}');
+		if (str != NULL)
+			*str = '\0';
+	}
+	else
+	{
+		*cTipString = NULL;
+	}
+	
+	return cUsefulComment;
+}
+
 int
 main (int argc, char** argv)
 {
@@ -33,7 +130,7 @@ main (int argc, char** argv)
 	gchar **pKeyList;
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
 	
-	gchar *cGroupName, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *pTipString, **pAuthorizedValuesList;
+	gchar *cGroupName, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *cTipString, **pAuthorizedValuesList;
 	int i, j, k, iNbElements;
 	char iElementType;
 	gboolean bIsAligned;
@@ -81,85 +178,15 @@ main (int argc, char** argv)
 			//g_print ("%s -> %s\n", cKeyName, cKeyComment);
 			if (cKeyComment != NULL && strcmp (cKeyComment, "") != 0)
 			{
-				cUsefulComment = cKeyComment;
-				while (*cUsefulComment == '#' || *cUsefulComment == ' ')  // on saute les # et les espaces.
-					cUsefulComment ++;
-
-				iElementType = *cUsefulComment;
-				cUsefulComment ++;
-
-				if (! g_ascii_isdigit (*cUsefulComment) && *cUsefulComment != '[')
-				{
-					cUsefulComment ++;
-				}
+				pAuthorizedValuesList = NULL;
+				cTipString = NULL;
+				iNbElements = 0;
+				cKeyComment =  g_key_file_get_comment (pKeyFile, cGroupName, cKeyName, NULL);
+				cUsefulComment = _parse_key_comment (cKeyComment, &iElementType, &iNbElements, &pAuthorizedValuesList, &bIsAligned, &cTipString);
 				
-				if (g_ascii_isdigit (*cUsefulComment))
+				if (cTipString != NULL)
 				{
-					iNbElements = atoi (cUsefulComment);
-					iNbElements = MAX (iNbElements, 1);  // cas 0.
-					while (g_ascii_isdigit (*cUsefulComment))
-						cUsefulComment ++;
-				}
-				else
-				{
-					iNbElements = 1;
-				}
-				//g_print ("%d element(s)\n", iNbElements);
-
-				while (*cUsefulComment == ' ')  // on saute les espaces.
-					cUsefulComment ++;
-
-				if (*cUsefulComment == '[')
-				{
-					cUsefulComment ++;
-					cAuthorizedValuesChain = cUsefulComment;
-
-					while (*cUsefulComment != '\0' && *cUsefulComment != ']')
-						cUsefulComment ++;
-					g_return_val_if_fail (*cUsefulComment != '\0', 1);
-					*cUsefulComment = '\0';
-					cUsefulComment ++;
-					while (*cUsefulComment == ' ')  // on saute les espaces.
-						cUsefulComment ++;
-
-					pAuthorizedValuesList = g_strsplit (cAuthorizedValuesChain, ";", 0);
-				}
-				else
-				{
-					pAuthorizedValuesList = NULL;
-				}
-				if (cUsefulComment[strlen (cUsefulComment) - 1] == '\n')
-					cUsefulComment[strlen (cUsefulComment) - 1] = '\0';
-				if (cUsefulComment[strlen (cUsefulComment) - 1] == '/')
-				{
-					bIsAligned = FALSE;
-					cUsefulComment[strlen (cUsefulComment) - 1] = '\0';
-				}
-				else
-				{
-					bIsAligned = TRUE;
-				}
-				//g_print ("cUsefulComment : %s\n", cUsefulComment);
-
-				pTipString = strchr (cUsefulComment, '{');
-				if (pTipString != NULL)
-				{
-					if (*(pTipString-1) == '\n')
-						*(pTipString-1) ='\0';
-					else
-						*pTipString = '\0';
-
-					pTipString ++;
-
-					gchar *pTipEnd = strrchr (pTipString, '}');
-					if (pTipEnd != NULL)
-						*pTipEnd = '\0';
-				}
-
-				if (pTipString != NULL)
-				{
-					//g_print ("pTipString : '%s'\n", pTipString);
-					write_message (pTipString);
+					write_message (cTipString);
 				}
 
 				if (*cUsefulComment != '\0' && strcmp (cUsefulComment, "...") != 0 && iElementType != 'F' && iElementType != 'X')
@@ -193,10 +220,8 @@ main (int argc, char** argv)
 					case CAIRO_DOCK_WIDGET_VIEW_LIST :
 					case CAIRO_DOCK_WIDGET_THEME_LIST :
 					case CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY :
-					case CAIRO_DOCK_WIDGET_USER_THEME_SELECTOR :
 					case CAIRO_DOCK_WIDGET_THEME_SELECTOR :
 					case CAIRO_DOCK_WIDGET_ANIMATION_LIST :
-					case CAIRO_DOCK_WIDGET_ANIMATION_DOUBLE_LIST :
 					case CAIRO_DOCK_WIDGET_DIALOG_DECORATOR_LIST :
 					case CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST :
 					case CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST_WITH_DEFAULT :

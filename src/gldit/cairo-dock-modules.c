@@ -966,7 +966,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 	do
 	{
 		if (j == 0)
-			cInstanceFilePath = g_strdup (module->cConfFilePath);
+			cInstanceFilePath = g_strdup (module->cConfFilePath);  // NULL si cConfFilePath l'est.
 		else
 			cInstanceFilePath = g_strdup_printf ("%s-%d",  module->cConfFilePath, j);
 		
@@ -979,7 +979,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 		cairo_dock_instanciate_module (module, cInstanceFilePath);  // prend possession de 'cInstanceFilePath'.
 		
 		j ++;
-	} while (1);
+	} while (cInstanceFilePath != NULL);
 	
 	if (j == 0)
 	{

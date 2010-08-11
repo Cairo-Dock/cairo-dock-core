@@ -55,7 +55,7 @@ msgid "Fun"
 msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:134 ../src/cairo-dock-gui-main.c:1523
-#: ../data/messages:1523
+#: ../data/messages:1521
 msgid "All"
 msgstr "Alles"
 
@@ -766,7 +766,7 @@ msgstr ""
 "Hopelijk bevalt deze software u !\n"
 "  (u kunt nu op deze dialoog klikken om deze te sluiten)"
 
-#: ../src/cairo-dock.c:844
+#: ../src/cairo-dock.c:842
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1074,7 +1074,7 @@ msgstr "Gedrag"
 msgid "Position on the screen"
 msgstr "Positie op het scherm"
 
-#: ../data/messages:5 ../data/messages:149
+#: ../data/messages:5 ../data/messages:149 ../data/messages:1341
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr "Kies de kant van het scherm waar u het dock wilt plaatsen :"
 
@@ -1205,7 +1205,7 @@ msgstr ""
 msgid "Behaviour of the Taskbar:"
 msgstr "Gedrag van de taakbalk :"
 
-#: ../data/messages:67 ../data/messages:1513
+#: ../data/messages:67 ../data/messages:1511
 msgid "None"
 msgstr "Geen"
 
@@ -1384,7 +1384,7 @@ msgstr ""
 msgid "Relative alignment:"
 msgstr "Relatieve uitlijning :"
 
-#: ../data/messages:167
+#: ../data/messages:167 ../data/messages:1355
 msgid "Offset from the screen's edge"
 msgstr "Marge ten opzichte van de beeldschermrand"
 
@@ -1397,7 +1397,7 @@ msgstr ""
 "ook verslepen met de linkermuisknop terwijl u de ALT- of CTRL-toets "
 "ingedrukt houdt."
 
-#: ../data/messages:171
+#: ../data/messages:171 ../data/messages:1359
 msgid "Lateral offset:"
 msgstr "Ruimte aan de zijkanten van dock :"
 
@@ -4095,7 +4095,9 @@ msgid "DBus API"
 msgstr "DBus-API"
 
 #: ../data/messages:1287
+#, fuzzy
 msgid ""
+"\n"
 "\n"
 "The Cairo-Dock Team"
 msgstr ""
@@ -4179,18 +4181,6 @@ msgid ""
 "system and reinstall 'cairo-dock' package."
 msgstr ""
 
-#: ../data/messages:1341
-msgid "Choose the screen border relative to which the dock will be positioned:"
-msgstr "Kies de positie op het beeldscherm waar u het dock wilt plaatsen :"
-
-#: ../data/messages:1355
-msgid "Position relative to the selected screen edge"
-msgstr "Positie ten opzichte van de gekozen kant van het scherm"
-
-#: ../data/messages:1359
-msgid "Lateral gap:"
-msgstr "Ruimte aan de zijkanten van dock :"
-
 #: ../data/messages:1365
 msgid "starting from 0"
 msgstr "Start bij 0"
@@ -4271,121 +4261,117 @@ msgstr "Lijst met persoonlijke thema´s"
 msgid "Delete from the list themes that you don't need anymore :"
 msgstr "Verwijder de thema's uit de lijst die u niet meer wilt :"
 
-#: ../data/messages:1457 ../data/messages:1459 ../data/messages:1463
-#: ../data/messages:1465 ../data/messages:1493 ../data/messages:1543
-#: ../data/messages:1577
+#: ../data/messages:1457 ../data/messages:1459 ../data/messages:1461
+#: ../data/messages:1463 ../data/messages:1491 ../data/messages:1541
+#: ../data/messages:1575
 msgid "Desktop Entry"
 msgstr "Menu-icoon"
 
-#: ../data/messages:1461
-msgid "cPath="
-msgstr "cPad="
-
-#: ../data/messages:1467
+#: ../data/messages:1465
 msgid "Sub-dock's name :"
 msgstr "Naam sub-dock :"
 
-#: ../data/messages:1469 ../data/messages:1497
+#: ../data/messages:1467 ../data/messages:1495
 msgid "How to render the icon :"
 msgstr "Hoe icoon weer te geven :"
 
-#: ../data/messages:1471 ../data/messages:1499
+#: ../data/messages:1469 ../data/messages:1497
 msgid "Use an image"
 msgstr "Een afbeelding gebruiken"
 
-#: ../data/messages:1473 ../data/messages:1501
+#: ../data/messages:1471 ../data/messages:1499
 msgid "Draw sub-dock's content as emblems"
 msgstr "Inhoud van sub-dock tekenen als emblemen"
 
-#: ../data/messages:1475 ../data/messages:1503
+#: ../data/messages:1473 ../data/messages:1501
 msgid "Draw sub-dock's content as stack"
 msgstr "Inhoud van sub-dock tekenen als stapel"
 
-#: ../data/messages:1477 ../data/messages:1505
+#: ../data/messages:1475 ../data/messages:1503
 msgid "Draw sub-dock's content inside a box"
 msgstr "Inhoud sub-dock tekenen in een box"
 
-#: ../data/messages:1479 ../data/messages:1507 ../data/messages:1551
-#: ../data/messages:1579
+#: ../data/messages:1477 ../data/messages:1505 ../data/messages:1549
+#: ../data/messages:1577
 msgid "Image's name or path :"
 msgstr "Naam afbeelding of pad :"
 
-#: ../data/messages:1481 ../data/messages:1533 ../data/messages:1557
-#: ../data/messages:1581
+#: ../data/messages:1479 ../data/messages:1531 ../data/messages:1555
+#: ../data/messages:1579
 msgid "Extra parameters"
 msgstr "Extra opties"
 
-#: ../data/messages:1483 ../data/messages:1535 ../data/messages:1559
-#: ../data/messages:1583
+#: ../data/messages:1481 ../data/messages:1533 ../data/messages:1557
+#: ../data/messages:1581
 msgid "Order you want for this launcher among the others:"
 msgstr "Volgorde voor deze starter tussen de andere:"
 
-#: ../data/messages:1485 ../data/messages:1537 ../data/messages:1555
-#: ../data/messages:1585
+#: ../data/messages:1483 ../data/messages:1535 ../data/messages:1553
+#: ../data/messages:1583
 msgid "Name of the container it belongs to:"
 msgstr "Naam van de houder waar het bij hoort :"
 
-#: ../data/messages:1487
+#: ../data/messages:1485
 msgid "Name of the view used for the sub-dock :"
 msgstr "Naam van weergave gebruikt voor het sub-dock :"
 
-#: ../data/messages:1489
+#: ../data/messages:1487
 msgid "If '0' the container will be displayed on every viewport."
 msgstr "Bij '0' zal de houder getoond worden in elke viewport."
 
-#: ../data/messages:1491 ../data/messages:1541 ../data/messages:1575
+#: ../data/messages:1489 ../data/messages:1539 ../data/messages:1573
 msgid "Only show in this specific viewport"
 msgstr "Alleen tonen in deze specifieke viewport"
 
-#: ../data/messages:1495 ../data/messages:1545
+#: ../data/messages:1493 ../data/messages:1543
 msgid "Launcher's name :"
 msgstr "Naam starter :"
 
-#: ../data/messages:1509
+#: ../data/messages:1507
 msgid "URI of the file :"
 msgstr "URI van het bestand :"
 
-#: ../data/messages:1511
+#: ../data/messages:1509
 msgid "Number of files to list in the sub-dock :"
 msgstr "Aantal bestanden om in het sub-dock te tonen :"
 
-#: ../data/messages:1515
+#: ../data/messages:1513
 msgid "5"
 msgstr "5"
 
-#: ../data/messages:1517
+#: ../data/messages:1515
 msgid "10"
 msgstr "10"
 
-#: ../data/messages:1519
+#: ../data/messages:1517
 msgid "20"
 msgstr "20"
 
-#: ../data/messages:1521
+#: ../data/messages:1519
 msgid "30"
 msgstr "30"
 
-#: ../data/messages:1525
+#: ../data/messages:1523
 msgid "Sort files by :"
 msgstr "Bestanden sorteren op:"
 
-#: ../data/messages:1527
+#: ../data/messages:1525
 msgid "Name"
 msgstr "Naam"
 
-#: ../data/messages:1529
+#: ../data/messages:1527
 msgid "Size"
 msgstr "Grootte"
 
-#: ../data/messages:1531
+#: ../data/messages:1529
 msgid "Date"
 msgstr "Datum"
 
-#: ../data/messages:1539 ../data/messages:1573
+#: ../data/messages:1537 ../data/messages:1571
 msgid "If '0' the launcher will be displayed on every viewport."
 msgstr "Bij '0' zal de starter getoond worden in elke viewport."
 
-#: ../data/messages:1547
+#: ../data/messages:1545
 msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
@@ -4393,11 +4379,11 @@ msgstr ""
 "Bijvoorbeeld : nautilus --no-desktop, gedit, etc. U kunt zelfs een sneltoets "
 "instellen, bijvoorbeeld <Alt>F1, <Ctrl>c, <Ctrl>v, etc"
 
-#: ../data/messages:1549
+#: ../data/messages:1547
 msgid "Command to launch on click :"
 msgstr "Opdracht om uit te voeren bij het aanklikken :"
 
-#: ../data/messages:1553
+#: ../data/messages:1551
 msgid ""
 "If you write here a container's name that doesn't exist yet, a new one will "
 "be created, with this icon inside."
@@ -4405,7 +4391,7 @@ msgstr ""
 "Als u hier een naam van een houder invoert die nog niet bestaat, zal er een "
 "nieuwe houder aangemaakt worden met dit icoon erin."
 
-#: ../data/messages:1561
+#: ../data/messages:1559
 msgid ""
 "If you choosed to mix launcher and applis, this option will deactivate this "
 "behaviour for this launcher only. It can be useful for instance for a "
@@ -4418,11 +4404,11 @@ msgstr ""
 "terminal, maar waarvan u niet wilt dat het het icoon van de terminal steelt "
 "uit de taakbalk."
 
-#: ../data/messages:1563
+#: ../data/messages:1561
 msgid "Prevent this launcher from stealing appli from taskbar ?"
 msgstr "Voorkomen dat deze starter toepassing van taakbalk steelt ?"
 
-#: ../data/messages:1565
+#: ../data/messages:1563
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -4434,24 +4420,24 @@ msgstr ""
 "zeker dat u hier niet aan hoeft te komen. Het bepaalt de klasse van de "
 "toepassing, wat handig is om de toepassing aan zijn starter te koppelen."
 
-#: ../data/messages:1567
+#: ../data/messages:1565
 msgid "Class of the program :"
 msgstr "Klasse van de toepassing :"
 
-#: ../data/messages:1569
+#: ../data/messages:1567
 msgid "It will use 'xterm'."
 msgstr "Het zal 'xterm' gebruiken."
 
-#: ../data/messages:1571
+#: ../data/messages:1569
 msgid "Run in a terminal ?"
 msgstr "Uitvoeren in een terminal ?"
 
-#: ../data/messages:1587
+#: ../data/messages:1585
 msgid "pouet"
 msgstr "pouet"
 
-#: ../data/messages:1589 ../data/messages:1591 ../data/messages:1593
-#: ../data/messages:1595
+#: ../data/messages:1587 ../data/messages:1589 ../data/messages:1591
+#: ../data/messages:1593
 msgid ""
 "v1.4.6.3 :\n"
 "Just to say :\n"
@@ -4463,7 +4449,7 @@ msgstr ""
 "*** Gelukkig 2008 ! ***\n"
 " het Cairo-Dock team."
 
-#: ../data/messages:1597
+#: ../data/messages:1595
 msgid ""
 "v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
 "bring you :\n"
@@ -4499,7 +4485,7 @@ msgstr ""
 " - En als toetje, een nieuw thema (I, Cairo) !\n"
 "  Waarom probeert u geen applet voor Cairo-Dock te maken ? ;-)"
 
-#: ../data/messages:1599
+#: ../data/messages:1597
 msgid ""
 "v1.5.1 :\n"
 " - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
@@ -4519,7 +4505,7 @@ msgstr ""
 "   De meeste applets kunnen losgekoppeld worden van het dock\n"
 "   en zich gedragen als echte desklets."
 
-#: ../data/messages:1601
+#: ../data/messages:1599
 msgid ""
 "v1.5.2.1 :\n"
 " - a lot of bug fixes, especially on desklets.\n"
@@ -4531,7 +4517,7 @@ msgstr ""
 " - Nieuw applet : Weer !\n"
 " - Cairo-Dock is nu in het geheel vertaald in het Japans, door Jiro Kawada !"
 
-#: ../data/messages:1603
+#: ../data/messages:1601
 msgid ""
 "v1.5.3.2 :\n"
 " - Themes have been deeply reviewed\n"
@@ -4555,7 +4541,7 @@ msgstr ""
 "  We zoeken trouwens nog steeds iemand\n"
 "  die ons kan helpen om cairo-dock te integreren in KDE ;-)"
 
-#: ../data/messages:1605
+#: ../data/messages:1603
 msgid ""
 "v1.5.4.2 : a huge release !\n"
 " - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
@@ -4580,7 +4566,7 @@ msgstr ""
 " - Vernieuw uw dock met een nieuw thema : Wood\n"
 " - 3 extra thema´s in Weer"
 
-#: ../data/messages:1607
+#: ../data/messages:1605
 msgid ""
 "v1.5.5.4 :\n"
 " - Huge enhancements in the TaskBar :\n"
@@ -4610,7 +4596,7 @@ msgstr ""
 " - Cairo-Dock is nog niet goed geintegreerd in Gnome 2.22, maar dit zal snel "
 "veranderen ;-)"
 
-#: ../data/messages:1609
+#: ../data/messages:1607
 msgid ""
 "v1.5.6 :\n"
 " - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
@@ -4643,7 +4629,7 @@ msgstr ""
 " - Foutreparaties in XGamma/Weather.\n"
 " - Alle hulp is welkom om het dock te integreren in KDE !"
 
-#: ../data/messages:1611
+#: ../data/messages:1609
 msgid ""
 "v1.6.0 :\n"
 " - A new view has appeared : Diapositive !\n"
@@ -4677,7 +4663,7 @@ msgstr ""
 " - Automatisch herladen na een crash.\n"
 " - Echt vensterminiatuur wanneer geminimaliseerd."
 
-#: ../data/messages:1613
+#: ../data/messages:1611
 msgid ""
 "v1.6.1 :\n"
 "Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
@@ -4698,7 +4684,7 @@ msgstr ""
 " - En we hopen nog steeds op iemand die ons helpt met het schrijven van KDE-"
 "integratie plug-in ^_^"
 
-#: ../data/messages:1615
+#: ../data/messages:1613
 msgid ""
 "v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
 " - 2 new applets have been released :\n"
@@ -4720,7 +4706,7 @@ msgstr ""
 " - We zijn nog steeds op zoek naar iemand, die een KDE-integratie plug-in "
 "wilt schrijven ^_^"
 
-#: ../data/messages:1617
+#: ../data/messages:1615
 msgid ""
 "v1.6.3 : \n"
 " - first the bad news :\n"
@@ -4752,7 +4738,7 @@ msgstr ""
 " - Strakke icoonbewegingen wanneer u ze naar het dock sleept\n"
 " - Het dock is nu vertaald in het Zweeds en deels in het Grieks."
 
-#: ../data/messages:1619
+#: ../data/messages:1617
 msgid ""
 "Cairo-Dock II\n"
 " - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
@@ -4775,7 +4761,7 @@ msgstr ""
 " - Nieuwe applets : mail, keyboard indicator, quick folder, Toons.\n"
 " - Veel foutreparaties en upgrades voor alle plug-ins."
 
-#: ../data/messages:1621
+#: ../data/messages:1619
 msgid ""
 "2.0.5 :\n"
 " - This is mainly a bug-fix version\n"
@@ -4787,7 +4773,7 @@ msgstr ""
 " - verbetering in het RB applet\n"
 " - Extra mogelijkheden toegevoegd voor iconen van gegroepeerde toepassingen."
 
-#: ../data/messages:1623
+#: ../data/messages:1621
 msgid ""
 "2.1.0 : A really heavy version !\n"
 " - Control any music player with the MusicPlayer applet\n"
@@ -4817,7 +4803,7 @@ msgstr ""
 " - Cairo-Dock heeft nu zijn eigen ppa op LaunchPad en een volledige "
 "documentatie op http://doc.glx-dock.org."
 
-#: ../data/messages:1625
+#: ../data/messages:1623
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
 " - This version corrects many bugs appeared with the v2.1.0 (sorry for "
@@ -4852,7 +4838,7 @@ msgstr ""
 "dock vanuit een externe toepassing kunt bedienen.\n"
 "    U kunt zelfs een applet schrijven in elke gewenste programmeertaal !"
 
-#: ../data/messages:1627
+#: ../data/messages:1625
 msgid ""
 "2.1.2 : \n"
 " - The config panel has been improved again (new icons, more clear, better "
@@ -4884,7 +4870,7 @@ msgstr ""
 " - We zijn gestart met een KDE-integratie plug-in, we kunnen alle hulp "
 "gebruiken om dit doel te bereiken !"
 
-#: ../data/messages:1629
+#: ../data/messages:1627
 msgid ""
 "GLX-Dock 2.1.3\n"
 " - A new and simplified configuration panel has been written\n"
@@ -4911,7 +4897,7 @@ msgstr ""
 " - Dnd2Share kan nu direct de inhoud van het klembord versturen.\n"
 " - In deze versie zijn ook een hoop problemen opgelost."
 
-#: ../data/messages:1631
+#: ../data/messages:1629
 msgid ""
 "<b><span color='red'>GLX-Dock 2.2.0</span></b>\n"
 " - The dock has gained 2 <b>new visibility modes</b> and several <b>auto-"
@@ -4955,6 +4941,20 @@ msgstr ""
 "vriendelijk thema en optiesindeling.\n"
 " - Er is ook een <b> nieuw standaardthema</b> beschikbaar; dat beter zou "
 "moeten integreren met elk bureaublad."
+
+#, fuzzy
+#~ msgid "ocPath="
+#~ msgstr "cPad="
+
+#~ msgid ""
+#~ "Choose the screen border relative to which the dock will be positioned:"
+#~ msgstr "Kies de positie op het beeldscherm waar u het dock wilt plaatsen :"
+
+#~ msgid "Position relative to the selected screen edge"
+#~ msgstr "Positie ten opzichte van de gekozen kant van het scherm"
+
+#~ msgid "Lateral gap:"
+#~ msgstr "Ruimte aan de zijkanten van dock :"
 
 #~ msgid "Controllers"
 #~ msgstr "Bedieningspaneel"
