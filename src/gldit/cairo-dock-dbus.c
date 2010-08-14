@@ -363,7 +363,7 @@ gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cA
 	gchar **cValues = NULL;
 	dbus_g_proxy_call (pDbusProxy, cAccessor, &erreur,
 		G_TYPE_INVALID,
-		G_TYPE_POINTER, &cValues,
+		G_TYPE_STRV, &cValues,
 		G_TYPE_INVALID);
 	if (erreur != NULL)
 	{

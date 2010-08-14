@@ -2584,7 +2584,7 @@ msgstr "Dessiner une image"
 
 #: ../data/messages:809
 msgid "Draw the sub-dock's icons as a stack"
-msgstr "Afficher les icones du sous-dock comme une pile"
+msgstr "Afficher les icônes du sous-dock comme une pile"
 
 #: ../data/messages:811
 msgid ""
@@ -4662,7 +4662,7 @@ msgstr ""
 "  lanceurs et applets peuvent maintenant se comporter comme des applis.\n"
 "  les fenetres peuvent apparaître durant un drag'n'drop si la souris reste "
 "dessus\n"
-" - des icones de lanceurs de bonne qualité peuvent etre utilisés a la place "
+" - des icônes de lanceurs de bonne qualité peuvent etre utilisés a la place "
 "des icons X\n"
 " - Gérez Compiz rapidement avec l'applet 'Compiz-Icon'\n"
 " - Contrôlez Cairo-Dock à partir d'un programme extérieur grace au plug-in "
