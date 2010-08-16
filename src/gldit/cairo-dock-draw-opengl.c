@@ -413,7 +413,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
 	glPopMatrix ();  // retour au debut de la fonction.
-	if (bUseText && icon->iLabelTexture != 0 && (icon->fScale > 1.01 || myIcons.fAmplitude == 0 || pDock->fMagnitudeMax == 0) && (! myLabels.bLabelForPointedIconOnly || icon->bPointed))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
+	if (bUseText && icon->iLabelTexture != 0 &&
+		( (icon->fScale > 1.01 && (! myLabels.bLabelForPointedIconOnly || icon->bPointed)) ||
+		((myIcons.fAmplitude < 0.001 || pDock->fMagnitudeMax < 0.001) && icon->bPointed) ))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		glPushMatrix ();
 		if (pDock->container.bIsHorizontal)

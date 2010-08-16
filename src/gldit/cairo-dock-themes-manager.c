@@ -111,7 +111,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 		g_free (cQuestion);
 		if (answer == GTK_RESPONSE_YES)
 		{
-			//\___________________ On traite le fichier de conf.
+			//\___________________ On traite le fichier de conf (et ceux des docks principaux, on les recopiera sauvagement).
 			gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
 			if (bSaveBehavior)
 			{
@@ -139,7 +139,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 			
 			//\___________________ On traite tous le reste.
 			/// TODO : traiter les .conf des applets comme celui du dock...
-			g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' ! -name \"%s\" -exec /bin/cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePath);
+			g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '%s' ! -name \"%s\" -exec /bin/cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePath);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 
