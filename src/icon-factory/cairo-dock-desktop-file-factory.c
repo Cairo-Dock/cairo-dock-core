@@ -261,6 +261,8 @@ static gchar *_cairo_dock_generate_desktop_file_for_script (const gchar *cURI, c
 gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconType iGroup, GError **erreur)
 {
 	g_return_val_if_fail (cURI != NULL, NULL);
+	if (iGroup != CAIRO_DOCK_LAUNCHER && iGroup != CAIRO_DOCK_APPLET)  // on n'autorise a placer des icones du theme que parmi les lanceurs ou les applets.
+		iGroup = CAIRO_DOCK_LAUNCHER;
 	cd_message ("%s (%s)", __func__, cURI);
 	/**double fEffectiveOrder;
 	if (fOrder == CAIRO_DOCK_LAST_ORDER && pDock != NULL)

@@ -154,18 +154,30 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
 	CairoDialog *pDialog)
 {
+	Icon *pIcon = pDialog->pIcon;
 	int iMouseX, iMouseY;
 	gdk_window_get_pointer (pDialog->container.pWidget->window, &iMouseX, &iMouseY, NULL);
-	if (iMouseX > 0 && iMouseX < pDialog->container.iWidth && iMouseY > 0 && iMouseY < pDialog->container.iHeight)
+	
+	if (iMouseX > 0 && iMouseX < pDialog->container.iWidth && iMouseY > 0 && iMouseY < pDialog->container.iHeight && pDialog->pInteractiveWidget != NULL)  // en fait on est dedans (peut arriver si le dialogue a un widget a l'interieur).
 	{
-		cd_debug ("en fait on est dedans");
-		return FALSE;
+		if (pIcon != NULL)
+		{
+			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
+			g_print ("pContainer : %d\n", pContainer?pContainer->bInside:-1);
+			if (!pContainer || !pContainer->bInside)  // peut arriver dans le cas d'un dock cache possedant un dialogue. Initialement les 2 se chevauchent, il faut considerer qu'on est hors du dialogue afin de pouvoir le replacer.
+			{
+				g_print ("en fait on est dedans\n");
+				return FALSE;
+			}
+			else
+				g_print ("leave dialog\n");
+		}
 	}
 	
 	//g_print ("leave\n");
 	//cd_debug ("outside (%d;%d / %dx%d)", iMouseX, iMouseY, pDialog->container.iWidth, pDialog->container.iHeight);
 	pDialog->container.bInside = FALSE;
-	Icon *pIcon = pDialog->pIcon;
+	
 	if (pIcon != NULL /*&& (pEvent->state & GDK_BUTTON1_MASK) == 0*/)
 	{
 		pDialog->container.iMouseX = pEvent->x_root;

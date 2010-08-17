@@ -245,6 +245,12 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 }
 
 
+static gboolean _emit_leave_signal_delayed (CairoDock *pDock)
+{
+	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+	pDock->iSidLeaveDemand = 0;
+	return FALSE;
+}
 static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 {
 	s_iSidShowSubDockDemand = 0;
@@ -299,17 +305,15 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 	if ((pDock == s_pLastPointedDock || s_pLastPointedDock == NULL) && pLastPointedIcon != NULL && pLastPointedIcon->pSubDock != NULL)  // on a quitte une icone ayant un sous-dock.
 	{
 		CairoDock *pSubDock = pLastPointedIcon->pSubDock;
-		if (GTK_WIDGET_VISIBLE (pSubDock->container.pWidget))
+		if (GTK_WIDGET_VISIBLE (pSubDock->container.pWidget))  // le sous-dock est visible, on retarde son cachage.
 		{
 			//g_print ("on cache %s en changeant d'icone\n", pLastPointedIcon->cName);
 			if (pSubDock->iSidLeaveDemand == 0)
 			{
 				//g_print ("  on retarde le cachage du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
-				pSubDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pSubDock);
+				pSubDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pSubDock);  // on force le retard meme si iLeaveSubDockDelay est a 0, car lorsqu'on entre dans un sous-dock, il arrive frequemment qu'on glisse hors de l'icone qui pointe dessus, et c'est tres desagreable d'avoir le dock qui se ferme avant d'avoir pu entre dedans.
 			}
 		}
-		//else
-		//	cd_debug ("pas encore visible !\n");
 	}
 	if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && pPointedIcon->pSubDock != s_pLastPointedDock && (! myAccessibility.bShowSubDockOnClick || CAIRO_DOCK_IS_APPLI (pPointedIcon) || pDock->bIsDragging))  // on entre sur une icone ayant un sous-dock.
 	{
@@ -650,31 +654,34 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	//\_______________ On retarde la sortie.
-	if (pDock->iSidLeaveDemand == 0 && pEvent != NULL)  // pas encore de demande de sortie et sortie naturelle.
+	if (pEvent != NULL)  // sortie naturelle.
 	{
-		if (pDock->iRefCount == 0)  // cas du main dock : on retarde si on pointe sur un sous-dock (pour laisser le temps au signal d'entree dans le sous-dock d'etre traite) ou si l'on a l'auto-hide.
+		if (pDock->iSidLeaveDemand == 0)  // pas encore de demande de sortie.
 		{
-			//g_print (" leave event : %.1f;%.1f (%dx%d)\n", pEvent->x, pEvent->y, pDock->container.iWidth, pDock->container.iHeight);
-			Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-			if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget)) || (pDock->bAutoHide))
+			if (pDock->iRefCount == 0)  // cas du main dock : on retarde si on pointe sur un sous-dock (pour laisser le temps au signal d'entree dans le sous-dock d'etre traite) ou si l'on a l'auto-hide.
 			{
-				//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
-				pDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
+				//g_print (" leave event : %.1f;%.1f (%dx%d)\n", pEvent->x, pEvent->y, pDock->container.iWidth, pDock->container.iHeight);
+				Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
+				if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget)) || (pDock->bAutoHide))
+				{
+					//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
+					pDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
+					return TRUE;
+				}
+			}
+			else if (myAccessibility.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
+			{
+				//g_print ("  on retarde la sortie du sous-dock de %dms\n", myAccessibility.iLeaveSubDockDelay);
+				pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 				return TRUE;
 			}
 		}
-		else if (myAccessibility.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
+		else if (pDock->iSidLeaveDemand != 0)  // deja une sortie en attente.
 		{
-			//g_print ("  on retarde la sortie du sous-dock de %dms\n", myAccessibility.iLeaveSubDockDelay);
-			pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
+			//g_print ("une sortie est deja programmee\n");
 			return TRUE;
 		}
-	}
-	else if (pDock->iSidLeaveDemand != 0 && pEvent != NULL)  // sortie naturelle et deja une sortie en attente.
-	{
-		//g_print ("une sortie est deja programmee\n");
-		return TRUE;
-	}
+	}  // sinon c'est nous qui avons explicitement demande cette sortie, donc on continue.
 	pDock->iSidLeaveDemand = 0;
 	
 	//\_______________ On enregistre la position de la souris.
