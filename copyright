@@ -1,43 +1,7 @@
-X-Source-Downloaded-From: http://developer.berlios.de/projects/cairo-dock/
+X-Source-Downloaded-From: https://launchpad.net/cairo-dock
 X-Upstream-Author: Fabrice Rey <fabounet@glx-dock.org>.
 
-Files: 	src/cairo-dock.*, 
-	src/cairo-dock-animations-*,
-	src/cairo-dock-applet*,
-	src/cairo-dock-application-factory.*,
-	src/cairo-dock-applications-manager.*,
-	src/cairo-dock-callbacks.*,
-	src/cairo-dock-class-manager.*,
-	src/cairo-dock-config.*,
-	src/cairo-dock-container.*,
-	src/cairo-dock-data-renderer.*,
-	src/cairo-dock-default-view.*,
-	src/cairo-dock-desktop-file-factory.*,
-	src/cairo-dock-dialogs.*,
-	src/cairo-dock-dock-*,
-	src/cairo-dock-draw*,
-	src/cairo-dock-file-manager.*,
-	src/cairo-dock-flying-container.*,
-	src/cairo-dock-gauge*,
-	src/cairo-dock-global-variables.*,
-	src/cairo-dock-graph*
-	src/cairo-dock-gui-*,
-	src/cairo-dock-icons.*,
-	src/cairo-dock-internal-*,
-	src/cairo-dock-keyfile-*,
-	src/cairo-dock-launcher-factory.*,
-	src/cairo-dock-load.*,
-	src/cairo-dock-menu.*,
-	src/cairo-dock-modules.*,
-	src/cairo-dock-notifications.*,
-	src/cairo-dock-particle-system.*,
-	src/cairo-dock-renderer-manager.*,
-	src/cairo-dock-separator-factory.*,
-	src/cairo-dock-struct.*,
-	src/cairo-dock-surface-factory.*,
-	src/cairo-dock-task.*,
-	src/cairo-dock-themes-manager.*,
-	src/cairo-dock-X-utilities.*
+Files: 	src/*
 Copyright: Fabrice Rey <fabounet@glx-dock.org>
 Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
  * This program is free software; you can redistribute it and/or modify
@@ -54,17 +18,17 @@ Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-Files: 	src/cairo-dock-dbus.*
+Files: 	src/gldit/cairo-dock-dbus.*
 Copyright: Adrien Pilleboue <adrien.pilleboue@gmail.com>
 Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
 
-Files: 	src/cairo-dock-desklet.*,
-	src/cairo-dock-keybinder.*,
-	src/cairo-dock-log.*
+Files: 	src/gldit/cairo-dock-desklet.*,
+	src/gldit/cairo-dock-keybinder.*,
+	src/gldit/cairo-dock-log.*
 Copyright: Copyright (C) 2008 Cedric GESTES
 Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
 
-Files: 	src/egg*
+Files: 	src/gldit/egg*
 Copyright: Copyright (C) 2002  Red Hat, Inc.; Copyright 1998, 2001 Tim Janik
 Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
  * This program is free software; you can redistribute it and/or modify
@@ -81,20 +45,14 @@ Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-Files: 	src/texture-gradation.h
+Files: 	src/gldit/texture-gradation.h
 Copyright: Copyright (C) 2007  Gimp dev.
 Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
 
-Files: icon-help.png
-	data/icon-background.png
-	data/icon-desktop.png
-	data/icon-behavior.png
-	data/icon-controler.png
-	data/icon-desklets.png
-Copyright: Deviant Dark (from the theme Oxygen-Refit 2)
-Licence: LGPL
+Files: data/*.svg, data/*.png
+Copyright: Humanity devs (some of them modified by Matthieu Baerts)
+Licence: GPL 3+
 
-Files: 	debian/*
-Copyright: Copyright (C) Julien Lavergne <julien.lavergne@gmail.com>
-Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
-Updated by Matthieu Baerts for new releases.
+Files: data/default-theme/ data/man/
+Copyright: Matthieu Baerts (matttbe) <matttbe@gmail.com>
+Licence: LGPL
