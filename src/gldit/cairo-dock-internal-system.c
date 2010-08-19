@@ -86,6 +86,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 		pSystem->cConnectionUser = cairo_dock_get_string_key_value (pKeyFile, "System", "conn user", &bFlushConfFileNeeded, NULL, NULL, NULL);
 		gchar *cPasswd = cairo_dock_get_string_key_value (pKeyFile, "System", "conn passwd", &bFlushConfFileNeeded, NULL, NULL, NULL);
 		cairo_dock_decrypt_string (cPasswd, &pSystem->cConnectionPasswd);
+		pSystem->bForceIPv4 = cairo_dock_get_boolean_key_value (pKeyFile, "System", "force ipv4", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	}
 	return bFlushConfFileNeeded;
 }

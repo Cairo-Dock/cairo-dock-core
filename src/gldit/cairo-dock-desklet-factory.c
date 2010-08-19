@@ -518,16 +518,8 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 	{
 		Icon *pClickedIcon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
 		GtkWidget *menu = cairo_dock_build_menu (pClickedIcon, CAIRO_CONTAINER (pDesklet));  // genere un CAIRO_DOCK_BUILD_ICON_MENU.
-		gtk_widget_show_all (menu);
-		gtk_menu_popup (GTK_MENU (menu),
-			NULL,
-			NULL,
-			NULL,
-			NULL,
-			1,
-			gtk_get_current_event_time ());
+		cairo_dock_popup_menu_on_container (menu, CAIRO_CONTAINER (pDesklet));
 		pDesklet->container.bInside = FALSE;
-		///pDesklet->iGradationCount = 0;  // on force le fond a redevenir transparent.
 		gtk_widget_queue_draw (pDesklet->container.pWidget);
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.

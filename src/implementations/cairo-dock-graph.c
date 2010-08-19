@@ -174,7 +174,7 @@ static void cairo_dock_render_graph_opengl (CairoDockGraph *pGraph)
 		_cairo_dock_disable_texture ();
 	}
 	
-	
+	/// to be continued ...
 }
 
 

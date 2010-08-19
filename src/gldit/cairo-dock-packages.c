@@ -121,6 +121,8 @@ static inline CURL *_init_curl_connection (const gchar *cURL)
 				curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, mySystem.cConnectionPasswd);*/  // a partir de libcurl 7.19.1, donc apres Jaunty
 		}
 	}
+	if (mySystem.bForceIPv4)
+		curl_easy_setopt (handle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);  // la resolution d'adresse en ipv6 peut etre tres lente chez certains.
 	curl_easy_setopt (handle, CURLOPT_TIMEOUT, mySystem.iConnectionMaxTime);
 	curl_easy_setopt (handle, CURLOPT_CONNECTTIMEOUT, mySystem.iConnectionTimeout);
 	curl_easy_setopt (handle, CURLOPT_NOSIGNAL, 1);  // With CURLOPT_NOSIGNAL set non-zero, curl will not use any signals; sinon curl se vautre apres le timeout, meme si le download s'est bien passe !

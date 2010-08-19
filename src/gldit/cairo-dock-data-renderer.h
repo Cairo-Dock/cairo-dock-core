@@ -29,9 +29,9 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-data-renderer.h This class defines the Data Renderer structure and API.
-* A CairoDataRenderer is a generic way to render onto an icon a set of values defined by : {yk = f(tk)}, k=0..n where yk is a vector.
-* Data Renderers are binded to an icon, and initialized with a set of attributes, that derives from a CairoDataRendererAttribute, with the function /ref cairo_dock_add_new_data_renderer_on_icon.
-* You update a Data Renderer with /ref cairo_dock_render_new_data_on_icon, providing it the correct number of values.
+* A CairoDataRenderer is a generic way to render onto an icon a set of N values defined by : {yk = f(t)}, k=0..N. For instance you could represent the (cpu, mem, swap) evolution over the time.
+* You bind a Data Renderer with /ref cairo_dock_add_new_data_renderer_on_icon. You can specify some configuration parameters for the Data Renderer with a set of attributes, that derive from a CairoDataRendererAttribute.
+* You feed the Data Renderer with /ref cairo_dock_render_new_data_on_icon, providing it the correct number of values.
 * If you want to change any parameter of a Data Renderer, use /ref cairo_dock_reload_data_renderer_on_icon, which keeps the history.
 * To remove the Data Renderer from an icon, use /ref cairo_dock_remove_data_renderer_on_icon.
 */
@@ -54,14 +54,23 @@ struct _CairoDataToRenderer {
 typedef void (*CairoDockGetValueFormatFunc) (double fValue, int iNumValue, gchar *cFormatBuffer, int iBufferLength, gpointer data);
 /// Generic DataRenderer attributes structure. The attributes of any implementation of a DataRenderer will derive from this class.
 struct _CairoDataRendererAttribute {
+	/// name of the model ("gauge", "graph", etc) [mandatory].
 	const gchar *cModelName;
+	/// number of values to represent (for instance 3 for (cpu, mem, swap)) [1 by default and minimum].
 	gint iNbValues;
+	/// number of values to remember over time. For instance graphs can display as much values as the icon's width [2 by default and minimum].
 	gint iMemorySize;
+	/// an array of pairs of (min,max) values. [optionnal, input values will be considered between 0 and 1 if NULL].
 	gdouble *pMinMaxValues;
+	/// whether to automatically update the values' range [false by default].
 	gboolean bUpdateMinMax;
+	/// whether to write the values on the icon. [false by default].
 	gboolean bWriteValues;
+	/// time needed to update to the new values. The update is smooth in OpenGL mode. [0 by default]
 	gint iLatencyTime;
+	/// a function used to format the values into a string. Only useful if you make te DataRenderer write the values [optionnal, by default the values are formatted with 2 decimals].
 	CairoDockGetValueFormatFunc format_value;
+	/// data to be passed to the format function [optionnal].
 	gpointer pFormatData;
 	gchar **cEmblems;
 	gchar **cTitles;
@@ -155,7 +164,7 @@ CairoDockGLFont *cairo_dock_get_default_data_renderer_font (void);
 void cairo_dock_unload_default_data_renderer_font (void);
 
 
-/**Add a Data Renderer on an icon (usually the icon of an applet). A Data Renderer is a view that will be used to display a set a values on the icon.
+/**Add a Data Renderer on an icon (usually the icon of an applet). A Data Renderer is a view that will be used to display a set of values on the icon.
 *@param pIcon the icon
 *@param pContainer the icon's container
 *@param pAttribute attributes defining the Renderer*/

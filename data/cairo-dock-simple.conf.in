@@ -108,6 +108,10 @@ frame_mod=
 #Once an applet is active, you can configure it by right clicking on its icon.}/
 modules=
 
+#W[More applets] Get more applets online !
+#{You can install them by simply drag-and-dropping the link onto your dock.}
+third party=http://forum.glx-dock.org
+
 
 #[@pkgdatadir@/icon-controler.svg]
 [Themes]

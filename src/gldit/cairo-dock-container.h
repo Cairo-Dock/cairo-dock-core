@@ -202,6 +202,8 @@ gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer);
 */
 void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer);
 
+void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer *pContainer);
+
 /** Add an entry to a given menu.
 *@param cLabel label of the entry
 *@param gtkStock a GTK stock or a path to an image

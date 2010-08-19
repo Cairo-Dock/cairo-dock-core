@@ -58,6 +58,7 @@
 #define ICON_MEDIUM 48
 #define ICON_SMALL 42
 #define ICON_TINY 36
+#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
 static GtkWidget *s_pSimpleConfigModuleWindow = NULL;
@@ -77,6 +78,7 @@ extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bUseOpenGL;
+extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 #define cd_reload(module_name) do {\
 	pInternalModule = cairo_dock_find_internal_module_from_name (module_name);\
@@ -357,6 +359,11 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "main dock view", myViews.cMainDockDefaultRendererName);
 	
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myViews.cSubDockDefaultRendererName);
+	
+	// applets
+	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_THEME_SERVER"/third-party/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
+	g_key_file_set_string (pSimpleKeyFile, "Add-ons", "third party", cAdress);
+	g_free (cAdress);
 	
 	// themes
 	g_key_file_set_boolean (pSimpleKeyFile, "Themes", "use theme launchers", FALSE);

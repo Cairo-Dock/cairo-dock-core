@@ -58,9 +58,11 @@
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_ICON_MARGIN 6
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
+#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bEnterHelpOnce;
+extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 struct _CairoDockCategoryWidgetTable {
 	GtkWidget *pFrame;
@@ -1160,7 +1162,6 @@ static void on_toggle_hide_others (GtkCheckMenuItem *pMenuItem/**GtkToggleButton
 	bHideOther = gtk_check_menu_item_get_active (pMenuItem);
 	_trigger_current_filter ();
 }
-///static void on_clear_filter (GtkButton *pButton, GtkEntry *pEntry)
 static void on_clear_filter (GtkEntry *pEntry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer data)
 {
 	gtk_entry_set_text (pEntry, "");
@@ -1663,9 +1664,11 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		FALSE,
 		0);
 	
+	#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
 	gtk_entry_set_icon_activatable (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, TRUE);
 	gtk_entry_set_icon_from_stock (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
 	g_signal_connect (s_pFilterEntry, "icon-press", G_CALLBACK (on_clear_filter), NULL);
+	#endif
 	
 	// options
 	_reset_filter_state ();
@@ -1768,6 +1771,18 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	GtkWidget *pSwitchButton = cairo_dock_make_switch_gui_button ();
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
 		pSwitchButton,
+		FALSE,
+		FALSE,
+		0);
+	
+	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_THEME_SERVER"/third-party/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
+	GtkWidget *pThirdPartyButton = gtk_link_button_new_with_label (cAdress, _("More applets"));
+	gtk_widget_set_tooltip_text (pThirdPartyButton, _("Get more applets online !"));
+	pImage = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image (GTK_BUTTON (pThirdPartyButton), pImage);
+	g_free (cAdress);
+	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
+		pThirdPartyButton,
 		FALSE,
 		FALSE,
 		0);

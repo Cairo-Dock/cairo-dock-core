@@ -57,7 +57,7 @@ struct _CairoConfigSystem {
 	gint iConnectionPort;
 	gchar *cConnectionUser;
 	gchar *cConnectionPasswd;
-	
+	gboolean bForceIPv4;
 	} ;
 
 DEFINE_PRE_INIT (System);

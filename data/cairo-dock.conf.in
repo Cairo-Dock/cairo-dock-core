@@ -287,6 +287,10 @@ conn user =
 #{Let empty if you don't need to log-in to the proxy with a user/password.}
 conn passwd =
 
+#b Force IPv4 ?
+#{Use this option if you experience problems to connect.}
+force ipv4 = false
+
 modules=
 
 
