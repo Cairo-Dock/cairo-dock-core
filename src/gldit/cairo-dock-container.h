@@ -196,13 +196,18 @@ gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const 
 gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer);
 gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer);
 
+/** Pop-up a menu on an icon. The menu is placed so that it touches the icon, without overlapping it. If the icon is NULL, it will be placed it at the mouse's position. In the case of a dock, it prevents this one from shrinking down.
+*@param menu the menu.
+*@param pIcon the icon, or NULL.
+*@param pContainer the container that was clicked.
+*/
+void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer *pContainer);
+
 /** Pop-up a menu on a container. In the case of a dock, it prevents this one from shrinking down.
 *@param menu the menu.
 *@param pContainer the container that was clicked.
 */
-void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer);
-
-void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer *pContainer);
+#define cairo_dock_popup_menu_on_container(menu, pContainer) cairo_dock_popup_menu_on_icon (menu, NULL, pContainer)
 
 /** Add an entry to a given menu.
 *@param cLabel label of the entry

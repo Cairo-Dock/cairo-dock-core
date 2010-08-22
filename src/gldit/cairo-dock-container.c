@@ -398,39 +398,6 @@ static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 		NULL,
 		pDock);*/
 }
-void cairo_dock_popup_menu_on_container (GtkWidget *menu, CairoContainer *pContainer)
-{
-	if (menu == NULL)
-		return;
-	if (CAIRO_DOCK_IS_DOCK (pContainer))
-	{
-		if (g_signal_handler_find (menu,
-			G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-			0,
-			0,
-			NULL,
-			_cairo_dock_delete_menu,
-			pContainer) == 0)  // on evite de connecter 2 fois ce signal, donc la fonction est appelable plusieurs fois sur un meme menu.
-		{
-			g_signal_connect (G_OBJECT (menu),
-				"deactivate",
-				G_CALLBACK (_cairo_dock_delete_menu),
-				pContainer);
-		}
-		CAIRO_DOCK (pContainer)->bMenuVisible = TRUE;
-	}
-	
-	gtk_widget_show_all (GTK_WIDGET (menu));
-	
-	gtk_menu_popup (GTK_MENU (menu),
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		1,
-		gtk_get_current_event_time ());
-}
-
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer *data)
 {
 	*push_in = TRUE;
@@ -469,10 +436,14 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer
 	
 	if (menu == NULL)
 		return;
-	if (pIcon == NULL)
+	GtkMenuPositionFunc place_menu = NULL;
+	if (pIcon != NULL && pContainer != NULL)
 	{
-		cairo_dock_popup_menu_on_container (menu, pContainer);
-		return;
+		place_menu = _place_menu_on_icon;
+		if (data == NULL)
+			data = g_new0 (gpointer, 2);
+		data[0] = pIcon;
+		data[1] = pContainer;
 	}
 	
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
@@ -495,14 +466,10 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer
 	
 	gtk_widget_show_all (GTK_WIDGET (menu));
 	
-	if (data == NULL)
-		data = g_new0 (gpointer, 2);
-	data[0] = pIcon;
-	data[1] = pContainer;
 	gtk_menu_popup (GTK_MENU (menu),
 		NULL,
 		NULL,
-		(GtkMenuPositionFunc)_place_menu_on_icon,
+		place_menu,
 		data,
 		1,
 		gtk_get_current_event_time ());

@@ -36,6 +36,7 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-packages.h"
+#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-graph.h"
 #include "cairo-dock-data-renderer.h"
@@ -68,15 +69,17 @@ void cairo_dock_unload_default_data_renderer_font (void)
 
 CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 {
-	CairoDataRendererNewFunc init = cairo_dock_get_data_renderer_entry_point (cRendererName);
-	g_return_val_if_fail (init != NULL, NULL);
+	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
+	g_return_val_if_fail (pRecord != NULL && pRecord->iStructSize != 0, NULL);
 	
 	if (g_pPrimaryContainer && s_pFont == NULL)
 	{
 		_init_data_renderer_font ();
 	}
 	
-	return init ();
+	CairoDataRenderer *pRenderer = g_malloc0 (pRecord->iStructSize);
+	memcpy (&pRenderer->interface, &pRecord->interface, sizeof (CairoDataRendererInterface));
+	return pRenderer;
 }
 
 static void _cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute)
@@ -194,9 +197,10 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 	_cairo_dock_init_data_renderer (pRenderer, pContainer, pAttribute);
 	
 	cairo_dock_get_icon_extent (pIcon, pContainer, &pRenderer->iWidth, &pRenderer->iHeight);
-	if (pAttribute->cEmblems != NULL)	
-		pRenderer->pEmblems = g_new0 (CairoDataRendererEmblem, pAttribute->iNbValues);
-	pRenderer->pTextZones = g_new0 (CairoDataRendererTextZone, pAttribute->iNbValues);
+	if (pRenderer->cEmblems != NULL)
+		pRenderer->pEmblems = g_new0 (CairoDataRendererEmblem, pRenderer->data.iNbValues);
+	if (pRenderer->cTitles != NULL)
+		pRenderer->pTextZones = g_new0 (CairoDataRendererTextZone, pRenderer->data.iNbValues);
 	
 	pRenderer->interface.load (pRenderer, pContainer, pAttribute);
 	
@@ -214,10 +218,10 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 		CairoDataRendererEmblem *pEmblem;
 		cairo_surface_t *pSurface;
 		int i;
-		for (i = 0; i < pAttribute->iNbValues; i ++)
+		for (i = 0; i < pRenderer->data.iNbValues; i ++)
 		{
 			pEmblem = &pRenderer->pEmblems[i];
-			if (pEmblem->fWidth != 0 && pEmblem->fHeight != 0)
+			if (pEmblem->fWidth != 0 && pEmblem->fHeight != 0 && pAttribute->cEmblems[i] != NULL)
 			{
 				pSurface = cairo_dock_create_surface_from_image_simple (pAttribute->cEmblems[i],
 					pEmblem->fWidth * pRenderer->iWidth,
@@ -233,6 +237,29 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 		}
 	}
 	
+	if (pRenderer->pTextZones != NULL)
+	{
+		CairoDataRendererTextZone *pTextZone;
+		cairo_surface_t *pSurface;
+		int i;
+		for (i = 0; i < pRenderer->data.iNbValues; i ++)
+		{
+			pTextZone = &pRenderer->pTextZones[i];
+			if (pTextZone->fWidth != 0 && pTextZone->fHeight != 0 && pRenderer->cTitles[i] != NULL)
+			{
+				pSurface = cairo_dock_create_surface_from_text (pRenderer->cTitles[i],
+					&myLabels.quickInfoTextDescription,
+					&pTextZone->iTextWidth, &pTextZone->iTextHeight);
+				if (bLoadTextures)
+				{
+					pTextZone->iTexture = cairo_dock_create_texture_from_surface (pSurface);
+					cairo_surface_destroy (pSurface);
+				}
+				else
+					pTextZone->pSurface = pSurface;
+			}
+		}
+	}
 }
 
 
@@ -316,6 +343,9 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 	if (pRenderer == NULL)
 		return ;
 	
+	if (pRenderer->interface.unload)
+		pRenderer->interface.unload (pRenderer);
+	
 	g_free (pRenderer->data.pValuesBuffer);
 	g_free (pRenderer->data.pTabValues);
 	g_free (pRenderer->data.pMinMaxValues);
@@ -336,9 +366,21 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 	}
 	
 	if (pRenderer->pTextZones != NULL)
+	{
+		CairoDataRendererTextZone *pTextZone;
+		int i;
+		for (i = 0; i < pRenderer->data.iNbValues; i ++)
+		{
+			pTextZone = &pRenderer->pTextZones[i];
+			if (pTextZone->pSurface != NULL)
+				cairo_surface_destroy (pTextZone->pSurface);
+			if (pTextZone->iTexture != 0)
+				_cairo_dock_delete_texture (pTextZone->iTexture);
+		}
 		g_free (pRenderer->pTextZones);
+	}
 	
-	pRenderer->interface.free (pRenderer);
+	g_free (pRenderer);
 }
 
 void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
@@ -523,6 +565,6 @@ gchar *cairo_dock_get_package_path_for_data_renderer (const gchar *cRendererName
 
 void cairo_dock_register_built_in_data_renderers (void)
 {
-	cairo_dock_register_data_renderer_entry_point ("gauge", (CairoDataRendererNewFunc) cairo_dock_new_gauge, "gauges", "Turbo-night-fuel");
-	cairo_dock_register_data_renderer_entry_point ("graph", (CairoDataRendererNewFunc) cairo_dock_new_graph, NULL, NULL);
+	cairo_dock_register_data_renderer_graph ();
+	cairo_dock_register_data_renderer_gauge ();
 }

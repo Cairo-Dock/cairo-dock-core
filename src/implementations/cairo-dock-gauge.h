@@ -29,8 +29,18 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-gauge.h This class defines the Gauge, which derives from the DataRenderer.
-* All you need to know is the attributes that define a Gauge, the API to use is the common API for DataRenderer, i ncairo-dock-data-renderer.h.
-*/ 
+* All you need to know is the attributes that define a Gauge, the API to use is the common API for DataRenderer, defined in cairo-dock-data-renderer.h.
+*/
+
+/// Attributes of a Gauge.
+typedef struct _CairoGaugeAttribute CairoGaugeAttribute;
+struct _CairoGaugeAttribute {
+	/// General attributes of any DataRenderer.
+	CairoDataRendererAttribute rendererAttribute;
+	/// path to a gauge theme.
+	const gchar *cThemePath;
+};
+
 
 typedef struct {
 	RsvgHandle *pSvgHandle;
@@ -68,25 +78,9 @@ typedef struct {
 	GList *pIndicatorList;
 } Gauge;
 
-/// Attributes of a Gauge.
-typedef struct _CairoGaugeAttribute CairoGaugeAttribute;
-struct _CairoGaugeAttribute {
-	/// General attributes of any DataRenderer.
-	CairoDataRendererAttribute rendererAttribute;
-	/// path to a gauge theme.
-	const gchar *cThemePath;
-};
 
+void cairo_dock_register_data_renderer_gauge (void);
 
-Gauge *cairo_dock_new_gauge (void);
-
-/**
-GHashTable *cairo_dock_list_available_gauges (void);
-
-gchar *cairo_dock_get_gauge_theme_path (const gchar *cThemeName, CairoDockPackageType iType);
-
-gchar *cairo_dock_get_package_path_for_gauge (const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName);
-*/
 
 G_END_DECLS
 #endif

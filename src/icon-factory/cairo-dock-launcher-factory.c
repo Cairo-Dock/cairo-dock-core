@@ -33,6 +33,8 @@ extern CairoDockDesktopEnv g_iDesktopEnv;
 
 gboolean cairo_dock_remove_version_from_string (gchar *cString)
 {
+	if (cString == NULL)
+		return FALSE;
 	int n = strlen (cString);
 	gchar *str = cString + n - 1;
 	do
@@ -138,7 +140,7 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 				if (str != NULL)  // on prend apres.
 					cClass = str + 1;
 				str = strchr (cClass, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
-				if (str != NULL)
+				if (str != NULL && str != cClass)
 					*str = '\0';
 			}
 			

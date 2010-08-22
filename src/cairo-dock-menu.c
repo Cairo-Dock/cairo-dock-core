@@ -1088,7 +1088,9 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	{
 		if (! cairo_dock_is_locked ())
 		{
-			_add_add_entry (menu, data, FALSE, TRUE);
+			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
+			if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
+				_add_add_entry (menu, data, FALSE, TRUE);
 		}
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}

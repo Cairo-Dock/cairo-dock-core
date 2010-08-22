@@ -486,6 +486,9 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 	CairoContainer *pContainer = pInstance->pContainer;
 	g_return_if_fail (pContainer != NULL);
 	
+	if (pOneIcon == NULL)
+		return;
+	
 	if (pInstance->pDock)
 	{
 		if (pIcon->pSubDock == NULL)

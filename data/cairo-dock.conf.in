@@ -269,6 +269,10 @@ conn timeout = 7
 #{Maximum time in seconds that you allow the whole operation to last. Some themes can be up to a few MB.}
 conn max time = 120
 
+#b- Force IPv4 ?
+#{Use this option if you experience problems to connect.}
+force ipv4 = true
+
 #B-[4] Are you behind a proxy ?
 #{Use this option if you connect to the Internet through a proxy.}
 conn use proxy = false
@@ -286,10 +290,6 @@ conn user =
 #p- Password :
 #{Let empty if you don't need to log-in to the proxy with a user/password.}
 conn passwd =
-
-#b Force IPv4 ?
-#{Use this option if you experience problems to connect.}
-force ipv4 = false
 
 modules=
 

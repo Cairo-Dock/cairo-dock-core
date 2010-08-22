@@ -884,7 +884,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						//g_print ("+ click on '%s' (%s)\n", icon->cName, icon->cCommand);
 						if (! s_bIconDragged)  // on ignore le drag'n'drop sur elle-meme.
 						{
-							cairo_dock_notify (CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
+							cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
 							if (myAccessibility.cRaiseDockShortcut != NULL)
 								s_bHideAfterShortcut = TRUE;
 							
@@ -989,7 +989,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 			case GDK_2BUTTON_PRESS :
 				{
 					if (icon && ! cairo_dock_icon_is_being_removed (icon))
-						cairo_dock_notify (CAIRO_DOCK_DOUBLE_CLICK_ICON, icon, pDock);
+						cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_DOUBLE_CLICK_ICON, icon, pDock);
 				}
 			break ;
 
@@ -1006,7 +1006,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{
 		if (icon && ! cairo_dock_icon_is_being_removed (icon))
-			cairo_dock_notify (CAIRO_DOCK_MIDDLE_CLICK_ICON, icon, pDock);
+			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_MIDDLE_CLICK_ICON, icon, pDock);
 	}
 
 	return FALSE;

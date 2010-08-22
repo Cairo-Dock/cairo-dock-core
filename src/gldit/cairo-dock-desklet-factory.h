@@ -292,7 +292,6 @@ void cairo_dock_insert_icon_in_desklet (Icon *icon, CairoDesklet *pDesklet);
 
 gboolean cairo_dock_detach_icon_from_desklet (Icon *icon, CairoDesklet *pDesklet);
 
-
 G_END_DECLS
 
 #endif

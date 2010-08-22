@@ -362,11 +362,9 @@ static void cairo_dock_reload_graph (CairoDockGraph *pGraph)
 }
 
 
-static void cairo_dock_free_graph (CairoDockGraph *pGraph)
+static void cairo_dock_unload_graph (CairoDockGraph *pGraph)
 {
 	cd_debug ("");
-	if (pGraph == NULL)
-		return ;
 	if (pGraph->pBackgroundSurface != NULL)
 		cairo_surface_destroy (pGraph->pBackgroundSurface);
 	if (pGraph->iBackgroundTexture != 0)
@@ -381,7 +379,6 @@ static void cairo_dock_free_graph (CairoDockGraph *pGraph)
 	g_free (pGraph->pGradationPatterns);
 	g_free (pGraph->fHighColor);
 	g_free (pGraph->fLowColor);
-	g_free (pGraph);
 }
 
 
@@ -389,14 +386,17 @@ static void cairo_dock_free_graph (CairoDockGraph *pGraph)
   //////////////////////////////////////////
  /////////////// RENDERER /////////////////
 //////////////////////////////////////////
-CairoDockGraph *cairo_dock_new_graph (void)
+void cairo_dock_register_data_renderer_graph (void)
 {
-	CairoDockGraph *pGraph = g_new0 (CairoDockGraph, 1);
-	pGraph->dataRenderer.interface.new				= (CairoDataRendererNewFunc) cairo_dock_new_graph;
-	pGraph->dataRenderer.interface.load				= (CairoDataRendererLoadFunc) cairo_dock_load_graph;
-	pGraph->dataRenderer.interface.render			= (CairoDataRendererRenderFunc) cairo_dock_render_graph;
-	pGraph->dataRenderer.interface.render_opengl	= (CairoDataRendererRenderOpenGLFunc) NULL;
-	pGraph->dataRenderer.interface.reload			= (CairoDataRendererReloadFunc) cairo_dock_reload_graph;
-	pGraph->dataRenderer.interface.free				= (CairoDataRendererFreeFunc) cairo_dock_free_graph;
-	return pGraph;
+	CairoDockDataRendererRecord *pRecord = g_new0 (CairoDockDataRendererRecord, 1);
+	pRecord->interface.load			= (CairoDataRendererLoadFunc) cairo_dock_load_graph;
+	pRecord->interface.render		= (CairoDataRendererRenderFunc) cairo_dock_render_graph;
+	pRecord->interface.render_opengl	= (CairoDataRendererRenderOpenGLFunc) NULL;
+	pRecord->interface.reload		= (CairoDataRendererReloadFunc) cairo_dock_reload_graph;
+	pRecord->interface.unload		= (CairoDataRendererUnloadFunc) cairo_dock_unload_graph;
+	pRecord->iStructSize			= sizeof (CairoDockGraph);
+	pRecord->cThemeDirName = NULL;
+	pRecord->cDefaultTheme = NULL;
+	
+	cairo_dock_register_data_renderer ("graph", pRecord);
 }

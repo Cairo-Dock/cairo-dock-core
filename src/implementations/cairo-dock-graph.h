@@ -29,8 +29,8 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-graph.h This class defines the Graph, which derives from the DataRenderer.
-* All you need to know is the attributes that define a Graph, the API to use is the common API for DataRenderer, i ncairo-dock-data-renderer.h.
-*/ 
+* All you need to know is the attributes that define a Graph, the API to use is the common API for DataRenderer, defined in cairo-dock-data-renderer.h.
+*/
 
 /// Types of graph.
 typedef enum {
@@ -80,7 +80,7 @@ typedef struct _CairoDockGraph {
 	} CairoDockGraph;
 
 
-CairoDockGraph *cairo_dock_new_graph (void);
+void cairo_dock_register_data_renderer_graph (void);
 
 
 G_END_DECLS

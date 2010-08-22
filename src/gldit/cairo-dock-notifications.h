@@ -307,7 +307,7 @@ void cairo_dock_remove_notification_func_on_container (CairoContainer *pContaine
 		_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);}\
 	} while (0)
 
-/** Broadcast a notification form a given container.
+/** Broadcast a notification from a given container.
 *@param pContainer the container.
 *@param iNotifType type of the notification.
 *@param ... parameters to be passed to the callbacks that has registerd to this notification.

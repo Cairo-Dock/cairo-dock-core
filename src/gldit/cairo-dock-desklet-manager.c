@@ -480,6 +480,7 @@ static gboolean _cairo_dock_update_desklet_notification (gpointer data, CairoDes
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
+
   ///////////////
  /// MANAGER ///
 ///////////////

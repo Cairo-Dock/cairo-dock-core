@@ -203,24 +203,9 @@ CairoDockDataRendererRecord *cairo_dock_get_data_renderer_record (const gchar *c
 		return NULL;
 }
 
-CairoDataRendererNewFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName)
-{
-	if (cRendererName != NULL)
-	{
-		CairoDockDataRendererRecord *pRecord = g_hash_table_lookup (s_hDataRendererTable, cRendererName);
-		return (pRecord ? pRecord->new : NULL);
-	}
-	else
-		return NULL;
-}
-
-void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererNewFunc pFunc, const gchar *cThemeDirName, const gchar *cDefaultTheme)
+void cairo_dock_register_data_renderer (const gchar *cRendererName, CairoDockDataRendererRecord *pRecord)
 {
 	cd_message ("%s (%s)", __func__, cRendererName);
-	CairoDockDataRendererRecord *pRecord = g_new0 (CairoDockDataRendererRecord, 1);
-	pRecord->new = pFunc;
-	pRecord->cThemeDirName = cThemeDirName;
-	pRecord->cDefaultTheme = cDefaultTheme;
 	g_hash_table_insert (s_hDataRendererTable, g_strdup (cRendererName), pRecord);
 }
 

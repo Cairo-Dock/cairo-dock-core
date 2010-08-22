@@ -365,7 +365,7 @@ static gboolean on_scroll_desklet (GtkWidget* pWidget,
 	if (! (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)))
 	{
 		Icon *icon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
-		if (icon != NULL)
+		///if (icon != NULL)
 		{
 			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_SCROLL_ICON, icon, pDesklet, pScroll->direction);
 		}
@@ -409,14 +409,15 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 {
 	if (pButton->button == 1)  // clic gauche.
 	{
+		pDesklet->container.iMouseX = pButton->x;
+		pDesklet->container.iMouseY = pButton->y;
 		if (pButton->type == GDK_BUTTON_PRESS)
 		{
 			pDesklet->bClicked = TRUE;
 			if (cairo_dock_desklet_is_free (pDesklet))
 			{
-				pDesklet->container.iMouseX = pButton->x;  // pour le deplacement manuel.
-				pDesklet->container.iMouseY = pButton->y;
-				
+				///pDesklet->container.iMouseX = pButton->x;  // pour le deplacement manuel.
+				///pDesklet->container.iMouseY = pButton->y;
 				if (pButton->x < myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
 					pDesklet->rotating = TRUE;
 				else if (pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)
@@ -433,12 +434,14 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 		}
 		else if (pButton->type == GDK_BUTTON_RELEASE)
 		{
-			if (!pDesklet->bClicked)  // on n'accepte le release que si on avait clique sur le desklet avant (on peut recevoir le release si on avat clique sur un dialogue qui chevauchait notre desklet et qui a disparu au clic).
+			if (!pDesklet->bClicked)  // on n'accepte le release que si on avait clique sur le desklet avant (on peut recevoir le release si on avait clique sur un dialogue qui chevauchait notre desklet et qui a disparu au clic).
 			{
 				return FALSE;
 			}
 			pDesklet->bClicked = FALSE;
-			cd_debug ("GDK_BUTTON_RELEASE");
+			//g_print ("GDK_BUTTON_RELEASE\n");
+			int x = pDesklet->container.iMouseX;
+			int y = pDesklet->container.iMouseY;
 			if (pDesklet->moving)
 			{
 				pDesklet->moving = FALSE;
@@ -454,19 +457,19 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 			else if (pDesklet->retaching)
 			{
 				pDesklet->retaching = FALSE;
-				if (pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize)  // on verifie qu'on est encore dedans.
+				if (x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && y < myDesklets.iDeskletButtonSize)  // on verifie qu'on est encore dedans.
 				{
 					Icon *icon = pDesklet->pIcon;
 					g_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
 					cairo_dock_detach_module_instance (icon->pModuleInstance);
-					return TRUE;  // interception du signal.
+					return CAIRO_DOCK_INTERCEPT_NOTIFICATION;  // interception du signal.
 				}
 			}
 			else if (pDesklet->making_transparent)
 			{
 				cd_debug ("pDesklet->making_transparent\n");
 				pDesklet->making_transparent = FALSE;
-				if (pButton->x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && pButton->y > pDesklet->container.iHeight - myDesklets.iDeskletButtonSize)  // on verifie qu'on est encore dedans.
+				if (x > pDesklet->container.iWidth - myDesklets.iDeskletButtonSize && y > pDesklet->container.iHeight - myDesklets.iDeskletButtonSize)  // on verifie qu'on est encore dedans.
 				{
 					Icon *icon = pDesklet->pIcon;
 					g_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
@@ -502,15 +505,21 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 			else
 			{
 				Icon *pClickedIcon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
-				cairo_dock_notify (CAIRO_DOCK_CLICK_ICON, pClickedIcon, pDesklet, pButton->state);
+				cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_CLICK_ICON, pClickedIcon, pDesklet, pButton->state);
 			}
+			// prudence.
+			pDesklet->rotating = FALSE;
+			pDesklet->retaching = FALSE;
+			pDesklet->making_transparent = FALSE;
+			pDesklet->rotatingX = FALSE;
+			pDesklet->rotatingY = FALSE;
 		}
 		else if (pButton->type == GDK_2BUTTON_PRESS)
 		{
 			if (! (pButton->x < myDesklets.iDeskletButtonSize && pButton->y < myDesklets.iDeskletButtonSize) && ! (pButton->x > (pDesklet->container.iWidth - myDesklets.iDeskletButtonSize)/2 && pButton->x < (pDesklet->container.iWidth + myDesklets.iDeskletButtonSize)/2 && pButton->y < myDesklets.iDeskletButtonSize))
 			{
 				Icon *pClickedIcon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);
-				cairo_dock_notify (CAIRO_DOCK_DOUBLE_CLICK_ICON, pClickedIcon, pDesklet);
+				cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_DOUBLE_CLICK_ICON, pClickedIcon, pDesklet);
 			}
 		}
 	}
@@ -550,7 +559,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 		}
 		else
 		{
-			cairo_dock_notify (CAIRO_DOCK_MIDDLE_CLICK_ICON, pDesklet->pIcon, pDesklet);
+			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_MIDDLE_CLICK_ICON, pDesklet->pIcon, pDesklet);
 		}
 	}
 	return FALSE;
@@ -579,15 +588,11 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 	GdkEventMotion* pMotion,
 	CairoDesklet *pDesklet)
 {
-	if (pMotion->state & GDK_BUTTON1_MASK && cairo_dock_desklet_is_free (pDesklet))
+	/*if (pMotion->state & GDK_BUTTON1_MASK && cairo_dock_desklet_is_free (pDesklet))
 	{
 		cd_debug ("root : %d;%d", (int) pMotion->x_root, (int) pMotion->y_root);
-		/*pDesklet->moving = TRUE;
-		gtk_window_move (GTK_WINDOW (pWidget),
-			pMotion->x_root + pDesklet->diff_x,
-			pMotion->y_root + pDesklet->diff_y);*/
 	}
-	else  // le 'press-button' est local au sous-widget clique, alors que le 'motion-notify' est global a la fenetre; c'est donc par lui qu'on peut avoir a coup sur les coordonnees du curseur (juste avant le clic).
+	else*/  // le 'press-button' est local au sous-widget clique, alors que le 'motion-notify' est global a la fenetre; c'est donc par lui qu'on peut avoir a coup sur les coordonnees du curseur (juste avant le clic).
 	{
 		pDesklet->container.iMouseX = pMotion->x;
 		pDesklet->container.iMouseY = pMotion->y;
@@ -652,7 +657,6 @@ static gboolean on_motion_notify_desklet(GtkWidget *pWidget,
 				
 				//g_print ("kedal\n");
 				cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_ENTER_ICON, pPointedIcon, pDesklet, &bStartAnimation);
-
 			}
 		}
 		if (bStartAnimation)
@@ -1316,4 +1320,11 @@ gboolean cairo_dock_detach_icon_from_desklet (Icon *icon, CairoDesklet *pDesklet
 	
 	// calculate icons
 	cairo_dock_update_desklet_icons (pDesklet);
+}
+
+
+gboolean cairo_dock_click_notification (gpointer pUserData, Icon *pClickedIcon, CairoDesklet *pDesklet, guint iButtonState)
+{
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

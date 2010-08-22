@@ -2130,7 +2130,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY :  // idem mais avec une combo-entry.
 				//\______________ On construit le widget de visualisation de themes.
 				modele = _cairo_dock_gui_allocate_new_model ();
-				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_RESULT, GTK_SORT_ASCENDING);
+				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
 				
 				_add_combo_from_modele (modele, TRUE, iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY);
 				
@@ -2933,6 +2933,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_HANDBOOK :  // le label contenant le manuel de l'applet, il a ete place avant.
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
+				g_print ("handbook: '%s' -> %x\n", cValue, pModule);
 				if (pModule == NULL)
 					break;	
 				

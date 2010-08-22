@@ -82,15 +82,19 @@ typedef void (*CairoDataRendererLoadFunc) (CairoDataRenderer *pDataRenderer, Cai
 typedef void (*CairoDataRendererRenderFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pCairoContext);
 typedef void (*CairoDataRendererRenderOpenGLFunc) (CairoDataRenderer *pDataRenderer);
 typedef void (*CairoDataRendererReloadFunc) (CairoDataRenderer *pDataRenderer);
-typedef void (*CairoDataRendererFreeFunc) (CairoDataRenderer *pDataRenderer);
+typedef void (*CairoDataRendererUnloadFunc) (CairoDataRenderer *pDataRenderer);
 /// Interface of a DataRenderer.
 struct _CairoDataRendererInterface {
-	CairoDataRendererNewFunc new;
+	/// function that loads anything the DataRenderer will need. It also completes the DataRenderer structure (for instance the text zones).
 	CairoDataRendererLoadFunc load;
+	/// function that draws the values with cairo.
 	CairoDataRendererRenderFunc render;
+	/// function that draws the values with opengl.
 	CairoDataRendererRenderOpenGLFunc render_opengl;
+	/// function that reloads the DataRenderer's buffers when the icon is resized.
 	CairoDataRendererReloadFunc reload;
-	CairoDataRendererFreeFunc free;
+	/// function that unload all the buffers previously allocated.
+	CairoDataRendererUnloadFunc unload;
 };
 
 
@@ -106,6 +110,9 @@ struct _CairoDataRendererTextZone {
 	gdouble fX, fY;
 	gdouble fWidth, fHeight;
 	gdouble pColor[3];
+	gint iTextWidth, iTextHeight;
+	cairo_surface_t *pSurface;
+	GLuint iTexture;
 	};
 
 
@@ -145,7 +152,7 @@ struct _CairoDataRenderer {
 	gchar **cTitles;
 	/// color of the titles.
 	gdouble fTextColor[3];
-	/// an optionnal list of emblems to be displayed on the Data Renderer next to each value. Same size as the set of values.
+	/// an optionnal list of emblems (image paths) to be displayed on the Data Renderer next to each value. Same size as the set of values.
 	gchar **cEmblems;
 	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
 	CairoDataRendererEmblem *pEmblems;
@@ -290,7 +297,8 @@ void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, 
 *@param i the number of the value*/
 #define cairo_data_renderer_format_value(pRenderer, fValue, i) cairo_data_renderer_format_value_full (pRenderer, fValue, i, (pRenderer)->cFormatBuffer)
 
-#define cairo_data_renderer_can_write_value(pRenderer) (pRenderer)->bCanRenderValueAsText
+#define cairo_data_renderer_can_write_values(pRenderer) (pRenderer)->bCanRenderValueAsText
+#define cairo_data_renderer_actually_writes_values(pRenderer) (pRenderer)->bCanRenderValueAsText
 
 
 GHashTable *cairo_dock_list_available_themes_for_data_renderer (const gchar *cRendererName);

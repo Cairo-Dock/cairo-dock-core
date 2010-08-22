@@ -226,12 +226,14 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 	
 	if (s_iCheckMouseIsOutsideCount != 0)
 	{
-		s_iCheckMouseIsOutsideCount ++;  // arrive a 3, on testera que X ne nous a pas fait sortir du dock sans raison.
-		if (s_iCheckMouseIsOutsideCount > 3)
+		s_iCheckMouseIsOutsideCount ++;  // donc la toute premiere fois on est a 2.
+		if (s_iCheckMouseIsOutsideCount & 1)  // donc on teste a t+1 et t+3
 		{
-			//g_print ("bCheckMouseIsOutside\n");
-			s_iCheckMouseIsOutsideCount = 0;
 			cairo_dock_foreach_root_docks ((GFunc)_check_mouse_outside, NULL);
+		}
+		if (s_iCheckMouseIsOutsideCount > 4)  // apres les 2 tests on arrete.
+		{
+			s_iCheckMouseIsOutsideCount = 0;
 		}
 	}
 	return TRUE;

@@ -37,7 +37,8 @@ struct _CairoDockAnimationRecord {
 	};
 
 struct _CairoDockDataRendererRecord {
-	CairoDataRendererNewFunc new;
+	CairoDataRendererInterface interface;
+	gulong iStructSize;
 	const gchar *cThemeDirName;
 	const gchar *cDefaultTheme;
 	};
@@ -60,9 +61,8 @@ CairoDeskletDecoration *cairo_dock_get_desklet_decoration (const gchar *cDecorat
 void cairo_dock_register_desklet_decoration (const gchar *cDecorationName, CairoDeskletDecoration *pDecoration);
 void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName);
 
-CairoDataRendererNewFunc cairo_dock_get_data_renderer_entry_point (const gchar *cRendererName);
 CairoDockDataRendererRecord *cairo_dock_get_data_renderer_record (const gchar *cRendererName);
-void cairo_dock_register_data_renderer_entry_point (const gchar *cRendererName, CairoDataRendererNewFunc pFunc, const gchar *cThemeDirName, const gchar *cDefaultTheme);
+void cairo_dock_register_data_renderer (const gchar *cRendererName, CairoDockDataRendererRecord *pRecord);
 void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName);
 
 CairoDockHidingEffect *cairo_dock_get_hiding_effect (const gchar *cHidingEffect);

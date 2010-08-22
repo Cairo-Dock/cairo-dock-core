@@ -854,12 +854,9 @@ static void _cairo_dock_free_gauge_indicator(GaugeIndicator *pGaugeIndicator)
 	
 	g_free (pGaugeIndicator);
 }
-static void cairo_dock_free_gauge (Gauge *pGauge)
+static void cairo_dock_unload_gauge (Gauge *pGauge)
 {
 	cd_debug("");
-	if(pGauge == NULL)
-		return ;
-	
 	_cairo_dock_free_gauge_image(pGauge->pImageBackground, TRUE);
 	_cairo_dock_free_gauge_image(pGauge->pImageForeground, TRUE);
 	
@@ -869,72 +866,28 @@ static void cairo_dock_free_gauge (Gauge *pGauge)
 		_cairo_dock_free_gauge_indicator (pElement->data);
 	}
 	g_list_free (pGauge->pIndicatorList);
-	
-	g_free (pGauge);
 }
 
 
   //////////////////////////////////////////
  /////////////// RENDERER /////////////////
 //////////////////////////////////////////
-Gauge *cairo_dock_new_gauge (void)
+void cairo_dock_register_data_renderer_gauge (void)
 {
-	Gauge *pGauge = g_new0 (Gauge, 1);
-	pGauge->dataRenderer.interface.new				= (CairoDataRendererNewFunc) cairo_dock_new_gauge;
-	pGauge->dataRenderer.interface.load				= (CairoDataRendererLoadFunc) cairo_dock_load_gauge;
-	pGauge->dataRenderer.interface.render			= (CairoDataRendererRenderFunc) cairo_dock_render_gauge;
-	pGauge->dataRenderer.interface.render_opengl		= (CairoDataRendererRenderOpenGLFunc) cairo_dock_render_gauge_opengl;
-	pGauge->dataRenderer.interface.reload			= (CairoDataRendererReloadFunc) cairo_dock_reload_gauge;
-	pGauge->dataRenderer.interface.free				= (CairoDataRendererFreeFunc) cairo_dock_free_gauge;
-	return pGauge;
+	CairoDockDataRendererRecord *pRecord = g_new0 (CairoDockDataRendererRecord, 1);
+	pRecord->interface.load			= (CairoDataRendererLoadFunc) cairo_dock_load_gauge;
+	pRecord->interface.render		= (CairoDataRendererRenderFunc) cairo_dock_render_gauge;
+	pRecord->interface.render_opengl	= (CairoDataRendererRenderOpenGLFunc) cairo_dock_render_gauge_opengl;
+	pRecord->interface.reload		= (CairoDataRendererReloadFunc) cairo_dock_reload_gauge;
+	pRecord->interface.unload		= (CairoDataRendererUnloadFunc) cairo_dock_unload_gauge;
+	pRecord->iStructSize			= sizeof (Gauge);
+	pRecord->cThemeDirName = "gauges";
+	pRecord->cDefaultTheme = "Turbo-night-fuel";
+	
+	cairo_dock_register_data_renderer ("gauge", pRecord);
 }
 
 
-  /////////////////////////////////////////////////
- /////////////// LIST OF THEMES  /////////////////
-/////////////////////////////////////////////////
-/*GHashTable *cairo_dock_list_available_gauges (void)
-{
-	gchar *cGaugeShareDir = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR);
-	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, CAIRO_DOCK_GAUGES_DIR);
-	GHashTable *pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR);
-	
-	g_free (cGaugeShareDir);
-	g_free (cGaugeUserDir);
-	return pGaugeTable;
-}
-
-gchar *cairo_dock_get_gauge_theme_path (const gchar *cThemeName, CairoDockPackageType iType)  // utile pour DBus aussi.
-{
-	const gchar *cGaugeShareDir = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR;
-	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, CAIRO_DOCK_GAUGES_DIR);
-	gchar *cGaugePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, CAIRO_DOCK_GAUGES_DIR, iType);
-	g_free (cGaugeUserDir);
-	return cGaugePath;
-}
-
-gchar *cairo_dock_get_package_path_for_gauge (const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName)
-{
-	gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
-	if (cChosenThemeName == NULL)
-		cChosenThemeName = g_strdup ("Turbo-night-fuel");
-	
-	CairoDockPackageType iType = cairo_dock_extract_package_type_from_name (cChosenThemeName);
-	gchar *cGaugePath = cairo_dock_get_gauge_theme_path (cChosenThemeName, iType);
-	
-	if (cGaugePath == NULL)  // theme introuvable.
-		cGaugePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_GAUGES_DIR"/Turbo-night-fuel");
-	
-	if (iType != CAIRO_DOCK_ANY_THEME)
-	{
-		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cChosenThemeName);
-		cairo_dock_write_keys_to_file (pKeyFile, cAppletConfFilePath);
-	}
-	cd_debug ("Theme de la jauge : %s", cGaugePath);
-	g_free (cChosenThemeName);
-	return cGaugePath;
-}
-*/
 
 /// deprecated ... to be added in the DataRenderer API.
 void cairo_dock_add_watermark_on_gauge (Gauge *pGauge, gchar *cImagePath, double fAlpha)
