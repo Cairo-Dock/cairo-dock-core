@@ -73,8 +73,7 @@ struct _CairoDataRendererAttribute {
 	/// data to be passed to the format function [optionnal].
 	gpointer pFormatData;
 	gchar **cEmblems;
-	gchar **cTitles;
-	gdouble fTextColor[3];
+	gchar **cLabels;
 };
 
 typedef CairoDataRenderer * (*CairoDataRendererNewFunc) (void);
@@ -98,22 +97,32 @@ struct _CairoDataRendererInterface {
 };
 
 
-struct _CairoDataRendererEmblem {
-	gdouble fX, fY;
-	gdouble fWidth, fHeight;
+struct _CairoDataRendererEmblemParam {
+	gdouble fX, fY;  // [-1;1]
+	gdouble fWidth, fHeight;  // [-1;1]
 	gdouble fAlpha;
+};
+
+struct _CairoDataRendererEmblem {
+	CairoDataRendererEmblemParam param;
+	gchar *cImagePath;
 	cairo_surface_t *pSurface;
 	GLuint iTexture;
-	};
+};
 
-struct _CairoDataRendererTextZone {
-	gdouble fX, fY;
-	gdouble fWidth, fHeight;
+struct _CairoDataRendererTextParam {
+	gdouble fX, fY;  // [-1;1], center of the text.
+	gdouble fWidth, fHeight;  // [-1;1]
 	gdouble pColor[3];
+};
+
+struct _CairoDataRendererText {
+	CairoDataRendererTextParam param;
+	gchar *cText;
 	gint iTextWidth, iTextHeight;
 	cairo_surface_t *pSurface;
 	GLuint iTexture;
-	};
+};
 
 
 /// Generic DataRenderer. Any implementation of a DataRenderer will derive from this class.
@@ -148,16 +157,16 @@ struct _CairoDataRenderer {
 	gint iSmoothAnimationStep;
 	/// latency due to the smooth movement (0 means the displayed value is the current one, 1 the previous)
 	gdouble fLatency;
-	/// an optionnal list of tiltes to be displayed on the Data Renderer next to each value. Same size as the set of values.
-	gchar **cTitles;
-	/// color of the titles.
-	gdouble fTextColor[3];
-	/// an optionnal list of emblems (image paths) to be displayed on the Data Renderer next to each value. Same size as the set of values.
-	gchar **cEmblems;
+	// an optionnal list of labels to be displayed on the Data Renderer next to each value. Same size as the set of values.
+	//gchar **cLabels;
+	/// an optionnal list of labels to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
+	CairoDataRendererText *pLabels;
+	// an optionnal list of emblems (image paths) to be displayed on the Data Renderer next to each value. Same size as the set of values.
+	//gchar **cEmblems;
 	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
 	CairoDataRendererEmblem *pEmblems;
-	/// an optionnal list of titles to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
-	CairoDataRendererTextZone *pTextZones;
+	/// an optionnal list of text zones to write the values.
+	CairoDataRendererTextParam *pValuesText;
 };
 
 

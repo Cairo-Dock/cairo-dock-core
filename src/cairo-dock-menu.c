@@ -62,6 +62,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-user-interaction.h"  // set_custom_icon_on_appli
 #include "cairo-dock-menu.h"
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 1000
@@ -679,6 +680,55 @@ static void _cairo_dock_close_appli (GtkMenuItem *pMenuItem, gpointer *data)
 	if (CAIRO_DOCK_IS_APPLI (icon))
 		cairo_dock_close_xwindow (icon->Xid);
 }
+static void _show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPreviewImage)
+{
+	gchar *cFileName = gtk_file_chooser_get_preview_filename (pFileChooser);
+	if (cFileName == NULL)
+		return ;
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cFileName, 64, 64, NULL);
+	g_free (cFileName);
+	if (pixbuf != NULL)
+	{
+		gtk_image_set_from_pixbuf (pPreviewImage, pixbuf);
+		gdk_pixbuf_unref (pixbuf);
+		gtk_file_chooser_set_preview_widget_active (pFileChooser, TRUE);
+	}
+	else
+		gtk_file_chooser_set_preview_widget_active (pFileChooser, FALSE);
+}
+static void _cairo_dock_set_custom_appli_icon (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	if (! CAIRO_DOCK_IS_APPLI (icon))
+		return;
+	
+	GtkWidget* pFileChooserDialog = gtk_file_chooser_dialog_new (
+		"Pick up an image",
+		GTK_WINDOW (pDock->container.pWidget),
+		GTK_FILE_CHOOSER_ACTION_OPEN,
+		GTK_STOCK_OK,
+		GTK_RESPONSE_OK,
+		GTK_STOCK_CANCEL,
+		GTK_RESPONSE_CANCEL,
+		NULL);
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), "~/.config/cairo-dock/current_theme/icons");
+	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), FALSE);
+	
+	GtkWidget *pPreviewImage = gtk_image_new ();
+	gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (pFileChooserDialog), pPreviewImage);
+	g_signal_connect (GTK_FILE_CHOOSER (pFileChooserDialog), "update-preview", G_CALLBACK (_show_image_preview), pPreviewImage);
+	
+	gtk_widget_show (pFileChooserDialog);
+	int answer = gtk_dialog_run (GTK_DIALOG (pFileChooserDialog));
+	if (answer == GTK_RESPONSE_OK)
+	{
+		gchar *cFilePath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (pFileChooserDialog));
+		cairo_dock_set_custom_icon_on_appli (cFilePath, icon, CAIRO_CONTAINER (pDock));
+		g_free (cFilePath);
+	}
+	gtk_widget_destroy (pFileChooserDialog);
+}
 static void _cairo_dock_remove_custom_appli_icon (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
@@ -1176,6 +1226,8 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 				_add_entry_in_menu (_("Remove custom icon"), GTK_STOCK_REMOVE, _cairo_dock_remove_custom_appli_icon, pSubMenuOtherActions);
 			}
 		}
+		
+		_add_entry_in_menu (_("Set a custom icon"), GTK_STOCK_SELECT_COLOR, _cairo_dock_set_custom_appli_icon, pSubMenuOtherActions);
 		
 		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
 		

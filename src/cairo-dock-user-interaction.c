@@ -305,33 +305,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 			}
 			else if (CAIRO_DOCK_IS_APPLI (icon))  // une appli normale
 			{
-				gchar *ext = strrchr (cReceivedData, '.');
-				if (!ext)
-					return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-				if ((strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0) && !myAccessibility.bLockAll && ! myAccessibility.bLockIcons)
-				{
-					if (!myTaskBar.bOverWriteXIcons)
-					{
-						myTaskBar.bOverWriteXIcons = TRUE;
-						cairo_dock_update_conf_file (g_cConfFile,
-							G_TYPE_BOOLEAN, "TaskBar", "overwrite xicon", myTaskBar.bOverWriteXIcons,
-							G_TYPE_INVALID);
-						cairo_dock_show_temporary_dialog_with_default_icon (_("The option 'overwrite X icons' has been automatically enabled in the config.\nIt is located in the 'Taskbar' module."), icon, pContainer, 6000);
-					}
-					
-					gchar *cPath = NULL;
-					if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
-					{
-						cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
-					}
-					
-					gchar *cCommand = g_strdup_printf ("cp '%s' '%s/%s%s'", cPath?cPath:cReceivedData, g_cCurrentIconsPath, icon->cClass, ext);
-					int r = system (cCommand);
-					g_free (cCommand);
-					
-					cairo_dock_reload_icon_image (icon, pContainer);
-					cairo_dock_redraw_icon (icon, pContainer);
-				}
+				cairo_dock_set_custom_icon_on_appli (cReceivedData, icon, pContainer);
 				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 			}
 			else  // autre chose.
@@ -356,4 +330,39 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 	cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+
+void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, CairoContainer *pContainer)
+{
+	g_return_if_fail (CAIRO_DOCK_IS_APPLI (icon) && cFilePath != NULL);
+	gchar *ext = strrchr (cFilePath, '.');
+	if (!ext)
+		return;
+	cd_debug ("%s (%s)", __func__, cFilePath);
+	if ((strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0) && !myAccessibility.bLockAll && ! myAccessibility.bLockIcons)
+	{
+		if (!myTaskBar.bOverWriteXIcons)
+		{
+			myTaskBar.bOverWriteXIcons = TRUE;
+			cairo_dock_update_conf_file (g_cConfFile,
+				G_TYPE_BOOLEAN, "TaskBar", "overwrite xicon", myTaskBar.bOverWriteXIcons,
+				G_TYPE_INVALID);
+			cairo_dock_show_temporary_dialog_with_default_icon (_("The option 'overwrite X icons' has been automatically enabled in the config.\nIt is located in the 'Taskbar' module."), icon, pContainer, 6000);
+		}
+		
+		gchar *cPath = NULL;
+		if (strncmp (cFilePath, "file://", 7) == 0)
+		{
+			cPath = g_filename_from_uri (cFilePath, NULL, NULL);
+		}
+		
+		gchar *cCommand = g_strdup_printf ("cp '%s' '%s/%s%s'", cPath?cPath:cFilePath, g_cCurrentIconsPath, icon->cClass, ext);
+		cd_debug (" -> '%s'", cCommand);
+		int r = system (cCommand);
+		g_free (cCommand);
+		
+		cairo_dock_reload_icon_image (icon, pContainer);
+		cairo_dock_redraw_icon (icon, pContainer);
+	}
 }

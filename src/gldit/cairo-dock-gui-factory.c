@@ -597,6 +597,7 @@ static void _cairo_dock_pick_a_file (GtkButton *button, gpointer *data)
 	{
 		gchar *cFilePath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (pFileChooserDialog));
 		gtk_entry_set_text (pEntry, cFilePath);
+		g_free (cFilePath);
 	}
 	gtk_widget_destroy (pFileChooserDialog);
 }
@@ -2933,7 +2934,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_HANDBOOK :  // le label contenant le manuel de l'applet, il a ete place avant.
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
-				g_print ("handbook: '%s' -> %x\n", cValue, pModule);
 				if (pModule == NULL)
 					break;	
 				

@@ -120,6 +120,27 @@ static void _cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, CairoC
 		}
 	}
 	
+	if (pAttribute->cEmblems != NULL)
+	{
+		pRenderer->pEmblems = g_new0 (CairoDataRendererEmblem, pRenderer->data.iNbValues);
+		int i;
+		for (i = 0; i < pRenderer->data.iNbValues; i ++)
+		{
+			pRenderer->pEmblems[i].cImagePath = pAttribute->cEmblems[i];
+			pRenderer->pEmblems[i].param.fAlpha = 1.;
+		}
+	}
+	if (pAttribute->cLabels != NULL)
+	{
+		pRenderer->pLabels = g_new0 (CairoDataRendererText, pRenderer->data.iNbValues);
+		int i;
+		for (i = 0; i < pRenderer->data.iNbValues; i ++)
+		{
+			pRenderer->pLabels[i].cText = pAttribute->cLabels[i];
+		}
+	}
+	pRenderer->pValuesText = g_new0 (CairoDataRendererTextParam, pRenderer->data.iNbValues);
+	
 	//\_______________ On charge les parametres generaux.
 	pRenderer->bUpdateMinMax = pAttribute->bUpdateMinMax;
 	pRenderer->bWriteValues = pAttribute->bWriteValues;
@@ -127,9 +148,6 @@ static void _cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, CairoC
 	pRenderer->iSmoothAnimationStep = 0;
 	pRenderer->format_value = pAttribute->format_value;
 	pRenderer->pFormatData = pAttribute->pFormatData;
-	pRenderer->cTitles = pAttribute->cTitles;
-	memcpy (pRenderer->fTextColor, pAttribute->fTextColor, sizeof (pRenderer->fTextColor));
-	pRenderer->cEmblems = pAttribute->cEmblems;
 }
 
 static void _cairo_dock_render_to_texture (CairoDataRenderer *pDataRenderer, Icon *pIcon, CairoContainer *pContainer)
@@ -153,6 +171,49 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pDataRenderer, Ico
 	cairo_save (pCairoContext);
 	pDataRenderer->interface.render (pDataRenderer, pCairoContext);
 	cairo_restore (pCairoContext);
+	
+	if (pDataRenderer->pEmblems != NULL)
+	{
+		CairoDataRendererEmblem *pEmblem;
+		int i;
+		for (i = 0; i < pDataRenderer->data.iNbValues; i ++)
+		{
+			pEmblem = &pDataRenderer->pEmblems[i];
+			if (pEmblem->pSurface != NULL)
+			{
+				cairo_set_source_surface (pCairoContext,
+					pEmblem->pSurface,
+					pEmblem->param.fX * pDataRenderer->iWidth,
+					pEmblem->param.fY * pDataRenderer->iHeight);
+				cairo_paint_with_alpha (pCairoContext, pEmblem->param.fAlpha);
+			}
+		}
+		g_free (pDataRenderer->pEmblems);
+	}
+	
+	if (pDataRenderer->pLabels != NULL)
+	{
+		CairoDataRendererText *pText;
+		cairo_surface_t *pSurface;
+		int i;
+		for (i = 0; i < pDataRenderer->data.iNbValues; i ++)
+		{
+			pText = &pDataRenderer->pLabels[i];
+			if (pText->pSurface != NULL)
+			{
+				cairo_save (pCairoContext);
+				cairo_scale (pCairoContext,
+					pText->param.fWidth * pDataRenderer->iWidth / pText->iTextWidth,
+					pText->param.fHeight * pDataRenderer->iHeight / pText->iTextHeight);
+				cairo_set_source_surface (pCairoContext,
+					pText->pSurface,
+					pText->param.fX * pDataRenderer->iWidth,
+					pText->param.fY * pDataRenderer->iHeight);
+				cairo_paint (pCairoContext);
+				cairo_restore (pCairoContext);
+			}
+		}
+	}
 	
 	if (pContainer->bUseReflect)
 	{
@@ -188,6 +249,7 @@ static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUse
 
 void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute)
 {
+	//\___________________ On affecte un nouveau DataRenderer a l'icone.
 	CairoDataRenderer *pRenderer = cairo_dock_new_data_renderer (pAttribute->cModelName);
 	
 	cairo_dock_set_data_renderer_on_icon (pIcon, pRenderer);
@@ -197,12 +259,6 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 	_cairo_dock_init_data_renderer (pRenderer, pContainer, pAttribute);
 	
 	cairo_dock_get_icon_extent (pIcon, pContainer, &pRenderer->iWidth, &pRenderer->iHeight);
-	if (pRenderer->cEmblems != NULL)
-		pRenderer->pEmblems = g_new0 (CairoDataRendererEmblem, pRenderer->data.iNbValues);
-	if (pRenderer->cTitles != NULL)
-		pRenderer->pTextZones = g_new0 (CairoDataRendererTextZone, pRenderer->data.iNbValues);
-	
-	pRenderer->interface.load (pRenderer, pContainer, pAttribute);
 	
 	gboolean bLoadTextures = FALSE;
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
@@ -210,9 +266,13 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 		bLoadTextures = TRUE;
 		cairo_dock_register_notification_on_icon (pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW,
 			(CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
-			CAIRO_DOCK_RUN_AFTER, NULL);
+			CAIRO_DOCK_RUN_AFTER, NULL);  // pour l'affichage fluide.
 	}
 	
+	//\___________________ On le charge.
+	pRenderer->interface.load (pRenderer, pContainer, pAttribute);
+	
+	//\___________________ On charge les emblemes si l'implementation les a valides.
 	if (pRenderer->pEmblems != NULL)
 	{
 		CairoDataRendererEmblem *pEmblem;
@@ -221,11 +281,11 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 		for (i = 0; i < pRenderer->data.iNbValues; i ++)
 		{
 			pEmblem = &pRenderer->pEmblems[i];
-			if (pEmblem->fWidth != 0 && pEmblem->fHeight != 0 && pAttribute->cEmblems[i] != NULL)
+			if (pEmblem->param.fWidth != 0 && pEmblem->param.fHeight != 0 && pEmblem->cImagePath != NULL)
 			{
-				pSurface = cairo_dock_create_surface_from_image_simple (pAttribute->cEmblems[i],
-					pEmblem->fWidth * pRenderer->iWidth,
-					pEmblem->fHeight * pRenderer->iHeight);
+				pSurface = cairo_dock_create_surface_from_image_simple (pEmblem->cImagePath,
+					pEmblem->param.fWidth * pRenderer->iWidth,
+					pEmblem->param.fHeight * pRenderer->iHeight);
 				if (bLoadTextures)
 				{
 					pEmblem->iTexture = cairo_dock_create_texture_from_surface (pSurface);
@@ -237,26 +297,37 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 		}
 	}
 	
-	if (pRenderer->pTextZones != NULL)
+	//\___________________ On charge les labels si l'implementation les a valides.
+	if (pRenderer->pLabels != NULL)
 	{
-		CairoDataRendererTextZone *pTextZone;
+		CairoDockLabelDescription textDescription;
+		cairo_dock_copy_label_description (&textDescription, &myLabels.quickInfoTextDescription);
+		textDescription.fBackgroundColor[3] = 0.;
+		textDescription.fColorStart[0] = 1.;
+		textDescription.fColorStart[1] = 1.;
+		textDescription.fColorStart[2] = 1.;
+		textDescription.fColorStop[0] = 1.;
+		textDescription.fColorStop[1] = 1.;
+		textDescription.fColorStop[2] = 1.;
+		
+		CairoDataRendererText *pLabel;
 		cairo_surface_t *pSurface;
 		int i;
 		for (i = 0; i < pRenderer->data.iNbValues; i ++)
 		{
-			pTextZone = &pRenderer->pTextZones[i];
-			if (pTextZone->fWidth != 0 && pTextZone->fHeight != 0 && pRenderer->cTitles[i] != NULL)
+			pLabel = &pRenderer->pLabels[i];
+			if (pLabel->param.fWidth != 0 && pLabel->param.fHeight != 0 && pLabel->cText != NULL)
 			{
-				pSurface = cairo_dock_create_surface_from_text (pRenderer->cTitles[i],
-					&myLabels.quickInfoTextDescription,
-					&pTextZone->iTextWidth, &pTextZone->iTextHeight);
+				pSurface = cairo_dock_create_surface_from_text (pLabel->cText,
+					&textDescription,
+					&pLabel->iTextWidth, &pLabel->iTextHeight);
 				if (bLoadTextures)
 				{
-					pTextZone->iTexture = cairo_dock_create_texture_from_surface (pSurface);
+					pLabel->iTexture = cairo_dock_create_texture_from_surface (pSurface);
 					cairo_surface_destroy (pSurface);
 				}
 				else
-					pTextZone->pSurface = pSurface;
+					pLabel->pSurface = pSurface;
 			}
 		}
 	}
@@ -365,19 +436,19 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 		g_free (pRenderer->pEmblems);
 	}
 	
-	if (pRenderer->pTextZones != NULL)
+	if (pRenderer->pLabels != NULL)
 	{
-		CairoDataRendererTextZone *pTextZone;
+		CairoDataRendererText *pText;
 		int i;
 		for (i = 0; i < pRenderer->data.iNbValues; i ++)
 		{
-			pTextZone = &pRenderer->pTextZones[i];
-			if (pTextZone->pSurface != NULL)
-				cairo_surface_destroy (pTextZone->pSurface);
-			if (pTextZone->iTexture != 0)
-				_cairo_dock_delete_texture (pTextZone->iTexture);
+			pText = &pRenderer->pLabels[i];
+			if (pText->pSurface != NULL)
+				cairo_surface_destroy (pText->pSurface);
+			if (pText->iTexture != 0)
+				_cairo_dock_delete_texture (pText->iTexture);
 		}
-		g_free (pRenderer->pTextZones);
+		g_free (pRenderer->pLabels);
 	}
 	
 	g_free (pRenderer);

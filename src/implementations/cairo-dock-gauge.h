@@ -64,10 +64,10 @@ typedef struct {
 	gint iNbImages;
 	gint iNbImageLoaded;
 	GaugeImage *pImageList;
-	// text zone
-	CairoDataRendererTextZone textZone;
+	// value text zone
+	CairoDataRendererTextParam textZone;
 	// logo zone
-	CairoDataRendererEmblem emblem;
+	CairoDataRendererEmblemParam emblem;
 } GaugeIndicator;
 
 typedef struct {

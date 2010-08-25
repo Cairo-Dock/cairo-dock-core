@@ -253,8 +253,6 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 	g_hash_table_remove (s_hDocksTable, cDockName);
 	s_pRootDockList = g_list_remove (s_pRootDockList, pDock);
 	
-	cairo_dock_free_dock (pDock);
-	
 	// s'il etait en train de scruter la souris, on l'arrete.
 	if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP ||
 		pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY ||
@@ -263,6 +261,8 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 	{
 		cairo_dock_stop_polling_screen_edge ();
 	}
+	
+	cairo_dock_free_dock (pDock);
 	
 	cairo_dock_trigger_refresh_launcher_gui ();
 }

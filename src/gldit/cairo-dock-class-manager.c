@@ -37,6 +37,7 @@
 #include "cairo-dock-icon-loader.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-icons.h"
+#include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-application-facility.h"
@@ -561,8 +562,11 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 			cd_debug ("  %s", pInhibatorIcon->cName);
 			if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibatorIcon))
 			{
-				cd_message ("%s va fournir genereusement sa surface", pInhibatorIcon->cName);
-				return cairo_dock_duplicate_inhibator_surface_for_appli (pInhibatorIcon, iWidth, iHeight);
+				if (pInhibatorIcon->pSubDock == NULL || myIndicators.bUseClassIndic)  // dans le cas d'un lanceur qui aurait deja plusieurs instances de sa classe, et qui les representerait en pile, on ne prend pas son icone.
+				{
+					cd_message ("%s va fournir genereusement sa surface", pInhibatorIcon->cName);
+					return cairo_dock_duplicate_inhibator_surface_for_appli (pInhibatorIcon, iWidth, iHeight);
+				}
 			}
 		}
 	}
@@ -579,7 +583,6 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 	}
 	
 	cd_debug ("classe %s prend l'icone X", cClass);
-	
 	return NULL;
 }
 

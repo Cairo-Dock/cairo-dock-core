@@ -101,36 +101,11 @@
 
 #define CAIRO_DOCK_GAUGES_DIR "gauges"
 
-extern gchar *g_cExtrasDirPath;
 extern gboolean g_bUseOpenGL;
-extern gboolean g_bEasterEggs;
 
   ////////////////////////////////////////////
  /////////////// LOAD GAUGE /////////////////
 ////////////////////////////////////////////
-/*void cairo_dock_xml_open_file (const gchar *filePath, const gchar *mainNodeName,xmlDocPtr *myXmlDoc,xmlNodePtr *myXmlNode)
-{
-	xmlDocPtr doc = xmlParseFile (filePath);
-	if (doc == NULL)
-	{
-		cd_warning ("Impossible de lire le fichier XML.");
-		*myXmlDoc = NULL;
-		*myXmlNode = NULL;
-		return ;
-	}
-	
-	xmlNodePtr node = xmlDocGetRootElement (doc);
-	if (node == NULL || xmlStrcmp (node->name, (const xmlChar *) mainNodeName) != 0)
-	{
-		cd_warning ("Le format du fichier XML n'est pas valide.");
-		*myXmlDoc = NULL;
-		*myXmlNode = NULL;
-		return ;
-	}
-	
-	*myXmlDoc = doc;
-	*myXmlNode = node;
-}*/
 
 static double _str2double (gchar *s)
 {
@@ -236,7 +211,7 @@ static void _cairo_dock_load_gauge_needle (GaugeIndicator *pGaugeIndicator, int 
 }
 static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cThemePath)
 {
-	cd_debug ("%s (%s)", __func__, cThemePath);
+	cd_message ("%s (%s)", __func__, cThemePath);
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
 	if (iWidth == 0 || iHeight == 0)
 		return FALSE;
@@ -246,8 +221,7 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 	xmlInitParser ();
 	xmlDocPtr pGaugeTheme;
 	xmlNodePtr pGaugeMainNode;
-	gchar *cXmlFile = g_strdup_printf("%s/theme.xml",cThemePath);
-	//cairo_dock_xml_open_file (cXmlFile, "gauge",&pGaugeTheme,&pGaugeMainNode);
+	gchar *cXmlFile = g_strdup_printf ("%s/theme.xml", cThemePath);
 	pGaugeTheme = cairo_dock_open_xml_file (cXmlFile, "gauge", &pGaugeMainNode, NULL);
 	g_free (cXmlFile);
 	g_return_val_if_fail (pGaugeTheme != NULL && pGaugeMainNode != NULL, FALSE);
@@ -268,7 +242,7 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "rank") == 0)
 		{
 			cNodeContent = xmlNodeGetContent (pGaugeNode);
-			CAIRO_DATA_RENDERER (pGauge)->iRank = atoi (cNodeContent);
+			pRenderer->iRank = atoi (cNodeContent);
 			xmlFree (cNodeContent);
 		}
 		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "file") == 0)
@@ -292,14 +266,14 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 		}
 		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "indicator") == 0)
 		{
-			if (CAIRO_DATA_RENDERER (pGauge)->iRank == 0)
+			if (pRenderer->iRank == 0)
 			{
-				CAIRO_DATA_RENDERER (pGauge)->iRank = 1;
+				pRenderer->iRank = 1;
 				xmlNodePtr node;
 				for (node = pGaugeNode->next; node != NULL; node = node->next)
 				{
 					if (xmlStrcmp (node->name, (const xmlChar *) "indicator") == 0)
-						CAIRO_DATA_RENDERER (pGauge)->iRank ++;
+						pRenderer->iRank ++;
 				}
 			}
 			
@@ -438,17 +412,46 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 	cairo_dock_close_xml_file (pGaugeTheme);
 	g_string_free (sImagePath, TRUE);
 	
-	g_return_val_if_fail (CAIRO_DATA_RENDERER (pGauge)->iRank != 0 && pGaugeIndicator != NULL, FALSE);
-	CAIRO_DATA_RENDERER (pGauge)->bCanRenderValueAsText = (pGaugeIndicator->textZone.fWidth != 0 && pGaugeIndicator->textZone.fHeight != 0);
+	g_return_val_if_fail (pRenderer->iRank != 0 && pGaugeIndicator != NULL, FALSE);
 	
 	return TRUE;
 }
 static void cairo_dock_load_gauge (Gauge *pGauge, CairoContainer *pContainer, CairoGaugeAttribute *pAttribute)
 {
-	_cairo_dock_load_gauge_theme (pGauge, pAttribute->cThemePath);
+	// on charge le theme defini en attribut.
+	gboolean bThemeLoaded = _cairo_dock_load_gauge_theme (pGauge, pAttribute->cThemePath);
+	if (!bThemeLoaded)
+		return;
 	
-	/// charger les emblemes...
+	// on complete le data-renderer.
+	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
+	GaugeIndicator *pGaugeIndicator = pGauge->pIndicatorList->data;
+	pRenderer->bCanRenderValueAsText = (pGaugeIndicator->textZone.fWidth != 0 && pGaugeIndicator->textZone.fHeight != 0);
 	
+	CairoDataToRenderer *data = cairo_data_renderer_get_data (pRenderer);
+	int iNbValues = data->iNbValues;
+	CairoDataRendererTextParam *pValuesText;
+	CairoDataRendererEmblem *pEmblem;
+	GList *il = pGauge->pIndicatorList;
+	int i;
+	for (i = 0; i < iNbValues; i ++)
+	{
+		pGaugeIndicator = il->data;
+		il = il->next;
+		if (il == NULL)
+			il = pGauge->pIndicatorList;
+		
+		if (pRenderer->pValuesText)
+		{
+			pValuesText = &pRenderer->pValuesText[i];
+			memcpy (pValuesText, &pGaugeIndicator->textZone, sizeof (CairoDataRendererTextParam));
+		}
+		if (pRenderer->pEmblems)
+		{
+			pEmblem = &pRenderer->pEmblems[i];
+			memcpy (pEmblem, &pGaugeIndicator->textZone, sizeof (CairoDataRendererTextParam));
+		}
+	}
 }
 
   ////////////////////////////////////////////
@@ -553,6 +556,7 @@ static void cairo_dock_draw_one_gauge (cairo_t *pCairoContext, Gauge *pGauge, in
 				fZoom,
 				fZoom);
 			pango_cairo_show_layout (pCairoContext, pLayout);
+			g_object_unref (pLayout);
 			cairo_restore (pCairoContext);
 		}
 	}

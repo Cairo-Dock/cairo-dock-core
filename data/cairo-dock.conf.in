@@ -258,14 +258,14 @@ fake transparency = false
 #{You need to re-open the panel. It is deactivated by default on KDE.}
 config transparency = false
 
-#X-[Connection to the themes' server;gtk-network]
+#X-[Connection to the Internet;gtk-network]
 frame_conn =
 
-#i-[1;20] Connection timeout to the themes' server :
+#i-[1;20] Connection timeout :
 #{Maximum time in seconds that you allow the connection to the server to take. This only limits the connection phase,  once the dock has connected this option is of no more use.}
-conn timeout = 7
+conn timeout = 10
 
-#i-[10;300] Maximum time to download a theme:
+#i-[10;300] Maximum time to download a file:
 #{Maximum time in seconds that you allow the whole operation to last. Some themes can be up to a few MB.}
 conn max time = 120
 
