@@ -127,7 +127,7 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 	glDisable (GL_BLEND); } while (0)
 
 /** Set the alpha channel to a current value, other channels are set to 1.
-*@param fAlpha 
+*@param fAlpha alpha
 */
 #define _cairo_dock_set_alpha(fAlpha) glColor4f (1., 1., 1., fAlpha)
 

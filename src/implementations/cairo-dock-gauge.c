@@ -232,6 +232,7 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 	GaugeImage *pGaugeImage;
 	GaugeIndicator *pGaugeIndicator = NULL;
 	xmlNodePtr pGaugeNode;
+	double ratio = 2.;
 	int i;
 	for (pGaugeNode = pGaugeMainNode->children, i = 0; pGaugeNode != NULL; pGaugeNode = pGaugeNode->next, i ++)
 	{
@@ -243,6 +244,14 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 		{
 			cNodeContent = xmlNodeGetContent (pGaugeNode);
 			pRenderer->iRank = atoi (cNodeContent);
+			xmlFree (cNodeContent);
+		}
+		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "version") == 0)
+		{
+			cNodeContent = xmlNodeGetContent (pGaugeNode);
+			int iVersion = atoi (cNodeContent);
+			if (iVersion == 2)
+				ratio = 1.;
 			xmlFree (cNodeContent);
 		}
 		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "file") == 0)
@@ -299,9 +308,9 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 					{
 						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
 						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_center") == 0)
-							pGaugeIndicator->textZone.fX = _str2double (cTextNodeContent);
+							pGaugeIndicator->textZone.fX = _str2double (cTextNodeContent)/ratio;
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_center") == 0)
-							pGaugeIndicator->textZone.fY = _str2double (cTextNodeContent);
+							pGaugeIndicator->textZone.fY = _str2double (cTextNodeContent)/ratio;
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "width") == 0)
 							pGaugeIndicator->textZone.fWidth = _str2double (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "height") == 0)
@@ -312,6 +321,28 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 							pGaugeIndicator->textZone.pColor[1] = _str2double (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "blue") == 0)
 							pGaugeIndicator->textZone.pColor[2] = _str2double (cTextNodeContent);
+					}
+				}
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "label_zone") == 0)
+				{
+					xmlNodePtr pTextSubNode;
+					for (pTextSubNode = pGaugeSubNode->children; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
+					{
+						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
+						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_center") == 0)
+							pGaugeIndicator->labelZone.fX = _str2double (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_center") == 0)
+							pGaugeIndicator->labelZone.fY = _str2double (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "width") == 0)
+							pGaugeIndicator->labelZone.fWidth = _str2double (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "height") == 0)
+							pGaugeIndicator->labelZone.fHeight = _str2double (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "red") == 0)
+							pGaugeIndicator->labelZone.pColor[0] = _str2double (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "green") == 0)
+							pGaugeIndicator->labelZone.pColor[1] = _str2double (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "blue") == 0)
+							pGaugeIndicator->labelZone.pColor[2] = _str2double (cTextNodeContent);
 					}
 				}
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "logo_zone") == 0)
@@ -425,6 +456,7 @@ static void cairo_dock_load_gauge (Gauge *pGauge, CairoContainer *pContainer, Ca
 	
 	// on complete le data-renderer.
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
+	
 	GaugeIndicator *pGaugeIndicator = pGauge->pIndicatorList->data;
 	pRenderer->bCanRenderValueAsText = (pGaugeIndicator->textZone.fWidth != 0 && pGaugeIndicator->textZone.fHeight != 0);
 	
@@ -432,6 +464,7 @@ static void cairo_dock_load_gauge (Gauge *pGauge, CairoContainer *pContainer, Ca
 	int iNbValues = data->iNbValues;
 	CairoDataRendererTextParam *pValuesText;
 	CairoDataRendererEmblem *pEmblem;
+	CairoDataRendererText *pLabel;
 	GList *il = pGauge->pIndicatorList;
 	int i;
 	for (i = 0; i < iNbValues; i ++)
@@ -449,7 +482,12 @@ static void cairo_dock_load_gauge (Gauge *pGauge, CairoContainer *pContainer, Ca
 		if (pRenderer->pEmblems)
 		{
 			pEmblem = &pRenderer->pEmblems[i];
-			memcpy (pEmblem, &pGaugeIndicator->textZone, sizeof (CairoDataRendererTextParam));
+			memcpy (pEmblem, &pGaugeIndicator->emblem, sizeof (CairoDataRendererEmblemParam));
+		}
+		if (pRenderer->pLabels)
+		{
+			pLabel = &pRenderer->pLabels[i];
+			memcpy (pLabel, &pGaugeIndicator->labelZone, sizeof (CairoDataRendererTextParam));
 		}
 	}
 }
@@ -533,7 +571,7 @@ static void cairo_dock_draw_one_gauge (cairo_t *pCairoContext, Gauge *pGauge, in
 			_draw_gauge_image (pCairoContext, pGauge, pIndicator, fValue);
 		}
 		
-		if (/**pRenderer->bWriteValues && */pIndicator->textZone.fWidth != 0 && pIndicator->textZone.fHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		/**if (pIndicator->textZone.fWidth != 0 && pIndicator->textZone.fHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			//g_print (" >>>%s\n", pRenderer->cFormatBuffer);
@@ -558,7 +596,7 @@ static void cairo_dock_draw_one_gauge (cairo_t *pCairoContext, Gauge *pGauge, in
 			pango_cairo_show_layout (pCairoContext, pLayout);
 			g_object_unref (pLayout);
 			cairo_restore (pCairoContext);
-		}
+		}*/
 	}
 	
 	//\________________ On affiche l'avant-plan.
@@ -701,7 +739,7 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 			_draw_gauge_image_opengl (pGauge, pIndicator, fValue);
 		}
 		
-		if (/**pRenderer->bWriteValues && */pIndicator->textZone.fWidth != 0 && pIndicator->textZone.fHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
+		/**if (pIndicator->textZone.fWidth != 0 && pIndicator->textZone.fHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
 		{
 			cairo_data_renderer_format_value (pRenderer, fValue, i);
 			
@@ -720,7 +758,7 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 			glPopMatrix ();
 			_cairo_dock_enable_texture ();
 			glColor3f (1.0, 1.0, 1.0);
-		}
+		}*/
 	}
 	
 	//\________________ On affiche l'avant-plan.

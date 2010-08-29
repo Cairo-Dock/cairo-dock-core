@@ -552,7 +552,13 @@ static void _on_change_window_state (Icon *icon)
 			// on redessine avec ou sans la miniature, suivant le nouvel etat.
 			cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pParentDock));
 			if (pParentDock)
+			{
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
+				if (pParentDock->iRefCount != 0)  // on prevoit le redessin de l'icone pointant sur le sous-dock.
+				{
+					cairo_dock_trigger_redraw_subdock_content (pParentDock);
+				}
+			}
 		}
 		#endif
 	}

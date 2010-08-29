@@ -263,8 +263,6 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	g_list_free (pDock->icons);
 	pDock->icons = NULL;
 	
-	cairo_dock_finish_container (CAIRO_CONTAINER (pDock));
-	
 	if (pDock->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
 	
@@ -282,6 +280,8 @@ void cairo_dock_free_dock (CairoDock *pDock)
 		glDeleteFramebuffersEXT (1, &pDock->iFboId);
 	if (pDock->iRedirectedTexture != 0)
 		_cairo_dock_delete_texture (pDock->iRedirectedTexture);
+	
+	cairo_dock_finish_container (CAIRO_CONTAINER (pDock));
 	
 	g_free (pDock);
 }

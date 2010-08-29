@@ -68,6 +68,8 @@ typedef struct {
 	CairoDataRendererTextParam textZone;
 	// logo zone
 	CairoDataRendererEmblemParam emblem;
+	// label text zone
+	CairoDataRendererTextParam labelZone;
 } GaugeIndicator;
 
 typedef struct {

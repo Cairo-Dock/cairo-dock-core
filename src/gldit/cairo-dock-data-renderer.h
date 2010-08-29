@@ -51,7 +51,7 @@ struct _CairoDataToRenderer {
 
 #define CAIRO_DOCK_DATA_FORMAT_MAX_LEN 20
 /// Prototype of a function used to format the values in a short readable format (to be displayed as quick-info).
-typedef void (*CairoDockGetValueFormatFunc) (double fValue, int iNumValue, gchar *cFormatBuffer, int iBufferLength, gpointer data);
+typedef void (*CairoDataRendererFormatValueFunc) (CairoDataRenderer *pRenderer, int iNumValue, gchar *cFormatBuffer, int iBufferLength, gpointer data);
 /// Generic DataRenderer attributes structure. The attributes of any implementation of a DataRenderer will derive from this class.
 struct _CairoDataRendererAttribute {
 	/// name of the model ("gauge", "graph", etc) [mandatory].
@@ -69,10 +69,12 @@ struct _CairoDataRendererAttribute {
 	/// time needed to update to the new values. The update is smooth in OpenGL mode. [0 by default]
 	gint iLatencyTime;
 	/// a function used to format the values into a string. Only useful if you make te DataRenderer write the values [optionnal, by default the values are formatted with 2 decimals].
-	CairoDockGetValueFormatFunc format_value;
+	CairoDataRendererFormatValueFunc format_value;
 	/// data to be passed to the format function [optionnal].
 	gpointer pFormatData;
+	/// an optionnal list of emblems to draw on the overlay.
 	gchar **cEmblems;
+	/// an optionnal list of labels to write on the overlay.
 	gchar **cLabels;
 };
 
@@ -92,7 +94,7 @@ struct _CairoDataRendererInterface {
 	CairoDataRendererRenderOpenGLFunc render_opengl;
 	/// function that reloads the DataRenderer's buffers when the icon is resized.
 	CairoDataRendererReloadFunc reload;
-	/// function that unload all the buffers previously allocated.
+	/// function that unload all the previously allocated buffers.
 	CairoDataRendererUnloadFunc unload;
 };
 
@@ -127,16 +129,16 @@ struct _CairoDataRendererText {
 
 /// Generic DataRenderer. Any implementation of a DataRenderer will derive from this class.
 struct _CairoDataRenderer {
-	// fill at init by the high level renderer.
+	//\_________________ filled at init by the implementation.
 	/// interface of the Data Renderer.
 	CairoDataRendererInterface interface;
-	// fill at load time independantly of the renderer type.
+	//\_________________ filled at loading time independantly of the renderer type.
 	/// internal data to be drawn by the renderer.it
 	CairoDataToRenderer data;
 	/// size of the drawing area.
 	gint iWidth, iHeight;  // taille du contexte de dessin.
 	/// specific function to format the values as text.
-	CairoDockGetValueFormatFunc format_value;
+	CairoDataRendererFormatValueFunc format_value;
 	/// buffer for the text.
 	gchar cFormatBuffer[CAIRO_DOCK_DATA_FORMAT_MAX_LEN+1];
 	/// data passed to the format fonction.
@@ -147,26 +149,24 @@ struct _CairoDataRenderer {
 	gboolean bWriteValues;
 	/// the time it will take to update to the new value, with a smooth animation (require openGL capacity)
 	gint iLatencyTime;
-	// fill at load time by the high level renderer.
+	//\_________________ filled at load time by the implementation.
 	/// the rank of the renderer, eg the number of values it can display at once (for exemple, 1 for a bar, 2 for a dual-gauge)
 	gint iRank;  // nbre de valeurs que peut afficher 1 unite (en general : gauge:1/2, graph:1/2, bar:1)
 	/// set to TRUE <=> the renderer can draw the values as text itself.
 	gboolean bCanRenderValueAsText;
-	// dynamic.
+	/// set to TRUE <=> the drawing will be rotated if the container is vertical.
+	gboolean bRotateWithContainer;
+	/// an optionnal list of labels to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
+	CairoDataRendererText *pLabels;
+	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
+	CairoDataRendererEmblem *pEmblems;
+	/// an optionnal list of text zones to write the values. Same size as the set of values.
+	CairoDataRendererTextParam *pValuesText;
+	//\_________________ dynamic.
 	/// the animation counter for the smooth movement.
 	gint iSmoothAnimationStep;
 	/// latency due to the smooth movement (0 means the displayed value is the current one, 1 the previous)
 	gdouble fLatency;
-	// an optionnal list of labels to be displayed on the Data Renderer next to each value. Same size as the set of values.
-	//gchar **cLabels;
-	/// an optionnal list of labels to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
-	CairoDataRendererText *pLabels;
-	// an optionnal list of emblems (image paths) to be displayed on the Data Renderer next to each value. Same size as the set of values.
-	//gchar **cEmblems;
-	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
-	CairoDataRendererEmblem *pEmblems;
-	/// an optionnal list of text zones to write the values.
-	CairoDataRendererTextParam *pValuesText;
 };
 
 
@@ -219,6 +219,9 @@ void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, 
 ///
 /// Structure Access
 ///
+
+#define cairo_dock_get_icon_data_renderer(pIcon) (pIcon)->pDataRenderer
+
 /**Get the elementary part of a Data Renderer
 *@param r a high level data renderer
 *@return a CairoDataRenderer* */
@@ -231,6 +234,16 @@ void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, 
 *@param pAttr a high level data renderer attribute
 *@return a CairoDataRendererAttribute* */
 #define CAIRO_DATA_RENDERER_ATTRIBUTE(pAttr) ((CairoDataRendererAttribute *) pAttr)
+/**Get the number of values a DataRenderer displays. It's also the size of any of its arrays.
+*@param pRenderer a data renderer
+*@return number of values a DataRenderer displays */
+#define cairo_data_renderer_get_nb_values(pRenderer) ((pRenderer)->data.iNbValues)
+
+#define cairo_data_renderer_get_history_size(pRenderer) ((pRenderer)->data.iMemorySize)
+
+#define cairo_data_renderer_get_nth_label(pRenderer, i) (&(pRenderer)->pLabels[i])
+#define cairo_data_renderer_get_nth_value_text(pRenderer, i) (&(pRenderer)->pValuesText[i])
+#define cairo_data_renderer_get_nth_emblem(pRenderer, i) (&(pRenderer)->pEmblems[i])
 
 
 /*#define cairo_data_renderer_set_attribute(pRendererAttribute, cAttributeName, ) g_datalist_get_data (pRendererAttribute->pExtraProperties)
@@ -295,16 +308,18 @@ void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, 
 *@param fValue the normalized value
 *@param i the number of the value
 *@param cBuffer a buffer where to write*/
-#define cairo_data_renderer_format_value_full(pRenderer, fValue, i, cBuffer) do {\
+#define cairo_data_renderer_format_value_full(pRenderer, i, cBuffer) do {\
 	if (pRenderer->format_value != NULL)\
-		(pRenderer)->format_value (fValue, i, cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, (pRenderer)->pFormatData);\
-	else\
-		snprintf (cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, fValue < .0995 ? "%.1f" : (fValue < 1 ? " %.0f" : "%.0f"), fValue * 100.); } while (0)
+		(pRenderer)->format_value (pRenderer, i, cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, (pRenderer)->pFormatData);\
+	else {\
+		double x_ = cairo_data_renderer_get_normalized_current_value (pRenderer, i);\
+		snprintf (cBuffer, CAIRO_DOCK_DATA_FORMAT_MAX_LEN, x_ < .0995 ? "%.1f" : (x_ < 1 ? " %.0f" : "%.0f"), x_ * 100.); }\
+	} while (0)
 /**Write a value in a readable text format in the renderer text buffer.
 *@param pRenderer a data renderer
 *@param fValue the normalized value
 *@param i the number of the value*/
-#define cairo_data_renderer_format_value(pRenderer, fValue, i) cairo_data_renderer_format_value_full (pRenderer, fValue, i, (pRenderer)->cFormatBuffer)
+#define cairo_data_renderer_format_value(pRenderer, i) cairo_data_renderer_format_value_full (pRenderer, i, (pRenderer)->cFormatBuffer)
 
 #define cairo_data_renderer_can_write_values(pRenderer) (pRenderer)->bCanRenderValueAsText
 #define cairo_data_renderer_actually_writes_values(pRenderer) (pRenderer)->bCanRenderValueAsText

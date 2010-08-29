@@ -31,6 +31,7 @@
 
 #include "../config.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-opengl.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-icons.h"
 #include "cairo-dock-modules.h"
@@ -240,15 +241,8 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 		else
 			glFlush ();
 		gdk_gl_drawable_gl_end (pGlDrawable);
-		if (! pFlyingContainer->pIcon)  // plus d'icone, le container va se faire detruire sous peu, on repasse donc sur un contexte qui a plus d'avenir, sinon cela peut invalider les fonctions qui font appel a OpenGL sans definir de contexte (genre cairo_dock_create_texture_from_surface).
-		{
-			GdkGLContext *pGlContext = gtk_widget_get_gl_context (g_pPrimaryContainer->pWidget);
-			GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (g_pPrimaryContainer->pWidget);
-			if (gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
-				gdk_gl_drawable_gl_end (pGlDrawable);
-		}
 	}
-	else
+ 	else
 	{
 		cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pFlyingContainer));
 		

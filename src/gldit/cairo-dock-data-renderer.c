@@ -46,8 +46,7 @@ extern CairoContainer *g_pPrimaryContainer;
 extern gchar *g_cExtrasDirPath;
 
 #define cairo_dock_set_data_renderer_on_icon(pIcon, pRenderer) (pIcon)->pDataRenderer = pRenderer
-#define cairo_dock_get_icon_data_renderer(pIcon) (pIcon)->pDataRenderer
-
+#define CD_MIN_TEXT_WITH 24
 
 static CairoDockGLFont *s_pFont = NULL;
 
@@ -126,7 +125,7 @@ static void _cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, CairoC
 		int i;
 		for (i = 0; i < pRenderer->data.iNbValues; i ++)
 		{
-			pRenderer->pEmblems[i].cImagePath = pAttribute->cEmblems[i];
+			pRenderer->pEmblems[i].cImagePath = g_strdup (pAttribute->cEmblems[i]);
 			pRenderer->pEmblems[i].param.fAlpha = 1.;
 		}
 	}
@@ -136,7 +135,7 @@ static void _cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, CairoC
 		int i;
 		for (i = 0; i < pRenderer->data.iNbValues; i ++)
 		{
-			pRenderer->pLabels[i].cText = pAttribute->cLabels[i];
+			pRenderer->pLabels[i].cText = g_strdup (pAttribute->cLabels[i]);
 		}
 	}
 	pRenderer->pValuesText = g_new0 (CairoDataRendererTextParam, pRenderer->data.iNbValues);
@@ -150,16 +149,116 @@ static void _cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, CairoC
 	pRenderer->pFormatData = pAttribute->pFormatData;
 }
 
-static void _cairo_dock_render_to_texture (CairoDataRenderer *pDataRenderer, Icon *pIcon, CairoContainer *pContainer)
+static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer)
 {
 	if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 0))
 		return ;
 	
-	pDataRenderer->interface.render_opengl (pDataRenderer);
+	//\________________ On dessine.
+	glPushMatrix ();
+	if (!pContainer->bIsHorizontal && pRenderer->bRotateWithContainer)
+	{
+		glTranslatef (pRenderer->iWidth/2, pRenderer->iHeight/2, 0.);
+		glRotatef (-90., 0., 0., 1.);
+		glTranslatef (-pRenderer->iHeight/2, -pRenderer->iWidth/2, 0.);
+	}
+	
+	glPushMatrix ();
+	pRenderer->interface.render_opengl (pRenderer);
+	glPopMatrix ();
+	
+	//\________________ On dessine les overlays.
+	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
+	if (pRenderer->pEmblems != NULL)
+	{
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_over ();
+		
+		CairoDataRendererEmblem *pEmblem;
+		int i;
+		for (i = 0; i < iNbValues; i ++)
+		{
+			pEmblem = &pRenderer->pEmblems[i];
+			if (pEmblem->iTexture != 0)
+			{
+				glBindTexture (GL_TEXTURE_2D, pEmblem->iTexture);
+				_cairo_dock_set_alpha (pEmblem->param.fAlpha);
+				_cairo_dock_apply_current_texture_at_size_with_offset (
+					pEmblem->param.fWidth * pRenderer->iWidth,
+					pEmblem->param.fHeight * pRenderer->iHeight,
+					pEmblem->param.fX * pRenderer->iWidth,
+					pEmblem->param.fY * pRenderer->iHeight);
+			}
+		}
+		_cairo_dock_disable_texture ();
+	}
+	
+	if (pRenderer->pLabels != NULL)
+	{
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_over ();
+		_cairo_dock_set_alpha (1.);
+		
+		CairoDataRendererText *pText;
+		double f;
+		int i;
+		for (i = 0; i < iNbValues; i ++)
+		{
+			pText = &pRenderer->pLabels[i];
+			if (pText->iTexture != 0)
+			{
+				glPushMatrix ();
+				f = MIN (pText->param.fWidth * pRenderer->iWidth / pText->iTextWidth, pText->param.fHeight * pRenderer->iHeight / pText->iTextHeight);  // on garde le ratio du texte.
+				glBindTexture (GL_TEXTURE_2D, pText->iTexture);
+				_cairo_dock_apply_current_texture_at_size_with_offset (
+					pText->iTextWidth * f,
+					pText->iTextHeight * f,
+					pText->param.fX * pRenderer->iWidth,
+					pText->param.fY * pRenderer->iHeight);
+				glPopMatrix ();
+			}
+		}
+		_cairo_dock_disable_texture ();
+	}
+	
+	if (pRenderer->bWriteValues && pRenderer->bCanRenderValueAsText)
+	{
+		CairoDataRendererTextParam *pText;
+		int w, h, dw, dh;
+		int i;
+		for (i = 0; i < iNbValues; i ++)
+		{
+			pText = &pRenderer->pValuesText[i];
+			if (pText->fWidth == 0 || pText->fHeight == 0)
+				continue;
+			
+			cairo_data_renderer_format_value (pRenderer, i);
+			
+			CairoDockGLFont *pFont = cairo_dock_get_default_data_renderer_font ();
+			glColor3f (pText->pColor[0], pText->pColor[1], pText->pColor[2]);
+			glPushMatrix ();
+			
+			w = pText->fWidth * pRenderer->iWidth;
+			h = pText->fHeight * pRenderer->iHeight;
+			dw = w & 1;
+			dh = h & 1;
+			cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer,
+				pFont,
+				floor (pText->fX * pRenderer->iWidth) + .5*dw,
+				floor (pText->fY * pRenderer->iHeight) + .5*dh,
+				w,
+				h,
+				TRUE);
+			
+			glPopMatrix ();
+			glColor3f (1.0, 1.0, 1.0);
+		}
+	}
+	glPopMatrix ();
 	
 	cairo_dock_end_draw_icon (pIcon, pContainer);
 }
-static void _cairo_dock_render_to_context (CairoDataRenderer *pDataRenderer, Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext)
+static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext)
 {
 	//\________________ On efface tout.
 	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
@@ -169,51 +268,98 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pDataRenderer, Ico
 	
 	//\________________ On dessine.
 	cairo_save (pCairoContext);
-	pDataRenderer->interface.render (pDataRenderer, pCairoContext);
+	if (!pContainer->bIsHorizontal && pRenderer->bRotateWithContainer)
+	{
+		cairo_translate (pCairoContext, pRenderer->iWidth/2, pRenderer->iHeight/2);
+		cairo_rotate (pCairoContext, G_PI/2);
+		cairo_translate (pCairoContext, -pRenderer->iHeight/2, -pRenderer->iWidth/2);
+	}
+	
+	cairo_save (pCairoContext);
+	pRenderer->interface.render (pRenderer, pCairoContext);
 	cairo_restore (pCairoContext);
 	
-	if (pDataRenderer->pEmblems != NULL)
+	//\________________ On dessine les overlays.
+	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
+	if (pRenderer->pEmblems != NULL)
 	{
 		CairoDataRendererEmblem *pEmblem;
 		int i;
-		for (i = 0; i < pDataRenderer->data.iNbValues; i ++)
+		for (i = 0; i < iNbValues; i ++)
 		{
-			pEmblem = &pDataRenderer->pEmblems[i];
+			pEmblem = &pRenderer->pEmblems[i];
 			if (pEmblem->pSurface != NULL)
 			{
 				cairo_set_source_surface (pCairoContext,
 					pEmblem->pSurface,
-					pEmblem->param.fX * pDataRenderer->iWidth,
-					pEmblem->param.fY * pDataRenderer->iHeight);
+					pEmblem->param.fX * pRenderer->iWidth,
+					pEmblem->param.fY * pRenderer->iHeight);
 				cairo_paint_with_alpha (pCairoContext, pEmblem->param.fAlpha);
 			}
 		}
-		g_free (pDataRenderer->pEmblems);
 	}
 	
-	if (pDataRenderer->pLabels != NULL)
+	if (pRenderer->pLabels != NULL)
 	{
 		CairoDataRendererText *pText;
-		cairo_surface_t *pSurface;
+		double f;
 		int i;
-		for (i = 0; i < pDataRenderer->data.iNbValues; i ++)
+		for (i = 0; i < iNbValues; i ++)
 		{
-			pText = &pDataRenderer->pLabels[i];
+			pText = &pRenderer->pLabels[i];
 			if (pText->pSurface != NULL)
 			{
 				cairo_save (pCairoContext);
+				f = MIN (pText->param.fWidth * pRenderer->iWidth / pText->iTextWidth, pText->param.fHeight * pRenderer->iHeight / pText->iTextHeight);  // on garde le ratio du texte.
 				cairo_scale (pCairoContext,
-					pText->param.fWidth * pDataRenderer->iWidth / pText->iTextWidth,
-					pText->param.fHeight * pDataRenderer->iHeight / pText->iTextHeight);
+					f,
+					f);
 				cairo_set_source_surface (pCairoContext,
 					pText->pSurface,
-					pText->param.fX * pDataRenderer->iWidth,
-					pText->param.fY * pDataRenderer->iHeight);
+					pText->param.fX * pRenderer->iWidth,
+					pText->param.fY * pRenderer->iHeight);
 				cairo_paint (pCairoContext);
 				cairo_restore (pCairoContext);
 			}
 		}
 	}
+	
+	if (pRenderer->bWriteValues && pRenderer->bCanRenderValueAsText)
+	{
+		CairoDataRendererTextParam *pText;
+		int i;
+		for (i = 0; i < iNbValues; i ++)
+		{
+			pText = &pRenderer->pValuesText[i];
+			if (pText->fWidth == 0 || pText->fHeight == 0)
+				continue;
+			
+			cairo_data_renderer_format_value (pRenderer, i);
+			
+			cairo_save (pCairoContext);
+			cairo_set_source_rgb (pCairoContext, pText->pColor[0], pText->pColor[1], pText->pColor[2]);
+			
+			PangoLayout *pLayout = pango_cairo_create_layout (pCairoContext);
+			PangoFontDescription *fd = pango_font_description_from_string ("Monospace 12");
+			pango_layout_set_font_description (pLayout, fd);
+			
+			PangoRectangle ink, log;
+			pango_layout_set_text (pLayout, pRenderer->cFormatBuffer, -1);
+			pango_layout_get_pixel_extents (pLayout, &ink, &log);
+			double fZoom = MIN (pText->fWidth * pRenderer->iWidth / (log.width), pText->fHeight * pRenderer->iHeight / log.height);
+			
+			cairo_move_to (pCairoContext,
+				floor ((1. + pText->fX) * pRenderer->iWidth/2 - log.width*fZoom/2),
+				floor ((1. - pText->fY) * pRenderer->iHeight/2 - log.height*fZoom/2));
+			cairo_scale (pCairoContext,
+				fZoom,
+				fZoom);
+			pango_cairo_show_layout (pCairoContext, pLayout);
+			g_object_unref (pLayout);
+			cairo_restore (pCairoContext);
+		}
+	}
+	cairo_restore (pCairoContext);
 	
 	if (pContainer->bUseReflect)
 	{
@@ -273,12 +419,13 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 	pRenderer->interface.load (pRenderer, pContainer, pAttribute);
 	
 	//\___________________ On charge les emblemes si l'implementation les a valides.
+	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	if (pRenderer->pEmblems != NULL)
 	{
 		CairoDataRendererEmblem *pEmblem;
 		cairo_surface_t *pSurface;
 		int i;
-		for (i = 0; i < pRenderer->data.iNbValues; i ++)
+		for (i = 0; i < iNbValues; i ++)
 		{
 			pEmblem = &pRenderer->pEmblems[i];
 			if (pEmblem->param.fWidth != 0 && pEmblem->param.fHeight != 0 && pEmblem->cImagePath != NULL)
@@ -313,7 +460,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 		CairoDataRendererText *pLabel;
 		cairo_surface_t *pSurface;
 		int i;
-		for (i = 0; i < pRenderer->data.iNbValues; i ++)
+		for (i = 0; i < iNbValues; i ++)
 		{
 			pLabel = &pRenderer->pLabels[i];
 			if (pLabel->param.fWidth != 0 && pLabel->param.fHeight != 0 && pLabel->cText != NULL)
@@ -330,6 +477,14 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 					pLabel->pSurface = pSurface;
 			}
 		}
+	}
+	
+	//\___________________ On regarde si le texte dessine sur l'icone sera suffisamment lisible.
+	if (pRenderer->pValuesText != NULL)
+	{
+		CairoDataRendererTextParam *pText = &pRenderer->pValuesText[0];
+		g_print ("+++++++pText->fWidth * pRenderer->iWidth : %.2f\n", pText->fWidth * pRenderer->iWidth);
+		pRenderer->bCanRenderValueAsText = (pText->fWidth * pRenderer->iWidth > CD_MIN_TEXT_WITH);
 	}
 }
 
@@ -355,7 +510,7 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 			if (fNewValue < pData->pMinMaxValues[2*i])
 				pData->pMinMaxValues[2*i] = fNewValue;
 			if (fNewValue > pData->pMinMaxValues[2*i+1])
-				pData->pMinMaxValues[2*i+1] = fNewValue;
+				pData->pMinMaxValues[2*i+1] = MAX (fNewValue, pData->pMinMaxValues[2*i]+.1);
 		}
 		pData->pTabValues[pData->iCurrentIndex][i] = fNewValue;
 	}
@@ -389,8 +544,7 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 		char *str = cBuffer;
 		for (i = 0; i < pData->iNbValues; i ++)
 		{
-			fValue = cairo_data_renderer_get_normalized_current_value (pRenderer, i);
-			cairo_data_renderer_format_value_full (pRenderer, fValue, i, str);
+			cairo_data_renderer_format_value_full (pRenderer, i, str);
 			
 			if (i+1 < pData->iNbValues)
 			{
@@ -403,6 +557,8 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 		cairo_dock_set_quick_info (pIcon, pContainer, cBuffer);
 		g_free (cBuffer);
 	}
+	else
+		cairo_dock_set_quick_info (pIcon, pContainer, NULL);
 	
 	cairo_dock_redraw_icon (pIcon, pContainer);
 }
@@ -421,11 +577,12 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 	g_free (pRenderer->data.pTabValues);
 	g_free (pRenderer->data.pMinMaxValues);
 	
+	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	if (pRenderer->pEmblems != NULL)
 	{
 		CairoDataRendererEmblem *pEmblem;
 		int i;
-		for (i = 0; i < pRenderer->data.iNbValues; i ++)
+		for (i = 0; i < iNbValues; i ++)
 		{
 			pEmblem = &pRenderer->pEmblems[i];
 			if (pEmblem->pSurface != NULL)
@@ -440,7 +597,7 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 	{
 		CairoDataRendererText *pText;
 		int i;
-		for (i = 0; i < pRenderer->data.iNbValues; i ++)
+		for (i = 0; i < iNbValues; i ++)
 		{
 			pText = &pRenderer->pLabels[i];
 			if (pText->pSurface != NULL)
@@ -450,6 +607,8 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 		}
 		g_free (pRenderer->pLabels);
 	}
+	
+	g_free (pRenderer->pValuesText);
 	
 	g_free (pRenderer);
 }
@@ -478,12 +637,19 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 		g_return_if_fail (pOldRenderer->interface.reload != NULL);
 		cairo_dock_get_icon_extent (pIcon, pContainer, &pOldRenderer->iWidth, &pOldRenderer->iHeight);
 		pOldRenderer->interface.reload (pOldRenderer);
+		
+		if (pOldRenderer->pValuesText != NULL)
+		{
+			CairoDataRendererTextParam *pText = &pOldRenderer->pValuesText[0];
+			g_print ("+++++++pText->fWidth * pRenderer->iWidth : %.2f\n", pText->fWidth * pOldRenderer->iWidth);
+			pOldRenderer->bCanRenderValueAsText = (pText->fWidth * pOldRenderer->iWidth > CD_MIN_TEXT_WITH);
+		}
 	}
 	else  // on recree le data-renderer avec les nouveaux attributs.
 	{
 		pAttribute->iNbValues = MAX (1, pAttribute->iNbValues);
 		//\_____________ On recupere les donnees courantes.
-		if (pOldRenderer && pOldRenderer->data.iNbValues == pAttribute->iNbValues)
+		if (pOldRenderer && cairo_data_renderer_get_nb_values (pOldRenderer) == pAttribute->iNbValues)
 		{
 			pData = g_memdup (&pOldRenderer->data, sizeof (CairoDataToRenderer));
 			memset (&pOldRenderer->data, 0, sizeof (CairoDataToRenderer));

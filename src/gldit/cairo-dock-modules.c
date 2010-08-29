@@ -702,7 +702,14 @@ static void _cairo_dock_stop_module_instance (CairoDockModuleInstance *pInstance
 		cairo_destroy (pInstance->pDrawContext);
 	
 	if (pInstance->pIcon != NULL)
+	{
+		if (pInstance->pIcon->pSubDock != NULL)
+		{
+			cairo_dock_destroy_dock (pInstance->pIcon->pSubDock, pInstance->pIcon->cName);
+			pInstance->pIcon->pSubDock = NULL;
+		}
 		pInstance->pIcon->pModuleInstance = NULL;
+	}
 }
 
 void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance)

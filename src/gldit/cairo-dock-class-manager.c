@@ -564,7 +564,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 			{
 				if (pInhibatorIcon->pSubDock == NULL || myIndicators.bUseClassIndic)  // dans le cas d'un lanceur qui aurait deja plusieurs instances de sa classe, et qui les representerait en pile, on ne prend pas son icone.
 				{
-					cd_message ("%s va fournir genereusement sa surface", pInhibatorIcon->cName);
+					cd_debug ("%s va fournir genereusement sa surface", pInhibatorIcon->cName);
 					return cairo_dock_duplicate_inhibator_surface_for_appli (pInhibatorIcon, iWidth, iHeight);
 				}
 			}
@@ -600,7 +600,7 @@ void cairo_dock_update_visibility_on_inhibators (const gchar *cClass, Window Xid
 			
 			if (pInhibatorIcon->Xid == Xid)
 			{
-				cd_message (" %s aussi se %s", pInhibatorIcon->cName, (bIsHidden ? "cache" : "montre"));
+				cd_debug (" %s aussi se %s", pInhibatorIcon->cName, (bIsHidden ? "cache" : "montre"));
 				pInhibatorIcon->bIsHidden = bIsHidden;
 				if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibatorIcon) && myTaskBar.fVisibleAppliAlpha != 0)
 				{
@@ -626,7 +626,7 @@ void cairo_dock_update_activity_on_inhibators (const gchar *cClass, Window Xid)
 			
 			if (pInhibatorIcon->Xid == Xid)
 			{
-				cd_message (" %s aussi devient active", pInhibatorIcon->cName);
+				cd_debug (" %s aussi devient active", pInhibatorIcon->cName);
 				///pInhibatorIcon->bIsActive = TRUE;
 				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
 				if (pParentDock != NULL)
@@ -649,7 +649,7 @@ void cairo_dock_update_inactivity_on_inhibators (const gchar *cClass, Window Xid
 			
 			if (pInhibatorIcon->Xid == Xid)
 			{
-				cd_message (" %s aussi devient inactive", pInhibatorIcon->cName);
+				cd_debug (" %s aussi devient inactive", pInhibatorIcon->cName);
 				///pInhibatorIcon->bIsActive = FALSE;
 				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibatorIcon->cParentDockName);
 				if (pParentDock != NULL && ! pParentDock->bIsShrinkingDown)
@@ -677,7 +677,7 @@ void cairo_dock_update_name_on_inhibators (const gchar *cClass, Window Xid, gcha
 				{
 					if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibatorIcon))
 					{
-						cd_message (" %s change son nom en %s", pInhibatorIcon->cName, cNewName);
+						cd_debug (" %s change son nom en %s", pInhibatorIcon->cName, cNewName);
 						if (pInhibatorIcon->cInitialName == NULL)
 						{
 							pInhibatorIcon->cInitialName = pInhibatorIcon->cName;

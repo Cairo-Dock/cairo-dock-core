@@ -841,3 +841,11 @@ void cairo_dock_set_gl_capabilities (GtkWidget *pWindow)
 		G_CALLBACK (_reset_opengl_context),
 		NULL);
 }
+
+void cairo_dock_set_default_gl_context (void)
+{
+	GdkGLContext *pGlContext = gtk_widget_get_gl_context (g_pPrimaryContainer->pWidget);
+	GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (g_pPrimaryContainer->pWidget);
+	if (gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		gdk_gl_drawable_gl_end (pGlDrawable);
+}

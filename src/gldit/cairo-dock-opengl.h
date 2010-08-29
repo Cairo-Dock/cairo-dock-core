@@ -136,5 +136,6 @@ void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer);
 */
 void cairo_dock_set_gl_capabilities (GtkWidget *pWindow);
 
+void cairo_dock_set_default_gl_context (void);
 
 #endif

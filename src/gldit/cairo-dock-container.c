@@ -100,6 +100,8 @@ void cairo_dock_finish_container (CairoContainer *pContainer)
 	}
 	if (g_pPrimaryContainer == pContainer)
 		g_pPrimaryContainer = NULL;
+	else
+		cairo_dock_set_default_gl_context ();
 }
 
 void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
