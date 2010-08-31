@@ -114,6 +114,7 @@ set_value "Rotation"		"color"						"1;1;1;0"
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
 set_value "Configuration"	"persistent"				""
+set_value "Configuration"	"enable actions"				false
 
 set_current_conf_file "plug-ins/clock/clock.conf"
 set_value "Icon"			"name"						""

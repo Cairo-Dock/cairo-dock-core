@@ -115,7 +115,7 @@ struct _CairoDataRendererEmblem {
 struct _CairoDataRendererTextParam {
 	gdouble fX, fY;  // [-1;1], center of the text.
 	gdouble fWidth, fHeight;  // [-1;1]
-	gdouble pColor[3];
+	gdouble pColor[4];
 };
 
 struct _CairoDataRendererText {

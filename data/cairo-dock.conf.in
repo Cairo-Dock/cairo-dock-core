@@ -235,19 +235,6 @@ cairo anim freq = 25
 #{The transparency gradation pattern will then be re-calculated in real time. May need more CPU power.}
 dynamic reflection = false
 
-#X-[Label readability;gtk-underline]
-frame_label =
-
-#b- Should the labels always be horizontal, even when dock is vertical?
-always horizontal = true
-
-#f-[0.;50.] label's visibility threshold :
-#{the bigger, the more the labels next to the selected icon will be transparent.}
-alpha threshold = 10.
-
-#m[Captions] Configure labels appearence.
-config_labels = 
-
 #X-[Composition;gtk-clear]
 frame_fake =
 #b- Emulate composition with fake transparency?
@@ -676,8 +663,18 @@ zoom class = false
 
 [Labels]
 
-#l+[No;On pointed icon;On all icons] Show labels:
+#X-[Label visibility;gtk-underline]
+frame_label =
+
+#Y+[No;0;0;On pointed icon;0;0;On all icons;1;1] Show labels:
 show_labels = 1
+
+#f-[0.;50.] label's visibility threshold :
+#{the bigger, the more the labels next to the selected icon will be transparent.}
+alpha threshold = 10.
+
+#b- Should the labels always be horizontal, even when dock is vertical?
+always horizontal = true
 
 #F+[Font;gtk-select-font]
 frame_font =

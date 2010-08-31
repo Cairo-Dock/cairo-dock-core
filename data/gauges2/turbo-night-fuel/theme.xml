@@ -1,0 +1,34 @@
+<gauge>
+	<name>Turbo Night Fuel</name>
+	<author>Adrien Pilleboue</author>
+	<version>2</version>
+	<file key="background">background.svg</file>
+	<file key="foreground">foreground.svg</file>
+	<indicator>
+		<posX>0</posX>
+		<posY>-0,23</posY>
+		<posStart>-43</posStart>
+		<posStop>43</posStop>
+		<file key="needle">needle.svg</file>
+		<text_zone>
+		        <x_center>0.0</x_center>
+		        <y_center>-0.3</y_center>
+		        <width>0.5</width>
+		        <height>0.16</height>
+		        <red>1.0</red>
+		        <blue>0.0</blue>
+		        <green>0.0</green>
+		        <alpha>1.0</alpha>
+		</text_zone>
+		<logo_zone>
+		        <x_center>0.0</x_center>
+		        <y_center>0.1</y_center>
+		        <width>0.5</width>
+		        <height>0.16</height>
+		        <red>1.0</red>
+		        <blue>0.0</blue>
+		        <green>0.0</green>
+		        <alpha>0.8</alpha>
+		</logo_zone>
+	</indicator>
+</gauge>

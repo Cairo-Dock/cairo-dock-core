@@ -17,70 +17,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/** Exemple of a gauge with text inside :
- * 
- * <gauge>
-	<name>Screenlets Vista'ish Default</name>
-	<author>(conversion by Nochka85)</author>
-	<rank>2</rank>
-	<file key="background">back.svg</file>
-	<file key="foreground">dialdot.svg</file>
-	<indicator>
-		<posX>-0,35</posX>
-		<posY>-0,10</posY>
-		<posStart>-130</posStart>
-		<posStop>130</posStop>
-		<file key="needle">dial.svg</file>
-		<offset_x>0</offset_x>
-		<width>40</width>
-		<height>8</height>
-		<text_zone>
-			<x_center>-0,34</x_center>
-			<y_center>-0,47</y_center>
-			<width>0,18</width>
-			<height>0,10</height>
-			<red>1.0</red>
-			<green>1,0</green>
-			<blue>1,0</blue>
-		</text_zone>
-		<logo_zone>
-			<x_center>-0,32</x_center>
-			<y_center>0,00</y_center>
-			<width>0,10</width>
-			<height>0,10</height>
-			<alpha>1.0</alpha>
-		</logo_zone>
-	</indicator>
-	<indicator>
-		<posX>0,48</posX>
-		<posY>0,27</posY>
-		<direction>1</direction>
-		<posStart>-128</posStart>
-		<posStop>128</posStop>
-		<file key="needle">dial2.svg</file>
-		<offset_x>0</offset_x>
-		<width>30</width>
-		<height>8</height>
-		<text_zone>
-			<x_center>0,50</x_center>
-			<y_center>-0,00</y_center>
-			<width>0,18</width>
-			<height>0,08</height>
-			<red>1.0</red>
-			<green>1,0</green>
-			<blue>1,0</blue>
-		</text_zone>
-		<logo_zone>
-			<x_center>0,50</x_center>
-			<y_center>0,30</y_center>
-			<width>0,10</width>
-			<height>0,10</height>
-			<alpha>1.0</alpha>
-		</logo_zone>
-	</indicator>
-</gauge>
- * 
- * */
+/** See the "data/gauges" folder for some exemples */
 
 #include <string.h>
 #include <math.h>
@@ -232,7 +169,8 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 	GaugeImage *pGaugeImage;
 	GaugeIndicator *pGaugeIndicator = NULL;
 	xmlNodePtr pGaugeNode;
-	double ratio = 2.;
+	double ratio_xy = 1.;
+	double ratio_text = 2.;
 	int i;
 	for (pGaugeNode = pGaugeMainNode->children, i = 0; pGaugeNode != NULL; pGaugeNode = pGaugeNode->next, i ++)
 	{
@@ -251,7 +189,10 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 			cNodeContent = xmlNodeGetContent (pGaugeNode);
 			int iVersion = atoi (cNodeContent);
 			if (iVersion == 2)
-				ratio = 1.;
+			{
+				ratio_text = 1.;
+				ratio_xy = 2.;
+			}
 			xmlFree (cNodeContent);
 		}
 		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "file") == 0)
@@ -298,19 +239,20 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 				//g_print ("+ %s\n", pGaugeSubNode->name);
 				cNodeContent = xmlNodeGetContent (pGaugeSubNode);
 				if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posX") == 0)
-					pGaugeIndicator->posX = _str2double (cNodeContent);
+					pGaugeIndicator->posX = _str2double (cNodeContent) * ratio_xy;
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "posY") == 0)
-					pGaugeIndicator->posY = _str2double (cNodeContent);
+					pGaugeIndicator->posY = _str2double (cNodeContent) * ratio_xy;
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "text_zone") == 0)
 				{
+					pGaugeIndicator->textZone.pColor[3] = 1.;
 					xmlNodePtr pTextSubNode;
 					for (pTextSubNode = pGaugeSubNode->children; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
 					{
 						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
 						if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_center") == 0)
-							pGaugeIndicator->textZone.fX = _str2double (cTextNodeContent)/ratio;
+							pGaugeIndicator->textZone.fX = _str2double (cTextNodeContent)/ratio_text;
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_center") == 0)
-							pGaugeIndicator->textZone.fY = _str2double (cTextNodeContent)/ratio;
+							pGaugeIndicator->textZone.fY = _str2double (cTextNodeContent)/ratio_text;
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "width") == 0)
 							pGaugeIndicator->textZone.fWidth = _str2double (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "height") == 0)
@@ -321,11 +263,14 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 							pGaugeIndicator->textZone.pColor[1] = _str2double (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "blue") == 0)
 							pGaugeIndicator->textZone.pColor[2] = _str2double (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "alpha") == 0)
+							pGaugeIndicator->textZone.pColor[3] = _str2double (cTextNodeContent);
 					}
 				}
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "label_zone") == 0)
 				{
 					xmlNodePtr pTextSubNode;
+					pGaugeIndicator->labelZone.pColor[3] = 1.;
 					for (pTextSubNode = pGaugeSubNode->children; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
 					{
 						cTextNodeContent = xmlNodeGetContent (pTextSubNode);
@@ -343,10 +288,13 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 							pGaugeIndicator->labelZone.pColor[1] = _str2double (cTextNodeContent);
 						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "blue") == 0)
 							pGaugeIndicator->labelZone.pColor[2] = _str2double (cTextNodeContent);
+						else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "alpha") == 0)
+							pGaugeIndicator->labelZone.pColor[3] = _str2double (cTextNodeContent);
 					}
 				}
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "logo_zone") == 0)
 				{
+					pGaugeIndicator->emblem.fAlpha = 1.;
 					xmlNodePtr pLogoSubNode;
 					for (pLogoSubNode = pGaugeSubNode->children; pLogoSubNode != NULL; pLogoSubNode = pLogoSubNode->next)
 					{
@@ -456,15 +404,11 @@ static void cairo_dock_load_gauge (Gauge *pGauge, CairoContainer *pContainer, Ca
 	
 	// on complete le data-renderer.
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
-	
-	GaugeIndicator *pGaugeIndicator = pGauge->pIndicatorList->data;
-	pRenderer->bCanRenderValueAsText = (pGaugeIndicator->textZone.fWidth != 0 && pGaugeIndicator->textZone.fHeight != 0);
-	
-	CairoDataToRenderer *data = cairo_data_renderer_get_data (pRenderer);
-	int iNbValues = data->iNbValues;
+	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	CairoDataRendererTextParam *pValuesText;
 	CairoDataRendererEmblem *pEmblem;
 	CairoDataRendererText *pLabel;
+	GaugeIndicator *pGaugeIndicator;
 	GList *il = pGauge->pIndicatorList;
 	int i;
 	for (i = 0; i < iNbValues; i ++)
@@ -923,7 +867,7 @@ void cairo_dock_register_data_renderer_gauge (void)
 	pRecord->interface.reload		= (CairoDataRendererReloadFunc) cairo_dock_reload_gauge;
 	pRecord->interface.unload		= (CairoDataRendererUnloadFunc) cairo_dock_unload_gauge;
 	pRecord->iStructSize			= sizeof (Gauge);
-	pRecord->cThemeDirName = "gauges";
+	pRecord->cThemeDirName = "gauges2";
 	pRecord->cDefaultTheme = "Turbo-night-fuel";
 	
 	cairo_dock_register_data_renderer ("gauge", pRecord);

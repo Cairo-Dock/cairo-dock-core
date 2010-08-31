@@ -45,11 +45,9 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-internal-system.h"
 #include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-container.h"
@@ -428,7 +426,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			fOffsetX = icon->iTextWidth/2 - (icon->fDrawX + icon->fWidth * icon->fScale/2);
 		else if (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2 > pDock->container.iWidth)
 			fOffsetX = pDock->container.iWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2);
-		if (icon->fOrientation != 0 && ! mySystem.bTextAlwaysHorizontal)
+		if (icon->fOrientation != 0 && ! myLabels.bTextAlwaysHorizontal)
 		{
 			glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
 			glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
@@ -437,7 +435,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		double dx = .5 * (icon->iTextWidth & 1);  // on decale la texture pour la coller sur la grille des coordonnees entieres.
 		double dy = .5 * (icon->iTextHeight & 1);
-		if (! pDock->container.bIsHorizontal && mySystem.bTextAlwaysHorizontal)
+		if (! pDock->container.bIsHorizontal && myLabels.bTextAlwaysHorizontal)
 		{
 			fOffsetX = MIN (0, icon->fDrawY + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2);
 			double y = (icon->fWidth * icon->fScale + icon->iTextHeight) / 2;
@@ -469,8 +467,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		else
 		{
 			fMagnitude = (icon->fScale - 1) / myIcons.fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
-			fMagnitude = pow (fMagnitude, mySystem.fLabelAlphaThreshold);
-			///fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
+			fMagnitude = pow (fMagnitude, myLabels.fLabelAlphaThreshold);
+			///fMagnitude *= (fMagnitude * myLabels.fLabelAlphaThreshold + 1) / (myLabels.fLabelAlphaThreshold + 1);
 		}
 		
 		_cairo_dock_enable_texture ();
@@ -498,7 +496,6 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	{
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_over ();
-		//_cairo_dock_set_alpha (myBackground.fVisibleZoneAlpha);
 		int w = MIN (myAccessibility.iZoneWidth, pDock->container.iWidth);
 		int h = MIN (myAccessibility.iZoneHeight, pDock->container.iHeight);
 		cd_debug ("%s (%dx%d)", __func__, w, h);
@@ -520,7 +517,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 		
 		if (! pDock->container.bIsHorizontal)
 			glRotatef (90., 0, 0, 1);
-		if (! pDock->container.bDirectionUp && /**myBackground.bReverseVisibleImage*/TRUE)
+		if (! pDock->container.bDirectionUp)  // reverse image with dock.
 			glScalef (1., -1., 1.);
 		
 		_cairo_dock_apply_texture_at_size (g_pVisibleZoneBuffer.iTexture, w, h);

@@ -37,6 +37,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
+	// font
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	gchar *cFontDescription = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
@@ -78,6 +79,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	pango_font_description_free (fd);
 	g_free (cFontDescription);
 	
+	// labels visibility
 	int iShowLabel = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "show_labels", &bFlushConfFileNeeded, -1, NULL, NULL);
 	gboolean bShow, bLabelForPointedIconOnly;
 	if (iShowLabel == -1)  // nouveau parametre
@@ -95,7 +97,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 		bShow = (iShowLabel != 0);
 		bLabelForPointedIconOnly = (iShowLabel == 1);
 	}
-	//g_print ("labels : %d;%d\n", bShow, bLabelForPointedIconOnly);
 	if (! bShow)
 	{
 		g_free (pLabels->iconTextDescription.cFont);
@@ -104,6 +105,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 	}
 	pLabels->bLabelForPointedIconOnly = bLabelForPointedIconOnly;
 	
+	// text color
 	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	double couleur_label[3] = {1., 1., 1.};
@@ -133,6 +135,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigLabels *pLabels)
 		(pLabels->iconTextDescription.bOutlined ? 2 : 0) +
 		2 * pLabels->iconTextDescription.iMargin : 0);
 	
+	// lisibilite des labels
+	pLabels->fLabelAlphaThreshold = cairo_dock_get_double_key_value (pKeyFile, "Labels", "alpha threshold", &bFlushConfFileNeeded, 10., "System", NULL);
+	pLabels->fLabelAlphaThreshold = (pLabels->fLabelAlphaThreshold + 10.) / 10.;  // [0;50] -> [1;6]
+	pLabels->bTextAlwaysHorizontal = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "always horizontal", &bFlushConfFileNeeded, FALSE, "System", NULL);
+	
 	return bFlushConfFileNeeded;
 }
 
@@ -161,6 +168,10 @@ static void reload (CairoConfigLabels *pPrevLabels, CairoConfigLabels *pLabels)
 	if (pPrevLabels->iLabelSize != pLabels->iLabelSize)
 	{
 		cairo_dock_foreach_docks ((GHFunc) _cairo_dock_resize_one_dock, NULL);
+	}
+	if (pPrevLabels->bTextAlwaysHorizontal != pLabels->bTextAlwaysHorizontal)
+	{
+		cairo_dock_reload_buffers_in_all_docks (TRUE);  // les modules aussi.
 	}
 }
 

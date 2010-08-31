@@ -43,6 +43,7 @@ void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext)
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
+	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	
 	if (pGraph->pBackgroundSurface != NULL)
 	{
@@ -50,7 +51,7 @@ void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext)
 		cairo_paint (pCairoContext);
 	}
 	
-	int iNbDrawings = pData->iNbValues / pRenderer->iRank;
+	int iNbDrawings = iNbValues / pRenderer->iRank;
 	if (iNbDrawings == 0)
 		return;
 	
@@ -62,7 +63,7 @@ void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext)
 	double fValue;
 	cairo_pattern_t *pGradationPattern;
 	int i;
-	for (i = 0; i < pData->iNbValues; i ++)
+	for (i = 0; i < iNbValues; i ++)
 	{
 		if (! pGraph->bMixGraphs)
 			cairo_translate (pCairoContext,
@@ -291,6 +292,80 @@ static cairo_pattern_t *_cairo_dock_create_graph_pattern (CairoDockGraph *pGraph
 	}
 	return pGradationPattern;
 }
+static void _set_overlay_zones (CairoDockGraph *pGraph)
+{
+	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
+	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
+	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
+	int i;
+	
+	// on complete le data-renderer.
+	int iNbDrawings = iNbValues / pRenderer->iRank;
+	double fMargin = pGraph->fMargin;
+	double fOneGraphHeight = iHeight - 2*fMargin;
+	fOneGraphHeight /= iNbDrawings;
+	double fOneGraphWidth = iWidth - 2*fMargin;
+	fOneGraphWidth /= iNbDrawings;
+	int iTextWidth = MIN (48, pRenderer->iWidth/2);  // on definit une taille pour les zones de texte.
+	int iTextHeight = MIN (16, fOneGraphHeight/2);
+	int iLabelWidth = MIN (48, pRenderer->iWidth/2);  // on definit une taille pour les zones de texte.
+	int iLabelHeight = MIN (16, fOneGraphHeight/3);
+	int h = 3;  // ecart du texte au-dessus de l'axe Ox.
+	CairoDataRendererTextParam *pValuesText;
+	CairoDataRendererEmblem *pEmblem;
+	CairoDataRendererText *pLabel;
+	for (i = 0; i < iNbValues; i ++)
+	{
+		if (pRenderer->pLabels)  // les labels en haut a gauche.
+		{
+			pLabel = &pRenderer->pLabels[i];
+			if (iLabelHeight > 8)  // sinon trop petit, et empiete sur la valeur.
+			{
+				if (pGraph->bMixGraphs)
+				{
+					pLabel->param.fX = (double)(fMargin + i * fOneGraphWidth + iLabelWidth/2) / iWidth - .5;
+					pLabel->param.fY = (double)(iHeight - fMargin - iLabelHeight/2) / iHeight - .5;
+				}
+				else
+				{
+					pLabel->param.fX = (double)0.;  // centered.
+					pLabel->param.fY = .5 - (double)(fMargin + h + i * fOneGraphHeight + iLabelHeight/2) / iHeight;
+				}
+				pLabel->param.fWidth = (double)iLabelWidth / iWidth;
+				pLabel->param.fHeight = (double)iLabelHeight / iHeight;
+				pLabel->param.pColor[0] = 0.;  /// noir par defaut, essayer de gerer en fonction de la couleur du graphe ou du fond ...
+				pLabel->param.pColor[1] = 0.;
+				pLabel->param.pColor[2] = 0.;
+				pLabel->param.pColor[3] = 0.7;
+			}
+			else
+			{
+				pLabel->param.fWidth = pLabel->param.fHeight = 0;
+			}
+		}
+		if (pRenderer->pValuesText)  // les valeurs en bas au milieu.
+		{
+			pValuesText = &pRenderer->pValuesText[i];
+			if (pGraph->bMixGraphs)
+			{
+				pValuesText->fX = (double)(fMargin + i * fOneGraphWidth + iTextWidth/2) / iWidth - .5;
+				pValuesText->fY = (double)(fMargin + h + iTextHeight/2) / iHeight - .5;
+			}
+			else
+			{
+				pValuesText->fX = (double)0.;  // centered.
+				pValuesText->fY = .5 - (double)(fMargin + (i+1) * fOneGraphHeight - iTextHeight - h) / iHeight;
+			}
+			pValuesText->fWidth = (double)iTextWidth / iWidth;
+			pValuesText->fHeight = (double)iTextHeight / iHeight;
+			pValuesText->pColor[0] = 0.;  /// noir par defaut, essayer de gerer en fonction de la couleur du graphe ou du fond ...
+			pValuesText->pColor[1] = 0.;
+			pValuesText->pColor[2] = 0.;
+			pValuesText->pColor[3] = 0.6;
+		}
+	}
+}
+
 static void cairo_dock_load_graph (CairoDockGraph *pGraph, CairoContainer *pContainer, CairoGraphAttribute *pAttribute)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
@@ -302,7 +377,7 @@ static void cairo_dock_load_graph (CairoDockGraph *pGraph, CairoContainer *pCont
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	pGraph->iType = pAttribute->iType;
 	pGraph->bMixGraphs = pAttribute->bMixGraphs;
-	pGraph->dataRenderer.iRank = (pAttribute->bMixGraphs ? iNbValues : 1);
+	pRenderer->iRank = (pAttribute->bMixGraphs ? iNbValues : 1);
 	
 	pGraph->fHighColor = g_new0 (double, 3 * iNbValues);
 	if (pAttribute->fHighColor != NULL)
@@ -333,8 +408,11 @@ static void cairo_dock_load_graph (CairoDockGraph *pGraph, CairoContainer *pCont
 		pGraph->fBackGroundColor,
 		pGraph->iType,
 		iNbValues / pRenderer->iRank);
-	if (g_bUseOpenGL)
+	if (g_bUseOpenGL && 0)
 		pGraph->iBackgroundTexture = cairo_dock_create_texture_from_surface (pGraph->pBackgroundSurface);
+	
+	// on complete le data-renderer.
+	_set_overlay_zones (pGraph);
 }
 
 
@@ -348,17 +426,20 @@ static void cairo_dock_reload_graph (CairoDockGraph *pGraph)
 	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (iWidth, iHeight, pGraph->iRadius, pGraph->fMargin, pGraph->fBackGroundColor, pGraph->iType, iNbValues / pRenderer->iRank);
 	if (pGraph->iBackgroundTexture != 0)
 		_cairo_dock_delete_texture (pGraph->iBackgroundTexture);
-	if (g_bUseOpenGL)
+	if (g_bUseOpenGL && 0)
 		pGraph->iBackgroundTexture = cairo_dock_create_texture_from_surface (pGraph->pBackgroundSurface);
 	else
 		pGraph->iBackgroundTexture = 0;
 	int i;
-	for (i = 0; i < pGraph->dataRenderer.data.iNbValues; i ++)
+	for (i = 0; i < iNbValues; i ++)
 	{
 		if (pGraph->pGradationPatterns[i] != NULL)
 			cairo_pattern_destroy (pGraph->pGradationPatterns[i]);
 		pGraph->pGradationPatterns[i] = _cairo_dock_create_graph_pattern (pGraph, &pGraph->fLowColor[3*i], &pGraph->fHighColor[3*i], 0.);
 	}
+	
+	// on re-complete le data-renderer.
+	_set_overlay_zones (pGraph);
 }
 
 
@@ -369,8 +450,11 @@ static void cairo_dock_unload_graph (CairoDockGraph *pGraph)
 		cairo_surface_destroy (pGraph->pBackgroundSurface);
 	if (pGraph->iBackgroundTexture != 0)
 		_cairo_dock_delete_texture (pGraph->iBackgroundTexture);
+	
+	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
+	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	int i;
-	for (i = 0; i < pGraph->dataRenderer.data.iNbValues; i ++)
+	for (i = 0; i < iNbValues; i ++)
 	{
 		if (pGraph->pGradationPatterns[i] != NULL)
 			cairo_pattern_destroy (pGraph->pGradationPatterns[i]);

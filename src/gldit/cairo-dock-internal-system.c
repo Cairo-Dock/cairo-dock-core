@@ -35,11 +35,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigSystem *pSystem)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	// lisibilite des labels
-	pSystem->fLabelAlphaThreshold = cairo_dock_get_double_key_value (pKeyFile, "System", "alpha threshold", &bFlushConfFileNeeded, 10., "Labels", NULL);
-	pSystem->fLabelAlphaThreshold = (pSystem->fLabelAlphaThreshold + 10.) / 10.;  // [0;50] -> [1;6]
-	pSystem->bTextAlwaysHorizontal = cairo_dock_get_boolean_key_value (pKeyFile, "System", "always horizontal", &bFlushConfFileNeeded, FALSE, "Labels", NULL);
-	
 	// vitesse des animations.
 	///pSystem->bAnimateOnAutoHide = cairo_dock_get_boolean_key_value (pKeyFile, "System", "animate on auto-hide", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
@@ -118,11 +113,6 @@ static void reload (CairoConfigSystem *pPrevSystem, CairoConfigSystem *pSystem)
 		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (FALSE));
 		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
 		g_pFakeTransparencyDesktopBg = NULL;
-	}
-	
-	if (pSystem->bTextAlwaysHorizontal != pPrevSystem->bTextAlwaysHorizontal)
-	{
-		cairo_dock_reload_buffers_in_all_docks (TRUE);  // les modules aussi.
 	}
 }
 

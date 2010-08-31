@@ -162,6 +162,22 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 			cd_warning ("couldn't create %s", cNewThemePath);
 	}
 	
+	//\___________________ On conserve la date de derniere modif.
+	time_t epoch = (time_t) time (NULL);
+	struct tm currentTime;
+	localtime_r (&epoch, &currentTime);
+	char cDateBuffer[50+1];
+	strftime (cDateBuffer, 50, "%a %d %b, %R", &currentTime);
+	gchar *cMessage = g_strdup_printf ("%s\n %s", _("Last modification on:"), cDateBuffer);
+	gchar *cReadmeFile = g_strdup_printf ("%s/%s", cNewThemePath, "readme");
+	g_file_set_contents (cReadmeFile,
+		cMessage,
+		-1,
+		NULL);
+	g_free (cReadmeFile);
+	g_free (cMessage);
+	
+	//\___________________ Le theme n'est plus en etat 'modifie'.
 	g_free (cNewThemePath);
 	if (bThemeSaved)
 	{

@@ -1,6 +1,7 @@
 <gauge>
 	<name>Battery</name>
 	<author>Adrien Pilleboue</author>
+	<version>2</version>
 	<file key="background">background.svg</file>
 	<file key="foreground">foreground.svg</file>
 	<indicator>
@@ -12,5 +13,25 @@
 		<file key="image">battery5.svg</file>
 		<file key="image">battery6.svg</file>
 		<file key="image">battery7.svg</file>
+	<text_zone>
+		<x_center>0.0</x_center>
+		<y_center>0.0</y_center>
+		<width>0.5</width>
+		<height>0.2</height>
+		<red>1.0</red>
+		<blue>1.0</blue>
+		<green>1.0</green>
+		<alpha>0.75</alpha>
+	</text_zone>
+	<logo_zone>
+		<x_center>0.0</x_center>
+		<y_center>-0.3</y_center>
+		<width>0.5</width>
+		<height>0.16</height>
+		<red>1.0</red>
+		<blue>1.0</blue>
+		<green>1.0</green>
+		<alpha>0.6</alpha>
+	</logo_zone>
 	</indicator>
 </gauge>

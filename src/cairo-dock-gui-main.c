@@ -1162,6 +1162,7 @@ static void on_toggle_hide_others (GtkCheckMenuItem *pMenuItem/**GtkToggleButton
 	bHideOther = gtk_check_menu_item_get_active (pMenuItem);
 	_trigger_current_filter ();
 }
+#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
 static void on_clear_filter (GtkEntry *pEntry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer data)
 {
 	gtk_entry_set_text (pEntry, "");
@@ -1171,6 +1172,7 @@ static void on_clear_filter (GtkEntry *pEntry, GtkEntryIconPosition icon_pos, Gd
 	const gchar *keyword[2] = {"fabounetfabounetfabounet", NULL};
 	cairo_dock_apply_current_filter ((gchar **)keyword, FALSE, FALSE, FALSE, FALSE);
 }
+#endif
 
 
   ////////////

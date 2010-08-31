@@ -43,7 +43,6 @@
 #include "cairo-dock-internal-indicators.h"
 #include "cairo-dock-internal-labels.h"
 #include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-background.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-backends-manager.h"
@@ -316,12 +315,12 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 	
 	if (pDock->container.bIsHorizontal)
 	{
-		cairo_translate (pCairoContext, /**pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed */fOffsetX, fOffsetY);
+		cairo_translate (pCairoContext, fOffsetX, fOffsetY);
 		cairo_scale (pCairoContext, (double)fWidth / pDock->backgroundBuffer.iWidth, (double)pDock->iDecorationsHeight / pDock->backgroundBuffer.iHeight);  // pDock->container.iWidth
 	}
 	else
 	{
-		cairo_translate (pCairoContext, fOffsetY, /**pDock->fDecorationsOffsetX * myBackground.fDecorationSpeed + */fOffsetX);
+		cairo_translate (pCairoContext, fOffsetY, fOffsetX);
 		cairo_scale (pCairoContext, (double)pDock->iDecorationsHeight / pDock->backgroundBuffer.iHeight, (double)fWidth / pDock->backgroundBuffer.iWidth);
 	}
 	
@@ -578,10 +577,10 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		else if (icon->fDrawX + fOffsetX + icon->iTextWidth > iWidth)
 			fOffsetX = iWidth - icon->iTextWidth - icon->fDrawX;
 		
-		if (icon->fOrientation != 0 && ! mySystem.bTextAlwaysHorizontal)
+		if (icon->fOrientation != 0 && ! myLabels.bTextAlwaysHorizontal)
 			cairo_rotate (pCairoContext, icon->fOrientation);
 		
-		if (! bIsHorizontal && mySystem.bTextAlwaysHorizontal)
+		if (! bIsHorizontal && myLabels.bTextAlwaysHorizontal)
 		{
 			if (fOffsetX < - icon->fDrawY)
 				fOffsetX = - icon->fDrawY;
@@ -614,8 +613,8 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		else
 		{
 			fMagnitude = (icon->fScale - 1) / myIcons.fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
-			fMagnitude = pow (fMagnitude, mySystem.fLabelAlphaThreshold);
-			///fMagnitude *= (fMagnitude * mySystem.fLabelAlphaThreshold + 1) / (mySystem.fLabelAlphaThreshold + 1);
+			fMagnitude = pow (fMagnitude, myLabels.fLabelAlphaThreshold);
+			///fMagnitude *= (fMagnitude * myLabels.fLabelAlphaThreshold + 1) / (myLabels.fLabelAlphaThreshold + 1);
 		}
 		if (fMagnitude > .1)
 			cairo_paint_with_alpha (pCairoContext, fMagnitude);
@@ -950,9 +949,9 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 		cairo_dock_draw_surface (pCairoContext, g_pVisibleZoneBuffer.pSurface,
 			w,
 			h,
-			(TRUE/**myBackground.bReverseVisibleImage*/ ? pDock->container.bDirectionUp : TRUE),
+			pDock->container.bDirectionUp,  // reverse image with dock.
 			pDock->container.bIsHorizontal,
-			1./**myBackground.fVisibleZoneAlpha*/);
+			1.);
 		cairo_restore (pCairoContext);
 	}
 	

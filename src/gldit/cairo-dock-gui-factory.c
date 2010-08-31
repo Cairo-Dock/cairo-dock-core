@@ -1867,53 +1867,50 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			
 			//\______________ On cree le label descriptif et la boite du widget.
-			///if (iElementType != CAIRO_DOCK_WIDGET_EMPTY_WIDGET)
+			if (iElementType == CAIRO_DOCK_WIDGET_HANDBOOK)
 			{
-				if (iElementType == CAIRO_DOCK_WIDGET_HANDBOOK)
+				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+				CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
+				if (pModule != NULL)
 				{
-					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
-					CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
-					if (pModule != NULL)
-					{
-						gchar *cDescription = g_strdup_printf ("<i>%s (v%s) by %s</i>\n%s",
-							pModule->pVisitCard->cModuleName,
-							pModule->pVisitCard->cModuleVersion,
-							pModule->pVisitCard->cAuthor,
-							dgettext (pModule->pVisitCard->cGettextDomain,
-								pModule->pVisitCard->cDescription));
-						pLabel = gtk_label_new (cDescription);
-						gtk_label_set_use_markup (GTK_LABEL (pLabel), TRUE);
-						gtk_widget_set (pLabel, "width-request", 500, NULL);  // CAIRO_DOCK_PREVIEW_WIDTH
-						gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
-						gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
-						g_free (cDescription);
-					}
-					g_free (cValue);
+					gchar *cDescription = g_strdup_printf ("<i>%s (v%s) by %s</i>\n%s",
+						pModule->pVisitCard->cModuleName,
+						pModule->pVisitCard->cModuleVersion,
+						pModule->pVisitCard->cAuthor,
+						dgettext (pModule->pVisitCard->cGettextDomain,
+							pModule->pVisitCard->cDescription));
+					pLabel = gtk_label_new (cDescription);
+					gtk_label_set_use_markup (GTK_LABEL (pLabel), TRUE);
+					gtk_widget_set (pLabel, "width-request", 500, NULL);  // CAIRO_DOCK_PREVIEW_WIDTH
+					gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
+					gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
+					g_free (cDescription);
 				}
-				else if (*cUsefulComment != '\0' && strcmp (cUsefulComment, "...") != 0)
-				{
-					pLabel = gtk_label_new (NULL);
-					gtk_label_set_use_markup  (GTK_LABEL (pLabel), TRUE);
-					gtk_label_set_markup (GTK_LABEL (pLabel), dgettext (cGettextDomain, cUsefulComment));
-				}
-				if (pLabel != NULL)
-				{
-					GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
-					gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
-					gtk_box_pack_start (GTK_BOX (pKeyBox),
-						pAlign,
-						FALSE,
-						FALSE,
-						0);
-				}
-				
-				pWidgetBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-				gtk_box_pack_end (GTK_BOX (pKeyBox),
-					pWidgetBox,
+				g_free (cValue);
+			}
+			else if (*cUsefulComment != '\0' && strcmp (cUsefulComment, "...") != 0)
+			{
+				pLabel = gtk_label_new (NULL);
+				gtk_label_set_use_markup  (GTK_LABEL (pLabel), TRUE);
+				gtk_label_set_markup (GTK_LABEL (pLabel), dgettext (cGettextDomain, cUsefulComment));
+			}
+			if (pLabel != NULL)
+			{
+				GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
+				gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
+				gtk_box_pack_start (GTK_BOX (pKeyBox),
+					pAlign,
 					FALSE,
 					FALSE,
 					0);
 			}
+			
+			pWidgetBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+			gtk_box_pack_end (GTK_BOX (pKeyBox),
+				pWidgetBox,
+				FALSE,
+				FALSE,
+				0);
 		}
 		
 		pSubWidgetList = NULL;
@@ -2929,6 +2926,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_TEXT_LABEL :  // juste le label de texte.
+				gtk_widget_set_size_request (pLabel, 800, -1);  /// on coupe a 800; valeur a tester sur differentes resolutions ...
+				gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
+				gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_HANDBOOK :  // le label contenant le manuel de l'applet, il a ete place avant.

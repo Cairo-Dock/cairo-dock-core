@@ -35,8 +35,6 @@ G_BEGIN_DECLS
 
 struct _CairoConfigSystem {
 	gboolean bUseFakeTransparency;
-	gdouble fLabelAlphaThreshold;
-	gboolean bTextAlwaysHorizontal;
 	gint iUnfoldingDuration;
 	gboolean bAnimateOnAutoHide_deprecated;
 	gint iGrowUpInterval, iShrinkDownInterval;
@@ -49,10 +47,8 @@ struct _CairoConfigSystem {
 	gint iGLAnimationDeltaT;
 	gint iCairoAnimationDeltaT;
 	gboolean bConfigPanelTransparency;
-	///gint iFadeOutNbSteps;
 	gint iConnectionTimeout;
 	gint iConnectionMaxTime;
-	///gint iConnectionNbRetries;
 	gchar *cConnectionProxy;
 	gint iConnectionPort;
 	gchar *cConnectionUser;
