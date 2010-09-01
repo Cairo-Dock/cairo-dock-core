@@ -65,6 +65,7 @@ void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext)
 	int i;
 	for (i = 0; i < iNbValues; i ++)
 	{
+		cairo_save (pCairoContext);
 		if (! pGraph->bMixGraphs)
 			cairo_translate (pCairoContext,
 				0.,
@@ -156,6 +157,9 @@ void cairo_dock_render_graph (CairoDockGraph *pGraph, cairo_t *pCairoContext)
 			}
 			cairo_stroke (pCairoContext);
 		}
+		cairo_restore (pCairoContext);
+		
+		cairo_dock_render_overlays_to_context (pRenderer, i, pCairoContext);
 	}
 }
 
@@ -307,15 +311,16 @@ static void _set_overlay_zones (CairoDockGraph *pGraph)
 	double fOneGraphWidth = iWidth - 2*fMargin;
 	fOneGraphWidth /= iNbDrawings;
 	int iTextWidth = MIN (48, pRenderer->iWidth/2);  // on definit une taille pour les zones de texte.
-	int iTextHeight = MIN (16, fOneGraphHeight/2);
+	int iTextHeight = MIN (16, fOneGraphHeight/1.5);
 	int iLabelWidth = MIN (48, pRenderer->iWidth/2);  // on definit une taille pour les zones de texte.
-	int iLabelHeight = MIN (16, fOneGraphHeight/3);
-	int h = 3;  // ecart du texte au-dessus de l'axe Ox.
+	int iLabelHeight = MIN (16, fOneGraphHeight/2.);
+	int h = fOneGraphHeight/8;  // ecart du texte au-dessus de l'axe Ox.
 	CairoDataRendererTextParam *pValuesText;
 	CairoDataRendererEmblem *pEmblem;
 	CairoDataRendererText *pLabel;
 	for (i = 0; i < iNbValues; i ++)
 	{
+		/// rajouter l'alignement gauche/centre/droit ...
 		if (pRenderer->pLabels)  // les labels en haut a gauche.
 		{
 			pLabel = &pRenderer->pLabels[i];
@@ -328,7 +333,7 @@ static void _set_overlay_zones (CairoDockGraph *pGraph)
 				}
 				else
 				{
-					pLabel->param.fX = (double)0.;  // centered.
+					pLabel->param.fX = (double) (fMargin + iLabelWidth/2) / iWidth - .5;
 					pLabel->param.fY = .5 - (double)(fMargin + h + i * fOneGraphHeight + iLabelHeight/2) / iHeight;
 				}
 				pLabel->param.fWidth = (double)iLabelWidth / iWidth;
@@ -354,7 +359,7 @@ static void _set_overlay_zones (CairoDockGraph *pGraph)
 			else
 			{
 				pValuesText->fX = (double)0.;  // centered.
-				pValuesText->fY = .5 - (double)(fMargin + (i+1) * fOneGraphHeight - iTextHeight - h) / iHeight;
+				pValuesText->fY = .5 - (double)(fMargin + (i+1) * fOneGraphHeight - iTextHeight/2 - h) / iHeight;
 			}
 			pValuesText->fWidth = (double)iTextWidth / iWidth;
 			pValuesText->fHeight = (double)iTextHeight / iHeight;
@@ -396,7 +401,7 @@ static void cairo_dock_load_graph (CairoDockGraph *pGraph, CairoContainer *pCont
 			0.);
 	}
 	
-	pGraph->iRadius = pAttribute->iRadius;
+	pGraph->iRadius = MAX (pAttribute->iRadius, MIN (iWidth, iHeight)/3.);
 	pGraph->fMargin = pGraph->iRadius * (1. - sqrt(2)/2);
 	if (pAttribute->fBackGroundColor != NULL)
 		memcpy (pGraph->fBackGroundColor, pAttribute->fBackGroundColor, 4 * sizeof (double));

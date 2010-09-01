@@ -124,6 +124,7 @@ static void _check_mouse_outside (CairoDock *pDock, gpointer data)
 		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
 	else
 		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
+	g_print ("%s (%d, %d)\n", __func__, pDock->container.iMouseX, pDock->container.iMouseY);
 	cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
 }
 static gboolean _cairo_dock_unstack_Xevents (gpointer data)

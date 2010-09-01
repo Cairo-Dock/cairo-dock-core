@@ -504,12 +504,6 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 
 
 static GtkWidget *s_pMenu = NULL;
-static gboolean _on_destroyed_menu (GtkWidget *widget, GdkEvent  *event, gpointer   user_data)
-{
-	g_print ("*** menu destroyed\n");
-	s_pMenu = NULL;
-	return FALSE;
-}
 static gboolean _on_delete_menu (GtkWidget *widget, GdkEvent  *event, gpointer   user_data)
 {
 	g_print ("*** menu deleted\n");
@@ -538,8 +532,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	}
 	
 	cairo_dock_notify (CAIRO_DOCK_BUILD_ICON_MENU, icon, pContainer, menu);
-	g_signal_connect (G_OBJECT (menu), "destroy-event", G_CALLBACK (_on_destroyed_menu), NULL);
-	g_signal_connect (G_OBJECT (menu), "delete-event", G_CALLBACK (_on_delete_menu), NULL);
+	g_signal_connect (G_OBJECT (menu), "delete-event", G_CALLBACK (_on_delete_menu), NULL);  // apparemment inutile.
 	
 	s_pMenu = menu;
 	return menu;

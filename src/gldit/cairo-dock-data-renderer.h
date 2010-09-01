@@ -216,6 +216,11 @@ void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize);
 void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext);
 
 
+void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iNumValue, cairo_t *pCairoContext);
+
+void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iNumValue);
+
+
 ///
 /// Structure Access
 ///

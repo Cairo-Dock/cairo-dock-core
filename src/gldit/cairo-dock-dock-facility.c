@@ -812,9 +812,9 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 		case CAIRO_DOCK_MOUSE_OUTSIDE :
 			//g_print ("en dehors du dock (bIsShrinkingDown:%d;bIsGrowingUp:%d;iMagnitudeIndex:%d)\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
 			///pDock->fDecorationsOffsetX = - pDock->container.iWidth / 2;  // on fixe les decorations.
-			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && pDock->iMagnitudeIndex > 0 && ! pDock->bIconIsFlyingAway)
+			if (! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && (pDock->iMagnitudeIndex > 0 || pDock->bIsGrowingUp) && ! pDock->bIconIsFlyingAway)
 			{
-				g_print ("on force a quitter (iRefCount:%d)\n", pDock->iRefCount);
+				g_print ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)\n", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
 				if (pDock->iRefCount > 0 && myAccessibility.iLeaveSubDockDelay > 0)
 					pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
 				else

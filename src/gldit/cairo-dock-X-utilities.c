@@ -424,15 +424,17 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 		XPixmapID, &root, &x, &y,
 		&iWidth, &iHeight, &border_width, &iDepth))
 		return NULL;
-	cd_debug ("%s (%d) : %ux%ux%u (%d;%d)", __func__, XPixmapID, iWidth, iHeight, iDepth, x, y);
+	//g_print ("%s (%d) : %ux%ux%u (%d;%d)\n", __func__, XPixmapID, iWidth, iHeight, iDepth, x, y);
 
 	//\__________________ On recupere le drawable associe.
 	GdkDrawable *pGdkDrawable = gdk_xid_table_lookup (XPixmapID);
 	if (pGdkDrawable)
+	{
 		g_object_ref (G_OBJECT (pGdkDrawable));
+	}
 	else
 	{
-		cd_debug ("pas d'objet GDK present, on en alloue un nouveau");
+		//g_print ("pas d'objet GDK present, on en alloue un nouveau\n");
 		GdkScreen* pScreen = gdk_screen_get_default ();
 		pGdkDrawable = gdk_pixmap_foreign_new_for_screen (pScreen, XPixmapID, iWidth, iHeight, iDepth);
 	}
@@ -446,7 +448,7 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 			pColormap = gdk_screen_get_rgba_colormap (pScreen);
 		else
 			pColormap = gdk_screen_get_rgb_colormap (pScreen);  // au pire on a un colormap nul.
-		cd_debug ("  pColormap : %x  (pScreen:%x)", pColormap, pScreen);
+		//cd_debug ("  pColormap : %x  (pScreen:%x)", pColormap, pScreen);
 	}
 
 	//\__________________ On recupere le buffer dans un GdkPixbuf.

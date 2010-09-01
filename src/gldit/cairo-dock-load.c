@@ -365,7 +365,7 @@ void cairo_dock_trigger_load_dock_background (CairoDock *pDock)
 
 static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // attention : fonction lourde.
 {
-	cd_debug ("%s ()", __func__);
+	//g_print ("+++ %s ()\n", __func__);
 	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (cairo_dock_get_root_id ());
 	g_return_val_if_fail (iRootPixmapID != 0, NULL);
 	
@@ -436,12 +436,12 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 
 CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo)
 {
-	cd_message ("%s (%d, %d)", __func__, bWithTextureToo, s_pDesktopBg?s_pDesktopBg->iRefCount:-1);
+	//g_print ("%s (%d, %d)\n", __func__, bWithTextureToo, s_pDesktopBg?s_pDesktopBg->iRefCount:-1);
 	if (s_pDesktopBg == NULL)
 	{
 		s_pDesktopBg = g_new0 (CairoDockDesktopBackground, 1);
 	}
-	if (s_pDesktopBg->iRefCount == 0)
+	if (s_pDesktopBg->pSurface == NULL)
 	{
 		s_pDesktopBg->pSurface = _cairo_dock_create_surface_from_desktop_bg ();
 	}
@@ -453,6 +453,7 @@ CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTex
 	s_pDesktopBg->iRefCount ++;
 	if (s_pDesktopBg->iSidDestroyBg != 0)
 	{
+		//g_print ("cancel pending destroy\n");
 		g_source_remove (s_pDesktopBg->iSidDestroyBg);
 		s_pDesktopBg->iSidDestroyBg = 0;
 	}
@@ -461,12 +462,13 @@ CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTex
 
 static gboolean _destroy_bg (CairoDockDesktopBackground *pDesktopBg)
 {
-	cd_message ("%s ()", __func__);
+	//g_print ("%s ()\n", __func__);
 	g_return_val_if_fail (pDesktopBg != NULL, 0);
 	if (pDesktopBg->pSurface != NULL)
 	{
 		cairo_surface_destroy (pDesktopBg->pSurface);
 		pDesktopBg->pSurface = NULL;
+		//g_print ("--- surface destroyed\n");
 	}
 	if (pDesktopBg->iTexture != 0)
 	{
@@ -478,11 +480,13 @@ static gboolean _destroy_bg (CairoDockDesktopBackground *pDesktopBg)
 }
 void cairo_dock_destroy_desktop_background (CairoDockDesktopBackground *pDesktopBg)
 {
+	//g_print ("%s ()\n", __func__);
 	g_return_if_fail (pDesktopBg != NULL);
 	if (pDesktopBg->iRefCount > 0)
 		pDesktopBg->iRefCount --;
 	if (pDesktopBg->iRefCount == 0 && pDesktopBg->iSidDestroyBg == 0)
 	{
+		//g_print ("add pending destroy\n");
 		pDesktopBg->iSidDestroyBg = g_timeout_add_seconds (3, (GSourceFunc)_destroy_bg, pDesktopBg);
 	}
 }
@@ -501,14 +505,17 @@ GLuint cairo_dock_get_desktop_bg_texture (CairoDockDesktopBackground *pDesktopBg
 
 void cairo_dock_reload_desktop_background (void)
 {
-	cd_message ("%s ()", __func__);
+	//g_print ("%s ()\n", __func__);
 	if (s_pDesktopBg == NULL)  // rien a recharger.
 		return ;
 	if (s_pDesktopBg->pSurface == NULL && s_pDesktopBg->iTexture == 0)  // rien a recharger.
 		return ;
 	
 	if (s_pDesktopBg->pSurface != NULL)
+	{
 		cairo_surface_destroy (s_pDesktopBg->pSurface);
+		//g_print ("--- surface destroyed\n");
+	}
 	s_pDesktopBg->pSurface = _cairo_dock_create_surface_from_desktop_bg ();
 	
 	if (s_pDesktopBg->iTexture != 0)
@@ -524,13 +531,13 @@ void cairo_dock_unload_additionnal_textures (void)
 	cd_debug ("");
 	if (s_pDesktopBg)  // on decharge le desktop-bg de force.
 	{
-		_destroy_bg (s_pDesktopBg);  // detruit ses ressources immediatement, mais pas le pointeur.
 		if (s_pDesktopBg->iSidDestroyBg != 0)
 		{
 			g_source_remove (s_pDesktopBg->iSidDestroyBg);
 			s_pDesktopBg->iSidDestroyBg = 0;
 		}
 		s_pDesktopBg->iRefCount = 0;
+		_destroy_bg (s_pDesktopBg);  // detruit ses ressources immediatement, mais pas le pointeur.
 	}
 	g_pFakeTransparencyDesktopBg = NULL;
 	cairo_dock_unload_desklet_buttons ();

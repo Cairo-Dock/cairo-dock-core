@@ -36,8 +36,6 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-gauge.h"
 
-#define CAIRO_DOCK_GAUGES_DIR "gauges"
-
 extern gboolean g_bUseOpenGL;
 
   ////////////////////////////////////////////
@@ -74,7 +72,6 @@ static GaugeImage *_cairo_dock_new_gauge_image (const gchar *cImagePath)
 }
 static void _cairo_dock_load_gauge_image (GaugeImage *pGaugeImage, int iWidth, int iHeight)
 {
-	cd_message ("%s (%dx%d)", __func__, iWidth, iHeight);
 	if (pGaugeImage->pSurface != NULL)
 		cairo_surface_destroy (pGaugeImage->pSurface);
 	if (pGaugeImage->iTexture != 0)
@@ -108,7 +105,6 @@ static void _cairo_dock_load_gauge_image (GaugeImage *pGaugeImage, int iWidth, i
 }
 static void _cairo_dock_load_gauge_needle (GaugeIndicator *pGaugeIndicator, int iWidth, int iHeight)
 {
-	cd_message ("%s (%dx%d)", __func__, iWidth, iHeight);
 	GaugeImage *pGaugeImage = pGaugeIndicator->pImageNeedle;
 	g_return_if_fail (pGaugeImage != NULL);
 	
@@ -334,7 +330,6 @@ static gboolean _cairo_dock_load_gauge_theme (Gauge *pGauge, const gchar *cTheme
 				}
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "file") == 0)
 				{
-					cd_debug("gauge : On charge un fichier (%s)",cNodeContent);
 					ap = xmlHasProp(pGaugeSubNode, "key");
 					cAttribute = xmlNodeGetContent(ap->children);
 					if (strcmp (cAttribute, "needle") == 0 && pGaugeIndicator->pImageNeedle == NULL)
@@ -514,33 +509,6 @@ static void cairo_dock_draw_one_gauge (cairo_t *pCairoContext, Gauge *pGauge, in
 		{
 			_draw_gauge_image (pCairoContext, pGauge, pIndicator, fValue);
 		}
-		
-		/**if (pIndicator->textZone.fWidth != 0 && pIndicator->textZone.fHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
-		{
-			cairo_data_renderer_format_value (pRenderer, fValue, i);
-			//g_print (" >>>%s\n", pRenderer->cFormatBuffer);
-			cairo_save (pCairoContext);
-			cairo_set_source_rgb (pCairoContext, pIndicator->textZone.pColor[0], pIndicator->textZone.pColor[1], pIndicator->textZone.pColor[2]);
-			
-			PangoLayout *pLayout = pango_cairo_create_layout (pCairoContext);
-			PangoFontDescription *fd = pango_font_description_from_string ("Monospace 12");
-			pango_layout_set_font_description (pLayout, fd);
-			
-			PangoRectangle ink, log;
-			pango_layout_set_text (pLayout, pRenderer->cFormatBuffer, -1);
-			pango_layout_get_pixel_extents (pLayout, &ink, &log);
-			double fZoom = MIN (pIndicator->textZone.fWidth * pRenderer->iWidth / (log.width), pIndicator->textZone.fHeight * pRenderer->iHeight / log.height);
-			
-			cairo_move_to (pCairoContext,
-				floor ((1. + pIndicator->textZone.fX) * pRenderer->iWidth/2 - log.width*fZoom/2),
-				floor ((1. - pIndicator->textZone.fY) * pRenderer->iHeight/2 - log.height*fZoom/2));
-			cairo_scale (pCairoContext,
-				fZoom,
-				fZoom);
-			pango_cairo_show_layout (pCairoContext, pLayout);
-			g_object_unref (pLayout);
-			cairo_restore (pCairoContext);
-		}*/
 	}
 	
 	//\________________ On affiche l'avant-plan.
@@ -549,6 +517,12 @@ static void cairo_dock_draw_one_gauge (cairo_t *pCairoContext, Gauge *pGauge, in
 		pGaugeImage = pGauge->pImageForeground;
 		cairo_set_source_surface (pCairoContext, pGaugeImage->pSurface, 0.0f, 0.0f);
 		cairo_paint (pCairoContext);
+	}
+	
+	//\________________ On affiche les overlays.
+	for (i = iDataOffset, pIndicatorElement = pGauge->pIndicatorList; i < pData->iNbValues && pIndicatorElement != NULL; i++, pIndicatorElement = pIndicatorElement->next)
+	{
+		cairo_dock_render_overlays_to_context (pRenderer, i, pCairoContext);
 	}
 }
 void cairo_dock_render_gauge (Gauge *pGauge, cairo_t *pCairoContext)
@@ -607,11 +581,6 @@ static void _draw_gauge_image_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndic
 	
 	GaugeImage *pGaugeImage = &pGaugeIndicator->pImageList[iNumImage];
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
-	/*if (pGaugeImage->iTexture == 0)
-	{
-		_cairo_dock_load_gauge_image (NULL, pGaugeImage, iWidth, iHeight);  // pas besoin d'un cairo_context pour creer une cairo_image_surface.
-		return ;
-	}*/
 	
 	if (pGaugeImage->iTexture != 0)
 	{
@@ -624,12 +593,6 @@ static void _draw_gauge_needle_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndi
 	g_return_if_fail (pGaugeImage != NULL);
 	
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
-	/*if (pGaugeImage->iTexture == 0)
-	{
-		_cairo_dock_load_gauge_needle (NULL, pGaugeIndicator, iWidth, iHeight);  // pas besoin d'un cairo_context pour creer une cairo_image_surface.
-		return ;
-	}*/
-	
 	if(pGaugeImage->iTexture != 0)
 	{
 		double fAngle = (pGaugeIndicator->posStart + fValue * (pGaugeIndicator->posStop - pGaugeIndicator->posStart));
@@ -682,27 +645,6 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 		{
 			_draw_gauge_image_opengl (pGauge, pIndicator, fValue);
 		}
-		
-		/**if (pIndicator->textZone.fWidth != 0 && pIndicator->textZone.fHeight != 0)  // cet indicateur a un emplacement pour le texte de la valeur.
-		{
-			cairo_data_renderer_format_value (pRenderer, fValue, i);
-			
-			CairoDockGLFont *pFont = cairo_dock_get_default_data_renderer_font ();
-			glColor3f (pIndicator->textZone.pColor[0], pIndicator->textZone.pColor[1], pIndicator->textZone.pColor[2]);
-			glPushMatrix ();
-			
-			cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer,
-				pFont,
-				floor (pIndicator->textZone.fX * pRenderer->iWidth/2),
-				floor (pIndicator->textZone.fY * pRenderer->iHeight/2),
-				pIndicator->textZone.fWidth * pRenderer->iWidth,
-				pIndicator->textZone.fHeight * pRenderer->iHeight,
-				TRUE);
-			
-			glPopMatrix ();
-			_cairo_dock_enable_texture ();
-			glColor3f (1.0, 1.0, 1.0);
-		}*/
 	}
 	
 	//\________________ On affiche l'avant-plan.
@@ -712,6 +654,13 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 		if (pGaugeImage->iTexture != 0)
 			_cairo_dock_apply_texture_at_size (pGaugeImage->iTexture, iWidth, iHeight);
 	}
+	
+	//\________________ On affiche les overlays.
+	for (i = iDataOffset, pIndicatorElement = pGauge->pIndicatorList; i < pData->iNbValues && pIndicatorElement != NULL; i++, pIndicatorElement = pIndicatorElement->next)
+	{
+		cairo_dock_render_overlays_to_texture (pRenderer, i);
+	}
+	_cairo_dock_enable_texture ();
 }
 static void cairo_dock_render_gauge_opengl (Gauge *pGauge)
 {
@@ -730,7 +679,7 @@ static void cairo_dock_render_gauge_opengl (Gauge *pGauge)
 		if (iNbDrawings > 1)  // on va dessiner la jauges plusieurs fois, la 1ere en grand et les autres en petit autour.
 		{
 			glPushMatrix ();
-			if (i == 0)
+			if (i == 0)  /// tester avec 1/2, 1/2
 			{
 				glTranslatef (-pRenderer->iWidth / 6, pRenderer->iHeight / 6, 0.);
 				glScalef (2./3, 2./3, 1.);
@@ -867,40 +816,8 @@ void cairo_dock_register_data_renderer_gauge (void)
 	pRecord->interface.reload		= (CairoDataRendererReloadFunc) cairo_dock_reload_gauge;
 	pRecord->interface.unload		= (CairoDataRendererUnloadFunc) cairo_dock_unload_gauge;
 	pRecord->iStructSize			= sizeof (Gauge);
-	pRecord->cThemeDirName = "gauges2";
-	pRecord->cDefaultTheme = "Turbo-night-fuel";
+	pRecord->cThemeDirName 			= "gauges2";
+	pRecord->cDefaultTheme 			= "Turbo-night-fuel";
 	
 	cairo_dock_register_data_renderer ("gauge", pRecord);
-}
-
-
-
-/// deprecated ... to be added in the DataRenderer API.
-void cairo_dock_add_watermark_on_gauge (Gauge *pGauge, gchar *cImagePath, double fAlpha)
-{
-	g_return_if_fail (pGauge != NULL && cImagePath != NULL);
-	
-	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
-	cairo_surface_t *pWatermarkSurface = cairo_dock_create_surface_for_icon (cImagePath, pRenderer->iWidth/2, pRenderer->iHeight/2);
-	
-	if (pGauge->pImageBackground == NULL)
-	{
-		pGauge->pImageBackground = g_new0 (GaugeImage, 1);
-		pGauge->pImageBackground->sizeX = pRenderer->iWidth;
-		pGauge->pImageBackground->sizeY = pRenderer->iHeight;
-		
-		pGauge->pImageBackground->pSurface = cairo_dock_create_blank_surface (
-			pRenderer->iWidth,
-			pRenderer->iHeight);
-	}
-	
-	cairo_t *pCairoContext = cairo_create (pGauge->pImageBackground->pSurface);
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-	
-	cairo_set_source_surface (pCairoContext, pWatermarkSurface, pRenderer->iWidth/4, pRenderer->iHeight/4);
-	cairo_paint_with_alpha (pCairoContext, fAlpha);
-	
-	cairo_destroy (pCairoContext);
-	
-	cairo_surface_destroy (pWatermarkSurface);
 }
