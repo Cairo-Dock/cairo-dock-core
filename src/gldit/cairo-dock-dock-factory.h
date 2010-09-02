@@ -264,7 +264,9 @@ struct _CairoDock {
 	
 	/// Source ID to destroy an empty main dock.
 	guint iSidDestroyEmptyDock;
-	gchar reserved[8];
+	/// Source ID for shrinking down the dock after a mouse event.
+	guint iSidTestMouseOutside;
+	gchar reserved[4];
 };
 
 

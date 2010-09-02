@@ -773,7 +773,6 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 
 void cairo_dock_manage_mouse_position (CairoDock *pDock)
 {
-	static gboolean bReturn = FALSE;
 	switch (pDock->iMousePositionType)
 	{
 		case CAIRO_DOCK_MOUSE_INSIDE :
@@ -791,7 +790,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 				if ((pDock->iMagnitudeIndex == 0 && pDock->iRefCount == 0 && ! pDock->bAutoHide) || !pDock->container.bInside)
 				{
 					//g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
-					g_signal_emit_by_name (pDock->container.pWidget, "enter-notify-event", NULL, &bReturn);
+					cairo_dock_emit_enter_signal (CAIRO_CONTAINER (pDock));
 				}
 				else // on se contente de faire grossir les icones.
 				{
@@ -804,16 +803,20 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 		break ;
 
 		case CAIRO_DOCK_MOUSE_ON_THE_EDGE :
-			///pDock->fDecorationsOffsetX = - pDock->container.iWidth / 2;  // on fixe les decorations.
 			if (pDock->iMagnitudeIndex > 0 && ! pDock->bIsGrowingUp)
 				cairo_dock_start_shrinking (pDock);
 		break ;
 
 		case CAIRO_DOCK_MOUSE_OUTSIDE :
 			//g_print ("en dehors du dock (bIsShrinkingDown:%d;bIsGrowingUp:%d;iMagnitudeIndex:%d)\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
-			///pDock->fDecorationsOffsetX = - pDock->container.iWidth / 2;  // on fixe les decorations.
 			if (! pDock->bIsGrowingUp && ! pDock->bIsShrinkingDown && pDock->iSidLeaveDemand == 0 && pDock->iMagnitudeIndex > 0 && ! pDock->bIconIsFlyingAway)
 			{
+				if (pDock->iRefCount > 0)
+				{
+					Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+					if (pPointingIcon && pPointingIcon->bPointed)  // sous-dock pointe, n le laisse en position haute.
+						return;
+				}
 				g_print ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)\n", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
 				if (pDock->iRefCount > 0 && myAccessibility.iLeaveSubDockDelay > 0)
 					pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);

@@ -89,6 +89,8 @@ static gboolean s_bHideAfterShortcut = FALSE;
 static gboolean s_bFrozenDock = FALSE;
 static gboolean s_bIconDragged = FALSE;
 
+static gboolean _check_mouse_outside (CairoDock *pDock);
+
 #define _mouse_is_really_outside(pDock) (pDock->container.iMouseX <= 0 ||\
 	pDock->container.iMouseX >= pDock->container.iWidth ||\
 	(pDock->container.bDirectionUp ?\
@@ -633,7 +635,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}
 	
-	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin).
+	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin) ou meme de X (changement de bureau).
 	if (pEvent)
 	{
 		if (pDock->container.bIsHorizontal)
@@ -649,6 +651,10 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		if (!_mouse_is_really_outside(pDock))
 		{
 			//g_print ("not really outside (%d;%d ; %d/%d)\n", (int)pEvent->x, (int)pEvent->y, pDock->iMaxDockHeight, pDock->iMinDockHeight);
+			if (pDock->iSidTestMouseOutside == 0)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
+			{
+				pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
+			}
 			return FALSE;
 		}
 	}
@@ -683,6 +689,13 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		}
 	}  // sinon c'est nous qui avons explicitement demande cette sortie, donc on continue.
 	pDock->iSidLeaveDemand = 0;
+	
+	if (pDock->iSidTestMouseOutside != 0)
+	{
+		//g_print ("stop checking mouse (leave)\n");
+		g_source_remove (pDock->iSidTestMouseOutside);
+		pDock->iSidTestMouseOutside = 0;
+	}
 	
 	//\_______________ On enregistre la position de la souris.
 	if (pEvent != NULL)
@@ -731,8 +744,14 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (pDock->iSidHideBack != 0)
 	{
 		//g_print ("remove hide back timeout\n");
-		g_source_remove(pDock->iSidHideBack);
+		g_source_remove (pDock->iSidHideBack);
 		pDock->iSidHideBack = 0;
+	}
+	if (pDock->iSidTestMouseOutside != 0)
+	{
+		//g_print ("stop checking mouse (enter)\n");
+		g_source_remove (pDock->iSidTestMouseOutside);
+		pDock->iSidTestMouseOutside = 0;
 	}
 	
 	// input shape desactivee, le dock devient actif.
@@ -846,7 +865,23 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	return TRUE;
 }
 
-
+static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principalement fait pour detecter les cas ou X nous envoit un signal leave errone alors qu'on est dedans (=> sortie refusee, bInside reste a TRUE), puis du coup ne nous en envoit pas de leave lorsqu'on quitte reellement le dock.
+{
+	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->bIsShrinkingDown, pDock->iMagnitudeIndex, pDock->container.bInside);
+	if (pDock->bIsShrinkingDown || pDock->iMagnitudeIndex == 0 || ! pDock->container.bInside)  // cas triviaux : si le dock est deja retrcit, ou qu'on est deja plus dedans, on peut quitter.
+	{
+		pDock->iSidTestMouseOutside = 0;
+		return FALSE;
+	}
+	if (pDock->container.bIsHorizontal)
+		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
+	else
+		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
+	//g_print (" -> (%d, %d)\n", pDock->container.iMouseX, pDock->container.iMouseY);
+	
+	cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
+	return TRUE;
+}
 gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton, CairoDock *pDock)
 {
 	//g_print ("+ %s (%d/%d, %x)\n", __func__, pButton->type, pButton->button, pWidget);
@@ -890,6 +925,11 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							
 							cairo_dock_start_icon_animation (icon, pDock);
 							icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
+							
+							if (pDock->iSidTestMouseOutside == 0)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
+							{
+								///pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
+							}
 						}
 					}
 					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && ! pDock->bPreventDraggingIcons)  //  && icon->iType == s_pIconClicked->iType
@@ -1019,12 +1059,14 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 	{
 		return FALSE;
 	}
-	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
-	///if (icon != NULL)
+	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // can be NULL
+	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_SCROLL_ICON, icon, pDock, pScroll->direction);
+	
+	if (pDock->iSidTestMouseOutside == 0)  // meme remarque que plus haut.
 	{
-		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_SCROLL_ICON, icon, pDock, pScroll->direction);
+		///pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
 	}
-
+	
 	return FALSE;
 }
 

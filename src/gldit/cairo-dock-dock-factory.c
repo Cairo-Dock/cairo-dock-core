@@ -257,6 +257,8 @@ void cairo_dock_free_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidLoadBg);
 	if (pDock->iSidDestroyEmptyDock != 0)
 		g_source_remove (pDock->iSidDestroyEmptyDock);
+	if (pDock->iSidTestMouseOutside != 0)
+		g_source_remove (pDock->iSidTestMouseOutside);
 	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);
 	
 	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);

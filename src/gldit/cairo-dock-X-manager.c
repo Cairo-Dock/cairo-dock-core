@@ -118,7 +118,7 @@ static void _on_change_desktop_geometry (void)
 	cairo_dock_notify (CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED);
 }
 
-static void _check_mouse_outside (CairoDock *pDock, gpointer data)
+/**static void _check_mouse_outside (CairoDock *pDock, gpointer data)
 {
 	if (pDock->container.bIsHorizontal)
 		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
@@ -126,11 +126,11 @@ static void _check_mouse_outside (CairoDock *pDock, gpointer data)
 		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
 	g_print ("%s (%d, %d)\n", __func__, pDock->container.iMouseX, pDock->container.iMouseY);
 	cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
-}
+}*/
 static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 {
 	static XEvent event;
-	static gboolean s_iCheckMouseIsOutsideCount = 0;
+	///static gboolean s_iCheckMouseIsOutsideCount = 0;
 	
 	if (!g_pPrimaryContainer)  // peut arriver en cours de chargement d'un theme.
 		return TRUE;
@@ -163,7 +163,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 				else if (event.xproperty.atom == s_aNetCurrentDesktop || event.xproperty.atom == s_aNetDesktopViewport)
 				{
 					_on_change_current_desktop_viewport ();  // -> CAIRO_DOCK_DESKTOP_CHANGED
-					s_iCheckMouseIsOutsideCount = 1;  // arrive a 3, on testera que X ne nous a pas fait sortir du dock sans raison.
+					///s_iCheckMouseIsOutsideCount = 1;  // arrive a 3, on testera que X ne nous a pas fait sortir du dock sans raison.
 				}
 				else if (event.xproperty.atom == s_aNetNbDesktops)
 				{
@@ -225,7 +225,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 		XSync (s_XDisplay, True);  // True <=> discard.
 	//g_print ("XEventsQueued : %d\n", XEventsQueued (s_XDisplay, QueuedAfterFlush));  // QueuedAlready, QueuedAfterReading, QueuedAfterFlush
 	
-	if (s_iCheckMouseIsOutsideCount != 0)
+	/**if (s_iCheckMouseIsOutsideCount != 0)
 	{
 		s_iCheckMouseIsOutsideCount ++;  // donc la toute premiere fois on est a 2.
 		if (s_iCheckMouseIsOutsideCount & 1)  // donc on teste a t+1 et t+3
@@ -236,7 +236,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 		{
 			s_iCheckMouseIsOutsideCount = 0;
 		}
-	}
+	}*/
 	return TRUE;
 }
 
