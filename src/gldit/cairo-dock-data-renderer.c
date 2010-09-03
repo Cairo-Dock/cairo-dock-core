@@ -804,7 +804,7 @@ gchar *cairo_dock_get_package_path_for_data_renderer (const gchar *cRendererName
 	gchar *cGaugePath = cairo_dock_get_data_renderer_theme_path (cRendererName, cChosenThemeName, iType);
 	
 	if (cGaugePath == NULL)  // theme introuvable.
-		cGaugePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName, pRecord->cDefaultTheme);
+		cGaugePath = g_strdup_printf ("%s/%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName, pRecord->cDefaultTheme);
 	
 	if (iType != CAIRO_DOCK_ANY_PACKAGE)
 	{

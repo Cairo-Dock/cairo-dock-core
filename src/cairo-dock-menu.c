@@ -319,7 +319,11 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, CairoContainer *pContainer
 
 gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu, gboolean *bDiscardMenu)
 {
-	//\_________________________ On ajoute le sous-menu Cairo-Dock, toujours present.
+	
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount > 0)  // pas sur les sous-docks
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	
+	//\_________________________ On ajoute le sous-menu Cairo-Dock.
 	GtkWidget *pMenuItem, *image;
 	GdkPixbuf *pixbuf;
 	pMenuItem = gtk_image_menu_item_new_with_label ("Cairo-Dock");
@@ -328,10 +332,10 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 	g_object_unref (pixbuf);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
 	gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
-
+	
 	GtkWidget *pSubMenu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
-
+	
 	if (! cairo_dock_is_locked ())
 	{
 		if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bIsMainDock && CAIRO_DOCK (pContainer)->iRefCount == 0)
@@ -351,7 +355,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 			NULL);
 		gtk_widget_set_tooltip_text (pMenuItem, _("Configure behaviour, appearance, and applets."));
 		
-		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Manage themes"), 
+		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Manage themes"),
 			CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg",
 			(GFunc)_cairo_dock_initiate_theme_management,
 			pSubMenu,
@@ -430,6 +434,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 			pSubMenu,
 			pContainer);
 	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 
