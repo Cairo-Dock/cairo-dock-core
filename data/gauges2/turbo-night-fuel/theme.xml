@@ -13,22 +13,22 @@
 		<text_zone>
 		        <x_center>0.0</x_center>
 		        <y_center>-0.3</y_center>
-		        <width>0.5</width>
-		        <height>0.16</height>
+		        <width>0.4</width>
+		        <height>0.18</height>
 		        <red>1.0</red>
 		        <blue>0.0</blue>
 		        <green>0.0</green>
 		        <alpha>1.0</alpha>
 		</text_zone>
-		<logo_zone>
+		<label_zone>
 		        <x_center>0.0</x_center>
-		        <y_center>0.1</y_center>
-		        <width>0.5</width>
-		        <height>0.16</height>
+		        <y_center>0.05</y_center>
+		        <width>0.4</width>
+		        <height>0.18</height>
 		        <red>1.0</red>
 		        <blue>0.0</blue>
 		        <green>0.0</green>
 		        <alpha>0.8</alpha>
-		</logo_zone>
+		</label_zone>
 	</indicator>
 </gauge>

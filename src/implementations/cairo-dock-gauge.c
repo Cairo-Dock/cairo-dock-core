@@ -816,7 +816,7 @@ void cairo_dock_register_data_renderer_gauge (void)
 	pRecord->interface.reload		= (CairoDataRendererReloadFunc) cairo_dock_reload_gauge;
 	pRecord->interface.unload		= (CairoDataRendererUnloadFunc) cairo_dock_unload_gauge;
 	pRecord->iStructSize			= sizeof (Gauge);
-	pRecord->cThemeDirName 			= "gauges2";
+	pRecord->cThemeDirName 			= "gauges";
 	pRecord->cDefaultTheme 			= "Turbo-night-fuel";
 	
 	cairo_dock_register_data_renderer ("gauge", pRecord);

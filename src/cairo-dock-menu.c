@@ -1213,26 +1213,29 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 		_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
 		
-		if (myTaskBar.bOverWriteXIcons)
+		if (CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
 		{
-			gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, icon->cClass);
-			if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+			if (myTaskBar.bOverWriteXIcons)
 			{
-				g_free (cCustomIcon);
-				cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, icon->cClass);
+				gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, icon->cClass);
 				if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
 				{
 					g_free (cCustomIcon);
-					cCustomIcon = NULL;
+					cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, icon->cClass);
+					if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+					{
+						g_free (cCustomIcon);
+						cCustomIcon = NULL;
+					}
+				}
+				if (cCustomIcon != NULL)
+				{
+					_add_entry_in_menu (_("Remove custom icon"), GTK_STOCK_REMOVE, _cairo_dock_remove_custom_appli_icon, pSubMenuOtherActions);
 				}
 			}
-			if (cCustomIcon != NULL)
-			{
-				_add_entry_in_menu (_("Remove custom icon"), GTK_STOCK_REMOVE, _cairo_dock_remove_custom_appli_icon, pSubMenuOtherActions);
-			}
+			
+			_add_entry_in_menu (_("Set a custom icon"), GTK_STOCK_SELECT_COLOR, _cairo_dock_set_custom_appli_icon, pSubMenuOtherActions);
 		}
-		
-		_add_entry_in_menu (_("Set a custom icon"), GTK_STOCK_SELECT_COLOR, _cairo_dock_set_custom_appli_icon, pSubMenuOtherActions);
 		
 		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
 		
