@@ -764,11 +764,11 @@ GHashTable *cairo_dock_list_available_themes_for_data_renderer (const gchar *cRe
 	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
 	g_return_val_if_fail (pRecord != NULL, NULL);
 	
-	if (pRecord->cThemeDirName == NULL)
+	if (pRecord->cThemeDirName == NULL && pRecord->cDistantThemeDirName == NULL)
 		return NULL;
 	gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName);
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
-	GHashTable *pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, cGaugeUserDir, pRecord->cThemeDirName);
+	GHashTable *pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName);
 	
 	g_free (cGaugeShareDir);
 	g_free (cGaugeUserDir);
@@ -781,12 +781,12 @@ gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, cons
 	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
 	g_return_val_if_fail (pRecord != NULL, NULL);
 	
-	if (pRecord->cThemeDirName == NULL)
+	if (pRecord->cThemeDirName == NULL && pRecord->cDistantThemeDirName == NULL)
 		return NULL;
 	
 	const gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName);
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
-	gchar *cGaugePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, pRecord->cThemeDirName, iType);
+	gchar *cGaugePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName, iType);
 	g_free (cGaugeUserDir);
 	return cGaugePath;
 }
@@ -804,7 +804,7 @@ gchar *cairo_dock_get_package_path_for_data_renderer (const gchar *cRendererName
 	gchar *cGaugePath = cairo_dock_get_data_renderer_theme_path (cRendererName, cChosenThemeName, iType);
 	
 	if (cGaugePath == NULL)  // theme introuvable.
-		cGaugePath = g_strdup_printf ("%s/%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName, pRecord->cDefaultTheme);
+		cGaugePath = g_strdup_printf (CAIRO_DOCK_SHARE_DATA_DIR"/%s/%s", pRecord->cThemeDirName, pRecord->cDefaultTheme);
 	
 	if (iType != CAIRO_DOCK_ANY_PACKAGE)
 	{

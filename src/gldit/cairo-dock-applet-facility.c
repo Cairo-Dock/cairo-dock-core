@@ -570,10 +570,10 @@ void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance
 	CairoContainer *pContainer = pInstance->pContainer;
 	g_return_if_fail (pContainer != NULL);
 	
-	g_print ("%s (%s)\n", __func__, pInstance->pModule->pVisitCard->cModuleName);
+	cd_debug ("%s (%s)", __func__, pInstance->pModule->pVisitCard->cModuleName);
 	if (pInstance->pDesklet && pInstance->pDesklet->icons != NULL)
 	{
-		g_print (" destroy desklet icons\n");
+		cd_debug (" destroy desklet icons");
 		g_list_foreach (pInstance->pDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);
 		g_list_free (pInstance->pDesklet->icons);
 		pInstance->pDesklet->icons = NULL;
@@ -583,7 +583,7 @@ void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance
 	{
 		if (pInstance->pDock)  // optimisation : on ne detruit pas le sous-dock.
 		{
-			g_print (" destroy sub-dock icons\n");
+			cd_debug (" destroy sub-dock icons");
 			g_list_foreach (pIcon->pSubDock->icons, (GFunc) cairo_dock_free_icon, NULL);
 			g_list_free (pIcon->pSubDock->icons);
 			pIcon->pSubDock->icons = NULL;
@@ -591,7 +591,7 @@ void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance
 		}
 		else  // precaution pas chere
 		{
-			g_print (" destroy sub-dock\n");
+			cd_debug (" destroy sub-dock");
 			cairo_dock_destroy_dock (pIcon->pSubDock, pIcon->cName);
 			pIcon->pSubDock = NULL;
 		}

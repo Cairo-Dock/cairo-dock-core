@@ -817,7 +817,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 					if (pPointingIcon && pPointingIcon->bPointed)  // sous-dock pointe, n le laisse en position haute.
 						return;
 				}
-				g_print ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)\n", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
+				cd_debug ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
 				if (pDock->iRefCount > 0 && myAccessibility.iLeaveSubDockDelay > 0)
 					pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
 				else

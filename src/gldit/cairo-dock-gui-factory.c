@@ -1139,7 +1139,7 @@ static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoD
 }
 static void _cairo_dock_fill_modele_with_short_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModele)
 {
-	_fill_modele_with_themes (cThemeName, pTheme, pModele, TRUE, TRUE);
+	_fill_modele_with_themes (cThemeName, pTheme, pModele, FALSE/**TRUE*/, TRUE);
 }
 
 static void _got_themes_list (GHashTable *pThemeTable, gpointer *data)
@@ -1496,6 +1496,53 @@ static void _cairo_dock_widget_launch_command (GtkButton *button, gpointer *data
 		cd_debug ("%s: %s => %s\n", __func__, cCommandToLaunch, cCommand);
 	//g_free (cCommand);
 	//g_free (cCommandToLaunch);
+}
+
+static void _cairo_dock_render_theme_name (GtkCellLayout *cell_layout,
+	GtkCellRenderer *cell,
+	GtkTreeModel *model,
+	GtkTreeIter *iter,
+	gpointer data)
+{
+	const gchar *cState=NULL;
+	gint iState = 0;
+	gboolean bRed = FALSE;
+	gchar *cName=NULL;
+	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_STATE, &iState, CAIRO_DOCK_MODEL_NAME, &cName, -1);
+	switch (iState)
+	{
+		case CAIRO_DOCK_LOCAL_PACKAGE:
+			cState = _("Local");
+		break;
+		case CAIRO_DOCK_USER_PACKAGE:
+			cState = _("User");
+		break;
+		case CAIRO_DOCK_DISTANT_PACKAGE:
+			cState = _("Net");
+		break;
+		case CAIRO_DOCK_NEW_PACKAGE:
+			cState = _("New");
+			bRed = TRUE;
+		break;
+		case CAIRO_DOCK_UPDATED_PACKAGE:
+			cState = _("Updated");
+			bRed = TRUE;  // "#FF0000"
+		break;
+		default:
+		break;
+	}
+	if (cState != NULL)
+	{
+		gchar *cName2 = g_strdup_printf ("(%s) %s", cState, cName);
+		if (bRed)
+		{
+			gchar *tmp = cName2;
+			cName2 = g_strdup_printf ("<span foreground='red'>(%s)</span> %s", cState, cName);
+			g_free (tmp);
+		}
+		g_object_set (cell, "markup", cName2, NULL);
+		g_free (cName2);
+	}
 }
 
 #define _allocate_new_buffer\
@@ -2130,7 +2177,15 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				modele = _cairo_dock_gui_allocate_new_model ();
 				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
 				
+				rend = NULL;
 				_add_combo_from_modele (modele, TRUE, iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY);
+				
+				if (rend != NULL)
+					gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (pOneWidget),
+						rend,
+						(GtkCellLayoutDataFunc) _cairo_dock_render_theme_name,
+						NULL,
+						NULL);
 				
 				//\______________ On recupere les themes.
 				if (pAuthorizedValuesList != NULL)

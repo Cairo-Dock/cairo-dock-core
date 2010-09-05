@@ -40,6 +40,7 @@ struct _CairoDockDataRendererRecord {
 	CairoDataRendererInterface interface;
 	gulong iStructSize;
 	const gchar *cThemeDirName;
+	const gchar *cDistantThemeDirName;
 	const gchar *cDefaultTheme;
 	};
 

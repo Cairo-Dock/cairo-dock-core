@@ -1,5 +1,5 @@
 add_subdirectory(default-theme)
-add_subdirectory(gauges2)
+add_subdirectory(gauges)
 add_subdirectory(explosion)
 add_subdirectory(man)
 
