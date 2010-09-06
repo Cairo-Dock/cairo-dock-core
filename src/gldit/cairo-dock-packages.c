@@ -639,7 +639,7 @@ GHashTable *cairo_dock_list_packages (const gchar *cSharePackagesDir, const gcha
 		pPackageTable = cairo_dock_list_local_packages (cUserPackagesDir, pPackageTable, cDistantPackagesDir != NULL, &erreur);
 	if (erreur != NULL)
 	{
-		cd_warning ("while listing user packages in '%s' : %s", cSharePackagesDir, erreur->message);
+		cd_warning ("while listing user packages in '%s' : %s", cUserPackagesDir, erreur->message);
 		g_error_free (erreur);
 		erreur = NULL;
 	}

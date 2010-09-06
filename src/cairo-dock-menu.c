@@ -319,7 +319,6 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, CairoContainer *pContainer
 
 gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu, gboolean *bDiscardMenu)
 {
-	
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount > 0)  // pas sur les sous-docks
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
@@ -1091,7 +1090,7 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer data)
 						g_string_printf (sDesktop, cLabel, i+1);
 					else
 						g_string_printf (sDesktop, cLabel, j*g_desktopGeometry.iNbViewportX+k+1);
-					iDesktopCode = i * g_desktopGeometry.iNbViewportY * g_desktopGeometry.iNbViewportX + j * g_desktopGeometry.iNbViewportY + k;
+					iDesktopCode = i * g_desktopGeometry.iNbViewportY * g_desktopGeometry.iNbViewportX + j * g_desktopGeometry.iNbViewportX + k;
 					user_data = &s_pDesktopData[4*iDesktopCode];
 					user_data[0] = data;
 					user_data[1] = GINT_TO_POINTER (i);
@@ -1137,7 +1136,9 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	data[1] = pContainer;
 	data[2] = menu;
 	GtkWidget *pMenuItem, *image;
-
+	
+	gboolean bAddSeparator = ! (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount > 0);  // pas sur les sous-docks.
+	
 	//\_________________________ Si pas d'icone dans un dock, on s'arrete la.
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && (icon == NULL || CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon)))
 	{
@@ -1160,9 +1161,13 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 			if (icon->cDesktopFileName != NULL && icon->cParentDockName != NULL)  // possede un .desktop.
 			{
-				pMenuItem = gtk_separator_menu_item_new ();
-				gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
-			
+				if (bAddSeparator)
+				{
+					pMenuItem = gtk_separator_menu_item_new ();
+					gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+				}
+				bAddSeparator = TRUE;
+				
 				_add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Modify this separator") : _("Modify this launcher"), GTK_STOCK_EDIT, _cairo_dock_modify_launcher, menu);
 				
 				pMenuItem = _add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Remove this separator") : _("Remove this launcher"), GTK_STOCK_REMOVE, _cairo_dock_remove_launcher, menu);
@@ -1182,8 +1187,12 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	//\_________________________ On rajoute les actions sur les applis.
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
-		pMenuItem = gtk_separator_menu_item_new ();
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		if (bAddSeparator)
+		{
+			pMenuItem = gtk_separator_menu_item_new ();
+			gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		}
+		bAddSeparator = TRUE;
 		
 		//\_________________________ On rajoute les actions supplementaires sur les icones d'applis.
 		pMenuItem = gtk_menu_item_new_with_label (_("Other actions"));
@@ -1261,8 +1270,12 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{
-		pMenuItem = gtk_separator_menu_item_new ();
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		if (bAddSeparator)
+		{
+			pMenuItem = gtk_separator_menu_item_new ();
+			gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		}
+		bAddSeparator = TRUE;
 		
 		//\_________________________ On rajoute les actions supplementaires sur la classe.
 		pMenuItem = gtk_menu_item_new_with_label (_("Other actions"));
@@ -1300,8 +1313,12 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		//\_________________________ On rajoute les actions propres a un module.
 		if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_APPLET (pIconModule))
 		{
-			pMenuItem = gtk_separator_menu_item_new ();
-			gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+			if (bAddSeparator)
+			{
+				pMenuItem = gtk_separator_menu_item_new ();
+				gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+			}
+			bAddSeparator = TRUE;
 			
 			_add_entry_in_menu (_("Configure this applet"), GTK_STOCK_PROPERTIES, _cairo_dock_initiate_config_module, menu);
 	
@@ -1333,8 +1350,12 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	//\_________________________ On rajoute les actions de positionnement d'un desklet.
 	if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
-		pMenuItem = gtk_separator_menu_item_new ();
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		if (bAddSeparator)
+		{
+			pMenuItem = gtk_separator_menu_item_new ();
+			gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		}
+		bAddSeparator = TRUE;
 		
 		pMenuItem = gtk_menu_item_new_with_label (_("Visibility"));
 		gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);

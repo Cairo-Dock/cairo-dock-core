@@ -296,6 +296,9 @@ static cairo_pattern_t *_cairo_dock_create_graph_pattern (CairoDockGraph *pGraph
 	}
 	return pGradationPattern;
 }
+#define dc .5
+#define _guess_color(i) (((pGraph->fLowColor[i] < pGraph->fHighColor[i] && pGraph->fLowColor[i] > dc) || pGraph->fLowColor[i] > 1-dc) ? pGraph->fLowColor[i] - dc : pGraph->fLowColor[i] + dc)
+//#define _guess_color(i) (1. - pGraph->fLowColor[i])
 static void _set_overlay_zones (CairoDockGraph *pGraph)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
@@ -338,10 +341,10 @@ static void _set_overlay_zones (CairoDockGraph *pGraph)
 				}
 				pLabel->param.fWidth = (double)iLabelWidth / iWidth;
 				pLabel->param.fHeight = (double)iLabelHeight / iHeight;
-				pLabel->param.pColor[0] = 0.;  /// noir par defaut, essayer de gerer en fonction de la couleur du graphe ou du fond ...
-				pLabel->param.pColor[1] = 0.;
-				pLabel->param.pColor[2] = 0.;
-				pLabel->param.pColor[3] = 0.7;
+				pLabel->param.pColor[0] = myLabels.quickInfoTextDescription.fBackgroundColor[0];
+				pLabel->param.pColor[1] = myLabels.quickInfoTextDescription.fBackgroundColor[1];
+				pLabel->param.pColor[2] = myLabels.quickInfoTextDescription.fBackgroundColor[2];
+				pLabel->param.pColor[3] = 1.;  // meme couleur que les axes.
 			}
 			else
 			{
@@ -363,10 +366,22 @@ static void _set_overlay_zones (CairoDockGraph *pGraph)
 			}
 			pValuesText->fWidth = (double)iTextWidth / iWidth;
 			pValuesText->fHeight = (double)iTextHeight / iHeight;
-			pValuesText->pColor[0] = 0.;  /// noir par defaut, essayer de gerer en fonction de la couleur du graphe ou du fond ...
-			pValuesText->pColor[1] = 0.;
-			pValuesText->pColor[2] = 0.;
-			pValuesText->pColor[3] = 0.6;
+			if (pGraph->fBackGroundColor[3] > .2 && pGraph->fBackGroundColor[3] < .7)
+			{
+				pValuesText->pColor[0] = pGraph->fBackGroundColor[0];
+				pValuesText->pColor[1] = pGraph->fBackGroundColor[1];
+				pValuesText->pColor[2] = pGraph->fBackGroundColor[2];
+				//g_print ("bg color: %.2f;%.2f;%.2f\n", pGraph->fBackGroundColor[0], pGraph->fBackGroundColor[1], pGraph->fBackGroundColor[2]);
+			}
+			else
+			{
+				pValuesText->pColor[0] = _guess_color (0);
+				pValuesText->pColor[1] = _guess_color (1);
+				pValuesText->pColor[2] = _guess_color (2);
+				//g_print ("line color: %.2f;%.2f;%.2f\n", pGraph->fLowColor[0], pGraph->fLowColor[1], pGraph->fLowColor[2]);
+			}
+			//g_print ("text color: %.2f;%.2f;%.2f\n", pValuesText->pColor[0], pValuesText->pColor[1], pValuesText->pColor[2]);
+			pValuesText->pColor[3] = 1.;
 		}
 	}
 }

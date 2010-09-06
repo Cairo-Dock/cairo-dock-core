@@ -179,15 +179,21 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 		_cairo_dock_set_blend_over ();
 		
 		CairoDataRendererText *pLabel;
+		int w, h, dw, dh;
 		pLabel = &pRenderer->pLabels[iNumValue];
 		if (pLabel->iTexture != 0)
 		{
 			double f = MIN (pLabel->param.fWidth * pRenderer->iWidth / pLabel->iTextWidth, pLabel->param.fHeight * pRenderer->iHeight / pLabel->iTextHeight);  // on garde le ratio du texte.
+			w = pLabel->iTextWidth * f;
+			h = pLabel->iTextHeight * f;
+			dw = w & 1;
+			dh = h & 1;
+			
 			glBindTexture (GL_TEXTURE_2D, pLabel->iTexture);
 			_cairo_dock_set_alpha (pLabel->param.pColor[3]);
 			_cairo_dock_apply_current_texture_at_size_with_offset (
-				pLabel->iTextWidth * f,
-				pLabel->iTextHeight * f,
+				w + dw,
+				h + dh,
 				pLabel->param.fX * pRenderer->iWidth,
 				pLabel->param.fY * pRenderer->iHeight);
 		}
@@ -452,6 +458,8 @@ static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer,
 			if (pLabel->param.fWidth != 0 && pLabel->param.fHeight != 0 && pLabel->cText != NULL)
 			{
 				textDescription.fBackgroundColor[3] = 0.;
+				textDescription.iMargin = 0;
+				textDescription.bOutlined = TRUE;  /// tester avec et sans ...
 				textDescription.fColorStart[0] = pLabel->param.pColor[0];
 				textDescription.fColorStart[1] = pLabel->param.pColor[1];
 				textDescription.fColorStart[2] = pLabel->param.pColor[2];
@@ -476,7 +484,7 @@ static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer,
 	if (pRenderer->pValuesText != NULL)
 	{
 		CairoDataRendererTextParam *pText = &pRenderer->pValuesText[0];
-		g_print ("+++++++pText->fWidth * pRenderer->iWidth : %.2f\n", pText->fWidth * pRenderer->iWidth);
+		//g_print ("+++++++pText->fWidth * pRenderer->iWidth : %.2f\n", pText->fWidth * pRenderer->iWidth);
 		pRenderer->bCanRenderValueAsText = (pText->fWidth * pRenderer->iWidth >= CD_MIN_TEXT_WITH);
 	}
 }
