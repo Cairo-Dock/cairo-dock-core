@@ -8,13 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-07-22 04:27+0000\n"
+"POT-Creation-Date: 2010-08-29 00:58+0000\n"
+"PO-Revision-Date: 2010-09-01 11:45+0000\n"
 "Last-Translator: Ander Elortondo <ander.elor@gmail.com>\n"
 "Language-Team: librezale.org\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-07-23 04:02+0000\n"
+"X-Launchpad-Export-Date: 2010-09-02 03:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: eu\n"
 
@@ -36,7 +37,7 @@ msgstr "Fitxategiak"
 
 #: ../src/cairo-dock-gui-main.c:131 ../src/gldit/cairo-dock-gui-factory.c:1252
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #: ../src/cairo-dock-gui-main.c:132 ../src/gldit/cairo-dock-gui-factory.c:1257
 msgid "Desktop"
@@ -93,14 +94,12 @@ msgid "Enable this module"
 msgstr "Modulu hau aktibatu"
 
 #: ../src/cairo-dock-gui-main.c:1779 ../data/messages:135
-#, fuzzy
 msgid "More applets"
-msgstr "Lortu miniaplikazio gehiago!"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:1780 ../data/messages:133
-#, fuzzy
 msgid "Get more applets online !"
-msgstr "Lortu miniaplikazio gehiago!"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:1815 ../src/cairo-dock.c:741
 msgid "< Maintenance mode >"
@@ -376,7 +375,8 @@ msgid "Get more applets!"
 msgstr "Lortu miniaplikazio gehiago!"
 
 #: ../src/cairo-dock-menu.c:417
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Hirugarrenen miniaplikazioek hainbat programen integrazioa ahalbidetzen "
 "dute, adibidez pidgin"
@@ -518,7 +518,8 @@ msgstr "Ezabatu abierazle hau"
 #: ../src/cairo-dock-menu.c:1164
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
+msgstr ""
+"Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
 
 #: ../src/cairo-dock-menu.c:1166 ../src/cairo-dock-menu.c:1314
 msgid "Move to another dock"
@@ -557,9 +558,8 @@ msgid "Remove custom icon"
 msgstr "Ezabatu ikono pertsonalizatua"
 
 #: ../src/cairo-dock-menu.c:1230
-#, fuzzy
 msgid "Set a custom icon"
-msgstr "Ezabatu ikono pertsonalizatua"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1232
 msgid "Kill"
@@ -889,7 +889,8 @@ msgid "category"
 msgstr "kategoria"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2339
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Klik miniaplikazioan bere aurrebista eta deskribapena jasotzeko."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2742
@@ -1764,7 +1765,8 @@ msgstr "Etiketa irakurgarritasuna"
 
 #: ../data/messages:411
 msgid "Should the labels always be horizontal, even when dock is vertical?"
-msgstr "Etiketak beti horizontalak izango dira nahiz eta docka bertikala izan?"
+msgstr ""
+"Etiketak beti horizontalak izango dira nahiz eta docka bertikala izan?"
 
 #: ../data/messages:413
 msgid ""
@@ -1808,9 +1810,8 @@ msgid "Make the config panel transparent?"
 msgstr "Konfigurazio panela gardena egin?"
 
 #: ../data/messages:429
-#, fuzzy
 msgid "Connection to the Internet"
-msgstr "Gaien zerbitzarira konexioa"
+msgstr ""
 
 #: ../data/messages:431
 msgid ""
@@ -1823,9 +1824,8 @@ msgstr ""
 "aintzat hartzen."
 
 #: ../data/messages:433
-#, fuzzy
 msgid "Connection timeout :"
-msgstr "Konexio denbora-muga gaien zerbitzarira:"
+msgstr ""
 
 #: ../data/messages:435
 msgid ""
@@ -1836,9 +1836,8 @@ msgstr ""
 "batzuk har ditzakete."
 
 #: ../data/messages:437
-#, fuzzy
 msgid "Maximum time to download a file:"
-msgstr "Gaia jaisteko denbora maximoa:"
+msgstr ""
 
 #: ../data/messages:439
 msgid "Use this option if you experience problems to connect."
@@ -1872,7 +1871,7 @@ msgstr ""
 
 #: ../data/messages:453
 msgid "User :"
-msgstr ""
+msgstr "Erabiltzailea :"
 
 #: ../data/messages:457
 msgid "Password :"
@@ -2190,7 +2189,8 @@ msgid "Zoom effect"
 msgstr "Zoom efektua"
 
 #: ../data/messages:653
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Ezarri 1 balioan ikonoen gainetik pasatzean zoom efekturik ez baduzu nahi."
 
@@ -2201,7 +2201,8 @@ msgstr "Ikonoen zoom maximoa:"
 #: ../data/messages:657
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
-msgstr "Pixeletan. Tarte honetatik kanpora (Saguan zentratua) ez dago zoomik."
+msgstr ""
+"Pixeletan. Tarte honetatik kanpora (Saguan zentratua) ez dago zoomik."
 
 #: ../data/messages:659
 msgid "Width of the space in which the zoom will be effective :"
@@ -2512,8 +2513,8 @@ msgstr "handiagoa"
 
 #: ../data/messages:807
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Erabili adierazleak dockaren kokapenari (Goian/Behean/eskuman/ezkerrean) "
 "jarrai diezaion."
@@ -2727,8 +2728,8 @@ msgstr ""
 
 #: ../data/messages:905
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 "Docketi kanpora arrastatu eta jaregin besterik ez, eztanda baten desagertuko "
 "dira!"
@@ -2745,8 +2746,8 @@ msgstr ""
 
 #: ../data/messages:911
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -3144,8 +3145,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3221,9 +3222,9 @@ msgstr ""
 
 #: ../data/messages:1099
 msgid ""
-"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will no "
-"longer work. This applet lets you configure a shortcut to pop up the menu at "
-"the mouse's location."
+"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will "
+"no longer work. This applet lets you configure a shortcut to pop up the menu "
+"at the mouse's location."
 msgstr ""
 
 #: ../data/messages:1101
@@ -3399,9 +3400,9 @@ msgstr ""
 
 #: ../data/messages:1175
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list/panel, and replace its content with \"cairo-dock"
-"\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list/panel, and replace its "
+"content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3427,8 +3428,8 @@ msgstr ""
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Cairo-Penguin, Weather, Netspeed, ...\n"
-"Right click on the applet's icon, and select «launch another instance». A new "
-"instance of this applet appears in the main dock.\n"
+"Right click on the applet's icon, and select «launch another instance». A "
+"new instance of this applet appears in the main dock.\n"
 "You can configure this new applet just like any other."
 msgstr ""
 
@@ -3521,16 +3522,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3572,8 +3573,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1243
@@ -3701,8 +3702,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3756,9 +3757,8 @@ msgid "Debian/Ubuntu"
 msgstr ""
 
 #: ../data/messages:1319
-#, fuzzy
 msgid "Ubuntu"
-msgstr "Desmuntatu"
+msgstr ""
 
 #: ../data/messages:1323
 msgid ""
@@ -4185,8 +4185,8 @@ msgstr ""
 #: ../data/messages:1621
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4267,8 +4267,8 @@ msgstr ""
 #: ../data/messages:1633
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4339,9 +4339,11 @@ msgid ""
 "better on any desktop."
 msgstr ""
 
+#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s orain desmuntatu da."
 
+#, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s orain muntatu da."
 
@@ -4354,6 +4356,7 @@ msgstr ""
 #~ msgid "Define the appearance of the dock when it's hidden."
 #~ msgstr "Definitu dock-aren itxura gordeta dagoenean."
 
+#, c-format
 #~ msgid ""
 #~ "You're about deleting this file\n"
 #~ "  (%s)\n"
@@ -4381,15 +4384,18 @@ msgstr ""
 #~ msgid "Close"
 #~ msgstr "Itxi"
 
+#, c-format
 #~ msgid "Downloading file %s ..."
 #~ msgstr "%s fitxategia deskargatzen"
 
 #~ msgid "Applying changes ..."
 #~ msgstr "Aldaketak aplikatzen..."
 
+#, c-format
 #~ msgid "couldn't get the list of themes for %s (no connection ?)"
 #~ msgstr "%sko gaien zerrenda ezin da lortu. (Konexiorik ez?)"
 
+#, c-format
 #~ msgid "couldn't get distant file %s"
 #~ msgstr "Ezin da hartu hurruneko %s fitxategia"
 
@@ -4418,32 +4424,32 @@ msgstr ""
 #~ msgstr "Baimendu miniaplikazioak abiarazleen tartean kokatzen?"
 
 #~ msgid ""
-#~ "This parameter will overwrite the previously defined order, to allow you "
-#~ "to mix applets and launchers into the dock."
+#~ "This parameter will overwrite the previously defined order, to allow you to "
+#~ "mix applets and launchers into the dock."
 #~ msgstr ""
-#~ "Parametro hau aurretik definitutako ordena gainidatziko du, "
-#~ "miniaplikazioak eta abiarazleen nahastea onartzeko dockean."
+#~ "Parametro hau aurretik definitutako ordena gainidatziko du, miniaplikazioak "
+#~ "eta abiarazleen nahastea onartzeko dockean."
 
 #~ msgid "You need a composite manager for it."
 #~ msgstr "Konposaketa kudeatzailea behar da horretarako."
 
 #~ msgid ""
-#~ "To the right, you can control the transparency of minimized windows, to "
-#~ "the left the transparency of visible windows. The more you go aside, the "
-#~ "more the concerned icons will be transparent; on the middle, icons are "
-#~ "always plain."
+#~ "To the right, you can control the transparency of minimized windows, to the "
+#~ "left the transparency of visible windows. The more you go aside, the more "
+#~ "the concerned icons will be transparent; on the middle, icons are always "
+#~ "plain."
 #~ msgstr ""
 #~ "Eskumarantz minimizatutako leihoen gardentasuna kontrolatu dezakezu, "
-#~ "Ezkerrerantz ageriko leihoen gardentasuna. Erdian ikonoak beti dira "
-#~ "lauak; gero eta albo batera gehiago egin gero eta gardenagoak izango dira "
-#~ "alde horretako ikonoak."
+#~ "Ezkerrerantz ageriko leihoen gardentasuna. Erdian ikonoak beti dira lauak; "
+#~ "gero eta albo batera gehiago egin gero eta gardenagoak izango dira alde "
+#~ "horretako ikonoak."
 
 #~ msgid "module"
 #~ msgstr "modulua"
 
 #~ msgid ""
-#~ "If an error occurs during downloading a theme, it will retry this number "
-#~ "of times before giving up."
+#~ "If an error occurs during downloading a theme, it will retry this number of "
+#~ "times before giving up."
 #~ msgstr ""
 #~ "Gaia jaisterakoan errorea emanez gero, zenbat aldiz saiatuko den berriz "
 #~ "lortzen."
@@ -4479,11 +4485,10 @@ msgstr ""
 #~ msgstr "Irudiaren gardentasuna:"
 
 #~ msgid ""
-#~ "Use it when the image is an arrow pointing to the center of the screen "
-#~ "for exemple."
+#~ "Use it when the image is an arrow pointing to the center of the screen for "
+#~ "exemple."
 #~ msgstr ""
-#~ "Hau erabili, adibidez, irudia pantaila erdira begiratzen duen gezia "
-#~ "denean."
+#~ "Hau erabili, adibidez, irudia pantaila erdira begiratzen duen gezia denean."
 
 #~ msgid ""
 #~ "in pixels. You can use this parameter to adjust the indicator's vertical "
@@ -4512,6 +4517,7 @@ msgstr ""
 #~ msgid "Rename to:"
 #~ msgstr "Izena aldatu honetara:"
 
+#, c-format
 #~ msgid ""
 #~ "Warning: could not rename %s.\n"
 #~ "Check file permissions \n"
@@ -4522,13 +4528,12 @@ msgstr ""
 #~ " eta izen berria jadanik existitzen ez dela."
 
 #~ msgid ""
-#~ "Icons will scroll according to what positioning model is selected. The "
-#~ "dock can of course can be positioned anywhere on the screen. Here we "
-#~ "specify this relative position."
+#~ "Icons will scroll according to what positioning model is selected. The dock "
+#~ "can of course can be positioned anywhere on the screen. Here we specify this "
+#~ "relative position."
 #~ msgstr ""
-#~ "Ikonoak aukeratutako kokapen motaren arabera korrituko dira. Dock "
-#~ "pantailako edozein tokitan kokatu daiteke noski, hemen gu zelan egin "
-#~ "adierazten diogu."
+#~ "Ikonoak aukeratutako kokapen motaren arabera korrituko dira. Dock pantailako "
+#~ "edozein tokitan kokatu daiteke noski, hemen gu zelan egin adierazten diogu."
 
 #~ msgid "Pop-up only if the mouse hits a screen corner"
 #~ msgstr "Atera bakarrik saguak pantaila ertza jotzean?"
@@ -4551,11 +4556,11 @@ msgstr ""
 #~ "ms-tan. Ez da eraginkorra azpi-docka ikuseko klik egiteko ezarpena baduzu."
 
 #~ msgid ""
-#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide "
-#~ "is not enabled or unfold acceleration is null."
+#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide is "
+#~ "not enabled or unfold acceleration is null."
 #~ msgstr ""
-#~ "Docka destolestu egingo da bere burua gorde/agertzean. Efekturik gabe "
-#~ "auto-gorde ez badago aktibatua edo destoleste azeleraziorik gabe badago."
+#~ "Docka destolestu egingo da bere burua gorde/agertzean. Efekturik gabe auto-"
+#~ "gorde ez badago aktibatua edo destoleste azeleraziorik gabe badago."
 
 #~ msgid "Animate the dock when auto-hiding"
 #~ msgstr "Animatu docka automatikoki gordetzen denean?"
@@ -4564,8 +4569,7 @@ msgstr ""
 #~ "This is the animation when the dock goes below a window. The higher the "
 #~ "value, the slower it will be"
 #~ msgstr ""
-#~ "Animazio hau docka leiho atzealdera doanekoa da; gero eta handiagoa "
-#~ "motelagoa"
+#~ "Animazio hau docka leiho atzealdera doanekoa da; gero eta handiagoa motelagoa"
 
 #~ msgid "Number of steps in the fade out animation:"
 #~ msgstr "Iraungi animazioko pauso kopurua:"
@@ -4580,8 +4584,8 @@ msgstr ""
 #~ "This is what you see when the dock hides itselfs. Any format is allowed. "
 #~ "Leave this field empty to have an invisible zone."
 #~ msgstr ""
-#~ "Hau da dockak bere burua ezkutatzen duenean ikusten duzuna. Formatu "
-#~ "guztiak baimenduak daude. Utzi hau hutsik gune ikusezina izateko."
+#~ "Hau da dockak bere burua ezkutatzen duenean ikusten duzuna. Formatu guztiak "
+#~ "baimenduak daude. Utzi hau hutsik gune ikusezina izateko."
 
 #~ msgid "Rotate the image when the dock is on top/left/right?"
 #~ msgstr "Biratu irudia docka goian/ezkerrean/eskuman dagoenean?"
