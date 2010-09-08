@@ -176,7 +176,7 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 	if (pRenderer->pLabels != NULL)
 	{
 		_cairo_dock_enable_texture ();
-		_cairo_dock_set_blend_over ();
+		_cairo_dock_set_blend_pbuffer ();  // rend mieux pour les textes
 		
 		CairoDataRendererText *pLabel;
 		int w, h, dw, dh;

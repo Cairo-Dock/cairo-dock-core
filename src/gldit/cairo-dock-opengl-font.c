@@ -281,6 +281,7 @@ void cairo_dock_draw_gl_text (const guchar *cText, CairoDockGLFont *pFont)
 	else if (pFont->iTexture != 0)
 	{
 		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_pbuffer ();  // rend mieux pour les textes
 		glBindTexture (GL_TEXTURE_2D, pFont->iTexture);
 		double u, v, du=1./pFont->iNbColumns, dv=1./pFont->iNbRows, w=pFont->iCharWidth, h=pFont->iCharHeight, x=.5*w, y=.5*h;
 		int i, j;

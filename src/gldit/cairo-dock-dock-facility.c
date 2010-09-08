@@ -744,11 +744,14 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 	gboolean bMouseInsideDock = (x_abs >= 0 && x_abs <= pDock->fFlatDockWidth && iMouseX > 0 && iMouseX < iWidth);
 	//g_print ("bMouseInsideDock : %d (%d;%d/%.2f)\n", bMouseInsideDock, pDock->container.bInside, x_abs, pDock->fFlatDockWidth);
 
-	if (! bMouseInsideDock)
+	if (! bMouseInsideDock)  // hors du dock par les cotes.
 	{
-		if (/*cairo_dock_is_extended_dock (pDock) && */pDock->bAutoHide)  // ca peut etre assez penible de sortir du dock juste apres y etre rentre.
+		if (/*cairo_dock_is_extended_dock (pDock) && */pDock->bAutoHide)  // c'est penible de sortir du dock trop facilement avec l'auto-hide.
 		{
-			iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+			if (iMouseY >= 0 && iMouseY < iHeight)
+				iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+			else
+				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
 		}
 		else
 		{

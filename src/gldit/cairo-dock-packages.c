@@ -78,25 +78,39 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	gchar *cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
 	g_free (cLocalFileName);
 	
-	//\_______________ on efface un dossier identique prealable.
+	//\_______________ on deplace un dossier identique prealable.
+	gchar *cTempBackup = NULL;
 	if (g_file_test (cResultPath, G_FILE_TEST_EXISTS))
 	{
-		gchar *cCommand = g_strdup_printf ("rm -rf \"%s\"", cResultPath);
-		int r = system (cCommand);
-		g_free (cCommand);
+		cTempBackup = g_strdup_printf ("%s___cairo-dock-backup", cResultPath);
+		g_rename (cResultPath, cTempBackup);
 	}
 	
 	//\_______________ on decompresse l'archive.
 	gchar *cCommand = g_strdup_printf ("tar xf%c \"%s\" -C \"%s\"", (g_str_has_suffix (cArchivePath, "bz2") ? 'j' : 'z'), cArchivePath, cExtractTo);
 	cd_debug ("tar : %s\n", cCommand);
 	int r = system (cCommand);
-	if (r != 0)
+	
+	//\_______________ on verifie le resultat, en remettant l'original en cas d'echec.
+	if (r != 0 || !g_file_test (cResultPath, G_FILE_TEST_EXISTS))
 	{
 		cd_warning ("an error occured while executing '%s'", cCommand);
+		if (cTempBackup != NULL)
+		{
+			g_rename (cTempBackup, cResultPath);
+		}
 		g_free (cResultPath);
 		cResultPath = NULL;
 	}
+	else if (cTempBackup != NULL)
+	{
+		gchar *cCommand = g_strdup_printf ("rm -rf \"%s\"", cTempBackup);
+		int r = system (cCommand);
+		g_free (cCommand);
+	}
+	
 	g_free (cCommand);
+	g_free (cTempBackup);
 	return cResultPath;
 }
 
