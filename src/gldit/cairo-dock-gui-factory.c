@@ -1095,31 +1095,17 @@ static void cairo_dock_build_icon_theme_list_for_gui (GHashTable *pHashTable)
 	_build_list_for_gui (s_pIconThemeListStore, "", pHashTable, _cairo_dock_add_one_icon_theme_item);
 }
 
-static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModele, gboolean bShowState, gboolean bInsertState)
+static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 	gchar *cReadmePath = g_strdup_printf ("%s/readme", pTheme->cPackagePath);
 	gchar *cPreviewPath = g_strdup_printf ("%s/preview", pTheme->cPackagePath);
-	gchar *cResult = (bInsertState ? g_strdup_printf ("%s[%d]", cThemeName, pTheme->iType) : NULL);
-	gchar *cDisplayedName = NULL;
-	if (bShowState)
-	{
-		const gchar *cType;
-		switch (pTheme->iType)
-		{
-			case CAIRO_DOCK_LOCAL_PACKAGE: cType 		= "(Local)  "; break;
-			case CAIRO_DOCK_USER_PACKAGE: cType 		= "(User)   "; break;
-			case CAIRO_DOCK_DISTANT_PACKAGE: cType 	= "(Net)    "; break;
-			case CAIRO_DOCK_NEW_PACKAGE: cType 		= "(New)    "; break;
-			case CAIRO_DOCK_UPDATED_PACKAGE: cType 	= "(Updated)"; break;
-			default: cType = ""; break;
-		}
-		cDisplayedName = g_strconcat (cType, pTheme->cDisplayedName, NULL);
-	}
+	gchar *cResult = g_strdup_printf ("%s[%d]", cThemeName, pTheme->iType);
+	
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-		CAIRO_DOCK_MODEL_NAME, cDisplayedName ? cDisplayedName : pTheme->cDisplayedName,
+		CAIRO_DOCK_MODEL_NAME, pTheme->cDisplayedName,
 		CAIRO_DOCK_MODEL_RESULT, cResult ? cResult : cThemeName,
 		CAIRO_DOCK_MODEL_ACTIVE, FALSE,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, cReadmePath,
@@ -1130,16 +1116,14 @@ static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockP
 	g_free (cReadmePath);
 	g_free (cPreviewPath);
 	g_free (cResult);
-	if (bShowState)
-		g_free (cDisplayedName);
 }
 static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModele)
 {
-	_fill_modele_with_themes (cThemeName, pTheme, pModele, FALSE, TRUE);
+	_fill_modele_with_themes (cThemeName, pTheme, pModele);
 }
 static void _cairo_dock_fill_modele_with_short_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModele)
 {
-	_fill_modele_with_themes (cThemeName, pTheme, pModele, FALSE/**TRUE*/, TRUE);
+	_fill_modele_with_themes (cThemeName, pTheme, pModele);
 }
 
 static void _got_themes_list (GHashTable *pThemeTable, gpointer *data)
@@ -1526,7 +1510,7 @@ static void _cairo_dock_render_theme_name (GtkCellLayout *cell_layout,
 		break;
 		case CAIRO_DOCK_UPDATED_PACKAGE:
 			cState = _("Updated");
-			bRed = TRUE;  // "#FF0000"
+			bRed = TRUE;
 		break;
 		default:
 		break;

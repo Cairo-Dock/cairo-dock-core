@@ -613,6 +613,10 @@ static void _draw_gauge_needle_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndi
 }
 static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 {
+	_cairo_dock_enable_texture ();  // on le fait ici car l'affichage des overlays le change.
+	_cairo_dock_set_blend_pbuffer ();  // ceci reste un mystere...
+	_cairo_dock_set_alpha (1.);
+	
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
 	GaugeImage *pGaugeImage;
 	
@@ -660,15 +664,10 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 	{
 		cairo_dock_render_overlays_to_texture (pRenderer, i);
 	}
-	_cairo_dock_enable_texture ();
 }
 static void cairo_dock_render_gauge_opengl (Gauge *pGauge)
 {
 	g_return_if_fail (pGauge != NULL && pGauge->pIndicatorList != NULL);
-	
-	_cairo_dock_enable_texture ();
-	_cairo_dock_set_blend_pbuffer ();  // ceci reste un mystere...
-	_cairo_dock_set_alpha (1.);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);

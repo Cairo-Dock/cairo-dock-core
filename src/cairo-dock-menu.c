@@ -321,6 +321,8 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 {
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount > 0)  // pas sur les sous-docks
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	if (CAIRO_DOCK_IS_DESKLET (pContainer) && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // pas sur les icones d'un desklet qui sont des sous-icones d'une applet (sur un desklet, on peut facilement cliquer a cote des icones)
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	//\_________________________ On ajoute le sous-menu Cairo-Dock.
 	GtkWidget *pMenuItem, *image;
