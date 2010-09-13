@@ -51,10 +51,8 @@ set (datadir ${prefix}/share)
 set (pkgdatadir ${datadir}/cairo-dock)
 set (mandir ${datadir}/man)
 
-if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND "${LIB_SUFFIX}" STREQUAL "" AND "${FORCE_NOT_LIB64}" STREQUAL "" )
+if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT "${FORCE_LIB64}" STREQUAL "")  # 64bits and force install in lib64
 	set (libdir ${prefix}/lib64)
-elseif( CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT "${FORCE_NOT_LIB64}" STREQUAL "" )
-	set (libdir ${prefix}/lib${LIB_SUFFIX})
 else()
 	set (libdir ${prefix}/lib${LIB_SUFFIX})
 endif()
