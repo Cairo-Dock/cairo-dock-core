@@ -265,6 +265,7 @@ static void _add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStore *model, G
 	GError *erreur = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	gchar *cImagePath = NULL;
+	const gchar *cName;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
@@ -274,6 +275,7 @@ static void _add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStore *model, G
 		if (cairo_dock_icon_is_being_removed (pIcon))
 			continue;
 		
+		// set an image.
 		if (pIcon->cFileName != NULL)
 		{
 			cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName);
@@ -311,9 +313,18 @@ static void _add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStore *model, G
 			}
 		}
 		
+		// set a name
+		if (CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))  // separator
+			cName = "separator";
+		else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet
+			cName = dgettext (pIcon->pModuleInstance->pModule->pVisitCard->cGettextDomain, pIcon->pModuleInstance->pModule->pVisitCard->cTitle);
+		else  // launcher
+			cName = (pIcon->cInitialName ? pIcon->cInitialName : pIcon->cName);
+		
+		// add an entry in the tree view.
 		gtk_tree_store_append (model, &iter, pParentIter);
 		gtk_tree_store_set (model, &iter,
-			0, CAIRO_DOCK_IS_USER_SEPARATOR (pIcon) ? "separator" : (pIcon->cInitialName ? pIcon->cInitialName : pIcon->cName),
+			0, cName,
 			1, pixbuf,
 			2, pIcon,
 			-1);
@@ -323,6 +334,7 @@ static void _add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStore *model, G
 			_add_one_sub_dock_to_model (pIcon->pSubDock, model, &iter);
 		}
 		
+		// reset all for the next round.
 		g_free (cImagePath);
 		cImagePath = NULL;
 		if (pixbuf)
