@@ -439,27 +439,18 @@ typedef struct _CairoDockManager CairoDockManager;
 
 #define CAIRO_DOCK_NB_DATA_SLOT 12
 
-/// Nom du fichier de conf principal du theme.
+// Nom du fichier de conf principal du theme.
 #define CAIRO_DOCK_CONF_FILE "cairo-dock.conf"
-/// Nom du fichier de conf d'un dock racine.
+// Nom du fichier de conf d'un dock racine.
 #define CAIRO_DOCK_MAIN_DOCK_CONF_FILE "main-dock.conf"
 
-/// Nom du repertoire racine du theme courant.
-#define CAIRO_DOCK_CURRENT_THEME_NAME "current_theme"
-/// Nom du repertoire des themes extras.
-#define CAIRO_DOCK_EXTRAS_DIR "extras"
-/// Nom du repertoire des themes de dock.
-#define CAIRO_DOCK_THEMES_DIR "themes"
-
-/// Nom du dock principal (le 1er cree).
+// Nom du dock principal (le 1er cree).
 #define CAIRO_DOCK_MAIN_DOCK_NAME "_MainDock_"
-/// Nom de la vue par defaut.
+// Nom de la vue par defaut.
 #define CAIRO_DOCK_DEFAULT_RENDERER_NAME N_("Default")
 
 
 #define CAIRO_DOCK_LAST_ORDER -1e9
 #define CAIRO_DOCK_NB_MAX_ITERATIONS 1000
-
-#define CAIRO_DOCK_LOAD_ICONS_FOR_DESKLET TRUE
 
 #endif

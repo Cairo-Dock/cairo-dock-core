@@ -72,7 +72,7 @@
 #define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
 #define CAIRO_DOCK_SITE_URL "http://glx-dock.org"  // http://cairo-dock.vef.fr
 #define CAIRO_DOCK_FORUM_URL "http://forum.glx-dock.org"  // http://cairo-dock.vef.fr/bg_forumlist.php
-#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://www.glx-dock.org/mc_album.php?a=4"
+#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
 
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
@@ -82,6 +82,7 @@ extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentIconsPath;
 
+extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern gboolean g_bLocked;
 extern gboolean g_bForceCairo;
 extern gboolean g_bEasterEggs;
@@ -117,7 +118,7 @@ static void _cairo_dock_configure_root_dock (GtkMenuItem *pMenuItem, CairoDock *
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
-		gchar *cCommand = g_strdup_printf ("cp \"%s/%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 		int r = system (cCommand);
 		g_free (cCommand);
 	}
@@ -212,8 +213,9 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	gtk_widget_set_tooltip_text (pLink, _("Find the latest version of Cairo-Dock here !"));
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
-	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_PLUGINS_EXTRAS_URL, _("Cairo-Dock-Plug-ins-Extras"));
-	gtk_widget_set_tooltip_text (pLink, _("Other applets"));
+	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
+	pLink = gtk_link_button_new_with_label (cAdress, _("More applets"));
+	g_free (cAdress);
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
 	GtkWidget *pNoteBook = gtk_notebook_new ();

@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_ICONS__
 #define  __CAIRO_DOCK_ICONS__
 
@@ -197,7 +196,8 @@ struct _Icon {
 	CairoContainer *pContainerForLoad;
 	
 	CairoDockIconTrueType iTrueType;
-	gpointer reserved[3];
+	gchar **pMimeTypes;
+	gpointer reserved[2];
 };
 
 /// Definition of a function that runs through all icons.

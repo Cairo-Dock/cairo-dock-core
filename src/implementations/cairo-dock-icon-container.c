@@ -41,8 +41,6 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-icon-container.h"
 
-#define CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME "default-icon-appli.svg"
-
 CairoDockImageBuffer g_pBoxAboveBuffer;
 CairoDockImageBuffer g_pBoxBelowBuffer;
 

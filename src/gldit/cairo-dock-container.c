@@ -43,7 +43,7 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-container.h"
 
-gboolean g_bSticky = TRUE;
+static gboolean s_bSticky = TRUE;
 gboolean g_bUseGlitz = FALSE;
 
 CairoContainer *g_pPrimaryContainer = NULL;
@@ -57,11 +57,21 @@ static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpoi
 	return TRUE;  // on empeche les ALT+F4 malheureux.
 }
 
+void cairo_dock_set_containers_non_sticky (void)
+{
+	if (g_pPrimaryContainer != NULL)
+	{
+		cd_warning ("this function has to be called before any container is created.");
+		return;
+	}
+	s_bSticky = FALSE;
+}
+
 GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow)
 {
 	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	
-	if (g_bSticky)
+	if (s_bSticky)
 		gtk_window_stick (GTK_WINDOW (pWindow));
 	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
 	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
@@ -79,7 +89,6 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	
 	gtk_widget_set_app_paintable (pWindow, TRUE);
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
-	///gtk_window_set_resizable (GTK_WINDOW (pWindow), TRUE);  // vrai par defaut.
 	
 	if (g_pPrimaryContainer == NULL)
 	{
@@ -104,6 +113,9 @@ void cairo_dock_finish_container (CairoContainer *pContainer)
 		cairo_dock_set_default_gl_context ();
 }
 
+/* Apply the scren colormap to a window, providing it transparency.
+*@param pWidget a GTK window.
+*/
 void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
 {
 	GdkScreen* pScreen = gtk_widget_get_screen (pWidget);
@@ -118,6 +130,9 @@ void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
 	gtk_widget_set_colormap (pWidget, pColormap);
 }
 
+/* Apply the scren colormap to a container, providing it transparency, and activate Glitz if possible.
+* @param pContainer the container.
+*/
 void cairo_dock_set_colormap (CairoContainer *pContainer)
 {
 	GdkColormap* pColormap;

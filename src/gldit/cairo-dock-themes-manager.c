@@ -266,7 +266,7 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 			cairo_dock_extract_package_type_from_name (cThemeName);
 			
 			bThemeDeleted = TRUE;
-			g_string_printf (sCommand, "rm -rf \"%s/%s/%s\"", g_cCairoDockDataDir, CAIRO_DOCK_THEMES_DIR, cThemeName);
+			g_string_printf (sCommand, "rm -rf \"%s/%s\"", g_cThemesDirPath, cThemeName);
 			r = system (sCommand->str);  // g_rmdir n'efface qu'un repertoire vide.
 		}
 	}

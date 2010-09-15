@@ -1445,7 +1445,7 @@ gchar *cairo_dock_get_appli_command (Window Xid)
 	if (iBufferNbElements > 0)
 	{
 		guint iPid = *pPidBuffer;
-		gchar *cFilePath = g_strdup_printf ("/proc/%d/cmdline", iPid);
+		gchar *cFilePath = g_strdup_printf ("/proc/%d/cmdline", iPid);  // utiliser /proc/%d/stat pour avoir le nom de fichier de l'executable
 		gsize length = 0;
 		gchar *cContent = NULL;
 		g_file_get_contents (cFilePath,

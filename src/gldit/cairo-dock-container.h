@@ -28,11 +28,13 @@ G_BEGIN_DECLS
 
 
 /**
-*@file cairo-dock-container.h This class defines the Containers, that are classic or hardware accelerated animated windows.
+*@file cairo-dock-container.h This class defines the Containers, that are classic or hardware accelerated animated windows, and exposes common functions, such as redrawing a part of a container or popping a menu on a container.
 *
 * A Container is a rectangular on-screen located surface, has the notion of orientation, can hold external datas, monitors the mouse position, and has its own animation loop.
 *
 * Docks, Desklets, Dialogs, and Flying-containers all derive from Containers.
+*
+* If you write a new type of container, you must call \ref cairo_dock_init_container when you create it and \ref cairo_dock_finish_container when you destroy it.
 */
 
 /// Main orientation of a container.
@@ -111,9 +113,11 @@ struct _CairoContainer {
  // WINDOW //
 ///////////
 
+void cairo_dock_set_containers_non_sticky (void);
+
 GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow);
 
-/** Initialize a Container : create a GTK window with transparency and OpenGL support.
+/** Initialize a Container : create a GTK window with transparency and OpenGL support. To be called when you create a new container.
 *@return the newly allocated GTK window.
 */
 #define cairo_dock_init_container(pContainer) cairo_dock_init_container_full (pContainer, TRUE)
@@ -121,16 +125,12 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
  */
 #define cairo_dock_init_container_no_opengl(pContainer) cairo_dock_init_container_full (pContainer, FALSE)
 
+/** Finish a Container. To be called before you free it.
+*@param pContainer a Container.
+*/
 void cairo_dock_finish_container (CairoContainer *pContainer);
 
-/** Apply the scren colormap to a window, providing it transparency.
-*@param pWidget a GTK window.
-*/
 void cairo_dock_set_colormap_for_window (GtkWidget *pWidget);
-/** Apply the scren colormap to a container, providing it transparency, and activate Glitz if possible.
-* @param pContainer the container.
-*/
-void cairo_dock_set_colormap (CairoContainer *pContainer);
 
   ////////////
  // REDRAW //
@@ -185,7 +185,7 @@ gboolean cairo_dock_string_is_adress (const gchar *cString);
 void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, CairoContainer *pContainer);
 
 
-/** Get the maximum zoom of ths icons inside a given container.
+/** Get the maximum zoom of the icons inside a given container.
 * @param pContainer the container.
 * @return the maximum scale factor.
 */

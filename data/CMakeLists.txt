@@ -14,18 +14,24 @@ install (FILES
 	depth-rotate-desklet.svg
 	cairo-dock-ok.svg
 	cairo-dock-cancel.svg
-	# appli
-	box-back.png
-	box-front.png
-	cairo-dock-animated.xpm
-	cairo-dock-logo.png
-	cairo-dock.svg
-	ChangeLog.txt
+	hand.svg
 	default-class-indicator.svg
 	default-icon-appli.svg
 	default-icon.svg
 	default-indicator.png
-	hand.svg
+	launcher.desktop
+	container.desktop
+	separator.desktop
+	# implementations
+	preview-default.png
+	readme-default-view
+	box-back.png
+	box-front.png
+	# appli
+	cairo-dock-animated.xpm
+	cairo-dock-logo.png
+	cairo-dock.svg
+	ChangeLog.txt
 	icon-accessories.svg
 	icon-all.svg
 	icon-appearance.svg
@@ -64,25 +70,24 @@ install (FILES
 	icon-views.svg
 	icon-visibility.svg
 	icon-wave.png
-	launcher.desktop
-	container.desktop
-	separator.desktop
-	preview-default.png
-	readme-default-view
 	DESTINATION ${pkgdatadir})
 
+# appli
 install (FILES help_scripts.sh
 	DESTINATION ${pkgdatadir}
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 install (FILES
+	# lib
+	${CMAKE_CURRENT_BINARY_DIR}/main-dock.conf
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.conf
+	# appli
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-simple.conf
 	${CMAKE_CURRENT_BINARY_DIR}/themes.conf
-	${CMAKE_CURRENT_BINARY_DIR}/main-dock.conf
 	${CMAKE_CURRENT_BINARY_DIR}/help.conf
 	DESTINATION ${pkgdatadir})
 
+# appli
 install (FILES
 	cairo-dock.svg
 	DESTINATION ${datadir}/pixmaps)

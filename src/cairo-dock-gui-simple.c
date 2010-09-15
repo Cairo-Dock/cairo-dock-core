@@ -58,7 +58,7 @@
 #define ICON_MEDIUM 48
 #define ICON_SMALL 42
 #define ICON_TINY 36
-#define CAIRO_DOCK_THEME_SERVER "http://extras.glx-dock.org"
+#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
 static GtkWidget *s_pSimpleConfigModuleWindow = NULL;
@@ -361,7 +361,7 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myViews.cSubDockDefaultRendererName);
 	
 	// applets
-	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_THEME_SERVER"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
+	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
 	g_key_file_set_string (pSimpleKeyFile, "Add-ons", "third party", cAdress);
 	g_free (cAdress);
 	

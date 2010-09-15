@@ -146,7 +146,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 	pAccessibility->iUnhideDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "unhide delay", &bFlushConfFileNeeded, 0, NULL, NULL);
 	
 	pAccessibility->bAutoHideOnFullScreen = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto quick hide", &bFlushConfFileNeeded, FALSE, "TaskBar", NULL);
-	pAccessibility->bAutoHideOnFullScreen = FALSE;
+	//pAccessibility->bAutoHideOnFullScreen = FALSE;
 	
 	//\____________________ sous-docks.
 	pAccessibility->iLeaveSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "leaving delay", &bFlushConfFileNeeded, 330, "System", NULL);

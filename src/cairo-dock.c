@@ -130,8 +130,14 @@
 #include "cairo-dock-icon-container.h"
 #include "cairo-dock-data-renderer.h"
 
-#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"  // "http://themes.cairo-dock.vef.fr"
+#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
+// Nom du repertoire racine du theme courant.
+#define CAIRO_DOCK_CURRENT_THEME_NAME "current_theme"
+// Nom du repertoire des themes extras.
+#define CAIRO_DOCK_EXTRAS_DIR "extras"
+// Nom du repertoire des themes de dock.
+#define CAIRO_DOCK_THEMES_DIR "themes"
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentThemePath;
@@ -393,9 +399,7 @@ int main (int argc, char** argv)
 	s_cLaunchCommand = sCommandString->str;
 	g_string_free (sCommandString, FALSE);
 	
-	cd_log_init(FALSE);
-	//No log
-	cd_log_set_level(0);
+	cd_log_init(FALSE);  // no log by default.
 	
 	gtk_init (&argc, &argv);
 	
@@ -502,9 +506,7 @@ int main (int argc, char** argv)
 	
 	cd_log_set_level_from_name (cVerbosity);
 	g_free (cVerbosity);
-
-	g_bSticky = ! bNoSticky;
-
+	
 	if (cEnvironment != NULL)
 	{
 		if (strcmp (cEnvironment, "gnome") == 0)
@@ -534,6 +536,10 @@ int main (int argc, char** argv)
 	bind_textdomain_codeset (CAIRO_DOCK_GETTEXT_PACKAGE, "UTF-8");
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 
+	  /////////////
+	 //// LIB ////
+	/////////////
+	
 	//\___________________ On definit les repertoires des donnees.
 	gchar *cRootDataDirPath;
 	if (cUserDefinedDataDir != NULL)
@@ -545,16 +551,10 @@ int main (int argc, char** argv)
 	{
 		cRootDataDirPath = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
 	}
-	gboolean bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
-	
 	gchar *cExtraDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_EXTRAS_DIR, NULL);
 	gchar *cThemesDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_THEMES_DIR, NULL);
 	gchar *cCurrentThemeDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_CURRENT_THEME_NAME, NULL);
 	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath, cThemeServerAdress ? cThemeServerAdress : g_strdup (CAIRO_DOCK_THEME_SERVER));
-	
-	  /////////////
-	 //// LIB ////
-	/////////////
 	
 	//\___________________ On initialise le gestionnaire de docks (a faire en 1er).
 	cairo_dock_init_dock_manager ();
@@ -590,6 +590,8 @@ int main (int argc, char** argv)
 	cairo_dock_register_built_in_data_renderers ();
 	cairo_dock_register_hiding_effects ();
 	g_pKeepingBelowBackend = cairo_dock_get_hiding_effect ("Fade out");
+	
+	cairo_dock_register_default_renderer ();
 	
 	cairo_dock_register_icon_container_renderers ();
 	
@@ -699,9 +701,6 @@ int main (int argc, char** argv)
 	cairo_dock_load_user_gui_backend (s_iGuiMode);
 	cairo_dock_register_default_launcher_gui_backend ();
 	
-	//\___________________ On enregistre la vue par defaut.
-	cairo_dock_register_default_renderer ();
-	
 	//\___________________ On enregistre nos notifications.
 	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
 		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
@@ -725,6 +724,10 @@ int main (int argc, char** argv)
 	//\___________________ On initialise la gestion des crash.
 	if (! bTesting)
 		_cairo_dock_set_signal_interception ();
+	
+	//\___________________ mode 'tout sur 1 ecran'.
+	if (bNoSticky)
+		cairo_dock_set_containers_non_sticky ();
 	
 	//\___________________ mode maintenance.
 	if (bMaintenance)
@@ -781,10 +784,8 @@ int main (int argc, char** argv)
 		g_free (cCommand);
 		
 		cairo_dock_mark_current_theme_as_modified (FALSE);  // on ne proposera pas de sauvegarder ce theme.
-		cairo_dock_load_current_theme ();
 	}
-	else
-		cairo_dock_load_current_theme ();
+	cairo_dock_load_current_theme ();
 	
 	if (g_bLocked)
 	{
@@ -813,6 +814,7 @@ int main (int argc, char** argv)
 		g_free (cConfFilePath);
 	}
 	
+	gboolean bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	if (bFirstLaunch)  // tout premier lancement -> bienvenue !
 	{
 		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);

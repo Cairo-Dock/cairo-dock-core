@@ -291,6 +291,9 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 		g_free (cOldCommand);
 	}
 	
+	gsize length = 0;
+	icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
+	
 	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "group", NULL))
 	{
 		icon->iType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "group", NULL);

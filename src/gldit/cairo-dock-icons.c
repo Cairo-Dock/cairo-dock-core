@@ -87,6 +87,8 @@ static void _cairo_dock_free_icon_buffers (Icon *icon)
 	g_free (icon->cClass);
 	g_free (icon->cQuickInfo);
 	g_free (icon->cLastAttentionDemand);
+	if (icon->pMimeTypes)
+		g_strfreev (icon->pMimeTypes);
 	
 	cairo_surface_destroy (icon->pIconBuffer);
 	cairo_surface_destroy (icon->pReflectionBuffer);
