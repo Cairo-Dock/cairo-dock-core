@@ -120,6 +120,12 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMUserActionFunc		show_system_monitor;
 };
 
+
+/** Initialize the Desktop Environment manager. Do it after the X manager is initialized.
+*@param iForceDesktopEnv known desktop environment, or CAIRO_DOCK_UNKNOWN_ENV to let the manager guess it.
+*/
+void cairo_dock_init_desktop_environment_manager (CairoDockDesktopEnv iForceDesktopEnv);
+
 /** Register a environment backend, overwriting any previous backend.
 */
 void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend);
@@ -230,8 +236,6 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 
 gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, CairoContainer *pContainer);
 
-
-CairoDockDesktopEnv cairo_dock_guess_environment (void);
 
 /** Get the size of a local file.
 *@param cFilePath path of a file on the hard disk.

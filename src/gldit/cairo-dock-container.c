@@ -109,7 +109,7 @@ void cairo_dock_finish_container (CairoContainer *pContainer)
 	}
 	if (g_pPrimaryContainer == pContainer)
 		g_pPrimaryContainer = NULL;
-	else
+	else if (g_pPrimaryContainer != NULL)
 		cairo_dock_set_default_gl_context ();
 }
 

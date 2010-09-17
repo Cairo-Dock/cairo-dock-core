@@ -67,7 +67,7 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-manager.h"
 
-CairoDock *g_pMainDock;  // pointeur sur le dock principal.
+CairoDock *g_pMainDock = NULL;  // pointeur sur le dock principal.
 gboolean g_bKeepAbove = FALSE;
 CairoDockImageBuffer g_pVisibleZoneBuffer;
 
@@ -105,8 +105,17 @@ void cairo_dock_init_dock_manager (void)
 			CAIRO_DOCK_RUN_FIRST, NULL);
 	}
 	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
-	
-	g_pMainDock = NULL;
+}
+
+
+void cairo_dock_force_docks_above (void)
+{
+	if (g_pMainDock != NULL)
+	{
+		cd_warning ("this function must be called before any dock is created.");
+		return;
+	}
+	g_bKeepAbove = TRUE;
 }
 
 // LOAD //

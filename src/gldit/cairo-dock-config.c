@@ -84,6 +84,7 @@ extern gchar *g_cConfFile;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 extern CairoDockHidingEffect *g_pHidingBackend;
+extern CairoDockHidingEffect *g_pKeepingBelowBackend;
 
 static gboolean s_bLoading = FALSE;
 
@@ -531,6 +532,9 @@ void cairo_dock_load_config (const gchar *cConfFilePath, CairoDock *pMainDock)
 	g_pHidingBackend = cairo_dock_get_hiding_effect (myAccessibility.cHideEffect);
 	
 	cairo_dock_set_dock_visibility (pMainDock, myAccessibility.iVisibility);
+	
+	if (g_pKeepingBelowBackend == NULL)  // pas d'option en config pour ca.
+		g_pKeepingBelowBackend = cairo_dock_get_hiding_effect ("Fade out");
 	
 	//\___________________ On charge les decorations des desklets.
 	if (myDesklets.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.

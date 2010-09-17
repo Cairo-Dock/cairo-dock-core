@@ -261,8 +261,7 @@ static gboolean on_key_press_dialog (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDialog *pDialog)
 {
-	cd_debug ("key pressed");
-	g_print ("%d / %d\n", pKey->state, GDK_CONTROL_MASK | GDK_MOD1_MASK);
+	cd_debug ("key pressed on dialog: %d / %d", pKey->state, GDK_CONTROL_MASK | GDK_MOD1_MASK);
 	
 	if (pKey->type == GDK_KEY_PRESS && ((pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)) == 0) && pDialog->action_on_answer != NULL)
 	{

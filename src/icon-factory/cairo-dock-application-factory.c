@@ -36,7 +36,6 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-application-factory.h"
 
-extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static Display *s_XDisplay = NULL;

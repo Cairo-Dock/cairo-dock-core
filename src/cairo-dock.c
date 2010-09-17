@@ -146,19 +146,13 @@ extern gchar *g_cConfFile;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 extern CairoDock *g_pMainDock;
-
-extern gboolean g_bKeepAbove;
-extern gboolean g_bSticky;
+extern CairoDockGLConfig g_openglConfig;
 
 extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
-extern CairoDockDesktopEnv g_iDesktopEnv;
 extern gboolean g_bEasterEggs;
 
-extern CairoDockGLConfig g_openglConfig;
-extern CairoDockHidingEffect *g_pKeepingBelowBackend;
 extern CairoDockModuleInstance *g_pCurrentModule;
-//int g_iDamageEvent = 0;
 
 gboolean g_bForceCairo = FALSE;
 gboolean g_bLocked;
@@ -406,7 +400,7 @@ int main (int argc, char** argv)
 	GError *erreur = NULL;
 	
 	//\___________________ On recupere quelques options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	GOptionEntry TableDesOptions[] =
 	{
@@ -431,7 +425,7 @@ int main (int argc, char** argv)
 			&bForceIndirectRendering,
 			"deprecated - see -O", NULL},
 		{"keep-above", 'a', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&g_bKeepAbove,
+			&bKeepAbove,
 			"keep the dock above other windows whatever", NULL},
 		{"no-sticky", 's', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bNoSticky,
@@ -485,16 +479,7 @@ int main (int argc, char** argv)
 		g_print ("ERROR in options : %s\n", erreur->message);
 		return 1;
 	}
-
-/* FIXME: utiliser l'option --enable-verbose du configure, l'idee etant que les fonctions de log sont non definies dans les versions officielles, histoire de pas faire le test tout le temps.
-#ifndef CAIRO_DOCK_VERBOSE
-	if (cVerbosity != NULL)
-	{
-		g_print ("Cairo-Dock was not compiled with verbose, configure it with --enable-verbose for that\n");
-		g_free (cVerbosity);
-		cVerbosity = NULL;
-	}
-#endif */
+	
 	if (bPrintVersion)
 	{
 		g_print ("%s\n", CAIRO_DOCK_VERSION);
@@ -504,19 +489,23 @@ int main (int argc, char** argv)
 	if (g_bLocked)
 		g_print ("Cairo-Dock will be locked.\n");
 	
-	cd_log_set_level_from_name (cVerbosity);
-	g_free (cVerbosity);
+	if (cVerbosity != NULL)
+	{
+		cd_log_set_level_from_name (cVerbosity);
+		g_free (cVerbosity);
+	}
 	
+	CairoDockDesktopEnv iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 	if (cEnvironment != NULL)
 	{
 		if (strcmp (cEnvironment, "gnome") == 0)
-			g_iDesktopEnv = CAIRO_DOCK_GNOME;
+			iDesktopEnv = CAIRO_DOCK_GNOME;
 		else if (strcmp (cEnvironment, "kde") == 0)
-			g_iDesktopEnv = CAIRO_DOCK_KDE;
+			iDesktopEnv = CAIRO_DOCK_KDE;
 		else if (strcmp (cEnvironment, "xfce") == 0)
-			g_iDesktopEnv = CAIRO_DOCK_XFCE;
+			iDesktopEnv = CAIRO_DOCK_XFCE;
 		else if (strcmp (cEnvironment, "none") == 0)
-			g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
+			iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 		else
 			cd_warning ("unknown environnment '%s'", cEnvironment);
 		g_free (cEnvironment);
@@ -582,14 +571,11 @@ int main (int argc, char** argv)
 	cd_keybinder_init();
 	
 	//\___________________ On detecte l'environnement de bureau (apres X et avant les modules).
-	if (g_iDesktopEnv == CAIRO_DOCK_UNKNOWN_ENV)
-		g_iDesktopEnv = cairo_dock_guess_environment ();
-	cd_debug ("environnement de bureau : %d", g_iDesktopEnv);
+	cairo_dock_init_desktop_environment_manager (iDesktopEnv);
 	
 	//\___________________ On enregistre les implementations.
 	cairo_dock_register_built_in_data_renderers ();
 	cairo_dock_register_hiding_effects ();
-	g_pKeepingBelowBackend = cairo_dock_get_hiding_effect ("Fade out");
 	
 	cairo_dock_register_default_renderer ();
 	
@@ -624,6 +610,13 @@ int main (int argc, char** argv)
 	
 	//\___________________ On lit la config globale de l'appli.
 	_cairo_dock_get_global_config ();
+	
+	//\___________________ Options generales.
+	if (bKeepAbove)
+		cairo_dock_force_docks_above ();
+	
+	if (bNoSticky)
+		cairo_dock_set_containers_non_sticky ();
 	
 	//\___________________ On initialise le support d'OpenGL.
 	gboolean bOpenGLok = FALSE;
@@ -725,10 +718,6 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		_cairo_dock_set_signal_interception ();
 	
-	//\___________________ mode 'tout sur 1 ecran'.
-	if (bNoSticky)
-		cairo_dock_set_containers_non_sticky ();
-	
 	//\___________________ mode maintenance.
 	if (bMaintenance)
 	{
@@ -776,7 +765,7 @@ int main (int argc, char** argv)
 	
 	//\___________________ On charge le dernier theme.
 	cd_message ("loading theme ...");
-	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))
+	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))  // aucun theme, on copie le theme par defaut.
 	{
 		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCurrentThemePath);
 		cd_message (cCommand);

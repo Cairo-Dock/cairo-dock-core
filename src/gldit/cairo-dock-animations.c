@@ -134,8 +134,6 @@ void cairo_dock_pop_down (CairoDock *pDock)
 		}
 		pDock->bIsBelow = TRUE;
 	}
-	///pDock->iSidPopDown = 0;
-	///return FALSE;
 }
 
 
@@ -255,63 +253,40 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 	if (pDock->iMagnitudeIndex == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1))  // on est arrive en bas.
 	{
 		//g_print ("equilibre atteint (%d)\n", pDock->container.bInside);
-		///if (iPrevMagnitudeIndex != 0 || (pDock->fDecorationsOffsetX == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1)))  // on vient d'arriver en bas OU l'animation de depliage est finie.
-		///{
-			if (! pDock->container.bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
-			{
-				//g_print ("rideau !\n");
-				
-				//\__________________ On repasse derriere si on etait devant.
-				if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow)
-					cairo_dock_pop_down (pDock);
-				
-				//\__________________ On se redimensionne en taille normale.
-				if (! pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
-				{
-					//g_print ("taille normale (%x; %d)\n", pDock->pShapeBitmap , pDock->iInputState);
-					if (pDock->pShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_AT_REST)
-					{
-						//g_print ("+++ input shape at rest on end shrinking\n");
-						cairo_dock_set_input_shape_at_rest (pDock);
-						pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
-						///cairo_dock_replace_all_dialogs ();
-					}
-				}
-				/**else if (pDock->bAutoHide && pDock->iRefCount == 0 && pDock->fFoldingFactor != 0)  // si le dock se replie, inutile de rester en taille grande avec une fenetre transparente, ca perturbe.
-				{
-					if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
-					{
-						//g_print ("+++ input shape hidden on end shrinking\n");
-						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-							NULL,
-							0,
-							0);
-						gtk_widget_input_shape_combine_mask (pDock->container.pWidget,
-							pDock->pHiddenShapeBitmap,
-							0,
-							0);
-						pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;
-					}
-				}*/
-				
-				//\__________________ On se cache si sous-dock.
-				if (pDock->iRefCount > 0)
-				{
-					//g_print ("on cache ce sous-dock en sortant par lui\n");
-					gtk_widget_hide (pDock->container.pWidget);
-					cairo_dock_hide_parent_dock (pDock);
-				}
-				cairo_dock_hide_after_shortcut ();
-			}
-			else
-			{
-				cairo_dock_calculate_dock_icons (pDock);  // relance le grossissement si on est dedans.
-			}
-		/**}
-		else if (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)
+		if (! pDock->container.bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
 		{
-			cairo_dock_calculate_dock_icons (pDock);
-		}*/
+			//g_print ("rideau !\n");
+			
+			//\__________________ On repasse derriere si on etait devant.
+			if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow)
+				cairo_dock_pop_down (pDock);
+			
+			//\__________________ On se redimensionne en taille normale.
+			if (! pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
+			{
+				//g_print ("taille normale (%x; %d)\n", pDock->pShapeBitmap , pDock->iInputState);
+				if (pDock->pShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_AT_REST)
+				{
+					//g_print ("+++ input shape at rest on end shrinking\n");
+					cairo_dock_set_input_shape_at_rest (pDock);
+					pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
+					///cairo_dock_replace_all_dialogs ();
+				}
+			}
+			
+			//\__________________ On se cache si sous-dock.
+			if (pDock->iRefCount > 0)
+			{
+				//g_print ("on cache ce sous-dock en sortant par lui\n");
+				gtk_widget_hide (pDock->container.pWidget);
+				cairo_dock_hide_parent_dock (pDock);
+			}
+			cairo_dock_hide_after_shortcut ();
+		}
+		else
+		{
+			cairo_dock_calculate_dock_icons (pDock);  // relance le grossissement si on est dedans.
+		}
 		if (!pDock->bIsGrowingUp)
 			cairo_dock_replace_all_dialogs ();
 		return (!pDock->bIsGrowingUp && (pDock->fDecorationsOffsetX != 0 || (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)));

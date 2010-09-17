@@ -43,6 +43,8 @@ struct _CairoDockDockManager {
 
 void cairo_dock_init_dock_manager (void);
 
+void cairo_dock_force_docks_above (void);
+
 void cairo_dock_load_visible_zone (const gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha);
 
 void cairo_dock_reset_docks_table (void);
