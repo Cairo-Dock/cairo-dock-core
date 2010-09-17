@@ -265,8 +265,6 @@ static gboolean on_key_press_dialog (GtkWidget *pWidget,
 	
 	if (pKey->type == GDK_KEY_PRESS && ((pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)) == 0) && pDialog->action_on_answer != NULL)
 	{
-		GdkEventScroll dummyScroll;
-		int iX, iY;
 		switch (pKey->keyval)
 		{
 			case GDK_Return :
