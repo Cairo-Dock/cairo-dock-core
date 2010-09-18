@@ -1,14 +1,18 @@
+
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
 Exec=cairo-dock -c
 Icon=cairo-dock.svg
 Terminal=false
-Comment=a light and eye-candy dock and desklets for your desktop.
+
+Comment=A light and eye-candy dock and desklets for your desktop.
+Comment[fr]=Un dock et des desklets légers et sexy pour votre bureau.
 
 Name=Cairo-Dock (no OpenGL)
 Name[fr]=Cairo-Dock (sans OpenGL)
 
 GenericName=Multi-purpose Dock and Desklets
 GenericName[fr]=Dock et Desklets multi-usage
+
 Categories=System;

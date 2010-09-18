@@ -28,7 +28,7 @@ add_custom_target (uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/
 set (CPACK_SOURCE_GENERATOR "TGZ")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
 set (CPACK_SOURCE_IGNORE_FILES 
-	"/build/;/.bzr/;bzrignore$;/config.h$;/scripts/;/doc/;/misc/;~$;${CPACK_SOURCE_IGNORE_FILES}")
+	"/build/;/.bzr/;bzrignore$;/config.h$;/scripts/;/doc/;/misc/;en_GB.po$;~$;${CPACK_SOURCE_IGNORE_FILES}")
 include (CPack)
 
 add_custom_target( dist
