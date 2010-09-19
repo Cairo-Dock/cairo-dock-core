@@ -7,13 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-09-05 22:03+0000\n"
+"POT-Creation-Date: 2010-09-13 00:34+0000\n"
+"PO-Revision-Date: 2010-09-15 13:55+0000\n"
 "Last-Translator: boki24 <Unknown>\n"
 "Language-Team: Serbian <sr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-06 04:56+0000\n"
+"X-Launchpad-Export-Date: 2010-09-16 04:57+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-gui-launcher.c:376
@@ -348,8 +349,10 @@ msgid "Get more applets!"
 msgstr "Nabavite još apleta!"
 
 #: ../src/cairo-dock-menu.c:422
-msgid "Third-party applets provide integration with many programs, like Pidgin"
-msgstr "Apleti omogućavaju integraciju sa mnogim programima, na primer Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
+msgstr ""
+"Apleti omogućavaju integraciju sa mnogim programima, na primer Pidgin"
 
 #: ../src/cairo-dock-menu.c:424
 msgid "About"
@@ -859,7 +862,8 @@ msgid "category"
 msgstr "kategorija"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2375
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Da bi dobili pregled i objašnjenje u vezi apleta, kliknite u njega."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2778
@@ -1015,7 +1019,7 @@ msgstr "Da li želite da prebrišete temu %s?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:171
 msgid "Last modification on:"
-msgstr ""
+msgstr "Poslednja izmena:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:238
 #, c-format
@@ -1734,7 +1738,8 @@ msgstr "Učestalost osvežavanja"
 
 #: ../data/messages:393 ../data/messages:397 ../data/messages:401
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
+msgstr ""
+"u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
 
 #: ../data/messages:395
 msgid "Refresh rate when mouving cursor into the dock :"
@@ -2060,7 +2065,8 @@ msgstr ""
 
 #: ../data/messages:571
 msgid "Choose a default decoration for all desklets :"
-msgstr "Odaberite podrazumevano ulepšavanje za sve programčiće radne površine:"
+msgstr ""
+"Odaberite podrazumevano ulepšavanje za sve programčiće radne površine:"
 
 #: ../data/messages:573
 msgid ""
@@ -2167,7 +2173,8 @@ msgid "Zoom effect"
 msgstr "Efekti zumiranja"
 
 #: ../data/messages:643
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "postavite na 1 ako ne želite da ikone budu zumirane kada je miš iznad njih."
 
@@ -2236,8 +2243,9 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Ovo je njihova providnost kada je dok neaktivan; oni će se \"materijalizovati"
-"\" postepeno kako dok raste. Što je bliže 0, biće više providan."
+"Ovo je njihova providnost kada je dok neaktivan; oni će se "
+"\"materijalizovati\" postepeno kako dok raste. Što je bliže 0, biće više "
+"providan."
 
 #: ../data/messages:675
 msgid "Icons' transparency at rest :"
@@ -2370,7 +2378,8 @@ msgstr "Poveži ikonu sa nizom znakova"
 
 #: ../data/messages:743
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr "Dužina linije niza znakova, u pikselima (0 ne koristiti niz znakova):"
+msgstr ""
+"Dužina linije niza znakova, u pikselima (0 ne koristiti niz znakova):"
 
 #: ../data/messages:745
 msgid "Colour of the string (red, blue, green, alpha) :"
@@ -2491,8 +2500,8 @@ msgstr "veće"
 
 #: ../data/messages:797
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Koristi se da indikator prati orijentaciju doka (gore/dole/levo/desno)."
 
@@ -2533,9 +2542,8 @@ msgid "Labels"
 msgstr "Natpisi"
 
 #: ../data/messages:819
-#, fuzzy
 msgid "Label visibility"
-msgstr "Čitljivost natpisa"
+msgstr "Vidljivost oznake"
 
 #: ../data/messages:821
 msgid "Show labels:"
@@ -2553,7 +2561,8 @@ msgstr "Na svim ikonama"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr "kada je veći, više natpisa susednih izabranoj ikoni će biti providno."
+msgstr ""
+"kada je veći, više natpisa susednih izabranoj ikoni će biti providno."
 
 #: ../data/messages:831
 msgid "label's visibility threshold :"
@@ -2728,8 +2737,8 @@ msgstr ""
 
 #: ../data/messages:903
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr "Jednostavno ih prevucite i pustite van doka, nestaće u eksploziji!"
 
 #: ../data/messages:905
@@ -2747,10 +2756,13 @@ msgstr ""
 
 #: ../data/messages:909
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
+"U moduli 'Ikone' možete podesiti podrazumevanu veličinu vaših ikona po "
+"vrstama: pokretači, programi, apleti i razdvajači.\n"
+"Takođe, možete podesiti nivo uvećanja."
 
 #: ../data/messages:913
 msgid ""
@@ -2764,7 +2776,8 @@ msgstr ""
 #: ../data/messages:1323 ../data/messages:1329 ../data/messages:1333
 #: ../data/messages:1337 ../data/messages:1341
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Savet: Ako je ova linija siva, to znači da se savet ne odnosi na vas."
+msgstr ""
+"Savet: Ako je ova linija siva, to znači da se savet ne odnosi na vas."
 
 #: ../data/messages:917 ../data/messages:1045
 msgid "If you're using Compiz, you can click on this button:"
@@ -2785,7 +2798,8 @@ msgid ""
 "positioned."
 msgstr ""
 "Savet: ako imate više ekrana kojima upravlja Xinerama, možete odabrati "
-"opciju «Koristi Xineram-u» i odaberite ekran na kojem želite da sa pojavi dok."
+"opciju «Koristi Xineram-u» i odaberite ekran na kojem želite da sa pojavi "
+"dok."
 
 #: ../data/messages:925
 msgid ""
@@ -2840,6 +2854,7 @@ msgstr "Ne želim daostali prozori prekrivaju dok"
 #: ../data/messages:943
 msgid "Tip: You can even do that with desklets: making a desklet's panel !."
 msgstr ""
+"Savet: To možete učiniti čak i sa deskletom: pravljenjem desklet panela!"
 
 #: ../data/messages:945
 msgid ""
@@ -2925,8 +2940,8 @@ msgid ""
 "Just right-click on the dock, then select «Add a sub-dock». Fill the config "
 "panel with a name and image, then confirm."
 msgstr ""
-"Uradite desni klik na dok, zatim odaberite «Dodaj pod-dok». Popunite panel za "
-"podešavanje nazivom i slikom i zatim potvrdite."
+"Uradite desni klik na dok, zatim odaberite «Dodaj pod-dok». Popunite panel "
+"za podešavanje nazivom i slikom i zatim potvrdite."
 
 #: ../data/messages:975
 msgid "How can I have many main docks?"
@@ -3053,6 +3068,8 @@ msgid ""
 "Desklets are widgets which are displayed on your desktop. Each applet can be "
 "detached from the dock to act as a desklet."
 msgstr ""
+"Deskleti i widgeti koji su prikazani na radnoj površini. Svaki aplet može "
+"biti otkačen od doka da se ponaša kao desklet."
 
 #: ../data/messages:1011
 msgid "How do I configure their position?"
@@ -3140,6 +3157,8 @@ msgid ""
 "Tip: you may have to switch to the Widget Layer once so that Compiz takes "
 "the change into account."
 msgstr ""
+"Savet: možete jednom prebaciti na Widget sloj tako da Compiz uzme izmene u "
+"obzir."
 
 #: ../data/messages:1041
 msgid ""
@@ -3201,8 +3220,8 @@ msgstr "Ikone nekih programa su ružne."
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3295,9 +3314,9 @@ msgstr "Kako da dodam glavni meni?"
 
 #: ../data/messages:1097
 msgid ""
-"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will no "
-"longer work. This applet lets you configure a shortcut to pop up the menu at "
-"the mouse's location."
+"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will "
+"no longer work. This applet lets you configure a shortcut to pop up the menu "
+"at the mouse's location."
 msgstr ""
 "Savet:ako ste uklonili Gnome-panel, tada kombinacija tastera «alt+F1» neće "
 "više funkcionisati. Ovaj aplet vam omogućava podešavanje kombinacije tastera "
@@ -3442,8 +3461,8 @@ msgid ""
 "Enable the «Clock» applet. Clicking on it will display a calendar, clicking "
 "again will hide it."
 msgstr ""
-"Omoguči aplet «Sat». Klikom na njega prikazaće se kalendar, a sledeći klik će "
-"ga sakriti."
+"Omoguči aplet «Sat». Klikom na njega prikazaće se kalendar, a sledeći klik "
+"će ga sakriti."
 
 #: ../data/messages:1155
 msgid "Go to the «Clock» module."
@@ -3487,8 +3506,8 @@ msgid ""
 "Enable the «Terminal» applet. You can detach it and place it on the Widget "
 "Layer for instance, or configure a shortkey to make it pop up instantly."
 msgstr ""
-"Omogući aplet «Terminal». Možete ga otkačiti i, na primer,  staviti na Widget "
-"slo, ili podesiti prečicu sa tastature za trenutno pojavljivanje."
+"Omogući aplet «Terminal». Možete ga otkačiti i, na primer,  staviti na "
+"Widget slo, ili podesiti prečicu sa tastature za trenutno pojavljivanje."
 
 #: ../data/messages:1169
 msgid "Go to the «terminal» module."
@@ -3500,9 +3519,9 @@ msgstr "Onda, kako da potpuno uklonim gnome-panel?"
 
 #: ../data/messages:1173
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/"
-"required_components_list/panel, and replace its content with \"cairo-dock"
-"\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components_list/panel, and replace its "
+"content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3533,8 +3552,8 @@ msgstr ""
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Cairo-Penguin, Weather, Netspeed, ...\n"
-"Right click on the applet's icon, and select «launch another instance». A new "
-"instance of this applet appears in the main dock.\n"
+"Right click on the applet's icon, and select «launch another instance». A "
+"new instance of this applet appears in the main dock.\n"
 "You can configure this new applet just like any other."
 msgstr ""
 
@@ -3637,16 +3656,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3661,8 +3680,8 @@ msgstr ""
 "zatim se možete strelicama kretati unutar njega .\n"
 " - <i>GMenu</i> applet mogućava da se pojavi meni  <b>Programi</b> i takođe "
 "dijalog <b>brzi-pokretač</b>.\n"
-" - <i>Clipper</i> applet mogućava da se pojavi meni  <b>istorijat klipborda</"
-"b>.\n"
+" - <i>Clipper</i> applet mogućava da se pojavi meni  <b>istorijat "
+"klipborda</b>.\n"
 " - i naravno, <i>Scooby-Do</i> dodatak omogućava <b>kretanje unutar vaših "
 "dokova</b> i da brzo <b>pronađete i pokrenete</b> programe i fajlove!"
 
@@ -3707,8 +3726,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1241
@@ -3836,6 +3855,9 @@ msgid ""
 "in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable "
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
+"U Gnomu postoji opcija koja može da prebriše dokove opcije. Da bi omogućili "
+"ikone, otvorili 'gconf-editor', idite na Desktop/Gnome/Interface i omogućite "
+"opcije \"menus have icons\" i \"buttons have icons\". "
 
 #: ../data/messages:1279
 msgid "If you're on Gnome you can click on this button:"
@@ -3853,8 +3875,8 @@ msgstr "Pridruži se projektu!"
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -4031,7 +4053,7 @@ msgstr "... ili prevucite i ispustite paket sa temom ovde:"
 
 #: ../data/messages:1435
 msgid "Theme loading options"
-msgstr ""
+msgstr "Opcije za učitavanje tema"
 
 #: ../data/messages:1445
 msgid "Save"
@@ -4416,8 +4438,8 @@ msgstr ""
 #: ../data/messages:1621
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4502,8 +4524,8 @@ msgstr ""
 #: ../data/messages:1633
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4599,9 +4621,6 @@ msgid ""
 "better on any desktop."
 msgstr ""
 
-#~ msgid "Configure labels appearence."
-#~ msgstr "Podesite pojavljivanje natpisa."
-
 #~ msgid "Plug-ins"
 #~ msgstr "Dodaci"
 
@@ -4610,6 +4629,9 @@ msgstr ""
 
 #~ msgid "Controller"
 #~ msgstr "Kontroler"
+
+#~ msgid "Configure labels appearence."
+#~ msgstr "Podesite pojavljivanje natpisa."
 
 #~ msgid "Lateral gap:"
 #~ msgstr "Bočni razmak:"

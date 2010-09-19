@@ -1,14 +1,61 @@
+
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
 Exec=cairo-dock -o
 Icon=cairo-dock.svg
 Terminal=false
+
 Comment=Cairo-Dock with OpenGL (hardware acceleration)
+Comment[be]=Cairo-Dock з OpenGL (апаратнае паскарэньне)
+Comment[ca]=Cairo-Dock amb OpenGL (acceleració per maquinari)
+Comment[cs]=Cairo-Dock s OpenGL (hardwarová akcelerace)
+Comment[de]=Cairo-Dock (benutzt OpenGL zur Hardwarebeschleunigung)
+Comment[el]=Cairo-Dock με OpenGL (επιτάχυνση υλικού)
+Comment[es]=Cairo-Dock con OpenGL (aceleración de hardware)
+Comment[fi]=Cairo-Dockin OpenGL-versio (laitteistokiihdytys käytössä)
+Comment[fr]=Cairo-Dock avec OpenGL (accélération matérielle)
+Comment[hu]=Cairo-Dock OpenGL-lel (hardveres gyorsítás)
+Comment[it]=Cairo-Dock con OpenGL (accelerazione hardware)
+Comment[ja]=OpenGL版 Cairo-Dock (ハードウェア・アクセラレーション)
+Comment[nb]=Cairo-Dock med OpenGL (maskinvareakselerasjon)
+Comment[nl]=Cairo-Dock met OpenGL (hardwareversnelling)
+Comment[oc]=Cairo-Dock amb OpenGL (acceleracion materiala)
+Comment[pt]=Cairo-Dock com OpenGL (aceleração por hardware)
+Comment[pt_BR]=Cairo-Dock com OpenGL (aceleração de hardware)
+Comment[ru]=Cairo-Dock с OpenGL (аппаратное ускорение)
+Comment[sv]=Cairo-Dock med OpenGL (hårdvaruacceleration)
+Comment[tr]=OpenGL etkin Cairo-Dock (donanım hızlandırması)
+Comment[uk]=Cairo-Dock з OpenGL (hardware acceleration)
+Comment[zh_CN]=使用了 OpenGL(硬件加速) 的 Cario-Dock
+Comment[zh_TW]=使用 OpenGL (硬體加速) 之 Cairo-Dock
 
 Name=GLX-Dock (Cairo-Dock with OpenGL)
+Name[be]=GLX-Dock (панэль Cairo з OpenGL)
+Name[ca]=GLX-Dock (Cairo-Dock amb OpenGL)
+Name[cs]=GLX-Dock (Cairo-Dock s OpenGL)
+Name[de]=GLX-Dock (Cairo-Dock mit OpenGL)
+Name[el]=GLX-Dock (Cairo-Dock με OpenGL)
+Name[es]=GLX-Dock (Cairo-Dock con OpenGL)
+Name[fi]=GLX-Dock (OpenGL-grafiikoita käyttävä Cairo-Dock)
 Name[fr]=GLX-Dock (Cairo-Dock avec OpenGL)
+Name[hu]=GLX-Dock (Cairo-Dock OpenGL-lel)
+Name[it]=GLX-Dock (Cairo-Dock con OpenGL)
+Name[ja]=GLX-Dock (OpenGL版 Cairo-Dock)
+Name[nb]=GLX-Dock (Cairo-Dock med OpenGL)
+Name[nl]=GLX-Dock (Cairo-Dock met OpenGL)
+Name[oc]=GLX-Dock (Cairo-Dock amb OpenGL)
+Name[pt]=GLX-Dock (Cairo-Dock em OpenGL)
+Name[pt_BR]=GLX-Dock (Cairo-Dock com OpenGL)
+Name[ru]=GLX-Dock (панель Cairo с OpenGL)
+Name[sv]=GLX-Dock (Cairo-Dock med OpenGL)
+Name[tr]=GLX-Dock (OpenGL ile Cairo-Dock)
+Name[uk]=GLX-Dock (Cairo-Dock з OpenGL)
+Name[vi]=GLX-Dock (Thanh neo Cairo với OpenGL)
+Name[zh_CN]=GLX-Dock (使用 OpenGL 的 Cairo-Dock)
+Name[zh_TW]=GLX-Dock (使用 OpenGL 的 Cairo-Dock)
 
 GenericName=Multi-purpose Dock and Desklets
 GenericName[fr]=Dock et Desklets multi-usage
+
 Categories=System;
