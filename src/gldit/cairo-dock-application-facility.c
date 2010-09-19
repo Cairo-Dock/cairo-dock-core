@@ -360,6 +360,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			if (pParentDock == NULL)  // alors il faut creer le sous-dock, qu'on associera soit a pSameClassIcon soit a un fake.
 			{
 				cd_message ("  creation du dock pour la classe %s", icon->cClass);
+				pMainDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);  // can be NULL (even if in practice will never be).
 				pParentDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cClass, pMainDock);
 			}
 			else
