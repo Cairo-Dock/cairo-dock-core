@@ -57,6 +57,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigDialogs *pDialogs)
 		pDialogs->dialogTextDescription.iSize *= 1.33;  // c'est pas beau, mais ca evite de casser tous les themes.
 	pDialogs->dialogTextDescription.iWeight = pango_font_description_get_weight (fd);
 	pDialogs->dialogTextDescription.iStyle = pango_font_description_get_style (fd);
+	pDialogs->dialogTextDescription.fMaxRelativeWidth = .5;  // on limite a la moitie de l'ecran.
 	
 	if (g_key_file_has_key (pKeyFile, "Dialogs", "message size", NULL))  // anciens parametres.
 	{

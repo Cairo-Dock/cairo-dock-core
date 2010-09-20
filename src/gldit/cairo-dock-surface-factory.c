@@ -28,10 +28,12 @@
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-surface-factory.h"
 
 extern CairoContainer *g_pPrimaryContainer;
 extern gboolean g_bUseOpenGL;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static cairo_t *s_pSourceContext = NULL;
 
@@ -785,6 +787,79 @@ cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurfac
 }
 
 
+void cairo_dock_limit_string_width (gchar *cLine, PangoLayout *pLayout, gboolean bUseMarkup, int iMaxWidth)
+{
+	// on insere des retours chariot pour tenir dans la largeur donnee.
+	PangoRectangle ink, log;
+	gchar *sp, *last_sp=NULL;
+	double w;
+	int iNbLines = 0;
+	
+	gchar *str = cLine;
+	while (*str == ' ')  // on saute les espaces en debut de ligne.
+		str ++;
+	
+	sp = str;
+	do
+	{
+		sp = strchr (sp+1, ' ');  // on trouve l'espace suivant.
+		if (!sp)  // plus d'espace, on quitte.
+			break ;
+		
+		*sp = '\0';  // on coupe a cet espace.
+		if (bUseMarkup)  // on regarde la taille de str a sp.
+			pango_layout_set_markup (pLayout, str, -1);
+		else
+			pango_layout_set_text (pLayout, str, -1);
+		pango_layout_get_pixel_extents (pLayout, &ink, &log);
+		//g_print ("%s => w:%d/%d, x:%d/%d\n", str, log.width, ink.width, log.x, ink.x);
+		w = log.width + log.x;
+		
+		if (w > iMaxWidth)  // on deborde.
+		{
+			if (last_sp != NULL)  // on coupe au dernier espace connu.
+			{
+				*sp = ' ';  // on remet l'espace.
+				*last_sp = '\n';  // on coupe.
+				iNbLines ++;
+				str = last_sp + 1;  // on place le debut de ligne apres la coupure.
+			}
+			else  // aucun espace, c'est un mot entier.
+			{
+				*sp = '\n';  // on coupe apres le mot.
+				iNbLines ++;
+				str = sp + 1;  // on place le debut de ligne apres la coupure.
+			}
+			
+			while (*str == ' ')  // on saute les espaces en debut de ligne.
+				str ++;
+			sp = str;
+			last_sp = NULL;
+		}
+		else  // ca rentre.
+		{
+			*sp = ' ';  // on remet l'espace.
+			last_sp = sp;  // on memorise la derniere cesure qui fait tenir la ligne en largeur.
+			sp ++;  // on se place apres.
+			while (*sp == ' ')  // on saute tous les espaces.
+				sp ++;
+		}
+	} while (sp);
+	
+	// dernier mot.
+	if (bUseMarkup)  // on regarde la taille de str a sp.
+		pango_layout_set_markup (pLayout, str, -1);
+	else
+		pango_layout_set_text (pLayout, str, -1);
+	pango_layout_get_pixel_extents (pLayout, &ink, &log);
+	w = log.width + log.x;
+	if (w > iMaxWidth)  // on deborde.
+	{
+		if (last_sp != NULL)  // on coupe au dernier espace connu.
+			*last_sp = '\n';
+	}
+}
+
 cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset)
 {
 	g_return_val_if_fail (cText != NULL && pLabelDescription != NULL, NULL);
@@ -805,20 +880,52 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	
 	pango_layout_set_text (pLayout, "|", -1);  // donne la hauteur max des lettres.
 	pango_layout_get_pixel_extents (pLayout, &ink, &log);
-	int iMaxSize = ink.height;
+	int iMinSize = ink.height;  // hauteur min = au moins la plus grande lettre pour une uniformite des labels.
 	
 	if (pLabelDescription->bUseMarkup)
 		pango_layout_set_markup (pLayout, cText, -1);
 	else
 		pango_layout_set_text (pLayout, cText, -1);
 	
-	//\_________________ On cree une surface aux dimensions du texte.
+	//\_________________ On insere des retours chariot si necessaire.
 	pango_layout_get_pixel_extents (pLayout, &ink, &log);
 	
+	if (pLabelDescription->fMaxRelativeWidth != 0)
+	{
+		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		int w = ink.width;
+		g_print ("text width : %d / %d\n", w, iMaxLineWidth);
+		if (w > iMaxLineWidth)  // le texte est trop long.
+		{
+			// on decoupe le texte en lignes et on limite chaque ligne trop longue.
+			gchar *sp, *last_sp=NULL;
+			gchar **cLines = g_strsplit (cText, "\n", -1);
+			gchar *cLine;
+			int i;
+			for (i = 0; cLines[i] != NULL; i ++)
+			{
+				cLine = cLines[i];
+				cairo_dock_limit_string_width (cLine, pLayout, pLabelDescription->bUseMarkup, iMaxLineWidth);
+				g_print (" + %s\n", cLine);
+			}
+			
+			// on reforme le texte et on le passe a pango.
+			gchar *cCutText = g_strjoinv ("\n", cLines);
+			if (pLabelDescription->bUseMarkup)
+				pango_layout_set_markup (pLayout, cCutText, -1);
+			else
+				pango_layout_set_text (pLayout, cCutText, -1);
+			pango_layout_get_pixel_extents (pLayout, &ink, &log);
+			g_strfreev (cLines);
+			g_free (cCutText);
+		}
+	}
+	
+	//\_________________ On cree une surface aux dimensions du texte.
 	gboolean bDrawBackground = (pLabelDescription->fBackgroundColor != NULL && pLabelDescription->fBackgroundColor[3] > 0);
 	double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/3));  // permet d'avoir un rayon meme si on n'a pas de marge.
 	int iOutlineMargin = 2*pLabelDescription->iMargin + (pLabelDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
-	double fZoomX = ((iMaxWidth != 0 && ink.width + iOutlineMargin > iMaxWidth) ? 1.*iMaxWidth / (ink.width + iOutlineMargin) : 1.);
+	double fZoomX = ((iMaxWidth != 0 && ink.width + iOutlineMargin > iMaxWidth) ? (double)iMaxWidth / (ink.width + iOutlineMargin) : 1.);
 	
 	*iTextWidth = (ink.width + iOutlineMargin) * fZoomX;  // le texte + la marge de chaque cote.
 	if (bDrawBackground)  // quand on trace le cadre, on evite qu'avec des petits textes genre "1" on obtienne un fond tout rond.
@@ -827,7 +934,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 		if (iMaxWidth != 0 && *iTextWidth > iMaxWidth)
 			*iTextWidth = iMaxWidth;
 	}
-	*iTextHeight = MAX (iMaxSize, ink.height) + iOutlineMargin + 0; // +1 car certaines polices "debordent".
+	*iTextHeight = MAX (iMinSize, ink.height) + iOutlineMargin + 0; // +1 car certaines polices "debordent".
 	
 	cairo_surface_t* pNewSurface = cairo_dock_create_blank_surface (
 		*iTextWidth,

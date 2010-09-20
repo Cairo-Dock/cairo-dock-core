@@ -90,6 +90,8 @@ struct _CairoDockLabelDescription {
 	gint iMargin;
 	/// whether to use Pango markups or not (markups are html-like marks, like <b>...</b>; using markups force you to escape some characters like "&" -> "&amp;")
 	gboolean bUseMarkup;
+	/// maximum width allowed, in ratio of the screen's width. Carriage returns will be inserted if necessary. 0 means no limit.
+	gdouble fMaxRelativeWidth;
 };
 
 
