@@ -928,10 +928,12 @@ static void _cairo_dock_get_answer_from_dialog (int iClickedButton, GtkWidget *p
 	cd_message ("%s (%d)", __func__, iClickedButton);
 	int *iAnswerBuffer = data[0];
 	GMainLoop *pBlockingLoop = data[1];
-	GtkWidget *pWidgetCatcher = data[2];
+	/**GtkWidget *pWidgetCatcher = data[2];
 	if (pInteractiveWidget != NULL)
-		gtk_widget_reparent (pInteractiveWidget, pWidgetCatcher);  // j'ai rien trouve de mieux pour empecher que le 'pInteractiveWidget' ne soit pas detruit avec le dialogue apres l'appel de la callback (g_object_ref ne marche pas).
-
+		gtk_widget_reparent (pInteractiveWidget, pWidgetCatcher);  // j'ai rien trouve de mieux pour empecher que le 'pInteractiveWidget' ne soit pas detruit avec le dialogue apres l'appel de la callback (g_object_ref ne marche pas).*/
+	
+	cairo_dock_steal_interactive_widget_from_dialog (pDialog);  // le dialogue disparaitra apres cette fonction, mais le widget interactif doit rester.
+	
 	*iAnswerBuffer = iClickedButton;
 
 	if (g_main_loop_is_running (pBlockingLoop))
@@ -940,19 +942,19 @@ static void _cairo_dock_get_answer_from_dialog (int iClickedButton, GtkWidget *p
 static gboolean _cairo_dock_dialog_destroyed (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
 	cd_debug ("dialogue detruit, on sort de la boucle\n");
-	gtk_window_set_modal (GTK_WINDOW (pWidget), FALSE);
+	gtk_window_set_modal (GTK_WINDOW (pWidget), FALSE);  /// utile ?...
 	if (g_main_loop_is_running (pBlockingLoop))
 		g_main_loop_quit (pBlockingLoop);
 	return FALSE;
 }
 int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, GtkWidget *pInteractiveWidget)
 {
-	static GtkWidget *pWidgetCatcher = NULL;  // voir l'astuce plus haut.
+	///static GtkWidget *pWidgetCatcher = NULL;  // voir l'astuce plus haut.
 	int iClickedButton = -3;
 	GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
-	if (pWidgetCatcher == NULL)
-		pWidgetCatcher = gtk_hbox_new (0, FALSE);
-	gpointer data[3] = {&iClickedButton, pBlockingLoop, pWidgetCatcher};  // inutile d'allouer 'data' puisqu'on va bloquer.
+	/**if (pWidgetCatcher == NULL)
+		pWidgetCatcher = gtk_hbox_new (0, FALSE);*/
+	gpointer data[2/**3*/] = {&iClickedButton, pBlockingLoop/**, pWidgetCatcher*/};  // inutile d'allouer 'data' puisqu'on va bloquer.
 
 	CairoDialog *pDialog = cairo_dock_show_dialog_full (cText,
 		pIcon,
@@ -989,11 +991,7 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 			cd_message ("on force a quitter");
 			CairoDock *pDock = CAIRO_DOCK (pContainer);
 			pDock->container.bInside = TRUE;
-			///pDock->bAtBottom = FALSE;
 			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
-			/*cairo_dock_on_leave_notify (pDock->container.pWidget,
-				NULL,
-				pDock);*/
 		}
 	}
 

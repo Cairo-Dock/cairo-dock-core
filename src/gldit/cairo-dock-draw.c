@@ -571,39 +571,38 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		else
 			cairo_translate (pCairoContext, floor (icon->fDrawY), floor (icon->fDrawX + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1)));
 		
-		double fOffsetX = (/**icon->fWidthFactor * */icon->fWidth * icon->fScale - icon->iTextWidth) / 2;
-		if (fOffsetX < - icon->fDrawX)
+		double fOffsetX = (icon->fWidth * icon->fScale - icon->iTextWidth) / 2;
+		if (fOffsetX < - icon->fDrawX)  // l'etiquette deborde a gauche.
 			fOffsetX = - icon->fDrawX;
-		else if (icon->fDrawX + fOffsetX + icon->iTextWidth > iWidth)
+		else if (icon->fDrawX + fOffsetX + icon->iTextWidth > iWidth)  // l'etiquette deborde a droite.
 			fOffsetX = iWidth - icon->iTextWidth - icon->fDrawX;
 		
 		if (icon->fOrientation != 0 && ! myLabels.bTextAlwaysHorizontal)
 			cairo_rotate (pCairoContext, icon->fOrientation);
 		
-		if (! bIsHorizontal && myLabels.bTextAlwaysHorizontal)
+		if (bIsHorizontal)
+		{
+			cairo_set_source_surface (pCairoContext,
+				icon->pTextBuffer,
+				floor (fOffsetX),
+				floor (bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale));
+		}
+		else if (myLabels.bTextAlwaysHorizontal)
 		{
 			if (fOffsetX < - icon->fDrawY)
 				fOffsetX = - icon->fDrawY;
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				/**floor ((pDock->container.bDirectionUp ? -myLabels.iLabelSize : - (pDock->container.bUseReflect ? myIcons.fReflectSize : 0.)) - myLabels.iconTextDescription.iMargin + 1),*/
 				floor (fOffsetX),
 				0.);
 		}
-		else if (bIsHorizontal)
-			cairo_set_source_surface (pCairoContext,
-				icon->pTextBuffer,
-				floor (fOffsetX),
-				floor (bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale/* - icon->fTextYOffset*/));
 		else
 		{
-			cairo_translate (pCairoContext, icon->iTextWidth/2, icon->iTextHeight/2);
 			cairo_rotate (pCairoContext, bDirectionUp ? - G_PI/2 : G_PI/2);
-			cairo_translate (pCairoContext, -icon->iTextWidth/2, -icon->iTextHeight/2);
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				floor (bDirectionUp ? -myLabels.iLabelSize : icon->fHeight * icon->fScale/* - icon->fTextYOffset*/),
-				floor (fOffsetX));
+				floor (bDirectionUp ? fOffsetX - icon->fWidth * icon->fScale : fOffsetX),
+				-floor (bDirectionUp ? myLabels.iLabelSize : icon->fHeight * icon->fScale + myLabels.iLabelSize));
 		}
 		double fMagnitude;
 		if (myLabels.bLabelForPointedIconOnly || pDock->fMagnitudeMax == 0.)

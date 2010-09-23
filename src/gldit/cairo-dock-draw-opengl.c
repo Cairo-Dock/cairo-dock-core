@@ -422,9 +422,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			glTranslatef (floor (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), floor (fX), - icon->fHeight * (1+myIcons.fAmplitude));
 		
 		double fOffsetX = 0.;
-		if (icon->fDrawX + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2 < 0)
+		if (icon->fDrawX + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2 < 0)  // l'etiquette deborde a gauche.
 			fOffsetX = icon->iTextWidth/2 - (icon->fDrawX + icon->fWidth * icon->fScale/2);
-		else if (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2 > pDock->container.iWidth)
+		else if (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2 > pDock->container.iWidth)  // l'etiquette deborde a droite.
 			fOffsetX = pDock->container.iWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2);
 		if (icon->fOrientation != 0 && ! myLabels.bTextAlwaysHorizontal)
 		{
@@ -435,7 +435,13 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		double dx = .5 * (icon->iTextWidth & 1);  // on decale la texture pour la coller sur la grille des coordonnees entieres.
 		double dy = .5 * (icon->iTextHeight & 1);
-		if (! pDock->container.bIsHorizontal && myLabels.bTextAlwaysHorizontal)
+		if (pDock->container.bIsHorizontal)
+		{
+			glTranslatef (floor (fOffsetX) + dx,
+				floor ((pDock->container.bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myLabels.iLabelSize - icon->iTextHeight / 2)) + dy,
+				0.);
+		}
+		else if (myLabels.bTextAlwaysHorizontal)
 		{
 			fOffsetX = MIN (0, icon->fDrawY + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2);
 			double y = (icon->fWidth * icon->fScale + icon->iTextHeight) / 2;
@@ -445,16 +451,10 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 				floor (y) + dy,
 				0.);
 		}
-		else if (pDock->container.bIsHorizontal)
-		{
-			glTranslatef (floor (fOffsetX) + dx,
-				floor ((pDock->container.bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myLabels.iLabelSize - icon->iTextHeight / 2)) + dy,
-				0.);
-		}
 		else
 		{
 			glTranslatef (floor ((pDock->container.bDirectionUp ? -.5:.5) * (icon->fHeight * icon->fScale + icon->iTextHeight)) + dx,
-				floor (fOffsetX) + dy,
+				- floor (fOffsetX) + dy,
 				0.);
 			glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
 		}

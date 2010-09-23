@@ -41,6 +41,7 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-callbacks.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-container.h"
 
 static gboolean s_bSticky = TRUE;
@@ -49,6 +50,7 @@ gboolean g_bUseGlitz = FALSE;
 CairoContainer *g_pPrimaryContainer = NULL;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 
 static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
@@ -434,15 +436,15 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	{
 		*x = x0;
 		if (pContainer->bDirectionUp)
-			*y = y0 - h;  /// - h_menu ?...
+			*y = y0 - h;
 		else
 			*y = y0 + pIcon->fHeight * pIcon->fScale;
 	}
 	else
 	{
-		*y = x0;
+		*y = MIN (x0, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - h);
 		if (pContainer->bDirectionUp)
-			*x = y0 - w;  /// - w_menu ?...
+			*x = y0 - w;
 		else
 			*x = y0 + pIcon->fHeight * pIcon->fScale;
 	}

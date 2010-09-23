@@ -164,12 +164,29 @@ static gchar *s_cDefaulBackend = NULL;
 static gboolean s_bTestComposite = TRUE;
 static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 
+static inline void _cancel_metacity_composite (void)
+{
+	int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false");
+}
 static void _accept_metacity_composition (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
 {
-	if (iClickedButton == 1)  // clic explicite sur "cancel"
+	g_print ("%s (%d)\n", __func__, iClickedButton);
+	if (iClickedButton == 1 || iClickedButton == -2)  // clic explicite sur "cancel", ou Echap ou auto-delete.
 	{
-		int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false");
+		_cancel_metacity_composite ();
 	}
+	gboolean *bAccepted = data;
+	*bAccepted = TRUE;  // l'utilisateur a valide son choix.
+}
+static void _on_free_metacity_dialog (gpointer data)
+{
+	gboolean *bAccepted = data;
+	g_print ("%s (%d)\n", __func__, *bAccepted);
+	if (! *bAccepted)  // le dialogue s'est detruit sans que l'utilisateur n'ait valide la question => on annule tout.
+	{
+		_cancel_metacity_composite ();
+	}
+	g_free (data);
 }
 static void _toggle_remember_choice (GtkCheckButton *pButton, GtkWidget *pDialog)
 {
@@ -200,17 +217,17 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 				g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), pAskBox);
 				int iClickedButton = cairo_dock_show_dialog_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., NULL, pAskBox);
 				
-				gboolean bRememberChoice = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pAskBox), "remember"));
-				gtk_widget_destroy (pAskBox);
+				gboolean bRememberChoice = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pCheckBox));
+				gtk_widget_destroy (pAskBox); // le widget survit a un dialogue bloquant.
 				if (bRememberChoice)
 				{
 					s_bTestComposite = FALSE;
 				}
-				///int iAnswer= cairo_dock_ask_question_and_wait (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nI can perform this last operation for you. Do you want to proceed ?"), pIcon, CAIRO_CONTAINER (g_pMainDock));
-				if (iClickedButton == 0 || iClickedButton == -1)
+				if (iClickedButton == 0 || iClickedButton == -1)  // ok or Enter.
 				{
 					int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
-					cairo_dock_show_dialog_with_question (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
+					///cairo_dock_show_dialog_with_question (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
+					cairo_dock_show_dialog_full (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), 10e3, NULL, NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, g_new0 (gboolean, 1), (GFreeFunc)_on_free_metacity_dialog);
 				}
 				
 			}
@@ -543,6 +560,8 @@ int main (int argc, char** argv)
 	gchar *cExtraDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_EXTRAS_DIR, NULL);
 	gchar *cThemesDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_THEMES_DIR, NULL);
 	gchar *cCurrentThemeDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_CURRENT_THEME_NAME, NULL);
+	gboolean bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
+	
 	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath, cThemeServerAdress ? cThemeServerAdress : g_strdup (CAIRO_DOCK_THEME_SERVER));
 	
 	//\___________________ On initialise le gestionnaire de docks (a faire en 1er).
@@ -803,7 +822,6 @@ int main (int argc, char** argv)
 		g_free (cConfFilePath);
 	}
 	
-	gboolean bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	if (bFirstLaunch)  // tout premier lancement -> bienvenue !
 	{
 		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);

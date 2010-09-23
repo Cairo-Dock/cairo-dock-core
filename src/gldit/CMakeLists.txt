@@ -88,9 +88,20 @@ link_directories(
 	${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/implementations)
 
+# Define the library
 add_library ("gldi" SHARED ${core_lib_SRCS})
+STRING (REGEX REPLACE "\\..*" "" SOVERSION "${VERSION}")
+set_target_properties ("gldi" PROPERTIES
+	# create *nix style library versions + symbolic links
+	VERSION ${VERSION}
+	SOVERSION ${SOVERSION}
+	# allow creating static and shared libs without conflicts
+	#CLEAN_DIRECT_OUTPUT 1
+	# avoid conflicts between library and binary target names
+	#OUTPUT_NAME ${PROJECT_NAME}
+)
 
-# Link the executable to the librairies.
+# Link the result to the librairies.
 target_link_libraries("gldi"
 	${PACKAGE_LIBRARIES}
 	${XEXTEND_LIBRARIES}
@@ -102,6 +113,8 @@ target_link_libraries("gldi"
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/gldi.pc.in ${CMAKE_CURRENT_BINARY_DIR}/gldi.pc)
 install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/gldi.pc DESTINATION ${libdir}/pkgconfig)
 install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/libgldi.so DESTINATION ${libdir})
+install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/libgldi.so.${VERSION} DESTINATION ${libdir})
+install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/libgldi.so.${SOVERSION} DESTINATION ${libdir})
 
 ########### install files ###############
 
