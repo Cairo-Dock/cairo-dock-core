@@ -550,7 +550,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImag
 	if (*cImageFile == '/')
 		cImagePath = (gchar *)cImageFile;
 	else
-		cImagePath = cairo_dock_generate_file_path (cImageFile);
+		cImagePath = cairo_dock_search_image_s_path (cImageFile);
 		
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
 		1.,
@@ -596,7 +596,7 @@ cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile
 
 	if (cImageFile != NULL)
 	{
-		gchar *cImagePath = cairo_dock_generate_file_path (cImageFile);
+		gchar *cImagePath = cairo_dock_search_image_s_path (cImageFile);
 		double fImageWidth, fImageHeight;
 		cairo_surface_t *pPatternSurface = cairo_dock_create_surface_from_image (cImagePath,
 			1.,
@@ -894,7 +894,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	{
 		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
 		int w = ink.width;
-		g_print ("text width : %d / %d\n", w, iMaxLineWidth);
+		//g_print ("text width : %d / %d\n", w, iMaxLineWidth);
 		if (w > iMaxLineWidth)  // le texte est trop long.
 		{
 			// on decoupe le texte en lignes et on limite chaque ligne trop longue.

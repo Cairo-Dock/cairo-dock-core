@@ -49,6 +49,7 @@ gchar *g_cExtrasDirPath = NULL;  // le chemin vers le repertoire des extra.
 gchar *g_cThemesDirPath = NULL;  // le chemin vers le repertoire des themes.
 gchar *g_cCurrentLaunchersPath = NULL;  // le chemin vers le repertoire des lanceurs du theme courant.
 gchar *g_cCurrentIconsPath = NULL;  // le chemin vers le repertoire des icones du theme courant.
+gchar *g_cCurrentImagesPath = NULL;  // le chemin vers le repertoire des images ou autre du theme courant.
 gchar *g_cCurrentPlugInsPath = NULL;  // le chemin vers le repertoire des plug-ins du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
@@ -59,6 +60,7 @@ extern CairoDock *g_pMainDock;
 #define CAIRO_DOCK_LAUNCHERS_DIR "launchers"
 #define CAIRO_DOCK_PLUG_INS_DIR "plug-ins"
 #define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
+#define CAIRO_DOCK_LOCAL_IMAGES_DIR "images"
 
 void cairo_dock_mark_current_theme_as_modified (gboolean bModified)
 {
@@ -547,6 +549,7 @@ void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar 
 	g_cCurrentLaunchersPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
 	_check_dir (g_cCurrentLaunchersPath);
 	g_cCurrentIconsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+	g_cCurrentImagesPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LOCAL_IMAGES_DIR);
 	_check_dir (g_cCurrentIconsPath);
 	g_cCurrentPlugInsPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_PLUG_INS_DIR);
 	_check_dir (g_cCurrentPlugInsPath);

@@ -41,7 +41,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "indicator image", &bFlushConfFileNeeded, NULL, "Icons", NULL);
 	if (cIndicatorImageName != NULL)
 	{
-		pIndicators->cIndicatorImagePath = cairo_dock_generate_file_path (cIndicatorImageName);
+		pIndicators->cIndicatorImagePath = cairo_dock_search_image_s_path (cIndicatorImageName);
 		g_free (cIndicatorImageName);
 	}
 	else
@@ -112,7 +112,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 	
 	if (cIndicatorImageName != NULL)
 	{
-		pIndicators->cActiveIndicatorImagePath = cairo_dock_generate_file_path (cIndicatorImageName);
+		pIndicators->cActiveIndicatorImagePath = cairo_dock_search_image_s_path (cIndicatorImageName);
 		g_free (cIndicatorImageName);
 	}
 	else
@@ -124,7 +124,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 		cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, pIndicators->fActiveColor, 4, couleur_active, "Icons", NULL);
 		pIndicators->iActiveLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active line width", &bFlushConfFileNeeded, 3, "Icons", NULL);
 		pIndicators->iActiveCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active corner radius", &bFlushConfFileNeeded, 6, "Icons", NULL);
-	}
+	}  // donc ici si on choisit le mode "image" sans en definir une, le alpha de la couleur reste a 0 => aucun indicateur
 	
 	pIndicators->bActiveIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "active frame position", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
 	
@@ -135,7 +135,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIndicators *pIndicato
 		cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "class indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
 		if (cIndicatorImageName != NULL)
 		{
-			pIndicators->cClassIndicatorImagePath = cairo_dock_generate_file_path (cIndicatorImageName);
+			pIndicators->cClassIndicatorImagePath = cairo_dock_search_image_s_path (cIndicatorImageName);
 			g_free (cIndicatorImageName);
 		}
 		else

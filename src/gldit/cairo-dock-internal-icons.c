@@ -208,7 +208,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigIcons *pIcons)
 	gchar *cLauncherBackgroundImageName = cairo_dock_get_string_key_value (pKeyFile, "Icons", "icons bg", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	if (cLauncherBackgroundImageName != NULL)
 	{
-		pIcons->cBackgroundImagePath = cairo_dock_generate_file_path (cLauncherBackgroundImageName);
+		pIcons->cBackgroundImagePath = cairo_dock_search_image_s_path (cLauncherBackgroundImageName);
 		g_free (cLauncherBackgroundImageName);
 	}
 		

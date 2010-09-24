@@ -644,14 +644,17 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		{
 			cd_warning ("icon's buffer is NULL, applet won't be able to draw to it !");
 			pInstance->pDrawContext = NULL;
+			bCanInit = FALSE;
 		}
 		else
-			pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
-		if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
 		{
-			cd_warning ("couldn't initialize drawing context, applet won't be able to draw itself !");
-			pInstance->pDrawContext = NULL;
-			bCanInit = FALSE;
+			pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
+			if (!pInstance->pDrawContext || cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
+			{
+				cd_warning ("couldn't initialize drawing context, applet won't be able to draw itself !");
+				pInstance->pDrawContext = NULL;
+				bCanInit = FALSE;
+			}
 		}
 	}
 	
@@ -878,7 +881,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	if (pIcon && pIcon->pIconBuffer)  // applet, on lui associe un contexte de dessin avant le reload.
 	{
 		pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
-		if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
+		if (!pInstance->pDrawContext || cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
 		{
 			cd_warning ("couldn't initialize drawing context, applet won't be reloaded !");
 			bCanReload = FALSE;
@@ -1385,6 +1388,7 @@ void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance)
 #define REGISTER_INTERNAL_MODULE(cGroupName) \
 	pModule = g_new0 (CairoDockInternalModule, 1);\
 	cairo_dock_pre_init_##cGroupName (pModule);\
+	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);\
 	g_hash_table_insert (pModuleTable, (gpointer)pModule->cModuleName, pModule)
 void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
 {

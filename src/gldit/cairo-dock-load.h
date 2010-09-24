@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-load.h This class defines a simple image loader interface.
 * It also handles the main image buffers of the dock.
-* Use \ref cairo_dock_create_image_buffer to create an immage buffer from a file, or \ref cairo_dock_load_image_buffer to load an image into an existing immage buffer.
+* Use \ref cairo_dock_create_image_buffer to create an image buffer from a file, or \ref cairo_dock_load_image_buffer to load an image into an existing immage buffer.
 * Use \ref cairo_dock_free_image_buffer to destroy it or \ref cairo_dock_unload_image_buffer to unload and reset it to 0.
 * If you just want to load an image into a mere cairo_surface, use the functions of the surface-factory.
 */
@@ -72,8 +72,8 @@ CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabe
 *@param cImageFile a file name or path. If it's already a path, it will just be duplicated.
 *@return the path of the file.
 */
-gchar *cairo_dock_generate_file_path (const gchar *cImageFile);
-
+gchar *cairo_dock_search_image_s_path (const gchar *cImageFile);
+#define cairo_dock_generate_file_path cairo_dock_search_image_s_path
 
 /** Load an image into an ImageBuffer with a given transparency. If the image is given by its sole name, it is taken in the root folder of the current theme.
 *@param pImage an ImageBuffer.

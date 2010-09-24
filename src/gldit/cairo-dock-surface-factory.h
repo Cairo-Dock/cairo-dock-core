@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 * 
 * To load a text into a surface, describe your text look with a _CairoDockLabelDescription, and pass it to \ref cairo_dock_create_surface_from_text.
 *
+* Note: if you also need to load the image into a texture, it's easier to use the higher level ImageBuffer API (see \ref cairo_dock_create_image_buffer).
 */
 
 /// Types of image loading modifiers.

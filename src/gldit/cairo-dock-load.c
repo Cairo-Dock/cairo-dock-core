@@ -69,6 +69,8 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 
 extern gchar *g_cCurrentThemePath;
+extern gchar *g_cCurrentIconsPath;
+extern gchar *g_cCurrentImagesPath;
 
 extern GLuint g_pGradationTexture[2];
 
@@ -99,21 +101,44 @@ CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabe
 	return pTextDescription;
 }
 
-gchar *cairo_dock_generate_file_path (const gchar *cImageFile)
+gchar *cairo_dock_search_image_s_path (const gchar *cImageFile)
 {
 	g_return_val_if_fail (cImageFile != NULL, NULL);
 	gchar *cImagePath;
 	if (*cImageFile == '~')
 	{
 		cImagePath = g_strdup_printf ("%s%s", getenv("HOME"), cImageFile + 1);
+		if (!g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+		{
+			g_free (cImagePath);
+			cImagePath = NULL;
+		}
 	}
 	else if (*cImageFile == '/')
 	{
-		cImagePath = g_strdup (cImageFile);
+		if (!g_file_test (cImageFile, G_FILE_TEST_EXISTS))
+			cImagePath = NULL;
+		else
+			cImagePath = g_strdup (cImageFile);
 	}
 	else
 	{
-		cImagePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, cImageFile);
+		cImagePath = g_strdup_printf ("%s/%s", g_cCurrentImagesPath, cImageFile);
+		if (!g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+		{
+			g_free (cImagePath);
+			cImagePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, cImageFile);
+			if (!g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cImagePath);
+				cImagePath = g_strdup_printf ("%s/%s", g_cCurrentIconsPath, cImageFile);
+				if (!g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+				{
+					g_free (cImagePath);
+					cImagePath = NULL;
+				}
+			}
+		}
 	}
 	return cImagePath;
 }
@@ -123,7 +148,7 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 {
 	if (cImageFile == NULL)
 		return;
-	gchar *cImagePath = cairo_dock_generate_file_path (cImageFile);
+	gchar *cImagePath = cairo_dock_search_image_s_path (cImageFile);
 	double w, h;
 	pImage->pSurface = cairo_dock_create_surface_from_image (
 		cImagePath,

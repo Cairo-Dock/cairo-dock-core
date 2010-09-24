@@ -664,7 +664,7 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, doubl
 	if (*cImageFile == '/')
 		cImagePath = (gchar *)cImageFile;
 	else
-		cImagePath = cairo_dock_generate_file_path (cImageFile);
+		cImagePath = cairo_dock_search_image_s_path (cImageFile);
 	
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (g_pPrimaryContainer);
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,

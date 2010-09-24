@@ -285,7 +285,7 @@ static void _add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStore *model, G
 			g_free (cImagePath);
 			if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
 			{
-				cImagePath = cairo_dock_generate_file_path (myIcons.cSeparatorImage);
+				cImagePath = cairo_dock_search_image_s_path (myIcons.cSeparatorImage);
 			}
 			else if (CAIRO_DOCK_IS_APPLET (pIcon))
 			{
@@ -293,7 +293,7 @@ static void _add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStore *model, G
 			}
 			else
 			{
-				cImagePath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
+				cImagePath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
 				if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 				{
 					g_free (cImagePath);

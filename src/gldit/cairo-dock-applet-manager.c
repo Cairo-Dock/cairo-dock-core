@@ -69,18 +69,7 @@ static void _load_applet (Icon *icon)
 		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath,
 			iWidth,
 			iHeight);
-	}
-	/*if (icon->pIconBuffer != NULL && icon->pModuleInstance != NULL)
-	{
-		if (icon->pModuleInstance->pDrawContext != NULL)
-			cairo_destroy (icon->pModuleInstance->pDrawContext);
-		icon->pModuleInstance->pDrawContext = cairo_create (icon->pIconBuffer);
-		if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
-		{
-			cd_warning ("couldn't initialize drawing context, applet won't be reloaded !");
-			icon->pModuleInstance->pDrawContext = NULL;
-		}
-	}*/
+	}  // on ne recharge pas myDrawContext car de toute facon l'icone de l'applet est chargee par le module-manager lors de l'init ou du reload, donc c'est lui qui gere le contexte.
 }
 
 static gboolean _delete_applet (Icon *icon)

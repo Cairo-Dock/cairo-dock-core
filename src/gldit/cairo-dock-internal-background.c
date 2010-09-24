@@ -53,14 +53,14 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 	
 	gchar *cBgImage = cairo_dock_get_string_key_value (pKeyFile, "Background", "background image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	int iFillBg = cairo_dock_get_integer_key_value (pKeyFile, "Background", "fill bg", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour intercepter le cas ou la cle n'existe pas.
-	if (iFillBg == -1)
+	if (iFillBg == -1)  // nouvelle cle
 	{
-		iFillBg = (cBgImage != NULL ? 0 : 1);
+		iFillBg = (cBgImage != NULL ? 0 : 1);  // si une image etait definie auparavant, on dit qu'on veut le mode "image"
 		g_key_file_set_integer (pKeyFile, "Background", "fill bg", iFillBg);
 	}
 	else
 	{
-		if (iFillBg != 0)
+		if (iFillBg != 0)  // remplissage avec un degrade => on ne veut pas d'image
 		{
 			g_free (cBgImage);
 			cBgImage = NULL;
@@ -68,8 +68,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigBackground *pBackgrou
 	}
 	
 	// image de fond.
-	pBackground->cBackgroundImageFile = cairo_dock_generate_file_path (cBgImage);
-	g_free (cBgImage);
+	if (cBgImage != NULL)
+	{
+		pBackground->cBackgroundImageFile = cairo_dock_search_image_s_path (cBgImage);
+		g_free (cBgImage);
+	}
 	
 	pBackground->fBackgroundImageAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "image alpha", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 

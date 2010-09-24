@@ -249,10 +249,9 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	if ((icon->pIconBuffer == pPrevSurface || icon->pIconBuffer == NULL) &&
 		(icon->iIconTexture == iPrevTexture || icon->iIconTexture == 0))
 	{
-		gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
-		if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
+		if (cIconPath == NULL)  // fichier non trouve.
 		{
-			g_free (cIconPath);
 			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
 		}
 		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,

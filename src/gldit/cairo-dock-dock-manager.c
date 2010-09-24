@@ -705,7 +705,7 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 			g_free (pDock->cBgImagePath);
 			if (cBgImage != NULL)
 			{
-				pDock->cBgImagePath = cairo_dock_generate_file_path (cBgImage);
+				pDock->cBgImagePath = cairo_dock_search_image_s_path (cBgImage);
 				g_free (cBgImage);
 			}
 			else

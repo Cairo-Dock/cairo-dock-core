@@ -1348,10 +1348,9 @@ static void _load_appli (Icon *icon)
 	if (icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
 	{
 		cd_debug ("%s (%ld) doesn't define any icon, we set the default one.\n", icon->cName, icon->Xid);
-		gchar *cIconPath = cairo_dock_generate_file_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
-		if (cIconPath == NULL || ! g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+		if (cIconPath == NULL)  // image non trouvee.
 		{
-			g_free (cIconPath);
 			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
 		}
 		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,

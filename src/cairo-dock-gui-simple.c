@@ -707,7 +707,8 @@ static void _add_one_effect_item (const gchar *cName, CairoDockAnimationRecord *
 static void _make_double_anim_widget (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, const gchar *cLabel)
 {
 	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, cGroupName, cKeyName);
-	g_return_if_fail (myWidget != NULL);
+	if (myWidget == NULL)  // peut arriver vu que en mode cairo on n'a pas "anim_hover"
+		return;
 	
 	gsize length = 0;
 	gchar **cValues = g_key_file_get_string_list (pKeyFile, cGroupName, cKeyName, &length, NULL);

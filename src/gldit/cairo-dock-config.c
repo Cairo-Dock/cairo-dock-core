@@ -450,8 +450,8 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 	gchar *cFileName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, NULL, cDefaultGroupName, cDefaultKeyName);
 	gchar *cFilePath = NULL;
 	if (cFileName != NULL)
-		cFilePath = cairo_dock_generate_file_path (cFileName);
-	else if (cDefaultFileName != NULL && cDefaultDir != NULL)
+		cFilePath = cairo_dock_search_image_s_path (cFileName);
+	if (cFilePath == NULL && cDefaultFileName != NULL && cDefaultDir != NULL)  // pas d'image specifiee, ou image introuvable => on prend l'image par defaut fournie.
 		cFilePath = g_strdup_printf ("%s/%s", cDefaultDir, cDefaultFileName);
 	return cFilePath;
 }

@@ -2177,7 +2177,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					gchar *cShareThemesDir = NULL, *cUserThemesDir = NULL, *cDistantThemesDir = NULL;
 					if (pAuthorizedValuesList[0] != NULL)
 					{
-						cShareThemesDir = (*pAuthorizedValuesList[0] != '\0' ? cairo_dock_generate_file_path (pAuthorizedValuesList[0]) : NULL);  // on autorise les ~/blabla.
+						cShareThemesDir = (*pAuthorizedValuesList[0] != '\0' ? cairo_dock_search_image_s_path (pAuthorizedValuesList[0]) : NULL);  // on autorise les ~/blabla.
 						if (pAuthorizedValuesList[1] != NULL)
 						{
 							cUserThemesDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pAuthorizedValuesList[1]);
