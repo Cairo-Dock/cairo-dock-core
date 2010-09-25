@@ -116,11 +116,12 @@ static void _cairo_dock_configure_root_dock (GtkMenuItem *pMenuItem, CairoDock *
 	cd_message ("%s (%s)", __func__, cDockName);
 	
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // ne devrait pas arriver mais au cas ou.
 	{
-		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+		cairo_dock_add_root_dock_config_for_name (cDockName);
+		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 		int r = system (cCommand);
-		g_free (cCommand);
+		g_free (cCommand);*/
 	}
 	
 	if (s_pRootDockConfigWindow != NULL)

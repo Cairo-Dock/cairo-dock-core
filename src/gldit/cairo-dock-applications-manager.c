@@ -306,21 +306,24 @@ static void _on_update_applis_list (CairoDock *pDock)
 			{
 				icon->iLastCheckTime = s_iTime;
 				icon->iStackOrder = iStackOrder ++;
-				if ((! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (icon)))  // bHideVisibleApplis est gere lors de l'insertion.
+				if (myTaskBar.bShowAppli)
 				{
-					cd_message (" insertion de %s ... (%d)", icon->cName, icon->iLastCheckTime);
-					pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-					if (pParentDock != NULL)
+					if ((! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (icon)))  // bHideVisibleApplis est gere lors de l'insertion.
 					{
-						if (pParentDock->bIsMainDock)
-							bUpdateMainDockSize = TRUE;
-						else
-							cairo_dock_update_dock_size (pParentDock);
+						cd_message (" insertion de %s ... (%d)", icon->cName, icon->iLastCheckTime);
+						pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+						if (pParentDock != NULL)
+						{
+							if (pParentDock->bIsMainDock)
+								bUpdateMainDockSize = TRUE;
+							else
+								cairo_dock_update_dock_size (pParentDock);
+						}
 					}
-				}
-				else if (myTaskBar.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
-				{
-					cairo_dock_prevent_inhibated_class (icon);
+					else if (myTaskBar.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
+					{
+						cairo_dock_prevent_inhibated_class (icon);
+					}
 				}
 				
 				// visibilite
@@ -419,7 +422,7 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 	CairoDock *pDock = g_pMainDock;
 	
 	// applis du bureau courant seulement.
-	if (myTaskBar.bAppliOnCurrentDesktopOnly)
+	if (myTaskBar.bAppliOnCurrentDesktopOnly && myTaskBar.bShowAppli)
 	{
 		g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_hide_show_windows_on_other_desktops, pDock);
 	}
@@ -472,7 +475,7 @@ static void _on_change_window_state (Icon *icon)
 		{
 			icon->bIsFullScreen = bIsFullScreen;
 			icon->bIsHidden = bIsHidden;
-			cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, NULL);
+			cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, icon);
 		}
 	}
 	
@@ -509,7 +512,7 @@ static void _on_change_window_state (Icon *icon)
 		}
 		
 		// applis minimisees seulement
-		if (myTaskBar.bHideVisibleApplis)  // on insere/detache l'icone selon la visibilite de la fenetre, avec une animation.
+		if (myTaskBar.bHideVisibleApplis && myTaskBar.bShowAppli)  // on insere/detache l'icone selon la visibilite de la fenetre, avec une animation.
 		{
 			if (bIsHidden)  // se cache => on insere son icone.
 			{
@@ -570,7 +573,7 @@ static void _on_change_window_desktop (Icon *icon)
 	icon->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
 	
 	// applis du bureau courant seulement.
-	if (myTaskBar.bAppliOnCurrentDesktopOnly)
+	if (myTaskBar.bAppliOnCurrentDesktopOnly && myTaskBar.bShowAppli)
 	{
 		_cairo_dock_hide_show_windows_on_other_desktops (&Xid, icon, g_pMainDock);  // si elle vient sur notre bureau, elle n'est pas forcement sur le meme viewport, donc il faut le verifier.
 	}
@@ -578,7 +581,7 @@ static void _on_change_window_desktop (Icon *icon)
 	// visibilite
 	if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change de bureau.
 	{
-		cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, NULL);
+		cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, icon);
 	}
 	
 	if ((icon->iNumDesktop == -1 || icon->iNumDesktop == g_desktopGeometry.iCurrentDesktop) && icon->iViewPortX == g_desktopGeometry.iCurrentViewportX && icon->iViewPortY == g_desktopGeometry.iCurrentViewportY)  // petite optimisation : si l'appli arrive sur le bureau courant, on peut se contenter de ne verifier qu'elle.
@@ -633,10 +636,10 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	else  // elle est sur le bureau.
 	{
 		// applis du bureau courant seulement.
-		if (myTaskBar.bAppliOnCurrentDesktopOnly && icon->cParentDockName == NULL)
+		if (myTaskBar.bAppliOnCurrentDesktopOnly && icon->cParentDockName == NULL && myTaskBar.bShowAppli)
 		{
 			cd_message ("cette fenetre est sur le bureau courant (%d;%d)", e->x, e->y);
-			gboolean bInsideDock = (icon->cParentDockName != NULL);  // jamais verifie mais ca devrait etre bon.
+			gboolean bInsideDock = (icon->cParentDockName != NULL);
 			if (! bInsideDock)
 				cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
@@ -853,7 +856,7 @@ void cairo_dock_unregister_appli (Icon *icon)
 
 void cairo_dock_start_application_manager (CairoDock *pDock)
 {
-	g_return_if_fail (!s_bAppliManagerIsRunning && myTaskBar.bShowAppli);
+	g_return_if_fail (!s_bAppliManagerIsRunning);
 	
 	cairo_dock_set_overwrite_exceptions (myTaskBar.cOverwriteException);
 	cairo_dock_set_group_exceptions (myTaskBar.cGroupException);
@@ -896,21 +899,24 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		{
 			//pIcon->fOrder = iOrder++;
 			pIcon->iLastCheckTime = s_iTime;
-			if (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pIcon))  // le filtre 'bHideVisibleApplis' est gere dans la fonction d'insertion.
+			if (myTaskBar.bShowAppli)
 			{
-				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
-				//g_print (">>>>>>>>>>>> Xid : %d\n", Xid);
-				if (pParentDock != NULL)
+				if (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pIcon))  // le filtre 'bHideVisibleApplis' est gere dans la fonction d'insertion.
 				{
-					if (pParentDock->bIsMainDock)
-						bUpdateMainDockSize = TRUE;
-					else
-						cairo_dock_update_dock_size (pParentDock);
+					pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+					//g_print (">>>>>>>>>>>> Xid : %d\n", Xid);
+					if (pParentDock != NULL)
+					{
+						if (pParentDock->bIsMainDock)
+							bUpdateMainDockSize = TRUE;
+						else
+							cairo_dock_update_dock_size (pParentDock);
+					}
 				}
-			}
-			else if (myTaskBar.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
-			{
-				cairo_dock_prevent_inhibated_class (pIcon);
+				else if (myTaskBar.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
+				{
+					cairo_dock_prevent_inhibated_class (pIcon);
+				}
 			}
 		}
 		else
@@ -1347,7 +1353,7 @@ static void _load_appli (Icon *icon)
 		icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, iWidth, iHeight);
 	if (icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
 	{
-		cd_debug ("%s (%ld) doesn't define any icon, we set the default one.\n", icon->cName, icon->Xid);
+		cd_debug ("%s (%ld) doesn't define any icon, we set the default one.", icon->cName, icon->Xid);
 		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
 		if (cIconPath == NULL)  // image non trouvee.
 		{
@@ -1404,26 +1410,23 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	icon->bHasIndicator = myIndicators.bDrawIndicatorOnAppli;
 	
 	//\____________ On remplit ses buffers.
-	#ifdef HAVE_XEXTEND
-	if (myTaskBar.iMinimizedWindowRenderType == 1 && ! icon->bIsHidden)
+	if (myTaskBar.bShowAppli)
 	{
-		//Display *display = gdk_x11_get_default_xdisplay ();
-		icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
-		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
-		cd_debug ("backing pixmap : %d ; iDamageHandle : %d\n", icon->iBackingPixmap, icon->iDamageHandle);*/
-	}
-	#endif
-	
-	if (pDock)
-	{
-		cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
-		/**if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
+		#ifdef HAVE_XEXTEND
+		if (myTaskBar.iMinimizedWindowRenderType == 1 && ! icon->bIsHidden)
 		{
-			cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), FALSE);
-		}*/
+			//Display *display = gdk_x11_get_default_xdisplay ();
+			icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
+			/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
+			cd_debug ("backing pixmap : %d ; iDamageHandle : %d\n", icon->iBackingPixmap, icon->iDamageHandle);*/
+		}
+		#endif
+		
+		if (pDock)
+		{
+			cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
+		}
 	}
-	else
-		g_print ("%s is not loaded\n", icon->cName);
 	
 	//\____________ On enregistre l'appli et on commence a la surveiller.
 	cairo_dock_register_appli (icon);

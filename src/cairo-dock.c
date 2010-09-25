@@ -410,7 +410,7 @@ int main (int argc, char** argv)
 	s_cLaunchCommand = sCommandString->str;
 	g_string_free (sCommandString, FALSE);
 	
-	cd_log_init(FALSE);  // no log by default.
+	cd_log_init(FALSE);  // warnings by default.
 	
 	gtk_init (&argc, &argv);
 	

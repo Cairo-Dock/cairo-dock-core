@@ -30,7 +30,7 @@
 #include "cairo-dock-log.h"
 
 static char s_iLogColor = '0';
-static GLogLevelFlags s_gLogLevel = 0;
+static GLogLevelFlags s_gLogLevel = G_LOG_LEVEL_WARNING;
 
 /* #    'default'     => "\033[1m", */
 

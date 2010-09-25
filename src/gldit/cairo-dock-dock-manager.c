@@ -543,9 +543,13 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 }
 
 
+static void _reload_buffer_in_one_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
+{
+	cairo_dock_reload_buffers_in_dock (pDock, GPOINTER_TO_INT (data), FALSE);
+}
 void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo)
 {
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) cairo_dock_reload_buffers_in_dock, GINT_TO_POINTER (bReloadAppletsToo));
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, GINT_TO_POINTER (bReloadAppletsToo));
 	
 	cairo_dock_draw_subdock_icons ();
 }
@@ -751,7 +755,7 @@ void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName)
 {
 	// on cree le fichier de conf a partir du template.
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-	gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s'", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+	gchar *cCommand = g_strdup_printf ("cp '%s' '%s'", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 	int r = system (cCommand);
 	g_free (cCommand);
 	
@@ -784,7 +788,8 @@ void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock)
 {
 	cairo_dock_read_root_dock_config (cDockName, pDock);
 	
-	cairo_dock_load_buffers_in_one_dock (pDock);  // recharge les icones et les applets.
+	///cairo_dock_load_buffers_in_one_dock (pDock);  // recharge les icones et les applets.
+	cairo_dock_reload_buffers_in_dock (pDock, TRUE, TRUE);  // recharge les icones et les applets, recursivement.
 	
 	pDock->backgroundBuffer.iWidth ++;  // pour forcer le chargement du fond.
 	cairo_dock_set_default_renderer (pDock);
@@ -838,14 +843,14 @@ void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, Cairo
 	{
 		pSubDock->container.bDirectionUp = pDock->container.bDirectionUp;
 		pSubDock->container.bIsHorizontal = pDock->container.bIsHorizontal;
-		pSubDock->iScreenOffsetX = pDock->iScreenOffsetX;
-		pSubDock->iScreenOffsetY = pDock->iScreenOffsetY;
 		if (bReloadBuffersIfNecessary)
 			cairo_dock_reload_reflects_in_dock (pSubDock);
 		cairo_dock_update_dock_size (pSubDock);
 		
 		cairo_dock_synchronize_sub_docks_orientation (pSubDock, bReloadBuffersIfNecessary);
 	}
+	pSubDock->iScreenOffsetX = pDock->iScreenOffsetX;
+	pSubDock->iScreenOffsetY = pDock->iScreenOffsetY;
 }
 
 void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bReloadBuffersIfNecessary)

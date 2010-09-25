@@ -141,7 +141,7 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 			if (pParentDock != NULL)
 				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, bForceDemand, NULL);
 		}
-		else if (bForceDemand)  // appli pas affichee, mais on veut tout de même etre notifie.
+		else if (bForceDemand)  // appli pas affichee, mais on veut tout de mï¿½me etre notifie.
 		{
 			Icon *pOneIcon = cairo_dock_get_dialogless_icon ();  // on prend une icone dans le main dock.
 			if (pOneIcon != NULL)
@@ -433,6 +433,8 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 
 CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate)
 {
+	if (! myTaskBar.bShowAppli)
+		return NULL;
 	cd_message ("%s (%s, %d)", __func__, icon->cName, icon->Xid);
 	
 	//\_________________ On gere ses eventuels inhibiteurs.

@@ -489,10 +489,9 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContain
 }
 
 
-void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadAppletsToo, gboolean bRecursive)
 {
-	gboolean bReloadAppletsToo = GPOINTER_TO_INT (data);
-	cd_message ("%s (%s, %d)", __func__, cDockName, bReloadAppletsToo);
+	cd_message ("%s (%d, %d)", __func__, bReloadAppletsToo, bRecursive);
 
 	double fFlatDockWidth = - myIcons.iIconGap;
 	pDock->iMaxIconHeight = 0;
@@ -513,6 +512,12 @@ void cairo_dock_reload_buffers_in_dock (gchar *cDockName, CairoDock *pDock, gpoi
 			cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));  // fait un set_icon_size
 			icon->fWidth *= pDock->container.fRatio;
 			icon->fHeight *= pDock->container.fRatio;
+			
+			if (bRecursive && icon->pSubDock != NULL)
+			{
+				cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
+				cairo_dock_reload_buffers_in_dock (icon->pSubDock, bReloadAppletsToo, bRecursive);
+			}
 		}
 		
 		//g_print (" =size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);

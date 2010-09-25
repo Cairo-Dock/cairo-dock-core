@@ -516,11 +516,9 @@ void cairo_dock_load_config (const gchar *cConfFilePath, CairoDock *pMainDock)
 	double fTime = time_val.tv_sec + time_val.tv_usec * 1e-6;
 	cairo_dock_activate_modules_from_list (mySystem.cActiveModuleList, fTime);
 	
-	//\___________________ On lance la barre des taches.
-	if (myTaskBar.bShowAppli)
-	{
+	//\___________________ On lance le gestionnaires des applis, meme si on les affiche pas, car il gere aussi le recouvrement des fenetres par le dock et maintient la liste des applications ouvertes.
+	///if (myTaskBar.bShowAppli)
 		cairo_dock_start_application_manager (pMainDock);  // va inserer le separateur si necessaire.
-	}
 	
 	//\___________________ On dessine tout.
 	cairo_dock_draw_subdock_icons ();
@@ -581,13 +579,13 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	//\___________________ On garde une trace de certains parametres.
 	gchar *cRaiseDockShortcutOld = myAccessibility.cRaiseDockShortcut;
 	myAccessibility.cRaiseDockShortcut = NULL;
-	///gboolean bPopUpOld = myAccessibility.bPopUp;  // FALSE initialement.
 	gboolean bUseFakeTransparencyOld = mySystem.bUseFakeTransparency;  // FALSE initialement.
 	gboolean bGroupAppliByClassOld = myTaskBar.bGroupAppliByClass;  // FALSE initialement.
 	gboolean bHideVisibleApplisOld = myTaskBar.bHideVisibleApplis;
 	gboolean bAppliOnCurrentDesktopOnlyOld = myTaskBar.bAppliOnCurrentDesktopOnly;
 	gboolean bMixLauncherAppliOld = myTaskBar.bMixLauncherAppli;
 	gboolean bOverWriteXIconsOld = myTaskBar.bOverWriteXIcons;  // TRUE initialement.
+	gboolean bShowAppliOld = myTaskBar.bShowAppli;
 	gint iMinimizedWindowRenderTypeOld = myTaskBar.iMinimizedWindowRenderType;
 	gchar *cDeskletDecorationsNameOld = myDesklets.cDeskletDecorationsName;
 	myDesklets.cDeskletDecorationsName = NULL;
@@ -682,7 +680,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 		bMixLauncherAppliOld != myTaskBar.bMixLauncherAppli ||
 		bOverWriteXIconsOld != myTaskBar.bOverWriteXIcons ||
 		iMinimizedWindowRenderTypeOld != myTaskBar.iMinimizedWindowRenderType ||
-		(cairo_dock_application_manager_is_running () && ! myTaskBar.bShowAppli))  // on ne veut plus voir les applis, il faut donc les enlever.
+		(bShowAppliOld != myTaskBar.bShowAppli))
 	{
 		cairo_dock_stop_application_manager ();
 	}
@@ -710,7 +708,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_activate_modules_from_list (mySystem.cActiveModuleList, fTime);
 	cairo_dock_deactivate_old_modules (fTime);
 	
-	if (! cairo_dock_application_manager_is_running () && myTaskBar.bShowAppli)  // maintenant on veut voir les applis !
+	if (! cairo_dock_application_manager_is_running ())  // maintenant on veut voir les applis !
 	{
 		cairo_dock_start_application_manager (pDock);  // va inserer le separateur si necessaire.
 	}
