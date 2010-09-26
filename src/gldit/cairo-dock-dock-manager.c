@@ -916,7 +916,7 @@ void cairo_dock_quick_hide_all_docks (void)
 
 static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden && pDock->bAutoHide)
+	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden && pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE)
 	{
 		pDock->bAutoHide = FALSE;
 		
@@ -954,7 +954,7 @@ gboolean cairo_dock_entrance_is_allowed (CairoDock *pDock)
 
 void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
 {
-	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden)
+	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden && pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE)
 	{
 		//g_print ("hide\n");
 		pDock->bTemporaryHidden = TRUE;
