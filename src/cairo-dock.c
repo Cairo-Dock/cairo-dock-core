@@ -253,6 +253,10 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 	}
 	return FALSE;
 }
+static void _cairo_dock_quit (int signal)
+{
+	gtk_main_quit ();
+}
 static void _cairo_dock_intercept_signal (int signal)
 {
 	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now (%s).\nFeel free to report this bug on glx-dock.org to help improving the dock !", signal, s_cLaunchCommand);
@@ -277,6 +281,7 @@ static void _cairo_dock_set_signal_interception (void)
 	signal (SIGFPE, _cairo_dock_intercept_signal);  // Floating-point exception
 	signal (SIGILL, _cairo_dock_intercept_signal);  // Illegal instruction
 	signal (SIGABRT, _cairo_dock_intercept_signal);  // Abort
+	signal (SIGTERM, _cairo_dock_quit);  // Abort
 }
 
 static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
@@ -865,6 +870,7 @@ int main (int argc, char** argv)
 	signal (SIGFPE, NULL);  // Floating-point exception
 	signal (SIGILL, NULL);  // Illegal instruction
 	signal (SIGABRT, NULL);
+	signal (SIGTERM, NULL);
 	cairo_dock_free_all ();
 	
 	rsvg_term ();

@@ -453,8 +453,48 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 		cFilePath = cairo_dock_search_image_s_path (cFileName);
 	if (cFilePath == NULL && cDefaultFileName != NULL && cDefaultDir != NULL)  // pas d'image specifiee, ou image introuvable => on prend l'image par defaut fournie.
 		cFilePath = g_strdup_printf ("%s/%s", cDefaultDir, cDefaultFileName);
+	g_free (cFileName);
 	return cFilePath;
 }
+
+gchar *cairo_dock_get_image_path_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, const gchar *cDefaultDir, const gchar *cDefaultFileName)
+{
+	gchar *cFileName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, NULL, cDefaultGroupName, cDefaultKeyName);
+	gchar *cFilePath = NULL;
+	if (cFileName != NULL)
+	{
+		cFilePath = cairo_dock_search_image_s_path (cFileName);
+		if (cFilePath == NULL)  // pas trouve, on cherche une icone
+		{
+			if (*cFileName != '/' && *cFileName != '~')  // pas un chemin, donc possibilite de trouver autre chose en cherchant dans les icones.
+				cFilePath = cairo_dock_search_icon_s_path (cFileName);
+		}
+	}
+	if (cFilePath == NULL && cDefaultFileName != NULL && cDefaultDir != NULL)  // pas d'image specifiee, ou image introuvable => on prend l'image par defaut fournie.
+		cFilePath = g_strdup_printf ("%s/%s", cDefaultDir, cDefaultFileName);
+	g_free (cFileName);
+	return cFilePath;
+}
+
+gchar *cairo_dock_get_icon_path_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, const gchar *cDefaultDir, const gchar *cDefaultFileName)
+{
+	gchar *cFileName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, NULL, cDefaultGroupName, cDefaultKeyName);
+	gchar *cFilePath = NULL;
+	if (cFileName != NULL)
+	{
+		cFilePath = cairo_dock_search_image_s_path (cFileName);
+		if (cFilePath == NULL)  // pas trouve, on cherche une icone
+		{
+			if (*cFileName != '/' && *cFileName != '~')  // pas un chemin, donc possibilite de trouver autre chose en cherchant dans les icones.
+				cFilePath = cairo_dock_search_icon_s_path (cFileName);
+		}
+	}
+	if (cFilePath == NULL && cDefaultFileName != NULL && cDefaultDir != NULL)  // pas d'image specifiee, ou image introuvable => on prend l'image par defaut fournie.
+		cFilePath = g_strdup_printf ("%s/%s", cDefaultDir, cDefaultFileName);
+	g_free (cFileName);
+	return cFilePath;
+}
+
 void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gint iDefaultSize, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, int *iWidth, int *iHeight)
 {
 	int iSize[2];

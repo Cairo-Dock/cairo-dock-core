@@ -529,7 +529,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cUserImageName, cDefaultLocalImageName) do { \
 	gchar *cImagePath; \
 	if (cUserImageName != NULL) \
-		cImagePath = cairo_dock_generate_file_path (cUserImageName); \
+		cImagePath = cairo_dock_search_image_s_path (cUserImageName); \
 	else \
 		cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \
 	CD_APPLET_SET_IMAGE_ON_MY_ICON (cImagePath); \

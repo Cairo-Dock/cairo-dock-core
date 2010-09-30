@@ -792,12 +792,6 @@ CairoDockPackageType cairo_dock_extract_package_type_from_name (const gchar *cPa
 	return iType;
 }
 
-#define _check_dir(cDirPath) \
-	if (! g_file_test (cDirPath, G_FILE_TEST_IS_DIR)) {\
-		if (g_mkdir (cDirPath, 7*8*8+7*8+7) != 0) {\
-			cd_warning ("couldn't create directory %s", cDirPath);\
-			g_free (cDirPath);\
-			cDirPath = NULL; } }
 
 void cairo_dock_init_package_manager (gchar *cPackageServerAdress)
 {

@@ -878,8 +878,6 @@ static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_render
 	bState = !bState;
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter, CAIRO_DOCK_MODEL_ACTIVE, bState, -1);
 	
-	/// passer en gras ?...
-	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 	if (g_pPrimaryContainer == NULL)
 	{
@@ -893,6 +891,10 @@ static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_render
 	{
 		cairo_dock_deactivate_module_and_unload (cModuleName);
 	}
+	
+	/// inverser le gras ?...
+	g_print ("need ot invert bold line ?\n");
+	
 	g_free (cModuleName);
 }
 
@@ -906,7 +908,7 @@ static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, CairoDoc
 }
 static void _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer *data)
 {
-	if (pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)
+	if (pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)  // clic droit.
 	{
 		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (pTreeView);
 		GtkTreeModel *pModel;
@@ -2310,7 +2312,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
 				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
 				gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (pOneWidget), TRUE);
-				g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_module_tree_view), data);
+				g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_module_tree_view), data);  // pour le menu du clic droit
 				GtkTreeViewColumn* col;
 				// case a cocher
 				rend = gtk_cell_renderer_toggle_new ();
@@ -3497,12 +3499,19 @@ void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, co
 }
 
 
-GtkWidget *cairo_dock_gui_make_tree_view (void)
+GtkWidget *cairo_dock_gui_make_tree_view (gboolean bGetActiveOnly)
 {
 	GtkListStore *modele = _cairo_dock_gui_allocate_new_model ();
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
 	GtkWidget *pOneWidget = gtk_tree_view_new ();
 	gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
+	
+	if (bGetActiveOnly)  // le resultat sera la ligne courante selectionnee (NULL si aucune).
+	{
+		GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
+		gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+		g_object_set_data (G_OBJECT (pOneWidget), "get-selected-line-only", GINT_TO_POINTER (1));
+	}  // else le resultat sera toutes les lignes cochees.
 	return pOneWidget;
 }
 

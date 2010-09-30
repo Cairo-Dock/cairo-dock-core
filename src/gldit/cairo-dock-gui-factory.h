@@ -212,7 +212,7 @@ void cairo_dock_free_generated_widget_list (GSList *pWidgetList);
 
 void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, const gchar *cActiveElement);  // utile pour les applets.
 
-GtkWidget *cairo_dock_gui_make_tree_view (void);
+GtkWidget *cairo_dock_gui_make_tree_view (gboolean bGetActiveOnly);
 
 GtkWidget *cairo_dock_gui_make_combo (gboolean bWithEntry);
 

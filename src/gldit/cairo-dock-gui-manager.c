@@ -40,12 +40,14 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-accessibility.h"
 #include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 
 #define CAIRO_DOCK_FRAME_MARGIN 6
 
 extern CairoDock *g_pMainDock;
 extern gchar *g_cCairoDockDataDir;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static CairoDockGuiBackend *s_pGuiBackend = NULL;
 static CairoDockLauncherGuiBackend *s_pLauncherGuiBackend = NULL;
@@ -113,33 +115,6 @@ void cairo_dock_reload_current_module_widget_full (CairoDockModuleInstance *pIns
 	{
 		cairo_dock_show_module_instance_gui (pInstance, iShowPage);
 	}
-	/**g_return_if_fail (s_pCurrentGroupWidget != NULL && s_pCurrentGroup != NULL && cairo_dock_get_current_widget_list () != NULL);
-	
-	int iNotebookPage = (GTK_IS_NOTEBOOK (s_pCurrentGroupWidget) ? 
-		(iShowPage >= 0 ?
-			iShowPage :
-			gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget))) :
-		-1);
-	
-	gtk_widget_destroy (s_pCurrentGroupWidget);
-	s_pCurrentGroupWidget = NULL;
-	
-	cairo_dock_reset_current_widget_list ();
-	
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (s_pCurrentGroup->cGroupName);
-	GtkWidget *pWidget;
-	if (pModule != NULL)
-	{
-		pWidget = cairo_dock_present_group_widget (pModule->cConfFilePath, s_pCurrentGroup, FALSE, pInstance);
-	}
-	else
-	{
-		pWidget = cairo_dock_present_group_widget (g_cConfFile, s_pCurrentGroup, TRUE, NULL);
-	}
-	if (iNotebookPage != -1)
-	{
-		gtk_notebook_set_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget), iNotebookPage);
-	}*/
 }
 
 
@@ -468,7 +443,9 @@ GtkWidget *cairo_dock_build_generic_gui_window (const gchar *cTitle, int iWidth,
 		0);
 	g_object_set_data (G_OBJECT (pMainWindow), "status-bar", pStatusBar);
 	
-	gtk_window_resize (GTK_WINDOW (pMainWindow), iWidth, iHeight);
+	gtk_window_resize (GTK_WINDOW (pMainWindow),
+		MIN (iWidth, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
+		MIN (iHeight, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	gtk_widget_show_all (pMainWindow);
 	cairo_dock_dialog_window_created ();
@@ -514,11 +491,6 @@ GtkWidget *cairo_dock_build_generic_gui_full (const gchar *cConfFilePath, const 
 	g_object_set_data (G_OBJECT (pMainWindow), "save-widget", save_custom_widgets);
 	g_object_set_data (G_OBJECT (pMainWindow), "load-widget", load_custom_widgets);
 	
-	if (load_custom_widgets)  // a faire apres avoir mis "widget-list".
-		load_custom_widgets (pMainWindow, pKeyFile);
-	
-	g_key_file_free (pKeyFile);
-	
 	//\_____________ On l'insere dans la fenetre.
 	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pMainWindow));
 	gtk_box_pack_start (GTK_BOX (pMainVBox),
@@ -526,8 +498,16 @@ GtkWidget *cairo_dock_build_generic_gui_full (const gchar *cConfFilePath, const 
 		TRUE,
 		TRUE,
 		0);
+	
+	//\_____________ On complete le widget.
+	if (load_custom_widgets)  // a faire apres avoir mis "widget-list" et insere dans la fenetre.
+		load_custom_widgets (pMainWindow, pKeyFile);
+	
+	g_key_file_free (pKeyFile);
+	
 	gtk_widget_show_all (pMainWindow);
 	
+	//\_____________ si pas de callback, on bloque.
 	int iResult = 0;
 	if (pAction == NULL)  // on bloque.
 	{
@@ -535,6 +515,7 @@ GtkWidget *cairo_dock_build_generic_gui_full (const gchar *cConfFilePath, const 
 		GList *w = g_list_last (children);
 		g_return_val_if_fail (w != NULL, FALSE);
 		GtkWidget *pButtonsHBox = w->data;
+		g_list_free (children);
 		
 		GtkWidget *pOkButton = gtk_button_new_from_stock (GTK_STOCK_OK);
 		g_signal_connect (G_OBJECT (pOkButton), "clicked", G_CALLBACK(on_click_generic_ok), pMainWindow);
@@ -586,6 +567,7 @@ void cairo_dock_reload_generic_gui (GtkWidget *pWindow)
 	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
 	g_return_if_fail (children != NULL);
 	GtkWidget *pNoteBook = children->data;
+	g_list_free (children);
 	gtk_widget_destroy (pNoteBook);
 	
 	gchar *cConfFilePath = g_object_get_data (G_OBJECT (pWindow), "conf-file");
@@ -603,17 +585,18 @@ void cairo_dock_reload_generic_gui (GtkWidget *pWindow)
 	g_object_set_data (G_OBJECT (pWindow), "widget-list", pWidgetList);
 	g_object_set_data (G_OBJECT (pWindow), "garbage", pDataGarbage);
 	
+	gtk_box_pack_start (GTK_BOX (pMainVBox),
+		pNoteBook,
+		TRUE,
+		TRUE,
+		0);
+	
 	CairoDockLoadCustomWidgetFunc load_custom_widgets = g_object_get_data (G_OBJECT (pWindow), "load-widget");
 	if (load_custom_widgets)  // a faire apres avoir mis "widget-list".
 		load_custom_widgets (pWindow, pKeyFile);
 	
 	g_key_file_free (pKeyFile);
 	
-	gtk_box_pack_start (GTK_BOX (pMainVBox),
-		pNoteBook,
-		TRUE,
-		TRUE,
-		0);
 	gtk_widget_show_all (pNoteBook);
 }
 

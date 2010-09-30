@@ -46,6 +46,7 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-switch.h"
+#include "cairo-dock-gui-commons.h"
 #include "cairo-dock-gui-simple.h"
 
 #define CAIRO_DOCK_PREVIEW_WIDTH 200
@@ -59,6 +60,7 @@
 #define ICON_SMALL 42
 #define ICON_TINY 36
 #define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
+#define CAIRO_DOCK_THEMES_PAGE 3
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
 static GtkWidget *s_pSimpleConfigModuleWindow = NULL;
@@ -73,6 +75,7 @@ static gchar *s_cHoverEffect = NULL;
 static gchar *s_cClickAnim = NULL;
 static gchar *s_cClickEffect = NULL;
 static int s_iEffectOnDisappearance = -1;
+static gboolean s_bShowThemePage = FALSE;
 
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
@@ -365,63 +368,98 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_string (pSimpleKeyFile, "Add-ons", "third party", cAdress);
 	g_free (cAdress);
 	
-	// themes
-	g_key_file_set_boolean (pSimpleKeyFile, "Themes", "use theme launchers", FALSE);
-	
-	g_key_file_set_boolean (pSimpleKeyFile, "Themes", "use theme behaviour", FALSE);
-	
 	cairo_dock_write_keys_to_file (pSimpleKeyFile, cConfFilePath);
 	
 	g_key_file_free (pSimpleKeyFile);
 	return cConfFilePath;
 }
 
-static gboolean on_apply_theme_simple (gpointer data)
+
+static void _load_theme (gboolean bSuccess, gpointer data)
 {
-	//\_______________ On recupere le choix de l'utilisateur.
+	if (s_pSimpleConfigWindow == NULL)  // si l'utilisateur a ferme la fenetre entre-temps, on considere qu'il a abandonne.
+	{
+		g_print ("user has given up\n");
+		return ;
+	}
+	if (bSuccess)
+	{
+		g_print ("loading new current theme...\n");
+		cairo_dock_load_current_theme ();
+		
+		cairo_dock_set_status_message (s_pSimpleConfigWindow, "");
+		
+		g_print ("now reload window\n");
+		gchar *cConfFilePath = _make_simple_conf_file ();
+		g_free (cConfFilePath);
+		s_bShowThemePage = TRUE;
+		cairo_dock_reload_generic_gui (s_pSimpleConfigWindow);
+	}
+	else
+	{
+		g_print ("Could not import the theme.\n");
+		cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Could not import the theme."));
+	}
+}
+static gboolean on_apply_theme_simple (GtkWidget *pThemeNotebook, gpointer data)
+{
+	//\_______________ On ouvre le fichier de conf.
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
 	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_free (cConfFilePath);
 	g_return_val_if_fail (pSimpleKeyFile != NULL, TRUE);
 	
-	gchar *cNewThemeName = g_key_file_get_string (pSimpleKeyFile, "Themes", "chosen theme", NULL);
-	gboolean bLoadBehavior = g_key_file_get_boolean (pSimpleKeyFile, "Themes", "use theme behaviour", NULL);
-	gboolean bLoadLaunchers = g_key_file_get_boolean (pSimpleKeyFile, "Themes", "use theme launchers", NULL);
+	//\_______________ On recupere l'onglet courant.
+	int iNumPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (pThemeNotebook));
+	pThemeNotebook = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pThemeNotebook), iNumPage);
 	
-	g_key_file_free (pSimpleKeyFile);
-	if (cNewThemeName == NULL || *cNewThemeName == '\0')
-		return TRUE;
-	
-	//\_______________ On importe le theme.
-	cairo_dock_set_status_message_printf (NULL, _("Importing theme %s ..."), cNewThemeName);
-	gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
-	cd_debug ("bThemeImported : %d\n", bThemeImported);
-	
-	//\_______________ On le charge.
-	if (bThemeImported)
+	//\_______________ On effectue les actions correspondantes.
+	gboolean bReloadWindow = FALSE;
+	switch (iNumPage)
 	{
-		cairo_dock_load_current_theme ();
+		case 0:  // load a theme
+			cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Importing theme..."));
+			cairo_dock_load_theme (pSimpleKeyFile, (GFunc) _load_theme);  // bReloadWindow reste a FALSE, on ne rechargera la fenetre que lorsque le theme aura ete importe.
+		break;
+		
+		case 1:  // save current theme
+			bReloadWindow = cairo_dock_save_current_theme (pSimpleKeyFile);
+			if (bReloadWindow)
+				cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Theme has been saved"));
+		break;
+		
+		case 2:  // delete some themes
+			bReloadWindow = cairo_dock_delete_user_themes (pSimpleKeyFile);
+			if (bReloadWindow)
+				cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Themes have been deleted"));
+		break;
 	}
 	
-	g_free (cNewThemeName);
-	cairo_dock_set_status_message (s_pSimpleConfigWindow, "");
-	
-	//\_______________ On recharge la fenetre.
-	cd_debug ("reload\n");
-	cConfFilePath = _make_simple_conf_file ();
+	//\_______________ On nettoie le fichier de conf si on recharge la fenetre.
+	if(bReloadWindow)
+	{
+		g_key_file_remove_group (pSimpleKeyFile, "Save", NULL);
+		g_key_file_remove_group (pSimpleKeyFile, "Delete", NULL);
+		cairo_dock_write_keys_to_file (pSimpleKeyFile, cConfFilePath);
+		s_bShowThemePage = TRUE;
+	}
+	g_key_file_free (pSimpleKeyFile);
 	g_free (cConfFilePath);
-	cairo_dock_reload_generic_gui (s_pSimpleConfigWindow);
-	return TRUE;
+	
+	return !bReloadWindow;
 }
 
 static gboolean on_apply_config_simple (gpointer data)
 {
+	//\___________________ On recupere l'onglet courant.
 	GtkWidget * pMainVBox= gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
 	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
 	GtkWidget *pGroupWidget = children->data;
-	if (gtk_notebook_get_current_page (GTK_NOTEBOOK (pGroupWidget)) == 3)
+	g_list_free (children);
+	if (gtk_notebook_get_current_page (GTK_NOTEBOOK (pGroupWidget)) == CAIRO_DOCK_THEMES_PAGE)
 	{
-		return on_apply_theme_simple (data);
+		CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (s_pSimpleConfigWindow, "Themes", "notebook");
+		g_return_val_if_fail (myWidget != NULL && myWidget->pSubWidgetList != NULL, TRUE);
+		return on_apply_theme_simple (myWidget->pSubWidgetList->data, data);
 	}
 	
 	//\_____________ On actualise le fichier de conf principal.
@@ -655,6 +693,7 @@ static gboolean on_apply_config_simple (gpointer data)
 	g_key_file_set_string (pKeyFile, "Views", "sub-dock view", cSubDockDefaultRendererName);
 	g_free (cSubDockDefaultRendererName);
 	
+	// on ecrit tout.
 	cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
 	
 	//\_____________ On recharge les modules concernes.
@@ -746,10 +785,55 @@ static void _make_double_anim_widget (GtkWidget *pSimpleConfigWindow, GKeyFile *
 	}
 	g_strfreev (cValues);
 }
+static void _make_theme_manager_widget (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
+{
+	//\_____________ On recupere notre emplacement perso dans la fenetre.
+	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, "Themes", "notebook");
+	g_return_if_fail (myWidget != NULL);
+	
+	//\_____________ On construit le widget a partir du fichier de conf du theme-manager.
+	const gchar *cConfFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/themes.conf";
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (pSimpleConfigWindow), "widget-list");
+	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pSimpleConfigWindow), "garbage");
+	GtkWidget *pThemeNotebook = cairo_dock_build_conf_file_widget (cConfFilePath,
+		NULL,
+		pSimpleConfigWindow,
+		&pWidgetList,
+		pDataGarbage,
+		NULL);  // les widgets seront ajoutes a la liste deja existante. Donc lors de l'ecriture, ils seront ecrit aussi, dans les cles definies dans le fichier de conf (donc de nouveaux groupes seront ajoutés).
+	gtk_notebook_set_scrollable (GTK_NOTEBOOK (pThemeNotebook), FALSE);  // l'onglet du groupe a deja son propre ascenseur.
+	gtk_widget_set (pThemeNotebook, "height-request", CAIRO_DOCK_SIMPLE_PANEL_HEIGHT, NULL);  // sinon le notebook est tout petit :-/
+	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox),
+		pThemeNotebook,
+		TRUE,
+		TRUE,
+		0);
+	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pThemeNotebook);  // on le met dans la liste, non pas pour recuperer sa valeur (d'ailleurs un notebook n'a pas encore de valeur), mais pour pouvoir y acceder facilement plus tard.
+	g_object_set_data (G_OBJECT (pSimpleConfigWindow), "widget-list", pWidgetList);  // on remet la liste, car on prepend les elements dedans, donc son pointeur a change.
+	
+	//\_____________ On charge les widgets perso de ce fichier.
+	cairo_dock_make_tree_view_for_delete_themes (pSimpleConfigWindow);
+}
 static void _make_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
 {
+	//\_____________ On ajoute le widget des animations au survol.
 	_make_double_anim_widget (pSimpleConfigWindow, pKeyFile, "Behavior", "anim_hover", _("On mouse hover:"));
+	//\_____________ On ajoute le widget des animations au clic.
 	_make_double_anim_widget (pSimpleConfigWindow, pKeyFile, "Behavior", "anim_click", _("On click:"));
+	//\_____________ On ajoute le widget du theme-manager.
+	_make_theme_manager_widget (pSimpleConfigWindow, pKeyFile);
+	//\_____________ On montre la page des themes si necessaire.
+	if (s_bShowThemePage)
+	{
+		GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pSimpleConfigWindow));
+		GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
+		g_return_if_fail (children != NULL);
+		GtkWidget *pNoteBook = children->data;
+		g_list_free (children);
+		gtk_widget_show_all (pNoteBook);
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (pNoteBook), CAIRO_DOCK_THEMES_PAGE);  // due to historical reasons, GtkNotebook refuses to switch to a page unless the child widget is visible. 
+		s_bShowThemePage = FALSE;
+	}
 }
 
 
@@ -773,13 +857,16 @@ static GtkWidget * show_main_gui (void)
 		NULL,
 		(GFreeFunc) on_destroy_config_simple,
 		_make_widgets,
-		NULL/**_save_widgets*/);
+		NULL);
 	
 	//\_____________ On ajoute un bouton "mode avance".
 	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
 	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
+	g_return_val_if_fail (children != NULL, s_pSimpleConfigWindow);
 	GList *w = g_list_last (children);
 	GtkWidget *pButtonsHBox = w->data;
+	g_list_free (children);
+	
 	GtkWidget *pSwitchButton = cairo_dock_make_switch_gui_button ();
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
 		pSwitchButton,
@@ -879,6 +966,7 @@ static int _reset_current_module_widget (void)
 	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigModuleWindow));
 	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
 	GtkWidget *pGroupWidget = children->data;
+	g_list_free (children);
 	
 	int iNotebookPage = 0;
 	if (GTK_IS_NOTEBOOK (pGroupWidget))
@@ -1069,10 +1157,12 @@ static void close_gui (void)
 		GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
 		GList *w = g_list_last (children);
 		GtkWidget *pButtonsHBox = w->data;
+		g_list_free (children);
 		
 		children = gtk_container_get_children (GTK_CONTAINER (pButtonsHBox));
 		w = g_list_last (children);
 		GtkWidget *pQuitButton = w->data;
+		g_list_free (children);
 		
 		gboolean bReturn;
 		g_signal_emit_by_name (pQuitButton, "clicked", NULL, &bReturn);
@@ -1083,10 +1173,12 @@ static void close_gui (void)
 		GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
 		GList *w = g_list_last (children);
 		GtkWidget *pButtonsHBox = w->data;
+		g_list_free (children);
 		
 		children = gtk_container_get_children (GTK_CONTAINER (pButtonsHBox));
 		w = g_list_last (children);
 		GtkWidget *pQuitButton = w->data;
+		g_list_free (children);
 		
 		gboolean bReturn;
 		g_signal_emit_by_name (pQuitButton, "clicked", NULL, &bReturn);

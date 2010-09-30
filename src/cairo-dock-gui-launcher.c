@@ -213,7 +213,7 @@ static gboolean _select_one_launcher_in_tree (GtkTreeSelection * selection, GtkT
 			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR;
 		else if (pIcon->pSubDock != NULL && pIcon->cClass == NULL)
 			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER;
-		else 
+		else
 			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER;
 		cairo_dock_update_launcher_desktop_file (cConfFilePath, iLauncherType);
 		
