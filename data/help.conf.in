@@ -311,10 +311,10 @@ terminal=
 config_terminal = 
 #X [So then, how can I remove completely the gnome-panel?]
 Xremove=
-#> Open gconf-editor, edit the key /desktop/gnome/session/required_components_list/panel, and replace its content with "cairo-dock".
+#> Open gconf-editor, edit the key /desktop/gnome/session/required_components/panel, and replace its content with "cairo-dock".
 #Then restart your session : the gnome-panel has not been started, and the dock has been started (if not, you can add it to the startup programs).
 remove=
-#G [sh -c "gconftool-2 --type string --set /desktop/gnome/session/required_components_list/panel '(cairo-dock'";sh -c "ps aux | grep -v grep | grep -c 'gnome-settings-daemon'"]If you are on Gnome, you can click on this button in order to automatically modify this key:
+#G [sh -c "gconftool-2 --type string --set /desktop/gnome/session/required_components/panel '(cairo-dock'";sh -c "ps aux | grep -v grep | grep -c 'gnome-settings-daemon'"]If you are on Gnome, you can click on this button in order to automatically modify this key:
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 widget_compiz=
 
