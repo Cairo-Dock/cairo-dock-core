@@ -78,6 +78,8 @@ struct _CairoDockRenderer {
 	CairoDockGLRenderFunc render_opengl;
 	/// function that computes the position of the dock when it's a sub-dock.
 	CairoDockSetSubDockPositionFunc set_subdock_position;
+	/// function called when the renderer is unset from the dock.
+	CairoDockRenderFreeDataFunc free_data;
 	/// TRUE if the view uses the OpenGL stencil buffer.
 	gboolean bUseStencil;
 	/// TRUE is the view uses reflects.
@@ -88,8 +90,6 @@ struct _CairoDockRenderer {
 	gchar *cReadmeFilePath;
 	/// path to a preview image.
 	gchar *cPreviewFilePath;
-	/// function called when the renderer is unset from the dock.
-	CairoDockRenderFreeDataFunc free_data;
 };
 
 typedef enum {
@@ -204,6 +204,12 @@ struct _CairoDock {
 	guint iSidUpdateWMIcons;
 	/// Source ID for hiding back the dock.
 	guint iSidHideBack;
+	/// Source ID for loading the background.
+	guint iSidLoadBg;
+	/// Source ID to destroy an empty main dock.
+	guint iSidDestroyEmptyDock;
+	/// Source ID for shrinking down the dock after a mouse event.
+	guint iSidTestMouseOutside;
 	
 	//\_______________ Renderer and fields set by it.
 	// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
@@ -257,15 +263,10 @@ struct _CairoDock {
 	gdouble fBgColorDark[4];
 	/// Background image buffer of the dock.
 	CairoDockImageBuffer backgroundBuffer;
-	/// Source ID for loading the background.
-	guint iSidLoadBg;
 	
-	gboolean bPreventDraggingIcons;  // whether icons in the dock can be dragged with the mouse (inside and outside of the dock).
+	// whether icons in the dock can be dragged with the mouse (inside and outside of the dock).
+	gboolean bPreventDraggingIcons;
 	
-	/// Source ID to destroy an empty main dock.
-	guint iSidDestroyEmptyDock;
-	/// Source ID for shrinking down the dock after a mouse event.
-	guint iSidTestMouseOutside;
 	gchar reserved[4];
 };
 

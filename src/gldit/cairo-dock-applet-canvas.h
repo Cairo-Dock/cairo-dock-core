@@ -450,10 +450,14 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 //\______________________ notification double clic.
 /** Abonne l'applet aux notifications du double clic. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet)
+#define CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT do {\
+	cairo_dock_listen_for_double_click (myIcon);\
+	cairo_dock_register_notification (CAIRO_DOCK_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet); } while (0)
 /** Desabonne l'applet aux notifications du double clic. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_DOUBLE_CLICK_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_DOUBLE_CLICK_EVENT do {\
+	cairo_dock_remove_notification_func (CAIRO_DOCK_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, myApplet);\
+	cairo_dock_stop_listening_for_double_click (myIcon); } while (0)
 
 //\______________________ notification drag'n'drop.
 /** Abonne l'applet aux notifications du glisse-depose. A effectuer lors de l'init de l'applet.

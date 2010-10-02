@@ -865,6 +865,22 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	return TRUE;
 }
 
+
+static gboolean _double_click_delay_over (Icon *icon)
+{
+	CairoDock *pDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	if (pDock)
+	{
+		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
+		if (myAccessibility.cRaiseDockShortcut != NULL)
+			s_bHideAfterShortcut = TRUE;
+		
+		cairo_dock_start_icon_animation (icon, pDock);
+	}
+	icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
+	icon->iSidDoubleClickDelay = 0;
+	return FALSE;
+}
 static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principalement fait pour detecter les cas ou X nous envoit un signal leave errone alors qu'on est dedans (=> sortie refusee, bInside reste a TRUE), puis du coup ne nous en envoit pas de leave lorsqu'on quitte reellement le dock.
 {
 	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->bIsShrinkingDown, pDock->iMagnitudeIndex, pDock->container.bInside);
@@ -904,6 +920,14 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 		{
 			case GDK_BUTTON_RELEASE :
 				//g_print ("+ GDK_BUTTON_RELEASE (%d/%d sur %s/%s)\n", pButton->state, GDK_CONTROL_MASK | GDK_MOD1_MASK, icon ? icon->cName : "personne", icon ? icon->cCommand : "");  // 272 = 100010000
+				if (pDock->container.bIgnoreNextReleaseEvent)
+				{
+					pDock->container.bIgnoreNextReleaseEvent = FALSE;
+					s_pIconClicked = NULL;
+					s_bIconDragged = FALSE;
+					return TRUE;
+				}
+				
 				if ( ! (pButton->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
 				{
 					if (s_pIconClicked != NULL)
@@ -919,16 +943,21 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						//g_print ("+ click on '%s' (%s)\n", icon->cName, icon->cCommand);
 						if (! s_bIconDragged)  // on ignore le drag'n'drop sur elle-meme.
 						{
-							cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
-							if (myAccessibility.cRaiseDockShortcut != NULL)
-								s_bHideAfterShortcut = TRUE;
-							
-							cairo_dock_start_icon_animation (icon, pDock);
-							icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
-							
-							if (pDock->iSidTestMouseOutside == 0)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
+							if (icon->iNbDoubleClickListeners > 0)
 							{
-								///pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
+								if (icon->iSidDoubleClickDelay == 0)  // 1er release.
+								{
+									icon->iSidDoubleClickDelay = g_timeout_add (CD_DOUBLE_CLICK_DELAY, (GSourceFunc)_double_click_delay_over, icon);
+								}
+							}
+							else
+							{
+								cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
+								if (myAccessibility.cRaiseDockShortcut != NULL)
+									s_bHideAfterShortcut = TRUE;
+								
+								cairo_dock_start_icon_animation (icon, pDock);
+								icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
 							}
 						}
 					}
@@ -1029,7 +1058,16 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 			case GDK_2BUTTON_PRESS :
 				{
 					if (icon && ! cairo_dock_icon_is_being_removed (icon))
+					{
+						if (icon->iSidDoubleClickDelay != 0)
+						{
+							g_source_remove (icon->iSidDoubleClickDelay);
+							icon->iSidDoubleClickDelay = 0;
+						}
 						cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_DOUBLE_CLICK_ICON, icon, pDock);
+						if (icon->iNbDoubleClickListeners > 0)
+							pDock->container.bIgnoreNextReleaseEvent = TRUE;
+					}
 				}
 			break ;
 

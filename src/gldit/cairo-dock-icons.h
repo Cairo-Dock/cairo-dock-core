@@ -89,6 +89,7 @@ struct _IconInterface {
 struct _Icon {
 	//\____________ Definition.
 	/// group of the icon.
+	CairoDockIconTrueType iTrueType;
 	CairoDockIconType iType;
 	IconInterface iface;
 	GPtrArray *pNotificationsTab;
@@ -152,7 +153,7 @@ struct _Icon {
 	
 	// Applet.
 	CairoDockModuleInstance *pModuleInstance;
-	CairoDockModuleInstance *pLinkedApplet;
+	CairoDockModuleInstance *pAppletOwner;
 	
 	//\____________ Buffers.
 	gdouble fWidth, fHeight;  // taille dans le container.
@@ -193,11 +194,13 @@ struct _Icon {
 	
 	guint iSidRedrawSubdockContent;
 	guint iSidLoadImage;
+	guint iSidDoubleClickDelay;
 	CairoContainer *pContainerForLoad;
+	gint iNbDoubleClickListeners;
 	
-	CairoDockIconTrueType iTrueType;
 	gchar **pMimeTypes;
-	gpointer reserved[2];
+	
+	gpointer reserved[4];
 };
 
 /// Definition of a function that runs through all icons.
@@ -567,6 +570,14 @@ void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer, 
 *@param pDock the dock whose icons are to be considered.
 */
 void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock);
+
+
+#define cairo_dock_listen_for_double_click(pIcon) (pIcon)->iNbDoubleClickListeners ++
+
+#define cairo_dock_stop_listening_for_double_click(pIcon) do {\
+	if (pIcon->iNbDoubleClickListeners > 0)\
+		pIcon->iNbDoubleClickListeners --; } while (0)
+
 
 G_END_DECLS
 #endif

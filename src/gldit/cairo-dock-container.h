@@ -37,6 +37,8 @@ G_BEGIN_DECLS
 * If you write a new type of container, you must call \ref cairo_dock_init_container when you create it and \ref cairo_dock_finish_container when you destroy it.
 */
 
+#define CD_DOUBLE_CLICK_DELAY 250  // ms
+
 /// Main orientation of a container.
 typedef enum {
 	CAIRO_DOCK_VERTICAL = 0,
@@ -104,6 +106,9 @@ struct _CairoContainer {
 	/// counter for the animation loop.
 	gint iAnimationStep;
 	CairoContainerInterface iface;
+	
+	gboolean bIgnoreNextReleaseEvent;
+	gpointer reserved[4];
 };
 
 /// Get the Container part of a pointer.
