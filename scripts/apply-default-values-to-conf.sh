@@ -176,6 +176,7 @@ set_value "Configuration"	"directory"					""
 
 set_current_conf_file "plug-ins/stack/stack.conf"
 set_value "Configuration"	"stack dir"					""
+set_value "Configuration"	"selection_"					false
 
 set_current_conf_file "plug-ins/switcher/switcher.conf"
 set_value "Icon"			"name"						""

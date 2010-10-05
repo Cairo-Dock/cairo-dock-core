@@ -732,6 +732,44 @@ static void _cairo_dock_set_custom_appli_icon (GtkMenuItem *pMenuItem, gpointer 
 	int answer = gtk_dialog_run (GTK_DIALOG (pFileChooserDialog));
 	if (answer == GTK_RESPONSE_OK)
 	{
+		if (myTaskBar.cOverwriteException != NULL && icon->cClass != NULL)  // si cette classe etait definie pour ne pas ecraser l'icone X, on le change, sinon l'action utilisateur n'aura aucun impact, ce sera troublant.
+		{
+			gchar **pExceptions = g_strsplit (myTaskBar.cOverwriteException, ";", -1);
+			
+			int i, j = -1;
+			for (i = 0; pExceptions[i] != NULL; i ++)
+			{
+				if (j == -1 && strcmp (pExceptions[i], icon->cClass) == 0)
+				{
+					g_free (pExceptions[i]);
+					pExceptions[i] = NULL;
+					j = i;
+				}
+			}  // apres la boucle, i = nbre d'elements, j = l'element qui a ete enleve.
+			if (j != -1)  // un element a ete enleve.
+			{
+				cd_warning ("The class '%s' was explicitely set up to use the X icon, we'll change this behavior automatically.", icon->cClass);
+				if (j < i - 1)  // ce n'est pas le dernier
+				{
+					pExceptions[j] = pExceptions[i-1];
+					pExceptions[i-1] = NULL;
+				}
+				
+				myTaskBar.cOverwriteException = g_strjoinv (";", pExceptions);
+				cairo_dock_set_overwrite_exceptions (myTaskBar.cOverwriteException);
+				
+				GKeyFile *pKeyFile = cairo_dock_open_key_file (g_cConfFile);
+				if (pKeyFile != NULL)
+				{
+					g_key_file_set_string (pKeyFile, "TaskBar", "overwrite exception", myTaskBar.cOverwriteException);
+					cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
+					
+					g_key_file_free (pKeyFile);
+				}
+			}
+			g_strfreev (pExceptions);
+		}
+		
 		gchar *cFilePath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (pFileChooserDialog));
 		cairo_dock_set_custom_icon_on_appli (cFilePath, icon, CAIRO_CONTAINER (pDock));
 		g_free (cFilePath);
