@@ -74,3 +74,9 @@ GtkWidget *cairo_dock_make_switch_gui_button (void)
 	g_signal_connect (G_OBJECT (pSwitchButton), "clicked", G_CALLBACK(on_click_switch_mode), NULL);
 	return pSwitchButton;
 }
+
+gboolean cairo_dock_theme_manager_is_integrated (void)
+{
+	return !s_bAdvancedMode;  // en mode simple, le theme-manager est integre au panneau de conf.
+}
+

@@ -63,6 +63,7 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-user-interaction.h"  // set_custom_icon_on_appli
+#include "cairo-dock-gui-switch.h"
 #include "cairo-dock-menu.h"
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 1000
@@ -342,6 +343,13 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 	
 	if (! cairo_dock_is_locked ())
 	{
+		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Configure"),
+			GTK_STOCK_PREFERENCES,
+			(GFunc)_cairo_dock_edit_and_reload_conf,
+			pSubMenu,
+			NULL);
+		gtk_widget_set_tooltip_text (pMenuItem, _("Configure behaviour, appearance, and applets."));
+		
 		if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bIsMainDock && CAIRO_DOCK (pContainer)->iRefCount == 0)
 		{
 			pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Configure this dock"),
@@ -352,19 +360,15 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 			gtk_widget_set_tooltip_text (pMenuItem, _("Customize the position, visibility and appearance of this main dock."));
 		}
 		
-		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Configure"),
-			GTK_STOCK_PREFERENCES,
-			(GFunc)_cairo_dock_edit_and_reload_conf,
-			pSubMenu,
-			NULL);
-		gtk_widget_set_tooltip_text (pMenuItem, _("Configure behaviour, appearance, and applets."));
-		
-		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Manage themes"),
-			CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg",
-			(GFunc)_cairo_dock_initiate_theme_management,
-			pSubMenu,
-			NULL);
-		gtk_widget_set_tooltip_text (pMenuItem, _("Choose from amongst many themes on the server or save your current theme."));
+		if (! cairo_dock_theme_manager_is_integrated ())
+		{
+			pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Manage themes"),
+				CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg",
+				(GFunc)_cairo_dock_initiate_theme_management,
+				pSubMenu,
+				NULL);
+			gtk_widget_set_tooltip_text (pMenuItem, _("Choose from amongst many themes on the server or save your current theme."));
+		}
 		
 		pMenuItem = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenu), pMenuItem);
@@ -1156,16 +1160,16 @@ static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSepar
 	GtkWidget *pSubMenuAdd = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);
 	
-	_add_entry_in_menu (_("Add a sub-dock"), GTK_STOCK_ADD, cairo_dock_add_sub_dock, pSubMenuAdd);
+	_add_entry_in_menu (_("sub-dock"), GTK_STOCK_ADD, cairo_dock_add_sub_dock, pSubMenuAdd);
 	
-	_add_entry_in_menu (_("Add a main dock"), GTK_STOCK_ADD, cairo_dock_add_main_dock, pSubMenuAdd);
+	_add_entry_in_menu (_("main dock"), GTK_STOCK_ADD, cairo_dock_add_main_dock, pSubMenuAdd);
 	
 	if (bAddSeparator)
-		_add_entry_in_menu (_("Add a separator"), GTK_STOCK_ADD, cairo_dock_add_separator, pSubMenuAdd);
+		_add_entry_in_menu (_("separator"), GTK_STOCK_ADD, cairo_dock_add_separator, pSubMenuAdd);
 	
 	if (bAddLauncher)
 	{
-		pMenuItem = _add_entry_in_menu (_("Add a custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
+		pMenuItem = _add_entry_in_menu (_("custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
 		gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it on the dock."));
 	}
 }
@@ -1195,13 +1199,15 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	}
 
 	//\_________________________ On rajoute des actions de modifications sur le dock.
+	gboolean bAddNewEntries = FALSE;
 	if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DOCK (pContainer) && icon && (cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER) || cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_APPLET)))
 	{
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
 		if (!pPointingIcon || CAIRO_DOCK_IS_CONTAINER_LAUNCHER (pPointingIcon))
 		{
-			_add_add_entry (menu, data, ! CAIRO_DOCK_IS_SEPARATOR (icon), cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER));
-		
+			///_add_add_entry (menu, data, ! CAIRO_DOCK_IS_SEPARATOR (icon), cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER));
+			bAddNewEntries = TRUE;
+			
 			if (icon->cDesktopFileName != NULL && icon->cParentDockName != NULL)  // possede un .desktop.
 			{
 				if (bAddSeparator)
@@ -1461,6 +1467,15 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		if (CAIRO_DESKLET (pContainer)->bPositionLocked)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), TRUE);
 		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_lock_position), data);
+	}
+	
+	//\_________________________ On rajoute les actions d'ajout de nouveaux elements.
+	if (bAddNewEntries)
+	{
+		pMenuItem = gtk_separator_menu_item_new ();
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		
+		_add_add_entry (menu, data, ! CAIRO_DOCK_IS_SEPARATOR (icon), cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER));
 	}
 
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;

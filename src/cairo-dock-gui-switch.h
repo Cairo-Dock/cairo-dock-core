@@ -29,6 +29,8 @@ void cairo_dock_load_user_gui_backend (int iMode);
 
 GtkWidget *cairo_dock_make_switch_gui_button (void);
 
+gboolean cairo_dock_theme_manager_is_integrated (void);
+
 
 G_END_DECLS
 #endif
