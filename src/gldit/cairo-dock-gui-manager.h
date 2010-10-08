@@ -148,7 +148,6 @@ GtkWidget *cairo_dock_build_generic_gui_full (const gchar *cConfFilePath, const 
 @param pAction callback to be called when the apply button is pressed, or NULL.
 @param pUserData data passed to the previous callback, or NULL.
 @param pFreeUserData callback called when the window is destroyed, to free the previous data, or NULL.
-@param pWindow pointer to the newly created window.
 @return the new window.
 */
 #define cairo_dock_build_generic_gui(cConfFilePath, cGettextDomain, cTitle, iWidth, iHeight, pAction, pUserData, pFreeUserData) cairo_dock_build_generic_gui_full (cConfFilePath, cGettextDomain, cTitle, iWidth, iHeight, pAction, pUserData, pFreeUserData, NULL, NULL)

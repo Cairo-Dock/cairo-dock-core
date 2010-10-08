@@ -182,6 +182,7 @@ void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock);
 void cairo_dock_remove_root_dock_config (const gchar *cDockName);
 
 /** Add a config file for a root dock. Does not create the dock (use \ref cairo_dock_create_dock for that). If the config file already exists, it is overwritten (use \ref cairo_dock_search_dock_from_name to check if the dock already exists).
+*@param cDockName name of the dock.
 */
 void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName);
 

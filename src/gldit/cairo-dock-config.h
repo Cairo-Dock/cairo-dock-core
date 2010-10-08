@@ -154,7 +154,7 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 
 /** Load the Cairo-Dock's config and everything.
 *@param cConfFilePath path to the main conf file.
-*@param pDock the main dock, created beforehand.
+*@param pMainDock the main dock, created beforehand.
 */
 void cairo_dock_load_config (const gchar *cConfFilePath, CairoDock *pMainDock);
 

@@ -1,20 +1,30 @@
 #!en
+
+#[gtk-about]
 [Desktop Entry]
+
+#F[Launcher]
+frame_maininfo=
+
+#d Name of the container it belongs to:
+#{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
+Container = 
+
 #s Launcher's name :
 Name = New Launcher
 #s Command to launch on click :
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
 Exec=your command
+
+#F[Display]
+frame_display=
+
 #S Image's name or path :
 Icon=
-#d Name of the container it belongs to:
-#{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
-Container = 
 
 #X[Extra parameters]
 frame_extra =
-#f[0;100] Order you want for this launcher among the others:
-Order=0
+
 #b Prevent this launcher from stealing appli from taskbar ?
 #{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate = false
@@ -30,6 +40,9 @@ Terminal = false
 #i-[0;16] Only show in this specific viewport
 #{If '0' the launcher will be displayed on every viewport.}
 ShowOnViewport = 0
+
+#f[0;100] Order you want for this launcher among the others:
+Order=0
 
 Is container = false
 

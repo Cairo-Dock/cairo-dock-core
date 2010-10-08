@@ -360,6 +360,7 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 *@param iType type of the launcher.
 *@param pReceivingDock the dock that will hold the new launcher.
 *@param fOrder the order of the icon inside the dock.
+*@param iGroup the group it will belong to
 *@return the newly created Icon corresponding to the type, or NULL if an error occured.
 */
 #define cairo_dock_add_new_launcher_by_type(iType, pReceivingDock, fOrder, iGroup) cairo_dock_add_new_launcher_by_uri_or_type (NULL, iType, pReceivingDock, fOrder, iGroup)

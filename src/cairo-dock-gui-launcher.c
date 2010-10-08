@@ -54,6 +54,16 @@ static GtkWidget *s_pLauncherPane = NULL;
 static GtkWidget *s_pLauncherScrolledWindow = NULL;
 static guint s_iSidRefreshGUI = 0;
 
+static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTreeIter *pParentIter);
+
+typedef enum {
+	CD_MODEL_NAME = 0,
+	CD_MODEL_PIXBUF,
+	CD_MODEL_ICON,
+	CD_MODEL_CONTAINER,
+	CD_MODEL_NB_COLUMNS
+	} CDModelColumns;
+
   ///////////////
  // CALLBACKS //
 ///////////////
@@ -192,14 +202,26 @@ static gboolean _select_one_launcher_in_tree (GtkTreeSelection * selection, GtkT
 	
 	gchar *cName = NULL;
 	Icon *pIcon = NULL;
+	CairoContainer *pContainer = NULL;
 	gtk_tree_model_get (model, &iter,
-		0, &cName,
-		2, &pIcon, -1);
+		CD_MODEL_NAME, &cName,
+		CD_MODEL_ICON, &pIcon,
+		CD_MODEL_CONTAINER, &pContainer, -1);
 	gtk_window_set_title (GTK_WINDOW (s_pLauncherWindow), cName);
 	g_free (cName);
 	if (pIcon == NULL)  // ligne correspondante a un dock principal.
+	{
+		if (CAIRO_DOCK_IS_DOCK (pContainer))
+		{
+			CairoDock *pDock = CAIRO_DOCK (pContainer);
+			if (!pDock->bIsMainDock)  // pour l'instant le 1er main dock n'a pas de fichier de conf
+			{
+				g_print ("display dock's config...");
+				/// charger son fichier de conf
+			}
+		}
 		return TRUE;
-	
+	}
 	// on charge son .conf
 	if (pIcon->cDesktopFileName != NULL)
 	{
@@ -257,89 +279,92 @@ static gboolean _select_one_launcher_in_tree (GtkTreeSelection * selection, GtkT
 	return TRUE;
 }
 
-static void _add_one_sub_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTreeIter *pParentIter)
+static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIter *pParentIter)
 {
+	if (! CAIRO_DOCK_IS_LAUNCHER (pIcon) && ! CAIRO_DOCK_IS_USER_SEPARATOR (pIcon) && ! CAIRO_DOCK_IS_APPLET (pIcon))
+		return;
+	
+	if (cairo_dock_icon_is_being_removed (pIcon))
+		return;
+	
 	GtkTreeIter iter;
-	GList *ic;
-	Icon *pIcon;
 	GError *erreur = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	gchar *cImagePath = NULL;
 	const gchar *cName;
+	
+	// set an image.
+	if (pIcon->cFileName != NULL)
+	{
+		cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName);
+	}
+	if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+	{
+		g_free (cImagePath);
+		if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
+		{
+			cImagePath = cairo_dock_search_image_s_path (myIcons.cSeparatorImage);
+		}
+		else if (CAIRO_DOCK_IS_APPLET (pIcon))
+		{
+			cImagePath = g_strdup (pIcon->pModuleInstance->pModule->pVisitCard->cIconFilePath);
+		}
+		else
+		{
+			cImagePath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
+			if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cImagePath);
+				cImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
+			}
+		}
+	}
+	
+	if (cImagePath != NULL)
+	{
+		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 32, 32, &erreur);
+		if (erreur != NULL)
+		{
+			cd_warning (erreur->message);
+			g_error_free (erreur);
+			erreur = NULL;
+		}
+	}
+	
+	// set a name
+	if (CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))  // separator
+		cName = "---------";
+	else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet
+		cName = dgettext (pIcon->pModuleInstance->pModule->pVisitCard->cGettextDomain, pIcon->pModuleInstance->pModule->pVisitCard->cTitle);
+	else  // launcher
+		cName = (pIcon->cInitialName ? pIcon->cInitialName : pIcon->cName);
+	
+	// add an entry in the tree view.
+	gtk_tree_store_append (model, &iter, pParentIter);
+	gtk_tree_store_set (model, &iter,
+		0, cName,
+		1, pixbuf,
+		2, pIcon,
+		-1);
+	
+	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon) && pIcon->pSubDock != NULL)
+	{
+		_add_one_dock_to_model (pIcon->pSubDock, model, &iter);
+	}
+	
+	// reset all.
+	g_free (cImagePath);
+	if (pixbuf)
+		g_object_unref (pixbuf);
+}
+static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTreeIter *pParentIter)
+{
+	GList *ic;
+	Icon *pIcon;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (! CAIRO_DOCK_IS_LAUNCHER (pIcon) && ! CAIRO_DOCK_IS_USER_SEPARATOR (pIcon) && ! CAIRO_DOCK_IS_APPLET (pIcon))
-			continue;
-		
-		if (cairo_dock_icon_is_being_removed (pIcon))
-			continue;
-		
-		// set an image.
-		if (pIcon->cFileName != NULL)
-		{
-			cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName);
-		}
-		if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
-		{
-			g_free (cImagePath);
-			if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
-			{
-				cImagePath = cairo_dock_search_image_s_path (myIcons.cSeparatorImage);
-			}
-			else if (CAIRO_DOCK_IS_APPLET (pIcon))
-			{
-				cImagePath = g_strdup (pIcon->pModuleInstance->pModule->pVisitCard->cIconFilePath);
-			}
-			else
-			{
-				cImagePath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
-				if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
-				{
-					g_free (cImagePath);
-					cImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
-				}
-			}
-		}
-		
-		if (cImagePath != NULL)
-		{
-			pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 32, 32, &erreur);
-			if (erreur != NULL)
-			{
-				cd_warning (erreur->message);
-				g_error_free (erreur);
-				erreur = NULL;
-			}
-		}
-		
-		// set a name
-		if (CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))  // separator
-			cName = "separator";
-		else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet
-			cName = dgettext (pIcon->pModuleInstance->pModule->pVisitCard->cGettextDomain, pIcon->pModuleInstance->pModule->pVisitCard->cTitle);
-		else  // launcher
-			cName = (pIcon->cInitialName ? pIcon->cInitialName : pIcon->cName);
-		
-		// add an entry in the tree view.
-		gtk_tree_store_append (model, &iter, pParentIter);
-		gtk_tree_store_set (model, &iter,
-			0, cName,
-			1, pixbuf,
-			2, pIcon,
-			-1);
-		
-		if (CAIRO_DOCK_IS_LAUNCHER (pIcon) && pIcon->pSubDock != NULL && ! CAIRO_DOCK_IS_URI_LAUNCHER (pIcon))
-		{
-			_add_one_sub_dock_to_model (pIcon->pSubDock, model, &iter);
-		}
-		
-		// reset all for the next round.
-		g_free (cImagePath);
-		cImagePath = NULL;
-		if (pixbuf)
-			g_object_unref (pixbuf);
-		pixbuf = NULL;
+		_add_one_icon_to_model (pIcon, model, pParentIter);
 	}
 }
 static void _add_one_root_dock_to_model (const gchar *cName, CairoDock *pDock, GtkTreeStore *model)
@@ -351,20 +376,22 @@ static void _add_one_root_dock_to_model (const gchar *cName, CairoDock *pDock, G
 	// on ajoute une ligne pour le dock.
 	gtk_tree_store_append (model, &iter, NULL);
     gtk_tree_store_set (model, &iter,
-			0, cName,
-			2, NULL,
-			-1);
+		CD_MODEL_NAME, cName,
+		CD_MODEL_ICON, NULL,
+		CD_MODEL_CONTAINER, pDock,
+		-1);
 	
 	// on ajoute chaque lanceur.
-	_add_one_sub_dock_to_model (pDock, model, &iter);
+	_add_one_dock_to_model (pDock, model, &iter);
 }
 static GtkTreeModel *_build_tree_model (void)
 {
-	GtkTreeStore *model = gtk_tree_store_new (3,
+	GtkTreeStore *model = gtk_tree_store_new (CD_MODEL_NB_COLUMNS,
 		G_TYPE_STRING,
 		GDK_TYPE_PIXBUF,
-		G_TYPE_POINTER);  // nom du lanceur, image, Icon.
-	cairo_dock_foreach_docks ((GHFunc) _add_one_root_dock_to_model, model);
+		G_TYPE_POINTER,
+		G_TYPE_POINTER);  // nom du lanceur, image, Icon, Container
+	cairo_dock_foreach_docks ((GHFunc) _add_one_root_dock_to_model, model);  // on n'utilise pas cairo_dock_foreach_root_docks(), de facon a avoir le nom du dock.
 	return GTK_TREE_MODEL (model);
 }
 

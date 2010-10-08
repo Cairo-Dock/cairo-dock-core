@@ -310,7 +310,6 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 ///
 /**Write a value in a readable text format.
 *@param pRenderer a data renderer
-*@param fValue the normalized value
 *@param i the number of the value
 *@param cBuffer a buffer where to write*/
 #define cairo_data_renderer_format_value_full(pRenderer, i, cBuffer) do {\
@@ -322,7 +321,6 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 	} while (0)
 /**Write a value in a readable text format in the renderer text buffer.
 *@param pRenderer a data renderer
-*@param fValue the normalized value
 *@param i the number of the value*/
 #define cairo_data_renderer_format_value(pRenderer, i) cairo_data_renderer_format_value_full (pRenderer, i, (pRenderer)->cFormatBuffer)
 

@@ -137,7 +137,7 @@ void cairo_dock_gl_path_rel_simple_curve_to (CairoDockGLPath *pPath, int iNbPoin
  * @param pPath the path.
  * @param iNbPoints number of points used to discretize the arc
  * @param xc x coordinate of the center
- * @param yx y coordinate of the center
+ * @param yc y coordinate of the center
  * @param r radius
  * @param teta0 initial angle
  * @param cone cone of the arc (a negative value means clockwise).
