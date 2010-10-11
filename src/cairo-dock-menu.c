@@ -120,9 +120,6 @@ static void _cairo_dock_configure_root_dock (GtkMenuItem *pMenuItem, CairoDock *
 	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // ne devrait pas arriver mais au cas ou.
 	{
 		cairo_dock_add_root_dock_config_for_name (cDockName);
-		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
-		int r = system (cCommand);
-		g_free (cCommand);*/
 	}
 	
 	if (s_pRootDockConfigWindow != NULL)
@@ -636,10 +633,11 @@ static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, gpointer
 	Icon *icon = data[0];
 	CairoContainer *pContainer= data[1];
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
-		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module !
+		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module.
 	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
-	cairo_dock_show_module_instance_gui (icon->pModuleInstance, -1);
+	///cairo_dock_show_module_instance_gui (icon->pModuleInstance, -1);
+	cairo_dock_build_launcher_gui (icon);
 }
 
 static void _cairo_dock_detach_module (GtkMenuItem *pMenuItem, gpointer *data)

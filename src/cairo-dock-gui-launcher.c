@@ -44,6 +44,7 @@
 #define CAIRO_DOCK_FRAME_MARGIN 6
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1000
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 500
+#define CAIRO_DOCK_LEFT_PANE_MIN_WIDTH 120
 
 extern gchar *g_cCurrentLaunchersPath;
 
@@ -214,9 +215,9 @@ static gboolean _select_one_launcher_in_tree (GtkTreeSelection * selection, GtkT
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
 		{
 			CairoDock *pDock = CAIRO_DOCK (pContainer);
-			if (!pDock->bIsMainDock)  // pour l'instant le 1er main dock n'a pas de fichier de conf
+			if (!pDock->bIsMainDock)  // pour l'instant le main dock n'a pas de fichier de conf
 			{
-				g_print ("display dock's config...");
+				g_print ("display dock's config...\n");
 				/// charger son fichier de conf
 			}
 		}
@@ -266,7 +267,7 @@ static gboolean _select_one_launcher_in_tree (GtkTreeSelection * selection, GtkT
 		g_return_val_if_fail (pKeyFile != NULL, FALSE);
 		
 		gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pIcon->pModuleInstance->pModule->pVisitCard->cShareDataDir, pIcon->pModuleInstance->pModule->pVisitCard->cConfFileName);
-		s_pCurrentLauncherWidget = cairo_dock_build_group_widget (pKeyFile, "Icon", pIcon->pModuleInstance->pModule->pVisitCard->cGettextDomain, s_pLauncherWindow, &pWidgetList, pDataGarbage, cOriginalConfFilePath);
+		s_pCurrentLauncherWidget = cairo_dock_build_key_file_widget (pKeyFile, pIcon->pModuleInstance->pModule->pVisitCard->cGettextDomain, s_pLauncherWindow, &pWidgetList, pDataGarbage, cOriginalConfFilePath);
 		g_free (cOriginalConfFilePath);
 		
 		gtk_paned_pack2 (GTK_PANED (s_pLauncherPane), s_pCurrentLauncherWidget, TRUE, FALSE);
@@ -342,11 +343,12 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	// add an entry in the tree view.
 	gtk_tree_store_append (model, &iter, pParentIter);
 	gtk_tree_store_set (model, &iter,
-		0, cName,
-		1, pixbuf,
-		2, pIcon,
+		CD_MODEL_NAME, cName,
+		CD_MODEL_PIXBUF, pixbuf,
+		CD_MODEL_ICON, pIcon,
 		-1);
 	
+	// recursively add the sub-icons.
 	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon) && pIcon->pSubDock != NULL)
 	{
 		_add_one_dock_to_model (pIcon->pSubDock, model, &iter);
@@ -361,12 +363,13 @@ static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTr
 {
 	GList *ic;
 	Icon *pIcon;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)  // add each icons.
 	{
 		pIcon = ic->data;
 		_add_one_icon_to_model (pIcon, model, pParentIter);
 	}
 }
+
 static void _add_one_root_dock_to_model (const gchar *cName, CairoDock *pDock, GtkTreeStore *model)
 {
 	if (pDock->iRefCount != 0)
@@ -375,7 +378,7 @@ static void _add_one_root_dock_to_model (const gchar *cName, CairoDock *pDock, G
 	
 	// on ajoute une ligne pour le dock.
 	gtk_tree_store_append (model, &iter, NULL);
-    gtk_tree_store_set (model, &iter,
+	gtk_tree_store_set (model, &iter,
 		CD_MODEL_NAME, cName,
 		CD_MODEL_ICON, NULL,
 		CD_MODEL_CONTAINER, pDock,
@@ -384,14 +387,27 @@ static void _add_one_root_dock_to_model (const gchar *cName, CairoDock *pDock, G
 	// on ajoute chaque lanceur.
 	_add_one_dock_to_model (pDock, model, &iter);
 }
+
+static gboolean _add_one_desklet_to_model (CairoDesklet *pDesklet, GtkTreeStore *model)
+{
+	if (pDesklet->pIcon == NULL)
+		return FALSE;
+	
+	// on ajoute l'icone du desklet.
+	_add_one_icon_to_model (pDesklet->pIcon, model, NULL);  // les sous-icones du desklet ne nous interessent pas.
+	
+	return FALSE; // FALSE => keep going
+}
+
 static GtkTreeModel *_build_tree_model (void)
 {
 	GtkTreeStore *model = gtk_tree_store_new (CD_MODEL_NB_COLUMNS,
-		G_TYPE_STRING,
-		GDK_TYPE_PIXBUF,
-		G_TYPE_POINTER,
-		G_TYPE_POINTER);  // nom du lanceur, image, Icon, Container
+		G_TYPE_STRING,  // displayed name
+		GDK_TYPE_PIXBUF,  // displayed icon
+		G_TYPE_POINTER,  // Icon
+		G_TYPE_POINTER);  // Container
 	cairo_dock_foreach_docks ((GHFunc) _add_one_root_dock_to_model, model);  // on n'utilise pas cairo_dock_foreach_root_docks(), de facon a avoir le nom du dock.
+	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _add_one_desklet_to_model, model);
 	return GTK_TREE_MODEL (model);
 }
 
@@ -448,6 +464,7 @@ static GtkWidget *show_gui (Icon *pIcon)
 		TRUE,
 		TRUE,
 		0);
+	gtk_widget_set_size_request (s_pLauncherPane, CAIRO_DOCK_LEFT_PANE_MIN_WIDTH, -1);
 	
 	//\_____________ On construit l'arbre des launceurs.
 	GtkTreeModel *model = _build_tree_model();
@@ -458,6 +475,7 @@ static GtkWidget *show_gui (Icon *pIcon)
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (s_pLauncherTreeView), FALSE);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (s_pLauncherTreeView), TRUE);
 	
+	// line selection
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
 	gtk_tree_selection_set_mode (pSelection, GTK_SELECTION_SINGLE);
 	gtk_tree_selection_set_select_function (pSelection,
@@ -466,10 +484,12 @@ static GtkWidget *show_gui (Icon *pIcon)
 		NULL);
 	
 	GtkCellRenderer *rend;
-	rend = gtk_cell_renderer_text_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (s_pLauncherTreeView), -1, NULL, rend, "text", 0, NULL);
+	// column icon
 	rend = gtk_cell_renderer_pixbuf_new ();
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (s_pLauncherTreeView), -1, NULL, rend, "pixbuf", 1, NULL);
+	// column name
+	rend = gtk_cell_renderer_text_new ();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (s_pLauncherTreeView), -1, NULL, rend, "text", 0, NULL);
 	
 	s_pLauncherScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_widget_set (s_pLauncherScrolledWindow, "height-request", CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT - 30, NULL);

@@ -139,7 +139,8 @@ set_value "Configuration"	"show recent"				true
 
 set_current_conf_file "plug-ins/logout/logout.conf"
 set_value "Icon"			"name"						"Log-out"
-set_value "Configuration"	"invert"					true
+set_value "Configuration"	"click"					0
+set_value "Configuration"	"middle-click"				1
 
 set_current_conf_file "plug-ins/mail/mail.conf"
 set_value_on_all_groups		"username"					""
