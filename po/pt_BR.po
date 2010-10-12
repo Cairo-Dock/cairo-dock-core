@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0-alpha\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2010-09-13 00:34+0000\n"
-"PO-Revision-Date: 2010-09-14 21:00+0000\n"
-"Last-Translator: Rafael nossal <rafael.nossal@gmail.com>\n"
+"POT-Creation-Date: 2010-09-18 10:21+0000\n"
+"PO-Revision-Date: 2010-10-10 21:33+0000\n"
+"Last-Translator: Guilherme Augusto Peixoto <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-15 04:55+0000\n"
+"X-Launchpad-Export-Date: 2010-10-11 04:43+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/cairo-dock-gui-launcher.c:376
@@ -26,11 +26,11 @@ msgstr "Comportamento"
 
 #: ../src/cairo-dock-gui-main.c:129 ../data/messages:83 ../data/messages:1397
 msgid "Appearance"
-msgstr "Aparência"
+msgstr "Aspecto"
 
 #: ../src/cairo-dock-gui-main.c:130 ../src/gldit/cairo-dock-gui-factory.c:1231
 msgid "Files"
-msgstr "Arquivos"
+msgstr "Arquívos"
 
 #: ../src/cairo-dock-gui-main.c:131 ../src/gldit/cairo-dock-gui-factory.c:1236
 msgid "Internet"
@@ -42,7 +42,7 @@ msgstr "Área de Trabalho"
 
 #: ../src/cairo-dock-gui-main.c:133
 msgid "Accessories"
-msgstr "Acessórios"
+msgstr "Complementos"
 
 #: ../src/cairo-dock-gui-main.c:134 ../src/gldit/cairo-dock-gui-factory.c:1251
 #: ../src/gldit/cairo-dock-internal-system.c:123 ../data/messages:353
@@ -51,12 +51,12 @@ msgstr "Sistema"
 
 #: ../src/cairo-dock-gui-main.c:135 ../src/gldit/cairo-dock-gui-factory.c:1256
 msgid "Fun"
-msgstr "Diversão"
+msgstr "Lazer"
 
 #: ../src/cairo-dock-gui-main.c:136 ../src/cairo-dock-gui-main.c:1526
 #: ../data/messages:1531
 msgid "All"
-msgstr "Todos"
+msgstr "Todas"
 
 #: ../src/cairo-dock-gui-main.c:1502
 msgid "Categories"
@@ -64,11 +64,11 @@ msgstr "Categorias"
 
 #: ../src/cairo-dock-gui-main.c:1632
 msgid "Filter"
-msgstr "Filtro"
+msgstr "Filtros"
 
 #: ../src/cairo-dock-gui-main.c:1679 ../data/messages:141
 msgid "Options"
-msgstr "Opções"
+msgstr "Preferências"
 
 #: ../src/cairo-dock-gui-main.c:1689
 msgid "All words"
@@ -157,7 +157,7 @@ msgstr "Quando mouse se sobrepuser."
 
 #: ../src/cairo-dock-gui-simple.c:751 ../data/messages:79
 msgid "On click:"
-msgstr "Ao clicar:"
+msgstr "Clicando"
 
 #: ../src/cairo-dock-gui-simple.c:803
 msgid ""
@@ -240,7 +240,7 @@ msgstr "Site da comunidade"
 
 #: ../src/cairo-dock-menu.c:208 ../data/messages:1299
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Problemas? Sugestões? Quer falar com a gente? Seja bem-vindo!"
+msgstr "Problemas? Sugestões? Quer falar conosco? Seja bem-vindo(a)!"
 
 #: ../src/cairo-dock-menu.c:211 ../data/messages:1305
 msgid "Development site"
@@ -252,7 +252,7 @@ msgstr "Descobra a última versão do Cairo-Dock aqui !"
 
 #: ../src/cairo-dock-menu.c:215 ../data/messages:1309
 msgid "Cairo-Dock-Plug-ins-Extras"
-msgstr "Cairo-Dock-Plug-ins-Extras"
+msgstr "Cairo-Dock-Plug-ins"
 
 #: ../src/cairo-dock-menu.c:216 ../data/messages:1179 ../data/messages:1307
 msgid "Other applets"
@@ -268,7 +268,7 @@ msgstr "Arte"
 
 #: ../src/cairo-dock-menu.c:235
 msgid "Support"
-msgstr "Suporte"
+msgstr "Suporte a Idiomas"
 
 #: ../src/cairo-dock-menu.c:313
 msgid "Quit Cairo-Dock?"
@@ -276,7 +276,7 @@ msgstr "Fechar Cairo-Dock ?"
 
 #: ../src/cairo-dock-menu.c:344
 msgid "Configure this dock"
-msgstr "Configurar esse dock"
+msgstr "Configurar Dock"
 
 #: ../src/cairo-dock-menu.c:349
 msgid "Customize the position, visibility and appearance of this main dock."

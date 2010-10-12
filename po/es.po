@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.2\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2010-09-13 00:34+0000\n"
-"PO-Revision-Date: 2010-09-13 20:06+0000\n"
-"Last-Translator: sebikul <Unknown>\n"
+"POT-Creation-Date: 2010-09-18 10:21+0000\n"
+"PO-Revision-Date: 2010-09-27 09:04+0000\n"
+"Last-Translator: Martín V. <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-14 04:45+0000\n"
+"X-Launchpad-Export-Date: 2010-09-28 04:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "X-Poedit-Language: Spanish\n"
 
@@ -1040,7 +1040,7 @@ msgstr "¿Está seguro que desea sobreescribir el tema %s?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:171
 msgid "Last modification on:"
-msgstr ""
+msgstr "Última modificación el:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:238
 #, c-format
@@ -2587,7 +2587,7 @@ msgstr "Etiquetas"
 
 #: ../data/messages:819
 msgid "Label visibility"
-msgstr ""
+msgstr "Visibilidad de Etiqueta"
 
 #: ../data/messages:821
 msgid "Show labels:"
@@ -2958,6 +2958,11 @@ msgid ""
 " - or choose the auto-hide. The dock will then hide itself and reappear when "
 "you enter the trigger zone."
 msgstr ""
+"Dos opciones están disponibles en el módulo de \"Accesibilidad\":\n"
+" - puede optar por \"mantener el dock por debajo de otras ventanas\". El "
+"dock emergerá cuando se coloque el puntero por sobre su borde de pantalla.\n"
+" - o escoger el auto-ocultar. El dock se esconderá por si solo y reaparecerá "
+"cuando se ingrese a la zona de activación."
 
 #: ../data/messages:957
 msgid "How can I add a separator?"
@@ -2968,6 +2973,8 @@ msgid ""
 "Tip: if you choose to mix applets and launchers in the 'Icons' module, you "
 "can also place separators between applets then."
 msgstr ""
+"Consejo: si usted elige mezclar applets y lanzadores en el módulo "
+"\"Iconos\", también puede colocar separadores entre applets."
 
 #: ../data/messages:961
 msgid ""
@@ -2976,6 +2983,10 @@ msgid ""
 "You can position it wherever you wish (except in amongst taskbar icons) by "
 "dragging it with the mouse."
 msgstr ""
+"Simplemente haga clic derecho sobre el dock donde desea agregar un separador "
+"y seleccione «añadir un separador».\n"
+"Puede colocarlo dondequiera que usted desee (exceptuando entre los iconos de "
+"la barra de tareas) arrastrando con el ratón."
 
 #: ../data/messages:963
 msgid ""
@@ -3152,6 +3163,9 @@ msgid ""
 "Simply right click on the desklet, and select «lock position». To unlock it, "
 "de-select this option."
 msgstr ""
+"Consejo: Si no quiere moverlo más, puede bloquear su posición. Simplemente "
+"haga clic en el desklet y seleccione «bloquear posición». Para "
+"desbloquearlo, anule la selección."
 
 #: ../data/messages:1015
 msgid "Simply drag them with the mouse."
@@ -3201,10 +3215,15 @@ msgid ""
 " go to the applet's configuration, click on the «desklet» tab, and then "
 "choose the decoration you wish to use."
 msgstr ""
+"La decoración por defecto es definida en el módulo «Desklets».\n"
+"Además, cada desklet puede tener su propia decoración. Para cambiar la "
+"decoración\n"
+" vaya a la configuración del applet, presione en la pestaña «desklet» y "
+"luego seleccione la decoración que desee utilizar."
 
 #: ../data/messages:1029
 msgid "Go to the «Desklets» module."
-msgstr ""
+msgstr "Ir al módulo «Desklets»"
 
 #: ../data/messages:1031
 msgid "How do I insert a desklet into the dock?"
@@ -3220,13 +3239,15 @@ msgstr "Simplemente haciendo clic en la parte superior derecha del botón."
 
 #: ../data/messages:1037
 msgid "How do I place a desklet on the <i>Compiz Widget Layer</i>?"
-msgstr ""
+msgstr "Cómo coloco un desklet en la <i>Capa de widgets de Compiz</i>?"
 
 #: ../data/messages:1039
 msgid ""
 "Tip: you may have to switch to the Widget Layer once so that Compiz takes "
 "the change into account."
 msgstr ""
+"Consejo: es posible que deba entrar en la Capa de widgets para que Compiz "
+"reconozca los cambios."
 
 #: ../data/messages:1041
 msgid ""
