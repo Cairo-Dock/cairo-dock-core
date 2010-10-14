@@ -161,15 +161,17 @@ typedef enum {
 	
 /// Model used for combo-box and tree-view. CAIRO_DOCK_MODEL_NAME is the name as displayed in the widget, and CAIRO_DOCK_MODEL_RESULT is the resulting string effectively written in the config file.
 typedef enum {
-	CAIRO_DOCK_MODEL_NAME = 0,
-	CAIRO_DOCK_MODEL_RESULT,
-	CAIRO_DOCK_MODEL_DESCRIPTION_FILE,
-	CAIRO_DOCK_MODEL_ACTIVE,
-	CAIRO_DOCK_MODEL_ORDER,
-	CAIRO_DOCK_MODEL_IMAGE,
-	CAIRO_DOCK_MODEL_ICON,
-	CAIRO_DOCK_MODEL_ORDER2,
-	CAIRO_DOCK_MODEL_STATE,
+	CAIRO_DOCK_MODEL_NAME = 0,  // displayed name
+	CAIRO_DOCK_MODEL_RESULT,  // string that will be used for this line
+	CAIRO_DOCK_MODEL_DESCRIPTION_FILE,  // readme file
+	CAIRO_DOCK_MODEL_IMAGE,  // preview file
+	CAIRO_DOCK_MODEL_ACTIVE,  // whether the line is enabled/disabled (checkbox)
+	CAIRO_DOCK_MODEL_ORDER,  // used to sort lines
+	CAIRO_DOCK_MODEL_ORDER2,  // used to sort lines
+	CAIRO_DOCK_MODEL_ICON,  // icon to be displayed
+	CAIRO_DOCK_MODEL_STATE,  // used to give a state to the line
+	CAIRO_DOCK_MODEL_SIZE,  // size
+	CAIRO_DOCK_MODEL_AUTHOR,  // author
 	CAIRO_DOCK_MODEL_NB_COLUMNS
 	} CairoDockGUIModelColumns;
 

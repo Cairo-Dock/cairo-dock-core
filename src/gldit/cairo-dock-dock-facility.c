@@ -787,7 +787,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 	switch (pDock->iMousePositionType)
 	{
 		case CAIRO_DOCK_MOUSE_INSIDE :
-			//g_print ("INSIDE (%d;%d;%d;%d;%.2f)\n", cairo_dock_entrance_is_allowed (pDock), pDock->iMagnitudeIndex, pDock->bIsGrowingUp, pDock->bIsShrinkingDown, pDock->fFoldingFactor);
+			//g_print ("INSIDE (%d;%d;%d;%d;%d)\n", cairo_dock_entrance_is_allowed (pDock), pDock->iMagnitudeIndex, pDock->bIsGrowingUp, pDock->bIsShrinkingDown, pDock->iInputState);
 			if (cairo_dock_entrance_is_allowed (pDock) && ((pDock->iMagnitudeIndex < CAIRO_DOCK_NB_MAX_ITERATIONS && ! pDock->bIsGrowingUp) || pDock->bIsShrinkingDown) && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN && (pDock->iInputState != CAIRO_DOCK_INPUT_AT_REST || pDock->bIsDragging))  // on est dedans et la taille des icones est non maximale bien que le dock ne soit pas en train de grossir, cependant on respecte l'etat 'cache', et l'etat repos.
 			{
 				//g_print ("on est dedans en x et en y et la taille des icones est non maximale bien qu'aucune icone  ne soit animee (%d;%d)\n", pDock->iMagnitudeIndex, pDock->container.bInside);

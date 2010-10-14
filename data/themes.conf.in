@@ -1,12 +1,9 @@
 #!en
 
-#[gtk-index]
+#[gtk-open]
 [Themes]
 
-#F[Choose a theme]
-frame1=
-
-#R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes2.2] Choose one of the available themes:/
+#R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes2.2] /
 chosen theme = 
 
 #S ...or drag and drop a theme package here :

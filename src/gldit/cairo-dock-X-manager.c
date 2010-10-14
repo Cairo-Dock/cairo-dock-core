@@ -70,7 +70,6 @@ static Atom s_aRootMapID;
 static Atom s_aNetNbDesktops;
 static Atom s_aXKlavierState;
 
-static gboolean _cairo_dock_window_is_on_our_way (Window *Xid, Icon *icon, gpointer *data);
 
   ///////////////////////
  // X listener : core //

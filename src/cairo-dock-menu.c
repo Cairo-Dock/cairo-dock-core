@@ -239,13 +239,11 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 <b>LaunchPad :</b>\n  Matttbe\n  Mav\n\
 <b>Suggestions/Comments/Beta-Testers :</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Franksuse64\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
 	
-	cairo_dock_dialog_window_created ();
 	gtk_widget_show_all (pDialog);
 	gtk_window_set_position (GTK_WINDOW (pDialog), GTK_WIN_POS_CENTER_ALWAYS);  // un GTK_WIN_POS_CENTER simple ne marche pas, probablement parceque la fenetre n'est pas encore realisee. le 'always' ne pose pas de probleme, puisqu'on ne peut pas redimensionner le dialogue.
 	gtk_window_set_keep_above (GTK_WINDOW (pDialog), TRUE);
 	gtk_dialog_run (GTK_DIALOG (pDialog));
 	gtk_widget_destroy (pDialog);
-	cairo_dock_dialog_window_destroyed ();
 }
 
 static void _launch_url (const gchar *cURL)

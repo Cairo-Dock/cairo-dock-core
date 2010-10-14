@@ -61,10 +61,6 @@ typedef void (* CairoDockLoadCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pK
 typedef void (* CairoDockSaveCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile);
 
 
-int cairo_dock_get_nb_dialog_windows (void);
-void cairo_dock_dialog_window_destroyed (void);
-void cairo_dock_dialog_window_created (void);
-
 /**Retrieve the group-key widget in the current config panel, corresponding to the (group,key) pair in its conf file.
 @param cGroupName name of the group in the conf file.
 @param cKeyName name of the key in the conf file.

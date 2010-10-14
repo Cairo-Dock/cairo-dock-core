@@ -122,7 +122,7 @@ void cairo_dock_stop_task (CairoDockTask *pTask);
 */
 void cairo_dock_discard_task (CairoDockTask *pTask);
 
-/** Stop and destroy a periodic Task, freeing all the allocated ressources. Unlike \ref cairo_dock_discard_task, the task is stopped before being freeed, so this is a blocking call.
+/** Stop and destroy a periodic Task, freeing all the allocated ressources. Unlike \ref cairo_dock_discard_task, the task is stopped before being freeed, so this is a blocking call. If you want to destroy the task inside the update callback, don't use this function; use \ref cairo_dock_discard_task instead.
 *@param pTask the periodic Task.
 */
 void cairo_dock_free_task (CairoDockTask *pTask);

@@ -638,6 +638,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin) ou meme de X (changement de bureau).
 	if (pEvent)
 	{
+		//g_print ("leave event: %d;%d\n", (int)pEvent->x, (int)pEvent->y);
 		if (pDock->container.bIsHorizontal)
 		{
 			pDock->container.iMouseX = pEvent->x;
@@ -648,15 +649,19 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			pDock->container.iMouseX = pEvent->y;
 			pDock->container.iMouseY = pEvent->x;
 		}
-		if (!_mouse_is_really_outside(pDock))
+	}
+	else
+	{
+		//g_print ("forced leave event: %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
+	}
+	if (!_mouse_is_really_outside(pDock))
+	{
+		//g_print ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
+		if (pDock->iSidTestMouseOutside == 0 && pEvent)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
 		{
-			//g_print ("not really outside (%d;%d ; %d/%d)\n", (int)pEvent->x, (int)pEvent->y, pDock->iMaxDockHeight, pDock->iMinDockHeight);
-			if (pDock->iSidTestMouseOutside == 0)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
-			{
-				pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
-			}
-			return FALSE;
+			pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
 		}
+		return FALSE;
 	}
 	
 	//\_______________ On retarde la sortie.

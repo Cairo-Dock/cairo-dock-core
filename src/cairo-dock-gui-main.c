@@ -64,6 +64,13 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bEnterHelpOnce;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
+extern gchar *g_cConfFile;
+extern CairoDock *g_pMainDock;
+extern CairoDockDesktopEnv g_iDesktopEnv;
+extern gchar *g_cCurrentLaunchersPath;
+extern gchar *g_cCairoDockDataDir;
+extern gboolean g_bEasterEggs;
+
 struct _CairoDockCategoryWidgetTable {
 	GtkWidget *pFrame;
 	GtkWidget *pTable;
@@ -116,13 +123,6 @@ static GSList *s_path = NULL;
 static int s_iPreviewWidth, s_iNbButtonsByRow;
 static CairoDialog *s_pDialog = NULL;
 static int s_iSidShowGroupDialog = 0;
-
-extern gchar *g_cConfFile;
-extern CairoDock *g_pMainDock;
-extern CairoDockDesktopEnv g_iDesktopEnv;
-extern gchar *g_cCurrentLaunchersPath;
-extern gchar *g_cCairoDockDataDir;
-extern gboolean g_bEasterEggs;
 
 static const gchar *s_cCategoriesDescription[2*(CAIRO_DOCK_NB_CATEGORY+1)] = {
 	N_("Behaviour"), "icon-behavior.svg",
@@ -932,8 +932,6 @@ static gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLo
 		g_source_remove (s_iSidShowGroupDialog);
 		s_iSidShowGroupDialog = 0;
 	}
-	
-	cairo_dock_dialog_window_destroyed ();
 	
 	return FALSE;
 }
@@ -1808,8 +1806,6 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gtk_widget_hide (s_pOkButton);
 	gtk_widget_hide (s_pGroupFrame);
 	gtk_widget_hide (s_pPreviewImage);
-	
-	cairo_dock_dialog_window_created ();
 	
 	if (bMaintenanceMode)
 	{

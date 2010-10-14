@@ -38,15 +38,19 @@
 #include "cairo-dock-load.h"
 #include "cairo-dock-internal-icons.h"
 #include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-launcher.h"
 
 #define CAIRO_DOCK_FRAME_MARGIN 6
-#define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1000
-#define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 500
-#define CAIRO_DOCK_LEFT_PANE_MIN_WIDTH 120
+#define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 800
+#define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 700
+#define CAIRO_DOCK_LEFT_PANE_MIN_WIDTH 100
+#define CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH 800
 
 extern gchar *g_cCurrentLaunchersPath;
+extern CairoDockDesktopGeometry g_desktopGeometry;
+extern CairoDock *g_pMainDock;
 
 static GtkWidget *s_pLauncherWindow = NULL;
 static GtkWidget *s_pCurrentLauncherWidget = NULL;
@@ -111,8 +115,6 @@ static gboolean on_delete_launcher_gui (GtkWidget *pWidget, GdkEvent *event, gpo
 	
 	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWidget), "garbage");
 	/// nettoyer.
-	
-	cairo_dock_dialog_window_destroyed ();
 	
 	_free_launcher_gui ();
 	
@@ -464,7 +466,6 @@ static GtkWidget *show_gui (Icon *pIcon)
 		TRUE,
 		TRUE,
 		0);
-	gtk_widget_set_size_request (s_pLauncherPane, CAIRO_DOCK_LEFT_PANE_MIN_WIDTH, -1);
 	
 	//\_____________ On construit l'arbre des launceurs.
 	GtkTreeModel *model = _build_tree_model();
@@ -530,10 +531,16 @@ static GtkWidget *show_gui (Icon *pIcon)
 		0);
 	g_object_set_data (G_OBJECT (s_pLauncherWindow), "status-bar", pStatusBar);
 	
-	gtk_window_resize (GTK_WINDOW (s_pLauncherWindow), CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT);
+	//\_____________ On essaie de definir une taille correcte.
+	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
+	gtk_window_resize (GTK_WINDOW (s_pLauncherWindow),
+		w,
+		MIN (CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
+	
+	if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] < CAIRO_DOCK_LAUNCHER_PANEL_WIDTH)  // ecran trop petit, on va essayer de reserver au moins R pixels pour le panneau de droite (avec un minimum de L pixels pour celui de gauche).
+		gtk_paned_set_position (GTK_PANED (s_pLauncherPane), MAX (CAIRO_DOCK_LEFT_PANE_MIN_WIDTH, w - CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH));
 	
 	gtk_widget_show_all (s_pLauncherWindow);
-	cairo_dock_dialog_window_created ();
 	
 	g_signal_connect (G_OBJECT (s_pLauncherWindow),
 		"delete-event",

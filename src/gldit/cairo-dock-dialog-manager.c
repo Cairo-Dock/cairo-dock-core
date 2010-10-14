@@ -610,9 +610,6 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	if (pAttribute->iTimeLength != 0)
 		pDialog->iSidTimer = g_timeout_add (pAttribute->iTimeLength, (GSourceFunc) _cairo_dock_dialog_auto_delete, (gpointer) pDialog);
 	
-	if (pIcon && pIcon->cParentDockName != NULL)
-		cairo_dock_dialog_window_created ();
-	
 	return pDialog;
 }
 
@@ -1112,8 +1109,6 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog)
 		gtk_widget_hide (pDialog->container.pWidget);
 		pDialog->container.bInside = FALSE;
 		cairo_dock_replace_all_dialogs ();
-		if (pDialog->pIcon && pDialog->pIcon->cParentDockName != NULL)
-			cairo_dock_dialog_window_destroyed ();
 	}
 }
 
@@ -1129,8 +1124,6 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 		{
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
 			cairo_dock_place_dialog (pDialog, pContainer);
-			if (pIcon->cParentDockName != NULL)
-				cairo_dock_dialog_window_created ();
 		}
 	}
 	pDialog->bPositionForced = FALSE;

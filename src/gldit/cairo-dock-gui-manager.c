@@ -52,36 +52,6 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 static CairoDockGuiBackend *s_pGuiBackend = NULL;
 static CairoDockLauncherGuiBackend *s_pLauncherGuiBackend = NULL;
 
-  //////////////////////////
- // MAIN DOCK VISIBILITY //
-//////////////////////////
-
-static int iNbConfigDialogs = 0;
-int cairo_dock_get_nb_dialog_windows (void)
-{
-	return iNbConfigDialogs;
-}
-
-void cairo_dock_dialog_window_destroyed (void)
-{
-	/**iNbConfigDialogs --;
-	if (iNbConfigDialogs <= 0)
-	{
-		iNbConfigDialogs = 0;
-		if (g_pMainDock != NULL)  // peut arriver au 1er lancement.
-			cairo_dock_pop_down (g_pMainDock);
-	}*/
-	//g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
-}
-
-void cairo_dock_dialog_window_created (void)
-{
-	/**iNbConfigDialogs ++;
-	//g_print ("iNbConfigDialogs <- %d\n", iNbConfigDialogs);
-	if (g_pMainDock != NULL && cairo_dock_search_window_covering_dock (g_pMainDock, FALSE, TRUE) == NULL)  // peut etre NULL au 1er lancement.
-		cairo_dock_pop_up (g_pMainDock);*/
-}
-
 
   //////////////////////////
  // DYNAMIC CONFIG PANEL //
@@ -304,8 +274,6 @@ static gboolean on_delete_generic_gui (GtkWidget *pWidget, GdkEvent *event, GMai
 	gchar *cConfFilePath = g_object_get_data (G_OBJECT (pWidget), "conf-file");
 	g_free (cConfFilePath);
 	
-	cairo_dock_dialog_window_destroyed ();
-	
 	return (pBlockingLoop != NULL);  // TRUE <=> ne pas detruire la fenetre.
 }
 
@@ -448,7 +416,6 @@ GtkWidget *cairo_dock_build_generic_gui_window (const gchar *cTitle, int iWidth,
 		MIN (iHeight, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	gtk_widget_show_all (pMainWindow);
-	cairo_dock_dialog_window_created ();
 	
 	int iResult = 0;
 	if (pAction != NULL)

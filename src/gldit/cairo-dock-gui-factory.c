@@ -74,7 +74,18 @@ typedef struct {
 
 
 #define _cairo_dock_gui_allocate_new_model(...)\
-	gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_INT, G_TYPE_INT)
+	gtk_list_store_new (CAIRO_DOCK_MODEL_NB_COLUMNS,\
+		G_TYPE_STRING,  /* CAIRO_DOCK_MODEL_NAME*/\
+		G_TYPE_STRING,  /* CAIRO_DOCK_MODEL_RESULT*/\
+		G_TYPE_STRING,  /* CAIRO_DOCK_MODEL_DESCRIPTION_FILE*/\
+		G_TYPE_STRING,  /* CAIRO_DOCK_MODEL_IMAGE*/\
+		G_TYPE_BOOLEAN,  /* CAIRO_DOCK_MODEL_ACTIVE*/\
+		G_TYPE_INT,  /* CAIRO_DOCK_MODEL_ORDER*/\
+		G_TYPE_INT,  /* CAIRO_DOCK_MODEL_ORDER2*/\
+		GDK_TYPE_PIXBUF,  /* CAIRO_DOCK_MODEL_ICON*/\
+		G_TYPE_INT,  /* CAIRO_DOCK_MODEL_STATE*/\
+		G_TYPE_DOUBLE,  /* CAIRO_DOCK_MODEL_SIZE*/\
+		G_TYPE_STRING)  /* CAIRO_DOCK_MODEL_AUTHOR*/
 
 static void _cairo_dock_activate_one_element (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
@@ -211,17 +222,85 @@ static void _cairo_dock_remove (GtkButton *button, gpointer *data)
 	g_free (cValue);
 }
 
+static gchar* _cairo_dock_gui_get_package_title (const gchar* cTitle, const gchar* cVersion)
+{
+	gchar *cTitleVersion;
+	if (cTitle == NULL)
+		cTitleVersion = NULL;
+	else if (cVersion == NULL)
+		cTitleVersion = g_strconcat ("<b>", cTitle, "</b>", NULL);
+	else
+		cTitleVersion = g_strconcat ("<b>", cTitle, "</b> - ", cVersion, NULL);
+	return cTitleVersion;
+}
+
+static gchar* _cairo_dock_gui_get_package_author (const gchar* cAuthor)
+{
+	if (cAuthor == NULL)
+		return NULL;
+	gchar *cBy = g_strdup_printf (_("by %s"), cAuthor);
+	gchar *cThemed = g_strdup_printf ("<small><i>%s </i></small>", cBy);  // need space after to prevent italic display bug (top right text truncated)
+	g_free (cBy);
+	return cThemed;
+}
+
+static gchar* _cairo_dock_gui_get_package_size (double fSize)
+{
+	if (fSize < 0.001)  // < 1ko
+		return NULL;
+	gchar *cThemed;
+	if (fSize < .1)
+		cThemed = g_strdup_printf ("<small>%.0f%s</small>", fSize*1e3, _("kB"));
+	else
+		cThemed = g_strdup_printf ("<small>%.1f%s</small>", fSize, _("MB"));
+	return cThemed;
+}
+
+static const gchar* _cairo_dock_gui_get_package_state (gint iState)
+{
+	const gchar *cState = NULL;
+	switch (iState)
+	{
+		case CAIRO_DOCK_LOCAL_PACKAGE:          cState = _("Local"); break;
+		case CAIRO_DOCK_USER_PACKAGE:           cState = _("User"); break;
+		case CAIRO_DOCK_DISTANT_PACKAGE:        cState = _("Net"); break;
+		case CAIRO_DOCK_NEW_PACKAGE:            cState = _("New"); break;
+		case CAIRO_DOCK_UPDATED_PACKAGE:        cState = _("Updated"); break;
+		default:                                cState = NULL; break;
+	}
+	return cState;
+}
+
+static GdkPixbuf* _cairo_dock_gui_get_package_state_icon (gint iState)
+{
+	/// Need appropriate icons here !...
+	const gchar *cType;
+	switch (iState)
+	{
+		case CAIRO_DOCK_LOCAL_PACKAGE: 		cType = "icons/harddisk.svg"; break; // "icon-internet.svg"
+		case CAIRO_DOCK_USER_PACKAGE: 		cType = "icons/user.svg"; break; // "plug-ins/MeMenu/icon.svg"
+		case CAIRO_DOCK_DISTANT_PACKAGE: 	cType = "icons/internet.svg"; break; // icon-internet.svg plug-ins/wifi/link-5.svg
+		case CAIRO_DOCK_NEW_PACKAGE: 		cType = "icons-indicator.svg"; break;
+		case CAIRO_DOCK_UPDATED_PACKAGE:	cType = "plug-ins/wifi/link-4.svg"; break; // rotate-desklet.svg
+		default: 							cType = NULL; break;
+	}
+	gchar *cStateIcon = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/", cType, NULL);
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cStateIcon, 24, 24, NULL);
+	g_free (cStateIcon);
+	return pixbuf;
+}
+
 static gboolean on_delete_async_widget (GtkWidget *pMainWindow, GdkEvent *event, GtkWidget *pWidget)
 {
-	//g_print ("%s ()\n", __func__);
+	g_print ("%s ()\n", __func__);
 	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pWidget), "cd-task");
 	if (pTask != NULL)
 	{
 		cairo_dock_discard_task (pTask);
 		g_object_set_data (G_OBJECT (pWidget), "cd-task", NULL);
 	}
-	g_object_unref (G_OBJECT (pWidget));
-	return FALSE;
+	g_object_unref (G_OBJECT (pWidget));  // on retire la reference qu'on avait prise, ce qui detruit donc le widget.
+	return FALSE;  // propagate event
 }
 
 static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *pPreviewImage)
@@ -250,13 +329,13 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 static void _on_got_readme (const gchar *cDescription, GtkWidget *pDescriptionLabel)
 {
 	//g_print ("%s ()\n", __func__);
-	gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDescription ? cDescription : "");
+	gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDescription);
 	
 	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
 	if (pTask != NULL)
 	{
 		//g_print ("remove the task\n");
-		cairo_dock_discard_task (pTask);
+		cairo_dock_discard_task (pTask);  // pas de cairo_dock_free_task dans la callback de la tache.
 		g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", NULL);
 	}
 }
@@ -277,16 +356,48 @@ static void _on_got_preview_file (const gchar *cPreviewFilePath, GtkWidget *pPre
 static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter, gpointer *data)
 {
 	static gchar *s_cPrevPreview = NULL, *s_cPrevReadme = NULL;
+	// get the widgets of the global preview widget.
 	GtkLabel *pDescriptionLabel = data[0];
+	GtkImage *pPreviewImage = data[1];
+	GtkLabel* pTitle = data[2];
+	GtkLabel* pAuthor = data[3];
+	GtkLabel* pState = data[4];
+	GtkImage* pStateIcon = data[5];
+	GtkLabel* pSize = data[6];
+	
 	gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_FILL);
 	gtk_label_set_line_wrap (pDescriptionLabel, TRUE);
-	GtkImage *pPreviewImage = data[1];
-	GError *erreur = NULL;
-	gchar *cDescriptionFilePath = NULL, *cPreviewFilePath = NULL, *cName = NULL;
+	
+	// get the info of this theme.
+	gchar *cDescriptionFilePath = NULL, *cPreviewFilePath = NULL, *cName = NULL, *cAuthor = NULL;
+	gint iState = 0;
+	double fSize = 0.;
+	GdkPixbuf *pixbuf = NULL;
 	gtk_tree_model_get (model, &iter,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, &cDescriptionFilePath,
-		CAIRO_DOCK_MODEL_IMAGE, &cPreviewFilePath, -1);
+		CAIRO_DOCK_MODEL_IMAGE, &cPreviewFilePath,
+		CAIRO_DOCK_MODEL_NAME, &cName,
+		CAIRO_DOCK_MODEL_AUTHOR, &cAuthor,
+		CAIRO_DOCK_MODEL_ICON, &pixbuf,
+		CAIRO_DOCK_MODEL_SIZE, &fSize,
+		CAIRO_DOCK_MODEL_STATE, &iState, -1);
+	g_print ("line selected (%s; %s; %f)\n", cDescriptionFilePath, cPreviewFilePath, fSize);
 	
+	// fill the info bar.
+	gchar *cTitle = _cairo_dock_gui_get_package_title (cName, NULL);
+	gtk_label_set_label(GTK_LABEL (pTitle), cTitle);
+	g_free (cTitle);
+	gchar *cBy = _cairo_dock_gui_get_package_author (cAuthor);
+	gtk_label_set_label(GTK_LABEL (pAuthor), cBy);
+	g_free (cBy);
+	const gchar *cState = _cairo_dock_gui_get_package_state (iState);
+	gtk_label_set_label(GTK_LABEL (pState), cState);
+	gchar *cSize = _cairo_dock_gui_get_package_size (fSize);
+	gtk_label_set_label (GTK_LABEL (pSize), cSize);
+	g_free (cSize);
+	gtk_image_set_from_pixbuf (GTK_IMAGE (pStateIcon), pixbuf);
+	
+	// get or fill the readme.
 	if (cDescriptionFilePath != NULL && (1 || !s_cPrevReadme || strcmp (s_cPrevReadme, cDescriptionFilePath) != 0))
 	{
 		CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
@@ -306,7 +417,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			g_return_if_fail (str != NULL);
 			*str = '\0';
 			
-			gtk_label_set_markup (pDescriptionLabel, "...");
+			gtk_label_set_markup (pDescriptionLabel, "loading...");
 			pTask = cairo_dock_get_distant_file_content_async (cDescriptionFilePath, "", str+1, (GFunc) _on_got_readme, pDescriptionLabel);
 			g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", pTask);
 			//g_print ("new task : %x\n", pTask);
@@ -319,7 +430,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 				&cDescription,
 				&length,
 				NULL);
-			gtk_label_set_markup (pDescriptionLabel, cDescription ? cDescription : "");
+			gtk_label_set_markup (pDescriptionLabel, cDescription);
 			g_free (cDescription);
 		}
 		else if (strcmp (cDescriptionFilePath, "none") != 0)  // texte de la description.
@@ -327,9 +438,10 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			gtk_label_set_markup (pDescriptionLabel, cDescriptionFilePath);
 		}
 		else  // rien.
-			gtk_label_set_markup (pDescriptionLabel, "");
+			gtk_label_set_markup (pDescriptionLabel, NULL);
 	}
 
+	// get or fill the preview image.
 	if (cPreviewFilePath != NULL && (1 || !s_cPrevPreview || strcmp (s_cPrevPreview, cPreviewFilePath) != 0))
 	{
 		g_free (s_cPrevPreview);
@@ -339,6 +451,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		if (strncmp (cPreviewFilePath, "http://", 7) == 0)  // fichier distant.
 		{
 			cd_debug ("fichier preview distant (%s)", cPreviewFilePath);
+			gtk_image_set_from_pixbuf (pPreviewImage, NULL);  // set blank image while downloading.
 			
 			gchar *str = strrchr (cPreviewFilePath, '/');
 			g_return_if_fail (str != NULL);
@@ -357,6 +470,10 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 
 	g_free (cDescriptionFilePath);
 	g_free (cPreviewFilePath);
+	g_free (cName);
+	g_free (cAuthor);
+	if (pixbuf)
+		g_object_unref (pixbuf);
 }
 
 static void _cairo_dock_select_custom_item_in_combo (GtkComboBox *widget, gpointer *data)
@@ -1002,25 +1119,6 @@ void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable)
 	_build_list_for_gui (s_pAnimationsListStore, "", pHashTable, _cairo_dock_add_one_animation_item);
 }
 
-/**static void _add_one_animation_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
-{
-	if (!pRecord->bIsEffect)
-		_cairo_dock_add_one_animation_item (cName, pRecord, pModele);
-}
-static void _add_one_effect_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
-{
-	if (pRecord->bIsEffect)
-		_cairo_dock_add_one_animation_item (cName, pRecord, pModele);
-}
-static GtkListStore * _cairo_dock_build_animations_effect_list_for_gui (gboolean bEffectOnly)
-{
-	GtkListStore *pListStore = _cairo_dock_gui_allocate_new_model ();
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pListStore), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
-	_cairo_dock_add_one_animation_item ("", NULL, pListStore);
-	cairo_dock_foreach_animation ((GHFunc) (bEffectOnly ? _add_one_effect_item : _add_one_animation_item), pListStore);
-	return pListStore;
-}*/
-
 static void _cairo_dock_add_one_dialog_decorator_item (const gchar *cName, CairoDialogDecorator *pDecorator, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
@@ -1058,7 +1156,6 @@ static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock,
 	if (pDock != NULL)  // peut etre NULL (entree vide)
 	{
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-		///if (CAIRO_DOCK_IS_APPLET (pPointingIcon) || CAIRO_DOCK_IS_MULTI_APPLI (pPointingIcon) || CAIRO_DOCK_IS_URI_LAUNCHER (pPointingIcon))  // on evite les sous-docks d'applet, de classe, et de repertoire.
 		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_FILE (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))  // on evite les sous-docks d'applet, de classe, et de repertoire.
 			return ;
 	}	
@@ -1106,6 +1203,7 @@ static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockP
 	gchar *cPreviewPath = g_strdup_printf ("%s/preview", pTheme->cPackagePath);
 	gchar *cResult = g_strdup_printf ("%s[%d]", cThemeName, pTheme->iType);
 	
+	GdkPixbuf *pixbuf = _cairo_dock_gui_get_package_state_icon (pTheme->iType);
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
 		CAIRO_DOCK_MODEL_NAME, pTheme->cDisplayedName,
 		CAIRO_DOCK_MODEL_RESULT, cResult ? cResult : cThemeName,
@@ -1114,10 +1212,14 @@ static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockP
 		CAIRO_DOCK_MODEL_IMAGE, cPreviewPath, 
 		CAIRO_DOCK_MODEL_ORDER, pTheme->iRating,
 		CAIRO_DOCK_MODEL_ORDER2, pTheme->iSobriety,
-		CAIRO_DOCK_MODEL_STATE, pTheme->iType, -1);
+		CAIRO_DOCK_MODEL_STATE, pTheme->iType,
+		CAIRO_DOCK_MODEL_SIZE, pTheme->fSize,
+		CAIRO_DOCK_MODEL_ICON, pixbuf,
+		CAIRO_DOCK_MODEL_AUTHOR, pTheme->cAuthor, -1);
 	g_free (cReadmePath);
 	g_free (cPreviewPath);
 	g_free (cResult);
+	///g_object_unref (pixbuf); a faire ?...
 }
 static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModele)
 {
@@ -1165,7 +1267,7 @@ static gboolean _test_one_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeI
 	g_free (cResult);
 	return FALSE;
 }
-static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, const gchar *cName, GtkTreeIter *iter, gboolean bIsTheme)
+static gboolean _cairo_dock_find_iter_from_name_full (GtkListStore *pModele, const gchar *cName, GtkTreeIter *iter, gboolean bIsTheme)
 {
 	//g_print ("%s (%s)\n", __func__, cName);
 	if (cName == NULL)
@@ -1175,7 +1277,7 @@ static gboolean _cairo_dock_find_iter_from_name (GtkListStore *pModele, const gc
 	gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _test_one_name, data);
 	return bFound;
 }
-#define cairo_dock_find_iter_from_name(pModele, cName, iter) _cairo_dock_find_iter_from_name (pModele, cName, iter, FALSE)
+#define _cairo_dock_find_iter_from_name(pModele, cName, iter) _cairo_dock_find_iter_from_name_full (pModele, cName, iter, FALSE)
 
 static void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTable, gchar *cActiveTheme)
 {
@@ -1185,7 +1287,7 @@ static void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pT
 	
 	GtkTreeIter iter;
 	cairo_dock_extract_package_type_from_name (cActiveTheme);
-	if (_cairo_dock_find_iter_from_name (GTK_LIST_STORE (modele), cActiveTheme, &iter, TRUE))
+	if (_cairo_dock_find_iter_from_name_full (GTK_LIST_STORE (modele), cActiveTheme, &iter, TRUE))
 	{
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
 		gboolean bReturn;
@@ -1203,10 +1305,27 @@ static void _got_themes_combo_list (GHashTable *pThemeTable, gpointer *data)
 	}
 	else
 		cairo_dock_set_status_message (data[1], "");
-	GtkWidget *pCombo = data[0];
 	
+	GtkWidget *pCombo = data[0];
 	gchar *cValue = data[2];
-	cairo_dock_fill_combo_with_themes (pCombo, pThemeTable, cValue);
+	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pCombo), "cd-task");
+	
+	if (pTask != NULL)
+	{
+		//g_print ("remove the task\n");
+		cairo_dock_discard_task (pTask);  // pas de cairo_dock_free_task dans la callback de la tache.
+		g_object_set_data (G_OBJECT (pCombo), "cd-task", NULL);
+	}
+	
+	if (gtk_widget_get_parent (pCombo) == NULL)  // la fenetre a ete rechargee avant que la tache se soit finie.
+	{
+		g_print ("old task, skip");
+		g_object_unref (pCombo);  // on retire la reference qu'on avait prise, ce qui detruit donc le widget.
+	}
+	else
+	{
+		cairo_dock_fill_combo_with_themes (pCombo, pThemeTable, cValue);
+	}
 	g_free (cValue);
 	data[2] = NULL;
 }
@@ -1289,7 +1408,11 @@ static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, G
 	}
 	else
 	{
-		g_object_set (cell, "text", iColumnIndex == CAIRO_DOCK_MODEL_ORDER ? _("rate me") : "-", NULL);
+		gchar *cRateMe = NULL;
+		if (iColumnIndex == CAIRO_DOCK_MODEL_ORDER)  // note, peut etre changee (la sobriete ne peut pas).
+			cRateMe = g_strconcat ("<small><i>", _("Rate me"), "</i></small>", NULL);
+		g_object_set (cell, "markup", cRateMe ? cRateMe : "   -", NULL);  // pour la sobriete d'un theme utilisateur, plutot que d'avoir une case vide, on met un tiret dedans.
+		g_free (cRateMe);
 	}
 }
 static void _cairo_dock_render_sobriety (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
@@ -1301,7 +1424,7 @@ static void _cairo_dock_render_rating (GtkTreeViewColumn *tree_column, GtkCellRe
 	/// ignorer les themes "default"...
 	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER);
 }
-static void _cairo_dock_render_state (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+/*static void _cairo_dock_render_state (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
 {
 	const gchar *cState=NULL;
 	gint iState = 0;
@@ -1337,7 +1460,7 @@ static void _cairo_dock_render_state (GtkTreeViewColumn *tree_column, GtkCellRen
 	{
 		g_object_set (cell, "text", cState, NULL);
 	}
-}
+}*/
 static GtkListStore *_make_rate_list_store (void)
 {
 	GString *s = g_string_sized_new (CD_MAX_RATING*4+1);
@@ -1532,8 +1655,128 @@ static void _cairo_dock_render_theme_name (GtkCellLayout *cell_layout,
 }
 
 #define _allocate_new_buffer\
-	data = g_new (gconstpointer, 3); \
+	data = g_new0 (gconstpointer, 7); \
 	g_ptr_array_add (pDataGarbage, data);
+
+static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidget, gboolean bHorizontalPackaging, int iAddInfoBar, const gchar *cInitialDescription, const gchar *cInitialImage, GPtrArray *pDataGarbage)
+{
+	gconstpointer *data;
+	_allocate_new_buffer;
+	
+	// readme label.
+	GtkWidget *pDescriptionLabel = gtk_label_new (NULL);
+	
+	g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pDescriptionLabel);
+	g_object_ref (pDescriptionLabel);
+	
+	gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
+	if (bHorizontalPackaging)
+		gtk_widget_set_size_request (pDescriptionLabel, 500, CAIRO_DOCK_PREVIEW_HEIGHT);
+	else
+		gtk_widget_set (pDescriptionLabel, "width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
+	gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);
+	gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);
+	
+	// preview image
+	GtkWidget *pPreviewImage = gtk_image_new_from_pixbuf (NULL);
+	
+	g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pPreviewImage);
+	g_object_ref (pPreviewImage);
+	
+	gtk_widget_set (pPreviewImage,
+		"height-request", CAIRO_DOCK_PREVIEW_HEIGHT,
+		"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
+	
+	// info bar
+	GtkWidget* pDescriptionFrame = NULL;
+	if (iAddInfoBar)
+	{
+		// vertical frame.
+		pDescriptionFrame = gtk_frame_new (NULL);
+		gtk_frame_set_shadow_type(GTK_FRAME(pDescriptionFrame), GTK_SHADOW_OUT);
+		GtkWidget* pFrameVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+		gtk_container_add (GTK_CONTAINER(pDescriptionFrame), pFrameVBox);
+		
+		// title
+		GtkWidget* pTitle = gtk_label_new (NULL);
+		gtk_label_set_use_markup (GTK_LABEL (pTitle), TRUE);
+		
+		// author
+		GtkWidget* pAuthor = gtk_label_new (NULL);
+		gtk_label_set_use_markup (GTK_LABEL (pAuthor), TRUE);
+		
+		data[2] = pTitle;
+		data[3] = pAuthor;
+		
+		// pack in 1 or 2 lines.
+		GtkWidget* pFirstLine = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+		GtkWidget *pSecondLine = NULL;
+		
+		gtk_box_pack_start (GTK_BOX (pFirstLine), pTitle, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);
+		
+		if (iAddInfoBar == 1)
+		{
+			gtk_box_pack_end (GTK_BOX (pFirstLine), pAuthor, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);
+		}
+		else
+		{
+			GtkWidget* pState = gtk_label_new (NULL);
+			gtk_label_set_use_markup (GTK_LABEL (pState), TRUE);
+			gtk_box_pack_end (GTK_BOX (pFirstLine), pState, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);  // state on the right.
+			
+			GtkWidget* pStateIcon = gtk_image_new_from_pixbuf (NULL);
+			gtk_box_pack_end (GTK_BOX (pFirstLine), pStateIcon, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);  // icon next to state.
+			
+			pSecondLine = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+			
+			gtk_box_pack_start (GTK_BOX (pSecondLine), pAuthor, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);  // author below title.
+			
+			GtkWidget* pSize = gtk_label_new (NULL);
+			gtk_label_set_use_markup (GTK_LABEL (pSize), TRUE);
+			gtk_box_pack_end (GTK_BOX (pSecondLine), pSize, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);  // size below state.
+			
+			data[4] = pState;
+			data[5] = pStateIcon;
+			data[6] = pSize;
+		}
+		// pack everything in the frame vbox.
+		gtk_box_pack_start (GTK_BOX (pFrameVBox), pFirstLine, FALSE, FALSE, CAIRO_DOCK_GUI_MARGIN);
+		if (pSecondLine)
+			gtk_box_pack_start (GTK_BOX (pFrameVBox), pSecondLine, FALSE, FALSE, CAIRO_DOCK_GUI_MARGIN);
+		gtk_box_pack_start (GTK_BOX (pFrameVBox), pDescriptionLabel, TRUE, TRUE, 0);
+	}
+	
+	// connect to the widget.
+	data[0] = pDescriptionLabel;
+	data[1] = pPreviewImage;
+	if (GTK_IS_COMBO_BOX (pOneWidget))
+	{
+		g_signal_connect (G_OBJECT (pOneWidget),
+			"changed",
+			G_CALLBACK (_cairo_dock_select_one_item_in_combo),
+			data);
+	}
+	else if (GTK_IS_TREE_VIEW (pOneWidget))
+	{
+		GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
+		gtk_tree_selection_set_select_function (selection,
+			(GtkTreeSelectionFunc) _cairo_dock_select_one_item_in_tree,
+			data,
+			NULL);
+	}
+	
+	// pack eveything in a box.
+	GtkWidget *pPreviewBox = (bHorizontalPackaging ? gtk_hbox_new : gtk_vbox_new) (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionFrame ? pDescriptionFrame : pDescriptionLabel, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);
+	
+	// initial values
+	if (cInitialDescription)
+		gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cInitialDescription);
+	if (cInitialImage)
+		_set_preview_image (cInitialImage, GTK_IMAGE (pPreviewImage));
+	return pPreviewBox;
+}
 
 #define _pack_in_widget_box(pSubWidget) gtk_box_pack_start (GTK_BOX (pWidgetBox), pSubWidget, FALSE, FALSE, 0)
 #define _pack_subwidget(pSubWidget) do {\
@@ -1570,26 +1813,9 @@ static void _cairo_dock_render_theme_name (GtkCellLayout *cell_layout,
 			gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);\
 			gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);}\
 		if (bAddPreviewWidgets) {\
-			pDescriptionLabel = gtk_label_new (NULL);\
-			g_signal_connect (pMainWindow, "destroy-event", G_CALLBACK (on_delete_async_widget), pDescriptionLabel);\
-			g_object_ref (pDescriptionLabel);\
-			gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);\
-			gtk_widget_set_size_request (pDescriptionLabel, 500, CAIRO_DOCK_PREVIEW_HEIGHT);\
-			gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);\
-			gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);\
-			pPreviewImage = gtk_image_new_from_pixbuf (NULL);\
-			g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pPreviewImage);\
-			g_object_ref (pPreviewImage);\
-			gtk_widget_set (pPreviewImage, "height-request", CAIRO_DOCK_PREVIEW_HEIGHT, "width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);\
-			_allocate_new_buffer;\
-			data[0] = pDescriptionLabel;\
-			data[1] = pPreviewImage;\
-			g_signal_connect (G_OBJECT (pOneWidget), "changed", G_CALLBACK (_cairo_dock_select_one_item_in_combo), data);\
-			pPreviewBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);\
-			gtk_box_pack_start (GTK_BOX (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox), pPreviewBox, FALSE, FALSE, 0);\
-			gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);\
-			gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0); }\
-		if (cairo_dock_find_iter_from_name (modele, cValue, &iter))\
+			pPreviewBox = _make_preview_box (pMainWindow, pOneWidget, TRUE, 0, NULL, NULL, pDataGarbage);\
+			gtk_box_pack_start (GTK_BOX (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox), pPreviewBox, FALSE, FALSE, 0);}\
+		if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))\
 			gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);\
 		_pack_subwidget (pOneWidget);\
 		g_free (cValue); } } while (0)
@@ -1921,7 +2147,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				}
 				g_free (cValue);
 			}
-			else if (*cUsefulComment != '\0' && strcmp (cUsefulComment, "...") != 0)
+			else if (*cUsefulComment != '\0' && strcmp (cUsefulComment, "loading...") != 0)
 			{
 				pLabel = gtk_label_new (NULL);
 				gtk_label_set_use_markup  (GTK_LABEL (pLabel), TRUE);
@@ -2191,7 +2417,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					_allocate_new_buffer;
 					data[0] = pOneWidget;
 					data[1] = pMainWindow;
-					data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+					data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // libere dans la callback de la tache.
 					CairoDockTask *pTask = cairo_dock_list_packages_async (cShareThemesDir, cUserThemesDir, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_combo_list, data);
 					g_object_set_data (G_OBJECT (pOneWidget), "cd-task", pTask);
 					g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pOneWidget);
@@ -2245,16 +2471,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			break ;
 			
-			/**case CAIRO_DOCK_WIDGET_GAUGE_LIST :  // liste des themes de jauge.
-				if (s_pGaugeListStore == NULL)
-				{
-					GHashTable *pGaugeTable = cairo_dock_list_available_gauges ();
-					cairo_dock_build_gauge_list_for_gui (pGaugeTable);
-					g_hash_table_destroy (pGaugeTable);
-				}
-				_add_combo_from_modele (s_pGaugeListStore, FALSE, FALSE);
-			break ;*/
-			
 			case CAIRO_DOCK_WIDGET_DOCK_LIST :  // liste des docks existant.
 				cairo_dock_build_dock_list_for_gui ();
 				modele = s_pDocksListStore;
@@ -2262,7 +2478,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				GtkTreeIter iter;
-				if (cairo_dock_find_iter_from_name (modele, cValue, &iter))
+				if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))
 					gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
 				g_free (cValue);
 				
@@ -2347,7 +2563,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_in_widget_box (pScrolledWindow);
 				
 				//\______________ On construit le widget de prevue et on le rajoute a la suite.
-				pDescriptionLabel = gtk_label_new (NULL);
+				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
+				pPreviewBox = _make_preview_box (pMainWindow, pOneWidget, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
+				_pack_in_widget_box (pPreviewBox);
+				g_free (cDefaultMessage);
+				/**pDescriptionLabel = gtk_label_new (NULL);
 				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pDescriptionLabel);
 				g_object_ref (pDescriptionLabel);
 				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
@@ -2377,7 +2597,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
 				gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDefaultMessage);
 				g_free (cDefaultMessage);
-				_set_preview_image (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, GTK_IMAGE (pPreviewImage));
+				_set_preview_image (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, GTK_IMAGE (pPreviewImage));*/
 			}
 			break ;
 			
@@ -2776,11 +2996,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				g_object_set_data (G_OBJECT (pOneWidget), "get-selected-line-only", GINT_TO_POINTER (1));
 				GtkTreeViewColumn* col;
 				// etat
-				rend = gtk_cell_renderer_text_new ();
-				col = gtk_tree_view_column_new_with_attributes (_("state"), rend, "text", CAIRO_DOCK_MODEL_STATE, NULL);
-				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_STATE);
-				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_state, NULL, NULL);
-				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
+				rend = gtk_cell_renderer_pixbuf_new ();
+				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "pixbuf", CAIRO_DOCK_MODEL_ICON, NULL);
+				
 				// nom du theme
 				rend = gtk_cell_renderer_text_new ();
 				col = gtk_tree_view_column_new_with_attributes (_("Theme"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
@@ -2817,7 +3035,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_in_widget_box (pScrolledWindow);
 				
 				//\______________ On construit le widget de prevue et on le rajoute a la suite.
-				pDescriptionLabel = gtk_label_new (NULL);
+				pPreviewBox = _make_preview_box (pMainWindow, pOneWidget, FALSE, 2, NULL, NULL, pDataGarbage);  // vertical packaging.
+				/**pDescriptionLabel = gtk_label_new (NULL);
 				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pDescriptionLabel);
 				g_object_ref (pDescriptionLabel);
 				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
@@ -2840,7 +3059,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					NULL);
 				pPreviewBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
 				gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);
-				gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);
+				gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);*/
 				_pack_in_widget_box (pPreviewBox);
 				
 				//\______________ On recupere les themes.
@@ -3143,9 +3362,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				bInsert = FALSE;
 			break ;
 		}
-
-		///if (pSubWidgetList != NULL)
-		if (bInsert)
+		
+		if (bInsert)  // donc pSubWidgetList peut etre NULL
 		{
 			pGroupKeyWidget = g_new0 (CairoDockGroupKeyWidget, 1);
 			pGroupKeyWidget->cGroupName = g_strdup (cGroupName);  // car on ne pourra pas le liberer s'il est partage entre plusieurs 'data'.
@@ -3164,13 +3382,15 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_in_widget_box (pBackButton);
 			}
 		}
+		else
+			g_free (cKeyName);
 		
 		if (pAuthorizedValuesList != NULL)
 			g_strfreev (pAuthorizedValuesList);
 		g_free (cKeyComment);
 	}
-	g_free (cGroupComment);  // cSmallGroupIcon et cDisplayedGroupName pointaient dessus.
-	g_free (pKeyList);  // on libere juste la liste de chaines, pas les chaines a l'interieur.
+	g_free (cGroupComment);  // libere a la fin car cSmallGroupIcon et cDisplayedGroupName pointaient dessus.
+	g_free (pKeyList);  // les chaines a l'interieur sont dans les group-key widgets.
 	
 	if (pControlWidgets != NULL)
 		cd_warning ("this conf file has an invalid combo list somewhere !");
@@ -3457,16 +3677,18 @@ void cairo_dock_update_keyfile_from_widget_list (GKeyFile *pKeyFile, GSList *pWi
 
 
 
-static void _cairo_dock_free_widget_list (gpointer *data, gpointer user_data)
+static void _cairo_dock_free_group_key_widget (CairoDockGroupKeyWidget *pGroupKeyWidget, gpointer user_data)
 {
         cd_debug ("");
-        g_free (data[0]);
-        g_free (data[1]);
-        g_slist_free (data[2]);  // les elements de data[2] sont les widgets, et se feront liberer lors de la destruction de la fenetre.
+        g_free (pGroupKeyWidget->cKeyName);
+        g_free (pGroupKeyWidget->cGroupName);
+        g_slist_free (pGroupKeyWidget->pSubWidgetList);  // les elements de pSubWidgetList sont les widgets, et se feront liberer lors de la destruction de la fenetre.
+        // cOriginalConfFilePath n'est pas duplique.
+        g_free (pGroupKeyWidget);
 }
 void cairo_dock_free_generated_widget_list (GSList *pWidgetList)
 {
-        g_slist_foreach (pWidgetList, (GFunc) _cairo_dock_free_widget_list, NULL);
+        g_slist_foreach (pWidgetList, (GFunc) _cairo_dock_free_group_key_widget, NULL);
         g_slist_free (pWidgetList);
 }
 
@@ -3494,7 +3716,7 @@ void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, co
 			CAIRO_DOCK_MODEL_IMAGE, "none", -1);
 	}
 	
-	if (cActiveElement != NULL && cairo_dock_find_iter_from_name (GTK_LIST_STORE (pModele), cActiveElement, &iter))
+	if (cActiveElement != NULL && _cairo_dock_find_iter_from_name (GTK_LIST_STORE (pModele), cActiveElement, &iter))
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
 }
 
@@ -3539,7 +3761,7 @@ void cairo_dock_gui_select_in_combo (GtkWidget *pOneWidget, const gchar *cValue)
 	GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
 	g_return_if_fail (model != NULL);
 	GtkTreeIter iter;
-	if (cairo_dock_find_iter_from_name (GTK_LIST_STORE (model), cValue, &iter))
+	if (_cairo_dock_find_iter_from_name (GTK_LIST_STORE (model), cValue, &iter))
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
 }
 

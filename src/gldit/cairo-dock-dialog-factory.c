@@ -611,8 +611,6 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	if (pDialog->pUserData != NULL && pDialog->pFreeUserDataFunc != NULL)
 		pDialog->pFreeUserDataFunc (pDialog->pUserData);
 	
-	if (pDialog->pIcon && pDialog->pIcon->cParentDockName != NULL)
-		cairo_dock_dialog_window_destroyed ();
 	g_free (pDialog);
 }
 

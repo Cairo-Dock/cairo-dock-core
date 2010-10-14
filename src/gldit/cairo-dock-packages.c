@@ -468,7 +468,7 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 	g_return_if_fail (pGroupList != NULL);  // rien a charger dans la table, on quitte.
 	
 	// on parcourt la liste.
-	gchar *cPackageName, *cDate, *cDisplayedName, *cName, *cAuthor;
+	gchar *cPackageName, *cName, *cAuthor;
 	CairoDockPackage *pPackage;
 	CairoDockPackageType iType;
 	double fSize;
@@ -489,10 +489,11 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 			g_free (cAuthor);
 			cAuthor = NULL;
 		}
-		cName = NULL;
-		if (g_key_file_has_key (pKeyFile, cPackageName, "name", NULL))
+		cName = g_key_file_get_string (pKeyFile, cPackageName, "name", NULL);
+		if (cName && *cName == '\0')
 		{
-			cName = g_key_file_get_string (pKeyFile, cPackageName, "name", NULL);
+			g_free (cName);
+			cName = NULL;
 		}
 		
 		// creation < 30j && pas sur le disque -> new
@@ -520,7 +521,7 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 					iLocalDate = day + (month - 1) * 1e2 + year * 1e4;
 				else
 					iLocalDate = day + 12 * 1e2 + (year - 1) * 1e4;
-				cDate = g_strdup_printf ("%d", iLocalDate);
+				gchar *cDate = g_strdup_printf ("%d", iLocalDate);
 				g_file_set_contents (cVersionFile,
 					cDate,
 					-1,
@@ -541,9 +542,8 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 			{
 				pSamePackage->iSobriety = iSobriety;  // par contre on en profite pour renseigner la sobriete.
 				g_free (pSamePackage->cDisplayedName);
-				pSamePackage->cDisplayedName = g_strdup_printf ("%s by %s", cName ? cName : cPackageName, (cAuthor ? cAuthor : "---"));
-				pSamePackage->cAuthor = cAuthor;
-				g_free (cName);
+				pSamePackage->cDisplayedName = (cName ? cName : g_strdup (cPackageName));
+				pSamePackage->cAuthor = cAuthor;  // et l'auteur original.
 				g_free (cPackageName);
 				continue;
 			}
@@ -566,7 +566,7 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 				iType = CAIRO_DOCK_DISTANT_PACKAGE;
 			
 			pPackage = g_new0 (CairoDockPackage, 1);
-			g_hash_table_insert (pPackageTable, cPackageName, pPackage);
+			g_hash_table_insert (pPackageTable, g_strdup (cPackageName), pPackage);
 			pPackage->iRating = g_key_file_get_integer (pKeyFile, cPackageName, "rating", NULL);  // par contre on affiche la note que l'utilisateur avait precedemment etablie.
 		}
 		
@@ -574,13 +574,14 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 		pPackage->iType = iType;
 		pPackage->fSize = fSize;
 		pPackage->cAuthor = cAuthor;
-		pPackage->cDisplayedName = g_strdup_printf ("%s by %s [%.2f MB]", cName ? cName : cPackageName, (cAuthor ? cAuthor : "---"), fSize);
+		pPackage->cDisplayedName = (cName ? cName : g_strdup (cPackageName));
 		pPackage->iSobriety = iSobriety;
 		pPackage->iCategory = iCategory;
 		pPackage->iCreationDate = iCreationDate;
 		pPackage->iLastModifDate = iLastModifDate;
+		g_free (cPackageName);
 	}
-	g_free (pGroupList);  // les noms des packages sont desormais dans la hash-table.
+	g_free (pGroupList);  // les noms des packages sont liberes dans la boucle.
 }
 GHashTable *cairo_dock_list_net_packages (const gchar *cServerAdress, const gchar *cDirectory, const gchar *cListFileName, GHashTable *hProvidedTable, GError **erreur)
 {
