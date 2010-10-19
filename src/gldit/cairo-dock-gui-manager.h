@@ -157,8 +157,8 @@ void cairo_dock_reload_generic_gui (GtkWidget *pWindow);
 
 /// Definition of the launcher GUI interface.
 struct _CairoDockLauncherGuiBackend {
-	/// Show the config panel on a given launcher, build or reload it if necessary.
-	GtkWidget * (*show_gui) (Icon *pIcon);
+	/// Show the config panel on a given icon/container, build or reload it if necessary.
+	GtkWidget * (*show_gui) (Icon *pIcon, CairoContainer *pContainer, int iShowPage);
 	/// reload the gui and its content, for the case a launcher has changed (image, order, new container, etc).
 	void (*refresh_gui) (void);
 	} ;
@@ -173,7 +173,7 @@ void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBac
 @param pIcon the launcher.
 @return the GUI window.
 */
-GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon);
+GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon, CairoContainer *pContainer, int iShowPage);
 
 /** Trigger the refresh of the launcher GUI. The refresh well happen when the main loop gets available.
 */

@@ -140,6 +140,7 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->launch_uri != NULL && cURI != NULL)
 	{
+		// launch the URI in a thread.
 		//s_pEnvBackend->launch_uri (cURI);
 		GError *erreur = NULL;
 		gchar *cThreadURI = g_strdup (cURI);
@@ -150,8 +151,13 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 			g_error_free (erreur);
 		}
 		
+		// add it to the recent files.
 		GtkRecentManager *rm = gtk_recent_manager_get_default () ;
-		gtk_recent_manager_add_item (rm, cURI);
+		gchar *cValidURI = NULL;
+		if (*cURI == '/')  // not an URI, this is now needed for gtk-recent.
+			cValidURI = g_filename_to_uri (cURI, NULL, NULL);
+		gtk_recent_manager_add_item (rm, cValidURI ? cValidURI : cURI);
+		g_free (cValidURI);
 		
 		return TRUE;
 	}

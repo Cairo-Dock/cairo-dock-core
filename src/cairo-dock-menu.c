@@ -518,7 +518,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 	
 	//\___________________ On ouvre automatiquement l'IHM pour permettre de modifier ses champs.
 	if (iLauncherType != CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR)  // inutile pour un separateur.
-		cairo_dock_build_launcher_gui (pNewIcon);
+		cairo_dock_build_launcher_gui (pNewIcon, NULL, -1);
 }
 
 static void cairo_dock_add_launcher (GtkMenuItem *pMenuItem, gpointer *data)
@@ -562,7 +562,7 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 		return ;
 	}
 	
-	cairo_dock_build_launcher_gui (icon);
+	cairo_dock_build_launcher_gui (icon, NULL, -1);
 }
 
 static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gchar *cDockName)
@@ -634,8 +634,8 @@ static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, gpointer
 		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module.
 	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
-	///cairo_dock_show_module_instance_gui (icon->pModuleInstance, -1);
-	cairo_dock_build_launcher_gui (icon);
+	cairo_dock_show_module_instance_gui (icon->pModuleInstance, -1);
+	///cairo_dock_build_launcher_gui (icon, NULL, -1);  // desactive pour l'instant, il manque pas mal de chose.
 }
 
 static void _cairo_dock_detach_module (GtkMenuItem *pMenuItem, gpointer *data)
