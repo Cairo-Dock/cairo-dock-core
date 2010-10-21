@@ -289,16 +289,3 @@ DEFINE_PRE_INIT (Accessibility)
 	pModule->pConfig = &myAccessibility;
 	pModule->pData = NULL;
 }
-
-/*
-IMHO, you can't assume in the spec that the dock/panel will be on the top of the screen.
-Even if you set up things like this by default, the user is likely to move it, break your assumption, and then report a bug because it won't work as expected. I don't imagine you would reply him "it's your fault, you shouldn't have moved the gnome-panel". ^^
-
-"our own indicators would not support that"
-Well they'd better support it, to handle the case where the user places its gnome-panel at the bottom of the screen.
-They just have to send the position of the gnome-panel, which is probably available as a property of the panel, or through a gconf call.
-
-The parameter should also be used by each application, so that they can place their menu; I believe the Qt/GTK framework can mask this thing.
-
-Fabounet.
-*/

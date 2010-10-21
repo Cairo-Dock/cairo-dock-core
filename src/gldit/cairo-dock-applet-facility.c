@@ -115,6 +115,18 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 	cairo_dock_add_reflection_to_icon (pIcon, pContainer);
 }
 
+static inline void _set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer)
+{
+	int iWidth, iHeight;
+	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+	cairo_surface_t *pImageSurface = cairo_dock_create_surface_from_icon (cImagePath,
+		iWidth,
+		iHeight);
+	
+	cairo_dock_set_icon_surface_with_reflect (pIconContext, pImageSurface, pIcon, pContainer);
+	
+	cairo_surface_destroy (pImageSurface);
+}
 void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer)
 {
 	if (cImagePath != pIcon->cFileName)
@@ -122,15 +134,34 @@ void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePat
 		g_free (pIcon->cFileName);
 		pIcon->cFileName = g_strdup (cImagePath);
 	}
-	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
-	cairo_surface_t *pImageSurface = cairo_dock_create_surface_for_icon (cImagePath,
-		iWidth,
-		iHeight);
+	_set_image_on_icon (pIconContext, cImagePath, pIcon, pContainer);
+}
+
+void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cImage, Icon *pIcon, CairoContainer *pContainer, const gchar *cDefaultImagePath)
+{
+	if (cImage != pIcon->cFileName)
+	{
+		g_free (pIcon->cFileName);
+		pIcon->cFileName = g_strdup (cImage);
+	}
 	
-	cairo_dock_set_icon_surface_with_reflect (pIconContext, pImageSurface, pIcon, pContainer);
+	gchar *cFoundImage = NULL;
+	if (cImage != NULL)
+	{
+		if (*cImage == '/' || *cImage == '~')  // chemin, on se contente de verifier son existence.
+		{
+			cFoundImage = cairo_dock_search_image_s_path (cImage);
+		}
+		else  // nom d'image ou d'icone, on cherche.
+		{
+			cFoundImage = cairo_dock_search_icon_s_path (cImage);  // on cherche en priorite une icone.
+			if (cFoundImage == NULL)  // si aucune icone, on regarde dans les repertoires d'images.
+				cFoundImage = cairo_dock_search_image_s_path (cImage);
+		}
+	}
 	
-	cairo_surface_destroy (pImageSurface);
+	_set_image_on_icon (pIconContext, cFoundImage ? cFoundImage : cDefaultImagePath, pIcon, pContainer);
+	g_free (cFoundImage);
 }
 
 void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon)

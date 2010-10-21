@@ -457,25 +457,6 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 	return cFilePath;
 }
 
-gchar *cairo_dock_get_image_path_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, const gchar *cDefaultDir, const gchar *cDefaultFileName)
-{
-	gchar *cFileName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, NULL, cDefaultGroupName, cDefaultKeyName);
-	gchar *cFilePath = NULL;
-	if (cFileName != NULL)
-	{
-		cFilePath = cairo_dock_search_image_s_path (cFileName);
-		if (cFilePath == NULL)  // pas trouve, on cherche une icone
-		{
-			if (*cFileName != '/' && *cFileName != '~')  // pas un chemin, donc possibilite de trouver autre chose en cherchant dans les icones.
-				cFilePath = cairo_dock_search_icon_s_path (cFileName);
-		}
-	}
-	if (cFilePath == NULL && cDefaultFileName != NULL && cDefaultDir != NULL)  // pas d'image specifiee, ou image introuvable => on prend l'image par defaut fournie.
-		cFilePath = g_strdup_printf ("%s/%s", cDefaultDir, cDefaultFileName);
-	g_free (cFileName);
-	return cFilePath;
-}
-
 gchar *cairo_dock_get_icon_path_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName, const gchar *cDefaultDir, const gchar *cDefaultFileName)
 {
 	gchar *cFileName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, NULL, cDefaultGroupName, cDefaultKeyName);
@@ -608,7 +589,8 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	GError *erreur = NULL;
 	gsize length;
 	gboolean bFlushConfFileNeeded = FALSE, bFlushConfFileNeeded2 = FALSE;  // si un champ n'existe pas, on le rajoute au fichier de conf.
-
+	g_print ("TOTO\n");
+	
 	//\___________________ On ouvre le fichier de conf.
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	if (pKeyFile == NULL)
@@ -763,6 +745,7 @@ void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
 	cairo_dock_redraw_root_docks (TRUE);  // TRUE <=> sauf le main dock.
 	
+	g_print ("myAccessibility.cRaiseDockShortcut: %s\n", myAccessibility.cRaiseDockShortcut);
 	if (myAccessibility.cRaiseDockShortcut != NULL)
 	{
 		if (cRaiseDockShortcutOld == NULL || strcmp (myAccessibility.cRaiseDockShortcut, cRaiseDockShortcutOld) != 0)

@@ -384,18 +384,31 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 	g_print ("line selected (%s; %s; %f)\n", cDescriptionFilePath, cPreviewFilePath, fSize);
 	
 	// fill the info bar.
-	gchar *cTitle = _cairo_dock_gui_get_package_title (cName, NULL);
-	gtk_label_set_label(GTK_LABEL (pTitle), cTitle);
-	g_free (cTitle);
-	gchar *cBy = _cairo_dock_gui_get_package_author (cAuthor);
-	gtk_label_set_label(GTK_LABEL (pAuthor), cBy);
-	g_free (cBy);
-	const gchar *cState = _cairo_dock_gui_get_package_state (iState);
-	gtk_label_set_label(GTK_LABEL (pState), cState);
-	gchar *cSize = _cairo_dock_gui_get_package_size (fSize);
-	gtk_label_set_label (GTK_LABEL (pSize), cSize);
-	g_free (cSize);
-	gtk_image_set_from_pixbuf (GTK_IMAGE (pStateIcon), pixbuf);
+	if (pTitle)
+	{
+		gchar *cTitle = _cairo_dock_gui_get_package_title (cName, NULL);
+		gtk_label_set_label(GTK_LABEL (pTitle), cTitle);
+		g_free (cTitle);
+	}
+	if (pAuthor)
+	{
+		gchar *cBy = _cairo_dock_gui_get_package_author (cAuthor);
+		gtk_label_set_label(GTK_LABEL (pAuthor), cBy);
+		g_free (cBy);
+	}
+	if (pState)
+	{
+		const gchar *cState = _cairo_dock_gui_get_package_state (iState);
+		gtk_label_set_label(GTK_LABEL (pState), cState);
+	}
+	if (pSize)
+	{
+		gchar *cSize = _cairo_dock_gui_get_package_size (fSize);
+		gtk_label_set_label (GTK_LABEL (pSize), cSize);
+		g_free (cSize);
+	}
+	if (pStateIcon)
+		gtk_image_set_from_pixbuf (GTK_IMAGE (pStateIcon), pixbuf);
 	
 	// get or fill the readme.
 	if (cDescriptionFilePath != NULL && (1 || !s_cPrevReadme || strcmp (s_cPrevReadme, cDescriptionFilePath) != 0))
@@ -1671,7 +1684,7 @@ static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidg
 	
 	gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
 	if (bHorizontalPackaging)
-		gtk_widget_set_size_request (pDescriptionLabel, 500, CAIRO_DOCK_PREVIEW_HEIGHT);
+		gtk_widget_set_size_request (pDescriptionLabel, 400, CAIRO_DOCK_PREVIEW_HEIGHT);
 	else
 		gtk_widget_set (pDescriptionLabel, "width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
 	gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);

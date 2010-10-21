@@ -101,7 +101,10 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 			cd_message ("le dock devient un dock fils (%d, %d)", pChildDock->container.bIsHorizontal, pChildDock->container.bDirectionUp);
 		}
 		if (cRendererName != NULL && icon->pSubDock != NULL)
+		{
 			cairo_dock_set_renderer (icon->pSubDock, cRendererName);
+			cairo_dock_update_dock_size (icon->pSubDock);
+		}
 	}
 	
 	//\____________ On met a jour les infos dans le cas d'un point de montage.

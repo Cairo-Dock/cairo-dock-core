@@ -63,6 +63,7 @@
 #include "cairo-dock-internal-system.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-emblem.h"
+#include "cairo-dock-keybinder.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-manager.h"
@@ -1144,12 +1145,14 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 	gboolean bAutoHideOnOverlap = (iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP);
 	gboolean bAutoHideOnAnyOverlap = (iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY);
 	gboolean bAutoHide = (iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE);
+	gboolean bShortKey = (iVisibility == CAIRO_DOCK_VISI_SHORTKEY);
 	
 	gboolean bReserveSpace0 = (pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE);
 	gboolean bKeepBelow0 = (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW);
 	gboolean bAutoHideOnOverlap0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP);
 	gboolean bAutoHideOnAnyOverlap0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY);
 	gboolean bAutoHide0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE);
+	gboolean bShortKey0 = (pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY);
 	
 	pDock->iVisibility = iVisibility;
 	
@@ -1192,6 +1195,32 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 			if (bAutoHideOnOverlap || myAccessibility.bAutoHideOnFullScreen)
 			{
 				cairo_dock_hide_show_if_current_window_is_on_our_way (pDock);
+			}
+		}
+	}
+	
+	//\_______________ changement dans le raccourci.
+	if (pDock->bIsMainDock && bShortKey != bShortKey0 && myAccessibility.cRaiseDockShortcut != NULL)
+	{
+		if (bShortKey0)
+		{
+			cd_keybinder_unbind (myAccessibility.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
+			
+			cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
+		}
+		else
+		{
+			if (cd_keybinder_bind (myAccessibility.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))
+			{
+				gtk_widget_hide (pDock->container.pWidget);
+			}
+			else  // le bind n'a pas pu se faire.
+			{
+				g_free (myAccessibility.cRaiseDockShortcut);
+				myAccessibility.cRaiseDockShortcut = NULL;
+				
+				gtk_widget_show (pDock->container.pWidget);
+				cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
 			}
 		}
 	}

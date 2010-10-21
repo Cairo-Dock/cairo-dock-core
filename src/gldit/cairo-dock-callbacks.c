@@ -1484,18 +1484,28 @@ static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 		gdk_window_get_pointer (pDock->container.pWidget->window, &iMouseX, &iMouseY, NULL);
 	else
 		gdk_window_get_pointer (pDock->container.pWidget->window, &iMouseY, &iMouseX, NULL);
-	//g_print (" %d;%d\n", iMouseX, iMouseY);
+	g_print (" %d;%d\n", iMouseX, iMouseY);
 	
 	///pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
 	///pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY);
-	pDock->iGapX = iMouseX - (g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - pDock->container.iWidth) * pDock->fAlign - pDock->iScreenOffsetX;
-	pDock->iGapY = iMouseY - (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - pDock->container.iHeight : 0) - pDock->iScreenOffsetY;
-	//g_print (" => %d;%d\n", g_pMainDock->iGapX, g_pMainDock->iGapY);
+	pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - (g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - pDock->container.iWidth) * pDock->fAlign - pDock->container.iWidth/2 - pDock->iScreenOffsetX;
+	pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY) - pDock->iScreenOffsetY;
+	g_print (" => %d;%d\n", g_pMainDock->iGapX, g_pMainDock->iGapY);
 	
 	int iNewPositionX, iNewPositionY;
 	cairo_dock_get_window_position_at_balance (pDock,
 		pDock->container.iWidth, pDock->container.iHeight,
 		&iNewPositionX, &iNewPositionY);
+	g_print (" ==> %d;%d\n", iNewPositionX, iNewPositionY);
+	if (iNewPositionX < 0)
+		iNewPositionX = 0;
+	else if (iNewPositionX + pDock->container.iWidth > g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal])
+		iNewPositionX = g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - pDock->container.iWidth;
+	
+	if (iNewPositionY < 0)
+		iNewPositionY = 0;
+	else if (iNewPositionY + pDock->container.iHeight > g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal])
+		iNewPositionY = g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - pDock->container.iHeight;
 	
 	gtk_window_move (GTK_WINDOW (pDock->container.pWidget),
 		(pDock->container.bIsHorizontal ? iNewPositionX : iNewPositionY),

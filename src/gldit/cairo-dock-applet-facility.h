@@ -74,6 +74,15 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 */
 void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer);
 
+/** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless.
+*@param pIconContext the drawing context; is not altered by the function.
+*@param cImagePath path of an image to apply on the icon.
+*@param pIcon the icon.
+*@param pContainer the container of the icon.
+*@param cDefaultImagePath default image.
+*/
+void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cImage, Icon *pIcon, CairoContainer *pContainer, const gchar *cDefaultImagePath);
+
 
 void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
 void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
@@ -527,18 +536,12 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	CD_APPLET_SET_IMAGE_ON_MY_ICON (_cImageFilePath); \
 	g_free (_cImageFilePath); } while (0)
 
-/** Apply an image on the applet's icon at the same size as the applet's icon, or a default image taken in the installed folder of the applet if the first one is NULL. If the user image is given by its sole name, it is searched inside the current theme root folder.
+/** Apply an image on the applet's icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless (taken in the installed folder of the applet).
 *@param cUserImageName nom du fichier of l'image cote utilisateur.
 *@param cDefaultLocalImageName image locale par defaut cote installation.
 */
-#define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cUserImageName, cDefaultLocalImageName) do { \
-	gchar *cImagePath; \
-	if (cUserImageName != NULL) \
-		cImagePath = cairo_dock_search_image_s_path (cUserImageName); \
-	else \
-		cImagePath = g_strdup_printf ("%s/%s", MY_APPLET_SHARE_DATA_DIR, cDefaultLocalImageName); \
-	CD_APPLET_SET_IMAGE_ON_MY_ICON (cImagePath); \
-	g_free (cImagePath); } while (0)
+#define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cImageName, cDefaultLocalImageName) \
+	cairo_dock_set_image_on_icon_with_default (myDrawContext, cImageName, myIcon, myContainer, MY_APPLET_SHARE_DATA_DIR"/"cDefaultLocalImageName)
 
 /** Apply the default icon on the applet's icon if there is no image yet.
 */
