@@ -145,7 +145,7 @@ void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
 	//\_____________________ On dessine son reflet.
 	if (pDock->container.bUseReflect)
 	{
-		if (pDock->pRenderer->bUseStencil)
+		if (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable)
 		{
 			glEnable (GL_STENCIL_TEST);
 			glStencilFunc (GL_EQUAL, 1, 1);
@@ -253,7 +253,7 @@ void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
 		glEnd();
 		
 		glPopMatrix ();
-		if (pDock->pRenderer->bUseStencil)
+		if (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable)
 		{
 			glDisable (GL_STENCIL_TEST);
 		}
@@ -489,7 +489,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	//g_print ("%s (%d, %x)\n", __func__, pDock->bIsMainDock, g_pVisibleZoneSurface);
 	//\_____________________ on dessine la zone de rappel.
 	glLoadIdentity ();  // annule l'offset de cachage.
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
 	cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 	
 	if (g_pVisibleZoneBuffer.iTexture != 0)

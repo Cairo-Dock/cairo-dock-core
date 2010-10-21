@@ -56,6 +56,7 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-opengl.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-backends-manager.h"
@@ -72,6 +73,7 @@
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockHidingEffect *g_pHidingBackend;
 extern CairoDockHidingEffect *g_pKeepingBelowBackend;
+extern CairoDockGLConfig g_openglConfig;
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
 static int s_iClickX, s_iClickY;  // coordonnees du clic dans le dock, pour pouvoir initialiser le deplacement apres un seuil.
@@ -109,7 +111,7 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 {
 	if (! pCairoContext)  // on n'a pas mis le rendu cairo ici a cause du rendu optimise.
 	{
-		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil ? GL_STENCIL_BUFFER_BIT : 0));
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
 		
 		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
 		
