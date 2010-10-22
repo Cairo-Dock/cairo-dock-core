@@ -107,8 +107,16 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConfigAccessibility *pAcces
 		}
 		if (iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 		{
-			pAccessibility->cRaiseDockShortcut = cShortkey;
-			cShortkey = NULL;
+			if (cShortkey == NULL)
+			{
+				cd_warning ("no shortcut defined to make the dock appear, we'll keep it above.");
+				iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+			}
+			else
+			{
+				pAccessibility->cRaiseDockShortcut = cShortkey;
+				cShortkey = NULL;
+			}
 		}
 	}
 	pAccessibility->iVisibility = iVisibility;
@@ -176,27 +184,6 @@ static void reset_config (CairoConfigAccessibility *pAccessibility)
 }
 
 
-static void _show_all_docks (const gchar *cName, CairoDock *pDock, Icon *icon)
-{
-	if (pDock->iRefCount > 0)
-		return;
-	pDock->bTemporaryHidden = FALSE;
-	pDock->bAutoHide = FALSE;
-	cairo_dock_start_showing (pDock);
-}
-static void _hide_all_docks (const gchar *cName, CairoDock *pDock, Icon *icon)
-{
-	if (pDock->iRefCount > 0)
-		return;
-	pDock->bTemporaryHidden = FALSE;
-	pDock->bAutoHide = TRUE;
-	cairo_dock_start_hiding (pDock);
-}
-#define _bind_key(cShortcut) \
-	do { if (! cd_keybinder_bind (cShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL)) { \
-		g_free (cShortcut); \
-		cShortcut = NULL; } } while (0)
-
 static void _init_hiding (CairoDock *pDock, gpointer data)
 {
 	if (pDock->bIsShowing || pDock->bIsHiding)
@@ -216,23 +203,23 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	}
 	
 	//\_______________ Shortcut.
-	if (pAccessibility->cRaiseDockShortcut != NULL)
+	if (pAccessibility->cRaiseDockShortcut != NULL)  // equivalent a avoir iVisibility == CAIRO_DOCK_VISI_SHORTKEY
 	{
-		if (pPrevAccessibility->cRaiseDockShortcut == NULL || strcmp (pAccessibility->cRaiseDockShortcut, pPrevAccessibility->cRaiseDockShortcut) != 0)  // le raccourci a change.
+		if (pPrevAccessibility->cRaiseDockShortcut != NULL && strcmp (pAccessibility->cRaiseDockShortcut, pPrevAccessibility->cRaiseDockShortcut) != 0)  // le raccourci a change, il faut donc juste le re-bind.
 		{
-			if (pPrevAccessibility->cRaiseDockShortcut != NULL)
-				cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
+			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
 			if (! cd_keybinder_bind (pAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))  // le bind n'a pas pu se faire.
 			{
 				g_free (pAccessibility->cRaiseDockShortcut);
 				pAccessibility->cRaiseDockShortcut = NULL;
+				pAccessibility->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
 				
 				cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
 			}
 		}
 	}
 	else if (pPrevAccessibility->cRaiseDockShortcut != NULL) // plus de raccourci
-{
+	{
 		cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
 		
 		cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.

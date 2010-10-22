@@ -182,12 +182,16 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
-	//g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
-	if (pEvent->width == CAIRO_DIALOG_MIN_SIZE && pEvent->height == CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
+	g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
+	if (pEvent->width <= CAIRO_DIALOG_MIN_SIZE && pEvent->height <= CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
 		return FALSE;
 	
-	int iWidth = pDialog->container.iWidth, iHeight = pDialog->container.iHeight;
-	//\____________ On recupere la taille du widget interactif qui a pu avoir change.
+	//\____________ get dialog size.
+	int iPrevWidth = pDialog->container.iWidth, iPrevHeight = pDialog->container.iHeight;
+	/**pDialog->container.iWidth = pEvent->width;
+	pDialog->container.iHeight = pEvent->height;*/
+	
+	//\____________ if an interactive widget is present, internal sizes may have changed.
 	if (pDialog->pInteractiveWidget != NULL)
 	{
 		GtkRequisition requisition;
@@ -201,8 +205,22 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		//g_print (" -> iBubbleWidth: %d , iBubbleHeight : %d\n", pDialog->iBubbleWidth, pDialog->iBubbleHeight);
 		_cairo_dock_compute_dialog_sizes (pDialog);
 	}
-
-	if (iWidth != pEvent->width || iHeight != pEvent->height || (pDialog->bNoInput && ! pDialog->pShapeBitmap))
+	g_print ("dialog size: %dx%d / %dx%d\n", pEvent->width, pEvent->height, pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin, pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iMinBottomGap);
+	
+	//\____________ set input shape if size has changed or if no shape yet.
+	if (pDialog->bNoInput && (iPrevWidth != pEvent->width || iPrevHeight != pEvent->height || ! pDialog->pShapeBitmap))
+	{
+		_cairo_dock_set_dialog_input_shape (pDialog);
+	}
+	
+	//\____________ set input shape if size has changed or if no shape yet.
+	if (pDialog->container.iWidth == pEvent->width && pDialog->container.iHeight == pEvent->height && pEvent->y != pDialog->container.iWindowPositionY && !pDialog->bPositionForced)
+	{
+		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget), pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY);
+		pDialog->bPositionForced = TRUE;
+	}
+	
+	/**if (iWidth != pEvent->width || iHeight != pEvent->height || (pDialog->bNoInput && ! pDialog->pShapeBitmap))
 	{
 		if ((pEvent->width != CAIRO_DIALOG_MIN_SIZE || pEvent->height != CAIRO_DIALOG_MIN_SIZE) && (pEvent->width < iWidth || pEvent->height < iHeight))
 		{
@@ -224,7 +242,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	{
 		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget), pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY);
 		pDialog->bPositionForced = TRUE;
-	}
+	}*/
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
 
 	return FALSE;
@@ -296,7 +314,7 @@ static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 	gtk_widget_add_events (pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 	gtk_window_resize (GTK_WINDOW (pWindow), CAIRO_DIALOG_MIN_SIZE, CAIRO_DIALOG_MIN_SIZE);
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
-	gtk_widget_show_all (pWindow);
+	///gtk_widget_show_all (pWindow);
 	
 	return pDialog;
 }
@@ -467,6 +485,8 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	
 	//\________________ Maintenant qu'on connait tout, on calcule les tailles des divers elements.
 	_cairo_dock_compute_dialog_sizes (pDialog);
+	pDialog->container.iWidth = pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin;
+	pDialog->container.iHeight = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iMinBottomGap;
 	
 	//\________________ On definit son orientation.
 	cairo_dock_set_dialog_orientation (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
@@ -515,7 +535,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 			FALSE,
 			0);
 		cd_debug (" pack -> ref = %d", pAttribute->pInteractiveWidget->object.parent_instance.ref_count);
-		cd_debug ("grab focus\n");
+		cd_debug ("grab focus");
 		gtk_window_present (GTK_WINDOW (pDialog->container.pWidget));
 		gtk_widget_grab_focus (pDialog->pInteractiveWidget);
 	}
@@ -528,13 +548,12 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	else
 		pDialog->pTopWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, TRUE);
 	
+	gtk_widget_show_all (pDialog->container.pWidget);
+	
 	if (pDialog->bNoInput)
 	{
 		_cairo_dock_set_dialog_input_shape (pDialog);
 	}
-	
-	gtk_widget_show_all (pDialog->container.pWidget);
-	
 	//\________________ On connecte les signaux utiles.
 	g_signal_connect (G_OBJECT (pDialog->container.pWidget),
 		"expose-event",

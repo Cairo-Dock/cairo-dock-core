@@ -672,7 +672,8 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 		if (pDialog->bRight)
 			pDialog->container.iWindowPositionX = MIN (pDialog->iAimedX - pDialog->fAlign * pDialog->iBubbleWidth - pDialog->iLeftMargin, fXRight - pDialog->container.iWidth);
 		else
-			pDialog->container.iWindowPositionX = MAX (pDialog->iAimedX - pDialog->iRightMargin - pDialog->container.iWidth + pDialog->fAlign * pDialog->iBubbleWidth, fXLeft);  /// pDialog->iBubbleWidth (?)
+			///pDialog->container.iWindowPositionX = MAX (pDialog->iAimedX - pDialog->iRightMargin - pDialog->container.iWidth + pDialog->fAlign * pDialog->iBubbleWidth, fXLeft);  /// pDialog->iBubbleWidth (?)
+			pDialog->container.iWindowPositionX = MAX (pDialog->iAimedX - pDialog->fAlign * pDialog->iBubbleWidth - pDialog->iLeftMargin, fXLeft);
 	}
 	else
 	{
@@ -721,11 +722,11 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 		if (! pDialog->container.bDirectionUp)  // iPositionY est encore la position du coin haut gauche de la bulle et non de la fenetre.
 			pDialog->container.iWindowPositionY = pDialog->iAimedY;
 		
-		if (pDialog->iDistanceToDock != iOldDistance && pDialog->pTipWidget != NULL)
+		/**if (pDialog->iDistanceToDock != iOldDistance && pDialog->pTipWidget != NULL)
 		{
 			//g_print ("  On change la taille de la pointe a : %d pixels ( -> %d)\n", pDialog->iDistanceToDock, pDialog->iMessageHeight + pDialog->iInteractiveHeight +pDialog->iButtonsHeight + pDialog->iDistanceToDock);
 			gtk_widget_set (pDialog->pTipWidget, "height-request", MAX (0, pDialog->iDistanceToDock + pDialog->iBottomMargin), NULL);
-		}
+		}*/
 		if (pDialog->bRight)
 		{
 			if (pDialog->container.bDirectionUp)
@@ -753,16 +754,19 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	}
 	
 	w = pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin;
-	h = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock;
+	h = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin/** + pDialog->iDistanceToDock*/;
 	
 	pDialog->bPositionForced = FALSE;
 	gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
-	//g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, w, h, iGravity);
-	gdk_window_move_resize (GDK_WINDOW (pDialog->container.pWidget->window),
+	g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, w, h, iGravity);
+	gdk_window_move  (GDK_WINDOW (pDialog->container.pWidget->window),
+		pDialog->container.iWindowPositionX,
+		pDialog->container.iWindowPositionY);
+	/**gdk_window_move_resize (GDK_WINDOW (pDialog->container.pWidget->window),
 		pDialog->container.iWindowPositionX,
 		pDialog->container.iWindowPositionY,
 		w,
-		h);
+		h);*/
 }
 
 

@@ -830,6 +830,7 @@ static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoD
 		}
 		cairo_dock_update_dock_size (pDock);  // la taille max du dock depend de la taille de l'ecran, donc on recalcule son ratio.
 		cairo_dock_move_resize_dock (pDock);
+		gtk_widget_show (pDock->container.pWidget);
 		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 }
