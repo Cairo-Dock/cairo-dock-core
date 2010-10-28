@@ -67,7 +67,7 @@ void cd_keybinder_unbind   (const char           *keystring,
 
 gboolean cd_keybinder_is_modifier (guint keycode);
 
-guint32 cd_keybinder_get_current_event_time (void);
+//guint32 cd_keybinder_get_current_event_time (void);
 
 /** Trigger the given shortcut. It will be as if the user effectively pressed the shortcut on its keyboard. It uses the 'XTest' X extension.
  * @param cKeyString a shortcut.

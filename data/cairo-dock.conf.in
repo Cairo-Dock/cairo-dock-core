@@ -663,7 +663,7 @@ zoom class = false
 
 [Labels]
 
-#X-[Label visibility;gtk-underline]
+#F-[Label visibility;gtk-underline]
 frame_label =
 
 #Y+[No;0;0;On pointed icon;0;0;On all icons;1;1] Show labels:
@@ -689,6 +689,20 @@ police =
 #b+ Draw the outline of the text?
 text oulined = true
 
+#F+[Background;gtk-orientation-portrait]
+frame_bg =
+
+#C+ Colour of the label's background :
+#{If you set it to fully transparent, there will be no background for the text, but the margin around the text will still be in effect.}
+text background color = 0;0;0;.5
+
+#b+ Use background color for labels?
+#{If false, only the quick-info will have this background color.}
+background for label = false
+
+#i+[0;20] Margin around the text (in pixels) :
+text margin = 4
+
 #F+[Colour;gtk-select-color]
 frame_col =
 
@@ -703,17 +717,3 @@ text color stop = 1;1;1
 #b+ Pattern should be vertical?
 #{If checked, the pattern will go from top to bottom, otherwise from left to right.}
 vertical label pattern = false
-
-#F+[Background;gtk-orientation-portrait]
-frame_bg =
-
-#C+ Colour of the label's background :
-#{If you set it to fully transparent, there will be no background for the text, but the margin around the text will still be in effect.}
-text background color = 0;0;0;.5
-
-#b+ Use background color for labels?
-#{If false, only the quick-info will have this background color.}
-background for label = false
-
-#i+[0;20] Margin around the text (in pixels) :
-text margin = 4

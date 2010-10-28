@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_CONTAINER__
 #define  __CAIRO_DOCK_CONTAINER__
 
@@ -38,6 +37,35 @@ G_BEGIN_DECLS
 */
 
 #define CD_DOUBLE_CLICK_DELAY 250  // ms
+
+typedef enum {
+	/// notification called when the menu is being built on a container. data : {Icon, CairoContainer, GtkMenu, gboolean*}
+	NOTIFICATION_BUILD_CONTAINER_MENU,
+	/// notification called when the menu is being built on an icon (possibly NULL). data : {Icon, CairoContainer, GtkMenu}
+	NOTIFICATION_BUILD_ICON_MENU,
+	/// notification called when use clicks on an icon data : {Icon, CairoDock, int}
+	NOTIFICATION_CLICK_ICON=0,
+	/// notification called when the user double-clicks on an icon. data : {Icon, CairoDock}
+	NOTIFICATION_DOUBLE_CLICK_ICON,
+	/// notification called when the user middle-clicks on an icon. data : {Icon, CairoDock}
+	NOTIFICATION_MIDDLE_CLICK_ICON,
+	/// notification called when the user scrolls on an icon. data : {Icon, CairoDock, int}
+	NOTIFICATION_SCROLL_ICON,
+	/// notification called when the mouse enters a dock while dragging an object.
+	NOTIFICATION_START_DRAG_DATA,
+	/// notification called when something is dropped inside a container. data : {gchar*, Icon, double*, CairoDock}
+	NOTIFICATION_DROP_DATA,
+	/// notification called when the mouse has moved inside a container.
+	NOTIFICATION_MOUSE_MOVED,
+	/// notification called when a key is pressed in a container that has the focus.
+	NOTIFICATION_KEY_PRESSED,
+	NB_NOTIFICATIONS_CONTAINER
+	} CairoContainerNotifications;
+
+struct _CairoDockContainerManager {
+	CairoDockManager mgr;
+	} ;
+
 
 /// Main orientation of a container.
 typedef enum {
@@ -60,10 +88,10 @@ struct _CairoContainerInterface {
 
 /// Definition of a Container, whom derive Dock, Desklet, Dialog and FlyingContainer. 
 struct _CairoContainer {
-	/// type of container.
-	CairoDockTypeContainer iType;
 	/// list of available notifications.
 	GPtrArray *pNotificationsTab;
+	/// type of container.
+	CairoDockTypeContainer iType;
 	/// External data.
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	/// window of the container.

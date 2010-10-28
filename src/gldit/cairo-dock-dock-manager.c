@@ -1130,7 +1130,7 @@ void cairo_dock_start_polling_screen_edge (void)
 
 void cairo_dock_stop_polling_screen_edge (void)
 {
-	cd_debug ("%s (%d)", __func__, s_iNbPolls);
+	g_print ("%s (%d)\n", __func__, s_iNbPolls);
 	s_iNbPolls --;
 	if (s_iNbPolls <= 0)
 	{
@@ -1201,17 +1201,15 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 	}
 	
 	//\_______________ changement dans le raccourci.
-	if (pDock->bIsMainDock && bShortKey != bShortKey0 && myAccessibility.cRaiseDockShortcut != NULL)
+	if (pDock->bIsMainDock && bShortKey != bShortKey0)
 	{
-		if (bShortKey0)
+		if (bShortKey0)  // option desormais non active => on remontre (le unbind s'est fait dans le Accessibility manager quand on avait encore le raccourci).
 		{
-			cd_keybinder_unbind (myAccessibility.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-			
 			cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
 		}
-		else
+		else  // option nouvellement active => on bind et on cache.
 		{
-			if (cd_keybinder_bind (myAccessibility.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))
+			if (cd_keybinder_bind (myAccessibility.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))  // succes => on cache.
 			{
 				gtk_widget_hide (pDock->container.pWidget);
 			}
@@ -1219,9 +1217,7 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 			{
 				g_free (myAccessibility.cRaiseDockShortcut);
 				myAccessibility.cRaiseDockShortcut = NULL;
-				
-				gtk_widget_show (pDock->container.pWidget);
-				cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
+				pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
 			}
 		}
 	}

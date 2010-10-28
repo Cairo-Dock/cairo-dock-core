@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_NOTIFICATIONS__
 #define  __CAIRO_DOCK_NOTIFICATIONS__
 
@@ -230,46 +229,12 @@ GSList *cairo_dock_get_notifications_list (CairoDockNotificationType iNotifType)
 */
 void cairo_dock_register_notification (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
 
-/** Register an action to be called when a given notification is broadcasted from a given icon.
-*@param pIcon the icon.
-*@param iNotifType type of the notification.
-*@param pFunction callback.
-*@param bRunFirst CAIRO_DOCK_RUN_FIRST to be called before Cairo-Dock, CAIRO_DOCK_RUN_AFTER to be called after.
-*@param pUserData data to be passed as the first parameter of the callback.
-*/
-void cairo_dock_register_notification_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
-
-/** Register an action to be called when a given notification is broadcasted from a given container.
-*@param pContainer the container.
-*@param iNotifType type of the notification.
-*@param pFunction callback.
-*@param bRunFirst CAIRO_DOCK_RUN_FIRST to be called before Cairo-Dock, CAIRO_DOCK_RUN_AFTER to be called after.
-*@param pUserData data to be passed as the first parameter of the callback.
-*/
-void cairo_dock_register_notification_on_container (CairoContainer *pContainer, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
-
 /** Remove a callback from the list of callbacks for a given notification and a given data.
 *@param iNotifType type of the notification.
 *@param pFunction callback.
 *@param pUserData data that was registerd with the callback.
 */
 void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
-
-/** Remove a callback from the list of callbacks of a given icon for a given notification and a given data.
-*@param pIcon the icon for which the action has been registered.
-*@param iNotifType type of the notification.
-*@param pFunction callback.
-*@param pUserData data that was registerd with the callback.
-*/
-void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
-
-/** Remove a callback from the list of callbacks of a given container for a given notification and a given data.
-*@param pContainer the container for which the action has been registered.
-*@param iNotifType type of the notification.
-*@param pFunction callback.
-*@param pUserData data that was registerd with the callback.
-*/
-void cairo_dock_remove_notification_func_on_container (CairoContainer *pContainer, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
 
 
 #define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
@@ -302,9 +267,8 @@ void cairo_dock_remove_notification_func_on_container (CairoContainer *pContaine
 	gboolean bStop = FALSE;\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
 	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
-	if (pIcon && pIcon->pNotificationsTab) {\
-		GSList *pNotificationRecordList = g_ptr_array_index (pIcon->pNotificationsTab, iNotifType);\
-		_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);}\
+	if (! bStop && pIcon) {\
+		cairo_dock_notify_on_object (pIcon, iNotifType, ##__VA_ARGS__); }\
 	} while (0)
 
 /** Broadcast a notification from a given container.
@@ -316,14 +280,58 @@ void cairo_dock_remove_notification_func_on_container (CairoContainer *pContaine
 	gboolean bStop = FALSE;\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
 	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
-	if (pContainer && pContainer->pNotificationsTab) {\
-		GSList *pNotificationRecordList = g_ptr_array_index (pContainer->pNotificationsTab, iNotifType);\
-		_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);}\
+	if (! bStop && pContainer) {\
+		cairo_dock_notify_on_object (pContainer, iNotifType, ##__VA_ARGS__); }\
 	} while (0)
 
 
 void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab);
 
+
+#define cairo_dock_install_notifications_on_object(pObject, iNbNotifs) do {\
+	GPtrArray **pNotificationsTabPtr = (GPtrArray**) pObject;\
+	GPtrArray *pNotificationsTab = g_ptr_array_new ();\
+	g_ptr_array_set_size (pNotificationsTab, iNbNotifs);\
+	*pNotificationsTabPtr = pNotificationsTab; } while (0)
+
+#define cairo_dock_clear_notifications_on_object(pObject) do {\
+	GPtrArray **pNotificationsTabPtr = (GPtrArray**) pObject;\
+	GPtrArray *pNotificationsTab = *pNotificationsTabPtr;\
+	cairo_dock_free_notification_table (pNotificationsTab); } while (0)
+
+/** Register an action to be called when a given notification is broadcasted from a given object.
+*@param pObject the object (Icon, Container, Manager).
+*@param iNotifType type of the notification.
+*@param pFunction callback.
+*@param bRunFirst CAIRO_DOCK_RUN_FIRST to be called before Cairo-Dock, CAIRO_DOCK_RUN_AFTER to be called after.
+*@param pUserData data to be passed as the first parameter of the callback.
+*/
+void cairo_dock_register_notification_on_object (gpointer pObject, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
+
+/** Remove a callback from the list of callbacks of a given object for a given notification and a given data.
+*@param pObject the object (Icon, Container, Manager) for which the action has been registered.
+*@param iNotifType type of the notification.
+*@param pFunction callback.
+*@param pUserData data that was registerd with the callback.
+*/
+void cairo_dock_remove_notification_func_on_object (gpointer pObject, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
+
+/** Broadcast a notification on a given object.
+*@param pObject the object (Icon, Container, Manager).
+*@param iNotifType type of the notification.
+*@param ... parameters to be passed to the callbacks that has registerd to this notification.
+*@return whether the notification has been intercepted or not.
+*/
+#define cairo_dock_notify_on_object(pObject, iNotifType, ...) \
+	__extension__ ({\
+	gboolean _bStop = FALSE;\
+	if (pObject != NULL) {\
+		GPtrArray **pNotificationsTabPtr = (GPtrArray**) pObject;\
+		GPtrArray *pNotificationsTab = *pNotificationsTabPtr;\
+		if (pNotificationsTab && iNotifType < pNotificationsTab->len) {\
+			GSList *pNotificationRecordList = g_ptr_array_index (pNotificationsTab, iNotifType);\
+			_cairo_dock_notify (pNotificationRecordList, _bStop, ##__VA_ARGS__);} }\
+	_bStop; })
 
 G_END_DECLS
 #endif

@@ -236,9 +236,9 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	
 	
 	//\__________________ On cree l'icone.
-	Icon *icon = g_new0 (Icon, 1);
-	icon->iType = CAIRO_DOCK_APPLI;
+	Icon *icon = cairo_dock_new_icon ();
 	icon->iTrueType = CAIRO_DOCK_ICON_TYPE_APPLI;
+	icon->iType = CAIRO_DOCK_APPLI;
 	icon->Xid = Xid;
 	
 	//\__________________ On renseigne les infos en provenance de X.

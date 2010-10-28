@@ -39,6 +39,22 @@ G_BEGIN_DECLS
 * Desklets can be resized or moved directly with the mouse, and can be rotated in the 3 directions of space.
 */
 
+typedef enum {
+	/// notification called when the mouse enters a desklet.
+	NOTIFICATION_ENTER_DESKLET,
+	/// notification called when the mouse leave a desklet.
+	NOTIFICATION_LEAVE_DESKLET,
+	/// notification called when a desklet is updated in the fast rendering loop.
+	NOTIFICATION_UPDATE_DESKLET,
+	/// notification called when a desklet is updated in the slow rendering loop.
+	NOTIFICATION_UPDATE_DESKLET_SLOW,
+	/// notification called when a desklet is rendered.
+	NOTIFICATION_RENDER_DESKLET,
+	/// notification called when a desklet is stopped, for instance before it is destroyed.
+	NOTIFICATION_STOP_DESKLET,
+	NB_NOTIFICATIONS_DESKLET
+	} CairoDeskletNotifications;
+
 /// Definition of a function that runs through all desklets.
 typedef gboolean (* CairoDockForeachDeskletFunc) (CairoDesklet *pDesklet, gpointer data);
 

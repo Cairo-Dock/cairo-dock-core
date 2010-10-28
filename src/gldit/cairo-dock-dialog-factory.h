@@ -127,12 +127,16 @@ struct _CairoDialog {
 	gint iAimedX;// position en X visee par la pointe dans le referentiel de l'ecran.
 	gint iAimedY;// position en Y visee par la pointe dans le referentiel de l'ecran.
 	gboolean bRight;// TRUE ssi the dialog est a droite de l'écran; dialog a droite <=> pointe a gauche.
+	gint iComputedPositionX;  // position du coin du dialogue dependant de sa gravite.
+	gint iComputedPositionY;
+	gint iComputedWidth;
+	gint iComputedHeight;
 	//\_____________________ Structure interne.
 	gint iBubbleWidth, iBubbleHeight;// dimensions de la bulle (message + widget utilisateur + boutons).
 	gint iMessageWidth, iMessageHeight;// dimensions du message en comptant la marge du texte + vgap en bas si necessaire.
 	gint iButtonsWidth, iButtonsHeight;// dimensions des boutons + vgap en haut.
 	gint iInteractiveWidth, iInteractiveHeight;// dimensions du widget interactif.
-	gint iDistanceToDock;// distance de la bulle au dock, donc hauteur totale de la pointe.
+	gint iDistanceToDock_deprecated;
 	GtkWidget *pLeftPaddingBox, *pRightPaddingBox, *pWidgetLayout;// la structure interne du widget.
 	GtkWidget *pMessageWidget;// le widget de remplissage ou l'on dessine le message.
 	GtkWidget *pButtonsWidget;// le widget de remplissage ou l'on dessine les boutons.
@@ -174,6 +178,7 @@ struct _CairoDialog {
 	gboolean bPositionForced;
 	gdouble fAppearanceCounter;
 	gboolean bTopBottomDialog;
+	gpointer reserved[4];
 };
 
 #define CAIRO_DIALOG_MIN_SIZE 20

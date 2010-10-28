@@ -53,7 +53,7 @@ typedef struct _Binding {
 } Binding;
 
 static GSList *bindings = NULL;
-static guint32 last_event_time = 0;
+///static guint32 last_event_time = 0;
 static gboolean processing_event = FALSE;
 
 static guint num_lock_mask=0, caps_lock_mask=0, scroll_lock_mask=0;
@@ -192,7 +192,7 @@ filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 		 * windows to avoid anti-focus-stealing code.
 		 */
 		processing_event = TRUE;
-		last_event_time = xevent->xkey.time;
+		///last_event_time = xevent->xkey.time;
 
 		event_mods = xevent->xkey.state & ~(num_lock_mask  |
 						    caps_lock_mask |
@@ -365,14 +365,14 @@ cd_keybinder_is_modifier (guint keycode)
 	return retval;
 }
 
-guint32
+/**guint32
 cd_keybinder_get_current_event_time (void)
 {
 	if (processing_event)
 		return last_event_time;
 	else
 		return GDK_CURRENT_TIME;
-}
+}*/
 
 
 gboolean cairo_dock_simulate_key_sequence (gchar *cKeyString)  // the idea was taken from xdo.

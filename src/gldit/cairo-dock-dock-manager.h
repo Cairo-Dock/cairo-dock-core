@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_MANAGER__
 #define  __CAIRO_DOCK_MANAGER__
 
@@ -28,16 +27,31 @@
 #include "cairo-dock-dock-factory.h"
 G_BEGIN_DECLS
 
-
 /**
 *@file cairo-dock-dock-manager.h This class manages all the Docks.
 * Each Dock has a name that is unique. A Dock can be a sub-dock or a root-dock, whether there exists an icon that points on it or not, but there is no fundamental difference between both.
 */
 
+typedef enum {
+	/// notification called when the mouse enters a dock.
+	NOTIFICATION_ENTER_DOCK,
+	/// notification called when the mouse leave a dock.
+	NOTIFICATION_LEAVE_DOCK,
+	/// notification called when a dock is updated in the fast rendering loop.
+	NOTIFICATION_UPDATE_DOCK,
+	/// notification called when when a dock is updated in the slow rendering loop.
+	NOTIFICATION_UPDATE_DOCK_SLOW,
+	/// notification called when a dock is rendered.
+	NOTIFICATION_RENDER_DOCK,
+	/// notification called when a dock is stopped, for instance before it is destroyed.
+	NOTIFICATION_STOP_DOCK,
+	NB_NOTIFICATIONS_DOCK
+	} CairoDockNotifications;
+
 struct _CairoDockDockManager {
 	CairoDockManager mgr;
 	CairoDock *(*cairo_dock_create_dock) (const gchar *cDockName, const gchar *cRendererName);
-	
+	void (*destroy_dock) (CairoDock *pDock, const gchar *cDockName);
 	} ;
 
 

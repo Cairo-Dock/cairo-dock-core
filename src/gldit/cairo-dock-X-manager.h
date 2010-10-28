@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_X_MANAGER__
 #define  __CAIRO_DOCK_X_MANAGER__
 
@@ -31,6 +30,30 @@ G_BEGIN_DECLS
 *@file cairo-dock-X-manager.h This class manages the interactions with X.
 * The X manager will handle signals from X and dispatch them, and manages the screen geometry.
 */
+
+typedef enum {
+	/// notification called when the user switches to another desktop/viewport. data : NULL
+	NOTIFICATION_DESKTOP_CHANGED,
+	/// notification called when the geometry of the desktop has changed (number of viewports/desktops, dimensions). data : NULL
+	NOTIFICATION_SCREEN_GEOMETRY_ALTERED,
+	/// notification called when the desktop is shown/hidden. data:NULL.
+	NOTIFICATION_DESKTOP_VISIBILITY_CHANGED,
+	/// notification called when the state of the keyboard has changed.
+	NOTIFICATION_KBD_STATE_CHANGED,
+	/// notification called when a window is resized or moved, or when the z-order of windows has changed. data : {Xid, XConfigureEvent or NULL}.
+	NOTIFICATION_WINDOW_CONFIGURED,
+	/// notification called when the active window has changed. data : Window* or NULL
+	NOTIFICATION_WINDOW_ACTIVATED,
+	/// notification called when a window's property has changed. data : {Window, Atom, int}
+	NOTIFICATION_WINDOW_PROPERTY_CHANGED,
+	NB_NOTIFICATIONS_DESKTOP
+	} CairoDesktopNotifications;
+
+struct _CairoDockDesktopManager {
+	CairoDockManager mgr;
+	} ;
+
+
 
 struct _CairoDockDesktopGeometry {
 	int iScreenWidth[2], iScreenHeight[2];  // dimension de l'ecran sur lequel est place le dock.

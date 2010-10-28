@@ -91,12 +91,14 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	
 	gtk_widget_set_app_paintable (pWindow, TRUE);
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
+	pContainer->pWidget = pWindow;
+	
+	cairo_dock_install_notifications_on_object (pContainer, CAIRO_DOCK_NB_NOTIFICATIONS);  /// a terme, le faire sur chaque container et utiliser le vrai nombre de notifications (idem pour les icones)...
 	
 	if (g_pPrimaryContainer == NULL)
 	{
 		g_pPrimaryContainer = pContainer;
 	}
-	pContainer->pWidget = pWindow;
 	return pWindow;
 }
 
@@ -109,6 +111,8 @@ void cairo_dock_finish_container (CairoContainer *pContainer)
 		g_source_remove (pContainer->iSidGLAnimation);
 		pContainer->iSidGLAnimation = 0;
 	}
+	cairo_dock_clear_notifications_on_object (pContainer);
+	pContainer->pNotificationsTab = NULL;
 	if (g_pPrimaryContainer == pContainer)
 		g_pPrimaryContainer = NULL;
 	else if (g_bUseOpenGL && g_pPrimaryContainer != NULL)
@@ -436,7 +440,7 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	if (pContainer->bIsHorizontal)
 	{
 		*x = x0;
-		if (pContainer->bDirectionUp)
+		if (pContainer->iWindowPositionY > g_desktopGeometry.iXScreenHeight[pContainer->bIsHorizontal]/2)  // pContainer->bDirectionUp
 			*y = y0 - h;
 		else
 			*y = y0 + pIcon->fHeight * pIcon->fScale;
@@ -444,7 +448,7 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	else
 	{
 		*y = MIN (x0, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - h);
-		if (pContainer->bDirectionUp)
+		if (pContainer->iWindowPositionY > g_desktopGeometry.iXScreenHeight[pContainer->bIsHorizontal]/2)  // pContainer->bDirectionUp
 			*x = y0 - w;
 		else
 			*x = y0 + pIcon->fHeight * pIcon->fScale;

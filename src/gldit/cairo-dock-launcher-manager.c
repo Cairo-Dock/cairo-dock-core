@@ -251,9 +251,9 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 {
 	//\____________ On cree l'icone.
 	gchar *cRendererName = NULL;
-	Icon *pIcon = g_new0 (Icon, 1);
-	pIcon->iType = CAIRO_DOCK_LAUNCHER;
+	Icon *pIcon = cairo_dock_new_icon ();
 	pIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
+	pIcon->iType = CAIRO_DOCK_LAUNCHER;
 	pIcon->cName = cName;
 	pIcon->cFileName = cFileName;
 	pIcon->cQuickInfo = cQuickInfo;

@@ -321,7 +321,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 Icon * cairo_dock_new_launcher_icon (const gchar *cDesktopFileName, gchar **cSubDockRendererName)
 {
 	//\____________ On cree l'icone.
-	Icon *icon = g_new0 (Icon, 1);
+	Icon *icon = cairo_dock_new_icon ();
 	icon->iType = CAIRO_DOCK_LAUNCHER;
 	
 	//\____________ On recupere les infos de son .desktop.

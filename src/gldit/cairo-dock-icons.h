@@ -24,6 +24,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-modules.h"
+#include "cairo-dock-notifications.h"
 G_BEGIN_DECLS
 
 
@@ -39,6 +40,18 @@ G_BEGIN_DECLS
 *
 * Icons are sorted by the (group, order) pair; the group is also the initial type of the icon.
 */
+
+
+typedef enum {
+	/// notification called when an icon's sub-dock is starting to (un)fold. data : {Icon}
+	NOTIFICATION_UNFOLD_SUBDOCK,
+	NB_NOTIFICATIONS_ICON
+	} CairoIconNotifications;
+
+struct _CairoDockIconManager {
+	CairoDockManager mgr;
+	} ;
+
 
 /// Definition of the groups of icons.
 typedef enum {
@@ -88,11 +101,14 @@ struct _IconInterface {
 /// Definition of an Icon.
 struct _Icon {
 	//\____________ Definition.
-	/// group of the icon.
-	CairoDockIconTrueType iTrueType;
-	CairoDockIconType iType;
-	IconInterface iface;
+	/// list of available notifications.
 	GPtrArray *pNotificationsTab;
+	/// type of the icon.
+	CairoDockIconTrueType iTrueType;
+	/// group of the icon.
+	CairoDockIconType iType;
+	/// interface
+	IconInterface iface;
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	
 	//\____________ properties.
@@ -285,6 +301,15 @@ typedef void (* CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContaine
 */
 #define CAIRO_DOCK_IS_DETACHABLE_APPLET(icon) (CAIRO_DOCK_IS_APPLET (icon) && (icon)->pModuleInstance->bCanDetach)
 
+
+/** Create an empty icon.
+*@return the newly allocated icon object.
+*/
+#define cairo_dock_new_icon()\
+	__extension__ ({\
+	Icon *_icon = g_new0 (Icon, 1);\
+	cairo_dock_install_notifications_on_object (_icon, CAIRO_DOCK_NB_NOTIFICATIONS);\
+	_icon; })
 
 /** Destroy an icon, freeing all allocated ressources. Ths sub-dock is not unreferenced, this must be done beforehand. It also deactivate the icon before (dialog, class, Xid, module) if necessary.
 *@param icon the icon to free.

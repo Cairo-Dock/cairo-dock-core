@@ -132,7 +132,7 @@ void cairo_dock_free_icon (Icon *icon)
 		s_DetachedLaunchersList = g_list_remove(s_DetachedLaunchersList, icon);
 	}
 	
-	cairo_dock_free_notification_table (icon->pNotificationsTab);
+	cairo_dock_clear_notifications_on_object (icon);
 	_cairo_dock_free_icon_buffers (icon);
 	cd_debug ("icon freeed");
 	g_free (icon);

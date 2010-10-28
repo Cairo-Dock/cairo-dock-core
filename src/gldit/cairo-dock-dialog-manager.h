@@ -40,21 +40,27 @@ G_BEGIN_DECLS
 * - if you want to pop up only 1 dialog at once on a given icon, use \ref cairo_dock_remove_dialog_if_any before you pop up your dialog.
 */
 
+typedef enum {
+	/// notification called when a Dialog is updated in the fast rendering loop.
+	NOTIFICATION_UPDATE_DIALOG,
+	/// notification called when a Dialog is updated in the slow rendering loop.
+	NOTIFICATION_UPDATE_DIALOG_SLOW,
+	/// notification called when a Dialog is rendered.
+	NOTIFICATION_RENDER_DIALOG,
+	NB_NOTIFICATIONS_DIALOG
+	} CairoDialogNotifications;
+	
 struct _CairoDialogManager {
 	CairoDockManager mgr;
 	CairoDialog* (*build_dialog) (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer);
-	void (*destroy_desklet) (CairoDesklet *pDesklet);
-	
-	void (*place_dialog) (CairoDialog *pDialog);
-	void (*set_icon) (CairoDialog *pDialog, const gchar *cImageFilePath);
-	void (*set_icon_surface) (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
-	void (*free) (CairoDialog *pDialog);
-	GList *pDialogList;  // sinon il faut les fonctions ci-dessous.
+	void (*unreference) (CairoDialog *pDialog);
+	void (*reference) (CairoDialog *pDialog);  // autant la mettre aussi si on met unref
+	void (*place_dialog) (CairoDialog *pDialog);  // sinon il faut hide et unhide.
 	void (*replace_all) (void);
-	void (*unreference) (CairoDialog *pDialog);  // a ce moment-la, free() n'est plus utile.
-	void (*icon_has_dialog) (Icon *pIcon);
+	void (*trigger_replace_all) (void);
+	gboolean (*icon_has_dialog) (Icon *pIcon);
 	gboolean (*remove_dialog_if_any_full) (Icon *icon, gboolean bAll);
-	} ;
+} ;
 
 void cairo_dock_init_dialog_manager (void);
 void cairo_dock_load_dialog_buttons (gchar *cButtonOkImage, gchar *cButtonCancelImage);
@@ -86,6 +92,10 @@ gboolean cairo_dock_remove_dialog_if_any_full (Icon *icon, gboolean bAll);
 #define cairo_dock_remove_dialog_if_any(icon) cairo_dock_remove_dialog_if_any_full (icon, TRUE)
 
 
+void cairo_dock_replace_all_dialogs (void);
+
+void cairo_dock_trigger_replace_all_dialogs (void);
+
 
 /** Generic function to pop up a dialog.
 *@param pAttribute attributes of the dialog.
@@ -94,9 +104,6 @@ gboolean cairo_dock_remove_dialog_if_any_full (Icon *icon, gboolean bAll);
 *@return a newly created dialog, visible, with a reference of 1.
 */
 CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer);
-
-
-void cairo_dock_replace_all_dialogs (void);
 
 /** Pop up a dialog with a message, a widget, 2 buttons ok/cancel and an icon, all optionnal.
 *@param cText the message to display.

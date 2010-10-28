@@ -203,26 +203,22 @@ static void reload (CairoConfigAccessibility *pPrevAccessibility, CairoConfigAcc
 	}
 	
 	//\_______________ Shortcut.
-	if (pAccessibility->cRaiseDockShortcut != NULL)  // equivalent a avoir iVisibility == CAIRO_DOCK_VISI_SHORTKEY
+	if (pPrevAccessibility->cRaiseDockShortcut != NULL)  // il y'a un ancien raccourci.
 	{
-		if (pPrevAccessibility->cRaiseDockShortcut != NULL && strcmp (pAccessibility->cRaiseDockShortcut, pPrevAccessibility->cRaiseDockShortcut) != 0)  // le raccourci a change, il faut donc juste le re-bind.
+		if (pAccessibility->cRaiseDockShortcut == NULL || strcmp (pAccessibility->cRaiseDockShortcut, pPrevAccessibility->cRaiseDockShortcut) != 0)  // le raccourci a change, ou n'est plus d'actualite => on le un-bind ou on le re-bind.
 		{
 			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-			if (! cd_keybinder_bind (pAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))  // le bind n'a pas pu se faire.
+			
+			if (pAccessibility->cRaiseDockShortcut != NULL)  // le raccourci a seulement change, mais l'option est toujours d'actualite, le set_visibility ne verra pas la difference, donc on re-binde.
 			{
-				g_free (pAccessibility->cRaiseDockShortcut);
-				pAccessibility->cRaiseDockShortcut = NULL;
-				pAccessibility->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
-				
-				cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
+				if (! cd_keybinder_bind (pAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))  // le bind n'a pas pu se faire.
+				{
+					g_free (pAccessibility->cRaiseDockShortcut);
+					pAccessibility->cRaiseDockShortcut = NULL;
+					pAccessibility->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+				}
 			}
 		}
-	}
-	else if (pPrevAccessibility->cRaiseDockShortcut != NULL) // plus de raccourci
-	{
-		cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-		
-		cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
 	}
 	
 	//\_______________ Max Size.

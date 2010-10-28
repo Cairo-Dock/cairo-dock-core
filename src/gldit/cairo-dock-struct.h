@@ -402,7 +402,6 @@ typedef struct _CairoDockImageBuffer CairoDockImageBuffer;
 typedef struct _CairoEmblem CairoEmblem;
 
 
-
 typedef gpointer CairoDockManagerConfigPtr;
 typedef gpointer CairoDockManagerDataPtr;
 typedef void (*CairoDockManagerInitFunc) (void);
@@ -413,6 +412,8 @@ typedef gboolean (* CairoDockManagerGetConfigFunc) (GKeyFile *pKeyFile, CairoDoc
 typedef void (* CairoDockManagerResetConfigFunc) (CairoDockManagerConfigPtr *pConfig);
 typedef void (* CairoDockManagerResetDataFunc) (CairoDockManagerDataPtr *pData);
 struct _CairoDockManager {
+	// list of available notifications.
+	GPtrArray *pNotificationsTab;
 	//\_____________ Carte de visite.
 	const gchar *cModuleName;
 	const gchar *cDescription;

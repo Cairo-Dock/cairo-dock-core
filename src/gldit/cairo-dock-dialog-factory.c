@@ -74,10 +74,13 @@ static void _cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 	if (pDialog->iBubbleWidth == 0)  // precaution.
 		pDialog->iBubbleWidth = 20;
 	if (pDialog->iBubbleHeight == 0)
-		pDialog->iBubbleHeight = 20;
+		pDialog->iBubbleHeight = 10;
 	
-	pDialog->container.iWidth = pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin;
-	pDialog->container.iHeight = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iMinBottomGap;  // resultat temporaire, sans la pointe.
+	pDialog->iComputedWidth = pDialog->iLeftMargin + pDialog->iBubbleWidth + pDialog->iRightMargin;
+	pDialog->iComputedHeight = pDialog->iTopMargin + pDialog->iBubbleHeight + pDialog->iBottomMargin + pDialog->iMinBottomGap;  // all included.
+	
+	pDialog->container.iWidth = pDialog->iComputedWidth;
+	pDialog->container.iHeight = pDialog->iComputedHeight;
 }
 
 static gboolean on_expose_dialog (GtkWidget *pWidget,
@@ -186,10 +189,12 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	if (pEvent->width <= CAIRO_DIALOG_MIN_SIZE && pEvent->height <= CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
 		return FALSE;
 	
-	//\____________ get dialog size.
+	//\____________ get dialog size and position.
 	int iPrevWidth = pDialog->container.iWidth, iPrevHeight = pDialog->container.iHeight;
-	/**pDialog->container.iWidth = pEvent->width;
-	pDialog->container.iHeight = pEvent->height;*/
+	pDialog->container.iWidth = pEvent->width;
+	pDialog->container.iHeight = pEvent->height;
+	pDialog->container.iWindowPositionX = pEvent->x;
+	pDialog->container.iWindowPositionY = pEvent->y;
 	
 	//\____________ if an interactive widget is present, internal sizes may have changed.
 	if (pDialog->pInteractiveWidget != NULL)
@@ -199,13 +204,9 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
 		//g_print ("  pInteractiveWidget : %dx%d\n", pDialog->iInteractiveWidth, pDialog->iInteractiveHeight);
-
-		pDialog->iBubbleWidth = MAX (pDialog->iMessageWidth, MAX (pDialog->iInteractiveWidth, pDialog->iButtonsWidth));
-		pDialog->iBubbleHeight = pDialog->iMessageHeight + pDialog->iInteractiveHeight + pDialog->iButtonsHeight;
-		//g_print (" -> iBubbleWidth: %d , iBubbleHeight : %d\n", pDialog->iBubbleWidth, pDialog->iBubbleHeight);
 		_cairo_dock_compute_dialog_sizes (pDialog);
 	}
-	g_print ("dialog size: %dx%d / %dx%d\n", pEvent->width, pEvent->height, pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin, pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iMinBottomGap);
+	g_print ("dialog size: %dx%d / %dx%d\n", pEvent->width, pEvent->height, pDialog->iComputedWidth, pDialog->iComputedHeight);
 	
 	//\____________ set input shape if size has changed or if no shape yet.
 	if (pDialog->bNoInput && (iPrevWidth != pEvent->width || iPrevHeight != pEvent->height || ! pDialog->pShapeBitmap))
@@ -213,36 +214,16 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 		_cairo_dock_set_dialog_input_shape (pDialog);
 	}
 	
-	//\____________ set input shape if size has changed or if no shape yet.
-	if (pDialog->container.iWidth == pEvent->width && pDialog->container.iHeight == pEvent->height && pEvent->y != pDialog->container.iWindowPositionY && !pDialog->bPositionForced)
+	//\____________ force position for buggy WM (Compiz).
+	if (pDialog->iComputedWidth == pEvent->width && pDialog->iComputedHeight == pEvent->height && (pEvent->y != pDialog->iComputedPositionY || pEvent->x != pDialog->iComputedPositionX) && !pDialog->bPositionForced)
 	{
-		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget), pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY);
+		g_print ("force to %d;%d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY);
+		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
+			pDialog->iComputedPositionX,
+			pDialog->iComputedPositionY);
 		pDialog->bPositionForced = TRUE;
 	}
 	
-	/**if (iWidth != pEvent->width || iHeight != pEvent->height || (pDialog->bNoInput && ! pDialog->pShapeBitmap))
-	{
-		if ((pEvent->width != CAIRO_DIALOG_MIN_SIZE || pEvent->height != CAIRO_DIALOG_MIN_SIZE) && (pEvent->width < iWidth || pEvent->height < iHeight))
-		{
-			//g_print ("non, on a dit %dx%d !\n", pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
-			//	pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
-			gtk_window_resize (GTK_WINDOW (pDialog->container.pWidget),
-				pDialog->iBubbleWidth + pDialog->iLeftMargin + pDialog->iRightMargin,
-				pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iDistanceToDock);
-		}
-		pDialog->container.iWidth = pEvent->width;
-		pDialog->container.iHeight = pEvent->height;
-		
-		if (pDialog->bNoInput)
-		{
-			_cairo_dock_set_dialog_input_shape (pDialog);
-		}
-	}
-	else if (pEvent->y != pDialog->container.iWindowPositionY && !pDialog->bPositionForced)
-	{
-		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget), pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY);
-		pDialog->bPositionForced = TRUE;
-	}*/
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
 
 	return FALSE;
@@ -641,78 +622,70 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
-		if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pDock->container.pWidget))  // sous-dock invisible.  // pDock->bAtBottom
+		if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pContainer->pWidget))  // sous-dock invisible.
 		{
-			//g_print ("sous-dock invisible\n");
 			CairoDock *pParentDock = NULL;
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			_cairo_dock_dialog_calculate_aimed_point (pPointingIcon, CAIRO_CONTAINER (pParentDock), iX, iY, bRight, bIsHorizontal, bDirectionUp, fAlign);
 		}
-		else/* if (pDock->iRefCount == 0)*/  // un dock principal au repos.  // && pDock->bAtBottom
+		else  // dock principal ou sous-dock wisible.
 		{
-			//g_print ("dock %d\n", pDock->iRefCount);
-			*bIsHorizontal = (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
+			*bIsHorizontal = (pContainer->bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
 			int dy;
 			if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 				dy = 0;
 			else if (cairo_dock_is_hidden (pDock))
-					dy = pDock->container.iHeight;
+				dy = pContainer->iHeight;
 			else
-				dy = pDock->container.iHeight - pDock->iMinDockHeight;
-			if (pDock->container.bIsHorizontal)
+				dy = pContainer->iHeight - pDock->iMinDockHeight;
+			if (pContainer->bIsHorizontal)
 			{
-				*bRight = (pIcon ? pIcon->fXAtRest > pDock->fFlatDockWidth / 2 : TRUE);
-				*bDirectionUp = pDock->container.bDirectionUp;
-				
-				//g_print ("y = %d + %d\n", pDock->container.iWindowPositionY, dy);
+				*bRight = (pIcon ? pIcon->fXAtRest < pDock->fFlatDockWidth / 2 : TRUE);
+				*bDirectionUp = pContainer->bDirectionUp;
 				
 				if (*bDirectionUp)
-					*iY = pDock->container.iWindowPositionY + dy;
+					*iY = pContainer->iWindowPositionY + dy;
 				else
-					*iY = pDock->container.iWindowPositionY + pDock->container.iHeight - dy;
+					*iY = pContainer->iWindowPositionY + pContainer->iHeight - dy;
 			}
 			else
 			{
-				*bRight = (pDock->container.iWindowPositionY > g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bRight = (pContainer->iWindowPositionY > g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 				*bDirectionUp = (pIcon ? pIcon->fXAtRest > pDock->fFlatDockWidth / 2 : TRUE);
-				///*iY = (! (*bRight) ? pDock->container.iWindowPositionY : pDock->container.iWindowPositionY + pDock->container.iHeight) + (pDock->container.bDirectionUp ? dy : -dy);
-				*iY = (pDock->container.bDirectionUp ?
-					pDock->container.iWindowPositionY + dy :
-					pDock->container.iWindowPositionY + pDock->container.iHeight - dy);
-				//g_print ("dock vertical -> y=%d, right = %d\n", *iY, *bRight);
+				*iY = (pContainer->bDirectionUp ?
+					pContainer->iWindowPositionY + dy :
+					pContainer->iWindowPositionY + pContainer->iHeight - dy);
 			}
 			
 			if (cairo_dock_is_hidden (pDock))
 			{
-				*iX = pDock->container.iWindowPositionX +
-					(pIcon ? (pIcon->fXAtRest + pIcon->fWidth * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign))) / pDock->fFlatDockWidth * pDock->iMaxDockWidth : 0);
-				//cd_debug ("placement sur un dock cache -> %d", *iX);
+				*iX = pContainer->iWindowPositionX +
+					(pIcon ? (pIcon->fXAtRest + pIcon->fWidth/2) / pDock->fFlatDockWidth * pDock->iMaxDockWidth : 0);
 			}
 			else
 			{
-				*iX = pDock->container.iWindowPositionX +
-					(pIcon ? pIcon->fDrawX + pIcon->fWidth * pIcon->fScale * (.5 + (*bRight ? .2 : -.2) * 2*(.5-fAlign)) : 0);
-				//g_print ("dock not hidden -> x=%d\n", *iX);
+				*iX = pContainer->iWindowPositionX +
+					(pIcon ? pIcon->fDrawX + pIcon->fWidth * pIcon->fScale/2 : 0);
 			}
 		}
 	}
 	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
-		*bDirectionUp = (pDesklet->container.iWindowPositionY > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-		*bIsHorizontal = (pDesklet->container.iWindowPositionX > 50 && pDesklet->container.iWindowPositionX + pDesklet->container.iHeight < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - 50);
+		*bDirectionUp = (pContainer->iWindowPositionY > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+		*bIsHorizontal = (pContainer->iWindowPositionX > 50 && pContainer->iWindowPositionX + pContainer->iHeight < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - 50);
 		
 		if (*bIsHorizontal)
 		{
-			*bRight = (pDesklet->container.iWindowPositionX > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-			*iX = pDesklet->container.iWindowPositionX + pDesklet->container.iWidth * (*bRight ? .7 : .3);
-			*iY = (*bDirectionUp ? pDesklet->container.iWindowPositionY : pDesklet->container.iWindowPositionY + pDesklet->container.iHeight);
+			*bRight = (pContainer->iWindowPositionX > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+			*iX = pContainer->iWindowPositionX + pContainer->iWidth * (*bRight ? .7 : .3);
+			*iY = (*bDirectionUp ? pContainer->iWindowPositionY : pContainer->iWindowPositionY + pContainer->iHeight);
 		}
 		else
 		{
-			*bRight = (pDesklet->container.iWindowPositionX < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-			*iY = pDesklet->container.iWindowPositionX + pDesklet->container.iWidth * (*bRight ? 1 : 0);
-			*iX =pDesklet->container.iWindowPositionY + pDesklet->container.iHeight / 2;
+			*bRight = (pContainer->iWindowPositionX < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+			*iY = pContainer->iWindowPositionX + pContainer->iWidth * (*bRight ? 1 : 0);
+			*iX =pContainer->iWindowPositionY + pContainer->iHeight / 2;
 		}
 	}
 }
@@ -722,7 +695,7 @@ void cairo_dock_set_dialog_orientation (CairoDialog *pDialog, CairoContainer *pC
 {
 	if (pContainer != NULL && pDialog->pIcon != NULL)
 	{
-		_cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bTopBottomDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);		
+		_cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bTopBottomDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);
 	}
 	else
 	{

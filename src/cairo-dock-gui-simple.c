@@ -77,6 +77,8 @@ static gchar *s_cClickEffect = NULL;
 static int s_iEffectOnDisappearance = -1;
 static gboolean s_bShowThemePage = FALSE;
 
+extern GtkWidget *s_pLauncherWindow;
+
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;

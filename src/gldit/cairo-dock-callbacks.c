@@ -658,9 +658,10 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	if (!_mouse_is_really_outside(pDock))
 	{
-		//g_print ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
+		cd_debug ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
 		if (pDock->iSidTestMouseOutside == 0 && pEvent)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
 		{
+			cd_debug ("start checking mouse\n");
 			pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
 		}
 		return FALSE;
@@ -865,7 +866,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 		//g_print ("release : pKey->keyval = %d\n", pKey->keyval);
 		if ((pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
-			if (pDock->iRefCount == 0)
+			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
 				cairo_dock_write_root_dock_gaps (pDock);
 		}
 	}
@@ -890,7 +891,7 @@ static gboolean _double_click_delay_over (Icon *icon)
 }
 static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principalement fait pour detecter les cas ou X nous envoit un signal leave errone alors qu'on est dedans (=> sortie refusee, bInside reste a TRUE), puis du coup ne nous en envoit pas de leave lorsqu'on quitte reellement le dock.
 {
-	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->bIsShrinkingDown, pDock->iMagnitudeIndex, pDock->container.bInside);
+	cd_debug ("%s (%d, %d, %d)\n", __func__, pDock->bIsShrinkingDown, pDock->iMagnitudeIndex, pDock->container.bInside);
 	if (pDock->bIsShrinkingDown || pDock->iMagnitudeIndex == 0 || ! pDock->container.bInside)  // cas triviaux : si le dock est deja retrcit, ou qu'on est deja plus dedans, on peut quitter.
 	{
 		pDock->iSidTestMouseOutside = 0;
@@ -900,7 +901,7 @@ static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principa
 		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
 	else
 		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
-	//g_print (" -> (%d, %d)\n", pDock->container.iMouseX, pDock->container.iMouseY);
+	cd_debug (" -> (%d, %d)\n", pDock->container.iMouseX, pDock->container.iMouseY);
 	
 	cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
 	return TRUE;
@@ -1038,7 +1039,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 				}
 				else
 				{
-					if (pDock->iRefCount == 0)
+					if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
 						cairo_dock_write_root_dock_gaps (pDock);
 				}
 				//g_print ("- apres clic : s_pIconClicked <- NULL\n");
@@ -1106,11 +1107,6 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 	}
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // can be NULL
 	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_SCROLL_ICON, icon, pDock, pScroll->direction);
-	
-	if (pDock->iSidTestMouseOutside == 0)  // meme remarque que plus haut.
-	{
-		///pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
-	}
 	
 	return FALSE;
 }

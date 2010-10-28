@@ -580,7 +580,7 @@ void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBac
 
 GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon, CairoContainer *pContainer, int iShowPage)
 {
-	g_print ("%s (%x)\n", __func__, pIcon);
+	//g_print ("%s (%x)\n", __func__, pIcon);
 	if (s_pLauncherGuiBackend && s_pLauncherGuiBackend->show_gui)
 		return s_pLauncherGuiBackend->show_gui (pIcon, pContainer, iShowPage);
 }

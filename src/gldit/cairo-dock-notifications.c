@@ -18,6 +18,7 @@
 */
 
 #include "cairo-dock-icons.h"
+#include "cairo-dock-log.h"
 #include "cairo-dock-notifications.h"
 
 static GPtrArray *s_pNotificationsTab = NULL;  // tables des notifications globales.
@@ -48,19 +49,6 @@ void cairo_dock_register_notification (CairoDockNotificationType iNotifType, Cai
 	
 	_cairo_dock_register_notification_in_tab (s_pNotificationsTab, iNotifType, pFunction, bRunFirst, pUserData);
 }
-void cairo_dock_register_notification_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData)
-{
-	_check_notification_table (pIcon->pNotificationsTab);
-	
-	_cairo_dock_register_notification_in_tab (pIcon->pNotificationsTab, iNotifType, pFunction, bRunFirst, pUserData);
-}
-void cairo_dock_register_notification_on_container (CairoContainer *pContainer, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData)
-{
-	_check_notification_table (pContainer->pNotificationsTab);
-	
-	_cairo_dock_register_notification_in_tab (pContainer->pNotificationsTab, iNotifType, pFunction, bRunFirst, pUserData);
-}
-
 
 
 static void _cairo_dock_remove_notification_func_in_tab (GPtrArray *pNotificationsTab, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData)
@@ -84,15 +72,6 @@ void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, 
 {
 	_cairo_dock_remove_notification_func_in_tab (s_pNotificationsTab, iNotifType, pFunction, pUserData);
 }
-void cairo_dock_remove_notification_func_on_icon (Icon *pIcon, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData)
-{
-	_cairo_dock_remove_notification_func_in_tab (pIcon->pNotificationsTab, iNotifType, pFunction, pUserData);
-}
-void cairo_dock_remove_notification_func_on_container (CairoContainer *pContainer, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData)
-{
-	_cairo_dock_remove_notification_func_in_tab (pContainer->pNotificationsTab, iNotifType, pFunction, pUserData);
-}
-
 
 
 GSList *cairo_dock_get_notifications_list (CairoDockNotificationType iNotifType)
@@ -116,4 +95,36 @@ void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab)
 		g_slist_free (pNotificationRecordList);
 	}
 	g_ptr_array_free (pNotificationsTab, TRUE);
+}
+
+
+
+void cairo_dock_register_notification_on_object (gpointer pObject, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData)
+{
+	g_return_if_fail (pObject != NULL);
+	GPtrArray **pNotificationsTabPtr = (GPtrArray**) pObject;
+	GPtrArray *pNotificationsTab = *pNotificationsTabPtr;
+	
+	if (pNotificationsTab == NULL)
+	{
+		pNotificationsTab = g_ptr_array_new ();
+		*pNotificationsTabPtr = pNotificationsTab;
+		g_ptr_array_set_size (pNotificationsTab, 10);
+	}
+	
+	if (pNotificationsTab->len < iNotifType)
+	{
+		cd_warning ("someone tried to register to an inexisting notification (%d) on an object", iNotifType);
+		g_ptr_array_set_size (pNotificationsTab, iNotifType+1);
+	}
+	
+	_cairo_dock_register_notification_in_tab (pNotificationsTab, iNotifType, pFunction, bRunFirst, pUserData);
+}
+
+void cairo_dock_remove_notification_func_on_object (gpointer pObject, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData)
+{
+	g_return_if_fail (pObject != NULL);
+	GPtrArray **pNotificationsTabPtr = (GPtrArray**) pObject;
+	GPtrArray *pNotificationsTab = *pNotificationsTabPtr;
+	_cairo_dock_remove_notification_func_in_tab (pNotificationsTab, iNotifType, pFunction, pUserData);
 }

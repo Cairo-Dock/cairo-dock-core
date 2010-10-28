@@ -824,7 +824,7 @@ static void cairo_dock_blacklist_appli (Window Xid)
 		*pXid = Xid;
 		cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);  // on veut pouvoir etre notifie de ses changements d'etat (si "skip taskbar" disparait, elle reviendra dans la barre des taches).
 		
-		Icon *pNullIcon = g_new0 (Icon, 1);
+		Icon *pNullIcon = cairo_dock_new_icon ();
 		pNullIcon->iLastCheckTime = s_iTime;
 		g_hash_table_insert (s_hXWindowTable, pXid, pNullIcon);  // NULL
 	}

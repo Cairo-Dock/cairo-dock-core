@@ -31,9 +31,9 @@
 Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance)
 {
 	//\____________ On cree l'icone.
-	Icon *icon = g_new0 (Icon, 1);
-	icon->iType = CAIRO_DOCK_APPLET;
+	Icon *icon = cairo_dock_new_icon ();
 	icon->iTrueType = CAIRO_DOCK_ICON_TYPE_APPLET;
+	icon->iType = CAIRO_DOCK_APPLET;
 	icon->pModuleInstance = pModuleInstance;
 	
 	//\____________ On recupere les infos de sa config.
