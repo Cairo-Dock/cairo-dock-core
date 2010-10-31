@@ -66,7 +66,7 @@ struct _CairoDockTask {
 	/// function carrying out the update of the dock. Returns TRUE to continue, FALSE to stop.
 	CairoDockUpdateSyncFunc update;
 	/// interval of time in seconds, 0 to run the Task once.
-	gint iPeriod;
+	guint iPeriod;
 	/// state of the frequency of the Task.
 	CairoDockFrequencyState iFrequencyState;
 	/// structure passed as parameter of the 'get_data' and 'update' functions. Must not be accessed outside of these 2 functions !

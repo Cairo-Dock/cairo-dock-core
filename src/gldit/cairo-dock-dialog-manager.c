@@ -744,7 +744,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 
 void cairo_dock_replace_all_dialogs (void)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	GSList *ic;
 	CairoDialog *pDialog;
 	CairoContainer *pContainer;

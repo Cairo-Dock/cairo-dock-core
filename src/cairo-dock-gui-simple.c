@@ -897,7 +897,7 @@ static GtkWidget * show_main_gui (void)
 	return s_pSimpleConfigWindow;
 }
 
-
+	
 static gboolean on_apply_config_module_simple (gpointer data)
 {
 	cd_debug ("%s (%s)\n", __func__, s_cCurrentModuleName);

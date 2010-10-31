@@ -533,7 +533,6 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, int iShowPa
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (s_pLauncherTreeView), -1, NULL, rend, "text", 0, NULL);
 	
 	GtkWidget *pLauncherWindow = gtk_scrolled_window_new (NULL, NULL);
-	gtk_widget_set (pLauncherWindow, "height-request", CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT - 30, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pLauncherWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pLauncherWindow), s_pLauncherTreeView);
 	gtk_paned_pack1 (GTK_PANED (s_pLauncherPane), pLauncherWindow, TRUE, FALSE);
@@ -570,6 +569,7 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, int iShowPa
 		FALSE,
 		0);
 	g_object_set_data (G_OBJECT (s_pLauncherWindow), "status-bar", pStatusBar);
+	g_object_set_data (G_OBJECT (s_pLauncherWindow), "frame-width", GINT_TO_POINTER (250));
 	
 	//\_____________ On essaie de definir une taille correcte.
 	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);

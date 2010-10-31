@@ -795,7 +795,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_LOAD_MY_ICONS_LIST(pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig) do {\
 	cairo_dock_insert_icons_in_applet (myApplet, pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig);\
-	if (myDesklet && myIcon->pIconBuffer != NULL)\
+	if (myDesklet && myIcon->pIconBuffer != NULL && myDrawContext == NULL)\
 		myDrawContext = cairo_create (myIcon->pIconBuffer); } while (0)
 
 /** Add an icon into an applet. The view previously set by CD_APPLET_LOAD_MY_ICONS_LIST will be used. The icon will be loaded automatically in an idle process.

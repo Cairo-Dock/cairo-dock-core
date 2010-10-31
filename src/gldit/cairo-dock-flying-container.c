@@ -325,6 +325,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
 		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
 	}
+	gtk_window_present (GTK_WINDOW (pWindow));
 	/*cd_debug ("%s (%d;%d %dx%d)\n", __func__ pFlyingContainer->container.iWindowPositionX,
 		pFlyingContainer->container.iWindowPositionY,
 		pFlyingContainer->container.iWidth,
@@ -340,7 +341,6 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	gtk_window_move (GTK_WINDOW (pWindow),
 		pFlyingContainer->container.iWindowPositionX,
 		pFlyingContainer->container.iWindowPositionY);*/
-	gtk_window_present (GTK_WINDOW (pWindow));
 	
 	_cairo_dock_load_hand_image (pFlyingContainer->container.iWidth);
 	_cairo_dock_load_explosion_image (pFlyingContainer->container.iWidth);

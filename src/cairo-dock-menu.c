@@ -1149,10 +1149,7 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer data)
 }
 static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSeparator, gboolean bAddLauncher)
 {
-	GtkWidget *pMenuItem = gtk_separator_menu_item_new ();
-	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem);
-	
-	pMenuItem = _add_entry_in_menu (_("Add"), GTK_STOCK_ADD, NULL, pMenu);
+	GtkWidget *pMenuItem = _add_entry_in_menu (_("Add"), GTK_STOCK_ADD, NULL, pMenu);
 	GtkWidget *pSubMenuAdd = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);
 	
@@ -1201,7 +1198,6 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
 		if (!pPointingIcon || CAIRO_DOCK_IS_CONTAINER_LAUNCHER (pPointingIcon))
 		{
-			///_add_add_entry (menu, data, ! CAIRO_DOCK_IS_SEPARATOR (icon), cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER));
 			bAddNewEntries = TRUE;
 			
 			if (icon->cDesktopFileName != NULL && icon->cParentDockName != NULL)  // possede un .desktop.
@@ -1468,10 +1464,12 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	//\_________________________ On rajoute les actions d'ajout de nouveaux elements.
 	if (bAddNewEntries)
 	{
-		pMenuItem = gtk_separator_menu_item_new ();
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
-		
-		_add_add_entry (menu, data, ! CAIRO_DOCK_IS_SEPARATOR (icon), cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER));
+		if (bAddSeparator)
+		{
+			pMenuItem = gtk_separator_menu_item_new ();
+			gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+		}
+		_add_add_entry (menu, data, FALSE, cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER));
 	}
 
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;

@@ -143,7 +143,7 @@ void cairo_dock_reset_source_context (void)
 cairo_surface_t *cairo_dock_create_blank_surface (int iWidth, int iHeight)
 {
 	cairo_t *pSourceContext = _get_source_context ();
-	if (pSourceContext != NULL && ! g_bUseOpenGL)
+	if (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS && ! g_bUseOpenGL)
 		return cairo_surface_create_similar (cairo_get_target (pSourceContext),
 			CAIRO_CONTENT_COLOR_ALPHA,
 			iWidth,
@@ -212,9 +212,6 @@ static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDo
 
 cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuffer, int iBufferNbElements, int iWidth, int iHeight)
 {
-	cairo_t *pSourceContext = _get_source_context ();
-	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
-
 	//\____________________ On recupere la plus grosse des icones presentes dans le tampon (meilleur rendu).
 	int iIndex = 0, iBestIndex = 0;
 	while (iIndex + 2 < iBufferNbElements)
@@ -384,8 +381,6 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 {
 	//g_print ("%s (%s, %dx%dx%.2f, %d)\n", __func__, cImagePath, iWidthConstraint, iHeightConstraint, fMaxScale, iLoadingModifier);
 	g_return_val_if_fail (cImagePath != NULL, NULL);
-	cairo_t *pSourceContext = _get_source_context ();
-	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	GError *erreur = NULL;
 	RsvgDimensionData rsvg_dimension_data;
 	RsvgHandle *rsvg_handle = NULL;

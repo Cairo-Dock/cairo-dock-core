@@ -41,11 +41,13 @@
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-load.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-launcher-manager.h" // cairo_dock_launch_command_sync
 
 #define CAIRO_DOCK_ICON_MARGIN 6
 #define CAIRO_DOCK_PREVIEW_WIDTH 400
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
+#define CAIRO_DOCK_README_WIDTH 500
 #define CAIRO_DOCK_APPLET_ICON_SIZE 32
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
@@ -56,6 +58,7 @@ extern gchar *g_cThemesDirPath;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static GtkListStore *s_pRendererListStore = NULL;
 static GtkListStore *s_pDecorationsListStore = NULL;
@@ -306,11 +309,14 @@ static gboolean on_delete_async_widget (GtkWidget *pMainWindow, GdkEvent *event,
 static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *pPreviewImage)
 {
 	int iPreviewWidth, iPreviewHeight;
+	GtkRequisition requisition;
+	gtk_widget_size_request (GTK_WIDGET (pPreviewImage), &requisition);
+	
 	GdkPixbuf *pPreviewPixbuf = NULL;
 	if (gdk_pixbuf_get_file_info (cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)
 	{
-		iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH);
-		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
+		iPreviewWidth = MIN (requisition.width, MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH));
+		iPreviewHeight = MIN (requisition.height, MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT));
 		 //g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight); // 
 		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 	}
@@ -1676,17 +1682,23 @@ static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidg
 	gconstpointer *data;
 	_allocate_new_buffer;
 	
+	// min size
+	int iFrameWidth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width"));
+	
 	// readme label.
 	GtkWidget *pDescriptionLabel = gtk_label_new (NULL);
 	
 	g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pDescriptionLabel);
 	g_object_ref (pDescriptionLabel);
 	
+	int iMinSize = (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iFrameWidth) /2.5;
 	gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
 	if (bHorizontalPackaging)
-		gtk_widget_set_size_request (pDescriptionLabel, 400, CAIRO_DOCK_PREVIEW_HEIGHT);
+	{
+		gtk_widget_set_size_request (pDescriptionLabel, MIN (iMinSize * 1.5, CAIRO_DOCK_README_WIDTH), CAIRO_DOCK_PREVIEW_HEIGHT);
+	}
 	else
-		gtk_widget_set (pDescriptionLabel, "width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
+		gtk_widget_set_size_request (pDescriptionLabel, CAIRO_DOCK_README_WIDTH, -1);
 	gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);
 	gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);
 	
@@ -1696,9 +1708,9 @@ static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidg
 	g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pPreviewImage);
 	g_object_ref (pPreviewImage);
 	
-	gtk_widget_set (pPreviewImage,
-		"height-request", CAIRO_DOCK_PREVIEW_HEIGHT,
-		"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
+	gtk_widget_set_size_request (pPreviewImage,
+		CAIRO_DOCK_PREVIEW_HEIGHT,
+		bHorizontalPackaging ? MIN (iMinSize, CAIRO_DOCK_PREVIEW_WIDTH) : CAIRO_DOCK_PREVIEW_WIDTH);
 	
 	// info bar
 	GtkWidget* pDescriptionFrame = NULL;
@@ -2153,7 +2165,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							pModule->pVisitCard->cDescription));
 					pLabel = gtk_label_new (cDescription);
 					gtk_label_set_use_markup (GTK_LABEL (pLabel), TRUE);
-					gtk_widget_set (pLabel, "width-request", 500, NULL);  // CAIRO_DOCK_PREVIEW_WIDTH
+					gtk_widget_set (pLabel, "width-request", CAIRO_DOCK_README_WIDTH, NULL);
 					gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
 					gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
 					g_free (cDescription);
@@ -2431,7 +2443,13 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					data[0] = pOneWidget;
 					data[1] = pMainWindow;
 					data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // libere dans la callback de la tache.
-					CairoDockTask *pTask = cairo_dock_list_packages_async (cShareThemesDir, cUserThemesDir, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_combo_list, data);
+					
+					GHashTable *pThemeTable = cairo_dock_list_packages (cShareThemesDir, cUserThemesDir, NULL);
+					_got_themes_combo_list (pThemeTable, (gpointer*)data);
+					g_hash_table_destroy (pThemeTable);
+					
+					data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // libere dans la callback de la tache.
+					CairoDockTask *pTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_combo_list, data);
 					g_object_set_data (G_OBJECT (pOneWidget), "cd-task", pTask);
 					g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pOneWidget);
 					g_object_ref (pOneWidget);  // on prend une reference pour que le widget reste en vie lorsqu'on recharge la fenetre (sinon le widget serait detruit sans que la fenetre ne le soit, et lors de la destruction de celle-ci, le signal delete-event serait emis, et la callback appelee avec un widget deja detruit).
@@ -2580,37 +2598,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				pPreviewBox = _make_preview_box (pMainWindow, pOneWidget, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
 				_pack_in_widget_box (pPreviewBox);
 				g_free (cDefaultMessage);
-				/**pDescriptionLabel = gtk_label_new (NULL);
-				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pDescriptionLabel);
-				g_object_ref (pDescriptionLabel);
-				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
-				gtk_widget_set (pDescriptionLabel,
-					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
-				gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);
-				gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);
-				pPreviewImage = gtk_image_new_from_pixbuf (NULL);
-				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pPreviewImage);
-				g_object_ref (pPreviewImage);
-				gtk_widget_set (pPreviewImage,
-					"height-request", CAIRO_DOCK_PREVIEW_HEIGHT,
-					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
-				_allocate_new_buffer;
-				data[0] = pDescriptionLabel;
-				data[1] = pPreviewImage;
-				gtk_tree_selection_set_select_function (selection,
-					(GtkTreeSelectionFunc) _cairo_dock_select_one_item_in_tree,
-					data,
-					NULL);
-				pPreviewBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-				gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);
-				gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);
-				_pack_in_widget_box (pPreviewBox);
-				
-				//\______________ On affiche un message par defaut.
-				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
-				gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDefaultMessage);
-				g_free (cDefaultMessage);
-				_set_preview_image (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, GTK_IMAGE (pPreviewImage));*/
 			}
 			break ;
 			
@@ -3049,30 +3036,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				//\______________ On construit le widget de prevue et on le rajoute a la suite.
 				pPreviewBox = _make_preview_box (pMainWindow, pOneWidget, FALSE, 2, NULL, NULL, pDataGarbage);  // vertical packaging.
-				/**pDescriptionLabel = gtk_label_new (NULL);
-				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pDescriptionLabel);
-				g_object_ref (pDescriptionLabel);
-				gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
-				gtk_widget_set (pDescriptionLabel,
-					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
-				gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);
-				gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);
-				pPreviewImage = gtk_image_new_from_pixbuf (NULL);
-				g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pPreviewImage);
-				g_object_ref (pPreviewImage);
-				gtk_widget_set (pPreviewImage,
-					"height-request", CAIRO_DOCK_PREVIEW_HEIGHT,
-					"width-request", CAIRO_DOCK_PREVIEW_WIDTH, NULL);
-				_allocate_new_buffer;
-				data[0] = pDescriptionLabel;
-				data[1] = pPreviewImage;
-				gtk_tree_selection_set_select_function (selection,
-					(GtkTreeSelectionFunc) _cairo_dock_select_one_item_in_tree,
-					data,
-					NULL);
-				pPreviewBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-				gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);
-				gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, 0);*/
 				_pack_in_widget_box (pPreviewBox);
 				
 				//\______________ On recupere les themes.
@@ -3199,9 +3162,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_TEXT_LABEL :  // juste le label de texte.
-				gtk_widget_set_size_request (pLabel, 800, -1);  /// on coupe a 800; valeur a tester sur differentes resolutions ...
+			{
+				int iFrameWidth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width"));
+				gtk_widget_set_size_request (pLabel, MIN (800, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iFrameWidth), -1);
 				gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
 				gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
+			}
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_HANDBOOK :  // le label contenant le manuel de l'applet, il a ete place avant.

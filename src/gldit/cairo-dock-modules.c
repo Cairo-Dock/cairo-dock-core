@@ -506,7 +506,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		
 		pDeskletAttribute->iDeskletPositionX = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "x position", NULL, 0, NULL, NULL);
 		pDeskletAttribute->iDeskletPositionY = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "y position", NULL, 0, NULL, NULL);
-		pDeskletAttribute->iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "accessibility", NULL, 0, NULL, NULL);
+		pDeskletAttribute->iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "accessibility", NULL, CAIRO_DESKLET_NORMAL, NULL, NULL);
 		pDeskletAttribute->bOnAllDesktops = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "sticky", NULL, TRUE, NULL, NULL);
 		pDeskletAttribute->iNumDesktop = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "num desktop", NULL, -1, NULL, NULL);
 		pDeskletAttribute->bPositionLocked = cairo_dock_get_boolean_key_value (pKeyFile, "Desklet", "locked", NULL, FALSE, NULL, NULL);
@@ -1255,10 +1255,30 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 		cConfFilePath = g_strdup_printf ("%s-%d", pModule->cConfFilePath, iNbInstances);
 		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 		{
-			gchar *cCommand = g_strdup_printf ("cp \"%s/%s\" \"%s\"", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName, cConfFilePath);
+			gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath/**pModule->pVisitCard->cShareDataDir, 
+			pModule->pVisitCard->cConfFileName*/, cConfFilePath);  // copy from first instance.
 			cd_debug (cCommand);
 			int r = system (cCommand);
 			g_free (cCommand);
+			
+			GList *last = g_list_last (pModule->pInstancesList);
+			CairoDockModuleInstance *pFirstInstance = last->data;  // instances are prepended.
+			if (pFirstInstance->pDesklet)  // prevent desklets from overlapping.
+			{
+				int iX2, iX = pFirstInstance->pContainer->iWindowPositionX;
+				int iWidth = pFirstInstance->pContainer->iWidth;
+				if (iX + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2)  // desklet on the left, we place the new one on its right.
+					iX2 = iX + iWidth;
+				else  // desklet on the right, we place the new one on its left.
+					iX2 = iX - iWidth;
+				
+				int iRelativePositionX = (iX2 + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iX2 : iX2 - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
+				cairo_dock_update_conf_file (cConfFilePath,
+					G_TYPE_INT, "Desklet", "x position", iRelativePositionX,
+					G_TYPE_BOOLEAN, "Desklet", "locked", FALSE,  // we'll probably want to move it
+					G_TYPE_BOOLEAN, "Desklet", "no input", FALSE,
+					G_TYPE_INVALID);
+			}
 		}
 	}
 	return cConfFilePath;
@@ -1293,6 +1313,7 @@ void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance)
 		//\__________________ On enregistre l'etat 'detache'.
 		cairo_dock_update_conf_file (pInstance->cConfFilePath,
 			G_TYPE_BOOLEAN, "Desklet", "initially detached", !bIsDetached,
+			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_NORMAL,
 			G_TYPE_INVALID);
 		//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
 		cairo_dock_update_desklet_detached_state_in_gui (pInstance, !bIsDetached);
@@ -1310,6 +1331,7 @@ void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pIn
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (pInstance->cConfFilePath);
 	if (pKeyFile != NULL)
 	{
+		//\__________________ compute coordinates of the center of the desklet.
 		int iDeskletWidth = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "width", NULL, 92, NULL, NULL);
 		int iDeskletHeight = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "height", NULL, 92, NULL, NULL);
 		
@@ -1319,9 +1341,13 @@ void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pIn
 		int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
 		int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		
+		//\__________________ update the conf file of the applet.
 		g_key_file_set_double (pKeyFile, "Desklet", "x position", iDeskletPositionX);
 		g_key_file_set_double (pKeyFile, "Desklet", "y position", iDeskletPositionY);
 		g_key_file_set_boolean (pKeyFile, "Desklet", "initially detached", TRUE);
+		g_key_file_set_double (pKeyFile, "Desklet", "locked", FALSE);  // we usually will want to adjust the position of the new desklet.
+		g_key_file_set_double (pKeyFile, "Desklet", "no input", FALSE);  // we usually will want to adjust the position of the new desklet.
+		g_key_file_set_double (pKeyFile, "Desklet", "accessibility", CAIRO_DESKLET_NORMAL);  // prevent "unforseen consequences".
 		
 		cairo_dock_write_keys_to_file (pKeyFile, pInstance->cConfFilePath);
 		g_key_file_free (pKeyFile);

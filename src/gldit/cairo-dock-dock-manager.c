@@ -65,6 +65,7 @@
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-manager.h"
 

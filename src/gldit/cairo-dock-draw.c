@@ -180,10 +180,10 @@ double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double
 
 void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight)
 {
-	double fDockOffsetX = fRadius + fLineWidth/2;
-	double fDockOffsetY = 0.;
 	if (2*fRadius > fFrameHeight + fLineWidth)
 		fRadius = (fFrameHeight + fLineWidth) / 2 - 1;
+	double fDockOffsetX = fRadius + fLineWidth/2;
+	double fDockOffsetY = 0.;
 	cairo_move_to (pCairoContext, fDockOffsetX, fDockOffsetY);
 	cairo_rel_line_to (pCairoContext, fFrameWidth, 0);
 	//\_________________ Coin haut droit.

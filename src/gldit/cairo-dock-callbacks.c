@@ -544,6 +544,46 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	return FALSE;
 }
 
+gboolean cairo_dock_on_leave_dock_notification2 (gpointer data, CairoDock *pDock, gboolean *bStartAnimation)
+{
+	//\_______________ On gere le drag d'une icone hors du dock.
+	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && ! pDock->bPreventDraggingIcons)
+	{
+		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
+		
+		//if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
+		//	return ;
+		
+		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pIconClicked->cParentDockName);
+		g_return_val_if_fail (pOriginDock != NULL, TRUE);
+		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
+		{
+			cd_debug (" on detache l'icone");
+			pOriginDock->bIconIsFlyingAway = TRUE;
+			gchar *cParentDockName = s_pIconClicked->cParentDockName;
+			s_pIconClicked->cParentDockName = NULL;
+			cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock, TRUE);
+			s_pIconClicked->cParentDockName = cParentDockName;
+			cairo_dock_update_dock_size (pOriginDock);
+			cairo_dock_stop_icon_glide (pOriginDock);
+			
+			s_pFlyingContainer = cairo_dock_create_flying_container (s_pIconClicked, pOriginDock, TRUE);
+			//g_print ("- s_pIconClicked <- NULL\n");
+			s_pIconClicked = NULL;
+			if (pDock->iRefCount > 0 || pDock->bAutoHide)  // pour garder le dock visible.
+			{
+				return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+			}
+		}
+	}
+	else if (s_pFlyingContainer != NULL && s_pFlyingContainer->pIcon != NULL && pDock->iRefCount > 0)  // on evite les bouclages.
+	{
+		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pFlyingContainer->pIcon->cParentDockName);
+		if (pOriginDock == pDock)
+			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
 gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock, gboolean *bStartAnimation)
 {
 	//\_______________ Arrive ici, on est sorti du dock.
@@ -728,6 +768,32 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	return TRUE;
 }
 
+gboolean cairo_dock_on_enter_notification (gpointer pData, CairoDock *pDock, gboolean *bStartAnimation)
+{
+	// si on rentre avec une icone volante, on la met dedans.
+	if (s_pFlyingContainer != NULL)
+	{
+		Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
+		if (pDock != pFlyingIcon->pSubDock)  // on evite les boucles.
+		{
+			struct timeval tv;
+			int r = gettimeofday (&tv, NULL);
+			double t = tv.tv_sec + tv.tv_usec * 1e-6;
+			if (t - s_pFlyingContainer->fCreationTime > 1)  // on empeche le cas ou enlever l'icone fait augmenter le ratio du dock, et donc sa hauteur, et nous fait rentrer dedans des qu'on sort l'icone.
+			{
+				cd_debug ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
+				cairo_dock_free_flying_container (s_pFlyingContainer);
+				cairo_dock_stop_icon_animation (pFlyingIcon);
+				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+				cairo_dock_start_icon_animation (pFlyingIcon, pDock);
+				s_pFlyingContainer = NULL;
+				pDock->bIconIsFlyingAway = FALSE;
+			}
+		}
+	}
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
 	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%x; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
@@ -1036,6 +1102,8 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						pDock->bIconIsFlyingAway = FALSE;
 						cairo_dock_stop_icon_glide (pDock);
 					}
+					/// a implementer ...
+					///cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RELEASE_ICON, icon, pDock);
 				}
 				else
 				{
