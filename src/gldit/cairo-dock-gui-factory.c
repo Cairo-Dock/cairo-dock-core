@@ -317,7 +317,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 	{
 		iPreviewWidth = MIN (requisition.width, MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH));
 		iPreviewHeight = MIN (requisition.height, MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT));
-		 //g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight); // 
+		g_print ("preview : %dx%d\n", requisition.width, requisition.height);
 		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 	}
 	if (pPreviewPixbuf == NULL)
@@ -1677,13 +1677,14 @@ static void _cairo_dock_render_theme_name (GtkCellLayout *cell_layout,
 	data = g_new0 (gconstpointer, 7); \
 	g_ptr_array_add (pDataGarbage, data);
 
-static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidget, gboolean bHorizontalPackaging, int iAddInfoBar, const gchar *cInitialDescription, const gchar *cInitialImage, GPtrArray *pDataGarbage)
+static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidget, gboolean bHorizontalPackaging, int iNbInfoBar, const gchar *cInitialDescription, const gchar *cInitialImage, GPtrArray *pDataGarbage)
 {
 	gconstpointer *data;
 	_allocate_new_buffer;
 	
 	// min size
 	int iFrameWidth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width"));
+	int iMinSize = (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iFrameWidth) /2.5;
 	
 	// readme label.
 	GtkWidget *pDescriptionLabel = gtk_label_new (NULL);
@@ -1691,7 +1692,6 @@ static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidg
 	g_signal_connect (pMainWindow, "delete-event", G_CALLBACK (on_delete_async_widget), pDescriptionLabel);
 	g_object_ref (pDescriptionLabel);
 	
-	int iMinSize = (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iFrameWidth) /2.5;
 	gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
 	if (bHorizontalPackaging)
 	{
@@ -1709,12 +1709,12 @@ static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidg
 	g_object_ref (pPreviewImage);
 	
 	gtk_widget_set_size_request (pPreviewImage,
-		CAIRO_DOCK_PREVIEW_HEIGHT,
-		bHorizontalPackaging ? MIN (iMinSize, CAIRO_DOCK_PREVIEW_WIDTH) : CAIRO_DOCK_PREVIEW_WIDTH);
+		bHorizontalPackaging ? MIN (iMinSize, CAIRO_DOCK_PREVIEW_WIDTH) : CAIRO_DOCK_PREVIEW_WIDTH,
+		CAIRO_DOCK_PREVIEW_HEIGHT);
 	
 	// info bar
 	GtkWidget* pDescriptionFrame = NULL;
-	if (iAddInfoBar)
+	if (iNbInfoBar)
 	{
 		// vertical frame.
 		pDescriptionFrame = gtk_frame_new (NULL);
@@ -1739,7 +1739,7 @@ static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidg
 		
 		gtk_box_pack_start (GTK_BOX (pFirstLine), pTitle, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);
 		
-		if (iAddInfoBar == 1)
+		if (iNbInfoBar == 1)
 		{
 			gtk_box_pack_end (GTK_BOX (pFirstLine), pAuthor, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);
 		}
@@ -1803,6 +1803,93 @@ static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidg
 	return pPreviewBox;
 }
 
+static GtkWidget *_make_handbook_box (CairoDockModule *pModule, GtkWidget *pMainWindow)
+{
+	// min size
+	int iFrameWidth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width"));
+	int w=200, h=200;
+	int iMinSize = MIN (700, (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iFrameWidth - w));
+	
+	// readme label.
+	GtkWidget *pDescriptionLabel = gtk_label_new (NULL);
+	
+	gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
+	gtk_widget_set_size_request (pDescriptionLabel, iMinSize, -1);
+	
+	gtk_label_set_justify (GTK_LABEL (pDescriptionLabel), GTK_JUSTIFY_LEFT);
+	gtk_label_set_line_wrap (GTK_LABEL (pDescriptionLabel), TRUE);
+	
+	// preview image
+	GtkWidget *pPreviewImage = gtk_image_new_from_pixbuf (NULL);
+	
+	int iPreviewWidth, iPreviewHeight;
+	GdkPixbuf *pPreviewPixbuf = NULL;
+	if (gdk_pixbuf_get_file_info (pModule->pVisitCard->cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)  // The return value is owned by GdkPixbuf and should not be freed.
+	{
+		if (iPreviewWidth > w)
+		{
+			iPreviewHeight *= 1.*w/iPreviewWidth;
+			iPreviewWidth = w;
+		}
+		if (iPreviewHeight > h)
+		{
+			iPreviewWidth *= 1.*h/iPreviewHeight;
+			iPreviewHeight = h;
+		}
+		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
+	}
+	if (pPreviewPixbuf != NULL)
+	{
+		gtk_image_set_from_pixbuf (GTK_IMAGE (pPreviewImage), pPreviewPixbuf);
+		gdk_pixbuf_unref (pPreviewPixbuf);
+	}
+	
+	// info bar
+	GtkWidget* pDescriptionFrame = NULL;
+	
+	// vertical frame.
+	pDescriptionFrame = gtk_frame_new (NULL);
+	gtk_frame_set_shadow_type(GTK_FRAME(pDescriptionFrame), GTK_SHADOW_OUT);
+	GtkWidget* pFrameVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	gtk_container_add (GTK_CONTAINER(pDescriptionFrame), pFrameVBox);
+	
+	// title
+	GtkWidget* pTitle = gtk_label_new (NULL);
+	gtk_label_set_use_markup (GTK_LABEL (pTitle), TRUE);
+	
+	// author
+	GtkWidget* pAuthor = gtk_label_new (NULL);
+	gtk_label_set_use_markup (GTK_LABEL (pAuthor), TRUE);
+	
+	// pack in 1 line.
+	GtkWidget* pFirstLine = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	
+	gtk_box_pack_start (GTK_BOX (pFirstLine), pTitle, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);
+	
+	gtk_box_pack_end (GTK_BOX (pFirstLine), pAuthor, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);
+	
+	// pack everything in the frame vbox.
+	gtk_box_pack_start (GTK_BOX (pFrameVBox), pFirstLine, FALSE, FALSE, CAIRO_DOCK_GUI_MARGIN);
+	gtk_box_pack_start (GTK_BOX (pFrameVBox), pDescriptionLabel, TRUE, TRUE, 0);
+		
+	// pack eveything in a box.
+	GtkWidget *pPreviewBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionFrame, FALSE, FALSE, 0);
+	gtk_box_pack_end (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);
+	
+	// initial values
+	gchar *cTitle = _cairo_dock_gui_get_package_title (pModule->pVisitCard->cModuleName, pModule->pVisitCard->cModuleVersion);
+	gchar *cAuthor = _cairo_dock_gui_get_package_author (pModule->pVisitCard->cAuthor);
+	
+	gtk_label_set_markup (GTK_LABEL (pTitle), cTitle);
+	gtk_label_set_markup (GTK_LABEL (pAuthor), cAuthor);
+	gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cDescription));
+	
+	g_free (cTitle);
+	g_free (cAuthor);
+	return pPreviewBox;
+}
+
 #define _pack_in_widget_box(pSubWidget) gtk_box_pack_start (GTK_BOX (pWidgetBox), pSubWidget, FALSE, FALSE, 0)
 #define _pack_subwidget(pSubWidget) do {\
 	pSubWidgetList = g_slist_append (pSubWidgetList, pSubWidget);\
@@ -1839,7 +1926,7 @@ static GtkWidget *_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidg
 			gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);}\
 		if (bAddPreviewWidgets) {\
 			pPreviewBox = _make_preview_box (pMainWindow, pOneWidget, TRUE, 0, NULL, NULL, pDataGarbage);\
-			gtk_box_pack_start (GTK_BOX (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox), pPreviewBox, FALSE, FALSE, 0);}\
+			gtk_box_pack_end (GTK_BOX (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox), pPreviewBox, FALSE, FALSE, 0);}\
 		if (_cairo_dock_find_iter_from_name (modele, cValue, &iter))\
 			gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);\
 		_pack_subwidget (pOneWidget);\
@@ -2151,7 +2238,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			
 			//\______________ On cree le label descriptif et la boite du widget.
-			if (iElementType == CAIRO_DOCK_WIDGET_HANDBOOK)
+			/**if (iElementType == CAIRO_DOCK_WIDGET_HANDBOOK)
 			{
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
@@ -2172,7 +2259,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				}
 				g_free (cValue);
 			}
-			else if (*cUsefulComment != '\0' && strcmp (cUsefulComment, "loading...") != 0)
+			else */if (*cUsefulComment != '\0' && strcmp (cUsefulComment, "...") != 0)
 			{
 				pLabel = gtk_label_new (NULL);
 				gtk_label_set_use_markup  (GTK_LABEL (pLabel), TRUE);
@@ -3173,33 +3260,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_HANDBOOK :  // le label contenant le manuel de l'applet, il a ete place avant.
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
+				g_free (cValue);
 				if (pModule == NULL)
 					break;	
 				
-				int iPreviewWidth, iPreviewHeight;
-				GdkPixbuf *pPreviewPixbuf = NULL;
-				int w=200, h=200;
-				if (gdk_pixbuf_get_file_info (pModule->pVisitCard->cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)  // The return value is owned by GdkPixbuf and should not be freed.
-				{
-					if (iPreviewWidth > w)
-					{
-						iPreviewHeight *= 1.*w/iPreviewWidth;
-						iPreviewWidth = w;
-					}
-					if (iPreviewHeight > h)
-					{
-						iPreviewWidth *= 1.*h/iPreviewHeight;
-						iPreviewHeight = h;
-					}
-					pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
-				}
-				if (pPreviewPixbuf != NULL)
-				{
-					pPreviewImage = gtk_image_new_from_pixbuf (NULL);
-					gtk_image_set_from_pixbuf (GTK_IMAGE (pPreviewImage), pPreviewPixbuf);
-					gdk_pixbuf_unref (pPreviewPixbuf);
-					_pack_in_widget_box (pPreviewImage);
-				}
+				GtkWidget *pHandbook = _make_handbook_box (pModule, pMainWindow);
+				gtk_box_pack_start (GTK_BOX (pKeyBox), pHandbook, TRUE, TRUE, 0);
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_FRAME :  // frame.
