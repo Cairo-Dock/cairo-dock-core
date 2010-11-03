@@ -43,6 +43,7 @@
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-switch.h"
@@ -84,6 +85,7 @@ extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bUseOpenGL;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 
 #define cd_reload(module_name) do {\
 	pInternalModule = cairo_dock_find_internal_module_from_name (module_name);\
@@ -803,8 +805,16 @@ static void _make_theme_manager_widget (GtkWidget *pSimpleConfigWindow, GKeyFile
 		&pWidgetList,
 		pDataGarbage,
 		NULL);  // les widgets seront ajoutes a la liste deja existante. Donc lors de l'ecriture, ils seront ecrit aussi, dans les cles definies dans le fichier de conf (donc de nouveaux groupes seront ajoutés).
-	gtk_notebook_set_scrollable (GTK_NOTEBOOK (pThemeNotebook), FALSE);  // l'onglet du groupe a deja son propre ascenseur.
-	gtk_widget_set (pThemeNotebook, "height-request", CAIRO_DOCK_SIMPLE_PANEL_HEIGHT, NULL);  // sinon le notebook est tout petit :-/
+	
+	// l'onglet du groupe a deja son propre ascenseur.
+	int i, n = gtk_notebook_get_n_pages (GTK_NOTEBOOK (pThemeNotebook));
+	for (i = 0; i < n; i ++)
+	{
+		GtkWidget *pScrolledWindow = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pThemeNotebook), i);
+		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
+	}
+	
+	gtk_widget_set (pThemeNotebook, "height-request", MIN (CAIRO_DOCK_SIMPLE_PANEL_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 100), NULL);  // sinon le notebook est tout petit :-/
 	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox),
 		pThemeNotebook,
 		TRUE,

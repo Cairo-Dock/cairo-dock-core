@@ -603,6 +603,20 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	g_free (cValidDockName);
 }
 
+static void _find_similar_root_dock (CairoDock *pDock, gpointer *data)
+{
+	CairoDock *pDock0 = data[0];
+	if (pDock == pDock0)
+		data[2] = GINT_TO_POINTER (TRUE);
+	if (data[2])
+		return;
+	if (pDock->container.bIsHorizontal == pDock0->container.bIsHorizontal
+		&& pDock->container.bDirectionUp == pDock0->container.bDirectionUp)
+	{
+		int *i = data[1];
+		*i = *i + 1;
+	}
+}
 static void _add_one_dock_to_menu (const gchar *cName, CairoDock *pDock, GtkWidget *pMenu)
 {
 	// on elimine les sous-dock d'appli, d'applets, ou de repertoire.
@@ -616,9 +630,37 @@ static void _add_one_dock_to_menu (const gchar *cName, CairoDock *pDock, GtkWidg
 	// on elimine le sous-dock.
 	if (pIcon->pSubDock != NULL && pIcon->pSubDock == pDock)
 		return;
+	// On definit un nom plus parlant.
+	gchar *cUserName = NULL;
+	if (pDock->iRefCount == 0)
+	{
+		int i = 0;
+		gpointer data[3] = {pDock, &i, NULL};
+		cairo_dock_foreach_root_docks ((GFunc)_find_similar_root_dock, data);
+		const gchar *cPosition;
+		if (pDock->container.bIsHorizontal)
+		{
+			if (pDock->container.bDirectionUp)
+				cPosition = _("bottom");
+			else
+				cPosition = _("top");
+		}
+		else
+		{
+			if (pDock->container.bDirectionUp)
+				cPosition = _("right");
+			else
+				cPosition = _("left");
+		}
+		if (i > 0)
+			cUserName = g_strdup_printf ("%s (%d)", cPosition, i+1);
+		else
+			cUserName = g_strdup (cPosition);
+	}
 	// on rajoute une entree pour le dock.
-	GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (cName, NULL, (GFunc)_cairo_dock_move_launcher_to_dock, pMenu, (gpointer)cName);
+	GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (cUserName ? cUserName : cName, NULL, (GFunc)_cairo_dock_move_launcher_to_dock, pMenu, (gpointer)cName);
 	g_object_set_data (G_OBJECT (pMenuItem), "launcher", pIcon);
+	g_free (cUserName);
 }
 
   //////////////////////////////////////////////////////////////////
@@ -1186,7 +1228,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		{
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
 			if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
-				_add_add_entry (menu, data, FALSE, TRUE);
+				_add_add_entry (menu, data, TRUE, TRUE);
 		}
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
@@ -1469,7 +1511,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			pMenuItem = gtk_separator_menu_item_new ();
 			gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
 		}
-		_add_add_entry (menu, data, FALSE, cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER));
+		_add_add_entry (menu, data, TRUE, cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER));
 	}
 
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;

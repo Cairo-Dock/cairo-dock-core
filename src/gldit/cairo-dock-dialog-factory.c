@@ -215,13 +215,13 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	}
 	
 	//\____________ force position for buggy WM (Compiz).
-	if (pDialog->iComputedWidth == pEvent->width && pDialog->iComputedHeight == pEvent->height && (pEvent->y != pDialog->iComputedPositionY || pEvent->x != pDialog->iComputedPositionX) && !pDialog->bPositionForced)
+	if (pDialog->iComputedWidth == pEvent->width && pDialog->iComputedHeight == pEvent->height && (pEvent->y != pDialog->iComputedPositionY || pEvent->x != pDialog->iComputedPositionX) && pDialog->bPositionForced == 3)
 	{
 		g_print ("force to %d;%d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY);
-		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
+		/*gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 			pDialog->iComputedPositionX,
 			pDialog->iComputedPositionY);
-		pDialog->bPositionForced = TRUE;
+		*/pDialog->bPositionForced ++;
 	}
 	
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
@@ -673,17 +673,18 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 	{
 		CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
 		*bDirectionUp = (pContainer->iWindowPositionY > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-		*bIsHorizontal = (pContainer->iWindowPositionX > 50 && pContainer->iWindowPositionX + pContainer->iHeight < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - 50);
+		///*bIsHorizontal = (pContainer->iWindowPositionX > 50 && pContainer->iWindowPositionX + pContainer->iHeight < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - 50);
+		*bIsHorizontal = TRUE;
 		
 		if (*bIsHorizontal)
 		{
-			*bRight = (pContainer->iWindowPositionX > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+			*bRight = (pContainer->iWindowPositionX + pContainer->iWidth/2 < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 			*iX = pContainer->iWindowPositionX + pContainer->iWidth * (*bRight ? .7 : .3);
 			*iY = (*bDirectionUp ? pContainer->iWindowPositionY : pContainer->iWindowPositionY + pContainer->iHeight);
 		}
 		else
 		{
-			*bRight = (pContainer->iWindowPositionX < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
+			*bRight = (pContainer->iWindowPositionX < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
 			*iY = pContainer->iWindowPositionX + pContainer->iWidth * (*bRight ? 1 : 0);
 			*iX =pContainer->iWindowPositionY + pContainer->iHeight / 2;
 		}

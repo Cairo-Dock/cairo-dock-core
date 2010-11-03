@@ -735,7 +735,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	}
 	
 	pDialog->bPositionForced = FALSE;
-	gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
+	///gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
 	g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight, iGravity);
 	gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 		pDialog->iComputedPositionX,
