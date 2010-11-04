@@ -408,9 +408,9 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cair
 	if (bIsHorizontal)
 	{
 		cairo_translate (pCairoContext,
-			icon->fWidth * icon->fScale / 2 - w * z/2,
+			icon->fWidth * icon->fWidthFactor * icon->fScale / 2 - w * z/2,
 			(bDirectionUp ?
-				icon->fHeight * icon->fScale - h * z + fY :
+				icon->fHeight * icon->fHeightFactor * icon->fScale - h * z + fY :
 				- fY));
 		cairo_scale (pCairoContext,
 			z,
@@ -420,9 +420,9 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cair
 	{
 		cairo_translate (pCairoContext,
 			(bDirectionUp ?
-				icon->fHeight * icon->fScale - h * z + fY :
+				icon->fHeight * icon->fHeightFactor * icon->fScale - h * z + fY :
 				- fY),
-			icon->fWidth * icon->fScale / 2 - (w * z/2));
+			icon->fWidth * icon->fWidthFactor * icon->fScale / 2 - (w * z/2));
 		cairo_scale (pCairoContext,
 			z,
 			z);
