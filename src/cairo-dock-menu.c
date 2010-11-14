@@ -1195,16 +1195,16 @@ static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSepar
 	GtkWidget *pSubMenuAdd = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);
 	
-	_add_entry_in_menu (_("sub-dock"), GTK_STOCK_ADD, cairo_dock_add_sub_dock, pSubMenuAdd);
+	_add_entry_in_menu (_("A new sub-dock"), GTK_STOCK_ADD, cairo_dock_add_sub_dock, pSubMenuAdd);
 	
-	_add_entry_in_menu (_("main dock"), GTK_STOCK_ADD, cairo_dock_add_main_dock, pSubMenuAdd);
+	_add_entry_in_menu (_("A new main dock"), GTK_STOCK_ADD, cairo_dock_add_main_dock, pSubMenuAdd);
 	
 	if (bAddSeparator)
-		_add_entry_in_menu (_("separator"), GTK_STOCK_ADD, cairo_dock_add_separator, pSubMenuAdd);
+		_add_entry_in_menu (_("A new separator"), GTK_STOCK_ADD, cairo_dock_add_separator, pSubMenuAdd);
 	
 	if (bAddLauncher)
 	{
-		pMenuItem = _add_entry_in_menu (_("custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
+		pMenuItem = _add_entry_in_menu (_("A custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
 		gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it on the dock."));
 	}
 }
