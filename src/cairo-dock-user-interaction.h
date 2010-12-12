@@ -38,5 +38,20 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, CairoContainer *pContainer);
 
 
+void cairo_dock_trigger_refresh_gui (void);
+
+gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDesklet *pDesklet);
+
+gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
+gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
+gboolean cairo_dock_notification_icon_removed(gpointer pUserData, Icon *pIcon, CairoDock *pDock);
+
+gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *pDock);
+
+gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gchar *cModuleName, gboolean bActivated);
+
+gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gchar *cModuleName, gboolean bRegistered);
+
+
 G_END_DECLS
 #endif

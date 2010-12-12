@@ -33,22 +33,18 @@
 
 #include "../config.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-indicators.h"
-#include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dialog-manager.h"
@@ -57,9 +53,9 @@
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-icon-loader.h"
+#include "cairo-dock-icon-manager.h"
 
 CairoDockImageBuffer g_pIconBackgroundBuffer;
 
@@ -89,7 +85,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 	}
 	
 	//\_______________________ On determine si le suffixe et une version sont presents ou non.
-	g_return_val_if_fail (myIcons.pDefaultIconDirectory != NULL, NULL);
+	g_return_val_if_fail (myIconsParam.pDefaultIconDirectory != NULL, NULL);
 	
 	GString *sIconPath = g_string_new ("");
 	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
@@ -101,15 +97,15 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 	bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)) && str-1 != cFileName);  // doit finir par x.y, x et y ayant autant de chiffres que l'on veut.
 	
 	//\_______________________ On parcourt les themes disponibles, en testant tous les suffixes connus.
-	for (i = 0; i < myIcons.iNbIconPlaces && ! bFileFound; i ++)
+	for (i = 0; i < myIconsParam.iNbIconPlaces && ! bFileFound; i ++)
 	{
-		if (myIcons.pDefaultIconDirectory[2*i] != NULL)  // repertoire.
+		if (myIconsParam.pDefaultIconDirectory[2*i] != NULL)  // repertoire.
 		{
-			//g_print ("on recherche %s dans le repertoire %s\n", sIconPath->str, myIcons.pDefaultIconDirectory[2*i]);
+			//g_print ("on recherche %s dans le repertoire %s\n", sIconPath->str, myIconsParam.pDefaultIconDirectory[2*i]);
 			j = 0;
 			while (! bFileFound && (cSuffixTab[j] != NULL || ! bAddSuffix))
 			{
-				g_string_printf (sIconPath, "%s/%s", (gchar *)myIcons.pDefaultIconDirectory[2*i], cFileName);
+				g_string_printf (sIconPath, "%s/%s", (gchar *)myIconsParam.pDefaultIconDirectory[2*i], cFileName);
 				if (bAddSuffix)
 					g_string_append_printf (sIconPath, "%s", cSuffixTab[j]);
 				//g_print ("  -> %s\n", sIconPath->str);
@@ -131,8 +127,8 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 			}
 			//g_print ("on recherche %s dans le theme d'icones\n", sIconPath->str);
 			GtkIconTheme *pIconTheme;
-			if (myIcons.pDefaultIconDirectory[2*i+1] != NULL)
-				pIconTheme = myIcons.pDefaultIconDirectory[2*i+1];
+			if (myIconsParam.pDefaultIconDirectory[2*i+1] != NULL)
+				pIconTheme = myIconsParam.pDefaultIconDirectory[2*i+1];
 			else
 				pIconTheme = gtk_icon_theme_get_default ();
 			pIconInfo = gtk_icon_theme_lookup_icon  (GTK_ICON_THEME (pIconTheme),
@@ -278,13 +274,13 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	}
 	
 	//\______________ le reflet en mode cairo.
-	if (! g_bUseOpenGL && myIcons.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cFileName == NULL))
+	if (! g_bUseOpenGL && myIconsParam.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cFileName == NULL))
 	{
 		icon->pReflectionBuffer = cairo_dock_create_reflection_surface (icon->pIconBuffer,
 			icon->iImageWidth,
 			icon->iImageHeight,
-			myIcons.fReflectSize * cairo_dock_get_max_scale (pContainer),
-			myIcons.fAlbedo,
+			myIconsParam.fReflectSize * cairo_dock_get_max_scale (pContainer),
+			myIconsParam.fAlbedo,
 			pContainer ? pContainer->bIsHorizontal : TRUE,
 			pContainer ? pContainer->bDirectionUp : TRUE);
 	}
@@ -452,10 +448,10 @@ void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 	
 	cairo_dock_load_icon_image (pIcon, pContainer);
 
-	cairo_dock_load_icon_text (pIcon, &myLabels.iconTextDescription);
+	cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
 
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	cairo_dock_load_icon_quickinfo (pIcon, &myLabels.quickInfoTextDescription, fMaxScale);
+	cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
 }
 
 static gboolean _load_icon_buffer_idle (Icon *pIcon)
@@ -469,7 +465,7 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 		cairo_dock_load_icon_image (pIcon, pContainer);
 
 		double fMaxScale = cairo_dock_get_max_scale (pContainer);
-		cairo_dock_load_icon_quickinfo (pIcon, &myLabels.quickInfoTextDescription, fMaxScale);
+		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
 	}
@@ -483,7 +479,7 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContain
 	{
 		//g_print ("trigger load for %s (%x)\n", pIcon->cName, pContainer);
 		//cairo_dock_load_icon_buffers (pIcon, pContainer);
-		cairo_dock_load_icon_text (pIcon, &myLabels.iconTextDescription);  // la vue peut avoir besoin de connaitre la taille du texte.
+		cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);  // la vue peut avoir besoin de connaitre la taille du texte.
 		pIcon->iSidLoadImage = g_idle_add ((GSourceFunc)_load_icon_buffer_idle, pIcon);
 	}
 }
@@ -493,7 +489,7 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadApplet
 {
 	cd_message ("%s (%d, %d)", __func__, bReloadAppletsToo, bRecursive);
 
-	double fFlatDockWidth = - myIcons.iIconGap;
+	double fFlatDockWidth = - myIconsParam.iIconGap;
 	pDock->iMaxIconHeight = 0;
 	Icon* icon;
 	GList* ic;
@@ -521,7 +517,7 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadApplet
 		}
 		
 		//g_print (" =size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);
-		fFlatDockWidth += myIcons.iIconGap + icon->fWidth;
+		fFlatDockWidth += myIconsParam.iIconGap + icon->fWidth;
 		if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
 	}
@@ -562,8 +558,8 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 	pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,
 		iWidth,
 		iHeight,
-		myIcons.fReflectSize * cairo_dock_get_max_scale (pContainer),
-		myIcons.fAlbedo,
+		myIconsParam.fReflectSize * cairo_dock_get_max_scale (pContainer),
+		myIconsParam.fAlbedo,
 		pContainer->bIsHorizontal,
 		pContainer->bDirectionUp);
 }
@@ -577,7 +573,7 @@ void cairo_dock_load_icons_background_surface (const gchar *cImagePath, double f
 {
 	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
 	
-	int iSize = MAX (myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
+	int iSize = MAX (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
 	if (iSize == 0)
 		iSize = 48;
 	iSize *= fMaxScale;
@@ -602,7 +598,7 @@ void cairo_dock_load_icon_textures (void)
 {
 	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
 	
-	cairo_dock_load_icons_background_surface (myIcons.cBackgroundImagePath, fMaxScale);
+	cairo_dock_load_icons_background_surface (myIconsParam.cBackgroundImagePath, fMaxScale);
 	
 	cairo_dock_foreach_icon_container_renderer ((GHFunc)_load_renderer, NULL);
 }

@@ -41,8 +41,10 @@
 
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-load.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-image-buffer.h"
+#include "cairo-dock-module-factory.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-desktop-file-factory.h"
@@ -60,10 +62,6 @@
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-X-utilities.h"
@@ -93,13 +91,58 @@ static gboolean s_bIconDragged = FALSE;
 
 static gboolean _check_mouse_outside (CairoDock *pDock);
 
-#define _mouse_is_really_outside(pDock) (pDock->container.iMouseX <= 0 ||\
-	pDock->container.iMouseX >= pDock->container.iWidth ||\
-	(pDock->container.bDirectionUp ?\
-		(pDock->container.iMouseY > pDock->container.iHeight ||\
-		pDock->container.iMouseY <= (pDock->fMagnitudeMax != 0 ? 0 : pDock->container.iHeight - pDock->iMinDockHeight)) :\
-		(pDock->container.iMouseY < 0 ||\
-		pDock->container.iMouseY >= (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight))))
+static inline gboolean _mouse_is_really_outside (CairoDock *pDock)
+{
+	/**return (pDock->container.iMouseX <= 0
+		|| pDock->container.iMouseX >= pDock->container.iWidth
+		|| (pDock->container.bDirectionUp ?
+			(pDock->container.iMouseY > pDock->container.iHeight
+			|| pDock->container.iMouseY <= (pDock->fMagnitudeMax != 0 ? 0 : pDock->container.iHeight - pDock->iMinDockHeight))
+			: (pDock->container.iMouseY < 0
+			||
+		pDock->container.iMouseY >= (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight))));*/
+	double x1, x2, y1, y2;
+	if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
+	{
+		x1 = 0;
+		x2 = pDock->container.iWidth;
+		if (pDock->container.bDirectionUp)
+		{
+			y1 = (pDock->fMagnitudeMax != 0 ? 0 : pDock->container.iHeight - pDock->iMinDockHeight);
+			y2 = pDock->container.iHeight;
+		}
+		else
+		{
+			y1 = 0;
+			y2 = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
+		}
+	}
+	else if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
+	{
+		x1 = (pDock->container.iWidth - pDock->iMinDockWidth) / 2;
+		x2 = (pDock->container.iWidth + pDock->iMinDockWidth) / 2;
+		if (pDock->container.bDirectionUp)
+		{
+			y1 = pDock->container.iHeight - pDock->iMinDockHeight;
+			y2 = pDock->container.iHeight;
+		}
+		else
+		{
+			y1 = 0;
+			y2 = pDock->iMinDockHeight;
+		}		
+	}
+	else
+		return FALSE;
+	if (pDock->container.iMouseX <= x1
+	|| pDock->container.iMouseX >= x2)
+		return TRUE;
+	if (pDock->container.iMouseY <= y1
+	|| pDock->container.iMouseY >= y2)
+		return TRUE;	
+	
+	return FALSE;
+}
 #define CD_CLICK_ZONE 5
 
 void cairo_dock_freeze_docks (gboolean bFreeze)
@@ -119,7 +162,7 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 			g_pHidingBackend->pre_render_opengl (pDock, pDock->fHideOffset);
 		
 		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->pre_render_opengl)
-			g_pKeepingBelowBackend->pre_render_opengl (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps);
+			g_pKeepingBelowBackend->pre_render_opengl (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps);
 		
 		pDock->pRenderer->render_opengl (pDock);
 		
@@ -127,7 +170,7 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 			g_pHidingBackend->post_render_opengl (pDock, pDock->fHideOffset);
 		
 		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render_opengl)
-			g_pKeepingBelowBackend->post_render_opengl (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps);
+			g_pKeepingBelowBackend->post_render_opengl (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -166,7 +209,8 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		}
 		else
 		{
-			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, NULL);
+			cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER_DOCK, pDock, NULL);
+			cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER_DOCK, pDock, NULL);
 		}
 		glDisable (GL_SCISSOR_TEST);
 		
@@ -189,7 +233,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 				g_pHidingBackend->pre_render (pDock, pDock->fHideOffset, pCairoContext);
 			
 			if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->pre_render)
-				g_pKeepingBelowBackend->pre_render (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps, pCairoContext);
+				g_pKeepingBelowBackend->pre_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
 			
 			if (pDock->pRenderer->render_optimized != NULL)
 				pDock->pRenderer->render_optimized (pCairoContext, pDock, &pExpose->area);
@@ -200,9 +244,10 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 				g_pHidingBackend->post_render (pDock, pDock->fHideOffset, pCairoContext);
 		
 			if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
-				g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps, pCairoContext);
+				g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
 			
-			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
+			cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER_DOCK, pDock, pCairoContext);
+			cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER_DOCK, pDock, pCairoContext);
 			
 			cairo_destroy (pCairoContext);
 		}
@@ -226,7 +271,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			g_pHidingBackend->pre_render (pDock, pDock->fHideOffset, pCairoContext);
 		
 		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->pre_render)
-			g_pKeepingBelowBackend->pre_render (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps, pCairoContext);
+			g_pKeepingBelowBackend->pre_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
 		
 		pDock->pRenderer->render (pCairoContext, pDock);
 		
@@ -234,9 +279,10 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			g_pHidingBackend->post_render (pDock, pDock->fHideOffset, pCairoContext);
 		
 		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
-			g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / mySystem.iHideNbSteps, pCairoContext);
+			g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
 		
-		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RENDER_DOCK, pDock, pCairoContext);
+		cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER_DOCK, pDock, pCairoContext);
+		cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER_DOCK, pDock, pCairoContext);
 	}
 	
 	cairo_destroy (pCairoContext);
@@ -314,12 +360,12 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 			//g_print ("on cache %s en changeant d'icone\n", pLastPointedIcon->cName);
 			if (pSubDock->iSidLeaveDemand == 0)
 			{
-				//g_print ("  on retarde le cachage du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
-				pSubDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pSubDock);  // on force le retard meme si iLeaveSubDockDelay est a 0, car lorsqu'on entre dans un sous-dock, il arrive frequemment qu'on glisse hors de l'icone qui pointe dessus, et c'est tres desagreable d'avoir le dock qui se ferme avant d'avoir pu entre dedans.
+				//g_print ("  on retarde le cachage du dock de %dms\n", MAX (myDocksParam.iLeaveSubDockDelay, 330));
+				pSubDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 330), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pSubDock);  // on force le retard meme si iLeaveSubDockDelay est a 0, car lorsqu'on entre dans un sous-dock, il arrive frequemment qu'on glisse hors de l'icone qui pointe dessus, et c'est tres desagreable d'avoir le dock qui se ferme avant d'avoir pu entre dedans.
 			}
 		}
 	}
-	if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && pPointedIcon->pSubDock != s_pLastPointedDock && (! myAccessibility.bShowSubDockOnClick || CAIRO_DOCK_IS_APPLI (pPointedIcon) || pDock->bIsDragging))  // on entre sur une icone ayant un sous-dock.
+	if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && pPointedIcon->pSubDock != s_pLastPointedDock && (! myDocksParam.bShowSubDockOnClick || CAIRO_DOCK_IS_APPLI (pPointedIcon) || pDock->bIsDragging))  // on entre sur une icone ayant un sous-dock.
 	{
 		//cd_debug ("il faut montrer un sous-dock");
 		if (pPointedIcon->pSubDock->iSidLeaveDemand != 0)
@@ -327,12 +373,12 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 			g_source_remove (pPointedIcon->pSubDock->iSidLeaveDemand);
 			pPointedIcon->pSubDock->iSidLeaveDemand = 0;
 		}
-		if (myAccessibility.iShowSubDockDelay > 0)
+		if (myDocksParam.iShowSubDockDelay > 0)
 		{
 			//pDock->container.iMouseX = iX;
 			if (s_iSidShowSubDockDemand != 0)
 				g_source_remove (s_iSidShowSubDockDemand);
-			s_iSidShowSubDockDemand = g_timeout_add (myAccessibility.iShowSubDockDelay, (GSourceFunc) _cairo_dock_show_sub_dock_delayed, pDock);
+			s_iSidShowSubDockDemand = g_timeout_add (myDocksParam.iShowSubDockDelay, (GSourceFunc) _cairo_dock_show_sub_dock_delayed, pDock);
 			s_pDockShowingSubDock = pDock;
 			//g_print ("s_iSidShowSubDockDemand <- %d\n", s_iSidShowSubDockDemand);
 		}
@@ -349,7 +395,8 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 	if (pPointedIcon != NULL && pDock->pRenderer->render_opengl != NULL && ! CAIRO_DOCK_IS_SEPARATOR (pPointedIcon) && pPointedIcon->iAnimationState <= CAIRO_DOCK_STATE_MOUSE_HOVERED)
 	{
 		gboolean bStartAnimation = FALSE;
-		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
+		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
+		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
 		
 		if (bStartAnimation)
 		{
@@ -402,13 +449,13 @@ static void _cairo_dock_make_icon_glide (Icon *pPointedIcon, Icon *pMovingicon, 
 		}
 		else
 		{
-			//g_print ("deplacement de %s vers la gauche (%.2f / %d)\n", icon->cName, icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap, pDock->container.iMouseX);
-			if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap >= pDock->container.iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
+			//g_print ("deplacement de %s vers la gauche (%.2f / %d)\n", icon->cName, icon->fDrawX + icon->fWidth * (1+myIconsParam.fAmplitude) + myIconsParam.iIconGap, pDock->container.iMouseX);
+			if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIconsParam.fAmplitude) + myIconsParam.iIconGap >= pDock->container.iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
 			{
 				//g_print ("  %s glisse vers la droite\n", icon->cName);
 				icon->iGlideDirection = 1;
 			}
-			else if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIcons.fAmplitude) + myIcons.iIconGap <= pDock->container.iMouseX && icon->fGlideOffset != 0)
+			else if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIconsParam.fAmplitude) + myIconsParam.iIconGap <= pDock->container.iMouseX && icon->fGlideOffset != 0)
 			{
 				//g_print ("  %s glisse vers la gauche\n", icon->cName);
 				icon->iGlideDirection = -1;
@@ -477,7 +524,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		}
 		
 		//\_______________ On elague le flux des MotionNotify, sinon X en envoie autant que le permet le CPU !
-		if (pMotion->time != 0 && pMotion->time - fLastTime < mySystem.fRefreshInterval && s_pIconClicked == NULL)
+		if (pMotion->time != 0 && pMotion->time - fLastTime < myBackendsParam.fRefreshInterval && s_pIconClicked == NULL)
 		{
 			gdk_device_get_state (pMotion->device, pMotion->window, NULL, NULL);
 			return FALSE;
@@ -489,17 +536,17 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		fLastTime = pMotion->time;
 		
 		//\_______________ On tire l'icone cliquee.
-		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && (fabs (pMotion->x - s_iClickX) > CD_CLICK_ZONE || fabs (pMotion->y - s_iClickY) > CD_CLICK_ZONE) && ! pDock->bPreventDraggingIcons)
+		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && (fabs (pMotion->x - s_iClickX) > CD_CLICK_ZONE || fabs (pMotion->y - s_iClickY) > CD_CLICK_ZONE) && ! pDock->bPreventDraggingIcons)
 		{
 			s_bIconDragged = TRUE;
 			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
 			//pDock->fAvoidingMouseMargin = .5;
-			pDock->iAvoidingMouseIconType = s_pIconClicked->iType;  // on pourrait le faire lors du clic aussi.
-			s_pIconClicked->fScale = 1 + myIcons.fAmplitude * pDock->fMagnitudeMax;
+			pDock->iAvoidingMouseIconType = s_pIconClicked->iGroup;  // on pourrait le faire lors du clic aussi.
+			s_pIconClicked->fScale = 1 + myIconsParam.fAmplitude * pDock->fMagnitudeMax;
 			s_pIconClicked->fDrawX = pDock->container.iMouseX  - s_pIconClicked->fWidth * s_pIconClicked->fScale / 2;
 			s_pIconClicked->fDrawY = pDock->container.iMouseY - s_pIconClicked->fHeight * s_pIconClicked->fScale / 2 ;
 			s_pIconClicked->fAlpha = 0.75;
-			if (myIcons.fAmplitude == 0)
+			if (myIconsParam.fAmplitude == 0)
 				gtk_widget_queue_draw (pWidget);
 		}
 
@@ -529,7 +576,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	{
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 		
-		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && ! pDock->bPreventDraggingIcons)
+		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)
 		{
 			_cairo_dock_make_icon_glide (pPointedIcon, s_pIconClicked, pDock);
 			bStartAnimation = TRUE;
@@ -537,7 +584,8 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	}
 	
 	//\_______________ On notifie tout le monde.
-	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_MOUSE_MOVED, pDock, &bStartAnimation);
+	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_MOUSE_MOVED, pDock, &bStartAnimation);
+	cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_MOUSE_MOVED, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	
@@ -547,7 +595,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 gboolean cairo_dock_on_leave_dock_notification2 (gpointer data, CairoDock *pDock, gboolean *bStartAnimation)
 {
 	//\_______________ On gere le drag d'une icone hors du dock.
-	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && ! pDock->bPreventDraggingIcons)
+	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)
 	{
 		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
@@ -610,7 +658,7 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	
 	//\_______________ On gere le drag d'une icone hors du dock.
-	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && ! pDock->bPreventDraggingIcons)
+	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)
 	{
 		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
@@ -652,16 +700,17 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 		//g_print ("%s (auto-hide:%d)\n", __func__, pDock->bAutoHide);
 		if (pDock->bAutoHide)
 		{
-			///pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? 0.001 : 0.);
+			///pDock->fFoldingFactor = (myBackendsParam.bAnimateOnAutoHide ? 0.001 : 0.);
 			cairo_dock_start_hiding (pDock);
 		}
 	}
 	else if (pDock->icons != NULL)
 	{
-		pDock->fFoldingFactor = (mySystem.bAnimateSubDock ? 0.001 : 0.);
+		pDock->fFoldingFactor = (myDocksParam.bAnimateSubDock ? 0.001 : 0.);
 		Icon *pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 		//g_print ("'%s' se replie\n", pIcon?pIcon->cName:"none");
-		cairo_dock_notify_on_icon (pIcon, CAIRO_DOCK_UNFOLD_SUBDOCK, pIcon);
+		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UNFOLD_SUBDOCK, pIcon);
+		cairo_dock_notify_on_object (pIcon, NOTIFICATION_UNFOLD_SUBDOCK, pIcon);
 	}
 	cairo_dock_start_shrinking (pDock);  // on commence a faire diminuer la taille des icones.
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -698,7 +747,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	if (!_mouse_is_really_outside(pDock))
 	{
-		cd_debug ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
+		//g_print ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
 		if (pDock->iSidTestMouseOutside == 0 && pEvent)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
 		{
 			cd_debug ("start checking mouse\n");
@@ -718,15 +767,15 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 				Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 				if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget)) || (pDock->bAutoHide))
 				{
-					//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myAccessibility.iLeaveSubDockDelay, 330));
-					pDock->iSidLeaveDemand = g_timeout_add (MAX (myAccessibility.iLeaveSubDockDelay, 330), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
+					//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myDocksParam.iLeaveSubDockDelay, 330));
+					pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 330), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 					return TRUE;
 				}
 			}
-			else if (myAccessibility.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
+			else if (myDocksParam.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
 			{
-				//g_print ("  on retarde la sortie du sous-dock de %dms\n", myAccessibility.iLeaveSubDockDelay);
-				pDock->iSidLeaveDemand = g_timeout_add (myAccessibility.iLeaveSubDockDelay, (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
+				//g_print ("  on retarde la sortie du sous-dock de %dms\n", myDocksParam.iLeaveSubDockDelay);
+				pDock->iSidLeaveDemand = g_timeout_add (myDocksParam.iLeaveSubDockDelay, (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 				return TRUE;
 			}
 		}
@@ -761,7 +810,8 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	gboolean bStartAnimation = FALSE;
-	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_LEAVE_DOCK, pDock, &bStartAnimation);
+	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
+	cairo_dock_notify_on_object (pDock, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	
@@ -852,7 +902,8 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	pDock->container.bInside = TRUE;
 	// animation d'entree.
 	gboolean bStartAnimation = FALSE;
-	cairo_dock_notify (CAIRO_DOCK_ENTER_DOCK, pDock, &bStartAnimation);
+	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_ENTER_DOCK, pDock, &bStartAnimation);
+	cairo_dock_notify_on_object (pDock, NOTIFICATION_ENTER_DOCK, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	
@@ -861,7 +912,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	
 	if (s_pIconClicked != NULL)  // on pourrait le faire a chaque motion aussi.
 	{
-		pDock->iAvoidingMouseIconType = s_pIconClicked->iType;
+		pDock->iAvoidingMouseIconType = s_pIconClicked->iGroup;
 		pDock->fAvoidingMouseMargin = .5;  /// inutile il me semble ...
 	}
 	
@@ -925,7 +976,8 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	g_print ("on a appuye sur une touche (%d)\n", pKey->keyval);
 	if (pKey->type == GDK_KEY_PRESS)
 	{
-		cairo_dock_notify (CAIRO_DOCK_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
+		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
+		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
 	}
 	else if (pKey->type == GDK_KEY_RELEASE)
 	{
@@ -945,8 +997,9 @@ static gboolean _double_click_delay_over (Icon *icon)
 	CairoDock *pDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pDock)
 	{
-		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
-		if (myAccessibility.cRaiseDockShortcut != NULL)
+		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
+		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
+		if (myDocksParam.cRaiseDockShortcut != NULL)
 			s_bHideAfterShortcut = TRUE;
 		
 		cairo_dock_start_icon_animation (icon, pDock);
@@ -1026,8 +1079,9 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							}
 							else
 							{
-								cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_CLICK_ICON, icon, pDock, pButton->state);
-								if (myAccessibility.cRaiseDockShortcut != NULL)
+								cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, pButton->state);
+								cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, pButton->state);
+								if (myDocksParam.cRaiseDockShortcut != NULL)
 									s_bHideAfterShortcut = TRUE;
 								
 								cairo_dock_start_icon_animation (icon, pDock);
@@ -1035,7 +1089,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							}
 						}
 					}
-					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! myAccessibility.bLockIcons && ! myAccessibility.bLockAll && ! pDock->bPreventDraggingIcons)  //  && icon->iType == s_pIconClicked->iType
+					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)  //  && icon->iType == s_pIconClicked->iType
 					{
 						//g_print ("deplacement de %s\n", s_pIconClicked->cName);
 						CairoDock *pOriginDock = CAIRO_DOCK (cairo_dock_search_container_from_icon (s_pIconClicked));
@@ -1077,8 +1131,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						{
 							cairo_dock_request_icon_animation (s_pIconClicked, pDock, "bounce", 2);
 						}
-						if (pDock->container.iSidGLAnimation == 0 || ! CAIRO_CONTAINER_IS_OPENGL (CAIRO_CONTAINER (pDock)))
-							gtk_widget_queue_draw (pDock->container.pWidget);
+						gtk_widget_queue_draw (pDock->container.pWidget);
 					}
 					
 					if (s_pFlyingContainer != NULL)
@@ -1140,7 +1193,8 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							g_source_remove (icon->iSidDoubleClickDelay);
 							icon->iSidDoubleClickDelay = 0;
 						}
-						cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_DOUBLE_CLICK_ICON, icon, pDock);
+						cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, icon, pDock);
+						cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_DOUBLE_CLICK_ICON, icon, pDock);
 						if (icon->iNbDoubleClickListeners > 0)
 							pDock->container.bIgnoreNextReleaseEvent = TRUE;
 					}
@@ -1160,7 +1214,10 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{
 		if (icon && ! cairo_dock_icon_is_being_removed (icon))
-			cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_MIDDLE_CLICK_ICON, icon, pDock);
+		{
+			cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, icon, pDock);
+			cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_MIDDLE_CLICK_ICON, icon, pDock);
+		}
 	}
 
 	return FALSE;
@@ -1174,7 +1231,8 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 		return FALSE;
 	}
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // can be NULL
-	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_SCROLL_ICON, icon, pDock, pScroll->direction);
+	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_SCROLL_ICON, icon, pDock, pScroll->direction);
+	cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_SCROLL_ICON, icon, pDock, pScroll->direction);
 	
 	return FALSE;
 }
@@ -1388,7 +1446,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 			double fMargin;  /// deviendra obsolete si le drag-received fonctionne.
 			if (g_str_has_suffix (cReceivedData, ".desktop")/** || g_str_has_suffix (cReceivedData, ".sh")*/)  // si c'est un .desktop, on l'ajoute.
 			{
-				if (myAccessibility.bLockIcons || myAccessibility.bLockAll)
+				if (myDocksParam.bLockIcons || myDocksParam.bLockAll)
 				{
 					gtk_drag_finish (dc, FALSE, FALSE, time);
 					return ;
@@ -1401,7 +1459,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 
 			if (iDropX > icon->fX + icon->fWidth * icon->fScale * (1 - fMargin))  // on est apres.
 			{
-				if (myAccessibility.bLockIcons || myAccessibility.bLockAll)
+				if (myDocksParam.bLockIcons || myDocksParam.bLockAll)
 				{
 					gtk_drag_finish (dc, FALSE, FALSE, time);
 					return ;
@@ -1411,7 +1469,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 			}
 			else if (iDropX < icon->fX + icon->fWidth * icon->fScale * fMargin)  // on est avant.
 			{
-				if (myAccessibility.bLockIcons || myAccessibility.bLockAll)
+				if (myDocksParam.bLockIcons || myDocksParam.bLockAll)
 				{
 					gtk_drag_finish (dc, FALSE, FALSE, time);
 					return ;
@@ -1456,7 +1514,8 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 		cd_debug (" <%s>\n", cairo_dock_get_property_name_on_xwindow (Xid, xAtom));*/
 		
 		gboolean bStartAnimation = FALSE;
-		cairo_dock_notify (CAIRO_DOCK_START_DRAG_DATA, pDock, &bStartAnimation);
+		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_START_DRAG_DATA, pDock, &bStartAnimation);
+		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_START_DRAG_DATA, pDock, &bStartAnimation);
 		if (bStartAnimation)
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 		

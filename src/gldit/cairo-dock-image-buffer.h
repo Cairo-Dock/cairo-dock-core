@@ -24,12 +24,12 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-icon-loader.h"
+#include "cairo-dock-icon-manager.h"
 #include "cairo-dock-surface-factory.h"
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-load.h This class defines a simple image loader interface.
+*@file cairo-dock-image-buffer.h This class defines a simple image loader interface.
 * It also handles the main image buffers of the dock.
 * Use \ref cairo_dock_create_image_buffer to create an image buffer from a file, or \ref cairo_dock_load_image_buffer to load an image into an existing immage buffer.
 * Use \ref cairo_dock_free_image_buffer to destroy it or \ref cairo_dock_unload_image_buffer to unload and reset it to 0.
@@ -116,26 +116,6 @@ void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
 *@param pImage an ImageBuffer.
 */
 void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
-
-
-///void cairo_dock_update_background_decorations_if_necessary (CairoDock *pDock, int iNewDecorationsWidth, int iNewDecorationsHeight);
-
-void cairo_dock_load_dock_background (CairoDock *pDock);
-void cairo_dock_trigger_load_dock_background (CairoDock *pDock);
-
-
-CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo);
-
-void cairo_dock_destroy_desktop_background (CairoDockDesktopBackground *pDesktopBg);
-
-cairo_surface_t *cairo_dock_get_desktop_bg_surface (CairoDockDesktopBackground *pDesktopBg);
-
-GLuint cairo_dock_get_desktop_bg_texture (CairoDockDesktopBackground *pDesktopBg);
-
-void cairo_dock_reload_desktop_background (void);
-
-
-void cairo_dock_unload_additionnal_textures (void);
 
 
 G_END_DECLS

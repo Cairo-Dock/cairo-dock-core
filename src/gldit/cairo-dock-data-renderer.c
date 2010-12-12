@@ -31,55 +31,20 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-icons.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-facility.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-packages.h"
-#include "cairo-dock-internal-labels.h"
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-graph.h"
 #include "cairo-dock-data-renderer.h"
 
 extern gboolean g_bUseOpenGL;
-extern CairoContainer *g_pPrimaryContainer;
-extern gchar *g_cExtrasDirPath;
 
 #define cairo_dock_set_data_renderer_on_icon(pIcon, pRenderer) (pIcon)->pDataRenderer = pRenderer
 #define CD_MIN_TEXT_WITH 24
-
-static CairoDockGLFont *s_pFont = NULL;
-
-#define _init_data_renderer_font(...) s_pFont = cairo_dock_load_textured_font ("Monospace Bold 12", 0, 184)  // on va jusqu'a ø
-
-CairoDockGLFont *cairo_dock_get_default_data_renderer_font (void)
-{
-	if (s_pFont == NULL)
-		_init_data_renderer_font ();
-	return s_pFont;
-}
-
-void cairo_dock_unload_default_data_renderer_font (void)
-{
-	cairo_dock_free_gl_font (s_pFont);
-	s_pFont = NULL;
-}
-
-
-CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
-{
-	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
-	g_return_val_if_fail (pRecord != NULL && pRecord->iStructSize != 0, NULL);
-	
-	if (g_pPrimaryContainer && s_pFont == NULL)
-	{
-		_init_data_renderer_font ();
-	}
-	
-	CairoDataRenderer *pRenderer = g_malloc0 (pRecord->iStructSize);
-	memcpy (&pRenderer->interface, &pRecord->interface, sizeof (CairoDataRendererInterface));
-	return pRenderer;
-}
 
 static void _cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute)
 {
@@ -437,7 +402,7 @@ static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer,
 	if (pRenderer->pLabels != NULL)
 	{
 		CairoDockLabelDescription textDescription;
-		cairo_dock_copy_label_description (&textDescription, &myLabels.quickInfoTextDescription);
+		cairo_dock_copy_label_description (&textDescription, &myIconsParam.quickInfoTextDescription);
 		
 		CairoDataRendererText *pLabel;
 		cairo_surface_t *pSurface;
@@ -506,7 +471,8 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
 	{
 		bLoadTextures = TRUE;
-		cairo_dock_register_notification_on_object (pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW,
+		cairo_dock_register_notification_on_object (pIcon,
+			NOTIFICATION_UPDATE_ICON_SLOW,
 			(CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
 			CAIRO_DOCK_RUN_AFTER, NULL);  // pour l'affichage fluide.
 	}
@@ -647,7 +613,7 @@ void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	
-	cairo_dock_remove_notification_func_on_object (pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
+	cairo_dock_remove_notification_func_on_object (pIcon, NOTIFICATION_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
 	
 	cairo_dock_free_data_renderer (pRenderer);
 	cairo_dock_set_data_renderer_on_icon (pIcon, NULL);
@@ -763,69 +729,7 @@ void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, 
 }
 
 
-
-  /////////////////////////////////////////////////
- /////////////// LIST OF THEMES  /////////////////
-/////////////////////////////////////////////////
-GHashTable *cairo_dock_list_available_themes_for_data_renderer (const gchar *cRendererName)
-{
-	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
-	g_return_val_if_fail (pRecord != NULL, NULL);
-	
-	if (pRecord->cThemeDirName == NULL && pRecord->cDistantThemeDirName == NULL)
-		return NULL;
-	gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName);
-	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
-	GHashTable *pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName);
-	
-	g_free (cGaugeShareDir);
-	g_free (cGaugeUserDir);
-	return pGaugeTable;
-}
-
-
-gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, const gchar *cThemeName, CairoDockPackageType iType)  // utile pour DBus aussi.
-{
-	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
-	g_return_val_if_fail (pRecord != NULL, NULL);
-	
-	if (pRecord->cThemeDirName == NULL && pRecord->cDistantThemeDirName == NULL)
-		return NULL;
-	
-	const gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, pRecord->cThemeDirName);
-	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
-	gchar *cGaugePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName, iType);
-	g_free (cGaugeUserDir);
-	return cGaugePath;
-}
-
-gchar *cairo_dock_get_package_path_for_data_renderer (const gchar *cRendererName, const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName)
-{
-	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
-	g_return_val_if_fail (pRecord != NULL, NULL);
-	
-	gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
-	if (cChosenThemeName == NULL)
-		cChosenThemeName = g_strdup (pRecord->cDefaultTheme);
-	
-	CairoDockPackageType iType = cairo_dock_extract_package_type_from_name (cChosenThemeName);
-	gchar *cGaugePath = cairo_dock_get_data_renderer_theme_path (cRendererName, cChosenThemeName, iType);
-	
-	if (cGaugePath == NULL)  // theme introuvable.
-		cGaugePath = g_strdup_printf (CAIRO_DOCK_SHARE_DATA_DIR"/%s/%s", pRecord->cThemeDirName, pRecord->cDefaultTheme);
-	
-	if (iType != CAIRO_DOCK_ANY_PACKAGE)
-	{
-		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cChosenThemeName);
-		cairo_dock_write_keys_to_file (pKeyFile, cAppletConfFilePath);
-	}
-	cd_debug ("Theme de la jauge : %s", cGaugePath);
-	g_free (cChosenThemeName);
-	return cGaugePath;
-}
-
-
-void cairo_dock_register_built_in_data_renderers (void)
+void cairo_dock_register_built_in_data_renderers (void)  /// merge with init.
 {
 	cairo_dock_register_data_renderer_graph ();
 	cairo_dock_register_data_renderer_gauge ();

@@ -4,6 +4,7 @@ SET(impl_SRCS
 	cairo-dock-graph.c 				cairo-dock-graph.h
 	cairo-dock-hiding-effect.c	 	cairo-dock-hiding-effect.h
 	cairo-dock-icon-container.c 	cairo-dock-icon-container.h
+	cairo-dock-default-view.c 			cairo-dock-default-view.h
 )
 
 add_library(implementations STATIC ${impl_SRCS})

@@ -31,13 +31,14 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-packages.h"
+#include "cairo-dock-core.h"
 #include "cairo-dock-themes-manager.h"
 
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
@@ -482,7 +483,9 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 
 static void _import_theme (gpointer *pSharedMemory)
 {
+	g_print ("dl start\n");
 	pSharedMemory[5] = GINT_TO_POINTER (cairo_dock_import_theme (pSharedMemory[0], GPOINTER_TO_INT (pSharedMemory[1]), GPOINTER_TO_INT (pSharedMemory[2])));
+	g_print ("dl over\n");
 }
 static gboolean _finish_import (gpointer *pSharedMemory)
 {
@@ -509,21 +512,6 @@ CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean 
 	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _import_theme, (CairoDockUpdateSyncFunc) _finish_import, (GFreeFunc) _discard_import, pSharedMemory);
 	cairo_dock_launch_task (pTask);
 	return pTask;
-}
-
-
-void cairo_dock_load_current_theme (void)
-{
-	cd_message ("%s ()", __func__);
-
-	//\___________________ On libere toute la memoire allouee par tout le monde (stoppe aussi tous les timeout).
-	cairo_dock_free_all ();
-
-	//\___________________ On cree le dock principal.
-	CairoDock *pMainDock = cairo_dock_create_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
-
-	//\___________________ On lit son fichier de conf et on charge tout.
-	cairo_dock_load_config (g_cConfFile, pMainDock);  // chargera des valeurs par defaut si le fichier de conf fourni est incorrect.
 }
 
 

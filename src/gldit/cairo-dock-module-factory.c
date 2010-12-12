@@ -27,153 +27,33 @@
 #include <cairo.h>
 
 #include "../config.h"
-#include "cairo-dock-icons.h"
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-X-manager.h"  // g_desktopGeometry
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-container.h"
-#include "cairo-dock-gui-manager.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-position.h"
-#include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-background.h"
-#include "cairo-dock-internal-indicators.h"
-#include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-desklets.h"
-#include "cairo-dock-internal-dialogs.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-views.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-dialog-manager.h"  // cairo_dock_show_temporary_dialog_with_icon
+#include "cairo-dock-config.h"
+///#include "cairo-dock-gui-manager.h"  // cairo_dock_trigger_refresh_launcher_gui
+#include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-factory.h"
 
-CairoDockModuleInstance *g_pCurrentModule = NULL;
-
-extern CairoDock *g_pPrimaryContainer;
-extern gchar *g_cConfFile;
+// dependancies
 extern gchar *g_cCurrentThemePath;
-extern gchar *g_cCairoDockDataDir;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bEasterEggs;
 
-static GHashTable *s_hModuleTable = NULL;
-static GHashTable *s_hInternalModuleTable = NULL;
 static int s_iMaxOrder = 0;
-static GList *s_AutoLoadedModules = NULL;
-static guint s_iSidWriteModules = 0;
-
-
-  ///////////////
- /// MANAGER ///
-///////////////
-
-void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath)
-{
-	if (s_hModuleTable == NULL)
-		s_hModuleTable = g_hash_table_new_full (g_str_hash,
-			g_str_equal,
-			NULL,  // la cle est le nom du module, et pointe directement sur le champ 'cModuleName' du module.
-			(GDestroyNotify) cairo_dock_free_module);
-	
-	if (s_hInternalModuleTable == NULL)
-	{
-		s_hInternalModuleTable = g_hash_table_new_full (g_str_hash,
-			g_str_equal,
-			NULL,  // la cle est le nom du module, et pointe directement sur le champ 'cModuleName' du module.
-			(GDestroyNotify) NULL);  // ne sont jamais liberes.
-		cairo_dock_preload_internal_modules (s_hInternalModuleTable);
-	}
-	
-	if (cModuleDirPath != NULL && g_file_test (cModuleDirPath, G_FILE_TEST_IS_DIR))
-	{
-		GError *erreur = NULL;
-		cairo_dock_load_modules_in_directory (cModuleDirPath, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning ("%s\n  no module will be available", erreur->message);
-			g_error_free (erreur);
-		}
-	}
-}
-
-CairoDockModule *cairo_dock_find_module_from_name (const gchar *cModuleName)
-{
-	//g_print ("%s (%s)\n", __func__, cModuleName);
-	g_return_val_if_fail (cModuleName != NULL, NULL);
-	return g_hash_table_lookup (s_hModuleTable, cModuleName);
-}
-
-CairoDockModule *cairo_dock_foreach_module (GHRFunc pCallback, gpointer user_data)
-{
-	return g_hash_table_find (s_hModuleTable, (GHRFunc) pCallback, user_data);
-}
-
-static int _sort_module_by_alphabetical_order (CairoDockModule *m1, CairoDockModule *m2)
-{
-	if (!m1 || !m1->pVisitCard || !m1->pVisitCard->cTitle)
-		return 1;
-	if (!m2 || !m2->pVisitCard || !m2->pVisitCard->cTitle)
-		return -1;
-	return g_ascii_strncasecmp (dgettext (m1->pVisitCard->cGettextDomain, m1->pVisitCard->cTitle),
-		dgettext (m2->pVisitCard->cGettextDomain, m2->pVisitCard->cTitle),
-		-1);
-}
-CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc pCallback, gpointer user_data)
-{
-	GList *pModuleList = g_hash_table_get_values (s_hModuleTable);
-	pModuleList = g_list_sort (pModuleList, (GCompareFunc) _sort_module_by_alphabetical_order);
-	
-	CairoDockModule *pModule = (CairoDockModule *)g_list_find_custom (pModuleList, user_data, pCallback);
-	
-	g_list_free (pModuleList);
-	return pModule;
-}
-
-int cairo_dock_get_nb_modules (void)
-{
-	return g_hash_table_size (s_hModuleTable);
-}
-
-
-const gchar *cairo_dock_get_modules_dir (void)
-{
-	return CAIRO_DOCK_MODULES_DIR;
-}
-
-static void _cairo_dock_write_one_module_name (gchar *cModuleName, CairoDockModule *pModule, GString *pString)
-{
-	if (pModule->pInstancesList != NULL && ! cairo_dock_module_is_auto_loaded (pModule) && pModule->cSoFilePath != NULL)
-	{
-		g_string_append_printf (pString, "%s;", cModuleName);
-	}
-}
-gchar *cairo_dock_list_active_modules (void)
-{
-	GString *pString = g_string_new ("");
-	
-	g_hash_table_foreach (s_hModuleTable, (GHFunc) _cairo_dock_write_one_module_name, pString);
-	
-	if (pString->len > 0)
-		pString->str[pString->len-1] = '\0';
-	
-	gchar *cModuleNames = pString->str;
-	g_string_free (pString, FALSE);
-	return cModuleNames;
-}
 
 
   /////////////////////
  /// MODULE LOADER ///
 /////////////////////
 
-static gchar *cairo_dock_extract_default_module_name_from_path (gchar *cSoFilePath)
+static gchar *_cairo_dock_extract_default_module_name_from_path (gchar *cSoFilePath)
 {
 	gchar *ptr = g_strrstr (cSoFilePath, "/");
 	if (ptr == NULL)
@@ -200,50 +80,6 @@ static gchar *cairo_dock_extract_default_module_name_from_path (gchar *cSoFilePa
 
 	return cModuleName;
 }
-
-gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard)
-{
-	if (pVisitCard->cConfFileName == NULL)
-		return NULL;
-	
-	int r;
-	gchar *cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, pVisitCard->cUserDataDir);
-	if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-	{
-		cd_message ("directory %s doesn't exist, it will be added.", cUserDataDirPath);
-		
-		gchar *command = g_strdup_printf ("mkdir -p \"%s\"", cUserDataDirPath);
-		r = system (command);
-		g_free (command);
-	}
-	
-	gchar *cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pVisitCard->cConfFileName);
-	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
-	{
-		cd_message ("no conf file %s, we will take the default one", cConfFilePath);
-		gchar *command = g_strdup_printf ("cp \"%s/%s\" \"%s\"", pVisitCard->cShareDataDir, pVisitCard->cConfFileName, cConfFilePath);
-		r = system (command);
-		g_free (command);
-	}
-	
-	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // la copie ne s'est pas bien passee.
-	{
-		cd_warning ("couldn't copy %s/%s in %s; check permissions and file's existence", pVisitCard->cShareDataDir, pVisitCard->cConfFileName, cUserDataDirPath);
-		g_free (cUserDataDirPath);
-		g_free (cConfFilePath);
-		return NULL;
-	}
-	
-	g_free (cUserDataDirPath);
-	return cConfFilePath;
-}
-
-void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard)
-{
-	g_free (pVisitCard);  // toutes les chaines sont statiques.
-}
-
-
 static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **erreur)
 {
 	//\__________________ On ouvre le .so.
@@ -299,12 +135,27 @@ static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError *
 	}
 
 	if (pVisitCard->cModuleName == NULL)
-		pVisitCard->cModuleName = cairo_dock_extract_default_module_name_from_path (pCairoDockModule->cSoFilePath);
+		pVisitCard->cModuleName = _cairo_dock_extract_default_module_name_from_path (pCairoDockModule->cSoFilePath);
+}
 
-	if (cairo_dock_module_is_auto_loaded (pCairoDockModule))  // c'est un module qui soit ne peut etre activer et/ou desactiver, soit s'est lie a un module interne; on l'activera donc automatiquement.
+CairoDockModule *cairo_dock_new_module (const gchar *cSoFilePath, GError **erreur)
+{
+	CairoDockModule *pCairoDockModule = g_new0 (CairoDockModule, 1);
+	
+	if (cSoFilePath != NULL)
 	{
-		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pCairoDockModule);
+		pCairoDockModule->cSoFilePath = g_strdup (cSoFilePath);
+		GError *tmp_erreur = NULL;
+		_cairo_dock_open_module (pCairoDockModule, &tmp_erreur);
+		if (tmp_erreur != NULL)
+		{
+			g_propagate_error (erreur, tmp_erreur);
+			g_free (pCairoDockModule->cSoFilePath);
+			g_free (pCairoDockModule);
+			return NULL;
+		}
 	}
+	return pCairoDockModule;
 }
 
 static void _cairo_dock_close_module (CairoDockModule *module)
@@ -322,90 +173,60 @@ static void _cairo_dock_close_module (CairoDockModule *module)
 	module->cConfFilePath = NULL;
 }
 
-gboolean cairo_dock_register_module (CairoDockModule *pModule)
+void cairo_dock_free_module (CairoDockModule *module)
 {
-	g_return_val_if_fail (s_hModuleTable != NULL && pModule->pVisitCard != NULL && pModule->pVisitCard->cModuleName != NULL, FALSE);
-	
-	if (g_hash_table_lookup (s_hModuleTable, pModule->pVisitCard->cModuleName) != NULL)
-	{
-		cd_warning ("a module with the name '%s' is already registered", pModule->pVisitCard->cModuleName);
-		return FALSE;
-	}
-	
-	if (pModule->pVisitCard->cDockVersionOnCompilation == NULL)
-		pModule->pVisitCard->cDockVersionOnCompilation = GLDI_VERSION;
-	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
-	return TRUE;
-}
-
-void cairo_dock_unregister_module (const gchar *cModuleName)
-{
-	g_return_if_fail (cModuleName != NULL);
-	g_hash_table_remove (s_hModuleTable, cModuleName);
-}
-
-CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur)  // cSoFilePath vers un fichier de la forme 'libtruc.so'. Le module est rajoute dans la table des modules.
-{
-	//g_print ("%s (%s)\n", __func__, cSoFilePath);
-	if (cSoFilePath == NULL)  // g_module_open () plante si 'cSoFilePath' est NULL.
-	{
-		g_set_error (erreur, 1, 1, "%s () : no such module", __func__);
-		return NULL;
-	}
-
-	CairoDockModule *pCairoDockModule = g_new0 (CairoDockModule, 1);
-	pCairoDockModule->cSoFilePath = g_strdup (cSoFilePath);
-
-	GError *tmp_erreur = NULL;
-	_cairo_dock_open_module (pCairoDockModule, &tmp_erreur);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
-		g_free (pCairoDockModule);
-		return NULL;
-	}
-
-	if (s_hModuleTable != NULL && pCairoDockModule->pVisitCard != NULL)
-		g_hash_table_insert (s_hModuleTable, (gpointer)pCairoDockModule->pVisitCard->cModuleName, pCairoDockModule);
-
-	return pCairoDockModule;
-}
-
-void cairo_dock_load_modules_in_directory (const gchar *cModuleDirPath, GError **erreur)
-{
-	cd_message ("%s (%s)", __func__, cModuleDirPath);
-	GError *tmp_erreur = NULL;
-	GDir *dir = g_dir_open (cModuleDirPath, 0, &tmp_erreur);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
+	if (module == NULL)
 		return ;
-	}
+	cd_debug ("%s (%s)", __func__, module->pVisitCard->cModuleName);
 
-	CairoDockModule *pModule;
-	const gchar *cFileName;
-	GString *sFilePath = g_string_new ("");
-	do
+	cairo_dock_deactivate_module (module);
+
+	_cairo_dock_close_module (module);
+
+	g_free (module->cSoFilePath);
+	g_free (module);
+}
+
+gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard)
+{
+	if (pVisitCard->cConfFileName == NULL)
+		return NULL;
+	
+	int r;
+	gchar *cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, pVisitCard->cUserDataDir);
+	if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
 	{
-		cFileName = g_dir_read_name (dir);
-		if (cFileName == NULL)
-			break ;
+		cd_message ("directory %s doesn't exist, it will be added.", cUserDataDirPath);
 		
-		if (g_str_has_suffix (cFileName, ".so"))
-		{
-			g_string_printf (sFilePath, "%s/%s", cModuleDirPath, cFileName);
-			pModule = cairo_dock_load_module (sFilePath->str, &tmp_erreur);
-			if (tmp_erreur != NULL)
-			{
-				cd_warning (tmp_erreur->message);
-				g_error_free (tmp_erreur);
-				tmp_erreur = NULL;
-			}
-		}
+		gchar *command = g_strdup_printf ("mkdir -p \"%s\"", cUserDataDirPath);
+		r = system (command);
+		g_free (command);
 	}
-	while (1);
-	g_string_free (sFilePath, TRUE);
-	g_dir_close (dir);
+	
+	gchar *cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pVisitCard->cConfFileName);
+	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+	{
+		cd_message ("no conf file %s, we will take the default one", cConfFilePath);
+		gchar *command = g_strdup_printf ("cp \"%s/%s\" \"%s\"", pVisitCard->cShareDataDir, pVisitCard->cConfFileName, cConfFilePath);
+		r = system (command);
+		g_free (command);
+	}
+	
+	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // la copie ne s'est pas bien passee.
+	{
+		cd_warning ("couldn't copy %s/%s in %s; check permissions and file's existence", pVisitCard->cShareDataDir, pVisitCard->cConfFileName, cUserDataDirPath);
+		g_free (cUserDataDirPath);
+		g_free (cConfFilePath);
+		return NULL;
+	}
+	
+	g_free (cUserDataDirPath);
+	return cConfFilePath;
+}
+
+void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard)
+{
+	g_free (pVisitCard);  // toutes les chaines sont statiques.
 }
 
 
@@ -459,11 +280,11 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		gboolean bUseless;
 		cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
 		if (pMinimalConfig->iDesiredIconWidth == 0)
-			pMinimalConfig->iDesiredIconWidth = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
+			pMinimalConfig->iDesiredIconWidth = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
 		if (pMinimalConfig->iDesiredIconWidth == 0)
 			pMinimalConfig->iDesiredIconWidth = 48;
 		if (pMinimalConfig->iDesiredIconHeight == 0)
-			pMinimalConfig->iDesiredIconHeight = myIcons.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
+			pMinimalConfig->iDesiredIconHeight = myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
 		if (pMinimalConfig->iDesiredIconHeight == 0)
 			pMinimalConfig->iDesiredIconHeight = 48;
 		
@@ -665,7 +486,15 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	{
 		pIcon->fWidth /= pDock->container.fRatio;
 		pIcon->fHeight /= pDock->container.fRatio;
-		cairo_dock_insert_icon_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+		if (cairo_dock_is_loading ())
+		{
+			cairo_dock_insert_icon_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+		}
+		else
+		{
+			cairo_dock_insert_icon_in_dock (pIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+		}
 	}
 	else if (pDesklet && pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0)  // peut arriver si le desklet a fini de se redimensionner avant l'init.
 		gtk_widget_queue_draw (pDesklet->container.pWidget);
@@ -720,6 +549,8 @@ void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance)
 	_cairo_dock_stop_module_instance (pInstance);
 	
 	pInstance->pModule->pInstancesList = g_list_remove (pInstance->pModule->pInstancesList, pInstance);
+	if (pInstance->pModule->pInstancesList == NULL)
+		cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_ACTIVATED, pInstance->pModule->pVisitCard->cModuleName, FALSE);
 	
 	_cairo_dock_free_module_instance (pInstance);
 }
@@ -798,7 +629,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			{
 				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
 				cOldDockName = g_strdup (pIcon->cParentDockName);
-				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock, myIcons.iSeparateIcons);
+				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock, myIconsParam.iSeparateIcons);
 			}
 			
 			// on recupere son desklet (cree au besoin).
@@ -903,8 +734,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		cairo_dock_redraw_subdock_content (pNewDock);
 	}
 	
-	if (pNewDock || pCurrentDock)
-		cairo_dock_trigger_refresh_launcher_gui ();
+	///cairo_dock_trigger_refresh_launcher_gui ();  /// voir s'il y'a besoin de qqch ici...
 	
 	//\_______________________ On nettoie derriere nous.
 	cairo_dock_free_minimal_config (pMinimalConfig);
@@ -941,25 +771,10 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
  /// MODULES ///
 ///////////////
 
-void cairo_dock_free_module (CairoDockModule *module)
-{
-	if (module == NULL)
-		return ;
-	cd_debug ("%s (%s)", __func__, module->pVisitCard->cModuleName);
-
-	cairo_dock_deactivate_module (module);
-
-	_cairo_dock_close_module (module);
-
-	cairo_dock_free_visit_card (module->pVisitCard);
-	g_free (module->cSoFilePath);
-	g_free (module);
-}
-
 void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 {
-	g_return_if_fail (module != NULL);
-	cd_message ("%s (%s)", __func__, module->pVisitCard->cModuleName);
+	g_return_if_fail (module != NULL && module->pVisitCard != NULL);
+	g_print ("%s (%s)\n", __func__, module->pVisitCard->cModuleName);
 
 	if (module->pInstancesList != NULL)
 	{
@@ -996,6 +811,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 		g_set_error (erreur, 1, 1, "%s () : no instance of module %s could be created", __func__, module->pVisitCard->cModuleName);
 		return ;
 	}
+	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, TRUE);
 }
 
 void cairo_dock_deactivate_module (CairoDockModule *module)
@@ -1006,6 +822,7 @@ void cairo_dock_deactivate_module (CairoDockModule *module)
 	g_list_foreach (module->pInstancesList, (GFunc) _cairo_dock_free_module_instance, NULL);
 	g_list_free (module->pInstancesList);
 	module->pInstancesList = NULL;
+	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, FALSE);
 }
 
 void cairo_dock_reload_module (CairoDockModule *pModule, gboolean bReloadAppletConf)
@@ -1020,479 +837,6 @@ void cairo_dock_reload_module (CairoDockModule *pModule, gboolean bReloadAppletC
 }
 
 
-void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fTime)
-{
-	//\_______________ On active les modules auto-charges en premier.
-	GError *erreur = NULL;
-	gchar *cModuleName;
-	CairoDockModule *pModule;
-	GList *m;
-	for (m = s_AutoLoadedModules; m != NULL; m = m->next)
-	{
-		pModule = m->data;
-		pModule->fLastLoadingTime = fTime;
-		if (pModule->pInstancesList == NULL)  // on ne les active qu'une seule fois. Si lors d'un changement de theme on re-active les modules, ceux-la resteront inchanges.
-		{
-			cairo_dock_activate_module (pModule, &erreur);
-			if (erreur != NULL)
-			{
-				cd_warning (erreur->message);
-				g_error_free (erreur);
-				erreur = NULL;
-			}
-		}
-	}
-	
-	if (cActiveModuleList == NULL)
-		return ;
-	
-	//\_______________ On active tous les autres.
-	int i;
-	GList *pNotFoundModules = NULL;
-	for (i = 0; cActiveModuleList[i] != NULL; i ++)
-	{
-		cModuleName = cActiveModuleList[i];
-		pModule = g_hash_table_lookup (s_hModuleTable, cModuleName);
-		if (pModule == NULL)
-		{
-			cd_debug ("No such module (%s)", cModuleName);
-			pNotFoundModules = g_list_prepend (pNotFoundModules, cModuleName);
-			continue ;
-		}
-		
-		pModule->fLastLoadingTime = fTime;
-		if (pModule->pInstancesList == NULL)
-		{
-			cairo_dock_activate_module (pModule, &erreur);
-			if (erreur != NULL)
-			{
-				cd_warning (erreur->message);
-				g_error_free (erreur);
-				erreur = NULL;
-			}
-		}
-		else
-		{
-			cairo_dock_reload_module (pModule, FALSE);
-		}
-	}
-}
-
-static void _cairo_dock_deactivate_one_old_module (gchar *cModuleName, CairoDockModule *pModule, double *fTime)
-{
-	if (pModule->fLastLoadingTime < *fTime)
-		cairo_dock_deactivate_module (pModule);
-}
-void cairo_dock_deactivate_old_modules (double fTime)
-{
-	g_hash_table_foreach (s_hModuleTable, (GHFunc) _cairo_dock_deactivate_one_old_module, &fTime);
-}
-
-static void _cairo_dock_deactivate_one_module (gchar *cModuleName, CairoDockModule *pModule, gpointer data)
-{
-	cairo_dock_deactivate_module (pModule);
-}
-void cairo_dock_deactivate_all_modules (void)
-{
-	g_hash_table_foreach (s_hModuleTable, (GHFunc) _cairo_dock_deactivate_one_module, NULL);
-	if (s_iSidWriteModules != 0)
-	{
-		g_source_remove (s_iSidWriteModules);
-		s_iSidWriteModules = 0;
-	}
-}
-
-
-  /////////////////////////
- /// MODULES HIGH LEVEL///
-/////////////////////////
-
-void cairo_dock_activate_module_and_load (const gchar *cModuleName)
-{
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-	g_return_if_fail (pModule != NULL);
-	
-	pModule->fLastLoadingTime = 0;
-	if (pModule->pInstancesList == NULL)
-	{
-		GError *erreur = NULL;
-		cairo_dock_activate_module (pModule, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-		}
-	}
-	else
-	{
-		cairo_dock_reload_module (pModule, FALSE);
-	}
-	
-	GList *pElement;
-	CairoDockModuleInstance *pInstance;
-	for (pElement = pModule->pInstancesList; pElement != NULL; pElement = pElement->next)
-	{
-		pInstance = pElement->data;
-		if (pInstance->pDock)
-		{
-			cairo_dock_update_dock_size (pInstance->pDock);
-			gtk_widget_queue_draw (pInstance->pDock->container.pWidget);
-		}
-	}
-	
-	cairo_dock_write_active_modules ();
-}
-
-// deinstanciate_module, remove icon, free_icon, write
-static void cairo_dock_deactivate_module_instance_and_unload (CairoDockModuleInstance *pInstance)
-{
-	g_return_if_fail (pInstance != NULL);
-	cd_message ("%s (%s)", __func__, pInstance->cConfFilePath);
-	
-	Icon *pIcon = pInstance->pIcon;  // l'instance va etre detruite.
-	CairoDock *pDock = pInstance->pDock;
-	if (pDock)
-	{
-		cairo_dock_remove_icon_from_dock (pDock, pInstance->pIcon);  // desinstancie le module et tout.
-		cairo_dock_update_dock_size (pDock);
-		gtk_widget_queue_draw (pDock->container.pWidget);
-	}
-	else
-	{
-		cairo_dock_deinstanciate_module (pInstance);
-		if (pIcon)
-			pIcon->pModuleInstance = NULL;
-	}
-	cairo_dock_free_icon (pIcon);
-}
-
-void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName)
-{
-	///if (g_pPrimaryContainer == NULL)
-	///	return ;
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-	g_return_if_fail (pModule != NULL);
-	
-	GList *pElement = pModule->pInstancesList, *pNextElement;
-	CairoDockModuleInstance *pInstance;
-	cd_debug ("%d instance(s) a arreter", g_list_length (pModule->pInstancesList));
-	//for (pElement = pModule->pInstancesList; pElement != NULL; pElement = pElement->next)
-	while (pElement != NULL)
-	{
-		pInstance = pElement->data;
-		pNextElement = pElement->next;
-		cairo_dock_deactivate_module_instance_and_unload (pInstance);
-		pElement = pNextElement;
-	}
-	
-	cairo_dock_write_active_modules ();
-}
-
-
-/*
-* Stoppe une instance d'un module, et la supprime.
-*/
-void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
-{
-	cd_message ("%s (%s)", __func__, pInstance->cConfFilePath);
-	//\_________________ Si c'est la derniere instance, on desactive le module.
-	if (pInstance->pModule->pInstancesList->next == NULL)
-	{
-		cairo_dock_deactivate_module_and_unload (pInstance->pModule->pVisitCard->cModuleName);
-		return ;
-	}
-	
-	//\_________________ On efface le fichier de conf de cette instance.
-	cd_debug ("on efface %s", pInstance->cConfFilePath);
-	g_remove (pInstance->cConfFilePath);
-	
-	//\_________________ On supprime cette instance (on le fait maintenant, pour que son fichier de conf n'existe plus lors du 'stop'.
-	gchar *cConfFilePath = pInstance->cConfFilePath;
-	pInstance->cConfFilePath = NULL;
-	CairoDockModule *pModule = pInstance->pModule;
-	cairo_dock_deactivate_module_instance_and_unload (pInstance);  // pInstance n'est plus.
-	
-	//\_________________ Si c'est pas la derniere instance, la derniere instance prend sa place.
-	int iNbInstances = g_list_length (pModule->pInstancesList)+1;  // nombre d'instances avant suppression.
-	gchar *str = strrchr (cConfFilePath, '-');
-	if (str == NULL || atoi (str+1) != iNbInstances-1)
-	{
-		gchar *cLastInstanceFilePath = g_strdup_printf ("%s-%d", pModule->cConfFilePath, iNbInstances-1);
-		
-		CairoDockModuleInstance *pOneInstance;
-		GList *pElement;
-		for (pElement = pModule->pInstancesList; pElement != NULL; pElement = pElement->next)
-		{
-			pOneInstance = pElement->data;
-			if (strcmp (pOneInstance->cConfFilePath, cLastInstanceFilePath) == 0)
-			{
-				gchar *cCommand = g_strdup_printf ("mv \"%s\" \"%s\"", cLastInstanceFilePath, cConfFilePath);
-				int r = system (cCommand);
-				g_free (cCommand);
-				
-				g_free (pOneInstance->cConfFilePath);
-				pOneInstance->cConfFilePath = cConfFilePath;
-				cConfFilePath = NULL;
-				break ;
-			}
-		}
-		
-		g_free (cLastInstanceFilePath);
-	}
-	g_free (cConfFilePath);
-}
-
-gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
-{
-	gchar *cConfFilePath;
-	if (pModule->pInstancesList == NULL)  // module non encore instancie, on utilise la fonction qui cree le dossier du module ainsi que son fichier de conf.
-	{
-		cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
-	}
-	else  // on rajoute un n-ieme fichier de conf si necessaire.
-	{
-		int iNbInstances = g_list_length (pModule->pInstancesList);
-		cConfFilePath = g_strdup_printf ("%s-%d", pModule->cConfFilePath, iNbInstances);
-		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
-		{
-			gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath/**pModule->pVisitCard->cShareDataDir, 
-			pModule->pVisitCard->cConfFileName*/, cConfFilePath);  // copy from first instance.
-			cd_debug (cCommand);
-			int r = system (cCommand);
-			g_free (cCommand);
-			
-			GList *last = g_list_last (pModule->pInstancesList);
-			CairoDockModuleInstance *pFirstInstance = last->data;  // instances are prepended.
-			if (pFirstInstance->pDesklet)  // prevent desklets from overlapping.
-			{
-				int iX2, iX = pFirstInstance->pContainer->iWindowPositionX;
-				int iWidth = pFirstInstance->pContainer->iWidth;
-				if (iX + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2)  // desklet on the left, we place the new one on its right.
-					iX2 = iX + iWidth;
-				else  // desklet on the right, we place the new one on its left.
-					iX2 = iX - iWidth;
-				
-				int iRelativePositionX = (iX2 + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iX2 : iX2 - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-				cairo_dock_update_conf_file (cConfFilePath,
-					G_TYPE_INT, "Desklet", "x position", iRelativePositionX,
-					G_TYPE_BOOLEAN, "Desklet", "locked", FALSE,  // we'll probably want to move it
-					G_TYPE_BOOLEAN, "Desklet", "no input", FALSE,
-					G_TYPE_INVALID);
-			}
-		}
-	}
-	return cConfFilePath;
-}
-
-void cairo_dock_add_module_instance (CairoDockModule *pModule)
-{
-	if (pModule->pInstancesList == NULL)
-	{
-		cd_warning ("This module has not been instanciated yet");
-		return ;
-	}
-	
-	gchar *cInstanceFilePath = cairo_dock_add_module_conf_file (pModule);
-	
-	CairoDockModuleInstance *pNewInstance = cairo_dock_instanciate_module (pModule, cInstanceFilePath);  // prend le 'cInstanceFilePath'.
-	
-	if (pNewInstance != NULL && pNewInstance->pDock)
-	{
-		cairo_dock_update_dock_size (pNewInstance->pDock);
-	}
-}
-
-void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance)
-{
-	//g_return_if_fail (pInstance->pDesklet == NULL);
-	//\__________________ On recupere l'etat actuel.
-	gboolean bIsDetached = (pInstance->pDesklet != NULL);
-	if ((bIsDetached && pInstance->pModule->pVisitCard->iContainerType & CAIRO_DOCK_MODULE_CAN_DOCK) ||
-		(!bIsDetached && pInstance->pModule->pVisitCard->iContainerType & CAIRO_DOCK_MODULE_CAN_DESKLET))
-	{
-		//\__________________ On enregistre l'etat 'detache'.
-		cairo_dock_update_conf_file (pInstance->cConfFilePath,
-			G_TYPE_BOOLEAN, "Desklet", "initially detached", !bIsDetached,
-			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_NORMAL,
-			G_TYPE_INVALID);
-		//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
-		cairo_dock_update_desklet_detached_state_in_gui (pInstance, !bIsDetached);
-		//\__________________ On detache l'applet.
-		cairo_dock_reload_module_instance (pInstance, TRUE);
-		if (pInstance->pDesklet)  // on a bien detache l'applet.
-			cairo_dock_zoom_out_desklet (pInstance->pDesklet);
-	}
-}
-
-void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pInstance, int iCenterX, int iCenterY)
-{
-	g_return_if_fail (pInstance->pDesklet == NULL);
-	//\__________________ On enregistre les nouvelles coordonnees qu'aura le desklet, ainsi que l'etat 'detache'.
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (pInstance->cConfFilePath);
-	if (pKeyFile != NULL)
-	{
-		//\__________________ compute coordinates of the center of the desklet.
-		int iDeskletWidth = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "width", NULL, 92, NULL, NULL);
-		int iDeskletHeight = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "height", NULL, 92, NULL, NULL);
-		
-		int iDeskletPositionX = iCenterX - iDeskletWidth/2;
-		int iDeskletPositionY = iCenterY - iDeskletHeight/2;
-		
-		int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-		int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		
-		//\__________________ update the conf file of the applet.
-		g_key_file_set_double (pKeyFile, "Desklet", "x position", iDeskletPositionX);
-		g_key_file_set_double (pKeyFile, "Desklet", "y position", iDeskletPositionY);
-		g_key_file_set_boolean (pKeyFile, "Desklet", "initially detached", TRUE);
-		g_key_file_set_double (pKeyFile, "Desklet", "locked", FALSE);  // we usually will want to adjust the position of the new desklet.
-		g_key_file_set_double (pKeyFile, "Desklet", "no input", FALSE);  // we usually will want to adjust the position of the new desklet.
-		g_key_file_set_double (pKeyFile, "Desklet", "accessibility", CAIRO_DESKLET_NORMAL);  // prevent "unforseen consequences".
-		
-		cairo_dock_write_keys_to_file (pKeyFile, pInstance->cConfFilePath);
-		g_key_file_free (pKeyFile);
-		
-		//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
-		cairo_dock_update_desklet_position_in_gui (pInstance, iDeskletPositionX, iDeskletPositionY);
-		cairo_dock_update_desklet_detached_state_in_gui (pInstance, TRUE);
-	}
-	
-	//\__________________ On detache l'applet.
-	cairo_dock_reload_module_instance (pInstance, TRUE);
-	if (pInstance->pDesklet)  // on a bien detache l'applet.
-		cairo_dock_zoom_out_desklet (pInstance->pDesklet);
-}
-
-
-static int s_iNbUsedSlots = 0;
-static CairoDockModuleInstance *s_pUsedSlots[CAIRO_DOCK_NB_DATA_SLOT+1];
-gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance)
-{
-	g_return_val_if_fail (s_iNbUsedSlots < CAIRO_DOCK_NB_DATA_SLOT, FALSE);
-	if (s_iNbUsedSlots == 0)
-		memset (s_pUsedSlots, 0, (CAIRO_DOCK_NB_DATA_SLOT+1) * sizeof (CairoDockModuleInstance*));
-	
-	if (pInstance->iSlotID == 0)
-	{
-		s_iNbUsedSlots ++;
-		if (s_pUsedSlots[s_iNbUsedSlots] == NULL)
-		{
-			pInstance->iSlotID = s_iNbUsedSlots;
-			s_pUsedSlots[s_iNbUsedSlots] = pInstance;
-		}
-		else
-		{
-			int i;
-			for (i = 1; i < s_iNbUsedSlots; i ++)
-			{
-				if (s_pUsedSlots[i] == NULL)
-				{
-					pInstance->iSlotID = i;
-					s_pUsedSlots[i] = pInstance;
-					break ;
-				}
-			}
-		}
-	}
-	return TRUE;
-}
-
-void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance)
-{
-	if (pInstance->iSlotID == 0)
-		return;
-	s_iNbUsedSlots --;
-	s_pUsedSlots[pInstance->iSlotID] = NULL;
-	pInstance->iSlotID = 0;
-}
-
-
-  ////////////////////////
- /// INTERNAL MODULES ///
-////////////////////////
-
-#define REGISTER_INTERNAL_MODULE(cGroupName) \
-	pModule = g_new0 (CairoDockInternalModule, 1);\
-	cairo_dock_pre_init_##cGroupName (pModule);\
-	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);\
-	g_hash_table_insert (pModuleTable, (gpointer)pModule->cModuleName, pModule)
-void cairo_dock_preload_internal_modules (GHashTable *pModuleTable)
-{
-	cd_message ("");
-	CairoDockInternalModule *pModule;
-	
-	REGISTER_INTERNAL_MODULE (Position);
-	REGISTER_INTERNAL_MODULE (Accessibility);
-	REGISTER_INTERNAL_MODULE (System);
-	REGISTER_INTERNAL_MODULE (TaskBar);
-	REGISTER_INTERNAL_MODULE (Background);
-	REGISTER_INTERNAL_MODULE (Icons);
-	REGISTER_INTERNAL_MODULE (Labels);
-	REGISTER_INTERNAL_MODULE (Dialogs);
-	REGISTER_INTERNAL_MODULE (Indicators);
-	REGISTER_INTERNAL_MODULE (Views);
-	REGISTER_INTERNAL_MODULE (Desklets);
-}
-
-void cairo_dock_reload_internal_module_from_keyfile (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
-{
-	gpointer *pPrevConfig = g_memdup (pModule->pConfig, pModule->iSizeOfConfig);
-	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);
-	
-	pModule->get_config (pKeyFile, pModule->pConfig);
-	
-	if (g_pPrimaryContainer != NULL)  // si on est en mode maintenance, inutile de recharger.
-		pModule->reload (pPrevConfig, pModule->pConfig);
-	
-	if (pModule->reset_config)
-		pModule->reset_config (pPrevConfig);
-	g_free (pPrevConfig);
-}
-
-void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, const gchar *cConfFilePath)
-{
-	g_return_if_fail (pModule != NULL);
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	if (pKeyFile == NULL)
-		return;
-	
-	cairo_dock_reload_internal_module_from_keyfile (pModule, pKeyFile);
-	
-	g_key_file_free (pKeyFile);
-}
-
-CairoDockInternalModule *cairo_dock_find_internal_module_from_name (const gchar *cModuleName)
-{
-	//g_print ("%s (%s)\n", __func__, cModuleName);
-	g_return_val_if_fail (cModuleName != NULL, NULL);
-	return g_hash_table_lookup (s_hInternalModuleTable, cModuleName);
-}
-
-gboolean cairo_dock_get_internal_module_config (CairoDockInternalModule *pModule, GKeyFile *pKeyFile)
-{
-	if (pModule->reset_config)
-	{
-		pModule->reset_config (pModule->pConfig);
-	}
-	memset (pModule->pConfig, 0, pModule->iSizeOfConfig);
-	return pModule->get_config (pKeyFile, pModule->pConfig);
-}
-
-static void _cairo_dock_get_one_internal_module_config (gchar *cModuleName, CairoDockInternalModule *pModule, gpointer *data)
-{
-	GKeyFile *pKeyFile = data[0];
-	gboolean *bFlushConfFileNeeded = data[1];
-	*bFlushConfFileNeeded |= cairo_dock_get_internal_module_config (pModule, pKeyFile);
-}
-gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile)
-{
-	gboolean bFlushConfFileNeeded = FALSE;
-	gpointer data[2] = {pKeyFile, &bFlushConfFileNeeded};
-	g_hash_table_foreach (s_hInternalModuleTable, (GHFunc) _cairo_dock_get_one_internal_module_config, data);
-	return bFlushConfFileNeeded;
-}
-
-
 void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pModuleInstance)
 {
 	gchar *cDescription = g_strdup_printf ("%s (v%s) by %s\n%s",
@@ -1502,39 +846,8 @@ void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pMod
 		dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain,
 			pModuleInstance->pModule->pVisitCard->cDescription));
 	
-	myDialogs.dialogTextDescription.bUseMarkup = TRUE;
+	myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
 	cairo_dock_show_temporary_dialog_with_icon (cDescription, pModuleInstance->pIcon, pModuleInstance->pContainer, 0, pModuleInstance->pModule->pVisitCard->cIconFilePath);
 	g_free (cDescription);
-	myDialogs.dialogTextDescription.bUseMarkup = FALSE;
-}
-
-void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const gchar *cOtherModuleName)
-{
-        CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (cOtherModuleName);
-        g_return_if_fail (pInternalModule != NULL && pInternalModule->iCategory == pVisitCard->iCategory && pVisitCard->cInternalModule == NULL);
-
-        pInternalModule->pExternalModules = g_list_prepend (pInternalModule->pExternalModules, (gpointer)pVisitCard->cModuleName);
-        pVisitCard->cInternalModule = cOtherModuleName;
-}
-
-
-static gboolean _write_modules (gpointer data)
-{
-	gchar *cModuleNames = cairo_dock_list_active_modules ();
-	
-	cairo_dock_update_conf_file (g_cConfFile,
-		G_TYPE_STRING, "System", "modules", cModuleNames,
-		G_TYPE_INVALID);
-	g_free (cModuleNames);
-}
-static gboolean _write_modules_idle (gpointer data)
-{
-	_write_modules (data);
-	s_iSidWriteModules = 0;
-	return FALSE;
-}
-void cairo_dock_write_active_modules (void)
-{
-	if (s_iSidWriteModules == 0)
-		s_iSidWriteModules = g_idle_add (_write_modules_idle, NULL);
+	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
 }

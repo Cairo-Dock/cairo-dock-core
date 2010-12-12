@@ -41,6 +41,7 @@
 #include "eggaccelerators.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-keybinder.h"
 
 typedef unsigned int uint;
@@ -52,9 +53,15 @@ typedef struct _Binding {
 	uint                  modifiers;
 } Binding;
 
+// public (manager, config, data)
+CairoShortcutsManager myShortcutsMgr;
+
+// dependancies
+
+// private
 static GSList *bindings = NULL;
 ///static guint32 last_event_time = 0;
-static gboolean processing_event = FALSE;
+///static gboolean processing_event = FALSE;
 
 static guint num_lock_mask=0, caps_lock_mask=0, scroll_lock_mask=0;
 
@@ -191,7 +198,7 @@ filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 		 * Set the last event time for use when showing
 		 * windows to avoid anti-focus-stealing code.
 		 */
-		processing_event = TRUE;
+		///processing_event = TRUE;
 		///last_event_time = xevent->xkey.time;
 
 		event_mods = xevent->xkey.state & ~(num_lock_mask  |
@@ -212,7 +219,7 @@ filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 			}
 		}
 
-		processing_event = FALSE;
+		///processing_event = FALSE;
 		break;
 	case KeyRelease:
 		cd_debug ("Got KeyRelease! ");
@@ -316,8 +323,8 @@ cd_keybinder_unbind (const char           *keystring,
 	cd_debug ("%s (%s)", __func__, keystring);
 	GSList *iter;
 
-        if (!keystring)
-          return;
+	if (!keystring)
+		return;
 	for (iter = bindings; iter != NULL; iter = iter->next) {
 		Binding *binding = (Binding *) iter->data;
 
@@ -409,4 +416,57 @@ gboolean cairo_dock_simulate_key_sequence (gchar *cKeyString)  // the idea was t
 #endif
 }
 
+
+
+  ////////////
+ /// INIT ///
+////////////
+
+static void init (void)
+{
+	cd_keybinder_init ();
+}
+
+
+static void unload (void)
+{
+	GSList *iter;
+	for (iter = bindings; iter != NULL; iter = iter->next)  // normalement la liste devrait etre vide.
+	{
+		Binding *binding = (Binding *) iter->data;
+		
+		cd_debug (" --- remove key binding '%s'\n", binding->keystring);
+		do_ungrab_key (binding);
+		
+		g_free (binding->keystring);
+		g_free (binding);
+	}
+	g_slist_free (bindings);
+	bindings = NULL;
+}
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_shortcuts_manager (void)
+{
+	// Manager
+	memset (&myShortcutsMgr, 0, sizeof (CairoShortcutsManager));
+	myShortcutsMgr.mgr.cModuleName 	= "Shortcuts";
+	myShortcutsMgr.mgr.init 		= init;
+	myShortcutsMgr.mgr.load 		= NULL;
+	myShortcutsMgr.mgr.unload 		= unload;
+	myShortcutsMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
+	myShortcutsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
+	myShortcutsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	// Config
+	myShortcutsMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
+	myShortcutsMgr.mgr.iSizeOfConfig = 0;
+	// data
+	myShortcutsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myShortcutsMgr.mgr.iSizeOfData = 0;
+	// signals
+	cairo_dock_install_notifications_on_object (&myShortcutsMgr, NB_NOTIFICATIONS_SHORTCUTS);
+}
 

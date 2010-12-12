@@ -26,7 +26,7 @@
 
 #include "../config.h"
 #include "cairo-dock-struct.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
@@ -37,13 +37,13 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-launcher-factory.h"
-#include "cairo-dock-load.h"
-#include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-X-manager.h"
+#define _MANAGER_DEF_
 #include "cairo-dock-gui-manager.h"
 
-#define CAIRO_DOCK_FRAME_MARGIN 6
+CairoGuiManager myGuiMgr;
 
 extern CairoDock *g_pMainDock;
 extern gchar *g_cCairoDockDataDir;
@@ -578,11 +578,11 @@ void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBac
 	s_pLauncherGuiBackend = pBackend;
 }
 
-GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon, CairoContainer *pContainer, int iShowPage)
+GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
 {
 	//g_print ("%s (%x)\n", __func__, pIcon);
 	if (s_pLauncherGuiBackend && s_pLauncherGuiBackend->show_gui)
-		return s_pLauncherGuiBackend->show_gui (pIcon, pContainer, iShowPage);
+		return s_pLauncherGuiBackend->show_gui (pIcon, pContainer, pModuleInstance, iShowPage);
 }
 
 static guint s_iSidRefreshGUI = 0;
@@ -600,4 +600,32 @@ void cairo_dock_trigger_refresh_launcher_gui (void)
 		return;
 	
 	s_iSidRefreshGUI = g_idle_add ((GSourceFunc) _refresh_launcher_gui, NULL);
+}
+
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_gui_manager (void)
+{
+	// Manager
+	memset (&myGuiMgr, 0, sizeof (CairoGuiManager));
+	myGuiMgr.mgr.cModuleName 	= "GUI";
+	myGuiMgr.mgr.init 		= NULL;
+	myGuiMgr.mgr.load 		= NULL;
+	myGuiMgr.mgr.unload 		= NULL;
+	myGuiMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
+	myGuiMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
+	myGuiMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	// Config
+	myGuiMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
+	myGuiMgr.mgr.iSizeOfConfig = 0;
+	// data
+	myGuiMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myGuiMgr.mgr.iSizeOfData = 0;
+	// signals
+	cairo_dock_install_notifications_on_object (&myGuiMgr, NB_NOTIFICATIONS_GUI);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myGuiMgr));
 }

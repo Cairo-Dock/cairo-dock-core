@@ -32,13 +32,13 @@
 #include <gtk/gtkgl.h>
 
 #include "../config.h"
-#include "cairo-dock-load.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-icon-manager.h"
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-icon-container.h"
 
 CairoDockImageBuffer g_pBoxAboveBuffer;
@@ -193,7 +193,7 @@ static void _cairo_dock_load_box_surface (void)
 	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
 	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
 	
-	int iSize = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	int iSize = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
 	if (iSize == 0)
 		iSize = 48;
 	iSize *= fMaxScale;
@@ -217,7 +217,7 @@ static void _cairo_dock_load_box_surface (void)
 		cUserPath = NULL;
 	}
 	cairo_dock_load_image_buffer (&g_pBoxBelowBuffer,
-		CAIRO_DOCK_SHARE_DATA_DIR"/box-back.png",
+		cUserPath ? cUserPath : CAIRO_DOCK_SHARE_DATA_DIR"/box-back.png",
 		iSize,
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);

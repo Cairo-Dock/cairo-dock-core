@@ -17,33 +17,28 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef __CAIRO_DOCK_INTERNAL_DESKLETS__
-#define  __CAIRO_DOCK_INTERNAL_DESKLETS__
+#ifndef __GLDI_CORE__
+#define  __GLDI_CORE__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-config.h"
-
-
-typedef struct _CairoConfigDesklets CairoConfigDesklets;
-#ifndef _INTERNAL_MODULE_
-extern CairoConfigDesklets myDesklets;
-#endif
 G_BEGIN_DECLS
 
-struct _CairoConfigDesklets {
-	gchar *cDeskletDecorationsName;
-	gint iDeskletButtonSize;
-	gchar *cRotateButtonImage;
-	gchar *cRetachButtonImage;
-	gchar *cDepthRotateButtonImage;
-	gchar *cNoInputButtonImage;
-	};
+/**
+*@file cairo-dock-core.h This class instanciates the different core managers.
+*/
+
+typedef enum {
+	GLDI_DEFAULT,
+	GLDI_OPENGL,
+	GLDI_CAIRO,
+	} GldiRenderingMethod;
+
+void gldi_init (GldiRenderingMethod iRendering);
 
 
-DEFINE_PRE_INIT (Desklets);
+void gldi_free_all (void);
 
-G_END_DECLS
+
 #endif

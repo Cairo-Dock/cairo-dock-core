@@ -41,7 +41,7 @@
 #include <GL/glxext.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_generate_string_path_opengl
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-opengl-path.h"
 
@@ -512,6 +512,6 @@ void cairo_dock_draw_string_opengl (CairoDock *pDock, double fStringLineWidth, g
 		return;
 	
 	glLineWidth (fStringLineWidth);
-	///glColor4f (myIcons.fStringColor[0], myIcons.fStringColor[1], myIcons.fStringColor[2], myIcons.fStringColor[3]);
+	///glColor4f (myIconsParam.fStringColor[0], myIconsParam.fStringColor[1], myIconsParam.fStringColor[2], myIconsParam.fStringColor[3]);
 	cairo_dock_stroke_gl_path (pPath, FALSE);
 }

@@ -17,12 +17,14 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_PACKAGES__
 #define  __CAIRO_DOCK_PACKAGES__
 
 #include <glib.h>
-#include <gtk/gtk.h>
+
+#include "cairo-dock-struct.h"
+#include "cairo-dock-manager.h"
+
 G_BEGIN_DECLS
 
 /**@file cairo-dock-packages.h This class provides a convenient way to deal with packages. A Package is a tarball (tar.gz) of a folder, located on a distant server, that can be installed locally.
@@ -34,6 +36,38 @@ G_BEGIN_DECLS
 * To get the list of available packages, use \ref cairo_dock_list_packages, or its asynchronous version \ref cairo_dock_list_packages_async.
 * To get the path of a package, use \ref cairo_dock_get_package_path; it will look for the the best
 */
+
+typedef struct _CairoConnectionParam CairoConnectionParam;
+typedef struct _CairoConnectionManager CairoConnectionManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoConnectionParam myConnectionParam;
+extern CairoConnectionManager myConnectionMgr;
+#endif
+
+// params
+struct _CairoConnectionParam {
+	gint iConnectionTimeout;
+	gint iConnectionMaxTime;
+	gchar *cConnectionProxy;
+	gint iConnectionPort;
+	gchar *cConnectionUser;
+	gchar *cConnectionPasswd;
+	gboolean bForceIPv4;
+	};
+
+// manager
+struct _CairoConnectionManager {
+	GldiManager mgr;
+	gchar* (*get_url_data) (const gchar *cURL, GError **erreur);
+	} ;
+
+// signals
+typedef enum {
+	NOTIFICATION_CONNECTION_UP,
+	NB_NOTIFICATIONS_CONNECTION
+	} CairoConnectionNotifications;
+
 
 /// Types of packagess.
 typedef enum {
@@ -176,6 +210,8 @@ CairoDockPackageType cairo_dock_extract_package_type_from_name (const gchar *cPa
 
 void cairo_dock_init_package_manager (gchar *cPackageServerAdress);
 
+
+void gldi_register_connection_manager (void);
 
 G_END_DECLS
 #endif

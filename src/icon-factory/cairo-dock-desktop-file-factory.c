@@ -29,10 +29,11 @@
 #endif
 
 #include "../config.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-desktop-file-factory.h"
 
 #define CAIRO_DOCK_LAUNCHER_CONF_FILE "launcher.desktop"
@@ -102,7 +103,7 @@ static inline const gchar *_cairo_dock_get_launcher_template_conf_file_path (Cai
 	return cTemplateFile;
 }
 
-static gchar *_cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesktopURI, const gchar *cDockName, double fOrder, CairoDockIconType iGroup, GError **erreur)
+static gchar *_cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesktopURI, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
 {
 	g_return_val_if_fail (cDesktopURI != NULL, NULL);
 	GError *tmp_erreur = NULL;
@@ -258,7 +259,7 @@ static gchar *_cairo_dock_generate_desktop_file_for_script (const gchar *cURI, c
 }
 
 
-gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconType iGroup, GError **erreur)
+gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
 {
 	g_return_val_if_fail (cURI != NULL, NULL);
 	if (iGroup != CAIRO_DOCK_LAUNCHER && iGroup != CAIRO_DOCK_APPLET)  // on n'autorise a placer des icones du theme que parmi les lanceurs ou les applets.
@@ -300,7 +301,7 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 	return cNewDesktopFileName;
 }
 
-gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconType iGroup, GError **erreur)
+gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
 {
 	const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file_path (iLauncherType);
 	return cairo_dock_add_desktop_file_from_uri (cTemplateFile, cDockName, fOrder, iGroup, erreur);

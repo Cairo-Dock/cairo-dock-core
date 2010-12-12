@@ -32,21 +32,18 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "config.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-icons.h"
-#include "cairo-dock-draw.h"
+#include "../config.h"
+#include "cairo-dock-animations.h"  // implicit
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl-path.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-background.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-load.h"
+//#include "cairo-dock-load.h"
 #include "texture-blur.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-default-view.h"
@@ -72,10 +69,10 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
 	pDock->pFirstDrawnElement = cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth, pDock->iScrollOffset);
 
-	pDock->iDecorationsHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myBackground.iFrameMargin;
+	pDock->iDecorationsHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myDocksParam.iFrameMargin;
 
-	double fRadius = MIN (myBackground.iDockRadius, (pDock->iDecorationsHeight + myBackground.iDockLineWidth) / 2 - 1);
-	double fExtraWidth = myBackground.iDockLineWidth + 2 * (fRadius + myBackground.iFrameMargin);
+	double fRadius = MIN (myDocksParam.iDockRadius, (pDock->iDecorationsHeight + myDocksParam.iDockLineWidth) / 2 - 1);
+	double fExtraWidth = myDocksParam.iDockLineWidth + 2 * (fRadius + myDocksParam.iFrameMargin);
 	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));
 	pDock->iOffsetForExtend = 0;
 	
@@ -94,11 +91,11 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		}
 	}
 	
-	pDock->iMaxDockHeight = (int) ((1 + myIcons.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + myLabels.iLabelSize + myBackground.iDockLineWidth + myBackground.iFrameMargin;
-	//g_print ("myLabels.iLabelSize : %d => %d\n", myLabels.iLabelSize, (int)pDock->iMaxDockHeight);
+	pDock->iMaxDockHeight = (int) ((1 + myIconsParam.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + myIconsParam.iLabelSize + myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin;
+	//g_print ("myIconsParam.iLabelSize : %d => %d\n", myIconsParam.iLabelSize, (int)pDock->iMaxDockHeight);
 
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
-	pDock->iMinDockHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myBackground.iFrameMargin + 2 * myBackground.iDockLineWidth;
+	pDock->iMinDockHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myDocksParam.iFrameMargin + 2 * myDocksParam.iDockLineWidth;
 	
 	/**if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
@@ -130,7 +127,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	else
 		pDock->iMinDockWidth = MAX (1, pDock->fFlatDockWidth);  // fFlatDockWidth peut etre meme negatif avec un dock vide.
 	
-	if (g_bUseOpenGL && s_iFlatSeparatorTexture == 0 && myIcons.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
+	if (g_bUseOpenGL && s_iFlatSeparatorTexture == 0 && myIconsParam.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
 		s_iFlatSeparatorTexture = cairo_dock_load_texture_from_raw_data (blurTex, 32, 32);
 }
 
@@ -153,10 +150,10 @@ static void _draw_flat_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoC
 	
 	cairo_pattern_add_color_stop_rgba (pPattern,
 		0.,
-		myIcons.fSeparatorColor[0], myIcons.fSeparatorColor[1], myIcons.fSeparatorColor[2], myIcons.fSeparatorColor[3]);
+		myIconsParam.fSeparatorColor[0], myIconsParam.fSeparatorColor[1], myIconsParam.fSeparatorColor[2], myIconsParam.fSeparatorColor[3]);
 	cairo_pattern_add_color_stop_rgba (pPattern,
 		1.,
-		myIcons.fSeparatorColor[0], myIcons.fSeparatorColor[1], myIcons.fSeparatorColor[2], 0.);
+		myIconsParam.fSeparatorColor[0], myIconsParam.fSeparatorColor[1], myIconsParam.fSeparatorColor[2], 0.);
 	cairo_scale (pCairoContext, rx/ry, 1.);
 	cairo_set_source (pCairoContext, pPattern);
 	cairo_paint (pCairoContext);
@@ -166,7 +163,7 @@ static void _draw_flat_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoC
 static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)
 {
 	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
-	cairo_set_line_width (pCairoContext, myBackground.iDockLineWidth);
+	cairo_set_line_width (pCairoContext, myDocksParam.iDockLineWidth);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
 	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1.0);
 	
@@ -177,18 +174,18 @@ static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCa
 		cairo_fill (pCairoContext);
 		
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		
 		cairo_move_to (pCairoContext,
-			-.5*myBackground.iDockLineWidth,
-			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth : 0.);  // coin haut gauche.
-		cairo_rel_line_to (pCairoContext, 0., pDock->iDecorationsHeight + myBackground.iDockLineWidth);
+			-.5*myDocksParam.iDockLineWidth,
+			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myDocksParam.iDockLineWidth : 0.);  // coin haut gauche.
+		cairo_rel_line_to (pCairoContext, 0., pDock->iDecorationsHeight + myDocksParam.iDockLineWidth);
 		cairo_stroke (pCairoContext);
 		
 		cairo_move_to (pCairoContext,
-			fSizeX + .5*myBackground.iDockLineWidth,
-			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth : 0.);  // coin haut droit.
-		cairo_rel_line_to (pCairoContext, 0., pDock->iDecorationsHeight + myBackground.iDockLineWidth);
+			fSizeX + .5*myDocksParam.iDockLineWidth,
+			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myDocksParam.iDockLineWidth : 0.);  // coin haut droit.
+		cairo_rel_line_to (pCairoContext, 0., pDock->iDecorationsHeight + myDocksParam.iDockLineWidth);
 		cairo_stroke (pCairoContext);
 	}
 	else
@@ -198,25 +195,25 @@ static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCa
 		cairo_fill (pCairoContext);
 		
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		
 		cairo_move_to (pCairoContext,
-			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth : 0.,
-			-.5*myBackground.iDockLineWidth);  // coin haut gauche.
-		cairo_rel_line_to (pCairoContext, pDock->iDecorationsHeight + myBackground.iDockLineWidth, 0.);
+			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myDocksParam.iDockLineWidth : 0.,
+			-.5*myDocksParam.iDockLineWidth);  // coin haut gauche.
+		cairo_rel_line_to (pCairoContext, pDock->iDecorationsHeight + myDocksParam.iDockLineWidth, 0.);
 		cairo_stroke (pCairoContext);
 		
 		cairo_move_to (pCairoContext,
-			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth : 0.,
-			fSizeX + .5*myBackground.iDockLineWidth);  // coin haut droit.
-		cairo_rel_line_to (pCairoContext, pDock->iDecorationsHeight + myBackground.iDockLineWidth, 0.);
+			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myDocksParam.iDockLineWidth : 0.,
+			fSizeX + .5*myDocksParam.iDockLineWidth);  // coin haut droit.
+		cairo_rel_line_to (pCairoContext, pDock->iDecorationsHeight + myDocksParam.iDockLineWidth, 0.);
 		cairo_stroke (pCairoContext);
 	}
 }
 
 static void _cairo_dock_draw_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)
 {
-	if (myIcons.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
+	if (myIconsParam.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
 		_draw_flat_separator (icon, pDock, pCairoContext, fDockMagnitude);
 	else
 		_draw_physical_separator (icon, pDock, pCairoContext, fDockMagnitude);
@@ -225,9 +222,9 @@ static void _cairo_dock_draw_separator (Icon *icon, CairoDock *pDock, cairo_t *p
 static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	//\____________________ On trace le cadre.
-	double fLineWidth = myBackground.iDockLineWidth;
-	double fMargin = myBackground.iFrameMargin;
-	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * myBackground.iDockRadius > 0 ? myBackground.iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
+	double fLineWidth = myDocksParam.iDockLineWidth;
+	double fMargin = myDocksParam.iFrameMargin;
+	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * myDocksParam.iDockRadius > 0 ? myDocksParam.iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
 	double fExtraWidth = 2 * fRadius + fLineWidth;
 	double fDockWidth;
 	int sens;
@@ -259,7 +256,7 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 	}
 
 	cairo_save (pCairoContext);
-	double fDeltaXTrapeze = cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fDockWidth, pDock->iDecorationsHeight, fDockOffsetX, fDockOffsetY, sens, 0., pDock->container.bIsHorizontal, myBackground.bRoundedBottomCorner);
+	double fDeltaXTrapeze = cairo_dock_draw_frame (pCairoContext, fRadius, fLineWidth, fDockWidth, pDock->iDecorationsHeight, fDockOffsetX, fDockOffsetY, sens, 0., pDock->container.bIsHorizontal, myDocksParam.bRoundedBottomCorner);
 
 	//\____________________ On dessine les decorations dedans.
 	fDockOffsetY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
@@ -269,7 +266,7 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 	if (fLineWidth > 0)
 	{
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		cairo_stroke (pCairoContext);
 	}
 	else
@@ -277,8 +274,8 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 	cairo_restore (pCairoContext);
 
 	//\____________________ On dessine la ficelle qui les joint.
-	if (myIcons.iStringLineWidth > 0)
-		cairo_dock_draw_string (pCairoContext, pDock, myIcons.iStringLineWidth, FALSE, FALSE);
+	if (myIconsParam.iStringLineWidth > 0)
+		cairo_dock_draw_string (pCairoContext, pDock, myIconsParam.iStringLineWidth, FALSE, FALSE);
 
 	//\____________________ On dessine les icones et les etiquettes, en tenant compte de l'ordre pour dessiner celles en arriere-plan avant celles en avant-plan.
 	///cairo_dock_render_icons_linear (pCairoContext, pDock);
@@ -295,7 +292,7 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 		icon = ic->data;
 
 		cairo_save (pCairoContext);
-		if (myIcons.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
 			_cairo_dock_draw_separator (icon, pDock, pCairoContext, fDockMagnitude);
 		else
 			cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
@@ -310,8 +307,8 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea)
 {
 	//g_print ("%s ((%d;%d) x (%d;%d) / (%dx%d))\n", __func__, pArea->x, pArea->y, pArea->width, pArea->height, pDock->container.iWidth, pDock->container.iHeight);
-	double fLineWidth = myBackground.iDockLineWidth;
-	double fMargin = myBackground.iFrameMargin;
+	double fLineWidth = myDocksParam.iDockLineWidth;
+	double fMargin = myDocksParam.iFrameMargin;
 	int iWidth = pDock->container.iWidth;
 	int iHeight = pDock->container.iHeight;
 
@@ -337,7 +334,7 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 
 	fDockOffsetY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - fLineWidth : fLineWidth);
 	
-	double fRadius = MIN (myBackground.iDockRadius, (pDock->iDecorationsHeight + myBackground.iDockLineWidth) / 2 - 1);
+	double fRadius = MIN (myDocksParam.iDockRadius, (pDock->iDecorationsHeight + myDocksParam.iDockLineWidth) / 2 - 1);
 	double fOffsetX;
 	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
@@ -360,28 +357,28 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 		cairo_move_to (pCairoContext, fDockOffsetX, fDockOffsetY - fLineWidth / 2);
 		cairo_rel_line_to (pCairoContext, pArea->width, 0);
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		cairo_stroke (pCairoContext);
 
 		cairo_new_path (pCairoContext);
 		cairo_move_to (pCairoContext, fDockOffsetX, (pDock->container.bDirectionUp ? iHeight - fLineWidth / 2 : pDock->iDecorationsHeight + 1.5 * fLineWidth));
 		cairo_rel_line_to (pCairoContext, pArea->width, 0);
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 	}
 	else
 	{
 		cairo_move_to (pCairoContext, fDockOffsetX - fLineWidth / 2, fDockOffsetY);
 		cairo_rel_line_to (pCairoContext, 0, pArea->height);
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		cairo_stroke (pCairoContext);
 
 		cairo_new_path (pCairoContext);
 		cairo_move_to (pCairoContext, (pDock->container.bDirectionUp ? iHeight - fLineWidth / 2 : pDock->iDecorationsHeight + 1.5 * fLineWidth), fDockOffsetY);
 		cairo_rel_line_to (pCairoContext, 0, pArea->height);
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 	}
 	cairo_stroke (pCairoContext);
 
@@ -419,7 +416,7 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 					icon->fAlpha = 0.7;
 				}
 				
-				if (myIcons.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+				if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
 					_cairo_dock_draw_separator (icon, pDock, pCairoContext, fDockMagnitude);
 				else
 					cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
@@ -444,7 +441,7 @@ static void _draw_flat_separator_opengl (Icon *icon, CairoDock *pDock, double fD
 	
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_alpha ();
-	glColor4f (myIcons.fSeparatorColor[0], myIcons.fSeparatorColor[1], myIcons.fSeparatorColor[2], myIcons.fSeparatorColor[3]);
+	glColor4f (myIconsParam.fSeparatorColor[0], myIconsParam.fSeparatorColor[1], myIconsParam.fSeparatorColor[2], myIconsParam.fSeparatorColor[3]);
 	
 	if (pDock->container.bIsHorizontal)
 	{
@@ -467,7 +464,7 @@ static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, doubl
 	glColor4f (0., 0., 0., 0.);
 	
 	glPolygonMode (GL_FRONT, GL_FILL);
-	glLineWidth (myBackground.iDockLineWidth);
+	glLineWidth (myDocksParam.iDockLineWidth);
 	
 	if (pDock->container.bIsHorizontal)
 	{
@@ -480,20 +477,20 @@ static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, doubl
 		glEnd();
 		
 		_cairo_dock_set_blend_alpha ();
-		glColor4f (myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		glColor4f (myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		glPolygonMode(GL_FRONT, GL_LINE);
 		
 		if (! pDock->container.bDirectionUp)
-			glTranslatef (0., pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth, 0.);
+			glTranslatef (0., pDock->container.iHeight - pDock->iDecorationsHeight - myDocksParam.iDockLineWidth, 0.);
 		
 		glBegin(GL_LINES);
-		glVertex3f(-.5*myBackground.iDockLineWidth, 0., 0.);
-		glVertex3f(-.5*myBackground.iDockLineWidth, pDock->iDecorationsHeight + myBackground.iDockLineWidth, 0.);
+		glVertex3f(-.5*myDocksParam.iDockLineWidth, 0., 0.);
+		glVertex3f(-.5*myDocksParam.iDockLineWidth, pDock->iDecorationsHeight + myDocksParam.iDockLineWidth, 0.);
 		glEnd();
 		
 		glBegin(GL_LINES);
-		glVertex3f(fSizeX + .5*myBackground.iDockLineWidth, 0., 0.);
-		glVertex3f(fSizeX + .5*myBackground.iDockLineWidth, pDock->iDecorationsHeight + myBackground.iDockLineWidth, 0.);
+		glVertex3f(fSizeX + .5*myDocksParam.iDockLineWidth, 0., 0.);
+		glVertex3f(fSizeX + .5*myDocksParam.iDockLineWidth, pDock->iDecorationsHeight + myDocksParam.iDockLineWidth, 0.);
 		glEnd();
 	}
 	else
@@ -507,20 +504,20 @@ static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, doubl
 		glEnd();
 		
 		_cairo_dock_set_blend_alpha ();
-		glColor4f (myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		glColor4f (myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		glPolygonMode(GL_FRONT, GL_LINE);
 		
 		if (pDock->container.bDirectionUp)
-			glTranslatef (pDock->container.iHeight - pDock->iDecorationsHeight - myBackground.iDockLineWidth, 0., 0.);
+			glTranslatef (pDock->container.iHeight - pDock->iDecorationsHeight - myDocksParam.iDockLineWidth, 0., 0.);
 		
 		glBegin(GL_LINES);
-		glVertex3f(0., -.5*myBackground.iDockLineWidth, 0.);
-		glVertex3f(pDock->iDecorationsHeight + myBackground.iDockLineWidth, -.5*myBackground.iDockLineWidth, 0.);
+		glVertex3f(0., -.5*myDocksParam.iDockLineWidth, 0.);
+		glVertex3f(pDock->iDecorationsHeight + myDocksParam.iDockLineWidth, -.5*myDocksParam.iDockLineWidth, 0.);
 		glEnd();
 		
 		glBegin(GL_LINES);
-		glVertex3f(0., fSizeX + .5*myBackground.iDockLineWidth, 0.);
-		glVertex3f(pDock->iDecorationsHeight + myBackground.iDockLineWidth, fSizeX + .5*myBackground.iDockLineWidth, 0.);
+		glVertex3f(0., fSizeX + .5*myDocksParam.iDockLineWidth, 0.);
+		glVertex3f(pDock->iDecorationsHeight + myDocksParam.iDockLineWidth, fSizeX + .5*myDocksParam.iDockLineWidth, 0.);
 		glEnd();
 	}
 	glDisable (GL_BLEND);
@@ -528,7 +525,7 @@ static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, doubl
 
 static void _cairo_dock_draw_separator_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude)
 {
-	if (myIcons.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
+	if (myIconsParam.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
 		_draw_flat_separator_opengl (icon, pDock, fDockMagnitude);
 	else
 		_draw_physical_separator_opengl (icon, pDock, fDockMagnitude);
@@ -537,9 +534,9 @@ static void _cairo_dock_draw_separator_opengl (Icon *icon, CairoDock *pDock, dou
 static void cd_render_opengl_default (CairoDock *pDock)
 {
 	//\_____________ On definit notre rectangle.
-	double fLineWidth = myBackground.iDockLineWidth;
-	double fMargin = myBackground.iFrameMargin;
-	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * myBackground.iDockRadius > 0 ? myBackground.iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
+	double fLineWidth = myDocksParam.iDockLineWidth;
+	double fMargin = myDocksParam.iFrameMargin;
+	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * myDocksParam.iDockRadius > 0 ? myDocksParam.iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
 	double fExtraWidth = 2 * fRadius + fLineWidth;
 	double fDockWidth;
 	double fFrameHeight = pDock->iDecorationsHeight + fLineWidth;
@@ -569,7 +566,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	
 	//\_____________ On genere les coordonnees du contour.
-	const CairoDockGLPath *pFramePath = cairo_dock_generate_rectangle_path (fDockWidth, fFrameHeight, fRadius, myBackground.bRoundedBottomCorner);
+	const CairoDockGLPath *pFramePath = cairo_dock_generate_rectangle_path (fDockWidth, fFrameHeight, fRadius, myDocksParam.bRoundedBottomCorner);
 	
 	//\_____________ On remplit avec le fond.
 	glPushMatrix ();
@@ -592,15 +589,15 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	if (fLineWidth != 0)
 	{
 		glLineWidth (fLineWidth);
-		glColor4f (myBackground.fLineColor[0], myBackground.fLineColor[1], myBackground.fLineColor[2], myBackground.fLineColor[3]);
+		glColor4f (myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		_cairo_dock_set_blend_alpha ();
 		cairo_dock_stroke_gl_path (pFramePath, TRUE);
 	}
 	glPopMatrix ();
 	
 	//\_____________ On dessine la ficelle.
-	if (myIcons.iStringLineWidth > 0)
-		cairo_dock_draw_string_opengl (pDock, myIcons.iStringLineWidth, FALSE, myIcons.bConstantSeparatorSize);
+	if (myIconsParam.iStringLineWidth > 0)
+		cairo_dock_draw_string_opengl (pDock, myIconsParam.iStringLineWidth, FALSE, myIconsParam.bConstantSeparatorSize);
 	
 	
 	//\_____________ On dessine les icones.
@@ -631,7 +628,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 		icon = ic->data;
 		
 		glPushMatrix ();
-		if (myIcons.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
 			_cairo_dock_draw_separator_opengl (icon, pDock, fDockMagnitude);
 		else
 			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);
@@ -687,9 +684,12 @@ void cairo_dock_register_default_renderer (void)
 	pDefaultRenderer->set_subdock_position = cairo_dock_set_subdock_position_linear;
 	pDefaultRenderer->bUseReflect = FALSE;
 	pDefaultRenderer->cDisplayedName = gettext (CAIRO_DOCK_DEFAULT_RENDERER_NAME);
-
+	
 	cairo_dock_register_renderer (CAIRO_DOCK_DEFAULT_RENDERER_NAME, pDefaultRenderer);
-	cairo_dock_register_notification (CAIRO_DOCK_STOP_DOCK,  // on ne fait cette fonction qu'une fois, donc on peut s'enregistrer ici.
+	
+	// when and only when the current theme is unloaded, the main dock is destroyed, and we must release our data.
+	cairo_dock_register_notification_on_object (&myDocksMgr,
+		NOTIFICATION_STOP_DOCK,  // on ne fait cette fonction qu'une fois, donc on peut s'enregistrer ici.
 		(CairoDockNotificationFunc) cd_default_view_free_data,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 }

@@ -31,36 +31,26 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "cairo-dock-load.h"
-#include "cairo-dock-icons.h"
-#include "cairo-dock-draw.h"
-#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_compare_icons_order
+#include "cairo-dock-config.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-backends-manager.h"
-#include "cairo-dock-file-manager.h"
+#include "cairo-dock-backends-manager.h"  // cairo_dock_set_renderer
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-applications-manager.h"
-#include "cairo-dock-class-manager.h"
+#include "cairo-dock-applications-manager.h"  // myTaskbarParam.bMixLauncherAppli
+#include "cairo-dock-class-manager.h"  // cairo_dock_inhibite_class
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-themes-manager.h"
-#include "cairo-dock-dock-facility.h"
-#include "cairo-dock-gui-manager.h"
-#include "cairo-dock-emblem.h"
-#include "cairo-dock-launcher-factory.h"
-#include "cairo-dock-internal-indicators.h"
-#include "cairo-dock-separator-manager.h"
+#include "cairo-dock-themes-manager.h"  // cairo_dock_mark_current_theme_as_modified
+#include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
+///#include "cairo-dock-gui-manager.h"  // cairo_dock_trigger_refresh_launcher_gui
+#include "cairo-dock-animations.h"  // cairo_dock_launch_animation
+#include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
+#include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
 #include "cairo-dock-launcher-manager.h"
 
 extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
-extern int g_iNbNonStickyLaunchers;
-
 
 static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
 {
@@ -237,10 +227,10 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
 	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
 	{
-		if (myTaskBar.bMixLauncherAppli)
-			cairo_dock_inhibate_class (icon->cClass, icon);
-		else  // on l'insere quand meme dans la classe pour pouvoir ecraser l'icone X avec la sienne.
-			cairo_dock_add_inhibator_to_class (icon->cClass, icon);
+		//if (myTaskbarParam.bMixLauncherAppli)
+			cairo_dock_inhibite_class (icon->cClass, icon);
+		//else  // on l'insere quand meme dans la classe pour pouvoir ecraser l'icone X avec la sienne.
+		//	cairo_dock_add_inhibitor_to_class (icon->cClass, icon);
 	}
 	
 	return icon;
@@ -253,7 +243,7 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 	gchar *cRendererName = NULL;
 	Icon *pIcon = cairo_dock_new_icon ();
 	pIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
-	pIcon->iType = CAIRO_DOCK_LAUNCHER;
+	pIcon->iGroup = CAIRO_DOCK_LAUNCHER;
 	pIcon->cName = cName;
 	pIcon->cFileName = cFileName;
 	pIcon->cQuickInfo = cQuickInfo;
@@ -418,7 +408,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		icon->cName = g_strdup (" ");
 	
 	if (cairo_dock_strings_differ (cName, icon->cName))
-		cairo_dock_load_icon_text (icon, &myLabels.iconTextDescription);
+		cairo_dock_load_icon_text (icon, &myIconsParam.iconTextDescription);
 	
 	//\_____________ On gere son sous-dock.
 	if (icon->Xid != 0)
@@ -459,10 +449,9 @@ void cairo_dock_reload_launcher (Icon *icon)
 		gchar *tmp = icon->cParentDockName;  // le detach_icon remet a 0 ce champ, il faut le donc conserver avant.
 		icon->cParentDockName = NULL;
 		cairo_dock_detach_icon_from_dock (icon, pDock, TRUE);
-		if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
+		if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // le dock devient vide, il se fera detruire automatiquement.
 		{
-			///cairo_dock_destroy_dock (pDock, cPrevDockName);
-			pDock = NULL;  // se fera detruire automatiquement.
+			pDock = NULL;
 		}
 		else
 		{
@@ -470,7 +459,8 @@ void cairo_dock_reload_launcher (Icon *icon)
 			cairo_dock_calculate_dock_icons (pDock);
 			gtk_widget_queue_draw (pDock->container.pWidget);
 		}
-		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
+		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pNewDock));
 		icon->cParentDockName = tmp;
 	}
 	else  // le container est identique, on gere juste le changement d'ordre.
@@ -491,7 +481,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		{
 			cairo_dock_redraw_subdock_content (pNewDock);
 		}
-		cairo_dock_trigger_refresh_launcher_gui ();
+		///cairo_dock_trigger_refresh_launcher_gui ();  // a faire par l'app
 	}
 	
 	//\_____________ On gere l'inhibition de sa classe.
@@ -499,12 +489,12 @@ void cairo_dock_reload_launcher (Icon *icon)
 	if (cClass != NULL && (cNowClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on desinhibe l'ancienne.
 	{
 		icon->cClass = cClass;
-		cairo_dock_deinhibate_class (cClass, icon);
+		cairo_dock_deinhibite_class (cClass, icon);
 		cClass = NULL;  // libere par la fonction precedente.
 		icon->cClass = cNowClass;
 	}
-	if (myTaskBar.bMixLauncherAppli && cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on inhibe la nouvelle.
-		cairo_dock_inhibate_class (cNowClass, icon);
+	if (myTaskbarParam.bMixLauncherAppli && cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on inhibe la nouvelle.
+		cairo_dock_inhibite_class (cNowClass, icon);
 
 	//\_____________ On redessine les docks impactes.
 	cairo_dock_calculate_dock_icons (pNewDock);

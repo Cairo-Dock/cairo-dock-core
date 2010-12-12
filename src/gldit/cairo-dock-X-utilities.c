@@ -36,6 +36,7 @@
 #include <X11/extensions/shape.h>
 #endif
 
+#include "cairo-dock-container.h"  // CAIRO_DOCK_HORIZONTAL
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-X-utilities.h"

@@ -32,6 +32,8 @@
 #define __CD_KEY_BINDER_H__
 
 #include <glib/gtypes.h>
+#include "cairo-dock-struct.h"
+#include "cairo-dock-manager.h"
 
 G_BEGIN_DECLS
 
@@ -42,11 +44,33 @@ G_BEGIN_DECLS
 * You bind an action to a shortcut with \ref cd_keybinder_bind, and unbind it with \ref cd_keybinder_unbind.
 */
 
+typedef struct _CairoShortcutsManager CairoShortcutsManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoShortcutsManager myShortcutsMgr;
+#endif
+
 /// Definition of a callback, called when a shortcut is pressed by the user.
 typedef void (* CDBindkeyHandler) (const char *keystring, gpointer user_data);
 
-void cd_keybinder_init (void);
-void cd_keybinder_stop (void);
+// params
+
+// manager
+struct _CairoShortcutsManager {
+	GldiManager mgr;
+	gboolean (*bind) (const char *keystring, CDBindkeyHandler handler, gpointer user_data);
+	void (*unbind) (const char *keystring, CDBindkeyHandler handler);
+	gboolean (*simulate_key_sequence) (const gchar *cKeyString);
+	} ;
+
+// signals
+typedef enum {
+	NB_NOTIFICATIONS_SHORTCUTS
+	} CairoShortcutsNotifications;
+
+
+void cd_keybinder_init (void);  /// merge with init
+void cd_keybinder_stop (void);  /// useless
 
 /** Bind a shortcut to an action. Unbind it when you don't want it anymore, or when 'user_data' is freed.
  * @param keystring a shortcut.
@@ -73,6 +97,9 @@ gboolean cd_keybinder_is_modifier (guint keycode);
  * @param cKeyString a shortcut.
 */
 gboolean cairo_dock_simulate_key_sequence (gchar *cKeyString);
+
+
+void gldi_register_shortcuts_manager (void);
 
 G_END_DECLS
 

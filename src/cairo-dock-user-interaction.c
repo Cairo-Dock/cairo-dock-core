@@ -27,22 +27,21 @@
 #include <gtk/gtk.h>
 
 #include "cairo-dock-animations.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-notifications.h"
+#include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-config.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-user-interaction.h"
@@ -148,7 +147,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	//g_print ("+ %s (%s)\n", __func__, icon ? icon->cName : "no icon");
 	if (icon == NULL)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	if (icon->pSubDock != NULL && (myAccessibility.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)) && ! (iButtonState & GDK_SHIFT_MASK))  // icone de sous-dock a montrer au clic.
+	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)) && ! (iButtonState & GDK_SHIFT_MASK))  // icone de sous-dock a montrer au clic.
 	{
 		cairo_dock_show_subdock (icon, pDock);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
@@ -156,7 +155,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	else if (CAIRO_DOCK_IS_APPLI (icon) && ! ((iButtonState & GDK_SHIFT_MASK) && CAIRO_DOCK_IS_LAUNCHER (icon)) && ! CAIRO_DOCK_IS_APPLET (icon))  // une icone d'appli ou d'inhibiteur (hors applet) mais sans le shift+clic : on cache ou on montre.
 	{
 		cd_debug (" appli");
-		if (cairo_dock_get_current_active_window () == icon->Xid && myTaskBar.bMinimizeOnClick)  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
+		if (cairo_dock_get_current_active_window () == icon->Xid && myTaskbarParam.bMinimizeOnClick)  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
 			cairo_dock_minimize_xwindow (icon->Xid);
 		else
 			cairo_dock_show_xwindow (icon->Xid);
@@ -167,7 +166,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		//g_print ("+ launcher\n");
 		if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on cache ou on montre.
 		{
-			if (! myAccessibility.bShowSubDockOnClick)
+			if (! myDocksParam.bShowSubDockOnClick)
 			{
 				_cairo_dock_hide_show_in_class_subdock (icon);
 			}
@@ -210,7 +209,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 
 gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock)
 {
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bCloseAppliOnMiddleClick && ! CAIRO_DOCK_IS_APPLET (icon))
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.bCloseAppliOnMiddleClick && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
 		cairo_dock_close_xwindow (icon->Xid);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
@@ -256,9 +255,9 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 	CairoDock *pReceivingDock = pDock;
 	if (g_str_has_suffix (cReceivedData, ".desktop"))  // ajout d'un nouveau lanceur si on a lache sur ou entre 2 lanceurs.
 	{
-		if ((myIcons.iSeparateIcons == 1 || myIcons.iSeparateIcons == 3) && CAIRO_DOCK_IS_NORMAL_APPLI (icon))
+		if ((myIconsParam.iSeparateIcons == 1 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		if ((myIcons.iSeparateIcons == 2 || myIcons.iSeparateIcons == 3) && CAIRO_DOCK_IS_APPLET (icon))
+		if ((myIconsParam.iSeparateIcons == 2 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_IS_APPLET (icon))
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 		if (fOrder == CAIRO_DOCK_LAST_ORDER && icon && icon->pSubDock != NULL)  // on a lache sur une icone de sous-dock => on l'ajoute dans le sous-dock.
 		{
@@ -324,7 +323,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 		}
 	}
 
-	if (g_bLocked || myAccessibility.bLockAll)
+	if (g_bLocked || myDocksParam.bLockAll)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
@@ -340,13 +339,13 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 	if (!ext)
 		return;
 	cd_debug ("%s (%s)", __func__, cFilePath);
-	if ((strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0) && !myAccessibility.bLockAll && ! myAccessibility.bLockIcons)
+	if ((strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0) && !myDocksParam.bLockAll && ! myDocksParam.bLockIcons)
 	{
-		if (!myTaskBar.bOverWriteXIcons)
+		if (!myTaskbarParam.bOverWriteXIcons)
 		{
-			myTaskBar.bOverWriteXIcons = TRUE;
+			myTaskbarParam.bOverWriteXIcons = TRUE;
 			cairo_dock_update_conf_file (g_cConfFile,
-				G_TYPE_BOOLEAN, "TaskBar", "overwrite xicon", myTaskBar.bOverWriteXIcons,
+				G_TYPE_BOOLEAN, "TaskBar", "overwrite xicon", myTaskbarParam.bOverWriteXIcons,
 				G_TYPE_INVALID);
 			cairo_dock_show_temporary_dialog_with_default_icon (_("The option 'overwrite X icons' has been automatically enabled in the config.\nIt is located in the 'Taskbar' module."), icon, pContainer, 6000);
 		}
@@ -365,4 +364,79 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 		cairo_dock_reload_icon_image (icon, pContainer);
 		cairo_dock_redraw_icon (icon, pContainer);
 	}
+}
+
+
+
+static guint s_iSidRefreshGUI = 0;
+static gboolean _refresh_gui (gpointer data)
+{
+	//if (s_pLauncherGuiBackend && s_pLauncherGuiBackend->refresh_gui)
+	//	s_pLauncherGuiBackend->refresh_gui ();
+	
+	s_iSidRefreshGUI = 0;
+	return FALSE;
+}
+void cairo_dock_trigger_refresh_gui (void)
+{
+	if (s_iSidRefreshGUI != 0)
+		return;
+	
+	s_iSidRefreshGUI = g_idle_add ((GSourceFunc) _refresh_gui, NULL);
+}
+
+gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDesklet *pDesklet)
+{
+	g_print ("desklet %s configured\n", pDesklet->pIcon?pDesklet->pIcon->cName:"unknown");
+	
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+{
+	g_print ("icon %s moved\n", pIcon?pIcon->cName:"unknown");
+	
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+{
+	g_print ("icon %s inserted\n", pIcon?pIcon->cName:"unknown");
+	
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+gboolean cairo_dock_notification_icon_removed(gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+{
+	g_print ("icon %s removed\n", pIcon?pIcon->cName:"unknown");
+	
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *pDock)
+{
+	g_print ("dock destroyed\n");
+	
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gchar *cModuleName, gboolean bActivated)
+{
+	g_print ("module %s (de)activated (%d)\n", cModuleName, bActivated);
+	
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gchar *cModuleName, gboolean bRegistered)
+{
+	g_print ("module %s (un)registered (%d)\n", cModuleName, bRegistered);
+	
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

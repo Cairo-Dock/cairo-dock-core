@@ -10,7 +10,7 @@ include (CheckSymbolExists)
 ########### project ###############
 
 project ("cairo-dock")
-set (VERSION "2.2.1~0alpha1")
+set (VERSION "2.2.1~0beta1")
 
 add_definitions (-std=c99 -Wstrict-prototypes -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration) #-Wunreachable-code -Wno-unused-parameter -Wall 
 if (NOT ${CMAKE_BUILD_TYPE})
@@ -109,6 +109,7 @@ set (CAIRO_DOCK_LOCALE_DIR ${datadir}/locale)
 set (CAIRO_DOCK_THEMES_DIR "themes")
 set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 
+set (GLDI_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 set (GLDI_SHARE_DATA_DIR ${pkgdatadir})
 
 ########### file generation ###############

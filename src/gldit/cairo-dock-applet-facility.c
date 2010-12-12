@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <cairo.h>
 
-#include "cairo-dock-load.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-launcher-manager.h"
@@ -36,12 +36,12 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-gui-manager.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dock-facility.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cExtrasDirPath;

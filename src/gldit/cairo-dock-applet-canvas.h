@@ -175,7 +175,7 @@ CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 CD_APPLET_DEFINE_END
 
 
-#define CD_APPLET_ATTACH_TO_INTERNAL_MODULE(cInternalModuleName) cairo_dock_attach_to_another_module (pVisitCard, cInternalModuleName)
+#define CD_APPLET_EXTEND_MANAGER(cManagerName) gldi_extend_manager (pVisitCard, cManagerName)
 
 //\______________________ init.
 /** Debut de la fonction d'initialisation de l'applet (celle qui est appelee a chaque chargement de l'applet).
@@ -426,70 +426,70 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 //\______________________ notification clique gauche.
 /** Abonne l'applet aux notifications du clic gauche. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet);
+#define CD_APPLET_REGISTER_FOR_CLICK_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet);
 /** Desabonne l'applet aux notifications du clic gauche. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_CLICK_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_CLICK_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK_FUNC, myApplet);
 /** Abonne l'applet aux notifications de construction du menu. A effectuer lors de l'init de l'applet.
 */
 
 //\______________________ notification construction menu.
-#define CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT cairo_dock_register_notification (CAIRO_DOCK_BUILD_ICON_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet);
+#define CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet);
 /** Desabonne l'applet aux notifications de construction du menu. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_BUILD_ICON_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, myApplet);
 
 //\______________________ notification clic milieu.
 /** Abonne l'applet aux notifications du clic du milieu. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet)
+#define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet)
 /** Desabonne l'applet aux notifications du clic du milieu. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, myApplet)
 
 //\______________________ notification double clic.
 /** Abonne l'applet aux notifications du double clic. A effectuer lors de l'init de l'applet.
 */
 #define CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT do {\
 	cairo_dock_listen_for_double_click (myIcon);\
-	cairo_dock_register_notification (CAIRO_DOCK_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet); } while (0)
+	cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet); } while (0)
 /** Desabonne l'applet aux notifications du double clic. A effectuer lors de l'arret de l'applet.
 */
 #define CD_APPLET_UNREGISTER_FOR_DOUBLE_CLICK_EVENT do {\
-	cairo_dock_remove_notification_func (CAIRO_DOCK_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, myApplet);\
+	cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, myApplet);\
 	cairo_dock_stop_listening_for_double_click (myIcon); } while (0)
 
 //\______________________ notification drag'n'drop.
 /** Abonne l'applet aux notifications du glisse-depose. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_DROP_DATA_EVENT cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA, (CairoDockNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet);
+#define CD_APPLET_REGISTER_FOR_DROP_DATA_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_DROP_DATA, (CairoDockNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet);
 /** Desabonne l'applet aux notifications du glisse-depose. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_DROP_DATA_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_DROP_DATA, (CairoDockNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_DROP_DATA_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_DROP_DATA, (CairoDockNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, myApplet);
 
 //\______________________ notification de scroll molette.
 /**
 *Abonne l'applet aux notifications du clic gauche. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_SCROLL_EVENT cairo_dock_register_notification (CAIRO_DOCK_SCROLL_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_SCROLL_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_SCROLL_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
 /**
 *Desabonne l'applet aux notifications du clic gauche. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_SCROLL_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_SCROLL_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_SCROLL_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_SCROLL_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, myApplet)
 
 //\______________________ notification de update icon.
 /** Register the applet to the 'update icon' notifications of the slow rendering loop. 
 */
-#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_register_notification_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
 /** Unregister the applet from the slow rendering loop. 
 */
-#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_remove_notification_func_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
 /** Register the applet to the 'update icon' notifications of the fast rendering loop. 
 */
-#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_register_notification_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
 /** Unregister the applet from the fast rendering loop. 
 */
-#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_remove_notification_func (CAIRO_DOCK_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_remove_notification_func_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
 
 
 //\_________________________________ INSTANCE

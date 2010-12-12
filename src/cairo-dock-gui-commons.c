@@ -30,7 +30,8 @@
 #include "config.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-module-manager.h"
+#include "cairo-dock-dock-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-task.h"
@@ -150,7 +151,25 @@ gboolean cairo_dock_delete_user_themes (GKeyFile* pKeyFile)
 }
 
 
-gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback)
+static void on_cancel_dl (GtkButton *button, GtkWidget *pWaitingDialog)
+{
+	gtk_widget_destroy (pWaitingDialog);
+	cairo_dock_discard_task (s_pImportTask);
+	s_pImportTask = NULL;
+}
+static gboolean _pulse_bar (GtkWidget *pBar)
+{
+	gtk_progress_bar_pulse (GTK_PROGRESS_BAR (pBar));
+	return TRUE;
+}
+static gboolean on_destroy_waiting_dialog (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
+{
+	guint iSidPulse = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pWidget), "pulse-id"));
+	g_print ("*** stop pulse\n");
+	g_source_remove (iSidPulse);
+	return FALSE;
+}
+gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback, GtkWidget *pMainWindow)
 {
 	const gchar *cGroupName = "Themes";
 	//\___________________ On recupere le theme selectionne.
@@ -195,15 +214,48 @@ gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback)
 	}
 	
 	//\___________________ On charge le nouveau theme choisi.
+	gchar *tmp = g_strdup (cNewThemeName);
+	CairoDockPackageType iType = cairo_dock_extract_package_type_from_name (tmp);
+	g_free (tmp);
+	
 	gboolean bThemeImported = FALSE;
-	if (pCallback != NULL)
+	if (pCallback != NULL && (iType != CAIRO_DOCK_LOCAL_PACKAGE && iType != CAIRO_DOCK_USER_PACKAGE))
 	{
-		s_pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)pCallback, NULL);
-		bThemeImported = TRUE;
+		GtkWidget *pWaitingDialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+		gtk_window_set_decorated (GTK_WINDOW (pWaitingDialog), FALSE);
+		gtk_window_set_skip_taskbar_hint (GTK_WINDOW (pWaitingDialog), TRUE);
+		gtk_window_set_skip_pager_hint (GTK_WINDOW (pWaitingDialog), TRUE);
+		gtk_window_set_transient_for (GTK_WINDOW (pWaitingDialog), GTK_WINDOW (pMainWindow));
+		gtk_window_set_modal (GTK_WINDOW (pWaitingDialog), TRUE);
+		
+		GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+		gtk_container_add (GTK_CONTAINER (pWaitingDialog), pMainVBox);
+		
+		GtkWidget *pLabel = gtk_label_new (_("Please wait while importing the theme..."));
+		gtk_box_pack_start(GTK_BOX (pMainVBox), pLabel, FALSE, FALSE, 0);
+		
+		GtkWidget *pBar = gtk_progress_bar_new ();
+		gtk_progress_bar_pulse (GTK_PROGRESS_BAR (pBar));
+		gtk_box_pack_start (GTK_BOX (pMainVBox), pBar, FALSE, FALSE, 0);
+		guint iSidPulse = g_timeout_add (100, (GSourceFunc)_pulse_bar, pBar);
+		g_object_set_data (G_OBJECT (pWaitingDialog), "pulse-id", GINT_TO_POINTER (iSidPulse));
+		g_signal_connect (G_OBJECT (pWaitingDialog),
+			"destroy",
+			G_CALLBACK (on_destroy_waiting_dialog),
+			NULL);
+		
+		GtkWidget *pCancelButton = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+		g_signal_connect (G_OBJECT (pCancelButton), "clicked", G_CALLBACK(on_cancel_dl), pWaitingDialog);
+		gtk_box_pack_start (GTK_BOX (pMainVBox), pCancelButton, FALSE, FALSE, 0);
+		
+		gtk_widget_show_all (pWaitingDialog);
+		
+		g_print ("start importation...\n");
+		s_pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)pCallback, pWaitingDialog);
 	}
 	else
 	{
-		gboolean bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
+		bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
 		
 		//\_______________ On le charge.
 		if (bThemeImported)
@@ -213,4 +265,51 @@ gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback)
 	}
 	g_free (cNewThemeName);
 	return bThemeImported;
+}
+
+
+static void _find_similar_root_dock (CairoDock *pDock, gpointer *data)
+{
+	CairoDock *pDock0 = data[0];
+	if (pDock == pDock0)
+		data[2] = GINT_TO_POINTER (TRUE);
+	if (data[2])
+		return;
+	if (pDock->container.bIsHorizontal == pDock0->container.bIsHorizontal
+		&& pDock->container.bDirectionUp == pDock0->container.bDirectionUp)
+	{
+		int *i = data[1];
+		*i = *i + 1;
+	}
+}
+gchar *cairo_dock_get_readable_name_for_fock (CairoDock *pDock)
+{
+	gchar *cUserName = NULL;
+	if (pDock->iRefCount == 0)
+	{
+		int i = 0;
+		gpointer data[3] = {pDock, &i, NULL};
+		cairo_dock_foreach_root_docks ((GFunc)_find_similar_root_dock, data);
+		const gchar *cPosition;
+		if (pDock->container.bIsHorizontal)
+		{
+			if (pDock->container.bDirectionUp)
+				cPosition = _("Bottom dock");
+			else
+				cPosition = _("Top dock");
+		}
+		else
+		{
+			if (pDock->container.bDirectionUp)
+				cPosition = _("Right dock");
+			else
+				cPosition = _("Left dock");
+		}
+		if (i > 0)
+			cUserName = g_strdup_printf ("%s (%d)", cPosition, i+1);
+		else
+			cUserName = g_strdup (cPosition);
+	}
+	
+	return cUserName;
 }

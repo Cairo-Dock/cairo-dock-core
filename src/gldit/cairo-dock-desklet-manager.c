@@ -37,30 +37,30 @@
 #include <gdk/gdkx.h>
 
 #include "../config.h"
-#include "cairo-dock-draw.h"
-#include "cairo-dock-modules.h"
-#include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-module-factory.h"  // cairo_dock_pre_read_module_instance_config
 #include "cairo-dock-config.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-X-utilities.h"
-#include "cairo-dock-surface-factory.h"
+#include "cairo-dock-X-utilities.h"  // cairo_dock_set_xwindow_type_hint
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-load.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-internal-desklets.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-gui-manager.h"
-#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-desklet-factory.h"
+#define _MANAGER_DEF_
 #include "cairo-dock-desklet-manager.h"
 
-extern gboolean g_bUseOpenGL;
-extern CairoDock *g_pMainDock;
+// public (manager, config, data)
+CairoDeskletsParam myDeskletsParam;
+CairoDeskletManager myDeskletsMgr;
 
+// dependancies
+extern gboolean g_bUseOpenGL;
+extern CairoDock *g_pMainDock;  // pour savoir s'il faut afficher les boutons rattach.
+
+// private
 static CairoDockImageBuffer s_pRotateButtonBuffer;
 static CairoDockImageBuffer s_pRetachButtonBuffer;
 static CairoDockImageBuffer s_pDepthRotateButtonBuffer;
@@ -75,95 +75,74 @@ static gboolean _cairo_dock_render_desklet_notification (gpointer pUserData, Cai
 #define _no_input_button_alpha(pDesklet) (pDesklet->bNoInput ? .4+.6*pDesklet->fButtonsAlpha : pDesklet->fButtonsAlpha)
 
 
-void cairo_dock_init_desklet_manager (void)
-{
-	memset (&s_pRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&s_pRetachButtonBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&s_pDepthRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&s_pNoInputButtonBuffer, 0, sizeof (CairoDockImageBuffer));
-	
-	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_DESKLET,
-		(CairoDockNotificationFunc) _cairo_dock_update_desklet_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_ENTER_DESKLET,
-		(CairoDockNotificationFunc) _cairo_dock_enter_leave_desklet_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_LEAVE_DESKLET,
-		(CairoDockNotificationFunc) _cairo_dock_enter_leave_desklet_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DESKLET,
-		(CairoDockNotificationFunc) _cairo_dock_render_desklet_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-}
-
 void cairo_dock_load_desklet_buttons (void)
 {
 	//g_print ("%s ()\n", __func__);
-	if (myDesklets.cRotateButtonImage != NULL)
+	if (myDeskletsParam.cRotateButtonImage != NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pRotateButtonBuffer,
-			myDesklets.cRotateButtonImage,
-			myDesklets.iDeskletButtonSize,
-			myDesklets.iDeskletButtonSize,
+			myDeskletsParam.cRotateButtonImage,
+			myDeskletsParam.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
 	}
 	if (s_pRotateButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pRotateButtonBuffer,
 			CAIRO_DOCK_SHARE_DATA_DIR"/rotate-desklet.svg",
-			myDesklets.iDeskletButtonSize,
-			myDesklets.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
 	}
 	
-	if (myDesklets.cRetachButtonImage != NULL)
+	if (myDeskletsParam.cRetachButtonImage != NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pRetachButtonBuffer,
-			myDesklets.cRetachButtonImage,
-			myDesklets.iDeskletButtonSize,
-			myDesklets.iDeskletButtonSize,
+			myDeskletsParam.cRetachButtonImage,
+			myDeskletsParam.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
 	}
 	if (s_pRetachButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pRetachButtonBuffer,
 			CAIRO_DOCK_SHARE_DATA_DIR"/retach-desklet.svg",
-			myDesklets.iDeskletButtonSize,
-			myDesklets.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
 	}
 
-	if (myDesklets.cDepthRotateButtonImage != NULL)
+	if (myDeskletsParam.cDepthRotateButtonImage != NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pDepthRotateButtonBuffer,
-			myDesklets.cDepthRotateButtonImage,
-			myDesklets.iDeskletButtonSize,
-			myDesklets.iDeskletButtonSize,
+			myDeskletsParam.cDepthRotateButtonImage,
+			myDeskletsParam.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
 	}
 	if (s_pDepthRotateButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pDepthRotateButtonBuffer,
 			CAIRO_DOCK_SHARE_DATA_DIR"/depth-rotate-desklet.svg",
-			myDesklets.iDeskletButtonSize,
-			myDesklets.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
 	}
 	
-	if (myDesklets.cNoInputButtonImage != NULL)
+	if (myDeskletsParam.cNoInputButtonImage != NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pNoInputButtonBuffer,
-			myDesklets.cNoInputButtonImage,
-			myDesklets.iDeskletButtonSize,
-			myDesklets.iDeskletButtonSize,
+			myDeskletsParam.cNoInputButtonImage,
+			myDeskletsParam.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
 	}
 	if (s_pNoInputButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pNoInputButtonBuffer,
 			CAIRO_DOCK_SHARE_DATA_DIR"/no-input-desklet.png",
-			myDesklets.iDeskletButtonSize,
-			myDesklets.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
+			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
 	}
 }
@@ -274,13 +253,13 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 		}
 		if (s_pRetachButtonBuffer.pSurface != NULL && g_pMainDock)
 		{
-			cairo_set_source_surface (pCairoContext, s_pRetachButtonBuffer.pSurface, pDesklet->container.iWidth - myDesklets.iDeskletButtonSize, 0.);
+			cairo_set_source_surface (pCairoContext, s_pRetachButtonBuffer.pSurface, pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize, 0.);
 			cairo_paint_with_alpha (pCairoContext, pDesklet->fButtonsAlpha);
 		}
 	}
 	if ((pDesklet->container.bInside || pDesklet->bNoInput || pDesklet->fButtonsAlpha) && s_pNoInputButtonBuffer.pSurface != NULL && pDesklet->bAllowNoClickable)
 	{
-		cairo_set_source_surface (pCairoContext, s_pNoInputButtonBuffer.pSurface, pDesklet->container.iWidth - myDesklets.iDeskletButtonSize, pDesklet->container.iHeight - myDesklets.iDeskletButtonSize);
+		cairo_set_source_surface (pCairoContext, s_pNoInputButtonBuffer.pSurface, pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize, pDesklet->container.iHeight - myDeskletsParam.iDeskletButtonSize);
 		cairo_paint_with_alpha (pCairoContext, _no_input_button_alpha (pDesklet));
 	}
 	cairo_restore (pCairoContext);
@@ -371,36 +350,36 @@ static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
 		if (s_pRotateButtonBuffer.iTexture != 0)
 		{
 			glPushMatrix ();
-			glTranslatef (-pDesklet->container.iWidth/2 + myDesklets.iDeskletButtonSize/2,
-				pDesklet->container.iHeight/2 - myDesklets.iDeskletButtonSize/2,
+			glTranslatef (-pDesklet->container.iWidth/2 + myDeskletsParam.iDeskletButtonSize/2,
+				pDesklet->container.iHeight/2 - myDeskletsParam.iDeskletButtonSize/2,
 				0.);
-			_cairo_dock_apply_texture_at_size (s_pRotateButtonBuffer.iTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (s_pRotateButtonBuffer.iTexture, myDeskletsParam.iDeskletButtonSize, myDeskletsParam.iDeskletButtonSize);
 			glPopMatrix ();
 		}
 		if (s_pRetachButtonBuffer.iTexture != 0 && g_pMainDock)
 		{
 			glPushMatrix ();
-			glTranslatef (pDesklet->container.iWidth/2 - myDesklets.iDeskletButtonSize/2,
-				pDesklet->container.iHeight/2 - myDesklets.iDeskletButtonSize/2,
+			glTranslatef (pDesklet->container.iWidth/2 - myDeskletsParam.iDeskletButtonSize/2,
+				pDesklet->container.iHeight/2 - myDeskletsParam.iDeskletButtonSize/2,
 				0.);
-			_cairo_dock_apply_texture_at_size (s_pRetachButtonBuffer.iTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (s_pRetachButtonBuffer.iTexture, myDeskletsParam.iDeskletButtonSize, myDeskletsParam.iDeskletButtonSize);
 			glPopMatrix ();
 		}
 		if (s_pDepthRotateButtonBuffer.iTexture != 0)
 		{
 			glPushMatrix ();
 			glTranslatef (0.,
-				pDesklet->container.iHeight/2 - myDesklets.iDeskletButtonSize/2,
+				pDesklet->container.iHeight/2 - myDeskletsParam.iDeskletButtonSize/2,
 				0.);
-			_cairo_dock_apply_texture_at_size (s_pDepthRotateButtonBuffer.iTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (s_pDepthRotateButtonBuffer.iTexture, myDeskletsParam.iDeskletButtonSize, myDeskletsParam.iDeskletButtonSize);
 			glPopMatrix ();
 			
 			glPushMatrix ();
 			glRotatef (90., 0., 0., 1.);
 			glTranslatef (0.,
-				pDesklet->container.iWidth/2 - myDesklets.iDeskletButtonSize/2,
+				pDesklet->container.iWidth/2 - myDeskletsParam.iDeskletButtonSize/2,
 				0.);
-			_cairo_dock_apply_texture_at_size (s_pDepthRotateButtonBuffer.iTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+			_cairo_dock_apply_texture_at_size (s_pDepthRotateButtonBuffer.iTexture, myDeskletsParam.iDeskletButtonSize, myDeskletsParam.iDeskletButtonSize);
 			glPopMatrix ();
 		}
 	}
@@ -409,10 +388,10 @@ static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
 		_cairo_dock_set_blend_alpha ();
 		_cairo_dock_set_alpha (_no_input_button_alpha(pDesklet));
 		glPushMatrix ();
-		glTranslatef (pDesklet->container.iWidth/2 - myDesklets.iDeskletButtonSize/2,
-			- pDesklet->container.iHeight/2 + myDesklets.iDeskletButtonSize/2,
+		glTranslatef (pDesklet->container.iWidth/2 - myDeskletsParam.iDeskletButtonSize/2,
+			- pDesklet->container.iHeight/2 + myDeskletsParam.iDeskletButtonSize/2,
 			0.);
-		_cairo_dock_apply_texture_at_size (s_pNoInputButtonBuffer.iTexture, myDesklets.iDeskletButtonSize, myDesklets.iDeskletButtonSize);
+		_cairo_dock_apply_texture_at_size (s_pNoInputButtonBuffer.iTexture, myDeskletsParam.iDeskletButtonSize, myDeskletsParam.iDeskletButtonSize);
 		glPopMatrix ();
 	}
 	
@@ -511,7 +490,6 @@ void cairo_dock_destroy_desklet (CairoDesklet *pDesklet)
 
 CairoDesklet *cairo_dock_foreach_desklet (CairoDockForeachDeskletFunc pCallback, gpointer user_data)
 {
-	gpointer data[3] = {pCallback, user_data, NULL};
 	CairoDesklet *pDesklet;
 	GList *dl;
 	for (dl = s_pDeskletList; dl != NULL; dl = dl->next)
@@ -523,6 +501,27 @@ CairoDesklet *cairo_dock_foreach_desklet (CairoDockForeachDeskletFunc pCallback,
 	
 	return NULL;
 }
+
+static gboolean _cairo_dock_foreach_icons_in_desklet (CairoDesklet *pDesklet, gpointer *data)
+{
+	CairoDockForeachIconFunc pFunction = data[0];
+	gpointer pUserData = data[1];
+	if (pDesklet->pIcon != NULL)
+		pFunction (pDesklet->pIcon, CAIRO_CONTAINER (pDesklet), pUserData);
+	Icon *pIcon;
+	GList *ic;
+	for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
+	{
+		pFunction ((Icon*)ic->data, CAIRO_CONTAINER (pDesklet), pUserData);
+	}
+	return FALSE;
+}
+void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, gpointer pUserData)
+{
+	gpointer data[2] = {pFunction, pUserData};
+	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _cairo_dock_foreach_icons_in_desklet, data);
+}
+
 
 static gboolean _cairo_dock_reload_one_desklet_decorations (CairoDesklet *pDesklet, gpointer data)
 {
@@ -825,4 +824,144 @@ Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 		}
 	}
 	return NULL;
+}
+
+
+  //////////////////
+ /// GET CONFIG ///
+//////////////////
+
+static gboolean get_config (GKeyFile *pKeyFile, CairoDeskletsParam *pDesklets)
+{
+	gboolean bFlushConfFileNeeded = FALSE;
+	
+	pDesklets->cDeskletDecorationsName = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "decorations", &bFlushConfFileNeeded, "dark", NULL, NULL);
+	CairoDeskletDecoration *pUserDeskletDecorations = cairo_dock_get_desklet_decoration ("personnal");
+	if (pUserDeskletDecorations == NULL)
+	{
+		pUserDeskletDecorations = g_new0 (CairoDeskletDecoration, 1);
+		pUserDeskletDecorations->cDisplayedName = _("_custom decoration_");
+		cairo_dock_register_desklet_decoration ("personnal", pUserDeskletDecorations);
+	}
+	if (pDesklets->cDeskletDecorationsName == NULL || strcmp (pDesklets->cDeskletDecorationsName, "personnal") == 0)
+	{
+		g_free (pUserDeskletDecorations->cBackGroundImagePath);
+		pUserDeskletDecorations->cBackGroundImagePath = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "bg desklet", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		g_free (pUserDeskletDecorations->cForeGroundImagePath);
+		pUserDeskletDecorations->cForeGroundImagePath = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "fg desklet", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		pUserDeskletDecorations->iLoadingModifier = CAIRO_DOCK_FILL_SPACE;
+		pUserDeskletDecorations->fBackGroundAlpha = cairo_dock_get_double_key_value (pKeyFile, "Desklets", "bg alpha", &bFlushConfFileNeeded, 1.0, NULL, NULL);
+		pUserDeskletDecorations->fForeGroundAlpha = cairo_dock_get_double_key_value (pKeyFile, "Desklets", "fg alpha", &bFlushConfFileNeeded, 1.0, NULL, NULL);
+		pUserDeskletDecorations->iLeftMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "left offset", &bFlushConfFileNeeded, 0, NULL, NULL);
+		pUserDeskletDecorations->iTopMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "top offset", &bFlushConfFileNeeded, 0, NULL, NULL);
+		pUserDeskletDecorations->iRightMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "right offset", &bFlushConfFileNeeded, 0, NULL, NULL);
+		pUserDeskletDecorations->iBottomMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "bottom offset", &bFlushConfFileNeeded, 0, NULL, NULL);
+	}
+	pDesklets->iDeskletButtonSize = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "button size", &bFlushConfFileNeeded, 16, NULL, NULL);
+	pDesklets->cRotateButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "rotate image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	pDesklets->cRetachButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "retach image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	pDesklets->cDepthRotateButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "depth rotate image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	pDesklets->cNoInputButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "no input image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	return bFlushConfFileNeeded;
+}
+
+
+  ////////////////////
+ /// RESET CONFIG ///
+////////////////////
+
+static void reset_config (CairoDeskletsParam *pDesklets)
+{
+	g_free (pDesklets->cDeskletDecorationsName);
+	g_free (pDesklets->cRotateButtonImage);
+	g_free (pDesklets->cRetachButtonImage);
+	g_free (pDesklets->cDepthRotateButtonImage);
+	g_free (pDesklets->cNoInputButtonImage);
+}
+
+
+  //////////////
+ /// RELOAD ///
+//////////////
+
+static void reload (CairoDeskletsParam *pPrevDesklets, CairoDeskletsParam *pDesklets)
+{
+	if (cairo_dock_strings_differ (pPrevDesklets->cRotateButtonImage, pDesklets->cRotateButtonImage) ||
+		cairo_dock_strings_differ (pPrevDesklets->cRetachButtonImage, pDesklets->cRetachButtonImage) ||
+		cairo_dock_strings_differ (pPrevDesklets->cDepthRotateButtonImage, pDesklets->cDepthRotateButtonImage) ||
+		cairo_dock_strings_differ (pPrevDesklets->cNoInputButtonImage, pDesklets->cNoInputButtonImage))
+	{
+		cairo_dock_unload_desklet_buttons ();
+		cairo_dock_load_desklet_buttons ();
+	}
+	if (cairo_dock_strings_differ (pPrevDesklets->cDeskletDecorationsName, pDesklets->cDeskletDecorationsName))
+	{
+		cairo_dock_reload_desklets_decorations (TRUE);  // TRUE <=> bDefaultThemeOnly
+	}
+}
+
+
+  //////////////
+ /// UNLOAD ///
+//////////////
+
+static void unload (void)
+{
+	cairo_dock_unload_desklet_buttons ();
+}
+
+  ////////////
+ /// INIT ///
+////////////
+
+static void init (void)
+{
+	cairo_dock_register_notification_on_object (&myDeskletsMgr,
+		NOTIFICATION_UPDATE_DESKLET,
+		(CairoDockNotificationFunc) _cairo_dock_update_desklet_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification_on_object (&myDeskletsMgr,
+		NOTIFICATION_ENTER_DESKLET,
+		(CairoDockNotificationFunc) _cairo_dock_enter_leave_desklet_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification_on_object (&myDeskletsMgr,
+		NOTIFICATION_LEAVE_DESKLET,
+		(CairoDockNotificationFunc) _cairo_dock_enter_leave_desklet_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification_on_object (&myDeskletsMgr,
+		NOTIFICATION_RENDER_DESKLET,
+		(CairoDockNotificationFunc) _cairo_dock_render_desklet_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+}
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_desklets_manager (void)
+{
+	// Manager
+	memset (&myDeskletsMgr, 0, sizeof (CairoDeskletManager));
+	myDeskletsMgr.mgr.cModuleName 	= "Desklets";
+	myDeskletsMgr.mgr.init 		= init;
+	myDeskletsMgr.mgr.load 		= NULL;  // data are loaded the first time a desklet is created, to avoid create them for nothing.
+	myDeskletsMgr.mgr.unload 		= unload;
+	myDeskletsMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
+	myDeskletsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	myDeskletsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	// Config
+	memset (&myDeskletsParam, 0, sizeof (CairoDeskletsParam));
+	myDeskletsMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myDeskletsParam;
+	myDeskletsMgr.mgr.iSizeOfConfig = sizeof (CairoDeskletsParam);
+	// data
+	memset (&s_pRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&s_pRetachButtonBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&s_pDepthRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
+	memset (&s_pNoInputButtonBuffer, 0, sizeof (CairoDockImageBuffer));
+	myDeskletsMgr.mgr.iSizeOfData = 0;
+	myDeskletsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	// signals
+	cairo_dock_install_notifications_on_object (&myDeskletsMgr, NB_NOTIFICATIONS_DESKLET);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myDeskletsMgr));
 }

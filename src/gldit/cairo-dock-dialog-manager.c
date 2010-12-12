@@ -29,20 +29,19 @@
 #include <gdk/x11/gdkglx.h>
 
 #include "../config.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-dialogs.h"
-#include "cairo-dock-internal-system.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-callbacks.h"
@@ -52,12 +51,19 @@
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-dialog-factory.h"
+#define _MANAGER_DEF_
 #include "cairo-dock-dialog-manager.h"
 
+// public (manager, config, data)
+CairoDialogsParam myDialogsParam;
+CairoDialogsManager myDialogsMgr;
+
+// dependancies
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
 
+// private
 static GSList *s_pDialogList = NULL;
 static cairo_surface_t *s_pButtonOkSurface = NULL;
 static cairo_surface_t *s_pButtonCancelSurface = NULL;
@@ -68,26 +74,20 @@ static guint s_iSidReplaceDialogs = 0;
 static gboolean _cairo_dock_render_dialog_notification (gpointer data, CairoDialog *pDialog, cairo_t *pCairoContext);
 static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer);
 
-void cairo_dock_init_dialog_manager (void)
-{
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_DIALOG,
-		(CairoDockNotificationFunc) _cairo_dock_render_dialog_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-}
 
 static inline cairo_surface_t *_cairo_dock_load_button_icon (const gchar *cButtonImage, const gchar *cDefaultButtonImage)
 {
 	cairo_surface_t *pButtonSurface = NULL;
 	if (cButtonImage != NULL)
 		pButtonSurface = cairo_dock_create_surface_from_image_simple (cButtonImage,
-			myDialogs.iDialogButtonWidth,
-			myDialogs.iDialogButtonHeight);
+			myDialogsParam.iDialogButtonWidth,
+			myDialogsParam.iDialogButtonHeight);
 
 	if (pButtonSurface == NULL)
 	{
 		pButtonSurface = cairo_dock_create_surface_from_image_simple (cDefaultButtonImage,
-			myDialogs.iDialogButtonWidth,
-			myDialogs.iDialogButtonHeight);
+			myDialogsParam.iDialogButtonWidth,
+			myDialogsParam.iDialogButtonHeight);
 	}
 
 	return pButtonSurface;
@@ -196,11 +196,11 @@ static int _cairo_dock_find_clicked_button_in_dialog (GdkEventButton* pButton, C
 	iButtonY = (pDialog->container.bDirectionUp ?
 		pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP :
 		pDialog->container.iHeight - (pDialog->iTopMargin + pDialog->iButtonsHeight));
-	int iMinButtonX = .5 * (pDialog->container.iWidth - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogs.iDialogButtonWidth);
+	int iMinButtonX = .5 * (pDialog->container.iWidth - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogsParam.iDialogButtonWidth);
 	for (i = 0; i < pDialog->iNbButtons; i++)
 	{
-		iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogs.iDialogButtonWidth);
-		if (pButton->x >= iButtonX && pButton->x <= iButtonX + myDialogs.iDialogButtonWidth && pButton->y >= iButtonY && pButton->y <= iButtonY + myDialogs.iDialogButtonHeight)
+		iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogsParam.iDialogButtonWidth);
+		if (pButton->x >= iButtonX && pButton->x <= iButtonX + myDialogsParam.iDialogButtonWidth && pButton->y >= iButtonY && pButton->y <= iButtonY + myDialogsParam.iDialogButtonHeight)
 		{
 			return i;
 		}
@@ -337,15 +337,15 @@ static void _cairo_dock_draw_inside_dialog_opengl (CairoDialog *pDialog, double 
 		int iButtonX, iButtonY;
 		int i, n = pDialog->iNbButtons;
 		iButtonY = (pDialog->container.bDirectionUp ? pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP : pDialog->container.iHeight - pDialog->iTopMargin - pDialog->iButtonsHeight - CAIRO_DIALOG_VGAP);
-		int iMinButtonX = .5 * (pDialog->container.iWidth - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogs.iDialogButtonWidth);
+		int iMinButtonX = .5 * (pDialog->container.iWidth - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogsParam.iDialogButtonWidth);
 		for (i = 0; i < pDialog->iNbButtons; i++)
 		{
-			iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogs.iDialogButtonWidth);
+			iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogsParam.iDialogButtonWidth);
 			glBindTexture (GL_TEXTURE_2D, pDialog->pButtons[i].iTexture);
-			_cairo_dock_apply_current_texture_at_size_with_offset (myDialogs.iDialogButtonWidth,
-				myDialogs.iDialogButtonWidth,
-				iButtonX + pDialog->pButtons[i].iOffset + myDialogs.iDialogButtonWidth/2,
-				pDialog->container.iHeight - (iButtonY + pDialog->pButtons[i].iOffset + myDialogs.iDialogButtonWidth/2));			}
+			_cairo_dock_apply_current_texture_at_size_with_offset (myDialogsParam.iDialogButtonWidth,
+				myDialogsParam.iDialogButtonWidth,
+				iButtonX + pDialog->pButtons[i].iOffset + myDialogsParam.iDialogButtonWidth/2,
+				pDialog->container.iHeight - (iButtonY + pDialog->pButtons[i].iOffset + myDialogsParam.iDialogButtonWidth/2));			}
 	}
 	
 	if (pDialog->pRenderer != NULL && pDialog->pRenderer->render_opengl)
@@ -424,11 +424,11 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 		int iButtonX, iButtonY;
 		int i, n = pDialog->iNbButtons;
 		iButtonY = (pDialog->container.bDirectionUp ? pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP : pDialog->container.iHeight - pDialog->iTopMargin - pDialog->iButtonsHeight + CAIRO_DIALOG_VGAP);
-		int iMinButtonX = .5 * ((pDialog->container.iWidth - pDialog->iLeftMargin - pDialog->iRightMargin) - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogs.iDialogButtonWidth) + pDialog->iLeftMargin;
+		int iMinButtonX = .5 * ((pDialog->container.iWidth - pDialog->iLeftMargin - pDialog->iRightMargin) - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogsParam.iDialogButtonWidth) + pDialog->iLeftMargin;
 		cairo_surface_t *pButtonSurface;
 		for (i = 0; i < pDialog->iNbButtons; i++)
 		{
-			iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogs.iDialogButtonWidth);
+			iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogsParam.iDialogButtonWidth);
 			if (pDialog->pButtons[i].pSurface != NULL)
 				pButtonSurface = pDialog->pButtons[i].pSurface;
 			else if (pDialog->pButtons[i].iDefaultType == 1)
@@ -577,7 +577,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	CairoDialog *pDialog = cairo_dock_new_dialog (pAttribute, pIcon, pContainer);
 	s_pDialogList = g_slist_prepend (s_pDialogList, pDialog);
 	if (pDialog->iNbButtons != 0 && (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL))
-		cairo_dock_load_dialog_buttons (myDialogs.cButtonOkImage, myDialogs.cButtonCancelImage);
+		cairo_dock_load_dialog_buttons (myDialogsParam.cButtonOkImage, myDialogsParam.cButtonCancelImage);
 	
 	//\________________ on le place parmi les autres.
 	cairo_dock_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
@@ -617,7 +617,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 
 static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 {
-	g_print ("%s (Ybulle:%d; %dx%d)\n", __func__, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight);
+	//g_print ("%s (Ybulle:%d; %dx%d)\n", __func__, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight);
 	
 	int iZoneXLeft, iZoneXRight, iY, iWidth, iHeight;  // our available zone.
 	iWidth = pDialog->iComputedWidth;
@@ -660,7 +660,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 			}
 		}
 	}
-	g_print (" -> [%d ; %d], %d, %d\n", iLimitXLeft, iLimitXRight, iWidth, iMinYLimit);
+	//g_print (" -> [%d ; %d], %d, %d\n", iLimitXLeft, iLimitXRight, iWidth, iMinYLimit);
 	if (iLimitXRight - iLimitXLeft >= MIN (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iWidth) || !bDialogOnOurWay)  // there is enough room to place the dialog.
 	{
 		if (pDialog->bRight)
@@ -736,7 +736,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	
 	pDialog->bPositionForced = FALSE;
 	///gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
-	g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight, iGravity);
+	//g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight, iGravity);
 	gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 		pDialog->iComputedPositionX,
 		pDialog->iComputedPositionY);
@@ -955,7 +955,7 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 			G_CALLBACK (_cairo_dock_dialog_destroyed),
 			pBlockingLoop);
 		
-		/**if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
+		/**if (myDocksParam.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 		{
 			cairo_dock_pop_up (CAIRO_DOCK (pContainer));
 		}*/
@@ -964,7 +964,7 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();
 		cd_debug ("fin de boucle bloquante -> %d\n", iClickedButton);
-		/*if (myAccessibility.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
+		/*if (myDocksParam.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_pop_down (CAIRO_DOCK (pContainer));*/
 		if (CAIRO_DOCK_IS_DOCK (pContainer)/* && ! pDock->container.bInside*/)
 		{
@@ -1119,4 +1119,155 @@ void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog)
 		cairo_dock_hide_dialog (pDialog);
 	else
 		cairo_dock_unhide_dialog (pDialog);
+}
+
+
+  //////////////////
+ /// GET CONFIG ///
+//////////////////
+
+static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
+{
+	gboolean bFlushConfFileNeeded = FALSE;
+	
+	pDialogs->cButtonOkImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_ok image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	pDialogs->cButtonCancelImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_cancel image", &bFlushConfFileNeeded, NULL, NULL, NULL);
+
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Dialogs", "button ", bFlushConfFileNeeded, pDialogs->iDialogButtonWidth, pDialogs->iDialogButtonHeight);
+
+	double couleur_bulle[4] = {1.0, 1.0, 1.0, 0.7};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "background color", &bFlushConfFileNeeded, pDialogs->fDialogColor, 4, couleur_bulle, NULL, NULL);
+	pDialogs->iDialogIconSize = MAX (16, cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL));
+	
+	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	gchar *cFontDescription = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
+	if (cFontDescription == NULL)
+		cFontDescription = cairo_dock_get_default_system_font ();
+	
+	PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
+	pDialogs->dialogTextDescription.cFont = g_strdup (pango_font_description_get_family (fd));
+	pDialogs->dialogTextDescription.iSize = pango_font_description_get_size (fd);
+	if (!pango_font_description_get_size_is_absolute (fd))
+		pDialogs->dialogTextDescription.iSize /= PANGO_SCALE;
+	if (pDialogs->dialogTextDescription.iSize == 0)
+		pDialogs->dialogTextDescription.iSize = 14;
+	if (!bCustomFont)
+		pDialogs->dialogTextDescription.iSize *= 1.33;  // c'est pas beau, mais ca evite de casser tous les themes.
+	pDialogs->dialogTextDescription.iWeight = pango_font_description_get_weight (fd);
+	pDialogs->dialogTextDescription.iStyle = pango_font_description_get_style (fd);
+	pDialogs->dialogTextDescription.fMaxRelativeWidth = .5;  // on limite a la moitie de l'ecran.
+	
+	if (g_key_file_has_key (pKeyFile, "Dialogs", "message size", NULL))  // anciens parametres.
+	{
+		pDialogs->dialogTextDescription.iSize = g_key_file_get_integer (pKeyFile, "Dialogs", "message size", NULL);
+		int iLabelWeight = g_key_file_get_integer (pKeyFile, "Dialogs", "message weight", NULL);
+		pDialogs->dialogTextDescription.iWeight = cairo_dock_get_pango_weight_from_1_9 (iLabelWeight);
+		gboolean bLabelStyleItalic = g_key_file_get_boolean (pKeyFile, "Dialogs", "message italic", NULL);
+		if (bLabelStyleItalic)
+			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_ITALIC;
+		else
+			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_NORMAL;
+		
+		pango_font_description_set_size (fd, pDialogs->dialogTextDescription.iSize * PANGO_SCALE);
+		pango_font_description_set_weight (fd, pDialogs->dialogTextDescription.iWeight);
+		pango_font_description_set_style (fd, pDialogs->dialogTextDescription.iStyle);
+		
+		g_free (cFontDescription);
+		cFontDescription = pango_font_description_to_string (fd);
+		g_key_file_set_string (pKeyFile, "Dialogs", "message police", cFontDescription);
+		bFlushConfFileNeeded = TRUE;
+	}
+	pango_font_description_free (fd);
+	g_free (cFontDescription);
+	pDialogs->dialogTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "outlined", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	pDialogs->dialogTextDescription.iMargin = 0;
+	
+	double couleur_dtext[3] = {0., 0., 0.};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, pDialogs->dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
+	memcpy (&pDialogs->dialogTextDescription.fColorStop, &pDialogs->dialogTextDescription.fColorStart, 3*sizeof (double));
+	
+	pDialogs->cDecoratorName = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "decorator", &bFlushConfFileNeeded, "comics", NULL, NULL);
+
+	return bFlushConfFileNeeded;
+}
+
+
+  ////////////////////
+ /// RESET CONFIG ///
+////////////////////
+
+static void reset_config (CairoDialogsParam *pDialogs)
+{
+	g_free (pDialogs->cButtonOkImage);
+	g_free (pDialogs->cButtonCancelImage);
+	g_free (pDialogs->dialogTextDescription.cFont);
+	g_free (pDialogs->cDecoratorName);
+}
+
+
+  //////////////
+ /// RELOAD ///
+//////////////
+
+static void reload (CairoDialogsParam *pPrevDialogs, CairoDialogsParam *pDialogs)
+{
+	if (cairo_dock_strings_differ (pPrevDialogs->cButtonOkImage, pDialogs->cButtonOkImage) ||
+		cairo_dock_strings_differ (pPrevDialogs->cButtonCancelImage, pDialogs->cButtonCancelImage) ||
+		pPrevDialogs->iDialogIconSize != pDialogs->iDialogIconSize)
+	{
+		cairo_dock_unload_dialog_buttons ();
+		cairo_dock_load_dialog_buttons (pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
+	}
+}
+
+
+  //////////////
+ /// UNLOAD ///
+//////////////
+
+static void unload (void)
+{
+	cairo_dock_unload_dialog_buttons ();
+}
+
+
+  ////////////
+ /// INIT ///
+////////////
+
+static void init (void)
+{
+	cairo_dock_register_notification_on_object (&myDialogsMgr,
+		NOTIFICATION_RENDER_DIALOG,
+		(CairoDockNotificationFunc) _cairo_dock_render_dialog_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+}
+
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_dialogs_manager (void)
+{
+	// Manager
+	memset (&myDialogsMgr, 0, sizeof (CairoDialogsManager));
+	myDialogsMgr.mgr.cModuleName 	= "Dialogs";
+	myDialogsMgr.mgr.init 		= init;
+	myDialogsMgr.mgr.load 		= NULL;  // data are loaded the first time a dialog is created, to avoid create them for nothing.
+	myDialogsMgr.mgr.unload 		= unload;
+	myDialogsMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
+	myDialogsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	myDialogsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	// Config
+	memset (&myDialogsParam, 0, sizeof (CairoDialogsParam));
+	myDialogsMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myDialogsParam;
+	myDialogsMgr.mgr.iSizeOfConfig = sizeof (CairoDialogsParam);
+	// data
+	myDialogsMgr.mgr.iSizeOfData = 0;
+	myDialogsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	// signals
+	cairo_dock_install_notifications_on_object (&myDialogsMgr, NB_NOTIFICATIONS_DIALOG);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myDialogsMgr));
 }

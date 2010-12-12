@@ -26,8 +26,6 @@
 G_BEGIN_DECLS
 
 
-void cairo_dock_initialize_application_factory (Display *pXDisplay);
-
 /** Create an icon that represents a window.
 *@param Xid ID of the window.
 *@param XParentWindow ID of the parent window set if the child window has been ignored but is demanding the attention.

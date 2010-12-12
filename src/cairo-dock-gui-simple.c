@@ -25,20 +25,17 @@
 #include <glib/gi18n.h>
 
 #include "config.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-config.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-launcher-factory.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-views.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-position.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-applications-manager.h"
@@ -87,10 +84,16 @@ extern gboolean g_bUseOpenGL;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
-#define cd_reload(module_name) do {\
+/*#define cd_reload(module_name) do {\
 	pInternalModule = cairo_dock_find_internal_module_from_name (module_name);\
 	if (pInternalModule != NULL) \
 		cairo_dock_reload_internal_module_from_keyfile (pInternalModule, pKeyFile);\
+	} while (0)*/
+
+#define cd_reload(module_name) do {\
+	pManager = gldi_get_manager (module_name);\
+	if (pManager != NULL)\
+		gldi_reload_manager_from_keyfile (pManager, pKeyFile);\
 	} while (0)
 
 static gchar *_get_animation_name (int i)
@@ -209,20 +212,20 @@ static gchar * _make_simple_conf_file (void)
 	}
 	
 	// comportement
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", myPosition.iScreenBorder);
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", myDocksParam.iScreenBorder);
 	
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", myAccessibility.iVisibility);
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", myDocksParam.iVisibility);
 	
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on_click", (myAccessibility.bShowSubDockOnClick ? 1 : 0));
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on_click", (myDocksParam.bShowSubDockOnClick ? 1 : 0));
 	
-	g_key_file_set_string (pSimpleKeyFile, "Behavior", "hide effect", myAccessibility.cHideEffect);
+	g_key_file_set_string (pSimpleKeyFile, "Behavior", "hide effect", myDocksParam.cHideEffect);
 	
 	int iTaskbarType;
-	if (! myTaskBar.bShowAppli)
+	if (! myTaskbarParam.bShowAppli)
 		iTaskbarType = 0;
-	else if (myTaskBar.bHideVisibleApplis)
+	else if (myTaskbarParam.bHideVisibleApplis)
 		iTaskbarType = 1;
-	else if (myTaskBar.bGroupAppliByClass)
+	else if (myTaskbarParam.bGroupAppliByClass)
 		iTaskbarType = 2;
 	else
 		iTaskbarType = 3;
@@ -337,17 +340,17 @@ static gchar * _make_simple_conf_file (void)
 	}
 	
 	// apparence
-	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIcons.cIconTheme);
+	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIconsParam.cIconTheme);
 	
 	int iIconSize;
-	int s = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	int s = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
 	if (s <= ICON_TINY+2)  // icones toutes petites.
 		iIconSize = 0;
 	else if (s >= ICON_HUGE-2)  // icones tres grandes.
 		iIconSize = 4;
 	else if (s <= ICON_MEDIUM)
 	{
-		if (myIcons.fAmplitude >= 2 || s <= ICON_SMALL)  // icones petites.
+		if (myIconsParam.fAmplitude >= 2 || s <= ICON_SMALL)  // icones petites.
 			iIconSize = 1;
 		else
 			iIconSize = 2;  // moyennes.
@@ -358,14 +361,14 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "icon size", iIconSize);
 	s_iIconSize = iIconSize;
 	
-	g_key_file_set_boolean (pSimpleKeyFile, "Appearance", "separate icons", myIcons.iSeparateIcons);
-	s_bSeparateIcons = myIcons.iSeparateIcons;
+	g_key_file_set_boolean (pSimpleKeyFile, "Appearance", "separate icons", myIconsParam.iSeparateIcons);
+	s_bSeparateIcons = myIconsParam.iSeparateIcons;
 	
-	g_key_file_set_integer_list (pSimpleKeyFile, "Appearance", "icon's type order", myIcons.iIconsTypesList, 3);
+	g_key_file_set_integer_list (pSimpleKeyFile, "Appearance", "icon's type order", myIconsParam.iIconsTypesList, 3);
 	
-	g_key_file_set_string (pSimpleKeyFile, "Appearance", "main dock view", myViews.cMainDockDefaultRendererName);
+	g_key_file_set_string (pSimpleKeyFile, "Appearance", "main dock view", myBackendsParam.cMainDockDefaultRendererName);
 	
-	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myViews.cSubDockDefaultRendererName);
+	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myBackendsParam.cSubDockDefaultRendererName);
 	
 	// applets
 	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
@@ -379,8 +382,9 @@ static gchar * _make_simple_conf_file (void)
 }
 
 
-static void _load_theme (gboolean bSuccess, gpointer data)
+static void _load_theme (gboolean bSuccess, GtkWidget *pWaitingDialog)
 {
+	g_print ("%s ()\n", __func__);
 	if (s_pSimpleConfigWindow == NULL)  // si l'utilisateur a ferme la fenetre entre-temps, on considere qu'il a abandonne.
 	{
 		g_print ("user has given up\n");
@@ -404,6 +408,7 @@ static void _load_theme (gboolean bSuccess, gpointer data)
 		g_print ("Could not import the theme.\n");
 		cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Could not import the theme."));
 	}
+	gtk_widget_destroy (pWaitingDialog);
 }
 static gboolean on_apply_theme_simple (GtkWidget *pThemeNotebook, gpointer data)
 {
@@ -422,7 +427,7 @@ static gboolean on_apply_theme_simple (GtkWidget *pThemeNotebook, gpointer data)
 	{
 		case 0:  // load a theme
 			cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Importing theme..."));
-			cairo_dock_load_theme (pSimpleKeyFile, (GFunc) _load_theme);  // bReloadWindow reste a FALSE, on ne rechargera la fenetre que lorsque le theme aura ete importe.
+			bReloadWindow = cairo_dock_load_theme (pSimpleKeyFile, (GFunc) _load_theme, s_pSimpleConfigWindow);  // bReloadWindow reste a FALSE, on ne rechargera la fenetre que lorsque le theme aura ete importe.
 		break;
 		
 		case 1:  // save current theme
@@ -670,7 +675,7 @@ static gboolean on_apply_config_simple (gpointer data)
 		g_key_file_set_integer_list (pKeyFile, "Icons", "launcher size", tab, 2);
 		g_key_file_set_integer_list (pKeyFile, "Icons", "appli size", tab, 2);
 		g_key_file_set_integer_list (pKeyFile, "Icons", "applet size", tab, 2);
-		tab[0] = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
+		tab[0] = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
 		g_key_file_set_integer_list (pKeyFile, "Icons", "separator size", tab, 2);
 		
 		g_key_file_set_double (pKeyFile, "Icons", "zoom max", fMaxScale);
@@ -701,12 +706,17 @@ static gboolean on_apply_config_simple (gpointer data)
 	cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
 	
 	//\_____________ On recharge les modules concernes.
-	CairoDockInternalModule *pInternalModule;
+	GldiManager *pManager;
+	cd_reload ("Docks");
+	cd_reload ("Taskbar");
+	cd_reload ("Icons");
+	cd_reload ("Backends");
+	/**CairoDockInternalModule *pInternalModule;
 	cd_reload ("Position");
 	cd_reload ("Accessibility");
 	cd_reload ("TaskBar");
 	cd_reload ("Icons");
-	cd_reload ("Views");
+	cd_reload ("Views");*/
 	if (pModuleInstanceAnim != NULL)
 	{
 		cairo_dock_reload_module_instance (pModuleInstanceAnim, TRUE);

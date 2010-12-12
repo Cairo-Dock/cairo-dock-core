@@ -30,15 +30,21 @@
 
 #include "../config.h"
 #include "cairo-dock-keyfile-utilities.h"
-//#include "cairo-dock-dock-manager.h"
-//#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-task.h"
+#include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-internal-system.h"
+#include "cairo-dock-notifications.h"
+#define _MANAGER_DEF_
 #include "cairo-dock-packages.h"
 
-#define CAIRO_DOCK_DEFAULT_PACKAGES_LIST_FILE "list.conf"
+// public (manager, config, data)
+CairoConnectionParam myConnectionParam;
+CairoConnectionManager myConnectionMgr;
 
+// dependancies
+
+// private
+#define CAIRO_DOCK_DEFAULT_PACKAGES_LIST_FILE "list.conf"
 static gchar *s_cPackageServerAdress = NULL;
 
   ////////////////////
@@ -118,27 +124,27 @@ static inline CURL *_init_curl_connection (const gchar *cURL)
 {
 	CURL *handle = curl_easy_init ();
 	curl_easy_setopt (handle, CURLOPT_URL, cURL);
-	if (mySystem.cConnectionProxy != NULL)
+	if (myConnectionParam.cConnectionProxy != NULL)
 	{
-		curl_easy_setopt (handle, CURLOPT_PROXY, mySystem.cConnectionProxy);
-		if (mySystem.iConnectionPort != 0)
-			curl_easy_setopt (handle, CURLOPT_PROXYPORT, mySystem.iConnectionPort);
-		if (mySystem.cConnectionUser != NULL && mySystem.
+		curl_easy_setopt (handle, CURLOPT_PROXY, myConnectionParam.cConnectionProxy);
+		if (myConnectionParam.iConnectionPort != 0)
+			curl_easy_setopt (handle, CURLOPT_PROXYPORT, myConnectionParam.iConnectionPort);
+		if (myConnectionParam.cConnectionUser != NULL && myConnectionParam.
 			cConnectionPasswd != NULL)
 		{
-			gchar *cUserPwd = g_strdup_printf ("%s:%s", mySystem.cConnectionUser, mySystem.
+			gchar *cUserPwd = g_strdup_printf ("%s:%s", myConnectionParam.cConnectionUser, myConnectionParam.
 			cConnectionPasswd);
 			curl_easy_setopt (handle, CURLOPT_PROXYUSERPWD, cUserPwd);
 			g_free (cUserPwd);
-			/*curl_easy_setopt (handle, CURLOPT_PROXYUSERNAME, mySystem.cConnectionUser);
-			if (mySystem.cConnectionPasswd != NULL)
-				curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, mySystem.cConnectionPasswd);*/  // a partir de libcurl 7.19.1, donc apres Jaunty
+			/*curl_easy_setopt (handle, CURLOPT_PROXYUSERNAME, myConnectionParam.cConnectionUser);
+			if (myConnectionParam.cConnectionPasswd != NULL)
+				curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, myConnectionParam.cConnectionPasswd);*/  // a partir de libcurl 7.19.1, donc apres Jaunty
 		}
 	}
-	if (mySystem.bForceIPv4)
+	if (myConnectionParam.bForceIPv4)
 		curl_easy_setopt (handle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);  // la resolution d'adresse en ipv6 peut etre tres lente chez certains.
-	curl_easy_setopt (handle, CURLOPT_TIMEOUT, mySystem.iConnectionMaxTime);
-	curl_easy_setopt (handle, CURLOPT_CONNECTTIMEOUT, mySystem.iConnectionTimeout);
+	curl_easy_setopt (handle, CURLOPT_TIMEOUT, myConnectionParam.iConnectionMaxTime);
+	curl_easy_setopt (handle, CURLOPT_CONNECTTIMEOUT, myConnectionParam.iConnectionTimeout);
 	curl_easy_setopt (handle, CURLOPT_NOSIGNAL, 1);  // With CURLOPT_NOSIGNAL set non-zero, curl will not use any signals; sinon curl se vautre apres le timeout, meme si le download s'est bien passe !
 	return handle;
 }
@@ -799,5 +805,81 @@ void cairo_dock_init_package_manager (gchar *cPackageServerAdress)
 	s_cPackageServerAdress = cPackageServerAdress;
 	
 	//\___________________ On initialise le gestionnaire de download.
+	curl_global_init (CURL_GLOBAL_DEFAULT);  /// merge with init
+}
+
+
+  //////////////////
+ /// GET CONFIG ///
+//////////////////
+
+static gboolean get_config (GKeyFile *pKeyFile, CairoConnectionParam *pSystem)
+{
+	gboolean bFlushConfFileNeeded = FALSE;
+	
+	pSystem->iConnectionTimeout = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn timeout", &bFlushConfFileNeeded, 7, NULL, NULL);
+	pSystem->iConnectionMaxTime = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn max time", &bFlushConfFileNeeded, 120, NULL, NULL);
+	if (cairo_dock_get_boolean_key_value (pKeyFile, "System", "conn use proxy", &bFlushConfFileNeeded, FALSE, NULL, NULL))
+	{
+		pSystem->cConnectionProxy = cairo_dock_get_string_key_value (pKeyFile, "System", "conn proxy", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		pSystem->iConnectionPort = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn port", &bFlushConfFileNeeded, 0, NULL, NULL);
+		pSystem->cConnectionUser = cairo_dock_get_string_key_value (pKeyFile, "System", "conn user", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		gchar *cPasswd = cairo_dock_get_string_key_value (pKeyFile, "System", "conn passwd", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		cairo_dock_decrypt_string (cPasswd, &pSystem->cConnectionPasswd);
+		pSystem->bForceIPv4 = cairo_dock_get_boolean_key_value (pKeyFile, "System", "force ipv4", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	}
+	
+	return bFlushConfFileNeeded;
+}
+
+  ////////////////////
+ /// RESET CONFIG ///
+////////////////////
+
+static void reset_config (CairoConnectionParam *pSystem)
+{
+	g_free (pSystem->cConnectionProxy);
+	g_free (pSystem->cConnectionUser);
+	g_free (pSystem->cConnectionPasswd);
+}
+
+
+  ////////////
+ /// INIT ///
+////////////
+
+static void init (void)
+{
 	curl_global_init (CURL_GLOBAL_DEFAULT);
 }
+
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_connection_manager (void)
+{
+	// Manager
+	memset (&myConnectionMgr, 0, sizeof (CairoConnectionManager));
+	myConnectionMgr.mgr.cModuleName 	= "Connection";
+	myConnectionMgr.mgr.init 		= init;
+	myConnectionMgr.mgr.load 		= NULL;
+	myConnectionMgr.mgr.unload 		= NULL;
+	myConnectionMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
+	myConnectionMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	myConnectionMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	// Config
+	myConnectionMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myConnectionParam;
+	myConnectionMgr.mgr.iSizeOfConfig = sizeof (CairoConnectionParam);
+	// data
+	myConnectionMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myConnectionMgr.mgr.iSizeOfData = 0;
+	// signals
+	cairo_dock_install_notifications_on_object (&myConnectionMgr, NB_NOTIFICATIONS_CONNECTION);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myConnectionMgr));
+}
+
+
+

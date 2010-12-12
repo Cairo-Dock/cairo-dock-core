@@ -28,7 +28,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
 

@@ -17,40 +17,27 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef __CAIRO_DOCK_MODULES__
-#define  __CAIRO_DOCK_MODULES__
+#ifndef __CAIRO_DOCK_MODULE_FACTORY__
+#define  __CAIRO_DOCK_MODULE_FACTORY__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-desklet-manager.h"
+#include "cairo-dock-module-manager.h"
 G_BEGIN_DECLS
 
-
 /**
-*@file cairo-dock-modules.h This class defines and handles the external and internal modules of Cairo-Dock.
+* @file cairo-dock-module-factory.h This class defines the external modules of Cairo-Dock.
 *
 * A module has an interface and a visit card :
 *  - the visit card allows it to define itself (name, category, default icon, etc)
 *  - the interface defines the entry points for init, stop, reload, read config, and reset datas.
 *
-* Modules can be instanciated several times; each time they are, an instance is created. This instance will hold all the data used by the module's functions : the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these parameters are optionnal; a module that has an icon is also called an applet.
-*
-* Internal modules are just simplified version of modules, and are used internally by Cairo-Dock. As a special feature, a module can bind itself to an internal module, if its purpose is to complete it.
+* Modules can be instanciated several times; each time they are, an instance is created.
+* Each instance holds all a set of the data : the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these parameters are optionnal; a module that has an icon is also called an applet.
 */
-
-struct _CairoDockModuleMgr {
-	CairoDockManager mgr;
-	void 			(*foreach_module) 				(GHRFunc pCallback, gpointer user_data);
-	void 			(*foreach_module_in_alphabetical_order) 	(GCompareFunc pCallback, gpointer user_data);
-	CairoDockModule* 	(*find_module_from_name) 			(const gchar *cModuleName);
-	int 			(*get_nb_modules) 				(void);
-	const gchar* 	(*get_modules_dir) 				(void);
-	gchar* 		(*list_active_modules) 				(void);
-	void 			(*write_active_modules_cb) 			(void);
-};
 
 /// Categories a module can be in.
 typedef enum {
@@ -70,7 +57,7 @@ typedef enum {
 	CAIRO_DOCK_MODULE_CAN_DOCK 		= 1<<0,
 	CAIRO_DOCK_MODULE_CAN_DESKLET 	= 1<<1,
 	CAIRO_DOCK_MODULE_CAN_OTHERS 	= 1<<2
-} CairoDockModuleContainerType;
+	} CairoDockModuleContainerType;
 	
 
 /// Definition of the visit card of a module. Contains everything that is statically defined for a module.
@@ -221,32 +208,15 @@ struct _CairoDockInternalModule {
 };
 
 
-  /////////////
- // MANAGER //
-/////////////
-
-void cairo_dock_initialize_module_manager (const gchar *cModuleDirPath);
-
-/** Get the module which has a given name.
-*@param cModuleName the unique name of the module.
-*/
-CairoDockModule *cairo_dock_find_module_from_name (const gchar *cModuleName);
-
-CairoDockModule *cairo_dock_foreach_module (GHRFunc pCallback, gpointer user_data);
-CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc pCallback, gpointer user_data);
-
-int cairo_dock_get_nb_modules (void);
-
-const gchar *cairo_dock_get_modules_dir (void);
-
-gchar *cairo_dock_list_active_modules (void);
-
-#define cairo_dock_module_is_auto_loaded(pModule) (pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL)
-
-
   ///////////////////
  // MODULE LOADER //
 ///////////////////
+
+#define cairo_dock_module_is_auto_loaded(pModule) (pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL)
+
+CairoDockModule *cairo_dock_new_module (const gchar *cSoFilePath, GError **erreur);
+
+void cairo_dock_free_module (CairoDockModule *module);
 
 /* Verifie que le fichier de conf d'un plug-in est bien present dans le repertoire utilisateur du plug-in, sinon le copie a partir du fichier de conf fournit lors de l'installation. Cree au besoin le repertoire utilisateur du plug-in.
 *@param pVisitCard la carte de visite du module.
@@ -255,22 +225,6 @@ gchar *cairo_dock_list_active_modules (void);
 gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard);
 
 void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard);
-
-gboolean cairo_dock_register_module (CairoDockModule *pModule);
-void cairo_dock_unregister_module (const gchar *cModuleName);
-
-/** Load a module into the table of modules. The module is opened and its visit card and interface are retrieved.
-*@param cSoFilePath path to the .so file.
-*@param erreur error set if something bad happens.
-*@return the newly allocated module.
-*/
-CairoDockModule * cairo_dock_load_module (gchar *cSoFilePath, GError **erreur);
-
-/** Load all the modules of a given folder.
-*@param cModuleDirPath path to the a folder containing .so files.
-*@param erreur error set if something bad happens.
-*/
-void cairo_dock_load_modules_in_directory (const gchar *cModuleDirPath, GError **erreur);
 
 
   /////////////////////
@@ -299,8 +253,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
  // MODULES //
 /////////////
 
-void cairo_dock_free_module (CairoDockModule *module);
-
 void cairo_dock_free_minimal_config (CairoDockMinimalAppletConfig *pMinimalConfig);
 
 /** Create and initialize all the instances of a module.
@@ -321,68 +273,7 @@ void cairo_dock_deactivate_module (CairoDockModule *module);
 void cairo_dock_reload_module (CairoDockModule *module, gboolean bReloadAppletConf);
 
 
-void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList, double fTime);
-
-void cairo_dock_deactivate_old_modules (double fTime);
-
-void cairo_dock_deactivate_all_modules (void);
-
-
-  ///////////////////////
- // MODULES HIGH LEVEL//
-///////////////////////
-
-// activate_module or reload, update_dock, redraw, write
-void cairo_dock_activate_module_and_load (const gchar *cModuleName);
-// deactivate_module_instance_and_unload all instances, write
-void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName);
-
-// deactivate_module_instance_and_unload + remove file + rename last instance file
-void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance);
-// cp file
-gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule);
-// cp file + instanciate_module + update_dock_size
-void cairo_dock_add_module_instance (CairoDockModule *pModule);
-// update conf file + reload_module_instance
-void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance);
-// update conf file + reload_module_instance
-void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pInstance, int iCenterX, int iCenterY);
-
-
-gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance);
-void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance);
-
-#define cairo_dock_get_icon_data(pIcon, pInstance) ((pIcon)->pDataSlot[pInstance->iSlotID])
-#define cairo_dock_get_container_data(pContainer, pInstance) ((pContainer)->pDataSlot[pInstance->iSlotID])
-
-#define cairo_dock_set_icon_data(pIcon, pInstance, pData) \
-	(pIcon)->pDataSlot[pInstance->iSlotID] = pData
-#define cairo_dock_set_container_data(pContainer, pInstance, pData) \
-	(pContainer)->pDataSlot[pInstance->iSlotID] = pData
-
-
-  //////////////////////
- // INTERNAL MODULES //
-//////////////////////
-
-void cairo_dock_reload_internal_module_from_keyfile (CairoDockInternalModule *pModule, GKeyFile *pKeyFile);
-void cairo_dock_preload_internal_modules (GHashTable *pModuleTable);
-
-void cairo_dock_reload_internal_module (CairoDockInternalModule *pModule, const gchar *cConfFilePath);
-
-CairoDockInternalModule *cairo_dock_find_internal_module_from_name (const gchar *cModuleName);
-
-gboolean cairo_dock_get_internal_module_config (CairoDockInternalModule *pModule, GKeyFile *pKeyFile);
-
-gboolean cairo_dock_get_global_config (GKeyFile *pKeyFile);
-
-
 void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pModuleInstance);
-
-void cairo_dock_attach_to_another_module (CairoDockVisitCard *pVisitCard, const gchar *cOtherModuleName);
-
-
-void cairo_dock_write_active_modules (void);
 
 
 G_END_DECLS

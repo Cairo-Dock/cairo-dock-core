@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 /** *@file cairo-dock-launcher-manager.h This class handles the creation, load and reload of launcher icons, from the desktop files contained inside the 'launchers' folder. The files holding the information are common desktop files, with additionnal keys added by the dock on the launcher creation.
 */
 
-/** Create an Icon from a given desktop file, and fill its buffers. The resulting icon can directly be used inside a container. Class inhibating is handled.
+/** Create an Icon from a given desktop file, and fill its buffers. The resulting icon can directly be used inside a container. Class inhibiting is handled.
 * @param cDesktopFileName name of the desktop file, present in the "launchers" folder of the current theme.
 * @return the newly created icon.
 */

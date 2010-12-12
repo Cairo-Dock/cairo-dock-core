@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-notifications.h This class defines the notification system. Each time an event occurs (like an icon being clicked), Cairo-Dock broadcasts the corresponding notification. Anybody that has registered to it will be called then.
+Common objects that hold notifications are Managers, Icons, and Containers (and their derivatives Docks, Desklets, Dialogs, Flyings).
 */
 
 /// Generic prototype of a notification callback.
@@ -37,8 +38,8 @@ typedef struct {
 	gpointer pUserData;
 	} CairoDockNotificationRecord;
 
-/// The list of all notifications.
-typedef enum {
+// The list of all notifications.
+/*typedef enum {
 	/// notification called when use clicks on an icon data : {Icon, CairoDock, int}
 	CAIRO_DOCK_CLICK_ICON=0,
 	/// notification called when the user double-clicks on an icon. data : {Icon, CairoDock}
@@ -148,6 +149,9 @@ typedef enum {
 	
 	CAIRO_DOCK_NB_NOTIFICATIONS
 	} CairoDockNotificationType;
+*/
+
+typedef guint CairoDockNotificationType;
 
 /// prototype of the callback to the CAIRO_DOCK_CLICK_ICON notification.
 typedef gboolean (* CairoDockClickIconFunc) (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, int iState);
@@ -219,22 +223,22 @@ typedef gboolean (* CairoDockLeaveContainerFunc) (gpointer pUserData, CairoConta
 #define CAIRO_DOCK_LET_PASS_NOTIFICATION FALSE
 
 
-GSList *cairo_dock_get_notifications_list (CairoDockNotificationType iNotifType);
+//GSList *cairo_dock_get_notifications_list (CairoDockNotificationType iNotifType);
 
-/** Register an action to be called when a given notification is broadcasted.
+/* Register an action to be called when a given notification is broadcasted.
 *@param iNotifType type of the notification.
 *@param pFunction callback.
 *@param bRunFirst CAIRO_DOCK_RUN_FIRST to be called before Cairo-Dock, CAIRO_DOCK_RUN_AFTER to be called after.
 *@param pUserData data to be passed as the first parameter of the callback.
 */
-void cairo_dock_register_notification (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
+//void cairo_dock_register_notification (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
 
-/** Remove a callback from the list of callbacks for a given notification and a given data.
+/* Remove a callback from the list of callbacks for a given notification and a given data.
 *@param iNotifType type of the notification.
 *@param pFunction callback.
 *@param pUserData data that was registerd with the callback.
 */
-void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
+//void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
 
 
 #define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
@@ -248,41 +252,41 @@ void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, 
 			pElement = pNextElement; } }\
 	} while (0)
 
-/** Broadcast a notification.
+/* Broadcast a notification.
 *@param iNotifType type of the notification.
 *@param ... parameters to be passed to the callbacks that has registerd to this notification.
 */
-#define cairo_dock_notify(iNotifType, ...) do {\
+/*#define cairo_dock_notify(iNotifType, ...) do {\
 	gboolean bStop = FALSE;\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
 	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
-	} while (0)
+	} while (0)*/
 
-/** Broadcast a notification from a given icon.
+/* Broadcast a notification from a given icon.
 *@param pIcon the icon.
 *@param iNotifType type of the notification.
 *@param ... parameters to be passed to the callbacks that has registerd to this notification.
 */
-#define cairo_dock_notify_on_icon(pIcon, iNotifType, ...) do {\
+/*#define cairo_dock_notify_on_icon(pIcon, iNotifType, ...) do {\
 	gboolean bStop = FALSE;\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
 	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
 	if (! bStop && pIcon) {\
 		cairo_dock_notify_on_object (pIcon, iNotifType, ##__VA_ARGS__); }\
-	} while (0)
+	} while (0)*/
 
-/** Broadcast a notification from a given container.
+/* Broadcast a notification from a given container.
 *@param pContainer the container.
 *@param iNotifType type of the notification.
 *@param ... parameters to be passed to the callbacks that has registerd to this notification.
 */
-#define cairo_dock_notify_on_container(pContainer, iNotifType, ...) do {\
+/*#define cairo_dock_notify_on_container(pContainer, iNotifType, ...) do {\
 	gboolean bStop = FALSE;\
 	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
 	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
 	if (! bStop && pContainer) {\
 		cairo_dock_notify_on_object (pContainer, iNotifType, ##__VA_ARGS__); }\
-	} while (0)
+	} while (0)*/
 
 
 void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab);

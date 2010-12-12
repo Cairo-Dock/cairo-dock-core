@@ -27,7 +27,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-surface-factory.h"
 

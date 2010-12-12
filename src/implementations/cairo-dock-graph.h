@@ -24,8 +24,8 @@
 #include <gtk/gtk.h>
 G_BEGIN_DECLS
 
-//#include "cairo-dock-struct.h"
-//#include "cairo-dock-data-renderer.h"
+#include "cairo-dock-struct.h"
+#include "cairo-dock-data-renderer-manager.h"
 
 /**
 *@file cairo-dock-graph.h This class defines the Graph, which derives from the DataRenderer.

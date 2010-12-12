@@ -37,7 +37,7 @@ struct _CairoDockClassAppli {
 	gboolean bUseXIcon;
 	/// TRUE if the appli doesn't group togather with its class.
 	gboolean bExpand;
-	/// List of the inhibators of the class.
+	/// List of the inhibitors of the class.
 	GList *pIconsOfClass;
 	/// List of the appli icons of this class.
 	GList *pAppliOfClass;
@@ -52,7 +52,7 @@ void cairo_dock_initialize_class_manager (void);
 * Libere une classe d'appli, en enlevant au passage tous les indicateurs des inhibiteurs de cette classe.
 * @param pClassAppli la classe d'appli.
 */
-void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli);
+//void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli);
 /*
 * Fournit la liste de toutes les applis connues du dock appartenant a cette classe.
 * @param cClass la classe.
@@ -65,7 +65,7 @@ const GList *cairo_dock_list_existing_appli_with_class (const gchar *cClass);
 * @param pIcon l'inhibiteur.
 * @return TRUE si l'enregistrement s'est effectue correctement ou si l'icone etait deja enregistree, FALSE sinon.
 */
-gboolean cairo_dock_add_inhibator_to_class (const gchar *cClass, Icon *pIcon);
+//gboolean cairo_dock_add_inhibitor_to_class (const gchar *cClass, Icon *pIcon);
 /*
 * Enregistre une icone d'appli dans sa classe. Ne fais rien aux inhibiteurs.
 * @param pIcon l'icone de l'appli.
@@ -88,17 +88,17 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 /*
 * Ajoute un inhibiteur a une classe, et lui fait prendre immediatement le controle de la 1ere appli de cette classe trouvee, la detachant du dock. Rajoute l'indicateur si necessaire, et redessine le dock d'ou l'appli a ete enlevee, mais ne redessine pas l'icone inhibitrice.
 * @param cClass la classe.
-* @param pInhibatorIcon l'inhibiteur.
+* @param pInhibitorIcon l'inhibiteur.
 * @return TRUE si l'inhibiteur a bien ete rajoute a la classe.
 */
-gboolean cairo_dock_inhibate_class (const gchar *cClass, Icon *pInhibatorIcon);
+gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon);
 
 /*
 * Dis si une classe donnee est inhibee par un inhibiteur, libre ou non.
 * @param cClass la classe.
 * @return TRUE ssi les applis de cette classe sont inhibees.
 */
-gboolean cairo_dock_class_is_inhibated (const gchar *cClass);
+gboolean cairo_dock_class_is_inhibited (const gchar *cClass);
 /*
 * Dis si une classe donnee utilise les icones fournies par X.
 * @param cClass la classe.
@@ -117,26 +117,26 @@ gboolean cairo_dock_class_is_expanded (const gchar *cClass);
 * @param pIcon l'icone d'appli.
 * @return TRUE si l'appli a ete inhibee.
 */
-gboolean cairo_dock_prevent_inhibated_class (Icon *pIcon);
+gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon);
 
 /*
 * Enleve un inhibiteur de la classe donnee.
-* @param pInhibatorIcon l'icone inhibitrice.
+* @param pInhibitorIcon l'icone inhibitrice.
 * @return TRUE ssi la classe est encore inhibee après l'enlèvement, FALSE sinon.
 */
-gboolean cairo_dock_remove_icon_from_class (Icon *pInhibatorIcon);
+//gboolean cairo_dock_remove_icon_from_class (Icon *pInhibitorIcon);
 /*
 * Empeche une icone d'inhiber sa classe; l'icone est enlevee de sa classe, son controle sur une appli est desactive, sa classe remise a 0, et l'appli controlee est inseree dans le dock.
 * @param cClass la classe.
-* @param pInhibatorIcon l'icone inhibitrice.
+* @param pInhibitorIcon l'icone inhibitrice.
 */
-void cairo_dock_deinhibate_class (const gchar *cClass, Icon *pInhibatorIcon);
+void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon);
 /*
 * Met a jour les inhibiteurs controlant une appli donnee pour leur en faire controler une autre.
 * @param Xid l'ID de l'appli.
 * @param cClass sa classe.
 */
-void cairo_dock_update_Xid_on_inhibators (Window Xid, const gchar *cClass);
+void cairo_dock_update_Xid_on_inhibitors (Window Xid, const gchar *cClass);
 /*
 * Enleve toutes les applis de toutes les classes, et met a jour les inhibiteurs.
 */
@@ -147,7 +147,7 @@ void cairo_dock_remove_all_applis_from_class_table (void);
 void cairo_dock_reset_class_table (void);
 
 
-cairo_surface_t *cairo_dock_duplicate_inhibator_surface_for_appli (Icon *pInhibatorIcon, int iWidth, int ifHeight);
+cairo_surface_t *cairo_dock_duplicate_inhibitor_surface_for_appli (Icon *pInhibitorIcon, int iWidth, int ifHeight);
 /*
 * Cree la surface d'une appli en utilisant le lanceur correspondant, si la classe n'utilise pas les icones X.
 * @param cClass la classe.
@@ -165,21 +165,21 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 * @param Xid l'ID de l'appli.
 * @param bIsHidden TRUE ssi a fenetre vient de se cacher.
 */
-void cairo_dock_update_visibility_on_inhibators (const gchar *cClass, Window Xid, gboolean bIsHidden);
+void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, Window Xid, gboolean bIsHidden);
 /*
 * Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir a la prise d'activite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches.
 * @param cClass la classe.
 * @param Xid l'ID de l'appli.
 */
-void cairo_dock_update_activity_on_inhibators (const gchar *cClass, Window Xid);
+void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, Window Xid);
 /*
 * Met a jour les inhibiteurs controlant une appli donnee pour les redessiner en mode normal lors de la perte d'activite de la fenetre.
 * @param cClass la classe.
 * @param Xid l'ID de l'appli.
 */
-void cairo_dock_update_inactivity_on_inhibators (const gchar *cClass, Window Xid);
+void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, Window Xid);
 
-void cairo_dock_update_name_on_inhibators (const gchar *cClass, Window Xid, gchar *cNewName);
+void cairo_dock_update_name_on_inhibitors (const gchar *cClass, Window Xid, gchar *cNewName);
 
 Icon *cairo_dock_get_classmate (Icon *pIcon);
 
@@ -193,7 +193,7 @@ void cairo_dock_set_group_exceptions (const gchar *cExceptions);
 
 Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext);
 
-Icon *cairo_dock_get_inhibator (Icon *pIcon, gboolean bOnlyInDock);
+Icon *cairo_dock_get_inhibitor (Icon *pIcon, gboolean bOnlyInDock);
 
 
 void cairo_dock_reorder_classes (void);

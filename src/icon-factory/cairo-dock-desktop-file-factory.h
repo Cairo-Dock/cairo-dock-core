@@ -23,7 +23,7 @@
 
 #include <glib.h>
 
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 G_BEGIN_DECLS
 
 /**
@@ -50,7 +50,7 @@ void cairo_dock_remove_html_spaces (gchar *cString);
 *@param iGroup group of the icon.
 *@param erreur an error filled if something went wrong.
 */
-gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconType iGroup, GError **erreur);
+gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur);
 
 /** Create and add an empty default desktop file for a given type.
 *@param iLauncherType type of the icon it will represent : launcher, file, container icon, separator.
@@ -59,7 +59,7 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 *@param iGroup group of the icon.
 *@param erreur an error filled if something went wrong.
 */
-gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconType iGroup, GError **erreur);
+gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur);
 
 
 void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockDesktopFileType iLauncherType);

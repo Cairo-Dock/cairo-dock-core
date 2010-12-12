@@ -17,12 +17,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DIALOG_MANAGER__
 #define  __CAIRO_DIALOG_MANAGER__
 
+#include "cairo-dock-struct.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-dialog-factory.h"
+#include "cairo-dock-dialog-factory.h"  // CairoDockActionOnAnswerFunc
 G_BEGIN_DECLS
 
 /** @file cairo-dock-dialog-manager.h This class manages the Dialogs, that are useful to bring interaction with the user.
@@ -40,18 +40,29 @@ G_BEGIN_DECLS
 * - if you want to pop up only 1 dialog at once on a given icon, use \ref cairo_dock_remove_dialog_if_any before you pop up your dialog.
 */
 
-typedef enum {
-	/// notification called when a Dialog is updated in the fast rendering loop.
-	NOTIFICATION_UPDATE_DIALOG,
-	/// notification called when a Dialog is updated in the slow rendering loop.
-	NOTIFICATION_UPDATE_DIALOG_SLOW,
-	/// notification called when a Dialog is rendered.
-	NOTIFICATION_RENDER_DIALOG,
-	NB_NOTIFICATIONS_DIALOG
-	} CairoDialogNotifications;
-	
-struct _CairoDialogManager {
-	CairoDockManager mgr;
+typedef struct _CairoDialogsParam CairoDialogsParam;
+typedef struct _CairoDialogsManager CairoDialogsManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoDialogsParam myDialogsParam;
+extern CairoDialogsManager myDialogsMgr;
+#endif
+
+// params
+struct _CairoDialogsParam {
+	gchar *cButtonOkImage;
+	gchar *cButtonCancelImage;
+	gint iDialogButtonWidth;
+	gint iDialogButtonHeight;
+	gint iDialogIconSize;
+	CairoDockLabelDescription dialogTextDescription;
+	gchar *cDecoratorName;
+	gdouble fDialogColor[4];
+	} ;
+
+// manager
+struct _CairoDialogsManager {
+	GldiManager mgr;
 	CairoDialog* (*build_dialog) (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer);
 	void (*unreference) (CairoDialog *pDialog);
 	void (*reference) (CairoDialog *pDialog);  // autant la mettre aussi si on met unref
@@ -60,9 +71,20 @@ struct _CairoDialogManager {
 	void (*trigger_replace_all) (void);
 	gboolean (*icon_has_dialog) (Icon *pIcon);
 	gboolean (*remove_dialog_if_any_full) (Icon *icon, gboolean bAll);
-} ;
+	} ;
 
-void cairo_dock_init_dialog_manager (void);
+// signals
+typedef enum {
+	/// notification called when a Dialog is updated in the fast rendering loop.
+	NOTIFICATION_UPDATE_DIALOG = NB_NOTIFICATIONS_CONTAINER,
+	/// notification called when a Dialog is updated in the slow rendering loop.
+	NOTIFICATION_UPDATE_DIALOG_SLOW,
+	/// notification called when a Dialog is rendered.
+	NOTIFICATION_RENDER_DIALOG,
+	NB_NOTIFICATIONS_DIALOG
+	} CairoDialogNotifications;
+	
+
 void cairo_dock_load_dialog_buttons (gchar *cButtonOkImage, gchar *cButtonCancelImage);
 void cairo_dock_unload_dialog_buttons (void);
 
@@ -282,6 +304,8 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog);
 */
 void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog);
 
+
+void gldi_register_dialogs_manager (void);
 
 G_END_DECLS
 #endif

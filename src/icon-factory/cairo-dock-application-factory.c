@@ -27,7 +27,8 @@
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
 
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
@@ -54,10 +55,9 @@ static Atom s_aNetWmMaximizedVert;
 static Atom s_aNetWmDemandsAttention;
 
 
-void cairo_dock_initialize_application_factory (Display *pXDisplay)
+static void _cairo_dock_initialize_application_factory (void)
 {
-	s_XDisplay = pXDisplay;
-	g_return_if_fail (s_XDisplay != NULL);
+	s_XDisplay = cairo_dock_get_Xdisplay ();
 
 	s_aNetWmIcon = XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
 
@@ -91,9 +91,39 @@ static Window _cairo_dock_get_parent_window (Window Xid)
 		XFree (pXBuffer);
 	return xParentWindow;
 }
+
+static gchar *_cairo_dock_get_appli_command (Window Xid)
+{
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements = 0;
+	gulong *pPidBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, XInternAtom (s_XDisplay, "_NET_WM_PID", False), 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pPidBuffer);
+	
+	gchar *cCommand = NULL;
+	if (iBufferNbElements > 0)
+	{
+		guint iPid = *pPidBuffer;
+		gchar *cFilePath = g_strdup_printf ("/proc/%d/cmdline", iPid);  // utiliser /proc/%d/stat pour avoir le nom de fichier de l'executable
+		gsize length = 0;
+		gchar *cContent = NULL;
+		g_file_get_contents (cFilePath,
+			&cCommand,  // contient des '\0' entre les arguments.
+			&length,
+			NULL);
+		g_free (cFilePath);
+	}
+	if (pPidBuffer != NULL)
+		XFree (pPidBuffer);
+	return cCommand;
+}
+
 Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 {
 	//g_print ("%s (%d)\n", __func__, Xid);
+	if (s_XDisplay == NULL)
+		_cairo_dock_initialize_application_factory ();
+	
 	guchar *pNameBuffer = NULL;
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
@@ -238,7 +268,7 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	//\__________________ On cree l'icone.
 	Icon *icon = cairo_dock_new_icon ();
 	icon->iTrueType = CAIRO_DOCK_ICON_TYPE_APPLI;
-	icon->iType = CAIRO_DOCK_APPLI;
+	icon->iGroup = CAIRO_DOCK_APPLI;
 	icon->Xid = Xid;
 	
 	//\__________________ On renseigne les infos en provenance de X.

@@ -185,12 +185,8 @@ struct _CairoDockGroupKeyWidget {
 	GtkWidget *pKeyBox;
 	};
 
-void cairo_dock_build_renderer_list_for_gui (GHashTable *pHashTable);
-void cairo_dock_build_desklet_decorations_list_for_gui (GHashTable *pHashTable);
-void cairo_dock_build_desklet_decorations_list_for_applet_gui (GHashTable *pHashTable);
-void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable);
-void cairo_dock_build_dialog_decorator_list_for_gui (GHashTable *pHashTable);
 
+GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidget, gboolean bHorizontalPackaging, int iAddInfoBar, const gchar *cInitialDescription, const gchar *cInitialImage, GPtrArray *pDataGarbage);
 
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data);  // exportee pour pouvoir desactiver la callback.
 

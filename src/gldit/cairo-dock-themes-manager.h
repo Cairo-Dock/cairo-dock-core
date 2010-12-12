@@ -76,10 +76,6 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
  */
 CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data);
 
-/** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.
-*/
-void cairo_dock_load_current_theme (void);
-
 
 void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath, gchar *cThemeServerAdress);
 

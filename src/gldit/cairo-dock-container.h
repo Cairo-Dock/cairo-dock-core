@@ -23,6 +23,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-manager.h"
 G_BEGIN_DECLS
 
 
@@ -36,21 +37,45 @@ G_BEGIN_DECLS
 * If you write a new type of container, you must call \ref cairo_dock_init_container when you create it and \ref cairo_dock_finish_container when you destroy it.
 */
 
+typedef struct _CairoContainersParam CairoContainersParam;
+typedef struct _CairoContainersManager CairoContainersManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoContainersParam myContainersParam;
+extern CairoContainersManager myContainersMgr;
+#endif
+
 #define CD_DOUBLE_CLICK_DELAY 250  // ms
 
+
+// params
+struct _CairoContainersParam{
+	gboolean bUseFakeTransparency;
+	gint iGLAnimationDeltaT;
+	gint iCairoAnimationDeltaT;
+	};
+
+// manager
+struct _CairoContainersManager {
+	GldiManager mgr;
+	} ;
+
+// signals
 typedef enum {
 	/// notification called when the menu is being built on a container. data : {Icon, CairoContainer, GtkMenu, gboolean*}
 	NOTIFICATION_BUILD_CONTAINER_MENU,
 	/// notification called when the menu is being built on an icon (possibly NULL). data : {Icon, CairoContainer, GtkMenu}
 	NOTIFICATION_BUILD_ICON_MENU,
 	/// notification called when use clicks on an icon data : {Icon, CairoDock, int}
-	NOTIFICATION_CLICK_ICON=0,
+	NOTIFICATION_CLICK_ICON,
 	/// notification called when the user double-clicks on an icon. data : {Icon, CairoDock}
 	NOTIFICATION_DOUBLE_CLICK_ICON,
 	/// notification called when the user middle-clicks on an icon. data : {Icon, CairoDock}
 	NOTIFICATION_MIDDLE_CLICK_ICON,
 	/// notification called when the user scrolls on an icon. data : {Icon, CairoDock, int}
 	NOTIFICATION_SCROLL_ICON,
+	/// notification called when the mouse enters an icon. data : {Icon, CairoDock, gboolean*}
+	NOTIFICATION_ENTER_ICON,
 	/// notification called when the mouse enters a dock while dragging an object.
 	NOTIFICATION_START_DRAG_DATA,
 	/// notification called when something is dropped inside a container. data : {gchar*, Icon, double*, CairoDock}
@@ -59,14 +84,17 @@ typedef enum {
 	NOTIFICATION_MOUSE_MOVED,
 	/// notification called when a key is pressed in a container that has the focus.
 	NOTIFICATION_KEY_PRESSED,
+	/// notification called for the fast rendering loop on a default container.
+	NOTIFICATION_UPDATE_DEFAULT_CONTAINER,
+	/// notification called for the slow rendering loop on a default container.
+	NOTIFICATION_UPDATE_DEFAULT_CONTAINER_SLOW,
+	/// notification called when a default container is rendered.
+	NOTIFICATION_RENDER_DEFAULT_CONTAINER,
 	NB_NOTIFICATIONS_CONTAINER
 	} CairoContainerNotifications;
 
-struct _CairoDockContainerManager {
-	CairoDockManager mgr;
-	} ;
 
-
+// factory
 /// Main orientation of a container.
 typedef enum {
 	CAIRO_DOCK_VERTICAL = 0,
@@ -222,7 +250,7 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 * @param pContainer the container.
 * @return the maximum scale factor.
 */
-#define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIcons.fAmplitude) : 1)
+#define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIconsParam.fAmplitude) : 1)
 
 
 gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const gchar *cSignal);
@@ -258,6 +286,8 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 */
 GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
 
+
+void gldi_register_containers_manager (void);
 
 G_END_DECLS
 #endif

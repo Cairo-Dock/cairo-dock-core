@@ -30,10 +30,10 @@
 #include <GL/glu.h>
 
 #include "cairo-dock-log.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-load.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-system.h"
+#include "cairo-dock-desklet-factory.h"  // cairo_dock_begin_draw_icon
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-opengl.h"
@@ -124,11 +124,10 @@ static inline XVisualInfo *_get_visual_from_fbconfigs (GLXFBConfig *pFBConfigs, 
 	return pVisInfo;
 }
 
-gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering, gboolean bForceOpenGL)  // taken from a MacSlow's exemple.
+gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL)  // taken from a MacSlow's exemple.
 {
 	memset (&g_openglConfig, 0, sizeof (CairoDockGLConfig));
 	g_bUseOpenGL = FALSE;
-	g_openglConfig.bHasBeenForced = bForceOpenGL;
 	gboolean bStencilBufferAvailable, bAlphaAvailable;
 	Display *XDisplay = gdk_x11_get_default_xdisplay ();
 	
@@ -265,7 +264,6 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 	g_bUseOpenGL = TRUE;
 	
 	//\_________________ On regarde si le rendu doit etre indirect ou pas.
-	g_openglConfig.bIndirectRendering = bToggleIndirectRendering;
 	/**if (glXQueryVersion(XDisplay, &g_openglConfig.iGlxMajor, &g_openglConfig.iGlxMinor) == False)
 	{
 		cd_warning ("GLX not available !\nFear the worst !");
@@ -304,6 +302,12 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering
 }
 
 
+void cairo_dock_force_indirect_rendering (void)
+{
+	if (g_bUseOpenGL)
+		g_openglConfig.bIndirectRendering = TRUE;
+}
+
 
 void cairo_dock_create_icon_fbo (void)  // it has been found that you get a speed boost if your textures is the same size and you use 1 FBO for them. => c'est le cas general dans le dock. Du coup on est gagnant a ne faire qu'un seul FBO pour toutes les icones.
 {
@@ -315,17 +319,17 @@ void cairo_dock_create_icon_fbo (void)  // it has been found that you get a spee
 	
 	int iWidth = 0, iHeight = 0;
 	int i;
-	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i += 2)
+	for (i = 0; i < CAIRO_DOCK_NB_GROUPS; i += 2)
 	{
-		iWidth = MAX (iWidth, myIcons.tIconAuthorizedWidth[i]);
-		iHeight = MAX (iHeight, myIcons.tIconAuthorizedHeight[i]);
+		iWidth = MAX (iWidth, myIconsParam.tIconAuthorizedWidth[i]);
+		iHeight = MAX (iHeight, myIconsParam.tIconAuthorizedHeight[i]);
 	}
 	if (iWidth == 0)
 		iWidth = 48;
 	if (iHeight == 0)
 		iHeight = 48;
-	iWidth *= (1 + myIcons.fAmplitude);
-	iHeight *= (1 + myIcons.fAmplitude);
+	iWidth *= (1 + myIconsParam.fAmplitude);
+	iHeight *= (1 + myIconsParam.fAmplitude);
 	g_openglConfig.iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL, iWidth, iHeight);
 }
 
@@ -395,17 +399,17 @@ void cairo_dock_create_icon_pbuffer (void)
 		return ;
 	int iWidth = 0, iHeight = 0;
 	int i;
-	for (i = 0; i < CAIRO_DOCK_NB_TYPES; i += 2)
+	for (i = 0; i < CAIRO_DOCK_NB_GROUPS; i += 2)
 	{
-		iWidth = MAX (iWidth, myIcons.tIconAuthorizedWidth[i]);
-		iHeight = MAX (iHeight, myIcons.tIconAuthorizedHeight[i]);
+		iWidth = MAX (iWidth, myIconsParam.tIconAuthorizedWidth[i]);
+		iHeight = MAX (iHeight, myIconsParam.tIconAuthorizedHeight[i]);
 	}
 	if (iWidth == 0)
 		iWidth = 48;
 	if (iHeight == 0)
 		iHeight = 48;
-	iWidth *= (1 + myIcons.fAmplitude);
-	iHeight *= (1 + myIcons.fAmplitude);
+	iWidth *= (1 + myIconsParam.fAmplitude);
+	iHeight *= (1 + myIconsParam.fAmplitude);
 	
 	cd_debug ("%s (%dx%d)", __func__, iWidth, iHeight);
 	if (g_openglConfig.iIconPbufferWidth != iWidth || g_openglConfig.iIconPbufferHeight != iHeight)
@@ -696,7 +700,7 @@ void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer
 
 void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer)
 {
-	if (! mySystem.bUseFakeTransparency || ! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
+	if (! myContainersParam.bUseFakeTransparency || ! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
 	
 	glPushMatrix ();

@@ -23,6 +23,7 @@
 
 #include <gtk/gtk.h>
 #include "cairo-dock-struct.h"
+#include "cairo-dock-manager.h"
 G_BEGIN_DECLS
 
 /** @file cairo-dock-gui-manager.h This class manages the config panels of Cairo-Dock.
@@ -33,6 +34,40 @@ G_BEGIN_DECLS
 * It also provides a useful function to easily build a window from a conf file : \ref cairo_dock_build_generic_gui
 * 
 */
+
+typedef struct _CairoGuiManager CairoGuiManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoGuiManager myGuiMgr;
+#endif
+
+// manager
+
+/// Definition of the callback called when the user apply the config panel.
+typedef gboolean (* CairoDockApplyConfigFunc) (gpointer data);
+typedef void (* CairoDockLoadCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile);
+typedef void (* CairoDockSaveCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile);
+
+struct _CairoGuiManager {
+	GldiManager mgr;
+	CairoDockGroupKeyWidget* (*get_group_key_widget_from_name) (const gchar *cGroupName, const gchar *cKeyName);
+	
+	GtkWidget* (*build_generic_gui_window) (const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);
+	GtkWidget* (*build_generic_gui_full) (const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, CairoDockLoadCustomWidgetFunc load_custom_widgets, CairoDockSaveCustomWidgetFunc save_custom_widgets);
+	void (*reload_generic_gui) (GtkWidget *pWindow);
+	} ;
+
+// signals
+typedef enum {
+	NOTIFICATION_SHOW_MODULE_INSTANCE_GUI,
+	NOTIFICATION_RELOAD_MODULE_INSTANCE_GUI,
+	NOTIFICATION_STATUS_MESSAGE,
+	NOTIFICATION_REFRESH_LAUNCHER_GUI,
+	NOTIFICATION_DESKLET_SIZE_CHANGED,
+	NOTIFICATION_DESKLET_POSITION_CHANGED,
+	NB_NOTIFICATIONS_GUI
+	} CairoGuiNotifications;
+
 
 /// Definition of the GUI interface.
 struct _CairoDockGuiBackend {
@@ -55,10 +90,7 @@ struct _CairoDockGuiBackend {
 	} ;
 typedef struct _CairoDockGuiBackend CairoDockGuiBackend;
 
-/// Definition of the callback called when the user apply the config panel.
-typedef gboolean (* CairoDockApplyConfigFunc) (gpointer data);
-typedef void (* CairoDockLoadCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile);
-typedef void (* CairoDockSaveCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile);
+#define CAIRO_DOCK_FRAME_MARGIN 6
 
 
 /**Retrieve the group-key widget in the current config panel, corresponding to the (group,key) pair in its conf file.
@@ -158,7 +190,7 @@ void cairo_dock_reload_generic_gui (GtkWidget *pWindow);
 /// Definition of the launcher GUI interface.
 struct _CairoDockLauncherGuiBackend {
 	/// Show the config panel on a given icon/container, build or reload it if necessary.
-	GtkWidget * (*show_gui) (Icon *pIcon, CairoContainer *pContainer, int iShowPage);
+	GtkWidget * (*show_gui) (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage);
 	/// reload the gui and its content, for the case a launcher has changed (image, order, new container, etc).
 	void (*refresh_gui) (void);
 	} ;
@@ -173,12 +205,14 @@ void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBac
 @param pIcon the launcher.
 @return the GUI window.
 */
-GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon, CairoContainer *pContainer, int iShowPage);
+GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
 /** Trigger the refresh of the launcher GUI. The refresh well happen when the main loop gets available.
 */
 void cairo_dock_trigger_refresh_launcher_gui (void);
 
+
+void gldi_register_gui_manager (void);
 
 G_END_DECLS
 #endif
