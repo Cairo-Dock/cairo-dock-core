@@ -142,7 +142,12 @@ gboolean cairo_dock_register_module (CairoDockModule *pModule)
 	
 	if (pModule->pVisitCard->cDockVersionOnCompilation == NULL)
 		pModule->pVisitCard->cDockVersionOnCompilation = GLDI_VERSION;
+	
 	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
+	
+	if (cairo_dock_module_is_auto_loaded (pModule))  // c'est un module qui soit ne peut etre activer et/ou desactiver, soit etend un manager; on l'activera donc automatiquement.
+		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
+	
 	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, TRUE);
 	return TRUE;
 }
@@ -162,23 +167,23 @@ CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath, GError **err
 	g_return_val_if_fail (cSoFilePath != NULL, NULL);
 	
 	GError *tmp_erreur = NULL;
-	CairoDockModule *pCairoDockModule = cairo_dock_new_module (cSoFilePath, &tmp_erreur);
+	CairoDockModule *pModule = cairo_dock_new_module (cSoFilePath, &tmp_erreur);
 	if (tmp_erreur != NULL)
 	{
 		g_propagate_error (erreur, tmp_erreur);
-		g_free (pCairoDockModule->cSoFilePath);
-		g_free (pCairoDockModule);
 		return NULL;
 	}
+	if (pModule == NULL)
+		return NULL;
 	
-	if (cairo_dock_module_is_auto_loaded (pCairoDockModule))  // c'est un module qui soit ne peut etre activer et/ou desactiver, soit etend un manager; on l'activera donc automatiquement.
-		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pCairoDockModule);
+	if (pModule->pVisitCard != NULL)
+		g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
 	
-	if (pCairoDockModule->pVisitCard != NULL)
-		g_hash_table_insert (s_hModuleTable, (gpointer)pCairoDockModule->pVisitCard->cModuleName, pCairoDockModule);
+	if (cairo_dock_module_is_auto_loaded (pModule))  // c'est un module qui soit ne peut etre activer et/ou desactiver, soit etend un manager; on l'activera donc automatiquement.
+		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
 	
-	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_REGISTERED, pCairoDockModule->pVisitCard->cModuleName, TRUE);
-	return pCairoDockModule;
+	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, TRUE);
+	return pModule;
 }
 
 void cairo_dock_load_modules_in_directory (const gchar *cModuleDirPath, GError **erreur)
@@ -305,7 +310,7 @@ void cairo_dock_activate_module_and_load (const gchar *cModuleName)
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 	g_return_if_fail (pModule != NULL);
 	
-	pModule->fLastLoadingTime = 0;
+	///pModule->fLastLoadingTime = 0;
 	if (pModule->pInstancesList == NULL)
 	{
 		GError *erreur = NULL;
@@ -507,7 +512,7 @@ void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance)
 			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_NORMAL,
 			G_TYPE_INVALID);
 		//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
-		cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_DETACHED, pInstance, !bIsDetached);
+		cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_INSTANCE_DETACHED, pInstance, !bIsDetached);
 		///cairo_dock_update_desklet_detached_state_in_gui (pInstance, !bIsDetached);
 		//\__________________ On detache l'applet.
 		cairo_dock_reload_module_instance (pInstance, TRUE);
@@ -547,7 +552,7 @@ void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pIn
 	//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
 	///cairo_dock_update_desklet_position_in_gui (pInstance, iDeskletPositionX, iDeskletPositionY);
 	///cairo_dock_update_desklet_detached_state_in_gui (pInstance, TRUE);
-	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_DETACHED, pInstance, TRUE);  // inutile de notifier du changement de taille, le configure-event du desklet s'en chargera.
+	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_INSTANCE_DETACHED, pInstance, TRUE);  // inutile de notifier du changement de taille, le configure-event du desklet s'en chargera.
 	
 	//\__________________ On detache l'applet.
 	cairo_dock_reload_module_instance (pInstance, TRUE);

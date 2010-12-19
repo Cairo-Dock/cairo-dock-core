@@ -1185,19 +1185,17 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 			break ;
 
 			case GDK_2BUTTON_PRESS :
+				if (icon && ! cairo_dock_icon_is_being_removed (icon))
 				{
-					if (icon && ! cairo_dock_icon_is_being_removed (icon))
+					if (icon->iSidDoubleClickDelay != 0)
 					{
-						if (icon->iSidDoubleClickDelay != 0)
-						{
-							g_source_remove (icon->iSidDoubleClickDelay);
-							icon->iSidDoubleClickDelay = 0;
-						}
-						cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, icon, pDock);
-						cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_DOUBLE_CLICK_ICON, icon, pDock);
-						if (icon->iNbDoubleClickListeners > 0)
-							pDock->container.bIgnoreNextReleaseEvent = TRUE;
+						g_source_remove (icon->iSidDoubleClickDelay);
+						icon->iSidDoubleClickDelay = 0;
 					}
+					cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, icon, pDock);
+					cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_DOUBLE_CLICK_ICON, icon, pDock);
+					if (icon->iNbDoubleClickListeners > 0)
+						pDock->container.bIgnoreNextReleaseEvent = TRUE;
 				}
 			break ;
 

@@ -95,6 +95,7 @@ gboolean cd_keybinder_is_modifier (guint keycode);
 
 /** Trigger the given shortcut. It will be as if the user effectively pressed the shortcut on its keyboard. It uses the 'XTest' X extension.
  * @param cKeyString a shortcut.
+ * @return TRUE if success.
 */
 gboolean cairo_dock_simulate_key_sequence (gchar *cKeyString);
 

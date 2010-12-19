@@ -45,6 +45,7 @@
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-switch.h"
 #include "cairo-dock-gui-commons.h"
+#include "cairo-dock-gui-items.h"  // cairo_dock_gui_items_get_widget_from_name et cairo_dock_gui_items_update_desklet_params
 #include "cairo-dock-gui-simple.h"
 
 #define CAIRO_DOCK_PREVIEW_WIDTH 200
@@ -61,7 +62,6 @@
 #define CAIRO_DOCK_THEMES_PAGE 3
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
-static GtkWidget *s_pSimpleConfigModuleWindow = NULL;
 static const  gchar *s_cCurrentModuleName = NULL;
 // GSList *s_pCurrentWidgetList;  // liste des widgets du main panel.
 // GSList *s_pCurrentModuleWidgetList;  // liste des widgets du module courant.
@@ -74,8 +74,6 @@ static gchar *s_cClickAnim = NULL;
 static gchar *s_cClickEffect = NULL;
 static int s_iEffectOnDisappearance = -1;
 static gboolean s_bShowThemePage = FALSE;
-
-extern GtkWidget *s_pLauncherWindow;
 
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
@@ -799,7 +797,7 @@ static void _make_double_anim_widget (GtkWidget *pSimpleConfigWindow, GKeyFile *
 	}
 	g_strfreev (cValues);
 }
-static void _make_theme_manager_widget (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
+static void _make_theme_manager_widget (GtkWidget *pSimpleConfigWindow)
 {
 	//\_____________ On recupere notre emplacement perso dans la fenetre.
 	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, "Themes", "notebook");
@@ -836,6 +834,30 @@ static void _make_theme_manager_widget (GtkWidget *pSimpleConfigWindow, GKeyFile
 	//\_____________ On charge les widgets perso de ce fichier.
 	cairo_dock_make_tree_view_for_delete_themes (pSimpleConfigWindow);
 }
+static void _make_modules_widget (GtkWidget *pSimpleConfigWindow)
+{
+	//\_____________ On recupere notre emplacement perso dans la fenetre.
+	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, "Add-ons", "modules");
+	g_return_if_fail (myWidget != NULL);
+	
+	//\_____________ On construit le tree-view.
+	GtkWidget *pOneWidget = cairo_dock_build_modules_treeview ();
+	
+	//\_____________ On l'ajoute a la fenetre.
+	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+	gtk_widget_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
+	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.
+	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow, FALSE, FALSE, 0);
+	
+	//\______________ On construit le widget de prevue et on le rajoute a la suite.
+	gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
+	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pSimpleConfigWindow), "garbage");
+	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (pSimpleConfigWindow, pOneWidget, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
+	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pPreviewBox, FALSE, FALSE, 0);
+	g_free (cDefaultMessage);
+}
 static void _make_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
 {
 	//\_____________ On ajoute le widget des animations au survol.
@@ -843,7 +865,9 @@ static void _make_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
 	//\_____________ On ajoute le widget des animations au clic.
 	_make_double_anim_widget (pSimpleConfigWindow, pKeyFile, "Behavior", "anim_click", _("On click:"));
 	//\_____________ On ajoute le widget du theme-manager.
-	_make_theme_manager_widget (pSimpleConfigWindow, pKeyFile);
+	_make_theme_manager_widget (pSimpleConfigWindow);
+	//\_____________ On ajoute le widget des modules.
+	_make_modules_widget (pSimpleConfigWindow);
 	//\_____________ On montre la page des themes si necessaire.
 	if (s_bShowThemePage)
 	{
@@ -917,130 +941,10 @@ static GtkWidget * show_main_gui (void)
 	return s_pSimpleConfigWindow;
 }
 
-	
-static gboolean on_apply_config_module_simple (gpointer data)
-{
-	cd_debug ("%s (%s)\n", __func__, s_cCurrentModuleName);
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (s_cCurrentModuleName);
-	if (pModule != NULL)
-	{
-		if (pModule->pInstancesList != NULL)
-		{
-			gchar *cConfFilePath = g_object_get_data (G_OBJECT (s_pSimpleConfigModuleWindow), "conf-file");
-			CairoDockModuleInstance *pModuleInstance = NULL;
-			GList *pElement;
-			for (pElement = pModule->pInstancesList; pElement != NULL; pElement= pElement->next)
-			{
-				pModuleInstance = pElement->data;
-				if (strcmp (pModuleInstance->cConfFilePath, cConfFilePath) == 0)
-					break ;
-			}
-			g_return_val_if_fail (pModuleInstance != NULL, TRUE);
-			
-			cairo_dock_reload_module_instance (pModuleInstance, TRUE);
-		}
-	}
-	return TRUE;
-}
-
-static void on_destroy_config_module_simple (gpointer data)
-{
-	s_pSimpleConfigModuleWindow = NULL;
-}
-
-
-static inline GtkWidget * _present_module_widget (GtkWidget *pWindow, CairoDockModuleInstance *pInstance, const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cOriginalConfFilePath)
-{
-	//\_____________ On construit l'IHM du fichier de conf.
-	GKeyFile* pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_val_if_fail (pKeyFile != NULL, NULL);
-	
-	GSList *pWidgetList = NULL;
-	GPtrArray *pDataGarbage = g_ptr_array_new ();
-	GtkWidget *pNoteBook = cairo_dock_build_key_file_widget (pKeyFile, cGettextDomain, pWindow, &pWidgetList, pDataGarbage, cOriginalConfFilePath);
-	
-	g_object_set_data (G_OBJECT (pWindow), "conf-file", g_strdup (cConfFilePath));
-	g_object_set_data (G_OBJECT (pWindow), "widget-list", pWidgetList);
-	g_object_set_data (G_OBJECT (pWindow), "garbage", pDataGarbage);
-	if (pInstance != NULL)
-		g_object_set_data (G_OBJECT (pWindow), "module", (gpointer)pInstance->pModule->pVisitCard->cModuleName);
-	
-	if (pInstance != NULL && pInstance->pModule->pInterface->load_custom_widget != NULL)
-		pInstance->pModule->pInterface->load_custom_widget (pInstance, pKeyFile);
-	
-	g_key_file_free (pKeyFile);
-	
-	//\_____________ On l'insere dans la fenetre.
-	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pWindow));
-	gtk_box_pack_start (GTK_BOX (pMainVBox),
-		pNoteBook,
-		TRUE,
-		TRUE,
-		0);
-	
-	return pNoteBook;
-}
-
-static int _reset_current_module_widget (void)
-{
-	if (s_pSimpleConfigModuleWindow == NULL)
-		return -1;
-	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigModuleWindow));
-	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
-	GtkWidget *pGroupWidget = children->data;
-	g_list_free (children);
-	
-	int iNotebookPage = 0;
-	if (GTK_IS_NOTEBOOK (pGroupWidget))
-		iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (pGroupWidget));
-	
-	gtk_widget_destroy (pGroupWidget);
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pSimpleConfigModuleWindow), "widget-list");
-	cairo_dock_free_generated_widget_list (pWidgetList);
-	g_object_set_data (G_OBJECT (s_pSimpleConfigModuleWindow), "widget-list", NULL);
-	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (s_pSimpleConfigModuleWindow), "garbage");
-	if (pDataGarbage != NULL)
-		g_ptr_array_free (pDataGarbage, TRUE);
-	g_object_set_data (G_OBJECT (s_pSimpleConfigModuleWindow), "garbage", NULL);
-	
-	return iNotebookPage;
-}
 
 static void show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
 {
-	int iNotebookPage = -1;
-	if (s_pSimpleConfigModuleWindow == NULL)
-	{
-		s_pSimpleConfigModuleWindow = cairo_dock_build_generic_gui_window (dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain, pModuleInstance->pModule->pVisitCard->cTitle),
-			CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
-			(CairoDockApplyConfigFunc) on_apply_config_module_simple,
-			NULL,
-			(GFreeFunc) on_destroy_config_module_simple);
-		iNotebookPage = iShowPage;
-	}
-	else
-	{
-		iNotebookPage = _reset_current_module_widget ();
-		if (iShowPage >= 0)
-			iNotebookPage = iShowPage;
-	}
-	
-	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModuleInstance->pModule->pVisitCard->cShareDataDir, pModuleInstance->pModule->pVisitCard->cConfFileName);
-	
-	GtkWidget *pGroupWidget = _present_module_widget (s_pSimpleConfigModuleWindow,
-		pModuleInstance,
-		pModuleInstance->cConfFilePath,
-		pModuleInstance->pModule->pVisitCard->cGettextDomain,
-		cOriginalConfFilePath);
-	
-	g_free (cOriginalConfFilePath);
-	s_cCurrentModuleName = pModuleInstance->pModule->pVisitCard->cModuleName;
-	
-	gtk_widget_show_all (s_pSimpleConfigModuleWindow);
-	if (iNotebookPage != -1 && GTK_IS_NOTEBOOK (pGroupWidget))
-	{
-		gtk_notebook_set_current_page (GTK_NOTEBOOK (pGroupWidget), iNotebookPage);
-	}
+	cairo_dock_show_items_gui (NULL, NULL, pModuleInstance, iShowPage);
 }
 
 static void show_module_gui (const gchar *cModuleName)
@@ -1048,43 +952,86 @@ static void show_module_gui (const gchar *cModuleName)
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 	g_return_if_fail (pModule != NULL);
 	
-	if (s_pSimpleConfigModuleWindow == NULL)
-	{
-		s_pSimpleConfigModuleWindow = cairo_dock_build_generic_gui_window (cModuleName,
-			CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
-			(CairoDockApplyConfigFunc) on_apply_config_module_simple,
-			NULL,
-			(GFreeFunc) on_destroy_config_module_simple);
-	}
-	else
-	{
-		_reset_current_module_widget ();
-	}
-	
 	CairoDockModuleInstance *pModuleInstance = (pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);
-	gchar *cConfFilePath = (pModuleInstance != NULL ? pModuleInstance->cConfFilePath : pModule->cConfFilePath);
-	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
+	if (pModuleInstance == NULL)  // on n'affiche pas la config d'un module non actif, car il faudrait alors gerer une autre fenetre juste pour eux. Donc seul le mode avance peut le faire.
+		return;
 	
-	//\_____________ On insere l'IHM du fichier de conf.
-	_present_module_widget (s_pSimpleConfigModuleWindow,
-		pModuleInstance,
-		cConfFilePath,
-		pModule->pVisitCard->cGettextDomain,
-		cOriginalConfFilePath);
-	
-	gtk_widget_show_all (s_pSimpleConfigModuleWindow);
-	g_free (cOriginalConfFilePath);
-	s_cCurrentModuleName = pModule->pVisitCard->cModuleName;
+	cairo_dock_show_items_gui (NULL, NULL, pModuleInstance, -1);
 }
+
+
+static void close_gui (void)
+{
+	if (s_pSimpleConfigWindow == NULL)
+		return;
+	
+	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
+	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
+	GList *w = g_list_last (children);
+	GtkWidget *pButtonsHBox = w->data;
+	g_list_free (children);
+	
+	children = gtk_container_get_children (GTK_CONTAINER (pButtonsHBox));
+	w = g_list_last (children);
+	GtkWidget *pQuitButton = w->data;
+	g_list_free (children);
+	
+	gboolean bReturn;
+	g_signal_emit_by_name (pQuitButton, "clicked", NULL, &bReturn);
+}
+
+
+static gboolean _update_module_checkbox (GtkTreeModel *pModel, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
+{
+	gchar *cWantedModuleName = data[0];
+	gchar *cModuleName = NULL;
+	gtk_tree_model_get (pModel, iter,
+		CAIRO_DOCK_MODEL_RESULT, &cModuleName, -1);
+	if (cModuleName && strcmp (cModuleName, cWantedModuleName) == 0)
+	{
+		gtk_list_store_set (GTK_LIST_STORE (pModel), iter, CAIRO_DOCK_MODEL_ACTIVE, data[1], -1);
+		g_free (cModuleName);
+		return TRUE;
+	}
+	g_free (cModuleName);
+	return FALSE;
+}
+static void update_module_state (const gchar *cModuleName, gboolean bActive)
+{
+	if (s_pSimpleConfigWindow == NULL)
+		return;
+	g_return_if_fail (cModuleName != NULL);
+	
+	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget (s_pSimpleConfigWindow, "Add-ons", "modules");
+	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	GtkWidget *pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
+	
+	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
+	gpointer data[2] = {(gpointer)cModuleName, GINT_TO_POINTER (bActive)};
+	gtk_tree_model_foreach (GTK_TREE_MODEL (pModel), (GtkTreeModelForeachFunc) _update_module_checkbox, data);
+}
+
+
+static void update_modules_list (void)
+{
+	if (s_pSimpleConfigWindow == NULL)
+		return;
+	
+	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget (s_pSimpleConfigWindow, "Add-ons", "modules");
+	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	
+	GtkWidget *pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
+	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
+	g_return_if_fail (pModel != NULL);
+	gtk_list_store_clear (GTK_LIST_STORE (pModel));
+	cairo_dock_foreach_module ((GHRFunc) cairo_dock_add_module_to_modele, pModel);
+}
+
 
 static void set_status_message_on_gui (const gchar *cMessage)
 {
 	GtkWidget *pStatusBar = NULL;
-	if (s_pSimpleConfigModuleWindow != NULL)
-	{
-		pStatusBar = g_object_get_data (G_OBJECT (s_pSimpleConfigModuleWindow), "status-bar");
-	}
-	else if (s_pSimpleConfigWindow != NULL)
+	if (s_pSimpleConfigWindow != NULL)
 	{
 		pStatusBar = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "status-bar");
 	}
@@ -1094,131 +1041,21 @@ static void set_status_message_on_gui (const gchar *cMessage)
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
 }
 
-static gboolean module_is_opened (CairoDockModuleInstance *pModuleInstance)
-{
-	if (s_pSimpleConfigModuleWindow == NULL || s_cCurrentModuleName == NULL || pModuleInstance == NULL)
-		return FALSE;
-	
-	if (strcmp (s_cCurrentModuleName, pModuleInstance->pModule->pVisitCard->cModuleName) != 0)
-		return FALSE;
-	
-	gchar *cConfFilePath = g_object_get_data (G_OBJECT (s_pSimpleConfigModuleWindow), "conf-file");
-	if (cConfFilePath == NULL)
-		return FALSE;
-	CairoDockModuleInstance *pInstance;
-	GList *pElement;
-	for (pElement = pModuleInstance->pModule->pInstancesList; pElement != NULL; pElement= pElement->next)
-	{
-		pInstance = pElement->data;
-		if (pInstance->cConfFilePath && strcmp (pModuleInstance->cConfFilePath, pInstance->cConfFilePath) == 0)
-			return TRUE;
-	}
-	return FALSE;
-}
-
-static gboolean _test_one_module_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
-{
-	gchar *cResult = NULL;
-	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_RESULT, &cResult, -1);
-	cd_debug ("- %s !\n", cResult
-	);
-	if (cResult && strcmp (data[0], cResult) == 0)
-	{
-		GtkTreeIter *iter_to_fill = data[1];
-		memcpy (iter_to_fill, iter, sizeof (GtkTreeIter));
-		gboolean *bFound = data[2];
-		*bFound = TRUE;
-		g_free (cResult);
-		return TRUE;
-	}
-	g_free (cResult);
-	return FALSE;
-}
-static void deactivate_module_in_gui (const gchar *cModuleName)
-{
-	if (s_pSimpleConfigWindow == NULL || cModuleName == NULL)
-		return ;
-	
-	// desactive la ligne qui va bien dans le gtk_list_store...
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-	g_return_if_fail (pModule != NULL);
-	
-	GSList *pCurrentWidgetList = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "widget-list");
-	g_return_if_fail (pCurrentWidgetList != NULL);
-	
-	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pCurrentWidgetList, "Add-ons", "modules");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
-	
-	GtkWidget *pTreeView = pGroupKeyWidget->pSubWidgetList->data;
-	
-	GtkTreeModel *pModele = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
-	gboolean bFound = FALSE;
-	GtkTreeIter iter;
-	memset (&iter, 0, sizeof (GtkTreeIter));
-	gconstpointer data[3] = {cModuleName, &iter, &bFound};
-	gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _test_one_module_name, data);
-	
-	if (bFound)
-	{
-		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-			CAIRO_DOCK_MODEL_ACTIVE, FALSE, -1);
-	}
-}
-
-static CairoDockGroupKeyWidget *get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
-{
-	g_return_val_if_fail (s_pSimpleConfigModuleWindow != NULL, NULL);
-	return cairo_dock_gui_find_group_key_widget (s_pSimpleConfigModuleWindow, cGroupName, cKeyName);
-}
-
-static void close_gui (void)
-{
-	if (s_pSimpleConfigWindow != NULL)
-	{
-		GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
-		GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
-		GList *w = g_list_last (children);
-		GtkWidget *pButtonsHBox = w->data;
-		g_list_free (children);
-		
-		children = gtk_container_get_children (GTK_CONTAINER (pButtonsHBox));
-		w = g_list_last (children);
-		GtkWidget *pQuitButton = w->data;
-		g_list_free (children);
-		
-		gboolean bReturn;
-		g_signal_emit_by_name (pQuitButton, "clicked", NULL, &bReturn);
-	}
-	if (s_pSimpleConfigModuleWindow != NULL)
-	{
-		GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigModuleWindow));
-		GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
-		GList *w = g_list_last (children);
-		GtkWidget *pButtonsHBox = w->data;
-		g_list_free (children);
-		
-		children = gtk_container_get_children (GTK_CONTAINER (pButtonsHBox));
-		w = g_list_last (children);
-		GtkWidget *pQuitButton = w->data;
-		g_list_free (children);
-		
-		gboolean bReturn;
-		g_signal_emit_by_name (pQuitButton, "clicked", NULL, &bReturn);
-	}
-}
 
 void cairo_dock_register_simple_gui_backend (void)
 {
-	CairoDockGuiBackend *pBackend = g_new0 (CairoDockGuiBackend, 1);
+	CairoDockMainGuiBackend *pBackend = g_new0 (CairoDockMainGuiBackend, 1);
 	
-	pBackend->show_main_gui 			= show_main_gui;
-	pBackend->show_module_instance_gui 	= show_module_instance_gui;
-	pBackend->show_module_gui 			= show_module_gui;
-	pBackend->set_status_message_on_gui = set_status_message_on_gui;
-	pBackend->module_is_opened 			= module_is_opened;
-	pBackend->deactivate_module_in_gui 	= deactivate_module_in_gui;
-	pBackend->get_widget_from_name 		= get_widget_from_name;
-	pBackend->close_gui 				= close_gui;
+	pBackend->show_main_gui 				= show_main_gui;
+	pBackend->show_module_gui 				= show_module_gui;
+	pBackend->show_module_instance_gui 		= show_module_instance_gui;
+	pBackend->close_gui 					= close_gui;
+	pBackend->update_module_state 			= update_module_state;
+	pBackend->update_module_instance_container = cairo_dock_gui_items_update_module_instance_container;
+	pBackend->update_desklet_params 		= cairo_dock_gui_items_update_desklet_params;
+	pBackend->update_modules_list 			= update_modules_list;
+	pBackend->set_status_message_on_gui 	= set_status_message_on_gui;
+	pBackend->get_widget_from_name 			= cairo_dock_gui_items_get_widget_from_name;
 	
-	cairo_dock_register_gui_backend (pBackend);
+	cairo_dock_register_config_gui_backend (pBackend);
 }

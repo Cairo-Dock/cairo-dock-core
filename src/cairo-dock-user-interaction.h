@@ -52,6 +52,8 @@ gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gch
 
 gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gchar *cModuleName, gboolean bRegistered);
 
+gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockModuleInstance *pInstance, gboolean bIsDetached);
+
 
 G_END_DECLS
 #endif

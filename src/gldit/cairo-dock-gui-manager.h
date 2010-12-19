@@ -18,15 +18,15 @@
 */
 
 
-#ifndef __CAIRO_DOCK_GUI_MANAGER__
-#define  __CAIRO_DOCK_GUI_MANAGER__
+#ifndef __CAIRO_DOCK_GUI_FACILITY__
+#define  __CAIRO_DOCK_GUI_FACILITY__
 
 #include <gtk/gtk.h>
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
 G_BEGIN_DECLS
 
-/** @file cairo-dock-gui-manager.h This class manages the config panels of Cairo-Dock.
+/** @file cairo-dock-gui-manager.h This class provides useful functions to build config panels from keyfiles.
 * 
 * GUIs are built from a .conf file; .conf files are normal group/key files, but with some special indications in the comments. Each key will be represented by a pre-defined widget, that is defined by the first caracter of its comment. The comment also contains a description of the key, and an optionnal tooltip. See cairo-dock-gui-factory.h for the list of pre-defined widgets and a short explanation on how to use them inside a conf file. The file 'cairo-dock.conf' can be an useful example.
 * 
@@ -60,35 +60,23 @@ struct _CairoGuiManager {
 // signals
 typedef enum {
 	NOTIFICATION_SHOW_MODULE_INSTANCE_GUI,
-	NOTIFICATION_RELOAD_MODULE_INSTANCE_GUI,
 	NOTIFICATION_STATUS_MESSAGE,
-	NOTIFICATION_REFRESH_LAUNCHER_GUI,
-	NOTIFICATION_DESKLET_SIZE_CHANGED,
-	NOTIFICATION_DESKLET_POSITION_CHANGED,
+	NOTIFICATION_GET_GROUP_KEY_WIDGET,
 	NB_NOTIFICATIONS_GUI
 	} CairoGuiNotifications;
 
 
-/// Definition of the GUI interface.
+/// Definition of the GUI interface for modules.
 struct _CairoDockGuiBackend {
 	/// display a message on the GUI.
 	void (*set_status_message_on_gui) (const gchar *cMessage);
-	/// Show the main config panel, build it if necessary.
-	GtkWidget * (*show_main_gui) (void);
-	/// Show the config panel of a given module (internal or external), reload it if it was already opened.
-	void (*show_module_gui) (const gchar *cModuleName);
 	/// Show the config panel of a given module instance, reload it if it was already opened. iShowPage is the page that should be displayed in case the module has several pages, -1 means to keep the current page.
 	void (*show_module_instance_gui) (CairoDockModuleInstance *pModuleInstance, int iShowPage);
-	/// say whether the config of a module instance is currently opened.
-	gboolean (*module_is_opened) (CairoDockModuleInstance *pModuleInstance);
-	/// update the GUI to mark a module as 'inactive'.
-	void (*deactivate_module_in_gui) (const gchar *cModuleName);
 	/// retrieve the widgets in the current module window, corresponding to the (group,key) pair in its conf file.
 	CairoDockGroupKeyWidget * (*get_widget_from_name) (const gchar *cGroupName, const gchar *cKeyName);
-	/// close the config panels.
-	void (*close_gui) (void);
 	} ;
 typedef struct _CairoDockGuiBackend CairoDockGuiBackend;
+
 
 #define CAIRO_DOCK_FRAME_MARGIN 6
 
@@ -109,15 +97,17 @@ GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar
 
 void cairo_dock_reload_current_module_widget_full (CairoDockModuleInstance *pInstance, int iShowPage);
 
+void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage);
+
 /**Reload the widget of a given module instance if it is currently opened (the current page is displayed). This is useful if the module has modified its conf file and wishes to display the changes.
 @param pInstance an instance of a module.
 */
 #define cairo_dock_reload_current_module_widget(pInstance) cairo_dock_reload_current_module_widget_full (pInstance, -1)
 
-void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName);
+/*void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName);
 void cairo_dock_update_desklet_size_in_gui (CairoDockModuleInstance *pModuleInstance, int iWidth, int iHeight);
 void cairo_dock_update_desklet_position_in_gui (CairoDockModuleInstance *pModuleInstance, int x, int y);
-void cairo_dock_update_desklet_detached_state_in_gui (CairoDockModuleInstance *pModuleInstance, gboolean bIsDetached);
+void cairo_dock_update_desklet_detached_state_in_gui (CairoDockModuleInstance *pModuleInstance, gboolean bIsDetached);*/
 
 /** Display a message on a given window that has a status-bar. If no window is provided, the current config panel will be used.
 @param pWindow window where the message should be displayed, or NULL to target the config panel.
@@ -131,27 +121,31 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage);
 */
 void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...) G_GNUC_PRINTF (2, 3);
 
-
-/** Register a GUI backend to be the current one.
-@param pBackend the new backend.
-*/
-void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend);
-
-/** Show the main config panel.
-*/
-GtkWidget *cairo_dock_show_main_gui (void);
-/** Show the config panel of a given module instance. Reload the widgets if the panel was already opened.
-@param pModuleInstance the module instance
-@param iShowPage the specific page to display, or -1 to keep the current one if the instance is already opened.
-*/
-void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 /** Show the config panel of a given module (internal or external). Reload the widgets if the panel was already opened.
 @param cModuleName name of the module.
 */
 void cairo_dock_show_module_gui (const gchar *cModuleName);
-/** Close the config panel(s).
+
+/* Register a GUI backend to be the current one.
+@param pBackend the new backend.
 */
-void cairo_dock_close_gui (void);
+//void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend);
+
+/* Show the main config panel.
+*/
+//GtkWidget *cairo_dock_show_main_gui (void);
+/* Show the config panel of a given module instance. Reload the widgets if the panel was already opened.
+@param pModuleInstance the module instance
+@param iShowPage the specific page to display, or -1 to keep the current one if the instance is already opened.
+*/
+//void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage);
+/* Show the config panel of a given module (internal or external). Reload the widgets if the panel was already opened.
+@param cModuleName name of the module.
+*/
+//void cairo_dock_show_module_gui (const gchar *cModuleName);
+/* Close the config panel(s).
+*/
+//void cairo_dock_close_gui (void);
 
 
 /** Build a generic GUI window, that contains 2 buttons apply and quit, and a statusbar.
@@ -196,21 +190,23 @@ struct _CairoDockLauncherGuiBackend {
 	} ;
 typedef struct _CairoDockLauncherGuiBackend CairoDockLauncherGuiBackend;
 
-/** Register a launcher GUI backend to be the current one.
+/* Register a launcher GUI backend to be the current one.
 @param pBackend the new backend.
 */
-void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBackend);
+//void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBackend);
 
-/** Build and show the launcher GUI for a given launcher.
+/* Build and show the launcher GUI for a given launcher.
 @param pIcon the launcher.
 @return the GUI window.
 */
-GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage);
+//GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
-/** Trigger the refresh of the launcher GUI. The refresh well happen when the main loop gets available.
+/* Trigger the refresh of the launcher GUI. The refresh well happen when the main loop gets available.
 */
-void cairo_dock_trigger_refresh_launcher_gui (void);
+//void cairo_dock_trigger_refresh_launcher_gui (void);
 
+
+void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend);
 
 void gldi_register_gui_manager (void);
 

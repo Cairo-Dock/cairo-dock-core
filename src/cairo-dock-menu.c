@@ -110,7 +110,7 @@ static void _cairo_dock_configure_root_dock (GtkMenuItem *pMenuItem, CairoDock *
 {
 	g_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
 	
-	cairo_dock_build_launcher_gui (NULL, CAIRO_CONTAINER (pDock), NULL, 0);
+	cairo_dock_show_items_gui (NULL, CAIRO_CONTAINER (pDock), NULL, 0);
 	/**const gchar *cDockName = cairo_dock_search_dock_name (pDock);
 	g_return_if_fail (cDockName != NULL);
 	cd_message ("%s (%s)", __func__, cDockName);
@@ -120,20 +120,6 @@ static void _cairo_dock_configure_root_dock (GtkMenuItem *pMenuItem, CairoDock *
 	{
 		cairo_dock_add_root_dock_config_for_name (cDockName);
 	}
-	
-	if (s_pRootDockConfigWindow != NULL)
-		gtk_widget_destroy (s_pRootDockConfigWindow);
-	
-	gchar *cTitle = g_strdup_printf (_("Configuration of the '%s' dock"), cDockName);
-	s_pRootDockConfigWindow = cairo_dock_build_generic_gui (cConfFilePath,
-		NULL,
-		cTitle,
-		CAIRO_DOCK_CONF_PANEL_WIDTH, CAIRO_DOCK_CONF_PANEL_HEIGHT,
-		(CairoDockApplyConfigFunc) on_apply_config_root_dock,
-		(gpointer)cDockName,
-		(GFreeFunc) on_destroy_root_dock);
-	g_free (cTitle);
-	
 	g_free (cConfFilePath);*/
 }
 
@@ -527,7 +513,7 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 	
 	//\___________________ On ouvre automatiquement l'IHM pour permettre de modifier ses champs.
 	if (iLauncherType != CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR)  // inutile pour un separateur.
-		cairo_dock_build_launcher_gui (pNewIcon, NULL, NULL, -1);
+		cairo_dock_show_items_gui (pNewIcon, NULL, NULL, -1);
 }
 
 static void cairo_dock_add_launcher (GtkMenuItem *pMenuItem, gpointer *data)
@@ -571,7 +557,7 @@ static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 		return ;
 	}
 	
-	cairo_dock_build_launcher_gui (icon, NULL, NULL, -1);
+	cairo_dock_show_items_gui (icon, NULL, NULL, -1);
 }
 
 static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gchar *cDockName)
@@ -660,8 +646,8 @@ static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, gpointer
 		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module.
 	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
-	cairo_dock_show_module_instance_gui (icon->pModuleInstance, -1);
-	///cairo_dock_build_launcher_gui (icon, NULL, -1);  // desactive pour l'instant, il manque pas mal de chose.
+	//cairo_dock_show_module_instance_gui (icon->pModuleInstance, -1);
+	cairo_dock_show_items_gui (icon, NULL, NULL, -1);
 }
 
 static void _cairo_dock_detach_module (GtkMenuItem *pMenuItem, gpointer *data)
@@ -687,8 +673,8 @@ static void _cairo_dock_remove_module_instance (GtkMenuItem *pMenuItem, gpointer
 	int answer = cairo_dock_ask_question_and_wait (question, icon, CAIRO_CONTAINER (pContainer));
 	if (answer == GTK_RESPONSE_YES)
 	{
-		if (icon->pModuleInstance->pModule->pInstancesList->next == NULL)  // plus d'instance du module apres ca.
-			cairo_dock_deactivate_module_in_gui (icon->pModuleInstance->pModule->pVisitCard->cModuleName);
+		///if (icon->pModuleInstance->pModule->pInstancesList->next == NULL)  // plus d'instance du module apres ca.
+		///	cairo_dock_deactivate_module_in_gui (icon->pModuleInstance->pModule->pVisitCard->cModuleName);
 		cairo_dock_remove_module_instance (icon->pModuleInstance);
 	}
 }

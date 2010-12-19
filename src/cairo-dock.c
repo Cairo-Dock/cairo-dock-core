@@ -107,7 +107,7 @@
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_sync
 
 #include "cairo-dock-gui-manager.h"
-#include "cairo-dock-gui-launcher.h"
+#include "cairo-dock-gui-items.h"
 #include "cairo-dock-gui-switch.h"
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-core.h"
@@ -317,9 +317,7 @@ static void _register_help_module (void)
 	
 	pHelpModule->pVisitCard = pVisitCard;
 	pHelpModule->pInterface = pInterface;
-	cairo_dock_register_module (pHelpModule);
-	cairo_dock_activate_module (pHelpModule, NULL);
-	pHelpModule->fLastLoadingTime = time (NULL) + 1e7;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
+	cairo_dock_register_module (pHelpModule);  // il sera vu par le modules-manager comme un module auto-loaded. 
 }
 
 static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
@@ -647,9 +645,11 @@ int main (int argc, char** argv)
 		}
 	}
 	
+	_register_help_module ();
+	
 	//\___________________ define GUI backend.
 	cairo_dock_load_user_gui_backend (s_iGuiMode);
-	cairo_dock_register_default_launcher_gui_backend ();
+	cairo_dock_register_default_items_gui_backend ();
 	
 	//\___________________ register to the useful notifications.
 	cairo_dock_register_notification_on_object (&myContainersMgr,
@@ -696,6 +696,10 @@ int main (int argc, char** argv)
 	cairo_dock_register_notification_on_object (&myModulesMgr,
 		NOTIFICATION_MODULE_REGISTERED,
 		(CairoDockNotificationFunc) cairo_dock_notification_module_registered,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myModulesMgr,
+		NOTIFICATION_MODULE_INSTANCE_DETACHED,
+		(CairoDockNotificationFunc) cairo_dock_notification_module_detached,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification_on_object (&myDocksMgr,
 		NOTIFICATION_INSERT_ICON,
@@ -775,15 +779,12 @@ int main (int argc, char** argv)
 		myDocksParam.bLockAll = TRUE;
 	}
 	
-	if (!bSafeMode && cairo_dock_get_nb_modules () == 0)
+	if (!bSafeMode && cairo_dock_get_nb_modules () <= 1)  // 1 en comptant l'aide
 	{
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
 		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
 		exit (0);
 	}
-	
-	_register_help_module ();
-	
 	
 	//\___________________ On affiche un petit message de bienvenue ou de changelog ou d'erreur.
 	gboolean bNewVersion = (s_cLastVersion == NULL || strcmp (s_cLastVersion, CAIRO_DOCK_VERSION) != 0);

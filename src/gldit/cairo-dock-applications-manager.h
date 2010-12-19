@@ -144,14 +144,14 @@ Icon *cairo_dock_get_current_active_icon (void);
 Icon *cairo_dock_get_icon_with_Xid (Window Xid);
 
 /** Run a function on all appli's icons.
-*@param pFunction a #CairoDockForeachIconFunc function to be called
+*@param pFunction a /ref CairoDockForeachIconFunc function to be called
 *@param bOutsideDockOnly TRUE if you only want to go through icons that are not inside a dock, FALSE to go through all icons.
 *@param pUserData a data passed to the function.
 */
 void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOutsideDockOnly, gpointer pUserData);
 
 /** Run a function on all appli's icons present on a given workspace.
-*@param pFunction a #CairoDockForeachIconFunc function to be called
+*@param pFunction a /ref CairoDockForeachIconFunc function to be called
 *@param iNumDesktop number of the desktop
 *@param iNumViewportX number of the horizontal viewport
 *@param iNumViewportY number of the vertical viewport

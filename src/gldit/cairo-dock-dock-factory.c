@@ -419,6 +419,8 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		///cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_INSERT_ICON, icon, pDock);
 		///cairo_dock_notify_on_object (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);
 	}
+	else
+		icon->fInsertRemoveFactor = 0.;
 	if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
 	

@@ -102,10 +102,10 @@ sub-dock view = default
 #F[Add or remove any applet;@pkgdatadir@/icon-accessories.svg]
 frame_mod=
 
-#N 
+#_ 
 #{Select a line to get a preview and a description of the applet.
 #Click on the left check-box to (de)activate an applet.
-#Once an applet is active, you can configure it by right clicking on its icon.}/
+#Once an applet is active, you can configure it by right clicking on its icon.}
 modules=
 
 #W[More applets] Get more applets online !

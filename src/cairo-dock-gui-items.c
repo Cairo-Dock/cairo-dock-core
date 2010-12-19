@@ -40,7 +40,8 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
-#include "cairo-dock-gui-launcher.h"
+#include "cairo-dock-gui-switch.h"
+#include "cairo-dock-gui-items.h"
 
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1150
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 700
@@ -52,7 +53,7 @@ extern gchar *g_cCurrentThemePath;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDock *g_pMainDock;
 
-GtkWidget *s_pLauncherWindow = NULL;  // partage avec le backend 'simple'.
+static GtkWidget *s_pLauncherWindow = NULL;  // partage avec le backend 'simple'.
 static GtkWidget *s_pCurrentLauncherWidget = NULL;
 static GtkWidget *s_pLauncherTreeView = NULL;
 static GtkWidget *s_pLauncherPane = NULL;
@@ -698,7 +699,7 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 }
 
 
-static void refresh_gui (void)
+static void reload_items (void)
 {
 	if (s_pLauncherWindow == NULL)
 		return ;
@@ -722,12 +723,45 @@ static void refresh_gui (void)
 }
 
 
-void cairo_dock_register_default_launcher_gui_backend (void)
+CairoDockGroupKeyWidget *cairo_dock_gui_items_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
 {
-	CairoDockLauncherGuiBackend *pBackend = g_new0 (CairoDockLauncherGuiBackend, 1);
+	g_return_val_if_fail (s_pLauncherWindow != NULL, NULL);
+	return cairo_dock_gui_find_group_key_widget (s_pLauncherWindow, cGroupName, cKeyName);
+}
+
+void cairo_dock_gui_items_update_desklet_params (CairoDesklet *pDesklet)
+{
+	if (s_pLauncherWindow == NULL || pDesklet == NULL || pDesklet->pIcon == NULL)
+		return;
+	
+	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
+	if (pIcon != pDesklet->pIcon)
+		return;
+	
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pLauncherWindow), "widget-list");
+	cairo_dock_update_desklet_widgets (pDesklet, pWidgetList);
+}
+
+void cairo_dock_gui_items_update_module_instance_container (CairoDockModuleInstance *pInstance, gboolean bDetached)
+{
+	if (s_pLauncherWindow == NULL || pInstance == NULL)
+		return;
+	
+	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
+	if (pIcon != pInstance->pIcon)  // pour un module qui se detache, il suffit de chercher parmi les applets.
+		return;
+	
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pLauncherWindow), "widget-list");
+	cairo_dock_update_is_detached_widget (bDetached, pWidgetList);
+}
+
+
+void cairo_dock_register_default_items_gui_backend (void)
+{
+	CairoDockItemsGuiBackend *pBackend = g_new0 (CairoDockItemsGuiBackend, 1);
 	
 	pBackend->show_gui 		= show_gui;
-	pBackend->refresh_gui 	= refresh_gui;
+	pBackend->reload_items 		= reload_items;
 	
-	cairo_dock_register_launcher_gui_backend (pBackend);
+	cairo_dock_register_items_gui_backend (pBackend);
 }

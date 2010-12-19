@@ -297,6 +297,8 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 	if (tmp_erreur != NULL)
 	{
 		g_propagate_error (erreur, tmp_erreur);
+		g_free (cNewDesktopFileName);
+		cNewDesktopFileName = NULL;
 	}
 	return cNewDesktopFileName;
 }

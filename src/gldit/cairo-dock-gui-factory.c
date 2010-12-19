@@ -978,7 +978,7 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 	return pHashTable;
 }
 
-static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, gpointer *data)
+/*static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, gpointer *data)
 {
 	int iCategory = GPOINTER_TO_INT (data[0]);
 	if (pModule->pVisitCard->iCategory == (CairoDockModuleCategory)iCategory || (iCategory == -1 && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule)))
@@ -1028,10 +1028,7 @@ static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_render
 	else
 	{
 		cairo_dock_deactivate_module_and_unload (cModuleName);
-	}
-	
-	/// inverser le gras ?...
-	g_print ("need ot invert bold line ?\n");
+	}  // la ligne passera en gras automatiquement.
 	
 	g_free (cModuleName);
 }
@@ -1075,7 +1072,7 @@ static void _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* 
 			gtk_get_current_event_time ());
 	}
 	return ;
-}
+}*/
 
 typedef void (*CDForeachRendererFunc) (GHFunc pFunction, GtkListStore *pListStore);
 
@@ -1346,7 +1343,7 @@ static void _got_themes_combo_list (GHashTable *pThemeTable, gpointer *data)
 	data[2] = NULL;
 }
 
-static void _cairo_dock_render_module_name (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+/*static void _cairo_dock_render_module_name (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
 {
 	gboolean bActive = FALSE;
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_ACTIVE, &bActive, -1);
@@ -1402,7 +1399,7 @@ static void _cairo_dock_render_category (GtkTreeViewColumn *tree_column, GtkCell
 	{
 		g_object_set (cell, "text", cCategory, NULL);
 	}
-}
+}*/
 
 #define CD_MAX_RATING 5
 static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, int iColumnIndex)
@@ -1584,7 +1581,7 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	gchar *cMessage = NULL;
 	
-	if (pModule == NULL/* && pInternalModule == NULL*/)
+	if (pModule == NULL)
 	{
 		cMessage = g_strdup_printf (_("The '%s' module was not found.\nBe sure to install it with the same version as the dock to enjoy these features."), cModuleName);
 		int iDuration = 10e3;
@@ -1672,7 +1669,7 @@ static void _cairo_dock_render_theme_name (GtkCellLayout *cell_layout,
 
 #define _allocate_new_buffer\
 	data = g_new0 (gconstpointer, 7); \
-	g_ptr_array_add (pDataGarbage, data);
+	if (pDataGarbage) g_ptr_array_add (pDataGarbage, data);
 
 GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidget, gboolean bHorizontalPackaging, int iAddInfoBar, const gchar *cInitialDescription, const gchar *cInitialImage, GPtrArray *pDataGarbage)
 {
@@ -2184,12 +2181,15 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					0);
 			}
 			
-			pWidgetBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-			gtk_box_pack_end (GTK_BOX (pKeyBox),
-				pWidgetBox,
-				FALSE,
-				FALSE,
-				0);
+			if (iElementType != CAIRO_DOCK_WIDGET_EMPTY_WIDGET)  // inutile si rien dans dedans.
+			{
+				pWidgetBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);  // cette boite permet d'empiler les widgets a droite, mais en les rangeant de gauche a droite normalement.
+				gtk_box_pack_end (GTK_BOX (pKeyBox),
+					pWidgetBox,
+					FALSE,
+					FALSE,
+					0);
+			}
 		}
 		
 		pSubWidgetList = NULL;
@@ -2554,7 +2554,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			break ;
 			
-			case CAIRO_DOCK_WIDGET_MODULE_LIST :
+			/*case CAIRO_DOCK_WIDGET_MODULE_LIST :
 			{
 				//\______________ On remplit un modele avec les modules de la categorie.
 				int iCategory = -1;
@@ -2613,7 +2613,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_in_widget_box (pPreviewBox);
 				g_free (cDefaultMessage);
 			}
-			break ;
+			break ;*/
 			
 			case CAIRO_DOCK_WIDGET_JUMP_TO_MODULE :  // bouton raccourci vers un autre module
 			case CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS :  // idem mais seulement affiche si le module existe.

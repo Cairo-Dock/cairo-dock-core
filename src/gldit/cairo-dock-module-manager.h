@@ -67,7 +67,7 @@ struct _CairoModulesManager {
 typedef enum {
 	NOTIFICATION_MODULE_REGISTERED,
 	NOTIFICATION_MODULE_ACTIVATED,
-	NOTIFICATION_MODULE_DETACHED,
+	NOTIFICATION_MODULE_INSTANCE_DETACHED,
 	NB_NOTIFICATIONS_MODULES
 	} CairoModulesNotifications;
 
@@ -78,6 +78,7 @@ typedef enum {
 
 /** Get the module which has a given name.
 *@param cModuleName the unique name of the module.
+*@return the module, or NULL if not found.
 */
 CairoDockModule *cairo_dock_find_module_from_name (const gchar *cModuleName);
 

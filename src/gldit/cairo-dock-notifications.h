@@ -212,9 +212,9 @@ typedef gboolean (* CairoDockStopContainerFunc) (gpointer pUserData, CairoContai
 typedef gboolean (* CairoDockLeaveContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);
 
 
-/// Use this in \ref cairo_dock_register_notification to be called before the dock.
+/// Use this in \ref cairo_dock_register_notification_on_object to be called before the dock.
 #define CAIRO_DOCK_RUN_FIRST TRUE
-/// Use this in \ref cairo_dock_register_notification to be called after the dock.
+/// Use this in \ref cairo_dock_register_notification_on_object to be called after the dock.
 #define CAIRO_DOCK_RUN_AFTER FALSE
 
 /// Return this in your callback to prevent the other callbacks from being called after you.

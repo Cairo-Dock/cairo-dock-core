@@ -92,7 +92,7 @@ struct _CairoDocksManager {
 	void (*destroy_dock) (CairoDock *pDock, const gchar *cDockName);
 	} ;
 
-// signals
+/// signals
 typedef enum {
 	/// notification called when the mouse enters a dock.
 	NOTIFICATION_ENTER_DOCK = NB_NOTIFICATIONS_CONTAINER,
@@ -112,6 +112,7 @@ typedef enum {
 	NOTIFICATION_REMOVE_ICON,
 	/// notification called when an icon is moved inside a dock. data : {Icon, CairoDock}
 	NOTIFICATION_ICON_MOVED,
+	/// 
 	NB_NOTIFICATIONS_DOCKS
 	} CairoDocksNotifications;
 
@@ -210,6 +211,7 @@ void cairo_dock_hide_parent_dock (CairoDock *pDock);
 
 /** Recursively hides all the sub-docks of a given dock.
 *@param pDock the dock.
+* @return TRUE if a sub-dock has been hidden.
 */
 gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
 

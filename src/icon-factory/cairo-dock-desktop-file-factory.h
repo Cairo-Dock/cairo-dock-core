@@ -49,6 +49,7 @@ void cairo_dock_remove_html_spaces (gchar *cString);
 *@param fOrder order of the icon inside the dock.
 *@param iGroup group of the icon.
 *@param erreur an error filled if something went wrong.
+* @return the name of the new desktop file, in a newly allocated string, or NULL if failed.
 */
 gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur);
 
@@ -58,6 +59,7 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 *@param fOrder order of the icon inside the dock.
 *@param iGroup group of the icon.
 *@param erreur an error filled if something went wrong.
+* @return the name of the new desktop file, in a newly allocated string, or NULL if failed.
 */
 gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur);
 

@@ -29,7 +29,7 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-icon-manager.h This class loads the icons and manages the associated ressources.
+*@file cairo-dock-icon-manager.h This class manages the icons parameters and their associated ressources.
 *
 * Specialized Icons are handled by the corresponding manager.
 */
@@ -93,7 +93,7 @@ struct _CairoIconsManager {
 	void (*set_specified_desktop_for_icon) (Icon *pIcon, int iSpecificDesktop);
 	} ;
 
-// signals
+/// signals
 typedef enum {
 	/// notification called when an icon's sub-dock is starting to (un)fold. data : {Icon}
 	NOTIFICATION_UNFOLD_SUBDOCK,
@@ -109,13 +109,13 @@ typedef enum {
 	NOTIFICATION_STOP_ICON,
 	/// notification called when someone asks for an animation for a given icon.
 	NOTIFICATION_REQUEST_ICON_ANIMATION,
+	/// 
 	NB_NOTIFICATIONS_ICON
 	} CairoIconNotifications;
 
 
 /** Terminate an Icon and free all its allocated ressources, except its sub-dock.
-*@param pFunction the action.
-*@param pUserData data passed to the callback.
+*@param icon the icon to destroy.
 */
 void cairo_dock_free_icon (Icon *icon);
 

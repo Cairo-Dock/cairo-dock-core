@@ -73,7 +73,7 @@ struct _CairoDialogsManager {
 	gboolean (*remove_dialog_if_any_full) (Icon *icon, gboolean bAll);
 	} ;
 
-// signals
+/// signals
 typedef enum {
 	/// notification called when a Dialog is updated in the fast rendering loop.
 	NOTIFICATION_UPDATE_DIALOG = NB_NOTIFICATIONS_CONTAINER,
@@ -81,6 +81,7 @@ typedef enum {
 	NOTIFICATION_UPDATE_DIALOG_SLOW,
 	/// notification called when a Dialog is rendered.
 	NOTIFICATION_RENDER_DIALOG,
+	/// 
 	NB_NOTIFICATIONS_DIALOG
 	} CairoDialogNotifications;
 	

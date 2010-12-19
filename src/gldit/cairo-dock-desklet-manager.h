@@ -73,7 +73,7 @@ struct _CairoDeskletManager {
 	void (*find_clicked_icon_in_desklet) (CairoDesklet *pDesklet);
 	} ;
 
-// signals
+/// signals
 typedef enum {
 	/// notification called when the mouse enters a desklet.
 	NOTIFICATION_ENTER_DESKLET = NB_NOTIFICATIONS_CONTAINER,
@@ -89,6 +89,7 @@ typedef enum {
 	NOTIFICATION_STOP_DESKLET,
 	/// notification called when a desklet is resized or moved on the screen.
 	NOTIFICATION_CONFIGURE_DESKLET,
+	/// 
 	NB_NOTIFICATIONS_DESKLET
 	} CairoDeskletNotifications;
 

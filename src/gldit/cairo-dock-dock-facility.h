@@ -134,6 +134,7 @@ Icon *cairo_dock_apply_wave_effect_linear (CairoDock *pDock);
 
 /** Get the current width of all the icons of a linear dock. It doesn't take into account any decoration or frame, only the space occupied by the icons.
 *@param pDock a linear dock.
+* @return the dock's width.
 */
 double cairo_dock_get_current_dock_width_linear (CairoDock *pDock);
 

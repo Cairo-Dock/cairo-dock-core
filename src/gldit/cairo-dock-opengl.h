@@ -63,7 +63,6 @@ struct _CairoDockGLConfig {
  // CONFIGURATION //
 ///////////////////
 /** Initialize the OpenGL backend, by trying to get a suitable GLX configuration.
-*@param bToggleIndirectRendering whether to toggle on/off the indirect rendering mode that have been detected by the function (for cards like Radeon 35xx).
 *@param bForceOpenGL whether to force the use of OpenGL, or let the function decide.
 *@return TRUE if OpenGL is usable.
 */
@@ -71,6 +70,9 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL);
 
 #define cairo_dock_opengl_is_safe(...) (g_openglConfig.pGlConfig != NULL && ! g_openglConfig.bIndirectRendering && g_openglConfig.bAlphaAvailable && g_openglConfig.bStencilBufferAvailable)  // bNonPowerOfTwoAvailable et FBO sont detectes une fois qu'on a un contexte OpenGL, on ne peut donc pas les inclure ici.
 
+/* Toggle on/off the indirect rendering mode (for cards like Radeon 35xx).
+*@param bToggleIndirectRendering whether to toggle on/off the indirect rendering mode that have been detected by the function (for cards like Radeon 35xx).
+*/
 void cairo_dock_force_indirect_rendering (void);
 
 #define cairo_dock_deactivate_opengl(...) do {\

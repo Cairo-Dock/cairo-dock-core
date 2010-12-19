@@ -57,18 +57,6 @@ SET(core_lib_SRCS
 	cairo-dock-particle-system.c 		cairo-dock-particle-system.h
 	cairo-dock-emblem.c 				cairo-dock-emblem.h
 	cairo-dock-task.c 					cairo-dock-task.h
-	# parameters
-	#cairo-dock-internal-position.c 		cairo-dock-internal-position.h
-	#cairo-dock-internal-accessibility.c cairo-dock-internal-accessibility.h
-	#cairo-dock-internal-system.c 		cairo-dock-internal-system.h
-	#cairo-dock-internal-taskbar.c 		cairo-dock-internal-taskbar.h
-	#cairo-dock-internal-dialogs.c 		cairo-dock-internal-dialogs.h
-	#cairo-dock-internal-indicators.c 	cairo-dock-internal-indicators.h
-	#cairo-dock-internal-views.c 		cairo-dock-internal-views.h
-	#cairo-dock-internal-labels.c 		cairo-dock-internal-labels.h
-	#cairo-dock-internal-desklets.c 		cairo-dock-internal-desklets.h
-	#cairo-dock-internal-background.c 	cairo-dock-internal-background.h
-	#cairo-dock-internal-icons.c 		cairo-dock-internal-icons.h
 	cairo-dock-config.c 				cairo-dock-config.h 
 	texture-gradation.h
 	texture-blur.h
@@ -158,13 +146,6 @@ install(FILES
 	
 	cairo-dock-applet-multi-instance.h 	cairo-dock-applet-single-instance.h
 	cairo-dock-applet-canvas.h			cairo-dock-applet-facility.h
-	
-	#cairo-dock-internal-position.h 		cairo-dock-internal-accessibility.h
-	#cairo-dock-internal-system.h 		cairo-dock-internal-taskbar.h
-	#cairo-dock-internal-dialogs.h 		cairo-dock-internal-indicators.h
-	#cairo-dock-internal-views.h 		cairo-dock-internal-labels.h
-	#cairo-dock-internal-desklets.h 		cairo-dock-internal-background.h
-	#cairo-dock-internal-icons.h
 	
 	cairo-dock-draw.h					cairo-dock-draw-opengl.h
 	cairo-dock-opengl-path.h 			cairo-dock-opengl-font.h 

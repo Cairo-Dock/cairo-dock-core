@@ -154,6 +154,12 @@ CairoDockModule *cairo_dock_new_module (const gchar *cSoFilePath, GError **erreu
 			g_free (pCairoDockModule);
 			return NULL;
 		}
+		if (pCairoDockModule->pVisitCard == NULL)
+		{
+			g_free (pCairoDockModule->pVisitCard);
+			g_free (pCairoDockModule);
+			return NULL;
+		}
 	}
 	return pCairoDockModule;
 }

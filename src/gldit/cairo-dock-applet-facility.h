@@ -76,10 +76,10 @@ void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePat
 
 /** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless.
 *@param pIconContext the drawing context; is not altered by the function.
-*@param cImagePath path of an image to apply on the icon.
+*@param cImage name of an image to apply on the icon.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
-*@param cDefaultImagePath default image.
+*@param cDefaultImagePath path to a default image.
 */
 void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cImage, Icon *pIcon, CairoContainer *pContainer, const gchar *cDefaultImagePath);
 
@@ -536,9 +536,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	CD_APPLET_SET_IMAGE_ON_MY_ICON (_cImageFilePath); \
 	g_free (_cImageFilePath); } while (0)
 
-/** Apply an image on the applet's icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless (taken in the installed folder of the applet).
-*@param cUserImageName nom du fichier of l'image cote utilisateur.
-*@param cDefaultLocalImageName image locale par defaut cote installation.
+/** Apply an image on the applet's icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless (taken in the installation folder of the applet).
+*@param cImageName name of an image.
+*@param cDefaultLocalImageName name of an image to use as a fallback (taken in the applet's installation folder).
 */
 #define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cImageName, cDefaultLocalImageName) \
 	cairo_dock_set_image_on_icon_with_default (myDrawContext, cImageName, myIcon, myContainer, MY_APPLET_SHARE_DATA_DIR"/"cDefaultLocalImageName)

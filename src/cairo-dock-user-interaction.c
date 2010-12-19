@@ -36,7 +36,9 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-file-manager.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-dock-manager.h"
@@ -44,6 +46,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-gui-switch.h"
 #include "cairo-dock-user-interaction.h"
 
 extern gboolean g_bLocked;
@@ -388,7 +391,7 @@ void cairo_dock_trigger_refresh_gui (void)
 gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDesklet *pDesklet)
 {
 	g_print ("desklet %s configured\n", pDesklet->pIcon?pDesklet->pIcon->cName:"unknown");
-	
+	cairo_dock_gui_trigger_update_desklet_params (pDesklet);
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -397,22 +400,29 @@ gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, Ca
 {
 	g_print ("icon %s moved\n", pIcon?pIcon->cName:"unknown");
 	
+	cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
+	if (pIcon->fInsertRemoveFactor == 0)
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	g_print ("icon %s inserted\n", pIcon?pIcon->cName:"unknown");
 	
+	cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_icon_removed(gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
+	if (pIcon->fInsertRemoveFactor == 0)
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	g_print ("icon %s removed\n", pIcon?pIcon->cName:"unknown");
 	
+	cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -421,6 +431,7 @@ gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *
 {
 	g_print ("dock destroyed\n");
 	
+	cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -429,6 +440,7 @@ gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gch
 {
 	g_print ("module %s (de)activated (%d)\n", cModuleName, bActivated);
 	
+	cairo_dock_gui_trigger_update_module_state (cModuleName);
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -437,6 +449,15 @@ gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gc
 {
 	g_print ("module %s (un)registered (%d)\n", cModuleName, bRegistered);
 	
+	cairo_dock_gui_trigger_update_modules_list ();
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
+gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockModuleInstance *pInstance, gboolean bIsDetached)
+{
+	g_print ("module %s (de)tached (%d)\n", pInstance->pModule->pVisitCard->cModuleName, bIsDetached);
+	cairo_dock_gui_trigger_update_module_container (pInstance);
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

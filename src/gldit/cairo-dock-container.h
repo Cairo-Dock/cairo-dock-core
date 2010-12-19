@@ -60,7 +60,7 @@ struct _CairoContainersManager {
 	GldiManager mgr;
 	} ;
 
-// signals
+/// signals
 typedef enum {
 	/// notification called when the menu is being built on a container. data : {Icon, CairoContainer, GtkMenu, gboolean*}
 	NOTIFICATION_BUILD_CONTAINER_MENU,
@@ -90,6 +90,7 @@ typedef enum {
 	NOTIFICATION_UPDATE_DEFAULT_CONTAINER_SLOW,
 	/// notification called when a default container is rendered.
 	NOTIFICATION_RENDER_DEFAULT_CONTAINER,
+	/// 
 	NB_NOTIFICATIONS_CONTAINER
 	} CairoContainerNotifications;
 
@@ -234,6 +235,7 @@ void cairo_dock_disallow_widget_to_receive_data (GtkWidget *pWidget);
 
 /** Say if a string is an adress (file://xxx, http://xxx, ftp://xxx, etc).
 * @param cString a string.
+* @return TRUE if it's an address.
 */
 gboolean cairo_dock_string_is_adress (const gchar *cString);
 
@@ -276,6 +278,7 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer
 *@param pFunction callback
 *@param pMenu the menu to insert the entry in
 *@param pData data to feed the callback with
+* @return the new menu-entry that has been added.
 */
 GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GFunc pFunction, GtkWidget *pMenu, gpointer pData);
 

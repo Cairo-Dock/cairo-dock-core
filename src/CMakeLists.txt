@@ -9,7 +9,7 @@ SET(cairo_dock_SRCS
 	cairo-dock-gui-main.c 				cairo-dock-gui-main.h
 	cairo-dock-gui-simple.c 			cairo-dock-gui-simple.h
 	cairo-dock-gui-switch.c 			cairo-dock-gui-switch.h
-	cairo-dock-gui-launcher.c 			cairo-dock-gui-launcher.h
+	cairo-dock-gui-items.c 				cairo-dock-gui-items.h
 	cairo-dock-gui-themes.c 			cairo-dock-gui-themes.h
 	cairo-dock-gui-commons.c 			cairo-dock-gui-commons.h
 )

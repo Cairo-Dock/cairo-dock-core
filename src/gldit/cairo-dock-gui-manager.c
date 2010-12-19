@@ -49,8 +49,9 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cCairoDockDataDir;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
+//static CairoDockGuiBackend *s_pGuiBackend = NULL;
+//static CairoDockLauncherGuiBackend *s_pLauncherGuiBackend = NULL;
 static CairoDockGuiBackend *s_pGuiBackend = NULL;
-static CairoDockLauncherGuiBackend *s_pLauncherGuiBackend = NULL;
 
 
   //////////////////////////
@@ -77,18 +78,29 @@ GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar
 void cairo_dock_reload_current_module_widget_full (CairoDockModuleInstance *pInstance, int iShowPage)
 {
 	g_return_if_fail (pInstance != NULL);
-	if (pInstance->pModule->pVisitCard->cInternalModule != NULL)
+	if (s_pGuiBackend && s_pGuiBackend->show_module_instance_gui)
 	{
-		cairo_dock_show_module_gui (pInstance->pModule->pVisitCard->cInternalModule);
-	}
-	else
-	{
-		cairo_dock_show_module_instance_gui (pInstance, iShowPage);
+		return s_pGuiBackend->show_module_instance_gui (pInstance, iShowPage);  // gere cInternalModule
 	}
 }
 
+void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
+{
+	if (s_pGuiBackend && s_pGuiBackend->show_module_instance_gui)
+		s_pGuiBackend->show_module_instance_gui (pModuleInstance, iShowPage);
+}
 
-void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName)
+void cairo_dock_show_module_gui (const gchar *cModuleName)
+{
+	CairoDockModuleInstance *pInstance = NULL;
+	/// find the instance ...
+	
+	g_return_if_fail (pInstance != NULL);
+	if (s_pGuiBackend && s_pGuiBackend->show_module_instance_gui)
+		s_pGuiBackend->show_module_instance_gui (pInstance, 0);
+}
+
+/*void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName)
 {
 	if (s_pGuiBackend && s_pGuiBackend->deactivate_module_in_gui)
 		s_pGuiBackend->deactivate_module_in_gui (cModuleName);
@@ -158,7 +170,7 @@ void cairo_dock_update_desklet_detached_state_in_gui (CairoDockModuleInstance *p
 		if (pOneWidget != NULL)
 			gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (pOneWidget), bIsDetached);
 	}
-}
+}*/
 
 
 void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
@@ -197,7 +209,7 @@ void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFor
  // GUI BACKEND //
 /////////////////
 
-void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend)
+/*void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend)
 {
 	g_free (s_pGuiBackend);
 	s_pGuiBackend = pBackend;
@@ -245,7 +257,7 @@ void cairo_dock_close_gui (void)
 {
 	if (s_pGuiBackend && s_pGuiBackend->close_gui)
 		s_pGuiBackend->close_gui ();
-}
+}*/
 
 
   ////////////////
@@ -572,7 +584,7 @@ void cairo_dock_reload_generic_gui (GtkWidget *pWindow)
  // LAUNCHER GUI BACKEND //
 //////////////////////////
 
-void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBackend)
+/*void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBackend)
 {
 	g_free (s_pLauncherGuiBackend);
 	s_pLauncherGuiBackend = pBackend;
@@ -600,6 +612,12 @@ void cairo_dock_trigger_refresh_launcher_gui (void)
 		return;
 	
 	s_iSidRefreshGUI = g_idle_add ((GSourceFunc) _refresh_launcher_gui, NULL);
+}*/
+
+
+void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend)
+{
+	
 }
 
 

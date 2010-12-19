@@ -44,7 +44,7 @@ struct _CairoDockDesktopManager {
 	GldiManager mgr;
 	} ;
 
-// signals
+/// signals
 typedef enum {
 	/// notification called when the user switches to another desktop/viewport. data : NULL
 	NOTIFICATION_DESKTOP_CHANGED,
@@ -60,6 +60,7 @@ typedef enum {
 	NOTIFICATION_WINDOW_ACTIVATED,
 	/// notification called when a window's property has changed. data : {Window, Atom, int}
 	NOTIFICATION_WINDOW_PROPERTY_CHANGED,
+	/// 
 	NB_NOTIFICATIONS_DESKTOP
 	} CairoDesktopNotifications;
 
