@@ -225,13 +225,13 @@ static gboolean _search_item_in_line (GtkTreeModel *model, GtkTreePath *path, Gt
 	}
 	return FALSE;
 }
-static gboolean _search_item_in_model (GtkWidget *pTreeView, gpointer pItem, gboolean bItemIsIcon, GtkTreeIter *iter)
+static gboolean _search_item_in_model (GtkWidget *pTreeView, gpointer pItem, CDModelColumns iItemType, GtkTreeIter *iter)
 {
 	if (pItem == NULL)
 		return FALSE;
 	//g_print ("%s (%s)\n", __func__, ((Icon*)pItem)->cName);
 	GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
-	gpointer data[4] = {pItem, GINT_TO_POINTER (bItemIsIcon ? CD_MODEL_ICON : CD_MODEL_CONTAINER), iter, GINT_TO_POINTER (FALSE)};
+	gpointer data[4] = {pItem, GINT_TO_POINTER (iItemType), iter, GINT_TO_POINTER (FALSE)};
 	gtk_tree_model_foreach (model,
 		(GtkTreeModelForeachFunc) _search_item_in_line,
 		data);
@@ -388,7 +388,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 
 static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIter *pParentIter)
 {
-	if (! CAIRO_DOCK_IS_LAUNCHER (pIcon) && ! CAIRO_DOCK_IS_USER_SEPARATOR (pIcon) && ! CAIRO_DOCK_IS_APPLET (pIcon))
+	if (!pIcon->cDesktopFileName && ! CAIRO_DOCK_IS_APPLET (pIcon))
 		return;
 	
 	if (cairo_dock_icon_is_being_removed (pIcon))
@@ -551,7 +551,7 @@ static GtkTreeModel *_build_tree_model (void)
 static inline gboolean _select_item (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, GtkWidget *pLauncherWindow)
 {
 	GtkTreeIter iter;
-	if (_search_item_in_model (s_pLauncherTreeView, pIcon ? (gpointer)pIcon : pContainer ? (gpointer)pContainer : (gpointer)pModuleInstance, pIcon != NULL, &iter))
+	if (_search_item_in_model (s_pLauncherTreeView, pIcon ? (gpointer)pIcon : pContainer ? (gpointer)pContainer : (gpointer)pModuleInstance, pIcon ? CD_MODEL_ICON : pContainer ? CD_MODEL_CONTAINER : CD_MODEL_MODULE, &iter))
 	{
 		GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (s_pLauncherTreeView));
 		GtkTreePath *path =  gtk_tree_model_get_path (model, &iter);
@@ -740,6 +740,19 @@ void cairo_dock_gui_items_update_desklet_params (CairoDesklet *pDesklet)
 	
 	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pLauncherWindow), "widget-list");
 	cairo_dock_update_desklet_widgets (pDesklet, pWidgetList);
+}
+
+void cairo_dock_update_desklet_visibility_params (CairoDesklet *pDesklet)
+{
+	if (s_pLauncherWindow == NULL || pDesklet == NULL || pDesklet->pIcon == NULL)
+		return;
+	
+	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
+	if (pIcon != pDesklet->pIcon)
+		return;
+	
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pLauncherWindow), "widget-list");
+	cairo_dock_update_desklet_visibility_widgets (pDesklet, pWidgetList);
 }
 
 void cairo_dock_gui_items_update_module_instance_container (CairoDockModuleInstance *pInstance, gboolean bDetached)

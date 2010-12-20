@@ -548,6 +548,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 			cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
 				G_TYPE_INT, "Desklet", "rotation", 0,
 				G_TYPE_INVALID);
+			cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_CONFIGURE_DESKLET, pDesklet);
 		}
 		else if (pButton->x > (pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize)/2 && pButton->x < (pDesklet->container.iWidth + myDeskletsParam.iDeskletButtonSize)/2 && pButton->y < myDeskletsParam.iDeskletButtonSize)
 		{

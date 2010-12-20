@@ -40,10 +40,9 @@
 #include <icon-factory/cairo-dock-separator-factory.h>
 #include <icon-factory/cairo-dock-desktop-file-factory.h>
 // structures de base.
-#include <cairo-dock/cairo-dock-manager.h>
+#include <cairo-dock/cairo-dock-module-factory.h>
 #include <cairo-dock/cairo-dock-icon-factory.h>
 #include <cairo-dock/cairo-dock-container.h>
-#include <cairo-dock/cairo-dock-modules.h>
 #include <cairo-dock/cairo-dock-flying-container.h>
 #include <cairo-dock/cairo-dock-dialog-factory.h>
 #include <cairo-dock/cairo-dock-desklet-factory.h>
@@ -70,6 +69,8 @@
 #include <cairo-dock/cairo-dock-icon-facility.h>
 #include <cairo-dock/cairo-dock-config.h>
 // managers.
+#include <cairo-dock/cairo-dock-manager.h>
+#include <cairo-dock/cairo-dock-module-manager.h>
 #include <cairo-dock/cairo-dock-X-manager.h>
 #include <cairo-dock/cairo-dock-indicator-manager.h>
 #include <cairo-dock/cairo-dock-applications-manager.h>

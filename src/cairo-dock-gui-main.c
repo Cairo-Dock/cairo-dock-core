@@ -2561,6 +2561,27 @@ static void update_desklet_params (CairoDesklet *pDesklet)
 	cairo_dock_update_desklet_widgets (pDesklet, s_pCurrentWidgetList);
 }
 
+static void update_desklet_visibility_params (CairoDesklet *pDesklet)
+{
+	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentWidgetList == NULL || pDesklet == NULL)
+		return ;
+	
+	Icon *pIcon = pDesklet->pIcon;
+	g_return_if_fail (pIcon != NULL);
+	CairoDockModuleInstance *pModuleInstance = pIcon->pModuleInstance;
+	g_return_if_fail (pModuleInstance != NULL && pModuleInstance->cConfFilePath != NULL);
+	
+	if (strcmp (pModuleInstance->pModule->pVisitCard->cModuleName, s_pCurrentGroup->cGroupName) != 0)  // est-on est en train d'editer ce module dans le panneau de conf.
+		return ;
+	
+	gchar *cConfFilePath = g_object_get_data (G_OBJECT (s_pMainWindow), "conf-file");
+	g_return_if_fail (cConfFilePath != NULL);
+	if (strcmp (pModuleInstance->cConfFilePath, cConfFilePath) != 0)
+		return;  // est-ce cette instance.
+	
+	cairo_dock_update_desklet_visibility_widgets (pDesklet, s_pCurrentWidgetList);
+}
+
 static void update_module_instance_container (CairoDockModuleInstance *pInstance, gboolean bDetached)
 {
 	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentWidgetList == NULL || pInstance == NULL)
@@ -2651,6 +2672,7 @@ void cairo_dock_register_main_gui_backend (void)
 	pBackend->close_gui 					= close_gui;
 	pBackend->update_module_state 			= update_module_state;
 	pBackend->update_desklet_params 		= update_desklet_params;
+	pBackend->update_desklet_visibility_params = update_desklet_visibility_params;
 	pBackend->update_module_instance_container = update_module_instance_container;
 	pBackend->update_modules_list 			= update_modules_list;
 	pBackend->set_status_message_on_gui 	= set_status_message_on_gui;

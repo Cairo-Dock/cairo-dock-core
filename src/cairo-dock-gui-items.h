@@ -32,6 +32,8 @@ void cairo_dock_gui_items_update_desklet_params (CairoDesklet *pDesklet);
 
 void cairo_dock_gui_items_update_module_instance_container (CairoDockModuleInstance *pInstance, gboolean bDetached);
 
+void cairo_dock_update_desklet_visibility_params (CairoDesklet *pDesklet);
+
 
 void cairo_dock_register_default_items_gui_backend (void);
 

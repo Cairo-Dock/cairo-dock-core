@@ -944,7 +944,7 @@ static GtkWidget * show_main_gui (void)
 
 static void show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
 {
-	cairo_dock_show_items_gui (NULL, NULL, pModuleInstance, iShowPage);
+	cairo_dock_show_items_gui (pModuleInstance->pIcon, NULL, pModuleInstance, iShowPage);
 }
 
 static void show_module_gui (const gchar *cModuleName)
@@ -956,7 +956,7 @@ static void show_module_gui (const gchar *cModuleName)
 	if (pModuleInstance == NULL)  // on n'affiche pas la config d'un module non actif, car il faudrait alors gerer une autre fenetre juste pour eux. Donc seul le mode avance peut le faire.
 		return;
 	
-	cairo_dock_show_items_gui (NULL, NULL, pModuleInstance, -1);
+	cairo_dock_show_items_gui (pModuleInstance->pIcon, NULL, pModuleInstance, -1);
 }
 
 
@@ -1053,6 +1053,7 @@ void cairo_dock_register_simple_gui_backend (void)
 	pBackend->update_module_state 			= update_module_state;
 	pBackend->update_module_instance_container = cairo_dock_gui_items_update_module_instance_container;
 	pBackend->update_desklet_params 		= cairo_dock_gui_items_update_desklet_params;
+	pBackend->update_desklet_visibility_params = cairo_dock_update_desklet_visibility_params;
 	pBackend->update_modules_list 			= update_modules_list;
 	pBackend->set_status_message_on_gui 	= set_status_message_on_gui;
 	pBackend->get_widget_from_name 			= cairo_dock_gui_items_get_widget_from_name;

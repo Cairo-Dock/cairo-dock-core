@@ -37,7 +37,7 @@ struct _CairoDockMainGuiBackend {
 	void (*update_module_state) (const gchar *cModuleName, gboolean bActive);
 	void (*update_module_instance_container) (CairoDockModuleInstance *pInstance, gboolean bDetached);
 	void (*update_desklet_params) (CairoDesklet *pDesklet);
-	void (*update_desklet_visibility_widgets) (CairoDesklet *pDesklet);
+	void (*update_desklet_visibility_params) (CairoDesklet *pDesklet);
 	void (*update_modules_list) (void);
 	// display a message on the GUI.
 	void (*set_status_message_on_gui) (const gchar *cMessage);

@@ -144,11 +144,42 @@ void cairo_dock_gui_trigger_update_desklet_params (CairoDesklet *pDesklet)
 }
 
 
+static guint s_iSidUpdateVisiDesklet = 0;
+static gboolean _update_desklet_visibility_params (gpointer data)
+{
+	if (s_DeskletToUpdate != NULL)
+	{
+		if (s_pMainGuiBackend && s_pMainGuiBackend->update_desklet_visibility_params)
+			s_pMainGuiBackend->update_desklet_visibility_params (s_DeskletToUpdate);
+		s_DeskletToUpdate = NULL;
+	}
+	s_iSidUpdateVisiDesklet = 0;
+	return FALSE;
+}
 void cairo_dock_gui_trigger_update_desklet_visibility (CairoDesklet *pDesklet)
 {
 	g_return_if_fail (pDesklet != NULL);
-	if (s_pMainGuiBackend && s_pMainGuiBackend->update_desklet_visibility_widgets)
-			s_pMainGuiBackend->update_desklet_visibility_widgets (pDesklet);
+	if (s_DeskletToUpdate != pDesklet)  // new desklet to update, let's forget the previous one.
+	{
+		if (s_iSidUpdateVisiDesklet != 0)
+		{
+			g_source_remove (s_iSidUpdateVisiDesklet);
+			s_iSidUpdateVisiDesklet = 0;
+		}
+		s_DeskletToUpdate = NULL;
+	}
+	if (s_iSidUpdateVisiDesklet == 0)  // no update scheduled yet, let's schedule it.
+	{
+		s_iSidUpdateVisiDesklet = g_idle_add_full (G_PRIORITY_LOW,
+			(GSourceFunc) _update_desklet_visibility_params,
+			NULL,
+			NULL);
+		s_DeskletToUpdate = pDesklet;
+		cairo_dock_register_notification_on_object (pDesklet,
+			NOTIFICATION_STOP_DESKLET,
+			(CairoDockNotificationFunc) _on_stop_desklet,
+			CAIRO_DOCK_RUN_AFTER, NULL);
+	}
 }
 
 

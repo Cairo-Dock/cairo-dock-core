@@ -101,10 +101,9 @@ void cairo_dock_unregister_module (const gchar *cModuleName);
 
 /** Load a module into the table of modules. The module is opened and its visit card and interface are retrieved.
 *@param cSoFilePath path to the .so file.
-*@param erreur error set if something bad happens.
 *@return the newly allocated module.
 */
-CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath, GError **erreur);
+CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath);
 
 /** Load all the modules of a given folder.
 *@param cModuleDirPath path to the a folder containing .so files.

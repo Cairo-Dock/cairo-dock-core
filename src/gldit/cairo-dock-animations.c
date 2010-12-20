@@ -683,7 +683,6 @@ void cairo_dock_launch_animation (CairoContainer *pContainer)
 	if (pContainer->iSidGLAnimation == 0)
 	{
 		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pContainer);
-		g_print ("%s (%d)\n", __func__, iAnimationDeltaT);
 		pContainer->bKeepSlowAnimation = TRUE;
 		switch (pContainer->iType)
 		{

@@ -563,6 +563,7 @@ void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetL
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "x position");
 	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
+	gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), iRelativePositionX);
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "y position");
 	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
@@ -572,7 +573,7 @@ void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetL
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "rotation");
 	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), pDesklet->fRotation);
+	gtk_range_set_value (GTK_RANGE (pOneWidget), pDesklet->fRotation/G_PI*180.);
 }
 
 void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSList *pWidgetList)

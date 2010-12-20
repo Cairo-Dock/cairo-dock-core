@@ -80,6 +80,22 @@ static gchar *_cairo_dock_extract_default_module_name_from_path (gchar *cSoFileP
 
 	return cModuleName;
 }
+
+static void _cairo_dock_close_module (CairoDockModule *module)
+{
+	if (module->pModule)
+		g_module_close (module->pModule);
+	
+	g_free (module->pInterface);
+	module->pInterface = NULL;
+	
+	cairo_dock_free_visit_card (module->pVisitCard);
+	module->pVisitCard = NULL;
+	
+	g_free (module->cConfFilePath);
+	module->cConfFilePath = NULL;
+}
+
 static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **erreur)
 {
 	//\__________________ On ouvre le .so.
@@ -102,9 +118,8 @@ static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError *
 		gboolean bModuleLoaded = function_pre_init (pCairoDockModule->pVisitCard, pCairoDockModule->pInterface);
 		if (! bModuleLoaded)
 		{
-			cairo_dock_free_visit_card (pCairoDockModule->pVisitCard);
-			pCairoDockModule->pVisitCard = NULL;
-			cd_debug ("module '%s' has not been loaded", pCairoDockModule->cSoFilePath);  // peut arriver a xxx-integration.
+			_cairo_dock_close_module (pCairoDockModule);
+			cd_debug ("module '%s' has not been loaded", pCairoDockModule->cSoFilePath);  // peut arriver a xxx-integration ou icon-effect par exemple.
 			return ;
 		}
 	}
@@ -156,27 +171,11 @@ CairoDockModule *cairo_dock_new_module (const gchar *cSoFilePath, GError **erreu
 		}
 		if (pCairoDockModule->pVisitCard == NULL)
 		{
-			g_free (pCairoDockModule->pVisitCard);
 			g_free (pCairoDockModule);
 			return NULL;
 		}
 	}
 	return pCairoDockModule;
-}
-
-static void _cairo_dock_close_module (CairoDockModule *module)
-{
-	if (module->pModule)
-		g_module_close (module->pModule);
-	
-	g_free (module->pInterface);
-	module->pInterface = NULL;
-	
-	cairo_dock_free_visit_card (module->pVisitCard);
-	module->pVisitCard = NULL;
-	
-	g_free (module->cConfFilePath);
-	module->cConfFilePath = NULL;
 }
 
 void cairo_dock_free_module (CairoDockModule *module)
@@ -780,7 +779,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 {
 	g_return_if_fail (module != NULL && module->pVisitCard != NULL);
-	g_print ("%s (%s)\n", __func__, module->pVisitCard->cModuleName);
+	cd_debug ("%s (%s)", __func__, module->pVisitCard->cModuleName);
 
 	if (module->pInstancesList != NULL)
 	{

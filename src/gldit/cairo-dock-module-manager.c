@@ -161,23 +161,24 @@ void cairo_dock_unregister_module (const gchar *cModuleName)
 	g_free (name);
 }
 
-CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath, GError **erreur)  // cSoFilePath vers un fichier de la forme 'libtruc.so'. Le module est rajoute dans la table des modules.
+CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath)  // cSoFilePath vers un fichier de la forme 'libtruc.so'. Le module est rajoute dans la table des modules.
 {
 	//g_print ("%s (%s)\n", __func__, cSoFilePath);
 	g_return_val_if_fail (cSoFilePath != NULL, NULL);
 	
-	GError *tmp_erreur = NULL;
-	CairoDockModule *pModule = cairo_dock_new_module (cSoFilePath, &tmp_erreur);
-	if (tmp_erreur != NULL)
+	GError *erreur = NULL;
+	CairoDockModule *pModule = cairo_dock_new_module (cSoFilePath, &erreur);
+	if (erreur != NULL)
 	{
-		g_propagate_error (erreur, tmp_erreur);
+		cd_warning (erreur->message);
+		g_error_free (erreur);
 		return NULL;
 	}
 	if (pModule == NULL)
 		return NULL;
+	g_return_val_if_fail (pModule->pVisitCard != NULL, NULL);
 	
-	if (pModule->pVisitCard != NULL)
-		g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
+	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
 	
 	if (cairo_dock_module_is_auto_loaded (pModule))  // c'est un module qui soit ne peut etre activer et/ou desactiver, soit etend un manager; on l'activera donc automatiquement.
 		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
@@ -199,7 +200,6 @@ void cairo_dock_load_modules_in_directory (const gchar *cModuleDirPath, GError *
 		return ;
 	}
 
-	CairoDockModule *pModule;
 	const gchar *cFileName;
 	GString *sFilePath = g_string_new ("");
 	do
@@ -211,13 +211,7 @@ void cairo_dock_load_modules_in_directory (const gchar *cModuleDirPath, GError *
 		if (g_str_has_suffix (cFileName, ".so"))
 		{
 			g_string_printf (sFilePath, "%s/%s", cModuleDirPath, cFileName);
-			pModule = cairo_dock_load_module (sFilePath->str, &tmp_erreur);
-			if (tmp_erreur != NULL)
-			{
-				cd_warning (tmp_erreur->message);
-				g_error_free (tmp_erreur);
-				tmp_erreur = NULL;
-			}
+			cairo_dock_load_module (sFilePath->str);
 		}
 	}
 	while (1);
