@@ -457,7 +457,7 @@ gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gc
 gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockModuleInstance *pInstance, gboolean bIsDetached)
 {
 	g_print ("module %s (de)tached (%d)\n", pInstance->pModule->pVisitCard->cModuleName, bIsDetached);
-	cairo_dock_gui_trigger_update_module_container (pInstance);
+	cairo_dock_gui_trigger_update_module_container (pInstance, bIsDetached);
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

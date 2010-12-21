@@ -505,13 +505,13 @@ void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance)
 			G_TYPE_BOOLEAN, "Desklet", "initially detached", !bIsDetached,
 			G_TYPE_INT, "Desklet", "accessibility", CAIRO_DESKLET_NORMAL,
 			G_TYPE_INVALID);
-		//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
-		cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_INSTANCE_DETACHED, pInstance, !bIsDetached);
-		///cairo_dock_update_desklet_detached_state_in_gui (pInstance, !bIsDetached);
 		//\__________________ On detache l'applet.
 		cairo_dock_reload_module_instance (pInstance, TRUE);
 		if (pInstance->pDesklet)  // on a bien detache l'applet.
 			cairo_dock_zoom_out_desklet (pInstance->pDesklet);
+		//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
+		///cairo_dock_update_desklet_detached_state_in_gui (pInstance, !bIsDetached);
+		cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_INSTANCE_DETACHED, pInstance, !bIsDetached);
 	}
 }
 

@@ -2539,63 +2539,62 @@ static void update_module_state (const gchar *cModuleName, gboolean bActive)
 	}
 	return FALSE;
 }*/
-
+static inline gboolean _module_is_opened (CairoDockModuleInstance *pInstance)
+{
+	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentGroup->cConfFilePath == NULL || s_pCurrentWidgetList == NULL || pInstance == NULL || pInstance->cConfFilePath == NULL)
+		return FALSE;
+	
+	if (strcmp (pInstance->pModule->pVisitCard->cModuleName, s_pCurrentGroup->cGroupName) != 0)  // est-on est en train d'editer ce module dans le panneau de conf.
+		return FALSE;
+	
+	if (strcmp (pInstance->cConfFilePath, s_pCurrentGroup->cConfFilePath) != 0)
+		return FALSE;  // est-ce cette instance.
+	
+	return TRUE;
+}
+static inline gboolean _desklet_is_opened (CairoDesklet *pDesklet)
+{
+	if (pDesklet == NULL)
+		return FALSE;
+	Icon *pIcon = pDesklet->pIcon;
+	g_return_val_if_fail (pIcon != NULL, FALSE);
+	
+	CairoDockModuleInstance *pModuleInstance = pIcon->pModuleInstance;
+	g_return_val_if_fail (pModuleInstance != NULL, FALSE);
+	
+	return _module_is_opened (pModuleInstance);
+}
 static void update_desklet_params (CairoDesklet *pDesklet)
 {
-	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentWidgetList == NULL || pDesklet == NULL)
+	if (! _desklet_is_opened (pDesklet))
 		return ;
 	
-	Icon *pIcon = pDesklet->pIcon;
-	g_return_if_fail (pIcon != NULL);
-	CairoDockModuleInstance *pModuleInstance = pIcon->pModuleInstance;
-	g_return_if_fail (pModuleInstance != NULL && pModuleInstance->cConfFilePath != NULL);
-	
-	if (strcmp (pModuleInstance->pModule->pVisitCard->cModuleName, s_pCurrentGroup->cGroupName) != 0)  // est-on est en train d'editer ce module dans le panneau de conf.
-		return ;
-	
-	gchar *cConfFilePath = g_object_get_data (G_OBJECT (s_pMainWindow), "conf-file");
-	g_return_if_fail (cConfFilePath != NULL);
-	if (strcmp (pModuleInstance->cConfFilePath, cConfFilePath) != 0)
-		return;  // est-ce cette instance.
-	
+	g_print ("update params\n");
 	cairo_dock_update_desklet_widgets (pDesklet, s_pCurrentWidgetList);
 }
 
 static void update_desklet_visibility_params (CairoDesklet *pDesklet)
 {
-	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentWidgetList == NULL || pDesklet == NULL)
+	if (! _desklet_is_opened (pDesklet))
 		return ;
-	
-	Icon *pIcon = pDesklet->pIcon;
-	g_return_if_fail (pIcon != NULL);
-	CairoDockModuleInstance *pModuleInstance = pIcon->pModuleInstance;
-	g_return_if_fail (pModuleInstance != NULL && pModuleInstance->cConfFilePath != NULL);
-	
-	if (strcmp (pModuleInstance->pModule->pVisitCard->cModuleName, s_pCurrentGroup->cGroupName) != 0)  // est-on est en train d'editer ce module dans le panneau de conf.
-		return ;
-	
-	gchar *cConfFilePath = g_object_get_data (G_OBJECT (s_pMainWindow), "conf-file");
-	g_return_if_fail (cConfFilePath != NULL);
-	if (strcmp (pModuleInstance->cConfFilePath, cConfFilePath) != 0)
-		return;  // est-ce cette instance.
 	
 	cairo_dock_update_desklet_visibility_widgets (pDesklet, s_pCurrentWidgetList);
 }
 
 static void update_module_instance_container (CairoDockModuleInstance *pInstance, gboolean bDetached)
 {
-	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentWidgetList == NULL || pInstance == NULL)
+	if (! _module_is_opened (pInstance))
 		return ;
 	
-	const gchar *cModuleName = pInstance->pModule->pVisitCard->cModuleName;
-	if (strcmp (s_pCurrentGroup->cGroupName, cModuleName) != 0)  // est-on est en train d'editer ce module dans le panneau de conf.
-		return ;
-	
+	g_print ("update detached widget (%d)\n", bDetached);
 	cairo_dock_update_is_detached_widget (bDetached, s_pCurrentWidgetList);
 }
 
 static void update_modules_list (void)
 {
+	if (s_pMainWindow == NULL)
+		return ;
+	
 	// On detruit la liste des boutons de chaque groupe.
 	gchar *cCurrentGroupName = (s_pCurrentGroup ? g_strdup (s_pCurrentGroup->cGroupName) : NULL);
 	GList *gd;
@@ -2607,10 +2606,13 @@ static void update_modules_list (void)
 		pGroupDescription->pGroupHBox = NULL;
 		_cairo_dock_free_group_description (pGroupDescription);
 	}
-	s_pCurrentGroup = NULL;
 	g_list_free (s_pGroupDescriptionList);
 	s_pGroupDescriptionList = NULL;
+	s_pCurrentGroup = NULL;
 	
+	g_slist_free (s_path);
+	s_path = NULL;
+		
 	// on reset les tables de chaque categorie.
 	int i;
 	CairoDockCategoryWidgetTable *pCategoryWidget;
@@ -2622,6 +2624,8 @@ static void update_modules_list (void)
 	}
 	
 	// on recree chaque groupe.
+	_add_main_groups_buttons ();
+	
 	cairo_dock_foreach_module_in_alphabetical_order ((GCompareFunc) _cairo_dock_add_one_module_widget, NULL);
 	
 	// on retrouve le groupe courant.
@@ -2635,6 +2639,8 @@ static void update_modules_list (void)
 		}
 		g_free (cCurrentGroupName);
 	}
+	
+	gtk_widget_show_all (s_pMainWindow);
 }
 
 static void set_status_message_on_gui (const gchar *cMessage)
