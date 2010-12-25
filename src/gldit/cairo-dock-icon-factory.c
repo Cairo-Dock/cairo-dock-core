@@ -31,7 +31,7 @@
 
 #include <gtk/gtkgl.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-draw.h"  // cairo_dock_erase_cairo_context
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-surface-factory.h"
@@ -274,7 +274,7 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
 		if (cIconPath == NULL)  // fichier non trouve.
 		{
-			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
+			cIconPath = g_strdup (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
 		}
 		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
 			icon->iImageWidth,

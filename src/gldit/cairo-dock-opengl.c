@@ -759,6 +759,7 @@ static void _cairo_dock_post_initialize_opengl_backend (GtkWidget* pWidget, gpoi
 	static gboolean bChecked=FALSE;
 	if (bChecked)
 		return;
+	g_print ("*** Check for cairo-desklet\n");
 	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
 	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
 	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))

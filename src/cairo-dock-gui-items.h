@@ -34,6 +34,7 @@ void cairo_dock_gui_items_update_module_instance_container (CairoDockModuleInsta
 
 void cairo_dock_update_desklet_visibility_params (CairoDesklet *pDesklet);
 
+void cairo_dock_gui_items_reload_current_widget (int iShowPage);
 
 void cairo_dock_register_default_items_gui_backend (void);
 

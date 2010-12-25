@@ -77,7 +77,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data);
 
 
-void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath, gchar *cThemeServerAdress);
+void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath, gchar *cLocalThemeDirPath, gchar *cDistantThemeDirName, gchar *cThemeServerAdress);
 
 
 G_END_DECLS

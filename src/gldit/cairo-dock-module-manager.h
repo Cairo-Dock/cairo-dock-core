@@ -87,8 +87,6 @@ CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc p
 
 int cairo_dock_get_nb_modules (void);
 
-const gchar *cairo_dock_get_modules_dir (void);
-
 gchar *cairo_dock_list_active_modules (void);
 
 
@@ -105,7 +103,7 @@ void cairo_dock_unregister_module (const gchar *cModuleName);
 */
 CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath);
 
-/** Load all the modules of a given folder.
+/** Load all the modules of a given folder. If the path is NULL, plug-ins are taken in the gldi install dir.
 *@param cModuleDirPath path to the a folder containing .so files.
 *@param erreur error set if something bad happens.
 */

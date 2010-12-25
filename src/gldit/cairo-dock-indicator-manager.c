@@ -31,7 +31,7 @@
 
 #include <gtk/gtkgl.h>
 
-#include "../config.h"  // CAIRO_DOCK_SHARE_DATA_DIR
+#include "gldi-config.h"  // GLDI_SHARE_DATA_DIR
 #include "cairo-dock-draw.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-config.h"
@@ -465,7 +465,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 		g_free (cIndicatorImageName);
 	}
 	else
-		pIndicators->cIndicatorImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/default-indicator.png");
+		pIndicators->cIndicatorImagePath = g_strdup (GLDI_SHARE_DATA_DIR"/default-indicator.png");
 	
 	pIndicators->bIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "indicator above", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
 	
@@ -560,7 +560,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 		}
 		else
 		{
-			pIndicators->cClassIndicatorImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/default-class-indicator.svg");
+			pIndicators->cClassIndicatorImagePath = g_strdup (GLDI_SHARE_DATA_DIR"/default-class-indicator.svg");
 		}
 		pIndicators->bZoomClassIndicator = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "zoom class", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	}

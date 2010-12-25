@@ -24,7 +24,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
@@ -272,14 +272,14 @@ static GdkPixbuf* _cairo_dock_gui_get_package_state_icon (gint iState)
 	const gchar *cType;
 	switch (iState)
 	{
-		case CAIRO_DOCK_LOCAL_PACKAGE: 		cType = "icons/harddisk.svg"; break; // "icon-internet.svg"
-		case CAIRO_DOCK_USER_PACKAGE: 		cType = "icons/user.svg"; break; // "plug-ins/MeMenu/icon.svg"
-		case CAIRO_DOCK_DISTANT_PACKAGE: 	cType = "icons/internet.svg"; break; // icon-internet.svg plug-ins/wifi/link-5.svg
-		case CAIRO_DOCK_NEW_PACKAGE: 		cType = "icons-indicator.svg"; break;
-		case CAIRO_DOCK_UPDATED_PACKAGE:	cType = "plug-ins/wifi/link-4.svg"; break; // rotate-desklet.svg
+		case CAIRO_DOCK_LOCAL_PACKAGE: 		cType = "icons/theme-local.svg"; break; // "icon-internet.svg"
+		case CAIRO_DOCK_USER_PACKAGE: 		cType = "icons/theme-user.svg"; break; // "plug-ins/MeMenu/icon.svg"
+		case CAIRO_DOCK_DISTANT_PACKAGE: 	cType = "icons/theme-distant.svg"; break; // icon-internet.svg plug-ins/wifi/link-5.svg
+		case CAIRO_DOCK_NEW_PACKAGE: 		cType = "icons/theme-new.svg"; break;
+		case CAIRO_DOCK_UPDATED_PACKAGE:	cType = "icons/theme-updated.svg"; break; // rotate-desklet.svg
 		default: 							cType = NULL; break;
 	}
-	gchar *cStateIcon = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/", cType, NULL);
+	gchar *cStateIcon = g_strconcat (GLDI_SHARE_DATA_DIR"/", cType, NULL);
 	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cStateIcon, 24, 24, NULL);
 	g_free (cStateIcon);
 	return pixbuf;
@@ -1309,6 +1309,14 @@ static void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pT
 	}
 }
 
+static gboolean _ignore_server_themes (const gchar *cThemeName, CairoDockPackage *pTheme, gpointer data)
+{
+	gchar *cVersionFile = g_strdup_printf ("%s/last-modif", pTheme->cPackagePath);
+	gboolean bRemove = g_file_test (cVersionFile, G_FILE_TEST_EXISTS);
+	g_free (cVersionFile);
+	return bRemove;
+}
+
 static void _got_themes_combo_list (GHashTable *pThemeTable, gpointer *data)
 {
 	if (pThemeTable == NULL)
@@ -1597,12 +1605,12 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 		if (iAnswer == GTK_RESPONSE_YES)
 		{
 			cairo_dock_activate_module (pModule, NULL);
-			cairo_dock_show_module_gui (cModuleName);
+			///cairo_dock_show_module_gui (cModuleName);
 		}
 	}
 	else
 	{
-		cairo_dock_show_module_gui (cModuleName);
+		///cairo_dock_show_module_gui (cModuleName);
 	}
 	g_free (cMessage);
 }
@@ -2449,15 +2457,20 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // libere dans la callback de la tache.
 					
 					GHashTable *pThemeTable = cairo_dock_list_packages (cShareThemesDir, cUserThemesDir, NULL);
+					if (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY)  // on ne veut pas des themes venant du serveur.
+						g_hash_table_foreach_remove (pThemeTable, (GHRFunc)_ignore_server_themes, NULL);
 					_got_themes_combo_list (pThemeTable, (gpointer*)data);
 					g_hash_table_destroy (pThemeTable);
 					
-					data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // libere dans la callback de la tache.
-					CairoDockTask *pTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_combo_list, data);
-					g_object_set_data (G_OBJECT (pOneWidget), "cd-task", pTask);
-					g_signal_connect (G_OBJECT (pOneWidget), "destroy", G_CALLBACK (on_delete_async_widget), NULL);
-					g_free (cUserThemesDir);
-					g_free (cShareThemesDir);
+					if (cDistantThemesDir != NULL)
+					{
+						data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // libere dans la callback de la tache.
+						CairoDockTask *pTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_combo_list, data);
+						g_object_set_data (G_OBJECT (pOneWidget), "cd-task", pTask);
+						g_signal_connect (G_OBJECT (pOneWidget), "destroy", G_CALLBACK (on_delete_async_widget), NULL);
+						g_free (cUserThemesDir);
+						g_free (cShareThemesDir);
+					}
 				}
 			break ;
 			
@@ -2609,7 +2622,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				//\______________ On construit le widget de prevue et on le rajoute a la suite.
 				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
-				pPreviewBox = cairo_dock_gui_make_preview_box (pMainWindow, pOneWidget, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
+				pPreviewBox = cairo_dock_gui_make_preview_box (pMainWindow, pOneWidget, FALSE, 1, cDefaultMessage, GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
 				_pack_in_widget_box (pPreviewBox);
 				g_free (cDefaultMessage);
 			}

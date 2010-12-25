@@ -31,7 +31,7 @@
 
 #include <gtk/gtkgl.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-module-factory.h"  // cairo_dock_deinstanciate_module
 #include "cairo-dock-log.h"

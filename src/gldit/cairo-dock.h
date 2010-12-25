@@ -33,6 +33,7 @@
 
 #include <cairo-dock/cairo-dock-struct.h>
 #include <cairo-dock/cairo-dock-global-variables.h>
+#include <cairo-dock/cairo-dock-core.h>
 // icon factory
 #include <icon-factory/cairo-dock-application-factory.h>
 #include <icon-factory/cairo-dock-applet-factory.h>

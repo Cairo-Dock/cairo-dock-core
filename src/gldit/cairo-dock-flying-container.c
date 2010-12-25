@@ -29,7 +29,7 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-draw-opengl.h"
@@ -73,7 +73,7 @@ static void _cairo_dock_load_hand_image (int iWidth)
 	if (s_pHandSurface != NULL || s_iHandTexture != 0)
 		return ;
 	
-	s_pHandSurface = cairo_dock_create_surface_from_image (CAIRO_DOCK_SHARE_DATA_DIR"/hand.svg",
+	s_pHandSurface = cairo_dock_create_surface_from_image (GLDI_SHARE_DATA_DIR"/hand.svg",
 		1.,
 		iWidth, 0.,
 		CAIRO_DOCK_KEEP_RATIO,
@@ -100,7 +100,7 @@ static void _cairo_dock_load_explosion_image (int iWidth)
 	}
 	else
 	{
-		s_pExplosionSurface = cairo_dock_create_surface_for_icon (CAIRO_DOCK_SHARE_DATA_DIR"/explosion/explosion.png",
+		s_pExplosionSurface = cairo_dock_create_surface_for_icon (GLDI_SHARE_DATA_DIR"/explosion/explosion.png",
 			iWidth * EXPLOSION_NB_FRAMES,
 			iWidth);
 	}

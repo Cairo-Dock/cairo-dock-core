@@ -28,7 +28,7 @@
 #include <GL/glx.h>
 #include <gdk/x11/gdkglx.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-container.h"
@@ -104,11 +104,11 @@ void cairo_dock_load_dialog_buttons (gchar *cButtonOkImage, gchar *cButtonCancel
 	//g_print ("%s (%s ; %s)\n", __func__, cButtonOkImage, cButtonCancelImage);
 	if (s_pButtonOkSurface != NULL)
 		cairo_surface_destroy (s_pButtonOkSurface);
-	s_pButtonOkSurface = _cairo_dock_load_button_icon (cButtonOkImage, CAIRO_DOCK_SHARE_DATA_DIR"/cairo-dock-ok.svg");
+	s_pButtonOkSurface = _cairo_dock_load_button_icon (cButtonOkImage, GLDI_SHARE_DATA_DIR"/cairo-dock-ok.svg");
 
 	if (s_pButtonCancelSurface != NULL)
 		cairo_surface_destroy (s_pButtonCancelSurface);
-	s_pButtonCancelSurface = _cairo_dock_load_button_icon (cButtonCancelImage, CAIRO_DOCK_SHARE_DATA_DIR"/cairo-dock-cancel.svg");
+	s_pButtonCancelSurface = _cairo_dock_load_button_icon (cButtonCancelImage, GLDI_SHARE_DATA_DIR"/cairo-dock-cancel.svg");
 	
 	if (0 && g_bUseOpenGL)
 	{
@@ -575,6 +575,8 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = cairo_dock_new_dialog (pAttribute, pIcon, pContainer);
+	if (pIcon && pIcon->pSubDock)  // un sous-dock par-dessus le dialogue est tres genant.
+		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pIcon->pSubDock));
 	s_pDialogList = g_slist_prepend (s_pDialogList, pDialog);
 	if (pDialog->iNbButtons != 0 && (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL))
 		cairo_dock_load_dialog_buttons (myDialogsParam.cButtonOkImage, myDialogsParam.cButtonCancelImage);
@@ -847,8 +849,8 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 {
 	g_return_val_if_fail (cText != NULL, NULL);
 	
-	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
-	cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, "cairo-dock-animated.xpm");
+	gchar *cIconPath = g_strdup_printf ("%s/%s", GLDI_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
+	cIconPath = g_strdup_printf ("%s/%s", GLDI_SHARE_DATA_DIR, "cairo-dock-animated.xpm");
 	
 	CairoDialogAttribute attr;
 	memset (&attr, 0, sizeof (CairoDialogAttribute));
@@ -984,7 +986,7 @@ gchar *cairo_dock_show_demand_and_wait (const gchar *cMessage, Icon *pIcon, Cair
 {
 	//GtkWidget *pWidget = cairo_dock_build_common_interactive_widget_for_dialog ((cInitialAnswer != NULL ? cInitialAnswer : ""), -1, -1);
 	GtkWidget *pWidget = _cairo_dock_make_entry_for_dialog (cInitialAnswer);
-	const gchar *cIconPath = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
+	const gchar *cIconPath = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
 
 	int iClickedButton = cairo_dock_show_dialog_and_wait (cMessage, pIcon, pContainer, 0, cIconPath, pWidget);
 
@@ -1001,7 +1003,7 @@ double cairo_dock_show_value_and_wait (const gchar *cMessage, Icon *pIcon, Cairo
 	fInitialValue = MIN (fMaxValue, fInitialValue);
 	//GtkWidget *pWidget = cairo_dock_build_common_interactive_widget_for_dialog (NULL, fInitialValue, fMaxValue);
 	GtkWidget *pWidget = _cairo_dock_make_hscale_for_dialog (fInitialValue, fMaxValue);
-	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
+	gchar *cIconPath = g_strdup_printf ("%s/%s", GLDI_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
 
 	int iClickedButton = cairo_dock_show_dialog_and_wait (cMessage, pIcon, pContainer, 0, cIconPath, pWidget);
 	g_free (cIconPath);
@@ -1015,7 +1017,7 @@ double cairo_dock_show_value_and_wait (const gchar *cMessage, Icon *pIcon, Cairo
 
 int cairo_dock_ask_question_and_wait (const gchar *cQuestion, Icon *pIcon, CairoContainer *pContainer)
 {
-	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);  // trouver une icone de question...
+	gchar *cIconPath = g_strdup_printf ("%s/%s", GLDI_SHARE_DATA_DIR, CAIRO_DOCK_ICON);  // trouver une icone de question...
 	int iClickedButton = cairo_dock_show_dialog_and_wait (cQuestion, pIcon, pContainer, 0, cIconPath, NULL);
 	g_free (cIconPath);
 

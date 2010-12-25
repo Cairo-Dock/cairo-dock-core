@@ -113,6 +113,8 @@ set_current_conf_file "plug-ins/Animated-icons/Animated-icons.conf"
 set_value "Rotation"		"color"						"1;1;1;0"
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
+set_value "Configuration"	"paste selection"				true
+set_value "Configuration"	"paste clipboard"				true
 set_value "Configuration"	"persistent"				""
 set_value "Configuration"	"enable actions"				false
 
@@ -155,12 +157,12 @@ set_value "Inclinated Plane" "vanishing point y"		300
 set_value "Curve"			"curvature"					70
 set_value "Parabolic"		"curvature"					".3"
 set_value "Parabolic"		"ratio"						5
-set_value "SimpleSlide"		"simple_iconGapX"			50	
-set_value "SimpleSlide"		"simple_fScaleMax"			"1.5"
-set_value "SimpleSlide"		"simple_arrowShift"			0
-set_value "SimpleSlide"		"simple_arrowHeight"		15
-set_value "SimpleSlide"		"simple_arrowWidth"			30
-set_value "SimpleSlide"		"simple_wide_grid"			true
+set_value "Slide"			"simple_iconGapX"			50	
+set_value "Slide"			"simple_fScaleMax"			"1.5"
+set_value "Slide"			"simple_arrowShift"			0
+set_value "Slide"			"simple_arrowHeight"		15
+set_value "Slide"			"simple_arrowWidth"			30
+set_value "Slide"			"simple_wide_grid"			true
 
 set_current_conf_file "plug-ins/RSSreader/RSSreader.conf"
 set_value "Icon"			"name"						""

@@ -26,7 +26,7 @@
 
 #include <cairo.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update

@@ -39,6 +39,9 @@ struct _CairoDockMainGuiBackend {
 	void (*update_desklet_params) (CairoDesklet *pDesklet);
 	void (*update_desklet_visibility_params) (CairoDesklet *pDesklet);
 	void (*update_modules_list) (void);
+	gboolean bCanManageThemes;
+	const gchar *cDisplayedName;
+	const gchar *cTooltip;
 	} ;
 typedef struct _CairoDockMainGuiBackend CairoDockMainGuiBackend;
 

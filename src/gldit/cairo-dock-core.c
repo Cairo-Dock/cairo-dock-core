@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-icon-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desklet-manager.h"

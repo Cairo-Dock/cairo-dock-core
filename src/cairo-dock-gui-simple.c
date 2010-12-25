@@ -43,7 +43,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
-#include "cairo-dock-gui-switch.h"
+#include "cairo-dock-gui-backend.h"
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-gui-items.h"  // cairo_dock_gui_items_get_widget_from_name et cairo_dock_gui_items_update_desklet_params
 #include "cairo-dock-gui-simple.h"
@@ -1048,15 +1048,25 @@ void cairo_dock_register_simple_gui_backend (void)
 	
 	pBackend->show_main_gui 				= show_main_gui;
 	pBackend->show_module_gui 				= show_module_gui;
-	pBackend->show_module_instance_gui 		= show_module_instance_gui;
+	//pBackend->show_module_instance_gui 		= show_module_instance_gui;
 	pBackend->close_gui 					= close_gui;
 	pBackend->update_module_state 			= update_module_state;
 	pBackend->update_module_instance_container = cairo_dock_gui_items_update_module_instance_container;
 	pBackend->update_desklet_params 		= cairo_dock_gui_items_update_desklet_params;
 	pBackend->update_desklet_visibility_params = cairo_dock_update_desklet_visibility_params;
 	pBackend->update_modules_list 			= update_modules_list;
-	pBackend->set_status_message_on_gui 	= set_status_message_on_gui;
-	pBackend->get_widget_from_name 			= cairo_dock_gui_items_get_widget_from_name;
+	pBackend->bCanManageThemes 				= TRUE;
+	pBackend->cDisplayedName 				= _("Simple Mode");
+	pBackend->cTooltip 						= NULL;
 	
 	cairo_dock_register_config_gui_backend (pBackend);
+	
+	CairoDockGuiBackend *pConfigBackend = g_new0 (CairoDockGuiBackend, 1);
+	
+	pConfigBackend->set_status_message_on_gui = set_status_message_on_gui;
+	pConfigBackend->reload_current_widget 	= cairo_dock_gui_items_reload_current_widget;
+	pConfigBackend->show_module_instance_gui 		= show_module_instance_gui;
+	pConfigBackend->get_widget_from_name 	= cairo_dock_gui_items_get_widget_from_name;
+	
+	cairo_dock_register_gui_backend (pConfigBackend);
 }

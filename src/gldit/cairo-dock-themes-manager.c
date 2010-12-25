@@ -27,7 +27,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
@@ -42,7 +42,6 @@
 #include "cairo-dock-themes-manager.h"
 
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
-#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes2.2"
 
 gchar *g_cCairoDockDataDir = NULL;  // le repertoire racine contenant tout.
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
@@ -54,6 +53,9 @@ gchar *g_cCurrentImagesPath = NULL;  // le chemin vers le repertoire des images 
 gchar *g_cCurrentPlugInsPath = NULL;  // le chemin vers le repertoire des plug-ins du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
+
+static gchar *s_cLocalThemeDirPath = NULL;
+static gchar *s_cDistantThemeDirName = NULL;
 
 extern CairoDock *g_pMainDock;
 
@@ -180,6 +182,9 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	g_free (cReadmeFile);
 	g_free (cMessage);
 	
+	g_string_printf (sCommand, "rm -f \"%s/last-modif\"", cNewThemePath);
+	r = system (sCommand->str);
+	
 	//\___________________ Le theme n'est plus en etat 'modifie'.
 	g_free (cNewThemePath);
 	if (bThemeSaved)
@@ -200,7 +205,7 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 	
 	cd_message ("building theme package ...");
 	int r;
-	if (g_file_test (CAIRO_DOCK_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme", G_FILE_TEST_EXISTS))
+	if (g_file_test (GLDI_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme", G_FILE_TEST_EXISTS))
 	{
 		gchar *cCommand;
 		const gchar *cTerm = g_getenv ("TERM");
@@ -310,7 +315,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	else  // c'est un theme officiel.
 	{
 		cd_debug ("c'est un theme officiel");
-		cNewThemePath = cairo_dock_get_package_path (cNewThemeName, CAIRO_DOCK_SHARE_THEMES_DIR, g_cThemesDirPath, CAIRO_DOCK_DISTANT_THEMES_DIR, CAIRO_DOCK_ANY_PACKAGE);
+		cNewThemePath = cairo_dock_get_package_path (cNewThemeName, s_cLocalThemeDirPath, g_cThemesDirPath, s_cDistantThemeDirName, CAIRO_DOCK_ANY_PACKAGE);
 	}
 	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
 	//g_print ("cNewThemePath : %s ; cNewThemeName : %s\n", cNewThemePath, cNewThemeName);
@@ -472,6 +477,9 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 		g_free (cNewPlugInsDir);
 	}
 	
+	g_string_printf (sCommand, "rm -f \"%s/last-modif\"", g_cCurrentThemePath);
+	r = system (sCommand->str);
+	
 	// precaution probablement inutile.
 	g_string_printf (sCommand, "chmod -R 777 \"%s\"", g_cCurrentThemePath);
 	r = system (sCommand->str);
@@ -522,7 +530,7 @@ CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean 
 			g_free (cDirPath);\
 			cDirPath = NULL; } }
 
-void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath, gchar *cThemeServerAdress)
+void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath, gchar *cLocalThemeDirPath, gchar *cDistantThemeDirName, gchar *cThemeServerAdress)
 {
 	//\___________________ On initialise les chemins de l'appli.
 	g_cCairoDockDataDir = cRootDataDirPath;  // le repertoire racine contenant tout.
@@ -533,6 +541,8 @@ void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar 
 	_check_dir (g_cExtrasDirPath);
 	g_cThemesDirPath = cThemesDirPath;  // le chemin vers le repertoire des themes.
 	_check_dir (g_cThemesDirPath);
+	s_cLocalThemeDirPath = cLocalThemeDirPath;
+	s_cDistantThemeDirName = cDistantThemeDirName;	
 	
 	g_cCurrentLaunchersPath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
 	_check_dir (g_cCurrentLaunchersPath);

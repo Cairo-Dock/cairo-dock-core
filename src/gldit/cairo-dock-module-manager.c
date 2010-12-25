@@ -26,7 +26,7 @@
 
 #include <cairo.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
@@ -96,12 +96,6 @@ CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc p
 int cairo_dock_get_nb_modules (void)
 {
 	return g_hash_table_size (s_hModuleTable);
-}
-
-
-const gchar *cairo_dock_get_modules_dir (void)
-{
-	return CAIRO_DOCK_MODULES_DIR;
 }
 
 static void _cairo_dock_write_one_module_name (const gchar *cModuleName, CairoDockModule *pModule, GString *pString)
@@ -191,7 +185,10 @@ void cairo_dock_load_modules_in_directory (const gchar *cModuleDirPath, GError *
 {
 	if (!g_module_supported ())
 		return;
+	if (cModuleDirPath == NULL)
+		cModuleDirPath = GLDI_MODULES_DIR;
 	cd_message ("%s (%s)", __func__, cModuleDirPath);
+	
 	GError *tmp_erreur = NULL;
 	GDir *dir = g_dir_open (cModuleDirPath, 0, &tmp_erreur);
 	if (tmp_erreur != NULL)

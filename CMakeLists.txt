@@ -104,17 +104,19 @@ add_subdirectory (po)
 
 set (CAIRO_DOCK_SHARE_DATA_DIR ${pkgdatadir})
 set (CAIRO_DOCK_SHARE_THEMES_DIR ${pkgdatadir}/themes)
-set (CAIRO_DOCK_MODULES_DIR ${libdir}/cairo-dock)
+#set (CAIRO_DOCK_MODULES_DIR ${libdir}/cairo-dock)
 set (CAIRO_DOCK_LOCALE_DIR ${datadir}/locale)
 set (CAIRO_DOCK_THEMES_DIR "themes")
 set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 
 set (GLDI_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 set (GLDI_SHARE_DATA_DIR ${pkgdatadir})
+set (GLDI_MODULES_DIR ${libdir}/cairo-dock)
 
 ########### file generation ###############
 
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-config.h)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/cairo-dock.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock-simple.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/cairo-dock-simple.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/main-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/main-dock.conf)

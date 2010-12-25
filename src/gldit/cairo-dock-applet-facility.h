@@ -377,10 +377,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** Reload the config panel of the applet. This is useful if you have custom widgets inside your conf file, and need to reload them.
 */
-#define CD_APPLET_RELOAD_CONFIG_PANEL cairo_dock_reload_current_module_widget (myApplet)
+#define CD_APPLET_RELOAD_CONFIG_PANEL cairo_dock_reload_current_module_widget ()
 /** Reload the config panel of the applet and jump to the given page. This is useful if you have custom widgets inside your conf file, and need to reload them.
 */
-#define CD_APPLET_RELOAD_CONFIG_PANEL_WITH_PAGE(iNumPage) cairo_dock_reload_current_module_widget_full (myApplet, iNumPage)
+#define CD_APPLET_RELOAD_CONFIG_PANEL_WITH_PAGE(iNumPage) cairo_dock_reload_current_module_widget_full (iNumPage)
 
 
   /////////////////////////
@@ -672,6 +672,11 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_DRAW_EMBLEM_ON_MY_ICON(pEmblem) cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer)
 
+#define CD_APPLET_SET_EMBLEM_ON_MY_ICON(cImageFile, iPosition) do {\
+	CairoEmblem *pEmblem = cairo_dock_make_emblem (cImageFile, myIcon, myContainer);\
+	cairo_dock_set_emblem_position (pEmblem, iPosition);\
+	cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer);\
+	cairo_dock_free_emblem (pEmblem); } while (0)
 
 /** Add a Data Renderer the applet's icon.
 *@param pAttr the attributes of the Data Renderer. They allow you to define its properties.

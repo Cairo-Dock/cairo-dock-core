@@ -552,6 +552,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 {
 	if (s_pMenu != NULL)
 	{
+		g_print ("previous menu still alive\n");
 		gtk_widget_destroy (GTK_WIDGET (s_pMenu));
 		s_pMenu = NULL;
 	}

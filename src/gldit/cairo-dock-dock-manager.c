@@ -36,7 +36,7 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-class-manager.h"
@@ -573,7 +573,7 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 		gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 		{
-			gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s'", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+			gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s'", GLDI_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 			int r = system (cCommand);
 			g_free (cCommand);
 		}
@@ -678,7 +678,7 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
 	if (bFlushConfFileNeeded)
 	{
-		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE);
+		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, GLDI_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE);
 	}
 	
 	g_key_file_free (pKeyFile);
@@ -702,7 +702,7 @@ void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName)
 {
 	// on cree le fichier de conf a partir du template.
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-	gchar *cCommand = g_strdup_printf ("cp '%s' '%s'", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+	gchar *cCommand = g_strdup_printf ("cp '%s' '%s'", GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 	int r = system (cCommand);
 	g_free (cCommand);
 	

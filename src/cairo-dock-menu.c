@@ -60,7 +60,7 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-user-interaction.h"  // set_custom_icon_on_appli
-#include "cairo-dock-gui-switch.h"
+#include "cairo-dock-gui-backend.h"
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-menu.h"
 
@@ -535,6 +535,8 @@ static void cairo_dock_add_main_dock (GtkMenuItem *pMenuItem, gpointer *data)
 	gchar *cDockName = cairo_dock_add_root_dock_config ();
 	CairoDock *pDock = cairo_dock_create_dock (cDockName, NULL);
 	cairo_dock_reload_one_root_dock (cDockName, pDock);
+	
+	cairo_dock_gui_trigger_reload_items ();  // pas de signal "new_dock"
 	
 	cairo_dock_show_general_message (_("The new dock has been created.\nNow move some launchers or applets into it by right-clicking on the icon -> move to another dock"), 10000);  // on le place pas sur le nouveau dock, car sa fenetre n'est pas encore bien placee (0,0).
 }

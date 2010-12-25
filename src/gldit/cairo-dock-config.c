@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #ifdef HAVE_LIBCRYPT
 /* libC crypt */
 #include <crypt.h>

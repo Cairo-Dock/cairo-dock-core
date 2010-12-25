@@ -24,7 +24,7 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"

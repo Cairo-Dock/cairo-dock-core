@@ -46,7 +46,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-utilities.h"
-#include "cairo-dock-gui-switch.h"
+#include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
 
 extern gboolean g_bLocked;
@@ -145,11 +145,12 @@ static void _cairo_dock_close_all_in_class_subdock (Icon *icon)
 	}
 }
 
-gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, guint iButtonState)
+gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer, guint iButtonState)
 {
 	//g_print ("+ %s (%s)\n", __func__, icon ? icon->cName : "no icon");
-	if (icon == NULL)
+	if (icon == NULL || ! CAIRO_DOCK_IS_DOCK (pContainer))
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)) && ! (iButtonState & GDK_SHIFT_MASK))  // icone de sous-dock a montrer au clic.
 	{
 		cairo_dock_show_subdock (icon, pDock);
@@ -210,7 +211,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 }
 
 
-gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoDock *pDock)
+gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.bCloseAppliOnMiddleClick && ! CAIRO_DOCK_IS_APPLET (icon))
 	{
@@ -233,7 +234,7 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 }
 
 
-gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoDock *pDock, int iDirection)
+gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer, int iDirection)
 {
 	if (CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_IS_CONTAINER_LAUNCHER (icon))  // on emule un alt+tab sur la liste des applis du sous-dock.
 	{
@@ -407,9 +408,9 @@ gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, Ca
 
 gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
+	g_print ("icon %s inserted (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
 	if (pIcon->fInsertRemoveFactor == 0)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	g_print ("icon %s inserted\n", pIcon?pIcon->cName:"unknown");
 	
 	cairo_dock_gui_trigger_reload_items ();
 	
@@ -418,9 +419,9 @@ gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon,
 
 gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
+	g_print ("icon %s removed (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
 	if (pIcon->fInsertRemoveFactor == 0)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-	g_print ("icon %s removed\n", pIcon?pIcon->cName:"unknown");
 	
 	cairo_dock_gui_trigger_reload_items ();
 	

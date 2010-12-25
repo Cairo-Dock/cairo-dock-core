@@ -33,34 +33,33 @@
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-gui-switch.h"
+#include "cairo-dock-gui-backend.h"
 
 extern gchar *g_cCairoDockDataDir;
 extern CairoDock *g_pMainDock;
 
 static CairoDockMainGuiBackend *s_pMainGuiBackend = NULL;
 static CairoDockItemsGuiBackend *s_pItemsGuiBackend = NULL;
+static int s_iCurrentMode = 0;
 
-static gboolean s_bAdvancedMode = FALSE;
 void cairo_dock_load_user_gui_backend (int iMode)  // 0 = simple
 {
 	if (iMode == 1)
 	{
 		cairo_dock_register_main_gui_backend ();
-		s_bAdvancedMode = TRUE;
 	}
 	else
 	{
 		cairo_dock_register_simple_gui_backend ();
-		s_bAdvancedMode = FALSE;
 	}
+	s_iCurrentMode = iMode;
 }
 
 static void on_click_switch_mode (GtkButton *button, gpointer data)
 {
 	cairo_dock_close_gui ();
 	
-	int iNewMode = (s_bAdvancedMode ? 0 : 1);
+	int iNewMode = (s_iCurrentMode == 1 ? 0 : 1);
 	
 	gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
 	cairo_dock_update_conf_file (cConfFilePath,
@@ -74,9 +73,9 @@ static void on_click_switch_mode (GtkButton *button, gpointer data)
 }
 GtkWidget *cairo_dock_make_switch_gui_button (void)
 {
-	GtkWidget *pSwitchButton = gtk_button_new_with_label (s_bAdvancedMode ? _("Simple Mode") : _("Advanced Mode"));
-	if (!s_bAdvancedMode)
-		gtk_widget_set_tooltip_text (pSwitchButton, _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme."));
+	GtkWidget *pSwitchButton = gtk_button_new_with_label (s_pMainGuiBackend->cDisplayedName);
+	if (s_pMainGuiBackend->cTooltip)
+		gtk_widget_set_tooltip_text (pSwitchButton, s_pMainGuiBackend->cTooltip);
 	
 	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (pSwitchButton), pImage);
@@ -86,7 +85,7 @@ GtkWidget *cairo_dock_make_switch_gui_button (void)
 
 gboolean cairo_dock_theme_manager_is_integrated (void)
 {
-	return !s_bAdvancedMode;  // en mode simple, le theme-manager est integre au panneau de conf.
+	return (s_pMainGuiBackend && s_pMainGuiBackend->bCanManageThemes);
 }
 
 

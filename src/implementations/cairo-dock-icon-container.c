@@ -31,7 +31,7 @@
 
 #include <gtk/gtkgl.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
@@ -205,7 +205,7 @@ static void _cairo_dock_load_box_surface (void)
 		cUserPath = NULL;
 	}
 	cairo_dock_load_image_buffer (&g_pBoxAboveBuffer,
-		cUserPath ? cUserPath : CAIRO_DOCK_SHARE_DATA_DIR"/box-front.png",
+		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/box-front.png",
 		iSize,
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);
@@ -217,7 +217,7 @@ static void _cairo_dock_load_box_surface (void)
 		cUserPath = NULL;
 	}
 	cairo_dock_load_image_buffer (&g_pBoxBelowBuffer,
-		cUserPath ? cUserPath : CAIRO_DOCK_SHARE_DATA_DIR"/box-back.png",
+		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/box-back.png",
 		iSize,
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);

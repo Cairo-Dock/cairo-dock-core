@@ -36,7 +36,7 @@
 #include <gdk/x11/gdkglx.h>
 #include <gdk/gdkx.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-module-factory.h"  // cairo_dock_pre_read_module_instance_config
 #include "cairo-dock-config.h"
 #include "cairo-dock-X-manager.h"
@@ -89,7 +89,7 @@ void cairo_dock_load_desklet_buttons (void)
 	if (s_pRotateButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pRotateButtonBuffer,
-			CAIRO_DOCK_SHARE_DATA_DIR"/rotate-desklet.svg",
+			GLDI_SHARE_DATA_DIR"/rotate-desklet.svg",
 			myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
@@ -106,7 +106,7 @@ void cairo_dock_load_desklet_buttons (void)
 	if (s_pRetachButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pRetachButtonBuffer,
-			CAIRO_DOCK_SHARE_DATA_DIR"/retach-desklet.svg",
+			GLDI_SHARE_DATA_DIR"/retach-desklet.svg",
 			myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
@@ -123,7 +123,7 @@ void cairo_dock_load_desklet_buttons (void)
 	if (s_pDepthRotateButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pDepthRotateButtonBuffer,
-			CAIRO_DOCK_SHARE_DATA_DIR"/depth-rotate-desklet.svg",
+			GLDI_SHARE_DATA_DIR"/depth-rotate-desklet.svg",
 			myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
@@ -140,7 +140,7 @@ void cairo_dock_load_desklet_buttons (void)
 	if (s_pNoInputButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pNoInputButtonBuffer,
-			CAIRO_DOCK_SHARE_DATA_DIR"/no-input-desklet.png",
+			GLDI_SHARE_DATA_DIR"/no-input-desklet.png",
 			myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);

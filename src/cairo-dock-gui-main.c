@@ -41,7 +41,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
-#include "cairo-dock-gui-switch.h"
+#include "cairo-dock-gui-backend.h"
 #include "cairo-dock-gui-main.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32
@@ -2076,13 +2076,20 @@ static void cairo_dock_insert_extern_widget_in_gui (GtkWidget *pWidget)
 	gtk_widget_show_all (pWidget);
 }
 
-static void _reload_current_module_widget (CairoDockModuleInstance *pInstance)
+static void _reload_current_module_widget (CairoDockModuleInstance *pInstance, int iShowPage)
 {
 	g_return_if_fail (s_pCurrentGroupWidget != NULL && s_pCurrentGroup != NULL && s_pCurrentWidgetList != NULL);
 	
-	int iNotebookPage = (GTK_IS_NOTEBOOK (s_pCurrentGroupWidget) ? 
-			gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget)) :
-			-1);
+	int iNotebookPage;
+	if ((GTK_IS_NOTEBOOK (s_pCurrentGroupWidget)))
+	{
+		if (iShowPage == -1)
+			iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget));
+		else
+			iNotebookPage = iShowPage;
+	}
+	else
+		iNotebookPage = -1;
 	
 	gtk_widget_destroy (s_pCurrentGroupWidget);
 	s_pCurrentGroupWidget = NULL;
@@ -2104,6 +2111,27 @@ static void _reload_current_module_widget (CairoDockModuleInstance *pInstance)
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget), iNotebookPage);
 	}
 }
+
+static void reload_current_widget (int iShowPage)
+{
+	g_return_if_fail (s_pCurrentGroup != NULL && s_pCurrentGroup->cConfFilePath != NULL);
+	
+	CairoDockModule *pModule = cairo_dock_find_module_from_name (s_pCurrentGroup->cGroupName);
+	g_return_if_fail (pModule != NULL && pModule->pInstancesList != NULL);
+	
+	CairoDockModuleInstance *pModuleInstance;
+	GList *pElement;
+	for (pElement = pModule->pInstancesList; pElement != NULL; pElement= pElement->next)
+	{
+		pModuleInstance = pElement->data;
+		if (strcmp (pModuleInstance->cConfFilePath, s_pCurrentGroup->cConfFilePath) == 0)
+			break ;
+	}
+	g_return_if_fail (pElement != NULL);
+	
+	_reload_current_module_widget (pModuleInstance, iShowPage);
+}
+
 static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance)
 {
 	cd_debug ("%s (%s, %s)", __func__, cConfFilePath, pGroupDescription->cGroupName);
@@ -2319,7 +2347,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 			}
 		}
 		if (bReload)
-			_reload_current_module_widget (NULL);
+			_reload_current_module_widget (NULL, -1);
 		pGroupDescription->bIgnoreDependencies = FALSE;
 	}
 	
@@ -2554,7 +2582,7 @@ static inline gboolean _module_is_opened (CairoDockModuleInstance *pInstance)
 }
 static inline gboolean _desklet_is_opened (CairoDesklet *pDesklet)
 {
-	if (pDesklet == NULL)
+	if (s_pMainWindow == NULL || pDesklet == NULL)
 		return FALSE;
 	Icon *pIcon = pDesklet->pIcon;
 	g_return_val_if_fail (pIcon != NULL, FALSE);
@@ -2569,7 +2597,6 @@ static void update_desklet_params (CairoDesklet *pDesklet)
 	if (! _desklet_is_opened (pDesklet))
 		return ;
 	
-	g_print ("update params\n");
 	cairo_dock_update_desklet_widgets (pDesklet, s_pCurrentWidgetList);
 }
 
@@ -2586,7 +2613,6 @@ static void update_module_instance_container (CairoDockModuleInstance *pInstance
 	if (! _module_is_opened (pInstance))
 		return ;
 	
-	g_print ("update detached widget (%d)\n", bDetached);
 	cairo_dock_update_is_detached_widget (bDetached, s_pCurrentWidgetList);
 }
 
@@ -2674,15 +2700,25 @@ void cairo_dock_register_main_gui_backend (void)
 	
 	pBackend->show_main_gui 				= show_main_gui;
 	pBackend->show_module_gui 				= show_module_gui;
-	pBackend->show_module_instance_gui 		= show_module_instance_gui;
+	//pBackend->show_module_instance_gui 		= show_module_instance_gui;
 	pBackend->close_gui 					= close_gui;
 	pBackend->update_module_state 			= update_module_state;
 	pBackend->update_desklet_params 		= update_desklet_params;
 	pBackend->update_desklet_visibility_params = update_desklet_visibility_params;
 	pBackend->update_module_instance_container = update_module_instance_container;
 	pBackend->update_modules_list 			= update_modules_list;
-	pBackend->set_status_message_on_gui 	= set_status_message_on_gui;
-	pBackend->get_widget_from_name 			= get_widget_from_name;
+	pBackend->bCanManageThemes 				= FALSE;
+	pBackend->cDisplayedName 				= _("Advanced Mode");
+	pBackend->cTooltip 						= _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme.");
 	
 	cairo_dock_register_config_gui_backend (pBackend);
+	
+	CairoDockGuiBackend *pConfigBackend = g_new0 (CairoDockGuiBackend, 1);
+	
+	pConfigBackend->set_status_message_on_gui = set_status_message_on_gui;
+	pConfigBackend->reload_current_widget 	= reload_current_widget;
+	pConfigBackend->show_module_instance_gui 	= show_module_instance_gui;
+	pConfigBackend->get_widget_from_name 	= get_widget_from_name;
+	
+	cairo_dock_register_gui_backend (pConfigBackend);
 }

@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-module-factory.h"  // gldi_extend_manager
 #include "cairo-dock-keyfile-utilities.h"
@@ -178,7 +178,7 @@ void gldi_get_managers_config (const gchar *cConfFilePath, const gchar *cVersion
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, cVersion);
 	if (bFlushConfFileNeeded)
 	{
-		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
+		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, GLDI_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
 	}
 	
 	g_key_file_free (pKeyFile);

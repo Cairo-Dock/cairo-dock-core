@@ -24,7 +24,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
@@ -54,123 +54,16 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 static CairoDockGuiBackend *s_pGuiBackend = NULL;
 
 
-  //////////////////////////
- // DYNAMIC CONFIG PANEL //
-//////////////////////////
+  /////////////////
+ // GUI BACKEND //
+/////////////////
 
-CairoDockGroupKeyWidget *cairo_dock_get_group_key_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
+
+void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend)
 {
-	if (s_pGuiBackend && s_pGuiBackend->get_widget_from_name)
-	{
-		return s_pGuiBackend->get_widget_from_name (cGroupName, cKeyName);
-	}
-	return NULL;
+	g_free (s_pGuiBackend);
+	s_pGuiBackend = pBackend;
 }
-
-GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
-{
-	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_get_group_key_widget_from_name (cGroupName, cKeyName);
-	if (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL)
-		return pGroupKeyWidget->pSubWidgetList->data;
-	return NULL;
-}
-
-void cairo_dock_reload_current_module_widget_full (CairoDockModuleInstance *pInstance, int iShowPage)
-{
-	g_return_if_fail (pInstance != NULL);
-	if (s_pGuiBackend && s_pGuiBackend->show_module_instance_gui)
-	{
-		return s_pGuiBackend->show_module_instance_gui (pInstance, iShowPage);  // gere cInternalModule
-	}
-}
-
-void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
-{
-	if (s_pGuiBackend && s_pGuiBackend->show_module_instance_gui)
-		s_pGuiBackend->show_module_instance_gui (pModuleInstance, iShowPage);
-}
-
-void cairo_dock_show_module_gui (const gchar *cModuleName)
-{
-	CairoDockModuleInstance *pInstance = NULL;
-	/// find the instance ...
-	
-	g_return_if_fail (pInstance != NULL);
-	if (s_pGuiBackend && s_pGuiBackend->show_module_instance_gui)
-		s_pGuiBackend->show_module_instance_gui (pInstance, 0);
-}
-
-/*void cairo_dock_deactivate_module_in_gui (const gchar *cModuleName)
-{
-	if (s_pGuiBackend && s_pGuiBackend->deactivate_module_in_gui)
-		s_pGuiBackend->deactivate_module_in_gui (cModuleName);
-}
-
-static gboolean _cairo_dock_module_is_opened (CairoDockModuleInstance *pModuleInstance)
-{
-	if (s_pGuiBackend && s_pGuiBackend->module_is_opened)
-		return s_pGuiBackend->module_is_opened (pModuleInstance);
-	else
-		return FALSE;
-}
-
-void cairo_dock_update_desklet_size_in_gui (CairoDockModuleInstance *pModuleInstance, int iWidth, int iHeight)
-{
-	if (_cairo_dock_module_is_opened (pModuleInstance))  // on est en train d'editer ce module dans le panneau de conf.
-	{
-		CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_get_group_key_widget_from_name ("Desklet", "size");
-		GtkWidget *pOneWidget;
-		
-		if (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList)
-		{
-			pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
-			g_signal_handlers_block_matched (pOneWidget,
-				(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
-				0, 0, NULL, _cairo_dock_set_value_in_pair, NULL);
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), iWidth);
-			g_signal_handlers_unblock_matched (pOneWidget,
-				(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
-				0, 0, NULL, _cairo_dock_set_value_in_pair, NULL);
-			
-			if (pGroupKeyWidget->pSubWidgetList->next != NULL)
-			{
-				pOneWidget = pGroupKeyWidget->pSubWidgetList->next->data;
-				g_signal_handlers_block_matched (pOneWidget,
-					(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
-					0, 0, NULL, _cairo_dock_set_value_in_pair, NULL);
-				gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), iHeight);
-				g_signal_handlers_unblock_matched (pOneWidget,
-					(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
-					0, 0, NULL, _cairo_dock_set_value_in_pair, NULL);
-			}
-		}
-		
-	}
-}
-
-void cairo_dock_update_desklet_position_in_gui (CairoDockModuleInstance *pModuleInstance, int x, int y)
-{
-	if (_cairo_dock_module_is_opened (pModuleInstance))  // on est en train d'editer ce module dans le panneau de conf.
-	{
-		GtkWidget *pOneWidget;
-		pOneWidget = cairo_dock_get_widget_from_name ("Desklet", "x position");
-		if (pOneWidget != NULL)
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), x);
-		pOneWidget = cairo_dock_get_widget_from_name ("Desklet", "y position");
-		if (pOneWidget != NULL)
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), y);
-	}
-}
-
-void cairo_dock_update_desklet_detached_state_in_gui (CairoDockModuleInstance *pModuleInstance, gboolean bIsDetached)
-{
-	if (_cairo_dock_module_is_opened (pModuleInstance))  // on est en train d'editer ce module dans le panneau de conf.
-	{
-		GtkWidget *pOneWidget = cairo_dock_get_widget_from_name ("Desklet", "initially detached");
-		if (pOneWidget != NULL)
-			gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (pOneWidget), bIsDetached);
-	}
-}*/
 
 
 void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
@@ -205,40 +98,27 @@ void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFor
 }
 
 
-  /////////////////
- // GUI BACKEND //
-/////////////////
-
-/*void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend)
+CairoDockGroupKeyWidget *cairo_dock_get_group_key_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
 {
-	g_free (s_pGuiBackend);
-	s_pGuiBackend = pBackend;
+	if (s_pGuiBackend && s_pGuiBackend->get_widget_from_name)
+	{
+		return s_pGuiBackend->get_widget_from_name (cGroupName, cKeyName);
+	}
+	return NULL;
 }
 
-GtkWidget *cairo_dock_show_main_gui (void)
+GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
 {
-	GtkWidget *pWindow = NULL;
-	if (s_pGuiBackend && s_pGuiBackend->show_main_gui)
-		pWindow = s_pGuiBackend->show_main_gui ();
-	if (pWindow && g_pMainDock != NULL)  // evitons d'empieter sur le main dock.
-	{
-		if (g_pMainDock->container.bIsHorizontal)
-		{
-			if (g_pMainDock->container.bDirectionUp)
-				gtk_window_move (GTK_WINDOW (pWindow), 0, 0);
-			else
-				gtk_window_move (GTK_WINDOW (pWindow), 0, g_pMainDock->iMinDockHeight+10);
-		}
-		else
-		{
-			if (g_pMainDock->container.bDirectionUp)
-				gtk_window_move (GTK_WINDOW (pWindow), 0, 0);
-			else
-				gtk_window_move (GTK_WINDOW (pWindow), g_pMainDock->iMinDockHeight+10, 0);
-		}
-	}
-	
-	return pWindow;
+	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_get_group_key_widget_from_name (cGroupName, cKeyName);
+	if (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL)
+		return pGroupKeyWidget->pSubWidgetList->data;
+	return NULL;
+}
+
+void cairo_dock_reload_current_widget_full (int iShowPage)
+{
+	if (s_pGuiBackend && s_pGuiBackend->reload_current_widget)
+		s_pGuiBackend->reload_current_widget (iShowPage);
 }
 
 void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
@@ -246,18 +126,6 @@ void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstan
 	if (s_pGuiBackend && s_pGuiBackend->show_module_instance_gui)
 		s_pGuiBackend->show_module_instance_gui (pModuleInstance, iShowPage);
 }
-
-void cairo_dock_show_module_gui (const gchar *cModuleName)
-{
-	if (s_pGuiBackend && s_pGuiBackend->show_module_gui)
-		s_pGuiBackend->show_module_gui (cModuleName);
-}
-
-void cairo_dock_close_gui (void)
-{
-	if (s_pGuiBackend && s_pGuiBackend->close_gui)
-		s_pGuiBackend->close_gui ();
-}*/
 
 
   ////////////////
@@ -369,7 +237,7 @@ GtkWidget *cairo_dock_build_generic_gui_window (const gchar *cTitle, int iWidth,
 {
 	//\_____________ On construit la fenetre.
 	GtkWidget *pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_icon_from_file (GTK_WINDOW (pMainWindow), CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
+	gtk_window_set_icon_from_file (GTK_WINDOW (pMainWindow), GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 	if (cTitle != NULL)
 		gtk_window_set_title (GTK_WINDOW (pMainWindow), cTitle);
 	
@@ -615,10 +483,6 @@ void cairo_dock_trigger_refresh_launcher_gui (void)
 }*/
 
 
-void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend)
-{
-	
-}
 
 
   ///////////////

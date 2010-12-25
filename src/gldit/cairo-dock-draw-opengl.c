@@ -321,7 +321,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	if (g_pGradationTexture[pDock->container.bIsHorizontal] == 0)
 	{
-		//g_pGradationTexture[pDock->container.bIsHorizontal] = cairo_dock_load_local_texture (pDock->container.bIsHorizontal ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", CAIRO_DOCK_SHARE_DATA_DIR);
+		//g_pGradationTexture[pDock->container.bIsHorizontal] = cairo_dock_load_local_texture (pDock->container.bIsHorizontal ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", GLDI_SHARE_DATA_DIR);
 		g_pGradationTexture[pDock->container.bIsHorizontal] = cairo_dock_load_texture_from_raw_data (gradationTex,
 			pDock->container.bIsHorizontal ? 1:48,
 			pDock->container.bIsHorizontal ? 48:1);

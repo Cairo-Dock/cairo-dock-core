@@ -108,7 +108,7 @@
 
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-items.h"
-#include "cairo-dock-gui-switch.h"
+#include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-core.h"
 
@@ -120,6 +120,8 @@
 #define CAIRO_DOCK_EXTRAS_DIR "extras"
 // Nom du repertoire des themes de dock.
 #define CAIRO_DOCK_THEMES_DIR "themes"
+// Nom du repertoire des themes de dock sur le serveur
+#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes2.2"
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentThemePath;
@@ -525,6 +527,7 @@ int main (int argc, char** argv)
 	}
 	
 	//\___________________ get global config.
+	gboolean bFirstLaunch = FALSE;
 	gchar *cRootDataDirPath;
 	if (cUserDefinedDataDir != NULL)
 	{
@@ -534,8 +537,8 @@ int main (int argc, char** argv)
 	else
 	{
 		cRootDataDirPath = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
+		bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	}
-	gboolean bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	_cairo_dock_get_global_config (cRootDataDirPath);
 	
 	//\___________________ internationalize the app.
@@ -563,7 +566,8 @@ int main (int argc, char** argv)
 	gchar *cExtraDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_EXTRAS_DIR, NULL);
 	gchar *cThemesDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_THEMES_DIR, NULL);
 	gchar *cCurrentThemeDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_CURRENT_THEME_NAME, NULL);
-	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath, cThemeServerAdress ? cThemeServerAdress : g_strdup (CAIRO_DOCK_THEME_SERVER));
+	
+	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath, (gchar*)CAIRO_DOCK_SHARE_THEMES_DIR, (gchar*)CAIRO_DOCK_DISTANT_THEMES_DIR, cThemeServerAdress ? cThemeServerAdress : g_strdup (CAIRO_DOCK_THEME_SERVER));
 	
 	//\___________________ Check that OpenGL is safely usable, if not ask the user what to do.
 	if (g_bUseOpenGL && ! bForceOpenGL && ! bToggleIndirectRendering && ! cairo_dock_opengl_is_safe ())  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
@@ -623,7 +627,7 @@ int main (int argc, char** argv)
 	if (! bSafeMode)
 	{
 		GError *erreur = NULL;
-		cairo_dock_load_modules_in_directory (cairo_dock_get_modules_dir (), &erreur);
+		cairo_dock_load_modules_in_directory (NULL, &erreur);  // load gldi-based plug-ins
 		if (erreur != NULL)
 		{
 			cd_warning ("%s\n  no module will be available", erreur->message);
@@ -633,7 +637,7 @@ int main (int argc, char** argv)
 		
 		if (cUserDefinedModuleDir != NULL)
 		{
-			cairo_dock_load_modules_in_directory (cUserDefinedModuleDir, &erreur);
+			cairo_dock_load_modules_in_directory (cUserDefinedModuleDir, &erreur);  // load user plug-ins
 			if (erreur != NULL)
 			{
 				cd_warning ("%s\n  no additionnal module will be available", erreur->message);
@@ -783,7 +787,7 @@ int main (int argc, char** argv)
 	{
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
 		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
-		exit (0);
+		return 0;
 	}
 	
 	//\___________________ On affiche un petit message de bienvenue ou de changelog ou d'erreur.

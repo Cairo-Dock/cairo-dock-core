@@ -43,6 +43,7 @@
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-gui-backend.h"
 #include "cairo-dock-gui-commons.h"
 
 static CairoDockTask *s_pImportTask = NULL;

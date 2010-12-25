@@ -40,7 +40,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
-#include "cairo-dock-gui-switch.h"
+#include "cairo-dock-gui-backend.h"
 #include "cairo-dock-gui-items.h"
 
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1150
@@ -59,6 +59,7 @@ static GtkWidget *s_pLauncherTreeView = NULL;
 static GtkWidget *s_pLauncherPane = NULL;
 
 static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTreeIter *pParentIter);
+static void reload_items (void);
 
 typedef enum {
 	CD_MODEL_NAME = 0,
@@ -195,8 +196,9 @@ static void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 		g_free (cConfFilePath);
 		
 		// reload widgets.
-		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et le rechargement de l'IHM.
+		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et declenche le rechargement de l'IHM.
 	}
+	reload_items ();
 }
 
 static void on_click_launcher_quit (GtkButton *button, GtkWidget *pWindow)
@@ -253,7 +255,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 	// delete previous widgets
 	_delete_current_launcher_widget (pLauncherWindow);  // remove all gobject data
 	
-	// find new current item
+	// get new current item
 	gchar *cName = NULL;
 	Icon *pIcon = NULL;
 	CairoContainer *pContainer = NULL;
@@ -548,7 +550,7 @@ static GtkTreeModel *_build_tree_model (void)
 	return GTK_TREE_MODEL (model);
 }
 
-static inline gboolean _select_item (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, GtkWidget *pLauncherWindow)
+static void _select_item (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, GtkWidget *pLauncherWindow)
 {
 	GtkTreeIter iter;
 	if (_search_item_in_model (s_pLauncherTreeView, pIcon ? (gpointer)pIcon : pContainer ? (gpointer)pContainer : (gpointer)pModuleInstance, pIcon ? CD_MODEL_ICON : pContainer ? CD_MODEL_CONTAINER : CD_MODEL_MODULE, &iter))
@@ -558,24 +560,22 @@ static inline gboolean _select_item (Icon *pIcon, CairoContainer *pContainer, Ca
 		gtk_tree_view_expand_to_path (GTK_TREE_VIEW (s_pLauncherTreeView), path);
 		gtk_tree_path_free (path);
 		
-		g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", pIcon);
+		/**g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", pIcon);
 		g_object_set_data (G_OBJECT (pLauncherWindow), "current-container", pContainer);
-		g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", pModuleInstance);
+		g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", pModuleInstance);*/
 		
 		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
 		gtk_tree_selection_select_iter (pSelection, &iter);
-		return TRUE;
 	}
 	else
 	{
+		cd_warning ("item not found");
+		_delete_current_launcher_widget (pLauncherWindow);
+		
 		gtk_window_set_title (GTK_WINDOW (pLauncherWindow), _("Launcher configuration"));
 		g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", NULL);
 		g_object_set_data (G_OBJECT (pLauncherWindow), "current-container", NULL);
 		g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", NULL);
-		
-		/// afficher une page non vide, comme pour les applets...
-		
-		return FALSE;
 	}
 }
 
@@ -768,6 +768,37 @@ void cairo_dock_gui_items_update_module_instance_container (CairoDockModuleInsta
 	cairo_dock_update_is_detached_widget (bDetached, pWidgetList);
 }
 
+void cairo_dock_gui_items_reload_current_widget (int iShowPage)
+{
+	g_return_if_fail (s_pLauncherWindow != NULL && s_pLauncherTreeView != NULL);
+	
+	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
+	GtkTreeModel *pModel = NULL;
+	GList *paths = gtk_tree_selection_get_selected_rows (pSelection, &pModel);
+	g_return_if_fail (paths != NULL && pModel != NULL);
+	GtkTreePath *path = paths->data;
+	
+	int iNotebookPage;
+	if ((GTK_IS_NOTEBOOK (s_pCurrentLauncherWidget)))
+	{
+		if (iShowPage == -1)
+			iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentLauncherWidget));
+		else
+			iNotebookPage = iShowPage;
+	}
+	else
+		iNotebookPage = -1;
+	
+	_on_select_one_item_in_tree (pSelection, pModel, path, FALSE, s_pLauncherWindow);  // on appelle la callback nous-memes, car la ligne est deja selectionnee, donc le parametre 'path_currently_selected' sera a TRUE. de plus on veut pouvoir mettre la page du notebook.
+	
+	if (iNotebookPage != -1)
+	{
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (s_pCurrentLauncherWidget), iNotebookPage);
+	}
+	
+	g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
+	g_list_free (paths);
+}
 
 void cairo_dock_register_default_items_gui_backend (void)
 {

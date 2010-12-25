@@ -28,7 +28,7 @@
 #include <glib/gi18n.h>
 #include <curl/curl.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-config.h"

@@ -1,6 +1,6 @@
 
-#ifndef __CAIRO_DOCK_BUILD_CONFIG_H__
-#define __CAIRO_DOCK_BUILD_CONFIG_H__
+#ifndef __GLDI_INTERNAL_CONFIG_H__
+#define __GLDI_INTERNAL_CONFIG_H__
 
 /* always defined to indicate that i18n is enabled */
 #define ENABLE_NLS 1
@@ -26,12 +26,16 @@
 /* Define to 1 if you have the <math.h> header file. */
 #cmakedefine HAVE_MATH_H @HAVE_MATH_H@
 
-// Appli
-#define CAIRO_DOCK_GETTEXT_PACKAGE "@CAIRO_DOCK_GETTEXT_PACKAGE@"
-#define CAIRO_DOCK_VERSION "@VERSION@"
-#define CAIRO_DOCK_SHARE_DATA_DIR "@CAIRO_DOCK_SHARE_DATA_DIR@"
-#define CAIRO_DOCK_SHARE_THEMES_DIR "@CAIRO_DOCK_SHARE_THEMES_DIR@"
-#define CAIRO_DOCK_LOCALE_DIR "@CAIRO_DOCK_LOCALE_DIR@"
-#define CAIRO_DOCK_THEMES_DIR "@CAIRO_DOCK_THEMES_DIR@"
+/* Defined if we can use X Extensions. */
+#cmakedefine HAVE_XEXTEND @HAVE_XEXTEND@
+
+/* Defined if we can crypt passwords. */
+#cmakedefine HAVE_LIBCRYPT @HAVE_LIBCRYPT@
+
+#define GLDI_GETTEXT_PACKAGE "@GLDI_GETTEXT_PACKAGE@"
+#define GLDI_VERSION "@VERSION@"
+#define GLDI_SHARE_DATA_DIR "@GLDI_SHARE_DATA_DIR@"
+#define AVOID_PATENT_CRAP "@AVOID_PATENT_CRAP@"
+#define GLDI_MODULES_DIR "@GLDI_MODULES_DIR@"
 
 #endif
