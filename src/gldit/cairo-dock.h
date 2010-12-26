@@ -32,6 +32,7 @@
 #include <GL/glx.h>
 
 #include <cairo-dock/cairo-dock-struct.h>
+#include <cairo-dock/gldi-config.h>
 #include <cairo-dock/cairo-dock-global-variables.h>
 #include <cairo-dock/cairo-dock-core.h>
 // icon factory

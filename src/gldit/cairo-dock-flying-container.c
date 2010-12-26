@@ -445,13 +445,13 @@ void gldi_register_flying_manager (void)
 {
 	// Manager
 	memset (&myFlyingsMgr, 0, sizeof (CairoFlyingManager));
-	myFlyingsMgr.mgr.cModuleName 	= "Icons";
-	myFlyingsMgr.mgr.init 		= init;
-	myFlyingsMgr.mgr.load 		= NULL;  // data loaded on the 1st creation.
+	myFlyingsMgr.mgr.cModuleName 	= "Flying";
+	myFlyingsMgr.mgr.init 			= init;
+	myFlyingsMgr.mgr.load 			= NULL;  // data loaded on the 1st creation.
 	myFlyingsMgr.mgr.unload 		= unload;
 	myFlyingsMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
 	myFlyingsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
-	myFlyingsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	myFlyingsMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)NULL;
 	// Config
 	myFlyingsMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
 	myFlyingsMgr.mgr.iSizeOfConfig = 0;

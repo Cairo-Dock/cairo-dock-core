@@ -1012,10 +1012,33 @@ static void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 	{
 		cairo_dock_write_current_group_conf_file (g_cConfFile, NULL);
 		
-		GldiManager *pManager = gldi_get_manager (pGroupDescription->cGroupName);
-		g_return_if_fail (pManager != NULL);
-		gldi_reload_manager (pManager, g_cConfFile);
+		const gchar *cManagerName;
+		GldiManager *pManager;
+		GList *m;
+		for (m = pGroupDescription->pManagers; m != NULL; m = m->next)
+		{
+			cManagerName = m->data;
+			pManager = gldi_get_manager (cManagerName);
+			g_return_if_fail (pManager != NULL);
+			gldi_reload_manager (pManager, g_cConfFile);
+		}
 		
+		if (pGroupDescription->pExternalModules != NULL)  // comme on ne sait pas sur quel(s) module(s) on a fait des modif, on les met tous a jour.
+		{
+			CairoDockModuleInstance *pModuleInstance;
+			GList *m;
+			int i = 0;
+			for (m = pGroupDescription->pExternalModules; m != NULL; m = m->next)
+			{
+				pModule = cairo_dock_find_module_from_name (m->data);
+				if (pModule == NULL || pModule->pInstancesList == NULL)
+					continue;
+				pModuleInstance = pModule->pInstancesList->data;
+				cairo_dock_write_extra_group_conf_file (pModuleInstance->cConfFilePath, pModuleInstance, i);
+				cairo_dock_reload_module_instance (pModuleInstance, TRUE);
+				i ++;
+			}
+		}
 		/// reload linked plug-ins ...
 		
 		/**CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (pGroupDescription->cGroupName);
@@ -1422,41 +1445,47 @@ static void _add_main_groups_buttons (void)
 {
 	CairoDockGroupDescription *pGroupDescription;
 	const gchar *cOriginalConfFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_CONF_FILE;
-	_add_one_main_group_button ("Position",
+	pGroupDescription = _add_one_main_group_button ("Position",
 		"icon-position.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Set the position of the main dock."),
 		N_("Position"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Docks");
 	
-	_add_one_main_group_button ("Accessibility",
+	pGroupDescription = _add_one_main_group_button ("Accessibility",
 		"icon-visibility.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Do you like your dock to be always visible,\n or on the contrary unobtrusive?\nConfigure the way you access your docks and sub-docks!"),
 		N_("Visibility"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Docks");
 	
-	_add_one_main_group_button ("TaskBar",
+	pGroupDescription = _add_one_main_group_button ("TaskBar",
 		"icon-taskbar.png",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Display and interact with currently open windows."),
 		N_("Taskbar"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Taskbar");
 	
-	_add_one_main_group_button ("System",
+	pGroupDescription = _add_one_main_group_button ("System",
 		"icon-system.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("All of the parameters you will never want to tweak."),
 		N_("System"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Docks");
 	
-	_add_one_main_group_button ("Background",
+	pGroupDescription = _add_one_main_group_button ("Background",
 		"icon-background.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Set a background for your dock."),
 		N_("Background"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Docks");
 	
 	pGroupDescription = _add_one_main_group_button ("Views",
 		"icon-views.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Select a view for each of your docks."),
 		N_("Views"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Backends");
 	pGroupDescription->pExternalModules = g_list_prepend (NULL, (gchar*)"dock rendering");
 	
 	pGroupDescription = _add_one_main_group_button ("Dialogs",
@@ -1464,33 +1493,38 @@ static void _add_main_groups_buttons (void)
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Configure text bubble appearance."),
 		N_("Dialog boxes"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Dialogs");
 	pGroupDescription->pExternalModules = g_list_prepend (NULL, (gchar*)"dialog rendering");
 	
-	_add_one_main_group_button ("Desklets",
+	pGroupDescription = _add_one_main_group_button ("Desklets",
 		"icon-desklets.png",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Applets can be displayed on your desktop as widgets."),
 		N_("Desklets"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Desklets");
 	pGroupDescription->pExternalModules = g_list_prepend (NULL, (gchar*)"desklet rendering");
 	
-	_add_one_main_group_button ("Icons",
+	pGroupDescription = _add_one_main_group_button ("Icons",
 		"icon-icons.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("All about icons:\n size, reflection, icon theme,..."),
 		N_("Icons"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Icons");
 	
 	pGroupDescription = _add_one_main_group_button ("Indicators",
 		"icon-indicators.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Indicators are additional markers for your icons."),
 		N_("Indicators"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Indicators");
 	pGroupDescription->pExternalModules = g_list_prepend (NULL, (gchar*)"drop indicator");
 	
-	_add_one_main_group_button ("Labels",
+	pGroupDescription = _add_one_main_group_button ("Labels",
 		"icon-labels.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Define icon caption and quick-info style."),
 		N_("Captions"));
+	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Icons");
 }
 
 

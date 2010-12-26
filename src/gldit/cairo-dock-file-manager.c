@@ -502,13 +502,13 @@ void gldi_register_desktop_environment_manager (void)
 {
 	// Manager
 	memset (&myDesktopEnvMgr, 0, sizeof (CairoDesktopEnvManager));
-	myDesktopEnvMgr.mgr.cModuleName 	= "Icons";
-	myDesktopEnvMgr.mgr.init 		= init;
-	myDesktopEnvMgr.mgr.load 		= NULL;
-	myDesktopEnvMgr.mgr.unload 		= NULL;
-	myDesktopEnvMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
-	myDesktopEnvMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
-	myDesktopEnvMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	myDesktopEnvMgr.mgr.cModuleName 	= "Desktop Env";
+	myDesktopEnvMgr.mgr.init 			= init;
+	myDesktopEnvMgr.mgr.load 			= NULL;
+	myDesktopEnvMgr.mgr.unload 			= NULL;
+	myDesktopEnvMgr.mgr.reload 			= (GldiManagerReloadFunc)NULL;
+	myDesktopEnvMgr.mgr.get_config 		= (GldiManagerGetConfigFunc)NULL;
+	myDesktopEnvMgr.mgr.reset_config	 = (GldiManagerResetConfigFunc)NULL;
 	// Config
 	myDesktopEnvMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
 	myDesktopEnvMgr.mgr.iSizeOfConfig = 0;

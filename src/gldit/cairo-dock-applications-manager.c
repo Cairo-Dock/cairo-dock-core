@@ -1374,6 +1374,8 @@ static void _load_appli (Icon *icon)
 			{
 				gsize length = 0;
 				icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
+				icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+				g_print ("check: set command '%s' to appli %s\n", icon->cCommand, icon->cName);
 				g_key_file_free (pKeyFile);
 			}
 		}
