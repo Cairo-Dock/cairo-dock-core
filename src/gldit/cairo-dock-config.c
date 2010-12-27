@@ -485,13 +485,8 @@ void cairo_dock_load_current_theme (void)
 	s_bLoading = TRUE;
 	
 	//\___________________ Free everything.
-	static gboolean bFirstCall = TRUE;
-	if (!bFirstCall)
-	{
-		gldi_free_all ();
-		bFirstCall = FALSE;
-	}
-	
+	gldi_free_all ();  // do nothing if there is nothing to unload.
+		
 	//\___________________ Get all managers config.
 	gldi_get_managers_config (g_cConfFile, GLDI_VERSION);  /// en fait, CAIRO_DOCK_VERSION ...
 	

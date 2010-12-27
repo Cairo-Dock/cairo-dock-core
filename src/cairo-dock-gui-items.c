@@ -704,6 +704,12 @@ static void reload_items (void)
 	if (s_pLauncherWindow == NULL)
 		return ;
 	
+	int iNotebookPage;
+	if (s_pCurrentLauncherWidget && GTK_IS_NOTEBOOK (s_pCurrentLauncherWidget))
+		iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentLauncherWidget));
+	else
+		iNotebookPage = -1;
+	
 	// reload the tree-view
 	GtkTreeModel *model = _build_tree_model();
 	
@@ -715,9 +721,12 @@ static void reload_items (void)
 	CairoContainer *pCurrentContainer = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-container");
 	CairoDockModuleInstance *pCurrentModuleInstance = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-module");
 	
-	_delete_current_launcher_widget (s_pLauncherWindow);
+	_delete_current_launcher_widget (s_pLauncherWindow);  // s_pCurrentLauncherWidget <- 0
 	
-	_select_item (pCurrentIcon, pCurrentContainer, pCurrentModuleInstance, s_pLauncherWindow);
+	_select_item (pCurrentIcon, pCurrentContainer, pCurrentModuleInstance, s_pLauncherWindow);  // set s_pCurrentLauncherWidget
+	
+	if (s_pCurrentLauncherWidget && GTK_IS_NOTEBOOK (s_pCurrentLauncherWidget) && iNotebookPage != -1)
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (s_pCurrentLauncherWidget), iNotebookPage);
 	
 	gtk_widget_show_all (s_pLauncherWindow);
 }

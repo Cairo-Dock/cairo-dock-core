@@ -400,8 +400,7 @@ gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDes
 gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
 	g_print ("icon %s moved\n", pIcon?pIcon->cName:"unknown");
-	
-	cairo_dock_gui_trigger_reload_items ();
+		cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -431,26 +430,23 @@ gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, 
 gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *pDock)
 {
 	g_print ("dock destroyed\n");
-	
-	cairo_dock_gui_trigger_reload_items ();
+		cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gchar *cModuleName, gboolean bActivated)
 {
-	g_print ("module %s (de)activated (%d)\n", cModuleName, bActivated);
-	
-	cairo_dock_gui_trigger_update_module_state (cModuleName);
+	//g_print ("module %s (de)activated (%d)\n", cModuleName, bActivated);
+		cairo_dock_gui_trigger_update_module_state (cModuleName);
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gchar *cModuleName, gboolean bRegistered)
 {
-	g_print ("module %s (un)registered (%d)\n", cModuleName, bRegistered);
-	
-	cairo_dock_gui_trigger_update_modules_list ();
+	//g_print ("module %s (un)registered (%d)\n", cModuleName, bRegistered);
+		cairo_dock_gui_trigger_update_modules_list ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

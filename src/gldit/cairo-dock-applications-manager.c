@@ -1375,6 +1375,9 @@ static void _load_appli (Icon *icon)
 				gsize length = 0;
 				icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
 				icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+				gchar *str = strchr (icon->cCommand, '%');
+				if (str != NULL)
+					*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
 				g_print ("check: set command '%s' to appli %s\n", icon->cCommand, icon->cName);
 				g_key_file_free (pKeyFile);
 			}

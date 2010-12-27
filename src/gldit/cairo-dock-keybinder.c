@@ -468,5 +468,7 @@ void gldi_register_shortcuts_manager (void)
 	myShortcutsMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myShortcutsMgr, NB_NOTIFICATIONS_SHORTCUTS);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myShortcutsMgr));
 }
 

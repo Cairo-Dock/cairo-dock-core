@@ -329,7 +329,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 
 static void _on_got_readme (const gchar *cDescription, GtkWidget *pDescriptionLabel)
 {
-	//g_print ("%s ()\n", __func__);
+	//g_print ("%s (%s)\n", __func__, cDescription);
 	gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDescription);
 	
 	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");

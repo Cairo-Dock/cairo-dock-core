@@ -113,17 +113,18 @@ set_current_conf_file "plug-ins/Animated-icons/Animated-icons.conf"
 set_value "Rotation"		"color"						"1;1;1;0"
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
-set_value "Configuration"	"paste selection"				true
-set_value "Configuration"	"paste clipboard"				true
+set_value "Configuration"	"item type"					3
+set_value "Configuration"	"paste selection"			true
+set_value "Configuration"	"paste clipboard"			true
 set_value "Configuration"	"persistent"				""
-set_value "Configuration"	"enable actions"				false
+set_value "Configuration"	"enable actions"			false
 
 set_current_conf_file "plug-ins/clock/clock.conf"
 set_value "Icon"			"name"						""
 desklet=`get_value "Desklet" "initially detached"`
 if test "$desklet" = "false"; then
-	set_value "Configuration"	"show date"					2
-	set_value "Configuration"	"show seconds"				false
+	set_value "Configuration"	"show date"				2
+	set_value "Configuration"	"show seconds"			false
 fi
 
 set_current_conf_file "plug-ins/drop_indicator/drop_indicator.conf"
@@ -141,7 +142,7 @@ set_value "Configuration"	"show recent"				true
 
 set_current_conf_file "plug-ins/logout/logout.conf"
 set_value "Icon"			"name"						"Log-out"
-set_value "Configuration"	"click"					0
+set_value "Configuration"	"click"						0
 set_value "Configuration"	"middle-click"				1
 
 set_current_conf_file "plug-ins/mail/mail.conf"
@@ -179,7 +180,7 @@ set_value "Configuration"	"directory"					""
 
 set_current_conf_file "plug-ins/stack/stack.conf"
 set_value "Configuration"	"stack dir"					""
-set_value "Configuration"	"selection_"					false
+set_value "Configuration"	"selection_"				false
 
 set_current_conf_file "plug-ins/switcher/switcher.conf"
 set_value "Icon"			"name"						""
@@ -191,7 +192,7 @@ set_value "Icon"			"name"						""
 set_value "Configuration"	"nb days"					5
 set_value "Configuration"	"check interval"			15
 set_value "Configuration"	"IS units"					true
-set_value "Configuration"	"display temperature"			true
+set_value "Configuration"	"display temperature"		true
 
 set_current_conf_file "plug-ins/weblets/weblets.conf"
 set_value "Configuration"	"weblet URI"				"http:\/\/www.google.com"
