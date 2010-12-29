@@ -52,7 +52,6 @@ gchar *g_cCurrentIconsPath = NULL;  // le chemin vers le repertoire des icones d
 gchar *g_cCurrentImagesPath = NULL;  // le chemin vers le repertoire des images ou autre du theme courant.
 gchar *g_cCurrentPlugInsPath = NULL;  // le chemin vers le repertoire des plug-ins du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
-int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
 static gchar *s_cLocalThemeDirPath = NULL;
 static gchar *s_cDistantThemeDirName = NULL;
@@ -342,7 +341,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	cd_debug ("%s", sCommand->str);
 	r = system (sCommand->str);
 	
-	//\___________________ On charge les lanceurs.
+	//\___________________ On charge les icones.
 	if (bLoadLaunchers)
 	{
 		g_string_printf (sCommand, "rm -f \"%s\"/*", g_cCurrentIconsPath);
@@ -351,9 +350,14 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 		g_string_printf (sCommand, "rm -f \"%s\"/.*", g_cCurrentIconsPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		
+		g_string_printf (sCommand, "rm -f \"%s\"/*", g_cCurrentImagesPath);
+		cd_debug ("%s", sCommand->str);
+		r = system (sCommand->str);
+		g_string_printf (sCommand, "rm -f \"%s\"/.*", g_cCurrentImagesPath);
+		cd_debug ("%s", sCommand->str);
+		r = system (sCommand->str);
 	}
-	
-	//\___________________ On charge les icones.
 	gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // c'est un ancien theme, on deplace les icones vers le repertoire 'icons'.
 	{
@@ -555,7 +559,4 @@ void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar 
 	
 	//\___________________ On initialise le gestionnaire de paquets.
 	cairo_dock_init_package_manager (cThemeServerAdress);
-	
-	//\___________________ On initialise les numeros de version.
-	cairo_dock_get_version_from_string (GLDI_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
 }

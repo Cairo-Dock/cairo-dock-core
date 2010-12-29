@@ -101,7 +101,7 @@ void cairo_dock_make_tree_view_for_delete_themes (GtkWidget *pWindow)
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 	
 	//\______________ On recupere les themes utilisateurs.
-	GHashTable *pThemeTable = cairo_dock_list_packages (NULL, g_cThemesDirPath, NULL);
+	GHashTable *pThemeTable = cairo_dock_list_packages (NULL, g_cThemesDirPath, NULL, NULL);
 
 	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_model_with_themes, pModel);
 	g_hash_table_destroy (pThemeTable);

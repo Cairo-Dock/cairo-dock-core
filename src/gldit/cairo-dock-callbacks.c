@@ -79,6 +79,7 @@ static CairoDock *s_pLastPointedDock = NULL;  // pour savoir quand on passe d'un
 static int s_iSidShowSubDockDemand = 0;
 static int s_iSidActionOnDragHover = 0;
 static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
+static CairoDock *s_pSubDockShowing = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
 static CairoFlyingContainer *s_pFlyingContainer = NULL;
 
 extern CairoDock *g_pMainDock;  // pour le raise-on-shortcut
@@ -305,6 +306,7 @@ static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 {
 	s_iSidShowSubDockDemand = 0;
 	s_pDockShowingSubDock = NULL;
+	s_pSubDockShowing = NULL;
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	//g_print ("%s (%x, %x)", __func__, icon, icon ? icon->pSubDock:0);
 	if (icon != NULL && icon->pSubDock != NULL)
@@ -337,6 +339,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		g_source_remove (s_iSidShowSubDockDemand);
 		s_iSidShowSubDockDemand = 0;
 		s_pDockShowingSubDock = NULL;
+		s_pSubDockShowing = NULL;
 	}
 	
 	if (s_iSidActionOnDragHover != 0)
@@ -380,6 +383,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 				g_source_remove (s_iSidShowSubDockDemand);
 			s_iSidShowSubDockDemand = g_timeout_add (myDocksParam.iShowSubDockDelay, (GSourceFunc) _cairo_dock_show_sub_dock_delayed, pDock);
 			s_pDockShowingSubDock = pDock;
+			s_pSubDockShowing = pPointedIcon->pSubDock;
 			//g_print ("s_iSidShowSubDockDemand <- %d\n", s_iSidShowSubDockDemand);
 		}
 		else
@@ -643,12 +647,14 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 	if (! cairo_dock_hide_child_docks (pDock))  // on quitte si l'un des sous-docks reste visible (on est entre dedans), pour rester en position "haute".
 		return TRUE;
 	
-	if (s_iSidShowSubDockDemand != 0 && pDock->iRefCount == 0)  // si l'un des sous-docks etait programme pour se montrer, on annule.
+	if (s_iSidShowSubDockDemand != 0 && (pDock->iRefCount == 0 || s_pSubDockShowing == pDock))  // si ce dock ou l'un des sous-docks etait programme pour se montrer, on annule.
 	{
 		g_source_remove (s_iSidShowSubDockDemand);
 		s_iSidShowSubDockDemand = 0;
 		s_pDockShowingSubDock = NULL;
+		s_pSubDockShowing = NULL;
 	}
+	
 	/// position de la souris
 	
 	//g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bMenuVisible);

@@ -639,11 +639,11 @@ GHashTable *cairo_dock_list_net_packages (const gchar *cServerAdress, const gcha
 	return pPackageTable;
 }
 
-GHashTable *cairo_dock_list_packages (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir)
+GHashTable *cairo_dock_list_packages (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, GHashTable *pTable)
 {
 	cd_message ("%s (%s, %s, %s)", __func__, cSharePackagesDir, cUserPackagesDir, cDistantPackagesDir);
 	GError *erreur = NULL;
-	GHashTable *pPackageTable = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_package);
+	GHashTable *pPackageTable = (pTable ? pTable : g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) cairo_dock_free_package));
 	
 	//\______________ On recupere les packages pre-installes.
 	if (cSharePackagesDir != NULL)
@@ -682,7 +682,7 @@ GHashTable *cairo_dock_list_packages (const gchar *cSharePackagesDir, const gcha
 
 static void _list_packages (gpointer *pSharedMemory)
 {
-	pSharedMemory[5] = cairo_dock_list_packages (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2]);
+	pSharedMemory[5] = cairo_dock_list_packages (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2], pSharedMemory[5]);
 }
 static gboolean _finish_list_packages (gpointer *pSharedMemory)
 {
@@ -702,7 +702,7 @@ static void _discard_list_packages (gpointer *pSharedMemory)
 		g_hash_table_unref (pSharedMemory[5]);
 	g_free (pSharedMemory);
 }
-CairoDockTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, CairoDockGetPackagesFunc pCallback, gpointer data)
+CairoDockTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, CairoDockGetPackagesFunc pCallback, gpointer data, GHashTable *pTable)
 {
 	gpointer *pSharedMemory = g_new0 (gpointer, 6);
 	pSharedMemory[0] = g_strdup (cSharePackagesDir);
@@ -710,6 +710,7 @@ CairoDockTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, c
 	pSharedMemory[2] = g_strdup (cDistantPackagesDir);
 	pSharedMemory[3] = pCallback;
 	pSharedMemory[4] = data;
+	pSharedMemory[5] = pTable;  // can be NULL
 	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _list_packages, (CairoDockUpdateSyncFunc) _finish_list_packages, (GFreeFunc) _discard_list_packages, pSharedMemory);
 	cairo_dock_launch_task (pTask);
 	return pTask;

@@ -114,7 +114,7 @@ GHashTable *cairo_dock_list_available_themes_for_data_renderer (const gchar *cRe
 		return NULL;
 	gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", GLDI_SHARE_DATA_DIR, pRecord->cThemeDirName);
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
-	GHashTable *pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName);
+	GHashTable *pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName, NULL);
 	
 	g_free (cGaugeShareDir);
 	g_free (cGaugeUserDir);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -14,7 +15,7 @@
    height="48"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
+   inkscape:version="0.48.0 r9654"
    sodipodi:docname="theme-new.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <metadata
@@ -30,7 +31,7 @@
   </metadata>
   <sodipodi:namedview
      inkscape:window-height="705"
-     inkscape:window-width="659"
+     inkscape:window-width="910"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      guidetolerance="10.0"
@@ -41,12 +42,13 @@
      pagecolor="#ffffff"
      id="base"
      showgrid="false"
-     inkscape:zoom="2.59375"
+     inkscape:zoom="5.1875"
      inkscape:cx="24"
      inkscape:cy="23.951807"
-     inkscape:window-x="0"
-     inkscape:window-y="293"
-     inkscape:current-layer="svg2" />
+     inkscape:window-x="191"
+     inkscape:window-y="92"
+     inkscape:current-layer="svg2"
+     inkscape:window-maximized="0" />
   <defs
      id="defs4">
     <inkscape:perspective
@@ -276,13 +278,14 @@
   </g>
   <text
      xml:space="preserve"
-     style="font-size:18px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-     x="14.265061"
-     y="11.373495"
-     id="text2421"><tspan
+     style="font-size:18.06100845px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+     x="12.364779"
+     y="12.129439"
+     id="text2421"
+     transform="scale(0.88621781,1.1283908)"><tspan
        sodipodi:role="line"
        id="tspan2423"
-       x="14.265061"
-       y="11.373495"
-       style="font-size:14px;fill:#ff0000">NEW</tspan></text>
+       x="12.364779"
+       y="12.129439"
+       style="font-size:16.05422974px;font-weight:bold;fill:#ff0000">NEW</tspan></text>
 </svg>

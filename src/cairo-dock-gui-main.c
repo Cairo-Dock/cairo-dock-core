@@ -42,6 +42,7 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-gui-backend.h"
+#include "cairo-dock-gui-items.h"
 #include "cairo-dock-gui-main.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32
@@ -2146,24 +2147,29 @@ static void _reload_current_module_widget (CairoDockModuleInstance *pInstance, i
 	}
 }
 
-static void reload_current_widget (int iShowPage)
+static inline gboolean _module_is_opened (CairoDockModuleInstance *pInstance)
 {
-	g_return_if_fail (s_pCurrentGroup != NULL && s_pCurrentGroup->cConfFilePath != NULL);
+	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentGroup->cConfFilePath == NULL || s_pCurrentWidgetList == NULL || pInstance == NULL || pInstance->cConfFilePath == NULL)
+		return FALSE;
 	
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (s_pCurrentGroup->cGroupName);
-	g_return_if_fail (pModule != NULL && pModule->pInstancesList != NULL);
+	if (strcmp (pInstance->pModule->pVisitCard->cModuleName, s_pCurrentGroup->cGroupName) != 0)  // est-on est en train d'editer ce module dans le panneau de conf.
+		return FALSE;
 	
-	CairoDockModuleInstance *pModuleInstance;
-	GList *pElement;
-	for (pElement = pModule->pInstancesList; pElement != NULL; pElement= pElement->next)
+	if (strcmp (pInstance->cConfFilePath, s_pCurrentGroup->cConfFilePath) != 0)
+		return FALSE;  // est-ce cette instance.
+	
+	return TRUE;
+}
+
+static void reload_current_widget (CairoDockModuleInstance *pInstance, int iShowPage)
+{
+	if (! _module_is_opened (pInstance))
 	{
-		pModuleInstance = pElement->data;
-		if (strcmp (pModuleInstance->cConfFilePath, s_pCurrentGroup->cConfFilePath) == 0)
-			break ;
+		cairo_dock_gui_items_reload_current_widget (pInstance, iShowPage);
+		return;
 	}
-	g_return_if_fail (pElement != NULL);
 	
-	_reload_current_module_widget (pModuleInstance, iShowPage);
+	_reload_current_module_widget (pInstance, iShowPage);
 }
 
 static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance)
@@ -2292,18 +2298,19 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 		}
 	}
 	
-	if (pInstance != NULL && pGroupDescription->load_custom_widget != NULL)
-		pGroupDescription->load_custom_widget (pInstance, pKeyFile);
-	g_key_file_free (pKeyFile);
-
 	//\_______________ On affiche le widget du groupe dans l'interface.
 	cairo_dock_hide_all_categories ();
-	
-	cairo_dock_insert_extern_widget_in_gui (pWidget);  // devient le widget courant.
 	
 	s_pCurrentGroup = pGroupDescription;
 	
 	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
+	
+	if (pInstance != NULL && pGroupDescription->load_custom_widget != NULL)
+		pGroupDescription->load_custom_widget (pInstance, pKeyFile);
+	
+	cairo_dock_insert_extern_widget_in_gui (pWidget);  // devient le widget courant.
+	
+	g_key_file_free (pKeyFile);
 	
 	//\_______________ On met a jour la frame du groupe (label + check-button).
 	GtkWidget *pLabel = gtk_label_new (NULL);
@@ -2601,19 +2608,6 @@ static void update_module_state (const gchar *cModuleName, gboolean bActive)
 	}
 	return FALSE;
 }*/
-static inline gboolean _module_is_opened (CairoDockModuleInstance *pInstance)
-{
-	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || s_pCurrentGroup->cConfFilePath == NULL || s_pCurrentWidgetList == NULL || pInstance == NULL || pInstance->cConfFilePath == NULL)
-		return FALSE;
-	
-	if (strcmp (pInstance->pModule->pVisitCard->cModuleName, s_pCurrentGroup->cGroupName) != 0)  // est-on est en train d'editer ce module dans le panneau de conf.
-		return FALSE;
-	
-	if (strcmp (pInstance->cConfFilePath, s_pCurrentGroup->cConfFilePath) != 0)
-		return FALSE;  // est-ce cette instance.
-	
-	return TRUE;
-}
 static inline gboolean _desklet_is_opened (CairoDesklet *pDesklet)
 {
 	if (s_pMainWindow == NULL || pDesklet == NULL)
@@ -2629,24 +2623,30 @@ static inline gboolean _desklet_is_opened (CairoDesklet *pDesklet)
 static void update_desklet_params (CairoDesklet *pDesklet)
 {
 	if (! _desklet_is_opened (pDesklet))
+	{
+		cairo_dock_gui_items_update_desklet_params (pDesklet);
 		return ;
-	
+	}
 	cairo_dock_update_desklet_widgets (pDesklet, s_pCurrentWidgetList);
 }
 
 static void update_desklet_visibility_params (CairoDesklet *pDesklet)
 {
 	if (! _desklet_is_opened (pDesklet))
+	{
+		cairo_dock_update_desklet_visibility_params (pDesklet);
 		return ;
-	
+	}
 	cairo_dock_update_desklet_visibility_widgets (pDesklet, s_pCurrentWidgetList);
 }
 
 static void update_module_instance_container (CairoDockModuleInstance *pInstance, gboolean bDetached)
 {
 	if (! _module_is_opened (pInstance))
-		return ;
-	
+	{
+		cairo_dock_gui_items_update_module_instance_container (pInstance, bDetached);
+		return;
+	}
 	cairo_dock_update_is_detached_widget (bDetached, s_pCurrentWidgetList);
 }
 
@@ -2711,9 +2711,11 @@ static void set_status_message_on_gui (const gchar *cMessage)
 	gtk_statusbar_push (GTK_STATUSBAR (s_pStatusBar), 0, cMessage);
 }
 
-static CairoDockGroupKeyWidget *get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
+static CairoDockGroupKeyWidget *get_widget_from_name (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
 {
-	g_return_val_if_fail (s_pCurrentWidgetList != NULL, NULL);
+	if (!_module_is_opened (pInstance))
+		return cairo_dock_gui_items_get_widget_from_name (pInstance, cGroupName, cKeyName);
+	
 	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (s_pCurrentWidgetList, cGroupName, cKeyName);
 	if (pGroupKeyWidget == NULL && s_pExtraCurrentWidgetList != NULL)
 	{
@@ -2732,27 +2734,27 @@ void cairo_dock_register_main_gui_backend (void)
 {
 	CairoDockMainGuiBackend *pBackend = g_new0 (CairoDockMainGuiBackend, 1);
 	
-	pBackend->show_main_gui 				= show_main_gui;
-	pBackend->show_module_gui 				= show_module_gui;
+	pBackend->show_main_gui 					= show_main_gui;
+	pBackend->show_module_gui 					= show_module_gui;
 	//pBackend->show_module_instance_gui 		= show_module_instance_gui;
-	pBackend->close_gui 					= close_gui;
-	pBackend->update_module_state 			= update_module_state;
-	pBackend->update_desklet_params 		= update_desklet_params;
-	pBackend->update_desklet_visibility_params = update_desklet_visibility_params;
-	pBackend->update_module_instance_container = update_module_instance_container;
-	pBackend->update_modules_list 			= update_modules_list;
-	pBackend->bCanManageThemes 				= FALSE;
-	pBackend->cDisplayedName 				= _("Advanced Mode");
-	pBackend->cTooltip 						= _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme.");
+	pBackend->close_gui 						= close_gui;
+	pBackend->update_module_state 				= update_module_state;
+	pBackend->update_desklet_params 			= update_desklet_params;
+	pBackend->update_desklet_visibility_params 	= update_desklet_visibility_params;
+	pBackend->update_module_instance_container 	= update_module_instance_container;
+	pBackend->update_modules_list 				= update_modules_list;
+	pBackend->bCanManageThemes 					= FALSE;
+	pBackend->cDisplayedName 					= _("Advanced Mode");
+	pBackend->cTooltip 							= _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme.");
 	
 	cairo_dock_register_config_gui_backend (pBackend);
 	
 	CairoDockGuiBackend *pConfigBackend = g_new0 (CairoDockGuiBackend, 1);
 	
-	pConfigBackend->set_status_message_on_gui = set_status_message_on_gui;
-	pConfigBackend->reload_current_widget 	= reload_current_widget;
+	pConfigBackend->set_status_message_on_gui 	= set_status_message_on_gui;
+	pConfigBackend->reload_current_widget 		= reload_current_widget;
 	pConfigBackend->show_module_instance_gui 	= show_module_instance_gui;
-	pConfigBackend->get_widget_from_name 	= get_widget_from_name;
+	pConfigBackend->get_widget_from_name 		= get_widget_from_name;
 	
 	cairo_dock_register_gui_backend (pConfigBackend);
 }

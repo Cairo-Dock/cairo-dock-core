@@ -43,21 +43,15 @@
 #define _MANAGER_DEF_
 #include "cairo-dock-gui-manager.h"
 
-CairoGuiManager myGuiMgr;
-
 extern CairoDock *g_pMainDock;
 extern gchar *g_cCairoDockDataDir;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
-//static CairoDockGuiBackend *s_pGuiBackend = NULL;
-//static CairoDockLauncherGuiBackend *s_pLauncherGuiBackend = NULL;
 static CairoDockGuiBackend *s_pGuiBackend = NULL;
-
 
   /////////////////
  // GUI BACKEND //
 /////////////////
-
 
 void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend)
 {
@@ -98,27 +92,27 @@ void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFor
 }
 
 
-CairoDockGroupKeyWidget *cairo_dock_get_group_key_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
+CairoDockGroupKeyWidget *cairo_dock_get_group_key_widget_from_name (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName)
 {
 	if (s_pGuiBackend && s_pGuiBackend->get_widget_from_name)
 	{
-		return s_pGuiBackend->get_widget_from_name (cGroupName, cKeyName);
+		return s_pGuiBackend->get_widget_from_name (pModuleInstance, cGroupName, cKeyName);
 	}
 	return NULL;
 }
 
-GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
+GtkWidget *cairo_dock_get_widget_from_name (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName)
 {
-	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_get_group_key_widget_from_name (cGroupName, cKeyName);
+	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_get_group_key_widget_from_name (pModuleInstance, cGroupName, cKeyName);
 	if (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL)
 		return pGroupKeyWidget->pSubWidgetList->data;
 	return NULL;
 }
 
-void cairo_dock_reload_current_widget_full (int iShowPage)
+void cairo_dock_reload_current_widget_full (CairoDockModuleInstance *pModuleInstance, int iShowPage)
 {
 	if (s_pGuiBackend && s_pGuiBackend->reload_current_widget)
-		s_pGuiBackend->reload_current_widget (iShowPage);
+		s_pGuiBackend->reload_current_widget (pModuleInstance, iShowPage);
 }
 
 void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
@@ -445,69 +439,4 @@ void cairo_dock_reload_generic_gui (GtkWidget *pWindow)
 	g_key_file_free (pKeyFile);
 	
 	gtk_widget_show_all (pNoteBook);
-}
-
-
-  //////////////////////////
- // LAUNCHER GUI BACKEND //
-//////////////////////////
-
-/*void cairo_dock_register_launcher_gui_backend (CairoDockLauncherGuiBackend *pBackend)
-{
-	g_free (s_pLauncherGuiBackend);
-	s_pLauncherGuiBackend = pBackend;
-}
-
-GtkWidget *cairo_dock_build_launcher_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
-{
-	//g_print ("%s (%x)\n", __func__, pIcon);
-	if (s_pLauncherGuiBackend && s_pLauncherGuiBackend->show_gui)
-		return s_pLauncherGuiBackend->show_gui (pIcon, pContainer, pModuleInstance, iShowPage);
-}
-
-static guint s_iSidRefreshGUI = 0;
-static gboolean _refresh_launcher_gui (gpointer data)
-{
-	if (s_pLauncherGuiBackend && s_pLauncherGuiBackend->refresh_gui)
-		s_pLauncherGuiBackend->refresh_gui ();
-	
-	s_iSidRefreshGUI = 0;
-	return FALSE;
-}
-void cairo_dock_trigger_refresh_launcher_gui (void)
-{
-	if (s_iSidRefreshGUI != 0)
-		return;
-	
-	s_iSidRefreshGUI = g_idle_add ((GSourceFunc) _refresh_launcher_gui, NULL);
-}*/
-
-
-
-
-  ///////////////
- /// MANAGER ///
-///////////////
-
-void gldi_register_gui_manager (void)
-{
-	// Manager
-	memset (&myGuiMgr, 0, sizeof (CairoGuiManager));
-	myGuiMgr.mgr.cModuleName 	= "GUI";
-	myGuiMgr.mgr.init 		= NULL;
-	myGuiMgr.mgr.load 		= NULL;
-	myGuiMgr.mgr.unload 		= NULL;
-	myGuiMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
-	myGuiMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
-	myGuiMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
-	// Config
-	myGuiMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
-	myGuiMgr.mgr.iSizeOfConfig = 0;
-	// data
-	myGuiMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
-	myGuiMgr.mgr.iSizeOfData = 0;
-	// signals
-	cairo_dock_install_notifications_on_object (&myGuiMgr, NB_NOTIFICATIONS_GUI);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myGuiMgr));
 }

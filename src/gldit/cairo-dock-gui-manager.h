@@ -34,12 +34,6 @@ G_BEGIN_DECLS
 * It also provides a useful function to easily build a window from a conf file : \ref cairo_dock_build_generic_gui
 */
 
-typedef struct _CairoGuiManager CairoGuiManager;
-
-#ifndef _MANAGER_DEF_
-extern CairoGuiManager myGuiMgr;
-#endif
-
 // manager
 /// Definition of the callback called when the user apply the config panel.
 typedef gboolean (* CairoDockApplyConfigFunc) (gpointer data);
@@ -69,10 +63,10 @@ struct _CairoDockGuiBackend {
 	/// display a message on the GUI.
 	void (*set_status_message_on_gui) (const gchar *cMessage);
 	/// Reload the current config window from the conf file. iShowPage is the page that should be displayed in case the module has several pages, -1 means to keep the current page.
-	void (*reload_current_widget) (int iShowPage);
+	void (*reload_current_widget) (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 	void (*show_module_instance_gui) (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 	/// retrieve the widgets in the current module window, corresponding to the (group,key) pair in its conf file.
-	CairoDockGroupKeyWidget * (*get_widget_from_name) (const gchar *cGroupName, const gchar *cKeyName);
+	CairoDockGroupKeyWidget * (*get_widget_from_name) (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName);
 	} ;
 typedef struct _CairoDockGuiBackend CairoDockGuiBackend;
 
@@ -87,21 +81,21 @@ void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend);
 @param cKeyName name of the key in the conf file.
 @return the group-key widget that match the group and key, or NULL if none was found.
 */
-CairoDockGroupKeyWidget *cairo_dock_get_group_key_widget_from_name (const gchar *cGroupName, const gchar *cKeyName);
+CairoDockGroupKeyWidget *cairo_dock_get_group_key_widget_from_name (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName);
 
 /** A mere wrapper around the previous function, that returns directly the GTK widget corresponding to the (group,key). Note that empty widgets will return NULL, so you can't you can't distinguish between an empty widget and an inexisant widget.
 @param cGroupName name of the group in the conf file.
 @param cKeyName name of the key in the conf file.
 @return the widget that match the group and key, or NULL if the widget is empty or if none was found.
 */
-GtkWidget *cairo_dock_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName);
+GtkWidget *cairo_dock_get_widget_from_name (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName);
 
-void cairo_dock_reload_current_module_widget_full (int iShowPage);
+void cairo_dock_reload_current_module_widget_full (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
 /**Reload the widget of a given module instance if it is currently opened (the current page is displayed). This is useful if the module has modified its conf file and wishes to display the changes.
 @param pInstance an instance of a module.
 */
-#define cairo_dock_reload_current_module_widget(...) cairo_dock_reload_current_module_widget_full (-1)
+#define cairo_dock_reload_current_module_widget(pModuleInstance) cairo_dock_reload_current_module_widget_full (pModuleInstance, -1)
 
 void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
@@ -150,8 +144,6 @@ GtkWidget *cairo_dock_build_generic_gui_full (const gchar *cConfFilePath, const 
 */
 void cairo_dock_reload_generic_gui (GtkWidget *pWindow);
 
-
-void gldi_register_gui_manager (void);
 
 G_END_DECLS
 #endif

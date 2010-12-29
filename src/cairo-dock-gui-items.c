@@ -293,7 +293,11 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 		
 		// load custom widgets
 		if (pInstance->pModule->pInterface->load_custom_widget != NULL)
+		{
+			g_object_set_data (G_OBJECT (pLauncherWindow), "widget-list", pWidgetList);
+			g_object_set_data (G_OBJECT (pLauncherWindow), "garbage", pDataGarbage);
 			pInstance->pModule->pInterface->load_custom_widget (pInstance, pKeyFile);
+		}
 		
 		if (pIcon != NULL)
 			g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", pIcon);
@@ -732,9 +736,10 @@ static void reload_items (void)
 }
 
 
-CairoDockGroupKeyWidget *cairo_dock_gui_items_get_widget_from_name (const gchar *cGroupName, const gchar *cKeyName)
+CairoDockGroupKeyWidget *cairo_dock_gui_items_get_widget_from_name (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
 {
 	g_return_val_if_fail (s_pLauncherWindow != NULL, NULL);
+	g_print ("%s (%s, %s)\n", __func__, cGroupName, cKeyName);
 	return cairo_dock_gui_find_group_key_widget (s_pLauncherWindow, cGroupName, cKeyName);
 }
 
@@ -777,9 +782,25 @@ void cairo_dock_gui_items_update_module_instance_container (CairoDockModuleInsta
 	cairo_dock_update_is_detached_widget (bDetached, pWidgetList);
 }
 
-void cairo_dock_gui_items_reload_current_widget (int iShowPage)
+void cairo_dock_gui_items_reload_current_widget (CairoDockModuleInstance *pInstance, int iShowPage)
 {
 	g_return_if_fail (s_pLauncherWindow != NULL && s_pLauncherTreeView != NULL);
+	
+	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
+	CairoDockModuleInstance *pModuleInstance = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-module");
+	if (pInstance)
+	{
+		if (pIcon)
+		{
+			if (pIcon->pModuleInstance != pInstance)
+				return;
+		}
+		else if (pModuleInstance)
+		{
+			if (pModuleInstance != pInstance)
+				return;
+		}
+	}
 	
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
 	GtkTreeModel *pModel = NULL;

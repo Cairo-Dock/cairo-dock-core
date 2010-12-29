@@ -182,7 +182,7 @@ GHashTable *cairo_dock_list_net_packages (const gchar *cServerAdress, const gcha
 *@param cDistantPackagesDir path of a distant folder containg packages or NULL.
 *@return a hash table of (name, #_CairoDockPackage). Free it with g_hash_table_destroy when you're done with it.
 */
-GHashTable *cairo_dock_list_packages (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir);
+GHashTable *cairo_dock_list_packages (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, GHashTable *pTable);
 
 /** Asynchronously get a list of packages from differente sources. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get a hash-table of the packages as the first argument of the callback (the second being the data you passed to this function).
 *@param cSharePackagesDir path of a local folder containg packages or NULL.
@@ -192,7 +192,7 @@ GHashTable *cairo_dock_list_packages (const gchar *cSharePackagesDir, const gcha
 *@param data data to be passed to the callback.
 *@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it), or \ref cairo_dock_free_task inside your callback.
 */
-CairoDockTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, CairoDockGetPackagesFunc pCallback, gpointer data);
+CairoDockTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, CairoDockGetPackagesFunc pCallback, gpointer data, GHashTable *pThemesTable);
 
 
 /** Look for a package with a given name into differente sources. If the package is found on the server and is not present on the disk, or is not up to date, then it is downloaded and the local path is returned.

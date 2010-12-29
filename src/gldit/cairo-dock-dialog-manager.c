@@ -972,7 +972,7 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		{
 			cd_message ("on force a quitter");
 			CairoDock *pDock = CAIRO_DOCK (pContainer);
-			pDock->container.bInside = TRUE;
+			//pDock->container.bInside = TRUE;
 			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 		}
 	}

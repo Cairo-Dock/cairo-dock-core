@@ -66,6 +66,7 @@ do
 	if test -e writer.$suff; then
 		echo "    towards writer.$suff"
 		ln -s writer.$suff gedit.$suff
+		ln -s writer.$suff geany.$suff
 		ln -s writer.$suff kate.$suff
 		ln -s writer.$suff ooo-writer.$suff
 		ln -s writer.$suff abiword.$suff

@@ -32,7 +32,6 @@
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-indicator-manager.h"
-#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-data-renderer-manager.h"
 #include "cairo-dock-gauge.h"
@@ -42,10 +41,12 @@
 #include "cairo-dock-icon-container.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-config.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-core.h"
 
 extern CairoContainer *g_pPrimaryContainer;
+int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
 static void _gldi_register_core_managers (void)
 {
@@ -61,7 +62,6 @@ static void _gldi_register_core_managers (void)
 	gldi_register_desktop_manager ();
 	gldi_register_connection_manager ();
 	gldi_register_indicators_manager ();
-	gldi_register_gui_manager ();
 	gldi_register_shortcuts_manager ();
 	gldi_register_data_renderers_manager ();
 	gldi_register_desktop_environment_manager ();
@@ -78,6 +78,9 @@ void gldi_init (GldiRenderingMethod iRendering)
 	// init lib
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
+	
+	//\___________________ On initialise les numeros de version.
+	cairo_dock_get_version_from_string (GLDI_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
 	
 	gldi_init_managers ();
 	
