@@ -400,6 +400,11 @@ gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDes
 gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
 	g_print ("icon %s moved\n", pIcon?pIcon->cName:"unknown");
+	
+	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
+	|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
+	|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon) && pIcon->cDesktopFileName)
+	|| CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
 		cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -408,10 +413,14 @@ gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, Ca
 gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
 	g_print ("icon %s inserted (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
-	if (pIcon->fInsertRemoveFactor == 0)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	//if (pIcon->fInsertRemoveFactor == 0)
+	//	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
-	cairo_dock_gui_trigger_reload_items ();
+	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
+	|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
+	|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon) && pIcon->cDesktopFileName)
+	|| CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
+		cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -419,10 +428,14 @@ gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon,
 gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
 	g_print ("icon %s removed (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
-	if (pIcon->fInsertRemoveFactor == 0)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	//if (pIcon->fInsertRemoveFactor == 0)
+	//	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
-	cairo_dock_gui_trigger_reload_items ();
+	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
+	|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
+	|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon) && pIcon->cDesktopFileName)
+	|| CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
+		cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

@@ -57,6 +57,7 @@ static GtkWidget *s_pLauncherWindow = NULL;  // partage avec le backend 'simple'
 static GtkWidget *s_pCurrentLauncherWidget = NULL;
 static GtkWidget *s_pLauncherTreeView = NULL;
 static GtkWidget *s_pLauncherPane = NULL;
+static gchar *cPrevPath = NULL;
 
 static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTreeIter *pParentIter);
 static void reload_items (void);
@@ -99,6 +100,7 @@ static void _delete_current_launcher_widget (GtkWidget *pLauncherWindow)
 	
 	g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", NULL);
 	g_object_set_data (G_OBJECT (pLauncherWindow), "current-container", NULL);
+	g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", NULL);
 }
 
 static void _free_launcher_gui (void)
@@ -242,16 +244,23 @@ static gboolean _search_item_in_model (GtkWidget *pTreeView, gpointer pItem, CDM
 
 static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, GtkWidget *pLauncherWindow)
 {
-	//g_print ("%s (path_currently_selected:%d)\n", __func__, path_currently_selected);
+	g_print ("%s (path_currently_selected:%d, %s)\n", __func__, path_currently_selected, gtk_tree_path_to_string(path));
 	if (path_currently_selected)
 		return TRUE;
-	g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", NULL);
-	g_object_set_data (G_OBJECT (pLauncherWindow), "current-container", NULL);
-	g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", NULL);
+	
 	GtkTreeIter iter;
 	if (! gtk_tree_model_get_iter (model, &iter, path))
 		return FALSE;
+	gchar *cPath = gtk_tree_path_to_string (path);
+	if (cPath && cPrevPath && strcmp (cPrevPath, cPath) == 0)
+	{
+		g_free (cPath);
+		return TRUE;
+	}
+	g_free (cPrevPath);
+	cPrevPath = cPath;
 	
+	g_print ("load widgets\n");
 	// delete previous widgets
 	_delete_current_launcher_widget (pLauncherWindow);  // remove all gobject data
 	
@@ -556,6 +565,8 @@ static GtkTreeModel *_build_tree_model (void)
 
 static void _select_item (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, GtkWidget *pLauncherWindow)
 {
+	g_free (cPrevPath);
+	cPrevPath = NULL;
 	GtkTreeIter iter;
 	if (_search_item_in_model (s_pLauncherTreeView, pIcon ? (gpointer)pIcon : pContainer ? (gpointer)pContainer : (gpointer)pModuleInstance, pIcon ? CD_MODEL_ICON : pContainer ? CD_MODEL_CONTAINER : CD_MODEL_MODULE, &iter))
 	{
@@ -564,11 +575,8 @@ static void _select_item (Icon *pIcon, CairoContainer *pContainer, CairoDockModu
 		gtk_tree_view_expand_to_path (GTK_TREE_VIEW (s_pLauncherTreeView), path);
 		gtk_tree_path_free (path);
 		
-		/**g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", pIcon);
-		g_object_set_data (G_OBJECT (pLauncherWindow), "current-container", pContainer);
-		g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", pModuleInstance);*/
-		
 		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
+		gtk_tree_selection_unselect_all (pSelection);
 		gtk_tree_selection_select_iter (pSelection, &iter);
 	}
 	else
@@ -674,11 +682,12 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 	GtkWidget *pStatusBar = gtk_statusbar_new ();
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),  // pMainVBox
 		pStatusBar,
-		FALSE,
-		FALSE,
+		TRUE,
+		TRUE,
 		0);
 	g_object_set_data (G_OBJECT (s_pLauncherWindow), "status-bar", pStatusBar);
 	g_object_set_data (G_OBJECT (s_pLauncherWindow), "frame-width", GINT_TO_POINTER (250));
+	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, "xxxxxx");
 	
 	//\_____________ On essaie de definir une taille correcte.
 	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
@@ -830,11 +839,25 @@ void cairo_dock_gui_items_reload_current_widget (CairoDockModuleInstance *pInsta
 	g_list_free (paths);
 }
 
+void cairo_dock_gui_items_set_status_message_on_gui (const gchar *cMessage)
+{
+	GtkWidget *pStatusBar = NULL;
+	if (s_pLauncherWindow != NULL)
+	{
+		pStatusBar = g_object_get_data (G_OBJECT (s_pLauncherWindow), "status-bar");
+	}
+	if (pStatusBar == NULL)
+		return ;
+	g_print ("%s (%s)\n", __func__, cMessage);
+	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
+	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
+}
+
 void cairo_dock_register_default_items_gui_backend (void)
 {
 	CairoDockItemsGuiBackend *pBackend = g_new0 (CairoDockItemsGuiBackend, 1);
 	
-	pBackend->show_gui 		= show_gui;
+	pBackend->show_gui 			= show_gui;
 	pBackend->reload_items 		= reload_items;
 	
 	cairo_dock_register_items_gui_backend (pBackend);

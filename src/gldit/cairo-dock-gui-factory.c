@@ -45,9 +45,10 @@
 #include "cairo-dock-launcher-manager.h" // cairo_dock_launch_command_sync
 
 #define CAIRO_DOCK_ICON_MARGIN 6
-#define CAIRO_DOCK_PREVIEW_WIDTH 400
+#define CAIRO_DOCK_PREVIEW_WIDTH 350
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
-#define CAIRO_DOCK_README_WIDTH 500
+#define CAIRO_DOCK_README_WIDTH 350
+#define CAIRO_DOCK_HANDBOOK_WIDTH 500
 #define CAIRO_DOCK_APPLET_ICON_SIZE 32
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
@@ -327,8 +328,10 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 
 static void _on_got_readme (const gchar *cDescription, GtkWidget *pDescriptionLabel)
 {
-	//g_print ("%s (%s)\n", __func__, cDescription);
-	gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDescription);
+	if (cDescription && strncmp (cDescription, "<!DOCTYPE", 9) == 0)  // message received when file is not found: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL /dustbin/Metal//readme was not found on this server.</p><hr><address>Apache/2.2.3 (Debian) mod_ssl/2.2.3 OpenSSL/0.9.8c Server at themes.glx-dock.org Port 80</address></body></html>
+		gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), "");
+	else
+		gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDescription);
 	
 	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
 	if (pTask != NULL)
@@ -354,7 +357,24 @@ static void _on_got_preview_file (const gchar *cPreviewFilePath, GtkWidget *pPre
 }
 static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter, gpointer *data)
 {
-	static gchar *s_cPrevPreview = NULL, *s_cPrevReadme = NULL;
+	///static gchar *s_cPrevPreview = NULL, *s_cPrevReadme = NULL;
+	
+	static gchar *cPrevPath = NULL;
+	gchar *cPath = NULL;
+	GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
+	if (path)
+	{
+		cPath = gtk_tree_path_to_string (path);
+		gtk_tree_path_free (path);
+	}
+	if (cPrevPath && cPath && strcmp (cPrevPath, cPath) == 0)
+	{
+		g_free (cPath);
+		return;
+	}
+	g_free (cPrevPath);
+	cPrevPath = cPath;
+	
 	// get the widgets of the global preview widget.
 	GtkLabel *pDescriptionLabel = data[0];
 	GtkImage *pPreviewImage = data[1];
@@ -410,7 +430,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		gtk_image_set_from_pixbuf (GTK_IMAGE (pStateIcon), pixbuf);
 	
 	// get or fill the readme.
-	if (cDescriptionFilePath != NULL && (1 || !s_cPrevReadme || strcmp (s_cPrevReadme, cDescriptionFilePath) != 0))
+	if (cDescriptionFilePath != NULL/** && (!s_cPrevReadme || strcmp (s_cPrevReadme, cDescriptionFilePath) != 0)*/)
 	{
 		CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
 		//g_print ("prev task : %x\n", pTask);
@@ -419,8 +439,9 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			cairo_dock_discard_task (pTask);
 			g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", NULL);
 		}
-		g_free (s_cPrevReadme);
-		s_cPrevReadme = g_strdup (cDescriptionFilePath);
+		///g_free (s_cPrevReadme);
+		///s_cPrevReadme = g_strdup (cDescriptionFilePath);
+		
 		if (strncmp (cDescriptionFilePath, "http://", 7) == 0)  // fichier distant.
 		{
 			cd_debug ("fichier readme distant (%s)", cDescriptionFilePath);
@@ -454,7 +475,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 	}
 
 	// get or fill the preview image.
-	if (cPreviewFilePath != NULL && (1 || !s_cPrevPreview || strcmp (s_cPrevPreview, cPreviewFilePath) != 0))
+	if (cPreviewFilePath != NULL/** && (!s_cPrevPreview || strcmp (s_cPrevPreview, cPreviewFilePath) != 0)*/)
 	{
 		CairoDockTask *pTask = g_object_get_data (G_OBJECT (pPreviewImage), "cd-task");
 		if (pTask != NULL)
@@ -462,8 +483,8 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			cairo_dock_discard_task (pTask);
 			g_object_set_data (G_OBJECT (pPreviewImage), "cd-task", NULL);
 		}
-		g_free (s_cPrevPreview);
-		s_cPrevPreview = g_strdup (cPreviewFilePath);
+		///g_free (s_cPrevPreview);
+		///s_cPrevPreview = g_strdup (cPreviewFilePath);
 		
 		gboolean bDistant = FALSE;
 		if (strncmp (cPreviewFilePath, "http://", 7) == 0)  // fichier distant.
@@ -2167,7 +2188,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							pModule->pVisitCard->cDescription));
 					pLabel = gtk_label_new (cDescription);
 					gtk_label_set_use_markup (GTK_LABEL (pLabel), TRUE);
-					gtk_widget_set (pLabel, "width-request", CAIRO_DOCK_README_WIDTH, NULL);
+					gtk_widget_set (pLabel, "width-request", CAIRO_DOCK_HANDBOOK_WIDTH, NULL);
 					gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
 					gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
 					g_free (cDescription);

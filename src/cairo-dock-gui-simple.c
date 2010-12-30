@@ -1036,7 +1036,10 @@ static void set_status_message_on_gui (const gchar *cMessage)
 		pStatusBar = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "status-bar");
 	}
 	if (pStatusBar == NULL)
-		return ;
+	{
+		cairo_dock_gui_items_set_status_message_on_gui (cMessage);
+		return;
+	}
 	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
 }

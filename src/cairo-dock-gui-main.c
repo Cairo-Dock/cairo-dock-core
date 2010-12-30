@@ -2706,7 +2706,10 @@ static void update_modules_list (void)
 static void set_status_message_on_gui (const gchar *cMessage)
 {
 	if (s_pStatusBar == NULL)
-		return ;
+	{
+		cairo_dock_gui_items_set_status_message_on_gui (cMessage);
+		return;
+	}
 	gtk_statusbar_pop (GTK_STATUSBAR (s_pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (s_pStatusBar), 0, cMessage);
 }
