@@ -416,9 +416,9 @@ gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon,
 	//if (pIcon->fInsertRemoveFactor == 0)
 	//	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
-	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
+	if ( ( (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
 	|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
-	|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon) && pIcon->cDesktopFileName)
+	|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)) && pIcon->cDesktopFileName)
 	|| CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
 		cairo_dock_gui_trigger_reload_items ();
 	
@@ -431,9 +431,9 @@ gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, 
 	//if (pIcon->fInsertRemoveFactor == 0)
 	//	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
-	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
+	if ( ( (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
 	|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
-	|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon) && pIcon->cDesktopFileName)
+	|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)) && pIcon->cDesktopFileName)
 	|| CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
 		cairo_dock_gui_trigger_reload_items ();
 	

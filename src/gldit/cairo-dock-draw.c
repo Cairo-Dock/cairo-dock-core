@@ -363,24 +363,9 @@ void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, g
 }
 
 
-void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext)
+void cairo_dock_draw_icon_reflect_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext)
 {
 	double fRatio = pDock->container.fRatio;
-	//\_____________________ On dessine l'icone.
-	if (icon->pIconBuffer != NULL)
-	{
-		cairo_save (pCairoContext);
-		
-		cairo_dock_set_icon_scale_on_context (pCairoContext, icon, pDock->container.bIsHorizontal, fRatio, pDock->container.bDirectionUp);
-		cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0.0, 0.0);
-		if (icon->fAlpha == 1)
-			cairo_paint (pCairoContext);
-		else
-			cairo_paint_with_alpha (pCairoContext, icon->fAlpha);
-
-		cairo_restore (pCairoContext);
-	}
-	//\_____________________ On dessine son reflet.
 	if (pDock->container.bUseReflect && icon->pReflectionBuffer != NULL)  // on dessine les reflets.
 	{
 		cairo_save (pCairoContext);
@@ -465,6 +450,26 @@ void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		}
 		cairo_restore (pCairoContext);
 	}
+}
+
+void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext)
+{
+	//\_____________________ On dessine l'icone.
+	if (icon->pIconBuffer != NULL)
+	{
+		cairo_save (pCairoContext);
+		
+		cairo_dock_set_icon_scale_on_context (pCairoContext, icon, pDock->container.bIsHorizontal, pDock->container.fRatio, pDock->container.bDirectionUp);
+		cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0.0, 0.0);
+		if (icon->fAlpha == 1)
+			cairo_paint (pCairoContext);
+		else
+			cairo_paint_with_alpha (pCairoContext, icon->fAlpha);
+
+		cairo_restore (pCairoContext);
+	}
+	//\_____________________ On dessine son reflet.
+	cairo_dock_draw_icon_reflect_cairo (icon, pDock, pCairoContext);
 }
 
 gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *icon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)

@@ -44,6 +44,9 @@ extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 /// ecran
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
+/// config opengl
+extern CairoDockGLConfig g_openglConfig;
+
 /// Environnement de bureau detecte.
 extern CairoDockDesktopEnv g_iDesktopEnv;
 

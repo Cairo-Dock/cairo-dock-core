@@ -496,16 +496,63 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 static void _import_theme (gpointer *pSharedMemory)
 {
 	g_print ("dl start\n");
-	pSharedMemory[5] = GINT_TO_POINTER (cairo_dock_import_theme (pSharedMemory[0], GPOINTER_TO_INT (pSharedMemory[1]), GPOINTER_TO_INT (pSharedMemory[2])));
+	
+	gchar *cNewThemeName = g_strdup (pSharedMemory[0]);
+	gchar *cNewThemePath = NULL;
+	
+	int length = strlen (cNewThemeName);
+	if (cNewThemeName[length-1] == '\n')
+		cNewThemeName[--length] = '\0';  // on vire le retour chariot final.
+	if (cNewThemeName[length-1] == '\r')
+		cNewThemeName[--length] = '\0';
+	cd_debug ("cNewThemeName : '%s'", cNewThemeName);
+	
+	// on recupere le theme en local, mais sans faire l'import dans le theme courant.
+	if (g_str_has_suffix (cNewThemeName, ".tar.gz") || g_str_has_suffix (cNewThemeName, ".tar.bz2") || g_str_has_suffix (cNewThemeName, ".tgz"))  // c'est l'URL d'un paquet.
+	{
+		cd_debug ("c'est un paquet");
+		cNewThemePath = cairo_dock_depackage_theme (cNewThemeName);
+		
+		if (cNewThemePath != NULL)
+		{
+			gchar *tmp = cNewThemeName;
+			cNewThemeName = g_path_get_basename (cNewThemePath);
+			g_free (tmp);
+		}
+		else
+		{
+			g_free (cNewThemeName);
+			cNewThemeName = NULL;
+		}
+		g_free (pSharedMemory[0]);
+		pSharedMemory[0] = cNewThemeName;
+	}
+	else  // c'est le nom d'un theme officiel.
+	{
+		cd_debug ("c'est un theme officiel");
+		cNewThemePath = cairo_dock_get_package_path (cNewThemeName, s_cLocalThemeDirPath, g_cThemesDirPath, s_cDistantThemeDirName, CAIRO_DOCK_ANY_PACKAGE);
+	}
+	
 	g_print ("dl over\n");
 }
 static gboolean _finish_import (gpointer *pSharedMemory)
 {
-	if (! pSharedMemory[5])
-		cd_warning ("Couldn't import the theme %s.", pSharedMemory[0]);
+	gboolean bSuccess;
+	if (! pSharedMemory[0])
+	{
+		cd_warning ("Couldn't download the theme.");
+		bSuccess = FALSE;
+	}
+	else
+	{
+		// maintenant que le theme est sur le disque, on l'importe dans le theme courant.
+		bSuccess = cairo_dock_import_theme (pSharedMemory[0], GPOINTER_TO_INT (pSharedMemory[1]), GPOINTER_TO_INT (pSharedMemory[2]));
+		if (! bSuccess)
+			cd_warning ("Couldn't import the theme %s.", pSharedMemory[0]);
+	}
 	
 	GFunc pCallback = pSharedMemory[3];
-	pCallback (pSharedMemory[5], pSharedMemory[4]);
+	pCallback (GINT_TO_POINTER (bSuccess), pSharedMemory[4]);
 	return FALSE;
 }
 static void _discard_import (gpointer *pSharedMemory)
@@ -515,7 +562,7 @@ static void _discard_import (gpointer *pSharedMemory)
 }
 CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data)
 {
-	gpointer *pSharedMemory = g_new0 (gpointer, 6);
+	gpointer *pSharedMemory = g_new0 (gpointer, 5);
 	pSharedMemory[0] = g_strdup (cThemeName);
 	pSharedMemory[1] = GINT_TO_POINTER (bLoadBehavior);
 	pSharedMemory[2] = GINT_TO_POINTER (bLoadLaunchers);

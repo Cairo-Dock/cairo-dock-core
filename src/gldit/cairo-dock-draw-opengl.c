@@ -126,21 +126,8 @@ void cairo_dock_combine_argb_argb (void)  // taken from glitz 0.5.6
 	glTexEnvf (GL_TEXTURE_ENV, GL_OPERAND1_ALPHA, GL_SRC_ALPHA);
 }
 
-void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
+void cairo_dock_draw_icon_reflect_opengl (Icon *pIcon, CairoDock *pDock)
 {
-	//\_____________________ On dessine l'icone.
-	double fSizeX, fSizeY;
-	cairo_dock_get_current_icon_size (pIcon, CAIRO_CONTAINER (pDock), &fSizeX, &fSizeY);
-	
-	_cairo_dock_enable_texture ();
-	if (pIcon->fAlpha == 1)
-		_cairo_dock_set_blend_over ();
-	else
-		_cairo_dock_set_blend_alpha ();
-	
-	_cairo_dock_apply_texture_at_size_with_alpha (pIcon->iIconTexture, fSizeX, fSizeY, pIcon->fAlpha);
-	
-	//\_____________________ On dessine son reflet.
 	if (pDock->container.bUseReflect)
 	{
 		if (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable)
@@ -256,6 +243,24 @@ void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
 			glDisable (GL_STENCIL_TEST);
 		}
 	}
+}
+
+void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
+{
+	//\_____________________ On dessine l'icone.
+	double fSizeX, fSizeY;
+	cairo_dock_get_current_icon_size (pIcon, CAIRO_CONTAINER (pDock), &fSizeX, &fSizeY);
+	
+	_cairo_dock_enable_texture ();
+	if (pIcon->fAlpha == 1)
+		_cairo_dock_set_blend_over ();
+	else
+		_cairo_dock_set_blend_alpha ();
+	
+	_cairo_dock_apply_texture_at_size_with_alpha (pIcon->iIconTexture, fSizeX, fSizeY, pIcon->fAlpha);
+	
+	//\_____________________ On dessine son reflet.
+	cairo_dock_draw_icon_reflect_opengl (pIcon, pDock);
 	
 	_cairo_dock_disable_texture ();
 }
