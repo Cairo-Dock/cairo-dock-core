@@ -58,7 +58,7 @@ CairoDockIconGroup cairo_dock_get_icon_type (Icon *icon)
 		return CAIRO_DOCK_APPLI;
 	else if (CAIRO_DOCK_IS_APPLET (icon))
 		return CAIRO_DOCK_APPLET;
-	else if (CAIRO_DOCK_IS_SEPARATOR (icon))
+	else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		return CAIRO_DOCK_SEPARATOR12;
 	else
 		return CAIRO_DOCK_LAUNCHER;*/
@@ -400,7 +400,7 @@ void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, 
 {
 	if (pContainer->bIsHorizontal)
 	{
-		if (myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
+		if (myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 		{
 			*fSizeX = pIcon->fWidth;
 			*fSizeY = pIcon->fHeight;
@@ -413,7 +413,7 @@ void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, 
 	}
 	else
 	{
-		if (myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_IS_SEPARATOR (pIcon))
+		if (myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 		{
 			*fSizeX = pIcon->fHeight;
 			*fSizeY = pIcon->fWidth;
@@ -549,8 +549,8 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	
 	if (bForceUpdate)
 		cairo_dock_normalize_icons_order (pDock->icons, icon1->iGroup);
-	///if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon1) || CAIRO_DOCK_IS_USER_SEPARATOR (icon1) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon1) || bForceUpdate)
-	///	cairo_dock_trigger_refresh_launcher_gui ();
+	
+	//\_________________ Notify everybody.
 	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_ICON_MOVED, icon1, pDock);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_ICON_MOVED, icon1, pDock);
 }

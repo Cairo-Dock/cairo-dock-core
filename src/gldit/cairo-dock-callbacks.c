@@ -396,7 +396,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		//g_print ("pLastPointedDock n'est plus null\n");
 		s_pLastPointedDock = pDock;
 	}
-	if (pPointedIcon != NULL && pDock->pRenderer->render_opengl != NULL && ! CAIRO_DOCK_IS_SEPARATOR (pPointedIcon) && pPointedIcon->iAnimationState <= CAIRO_DOCK_STATE_MOUSE_HOVERED)
+	if (pPointedIcon != NULL && pDock->pRenderer->render_opengl != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPointedIcon) && pPointedIcon->iAnimationState <= CAIRO_DOCK_STATE_MOUSE_HOVERED)
 	{
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
@@ -599,7 +599,15 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 gboolean cairo_dock_on_leave_dock_notification2 (gpointer data, CairoDock *pDock, gboolean *bStartAnimation)
 {
 	//\_______________ On gere le drag d'une icone hors du dock.
-	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)
+	if (s_pIconClicked != NULL
+	&& (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (s_pIconClicked)
+		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (s_pIconClicked)
+		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked) && s_pIconClicked->cDesktopFileName)
+		|| CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked))
+	&& s_pFlyingContainer == NULL
+	&& ! myDocksParam.bLockIcons
+	&& ! myDocksParam.bLockAll
+	&& ! pDock->bPreventDraggingIcons)
 	{
 		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
@@ -664,7 +672,15 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	
 	//\_______________ On gere le drag d'une icone hors du dock.
-	if (s_pIconClicked != NULL && (CAIRO_DOCK_IS_LAUNCHER (s_pIconClicked) || CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked)/** || CAIRO_DOCK_IS_USER_SEPARATOR(s_pIconClicked)*/) && s_pFlyingContainer == NULL && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)
+	if (s_pIconClicked != NULL
+	&& (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (s_pIconClicked)
+		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (s_pIconClicked)
+		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked) && s_pIconClicked->cDesktopFileName)
+		|| CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked))
+	&& s_pFlyingContainer == NULL
+	&& ! myDocksParam.bLockIcons
+	&& ! myDocksParam.bLockAll
+	&& ! pDock->bPreventDraggingIcons)
 	{
 		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
@@ -1070,7 +1086,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						pDock->iAvoidingMouseIconType = -1;
 						cairo_dock_stop_icon_glide (pDock);
 					}
-					if (icon != NULL && ! CAIRO_DOCK_IS_SEPARATOR (icon) && icon == s_pIconClicked)
+					if (icon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && icon == s_pIconClicked)
 					{
 						s_pIconClicked = NULL;  // il faut le faire ici au cas ou le clic induirait un dialogue bloquant qui nous ferait sortir du dock par exemple.
 						//g_print ("+ click on '%s' (%s)\n", icon->cName, icon->cCommand);
@@ -1133,7 +1149,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 
 						pDock->pRenderer->calculate_icons (pDock);
 
-						if (! CAIRO_DOCK_IS_SEPARATOR (s_pIconClicked))
+						if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked))
 						{
 							cairo_dock_request_icon_animation (s_pIconClicked, pDock, "bounce", 2);
 						}

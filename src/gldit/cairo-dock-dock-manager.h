@@ -176,8 +176,6 @@ Icon *cairo_dock_search_icon_pointing_on_dock (CairoDock *pDock, CairoDock **pPa
 gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 
-CairoDock *cairo_dock_alter_dock_name (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
-
 /** Rename a dock. Update the container's name of all of its icons.
 *@param cDockName name of the dock.
 *@param pDock the dock (optional).

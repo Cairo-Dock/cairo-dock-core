@@ -364,9 +364,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 		
 		// update launcher's conf file to get possible new keys/comments.
 		CairoDockDesktopFileType iLauncherType;
-		if (CAIRO_DOCK_IS_URI_LAUNCHER (pIcon))
-			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_FILE;
-		else if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR;
 		else if (pIcon->pSubDock != NULL && pIcon->cClass == NULL)
 			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER;
@@ -423,7 +421,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 	{
 		g_free (cImagePath);
-		if (CAIRO_DOCK_IS_SEPARATOR (pIcon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 		{
 			cImagePath = cairo_dock_search_image_s_path (myIconsParam.cSeparatorImage);
 		}

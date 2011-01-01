@@ -66,7 +66,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoContai
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -93,7 +93,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, Cair
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -116,7 +116,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoContain
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -159,7 +159,7 @@ static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, Cairo
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -270,7 +270,7 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoContainer
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -354,7 +354,7 @@ static void _cairo_dock_draw_subdock_content_as_box_opengl (Icon *pIcon, CairoCo
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;

@@ -227,10 +227,10 @@ struct _CairoIconContainerRenderer {
 #define CAIRO_DOCK_ICON_TYPE_IS_APPLI(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_APPLI)
 #define CAIRO_DOCK_ICON_TYPE_IS_APPLET(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_APPLET)
 
-/** TRUE if the icon is a launcher (a real launcher with a command or an URI, or a container icon, or even a fake launcher).
+/* TRUE if the icon is a launcher (a real launcher with a command or an URI, or a container icon, or even a fake launcher).
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL && ((icon)->cCommand != NULL || (icon)->cBaseURI != NULL || ((icon)->pSubDock != NULL && (icon)->pModuleInstance == NULL)))
+//#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL && ((icon)->cCommand != NULL || (icon)->cBaseURI != NULL || ((icon)->pSubDock != NULL && (icon)->pModuleInstance == NULL)))
 
 /** TRUE if the icon is an icon of appli.
 *@param icon an icon.
@@ -242,50 +242,50 @@ struct _CairoIconContainerRenderer {
 */
 #define CAIRO_DOCK_IS_APPLET(icon) (icon != NULL && (icon)->pModuleInstance != NULL)
 
-/** TRUE if the icon is an icon of separator.
+/* TRUE if the icon is an icon of separator.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_SEPARATOR(icon) (icon != NULL && (icon)->pModuleInstance == NULL && (icon)->Xid == 0 && (icon)->pSubDock == NULL && (icon)->cCommand == NULL && (icon)->cBaseURI == NULL)
+//#define CAIRO_DOCK_IS_SEPARATOR(icon) (icon != NULL && (icon)->pModuleInstance == NULL && (icon)->Xid == 0 && (icon)->pSubDock == NULL && (icon)->cCommand == NULL && (icon)->cBaseURI == NULL)
 
-/** TRUE if the icon is an icon of launcher launching something.
+/* TRUE if the icon is an icon of launcher launching something.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cCommand != NULL)
+//#define CAIRO_DOCK_IS_NORMAL_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cCommand != NULL)
 
-/** TRUE if the icon is an icon of launcher defined by a .desktop file.
+/* TRUE if the icon is an icon of launcher defined by a .desktop file.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_STORED_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cDesktopFileName != NULL)
+//#define CAIRO_DOCK_IS_STORED_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cDesktopFileName != NULL)
 
-/** TRUE if the icon is an icon representing an URI.
+/* TRUE if the icon is an icon representing an URI.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_URI_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cBaseURI != NULL)
+//#define CAIRO_DOCK_IS_URI_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cBaseURI != NULL)
 
-/** TRUE if the icon is a fake icon (for class groupment).
+/* TRUE if the icon is a fake icon (for class groupment).
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_FAKE_LAUNCHER(icon) (icon != NULL && (icon)->cCommand == NULL && (icon)->cClass != NULL && (icon)->pModuleInstance == NULL && (icon)->pSubDock != NULL && (icon)->cDesktopFileName == NULL)
+//#define CAIRO_DOCK_IS_FAKE_LAUNCHER(icon) (icon != NULL && (icon)->cCommand == NULL && (icon)->cClass != NULL && (icon)->pModuleInstance == NULL && (icon)->pSubDock != NULL && (icon)->cDesktopFileName == NULL)
 
-/** TRUE if the icon is a container icon.
+/* TRUE if the icon is a container icon.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_CONTAINER_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cCommand == NULL && (icon)->cBaseURI == NULL && icon->cClass == NULL)
+//#define CAIRO_DOCK_IS_CONTAINER_LAUNCHER(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && (icon)->cCommand == NULL && (icon)->cBaseURI == NULL && icon->cClass == NULL)
 
 /** TRUE if the icon is an icon pointing on the sub-dock of a class.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_MULTI_APPLI(icon) (CAIRO_DOCK_IS_LAUNCHER (icon) && icon->pSubDock != NULL && icon->pSubDock->icons != NULL && icon->cClass != NULL)
+#define CAIRO_DOCK_IS_MULTI_APPLI(icon) ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)) && icon->pSubDock != NULL)
 
 /** TRUE if the icon is an icon of automatic separator.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && (icon)->cDesktopFileName == NULL)
+#define CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR(icon) (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && (icon)->cDesktopFileName == NULL)
 
 /** TRUE if the icon is an icon of separator added by the user.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_USER_SEPARATOR(icon) (CAIRO_DOCK_IS_SEPARATOR (icon) && (icon)->cDesktopFileName != NULL)
+#define CAIRO_DOCK_IS_USER_SEPARATOR(icon) (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && (icon)->cDesktopFileName != NULL)
 /**
 *TRUE if the icon is an icon d'appli seulement.
 *@param icon an icon.

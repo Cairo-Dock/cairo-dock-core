@@ -416,8 +416,6 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 			icon->fInsertRemoveFactor = - 0.95;
 		else
 			icon->fInsertRemoveFactor = - 0.05;
-		///cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_INSERT_ICON, icon, pDock);
-		///cairo_dock_notify_on_object (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);
 	}
 	else
 		icon->fInsertRemoveFactor = 0.;
@@ -432,8 +430,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
 	
-	///if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
-	///	cairo_dock_trigger_refresh_launcher_gui ();
+	//\______________ Notify everybody.
 	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_INSERT_ICON, icon, pDock);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);
 }
@@ -565,11 +562,10 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 			pDock->iSidDestroyEmptyDock = g_idle_add ((GSourceFunc) _destroy_empty_dock, pDock);  // on ne passe pas le nom du dock en parametre, car le dock peut se faire renommer (improbable, mais bon).
 	}
 	
-	//\___________________ On prevoit le rafraichissement de la fenetre de config des lanceurs.
-	///if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
-	///	cairo_dock_trigger_refresh_launcher_gui ();
+	//\___________________ Notify everybody.
 	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_REMOVE_ICON, icon, pDock);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, icon, pDock);
+	
 	return TRUE;
 }
 void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator)
@@ -683,11 +679,6 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 		if (pNewIcon != NULL)
 		{
 			cairo_dock_insert_icon_in_dock (pNewIcon, pReceivingDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-
-			/**if (CAIRO_DOCK_IS_URI_LAUNCHER (pNewIcon))
-			{
-				cairo_dock_fm_add_monitor (pNewIcon);
-			}*/
 			
 			if (pNewIcon->pSubDock != NULL)
 				cairo_dock_trigger_redraw_subdock_content (pNewIcon->pSubDock);

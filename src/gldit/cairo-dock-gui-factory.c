@@ -997,102 +997,6 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 	return pHashTable;
 }
 
-/*static gboolean _add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, gpointer *data)
-{
-	int iCategory = GPOINTER_TO_INT (data[0]);
-	if (pModule->pVisitCard->iCategory == (CairoDockModuleCategory)iCategory || (iCategory == -1 && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule)))
-	{
-		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cIconFilePath, 32, 32, NULL);
-		GtkListStore *pModele = data[1];
-		GtkTreeIter iter;
-		memset (&iter, 0, sizeof (GtkTreeIter));
-		gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
-		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-			CAIRO_DOCK_MODEL_NAME, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cTitle),
-			CAIRO_DOCK_MODEL_RESULT, cModuleName,
-			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cDescription),
-			CAIRO_DOCK_MODEL_IMAGE, pModule->pVisitCard->cPreviewFilePath,
-			CAIRO_DOCK_MODEL_ICON, pixbuf,
-			CAIRO_DOCK_MODEL_STATE, pModule->pVisitCard->iCategory,
-			CAIRO_DOCK_MODEL_ACTIVE, (pModule->pInstancesList != NULL), -1);
-		g_object_unref (pixbuf);
-	}
-	return FALSE;
-}
-
-static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
-{
-	GtkTreeIter iter;
-	if (! gtk_tree_model_get_iter_from_string (model, &iter, path))
-		return ;
-	gchar *cModuleName = NULL;
-	gboolean bState;
-	gtk_tree_model_get (model, &iter,
-		CAIRO_DOCK_MODEL_RESULT, &cModuleName,
-		CAIRO_DOCK_MODEL_ACTIVE, &bState, -1);
-	
-	bState = !bState;
-	gtk_list_store_set (GTK_LIST_STORE (model), &iter, CAIRO_DOCK_MODEL_ACTIVE, bState, -1);
-	
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-	if (g_pPrimaryContainer == NULL)
-	{
-		cairo_dock_add_remove_element_to_key (g_cConfFile, "System", "modules", cModuleName, bState);
-	}
-	else if (pModule->pInstancesList == NULL)
-	{
-		cairo_dock_activate_module_and_load (cModuleName);
-	}
-	else
-	{
-		cairo_dock_deactivate_module_and_unload (cModuleName);
-	}  // la ligne passera en gras automatiquement.
-	
-	g_free (cModuleName);
-}
-
-static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, CairoDockModule *pModule)
-{
-	CairoDockModuleInstance *pModuleInstance = (pModule->pInstancesList ? pModule->pInstancesList->data : NULL);
-	if (pModuleInstance)
-		cairo_dock_show_module_instance_gui (pModuleInstance, -1);
-	else
-		cairo_dock_show_module_gui (pModule->pVisitCard->cModuleName);
-}
-static void _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer *data)
-{
-	if (pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)  // clic droit.
-	{
-		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (pTreeView);
-		GtkTreeModel *pModel;
-		GtkTreeIter iter;
-		if (! gtk_tree_selection_get_selected (pSelection, &pModel, &iter))
-			return ;
-		
-		gchar *cModuleName = NULL;
-		gtk_tree_model_get (pModel, &iter,
-			CAIRO_DOCK_MODEL_RESULT, &cModuleName, -1);
-		CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-		if (pModule == NULL)
-			return ;
-		
-		GtkWidget *pMenu = gtk_menu_new ();
-		
-		cairo_dock_add_in_menu_with_stock_and_data (_("Configure this applet"), GTK_STOCK_PROPERTIES, (GFunc)_cairo_dock_initiate_config_module, pMenu, pModule);
-		
-		gtk_widget_show_all (pMenu);
-		gtk_menu_popup (GTK_MENU (pMenu),
-			NULL,
-			NULL,
-			NULL,
-			NULL,
-			1,
-			gtk_get_current_event_time ());
-	}
-	return ;
-}*/
-
 typedef void (*CDForeachRendererFunc) (GHFunc pFunction, GtkListStore *pListStore);
 
 static inline GtkListStore *_build_list_for_gui (CDForeachRendererFunc pFunction, GHFunc pHFunction, const gchar *cEmptyItem)
@@ -1105,17 +1009,6 @@ static inline GtkListStore *_build_list_for_gui (CDForeachRendererFunc pFunction
 		pFunction (pHFunction, pListStore);
 	return pListStore;
 }
-/*#define _build_list_for_gui(pListStore, cEmptyItem, pHashTable, pHFunction) do { \
-	if (pListStore != NULL)\
-		g_object_unref (pListStore);\
-	if (pHashTable == NULL) {\
-		pListStore = NULL;\
-		return ; }\
-	pListStore = _cairo_dock_gui_allocate_new_model ();\
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pListStore), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);\
-	if (cEmptyItem) {\
-		pHFunction (cEmptyItem, NULL, pListStore); }\
-	g_hash_table_foreach (pHashTable, (GHFunc) pHFunction, pListStore); } while (0)*/
 
 static void _cairo_dock_add_one_renderer_item (const gchar *cName, CairoDockRenderer *pRenderer, GtkListStore *pModele)
 {
@@ -1374,63 +1267,6 @@ static void _got_themes_combo_list (GHashTable *pThemeTable, gpointer *data)
 	data[2] = NULL;
 }
 
-/*static void _cairo_dock_render_module_name (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
-{
-	gboolean bActive = FALSE;
-	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_ACTIVE, &bActive, -1);
-	
-	if (bActive)
-		g_object_set (cell, "weight", 800, "weight-set", TRUE, NULL);
-	else
-		g_object_set (cell, "weight", 400, "weight-set", FALSE, NULL);
-}
-
-static void _cairo_dock_render_category (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
-{
-	const gchar *cCategory=NULL;
-	gint iCategory = 0;
-	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_STATE, &iCategory, -1);
-	switch (iCategory)
-	{
-		case CAIRO_DOCK_CATEGORY_APPLET_FILES:
-			cCategory = _("Files");
-			g_object_set (cell, "foreground", "#004EA1", NULL);  // bleu
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
-		case CAIRO_DOCK_CATEGORY_APPLET_INTERNET:
-			cCategory = _("Internet");
-			g_object_set (cell, "foreground", "#FF5555", NULL);  // orange
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
-		case CAIRO_DOCK_CATEGORY_APPLET_DESKTOP:
-			cCategory = _("Desktop");
-			g_object_set (cell, "foreground", "#116E08", NULL);  // vert
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
-		case CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY:
-			cCategory = _("Accessory");
-			g_object_set (cell, "foreground", "#900009", NULL);  // rouge
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
-		case CAIRO_DOCK_CATEGORY_APPLET_SYSTEM:
-			cCategory = _("System");
-			g_object_set (cell, "foreground", "#A58B0D", NULL);  // jaune
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
-		case CAIRO_DOCK_CATEGORY_APPLET_FUN:
-			cCategory = _("Fun");
-			g_object_set (cell, "foreground", "#FF55FF", NULL);  // rose
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
-		default:
-			cd_warning ("incorrect category (%d)", iCategory);
-		break;
-	}
-	if (cCategory != NULL)
-	{
-		g_object_set (cell, "text", cCategory, NULL);
-	}
-}*/
 
 #define CD_MAX_RATING 5
 static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, int iColumnIndex)
@@ -1468,43 +1304,7 @@ static void _cairo_dock_render_rating (GtkTreeViewColumn *tree_column, GtkCellRe
 	/// ignorer les themes "default"...
 	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER);
 }
-/*static void _cairo_dock_render_state (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
-{
-	const gchar *cState=NULL;
-	gint iState = 0;
-	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_STATE, &iState, -1);
-	switch (iState)
-	{
-		case CAIRO_DOCK_LOCAL_PACKAGE:
-			cState = _("Local");
-			g_object_set (cell, "foreground-set", FALSE, NULL);
-		break;
-		case CAIRO_DOCK_USER_PACKAGE:
-			cState = _("User");
-			g_object_set (cell, "foreground-set", FALSE, NULL);
-		break;
-		case CAIRO_DOCK_DISTANT_PACKAGE:
-			cState = _("Net");
-			g_object_set (cell, "foreground-set", FALSE, NULL);
-		break;
-		case CAIRO_DOCK_NEW_PACKAGE:
-			cState = _("New");
-			g_object_set (cell, "foreground", "#FF0000", NULL);  // "red"
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
-		case CAIRO_DOCK_UPDATED_PACKAGE:
-			cState = _("Updated");
-			g_object_set (cell, "foreground", "#FF0000", NULL);  // "red"
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
-		default:
-		break;
-	}
-	if (cState != NULL)
-	{
-		g_object_set (cell, "text", cState, NULL);
-	}
-}*/
+
 static GtkListStore *_make_rate_list_store (void)
 {
 	GString *s = g_string_sized_new (CD_MAX_RATING*4+1);
@@ -2590,67 +2390,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				g_hash_table_destroy (pHashTable);
 			}
 			break ;
-			
-			/*case CAIRO_DOCK_WIDGET_MODULE_LIST :
-			{
-				//\______________ On remplit un modele avec les modules de la categorie.
-				int iCategory = -1;
-				if (pAuthorizedValuesList && pAuthorizedValuesList[0] != NULL)
-					iCategory = atoi (pAuthorizedValuesList[0]);
-				modele = _cairo_dock_gui_allocate_new_model ();
-				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
-				_allocate_new_buffer;
-				data[0] = GINT_TO_POINTER (iCategory);
-				data[1] = modele;
-				cairo_dock_foreach_module ((GHRFunc) _add_module_to_modele, data);
-				
-				//\______________ On construit le treeview des modules.
-				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
-				pOneWidget = gtk_tree_view_new ();
-				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
-				gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
-				gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (pOneWidget), TRUE);
-				g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_module_tree_view), data);  // pour le menu du clic droit
-				GtkTreeViewColumn* col;
-				// case a cocher
-				rend = gtk_cell_renderer_toggle_new ();
-				col = gtk_tree_view_column_new_with_attributes (NULL, rend, "active", CAIRO_DOCK_MODEL_ACTIVE, NULL);
-				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_ACTIVE);
-				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
-				g_signal_connect (G_OBJECT (rend), "toggled", (GCallback) _cairo_dock_activate_one_module, modele);
-				// icone
-				rend = gtk_cell_renderer_pixbuf_new ();
-				gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "pixbuf", CAIRO_DOCK_MODEL_ICON, NULL);
-				// nom
-				rend = gtk_cell_renderer_text_new ();
-				col = gtk_tree_view_column_new_with_attributes (_("plug-in"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
-				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_module_name, NULL, NULL);
-				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
-				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
-				// categorie
-				rend = gtk_cell_renderer_text_new ();
-				col = gtk_tree_view_column_new_with_attributes (_("category"), rend, "text", CAIRO_DOCK_MODEL_STATE, NULL);
-				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_category, NULL, NULL);
-				gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_STATE);
-				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
-				
-				selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
-				gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
-				
-				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-				gtk_widget_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
-				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
-				pSubWidgetList = g_slist_append (pSubWidgetList, pOneWidget);
-				_pack_in_widget_box (pScrolledWindow);
-				
-				//\______________ On construit le widget de prevue et on le rajoute a la suite.
-				gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
-				pPreviewBox = cairo_dock_gui_make_preview_box (pMainWindow, pOneWidget, FALSE, 1, cDefaultMessage, GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
-				_pack_in_widget_box (pPreviewBox);
-				g_free (cDefaultMessage);
-			}
-			break ;*/
 			
 			case CAIRO_DOCK_WIDGET_JUMP_TO_MODULE :  // bouton raccourci vers un autre module
 			case CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS :  // idem mais seulement affiche si le module existe.

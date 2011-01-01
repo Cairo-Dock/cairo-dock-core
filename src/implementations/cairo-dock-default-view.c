@@ -292,7 +292,7 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 		icon = ic->data;
 
 		cairo_save (pCairoContext);
-		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 			_cairo_dock_draw_separator (icon, pDock, pCairoContext, fDockMagnitude);
 		else
 			cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
@@ -416,7 +416,7 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 					icon->fAlpha = 0.7;
 				}
 				
-				if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+				if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 					_cairo_dock_draw_separator (icon, pDock, pCairoContext, fDockMagnitude);
 				else
 					cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
@@ -628,7 +628,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 		icon = ic->data;
 		
 		glPushMatrix ();
-		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 			_cairo_dock_draw_separator_opengl (icon, pDock, fDockMagnitude);
 		else
 			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);

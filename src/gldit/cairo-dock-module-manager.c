@@ -44,7 +44,7 @@
 CairoModulesParam myModulesParam;
 CairoModulesManager myModulesMgr;
 
-CairoDockModuleInstance *g_pCurrentModule = NULL;
+CairoDockModuleInstance *g_pCurrentModule = NULL;  // only used to trace a possible crash in one of the modules.
 
 // dependancies
 extern gchar *g_cConfFile;

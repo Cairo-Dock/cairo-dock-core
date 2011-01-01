@@ -37,7 +37,6 @@
 #include "cairo-dock-desktop-file-factory.h"
 
 #define CAIRO_DOCK_LAUNCHER_CONF_FILE "launcher.desktop"
-#define CAIRO_DOCK_FILE_CONF_FILE "file.desktop"
 #define CAIRO_DOCK_CONTAINER_CONF_FILE "container.desktop"
 #define CAIRO_DOCK_SEPARATOR_CONF_FILE "separator.desktop"
 
@@ -93,9 +92,6 @@ static inline const gchar *_cairo_dock_get_launcher_template_conf_file_path (Cai
 		break ;
 		case CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR :
 			cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_SEPARATOR_CONF_FILE;
-		break ;
-		case CAIRO_DOCK_DESKTOP_FILE_FOR_FILE :
-			cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_FILE_CONF_FILE;
 		break ;
 		default:
 			cTemplateFile = NULL;

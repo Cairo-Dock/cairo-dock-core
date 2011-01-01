@@ -754,7 +754,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		CairoDock *pFakeParentDock = NULL;
 		Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
 		g_return_val_if_fail (pFakeClassIcon != NULL, TRUE);
-		if (CAIRO_DOCK_IS_FAKE_LAUNCHER (pFakeClassIcon))  // le sous-dock est pointe par une icone de paille.
+		if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon))  // le sous-dock est pointe par une icone de paille.
 		{
 			cd_debug ("trouve l'icone en papier (%x;%x)", pFakeClassIcon, pFakeParentDock);
 			cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
@@ -986,7 +986,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 			if (!pDock || !pDock->bIsMainDock)
 				pInhibitorIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 			pSameClassIcon = pInhibitorIcon;
-			if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon))  // on prend les lanceurs de preference.
+			if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon))  // on prend les lanceurs de preference.
 				break ;
 		}
 		
@@ -1061,7 +1061,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 			{
 				icon = ic->data;
 				if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
-				///if (icon->iType == CAIRO_DOCK_LAUNCHER && ! CAIRO_DOCK_IS_SEPARATOR (icon))
+				///if (icon->iType == CAIRO_DOCK_LAUNCHER && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 					break;
 			}
 			if (ic != NULL)  // on a trouve une icone de lanceur.
@@ -1102,7 +1102,7 @@ static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *p
 		if (!pParentDock || !pParentDock->bIsMainDock)  // on place les icones d'applis dans le main dock.
 			continue;
 		pSameClassIcon = pInhibitorIcon;
-		if (CAIRO_DOCK_IS_LAUNCHER (pSameClassIcon))  // on prend les lanceurs de preference aux applets.
+		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon))  // on prend les lanceurs de preference aux applets.
 			break ;
 	}
 	

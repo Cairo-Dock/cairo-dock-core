@@ -628,6 +628,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 		
 		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic && g_pMainDock)  // on recharge les icones pointant sur une classe (qui sont dans le main dock).
 		{
+			/// il faudrait le faire pour les lanceurs de tous les docks ...
 			Icon *icon;
 			GList *ic;
 			for (ic = g_pMainDock->icons; ic != NULL; ic = ic->next)

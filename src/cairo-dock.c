@@ -150,6 +150,7 @@ gboolean g_bEnterHelpOnce = FALSE;
 static gchar *s_cDefaulBackend = NULL;
 static gboolean s_bTestComposite = TRUE;
 static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
+static gint s_iLastYear = 0;
 
 static inline void _cancel_metacity_composite (void)
 {
@@ -243,10 +244,21 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 	struct tm st;
 	localtime_r (&t, &st);
 	
-	if (st.tm_mday == 1 && st.tm_mon == 0)
+	if (st.tm_mday <= 15 && st.tm_mon == 0 && s_iLastYear < st.tm_year + 1900)  // 2 premieres semaines de janvier.
 	{
+		s_iLastYear = st.tm_year + 1900;
+		gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+		cairo_dock_update_conf_file (cConfFilePath,
+			G_TYPE_INT, "Launch", "last year", s_iLastYear,
+			G_TYPE_INVALID);
+		g_free (cConfFilePath);
+		
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
-		cairo_dock_show_temporary_dialog_with_icon ("\nHappy new year !!!  :-)\n", pIcon, CAIRO_CONTAINER (g_pMainDock), 10000., CAIRO_DOCK_SHARE_DATA_DIR"/icons/balloons-aj.svg");
+		gchar *cMessage = g_strdup_printf (_("Happy new year %d !!!"), s_iLastYear);
+		gchar *cMessageFull = g_strdup_printf ("\n%s :-)\n", cMessage);
+		cairo_dock_show_temporary_dialog_with_icon (cMessageFull, pIcon, CAIRO_CONTAINER (g_pMainDock), 15000., CAIRO_DOCK_SHARE_DATA_DIR"/icons/balloons-aj.svg");
+		g_free (cMessageFull);
+		g_free (cMessage);
 	}
 	return FALSE;
 }
@@ -352,6 +364,7 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 		s_bTestComposite = g_key_file_get_boolean (pKeyFile, "Launch", "test composite", NULL);
 		g_bEnterHelpOnce = g_key_file_get_boolean (pKeyFile, "Help", "entered once", NULL);
 		s_iGuiMode = g_key_file_get_integer (pKeyFile, "Gui", "mode", NULL);  // 0 si la cle n'est pas presente.
+		s_iLastYear = g_key_file_get_integer (pKeyFile, "Launch", "last year", NULL);  // 0 si la cle n'est pas presente.
 	}
 	else  // ancienne methode.
 	{
@@ -384,6 +397,9 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 		
 		s_iGuiMode = 0;
 		g_key_file_set_integer (pKeyFile, "Gui", "mode", s_iGuiMode);
+		
+		s_iLastYear = 0;
+		g_key_file_set_integer (pKeyFile, "Launch", "last year", s_iLastYear);
 		
 		cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
 	}

@@ -61,7 +61,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 	if (pIcon != NULL &&
 		pIcon->pIconBuffer != NULL &&
 		g_pIconBackgroundBuffer.pSurface != NULL &&
-		(! CAIRO_DOCK_IS_SEPARATOR (pIcon)))
+		(! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)))
 	{
 		//cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
 		cairo_save (pIconContext);

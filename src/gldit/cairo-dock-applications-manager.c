@@ -919,8 +919,7 @@ static gboolean _cairo_dock_remove_one_appli (Window *pXid, Icon *pIcon, gpointe
 			{
 				CairoDock *pFakeClassParentDock = NULL;
 				Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeClassParentDock);
-				if (CAIRO_DOCK_IS_FAKE_LAUNCHER (pFakeClassIcon))
-				//if (pFakeClassIcon != NULL && ! CAIRO_DOCK_IS_APPLI (pFakeClassIcon) && ! CAIRO_DOCK_IS_APPLET (pFakeClassIcon) && ! CAIRO_DOCK_IS_NORMAL_LAUNCHER (pFakeClassIcon) && pFakeClassIcon->cClass != NULL && pFakeClassIcon->cName != NULL && strcmp (pFakeClassIcon->cClass, pFakeClassIcon->cName) == 0)  // stop la parano.
+				if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon)) // fake launcher
 				{
 					cd_debug ("on degage le fake qui pointe sur %s", cParentDockName);
 					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock, myIconsParam.iSeparateIcons);

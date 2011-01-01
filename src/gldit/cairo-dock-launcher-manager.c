@@ -225,12 +225,9 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pParentDock));
 	
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
-	if (CAIRO_DOCK_IS_NORMAL_LAUNCHER (icon) && icon->cClass != NULL)
+	if (icon->cClass != NULL)
 	{
-		//if (myTaskbarParam.bMixLauncherAppli)
-			cairo_dock_inhibite_class (icon->cClass, icon);
-		//else  // on l'insere quand meme dans la classe pour pouvoir ecraser l'icone X avec la sienne.
-		//	cairo_dock_add_inhibitor_to_class (icon->cClass, icon);
+		cairo_dock_inhibite_class (icon->cClass, icon);  // gere le bMixLauncherAppli
 	}
 	
 	return icon;
@@ -242,7 +239,7 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 	//\____________ On cree l'icone.
 	gchar *cRendererName = NULL;
 	Icon *pIcon = cairo_dock_new_icon ();
-	pIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
+	pIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_OTHER;
 	pIcon->iGroup = CAIRO_DOCK_LAUNCHER;
 	pIcon->cName = cName;
 	pIcon->cFileName = cFileName;
@@ -252,8 +249,7 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 	pIcon->fAlpha = 1.;
 	pIcon->fWidthFactor = 1.;
 	pIcon->fHeightFactor = 1.;
-	pIcon->cCommand = cCommand ? cCommand : g_strdup ("none");  /// virer le 'none' ...
-	///pIcon->cDesktopFileName = g_strdup ("none");
+	pIcon->cCommand = cCommand;
 	pIcon->iface.load_image = _load_launcher;
 	
 	return pIcon;
@@ -299,19 +295,18 @@ void cairo_dock_reload_launcher (Icon *icon)
 {
 	if (icon->cDesktopFileName == NULL || strcmp (icon->cDesktopFileName, "none") == 0)
 	{
-		cd_warning ("tried to reload a launcher whereas this icon (%s) is obviously not a launcher", icon->cName);
+		cd_warning ("missing config file for icon %s", icon->cName);
 		return ;
 	}
-	GError *erreur = NULL;
 	
 	//\_____________ On assure la coherence du nouveau fichier de conf.
-	if (CAIRO_DOCK_IS_LAUNCHER (icon))
+	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
 	{
 		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 		GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
 		g_return_if_fail (pKeyFile != NULL);
 		
-		if (icon->pSubDock != NULL)  // on assure l'unicite du nom du sous-dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
+		if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // on assure l'unicite du nom du sous-dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
 		{
 			gchar *cName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Name", NULL);
 			if (cName == NULL || *cName == '\0')
@@ -323,35 +318,25 @@ void cairo_dock_reload_launcher (Icon *icon)
 				{
 					g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
 					cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-					cd_debug ("on renomme a l'avance le sous-dock en %s\n", cUniqueName);
-					cairo_dock_rename_dock (icon->cName, icon->pSubDock, cUniqueName);  // on le renomme ici pour eviter de transvaser dans un nouveau dock (ca marche aussi ceci dit).
+					cd_debug ("on renomme a l'avance le sous-dock en %s", cUniqueName);
+					if (icon->pSubDock != NULL)
+						cairo_dock_rename_dock (icon->cName, icon->pSubDock, cUniqueName);  // on le renomme ici pour eviter de transvaser dans un nouveau dock (ca marche aussi ceci dit).
 				}
 				g_free (cUniqueName);
 			}
 			g_free (cName);
 		}
-		if (icon->cCommand != NULL)  // on assure que ca reste un lanceur.
+		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon))  // pas vraiment utile mais bon.
 		{
 			gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
 			if (cCommand == NULL || *cCommand == '\0')
 			{
-				cCommand = g_strdup ("no command");
+				cCommand = g_strdup ("enter a command");
 				g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", cCommand);
 				cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
 			}
 			g_free (cCommand);
 		}
-		/*if (icon->cBaseURI != NULL)  // on assure que ca reste un fichier.
-		{
-			gchar *cBaseURI = g_key_file_get_string (pKeyFile, "Desktop Entry", "Base URI", NULL);
-			if (cBaseURI == NULL || *cBaseURI == '\0')
-			{
-				cBaseURI = g_strdup (icon->cBaseURI);
-				g_key_file_set_string (pKeyFile, "Desktop Entry", "Base URI", cBaseURI);
-				cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-			}
-			g_free (cBaseURI);
-		}*/
 		
 		g_key_file_free (pKeyFile);
 		g_free (cDesktopFilePath);
@@ -362,12 +347,6 @@ void cairo_dock_reload_launcher (Icon *icon)
 	icon->cParentDockName = NULL;
 	CairoDock *pDock = cairo_dock_search_dock_from_name (cPrevDockName);  // changement de l'ordre ou du container.
 	double fOrder = icon->fOrder;
-	
-	if (CAIRO_DOCK_IS_URI_LAUNCHER (icon) && icon->pSubDock != NULL)  // dans le cas d'un repertoire, beaucoup de parametres peuvent affecter le contenu du sous-dock : nombre de fichiers max, ordre, et meme l'URI. Donc on s'embete pas trop, on le recree.
-	{
-		cairo_dock_destroy_dock (icon->pSubDock, icon->cName);
-		icon->pSubDock = NULL;
-	}
 	
 	CairoDock *pSubDock = icon->pSubDock;
 	///icon->pSubDock = NULL;
@@ -423,13 +402,8 @@ void cairo_dock_reload_launcher (Icon *icon)
 		if (pSubDock != NULL && pSubDock != icon->pSubDock)  // ca n'est plus le meme container, on transvase ou on detruit.
 		{
 			cd_debug ("on transvase dans le nouveau sous-dock");
-			if (CAIRO_DOCK_IS_URI_LAUNCHER (icon))  // dans ce cas on ne transvase pas puisque le sous-dock est cree a partir du contenu du repertoire.
-				cairo_dock_destroy_dock (pSubDock, cName);
-			else
-			{
-				cairo_dock_remove_icons_from_dock (pSubDock, icon->pSubDock, icon->cName);
-				cairo_dock_destroy_dock (pSubDock, cName);
-			}
+			cairo_dock_remove_icons_from_dock (pSubDock, icon->pSubDock, icon->cName);
+			cairo_dock_destroy_dock (pSubDock, cName);
 			pSubDock = NULL;
 		}
 	}

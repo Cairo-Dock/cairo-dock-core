@@ -450,7 +450,7 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	const gchar *cName = (icon->cInitialName != NULL ? icon->cInitialName : icon->cName);
 	if (cName == NULL)
 	{
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 			cName = _("separator");
 		else
 			cName = "no name";
@@ -463,8 +463,8 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	
 	if (icon->pSubDock != NULL)  // on bazarde le sous-dock.
 	{
-		gboolean bDestroyIcons = ! CAIRO_DOCK_IS_APPLI (icon);
-		if (icon->pSubDock->icons != NULL && ! CAIRO_DOCK_IS_URI_LAUNCHER (icon) && icon->cClass == NULL)  // alors on propose de repartir les icones de son sous-dock dans le dock principal.
+		gboolean bDestroyIcons = TRUE;
+		if (icon->pSubDock->icons != NULL)  // on propose de repartir les icones de son sous-dock dans le dock principal.
 		{
 			int answer = cairo_dock_ask_question_and_wait (_("Do you want to re-dispatch the icons contained inside this container into the dock?\n(otherwise they will be destroyed)"), icon, CAIRO_CONTAINER (pDock));
 			g_return_if_fail (answer != GTK_RESPONSE_NONE);
@@ -585,7 +585,10 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	pIcon->cParentDockName = cCurrentDockName;
 	
 	//\_________________________ on recharge l'icone, ce qui va creer le dock.
-	if (CAIRO_DOCK_IS_STORED_LAUNCHER (pIcon))
+	if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
+		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
+		|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+	&& pIcon->cDesktopFileName != NULL)  // user icon.
 	{
 		cairo_dock_reload_launcher (pIcon);
 	}
@@ -602,9 +605,9 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 
 static void _add_one_dock_to_menu (const gchar *cName, CairoDock *pDock, GtkWidget *pMenu)
 {
-	// on elimine les sous-dock d'appli, d'applets, ou de repertoire.
+	// on ne prend que les sous-docks utilisateur.
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	if (CAIRO_DOCK_IS_APPLET (pPointingIcon) || CAIRO_DOCK_IS_MULTI_APPLI (pPointingIcon) || CAIRO_DOCK_IS_URI_LAUNCHER (pPointingIcon))
+	if (! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
 		return;
 	// on elimine le dock courant.
 	Icon *pIcon = g_object_get_data (G_OBJECT (pMenu), "launcher");
@@ -1204,11 +1207,15 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DOCK (pContainer) && icon && (cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER) || cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_APPLET)))
 	{
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
-		if (!pPointingIcon || CAIRO_DOCK_IS_CONTAINER_LAUNCHER (pPointingIcon))
+		if (!pPointingIcon || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))  // the clicked dock is a main dock or user sub-dock.
 		{
 			bAddNewEntries = TRUE;
 			
-			if (icon->cDesktopFileName != NULL && icon->cParentDockName != NULL)  // possede un .desktop.
+			if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)
+				|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon)
+				|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+			&& icon->cDesktopFileName != NULL)  // user icon
+			///if (icon->cDesktopFileName != NULL && icon->cParentDockName != NULL)  // possede un .desktop.
 			{
 				if (bAddSeparator)
 				{
@@ -1339,7 +1346,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 		_add_desktops_entry (pSubMenuOtherActions, TRUE, data);
 		
-		if (icon->cDesktopFileName != NULL)  // c'est un lanceur inhibiteur.
+		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon))  // c'est un lanceur inhibiteur.
 		{
 			_add_entry_in_menu (_("Launch new"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
 		}
