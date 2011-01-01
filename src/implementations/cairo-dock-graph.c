@@ -27,9 +27,6 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-background.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-graph.h"
 
@@ -215,9 +212,9 @@ static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidt
 	// on trace les axes.
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 	cairo_set_source_rgb (pCairoContext,
-		myLabels.quickInfoTextDescription.fBackgroundColor[0],
-		myLabels.quickInfoTextDescription.fBackgroundColor[1],
-		myLabels.quickInfoTextDescription.fBackgroundColor[2]);  // meme couleur que le fond des info-rapides, mais opaque.
+		myIconsParam.quickInfoTextDescription.fBackgroundColor[0],
+		myIconsParam.quickInfoTextDescription.fBackgroundColor[1],
+		myIconsParam.quickInfoTextDescription.fBackgroundColor[2]);  // meme couleur que le fond des info-rapides, mais opaque.
 	cairo_set_line_width (pCairoContext, 1.);
 	if (iType == CAIRO_DOCK_GRAPH2_CIRCLE || iType == CAIRO_DOCK_GRAPH2_CIRCLE_PLAIN)
 	{
@@ -341,9 +338,9 @@ static void _set_overlay_zones (CairoDockGraph *pGraph)
 				}
 				pLabel->param.fWidth = (double)iLabelWidth / iWidth;
 				pLabel->param.fHeight = (double)iLabelHeight / iHeight;
-				pLabel->param.pColor[0] = myLabels.quickInfoTextDescription.fBackgroundColor[0];
-				pLabel->param.pColor[1] = myLabels.quickInfoTextDescription.fBackgroundColor[1];
-				pLabel->param.pColor[2] = myLabels.quickInfoTextDescription.fBackgroundColor[2];
+				pLabel->param.pColor[0] = myIconsParam.quickInfoTextDescription.fBackgroundColor[0];
+				pLabel->param.pColor[1] = myIconsParam.quickInfoTextDescription.fBackgroundColor[1];
+				pLabel->param.pColor[2] = myIconsParam.quickInfoTextDescription.fBackgroundColor[2];
 				pLabel->param.pColor[3] = 1.;  // meme couleur que les axes.
 			}
 			else

@@ -28,22 +28,22 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-separator-factory.h"
-#include "cairo-dock-icon-loader.h"
+#include "cairo-dock-icon-manager.h"
 #include "cairo-dock-separator-manager.h"
 
 
 cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
 {
 	cairo_surface_t *pNewSurface = NULL;
-	if (myIcons.cSeparatorImage == NULL)
+	if (myIconsParam.cSeparatorImage == NULL)
 	{
 		pNewSurface = cairo_dock_create_blank_surface (
 			iWidth,
@@ -51,7 +51,7 @@ cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
 	}
 	else
 	{
-		gchar *cImagePath = cairo_dock_search_image_s_path (myIcons.cSeparatorImage);
+		gchar *cImagePath = cairo_dock_search_image_s_path (myIconsParam.cSeparatorImage);
 		
 		pNewSurface = cairo_dock_create_surface_from_image_simple (cImagePath,
 			iWidth,
@@ -77,7 +77,7 @@ static void _load_separator (Icon *icon)
 Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
-	if ((iSeparatorType & 1) && ! myIcons.iSeparateIcons)
+	if ((iSeparatorType & 1) && ! myIconsParam.iSeparateIcons)
 		return NULL;
 	
 	//\____________ On cree l'icone.
@@ -103,7 +103,7 @@ void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, const gc
 			(GCompareFunc) cairo_dock_compare_icons_order);
 		pSeparatorIcon->fWidth *= pDock->container.fRatio;
 		pSeparatorIcon->fHeight *= pDock->container.fRatio;
-		pDock->fFlatDockWidth += myIcons.iIconGap + pSeparatorIcon->fWidth;
+		pDock->fFlatDockWidth += myIconsParam.iIconGap + pSeparatorIcon->fWidth;
 		///pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pSeparatorIcon->fHeight);
 	}
 }

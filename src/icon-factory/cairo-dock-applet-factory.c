@@ -22,8 +22,8 @@
 #include <stdlib.h>
 #include <cairo.h>
 
-#include "cairo-dock-icons.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-factory.h"
 
@@ -33,7 +33,7 @@ Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, 
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_icon ();
 	icon->iTrueType = CAIRO_DOCK_ICON_TYPE_APPLET;
-	icon->iType = CAIRO_DOCK_APPLET;
+	icon->iGroup = CAIRO_DOCK_APPLET;
 	icon->pModuleInstance = pModuleInstance;
 	
 	//\____________ On recupere les infos de sa config.

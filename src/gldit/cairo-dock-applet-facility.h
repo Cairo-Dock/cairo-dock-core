@@ -21,7 +21,7 @@
 #define  __CAIRO_DOCK_APPLET_FACILITY__
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-module-factory.h"
 G_BEGIN_DECLS
 
 /**
@@ -76,10 +76,10 @@ void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePat
 
 /** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless.
 *@param pIconContext the drawing context; is not altered by the function.
-*@param cImagePath path of an image to apply on the icon.
+*@param cImage name of an image to apply on the icon.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
-*@param cDefaultImagePath default image.
+*@param cDefaultImagePath path to a default image.
 */
 void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cImage, Icon *pIcon, CairoContainer *pContainer, const gchar *cDefaultImagePath);
 
@@ -324,7 +324,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Create and add the default sub-menu of an applet to the main menu. This sub-menu is named according to the name of the applet, and is represented by the default icon of the applet.
 *@return the sub-menu, newly created and attached to the main menu.
 */
-#define CD_APPLET_CREATE_MY_SUB_MENU(...) (myAccessibility.bLockAll ? CD_APPLET_MY_MENU : CD_APPLET_ADD_SUB_MENU_WITH_IMAGE (D_ (myApplet->pModule->pVisitCard->cTitle), CD_APPLET_MY_MENU, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE))
+#define CD_APPLET_CREATE_MY_SUB_MENU(...) (myDocksParam.bLockAll ? CD_APPLET_MY_MENU : CD_APPLET_ADD_SUB_MENU_WITH_IMAGE (D_ (myApplet->pModule->pVisitCard->cTitle), CD_APPLET_MY_MENU, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE))
 
 /** Create and add an entry to a menu, with an icon.
 *@param cLabel name of the entry.
@@ -382,6 +382,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_RELOAD_CONFIG_PANEL_WITH_PAGE(iNumPage) cairo_dock_reload_current_module_widget_full (myApplet, iNumPage)
 
+#define CD_APPLET_GET_CONFIG_PANEL_WIDGET(cGroupName, cKeyName) cairo_dock_get_widget_from_name (myApplet, cGroupName, cKeyName)
+
+#define CD_APPLET_GET_CONFIG_PANEL_GROUP_KEY_WIDGET(cGroupName, cKeyName) cairo_dock_get_group_key_widget_from_name (myApplet, cGroupName, cKeyName)
 
   /////////////////////////
  // AVAILABLE VARIABLES //
@@ -470,7 +473,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@return the newly allocated surface.
 */
 #define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \
-	cairo_dock_create_surface_from_image_simple (cImagePath, myIcon->fWidth * (myDock ? (1 + g_fAmplitude) / myDock->container.fRatio : 1), myIcon->fHeight* (myDock ? (1 + g_fAmplitude) / myDock->container.fRatio : 1))
+	cairo_dock_create_surface_from_image_simple (cImagePath, myIcon->fWidth * (myDock ? (1 + myIconsParam.fAmplitude) / myDock->container.fRatio : 1), myIcon->fHeight* (myDock ? (1 + myIconsParam.fAmplitude) / myDock->container.fRatio : 1))
 
 /** Load a user image into a surface, at the same size as the applet's icon, or a default image taken in the installed folder of the applet if the first one is NULL. If the user image is given by its sole name, it is searched inside the current theme root folder.
 *@param cUserImageName name or path of an user image.
@@ -536,9 +539,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	CD_APPLET_SET_IMAGE_ON_MY_ICON (_cImageFilePath); \
 	g_free (_cImageFilePath); } while (0)
 
-/** Apply an image on the applet's icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless (taken in the installed folder of the applet).
-*@param cUserImageName nom du fichier of l'image cote utilisateur.
-*@param cDefaultLocalImageName image locale par defaut cote installation.
+/** Apply an image on the applet's icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless (taken in the installation folder of the applet).
+*@param cImageName name of an image.
+*@param cDefaultLocalImageName name of an image to use as a fallback (taken in the applet's installation folder).
 */
 #define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cImageName, cDefaultLocalImageName) \
 	cairo_dock_set_image_on_icon_with_default (myDrawContext, cImageName, myIcon, myContainer, MY_APPLET_SHARE_DATA_DIR"/"cDefaultLocalImageName)
@@ -672,6 +675,11 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_DRAW_EMBLEM_ON_MY_ICON(pEmblem) cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer)
 
+#define CD_APPLET_SET_EMBLEM_ON_MY_ICON(cImageFile, iPosition) do {\
+	CairoEmblem *pEmblem = cairo_dock_make_emblem (cImageFile, myIcon, myContainer);\
+	cairo_dock_set_emblem_position (pEmblem, iPosition);\
+	cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer);\
+	cairo_dock_free_emblem (pEmblem); } while (0)
 
 /** Add a Data Renderer the applet's icon.
 *@param pAttr the attributes of the Data Renderer. They allow you to define its properties.
@@ -817,9 +825,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_MANAGE_APPLICATION(cApplicationClass) do {\
 	if (cairo_dock_strings_differ (myIcon->cClass, (cApplicationClass))) {\
 		if (myIcon->cClass != NULL)\
-			cairo_dock_deinhibate_class (myIcon->cClass, myIcon);\
+			cairo_dock_deinhibite_class (myIcon->cClass, myIcon);\
 		if ((cApplicationClass) != NULL)\
-			cairo_dock_inhibate_class ((cApplicationClass), myIcon); } } while (0)
+			cairo_dock_inhibite_class ((cApplicationClass), myIcon); } } while (0)
 
 //\_________________________________ INTERNATIONNALISATION
 /** Macro for gettext, similar to _() et N_(), but with the domain of the applet. Surround all your strings with this, so that 'xgettext' can find them and automatically include them in the translation files.

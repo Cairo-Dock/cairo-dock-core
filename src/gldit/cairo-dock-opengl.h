@@ -37,7 +37,6 @@ G_BEGIN_DECLS
 /// This strucure summarizes the available OpenGL configuration on the system.
 struct _CairoDockGLConfig {
 	GdkGLConfig *pGlConfig;
-	gboolean bHasBeenForced;
 	gboolean bIndirectRendering;
 	gboolean bAlphaAvailable;
 	gboolean bStencilBufferAvailable;
@@ -64,17 +63,21 @@ struct _CairoDockGLConfig {
  // CONFIGURATION //
 ///////////////////
 /** Initialize the OpenGL backend, by trying to get a suitable GLX configuration.
-*@param bToggleIndirectRendering whether to toggle on/off the indirect rendering mode that have been detected by the function (for cards like Radeon 35xx).
 *@param bForceOpenGL whether to force the use of OpenGL, or let the function decide.
 *@return TRUE if OpenGL is usable.
 */
-gboolean cairo_dock_initialize_opengl_backend (gboolean bToggleIndirectRendering, gboolean bForceOpenGL);
+gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL);
 
 #define cairo_dock_opengl_is_safe(...) (g_openglConfig.pGlConfig != NULL && ! g_openglConfig.bIndirectRendering && g_openglConfig.bAlphaAvailable && g_openglConfig.bStencilBufferAvailable)  // bNonPowerOfTwoAvailable et FBO sont detectes une fois qu'on a un contexte OpenGL, on ne peut donc pas les inclure ici.
 
+/* Toggle on/off the indirect rendering mode (for cards like Radeon 35xx).
+*@param bToggleIndirectRendering whether to toggle on/off the indirect rendering mode that have been detected by the function (for cards like Radeon 35xx).
+*/
+void cairo_dock_force_indirect_rendering (void);
+
 #define cairo_dock_deactivate_opengl(...) do {\
 	g_bUseOpenGL = FALSE;\
-	g_openglConfig.pGlConfig = NULL; } while (0)
+	memset (&g_openglConfig, 0, sizeof (CairoDockGLConfig)); } while (0)
 
   ///////////////////////
  // RENDER TO TEXTURE //
@@ -86,12 +89,12 @@ void cairo_dock_create_icon_fbo (void);
 */
 void cairo_dock_destroy_icon_fbo (void);
 
-/** Create a pbuffer that will fit the icons of the docks. Do nothing it a pbuffer with the correct size already exists.
+/* Create a pbuffer that will fit the icons of the docks. Do nothing it a pbuffer with the correct size already exists.
 */
-///void cairo_dock_create_icon_pbuffer (void);
-/** Destroy the icons pbuffer.
+//void cairo_dock_create_icon_pbuffer (void);
+/* Destroy the icons pbuffer.
 */
-///void cairo_dock_destroy_icon_pbuffer (void);
+//void cairo_dock_destroy_icon_pbuffer (void);
 
 /** Initiate an OpenGL drawing session on an icon's texture.
 *@param pIcon the icon on which to draw.

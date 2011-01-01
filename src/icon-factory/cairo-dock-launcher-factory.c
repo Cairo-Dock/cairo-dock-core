@@ -21,14 +21,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-launcher-factory.h"
 
 extern gchar *g_cCurrentLaunchersPath;
-extern int g_iNbNonStickyLaunchers;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
 gboolean cairo_dock_remove_version_from_string (gchar *cString)
@@ -258,8 +258,8 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	else
 		*cSubDockRendererName = NULL;
 
-	gboolean bPreventFromInhibating = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
-	if (bPreventFromInhibating)
+	gboolean bPreventFromInhibiting = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
+	if (bPreventFromInhibiting)
 	{
 		g_free (icon->cClass);
 		icon->cClass = NULL;
@@ -296,19 +296,12 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	
 	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "group", NULL))
 	{
-		icon->iType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "group", NULL);
+		icon->iGroup = g_key_file_get_integer (pKeyFile, "Desktop Entry", "group", NULL);
 	}
 	
 	int iSpecificDesktop = g_key_file_get_integer (pKeyFile, "Desktop Entry", "ShowOnViewport", NULL);
-	if (iSpecificDesktop != 0 && icon->iSpecificDesktop == 0)
-	{
-		g_iNbNonStickyLaunchers ++;
-	}
-	else if (iSpecificDesktop == 0 && icon->iSpecificDesktop != 0)
-	{
-		g_iNbNonStickyLaunchers --;
-	}
-	icon->iSpecificDesktop = iSpecificDesktop;
+	if (iSpecificDesktop != 0)
+		cairo_dock_set_specified_desktop_for_icon (icon, iSpecificDesktop);
 	
 	if (icon->cCommand == NULL && icon->cName == NULL && ! bIsContainer)
 		iType = CAIRO_DOCK_ICON_TYPE_SEPARATOR;
@@ -322,7 +315,7 @@ Icon * cairo_dock_new_launcher_icon (const gchar *cDesktopFileName, gchar **cSub
 {
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_icon ();
-	icon->iType = CAIRO_DOCK_LAUNCHER;
+	icon->iGroup = CAIRO_DOCK_LAUNCHER;
 	
 	//\____________ On recupere les infos de son .desktop.
 	icon->iTrueType = cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon, cSubDockRendererName);

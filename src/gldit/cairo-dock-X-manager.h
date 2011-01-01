@@ -22,8 +22,8 @@
 
 #include <X11/Xlib.h>
 
-#include "cairo-dock-icons.h"
 #include "cairo-dock-struct.h"
+#include "cairo-dock-manager.h"
 G_BEGIN_DECLS
 
 /**
@@ -31,6 +31,20 @@ G_BEGIN_DECLS
 * The X manager will handle signals from X and dispatch them, and manages the screen geometry.
 */
 
+typedef struct _CairoDockDesktopManager CairoDockDesktopManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoDockDesktopManager myDesktopMgr;
+#endif
+
+// no param
+
+// manager
+struct _CairoDockDesktopManager {
+	GldiManager mgr;
+	} ;
+
+/// signals
 typedef enum {
 	/// notification called when the user switches to another desktop/viewport. data : NULL
 	NOTIFICATION_DESKTOP_CHANGED,
@@ -46,15 +60,11 @@ typedef enum {
 	NOTIFICATION_WINDOW_ACTIVATED,
 	/// notification called when a window's property has changed. data : {Window, Atom, int}
 	NOTIFICATION_WINDOW_PROPERTY_CHANGED,
+	/// 
 	NB_NOTIFICATIONS_DESKTOP
 	} CairoDesktopNotifications;
 
-struct _CairoDockDesktopManager {
-	CairoDockManager mgr;
-	} ;
-
-
-
+// data
 struct _CairoDockDesktopGeometry {
 	int iScreenWidth[2], iScreenHeight[2];  // dimension de l'ecran sur lequel est place le dock.
 	int iXScreenWidth[2], iXScreenHeight[2];  // dimension de l'ecran logique compose eventuellement de plusieurs moniteurs.
@@ -64,10 +74,6 @@ struct _CairoDockDesktopGeometry {
 	int iCurrentViewportX, iCurrentViewportY;
 	};
 
-// X manager : core
-void cairo_dock_start_X_manager (void);
-void cairo_dock_stop_X_manager (void);
-
 // X manager : access
 /** Get the current workspace (desktop and viewport).
 *@param iCurrentDesktop will be filled with the current desktop number
@@ -76,6 +82,17 @@ void cairo_dock_stop_X_manager (void);
 */
 void cairo_dock_get_current_desktop_and_viewport (int *iCurrentDesktop, int *iCurrentViewportX, int *iCurrentViewportY);
 
+// Desktop background
+CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo);
+
+void cairo_dock_destroy_desktop_background (CairoDockDesktopBackground *pDesktopBg);
+
+cairo_surface_t *cairo_dock_get_desktop_bg_surface (CairoDockDesktopBackground *pDesktopBg);
+
+GLuint cairo_dock_get_desktop_bg_texture (CairoDockDesktopBackground *pDesktopBg);
+
+
+void gldi_register_desktop_manager (void);
 
 G_END_DECLS
 #endif

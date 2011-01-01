@@ -17,17 +17,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-notifications.h"
 
 static GPtrArray *s_pNotificationsTab = NULL;  // tables des notifications globales.
-
-
-#define _check_notification_table(pNotificationsTab) do {\
-	if (pNotificationsTab == NULL) {\
-		pNotificationsTab = g_ptr_array_new ();\
-		g_ptr_array_set_size (pNotificationsTab, CAIRO_DOCK_NB_NOTIFICATIONS); } } while (0)
 
 static void _cairo_dock_register_notification_in_tab (GPtrArray *pNotificationsTab, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData)
 {
@@ -42,12 +36,6 @@ static void _cairo_dock_register_notification_in_tab (GPtrArray *pNotificationsT
 		pNotificationsTab->pdata[iNotifType] = g_slist_prepend (pNotificationRecordList, pNotificationRecord);
 	else
 		pNotificationsTab->pdata[iNotifType] = g_slist_append (pNotificationRecordList, pNotificationRecord);
-}
-void cairo_dock_register_notification (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData)
-{
-	_check_notification_table (s_pNotificationsTab);
-	
-	_cairo_dock_register_notification_in_tab (s_pNotificationsTab, iNotifType, pFunction, bRunFirst, pUserData);
 }
 
 

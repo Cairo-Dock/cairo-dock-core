@@ -36,13 +36,13 @@ G_BEGIN_DECLS
 * @param pDock le dock.
 * @return la taille max.
 */
-#define cairo_dock_get_max_authorized_dock_width(pDock) (myAccessibility.iMaxAuthorizedWidth == 0 ? g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] : MIN (myAccessibility.iMaxAuthorizedWidth, g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal]))
+#define cairo_dock_get_max_authorized_dock_width(pDock) (myDocksParam.iMaxAuthorizedWidth == 0 ? g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] : MIN (myDocksParam.iMaxAuthorizedWidth, g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal]))
 
 /* Dis si un dock est etendu ou pas.
 * @param pDock le dock.
 * @return TRUE ssi le dock doit remplir l'ecran.
 */
-#define cairo_dock_is_extended_dock(pDock) (myAccessibility.bExtendedMode && (pDock->iRefCount == 0))
+#define cairo_dock_is_extended_dock(pDock) (myDocksParam.bExtendedMode && (pDock->iRefCount == 0))
 
 #define cairo_dock_is_hidden(pDock) ((pDock)->iRefCount == 0 && (pDock)->bAutoHide && (pDock)->fHideOffset == 1 && (!g_pHidingBackend || !g_pHidingBackend->bCanDisplayHiddenDock))
 
@@ -134,6 +134,7 @@ Icon *cairo_dock_apply_wave_effect_linear (CairoDock *pDock);
 
 /** Get the current width of all the icons of a linear dock. It doesn't take into account any decoration or frame, only the space occupied by the icons.
 *@param pDock a linear dock.
+* @return the dock's width.
 */
 double cairo_dock_get_current_dock_width_linear (CairoDock *pDock);
 
@@ -168,6 +169,9 @@ void cairo_dock_trigger_redraw_subdock_content_on_icon (Icon *icon);
 void cairo_dock_redraw_subdock_content (CairoDock *pDock);
 
 void cairo_dock_trigger_set_WM_icons_geometry (CairoDock *pDock);
+
+void cairo_dock_load_dock_background (CairoDock *pDock);
+void cairo_dock_trigger_load_dock_background (CairoDock *pDock);  // peu utile
 
 
 G_END_DECLS

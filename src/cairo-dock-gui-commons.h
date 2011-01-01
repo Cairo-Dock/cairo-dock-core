@@ -35,7 +35,22 @@ gboolean cairo_dock_save_current_theme (GKeyFile* pKeyFile);
 gboolean cairo_dock_delete_user_themes (GKeyFile* pKeyFile);
 
 
-gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback);
+gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback, GtkWidget *pMainWindow);
+
+
+gchar *cairo_dock_get_readable_name_for_fock (CairoDock *pDock);
+
+
+gboolean cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, GtkListStore *pModele);
+
+GtkWidget *cairo_dock_build_modules_treeview (void);
+
+
+void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+
+void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+
+void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidgetList);
 
 
 G_END_DECLS

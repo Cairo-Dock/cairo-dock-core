@@ -90,14 +90,10 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST='O',
 	/// same but with the 'default' choice too.
 	CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST_WITH_DEFAULT='o',
-	// list of gauges themes.
-	//CAIRO_DOCK_WIDGET_GAUGE_LIST='g',
 	/// list of existing docks.
 	CAIRO_DOCK_WIDGET_DOCK_LIST='d',
 	/// list of installed icon themes.
 	CAIRO_DOCK_WIDGET_ICON_THEME_LIST='w',
-	/// list of available modules.
-	CAIRO_DOCK_WIDGET_MODULE_LIST='N',
 	/// a button to jump to another module inside the config panel.
 	CAIRO_DOCK_WIDGET_JUMP_TO_MODULE='m',
 	/// same but only if the module exists.
@@ -185,12 +181,8 @@ struct _CairoDockGroupKeyWidget {
 	GtkWidget *pKeyBox;
 	};
 
-void cairo_dock_build_renderer_list_for_gui (GHashTable *pHashTable);
-void cairo_dock_build_desklet_decorations_list_for_gui (GHashTable *pHashTable);
-void cairo_dock_build_desklet_decorations_list_for_applet_gui (GHashTable *pHashTable);
-void cairo_dock_build_animations_list_for_gui (GHashTable *pHashTable);
-void cairo_dock_build_dialog_decorator_list_for_gui (GHashTable *pHashTable);
 
+GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidget, gboolean bHorizontalPackaging, int iAddInfoBar, const gchar *cInitialDescription, const gchar *cInitialImage, GPtrArray *pDataGarbage);
 
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data);  // exportee pour pouvoir desactiver la callback.
 

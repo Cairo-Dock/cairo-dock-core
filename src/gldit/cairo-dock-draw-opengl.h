@@ -41,6 +41,8 @@ void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double 
 
 void cairo_dock_set_container_orientation_opengl (CairoContainer *pContainer);
 
+void cairo_dock_draw_icon_reflect_opengl (Icon *pIcon, CairoDock *pDock);
+
 void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock);
 
 void cairo_dock_translate_on_icon_opengl (Icon *icon, CairoContainer *pContainer, double fDockMagnitude);

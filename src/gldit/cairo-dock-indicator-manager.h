@@ -17,29 +17,67 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_INDICATOR_MANAGER__
 #define  __CAIRO_DOCK_INDICATOR_MANAGER__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-manager.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-internal-indicators.h"
 G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-indicator-manager.h This class loads the indicators and manages the associated ressources.
 */
 
-void cairo_dock_init_indicator_manager (void);
+typedef struct _CairoIndicatorsParam CairoIndicatorsParam;
+typedef struct _CairoIndicatorsManager CairoIndicatorsManager;
 
-void cairo_dock_load_indicator_textures (void);
+#ifndef _MANAGER_DEF_
+extern CairoIndicatorsParam myIndicatorsParam;
+extern CairoIndicatorsManager myIndicatorsMgr;
+#endif
 
-void cairo_dock_unload_indicator_textures (void);
+// params
+struct _CairoIndicatorsParam {
+	// active indicator.
+	gchar *cActiveIndicatorImagePath;
+	gdouble fActiveColor[4];
+	gint iActiveLineWidth;
+	gint iActiveCornerRadius;
+	gboolean bActiveIndicatorAbove;
+	// launched indicator.
+	gchar *cIndicatorImagePath;
+	gboolean bIndicatorAbove;
+	gdouble fIndicatorRatio;
+	gboolean bIndicatorOnIcon;
+	gdouble fIndicatorDeltaY;
+	gboolean bRotateWithDock;
+	gboolean bDrawIndicatorOnAppli;
+	// grouped indicator.
+	gchar *cClassIndicatorImagePath;
+	gboolean bZoomClassIndicator;
+	gboolean bUseClassIndic;
+	};
 
-void cairo_dock_reload_indicators (CairoConfigIndicators *pPrevIndicators, CairoConfigIndicators *pIndicators);
+// manager
+struct _CairoIndicatorsManager {
+	GldiManager mgr;
+	};
 
+// signals
+typedef enum {
+	NB_NOTIFICATIONS_INDICATORS
+	} CairoIndicatorsNotifications;
+
+
+//void cairo_dock_load_indicator_textures (void);
+
+//void cairo_dock_unload_indicator_textures (void);
+
+
+void gldi_register_indicators_manager (void);
 
 G_END_DECLS
 #endif

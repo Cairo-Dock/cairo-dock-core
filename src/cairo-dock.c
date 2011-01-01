@@ -75,11 +75,17 @@
 **
 *******************************************************************************/
 
+/// http://www.siteduzero.com/tutoriel-3-307309-le-systeme-de-micro-paiement-flattr.html
+/// http://www.cyber-junk.de/wp-content/cache/supercache/cyber-junk.de/entwickelt/flattr-button-im-eigenbau-mittels-curl-und-mini-api/index.html
+
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h> 
 #include <unistd.h>
+
+#define __USE_POSIX
+#include <time.h>
 
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -89,10 +95,8 @@
 #include <gtk/gtkgl.h>
 
 #include "config.h"
-#include "cairo-dock-icons.h"
-#include "cairo-dock-applications-manager.h"
-#include "cairo-dock-callbacks.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_get_first_icon
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-menu.h"
 #include "cairo-dock-themes-manager.h"
@@ -101,34 +105,15 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-file-manager.h"
-#include "cairo-dock-backends-manager.h"
-#include "cairo-dock-keybinder.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-X-utilities.h"
+#include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_sync
+
 #include "cairo-dock-gui-manager.h"
-#include "cairo-dock-gui-launcher.h"
-#include "cairo-dock-gui-switch.h"
-#include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-dbus.h"
-#include "cairo-dock-load.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-desklet-manager.h"
-#include "cairo-dock-flying-container.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-gauge.h"
-#include "cairo-dock-graph.h"
-#include "cairo-dock-default-view.h"
-#include "cairo-dock-X-manager.h"
-#include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-dialogs.h"
-#include "cairo-dock-indicator-manager.h"
-#include "cairo-dock-internal-accessibility.h"
+#include "cairo-dock-gui-items.h"
+#include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
-#include "cairo-dock-hiding-effect.h"
-#include "cairo-dock-icon-container.h"
-#include "cairo-dock-data-renderer.h"
+#include "cairo-dock-core.h"
 
 #define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
@@ -138,6 +123,8 @@
 #define CAIRO_DOCK_EXTRAS_DIR "extras"
 // Nom du repertoire des themes de dock.
 #define CAIRO_DOCK_THEMES_DIR "themes"
+// Nom du repertoire des themes de dock sur le serveur
+#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes2.2"
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentThemePath;
@@ -163,6 +150,7 @@ gboolean g_bEnterHelpOnce = FALSE;
 static gchar *s_cDefaulBackend = NULL;
 static gboolean s_bTestComposite = TRUE;
 static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
+static gint s_iLastYear = 0;
 
 static inline void _cancel_metacity_composite (void)
 {
@@ -201,7 +189,7 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 	if (s_bTestComposite)
 	{
 		GdkScreen *pScreen = gdk_screen_get_default ();
-		if (! mySystem.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
+		if (! myContainersParam.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
 		{
 			cd_warning ("no composite manager found");
 			// Si l'utilisateur utilise Metacity, on lui propose d'activer le composite.
@@ -250,6 +238,27 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 				G_TYPE_INVALID);
 			g_free (cConfFilePath);
 		}
+	}
+	
+	time_t t = time (NULL);
+	struct tm st;
+	localtime_r (&t, &st);
+	
+	if (st.tm_mday <= 15 && st.tm_mon == 0 && s_iLastYear < st.tm_year + 1900)  // 2 premieres semaines de janvier.
+	{
+		s_iLastYear = st.tm_year + 1900;
+		gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+		cairo_dock_update_conf_file (cConfFilePath,
+			G_TYPE_INT, "Launch", "last year", s_iLastYear,
+			G_TYPE_INVALID);
+		g_free (cConfFilePath);
+		
+		Icon *pIcon = cairo_dock_get_dialogless_icon ();
+		gchar *cMessage = g_strdup_printf (_("Happy new year %d !!!"), s_iLastYear);
+		gchar *cMessageFull = g_strdup_printf ("\n%s :-)\n", cMessage);
+		cairo_dock_show_temporary_dialog_with_icon (cMessageFull, pIcon, CAIRO_CONTAINER (g_pMainDock), 15000., CAIRO_DOCK_SHARE_DATA_DIR"/icons/balloons-aj.svg");
+		g_free (cMessageFull);
+		g_free (cMessage);
 	}
 	return FALSE;
 }
@@ -311,7 +320,6 @@ static void _register_help_module (void)
 	//\________________ ceci est un vilain hack ... mais je trouvais ca lourd de compiler un truc qui n'a aucun code, et puis comme ca on a l'aide meme sans les plug-ins.
 	CairoDockModule *pHelpModule = g_new0 (CairoDockModule, 1);
 	CairoDockVisitCard *pVisitCard = g_new0 (CairoDockVisitCard, 1);
-	pHelpModule->pVisitCard = pVisitCard;
 	pVisitCard->cModuleName = "Help";
 	pVisitCard->cTitle = _("Help");
 	pVisitCard->iMajorVersionNeeded = 2;
@@ -330,16 +338,18 @@ static void _register_help_module (void)
 	pVisitCard->iSizeOfData = 0;
 	pVisitCard->cDescription = N_("A useful FAQ which also contains a lot of hints.\nRoll your mouse over a sentence to make helpful popups appear.");
 	pVisitCard->cAuthor = "Fabounet";
-	pHelpModule->pInterface = g_new0 (CairoDockModuleInterface, 1);
-	pHelpModule->pInterface->load_custom_widget = _entered_help_once;
-	cairo_dock_register_module (pHelpModule);
-	cairo_dock_activate_module (pHelpModule, NULL);
-	pHelpModule->fLastLoadingTime = time (NULL) + 1e7;  // pour ne pas qu'il soit desactive lors d'un reload general, car il n'est pas dans la liste des modules actifs du fichier de conf.
+	
+	CairoDockModuleInterface *pInterface = g_new0 (CairoDockModuleInterface, 1);
+	pInterface->load_custom_widget = _entered_help_once;
+	
+	pHelpModule->pVisitCard = pVisitCard;
+	pHelpModule->pInterface = pInterface;
+	cairo_dock_register_module (pHelpModule);  // il sera vu par le modules-manager comme un module auto-loaded. 
 }
 
-static void _cairo_dock_get_global_config (void)
+static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 {
-	gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+	gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", cCairoDockDataDir);
 	GKeyFile *pKeyFile = g_key_file_new ();
 	if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
@@ -354,10 +364,11 @@ static void _cairo_dock_get_global_config (void)
 		s_bTestComposite = g_key_file_get_boolean (pKeyFile, "Launch", "test composite", NULL);
 		g_bEnterHelpOnce = g_key_file_get_boolean (pKeyFile, "Help", "entered once", NULL);
 		s_iGuiMode = g_key_file_get_integer (pKeyFile, "Gui", "mode", NULL);  // 0 si la cle n'est pas presente.
+		s_iLastYear = g_key_file_get_integer (pKeyFile, "Launch", "last year", NULL);  // 0 si la cle n'est pas presente.
 	}
 	else  // ancienne methode.
 	{
-		gchar *cLastVersionFilePath = g_strdup_printf ("%s/.cairo-dock-last-version", g_cCairoDockDataDir);
+		gchar *cLastVersionFilePath = g_strdup_printf ("%s/.cairo-dock-last-version", cCairoDockDataDir);
 		if (g_file_test (cLastVersionFilePath, G_FILE_TEST_EXISTS))
 		{
 			gsize length = 0;
@@ -373,12 +384,12 @@ static void _cairo_dock_get_global_config (void)
 		g_key_file_set_string (pKeyFile, "Launch", "default backend", "");
 		g_key_file_set_boolean (pKeyFile, "Launch", "test composite", TRUE);
 		
-		gchar *cHelpHistory = g_strdup_printf ("%s/.help/entered-once", g_cCairoDockDataDir);
+		gchar *cHelpHistory = g_strdup_printf ("%s/.help/entered-once", cCairoDockDataDir);
 		if (g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
 		{
 			g_bEnterHelpOnce = TRUE;
 		}
-		gchar *cCommand = g_strdup_printf ("rm -rf \"%s/.help\"", g_cCairoDockDataDir);
+		gchar *cCommand = g_strdup_printf ("rm -rf \"%s/.help\"", cCairoDockDataDir);
 		int r = system (cCommand);
 		g_free (cCommand);
 		g_free (cHelpHistory);
@@ -386,6 +397,9 @@ static void _cairo_dock_get_global_config (void)
 		
 		s_iGuiMode = 0;
 		g_key_file_set_integer (pKeyFile, "Gui", "mode", s_iGuiMode);
+		
+		s_iLastYear = 0;
+		g_key_file_set_integer (pKeyFile, "Launch", "last year", s_iLastYear);
 		
 		cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
 	}
@@ -395,6 +409,7 @@ static void _cairo_dock_get_global_config (void)
 
 int main (int argc, char** argv)
 {
+	//\___________________ show the config panel if something has gone wrong in a previous life, or just quit to prevent infinite crash loop.
 	int i, iNbMaintenance=0;
 	GString *sCommandString = g_string_new (argv[0]);
 	gchar *cDisableApplet = NULL;
@@ -415,13 +430,11 @@ int main (int argc, char** argv)
 	s_cLaunchCommand = sCommandString->str;
 	g_string_free (sCommandString, FALSE);
 	
-	cd_log_init(FALSE);  // warnings by default.
-	
 	gtk_init (&argc, &argv);
 	
 	GError *erreur = NULL;
 	
-	//\___________________ On recupere quelques options.
+	//\___________________ get app's options.
 	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	GOptionEntry TableDesOptions[] =
@@ -533,7 +546,7 @@ int main (int argc, char** argv)
 		g_free (cEnvironment);
 	}
 #ifdef HAVE_GLITZ
-	cd_message ("Compiled with Glitz (hardware acceleration support for cairo)n");
+	g_print ("Compiled with Glitz (hardware acceleration support for cairo)\n");
 #endif
 	
 	if (bCappuccino)
@@ -542,16 +555,8 @@ int main (int argc, char** argv)
 		return 0;
 	}
 	
-	//\___________________ On internationalise l'appli.
-	bindtextdomain (CAIRO_DOCK_GETTEXT_PACKAGE, CAIRO_DOCK_LOCALE_DIR);
-	bind_textdomain_codeset (CAIRO_DOCK_GETTEXT_PACKAGE, "UTF-8");
-	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
-
-	  /////////////
-	 //// LIB ////
-	/////////////
-	
-	//\___________________ On definit les repertoires des donnees.
+	//\___________________ get global config.
+	gboolean bFirstLaunch = FALSE;
 	gchar *cRootDataDirPath;
 	if (cUserDefinedDataDir != NULL)
 	{
@@ -561,94 +566,42 @@ int main (int argc, char** argv)
 	else
 	{
 		cRootDataDirPath = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
+		bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	}
-	gchar *cExtraDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_EXTRAS_DIR, NULL);
-	gchar *cThemesDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_THEMES_DIR, NULL);
-	gchar *cCurrentThemeDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_CURRENT_THEME_NAME, NULL);
-	gboolean bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
+	_cairo_dock_get_global_config (cRootDataDirPath);
 	
-	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath, cThemeServerAdress ? cThemeServerAdress : g_strdup (CAIRO_DOCK_THEME_SERVER));
+	//\___________________ internationalize the app.
+	bindtextdomain (CAIRO_DOCK_GETTEXT_PACKAGE, CAIRO_DOCK_LOCALE_DIR);
+	bind_textdomain_codeset (CAIRO_DOCK_GETTEXT_PACKAGE, "UTF-8");
+	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 	
-	//\___________________ On initialise le gestionnaire de docks (a faire en 1er).
-	cairo_dock_init_dock_manager ();
+	//\___________________ initialize libgldi.
+	GldiRenderingMethod iRendering = (bForceOpenGL ? GLDI_OPENGL : g_bForceCairo ? GLDI_CAIRO : GLDI_DEFAULT);
+	gldi_init (iRendering);
 	
-	//\___________________ On initialise le gestionnaire de desklets.
-	cairo_dock_init_desklet_manager ();
-	
-	//\___________________ On initialise le gestionnaire de dialogues.
-	cairo_dock_init_dialog_manager ();
-	
-	//\___________________ On initialise le gestionnaire de backends (vues, etc).
-	cairo_dock_init_backends_manager ();
-	
-	//\___________________ On initialise le gestionnaire des indicateurs.
-	cairo_dock_init_indicator_manager ();
-	
-	//\___________________ On initialise le multi-threading.
-	if (!g_thread_supported ())
-		g_thread_init (NULL);
-	
-	//\___________________ On demarre le support de X.
-	cairo_dock_start_X_manager ();
-	
-	//\___________________ On initialise le keybinder.
-	cd_keybinder_init();
-	
-	//\___________________ On detecte l'environnement de bureau (apres X et avant les modules).
-	cairo_dock_init_desktop_environment_manager (iDesktopEnv);
-	
-	//\___________________ On enregistre les implementations.
-	cairo_dock_register_built_in_data_renderers ();
-	cairo_dock_register_hiding_effects ();
-	
-	cairo_dock_register_default_renderer ();
-	
-	cairo_dock_register_icon_container_renderers ();
-	
-	//\___________________ On enregistre les notifications de base (avant les modules).
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_ICON,
-		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_INSERT_ICON,
-		(CairoDockNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_REMOVE_ICON,
-		(CairoDockNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_ICON,
-		(CairoDockNotificationFunc) cairo_dock_update_inserting_removing_icon_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_STOP_ICON,
-		(CairoDockNotificationFunc) cairo_dock_stop_inserting_removing_icon_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_UPDATE_FLYING_CONTAINER,
-		(CairoDockNotificationFunc) cairo_dock_update_flying_container_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_RENDER_FLYING_CONTAINER,
-		(CairoDockNotificationFunc) cairo_dock_render_flying_container_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	
-	  /////////////
-	 //// APP ////
-	/////////////
-	
-	//\___________________ On lit la config globale de l'appli.
-	_cairo_dock_get_global_config ();
-	
-	//\___________________ Options generales.
+	//\___________________ set custom user options.
 	if (bKeepAbove)
 		cairo_dock_force_docks_above ();
 	
 	if (bNoSticky)
 		cairo_dock_set_containers_non_sticky ();
 	
-	//\___________________ On initialise le support d'OpenGL.
-	gboolean bOpenGLok = FALSE;
-	if (bForceOpenGL || (! g_bForceCairo && ! g_bUseGlitz))
-		bOpenGLok = cairo_dock_initialize_opengl_backend (bToggleIndirectRendering, bForceOpenGL);
-	if (bOpenGLok && ! bForceOpenGL && ! bToggleIndirectRendering && ! cairo_dock_opengl_is_safe ())  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
+	if (iDesktopEnv != CAIRO_DOCK_UNKNOWN_ENV)
+		cairo_dock_fm_force_desktop_env (iDesktopEnv);
+	
+	if (bToggleIndirectRendering)
+		cairo_dock_force_indirect_rendering ();
+	
+	gchar *cExtraDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_EXTRAS_DIR, NULL);
+	gchar *cThemesDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_THEMES_DIR, NULL);
+	gchar *cCurrentThemeDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_CURRENT_THEME_NAME, NULL);
+	
+	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath, (gchar*)CAIRO_DOCK_SHARE_THEMES_DIR, (gchar*)CAIRO_DOCK_DISTANT_THEMES_DIR, cThemeServerAdress ? cThemeServerAdress : g_strdup (CAIRO_DOCK_THEME_SERVER));
+	
+	//\___________________ Check that OpenGL is safely usable, if not ask the user what to do.
+	if (g_bUseOpenGL && ! bForceOpenGL && ! bToggleIndirectRendering && ! cairo_dock_opengl_is_safe ())  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
 	{
-		if (s_cDefaulBackend == NULL) // pas de backend par defaut defini.
+		if (s_cDefaulBackend == NULL)  // pas de backend par defaut defini.
 		{
 			GtkWidget *dialog = gtk_dialog_new_with_buttons (_("Use OpenGL in Cairo-Dock"),
 				NULL,
@@ -699,50 +652,102 @@ int main (int argc, char** argv)
 		__DATE__, __TIME__,
 		g_bUseOpenGL);
 	
-	//\___________________ On initialise le gestionnaire de modules et on pre-charge les modules existant (il faut le faire apres savoir si on utilise l'OpenGL).
-	if (g_module_supported () && ! bSafeMode)
+	//\___________________ load plug-ins (must be done after everything is initialized).
+	if (! bSafeMode)
 	{
-		cairo_dock_initialize_module_manager (cairo_dock_get_modules_dir ());
+		GError *erreur = NULL;
+		cairo_dock_load_modules_in_directory (NULL, &erreur);  // load gldi-based plug-ins
+		if (erreur != NULL)
+		{
+			cd_warning ("%s\n  no module will be available", erreur->message);
+			g_error_free (erreur);
+			erreur = NULL;
+		}
 		
 		if (cUserDefinedModuleDir != NULL)
 		{
-			cairo_dock_initialize_module_manager (cUserDefinedModuleDir);
+			cairo_dock_load_modules_in_directory (cUserDefinedModuleDir, &erreur);  // load user plug-ins
+			if (erreur != NULL)
+			{
+				cd_warning ("%s\n  no additionnal module will be available", erreur->message);
+				g_error_free (erreur);
+				erreur = NULL;
+			}
 			g_free (cUserDefinedModuleDir);
 			cUserDefinedModuleDir = NULL;
 		}
 	}
-	else
-		cairo_dock_initialize_module_manager (NULL);
 	
-	//\___________________ On definit le backend des GUI.
+	_register_help_module ();
+	
+	//\___________________ define GUI backend.
 	cairo_dock_load_user_gui_backend (s_iGuiMode);
-	cairo_dock_register_default_launcher_gui_backend ();
+	cairo_dock_register_default_items_gui_backend ();
 	
-	//\___________________ On enregistre nos notifications.
-	cairo_dock_register_notification (CAIRO_DOCK_DROP_DATA,
+	//\___________________ register to the useful notifications.
+	cairo_dock_register_notification_on_object (&myContainersMgr,
+		NOTIFICATION_DROP_DATA,
 		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
 		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_CLICK_ICON,
+	cairo_dock_register_notification_on_object (&myContainersMgr,
+		NOTIFICATION_CLICK_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_click_icon,
 		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_MIDDLE_CLICK_ICON,
+	cairo_dock_register_notification_on_object (&myContainersMgr,
+		NOTIFICATION_MIDDLE_CLICK_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
 		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_SCROLL_ICON,
+	cairo_dock_register_notification_on_object (&myContainersMgr,
+		NOTIFICATION_SCROLL_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_scroll_icon,
 		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_BUILD_CONTAINER_MENU,
+	cairo_dock_register_notification_on_object (&myContainersMgr,
+		NOTIFICATION_BUILD_CONTAINER_MENU,
 		(CairoDockNotificationFunc) cairo_dock_notification_build_container_menu,
 		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_BUILD_ICON_MENU,
+	cairo_dock_register_notification_on_object (&myContainersMgr,
+		NOTIFICATION_BUILD_ICON_MENU,
 		(CairoDockNotificationFunc) cairo_dock_notification_build_icon_menu,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	
-	//\___________________ On initialise la gestion des crash.
+	cairo_dock_register_notification_on_object (&myDeskletsMgr,
+		NOTIFICATION_CONFIGURE_DESKLET,
+		(CairoDockNotificationFunc) cairo_dock_notification_configure_desklet,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myDocksMgr,
+		NOTIFICATION_ICON_MOVED,
+		(CairoDockNotificationFunc) cairo_dock_notification_icon_moved,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myDocksMgr,
+		NOTIFICATION_STOP_DOCK,
+		(CairoDockNotificationFunc) cairo_dock_notification_dock_destroyed,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myModulesMgr,
+		NOTIFICATION_MODULE_ACTIVATED,
+		(CairoDockNotificationFunc) cairo_dock_notification_module_activated,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myModulesMgr,
+		NOTIFICATION_MODULE_REGISTERED,
+		(CairoDockNotificationFunc) cairo_dock_notification_module_registered,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myModulesMgr,
+		NOTIFICATION_MODULE_INSTANCE_DETACHED,
+		(CairoDockNotificationFunc) cairo_dock_notification_module_detached,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myDocksMgr,
+		NOTIFICATION_INSERT_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_icon_inserted,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myDocksMgr,
+		NOTIFICATION_REMOVE_ICON,
+		(CairoDockNotificationFunc) cairo_dock_notification_icon_removed,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	
+	//\___________________ handle crashes.
 	if (! bTesting)
 		_cairo_dock_set_signal_interception ();
 	
-	//\___________________ mode maintenance.
+	//\___________________ maintenance mode -> show the main config panel.
 	if (bMaintenance)
 	{
 		if (cExcludeModule != NULL)
@@ -763,7 +768,7 @@ int main (int argc, char** argv)
 			"delete-event",
 			G_CALLBACK (on_delete_maintenance_gui),
 			pBlockingLoop);
-
+		
 		g_print ("showing the maintenance mode ...\n");
 		g_main_loop_run (pBlockingLoop);  // pas besoin de GDK_THREADS_LEAVE/ENTER vu qu'on est pas encore dans la main loop de GTK. En fait cette boucle va jouer le role de la main loop GTK.
 		g_print ("end of the maintenance mode.\n");
@@ -787,9 +792,9 @@ int main (int argc, char** argv)
 		}
 	}
 	
-	//\___________________ On charge le dernier theme.
+	//\___________________ load the current theme.
 	cd_message ("loading theme ...");
-	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))  // aucun theme, on copie le theme par defaut.
+	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))  // no theme yet, copy the default theme first.
 	{
 		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCurrentThemePath);
 		cd_message (cCommand);
@@ -800,21 +805,19 @@ int main (int argc, char** argv)
 	}
 	cairo_dock_load_current_theme ();
 	
-	if (g_bLocked)
+	//\___________________ lock mode.
+	if (g_bLocked)  // comme on ne pourra pas ouvrir le panneau de conf, ces 2 variables resteront tel quel.
 	{
-		myAccessibility.bLockIcons = TRUE;
-		myAccessibility.bLockAll = TRUE;
+		myDocksParam.bLockIcons = TRUE;
+		myDocksParam.bLockAll = TRUE;
 	}
 	
-	if (!bSafeMode && cairo_dock_get_nb_modules () == 0)
+	if (!bSafeMode && cairo_dock_get_nb_modules () <= 1)  // 1 en comptant l'aide
 	{
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
 		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
-		exit (0);
+		return 0;
 	}
-	
-	_register_help_module ();
-	
 	
 	//\___________________ On affiche un petit message de bienvenue ou de changelog ou d'erreur.
 	gboolean bNewVersion = (s_cLastVersion == NULL || strcmp (s_cLastVersion, CAIRO_DOCK_VERSION) != 0);
@@ -844,9 +847,9 @@ int main (int argc, char** argv)
 			if (cChangeLogMessage != NULL)
 			{
 				Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
-				myDialogs.dialogTextDescription.bUseMarkup = TRUE;
+				myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
 				cairo_dock_show_temporary_dialog_with_default_icon (gettext (cChangeLogMessage), pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
-				myDialogs.dialogTextDescription.bUseMarkup = FALSE;
+				myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
 				g_free (cChangeLogMessage);
 			}
 		}
@@ -871,7 +874,7 @@ int main (int argc, char** argv)
 	signal (SIGILL, NULL);  // Illegal instruction
 	signal (SIGABRT, NULL);
 	signal (SIGTERM, NULL);
-	cairo_dock_free_all ();
+	gldi_free_all ();
 	
 	rsvg_term ();
 	xmlCleanupParser ();

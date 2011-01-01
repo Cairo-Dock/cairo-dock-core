@@ -46,24 +46,21 @@
 
 #include "cairo-dock-draw.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-config.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-callbacks.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-backends-manager.h"
+#include "cairo-dock-backends-manager.h"  // myBackendsParam.fSubDockSizeRatio
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-views.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-desktop-file-factory.h"
@@ -78,8 +75,6 @@
 
 extern gchar *g_cCurrentLaunchersPath;
 
-extern gboolean g_bKeepAbove;
-
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 #ifdef HAVE_GLITZ
@@ -89,18 +84,18 @@ extern gboolean g_bUseGlitz;
 
 static void _cairo_dock_set_icon_size (CairoDock *pDock, Icon *icon)
 {
-	CairoDockIconType iType = cairo_dock_get_icon_type (icon);
+	CairoDockIconGroup iType = cairo_dock_get_icon_type (icon);
 	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
 	{
 		if (icon->fWidth == 0)
-			icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
+			icon->fWidth = myIconsParam.tIconAuthorizedWidth[iType];
 		if (icon->fHeight == 0)
-			icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
+			icon->fHeight = myIconsParam.tIconAuthorizedHeight[iType];
 	}
 	else
 	{
-		icon->fWidth = myIcons.tIconAuthorizedWidth[iType];
-		icon->fHeight = myIcons.tIconAuthorizedHeight[iType];
+		icon->fWidth = myIconsParam.tIconAuthorizedWidth[iType];
+		icon->fHeight = myIconsParam.tIconAuthorizedHeight[iType];
 	}
 }
 
@@ -113,7 +108,7 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 	pDock->iRefCount = 0;  // c'est un dock racine par defaut.
 	pDock->container.fRatio = 1.;
 	pDock->iAvoidingMouseIconType = -1;
-	pDock->fFlatDockWidth = - myIcons.iIconGap;
+	pDock->fFlatDockWidth = - myIconsParam.iIconGap;
 	pDock->container.iMouseX = -1; // utile ?
 	pDock->container.iMouseY = -1;
 	pDock->fMagnitudeMax = 1.;
@@ -124,7 +119,8 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 	
 	//\__________________ On cree la fenetre GTK.
 	GtkWidget *pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDock));
-	gtk_container_set_border_width (GTK_CONTAINER(pWindow), 0);
+	cairo_dock_install_notifications_on_object (pDock, NB_NOTIFICATIONS_DOCKS);
+	gtk_container_set_border_width (GTK_CONTAINER (pWindow), 0);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
@@ -259,7 +255,8 @@ void cairo_dock_free_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidDestroyEmptyDock);
 	if (pDock->iSidTestMouseOutside != 0)
 		g_source_remove (pDock->iSidTestMouseOutside);
-	cairo_dock_notify (CAIRO_DOCK_STOP_DOCK, pDock);
+	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_STOP_DOCK, pDock);
+	cairo_dock_notify_on_object (pDock, NOTIFICATION_STOP_DOCK, pDock);
 	
 	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
 	g_list_free (pDock->icons);
@@ -305,17 +302,17 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock)
 	
 	pDock->bAutoHide = FALSE;
 	double fPrevRatio = pDock->container.fRatio;
-	pDock->container.fRatio = MIN (pDock->container.fRatio, myViews.fSubDockSizeRatio);
+	pDock->container.fRatio = MIN (pDock->container.fRatio, myBackendsParam.fSubDockSizeRatio);
 	
 	Icon *icon;
 	GList *ic;
-	pDock->fFlatDockWidth = - myIcons.iIconGap;
+	pDock->fFlatDockWidth = - myIconsParam.iIconGap;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
 		icon->fWidth *= pDock->container.fRatio / fPrevRatio;
 		icon->fHeight *= pDock->container.fRatio / fPrevRatio;
-		pDock->fFlatDockWidth += icon->fWidth + myIcons.iIconGap;
+		pDock->fFlatDockWidth += icon->fWidth + myIconsParam.iIconGap;
 	}
 	pDock->iMaxIconHeight *= pDock->container.fRatio / fPrevRatio;
 
@@ -349,7 +346,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	gboolean bSeparatorNeeded = FALSE;
 	if (bInsertSeparator && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
-		Icon *pSameTypeIcon = cairo_dock_get_first_icon_of_order (pDock->icons, icon->iType);
+		Icon *pSameTypeIcon = cairo_dock_get_first_icon_of_order (pDock->icons, icon->iGroup);
 		if (pSameTypeIcon == NULL && pDock->icons != NULL)
 		{
 			bSeparatorNeeded = TRUE;
@@ -360,7 +357,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	//\______________ On insere l'icone a sa place dans la liste.
 	if (icon->fOrder == CAIRO_DOCK_LAST_ORDER)
 	{
-		Icon *pLastIcon = cairo_dock_get_last_icon_of_order (pDock->icons, icon->iType);
+		Icon *pLastIcon = cairo_dock_get_last_icon_of_order (pDock->icons, icon->iGroup);
 		if (pLastIcon != NULL)
 			icon->fOrder = pLastIcon->fOrder + 1;
 		else
@@ -382,7 +379,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	icon->fWidth *= pDock->container.fRatio;
 	icon->fHeight *= pDock->container.fRatio;
 
-	pDock->fFlatDockWidth += myIcons.iIconGap + icon->fWidth;
+	pDock->fFlatDockWidth += myIconsParam.iIconGap + icon->fWidth;
 	if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
 
@@ -390,7 +387,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	if (bSeparatorNeeded)
 	{
 		int iOrder = cairo_dock_get_icon_order (icon);
-		if (iOrder + 1 < CAIRO_DOCK_NB_TYPES)
+		if (iOrder + 1 < CAIRO_DOCK_NB_GROUPS)
 		{
 			Icon *pNextIcon = cairo_dock_get_next_icon (pDock->icons, icon);
 			if (pNextIcon != NULL && ((cairo_dock_get_icon_order (pNextIcon) - cairo_dock_get_icon_order (icon)) % 2 == 0) && (cairo_dock_get_icon_order (pNextIcon) != cairo_dock_get_icon_order (icon)))
@@ -419,8 +416,9 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 			icon->fInsertRemoveFactor = - 0.95;
 		else
 			icon->fInsertRemoveFactor = - 0.05;
-		cairo_dock_notify (CAIRO_DOCK_INSERT_ICON, icon, pDock);
 	}
+	else
+		icon->fInsertRemoveFactor = 0.;
 	if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
 	
@@ -432,8 +430,9 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
 	
-	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
-		cairo_dock_trigger_refresh_launcher_gui ();
+	//\______________ Notify everybody.
+	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_INSERT_ICON, icon, pDock);
+	cairo_dock_notify_on_object (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);
 }
 
 
@@ -506,7 +505,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	}
 	pDock->icons = g_list_delete_link (pDock->icons, ic);
 	ic = NULL;
-	pDock->fFlatDockWidth -= icon->fWidth + myIcons.iIconGap;
+	pDock->fFlatDockWidth -= icon->fWidth + myIconsParam.iIconGap;
 	
 	//\___________________ On enleve le separateur si c'est la derniere icone de son type.
 	if (bCheckUnusedSeparator && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
@@ -515,7 +514,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		{
 			pDock->icons = g_list_delete_link (pDock->icons, next_ic);
 			next_ic = NULL;
-			pDock->fFlatDockWidth -= pNextIcon->fWidth + myIcons.iIconGap;
+			pDock->fFlatDockWidth -= pNextIcon->fWidth + myIconsParam.iIconGap;
 			cairo_dock_free_icon (pNextIcon);
 			pNextIcon = NULL;
 		}
@@ -523,7 +522,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 		{
 			pDock->icons = g_list_delete_link (pDock->icons, prev_ic);
 			prev_ic = NULL;
-			pDock->fFlatDockWidth -= pPrevIcon->fWidth + myIcons.iIconGap;
+			pDock->fFlatDockWidth -= pPrevIcon->fWidth + myIconsParam.iIconGap;
 			cairo_dock_free_icon (pPrevIcon);
 			pPrevIcon = NULL;
 		}
@@ -563,9 +562,10 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 			pDock->iSidDestroyEmptyDock = g_idle_add ((GSourceFunc) _destroy_empty_dock, pDock);  // on ne passe pas le nom du dock en parametre, car le dock peut se faire renommer (improbable, mais bon).
 	}
 	
-	//\___________________ On prevoit le rafraichissement de la fenetre de config des lanceurs.
-	if (CAIRO_DOCK_IS_STORED_LAUNCHER (icon) || CAIRO_DOCK_IS_USER_SEPARATOR (icon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
-		cairo_dock_trigger_refresh_launcher_gui ();
+	//\___________________ Notify everybody.
+	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_REMOVE_ICON, icon, pDock);
+	cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, icon, pDock);
+	
 	return TRUE;
 }
 void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator)
@@ -620,8 +620,8 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 				next_icon = ic->next->data;
 				if (! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (next_icon) && abs (cairo_dock_get_icon_order (icon) - cairo_dock_get_icon_order (next_icon)) > 1)  // icon->iType != next_icon->iType
 				{
-					int iSeparatorType = myIcons.tIconTypeOrder[next_icon->iType] - 1;
-					cd_debug ("+ un separateur entre %s et %s, dans le groupe %d (=%d)\n", icon->cName, next_icon->cName, iSeparatorType, myIcons.tIconTypeOrder[iSeparatorType]);
+					int iSeparatorType = myIconsParam.tIconTypeOrder[next_icon->iGroup] - 1;
+					cd_debug ("+ un separateur entre %s et %s, dans le groupe %d (=%d)\n", icon->cName, next_icon->cName, iSeparatorType, myIconsParam.tIconTypeOrder[iSeparatorType]);
 					cairo_dock_insert_automatic_separator_in_dock (iSeparatorType, next_icon->cParentDockName, pDock);
 				}
 			}
@@ -630,7 +630,7 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 }
 
 
-Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder, CairoDockIconType iGroup)
+Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder, CairoDockIconGroup iGroup)
 {
 	//\_________________ On ajoute un fichier desktop dans le repertoire des lanceurs du theme courant.
 	gchar *cPath = NULL;
@@ -679,11 +679,6 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 		if (pNewIcon != NULL)
 		{
 			cairo_dock_insert_icon_in_dock (pNewIcon, pReceivingDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-
-			/**if (CAIRO_DOCK_IS_URI_LAUNCHER (pNewIcon))
-			{
-				cairo_dock_fm_add_monitor (pNewIcon);
-			}*/
 			
 			if (pNewIcon->pSubDock != NULL)
 				cairo_dock_trigger_redraw_subdock_content (pNewIcon->pSubDock);

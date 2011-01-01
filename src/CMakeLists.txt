@@ -4,13 +4,12 @@ add_subdirectory (gldit)
 add_subdirectory (implementations)
 
 SET(cairo_dock_SRCS
-	cairo-dock-default-view.c 			cairo-dock-default-view.h
 	cairo-dock-menu.c 					cairo-dock-menu.h 
 	cairo-dock-user-interaction.c 		cairo-dock-user-interaction.h 
 	cairo-dock-gui-main.c 				cairo-dock-gui-main.h
 	cairo-dock-gui-simple.c 			cairo-dock-gui-simple.h
-	cairo-dock-gui-switch.c 			cairo-dock-gui-switch.h
-	cairo-dock-gui-launcher.c 			cairo-dock-gui-launcher.h
+	cairo-dock-gui-backend.c 			cairo-dock-gui-backend.h
+	cairo-dock-gui-items.c 				cairo-dock-gui-items.h
 	cairo-dock-gui-themes.c 			cairo-dock-gui-themes.h
 	cairo-dock-gui-commons.c 			cairo-dock-gui-commons.h
 )

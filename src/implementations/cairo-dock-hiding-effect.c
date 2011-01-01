@@ -39,12 +39,11 @@
 #include <gtk/gtkgl.h>
 #include <GL/glu.h>
 
-#include "cairo-dock-animations.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-animations.h"  // definition of CairoDockHidingEffect
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-internal-system.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-hiding-effect.h"
 
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
@@ -83,7 +82,7 @@ static void _pre_render_opengl (CairoDock *pDock, double fOffset)
 
 static inline double _compute_y_offset (CairoDock *pDock, double fOffset)
 {
-	int N = (pDock->bIsHiding ? mySystem.iHideNbSteps : mySystem.iUnhideNbSteps);
+	int N = (pDock->bIsHiding ? myBackendsParam.iHideNbSteps : myBackendsParam.iUnhideNbSteps);
 	int k = (1 - fOffset) * N;
 	double a = pow (1./pDock->iMaxDockHeight, 1./N);  // le dernier step est un ecart d'environ 1 pixel.
 	return pDock->iMaxDockHeight * pow (a, k) * (pDock->container.bDirectionUp ? 1 : -1);
@@ -350,7 +349,7 @@ static void _post_render_semi_transparent_opengl (CairoDock *pDock, double fOffs
 
 static inline double _compute_zoom (CairoDock *pDock, double fOffset)
 {
-	int N = (pDock->bIsHiding ? mySystem.iHideNbSteps : mySystem.iUnhideNbSteps);
+	int N = (pDock->bIsHiding ? myBackendsParam.iHideNbSteps : myBackendsParam.iUnhideNbSteps);
 	int k = fOffset * N;
 	double a = pow (1./pDock->iMaxDockHeight, 1./N);  // le premier step est un ecart d'environ 1 pixels.
 	return 1 - pow (a, N - k);

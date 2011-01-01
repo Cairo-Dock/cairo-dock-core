@@ -122,7 +122,7 @@
  * See _CairoContainer for the definition of a Container, and cairo-dock-container.h for a complete description of the Container class.
  * 
  * \subsection icons Icons
- * See _Icon for the definition of an Icon, and cairo-dock-icons.h for a complete description of the Icon class.
+ * See _Icon for the definition of an Icon, and cairo-dock-icon-factory.h for a complete description of the Icon class.
  * 
  * \subsection dock Dock
  * See _CairoDock for the definition of a Dock, and cairo-dock-dock-factory.h for a complete description of the Dock class.
@@ -332,9 +332,6 @@ when defining your applet in the \ref CD_APPLET_DEFINE_BEGIN/\ref CD_APPLET_DEFI
  * to be continued ...
  */
 
-
-
-
 typedef struct _CairoDockRenderer CairoDockRenderer;
 typedef struct _CairoDeskletRenderer CairoDeskletRenderer;
 typedef struct _CairoDeskletDecoration CairoDeskletDecoration;
@@ -354,7 +351,6 @@ typedef struct _CairoDockModule CairoDockModule;
 typedef struct _CairoDockModuleInterface CairoDockModuleInterface;
 typedef struct _CairoDockModuleInstance CairoDockModuleInstance;
 typedef struct _CairoDockVisitCard CairoDockVisitCard;
-typedef struct _CairoDockInternalModule CairoDockInternalModule;
 typedef struct _CairoDockMinimalAppletConfig CairoDockMinimalAppletConfig;
 typedef struct _CairoDockDesktopEnvBackend CairoDockDesktopEnvBackend;
 typedef struct _CairoDockClassAppli CairoDockClassAppli;
@@ -401,41 +397,10 @@ typedef struct _CairoDockImageBuffer CairoDockImageBuffer;
 
 typedef struct _CairoEmblem CairoEmblem;
 
+typedef struct _GldiManager GldiManager;
 
-typedef gpointer CairoDockManagerConfigPtr;
-typedef gpointer CairoDockManagerDataPtr;
-typedef void (*CairoDockManagerInitFunc) (void);
-typedef void (*CairoDockManagerLoadFunc) (void);
-typedef void (*CairoDockManagerUnloadFunc) (void);
-typedef void (* CairoDockManagerReloadFunc) (CairoDockManagerConfigPtr *pPrevConfig, CairoDockManagerConfigPtr *pNewConfig);
-typedef gboolean (* CairoDockManagerGetConfigFunc) (GKeyFile *pKeyFile, CairoDockManagerConfigPtr *pConfig);
-typedef void (* CairoDockManagerResetConfigFunc) (CairoDockManagerConfigPtr *pConfig);
-typedef void (* CairoDockManagerResetDataFunc) (CairoDockManagerDataPtr *pData);
-struct _CairoDockManager {
-	// list of available notifications.
-	GPtrArray *pNotificationsTab;
-	//\_____________ Carte de visite.
-	const gchar *cModuleName;
-	const gchar *cDescription;
-	const gchar *cIcon;
-	const gchar *cTitle;
-	gint iCategory;
-	gint iSizeOfConfig;
-	gint iSizeOfData;
-	//\_____________ Interface.
-	CairoDockManagerInitFunc init;
-	CairoDockManagerLoadFunc load;
-	CairoDockManagerUnloadFunc unload;
-	CairoDockManagerReloadFunc reload;
-	CairoDockManagerGetConfigFunc get_config;
-	CairoDockManagerResetConfigFunc reset_config;
-	//\_____________ Instance.
-	CairoDockManagerConfigPtr pConfig;
-	CairoDockManagerDataPtr pData;
-};
-
-typedef struct _CairoDockManager CairoDockManager;
-
+typedef void (* _CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
+typedef _CairoDockForeachIconFunc CairoDockForeachIconFunc;
 
 
 #define CAIRO_DOCK_NB_DATA_SLOT 12

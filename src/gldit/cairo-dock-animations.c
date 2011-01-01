@@ -29,7 +29,8 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-callbacks.h"
@@ -41,30 +42,26 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-taskbar.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-desklet-factory.h"
+#include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-flying-container.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-animations.h"
 
-CairoDockHidingEffect *g_pHidingBackend = NULL;
-CairoDockHidingEffect *g_pKeepingBelowBackend = NULL;
-
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
+extern CairoDockHidingEffect *g_pHidingBackend;
+extern CairoDockHidingEffect *g_pKeepingBelowBackend;
 
 static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gboolean *bContinueAnimation)
 {
 	pDock->iFadeCounter += (pDock->bFadeInOut ? 1 : -1);  // fade out, puis fade in.
 	
-	if (pDock->iFadeCounter >= mySystem.iHideNbSteps)
+	if (pDock->iFadeCounter >= myBackendsParam.iHideNbSteps)
 	{
 		pDock->bFadeInOut = FALSE;
 		//g_print ("set below\n");
@@ -81,8 +78,8 @@ static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gbo
 	}
 	else
 	{
-		cairo_dock_remove_notification_func_on_object (CAIRO_CONTAINER (pDock),
-			CAIRO_DOCK_UPDATE_DOCK,
+		cairo_dock_remove_notification_func_on_object (pDock,
+			NOTIFICATION_UPDATE_DOCK,
 			(CairoDockNotificationFunc) _update_fade_out_dock,
 			NULL);
 	}
@@ -96,8 +93,8 @@ void cairo_dock_pop_up (CairoDock *pDock)
 	//g_print ("%s (%d)\n", __func__, pDock->bIsBelow);
 	if (pDock->bIsBelow)
 	{
-		cairo_dock_remove_notification_func_on_object (CAIRO_CONTAINER (pDock),
-			CAIRO_DOCK_UPDATE_DOCK,
+		cairo_dock_remove_notification_func_on_object (pDock,
+			NOTIFICATION_UPDATE_DOCK,
 			(CairoDockNotificationFunc) _update_fade_out_dock,
 			NULL);
 		pDock->iFadeCounter = 0;
@@ -119,8 +116,8 @@ void cairo_dock_pop_down (CairoDock *pDock)
 		{
 			pDock->iFadeCounter = 0;
 			pDock->bFadeInOut = TRUE;
-			cairo_dock_register_notification_on_object (CAIRO_CONTAINER (pDock),
-				CAIRO_DOCK_UPDATE_DOCK,
+			cairo_dock_register_notification_on_object (pDock,
+				NOTIFICATION_UPDATE_DOCK,
 				(CairoDockNotificationFunc) _update_fade_out_dock,
 				CAIRO_DOCK_RUN_FIRST, NULL);
 			if (g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->init)
@@ -161,19 +158,14 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 	if (pDock->bIsShrinkingDown)
 		return TRUE;  // on se met en attente de fin d'animation.
 	
-	pDock->iMagnitudeIndex += mySystem.iGrowUpInterval;
+	pDock->iMagnitudeIndex += myBackendsParam.iGrowUpInterval;
 	if (pDock->iMagnitudeIndex > CAIRO_DOCK_NB_MAX_ITERATIONS)
 		pDock->iMagnitudeIndex = CAIRO_DOCK_NB_MAX_ITERATIONS;
 
 	if (pDock->fFoldingFactor != 0)
 	{
 		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
-		if (iAnimationDeltaT == 0)  // precaution.
-		{
-			cairo_dock_set_default_animation_delta_t (pDock);
-			iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
-		}
-		pDock->fFoldingFactor -= (double) iAnimationDeltaT / mySystem.iUnfoldingDuration;
+		pDock->fFoldingFactor -= (double) iAnimationDeltaT / myBackendsParam.iUnfoldingDuration;
 		if (pDock->fFoldingFactor < 0)
 			pDock->fFoldingFactor = 0;
 	}
@@ -211,7 +203,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 	//g_print ("%s (%d, %f, %f)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->fDecorationsOffsetX);
 	//\_________________ On fait decroitre la magnitude du dock.
 	int iPrevMagnitudeIndex = pDock->iMagnitudeIndex;
-	pDock->iMagnitudeIndex -= mySystem.iShrinkDownInterval;
+	pDock->iMagnitudeIndex -= myBackendsParam.iShrinkDownInterval;
 	if (pDock->iMagnitudeIndex < 0)
 		pDock->iMagnitudeIndex = 0;
 	
@@ -219,12 +211,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 	if (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)
 	{
 		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
-		if (iAnimationDeltaT == 0)  // precaution.
-		{
-			cairo_dock_set_default_animation_delta_t (pDock);
-			iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
-		}
-		pDock->fFoldingFactor += (double) iAnimationDeltaT / mySystem.iUnfoldingDuration;
+		pDock->fFoldingFactor += (double) iAnimationDeltaT / myBackendsParam.iUnfoldingDuration;
 		if (pDock->fFoldingFactor > 1)
 			pDock->fFoldingFactor = 1;
 	}
@@ -304,7 +291,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 	
 	if (pDock->fHideOffset < 1)
 	{
-		pDock->fHideOffset += 1./mySystem.iHideNbSteps;
+		pDock->fHideOffset += 1./myBackendsParam.iHideNbSteps;
 		if (pDock->fHideOffset > .99)  // fin d'anim.
 		{
 			pDock->fHideOffset = 1;
@@ -331,7 +318,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 			}
 			
 			pDock->pRenderer->calculate_icons (pDock);
-			///pDock->fFoldingFactor = (mySystem.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
+			///pDock->fFoldingFactor = (myBackendsParam.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
 			cairo_dock_allow_entrance (pDock);
 			
 			cairo_dock_replace_all_dialogs ();
@@ -350,7 +337,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 	}
 	else if (pDock->fPostHideOffset > 0 && pDock->fPostHideOffset < 1)
 	{
-		pDock->fPostHideOffset += 1./mySystem.iHideNbSteps;
+		pDock->fPostHideOffset += 1./myBackendsParam.iHideNbSteps;
 		if (pDock->fPostHideOffset > .99)
 		{
 			pDock->fPostHideOffset = 1.;
@@ -362,7 +349,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 
 static gboolean _cairo_dock_show (CairoDock *pDock)
 {
-	pDock->fHideOffset -= 1./mySystem.iUnhideNbSteps;
+	pDock->fHideOffset -= 1./myBackendsParam.iUnhideNbSteps;
 	if (pDock->fHideOffset < 0.01)
 	{
 		pDock->fHideOffset = 0;
@@ -389,7 +376,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			{
 				cd_message ("cette (%s) appli est toujours valide, on la detache juste", pIcon->cName);
 				pIcon->fInsertRemoveFactor = 0.;  // on le fait avant le reload, sinon l'icone n'est pas rechargee.
-				if (!pIcon->bIsHidden && myTaskBar.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
+				if (!pIcon->bIsHidden && myTaskbarParam.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
 					cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
 				cairo_dock_detach_appli (pIcon);
 			}
@@ -478,16 +465,18 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 		icon = ic->data;
 		
 		icon->fDeltaYReflection = 0;
-		if (myIcons.fAlphaAtRest != 1)
-			icon->fAlpha = fDockMagnitude + myIcons.fAlphaAtRest * (1 - fDockMagnitude);
+		if (myIconsParam.fAlphaAtRest != 1)
+			icon->fAlpha = fDockMagnitude + myIconsParam.fAlphaAtRest * (1 - fDockMagnitude);
 		
 		bIconIsAnimating = FALSE;
 		if (bUpdateSlowAnimation)
 		{
-			cairo_dock_notify_on_icon (icon, CAIRO_DOCK_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
+			cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
+			cairo_dock_notify_on_object (icon, NOTIFICATION_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
 			pDock->container.bKeepSlowAnimation |= bIconIsAnimating;
 		}
-		cairo_dock_notify_on_icon (icon, CAIRO_DOCK_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
+		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
+		cairo_dock_notify_on_object (icon, NOTIFICATION_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
 		
 		if ((icon->bIsDemandingAttention || icon->bAlwaysVisible) && cairo_dock_is_hidden (pDock))  // animation d'une icone demandant l'attention dans un dock cache => on force le dessin qui normalement ne se fait pas.
 		{
@@ -521,9 +510,11 @@ static gboolean _cairo_dock_dock_animation_loop (CairoDock *pDock)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_UPDATE_DOCK_SLOW, pDock, &pDock->container.bKeepSlowAnimation);
+		cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_UPDATE_DOCK_SLOW, pDock, &pDock->container.bKeepSlowAnimation);
+		cairo_dock_notify_on_object (pDock, NOTIFICATION_UPDATE_DOCK_SLOW, pDock, &pDock->container.bKeepSlowAnimation);
 	}
-	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_UPDATE_DOCK, pDock, &bContinue);
+	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_UPDATE_DOCK, pDock, &bContinue);
+	cairo_dock_notify_on_object (pDock, NOTIFICATION_UPDATE_DOCK, pDock, &bContinue);
 	
 	if (! bContinue && ! pDock->container.bKeepSlowAnimation)
 	{
@@ -552,11 +543,13 @@ static gboolean _cairo_desklet_animation_loop (CairoDesklet *pDesklet)
 		
 		if (bUpdateSlowAnimation)
 		{
-			cairo_dock_notify_on_icon (pDesklet->pIcon, CAIRO_DOCK_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+			cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+			cairo_dock_notify_on_object (pDesklet->pIcon, NOTIFICATION_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
 			pDesklet->container.bKeepSlowAnimation |= bIconIsAnimating;
 		}
 		
-		cairo_dock_notify_on_icon (pDesklet->pIcon, CAIRO_DOCK_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+		cairo_dock_notify_on_object (pDesklet->pIcon, NOTIFICATION_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
 		if (! bIconIsAnimating)
 			pDesklet->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
 		else
@@ -565,10 +558,12 @@ static gboolean _cairo_desklet_animation_loop (CairoDesklet *pDesklet)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_UPDATE_DESKLET_SLOW, pDesklet, &pDesklet->container.bKeepSlowAnimation);
+		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_UPDATE_DESKLET_SLOW, pDesklet, &pDesklet->container.bKeepSlowAnimation);
+		cairo_dock_notify_on_object (pDesklet, NOTIFICATION_UPDATE_DESKLET_SLOW, pDesklet, &pDesklet->container.bKeepSlowAnimation);
 	}
 	
-	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDesklet), CAIRO_DOCK_UPDATE_DESKLET, pDesklet, &bContinue);
+	cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_UPDATE_DESKLET, pDesklet, &bContinue);
+	cairo_dock_notify_on_object (pDesklet, NOTIFICATION_UPDATE_DESKLET, pDesklet, &bContinue);
 	
 	if (! bContinue && ! pDesklet->container.bKeepSlowAnimation)
 	{
@@ -587,14 +582,16 @@ static gboolean _cairo_flying_container_animation_loop (CairoFlyingContainer *pF
 	{
 		gboolean bIconIsAnimating = FALSE;
 		
-		cairo_dock_notify_on_icon (pFlyingContainer->pIcon, CAIRO_DOCK_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
+		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
+		cairo_dock_notify_on_object (pFlyingContainer->pIcon, NOTIFICATION_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
 		if (! bIconIsAnimating)
 			pFlyingContainer->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
 		else
 			bContinue = TRUE;
 	}
 	
-	cairo_dock_notify (CAIRO_DOCK_UPDATE_FLYING_CONTAINER, pFlyingContainer, &bContinue);
+	cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_UPDATE_FLYING_CONTAINER, pFlyingContainer, &bContinue);
+	cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_UPDATE_FLYING_CONTAINER, pFlyingContainer, &bContinue);
 	
 	if (! bContinue)
 	{
@@ -633,10 +630,12 @@ static gboolean _cairo_dialog_animation_loop (CairoDialog *pDialog)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify_on_container (CAIRO_CONTAINER (pDialog), CAIRO_DOCK_UPDATE_DIALOG_SLOW, pDialog, &pDialog->container.bKeepSlowAnimation);
+		cairo_dock_notify_on_object (&myDialogsMgr, NOTIFICATION_UPDATE_DIALOG_SLOW, pDialog, &pDialog->container.bKeepSlowAnimation);
+		cairo_dock_notify_on_object (pDialog, NOTIFICATION_UPDATE_DIALOG_SLOW, pDialog, &pDialog->container.bKeepSlowAnimation);
 	}
 	
-	cairo_dock_notify_on_container (CAIRO_CONTAINER (pDialog), CAIRO_DOCK_UPDATE_DIALOG, pDialog, &bContinue);
+	cairo_dock_notify_on_object (&myDialogsMgr, NOTIFICATION_UPDATE_DIALOG, pDialog, &bContinue);
+	cairo_dock_notify_on_object (pDialog, NOTIFICATION_UPDATE_DIALOG, pDialog, &bContinue);
 	
 	cairo_dock_redraw_container (CAIRO_CONTAINER (pDialog));
 	if (! bContinue && ! pDialog->container.bKeepSlowAnimation)
@@ -663,10 +662,12 @@ static gboolean _cairo_default_container_animation_loop (CairoContainer *pContai
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify_on_container (pContainer, CAIRO_DOCK_UPDATE_DEFAULT_CONTAINER_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
+		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_UPDATE_DEFAULT_CONTAINER_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
+		cairo_dock_notify_on_object (pContainer, NOTIFICATION_UPDATE_DEFAULT_CONTAINER_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
 	}
 	
-	cairo_dock_notify_on_container (pContainer, CAIRO_DOCK_UPDATE_DEFAULT_CONTAINER, pContainer, &bContinue);
+	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_UPDATE_DEFAULT_CONTAINER, pContainer, &bContinue);
+	cairo_dock_notify_on_object (pContainer, NOTIFICATION_UPDATE_DEFAULT_CONTAINER, pContainer, &bContinue);
 	
 	if (! bContinue && ! pContainer->bKeepSlowAnimation)
 	{
@@ -682,11 +683,6 @@ void cairo_dock_launch_animation (CairoContainer *pContainer)
 	if (pContainer->iSidGLAnimation == 0)
 	{
 		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pContainer);
-		if (iAnimationDeltaT == 0)  // precaution.
-		{
-			cairo_dock_set_default_animation_delta_t (pContainer);
-			iAnimationDeltaT = cairo_dock_get_animation_delta_t (pContainer);
-		}
 		pContainer->bKeepSlowAnimation = TRUE;
 		switch (pContainer->iType)
 		{
@@ -792,14 +788,15 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
 {
-	//cd_debug ("%s (%s, state:%d)", __func__, pIcon->cName, pIcon->iAnimationState);
+	//g_print ("%s (%s, state:%d)\n", __func__, pIcon->cName, pIcon->iAnimationState);
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)  // on le fait avant de changer d'animation, pour le cas ou l'icone ne serait plus placee au meme endroit (rebond).
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	cairo_dock_stop_icon_animation (pIcon);
 	
 	if (cAnimation == NULL || iNbRounds == 0 || pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)
 		return ;
-	cairo_dock_notify (CAIRO_DOCK_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
+	cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
+	cairo_dock_notify_on_object (pIcon, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_start_icon_animation (pIcon, pDock);
 }
 
@@ -812,8 +809,8 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 		iNbRounds = 1e6;
 	if (cAnimation == NULL || *cAnimation == '\0' || strcmp (cAnimation, "default") == 0)
 	{
-		if (myTaskBar.cAnimationOnDemandsAttention != NULL)
-			cAnimation = myTaskBar.cAnimationOnDemandsAttention;
+		if (myTaskbarParam.cAnimationOnDemandsAttention != NULL)
+			cAnimation = myTaskbarParam.cAnimationOnDemandsAttention;
 		else
 			cAnimation = "rotate";
 	}
@@ -878,7 +875,8 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
 			pIcon->fInsertRemoveFactor = 1.0;
 		else
 			pIcon->fInsertRemoveFactor = 0.05;
-		cairo_dock_notify (CAIRO_DOCK_REMOVE_ICON, pIcon, pDock);
+		cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
+		cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
 		cairo_dock_start_icon_animation (pIcon, pDock);
 	}
 }
@@ -951,12 +949,15 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 
 gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
-	if (pIcon->iAnimationState == CAIRO_DOCK_STATE_REMOVE_INSERT)
+	if (pIcon->iAnimationState == CAIRO_DOCK_STATE_REMOVE_INSERT)  // already in insert/remove state
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	
+	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
+	
+	if (fabs (pIcon->fInsertRemoveFactor) < .1)  // useless or not needed animation.
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	pIcon->bBeingRemovedByCairo = TRUE;
-	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
-	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
@@ -1045,8 +1046,10 @@ void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer,
 	pTransition->pFreeUserDataFunc = pFreeUserDataFunc;
 	cairo_dock_set_transition (pIcon, pTransition);
 	
-	cairo_dock_register_notification_on_object (pIcon, bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
-		(CairoDockNotificationFunc) _cairo_dock_transition_step, CAIRO_DOCK_RUN_AFTER, pUserData);
+	cairo_dock_register_notification_on_object (pIcon,
+		bFastPace ? NOTIFICATION_UPDATE_ICON : NOTIFICATION_UPDATE_ICON_SLOW,
+		(CairoDockNotificationFunc) _cairo_dock_transition_step,
+		CAIRO_DOCK_RUN_AFTER, pUserData);
 	
 	cairo_dock_launch_animation (pContainer);
 }
@@ -1057,7 +1060,8 @@ void cairo_dock_remove_transition_on_icon (Icon *pIcon)
 	if (pTransition == NULL)
 		return ;
 	
-	cairo_dock_remove_notification_func_on_object (pIcon, pTransition->bFastPace ? CAIRO_DOCK_UPDATE_ICON : CAIRO_DOCK_UPDATE_ICON_SLOW,
+	cairo_dock_remove_notification_func_on_object (pIcon,
+		pTransition->bFastPace ? NOTIFICATION_UPDATE_ICON : NOTIFICATION_UPDATE_ICON_SLOW,
 		(CairoDockNotificationFunc) _cairo_dock_transition_step,
 		pTransition->pUserData);
 	

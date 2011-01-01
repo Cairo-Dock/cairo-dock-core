@@ -9,6 +9,7 @@ msgstr ""
 "PO-Revision-Date: 2010-10-02 16:57+0000\n"
 "Last-Translator: Maks Mokriev <mcree@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,7 +18,7 @@ msgstr ""
 "X-Poedit-Country: Ukraine\n"
 "X-Poedit-Language: Ukrainian\n"
 
-#: ../src/cairo-dock-gui-commons.c:189
+#: ../src/cairo-dock-gui-commons.c:215
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -27,98 +28,264 @@ msgstr ""
 "Вони будуть втрачені, якщо перед вибором нової теми їх не зберегти.\n"
 "Продовжити в будь-якому випадку?"
 
-#: ../src/cairo-dock-gui-launcher.c:470
-msgid "Launcher configuration"
-msgstr "Налаштування піктограм"
+#: ../src/cairo-dock-gui-commons.c:241
+#, fuzzy
+msgid "Please wait while importing the theme..."
+msgstr "Не вдалося імпортувати тему."
 
-#: ../src/cairo-dock-gui-main.c:128 ../data/messages:263
-msgid "Behaviour"
-msgstr "Поведінка"
+#: ../src/cairo-dock-gui-commons.c:304
+#, fuzzy
+msgid "Bottom dock"
+msgstr "Нижнє зміщення:"
 
-#: ../src/cairo-dock-gui-main.c:129 ../data/messages:83 ../data/messages:1383
-msgid "Appearance"
-msgstr "Зовнішній вигляд"
+#: ../src/cairo-dock-gui-commons.c:306
+#, fuzzy
+msgid "Top dock"
+msgstr "Заблокувати панель"
 
-#: ../src/cairo-dock-gui-main.c:130 ../src/gldit/cairo-dock-gui-factory.c:1365
+#: ../src/cairo-dock-gui-commons.c:311
+#, fuzzy
+msgid "Right dock"
+msgstr "Нова основна панель"
+
+#: ../src/cairo-dock-gui-commons.c:313
+#, fuzzy
+msgid "Left dock"
+msgstr "Заблокувати панель"
+
+#: ../src/cairo-dock-gui-commons.c:410 ../src/cairo-dock-menu.c:1373
+msgid "Configure this applet"
+msgstr "Налаштувати аплет"
+
+#: ../src/cairo-dock-gui-commons.c:447 ../src/cairo-dock-gui-main.c:131
 msgid "Files"
 msgstr "Файли"
 
-#: ../src/cairo-dock-gui-main.c:131 ../src/gldit/cairo-dock-gui-factory.c:1370
+#: ../src/cairo-dock-gui-commons.c:452 ../src/cairo-dock-gui-main.c:132
 msgid "Internet"
 msgstr "Інтернет"
 
-#: ../src/cairo-dock-gui-main.c:132 ../src/gldit/cairo-dock-gui-factory.c:1375
+#: ../src/cairo-dock-gui-commons.c:457 ../src/cairo-dock-gui-main.c:133
 msgid "Desktop"
 msgstr "Стільниця"
 
-#: ../src/cairo-dock-gui-main.c:133
-msgid "Accessories"
-msgstr "Аксесуари"
+#: ../src/cairo-dock-gui-commons.c:462
+msgid "Accessory"
+msgstr "Аксесуар"
 
-#: ../src/cairo-dock-gui-main.c:134 ../src/gldit/cairo-dock-gui-factory.c:1385
-#: ../src/gldit/cairo-dock-internal-system.c:123 ../data/messages:339
+#: ../src/cairo-dock-gui-commons.c:467 ../src/cairo-dock-gui-main.c:135
+#: ../src/cairo-dock-gui-main.c:1447
+#: ../src/internal-old/cairo-dock-internal-system.c:122 ../data/messages:339
 msgid "System"
 msgstr "Система"
 
-#: ../src/cairo-dock-gui-main.c:135 ../src/gldit/cairo-dock-gui-factory.c:1390
+#: ../src/cairo-dock-gui-commons.c:472 ../src/cairo-dock-gui-main.c:136
 msgid "Fun"
 msgstr "Веселий"
 
-#: ../src/cairo-dock-gui-main.c:136 ../src/cairo-dock-gui-main.c:1524
+#: ../src/cairo-dock-gui-commons.c:514
+msgid "plug-in"
+msgstr "додаток"
+
+#: ../src/cairo-dock-gui-commons.c:520
+msgid "category"
+msgstr "категорія"
+
+#: ../src/cairo-dock-gui-items.c:334
+msgid "Main dock's paramaters are available in the main configuration window."
+msgstr ""
+
+#: ../src/cairo-dock-gui-items.c:571
+msgid "Launcher configuration"
+msgstr "Налаштування піктограм"
+
+#: ../src/cairo-dock-gui-main.c:129 ../data/messages:263
+msgid "Behaviour"
+msgstr "Поведінка"
+
+#: ../src/cairo-dock-gui-main.c:130 ../data/messages:83 ../data/messages:1383
+msgid "Appearance"
+msgstr "Зовнішній вигляд"
+
+#: ../src/cairo-dock-gui-main.c:134
+msgid "Accessories"
+msgstr "Аксесуари"
+
+#: ../src/cairo-dock-gui-main.c:137 ../src/cairo-dock-gui-main.c:1585
 #: ../data/messages:1519
 msgid "All"
 msgstr "Всі"
 
-#: ../src/cairo-dock-gui-main.c:1500
+#: ../src/cairo-dock-gui-main.c:1428
+#: ../src/internal-old/cairo-dock-internal-position.c:131
+msgid "Set the position of the main dock."
+msgstr "Виберіть позицію основної панелі"
+
+#: ../src/cairo-dock-gui-main.c:1429
+#: ../src/internal-old/cairo-dock-internal-position.c:129 ../data/messages:137
+msgid "Position"
+msgstr "Позиція"
+
+#: ../src/cairo-dock-gui-main.c:1434
+#: ../src/internal-old/cairo-dock-internal-accessibility.c:261
+msgid ""
+"Do you like your dock to be always visible,\n"
+" or on the contrary unobtrusive?\n"
+"Configure the way you access your docks and sub-docks!"
+msgstr ""
+"Ви б хотіли, щоб ваша панель була завжди видима,\n"
+" чи, навпаки, ховалася?\n"
+"Налаштуйте спосіб доступу до своїх панелей та суб-панелей!"
+
+#: ../src/cairo-dock-gui-main.c:1435 ../src/cairo-dock-menu.c:1410
+#: ../src/internal-old/cairo-dock-internal-accessibility.c:259
+msgid "Visibility"
+msgstr "Видимість"
+
+#: ../src/cairo-dock-gui-main.c:1440
+#: ../src/internal-old/cairo-dock-internal-taskbar.c:167
+msgid "Display and interact with currently open windows."
+msgstr "Відображає і взаємодіє з відкритими вікнами."
+
+#: ../src/cairo-dock-gui-main.c:1441
+#: ../src/internal-old/cairo-dock-internal-taskbar.c:165 ../data/messages:61
+#: ../data/messages:1033
+msgid "Taskbar"
+msgstr "Панель задач"
+
+#: ../src/cairo-dock-gui-main.c:1446
+#: ../src/internal-old/cairo-dock-internal-system.c:124
+msgid "All of the parameters you will never want to tweak."
+msgstr "Не змінюйте ці параметри без особливої потреби."
+
+#: ../src/cairo-dock-gui-main.c:1452
+#: ../src/internal-old/cairo-dock-internal-background.c:130
+msgid "Set a background for your dock."
+msgstr "Виберіть тло для вашої панелі."
+
+#: ../src/cairo-dock-gui-main.c:1453
+#: ../src/internal-old/cairo-dock-internal-background.c:128
+#: ../data/messages:435 ../data/messages:831 ../data/messages:1391
+msgid "Background"
+msgstr "Тло"
+
+#: ../src/cairo-dock-gui-main.c:1458
+#: ../src/internal-old/cairo-dock-internal-views.c:87
+msgid "Select a view for each of your docks."
+msgstr "Можете вибрати окремий вигляд для кожної панелі."
+
+#: ../src/cairo-dock-gui-main.c:1459
+#: ../src/internal-old/cairo-dock-internal-views.c:85 ../data/messages:115
+#: ../data/messages:495 ../data/messages:1385
+msgid "Views"
+msgstr "Види"
+
+#: ../src/cairo-dock-gui-main.c:1465
+#: ../src/internal-old/cairo-dock-internal-dialogs.c:121
+msgid "Configure text bubble appearance."
+msgstr "Налаштуйте зовнішній вигляд хмарок нагадувань."
+
+#: ../src/cairo-dock-gui-main.c:1466
+#: ../src/internal-old/cairo-dock-internal-dialogs.c:119
+msgid "Dialog boxes"
+msgstr "Діалоги"
+
+#: ../src/cairo-dock-gui-main.c:1472
+#: ../src/internal-old/cairo-dock-internal-desklets.c:100
+msgid "Applets can be displayed on your desktop as widgets."
+msgstr "Аплети можуть розташовуватися на вашій стільниці, як віджети."
+
+#: ../src/cairo-dock-gui-main.c:1473
+#: ../src/internal-old/cairo-dock-internal-desklets.c:98 ../data/messages:551
+msgid "Desklets"
+msgstr "Десклети"
+
+#: ../src/cairo-dock-gui-main.c:1479
+#: ../src/internal-old/cairo-dock-internal-icons.c:459
+msgid ""
+"All about icons:\n"
+" size, reflection, icon theme,..."
+msgstr ""
+"Все про значки :\n"
+" розмір, відображення, тема значків, ..."
+
+#: ../src/cairo-dock-gui-main.c:1480
+#: ../src/internal-old/cairo-dock-internal-icons.c:457 ../data/messages:85
+#: ../data/messages:615 ../data/messages:857
+msgid "Icons"
+msgstr "Значки"
+
+#: ../src/cairo-dock-gui-main.c:1485
+#: ../src/internal-old/cairo-dock-internal-indicators.c:169
+msgid "Indicators are additional markers for your icons."
+msgstr "Індикатори відображають додаткову інформацію на значках."
+
+#: ../src/cairo-dock-gui-main.c:1486
+#: ../src/internal-old/cairo-dock-internal-indicators.c:167
+#: ../data/messages:733
+msgid "Indicators"
+msgstr "Індикатори"
+
+#: ../src/cairo-dock-gui-main.c:1492
+#: ../src/internal-old/cairo-dock-internal-labels.c:182
+msgid "Define icon caption and quick-info style."
+msgstr "Виберіть зовнішній вигляд підписів та інфо-повідомлень."
+
+#: ../src/cairo-dock-gui-main.c:1493
+#: ../src/internal-old/cairo-dock-internal-labels.c:180
+msgid "Captions"
+msgstr "Підписи"
+
+#: ../src/cairo-dock-gui-main.c:1561
 msgid "Categories"
 msgstr "Категорії"
 
-#: ../src/cairo-dock-gui-main.c:1629
+#: ../src/cairo-dock-gui-main.c:1699
 msgid "Filter"
 msgstr "Фільтр"
 
-#: ../src/cairo-dock-gui-main.c:1676
+#: ../src/cairo-dock-gui-main.c:1746
 msgid "Options"
 msgstr "Параметри"
 
-#: ../src/cairo-dock-gui-main.c:1686
+#: ../src/cairo-dock-gui-main.c:1756
 msgid "All words"
 msgstr "За всіма словами"
 
-#: ../src/cairo-dock-gui-main.c:1690
+#: ../src/cairo-dock-gui-main.c:1760
 msgid "Highlighted words"
 msgstr "Підсвічувати слова"
 
-#: ../src/cairo-dock-gui-main.c:1695
+#: ../src/cairo-dock-gui-main.c:1765
 msgid "Hide others"
 msgstr "Сховати решту"
 
-#: ../src/cairo-dock-gui-main.c:1700
+#: ../src/cairo-dock-gui-main.c:1770
 msgid "Search in description"
 msgstr "Шукати в описах"
 
-#: ../src/cairo-dock-gui-main.c:1714
+#: ../src/cairo-dock-gui-main.c:1784
 msgid "Enable this module"
 msgstr "Активувати цей модуль"
 
-#: ../src/cairo-dock-gui-main.c:1778 ../src/cairo-dock-menu.c:216
+#: ../src/cairo-dock-gui-main.c:1848 ../src/cairo-dock-menu.c:205
 #: ../data/messages:133
 msgid "More applets"
 msgstr "Більше аплетів"
 
-#: ../src/cairo-dock-gui-main.c:1779 ../data/messages:131
+#: ../src/cairo-dock-gui-main.c:1849 ../data/messages:131
 msgid "Get more applets online !"
 msgstr "Отримати більше аплетів!"
 
-#: ../src/cairo-dock-gui-main.c:1812 ../src/cairo-dock.c:757
+#: ../src/cairo-dock-gui-main.c:1883 ../src/cairo-dock.c:729
 msgid "< Maintenance mode >"
 msgstr "< Режим обслуговування >"
 
-#: ../src/cairo-dock-gui-main.c:1902 ../src/cairo-dock-gui-simple.c:856
+#: ../src/cairo-dock-gui-main.c:1973 ../src/cairo-dock-gui-simple.c:900
 msgid "Cairo-Dock configuration"
 msgstr "Налаштування Cairo-Dock"
 
-#: ../src/cairo-dock-gui-main.c:2223
+#: ../src/cairo-dock-gui-main.c:2294
 #, c-format
 msgid ""
 "The '%s' module is not present. You need to install it and all its "
@@ -127,16 +294,16 @@ msgstr ""
 "Модуль '%s' не встановлено. Вам потрібно встановити його або його "
 "залежності, щоб використовувати його повною мірою."
 
-#: ../src/cairo-dock-gui-main.c:2229
+#: ../src/cairo-dock-gui-main.c:2300
 #, c-format
 msgid "The '%s' module is not enabled."
 msgstr "Модуль '%s'  не активовано."
 
-#: ../src/cairo-dock-gui-main.c:2230
+#: ../src/cairo-dock-gui-main.c:2301
 msgid "Do you want to enable it now?"
 msgstr "Бажаєте активувати зараз?"
 
-#: ../src/cairo-dock-gui-main.c:2373
+#: ../src/cairo-dock-gui-main.c:2444
 msgid ""
 "It appears that you've never entered the help module before.\n"
 "If you are having difficulty configuring the dock, or if you want to "
@@ -150,42 +317,46 @@ msgstr ""
 "модуль Допомоги допоможе в цьому!\n"
 "Бажаєте перейти в модуль Допомоги зараз?"
 
-#: ../src/cairo-dock-gui-simple.c:403 ../src/cairo-dock-gui-themes.c:151
+#: ../src/cairo-dock-gui-simple.c:407 ../src/cairo-dock-gui-themes.c:112
 msgid "Could not import the theme."
 msgstr "Не вдалося імпортувати тему."
 
-#: ../src/cairo-dock-gui-simple.c:422
+#: ../src/cairo-dock-gui-simple.c:427
 #, fuzzy
 msgid "Importing theme..."
 msgstr "Імпорт теми %s..."
 
-#: ../src/cairo-dock-gui-simple.c:429 ../src/cairo-dock-gui-themes.c:193
+#: ../src/cairo-dock-gui-simple.c:434 ../src/cairo-dock-gui-themes.c:154
 #, fuzzy
 msgid "Theme has been saved"
 msgstr "Тему збережено"
 
-#: ../src/cairo-dock-gui-simple.c:435 ../src/cairo-dock-gui-themes.c:199
+#: ../src/cairo-dock-gui-simple.c:440 ../src/cairo-dock-gui-themes.c:160
 #, fuzzy
 msgid "Themes have been deleted"
 msgstr "Тему видалено"
 
-#: ../src/cairo-dock-gui-simple.c:760
+#: ../src/cairo-dock-gui-simple.c:770
 msgid "Animation:"
 msgstr "Анімація:"
 
-#: ../src/cairo-dock-gui-simple.c:777
+#: ../src/cairo-dock-gui-simple.c:787
 msgid "Effects:"
 msgstr "Ефекти:"
 
-#: ../src/cairo-dock-gui-simple.c:822 ../data/messages:77
+#: ../src/cairo-dock-gui-simple.c:855
+msgid "Click on an applet in order to have a preview and a description for it."
+msgstr "Натисніть на аплеті, щоб мати його попередній перегляд та опис."
+
+#: ../src/cairo-dock-gui-simple.c:864 ../data/messages:77
 msgid "On mouse hover:"
 msgstr "При наведенні курсора:"
 
-#: ../src/cairo-dock-gui-simple.c:824 ../data/messages:79
+#: ../src/cairo-dock-gui-simple.c:866 ../data/messages:79
 msgid "On click:"
 msgstr "При клацанні"
 
-#: ../src/cairo-dock-gui-simple.c:893
+#: ../src/cairo-dock-gui-simple.c:937
 msgid ""
 "This is the simple configuration panel of Cairo-Dock.\n"
 " After you get familiar with it, and if you want to customise your theme\n"
@@ -197,15 +368,15 @@ msgstr ""
 "ви можете переключитися до розширеного режиму.\n"
 " Ви можете перемикатися між режимами у будь-який час."
 
-#: ../src/cairo-dock-gui-switch.c:68
+#: ../src/cairo-dock-gui-switch.c:77
 msgid "Simple Mode"
 msgstr "Простий режим"
 
-#: ../src/cairo-dock-gui-switch.c:68
+#: ../src/cairo-dock-gui-switch.c:77
 msgid "Advanced Mode"
 msgstr "Розширений Режим"
 
-#: ../src/cairo-dock-gui-switch.c:70
+#: ../src/cairo-dock-gui-switch.c:79
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
@@ -213,150 +384,150 @@ msgstr ""
 "Розширений режим дозволяє налаштування кожного параметру панелі. Він є "
 "потужним інструментом для налаштування поточної теми."
 
-#: ../src/cairo-dock-gui-themes.c:186
+#: ../src/cairo-dock-gui-themes.c:147
 #, fuzzy
 msgid "Importing theme ..."
 msgstr "Імпорт теми %s..."
 
-#: ../src/cairo-dock-gui-themes.c:347
+#: ../src/cairo-dock-gui-themes.c:180
 msgid "Manage Themes"
 msgstr "Управління темами"
 
-#: ../src/cairo-dock-menu.c:128
-#, c-format
-msgid "Configuration of the '%s' dock"
-msgstr "Налаштування '%s' панелі"
+#: ../src/cairo-dock-menu.c:169
+#, fuzzy
+msgid "About Cairo-Dock"
+msgstr "Вийти з Cairo-Dock ?"
 
-#: ../src/cairo-dock-menu.c:207 ../data/messages:1287
+#: ../src/cairo-dock-menu.c:196 ../data/messages:1287
 msgid "Community site"
 msgstr "Сайт спільноти"
 
-#: ../src/cairo-dock-menu.c:208 ../data/messages:1285
+#: ../src/cairo-dock-menu.c:197 ../data/messages:1285
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr "Проблеми? Пропозиції? Хочете поспілкуватися з нами? Ласкаво просимо!"
 
-#: ../src/cairo-dock-menu.c:211 ../data/messages:1291
+#: ../src/cairo-dock-menu.c:200 ../data/messages:1291
 msgid "Development site"
 msgstr "Сайт розробників"
 
-#: ../src/cairo-dock-menu.c:212 ../data/messages:1289
+#: ../src/cairo-dock-menu.c:201 ../data/messages:1289
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Вияснити тут, яка остання версія Cairo-Dock доступна !."
 
-#: ../src/cairo-dock-menu.c:226
+#: ../src/cairo-dock-menu.c:216
 msgid "Development"
 msgstr "Розробники"
 
-#: ../src/cairo-dock-menu.c:232
+#: ../src/cairo-dock-menu.c:222
 msgid "Artwork"
 msgstr "Оформлення"
 
-#: ../src/cairo-dock-menu.c:236
+#: ../src/cairo-dock-menu.c:226
 msgid "Support"
 msgstr "Підтримка"
 
-#: ../src/cairo-dock-menu.c:312
+#: ../src/cairo-dock-menu.c:307
 msgid "Quit Cairo-Dock?"
 msgstr "Вийти з Cairo-Dock ?"
 
-#: ../src/cairo-dock-menu.c:341
+#: ../src/cairo-dock-menu.c:336
 msgid "Configure"
 msgstr "Налаштувати"
 
-#: ../src/cairo-dock-menu.c:346
+#: ../src/cairo-dock-menu.c:341
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Налаштувати поведінку, зовнішній вигляд та аплети."
 
-#: ../src/cairo-dock-menu.c:350
+#: ../src/cairo-dock-menu.c:345
 msgid "Configure this dock"
 msgstr "Налаштувати цю панель"
 
-#: ../src/cairo-dock-menu.c:355
+#: ../src/cairo-dock-menu.c:350
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr ""
 "Налаштування позиції, видимість і зовнішній вигляд цієї головної панелі."
 
-#: ../src/cairo-dock-menu.c:360
+#: ../src/cairo-dock-menu.c:355
 msgid "Manage themes"
 msgstr "Управління темами"
 
-#: ../src/cairo-dock-menu.c:365
+#: ../src/cairo-dock-menu.c:360
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr "Виберіть серед багатьох на сервері тем, і збережіть власну."
 
-#: ../src/cairo-dock-menu.c:371
+#: ../src/cairo-dock-menu.c:366
 msgid "Unlock icons"
 msgstr "Розблокувати значки"
 
-#: ../src/cairo-dock-menu.c:371
+#: ../src/cairo-dock-menu.c:366
 msgid "Lock icons"
 msgstr "Заблокувати значки"
 
-#: ../src/cairo-dock-menu.c:375
+#: ../src/cairo-dock-menu.c:370
 msgid "This will (un)lock the position of the icons."
 msgstr "Це (Роз)заблокує позицію піктограм."
 
-#: ../src/cairo-dock-menu.c:379
+#: ../src/cairo-dock-menu.c:374
 msgid "Unlock dock"
 msgstr "Розблокувати панель"
 
-#: ../src/cairo-dock-menu.c:379
+#: ../src/cairo-dock-menu.c:374
 msgid "Lock dock"
 msgstr "Заблокувати панель"
 
-#: ../src/cairo-dock-menu.c:384
+#: ../src/cairo-dock-menu.c:379
 msgid "This will (un)lock the whole dock."
 msgstr "Це (Роз)заблокує всю панель"
 
-#: ../src/cairo-dock-menu.c:389
+#: ../src/cairo-dock-menu.c:384
 msgid "Quick-Hide"
 msgstr "Приховати"
 
-#: ../src/cairo-dock-menu.c:394
+#: ../src/cairo-dock-menu.c:389
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Приховати панель поки ви не наведете на неї курсор."
 
-#: ../src/cairo-dock-menu.c:402
+#: ../src/cairo-dock-menu.c:397
 msgid "Launch Cairo-Dock on startup"
 msgstr "Запускати Cairo-Dock при старті системи"
 
-#: ../src/cairo-dock-menu.c:412 ../src/cairo-dock.c:316
+#: ../src/cairo-dock-menu.c:407 ../src/cairo-dock.c:297
 msgid "Help"
 msgstr "Довідка"
 
-#: ../src/cairo-dock-menu.c:417
+#: ../src/cairo-dock-menu.c:412
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr "Немає проблем, тільки вирішення (і багато корисних порад! )."
 
-#: ../src/cairo-dock-menu.c:419
+#: ../src/cairo-dock-menu.c:414
 msgid "Get more applets!"
 msgstr "Отримайте більше аплетів!"
 
-#: ../src/cairo-dock-menu.c:424
+#: ../src/cairo-dock-menu.c:419
 msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Аплети третіх сторін забезпечують інтеграцію з різноманітними програмами, "
 "наприклад Pidgin"
 
-#: ../src/cairo-dock-menu.c:426
+#: ../src/cairo-dock-menu.c:421
 msgid "About"
 msgstr "Про програму"
 
-#: ../src/cairo-dock-menu.c:434
+#: ../src/cairo-dock-menu.c:429
 msgid "Quit"
 msgstr "Вийти"
 
-#: ../src/cairo-dock-menu.c:459 ../src/cairo-dock-menu.c:1164
+#: ../src/cairo-dock-menu.c:454
 msgid "separator"
 msgstr "розділювач"
 
-#: ../src/cairo-dock-menu.c:463
+#: ../src/cairo-dock-menu.c:458
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr "Ви збираєтеся видалити значок (%s) з панелі. Ви впевнені?"
 
-#: ../src/cairo-dock-menu.c:474
+#: ../src/cairo-dock-menu.c:469
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -365,7 +536,7 @@ msgstr ""
 "Перемістити всі ці значки на панель?\n"
 "(інакше вони будуть видалені)"
 
-#: ../src/cairo-dock-menu.c:544
+#: ../src/cairo-dock-menu.c:539
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -375,11 +546,11 @@ msgstr ""
 "Тепер можна перемістити на неї деякі значки запуску або аплети, зробивши "
 "клацання правою кнопкою на значку -> перемістити на іншу панель."
 
-#: ../src/cairo-dock-menu.c:561
+#: ../src/cairo-dock-menu.c:556
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Цей значок не має файлу налаштувань."
 
-#: ../src/cairo-dock-menu.c:602
+#: ../src/cairo-dock-menu.c:597
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -389,12 +560,12 @@ msgstr ""
 "Тепер ви можете змінити її через праве клацання -> Cairo-dock -> Налаштувати "
 "цю панель."
 
-#: ../src/cairo-dock-menu.c:660
+#: ../src/cairo-dock-menu.c:658
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Ви збираєтеся видалити аплет (%s) з панелі. Ви впевнені?"
 
-#: ../src/cairo-dock-menu.c:882
+#: ../src/cairo-dock-menu.c:881
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -402,230 +573,226 @@ msgstr ""
 "Не вдалося знайти потрібний файл з описом.\n"
 "Спробуйте перетягнути програму з меню."
 
-#: ../src/cairo-dock-menu.c:1114
+#: ../src/cairo-dock-menu.c:1116
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Перемістити все на поверхню %d — стільниці %d"
 
-#: ../src/cairo-dock-menu.c:1114
+#: ../src/cairo-dock-menu.c:1116
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Перемістити на стільницю %d — поверхню %d"
 
-#: ../src/cairo-dock-menu.c:1116
+#: ../src/cairo-dock-menu.c:1118
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Перемістити все на стільницю %d"
 
-#: ../src/cairo-dock-menu.c:1116
+#: ../src/cairo-dock-menu.c:1118
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Перемістити на стільницю %d"
 
-#: ../src/cairo-dock-menu.c:1118
+#: ../src/cairo-dock-menu.c:1120
 #, c-format
 msgid "Move all to face %d"
 msgstr "Перемістити все на поверхню %d"
 
-#: ../src/cairo-dock-menu.c:1118
+#: ../src/cairo-dock-menu.c:1120
 #, c-format
 msgid "Move to face %d"
 msgstr "Перемістити на поверхню %d"
 
-#: ../src/cairo-dock-menu.c:1155
+#: ../src/cairo-dock-menu.c:1158
 msgid "Add"
 msgstr "Додати"
 
-#: ../src/cairo-dock-menu.c:1159
+#: ../src/cairo-dock-menu.c:1162
 #, fuzzy
-msgid "sub-dock"
-msgstr "Додати суб-панель"
+msgid "Sub-dock"
+msgstr "Суб-панелі"
 
-#: ../src/cairo-dock-menu.c:1161
+#: ../src/cairo-dock-menu.c:1164
 #, fuzzy
-msgid "main dock"
+msgid "Main dock"
 msgstr "Нова основна панель"
 
-#: ../src/cairo-dock-menu.c:1168
+#: ../src/cairo-dock-menu.c:1167 ../data/messages:1579
 #, fuzzy
-msgid "custom launcher"
+msgid "Separator"
+msgstr "Розділювачі"
+
+#: ../src/cairo-dock-menu.c:1171
+#, fuzzy
+msgid "Custom launcher"
 msgstr "Додати свою піктограму запуску"
 
-#: ../src/cairo-dock-menu.c:1169
+#: ../src/cairo-dock-menu.c:1172
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
 "Достатньо просто перетягнути піктограму з системного меню прямо на панель."
 
-#: ../src/cairo-dock-menu.c:1216
+#: ../src/cairo-dock-menu.c:1218
 msgid "Modify this separator"
 msgstr "Змінити цей розділювач"
 
-#: ../src/cairo-dock-menu.c:1216
+#: ../src/cairo-dock-menu.c:1218
 msgid "Modify this launcher"
 msgstr "Змінити значок запуску"
 
-#: ../src/cairo-dock-menu.c:1218
+#: ../src/cairo-dock-menu.c:1220
 msgid "Remove this separator"
 msgstr "Видалити розділювач"
 
-#: ../src/cairo-dock-menu.c:1218
+#: ../src/cairo-dock-menu.c:1220
 msgid "Remove this launcher"
 msgstr "Видалити значок запуску"
 
-#: ../src/cairo-dock-menu.c:1219
+#: ../src/cairo-dock-menu.c:1221
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 "Ви можете видалити будь-яку піктограму просто перетягнувши її поза панель."
 
-#: ../src/cairo-dock-menu.c:1221 ../src/cairo-dock-menu.c:1384
+#: ../src/cairo-dock-menu.c:1223 ../src/cairo-dock-menu.c:1389
 msgid "Move to another dock"
 msgstr "Перемістити до іншої панелі"
 
-#: ../src/cairo-dock-menu.c:1225 ../src/cairo-dock-menu.c:1388
+#: ../src/cairo-dock-menu.c:1227 ../src/cairo-dock-menu.c:1393
 msgid "New main dock"
 msgstr "Нова основна панель"
 
-#: ../src/cairo-dock-menu.c:1243 ../src/cairo-dock-menu.c:1326
+#: ../src/cairo-dock-menu.c:1247 ../src/cairo-dock-menu.c:1331
 msgid "Other actions"
 msgstr "Інші дії"
 
-#: ../src/cairo-dock-menu.c:1248
+#: ../src/cairo-dock-menu.c:1252
 msgid "Move to this desktop"
 msgstr "Перемістити на цю стільницю"
 
-#: ../src/cairo-dock-menu.c:1262
+#: ../src/cairo-dock-menu.c:1267
 msgid "Not Fullscreen"
 msgstr "Не повноекранний"
 
-#: ../src/cairo-dock-menu.c:1262
+#: ../src/cairo-dock-menu.c:1267
 msgid "Fullscreen"
 msgstr "Повноекранний"
 
-#: ../src/cairo-dock-menu.c:1266
+#: ../src/cairo-dock-menu.c:1271
 msgid "Don't keep above"
 msgstr "Не тримати поверх"
 
-#: ../src/cairo-dock-menu.c:1266
+#: ../src/cairo-dock-menu.c:1271
 msgid "Keep above"
 msgstr "Тримати поверх"
 
-#: ../src/cairo-dock-menu.c:1287
+#: ../src/cairo-dock-menu.c:1292
 msgid "Remove custom icon"
 msgstr "Видалити власний значок"
 
-#: ../src/cairo-dock-menu.c:1291
+#: ../src/cairo-dock-menu.c:1296
 msgid "Set a custom icon"
 msgstr "Вказати власний значок"
 
-#: ../src/cairo-dock-menu.c:1294
+#: ../src/cairo-dock-menu.c:1299
 msgid "Kill"
 msgstr "Знищити"
 
-#: ../src/cairo-dock-menu.c:1299
+#: ../src/cairo-dock-menu.c:1304
 msgid "Launch a new (Shift+clic)"
 msgstr "Запустити новий (Shift+клацання)"
 
-#: ../src/cairo-dock-menu.c:1304
+#: ../src/cairo-dock-menu.c:1309
 msgid "Make it a launcher"
 msgstr "Зробити значком запуску"
 
-#: ../src/cairo-dock-menu.c:1307
+#: ../src/cairo-dock-menu.c:1312
 msgid "Show"
 msgstr "Показати"
 
-#: ../src/cairo-dock-menu.c:1309
+#: ../src/cairo-dock-menu.c:1314
 msgid "Unmaximise"
 msgstr "Звичайний розмір"
 
-#: ../src/cairo-dock-menu.c:1309
+#: ../src/cairo-dock-menu.c:1314
 msgid "Maximise"
 msgstr "Розгорнути"
 
-#: ../src/cairo-dock-menu.c:1312
+#: ../src/cairo-dock-menu.c:1317
 msgid "Minimise"
 msgstr "Згорнути"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1319
 msgid "Close (middle-click)"
 msgstr "Закрити (середнє клацання)"
 
-#: ../src/cairo-dock-menu.c:1331
+#: ../src/cairo-dock-menu.c:1336
 msgid "Move all to this desktop"
 msgstr "Перемістити все на цю стільницю"
 
-#: ../src/cairo-dock-menu.c:1337
+#: ../src/cairo-dock-menu.c:1342
 msgid "Launch new"
 msgstr "Запустити новий"
 
-#: ../src/cairo-dock-menu.c:1340
+#: ../src/cairo-dock-menu.c:1345
 msgid "Show all"
 msgstr "Показати все"
 
-#: ../src/cairo-dock-menu.c:1342
+#: ../src/cairo-dock-menu.c:1347
 msgid "Minimise all"
 msgstr "Згорнути все"
 
-#: ../src/cairo-dock-menu.c:1344
+#: ../src/cairo-dock-menu.c:1349
 msgid "Close all"
 msgstr "Закрити все"
 
-#: ../src/cairo-dock-menu.c:1368 ../src/gldit/cairo-dock-gui-factory.c:1058
-msgid "Configure this applet"
-msgstr "Налаштувати аплет"
-
-#: ../src/cairo-dock-menu.c:1372
+#: ../src/cairo-dock-menu.c:1377
 msgid "Detach this applet"
 msgstr "Відокремити аплет"
 
-#: ../src/cairo-dock-menu.c:1372
+#: ../src/cairo-dock-menu.c:1377
 msgid "Return to the dock"
 msgstr "Повернути на панель"
 
-#: ../src/cairo-dock-menu.c:1375
+#: ../src/cairo-dock-menu.c:1380
 msgid "Remove this applet"
 msgstr "Видалити аплет"
 
-#: ../src/cairo-dock-menu.c:1379
+#: ../src/cairo-dock-menu.c:1384
 msgid "Launch another instance of this applet"
 msgstr "Запустити іншу копію аплету"
 
-#: ../src/cairo-dock-menu.c:1405
-#: ../src/gldit/cairo-dock-internal-accessibility.c:260
-msgid "Visibility"
-msgstr "Видимість"
-
-#: ../src/cairo-dock-menu.c:1420
+#: ../src/cairo-dock-menu.c:1425
 msgid "Normal"
 msgstr "Звичайний"
 
-#: ../src/cairo-dock-menu.c:1426 ../data/messages:21 ../data/messages:187
+#: ../src/cairo-dock-menu.c:1431 ../data/messages:21 ../data/messages:187
 #: ../data/messages:1369
 msgid "Always on top"
 msgstr "Завжди зверху"
 
-#: ../src/cairo-dock-menu.c:1433
+#: ../src/cairo-dock-menu.c:1438
 msgid "Always below"
 msgstr "Завжди позаду"
 
-#: ../src/cairo-dock-menu.c:1446
+#: ../src/cairo-dock-menu.c:1451
 msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
 msgstr "встановіть поведінку в Compiz на: (ім'я=cairo-dock·&·тип=utility)"
 
-#: ../src/cairo-dock-menu.c:1448
+#: ../src/cairo-dock-menu.c:1453
 msgid "Reserve space"
 msgstr "Резервувати місце"
 
-#: ../src/cairo-dock-menu.c:1455
+#: ../src/cairo-dock-menu.c:1460
 msgid "On all desktops"
 msgstr "На всіх стільницях"
 
-#: ../src/cairo-dock-menu.c:1461
+#: ../src/cairo-dock-menu.c:1466
 msgid "Lock position"
 msgstr "Закріпити позицію"
 
-#: ../src/cairo-dock-user-interaction.c:351
+#: ../src/cairo-dock-user-interaction.c:353
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -634,11 +801,11 @@ msgstr ""
 "Параметр 'замістити значки програм' встановлений автоматично.\n"
 "Він розташовується в модулі 'Панель задач'."
 
-#: ../src/cairo-dock.c:213
+#: ../src/cairo-dock.c:195
 msgid "Don't ask me any more"
 msgstr "Не питати мене про це знову"
 
-#: ../src/cairo-dock.c:218
+#: ../src/cairo-dock.c:200
 msgid ""
 "To remove the black rectangle around the dock, you will need to activate a "
 "composite manager.\n"
@@ -652,13 +819,13 @@ msgstr ""
 "Compiz або ж включити композиційність в Metacity.\n"
 "Я можу виконати це за вас, продовжити?"
 
-#: ../src/cairo-dock.c:230
+#: ../src/cairo-dock.c:212
 msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
 msgstr ""
 
-#: ../src/cairo-dock.c:236
+#: ../src/cairo-dock.c:218
 msgid ""
 "To remove the black rectangle around the dock, you will need to activate a "
 "composite manager.\n"
@@ -675,7 +842,7 @@ msgstr ""
 "Якщо ваш комп'ютер не підтримує композиційність, то Cairo-Dock може "
 "симулювати її; ця опція знаходиться в модулі 'Система', нагорі сторінки."
 
-#: ../src/cairo-dock.c:331
+#: ../src/cairo-dock.c:312
 msgid ""
 "A useful FAQ which also contains a lot of hints.\n"
 "Roll your mouse over a sentence to make helpful popups appear."
@@ -683,11 +850,11 @@ msgstr ""
 "Корисний збірник ЧаПів, з великою кількістю порад.\n"
 "Проведіть мишою поверх програм, щоб побачити підказку."
 
-#: ../src/cairo-dock.c:653
+#: ../src/cairo-dock.c:573
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Використовувати OpenGL в Cairo-Dock?"
 
-#: ../src/cairo-dock.c:661
+#: ../src/cairo-dock.c:581
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -710,11 +877,11 @@ msgstr ""
 "або з опцією -o для примусового OpenGL, або з опцією -c для примусового "
 "cairo.)"
 
-#: ../src/cairo-dock.c:666
+#: ../src/cairo-dock.c:586
 msgid "Remember this choice"
 msgstr "Запам’ятати мій вибір"
 
-#: ../src/cairo-dock.c:832
+#: ../src/cairo-dock.c:802
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "A default and simple theme has been loaded.\n"
@@ -736,7 +903,7 @@ msgstr ""
 "Сподіваємося вам сподобається ця програма!\n"
 "  (щоб закрити цей діалог, клацніть на ньому)"
 
-#: ../src/cairo-dock.c:856
+#: ../src/cairo-dock.c:826
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -770,61 +937,62 @@ msgstr ""
 msgid "Applet's handbook"
 msgstr "Довідник аплетів"
 
-#: ../src/gldit/cairo-dock-file-manager.c:238
+#: ../src/gldit/cairo-dock-desklet-manager.c:843
+#: ../src/internal-old/cairo-dock-internal-desklets.c:42
+msgid "_custom decoration_"
+msgstr "_Змінити оформлення_"
+
+#: ../src/gldit/cairo-dock-file-manager.c:212
 #, c-format
 msgid "failed to mount %s"
 msgstr "не вдалося приєднати %s"
 
-#: ../src/gldit/cairo-dock-file-manager.c:238
+#: ../src/gldit/cairo-dock-file-manager.c:212
 #, c-format
 msgid "Failed to unmount %s"
 msgstr "не вдалося від'єднати %s"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:241
+#: ../src/gldit/cairo-dock-gui-factory.c:235
 #, c-format
 msgid "by %s"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:253
+#: ../src/gldit/cairo-dock-gui-factory.c:247
 msgid "kB"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:255
+#: ../src/gldit/cairo-dock-gui-factory.c:249
 msgid "MB"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:264
+#: ../src/gldit/cairo-dock-gui-factory.c:258
 #: ../src/gldit/cairo-dock-gui-factory.c:1637
 msgid "Local"
 msgstr "Локальний"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:265
+#: ../src/gldit/cairo-dock-gui-factory.c:259
 #: ../src/gldit/cairo-dock-gui-factory.c:1640
 msgid "User"
 msgstr "Користувач"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:266
+#: ../src/gldit/cairo-dock-gui-factory.c:260
 #: ../src/gldit/cairo-dock-gui-factory.c:1643
 msgid "Net"
 msgstr "Мережа"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:267
+#: ../src/gldit/cairo-dock-gui-factory.c:261
 #: ../src/gldit/cairo-dock-gui-factory.c:1646
 msgid "New"
 msgstr "Новий"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:268
+#: ../src/gldit/cairo-dock-gui-factory.c:262
 #: ../src/gldit/cairo-dock-gui-factory.c:1650
 msgid "Updated"
 msgstr "Оновлено"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:962
+#: ../src/gldit/cairo-dock-gui-factory.c:970
 msgid "_Custom Icons_"
 msgstr "_Змінити значки_"
-
-#: ../src/gldit/cairo-dock-gui-factory.c:1380
-msgid "Accessory"
-msgstr "Аксесуар"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1426
 #, fuzzy
@@ -856,174 +1024,45 @@ msgstr ""
 "Додаток '%s' неактивний.\n"
 "Активувати зараз?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2429
+#: ../src/gldit/cairo-dock-gui-factory.c:2445
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Список тем з '%s' ..."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2557
-msgid "plug-in"
-msgstr "додаток"
-
-#: ../src/gldit/cairo-dock-gui-factory.c:2563
-msgid "category"
-msgstr "категорія"
-
-#: ../src/gldit/cairo-dock-gui-factory.c:2579
-msgid "Click on an applet in order to have a preview and a description for it."
-msgstr "Натисніть на аплеті, щоб мати його попередній перегляд та опис."
-
-#: ../src/gldit/cairo-dock-gui-factory.c:3017
+#: ../src/gldit/cairo-dock-gui-factory.c:3018
 msgid "Theme"
 msgstr "тема"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3030
+#: ../src/gldit/cairo-dock-gui-factory.c:3031
 msgid "Rating"
 msgstr "оцінка"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3036
+#: ../src/gldit/cairo-dock-gui-factory.c:3037
 msgid "Sobriety"
 msgstr "помірність"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3120
+#: ../src/gldit/cairo-dock-gui-factory.c:3096
 msgid "link"
 msgstr "посилання"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3173
+#: ../src/gldit/cairo-dock-gui-factory.c:3149
 msgid "Grab"
 msgstr "Захопити"
 
-#: ../src/gldit/cairo-dock-internal-accessibility.c:262
-msgid ""
-"Do you like your dock to be always visible,\n"
-" or on the contrary unobtrusive?\n"
-"Configure the way you access your docks and sub-docks!"
-msgstr ""
-"Ви б хотіли, щоб ваша панель була завжди видима,\n"
-" чи, навпаки, ховалася?\n"
-"Налаштуйте спосіб доступу до своїх панелей та суб-панелей!"
-
-#: ../src/gldit/cairo-dock-internal-background.c:131 ../data/messages:435
-#: ../data/messages:831 ../data/messages:1391
-msgid "Background"
-msgstr "Тло"
-
-#: ../src/gldit/cairo-dock-internal-background.c:133
-msgid "Set a background for your dock."
-msgstr "Виберіть тло для вашої панелі."
-
-#: ../src/gldit/cairo-dock-internal-desklets.c:44
-msgid "_custom decoration_"
-msgstr "_Змінити оформлення_"
-
-#: ../src/gldit/cairo-dock-internal-desklets.c:100 ../data/messages:551
-msgid "Desklets"
-msgstr "Десклети"
-
-#: ../src/gldit/cairo-dock-internal-desklets.c:102
-msgid "Applets can be displayed on your desktop as widgets."
-msgstr "Аплети можуть розташовуватися на вашій стільниці, як віджети."
-
-#: ../src/gldit/cairo-dock-internal-dialogs.c:120
-msgid ""
-"This provides different window decorators. Enable this first if you want to "
-"select a different decorator for your dialog boxes."
-msgstr ""
-"Надає різне оформлення для вікон. Активуйте його, щоб змінювати оформлення "
-"вікон."
-
-#: ../src/gldit/cairo-dock-internal-dialogs.c:122
-msgid "Dialog boxes"
-msgstr "Діалоги"
-
-#: ../src/gldit/cairo-dock-internal-dialogs.c:124
-msgid "Configure text bubble appearance."
-msgstr "Налаштуйте зовнішній вигляд хмарок нагадувань."
-
-#: ../src/gldit/cairo-dock-internal-icons.c:457
-msgid "Provides various animations for your icons."
-msgstr "Пропонує різні анімації для значків."
-
-#: ../src/gldit/cairo-dock-internal-icons.c:459 ../data/messages:85
-#: ../data/messages:615 ../data/messages:857
-msgid "Icons"
-msgstr "Значки"
-
-#: ../src/gldit/cairo-dock-internal-icons.c:461
-msgid ""
-"All about icons:\n"
-" size, reflection, icon theme,..."
-msgstr ""
-"Все про значки :\n"
-" розмір, відображення, тема значків, ..."
-
-#: ../src/gldit/cairo-dock-internal-indicators.c:168 ../data/messages:733
-msgid "Indicators"
-msgstr "Індикатори"
-
-#: ../src/gldit/cairo-dock-internal-indicators.c:170
-msgid "Indicators are additional markers for your icons."
-msgstr "Індикатори відображають додаткову інформацію на значках."
-
-#: ../src/gldit/cairo-dock-internal-labels.c:182
-msgid "Captions"
-msgstr "Підписи"
-
-#: ../src/gldit/cairo-dock-internal-labels.c:184
-msgid "Define icon caption and quick-info style."
-msgstr "Виберіть зовнішній вигляд підписів та інфо-повідомлень."
-
-#: ../src/gldit/cairo-dock-internal-position.c:131 ../data/messages:137
-msgid "Position"
-msgstr "Позиція"
-
-#: ../src/gldit/cairo-dock-internal-position.c:133
-msgid "Set the position of the main dock."
-msgstr "Виберіть позицію основної панелі"
-
-#: ../src/gldit/cairo-dock-internal-system.c:125
-msgid "All of the parameters you will never want to tweak."
-msgstr "Не змінюйте ці параметри без особливої потреби."
-
-#: ../src/gldit/cairo-dock-internal-taskbar.c:169 ../data/messages:61
-#: ../data/messages:1033
-msgid "Taskbar"
-msgstr "Панель задач"
-
-#: ../src/gldit/cairo-dock-internal-taskbar.c:171
-msgid "Display and interact with currently open windows."
-msgstr "Відображає і взаємодіє з відкритими вікнами."
-
-#: ../src/gldit/cairo-dock-internal-views.c:85
-msgid ""
-"Provides different views for Cairo-Dock. Enable this first if you want to "
-"select a different view for your docks."
-msgstr ""
-"Надає різні види Cairo-Dock. Активуйте, щоб вибрати інший вигляд панелі."
-
-#: ../src/gldit/cairo-dock-internal-views.c:87 ../data/messages:115
-#: ../data/messages:495 ../data/messages:1385
-msgid "Views"
-msgstr "Види"
-
-#: ../src/gldit/cairo-dock-internal-views.c:89
-msgid "Select a view for each of your docks."
-msgstr "Можете вибрати окремий вигляд для кожної панелі."
-
-#: ../src/gldit/cairo-dock-struct.h:451
+#: ../src/gldit/cairo-dock-struct.h:416
 msgid "Default"
 msgstr "типовий"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:111
+#: ../src/gldit/cairo-dock-themes-manager.c:112
 #, c-format
 msgid "Are you sure you want to overwrite theme %s?"
 msgstr "Ви впевнені, що бажаєте перезаписати тему %s?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:173
+#: ../src/gldit/cairo-dock-themes-manager.c:174
 msgid "Last modification on:"
 msgstr "Останні зміни"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:240
+#: ../src/gldit/cairo-dock-themes-manager.c:241
 #, c-format
 msgid ""
 "Could not access remote file %s/%s. Maybe the server is down.\n"
@@ -1032,39 +1071,58 @@ msgstr ""
 "не вдалося отримати файл %s/%s, можливо сервер не працює.\n"
 "Спробуйте пізніше або зв'яжіться з нами на glx-dock.org."
 
-#: ../src/gldit/cairo-dock-themes-manager.c:255
+#: ../src/gldit/cairo-dock-themes-manager.c:256
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "Ви впевнені, що бажаєте видалити тему %s?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:257
+#: ../src/gldit/cairo-dock-themes-manager.c:258
 msgid "Are you sure you want to delete these themes?"
 msgstr "Ви впевнені, що бажаєте видалити ці теми %s?"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:37
+#: ../src/implementations/cairo-dock-hiding-effect.c:601 ../data/messages:37
 #: ../data/messages:203
 msgid "Move down"
 msgstr "Перемістити донизу"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:610 ../data/messages:39
+#: ../src/implementations/cairo-dock-hiding-effect.c:609 ../data/messages:39
 #: ../data/messages:205
 msgid "Fade out"
 msgstr "Згасання"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:41
+#: ../src/implementations/cairo-dock-hiding-effect.c:617 ../data/messages:41
 #: ../data/messages:207
 msgid "Semi transparent"
 msgstr "Напівпрозорість"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:43
+#: ../src/implementations/cairo-dock-hiding-effect.c:626 ../data/messages:43
 #: ../data/messages:209
 msgid "Zoom out"
 msgstr "Віддалити"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:45
+#: ../src/implementations/cairo-dock-hiding-effect.c:634 ../data/messages:45
 #: ../data/messages:211
 msgid "Folding"
 msgstr "Згортання"
+
+#: ../src/internal-old/cairo-dock-internal-dialogs.c:117
+msgid ""
+"This provides different window decorators. Enable this first if you want to "
+"select a different decorator for your dialog boxes."
+msgstr ""
+"Надає різне оформлення для вікон. Активуйте його, щоб змінювати оформлення "
+"вікон."
+
+#: ../src/internal-old/cairo-dock-internal-icons.c:455
+msgid "Provides various animations for your icons."
+msgstr "Пропонує різні анімації для значків."
+
+#: ../src/internal-old/cairo-dock-internal-views.c:83
+msgid ""
+"Provides different views for Cairo-Dock. Enable this first if you want to "
+"select a different view for your docks."
+msgstr ""
+"Надає різні види Cairo-Dock. Активуйте, щоб вибрати інший вигляд панелі."
 
 #: ../data/messages:1 ../data/messages:1331
 msgid "Behavior"
@@ -2928,9 +2986,9 @@ msgid ""
 "also create new main docks this way."
 msgstr ""
 "Порада: якщо ви хочете перемістити значок на іншу панель, то зробіть праве "
-"клацання на ньому, пункт меню «Перемістити на іншу панель» та виберіть ту, на "
-"яку потрібно перемістити. Теж саме можна робити  з аплетами, наприклад, щоб "
-"згрупувати їх всі в одну суб-панель. Таким же чином ви можете створювати "
+"клацання на ньому, пункт меню «Перемістити на іншу панель» та виберіть ту, "
+"на яку потрібно перемістити. Теж саме можна робити  з аплетами, наприклад, "
+"щоб згрупувати їх всі в одну суб-панель. Таким же чином ви можете створювати "
 "нові панелі."
 
 #: ../data/messages:959
@@ -3316,8 +3374,8 @@ msgstr ""
 "виключення для Pidgin, перед поточною опцією.\n"
 "Якщо ж вибрали опцію об'єднання значків з їх програмами, то вам потрібно "
 "змінити значок запуску Pidigin,\n"
-" та в його «Додаткових параметрах» встановити прапорець на видаленні значка з "
-"панелі задач."
+" та в його «Додаткових параметрах» встановити прапорець на видаленні значка "
+"з панелі задач."
 
 #: ../data/messages:1073
 msgid ""
@@ -3351,9 +3409,9 @@ msgstr "Чи можу я розмістити Головне меню на па�
 
 #: ../data/messages:1083
 msgid ""
-"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will no "
-"longer work. This applet lets you configure a shortcut to pop up the menu at "
-"the mouse's location."
+"Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will "
+"no longer work. This applet lets you configure a shortcut to pop up the menu "
+"at the mouse's location."
 msgstr ""
 "Порада: Якщо ви повністю видалите панель Gnome, комбінація Alt+F1 більше не "
 "буде працювати. Цей аплет дозволяє налаштувати комбінації клавіш для "
@@ -3377,9 +3435,9 @@ msgid ""
 "longer work. This applet lets you configure a shortcut to pop up the quick-"
 "launch dialog."
 msgstr ""
-"Порада: якщо ви приберете панель-Gnome, то комбінація «alt+F2» більше не буде "
-"спрацьовувати. Цей аплет допоможе вам налаштувати нову комбінацію клавіш для "
-"виклику швидкого запуску."
+"Порада: якщо ви приберете панель-Gnome, то комбінація «alt+F2» більше не "
+"буде спрацьовувати. Цей аплет допоможе вам налаштувати нову комбінацію "
+"клавіш для виклику швидкого запуску."
 
 #: ../data/messages:1093
 msgid ""
@@ -3605,8 +3663,8 @@ msgstr ""
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Cairo-Penguin, Weather, Netspeed, ...\n"
-"Right click on the applet's icon, and select «launch another instance». A new "
-"instance of this applet appears in the main dock.\n"
+"Right click on the applet's icon, and select «launch another instance». A "
+"new instance of this applet appears in the main dock.\n"
 "You can configure this new applet just like any other."
 msgstr ""
 "Деякі аплети можуть бути запущені кілька разів, наприклад: Годинник, Cairo-"
@@ -4417,11 +4475,6 @@ msgstr "Буде використано 'xterm'."
 msgid "Run in a terminal ?"
 msgstr "Виконувати в терміналі?"
 
-#: ../data/messages:1579
-#, fuzzy
-msgid "Separator"
-msgstr "Розділювачі"
-
 #: ../data/messages:1593
 msgid "pouet"
 msgstr "так собі"
@@ -4938,6 +4991,13 @@ msgid ""
 "restarted</b>.\n"
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
+
+#~ msgid "Configuration of the '%s' dock"
+#~ msgstr "Налаштування '%s' панелі"
+
+#, fuzzy
+#~ msgid "sub-dock"
+#~ msgstr "Додати суб-панель"
 
 #~ msgid "Importing theme %s ..."
 #~ msgstr "Імпорт теми %s..."

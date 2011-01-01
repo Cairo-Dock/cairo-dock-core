@@ -29,52 +29,47 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #ifdef HAVE_XEXTEND
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
 #endif
 
-#include "cairo-dock-icons.h"
-#include "cairo-dock-draw.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-load.h"
-#include "cairo-dock-application-factory.h"
-#include "cairo-dock-separator-factory.h"
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dock-facility.h"
+#include "cairo-dock-icon-manager.h"
+#include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bDrawIndicatorOnAppli
+#include "cairo-dock-icon-facility.h"  // cairo_dock_update_icon_s_container_name
+#include "cairo-dock-animations.h"  // cairo_dock_trigger_icon_removal_from_dock
+#include "cairo-dock-application-factory.h"  // cairo_dock_create_icon_from_xwindow
+#include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-container.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-callbacks.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-indicators.h"
+#include "cairo-dock-draw-opengl.h"  // cairo_dock_create_texture_from_surface
+#include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-X-manager.h"
-#include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-emblem.h"
+#define _MANAGER_DEF_
 #include "cairo-dock-applications-manager.h"
 
 #define CAIRO_DOCK_TASKBAR_CHECK_INTERVAL 200
 #define CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME "default-icon-appli.svg"
 
+// public (manager, config, data)
+CairoTaskbarParam myTaskbarParam;
+CairoTaskbarManager myTaskbarMgr;
+
+// dependancies
 extern CairoDock *g_pMainDock;
-
 extern CairoDockDesktopGeometry g_desktopGeometry;
-
 extern gboolean g_bUseOpenGL;
 //extern int g_iDamageEvent;
 
+// private
 static Display *s_XDisplay = NULL;
 static GHashTable *s_hXWindowTable = NULL;  // table des fenetres X affichees dans le dock.
 static int s_bAppliManagerIsRunning = FALSE;
@@ -97,7 +92,7 @@ static void cairo_dock_blacklist_appli (Window Xid);
 
 static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *icon, CairoDock *pMainDock)
 {
-	if (CAIRO_DOCK_IS_APPLI (icon) && (! myTaskBar.bHideVisibleApplis || icon->bIsHidden))
+	if (CAIRO_DOCK_IS_APPLI (icon) && (! myTaskbarParam.bHideVisibleApplis || icon->bIsHidden))
 	{
 		cd_debug ("%s (%d)", __func__, *Xid);
 		CairoDock *pParentDock = NULL;
@@ -210,7 +205,7 @@ static void _unhide_all_docks (CairoDock *pDock, Icon *icon)
 
 static void _hide_show_if_on_our_way (CairoDock *pDock, Icon *icon)
 {
-	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && ! myAccessibility.bAutoHideOnFullScreen)
+	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && ! myDocksParam.bAutoHideOnFullScreen)
 		return ;
 	if (_cairo_dock_appli_is_on_our_way (icon, pDock))  // la nouvelle fenetre active nous gene.
 	{
@@ -261,7 +256,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 			else  // n'etait pas dans un dock, on la detruit donc immediatement.
 			{
 				cd_message ("  pas dans un container, on la detruit donc immediatement");
-				cairo_dock_update_name_on_inhibators (icon->cClass, *Xid, NULL);
+				cairo_dock_update_name_on_inhibitors (icon->cClass, *Xid, NULL);
 				icon->iLastCheckTime = -1;  // pour ne pas la desenregistrer de la HashTable lors du 'free' puisqu'on est en train de parcourir la table.
 				cairo_dock_free_icon (icon);
 				/// redessiner les inhibiteurs ?...
@@ -306,9 +301,9 @@ static void _on_update_applis_list (CairoDock *pDock)
 			{
 				icon->iLastCheckTime = s_iTime;
 				icon->iStackOrder = iStackOrder ++;
-				if (myTaskBar.bShowAppli)
+				if (myTaskbarParam.bShowAppli)
 				{
-					if ((! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (icon)))  // bHideVisibleApplis est gere lors de l'insertion.
+					if ((! myTaskbarParam.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (icon)))  // bHideVisibleApplis est gere lors de l'insertion.
 					{
 						cd_message (" insertion de %s ... (%d)", icon->cName, icon->iLastCheckTime);
 						pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
@@ -320,9 +315,9 @@ static void _on_update_applis_list (CairoDock *pDock)
 								cairo_dock_update_dock_size (pParentDock);
 						}
 					}
-					else if (myTaskBar.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
+					else if (myTaskbarParam.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
 					{
-						cairo_dock_prevent_inhibated_class (icon);
+						cairo_dock_prevent_inhibited_class (icon);
 					}
 				}
 				
@@ -342,7 +337,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 	
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_old_applis, GINT_TO_POINTER (s_iTime));
 	
-	if (bUpdateMainDockSize)
+	if (bUpdateMainDockSize)  // will stay at FALSE if pDock is NULL.
 		cairo_dock_update_dock_size (pDock);
 
 	XFree (pXWindowsList);
@@ -364,7 +359,7 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock == NULL)  // elle est soit inhibee, soit pas dans un dock.
 			{
-				cairo_dock_update_activity_on_inhibators (icon->cClass, icon->Xid);
+				cairo_dock_update_activity_on_inhibitors (icon->cClass, icon->Xid);
 			}
 			else
 			{
@@ -380,7 +375,7 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 			CairoDock *pLastActiveParentDock = cairo_dock_search_dock_from_name (pLastActiveIcon->cParentDockName);
 			if (pLastActiveParentDock == NULL)  // elle est soit inhibee, soit pas dans un dock.
 			{
-				cairo_dock_update_inactivity_on_inhibators (pLastActiveIcon->cClass, pLastActiveIcon->Xid);
+				cairo_dock_update_inactivity_on_inhibitors (pLastActiveIcon->cClass, pLastActiveIcon->Xid);
 			}
 			else
 			{
@@ -412,7 +407,7 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 		
 		// notification xklavier.
 		if (bForceKbdStateRefresh)  // si on active une fenetre n'ayant pas de focus clavier, on n'aura pas d'evenement kbd_changed, pourtant en interne le clavier changera. du coup si apres on revient sur une fenetre qui a un focus clavier, il risque de ne pas y avoir de changement de clavier, et donc encore une fois pas d'evenement ! pour palier a ce, on considere que les fenetres avec focus clavier sont celles presentes en barre des taches. On decide de generer un evenement lorsqu'on revient sur une fenetre avec focus, a partir d'une fenetre sans focus (mettre a jour le clavier pour une fenetre sans focus n'a pas grand interet, autant le laisser inchange).
-			cairo_dock_notify (CAIRO_DOCK_KBD_STATE_CHANGED, &XActiveWindow);
+			cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_KBD_STATE_CHANGED, &XActiveWindow);
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -421,13 +416,12 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 {
 	CairoDock *pDock = g_pMainDock;
 	
+	g_print ("*** applis du bureau seulement...");
 	// applis du bureau courant seulement.
-	if (myTaskBar.bAppliOnCurrentDesktopOnly && myTaskBar.bShowAppli)
+	if (myTaskbarParam.bAppliOnCurrentDesktopOnly && myTaskbarParam.bShowAppli)
 	{
 		g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_hide_show_windows_on_other_desktops, pDock);
 	}
-	
-	cairo_dock_hide_show_launchers_on_other_desktops(pDock);
 	
 	// visibilite
 	Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
@@ -454,7 +448,7 @@ static void _on_change_window_state (Icon *icon)
 	}
 	
 	// demande d'attention.
-	if (bDemandsAttention && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))  // elle peut demander l'attention plusieurs fois de suite.
+	if (bDemandsAttention && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))  // elle peut demander l'attention plusieurs fois de suite.
 	{
 		cd_debug ("%s demande votre attention %s !", icon->cName, icon->bIsDemandingAttention?"encore une fois":"");
 		cairo_dock_appli_demands_attention (icon);
@@ -497,7 +491,7 @@ static void _on_change_window_state (Icon *icon)
 			cairo_dock_foreach_root_docks ((GFunc)_show_if_no_overlapping_window, NULL);
 		
 		// affichage des applis minimisees.
-		if (g_bUseOpenGL && myTaskBar.iMinimizedWindowRenderType == 2)
+		if (g_bUseOpenGL && myTaskbarParam.iMinimizedWindowRenderType == 2)
 		{
 			CairoDock *pDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pDock != NULL)
@@ -505,24 +499,24 @@ static void _on_change_window_state (Icon *icon)
 				cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), TRUE);
 			}
 		}
-		else if (myTaskBar.iMinimizedWindowRenderType == 0)
+		else if (myTaskbarParam.iMinimizedWindowRenderType == 0)
 		{
 			// transparence sur les inhibiteurs.
-			cairo_dock_update_visibility_on_inhibators (icon->cClass, icon->Xid, icon->bIsHidden);
+			cairo_dock_update_visibility_on_inhibitors (icon->cClass, icon->Xid, icon->bIsHidden);
 		}
 		
 		// applis minimisees seulement
-		if (myTaskBar.bHideVisibleApplis && myTaskBar.bShowAppli)  // on insere/detache l'icone selon la visibilite de la fenetre, avec une animation.
+		if (myTaskbarParam.bHideVisibleApplis && myTaskbarParam.bShowAppli)  // on insere/detache l'icone selon la visibilite de la fenetre, avec une animation.
 		{
 			if (bIsHidden)  // se cache => on insere son icone.
 			{
 				cd_message (" => se cache");
-				if (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (icon))
+				if (! myTaskbarParam.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (icon))
 				{
 					pParentDock = cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 					if (pParentDock != NULL)
 					{
-						if (g_bUseOpenGL && myTaskBar.iMinimizedWindowRenderType == 2)  // quand on est passe dans ce cas tout a l'heure l'icone n'etait pas encore dans son dock.
+						if (g_bUseOpenGL && myTaskbarParam.iMinimizedWindowRenderType == 2)  // quand on est passe dans ce cas tout a l'heure l'icone n'etait pas encore dans son dock.
 							cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pParentDock), TRUE);
 						gtk_widget_queue_draw (pParentDock->container.pWidget);
 					}
@@ -534,7 +528,7 @@ static void _on_change_window_state (Icon *icon)
 				cairo_dock_trigger_icon_removal_from_dock (icon);
 			}
 		}
-		else if (myTaskBar.fVisibleAppliAlpha != 0)  // transparence
+		else if (myTaskbarParam.fVisibleAppliAlpha != 0)  // transparence
 		{
 			icon->fAlpha = 1;  // on triche un peu.
 			if (pParentDock != NULL)
@@ -543,7 +537,7 @@ static void _on_change_window_state (Icon *icon)
 		
 		// miniature (on le fait apres l'avoir inseree/detachee, car comme ca dans le cas ou on l'enleve du dock apres l'avoir deminimisee, l'icone est marquee comme en cours de suppression, et donc on ne recharge pas son icone. Sinon l'image change pendant la transition, ce qui est pas top. Comme ca ne change pas la taille de l'icone dans le dock, on peut faire ca apres l'avoir inseree.
 		#ifdef HAVE_XEXTEND
-		if (myTaskBar.iMinimizedWindowRenderType == 1 && (pParentDock != NULL || myTaskBar.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
+		if (myTaskbarParam.iMinimizedWindowRenderType == 1 && (pParentDock != NULL || myTaskbarParam.bHideVisibleApplis))  // on recupere la miniature ou au contraire on remet l'icone.
 		{
 			if (! icon->bIsHidden)  // fenetre mappee => BackingPixmap disponible.
 			{
@@ -573,7 +567,7 @@ static void _on_change_window_desktop (Icon *icon)
 	icon->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
 	
 	// applis du bureau courant seulement.
-	if (myTaskBar.bAppliOnCurrentDesktopOnly && myTaskBar.bShowAppli)
+	if (myTaskbarParam.bAppliOnCurrentDesktopOnly && myTaskbarParam.bShowAppli)
 	{
 		_cairo_dock_hide_show_windows_on_other_desktops (&Xid, icon, g_pMainDock);  // si elle vient sur notre bureau, elle n'est pas forcement sur le meme viewport, donc il faut le verifier.
 	}
@@ -603,7 +597,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	{
 		if (icon->iBackingPixmap != 0)
 			XFreePixmap (s_XDisplay, icon->iBackingPixmap);
-		if (myTaskBar.iMinimizedWindowRenderType == 1)
+		if (myTaskbarParam.iMinimizedWindowRenderType == 1)
 		{
 			icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
 			cd_message ("new backing pixmap : %d", icon->iBackingPixmap);
@@ -623,7 +617,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	if (e->x + e->width <= 0 || e->x >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || e->y + e->height <= 0 || e->y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // en fait il faudrait faire ca modulo le nombre de viewports * la largeur d'un bureau, car avec une fenetre a droite, elle peut revenir sur le bureau par la gauche si elle est tres large...
 	{
 		// applis du bureau courant seulement.
-		if (myTaskBar.bAppliOnCurrentDesktopOnly && icon->cParentDockName != NULL)
+		if (myTaskbarParam.bAppliOnCurrentDesktopOnly && icon->cParentDockName != NULL)
 		{
 			CairoDock *pParentDock = cairo_dock_detach_appli (icon);
 			if (pParentDock)
@@ -636,7 +630,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	else  // elle est sur le bureau.
 	{
 		// applis du bureau courant seulement.
-		if (myTaskBar.bAppliOnCurrentDesktopOnly && icon->cParentDockName == NULL && myTaskBar.bShowAppli)
+		if (myTaskbarParam.bAppliOnCurrentDesktopOnly && icon->cParentDockName == NULL && myTaskbarParam.bShowAppli)
 		{
 			cd_message ("cette fenetre est sur le bureau courant (%d;%d)", e->x, e->y);
 			gboolean bInsideDock = (icon->cParentDockName != NULL);
@@ -676,21 +670,21 @@ static void _on_change_window_name (Icon *icon, CairoDock *pDock, gboolean bSear
 	{
 		if (icon->cName == NULL || strcmp (icon->cName, cName) != 0)
 		{
-			g_free (icon->cName);
+			cairo_dock_set_icon_name (cName, icon, NULL);
+			/**g_free (icon->cName);
 			icon->cName = cName;
 			
-			cairo_dock_load_icon_text (icon, &myLabels.iconTextDescription);
+			cairo_dock_load_icon_text (icon, &myIconsParam.iconTextDescription);*/
 			
-			cairo_dock_update_name_on_inhibators (icon->cClass, icon->Xid, icon->cName);
+			cairo_dock_update_name_on_inhibitors (icon->cClass, icon->Xid, cName);
 		}
-		else
-			g_free (cName);
+		g_free (cName);
 	}
 }
 
 static void _on_change_window_icon (Icon *icon, CairoDock *pDock)
 {
-	if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
+	if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskbarParam.bOverWriteXIcons)
 	{
 		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
 		if (pDock->iRefCount != 0)
@@ -704,7 +698,7 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 	XWMHints *pWMHints = XGetWMHints (s_XDisplay, icon->Xid);
 	if (pWMHints != NULL)
 	{
-		if ((pWMHints->flags & XUrgencyHint) && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
+		if ((pWMHints->flags & XUrgencyHint) && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))
 		{
 			if (iState == PropertyNewValue)
 			{
@@ -722,7 +716,7 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 		if (iState == PropertyNewValue && (pWMHints->flags & (IconPixmapHint | IconMaskHint | IconWindowHint)))
 		{
 			//g_print ("%s change son icone\n", icon->cName);
-			if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskBar.bOverWriteXIcons)
+			if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskbarParam.bOverWriteXIcons)
 			{
 				cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
 				if (pDock->iRefCount != 0)
@@ -780,26 +774,6 @@ static gboolean _on_property_changed_notification (gpointer data, Window Xid, At
  // Applis manager : core //
 ///////////////////////////
 
-void cairo_dock_initialize_application_manager (Display *pDisplay)
-{
-	s_XDisplay = pDisplay;
-
-	s_hXWindowTable = g_hash_table_new_full (g_int_hash,
-		g_int_equal,
-		g_free,
-		NULL);
-	
-	s_aNetWmState			= XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
-	s_aNetWmName 			= XInternAtom (s_XDisplay, "_NET_WM_NAME", False);
-	s_aUtf8String 			= XInternAtom (s_XDisplay, "UTF8_STRING", False);
-	s_aWmName 				= XInternAtom (s_XDisplay, "WM_NAME", False);
-	s_aString 				= XInternAtom (s_XDisplay, "STRING", False);
-	s_aNetWmIcon 			= XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
-	s_aWmHints 				= XInternAtom (s_XDisplay, "WM_HINTS", False);
-	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
-	cairo_dock_initialize_application_factory (pDisplay);
-}
-
 static void cairo_dock_register_appli (Icon *icon)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon))
@@ -847,33 +821,19 @@ void cairo_dock_unregister_appli (Icon *icon)
 		}
 		
 		cairo_dock_remove_appli_from_class (icon);  // n'efface pas sa classe (on peut en avoir besoin encore).
-		cairo_dock_update_Xid_on_inhibators (icon->Xid, icon->cClass);
+		cairo_dock_update_Xid_on_inhibitors (icon->Xid, icon->cClass);
 		
 		icon->Xid = 0;  // hop, elle n'est plus une appli.
 	}
 }
 
 
-void cairo_dock_start_application_manager (CairoDock *pDock)
+void cairo_dock_start_applications_manager (CairoDock *pDock)
 {
 	g_return_if_fail (!s_bAppliManagerIsRunning);
 	
-	cairo_dock_set_overwrite_exceptions (myTaskBar.cOverwriteException);
-	cairo_dock_set_group_exceptions (myTaskBar.cGroupException);
-	
-	//\__________________ On s'enregistre aux signaux
-	cairo_dock_register_notification (CAIRO_DOCK_WINDOW_ACTIVATED,
-		(CairoDockNotificationFunc) _on_change_active_window_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_WINDOW_CONFIGURED,
-		(CairoDockNotificationFunc) _on_window_configured_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_WINDOW_PROPERTY_CHANGED,
-		(CairoDockNotificationFunc) _on_property_changed_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification (CAIRO_DOCK_DESKTOP_CHANGED,
-		(CairoDockNotificationFunc) _on_change_current_desktop_viewport_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_set_overwrite_exceptions (myTaskbarParam.cOverwriteException);
+	cairo_dock_set_group_exceptions (myTaskbarParam.cGroupException);
 	
 	//\__________________ On recupere l'ensemble des fenetres presentes.
 	gulong i, iNbWindows = 0;
@@ -899,9 +859,9 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 		{
 			//pIcon->fOrder = iOrder++;
 			pIcon->iLastCheckTime = s_iTime;
-			if (myTaskBar.bShowAppli)
+			if (myTaskbarParam.bShowAppli && pDock)
 			{
-				if (! myTaskBar.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pIcon))  // le filtre 'bHideVisibleApplis' est gere dans la fonction d'insertion.
+				if (! myTaskbarParam.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pIcon))  // le filtre 'bHideVisibleApplis' est gere dans la fonction d'insertion.
 				{
 					pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 					//g_print (">>>>>>>>>>>> Xid : %d\n", Xid);
@@ -913,9 +873,9 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 							cairo_dock_update_dock_size (pParentDock);
 					}
 				}
-				else if (myTaskBar.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
+				else if (myTaskbarParam.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
 				{
-					cairo_dock_prevent_inhibated_class (pIcon);
+					cairo_dock_prevent_inhibited_class (pIcon);
 				}
 			}
 		}
@@ -937,7 +897,7 @@ void cairo_dock_start_application_manager (CairoDock *pDock)
 	s_bAppliManagerIsRunning = TRUE;
 }
 
-static gboolean _cairo_dock_reset_appli_table_iter (Window *pXid, Icon *pIcon, gpointer data)
+static gboolean _cairo_dock_remove_one_appli (Window *pXid, Icon *pIcon, gpointer data)
 {
 	if (pIcon == NULL)
 		return TRUE;
@@ -952,18 +912,17 @@ static gboolean _cairo_dock_reset_appli_table_iter (Window *pXid, Icon *pIcon, g
 	{
 		gchar *cParentDockName = pIcon->cParentDockName;
 		pIcon->cParentDockName = NULL;  // astuce.
-		cairo_dock_detach_icon_from_dock (pIcon, pDock, myIcons.iSeparateIcons);
+		cairo_dock_detach_icon_from_dock (pIcon, pDock, myIconsParam.iSeparateIcons);
 		if (! pDock->bIsMainDock)  // la taille du main dock est mis a jour 1 fois a la fin.
 		{
 			if (pDock->icons == NULL)  // le dock degage, le fake aussi.
 			{
 				CairoDock *pFakeClassParentDock = NULL;
 				Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeClassParentDock);
-				if (CAIRO_DOCK_IS_FAKE_LAUNCHER (pFakeClassIcon))
-				//if (pFakeClassIcon != NULL && ! CAIRO_DOCK_IS_APPLI (pFakeClassIcon) && ! CAIRO_DOCK_IS_APPLET (pFakeClassIcon) && ! CAIRO_DOCK_IS_NORMAL_LAUNCHER (pFakeClassIcon) && pFakeClassIcon->cClass != NULL && pFakeClassIcon->cName != NULL && strcmp (pFakeClassIcon->cClass, pFakeClassIcon->cName) == 0)  // stop la parano.
+				if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon)) // fake launcher
 				{
 					cd_debug ("on degage le fake qui pointe sur %s", cParentDockName);
-					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock, myIcons.iSeparateIcons);
+					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock, myIconsParam.iSeparateIcons);
 					cairo_dock_free_icon (pFakeClassIcon);
 					if (! pFakeClassParentDock->bIsMainDock)
 						cairo_dock_update_dock_size (pFakeClassParentDock);
@@ -983,34 +942,51 @@ static gboolean _cairo_dock_reset_appli_table_iter (Window *pXid, Icon *pIcon, g
 	cairo_dock_free_icon (pIcon);
 	return TRUE;
 }
-void cairo_dock_stop_application_manager (void)
+static void _cairo_dock_stop_application_manager (void)
 {
 	s_bAppliManagerIsRunning = FALSE;
 	
-	cairo_dock_remove_notification_func (CAIRO_DOCK_WINDOW_ACTIVATED,
-		(CairoDockNotificationFunc) _on_change_active_window_notification,
-		NULL);
-	cairo_dock_remove_notification_func (CAIRO_DOCK_WINDOW_CONFIGURED,
-		(CairoDockNotificationFunc) _on_window_configured_notification,
-		NULL);
-	cairo_dock_remove_notification_func (CAIRO_DOCK_WINDOW_PROPERTY_CHANGED,
-		(CairoDockNotificationFunc) _on_property_changed_notification,
-		NULL);
-	cairo_dock_remove_notification_func (CAIRO_DOCK_DESKTOP_CHANGED,
-		(CairoDockNotificationFunc) _on_change_current_desktop_viewport_notification,
-		NULL);
-	
 	cairo_dock_remove_all_applis_from_class_table ();  // enleve aussi les indicateurs.
 	
-	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_reset_appli_table_iter, NULL);  // libere toutes les icones d'appli.
+	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_one_appli, NULL);  // libere toutes les icones d'appli.
 	cairo_dock_update_dock_size (g_pMainDock);
 	
 	cairo_dock_foreach_root_docks ((GFunc)_unhide_all_docks, NULL);
 }
 
-gboolean cairo_dock_application_manager_is_running (void)
+
+static gboolean _cairo_dock_reset_appli_table_iter (Window *pXid, Icon *pIcon, gpointer data)
 {
-	return s_bAppliManagerIsRunning;
+	// if not a valid appli, just free it.
+	if (pIcon == NULL)
+		return TRUE;
+	if (pIcon->Xid == 0)
+	{
+		g_free (pIcon);
+		return TRUE;
+	}
+	
+	// if inside a dock, detach it first.
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	if (pDock != NULL)
+	{
+		cairo_dock_detach_icon_from_dock (pIcon, pDock, FALSE);
+	}
+	
+	// make it an invalid appli, and free it.
+	pIcon->Xid = 0;  // on ne veut pas passer dans le 'unregister'
+	g_free (pIcon->cClass);  // ni la gestion de la classe.
+	pIcon->cClass = NULL;
+	cairo_dock_free_icon (pIcon);
+	return TRUE;
+}
+void cairo_dock_reset_applications_manager (void)
+{
+	// reset class table
+	cairo_dock_reset_class_table ();
+	
+	// reset appli table
+	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_reset_appli_table_iter, NULL);  // libere toutes les icones d'appli.
 }
 
 
@@ -1153,7 +1129,7 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 		}
 	}
 	
-	if (pDock->bIsMainDock && myTaskBar.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
+	if (pDock->bIsMainDock && myTaskbarParam.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
 	{
 		g_hash_table_foreach (s_hXWindowTable, (GHFunc) cairo_dock_reserve_one_icon_geometry_for_window_manager, pDock);
 	}
@@ -1293,7 +1269,7 @@ static void _load_appli (Icon *icon)
 	icon->pIconBuffer = NULL;
 	icon->iIconTexture = 0;
 	//g_print ("%s (%dx%d / %ld)\n", __func__, iWidth, iHeight, icon->iBackingPixmap);
-	if (myTaskBar.iMinimizedWindowRenderType == 1 && icon->bIsHidden && icon->iBackingPixmap != 0)
+	if (myTaskbarParam.iMinimizedWindowRenderType == 1 && icon->bIsHidden && icon->iBackingPixmap != 0)
 	{
 		// on cree la miniature.
 		if (g_bUseOpenGL)
@@ -1347,7 +1323,7 @@ static void _load_appli (Icon *icon)
 			}
 		}
 	}
-	if (icon->pIconBuffer == NULL && myTaskBar.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
+	if (icon->pIconBuffer == NULL && myTaskbarParam.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
 		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, iWidth, iHeight);
 	if (icon->pIconBuffer == NULL)
 		icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, iWidth, iHeight);
@@ -1357,7 +1333,7 @@ static void _load_appli (Icon *icon)
 		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
 		if (cIconPath == NULL)  // image non trouvee.
 		{
-			cIconPath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+			cIconPath = g_strdup (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
 		}
 		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
 			iWidth,
@@ -1365,11 +1341,47 @@ static void _load_appli (Icon *icon)
 		g_free (cIconPath);
 	}
 	
-	if (icon->bIsHidden && myTaskBar.iMinimizedWindowRenderType == 2)
+	if (icon->bIsHidden && myTaskbarParam.iMinimizedWindowRenderType == 2)
 	{
 		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 		if (pParentDock)
 			cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pParentDock), FALSE);
+	}
+	
+	// on trouve son .desktop puis ses mime-types.
+	if (icon->cClass && !icon->pMimeTypes)
+	{
+		gboolean bFound = TRUE;
+		GString *sDesktopFilePath = g_string_new ("");
+		g_string_printf (sDesktopFilePath, "/usr/share/applications/%s.desktop", icon->cClass);
+		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+		{
+			g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s.desktop", icon->cClass);
+			if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+			{
+				g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s.desktop", icon->cClass);
+				if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+				{
+					bFound = FALSE;
+				}
+			}
+		}
+		if (bFound)
+		{
+			GKeyFile *pKeyFile = cairo_dock_open_key_file (sDesktopFilePath->str);
+			if (pKeyFile)
+			{
+				gsize length = 0;
+				icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
+				icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+				gchar *str = strchr (icon->cCommand, '%');
+				if (str != NULL)
+					*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
+				g_print ("check: set command '%s' to appli %s\n", icon->cCommand, icon->cName);
+				g_key_file_free (pKeyFile);
+			}
+		}
+		g_string_free (sDesktopFilePath, TRUE);
 	}
 }
 
@@ -1390,7 +1402,7 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	Window XParentWindow = 0;
 	Icon *icon = cairo_dock_new_appli_icon (Xid, &XParentWindow);
 	
-	if (XParentWindow != 0 && (myTaskBar.bDemandsAttentionWithDialog || myTaskBar.cAnimationOnDemandsAttention))
+	if (XParentWindow != 0 && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))
 	{
 		Icon *pParentIcon = cairo_dock_get_icon_with_Xid (XParentWindow);
 		if (pParentIcon != NULL)
@@ -1407,13 +1419,13 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	icon->iface.load_image = _load_appli;
 	icon->iface.action_on_drag_hover = _show_appli_for_drop;
 	icon->iface.on_delete = _delete_appli;
-	icon->bHasIndicator = myIndicators.bDrawIndicatorOnAppli;
+	icon->bHasIndicator = myIndicatorsParam.bDrawIndicatorOnAppli;
 	
 	//\____________ On remplit ses buffers.
-	if (myTaskBar.bShowAppli)
+	if (myTaskbarParam.bShowAppli)
 	{
 		#ifdef HAVE_XEXTEND
-		if (myTaskBar.iMinimizedWindowRenderType == 1 && ! icon->bIsHidden)
+		if (myTaskbarParam.iMinimizedWindowRenderType == 1 && ! icon->bIsHidden)
 		{
 			//Display *display = gdk_x11_get_default_xdisplay ();
 			icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
@@ -1435,29 +1447,229 @@ Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 }
 
 
-gchar *cairo_dock_get_appli_command (Window Xid)
+  //////////////////
+ /// GET CONFIG ///
+//////////////////
+
+static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 {
-	Atom aReturnedType = 0;
-	int aReturnedFormat = 0;
-	unsigned long iLeftBytes, iBufferNbElements = 0;
-	gulong *pPidBuffer = NULL;
-	XGetWindowProperty (s_XDisplay, Xid, XInternAtom (s_XDisplay, "_NET_WM_PID", False), 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pPidBuffer);
+	gboolean bFlushConfFileNeeded = FALSE;
 	
-	gchar *cCommand = NULL;
-	if (iBufferNbElements > 0)
+	// comportement
+	pTaskBar->bShowAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "show applications", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
+	
+	if (pTaskBar->bShowAppli)
 	{
-		guint iPid = *pPidBuffer;
-		gchar *cFilePath = g_strdup_printf ("/proc/%d/cmdline", iPid);  // utiliser /proc/%d/stat pour avoir le nom de fichier de l'executable
-		gsize length = 0;
-		gchar *cContent = NULL;
-		g_file_get_contents (cFilePath,
-			&cCommand,  // contient des '\0' entre les arguments.
-			&length,
-			NULL);
-		g_free (cFilePath);
+		pTaskBar->bAppliOnCurrentDesktopOnly = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "current desktop only", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
+		
+		pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+		
+		pTaskBar->bGroupAppliByClass = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "group by class", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
+		pTaskBar->cGroupException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "group exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
+		if (pTaskBar->cGroupException)
+		{
+			int i;
+			for (i = 0; pTaskBar->cGroupException[i] != '\0'; i ++)  // on passe tout en minuscule.
+				pTaskBar->cGroupException[i] = g_ascii_tolower (pTaskBar->cGroupException[i]);
+		}
+		
+		pTaskBar->bHideVisibleApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "hide visible", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
+		
+		
+		// representation
+		pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+		pTaskBar->cOverwriteException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "overwrite exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
+		if (pTaskBar->cOverwriteException)
+		{
+			int i;
+			for (i = 0; pTaskBar->cOverwriteException[i] != '\0'; i ++)
+				pTaskBar->cOverwriteException[i] = g_ascii_tolower (pTaskBar->cOverwriteException[i]);
+		}
+		
+		pTaskBar->iMinimizedWindowRenderType = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "minimized", &bFlushConfFileNeeded, -1, NULL, NULL);
+		if (pTaskBar->iMinimizedWindowRenderType == -1)  // anciens parametres.
+		{
+			gboolean bShowThumbnail = g_key_file_get_boolean (pKeyFile, "TaskBar", "window thumbnail", NULL);
+			if (bShowThumbnail)
+				pTaskBar->iMinimizedWindowRenderType = 1;
+			else
+				pTaskBar->iMinimizedWindowRenderType = 0;
+			g_key_file_set_integer (pKeyFile, "TaskBar", "minimized", pTaskBar->iMinimizedWindowRenderType);
+		}
+		
+		if (pTaskBar->iMinimizedWindowRenderType == 1 && ! cairo_dock_xcomposite_is_available ())
+		{
+			cd_warning ("Sorry but either your X server does not have the XComposite extension, or your version of Cairo-Dock was not built with the support of XComposite.\n You can't have window thumbnails in the dock");
+			pTaskBar->iMinimizedWindowRenderType = 0;
+		}
+		if (pTaskBar->iMinimizedWindowRenderType == 0)
+			pTaskBar->fVisibleAppliAlpha = MIN (.6, cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL));
+		
+		pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 15, "Applications", NULL);
+		
+		
+		// interaction
+		pTaskBar->bMinimizeOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "minimize on click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
+		pTaskBar->bCloseAppliOnMiddleClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "close on middle click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
+		
+		pTaskBar->bDemandsAttentionWithDialog = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "demands attention with dialog", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
+		pTaskBar->iDialogDuration = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "duration", &bFlushConfFileNeeded, 2, NULL, NULL);
+		pTaskBar->cAnimationOnDemandsAttention = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on demands attention", &bFlushConfFileNeeded, "fire", NULL, NULL);
+		gchar *cForceDemandsAttention = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "force demands attention", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
+		if (cForceDemandsAttention != NULL)
+		{
+			pTaskBar->cForceDemandsAttention = g_ascii_strdown (cForceDemandsAttention, -1);
+			g_free (cForceDemandsAttention);
+		}
+		
+		pTaskBar->cAnimationOnActiveWindow = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on active window", &bFlushConfFileNeeded, "wobbly", NULL, NULL);
 	}
-	if (pPidBuffer != NULL)
-		XFree (pPidBuffer);
-	return cCommand;
+	return bFlushConfFileNeeded;
 }
 
+
+  ////////////////////
+ /// RESET CONFIG ///
+////////////////////
+
+static void reset_config (CairoTaskbarParam *pTaskBar)
+{
+	g_free (pTaskBar->cAnimationOnActiveWindow);
+	g_free (pTaskBar->cAnimationOnDemandsAttention);
+	g_free (pTaskBar->cOverwriteException);
+	g_free (pTaskBar->cGroupException);
+	g_free (pTaskBar->cForceDemandsAttention);
+}
+
+  ////////////
+ /// LOAD ///
+////////////
+
+static void load (void)
+{
+	
+}
+
+
+  //////////////
+ /// RELOAD ///
+//////////////
+
+static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar)
+{
+	CairoDock *pDock = g_pMainDock;
+	
+	gboolean bUpdateSize = FALSE;
+	if (pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass ||
+		pPrevTaskBar->bHideVisibleApplis != pTaskBar->bHideVisibleApplis ||
+		pPrevTaskBar->bAppliOnCurrentDesktopOnly != pTaskBar->bAppliOnCurrentDesktopOnly ||
+		pPrevTaskBar->bMixLauncherAppli != pTaskBar->bMixLauncherAppli ||
+		pPrevTaskBar->bOverWriteXIcons != pTaskBar->bOverWriteXIcons ||
+		pPrevTaskBar->iMinimizedWindowRenderType != pTaskBar->iMinimizedWindowRenderType ||
+		pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength ||
+		cairo_dock_strings_differ (pPrevTaskBar->cGroupException, pTaskBar->cGroupException) ||
+		cairo_dock_strings_differ (pPrevTaskBar->cOverwriteException, pTaskBar->cOverwriteException) ||
+		pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli)
+	{
+		_cairo_dock_stop_application_manager ();
+		bUpdateSize = TRUE;
+	}
+	
+	if (! s_bAppliManagerIsRunning)  // maintenant on veut voir les applis !
+	{
+		cairo_dock_start_applications_manager (pDock);  // va inserer le separateur si necessaire.
+		bUpdateSize = TRUE;
+	}
+	else
+		gtk_widget_queue_draw (pDock->container.pWidget);  // pour le fVisibleAlpha
+	
+	if (bUpdateSize)
+	{
+		cairo_dock_calculate_dock_icons (pDock);
+		gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
+		
+		cairo_dock_move_resize_dock (pDock);
+	}
+}
+
+
+  //////////////
+ /// UNLOAD ///
+//////////////
+
+static void unload (void)
+{
+	
+}
+
+
+  ////////////
+ /// INIT ///
+////////////
+
+static void init (void)
+{
+	s_hXWindowTable = g_hash_table_new_full (g_int_hash,
+		g_int_equal,
+		g_free,
+		NULL);
+	
+	s_XDisplay = cairo_dock_get_Xdisplay ();
+	
+	s_aNetWmState			= XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
+	s_aNetWmName 			= XInternAtom (s_XDisplay, "_NET_WM_NAME", False);
+	s_aUtf8String 			= XInternAtom (s_XDisplay, "UTF8_STRING", False);
+	s_aWmName 				= XInternAtom (s_XDisplay, "WM_NAME", False);
+	s_aString 				= XInternAtom (s_XDisplay, "STRING", False);
+	s_aNetWmIcon 			= XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
+	s_aWmHints 				= XInternAtom (s_XDisplay, "WM_HINTS", False);
+	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
+	
+	cairo_dock_initialize_class_manager ();
+	
+	cairo_dock_register_notification_on_object (&myDesktopMgr,
+		NOTIFICATION_WINDOW_ACTIVATED,
+		(CairoDockNotificationFunc) _on_change_active_window_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification_on_object (&myDesktopMgr,
+		NOTIFICATION_WINDOW_CONFIGURED,
+		(CairoDockNotificationFunc) _on_window_configured_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification_on_object (&myDesktopMgr,
+		NOTIFICATION_WINDOW_PROPERTY_CHANGED,
+		(CairoDockNotificationFunc) _on_property_changed_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification_on_object (&myDesktopMgr,
+		NOTIFICATION_DESKTOP_CHANGED,
+		(CairoDockNotificationFunc) _on_change_current_desktop_viewport_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+}
+
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_applications_manager (void)
+{
+	// Manager
+	memset (&myTaskbarMgr, 0, sizeof (CairoTaskbarManager));
+	myTaskbarMgr.mgr.cModuleName 	= "Taskbar";
+	myTaskbarMgr.mgr.init 		= init;
+	myTaskbarMgr.mgr.load 		= load;
+	myTaskbarMgr.mgr.unload 		= unload;
+	myTaskbarMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
+	myTaskbarMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	myTaskbarMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	// Config
+	memset (&myTaskbarParam, 0, sizeof (CairoTaskbarParam));
+	myTaskbarMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myTaskbarParam;
+	myTaskbarMgr.mgr.iSizeOfConfig = sizeof (CairoTaskbarParam);
+	// data
+	myTaskbarMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myTaskbarMgr.mgr.iSizeOfData = 0;
+	// signals
+	cairo_dock_install_notifications_on_object (&myTaskbarMgr, NB_NOTIFICATIONS_TASKBAR);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myTaskbarMgr));
+}

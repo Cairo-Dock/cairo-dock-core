@@ -21,32 +21,37 @@
 #include <string.h>
 
 #include "cairo-dock-draw.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
-#include "cairo-dock-internal-views.h"
-#include "cairo-dock-internal-desklets.h"
-#include "cairo-dock-internal-system.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-desklet-manager.h"
+#include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-config.h"
 #include "cairo-dock-backends-manager.h"
 
+// public (manager, config, data)
+CairoBackendsManager myBackendsMgr;
+CairoBackendsParam myBackendsParam;
+
+// dependancies
 extern gboolean g_bUseOpenGL;
 
+// private
 static GHashTable *s_hRendererTable = NULL;  // table des rendus de dock.
 static GHashTable *s_hDeskletRendererTable = NULL;  // table des rendus des desklets.
 static GHashTable *s_hDialogRendererTable = NULL;  // table des rendus des dialogues.
 static GHashTable *s_hDeskletDecorationsTable = NULL;  // table des decorations des desklets.
 static GHashTable *s_hAnimationsTable = NULL;  // table des animations disponibles.
 static GHashTable *s_hDialogDecoratorTable = NULL;  // table des decorateurs de dialogues disponibles.
-static GHashTable *s_hDataRendererTable = NULL;  // table des rendus de donnees disponibles.
 static GHashTable *s_hHidingEffectTable = NULL;  // table des effets de cachage des docks.
 static GHashTable *s_hIconContainerTable = NULL;  // table des rendus d'icones de container.
-
+/*
 typedef struct _CairoBackendMgr CairoBackendMgr;
 struct _CairoBackendMgr {
 	GHashTable *pTable;
@@ -72,7 +77,7 @@ void _register_backend (CairoBackendMgr *pBackendMgr, const gchar *cName, gpoint
 void _remove_backend (CairoBackendMgr *pBackendMgr, const gchar *cName)
 {
 	g_hash_table_remove (pBackendMgr->pTable, cName);
-}
+}*/
 
 
 CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean bForMainDock)
@@ -84,7 +89,7 @@ CairoDockRenderer *cairo_dock_get_renderer (const gchar *cRendererName, gboolean
 	
 	if (pRenderer == NULL)
 	{
-		const gchar *cDefaultRendererName = (bForMainDock ? myViews.cMainDockDefaultRendererName : myViews.cSubDockDefaultRendererName);
+		const gchar *cDefaultRendererName = (bForMainDock ? myBackendsParam.cMainDockDefaultRendererName : myBackendsParam.cSubDockDefaultRendererName);
 		//g_print ("  cDefaultRendererName : %s\n", cDefaultRendererName);
 		if (cDefaultRendererName != NULL)
 			pRenderer = g_hash_table_lookup (s_hRendererTable, cDefaultRendererName);
@@ -177,8 +182,8 @@ CairoDeskletDecoration *cairo_dock_get_desklet_decoration (const gchar *cDecorat
 {
 	if (cDecorationName != NULL)
 		return g_hash_table_lookup (s_hDeskletDecorationsTable, cDecorationName);
-	else if (myDesklets.cDeskletDecorationsName != NULL)
-		return g_hash_table_lookup (s_hDeskletDecorationsTable, myDesklets.cDeskletDecorationsName);
+	else if (myDeskletsParam.cDeskletDecorationsName != NULL)
+		return g_hash_table_lookup (s_hDeskletDecorationsTable, myDeskletsParam.cDeskletDecorationsName);
 	else
 		return NULL;
 }
@@ -195,26 +200,7 @@ void cairo_dock_remove_desklet_decoration (const gchar *cDecorationName)
 }
 
 
-CairoDockDataRendererRecord *cairo_dock_get_data_renderer_record (const gchar *cRendererName)
-{
-	if (cRendererName != NULL)
-		return g_hash_table_lookup (s_hDataRendererTable, cRendererName);
-	else
-		return NULL;
-}
-
-void cairo_dock_register_data_renderer (const gchar *cRendererName, CairoDockDataRendererRecord *pRecord)
-{
-	cd_message ("%s (%s)", __func__, cRendererName);
-	g_hash_table_insert (s_hDataRendererTable, g_strdup (cRendererName), pRecord);
-}
-
-void cairo_dock_remove_data_renderer_entry_point (const gchar *cRendererName)
-{
-	g_hash_table_remove (s_hDataRendererTable, cRendererName);
-}
-
-
+// Hiding animations
 CairoDockHidingEffect *cairo_dock_get_hiding_effect (const gchar *cHidingEffect)
 {
 	if (cHidingEffect != NULL)
@@ -235,6 +221,7 @@ void cairo_dock_remove_hiding_effect (const gchar *cHidingEffect)
 }
 
 
+// Icon-Container renderers
 CairoIconContainerRenderer *cairo_dock_get_icon_container_renderer (const gchar *cRendererName)
 {
 	if (cRendererName != NULL)
@@ -260,58 +247,6 @@ void cairo_dock_foreach_icon_container_renderer (GHFunc pCallback, gpointer data
 }
 
 
-void cairo_dock_init_backends_manager (void)
-{
-	g_return_if_fail (s_hRendererTable == NULL);
-	cd_message ("");
-	
-	s_hRendererTable = g_hash_table_new_full (g_str_hash,
-		g_str_equal,
-		g_free,
-		g_free);
-	
-	s_hDeskletRendererTable = g_hash_table_new_full (g_str_hash,
-		g_str_equal,
-		g_free,
-		g_free);
-	
-	s_hDialogRendererTable = g_hash_table_new_full (g_str_hash,
-		g_str_equal,
-		g_free,
-		g_free);
-	
-	s_hDeskletDecorationsTable = g_hash_table_new_full (g_str_hash,
-		g_str_equal,
-		g_free,
-		(GFreeFunc) cairo_dock_free_desklet_decoration);
-	
-	s_hAnimationsTable = g_hash_table_new_full (g_str_hash,
-		g_str_equal,
-		g_free,
-		(GFreeFunc) cairo_dock_free_animation_record);
-	
-	s_hDialogDecoratorTable = g_hash_table_new_full (g_str_hash,
-		g_str_equal,
-		g_free,
-		g_free);
-	
-	s_hDataRendererTable = g_hash_table_new_full (g_str_hash,
-		g_str_equal,
-		g_free,
-		g_free);
-	
-	s_hHidingEffectTable = g_hash_table_new_full (g_str_hash,
-		g_str_equal,
-		g_free,
-		g_free);
-	
-	s_hIconContainerTable = g_hash_table_new_full (g_str_hash,
-		g_str_equal,
-		g_free,
-		g_free);
-}
-
-
 void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 {
 	g_return_if_fail (pDock != NULL);
@@ -329,9 +264,9 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 	gtk_widget_set_double_buffered (pDock->container.pWidget, ! (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL));
 	
 	int iAnimationDeltaT = pDock->container.iAnimationDeltaT;
-	pDock->container.iAnimationDeltaT = (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
+	pDock->container.iAnimationDeltaT = (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL ? myContainersParam.iGLAnimationDeltaT : myContainersParam.iCairoAnimationDeltaT);
 	if (pDock->container.iAnimationDeltaT == 0)
-		pDock->container.iAnimationDeltaT = 30;  // le main dock est cree avant meme qu'on ait recuperer la valeur en conf. Lorsqu'une vue lui sera attribuee, la bonne valeur sera renseignee, en attendant on met un truc non nul.
+		pDock->container.iAnimationDeltaT = 30;  // le main dock est cree avant meme qu'on ait recupere la valeur en conf. Lorsqu'une vue lui sera attribuee, la bonne valeur sera renseignee, en attendant on met un truc non nul.
 	if (iAnimationDeltaT != pDock->container.iAnimationDeltaT && pDock->container.iSidGLAnimation != 0)
 	{
 		g_source_remove (pDock->container.iSidGLAnimation);
@@ -364,7 +299,8 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 	
 	pDesklet->pRenderer = pRenderer;
 	gtk_widget_set_double_buffered (pDesklet->container.pWidget, ! (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL));
-	pDesklet->container.iAnimationDeltaT = (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT);
+	pDesklet->container.iAnimationDeltaT = (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL ? myContainersParam.iGLAnimationDeltaT : myContainersParam.iCairoAnimationDeltaT);
+	g_print ("desklet: %d\n", pDesklet->container.iAnimationDeltaT);
 	
 	if (pRenderer != NULL)
 	{
@@ -481,29 +417,19 @@ void cairo_dock_set_dialog_decorator_by_name (CairoDialog *pDialog, const gchar 
 }
 
 
-void cairo_dock_update_renderer_list_for_gui (void)
+void cairo_dock_foreach_dock_renderer (GHFunc pFunction, gpointer data)
 {
-	cairo_dock_build_renderer_list_for_gui (s_hRendererTable);
+	g_hash_table_foreach (s_hRendererTable, pFunction, data);
 }
 
-void cairo_dock_update_desklet_decorations_list_for_gui (void)
+void cairo_dock_foreach_desklet_decoration (GHFunc pFunction, gpointer data)
 {
-	cairo_dock_build_desklet_decorations_list_for_gui (s_hDeskletDecorationsTable);
+	g_hash_table_foreach (s_hDeskletDecorationsTable, pFunction, data);
 }
 
-void cairo_dock_update_desklet_decorations_list_for_applet_gui (void)
+void cairo_dock_foreach_dialog_decorator (GHFunc pFunction, gpointer data)
 {
-	cairo_dock_build_desklet_decorations_list_for_applet_gui (s_hDeskletDecorationsTable);
-}
-
-void cairo_dock_update_animations_list_for_gui (void)
-{
-	cairo_dock_build_animations_list_for_gui (s_hAnimationsTable);
-}
-
-void cairo_dock_update_dialog_decorator_list_for_gui (void)
-{
-	cairo_dock_build_dialog_decorator_list_for_gui (s_hDialogDecoratorTable);
+	g_hash_table_foreach (s_hDialogDecoratorTable, pFunction, data);
 }
 
 
@@ -547,4 +473,167 @@ void cairo_dock_unregister_animation (const gchar *cAnimation)
 void cairo_dock_foreach_animation (GHFunc pHFunction, gpointer data)
 {
 	g_hash_table_foreach (s_hAnimationsTable, pHFunction, data);
+}
+
+
+  //////////////////
+ /// GET CONFIG ///
+//////////////////
+
+static gboolean get_config (GKeyFile *pKeyFile, CairoBackendsParam *pBackends)
+{
+	gboolean bFlushConfFileNeeded = FALSE;
+	
+	// views
+	pBackends->cMainDockDefaultRendererName = cairo_dock_get_string_key_value (pKeyFile, "Views", "main dock view", &bFlushConfFileNeeded, CAIRO_DOCK_DEFAULT_RENDERER_NAME, "Cairo Dock", NULL);
+	if (pBackends->cMainDockDefaultRendererName == NULL)
+		pBackends->cMainDockDefaultRendererName = g_strdup (CAIRO_DOCK_DEFAULT_RENDERER_NAME);
+	cd_message ("cMainDockDefaultRendererName <- %s", pBackends->cMainDockDefaultRendererName);
+
+	pBackends->cSubDockDefaultRendererName = cairo_dock_get_string_key_value (pKeyFile, "Views", "sub-dock view", &bFlushConfFileNeeded, CAIRO_DOCK_DEFAULT_RENDERER_NAME, "Sub-Docks", NULL);
+	if (pBackends->cSubDockDefaultRendererName == NULL)
+		pBackends->cSubDockDefaultRendererName = g_strdup (CAIRO_DOCK_DEFAULT_RENDERER_NAME);
+
+	pBackends->fSubDockSizeRatio = cairo_dock_get_double_key_value (pKeyFile, "Views", "relative icon size", &bFlushConfFileNeeded, 0.8, "Sub-Docks", NULL);
+	
+	// system
+	pBackends->iUnfoldingDuration = cairo_dock_get_integer_key_value (pKeyFile, "System", "unfold duration", &bFlushConfFileNeeded, 400, NULL, NULL);
+	
+	int iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "grow nb steps", &bFlushConfFileNeeded, 10, NULL, NULL);
+	iNbSteps = MAX (iNbSteps, 1);
+	pBackends->iGrowUpInterval = MAX (1, CAIRO_DOCK_NB_MAX_ITERATIONS / iNbSteps);
+	
+	iNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "shrink nb steps", &bFlushConfFileNeeded, 8, NULL, NULL);
+	iNbSteps = MAX (iNbSteps, 1);
+	pBackends->iShrinkDownInterval = MAX (1, CAIRO_DOCK_NB_MAX_ITERATIONS / iNbSteps);
+	
+	pBackends->iUnhideNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "move up nb steps", &bFlushConfFileNeeded, 10, NULL, NULL);
+	
+	pBackends->iHideNbSteps = cairo_dock_get_integer_key_value (pKeyFile, "System", "move down nb steps", &bFlushConfFileNeeded, 12, NULL, NULL);
+	
+	// frequence de rafraichissement.
+	int iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "refresh frequency", &bFlushConfFileNeeded, 25, NULL, NULL);
+	pBackends->fRefreshInterval = 1000. / iRefreshFrequency;
+	pBackends->bDynamicReflection = cairo_dock_get_boolean_key_value (pKeyFile, "System", "dynamic reflection", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	
+	return bFlushConfFileNeeded;
+}
+
+
+  ////////////////////
+ /// RESET CONFIG ///
+////////////////////
+
+static void reset_config (CairoBackendsParam *pBackendsParam)
+{
+	// views
+	g_free (pBackendsParam->cMainDockDefaultRendererName);
+	g_free (pBackendsParam->cSubDockDefaultRendererName);
+	
+	// system
+}
+
+
+  ////////////
+ /// LOAD ///
+////////////
+
+
+  //////////////
+ /// RELOAD ///
+//////////////
+
+static void reload (CairoBackendsParam *pPrevBackendsParam, CairoBackendsParam *pBackendsParam)
+{
+	CairoBackendsParam *pPrevViews = pPrevBackendsParam;
+	CairoBackendsParam *pPrevSystem = pPrevBackendsParam;
+	
+	// views
+	if (cairo_dock_strings_differ (pPrevViews->cMainDockDefaultRendererName, pBackendsParam->cMainDockDefaultRendererName))
+	{
+		cairo_dock_set_all_views_to_default (1);  // met a jour la taille des docks principaux.
+		cairo_dock_redraw_root_docks (FALSE);  // FALSE <=> main dock inclus.
+	}
+	
+	if (cairo_dock_strings_differ (pPrevViews->cSubDockDefaultRendererName, pBackendsParam->cSubDockDefaultRendererName) ||
+		pPrevViews->fSubDockSizeRatio != pBackendsParam->fSubDockSizeRatio)
+	{
+		cairo_dock_set_all_views_to_default (2);  // met a jour la taille des sous-docks.
+	}
+}
+
+
+  ////////////
+ /// INIT ///
+////////////
+
+static void init (void)
+{
+	s_hRendererTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		g_free);
+	
+	s_hDeskletRendererTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		g_free);
+	
+	s_hDialogRendererTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		g_free);
+	
+	s_hDeskletDecorationsTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		(GFreeFunc) cairo_dock_free_desklet_decoration);
+	
+	s_hAnimationsTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		(GFreeFunc) cairo_dock_free_animation_record);
+	
+	s_hDialogDecoratorTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		g_free);
+	
+	s_hHidingEffectTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		g_free);
+	
+	s_hIconContainerTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		g_free);
+}
+
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_backends_manager (void)
+{
+	// Manager
+	memset (&myBackendsMgr, 0, sizeof (CairoBackendsManager));
+	myBackendsMgr.mgr.cModuleName 	= "Backends";
+	myBackendsMgr.mgr.init 			= init;
+	myBackendsMgr.mgr.load 			= NULL;
+	myBackendsMgr.mgr.unload 		= NULL;
+	myBackendsMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
+	myBackendsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	myBackendsMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
+	// Config
+	myBackendsMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myBackendsParam;
+	myBackendsMgr.mgr.iSizeOfConfig = sizeof (CairoBackendsParam);
+	// data
+	myBackendsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myBackendsMgr.mgr.iSizeOfData = 0;
+	// signals
+	cairo_dock_install_notifications_on_object (&myBackendsMgr, NB_NOTIFICATIONS_BACKENDS);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myBackendsMgr));
 }

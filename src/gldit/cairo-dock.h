@@ -32,7 +32,9 @@
 #include <GL/glx.h>
 
 #include <cairo-dock/cairo-dock-struct.h>
+#include <cairo-dock/gldi-config.h>
 #include <cairo-dock/cairo-dock-global-variables.h>
+#include <cairo-dock/cairo-dock-core.h>
 // icon factory
 #include <icon-factory/cairo-dock-application-factory.h>
 #include <icon-factory/cairo-dock-applet-factory.h>
@@ -40,9 +42,9 @@
 #include <icon-factory/cairo-dock-separator-factory.h>
 #include <icon-factory/cairo-dock-desktop-file-factory.h>
 // structures de base.
-#include <cairo-dock/cairo-dock-icons.h>
+#include <cairo-dock/cairo-dock-module-factory.h>
+#include <cairo-dock/cairo-dock-icon-factory.h>
 #include <cairo-dock/cairo-dock-container.h>
-#include <cairo-dock/cairo-dock-modules.h>
 #include <cairo-dock/cairo-dock-flying-container.h>
 #include <cairo-dock/cairo-dock-dialog-factory.h>
 #include <cairo-dock/cairo-dock-desklet-factory.h>
@@ -58,16 +60,19 @@
 #include <cairo-dock/cairo-dock-dock-facility.h>
 #include <cairo-dock/cairo-dock-animations.h>
 // chargeurs d'icone.
+#include <cairo-dock/cairo-dock-icon-manager.h>
 #include <cairo-dock/cairo-dock-applications-manager.h>
 #include <cairo-dock/cairo-dock-applet-manager.h>
 #include <cairo-dock/cairo-dock-launcher-manager.h>
 #include <cairo-dock/cairo-dock-separator-manager.h>
 #include <cairo-dock/cairo-dock-application-facility.h>
 #include <cairo-dock/cairo-dock-dialog-manager.h>
-#include <cairo-dock/cairo-dock-load.h>
-#include <cairo-dock/cairo-dock-icon-loader.h>
+#include <cairo-dock/cairo-dock-image-buffer.h>
+#include <cairo-dock/cairo-dock-icon-facility.h>
 #include <cairo-dock/cairo-dock-config.h>
 // managers.
+#include <cairo-dock/cairo-dock-manager.h>
+#include <cairo-dock/cairo-dock-module-manager.h>
 #include <cairo-dock/cairo-dock-X-manager.h>
 #include <cairo-dock/cairo-dock-indicator-manager.h>
 #include <cairo-dock/cairo-dock-applications-manager.h>
@@ -81,17 +86,17 @@
 #include <cairo-dock/cairo-dock-gui-manager.h>
 #include <cairo-dock/cairo-dock-gui-factory.h>
 // donnees et modules internes.
-#include <cairo-dock/cairo-dock-internal-position.h>
-#include <cairo-dock/cairo-dock-internal-accessibility.h>
-#include <cairo-dock/cairo-dock-internal-system.h>
-#include <cairo-dock/cairo-dock-internal-taskbar.h>
-#include <cairo-dock/cairo-dock-internal-dialogs.h>
-#include <cairo-dock/cairo-dock-internal-indicators.h>
-#include <cairo-dock/cairo-dock-internal-views.h>
-#include <cairo-dock/cairo-dock-internal-desklets.h>
-#include <cairo-dock/cairo-dock-internal-labels.h>
-#include <cairo-dock/cairo-dock-internal-background.h>
-#include <cairo-dock/cairo-dock-internal-icons.h>
+//#include <cairo-dock/cairo-dock-internal-position.h>
+//#include <cairo-dock/cairo-dock-internal-accessibility.h>
+//#include <cairo-dock/cairo-dock-internal-system.h>
+//#include <cairo-dock/cairo-dock-internal-taskbar.h>
+//#include <cairo-dock/cairo-dock-internal-dialogs.h>
+//#include <cairo-dock/cairo-dock-internal-indicators.h>
+//#include <cairo-dock/cairo-dock-internal-views.h>
+//#include <cairo-dock/cairo-dock-internal-desklets.h>
+//#include <cairo-dock/cairo-dock-internal-labels.h>
+//#include <cairo-dock/cairo-dock-internal-background.h>
+//#include <cairo-dock/cairo-dock-internal-icons.h>
 // architecture pour les applets.
 #include <cairo-dock/cairo-dock-applet-facility.h>
 #include <cairo-dock/cairo-dock-applet-canvas.h>

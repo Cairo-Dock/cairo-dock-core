@@ -23,7 +23,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 G_BEGIN_DECLS
 
 /**
@@ -141,7 +141,8 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gch
 */
 #define cairo_dock_stop_icon_animation(pIcon) do { \
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && pIcon->iAnimationState != CAIRO_DOCK_STATE_REST) {\
-		cairo_dock_notify (CAIRO_DOCK_STOP_ICON, pIcon); \
+		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_STOP_ICON, pIcon); \
+		cairo_dock_notify_on_object (pIcon, NOTIFICATION_STOP_ICON, pIcon); \
 		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } } while (0)
 
 void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds);
@@ -162,8 +163,6 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon);
 *@param pContainer the container.
 */
 #define cairo_dock_get_slow_animation_delta_t(pContainer) ((int) ceil (1.*CAIRO_DOCK_MIN_SLOW_DELTA_T / CAIRO_CONTAINER(pContainer)->iAnimationDeltaT) * CAIRO_CONTAINER(pContainer)->iAnimationDeltaT)
-
-#define cairo_dock_set_default_animation_delta_t(pContainer) CAIRO_CONTAINER(pContainer)->iAnimationDeltaT = (g_bUseOpenGL ? mySystem.iGLAnimationDeltaT : mySystem.iCairoAnimationDeltaT)
 
 void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);
 void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);

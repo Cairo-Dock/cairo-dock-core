@@ -27,12 +27,7 @@
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
 
-#include "cairo-dock-load.h"
-#include "cairo-dock-icons.h"
-#include "cairo-dock-draw.h"
-#include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dialog-factory.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_name
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-surface-factory.h"
@@ -40,18 +35,10 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-X-utilities.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-indicators.h"
-#include "cairo-dock-notifications.h"
-#include "cairo-dock-launcher-factory.h"
-#include "cairo-dock-container.h"
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dock-facility.h"
-#include "cairo-dock-callbacks.h"
+#include "cairo-dock-X-utilities.h"  // cairo_dock_set_xicon_geometry
+#include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-X-manager.h"
-#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
 #include "cairo-dock-application-facility.h"
 
 extern CairoDock *g_pMainDock;
@@ -66,16 +53,16 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 	if (! pHiddenIcon)
 		icon->bIsDemandingAttention = TRUE;
 	//\____________________ On montre le dialogue.
-	if (myTaskBar.bDemandsAttentionWithDialog)
+	if (myTaskbarParam.bDemandsAttentionWithDialog)
 	{
 		CairoDialog *pDialog;
 		if (pHiddenIcon == NULL)
 		{
-			pDialog = cairo_dock_show_temporary_dialog_with_icon (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration, "same icon");
+			pDialog = cairo_dock_show_temporary_dialog_with_icon (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskbarParam.iDialogDuration, "same icon");
 		}
 		else
 		{
-			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskBar.iDialogDuration); // mieux vaut montrer d'icone dans le dialogue que de montrer une icone qui n'a pas de rapport avec l'appli demandant l'attention.
+			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskbarParam.iDialogDuration); // mieux vaut montrer d'icone dans le dialogue que de montrer une icone qui n'a pas de rapport avec l'appli demandant l'attention.
 			g_return_if_fail (pDialog != NULL);
 			cairo_dock_set_new_dialog_icon_surface (pDialog, pHiddenIcon->pIconBuffer, pDialog->iIconSize);
 		}
@@ -90,7 +77,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		}
 	}
 	//\____________________ On montre l'icone avec une animation.
-	if (myTaskBar.cAnimationOnDemandsAttention && ! pHiddenIcon)  // on ne l'anime pas si elle n'est pas dans un dock.
+	if (myTaskbarParam.cAnimationOnDemandsAttention && ! pHiddenIcon)  // on ne l'anime pas si elle n'est pas dans un dock.
 	{
 		if (pDock->iRefCount == 0)
 		{
@@ -108,7 +95,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			if (pParentDock)
 				cairo_dock_show_subdock (pPointedIcon, pParentDock);
 		}*/
-		cairo_dock_request_icon_animation (icon, pDock, myTaskBar.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
+		cairo_dock_request_icon_animation (icon, pDock, myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
 	}
 }
@@ -129,19 +116,19 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 	g_free (icon->cLastAttentionDemand);
 	icon->cLastAttentionDemand = g_strdup (icon->cName);
 	
-	gboolean bForceDemand = (myTaskBar.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskBar.cForceDemandsAttention, -1, icon->cClass));
+	gboolean bForceDemand = (myTaskbarParam.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskbarParam.cForceDemandsAttention, -1, icon->cClass));
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)  // appli inhibee ou non affichee.
 	{
 		icon->bIsDemandingAttention = TRUE;  // on met a TRUE meme si ce n'est pas reellement elle qui va prendre la demande.
-		Icon *pInhibitorIcon = cairo_dock_get_inhibator (icon, TRUE);  // on cherche son inhibiteur dans un dock.
+		Icon *pInhibitorIcon = cairo_dock_get_inhibitor (icon, TRUE);  // on cherche son inhibiteur dans un dock.
 		if (pInhibitorIcon != NULL)  // appli inhibee.
 		{
 			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 			if (pParentDock != NULL)
 				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, bForceDemand, NULL);
 		}
-		else if (bForceDemand)  // appli pas affichee, mais on veut tout de m�me etre notifie.
+		else if (bForceDemand)  // appli pas affichee, mais on veut tout de meme etre notifie.
 		{
 			Icon *pOneIcon = cairo_dock_get_dialogless_icon ();  // on prend une icone dans le main dock.
 			if (pOneIcon != NULL)
@@ -156,9 +143,9 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 {
 	if (CAIRO_DOCK_IS_APPLET (icon))  // cf remarque plus haut.
 		return ;
-	if (myTaskBar.bDemandsAttentionWithDialog)
+	if (myTaskbarParam.bDemandsAttentionWithDialog)
 		cairo_dock_remove_dialog_if_any (icon);
-	if (myTaskBar.cAnimationOnDemandsAttention)
+	if (myTaskbarParam.cAnimationOnDemandsAttention)
 	{
 		cairo_dock_stop_icon_animation (icon);  // arrete l'animation precedemment lancee par la demande.
 		gtk_widget_queue_draw (pDock->container.pWidget);  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
@@ -173,7 +160,7 @@ void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 	if (pParentDock == NULL)
 	{
 		icon->bIsDemandingAttention = FALSE;  // idem que plus haut.
-		Icon *pInhibitorIcon = cairo_dock_get_inhibator (icon, TRUE);
+		Icon *pInhibitorIcon = cairo_dock_get_inhibitor (icon, TRUE);
 		if (pInhibitorIcon != NULL)
 		{
 			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
@@ -191,10 +178,10 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 	g_return_if_fail (pParentDock != NULL);
 	if (! cairo_dock_icon_is_being_inserted_or_removed (icon))  // sinon on laisse l'animation actuelle.
 	{
-		if (myTaskBar.cAnimationOnActiveWindow)
+		if (myTaskbarParam.cAnimationOnActiveWindow)
 		{
 			if (cairo_dock_animation_will_be_visible (pParentDock) && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
-				cairo_dock_request_icon_animation (icon, pParentDock, myTaskBar.cAnimationOnActiveWindow, 1);
+				cairo_dock_request_icon_animation (icon, pParentDock, myTaskbarParam.cAnimationOnActiveWindow, 1);
 		}
 		else
 		{
@@ -285,7 +272,7 @@ static void _load_class_icon (Icon *icon)
 {
 	int iWidth = icon->iImageWidth;
 	int iHeight = icon->iImageHeight;
-	if (icon->pSubDock != NULL && !myIndicators.bUseClassIndic)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
+	if (icon->pSubDock != NULL && !myIndicatorsParam.bUseClassIndic)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 	{
 		icon->pIconBuffer = cairo_dock_create_blank_surface (iWidth, iHeight);
 	}
@@ -302,7 +289,7 @@ static void _load_class_icon (Icon *icon)
 			{
 				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
 				//g_print ("  load from %s (%dx%d)\n", pOneIcon->cName, iWidth, iHeight);
-				icon->pIconBuffer = cairo_dock_duplicate_inhibator_surface_for_appli (pOneIcon,
+				icon->pIconBuffer = cairo_dock_duplicate_inhibitor_surface_for_appli (pOneIcon,
 					iWidth,
 					iHeight);
 			}
@@ -314,7 +301,7 @@ static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, Cai
 	Icon *pFakeClassIcon = cairo_dock_new_icon ();
 	pFakeClassIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER;
 	pFakeClassIcon->iface.load_image = _load_class_icon;
-	pFakeClassIcon->iType = pSameClassIcon->iType;
+	pFakeClassIcon->iGroup = pSameClassIcon->iGroup;
 	
 	pFakeClassIcon->cName = g_strdup (pSameClassIcon->cClass);
 	pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
@@ -335,7 +322,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 	cd_message ("%s (%s)", __func__, icon->cName);
 	CairoDock *pParentDock = pMainDock;
 	g_free (icon->cParentDockName);
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskBar.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))
 	{
 		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);  // un inhibiteur dans un dock OU une appli de meme classe dans le main dock.
 		if (pSameClassIcon == NULL)  // aucun classmate => elle va dans le main dock.
@@ -372,7 +359,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				if (pSameClassIcon->Xid != 0)  // actuellement l'inhibiteur inhibe 1 seule appli.
 				{
 					cd_debug ("actuellement l'inhibiteur inhibe 1 seule appli");
-					Icon *pInhibatedIcon = cairo_dock_get_icon_with_Xid (pSameClassIcon->Xid);
+					Icon *pInhibitedIcon = cairo_dock_get_icon_with_Xid (pSameClassIcon->Xid);
 					pSameClassIcon->Xid = 0;  // on lui laisse par contre l'indicateur.
 					if (pSameClassIcon->pSubDock == NULL)
 					{
@@ -391,16 +378,16 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 					}
 					else if (pSameClassIcon->pSubDock != pParentDock)
 						cd_warning ("this launcher (%s) already has a subdock, but it's not the class's subdock !", pSameClassIcon->cName);
-					if (pInhibatedIcon != NULL)
+					if (pInhibitedIcon != NULL)
 					{
-						cd_debug (" on insere %s dans le dock de la classe", pInhibatedIcon->cName);
-						g_free (pInhibatedIcon->cParentDockName);
-						pInhibatedIcon->cParentDockName = g_strdup (icon->cClass);
-						cairo_dock_insert_icon_in_dock_full (pInhibatedIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+						cd_debug (" on insere %s dans le dock de la classe", pInhibitedIcon->cName);
+						g_free (pInhibitedIcon->cParentDockName);
+						pInhibitedIcon->cParentDockName = g_strdup (icon->cClass);
+						cairo_dock_insert_icon_in_dock_full (pInhibitedIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 					}
 				}
 				else if (pSameClassIcon->pSubDock != pParentDock)
-					cd_warning ("this inhibator doesn't hold the class dock !");
+					cd_warning ("this inhibitor doesn't hold the class dock !");
 			}
 			else  // c'est donc une appli du main dock.
 			{
@@ -434,19 +421,19 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 
 CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate)
 {
-	if (! myTaskBar.bShowAppli)
+	if (! myTaskbarParam.bShowAppli)
 		return NULL;
 	cd_message ("%s (%s, %d)", __func__, icon->cName, icon->Xid);
 	
 	//\_________________ On gere ses eventuels inhibiteurs.
-	if (myTaskBar.bMixLauncherAppli && cairo_dock_prevent_inhibated_class (icon))
+	if (myTaskbarParam.bMixLauncherAppli && cairo_dock_prevent_inhibited_class (icon))
 	{
 		cd_message (" -> se fait inhiber");
 		return NULL;
 	}
 	
 	//\_________________ On gere le filtre 'applis minimisees seulement'.
-	if (!icon->bIsHidden && myTaskBar.bHideVisibleApplis)
+	if (!icon->bIsHidden && myTaskbarParam.bHideVisibleApplis)
 	{
 		cairo_dock_reserve_one_icon_geometry_for_window_manager (&icon->Xid, icon, pMainDock);  // on reserve la position de l'icone dans le dock pour que l'effet de minimisation puisse viser la bonne position avant que l'icone ne soit effectivement dans le dock.
 		return NULL;
@@ -457,7 +444,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	if ((myIcons.iSeparateIcons == 0 || myIcons.iSeparateIcons == 2) && pParentDock->iRefCount == 0)
+	if ((myIconsParam.iSeparateIcons == 0 || myIconsParam.iSeparateIcons == 2) && pParentDock->iRefCount == 0)
 	{
 		cairo_dock_set_class_order (icon);
 	}
@@ -499,7 +486,7 @@ CairoDock * cairo_dock_detach_appli (Icon *pIcon)
 }
 
 #define x_icon_geometry(icon, pDock) (pDock->container.iWindowPositionX + icon->fXAtRest + (pDock->container.iWidth - pDock->fFlatDockWidth) / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2))
-#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIcons.fAmplitude * pDock->fMagnitudeMax)
+#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIconsParam.fAmplitude * pDock->fMagnitudeMax)
 void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
 	//g_print ("%s (%s)\n", __func__, icon->cName);
@@ -508,7 +495,7 @@ void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock
 	iY = y_icon_geometry (icon, pDock);  // il faudrait un fYAtRest ...
 	//g_print (" -> %d;%d (%.2f)\n", iX - pDock->container.iWindowPositionX, iY - pDock->container.iWindowPositionY, icon->fXAtRest);
 	iWidth = icon->fWidth;
-	iHeight = icon->fHeight * (1. + 2*myIcons.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
+	iHeight = icon->fHeight * (1. + 2*myIconsParam.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 	
 	if (pDock->container.bIsHorizontal)
 		cairo_dock_set_xicon_geometry (icon->Xid, iX, iY, iWidth, iHeight);
@@ -520,13 +507,13 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && icon->cParentDockName == NULL)
 	{
-		Icon *pInhibator = cairo_dock_get_inhibator (icon, FALSE);  // FALSE <=> meme en-dehors d'un dock
-		if (pInhibator == NULL)  // cette icone n'est pas inhinbee, donc se minimisera dans le dock en une nouvelle icone.
+		Icon *pInhibitor = cairo_dock_get_inhibitor (icon, FALSE);  // FALSE <=> meme en-dehors d'un dock
+		if (pInhibitor == NULL)  // cette icone n'est pas inhinbee, donc se minimisera dans le dock en une nouvelle icone.
 		{
 			int x, y;
 			Icon *pClassmate = cairo_dock_get_classmate (icon);
 			CairoDock *pClassmateDock = (pClassmate ? cairo_dock_search_dock_from_name (pClassmate->cParentDockName) : NULL);
-			if (myTaskBar.bGroupAppliByClass && pClassmate != NULL && pClassmateDock != NULL)  // on va se grouper avec cette icone.
+			if (myTaskbarParam.bGroupAppliByClass && pClassmate != NULL && pClassmateDock != NULL)  // on va se grouper avec cette icone.
 			{
 				x = x_icon_geometry (pClassmate, pClassmateDock);
 				if (cairo_dock_is_hidden (pMainDock))
@@ -538,7 +525,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 					y = y_icon_geometry (pClassmate, pClassmateDock);
 				}
 			}
-			else if (!myIcons.iSeparateIcons && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
+			else if (!myIconsParam.iSeparateIcons && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{
 				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
 				if (cairo_dock_is_hidden (pClassmateDock))

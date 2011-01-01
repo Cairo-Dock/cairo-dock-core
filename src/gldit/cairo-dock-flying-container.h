@@ -22,8 +22,30 @@
 #define  __CAIRO_FLYING_CONTAINER__
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
+typedef struct _CairoFlyingManager CairoFlyingManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoFlyingManager myFlyingsMgr;
+#endif
+
+// manager
+struct _CairoFlyingManager {
+	GldiManager mgr;
+	} ;
+
+// signals
+typedef enum {
+	/// notification called when a FlyingContainer is updated in the fast rendering loop.
+	NOTIFICATION_UPDATE_FLYING_CONTAINER = NB_NOTIFICATIONS_CONTAINER,
+	/// notification called when a FlyingContainer is rendered.
+	NOTIFICATION_RENDER_FLYING_CONTAINER,
+	NB_NOTIFICATIONS_FLYING_CONTAINER
+	} CairoFlyingNotifications;
+
+// factory
 struct _CairoFlyingContainer {
 	/// container
 	CairoContainer container;
@@ -35,11 +57,11 @@ struct _CairoFlyingContainer {
 	double fCreationTime;
 };
 
-void cairo_dock_unload_flying_container_textures (void);
+void cairo_dock_unload_flying_container_textures (void);  // merge with unload
 
-gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation);
+//gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation);
 
-gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext);
+//gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext);
 
 
 CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock, gboolean bDrawHand);
@@ -49,6 +71,9 @@ void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, C
 void cairo_dock_free_flying_container (CairoFlyingContainer *pFlyingContainer);
 
 void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContainer);
+
+
+void gldi_register_flying_manager (void);
 
 
 G_END_DECLS

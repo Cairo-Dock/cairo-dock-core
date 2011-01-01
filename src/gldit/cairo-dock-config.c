@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../config.h"
+#include "gldi-config.h"
 #ifdef HAVE_LIBCRYPT
 /* libC crypt */
 #include <crypt.h>
@@ -39,10 +39,12 @@ static char DES_crypt_key[64] =
 
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-load.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-image-buffer.h"
+#include "cairo-dock-icon-manager.h"  // cairo_dock_hide_show_launchers_on_other_desktops
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-themes-manager.h"
@@ -57,34 +59,25 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-desklet-manager.h"
-#include "cairo-dock-internal-position.h"
-#include "cairo-dock-internal-accessibility.h"
-#include "cairo-dock-internal-system.h"
-#include "cairo-dock-internal-taskbar.h"
-#include "cairo-dock-internal-dialogs.h"
-#include "cairo-dock-internal-indicators.h"
-#include "cairo-dock-internal-views.h"
-#include "cairo-dock-internal-labels.h"
-#include "cairo-dock-internal-desklets.h"
-#include "cairo-dock-internal-icons.h"
-#include "cairo-dock-internal-background.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-indicator-manager.h"
+#include "cairo-dock-X-manager.h"
+#include "cairo-dock-core.h"
 #include "cairo-dock-config.h"
 
-CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 gboolean g_bEasterEggs = FALSE;
 
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cConfFile;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
-extern CairoDockHidingEffect *g_pHidingBackend;
-extern CairoDockHidingEffect *g_pKeepingBelowBackend;
+//extern CairoDockHidingEffect *g_pHidingBackend;
+//extern CairoDockHidingEffect *g_pKeepingBelowBackend;
+extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 
 static gboolean s_bLoading = FALSE;
 
@@ -486,355 +479,51 @@ void cairo_dock_get_size_key_value (GKeyFile *pKeyFile, const gchar *cGroupName,
 }
 
 
-void cairo_dock_load_config (const gchar *cConfFilePath, CairoDock *pMainDock)
+void cairo_dock_load_current_theme (void)
 {
-	//\___________________ On ouvre le fichier de conf.
-	gboolean bFlushConfFileNeeded = FALSE;  // si un champ n'existe pas, on le rajoute au fichier de conf.
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_if_fail (pKeyFile != NULL);
-	
+	cd_message ("%s ()", __func__);
 	s_bLoading = TRUE;
 	
-	//\___________________ On recupere la conf de tous les modules.
-	bFlushConfFileNeeded = cairo_dock_get_global_config (pKeyFile);
+	//\___________________ Free everything.
+	gldi_free_all ();  // do nothing if there is nothing to unload.
+		
+	//\___________________ Get all managers config.
+	gldi_get_managers_config (g_cConfFile, GLDI_VERSION);  /// en fait, CAIRO_DOCK_VERSION ...
 	
-	//\___________________ Post-initialisation : parametres impactant le main dock.
-	pMainDock->iGapX = myPosition.iGapX;
-	pMainDock->iGapY = myPosition.iGapY;
-	pMainDock->fAlign = myPosition.fAlign;
-	if (myPosition.bUseXinerama)
-	{
-		pMainDock->iNumScreen = myPosition.iNumScreen;
-		cairo_dock_get_screen_offsets (myPosition.iNumScreen, &pMainDock->iScreenOffsetX, &pMainDock->iScreenOffsetY);
-	}
+	//\___________________ Create the primary container (needed to have a cairo/opengl context).
+	CairoDock *pMainDock = cairo_dock_create_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
 	
-	cairo_dock_set_dock_orientation (pMainDock, myPosition.iScreenBorder);
-	cairo_dock_move_resize_dock (pMainDock);
+	//\___________________ Load all managers data.
+	gldi_load_managers ();
 	
-	//\___________________ fausse transparence.
-	if (mySystem.bUseFakeTransparency)
-	{
-		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
-	}
-	
-	//\___________________ On charge les images dont on aura besoin tout de suite.
-	cairo_dock_load_icon_textures ();
-	cairo_dock_load_indicator_textures ();
-	
-	cairo_dock_load_visible_zone (myAccessibility.cZoneImage, myAccessibility.iZoneWidth, myAccessibility.iZoneHeight, myAccessibility.fZoneAlpha);
-	
-	cairo_dock_create_icon_fbo ();
-	
-	//\___________________ On charge les lanceurs.
-	pMainDock->fFlatDockWidth = - myIcons.iIconGap;  // car on ne le connaissait pas encore au moment de sa creation .
+	//\___________________ Now load the launchers.
 	cairo_dock_build_docks_tree_with_desktop_files (g_cCurrentLaunchersPath);
 	
 	cairo_dock_hide_show_launchers_on_other_desktops (pMainDock);
 	
-	//\___________________ On charge les applets.
-	GTimeVal time_val;
-	g_get_current_time (&time_val);  // on pourrait aussi utiliser un compteur statique a la fonction ...
-	double fTime = time_val.tv_sec + time_val.tv_usec * 1e-6;
-	cairo_dock_activate_modules_from_list (mySystem.cActiveModuleList, fTime);
+	//\___________________ Load the applets.
+	cairo_dock_activate_modules_from_list (myModulesParam.cActiveModuleList);
 	
-	//\___________________ On lance le gestionnaires des applis, meme si on les affiche pas, car il gere aussi le recouvrement des fenetres par le dock et maintient la liste des applications ouvertes.
-	///if (myTaskBar.bShowAppli)
-		cairo_dock_start_application_manager (pMainDock);  // va inserer le separateur si necessaire.
+	//\___________________ Start the applications manager (will load the icons if the option is enabled).
+	cairo_dock_start_applications_manager (pMainDock);
 	
-	//\___________________ On dessine tout.
-	cairo_dock_draw_subdock_icons ();
+	//\___________________ Draw everything.
+	cairo_dock_draw_subdock_icons ();  // maintenant que les sous-docks sont tous definis.
 	
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
 	cairo_dock_redraw_root_docks (FALSE);  // FALSE <=> main dock inclus.
 	
-	//\___________________ On charge le comportement d'accessibilite.
-	g_pHidingBackend = cairo_dock_get_hiding_effect (myAccessibility.cHideEffect);
-	
-	cairo_dock_set_dock_visibility (pMainDock, myAccessibility.iVisibility);
-	
-	if (g_pKeepingBelowBackend == NULL)  // pas d'option en config pour ca.
-		g_pKeepingBelowBackend = cairo_dock_get_hiding_effect ("Fade out");
-	
 	//\___________________ On charge les decorations des desklets.
-	if (myDesklets.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
+	/**if (myDeskletsParam.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
 	{
 		cairo_dock_reload_desklets_decorations (FALSE);
-	}
+	}*/
 	
-	//\___________________ On charge les listes de backends.
-	cairo_dock_update_renderer_list_for_gui ();
-	cairo_dock_update_desklet_decorations_list_for_gui ();
-	cairo_dock_update_desklet_decorations_list_for_applet_gui ();
-	cairo_dock_update_animations_list_for_gui ();
-	cairo_dock_update_dialog_decorator_list_for_gui ();
-	
-	//\___________________ On met a jour le fichier sur le disque si necessaire.
-	if (! bFlushConfFileNeeded)
-		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
-	if (bFlushConfFileNeeded)
-	{
-		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
-	}
-	
-	g_key_file_free (pKeyFile);
-
 	s_bLoading = FALSE;
 	
-	cairo_dock_trigger_refresh_launcher_gui ();
+	///cairo_dock_trigger_refresh_launcher_gui (); // a faire par l'app
 }
 
-void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock)
-{
-	//g_print ("%s (%s)\n", __func__, cConfFilePath);
-	GError *erreur = NULL;
-	gsize length;
-	gboolean bFlushConfFileNeeded = FALSE, bFlushConfFileNeeded2 = FALSE;  // si un champ n'existe pas, on le rajoute au fichier de conf.
-	g_print ("TOTO\n");
-	
-	//\___________________ On ouvre le fichier de conf.
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	if (pKeyFile == NULL)
-		return ;
-	
-	s_bLoading = TRUE;
-	
-	//\___________________ On garde une trace de certains parametres.
-	gchar *cRaiseDockShortcutOld = myAccessibility.cRaiseDockShortcut;
-	myAccessibility.cRaiseDockShortcut = NULL;
-	gboolean bUseFakeTransparencyOld = mySystem.bUseFakeTransparency;  // FALSE initialement.
-	gboolean bGroupAppliByClassOld = myTaskBar.bGroupAppliByClass;  // FALSE initialement.
-	gboolean bHideVisibleApplisOld = myTaskBar.bHideVisibleApplis;
-	gboolean bAppliOnCurrentDesktopOnlyOld = myTaskBar.bAppliOnCurrentDesktopOnly;
-	gboolean bMixLauncherAppliOld = myTaskBar.bMixLauncherAppli;
-	gboolean bOverWriteXIconsOld = myTaskBar.bOverWriteXIcons;  // TRUE initialement.
-	gboolean bShowAppliOld = myTaskBar.bShowAppli;
-	gint iMinimizedWindowRenderTypeOld = myTaskBar.iMinimizedWindowRenderType;
-	gchar *cDeskletDecorationsNameOld = myDesklets.cDeskletDecorationsName;
-	myDesklets.cDeskletDecorationsName = NULL;
-	int iSeparateIconsOld = myIcons.iSeparateIcons;
-	CairoDockIconType tIconTypeOrderOld[CAIRO_DOCK_NB_TYPES];
-	memcpy (tIconTypeOrderOld, myIcons.tIconTypeOrder, sizeof (tIconTypeOrderOld));
-	
-	//\___________________ On recupere la conf de tous les modules.
-	bFlushConfFileNeeded = cairo_dock_get_global_config (pKeyFile);
-	
-	//\___________________ Post-initialisation : parametres impactant le main dock.
-	pDock->iGapX = myPosition.iGapX;
-	pDock->iGapY = myPosition.iGapY;
-	
-	pDock->fAlign = myPosition.fAlign;
-	
-	gboolean bGroupOrderChanged;
-	if (tIconTypeOrderOld[CAIRO_DOCK_LAUNCHER] != myIcons.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] ||
-		tIconTypeOrderOld[CAIRO_DOCK_APPLI] != myIcons.tIconTypeOrder[CAIRO_DOCK_APPLI] ||
-		tIconTypeOrderOld[CAIRO_DOCK_APPLET] != myIcons.tIconTypeOrder[CAIRO_DOCK_APPLET])
-		bGroupOrderChanged = TRUE;
-	else
-		bGroupOrderChanged = FALSE;
-	
-	if (myPosition.bUseXinerama)
-	{
-		pDock->iNumScreen = myPosition.iNumScreen;
-		cairo_dock_get_screen_offsets (myPosition.iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
-	}
-	else
-	{
-		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
-	}
-	
-	switch (myPosition.iScreenBorder)
-	{
-		case CAIRO_DOCK_BOTTOM :
-		default :
-			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-			pDock->container.bDirectionUp = TRUE;
-		break;
-		case CAIRO_DOCK_TOP :
-			pDock->container.bIsHorizontal = CAIRO_DOCK_HORIZONTAL;
-			pDock->container.bDirectionUp = FALSE;
-		break;
-		case CAIRO_DOCK_RIGHT :
-			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
-			pDock->container.bDirectionUp = TRUE;
-		break;
-		case CAIRO_DOCK_LEFT :
-			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
-			pDock->container.bDirectionUp = FALSE;
-		break;
-	}
-	
-	//\___________________ On (re)charge tout, car n'importe quel parametre peut avoir change.
-	// fausse transparence.
-	if (mySystem.bUseFakeTransparency)
-	{
-		if (g_pFakeTransparencyDesktopBg == NULL)
-		{
-			g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
-		}
-		else if (g_bUseOpenGL)
-		{
-			CairoDockDesktopBackground *dummy = cairo_dock_get_desktop_background (g_bUseOpenGL);  // pour recharger la texture.
-			cairo_dock_destroy_desktop_background (dummy);
-		}
-	}
-	else if (g_pFakeTransparencyDesktopBg != NULL)
-	{
-		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
-		g_pFakeTransparencyDesktopBg = NULL;
-	}
-	
-	//\___________________ on recharge les buffers d'images.
-	cairo_dock_unload_dialog_buttons ();  // on se contente de remettre a zero ces buffers,
-	cairo_dock_unload_desklet_buttons ();  // qui seront charges lorsque necessaire.
-	
-	cairo_dock_load_icon_textures ();
-	cairo_dock_load_indicator_textures ();
-	
-	cairo_dock_load_visible_zone (myAccessibility.cZoneImage, myAccessibility.iZoneWidth, myAccessibility.iZoneHeight, myAccessibility.fZoneAlpha);
-	
-	///cairo_dock_create_icon_pbuffer ();
-	cairo_dock_create_icon_fbo ();
-	
-	//\___________________ On recharge les lanceurs, les applis, et les applets.
-	if (bGroupAppliByClassOld != myTaskBar.bGroupAppliByClass ||
-		bHideVisibleApplisOld != myTaskBar.bHideVisibleApplis ||
-		bAppliOnCurrentDesktopOnlyOld != myTaskBar.bAppliOnCurrentDesktopOnly ||
-		bMixLauncherAppliOld != myTaskBar.bMixLauncherAppli ||
-		bOverWriteXIconsOld != myTaskBar.bOverWriteXIcons ||
-		iMinimizedWindowRenderTypeOld != myTaskBar.iMinimizedWindowRenderType ||
-		(bShowAppliOld != myTaskBar.bShowAppli))
-	{
-		cairo_dock_stop_application_manager ();
-	}
-	
-	if (bGroupOrderChanged || myIcons.iSeparateIcons != iSeparateIconsOld)
-		pDock->icons = g_list_sort (pDock->icons, (GCompareFunc) cairo_dock_compare_icons_order);
-	
-	if ((iSeparateIconsOld && ! myIcons.iSeparateIcons) || bGroupOrderChanged)
-		cairo_dock_remove_automatic_separators (pDock);
-		
-	if (pDock->icons == NULL)
-	{
-		pDock->fFlatDockWidth = - myIcons.iIconGap;  // car on ne le connaissait pas encore au moment de la creation du dock.
-		cairo_dock_build_docks_tree_with_desktop_files (g_cCurrentLaunchersPath);
-	}
-	else
-	{
-		cairo_dock_synchronize_sub_docks_orientation (pDock, FALSE);
-		cairo_dock_reload_buffers_in_all_docks (FALSE);  // tout sauf les applets, qui seront rechargees en bloc juste apres.
-	}
-	
-	GTimeVal time_val;
-	g_get_current_time (&time_val);  // on pourrait aussi utiliser un compteur statique a la fonction ...
-	double fTime = time_val.tv_sec + time_val.tv_usec * 1e-6;
-	cairo_dock_activate_modules_from_list (mySystem.cActiveModuleList, fTime);
-	cairo_dock_deactivate_old_modules (fTime);
-	
-	if (! cairo_dock_application_manager_is_running ())  // maintenant on veut voir les applis !
-	{
-		cairo_dock_start_application_manager (pDock);  // va inserer le separateur si necessaire.
-	}
-
-	if (myIcons.iSeparateIcons && (! iSeparateIconsOld || bGroupOrderChanged))
-	{
-		cairo_dock_insert_separators_in_dock (pDock);
-	}
-	
-	cairo_dock_draw_subdock_icons ();
-	
-	cairo_dock_set_all_views_to_default (0);  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
-	cairo_dock_redraw_root_docks (TRUE);  // TRUE <=> sauf le main dock.
-	
-	g_print ("myAccessibility.cRaiseDockShortcut: %s\n", myAccessibility.cRaiseDockShortcut);
-	if (myAccessibility.cRaiseDockShortcut != NULL)
-	{
-		if (cRaiseDockShortcutOld == NULL || strcmp (myAccessibility.cRaiseDockShortcut, cRaiseDockShortcutOld) != 0)
-		{
-			if (cRaiseDockShortcutOld != NULL)
-				cd_keybinder_unbind (cRaiseDockShortcutOld, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-			if (! cd_keybinder_bind (myAccessibility.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))
-			{
-				g_free (myAccessibility.cRaiseDockShortcut);
-				myAccessibility.cRaiseDockShortcut = NULL;
-			}
-		}
-	}
-	else
-	{
-		if (cRaiseDockShortcutOld != NULL)
-		{
-			cd_keybinder_unbind (cRaiseDockShortcutOld, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-			cairo_dock_move_resize_dock (pDock);
-			gtk_widget_show (pDock->container.pWidget);
-		}
-	}
-	g_free (cRaiseDockShortcutOld);
-	
-	//\___________________ On gere le changement dans la visibilite.
-	g_pHidingBackend = cairo_dock_get_hiding_effect (myAccessibility.cHideEffect);
-	
-	if (pDock->bAutoHide)
-	{
-		pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;  // le 'configure' mettra a jour la zone d'input.
-		pDock->fHideOffset = 1.;
-	}
-	else
-	{
-		cairo_dock_start_showing (pDock);
-	}
-	
-	cairo_dock_hide_show_launchers_on_other_desktops (pDock);
-	
-	cairo_dock_set_dock_visibility (pDock, myAccessibility.iVisibility);
-	
-	///cairo_dock_load_background_decorations (pDock);
-
-	cairo_dock_move_resize_dock (pDock);
-	
-	pDock->container.iMouseX = 0;  // on se place hors du dock initialement.
-	pDock->container.iMouseY = 0;
-	cairo_dock_calculate_dock_icons (pDock);
-	gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
-	
-	//\___________________ On recharge les decorations des desklets.
-	if (cDeskletDecorationsNameOld == NULL && myDesklets.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
-	{
-		cairo_dock_reload_desklets_decorations (FALSE);
-	}
-	else if (cDeskletDecorationsNameOld != NULL && (myDesklets.cDeskletDecorationsName == NULL || strcmp (cDeskletDecorationsNameOld, myDesklets.cDeskletDecorationsName) != 0))  // le theme par defaut a change, on recharge les desklets qui utilisent le theme "default".
-	{
-		cairo_dock_reload_desklets_decorations (TRUE);
-	}
-	else if (myDesklets.cDeskletDecorationsName != NULL && strcmp (myDesklets.cDeskletDecorationsName, "personnal") == 0)  // on a configure le theme personnel, il peut avoir change.
-	{
-		cairo_dock_reload_desklets_decorations (TRUE);
-	}
-	else  // on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
-	{
-		cairo_dock_reload_desklets_decorations (FALSE);
-	}
-	g_free (cDeskletDecorationsNameOld);
-	
-	cairo_dock_update_renderer_list_for_gui ();
-	cairo_dock_update_desklet_decorations_list_for_gui ();
-	cairo_dock_update_desklet_decorations_list_for_applet_gui ();
-	cairo_dock_update_animations_list_for_gui ();
-	cairo_dock_update_dialog_decorator_list_for_gui ();
-	
-	//\___________________ On ecrit sur le disque si necessaire.
-	if (! bFlushConfFileNeeded)
-		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
-	if (bFlushConfFileNeeded)
-	{
-		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
-	}
-	
-	g_key_file_free (pKeyFile);
-
-	s_bLoading = FALSE;
-	
-	cairo_dock_trigger_refresh_launcher_gui ();
-}
 
 gboolean cairo_dock_is_loading (void)
 {

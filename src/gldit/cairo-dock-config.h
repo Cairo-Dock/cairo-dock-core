@@ -154,15 +154,8 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 
 /** Load the Cairo-Dock's config and everything.
 *@param cConfFilePath path to the main conf file.
-*@param pMainDock the main dock, created beforehand.
 */
-void cairo_dock_load_config (const gchar *cConfFilePath, CairoDock *pMainDock);
-
-/** Get the Cairo-Dock's config and reload everything.
-*@param cConfFilePath path to the main conf file.
-*@param pDock the main dock, created beforehand.
-*/
-void cairo_dock_read_conf_file (const gchar *cConfFilePath, CairoDock *pDock);
+void cairo_dock_load_config (const gchar *cConfFilePath);
 
 /** Say if Cairo-Dock is loading.
 *@return TRUE if the global config is being loaded (this happens when a theme is loaded).
@@ -215,6 +208,11 @@ gchar *cairo_dock_get_default_system_font (void);
 
 #define DEFINE_PRE_INIT(cGroupName) \
 void cairo_dock_pre_init_##cGroupName (CairoDockInternalModule *pModule)
+
+
+/** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.
+*/
+void cairo_dock_load_current_theme (void);
 
 
 G_END_DECLS

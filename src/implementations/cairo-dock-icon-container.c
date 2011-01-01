@@ -31,14 +31,14 @@
 
 #include <gtk/gtkgl.h>
 
-#include "../config.h"
-#include "cairo-dock-load.h"
+#include "gldi-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-internal-icons.h"
+#include "cairo-dock-icon-manager.h"
 #include "cairo-dock-emblem.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-icon-container.h"
 
 CairoDockImageBuffer g_pBoxAboveBuffer;
@@ -66,7 +66,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoContai
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -93,7 +93,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, Cair
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -116,7 +116,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoContain
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -159,7 +159,7 @@ static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, Cairo
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -193,7 +193,7 @@ static void _cairo_dock_load_box_surface (void)
 	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
 	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
 	
-	int iSize = myIcons.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	int iSize = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
 	if (iSize == 0)
 		iSize = 48;
 	iSize *= fMaxScale;
@@ -205,7 +205,7 @@ static void _cairo_dock_load_box_surface (void)
 		cUserPath = NULL;
 	}
 	cairo_dock_load_image_buffer (&g_pBoxAboveBuffer,
-		cUserPath ? cUserPath : CAIRO_DOCK_SHARE_DATA_DIR"/box-front.png",
+		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/box-front.png",
 		iSize,
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);
@@ -217,7 +217,7 @@ static void _cairo_dock_load_box_surface (void)
 		cUserPath = NULL;
 	}
 	cairo_dock_load_image_buffer (&g_pBoxBelowBuffer,
-		CAIRO_DOCK_SHARE_DATA_DIR"/box-back.png",
+		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/box-back.png",
 		iSize,
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);
@@ -270,7 +270,7 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoContainer
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;
@@ -354,7 +354,7 @@ static void _cairo_dock_draw_subdock_content_as_box_opengl (Icon *pIcon, CairoCo
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_IS_SEPARATOR (icon))
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			i --;
 			continue;

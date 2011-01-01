@@ -1,0 +1,17 @@
+
+#ifndef __GLDI_INTERNAL_CONFIG_H__
+#define __GLDI_INTERNAL_CONFIG_H__
+
+/* Defined if we can use X Extensions. */
+#cmakedefine HAVE_XEXTEND @HAVE_XEXTEND@
+
+/* Defined if we can crypt passwords. */
+#cmakedefine HAVE_LIBCRYPT @HAVE_LIBCRYPT@
+
+#define GLDI_GETTEXT_PACKAGE "@GLDI_GETTEXT_PACKAGE@"
+#define GLDI_VERSION "@VERSION@"
+#define GLDI_SHARE_DATA_DIR "@GLDI_SHARE_DATA_DIR@"
+#define AVOID_PATENT_CRAP "@AVOID_PATENT_CRAP@"
+#define GLDI_MODULES_DIR "@GLDI_MODULES_DIR@"
+
+#endif

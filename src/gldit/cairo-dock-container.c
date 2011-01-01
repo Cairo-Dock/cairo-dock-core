@@ -32,25 +32,35 @@
 #include <gtk/gtkgl.h>
 #include <GL/gl.h> 
 
-#include "cairo-dock-icons.h"
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dock-facility.h"
-#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area
+#include "cairo-dock-dock-facility.h"  // cairo_dock_is_hidden
+#include "cairo-dock-module-factory.h"  // cairo_dock_search_container_from_icon
+#include "cairo-dock-dock-manager.h"  // cairo_dock_search_dock_from_name
+#include "cairo-dock-desklet-factory.h"  // cairo_dock_search_container_from_icon
 #include "cairo-dock-log.h"
+#include "cairo-dock-config.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-callbacks.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
+#include "cairo-dock-X-manager.h"  // g_desktopGeometry
+#define _MANAGER_DEF_
 #include "cairo-dock-container.h"
 
-static gboolean s_bSticky = TRUE;
+// public (manager, config, data)
+CairoContainersParam myContainersParam;
+CairoContainersManager myContainersMgr;
+CairoContainer *g_pPrimaryContainer = NULL;
+CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 gboolean g_bUseGlitz = FALSE;
 
-CairoContainer *g_pPrimaryContainer = NULL;
+// dependancies
+extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
-extern CairoDockDesktopGeometry g_desktopGeometry;
+extern CairoDockDesktopGeometry g_desktopGeometry;  // _place_menu_on_icon
+
+// private
+static gboolean s_bSticky = TRUE;
 
 
 static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
@@ -82,7 +92,12 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	if (g_bUseOpenGL && bOpenGLWindow)
 	{
 		cairo_dock_set_gl_capabilities (pWindow);
+		pContainer->iAnimationDeltaT = myContainersParam.iGLAnimationDeltaT;
 	}
+	else
+		pContainer->iAnimationDeltaT = myContainersParam.iCairoAnimationDeltaT;
+	if (pContainer->iAnimationDeltaT == 0)
+		pContainer->iAnimationDeltaT = 30;
 	
 	g_signal_connect (G_OBJECT (pWindow),
 		"delete-event",
@@ -93,7 +108,7 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
 	pContainer->pWidget = pWindow;
 	
-	cairo_dock_install_notifications_on_object (pContainer, CAIRO_DOCK_NB_NOTIFICATIONS);  /// a terme, le faire sur chaque container et utiliser le vrai nombre de notifications (idem pour les icones)...
+	cairo_dock_install_notifications_on_object (pContainer, NB_NOTIFICATIONS_CONTAINER);  // l'implementation du container installera par-dessus ses notifications.
 	
 	if (g_pPrimaryContainer == NULL)
 	{
@@ -384,7 +399,8 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 		
 		cData = sArg->str;
 		cd_debug (" notification de drop '%s'", cData);
-		cairo_dock_notify (CAIRO_DOCK_DROP_DATA, cData, pPointedIcon, fOrder, pContainer);
+		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_DROP_DATA, cData, pPointedIcon, fOrder, pContainer);
+		cairo_dock_notify_on_object (pContainer, NOTIFICATION_DROP_DATA, cData, pPointedIcon, fOrder, pContainer);
 	}
 	
 	g_strfreev (cStringList);
@@ -413,7 +429,7 @@ static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
 	pDock->bMenuVisible = FALSE;
 	
-	cd_message ("on force a quitter");
+	g_print ("on force a quitter\n");
 	pDock->container.bInside = TRUE;
 	// on recupere la position de la souris avant le leave, car le clic droit a genere precedemment un leave-event avec des coordonnees nulles (0;0), donc le dock a perdu la position de la souris; du coup, lors du leave qu'on s'apprete a envoyer, il ne verra pas si la souris est encore dedans, et donc se cachera/retrecira, ce qu'on ne veut pas.
 	if (pDock->container.bIsHorizontal)
@@ -526,9 +542,9 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 
 
 static GtkWidget *s_pMenu = NULL;
-static gboolean _on_delete_menu (GtkWidget *widget, GdkEvent  *event, gpointer   user_data)
+static gboolean _on_destroy_menu (GtkWidget *widget, GdkEvent  *event, gpointer   user_data)
 {
-	g_print ("*** menu deleted\n");
+	g_print ("*** menu destroyed\n");
 	s_pMenu = NULL;
 	return FALSE;
 }
@@ -536,6 +552,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 {
 	if (s_pMenu != NULL)
 	{
+		g_print ("previous menu still alive\n");
 		gtk_widget_destroy (GTK_WIDGET (s_pMenu));
 		s_pMenu = NULL;
 	}
@@ -546,16 +563,117 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	
 	//\_________________________ On passe la main a ceux qui veulent y rajouter des choses.
 	gboolean bDiscardMenu = FALSE;
-	cairo_dock_notify (CAIRO_DOCK_BUILD_CONTAINER_MENU, icon, pContainer, menu, &bDiscardMenu);
+	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_BUILD_CONTAINER_MENU, icon, pContainer, menu, &bDiscardMenu);
+	cairo_dock_notify_on_object (pContainer, NOTIFICATION_BUILD_CONTAINER_MENU, icon, pContainer, menu, &bDiscardMenu);
 	if (bDiscardMenu)
 	{
 		gtk_widget_destroy (menu);
 		return NULL;
 	}
 	
-	cairo_dock_notify (CAIRO_DOCK_BUILD_ICON_MENU, icon, pContainer, menu);
-	g_signal_connect (G_OBJECT (menu), "delete-event", G_CALLBACK (_on_delete_menu), NULL);  // apparemment inutile.
+	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, icon, pContainer, menu);
+	cairo_dock_notify_on_object (pContainer, NOTIFICATION_BUILD_ICON_MENU, icon, pContainer, menu);
+	g_signal_connect (G_OBJECT (menu), "destroy", G_CALLBACK (_on_destroy_menu), NULL);  // apparemment inutile.
 	
 	s_pMenu = menu;
 	return menu;
+}
+
+
+
+  //////////////////
+ /// GET CONFIG ///
+//////////////////
+
+static gboolean get_config (GKeyFile *pKeyFile, CairoContainersParam *pContainersParam)
+{
+	gboolean bFlushConfFileNeeded = FALSE;
+	pContainersParam->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	if (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable)
+		pContainersParam->bUseFakeTransparency = TRUE;
+	
+	int iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "opengl anim freq", &bFlushConfFileNeeded, 33, NULL, NULL);
+	pContainersParam->iGLAnimationDeltaT = 1000. / iRefreshFrequency;
+	iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "cairo anim freq", &bFlushConfFileNeeded, 25, NULL, NULL);
+	pContainersParam->iCairoAnimationDeltaT = 1000. / iRefreshFrequency;
+	g_print ("iGLAnimationDeltaT: %d\n", pContainersParam->iGLAnimationDeltaT);
+	
+	//pContainersParam->bConfigPanelTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "config transparency", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	return bFlushConfFileNeeded;
+}
+
+
+  ////////////
+ /// LOAD ///
+////////////
+
+static void load (void)
+{
+	if (myContainersParam.bUseFakeTransparency)
+	{
+		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
+	}
+}
+
+
+  //////////////
+ /// RELOAD ///
+//////////////
+
+static void _set_below (CairoDock *pDock, gpointer data)
+{
+	gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), GPOINTER_TO_INT (data));
+}
+static void reload (CairoContainersParam *pPrevContainers, CairoContainersParam *pContainers)
+{
+		//\_______________ Fake Transparency.
+	if (pContainers->bUseFakeTransparency && ! pPrevContainers->bUseFakeTransparency)
+	{
+		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (TRUE));
+		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
+	}
+	else if (! pContainers->bUseFakeTransparency && pPrevContainers->bUseFakeTransparency)
+	{
+		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (FALSE));
+		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
+		g_pFakeTransparencyDesktopBg = NULL;
+	}
+}
+
+
+  //////////////
+ /// UNLOAD ///
+//////////////
+
+static void unload (void)
+{
+	g_pFakeTransparencyDesktopBg = NULL;  // no need to unref it, since everything is going to be unloaded, including the desktop_bg.
+}
+
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_containers_manager (void)
+{
+	// Manager
+	memset (&myContainersMgr, 0, sizeof (CairoContainersManager));
+	myContainersMgr.mgr.cModuleName 	= "Containers";
+	myContainersMgr.mgr.init 		= NULL;
+	myContainersMgr.mgr.load 		= load;
+	myContainersMgr.mgr.unload 		= unload;
+	myContainersMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
+	myContainersMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	myContainersMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	// Config
+	myContainersMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myContainersParam;
+	myContainersMgr.mgr.iSizeOfConfig = sizeof (CairoContainersParam);
+	// data
+	myContainersMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myContainersMgr.mgr.iSizeOfData = 0;
+	// signals
+	cairo_dock_install_notifications_on_object (&myContainersMgr, NB_NOTIFICATIONS_CONTAINER);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myContainersMgr));
 }

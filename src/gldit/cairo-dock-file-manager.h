@@ -21,15 +21,34 @@
 #ifndef __CAIRO_DOCK_FILE_MANAGER__
 #define  __CAIRO_DOCK_FILE_MANAGER__
 
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-struct.h"
+#include "cairo-dock-manager.h"
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-file-manager.h This class handles the integration into the desktop environment, which includes :
+*@file cairo-dock-file-manager.h This class manages the integration into the desktop environment, which includes :
 * - the VFS (Virtual File System)
 * - the various desktop-related tools.
 */
+
+typedef struct _CairoDesktopEnvManager CairoDesktopEnvManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoDesktopEnvManager myDesktopEnvMgr;
+#endif
+
+
+// manager
+struct _CairoDesktopEnvManager {
+	GldiManager mgr;
+	};
+
+// signals
+typedef enum {
+	NB_NOTIFICATIONS_DESKTOP_ENV
+	} CairoDesktopEnvNotifications;
+
 
 /// Type of available Desktop Environments.
 typedef enum {
@@ -121,14 +140,11 @@ struct _CairoDockDesktopEnvBackend {
 };
 
 
-/** Initialize the Desktop Environment manager. Do it after the X manager is initialized.
-*@param iForceDesktopEnv known desktop environment, or CAIRO_DOCK_UNKNOWN_ENV to let the manager guess it.
-*/
-void cairo_dock_init_desktop_environment_manager (CairoDockDesktopEnv iForceDesktopEnv);
-
 /** Register a environment backend, overwriting any previous backend.
 */
 void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend);
+
+void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv);
 
 /** List the content of a directory and turn it into a list of icons.
 */
@@ -243,6 +259,8 @@ gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, Cairo
 */
 int cairo_dock_get_file_size (const gchar *cFilePath);
 
+
+void gldi_register_desktop_environment_manager (void);
 
 G_END_DECLS
 #endif

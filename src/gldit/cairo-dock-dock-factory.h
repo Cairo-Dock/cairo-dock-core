@@ -25,8 +25,8 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-load.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-image-buffer.h"
+#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
@@ -308,7 +308,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 * @param bUpdateSize TRUE to update the size of the dock after the insertion.
 * @param bAnimated TRUE to arm the icon's animation for insertion.
 */
-#define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, myIcons.iSeparateIcons, NULL)
+#define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, myIconsParam.iSeparateIcons, NULL)
 
 /** Detach an icon from its dock, removing the unnecessary separators. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but looses its dialogs. Do nothing if the icon doesn't exist inside the dock.
 *@param icon the icon to detach.
@@ -346,7 +346,7 @@ void cairo_dock_remove_automatic_separators (CairoDock *pDock);
 */
 void cairo_dock_insert_separators_in_dock (CairoDock *pDock);
 
-Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder, CairoDockIconType iGroup);
+Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder, CairoDockIconGroup iGroup);
 
 /** Add a launcher from a common desktop file : create and add the corresponding .desktop file with the others, load the corresponding icon, and insert it inside a dock with an animtion.
 *@param cExternDesktopFileURI path to a desktop file.

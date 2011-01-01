@@ -22,61 +22,35 @@
 
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-icons.h"
-#include "cairo-dock-load.h"
+#include "cairo-dock-desklet-factory.h"  // cairo_dock_fm_create_icon_from_URI
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-internal-system.h"
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-X-utilities.h"  // cairo_dock_property_is_present_on_root
+#define _MANAGER_DEF_
 #include "cairo-dock-file-manager.h"
 
+// public (manager, config, data)
+CairoDesktopEnvManager myDesktopEnvMgr;
 CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
+// dependancies
+
+// private
 static CairoDockDesktopEnvBackend *s_pEnvBackend = NULL;
 
 
-static inline CairoDockDesktopEnv _guess_environment (void)
+void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv)
 {
-	const gchar * cEnv = g_getenv ("GNOME_DESKTOP_SESSION_ID");
-	if (cEnv != NULL && *cEnv != '\0')
-		return CAIRO_DOCK_GNOME;
-	
-	cEnv = g_getenv ("KDE_FULL_SESSION");
-	if (cEnv != NULL && *cEnv != '\0')
-		return CAIRO_DOCK_KDE;
-	
-	cEnv = g_getenv ("KDE_SESSION_UID");
-	if (cEnv != NULL && *cEnv != '\0')
-		return CAIRO_DOCK_KDE;
-	
-	if (cairo_dock_property_is_present_on_root ("_DT_SAVE_MODE"))
-		return CAIRO_DOCK_XFCE;
-	
-	gchar *cKWin = cairo_dock_launch_command_sync ("pgrep kwin");
-	if (cKWin != NULL && *cKWin != '\0')
-	{
-		g_free (cKWin);
-		return CAIRO_DOCK_KDE;
-	}
-	g_free (cKWin);
-	
-	return CAIRO_DOCK_UNKNOWN_ENV;
-	
+	g_return_if_fail (s_pEnvBackend == NULL);
+	g_iDesktopEnv = iForceDesktopEnv;
 }
-void cairo_dock_init_desktop_environment_manager (CairoDockDesktopEnv iForceDesktopEnv)
-{
-	if (iForceDesktopEnv != CAIRO_DOCK_UNKNOWN_ENV)
-		g_iDesktopEnv = iForceDesktopEnv;
-	else
-		g_iDesktopEnv = _guess_environment ();
-	cd_debug ("desktop environment : %d", g_iDesktopEnv);
-}
-
 
 void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend)
 {
@@ -418,7 +392,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 	}
 	if (bIsDirectory)
 		pNewIcon->iVolumeID = -1;
-	//g_print ("%s -> %s\n", cURI, pNewIcon->cFileName);
+	g_print ("%s -> %s ; %s\n", cURI, pNewIcon->cCommand, pNewIcon->cBaseURI);
 
 	if (iFileSortType == CAIRO_DOCK_FM_SORT_BY_NAME)
 	{
@@ -479,4 +453,70 @@ int cairo_dock_get_file_size (const gchar *cFilePath)
 	}
 	else
 		return 0;
+}
+
+
+  ////////////
+ /// INIT ///
+////////////
+
+static inline CairoDockDesktopEnv _guess_environment (void)
+{
+	const gchar * cEnv = g_getenv ("GNOME_DESKTOP_SESSION_ID");
+	if (cEnv != NULL && *cEnv != '\0')
+		return CAIRO_DOCK_GNOME;
+	
+	cEnv = g_getenv ("KDE_FULL_SESSION");
+	if (cEnv != NULL && *cEnv != '\0')
+		return CAIRO_DOCK_KDE;
+	
+	cEnv = g_getenv ("KDE_SESSION_UID");
+	if (cEnv != NULL && *cEnv != '\0')
+		return CAIRO_DOCK_KDE;
+	
+	if (cairo_dock_property_is_present_on_root ("_DT_SAVE_MODE"))
+		return CAIRO_DOCK_XFCE;
+	
+	gchar *cKWin = cairo_dock_launch_command_sync ("pgrep kwin");
+	if (cKWin != NULL && *cKWin != '\0')
+	{
+		g_free (cKWin);
+		return CAIRO_DOCK_KDE;
+	}
+	g_free (cKWin);
+	
+	return CAIRO_DOCK_UNKNOWN_ENV;
+	
+}
+static void init (void)
+{
+	g_iDesktopEnv = _guess_environment ();
+}
+
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_desktop_environment_manager (void)
+{
+	// Manager
+	memset (&myDesktopEnvMgr, 0, sizeof (CairoDesktopEnvManager));
+	myDesktopEnvMgr.mgr.cModuleName 	= "Desktop Env";
+	myDesktopEnvMgr.mgr.init 			= init;
+	myDesktopEnvMgr.mgr.load 			= NULL;
+	myDesktopEnvMgr.mgr.unload 			= NULL;
+	myDesktopEnvMgr.mgr.reload 			= (GldiManagerReloadFunc)NULL;
+	myDesktopEnvMgr.mgr.get_config 		= (GldiManagerGetConfigFunc)NULL;
+	myDesktopEnvMgr.mgr.reset_config	 = (GldiManagerResetConfigFunc)NULL;
+	// Config
+	myDesktopEnvMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
+	myDesktopEnvMgr.mgr.iSizeOfConfig = 0;
+	// data
+	myDesktopEnvMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myDesktopEnvMgr.mgr.iSizeOfData = 0;
+	// signals
+	cairo_dock_install_notifications_on_object (&myDesktopEnvMgr, NB_NOTIFICATIONS_DESKTOP_ENV);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myDesktopEnvMgr));
 }

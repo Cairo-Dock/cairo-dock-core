@@ -34,6 +34,7 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-config.h"  // cairo_dock_load_current_theme
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-gui-themes.h"
@@ -96,7 +97,7 @@ static void _make_widgets (GtkWidget *pThemeManager, GKeyFile *pKeyFile)
 }
 
 
-static void _load_theme (gboolean bSuccess, gpointer data)
+static void _load_theme (gboolean bSuccess, GtkWidget *pWaitingDialog)
 {
 	if (s_pThemeManager == NULL)  // si l'utilisateur a ferme la fenetre entre-temps, on considere qu'il a abandonne.
 		return ;
@@ -109,6 +110,7 @@ static void _load_theme (gboolean bSuccess, gpointer data)
 	}
 	else
 		cairo_dock_set_status_message (s_pThemeManager, _("Could not import the theme."));
+	gtk_widget_destroy (pWaitingDialog);
 }
 
 static void on_theme_destroy (gchar *cInitConfFile)
@@ -126,7 +128,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 	int r;  // resultat de system().
 	
 	//\___________________ On recupere l'onglet courant.
-	GtkWidget * pMainVBox= gtk_bin_get_child (GTK_BIN (s_pThemeManager));
+	GtkWidget * pMainVBox = gtk_bin_get_child (GTK_BIN (s_pThemeManager));
 	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
 	g_return_val_if_fail (children != NULL, FALSE);
 	GtkWidget *pGroupWidget = children->data;
@@ -143,7 +145,7 @@ static gboolean on_theme_apply (gchar *cInitConfFile)
 	{
 		case 0:  // load a theme
 			cairo_dock_set_status_message (s_pThemeManager, _("Importing theme ..."));
-			cairo_dock_load_theme (pKeyFile, (GFunc) _load_theme);  // bReloadWindow reste a FALSE, on ne rechargera la fenetre que lorsque le theme aura ete importe.
+			cairo_dock_load_theme (pKeyFile, (GFunc) _load_theme, s_pThemeManager);  // bReloadWindow reste a FALSE, on ne rechargera la fenetre que lorsque le theme aura ete importe.
 		break;
 		
 		case 1:  // save current theme

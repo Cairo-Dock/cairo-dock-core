@@ -29,12 +29,12 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "../config.h"
+#include "gldi-config.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-icons.h"
-#include "cairo-dock-modules.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
@@ -43,16 +43,18 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-internal-system.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-X-manager.h"
+#define _MANAGER_DEF_
 #include "cairo-dock-flying-container.h"
 
 #define HAND_WIDTH 80
 #define HAND_HEIGHT 50
 #define EXPLOSION_NB_FRAMES 10
+
+CairoFlyingManager myFlyingsMgr;
 
 extern CairoContainer *g_pPrimaryContainer;
 extern CairoDockDesktopGeometry g_desktopGeometry;
@@ -71,7 +73,7 @@ static void _cairo_dock_load_hand_image (int iWidth)
 	if (s_pHandSurface != NULL || s_iHandTexture != 0)
 		return ;
 	
-	s_pHandSurface = cairo_dock_create_surface_from_image (CAIRO_DOCK_SHARE_DATA_DIR"/hand.svg",
+	s_pHandSurface = cairo_dock_create_surface_from_image (GLDI_SHARE_DATA_DIR"/hand.svg",
 		1.,
 		iWidth, 0.,
 		CAIRO_DOCK_KEEP_RATIO,
@@ -98,7 +100,7 @@ static void _cairo_dock_load_explosion_image (int iWidth)
 	}
 	else
 	{
-		s_pExplosionSurface = cairo_dock_create_surface_for_icon (CAIRO_DOCK_SHARE_DATA_DIR"/explosion/explosion.png",
+		s_pExplosionSurface = cairo_dock_create_surface_for_icon (GLDI_SHARE_DATA_DIR"/explosion/explosion.png",
 			iWidth * EXPLOSION_NB_FRAMES,
 			iWidth);
 	}
@@ -128,7 +130,7 @@ void cairo_dock_unload_flying_container_textures (void)
 	}
 }
 
-gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
+static gboolean _cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
 {
 	if (pFlyingContainer->container.iAnimationStep > 0)
 	{
@@ -145,7 +147,7 @@ gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, Ca
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext)
+static gboolean _cairo_dock_render_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext)
 {
 	Icon *pIcon = pFlyingContainer->pIcon;
 	if (pCairoContext != NULL)
@@ -234,7 +236,8 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 		
 		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pFlyingContainer));
 		
-		cairo_dock_notify (CAIRO_DOCK_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
+		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
+		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
 		
 		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
 			gdk_gl_drawable_swap_buffers (pGlDrawable);
@@ -246,7 +249,8 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 	{
 		cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pFlyingContainer));
 		
-		cairo_dock_notify (CAIRO_DOCK_RENDER_FLYING_CONTAINER, pFlyingContainer, pCairoContext);
+		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, pCairoContext);
+		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, pCairoContext);
 		
 		cairo_destroy (pCairoContext);
 	}
@@ -288,15 +292,15 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	CairoFlyingContainer * pFlyingContainer = g_new0 (CairoFlyingContainer, 1);
 	pFlyingContainer->container.iType = CAIRO_DOCK_TYPE_FLYING_CONTAINER;
 	GtkWidget* pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pFlyingContainer));
+	cairo_dock_install_notifications_on_object (pFlyingContainer, NB_NOTIFICATIONS_FLYING_CONTAINER);
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
-	pFlyingContainer->container.pWidget = pWindow;
+	
 	pFlyingContainer->pIcon = pFlyingIcon;
 	pFlyingContainer->container.bIsHorizontal = TRUE;
 	pFlyingContainer->container.bDirectionUp = TRUE;
 	pFlyingContainer->container.fRatio = 1.;
 	pFlyingContainer->container.bUseReflect = FALSE;
-	cairo_dock_set_default_animation_delta_t (pFlyingContainer);
 	
 	g_signal_connect (G_OBJECT (pWindow),
 		"expose-event",
@@ -403,4 +407,59 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 			pFlyingContainer->container.iWindowPositionX + pFlyingContainer->container.iWidth/2,
 			pFlyingContainer->container.iWindowPositionY + pFlyingContainer->container.iHeight/2);
 	}
+}
+
+
+  //////////////
+ /// UNLOAD ///
+//////////////
+
+static void unload (void)
+{
+	cairo_dock_unload_flying_container_textures ();
+}
+
+
+  ////////////
+ /// INIT ///
+////////////
+
+static void init (void)
+{
+	cairo_dock_register_notification_on_object (&myFlyingsMgr,
+		NOTIFICATION_UPDATE_FLYING_CONTAINER,
+		(CairoDockNotificationFunc) _cairo_dock_update_flying_container_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myFlyingsMgr,
+		NOTIFICATION_RENDER_FLYING_CONTAINER,
+		(CairoDockNotificationFunc) _cairo_dock_render_flying_container_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+}
+
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+void gldi_register_flying_manager (void)
+{
+	// Manager
+	memset (&myFlyingsMgr, 0, sizeof (CairoFlyingManager));
+	myFlyingsMgr.mgr.cModuleName 	= "Flying";
+	myFlyingsMgr.mgr.init 			= init;
+	myFlyingsMgr.mgr.load 			= NULL;  // data loaded on the 1st creation.
+	myFlyingsMgr.mgr.unload 		= unload;
+	myFlyingsMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
+	myFlyingsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
+	myFlyingsMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)NULL;
+	// Config
+	myFlyingsMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
+	myFlyingsMgr.mgr.iSizeOfConfig = 0;
+	// data
+	myFlyingsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myFlyingsMgr.mgr.iSizeOfData = 0;
+	// signals
+	cairo_dock_install_notifications_on_object (&myFlyingsMgr, NB_NOTIFICATIONS_FLYING_CONTAINER);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myFlyingsMgr));
 }

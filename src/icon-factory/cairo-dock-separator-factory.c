@@ -28,7 +28,7 @@
 #include <cairo-glitz.h>
 #endif
 
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-separator-factory.h"
 
 
@@ -37,7 +37,7 @@ Icon *cairo_dock_new_separator_icon (int iSeparatorType)
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_icon ();
 	icon->iTrueType = CAIRO_DOCK_ICON_TYPE_SEPARATOR;
-	icon->iType = iSeparatorType;
+	icon->iGroup = iSeparatorType;
 	
 	return icon;
 }

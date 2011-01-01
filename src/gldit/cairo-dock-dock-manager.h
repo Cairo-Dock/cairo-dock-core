@@ -17,13 +17,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CAIRO_DOCK_MANAGER__
-#define  __CAIRO_DOCK_MANAGER__
+#ifndef __CAIRO_DOCK_DOCK_MANAGER__
+#define  __CAIRO_DOCK_DOCK_MANAGER__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-icons.h"
+#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-dock-factory.h"
 G_BEGIN_DECLS
 
@@ -32,9 +32,70 @@ G_BEGIN_DECLS
 * Each Dock has a name that is unique. A Dock can be a sub-dock or a root-dock, whether there exists an icon that points on it or not, but there is no fundamental difference between both.
 */
 
+typedef struct _CairoDocksParam CairoDocksParam;
+typedef struct _CairoDocksManager CairoDocksManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoDocksParam myDocksParam;
+extern CairoDocksManager myDocksMgr;
+#endif
+
+// params
+struct _CairoDocksParam {
+	// frame
+	gint iDockRadius;
+	gint iDockLineWidth;
+	gint iFrameMargin;
+	gdouble fLineColor[4];
+	gboolean bRoundedBottomCorner;
+	// background
+	gchar *cBackgroundImageFile;
+	gdouble fBackgroundImageAlpha;
+	gboolean bBackgroundImageRepeat;
+	gint iNbStripes;
+	gdouble fStripesWidth;
+	gdouble fStripesColorBright[4];
+	gdouble fStripesColorDark[4];
+	gdouble fStripesAngle;
+	// position
+	gint iGapX, iGapY;
+	CairoDockPositionType iScreenBorder;
+	gdouble fAlign;
+	gboolean bUseXinerama;
+	gint iNumScreen;
+	// Root dock visibility
+	CairoDockVisibility iVisibility;
+	gchar *cHideEffect;
+	gint iCallbackMethod;
+	gint iZoneWidth, iZoneHeight;
+	gchar *cZoneImage;
+	gdouble fZoneAlpha;
+	gchar *cRaiseDockShortcut;
+	gint iUnhideDockDelay;
+	//Sub-Dock visibility
+	gboolean bShowSubDockOnClick;
+	gint iShowSubDockDelay;
+	gint iLeaveSubDockDelay;
+	gboolean bAnimateSubDock;
+	// others
+	gboolean bAutoHideOnFullScreen;
+	gint iMaxAuthorizedWidth;
+	gboolean bExtendedMode;
+	gboolean bLockIcons;
+	gboolean bLockAll;
+	};
+
+// manager
+struct _CairoDocksManager {
+	GldiManager mgr;
+	CairoDock *(*cairo_dock_create_dock) (const gchar *cDockName, const gchar *cRendererName);
+	void (*destroy_dock) (CairoDock *pDock, const gchar *cDockName);
+	} ;
+
+/// signals
 typedef enum {
 	/// notification called when the mouse enters a dock.
-	NOTIFICATION_ENTER_DOCK,
+	NOTIFICATION_ENTER_DOCK = NB_NOTIFICATIONS_CONTAINER,
 	/// notification called when the mouse leave a dock.
 	NOTIFICATION_LEAVE_DOCK,
 	/// notification called when a dock is updated in the fast rendering loop.
@@ -45,24 +106,23 @@ typedef enum {
 	NOTIFICATION_RENDER_DOCK,
 	/// notification called when a dock is stopped, for instance before it is destroyed.
 	NOTIFICATION_STOP_DOCK,
-	NB_NOTIFICATIONS_DOCK
-	} CairoDockNotifications;
-
-struct _CairoDockDockManager {
-	CairoDockManager mgr;
-	CairoDock *(*cairo_dock_create_dock) (const gchar *cDockName, const gchar *cRendererName);
-	void (*destroy_dock) (CairoDock *pDock, const gchar *cDockName);
-	} ;
+	/// notification called when an icon has just been inserted into a dock. data : {Icon, CairoDock}
+	NOTIFICATION_INSERT_ICON,
+	/// notification called when an icon is going to be removed from a dock. data : {Icon, CairoDock}
+	NOTIFICATION_REMOVE_ICON,
+	/// notification called when an icon is moved inside a dock. data : {Icon, CairoDock}
+	NOTIFICATION_ICON_MOVED,
+	/// 
+	NB_NOTIFICATIONS_DOCKS
+	} CairoDocksNotifications;
 
 
 void cairo_dock_init_dock_manager (void);
 
 void cairo_dock_force_docks_above (void);
 
-void cairo_dock_load_visible_zone (const gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha);
 
 void cairo_dock_reset_docks_table (void);
-
 
 /** Create a new root dock.
 * @param cDockName name of the dock, used to identify it quickly. If the name is already used, the corresponding dock is returned.
@@ -93,11 +153,6 @@ CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDoc
 void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName);
 
 
-/** Destroy all docks and all icons contained inside, and free all allocated ressources. Applets and Taskbar are stopped beforehand.
-*/
-void cairo_dock_free_all (void);
-
-
 /** Search the name of a Dock. It does a linear search in the table of Docks.
 * @param pDock the dock.
 * @return the name of the dock, or NULL if not found.
@@ -121,32 +176,12 @@ Icon *cairo_dock_search_icon_pointing_on_dock (CairoDock *pDock, CairoDock **pPa
 gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 
-CairoDock *cairo_dock_alter_dock_name (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
-
 /** Rename a dock. Update the container's name of all of its icons.
 *@param cDockName name of the dock.
 *@param pDock the dock (optional).
 *@param cNewName the new name.
 */
 void cairo_dock_rename_dock (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
-
-/** Execute an action on all icons.
-*@param pFunction the action.
-*@param pUserData data passed to the callback.
-*/
-void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData);
-
-/** Execute an action on all icons being inside a dock.
-*@param pFunction the action.
-*@param pUserData data passed to the callback.
-*/
-void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
-
-/** Execute an action on all icons being inside a desklet.
-*@param pFunction the action.
-*@param pUserData data passed to the callback.
-*/
-void cairo_dock_foreach_icons_in_desklets (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 /** Execute an action on all docks.
 *@param pFunction the action.
@@ -160,6 +195,12 @@ void cairo_dock_foreach_docks (GHFunc pFunction, gpointer pUserData);
 */
 void cairo_dock_foreach_root_docks (GFunc pFunction, gpointer pUserData);
 
+/** Execute an action on all icons being inside a dock.
+*@param pFunction the action.
+*@param pUserData data passed to the callback.
+*/
+void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+
 
 /** Recursively hides all the parent docks of a sub-dock.
 *@param pDock the (sub)dock.
@@ -168,6 +209,7 @@ void cairo_dock_hide_parent_dock (CairoDock *pDock);
 
 /** Recursively hides all the sub-docks of a given dock.
 *@param pDock the dock.
+* @return TRUE if a sub-dock has been hidden.
 */
 gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
 
@@ -239,6 +281,8 @@ void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenB
 */
 void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisibility);
 
+
+void gldi_register_docks_manager (void);
 
 G_END_DECLS
 #endif

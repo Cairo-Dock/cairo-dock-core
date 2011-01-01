@@ -22,15 +22,16 @@
 #include <stdlib.h>
 #include <cairo.h>
 
-#include "cairo-dock-load.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-icon-loader.h"
+#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-module-manager.h"  // cairo_dock_write_active_modules
+#include "cairo-dock-module-factory.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-internal-icons.h"
 #include "cairo-dock-applet-factory.h"
 #include "cairo-dock-applet-manager.h"
 
