@@ -256,7 +256,7 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
 		gchar *cMessage = g_strdup_printf (_("Happy new year %d !!!"), s_iLastYear);
 		gchar *cMessageFull = g_strdup_printf ("\n%s :-)\n", cMessage);
-		cairo_dock_show_temporary_dialog_with_icon (cMessageFull, pIcon, CAIRO_CONTAINER (g_pMainDock), 15000., CAIRO_DOCK_SHARE_DATA_DIR"/icons/balloons-aj.svg");
+		cairo_dock_show_temporary_dialog_with_icon (cMessageFull, pIcon, CAIRO_CONTAINER (g_pMainDock), 15000., CAIRO_DOCK_SHARE_DATA_DIR"/icons/balloons.png");
 		g_free (cMessageFull);
 		g_free (cMessage);
 	}
