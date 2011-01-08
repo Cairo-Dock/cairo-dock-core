@@ -100,7 +100,7 @@ int cairo_dock_get_nb_modules (void)
 
 static void _cairo_dock_write_one_module_name (const gchar *cModuleName, CairoDockModule *pModule, GString *pString)
 {
-	if (pModule->pInstancesList != NULL && ! cairo_dock_module_is_auto_loaded (pModule) && pModule->cSoFilePath != NULL)
+	if (pModule->pInstancesList != NULL && ! cairo_dock_module_is_auto_loaded (pModule))
 	{
 		g_string_append_printf (pString, "%s;", cModuleName);
 	}
@@ -139,7 +139,7 @@ gboolean cairo_dock_register_module (CairoDockModule *pModule)
 	
 	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
 	
-	if (cairo_dock_module_is_auto_loaded (pModule))  // c'est un module qui soit ne peut etre activer et/ou desactiver, soit etend un manager; on l'activera donc automatiquement.
+	if (cairo_dock_module_is_auto_loaded (pModule))  // c'est un module qui soit ne peut etre active ou desactive, soit etend un manager; on l'activera donc automatiquement (et avant les autres modules).
 		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
 	
 	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, TRUE);

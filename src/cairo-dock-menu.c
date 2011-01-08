@@ -1188,6 +1188,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	data[2] = menu;
 	GtkWidget *pMenuItem, *image;
 	
+	gchar *cLabel;
 	gboolean bAddSeparator = ! (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount > 0);  // pas sur les sous-docks.
 	
 	//\_________________________ Si pas d'icone dans un dock, on s'arrete la.
@@ -1323,9 +1324,21 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximise") : _("Maximise"), icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icon-restore.png" : CAIRO_DOCK_SHARE_DATA_DIR"/icon-maximize.png", _cairo_dock_maximize_appli, menu);
 		
 		if (! icon->bIsHidden)
-			_add_entry_in_menu (_("Minimise"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-minimize.png", _cairo_dock_minimize_appli, menu);
-
-		_add_entry_in_menu (_("Close (middle-click)"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-close.png", _cairo_dock_close_appli, menu);
+		{
+			if (myTaskbarParam.iActionOnMiddleClick == 2)  // minimize
+				cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
+			else
+				cLabel = g_strdup (_("Minimise"));
+			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icon-minimize.png", _cairo_dock_minimize_appli, menu);
+			g_free (cLabel);
+		}
+		
+		if (myTaskbarParam.iActionOnMiddleClick == 1)  // close
+			cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
+		else
+			cLabel = g_strdup (_("Close"));
+		_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icon-close.png", _cairo_dock_close_appli, menu);
+		g_free (cLabel);
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{

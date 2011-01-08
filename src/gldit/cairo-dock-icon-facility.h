@@ -47,6 +47,7 @@ G_BEGIN_DECLS
 
 /** Get the type of an icon according to its content (launcher, appli, applet). This can be different from its group.
 *@param icon the icon.
+*@return the type of the icon.
 */
 CairoDockIconGroup cairo_dock_get_icon_type (Icon *icon);
 

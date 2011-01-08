@@ -389,18 +389,23 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	cd_message ("%s (%s)", __func__, cConfFilePath);
 	
 	//\____________________ On cree une instance du module.
-	//CairoDockModuleInstance *pInstance = g_new0 (CairoDockModuleInstance, 1);
-	CairoDockModuleInstance *pInstance = calloc (1, sizeof (CairoDockModuleInstance) + pModule->pVisitCard->iSizeOfConfig + pModule->pVisitCard->iSizeOfData);
+	CairoDockModuleInstance *pInstance = calloc (1, sizeof (CairoDockModuleInstance) + pModule->pVisitCard->iSizeOfConfig + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
 	pInstance->pModule = pModule;
 	pInstance->cConfFilePath = cConfFilePath;
-	/*if (pModule->pVisitCard->iSizeOfConfig > 0)
-		pInstance->pConfig = g_new0 (gpointer, pModule->pVisitCard->iSizeOfConfig);
+	if (pModule->pVisitCard->iSizeOfConfig > 0)
+		pInstance->pConfig = ( ((gpointer)pInstance) + sizeof(CairoDockModuleInstance) );
 	if (pModule->pVisitCard->iSizeOfData > 0)
-		pInstance->pData = g_new0 (gpointer, pModule->pVisitCard->iSizeOfData);*/
+		pInstance->pData = ( ((gpointer)pInstance) + sizeof(CairoDockModuleInstance) + pModule->pVisitCard->iSizeOfConfig);
 	
 	CairoDockMinimalAppletConfig *pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
 	GKeyFile *pKeyFile = cairo_dock_pre_read_module_instance_config (pInstance, pMinimalConfig);
-	g_return_val_if_fail (cConfFilePath == NULL || pKeyFile != NULL, NULL);  // protection en cas de fichier de conf illisible.
+	if (cConfFilePath != NULL && pKeyFile == NULL)  // we have a conf file, but it was unreadable -> cancel
+	{
+		cd_warning ("unreadable config file (%s) for applet %s", cConfFilePath, pModule->pVisitCard->cModuleName);
+		g_free (pMinimalConfig);
+		free (pInstance);
+		return NULL;
+	}
 	pModule->pInstancesList = g_list_prepend (pModule->pInstancesList, pInstance);
 	
 	//\____________________ On cree le container de l'instance, ainsi que son icone.
@@ -581,7 +586,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	CairoDesklet *pNewDesklet = NULL;
 	
 	//\______________ On recharge la config minimale.
-	gboolean bModuleReloaded = FALSE;
 	Icon *pIcon = pInstance->pIcon;
 	GKeyFile *pKeyFile = NULL;
 	CairoDockMinimalAppletConfig *pMinimalConfig = NULL;
@@ -727,7 +731,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 
 	//\_______________________ On recharge l'instance.
 	if (bCanReload && module->pInterface->reloadModule != NULL)
-		bModuleReloaded = module->pInterface->reloadModule (pInstance, pCurrentContainer, pKeyFile);
+		module->pInterface->reloadModule (pInstance, pCurrentContainer, pKeyFile);
 	
 	if (pNewContainer != pCurrentContainer && pNewDock != NULL && pCurrentDock != NULL && pIcon != NULL && pIcon->pSubDock != NULL)
 	{

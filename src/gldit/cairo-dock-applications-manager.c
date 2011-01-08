@@ -1349,7 +1349,7 @@ static void _load_appli (Icon *icon)
 	}
 	
 	// on trouve son .desktop puis ses mime-types.
-	if (icon->cClass && !icon->pMimeTypes)
+	if (icon->cClass && !icon->pMimeTypes && ! icon->cCommand)
 	{
 		gboolean bFound = TRUE;
 		GString *sDesktopFilePath = g_string_new ("");
@@ -1509,8 +1509,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		
 		
 		// interaction
+		pTaskBar->iActionOnMiddleClick = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "action on middle click", &bFlushConfFileNeeded, 1, NULL, NULL);
 		pTaskBar->bMinimizeOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "minimize on click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
-		pTaskBar->bCloseAppliOnMiddleClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "close on middle click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 		
 		pTaskBar->bDemandsAttentionWithDialog = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "demands attention with dialog", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 		pTaskBar->iDialogDuration = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "duration", &bFlushConfFileNeeded, 2, NULL, NULL);

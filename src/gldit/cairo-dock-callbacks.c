@@ -487,7 +487,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	{
 		//g_print ("%s (%d,%d) (%d, %.2fms, bAtBottom:%d; bIsShrinkingDown:%d)\n", __func__, (int) pMotion->x, (int) pMotion->y, pMotion->is_hint, pMotion->time - fLastTime, pDock->bAtBottom, pDock->bIsShrinkingDown);
 		//\_______________ On deplace le dock si ALT est enfoncee.
-		if ((pMotion->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pMotion->state & GDK_BUTTON1_MASK))
+		if ((pMotion->state & GDK_MOD1_MASK) && (pMotion->state & GDK_BUTTON1_MASK))
 		{
 			if (pDock->container.bIsHorizontal)
 			{
@@ -743,7 +743,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 {
 	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
 	//\_______________ On tire le dock => on ignore le signal.
-	if (pEvent != NULL && (pEvent->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && (pEvent->state & GDK_BUTTON1_MASK))
+	if (pEvent != NULL && (pEvent->state & GDK_MOD1_MASK) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
 		return FALSE;
 	}
@@ -1004,7 +1004,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	else if (pKey->type == GDK_KEY_RELEASE)
 	{
 		//g_print ("release : pKey->keyval = %d\n", pKey->keyval);
-		if ((pKey->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
+		if ((pKey->state & GDK_MOD1_MASK) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
 			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
 				cairo_dock_write_root_dock_gaps (pDock);
@@ -1077,7 +1077,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					return TRUE;
 				}
 				
-				if ( ! (pButton->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
+				if ( ! (pButton->state & GDK_MOD1_MASK))
 				{
 					if (s_pIconClicked != NULL)
 					{
@@ -1191,7 +1191,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 			break ;
 			
 			case GDK_BUTTON_PRESS :
-				if ( ! (pButton->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
+				if ( ! (pButton->state & GDK_MOD1_MASK))
 				{
 					//g_print ("+ clic sur %s (%.2f)!\n", icon ? icon->cName : "rien", icon ? icon->fInsertRemoveFactor : 0.);
 					s_iClickX = pButton->x;

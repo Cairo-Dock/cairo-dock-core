@@ -989,7 +989,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
 	
 	if (pSubDock->container.bIsHorizontal)
-			gdk_window_move_resize (pSubDock->container.pWidget->window,
+		gdk_window_move_resize (pSubDock->container.pWidget->window,
 			iNewPositionX,
 			iNewPositionY,
 			iNewWidth,

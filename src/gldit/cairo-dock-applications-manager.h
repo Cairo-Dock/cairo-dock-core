@@ -46,7 +46,7 @@ struct _CairoTaskbarParam {
 	gboolean bGroupAppliByClass;
 	gint iAppliMaxNameLength;
 	gboolean bMinimizeOnClick;
-	gboolean bCloseAppliOnMiddleClick;
+	gint iActionOnMiddleClick;
 	gboolean bHideVisibleApplis;
 	gdouble fVisibleAppliAlpha;
 	gboolean bAppliOnCurrentDesktopOnly;

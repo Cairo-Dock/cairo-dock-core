@@ -304,6 +304,8 @@ static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, Cai
 	pFakeClassIcon->iGroup = pSameClassIcon->iGroup;
 	
 	pFakeClassIcon->cName = g_strdup (pSameClassIcon->cClass);
+	pFakeClassIcon->cCommand = g_strdup (pSameClassIcon->cCommand);
+	pFakeClassIcon->pMimeTypes = g_strdupv (pSameClassIcon->pMimeTypes);
 	pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
 	pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
 	pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
