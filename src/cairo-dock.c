@@ -56,7 +56,7 @@
 **    great deal by sending me additional tweaked and optimized versions. I've
 **    now merged all that with my recent additions.
 **
-*********************** VERSION 0.1.0 and above (2007-2010)*********************
+*********************** VERSION 0.1.0 and above (2007-2011)*********************
 **
 ** author(s) :
 **     Fabrice Rey <fabounet@glx-dock.org>

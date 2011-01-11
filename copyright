@@ -1,8 +1,8 @@
 X-Source-Downloaded-From: https://launchpad.net/cairo-dock
 X-Upstream-Author: Fabrice Rey <fabounet@glx-dock.org>.
 
-Files: 	src/*
-Copyright: Fabrice Rey <fabounet@glx-dock.org>
+Files: 	*/*
+Copyright: 2007-2011 Fabrice Rey <fabounet@glx-dock.org>
 Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
