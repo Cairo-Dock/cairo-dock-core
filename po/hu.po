@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2011-01-01 04:03+0000\n"
 "PO-Revision-Date: 2010-09-18 12:48+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-19 04:46+0000\n"
+"X-Launchpad-Export-Date: 2011-01-02 04:43+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: hu\n"
 
 #: ../src/cairo-dock-gui-commons.c:215
 msgid ""
@@ -27,29 +28,24 @@ msgstr ""
 "Mentés nélkül minden módosítás elvész új téma választása esetén. Folytatja?"
 
 #: ../src/cairo-dock-gui-commons.c:241
-#, fuzzy
 msgid "Please wait while importing the theme..."
-msgstr "A téma nem importálható."
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:304
-#, fuzzy
 msgid "Bottom dock"
-msgstr "Alsó eltolás:"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:306
-#, fuzzy
 msgid "Top dock"
-msgstr "Dokk zárolása"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:311
-#, fuzzy
 msgid "Right dock"
-msgstr "Új fő dokk"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:313
-#, fuzzy
 msgid "Left dock"
-msgstr "Dokk zárolása"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:410 ../src/cairo-dock-menu.c:1373
 msgid "Configure this applet"
@@ -90,7 +86,8 @@ msgid "category"
 msgstr "Kategória"
 
 #: ../src/cairo-dock-gui-items.c:334
-msgid "Main dock's paramaters are available in the main configuration window."
+msgid ""
+"Main dock's paramaters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:571
@@ -319,19 +316,16 @@ msgid "Could not import the theme."
 msgstr "A téma nem importálható."
 
 #: ../src/cairo-dock-gui-simple.c:427
-#, fuzzy
 msgid "Importing theme..."
-msgstr "A(z) %s téma importálása…"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:434 ../src/cairo-dock-gui-themes.c:154
-#, fuzzy
 msgid "Theme has been saved"
-msgstr "A téma mentve"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:440 ../src/cairo-dock-gui-themes.c:160
-#, fuzzy
 msgid "Themes have been deleted"
-msgstr "A témák törölve"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:770
 msgid "Animation:"
@@ -342,7 +336,8 @@ msgid "Effects:"
 msgstr "Hatások:"
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Kattintson egy kisalkalmazásra az előnézet és a leírás megtekintéséhez."
 
@@ -383,18 +378,16 @@ msgstr ""
 "eszköz a jelenlegi témájának testreszabására."
 
 #: ../src/cairo-dock-gui-themes.c:147
-#, fuzzy
 msgid "Importing theme ..."
-msgstr "A(z) %s téma importálása…"
+msgstr ""
 
 #: ../src/cairo-dock-gui-themes.c:180
 msgid "Manage Themes"
 msgstr "Témakezelő"
 
 #: ../src/cairo-dock-menu.c:169
-#, fuzzy
 msgid "About Cairo-Dock"
-msgstr "Kilép a Cairo-Dockból?"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:196 ../data/messages:1287
 msgid "Community site"
@@ -507,7 +500,8 @@ msgid "Get more applets!"
 msgstr "Szerezzen még több kisalkalmazást!"
 
 #: ../src/cairo-dock-menu.c:419
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "A harmadik féltől származó kisalkalmazások biztosítják számos program, "
 "például a Pidgin integrációját"
@@ -611,24 +605,20 @@ msgid "Add"
 msgstr "Hozzáadás"
 
 #: ../src/cairo-dock-menu.c:1162
-#, fuzzy
 msgid "Sub-dock"
-msgstr "Aldokkok"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1164
-#, fuzzy
 msgid "Main dock"
-msgstr "Új fő dokk"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1167 ../data/messages:1579
-#, fuzzy
 msgid "Separator"
-msgstr "Elválasztók"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1171
-#, fuzzy
 msgid "Custom launcher"
-msgstr "Egyéni indítóikon hozzáadása"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1172
 msgid ""
@@ -903,8 +893,8 @@ msgstr ""
 "Megismerkedhet a dokkal, vagy másik témát választhat jobb egérgombbal a "
 "dokkon kattintva, majd a „Cairo-Dock → Témakezelő” menüpontot kiválasztva.\n"
 "Ha segítségre van szüksége, válassza a „Cairo-Dock → Súgó” menüpontot.\n"
-"Ha bármilyen kérdése, kívánsága,vagy észrevétele van, látogassa meg a http://"
-"glx-dock.org oldalt.\n"
+"Ha bármilyen kérdése, kívánsága,vagy észrevétele van, látogassa meg a "
+"http://glx-dock.org oldalt.\n"
 "Reméljük hogy örömét leli a program használatában!\n"
 "  (A párbeszédablak bezárásához kattintson rá.)"
 
@@ -1001,9 +991,8 @@ msgid "_Custom Icons_"
 msgstr "_Egyéni Ikonok_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1426
-#, fuzzy
 msgid "Rate me"
-msgstr "Értékelje"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1561
 #: ../src/gldit/cairo-dock-gui-factory.c:1563
@@ -1368,9 +1357,8 @@ msgid "Add-ons"
 msgstr "Bővítmények"
 
 #: ../data/messages:125
-#, fuzzy
 msgid "Add or remove any applet"
-msgstr "Kisalkalmazás hozzáadása/eltávolítása:"
+msgstr ""
 
 #: ../data/messages:127
 msgid ""
@@ -2200,7 +2188,8 @@ msgid "Zoom effect"
 msgstr "Nagyítás"
 
 #: ../data/messages:629
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Állítsa 1-re, ha nem akarja hogy az ikonok kinagyítódjanak, amikor lebegteti "
 "őket."
@@ -2514,8 +2503,8 @@ msgstr "nagyobb"
 
 #: ../data/messages:783
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:785
@@ -2575,7 +2564,8 @@ msgstr "Az összes ikonon"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr "Minél nagyobb, annál több címke lesz átlátszó a mutatott ikon mellett."
+msgstr ""
+"Minél nagyobb, annál több címke lesz átlátszó a mutatott ikon mellett."
 
 #: ../data/messages:817
 msgid "label's visibility threshold :"
@@ -2750,8 +2740,8 @@ msgstr ""
 
 #: ../data/messages:889
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr "Csak fogd meg és húzd a dokkon kívülre, ahol látványosan felrobban!"
 
 #: ../data/messages:891
@@ -2769,8 +2759,8 @@ msgstr ""
 
 #: ../data/messages:895
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 "Az \"Ikonok\" modulban minden ikontípus méretét megadhatod: indítóikonokét, "
@@ -2986,8 +2976,8 @@ msgid ""
 "dock, and for sub-dock."
 msgstr ""
 "Bármelyik dokknak megadhatsz bármilyen megjelenést.\n"
-"Menj a \"Megjelenés\" modulba és válaszd ki a neked tetsző nézete(ke)t a dokk"
-"(ok)nak és aldokk(ok)nak."
+"Menj a \"Megjelenés\" modulba és válaszd ki a neked tetsző nézete(ke)t a "
+"dokk(ok)nak és aldokk(ok)nak."
 
 #: ../data/messages:973
 msgid "Go to the «Views» module."
@@ -3044,8 +3034,8 @@ msgid ""
 "this would be a shame ! ^_^"
 msgstr ""
 "Kikapcsolhatod az \"Ikon hatások\" beépülő modult,\n"
-" vagy az ikonok nagyítását amikor az egér föléjük mozog az \"Animált ikonok"
-"\" beépülőben.\n"
+" vagy az ikonok nagyítását amikor az egér föléjük mozog az \"Animált "
+"ikonok\" beépülőben.\n"
 "Csökkentheted a nagyítás mértékét és/vagy tükröződését az \"Ikon\" "
 "modulban,\n"
 " lecserélheted a hátterüket a \"Háttér\" modulban, vagy beállíthatod az "
@@ -3209,8 +3199,8 @@ msgstr "Bizonyos alkalmazások ikonjai nem esztétikusak."
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3462,8 +3452,9 @@ msgstr ""
 
 #: ../data/messages:1159
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3587,16 +3578,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3638,8 +3629,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1227
@@ -3767,8 +3758,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3993,9 +3984,8 @@ msgid "Desktop Entry"
 msgstr ""
 
 #: ../data/messages:1457
-#, fuzzy
 msgid "Subdock"
-msgstr "Aldokkok"
+msgstr ""
 
 #: ../data/messages:1459 ../data/messages:1543 ../data/messages:1581
 msgid ""
@@ -4112,9 +4102,8 @@ msgid "If '0' the launcher will be displayed on every viewport."
 msgstr ""
 
 #: ../data/messages:1541
-#, fuzzy
 msgid "Launcher"
-msgstr "Indítóikonok"
+msgstr ""
 
 #: ../data/messages:1549
 msgid ""
@@ -4295,8 +4284,8 @@ msgstr ""
 #: ../data/messages:1619
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4377,8 +4366,8 @@ msgstr ""
 #: ../data/messages:1631
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4460,43 +4449,6 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#~ msgid "Configuration of the '%s' dock"
-#~ msgstr "A(z) „%s” dokk beállításai"
-
-#, fuzzy
-#~ msgid "sub-dock"
-#~ msgstr "Aldokk hozzáadása"
-
-#~ msgid "The theme could not be saved"
-#~ msgstr "A téma nem menthető"
-
-#~ msgid "The theme has been deleted"
-#~ msgstr "A téma törölve"
-
-#~ msgid "The theme could not be deleted"
-#~ msgstr "A téma nem törölhető"
-
-#~ msgid "The themes could not be deleted"
-#~ msgstr "A témák nem törölhetők"
-
-#~ msgid "Add a main dock"
-#~ msgstr "Fő dokk hozzáadása"
-
-#~ msgid "Add a separator"
-#~ msgstr "Elválasztó hozzáadása"
-
-#~ msgid "Do you want to keep this setting?"
-#~ msgstr "Megtartja ezeket a beállításokat?"
-
-#~ msgid "state"
-#~ msgstr "Állapot"
-
-#~ msgid "Applets"
-#~ msgstr "Kisalkalmazások"
-
-#~ msgid "Choose one of the available themes:"
-#~ msgstr "Válasszon ki egyet az elérhető témákból:"
-
 #~ msgid "Mount"
 #~ msgstr "Csatolás"
 
@@ -4505,6 +4457,9 @@ msgstr ""
 
 #~ msgid "Eject"
 #~ msgstr "Kiadás"
+
+#~ msgid "Add a separator"
+#~ msgstr "Elválasztó hozzáadása"
 
 #~ msgid "Close"
 #~ msgstr "Bezárás"
@@ -4517,17 +4472,17 @@ msgstr ""
 #~ "'reserve space for dock',\n"
 #~ " it will be ignored"
 #~ msgstr ""
-#~ "A 'Automatikus elrejtés nagyított ablakoknál' beállítás konfliktál a "
-#~ "'Hely fenntartása a dokknak' opcióval,\n"
+#~ "A 'Automatikus elrejtés nagyított ablakoknál' beállítás konfliktál a 'Hely "
+#~ "fenntartása a dokknak' opcióval,\n"
 #~ " ezért figyelmen kívül hagyom."
 
 #~ msgid ""
-#~ "The option 'auto-hide on fullscreen window' is in conflict with the "
-#~ "option 'reserve space for dock',\n"
+#~ "The option 'auto-hide on fullscreen window' is in conflict with the option "
+#~ "'reserve space for dock',\n"
 #~ " it will be ignored"
 #~ msgstr ""
-#~ "A 'Automatikus elrejtés teljesképernyős ablakoknál' beállítás konfliktál "
-#~ "a 'Hely fenntartása a dokknak' opcióval,\n"
+#~ "A 'Automatikus elrejtés teljesképernyős ablakoknál' beállítás konfliktál a "
+#~ "'Hely fenntartása a dokknak' opcióval,\n"
 #~ " ezért figyelmen kívül hagyom."
 
 #~ msgid "How do you access to your docks ?"
@@ -4536,6 +4491,9 @@ msgstr ""
 #~ msgid "Undefined"
 #~ msgstr "Meghatározatlan"
 
+#~ msgid "The theme has been deleted"
+#~ msgstr "A téma törölve"
+
 #~ msgid "Now reloading theme ..."
 #~ msgstr "Téma újratöltése..."
 
@@ -4543,9 +4501,9 @@ msgstr ""
 #~ msgstr "-1000"
 
 #~ msgid ""
-#~ "The dock will automatically hide itself outside of the scren when the "
-#~ "mouse leaves it. Instead, it will show a zone where placing the mouse "
-#~ "will trigger the dock and make it re-appear."
+#~ "The dock will automatically hide itself outside of the scren when the mouse "
+#~ "leaves it. Instead, it will show a zone where placing the mouse will trigger "
+#~ "the dock and make it re-appear."
 #~ msgstr ""
 #~ "A dokk automatikusan elrejti magát amikor az egér nincs fölötte. Ehelyett "
 #~ "megjelenít egy területet, ami fölé helyezve az egeret, a dokk újra "
@@ -4558,25 +4516,25 @@ msgstr ""
 #~ msgstr "Szóköz"
 
 #~ msgid ""
-#~ "This will prevent other windows from overlapping the dock. It has no "
-#~ "effect if you defined the 'show/hide' shortcut below, cause then the dock "
-#~ "behaves like a menu."
+#~ "This will prevent other windows from overlapping the dock. It has no effect "
+#~ "if you defined the 'show/hide' shortcut below, cause then the dock behaves "
+#~ "like a menu."
 #~ msgstr ""
-#~ "Ez megakadályozza a többi alkalmazást a dokk eltakarásában. Nincs hatása, "
-#~ "ha az 'Automatikus elrejtés' beállítás érvényes, mivel ilyenkor a dokk "
-#~ "menüként viselkedik."
+#~ "Ez megakadályozza a többi alkalmazást a dokk eltakarásában. Nincs hatása, ha "
+#~ "az 'Automatikus elrejtés' beállítás érvényes, mivel ilyenkor a dokk menüként "
+#~ "viselkedik."
 
 #~ msgid "Shortcut"
 #~ msgstr "Gyorsbillentyű"
 
 #~ msgid ""
 #~ "The dock will pop-up on the foreground when you place the mouse on its "
-#~ "screen border. This option is only useful if you don't want to reserve "
-#~ "space for the dock, nor to activate auto-hide."
+#~ "screen border. This option is only useful if you don't want to reserve space "
+#~ "for the dock, nor to activate auto-hide."
 #~ msgstr ""
 #~ "A dokk az aktív alkalmazások elé ugrik amikor az egér a képernyő széléhez "
-#~ "ér. Ez az opció akkor jó, ha nem akarsz helyet fenntartani a dokknak és "
-#~ "nem akarod használni az automatikus elrejtést."
+#~ "ér. Ez az opció akkor jó, ha nem akarsz helyet fenntartani a dokknak és nem "
+#~ "akarod használni az automatikus elrejtést."
 
 #~ msgid "Keep the dock below other windows ?"
 #~ msgstr "A dokk maradjon a többi ablak alatt"
@@ -4592,23 +4550,22 @@ msgstr ""
 
 #~ msgid ""
 #~ "This is only usefull if don't already use the auto-hide, and if you don't "
-#~ "want to reserve the space for your dock nor let it below the other "
-#~ "windows."
+#~ "want to reserve the space for your dock nor let it below the other windows."
 #~ msgstr ""
-#~ "Ez a funkció akkor hasznos, ha még nem használod az automatikus elrejtést "
-#~ "és nem akarsz helyet fenntartani a dokknak vagy a töbi ablak alá engedni."
+#~ "Ez a funkció akkor hasznos, ha még nem használod az automatikus elrejtést és "
+#~ "nem akarsz helyet fenntartani a dokknak vagy a töbi ablak alá engedni."
 
 #~ msgid "Should the applications with same class be grouped in a sub-dock ?"
 #~ msgstr "Azonos osztályú alkalmazások ikonjainak összevonása aldokk(ok)ba"
 
 #~ msgid ""
-#~ "This allows to group windows in some soft like Gimp, and to have only 1 "
-#~ "icon in the main dock.The 1st window will appear in the main dock, and "
-#~ "the others will be placed in a container associated with this 1st icon."
+#~ "This allows to group windows in some soft like Gimp, and to have only 1 icon "
+#~ "in the main dock.The 1st window will appear in the main dock, and the others "
+#~ "will be placed in a container associated with this 1st icon."
 #~ msgstr ""
-#~ "Ez engedélyezi az olyan alkalmazások ikonjainak összevonását mint amilyen "
-#~ "a Gimp. Az első ablak fog megjelenni a dokkon, a továbbiak pedig egy "
-#~ "aldokkba kerülnek."
+#~ "Ez engedélyezi az olyan alkalmazások ikonjainak összevonását mint amilyen a "
+#~ "Gimp. Az első ablak fog megjelenni a dokkon, a továbbiak pedig egy aldokkba "
+#~ "kerülnek."
 
 #~ msgid "-.6"
 #~ msgstr "-.6"
@@ -4650,8 +4607,8 @@ msgstr ""
 #~ msgid ""
 #~ "1 pattern contains N stripes, so the width can be less or equal than 1/N."
 #~ msgstr ""
-#~ "1 minta N sávot tartalmaz, tehát a szélesség kisebb vagy egyenlő lehet "
-#~ "mint 1/N."
+#~ "1 minta N sávot tartalmaz, tehát a szélesség kisebb vagy egyenlő lehet mint "
+#~ "1/N."
 
 #~ msgid "Background movement"
 #~ msgstr "Háttérkép mozgása"
@@ -4678,18 +4635,19 @@ msgstr ""
 #~ msgstr "Helyi ikonok használata"
 
 #~ msgid ""
-#~ "These are icons located in ~/.config/cairo-dock/current_theme/icons, "
-#~ "coming from the theme you choosed. If you use this option, the dock will "
-#~ "search here first, and then in the icons theme."
+#~ "These are icons located in ~/.config/cairo-dock/current_theme/icons, coming "
+#~ "from the theme you choosed. If you use this option, the dock will search "
+#~ "here first, and then in the icons theme."
 #~ msgstr ""
-#~ "Ezek az ikonok a ~/.config/cairo-dock/current_theme/icons könyvtárban "
-#~ "vannak és a választott témához tartoznak. Ha használod ezt az opciót, "
-#~ "akkor a dokk először itt fogja keresni őket és csak utána a témában."
+#~ "Ezek az ikonok a ~/.config/cairo-dock/current_theme/icons könyvtárban vannak "
+#~ "és a választott témához tartoznak. Ha használod ezt az opciót, akkor a dokk "
+#~ "először itt fogja keresni őket és csak utána a témában."
 
+#, c-format
 #~ msgid ""
 #~ "Setting it to 0.33 will mean that 33% of the icons will reflect on the "
-#~ "ground. The icons will be placed at the right distance from the front "
-#~ "border of the frame so that the reflect is fully visible."
+#~ "ground. The icons will be placed at the right distance from the front border "
+#~ "of the frame so that the reflect is fully visible."
 #~ msgstr ""
 #~ "A 0.33-as beállítás azt jelenti hogy az ikonok 33%-a tükröződik vissza a "
 #~ "síkon. Az ikonok automatikusan olyan távolságba kerülnek a alapvonaltól, "
@@ -4714,8 +4672,8 @@ msgstr ""
 #~ "for exemple Monospace, Purisa, ... Just write the font name wihtout any "
 #~ "number or so."
 #~ msgstr ""
-#~ "Pédául Monospcae, Pursia, stb... Elég beírni a betűkészlet nevét, számok "
-#~ "és egyebek nélkül."
+#~ "Pédául Monospcae, Pursia, stb... Elég beírni a betűkészlet nevét, számok és "
+#~ "egyebek nélkül."
 
 #~ msgid "Choose a window decorator :"
 #~ msgstr "Ablakdekorátor:"
@@ -4736,8 +4694,7 @@ msgstr ""
 #~ msgstr "Állapotjelző az ikonon"
 
 #~ msgid ""
-#~ "Filename of an image to indicate that a class has been grouped in a "
-#~ "subdock :"
+#~ "Filename of an image to indicate that a class has been grouped in a subdock :"
 #~ msgstr "Osztály aldokk jelző képét tartalmazó állomány neve:"
 
 #~ msgid ""
@@ -4779,8 +4736,8 @@ msgstr ""
 #~ msgstr "A könyvtár tartalmának figyelemmel kísérése"
 
 #~ msgid ""
-#~ "In the “Icons” module, you can choose a <b>icon theme</b>. Enter a name "
-#~ "of a theme, for exemple : Human or Gartoon.\n"
+#~ "In the “Icons” module, you can choose a <b>icon theme</b>. Enter a name of a "
+#~ "theme, for exemple : Human or Gartoon.\n"
 #~ "You can even enter the path of a folder containing personnal icons.\n"
 #~ "You can enter many themes or folders, the dock will search for images in "
 #~ "them in the same order as you entered them.\n"
@@ -4788,8 +4745,8 @@ msgstr ""
 #~ msgstr ""
 #~ "Az \"Ikonok\" modulban választhatsz <b>ikon témát</b>. Beírhatod a téma "
 #~ "nevét (pl: \"Human\", \"Gartoon\", stb...),\n"
-#~ "megadhatsz egy könyvtárat ahol az ikonok elhelyezkednek, illetve több "
-#~ "témát vagy könyvtárat; \n"
+#~ "megadhatsz egy könyvtárat ahol az ikonok elhelyezkednek, illetve több témát "
+#~ "vagy könyvtárat; \n"
 #~ "a dokk a megadott sorrendben fog keresni bennük.\n"
 #~ "Ha üresen hagyod, a rendszer alapértelmezett ikon témáját fogja használni."
 
@@ -4802,6 +4759,7 @@ msgstr ""
 #~ msgid "Delete this file"
 #~ msgstr "Fájl törlése"
 
+#, c-format
 #~ msgid "couldn't retrieve distant theme %s"
 #~ msgstr "A(z) %s távoli téma nem érhető el"
 
@@ -4815,8 +4773,7 @@ msgstr ""
 #~ msgstr "Bővítmények"
 
 #~ msgid ""
-#~ "Hint : if you use it, you don't need to use the “keep the dock below "
-#~ "“option."
+#~ "Hint : if you use it, you don't need to use the “keep the dock below “option."
 #~ msgstr ""
 #~ "Tipp: Ha ezt a megoldást használod, akkor fölösleges bekapcsolni a \"Dokk "
 #~ "más alkalmazások alatt tartása\" opciót."
@@ -4827,15 +4784,21 @@ msgstr ""
 #~ msgid "You need a composite manager for it."
 #~ msgstr "Ehhez kompozitkezelőre van szüksége."
 
+#, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s csatolva"
 
+#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s leválasztva"
 
 #~ msgid "Windows7"
 #~ msgstr "Windows7"
 
+#~ msgid "state"
+#~ msgstr "Állapot"
+
+#, c-format
 #~ msgid "couldn't get the list of themes for %s (no connection ?)"
 #~ msgstr "A(z) %s témáinak listája nem érhető el (talán nincs kapcsolat?)"
 
@@ -4843,28 +4806,29 @@ msgstr ""
 #~ msgstr "Változások alkalmazása..."
 
 #~ msgid ""
-#~ "This parameter will overwrite the previously defined order, to allow you "
-#~ "to mix applets and launchers into the dock."
+#~ "This parameter will overwrite the previously defined order, to allow you to "
+#~ "mix applets and launchers into the dock."
 #~ msgstr ""
 #~ "Ez a paraméter felülírja a korábban definiált sorrendet, lehetővé téve a "
 #~ "kisalkalmazások és az indítóikonok keverését."
 
+#, c-format
 #~ msgid "Downloading file %s ..."
 #~ msgstr "%s letöltése..."
 
+#, c-format
 #~ msgid "couldn't get distant file %s"
 #~ msgstr "A(z) %s távoli fájl nem érhető el"
 
 #~ msgid ""
-#~ "To the right, you can control the transparency of minimized windows, to "
-#~ "the left the transparency of visible windows. The more you go aside, the "
-#~ "more the concerned icons will be transparent; on the middle, icons are "
-#~ "always plain."
+#~ "To the right, you can control the transparency of minimized windows, to the "
+#~ "left the transparency of visible windows. The more you go aside, the more "
+#~ "the concerned icons will be transparent; on the middle, icons are always "
+#~ "plain."
 #~ msgstr ""
 #~ "Jobbra a minimalizált ablakok átlátszóságát szabályozhatja, balra pedig a "
 #~ "látható ablakok átlátszóságát. Minél inkább elmozdul oldalra, az érintett "
-#~ "ikonok annál átlátszóbbak lesznek; középen tartva az ikonok mindig "
-#~ "láthatóak."
+#~ "ikonok annál átlátszóbbak lesznek; középen tartva az ikonok mindig láthatóak."
 
 #~ msgid "Label readability"
 #~ msgstr "A címkék olvashatósága"
@@ -4873,8 +4837,8 @@ msgstr ""
 #~ msgstr "Állítsa be a címkék megjelenését."
 
 #~ msgid ""
-#~ "If an error occurs during downloading a theme, it will retry this number "
-#~ "of times before giving up."
+#~ "If an error occurs during downloading a theme, it will retry this number of "
+#~ "times before giving up."
 #~ msgstr ""
 #~ "Ha probléma merülne fel egy téma letöltése során, ennyiszer próbálja meg "
 #~ "újra, mielőtt feladja."
@@ -4889,8 +4853,8 @@ msgstr ""
 #~ msgstr "A kép átlátszósága:"
 
 #~ msgid ""
-#~ "Use it when the image is an arrow pointing to the center of the screen "
-#~ "for exemple."
+#~ "Use it when the image is an arrow pointing to the center of the screen for "
+#~ "exemple."
 #~ msgstr ""
 #~ "Használja ezt, amikor például a kép egy, a képernyő közepére mutató nyíl."
 
@@ -4905,6 +4869,9 @@ msgstr ""
 
 #~ msgid "module"
 #~ msgstr "Modul"
+
+#~ msgid "Applets"
+#~ msgstr "Kisalkalmazások"
 
 #~ msgid "Define the appearance of the dock when it's hidden."
 #~ msgstr "A rejtett dokk megjelenésének meghatározása."
@@ -4927,18 +4894,18 @@ msgstr ""
 #~ "None     : Don't show opened windows in the dock.\n"
 #~ "MacOSX   : Mix applications with its launcher, show other windows only if "
 #~ "they are minimized.\n"
-#~ "Windows7 : Mix applications with its launcher, show all others windows "
-#~ "and group windows togather in sub-dock.\n"
+#~ "Windows7 : Mix applications with its launcher, show all others windows and "
+#~ "group windows togather in sub-dock.\n"
 #~ "Gnome    : Separate the taskbar from the launchers and only show windows "
 #~ "that are on the current desktop."
 #~ msgstr ""
 #~ "Nincs: Ne mutassa a megnyitott ablakokat a dokkon.\n"
-#~ "MacOSX: Keverje az alkalmazásokat az indítóikonjaikkal, az egyéb "
-#~ "ablakokat pedig csak akkor mutassa, ha minimalizáltak.\n"
-#~ "Windows7: Keverje az alkalmazásokat az indítóikonjaikkal, minden más "
-#~ "ablakot pedig együtt, aldokkon mutasson.\n"
-#~ "Gnome: Különítse el a feladatkezelőt az indítóikonoktól, és csak az "
-#~ "aktuális asztalon lévő ablakokat mutassa."
+#~ "MacOSX: Keverje az alkalmazásokat az indítóikonjaikkal, az egyéb ablakokat "
+#~ "pedig csak akkor mutassa, ha minimalizáltak.\n"
+#~ "Windows7: Keverje az alkalmazásokat az indítóikonjaikkal, minden más ablakot "
+#~ "pedig együtt, aldokkon mutasson.\n"
+#~ "Gnome: Különítse el a feladatkezelőt az indítóikonoktól, és csak az aktuális "
+#~ "asztalon lévő ablakokat mutassa."
 
 #~ msgid "Do you want to mount this device?"
 #~ msgstr "Szeretné csatolni ezt az eszközt?"
@@ -4949,40 +4916,55 @@ msgstr ""
 #~ msgid "Controllers"
 #~ msgstr "Vezérlők"
 
+#~ msgid "The theme could not be saved"
+#~ msgstr "A téma nem menthető"
+
+#~ msgid "The theme could not be deleted"
+#~ msgstr "A téma nem törölhető"
+
+#~ msgid "The themes could not be deleted"
+#~ msgstr "A témák nem törölhetők"
+
 #~ msgid "Rename to:"
 #~ msgstr "Átnevezés erre:"
 
-#~ msgid ""
-#~ "Icons will scroll according to what positioning model is selected. The "
-#~ "dock can of course can be positioned anywhere on the screen. Here we "
-#~ "specify this relative position."
-#~ msgstr ""
-#~ "Az ikonok a kiválasztott elhelyezkedésnek megfelelően fognak mozogni. "
-#~ "Természetesen a dokk bárhol elhelyezhető a képernyőn, itt beállíthatja, "
-#~ "hogy mihez képest."
+#~ msgid "Do you want to keep this setting?"
+#~ msgstr "Megtartja ezeket a beállításokat?"
 
 #~ msgid ""
-#~ "Prevent windows from overlapping the dock: reserve space at the edge of "
-#~ "the screen for the dock.\n"
+#~ "Icons will scroll according to what positioning model is selected. The dock "
+#~ "can of course can be positioned anywhere on the screen. Here we specify this "
+#~ "relative position."
+#~ msgstr ""
+#~ "Az ikonok a kiválasztott elhelyezkedésnek megfelelően fognak mozogni. "
+#~ "Természetesen a dokk bárhol elhelyezhető a képernyőn, itt beállíthatja, hogy "
+#~ "mihez képest."
+
+#~ msgid ""
+#~ "Prevent windows from overlapping the dock: reserve space at the edge of the "
+#~ "screen for the dock.\n"
 #~ "Auto-hide: the dock will automatically hide itself outside of the screen "
 #~ "when the mouse leaves it. Instead, it will show a zone where placing the "
 #~ "mouse will trigger the dock and make it re-appear.\n"
-#~ "Keep the dock below windows: the dock will pop-up on the foreground when "
-#~ "you place the mouse on its screen border.\n"
+#~ "Keep the dock below windows: the dock will pop-up on the foreground when you "
+#~ "place the mouse on its screen border.\n"
 #~ "Pop-up on shortcut : When you press the shortcut, the dock will pop-up at "
-#~ "the position of your mouse. The rest of the time, it stays invisible, "
-#~ "thus acting like a menu."
+#~ "the position of your mouse. The rest of the time, it stays invisible, thus "
+#~ "acting like a menu."
 #~ msgstr ""
-#~ "Az ablakok nem takarhatják el a dokkot: helyet foglal le a képernyő "
-#~ "szélén a dokknak.\n"
+#~ "Az ablakok nem takarhatják el a dokkot: helyet foglal le a képernyő szélén a "
+#~ "dokknak.\n"
 #~ "Automatikus elrejtés: a dokk automatikusan eltűnik, ha nincs fölötte az "
 #~ "egér.  Helyette egy sávot mutat, ha oda viszi a kurzort, a dokk újra "
 #~ "megjelenik.\n"
-#~ "Mindig az ablakok mögött: a dokk automatikusan felugrik az előtérben, ha "
-#~ "a megfelelő képernyőszélhez viszi a kurzort.\n"
-#~ "Felugrás gyorsbillentyűre: ha megnyom egy gyorsbillentyűt, a dokk "
-#~ "megjelenik a kurzor pozícióján. Az idő nagy részében pedig láthatatlan "
-#~ "marad, akár egy menü."
+#~ "Mindig az ablakok mögött: a dokk automatikusan felugrik az előtérben, ha a "
+#~ "megfelelő képernyőszélhez viszi a kurzort.\n"
+#~ "Felugrás gyorsbillentyűre: ha megnyom egy gyorsbillentyűt, a dokk megjelenik "
+#~ "a kurzor pozícióján. Az idő nagy részében pedig láthatatlan marad, akár egy "
+#~ "menü."
+
+#~ msgid "Choose one of the available themes:"
+#~ msgstr "Válasszon ki egyet az elérhető témákból:"
 
 #~ msgid "Pop-up only if the mouse hits a screen corner"
 #~ msgstr "Csak akkor ugorjon fel, ha az egér a képernyő egyik sarkához ér?"
@@ -5012,12 +4994,11 @@ msgstr ""
 #~ msgstr "Jelző megjelenítése, még ha az ikon nem is indítóikon"
 
 #~ msgid ""
-#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide "
-#~ "is not enabled or unfold acceleration is null."
+#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide is "
+#~ "not enabled or unfold acceleration is null."
 #~ msgstr ""
-#~ "A dokk kinyílik amikor elrejti vagy megjeleníti önmagát. Nincs hatás, ha "
-#~ "az automatikus elrejtés nincs bekapcsolva, vagy a kinyílás sebessége "
-#~ "nulla."
+#~ "A dokk kinyílik amikor elrejti vagy megjeleníti önmagát. Nincs hatás, ha az "
+#~ "automatikus elrejtés nincs bekapcsolva, vagy a kinyílás sebessége nulla."
 
 #~ msgid "Animate the dock when auto-hiding"
 #~ msgstr "Animálja a dokkot automatikus elrejtéskor?"
@@ -5065,8 +5046,7 @@ msgstr ""
 #~ "The lower the value, the less the decorations will move along with the "
 #~ "cursor."
 #~ msgstr ""
-#~ "Minél kisebb, a díszítések annál lassabban fognak mozogni a kurzorral "
-#~ "együtt."
+#~ "Minél kisebb, a díszítések annál lassabban fognak mozogni a kurzorral együtt."
 
 #~ msgid "Position relative to the selected screen edge"
 #~ msgstr "A kiválasztott képernyőszélhez viszonított elhelyezkedés."
@@ -5080,6 +5060,11 @@ msgstr ""
 #~ msgid "Do you want to monitor the content of this directory?"
 #~ msgstr "Szeretné figyelni a könyvtár tartalmát?"
 
+#, c-format
+#~ msgid "Configuration of the '%s' dock"
+#~ msgstr "A(z) „%s” dokk beállításai"
+
+#, c-format
 #~ msgid ""
 #~ "You're about deleting this file\n"
 #~ "  (%s)\n"
@@ -5089,6 +5074,7 @@ msgstr ""
 #~ "  (%s)\n"
 #~ "fájlt a merevlemezről?"
 
+#, c-format
 #~ msgid ""
 #~ "Warning: could not rename %s.\n"
 #~ "Check file permissions \n"
@@ -5104,3 +5090,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Figyelmeztetés: a fájl nem törölhető.\n"
 #~ "Ellenőrizze a fájl jogosultságait."
+
+#~ msgid "Add a main dock"
+#~ msgstr "Fő dokk hozzáadása"

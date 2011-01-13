@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2011-01-01 04:03+0000\n"
 "PO-Revision-Date: 2010-09-18 12:47+0000\n"
 "Last-Translator: Cédric VALMARY (Tot en òc) <cvalmary@yahoo.fr>\n"
 "Language-Team: Occitan (post 1500) <oc@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-19 04:46+0000\n"
+"X-Launchpad-Export-Date: 2011-01-02 04:43+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:215
 msgid ""
@@ -83,7 +84,8 @@ msgid "category"
 msgstr "categoria"
 
 #: ../src/cairo-dock-gui-items.c:334
-msgid "Main dock's paramaters are available in the main configuration window."
+msgid ""
+"Main dock's paramaters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:571
@@ -321,7 +323,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:77
@@ -472,7 +475,8 @@ msgid "Get more applets!"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:419
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:421
@@ -571,14 +575,12 @@ msgid "Main dock"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1167 ../data/messages:1579
-#, fuzzy
 msgid "Separator"
-msgstr "Separadors"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1171
-#, fuzzy
 msgid "Custom launcher"
-msgstr "Aviadors"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1172
 msgid ""
@@ -903,9 +905,8 @@ msgid "_Custom Icons_"
 msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1426
-#, fuzzy
 msgid "Rate me"
-msgstr "Notatz-me !"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1561
 #: ../src/gldit/cairo-dock-gui-factory.c:1563
@@ -2013,7 +2014,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:629
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:631
@@ -2308,8 +2310,8 @@ msgstr ""
 
 #: ../data/messages:783
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:785
@@ -2522,8 +2524,8 @@ msgstr ""
 
 #: ../data/messages:889
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:891
@@ -2538,8 +2540,8 @@ msgstr ""
 
 #: ../data/messages:895
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2936,8 +2938,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3189,8 +3191,9 @@ msgstr ""
 
 #: ../data/messages:1159
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3314,16 +3317,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3365,8 +3368,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1227
@@ -3494,8 +3497,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3832,9 +3835,8 @@ msgid "If '0' the launcher will be displayed on every viewport."
 msgstr ""
 
 #: ../data/messages:1541
-#, fuzzy
 msgid "Launcher"
-msgstr "Aviadors"
+msgstr ""
 
 #: ../data/messages:1549
 msgid ""
@@ -4015,8 +4017,8 @@ msgstr ""
 #: ../data/messages:1619
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4097,8 +4099,8 @@ msgstr ""
 #: ../data/messages:1631
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4180,14 +4182,11 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#~ msgid "state"
-#~ msgstr "estat"
-
-#~ msgid "Applets"
-#~ msgstr "Applets"
-
 #~ msgid "Plug-in"
 #~ msgstr "Ensèrt"
+
+#~ msgid "state"
+#~ msgstr "estat"
 
 #~ msgid "module"
 #~ msgstr "modul"
@@ -4212,6 +4211,9 @@ msgstr ""
 
 #~ msgid "Windows7"
 #~ msgstr "Windows7"
+
+#~ msgid "Applets"
+#~ msgstr "Applets"
 
 #~ msgid "Speed :"
 #~ msgstr "Velocitat :"

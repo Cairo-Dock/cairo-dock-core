@@ -8,15 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2011-01-01 04:03+0000\n"
 "PO-Revision-Date: 2010-09-07 04:10+0000\n"
 "Last-Translator: Cesc Llagostera <cescllp@gmail.com>\n"
 "Language-Team: Catalan <ca@li.org>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-08 04:34+0000\n"
+"X-Launchpad-Export-Date: 2011-01-02 04:41+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: ca\n"
 
 #: ../src/cairo-dock-gui-commons.c:215
 msgid ""
@@ -30,24 +31,20 @@ msgid "Please wait while importing the theme..."
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:304
-#, fuzzy
 msgid "Bottom dock"
-msgstr "bloca la barra"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:306
-#, fuzzy
 msgid "Top dock"
-msgstr "bloca la barra"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:311
-#, fuzzy
 msgid "Right dock"
-msgstr "desbloca la barra"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:313
-#, fuzzy
 msgid "Left dock"
-msgstr "bloca la barra"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:410 ../src/cairo-dock-menu.c:1373
 msgid "Configure this applet"
@@ -88,7 +85,8 @@ msgid "category"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:334
-msgid "Main dock's paramaters are available in the main configuration window."
+msgid ""
+"Main dock's paramaters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:571
@@ -333,7 +331,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:77
@@ -375,9 +374,8 @@ msgid "Manage Themes"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:169
-#, fuzzy
 msgid "About Cairo-Dock"
-msgstr "Tancar Cairo-Dock ?"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:196 ../data/messages:1287
 msgid "Community site"
@@ -485,7 +483,8 @@ msgid "Get more applets!"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:419
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:421
@@ -503,7 +502,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:458
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
+msgstr ""
+"Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
 
 #: ../src/cairo-dock-menu.c:469
 msgid ""
@@ -534,8 +534,8 @@ msgstr ""
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
-"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs "
-"segur ?"
+"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs segur "
+"?"
 
 #: ../src/cairo-dock-menu.c:881
 msgid ""
@@ -582,18 +582,16 @@ msgid "Sub-dock"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1164
-#, fuzzy
 msgid "Main dock"
-msgstr "desbloca la barra"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1167 ../data/messages:1579
 msgid "Separator"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1171
-#, fuzzy
 msgid "Custom launcher"
-msgstr "llançadors"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1172
 msgid ""
@@ -1299,9 +1297,8 @@ msgid "Add-ons"
 msgstr "Complements"
 
 #: ../data/messages:125
-#, fuzzy
 msgid "Add or remove any applet"
-msgstr "Afegeix o elimina subprogrames :"
+msgstr ""
 
 #: ../data/messages:127
 msgid ""
@@ -2105,7 +2102,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:629
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:631
@@ -2402,8 +2400,8 @@ msgstr ""
 
 #: ../data/messages:783
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:785
@@ -2441,9 +2439,8 @@ msgid "Labels"
 msgstr ""
 
 #: ../data/messages:805
-#, fuzzy
 msgid "Label visibility"
-msgstr "Visibilitat"
+msgstr ""
 
 #: ../data/messages:807
 msgid "Show labels:"
@@ -2617,8 +2614,8 @@ msgstr ""
 
 #: ../data/messages:889
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:891
@@ -2633,8 +2630,8 @@ msgstr ""
 
 #: ../data/messages:895
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -3031,8 +3028,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3284,8 +3281,9 @@ msgstr ""
 
 #: ../data/messages:1159
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3409,16 +3407,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3460,8 +3458,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1227
@@ -3589,8 +3587,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3933,9 +3931,8 @@ msgid "If '0' the launcher will be displayed on every viewport."
 msgstr ""
 
 #: ../data/messages:1541
-#, fuzzy
 msgid "Launcher"
-msgstr "llançadors"
+msgstr ""
 
 #: ../data/messages:1549
 msgid ""
@@ -4116,8 +4113,8 @@ msgstr ""
 #: ../data/messages:1619
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4198,8 +4195,8 @@ msgstr ""
 #: ../data/messages:1631
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4281,15 +4278,11 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#~ msgid "Choose one of the available themes:"
-#~ msgstr "Trieu un tema dels disponibles:"
-
-#~ msgid "Choose a theme"
-#~ msgstr "Tria un tema"
-
+#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s està desmuntat"
 
+#, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s està muntat"
 
@@ -4299,6 +4292,7 @@ msgstr ""
 #~ msgid "Hidden Dock"
 #~ msgstr "Barra Oculta"
 
+#, c-format
 #~ msgid ""
 #~ "You're about deleting this file\n"
 #~ "  (%s)\n"
@@ -4327,6 +4321,7 @@ msgstr ""
 #~ msgid "Rename to:"
 #~ msgstr "Canvia el nom per:"
 
+#, c-format
 #~ msgid ""
 #~ "Warning: could not rename %s.\n"
 #~ "Check file permissions \n"
@@ -4336,5 +4331,11 @@ msgstr ""
 #~ "Comprova que en tens drets d'escriptura,\n"
 #~ " i que el nou nom no existeixi."
 
+#~ msgid "Choose one of the available themes:"
+#~ msgstr "Trieu un tema dels disponibles:"
+
 #~ msgid "Position relative to the selected screen edge"
 #~ msgstr "Posició relativa per les superfícies seleccionades"
+
+#~ msgid "Choose a theme"
+#~ msgstr "Tria un tema"

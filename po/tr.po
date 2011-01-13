@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-09-22 16:32+0000\n"
+"POT-Creation-Date: 2011-01-01 04:03+0000\n"
+"PO-Revision-Date: 2011-01-01 07:28+0000\n"
 "Last-Translator: Erkin Batu Altunbaş <erkinbatu@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-24 04:37+0000\n"
+"X-Launchpad-Export-Date: 2011-01-02 04:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: tr\n"
 
 #: ../src/cairo-dock-gui-commons.c:215
 msgid ""
@@ -28,29 +29,24 @@ msgstr ""
 "kaybolacak. Devam edilsin mi?"
 
 #: ../src/cairo-dock-gui-commons.c:241
-#, fuzzy
 msgid "Please wait while importing the theme..."
-msgstr "Tema ithal edilemedi."
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:304
-#, fuzzy
 msgid "Bottom dock"
-msgstr "Rıhtımı kilitle"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:306
-#, fuzzy
 msgid "Top dock"
-msgstr "Rıhtımı kilitle"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:311
-#, fuzzy
 msgid "Right dock"
-msgstr "Yeni ana rıhtım"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:313
-#, fuzzy
 msgid "Left dock"
-msgstr "Rıhtımı kilitle"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:410 ../src/cairo-dock-menu.c:1373
 msgid "Configure this applet"
@@ -91,7 +87,8 @@ msgid "category"
 msgstr "kategori"
 
 #: ../src/cairo-dock-gui-items.c:334
-msgid "Main dock's paramaters are available in the main configuration window."
+msgid ""
+"Main dock's paramaters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:571
@@ -321,19 +318,16 @@ msgid "Could not import the theme."
 msgstr "Tema ithal edilemedi."
 
 #: ../src/cairo-dock-gui-simple.c:427
-#, fuzzy
 msgid "Importing theme..."
-msgstr "Tema ithal ediliyor %s..."
+msgstr "Temayı aktarılıyor..."
 
 #: ../src/cairo-dock-gui-simple.c:434 ../src/cairo-dock-gui-themes.c:154
-#, fuzzy
 msgid "Theme has been saved"
 msgstr "Tema kaydedildi"
 
 #: ../src/cairo-dock-gui-simple.c:440 ../src/cairo-dock-gui-themes.c:160
-#, fuzzy
 msgid "Themes have been deleted"
-msgstr "Temalar silindi"
+msgstr "Tema kaldırıdı"
 
 #: ../src/cairo-dock-gui-simple.c:770
 msgid "Animation:"
@@ -344,7 +338,8 @@ msgid "Effects:"
 msgstr "Efektler:"
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:77
@@ -384,18 +379,16 @@ msgstr ""
 "Geçerli temayı özelleştirmek için güçlü bir araçtır."
 
 #: ../src/cairo-dock-gui-themes.c:147
-#, fuzzy
 msgid "Importing theme ..."
-msgstr "Tema ithal ediliyor %s..."
+msgstr "Temayı aktarıyor..."
 
 #: ../src/cairo-dock-gui-themes.c:180
 msgid "Manage Themes"
 msgstr "Temaları yönet"
 
 #: ../src/cairo-dock-menu.c:169
-#, fuzzy
 msgid "About Cairo-Dock"
-msgstr "Cairo-Dock'tan çıkmak istiyor musunuz?"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:196 ../data/messages:1287
 msgid "Community site"
@@ -504,7 +497,8 @@ msgid "Get more applets!"
 msgstr "Daha fazla uygulamacık al!"
 
 #: ../src/cairo-dock-menu.c:419
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -608,24 +602,20 @@ msgid "Add"
 msgstr "Ekle"
 
 #: ../src/cairo-dock-menu.c:1162
-#, fuzzy
 msgid "Sub-dock"
-msgstr "Bir alt rıhtım ekle"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1164
-#, fuzzy
 msgid "Main dock"
-msgstr "Yeni ana rıhtım"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1167 ../data/messages:1579
-#, fuzzy
 msgid "Separator"
-msgstr "Ayıraçlar"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1171
-#, fuzzy
 msgid "Custom launcher"
-msgstr "Özel bir başlatıcı ekle"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1172
 msgid ""
@@ -651,7 +641,8 @@ msgstr "Bu başlatıcıyı kaldır"
 #: ../src/cairo-dock-menu.c:1221
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr ""
+"Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
 
 #: ../src/cairo-dock-menu.c:1223 ../src/cairo-dock-menu.c:1389
 msgid "Move to another dock"
@@ -815,6 +806,8 @@ msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
 msgstr ""
+"15 saniye içinde bir önceki ayarlara dönülecek.\n"
+"Bu ayarları kaydetmek ister misin?"
 
 #: ../src/cairo-dock.c:218
 msgid ""
@@ -954,9 +947,8 @@ msgid "_Custom Icons_"
 msgstr "_Özel simgeler_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1426
-#, fuzzy
 msgid "Rate me"
-msgstr "derecelendir"
+msgstr "Oyla"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1561
 #: ../src/gldit/cairo-dock-gui-factory.c:1563
@@ -1302,9 +1294,8 @@ msgid "Add-ons"
 msgstr "Eklentiler"
 
 #: ../data/messages:125
-#, fuzzy
 msgid "Add or remove any applet"
-msgstr "Uygulamacık ekle veya kaldır:"
+msgstr ""
 
 #: ../data/messages:127
 msgid ""
@@ -2074,7 +2065,8 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:629
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:631
@@ -2369,8 +2361,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:783
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:785
@@ -2583,8 +2575,8 @@ msgstr ""
 
 #: ../data/messages:889
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:891
@@ -2599,8 +2591,8 @@ msgstr ""
 
 #: ../data/messages:895
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2997,8 +2989,8 @@ msgstr "Bazı uygulamalar için çirkin simgelerim var."
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3250,8 +3242,9 @@ msgstr ""
 
 #: ../data/messages:1159
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3375,16 +3368,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3426,8 +3419,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1227
@@ -3555,8 +3548,8 @@ msgstr "Projeye katıl!"
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3893,9 +3886,8 @@ msgid "If '0' the launcher will be displayed on every viewport."
 msgstr ""
 
 #: ../data/messages:1541
-#, fuzzy
 msgid "Launcher"
-msgstr "başlatıcılar"
+msgstr ""
 
 #: ../data/messages:1549
 msgid ""
@@ -4080,8 +4072,8 @@ msgstr ""
 #: ../data/messages:1619
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4162,8 +4154,8 @@ msgstr ""
 #: ../data/messages:1631
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4245,48 +4237,11 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#~ msgid "Configuration of the '%s' dock"
-#~ msgstr "'%s' rıhtımı yapılandırması"
-
-#~ msgid "Importing theme %s ..."
-#~ msgstr "Tema yükleniyor... %s"
-
-#~ msgid "The theme could not be saved"
-#~ msgstr "Tema kaydedilemedi"
-
-#~ msgid "The theme has been deleted"
-#~ msgstr "Tema silindi"
-
-#~ msgid "The theme could not be deleted"
-#~ msgstr "Tema silinemedi"
-
-#~ msgid "The themes could not be deleted"
-#~ msgstr "Temalar silinemedi"
-
-#~ msgid "Add a main dock"
-#~ msgstr "Bir ana rıhtım ekle"
-
-#~ msgid "Add a separator"
-#~ msgstr "Ayırıcı ekle"
-
-#~ msgid "Do you want to keep this setting?"
-#~ msgstr "Bu ayarları korumak istiyor musunuz?"
-
-#~ msgid "state"
-#~ msgstr "konum"
-
-#~ msgid "Applets"
-#~ msgstr "Uygulamacıklar"
-
-#~ msgid "Choose one of the available themes:"
-#~ msgstr "Uygun temalardan birini seçiniz:"
-
-#~ msgid "Choose a theme"
-#~ msgstr "Tema seç"
-
+#, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s şimdi bağlı"
 
+#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s şimdi bağlı değil"
 
@@ -4299,6 +4254,9 @@ msgstr ""
 #~ msgid "module"
 #~ msgstr "modül"
 
+#~ msgid "state"
+#~ msgstr "konum"
+
 #~ msgid "Hidden Dock"
 #~ msgstr "Dock gizle"
 
@@ -4310,6 +4268,9 @@ msgstr ""
 
 #~ msgid "Mount"
 #~ msgstr "Üzerine yerleştir"
+
+#~ msgid "Add a separator"
+#~ msgstr "Ayırıcı ekle"
 
 #~ msgid "Properties"
 #~ msgstr "Özellikleri"
@@ -4332,6 +4293,24 @@ msgstr ""
 #~ msgid "Controllers"
 #~ msgstr "Kontrol ediciler"
 
+#~ msgid "The themes could not be deleted"
+#~ msgstr "Temalar silinemedi"
+
+#~ msgid "The theme could not be deleted"
+#~ msgstr "Tema silinemedi"
+
+#~ msgid "The theme could not be saved"
+#~ msgstr "Tema kaydedilemedi"
+
+#~ msgid "The theme has been deleted"
+#~ msgstr "Tema silindi"
+
+#~ msgid "Do you want to keep this setting?"
+#~ msgstr "Bu ayarları korumak istiyor musunuz?"
+
+#~ msgid "Choose one of the available themes:"
+#~ msgstr "Uygun temalardan birini seçiniz:"
+
 #~ msgid "Label readability"
 #~ msgstr "Etiket okunabilirliği"
 
@@ -4350,8 +4329,14 @@ msgstr ""
 #~ msgid "Connection to the themes' server"
 #~ msgstr "Temaların sunucu bağlantısı"
 
+#~ msgid "Choose a theme"
+#~ msgstr "Tema seç"
+
 #~ msgid "Eject"
 #~ msgstr "Çıkart"
+
+#~ msgid "Applets"
+#~ msgstr "Uygulamacıklar"
 
 #~ msgid "Automatically hide the dock"
 #~ msgstr "Rıhtımı otomatik olarak gizle"
@@ -4368,3 +4353,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Uyarı: bu dosyayı silemezsiniz.\n"
 #~ "Lütfen dosya öz niteliklerini gözden geçiriniz."
+
+#, c-format
+#~ msgid "Importing theme %s ..."
+#~ msgstr "Tema yükleniyor... %s"
+
+#, c-format
+#~ msgid "Configuration of the '%s' dock"
+#~ msgstr "'%s' rıhtımı yapılandırması"
+
+#~ msgid "Add a main dock"
+#~ msgstr "Bir ana rıhtım ekle"

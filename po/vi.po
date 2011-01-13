@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2011-01-01 04:03+0000\n"
 "PO-Revision-Date: 2010-05-25 12:56+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
-"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-05-26 03:45+0000\n"
+"X-Launchpad-Export-Date: 2011-01-02 04:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: vi\n"
 
 #: ../src/cairo-dock-gui-commons.c:215
 msgid ""
@@ -29,18 +30,16 @@ msgid "Please wait while importing the theme..."
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:304
-#, fuzzy
 msgid "Bottom dock"
-msgstr "Thanh neo ẩn"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:306
 msgid "Top dock"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:311
-#, fuzzy
 msgid "Right dock"
-msgstr "Thanh neo ẩn"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:313
 msgid "Left dock"
@@ -85,7 +84,8 @@ msgid "category"
 msgstr "thể loại"
 
 #: ../src/cairo-dock-gui-items.c:334
-msgid "Main dock's paramaters are available in the main configuration window."
+msgid ""
+"Main dock's paramaters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:571
@@ -336,7 +336,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:77
@@ -382,9 +383,8 @@ msgid "Manage Themes"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:169
-#, fuzzy
 msgid "About Cairo-Dock"
-msgstr "Thoát Cairo-Dock ?"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:196 ../data/messages:1287
 msgid "Community site"
@@ -392,7 +392,8 @@ msgstr "Trang cộng đồng"
 
 #: ../src/cairo-dock-menu.c:197 ../data/messages:1285
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Có vấn đề ? Có đề xuất ? Muốn nói chuyện với chúng tôi ? Xin mời bạn !"
+msgstr ""
+"Có vấn đề ? Có đề xuất ? Muốn nói chuyện với chúng tôi ? Xin mời bạn !"
 
 #: ../src/cairo-dock-menu.c:200 ../data/messages:1291
 msgid "Development site"
@@ -431,9 +432,8 @@ msgid "Configure this dock"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:350
-#, fuzzy
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Định vị trí thanh neo chính."
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:355
 msgid "Manage themes"
@@ -493,7 +493,8 @@ msgid "Get more applets!"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:419
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:421
@@ -588,9 +589,8 @@ msgid "Sub-dock"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1164
-#, fuzzy
 msgid "Main dock"
-msgstr "Thanh neo ẩn"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1167 ../data/messages:1579
 msgid "Separator"
@@ -1747,9 +1747,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:429
-#, fuzzy
 msgid "User :"
-msgstr "Người dùng"
+msgstr ""
 
 #: ../data/messages:433
 msgid "Password :"
@@ -2055,7 +2054,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:629
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:631
@@ -2350,8 +2350,8 @@ msgstr ""
 
 #: ../data/messages:783
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:785
@@ -2389,9 +2389,8 @@ msgid "Labels"
 msgstr "Nhãn"
 
 #: ../data/messages:805
-#, fuzzy
 msgid "Label visibility"
-msgstr "Khả kiến"
+msgstr ""
 
 #: ../data/messages:807
 msgid "Show labels:"
@@ -2565,8 +2564,8 @@ msgstr ""
 
 #: ../data/messages:889
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:891
@@ -2581,8 +2580,8 @@ msgstr ""
 
 #: ../data/messages:895
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2979,8 +2978,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3062,9 +3061,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1085
-#, fuzzy
 msgid "Enable the GMenu applet."
-msgstr "Kích hoạt mô-đun này"
+msgstr ""
 
 #: ../data/messages:1087 ../data/messages:1095
 msgid "Go to the «GMenu» module."
@@ -3233,8 +3231,9 @@ msgstr ""
 
 #: ../data/messages:1159
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3358,16 +3357,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3409,8 +3408,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1227
@@ -3538,8 +3537,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -3582,9 +3581,8 @@ msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr ""
 
 #: ../data/messages:1297
-#, fuzzy
 msgid "Repositories"
-msgstr "Tiện ích bổ trợ"
+msgstr ""
 
 #: ../data/messages:1299
 msgid ""
@@ -4059,8 +4057,8 @@ msgstr ""
 #: ../data/messages:1619
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4141,8 +4139,8 @@ msgstr ""
 #: ../data/messages:1631
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4224,24 +4222,18 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#~ msgid "%s is now mounted"
-#~ msgstr "%s đã được gắn kết"
-
+#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s đã được tháo gắn kết"
 
-#~ msgid "state"
-#~ msgstr "tình trạng"
-
-#~ msgid "Controllers"
-#~ msgstr "Trình điều khiển"
+#, c-format
+#~ msgid "%s is now mounted"
+#~ msgstr "%s đã được gắn kết"
 
 #~ msgid "Plug-ins"
 #~ msgstr "Phần bổ sung"
 
-#~ msgid "Do you want to mount this device?"
-#~ msgstr "Bạn có muốn gắn kết với điểm này ?"
-
+#, c-format
 #~ msgid ""
 #~ "The '%s' plug-in is not active.\n"
 #~ "Be sure to activate it to enjoy these features."
@@ -4252,8 +4244,17 @@ msgstr ""
 #~ msgid "module"
 #~ msgstr "mô-đun"
 
+#~ msgid "state"
+#~ msgstr "tình trạng"
+
 #~ msgid "Define the appearance of the dock when it's hidden."
 #~ msgstr "Xác định hình dáng của thanh neo khi ẩn."
 
+#~ msgid "Do you want to mount this device?"
+#~ msgstr "Bạn có muốn gắn kết với điểm này ?"
+
 #~ msgid "Do you want to monitor the content of this directory?"
 #~ msgstr "Bạn có muốn giám sát nội dung của thư mục ?"
+
+#~ msgid "Controllers"
+#~ msgstr "Trình điều khiển"
