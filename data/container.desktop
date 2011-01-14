@@ -18,11 +18,20 @@ Exec=
 #F[Display]
 frame_display=
 
-#Y[Use an image;1;1;Draw sub-dock's content as emblems;0;0;Draw sub-dock's content as stack;0;0;Draw sub-dock's content inside a box;0;0] How to render the icon :
+#Y[Use an image;1;1;Draw sub-dock's content as emblems;0;0;Draw sub-dock's content as stack;0;0;Draw sub-dock's content inside a box;2;2] How to render the icon :
 render = 3
 
 #S Image's name or path :
 Icon=
+
+#S Image for the front box:
+#{If you don't provide any, a default image will be used.}
+front box=
+
+#S Image for the back box:
+#{If you don't provide any, a default image will be used.}
+back box=
+
 
 #X[Extra parameters]
 frame_extra =

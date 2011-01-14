@@ -24,13 +24,13 @@
 #define myDrawContext myApplet->pDrawContext
 
 #define CD_APPLET_DEFINE_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
+CairoDockModuleInstance *myApplet = NULL; \
 Icon *myIcon; \
 CairoContainer *myContainer; \
 CairoDock *myDock; \
 CairoDesklet *myDesklet; \
 AppletConfig *myConfigPtr = NULL; \
 AppletData *myDataPtr = NULL; \
-CairoDockModuleInstance *myApplet = NULL; \
 CD_APPLET_DEFINE_ALL_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 pVisitCard->bMultiInstance = FALSE;
 
@@ -40,7 +40,8 @@ myApplet = pApplet; \
 myIcon = myApplet->pIcon; \
 myContainer = myApplet->pContainer; \
 myDock = myApplet->pDock; \
-myDesklet = myApplet->pDesklet;
+myDesklet = myApplet->pDesklet;\
+myDataPtr = (AppletData*)myApplet->pData;
 
 #define myConfig (* myConfigPtr)
 #define myData (* myDataPtr)
@@ -57,7 +58,6 @@ myDesklet = myApplet->pDesklet;
 	myDock = NULL; \
 	myContainer = NULL; \
 	myIcon = NULL; \
-	if (myDataPtr) memset (myDataPtr, 0, sizeof (AppletData)); \
 	myDataPtr = NULL; \
 	myDesklet = NULL; \
 	myApplet = NULL; \
@@ -76,9 +76,9 @@ myDesklet = myApplet->pDesklet;
 #define CD_APPLET_GET_CONFIG_BEGIN \
 	CD_APPLET_GET_CONFIG_ALL_BEGIN\
 	if (myConfigPtr == NULL)\
-		myConfigPtr = (((gpointer)myApplet)+sizeof(CairoDockModuleInstance));\
+		myConfigPtr = (AppletConfig*)myApplet->pConfig;\
 	if (myDataPtr == NULL)\
-		myDataPtr = (((gpointer)myConfigPtr)+sizeof(AppletConfig));
+		myDataPtr = (AppletData*)myApplet->pData;
 
 
 extern Icon *myIcon;

@@ -45,8 +45,9 @@ DBusGProxy *cairo_dock_get_main_system_proxy (void);
 
 /**Register a new service on the session bus.
 *@param cServiceName name of the service.
+*@return TRUE in case of success, false otherwise.
 */
-void cairo_dock_register_service_name (const gchar *cServiceName);
+gboolean cairo_dock_register_service_name (const gchar *cServiceName);
 
 /** Say if the bus is available or not.
 *@return TRUE if the connection to the bus has been established.

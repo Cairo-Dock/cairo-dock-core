@@ -83,11 +83,11 @@ DBusGProxy *cairo_dock_get_main_system_proxy (void)
 	return s_pDBusSystemProxy;
 }
 
-void cairo_dock_register_service_name (const gchar *cServiceName)
+gboolean cairo_dock_register_service_name (const gchar *cServiceName)
 {
 	DBusGProxy *pProxy = cairo_dock_get_main_proxy ();
 	if (pProxy == NULL)
-		return ;
+		return FALSE;
 	GError *erreur = NULL;
 	int request_ret;
 	org_freedesktop_DBus_request_name (pProxy, cServiceName, 0, &request_ret, &erreur);
@@ -95,7 +95,9 @@ void cairo_dock_register_service_name (const gchar *cServiceName)
 	{
 		cd_warning ("Unable to register service: %s", erreur->message);
 		g_error_free (erreur);
+		return FALSE;
 	}
+	return TRUE;
 }
 
 

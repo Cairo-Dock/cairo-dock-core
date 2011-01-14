@@ -232,12 +232,12 @@ struct _CairoIconContainerRenderer {
 */
 //#define CAIRO_DOCK_IS_LAUNCHER(icon) (icon != NULL && ((icon)->cCommand != NULL || (icon)->cBaseURI != NULL || ((icon)->pSubDock != NULL && (icon)->pModuleInstance == NULL)))
 
-/** TRUE if the icon is an icon of appli.
+/** TRUE if the icon holds a window.
 *@param icon an icon.
 */
 #define CAIRO_DOCK_IS_APPLI(icon) (icon != NULL && (icon)->Xid != 0)
 
-/** TRUE if the icon is an icon of applet.
+/** TRUE if the icon holds an instance of a module.
 *@param icon an icon.
 */
 #define CAIRO_DOCK_IS_APPLET(icon) (icon != NULL && (icon)->pModuleInstance != NULL)
@@ -277,17 +277,17 @@ struct _CairoIconContainerRenderer {
 */
 #define CAIRO_DOCK_IS_MULTI_APPLI(icon) ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)) && icon->pSubDock != NULL)
 
-/** TRUE if the icon is an icon of automatic separator.
+/** TRUE if the icon is an automatic separator.
 *@param icon an icon.
 */
 #define CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR(icon) (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && (icon)->cDesktopFileName == NULL)
 
-/** TRUE if the icon is an icon of separator added by the user.
+/** TRUE if the icon is a separator added by the user.
 *@param icon an icon.
 */
 #define CAIRO_DOCK_IS_USER_SEPARATOR(icon) (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && (icon)->cDesktopFileName != NULL)
 /**
-*TRUE if the icon is an icon d'appli seulement.
+*TRUE if the icon is an icon d'appli only.
 *@param icon an icon.
 */
 #define CAIRO_DOCK_IS_NORMAL_APPLI(icon) (CAIRO_DOCK_IS_APPLI (icon) && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))

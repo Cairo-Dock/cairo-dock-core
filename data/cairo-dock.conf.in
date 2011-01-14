@@ -159,13 +159,12 @@ max name length = 20
 #F-[Interaction;gtk-refresh]
 frame2 =
 
+#l-[Nothing;Close;Minimize;Launch new] Action on middle-click on the related application
+action on middle click = 1
+
 #b- Minimise the window when its icon is clicked, if it was already the active window ?
 #{This is the default behaviour of most taskbars.}
 minimize on click = true
-
-#b- Middle-clicking on an icon closes the related application
-#{In the style of Firefox tabs}
-close on middle click = true
 
 #v- 
 sep_att =

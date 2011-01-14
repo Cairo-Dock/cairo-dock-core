@@ -140,8 +140,10 @@ struct _CairoDockModuleInstance {
 	cairo_t *pDrawContext;
 	/// a unique ID to insert external data on icons and containers.
 	gint iSlotID;
-	/*gpointer *myConfig;
-	gpointer *myData;*/
+	/// pointer to a structure containing the config parameters of the applet.
+	gpointer *pConfig;
+	/// pointer to a structure containing the data of the applet.
+	gpointer *pData;
 };
 
 /// Pre-init function of a module. Fills the visit card and the interface of a module.

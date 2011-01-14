@@ -151,18 +151,62 @@ static void _cairo_dock_close_all_in_class_subdock (Icon *icon)
 	}
 }
 
+
+static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
+{
+	if (icon->cCommand == NULL)
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	
+	if (pDock->iRefCount != 0)  // let the applets handle their own sub-icons.
+	{
+		Icon *pMainIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+		if (CAIRO_DOCK_IS_APPLET (pMainIcon))
+			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	}
+	
+	gboolean bSuccess = FALSE;
+	if (*icon->cCommand == '<')  // shortkey
+	{
+		bSuccess = cairo_dock_simulate_key_sequence (icon->cCommand);
+		if (!bSuccess)
+			bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
+	}
+	else  // normal command
+	{
+		bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
+		if (! bSuccess)
+			bSuccess = cairo_dock_simulate_key_sequence (icon->cCommand);
+	}
+	if (! bSuccess)
+	{
+		cairo_dock_request_icon_animation (icon, pDock, "blink", 1);  // 1 blink if fail.
+	}
+	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+}
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer, guint iButtonState)
 {
 	//g_print ("+ %s (%s)\n", __func__, icon ? icon->cName : "no icon");
 	if (icon == NULL || ! CAIRO_DOCK_IS_DOCK (pContainer))
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
-	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)) && ! (iButtonState & GDK_SHIFT_MASK))  // icone de sous-dock a montrer au clic.
+	
+	if (iButtonState & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))  // shit or ctrl + click
+	{
+		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)
+		|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
+		|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon))
+		{
+			return _launch_icon_command (icon, pDock);
+		}
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	}
+	
+	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
 	{
 		cairo_dock_show_subdock (icon, pDock);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
-	else if (CAIRO_DOCK_IS_APPLI (icon) && ! ((iButtonState & GDK_SHIFT_MASK) && CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)) && ! CAIRO_DOCK_IS_APPLET (icon))  // une icone d'appli ou d'inhibiteur (hors applet) mais sans le shift+clic : on cache ou on montre.
+	else if (CAIRO_DOCK_IS_APPLI (icon) && ! CAIRO_DOCK_IS_APPLET (icon))  // icon holding an appli, but not being an applet -> show/hide the window.
 	{
 		if (cairo_dock_get_current_active_window () == icon->Xid && myTaskbarParam.bMinimizeOnClick)  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
 			cairo_dock_minimize_xwindow (icon->Xid);
@@ -170,7 +214,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 			cairo_dock_show_xwindow (icon->Xid);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
-	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && ! (iButtonState & GDK_SHIFT_MASK))  // un lanceur ayant un sous-dock de classe ou une icone de paille : on cache ou on montre.
+	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))  // icon holding a class sub-dock -> show/hide the windows of the class.
 	{
 		if (! myDocksParam.bShowSubDockOnClick)
 		{
@@ -178,51 +222,65 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		}
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
-	else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) && icon->cCommand != NULL && strcmp (icon->cCommand, "none") != 0)  // finalement, on lance la commande.
+	else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon))  // finally, launcher being none of the previous cases -> launch the command
 	{
-		if (pDock->iRefCount != 0)
-		{
-			Icon *pMainIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-			if (CAIRO_DOCK_IS_APPLET (pMainIcon))
-				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		}
-		
-		gboolean bSuccess = FALSE;
-		if (*icon->cCommand == '<')
-		{
-			bSuccess = cairo_dock_simulate_key_sequence (icon->cCommand);
-			if (!bSuccess)
-				bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
-		}
-		else
-		{
-			bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
-			if (! bSuccess)
-				bSuccess = cairo_dock_simulate_key_sequence (icon->cCommand);
-		}
-		if (! bSuccess)
-		{
-			cairo_dock_request_icon_animation (icon, pDock, "blink", 1);  // 1 clignotement si echec
-		}
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+		return _launch_icon_command (icon, pDock);
 	}
 	else
+	{
 		cd_debug ("no action here");
+	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
 
 gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer)
 {
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.bCloseAppliOnMiddleClick && ! CAIRO_DOCK_IS_APPLET (icon))
+	if (icon == NULL || ! CAIRO_DOCK_IS_DOCK (pContainer))
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	CairoDock *pDock = CAIRO_DOCK (pContainer);
+	
+	if (CAIRO_DOCK_IS_APPLI (icon) && ! CAIRO_DOCK_IS_APPLET (icon) && myTaskbarParam.iActionOnMiddleClick != 0)
 	{
-		cairo_dock_close_xwindow (icon->Xid);
+		switch (myTaskbarParam.iActionOnMiddleClick)
+		{
+			case 1:  // close
+				cairo_dock_close_xwindow (icon->Xid);
+			break;
+			case 2:  // minimise
+				if (! icon->bIsHidden)
+				{
+					cairo_dock_minimize_xwindow (icon->Xid);
+				}
+			break;
+			case 3:  // launch new
+				if (icon->cCommand != NULL)
+				{
+					cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+				}
+			break;
+		}
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
-	if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
+	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && myTaskbarParam.iActionOnMiddleClick != 0)
 	{
-		// On ferme tout.
-		_cairo_dock_close_all_in_class_subdock (icon);
+		switch (myTaskbarParam.iActionOnMiddleClick)
+		{
+			case 1:  // close
+				_cairo_dock_close_all_in_class_subdock (icon);
+			break;
+			case 2:  // minimise
+				_cairo_dock_hide_show_in_class_subdock (icon);
+			break;
+			case 3:  // launch new
+				if (icon->cCommand != NULL)
+				{
+					cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+				}
+			break;
+		}
 		
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}

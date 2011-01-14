@@ -431,6 +431,7 @@ int main (int argc, char** argv)
 	g_string_free (sCommandString, FALSE);
 	
 	gtk_init (&argc, &argv);
+	gtk_gl_init (&argc, &argv);
 	
 	GError *erreur = NULL;
 	
