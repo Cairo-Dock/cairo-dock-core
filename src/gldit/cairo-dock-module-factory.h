@@ -226,6 +226,8 @@ void cairo_dock_free_module (CairoDockModule *module);
 */
 gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard);
 
+gchar *cairo_dock_check_module_conf_dir (CairoDockModule *pModule);
+
 void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard);
 
 

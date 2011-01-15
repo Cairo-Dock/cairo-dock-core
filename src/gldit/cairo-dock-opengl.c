@@ -261,7 +261,7 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL)  // taken 
 		/// link with https://bugzilla.redhat.com/show_bug.cgi?id=440340 ?
 		g_openglConfig.pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
 		Display *dpy = XOpenDisplay (0);
-		XDeleteProperty ( dpy, RootWindow (dpy, DefaultScreen (dpy)), XInternAtom (dpy, "RGB_DEFAULT_MAP", 0) ); // there're probably gdk hooks for the rootwindow/the display - use them.
+		XDeleteProperty ( dpy, RootWindow (dpy, DefaultScreen (dpy)), XInternAtom (dpy, "XA_RGB_DEFAULT_MAP", 0) ); // there're probably gdk hooks for the rootwindow/the display - use them.
 		XFree (pVisInfo);
 	}
 	g_return_val_if_fail (g_openglConfig.pGlConfig != NULL, FALSE);

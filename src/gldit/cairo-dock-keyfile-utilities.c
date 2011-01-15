@@ -368,6 +368,7 @@ gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *
 		return FALSE;
 	
 	gchar **pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, NULL, NULL);
+	g_return_val_if_fail (pKeyList != NULL, FALSE);
 	gchar *cValue;
 	int i;
 	for (i = 0; pKeyList[i] != NULL; i ++)

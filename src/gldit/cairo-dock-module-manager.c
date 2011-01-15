@@ -382,6 +382,7 @@ void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName)
 void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 {
 	cd_message ("%s (%s)", __func__, pInstance->cConfFilePath);
+	g_return_if_fail (pInstance->pModule->pInstancesList != NULL);
 	//\_________________ Si c'est la derniere instance, on desactive le module.
 	if (pInstance->pModule->pInstancesList->next == NULL)
 	{
@@ -400,7 +401,7 @@ void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 	cairo_dock_deactivate_module_instance_and_unload (pInstance);  // pInstance n'est plus.
 	
 	//\_________________ Si c'est pas la derniere instance, la derniere instance prend sa place.
-	int iNbInstances = g_list_length (pModule->pInstancesList)+1;  // nombre d'instances avant suppression.
+	/*int iNbInstances = g_list_length (pModule->pInstancesList)+1;  // nombre d'instances avant suppression.
 	gchar *str = strrchr (cConfFilePath, '-');
 	if (str == NULL || atoi (str+1) != iNbInstances-1)
 	{
@@ -426,12 +427,70 @@ void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 		
 		g_free (cLastInstanceFilePath);
 	}
-	g_free (cConfFilePath);
+	g_free (cConfFilePath);*/
 }
 
 gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 {
+	gchar *cUserDataDirPath = cairo_dock_check_module_conf_dir (pModule);
+	if (cUserDataDirPath == NULL)
+		return NULL;
+	
+	// find a name that doesn't exist yet in the config dir.
 	gchar *cConfFilePath;
+	int i = 0;
+	do
+	{
+		if (i == 0)
+			cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pModule->pVisitCard->cConfFileName);
+		else
+			cConfFilePath = g_strdup_printf ("%s/%s-%d", cUserDataDirPath, pModule->pVisitCard->cConfFileName, i);
+		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+			break;
+		g_free (cConfFilePath);
+		i ++;
+	} while (1);
+	
+	// copy one of the instances conf file, or the default one.
+	CairoDockModuleInstance *pFirstInstance = NULL;
+	if (pModule->pInstancesList != NULL)
+	{
+		GList *last = g_list_last (pModule->pInstancesList);
+		pFirstInstance = last->data;  // instances are prepended.
+		
+		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pFirstInstance->cConfFilePath, cConfFilePath);
+		int r = system (cCommand);
+		g_free (cCommand);
+		
+		if (pFirstInstance->pDesklet)  // prevent desklets from overlapping.
+		{
+			int iX2, iX = pFirstInstance->pContainer->iWindowPositionX;
+			int iWidth = pFirstInstance->pContainer->iWidth;
+			if (iX + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2)  // desklet on the left, we place the new one on its right.
+				iX2 = iX + iWidth;
+			else  // desklet on the right, we place the new one on its left.
+				iX2 = iX - iWidth;
+			
+			int iRelativePositionX = (iX2 + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iX2 : iX2 - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
+			cairo_dock_update_conf_file (cConfFilePath,
+				G_TYPE_INT, "Desklet", "x position", iRelativePositionX,
+				G_TYPE_BOOLEAN, "Desklet", "locked", FALSE,  // we'll probably want to move it
+				G_TYPE_BOOLEAN, "Desklet", "no input", FALSE,
+				G_TYPE_INVALID);
+		}
+	}
+	else  // no instance yet, just copy the default conf file.
+	{
+		gchar *cSourceConfFile = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
+		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", cSourceConfFile, cConfFilePath);
+		int r = system (cCommand);
+		g_free (cCommand);
+		g_free (cSourceConfFile);
+	}
+	
+	g_free (cUserDataDirPath);
+	
+	/*gchar *cConfFilePath;
 	if (pModule->pInstancesList == NULL)  // module non encore instancie, on utilise la fonction qui cree le dossier du module ainsi que son fichier de conf.
 	{
 		cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
@@ -442,8 +501,7 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 		cConfFilePath = g_strdup_printf ("%s-%d", pModule->cConfFilePath, iNbInstances);
 		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 		{
-			gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath/**pModule->pVisitCard->cShareDataDir, 
-			pModule->pVisitCard->cConfFileName*/, cConfFilePath);  // copy from first instance.
+			gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath, cConfFilePath);  // copy from first instance.
 			cd_debug (cCommand);
 			int r = system (cCommand);
 			g_free (cCommand);
@@ -467,7 +525,7 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 					G_TYPE_INVALID);
 			}
 		}
-	}
+	}*/
 	return cConfFilePath;
 }
 
