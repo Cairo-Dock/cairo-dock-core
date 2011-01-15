@@ -352,8 +352,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 #else
 	pIcons->fAmplitude = 1.;
 #endif
-	g_print ("myIconsParam.fAmplitude : %.2f\n", pIcons->fAmplitude);
-	g_print ("myIconsParam.fAmplitude : %.2f\n", myIconsParam.fAmplitude);
 	
 	pIcons->iSinusoidWidth = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "sinusoid width", &bFlushConfFileNeeded, 250, NULL, NULL);
 	pIcons->iSinusoidWidth = MAX (1, pIcons->iSinusoidWidth);

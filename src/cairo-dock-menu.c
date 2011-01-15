@@ -607,7 +607,7 @@ static void _add_one_dock_to_menu (const gchar *cName, CairoDock *pDock, GtkWidg
 {
 	// on ne prend que les sous-docks utilisateur.
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	if (! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
+	if (pPointingIcon && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
 		return;
 	// on elimine le dock courant.
 	Icon *pIcon = g_object_get_data (G_OBJECT (pMenu), "launcher");
