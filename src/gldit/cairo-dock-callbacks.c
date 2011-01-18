@@ -974,16 +974,21 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	// cas special.
-	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
-	if (icon != NULL)
+	if (pEvent != NULL)
 	{
-		//g_print (">>> we've just entered the dock, pointed icon becomes NULL\n");
-		if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
-			icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
-		//else
-		//	cd_debug (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
+		Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
+		if (icon != NULL)
+		{
+			//g_print (">>> we've just entered the dock, pointed icon becomes NULL\n");
+			if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
+			{
+				//g_print ("icon %s is forced to be unpointed\n", icon->cName);
+				icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
+			}
+			//else
+			//	cd_debug (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
+		}
 	}
-	
 	// on lance le grossissement.
 	cairo_dock_start_growing (pDock);
 	

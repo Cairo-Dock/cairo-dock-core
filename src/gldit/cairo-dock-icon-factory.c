@@ -446,7 +446,9 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadApplet
 		if (CAIRO_DOCK_IS_APPLET (icon))
 		{
 			if (bReloadAppletsToo)  /// modif du 23/05/2009 : utiliser la taille avec ratio ici. les applets doivent faire attention a utiliser la fonction get_icon_extent().
+			{
 				cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
+			}
 		}
 		else
 		{

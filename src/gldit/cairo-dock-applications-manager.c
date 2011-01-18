@@ -353,8 +353,8 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 		CairoDock *pParentDock = NULL;
 		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
-			if (icon->bIsDemandingAttention)  // on force ici, car il semble qu'on ne recoive pas toujours le retour a la normale.
-				cairo_dock_appli_stops_demanding_attention (icon);
+			///if (icon->bIsDemandingAttention)  // on force ici, car il semble qu'on ne recoive pas toujours le retour a la normale.
+			///	cairo_dock_appli_stops_demanding_attention (icon);
 			
 			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock == NULL)  // elle est soit inhibee, soit pas dans un dock.
@@ -458,7 +458,7 @@ static void _on_change_window_state (Icon *icon)
 		if (icon->bIsDemandingAttention)
 		{
 			cd_debug ("%s se tait", icon->cName);
-			cairo_dock_appli_stops_demanding_attention (icon);  // ca c'est plus une precaution qu'autre chose.
+			cairo_dock_appli_stops_demanding_attention (icon);
 		}
 	}
 	
@@ -698,21 +698,16 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 	XWMHints *pWMHints = XGetWMHints (s_XDisplay, icon->Xid);
 	if (pWMHints != NULL)
 	{
-		if ((pWMHints->flags & XUrgencyHint) && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))
+		if (pWMHints->flags & XUrgencyHint)
 		{
-			if (iState == PropertyNewValue)
-			{
-				cd_debug ("%s vous interpelle !", icon->cName);
+			if (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention)
 				cairo_dock_appli_demands_attention (icon);
-			}
-			else if (iState == PropertyDelete)
-			{
-				cd_debug ("%s arrette de vous interpeler.", icon->cName);
-				cairo_dock_appli_stops_demanding_attention (icon);
-			}
-			else
-				cd_warning ("  etat du changement d'urgence inconnu sur %s !", icon->cName);
 		}
+		else if (icon->bIsDemandingAttention)
+		{
+			cairo_dock_appli_stops_demanding_attention (icon);
+		}
+		
 		if (iState == PropertyNewValue && (pWMHints->flags & (IconPixmapHint | IconMaskHint | IconWindowHint)))
 		{
 			//g_print ("%s change son icone\n", icon->cName);
@@ -724,6 +719,12 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
 			}
 		}
+		XFree (pWMHints);  // "When finished with the data, free the space used for it by calling XFree()."
+	}
+	else  // no hints set on this window.
+	{
+		if (icon->bIsDemandingAttention)
+			cairo_dock_appli_stops_demanding_attention (icon);
 	}
 }
 

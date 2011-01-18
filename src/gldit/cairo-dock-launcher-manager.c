@@ -46,6 +46,7 @@
 #include "cairo-dock-animations.h"  // cairo_dock_launch_animation
 #include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
+#include "cairo-dock-X-utilities.h"  // cairo_dock_show_xwindow
 #include "cairo-dock-launcher-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -197,6 +198,12 @@ static gboolean _delete_launcher (Icon *icon)
 	return r;
 }
 
+static void _show_appli_for_drop (Icon *pIcon)
+{
+	if (pIcon->Xid != 0)
+		cairo_dock_show_xwindow (pIcon->Xid);
+}
+
 Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 {
 	//g_print ("%s (%s)\n", __func__, cDesktopFileName);
@@ -215,6 +222,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	{
 		icon->iface.load_image = _load_launcher;
 		icon->iface.on_delete = _delete_launcher;
+		icon->iface.action_on_drag_hover = _show_appli_for_drop;
 	}
 	
 	//\____________ On gere son dock et sous-dock.

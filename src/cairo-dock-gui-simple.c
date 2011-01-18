@@ -1059,8 +1059,8 @@ void cairo_dock_register_simple_gui_backend (void)
 	pBackend->update_desklet_visibility_params = cairo_dock_update_desklet_visibility_params;
 	pBackend->update_modules_list 			= update_modules_list;
 	pBackend->bCanManageThemes 				= TRUE;
-	pBackend->cDisplayedName 				= _("Simple Mode");
-	pBackend->cTooltip 						= NULL;
+	pBackend->cDisplayedName 				= _("Advanced Mode");
+	pBackend->cTooltip 						= _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme.");
 	
 	cairo_dock_register_config_gui_backend (pBackend);
 	

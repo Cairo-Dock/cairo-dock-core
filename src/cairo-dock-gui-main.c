@@ -2747,8 +2747,8 @@ void cairo_dock_register_main_gui_backend (void)
 	pBackend->update_module_instance_container 	= update_module_instance_container;
 	pBackend->update_modules_list 				= update_modules_list;
 	pBackend->bCanManageThemes 					= FALSE;
-	pBackend->cDisplayedName 					= _("Advanced Mode");
-	pBackend->cTooltip 							= _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme.");
+	pBackend->cDisplayedName 					= _("Simple Mode");
+	pBackend->cTooltip 							= NULL;
 	
 	cairo_dock_register_config_gui_backend (pBackend);
 	

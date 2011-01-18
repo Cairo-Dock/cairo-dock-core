@@ -350,7 +350,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	else
 		pIcons->fAmplitude = fMaxScale - 1;
 #else
-	pIcons->fAmplitude = 1.;
+	pIcons->fAmplitude = 0.;
 #endif
 	
 	pIcons->iSinusoidWidth = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "sinusoid width", &bFlushConfFileNeeded, 250, NULL, NULL);
@@ -722,13 +722,18 @@ static void _remove_separators (const gchar *cDockName, CairoDock *pDock, gpoint
 }
 static void _insert_separators (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
+	g_print ("%s (%s)\n", __func__, cDockName);
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)  // les separateurs utilisateurs ne sont pas recrees, on les recharge donc.
 	{
 		icon = ic->data;
 		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // il n'y a que des separateurs utilisateurs dans le dock en ce moment.
+		{
+			g_print ("  load 1 separator in %s...\n", cDockName);
 			cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
+			g_print ("  done.\n");
+		}
 	}
 	cairo_dock_insert_separators_in_dock (pDock);
 }
@@ -820,6 +825,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		cairo_dock_reload_buffers_in_all_docks (TRUE);  // TRUE <=> y compris les applets.
 	}
 	
+	g_print ("add separators...\n");
 	if (bInsertSeparators)
 	{
 		cairo_dock_foreach_docks ((GHFunc)_insert_separators, NULL);
@@ -829,12 +835,14 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
+		g_print ("indicators...\n");
 		_cairo_dock_unload_icon_textures ();
 		myIndicatorsMgr.mgr.unload ();
 		_cairo_dock_load_icon_textures ();
 		myIndicatorsMgr.mgr.load ();
 	}
 	
+	g_print ("views...\n");
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks; le chargement des separateurs plats se fait dans le calcul de max dock size.
 	cairo_dock_foreach_docks ((GHFunc)_calculate_icons, NULL);
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
@@ -852,6 +860,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	{
 		cairo_dock_reload_buffers_in_all_docks (TRUE);  // les modules aussi.
 	}
+	g_print ("reloaded icon manager\n");
 }
 
 

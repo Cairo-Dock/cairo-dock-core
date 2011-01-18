@@ -333,6 +333,12 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 				iWidth, iHeight,
 				iDesiredSize, iDesiredSize);
 		}
+		else if (pIcon && pIcon->cFileName)
+		{
+			pIconBuffer = cairo_dock_create_surface_from_image_simple (pIcon->cFileName,
+				iDesiredSize,
+				iDesiredSize);
+		}
 	}
 	else
 	{

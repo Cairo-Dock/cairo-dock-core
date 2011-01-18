@@ -1022,6 +1022,8 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 
 static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 {
+	g_print ("%s()\n", __func__);
+	g_print (" %s\n", pIcon->cName);
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 	if (pDock != NULL)
 	{
