@@ -620,8 +620,9 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 				next_icon = ic->next->data;
 				if (! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (next_icon) && abs (cairo_dock_get_icon_order (icon) - cairo_dock_get_icon_order (next_icon)) > 1)  // icon->iType != next_icon->iType
 				{
-					int iSeparatorType = myIconsParam.tIconTypeOrder[next_icon->iGroup] - 1;
-					cd_debug ("+ un separateur entre %s et %s, dans le groupe %d (=%d)\n", icon->cName, next_icon->cName, iSeparatorType, myIconsParam.tIconTypeOrder[iSeparatorType]);
+					///int iSeparatorType = myIconsParam.tIconTypeOrder[next_icon->iGroup] - 1;
+					int iSeparatorType = cairo_dock_get_icon_order (next_icon) - 1;
+					cd_debug ("+ un separateur entre %s et %s, dans le groupe %d\n", icon->cName, next_icon->cName, iSeparatorType);
 					cairo_dock_insert_automatic_separator_in_dock (iSeparatorType, next_icon->cParentDockName, pDock);
 				}
 			}

@@ -497,32 +497,26 @@ void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, GINT_TO_POINTER (bReloadAppletsToo));
 	
-	g_print ("now draw subdocks...\n");
 	cairo_dock_draw_subdock_icons ();
-	g_print ("done.\n");
 }
 
 
 static void _cairo_dock_draw_one_subdock_icon (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	g_print ("%s (%s)\n", __func__, cDockName);
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		g_print (" redraw %s?\n", icon->cName);
 		if (icon->pSubDock != NULL
 		&& (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) || CAIRO_DOCK_IS_MULTI_APPLI (icon))
 		&& (icon->iSubdockViewType != 0
 			|| (CAIRO_DOCK_IS_MULTI_APPLI (icon) && !myIndicatorsParam.bUseClassIndic))
 		&& icon->iSidRedrawSubdockContent == 0)  // icone de sous-dock ou de classe; les applets font ce qu'elles veulent.
 		{
-			g_print (" -> yes\n");
 			cairo_dock_trigger_redraw_subdock_content_on_icon (icon);
 		}
 	}
-	g_print ("ok.\n");
 }
 void cairo_dock_draw_subdock_icons (void)
 {

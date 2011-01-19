@@ -331,7 +331,7 @@ static gboolean _cairo_dock_action_on_drag_hover (Icon *pIcon)
 }
 void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock)
 {
-	//g_print ("%s (%x;%x)\n", __func__, pLastPointedIcon, pPointedIcon);
+	//g_print ("%s (%s -> %s)\n", __func__, pLastPointedIcon?pLastPointedIcon->cName:"none", pPointedIcon?pPointedIcon->cName:"none");
 	//cd_debug ("on change d'icone dans %x (-> %s)", pDock, (pPointedIcon != NULL ? pPointedIcon->cName : "rien"));
 	if (s_iSidShowSubDockDemand != 0 && pDock == s_pDockShowingSubDock)
 	{
@@ -536,6 +536,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		
 		//\_______________ On recalcule toutes les icones et on redessine.
 		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
+		//g_print ("pPointedIcon: %s\n", pPointedIcon?pPointedIcon->cName:"none");
 		gtk_widget_queue_draw (pWidget);
 		fLastTime = pMotion->time;
 		
@@ -982,7 +983,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			//g_print (">>> we've just entered the dock, pointed icon becomes NULL\n");
 			if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 			{
-				//g_print ("icon %s is forced to be unpointed\n", icon->cName);
+				g_print ("icon %s is forced to be unpointed\n", icon->cName);
 				icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
 			}
 			//else

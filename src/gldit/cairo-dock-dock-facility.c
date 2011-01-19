@@ -702,7 +702,8 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *
 		}
 	}
 	
-	return pointed_ic->data;
+	icon = pointed_ic->data;
+	return (icon->bPointed ? icon : NULL);
 }
 
 Icon *cairo_dock_apply_wave_effect_linear (CairoDock *pDock)

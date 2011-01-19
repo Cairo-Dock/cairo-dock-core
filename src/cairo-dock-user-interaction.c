@@ -201,6 +201,14 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
 	
+	/// faire marcher ca ...
+	/**if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
+	{
+		gchar *cCommand = g_strdup_printf ("dbus-send --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/scale/allscreens/initiate_all org.freedesktop.compiz.activate string:'root' int32:`xwininfo -root | grep id: | awk '{ print $4 }'` string:'match' string:'class=%s'", icon->cClass);
+		system (cCommand);
+		g_free (cCommand);
+		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+	}*/
 	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
 	{
 		cairo_dock_show_subdock (icon, pDock);

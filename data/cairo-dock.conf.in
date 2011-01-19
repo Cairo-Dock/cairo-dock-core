@@ -51,7 +51,7 @@ visibility = 4
 #v
 sep_visi =
 
-#L-[Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
+#L-[None;Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
 hide effect = Move down
 
 #i-[0;1500] Delay before the dock unhides itself:
