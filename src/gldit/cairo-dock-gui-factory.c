@@ -1097,7 +1097,15 @@ static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock,
 }
 static GtkListStore *_cairo_dock_build_dock_list_for_gui (void)
 {
-	return _build_list_for_gui ((CDForeachRendererFunc)cairo_dock_foreach_docks, (GHFunc)_cairo_dock_add_one_dock_item, "");
+	GtkListStore *pList = _build_list_for_gui ((CDForeachRendererFunc)cairo_dock_foreach_docks, (GHFunc)_cairo_dock_add_one_dock_item, "");
+	GtkTreeIter iter;
+	memset (&iter, 0, sizeof (GtkTreeIter));
+	gtk_list_store_append (GTK_LIST_STORE (pList), &iter);
+	gtk_list_store_set (GTK_LIST_STORE (pList), &iter,
+		CAIRO_DOCK_MODEL_NAME, _("New main dock"),
+		CAIRO_DOCK_MODEL_RESULT, "_New Dock_",  // this name does likely not exist, which will lead to the creation of a new dock.
+		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
+		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
 }
 
 static void _cairo_dock_add_one_icon_theme_item (const gchar *cDisplayedName, const gchar *cFolderName, GtkListStore *pModele)
@@ -1144,7 +1152,7 @@ static inline void _fill_modele_with_themes (const gchar *cThemeName, CairoDockP
 	g_free (cReadmePath);
 	g_free (cPreviewPath);
 	g_free (cResult);
-	///g_object_unref (pixbuf); a faire ?...
+	g_object_unref (pixbuf); /// a faire ?...
 }
 static void _cairo_dock_fill_modele_with_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModele)
 {

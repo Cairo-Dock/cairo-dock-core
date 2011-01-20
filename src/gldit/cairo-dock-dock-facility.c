@@ -981,6 +981,8 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
 		cairo_dock_notify_on_object (pPointedIcon, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
 	}
+	else
+		pSubDock->fFoldingFactor = 0.;
 	
 	int iNewWidth = pSubDock->iMaxDockWidth;
 	int iNewHeight = pSubDock->iMaxDockHeight;
@@ -1005,6 +1007,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	if (pSubDock->fFoldingFactor == 0.)
 	{
 		cd_debug ("  on montre le sous-dock sans animation");
+		gtk_widget_queue_draw (pSubDock->container.pWidget);
 	}
 	else
 	{

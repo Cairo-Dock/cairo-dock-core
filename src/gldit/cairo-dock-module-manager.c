@@ -481,11 +481,9 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 	}
 	else  // no instance yet, just copy the default conf file.
 	{
-		gchar *cSourceConfFile = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
-		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", cSourceConfFile, cConfFilePath);
+		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath, cConfFilePath);
 		int r = system (cCommand);
 		g_free (cCommand);
-		g_free (cSourceConfFile);
 	}
 	
 	g_free (cUserDataDirPath);

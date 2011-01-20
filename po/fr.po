@@ -136,7 +136,7 @@ msgid ""
 msgstr ""
 "Vous aimeriez que votre dock soit toujours bien en vue,\n"
 " ou au contraire le plus discret possible ?\n"
-"Configurez donc la manière donc vous accéder a vos docks et sous-docks !"
+"Configurez donc la manière donc vous accédez a vos docks et sous-docks !"
 
 #: ../src/cairo-dock-gui-main.c:1435 ../src/cairo-dock-menu.c:1410
 #: ../src/internal-old/cairo-dock-internal-accessibility.c:259

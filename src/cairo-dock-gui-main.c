@@ -95,7 +95,7 @@ struct _CairoDockGroupDescription {
 	void (* load_custom_widget) (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 	const gchar **cDependencies;
 	gboolean bIgnoreDependencies;
-	GList *pExternalModules;
+	GList *pExtensions;
 	const gchar *cInternalModule;
 	GList *pManagers;
 	gboolean bMatchFilter;
@@ -149,6 +149,49 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
   ////////////
  // FILTER //
 ////////////
+
+gchar *_get_valid_module_conf_file (CairoDockModule *pModule)
+{
+	if (pModule->pInstancesList != NULL)
+	{
+		CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
+		return g_strdup (pModuleInstance->cConfFilePath);
+	}
+	else
+	{
+		//gchar *cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, pModule->pVisitCard->cUserDataDir);
+		gchar *cUserDataDirPath = cairo_dock_check_module_conf_dir (pModule);
+		GDir *dir = g_dir_open (cUserDataDirPath, 0, NULL);
+		if (dir == NULL)
+		{
+			g_free (cUserDataDirPath);
+			return NULL;
+		}
+		const gchar *cFileName;
+		gchar *cInstanceFilePath = NULL;
+		while ((cFileName = g_dir_read_name (dir)) != NULL)
+		{
+			gchar *str = strstr (cFileName, ".conf");
+			if (!str)
+				continue;
+			if (*(str+5) != '-' && *(str+5) != '\0')  // xxx.conf or xxx.conf-i
+				continue;
+			cInstanceFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cFileName);
+			break;
+		}
+		g_dir_close (dir);
+		if (cInstanceFilePath == NULL)  // no conf file present yet, let's copy the default one into the applet's folder.
+		{
+			gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath, cUserDataDirPath);
+			int r = system (cCommand);
+			g_free (cCommand);
+			if (r == 0)
+				cInstanceFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pModule->pVisitCard->cConfFileName);
+		}
+		g_free (cUserDataDirPath);
+		return cInstanceFilePath;
+	}
+}
 
 static GString *sBuffer = NULL;
 static inline void _copy_string_to_buffer (const gchar *cSentence)
@@ -514,7 +557,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 			CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 			if (pModule != NULL)
 			{
-				pKeyFile = cairo_dock_open_key_file (pModule->cConfFilePath);
+				pKeyFile = cairo_dock_open_key_file (pModule->cConfFilePath);  // search in default conf file
 				if (pKeyFile != NULL)
 				{
 					gsize length = 0;
@@ -892,7 +935,7 @@ static void _cairo_dock_free_group_description (CairoDockGroupDescription *pGrou
 	g_free (pGroupDescription->cOriginalConfFilePath);
 	g_free (pGroupDescription->cIcon);
 	g_free (pGroupDescription->cConfFilePath);
-	g_list_free (pGroupDescription->pExternalModules);
+	g_list_free (pGroupDescription->pExtensions);
 	g_list_free (pGroupDescription->pManagers);
 	g_free (pGroupDescription);
 }
@@ -996,17 +1039,20 @@ static void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 			for (pElement = pModule->pInstancesList; pElement != NULL; pElement= pElement->next)
 			{
 				pModuleInstance = pElement->data;
-				if (strcmp (pModuleInstance->cConfFilePath, pGroupDescription->cConfFilePath) == 0)
+				if (strcmp (pModuleInstance->cConfFilePath, pGroupDescription->cConfFilePath) == 0)  // the one that has been opened.
 					break ;
 			}
-			g_return_if_fail (pModuleInstance != NULL);
+			if (pElement == NULL)  // couldn't find it, the instance that was being edited has been deleted meanwhile.
+				return;
 			
 			cairo_dock_write_current_group_conf_file (pModuleInstance->cConfFilePath, pModuleInstance);
 			cairo_dock_reload_module_instance (pModuleInstance, TRUE);
 		}
 		else
 		{
-			cairo_dock_write_current_group_conf_file (pModule->cConfFilePath, NULL);
+			gchar *cFile = _get_valid_module_conf_file (pModule);
+			cairo_dock_write_current_group_conf_file (cFile, NULL);
+			g_free (cFile);
 		}
 	}
 	else
@@ -1024,12 +1070,12 @@ static void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 			gldi_reload_manager (pManager, g_cConfFile);
 		}
 		
-		if (pGroupDescription->pExternalModules != NULL)  // comme on ne sait pas sur quel(s) module(s) on a fait des modif, on les met tous a jour.
+		if (pGroupDescription->pExtensions != NULL)  // comme on ne sait pas sur quel(s) module(s) on a fait des modif, on les met tous a jour.
 		{
 			CairoDockModuleInstance *pModuleInstance;
 			GList *m;
 			int i = 0;
-			for (m = pGroupDescription->pExternalModules; m != NULL; m = m->next)
+			for (m = pGroupDescription->pExtensions; m != NULL; m = m->next)
 			{
 				pModule = cairo_dock_find_module_from_name (m->data);
 				if (pModule == NULL || pModule->pInstancesList == NULL)
@@ -1040,28 +1086,6 @@ static void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 				i ++;
 			}
 		}
-		/// reload linked plug-ins ...
-		
-		/**CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (pGroupDescription->cGroupName);
-		g_return_if_fail (pInternalModule != NULL);
-		//g_print ("found module %s\n", pInternalModule->cModuleName);
-		cairo_dock_reload_internal_module (pInternalModule, g_cConfFile);
-		if (pInternalModule->pExternalModules != NULL)  // comme on ne sait pas sur quel(s) module(s) on a fait des modif, on les met tous a jour.
-		{
-			CairoDockModuleInstance *pModuleInstance;
-			GList *m;
-			int i = 0;
-			for (m = pInternalModule->pExternalModules; m != NULL; m = m->next)
-			{
-				pModule = cairo_dock_find_module_from_name (m->data);
-				if (pModule == NULL || pModule->pInstancesList == NULL)
-					continue;
-				pModuleInstance = pModule->pInstancesList->data;
-				cairo_dock_write_extra_group_conf_file (pModuleInstance->cConfFilePath, pModuleInstance, i);
-				cairo_dock_reload_module_instance (pModuleInstance, TRUE);
-				i ++;
-			}
-		}*/
 	}
 }
 
@@ -1287,7 +1311,7 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 	return pWidget;
 }
 
-static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cOriginalConfFilePath, const gchar *cGettextDomain, const gchar **cDependencies, GList *pExternalModules, const gchar *cInternalModule, const gchar *cTitle)
+static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cOriginalConfFilePath, const gchar *cGettextDomain, const gchar **cDependencies, GList *pExtensions, const gchar *cInternalModule, const gchar *cTitle)
 {
 	//\____________ On garde une trace de ses caracteristiques.
 	CairoDockGroupDescription *pGroupDescription = g_new0 (CairoDockGroupDescription, 1);
@@ -1325,7 +1349,7 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 	pGroupDescription->cIcon = cIconPath;
 	pGroupDescription->cGettextDomain = cGettextDomain;
 	pGroupDescription->cDependencies = cDependencies;
-	pGroupDescription->pExternalModules = pExternalModules;
+	pGroupDescription->pExtensions = pExtensions;
 	pGroupDescription->cInternalModule = cInternalModule;
 	pGroupDescription->cTitle = cTitle;
 	
@@ -1393,8 +1417,8 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 static gboolean _cairo_dock_add_one_module_widget (CairoDockModule *pModule, const gchar *cActiveModules)
 {
 	const gchar *cModuleName = pModule->pVisitCard->cModuleName;
-	if (pModule->cConfFilePath == NULL && ! g_bEasterEggs)  // option perso : les plug-ins non utilises sont grises et ne rajoutent pas leur .conf au theme courant.
-		pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
+	///if (pModule->cConfFilePath == NULL && ! g_bEasterEggs)  // option perso : les plug-ins non utilises sont grises et ne rajoutent pas leur .conf au theme courant.
+	///	pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
 	int iActive;
 	if (! pModule->pInterface->stopModule)
 		iActive = -1;
@@ -1414,7 +1438,7 @@ static gboolean _cairo_dock_add_one_module_widget (CairoDockModule *pModule, con
 		pModule->pVisitCard->cDescription,
 		pModule->pVisitCard->cPreviewFilePath,
 		iActive,
-		pModule->cConfFilePath != NULL,
+		pModule->pVisitCard->cConfFileName != NULL,
 		NULL,
 		pModule->pVisitCard->cGettextDomain,
 		NULL,
@@ -1473,6 +1497,9 @@ static void _add_main_groups_buttons (void)
 		N_("All of the parameters you will never want to tweak."),
 		N_("System"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Docks");
+	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Connection");
+	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Containers");
+	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Backends");
 	
 	pGroupDescription = _add_one_main_group_button ("Background",
 		"icon-background.svg",
@@ -1487,7 +1514,7 @@ static void _add_main_groups_buttons (void)
 		N_("Select a view for each of your docks."),
 		N_("Views"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Backends");
-	pGroupDescription->pExternalModules = g_list_prepend (NULL, (gchar*)"dock rendering");
+	pGroupDescription->pExtensions = g_list_prepend (NULL, (gchar*)"dock rendering");
 	
 	pGroupDescription = _add_one_main_group_button ("Dialogs",
 		"icon-dialogs.svg",
@@ -1495,7 +1522,7 @@ static void _add_main_groups_buttons (void)
 		N_("Configure text bubble appearance."),
 		N_("Dialog boxes"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Dialogs");
-	pGroupDescription->pExternalModules = g_list_prepend (NULL, (gchar*)"dialog rendering");
+	pGroupDescription->pExtensions = g_list_prepend (NULL, (gchar*)"dialog rendering");
 	
 	pGroupDescription = _add_one_main_group_button ("Desklets",
 		"icon-desklets.png",
@@ -1503,7 +1530,7 @@ static void _add_main_groups_buttons (void)
 		N_("Applets can be displayed on your desktop as widgets."),
 		N_("Desklets"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Desklets");
-	pGroupDescription->pExternalModules = g_list_prepend (NULL, (gchar*)"desklet rendering");
+	pGroupDescription->pExtensions = g_list_prepend (NULL, (gchar*)"desklet rendering");
 	
 	pGroupDescription = _add_one_main_group_button ("Icons",
 		"icon-icons.svg",
@@ -1518,7 +1545,7 @@ static void _add_main_groups_buttons (void)
 		N_("Indicators are additional markers for your icons."),
 		N_("Indicators"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Indicators");
-	pGroupDescription->pExternalModules = g_list_prepend (NULL, (gchar*)"drop indicator");
+	pGroupDescription->pExtensions = g_list_prepend (NULL, (gchar*)"drop indicator");
 	
 	pGroupDescription = _add_one_main_group_button ("Labels",
 		"icon-labels.svg",
@@ -1708,7 +1735,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 			cOriginalConfFilePath,
 			NULL,  // domaine de traduction : celui du dock.
 			pInternalModule->cDependencies,
-			pInternalModule->pExternalModules,
+			pInternalModule->pExtensions,
 			NULL,
 			pInternalModule->cTitle);
 	}
@@ -2135,7 +2162,9 @@ static void _reload_current_module_widget (CairoDockModuleInstance *pInstance, i
 	GtkWidget *pWidget;
 	if (pModule != NULL)
 	{
-		pWidget = cairo_dock_present_group_widget (pModule->cConfFilePath, s_pCurrentGroup, FALSE, pInstance);
+		gchar *cFile = _get_valid_module_conf_file (pModule);
+		pWidget = cairo_dock_present_group_widget (cFile, s_pCurrentGroup, FALSE, pInstance);
+		g_free (cFile);
 	}
 	else
 	{
@@ -2210,7 +2239,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 	}
 	
 	//\_______________ On complete avec les modules additionnels.
-	if (pGroupDescription->pExternalModules != NULL)
+	if (pGroupDescription->pExtensions != NULL)
 	{
 		// on cree les widgets de tous les modules externes dans un meme notebook.
 		//g_print ("on cree les widgets de tous les modules externes\n");
@@ -2221,24 +2250,22 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 		GSList *pExtraCurrentWidgetList = NULL;
 		CairoDockGroupDescription *pExtraGroupDescription;
 		GList *p;
-		for (p = pGroupDescription->pExternalModules; p != NULL; p = p->next)
+		for (p = pGroupDescription->pExtensions; p != NULL; p = p->next)
 		{
 			//g_print (" + %s\n", p->data);
 			pModule = cairo_dock_find_module_from_name (p->data);
-			if (pModule == NULL)
+			if (pModule == NULL || pModule->pVisitCard->cConfFileName == NULL)
 				continue;
-			if (pModule->cConfFilePath == NULL)  // on n'est pas encore passe par la dans le cas ou le plug-in n'a pas ete active; mais on veut pouvoir configurer un plug-in meme lorsqu'il est inactif.
-			{
-				pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
-			}
-			//g_print (" + %s\n", pModule->cConfFilePath);
-
+			
 			pExtraGroupDescription = cairo_dock_find_module_description (p->data);
 			//g_print (" pExtraGroupDescription : %x\n", pExtraGroupDescription);
 			if (pExtraGroupDescription == NULL)
 				continue;
-
-			pExtraKeyFile = cairo_dock_open_key_file (pModule->cConfFilePath);
+			
+			g_free (pExtraGroupDescription->cConfFilePath);
+			pExtraGroupDescription->cConfFilePath = _get_valid_module_conf_file (pModule);
+			
+			pExtraKeyFile = cairo_dock_open_key_file (pExtraGroupDescription->cConfFilePath);
 			if (pExtraKeyFile == NULL)
 				continue;
 			
@@ -2419,8 +2446,13 @@ static void cairo_dock_present_module_gui (CairoDockModule *pModule)
 		return ;
 	
 	CairoDockModuleInstance *pModuleInstance = (pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);
-	gchar *cConfFilePath = (pModuleInstance != NULL ? pModuleInstance->cConfFilePath : pModule->cConfFilePath);
+	gchar *cConfFilePath;
+	if (pModuleInstance)
+		cConfFilePath = g_strdup (pModuleInstance->cConfFilePath);
+	else
+		cConfFilePath = _get_valid_module_conf_file (pModule);
 	cairo_dock_present_group_widget (cConfFilePath, pGroupDescription, FALSE, pModuleInstance);
+	g_free (cConfFilePath);
 }
 
 static void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleInstance)
@@ -2443,28 +2475,26 @@ static void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	if (pModule == NULL)  // c'est un groupe du fichier de conf principal.
 	{
-		cConfFilePath = g_cConfFile;
+		cConfFilePath = g_strdup (g_cConfFile);
 		bSingleGroup = TRUE;
 	}
 	else  // c'est un module, on recupere son fichier de conf en entier.
 	{
-		if (pModule->cConfFilePath == NULL)  // on n'est pas encore passe par la dans le cas ou le plug-in n'a pas ete active; mais on veut pouvoir configurer un plug-in meme lorsqu'il est inactif.
+		if (pModule->pInstancesList != NULL)
 		{
-			pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
+			pModuleInstance = pModule->pInstancesList->data;
+			cConfFilePath = g_strdup (pModuleInstance->cConfFilePath);
 		}
-		if (pModule->cConfFilePath == NULL)
+		else
 		{
-			cd_warning ("couldn't load a conf file for this module => can't configure it.");
-			return;
+			cConfFilePath = _get_valid_module_conf_file (pModule);
 		}
-		
-		pModuleInstance = (pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);
-		cConfFilePath = (pModuleInstance != NULL ? pModuleInstance->cConfFilePath : pModule->cConfFilePath);
 		
 		bSingleGroup = FALSE;
 	}
 	
 	cairo_dock_present_group_widget (cConfFilePath, pGroupDescription, bSingleGroup, pModuleInstance);
+	g_free (cConfFilePath);
 }
 
 

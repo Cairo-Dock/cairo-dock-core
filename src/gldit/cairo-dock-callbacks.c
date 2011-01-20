@@ -322,7 +322,7 @@ static void _search_icon (Icon *icon, CairoContainer *pContainer, gpointer *data
 static gboolean _cairo_dock_action_on_drag_hover (Icon *pIcon)
 {
 	gpointer data[2] = {pIcon, NULL};
-	cairo_dock_foreach_icons_in_docks ((CairoDockForeachIconFunc)_search_icon, data);  // on verifie que l'icone ne s'est pas faite effacee entre-temps?
+	cairo_dock_foreach_icons_in_docks ((CairoDockForeachIconFunc)_search_icon, data);  // on verifie que l'icone ne s'est pas faite effacee entre-temps.
 	pIcon = data[1];
 	if (pIcon && pIcon->iface.action_on_drag_hover)
 		pIcon->iface.action_on_drag_hover (pIcon);

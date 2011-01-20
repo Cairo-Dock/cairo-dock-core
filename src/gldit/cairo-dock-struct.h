@@ -76,20 +76,23 @@
  * \n
  * \section intro_sec Introduction
  *
- * Cairo-Dock's API can be divided into 3 parts :
+ * This documentation is divided into 3 parts :
  * - the definition of the main classes (dock, icon, etc)
  * - utilities functions (interaction with X, GUI, etc)
  * - plug-ins framework.
  *
- * Each class is defined in its own header. When a class is complex, it is divided into several files :
- * - "factory" define structures/enums and creation/modification/destruction functions
- * - "manager" manage all the ressources needed by a class and all the instances of a class
- * - "utilities" are a collection of helper functions.
+ * It is useful if you want to write a complex plug-in or add new features in the core (or if you just love C); to write simple applets in any language, see http://doc.glx-dock.org.
  *
  * Cairo-Dock has a <b>decentralized conception</b> : it has a minimalistic core, and lets external modules extend its functionnalities.\n
  * This is a strong design, because it allows to extend functionnalities easily without having to hack into the core, which makes the project more stable and allows developpers to use high-level functions only, that are very tested and optimized.\n
  * Thus, Cairo-Dock itself has no animation, but has a convenient notification system that allows external plug-ins to animate icons when they want.\n
- * We will focus on this system and the plug-ins framework in this document. Part 1 will be seen briefly, and part 2 will be let to your curiosity. This should be enough to quickly be able to write a lot of applets.
+ *
+ * The core itself is a library made of several modules. Each module is made on the same model:
+ * - the "factory" defines the structures/enums/interfaces of a class and creation/modification/destruction functions
+ * - the "manager" manages all the ressources of the module and all the instances of the class
+ * - the "facility" or "utilities" are a collection of helper functions to related to the class.
+ *
+ * In this document, we will focus on the notification system and the plug-ins framework. Part 1 will be seen briefly, and part 2 will be let to your curiosity. This should be enough to quickly be able to write a lot of applets.
  * 
  * \n
  * \section install_sec Installation
@@ -112,7 +115,7 @@
  *   make
  *   sudo make install
  * \endcode
- * To install unstable applets, add some -Denable-xxx=yes to the cmake command, where xxx is the lower-case name of the applet.
+ * To install unstable plug-ins, add -Denable-xxx=yes to the cmake command, where xxx is the lower-case name of the applet.
  * 
  * 
  * \n
@@ -144,15 +147,15 @@
  * \subsection module First, what is a module ?
  * 
  * Modules are compiled .so files (that is to say, library) that are plugged into the dock at run-time.
- * Due to this fact, they can use any function used by the dock, and have a total interaction freedom on the dock.
+ * Therefore, they can use any function used by the dock, and have a total interaction freedom on the dock.
  * The advantage is that applets can do anything, in fact they are extensions of the dock itself.
  * The drawback is that a buggy applet can make the dock unstable.
  * 
  * A module has an <b>interface</b> and a <b>visit card</b> :
  *  - the visit card allows it to define itself (name, category, default icon, etc)
- *  - the interface defines the entry points for init, stop, reload, read config, and reset datas.
+ *  - the interface defines the entry points for init, stop, reload, read config, and reset config/data.
  * 
- * Modules can be instanciated several times; each time they are, an <b>instance</b> is created. This instance will hold all the data used by the module's functions : the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these parameters are optionnal; a module that has an icon is also called an <b>applet</b>.
+ * Modules can be instanciated several times; each time they are, an <b>instance</b> is created. This instance will hold all the data used by the module: the icon and its container, the config structure and its conf file, the data structure and a slot to plug data into containers and icons. All these parameters are optionnal; a module that has an icon is also called an <b>applet</b>.
  * 
  * When instanciating a module, CD will check the presence of an "Icon" group in the conf file. If there is one, it will create an icon accordingly and insert it into its container. If there is a "Desklet" group, the module is considered as detachable, and can be placed into a desklet.
  * Here we will focus on applets, that is to say, we will have an icon and a container (dock or desklet).
@@ -162,12 +165,11 @@
  * 
  * Easy ! just go to the "plug-ins" folder, and run the <i>generate-applet.sh</i> script. Answer the few questions, and you're done ! Don't forget to install the plug-in each time you modify it (<i>sudo make install</i> in your applet's folder).
  * You can see that the script has created for you the architecture of your applet :
- * - in the <b>root</b> folder, you have the "configure.ac", where you can set the version number of your applet, the dependencies, etc
- * - in the <b>src</b> folder, you have the sources of your applet. It is common to put the init/stop/reload in applet-init.c, the get_config/reset_config/reset_data in applet-config.c, the notifications in applet-notifications.c, and the structures in applet-struct.h. Of course, you can add as many files as you want, just don't forget to specify them in the Makefile.am
- * - in the <b>po</b> folder, you have the translation files. Currently the dock is widely translated into French, Japanese, and Italian.
+ * - in the <b>plug-ins</b> parent folder, you have the "CMakeLists.txt", where you can set the version number of your applet, the dependencies, etc
+ * - in the <b>src</b> folder, you have the sources of your applet. It is common to put the init/stop/reload in applet-init.c, the get_config/reset_config/reset_data in applet-config.c, the notifications in applet-notifications.c, and the structures in applet-struct.h. Of course, you can add as many files as you want, just don't forget to specify them in the CMakeLists.txt.
  * - in the <b>data</b> folder, you have the config file, the default icon, and a preview. You will have to choose a default icon that fits your applet, and make a preview that makes users want to try it ;-)
  * If you have other files to install, it's here you will do it.
- * If you change the name of the default icon (for instance you use an SVG file), don't forget to modify the data/Makefile.am and also the src/Makefile.am.
+ * If you change the name of the default icon (for instance you use an SVG file), don't forget to modify the data/CMakeLists.txt and also the src/CMakeLists.txt.
  * 
  * 
  * \subsection definition Ok I have a generic applet, how do I define it ?
@@ -175,7 +177,7 @@
  * As we saw, a module must fill a visit card and an interface, to be acecpted by the dock.
  * This is done very easily by the \ref CD_APPLET_DEFINITION macro. All you have to give is the name of the applet, its category, a brief description/manual (very important !), and your name.
  * 
- * Once have finished your applet, don't forget to make a nice preview (~200x200 pixels) and a nice default icon, and place them in the <i>data</i> folder.
+ * Once you have finished your applet, don't forget to make a nice preview (~200x200 pixels) and a nice default icon, and place them in the <i>data</i> folder.
  * 
  * 
  * \subsection sections Great, I can see my applet in the dock ! Now, where should I continue ?
@@ -203,24 +205,24 @@
  * 
  * When something happens, Cairo-Dock notifies everybody about it, including itself. An applet can register to any notification (see \ref cairo-dock-notifications.h) before or after the dock, to be notified of the event of its choice. When you are notified, the function you registered for this event will be called; it must match the notification prototype as defined in \ref cairo-dock-notifications.h.
  *
- * For instance if you want to know when the user clicks on your icon, you will register to the \ref CAIRO_DOCK_CLICK_ICON notification.
+ * For instance if you want to know when the user clicks on your icon, you will register to the \ref NOTIFICATION_CLICK_ICON notification.
  *
- * To register to a notification, you have the \ref cairo_dock_register_notification function. Always unregister when your applet is stopped, to avoid being notified when you shouldn't, with the function \ref cairo_dock_remove_notification_func.
+ * To register to a notification, you have the \ref cairo_dock_register_notification_on_object function. Always unregister when your applet is stopped, to avoid being notified when you shouldn't, with the function \ref cairo_dock_remove_notification_func_on_object.
  * 
- * For convenience, there are sections dedicated to the most common events; you just have to fill the corresponding sections :
- * - \ref CD_APPLET_ON_CLICK_BEGIN/\ref CD_APPLET_ON_CLICK_END for the actions on right click on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_MIDDLE_CLICK_BEGIN/\ref CD_APPLET_ON_MIDDLE_CLICK_END for the actions on middle click on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_DOUBLE_CLICK_BEGIN/\ref CD_APPLET_ON_DOUBLE_CLICK_END for the actions on double click on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_SCROLL_BEGIN/\ref CD_APPLET_ON_SCROLL_END for the actions on scroll on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_BUILD_MENU_BEGIN/\ref CD_APPLET_ON_BUILD_MENU_END for the building of the menu on left click on your icon or one of its sub-dock.
- * 
- * To register to these notifications, you can use the convenient macros :
+ * For convenience, there are macros to register to the most common events:
  * - \ref CD_APPLET_REGISTER_FOR_CLICK_EVENT
  * - \ref CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT
  * - \ref CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT
  * - \ref CD_APPLET_REGISTER_FOR_SCROLL_EVENT
  * - \ref CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT
  *
+ * Then you just have to fill the corresponding sections:
+ * - \ref CD_APPLET_ON_CLICK_BEGIN/\ref CD_APPLET_ON_CLICK_END for the actions on right click on your icon or one of its sub-dock.
+ * - \ref CD_APPLET_ON_MIDDLE_CLICK_BEGIN/\ref CD_APPLET_ON_MIDDLE_CLICK_END for the actions on middle click on your icon or one of its sub-dock.
+ * - \ref CD_APPLET_ON_DOUBLE_CLICK_BEGIN/\ref CD_APPLET_ON_DOUBLE_CLICK_END for the actions on double click on your icon or one of its sub-dock.
+ * - \ref CD_APPLET_ON_SCROLL_BEGIN/\ref CD_APPLET_ON_SCROLL_END for the actions on scroll on your icon or one of its sub-dock.
+ * - \ref CD_APPLET_ON_BUILD_MENU_BEGIN/\ref CD_APPLET_ON_BUILD_MENU_END for the building of the menu on left click on your icon or one of its sub-dock.
+ * 
  *
  * \subsection useful_functions Ok now I have several sections of code to fill. Are there any useful functions to do it ?
  * A lot of useful macros are provided in cairo-dock-applet-facility.h to make your life easier :
@@ -274,7 +276,7 @@
  * 
  * Say for instance you want to download a file on the Net, it is likely to take some amount of time, during which the dock will be frozen, waiting for you. To avoid such a situation, Cairo-Dock defines \ref _CairoDockTask "Tasks". They are perform their job <b>asynchronously</b>, and can be <b>periodic</b>. See cairo-dock-task.h for a quick explanation on how a Task works.
  * 
- * You create a Task with \ref cairo_dock_new_task, launch it with \ref cairo_dock_launch_task, and destroy it with \ref cairo_dock_free_task.
+ * You create a Task with \ref cairo_dock_new_task, launch it with \ref cairo_dock_launch_task, and either cancel it with \ref cairo_dock_discard_task or destroy it with \ref cairo_dock_free_task.
  * 
  * 
  * \subsection sub-icons I need more than one icon, how can I easily get more ?
@@ -321,15 +323,14 @@ when defining your applet in the \ref CD_APPLET_DEFINE_BEGIN/\ref CD_APPLET_DEFI
  * 
  * \subsection multi How can I make my applet multi-instanciable ?
  *
- * Applets can be launched several times, an instance will be created each time. To ensure your applet can be instanciated several times, you just need to pass myApplet to any function that uses one of its fields (myData, myIcon, etc). Then, to indicate Cairo-Dock that your applet is multi-instanciable, you'll have to define the macro CD_APPLET_MULTI_INSTANCE in each file. A convenient way to do that is to define it in the Makefile.am, by adding the following line to the CFLAGS : \code -DCD_APPLET_MULTI_INSTANCE=\"1\"\ \endcode.
+ * Applets can be launched several times, an instance will be created each time. To ensure your applet can be instanciated several times, you just need to pass myApplet to any function that uses one of its fields (myData, myIcon, etc). Then, to indicate Cairo-Dock that your applet is multi-instanciable, you'll have to define the macro CD_APPLET_MULTI_INSTANCE in each file. A convenient way to do that is to define it in the CMakeLists.txt by adding the following line: \code add_definitions (-DCD_APPLET_MULTI_INSTANCE="1") \endcode.
  * 
  * 
  * \subsection render_container How can I draw anywhere on the dock, not only on my icon ?
  * 
- * Say you want to draw directly on your container, like <i>CairoPenguin</i> or <i>ShowMouse</i> do. This can be achieved easily by registering to the \ref CAIRO_DOCK_RENDER_DOCK or \ref CAIRO_DOCK_RENDER_DESKLET notifications. You will then be notified eash time a Dock or a Desklet is drawn. Register AFTER so that you will draw after the view.
+ * Say you want to draw directly on your container, like <i>CairoPenguin</i> or <i>ShowMouse</i> do. This can be achieved easily by registering to the \ref NOTIFICATION_RENDER_DOCK or \ref NOTIFICATION_RENDER_DESKLET notifications. You will then be notified eash time a Dock or a Desklet is drawn. Register AFTER so that you will draw after the view.
  * 
  * 
- * to be continued ...
  */
 
 typedef struct _CairoDockRenderer CairoDockRenderer;

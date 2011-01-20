@@ -26,6 +26,10 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-default-view.h This class implements the Dock rendering interface and provides the "default" view.
+*/
+
 
 void cairo_dock_register_default_renderer (void);
 
