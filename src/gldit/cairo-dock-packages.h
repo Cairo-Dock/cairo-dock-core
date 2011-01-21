@@ -150,7 +150,16 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 *@param erreur an error.
 *@return the data. Free the string after using it.
 */
-gchar *cairo_dock_get_url_data (const gchar *cURL, GError **erreur);
+#define cairo_dock_get_url_data(cURL, erreur) cairo_dock_get_url_data_with_post (cURL, erreur, NULL)
+
+/** Retrieve the response of a POST request to a server.
+*@param cURL URL of the server
+*@param erreur an error.
+*@param cFirstProperty first property of the POST data.
+*@param ... tuples of property and data to insert in POST data; the POST data will be formed with a=urlencode(b)&c=urlencode(d)&... End it with NULL.
+*@return the data. Free the string after using it.
+*/
+gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, GError **erreur, const gchar *cFirstProperty, ...);
 
 /** Asynchronously retrieve the content of a distant text file. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the content of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
 *@param cServerAdress adress of the server.

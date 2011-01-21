@@ -277,11 +277,41 @@ static size_t _write_data_to_buffer (gpointer buffer, size_t size, size_t nmemb,
 	*list_ptr = g_list_prepend (*list_ptr, g_strndup (buffer, size * nmemb));
 	return size * nmemb;
 }
-gchar *cairo_dock_get_url_data (const gchar *cURL, GError **erreur)
+
+gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, GError **erreur, const gchar *cFirstProperty, ...)
 {
 	//\_______________ On lance le download.
 	cd_debug ("getting data from '%s' ...", cURL);
 	CURL *handle = _init_curl_connection (cURL);
+	
+	GString *sPostData = NULL;
+	if (cFirstProperty != NULL)
+	{
+		sPostData = g_string_new ("");
+		const gchar *cProperty = cFirstProperty;
+		gchar *cData;
+		gchar *cEncodedData = NULL;
+		va_list args;
+		va_start (args, cFirstProperty);
+		do
+		{
+			cData = va_arg (args, gchar *);
+			if (!cData)
+				break;
+				if (cEncodedData != NULL)  // we don't access the pointer, we just want to know if we have already looped once or not.
+				g_string_append_c (sPostData, '&');
+			cEncodedData = curl_easy_escape (handle, cData, 0);
+			g_string_append_printf (sPostData, "%s=%s", cProperty, cEncodedData);
+			curl_free (cEncodedData);
+			cProperty = va_arg (args, gchar *);
+		}
+		while (cProperty != NULL);
+		va_end (args);
+		g_print ("POST data: '%s'\n", sPostData->str);
+		
+		curl_easy_setopt (handle, CURLOPT_POST, 1);
+		curl_easy_setopt (handle, CURLOPT_POSTFIELDS, sPostData->str);
+	}
 	curl_easy_setopt (handle, CURLOPT_WRITEFUNCTION, (curl_write_callback)_write_data_to_buffer);
 	gpointer *pointer_to_list = g_new0 (gpointer, 1);
 	curl_easy_setopt (handle, CURLOPT_WRITEDATA, pointer_to_list);
@@ -296,6 +326,8 @@ gchar *cairo_dock_get_url_data (const gchar *cURL, GError **erreur)
 	}
 	
 	curl_easy_cleanup (handle);
+	if (sPostData)
+		g_string_free (sPostData, TRUE);
 	
 	//\_______________ On recupere les donnees.
 	gchar *cContent = NULL;
