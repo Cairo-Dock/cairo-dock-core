@@ -278,7 +278,7 @@ static size_t _write_data_to_buffer (gpointer buffer, size_t size, size_t nmemb,
 	return size * nmemb;
 }
 
-gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, GError **erreur, const gchar *cFirstProperty, ...)
+gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutputHeaders, GError **erreur, const gchar *cFirstProperty, ...)
 {
 	//\_______________ On lance le download.
 	cd_debug ("getting data from '%s' ...", cURL);
@@ -311,6 +311,8 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, GError **erreur, co
 		
 		curl_easy_setopt (handle, CURLOPT_POST, 1);
 		curl_easy_setopt (handle, CURLOPT_POSTFIELDS, sPostData->str);
+		if (bGetOutputHeaders)
+			curl_easy_setopt (handle, CURLOPT_HEADER, 1);
 	}
 	curl_easy_setopt (handle, CURLOPT_WRITEFUNCTION, (curl_write_callback)_write_data_to_buffer);
 	gpointer *pointer_to_list = g_new0 (gpointer, 1);

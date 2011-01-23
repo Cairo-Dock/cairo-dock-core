@@ -1097,7 +1097,7 @@ static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock,
 }
 static GtkListStore *_cairo_dock_build_dock_list_for_gui (void)
 {
-	GtkListStore *pList = _build_list_for_gui ((CDForeachRendererFunc)cairo_dock_foreach_docks, (GHFunc)_cairo_dock_add_one_dock_item, "");
+	GtkListStore *pList = _build_list_for_gui ((CDForeachRendererFunc)cairo_dock_foreach_docks, (GHFunc)_cairo_dock_add_one_dock_item, NULL);
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pList), &iter);
@@ -1106,6 +1106,7 @@ static GtkListStore *_cairo_dock_build_dock_list_for_gui (void)
 		CAIRO_DOCK_MODEL_RESULT, "_New Dock_",  // this name does likely not exist, which will lead to the creation of a new dock.
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
 		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
+	return pList;
 }
 
 static void _cairo_dock_add_one_icon_theme_item (const gchar *cDisplayedName, const gchar *cFolderName, GtkListStore *pModele)
@@ -2366,7 +2367,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			{
 				GtkListStore *pDocksListStore = _cairo_dock_build_dock_list_for_gui ();
 				
-				pOneWidget = gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (pDocksListStore), CAIRO_DOCK_MODEL_NAME);
+				///pOneWidget = gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (pDocksListStore), CAIRO_DOCK_MODEL_NAME);
+				pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (pDocksListStore));
+				rend = gtk_cell_renderer_text_new ();
+				gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
+				gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 				
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				GtkTreeIter iter;

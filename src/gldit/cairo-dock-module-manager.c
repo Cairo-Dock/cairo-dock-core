@@ -269,11 +269,11 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList)
 				erreur = NULL;
 			}
 		}
-		else  // ne devrait pas arriver
+		/**else  // ne devrait pas arriver
 		{
 			cd_warning ("module %s has not been stopped beforehand !", cModuleName);
 			cairo_dock_reload_module (pModule, FALSE);
-		}
+		}*/
 	}
 }
 

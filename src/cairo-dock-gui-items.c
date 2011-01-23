@@ -145,6 +145,24 @@ static void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 		// update the keys with the widgets.
 		cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
 		
+		// if the parent dock doesn't exist (new dock), add a conf file for it with a nominal name.
+		if (g_key_file_has_key (pKeyFile, "Icon", "dock name", NULL))
+		{
+			gchar *cDockName = g_key_file_get_string (pKeyFile, "Icon", "dock name", NULL);
+			gboolean bIsDetached = g_key_file_get_boolean (pKeyFile, "Desklet", "initially detached", NULL);
+			if (!bIsDetached)
+			{
+				CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
+				if (pDock == NULL)
+				{
+					gchar *cNewDockName = cairo_dock_add_root_dock_config ();
+					g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewDockName);
+					g_free (cNewDockName);
+				}
+			}
+			g_free (cDockName);
+		}
+		
 		if (pModuleInstance->pModule->pInterface->save_custom_widget != NULL)
 			pModuleInstance->pModule->pInterface->save_custom_widget (pModuleInstance, pKeyFile);
 		
@@ -191,6 +209,20 @@ static void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 		
 		// update the keys with the widgets.
 		cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
+		
+		// if the parent dock doesn't exist (new dock), add a conf file for it with a nominal name.
+		if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Container", NULL))
+		{
+			gchar *cDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", NULL);
+			CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
+			if (pDock == NULL)
+			{
+				gchar *cNewDockName = cairo_dock_add_root_dock_config ();
+				g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewDockName);
+				g_free (cNewDockName);
+			}
+			g_free (cDockName);
+		}
 		
 		// write everything in the conf file.
 		cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
