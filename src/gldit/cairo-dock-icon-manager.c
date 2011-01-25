@@ -533,7 +533,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	pIcons->fReflectSize *= pIcons->fReflectHeightRatio;
 	
 	
-	//\___________________ font
+	//\___________________ labels font
 	CairoIconsParam *pLabels = pIcons;
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
@@ -576,7 +576,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	pango_font_description_free (fd);
 	g_free (cFontDescription);
 	
-	//\___________________ text color
+	//\___________________ labels text color
 	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	double couleur_label[3] = {1., 1., 1.};
@@ -588,18 +588,37 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 
 	double couleur_backlabel[4] = {0., 0., 0., 0.5};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text background color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", NULL);
+	if (!g_key_file_has_key (pKeyFile, "Labels", "qi same", NULL))  // old params
+	{
+		gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
+		if (! bUseBackgroundForLabel)
+		{
+			pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas dessine.
+			g_key_file_set_double_list (pKeyFile, "Icons", "text background color", pLabels->iconTextDescription.fBackgroundColor, 4);
+		}
+	}
 	
 	pLabels->iconTextDescription.iMargin = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "text margin", &bFlushConfFileNeeded, 4, NULL, NULL);
 	
+	//\___________________ quick-info
 	memcpy (&pLabels->quickInfoTextDescription, &pLabels->iconTextDescription, sizeof (CairoDockLabelDescription));
 	pLabels->quickInfoTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
 	pLabels->quickInfoTextDescription.iSize = 12;
 	pLabels->quickInfoTextDescription.iWeight = PANGO_WEIGHT_HEAVY;
 	pLabels->quickInfoTextDescription.iStyle = PANGO_STYLE_NORMAL;
 	
-	gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
-	if (! bUseBackgroundForLabel)
-		pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas dessine.
+	gboolean bQuickInfoSameLook = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "qi same", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	if (bQuickInfoSameLook)
+	{
+		memcpy (pLabels->quickInfoTextDescription.fBackgroundColor, pLabels->iconTextDescription.fBackgroundColor, 4 * sizeof (gdouble));
+		memcpy (pLabels->quickInfoTextDescription.fColorStart, pLabels->iconTextDescription.fColorStart, 3 * sizeof (gdouble));
+	}
+	else
+	{
+		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "qi bg color", &bFlushConfFileNeeded, pLabels->quickInfoTextDescription.fBackgroundColor, 4, couleur_backlabel, NULL, NULL);
+		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "qi text color", &bFlushConfFileNeeded, pLabels->quickInfoTextDescription.fColorStart, 3, couleur_label, NULL, NULL);
+	}
+	memcpy (pLabels->quickInfoTextDescription.fColorStop, pLabels->quickInfoTextDescription.fColorStart, 3 * sizeof (gdouble));
 	
 	pLabels->iLabelSize = (pLabels->iconTextDescription.iSize != 0 ?
 		pLabels->iconTextDescription.iSize +

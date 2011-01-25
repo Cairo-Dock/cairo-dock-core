@@ -204,7 +204,8 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	/// faire marcher ca ...
 	/**if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{
-		gchar *cCommand = g_strdup_printf ("dbus-send --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/scale/allscreens/initiate_all org.freedesktop.compiz.activate string:'root' int32:`xwininfo -root | grep id: | awk '{ print $4 }'` string:'match' string:'class=%s'", icon->cClass);
+		gchar *cCommand = g_strdup_printf ("dbus-send  --type=method_call --dest=org.freedesktop.compiz  /org/freedesktop/compiz/scale/allscreens/initiate_all_key  org.freedesktop.compiz.activate string:'root' int32:`xwininfo  -root | grep id: | awk '{ print $5 }'` string:\"match\"  string:'class=.*%s*'", icon->cClass+1);
+		g_print ("%s\n", cCommand);
 		system (cCommand);
 		g_free (cCommand);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;

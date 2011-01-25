@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 #include <gtk/gtkgl.h>
 #include <GL/gl.h> 
@@ -66,6 +67,7 @@ static CairoDockImageBuffer s_pRetachButtonBuffer;
 static CairoDockImageBuffer s_pDepthRotateButtonBuffer;
 static CairoDockImageBuffer s_pNoInputButtonBuffer;
 static GList *s_pDeskletList = NULL;
+static time_t s_iStartupTime = 0;
 
 static gboolean _cairo_dock_update_desklet_notification (gpointer data, CairoDesklet *pDesklet, gboolean *bContinueAnimation);
 static gboolean _cairo_dock_enter_leave_desklet_notification (gpointer data, CairoDesklet *pDesklet, gboolean *bStartAnimation);
@@ -826,6 +828,15 @@ Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 	return NULL;
 }
 
+gboolean cairo_dock_desklet_manager_is_ready (void)
+{
+	static gboolean bReady = FALSE;
+	if (!bReady)  // once we are ready, no need to test it again.
+	{
+		bReady = (time (NULL) > s_iStartupTime + 5);  // 5s delay on startup
+	}
+	return bReady;
+}
 
   //////////////////
  /// GET CONFIG ///
@@ -932,6 +943,7 @@ static void init (void)
 		NOTIFICATION_RENDER_DESKLET,
 		(CairoDockNotificationFunc) _cairo_dock_render_desklet_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
+	s_iStartupTime = time (NULL);  // on startup, the WM can take a long time before it has positionned all the desklets. To avoid irrelevant configure events, we set a delay.
 }
 
   ///////////////

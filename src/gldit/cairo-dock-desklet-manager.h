@@ -151,6 +151,8 @@ CairoDesklet *cairo_dock_get_desklet_by_Xid (Window Xid);
 */
 Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet);
 
+gboolean cairo_dock_desklet_manager_is_ready (void);
+
 
 void gldi_register_desklets_manager (void);
 

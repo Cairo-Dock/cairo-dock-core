@@ -54,6 +54,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-desklet-factory.h"
 
 extern gboolean g_bUseOpenGL;
@@ -298,7 +299,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDesklet *pDesklet)
 {
-	//g_print (" >>>>>>>>> %s (%dx%d, %d;%d)", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
+	g_print (" >>>>>>>>> %s (%dx%d, %d;%d)", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
 	if (pDesklet->container.iWidth != pEvent->width || pDesklet->container.iHeight != pEvent->height)
 	{
 		if ((pEvent->width < pDesklet->container.iWidth || pEvent->height < pDesklet->container.iHeight) && (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0))
@@ -330,11 +331,14 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 		if (pDesklet->bNoInput)
 			_cairo_dock_set_desklet_input_shape (pDesklet);
 		
-		if (pDesklet->iSidWriteSize != 0)
+		if (cairo_dock_desklet_manager_is_ready ())
 		{
-			g_source_remove (pDesklet->iSidWriteSize);
+			if (pDesklet->iSidWriteSize != 0)
+			{
+				g_source_remove (pDesklet->iSidWriteSize);
+			}
+			pDesklet->iSidWriteSize = g_timeout_add (CD_WRITE_DELAY, (GSourceFunc) _cairo_dock_write_desklet_size, (gpointer) pDesklet);
 		}
-		pDesklet->iSidWriteSize = g_timeout_add (CD_WRITE_DELAY, (GSourceFunc) _cairo_dock_write_desklet_size, (gpointer) pDesklet);
 	}
 	
 	int x = pEvent->x, y = pEvent->y;
@@ -347,17 +351,20 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 		y += g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 	while (y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 		y -= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	//g_print (" => (%d;%d)\n", x, y);
+	g_print (" => (%d;%d)\n", x, y);
 	if (pDesklet->container.iWindowPositionX != x || pDesklet->container.iWindowPositionY != y)
 	{
 		pDesklet->container.iWindowPositionX = x;
 		pDesklet->container.iWindowPositionY = y;
 
-		if (pDesklet->iSidWritePosition != 0)
+		if (cairo_dock_desklet_manager_is_ready ())
 		{
-			g_source_remove (pDesklet->iSidWritePosition);
+			if (pDesklet->iSidWritePosition != 0)
+			{
+				g_source_remove (pDesklet->iSidWritePosition);
+			}
+			pDesklet->iSidWritePosition = g_timeout_add (CD_WRITE_DELAY, (GSourceFunc) _cairo_dock_write_desklet_position, (gpointer) pDesklet);
 		}
-		pDesklet->iSidWritePosition = g_timeout_add (CD_WRITE_DELAY, (GSourceFunc) _cairo_dock_write_desklet_position, (gpointer) pDesklet);
 	}
 	pDesklet->moving = FALSE;
 
