@@ -263,7 +263,6 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL)  // taken 
 		Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
 		XDeleteProperty ( dpy, DefaultRootWindow (dpy), XInternAtom (dpy, "RGB_COLOR_MAP", 0) ); // (XA_RGB_DEFAULT_MAP)
 		XFree (pVisInfo);
-		exit(1);
 	}
 	g_return_val_if_fail (g_openglConfig.pGlConfig != NULL, FALSE);
 	g_bUseOpenGL = TRUE;
