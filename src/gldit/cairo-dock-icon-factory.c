@@ -414,6 +414,9 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
+		/*while (gtk_events_pending ())
+			gtk_main_iteration ();*/
+		gtk_main_iteration_do (FALSE);  /// check the consequences...
 	}
 	return FALSE;
 }

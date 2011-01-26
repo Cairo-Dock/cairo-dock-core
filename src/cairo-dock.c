@@ -407,6 +407,12 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 	g_free (cConfFilePath);
 }
 
+static gboolean _wait (GMainLoop *loop)
+{
+	g_main_loop_quit (loop);
+	return FALSE;
+}
+
 int main (int argc, char** argv)
 {
 	//\___________________ show the config panel if something has gone wrong in a previous life, or just quit to prevent infinite crash loop.
@@ -438,11 +444,15 @@ int main (int argc, char** argv)
 	//\___________________ get app's options.
 	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
+	int iDelay = 0;
 	GOptionEntry TableDesOptions[] =
 	{
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cVerbosity,
 			"log verbosity (debug,message,warning,critical,error); default is warning", NULL},
+		{"wait", 'w', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_INT,
+			&iDelay,
+			"wait for N seconds before starting; this is useful if you notice some problems when the dock starts with the session.", NULL},
 #ifdef HAVE_GLITZ
 		{"glitz", 'g', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bUseGlitz,
@@ -575,6 +585,15 @@ int main (int argc, char** argv)
 	bindtextdomain (CAIRO_DOCK_GETTEXT_PACKAGE, CAIRO_DOCK_LOCALE_DIR);
 	bind_textdomain_codeset (CAIRO_DOCK_GETTEXT_PACKAGE, "UTF-8");
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
+	
+	//\___________________ delay the startup if specified.
+	if (iDelay > 0)
+	{
+		GMainLoop *loop = g_main_loop_new (NULL, FALSE);
+		g_timeout_add_seconds (iDelay, (GSourceFunc)_wait, loop);
+		g_main_loop_run (loop);
+		g_main_loop_unref (loop);
+	}
 	
 	//\___________________ initialize libgldi.
 	GldiRenderingMethod iRendering = (bForceOpenGL ? GLDI_OPENGL : g_bForceCairo ? GLDI_CAIRO : GLDI_DEFAULT);

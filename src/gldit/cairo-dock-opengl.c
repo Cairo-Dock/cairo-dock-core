@@ -260,9 +260,10 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL)  // taken 
 		/// This function sets a new colormap on the root window, and Qt doesn't like that !...
 		/// link with https://bugzilla.redhat.com/show_bug.cgi?id=440340 ?
 		g_openglConfig.pGlConfig = gdk_x11_gl_config_new_from_visualid (pVisInfo->visualid);
-		Display *dpy = XOpenDisplay (0);
-		XDeleteProperty ( dpy, RootWindow (dpy, DefaultScreen (dpy)), XInternAtom (dpy, "XA_RGB_DEFAULT_MAP", 0) ); // there're probably gdk hooks for the rootwindow/the display - use them.
+		Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+		XDeleteProperty ( dpy, DefaultRootWindow (dpy), XInternAtom (dpy, "RGB_COLOR_MAP", 0) ); // (XA_RGB_DEFAULT_MAP)
 		XFree (pVisInfo);
+		exit(1);
 	}
 	g_return_val_if_fail (g_openglConfig.pGlConfig != NULL, FALSE);
 	g_bUseOpenGL = TRUE;

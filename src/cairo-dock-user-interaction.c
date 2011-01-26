@@ -320,27 +320,31 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 	
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	CairoDock *pReceivingDock = pDock;
-	if (g_str_has_suffix (cReceivedData, ".desktop"))  // ajout d'un nouveau lanceur si on a lache sur ou entre 2 lanceurs.
+	if (g_str_has_suffix (cReceivedData, ".desktop"))  // .desktop -> add a new launcher if dropped on or amongst launchers. 
 	{
 		if ((myIconsParam.iSeparateIcons == 1 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 		if ((myIconsParam.iSeparateIcons == 2 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_IS_APPLET (icon))
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		if (fOrder == CAIRO_DOCK_LAST_ORDER && icon && icon->pSubDock != NULL)  // on a lache sur une icone de sous-dock => on l'ajoute dans le sous-dock.
+		if (fOrder == CAIRO_DOCK_LAST_ORDER && icon && icon->pSubDock != NULL)  // drop onto a container icon.
 		{
-			pReceivingDock = icon->pSubDock;
+			pReceivingDock = icon->pSubDock;  // -> add into the pointed sub-dock.
 		}
 	}
-	else  // c'est un fichier.
+	else  // file.
 	{
-		if (fOrder == CAIRO_DOCK_LAST_ORDER)  // on a lache dessus.
+		if (fOrder == CAIRO_DOCK_LAST_ORDER)  // dropped on an icon
 		{
-			if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // on le lache sur un sous-dock de lanceurs.
+			if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // sub-dock -> propagate to the sub-dock.
 			{
 				pReceivingDock = icon->pSubDock;
 			}
-			else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)) // on le lache sur un lanceur.
+			else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)
+			|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
+			|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)) // launcher/appli -> fire the command with this file.
 			{
+				if (icon->cCommand == NULL)
+					return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 				gchar *cPath = NULL;
 				if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
 				{
@@ -354,24 +358,19 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 				cairo_dock_request_icon_animation (icon, pDock, "blink", 2);
 				return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 			}
-			else if (CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon))  // une appli normale
-			{
-				cairo_dock_set_custom_icon_on_appli (cReceivedData, icon, pContainer);
-				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-			}
-			else  // autre chose.
+			else  // skip any other case.
 			{
 				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 			}
-		}  // else we dropped next to the icon -> do nothing
+		}  // else: dropped between 2 icons -> try to add it.
 	}
 
 	if (g_bLocked || myDocksParam.bLockAll)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
-	cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
+	Icon *pNewIcon = cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return (pNewIcon ? CAIRO_DOCK_INTERCEPT_NOTIFICATION : CAIRO_DOCK_LET_PASS_NOTIFICATION);
 }
 
 
@@ -399,7 +398,7 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 			cPath = g_filename_from_uri (cFilePath, NULL, NULL);
 		}
 		
-		gchar *cCommand = g_strdup_printf ("cp '%s' '%s/%s%s'", cPath?cPath:cFilePath, g_cCurrentIconsPath, icon->cClass, ext);
+		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s/%s%s\"", cPath?cPath:cFilePath, g_cCurrentIconsPath, icon->cClass, ext);
 		cd_debug (" -> '%s'", cCommand);
 		int r = system (cCommand);
 		g_free (cCommand);
