@@ -87,8 +87,10 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 		gtk_window_stick (GTK_WINDOW (pWindow));
 	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
 	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
-	#if (GLIB_MAJOR_VERSION >= 3)
-	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);  // needed since 3.0
+
+	// needed since gtk+-3.0 but it's possible that this resize grip has been backported to gtk+-2.0 (e.g. in Ubuntu Natty...)
+	#if (GTK_MAJOR_VERSION >= 3 || ENABLE_GTK_GRIP == 1)
+	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
 	#endif
 	
 	cairo_dock_set_colormap_for_window (pWindow);

@@ -160,3 +160,7 @@ install(FILES
 	cairo-dock-gui-factory.h
 	
 	DESTINATION ${includedir}/cairo-dock/cairo-dock)
+
+if (NOT "${enable_gtk_grip}" STREQUAL "")
+	add_definitions (-DENABLE_GTK_GRIP=1)
+endif()
