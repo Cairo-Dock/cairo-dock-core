@@ -87,6 +87,9 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 		gtk_window_stick (GTK_WINDOW (pWindow));
 	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
 	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
+	#if (GLIB_MAJOR_VERSION >= 3)
+	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);  // needed since 3.0
+	#endif
 	
 	cairo_dock_set_colormap_for_window (pWindow);
 	if (g_bUseOpenGL && bOpenGLWindow)
