@@ -115,7 +115,9 @@ gboolean cairo_dock_remove_dialog_if_any_full (Icon *icon, gboolean bAll);
 #define cairo_dock_remove_dialog_if_any(icon) cairo_dock_remove_dialog_if_any_full (icon, TRUE)
 
 
-void cairo_dock_replace_all_dialogs (void);
+void cairo_dock_refresh_all_dialogs (gboolean bReplace);
+
+#define cairo_dock_replace_all_dialogs(...) cairo_dock_refresh_all_dialogs (TRUE)
 
 void cairo_dock_trigger_replace_all_dialogs (void);
 

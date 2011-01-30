@@ -183,7 +183,8 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 		pDialog->container.iMouseX = pEvent->x_root;
 		pDialog->container.iMouseY = pEvent->y_root;
 		CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
-		cairo_dock_place_dialog (pDialog, pContainer);
+		//cairo_dock_place_dialog (pDialog, pContainer);
+		cairo_dock_set_dialog_orientation (pDialog, pContainer);
 	}
 
 	return FALSE;
@@ -744,7 +745,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 		pDialog->iComputedPositionY);
 }
 
-void cairo_dock_replace_all_dialogs (void)
+void cairo_dock_refresh_all_dialogs (gboolean bReplace)
 {
 	//g_print ("%s ()\n", __func__);
 	GSList *ic;
@@ -767,7 +768,10 @@ void cairo_dock_replace_all_dialogs (void)
 			{
 				int iAimedX = pDialog->iAimedX;
 				int iAimedY = pDialog->iAimedY;
-				cairo_dock_place_dialog (pDialog, pContainer);
+				if (bReplace)
+					cairo_dock_place_dialog (pDialog, pContainer);
+				else
+					cairo_dock_set_dialog_orientation (pDialog, pContainer);
 				
 				if (iAimedX != pDialog->iAimedX || iAimedY != pDialog->iAimedY)
 					gtk_widget_queue_draw (pDialog->container.pWidget);  // on redessine si la pointe change de position.

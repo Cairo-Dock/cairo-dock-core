@@ -348,7 +348,8 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		g_source_remove (s_iSidActionOnDragHover);
 		s_iSidActionOnDragHover = 0;
 	}
-	cairo_dock_replace_all_dialogs ();
+	///cairo_dock_replace_all_dialogs ();
+	cairo_dock_refresh_all_dialogs (FALSE);
 	if (pDock->bIsDragging && pPointedIcon && pPointedIcon->iface.action_on_drag_hover)
 	{
 		s_iSidActionOnDragHover = g_timeout_add (600, (GSourceFunc) _cairo_dock_action_on_drag_hover, pPointedIcon);

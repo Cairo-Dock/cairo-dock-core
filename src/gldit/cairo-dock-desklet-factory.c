@@ -158,7 +158,7 @@ static void _cairo_dock_set_desklet_input_shape (CairoDesklet *pDesklet)
 
 static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 {
-	if ((pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0) && pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
+	if ((pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0) && pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL && cairo_dock_desklet_manager_is_ready ())
 	{
 		gchar *cSize = g_strdup_printf ("%d;%d", pDesklet->container.iWidth, pDesklet->container.iHeight);
 		cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
@@ -166,9 +166,6 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 			G_TYPE_INVALID);
 		g_free (cSize);
 		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_CONFIGURE_DESKLET, pDesklet);
-		/**cairo_dock_update_desklet_size_in_gui (pDesklet->pIcon->pModuleInstance,
-			pDesklet->container.iWidth,
-			pDesklet->container.iHeight);*/
 	}
 	pDesklet->iSidWriteSize = 0;
 	pDesklet->iKnownWidth = pDesklet->container.iWidth;
@@ -279,9 +276,6 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			G_TYPE_INT, "Desklet", "num desktop", iNumDesktop,
 			G_TYPE_INVALID);
 		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_CONFIGURE_DESKLET, pDesklet);
-		/**cairo_dock_update_desklet_position_in_gui (pDesklet->pIcon->pModuleInstance,
-			iRelativePositionX,
-			iRelativePositionY);*/
 	}
 	
 	if (pDesklet->bSpaceReserved)  // l'espace est reserve, on reserve a la nouvelle position.
@@ -331,14 +325,11 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 		if (pDesklet->bNoInput)
 			_cairo_dock_set_desklet_input_shape (pDesklet);
 		
-		if (cairo_dock_desklet_manager_is_ready ())
+		if (pDesklet->iSidWriteSize != 0)
 		{
-			if (pDesklet->iSidWriteSize != 0)
-			{
-				g_source_remove (pDesklet->iSidWriteSize);
-			}
-			pDesklet->iSidWriteSize = g_timeout_add (CD_WRITE_DELAY, (GSourceFunc) _cairo_dock_write_desklet_size, (gpointer) pDesklet);
+			g_source_remove (pDesklet->iSidWriteSize);
 		}
+		pDesklet->iSidWriteSize = g_timeout_add (CD_WRITE_DELAY, (GSourceFunc) _cairo_dock_write_desklet_size, (gpointer) pDesklet);
 	}
 	
 	int x = pEvent->x, y = pEvent->y;
