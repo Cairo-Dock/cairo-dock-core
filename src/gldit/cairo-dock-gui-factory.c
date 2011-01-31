@@ -1080,20 +1080,25 @@ static GtkListStore *_cairo_dock_build_dialog_decorator_list_for_gui (void)
 
 static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock, GtkListStore *pModele)
 {
+	gchar *cUserName = NULL;
 	if (pDock != NULL)  // peut etre NULL (entree vide)
 	{
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_FILE (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))  // on evite les sous-docks d'applet, de classe, et de repertoire.
 			return ;
-	}	
+		if (pDock->iRefCount == 0)
+			cUserName = cairo_dock_get_readable_name_for_fock (pDock);
+	}
+	
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-		CAIRO_DOCK_MODEL_NAME, cName,
+		CAIRO_DOCK_MODEL_NAME, cUserName?cUserName:cName,
 		CAIRO_DOCK_MODEL_RESULT, cName,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
 		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
+	g_free (cUserName);
 }
 static GtkListStore *_cairo_dock_build_dock_list_for_gui (void)
 {

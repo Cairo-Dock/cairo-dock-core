@@ -299,6 +299,53 @@ const gchar *cairo_dock_search_dock_name (CairoDock *pDock)
 	return cDockName;
 }
 
+static void _find_similar_root_dock (CairoDock *pDock, gpointer *data)
+{
+	CairoDock *pDock0 = data[0];
+	if (pDock == pDock0)
+		data[2] = GINT_TO_POINTER (TRUE);
+	if (data[2])
+		return;
+	if (pDock->container.bIsHorizontal == pDock0->container.bIsHorizontal
+		&& pDock->container.bDirectionUp == pDock0->container.bDirectionUp)
+	{
+		int *i = data[1];
+		*i = *i + 1;
+	}
+}
+gchar *cairo_dock_get_readable_name_for_fock (CairoDock *pDock)
+{
+	g_return_val_if_fail (pDock != NULL, NULL);
+	gchar *cUserName = NULL;
+	if (pDock->iRefCount == 0)
+	{
+		int i = 0;
+		gpointer data[3] = {pDock, &i, NULL};
+		cairo_dock_foreach_root_docks ((GFunc)_find_similar_root_dock, data);
+		const gchar *cPosition;
+		if (pDock->container.bIsHorizontal)
+		{
+			if (pDock->container.bDirectionUp)
+				cPosition = _("Bottom dock");
+			else
+				cPosition = _("Top dock");
+		}
+		else
+		{
+			if (pDock->container.bDirectionUp)
+				cPosition = _("Right dock");
+			else
+				cPosition = _("Left dock");
+		}
+		if (i > 0)
+			cUserName = g_strdup_printf ("%s (%d)", cPosition, i+1);
+		else
+			cUserName = g_strdup (cPosition);
+	}
+	
+	return cUserName;
+}
+
 CairoDock *cairo_dock_search_dock_from_name (const gchar *cDockName)
 {
 	if (cDockName == NULL)

@@ -159,6 +159,12 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName);
 */
 const gchar *cairo_dock_search_dock_name (CairoDock *pDock);
 
+/** Get a readable name for a main Dock, suitable for display (like "Bottom dock"). Sub-Docks names are defined by the user, so you can just use \ref cairo_dock_search_dock_name for them.
+* @param pDock the dock.
+* @return the readable name of the dock, or NULL if not found. Free it when you're done.
+*/
+gchar *cairo_dock_get_readable_name_for_fock (CairoDock *pDock);
+
 /** Search a Dock from a given name. It does a fast search in the table of Docks.
 * @param cDockName the name of the dock.
 * @return the dock that has been registerd under this name, or NULL if none exists.
