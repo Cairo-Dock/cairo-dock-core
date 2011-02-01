@@ -115,7 +115,8 @@
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-core.h"
 
-#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
+//#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
+#define CAIRO_DOCK_THEME_SERVER "http://download.tuxfamily.org/glxdock/themes"
 #define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
 // Nom du repertoire racine du theme courant.
 #define CAIRO_DOCK_CURRENT_THEME_NAME "current_theme"

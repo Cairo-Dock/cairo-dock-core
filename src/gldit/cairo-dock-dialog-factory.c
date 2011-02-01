@@ -200,12 +200,24 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	//\____________ if an interactive widget is present, internal sizes may have changed.
 	if (pDialog->pInteractiveWidget != NULL)
 	{
+		int w = pDialog->iInteractiveWidth, h = pDialog->iInteractiveHeight;
 		GtkRequisition requisition;
 		gtk_widget_size_request (pDialog->pInteractiveWidget, &requisition);
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
 		//g_print ("  pInteractiveWidget : %dx%d\n", pDialog->iInteractiveWidth, pDialog->iInteractiveHeight);
 		_cairo_dock_compute_dialog_sizes (pDialog);
+		
+		if (w != pDialog->iInteractiveWidth || h != pDialog->iInteractiveHeight)
+		{
+			cairo_dock_replace_all_dialogs ();
+			/*Icon *pIcon = pDialog->pIcon;
+			if (pIcon != NULL)
+			{
+				CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
+				cairo_dock_place_dialog (pDialog, pContainer);
+			}*/
+		}
 	}
 	//g_print ("dialog size: %dx%d / %dx%d\n", pEvent->width, pEvent->height, pDialog->iComputedWidth, pDialog->iComputedHeight);
 	

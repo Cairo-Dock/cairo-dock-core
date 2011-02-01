@@ -90,12 +90,13 @@ CairoDockGroupKeyWidget *cairo_dock_get_group_key_widget_from_name (CairoDockMod
 */
 GtkWidget *cairo_dock_get_widget_from_name (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName);
 
-void cairo_dock_reload_current_module_widget_full (CairoDockModuleInstance *pModuleInstance, int iShowPage);
+void cairo_dock_reload_current_widget_full (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
 /**Reload the widget of a given module instance if it is currently opened (the current page is displayed). This is useful if the module has modified its conf file and wishes to display the changes.
 @param pInstance an instance of a module.
 */
-#define cairo_dock_reload_current_module_widget(pModuleInstance) cairo_dock_reload_current_module_widget_full (pModuleInstance, -1)
+#define cairo_dock_reload_current_module_widget(pModuleInstance) cairo_dock_reload_current_widget_full (pModuleInstance, -1)
+#define cairo_dock_reload_current_module_widget_full cairo_dock_reload_current_widget_full
 
 void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
