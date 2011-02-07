@@ -164,7 +164,7 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 		if (pIcon != NULL)
 		{
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
-			if (!pContainer || !pContainer->bInside)  // peut arriver dans le cas d'un dock cache possedant un dialogue. Initialement les 2 se chevauchent, il faut considerer qu'on est hors du dialogue afin de pouvoir le replacer.
+			///if (!pContainer || !pContainer->bInside)  // peut arriver dans le cas d'un dock cache possedant un dialogue. Initialement les 2 se chevauchent, il faut considerer qu'on est hors du dialogue afin de pouvoir le replacer.
 			{
 				//g_print ("en fait on est dedans\n");
 				return FALSE;

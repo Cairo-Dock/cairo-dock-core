@@ -1193,6 +1193,7 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 			}
 			if (bAutoHideOnOverlap || myDocksParam.bAutoHideOnFullScreen)
 			{
+				pDock->bTemporaryHidden = pDock->bAutoHide;  // astuce pour utiliser la fonction ci-dessous.
 				cairo_dock_hide_show_if_current_window_is_on_our_way (pDock);
 			}
 		}
