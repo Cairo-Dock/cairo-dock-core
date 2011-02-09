@@ -42,3 +42,6 @@ _CPack_Packages/
 data/messages
 src/gldit/gldi.pc
 build/
+doc/html/
+doc/man/
+doc/latex/
