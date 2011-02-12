@@ -166,11 +166,11 @@ void cairo_dock_unload_indicator_textures (void)
  /// RENDERING ///
 /////////////////
 
-static inline double _compute_delta_y (Icon *icon, double py, gboolean bOnIcon, double fRatio, gboolean bUseReflect)
+static inline double _compute_delta_y (Icon *icon, double py, gboolean bOnIcon, double fRatio, gboolean bUseReflect, double fMaxScale)
 {
 	double dy;
 	if (bOnIcon)  // decalage vers le haut et zoom avec l'icone.
-		dy = py * icon->fHeight * icon->fScale + icon->fDeltaYReflection;
+		dy = py * icon->fHeight * icon->fScale + icon->fDeltaYReflection / 2;
 	else  // decalage vers le bas sans zoom.
 		dy = - py * ((bUseReflect ? myIconsParam.fReflectSize * fRatio : 0.) + myDocksParam.iFrameMargin + .5*myDocksParam.iDockLineWidth);
 	return dy;
@@ -189,7 +189,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, CairoDock *pDoc
 	double h = s_indicatorBuffer.iHeight;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	double z = (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
-	double fY = _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, fRatio, pDock->container.bUseReflect);
+	double fY = _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, fRatio, pDock->container.bUseReflect, fMaxScale);
 	fY += - icon->fHeight * icon->fScale/2 + h*z/2;  // a 0, le bas de l'indicateur correspond au bas de l'icone.
 	
 	//\__________________ On place l'indicateur.
@@ -266,7 +266,7 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cair
 	double h = s_indicatorBuffer.iHeight;
 	double fMaxScale = cairo_dock_get_max_scale (pDock);
 	double z = (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
-	double fY = - _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, fRatio, pDock->container.bUseReflect);  // a 0, le bas de l'indicateur correspond au bas de l'icone.
+	double fY = - _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, fRatio, pDock->container.bUseReflect, fMaxScale);  // a 0, le bas de l'indicateur correspond au bas de l'icone.
 	
 	//\__________________ On place l'indicateur.
 	cairo_save (pCairoContext);
@@ -424,10 +424,11 @@ static gboolean cairo_dock_render_indicator_notification (gpointer pUserData, Ic
 	{
 		if (icon->bHasIndicator && myIndicatorsParam.bIndicatorAbove)
 		{
-			//glPushMatrix ();
-			//glTranslatef (0., 0., icon->fHeight * (1+myIconsParam.fAmplitude) -1);  // avant-plan
+			glPushMatrix ();
+			glLoadIdentity();
+			cairo_dock_translate_on_icon_opengl (icon, pDock, 1.);
 			_cairo_dock_draw_appli_indicator_opengl (icon, pDock);
-			//glPopMatrix ();
+			glPopMatrix ();
 		}
 		if (bIsActive)
 		{

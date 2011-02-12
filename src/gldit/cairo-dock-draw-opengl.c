@@ -313,9 +313,9 @@ void cairo_dock_translate_on_icon_opengl (Icon *icon, CairoContainer *pContainer
 	_compute_icon_coordinate (icon, pContainer, fDockMagnitude, &fX, &fY);
 	
 	if (pContainer->bIsHorizontal)
-		glTranslatef (floor (fX), floor (fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), - icon->fHeight * (1+myIconsParam.fAmplitude));
+		glTranslatef ( (fX),  (fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), - icon->fHeight * (1+myIconsParam.fAmplitude));
 	else
-		glTranslatef (floor (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), floor (fX), - icon->fHeight * (1+myIconsParam.fAmplitude));
+		glTranslatef ( (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)),  (fX), - icon->fHeight * (1+myIconsParam.fAmplitude));
 }
 
 void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude, gboolean bUseText)
