@@ -365,7 +365,8 @@ void cairo_dock_play_sound (const gchar *cSoundPath)
 	g_free (cSoundCommand);
 }
 
-void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro) {
+// should be in gnome-integration if needed...
+/*void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro) {
 	gchar *cContent = NULL;
 	gsize length = 0;
 	GError *erreur = NULL;
@@ -441,7 +442,7 @@ void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro) {
 	
 	g_free (cContent);
 	g_strfreev (cLineList);
-}
+}*/
 
 void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, CairoDockModuleInstance *pModuleInstance)
 {

@@ -954,8 +954,8 @@ gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon
 	
 	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
 	
-	if (fabs (pIcon->fInsertRemoveFactor) < .1)  // useless or not needed animation.
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	///if (fabs (pIcon->fInsertRemoveFactor) < .1)  // useless or not needed animation.
+	///	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	pIcon->bBeingRemovedByCairo = TRUE;
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;

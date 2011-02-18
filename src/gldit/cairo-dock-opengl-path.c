@@ -272,7 +272,7 @@ const CairoDockGLPath *cairo_dock_generate_rectangle_path (double fFrameWidth, d
 	double r = fRadius;
 	
 	int ddeg = (fRadius < 5 ? 6 : 3);
-	int iNbPoins1Round = 90/20;
+	int iNbPoins1Round = 90/3;  /// 90/20
 	if (pPath == NULL)
 		pPath = cairo_dock_new_gl_path ((iNbPoins1Round+1)*4+1, w+r, h, fTotalWidth, fTotalHeight);  // on commence au coin haut droit pour avoir une bonne triangulation du polygone, et en raisonnant par rapport au centre du rectangle.
 	else

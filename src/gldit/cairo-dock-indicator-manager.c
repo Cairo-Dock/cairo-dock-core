@@ -426,7 +426,7 @@ static gboolean cairo_dock_render_indicator_notification (gpointer pUserData, Ic
 		{
 			glPushMatrix ();
 			glLoadIdentity();
-			cairo_dock_translate_on_icon_opengl (icon, pDock, 1.);
+			cairo_dock_translate_on_icon_opengl (icon, CAIRO_CONTAINER (pDock), 1.);
 			_cairo_dock_draw_appli_indicator_opengl (icon, pDock);
 			glPopMatrix ();
 		}

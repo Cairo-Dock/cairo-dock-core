@@ -159,11 +159,13 @@ set_value "Curve"			"curvature"					70
 set_value "Parabolic"		"curvature"					".3"
 set_value "Parabolic"		"ratio"						5
 set_value "Slide"			"simple_iconGapX"			50	
+set_value "Slide"			"simple_iconGapY"			50	
 set_value "Slide"			"simple_fScaleMax"			"1.5"
 set_value "Slide"			"simple_arrowShift"			0
 set_value "Slide"			"simple_arrowHeight"		15
 set_value "Slide"			"simple_arrowWidth"			30
 set_value "Slide"			"simple_wide_grid"			true
+set_value "Slide"			"simple_max_size"			".7"
 
 set_current_conf_file "plug-ins/RSSreader/RSSreader.conf"
 set_value "Icon"			"name"						""

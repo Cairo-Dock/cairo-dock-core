@@ -563,6 +563,7 @@ gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolea
 	}
 	
 	//\___________________ Notify everybody.
+	icon->fInsertRemoveFactor = 0.;
 	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_REMOVE_ICON, icon, pDock);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, icon, pDock);
 	

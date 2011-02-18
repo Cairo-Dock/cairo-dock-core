@@ -117,12 +117,13 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 void cairo_dock_play_sound (const gchar *cSoundPath);
 
 
-/** Get the Gnome's version.
+// should be in gnome-integration if needed...
+/* Get the Gnome's version.
 *@param iMajor pointer to the major.
 *@param iMinor pointer to the minor.
 *@param iMicro pointer to the micro.
 */
-void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro);
+//void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro);
 
 
 void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, CairoDockModuleInstance *pModuleInstance);

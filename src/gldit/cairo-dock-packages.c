@@ -147,6 +147,7 @@ static inline CURL *_init_curl_connection (const gchar *cURL)
 	curl_easy_setopt (handle, CURLOPT_CONNECTTIMEOUT, myConnectionParam.iConnectionTimeout);
 	curl_easy_setopt (handle, CURLOPT_NOSIGNAL, 1);  // With CURLOPT_NOSIGNAL set non-zero, curl will not use any signals; sinon curl se vautre apres le timeout, meme si le download s'est bien passe !
 	curl_easy_setopt (handle, CURLOPT_FOLLOWLOCATION , 1);  // follow redirection
+	curl_easy_setopt (handle, CURLOPT_USERAGENT , "a/5.0 (X11; Linux x86_64; rv:2.0b11) Gecko/20100101 Firefox/4.0b11");
 	return handle;
 }
 
