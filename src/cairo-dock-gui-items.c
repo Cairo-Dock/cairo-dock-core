@@ -717,7 +717,6 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 		0);
 	g_object_set_data (G_OBJECT (s_pLauncherWindow), "status-bar", pStatusBar);
 	g_object_set_data (G_OBJECT (s_pLauncherWindow), "frame-width", GINT_TO_POINTER (250));
-	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, "xxxxxx");
 	
 	//\_____________ On essaie de definir une taille correcte.
 	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);

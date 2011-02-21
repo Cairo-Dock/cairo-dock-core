@@ -269,11 +269,6 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList)
 				erreur = NULL;
 			}
 		}
-		/**else  // ne devrait pas arriver
-		{
-			cd_warning ("module %s has not been stopped beforehand !", cModuleName);
-			cairo_dock_reload_module (pModule, FALSE);
-		}*/
 	}
 }
 
@@ -363,7 +358,6 @@ void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName)
 	GList *pElement = pModule->pInstancesList, *pNextElement;
 	CairoDockModuleInstance *pInstance;
 	cd_debug ("%d instance(s) a arreter", g_list_length (pModule->pInstancesList));
-	//for (pElement = pModule->pInstancesList; pElement != NULL; pElement = pElement->next)
 	while (pElement != NULL)
 	{
 		pInstance = pElement->data;
@@ -399,35 +393,6 @@ void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 	pInstance->cConfFilePath = NULL;
 	CairoDockModule *pModule = pInstance->pModule;
 	cairo_dock_deactivate_module_instance_and_unload (pInstance);  // pInstance n'est plus.
-	
-	//\_________________ Si c'est pas la derniere instance, la derniere instance prend sa place.
-	/*int iNbInstances = g_list_length (pModule->pInstancesList)+1;  // nombre d'instances avant suppression.
-	gchar *str = strrchr (cConfFilePath, '-');
-	if (str == NULL || atoi (str+1) != iNbInstances-1)
-	{
-		gchar *cLastInstanceFilePath = g_strdup_printf ("%s-%d", pModule->cConfFilePath, iNbInstances-1);
-		
-		CairoDockModuleInstance *pOneInstance;
-		GList *pElement;
-		for (pElement = pModule->pInstancesList; pElement != NULL; pElement = pElement->next)
-		{
-			pOneInstance = pElement->data;
-			if (strcmp (pOneInstance->cConfFilePath, cLastInstanceFilePath) == 0)
-			{
-				gchar *cCommand = g_strdup_printf ("mv \"%s\" \"%s\"", cLastInstanceFilePath, cConfFilePath);
-				int r = system (cCommand);
-				g_free (cCommand);
-				
-				g_free (pOneInstance->cConfFilePath);
-				pOneInstance->cConfFilePath = cConfFilePath;
-				cConfFilePath = NULL;
-				break ;
-			}
-		}
-		
-		g_free (cLastInstanceFilePath);
-	}
-	g_free (cConfFilePath);*/
 }
 
 gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
@@ -488,42 +453,6 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 	
 	g_free (cUserDataDirPath);
 	
-	/*gchar *cConfFilePath;
-	if (pModule->pInstancesList == NULL)  // module non encore instancie, on utilise la fonction qui cree le dossier du module ainsi que son fichier de conf.
-	{
-		cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
-	}
-	else  // on rajoute un n-ieme fichier de conf si necessaire.
-	{
-		int iNbInstances = g_list_length (pModule->pInstancesList);
-		cConfFilePath = g_strdup_printf ("%s-%d", pModule->cConfFilePath, iNbInstances);
-		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
-		{
-			gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath, cConfFilePath);  // copy from first instance.
-			cd_debug (cCommand);
-			int r = system (cCommand);
-			g_free (cCommand);
-			
-			GList *last = g_list_last (pModule->pInstancesList);
-			CairoDockModuleInstance *pFirstInstance = last->data;  // instances are prepended.
-			if (pFirstInstance->pDesklet)  // prevent desklets from overlapping.
-			{
-				int iX2, iX = pFirstInstance->pContainer->iWindowPositionX;
-				int iWidth = pFirstInstance->pContainer->iWidth;
-				if (iX + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2)  // desklet on the left, we place the new one on its right.
-					iX2 = iX + iWidth;
-				else  // desklet on the right, we place the new one on its left.
-					iX2 = iX - iWidth;
-				
-				int iRelativePositionX = (iX2 + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iX2 : iX2 - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-				cairo_dock_update_conf_file (cConfFilePath,
-					G_TYPE_INT, "Desklet", "x position", iRelativePositionX,
-					G_TYPE_BOOLEAN, "Desklet", "locked", FALSE,  // we'll probably want to move it
-					G_TYPE_BOOLEAN, "Desklet", "no input", FALSE,
-					G_TYPE_INVALID);
-			}
-		}
-	}*/
 	return cConfFilePath;
 }
 

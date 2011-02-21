@@ -757,6 +757,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon))  // le sous-dock est pointe par une icone de paille.
 		{
 			cd_debug ("trouve l'icone en papier (%x;%x)", pFakeClassIcon, pFakeParentDock);
+			gboolean bLastIconIsRemoving = cairo_dock_icon_is_being_removed (pLastClassIcon);  // keep the removing state because when we detach the icon, it returns to normal state.
 			cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
 			g_free (pLastClassIcon->cParentDockName);
 			pLastClassIcon->cParentDockName = g_strdup (pFakeClassIcon->cParentDockName);
@@ -773,7 +774,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			cairo_dock_free_icon (pFakeClassIcon);
 			
 			cd_debug (" puis on re-insere l'appli restante");
-			if (! cairo_dock_icon_is_being_removed (pLastClassIcon))
+			if (! bLastIconIsRemoving)
 			{
 				cairo_dock_insert_icon_in_dock (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 				cairo_dock_calculate_dock_icons (pFakeParentDock);
