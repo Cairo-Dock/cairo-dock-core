@@ -47,7 +47,7 @@
 #define CAIRO_DOCK_ICON_MARGIN 6
 #define CAIRO_DOCK_PREVIEW_WIDTH 350
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
-#define CAIRO_DOCK_README_WIDTH 350
+#define CAIRO_DOCK_README_WIDTH 400
 #define CAIRO_DOCK_HANDBOOK_WIDTH 500
 #define CAIRO_DOCK_APPLET_ICON_SIZE 32
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
@@ -2380,7 +2380,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				GtkTreeIter iter;
-				if (_cairo_dock_find_iter_from_name (pDocksListStore, cValue, &iter))
+				gboolean bIterFound = False;
+				if (cValue == NULL || *cValue == '\0')  // dock not specified => it's the main dock
+					bIterFound = _cairo_dock_find_iter_from_name (pDocksListStore, CAIRO_DOCK_MAIN_DOCK_NAME, &iter);
+				else
+					bIterFound = _cairo_dock_find_iter_from_name (pDocksListStore, cValue, &iter);
+				if (bIterFound)
 					gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
 				g_free (cValue);
 				

@@ -19,7 +19,7 @@ frame_visi =
 #When the dock pops up on shortcut, it will appear at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 visibility = 4
 
-#L-[Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
+#L-[None;Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
 hide effect = Move down
 
 #k- Keyboard shortcut to pop-up the dock:

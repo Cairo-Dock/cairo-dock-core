@@ -667,7 +667,7 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 	
 	/// position de la souris
 	
-	//g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bMenuVisible);
+	g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bMenuVisible);
 	
 	//\_______________ On quitte si le menu est leve, pour rester en position haute.
 	if (pDock->bMenuVisible)
@@ -743,7 +743,7 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & GDK_MOD1_MASK) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -774,9 +774,10 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		//g_print ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
 		if (pDock->iSidTestMouseOutside == 0 && pEvent)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
 		{
-			cd_debug ("start checking mouse\n");
+			g_print ("start checking mouse\n");
 			pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
 		}
+		g_print ("mouse: %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
 		return FALSE;
 	}
 	
@@ -787,25 +788,25 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		{
 			if (pDock->iRefCount == 0)  // cas du main dock : on retarde si on pointe sur un sous-dock (pour laisser le temps au signal d'entree dans le sous-dock d'etre traite) ou si l'on a l'auto-hide.
 			{
-				//g_print (" leave event : %.1f;%.1f (%dx%d)\n", pEvent->x, pEvent->y, pDock->container.iWidth, pDock->container.iHeight);
+				g_print (" leave event : %.1f;%.1f (%dx%d)\n", pEvent->x, pEvent->y, pDock->container.iWidth, pDock->container.iHeight);
 				Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 				if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget)) || (pDock->bAutoHide))
 				{
-					//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myDocksParam.iLeaveSubDockDelay, 330));
+					g_print ("  on retarde la sortie du dock de %dms\n", MAX (myDocksParam.iLeaveSubDockDelay, 330));
 					pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 330), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 					return TRUE;
 				}
 			}
 			else if (myDocksParam.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
 			{
-				//g_print ("  on retarde la sortie du sous-dock de %dms\n", myDocksParam.iLeaveSubDockDelay);
+				g_print ("  on retarde la sortie du sous-dock de %dms\n", myDocksParam.iLeaveSubDockDelay);
 				pDock->iSidLeaveDemand = g_timeout_add (myDocksParam.iLeaveSubDockDelay, (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 				return TRUE;
 			}
 		}
 		else if (pDock->iSidLeaveDemand != 0)  // deja une sortie en attente.
 		{
-			//g_print ("une sortie est deja programmee\n");
+			g_print ("une sortie est deja programmee\n");
 			return TRUE;
 		}
 	}  // sinon c'est nous qui avons explicitement demande cette sortie, donc on continue.
@@ -832,6 +833,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			pDock->container.iMouseY = pEvent->x;
 		}
 	}
+	g_print (" notify leave\n");
 	
 	gboolean bStartAnimation = FALSE;
 	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
@@ -1601,14 +1603,14 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 		return FALSE;  // on n'accepte pas le drop.
 	}
 	
-	g_print ("take the drop\n");
+	//g_print ("take the drop\n");
 	gdk_drag_status (dc, GDK_ACTION_COPY, time);
 	return TRUE;  // on accepte le drop.
 }
 
 void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock)
 {
-	cd_debug ("stop dragging1\n");
+	g_print ("stop dragging 1\n");
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if ((icon && icon->pSubDock) || pDock->iRefCount > 0)  // on retarde l'evenement, car il arrive avant le leave-event, et donc le sous-dock se cache avant qu'on puisse y entrer.
 	{
@@ -1617,13 +1619,17 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 			gtk_main_iteration ();
 		cd_debug (">>> pDock->container.bInside : %d", pDock->container.bInside);
 	}
-	cd_debug ("stop dragging2\n");
+	g_print ("stop dragging 2\n");
 	s_bWaitForData = FALSE;
 	pDock->bIsDragging = FALSE;
 	pDock->bCanDrop = FALSE;
 	//cairo_dock_stop_marking_icons (pDock);
 	pDock->iAvoidingMouseIconType = -1;
-	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+	///cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+	if (pDock->iSidLeaveDemand == 0)
+	{
+		pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 330), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);  // meme raison que plus haut, on utilise un delai dans tous les cas.
+	}
 }
 
 
