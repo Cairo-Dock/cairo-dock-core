@@ -824,11 +824,8 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 					if (pPointingIcon && pPointingIcon->bPointed)  // sous-dock pointe, n le laisse en position haute.
 						return;
 				}
-				cd_debug ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
-				if (pDock->iRefCount > 0 && myDocksParam.iLeaveSubDockDelay > 0)
-					pDock->iSidLeaveDemand = g_timeout_add (myDocksParam.iLeaveSubDockDelay, (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
-				else
-					cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+				//g_print ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)\n", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
+				pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
 			}
 		break ;
 	}
