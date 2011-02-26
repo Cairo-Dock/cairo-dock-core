@@ -1309,15 +1309,12 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
 		
 		//\_________________________ On rajoute les actions courantes sur les icones d'applis.
-		if (icon->cDesktopFileName != NULL)  // c'est un lanceur inhibiteur.
-		{
-			_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
-		}
-		
-		if (! cairo_dock_class_is_inhibited (icon->cClass))
+		if (! cairo_dock_class_is_inhibited (icon->cClass))  // if the class doesn't already have an inhibator somewhere.
 		{
 			_add_entry_in_menu (_("Make it a launcher"), GTK_STOCK_CONVERT, _cairo_dock_make_launcher_from_appli, menu);
 		}
+		
+		_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
 		
 		_add_entry_in_menu (_("Show"), GTK_STOCK_FIND, _cairo_dock_show_appli, menu);
 		
@@ -1359,10 +1356,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 		_add_desktops_entry (pSubMenuOtherActions, TRUE, data);
 		
-		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon))  // c'est un lanceur inhibiteur.
-		{
-			_add_entry_in_menu (_("Launch new"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
-		}
+		_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
 		
 		_add_entry_in_menu (_("Show all"), GTK_STOCK_FIND, _cairo_dock_show_class, menu);
 
@@ -1429,8 +1423,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		}
 		bAddSeparator = TRUE;
 		
-		pMenuItem = gtk_menu_item_new_with_label (_("Visibility"));
-		gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
+		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Visibility"), GTK_STOCK_FIND, NULL, menu, NULL);
 		GtkWidget *pSubMenuAccessibility = gtk_menu_new ();
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAccessibility);
 		

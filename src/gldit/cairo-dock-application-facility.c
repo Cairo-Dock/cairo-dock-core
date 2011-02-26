@@ -309,11 +309,13 @@ static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, Cai
 	pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
 	pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
 	pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
-	pFakeClassIcon->fWidth = pSameClassIcon->fWidth / pClassMateParentDock->container.fRatio;
+	pFakeClassIcon->bHasIndicator = pSameClassIcon->bHasIndicator;
+	
+	/**pFakeClassIcon->fWidth = pSameClassIcon->fWidth / pClassMateParentDock->container.fRatio;
 	pFakeClassIcon->fHeight = pSameClassIcon->fHeight / pClassMateParentDock->container.fRatio;
 	pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
 	pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
-	pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;
+	pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;*/
 	g_print ("%s() : TESTER SANS LES 5 LIGNES DU DESSUS...\n", __func__);
 	pFakeClassIcon->pSubDock = pClassDock;
 	return pFakeClassIcon;

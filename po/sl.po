@@ -86,7 +86,7 @@ msgstr "kategorija"
 
 #: ../src/cairo-dock-gui-items.c:334
 msgid ""
-"Main dock's paramaters are available in the main configuration window."
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Parametri osnovnega sidrišča so na voljo v osnovnem nastavitvenem oknu."
 

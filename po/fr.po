@@ -91,9 +91,9 @@ msgstr "catégorie"
 
 #: ../src/cairo-dock-gui-items.c:334
 msgid ""
-"Main dock's paramaters are available in the main configuration window."
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
-"Les principaux paramètres des docks sont disponibles dans la fenêtre de "
+"Les paramètres du dock principal sont disponibles dans la fenêtre de "
 "configuration principale."
 
 #: ../src/cairo-dock-gui-items.c:571

@@ -169,8 +169,8 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 
 static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 {
-	CairoDock *pInhibhatorDock = cairo_dock_search_dock_from_name (pInhibhatorIcon->cParentDockName);
-	if (pInhibhatorDock != NULL && pInhibhatorDock->iRefCount > 0)  // l'inhibiteur est dans un sous-dock.
+	CairoDock *pInhibatorDock = cairo_dock_search_dock_from_name (pInhibhatorIcon->cParentDockName);
+	if (pInhibatorDock != NULL && pInhibatorDock->iRefCount > 0)  // l'inhibiteur est dans un sous-dock.
 	{
 		gboolean bSubDockHasIndicator = FALSE;
 		if (pInhibhatorIcon->bHasIndicator)
@@ -181,7 +181,7 @@ static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 		{
 			GList* ic;
 			Icon *icon;
-			for (ic =pInhibhatorDock->icons ; ic != NULL; ic = ic->next)
+			for (ic =pInhibatorDock->icons ; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
 				if (icon->bHasIndicator)
@@ -192,7 +192,7 @@ static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 			}
 		}
 		CairoDock *pParentDock = NULL;
-		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pInhibhatorDock, &pParentDock);
+		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pInhibatorDock, &pParentDock);
 		if (pPointingIcon != NULL && pPointingIcon->bHasIndicator != bSubDockHasIndicator)
 		{
 			cd_message ("  pour le sous-dock %s : indicateur <- %d", pPointingIcon->cName, bSubDockHasIndicator);
@@ -354,26 +354,26 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 				
 				if (pInhibitorIcon->Xid == pIcon->Xid)  // cette icone nous controle.
 				{
-					CairoDock *pInhibhatorDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+					CairoDock *pInhibatorDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 					//\______________ On place l'icone pour X.
 					if (! bToBeInhibited)  // on ne met le thumbnail que sur la 1ere.
 					{
-						if (pInhibhatorDock != NULL)
+						if (pInhibatorDock != NULL)
 						{
 							//g_print ("on positionne la miniature sur l'inhibiteur %s\n", pInhibitorIcon->cName);
-							cairo_dock_set_one_icon_geometry_for_window_manager (pInhibitorIcon, pInhibhatorDock);
+							cairo_dock_set_one_icon_geometry_for_window_manager (pInhibitorIcon, pInhibatorDock);
 						}
 						bToBeInhibited = TRUE;
 					}
 					//\______________ On met a jour l'etiquette de l'inhibiteur.
-					if (pInhibhatorDock != NULL && pIcon->cName != NULL)
+					if (pInhibatorDock != NULL && pIcon->cName != NULL)
 					{
 						if (pInhibitorIcon->cInitialName == NULL)
 							pInhibitorIcon->cInitialName = pInhibitorIcon->cName;
 						else
 							g_free (pInhibitorIcon->cName);
 						pInhibitorIcon->cName = NULL;
-						cairo_dock_set_icon_name (pIcon->cName, pInhibitorIcon, CAIRO_CONTAINER (pInhibhatorDock));
+						cairo_dock_set_icon_name (pIcon->cName, pInhibitorIcon, CAIRO_CONTAINER (pInhibatorDock));
 					}
 				}
 			}
@@ -603,9 +603,9 @@ void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, Window Xid
 				pInhibitorIcon->bIsHidden = bIsHidden;
 				if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon) && myTaskbarParam.fVisibleAppliAlpha != 0)
 				{
-					CairoDock *pInhibhatorDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+					CairoDock *pInhibatorDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 					pInhibitorIcon->fAlpha = 1;  // on triche un peu.
-					cairo_dock_redraw_icon (pInhibitorIcon, CAIRO_CONTAINER (pInhibhatorDock));
+					cairo_dock_redraw_icon (pInhibitorIcon, CAIRO_CONTAINER (pInhibatorDock));
 				}
 			}
 		}

@@ -88,7 +88,7 @@ msgstr "Categorie"
 
 #: ../src/cairo-dock-gui-items.c:334
 msgid ""
-"Main dock's paramaters are available in the main configuration window."
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "De instellingen van het hoof-dock zijn beschikbaar in het "
 "hoofdconfiguratievenster."

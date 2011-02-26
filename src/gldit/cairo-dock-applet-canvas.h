@@ -296,8 +296,9 @@ CD_APPLET_ON_BUILD_MENU_PROTO \
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{ \
 		GtkWidget *pMenuItem, *image; \
-		pMenuItem = gtk_separator_menu_item_new (); \
-		gtk_menu_shell_append(GTK_MENU_SHELL (pAppletMenu), pMenuItem);
+		if (pClickedIcon == myIcon) {\
+			pMenuItem = gtk_separator_menu_item_new (); \
+			gtk_menu_shell_append(GTK_MENU_SHELL (pAppletMenu), pMenuItem); }
 /** Fin de la fonction de notification de construction du menu. Par defaut elle intercepte la notification si elle l'a recue.
 */
 #define CD_APPLET_ON_BUILD_MENU_END \

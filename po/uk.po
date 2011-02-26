@@ -89,7 +89,7 @@ msgstr "категорія"
 
 #: ../src/cairo-dock-gui-items.c:334
 msgid ""
-"Main dock's paramaters are available in the main configuration window."
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Параметри головної панелі можна налаштувати в головному вікні налаштувань."
 

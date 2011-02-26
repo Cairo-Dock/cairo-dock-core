@@ -201,15 +201,36 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
 	
-	/// faire marcher ca ...
-	/**if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
+	/// TODO: compiz/kwin integration ...
+	if (CAIRO_DOCK_IS_MULTI_APPLI(icon))
 	{
-		gchar *cCommand = g_strdup_printf ("dbus-send  --type=method_call --dest=org.freedesktop.compiz  /org/freedesktop/compiz/scale/allscreens/initiate_all_key  org.freedesktop.compiz.activate string:'root' int32:`xwininfo  -root | grep id: | awk '{ print $5 }'` string:\"match\"  string:'class=.*%s*'", icon->cClass+1);
-		g_print ("%s\n", cCommand);
-		system (cCommand);
-		g_free (cCommand);
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-	}*/
+		gboolean bAllHidden = TRUE;
+		if (icon->pSubDock != NULL)
+		{
+			Icon *pOneIcon;
+			GList *ic;
+			for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
+			{
+				pOneIcon = ic->data;
+				bAllHidden &= pOneIcon->bIsHidden;
+			}
+		}
+		if (! bAllHidden)  // the Expose does not work for hidden windows, so let's skip the case where all the windows of the class are hidden.
+		{
+			gchar *cCommand = g_strdup_printf ("dbus-send  --type=method_call --dest=org.freedesktop.compiz  /org/freedesktop/compiz/scale/allscreens/initiate_all_key  org.freedesktop.compiz.activate string:'root' int32:%d string:\"match\"  string:'class=.*%s'", cairo_dock_get_root_id (), icon->cClass+1);  /// we need the real class here...
+			g_print ("%s\n", cCommand);
+			int r = system (cCommand);
+			g_free (cCommand);
+			if (r == 0)
+			{
+				if (icon->pSubDock != NULL)
+				{
+					cairo_dock_emit_leave_signal (CAIRO_CONTAINER (icon->pSubDock));
+				}
+				return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+			}
+		}
+	}
 	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
 	{
 		cairo_dock_show_subdock (icon, pDock);
