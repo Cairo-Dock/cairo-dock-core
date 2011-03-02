@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: 2.1.0-alpha\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2011-01-01 04:03+0000\n"
-"PO-Revision-Date: 2011-01-01 08:48+0000\n"
-"Last-Translator: Eduardo Mucelli Rezende Oliveira <edumucelli@gmail.com>\n"
+"PO-Revision-Date: 2011-02-03 12:32+0000\n"
+"Last-Translator: Sérgio Marques <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-02 04:43+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-04 04:43+0000\n"
+"X-Generator: Launchpad (build 12177)\n"
 "Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:215
@@ -23,33 +23,33 @@ msgid ""
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
-"Você fez algumas modificações no tema atual.\n"
-"As modificações serão perdidas se você não salvá-las antes de escolher um "
+"Você fez algumas alterações ao tema atual.\n"
+"As alterações serão perdidas se você não as guardar antes de escolher um "
 "novo tema. Continuar assim mesmo ?"
 
 #: ../src/cairo-dock-gui-commons.c:241
 msgid "Please wait while importing the theme..."
-msgstr ""
+msgstr "Por favor, aguarde pela importação do tema..."
 
 #: ../src/cairo-dock-gui-commons.c:304
 msgid "Bottom dock"
-msgstr ""
+msgstr "\"Dock\" inferior"
 
 #: ../src/cairo-dock-gui-commons.c:306
 msgid "Top dock"
-msgstr ""
+msgstr "\"Dock\" superior"
 
 #: ../src/cairo-dock-gui-commons.c:311
 msgid "Right dock"
-msgstr ""
+msgstr "\"Dock\" à direita"
 
 #: ../src/cairo-dock-gui-commons.c:313
 msgid "Left dock"
-msgstr ""
+msgstr "\"Dock à esquerda"
 
 #: ../src/cairo-dock-gui-commons.c:410 ../src/cairo-dock-menu.c:1373
 msgid "Configure this applet"
-msgstr "Configurar este applet"
+msgstr "Configurar este \"applet\""
 
 #: ../src/cairo-dock-gui-commons.c:447 ../src/cairo-dock-gui-main.c:131
 msgid "Files"
@@ -61,7 +61,7 @@ msgstr "Internet"
 
 #: ../src/cairo-dock-gui-commons.c:457 ../src/cairo-dock-gui-main.c:133
 msgid "Desktop"
-msgstr "Área de Trabalho"
+msgstr "Ambiente de trabalho"
 
 #: ../src/cairo-dock-gui-commons.c:462
 msgid "Accessory"
@@ -79,7 +79,7 @@ msgstr "Diversão"
 
 #: ../src/cairo-dock-gui-commons.c:514
 msgid "plug-in"
-msgstr "plug-in"
+msgstr "\"plug-in\""
 
 #: ../src/cairo-dock-gui-commons.c:520
 msgid "category"
@@ -87,8 +87,10 @@ msgstr "categoria"
 
 #: ../src/cairo-dock-gui-items.c:334
 msgid ""
-"Main dock's parameters are available in the main configuration window."
+"Main dock's paramaters are available in the main configuration window."
 msgstr ""
+"Os parâmetros da \"dock\" estão disponíveis na janela de configuração "
+"principal."
 
 #: ../src/cairo-dock-gui-items.c:571
 msgid "Launcher configuration"
@@ -114,7 +116,7 @@ msgstr "Todas"
 #: ../src/cairo-dock-gui-main.c:1428
 #: ../src/internal-old/cairo-dock-internal-position.c:131
 msgid "Set the position of the main dock."
-msgstr "Defina a posição da Doca principal."
+msgstr "Definir a posição da \"dock\" principal"
 
 #: ../src/cairo-dock-gui-main.c:1429
 #: ../src/internal-old/cairo-dock-internal-position.c:129 ../data/messages:137
@@ -128,9 +130,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
-"Quer que a sua Doca esteja sempre visível.\n"
-" ou quer que ela não o incomode ?\n"
-"Configure a forma de aceder às suas Docas e sub-Docas !"
+"Pretende que a \"dock\" esteja sempre visível,\n"
+" ou que ela não o incomode?\n"
+"Configure o método de acesso às \"docks\" e \"sub-docks\"!"
 
 #: ../src/cairo-dock-gui-main.c:1435 ../src/cairo-dock-menu.c:1410
 #: ../src/internal-old/cairo-dock-internal-accessibility.c:259
@@ -140,7 +142,7 @@ msgstr "Visibilidade"
 #: ../src/cairo-dock-gui-main.c:1440
 #: ../src/internal-old/cairo-dock-internal-taskbar.c:167
 msgid "Display and interact with currently open windows."
-msgstr "Exibir e interagir com a janela actualmente aberta."
+msgstr "Exibir e interagir com as janelas abertas."
 
 #: ../src/cairo-dock-gui-main.c:1441
 #: ../src/internal-old/cairo-dock-internal-taskbar.c:165 ../data/messages:61
@@ -156,18 +158,18 @@ msgstr "Todos os parâmetros que você nunca desejará ajustar."
 #: ../src/cairo-dock-gui-main.c:1452
 #: ../src/internal-old/cairo-dock-internal-background.c:130
 msgid "Set a background for your dock."
-msgstr "Defina uma imagem de fundo para a sua doca."
+msgstr "Defina um fundo para a sua \"dock\"."
 
 #: ../src/cairo-dock-gui-main.c:1453
 #: ../src/internal-old/cairo-dock-internal-background.c:128
 #: ../data/messages:435 ../data/messages:831 ../data/messages:1391
 msgid "Background"
-msgstr "Plano de fundo"
+msgstr "Fundo"
 
 #: ../src/cairo-dock-gui-main.c:1458
 #: ../src/internal-old/cairo-dock-internal-views.c:87
 msgid "Select a view for each of your docks."
-msgstr "Seleccione uma vista diferente as suas Docas."
+msgstr "Selecione uma visualização para cada uma das \"dock\"."
 
 #: ../src/cairo-dock-gui-main.c:1459
 #: ../src/internal-old/cairo-dock-internal-views.c:85 ../data/messages:115
@@ -178,7 +180,7 @@ msgstr "Visualizações"
 #: ../src/cairo-dock-gui-main.c:1465
 #: ../src/internal-old/cairo-dock-internal-dialogs.c:121
 msgid "Configure text bubble appearance."
-msgstr "Configure a aparência das caixas de diálogo balão."
+msgstr "Configure a aparência das caixas de diálogo."
 
 #: ../src/cairo-dock-gui-main.c:1466
 #: ../src/internal-old/cairo-dock-internal-dialogs.c:119
@@ -188,12 +190,14 @@ msgstr "Caixa de diálogo"
 #: ../src/cairo-dock-gui-main.c:1472
 #: ../src/internal-old/cairo-dock-internal-desklets.c:100
 msgid "Applets can be displayed on your desktop as widgets."
-msgstr "Os applets podem ser definidos na sua área de trabalho como widgets."
+msgstr ""
+"As \"applets\" podem ser apresentados como \"widgets\" do seu ambiente de "
+"trabalho."
 
 #: ../src/cairo-dock-gui-main.c:1473
 #: ../src/internal-old/cairo-dock-internal-desklets.c:98 ../data/messages:551
 msgid "Desklets"
-msgstr "Desklets"
+msgstr "\"Desklets\""
 
 #: ../src/cairo-dock-gui-main.c:1479
 #: ../src/internal-old/cairo-dock-internal-icons.c:459
@@ -201,8 +205,8 @@ msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
 msgstr ""
-"Tudo sobre ícones :\n"
-" tamanho, reflexão, tema, ..."
+"Tudo sobre ícones:\n"
+" tamanho, reflexão, ícones..."
 
 #: ../src/cairo-dock-gui-main.c:1480
 #: ../src/internal-old/cairo-dock-internal-icons.c:457 ../data/messages:85
@@ -213,7 +217,7 @@ msgstr "Ícones"
 #: ../src/cairo-dock-gui-main.c:1485
 #: ../src/internal-old/cairo-dock-internal-indicators.c:169
 msgid "Indicators are additional markers for your icons."
-msgstr "Indicadores são indicações extras em seus ícones."
+msgstr "Os indicadores são marcas adicionais para os seus ícones."
 
 #: ../src/cairo-dock-gui-main.c:1486
 #: ../src/internal-old/cairo-dock-internal-indicators.c:167
@@ -224,12 +228,12 @@ msgstr "Indicadores"
 #: ../src/cairo-dock-gui-main.c:1492
 #: ../src/internal-old/cairo-dock-internal-labels.c:182
 msgid "Define icon caption and quick-info style."
-msgstr "Defina o estilo dos rótulos dos ícones e das informações rápidas."
+msgstr "Defina o estilo do texto dos ícones e das informações rápidas."
 
 #: ../src/cairo-dock-gui-main.c:1493
 #: ../src/internal-old/cairo-dock-internal-labels.c:180
 msgid "Captions"
-msgstr "Rótulos"
+msgstr "Texto"
 
 #: ../src/cairo-dock-gui-main.c:1561
 msgid "Categories"
@@ -261,16 +265,16 @@ msgstr "Procurar na descrição"
 
 #: ../src/cairo-dock-gui-main.c:1784
 msgid "Enable this module"
-msgstr "Activar este módulo"
+msgstr "Ativar este módulo"
 
 #: ../src/cairo-dock-gui-main.c:1848 ../src/cairo-dock-menu.c:205
 #: ../data/messages:133
 msgid "More applets"
-msgstr "Mais applets"
+msgstr "Mais \"applets\""
 
 #: ../src/cairo-dock-gui-main.c:1849 ../data/messages:131
 msgid "Get more applets online !"
-msgstr "Obter mais applets online !"
+msgstr "Obter mais \"applets\" na internet!"
 
 #: ../src/cairo-dock-gui-main.c:1883 ../src/cairo-dock.c:729
 msgid "< Maintenance mode >"
@@ -286,17 +290,17 @@ msgid ""
 "The '%s' module is not present. You need to install it and all its "
 "dependencies in order to use this module."
 msgstr ""
-"O módulo '%s' não está presente. Você precisar instalá-lo ou suas "
-"dependências para aproveitar ao máximo este módulo."
+"O módulo \"%s\" não está presente. Precisa de instalar o módulo e as suas "
+"dependências para o poder utilizar."
 
 #: ../src/cairo-dock-gui-main.c:2300
 #, c-format
 msgid "The '%s' module is not enabled."
-msgstr "O módulo '%s' não está activo."
+msgstr "O módulo \"%s2 não está ativo."
 
 #: ../src/cairo-dock-gui-main.c:2301
 msgid "Do you want to enable it now?"
-msgstr "Deseja activá-lo agora ?"
+msgstr "Deseja ativá-lo agora ?"
 
 #: ../src/cairo-dock-gui-main.c:2444
 msgid ""
@@ -306,15 +310,15 @@ msgid ""
 "the Help module is here for you!\n"
 "Would you like to take a look at it now?"
 msgstr ""
-"Parece que você nunca entrou nos módulos de ajuda antes.\n"
-"Se está a ter dificuldades em configurar a Doca, \n"
-"ou se a quer personalizar ao seu gosto, então \n"
-"o módulo da ajuda está aqui para o/a ajudar !\n"
-"Gostaria de consultá-lo agora?"
+"Parece que você nunca entrou no módulo de ajuda.\n"
+"Se está a ter dificuldades em configurar a \"dock\" ou a pretende "
+"personalizar, \n"
+"então o módulo da ajuda está aqui para o/a ajudar !\n"
+"Gostaria de dar agora uma vista de olhos?"
 
 #: ../src/cairo-dock-gui-simple.c:407 ../src/cairo-dock-gui-themes.c:112
 msgid "Could not import the theme."
-msgstr "Não consegui importar o tema"
+msgstr "Não foi possível importar o tema."
 
 #: ../src/cairo-dock-gui-simple.c:427
 msgid "Importing theme..."
@@ -339,13 +343,11 @@ msgstr "Efeitos:"
 #: ../src/cairo-dock-gui-simple.c:855
 msgid ""
 "Click on an applet in order to have a preview and a description for it."
-msgstr ""
-"Clique no applet para poder ver uma pré-visualização e uma descrição para "
-"este."
+msgstr "Clique no \"applet\" para uma pré-visualização e uma descrição."
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:77
 msgid "On mouse hover:"
-msgstr "Com o rato por cima:"
+msgstr "Ao passar com o rato:"
 
 #: ../src/cairo-dock-gui-simple.c:866 ../data/messages:79
 msgid "On click:"
@@ -359,25 +361,26 @@ msgid ""
 " You can switch from a mode to another at any time."
 msgstr ""
 "Esta é apenas uma simples configuração do painel do Cairo-Dock.\n"
-" Depois de estar familarizado, e se quiser customizar o seu tema\n"
-", pode mudar para o modo avançado.\n"
-" Pode alternar entre os modos a qualquer momento."
+" Depois de estar familiarizado com o painel e quiser personalizar o seu "
+"tema,\n"
+" pode então mudar para o modo avançado.\n"
+" Pode trocar entre os modos sempre que quiser."
 
 #: ../src/cairo-dock-gui-switch.c:77
 msgid "Simple Mode"
-msgstr "Modo Simples"
+msgstr "Modo básico"
 
 #: ../src/cairo-dock-gui-switch.c:77
 msgid "Advanced Mode"
-msgstr "Modo Avançado"
+msgstr "Modo avançado"
 
 #: ../src/cairo-dock-gui-switch.c:79
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
-"O modo avançado deixa-o mudar cada parâmetro da sua Doca. É uma ferramenta "
-"poderosa para personalizar o seu tema actual."
+"O modo avançado permite-lhe ajustar cada parâmetro da sua \"dock\". É uma "
+"ferramenta poderosa para personalizar o tema atual."
 
 #: ../src/cairo-dock-gui-themes.c:147
 msgid "Importing theme ..."
@@ -385,15 +388,15 @@ msgstr "A importar o tema ..."
 
 #: ../src/cairo-dock-gui-themes.c:180
 msgid "Manage Themes"
-msgstr "Administrar Temas"
+msgstr "Gerir temas"
 
 #: ../src/cairo-dock-menu.c:169
 msgid "About Cairo-Dock"
-msgstr ""
+msgstr "Sobre Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:196 ../data/messages:1287
 msgid "Community site"
-msgstr "Site da comunidade"
+msgstr "Página da comunidade"
 
 #: ../src/cairo-dock-menu.c:197 ../data/messages:1285
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
@@ -401,7 +404,7 @@ msgstr "Problemas? Sugestões? Apenas quer falar connosco? Venha cá!"
 
 #: ../src/cairo-dock-menu.c:200 ../data/messages:1291
 msgid "Development site"
-msgstr "Site de desenvolvimento"
+msgstr "Página de desenvolvimento"
 
 #: ../src/cairo-dock-menu.c:201 ../data/messages:1289
 msgid "Find the latest version of Cairo-Dock here !"
@@ -413,7 +416,7 @@ msgstr "Desenvolvimento"
 
 #: ../src/cairo-dock-menu.c:222
 msgid "Artwork"
-msgstr "Arte"
+msgstr "Gráficos"
 
 #: ../src/cairo-dock-menu.c:226
 msgid "Support"
@@ -421,7 +424,7 @@ msgstr "Suporte"
 
 #: ../src/cairo-dock-menu.c:307
 msgid "Quit Cairo-Dock?"
-msgstr "Fechar o Cairo-Dock ?"
+msgstr "Sair de Cairo-Dock ?"
 
 #: ../src/cairo-dock-menu.c:336
 msgid "Configure"
@@ -429,34 +432,33 @@ msgstr "Configurar"
 
 #: ../src/cairo-dock-menu.c:341
 msgid "Configure behaviour, appearance, and applets."
-msgstr "Configurar o comportamento, aparência, e os applets."
+msgstr "Configurar o comportamento, aparência e os \"applets\"."
 
 #: ../src/cairo-dock-menu.c:345
 msgid "Configure this dock"
-msgstr "Configurar esta Doca"
+msgstr "Configurar esta \"dock\""
 
 #: ../src/cairo-dock-menu.c:350
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr ""
-"Personalizar a posição, visibilidade e a aparência desta Doca principal."
+msgstr "Personalizar a posição, visibilidade e a aparência desta \"dock\"."
 
 #: ../src/cairo-dock-menu.c:355
 msgid "Manage themes"
-msgstr "Administrar temas"
+msgstr "Gerir temas"
 
 #: ../src/cairo-dock-menu.c:360
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
-"Escolha entre os vários temas no servidor ou guarde o seu tema actual."
+"Escolha entre os vários temas no servidor ou guarde o seu tema atual."
 
 #: ../src/cairo-dock-menu.c:366
 msgid "Unlock icons"
-msgstr "desbloquear ícones"
+msgstr "Desbloquear ícones"
 
 #: ../src/cairo-dock-menu.c:366
 msgid "Lock icons"
-msgstr "bloquear ícones"
+msgstr "Bloquear ícones"
 
 #: ../src/cairo-dock-menu.c:370
 msgid "This will (un)lock the position of the icons."
@@ -464,15 +466,15 @@ msgstr "Isto irá (des)bloquear a posição dos ícones."
 
 #: ../src/cairo-dock-menu.c:374
 msgid "Unlock dock"
-msgstr "Desbloquear a Doca"
+msgstr "Desbloquear \"dock\""
 
 #: ../src/cairo-dock-menu.c:374
 msgid "Lock dock"
-msgstr "Bloquear a Doca"
+msgstr "Bloquear \"dock\""
 
 #: ../src/cairo-dock-menu.c:379
 msgid "This will (un)lock the whole dock."
-msgstr "Isto irá (des)bloquear toda a Doca."
+msgstr "Isto irá (des)bloquear toda a \"dock\"."
 
 #: ../src/cairo-dock-menu.c:384
 msgid "Quick-Hide"
@@ -480,7 +482,8 @@ msgstr "Ocultar rapidamente"
 
 #: ../src/cairo-dock-menu.c:389
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "Isto irá esconder a Doca até você passar por cima dela com o rato."
+msgstr ""
+"Isto irá ocultar a \"dock\" até que você passe por cima dela com o rato."
 
 #: ../src/cairo-dock-menu.c:397
 msgid "Launch Cairo-Dock on startup"
@@ -496,12 +499,14 @@ msgstr "Não existem problemas, apenas soluções (e bastantes dicas úteis!)"
 
 #: ../src/cairo-dock-menu.c:414
 msgid "Get more applets!"
-msgstr "Procurar mais applets!"
+msgstr "Obter mais \"applets\"!"
 
 #: ../src/cairo-dock-menu.c:419
 msgid ""
 "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
+"Os \"applets\" de terceiros disponibilizam a integração com diversos "
+"programas, como por exemplo o Pidgin"
 
 #: ../src/cairo-dock-menu.c:421
 msgid "About"
@@ -518,7 +523,8 @@ msgstr "separador"
 #: ../src/cairo-dock-menu.c:458
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Você está prestes a remover este ícone (%s) da Doca. Tem a certeza ?"
+msgstr ""
+"Você está prestes a remover o ícone (%s) da \"dock\". Tem a certeza ?"
 
 #: ../src/cairo-dock-menu.c:469
 msgid ""
@@ -527,7 +533,7 @@ msgid ""
 "(otherwise they will be destroyed)"
 msgstr ""
 "Deseja que os ícones existentes neste contentor sejam re-enviados para "
-"dentro da Doca ?\n"
+"dentro da \"dock\"?\n"
 " (caso contrário eles serão destruídos)"
 
 #: ../src/cairo-dock-menu.c:539
@@ -536,13 +542,13 @@ msgid ""
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
-"Foi criada uma nova Doca.\n"
-"Agora mova alguns programas ou mini-aplicações para dentro dela, clicando "
-"com o botão direito no ícone -> mover para outra Doca"
+"A nova \"dock\" foi criada.\n"
+"Agora mova alguns lançadores ou \"applets\" para a nova \"dock\" utilizando "
+"o botão direito do rato sobre o ícone->mover para outra \"dock\""
 
 #: ../src/cairo-dock-menu.c:556
 msgid "Sorry, this icon doesn't have a configuration file."
-msgstr "Desculpe, este ícone não contêm um ficheiro de configuração."
+msgstr "Desculpe, este ícone não contém um ficheiro de configuração."
 
 #: ../src/cairo-dock-menu.c:597
 msgid ""
@@ -550,43 +556,43 @@ msgid ""
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
-"Foi criada uma nova Doca.\n"
-"Pode personalizá-la clicando nela com o botão direito do rato  -> cairo-dock "
-"-> configurar esta Doca."
+"A nova \"dock\" foi criada.\n"
+"Pode personaliza-la utilizando o botão direito do rato em cima da \"dock\" -"
+"> cairo-dock -> configurar esta \"dock\"."
 
 #: ../src/cairo-dock-menu.c:658
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
-"Você está prestes a remover esta mini-aplicação (%s) da Doca. Tem a certeza ?"
+"Você está prestes a remover o \"applet\" (%s) da \"dock\". Tem a certeza ?"
 
 #: ../src/cairo-dock-menu.c:881
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
 msgstr ""
-"Desculpe, não foi possível encontrar o ficheiro descrito.\n"
-"Considere arrastar e soltar o lançador do Menu Aplicativos."
+"Desculpe, não foi possível encontrar o ficheiro correspondente.\n"
+"Considere arrastar e largar o lançador existente no menu de aplicações."
 
 #: ../src/cairo-dock-menu.c:1116
 #, c-format
 msgid "Move all to desktop %d - face %d"
-msgstr "Mover todos para a Área de Trabalho %d - frente %d"
+msgstr "Mover todos para o ambiente de trabalho %d - frente %d"
 
 #: ../src/cairo-dock-menu.c:1116
 #, c-format
 msgid "Move to desktop %d - face %d"
-msgstr "Mover para a Área de Trabalho %d - frente %d"
+msgstr "Mover para o ambiente de trabalho %d - frente %d"
 
 #: ../src/cairo-dock-menu.c:1118
 #, c-format
 msgid "Move all to desktop %d"
-msgstr "Mover todos para a Área de Trabalho %d"
+msgstr "Mover todos para o ambiente de trabalho %d"
 
 #: ../src/cairo-dock-menu.c:1118
 #, c-format
 msgid "Move to desktop %d"
-msgstr "Mover para a Área de Trabalho %d"
+msgstr "Mover para o ambiente de trabalho %d"
 
 #: ../src/cairo-dock-menu.c:1120
 #, c-format
@@ -604,26 +610,26 @@ msgstr "Adicionar"
 
 #: ../src/cairo-dock-menu.c:1162
 msgid "Sub-dock"
-msgstr ""
+msgstr "\"Sub-dock\""
 
 #: ../src/cairo-dock-menu.c:1164
 msgid "Main dock"
-msgstr ""
+msgstr "\"Dock\" principal"
 
 #: ../src/cairo-dock-menu.c:1167 ../data/messages:1579
 msgid "Separator"
-msgstr ""
+msgstr "Separador"
 
 #: ../src/cairo-dock-menu.c:1171
 msgid "Custom launcher"
-msgstr ""
+msgstr "Iniciador presonalizado"
 
 #: ../src/cairo-dock-menu.c:1172
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
-"Normalmente poderá arrastar o atalho da aplicação existente no menu e largá-"
-"lo dentro da Doca."
+"Normalmente, pode arrastar e largar na \"dock\" o lançador da aplicação "
+"existente no menu"
 
 #: ../src/cairo-dock-menu.c:1218
 msgid "Modify this separator"
@@ -645,15 +651,16 @@ msgstr "Remover este lançador"
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
-"Pode remover o atalho da aplicação arrastando-o com o rato para fora da Doca."
+"Pode remover o lançador da aplicação arrastando-o com o rato para fora da "
+"\"dock\"."
 
 #: ../src/cairo-dock-menu.c:1223 ../src/cairo-dock-menu.c:1389
 msgid "Move to another dock"
-msgstr "Mover para outra Doca"
+msgstr "Mover para outra \"dock\""
 
 #: ../src/cairo-dock-menu.c:1227 ../src/cairo-dock-menu.c:1393
 msgid "New main dock"
-msgstr "Nova Doca principal"
+msgstr "Nova \"dock\" principal"
 
 #: ../src/cairo-dock-menu.c:1247 ../src/cairo-dock-menu.c:1331
 msgid "Other actions"
@@ -661,15 +668,15 @@ msgstr "Outras ações"
 
 #: ../src/cairo-dock-menu.c:1252
 msgid "Move to this desktop"
-msgstr "Mover para esta Área de Trabalho"
+msgstr "Mover para este ambiente de trabalho"
 
 #: ../src/cairo-dock-menu.c:1267
 msgid "Not Fullscreen"
-msgstr "Sem tela cheia"
+msgstr "Sem ecrã completo"
 
 #: ../src/cairo-dock-menu.c:1267
 msgid "Fullscreen"
-msgstr "Tela cheia"
+msgstr "Ecrã completo"
 
 #: ../src/cairo-dock-menu.c:1271
 msgid "Don't keep above"
@@ -685,11 +692,11 @@ msgstr "Remover ícone personalizado"
 
 #: ../src/cairo-dock-menu.c:1296
 msgid "Set a custom icon"
-msgstr "Colocar um ícone personalizado"
+msgstr "Definir um ícone personalizado"
 
 #: ../src/cairo-dock-menu.c:1299
 msgid "Kill"
-msgstr "Matar"
+msgstr "Terminar"
 
 #: ../src/cairo-dock-menu.c:1304
 msgid "Launch a new (Shift+clic)"
@@ -697,7 +704,7 @@ msgstr "Executar um novo (Shift+clic)"
 
 #: ../src/cairo-dock-menu.c:1309
 msgid "Make it a launcher"
-msgstr "Fazê-lo um lançador"
+msgstr "Torná-lo lançador"
 
 #: ../src/cairo-dock-menu.c:1312
 msgid "Show"
@@ -717,11 +724,11 @@ msgstr "Minimizar"
 
 #: ../src/cairo-dock-menu.c:1319
 msgid "Close (middle-click)"
-msgstr ""
+msgstr "Fechar (clique central)"
 
 #: ../src/cairo-dock-menu.c:1336
 msgid "Move all to this desktop"
-msgstr "Mover todos para a Área de Trabalho"
+msgstr "Mover todos para este ambiente de trabalho"
 
 #: ../src/cairo-dock-menu.c:1342
 msgid "Launch new"
@@ -741,19 +748,19 @@ msgstr "Fechar todos"
 
 #: ../src/cairo-dock-menu.c:1377
 msgid "Detach this applet"
-msgstr "Separar este applet"
+msgstr "Separar este \"applet\""
 
 #: ../src/cairo-dock-menu.c:1377
 msgid "Return to the dock"
-msgstr "Retornar à Doca"
+msgstr "Retornar à \"dock\""
 
 #: ../src/cairo-dock-menu.c:1380
 msgid "Remove this applet"
-msgstr "Remover este applet"
+msgstr "Remover este \"applet\""
 
 #: ../src/cairo-dock-menu.c:1384
 msgid "Launch another instance of this applet"
-msgstr "Lançar nova instância deste applet"
+msgstr "Iniciar nova instância deste \"applet\""
 
 #: ../src/cairo-dock-menu.c:1425
 msgid "Normal"
@@ -762,7 +769,7 @@ msgstr "Normal"
 #: ../src/cairo-dock-menu.c:1431 ../data/messages:21 ../data/messages:187
 #: ../data/messages:1369
 msgid "Always on top"
-msgstr "Sempre no topo"
+msgstr "Sempre visível"
 
 #: ../src/cairo-dock-menu.c:1438
 msgid "Always below"
@@ -779,11 +786,11 @@ msgstr "Reservar espaço"
 
 #: ../src/cairo-dock-menu.c:1460
 msgid "On all desktops"
-msgstr "Em todas as Áreas de Trabalho"
+msgstr "Em todos os ambientes de trabalho"
 
 #: ../src/cairo-dock-menu.c:1466
 msgid "Lock position"
-msgstr "Fixar posição"
+msgstr "Bloquear posição"
 
 #: ../src/cairo-dock-user-interaction.c:353
 msgid ""
@@ -791,10 +798,12 @@ msgid ""
 "config.\n"
 "It is located in the 'Taskbar' module."
 msgstr ""
+"A opção \"substituir os ícones X\" foi ativada automaticamente.\n"
+"A opção está localizada no módulo \"Barra de tarefas\"."
 
 #: ../src/cairo-dock.c:195
 msgid "Don't ask me any more"
-msgstr "Não me pergunte novamente"
+msgstr "Não perguntar novamente"
 
 #: ../src/cairo-dock.c:200
 msgid ""
@@ -804,10 +813,10 @@ msgid ""
 "Compiz, or activating the composition in Metacity.\n"
 "I can perform this last operation for you. Do you want to proceed ?"
 msgstr ""
-"Para remover o rectângulo preto à volta da Doca, terá que activar o gestor "
-"de 'composite'.\n"
-"Isto pode ser feito, por exemplo, activando os efeitos da área de trabalho, "
-"iniciando o Compiz ou activando a composição no Metacity.\n"
+"Para remover o rectângulo preto envolvente da \"dock\", tem que ativar um "
+"gestor de composição.\n"
+"Isto pode ser feito, por exemplo, ativando os efeitos da área de trabalho, "
+"iniciando o Compiz ou ativando a composição no Metacity.\n"
 "Eu posso realizar esta última operação por si. Quer continuar ?"
 
 #: ../src/cairo-dock.c:212
@@ -816,7 +825,7 @@ msgid ""
 "In 15 seconds, the previous setting will be restored."
 msgstr ""
 "Quer manter estas definições?\n"
-"Em 15 segundos as definições anteriores serão restauradas"
+"Dentro de 15 segundos, as definições anteriores serão restauradas."
 
 #: ../src/cairo-dock.c:218
 msgid ""
@@ -828,25 +837,24 @@ msgid ""
 "option is in the 'System' module of the configuration, at the bottom of the "
 "page."
 msgstr ""
-"Para remover o rectângulo preto à volta da Doca, terá que activar o gestor "
-"de 'composite'.\n"
-"Isto pode ser feito, por exemplo, activando os efeitos da área de trabalho, "
-"iniciando o Compiz ou activando a composição no Metacity.\n"
-"Se a sua máquina não suporta a composição, o Cairo-dock irá emular essa "
-"função. Esta opções está no módulo ' Sistema' da configuração, no fim da "
-"página."
+"Para remover o rectângulo preto envolvente da \"dock\", tem que ativar um "
+"gestor de composição.\n"
+"Isto pode ser feito, por exemplo, ativando os efeitos da área de trabalho, "
+"iniciando o Compiz ou ativando a composição no Metacity.\n"
+"Se o seu computador não tiver suporte à composição, o Cairo-Dock pode criar "
+"uma emulação. Esta opção está no módulo \"Sistema\", no final da página."
 
 #: ../src/cairo-dock.c:312
 msgid ""
 "A useful FAQ which also contains a lot of hints.\n"
 "Roll your mouse over a sentence to make helpful popups appear."
 msgstr ""
-"Um FAQ útil que contém muitas dicas.\n"
-"Deixe o rato sobre a sentença para fazer a caixa de diálogo se abrir."
+"Diversas FAQ que contêm muitas dicas.\n"
+"Desloque o rato sobre a frase para fazer aparecer a caixa de ajuda."
 
 #: ../src/cairo-dock.c:573
 msgid "Use OpenGL in Cairo-Dock"
-msgstr "Usar OpenGL no Cairo-Dock ?"
+msgstr "Utilizar OpenGL no Cairo-Dock ?"
 
 #: ../src/cairo-dock.c:581
 msgid ""
@@ -859,14 +867,17 @@ msgid ""
 " (To not show this dialog, launch the dock from the Application menu,\n"
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
-"OpenGL permite o uso de aceleração de hardware, reduzir a carga na CPU ao "
-"mínimo.\n"
-"Também permite belos efeitos visuais similar ao Compiz.\n"
-"No entanto, algumas placas de vídeo e/ou seus drivers não suportam "
-"completamente, que pode fazer com que o dock não execute correctamente.\n"
-"Deseja activar o OpenGL ?\n"
-" (Para não mostrar esta mensagem, execute o dock do menu Aplicativos,\n"
-"  ou com a opção -o para forçar o uso do OpenGL e -c para forçar o cairo.)"
+"O OpenGL permite a utilização de aceleração de equipamento, reduzindo a "
+"utilização do processador.\n"
+"Também permite belos efeitos visuais similares aos do Compiz.\n"
+"No entanto, algumas placas de vídeo e/ou os seus controladores não possuem "
+"suporte ao OpenGL o que pode originar com que a \"dock\" não seja executada "
+"corretamente.\n"
+"Deseja activar o OpenGL?\n"
+" (Para não mostrar esta mensagem, inicie a \"dock\" a partir do menu "
+"\"Aplicações\",\n"
+"  ou com a opção -o para forçar a utilização do OpenGL e -c para forçar o "
+"cairo.)"
 
 #: ../src/cairo-dock.c:586
 msgid "Remember this choice"
@@ -885,12 +896,12 @@ msgid ""
 "  (you can now click on this dialog to close it)"
 msgstr ""
 "Bem vindo ao Cairo-Dock2 !\n"
-"O tema simples por defeito foi carregado.\n"
-"Pode se familiarizar com a dock ou escolher um outro tema com o botão "
-"direito do rato -> Cairo-Dock -> selecção de temas.\n"
-"Uma ajuda útil está disponivek clicando com o botão direito -> Cairo-Dock -> "
-"Ajuda.\n"
-"Se tem alguma questão/pedido/comentário, por favor visito-nos em http://glx-"
+"O tema básico e omisso foi carregado.\n"
+"Pode familiarizar-se com a \"dock\" ou escolher outro tema com o botão "
+"direito do rato -> Cairo-Dock -> Gestão de de temas.\n"
+"Tem à sua disposição a ajuda se clicar com o botão direito do rato -> Cairo-"
+"Dock -> Ajuda.\n"
+"Se tem alguma questão/pedido/comentário, por favor visite-nos em http://glx-"
 "dock.org.\n"
 "Esperamos que aprecie este programa !\n"
 "  (pode carregar nesta caixa de diálogo para a fechar)"
@@ -902,8 +913,8 @@ msgid ""
 "It has been restored successfully, but if it happens again, please report it "
 "at http://glx-dock.org"
 msgstr ""
-"O módulo '%s' encontrou um problema.\n"
-"Foi restaurado com sucesso, mas se acontecer outra vez, por favor reporte em "
+"O módulo \"%s\" encontrou um problema.\n"
+"Foi restaurado com sucesso, mas se isto acontecer novamente, reporte-o em "
 "http://glx-dock.org"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:274
@@ -912,8 +923,9 @@ msgid ""
 " You can change this by opening the configuration of this module. Do you "
 "want to do it now?"
 msgstr ""
-"O tema não foi encontrado; o tema por defeito será carregado em vez dele.\n"
-" Pode mudar esta opção abrindo a configuração deste módulo. Quer abrir agora?"
+"O tema não foi encontrado e o tema omisso será utilizado.\n"
+" Pode alterar esta opção abrindo a configuração deste módulo. Pretende fazê-"
+"lo agora?"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:289
 msgid ""
@@ -924,7 +936,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-applet-facility.h:371
 msgid "Applet's handbook"
-msgstr "Manual de mini-aplicativos"
+msgstr "Manual de \"applets\""
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:843
 #: ../src/internal-old/cairo-dock-internal-desklets.c:42
@@ -977,20 +989,20 @@ msgstr "Novo"
 #: ../src/gldit/cairo-dock-gui-factory.c:262
 #: ../src/gldit/cairo-dock-gui-factory.c:1650
 msgid "Updated"
-msgstr "Actualizado"
+msgstr "Atualizado"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:970
 msgid "_Custom Icons_"
-msgstr "Ícones Personalizados"
+msgstr "_Ícones Personalizados_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1426
 msgid "Rate me"
-msgstr "Avalia-me"
+msgstr "Avaliar"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1561
 #: ../src/gldit/cairo-dock-gui-factory.c:1563
 msgid "You must try the theme before you can rate it."
-msgstr "Deve experimentar o tema antes de o avaliar"
+msgstr "Deve experimentar o tema antes de avaliar"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1586
 #, c-format
@@ -999,8 +1011,8 @@ msgid ""
 "Be sure to install it with the same version as the dock to enjoy these "
 "features."
 msgstr ""
-"O módulo '%s' não foi encontrado.\n"
-"Certifique-se que instala uma versão igual à versão da Doca, para poder "
+"O módulo \"%s\" não foi encontrado.\n"
+"Certifique-se que instala uma versão igual à versão da \"dock\", para poder "
 "utilizar estas funcionalidades."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1595
@@ -1009,46 +1021,46 @@ msgid ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 msgstr ""
-"O plug in '%s' não está activo.\n"
-"Deseja activá-lo agora?"
+"O \"plug-in\" \"%s\" não está ativo.\n"
+"Deseja ativá-lo agora?"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2445
 #, c-format
 msgid "Listing themes in '%s' ..."
-msgstr "Listando os temas em '%s' ..."
+msgstr "Listando os temas em \"%s\"..."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3018
 msgid "Theme"
-msgstr "tema"
+msgstr "Tema"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3031
 msgid "Rating"
-msgstr "classificação"
+msgstr "Classificação"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3037
 msgid "Sobriety"
-msgstr ""
+msgstr "Sobriedade"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3096
 msgid "link"
-msgstr "link"
+msgstr "ligação"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3149
 msgid "Grab"
-msgstr "agarrar"
+msgstr "Capturar"
 
 #: ../src/gldit/cairo-dock-struct.h:416
 msgid "Default"
-msgstr "Defeito"
+msgstr "Omissão"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:112
 #, c-format
 msgid "Are you sure you want to overwrite theme %s?"
-msgstr "Tem certeza que deseja sobrescrever o tema %s ?"
+msgstr "Tem certeza que deseja sobrescrever o tema %s?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:174
 msgid "Last modification on:"
-msgstr "Ultima modificação em:"
+msgstr "Última modificação em:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:241
 #, c-format
@@ -1056,18 +1068,18 @@ msgid ""
 "Could not access remote file %s/%s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"Não foi possível obter o ficheiro remoto %s/%s, talvez o servidor esteja 'em "
-"baixo'.\n"
+"Não foi possível obter o ficheiro remoto %s/%s. É possível que o servidor "
+"esteja inacessível.\n"
 "Tente novamente mais tarde ou contacte-nos em glx-dock.org."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:256
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
-msgstr "Tem certeza que deseja deletar tema %s ?"
+msgstr "Tem certeza que quer apagar o tema %s ?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:258
 msgid "Are you sure you want to delete these themes?"
-msgstr "Tem certeza que quer deletar estes temas ?"
+msgstr "Tem certeza que quer apagar estes temas ?"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:601 ../data/messages:37
 #: ../data/messages:203
@@ -1082,37 +1094,37 @@ msgstr "Desvanecer"
 #: ../src/implementations/cairo-dock-hiding-effect.c:617 ../data/messages:41
 #: ../data/messages:207
 msgid "Semi transparent"
-msgstr "Semi-transparente"
+msgstr "Semi transparente"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:626 ../data/messages:43
 #: ../data/messages:209
 msgid "Zoom out"
-msgstr "Diminuir zoom"
+msgstr "Reduzir"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:634 ../data/messages:45
 #: ../data/messages:211
 msgid "Folding"
-msgstr ""
+msgstr "Desdobrável"
 
 #: ../src/internal-old/cairo-dock-internal-dialogs.c:117
 msgid ""
 "This provides different window decorators. Enable this first if you want to "
 "select a different decorator for your dialog boxes."
 msgstr ""
-"Isto provê diferentes decoradores de janelas. Active-o primeiro se você "
-"deseja seleccionar um decorador diferente para suas janelas."
+"Isto disponibiliza diversos decoradores de janelas. Ative-o primeiro, caso "
+"queira selecionar um decorador diferente para as suas janelas."
 
 #: ../src/internal-old/cairo-dock-internal-icons.c:455
 msgid "Provides various animations for your icons."
-msgstr "Provê diversas animações para seus ícones"
+msgstr "Disponibiliza diversas animações para os seus ícones."
 
 #: ../src/internal-old/cairo-dock-internal-views.c:83
 msgid ""
 "Provides different views for Cairo-Dock. Enable this first if you want to "
 "select a different view for your docks."
 msgstr ""
-"Fornece diferentes vistas para o Cairo-Dock. Active-o primeiro, se você "
-"desejar seleccionar uma vista diferente para sua Doca."
+"Disponibiliza diversas visualizações para o Cairo-Dock. Ative-o primeiro, "
+"caso queira selecionar uma visualização diferente para as suas \"docks\"."
 
 #: ../data/messages:1 ../data/messages:1331
 msgid "Behavior"
@@ -1124,29 +1136,29 @@ msgstr "Posição no ecrã"
 
 #: ../data/messages:5 ../data/messages:141 ../data/messages:1335
 msgid "Choose which border of the screen the dock will be placed on:"
-msgstr "Escolha em que borda do ecrã a Doca será posicionada :"
+msgstr "Escolha o limite do ecrã para posicionar a \"dock\":"
 
 #: ../data/messages:7 ../data/messages:143 ../data/messages:1337
 msgid "bottom"
-msgstr "em baixo"
+msgstr "inferior"
 
 #: ../data/messages:9 ../data/messages:145 ../data/messages:1339
 msgid "top"
-msgstr "em cima"
+msgstr "superior"
 
 #: ../data/messages:11 ../data/messages:147 ../data/messages:157
 #: ../data/messages:1341
 msgid "right"
-msgstr "à direita"
+msgstr "direito"
 
 #: ../data/messages:13 ../data/messages:149 ../data/messages:155
 #: ../data/messages:1343
 msgid "left"
-msgstr "à esquerda"
+msgstr "esquerdo"
 
 #: ../data/messages:15 ../data/messages:181
 msgid "Visibility of the main dock"
-msgstr "Visibilidade da Doca principal"
+msgstr "Visibilidade da \"dock\" principal"
 
 #: ../data/messages:17 ../data/messages:183 ../data/messages:1365
 msgid ""
@@ -1156,12 +1168,12 @@ msgid ""
 "When the dock pops up on shortcut, it will appear at the position of your "
 "mouse. The rest of the time, it stays invisible, thus acting like a menu."
 msgstr ""
-"Os modos são ordenados desde o mais ao  menos intrusivos.\n"
-"Quando a Doca estiver escondida ou por baixo de uma janela, coloque o rato "
-"na borda do ecrã para chamá-la.\n"
-"Quando a Doca reaparecer com o atalho, irá aparecer na mesma local onde está "
-"o ponteiro do rato. No resto do tempo, ela estará invisível actuando desta "
-"forma como um menu."
+"Os modos são organizados do mais para o menos intrusivo.\n"
+"Quando a \"dock\" estiver oculta ou por baixo de uma janela, coloque o rato "
+"no limite do ecrã para a invocar.\n"
+"Quando a \"dock\" reaparecer com o atalho, irá aparecer no local onde está o "
+"cursor do rato. No resto do tempo, ela estará invisível funcionando como um "
+"menu."
 
 #: ../data/messages:19 ../data/messages:55 ../data/messages:185
 #: ../data/messages:247 ../data/messages:1367
@@ -1170,23 +1182,23 @@ msgstr "Visibilidade:"
 
 #: ../data/messages:23 ../data/messages:189 ../data/messages:1371
 msgid "Reserve space for the dock"
-msgstr "Reservar espaço para a Doca"
+msgstr "Reservar espaço para a \"dock\""
 
 #: ../data/messages:25 ../data/messages:191 ../data/messages:1373
 msgid "Keep the dock below"
-msgstr "Manter a Doca em baixo"
+msgstr "Manter a \"dock\" em baixo"
 
 #: ../data/messages:27 ../data/messages:193 ../data/messages:1375
 msgid "Hide the dock when it overlaps the current window"
-msgstr "Esconder a Doca quando ela se sobrepõe à janela actual"
+msgstr "Ocultar a \"dock\" quando ela se sobrepõe à janela atual"
 
 #: ../data/messages:29 ../data/messages:195 ../data/messages:1377
 msgid "Hide the dock whenever it overlaps any window"
-msgstr "Esconder a Doca quando ela se sobrepuser a qualquer janela"
+msgstr "Ocultar a \"dock\" quando ela se sobrepõe a qualquer janela"
 
 #: ../data/messages:31 ../data/messages:197 ../data/messages:1379
 msgid "Keep the dock hidden"
-msgstr "Manter a Doca escondida"
+msgstr "Manter a \"dock\" escondida"
 
 #: ../data/messages:33 ../data/messages:199 ../data/messages:1381
 msgid "Pop-up on shortcut"
@@ -1194,7 +1206,7 @@ msgstr "Reaparecer com atalho"
 
 #: ../data/messages:35 ../data/messages:201
 msgid "Effect used to hide the dock:"
-msgstr "Efeito usado para esconder a Doca"
+msgstr "Efeito utilizado para ocultar a \"dock\""
 
 #: ../data/messages:47 ../data/messages:231
 msgid ""
@@ -1202,32 +1214,32 @@ msgid ""
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
 msgstr ""
-"Quando você activar o atalho, a Doca aparecerá na posição do seu rato. O "
-"resto do tempo ele ficará invisível, funcionando como um menu."
+"Quando você ativar o atalho, a \"dock\" aparecerá na posição do seu rato. O "
+"resto do tempo ela ficará invisível, funcionando como um menu."
 
 #: ../data/messages:49 ../data/messages:233
 msgid "Keyboard shortcut to pop-up the dock:"
-msgstr "Atalho de teclado para chamar a Doca:"
+msgstr "Atalho de teclado para invocar a \"dock\":"
 
 #: ../data/messages:51
 msgid "Visibility of sub-docks"
-msgstr "Visibilidade das Docas secundárias"
+msgstr "Visibilidade das \"sub-docks\""
 
 #: ../data/messages:53 ../data/messages:245
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
 msgstr ""
-"Elas irão aparecer se clicar nelas ou se mantiver o rato sobre o ícone que "
+"elas irão aparecer ao serem clicadas ou se mantiver o rato sobre o ícone que "
 "aponta para elas."
 
 #: ../data/messages:57 ../data/messages:249
 msgid "Appear on mouse over"
-msgstr "Aparecer quando pairar com o rato"
+msgstr "Aparecer ao passar com o rato"
 
 #: ../data/messages:59 ../data/messages:251
 msgid "Appear on click"
-msgstr "Aparecer quando clicar"
+msgstr "Aparecer quando clicadas"
 
 #: ../data/messages:63
 msgid ""
@@ -1239,17 +1251,17 @@ msgid ""
 "Gnome    : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
-"Nenhuma: Não mostrar as janelas abertas na Doca.\n"
-"MacOSX : Mix applications with its launcher, show other windows only if they "
-"are minimized.\n"
-"KDE: Misturar as aplicações com os iniciadores delas, apresentar todas as "
-"janelas e grupos de janelas juntas numa sub-Doca.\n"
-"GNOME: Separar a Barra de tarefas dos inciadores e apenas mostrar as janelas "
-"que estão actualmente na área de trabalho."
+"Nenhum: Não mostrar as janelas abertas na \"dock\".\n"
+"MacOSX : Combinar aplicações com o seu lançador e apenas mostrar as outras "
+"janelas se estiverem minimizadas.\n"
+"KDE: Combinar aplicações com o seu lançador e apresentar todas as janelas e "
+"grupos de janelas juntas numa \"sub-dock\".\n"
+"GNOME: Separar a barra de tarefas dos seus lançadores e apenas mostrar as "
+"janelas que estão no ambiente de trabalho atual."
 
 #: ../data/messages:65
 msgid "Behaviour of the Taskbar:"
-msgstr "Comportamento da Barra de Tarefas:"
+msgstr "Comportamento da barra de tarefas:"
 
 #: ../data/messages:67 ../data/messages:1509
 msgid "None"
@@ -1265,7 +1277,7 @@ msgstr "KDE"
 
 #: ../data/messages:73
 msgid "Gnome"
-msgstr "GNOME"
+msgstr "Gnome"
 
 #: ../data/messages:75
 msgid "Icons' animations and effects"
@@ -1273,7 +1285,7 @@ msgstr "Animações e efeitos dos ícones"
 
 #: ../data/messages:81
 msgid "On appearance/disappearance:"
-msgstr "No aparecimento/desaparecimento"
+msgstr "Ao aparecer/desaparecer:"
 
 #: ../data/messages:87 ../data/messages:619
 msgid ""
@@ -1281,13 +1293,13 @@ msgid ""
 "name of a theme that is installed on your system (like 'Gartoon' or "
 "'Human'), or even a path to a folder containing icons."
 msgstr ""
-"Deixe vazio para usar os ícones actuais do tema de seu sistema. Você pode "
-"entrar com o nome de um tema que está instalado em seu sistema (como "
-"'Gartoon' ou 'Human'), ou mesmo o caminho para a pasta que o contém."
+"Deixe vazio para utilizar os ícones do tema do seu sistema. Você pode "
+"indicar o nome de um tema que está instalado no seu sistema (como "
+"\"Gartoon\" ou \"Human\") ou o caminho para a pasta que o contém."
 
 #: ../data/messages:89
 msgid "Choose a theme of icons :"
-msgstr "Escolha um tema para os ícones :"
+msgstr "Escolha o tema de ícones :"
 
 #: ../data/messages:91
 msgid "Icons size:"
@@ -1311,25 +1323,27 @@ msgstr "Grande"
 
 #: ../data/messages:101
 msgid "Very Big"
-msgstr "Muito Grande"
+msgstr "Muito grande"
 
 #: ../data/messages:103
 msgid ""
 "This will separate launchers, application, and applets from each others. "
 "Separators will be automatically inserted then."
 msgstr ""
+"Isto irá separar lançadores, as aplicações e os \"applets\" uns dos outros. "
+"Os separadores serão introduzidos automaticamente."
 
 #: ../data/messages:105 ../data/messages:709
 msgid "Separate the different types of icons?"
-msgstr "Separa os diferentes tipo de ícones?"
+msgstr "Separar os diferentes tipos de ícones?"
 
 #: ../data/messages:107 ../data/messages:719
 msgid "Order of the different types of icons :"
-msgstr "Ordem dos diferentes tipos de ícones :"
+msgstr "Organização dos diferentes tipos de ícones :"
 
 #: ../data/messages:109 ../data/messages:721
 msgid "launchers"
-msgstr ""
+msgstr "lançadores"
 
 #: ../data/messages:111 ../data/messages:723
 msgid "applications"
@@ -1337,27 +1351,27 @@ msgstr "aplicações"
 
 #: ../data/messages:113 ../data/messages:725
 msgid "applets"
-msgstr "applets"
+msgstr "\"applets\""
 
 #: ../data/messages:117 ../data/messages:499
 msgid "Choose the default view for main docks :"
-msgstr "Escolhe a visualização padrão para Doca principal :"
+msgstr "Escolha a visualização omissa para a \"dock\" principal :"
 
 #: ../data/messages:119 ../data/messages:503
 msgid "You can overwrite this parameter for each sub-dock."
-msgstr "Você pode sobrescrever este parâmetro em cada sub-Doca."
+msgstr "Você pode sobrescrever este parâmetro para cada \"sub-dock\"."
 
 #: ../data/messages:121 ../data/messages:505
 msgid "Choose the default view for sub-docks :"
-msgstr "Escolha uma vista predefinida para as sub-Docas :"
+msgstr "Escolha a visualização omissa para as \"sub-docks\" :"
 
 #: ../data/messages:123
 msgid "Add-ons"
-msgstr "Add-ons"
+msgstr "Extras"
 
 #: ../data/messages:125
 msgid "Add or remove any applet"
-msgstr "Adicionar ou remover um applet"
+msgstr "Adicionar ou remover um \"applet\""
 
 #: ../data/messages:127
 msgid ""
@@ -1365,12 +1379,16 @@ msgid ""
 "Click on the left check-box to (de)activate an applet.\n"
 "Once an applet is active, you can configure it by right clicking on its icon."
 msgstr ""
+"Selecione uma linha para a visualizar e ver uma descrição do \"applet\".\n"
+"Clique na caixa à esquerda para des(ativar) um \"applet\"\n"
+"Assim que o \"applet\" estiver ativo, pode configurá-lo ao clicar com o "
+"botão direito do rato no seu ícone."
 
 #: ../data/messages:129
 msgid ""
 "You can install them by simply drag-and-dropping the link onto your dock."
 msgstr ""
-"Pode facilmente instalá-las arrastando-e-largando o link na sua Doca."
+"Pode facilmente instalá-los arrastando e largando a ligação na sua \"dock\"."
 
 #: ../data/messages:135 ../data/messages:1411
 msgid "Themes"
@@ -1384,20 +1402,19 @@ msgid ""
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
 msgstr ""
-"Quando definida com 0, a Doca ficará numa posição relativa ao canto esquerdo "
-"se na horizontal, ou no canto superior se na vertical. \r\n"
-"Se escolher 1, irá posicionar-se no canto direito se na horizontal ou no "
-"canto inferior se na vertical. \r\n"
-"Se a definição for 0,5, irá posicionar-se numa posição central em relação às "
-"margens do ecrã."
+"Quando definida para 0, a \"dock\" posicionar-se-á no canto esquerdo se for "
+"horizontal ou no canto superior se for vertical. Se definido para 1, irá "
+"posicionar-se no canto direito se for horizontal ou no canto inferior se for "
+"vertical. Se definida para 0.5, irá posicionar-se numa posição central em "
+"relação às margens do ecrã."
 
 #: ../data/messages:153 ../data/messages:1347
 msgid "Relative alignment:"
-msgstr "Alinhamento relactivo :"
+msgstr "Alinhamento relativo :"
 
 #: ../data/messages:159 ../data/messages:1349
 msgid "Offset from the screen's edge"
-msgstr ""
+msgstr "Distância das margens do ecrã"
 
 #: ../data/messages:161 ../data/messages:1351
 msgid ""
@@ -1405,47 +1422,48 @@ msgid ""
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 msgstr ""
 "Distância desde a posição absoluta na margem do ecrã, em pixeis. Você também "
-"pode mover a Doca, mantendo premida a tecla ALT ou CTRL e usando o botão "
-"esquerdo do rato."
+"pode mover a \"dock\", mantendo premida a tecla ALT ou CTRL e utilizando o "
+"botão esquerdo do rato."
 
 #: ../data/messages:163 ../data/messages:1353
 msgid "Lateral offset:"
-msgstr ""
+msgstr "Distância lateral:"
 
 #: ../data/messages:165 ../data/messages:1355
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
 msgstr ""
-"em pixeis. Você também pode mover a Doca, mantendo premida a tecla ALT ou "
-"CTRL e usando o botão esquerdo do rato."
+"em pixeis. Você também pode mover a \"dock\", mantendo premida a tecla ALT "
+"ou CTRL e utilizando o botão esquerdo do rato."
 
 #: ../data/messages:167 ../data/messages:1357
 msgid "Distance to the screen edge:"
-msgstr "Distância para a borda da tela :"
+msgstr "Distância para o limite do ecrã :"
 
 #: ../data/messages:169
 msgid "Multiple screens"
-msgstr "Múltiplas telas"
+msgstr "Ecrãs múltiplos"
 
 #: ../data/messages:171
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama to manage "
 "them."
 msgstr ""
-"Esta opção ser se possuir um dual-screen e será usado o Xinerama para o gerir"
+"Esta opção deve ser utilizada se você possui diversos ecrãs e caso utilize o "
+"Xinerama para a sua gestão."
 
 #: ../data/messages:173
 msgid "Use Xinerama?"
-msgstr "Usar Xinerama ?"
+msgstr "Utilizar Xinerama ?"
 
 #: ../data/messages:175
 msgid "0 is the first screen."
-msgstr "0 é o primeiro ecrã"
+msgstr "0 é o primeiro ecrã."
 
 #: ../data/messages:177 ../data/messages:1361
 msgid "Number of the screen where the dock should be located:"
-msgstr "Número de ecrãs onde a Doca deve ser localizada :"
+msgstr "Número de ecrãs onde a \"dock\" deve ser localizada :"
 
 #: ../data/messages:179
 msgid "Accessibility"
@@ -1453,39 +1471,39 @@ msgstr "Acessibilidade"
 
 #: ../data/messages:213
 msgid "in ms. 0 means no delay."
-msgstr ""
+msgstr "em ms. 0 significa sem atraso."
 
 #: ../data/messages:215
 msgid "Delay before the dock unhides itself:"
-msgstr "Atraso antes da Doca se auto-esconder:"
+msgstr "Atraso antes da ocultação automática da \"dock\":"
 
 #: ../data/messages:217
 msgid "How to call the dock back:"
-msgstr "Como chamar a Doca outra vez:"
+msgstr "Como invocar a \"dock\":"
 
 #: ../data/messages:219
 msgid "Hit the screen's border"
-msgstr ""
+msgstr "Clicar na margem do ecrã"
 
 #: ../data/messages:221
 msgid "Hit where the dock is"
-msgstr "Clicar onde a Doca estiver"
+msgstr "Clicar no local da \"dock\""
 
 #: ../data/messages:223
 msgid "Hit the screen's corner"
-msgstr ""
+msgstr "Clicar no canto do ecrã"
 
 #: ../data/messages:225
 msgid "Hit a zone"
-msgstr ""
+msgstr "Clicar numa área"
 
 #: ../data/messages:227
 msgid "Size of the zone :"
-msgstr "Tamanho da zona"
+msgstr "Tamanho da área:"
 
 #: ../data/messages:229
 msgid "Image to display on the zone :"
-msgstr "Imagem para mostrar na zona"
+msgstr "Imagem a exibir na área"
 
 #: ../data/messages:235
 msgid "Additional parameters"
@@ -1493,25 +1511,24 @@ msgstr "Parâmetros adicionais"
 
 #: ../data/messages:237
 msgid "Stretch the dock to always fill the screen"
-msgstr "Alargar a Doca para encher sempre todo o ecrã"
+msgstr "Ajustar a \"dock\" para preencher a totalidade do ecrã"
 
 #: ../data/messages:239
 msgid ""
 "This is only usefull if you do not already use auto-hide and if your Window "
 "Manager allows the dock in front of fullscreen windows (which is rare)."
 msgstr ""
-"Isto só é útil se ainda não usar o auto-esconder e se seu Gestor de Janelas "
-"permitir que a Doca fique em frente das janelas que usem ecrã completo (o "
-"que é raro)."
+"Isto só é útil se não utilizar a ocultação automática e caso o seu gestor de "
+"janelas não permita que a \"dock\" se sobreponha às janelas em ecrã completo."
 
 #: ../data/messages:241
 msgid "Automatically hide the dock when a window becomes full screen?"
 msgstr ""
-"Esconder a Doca automaticamente quando uma janela usar o ecrã completo ?"
+"Ocultar automaticamente a \"dock\" quando uma janela ficar em ecrã completo ?"
 
 #: ../data/messages:243
 msgid "Sub-docks' visibility"
-msgstr "Visibilidade das sub-Docas"
+msgstr "Visibilidade das \"sub-docks\""
 
 #: ../data/messages:253 ../data/messages:257
 msgid "in ms."
@@ -1519,11 +1536,11 @@ msgstr "em ms."
 
 #: ../data/messages:255
 msgid "Delay before displaying a sub-dock:"
-msgstr "Atraso antes de mostrar uma sub-Doca :"
+msgstr "Atraso antes de exibir a \"sub-dock\":"
 
 #: ../data/messages:259
 msgid "Delay before leaving a sub-dock takes effect:"
-msgstr "Atraso antes do activar o efeito de sair de sub-Doca:"
+msgstr "Atraso antes de sair da \"sub-dock\":"
 
 #: ../data/messages:261
 msgid "TaskBar"
@@ -1534,21 +1551,20 @@ msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
 msgstr ""
-"O Cairo-Dock irá substituir-se à área de Notificação/Barra de tarefas. É "
-"recomendável a remoção de outras aplicações que actuem como barras de "
-"tarefas."
+"O Cairo-Dock irá atuar como uma barra de tarefas. É recomendável a remoção "
+"de outras barras de tarefas."
 
 #: ../data/messages:267
 msgid "Show currently opened applications in the dock?"
-msgstr "Mostrar na Doca as aplicações actualmente abertas ?"
+msgstr "Mostrar na \"dock\" as aplicações abertas ?"
 
 #: ../data/messages:269
 msgid "Only show icons whose windows are minimised"
-msgstr "Mostrar ícones da janela quando minimizada ?"
+msgstr "Apenas mostrar os ícones das janelas minimizadas"
 
 #: ../data/messages:271
 msgid "Only show applications on current desktop"
-msgstr "Mostrar aplicativos na Área de trabalho actual ?"
+msgstr "Apenas mostrar as aplicações do ambiente de trabalho atual"
 
 #: ../data/messages:273
 msgid ""
@@ -1556,34 +1572,33 @@ msgid ""
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 msgstr ""
-"Permite aos lançadores funcionarem como aplicativos quando seus programas "
-"estiverem a executar, e mostrar um indicador em seu ícone. Você pode lançar "
-"outras instâncias do programa com SHIFT+clique."
+"Permite que os lançadores atuem como aplicações quando os seus programas "
+"estão em execução e exibe um indicador nos ícones. Pode iniciar outras "
+"instâncias do programa com SHIFT+clique."
 
 #: ../data/messages:275
 msgid "Mix launchers and applications"
-msgstr "Misturar lançadores e aplicativos ?"
+msgstr "Combinar lançadores e aplicações"
 
 #: ../data/messages:277
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
 msgstr ""
-"Isto permitir-lhe-á agrupar todas as janelas de uma dada aplicação numa "
-"única sub-Doca e agir sobre todas essas janelas ao mesmo tempo."
+"Isto permitir-lhe agrupar todas as janelas de uma dada aplicação numa única "
+"\"sub-dock\" e agir sobre todas as janelas ao mesmo tempo."
 
 #: ../data/messages:279
 msgid "Group windows from the same application in a sub-dock ?"
-msgstr "Agrupar todas as janelas da mesma aplicação numa única sub-Doca ?"
+msgstr "Agrupar todas as janelas da mesma aplicação numa única \"sub-dock\"?"
 
 #: ../data/messages:281 ../data/messages:291
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
-msgstr ""
-"preencha com as classes de aplicações, separadas por ponto e vírgula ';'"
+msgstr "Indique a classe das aplicações separadas por ponto e vírgula"
 
 #: ../data/messages:283 ../data/messages:293
 msgid "\t\tExcept the following classes:"
-msgstr ""
+msgstr "\t\tExcepto as seguintes classes:"
 
 #: ../data/messages:285
 msgid "Representation"
@@ -1595,39 +1610,41 @@ msgid ""
 "set, the same icon as the corresponding launcher will be used for each "
 "application."
 msgstr ""
-"Se não definido, usará o ícone provido pelo X para cada aplicativo. Se "
-"definido, o mesmo ícone do lançador correspondente será usado para cada "
-"aplicativo."
+"Se não for definido, será utilizado para cada aplicação o ícone "
+"disponibilizado pelo X. Se for definido, será utilizado para cada aplicação "
+"o mesmo ícone do lançador."
 
 #: ../data/messages:289
 msgid "Overwrite the X icon with the launchers' icon?"
-msgstr "Sobrescrever os ícones do X pelos do lançador ?"
+msgstr "Sobrescrever os ícones X pelos do lançador?"
 
 #: ../data/messages:295
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
+"Precisa de um gestor de composição para exibir as miniaturas.\n"
+"Precisa do OpenGL para que possa exibir o ícone com inclinação para trás."
 
 #: ../data/messages:297
 msgid "How to draw minimised windows ?"
-msgstr ""
+msgstr "Como desenhar as janelas minimizadas?"
 
 #: ../data/messages:299
 msgid "Make the icon transparent"
-msgstr "Colocar um ícone transparente"
+msgstr "Tornar o ícone transparente"
 
 #: ../data/messages:301
 msgid "Show a window's thumbnail"
-msgstr ""
+msgstr "Mostrar a miniatura da janela"
 
 #: ../data/messages:303
 msgid "Draw it bent backwards"
-msgstr ""
+msgstr "Exibir com inclinação para trás"
 
 #: ../data/messages:305
 msgid "Transparency of icons whose window is minimised:"
-msgstr ""
+msgstr "Transparência dos ícones cuja janela está minimizada:"
 
 #: ../data/messages:307 ../data/messages:455 ../data/messages:567
 #: ../data/messages:593 ../data/messages:665
@@ -1642,42 +1659,42 @@ msgstr "Transparente"
 #: ../data/messages:311
 msgid "Play a short animation of the icon when its window becomes active"
 msgstr ""
-"Mostrar uma pequena animação no ícone quando sua janela se tornar activa ?"
+"Mostrar uma pequena animação no ícone quando a sua janela fica ativa?"
 
 #: ../data/messages:313
 msgid "\"...\" will be added at the end if the name is too long."
-msgstr "\"...\" será adicionado no fim se o nome for longo demais."
+msgstr "Se o nome for muito extenso, no fim será adicionado \"...\"."
 
 #: ../data/messages:315
 msgid "Maximum number of caracters in application name:"
-msgstr "Número máximo de caracteres no nome do aplicativo :"
+msgstr "Número máximo de caracteres para o nome da aplicação:"
 
 #: ../data/messages:317
 msgid "Interaction"
-msgstr "Interacção"
+msgstr "Interação"
 
 #: ../data/messages:319
 msgid "This is the default behaviour of most taskbars."
-msgstr "Este é o comportamento padrão da maioria das Barras de tarefa."
+msgstr "Este é o comportamento omisso para a maioria das barras de tarefas."
 
 #: ../data/messages:321
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
-msgstr ""
+msgstr "Minimizar a janela ao clicar no ícone caso a janela já esteja ativa?"
 
 #: ../data/messages:323
 msgid "In the style of Firefox tabs"
-msgstr "Como as abas do Firefox."
+msgstr "No mesmo estilo dos separadores do Firefox."
 
 #: ../data/messages:325
 msgid "Middle-clicking on an icon closes the related application"
 msgstr ""
-"Clicar com o botão do meio do rato no ícone fecha a aplicação relativa ?"
+"Clicar com o botão do meio do rato no ícone fecha a aplicação relacionada"
 
 #: ../data/messages:327
 msgid "Highlight applications requiring your attention with a dialog bubble"
-msgstr ""
+msgstr "Realçar as aplicações que requerem a sua atenção com um diálogo"
 
 #: ../data/messages:329
 msgid "in seconds"
@@ -1685,98 +1702,100 @@ msgstr "em segundos"
 
 #: ../data/messages:331
 msgid "Duration of the dialog:"
-msgstr "Duração da caixa :"
+msgstr "Duração do diálogo:"
 
 #: ../data/messages:333
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
 msgstr ""
+"Irá notificá-lo mesmo que esteja a visualizar um filme em ecrã completo ou "
+"se estiver noutro ambiente de trabalho.\n"
 
 #: ../data/messages:335
 msgid "Force the following applications to demand your attention"
-msgstr "Forçar os seguintes aplicativos a requisitarem sua atenção ?"
+msgstr "Forçar que as seguintes aplicações requisitem a sua atenção"
 
 #: ../data/messages:337
 msgid "Highlight applications demanding your attention with an animation"
-msgstr ""
-"Assinalar os aplicativos que requisitarem sua atenção com uma animação ?"
+msgstr "Realçar com uma animação, as aplicações que requisitam sua atenção"
 
 #: ../data/messages:341
 msgid "Animations speed"
-msgstr "Velocidade das Animações"
+msgstr "Velocidade das animações"
 
 #: ../data/messages:343
 msgid "Animate sub-docks when they appear"
-msgstr "Animar as sub-Docas quando eles aparecerem ?"
+msgstr "Animar \"sub-docks\" quando elas aparecerem"
 
 #: ../data/messages:345
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
 msgstr ""
-"Os ícones aparecerão enrolados neles mesmos, e depois desenrolarão-se até "
-"preencherem completamente a Doca. Quanto menor o valor, mais rápido isto "
-"será."
+"Os ícones aparecerão dobrados em si mesmos e depois desdobram-se até "
+"preencherem completamente a \"dock\". Quanto menor o valor, mais rápido será."
 
 #: ../data/messages:347
 msgid "Animation unfolding duration:"
-msgstr "Duração da animação de desenrolar :"
+msgstr "Duração da animação de desdobramento:"
 
 #: ../data/messages:349 ../data/messages:357 ../data/messages:361
 #: ../data/messages:369 ../data/messages:373
 msgid "fast"
-msgstr "rápido"
+msgstr "rápida"
 
 #: ../data/messages:351 ../data/messages:359 ../data/messages:363
 #: ../data/messages:371 ../data/messages:375
 msgid "slow"
-msgstr "lento"
+msgstr "lenta"
 
 #: ../data/messages:353 ../data/messages:365
 msgid "The more there are, the slower it will be"
-msgstr "Quanto mais houverem, mais lento isto será"
+msgstr "Quanto mais houverem, mais lento será"
 
 #: ../data/messages:355
 msgid "Number of steps in the zoom animation (grow/shrink):"
-msgstr "Número de passos na animação de zoom (crescer/diminuir) :"
+msgstr "Número de passos na animação de ampliação (aumentar/diminuir) :"
 
 #: ../data/messages:367
 msgid "Number of steps in the auto-hide animation (move up/move down):"
 msgstr ""
-"Número de passos para esconder a animação (mover para cima/mover para baixo):"
+"Número de passos para a animação de ocultação (mover para cima/mover para "
+"baixo):"
 
 #: ../data/messages:377
 msgid "Refresh rate"
-msgstr ""
+msgstr "Taxa de atualização"
 
 #: ../data/messages:379 ../data/messages:383 ../data/messages:387
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "em Hz. Ajustar dependendo da frequência do seu CPU."
+msgstr ""
+"em Hz. Deve ajustar o comportamento em relação à frequência do seu CPU."
 
 #: ../data/messages:381
 msgid "Refresh rate when mouving cursor into the dock :"
-msgstr "Taxa de refrescamento quando mover o cursor para dentro da Doca:"
+msgstr "Taxa de atualização ao mover o cursor para dentro da \"dock\":"
 
 #: ../data/messages:385
 msgid "Animation frequency for the OpenGL backend :"
-msgstr "Frequência de animação para o backend do OpenGL :"
+msgstr "Frequência da animação para a estrutura OpenGL :"
 
 #: ../data/messages:389
 msgid "Animation frequency for the Cairo backend :"
-msgstr "Frequência de animação para o backend do cairo :"
+msgstr "Frequência da animação para a estrutura Cairo:"
 
 #: ../data/messages:391
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
 msgstr ""
-"O modelo de gradação da transparência será recalculado em tempo real. Pode "
-"necessitar de mais poder da CPU."
+"O padrão de gradação da transparência será calculado em tempo real. Pode "
+"utilizar mais energia do seu CPU."
 
 #: ../data/messages:393
 msgid "Reflections should be calculated in real-time?"
-msgstr "Reflexões devem ser calculadas em tempo real ?"
+msgstr "Os reflexos devem ser calculados em tempo real?"
 
 #: ../data/messages:395
 msgid "Composition"
@@ -1788,27 +1807,27 @@ msgid ""
 "etc and have a black background around your dock. For aesthetic reasons, the "
 "dock will be kept under other windows."
 msgstr ""
-"Use apenas se você tiver em execução um administrador de composição como o "
-"Compiz, o xcompmgr, etc, e se houver um fundo preto ao redor da sua Doca. "
-"Por razões estéticas, a Doca manter-se-á  debaixo das demais janelas."
+"Só deve ser utilizado se você não possuir um gestor de composição como o "
+"Compiz, o xcompmgr... e se tiver um fundo negro em torno da sua \"dock\". "
+"Por razões estéticas, a \"dock\" ficará por baixo das janelas."
 
 #: ../data/messages:399
 msgid "Emulate composition with fake transparency?"
-msgstr "Emular composição com transparência falsa ?"
+msgstr "Emular composição com transparência falsa?"
 
 #: ../data/messages:401
 msgid "You need to re-open the panel. It is deactivated by default on KDE."
 msgstr ""
-"Você precisa abrir novamente o painel. Ele está desactivado por padrão no "
-"KDE."
+"Você precisa de abrir novamente o painel. No KDE, ele está inativo por "
+"omissão."
 
 #: ../data/messages:403
 msgid "Make the config panel transparent?"
-msgstr "Tornar o painel de configuração transparente ?"
+msgstr "Tornar o painel de configuração transparente?"
 
 #: ../data/messages:405
 msgid "Connection to the Internet"
-msgstr ""
+msgstr "Ligação à internet"
 
 #: ../data/messages:407
 msgid ""
@@ -1816,27 +1835,29 @@ msgid ""
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
-"Duração máxima, em segundos, que permitida para a ligação ao servidor. Isto "
-"apenas limita a fase de inicial da ligação e assim que a Doca estiver ligada "
-"esta opção deixa de ser usada."
+"Duração máxima, em segundos, que é permitida para a ligação ao servidor. "
+"Isto apenas limita a fase da ligação e assim que a \"dock\" estiver ligada, "
+"esta opção não será utilizada."
 
 #: ../data/messages:409
 msgid "Connection timeout :"
-msgstr ""
+msgstr "A ligação expira em:"
 
 #: ../data/messages:411
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
 msgstr ""
+"Duração máxima, em segundos, que permite para o decorrer da operação. Alguns "
+"temas podem atingir alguns MB."
 
 #: ../data/messages:413
 msgid "Maximum time to download a file:"
-msgstr "Máximo de tempo para fazer o download de um ficheiro:"
+msgstr "Duração máxima para a transferência de um  ficheiro:"
 
 #: ../data/messages:415
 msgid "Use this option if you experience problems to connect."
-msgstr "Use esta opção se está a experiencial problemas para se conectar."
+msgstr "Utilize esta opção se estiver a ter problemas durante a ligação."
 
 #: ../data/messages:417
 msgid "Force IPv4 ?"
@@ -1844,15 +1865,15 @@ msgstr "Forçar IPv4?"
 
 #: ../data/messages:419
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Use esta opção se se liga à internet através de um proxy."
+msgstr "Utilize esta opção caso se ligue à internet através de um proxy."
 
 #: ../data/messages:421
 msgid "Are you behind a proxy ?"
-msgstr "Está atrás de um proxy?"
+msgstr "Está protegido por um proxy?"
 
 #: ../data/messages:423
 msgid "Proxy name :"
-msgstr "Nome do Proxy :"
+msgstr "Nome do proxy:"
 
 #: ../data/messages:425
 msgid "Port :"
@@ -1862,6 +1883,8 @@ msgstr "Porta :"
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
+"Deixe em branco se não necessitar de iniciar sessão com um nome de "
+"utilizador e senha."
 
 #: ../data/messages:429
 msgid "User :"
@@ -1869,11 +1892,11 @@ msgstr "Utilizador :"
 
 #: ../data/messages:433
 msgid "Password :"
-msgstr "Palavra-chave :"
+msgstr "Senha :"
 
 #: ../data/messages:437 ../data/messages:1393
 msgid "Fill the background with:"
-msgstr "Preencher um fundo com:"
+msgstr "Preencher o fundo com:"
 
 #: ../data/messages:439 ../data/messages:445 ../data/messages:739
 #: ../data/messages:1397
@@ -1882,37 +1905,39 @@ msgstr "Imagem"
 
 #: ../data/messages:441 ../data/messages:461 ../data/messages:1399
 msgid "Colour gradation"
-msgstr "Graduação de Cor"
+msgstr "Gradação de cor"
 
 #: ../data/messages:443
 msgid "Use a background image."
-msgstr "Usar uma imagem de fundo"
+msgstr "Utilizar uma imagem de fundo."
 
 #: ../data/messages:447 ../data/messages:1401
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
 msgstr ""
+"Permitir qualquer formato; se estiver em branco, a gradação de cor será "
+"utilizada como recurso."
 
 #: ../data/messages:449 ../data/messages:1403
 msgid "Image filename to use as a background :"
-msgstr "Nome do ficheiro de imagem para usar como fundo :"
+msgstr "Nome da imagem a utilizar como fundo:"
 
 #: ../data/messages:451
 msgid "Image's transparency :"
-msgstr "Transparência da imagem :"
+msgstr "Transparência da imagem:"
 
 #: ../data/messages:457 ../data/messages:1405
 msgid "Repeat image as a pattern to fill background?"
-msgstr "Repetir a imagem como padrão ou preencher o fundo ?"
+msgstr "Repetir a imagem como padrão para preencher o fundo?"
 
 #: ../data/messages:459
 msgid "Use a colour gradation."
-msgstr "Usar a graduação de cor"
+msgstr "Utilizar gradação de cor."
 
 #: ../data/messages:463 ../data/messages:1407
 msgid "Bright colour:"
-msgstr "Cor de brilho:"
+msgstr "Brilho:"
 
 #: ../data/messages:465 ../data/messages:1409
 msgid "Dark colour:"
@@ -1924,68 +1949,68 @@ msgstr "Em graus, em relação à vertical"
 
 #: ../data/messages:469
 msgid "Angle of the gradation :"
-msgstr "Ângulo da graduação :"
+msgstr "Ângulo da gradação :"
 
 #: ../data/messages:471
 msgid "If not nul, it will form stripes."
-msgstr ""
+msgstr "Se não nulo, irá criar linhas."
 
 #: ../data/messages:473
 msgid "Repeat the gradation this number of times:"
-msgstr "Repetir a graduação este número de vezes:"
+msgstr "Repetir a gradação este número de vezes:"
 
 #: ../data/messages:475
 msgid "Percentage of the bright colour:"
-msgstr "Percentagem do brilho de cor:"
+msgstr "Percentagem de brilho:"
 
 #: ../data/messages:477
 msgid "External Frame"
-msgstr "Moldura Externa"
+msgstr "Moldura externa"
 
 #: ../data/messages:479 ../data/messages:483 ../data/messages:489
 #: ../data/messages:537 ../data/messages:637
 msgid "in pixels."
-msgstr "em píxeis."
+msgstr "em pixeis."
 
 #: ../data/messages:481
 msgid "Corner radius :"
-msgstr "Raio do canto :"
+msgstr "Raio do canto:"
 
 #: ../data/messages:485
 msgid "Linewidth of the external line :"
-msgstr "Largura na linha externa :"
+msgstr "Largura na linha externa:"
 
 #: ../data/messages:487
 msgid "Colour of the external line:"
-msgstr ""
+msgstr "Cor da linha externa:"
 
 #: ../data/messages:491
 msgid "Margin between the frame and the icons or their reflects :"
-msgstr "Margem entre a moldura e os ícones ou o reflexo destes :"
+msgstr "Margem entre a moldura e os ícones ou os seus reflexos:"
 
 #: ../data/messages:493
 msgid "Are the bottom left and right corners rounded?"
-msgstr "O cantos inferior esquerdo e direito são arredondados ?"
+msgstr "Os cantos inferiores (esquerdo e direito) são arredondados?"
 
 #: ../data/messages:497
 msgid "Main Dock"
-msgstr "Doca Principal"
+msgstr "\"Dock\" principal"
 
 #: ../data/messages:501
 msgid "Sub-Docks"
-msgstr "Sub-Docas"
+msgstr "\"Sub-Docks\""
 
 #: ../data/messages:507
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
 msgstr ""
-"Você pode especificar a proporção do tamanho dos ícones das sub-Docas, em "
-"relação ao tamanho dos ícones da Doca principal"
+"Você pode especificar a proporção do tamanho dos ícones nas \"sub-docks\", "
+"em relação ao tamanho dos ícones da \"dock\" principal"
 
 #: ../data/messages:509
 msgid "Ratio for the size of the sub-docks' icons :"
-msgstr "Proporção para o tamanho dos ícones dos sub-docks :"
+msgstr "Proporção para o tamanho dos ícones das \"sub-docks\":"
 
 #: ../data/messages:511 ../data/messages:779
 msgid "smaller"
@@ -1997,7 +2022,7 @@ msgstr "mesmo tamanho"
 
 #: ../data/messages:515
 msgid "Dialogs"
-msgstr "Caixa de diálogo"
+msgstr "Diálogos"
 
 #: ../data/messages:517
 msgid "Bubble"
@@ -2005,11 +2030,11 @@ msgstr "Bolha"
 
 #: ../data/messages:519
 msgid "Background colour of the bubble:"
-msgstr ""
+msgstr "Cor de fundo da bolha:"
 
 #: ../data/messages:521
 msgid "Shape of the bubble:"
-msgstr ""
+msgstr "Forma da bolha:"
 
 #: ../data/messages:523
 msgid "Text"
@@ -2017,23 +2042,23 @@ msgstr "Texto"
 
 #: ../data/messages:525 ../data/messages:823
 msgid "Otherwise the default's system one will be used."
-msgstr ""
+msgstr "Caso contrário, serão utilizadas as omissões do sistema."
 
 #: ../data/messages:527
 msgid "Use a custom font for the text?"
-msgstr "Usar uma fonte personalizada para o texto?"
+msgstr "Utilizar um tipo de letra personalizada para o texto?"
 
 #: ../data/messages:529
 msgid "Text font:"
-msgstr "Fonte do Texto:"
+msgstr "Tipo de letra do texto:"
 
 #: ../data/messages:531 ../data/messages:829
 msgid "Draw the outline of the text?"
-msgstr ""
+msgstr "Desenhar o contorno do texto?"
 
 #: ../data/messages:533
 msgid "Text color:"
-msgstr "Cor do Texto:"
+msgstr "Cor do texto:"
 
 #: ../data/messages:535 ../data/messages:595
 msgid "Buttons"
@@ -2046,200 +2071,202 @@ msgstr "Tamanho dos botões nos balões informativos (largura x altura) :"
 #: ../data/messages:541 ../data/messages:545 ../data/messages:599
 #: ../data/messages:603 ../data/messages:607 ../data/messages:611
 msgid "If you don't provide any, a default image will be used."
-msgstr "Se não prover algum, uma imagem padrão será usada."
+msgstr "Se não indicar alguma, será utilizada a imagem omissa."
 
 #: ../data/messages:543
 msgid "Name of an image to use for the yes/ok button :"
-msgstr "Nome de uma imagem para usar no botão \"sim/ok\" :"
+msgstr "Nome da imagem a utilizar no botão \"sim/ok\":"
 
 #: ../data/messages:547
 msgid "Name of an image to use for the no/cancel button :"
-msgstr "Nome de uma imagem para usar no botão \"não/cancelar\" :"
+msgstr "Nome da imagem a utilizar no botão \"não/cancelar\":"
 
 #: ../data/messages:549
 msgid "Size of the icon displayed next to the text :"
-msgstr "Tamanho do ícone mostrado perto do texto :"
+msgstr "Tamanho do ícone a exibir perto do texto:"
 
 #: ../data/messages:553
 msgid "Decorations"
-msgstr "Decorações"
+msgstr ""
 
 #: ../data/messages:555
 msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
 msgstr ""
+"Isto pode ser personalizado separadamente para cada \"desklet\".\n"
+"Escolha \"Decoração personalizada\" para definir as suas decorações"
 
 #: ../data/messages:557
 msgid "Choose a default decoration for all desklets :"
-msgstr "Escolha uma decoração padrão para todos os desklets :"
+msgstr ""
+"Escolha a decoração a utilizar como omissão para todos os \"desklets\":"
 
 #: ../data/messages:559
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
 msgstr ""
-"Esta é uma imagem que será mostrada abaixo dos desenhos, como um quadro, por "
-"exemplo. Deixe vazio ..."
+"Esta é a imagem a exibir por baixo dos desenhos. Deixe em branco se não "
+"quiser utilizar."
 
 #: ../data/messages:561
 msgid "Background image :"
-msgstr "Imagem de fundo :"
+msgstr "Imagem de fundo:"
 
 #: ../data/messages:563
 msgid "Background transparency :"
-msgstr "Transparência do fundo :"
+msgstr "Transparência do fundo:"
 
 #: ../data/messages:569
 msgid "in pixels. Use this to adjust the left position of the drawings."
-msgstr "em píxeis. Use isto para ajustar a posição esquerda dos desenhos."
+msgstr "em pixeis. Utilize-o para ajustar a posição esquerda dos desenhos."
 
 #: ../data/messages:571
 msgid "Left offset :"
-msgstr "Deslocamento à esquerda :"
+msgstr "Deslocamento à esquerda:"
 
 #: ../data/messages:573
 msgid "in pixels. Use this to adjust the top position of the drawings."
-msgstr "em píxeis. Use isto para ajustar a posição superior dos desenhos."
+msgstr "em pixeis. Utilize-o para ajustar a posição superior dos desenhos."
 
 #: ../data/messages:575
 msgid "Top offset :"
-msgstr "Deslocamento superior :"
+msgstr "Deslocamento superior:"
 
 #: ../data/messages:577
 msgid "in pixels. Use this to adjust the right position of the drawings."
-msgstr "em píxeis. Use isto para ajustar a posição direita dos desenhos."
+msgstr "em pixeis. Utilize-o para ajustar a posição direita dos desenhos."
 
 #: ../data/messages:579
 msgid "Right offset :"
-msgstr "Deslocamento à direita :"
+msgstr "Deslocamento à direita:"
 
 #: ../data/messages:581
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
-msgstr "em píxeis. Use isto para ajustar a posição inferior dos desenhos."
+msgstr "em pixeis. Utilize-o para ajustar a posição inferior dos desenhos."
 
 #: ../data/messages:583
 msgid "Bottom offset :"
-msgstr "Deslocamento inferior :"
+msgstr "Deslocamento inferior:"
 
 #: ../data/messages:585
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
 msgstr ""
-"esta é a imagem que será mostrada sobre os desenhos, como um reflexo. Deixe "
-"vazio para não usar."
+"Esta é a imagem a exibir por cima os desenhos. Deixe em branco se não quiser "
+"utilizar."
 
 #: ../data/messages:587
 msgid "Foreground image :"
-msgstr "Imagem da frente :"
+msgstr "Imagem principal:"
 
 #: ../data/messages:589
 msgid "Foreground tansparency :"
-msgstr "Transparência frontal :"
+msgstr "Transparência frontal:"
 
 #: ../data/messages:597
 msgid "Buttons size :"
-msgstr "Tamanho do botão :"
+msgstr "Tamanho dos botões :"
 
 #: ../data/messages:601 ../data/messages:613
 msgid "Name of an image to use for the 'rotate' button :"
-msgstr "Nome de uma imagem para usar no botão 'rotacionar' :"
+msgstr "Nome da imagem a utilizar para o botão \"Rotação\":"
 
 #: ../data/messages:605
 msgid "Name of an image to use for the 'reattach' button :"
-msgstr "Nome de uma imagem para usar no botão 'recolocar' :"
+msgstr "Nome da imagem a utilizar no botão \"Recolocar\":"
 
 #: ../data/messages:609
 msgid "Name of an image to use for the 'depth rotate' button :"
-msgstr "Nome de uma imagem para usar no botão 'rotação em profundidade' :"
+msgstr "Nome da imagem a utilizar no botão \"Rotação intensiva\":"
 
 #: ../data/messages:617
 msgid "Icons' themes"
-msgstr "Tema dos ícones"
+msgstr "Temas dos ícones"
 
 #: ../data/messages:621
 msgid "Choose an icon theme :"
-msgstr "Escolha um tema para os ícones :"
+msgstr "Escolha um tema de ícones:"
 
 #: ../data/messages:623
 msgid ""
 "Any format allowed; leave this field empty if you don't want to use an image "
 "as background."
 msgstr ""
-"Qualquer formato é permitido; deixe este campo vazio se você não quer usar "
-"uma imagem de fundo."
+"Permitir qualquer formato; deixe este campo em branco se não quiser utilizar "
+"uma imagem."
 
 #: ../data/messages:625
 msgid "Image filename to use as a background for icons :"
-msgstr "Nome do ficheiro da imagem a ser usado como fundo dos ícones :"
+msgstr "Nome do ficheiro da imagem a utilizar como fundo dos ícones:"
 
 #: ../data/messages:627
 msgid "Zoom effect"
-msgstr "Efeito de zoom"
+msgstr "Efeito de ampliação"
 
 #: ../data/messages:629
 msgid ""
 "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr ""
-"defina 1 se você não deseja zoom nos ícones, quando passar o rato sobre eles."
+msgstr "defina 1 se não quiser ampliar os ícones ao passar por cima deles."
 
 #: ../data/messages:631
 msgid "Maximum zoom of the icons :"
-msgstr "Máximo de zoom nos ícones :"
+msgstr "Ampliação máxima dos ícones:"
 
 #: ../data/messages:633
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
-msgstr "em píxeis. Fora deste intervalo (centrado no rato), não há zoom."
+msgstr "em pixeis. Fora deste intervalo (centrado no rato), não há ampliação"
 
 #: ../data/messages:635
 msgid "Width of the space in which the zoom will be effective :"
-msgstr "Largura do intervalo no qual o zoom terá efeito."
+msgstr "Largura do intervalo no qual a ampliação será efetiva:"
 
 #: ../data/messages:639
 msgid "Space between icons :"
-msgstr "Espaço entre ícones :"
+msgstr "Espaço entre ícones:"
 
 #: ../data/messages:641
 msgid "Reflections"
-msgstr "Reflexões"
+msgstr "Reflexos"
 
 #: ../data/messages:643
 msgid ""
 "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 "
 "reflections are not used."
 msgstr ""
-"Isto é seu albedo; Em 1 os ícones reflectem o máximo, em 0 reflexos não são "
-"usados."
+"Valo do reflexo; em 1 os ícones são refletidos ao máximo, em 0 não se "
+"utilizam reflexos."
 
 #: ../data/messages:645
 msgid "Reflective power of the plane :"
-msgstr "Poder de reflexão do plano :"
+msgstr "Plano de reflexos:"
 
 #: ../data/messages:647
 msgid "light"
-msgstr "luz"
+msgstr "suave"
 
 #: ../data/messages:649
 msgid "strong"
-msgstr "forte"
+msgstr "intenso"
 
 #: ../data/messages:651
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
 msgstr ""
-"A percentagem do tamanho dos ícones. Este parâmetro influência a altura da "
-"Doca."
+"Em percentagem do tamanho dos ícones. Este parâmetro influencia a altura da "
+"\"dock\"."
 
 #: ../data/messages:653
 msgid "Height of the reflection:"
-msgstr "Altura da reflexão:"
+msgstr "Altura do reflexo:"
 
 #: ../data/messages:655
 msgid "small"
-msgstr "pequeno"
+msgstr "pequena"
 
 #: ../data/messages:657
 msgid "tall"
@@ -4729,6 +4756,15 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
+#~ msgid "Do you want to mount this point ?"
+#~ msgstr "Deseja montar este ponto ?"
+
+#~ msgid "Do you want to monitor the content of the directory ?"
+#~ msgstr "Deseja monitorar o conteúdo deste directório ?"
+
+#~ msgid "Use OpenGL in Cairo-Dock ?"
+#~ msgstr "Usar OpenGL no Cairo-Dock ?"
+
 #, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s foi montado"
@@ -4738,6 +4774,20 @@ msgstr ""
 #~ msgstr "%s foi desmontado"
 
 #, c-format
+#~ msgid "failed to unmount %s"
+#~ msgstr "falha ao desmontar %s"
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' module was not found.\n"
+#~ "Be sure to install it in the same version as the dock to enjoy these "
+#~ "features."
+#~ msgstr ""
+#~ "O módulo '%s' não foi encontrado.\n"
+#~ "Certifique-se de instalá-lo com a mesma versão do dock para utilizar estas "
+#~ "características."
+
+#, c-format
 #~ msgid ""
 #~ "The '%s' plug-in is not active.\n"
 #~ "Be sure to activate it to enjoy these features."
@@ -4745,17 +4795,107 @@ msgstr ""
 #~ "O plug-in '%s' não está activo.\n"
 #~ "Certifique-se de activá-lo para utilizar estas características."
 
+#~ msgid "grab"
+#~ msgstr "agarrar"
+
+#~ msgid "Controlers"
+#~ msgstr "Controladores"
+
 #~ msgid "Plug-ins"
 #~ msgstr "Plug-ins"
 
+#~ msgid "Activate this module"
+#~ msgstr "activar este módulo"
+
+#~ msgid "Highlight words"
+#~ msgstr "Destacar palavras"
+
+#~ msgid "Configuration of Cairo-Dock"
+#~ msgstr "Configuração do Cairo-Dock"
+
+#, c-format
+#~ msgid ""
+#~ "The module '%s' is not present. You need to install it or its dependencies "
+#~ "to make the most of this module."
+#~ msgstr ""
+#~ "O módulo '%s' não está presente. Você precisar instalá-lo ou suas "
+#~ "dependências para aproveitar ao máximo este módulo."
+
+#, c-format
+#~ msgid "The module '%s' is not activated."
+#~ msgstr "O módulo '%s' não está activo."
+
+#~ msgid "Do you want to activate it now ?"
+#~ msgstr "Deseja activá-lo agora ?"
+
 #~ msgid "How do you access to your docks ?"
 #~ msgstr "Como você acessa seus docks ?"
+
+#~ msgid "Set a background to your dock."
+#~ msgstr "Define um plano de fundo para seu dock."
+
+#~ msgid "The applets can be set on your desktop as widgets."
+#~ msgstr "Os applets podem ser definidos na sua área de trabalho como widgets."
+
+#~ msgid ""
+#~ "It provides different window decorators. Activate it first if you want to "
+#~ "select a different decorator for your dialogs."
+#~ msgstr ""
+#~ "Isto provê diferentes decoradores de janelas. Active-o primeiro se você "
+#~ "deseja seleccionar um decorador diferente para suas janelas."
+
+#~ msgid "Configure the look of the dialog bubbles."
+#~ msgstr "Configure a aparência das caixas de diálogo balão."
 
 #~ msgid "Hidden Dock"
 #~ msgstr "Dock oculto"
 
 #~ msgid "Define the appearance of the dock when it's hidden."
 #~ msgstr "Defina a aparência do dock quando ele estiver oculto"
+
+#~ msgid "It provides many animations to your icons."
+#~ msgstr "Provê diversas animações para seus ícones"
+
+#~ msgid ""
+#~ "All about icons :\n"
+#~ " size, reflection, icon theme, ..."
+#~ msgstr ""
+#~ "Tudo sobre ícones :\n"
+#~ " tamanho, reflexão, tema, ..."
+
+#~ msgid "Indicators are extra indications on your icons."
+#~ msgstr "Indicadores são indicações extras em seus ícones."
+
+#~ msgid "Define the style of the icons' labels and quick-info."
+#~ msgstr "Defina o estilo dos rótulos dos ícones e das informações rápidas."
+
+#~ msgid "All the parameters you will never want to tweak."
+#~ msgstr "Todos os parâmetros que você nunca desejará ajustar."
+
+#~ msgid "Display and interact with the currently open windows."
+#~ msgstr "Exibir e interagir com a janela actualmente aberta."
+
+#~ msgid ""
+#~ "It provides different views to Cairo-Dock. Activate it first if you want to "
+#~ "select a different view for your docks."
+#~ msgstr ""
+#~ "Provê diferentes visualizações para o Cairo-Dock. Active-o primeiro se você "
+#~ "deseja seleccionar uma visualização diferente para sua dock."
+
+#~ msgid "Quit Cairo-Dock ?"
+#~ msgstr "Fechar Cairo-Dock ?"
+
+#~ msgid ""
+#~ "Do you want to re-dispatch the icons contained inside this container into "
+#~ "the dock ?\n"
+#~ " (otherwise they will be destroyed)"
+#~ msgstr ""
+#~ "Deseja executar novamente os ícones contidos no contêiner dentro do dock ?\n"
+#~ " (caso contrário eles serão destruídos)"
+
+#, c-format
+#~ msgid "You're about removing this icon (%s) from the dock. Sure ?"
+#~ msgstr "Você está quase removendo este ícone (%s) do dock. Tem certeza ?"
 
 #~ msgid "Fill this launcher"
 #~ msgstr "Preencha este lançador"
@@ -4772,6 +4912,68 @@ msgstr ""
 #~ "Você está prestes a remover este ficheiro\n"
 #~ "  (%s)\n"
 #~ "do seu HD. Tem certeza ?"
+
+#~ msgid ""
+#~ "Attention : couldn't delete this file.\n"
+#~ "Check that you have writing rights on it."
+#~ msgstr ""
+#~ "Atenção : não foi possível remover este ficheiro.\n"
+#~ "Verifique se você tem permissão de escrita no mesmo."
+
+#~ msgid "Rename to :"
+#~ msgstr "Renomear para :"
+
+#, c-format
+#~ msgid ""
+#~ "Attention : couldn't rename %s.\n"
+#~ "Check that you have writing rights,\n"
+#~ " and that the new name does not already exist."
+#~ msgstr ""
+#~ "Atenção : não foi possível renomear %s.\n"
+#~ "Verifique se você tem permissão de escrita,\n"
+#~ " e se o nome desejado já não existe."
+
+#, c-format
+#~ msgid "You're about removing this applet (%s) from the dock. Sure ?"
+#~ msgstr "Você está quase removendo este applet (%s) do dock. Tem certeza ?"
+
+#~ msgid ""
+#~ "Sorry, couldn't find the corresponding description file.\n"
+#~ "Consider drag and dropping the launcher from the Applications Menu."
+#~ msgstr ""
+#~ "Desculpe, não foi possível encontrar o ficheiro descrito.\n"
+#~ "Considere arrastar e soltar o lançador do Menu Aplicativos."
+
+#, c-format
+#~ msgid "Set position for the dock '%s'"
+#~ msgstr "Defina a posição para o dock '%s'"
+
+#~ msgid "Set up this dock"
+#~ msgstr "Instalar este dock"
+
+#~ msgid "unlock icons"
+#~ msgstr "desbloquear ícones"
+
+#~ msgid "lock icons"
+#~ msgstr "bloquear ícones"
+
+#~ msgid "Development's site"
+#~ msgstr "Site de desenvolvimento"
+
+#~ msgid "Community's site"
+#~ msgstr "Site da comunidade"
+
+#~ msgid "Add a manual launcher"
+#~ msgstr "Adicionar um lançador manual"
+
+#~ msgid ""
+#~ "Don't forget you can drag a launcher from the menu and drop it in the dock !"
+#~ msgstr ""
+#~ "Não se esqueça que você pode arrastar um lançador do menu e soltá-lo no dock "
+#~ "!"
+
+#~ msgid "Add a sub-dock"
+#~ msgstr "Adicionar um sub-dock"
 
 #~ msgid "Add a separator"
 #~ msgstr "Adicionar um separador"
@@ -4794,8 +4996,34 @@ msgstr ""
 #~ msgid "Properties"
 #~ msgstr "Propriedades"
 
+#~ msgid "Unmaximize"
+#~ msgstr "Restaurar"
+
+#~ msgid "Maximize"
+#~ msgstr "Maximizar"
+
+#~ msgid "Minimize"
+#~ msgstr "Minimizar"
+
 #~ msgid "Close"
 #~ msgstr "Fechar"
+
+#~ msgid "Minimize all"
+#~ msgstr "Minimizar todos"
+
+#~ msgid "Return to dock"
+#~ msgstr "Retornar ao dock"
+
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgstr ""
+#~ "definir comportamento no Compiz para: (name=cairo-dock & type=utility)"
+
+#~ msgid ""
+#~ "A useful FAQ that contains also a lot of hints.\n"
+#~ "Let the mouse over a sentence to make the hint dialog popups."
+#~ msgstr ""
+#~ "Um FAQ útil que contém muitas dicas.\n"
+#~ "Deixe o rato sobre a sentença para fazer a caixa de diálogo se abrir."
 
 #, c-format
 #~ msgid "Downloading file %s ..."
@@ -4809,12 +5037,118 @@ msgstr ""
 #~ msgid "couldn't get the list of themes for %s (no connection ?)"
 #~ msgstr "não foi possível obter a lista de temas para %s (sem conexão ?)"
 
+#, c-format
+#~ msgid "Are you sure you want to overwrite theme %s ?"
+#~ msgstr "Tem certeza que deseja sobrescrever o tema %s ?"
+
+#, c-format
+#~ msgid "Are you sure you want to delete theme %s ?"
+#~ msgstr "Tem certeza que deseja deletar tema %s ?"
+
+#~ msgid "Are you sure you want to delete these themes ?"
+#~ msgstr "Tem certeza que quer deletar estes temas ?"
+
+#~ msgid ""
+#~ "You made some modifications in the current theme.\n"
+#~ "You will loose them if you don't save before choosing a new theme. Continue "
+#~ "anyway ?"
+#~ msgstr ""
+#~ "Você fez algumas modificações no tema atual.\n"
+#~ "As modificações serão perdidas se você não salvá-las antes de escolher um "
+#~ "novo tema. Continuar assim mesmo ?"
+
+#, c-format
+#~ msgid ""
+#~ "couldn't get distant file %s/%s, maybe the server is down.\n"
+#~ "Please retry later or contact us at cairo-dock.org."
+#~ msgstr ""
+#~ "não foi possível obter ficheiros remotos %s/%s, talvez o servidor esteja "
+#~ "fora do ar.\n"
+#~ "Tente novamente mais tarde ou contacte-nos em cairo-dock.org."
+
 #~ msgid "Applying changes ..."
 #~ msgstr "A aplicar mudanças ..."
+
+#~ msgid "Now reloading theme ..."
+#~ msgstr "A recarregar tema ..."
 
 #, c-format
 #~ msgid "couldn't retrieve distant theme %s"
 #~ msgstr "não foi possível obter tema remoto %s"
+
+#~ msgid ""
+#~ "Welcome in Cairo-Dock2 !\n"
+#~ "A default and simple theme has been loaded.\n"
+#~ "You can either familiarize yourself with the dock or choose another theme "
+#~ "with right-click -> Cairo-Dock -> Theme manager\n"
+#~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
+#~ "If you have any question/request/remark, please pay us a visit : right-click "
+#~ "-> Cairo-Dock -> Communauty site.\n"
+#~ "Hope you will enjoy this soft !\n"
+#~ "  (you can now click on this dialog to close it)"
+#~ msgstr ""
+#~ "Bem-vindo ao Cairo-Dock2 !\n"
+#~ "Um tema padrão simples foi carregado.\n"
+#~ "Você pode se familiarizar com o dock ou escolher outro tema com botão-"
+#~ "direito -> Cairo-Dock -> Administrador de tema\n"
+#~ "Ajuda está disponível com botão-direito -> Cairo-Dock -> Ajuda.\n"
+#~ "Se você tem qualquer dúvida/pedido/observação, por favor faça-nos uma visita "
+#~ ": botão direito -> Cairo-Dock -> Site da comunidade.\n"
+#~ "Espero que você curta este aplicativo !\n"
+#~ "  (você pode clicar sobre esta caixa para fechá-la)"
+
+#~ msgid ""
+#~ "The icons will scroll according to the chosen placement type. Of course the "
+#~ "dock can be placed anywhere on the screen, here we specify regarding to what."
+#~ msgstr ""
+#~ "Os ícones rolarão de acordo com o tipo de disposição. É claro que o dock "
+#~ "pode ser colocado em qualquer lugar da tela, aqui nós especificamos isto."
+
+#~ msgid "Choose which screen border the dock will placed on :"
+#~ msgstr "Escolha em que borda da tela o dock será posicionado :"
+
+#~ msgid ""
+#~ "At 0, the dock will place itself regarding the left corner if horizontal and "
+#~ "the top corner if vertical, at 1 regarding the right corner if horizontal "
+#~ "and the bottom corner if vertical, and at 0.5, regarding the middle of the "
+#~ "screen's edge."
+#~ msgstr ""
+#~ "Em 0, o dock será posicionado no canto esquerdo se na horizontal e no canto "
+#~ "superior se na vertical, em 1 será posicionado no canto direito se na "
+#~ "horizontal e em baixo se na vertical, e em 0.5, será posicionado no meio da "
+#~ "borda tela."
+
+#~ msgid "Relative alignment :"
+#~ msgstr "Alinhamento relactivo :"
+
+#~ msgid "Position regarding the chosen screen's edge"
+#~ msgstr "Posição relativa à borda escolhida da tela"
+
+#~ msgid ""
+#~ "Gap from the absolute position on the screen's edge, in pixels. You can also "
+#~ "move the dock by holding ALT or CTRL key and left mouse button."
+#~ msgstr ""
+#~ "Distância da posição absoluta da borda da tela, em píxeis. Você também pode "
+#~ "mover o dock a segurar ALT ou CTRL e o botão esquerdo do rato."
+
+#~ msgid "Lateral gap :"
+#~ msgstr "Distância lateral :"
+
+#~ msgid ""
+#~ "in pixels. You can also move the dock by holding ALT or CTRL key and left "
+#~ "mouse button."
+#~ msgstr ""
+#~ "em píxeis. Você também pode mover o dock a segurar ALT ou CTRL e o botão "
+#~ "esquerdo do rato."
+
+#~ msgid "Distance to the screen's edge :"
+#~ msgstr "Distância para a borda da tela :"
+
+#~ msgid "Use Xinerama ?"
+#~ msgstr "Usar Xinerama ?"
+
+#~ msgid "Number of the screen where the dock should be located :"
+#~ msgstr "Número de telas onde o dock deve ser alocado :"
 
 #~ msgid "Space"
 #~ msgstr "Espaço"
@@ -4825,6 +5159,9 @@ msgstr ""
 #~ msgstr ""
 #~ "O dock redimensionará a si mesmo automaticamente para se ajustar a este "
 #~ "tamanho. Defina 0 para fazer com que o dock se ajuste ao tamanho da tela."
+
+#~ msgid "Size allowed for the dock :"
+#~ msgstr "Tamanho permitido para o dock :"
 
 #~ msgid ""
 #~ "This will prevent other windows from overlapping the dock. It has no effect "
@@ -4850,6 +5187,9 @@ msgstr ""
 #~ "será mostrada uma área, que fará o dock reaparecer, quando o rato for "
 #~ "colocado sobre a mesma."
 
+#~ msgid "Activate auto-hide ?"
+#~ msgstr "activar auto-ocultar ?"
+
 #~ msgid "Configure the dock's appearence when hidden."
 #~ msgstr "Configurar a aparência do dock quando oculto."
 
@@ -4865,6 +5205,12 @@ msgstr ""
 #~ "só é útil se você não deseja reservar espaço para o dock, nem activar o auto-"
 #~ "ocultar."
 
+#~ msgid "Keep the dock below other windows ?"
+#~ msgstr "Manter o dock abaixo das outras janelas ?"
+
+#~ msgid "Pop-up only if the mouse hits a screen corner ?"
+#~ msgstr "Aparecer apenas se o rato alcançar o canto da tela ?"
+
 #~ msgid "Shortcut"
 #~ msgstr "Atalho"
 
@@ -4873,6 +5219,31 @@ msgstr ""
 
 #~ msgid "Sub-docks' accessibility"
 #~ msgstr "Acessibilidade aos sub-docks"
+
+#~ msgid "Delay before you effectively leave from a sub-dock or to a sub-dock :"
+#~ msgstr "Atraso antes de você efectivamente sair de/para um sub-dock :"
+
+#~ msgid "in ms. Unused if you set up to click to show sub-docks."
+#~ msgstr "em ms. Não usado se você definir 'clicar para mostrar sub-docks'."
+
+#~ msgid "Delay before displaying a sub-dock :"
+#~ msgstr "Atraso antes de mostrar um sub-dock :"
+
+#~ msgid ""
+#~ "Otherwise they will appear when you linger over the icon pointing on it."
+#~ msgstr ""
+#~ "Do contrário, eles aparecerão quando você deixar o rato sobre o ícone."
+
+#~ msgid "Click to show sub-docks ?"
+#~ msgstr "Clicar para mostrar sub-docks ?"
+
+#~ msgid ""
+#~ "Cairo-Dock will then replace your taskbar. It is recommanded to remove any "
+#~ "other taskbar, and to not force the dock's type to normal."
+#~ msgstr "Cairo-Dock substituirá sua Barra de tarefas."
+
+#~ msgid "Show the current applications in the dock ?"
+#~ msgstr "Mostrar as aplicações actuais no dock ?"
 
 #~ msgid ""
 #~ "This allows to group windows in some soft like Gimp, and to have only 1 icon "
@@ -4886,8 +5257,72 @@ msgstr ""
 #~ msgid "Should the applications with same class be grouped in a sub-dock ?"
 #~ msgstr "As aplicações de mesma classe devem ser agrupadas em um sub-dock ?"
 
+#~ msgid "enter the class of the applications, separated by a semi-colon ';'"
+#~ msgstr ""
+#~ "preencha com as classes de aplicações, separadas por ponto e vírgula ';'"
+
+#~ msgid "\t\tExcept the following classes :"
+#~ msgstr "\t\tExcepto as seguintes classes :"
+
+#~ msgid "Only show icons whose window is minimized ?"
+#~ msgstr "Mostrar ícones da janela quando minimizada ?"
+
+#~ msgid "Only show applis on current desktop ?"
+#~ msgstr "Mostrar aplicativos na Área de trabalho actual ?"
+
+#~ msgid ""
+#~ "Allows launchers to act as applis when their program is running, and "
+#~ "displays an indicator on their icon to signal it. You can launch other "
+#~ "occurences of the program with SHIFT+click."
+#~ msgstr ""
+#~ "Permite aos lançadores funcionarem como aplicativos quando seus programas "
+#~ "estiverem a executar, e mostrar um indicador em seu ícone. Você pode lançar "
+#~ "outras instâncias do programa com SHIFT+clique."
+
+#~ msgid "Mix launchers and applis ?"
+#~ msgstr "Misturar lançadores e aplicativos ?"
+
+#~ msgid ""
+#~ "If not set, will use the icon provided by X for each appli. If set, the same "
+#~ "icon as the corresponding launcher will be used for each appli."
+#~ msgstr ""
+#~ "Se não definido, usará o ícone provido pelo X para cada aplicativo. Se "
+#~ "definido, o mesmo ícone do lançador correspondente será usado para cada "
+#~ "aplicativo."
+
+#~ msgid "Overwrite X icons with launchers' one ?"
+#~ msgstr "Sobrescrever os ícones do X pelos do lançador ?"
+
 #~ msgid "You need a composite manager for it."
 #~ msgstr "Você precisa de um administrador de composição para isto."
+
+#~ msgid "Show a window thumbnail when it's minimized ?"
+#~ msgstr ""
+#~ "Mostrar um pequena imagem (thumb) da tela quando ela está minimizada ?"
+
+#~ msgid "It is the default behaviour of most of taskbars."
+#~ msgstr "Este é o comportamento padrão da maioria das Barras de tarefa."
+
+#~ msgid ""
+#~ "Minimize the window when its icon is clicked, if it was already the active "
+#~ "window ?"
+#~ msgstr ""
+#~ "Minimizar a tela quando seu ícone for clicado, se esta já fosse uma tela "
+#~ "activa ?"
+
+#~ msgid "In a Firefox's tabs manner."
+#~ msgstr "Como as abas do Firefox."
+
+#~ msgid "Middle click on an icon closes its relative application ?"
+#~ msgstr ""
+#~ "Clicar com o botão do meio do rato no ícone fecha a aplicação relativa ?"
+
+#~ msgid ""
+#~ "This is only usefull if you don't already use the auto-hide, and if your WM "
+#~ "let the dock in front of fullscreen windows (which is rare)."
+#~ msgstr ""
+#~ "Isto só é útil se você já não usa o auto-ocultar e se seu Gerenciador de "
+#~ "Janelas deixa o dock na frente de telas cheias (o que é raro)."
 
 #~ msgid "Automatically quick-hide the dock when a window becomes fullscreen ?"
 #~ msgstr ""
@@ -4906,6 +5341,30 @@ msgstr ""
 #~ msgstr ""
 #~ "Assinalar os aplicativos que requerem sua atenção com uma caixa de dica ?"
 
+#~ msgid "Duration of the dialog :"
+#~ msgstr "Duração da caixa :"
+
+#~ msgid ""
+#~ "It will notify you even if, for instance, you're watching a video in "
+#~ "fullscreen."
+#~ msgstr ""
+#~ "Notificará você mesmo se, por acaso, você estiver assistindo um vídeo com "
+#~ "tela-cheia."
+
+#~ msgid "Force the following applications to demand your attention ?"
+#~ msgstr "Forçar os seguintes aplicativos a requisitarem sua atenção ?"
+
+#~ msgid "Signal the applications demanding your attention with an animation ?"
+#~ msgstr ""
+#~ "Assinalar os aplicativos que requisitarem sua atenção com uma animação ?"
+
+#~ msgid "Play a short animation of the icon when its window becomes active ?"
+#~ msgstr ""
+#~ "Mostrar uma pequena animação no ícone quando sua janela se tornar activa ?"
+
+#~ msgid "Maximum number of caracters in application's name :"
+#~ msgstr "Número máximo de caracteres no nome do aplicativo :"
+
 #~ msgid ""
 #~ "To the right, you can control the transparency of minimized windows, to the "
 #~ "left the transparency of visible windows. The more you go aside, the more "
@@ -4917,17 +5376,58 @@ msgstr ""
 #~ "o lado, mais estes ícones se tornarão transparentes; no meio, os ícones são "
 #~ "sempre dispostos normalmente."
 
+#~ msgid "Transparency of icons whose window is or isn't minimized :"
+#~ msgstr ""
+#~ "Transparência dos ícones para os quais a janela está ou não minimizada :"
+
 #~ msgid "Movement parameters"
 #~ msgstr "Parâmetros de movimento"
 
+#~ msgid ""
+#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide is "
+#~ "not activated or unfold acceleration is nul."
+#~ msgstr ""
+#~ "O dock vai desenrolar-se quando ele ocultar/mostra a si mesmo. Não terá "
+#~ "efeito caso o auto-ocultar estiver desactivado ou a aceleração do "
+#~ "desenrolamento for null."
+
+#~ msgid "Animate the dock when auto-hiding ?"
+#~ msgstr "Animação no dock quando auto-ocultar ?"
+
 #~ msgid "Always true if sub-docks appear with mouse click."
 #~ msgstr "Sempre verdade se sub-docks aparecerem com clique do rato."
+
+#~ msgid "Animate sub-docks when they appear ?"
+#~ msgstr "Animar sub-docks quando eles aparecerem ?"
+
+#~ msgid ""
+#~ "The icons will appear folded on themselves, then will unfold untill they "
+#~ "fill the whole dock. The smaller, the faster it will be."
+#~ msgstr ""
+#~ "Os ícones aparecerão enrolados neles mesmos, então desenrolarão até "
+#~ "preencher completamente o dock. Quanto menor, mais rápido isto será."
+
+#~ msgid "Unfolding animation duration :"
+#~ msgstr "Duração da animação de desenrolar :"
+
+#~ msgid "Number of steps in the zoom animation (grow up/shrink down) :"
+#~ msgstr "Número de passos na animação de zoom (crescer/diminuir) :"
 
 #~ msgid "the smaller, the faster the dock will hide."
 #~ msgstr "quanto menor, mais rápido o dock irá se ocultar."
 
 #~ msgid "Window's move acceleration (move up/move down) :"
 #~ msgstr "Aceleração do movimento da janela (move para cima/baixo)"
+
+#~ msgid "Background movments"
+#~ msgstr "Movimentos do fundo"
+
+#~ msgid ""
+#~ "The smaller, the lower the decorations will move along with the cursor. At 0 "
+#~ "they will be static."
+#~ msgstr ""
+#~ "Quanto menor, mais lento a decoração se moverá com o cursor. Em 0 isto será "
+#~ "estático."
 
 #~ msgid "Scroll speed factor for background decorations :"
 #~ msgstr "Fator de velocidade para decoração de fundo :"
@@ -4945,14 +5445,81 @@ msgstr ""
 #~ msgid "CPU"
 #~ msgstr "CPU"
 
+#~ msgid "in Hz. This is to adjust regarding your CPU power."
+#~ msgstr "em Hz. Ajustar dependendo da frequência do seu CPU."
+
+#~ msgid "Refresh frequency when mouving cursor into the dock :"
+#~ msgstr "Actualizar frequência quando mover o cursor para o dock :"
+
+#~ msgid ""
+#~ "The transparency gradation pattern will then be re-calculated in real time. "
+#~ "May needs more CPU power."
+#~ msgstr ""
+#~ "O modelo de gradação da transparência será recalculado em tempo real. Pode "
+#~ "necessitar de mais poder da CPU."
+
+#~ msgid "Reflections should be calculated in real-time ?"
+#~ msgstr "Reflexões devem ser calculadas em tempo real ?"
+
+#~ msgid "Animation frequency for the opengl backend :"
+#~ msgstr "Frequência de animação para o backend do OpenGL :"
+
+#~ msgid "Animation frequency for the cairo backend :"
+#~ msgstr "Frequência de animação para o backend do cairo :"
+
 #~ msgid "Label readability"
 #~ msgstr "Legibilidade do rótulo"
 
 #~ msgid "Show label of the currently pointed icon only ?"
 #~ msgstr "Mostrar o rótulo do ícone apontado ?"
 
+#~ msgid "Should the labels be always horizontal, even when dock is vertical ?"
+#~ msgstr ""
+#~ "Rótulos devem sempre ficar na horizontal, mesmo quando o dock está na "
+#~ "vertical ?"
+
+#~ msgid ""
+#~ "the bigger, the more the labels next to the pointed icon will be transparent."
+#~ msgstr ""
+#~ "quanto maior, mais transparente ficarão os rótulos próximos aos ícones "
+#~ "apontados ."
+
 #~ msgid "Configure labels appearence."
 #~ msgstr "Configurar a aparência dos rótulos."
+
+#~ msgid "Show hidden files ?"
+#~ msgstr "Mostrar ficheiros ocultos ?"
+
+#~ msgid ""
+#~ "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
+#~ "etc and have a black background around your dock. For esthetic reason, the "
+#~ "dock will be kept under other windows."
+#~ msgstr ""
+#~ "Use apenas se você não executa um administrador de composição como Compiz, "
+#~ "xcompmgr, etc e há um fundo preto ao redor de seu dock. Por razão estética, "
+#~ "o dock se manterá abaixo das demais janelas."
+
+#~ msgid "Emulates composition with fake transparency ?"
+#~ msgstr "Emular composição com transparência falsa ?"
+
+#~ msgid "Make the config panel transparent ?"
+#~ msgstr "Tornar o painel de configuração transparente ?"
+
+#~ msgid "Hidden dock"
+#~ msgstr "Dock oculto"
+
+#~ msgid "Place the mouse into it will make the dock re-appear."
+#~ msgstr "Posicione o rato dentro e isto fará o dock aparecer novamente."
+
+#~ msgid "Size of the callback zone (width x height, in pixels) :"
+#~ msgstr "Tamanho da zona de ação (largura x altura, em píxeis) :"
+
+#~ msgid ""
+#~ "This is what you see when the dock hides itselfs. Any format is allowed. Let "
+#~ "this field empty to have an invisible zone."
+#~ msgstr ""
+#~ "Isto é o que você verá quando o dock ocultar a si mesmo. Qualquer formato é "
+#~ "permitido. Deixe este campo vazio para ter uma área invisível."
 
 #~ msgid "Filename of an image to put on :"
 #~ msgstr "Nome do ficheiro de imagem :"
@@ -4967,14 +5534,39 @@ msgstr ""
 #~ "Use quando a imagem for uma seta apontando para o centro da tela, por "
 #~ "exemplo."
 
+#~ msgid "Rotate the image when the dock is on top/left/right ?"
+#~ msgstr "Rotacionar a imagem quando o dock estiver no topo/esquerda/direita ?"
+
 #~ msgid "Configure the auto-hide behaviour."
 #~ msgstr "Configurar o comportamento do auto-ocultar"
+
+#~ msgid "Extern Frame"
+#~ msgstr "Moldura Externa"
+
+#~ msgid "Linewidth of the extern line :"
+#~ msgstr "Largura na linha externa :"
 
 #~ msgid "Color of the extern line (r,v,b,a) :"
 #~ msgstr "Cor da linha externa (r,g,b,a)"
 
+#~ msgid "Are the bottom left and right corners rounded ?"
+#~ msgstr "O cantos inferior esquerdo e direito são arredondados ?"
+
 #~ msgid "Background image..."
 #~ msgstr "Imagem de fundo..."
+
+#~ msgid ""
+#~ "Any format allowed; let this field empty if you don't want to use an image "
+#~ "as background."
+#~ msgstr ""
+#~ "Qualquer formato é permitido; deixe este campo vazio se você não quer usar "
+#~ "uma imagem de fundo."
+
+#~ msgid "Image's filename to use as a background :"
+#~ msgstr "Nome do ficheiro de imagem para usar como fundo :"
+
+#~ msgid "Repeat image as a pattern to fill background ?"
+#~ msgstr "Repetir a imagem como padrão ou preencher o fundo ?"
 
 #~ msgid "...or Gradation"
 #~ msgstr "...ou Gradação"
@@ -5012,6 +5604,9 @@ msgstr ""
 #~ msgstr ""
 #~ "tamanho em píxeis aproximadamente, coloque 0 para não mostrar rótulos"
 
+#~ msgid "Size of the font :"
+#~ msgstr "Tamanho da fonte :"
+
 #~ msgid ""
 #~ "for exemple Monospace, Purisa, ... Just write the font name wihtout any "
 #~ "number or so."
@@ -5027,11 +5622,46 @@ msgstr ""
 #~ msgid "Weight (between 1 and 9, the bigger, the heavier):"
 #~ msgstr "Peso (entre 1 e 9, quanto maior, mais pesada):"
 
+#~ msgid ""
+#~ "It's the second color of the gradation. Set it to the same value as the "
+#~ "first if you just don't want to have a gradation."
+#~ msgstr ""
+#~ "segunda cor da gradação. Defina o mesmo valor da primeira se você não quiser "
+#~ "gradação."
+
+#~ msgid "Pattern should be vertical ?"
+#~ msgstr "Padrão deve ser vertical ?"
+
+#~ msgid ""
+#~ "If you set it to fully transparent, there will be no background for the "
+#~ "text, but the margin around the text will still be effective."
+#~ msgstr ""
+#~ "Se for definido completamente transparente, não haverá fundo com o texto, "
+#~ "mas a margem ao redor do texto ainda terá efeito."
+
+#~ msgid "Color of the label's background :"
+#~ msgstr "Cor do fundo do rótulo :"
+
 #~ msgid "Should the text be oulined ?"
 #~ msgstr "O texto deve ter contorno ?"
 
+#~ msgid "Use background color for labels ?"
+#~ msgstr "Usar a cor de fundo para os rótulos ?"
+
 #~ msgid "Configure the label readability."
 #~ msgstr "Configurar a legibilidade do rótulo."
+
+#~ msgid "set to 1 if you don't want the icons to zoom when you hover them."
+#~ msgstr ""
+#~ "defina 1 se você não deseja zoom nos ícones, quando passar o rato sobre eles."
+
+#~ msgid ""
+#~ "in pixels. Outside of this interval (centered on the mouse), there is no "
+#~ "zoom."
+#~ msgstr "em píxeis. Fora deste intervalo (centrado no rato), não há zoom."
+
+#~ msgid "Width of the interval in which the zoom will be effective :"
+#~ msgstr "Largura do intervalo no qual o zoom terá efeito."
 
 #~ msgid ""
 #~ "These are icons located in ~/.config/cairo-dock/current_theme/icons, coming "
@@ -5046,6 +5676,18 @@ msgstr ""
 #~ msgstr "Usar ícones locais ?"
 
 #~ msgid ""
+#~ "Let empty to use the current icons theme of your system. You can enter the "
+#~ "name of a theme that is installed on your system (like 'Gartoon' or "
+#~ "'Human'), or even a path to a folder containing icons."
+#~ msgstr ""
+#~ "Deixe vazio para usar os ícones actuais do tema de seu sistema. Você pode "
+#~ "entrar com o nome de um tema que está instalado em seu sistema (como "
+#~ "'Gartoon' ou 'Human'), ou mesmo o caminho para a pasta que o contém."
+
+#~ msgid "Image's filename to use as a background for icons :"
+#~ msgstr "Nome do ficheiro da imagem a ser usado como fundo dos ícones :"
+
+#~ msgid ""
 #~ "Some applets may not use it, because they redraw periodically themselves."
 #~ msgstr ""
 #~ "Alguns applets podem não usar isto, porque eles se redesenham periodicamente."
@@ -5053,8 +5695,36 @@ msgstr ""
 #~ msgid "Use this background for applets too ?"
 #~ msgstr "Usar este fundo para os applets também ?"
 
+#~ msgid ""
+#~ "It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are "
+#~ "not used."
+#~ msgstr ""
+#~ "Isto é seu albedo; Em 1 os ícones reflectem o máximo, em 0 reflexos não são "
+#~ "usados."
+
+#~ msgid "Reflecting power of the plane :"
+#~ msgstr "Poder de reflexão do plano :"
+
 #~ msgid "Fraction of the icon height that will reflect :"
 #~ msgstr "Fracção da altura do ícone que reflectirá :"
+
+#~ msgid "Color of the string (red, blue, green, alpha) :"
+#~ msgstr "Cor da corda (vermelho, azul, verde, alfa) :"
+
+#~ msgid "Appli's size at rest (width x height) :"
+#~ msgstr "Tamanho do aplicativo em repouso (largura x altura) :"
+
+#~ msgid "Configure icons animations."
+#~ msgstr "Configurar a animação dos ícones."
+
+#~ msgid "Configure icons special effects (require OpenGL capacity)."
+#~ msgstr "Configurar efeitos especiais dos ícones (requer OpenGL)."
+
+#~ msgid ""
+#~ "Configure icons animations on appearing/disappearing (require OpenGL "
+#~ "capacity)."
+#~ msgstr ""
+#~ "Configurar a animação dos ícones quando aparecem/desaparecem (requer OpenGL)."
 
 #~ msgid ""
 #~ "Separators are icons used to make a separation between different types of "
@@ -5069,6 +5739,16 @@ msgstr ""
 #~ msgstr "Adicionar separadores automaticamente ?"
 
 #~ msgid ""
+#~ "Make the separator's image revolve when dock is on top/on the left/on the "
+#~ "right ?"
+#~ msgstr ""
+#~ "Fazer a imagem do separador girar quando o dock está no "
+#~ "topo/esquerda/direita ?"
+
+#~ msgid "Force separator's image size to stay constant ?"
+#~ msgstr "Forçar o tamanho do separador de imagem ser constante ?"
+
+#~ msgid ""
 #~ "This parameter will overwrite the previously defined order, to allow you to "
 #~ "mix applets and launchers into the dock."
 #~ msgstr ""
@@ -5078,11 +5758,21 @@ msgstr ""
 #~ msgid "Allow applets to be placed amongst launchers ?"
 #~ msgstr "Permitir applets serem posicionados no meio dos lançadores ?"
 
+#~ msgid "Choose the default view for root docks :"
+#~ msgstr "Escolhe a visualização padrão para a base do dock :"
+
 #~ msgid "otherwise they will be perpendicular"
 #~ msgstr "Do contrário, eles serão perpendiculares"
 
 #~ msgid "Are the sub-docks parallel to main docks ?"
 #~ msgstr "Os sub-docks são paralelos ao dock principal ?"
+
+#~ msgid ""
+#~ "You can specify a ratio for the size of the sub-docks' icons, regarding the "
+#~ "main docks' icons size"
+#~ msgstr ""
+#~ "Você pode especificar a proporção do tamanho dos ícones dos sub-docks, a "
+#~ "considerar o tamanho dos ícones do dock principal"
 
 #~ msgid "Background color of the bubble (r,v,b,a) :"
 #~ msgstr "Cor de fundo da bolha (r,g,b,a) :"
@@ -5109,14 +5799,60 @@ msgstr ""
 #~ msgid "Personnal decorations"
 #~ msgstr "Decorações pessoais"
 
+#~ msgid ""
+#~ "It's an image that will be displayed below the drawings, like a frame for "
+#~ "exemple. Let empty to not use any."
+#~ msgstr ""
+#~ "Esta é uma imagem que será mostrada abaixo dos desenhos, como um quadro, por "
+#~ "exemplo. Deixe vazio ..."
+
+#~ msgid "Background tansparency :"
+#~ msgstr "Transparência do fundo :"
+
+#~ msgid ""
+#~ "It's an image that will be displayed above the drawings, like a reflect for "
+#~ "exemple. Let empty to not use any."
+#~ msgstr ""
+#~ "esta é a imagem que será mostrada sobre os desenhos, como um reflexo. Deixe "
+#~ "vazio para não usar."
+
+#~ msgid "Name of an image to use for the 'retach' button :"
+#~ msgstr "Nome de uma imagem para usar no botão 'recolocar' :"
+
+#~ msgid "Color of the frame (r,v,b,a) :"
+#~ msgstr "Cor da moldura (r,g,b,a) :"
+
 #~ msgid "Let it empty to draw a simple frame."
 #~ msgstr "Deixe vazio para desenhar uma moldura simples."
 
 #~ msgid "Alternatively you can set an image for the indicator :"
 #~ msgstr "Alternativamente você pode definir uma imagem para o indicador :"
 
+#~ msgid "Draw indicator above the icon ?"
+#~ msgstr "Desenhar indicador sobre o ícone ?"
+
+#~ msgid ""
+#~ "Indicators are drawn on launchers icons to show that they have already been "
+#~ "launched. Let blank to use the default one."
+#~ msgstr ""
+#~ "Indicadores são desenhados em ícones dos lançadores para mostrar que eles já "
+#~ "foram executados. Deixe vazio para usar o padrão."
+
 #~ msgid "Filename of an image to use for indicators :"
 #~ msgstr "Nome do ficheiro da imagem para usar nos indicadores :"
+
+#~ msgid "Display the indicator above the icon ?"
+#~ msgstr "Mostrar indicador sobre o ícone ?"
+
+#~ msgid ""
+#~ "It will then be resized like the icon, move like the icon, etc. Otherwise it "
+#~ "will be drawn directly on the dock."
+#~ msgstr ""
+#~ "será redimensionado como o ícone, mover como o ícone, etc. Do contrário, "
+#~ "será directamente desenhado no dock."
+
+#~ msgid "Link the indicator with its icon ?"
+#~ msgstr "Ligar o indicador ao seu ícone ?"
 
 #~ msgid ""
 #~ "in pixels. You can use this parameter to adjust the indicator's vertical "
@@ -5124,14 +5860,34 @@ msgstr ""
 #~ msgstr ""
 #~ "em píxeis. use este parâmetro para ajustar a posição vertical do indicador."
 
+#~ msgid ""
+#~ "Use it to make the indicator rotate according to the position of the dock "
+#~ "(top/bottom/right/left)"
+#~ msgstr ""
+#~ "Use isto para fazer o indicador rotacionar de acordo com a posição do dock "
+#~ "(topo/inferior/direita/esquerda)"
+
+#~ msgid "Rotate the indicator with dock ?"
+#~ msgstr "Rotacione o indicador junto com o dock ?"
+
 #~ msgid "Indicator of class subdock"
 #~ msgstr "Indicador da classe sub-dock"
+
+#~ msgid ""
+#~ "It only makes sense if you choosed to group the applis of the same class "
+#~ "togather. Let blank to use the default one."
+#~ msgstr ""
+#~ "Isto só fará sentido se você escolheu agrupar juntos os aplicativos de mesma "
+#~ "classe. Deixe vazio para usar o padrão."
 
 #~ msgid ""
 #~ "Filename of an image to indicate that a class has been grouped in a subdock :"
 #~ msgstr ""
 #~ "Nome do ficheiro da imagem para indicar que classe foi agrupada em uma sub-"
 #~ "dock :"
+
+#~ msgid "Zoom the indicator with its icon ?"
+#~ msgstr "Dar zoom no indicador junto com seu ícone ?"
 
 #~ msgid "Misc. Emblems"
 #~ msgstr "Símbolos diversos"
@@ -5160,6 +5916,223 @@ msgstr ""
 #~ msgid "Name of an image to use for the locked emblem :"
 #~ msgstr "Nome da uma imagem para ser usada no símbolo de bloqueado :"
 
+#~ msgid "How can I re-order my icons ?"
+#~ msgstr "Como posso reordenar meus ícones ?"
+
+#~ msgid "Hint : you can even re-order the icons of the current applications."
+#~ msgstr "Dica : você pode reordenar os ícones dos aplicativos actuais."
+
+#~ msgid "Simply drag them with the mouse, and drop it where you want."
+#~ msgstr "Simplesmente arraste-os com o rato e solte-o onde você desejar."
+
+#~ msgid ""
+#~ "How can I place the applets and taskbar icons at the beginning of the dock ?"
+#~ msgstr ""
+#~ "Como posso posicionar os ícones de applets e da Barra de tarefas no início "
+#~ "do dock ?"
+
+#~ msgid ""
+#~ "Hint : you can also place applets amongst launchers, by ticking the box "
+#~ "below."
+#~ msgstr ""
+#~ "Dica : você pode também posicionar applets entre lançadores, marcando a "
+#~ "caixa abaixo."
+
+#~ msgid ""
+#~ "In the “icons” module, on the bottom, you can choose the order of icons "
+#~ "according to their type (launcher/appli/applet)."
+#~ msgstr ""
+#~ "No módulo \"ícones\", em baixo, você pode escolher a ordem dos ícones de "
+#~ "acordo com seu tipo (lançador/aplicativo/applet)."
+
+#~ msgid "How can I change the image of an icon ?"
+#~ msgstr "Como posso mudar a imagem de um ícone ?"
+
+#~ msgid ""
+#~ "Hint : you can also directly edit a launcher’s configuration, and set a path "
+#~ "for an image. If you don’t write a path, but simply the name of an image, "
+#~ "don’t put the extension (.svg, .png, etc), to let the dock choose the best."
+#~ msgstr ""
+#~ "Dica : você pode editar a configuração de um lançador directamente, e "
+#~ "definir o caminho de uma imagem. Se você não definir o caminho, mas "
+#~ "simplesmente o nome de uma imagem, não coloque a extensão (.svg, .png, etc), "
+#~ "para deixar o dock escolher a melhor."
+
+#~ msgid ""
+#~ "In the “Icons” module, you can choose a <b>icon theme</b>. Enter a name of a "
+#~ "theme, for exemple : Human or Gartoon.\n"
+#~ "You can even enter the path of a folder containing personnal icons.\n"
+#~ "By default, all the Cairo-Dock themes put here the local icons folder "
+#~ "“_LocalIcons_”, that is in fact  ~/.config/cairo-dock/current_theme/icons.\n"
+#~ "You can enter many themes or folders, the dock will search for images in "
+#~ "them in the same order as you entered them.\n"
+#~ "If you let it empty, the default icon theme of your system wil be used."
+#~ msgstr ""
+#~ "No módulo \"Ícones\", você pode escolher um <b>tema de ícone</b>. Entre o "
+#~ "nome de um tema, por exemplo : Human ou Gartoon.\n"
+#~ "Você pode entrar com o caminho de uma pasta que contenha seus ícones.\n"
+#~ "Por padrão, todos os temas do Cairo-Dock colocam aqui a pasta de ícones "
+#~ "local \"_LocalIcons_\", que é de fato  ~/.config/cairo-"
+#~ "dock/current_theme/icons.\n"
+#~ "Você pode entrar com muitos temas ou pastas, o dock procurará nestes por "
+#~ "imagens na mesma ordem a qual você os inseriu.\n"
+#~ "Se você deixar vazio, o tema padrão do seu sistema será usado."
+
+#~ msgid "How can I quickly remove many icons ?"
+#~ msgstr "Como eu removo rapidamente muitos ícones ?"
+
+#~ msgid ""
+#~ "Hint : if you delete an icon pointing on a sub-dock, you will be asked to "
+#~ "delete the sub-dock’s icons as well, or to move them in the main dock."
+#~ msgstr ""
+#~ "Dica : se você deletar um ícone que aponte para um sub-dock, você será "
+#~ "perguntado sobre a deleção dos ícones do sub-dock, ou para movê-los para o "
+#~ "dock principal."
+
+#~ msgid "How can I resize my icons ?"
+#~ msgstr "Como posso redimensionar meus ícones ?"
+
+#~ msgid ""
+#~ "Hint : You can define the size of each applet independantely, to any size "
+#~ "smaller or equal than the default size. Set it to 0x0 to use the default "
+#~ "size."
+#~ msgstr ""
+#~ "Dica : Você pode definir o tamanho de cada applet independentemente, para "
+#~ "qualquer tamanho menor ou igual ao tamanho padrão. Defina isto para 0x0 para "
+#~ "usar o tamanho padrão."
+
+#~ msgid ""
+#~ "In the 'Icons' modules, you can setup the default size of your icons by type "
+#~ ": launchers, applis, applets and separators.\n"
+#~ "You can also setup the zoom factor."
+#~ msgstr ""
+#~ "No módulo \"Ícones\", você pode definir o tamanho padrão dos seus ícones por "
+#~ "tipo: lançadores, aplicativos, applets e separadores.\n"
+#~ "Você pode também definir o factor de zoom."
+
+#~ msgid "How can I place my dock on the screen ?"
+#~ msgstr "Como posso posicionar meu dock na tela ?"
+
+#~ msgid ""
+#~ "Hint : If you have a multi-screen managed by Xinerama, you can tick the "
+#~ "option “Use Xinerama”, and choose the screen where you want your dock to be."
+#~ msgstr ""
+#~ "Dica : Se você tem tela múltipla administrada pelo Xinerama, você pode "
+#~ "marcar a opção \"Usar Xinerama\", e escolher a tela na qual você quer que o "
+#~ "dock esteja."
+
+#~ msgid ""
+#~ "All is in the “Position” module. You can choose to place it on the bottom, "
+#~ "top, left or right side of your screen.\n"
+#~ "Moreover, you can also place it on the beginning, center, or end of the "
+#~ "screen border."
+#~ msgstr ""
+#~ "Tudo está no módulo \"Posição\". Você pode escolher posicioná-lo na parte "
+#~ "inferior, topo, esquerda ou direita da sua tela.\n"
+#~ "Além disto, você pode também posicioná-lo no começo, centro ou fim da borda "
+#~ "da tela."
+
+#~ msgid "How can I adjust the position of the dock above the gnome-panel ?"
+#~ msgstr "Como posso ajustar a posição do dock sobre o painel do Gnome ?"
+
+#~ msgid ""
+#~ "Hint : you can also just dragging your dock with the mouse, by pressing the "
+#~ "ALT key at the same time."
+#~ msgstr ""
+#~ "Dica : Você pode também arrastar seu dock com o rato, pressionando a tecla "
+#~ "ALT ao mesmo tempo."
+
+#~ msgid "In the “Position” module, you can add an offset to the screen border."
+#~ msgstr ""
+#~ "No módulo \"Posição\", você pode adicionar um deslocamento para a borda da "
+#~ "tela."
+
+#~ msgid "The dock is hidden by the gnome-panel"
+#~ msgstr "O dock está escondido pelo painel do Gnome"
+
+#~ msgid ""
+#~ "it’s normal, because they both are “docks”. You can either move the dock out "
+#~ "of the panel, or launch it wih the command “cairo-dock -–keep-above”."
+#~ msgstr ""
+#~ "Isto é normal, pois ambos são \"docks\". Você pode mover o dock para fora do "
+#~ "painel, ou lançar isto com o comando \"cairo-dock --keep-above\"."
+
+#~ msgid "How can I add a separator ?"
+#~ msgstr "Como posso adicionar um separador ?"
+
+#~ msgid ""
+#~ "Simply right-click on the dock where you want to add a separator, and select "
+#~ "“add a separator”.\n"
+#~ "You can place it wherever you want (except in amongst taskbar icons) by "
+#~ "dragging it with the mouse."
+#~ msgstr ""
+#~ "Simplesmente clique com o botão direito no dock onde você deseja adicionar "
+#~ "um separador e seleccione \"adicionar um separador\".\n"
+#~ "Você pode posicioná-lo onde quiser (excepto no meio dos ícones da barra de "
+#~ "tarefas) arrastando-o com o rato."
+
+#~ msgid ""
+#~ "I don’t want to have a separator between launchers , applis and applets"
+#~ msgstr "Eu não quero ter separadores entre lançadores, aplicativos e applets"
+
+#~ msgid ""
+#~ "In the “Icons” module, under the “separator” part, untick the box that says "
+#~ "to “add automatic separators”."
+#~ msgstr ""
+#~ "No módulo \"Ícones\", abaixo da parte \"separador\", desmarque a caixa que "
+#~ "diz \"adicionar separadores automaticamente ?\"."
+
+#~ msgid "How can I add a sub-dock ?"
+#~ msgstr "Como posso adicionar um sub-dock ?"
+
+#~ msgid ""
+#~ "Hint : to move an icon into a subdock, edit  its configuration, and in the "
+#~ "list of the docks, choose the one you want. You can do the same with applets "
+#~ "as well, allowing you to group many applets in a sub-dok !"
+#~ msgstr ""
+#~ "Dica : para mover um ícone para um sub-dock, edite sua configuração, e na "
+#~ "lista de docks, escolhe aquele que você deseja. Você pode fazer o mesmo com "
+#~ "applets, permitindo agrupar muitos applets em uma sub-dock !"
+
+#~ msgid ""
+#~ "Just right-click on the dock, then select “add a sub-dock”. Fill the config "
+#~ "panel with some name and image, then validate."
+#~ msgstr ""
+#~ "Clique com o botão direito no dock, seleccione \"adicionar um sub-dock\". "
+#~ "Preencha o painel de configuração com algum nome de imagem e valide."
+
+#~ msgid "How can I have many main docks ?"
+#~ msgstr "Como posso ter vários docks principais ?"
+
+#~ msgid ""
+#~ "Hint : you can then move icons inside this new dock by following the "
+#~ "previous method.\n"
+#~ "To place this new dock, right click on it, and in the Cairo-dock sub-menu "
+#~ "choose “configure this dock”."
+#~ msgstr ""
+#~ "Dica : você pode mover os ícones dentro deste novo dock seguindo o método "
+#~ "anterior.\n"
+#~ "Para colocar este novo dock, clique com o botão direito nele e, no sub-menu "
+#~ "do Cairo-Dock, escolha \"configurar este dock\"."
+
+#~ msgid ""
+#~ "Edit a launcher or an applet, and in the list of the available docks, enter "
+#~ "a name that doesn’t exist yet. A new dock will be created, with this icon "
+#~ "inside."
+#~ msgstr ""
+#~ "Edite um lançador ou um applet e, na lista de docks disponíveis, entre com "
+#~ "um nome que ainda não existe. Um novo dock será criado com este ícone dentro."
+
+#~ msgid "How do I get a 3D dock ?"
+#~ msgstr "Como eu consigo um dock 3D ?"
+
+#~ msgid ""
+#~ "Hint : you can setup the view for each sub-dock; just edit the icon pointing "
+#~ "on the sub-dock, and choose the view you want for it."
+#~ msgstr ""
+#~ "Dica : você pode definir a visualização para cada sub-dock; edite o ícone "
+#~ "que aponta para a sub-dock e escolha a visualização que você quer para ele."
+
 #~ msgid ""
 #~ "any dock can be displayed with one view, and many views are available (3D, "
 #~ "Curve, etc). They are mostly provided by the “dock-rendering” plug-in, so be "
@@ -5173,6 +6146,9 @@ msgstr ""
 #~ "Para isto, vá no módulo \"Visualizações\" e escolha a visualização que você "
 #~ "quer para o dock principal e sub-dock."
 
+#~ msgid "I don’t want other windows to hover the dock"
+#~ msgstr "Eu não quero que outras janelas sobreponham-se ao dock"
+
 #~ msgid ""
 #~ "Hint : if you use it, you don’t need to use the “keep the dock below “option."
 #~ msgstr ""
@@ -5183,6 +6159,261 @@ msgstr ""
 #~ "Just use the option “reserve space for dock” in the “Accessibility” module."
 #~ msgstr ""
 #~ "Use a opção \"reservar espaço para o dock\" no módulo \"Acessibilidade\"."
+
+#~ msgid "I don’t want that the dock hovers windows"
+#~ msgstr "Eu não quero que o dock sobreponha janelas"
+
+#~ msgid ""
+#~ "Hint : you can choose to pop-up the dock only when the mouse hits the screen "
+#~ "corner instead of the whole screen border.\n"
+#~ "You can also setup the size of the trigger zone in the “Hidden dock” module, "
+#~ "and even set an image to it."
+#~ msgstr ""
+#~ "Dica : você pode escolher que a dock apareça quando o rato encostar apenas "
+#~ "no canto da tela ao invés de toda a borda.\n"
+#~ "Você também pode definir o tamanho da zona de ação no módulo \"Dock "
+#~ "escondido\" e definir a imagem para a mesma."
+
+#~ msgid ""
+#~ "Two choices are available, in the “Accessibility” module :\n"
+#~ " - either choose to “keep the dock below other windows”. The dock will then "
+#~ "pop-up when you place the mouse on its screen border.\n"
+#~ " - or activate the auto-hide. The dock will then appear when you enter the "
+#~ "trigger zone."
+#~ msgstr ""
+#~ "Duas escolhas estão disponíveis no módulo \"Acessibilidade\" :\n"
+#~ " - escolher \"manter o dock abaixo de outras janelas\". O dock aparecerá "
+#~ "quando você colocar o rato sobre a borda da tela.\n"
+#~ " - ou activar o auto-ocultar. O dock aparecerá quando o rato entrar na zona "
+#~ "de ação."
+
+#~ msgid "What are these “desklets” ?"
+#~ msgstr "O que são estes \"desklets\" ?"
+
+#~ msgid ""
+#~ "Hint : to detach an applet, you can drag and drop its icon from the dock to "
+#~ "the desktop"
+#~ msgstr ""
+#~ "Dica : para separar um applet, você pode arrastá-lo e soltá-lo do dock para "
+#~ "a Área de Trabalho"
+
+#~ msgid ""
+#~ "they are widgets that’s are displayed on your desktop. Each applet can be "
+#~ "detached from the dock to act as a desklet."
+#~ msgstr ""
+#~ "eles são widgets que são mostrados em sua Área de Trabalho. Cada applet pode "
+#~ "ser separado do dock para funcionar como um desklet."
+
+#~ msgid "How do I setup their position ?"
+#~ msgstr "Como eu defino posição deles ?"
+
+#~ msgid ""
+#~ "Hint : If you don’t want to move it anymore, you can lock its position. "
+#~ "Simply right click on the desklet, and select “lock position”. To unlock it, "
+#~ "de-select this option."
+#~ msgstr ""
+#~ "Dica : Se você não deseja movê-lo mais, você pode bloquear sua posição. "
+#~ "Clique com o botão direito no desklet e seleccione \"bloquear posição\". "
+#~ "Para desbloqueá-lo, desmarque esta opção."
+
+#~ msgid "How do I set up their attitude ?"
+#~ msgstr "Como eu defino sua atitude ?"
+
+#~ msgid ""
+#~ "Hint : if you locked the desklet, the buttons won’t appear. You can reset a "
+#~ "rotation by middle-clicking on the appropriate button."
+#~ msgstr ""
+#~ "Dica : se você bloqueou o desklet, os botões não aparecerão. Você pode zerar "
+#~ "a rotação clicando com o botão do meio no botão apropriado."
+
+#~ msgid "How can I change their decorations ?"
+#~ msgstr "Como posso mudar a decoração deles ?"
+
+#~ msgid ""
+#~ "Hint : you can add new decorations, by choosing the “personnal” decoration, "
+#~ "and providing a background and/or foreground image. You can setup the "
+#~ "offsets of these images to adjust the position of the drawings inside the "
+#~ "decorations."
+#~ msgstr ""
+#~ "Dica : você pode adicionar novas decorações, escolha a decoração \"pessoal\" "
+#~ "provendo uma imagem de fundo ou de frente. Você pode definir os "
+#~ "deslocamentos destas imagens para ajustar a posição dos desenhos dentro da "
+#~ "decoração."
+
+#~ msgid ""
+#~ "You need to have the “desklet-rendering” plug-in activated. The default "
+#~ "decoration is defined in the “Desklets” module.\n"
+#~ "Moreover, each desklet can have its own decoration. To change a desklet’s "
+#~ "decoration,\n"
+#~ " go to the applet’s configuration, click on the “desklet” tab, and then "
+#~ "choose the decoration you want."
+#~ msgstr ""
+#~ "Você precisa activar o plugin \"desklet-rendering\". A decoração padrão é "
+#~ "definida no módulo \"Desklets\".\n"
+#~ "Além disto, cada desklet pode ter decoração própria. Para modificar a "
+#~ "decoração de um desklet,\n"
+#~ " vá nas configurações de applets, clique na aba \"desklet\" e escolha a "
+#~ "decoração que você deseja."
+
+#~ msgid "How do I insert a desklet into the dock ?"
+#~ msgstr "Como eu insiro um desklet no dock ?"
+
+#~ msgid "How can I place a desklet on the <i>Compiz Widget Layer</i> ?"
+#~ msgstr "Como posso posicionar o desklet no <i>Compiz Widget Layer</i>"
+
+#~ msgid ""
+#~ "Hint : you may have to switch one time to the Widget Layer so that Compiz "
+#~ "takes into account the modification."
+#~ msgstr ""
+#~ "Dica : você pode ter que trocar para Widget Layer, assim o Compiz leva em "
+#~ "consideração a modificação."
+
+#~ msgid ""
+#~ "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
+#~ "the rule (name=cairo-dock &amp; type=utility).\n"
+#~ "You can then switch an applet to the Widget Layer by left-clicking on its "
+#~ "desklet and selecting 'Compiz-Fusion Widget'."
+#~ msgstr ""
+#~ "Na configuração do Compiz-Fusion, active o plugin 'Widget Layer' e defina a "
+#~ "regra (name=cairo-dock &amp; type=utility).\n"
+#~ "Aí você pode trocar um applet para o Widget Layer clicando com o botão "
+#~ "esquerdo no desklet e seleccionando 'Compiz-Fusion Widget'."
+
+#~ msgid "How do I activate the Taskbar ?"
+#~ msgstr "Como eu activo a Barra de tarefas ?"
+
+#~ msgid "Hint : All the Taskbar’s options are grouped together in this module."
+#~ msgstr ""
+#~ "Dica : Todas as opções da Barra de tarefas estão agrupadas neste módulo."
+
+#~ msgid "go to the “Taskbar” module, then tick the first box, and apply."
+#~ msgstr ""
+#~ "vá para o módulo \"Barra de tarefas\", marque a primeira caixa e aplique."
+
+#~ msgid ""
+#~ "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+#~ msgstr "Eu não quero ter vários ícones no dock quando eu uso Gimp/Pidgin/etc"
+
+#~ msgid ""
+#~ "Hint : You can then scroll on this icon to switch from a window to another, "
+#~ "in an ALT+TAB way."
+#~ msgstr ""
+#~ "Dica : Você pode rolar neste ícone para trocar de uma janela para outra, no "
+#~ "modelo ALT+TAB."
+
+#~ msgid ""
+#~ "Use the “group applis by class” option. Only a single icon will appear in "
+#~ "the dock. and if there are several windows, they will be grouped together in "
+#~ "a sub-dock above this icon."
+#~ msgstr ""
+#~ "Use a opção \"Agrupar aplicativos por classe\". Um único ícone aparecerá no "
+#~ "dock e, se houverem muitas janelas, elas serão agrupadas juntas num sub-dock "
+#~ "sobre este ícone."
+
+#~ msgid "I have ugly icons for some applis"
+#~ msgstr "Os ícones para alguns aplicativos estão horríveis"
+
+#~ msgid ""
+#~ "Hint : This way, you can setup your personnal icon for any application. Just "
+#~ "place an icon with the same name as the class of the application in a folder "
+#~ "used by the dock (by default, ~/.config/cairo-dock/current_theme/icons)\n"
+#~ "The class of an appli can be found by typing xprop in a terminal, then "
+#~ "clicking on the window of the appli."
+#~ msgstr ""
+#~ "Dica : Deste modo, você pode definir ícones pessoais para qualquer "
+#~ "aplicativo. Coloque um ícone com o mesmo nome da classe do aplicativo na "
+#~ "pasta usada pelo dock(por padrão, ~/.config/cairo-dock/current_theme/icons)\n"
+#~ "A classe de um aplicativo pode ser encontrada digitando-se \"xprop\" no "
+#~ "terminal, e depois clicando na janela do aplicativo."
+
+#~ msgid ""
+#~ "it’s because X provides small icons for applis, that don’t look nice when "
+#~ "zoomed. Use the option “overwrite X icons”, to tell the dock to not use them."
+#~ msgstr ""
+#~ "isto ocorre porque o X provê ícones pequenos para os aplicativos, que ficam "
+#~ "feios quando em zoom. Use a opção \"sobrescrever ícones do X\", para que o "
+#~ "dock não os use."
+
+#~ msgid ""
+#~ "When I launch a program with its launcher, I don’t want an additional icon "
+#~ "in the taskbar"
+#~ msgstr ""
+#~ "Quando eu executo um programa pelo seu lançador, eu não quero um ícone "
+#~ "adicional na Barra de tarefas"
+
+#~ msgid ""
+#~ "Hint : to launch another instance of the program, shift+click on the "
+#~ "launcher."
+#~ msgstr ""
+#~ "Dica : para executar uma nova instância do programa, SHIFT+Clique no "
+#~ "lançador."
+
+#~ msgid ""
+#~ "Use the “Mix applis and launchers” option.\n"
+#~ "When a program is launched, if it has a launcher in the dock, this one will "
+#~ "take an indicator to signal you that the corresponding application is "
+#~ "running.\n"
+#~ "You can then act on the window as if it was a taskbar icon."
+#~ msgstr ""
+#~ "Use a opção \"Misturar aplicativos e lançadores\".\n"
+#~ "Quando o programa é executado, se ele tiver um lançador no dock, este terá "
+#~ "um indicador de que o aplicativo correspondente está a rodar.\n"
+#~ "Você pode usar a janela como se fosse um ícone da Barra de tarefas."
+
+#~ msgid "I’m using Pidgin, and I want to see my friends’ avatar"
+#~ msgstr "Estou a usar o Pidgin, e quero ver o avatar dos meu amigos"
+
+#~ msgid ""
+#~ "If you choosed to overwrite X icons, you can add an exception for Pidgin "
+#~ "just before this option.\n"
+#~ "If you choosed to mix applis and launchers, you can edit the Pidgin "
+#~ "launcher,\n"
+#~ " and in the “Extra parameters”, tick the box that says to not steal the icon "
+#~ "for this appli."
+#~ msgstr ""
+#~ "Se você escolheu sobrescrever os ícones do X, você pode adicionar uma "
+#~ "excepção para o Pidgin, bem atrás desta opção.\n"
+#~ "Se você escolheu misturar aplicativos e lançadores, você pode editar o "
+#~ "lançador do Pidgin,\n"
+#~ " e nos \"Parâmetros extras\", marque a caixa que diz para não roubar o ícone "
+#~ "do aplicativo."
+
+#~ msgid ""
+#~ "How can I quickly navigate between many windows of the same application ?"
+#~ msgstr ""
+#~ "Como posso navegar rapidamente entre várias janelas do mesmo aplicativo ?"
+
+#~ msgid ""
+#~ "Hint : you can also close all the windows of this appli by middle-clicking "
+#~ "on the icon pointing on the sub-dock."
+#~ msgstr ""
+#~ "Dica : você pode fechar todas as janelas deste aplicativo a clicar com o "
+#~ "botão do meio no ícone que aponta para o sub-dock."
+
+#~ msgid ""
+#~ "Scroll on the icon of one of the windows of this appli, or even on the icon "
+#~ "pointing on the sub-dock if you group windows in a sub-dock."
+#~ msgstr ""
+#~ "Role no ícone das janelas deste aplicativo, ou no ícone que apontar para o "
+#~ "sub-dock, se você agrupa as janelas em um sub-dock."
+
+#~ msgid "Replacing the gnome-panel"
+#~ msgstr "Substituindo o painel do Gnome"
+
+#~ msgid "How can I have the main menu ?"
+#~ msgstr "Como eu posso ter o menu principal ?"
+
+#~ msgid ""
+#~ "Hint : if you removed your gnome-panel, then the “alt+F1” shortkey does not "
+#~ "work anymore. This applet let you setup a shortcut to pop up the menu at the "
+#~ "mouse’s location."
+#~ msgstr ""
+#~ "Dica : se você removeu o painel do Gnome, o atalho \"ALT+F1\" não funcionará "
+#~ "mais. Este applet deixa você definir um atalho para mostrar o menu na "
+#~ "posição do rato."
+
+#~ msgid "activate the Gmenu applet."
+#~ msgstr "activar o applet Gmenu."
 
 #~ msgid "How can I have a simple “quick launch” panel ?"
 #~ msgstr "Como posso ter um simples painel \"lançar rapidamente\" ?"
@@ -5197,11 +6428,194 @@ msgstr ""
 #~ "de lançamento rápido."
 
 #~ msgid ""
+#~ "activate the Gmenu applet, then you can have it by middle-clicking on its "
+#~ "icon."
+#~ msgstr ""
+#~ "active o applet Gmenu, assim você pode tê-lo clicando com o botão do meio em "
+#~ "seu ícone."
+
+#~ msgid "How can I have a logout icon ?"
+#~ msgstr "Como eu posso ter um ícone de Finalizar sessão."
+
+#~ msgid ""
+#~ "Hint : In the last Gnome version, there are 2 panel : one to logout, and one "
+#~ "to turn off computer. The first one is raised by a click on the icon, the "
+#~ "second by a middle-click, but the applet let you invert this order, and even "
+#~ "let you enter your own commands."
+#~ msgstr ""
+#~ "Dica : Na última versão do Gnome, existem dois painéis : um para finalizar "
+#~ "sessão e outro para desligar o computador. O primeiro é chamado clicando-se "
+#~ "no ícone, enquanto o segundo clicando-se no botão do meio, mas o applet "
+#~ "deixa você inverter tal ordem, e ainda deixa você definir comandos próprios."
+
+#~ msgid "Simply activate the “logout” applet."
+#~ msgstr "Simplesmente active o applet \"finalizar sessão\"."
+
+#~ msgid "How can I access the dustbin ?"
+#~ msgstr "Como posso aceder a lixeira ?"
+
+#~ msgid ""
+#~ "Hint : you can delete a file by dragging it into the dustbin. You can even "
+#~ "unmount a mount-point this way !"
+#~ msgstr ""
+#~ "Dica : Você pode remover um ficheiro arrastando-o para a lixeira. Você pode "
+#~ "até montar ou desmontar um ponto desta maneira !"
+
+#~ msgid "Simply activate the “dustbin” applet."
+#~ msgstr "Simplesmente active o applet \"Lixeira\"."
+
+#~ msgid "How can I access to my mount points ?"
+#~ msgstr "Como posso aceder meus pontos de montagem ?"
+
+#~ msgid ""
+#~ "Hint : you can mount a volume by clicking on its icon. To unmount  it, right-"
+#~ "click and select “unmount”."
+#~ msgstr ""
+#~ "Dica : Você pode montar um volume clicando em seu ícone. Para desmontá-lo, "
+#~ "clique com o botão direito e seleccione \"desmontar\"."
+
+#~ msgid "Simply activate the “shortcuts” applet."
+#~ msgstr "Simplesmente active o applet \"atalhos\"."
+
+#~ msgid "How can I access to my Nautilus bookmarks ?"
+#~ msgstr "Como posso aceder meus favoritos do Nautilus ?"
+
+#~ msgid ""
+#~ "Hint : you can add a bookmark by dragging the folder onto the applet or into "
+#~ "its sub-dock. You can also rename and remove them. This will also take "
+#~ "effect in Nautilus immediately, and vice versa."
+#~ msgstr ""
+#~ "Dica : você pode adicionar favoritos arrastando a pasta neste applet ou em "
+#~ "seu sub-dock. Você pode também renomear ou removê-los. Isto também terá "
+#~ "efeito no Nautilus imediatamente, e vice-versa."
+
+#~ msgid "How can I access to my desktop ?"
+#~ msgstr "Como posso aceder minha Área de trabalho ?"
+
+#~ msgid ""
+#~ "Hint : middle-clicking on it will hide all the windows, but not the desklets."
+#~ msgstr ""
+#~ "Dica : Clique com o botão do meio do rato esconderá todas as janelas, mas "
+#~ "não os desklets."
+
+#~ msgid "Simply activate the “show desktop” applet."
+#~ msgstr "Simplesmente active o applet \"Mostrar Área de trabalho\"."
+
+#~ msgid "How can I have an easy-to-acces calendar ?"
+#~ msgstr "Como posso ter um calendário de fácil acesso ?"
+
+#~ msgid ""
+#~ "activate the “clock” applet; clicking on it will display a calendar, "
+#~ "clicking again will hide it."
+#~ msgstr ""
+#~ "active o applet do \"relógio\"; clicando nele aparecerá um calendário, "
+#~ "clicando de novo este desaparecerá."
+
+#~ msgid "How can I have the notification area (also called systray) ?"
+#~ msgstr ""
+#~ "Como posso ter uma área de notificação (também chamada de bandeja do "
+#~ "sistema) ?"
+
+#~ msgid ""
+#~ "activate the “systray” applet. For the moment it can’t be displayed directly "
+#~ "into the dock,\n"
+#~ "so clicking on the icon will pop-up a dialog containing the systray, middle-"
+#~ "click will hide it.\n"
+#~ "I recommend to detach this applet to make it a desklet, place it in a corner "
+#~ "of your screen, and keep it above other windows."
+#~ msgstr ""
+#~ "active o applet \"Bandeja do sistema\". No momento, ele não pode ser "
+#~ "mostrado directamente no dock,\n"
+#~ "desta forma, clicar no ícone fará aparecer uma caixa contendo a bandeja, "
+#~ "clique com o botão do meio para ocultá-la.\n"
+#~ "Recomendo separar este applet tornando-o desklet, posicione-o no canto da "
+#~ "tela e mantenha-o sobre as outras janelas."
+
+#~ msgid ""
+#~ "How can I have an easy-to-access terminal with real transparence, like Tilda "
+#~ "?"
+#~ msgstr ""
+#~ "Como posso ter um terminal de fácil acesso com transparência real, como "
+#~ "Tilda ?"
+
+#~ msgid ""
+#~ "Hint : clicking next to the last tab will create a new tab. Double-clicking "
+#~ "on a tab allows you to rename it. You can even change the color of a tab !"
+#~ msgstr ""
+#~ "Dica : clicando próximo a última aba criará uma nova aba. Clicando duas "
+#~ "vezes na aba permitirá renomeá-la. Você pode até modificar a cor da aba."
+
+#~ msgid ""
+#~ "activate the “terminal” applet. You can detach it and place it on the Widget "
+#~ "Layer for instance, or setup a shorkey to make it pop-up instantly."
+#~ msgstr ""
+#~ "active o applet \"terminal\". Você pode separá-lo e aplicá-lo com o Widget "
+#~ "Layer, ou definir um atalho para fazê-lo aparecer instantaneamente."
+
+#~ msgid "So then, how can I remove completely the gnome-panel ?"
+#~ msgstr "Então, como posso remover completamente o painel do Gnome ?"
+
+#~ msgid ""
+#~ "Open gconf-editor, edit the key "
+#~ "/desktop/gnome/session/required_components_list, and erase its content "
+#~ "(\"panel\").\n"
+#~ "Restart your session : the gnome-panel has not been started."
+#~ msgstr ""
+#~ "Abra gconf-editor, edite a chave "
+#~ "/desktop/gnome/session/required_components_list, e apague de seu conteúdo "
+#~ "(\"panel\").\n"
+#~ "Reinicie sua sessão : o painel do Gnome não será iniciado."
+
+#~ msgid "How can I have a same applet many times ?"
+#~ msgstr "Como posso ter o mesmo applet várias vezes ?"
+
+#~ msgid ""
+#~ "Hint : This allows you, for example, to have the time of different countries "
+#~ "in your dock, or to have many animated caracters in your dock, or the "
+#~ "weather of different cities."
+#~ msgstr ""
+#~ "Dica : Isto permite, por exemplo, ter a hora de diferentes países, "
+#~ "caracteres animados ou clima de diferentes cidades no seu dock."
+
+#~ msgid ""
+#~ "Some applets can run several times at the same time : Clock, Cairo-Penguin, "
+#~ "Weather, Netspeed, …\n"
+#~ "Right click on the applet’s icon, and select “launch another instance”. A "
+#~ "new instance of this applet appears in the main dock.\n"
+#~ "You can configure this new one like any other applet."
+#~ msgstr ""
+#~ "Alguns applets pode rodar várias vezes ao mesmo tempo : Relógio, Cairo-"
+#~ "Penguin, Clima, Netspeed, …\n"
+#~ "Clique com o botão direito no ícone do applet e seleccione \"lançar outra "
+#~ "instância\". Uma nova instância deste applet aparecerá no dock principal.\n"
+#~ "Você pode configurar este novo como outro applet."
+
+#~ msgid ""
 #~ "I have a personal gauge that I want to use in the dock (for cpusage or "
 #~ "others)"
 #~ msgstr ""
 #~ "Tenho um medidor pessoal que quero usar no dock (para uso de CPU, ou outra "
 #~ "coisa)"
+
+#~ msgid ""
+#~ "move the folder containing your gauge in ~/.config/cairo-dock/extras/gauges, "
+#~ "you’re done !"
+#~ msgstr ""
+#~ "mova a pasta que contém seu medidor em ~/.config/cairo-dock/extras/gauges e "
+#~ "pronto !"
+
+#~ msgid ""
+#~ "I have a personal Cairo-Clock theme that I want to use in the “clock” applet."
+#~ msgstr ""
+#~ "Tenho um tema pessoal para o relógio Cairo que eu quero usar no applet "
+#~ "\"relógio\"."
+
+#~ msgid ""
+#~ "Hint : the same goes on for all the applets that propose a theme : dustbin, "
+#~ "Cairo-Penguin, weather, etc."
+#~ msgstr ""
+#~ "Dica : o mesmo vale para todos os applets que propõem um tema : lixeira, "
+#~ "Cairo-Penguim, clima, etc."
 
 #~ msgid ""
 #~ "move the folder containing your theme in ~/.config/cairo-dock/extras/clock, "
@@ -5210,11 +6624,240 @@ msgstr ""
 #~ "mova a pasta que contém seu tema para ~/.config/cairo-dock/extras/clock e "
 #~ "pronto !"
 
+#~ msgid "How can I change quickly the luminosity of my screen ?"
+#~ msgstr "Como posso mudar rapidamente a luminosidade da minha tela ?"
+
+#~ msgid ""
+#~ "Activate the Xgamma applet, then you can scroll up/down on the icon with the "
+#~ "mouse."
+#~ msgstr ""
+#~ "Active o applet Xgamma, desta forma, você pode rolar com o rato para "
+#~ "cima/baixo."
+
+#~ msgid "How can I change quickly the speakers volume ?"
+#~ msgstr "Como posso mudar rapidamente o volume dos alto-falantes."
+
+#~ msgid ""
+#~ "Activate the AlsaMixer applet, then you can scroll up/down on the icon with "
+#~ "the mouse."
+#~ msgstr ""
+#~ "Active o applet \"AlsaMixer\", desta forma, você pode rolar com o rato para "
+#~ "cima/baixo."
+
+#~ msgid "I have a black background around my dock"
+#~ msgstr "Tenho um fundo ao redor do meu dock"
+
+#~ msgid ""
+#~ "Hint : If yo have an ATI or an Intel, you should try without OpenGL first, "
+#~ "because their drivers are not yet perfect."
+#~ msgstr ""
+#~ "Dica : Se você tem placa de vídeo ATI ou Intel, você deveria rodar sem "
+#~ "OpenGL primeiro, pois os drivers ainda não estão perfeitos."
+
+#~ msgid ""
+#~ "You have to turn on the compositing. For instance, you can run Compiz or "
+#~ "xcompmgr. \n"
+#~ "If you’re under XFCE or KDE, you can just activate the compositing in the "
+#~ "window manager’s options."
+#~ msgstr ""
+#~ "Você tem que ligar a composição. Você pode rodar o Compiz ou xcompmgr.\n"
+#~ "Se você estiver a usar XFCE ou KDE, você pode activar a composição nas "
+#~ "opções de administração de janelas."
+
+#~ msgid "My machine is too old to run a composite manager"
+#~ msgstr ""
+#~ "Minha máquina é muito antiga para executar o administrador de composição."
+
+#~ msgid ""
+#~ "Don’t panic, Cairo-Dock can emulate the transparency.\n"
+#~ "So to get rid of the black background, just activate the corresponding "
+#~ "option, in the end of the “System” module"
+#~ msgstr ""
+#~ "Não entre em pânico, Cairo-Dock pode emular transparência.\n"
+#~ "Desta forma, para eliminar o fundo preto, active a opção correspondente, no "
+#~ "fim do módulo \"Sistema\""
+
+#~ msgid "The dock is horribly slow when I move the mouse into it"
+#~ msgstr "O dock está terrivelmente lento quando eu movo o rato nele."
+
+#~ msgid ""
+#~ "If you have a GeForce8, you have to install the latest drivers, because the "
+#~ "first ones were really buggy.\n"
+#~ "If the dock is running without openGL, try to reduce the number of icons in "
+#~ "the main dock, or try to reduce its size.\n"
+#~ "If the dock is running with openGL, try to deactivate it by launching the "
+#~ "dock with “cairo-dock –c”."
+#~ msgstr ""
+#~ "Se você tem uma GeForce8, você tem que instalar os últimos drivers, pois os "
+#~ "primeiros possuíam problemas.\n"
+#~ "Se o dock está a funcionar sem OpenGL, tente reduzir o número de ícones no "
+#~ "dock principal, ou seu tamanho.\n"
+#~ "Se o dock está a funcionar com OpenGL, tente desactivá-lo executar o dock "
+#~ "com \"cairo-dock -c\"."
+
+#~ msgid "I don’t have these wonderful effects like fire, cube rotating, etc"
+#~ msgstr "Eu não tenho efeitos maravilhosos como fogo, rotação de cubo, etc"
+
+#~ msgid ""
+#~ "Hint : You can force the openGL by launching the dock with “cairo-dock "
+#~ "–o”.but you might get a lot of visual artifacts."
+#~ msgstr ""
+#~ "Dica : Você pode forçar o OpenGL a executar o dock com \"cairo-dock -o\", "
+#~ "com isto pode-se conseguir vários efeitos visuais."
+
+#~ msgid ""
+#~ "You need a graphic card with drivers that support openGL2.0. Most of Nvidia "
+#~ "cards can do that, more and more Intel cards can do too. Most of ATI cards "
+#~ "can’t do that."
+#~ msgstr ""
+#~ "Você precisa de uma placa gráfica com drivers que suportam OpenGL 2.0. A "
+#~ "maioria das placas Nvidia tem, assim como mais e mais placas Intel. A "
+#~ "maioria das ATI não tem."
+
+#~ msgid "The “netspeed” applet displays 0 even when I’m downloading something"
+#~ msgstr "O applet \"netspeed\" mostra 0 quando estou a baixar alguma coisa."
+
+#~ msgid ""
+#~ "Hint : you can instantiate this applet many times if you want to monitor "
+#~ "many interfaces."
+#~ msgstr ""
+#~ "Dica : Você pode instanciar este applet muitas vezes se você quiser "
+#~ "monitorar interfaces."
+
+#~ msgid ""
+#~ "You have to tell it which interface you’re using to connect to the Net (by "
+#~ "default, it’s “eth0”).\n"
+#~ "Just edit its configuration, and enter the interface’s name. To find it, "
+#~ "type “ifconfig” in a terminal, and ignore the “loop” interface. It’s "
+#~ "probably something like “eth1”, “ath0”, or “wifi0”."
+#~ msgstr ""
+#~ "Você tem que dizer qual interface você está a usar para se conectar na rede "
+#~ "(\"eth0\" é o padrão).\n"
+#~ "Edite suas configurações e entre com o nome da interface. Para encontrá-la, "
+#~ "digite \"ifconfig\" no terminal e ignore a interface \"loop\". Será "
+#~ "provavelmente algo como \"eth1\", \"ath0\" ou \"wifi0\"."
+
+#~ msgid "The dustbin remains empty even when I delete a file"
+#~ msgstr "A lixeira continua vazia mesmo quando deleto ficheiros"
+
+#~ msgid ""
+#~ "if you’re under KDE, you may have to tell it the path of the trash folder.\n"
+#~ "Just edit the applet’s configuration, and fill in the Trash path; it is "
+#~ "probably “~/.locale/share/Trash/files”. Be very careful when typing a path "
+#~ "here !!! (do not insert spaces or some invisible caracters)."
+#~ msgstr ""
+#~ "Se você estiver a usar KDE, pode ser necessário informar o caminho da "
+#~ "lixeira.\n"
+#~ "Edita a configuração do applet e preencha no caminho da Lixeira; será "
+#~ "provavelmente \"~/.locale/share/Trash/files\". Tome cuidado ao digitar o "
+#~ "caminho !!! (não insira espaços ou caracteres invisíveis)."
+
 #~ msgid "Help us !"
 #~ msgstr "Ajude-nos !"
 
+#~ msgid ""
+#~ "We value your help ! If you see a bug, or if you think something could be "
+#~ "improved,\n"
+#~ "or if you just made a dream about the dock, pay us a visit on cairo-"
+#~ "dock.org.\n"
+#~ "English speakers are welcome, so don’t be shy ! ;-)\n"
+#~ "\n"
+#~ "If you made a theme for the dock or one of the applet, and want to share it, "
+#~ "we’ll be happy to integrate it with the other themes !\n"
+#~ "Fabounet"
+#~ msgstr ""
+#~ "Nós apreciamos sua ajuda ! Se você encontrar um erro, ou se você acha que "
+#~ "algo pode ser melhorado,\n"
+#~ "ou você teve um sonho com o dock, faça-nos uma visita em cairo-dock.org.\n"
+#~ "Pessoas de língua inglesa também são bem-vindos, então não seja tímido ! ;-"
+#~ ")\n"
+#~ "\n"
+#~ "Se você fez um tema ou um applet para o dock e quer compartilhar, ficaremos "
+#~ "felizes em integrá-lo com outros temas !\n"
+#~ "Fabounet"
+
+#~ msgid ""
+#~ "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
+#~ "shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v "
+#~ "to copy or paste, etc"
+#~ msgstr ""
+#~ "Exemplo : nautilus --no-desktop, gedit, etc. Você pode até entrar com um "
+#~ "atalho de teclado, por exemplo, <Alt>F1 para o Menu de Aplicativos, <Ctrl>c "
+#~ "ou <Ctrl>v para copiar ou colar, etc"
+
+#~ msgid ""
+#~ "Choose the screen border regarding to which the dock will place itself :"
+#~ msgstr "Escolha o canto da tela na qual o dock se posicionará :"
+
+#~ msgid ""
+#~ "The dock will automatically hide itself outside of the scren when the mouse "
+#~ "leaves it and will show a callback zone instead. Place the mouse into this "
+#~ "zone will make the dock re-appear."
+#~ msgstr ""
+#~ "O dock ocultará a si mesmo automaticamente fora da tela quando o rato deixá-"
+#~ "lo e mostrará uma área de ação no lugar. Coloque o rato nesta área e isto "
+#~ "fará o dock reaparecer."
+
 #~ msgid "Choose a theme"
 #~ msgstr "Escolha um tema"
+
+#~ msgid "Choose one of the available themes :"
+#~ msgstr "Escolha um dos temas disponíveis :"
+
+#~ msgid "You can even drop an internet URL."
+#~ msgstr "Você pode colocar uma URL da internet."
+
+#~ msgid "... or drag and drop a theme package here :"
+#~ msgstr "... ou arrastar e soltar um pacote de tema aqui :"
+
+#~ msgid ""
+#~ "So if you check this box, your launchers will be deleted and replaced by the "
+#~ "ones provided in the new theme. Otherwise the current launchers will be "
+#~ "kept, only icons will be replaced."
+#~ msgstr ""
+#~ "Se você marcar esta caixa, seus lançadores serão deletados e substituídos "
+#~ "por aqueles disponíveis no novo tema. Do contrário, os lançadores actuais "
+#~ "serão mantidos, apenas os ícones serão substituídos."
+
+#~ msgid "Use the new theme's launchers ?"
+#~ msgstr "Usar os novos lançadores do tema ?"
+
+#~ msgid ""
+#~ "Otherwise the current behaviour will be kept. It's all about the dock's "
+#~ "position, behaviour parameters such as auto-hide, using taskbar or not, etc."
+#~ msgstr ""
+#~ "Do contrário, o comportamento actual será mantido. Isto é relativo à posição "
+#~ "do dock, parâmetros de comportamento tais como auto-ocultar, usar ou não "
+#~ "barra de tarefas, etc."
+
+#~ msgid "Use the new theme's behaviour ?"
+#~ msgstr "Usar o novo comportamento do tema ?"
+
+#~ msgid "Save as :"
+#~ msgstr "Salvar como :"
+
+#~ msgid "Save current behaviour too ?"
+#~ msgstr "Salvar também o comportamento actual :"
+
+#~ msgid "Save current launchers too ?"
+#~ msgstr "Salvar também os lançadores actuais ?"
+
+#~ msgid ""
+#~ "The dock will build a complete tarball of your current theme, allowing you "
+#~ "to exchange it easily with other people."
+#~ msgstr ""
+#~ "O dock construirá um tarball completo para seu tema actual, permitindo a "
+#~ "você trocá-lo facilmente com outras pessoas."
+
+#~ msgid "Build a package of the theme ?"
+#~ msgstr "Construir um pacote do tema actual ?"
+
+#~ msgid "List of your personnal themes"
+#~ msgstr "Lista de seus temas pessoais"
+
+#~ msgid "Delete from the list themes you don't want anymore :"
+#~ msgstr ""
+#~ "Remover da lista de seus temas pessoas aqueles que você não deseja mais :"
 
 #~ msgid "Happy Birthday Cairo-Dock !!! :-)"
 #~ msgstr "Feliz Aniversário, Cairo-Dock !!! :-)"
@@ -5229,14 +6872,45 @@ msgstr ""
 #~ "Os ícones serão posicionados na distância correta da borda de frente à "
 #~ "estrutura, assim o reflexo é completamente visível."
 
+#~ msgid "Do you want to keep this setting ?"
+#~ msgstr "Deseja manter esta definição?"
+
+#~ msgid "theme"
+#~ msgstr "tema"
+
+#~ msgid "rating"
+#~ msgstr "classificação"
+
 #~ msgid "Speed :"
 #~ msgstr "Velocidade :"
+
+#~ msgid "Color"
+#~ msgstr "Cor"
+
+#~ msgid ""
+#~ "The smaller, the slower the decorations will move along with the cursor."
+#~ msgstr ""
+#~ "Quanto menor, mais lento a decoração se moverá com o cursor. Em 0 isto será "
+#~ "estático."
+
+#, c-format
+#~ msgid ""
+#~ "couldn't get distant file %s/%s, maybe the server is down.\n"
+#~ "Please retry later or contact us at glx-dock.org."
+#~ msgstr ""
+#~ "não foi possível obter ficheiros remotos %s/%s, talvez o servidor esteja "
+#~ "fora do ar.\n"
+#~ "Tente novamente mais tarde ou contacte-nos em glx-dock.org."
 
 #~ msgid "Do you want to mount this device?"
 #~ msgstr "Deseja montar este ponto ?"
 
 #~ msgid "Controllers"
 #~ msgstr "Controladores"
+
+#, c-format
+#~ msgid "Set position for the '%s' dock"
+#~ msgstr "Defina a posição para o dock '%s'"
 
 #~ msgid ""
 #~ "Warning: could not delete this file.\n"
@@ -5289,8 +6963,16 @@ msgstr ""
 #~ msgid "Click to show sub-docks"
 #~ msgstr "Clicar para mostrar sub-docks ?"
 
+#~ msgid "Delay before leaving or entering a sub-dock takes effect:"
+#~ msgstr "Atraso antes de você efectivamente sair de/para um sub-dock :"
+
 #~ msgid "in ms. Unused if you activate the click to show sub-docks."
 #~ msgstr "em ms. Não usado se você definir 'clicar para mostrar sub-docks'."
+
+#~ msgid ""
+#~ "Cairo-Dock will then replace your taskbar. It is recommended to remove any "
+#~ "other taskbars and to not force the dock type to normal."
+#~ msgstr "Cairo-Dock substituirá sua Barra de tarefas."
 
 #~ msgid "Overwrite the X icon with the launchers' icon"
 #~ msgstr "Sobrescrever os ícones do X pelos do lançador ?"
@@ -5422,3 +7104,13 @@ msgstr ""
 
 #~ msgid "Program class:"
 #~ msgstr "Classe do programa :"
+
+#, c-format
+#~ msgid "Configuration of the '%s' dock"
+#~ msgstr "Configuração da Doca '%s'"
+
+#~ msgid "sub-dock"
+#~ msgstr "sub-Doca"
+
+#~ msgid "main dock"
+#~ msgstr "Doca principal"

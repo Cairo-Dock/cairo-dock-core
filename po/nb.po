@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2011-01-01 04:03+0000\n"
-"PO-Revision-Date: 2010-11-30 02:41+0000\n"
-"Last-Translator: Espen Krømke <beamboom@gmail.com>\n"
+"PO-Revision-Date: 2011-02-08 13:43+0000\n"
+"Last-Translator: EspenK <espen.kromke@beatradar.no>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-02 04:43+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-02-09 04:52+0000\n"
+"X-Generator: Launchpad (build 12177)\n"
 "Language: nb\n"
 
 #: ../src/cairo-dock-gui-commons.c:215
@@ -30,23 +30,23 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:241
 msgid "Please wait while importing the theme..."
-msgstr ""
+msgstr "Vennligst vent mens tema lastes..."
 
 #: ../src/cairo-dock-gui-commons.c:304
 msgid "Bottom dock"
-msgstr ""
+msgstr "Nedre dokk"
 
 #: ../src/cairo-dock-gui-commons.c:306
 msgid "Top dock"
-msgstr ""
+msgstr "Øvre dokk"
 
 #: ../src/cairo-dock-gui-commons.c:311
 msgid "Right dock"
-msgstr ""
+msgstr "Høyre dokk"
 
 #: ../src/cairo-dock-gui-commons.c:313
 msgid "Left dock"
-msgstr ""
+msgstr "Venstre dokk"
 
 #: ../src/cairo-dock-gui-commons.c:410 ../src/cairo-dock-menu.c:1373
 msgid "Configure this applet"
@@ -88,8 +88,9 @@ msgstr "kategori"
 
 #: ../src/cairo-dock-gui-items.c:334
 msgid ""
-"Main dock's parameters are available in the main configuration window."
+"Main dock's paramaters are available in the main configuration window."
 msgstr ""
+"Hoved-dokkens parametre er tilgjengelig i vindu for hovedkonfigurasjon."
 
 #: ../src/cairo-dock-gui-items.c:571
 msgid "Launcher configuration"
@@ -389,7 +390,7 @@ msgstr "Behandle drakter"
 
 #: ../src/cairo-dock-menu.c:169
 msgid "About Cairo-Dock"
-msgstr ""
+msgstr "Om Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:196 ../data/messages:1287
 msgid "Community site"
@@ -613,11 +614,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1164
 msgid "Main dock"
-msgstr ""
+msgstr "Hoved-dokk"
 
 #: ../src/cairo-dock-menu.c:1167 ../data/messages:1579
 msgid "Separator"
-msgstr ""
+msgstr "Skillelinje"
 
 #: ../src/cairo-dock-menu.c:1171
 msgid "Custom launcher"
@@ -4545,11 +4546,50 @@ msgstr ""
 #~ msgid "%s is now mounted"
 #~ msgstr "%s er nå montert"
 
+#~ msgid "Use OpenGL in Cairo-Dock ?"
+#~ msgstr "Bruke OpenGL i Cairo-Dock?"
+
+#~ msgid "Do you want to mount this point ?"
+#~ msgstr "Ønsker du å montere denne?"
+
+#~ msgid "Do you want to monitor the content of the directory ?"
+#~ msgstr "Ønsker du å overvåke innholdet i denne mappen?"
+
+#~ msgid "theme"
+#~ msgstr "drakt"
+
+#~ msgid "rating"
+#~ msgstr "vurdering"
+
+#~ msgid "You have to try the theme before you can rate it."
+#~ msgstr "Du må prøve ut drakten før du kan vurdere den."
+
+#~ msgid "Highlight words"
+#~ msgstr "Marker ord"
+
 #~ msgid "Plug-ins"
 #~ msgstr "Tillegg"
 
+#~ msgid "Activate this module"
+#~ msgstr "Aktiver denne modulen"
+
+#~ msgid "Configuration of Cairo-Dock"
+#~ msgstr "Konfigurer Cairo-Dock"
+
+#~ msgid "Do you want to activate it now ?"
+#~ msgstr "Ønsker du å aktivere den nå?"
+
+#~ msgid "Set a background to your dock."
+#~ msgstr "Velg en bakgrunn for samlevinduet."
+
 #~ msgid "Hidden Dock"
 #~ msgstr "Skjult samlevindu"
+
+#~ msgid "Configure the look of the dialog bubbles."
+#~ msgstr "Velg utseende for meldingsbobler."
+
+#~ msgid "Quit Cairo-Dock ?"
+#~ msgstr "Avslutte Cairo-Dock?"
 
 #~ msgid "Undefined"
 #~ msgstr "Ikke angitt"
@@ -4558,8 +4598,73 @@ msgstr ""
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s er nå avmontert"
 
+#, c-format
+#~ msgid "failed to unmount %s"
+#~ msgstr "avmontering av %s mislyktes"
+
+#, c-format
+#~ msgid "The module '%s' is not activated."
+#~ msgstr "Modulen %s er ikke aktivert"
+
+#~ msgid "The applets can be set on your desktop as widgets."
+#~ msgstr "Miniprogrammene kan brukes på skrivebordet som widgets."
+
+#~ msgid ""
+#~ "the theme couldn't be found; the default theme will be used instead.\n"
+#~ " You can change this by opening the configuration of this module; do you "
+#~ "want to do it now ?"
+#~ msgstr ""
+#~ "drakten kunne ikke hentes; standarddrakten vil brukes istedet.\n"
+#~ " Du kan endre dette ved å åpne konfigurasjonen av denne modulen; ønsker du å "
+#~ "gjøre dette nå?"
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' plug-in is not active.\n"
+#~ "Be sure to activate it to enjoy these features."
+#~ msgstr ""
+#~ "Utvidelsen '%s' er ikke aktivert.\n"
+#~ "Denne må aktiveres for å kunne bruke disse funksjonene."
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' module was not found.\n"
+#~ "Be sure to install it in the same version as the dock to enjoy these "
+#~ "features."
+#~ msgstr ""
+#~ "Modulen '%s' ble ikke funnet.\n"
+#~ "Vær sikker på at denne er installert i samme versjon som samlevinduet for å "
+#~ "kunne bruke alle funksjonene."
+
+#~ msgid "Configuration of the launchers"
+#~ msgstr "Konfigurere oppstartere"
+
+#~ msgid "Indicators are extra indications on your icons."
+#~ msgstr "Indikatorer er ytterligere indikasjoner på ikonene dine."
+
+#~ msgid "Rename to :"
+#~ msgstr "Gi nytt navn:"
+
+#~ msgid "This icon doesn't have a desktop file."
+#~ msgstr "Dette ikonet har ingen skrivebordsfil."
+
+#~ msgid "Set up this dock"
+#~ msgstr "Sett opp dette samlevinduet"
+
+#~ msgid "Set up the position of this main dock."
+#~ msgstr "Velg posisjonen til hovedsamlevinduet."
+
+#~ msgid "unlock dock"
+#~ msgstr "lås opp samlevindu"
+
+#~ msgid "lock dock"
+#~ msgstr "lås samlevindu"
+
 #~ msgid "Add a separator"
 #~ msgstr "Legg til separator"
+
+#~ msgid "Add a custom launcher"
+#~ msgstr "Legg til egendefinert oppstarter"
 
 #~ msgid "Eject"
 #~ msgstr "Løs ut"
@@ -4567,8 +4672,17 @@ msgstr ""
 #~ msgid "Mount"
 #~ msgstr "Monter"
 
+#~ msgid "Unmount"
+#~ msgstr "Avmonter"
+
+#~ msgid "Add a sub-dock"
+#~ msgstr "Legg til i under-samlevindu"
+
 #~ msgid "Delete this file"
 #~ msgstr "Slett denne filen"
+
+#~ msgid "A new main dock"
+#~ msgstr "Et nytt hovedsamlevindu"
 
 #~ msgid "Properties"
 #~ msgstr "Egenskaper"
@@ -4576,8 +4690,26 @@ msgstr ""
 #~ msgid "Rename this file"
 #~ msgstr "Gi nytt navn til denne filen"
 
+#~ msgid "Maximize"
+#~ msgstr "Maksimer"
+
+#~ msgid "Minimize"
+#~ msgstr "Minimer"
+
+#~ msgid "Return to dock"
+#~ msgstr "Returner til samlevindu"
+
 #~ msgid "Close"
 #~ msgstr "Lukk"
+
+#~ msgid "Are you sure you want to delete these themes ?"
+#~ msgstr "Ønsker du å slette disse draktene?"
+
+#~ msgid "default"
+#~ msgstr "standard"
+
+#~ msgid "The theme couldn't be saved"
+#~ msgstr "Drakten kunne ikke lagres"
 
 #~ msgid "The theme has been deleted"
 #~ msgstr "Drakten har blitt slettet"
@@ -4586,17 +4718,57 @@ msgstr ""
 #~ msgid "Downloading file %s ..."
 #~ msgstr "Laster ned fil %s ..."
 
+#, c-format
+#~ msgid "Are you sure you want to overwrite theme %s ?"
+#~ msgstr "Ønsker du å overskrive drakt %s?"
+
 #~ msgid "Now reloading theme ..."
 #~ msgstr "Laster drakt på nytt ..."
 
 #~ msgid "Applying changes ..."
 #~ msgstr "Utfører endringer ..."
 
+#~ msgid "Do you want to keep this setting ?"
+#~ msgstr "Ønsker du å beholde disse innstillingene?"
+
+#~ msgid "Distance to the screen's edge :"
+#~ msgstr "Avstand fra skjermkant:"
+
+#~ msgid "Relative alignment :"
+#~ msgstr "Relativ plassering:"
+
+#~ msgid "Use Xinerama ?"
+#~ msgstr "Bruke Xinerama?"
+
+#~ msgid "Visibility :"
+#~ msgstr "Synlighet:"
+
 #~ msgid "Automatically hide when a window is maximized"
 #~ msgstr "Skjul automatisk når vinduer maksimeres"
 
 #~ msgid "Automatically hide the dock"
 #~ msgstr "Skjul samlevindu automatisk"
+
+#, c-format
+#~ msgid "You're about removing this icon (%s) from the dock. Sure ?"
+#~ msgstr ""
+#~ "Du er i ferd med å fjerne dette ikonet (%s) fra samlevinduet. Er du sikker?"
+
+#~ msgid "Define the style of the icons' labels and quick-info."
+#~ msgstr "Bestem ikonetikettenes stil og beskrivelse"
+
+#~ msgid ""
+#~ "All about icons :\n"
+#~ " size, reflection, icon theme, ..."
+#~ msgstr ""
+#~ "Alt om ikoner:\n"
+#~ " størrelse, gjenskinn, ikondrakt, ..."
+
+#~ msgid "All the parameters you will never want to tweak."
+#~ msgstr "Alle innstillingene som du aldri vil ønske å endre på."
+
+#~ msgid "It provides many animations to your icons."
+#~ msgstr "Tilfører animasjoner til ikonene dine."
 
 #, c-format
 #~ msgid ""
@@ -4608,11 +4780,39 @@ msgstr ""
 #~ "  (%s)\n"
 #~ "fra harddisken. Er du sikker?"
 
+#~ msgid "unlock icons"
+#~ msgstr "lås opp ikoner"
+
+#~ msgid ""
+#~ "There is no problem, there is only solution (and a lot of useful hints !)."
+#~ msgstr ""
+#~ "Det finnes ikke problemer, kun løsninger (og massevis av nyttige hint og "
+#~ "vink!)."
+
+#~ msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
+#~ msgstr ""
+#~ "Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
+
+#~ msgid "Find out the latest version of Cairo-Dock here !."
+#~ msgstr "Skaff siste versjon av Cairo-Dock her!"
+
+#~ msgid "lock icons"
+#~ msgstr "lås ikoner"
+
+#~ msgid "Development's site"
+#~ msgstr "Utviklers nettside"
+
+#~ msgid "Unmaximize"
+#~ msgstr "Gjenopprett"
+
 #~ msgid "Do you want to monitor the content of this directory?"
 #~ msgstr "Ønsker du å overvåke innholdet i denne mappen?"
 
 #~ msgid "Rename to:"
 #~ msgstr "Gi nytt navn:"
+
+#~ msgid "Set the position of this main dock."
+#~ msgstr "Velg posisjonen til hovedsamlevinduet."
 
 #~ msgid "The theme could not be saved"
 #~ msgstr "Drakten kunne ikke lagres"
@@ -4638,14 +4838,28 @@ msgstr ""
 #~ msgid "Controllers"
 #~ msgstr "Kontrollører"
 
+#, c-format
+#~ msgid "Importing theme %s ..."
+#~ msgstr "Importer drakt %s ..."
+
+#~ msgid "The theme has been saved"
+#~ msgstr "Drakten ble lagret"
+
 #~ msgid "The themes could not be deleted"
 #~ msgstr "Draktene kunne ikke slettes"
 
 #~ msgid "The theme could not be deleted"
 #~ msgstr "Drakten kunne ikke slettes"
 
+#~ msgid "The themes have been deleted"
+#~ msgstr "Drakten ble slettet"
+
 #~ msgid "Define the appearance of the dock when it's hidden."
 #~ msgstr "Definer utseendet på samlevinduet når det er skjult."
+
+#, c-format
+#~ msgid "Set position for the '%s' dock"
+#~ msgstr "Angi posisjon for samlevinduet '%s'"
 
 #~ msgid ""
 #~ "Warning: could not delete this file.\n"
@@ -4667,11 +4881,17 @@ msgstr ""
 #~ msgid "Windows7"
 #~ msgstr "Windows7"
 
+#~ msgid "Animations"
+#~ msgstr "Animasjoner"
+
 #~ msgid "Applets"
 #~ msgstr "Miniprogrammer"
 
 #~ msgid "Choose one of the available themes:"
 #~ msgstr "Velg en av de tilgjengelige draktene:"
+
+#~ msgid "Add or remove any applet :"
+#~ msgstr "Legg til eller fjern et miniprogram:"
 
 #~ msgid "Size of the callback zone (width x height, in pixels):"
 #~ msgstr "Størrelse på tilbakekallingssonen (bredde x høyde, i piksler):"
@@ -4689,11 +4909,21 @@ msgstr ""
 #~ msgid "Click to show sub-docks"
 #~ msgstr "Klikk for å vise under-samlevinduer"
 
+#~ msgid "Delay before leaving or entering a sub-dock takes effect:"
+#~ msgstr ""
+#~ "Forsinkelse før effekt av å gå inn i eller ut av et under-samlevindu:"
+
 #~ msgid "in ms. Unused if you activate the click to show sub-docks."
 #~ msgstr "i ms. Ubrukt hvis du aktiverer klikk for å vise under-samlevindu."
 
+#~ msgid "Customize the position, visibility and view of this main dock."
+#~ msgstr "Bestem posisjon, synlighet og utseende til dette hovedpanelet."
+
 #~ msgid "Add a main dock"
 #~ msgstr "Legg til et hovedpanel"
+
+#~ msgid "rate me"
+#~ msgstr "vurder meg"
 
 #, c-format
 #~ msgid "Configuration of the '%s' dock"
@@ -4705,8 +4935,20 @@ msgstr ""
 #~ msgid "Label readability"
 #~ msgstr "Tittelens lesevennlighet"
 
+#~ msgid "Connection to the themes' server"
+#~ msgstr "Kobling til tema-servereren"
+
 #~ msgid "Show hidden files?"
 #~ msgstr "Vis skjulte filer?"
 
+#~ msgid "Maximum time to download a theme:"
+#~ msgstr "Lengste tid for å laste ned et tema:"
+
+#~ msgid "Connection timeout to the themes' server :"
+#~ msgstr "Tidsgrense for oppkoblingstid til tema-serveren:"
+
 #~ msgid "sub-dock"
 #~ msgstr "under-dokk"
+
+#~ msgid "main dock"
+#~ msgstr "hoved-dokk"
