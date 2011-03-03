@@ -1429,46 +1429,51 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 		GSList *group = NULL;
 
-		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		Window Xid = GDK_WINDOW_XID (pContainer->pWidget->window);
+		/*gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		cairo_dock_xwindow_is_above_or_below (Xid, &bIsAbove, &bIsBelow);  // gdk_window_get_state bugue.
 		gboolean bIsUtility = cairo_dock_window_is_utility (Xid);  // gtk_window_get_type_hint me renvoie toujours 0 !
-		gboolean bIsDock = (/*cairo_dock_window_is_dock (Xid) || */CAIRO_DESKLET (pContainer)->bSpaceReserved);
-		gboolean bIsNormal = (!bIsAbove && !bIsBelow && !bIsUtility && !bIsDock);
-		gboolean bIsSticky = /*(cairo_dock_get_xwindow_desktop (Xid) == -1) || */cairo_dock_xwindow_is_sticky (Xid);
+		gboolean bIsDock = (CAIRO_DESKLET (pContainer)->bSpaceReserved);
+		gboolean bIsNormal = (!bIsAbove && !bIsBelow && !bIsUtility && !bIsDock);*/
+		gboolean bIsSticky = cairo_dock_xwindow_is_sticky (Xid);
+		CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
+		CairoDeskletVisibility iVisibility = pDesklet->iVisibility;
 		
 		pMenuItem = gtk_radio_menu_item_new_with_label(group, _("Normal"));
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));
 		gtk_menu_shell_append(GTK_MENU_SHELL(pSubMenuAccessibility), pMenuItem);
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), bIsNormal);  // on coche celui-ci par defaut, il sera decoche par les suivants eventuellement.
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), iVisibility == CAIRO_DESKLET_NORMAL/*bIsNormal*/);  // on coche celui-ci par defaut, il sera decoche par les suivants eventuellement.
 		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_keep_normal), data);
 		
 		pMenuItem = gtk_radio_menu_item_new_with_label(group, _("Always on top"));
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));
 		gtk_menu_shell_append(GTK_MENU_SHELL(pSubMenuAccessibility), pMenuItem);
-		if (bIsAbove)
+		if (iVisibility == CAIRO_DESKLET_KEEP_ABOVE/*bIsAbove*/)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), TRUE);
 		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_keep_above), data);
 		
 		pMenuItem = gtk_radio_menu_item_new_with_label(group, _("Always below"));
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));
 		gtk_menu_shell_append(GTK_MENU_SHELL(pSubMenuAccessibility), pMenuItem);
-		if (bIsBelow)
+		if (iVisibility == CAIRO_DESKLET_KEEP_BELOW/*bIsBelow*/)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), TRUE);
 		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_keep_below), data);
 		
-		pMenuItem = gtk_radio_menu_item_new_with_label(group, "Compiz Fusion Widget");
-		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));
-		gtk_menu_shell_append(GTK_MENU_SHELL(pSubMenuAccessibility), pMenuItem);
-		if (bIsUtility)
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), TRUE);
-		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_keep_on_widget_layer), data);
-		gtk_widget_set_tooltip_text (pMenuItem, _("Set behaviour in Compiz to: (name=cairo-dock & type=utility)"));
+		if (cairo_dock_wm_can_set_on_widget_layer ())
+		{
+			pMenuItem = gtk_radio_menu_item_new_with_label(group, "Widget Layer");
+			group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));
+			gtk_menu_shell_append(GTK_MENU_SHELL(pSubMenuAccessibility), pMenuItem);
+			if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER/*bIsUtility*/)
+				gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), TRUE);
+			g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_keep_on_widget_layer), data);
+			gtk_widget_set_tooltip_text (pMenuItem, _("Set behaviour in Compiz to: (name=cairo-dock & type=utility)"));
+		}
 		
 		pMenuItem = gtk_radio_menu_item_new_with_label(group, _("Reserve space"));
 		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(pMenuItem));
 		gtk_menu_shell_append(GTK_MENU_SHELL(pSubMenuAccessibility), pMenuItem);
-		if (bIsDock)
+		if (iVisibility == CAIRO_DESKLET_RESERVE_SPACE/*bIsDock*/)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), TRUE);
 		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_keep_space), data);
 		

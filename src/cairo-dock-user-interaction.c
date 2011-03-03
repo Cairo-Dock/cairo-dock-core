@@ -25,6 +25,7 @@
 #include <cairo.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
+#include <X11/Xatom.h>
 
 #include "cairo-dock-animations.h"
 #include "cairo-dock-icon-facility.h"
@@ -46,7 +47,9 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-backend.h"
+#include "cairo-dock-dbus.h"
 #include "cairo-dock-user-interaction.h"
 
 extern gboolean g_bLocked;
@@ -201,35 +204,11 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
 	
-	/// TODO: compiz/kwin integration ...
+	// scale.
 	if (CAIRO_DOCK_IS_MULTI_APPLI(icon))
 	{
-		gboolean bAllHidden = TRUE;
-		if (icon->pSubDock != NULL)
-		{
-			Icon *pOneIcon;
-			GList *ic;
-			for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-			{
-				pOneIcon = ic->data;
-				bAllHidden &= pOneIcon->bIsHidden;
-			}
-		}
-		if (! bAllHidden)  // the Expose does not work for hidden windows, so let's skip the case where all the windows of the class are hidden.
-		{
-			gchar *cCommand = g_strdup_printf ("dbus-send  --type=method_call --dest=org.freedesktop.compiz  /org/freedesktop/compiz/scale/allscreens/initiate_all_key  org.freedesktop.compiz.activate string:'root' int32:%d string:\"match\"  string:'class=.*%s'", cairo_dock_get_root_id (), icon->cClass+1);  /// we need the real class here...
-			g_print ("%s\n", cCommand);
-			int r = system (cCommand);
-			g_free (cCommand);
-			if (r == 0)
-			{
-				if (icon->pSubDock != NULL)
-				{
-					cairo_dock_emit_leave_signal (CAIRO_CONTAINER (icon->pSubDock));
-				}
-				return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-			}
-		}
+		if (cairo_dock_wm_present_class (icon->cClass))
+			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	}
 	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
 	{
@@ -502,7 +481,7 @@ gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, 
 gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *pDock)
 {
 	g_print ("dock destroyed\n");
-		cairo_dock_gui_trigger_reload_items ();
+	cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -527,6 +506,8 @@ gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockM
 {
 	g_print ("module %s (de)tached (%d)\n", pInstance->pModule->pVisitCard->cModuleName, bIsDetached);
 	cairo_dock_gui_trigger_update_module_container (pInstance, bIsDetached);
+	
+	cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
