@@ -33,9 +33,13 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-desklet-manager.h"  // cairo_dock_foreach_desklet
+#include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dock-manager.h"  // cairo_dock_reposition_root_docks
 #include "cairo-dock-class-manager.h"  // cairo_dock_initialize_class_manager
 #include "cairo-dock-draw-opengl.h"  // cairo_dock_create_texture_from_surface
+#include "cairo-dock-compiz-integration.h"
+#include "cairo-dock-kwin-integration.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-X-manager.h"
 
@@ -62,12 +66,13 @@ static Atom s_aRootMapID;
 static Atom s_aNetNbDesktops;
 static Atom s_aXKlavierState;
 static CairoDockDesktopBackground *s_pDesktopBg = NULL;  // une fois alloue, le pointeur restera le meme tout le temps.
+static CairoDockWMBackend *s_pWMBackend = NULL;
 
 static void _cairo_dock_reload_desktop_background (void);
 
-  /////////////////////////
- /// X listener : core ///
-/////////////////////////
+  ////////////////
+ /// X events ///
+////////////////
 
 static inline void _cairo_dock_retrieve_current_desktop_and_viewport (void)
 {
@@ -223,15 +228,111 @@ static void cairo_dock_initialize_X_manager (Display *pDisplay)
 	s_aXKlavierState		= XInternAtom (s_XDisplay, "XKLAVIER_STATE", False);
 }
 
-  ///////////////////////////
- /// X listener : access ///
-///////////////////////////
+
+  ////////////////////////
+ /// X desktop access ///
+////////////////////////
 
 void cairo_dock_get_current_desktop_and_viewport (int *iCurrentDesktop, int *iCurrentViewportX, int *iCurrentViewportY)
 {
 	*iCurrentDesktop = g_desktopGeometry.iCurrentDesktop;
 	*iCurrentViewportX = g_desktopGeometry.iCurrentViewportX;
 	*iCurrentViewportY = g_desktopGeometry.iCurrentViewportY;
+}
+
+
+  //////////////////////////////
+ /// WINDOW MANAGER BACKEND ///
+//////////////////////////////
+
+static gboolean _set_desklets_on_widget_layer (CairoDesklet *pDesklet, gpointer data)
+{
+	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
+	if (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
+		cairo_dock_wm_set_on_widget_layer (Xid, TRUE);
+	return FALSE;  // continue
+}
+void cairo_dock_wm_register_backend (CairoDockWMBackend *pBackend)
+{
+	g_free (s_pWMBackend);
+	s_pWMBackend = pBackend;
+	
+	// since we have a backend, set up the desklets that are supposed to be on the widget layer.
+	if (pBackend->set_on_widget_layer != NULL)
+	{
+		cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _set_desklets_on_widget_layer, NULL);
+	}
+}
+
+gboolean cairo_dock_wm_present_class (const gchar *cClass)  // scale matching class
+{
+	g_return_val_if_fail (cClass != NULL, FALSE);
+	if (s_pWMBackend != NULL && s_pWMBackend->present_class != NULL)
+	{
+		return s_pWMBackend->present_class (cClass);
+	}
+	return FALSE;
+}
+
+gboolean cairo_dock_wm_present_windows (void)  // scale
+{
+	if (s_pWMBackend != NULL && s_pWMBackend->present_windows != NULL)
+	{
+		return s_pWMBackend->present_windows ();
+	}
+	return FALSE;
+}
+
+gboolean cairo_dock_wm_present_desktops (void)  // expose
+{
+	if (s_pWMBackend != NULL && s_pWMBackend->present_desktops != NULL)
+	{
+		return s_pWMBackend->present_desktops ();
+	}
+	return FALSE;
+}
+
+gboolean cairo_dock_wm_show_widget_layer (void)  // widget
+{
+	if (s_pWMBackend != NULL && s_pWMBackend->show_widget_layer != NULL)
+	{
+		return s_pWMBackend->show_widget_layer ();
+	}
+	return FALSE;
+}
+
+gboolean cairo_dock_wm_set_on_widget_layer (Window Xid, gboolean bOnWidgetLayer)
+{
+	if (s_pWMBackend != NULL && s_pWMBackend->set_on_widget_layer != NULL)
+	{
+		return s_pWMBackend->set_on_widget_layer (Xid, bOnWidgetLayer);
+	}
+	return FALSE;
+}
+
+gboolean cairo_dock_wm_can_present_class (void)
+{
+	return (s_pWMBackend != NULL && s_pWMBackend->present_class != NULL);
+}
+
+gboolean cairo_dock_wm_can_present_windows (void)
+{
+	return (s_pWMBackend != NULL && s_pWMBackend->present_windows != NULL);
+}
+
+gboolean cairo_dock_wm_can_present_desktops (void)
+{
+	return (s_pWMBackend != NULL && s_pWMBackend->present_desktops != NULL);
+}
+
+gboolean cairo_dock_wm_can_show_widget_layer (void)
+{
+	return (s_pWMBackend != NULL && s_pWMBackend->show_widget_layer != NULL);
+}
+
+gboolean cairo_dock_wm_can_set_on_widget_layer (void)
+{
+	return (s_pWMBackend != NULL && s_pWMBackend->set_on_widget_layer != NULL);
 }
 
 
@@ -454,6 +555,10 @@ static void init (void)
 	
 	//\__________________ On lance l'ecoute.
 	s_iSidPollXEvents = g_timeout_add (CAIRO_DOCK_CHECK_XEVENTS_INTERVAL, (GSourceFunc) _cairo_dock_unstack_Xevents, (gpointer) NULL);  // un g_idle_add () consomme 90% de CPU ! :-/
+	
+	//\__________________ Init the Window Manager backends.
+	cd_init_compiz_backend ();
+	cd_init_kwin_backend ();
 }
 
 

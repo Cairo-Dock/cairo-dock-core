@@ -33,6 +33,8 @@ G_BEGIN_DECLS
 
 #define G_VALUE_INIT {0,{{0}}}  // bonne idée d'un dev de GTK, pour eviter les warnings de gcc.
 
+typedef void (*CairoDockDbusNameOwnerChangedFunc) (gboolean bOwned, gpointer data);
+
 /** Get the connection to the 'session' Bus.
 *@return the connection to the bus.
 */
@@ -53,6 +55,11 @@ gboolean cairo_dock_register_service_name (const gchar *cServiceName);
 *@return TRUE if the connection to the bus has been established.
 */
 gboolean cairo_dock_dbus_is_enabled (void);
+
+void cairo_dock_watch_dbus_name_owner (const char *cName, CairoDockDbusNameOwnerChangedFunc pCallback, gpointer data);
+
+void cairo_dock_stop_watching_dbus_name_owner (const char *cName, CairoDockDbusNameOwnerChangedFunc pCallback);
+
 
 /** Create a new proxy for the 'session' connection.
 *@param name a name on the bus.

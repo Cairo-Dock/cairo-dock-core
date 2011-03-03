@@ -382,7 +382,8 @@ static gboolean on_unmap_desklet (GtkWidget* pWidget,
 {
 	cd_debug ("unmap desklet (bAllowMinimize:%d)\n", pDesklet->bAllowMinimize);
 	Window Xid = GDK_WINDOW_XID (pWidget->window);
-	if (cairo_dock_window_is_utility (Xid))  // sur la couche des widgets, on ne fait rien.
+	if (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)  // on the widget layer, let pass the unmap event..
+	//if (cairo_dock_window_is_utility (Xid))  // sur la couche des widgets, on ne fait rien.
 		return FALSE;
 	if (! pDesklet->bAllowMinimize)
 	{
@@ -1148,17 +1149,29 @@ static void _cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gbool
 //set behaviour in compiz to: (class=Cairo-dock & type=utility)
 void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibility iVisibility, gboolean bSaveState)
 {
-	//g_print ("%s (%d)\n", __func__, iVisibility);
+	g_print ("%s (%d)\n", __func__, iVisibility);
 	
 	//\_________________ On applique la nouvelle accessibilite.
 	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_BELOW);
 	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_ABOVE);
 
 	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
-	if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
+	cairo_dock_wm_set_on_widget_layer (Xid, iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER);
+	/*if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
+	{
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");  // le hide-show le fait deconner completement, il perd son skip_task_bar ! au moins sous KDE3.
+		//~ XClassHint *class_hints = XAllocClassHint ();
+		//~ class_hints->res_name = (gchar*)"plasma-desktop";  // dashboard dashboard
+		//~ class_hints->res_class = (gchar*)"Plasma-desktop";
+		//~ XSetClassHint (cairo_dock_get_Xdisplay (),
+			//~ GDK_WINDOW_XID (pDesklet->container.pWidget->window),
+			//~ class_hints);
+		//~ XFree (class_hints);
+	}
 	else
+	{
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
+	}*/
 	
 	if (iVisibility == CAIRO_DESKLET_RESERVE_SPACE)
 	{
@@ -1171,6 +1184,8 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletV
 	}
 	
 	//\_________________ On enregistre le nouvel etat.
+	pDesklet->iVisibility = iVisibility;
+	
 	Icon *icon = pDesklet->pIcon;
 	if (bSaveState && CAIRO_DOCK_IS_APPLET (icon))
 		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
@@ -1178,7 +1193,7 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletV
 			G_TYPE_INVALID);
 	
 	//\_________________ On verifie que la regle de Compiz est correcte.
-	if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER && bSaveState)
+	/*if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER && bSaveState)
 	{
 		// pour activer le plug-in, recuperer la liste, y rajouter widget-layer, puis envoyer :
 		//dbus-send --print-reply --type=method_call  --dest=org.freedesktop.compiz  /org/freedesktop/compiz/core/allscreens/active_plugins  org.freedesktop.compiz.get
@@ -1232,7 +1247,7 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletV
 			g_free (cNewRule);
 		}
 		g_free (cRule);
-	}
+	}*/
 }
 
 void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky)

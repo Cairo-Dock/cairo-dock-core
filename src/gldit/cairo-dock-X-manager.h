@@ -74,6 +74,38 @@ struct _CairoDockDesktopGeometry {
 	int iCurrentViewportX, iCurrentViewportY;
 	};
 
+
+/// Definition of the Window Manager backend.
+struct _CairoDockWMBackend {
+	gboolean (*present_class) (const gchar *cClass);
+	gboolean (*present_windows) (void);
+	gboolean (*present_desktops) (void);
+	gboolean (*show_widget_layer) (void);
+	gboolean (*set_on_widget_layer) (Window Xid, gboolean bOnWidgetLayer);
+	};
+
+
+/** Register a Window Manager backend, overwriting any previous one.
+*/
+void cairo_dock_wm_register_backend (CairoDockWMBackend *pBackend);
+
+gboolean cairo_dock_wm_present_class (const gchar *cClass);
+
+gboolean cairo_dock_wm_present_windows (void);
+
+gboolean cairo_dock_wm_present_desktops (void);
+
+gboolean cairo_dock_wm_show_widget_layer (void);
+
+gboolean cairo_dock_wm_set_on_widget_layer (Window Xid, gboolean bOnWidgetLayer);
+
+gboolean cairo_dock_wm_can_present_class (void);
+gboolean cairo_dock_wm_can_present_windows (void);
+gboolean cairo_dock_wm_can_present_desktops (void);
+gboolean cairo_dock_wm_can_show_widget_layer (void);
+gboolean cairo_dock_wm_can_set_on_widget_layer (void);
+
+
 // X manager : access
 /** Get the current workspace (desktop and viewport).
 *@param iCurrentDesktop will be filled with the current desktop number

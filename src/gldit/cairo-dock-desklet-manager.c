@@ -563,7 +563,8 @@ static void _cairo_dock_set_one_desklet_visible (CairoDesklet *pDesklet, gpointe
 {
 	gboolean bOnWidgetLayerToo = GPOINTER_TO_INT (data);
 	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
-	gboolean bIsOnWidgetLayer = cairo_dock_window_is_utility (Xid);
+	//gboolean bIsOnWidgetLayer = cairo_dock_window_is_utility (Xid);
+	gboolean bIsOnWidgetLayer = (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER);
 	if (bOnWidgetLayerToo || ! bIsOnWidgetLayer)
 	{
 		cd_debug ("%s (%d)", __func__, Xid);

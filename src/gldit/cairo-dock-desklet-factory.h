@@ -186,6 +186,9 @@ struct _CairoDesklet {
 	gboolean moving;  // pour le deplacement manuel de la fenetre.
 	gboolean bClicked;
 	guint time;  // date du clic.
+	
+	CairoDeskletVisibility iVisibility;
+	gpointer reserved[4];
 };
 
 /** Say if a Container is a Desklet.

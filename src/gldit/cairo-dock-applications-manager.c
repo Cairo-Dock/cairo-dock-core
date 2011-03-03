@@ -448,7 +448,8 @@ static void _on_change_window_state (Icon *icon)
 	}
 	
 	// demande d'attention.
-	if (bDemandsAttention && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))  // elle peut demander l'attention plusieurs fois de suite.
+	// seems like this demand should be ignored, or we'll get tons of demands under Kwin. Let's just watch the UrgencyHint in the WMHints.
+	/**if (bDemandsAttention && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))  // elle peut demander l'attention plusieurs fois de suite.
 	{
 		cd_debug ("%s demande votre attention %s !", icon->cName, icon->bIsDemandingAttention?"encore une fois":"");
 		cairo_dock_appli_demands_attention (icon);
@@ -460,7 +461,7 @@ static void _on_change_window_state (Icon *icon)
 			cd_debug ("%s se tait", icon->cName);
 			cairo_dock_appli_stops_demanding_attention (icon);
 		}
-	}
+	}*/
 	
 	// masquage du dock.
 	if (Xid == s_iCurrentActiveWindow)  // c'est la fenetre courante qui a change d'etat.
@@ -1118,7 +1119,9 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 	if (! s_bAppliManagerIsRunning)
 		return ;
 	cd_debug ("%s (main:%d)", __func__, pDock->bIsMainDock);
-
+	
+	/*long *data = g_new0 (long, 1+6*g_list_length (pDock->icons));
+	int i = 0;*/
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -1127,8 +1130,20 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
 			cairo_dock_set_one_icon_geometry_for_window_manager (icon, pDock);
+			/*data[1+6*i+0] = 5;
+			data[1+6*i+1] = icon->Xid;
+			data[1+6*i+2] = pDock->container.iWindowPositionX + icon->fXAtRest;
+			data[1+6*i+3] = 0;
+			data[1+6*i+4] = icon->fWidth;
+			data[1+6*i+5] = icon->fHeight;
+			i ++;*/
 		}
 	}
+	
+	/*data[0] = i;
+	Atom atom = XInternAtom (cairo_dock_get_Xdisplay(), "_KDE_WINDOW_PREVIEW", False);
+	Window Xid = GDK_WINDOW_XID (pDock->container.pWidget->window);
+	XChangeProperty(cairo_dock_get_Xdisplay(), Xid, atom, atom, 32, PropModeReplace, data, 1+6*i);*/
 	
 	if (pDock->bIsMainDock && myTaskbarParam.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
 	{

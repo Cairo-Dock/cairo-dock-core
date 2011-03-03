@@ -27,6 +27,7 @@ static DBusGConnection *s_pSessionConnexion = NULL;
 static DBusGConnection *s_pSystemConnexion = NULL;
 static DBusGProxy *s_pDBusSessionProxy = NULL;
 static DBusGProxy *s_pDBusSystemProxy = NULL;
+static GHashTable *s_pFilterTable = NULL;
 
 
 DBusGConnection *cairo_dock_get_session_connection (void)
@@ -104,6 +105,55 @@ gboolean cairo_dock_register_service_name (const gchar *cServiceName)
 gboolean cairo_dock_dbus_is_enabled (void)
 {
 	return (cairo_dock_get_session_connection () != NULL && cairo_dock_get_system_connection () != NULL);
+}
+
+static void on_name_owner_changed (DBusGProxy *pProxy, const gchar *cName, const gchar *cPrevOwner, const gchar *cNewOwner, gpointer data)
+{
+	g_print ("%s (%s)\n", __func__, cName);
+	gboolean bOwned = (cNewOwner != NULL && *cNewOwner != '\0');
+	GList *pFilter = g_hash_table_lookup (s_pFilterTable, cName);
+	GList *f;
+	for (f = pFilter; f != NULL; f = f->next)
+	{
+		gpointer *p = f->data;
+		CairoDockDbusNameOwnerChangedFunc pCallback = p[0];
+		pCallback (bOwned, p[1]);
+	}
+}
+void cairo_dock_watch_dbus_name_owner (const char *cName, CairoDockDbusNameOwnerChangedFunc pCallback, gpointer data)
+{
+	if (s_pFilterTable == NULL)
+	{
+		s_pFilterTable = g_hash_table_new_full (g_str_hash,
+			g_str_equal,
+			g_free,
+			NULL);
+
+		DBusGProxy *pProxy = cairo_dock_get_main_proxy ();
+		g_return_if_fail (pProxy != NULL);
+		
+		dbus_g_proxy_add_signal (pProxy, "NameOwnerChanged",
+			G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+			G_TYPE_INVALID);
+		dbus_g_proxy_connect_signal (pProxy, "NameOwnerChanged",
+			G_CALLBACK (on_name_owner_changed),
+			NULL, NULL);
+	}
+	GList *pFilter = g_hash_table_lookup (s_pFilterTable, cName);
+	gpointer *p = g_new0 (gpointer, 1);
+	p[0] = pCallback;
+	p[1] = data;
+	pFilter = g_list_prepend (pFilter, p);
+	g_hash_table_insert (s_pFilterTable, g_strdup (cName), pFilter);
+}
+
+void cairo_dock_stop_watching_dbus_name_owner (const char *cName, CairoDockDbusNameOwnerChangedFunc pCallback)
+{
+	GList *pFilter = g_hash_table_lookup (s_pFilterTable, cName);
+	if (pFilter == NULL)
+		return;
+	pFilter = g_list_remove (pFilter, pCallback);
+	g_hash_table_insert (s_pFilterTable, g_strdup (cName), pFilter);
 }
 
 

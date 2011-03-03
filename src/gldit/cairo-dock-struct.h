@@ -394,6 +394,8 @@ typedef struct _CairoDockDesktopGeometry CairoDockDesktopGeometry;
 
 typedef struct _CairoDockDesktopBackground CairoDockDesktopBackground;
 
+typedef struct _CairoDockWMBackend CairoDockWMBackend;
+
 typedef struct _CairoDockImageBuffer CairoDockImageBuffer;
 
 typedef struct _CairoEmblem CairoEmblem;
