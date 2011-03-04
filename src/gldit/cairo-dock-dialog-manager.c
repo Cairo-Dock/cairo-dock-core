@@ -972,12 +972,10 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		cd_debug ("fin de boucle bloquante -> %d\n", iClickedButton);
 		/*if (myDocksParam.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_pop_down (CAIRO_DOCK (pContainer));*/
-		if (CAIRO_DOCK_IS_DOCK (pContainer)/* && ! pDock->container.bInside*/)
+		if (CAIRO_DOCK_IS_DOCK (pContainer))
 		{
-			cd_message ("on force a quitter");
-			CairoDock *pDock = CAIRO_DOCK (pContainer);
-			//pDock->container.bInside = TRUE;
-			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+			g_print ("on force a quitter apres le dialogue bloquant\n");
+			cairo_dock_emit_leave_signal (pContainer);
 		}
 	}
 

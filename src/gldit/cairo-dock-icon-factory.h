@@ -275,7 +275,11 @@ struct _CairoIconContainerRenderer {
 /** TRUE if the icon is an icon pointing on the sub-dock of a class.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_MULTI_APPLI(icon) ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)) && icon->pSubDock != NULL)
+#define CAIRO_DOCK_IS_MULTI_APPLI(icon) (\
+	(  CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)\
+	|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)\
+	|| (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cClass != NULL) )\
+	&& icon->pSubDock != NULL)
 
 /** TRUE if the icon is an automatic separator.
 *@param icon an icon.
