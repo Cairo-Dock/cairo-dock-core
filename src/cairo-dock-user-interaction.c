@@ -208,7 +208,11 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	if (CAIRO_DOCK_IS_MULTI_APPLI(icon))
 	{
 		if (cairo_dock_wm_present_class (icon->cClass))
+		{
+			if (icon->pSubDock)
+				cairo_dock_emit_leave_signal (CAIRO_CONTAINER (icon->pSubDock));
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+		}
 	}
 	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
 	{
