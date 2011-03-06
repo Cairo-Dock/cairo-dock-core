@@ -107,7 +107,7 @@ lock all = false
 #F-[Behaviour;gtk-properties]
 frame1 =
 
-#b- Show currently opened applications in the dock?
+#B-[5] Show currently opened applications in the dock?
 #{Cairo-Dock will then act as your taskbar. It is recommended to remove any other taskbars.}
 show applications = true
 

@@ -775,7 +775,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		//g_print ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
 		if (pDock->iSidTestMouseOutside == 0 && pEvent)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
 		{
-			g_print ("start checking mouse\n");
+			//g_print ("start checking mouse\n");
 			pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
 		}
 		//g_print ("mouse: %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);

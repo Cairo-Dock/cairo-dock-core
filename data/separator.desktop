@@ -16,7 +16,7 @@ Exec=
 #F[Display]
 frame_display=
 
-#S Image's name or path :
+#> Separators' appearance is defined in the global configuration.
 Icon=
 
 #X[Extra parameters]

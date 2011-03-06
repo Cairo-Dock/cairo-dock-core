@@ -464,7 +464,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	pIcons->iSeparatorType = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "separator type", &bFlushConfFileNeeded, -1, NULL, NULL);
 	if (pIcons->iSeparatorType >= CAIRO_DOCK_NB_SEPARATOR_TYPES)  // nouveau parametre, avant il etait dans dock-rendering.
 	{
-		pIcons->iSeparatorType = 0;  // ce qui suit est tres moche, mais c'est pour eviter d'avoir a repasser derriere tous les themes.
+		pIcons->iSeparatorType = CAIRO_DOCK_NORMAL_SEPARATOR;  // ce qui suit est tres moche, mais c'est pour eviter d'avoir a repasser derriere tous les themes.
 		gchar *cMainDockDefaultRendererName = g_key_file_get_string (pKeyFile, "Views", "main dock view", NULL);
 		if (cMainDockDefaultRendererName && (strcmp (cMainDockDefaultRendererName, "3D plane") == 0 || strcmp (cMainDockDefaultRendererName, "Curve") == 0))
 		{
@@ -472,7 +472,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 			GKeyFile *keyfile = cairo_dock_open_key_file (cRenderingConfFile);
 			g_free (cRenderingConfFile);
 			if (keyfile == NULL)
-				pIcons->iSeparatorType = 0;
+				pIcons->iSeparatorType = CAIRO_DOCK_NORMAL_SEPARATOR;
 			else
 			{
 				gsize length=0;
@@ -505,7 +505,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		double couleur[4] = {0.9,0.9,1.0,1.0};
 		cairo_dock_get_double_list_key_value (pKeyFile, "Icons", "separator color", &bFlushConfFileNeeded, pIcons->fSeparatorColor, 4, couleur, NULL, NULL);
 	}
-	pIcons->cSeparatorImage = cairo_dock_get_string_key_value (pKeyFile, "Icons", "separator image", &bFlushConfFileNeeded, NULL, "Separators", NULL);
+	if (pIcons->iSeparatorType == CAIRO_DOCK_NORMAL_SEPARATOR)
+		pIcons->cSeparatorImage = cairo_dock_get_string_key_value (pKeyFile, "Icons", "separator image", &bFlushConfFileNeeded, NULL, "Separators", NULL);
 
 	pIcons->bRevolveSeparator = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "revolve separator image", &bFlushConfFileNeeded, TRUE, "Separators", NULL);
 

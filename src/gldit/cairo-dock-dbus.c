@@ -109,7 +109,7 @@ gboolean cairo_dock_dbus_is_enabled (void)
 
 static void on_name_owner_changed (DBusGProxy *pProxy, const gchar *cName, const gchar *cPrevOwner, const gchar *cNewOwner, gpointer data)
 {
-	g_print ("%s (%s)\n", __func__, cName);
+	//g_print ("%s (%s)\n", __func__, cName);
 	gboolean bOwned = (cNewOwner != NULL && *cNewOwner != '\0');
 	GList *pFilter = g_hash_table_lookup (s_pFilterTable, cName);
 	GList *f;

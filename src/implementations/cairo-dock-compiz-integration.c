@@ -321,20 +321,31 @@ static void _on_compiz_owner_changed (gboolean bOwned, gpointer data)
 	{
 		g_return_if_fail (s_pScaleProxy == NULL);
 		
+		gchar *cConfDir = g_strdup_printf ("%s/.config/compiz-1", g_getenv ("HOME"));
+		gboolean bNewCompiz = g_file_test (cConfDir, G_FILE_TEST_EXISTS);
+			
 		s_pScaleProxy = cairo_dock_create_new_session_proxy (
 			CD_COMPIZ_BUS,
-			CD_COMPIZ_OBJECT"/scale/allscreens/initiate_all_key",
+			bNewCompiz ?
+				CD_COMPIZ_OBJECT"/scale/screen0/initiate_all_key":
+				CD_COMPIZ_OBJECT"/scale/allscreens/initiate_all_key",
 			CD_COMPIZ_INTERFACE);
 		
 		s_pExposeProxy = cairo_dock_create_new_session_proxy (
 			CD_COMPIZ_BUS,
-			CD_COMPIZ_OBJECT"/expo/allscreens/expo_button",
+			bNewCompiz ?
+				CD_COMPIZ_OBJECT"/expo/screen0/expo_button":
+				CD_COMPIZ_OBJECT"/expo/allscreens/expo_button",
 			CD_COMPIZ_INTERFACE);
 		
 		s_pWidgetLayerProxy = cairo_dock_create_new_session_proxy (
 			CD_COMPIZ_BUS,
-			CD_COMPIZ_OBJECT"/widget/allscreens/toggle_button",
+			bNewCompiz ?
+				CD_COMPIZ_OBJECT"/widget/screen0/toggle_button":
+				CD_COMPIZ_OBJECT"/widget/allscreens/toggle_button",
 			CD_COMPIZ_INTERFACE);
+		
+		g_free (cConfDir);
 		
 		_register_compiz_backend ();
 	}
