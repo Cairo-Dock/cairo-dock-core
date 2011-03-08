@@ -566,6 +566,19 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 					cd_debug ("%s va fournir genereusement sa surface", pInhibitorIcon->cName);
 					return cairo_dock_duplicate_inhibitor_surface_for_appli (pInhibitorIcon, iWidth, iHeight);
 				}
+				else if (pInhibitorIcon->cFileName != NULL)
+				{
+					gchar *cIconFilePath = cairo_dock_search_icon_s_path (pInhibitorIcon->cFileName);
+					if (cIconFilePath != NULL)
+					{
+						cd_debug ("on remplace l'icone X par %s", cIconFilePath);
+						cairo_surface_t *pSurface = cairo_dock_create_surface_from_image_simple (cIconFilePath,
+							iWidth,
+							iHeight);
+						g_free (cIconFilePath);
+						return pSurface;
+					}
+				}
 			}
 		}
 	}
