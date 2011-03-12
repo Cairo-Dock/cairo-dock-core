@@ -114,8 +114,8 @@ void _cairo_dock_apply_emblem_texture (CairoEmblem *pEmblem, int w, int h)
 			y = -h/2 * (1 - a);
 		break;
 		case CAIRO_DOCK_EMBLEM_UPPER_LEFT:
-			x = -(double)w/2 * (1 - a);
-			y = (double)h/2 * (1 - a);
+			x = -w/2 * (1 - a);
+			y = h/2 * (1 - a);
 		break;
 		case CAIRO_DOCK_EMBLEM_LOWER_LEFT:
 		default:
