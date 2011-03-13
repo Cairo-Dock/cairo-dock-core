@@ -73,12 +73,26 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 	GdkEventExpose *pExpose,
 	CairoDesklet *pDesklet)
 {
-	if (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0 && (pDesklet->iKnownWidth != pDesklet->iDesiredWidth || pDesklet->iKnownHeight != pDesklet->iDesiredHeight))
+	if (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0 && (pDesklet->iKnownWidth != pDesklet->iDesiredWidth || pDesklet->iKnownHeight != pDesklet->iDesiredHeight))  // skip the drawing until the desklet has reached its size.
 	{
 		//g_print ("on saute le dessin\n");
 		if (g_bUseOpenGL)
 		{
-			// dessiner la fausse transparence.
+			GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDesklet->container.pWidget);
+			GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDesklet->container.pWidget);
+			if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+				return FALSE;
+			
+			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glLoadIdentity ();
+			
+			cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDesklet));
+			
+			if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
+				gdk_gl_drawable_swap_buffers (pGlDrawable);
+			else
+				glFlush ();
+			gdk_gl_drawable_gl_end (pGlDrawable);
 		}
 		else
 		{
