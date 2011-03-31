@@ -397,7 +397,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		//g_print ("pLastPointedDock n'est plus null\n");
 		s_pLastPointedDock = pDock;
 	}
-	if (pPointedIcon != NULL && pDock->pRenderer->render_opengl != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPointedIcon) && pPointedIcon->iAnimationState <= CAIRO_DOCK_STATE_MOUSE_HOVERED)
+	if (pPointedIcon != NULL /**&& pDock->pRenderer->render_opengl != NULL */&& ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPointedIcon)/** && pPointedIcon->iAnimationState <= CAIRO_DOCK_STATE_MOUSE_HOVERED*/)
 	{
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
@@ -1238,7 +1238,8 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	{
 		GtkWidget *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
 		
-		cairo_dock_popup_menu_on_container (menu, CAIRO_CONTAINER (pDock));
+		///cairo_dock_popup_menu_on_container (menu, CAIRO_CONTAINER (pDock));
+		cairo_dock_popup_menu_on_icon (menu, icon, CAIRO_CONTAINER (pDock));
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{

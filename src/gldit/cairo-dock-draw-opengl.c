@@ -781,11 +781,10 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon)
 void cairo_dock_draw_texture_with_alpha (GLuint iTexture, int iWidth, int iHeight, double fAlpha)
 {
 	_cairo_dock_enable_texture ();
-	if (fAlpha == 1)
-		_cairo_dock_set_blend_over ();
-	else
+	//~ if (fAlpha == 1)
+		//~ _cairo_dock_set_blend_over ();
+	//~ else
 		_cairo_dock_set_blend_alpha ();
-		//_cairo_dock_set_blend_alpha ();
 	
 	_cairo_dock_apply_texture_at_size_with_alpha (iTexture, iWidth, iHeight, fAlpha);
 	

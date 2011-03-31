@@ -46,6 +46,8 @@ gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, Ca
 gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
 gboolean cairo_dock_notification_icon_removed(gpointer pUserData, Icon *pIcon, CairoDock *pDock);
 
+gboolean cairo_dock_notification_desklet_destroyed (gpointer pUserData, CairoDesklet *pDesklet);
+
 gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *pDock);
 
 gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gchar *cModuleName, gboolean bActivated);

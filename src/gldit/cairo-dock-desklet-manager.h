@@ -89,7 +89,8 @@ typedef enum {
 	NOTIFICATION_STOP_DESKLET,
 	/// notification called when a desklet is resized or moved on the screen.
 	NOTIFICATION_CONFIGURE_DESKLET,
-	/// 
+	/// notification called when a new desklet is creayed.
+	NOTIFICATION_NEW_DESKLET,
 	NB_NOTIFICATIONS_DESKLET
 	} CairoDeskletNotifications;
 

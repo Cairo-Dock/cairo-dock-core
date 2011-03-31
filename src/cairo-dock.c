@@ -763,6 +763,14 @@ int main (int argc, char** argv)
 		NOTIFICATION_REMOVE_ICON,
 		(CairoDockNotificationFunc) cairo_dock_notification_icon_removed,
 		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myDeskletsMgr,
+		NOTIFICATION_STOP_DESKLET,
+		(CairoDockNotificationFunc) cairo_dock_notification_desklet_destroyed,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myDeskletsMgr,
+		NOTIFICATION_NEW_DESKLET,
+		(CairoDockNotificationFunc) cairo_dock_notification_desklet_destroyed,
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	
 	//\___________________ handle crashes.
 	if (! bTesting)

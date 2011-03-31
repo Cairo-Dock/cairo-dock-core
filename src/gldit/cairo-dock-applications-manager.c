@@ -1367,7 +1367,9 @@ static void _load_appli (Icon *icon)
 	// on trouve son .desktop puis ses mime-types.
 	if (icon->cClass && !icon->pMimeTypes && ! icon->cCommand)
 	{
-		gboolean bFound = TRUE;
+		icon->cCommand = g_strdup (cairo_dock_get_class_command (icon->cClass));
+		icon->pMimeTypes = g_strdupv (cairo_dock_get_class_mimetypes (icon->cClass));
+		/**gboolean bFound = TRUE;
 		GString *sDesktopFilePath = g_string_new ("");
 		g_string_printf (sDesktopFilePath, "/usr/share/applications/%s.desktop", icon->cClass);
 		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
@@ -1397,7 +1399,7 @@ static void _load_appli (Icon *icon)
 				g_key_file_free (pKeyFile);
 			}
 		}
-		g_string_free (sDesktopFilePath, TRUE);
+		g_string_free (sDesktopFilePath, TRUE);*/
 	}
 }
 

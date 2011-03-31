@@ -1167,25 +1167,11 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletV
 	
 	//\_________________ On applique la nouvelle accessibilite.
 	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_BELOW);
+	
 	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_ABOVE);
 
 	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
 	cairo_dock_wm_set_on_widget_layer (Xid, iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER);
-	/*if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
-	{
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");  // le hide-show le fait deconner completement, il perd son skip_task_bar ! au moins sous KDE3.
-		//~ XClassHint *class_hints = XAllocClassHint ();
-		//~ class_hints->res_name = (gchar*)"plasma-desktop";  // dashboard dashboard
-		//~ class_hints->res_class = (gchar*)"Plasma-desktop";
-		//~ XSetClassHint (cairo_dock_get_Xdisplay (),
-			//~ GDK_WINDOW_XID (pDesklet->container.pWidget->window),
-			//~ class_hints);
-		//~ XFree (class_hints);
-	}
-	else
-	{
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
-	}*/
 	
 	if (iVisibility == CAIRO_DESKLET_RESERVE_SPACE)
 	{
@@ -1205,63 +1191,6 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletV
 		cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
 			G_TYPE_INT, "Desklet", "accessibility", iVisibility,
 			G_TYPE_INVALID);
-	
-	//\_________________ On verifie que la regle de Compiz est correcte.
-	/*if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER && bSaveState)
-	{
-		// pour activer le plug-in, recuperer la liste, y rajouter widget-layer, puis envoyer :
-		//dbus-send --print-reply --type=method_call  --dest=org.freedesktop.compiz  /org/freedesktop/compiz/core/allscreens/active_plugins  org.freedesktop.compiz.get
-		// dbus-send --print-reply --type=method_call  --dest=org.freedesktop.compiz  /org/freedesktop/compiz/core/allscreens/active_plugins  org.freedesktop.compiz.set array:string:"foo",string:"fum"
-		
-		// on recupere la regle
-		gchar *cDbusAnswer = cairo_dock_launch_command_sync ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.get");
-		cd_debug ("cDbusAnswer : '%s'", cDbusAnswer);
-		gchar *cRule = NULL;
-		gchar *str = (cDbusAnswer ? strchr (cDbusAnswer, '\n') : NULL);
-		if (str)
-		{
-			str ++;
-			while (*str == ' ')
-				str ++;
-			if (strncmp (str, "string", 6) == 0)
-			{
-				str += 6;
-				while (*str == ' ')
-					str ++;
-				if (*str == '"')
-				{
-					str ++;
-					gchar *ptr = strrchr (str, '"');
-					if (ptr)
-					{
-						*ptr = '\0';
-						cRule = g_strdup (str);
-					}
-				}
-			}
-		}
-		g_free (cDbusAnswer);
-		cd_debug ("got rule : '%s'", cRule);
-		
-		if (cRule == NULL)  /// on ne sait pas le distinguer d'une regle vide...
-		{
-			cd_warning ("couldn't get Widget Layer rule from Compiz");
-		}
-		
-		// on complete la regle si necessaire.
-		if (cRule == NULL || *cRule == '\0' || (g_strstr_len (cRule, -1, "class=Cairo-dock & type=utility") == NULL && g_strstr_len (cRule, -1, "(class=Cairo-dock) & (type=utility)") == NULL && g_strstr_len (cRule, -1, "name=cairo-dock & type=utility") == NULL))
-		{
-			gchar *cNewRule = (cRule == NULL || *cRule == '\0' ?
-				g_strdup ("(class=Cairo-dock & type=utility)") :
-				g_strdup_printf ("(%s) | (class=Cairo-dock & type=utility)", cRule));
-			cd_debug ("set rule : %s", cNewRule);
-			gchar *cCommand = g_strdup_printf ("dbus-send --print-reply --type=method_call --dest=org.freedesktop.compiz /org/freedesktop/compiz/widget/screen0/match org.freedesktop.compiz.set string:\"%s\"", cNewRule);
-			cairo_dock_launch_command_sync (cCommand);
-			g_free (cCommand);
-			g_free (cNewRule);
-		}
-		g_free (cRule);
-	}*/
 }
 
 void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky)

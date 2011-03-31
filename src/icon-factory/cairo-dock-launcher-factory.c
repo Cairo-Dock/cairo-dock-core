@@ -222,14 +222,6 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	icon->fOrder = g_key_file_get_double (pKeyFile, "Desktop Entry", "Order", &erreur);
 	_print_error( cDesktopFileName, erreur);
 
-	/**icon->cBaseURI = g_key_file_get_string (pKeyFile, "Desktop Entry", "Base URI", NULL);
-	if (icon->cBaseURI != NULL && *icon->cBaseURI == '\0')
-	{
-		g_free (icon->cBaseURI);
-		icon->cBaseURI = NULL;
-	}
-	icon->iVolumeID = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is mounting point", NULL);*/
-	
 	g_free (icon->cParentDockName);
 	icon->cParentDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", &erreur);
 	_print_error( cDesktopFileName, erreur);

@@ -461,7 +461,7 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	if (pContainer->bIsHorizontal)
 	{
 		*x = x0;
-		if (pContainer->iWindowPositionY > g_desktopGeometry.iXScreenHeight[pContainer->bIsHorizontal]/2)  // pContainer->bDirectionUp
+		if (y0 > g_desktopGeometry.iXScreenHeight[pContainer->bIsHorizontal]/2)  // pContainer->bDirectionUp
 			*y = y0 - h;
 		else
 			*y = y0 + pIcon->fHeight * pIcon->fScale;
@@ -469,7 +469,7 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	else
 	{
 		*y = MIN (x0, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - h);
-		if (pContainer->iWindowPositionY > g_desktopGeometry.iXScreenHeight[pContainer->bIsHorizontal]/2)  // pContainer->bDirectionUp
+		if (y0 > g_desktopGeometry.iXScreenHeight[pContainer->bIsHorizontal]/2)  // pContainer->bDirectionUp
 			*x = y0 - w;
 		else
 			*x = y0 + pIcon->fHeight * pIcon->fScale;

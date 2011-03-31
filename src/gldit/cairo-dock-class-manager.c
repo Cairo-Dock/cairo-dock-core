@@ -40,9 +40,12 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-application-facility.h"
+#include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-file-manager.h"
 #include "cairo-dock-class-manager.h"
 
 extern CairoDock *g_pMainDock;
+extern CairoDockDesktopEnv g_iDesktopEnv;
 
 static GHashTable *s_hClassTable = NULL;
 
@@ -59,7 +62,7 @@ void cairo_dock_initialize_class_manager (void)
 }
 
 
-static CairoDockClassAppli *cairo_dock_find_class_appli (const gchar *cClass)
+static CairoDockClassAppli *_cairo_dock_lookup_class_appli (const gchar *cClass)
 {
 	return (cClass != NULL ? g_hash_table_lookup (s_hClassTable, cClass) : NULL);
 }
@@ -68,7 +71,7 @@ const GList *cairo_dock_list_existing_appli_with_class (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, NULL);
 	
-	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	return (pClassAppli != NULL ? pClassAppli->pAppliOfClass : NULL);
 }
 
@@ -84,7 +87,7 @@ static CairoDockClassAppli *cairo_dock_get_class (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, NULL);
 	
-	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli == NULL)
 	{
 		pClassAppli = g_new0 (CairoDockClassAppli, 1);
@@ -311,19 +314,19 @@ gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 
 gboolean cairo_dock_class_is_inhibited (const gchar *cClass)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	return (pClassAppli != NULL && pClassAppli->pIconsOfClass != NULL);
 }
 
 gboolean cairo_dock_class_is_using_xicon (const gchar *cClass)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	return (pClassAppli != NULL && pClassAppli->bUseXIcon);  // si pClassAppli == NULL, il n'y a pas de lanceur pouvant lui filer son icone, mais on peut en trouver une dans le theme d'icones systeme.
 }
 
 gboolean cairo_dock_class_is_expanded (const gchar *cClass)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	return (pClassAppli != NULL && pClassAppli->bExpand);
 }
 
@@ -333,7 +336,7 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 	//g_print ("%s (%s)\n", __func__, pIcon->cClass);
 	
 	gboolean bToBeInhibited = FALSE;
-	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (pIcon->cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
 	if (pClassAppli != NULL)
 	{
 		Icon *pInhibitorIcon;
@@ -389,7 +392,7 @@ static gboolean _cairo_dock_remove_icon_from_class (Icon *pInhibitorIcon)
 	cd_message ("%s (%s)", __func__, pInhibitorIcon->cClass);
 	
 	gboolean bStillInhibited = FALSE;
-	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (pInhibitorIcon->cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pInhibitorIcon->cClass);
 	if (pClassAppli != NULL)
 	{
 		pClassAppli->pIconsOfClass = g_list_remove (pClassAppli->pIconsOfClass, pInhibitorIcon);
@@ -454,7 +457,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 void cairo_dock_update_Xid_on_inhibitors (Window Xid, const gchar *cClass)
 {
 	cd_message ("%s (%s)", __func__, cClass);
-	CairoDockClassAppli *pClassAppli = cairo_dock_find_class_appli (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli != NULL)
 	{
 		int iNextXid = -1;
@@ -1174,4 +1177,153 @@ void cairo_dock_reorder_classes (void)
 	Icon *pLastIcon = cairo_dock_get_last_icon (g_pMainDock->icons);
 	int iMaxOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 1);
 	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_reorder_one_class, &iMaxOrder);
+}
+
+static gchar *_search_class_desktop_file (const gchar *cClass)
+{
+	gboolean bFound = TRUE;
+	GString *sDesktopFilePath = g_string_new ("");
+	g_string_printf (sDesktopFilePath, "/usr/share/applications/%s.desktop", cClass);
+	if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+	{
+		g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s.desktop", cClass);
+		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+		{
+			g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s.desktop", cClass);
+			if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+			{
+				bFound = FALSE;
+			}
+		}
+	}
+	
+	gchar *cDesktopFile;
+	if (bFound)
+	{
+		cDesktopFile = sDesktopFilePath->str;
+		g_string_free (sDesktopFilePath, FALSE);
+	}
+	else
+	{
+		cDesktopFile = NULL;
+		g_string_free (sDesktopFilePath, TRUE);
+		g_print ("couldn't find the .desktop for %s\n", cClass);
+	}
+	return cDesktopFile;
+}
+
+void cairo_dock_find_class_attributes (const gchar *cClass)
+{
+	g_return_if_fail (cClass != NULL);
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	
+	// if we already searched the attributes beforehand, quit.
+	if (pClassAppli->bSearchedAttributes)
+		return;
+	pClassAppli->bSearchedAttributes = TRUE;
+	
+	// look for the .desktop file in the common locations.
+	pClassAppli->cDesktopFile = _search_class_desktop_file (cClass);
+	
+	// if found, get the attributes.
+	if (pClassAppli->cDesktopFile != NULL)
+	{
+		GKeyFile *pKeyFile = cairo_dock_open_key_file (pClassAppli->cDesktopFile);
+		if (pKeyFile)
+		{
+			gsize length = 0;
+			pClassAppli->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
+			pClassAppli->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+			if (pClassAppli->cCommand != NULL)
+			{
+				gchar *str = strchr (pClassAppli->cCommand, '%');
+				if (str != NULL)
+					*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
+			}
+			g_print ("check: set command '%s' to class %s\n", pClassAppli->cCommand, cClass);
+			g_key_file_free (pKeyFile);
+		}
+	}
+}
+
+
+static inline CairoDockClassAppli *_get_class_appli_with_attributes (const gchar *cClass)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	if (! pClassAppli->bSearchedAttributes)
+	{
+		cairo_dock_find_class_attributes (cClass);
+	}
+	return pClassAppli;
+}
+const gchar *cairo_dock_get_class_command (const gchar *cClass)
+{
+	g_return_val_if_fail (cClass != NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _get_class_appli_with_attributes (cClass);
+	return pClassAppli->cCommand;
+}
+
+const gchar **cairo_dock_get_class_mimetypes (const gchar *cClass)
+{
+	g_return_val_if_fail (cClass != NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _get_class_appli_with_attributes (cClass);
+	return (const gchar **)pClassAppli->pMimeTypes;
+}
+
+const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass)
+{
+	g_return_val_if_fail (cClass != NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _get_class_appli_with_attributes (cClass);
+	return pClassAppli->cDesktopFile;
+}
+
+
+void cairo_dock_get_class_attributes (const gchar *cClass, GKeyFile *pKeyFile)
+{
+	g_return_if_fail (cClass != NULL && pKeyFile != NULL);
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	
+	// get mime types
+	gsize length = 0;
+	pClassAppli->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
+	
+	// get command
+	gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+	if (cCommand != NULL)
+	{
+		gchar *str = strchr (cCommand, '%');
+		if (str != NULL)
+			*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
+	}
+	g_print ("check: set command '%s' to class %s\n", pClassAppli->cCommand, cClass);
+	
+	// modify the command if it should be launched in a terminal.
+	gchar *cCommandFull = NULL;
+	gboolean bExecInTerminal = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL);
+	if (bExecInTerminal)
+	{
+		const gchar *cTerm = g_getenv ("COLORTERM");
+		if (cTerm != NULL && strlen (cTerm) > 1)  // on filtre les cas COLORTERM=1 ou COLORTERM=y. ce qu'on veut c'est le nom d'un terminal.
+			cCommandFull = g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
+		else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
+			cCommandFull = g_strdup_printf ("gnome-terminal -e \"%s\"", cCommand);
+		else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
+			cCommandFull = g_strdup_printf ("xfce4-terminal -e \"%s\"", cCommand);
+		else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
+			cCommandFull = g_strdup_printf ("konsole -e \"%s\"", cCommand);
+		else if (g_getenv ("TERM") != NULL)
+			cCommandFull = g_strdup_printf ("%s -e \"%s\"", g_getenv ("TERM"), cCommand);
+		else
+			cCommandFull = g_strdup_printf ("xterm -e \"%s\"", cCommand);
+	}
+	
+	// get the working directory.
+	gchar *cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
+	if (cWorkingDirectory != NULL && *cWorkingDirectory == '\0')
+	{
+		g_free (cWorkingDirectory);
+		cWorkingDirectory = NULL;
+	}
+	
+	pClassAppli->cCommand = cCommand;
 }

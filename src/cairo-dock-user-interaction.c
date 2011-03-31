@@ -193,6 +193,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	
+	// shit/ctrl + click on an icon that is linked to a program => re-launch this program.
 	if (iButtonState & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))  // shit or ctrl + click
 	{
 		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)
@@ -204,7 +205,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
 	
-	// scale.
+	// scale on an icon holding a class sub-dock.
 	if (CAIRO_DOCK_IS_MULTI_APPLI(icon))
 	{
 		if (cairo_dock_wm_present_class (icon->cClass))
@@ -214,6 +215,8 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		}
 	}
+	
+	// else handle sub-docks showing on click, applis and launchers.
 	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
 	{
 		cairo_dock_show_subdock (icon, pDock);
@@ -482,6 +485,16 @@ gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, 
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
+gboolean cairo_dock_notification_desklet_destroyed (gpointer pUserData, CairoDesklet *pDesklet)
+{
+	Icon *pIcon = pDesklet->pIcon;
+	g_print ("desklet %s removed\n", pIcon?pIcon->cName:"unknown");
+	
+	cairo_dock_gui_trigger_reload_items ();
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
 gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *pDock)
 {
 	g_print ("dock destroyed\n");
@@ -493,7 +506,7 @@ gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *
 gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gchar *cModuleName, gboolean bActivated)
 {
 	//g_print ("module %s (de)activated (%d)\n", cModuleName, bActivated);
-		cairo_dock_gui_trigger_update_module_state (cModuleName);
+	cairo_dock_gui_trigger_update_module_state (cModuleName);
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -501,7 +514,7 @@ gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gch
 gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gchar *cModuleName, gboolean bRegistered)
 {
 	//g_print ("module %s (un)registered (%d)\n", cModuleName, bRegistered);
-		cairo_dock_gui_trigger_update_modules_list ();
+	cairo_dock_gui_trigger_update_modules_list ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

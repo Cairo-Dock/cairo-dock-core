@@ -262,7 +262,9 @@ which opera > /dev/null && opera %s ",
 }
 static void _cairo_dock_show_third_party_applets (GtkMenuItem *pMenuItem, gpointer data)
 {
-	_launch_url ("http://www.glx-dock.org/mc_album.php?a=4");
+	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
+	_launch_url (cAdress);
+	g_free (cAdress);
 }
 
 static void _cairo_dock_present_help (GtkMenuItem *pMenuItem, gpointer data)

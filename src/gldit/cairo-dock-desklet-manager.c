@@ -480,6 +480,10 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, CairoDeskletAttribute *pAt
 	}
 	
 	s_pDeskletList = g_list_prepend (s_pDeskletList, pDesklet);
+	
+	cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_NEW_DESKLET, pDesklet);
+	cairo_dock_notify_on_object (pDesklet, NOTIFICATION_NEW_DESKLET, pDesklet);
+	
 	return pDesklet;
 }
 

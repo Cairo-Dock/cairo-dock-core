@@ -41,6 +41,10 @@ struct _CairoDockClassAppli {
 	GList *pIconsOfClass;
 	/// List of the appli icons of this class.
 	GList *pAppliOfClass;
+	gboolean bSearchedAttributes;
+	gchar *cDesktopFile;
+	gchar **pMimeTypes;
+	gchar *cCommand;
 };
 
 /*
@@ -199,6 +203,15 @@ Icon *cairo_dock_get_inhibitor (Icon *pIcon, gboolean bOnlyInDock);
 void cairo_dock_reorder_classes (void);
 
 void cairo_dock_set_class_order (Icon *pIcon);
+
+
+void cairo_dock_find_class_attributes (const gchar *cClass);
+
+const gchar *cairo_dock_get_class_command (const gchar *cClass);
+
+const gchar **cairo_dock_get_class_mimetypes (const gchar *cClass);
+
+const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass);
 
 
 G_END_DECLS

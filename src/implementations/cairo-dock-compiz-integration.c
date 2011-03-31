@@ -81,7 +81,7 @@ static gboolean present_class (const gchar *cClass)
 	if (s_pScaleProxy != NULL)
 	{
 		GError *erreur = NULL;
-		gchar *cMatch = g_strdup_printf ("class=.%s", cClass+1);  /// we need the real class here...
+		gchar *cMatch = g_strdup_printf ("class=.%s*", cClass+1);  /// we need the real class here...
 		g_print ("match %s\n", cMatch);
 		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
