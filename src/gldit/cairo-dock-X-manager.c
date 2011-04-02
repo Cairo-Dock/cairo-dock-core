@@ -257,7 +257,7 @@ void cairo_dock_wm_register_backend (CairoDockWMBackend *pBackend)
 	g_free (s_pWMBackend);
 	s_pWMBackend = pBackend;
 	
-	g_print ("new backend (%x)\n", pBackend);
+	cd_debug ("new WM backend (%x)", pBackend);
 	// since we have a backend, set up the desklets that are supposed to be on the widget layer.
 	if (pBackend && pBackend->set_on_widget_layer != NULL)
 	{

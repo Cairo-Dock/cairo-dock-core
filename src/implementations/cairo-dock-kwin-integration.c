@@ -204,7 +204,7 @@ static void _unregister_kwin_backend (void)
 
 static void _on_kwin_owner_changed (gboolean bOwned, gpointer data)
 {
-	g_print ("Kwin is on the bus (%d)\n", bOwned);
+	cd_debug ("Kwin is on the bus (%d)", bOwned);
 	
 	if (bOwned)  // set up the proxies
 	{
@@ -232,7 +232,7 @@ static void _on_kwin_owner_changed (gboolean bOwned, gpointer data)
 }
 static void _on_detect_kwin (gboolean bPresent, gpointer data)
 {
-	g_print ("Kwin is present: %d\n", bPresent);
+	cd_debug ("Kwin is present: %d", bPresent);
 	if (bPresent)
 	{
 		_on_kwin_owner_changed (TRUE, NULL);

@@ -82,7 +82,7 @@ static gboolean present_class (const gchar *cClass)
 	{
 		GError *erreur = NULL;
 		gchar *cMatch = g_strdup_printf ("class=.%s*", cClass+1);  /// we need the real class here...
-		g_print ("match %s\n", cMatch);
+		//g_print ("match %s\n", cMatch);
 		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
 			G_TYPE_INT, cairo_dock_get_root_id (),
@@ -145,7 +145,7 @@ static gboolean show_widget_layer (void)
 
 static void _on_got_widget_match_rule (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
 {
-	g_print ("%s ()\n", __func__);
+	//g_print ("%s ()\n", __func__);
 	// get the matching rule.
 	GError *error = NULL;
 	gchar *cRule = NULL;
@@ -161,7 +161,7 @@ static void _on_got_widget_match_rule (DBusGProxy *proxy, DBusGProxyCall *call_i
 		g_error_free (error);
 		return;
 	}
-	g_print ("got rule : %s\n", cRule);
+	cd_debug ("got rule : %s", cRule);
 	
 	// if our rule is not present yet, add it.
 	if (cRule == NULL || *cRule == '\0' || (g_strstr_len (cRule, -1, "class=Cairo-dock & type=utility") == NULL && g_strstr_len (cRule, -1, "(class=Cairo-dock) & (type=utility)") == NULL && g_strstr_len (cRule, -1, "name=cairo-dock & type=utility") == NULL))
@@ -169,7 +169,7 @@ static void _on_got_widget_match_rule (DBusGProxy *proxy, DBusGProxyCall *call_i
 		gchar *cNewRule = (cRule == NULL || *cRule == '\0' ?
 			g_strdup ("(class=Cairo-dock & type=utility)") :
 			g_strdup_printf ("(%s) | (class=Cairo-dock & type=utility)", cRule));
-		g_print ("set rule : %s\n", cNewRule);
+		cd_debug ("set rule : %s", cNewRule);
 		
 		dbus_g_proxy_call_no_reply (proxy,
 			"set",
@@ -183,7 +183,7 @@ static void _on_got_widget_match_rule (DBusGProxy *proxy, DBusGProxyCall *call_i
 }
 static gboolean _check_widget_rule (gpointer data)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	// get the matching rule.
 	DBusGProxy *pWidgetProxy = cairo_dock_create_new_session_proxy (
 			CD_COMPIZ_BUS,
@@ -200,7 +200,7 @@ static gboolean _check_widget_rule (gpointer data)
 }
 static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	// get the active plug-ins.
 	GError *error = NULL;
 	gchar **plugins = NULL;
@@ -317,7 +317,7 @@ static void _unregister_compiz_backend (void)
 
 static void _on_compiz_owner_changed (gboolean bOwned, gpointer data)
 {
-	g_print ("Compiz is on the bus (%d)\n", bOwned);
+	cd_debug ("Compiz is on the bus (%d)", bOwned);
 	
 	if (bOwned)  // set up the proxies
 	{
@@ -337,7 +337,7 @@ static void _on_compiz_owner_changed (gboolean bOwned, gpointer data)
 					bNewCompiz = TRUE;
 			}
 		}
-		g_print ("NewCompiz: %d\n", bNewCompiz);
+		cd_debug ("NewCompiz: %d", bNewCompiz);
 		
 		s_pScaleProxy = cairo_dock_create_new_session_proxy (
 			CD_COMPIZ_BUS,
@@ -376,7 +376,7 @@ static void _on_compiz_owner_changed (gboolean bOwned, gpointer data)
 }
 static void _on_detect_compiz (gboolean bPresent, gpointer data)
 {
-	g_print ("Compiz is present: %d\n", bPresent);
+	cd_debug ("Compiz is present: %d", bPresent);
 	if (bPresent)
 	{
 		_on_compiz_owner_changed (TRUE, NULL);

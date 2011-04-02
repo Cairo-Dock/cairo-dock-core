@@ -601,7 +601,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoContainersParam *pContainer
 	pContainersParam->iGLAnimationDeltaT = 1000. / iRefreshFrequency;
 	iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "cairo anim freq", &bFlushConfFileNeeded, 25, NULL, NULL);
 	pContainersParam->iCairoAnimationDeltaT = 1000. / iRefreshFrequency;
-	g_print ("iGLAnimationDeltaT: %d\n", pContainersParam->iGLAnimationDeltaT);
+	//g_print ("iGLAnimationDeltaT: %d\n", pContainersParam->iGLAnimationDeltaT);
 	
 	//pContainersParam->bConfigPanelTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "config transparency", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	return bFlushConfFileNeeded;

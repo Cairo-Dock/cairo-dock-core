@@ -398,7 +398,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 		CairoDockDesktopFileType iLauncherType;
 		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR;
-		else if (pIcon->pSubDock != NULL && pIcon->cClass == NULL)
+		else if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon))
 			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER;
 		else
 			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER;

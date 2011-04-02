@@ -436,7 +436,7 @@ void cairo_dock_trigger_refresh_gui (void)
 
 gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDesklet *pDesklet)
 {
-	g_print ("desklet %s configured\n", pDesklet->pIcon?pDesklet->pIcon->cName:"unknown");
+	//g_print ("desklet %s configured\n", pDesklet->pIcon?pDesklet->pIcon->cName:"unknown");
 	cairo_dock_gui_trigger_update_desklet_params (pDesklet);
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -444,7 +444,7 @@ gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDes
 
 gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
-	g_print ("icon %s moved\n", pIcon?pIcon->cName:"unknown");
+	//g_print ("icon %s moved\n", pIcon?pIcon->cName:"unknown");
 	
 	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
 	|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
@@ -457,7 +457,7 @@ gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, Ca
 
 gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
-	g_print ("icon %s inserted (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
+	//g_print ("icon %s inserted (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
 	//if (pIcon->fInsertRemoveFactor == 0)
 	//	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
@@ -472,7 +472,7 @@ gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon,
 
 gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
-	g_print ("icon %s removed (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
+	//g_print ("icon %s removed (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
 	//if (pIcon->fInsertRemoveFactor == 0)
 	//	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
@@ -488,7 +488,7 @@ gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, 
 gboolean cairo_dock_notification_desklet_destroyed (gpointer pUserData, CairoDesklet *pDesklet)
 {
 	Icon *pIcon = pDesklet->pIcon;
-	g_print ("desklet %s removed\n", pIcon?pIcon->cName:"unknown");
+	//g_print ("desklet %s removed\n", pIcon?pIcon->cName:"unknown");
 	
 	cairo_dock_gui_trigger_reload_items ();
 	
@@ -497,7 +497,7 @@ gboolean cairo_dock_notification_desklet_destroyed (gpointer pUserData, CairoDes
 
 gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *pDock)
 {
-	g_print ("dock destroyed\n");
+	//g_print ("dock destroyed\n");
 	cairo_dock_gui_trigger_reload_items ();
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -521,7 +521,7 @@ gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gc
 
 gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockModuleInstance *pInstance, gboolean bIsDetached)
 {
-	g_print ("module %s (de)tached (%d)\n", pInstance->pModule->pVisitCard->cModuleName, bIsDetached);
+	//g_print ("module %s (de)tached (%d)\n", pInstance->pModule->pVisitCard->cModuleName, bIsDetached);
 	cairo_dock_gui_trigger_update_module_container (pInstance, bIsDetached);
 	
 	cairo_dock_gui_trigger_reload_items ();

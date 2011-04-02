@@ -1163,7 +1163,7 @@ static void _cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gbool
 //set behaviour in compiz to: (class=Cairo-dock & type=utility)
 void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibility iVisibility, gboolean bSaveState)
 {
-	g_print ("%s (%d)\n", __func__, iVisibility);
+	cd_debug ("%s (%d)", __func__, iVisibility);
 	
 	//\_________________ On applique la nouvelle accessibilite.
 	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_BELOW);

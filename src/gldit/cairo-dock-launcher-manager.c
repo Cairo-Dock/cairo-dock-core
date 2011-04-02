@@ -98,19 +98,6 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 		}
 	}
 	
-	//\____________ On met a jour les infos dans le cas d'un point de montage.
-	/*if (icon->iVolumeID)  // les infos dans le .desktop ne sont pas a jour.
-	{
-		g_free (icon->cName);
-		icon->cName = NULL;
-		g_free (icon->cCommand);
-		icon->cCommand = NULL;
-		g_free (icon->cFileName);
-		icon->cFileName = NULL;
-
-		gboolean bIsDirectory;  // on n'ecrase pas le fait que ce soit un container ou pas, car c'est l'utilisateur qui l'a decide.
-		cairo_dock_fm_get_file_info (icon->cBaseURI, &icon->cName, &icon->cCommand, &icon->cFileName, &bIsDirectory, &icon->iVolumeID, &icon->fOrder, CAIRO_DOCK_FM_SORT_BY_NAME);  // son ordre nous importe peu ici, puisqu'il est definie par le champ 'Order'.
-	}*/
 	return pParentDock;
 }
 

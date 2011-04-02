@@ -112,6 +112,9 @@ fi
 set_current_conf_file "plug-ins/Animated-icons/Animated-icons.conf"
 set_value "Rotation"		"color"						"1;1;1;0"
 
+set_current_conf_file "plug-ins/AlsaMixer/AlsaMixer.conf"
+set_value "Icon"			"name"						""
+
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
 set_value "Configuration"	"item type"					3
 set_value "Configuration"	"paste selection"			true
@@ -201,6 +204,7 @@ set_value "Configuration"	"weblet URI"				"http:\/\/www.google.com"
 set_value "Configuration"	"uri list"					""
 
 set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
+set_value "Icon"			"name"						""
 set_value "Configuration"	"initial gamma"				0
 
 echo ""

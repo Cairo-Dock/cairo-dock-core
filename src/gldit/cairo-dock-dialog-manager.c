@@ -507,9 +507,17 @@ gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
 		pDialog->iRefCount --;
 		if (pDialog->iRefCount == 0)  // devient nul.
 		{
+			Icon *pIcon = pDialog->pIcon;
+			if (pIcon != NULL)
+			{
+				CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
+				if (pContainer)
+					cairo_dock_emit_leave_signal (pContainer);
+			}
 			cairo_dock_free_dialog (pDialog);
 			s_pDialogList = g_slist_remove (s_pDialogList, pDialog);
 			cairo_dock_trigger_replace_all_dialogs ();
+			
 			return TRUE;
 		}
 		else

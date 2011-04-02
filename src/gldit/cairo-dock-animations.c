@@ -763,6 +763,8 @@ void cairo_dock_start_showing (CairoDock *pDock)
 			//g_print ("+++ input shape at rest on start showing\n");
 			cairo_dock_set_input_shape_at_rest (pDock);
 			pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
+			
+			cairo_dock_replace_all_dialogs ();
 		}
 		
 		if (g_pHidingBackend != NULL && g_pHidingBackend->init)

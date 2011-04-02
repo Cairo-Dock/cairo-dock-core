@@ -300,7 +300,7 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 	pDesklet->pRenderer = pRenderer;
 	gtk_widget_set_double_buffered (pDesklet->container.pWidget, ! (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL));
 	pDesklet->container.iAnimationDeltaT = (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL ? myContainersParam.iGLAnimationDeltaT : myContainersParam.iCairoAnimationDeltaT);
-	g_print ("desklet: %d\n", pDesklet->container.iAnimationDeltaT);
+	//g_print ("desklet: %d\n", pDesklet->container.iAnimationDeltaT);
 	
 	if (pRenderer != NULL)
 	{
