@@ -15,7 +15,7 @@ Container=_MainDock_
 #X[Extra parameters]
 frame_extra=
 #f[0;100] Order you want for this launcher among the others:
-Order=0.2274322509765625
+Order=3.23333740234375
 #b Prevent this launcher from stealing appli from taskbar ?
 #{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate=false

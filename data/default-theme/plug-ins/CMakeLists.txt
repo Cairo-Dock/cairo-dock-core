@@ -14,7 +14,7 @@ add_subdirectory(shortcuts)
 add_subdirectory(showDesktop)
 add_subdirectory(stack)
 add_subdirectory(switcher)
-
+add_subdirectory(Recent-Events)
 ########### install files ###############
 
 
