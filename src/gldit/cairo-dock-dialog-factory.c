@@ -186,9 +186,12 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
-	//g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
+	g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
 	if (pEvent->width <= CAIRO_DIALOG_MIN_SIZE && pEvent->height <= CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
+	{
+		pDialog->container.bInside = FALSE;
 		return FALSE;
+	}
 	
 	//\____________ get dialog size and position.
 	int iPrevWidth = pDialog->container.iWidth, iPrevHeight = pDialog->container.iHeight;
@@ -225,11 +228,13 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	if (pDialog->bNoInput && (iPrevWidth != pEvent->width || iPrevHeight != pEvent->height || ! pDialog->pShapeBitmap))
 	{
 		_cairo_dock_set_dialog_input_shape (pDialog);
+		pDialog->container.bInside = FALSE;
 	}
 	
 	//\____________ force position for buggy WM (Compiz).
 	if (pDialog->iComputedWidth == pEvent->width && pDialog->iComputedHeight == pEvent->height && (pEvent->y != pDialog->iComputedPositionY || pEvent->x != pDialog->iComputedPositionX) && pDialog->bPositionForced == 3)
 	{
+		pDialog->container.bInside = FALSE;
 		g_print ("force to %d;%d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY);
 		/*gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 			pDialog->iComputedPositionX,
@@ -433,15 +438,15 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	}
 	
 	//\________________ On prend en compte les boutons.
-	pDialog->action_on_answer = pAttribute->pActionFunc;
 	pDialog->pUserData = pAttribute->pUserData;
 	pDialog->pFreeUserDataFunc = pAttribute->pFreeDataFunc;
 	if (pAttribute->cButtonsImage != NULL && pAttribute->pActionFunc != NULL)
 	{
 		int i;
 		for (i = 0; pAttribute->cButtonsImage[i] != NULL; i++);
-		pDialog->iNbButtons = i;
 		
+		pDialog->iNbButtons = i;
+		pDialog->action_on_answer = pAttribute->pActionFunc;
 		pDialog->pButtons = g_new0 (CairoDialogButton, pDialog->iNbButtons);
 		const gchar *cButtonImage;
 		for (i = 0; i < pDialog->iNbButtons; i++)
@@ -475,7 +480,13 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	{
 		pDialog->bNoInput = pAttribute->bNoInput;
 	}
-
+	
+	//\________________ Interactive dialogs are set modal, to be fixed.
+	if (pDialog->pInteractiveWidget || pDialog->action_on_answer)
+	{
+		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);
+	}
+	
 	//\________________ On lui affecte un decorateur.
 	cairo_dock_set_dialog_decorator_by_name (pDialog, (pAttribute->cDecoratorName ? pAttribute->cDecoratorName : myDialogsParam.cDecoratorName));
 	if (pDialog->pDecorator != NULL)

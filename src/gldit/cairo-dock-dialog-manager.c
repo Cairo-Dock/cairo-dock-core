@@ -174,7 +174,7 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 		}
 	}
 	
-	g_print ("leave\n");
+	//g_print ("leave\n");
 	//cd_debug ("outside (%d;%d / %dx%d)", iMouseX, iMouseY, pDialog->container.iWidth, pDialog->container.iHeight);
 	pDialog->container.bInside = FALSE;
 	
@@ -213,7 +213,7 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 	GdkEventButton* pButton,
 	CairoDialog *pDialog)
 {
-	if (pButton->button == 1)  // clique gauche.
+	if (pButton->button == 1)  // left click.
 	{
 		if (pButton->type == GDK_BUTTON_PRESS)
 		{
@@ -511,6 +511,7 @@ gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
 			if (pIcon != NULL)
 			{
 				CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
+				//g_print ("leave from container %x\n", pContainer);
 				if (pContainer)
 					cairo_dock_emit_leave_signal (pContainer);
 			}
@@ -675,7 +676,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 	if (iLimitXRight - iLimitXLeft >= MIN (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iWidth) || !bDialogOnOurWay)  // there is enough room to place the dialog.
 	{
 		if (pDialog->bRight)
-			pDialog->iComputedPositionX = MIN (pDialog->iAimedX - pDialog->fAlign * iWidth, iLimitXRight - iWidth);
+			pDialog->iComputedPositionX = MAX (0, MIN (pDialog->iAimedX - pDialog->fAlign * iWidth, iLimitXRight - iWidth));
 		else
 			pDialog->iComputedPositionX = MAX (pDialog->iAimedX - (1. - pDialog->fAlign) * iWidth, iLimitXLeft);
 		if (pDialog->container.bDirectionUp && pDialog->iComputedPositionY < 0)
@@ -717,8 +718,8 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 			pDialog->iAimedX = pDialog->iAimedY;
 			pDialog->iAimedY = tmp;
 			
-			pDialog->iComputedPositionX = (pDialog->bRight ? pDialog->iAimedX - pDialog->container.iWidth : pDialog->iAimedX);
-			pDialog->iComputedPositionY = (pDialog->container.bDirectionUp ? pDialog->iAimedY - (pDialog->iComputedHeight) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.
+			pDialog->iComputedPositionX = (pDialog->bRight ? MAX (0, pDialog->iAimedX - pDialog->container.iWidth) : pDialog->iAimedX);
+			pDialog->iComputedPositionY = (pDialog->container.bDirectionUp ? MAX (0, pDialog->iAimedY - pDialog->iComputedHeight) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.
 		}
 		
 		if (pDialog->bRight)
@@ -747,7 +748,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	
 	pDialog->bPositionForced = FALSE;
 	///gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
-	//g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight, iGravity);
+	g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight, iGravity);
 	gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 		pDialog->iComputedPositionX,
 		pDialog->iComputedPositionY);
@@ -1103,7 +1104,17 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog)
 		pDialog->bAllowMinimize = TRUE;
 		gtk_widget_hide (pDialog->container.pWidget);
 		pDialog->container.bInside = FALSE;
+		
 		cairo_dock_trigger_replace_all_dialogs ();
+		
+		Icon *pIcon = pDialog->pIcon;
+		if (pIcon != NULL)
+		{
+			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
+			//g_print ("leave from container %x\n", pContainer);
+			if (pContainer)
+				cairo_dock_emit_leave_signal (pContainer);
+		}
 	}
 }
 

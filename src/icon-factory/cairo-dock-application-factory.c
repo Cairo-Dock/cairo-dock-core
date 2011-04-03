@@ -257,13 +257,14 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 		
 		XFree (pClassHint->res_name);
 		XFree (pClassHint->res_class);
+		XFree (pClassHint);
 	}
 	else
 	{
 		cd_warning ("this window doesn't belong to any class, skip it.");
-	}
-	XFree (pClassHint);
-	
+		XFree (pClassHint);
+		return NULL;
+	}	
 	
 	//\__________________ On cree l'icone.
 	Icon *icon = cairo_dock_new_icon ();
