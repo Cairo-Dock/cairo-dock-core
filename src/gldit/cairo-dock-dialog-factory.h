@@ -98,7 +98,6 @@ struct _CairoDialogAttribute {
 	gpointer pUserData;
 	/// a function to free the data when the dialog is destroyed, or NULL.
 	GFreeFunc pFreeDataFunc;
-	
 	/// life time of the dialog (in ms), or 0 for an unlimited dialog.
 	gint iTimeLength;
 	/// name of a decorator, or NULL to use the default one.
@@ -108,6 +107,8 @@ struct _CairoDialogAttribute {
 	gboolean bNoInput;
 	/// whether to pop-up the dialog in front of al other windows, including fullscreen windows.
 	gboolean bForceAbove;
+	/// for a dialog with no buttons, clicking on it will close it, or hide if this boolean is TRUE.
+	gboolean bHideOnClick;
 };
 
 struct _CairoDialogButton {
@@ -178,7 +179,9 @@ struct _CairoDialog {
 	gboolean bPositionForced;
 	gdouble fAppearanceCounter;
 	gboolean bTopBottomDialog;
-	gpointer reserved[4];
+	gboolean bHideOnClick;
+	guint iButtonPressTime;
+	gpointer reserved[2];
 };
 
 #define CAIRO_DIALOG_MIN_SIZE 20

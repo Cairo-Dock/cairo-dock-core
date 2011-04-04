@@ -213,15 +213,19 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 	GdkEventButton* pButton,
 	CairoDialog *pDialog)
 {
-	if (pButton->button == 1)  // left click.
+	g_print ("press button on dialog\n");
+	if (pButton->time > pDialog->iButtonPressTime)  // it's not a click on the interactive widget that has been passed to the dialog.
 	{
 		if (pButton->type == GDK_BUTTON_PRESS)
 		{
-			if (pDialog->pButtons == NULL && pDialog->pInteractiveWidget == NULL)  // ce n'est pas un dialogue interactif.
+			if (pDialog->pButtons == NULL/** && pDialog->pInteractiveWidget == NULL*/)  // not a dialog that can be closed by a button => we close it here
 			{
-				cairo_dock_dialog_unreference (pDialog);
+				if (pDialog->bHideOnClick)
+					cairo_dock_hide_dialog (pDialog);
+				else
+					cairo_dock_dialog_unreference (pDialog);
 			}
-			else if (pDialog->pButtons != NULL)
+			else if (pDialog->pButtons != NULL && pButton->button == 1)  // left click on a button.
 			{
 				int iButton = _cairo_dock_find_clicked_button_in_dialog (pButton, pDialog);
 				if (iButton >= 0 && iButton < pDialog->iNbButtons)
@@ -233,7 +237,7 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 		}
 		else if (pButton->type == GDK_BUTTON_RELEASE)
 		{
-			if (pDialog->pButtons != NULL)
+			if (pDialog->pButtons != NULL && pButton->button == 1)
 			{
 				int iButton = _cairo_dock_find_clicked_button_in_dialog (pButton, pDialog);
 				cd_debug ("clic on button %d", iButton);
@@ -748,7 +752,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	
 	pDialog->bPositionForced = FALSE;
 	///gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
-	g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight, iGravity);
+	//g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight, iGravity);
 	gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 		pDialog->iComputedPositionX,
 		pDialog->iComputedPositionY);
@@ -983,7 +987,7 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 			cairo_dock_pop_down (CAIRO_DOCK (pContainer));*/
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
 		{
-			g_print ("on force a quitter apres le dialogue bloquant\n");
+			//g_print ("on force a quitter apres le dialogue bloquant\n");
 			cairo_dock_emit_leave_signal (pContainer);
 		}
 	}

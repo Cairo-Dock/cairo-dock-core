@@ -186,7 +186,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
-	g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
+	//g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
 	if (pEvent->width <= CAIRO_DIALOG_MIN_SIZE && pEvent->height <= CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
 	{
 		pDialog->container.bInside = FALSE;
@@ -387,6 +387,15 @@ static gboolean _cairo_dock_animate_dialog_text (CairoDialog *pDialog)
 	cairo_dock_damage_text_dialog (pDialog);
 	return TRUE;
 }
+static gboolean on_button_press_widget (GtkWidget *widget,
+	GdkEventButton *pButton,
+	CairoDialog *pDialog)
+{
+	g_print ("press button on widget\n");
+	// memorize the time when the user clicked on the widget.
+	pDialog->iButtonPressTime = pButton->time;
+	return FALSE;
+}
 CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer)
 {
 	//\________________ On cree un nouveau dialogue.
@@ -482,10 +491,11 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	}
 	
 	//\________________ Interactive dialogs are set modal, to be fixed.
-	if (pDialog->pInteractiveWidget || pDialog->action_on_answer)
+	if (pDialog->pInteractiveWidget || pDialog->pButtons)
 	{
 		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);
 	}
+	pDialog->bHideOnClick = pAttribute->bHideOnClick;
 	
 	//\________________ On lui affecte un decorateur.
 	cairo_dock_set_dialog_decorator_by_name (pDialog, (pAttribute->cDecoratorName ? pAttribute->cDecoratorName : myDialogsParam.cDecoratorName));
@@ -576,7 +586,12 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		"unmap-event",
 		G_CALLBACK (on_unmap_dialog),
 		pDialog);
-	
+	if (pDialog->pInteractiveWidget != NULL && pDialog->pButtons == NULL)  // the dialog has no button to be closed, so it can be closed by clicking on it. But some widget (like the GTK calendar) let pass the click to their parent (= the dialog), which then close it. To prevent this, we memorize the last click on the widget.
+		g_signal_connect (G_OBJECT (pDialog->pInteractiveWidget),
+			"button-press-event",
+			G_CALLBACK (on_button_press_widget),
+			pDialog);
+		
 	cairo_dock_launch_animation (CAIRO_CONTAINER (pDialog));
 	
 	return pDialog;
@@ -743,6 +758,15 @@ GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget)
 		g_object_ref (G_OBJECT (pWidget));
 		gtk_container_remove (GTK_CONTAINER (pContainer), pWidget);
 		cd_debug (" -> %d", pWidget->object.parent_instance.ref_count);
+		
+		// if we were monitoring the click events on the widget, stop it.
+		g_signal_handlers_disconnect_matched (pWidget,
+			G_SIGNAL_MATCH_FUNC,
+			0,
+			0,
+			NULL,
+			on_button_press_widget,
+			NULL);
 	}
 	return pWidget;
 }
