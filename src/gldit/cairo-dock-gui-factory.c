@@ -1171,16 +1171,41 @@ static void _cairo_dock_fill_modele_with_short_themes (const gchar *cThemeName, 
 
 static void _got_themes_list (GHashTable *pThemeTable, gpointer *data)
 {
-	if (pThemeTable == NULL)
+	/**if (pThemeTable == NULL)
 	{
-		cairo_dock_set_status_message (data[1], "Couldn't list available themes (is connection alive ?)");
+		cairo_dock_set_status_message (data[1], "Couldn't list online themes (is connection alive ?)");
 		return ;
 	}
 	else
 		cairo_dock_set_status_message (data[1], "");
 	GtkWidget *pTreeView = data[0];
 	GtkListStore *modele = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView)));
-	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_themes, modele);
+	
+	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_themes, modele);*/
+	
+	if (pThemeTable == NULL)
+	{
+		cairo_dock_set_status_message (data[1], "Couldn't list online themes (is connection alive ?)");
+		return ;
+	}
+	else
+		cairo_dock_set_status_message (data[1], "");
+	
+	GtkWidget *pTreeView = data[0];
+	
+	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pTreeView), "cd-task");
+	if (pTask != NULL)
+	{
+		//g_print ("remove the task\n");
+		cairo_dock_discard_task (pTask);  // pas de cairo_dock_free_task dans la callback de la tache.
+		g_object_set_data (G_OBJECT (pTreeView), "cd-task", NULL);
+	}
+	
+	GtkListStore *pModel = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView)));
+	g_return_if_fail (pModel != NULL);
+	
+	gtk_list_store_clear (GTK_LIST_STORE (pModel));
+	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_modele_with_themes, pModel);
 }
 
 
@@ -2276,6 +2301,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				//\______________ On recupere les themes.
 				if (pAuthorizedValuesList != NULL)
 				{
+					// get the local, shared and distant paths.
 					gchar *cShareThemesDir = NULL, *cUserThemesDir = NULL, *cDistantThemesDir = NULL;
 					if (pAuthorizedValuesList[0] != NULL)
 					{
@@ -2286,29 +2312,33 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							cDistantThemesDir = pAuthorizedValuesList[2];
 						}
 					}
-					if (cDistantThemesDir != NULL)
-						cairo_dock_set_status_message_printf (pMainWindow, _("Listing themes in '%s' ..."), cDistantThemesDir);
+					
+					// list local packages first.
 					_allocate_new_buffer;
 					data[0] = pOneWidget;
 					data[1] = pMainWindow;
-					data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // libere dans la callback de la tache.
+					data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // freed in the callback '_got_themes_combo_list'.
 					
 					GHashTable *pThemeTable = cairo_dock_list_packages (cShareThemesDir, cUserThemesDir, NULL, NULL);
 					if (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY)  // on ne veut pas des themes venant du serveur.
 						g_hash_table_foreach_remove (pThemeTable, (GHRFunc)_ignore_server_themes, NULL);
 					_got_themes_combo_list (pThemeTable, (gpointer*)data);
-					///g_hash_table_destroy (pThemeTable);
 					
+					// list distant packages asynchronously.
 					if (cDistantThemesDir != NULL)
 					{
-						data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // libere dans la callback de la tache.
-						/// passer la hash table en entree/sortie ...
-						CairoDockTask *pTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_combo_list, data, pThemeTable);
+						cairo_dock_set_status_message_printf (pMainWindow, _("Listing themes in '%s' ..."), cDistantThemesDir);
+						data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // freed in the callback '_got_themes_combo_list'.
+						CairoDockTask *pTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_combo_list, data, pThemeTable);  // the table will be freed along with the task.
 						g_object_set_data (G_OBJECT (pOneWidget), "cd-task", pTask);
 						g_signal_connect (G_OBJECT (pOneWidget), "destroy", G_CALLBACK (on_delete_async_widget), NULL);
-						g_free (cUserThemesDir);
-						g_free (cShareThemesDir);
 					}
+					else
+					{
+						g_hash_table_destroy (pThemeTable);
+					}
+					g_free (cUserThemesDir);
+					g_free (cShareThemesDir);
 				}
 			break ;
 			
@@ -2854,6 +2884,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				//\______________ On recupere les themes.
 				if (pAuthorizedValuesList != NULL)
 				{
+					// get the local, shared and distant paths.
 					gchar *cShareThemesDir = NULL, *cUserThemesDir = NULL, *cDistantThemesDir = NULL;
 					if (pAuthorizedValuesList[0] != NULL)
 					{
@@ -2865,18 +2896,35 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						}
 					}
 					
-					_allocate_new_buffer;
+					/**_allocate_new_buffer;
 					data[0] = pOneWidget;
 					data[1] = pMainWindow;
 					CairoDockTask *pTask = cairo_dock_list_packages_async (cShareThemesDir, cUserThemesDir, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_list, data, NULL);
 					g_object_set_data (G_OBJECT (pOneWidget), "cd-task", pTask);
 					g_signal_connect (G_OBJECT (pOneWidget), "destroy", G_CALLBACK (on_delete_async_widget), NULL);
+					g_free (cUserThemesDir);*/
+					
+					// list local packages first.
+					_allocate_new_buffer;
+					data[0] = pOneWidget;
+					data[1] = pMainWindow;
+					GHashTable *pThemeTable = cairo_dock_list_packages (cShareThemesDir, cUserThemesDir, NULL, NULL);
+					_got_themes_list (pThemeTable, (gpointer*)data);
+					
+					// list distant packages asynchronously.
+					if (cDistantThemesDir != NULL)
+					{
+						cairo_dock_set_status_message_printf (pMainWindow, _("Listing themes in '%s' ..."), cDistantThemesDir);
+						CairoDockTask *pTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_list, data, pThemeTable);  // the table will be freed along with the task.
+						g_object_set_data (G_OBJECT (pOneWidget), "cd-task", pTask);
+						g_signal_connect (G_OBJECT (pOneWidget), "destroy", G_CALLBACK (on_delete_async_widget), NULL);
+					}
+					else
+					{
+						g_hash_table_destroy (pThemeTable);
+					}
 					g_free (cUserThemesDir);
 				}
-			break ;
-			
-			case 'r' :  // deprecated.
-				cd_warning ("\nTHIS CONF FILE IS OUT OF DATE\n");
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_FONT_SELECTOR :  // string avec un selecteur de font a cote du GtkEntry.

@@ -15,11 +15,11 @@ frame2=
 
 #b Use the new theme's launchers?
 #{If you tick this box, your launchers will be deleted and replaced by the ones provided in the new theme. Otherwise the current launchers will be kept, only icons will be replaced.}
-use theme launchers = false
+use theme launchers = true
 
 #b Use the new theme's behaviour?
 #{Otherwise the current behaviour will be kept. This defines the dock's position, behavioural settings such as auto-hide, using taskbar or not, etc.}
-use theme behaviour = false
+use theme behaviour = true
 
 #[gtk-save]
 [Save]
