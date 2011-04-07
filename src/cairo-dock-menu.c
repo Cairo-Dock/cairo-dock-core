@@ -1311,7 +1311,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
 		
 		//\_________________________ On rajoute les actions courantes sur les icones d'applis.
-		if (! cairo_dock_class_is_inhibited (icon->cClass))  // if the class doesn't already have an inhibator somewhere.
+		if (cairo_dock_icons_are_locked () && ! cairo_dock_class_is_inhibited (icon->cClass))  // if the class doesn't already have an inhibator somewhere.
 		{
 			_add_entry_in_menu (_("Make it a launcher"), GTK_STOCK_CONVERT, _cairo_dock_make_launcher_from_appli, menu);
 		}

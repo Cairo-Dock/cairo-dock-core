@@ -213,7 +213,7 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 	GdkEventButton* pButton,
 	CairoDialog *pDialog)
 {
-	g_print ("press button on dialog\n");
+	//g_print ("press button on dialog\n");
 	if (pButton->time > pDialog->iButtonPressTime)  // it's not a click on the interactive widget that has been passed to the dialog.
 	{
 		if (pButton->type == GDK_BUTTON_PRESS)

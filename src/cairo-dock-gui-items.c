@@ -823,6 +823,7 @@ void cairo_dock_gui_items_update_module_instance_container (CairoDockModuleInsta
 void cairo_dock_gui_items_reload_current_widget (CairoDockModuleInstance *pInstance, int iShowPage)
 {
 	g_return_if_fail (s_pLauncherWindow != NULL && s_pLauncherTreeView != NULL);
+	g_print ("%s ()\n", __func__);
 	
 	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
 	CairoDockModuleInstance *pModuleInstance = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-module");
@@ -857,6 +858,8 @@ void cairo_dock_gui_items_reload_current_widget (CairoDockModuleInstance *pInsta
 	else
 		iNotebookPage = -1;
 	
+	g_free (cPrevPath);
+	cPrevPath = NULL;
 	_on_select_one_item_in_tree (pSelection, pModel, path, FALSE, s_pLauncherWindow);  // on appelle la callback nous-memes, car la ligne est deja selectionnee, donc le parametre 'path_currently_selected' sera a TRUE. de plus on veut pouvoir mettre la page du notebook.
 	
 	if (iNotebookPage != -1)

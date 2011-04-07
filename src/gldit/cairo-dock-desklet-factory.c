@@ -307,7 +307,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDesklet *pDesklet)
 {
-	g_print (" >>>>>>>>> %s (%dx%d, %d;%d)", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
+	//g_print (" >>>>>>>>> %s (%dx%d, %d;%d)", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
 	if (pDesklet->container.iWidth != pEvent->width || pDesklet->container.iHeight != pEvent->height)
 	{
 		if ((pEvent->width < pDesklet->container.iWidth || pEvent->height < pDesklet->container.iHeight) && (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0))
@@ -356,7 +356,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 		y += g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
 	while (y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 		y -= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	g_print (" => (%d;%d)\n", x, y);
+	//g_print (" => (%d;%d)\n", x, y);
 	if (pDesklet->container.iWindowPositionX != x || pDesklet->container.iWindowPositionY != y)
 	{
 		pDesklet->container.iWindowPositionX = x;
