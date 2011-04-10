@@ -1,0 +1,199 @@
+.TH CAIRO-DOCK 1 "Apr. 10, 2011"
+
+.SH NAME
+cairo\-dock \- A dock to launch your programs easily.
+
+.SH SYNOPSIS
+.br
+.B cairo\-dock
+[options]
+
+.SH DESCRIPTION
+.B Cairo\-Dock
+is a pretty, light and convenient interface to your desktop,
+able to replace advantageously your system panel!
+.PP
+It features 
+.B multi-docks, taskbar, launchers
+and a lot of useful
+.B applets.
+.br
+.B Applets
+can be detached from the dock to act as desktop
+.B widgets.
+.br
+Numerous ready\-to\-use
+.B themes
+are downloadable in 1 click, and can be easily customized at your convenience.
+.br
+It can use 
+.B hardware acceleration
+(OpenGL) to be very fast and low on CPU.
+.PP
+It is recommended to install the PLUG\-INS package (
+.B cairo\-dock\-plug\-ins
+) to have acces to more views, dialogs and many plug\-ins and applets.
+.PP
+Some
+.B screenshots
+are available :
+.br
+        http://pics.glx\-dock.org
+.PP
+.B Development site:
+.br
+        https://launchpad.net/cairo\-dock
+
+.SH OPTIONS
+You can launch
+.B Cairo\-Dock
+with several options :
+.br
+(Note : you can use these options in one block. For example : cairo\-dock\ \-oia )
+.TP
+.B \-c, \-\-cairo
+force Cairo backend (Use this option if you have issue with the OpenGL mode. It removes the window at startup)
+.TP
+.B \-o, \-\-opengl
+force OpenGL backend (Cairo\-Dock with OpenGL. It removes the window at startup)
+.TP
+.B \-i, \-\-indirect
+use Indirect Rendering mode for OpenGL
+.TP
+.B \-l, \-\-log [option]
+log verbosity (options : debug, message, warning, critical, error \- default is 'warning')
+.br
+For example : cairo\-dock \-l debug
+.TP
+.B \-w, \-\-wait
+wait for N seconds before starting; this is useful if you notice some problems when the dock starts with the session.
+.TP
+.B \-a, \-\-keep\-above
+force to keep the dock above other windows whatever
+.TP
+.B \-p, \-\-no\-skip\-pager
+show the dock in pager
+.TP
+.B \-b, \-\-no\-skip\-taskbar
+show the dock in taskbar
+.TP
+.B \-s, \-\-no\-sticky
+don't make the dock appear on all desktops
+.TP
+.B \-t, \-\-toolbar\-hint
+force the window manager to consider Cairo\-Dock as a toolbar rather than as a dock
+.TP
+.B \-n, \-\-normal\-hint
+force the window manager to consider Cairo\-Dock as a normal application rather than as a dock
+.TP
+.B \-e, \-\-env
+force the dock to consider this environment (gnome, xfce, etc.) \- it may crash
+the dock if not set properly.
+.TP
+.B \-d, \-\-dir
+force the dock to load the configuration in this directory  (default is ~/.config/cairo\-dock).
+.TP
+.B \-m, \-\-maintenance
+allow to edit the config before the dock is started and show the config panel
+on startup
+.TP
+.B \-f, \-\-safe\-mode
+don't load any plug\-ins and show the theme manager on startup
+.TP
+.B \-M, \-\-modules\-dir
+ask the dock to load additional modules contained in this directory
+(though it is unsafe for your dock to load unofficial modules).
+.TP
+.B \-T, \-\-testing
+for debugging purpose only. The crash manager will not be started to hunt down the bugs.
+.TP
+.B \-E, \-\-easter\-eggs
+for debugging purpose only. Some hidden and still unstable options will be activated.
+.TP
+.B \-S, \-\-server
+address of a server containing additional themes. This will overwrite the default server address.
+.TP
+.B \-k, \-\-locked
+lock the dock so that any modification is impossible for users.
+
+.SH OTHER
+Some other options with an output in the terminal :
+.TP 10
+.B \-v, \-\-version
+print version and quit.
+.TP
+.B \-h, \-\-help
+Show the help and quit
+.TP
+.B \-C, \-\-capuccino
+.TP
+.B \-X, \-\-expresso
+.TP
+.B \-L, \-\-cafe\-latte
+Cairo\-Dock makes anything, including coffee !
+
+.SH FILES
+.TP 10
+.B ~/.config/cairo\-dock/
+Your config files are saved in this repertory. You can use '\-d' option to change it.
+.TP
+.B /usr/share/cairo\-dock/
+Data files for Cairo-Dock.
+.TP
+.B /usr/lib/cairo\-dock/
+Binary files for Cairo\-Dock and its plug\-ins.
+
+.SH AUTHOR
+Most of the
+.B Cairo\-Dock
+project was written by 
+.B Fabrice Rey
+(fabounet) <fabounet@users.berlios.de>.
+.br
+The
+.B Cairo\-Dock Team
+is formed by
+.B Fabounet
+(Fabrice Rey),
+.B Mav
+(Yann Sladek),
+.B Tofe
+(Christophe Chapuis),
+.B Nochka85
+(Yann Dulieu),
+.B Matttbe
+(Matthieu Baerts)
+.B ChanGFu
+(Rémy Robertson),
+.B Paradoxxx\ Zero
+(Florian Mounier),
+.B Necropotame
+(Adrien Pilleboue),
+.B Rom1
+(Romain Perol),
+.B Ctaf
+,
+.B Augur
+ as well as numerous beta testers (ppmt, vilraleur, M.Tasaka, etc. see the 'About' menu in the dock) !
+.PP
+This manual page was started by Julien Lavergne <julien.lavergne@gmail.com>,
+for the Debian project (but may be used by others).
+.br
+Updated by Matthieu Baerts (matttbe) <matttbe@gmail.com>.
+
+.SH BUGS
+Your bug is maybe a
+.B recurrent problem
+(black background, window at startup (use \-c or \-o),
+problem with OpenGL, etc.). Please go to http://www.glx\-dock.org/ww_page.php?p=Recurrents%20problems&lang=en
+.PP
+For any other bugs, you can post them on Cairo\-Dock forum
+(http://forum.glx\-dock.org)
+.br
+or on Launchpad
+(https://bugs.launchpad.net/cairo\-dock)
+
+.SH WEBSITE
+<
+.B http://glx-dock.org
+>
