@@ -551,6 +551,24 @@ static gboolean _add_one_desklet_to_model (CairoDesklet *pDesklet, GtkTreeStore 
 	return FALSE; // FALSE => keep going
 }
 
+static inline void _add_one_module (const gchar *cModuleName, CairoDockModuleInstance *pModuleInstance, GtkTreeStore *model)
+{
+	GtkTreeIter iter;
+	gtk_tree_store_append (model, &iter, NULL);
+	
+	GdkPixbuf *pixbuf = NULL;
+	gchar *cImagePath = g_strdup (pModuleInstance->pModule->pVisitCard->cIconFilePath);
+	if (cImagePath != NULL)
+		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 32, 32, NULL);
+	gtk_tree_store_set (model, &iter,
+		CD_MODEL_NAME, cModuleName,
+		CD_MODEL_PIXBUF, pixbuf,
+		CD_MODEL_MODULE, pModuleInstance,
+		-1);
+	g_free (cImagePath);
+	if (pixbuf)
+		g_object_unref (pixbuf);
+}
 static gboolean _add_one_module_to_model (const gchar *cModuleName, CairoDockModule *pModule, GtkTreeStore *model)
 {
 	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule) && pModule->pInstancesList != NULL)
@@ -558,22 +576,8 @@ static gboolean _add_one_module_to_model (const gchar *cModuleName, CairoDockMod
 		CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
 		if (pModuleInstance->pIcon == NULL || (pModuleInstance->pDock && !pModuleInstance->pIcon->cParentDockName))
 		{
-			// on ajoute une ligne pour le dock.
-			GtkTreeIter iter;
-			gtk_tree_store_append (model, &iter, NULL);
-			
-			GdkPixbuf *pixbuf = NULL;
-			gchar *cImagePath = g_strdup (pModuleInstance->pModule->pVisitCard->cIconFilePath);
-			if (cImagePath != NULL)
-				pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 32, 32, NULL);
-			gtk_tree_store_set (model, &iter,
-				CD_MODEL_NAME, cModuleName,
-				CD_MODEL_PIXBUF, pixbuf,
-				CD_MODEL_MODULE, pModuleInstance,
-				-1);
-			g_free (cImagePath);
-			if (pixbuf)
-				g_object_unref (pixbuf);
+			// on ajoute une ligne pour l'applet.
+			_add_one_module (cModuleName, pModuleInstance, model);
 		}
 	}
 	return FALSE; // FALSE => keep going
@@ -590,6 +594,9 @@ static GtkTreeModel *_build_tree_model (void)
 	cairo_dock_foreach_docks ((GHFunc) _add_one_root_dock_to_model, model);  // on n'utilise pas cairo_dock_foreach_root_docks(), de facon a avoir le nom du dock.
 	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _add_one_desklet_to_model, model);
 	cairo_dock_foreach_module ((GHRFunc)_add_one_module_to_model, model);
+	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
+	CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
+	_add_one_module ("Help", pModuleInstance, model);
 	return GTK_TREE_MODEL (model);
 }
 

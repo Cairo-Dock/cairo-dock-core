@@ -111,18 +111,20 @@ static void _cairo_dock_configure_root_dock (GtkMenuItem *pMenuItem, CairoDock *
 	g_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
 	
 	cairo_dock_show_items_gui (NULL, CAIRO_CONTAINER (pDock), NULL, 0);
-	/**const gchar *cDockName = cairo_dock_search_dock_name (pDock);
-	g_return_if_fail (cDockName != NULL);
-	cd_message ("%s (%s)", __func__, cDockName);
-	
-	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // ne devrait pas arriver mais au cas ou.
-	{
-		cairo_dock_add_root_dock_config_for_name (cDockName);
-	}
-	g_free (cConfFilePath);*/
 }
-
+static void _cairo_dock_delete_dock (GtkMenuItem *pMenuItem, CairoDock *pDock)
+{
+	g_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
+	
+	Icon *pIcon = cairo_dock_get_dialogless_icon_full (pDock);
+	
+	int answer = cairo_dock_ask_question_and_wait (_("Delete this dock?"), pIcon, CAIRO_CONTAINER (pDock));
+	if (answer != GTK_RESPONSE_YES)
+		return ;
+	
+	const gchar *cDockName = cairo_dock_search_dock_name (pDock);
+	cairo_dock_destroy_dock (pDock, cDockName);
+}
 static void _cairo_dock_initiate_theme_management (GtkMenuItem *pMenuItem, gpointer data)
 {
 	cairo_dock_manage_themes ();
@@ -350,6 +352,12 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 				pSubMenu,
 				CAIRO_DOCK (pContainer));
 			gtk_widget_set_tooltip_text (pMenuItem, _("Customize the position, visibility and appearance of this main dock."));
+			
+			cairo_dock_add_in_menu_with_stock_and_data (_("Delete this dock"),
+				GTK_STOCK_DELETE,
+				(GFunc)_cairo_dock_delete_dock,
+				pSubMenu,
+				CAIRO_DOCK (pContainer));
 		}
 		
 		if (! cairo_dock_theme_manager_is_integrated ())
