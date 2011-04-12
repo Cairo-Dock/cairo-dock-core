@@ -491,7 +491,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	}
 	
 	//\________________ Interactive dialogs are set modal, to be fixed.
-	if (pDialog->pInteractiveWidget || pDialog->pButtons)
+	if ((pDialog->pInteractiveWidget || pDialog->pButtons || pAttribute->iTimeLength == 0) && ! pDialog->bNoInput)
 	{
 		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);
 	}

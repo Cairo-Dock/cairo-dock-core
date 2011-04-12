@@ -45,6 +45,10 @@ set_current_conf_file()  # (conf file)
 
 cd "$CURRENT_THEME_DIR"
 
+mkdir "images"
+mv *.svg images 2> /dev/null
+mv *.png images 2> /dev/null
+
 set_current_conf_file "cairo-dock.conf"
 set_value "Position"		"x gap"				0
 set_value "Position"		"y gap"				0
@@ -196,6 +200,7 @@ set_current_conf_file "plug-ins/weather/weather.conf"
 set_value "Icon"			"name"						""
 set_value "Configuration"	"nb days"					5
 set_value "Configuration"	"check interval"			15
+#set_value "Configuration"	"dialog duration"			0
 set_value "Configuration"	"IS units"					true
 set_value "Configuration"	"display temperature"		true
 

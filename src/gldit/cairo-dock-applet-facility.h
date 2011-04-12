@@ -141,6 +141,9 @@ gboolean cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pModuleIns
 void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pModuleInstance);
 
 
+void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h);
+
+
   ////////////
  // CONFIG //
 ////////////

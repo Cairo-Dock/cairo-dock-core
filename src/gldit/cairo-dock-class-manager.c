@@ -80,6 +80,9 @@ static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 {
 	g_list_free (pClassAppli->pIconsOfClass);
 	g_list_free (pClassAppli->pAppliOfClass);
+	g_free (pClassAppli->cDesktopFile);
+	if (pClassAppli->pMimeTypes)
+		g_strfreev (pClassAppli->pMimeTypes);
 	g_free (pClassAppli);
 }
 
@@ -807,6 +810,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		}
 		else  // le sous-dock est pointe par un inhibiteur (normal launcher ou applet).
 		{
+			gboolean bLastIconIsRemoving = cairo_dock_icon_is_being_removed (pLastClassIcon);  // keep the removing state because when we detach the icon, it returns to normal state.
 			cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
 			g_free (pLastClassIcon->cParentDockName);
 			pLastClassIcon->cParentDockName = NULL;
@@ -814,7 +818,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			cairo_dock_destroy_dock (pDock, cClass);
 			pFakeClassIcon->pSubDock = NULL;
 			cd_debug ("sanity check : pFakeClassIcon->Xid : %d", pFakeClassIcon->Xid);
-			if (! cairo_dock_icon_is_being_removed (pLastClassIcon))
+			if (! bLastIconIsRemoving)
 			{
 				cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);  // a priori inutile.
 				cairo_dock_update_name_on_inhibitors (cClass, pLastClassIcon->Xid, pLastClassIcon->cName);
@@ -1212,7 +1216,7 @@ static gchar *_search_class_desktop_file (const gchar *cClass)
 	return cDesktopFile;
 }
 
-void cairo_dock_find_class_attributes (const gchar *cClass)
+static void _cairo_dock_find_class_attributes (const gchar *cClass)
 {
 	g_return_if_fail (cClass != NULL);
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
@@ -1252,7 +1256,7 @@ static inline CairoDockClassAppli *_get_class_appli_with_attributes (const gchar
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (! pClassAppli->bSearchedAttributes)
 	{
-		cairo_dock_find_class_attributes (cClass);
+		_cairo_dock_find_class_attributes (cClass);
 	}
 	return pClassAppli;
 }

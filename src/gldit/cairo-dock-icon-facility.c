@@ -142,13 +142,20 @@ GList *cairo_dock_sort_icons_by_order (GList *pIconList)
 GList *cairo_dock_sort_icons_by_name (GList *pIconList)
 {
 	GList *pSortedIconList = g_list_sort (pIconList, (GCompareFunc) cairo_dock_compare_icons_name);
-	int iOrder = 0;
+	
+	guint iCurrentGroup = -1;
+	double fCurrentOrder = 0.;
 	Icon *icon;
 	GList *ic;
 	for (ic = pIconList; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		icon->fOrder = iOrder ++;
+		if (icon->iGroup != iCurrentGroup)
+		{
+			iCurrentGroup = icon->iGroup;
+			fCurrentOrder = 0.;
+		}
+		icon->fOrder = fCurrentOrder++;
 	}
 	return pSortedIconList;
 }

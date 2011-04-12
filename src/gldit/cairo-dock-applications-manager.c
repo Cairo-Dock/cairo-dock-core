@@ -39,7 +39,7 @@
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bDrawIndicatorOnAppli
 #include "cairo-dock-icon-facility.h"  // cairo_dock_update_icon_s_container_name
 #include "cairo-dock-animations.h"  // cairo_dock_trigger_icon_removal_from_dock
-#include "cairo-dock-application-factory.h"  // cairo_dock_create_icon_from_xwindow
+#include "cairo-dock-application-factory.h"  // cairo_dock_new_appli_icon
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-container.h"
 #include "cairo-dock-notifications.h"
@@ -672,10 +672,6 @@ static void _on_change_window_name (Icon *icon, CairoDock *pDock, gboolean bSear
 		if (icon->cName == NULL || strcmp (icon->cName, cName) != 0)
 		{
 			cairo_dock_set_icon_name (cName, icon, NULL);
-			/**g_free (icon->cName);
-			icon->cName = cName;
-			
-			cairo_dock_load_icon_text (icon, &myIconsParam.iconTextDescription);*/
 			
 			cairo_dock_update_name_on_inhibitors (icon->cClass, icon->Xid, cName);
 		}
@@ -1368,38 +1364,7 @@ static void _load_appli (Icon *icon)
 	if (icon->cClass && !icon->pMimeTypes && ! icon->cCommand)
 	{
 		icon->cCommand = g_strdup (cairo_dock_get_class_command (icon->cClass));
-		icon->pMimeTypes = g_strdupv (cairo_dock_get_class_mimetypes (icon->cClass));
-		/**gboolean bFound = TRUE;
-		GString *sDesktopFilePath = g_string_new ("");
-		g_string_printf (sDesktopFilePath, "/usr/share/applications/%s.desktop", icon->cClass);
-		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-		{
-			g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s.desktop", icon->cClass);
-			if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-			{
-				g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s.desktop", icon->cClass);
-				if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-				{
-					bFound = FALSE;
-				}
-			}
-		}
-		if (bFound)
-		{
-			GKeyFile *pKeyFile = cairo_dock_open_key_file (sDesktopFilePath->str);
-			if (pKeyFile)
-			{
-				gsize length = 0;
-				icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
-				icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
-				gchar *str = strchr (icon->cCommand, '%');
-				if (str != NULL)
-					*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
-				g_print ("check: set command '%s' to appli %s\n", icon->cCommand, icon->cName);
-				g_key_file_free (pKeyFile);
-			}
-		}
-		g_string_free (sDesktopFilePath, TRUE);*/
+		icon->pMimeTypes = g_strdupv ((gchar**)cairo_dock_get_class_mimetypes (icon->cClass));
 	}
 }
 

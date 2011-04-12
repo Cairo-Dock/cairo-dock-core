@@ -218,14 +218,14 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 	{
 		if (pButton->type == GDK_BUTTON_PRESS)
 		{
-			if (pDialog->pButtons == NULL/** && pDialog->pInteractiveWidget == NULL*/)  // not a dialog that can be closed by a button => we close it here
+			if (pDialog->pButtons == NULL)  // not a dialog that can be closed by a button => we close it here
 			{
 				if (pDialog->bHideOnClick)
 					cairo_dock_hide_dialog (pDialog);
 				else
 					cairo_dock_dialog_unreference (pDialog);
 			}
-			else if (pDialog->pButtons != NULL && pButton->button == 1)  // left click on a button.
+			else if (pButton->button == 1)  // left click on a button.
 			{
 				int iButton = _cairo_dock_find_clicked_button_in_dialog (pButton, pDialog);
 				if (iButton >= 0 && iButton < pDialog->iNbButtons)
@@ -237,7 +237,7 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 		}
 		else if (pButton->type == GDK_BUTTON_RELEASE)
 		{
-			if (pDialog->pButtons != NULL && pButton->button == 1)
+			if (pDialog->pButtons != NULL && pButton->button == 1)  // release left click with buttons present
 			{
 				int iButton = _cairo_dock_find_clicked_button_in_dialog (pButton, pDialog);
 				cd_debug ("clic on button %d", iButton);
@@ -964,10 +964,10 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		(CairoDockActionOnAnswerFunc)_cairo_dock_get_answer_from_dialog,
 		(gpointer) data,
 		(GFreeFunc) NULL);
-	pDialog->fAppearanceCounter = 1.;
 	
 	if (pDialog != NULL)
 	{
+		pDialog->fAppearanceCounter = 1.;
 		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);
 		g_signal_connect (pDialog->container.pWidget,
 			"delete-event",

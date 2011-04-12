@@ -630,3 +630,42 @@ void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance
 		}
 	}
 }
+
+
+
+void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
+{
+	Icon *pIcon = pInstance->pIcon;
+	g_return_if_fail (pIcon != NULL);
+	
+	CairoContainer *pContainer = pInstance->pContainer;
+	g_return_if_fail (pContainer != NULL);
+	
+	if (pInstance->pDock)
+	{
+		double fMaxScale = cairo_dock_get_max_scale (pContainer);
+		pIcon->fWidth = w / fMaxScale;
+		pIcon->fHeight = h / fMaxScale;  // set the height too, because at the moment it takes into account the dock's ratio.
+		pIcon->iImageWidth = 0;  // will be updated when the icon is reloaded.
+		pIcon->iImageHeight = 0;  // will be updated when the icon is reloaded.
+		cairo_dock_load_icon_image (pIcon, pContainer);
+		
+		if (pInstance->pDrawContext)
+		{
+			cairo_destroy (pInstance->pDrawContext);
+			pInstance->pDrawContext = NULL;
+		}
+		if (pIcon->pIconBuffer)
+			pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
+		if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
+			pInstance->pDrawContext = NULL;
+		
+		cairo_dock_update_dock_size (pInstance->pDock);
+	}
+	else  // in desklet mode, just resize the desklet, it will trigger the reload of the applet when the 'configure' event is received.
+	{
+		gtk_window_resize (GTK_WINDOW (pContainer->pWidget),
+			w,
+			h);
+	}
+}
