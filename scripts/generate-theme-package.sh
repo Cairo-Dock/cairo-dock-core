@@ -44,7 +44,7 @@ import_file()
 		static local_file=${file##*/}
 		echo "  => $local_file"
 		/bin/cp "$file" "$3"
-		set_value "Hidden dock" "callback image" "$local_file"
+		set_value "Accessibility" "callback image" "$local_file"
 	fi
 }
 
@@ -99,7 +99,7 @@ cd "$CURRENT_THEME_DIR"
 mkdir extras
 
 set_current_conf_file "cairo-dock.conf"
-import_file "Hidden dock"	"callback image"		.
+import_file "Accessibility"	"callback image"		.
 import_file "Background"	"background image"		.
 import_file "Icons"			"icons bg"				.
 import_file "Icons"			"separator image"		.
