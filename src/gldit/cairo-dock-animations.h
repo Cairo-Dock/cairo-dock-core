@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 */
 
 /// callback to render the icon with libcairo at each step of the Transition.
-typedef gboolean (*CairoDockTransitionRenderFunc) (Icon *pIcon, gpointer pUserData, cairo_t *pIconContext);
+typedef gboolean (*CairoDockTransitionRenderFunc) (Icon *pIcon, gpointer pUserData);
 /// callback to render the icon with OpenGL at each step of the Transition.
 typedef gboolean (*CairoDockTransitionGLRenderFunc) (Icon *pIcon, gpointer pUserData);
 
@@ -59,10 +59,8 @@ struct _CairoDockTransition {
 	gint iElapsedTime;
 	/// number of setps since the beginning of the transition, in ms.
 	gint iCount;
-	/// cairo context on the Icon.
-	cairo_t *pIconContext;  // attention a bien detruire la transition
 	/// Container of the Icon.
-	CairoContainer *pContainer;  // si l'un de ces 2 parametres change !
+	CairoContainer *pContainer;  // keep it up-to-date!
 	};
 
 /// Definition of a Hiding Effect backend (used to provide an animation when the docks hides/shows itself).
@@ -193,7 +191,6 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserDat
 /** Set a Transition on an Icon.
 *@param pIcon the icon.
 *@param pContainer the Container of the Icon. It will be shared with the transition.
-*@param pIconContext a cairo context on the Icon for the cairo rendering. It will be shared with the transition.
 *@param render_step_cairo the cairo rendering function.
 *@param render_step_opengl the openGL rendering function (can be NULL, in which case the texture mapping from the cairo drawing is done automatically).
 *@param bFastPace TRUE for a high frequency refresh (this uses of course more CPU).
@@ -202,7 +199,7 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserDat
 *@param pUserData data passed to the rendering functions.
 *@param pFreeUserDataFunc function called to free the user data when the transition is destroyed (optionnal).
 */
-void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pIconContext, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData, GFreeFunc pFreeUserDataFunc);
+void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData, GFreeFunc pFreeUserDataFunc);
 
 /** Stop and remove the Transition of an Icon.
 *@param pIcon the icon.

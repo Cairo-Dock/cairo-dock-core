@@ -742,7 +742,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_MY_CONTAINER_IS_OPENGL (g_bUseOpenGL && ((myDock && myDock->pRenderer->render_opengl) || (myDesklet && myDesklet->pRenderer && myDesklet->pRenderer->render_opengl)))
 
 #define CD_APPLET_SET_TRANSITION_ON_MY_ICON(render_step_cairo, render_step_opengl, bFastPace, iDuration, bRemoveWhenFinished) \
-	cairo_dock_set_transition_on_icon (myIcon, myContainer, myDrawContext,\
+	cairo_dock_set_transition_on_icon (myIcon, myContainer,\
 		(CairoDockTransitionRenderFunc) render_step_cairo,\
 		(CairoDockTransitionGLRenderFunc) render_step_opengl,\
 		bFastPace,\

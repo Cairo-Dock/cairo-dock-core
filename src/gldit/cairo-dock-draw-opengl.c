@@ -887,7 +887,7 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 			iOriginalTexture = cairo_dock_create_texture_from_surface (pIcon->pIconBuffer);
 		}
 		
-		cairo_dock_set_transition_on_icon (pIcon, pContainer, NULL,
+		cairo_dock_set_transition_on_icon (pIcon, pContainer,
 			(CairoDockTransitionRenderFunc) NULL,
 			(CairoDockTransitionGLRenderFunc) _transition_step,
 			TRUE,  // slow
