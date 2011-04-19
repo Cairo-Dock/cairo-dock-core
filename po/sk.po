@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2011-04-15 00:24+0000\n"
 "PO-Revision-Date: 2010-10-12 09:44+0000\n"
 "Last-Translator: milboy <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
-"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-02 04:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-16 04:38+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
+"Language: sk\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -70,7 +71,8 @@ msgid "category"
 msgstr "kategória"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:624
@@ -324,7 +326,8 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknite na applet, a získate náhľad a jeho popis."
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:79
@@ -368,9 +371,8 @@ msgid "Manage Themes"
 msgstr "Spravovať témy"
 
 #: ../src/cairo-dock-menu.c:121
-#, fuzzy
 msgid "Delete this dock?"
-msgstr "Odstrániť tento súbor"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:171
 msgid "About Cairo-Dock"
@@ -425,9 +427,8 @@ msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Upraviť pozíciu, viditeľnosť a vzhľad hlavného panelu."
 
 #: ../src/cairo-dock-menu.c:356
-#, fuzzy
 msgid "Delete this dock"
-msgstr "Odstrániť tento súbor"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:365
 msgid "Manage themes"
@@ -488,7 +489,8 @@ msgid "Get more applets!"
 msgstr "Získajte viac appletov!"
 
 #: ../src/cairo-dock-menu.c:429
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Aplety tretej strany poskytujú integráciu do mnohých programov, ako je Pidgin"
 
@@ -700,9 +702,8 @@ msgid "Minimise"
 msgstr "Minimalizovať"
 
 #: ../src/cairo-dock-menu.c:1336 ../src/cairo-dock-menu.c:1344
-#, fuzzy
 msgid "middle-click"
-msgstr "Zavrieť (stredný-klik)"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1344 ../src/cairo-dock-menu.c:1346
 #: ../data/messages:327
@@ -1661,16 +1662,14 @@ msgid "Interaction"
 msgstr "Interakcia"
 
 #: ../data/messages:323
-#, fuzzy
 msgid "Action on middle-click on the related application"
-msgstr "Stredným kliknutím na ikonu ukončíte súvisiacu aplikáciu"
+msgstr ""
 
 #: ../data/messages:325
 msgid "Nothing"
 msgstr ""
 
 #: ../data/messages:329
-#, fuzzy
 msgid "Minimize"
 msgstr "Minimalizovať"
 
@@ -2198,7 +2197,8 @@ msgid "Zoom effect"
 msgstr "Efekt priblíženia"
 
 #: ../data/messages:639
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "nastavený na hodnotu 1, ak nechcete zväčšujúce sa ikony, keď  nad nimi "
 "podržíte kurzor."
@@ -2516,8 +2516,8 @@ msgstr "väčší"
 
 #: ../data/messages:793
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:795
@@ -2533,9 +2533,8 @@ msgid "How to show that several icons are grouped :"
 msgstr "Ako zobraziť, že niektoré ikony sú zoskupené :"
 
 #: ../data/messages:803
-#, fuzzy
 msgid "Draw an emblem"
-msgstr "Vykresliť obrázok"
+msgstr ""
 
 #: ../data/messages:805
 msgid "Draw the sub-dock's icons as a stack"
@@ -2654,19 +2653,16 @@ msgid "Quick-info are short information drawn on the icons."
 msgstr ""
 
 #: ../data/messages:865
-#, fuzzy
 msgid "Quick-info"
-msgstr "Rýchle skrytie"
+msgstr ""
 
 #: ../data/messages:867
-#, fuzzy
 msgid "Use the same look as the labels?"
-msgstr "Použiť novú tému spúšťačov ?"
+msgstr ""
 
 #: ../data/messages:871
-#, fuzzy
 msgid "Background color:"
-msgstr "Pozadie"
+msgstr ""
 
 #: ../data/messages:875
 msgid "Yes, like that :-)"
@@ -2768,8 +2764,8 @@ msgstr ""
 
 #: ../data/messages:905
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr "Jednoducho chyťte a pretiahnite mimo dok, a zmizne v explózii !"
 
 #: ../data/messages:907
@@ -2787,8 +2783,8 @@ msgstr ""
 
 #: ../data/messages:911
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 "V module 'Ikony' si  môžete nastaviť predvolenú veľkosť ikôn podľa typu: "
@@ -2858,7 +2854,8 @@ msgstr ""
 
 #: ../data/messages:935
 msgid "In the «Position» module, you can add an offset to the screen border."
-msgstr "V module «Pozícia», môžete pridať odsadenie od ohraničenia obrazovky."
+msgstr ""
+"V module «Pozícia», môžete pridať odsadenie od ohraničenia obrazovky."
 
 #: ../data/messages:939
 msgid "The dock is hidden by the Gnome-panel"
@@ -3068,8 +3065,8 @@ msgid ""
 "In brief, you can easily have something as much sober as a gnome-panel, but "
 "this would be a shame ! ^_^"
 msgstr ""
-"Niekedy viac je menej! Môžete napríklad deaktivovať rozšírenie \"Efekty ikony"
-"\",\n"
+"Niekedy viac je menej! Môžete napríklad deaktivovať rozšírenie \"Efekty "
+"ikony\",\n"
 " alebo deaktivovať efekt keď je myš nad, v rozšírení \"Animovaná Ikona\".\n"
 "Môžete tiež znížiť efekt priblíženia alebo znížiť efekt odlesku v module "
 "\"Ikona\",\n"
@@ -3257,15 +3254,15 @@ msgstr "Mám škaredé ikony pre niektoré aplikácie"
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
 "Tip: Týmto spôsobom môžete nastaviť svoju vlastnú ikonu pre akúkoľvek "
 "aplikáciu. Stačí umiestniť ikonu s rovnakým názvom ako trieda aplikácie v "
-"zložke používanej dockom (v predvolenom nastavení, ~/.config/cairo-dock/"
-"current_theme/icons)\n"
+"zložke používanej dockom (v predvolenom nastavení, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "Triedu aplikácie možno nájsť zadaním «xprop |grep CLASS» v termináli a potom "
 "kliknete na okno aplikácie."
 
@@ -3288,7 +3285,8 @@ msgstr ""
 #: ../data/messages:1077
 msgid ""
 "Tip: to launch another instance of the program, shift+click on the launcher."
-msgstr "Tip: na spustenie ďalšej inštancie programu, shift + klik na spúšťač."
+msgstr ""
+"Tip: na spustenie ďalšej inštancie programu, shift + klik na spúšťač."
 
 #: ../data/messages:1079
 msgid ""
@@ -3562,8 +3560,9 @@ msgstr "Tak, ako môžem odstrániť úplne gnome-panel?"
 
 #: ../data/messages:1175
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3617,8 +3616,8 @@ msgstr ""
 msgid ""
 "Move the folder containing your gauge to ~/.config/cairo-dock/extras/gauges"
 msgstr ""
-"presuňte zložky obsahujúce vaše ukazovatele v ~ /.config/cairo-dock/extras/"
-"meradiel, a máte hotovo !"
+"presuňte zložky obsahujúce vaše ukazovatele v ~ /.config/cairo-"
+"dock/extras/meradiel, a máte hotovo !"
 
 #: ../data/messages:1193
 msgid ""
@@ -3708,16 +3707,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3726,14 +3725,14 @@ msgstr ""
 "hlasitosti</b> možno ovládať pomocou šípok vľavo/vpravo.\n"
 " - the <i>Terminal</i> applet allows you to pop-up the <b>okno terminalu</b> "
 "a zapísať priamo vnútri.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>oznamovacia oblasť</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>,potom môžete pohybovať vo vnútri šípkami\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>oznamovacia "
+"oblasť</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>,potom môžete pohybovať vo vnútri šípkami\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Aplikácie</b> menu, a "
 "tiež <b>rýchle spustenie</b> dialógového okna.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - a samozrejme <i>Scooby-Do</i> plug-in vám umožní <b>navigáciou vo vnútri "
 "vášho docku</b> a rýchlo <b>nájsť a spustiť</b> aplikácie a súbory !"
 
@@ -3777,15 +3776,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Musíte zapnúť kompozíciu. Napríklad, môžete spustiť Compiz alebo xcompmgr. \n"
 "Ak používate XFCE alebo KDE, stačí povoliť kompozície v nastavení správcu "
 "okien.\n"
 "Ak používate Gnome, môžete to povoliť v Metacity týmto spôsobom:\n"
-" Otvorte gconf-editor, upravte kľúč '/apps/metacity/general/"
-"compositing_manager' a nastavte na 'true'."
+" Otvorte gconf-editor, upravte kľúč "
+"'/apps/metacity/general/compositing_manager' a nastavte na 'true'."
 
 #: ../data/messages:1243
 msgid ""
@@ -3947,8 +3946,8 @@ msgstr "Zapojte sa do projektu !"
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -4562,8 +4561,8 @@ msgstr ""
 #: ../data/messages:1629
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4599,8 +4598,8 @@ msgstr ""
 " - Aplety teraz môžu byť spustené viac krát\n"
 " (Clock, Cairo-Penguin, Slider, Stack), každý s odlišnou konfiguráciou.\n"
 " - Cairo-Dock je teraz schopný načítať temy na vašom vlastnom serveri,\n"
-"  tak neváhajte a pošlite nám všetky svoje motívy, môžeme ich "
-"distribuovať! :-)\n"
+"  tak neváhajte a pošlite nám všetky svoje motívy, môžeme ich distribuovať! "
+":-)\n"
 " - A stále hľadáme niekoho, s motiváciou napísať rozšírenie pre integráciu "
 "do KDE ^_^"
 
@@ -4690,8 +4689,8 @@ msgstr ""
 #: ../data/messages:1641
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4706,8 +4705,8 @@ msgid ""
 msgstr ""
 "2.1.1 : viac stabilnejšia a používateľsky prívetivejšia !\n"
 " - Táto verzia opravuje množstvo chýb vo verzii v2.1.0 (tak prepáčte !)\n"
-" - Je k dispozícii viacero vizuálnych efektov fugujúcich pod Metacity,"
-"OpenBox,KDE,etc.\n"
+" - Je k dispozícii viacero vizuálnych efektov fugujúcich pod "
+"Metacity,OpenBox,KDE,etc.\n"
 " - Applis môže byť teraz umiestnený medzi spúšťače a aplety.\n"
 " - Nový a pohodlný configuračný panel pre spúšťače.\n"
 " - Prepínač ponúka zoznam všetkých otvorených okien kliknutím na stredné "
@@ -4797,30 +4796,61 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#~ msgid ""
-#~ "If you write here a container's name that doesn't exist yet, a new one "
-#~ "will be created, with this icon inside."
-#~ msgstr ""
-#~ "Ak napíšete sem názov kontajnera, ktorý zatiaľ neexistuje, nový bude "
-#~ "vytvorený, s touto ikonou vnútri."
-
-#~ msgid "In the style of Firefox tabs"
-#~ msgstr "Spôsob kariet vo Firefoxe."
-
-#~ msgid "If false, only the quick-info will have this background color."
-#~ msgstr "Ak je neplatný, iba rýchla správa bude mať túto farbu pozadia."
-
-#~ msgid "Use background color for labels?"
-#~ msgstr "Použiť farbu pozadia pre štítky ?"
-
+#, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s je teraz pripojený"
 
+#, c-format
+#~ msgid "failed to unmount %s"
+#~ msgstr "zlyhalo odpojenie %s"
+
+#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s je teraz odpojený"
 
+#~ msgid ""
+#~ "the theme couldn't be found; the default theme will be used instead.\n"
+#~ " You can change this by opening the configuration of this module; do you "
+#~ "want to do it now ?"
+#~ msgstr ""
+#~ "Tému sa nepodarilo nájsť, bude použitý predvolený motív .\n"
+#~ " Môžete to zmeniť tým, že otvoríte konfiguráciu tohto modulu, chcete to "
+#~ "urobiť teraz?"
+
+#~ msgid "Do you want to mount this point ?"
+#~ msgstr "Chcete pripojiť tento bod ?"
+
+#~ msgid "Do you want to monitor the content of the directory ?"
+#~ msgstr "Chcete sledovať obsah adresára ?"
+
 #~ msgid "Plug-in"
 #~ msgstr "Zásuvný modul"
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' module was not found.\n"
+#~ "Be sure to install it in the same version as the dock to enjoy these "
+#~ "features."
+#~ msgstr ""
+#~ "Modul '%s' sa nenašiel.\n"
+#~ "Nainštalujte ho v rovnakej verzii ako dock a užívajte si nových možností."
+
+#~ msgid "theme"
+#~ msgstr "téma vzhľadu"
+
+#~ msgid "rating"
+#~ msgstr "hodnotenie"
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' plug-in is not active.\n"
+#~ "Be sure to activate it to enjoy these features."
+#~ msgstr ""
+#~ "Rozšírenie '%s' nie je aktívny.\n"
+#~ "Uistite sa, že je aktivovaný a užívajte si jeho funkcie."
+
+#~ msgid "You have to try the theme before you can rate it."
+#~ msgstr "Zkúste túto tému a budete ju môcť priamo ohodnotiť."
 
 #~ msgid "state"
 #~ msgstr "stav"
@@ -4828,18 +4858,162 @@ msgstr ""
 #~ msgid "module"
 #~ msgstr "modul"
 
+#~ msgid "grab"
+#~ msgstr "chytiť"
+
+#~ msgid "sobriety"
+#~ msgstr "triezvosť"
+
+#~ msgid "Configuration of the launchers"
+#~ msgstr "Konfigurácia spúšťačov"
+
 #~ msgid "Plug-ins"
 #~ msgstr "Zásuvné moduly"
+
+#~ msgid "Highlight words"
+#~ msgstr "Zvýrazniť slová"
+
+#~ msgid "Configuration of Cairo-Dock"
+#~ msgstr "Konfigurácia Cairo-Docku"
+
+#~ msgid "Activate this module"
+#~ msgstr "Aktivovať tento modul"
+
+#~ msgid ""
+#~ "It seems that you've never entered the help module yet.\n"
+#~ "If you have some difficulty to configure the dock, or if you are willing to "
+#~ "customize it,\n"
+#~ "the Help module is here for you !\n"
+#~ "Do you want to take a look at it now ?"
+#~ msgstr ""
+#~ "Zdá sa, že ste ešte nikdy nevstúpili do pomocníka tohto modulu.\n"
+#~ "Ak máte nejaké problémy s konfigurovaním docku, alebo si ho chcete "
+#~ "prispôsobiť,\n"
+#~ "Pomocník modul je tu pre vás!\n"
+#~ "Chceš sa na to pozrieť teraz?"
+
+#~ msgid "Do you want to activate it now ?"
+#~ msgstr "Chcete ho aktivovať teraz ?"
+
+#, c-format
+#~ msgid "The module '%s' is not activated."
+#~ msgstr "Modul %s nie je aktivovaný."
+
+#, c-format
+#~ msgid "Importing theme %s..."
+#~ msgstr "Importujem tému %s..."
 
 #~ msgid "Hidden Dock"
 #~ msgstr "Skrytý Dock"
 
+#~ msgid "The applets can be set on your desktop as widgets."
+#~ msgstr "Aplety môžu byť nastavené na ploche ako widgety."
+
+#~ msgid "Set a background to your dock."
+#~ msgstr "Nastaviť pozadie pre váš dock."
+
+#~ msgid "Configure the look of the dialog bubbles."
+#~ msgstr "Konfigurovať vzhľad dialógov v bublinách."
+
+#~ msgid ""
+#~ "It provides different window decorators. Activate it first if you want to "
+#~ "select a different decorator for your dialogs."
+#~ msgstr ""
+#~ "Poskytuje rôzne ozdoby okien. Aktivujte ich, ak chcete vybrať iné ozdoby pre "
+#~ "vaše dialógy."
+
+#~ msgid "Define the style of the icons' labels and quick-info."
+#~ msgstr "Definovať štýl popisu ikony a rýchle-info."
+
+#~ msgid "Indicators are extra indications on your icons."
+#~ msgstr "Ukazovatele sú ďaľšie údaje o vašich ikonách."
+
+#~ msgid ""
+#~ "All about icons :\n"
+#~ " size, reflection, icon theme, ..."
+#~ msgstr ""
+#~ "Všetko o ikonách :\n"
+#~ " veľkosť, odrazy, vzhľady ikôn, ..."
+
 #~ msgid "Define the appearance of the dock when it's hidden."
 #~ msgstr "Definovať vzhľad doku, keď je skrytý."
+
+#~ msgid "It provides many animations to your icons."
+#~ msgstr "Prináša množstvo animácií pre vaše ikony."
+
+#~ msgid "Display and interact with the currently open windows."
+#~ msgstr "Zobraziť a pracovať s aktuálne otvorenými oknami."
+
+#~ msgid ""
+#~ "It provides different views to Cairo-Dock. Activate it first if you want to "
+#~ "select a different view for your docks."
+#~ msgstr ""
+#~ "Toto poskytuje rôzne pohľady na Cairo-Dock. Aktivujte si ich, ak chcete "
+#~ "vybrať iný pohľad na vaše docky."
+
+#, c-format
+#~ msgid "Set position for the dock '%s'"
+#~ msgstr "Nastaviť pozíciu pre dock '%s'"
+
+#~ msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
+#~ msgstr "Problem? Návrh? Chcete s nami hovoriť ? Ste vítaní !"
+
+#~ msgid "All the parameters you will never want to tweak."
+#~ msgstr "Všetky parametre už nikdy nebudete chcieť vyladiť."
+
+#~ msgid "Community's site"
+#~ msgstr "Stránky spoločnosti"
+
+#~ msgid "Quit Cairo-Dock ?"
+#~ msgstr "Ukončiť Cairo-Dock ?"
+
+#~ msgid "Find out the latest version of Cairo-Dock here !."
+#~ msgstr "Zistite si najnovšiu verziu Cairo-Dock tu!."
+
+#~ msgid "Set up the position of this main dock."
+#~ msgstr "Nastaviť pozíciu hlavného panela."
+
+#~ msgid "Development's site"
+#~ msgstr "Stránka vývojárov"
+
+#~ msgid "Set up this dock"
+#~ msgstr "Nastaviť dock"
+
+#~ msgid "Configure the behaviour, appearance, and applets."
+#~ msgstr "Nastaviť správanie, vzhľad a applety."
+
+#~ msgid "unlock dock"
+#~ msgstr "odomknúť dock"
+
+#~ msgid "It will hide the dock until you enter inside with the mouse."
+#~ msgstr "To bude skrývať váš dock pokiaľ tam nevstúpite s myšou."
+
+#~ msgid "unlock icons"
+#~ msgstr "odomknúť ikony"
+
+#~ msgid "lock dock"
+#~ msgstr "zamknúť dock"
+
+#~ msgid "lock icons"
+#~ msgstr "zamknúť ikony"
+
+#~ msgid ""
+#~ "Choose amongst many themes on the server, and save your current theme."
+#~ msgstr "Vyberte si z mnohých tém na serveri, a uložte svoju aktuálnu tému."
+
+#~ msgid ""
+#~ "There is no problem, there is only solution (and a lot of useful hints !)."
+#~ msgstr ""
+#~ "To nie je žiadny problém, existuje jediné riešenie (a veľa užitočných rád !)."
 
 #~ msgid "Undefined"
 #~ msgstr "Nedefinovaný"
 
+#, c-format
+#~ msgid "You're about removing this icon (%s) from the dock. Sure ?"
+#~ msgstr "Chystáte sa odstrániť túto ikonu a (%s) z docku. Ste si istí?"
+
+#, c-format
 #~ msgid ""
 #~ "You're about deleting this file\n"
 #~ "  (%s)\n"
@@ -4849,8 +5023,38 @@ msgstr ""
 #~ "  (%s)\n"
 #~ "z vášho hardisku. Ste si istý ?"
 
+#~ msgid "rate me"
+#~ msgstr "ohodnoť ma"
+
+#, c-format
+#~ msgid ""
+#~ "Attention : couldn't rename %s.\n"
+#~ "Check that you have writing rights,\n"
+#~ " and that the new name does not already exist."
+#~ msgstr ""
+#~ "Upozornenie : nemôžete premenovať %s.\n"
+#~ "Skontrolujte si či máte právo na zapisovanie.\n"
+#~ " a že nový názov už neexistuje."
+
+#~ msgid "Rename to :"
+#~ msgstr "Premenovať na :"
+
+#~ msgid ""
+#~ "Attention : couldn't delete this file.\n"
+#~ "Check that you have writing rights on it."
+#~ msgstr ""
+#~ "Upozornenie : nemôžete odstrániť tento súbor.\n"
+#~ "Skontrolujte si či máte právo na zapisovanie."
+
+#, c-format
+#~ msgid "You're about removing this applet (%s) from the dock. Sure ?"
+#~ msgstr "Chcete odstrániť tento applet (%s) z docku. Ste si istý ?"
+
 #~ msgid "Add a separator"
 #~ msgstr "Pridať oddeľovač"
+
+#~ msgid "Add a custom launcher"
+#~ msgstr "Pridať vlastný spúšťač"
 
 #~ msgid "Mount"
 #~ msgstr "Pripojiť"
@@ -4858,8 +5062,14 @@ msgstr ""
 #~ msgid "Unmount"
 #~ msgstr "Odpojiť"
 
+#~ msgid "Add a sub-dock"
+#~ msgstr "Pridať do sub-docku"
+
 #~ msgid "Rename this file"
 #~ msgstr "Premenovať tento súbor"
+
+#~ msgid "Delete this file"
+#~ msgstr "Odstrániť tento súbor"
 
 #~ msgid "Eject"
 #~ msgstr "Vysunúť"
@@ -4867,8 +5077,84 @@ msgstr ""
 #~ msgid "Properties"
 #~ msgstr "Vlastnosti"
 
+#~ msgid "A new main dock"
+#~ msgstr "Nový hlavný panel"
+
+#~ msgid "Minimize all"
+#~ msgstr "Minimalizovať všetko"
+
+#~ msgid "Unmaximize"
+#~ msgstr "Nemaximalizovať"
+
+#~ msgid "Maximize"
+#~ msgstr "Maximalizovať"
+
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgstr "nastaviť správanie Compizu na: (name = cairo-dock & type = utility)"
+
+#~ msgid "Return to dock"
+#~ msgstr "Vrátiť do docku"
+
+#~ msgid "Couldn't import the theme."
+#~ msgstr "Nedá sa importovať téma."
+
+#~ msgid "default"
+#~ msgstr "predvolené"
+
+#, c-format
+#~ msgid "Are you sure you want to delete theme %s ?"
+#~ msgstr "Ste si istý, že chcete odstrániť tému %s ?"
+
+#, c-format
+#~ msgid "Are you sure you want to overwrite theme %s ?"
+#~ msgstr "Ste si istý, že chcete prepísať tému %s ?"
+
+#~ msgid "The theme has been saved"
+#~ msgstr "Téma bola uložená"
+
+#~ msgid "Are you sure you want to delete these themes ?"
+#~ msgstr "Ste si istý, že chcete odstrániť tieto témy ?"
+
+#~ msgid "The themes couldn't be deleted"
+#~ msgstr "Témy sa nedajú odstrániť"
+
+#, c-format
 #~ msgid "Importing theme %s ..."
 #~ msgstr "Importujem tému %s ..."
+
+#~ msgid "Use OpenGL in Cairo-Dock ?"
+#~ msgstr "Použiť OpenGL v Cairo-Docku ?"
+
+#~ msgid "The theme couldn't be saved"
+#~ msgstr "Téma sa nedá uložiť"
+
+#~ msgid "The theme couldn't be deleted"
+#~ msgstr "Téma sa nedá odstrániť"
+
+#~ msgid "The themes have been deleted"
+#~ msgstr "Témy boli odstránené"
+
+#~ msgid "Do you want to keep this setting ?"
+#~ msgstr "Chcete ponechať tieto nastavenia ?"
+
+#, c-format
+#~ msgid ""
+#~ "The module '%s' may have encountered a problem.\n"
+#~ "It has been restared successfully, but if it happens again, thanks to report "
+#~ "it to us at http://cairo-dock.org"
+#~ msgstr ""
+#~ "Modul '%s' narazil na problém.\n"
+#~ "Bol úspešne reštartovaný, ale keď sa to stane znova, pošlite nám o tom "
+#~ "správu na http://cairo-dock.org"
+
+#~ msgid "Visibility :"
+#~ msgstr "Viditeľnosť :"
+
+#~ msgid "Visibility of the sub-docks"
+#~ msgstr "Viditeľnosť sub-dockov"
+
+#~ msgid "Keep the dock below windows"
+#~ msgstr "Udržujte panel pod oknami"
 
 #~ msgid "Prevent windows from overlapping the dock"
 #~ msgstr "Zabrániť oknám aby prekrývali dock"
@@ -4879,20 +5165,186 @@ msgstr ""
 #~ msgid "Automatically hide the dock"
 #~ msgstr "Automaticky skrývať panel"
 
+#~ msgid "Animations"
+#~ msgstr "Animácie"
+
+#~ msgid "Windows7"
+#~ msgstr "Windows7"
+
+#~ msgid "Icons size :"
+#~ msgstr "Veľkosť ikony :"
+
+#~ msgid "Configure icons animations."
+#~ msgstr "Konfigurovať animácie ikôn."
+
+#~ msgid "Configure icons special effects (require OpenGL capacity)."
+#~ msgstr "Konfigurovať špeciálne efekty ikôn. (Vyžaduje OpenGL funkcie)."
+
+#~ msgid "Separate the different types of icons ?"
+#~ msgstr "Oddeliť rôzne typy ikôn ?"
+
 #~ msgid "Applets"
 #~ msgstr "Aplety"
+
+#~ msgid "Use the new theme's launchers ?"
+#~ msgstr "Použiť novú tému spúšťačov ?"
+
+#~ msgid "Choose one of the available themes :"
+#~ msgstr "Vyberte jeden z dostupných motívov :"
+
+#~ msgid "Use the new theme's behaviour ?"
+#~ msgstr "Použiť nové správanie témy ?"
+
+#~ msgid "Distance to the screen's edge :"
+#~ msgstr "Vzdialenosť od okraja obrazovky :"
+
+#~ msgid ""
+#~ "in pixels. You can also move the dock by holding ALT or CTRL key and left "
+#~ "mouse button."
+#~ msgstr ""
+#~ "v pixeloch. Môžete tiež pohybovať dock-om podržaním ALT alebo CTRL a ľavým "
+#~ "tlačítkom myši."
+
+#~ msgid "Relative alignment :"
+#~ msgstr "Pomerné zarovnanie :"
+
+#~ msgid "Use Xinerama ?"
+#~ msgstr "Použiť Xinerama ?"
+
+#~ msgid "Extend the dock to always fill the screen ?"
+#~ msgstr "Rozšíriť dock aby vždy vyplnil obrazovku?"
+
+#~ msgid "Automatically hide the dock when a window becomes fullscreen ?"
+#~ msgstr "Automaticky skrývať dock ak je okno prepnuté na celú obrazovku ?"
+
+#~ msgid "Size of the callback zone (width x height, in pixels) :"
+#~ msgstr "Veľkosť zóny spätného volania (šírka x výška, v pixeloch):"
+
+#~ msgid "Additionnal parameters"
+#~ msgstr "Prídavné parametre"
+
+#~ msgid "Only show applis on current desktop ?"
+#~ msgstr "Zobraziť applis iba na súčasnej ploche?"
+
+#~ msgid "Click to show sub-docks ?"
+#~ msgstr "Kliknúť na zobrazenie sub-docku ?"
+
+#~ msgid "Delay before displaying a sub-dock :"
+#~ msgstr "Omeškanie pred zobrazením sub-docku :"
+
+#~ msgid "Delay before you effectively leave from a sub-dock or to a sub-dock :"
+#~ msgstr ""
+#~ "Veľkosť omeškania keď skutočne opúšťate sub-dock alebo vchádzate do sub-"
+#~ "docku :"
+
+#~ msgid "Show currently opened applications in the dock ?"
+#~ msgstr "Zobraziť súčasne otvorené aplikácie v docku ?"
 
 #~ msgid "You need a composite manager for it."
 #~ msgstr "Pre toto potrebujete kompozitného manažéra."
 
+#~ msgid "Group windows of the same application in a sub-dock ?"
+#~ msgstr "Zoskupiť okná rovnakej aplikácie v sub-docku ?"
+
+#~ msgid "\t\tExcept the following classes :"
+#~ msgstr "\t\tS výnimkou nasledovných kategórií:"
+
+#~ msgid "Show a window thumbnail when it's minimized ?"
+#~ msgstr "Zobraziť náhľad okna potom, čo bolo minimalizované ?"
+
+#~ msgid "Display an indicator even if the icon is not a launcher ?"
+#~ msgstr "Zobraziť indikátor, aj keď ikona nie je spúšťač ?"
+
+#~ msgid "Duration of the dialog :"
+#~ msgstr "Doba trvania dialógu :"
+
+#~ msgid "In a Firefox's tabs manner."
+#~ msgstr "Spôsob kariet vo Firefoxe."
+
+#~ msgid ""
+#~ "Signal the applications demanding your attention with a dialog bubble ?"
+#~ msgstr "Signálu aplikácie vyžadujúci vašu pozornosť s dialógom v bubline ?"
+
+#~ msgid "Maximum number of caracters in application's name :"
+#~ msgstr "Maximálny počet znakov v názve aplikácie :"
+
+#~ msgid "Number of steps in the zoom animation (grow up/shrink down) :"
+#~ msgstr "Počet krokov v animácii priblíženia (rastie hore/zmenšuje sa dole) :"
+
+#~ msgid "Unfolding animation duration :"
+#~ msgstr "Rozvíjajúca doba animácie :"
+
+#~ msgid "Animate the dock when auto-hiding ?"
+#~ msgstr "Animovať dock pri automatickom skrývaní ?"
+
+#~ msgid "Number of steps in the fade out animation :"
+#~ msgstr "Počet krokov pri animácii stišenie:"
+
+#~ msgid "in Hz. This is to adjust regarding your CPU power."
+#~ msgstr "v Hz. Toto je úprava týkajúca sa vášho výkonu CPU."
+
+#~ msgid "Refresh frequency when mouving cursor into the dock :"
+#~ msgstr "Obnovoviť frekvenciu, ak premiestnite kurzor do docku :"
+
 #~ msgid "Label readability"
 #~ msgstr "Čitateľnosť štítku"
+
+#~ msgid "Refresh frequency"
+#~ msgstr "Obnovovacia frekvencia"
+
+#~ msgid "Show hidden files ?"
+#~ msgstr "Zobraziť skryté súbory ?"
+
+#~ msgid "Make the config panel transparent ?"
+#~ msgstr "Urobiť configuračný panel priehľadným ?"
+
+#~ msgid "Maximum time to download a theme :"
+#~ msgstr "Maximálny čas na stiahnutie témy :"
+
+#~ msgid "Emulates composition with fake transparency ?"
+#~ msgstr "Napodobňuje zloženie s falošnou transparentnosťou ?"
+
+#~ msgid "Connection timeout to the themes server :"
+#~ msgstr "Uplynulo spojenie na server s témami :"
+
+#~ msgid "Connection to the themes server"
+#~ msgstr "Pripojenie na server s témami"
+
+#~ msgid "Color gradation"
+#~ msgstr "Stupňovanie farby"
+
+#~ msgid "Number of retries :"
+#~ msgstr "Počet opakovaní :"
+
+#~ msgid "Fill the background with :"
+#~ msgstr "Vyplniť pozadie s :"
+
+#~ msgid "transparent"
+#~ msgstr "priehľadný"
+
+#~ msgid "Use a color gradation."
+#~ msgstr "Použiť stupňovanie farby."
+
+#~ msgid "Bright color :"
+#~ msgstr "Jasná farba :"
+
+#~ msgid "Dark color :"
+#~ msgstr "Tmavá farba :"
+
+#~ msgid "opaque"
+#~ msgstr "nepriehľadné"
+
+#~ msgid "Percentage of the bright color :"
+#~ msgstr "Percento svetlej farby:"
 
 #~ msgid "Hidden dock"
 #~ msgstr "Skrytý panel"
 
 #~ msgid "Configure the dock's appearence when hidden."
 #~ msgstr "Konfigurácia vzhľadu docku, keď je skrytý."
+
+#~ msgid "Extern Frame"
+#~ msgstr "Externý rám"
 
 #~ msgid "Follow the mouse"
 #~ msgstr "Nasledovať myš"
@@ -4909,14 +5361,185 @@ msgstr ""
 #~ msgid "Speed :"
 #~ msgstr "Rýchlosť :"
 
+#~ msgid "Use a custom font for labels ?"
+#~ msgstr "Použiť vlastné ísmo re štítok ?"
+
+#~ msgid "Show labels :"
+#~ msgstr "Zobraziť štítky :"
+
+#~ msgid "Otherwise the default system one will be used."
+#~ msgstr "V opačnom prípade budú použité predvolené nastavenia systému."
+
+#~ msgid "Color"
+#~ msgstr "Farby"
+
+#~ msgid "Use background color for labels ?"
+#~ msgstr "Použiť farbu pozadia pre štítky ?"
+
+#~ msgid "Shape of the bubble :"
+#~ msgstr "Tvar bubliny :"
+
+#~ msgid "Background color of the bubble :"
+#~ msgstr "Farba pozadia bubliny :"
+
+#~ msgid "Use a custom font for the text ?"
+#~ msgstr "Použiť vlastné písmo pre text ?"
+
+#~ msgid "Text font :"
+#~ msgstr "Písmo textu :"
+
+#~ msgid "Text color :"
+#~ msgstr "Farba textu :"
+
+#~ msgid ""
+#~ "It's an image that will be displayed below the drawings, like a frame for "
+#~ "exemple. Let empty to not use any."
+#~ msgstr ""
+#~ "Je to obrázok, ktorý se zobrazí pod kresbami, ako napríklad rámček. Ak "
+#~ "žiadny nechcete, nechajte nevyplnené."
+
+#~ msgid "Background tansparency :"
+#~ msgstr "Priehľadnosť pozadia :"
+
+#~ msgid "Name of an image to use for the 'retach' button :"
+#~ msgstr "Názov obrázku ktorý sa použije pre tlačidlo 'retach' :"
+
+#~ msgid ""
+#~ "It's an image that will be displayed above the drawings, like a reflect for "
+#~ "exemple. Let empty to not use any."
+#~ msgstr ""
+#~ "Je to obrázok, ktorý sa zobrazí nad kresbami, ako napríklad odraz. Ak žiadny "
+#~ "nechcete, ponechajte nevyplnené."
+
+#~ msgid ""
+#~ "Click on an applet in order to have a preview and a description of it."
+#~ msgstr "Kliknite na applet, a získate náhľad a jeho popis."
+
+#~ msgid ""
+#~ "the gauge theme couldn't be found; a default gauge will be used instead.\n"
+#~ " You can change this by opening the configuration of this module; do you "
+#~ "want to do it now ?"
+#~ msgstr ""
+#~ "nepodarilo sa  nájsť ukazovateľ témy, bude použitý predvolený ukazovateľ "
+#~ "témy.\n"
+#~ " Môžete to zmeniť tým, že otvoríte konfiguráciu tohto modulu, chcete to "
+#~ "urobiť teraz?"
+
+#~ msgid ""
+#~ "You can remove a launcher by dragging it with the mouse out of the dock."
+#~ msgstr "Môžete odstrániť spúšťač chytením myšou a preneste ho mimo dock."
+
+#~ msgid ""
+#~ "A useful FAQ that contains also a lot of hints.\n"
+#~ "Let the mouse over a sentence to make the hint dialog popups."
+#~ msgstr ""
+#~ "Užitočný FAQ, ktorý obsahuje aj veľa rád.\n"
+#~ "Umiestnite myš nad, aby sa automaticky otvárali okná s náznakom dialógu."
+
+#~ msgid ""
+#~ "You made some modifications in the current theme.\n"
+#~ "You will loose them if you don't save before choosing a new theme. Continue "
+#~ "anyway ?"
+#~ msgstr ""
+#~ "Urobili ste určité úpravy v aktuálnej téme.\n"
+#~ "Budete stratená, ak ju neuložíte pred voľbou novej tému. Chcete napriek tomu "
+#~ "pokračovať?"
+
+#~ msgid "Behaviour of the Taskbar :"
+#~ msgstr "Správanie sa panela úloh"
+
+#~ msgid "Offset to the screen's edge"
+#~ msgstr "Odstup od okraja obrazovky"
+
 #~ msgid ""
 #~ "in pixels. You can use this parameter to adjust the indicator's vertical "
 #~ "position."
 #~ msgstr ""
 #~ "v pixeloch. Môžete použiť tento parameter na nastavenie zvislej pozície."
 
+#~ msgid "Rotate the indicator with dock ?"
+#~ msgstr "Otáčať indikátor s dockom ?"
+
+#~ msgid "Zoom the indicator with its icon ?"
+#~ msgstr "Priblížiť indikátor s jeho ikonou ?"
+
 #~ msgid "Monitor the content of folder ?"
 #~ msgstr "Sledovať obsah priečinka ?"
+
+#~ msgid "Hint : you can even re-order the icons of the current applications."
+#~ msgstr "Tip: môžete dokonca zmeniť poradie ikon aktuálnych aplikácií."
+
+#~ msgid "Simply drag them with the mouse, and drop it where you want."
+#~ msgstr "Jednoducho chytiť myšou a pustiť kam chcete."
+
+#~ msgid "How can I re-order my icons ?"
+#~ msgstr "Ako môžem zmeniť poradie mojich ikôn ?"
+
+#~ msgid ""
+#~ "How can I place the applets and taskbar icons at the beginning of the dock ?"
+#~ msgstr ""
+#~ "Ako sa môžem umiestniť ikony s apletami a panelom úloh na začiatku docku ?"
+
+#~ msgid "How can I change the image of an icon ?"
+#~ msgstr "Ako môžem zmeniť obrázok ikony?"
+
+#~ msgid ""
+#~ "Hint : you can also place applets amongst launchers, by ticking the box "
+#~ "below."
+#~ msgstr ""
+#~ "Tip: Môžete tiež umiestniť spúšťače medzi applety, zaškrtnutím políčka "
+#~ "nižšie."
+
+#~ msgid "How can I quickly remove many icons ?"
+#~ msgstr "Ako môžem rýchlo odstrániť viac ikôn ?"
+
+#~ msgid ""
+#~ "Hint : you can also directly edit a launcher’s configuration, and set a path "
+#~ "for an image. If you don’t write a path, but simply the name of an image, "
+#~ "don’t put the extension (.svg, .png, etc), to let the dock choose the best."
+#~ msgstr ""
+#~ "Tip: Môžete tiež priamo upraviť spúšťač konfigurácie a nastaviť cestu k "
+#~ "obrázku. Ak nechcete písať cestu, ale iba meno obrázka, nedávajte predĺženie "
+#~ "(. svg,. png, atď), nechajte dock vybrať to najlepšie."
+
+#~ msgid "How can I resize my icons ?"
+#~ msgstr "Ako môžem zmeniť veľkosť mojich ikôn ?"
+
+#~ msgid ""
+#~ "Hint : If you have a multi-screen managed by Xinerama, you can tick the "
+#~ "option “Use Xinerama”, and choose the screen where you want your dock to be."
+#~ msgstr ""
+#~ "Tip: Ak máte multi-obrazovku spravované Xinerama, môžete zaškrtnúť voľbu "
+#~ "\"Použiť Xinerama\" a vyberte obrazovku, kde chcete mať dock."
+
+#~ msgid "How can I adjust the position of the dock above the gnome-panel ?"
+#~ msgstr "Ako môžem nastaviť polohu panela nad gnome-panel?"
+
+#~ msgid ""
+#~ "Hint : you can also just dragging your dock with the mouse, by pressing the "
+#~ "ALT key at the same time."
+#~ msgstr ""
+#~ "Tip: môžete len pretiahnutím pomocou myši, a zároveň stlačením klávesu ALT."
+
+#~ msgid "How can I place my dock on the screen ?"
+#~ msgstr "Ako môžem umiestniť svoj dock na obrazovke?"
+
+#~ msgid "The dock is hidden by the gnome-panel"
+#~ msgstr "Dock je prekrytý gnome-panelom"
+
+#~ msgid ""
+#~ "it’s normal, because they both are “docks”. You can either move the dock out "
+#~ "of the panel, or launch it wih the command “cairo-dock -–keep-above”."
+#~ msgstr ""
+#~ "je to normálne, pretože oba sú \"panely\". Môžete buď prejsť na dock z "
+#~ "panela, alebo spustiť príkaz s \"cairo-dock --nechať-navrchu\"."
+
+#~ msgid ""
+#~ "Hint : if you choose to mix applets and launchers in the 'Icons' module, you "
+#~ "can also place separators between applets then."
+#~ msgstr ""
+#~ "Tip: Ak vyberiete mix applety a spúšťače v module 'ikona', takže si potom "
+#~ "môžete vložiť oddeľovače medzi applety."
 
 #~ msgid ""
 #~ "Just choose the corresponding option in the “Visibility” module.\n"
@@ -4925,17 +5548,333 @@ msgstr ""
 #~ "Stačí vybrať zodpovedajúcu voľbu vo \"Viditeľnosť\" modulu.\n"
 #~ "Táto rezervuje priestor pre jediný dock."
 
+#~ msgid "How can I add a separator ?"
+#~ msgstr "Ako môžem pridať oddeľovač ?"
+
+#~ msgid "How do I get a 3D dock ?"
+#~ msgstr "Ako môžem získať 3D dock ?"
+
 #~ msgid ""
-#~ "Hint : if you removed your gnome-panel, then the “alt+F2” shortkey does "
-#~ "not work anymore. This applet let you setup a shortcut to pop up the "
-#~ "quick-launch dialog."
+#~ "Hint : you can setup the view for each sub-dock; just edit the icon pointing "
+#~ "on the sub-dock, and choose the view you want for it."
 #~ msgstr ""
-#~ "Tip: Ak ste odstránili váš gnome-panel, potom klávesová skratka \"alt + "
-#~ "F2\" už nie je funkčná. Tento applet vám umožní nastaviť skratku na "
-#~ "rýchle spustenie dialógu."
+#~ "Tip: môžete nastaviť zobrazenie na každý sub-dock, stačí upraviť ikonu "
+#~ "ukazujúcu na sub-dok, a vyberte požadované zobrazenie."
+
+#~ msgid "How can I add a sub-dock ?"
+#~ msgstr "Ako môžem pridať sub-dock ?"
+
+#~ msgid ""
+#~ "Hint : you can then move icons inside this new dock by following the "
+#~ "previous method and selecting the dock you've just created.\n"
+#~ "To place this new dock, right click on it, and in the Cairo-dock sub-menu "
+#~ "choose “configure this dock”."
+#~ msgstr ""
+#~ "Tip: môžete potom pohybovať ikonami v tomto novom docku podľa "
+#~ "predchádzajúcej metódy a výber doku, ktorý ste práve vytvorili.\n"
+#~ "Ak chcete tento nový dock, kliknite pravým tlačidlom myši na neho, a Cairo-"
+#~ "dock sub-menu zvolte \"konfiguráciu tohto docku."
+
+#~ msgid ""
+#~ "Just right-click on the dock, then select “add a sub-dock”. Fill the config "
+#~ "panel with some name and image, then validate."
+#~ msgstr ""
+#~ "Len kliknite pravým tlač. na dock, potom zvoľte \"pridať sub-dock.\" Vyplňte "
+#~ "config panel s nejakým názvom a obrázkom, potom overte."
+
+#~ msgid "How can I have many main docks ?"
+#~ msgstr "Ako môžem mať viac hlavných panelov?"
+
+#~ msgid ""
+#~ "Hint : the Parabolic view doe not have a background, and the Slide and "
+#~ "Rainbow views have their own background parameters."
+#~ msgstr ""
+#~ "Tip: Parabolic pohľad nemá pozadie, a Rainbow a Slide majú svoje vlastné "
+#~ "parametre pozadia."
+
+#~ msgid "How can I change the background of my docks ?"
+#~ msgstr "Ako môžem zmeniť pozadie môjho docku ?"
+
+#~ msgid "I find the dock too much flashy, can it be more sober ?"
+#~ msgstr "Nájdem na docku príliš okázalosti, môže to byť uváženejšie?"
+
+#~ msgid "How do I insert a desklet into the dock ?"
+#~ msgstr "Ako vložím desklet do docku ?"
+
+#~ msgid ""
+#~ "Hint : you can add new decorations, by choosing the “personnal” decoration, "
+#~ "and providing a background and/or foreground image. You can setup the "
+#~ "offsets of these images to adjust the position of the drawings inside the "
+#~ "decorations."
+#~ msgstr ""
+#~ "Tip: môžete pridať nové dekorácie, voľbou \"personnal\" dekorácie, a "
+#~ "poskytuje pozadie a/alebo popredie obrázku. Môžete nastaviť offsety týchto "
+#~ "obrázkov k nastaveniu pozície vykreslenia vnútri dekorácie."
+
+#~ msgid "How can I change their decorations ?"
+#~ msgstr "Ako môžem zmeniť svoje dekorácie?"
+
+#~ msgid "How do I setup their position ?"
+#~ msgstr "Ako môžem nastaviť svoju pozíciu ?"
+
+#~ msgid "How can I place a desklet on the <i>Compiz Widget Layer</i> ?"
+#~ msgstr "Ako môžem   umiestniť desklet na <i>Compiz Widget Layer</i>?"
+
+#~ msgid ""
+#~ "Hint : You can then scroll on this icon to switch from a window to another, "
+#~ "in an ALT+TAB way."
+#~ msgstr ""
+#~ "Tip: Môžete potom prejsť na túto ikonu prepnutím z okna do druhého, čiže ALT "
+#~ "+ TAB."
+
+#~ msgid "go to the “Taskbar” module, then tick the first box, and apply."
+#~ msgstr ""
+#~ "prejdite na modul \"Hlavný panel\", potom začiarknite prvé políčko a použiť."
+
+#~ msgid ""
+#~ "I don’t want to have many icons in the dock when I use Gimp/Pidgin/etc"
+#~ msgstr "Nechcem mať veľa ikon v doku, keď používam Gimp / Pidgin / atď"
+
+#~ msgid "How do I activate the Taskbar ?"
+#~ msgstr "Ako aktivujem Hlavný panel ?"
+
+#~ msgid "Hint : All the Taskbar’s options are grouped together in this module."
+#~ msgstr "Tip: Všetky nastavenia Hlavného panela sú zoskupené v tomto module."
+
+#~ msgid ""
+#~ "How can I quickly navigate between many windows of the same application ?"
+#~ msgstr ""
+#~ "Ako môžem   rýchlo navigovať medzi viacerými oknami rovnakých aplikácií ?"
+
+#~ msgid ""
+#~ "If you choosed to overwrite X icons, you can add an exception for Pidgin "
+#~ "just before this option.\n"
+#~ "If you choosed to mix applis and launchers, you can edit the Pidgin "
+#~ "launcher,\n"
+#~ " and in the “Extra parameters”, tick the box that says to not steal the icon "
+#~ "for this appli."
+#~ msgstr ""
+#~ "Ak si vyberieme prepísať X ikony, môžete pridať výnimku pre Pidgin tesne "
+#~ "pred jeho nastavením.\n"
+#~ "Ak si vyberieme miešať applis a spúšťače, môžete upraviť spúšťač Pidgin,\n"
+#~ " a v \"Extra parametre\", začiarknite políčko, ktoré hovorí, že sa nemá "
+#~ "kradnúť ikona pre tento spúšťač."
+
+#~ msgid "I’m using Pidgin, and I want to see my friends’ avatar"
+#~ msgstr "Používam Pidgin, a chcem vidieť avatar mojich priateľov"
+
+#~ msgid ""
+#~ "When I launch a program with its launcher, I don’t want an additional icon "
+#~ "in the taskbar"
+#~ msgstr ""
+#~ "Keď som spustil program s jeho spúšťačom, nechcem ďalšiu ikonu v hlavnom "
+#~ "paneli"
+
+#~ msgid ""
+#~ "Hint : to launch another instance of the program, shift+click on the "
+#~ "launcher."
+#~ msgstr ""
+#~ "Tip: na spustenie ďalšej inštancie programu, shift + klik na spúšťač."
+
+#~ msgid "I have ugly icons for some applis"
+#~ msgstr "Mám škaredé ikony pre niektoré aplikácie"
+
+#~ msgid ""
+#~ "Hint : if you removed your gnome-panel, then the “alt+F1” shortkey does not "
+#~ "work anymore. This applet let you setup a shortcut to pop up the menu at the "
+#~ "mouse’s location."
+#~ msgstr ""
+#~ "Tip: Ak ste odstránili váš gnome-panel, potom klávesová skratka \"alt + F1\" "
+#~ "už nie je funkčná. Tento applet vám umožní nastaviť skratku na pop up menu "
+#~ "ktoré nájdete myšou."
+
+#~ msgid "How can I have the main menu ?"
+#~ msgstr "Ako môžem mať hlavné menu ?"
+
+#~ msgid "Replacing the gnome-panel"
+#~ msgstr "Nahradenie gnome-panelu"
+
+#~ msgid "How can I have a simple “quick launch” window ?"
+#~ msgstr "Ako môžem mať jednoduché \"rýchle spustenia\" okna ?"
+
+#~ msgid "activate the Gmenu applet."
+#~ msgstr "aktivuje applet Gmenu."
+
+#~ msgid ""
+#~ "Hint : if you removed your gnome-panel, then the “alt+F2” shortkey does not "
+#~ "work anymore. This applet let you setup a shortcut to pop up the quick-"
+#~ "launch dialog."
+#~ msgstr ""
+#~ "Tip: Ak ste odstránili váš gnome-panel, potom klávesová skratka \"alt + F2\" "
+#~ "už nie je funkčná. Tento applet vám umožní nastaviť skratku na rýchle "
+#~ "spustenie dialógu."
+
+#~ msgid ""
+#~ "activate the Gmenu applet, then you can have it by middle-clicking on its "
+#~ "icon."
+#~ msgstr ""
+#~ "aktivuje applet Gmenu, môžete to urobiť kliknutím stredným tlačítkom na jeho "
+#~ "ikonu."
+
+#~ msgid "How can I have a logout icon ?"
+#~ msgstr "Ako môžem mať ikonu odhlásiť ?"
+
+#~ msgid "Simply activate the “dustbin” applet."
+#~ msgstr "Jednoducho aktivujte applet  \"kôš\" ."
+
+#~ msgid "How can I access to my Nautilus bookmarks ?"
+#~ msgstr "Ako získam prístup ku záložkám Nautilus ?"
+
+#~ msgid "Simply activate the “shortcuts” applet."
+#~ msgstr "Jednoducho aktivovať  applet \"odkazy\"."
+
+#~ msgid "How can I access to my mount points ?"
+#~ msgstr "Ako môžem získať prístup k mojim bodom priojenia ?"
+
+#~ msgid ""
+#~ "Hint : you can mount a volume by clicking on its icon. To unmount it, middle-"
+#~ "click on its icon, or right-click -> unmount."
+#~ msgstr ""
+#~ "Tip: môžete pripojiť zväzok kliknutím na jeho ikonu. Odpojiť to, stredným-"
+#~ "kliknutím na jej ikonu, a pravý-klik -> odpojiť ."
+
+#~ msgid ""
+#~ "Hint : you can delete a file by dragging it into the dustbin. You can even "
+#~ "unmount a mount-point this way !"
+#~ msgstr ""
+#~ "Tip: môžete vymazať súbor pretiahnutím ho do koša. Môžete týmto spôsobom "
+#~ "dokonca odpojiť mount-bod !"
+
+#~ msgid "Simply activate the “logout” applet."
+#~ msgstr "Jednoducho aktivovať applet \"odhlásenie\" ."
+
+#~ msgid "How can I access the dustbin ?"
+#~ msgstr "Ako sa dostanem do koša ?"
+
+#~ msgid "Simply activate the “show desktop” applet."
+#~ msgstr "Jednoducho aktivujte applet “zobraziť plochu”"
+
+#~ msgid "How can I access to my desktop ?"
+#~ msgstr "Ako získam prístup na plochu ?"
+
+#~ msgid "How can I have an easy-to-acces calendar ?"
+#~ msgstr "Ako môžem mať ľahký prístup ku kalendáru ?"
+
+#~ msgid "How can I have the notification area (also called systray) ?"
+#~ msgstr "Ako môžem získať oznamovaciu oblasť (nazývané tiež systray) ?"
+
+#~ msgid ""
+#~ "I have a personal gauge that I want to use in the dock (for System-Monitor "
+#~ "or others)"
+#~ msgstr ""
+#~ "Mám vlastné ukazovatele, ktoré chcem použiť v docku (pre System-Monitor "
+#~ "alebo iné)"
+
+#~ msgid "How can I have a same applet many times ?"
+#~ msgstr "Ako môžem mať rovnaký applet viac krát?"
+
+#~ msgid ""
+#~ "move the folder containing your gauge in ~/.config/cairo-dock/extras/gauges, "
+#~ "you’re done !"
+#~ msgstr ""
+#~ "presuňte zložky obsahujúce vaše ukazovatele v ~ /.config/cairo-"
+#~ "dock/extras/meradiel, a máte hotovo !"
+
+#~ msgid "How can I quickly switch to another desktop ?"
+#~ msgstr "Ako môžem rýchlo prepnúť na inú plochu ?"
+
+#~ msgid "How can I control my dock with the keyboard ?"
+#~ msgstr "Ako môžem ovládať dock klávesnicou ?"
+
+#~ msgid "If you have any question, don't hesitate to ask it on our forum."
+#~ msgstr "Ak máte akékoľvek otázky, neváhajte a opýtajte sa na našom fóre."
+
+#~ msgid "I have a black background around my dock"
+#~ msgstr "Mám čierne pozadie okolo docku"
+
+#~ msgid ""
+#~ "Hint : If yo have an ATI or an Intel, you should try without OpenGL first, "
+#~ "because their drivers are not yet perfect."
+#~ msgstr ""
+#~ "Tip: Ak máte ATI alebo Intel, mali by ste najskôr skúsiť bez OpenGL, pretože "
+#~ "ich ovládače ešte nie sú dokonalé."
+
+#~ msgid "My machine is too old to run a composite manager"
+#~ msgstr "Môj počítač je príliš starý na spustenie kompozitného správcu"
+
+#~ msgid "The “netspeed” applet displays 0 even when I’m downloading something"
+#~ msgstr "\"Netspeed\" applet zobrazuje 0, aj keď som niečo na stiahol"
+
+#~ msgid ""
+#~ "You need a graphic card with drivers that support openGL2.0. Most of Nvidia "
+#~ "cards can do that, more and more Intel cards can do too. Most of ATI cards "
+#~ "can’t do that."
+#~ msgstr ""
+#~ "Budete potrebovať grafickú kartu s ovládačmi, ktoré podporujú openGL2.0. "
+#~ "Väčšina kariet Nvidia to dokáže, je čoraz viac a viac kariet Intel. Väčšina "
+#~ "kariet ATI to nemôže urobiť."
+
+#~ msgid "Hint : Until the version 2.1.1-2, wget was used."
+#~ msgstr "Tip: Až do verzie 2.1.1-2, bol používaný wget."
+
+#~ msgid ""
+#~ "Hint : You can force the openGL by launching the dock with “cairo-dock "
+#~ "–o”.but you might get a lot of visual artifacts."
+#~ msgstr ""
+#~ "Tip: Môžete uplatniť OpenGL spustením doku s \"cairo-dock-o.\" Tak môžete "
+#~ "získať veľa vizuálnych artefaktov."
+
+#~ msgid "I don’t have these wonderful effects like fire, cube rotating, etc"
+#~ msgstr "Nemám tieto úžasné efekty, ako oheň, otáčajúcu kocku, atď"
+
+#~ msgid ""
+#~ "Don’t panic, Cairo-Dock can emulate the transparency.\n"
+#~ "So to get rid of the black background, just activate the corresponding "
+#~ "option, in the end of the “System” module"
+#~ msgstr ""
+#~ "Neprepadajte panike, Cairo-Dock môže napodobniť priehľadnosť.\n"
+#~ "Takže pre zbavenie sa čierneho pozadia, stačí aktivovať voľbu, na konci  "
+#~ "modulu \"System\""
+
+#~ msgid ""
+#~ "If you have a GeForce8, you have to install the latest drivers, because the "
+#~ "first ones were really buggy.\n"
+#~ "If the dock is running without openGL, try to reduce the number of icons in "
+#~ "the main dock, or try to reduce its size.\n"
+#~ "If the dock is running with openGL, try to deactivate it by launching the "
+#~ "dock with “cairo-dock –c”."
+#~ msgstr ""
+#~ "Ak máte GeForce8, musíte nainštalovať najnovšie ovládače, pretože prvý z "
+#~ "nich boli naozaj chybný.\n"
+#~ "Ak spúšťate dock bez OpenGL, snažte sa znížiť počet ikon v hlavnom paneli, "
+#~ "alebo sa skúste znížiť jeho veľkosť.\n"
+#~ "Ak spúšťate dock  s OpenGL, skúste deaktivovaťspustením docku s \"cairo-dock-"
+#~ "c\"."
+
+#~ msgid "The dock is horribly slow when I move the mouse into it"
+#~ msgstr "Panel je veľmi pomalý, keď v ňom pohybujem myšou"
+
+#~ msgid ""
+#~ "You have to tell it which interface you’re using to connect to the Net (by "
+#~ "default, it’s “eth0”).\n"
+#~ "Just edit its configuration, and enter the interface’s name. To find it, "
+#~ "type “ifconfig” in a terminal, and ignore the “loop” interface. It’s "
+#~ "probably something like “eth1”, “ath0”, or “wifi0”."
+#~ msgstr ""
+#~ "Musíte povedať, aké je rozhranie, ktoré používate na pripojenie k internetu "
+#~ "(štandardne je to \"eth0\").\n"
+#~ "Len upravte jeho konfiguráciu, a zadajte meno rozhrania. Ak chcete zistiť, "
+#~ "zadajte \"ifconfig\" v termináli, a ignorujte \"loop\" rozhranie. Je to asi "
+#~ "niečo ako \"eth1\", \"ath0\", alebo \"wifi0\"."
+
+#~ msgid "The dustbin remains empty even when I delete a file"
+#~ msgstr "Kôš zostane prázdny, aj keď som zmazať súbor"
 
 #~ msgid "documentation"
 #~ msgstr "dokumentácia"
+
+#~ msgid "Join the project !"
+#~ msgstr "Zapojte sa do projektu !"
 
 #~ msgid ""
 #~ "\n"
@@ -4944,14 +5883,547 @@ msgstr ""
 #~ "\n"
 #~ "Cairo-Dock skupina"
 
+#~ msgid ""
+#~ "If you write here a container's name that doesn't exist yet, a new one will "
+#~ "be created, with this icon inside."
+#~ msgstr ""
+#~ "Ak napíšete sem názov kontajnera, ktorý zatiaľ neexistuje, nový bude "
+#~ "vytvorený, s touto ikonou vnútri."
+
+#~ msgid "Lateral gap :"
+#~ msgstr "Bočné medzery :"
+
+#~ msgid "... or drag and drop a theme package here :"
+#~ msgstr "... alebo chytiť a vložiť balík s témami vzhľadu sem :"
+
 #~ msgid "Choose a theme"
 #~ msgstr "Vybrať tému vzhľadu"
+
+#~ msgid "You can even drop an internet URL."
+#~ msgstr "Môžete dokonca spustiť internetovú adresu URL."
+
+#~ msgid "Let it empty to use the same view as the main dock."
+#~ msgstr "Nechajte prázdne pre použitie rovnakého vzhľadu ako hlavný panel."
+
+#~ msgid "Activate auto-hide ?"
+#~ msgstr "Aktivovať automatické skrývanie ?"
+
+#~ msgid "List of your personnal themes"
+#~ msgstr "Zoznam vašich osobných tém"
+
+#~ msgid ""
+#~ "The dock will build a complete tarball of your current theme, allowing you "
+#~ "to exchange it easily with other people."
+#~ msgstr ""
+#~ "Dok urobí kompletný archív s aktuálnou tému, čo vám umožní jednoducho si ju "
+#~ "vymieňať s ostatnými ľuďmi."
+
+#~ msgid "Build a package of the theme ?"
+#~ msgstr "Vytvoriť balíček s témou ?"
+
+#~ msgid "Save current behaviour too ?"
+#~ msgstr "Uložiť aktuálne rozloženie ?"
+
+#~ msgid "Save as :"
+#~ msgstr "Uložiť ako :"
+
+#~ msgid "Delete from the list themes you don't want anymore :"
+#~ msgstr "Odstrániť zo zoznamu témy ktoré už nechcete :"
+
+#~ msgid ""
+#~ "Do you want to re-dispatch the icons contained inside this container into "
+#~ "the dock ?\n"
+#~ " (otherwise they will be destroyed)"
+#~ msgstr ""
+#~ "Prajete si, znovu-odoslať ikony obsiahnuté rámci tohto kontajnera do docku?\n"
+#~ " (inak budú zničené)"
+
+#~ msgid ""
+#~ "The advanced mode lets you tweak every single parameter of the dock. It is a "
+#~ "powerful tool to customize your current theme."
+#~ msgstr ""
+#~ "Pokročilý režim vám umožňuje vyladiť každý parameter na paneli. Je to mocný "
+#~ "nástroj na prispôsobenie aktuálnej témy."
+
+#~ msgid ""
+#~ "This is the simple config panel of Cairo-Dock.\n"
+#~ " After you got familiar with it, and if you want to customise your theme\n"
+#~ ", you can switch to an advanced mode.\n"
+#~ " You can switch from a mode to another at any time."
+#~ msgstr ""
+#~ "To je jednoduchý konfiguračný panel Cairo-Dock.\n"
+#~ " Potom, čo ste sa sním oboznámili, si môžete prispôsobiť vašu tému\n"
+#~ ", môžete prepnúť do rozšíreného režimu.\n"
+#~ " Kedykoľvek môžete prepnúť z režimu na iný."
+
+#~ msgid ""
+#~ "None     : Don't show opened windows in the dock.\n"
+#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
+#~ "they are minimized.\n"
+#~ "Windows7 : Mix applications with its launcher, show all others windows and "
+#~ "group windows togather in sub-dock.\n"
+#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
+#~ "that are on the current desktop."
+#~ msgstr ""
+#~ "None: Nezobrazovať otvorené okná v doku.\n"
+#~ "MacOSX: Mix aplikácií so spúšťačom, zobrazujú ostatné okná len v prípade, že "
+#~ "sú minimalizované.\n"
+#~ "Windows7: Mix aplikácií so spúšťačom, zobrazujú všetky ostatné okná a "
+#~ "skupiny okien spolu v sub-docku.\n"
+#~ "Gnome: Oddelený panel od spúšťačov a ukazuje len okná, ktoré sú na súčasnej "
+#~ "ploche."
+
+#~ msgid ""
+#~ "Configure icons animations on appearing/disappearing (require OpenGL "
+#~ "capacity)."
+#~ msgstr "Konfigurácia animácie ikôn na objavuje/mizne (vyžaduje OpenGL)."
+
+#~ msgid ""
+#~ "This will separate launchers, applis, and applets. Separators will be "
+#~ "automatically inserted then."
+#~ msgstr ""
+#~ "Oddeľuje spúšťače, aplikácie a aplety. Oddeľovač bude vložený automaticky."
+
+#~ msgid "Add or remove any applet :"
+#~ msgstr "Pridať alebo odstrániť applet :"
+
+#~ msgid "Number of the screen where the dock should be located :"
+#~ msgstr "Počet obrazoviek, kde by mal byť umiestnený dock :"
+
+#~ msgid "Only show icons whose window is minimized ?"
+#~ msgstr "Zobraziť iba ikony minimalizovaných okien ?"
+
+#~ msgid "Mix launchers and applis ?"
+#~ msgstr "Zmes spúšťačov a aplikácií ?"
+
+#~ msgid "Signal the applications demanding your attention with an animation ?"
+#~ msgstr "Signálu aplikácie vyžadujúcich vašu pozornosť s animáciou ?"
+
+#~ msgid "It is the default behaviour of most of taskbars."
+#~ msgstr "To je predvolené správanie väčšiny panelov s úlohami."
+
+#, c-format
+#~ msgid ""
+#~ "couldn't get distant file %s/%s, maybe the server is down.\n"
+#~ "Please retry later or contact us at cairo-dock.org."
+#~ msgstr ""
+#~ "nemôžem získať vzdialený súbor %s/%s, možno je spadnutý server.\n"
+#~ "Prosím, skúste to neskôr alebo nás kontaktujte na cairo-dock.org."
+
+#, c-format
+#~ msgid ""
+#~ "couldn't get distant file %s/%s, maybe the server is down.\n"
+#~ "Please retry later or contact us at glx-dock.org."
+#~ msgstr ""
+#~ "nemôžem získať vzdialený súbor %s/%s, možno je spadnutý server.\n"
+#~ "Prosím, skúste to neskôr alebo nás kontaktujte na glx-dock.org."
+
+#, c-format
+#~ msgid ""
+#~ "The module '%s' may have encountered a problem.\n"
+#~ "It has been restared successfully, but if it happens again, thanks to report "
+#~ "it to us at http://glx-dock.org"
+#~ msgstr ""
+#~ "Modul '%s' narazil na problém.\n"
+#~ "Bol úspešne reštartovaný, ale keď sa to stane znova, pošlite nám o tom "
+#~ "správu na http://glx-dock.org"
+
+#~ msgid ""
+#~ "We value your help ! If you see a bug, or if you think something could be "
+#~ "improved,\n"
+#~ "or if you just made a dream about the dock, pay us a visit on cairo-"
+#~ "dock.org.\n"
+#~ "English speakers are welcome, so don’t be shy ! ;-)\n"
+#~ "\n"
+#~ "If you made a theme for the dock or one of the applet, and want to share it, "
+#~ "we’ll be happy to integrate it on our server !"
+#~ msgstr ""
+#~ "Vážime si vašej pomoci! Ak narazíte na chybu, alebo ak si myslíte, že niečo, "
+#~ "čo by mohlo byť lepšie,\n"
+#~ "alebo ak ste práve mal sen o doku, prídťe nás navštíviť na glx-dock.org.\n"
+#~ "Anglicky hovoriaci sú vítaní, takže sa nehanbite! ;-)\n"
+#~ "\n"
+#~ "Ak ste vytvorili tému pre panel, alebo jeden z appletov, a chcete sa "
+#~ "podeliť, budeme radi a začleníme ju na našom serveri!"
+
+#~ msgid "Number of steps in the auto-hide animation (move up/move down) :"
+#~ msgstr "Počet krokov v animácii auto-skrývanie (pohyb hore/dole) :"
+
+#~ msgid "Filename of an image to put on :"
+#~ msgstr "Názov súboru vloženého obrázku :"
+
+#~ msgid "Close (middle-click)"
+#~ msgstr "Zavrieť (stredný-klik)"
+
+#~ msgid ""
+#~ "Sorry, couldn't find the corresponding description file.\n"
+#~ "Consider drag and dropping the launcher from the Applications Menu."
+#~ msgstr ""
+#~ "Prepáčte, nenašiel som súbor zodpovedajúci popisu.\n"
+#~ "Zvážte chytenie a vloženie spúšťača zo zoznamu Aplikácií."
+
+#~ msgid ""
+#~ "Usually you would drag a launcher from the menu and drop it into the dock."
+#~ msgstr "Normálne chytíte spúšťač v ponuke a pustíte ho do doku."
+
+#~ msgid "Keyboard shortcut to pop-up the dock :"
+#~ msgstr "Klávesová skratka pre vyskakovacie okno doku :"
+
+#~ msgid ""
+#~ "So if you check this box, your launchers will be deleted and replaced by the "
+#~ "ones provided in the new theme. Otherwise the current launchers will be "
+#~ "kept, only icons will be replaced."
+#~ msgstr ""
+#~ "Takže ak toto políčko zaškrtnete, budú vaše spúšťače odstránené a nahradené "
+#~ "tými ktoré poskytuje nová téma. Inak budú aktuálne spúšťače zachované a "
+#~ "nahradené budú iba ikony."
+
+#~ msgid "in ms. Unused if you set up to click to show sub-docks."
+#~ msgstr "v ms. Nepoužité, ak nastavíte kliknutie pre zobrazenie sub-dokov."
+
+#~ msgid "Play a short animation of the icon when its window becomes active ?"
+#~ msgstr "Prehrať krátku animáciu ikony ak sa jej okno stane aktívnym ?"
+
+#~ msgid "Force the following applications to demand your attention ?"
+#~ msgstr "Vnútiť týmto aplikáciam vyžadovať si vašu pozornosť ?"
+
+#~ msgid "Animation frequency for the cairo backend :"
+#~ msgstr "Frekvencia animácie pre ukončenie cairo :"
+
+#~ msgid "Animation frequency for the opengl backend :"
+#~ msgstr "Frekvencia animácie pre ukončenie opengl :"
+
+#~ msgid "Transparency of icons whose window is or isn't minimized :"
+#~ msgstr "Spriehľadniť ikony ktorých okno je alebo nie je minimalizované :"
+
+#~ msgid "Repeat image as a pattern to fill background ?"
+#~ msgstr "Opakovať obrázok ako vzor na vyplnenie pozadia ?"
+
+#~ msgid "Image's filename to use as a background :"
+#~ msgstr "Názov súboru obrázkov použitých ako pozadie :"
+
+#~ msgid "Color of the extern line :"
+#~ msgstr "Farba externého okraja  :"
+
+#~ msgid "Color of the label's background :"
+#~ msgstr "Farba pozadia štítku :"
+
+#~ msgid "Image's filename to use as a background for icons :"
+#~ msgstr "Názov súboru obrázkov použitých ako pozadie pre ikony :"
+
+#~ msgid "Get more applets !"
+#~ msgstr "Získajte viac appletov !"
+
+#~ msgid ""
+#~ "To remove the black rectangle around the dock, you need to activate a "
+#~ "composite manager.\n"
+#~ "For instance, it can be done by activating the desktop effects, launching "
+#~ "Compiz, or activating the composition in Metacity.\n"
+#~ "I can do this lattest operation for you, do you want to proceed ?"
+#~ msgstr ""
+#~ "Ak chcete odstrániť čierny obdĺžnik okolo doku, musíte aktivovať "
+#~ "kompozitného manažéra.\n"
+#~ "To je možné vykonať napríklad aktiváciou efektov plochy, spustením Compizu, "
+#~ "alebo aktiváciou v Metacity.\n"
+#~ "Môžem urobiť poslednú operáciu za vás, chcete pokračovať?"
+
+#~ msgid ""
+#~ "To remove the black rectangle around the dock, you need to activate a "
+#~ "composite manager.\n"
+#~ "For instance, it can be done by activating the desktop effects, launching "
+#~ "Compiz, or activating the composition in Metacity.\n"
+#~ "If your machine can't support composition, Cairo-Dock can emulate it; this "
+#~ "option is in the 'System' module of the configuration, at the bottom of the "
+#~ "page."
+#~ msgstr ""
+#~ "Ak chcete odstrániť čierny obdĺžnik okolo doku, musíte aktivovať "
+#~ "kompozitného manažéra.\n"
+#~ "To je možné vykonať napríklad aktiváciou efektov plochy, spustením Compizu, "
+#~ "alebo aktiváciou v Metacity.\n"
+#~ "Ak je váš počítač nepodporuje kompozíciu, Cairo-Dock ju môže napodobniť, "
+#~ "pričom táto možnosť je v module konfigurácie 'systému' v spodnej časti "
+#~ "stránky."
+
+#~ msgid ""
+#~ "Otherwise the current behaviour will be kept. It's all about the dock's "
+#~ "position, behaviour parameters such as auto-hide, using taskbar or not, etc."
+#~ msgstr ""
+#~ "Inak bude súčasné rozloženie zachované. Je to všetko o pozícii doku, "
+#~ "parametroch rozloženia ako je auto-skrývanie, či používať panel úloh alebo "
+#~ "nie, atď."
+
+#~ msgid ""
+#~ "This allows to group all the windows of a given application into a unique "
+#~ "sub-dock, and to act on all of the windows at the same time."
+#~ msgstr ""
+#~ "To umožňuje spojiť všetky okná danej aplikácie v unikátnom sub-docku, a "
+#~ "pôsobiť na všetkých oknách súčasne."
+
+#~ msgid ""
+#~ "Cairo-Dock will then replace your taskbar. It is recommanded to remove any "
+#~ "other taskbar, and to not force the dock's type to normal."
+#~ msgstr ""
+#~ "Cairo-Dock potom nahradí váš panel úloh. Je odporučené, aby boli odstránené "
+#~ "všetky ostatné panely a spustiť dok normálne bez vynútenia."
+
+#~ msgid ""
+#~ "Otherwise they will appear when you linger over the icon pointing on it."
+#~ msgstr "V opačnom prípade sa objaví, keď ponecháte ukazovateľ na ikone."
+
+#~ msgid ""
+#~ "This is only usefull if you don't already use the auto-hide, and if your WM "
+#~ "let the dock in front of fullscreen windows (which is rare)."
+#~ msgstr ""
+#~ "To je užitočné len vtedy, ak nechcete už používať auto-skrývanie, a ak  "
+#~ "ponecháte vaše WM na doku pred oknami na celú obrazovku (čo je zriedkavé)."
+
+#~ msgid "Show the window thumbnail"
+#~ msgstr "Zobraziť náhľad okna"
+
+#~ msgid "How to draw minimized windows ?"
+#~ msgstr "Ako vykresliť minimalizované okná?"
+
+#~ msgid "Transparency of icons whose window is minimized :"
+#~ msgstr "Spriehľadniť ikony, ktorých okno je minimalizované:"
+
+#~ msgid ""
+#~ "This is the animation when the dock goes below a window; The greater, the "
+#~ "slower it will be"
+#~ msgstr ""
+#~ "Toto je animácia, keď je dock schovaný pod oknom, Čím väčšia tým bude "
+#~ "pomalšia"
+
+#~ msgid ""
+#~ "It will notify you even if, for instance, you are watching a movie in "
+#~ "fullscreen or you are on another desktop.\n"
+#~ msgstr ""
+#~ "To vám oznámi, ak napríklad sledujete film na celej obrazovke, alebo ste na "
+#~ "inej ploche.\n"
+
+#~ msgid "Animate sub-docks when they appear ?"
+#~ msgstr "Animovať sub-doky, keď sa objavia ?"
+
+#~ msgid ""
+#~ "Any format allowed; if empty, the color gradation will be used as a fallback."
+#~ msgstr ""
+#~ "Akýkoľvek formát je povolený; ak je prázdne, bude farebná gradácia použitá "
+#~ "ako núdzová."
 
 #~ msgid "Configure labels appearence."
 #~ msgstr "Konfigurovať vzhľad štítkov."
 
+#~ msgid "Repeat the gradation this number of times :"
+#~ msgstr "Opakujte túto gradáciu, koľkokrát :"
+
+#~ msgid "Rotate the image when the dock is on top/left/right ?"
+#~ msgstr "Otočenie obrázku, keď je dok hore/vľavo/vpravo ?"
+
+#~ msgid "How to draw the separators :"
+#~ msgstr "Ako vykresliť oddeľovače :"
+
+#~ msgid "Appli's size at rest (width x height) :"
+#~ msgstr "Požadovaná veľkosť v kľude (šírka x výška):"
+
+#~ msgid ""
+#~ "If you separate a type of icons, the icons of this type will be placed "
+#~ "togather, separated from the others by a separator.\n"
+#~ "If you don't separate the icons, you can place them wherever you want, and "
+#~ "insert separators manually. Applications will then be placed next to their "
+#~ "launcher if they have, or after the last launcher."
+#~ msgstr ""
+#~ "Ak máte špeciálne typy ikôn, budú ikony tohto druhu umiestnené oddelene od "
+#~ "ostatných oddeľovačov.\n"
+#~ "Ak nemáte samostatné ikony, môžete ich umiestniť kamkoľvek budete chcieť, a "
+#~ "oddeľovače vložiť ručne. Aplikácie budú následne umiestnené vedľa ich "
+#~ "spúšťačov, ak ich majú, alebo za posledným spúšťačom."
+
+#~ msgid "Color of flat separators :"
+#~ msgstr "Farba plochých oddeľovačov :"
+
+#~ msgid "Color of the string (red, blue, green, alpha) :"
+#~ msgstr "Farba reťazca (červená, modrá, zelená, alfa):"
+
+#~ msgid "Name of an image to use for the 'no input' button :"
+#~ msgstr "Názov obrázku použitého pre tlačidlo 'žiadny vstup' :"
+
+#~ msgid "Type of indicator :"
+#~ msgstr "Typ indikátora :"
+
+#~ msgid "Image file :"
+#~ msgstr "Súbor s obrázkom :"
+
+#~ msgid "Color of the frame :"
+#~ msgstr "Farba rámu :"
+
+#~ msgid "Draw indicator above the icon ?"
+#~ msgstr "Nakresliť indikátor nad ikonou ?"
+
+#~ msgid "Use an indicator"
+#~ msgstr "Použiť indikátor"
+
+#~ msgid ""
+#~ "Let empty to use the current icons theme of your system. You can enter the "
+#~ "name of a theme that is installed on your system (like 'Gartoon' or "
+#~ "'Human'), or even a path to a folder containing icons."
+#~ msgstr ""
+#~ "Nechajte prázdne, pre využitie existujúcich ikôn témy vášho systému. Môžete "
+#~ "zadať názov témy, ktorá je nainštalovaná vo vašom systéme (ako 'Gartoon' "
+#~ "alebo 'Human'), alebo zadať cestu k priečinku obsahujúcemu ikony."
+
+#~ msgid ""
+#~ "Minimize the window when its icon is clicked, if it was already the active "
+#~ "window ?"
+#~ msgstr ""
+#~ "Minimalizovať okno, keď kliknem na jeho ikonu, ak bolo okno aktívne ?"
+
+#~ msgid "Middle click on an icon closes its relative application ?"
+#~ msgstr ""
+#~ "Kliknutie na ikonu stredným tlačítkom ukončí jeho príbuznú aplikáciu ?"
+
+#~ msgid ""
+#~ "Maximum time in seconds that you allow the whole operation to take. Some "
+#~ "themes can take up to a few MB."
+#~ msgstr ""
+#~ "Maximálny čas v sekundách, ktorý umožňuje dokončenie celej operácie. "
+#~ "Niektoré témy, majú až niekoľko MB."
+
+#~ msgid ""
+#~ "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
+#~ "etc and have a black background around your dock. For esthetic reason, the "
+#~ "dock will be kept under other windows."
+#~ msgstr ""
+#~ "Použiť iba ak nemáte ako spustiť kompozitný manažér Compiz, xcompmgr, atď a "
+#~ "máte čierne pozadie okolo doku. Pre estetický dôvod, bude dok ponechaný pod "
+#~ "inými oknami."
+
+#~ msgid "Should the labels be always horizontal, even when dock is vertical ?"
+#~ msgstr "Majú byť popisky vždy horizontálne, aj keď je dok vertikálne ?"
+
+#~ msgid "Reflections should be calculated in real-time ?"
+#~ msgstr "Zkadlenia by mali byť vypočítané v reálnom čase ?"
+
+#~ msgid "Move the background image along with the cursor ?"
+#~ msgstr "Presunúť obrázok pozadia spolu s kurzorom ?"
+
+#~ msgid "Pattern should be vertical ?"
+#~ msgstr "Vzor by mal byť vertikálne ?"
+
+#~ msgid ""
+#~ "If you set it to fully transparent, there will be no background for the "
+#~ "text, but the margin around the text will still be effective."
+#~ msgstr ""
+#~ "Ak nastavíte na plne priehľadné, text nebude mať pozadie, ale priestor okolo "
+#~ "textu zostane efektívny."
+
+#~ msgid "If false, only the quick-info will have this background color."
+#~ msgstr "Ak je neplatný, iba rýchla správa bude mať túto farbu pozadia."
+
+#~ msgid ""
+#~ "Any format allowed; let this field empty if you don't want to use an image "
+#~ "as background."
+#~ msgstr ""
+#~ "Ľubovoľný formát, nechajte toto pole prázdne, ak nechcete použiť obrázok ako "
+#~ "pozadie."
+
+#~ msgid ""
+#~ "Note : many answers have an extra hint.\n"
+#~ "To popup the hint, simply let the mouse over the sentence for 1 second, a "
+#~ "tooltip will appear."
+#~ msgstr ""
+#~ "Poznámka: veľa odpovedí má extra nápovedu.\n"
+#~ "Ak chcete okno s nápovedou, jednoducho ponechajte myš nad, asi 1 sekundu, a "
+#~ "nápoveda sa objaví."
+
+#~ msgid ""
+#~ "Hint : You can define the size of each applet independantely, to any size "
+#~ "smaller or equal than the default size. Set it to 0x0 to use the default "
+#~ "size."
+#~ msgstr ""
+#~ "Tip: Môžete definovať veľkosť každého appletu nezávisle, akákoľvek menšia "
+#~ "veľkosť alebo rovná predvolenej veľkosti. Nastavte ju na 0x0 pre použitie "
+#~ "predvolenej veľkosti."
+
+#~ msgid ""
+#~ "Hint : middle-clicking on it will hide all the windows, but not the desklets."
+#~ msgstr "Tip: stredným kliknutím sa skryjú všetky okná, ale nie desklety."
+
+#~ msgid ""
+#~ "activate the “clock” applet; clicking on it will display a calendar, "
+#~ "clicking again will hide it."
+#~ msgstr ""
+#~ "aktivovať applet \"hodiny\", kliknutím na ne sa zobrazí kalendár, kliknutím "
+#~ "sa opäť skryje."
+
+#~ msgid "How can I change quickly the speakers volume ?"
+#~ msgstr "Ako sa môžem rýchlo zmeniť hlasitosť reproduktorov ?"
+
+#~ msgid ""
+#~ "I have a personal Cairo-Clock theme that I want to use in the “clock” applet."
+#~ msgstr ""
+#~ "Mám vlastnú Cairo-Clock tému, ktorú chcem použiť v applete \"hodiny\"."
+
+#~ msgid ""
+#~ "Hint : This allows you, for example, to have the time of different countries "
+#~ "in your dock, or to have many animated caracters in your dock, or the "
+#~ "weather of different cities."
+#~ msgstr ""
+#~ "Tip: To vám umožní napríklad, zobraziť v doku čas rôznych krajín, alebo mať "
+#~ "veľa animovaných postáv vo vašom doku, alebo počasie v rôznych mestách."
+
+#~ msgid "So then, how can I remove completely the gnome-panel ?"
+#~ msgstr "Tak, ako môžem úplne odstrániť gnome-panel ?"
+
+#~ msgid "Save current launchers too ?"
+#~ msgstr "Uložiť tiež aktuálne spúšťače ?"
+
+#~ msgid "What are these “desklets” ?"
+#~ msgstr "Čo sú tieto \"desklety\" ?"
+
+#~ msgid ""
+#~ "Any dock can be displayed with one view, and many views are available (3D, "
+#~ "Curve, etc).\n"
+#~ "Go to the “Views” module, and choose the view you want for main dock, and "
+#~ "for sub-docks."
+#~ msgstr ""
+#~ "Akýkoľvek dok môže byť zobrazený v jednom pohľade, a mnohé iné pohľady sú k "
+#~ "dispozícii (3D, krivky, atď).\n"
+#~ "Choď na modul \"Zobrazenie\", a vyberte požadované zobrazenie pre hlavný "
+#~ "dok, a sub-doky."
+
+#~ msgid ""
+#~ "Simply right-click on the dock where you want to add a separator, and select "
+#~ "“add a separator”.\n"
+#~ "You can place it wherever you want (except in amongst taskbar icons) by "
+#~ "dragging it with the mouse."
+#~ msgstr ""
+#~ "Stačí kliknúť pravým tlačítkom na dok, kam chcete pridať oddeľovač, a "
+#~ "vyberte možnosť \"pridať oddeľovač\".\n"
+#~ "Možno ho umiestniť kdekoľvek chcete (s výnimkou medzi ikony hlavného panelu) "
+#~ "pretiahnutím myšou."
+
+#~ msgid ""
+#~ "I don’t want to have a separator between launchers , applis and applets"
+#~ msgstr "Nechcem mať oddeľovač medzi spúšťačmi, applikáciami a apletmi"
+
+#~ msgid ""
+#~ "In the “Icons” module, under the “separator” part, untick the box that says "
+#~ "to “add automatic separators”."
+#~ msgstr ""
+#~ "V module \"ikony\", v rámci časti \"oddeľovač\", odčiarknite pole, ktoré "
+#~ "hovorí: \"pridať automatické oddeľovače\"."
+
+#~ msgid "How do I set up their attitude ?"
+#~ msgstr "Ako mám nastaviť svoju pozíciu ?"
+
 #~ msgid "The themes could not be deleted"
 #~ msgstr "Témy sa nedajú odstrániť"
+
+#, c-format
+#~ msgid "Set position for the '%s' dock"
+#~ msgstr "Nastaviť pozíciu pre dock '%s'"
+
+#~ msgid "Set the position of this main dock."
+#~ msgstr "Nastaviť pozíciu hlavného panela."
 
 #~ msgid ""
 #~ "Warning: could not delete this file.\n"
@@ -4963,6 +6435,7 @@ msgstr ""
 #~ msgid "Rename to:"
 #~ msgstr "Premenovať na :"
 
+#, c-format
 #~ msgid ""
 #~ "Warning: could not rename %s.\n"
 #~ "Check file permissions \n"
@@ -4983,6 +6456,17 @@ msgstr ""
 
 #~ msgid "Click to show sub-docks"
 #~ msgstr "Kliknúť na zobrazenie sub-docku ?"
+
+#~ msgid "Delay before leaving or entering a sub-dock takes effect:"
+#~ msgstr ""
+#~ "Veľkosť omeškania keď skutočne opúšťate sub-dock alebo vchádzate do sub-"
+#~ "docku :"
+
+#~ msgid "Display an indicator even when the icon is not a launcher ?"
+#~ msgstr "Zobraziť indikátor, aj keď ikona nie je spúšťač ?"
+
+#~ msgid "In the style of Firefox tabs"
+#~ msgstr "Spôsob kariet vo Firefoxe."
 
 #~ msgid "Animate the dock when auto-hiding"
 #~ msgstr "Animovať dock pri automatickom skrývaní ?"
@@ -5005,27 +6489,29 @@ msgstr ""
 #~ msgid "Number of retries:"
 #~ msgstr "Počet opakovaní :"
 
+#~ msgid "Use background color for labels?"
+#~ msgstr "Použiť farbu pozadia pre štítky ?"
+
 #~ msgid ""
-#~ "This is normal, because they are both «docks». You can either move the "
-#~ "dock out of the panel, or launch it wih the command «cairo-dock --keep-"
-#~ "above»."
+#~ "This is normal, because they are both «docks». You can either move the dock "
+#~ "out of the panel, or launch it wih the command «cairo-dock --keep-above»."
 #~ msgstr ""
 #~ "je to normálne, pretože oba sú \"panely\". Môžete buď prejsť na dock z "
 #~ "panela, alebo spustiť príkaz s \"cairo-dock --nechať-navrchu\"."
 
 #~ msgid ""
-#~ "Hint: if you choose to mix applets and launchers in the 'Icons' module, "
-#~ "you can also place separators between applets then."
+#~ "Hint: if you choose to mix applets and launchers in the 'Icons' module, you "
+#~ "can also place separators between applets then."
 #~ msgstr ""
 #~ "Tip: Ak vyberiete mix applety a spúšťače v module 'ikona', takže si potom "
 #~ "môžete vložiť oddeľovače medzi applety."
 
 #~ msgid ""
-#~ "Just right-click on the dock, then select «add a sub-dock». Fill the "
-#~ "config panel with a name and image, then confirm."
+#~ "Just right-click on the dock, then select «add a sub-dock». Fill the config "
+#~ "panel with a name and image, then confirm."
 #~ msgstr ""
-#~ "Len kliknite pravým tlač. na dock, potom zvoľte \"pridať sub-dock.\" "
-#~ "Vyplňte config panel s nejakým názvom a obrázkom, potom overte."
+#~ "Len kliknite pravým tlač. na dock, potom zvoľte \"pridať sub-dock.\" Vyplňte "
+#~ "config panel s nejakým názvom a obrázkom, potom overte."
 
 #~ msgid "Enable the Gmenu applet."
 #~ msgstr "aktivuje applet Gmenu."
@@ -5055,19 +6541,30 @@ msgstr ""
 #~ msgstr "Trieda programu :"
 
 #~ msgid "in ms. Unused if you activate the click to show sub-docks."
-#~ msgstr ""
-#~ "v ms. Nevyužité ak máte aktivované zobrazenie sub dokov po kliknutí."
+#~ msgstr "v ms. Nevyužité ak máte aktivované zobrazenie sub dokov po kliknutí."
+
+#~ msgid "Overwrite the X icon with the launchers' icon"
+#~ msgstr "Nahradiť ikonu X ikonou spúšťača"
+
+#~ msgid "Transparency of icons whose window is or isn't minimised:"
+#~ msgstr "Priehľadnosť ikôn, ktorých okná sú, alebo nie sú minimalizované:"
+
+#~ msgid "Show thumbnails for minimsed windows"
+#~ msgstr "Zobraziť náhľady pre minimalizované okná"
+
+#~ msgid "Middle-clicking on an icon closes the related application"
+#~ msgstr "Stredným kliknutím na ikonu ukončíte súvisiacu aplikáciu"
 
 #~ msgid ""
 #~ "This is the animation when the dock goes below a window. The higher the "
 #~ "value, the slower it will be"
 #~ msgstr ""
-#~ "Jedná sa o animáciu, keď je dok pod oknom. Čím vyššia je hodnota, tým "
-#~ "bude pomalšia"
+#~ "Jedná sa o animáciu, keď je dok pod oknom. Čím vyššia je hodnota, tým bude "
+#~ "pomalšia"
 
 #~ msgid ""
-#~ "If an error occurs during downloading a theme, it will retry this number "
-#~ "of times before giving up."
+#~ "If an error occurs during downloading a theme, it will retry this number of "
+#~ "times before giving up."
 #~ msgstr ""
 #~ "Ak dôjde ku chybe pri sťahovaní témy, bude to opakované niekoľkokrát."
 
@@ -5085,15 +6582,14 @@ msgstr ""
 #~ "The lower the value, the less the decorations will move along with the "
 #~ "cursor."
 #~ msgstr ""
-#~ "Čím nižšia hodnota, tým menej dekorácie sa bude pohybovať spolu s "
-#~ "kurzorom."
+#~ "Čím nižšia hodnota, tým menej dekorácie sa bude pohybovať spolu s kurzorom."
 
 #~ msgid "Rotate the image when the dock is on top/left/right?"
 #~ msgstr "Otočenie obrazu, keď je dok hore/vľavo/vpravo?"
 
 #~ msgid ""
-#~ "Use it when the image is an arrow pointing to the center of the screen "
-#~ "for exemple."
+#~ "Use it when the image is an arrow pointing to the center of the screen for "
+#~ "exemple."
 #~ msgstr "Použite ho napr. keď obrázok je šípka smerujúca do stredu obrazovky"
 
 #~ msgid "Placing the mouse into it will make the dock re-appear."
@@ -5104,30 +6600,43 @@ msgstr ""
 #~ msgstr "V opačnom prípade sa objaví, keď podržíte ukazovateľ nad ikonou."
 
 #~ msgid ""
-#~ "Hint: to move an icon into another dock, right-click on it, go to 'Move "
-#~ "to', and choose the one you want in the list. You can do the same with "
-#~ "applets as well, allowing you to group many applets in a sub-dock. You "
-#~ "can also create new main docks this way."
+#~ "Cairo-Dock will then replace your taskbar. It is recommended to remove any "
+#~ "other taskbars and to not force the dock type to normal."
 #~ msgstr ""
-#~ "Tip: Ak chcete presunúť ikonu do iného doku, kliknite na ňu pravým "
-#~ "tlačítkom, vyberte 'Presunúť do', a vyberte si ten, ktorý chcete v "
-#~ "zozname. Môžete urobiť to isté rovnako s appletami , čo vám umožní "
-#~ "zoskupiť v sub-doku  množstvo apletov. Môžete rovnakým spôsobom tiež "
-#~ "vytvárať nové hlavné doky ."
+#~ "Cairo-Dock potom nahradí váš panel úloh. Odporúča sa, aby boli odstránené "
+#~ "všetky ostatné panely úloh a bez vynútenia spustiť dok ako normálne."
 
 #~ msgid ""
-#~ "This is because X provides small icons for applications which look ugly "
-#~ "when zoomed. Use the «overwrite X icons» option to tell the dock not to "
-#~ "use them."
+#~ "Use it to make the indicator rotate according to the position of the dock "
+#~ "(top/bottom/right/left)"
+#~ msgstr ""
+#~ "Použite ho, aby sa ukazovateľ otáčal podľa polohy doku "
+#~ "(hore/dole/vpravo/vľavo)"
+
+#~ msgid ""
+#~ "Hint: to move an icon into another dock, right-click on it, go to 'Move to', "
+#~ "and choose the one you want in the list. You can do the same with applets as "
+#~ "well, allowing you to group many applets in a sub-dock. You can also create "
+#~ "new main docks this way."
+#~ msgstr ""
+#~ "Tip: Ak chcete presunúť ikonu do iného doku, kliknite na ňu pravým "
+#~ "tlačítkom, vyberte 'Presunúť do', a vyberte si ten, ktorý chcete v zozname. "
+#~ "Môžete urobiť to isté rovnako s appletami , čo vám umožní zoskupiť v sub-"
+#~ "doku  množstvo apletov. Môžete rovnakým spôsobom tiež vytvárať nové hlavné "
+#~ "doky ."
+
+#~ msgid ""
+#~ "This is because X provides small icons for applications which look ugly when "
+#~ "zoomed. Use the «overwrite X icons» option to tell the dock not to use them."
 #~ msgstr ""
 #~ "To je preto, že X poskytuje malé ikony pre aplikácie, ktoré vyzerajú "
 #~ "škaredo, keď sú zväčšené. Použite možnosť «prepísať ikony X» a dok ich "
 #~ "nebude používať."
 
 #~ msgid ""
-#~ "Use the «Group applications by class» option. Only a single icon will "
-#~ "appear in the dock. If there are several windows, they will be grouped "
-#~ "together in a sub-dock above this icon."
+#~ "Use the «Group applications by class» option. Only a single icon will appear "
+#~ "in the dock. If there are several windows, they will be grouped together in "
+#~ "a sub-dock above this icon."
 #~ msgstr ""
 #~ "Použite nastavenie «zoskupiť applikácie podľa triedy». Iba jedna ikona sa "
 #~ "objaví v doku. Ak existuje niekoľko okien, budú zoskupené v sub-doku nad "
@@ -5135,9 +6644,9 @@ msgstr ""
 
 #~ msgid ""
 #~ "Use the «Mix applis and launchers» option.\n"
-#~ "When a program is launched, if it has a launcher in the dock, the "
-#~ "launcher icon will be marked with an icon to indicate that the "
-#~ "corresponding application is running.\n"
+#~ "When a program is launched, if it has a launcher in the dock, the launcher "
+#~ "icon will be marked with an icon to indicate that the corresponding "
+#~ "application is running.\n"
 #~ "You can then act on the window as if it were a taskbar icon."
 #~ msgstr ""
 #~ "Použite nastavenie «Mix aplikácií a spúšťačov».\n"
@@ -5149,8 +6658,8 @@ msgstr ""
 #~ msgstr "Tip: tento applet umožňuje pridať/odobrať pracovnú plochu!"
 
 #~ msgid ""
-#~ "Hint : when you define a shortkey, try it before to be sure that it is "
-#~ "not already used by another application."
+#~ "Hint : when you define a shortkey, try it before to be sure that it is not "
+#~ "already used by another application."
 #~ msgstr ""
 #~ "Tip: keď sa definujú klávesové skratky, overte si či nie je už používaná "
 #~ "inou aplikáciou."
@@ -5162,6 +6671,9 @@ msgstr ""
 
 #~ msgid "Position relative to the selected screen edge"
 #~ msgstr "Pozícia vo vzťahu k vybranému okraju obrazovky"
+
+#~ msgid "This icon doesn't have a desktop file."
+#~ msgstr "Táto ikona nie je súborom plochy."
 
 #~ msgid "Do you want to mount this device?"
 #~ msgstr "Chcete pripojiť túto jednotku ?"
@@ -5185,9 +6697,22 @@ msgstr ""
 #~ msgstr "Prepojené s myšou"
 
 #~ msgid ""
-#~ "Icons will scroll according to what positioning model is selected. The "
-#~ "dock can of course can be positioned anywhere on the screen. Here we "
-#~ "specify this relative position."
+#~ "It will then be resized like the icon, move like the icon, etc. Otherwise it "
+#~ "will be drawn directly on the dock."
+#~ msgstr ""
+#~ "Bude meniť veľkosť ako ikona, pohybovať sa ako ikona, atď. V opačnom prípade "
+#~ "bude vykreslený priamo v doku."
+
+#~ msgid "Show thumbnails for minimised windows"
+#~ msgstr "Zobraziť náhľady pre minimalizované okná"
+
+#~ msgid "Make the icon transparent?"
+#~ msgstr "Urobiť ikonu priehľadnou?"
+
+#~ msgid ""
+#~ "Icons will scroll according to what positioning model is selected. The dock "
+#~ "can of course can be positioned anywhere on the screen. Here we specify this "
+#~ "relative position."
 #~ msgstr ""
 #~ "Ikony budú posunuté v závislosti na umiestnení vybraného modelu. Dok "
 #~ "samozrejme môže byť umiestnený kdekoľvek na obrazovke. Tu sme to "
@@ -5197,39 +6722,73 @@ msgstr ""
 #~ msgstr "Zobraziť iba v prípade, že myš vojde do rohu obrazovku"
 
 #~ msgid ""
-#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide "
-#~ "is not enabled or unfold acceleration is null."
+#~ "Prevent windows from overlapping the dock: reserve space at the edge of the "
+#~ "screen for the dock.\n"
+#~ "Auto-hide: the dock will automatically hide itself outside of the screen "
+#~ "when the mouse leaves it. Instead, it will show a zone where placing the "
+#~ "mouse will trigger the dock and make it re-appear.\n"
+#~ "Keep the dock below windows: the dock will pop-up on the foreground when you "
+#~ "place the mouse on its screen border.\n"
+#~ "Pop-up on shortcut : When you press the shortcut, the dock will pop-up at "
+#~ "the position of your mouse. The rest of the time, it stays invisible, thus "
+#~ "acting like a menu."
 #~ msgstr ""
-#~ "Dock sa rozvinie ihneď po skrytí/objavení. Pri auto-skrývaní nie je "
-#~ "povolený žiadny efekt alebo zrýchlenie rozbalenia je nulové."
+#~ "Zabrániť oknám v prekrytí doku: rezervuje priestor na okraji obrazovky pre "
+#~ "dok.\n"
+#~ "Auto-skrývanie: dok sa automaticky skrýva sám mimo obrazovku, keď ho myš "
+#~ "opustí. Namiesto toho bude ukazovať zónu, kde umiestnenie myši spustí dok a "
+#~ "znovu sa objaví.\n"
+#~ "Ponechajte dock pod oknami: dok sa objaví na popredí, keď umiestnite myš na "
+#~ "jeho hranici obrazovky.\n"
+#~ "Pop-up skratka: Keď stlačíte klávesovú skratku, bude dock reagovať na "
+#~ "pozíciu myši. Zvyšok času, zostáva neviditeľným, a tak pôsobí ako menu."
 
 #~ msgid ""
-#~ "Hint: you can even do that with desklets, making a desklet's panel !."
+#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide is "
+#~ "not enabled or unfold acceleration is null."
+#~ msgstr ""
+#~ "Dock sa rozvinie ihneď po skrytí/objavení. Pri auto-skrývaní nie je povolený "
+#~ "žiadny efekt alebo zrýchlenie rozbalenia je nulové."
+
+#~ msgid "Hint: you can even do that with desklets, making a desklet's panel !."
 #~ msgstr "Tip: čo všetko sa dá robiť s deskletmi, urobte z nich panel !."
 
 #~ msgid ""
-#~ "Two choices are available in the “Visibility” module:\n"
-#~ " - either choose to “keep the dock below other windows”. The dock will "
-#~ "then pop-up when you place the mouse on its screen border.\n"
-#~ " - or choose the auto-hide. The dock will then hide itself and reappear "
-#~ "when you enter the trigger zone."
+#~ "Open gconf-editor, edit the key "
+#~ "/desktop/gnome/session/required_components_list/panel, and replace its "
+#~ "content with \"cairo-dock\". This will not launch the dock on start-up, but "
+#~ "just prevent the gnome-panel from launching, so don't forget to add Cairo-"
+#~ "Dock on startup.\n"
+#~ "Then restart your session : the gnome-panel has not been started."
 #~ msgstr ""
-#~ "V module \"viditeľnosť\" sú k dispozícii dve možnosti:\n"
-#~ " - buď zvoliť \"držať panel pod ostatnými oknami\". Dock sa objaví, keď "
-#~ "na toto miesto na hranici obrazovky vojdete myšou.\n"
-#~ " - alebo zvoliť auto-skrývanie. Dock sa potom skrýva sám, a znovu sa "
-#~ "objaví, keď vojdete do aktivačnej zóny."
+#~ "Otvorte gconf-editor, upravte kľúč "
+#~ "/desktop/gnome/session/required_components_list/panel, a nahradte ho s "
+#~ "\"cairo-dock\". To nespustí dock pri štarte, ale len zabráni spusteniu gnome-"
+#~ "panelu, takže nezabudnite pridať Cairo-Dock do zoznamu pri spustení.\n"
+#~ "Reštartujte sedenie: gnome-panel nebude spustený."
 
 #~ msgid ""
-#~ "Hint : you can choose to pop-up the dock only when the mouse hits the "
-#~ "screen corner instead of the whole screen border.\n"
-#~ "You can also set-up the size of the trigger zone, and even set an image "
-#~ "to it."
+#~ "Two choices are available in the “Visibility” module:\n"
+#~ " - either choose to “keep the dock below other windows”. The dock will then "
+#~ "pop-up when you place the mouse on its screen border.\n"
+#~ " - or choose the auto-hide. The dock will then hide itself and reappear when "
+#~ "you enter the trigger zone."
 #~ msgstr ""
-#~ "Tip: Môžete si vybrať, zobrazenie panela len vtedy, keď sa myš dotkne "
-#~ "rohu obrazovky namiesto celej hranice obrazovky.\n"
-#~ "Môžete tiež nastaviť veľkosť spúšťacej zóny, a dokonca aj nastaviť "
-#~ "obrázok."
+#~ "V module \"viditeľnosť\" sú k dispozícii dve možnosti:\n"
+#~ " - buď zvoliť \"držať panel pod ostatnými oknami\". Dock sa objaví, keď na "
+#~ "toto miesto na hranici obrazovky vojdete myšou.\n"
+#~ " - alebo zvoliť auto-skrývanie. Dock sa potom skrýva sám, a znovu sa objaví, "
+#~ "keď vojdete do aktivačnej zóny."
+
+#~ msgid ""
+#~ "Hint : you can choose to pop-up the dock only when the mouse hits the screen "
+#~ "corner instead of the whole screen border.\n"
+#~ "You can also set-up the size of the trigger zone, and even set an image to "
+#~ "it."
+#~ msgstr ""
+#~ "Tip: Môžete si vybrať, zobrazenie panela len vtedy, keď sa myš dotkne rohu "
+#~ "obrazovky namiesto celej hranice obrazovky.\n"
+#~ "Môžete tiež nastaviť veľkosť spúšťacej zóny, a dokonca aj nastaviť obrázok."
 
 #~ msgid ""
 #~ "The dock will automatically hide itself when the mouse leaves it and will "
@@ -5240,9 +6799,35 @@ msgstr ""
 #~ "mieste zónu spätného volania. Umiestnite myš do tejto zóny, aby sa panel "
 #~ "znova objavil."
 
+#~ msgid "Hide the dock whenever it overlaps a window"
+#~ msgstr "Skryť panel ak je prekrytý oknom"
+
+#~ msgid "The last effect requires opengl."
+#~ msgstr "Posledný efekt vyžaduje OpenGL."
+
+#~ msgid "Draw an image"
+#~ msgstr "Vykresliť obrázok"
+
 #~ msgid "cPath="
 #~ msgstr "cPath="
 
+#~ msgid ""
+#~ "Prevent windows from overlapping the dock: reserve space at the edge of the "
+#~ "screen for the dock.\n"
+#~ "Auto-hide: when the dock is hidden, place the mouse on the screen's border "
+#~ "to call it back.\n"
+#~ "Pop-up on shortcut : When you press the shortcut, the dock will pop-up at "
+#~ "the position of your mouse. The rest of the time, it stays invisible, thus "
+#~ "acting like a menu."
+#~ msgstr ""
+#~ "Zabráni oknám v prekrývaní panelu: rezervuje priestor na okraji obrazovky "
+#~ "pre panel\n"
+#~ "Auto-skrývanie: keď je panel skrytý, umiestnite myš na hraníci obrazovky pre "
+#~ "jeho vyvolanie.\n"
+#~ "Pop-up skratka: Keď stlačíte klávesovú skratku, panel sa objaví na pozícii "
+#~ "myši. Zvyšok času, zostáva neviditeľný, a tak pôsobí ako menu."
+
+#, c-format
 #~ msgid "Configuration of the '%s' dock"
 #~ msgstr "Nastavenie '%s' panelu"
 

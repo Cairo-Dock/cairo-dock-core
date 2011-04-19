@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2011-04-15 00:24+0000\n"
 "PO-Revision-Date: 2010-09-18 12:45+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Faroese <fo@li.org>\n"
-"Language: fo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-02 04:42+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-16 04:35+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
+"Language: fo\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -70,7 +71,8 @@ msgid "category"
 msgstr "bólkur"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:624
@@ -314,7 +316,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:79
@@ -352,9 +355,8 @@ msgid "Manage Themes"
 msgstr "Umsit tema"
 
 #: ../src/cairo-dock-menu.c:121
-#, fuzzy
 msgid "Delete this dock?"
-msgstr "Samanset hesa dokk"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:171
 msgid "About Cairo-Dock"
@@ -409,9 +411,8 @@ msgid "Customize the position, visibility and appearance of this main dock."
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:356
-#, fuzzy
 msgid "Delete this dock"
-msgstr "Samanset hesa dokk"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:365
 msgid "Manage themes"
@@ -420,7 +421,8 @@ msgstr "Umsit temur"
 #: ../src/cairo-dock-menu.c:370
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "Víl ímillum mangar temur á ambætaranum, ella goym títt núverandi tema."
+msgstr ""
+"Víl ímillum mangar temur á ambætaranum, ella goym títt núverandi tema."
 
 #: ../src/cairo-dock-menu.c:376
 msgid "Unlock icons"
@@ -472,7 +474,8 @@ msgid "Get more applets!"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:429
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:431
@@ -680,9 +683,8 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1344 ../src/cairo-dock-menu.c:1346
 #: ../data/messages:327
-#, fuzzy
 msgid "Close"
-msgstr "Lat allar aftur"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1365
 msgid "Move all to this desktop"
@@ -1558,9 +1560,8 @@ msgid "Nothing"
 msgstr ""
 
 #: ../data/messages:329
-#, fuzzy
 msgid "Minimize"
-msgstr "Minsta"
+msgstr ""
 
 #: ../data/messages:331
 msgid "Launch new"
@@ -2057,7 +2058,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:639
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:641
@@ -2352,8 +2354,8 @@ msgstr "størri"
 
 #: ../data/messages:793
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:795
@@ -2369,9 +2371,8 @@ msgid "How to show that several icons are grouped :"
 msgstr ""
 
 #: ../data/messages:803
-#, fuzzy
 msgid "Draw an emblem"
-msgstr "Tekna eina mynd"
+msgstr ""
 
 #: ../data/messages:805
 msgid "Draw the sub-dock's icons as a stack"
@@ -2486,18 +2487,16 @@ msgid "Quick-info are short information drawn on the icons."
 msgstr ""
 
 #: ../data/messages:865
-#, fuzzy
 msgid "Quick-info"
-msgstr "Snar-fjalan"
+msgstr ""
 
 #: ../data/messages:867
 msgid "Use the same look as the labels?"
 msgstr ""
 
 #: ../data/messages:871
-#, fuzzy
 msgid "Background color:"
-msgstr "Bakgrund"
+msgstr ""
 
 #: ../data/messages:875
 msgid "Yes, like that :-)"
@@ -2579,8 +2578,8 @@ msgstr ""
 
 #: ../data/messages:905
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 "Einans drag og slepp tær uttanfyri dokkina, og tær hvørva í einari "
 "spreinging !"
@@ -2597,8 +2596,8 @@ msgstr ""
 
 #: ../data/messages:911
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -3000,8 +2999,8 @@ msgstr "Eg havi ljótar ímyndir fyri summum nýtsluskipanum."
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3253,8 +3252,9 @@ msgstr ""
 
 #: ../data/messages:1175
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3380,16 +3380,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3431,8 +3431,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1243
@@ -3560,8 +3560,8 @@ msgstr "Kom við í verkætlaninna!"
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -4077,8 +4077,8 @@ msgstr ""
 #: ../data/messages:1629
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4159,8 +4159,8 @@ msgstr ""
 #: ../data/messages:1641
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4250,8 +4250,9 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#~ msgid "Use background color for labels?"
-#~ msgstr "Nýta bakrundslit á spjøldrum?"
+#, c-format
+#~ msgid "Importing theme %s ..."
+#~ msgstr "Flyti inn tema %s ..."
 
 #~ msgid "The themes could not be deleted"
 #~ msgstr "Temur kundi ikki strikast"
@@ -4265,6 +4266,13 @@ msgstr ""
 #~ msgid "The theme has been deleted"
 #~ msgstr "Tema er strikað"
 
+#~ msgid "The theme has been saved"
+#~ msgstr "Tema er goymt"
+
+#~ msgid "The themes have been deleted"
+#~ msgstr "Temur eru strikaðar"
+
+#, c-format
 #~ msgid "Configuration of the '%s' dock"
 #~ msgstr "Samanseting av '%s' dokk"
 
@@ -4273,6 +4281,12 @@ msgstr ""
 
 #~ msgid "Configure labels appearence."
 #~ msgstr "Samanset útsjónd á spjaldri."
+
+#~ msgid "Draw an image"
+#~ msgstr "Tekna eina mynd"
+
+#~ msgid "Use background color for labels?"
+#~ msgstr "Nýta bakrundslit á spjøldrum?"
 
 #~ msgid ""
 #~ "\n"

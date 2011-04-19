@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2011-04-15 00:24+0000\n"
 "PO-Revision-Date: 2011-02-05 22:46+0000\n"
 "Last-Translator: H. Fatih ATASEVER <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-06 04:50+0000\n"
-"X-Generator: Launchpad (build 12177)\n"
+"X-Launchpad-Export-Date: 2011-04-16 04:38+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
+"Language: tr\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -70,9 +71,9 @@ msgid "category"
 msgstr "kategori"
 
 #: ../src/cairo-dock-gui-items.c:381
-#, fuzzy
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "ana sehpanın ayarları,ana ayar seçenekleri menüsündedir."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:624
 msgid "Launcher configuration"
@@ -325,7 +326,8 @@ msgid "Effects:"
 msgstr "Efektler:"
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:79
@@ -369,9 +371,8 @@ msgid "Manage Themes"
 msgstr "Temaları yönet"
 
 #: ../src/cairo-dock-menu.c:121
-#, fuzzy
 msgid "Delete this dock?"
-msgstr "Bu dosyayı sil"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:171
 msgid "About Cairo-Dock"
@@ -426,9 +427,8 @@ msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Bu ana rıhtımın konum, görünürlük ve görünümünü özelleştir"
 
 #: ../src/cairo-dock-menu.c:356
-#, fuzzy
 msgid "Delete this dock"
-msgstr "Bu dosyayı sil"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:365
 msgid "Manage themes"
@@ -488,7 +488,8 @@ msgid "Get more applets!"
 msgstr "Daha fazla uygulamacık al!"
 
 #: ../src/cairo-dock-menu.c:429
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -631,7 +632,8 @@ msgstr "Bu başlatıcıyı kaldır"
 #: ../src/cairo-dock-menu.c:1241
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr ""
+"Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
 
 #: ../src/cairo-dock-menu.c:1243 ../src/cairo-dock-menu.c:1415
 msgid "Move to another dock"
@@ -703,15 +705,13 @@ msgid "Minimise"
 msgstr "Asgari"
 
 #: ../src/cairo-dock-menu.c:1336 ../src/cairo-dock-menu.c:1344
-#, fuzzy
 msgid "middle-click"
-msgstr "Kapat (orta-tıkla)"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1344 ../src/cairo-dock-menu.c:1346
 #: ../data/messages:327
-#, fuzzy
 msgid "Close"
-msgstr "Tümünü kapat"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1365
 msgid "Move all to this desktop"
@@ -1290,8 +1290,8 @@ msgid ""
 "This will separate launchers, application, and applets from each others. "
 "Separators will be automatically inserted then."
 msgstr ""
-"Bu, uygulamaları, kısayolları ve programcıkları birbirinden ayıracak."
-"Ayraçlar daha sonra otomatik olarak eklenecek."
+"Bu, uygulamaları, kısayolları ve programcıkları birbirinden "
+"ayıracak.Ayraçlar daha sonra otomatik olarak eklenecek."
 
 #: ../data/messages:107 ../data/messages:719
 msgid "Separate the different types of icons?"
@@ -2113,7 +2113,8 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:639
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:641
@@ -2408,8 +2409,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:793
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:795
@@ -2425,9 +2426,8 @@ msgid "How to show that several icons are grouped :"
 msgstr ""
 
 #: ../data/messages:803
-#, fuzzy
 msgid "Draw an emblem"
-msgstr "Görüntü çiz"
+msgstr ""
 
 #: ../data/messages:805
 msgid "Draw the sub-dock's icons as a stack"
@@ -2540,18 +2540,16 @@ msgid "Quick-info are short information drawn on the icons."
 msgstr ""
 
 #: ../data/messages:865
-#, fuzzy
 msgid "Quick-info"
-msgstr "Hızlı-Gizle"
+msgstr ""
 
 #: ../data/messages:867
 msgid "Use the same look as the labels?"
 msgstr ""
 
 #: ../data/messages:871
-#, fuzzy
 msgid "Background color:"
-msgstr "Artalan"
+msgstr ""
 
 #: ../data/messages:875
 msgid "Yes, like that :-)"
@@ -2633,8 +2631,8 @@ msgstr ""
 
 #: ../data/messages:905
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:907
@@ -2649,8 +2647,8 @@ msgstr ""
 
 #: ../data/messages:911
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -3047,8 +3045,8 @@ msgstr "Bazı uygulamalar için çirkin simgelerim var."
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3300,8 +3298,9 @@ msgstr ""
 
 #: ../data/messages:1175
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3425,16 +3424,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3476,8 +3475,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1243
@@ -3605,8 +3604,8 @@ msgstr "Projeye katıl!"
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -4126,8 +4125,8 @@ msgstr ""
 #: ../data/messages:1629
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4208,8 +4207,8 @@ msgstr ""
 #: ../data/messages:1641
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4299,12 +4298,11 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#~ msgid "Use background color for labels?"
-#~ msgstr "Etiketler için arkaplan rengi kullanılsın mı?"
-
+#, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s şimdi bağlı"
 
+#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s şimdi bağlı değil"
 
@@ -4326,12 +4324,14 @@ msgstr ""
 #~ msgid "Do you want to activate it now ?"
 #~ msgstr "Şimdi aktifleştirmek istiyor musunuz?"
 
+#, c-format
 #~ msgid "The module '%s' is not activated."
 #~ msgstr "'%s' modülü aktifleştirilmedi."
 
 #~ msgid "Activate this module"
 #~ msgstr "Bu modülü aktifleştir"
 
+#, c-format
 #~ msgid "failed to unmount %s"
 #~ msgstr "%s'in bağını kaldırma başarısız"
 
@@ -4350,6 +4350,7 @@ msgstr ""
 #~ msgid "module"
 #~ msgstr "modül"
 
+#, c-format
 #~ msgid ""
 #~ "The '%s' plug-in is not active.\n"
 #~ "Be sure to activate it to enjoy these features."
@@ -4369,18 +4370,15 @@ msgstr ""
 #~ "want to do it now ?"
 #~ msgstr ""
 #~ "tema, bulunamadı; Hazır gelen tema, onun yerine kullanılacak. \n"
-#~ " Bu modülün konumunu açarak bunu değiştirebilirsin; hemen yapmayı "
-#~ "istermisin?"
+#~ " Bu modülün konumunu açarak bunu değiştirebilirsin; hemen yapmayı istermisin?"
 
 #~ msgid ""
 #~ "the gauge theme couldn't be found; a default gauge will be used instead.\n"
 #~ " You can change this by opening the configuration of this module; do you "
 #~ "want to do it now ?"
 #~ msgstr ""
-#~ "Ölçek teması, bulunamazdı; Hazır gelen bir ölçek, onun yerine "
-#~ "kullanılacak.\n"
-#~ " Bu modülün konumunu açarak bunu değiştirebilirsin; hemen yapmayı "
-#~ "istermisin?"
+#~ "Ölçek teması, bulunamazdı; Hazır gelen bir ölçek, onun yerine kullanılacak.\n"
+#~ " Bu modülün konumunu açarak bunu değiştirebilirsin; hemen yapmayı istermisin?"
 
 #~ msgid "Controler"
 #~ msgstr "Kontrol edici"
@@ -4399,20 +4397,21 @@ msgstr ""
 
 #~ msgid ""
 #~ "It seems that you've never entered the help module yet.\n"
-#~ "If you have some difficulty to configure the dock, or if you are willing "
-#~ "to customize it,\n"
+#~ "If you have some difficulty to configure the dock, or if you are willing to "
+#~ "customize it,\n"
 #~ "the Help module is here for you !\n"
 #~ "Do you want to take a look at it now ?"
 #~ msgstr ""
 #~ "Görünüyor ki henüz hiç yardım modülü girmemişsin.\n"
-#~ "Eğer dock'unu yapılandırmanda  bazı engeller varsa,yada eğer isteğine "
-#~ "göre değiştimek istiyorsun,\n"
+#~ "Eğer dock'unu yapılandırmanda  bazı engeller varsa,yada eğer isteğine göre "
+#~ "değiştimek istiyorsun,\n"
 #~ "yardım modülü senin için burada !\n"
 #~ "Şimdi bakmak ister misin?"
 
+#, c-format
 #~ msgid ""
-#~ "The module '%s' is not present. You need to install it or its "
-#~ "dependencies to make the most of this module."
+#~ "The module '%s' is not present. You need to install it or its dependencies "
+#~ "to make the most of this module."
 #~ msgstr ""
 #~ "'%s' modülü mevcut değil.Bu modülü kurmak için ona veya onun "
 #~ "bağımlılıklarına ihtiyacın var."
@@ -4428,6 +4427,7 @@ msgstr ""
 #~ ",bir ileri moda geçiş yapabilirsin.\n"
 #~ "Bir moddan diğerine istediğin zamanda geçiş yapabilirsin."
 
+#, c-format
 #~ msgid "Importing theme %s..."
 #~ msgstr "Tema ithal ediliyor %s..."
 
@@ -4456,14 +4456,15 @@ msgstr ""
 #~ "Click on an applet in order to have a preview and a description of it."
 #~ msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
+#, c-format
 #~ msgid ""
 #~ "The '%s' module was not found.\n"
 #~ "Be sure to install it in the same version as the dock to enjoy these "
 #~ "features."
 #~ msgstr ""
 #~ "'%s' modülü bulunamadı.\n"
-#~ "Dock'un bu özelliklerinden yararlanmak için aynı sürümün yüklendiğinden "
-#~ "emin ol."
+#~ "Dock'un bu özelliklerinden yararlanmak için aynı sürümün yüklendiğinden emin "
+#~ "ol."
 
 #~ msgid ""
 #~ "Do you like your dock to be always visible,\n"
@@ -4489,9 +4490,9 @@ msgstr ""
 
 #~ msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
 #~ msgstr ""
-#~ "Bir sorun mu var ? Bir öneri ? Bizimle konuşmak mı istiyor sun ? Hoş "
-#~ "geldin !"
+#~ "Bir sorun mu var ? Bir öneri ? Bizimle konuşmak mı istiyor sun ? Hoş geldin !"
 
+#, c-format
 #~ msgid "Set position for the dock '%s'"
 #~ msgstr "Dock için konum ayarlama '%s'"
 
@@ -4523,8 +4524,8 @@ msgstr ""
 #~ "It provides different window decorators. Activate it first if you want to "
 #~ "select a different decorator for your dialogs."
 #~ msgstr ""
-#~ "Farklı pencere dekoratörleri sağlayıcı.Eğer diyaloglarınız için farklı "
-#~ "bir dekoratör seçmek isterseniz ilk önce onları aktif hale getirin."
+#~ "Farklı pencere dekoratörleri sağlayıcı.Eğer diyaloglarınız için farklı bir "
+#~ "dekoratör seçmek isterseniz ilk önce onları aktif hale getirin."
 
 #~ msgid "All the parameters you will never want to tweak."
 #~ msgstr "Asla oynamamanız gereken tüm parametreler."
@@ -4559,6 +4560,12 @@ msgstr ""
 #~ msgid "Rename this file"
 #~ msgstr "Bu dosyayı yeniden isimlendir"
 
+#~ msgid "Delete this file"
+#~ msgstr "Bu dosyayı sil"
+
+#~ msgid "Close (middle-click)"
+#~ msgstr "Kapat (orta-tıkla)"
+
 #~ msgid "A new main dock"
 #~ msgstr "Yeni bir ana dock"
 
@@ -4583,6 +4590,7 @@ msgstr ""
 #~ msgid "Controllers"
 #~ msgstr "Kontrol ediciler"
 
+#, c-format
 #~ msgid "Set position for the '%s' dock"
 #~ msgstr "Dock için konum ayarlama '%s'"
 
@@ -4646,6 +4654,9 @@ msgstr ""
 #~ msgid "Connection to the themes' server"
 #~ msgstr "Temaların sunucu bağlantısı"
 
+#~ msgid "Use background color for labels?"
+#~ msgstr "Etiketler için arkaplan rengi kullanılsın mı?"
+
 #~ msgid "documentation"
 #~ msgstr "belgelendirme"
 
@@ -4674,6 +4685,9 @@ msgstr ""
 #~ msgid "Background movement"
 #~ msgstr "Arkaplan hareketi"
 
+#~ msgid "Draw an image"
+#~ msgstr "Görüntü çiz"
+
 #~ msgid "Rename to:"
 #~ msgstr "Yeniden adlandır:"
 
@@ -4687,9 +4701,11 @@ msgstr ""
 #~ msgid "Unmount"
 #~ msgstr "Bağı Kaldır"
 
+#, c-format
 #~ msgid "Importing theme %s ..."
 #~ msgstr "Tema yükleniyor... %s"
 
+#, c-format
 #~ msgid "Configuration of the '%s' dock"
 #~ msgstr "'%s' rıhtımı yapılandırması"
 
@@ -4707,3 +4723,7 @@ msgstr ""
 
 #~ msgid "custom launcher"
 #~ msgstr "özel kısayol"
+
+#~ msgid ""
+#~ "Main dock's paramaters are available in the main configuration window."
+#~ msgstr "ana sehpanın ayarları,ana ayar seçenekleri menüsündedir."

@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2011-04-15 00:24+0000\n"
 "PO-Revision-Date: 2010-11-12 06:08+0000\n"
 "Last-Translator: Aniruddha Adhikary <Unknown>\n"
 "Language-Team: Bengali <bn@li.org>\n"
-"Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-02 04:41+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-16 04:34+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
+"Language: bn\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -24,8 +25,8 @@ msgid ""
 "anyway?"
 msgstr ""
 "আপনি বর্তমান থীমে কিছু পরিবর্তন করেছেন।\n"
-"আপনি সেগুলি হারিয়ে ফেলবেন যদি নতুন থীম বাছাই করার পূর্বে সংরক্ষণ না করেন। তবুও "
-"এগোবেন?"
+"আপনি সেগুলি হারিয়ে ফেলবেন যদি নতুন থীম বাছাই করার পূর্বে সংরক্ষণ না করেন। "
+"তবুও এগোবেন?"
 
 #: ../src/cairo-dock-gui-commons.c:242
 msgid "Please wait while importing the theme..."
@@ -70,7 +71,8 @@ msgid "category"
 msgstr "ক্যাটেগরী"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:624
@@ -319,7 +321,8 @@ msgid "Effects:"
 msgstr "ইফেক্ট সমূহঃ"
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:79
@@ -364,9 +367,8 @@ msgid "Manage Themes"
 msgstr "থীম ব্যবস্থাপনা করুন"
 
 #: ../src/cairo-dock-menu.c:121
-#, fuzzy
 msgid "Delete this dock?"
-msgstr "এই ডকটি কনফিগার করুন"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:171
 msgid "About Cairo-Dock"
@@ -421,9 +423,8 @@ msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "এই মূল ডকটির অবস্থান, দৃশ্যমানতা এবং দৃশ্য কাস্টমাইজ করুন"
 
 #: ../src/cairo-dock-menu.c:356
-#, fuzzy
 msgid "Delete this dock"
-msgstr "এই ডকটি কনফিগার করুন"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:365
 msgid "Manage themes"
@@ -432,7 +433,8 @@ msgstr "থীম ব্যবস্থাপনা করুন"
 #: ../src/cairo-dock-menu.c:370
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "আপনার বর্তমান থীমটি সংরক্ষণ করুন কিংবা সার্ভারের অনেক থীম হতে বাছাই করুন"
+msgstr ""
+"আপনার বর্তমান থীমটি সংরক্ষণ করুন কিংবা সার্ভারের অনেক থীম হতে বাছাই করুন"
 
 #: ../src/cairo-dock-menu.c:376
 msgid "Unlock icons"
@@ -483,8 +485,10 @@ msgid "Get more applets!"
 msgstr "আরও এ্যাপ্লেট পান!"
 
 #: ../src/cairo-dock-menu.c:429
-msgid "Third-party applets provide integration with many programs, like Pidgin"
-msgstr "তৃতীর-পক্ষের এ্যাপ্লেট পিজিনের পত প্রোগ্রামের সাথে ইন্টিগ্রেশন সরবরাহ করে"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
+msgstr ""
+"তৃতীর-পক্ষের এ্যাপ্লেট পিজিনের পত প্রোগ্রামের সাথে ইন্টিগ্রেশন সরবরাহ করে"
 
 #: ../src/cairo-dock-menu.c:431
 msgid "About"
@@ -517,8 +521,8 @@ msgid ""
 "move to another dock"
 msgstr ""
 "নতুন ডকটি তৈরী করা হয়েছে।\n"
-"এখন, '-> অন্য ডকে সরিয়ে নিন' আইকনে ক্লিক করে কিছু লঞ্চার বা এ্যাপ্লেট এর ভেতর "
-"সরিয়ে আনুন"
+"এখন, '-> অন্য ডকে সরিয়ে নিন' আইকনে ক্লিক করে কিছু লঞ্চার বা এ্যাপ্লেট এর "
+"ভেতর সরিয়ে আনুন"
 
 #: ../src/cairo-dock-menu.c:568
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -537,7 +541,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:673
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr "আপনি কিন্তু এই এ্যাপ্লেট (%s) ডকটি থেকে সরিয়ে ফেলছেন। আপনি কি নিশ্চিত?"
+msgstr ""
+"আপনি কিন্তু এই এ্যাপ্লেট (%s) ডকটি থেকে সরিয়ে ফেলছেন। আপনি কি নিশ্চিত?"
 
 #: ../src/cairo-dock-menu.c:896
 msgid ""
@@ -691,15 +696,13 @@ msgid "Minimise"
 msgstr "মিনিমাইজ"
 
 #: ../src/cairo-dock-menu.c:1336 ../src/cairo-dock-menu.c:1344
-#, fuzzy
 msgid "middle-click"
-msgstr "বন্ধ (মিডল-ক্লিক)"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1344 ../src/cairo-dock-menu.c:1346
 #: ../data/messages:327
-#, fuzzy
 msgid "Close"
-msgstr "সব বন্ধ কর"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1365
 msgid "Move all to this desktop"
@@ -1566,9 +1569,8 @@ msgid "Nothing"
 msgstr ""
 
 #: ../data/messages:329
-#, fuzzy
 msgid "Minimize"
-msgstr "মিনিমাইজ"
+msgstr ""
 
 #: ../data/messages:331
 msgid "Launch new"
@@ -2065,7 +2067,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:639
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:641
@@ -2360,8 +2363,8 @@ msgstr ""
 
 #: ../data/messages:793
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:795
@@ -2491,18 +2494,16 @@ msgid "Quick-info are short information drawn on the icons."
 msgstr ""
 
 #: ../data/messages:865
-#, fuzzy
 msgid "Quick-info"
-msgstr "দ্রুত-লুকানো"
+msgstr ""
 
 #: ../data/messages:867
 msgid "Use the same look as the labels?"
 msgstr ""
 
 #: ../data/messages:871
-#, fuzzy
 msgid "Background color:"
-msgstr "ব্যাকগ্রাউন্ড"
+msgstr ""
 
 #: ../data/messages:875
 msgid "Yes, like that :-)"
@@ -2584,8 +2585,8 @@ msgstr ""
 
 #: ../data/messages:905
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:907
@@ -2600,8 +2601,8 @@ msgstr ""
 
 #: ../data/messages:911
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2998,8 +2999,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3251,8 +3252,9 @@ msgstr ""
 
 #: ../data/messages:1175
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3376,16 +3378,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3427,8 +3429,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1243
@@ -3556,8 +3558,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -4073,8 +4075,8 @@ msgstr ""
 #: ../data/messages:1629
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4155,8 +4157,8 @@ msgstr ""
 #: ../data/messages:1641
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4246,6 +4248,7 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
+#, c-format
 #~ msgid "Configuration of the '%s' dock"
 #~ msgstr "'%s' ডকটির কনফিগাররেশন"
 
@@ -4257,3 +4260,6 @@ msgstr ""
 
 #~ msgid "custom launcher"
 #~ msgstr "কাস্টম লঞ্চার"
+
+#~ msgid "Close (middle-click)"
+#~ msgstr "বন্ধ (মিডল-ক্লিক)"

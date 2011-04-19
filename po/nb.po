@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-02-08 13:43+0000\n"
+"POT-Creation-Date: 2011-04-15 00:24+0000\n"
+"PO-Revision-Date: 2011-03-16 00:49+0000\n"
 "Last-Translator: EspenK <espen.kromke@beatradar.no>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
-"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-09 04:52+0000\n"
-"X-Generator: Launchpad (build 12177)\n"
+"X-Launchpad-Export-Date: 2011-04-16 04:37+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
+"Language: nb\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -70,10 +71,11 @@ msgid "category"
 msgstr "kategori"
 
 #: ../src/cairo-dock-gui-items.c:381
-#, fuzzy
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
-"Hoved-dokkens parametre er tilgjengelig i vindu for hovedkonfigurasjon."
+"Hoved-dokkens innstillinger er tilgjengelige i hovedvinduet til "
+"innstillingene."
 
 #: ../src/cairo-dock-gui-items.c:624
 msgid "Launcher configuration"
@@ -326,7 +328,8 @@ msgid "Effects:"
 msgstr "Effekter:"
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klikk på et av de små programmene for å få en forhåndsvisning og beskrivelse."
 
@@ -371,9 +374,8 @@ msgid "Manage Themes"
 msgstr "Behandle drakter"
 
 #: ../src/cairo-dock-menu.c:121
-#, fuzzy
 msgid "Delete this dock?"
-msgstr "Slett denne filen"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:171
 msgid "About Cairo-Dock"
@@ -385,7 +387,8 @@ msgstr "Fellesskapets nettside"
 
 #: ../src/cairo-dock-menu.c:199 ../data/messages:1301
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
+msgstr ""
+"Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
 
 #: ../src/cairo-dock-menu.c:202 ../data/messages:1307
 msgid "Development site"
@@ -428,9 +431,8 @@ msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Tilpass hoveddokkens plassering, synlighet og utseende."
 
 #: ../src/cairo-dock-menu.c:356
-#, fuzzy
 msgid "Delete this dock"
-msgstr "Slett denne filen"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:365
 msgid "Manage themes"
@@ -493,7 +495,8 @@ msgid "Get more applets!"
 msgstr "Skaff deg flere panelprogram!"
 
 #: ../src/cairo-dock-menu.c:429
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Tredjeparts-panelprogram tilbyr integrasjon med mange program, eksempelvis "
 "Pidgin"
@@ -600,7 +603,7 @@ msgstr "Legg til"
 
 #: ../src/cairo-dock-menu.c:1177
 msgid "Sub-dock"
-msgstr ""
+msgstr "Under-dokk"
 
 #: ../src/cairo-dock-menu.c:1179
 msgid "Main dock"
@@ -612,7 +615,7 @@ msgstr "Skillelinje"
 
 #: ../src/cairo-dock-menu.c:1186
 msgid "Custom launcher"
-msgstr ""
+msgstr "Brukerdefinert oppstarter"
 
 #: ../src/cairo-dock-menu.c:1187
 msgid ""
@@ -713,9 +716,8 @@ msgid "Minimise"
 msgstr "Minimer"
 
 #: ../src/cairo-dock-menu.c:1336 ../src/cairo-dock-menu.c:1344
-#, fuzzy
 msgid "middle-click"
-msgstr "Lukk (midt-klikk)"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1344 ../src/cairo-dock-menu.c:1346
 #: ../data/messages:327
@@ -839,7 +841,7 @@ msgstr ""
 #: ../src/cairo-dock.c:258
 #, c-format
 msgid "Happy new year %d !!!"
-msgstr ""
+msgstr "Godt nytt år %d !!!"
 
 #: ../src/cairo-dock.c:340
 msgid ""
@@ -1616,7 +1618,7 @@ msgstr "\t\tUnntatt følgende klasser:"
 
 #: ../data/messages:289
 msgid "Representation"
-msgstr ""
+msgstr "Visning"
 
 #: ../data/messages:291
 msgid ""
@@ -1687,13 +1689,12 @@ msgid "Interaction"
 msgstr "Interaksjon"
 
 #: ../data/messages:323
-#, fuzzy
 msgid "Action on middle-click on the related application"
-msgstr "Klikking på midterste museknapp lukker ikonets applikasjon"
+msgstr "Handling på tilhørende program ved klikk med midterste musetast"
 
 #: ../data/messages:325
 msgid "Nothing"
-msgstr ""
+msgstr "Ingenting"
 
 #: ../data/messages:329
 msgid "Minimize"
@@ -1717,7 +1718,8 @@ msgstr ""
 
 #: ../data/messages:337
 msgid "Highlight applications requiring your attention with a dialog bubble"
-msgstr "Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
+msgstr ""
+"Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
 
 #: ../data/messages:339
 msgid "in seconds"
@@ -2227,7 +2229,8 @@ msgid "Zoom effect"
 msgstr "Forstørringseffekt"
 
 #: ../data/messages:639
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Sett til 1 dersom du ikke ønsker at ikonene skal forstørres når musen "
 "beveger seg over dem."
@@ -2301,8 +2304,8 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere seg"
-"\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
+"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere "
+"seg\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
 "gjennomsiktig blir de."
 
 #: ../data/messages:671
@@ -2559,11 +2562,11 @@ msgstr "større"
 
 #: ../data/messages:793
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Bruk denne for å la indikatoren følge dokkens orientering (topp/bunn/høyre/"
-"venstre)."
+"Bruk denne for å la indikatoren følge dokkens orientering "
+"(topp/bunn/høyre/venstre)."
 
 #: ../data/messages:795
 msgid "Rotate the indicator with dock?"
@@ -2578,9 +2581,8 @@ msgid "How to show that several icons are grouped :"
 msgstr "Hvordan vise at flere ikoner er i gruppe:"
 
 #: ../data/messages:803
-#, fuzzy
 msgid "Draw an emblem"
-msgstr "Tegn et bilde"
+msgstr ""
 
 #: ../data/messages:805
 msgid "Draw the sub-dock's icons as a stack"
@@ -2699,22 +2701,19 @@ msgstr "Skal mønsteret legges vertikalt?"
 
 #: ../data/messages:863
 msgid "Quick-info are short information drawn on the icons."
-msgstr ""
+msgstr "Hurtig-info er kort informasjon tegnet på ikonene."
 
 #: ../data/messages:865
-#, fuzzy
 msgid "Quick-info"
-msgstr "Hurtigskjul"
+msgstr "Hurtig-info"
 
 #: ../data/messages:867
-#, fuzzy
 msgid "Use the same look as the labels?"
-msgstr "Bruk den nye draktens oppstarere?"
+msgstr "Bruke samme utseende som på etikettene?"
 
 #: ../data/messages:871
-#, fuzzy
 msgid "Background color:"
-msgstr "Bakgrunn"
+msgstr "Bakgrunnsfarge:"
 
 #: ../data/messages:875
 msgid "Yes, like that :-)"
@@ -2819,8 +2818,8 @@ msgstr ""
 
 #: ../data/messages:905
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 "Bare dra og slipp dem utenfor dokken og de vil forsvinne med en eksplosjon!"
 
@@ -2839,8 +2838,8 @@ msgstr ""
 
 #: ../data/messages:911
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 "I modulen 'ikoner' bestemmer du standard størrelse på dine ikoner etter "
@@ -3015,7 +3014,8 @@ msgstr ""
 msgid ""
 "I don't want to have a separator between launchers , applications and "
 "applets."
-msgstr "Jeg ønsker ikke å separere oppstartere, applikasjoner og miniprogram."
+msgstr ""
+"Jeg ønsker ikke å separere oppstartere, applikasjoner og miniprogram."
 
 #: ../data/messages:967
 msgid ""
@@ -3326,8 +3326,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3579,8 +3579,9 @@ msgstr ""
 
 #: ../data/messages:1175
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3704,16 +3705,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3755,8 +3756,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1243
@@ -3884,8 +3885,8 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -4407,8 +4408,8 @@ msgstr ""
 #: ../data/messages:1629
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4489,8 +4490,8 @@ msgstr ""
 #: ../data/messages:1641
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4580,15 +4581,7 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#~ msgid "In the style of Firefox tabs"
-#~ msgstr "På samme måte som fanene i Firefox"
-
-#~ msgid "If false, only the quick-info will have this background color."
-#~ msgstr "Dersom ikke vil bare kvikk-informasjonen ha denne bakgrunnsfargen."
-
-#~ msgid "Use background color for labels?"
-#~ msgstr "Bruke bakgrunnsfarge på titlene?"
-
+#, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s er nå montert"
 
@@ -4640,12 +4633,15 @@ msgstr ""
 #~ msgid "Undefined"
 #~ msgstr "Ikke angitt"
 
+#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s er nå avmontert"
 
+#, c-format
 #~ msgid "failed to unmount %s"
 #~ msgstr "avmontering av %s mislyktes"
 
+#, c-format
 #~ msgid "The module '%s' is not activated."
 #~ msgstr "Modulen %s er ikke aktivert"
 
@@ -4658,9 +4654,10 @@ msgstr ""
 #~ "want to do it now ?"
 #~ msgstr ""
 #~ "drakten kunne ikke hentes; standarddrakten vil brukes istedet.\n"
-#~ " Du kan endre dette ved å åpne konfigurasjonen av denne modulen; ønsker "
-#~ "du å gjøre dette nå?"
+#~ " Du kan endre dette ved å åpne konfigurasjonen av denne modulen; ønsker du å "
+#~ "gjøre dette nå?"
 
+#, c-format
 #~ msgid ""
 #~ "The '%s' plug-in is not active.\n"
 #~ "Be sure to activate it to enjoy these features."
@@ -4668,14 +4665,15 @@ msgstr ""
 #~ "Utvidelsen '%s' er ikke aktivert.\n"
 #~ "Denne må aktiveres for å kunne bruke disse funksjonene."
 
+#, c-format
 #~ msgid ""
 #~ "The '%s' module was not found.\n"
 #~ "Be sure to install it in the same version as the dock to enjoy these "
 #~ "features."
 #~ msgstr ""
 #~ "Modulen '%s' ble ikke funnet.\n"
-#~ "Vær sikker på at denne er installert i samme versjon som samlevinduet for "
-#~ "å kunne bruke alle funksjonene."
+#~ "Vær sikker på at denne er installert i samme versjon som samlevinduet for å "
+#~ "kunne bruke alle funksjonene."
 
 #~ msgid "Configuration of the launchers"
 #~ msgstr "Konfigurere oppstartere"
@@ -4719,6 +4717,9 @@ msgstr ""
 #~ msgid "Add a sub-dock"
 #~ msgstr "Legg til i under-samlevindu"
 
+#~ msgid "Delete this file"
+#~ msgstr "Slett denne filen"
+
 #~ msgid "A new main dock"
 #~ msgstr "Et nytt hovedsamlevindu"
 
@@ -4746,9 +4747,11 @@ msgstr ""
 #~ msgid "The theme has been deleted"
 #~ msgstr "Drakten har blitt slettet"
 
+#, c-format
 #~ msgid "Downloading file %s ..."
 #~ msgstr "Laster ned fil %s ..."
 
+#, c-format
 #~ msgid "Are you sure you want to overwrite theme %s ?"
 #~ msgstr "Ønsker du å overskrive drakt %s?"
 
@@ -4779,10 +4782,10 @@ msgstr ""
 #~ msgid "Automatically hide the dock"
 #~ msgstr "Skjul samlevindu automatisk"
 
+#, c-format
 #~ msgid "You're about removing this icon (%s) from the dock. Sure ?"
 #~ msgstr ""
-#~ "Du er i ferd med å fjerne dette ikonet (%s) fra samlevinduet. Er du "
-#~ "sikker?"
+#~ "Du er i ferd med å fjerne dette ikonet (%s) fra samlevinduet. Er du sikker?"
 
 #~ msgid "Define the style of the icons' labels and quick-info."
 #~ msgstr "Bestem ikonetikettenes stil og beskrivelse"
@@ -4800,6 +4803,7 @@ msgstr ""
 #~ msgid "It provides many animations to your icons."
 #~ msgstr "Tilfører animasjoner til ikonene dine."
 
+#, c-format
 #~ msgid ""
 #~ "You're about deleting this file\n"
 #~ "  (%s)\n"
@@ -4867,6 +4871,7 @@ msgstr ""
 #~ msgid "Controllers"
 #~ msgstr "Kontrollører"
 
+#, c-format
 #~ msgid "Importing theme %s ..."
 #~ msgstr "Importer drakt %s ..."
 
@@ -4885,6 +4890,7 @@ msgstr ""
 #~ msgid "Define the appearance of the dock when it's hidden."
 #~ msgstr "Definer utseendet på samlevinduet når det er skjult."
 
+#, c-format
 #~ msgid "Set position for the '%s' dock"
 #~ msgstr "Angi posisjon for samlevinduet '%s'"
 
@@ -4895,6 +4901,7 @@ msgstr ""
 #~ "Advarsel: kunne ikke slette denne filen.\n"
 #~ "Vennligst kontroller filens rettigheter."
 
+#, c-format
 #~ msgid ""
 #~ "Warning: could not rename %s.\n"
 #~ "Check file permissions \n"
@@ -4903,6 +4910,9 @@ msgstr ""
 #~ "Advarsel: kunne ikke gi nytt til %s.\n"
 #~ "Vennligst kontroller filens rettigheter \n"
 #~ "og at det nye navnet ikke allerede finnes."
+
+#~ msgid "Close (middle-click)"
+#~ msgstr "Lukk (midt-klikk)"
 
 #~ msgid "Windows7"
 #~ msgstr "Windows7"
@@ -4951,8 +4961,15 @@ msgstr ""
 #~ msgid "rate me"
 #~ msgstr "vurder meg"
 
+#, c-format
 #~ msgid "Configuration of the '%s' dock"
 #~ msgstr "Konfigurasjon av '%s'"
+
+#~ msgid "Middle-clicking on an icon closes the related application"
+#~ msgstr "Klikking på midterste museknapp lukker ikonets applikasjon"
+
+#~ msgid "In the style of Firefox tabs"
+#~ msgstr "På samme måte som fanene i Firefox"
 
 #~ msgid "Configure labels appearence."
 #~ msgstr "Konfigurer tittelens utseende."
@@ -4972,8 +4989,22 @@ msgstr ""
 #~ msgid "Connection timeout to the themes' server :"
 #~ msgstr "Tidsgrense for oppkoblingstid til tema-serveren:"
 
+#~ msgid "Draw an image"
+#~ msgstr "Tegn et bilde"
+
+#~ msgid "Use background color for labels?"
+#~ msgstr "Bruke bakgrunnsfarge på titlene?"
+
+#~ msgid "If false, only the quick-info will have this background color."
+#~ msgstr "Dersom ikke vil bare kvikk-informasjonen ha denne bakgrunnsfargen."
+
 #~ msgid "sub-dock"
 #~ msgstr "under-dokk"
 
 #~ msgid "main dock"
 #~ msgstr "hoved-dokk"
+
+#~ msgid ""
+#~ "Main dock's paramaters are available in the main configuration window."
+#~ msgstr ""
+#~ "Hoved-dokkens parametre er tilgjengelig i vindu for hovedkonfigurasjon."

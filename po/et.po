@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-10-12 19:37+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2011-04-15 00:24+0000\n"
+"PO-Revision-Date: 2011-03-31 14:29+0000\n"
+"Last-Translator: lyyser <Unknown>\n"
 "Language-Team: Estonian <et@li.org>\n"
-"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-02 04:42+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-16 04:35+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
+"Language: et\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -26,7 +27,7 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:242
 msgid "Please wait while importing the theme..."
-msgstr ""
+msgstr "Palun oodake kuni impordin teemat..."
 
 #: ../src/cairo-dock-gui-commons.c:364 ../src/cairo-dock-menu.c:1399
 msgid "Configure this applet"
@@ -46,7 +47,7 @@ msgstr "Töölaud"
 
 #: ../src/cairo-dock-gui-commons.c:416
 msgid "Accessory"
-msgstr ""
+msgstr "Tarvik"
 
 #: ../src/cairo-dock-gui-commons.c:421 ../src/cairo-dock-gui-main.c:136
 #: ../src/cairo-dock-gui-main.c:1498
@@ -67,7 +68,8 @@ msgid "category"
 msgstr "kategooria"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:624
@@ -94,7 +96,7 @@ msgstr "Kõik"
 #: ../src/cairo-dock-gui-main.c:1476
 #: ../src/internal-old/cairo-dock-internal-position.c:131
 msgid "Set the position of the main dock."
-msgstr ""
+msgstr "Sea põhidoki asukoht."
 
 #: ../src/cairo-dock-gui-main.c:1477
 #: ../src/internal-old/cairo-dock-internal-position.c:129 ../data/messages:139
@@ -133,7 +135,7 @@ msgstr ""
 #: ../src/cairo-dock-gui-main.c:1507
 #: ../src/internal-old/cairo-dock-internal-background.c:130
 msgid "Set a background for your dock."
-msgstr ""
+msgstr "Sea doki taustapilt."
 
 #: ../src/cairo-dock-gui-main.c:1508
 #: ../src/internal-old/cairo-dock-internal-background.c:128
@@ -155,7 +157,7 @@ msgstr "Vaated"
 #: ../src/cairo-dock-gui-main.c:1522
 #: ../src/internal-old/cairo-dock-internal-dialogs.c:121
 msgid "Configure text bubble appearance."
-msgstr ""
+msgstr "Muuda tekstimulli välimust."
 
 #: ../src/cairo-dock-gui-main.c:1523
 #: ../src/internal-old/cairo-dock-internal-dialogs.c:119
@@ -201,7 +203,7 @@ msgstr "Näiturid"
 #: ../src/cairo-dock-gui-main.c:1553
 #: ../src/internal-old/cairo-dock-internal-labels.c:182
 msgid "Define icon caption and quick-info style."
-msgstr ""
+msgstr "Määra ikooni nimi ja kiirinfo stiil."
 
 #: ../src/cairo-dock-gui-main.c:1554
 #: ../src/internal-old/cairo-dock-internal-labels.c:180
@@ -294,15 +296,15 @@ msgstr "Teema importimine nurjus."
 
 #: ../src/cairo-dock-gui-simple.c:427
 msgid "Importing theme..."
-msgstr ""
+msgstr "Impordin teemat..."
 
 #: ../src/cairo-dock-gui-simple.c:434 ../src/cairo-dock-gui-themes.c:154
 msgid "Theme has been saved"
-msgstr ""
+msgstr "Teema on salvestatud"
 
 #: ../src/cairo-dock-gui-simple.c:440 ../src/cairo-dock-gui-themes.c:160
 msgid "Themes have been deleted"
-msgstr ""
+msgstr "Teemad on kustutatud"
 
 #: ../src/cairo-dock-gui-simple.c:770
 msgid "Animation:"
@@ -313,7 +315,8 @@ msgid "Effects:"
 msgstr "Efektid:"
 
 #: ../src/cairo-dock-gui-simple.c:855
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:864 ../data/messages:79
@@ -344,20 +347,19 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-themes.c:147
 msgid "Importing theme ..."
-msgstr ""
+msgstr "Impordin teemat..."
 
 #: ../src/cairo-dock-gui-themes.c:180
 msgid "Manage Themes"
 msgstr "Teemade haldamine"
 
 #: ../src/cairo-dock-menu.c:121
-#, fuzzy
 msgid "Delete this dock?"
-msgstr "Seadista seda dock'i"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:171
 msgid "About Cairo-Dock"
-msgstr ""
+msgstr "Cairo-Dock-ist lähemalt"
 
 #: ../src/cairo-dock-menu.c:198 ../data/messages:1303
 msgid "Community site"
@@ -408,9 +410,8 @@ msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Kohanda asukoht, nähtavus ja selle peamised dokki välimus."
 
 #: ../src/cairo-dock-menu.c:356
-#, fuzzy
 msgid "Delete this dock"
-msgstr "Seadista seda dock'i"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:365
 msgid "Manage themes"
@@ -420,6 +421,7 @@ msgstr "Halda teemasid"
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
+"Valige paljudest serveris asuvatest teemadest või salvestage praegune teema."
 
 #: ../src/cairo-dock-menu.c:376
 msgid "Unlock icons"
@@ -470,7 +472,8 @@ msgid "Get more applets!"
 msgstr "Saa rohkem aplettisi!"
 
 #: ../src/cairo-dock-menu.c:429
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Kolmanda osapoole vidinad pakuvad ühilduvust mitmete  programmidega, nagu "
 "Pidgin"
@@ -505,6 +508,9 @@ msgid ""
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
+"Uus dokk on loodud.\n"
+"Nüüd lisage mõni käivitaja või vidin vajutades parem-klikiga ikoonil -> "
+"Liigutage teisele dokile"
 
 #: ../src/cairo-dock-menu.c:568
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -516,11 +522,13 @@ msgid ""
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
+"Uus dokk on loodud.\n"
+"Doki seadistamiseks parem-klikk sellel -> cairo-dock -> Seadista seda dokki."
 
 #: ../src/cairo-dock-menu.c:673
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr ""
+msgstr "Te kustutate selle vidina (%s) dokilt. Olete kindel?"
 
 #: ../src/cairo-dock-menu.c:896
 msgid ""
@@ -546,7 +554,7 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1133
 #, c-format
 msgid "Move to desktop %d"
-msgstr ""
+msgstr "Liiguta töölauale %d"
 
 #: ../src/cairo-dock-menu.c:1135
 #, c-format
@@ -564,19 +572,19 @@ msgstr "Lisa"
 
 #: ../src/cairo-dock-menu.c:1177
 msgid "Sub-dock"
-msgstr ""
+msgstr "Alam-dokk"
 
 #: ../src/cairo-dock-menu.c:1179
 msgid "Main dock"
-msgstr ""
+msgstr "Põhidokk"
 
 #: ../src/cairo-dock-menu.c:1182 ../data/messages:1591
 msgid "Separator"
-msgstr ""
+msgstr "Eraldaja"
 
 #: ../src/cairo-dock-menu.c:1186
 msgid "Custom launcher"
-msgstr ""
+msgstr "Kohandatud käivitaja"
 
 #: ../src/cairo-dock-menu.c:1187
 msgid ""
@@ -602,7 +610,7 @@ msgstr "Eemalda see käivitja"
 #: ../src/cairo-dock-menu.c:1241
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr ""
+msgstr "Käivitaja saate eemaldada lohistades selle hiirega dokilt minema."
 
 #: ../src/cairo-dock-menu.c:1243 ../src/cairo-dock-menu.c:1415
 msgid "Move to another dock"
@@ -655,7 +663,7 @@ msgstr "Sea see käivitajaks"
 
 #: ../src/cairo-dock-menu.c:1327 ../src/cairo-dock-menu.c:1369
 msgid "Launch a new (Shift+clic)"
-msgstr ""
+msgstr "Käivita uus (Shift+klikk)"
 
 #: ../src/cairo-dock-menu.c:1329
 msgid "Show"
@@ -674,15 +682,13 @@ msgid "Minimise"
 msgstr "Minimeeri"
 
 #: ../src/cairo-dock-menu.c:1336 ../src/cairo-dock-menu.c:1344
-#, fuzzy
 msgid "middle-click"
-msgstr "Sulge (kesk-klikk)"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1344 ../src/cairo-dock-menu.c:1346
 #: ../data/messages:327
-#, fuzzy
 msgid "Close"
-msgstr "Sulge kõik"
+msgstr "Sulge"
 
 #: ../src/cairo-dock-menu.c:1365
 msgid "Move all to this desktop"
@@ -706,7 +712,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1403
 msgid "Return to the dock"
-msgstr ""
+msgstr "Mine dokile tagasi"
 
 #: ../src/cairo-dock-menu.c:1406
 msgid "Remove this applet"
@@ -731,11 +737,11 @@ msgstr "Alati allpool"
 
 #: ../src/cairo-dock-menu.c:1480
 msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-msgstr ""
+msgstr "Seadke käitumine Compiz-is nii: (name=cairo-dock & type=utility)"
 
 #: ../src/cairo-dock-menu.c:1483
 msgid "Reserve space"
-msgstr ""
+msgstr "Varu maht"
 
 #: ../src/cairo-dock-menu.c:1490
 msgid "On all desktops"
@@ -770,6 +776,8 @@ msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
 msgstr ""
+"Soovite seadistusi alles hoida?\n"
+"15 sekundi pärast taastatakse eelmised sätted."
 
 #: ../src/cairo-dock.c:225
 msgid ""
@@ -785,7 +793,7 @@ msgstr ""
 #: ../src/cairo-dock.c:258
 #, c-format
 msgid "Happy new year %d !!!"
-msgstr ""
+msgstr "Head uut aastat %d !!!"
 
 #: ../src/cairo-dock.c:340
 msgid ""
@@ -859,19 +867,19 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-dock-manager.c:329
 msgid "Bottom dock"
-msgstr ""
+msgstr "Alumine dokk"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:331
 msgid "Top dock"
-msgstr ""
+msgstr "Ülemine dokk"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:336
 msgid "Right dock"
-msgstr ""
+msgstr "Parempoolne dokk"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:338
 msgid "Left dock"
-msgstr ""
+msgstr "Vasakpoolne dokk"
 
 #: ../src/gldit/cairo-dock-file-manager.c:212
 #, c-format
@@ -890,11 +898,11 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:248
 msgid "kB"
-msgstr ""
+msgstr "kB"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:250
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:259
 #: ../src/gldit/cairo-dock-gui-factory.c:1507
@@ -927,12 +935,12 @@ msgstr "_Kohandatud ikoonid_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1332
 msgid "Rate me"
-msgstr ""
+msgstr "Hinda mind"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1431
 #: ../src/gldit/cairo-dock-gui-factory.c:1433
 msgid "You must try the theme before you can rate it."
-msgstr ""
+msgstr "Enne hindamist peate teemat katsetama."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1456
 #, c-format
@@ -941,6 +949,8 @@ msgid ""
 "Be sure to install it with the same version as the dock to enjoy these "
 "features."
 msgstr ""
+"Moodulit '%s' ei leitud.\n"
+"Nende võimalust kasutamiseks veenduge, et paigaldate dokiga sama versiooni."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1465
 #, c-format
@@ -948,6 +958,8 @@ msgid ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 msgstr ""
+"'%s' pole aktiivne.\n"
+"Aktiveerin praegu?"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2330
 #: ../src/gldit/cairo-dock-gui-factory.c:2917
@@ -986,7 +998,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:175
 msgid "Last modification on:"
-msgstr ""
+msgstr "Viimati muudetud:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:245
 #, c-format
@@ -998,11 +1010,11 @@ msgstr ""
 #: ../src/gldit/cairo-dock-themes-manager.c:260
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
-msgstr ""
+msgstr "Oled kindel et soovid kustuta teema %s?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:262
 msgid "Are you sure you want to delete these themes?"
-msgstr ""
+msgstr "Oled sa kindel et soovid kustutada need teemad?"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:601 ../data/messages:39
 #: ../data/messages:207
@@ -1017,7 +1029,7 @@ msgstr "Hajumine"
 #: ../src/implementations/cairo-dock-hiding-effect.c:617 ../data/messages:43
 #: ../data/messages:211
 msgid "Semi transparent"
-msgstr ""
+msgstr "Poolläbipaistev"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:626 ../data/messages:45
 #: ../data/messages:213
@@ -1547,9 +1559,8 @@ msgid "Nothing"
 msgstr ""
 
 #: ../data/messages:329
-#, fuzzy
 msgid "Minimize"
-msgstr "Minimeeri"
+msgstr ""
 
 #: ../data/messages:331
 msgid "Launch new"
@@ -2046,7 +2057,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:639
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:641
@@ -2341,8 +2353,8 @@ msgstr ""
 
 #: ../data/messages:793
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:795
@@ -2472,18 +2484,16 @@ msgid "Quick-info are short information drawn on the icons."
 msgstr ""
 
 #: ../data/messages:865
-#, fuzzy
 msgid "Quick-info"
-msgstr "Kiirelt-peida"
+msgstr ""
 
 #: ../data/messages:867
 msgid "Use the same look as the labels?"
 msgstr ""
 
 #: ../data/messages:871
-#, fuzzy
 msgid "Background color:"
-msgstr "Tagapõhi"
+msgstr ""
 
 #: ../data/messages:875
 msgid "Yes, like that :-)"
@@ -2565,8 +2575,8 @@ msgstr ""
 
 #: ../data/messages:905
 msgid ""
-"Just drag and drop them out of the dock, they will disappear in an "
-"explosion !"
+"Just drag and drop them out of the dock, they will disappear in an explosion "
+"!"
 msgstr ""
 
 #: ../data/messages:907
@@ -2581,8 +2591,8 @@ msgstr ""
 
 #: ../data/messages:911
 msgid ""
-"In the 'Icons' modules, you can setup the default size of your icons by "
-"type : launchers, apps, applets and separators.\n"
+"In the 'Icons' modules, you can setup the default size of your icons by type "
+": launchers, apps, applets and separators.\n"
 "You can also setup the zoom factor."
 msgstr ""
 
@@ -2979,8 +2989,8 @@ msgstr ""
 msgid ""
 "Tip: This way, you can configure your personal icon for any application. "
 "Just place an icon with the same name as the class of the application in a "
-"folder used by the dock (by default, ~/.config/cairo-dock/current_theme/"
-"icons)\n"
+"folder used by the dock (by default, ~/.config/cairo-"
+"dock/current_theme/icons)\n"
 "The class of an application can be found by typing «xprop |grep CLASS» in a "
 "terminal, then clicking on the window of the application."
 msgstr ""
@@ -3232,8 +3242,9 @@ msgstr ""
 
 #: ../data/messages:1175
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -3357,16 +3368,16 @@ msgid ""
 "Many applets have events that can be triggered by a keyboard shortcut :\n"
 " - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> "
 "that can be controlled with the left/right arrows.\n"
-" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</"
-"b> and directly write inside it.\n"
-" - the <i>Systray</i> applet allows you to pop-up the <b>notification area</"
-"b>.\n"
-" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</"
-"b>, you can then navigate inside it with the arrows.\n"
+" - the <i>Terminal</i> applet allows you to pop-up the <b>terminal "
+"window</b> and directly write inside it.\n"
+" - the <i>Systray</i> applet allows you to pop-up the <b>notification "
+"area</b>.\n"
+" - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu "
+"browser</b>, you can then navigate inside it with the arrows.\n"
 " - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> "
 "menu, and also a <b>quick-launcher</b> dialog box.\n"
-" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</"
-"b> menu.\n"
+" - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard "
+"history</b> menu.\n"
 " - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside "
 "your docks</b> and quickly <b>find and launch</b> applications and files !"
 msgstr ""
@@ -3408,8 +3419,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:1243
@@ -3537,8 +3548,8 @@ msgstr "Liitu projektiga!"
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on cairo-dock."
-"org.\n"
+"or if you just made a dream about the dock, pay us a visit on cairo-"
+"dock.org.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -4057,8 +4068,8 @@ msgstr ""
 #: ../data/messages:1629
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4139,8 +4150,8 @@ msgstr ""
 #: ../data/messages:1641
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4230,6 +4241,10 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
+#, c-format
+#~ msgid "Importing theme %s ..."
+#~ msgstr "Importditav teema %s..."
+
 #~ msgid "The themes could not be deleted"
 #~ msgstr "Teemasid ei saa kustutada"
 
@@ -4242,8 +4257,20 @@ msgstr ""
 #~ msgid "The theme has been deleted"
 #~ msgstr "Teema on kustutatud"
 
+#~ msgid "The theme has been saved"
+#~ msgstr "Teema on salvestatud"
+
+#~ msgid "The themes have been deleted"
+#~ msgstr "Teemad on kustutatud"
+
 #~ msgid "Add a separator"
 #~ msgstr "Lisa eraldaja"
+
+#~ msgid "Close (middle-click)"
+#~ msgstr "Sulge (kesk-klikk)"
+
+#~ msgid "rate me"
+#~ msgstr "hinda mind"
 
 #~ msgid "Applets"
 #~ msgstr "Apletid"
@@ -4254,8 +4281,15 @@ msgstr ""
 #~ msgid "Do you want to keep this setting?"
 #~ msgstr "Kas soovite säilitada käesolevat seadet?"
 
+#, c-format
 #~ msgid "Configuration of the '%s' dock"
 #~ msgstr "'%s' doki seadistus"
+
+#~ msgid "Add a custom launcher"
+#~ msgstr "Lisa kohandatud käivitaja"
+
+#~ msgid "Add a sub-dock"
+#~ msgstr "Lisa alamdokk"
 
 #~ msgid "Add a main dock"
 #~ msgstr "Lisa peadokk"
