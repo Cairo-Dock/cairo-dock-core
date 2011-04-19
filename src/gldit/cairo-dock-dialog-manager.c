@@ -664,13 +664,13 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 				if ( ((iTopY < iY && iBottomY > iY) || (iTopY >= iY && iTopY < iY + iHeight))
 					&& ((iXleft < iZoneXLeft && iXright > iZoneXLeft) || iXleft >= iZoneXLeft && iXleft < iZoneXRight) )  // intersection of the 2 rectangles.
 				{
-					g_print ("  dialogue genant: \n %d - %d, %d - %d", iTopY, iBottomY, iXleft, iXright);
+					cd_debug ("  dialogue genant:  %d - %d, %d - %d", iTopY, iBottomY, iXleft, iXright);
 					if (pDialogOnOurWay->iAimedX < pDialog->iAimedX)  // this dialog is on our left.
 						iLimitXLeft = MAX (iLimitXLeft, pDialogOnOurWay->container.iWindowPositionX + pDialogOnOurWay->container.iWidth);
 					else
 						iLimitXRight = MIN (iLimitXRight, pDialogOnOurWay->container.iWindowPositionX);
 					iMinYLimit = (pDialog->container.bDirectionUp ? MAX (iMinYLimit, iTopY) : MIN (iMinYLimit, iBottomY));
-					g_print ("  iMinYLimit <- %d\n", iMinYLimit);
+					cd_debug ("  iMinYLimit <- %d", iMinYLimit);
 					bDialogOnOurWay = TRUE;
 				}
 			}
@@ -694,7 +694,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 			pDialog->iComputedPositionY = iMinYLimit - iHeight;
 		else
 			pDialog->iComputedPositionY = iMinYLimit;
-		g_print (" => re-try with y=%d\n", pDialog->iComputedPositionY);
+		cd_debug (" => re-try with y=%d", pDialog->iComputedPositionY);
 		_cairo_dock_dialog_find_optimal_placement (pDialog);
 	}
 }

@@ -416,7 +416,7 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 {
 	CairoDock *pDock = g_pMainDock;
 	
-	g_print ("*** applis du bureau seulement...");
+	cd_debug ("*** applis du bureau seulement...");
 	// applis du bureau courant seulement.
 	if (myTaskbarParam.bAppliOnCurrentDesktopOnly && myTaskbarParam.bShowAppli)
 	{

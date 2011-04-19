@@ -235,7 +235,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	if (pDialog->iComputedWidth == pEvent->width && pDialog->iComputedHeight == pEvent->height && (pEvent->y != pDialog->iComputedPositionY || pEvent->x != pDialog->iComputedPositionX) && pDialog->bPositionForced == 3)
 	{
 		pDialog->container.bInside = FALSE;
-		g_print ("force to %d;%d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY);
+		cd_debug ("force to %d;%d", pDialog->iComputedPositionX, pDialog->iComputedPositionY);
 		/*gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 			pDialog->iComputedPositionX,
 			pDialog->iComputedPositionY);
@@ -391,7 +391,7 @@ static gboolean on_button_press_widget (GtkWidget *widget,
 	GdkEventButton *pButton,
 	CairoDialog *pDialog)
 {
-	g_print ("press button on widget\n");
+	cd_debug ("press button on widget");
 	// memorize the time when the user clicked on the widget.
 	pDialog->iButtonPressTime = pButton->time;
 	return FALSE;

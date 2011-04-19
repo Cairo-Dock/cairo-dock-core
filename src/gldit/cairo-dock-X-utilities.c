@@ -174,7 +174,7 @@ gboolean cairo_dock_update_screen_geometry (void)
 		g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
 		g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];  // si on utilise Xinerama, on mettra les valeurs correctes plus tard.
 		
-		g_print ("new screen size : %dx%d\n", g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		cd_debug ("new screen size : %dx%d", g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		return TRUE;
 	}
 	else

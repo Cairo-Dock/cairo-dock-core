@@ -446,7 +446,7 @@ static gboolean _destroy_empty_dock (CairoDock *pDock)
 	pDock->iSidDestroyEmptyDock = 0;
 	if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // le dock est toujours a detruire.
 	{
-		g_print ("The dock '%s' is empty. No icon, no dock.\n", cDockName);
+		cd_debug ("The dock '%s' is empty. No icon, no dock.", cDockName);
 		cairo_dock_destroy_dock (pDock, cDockName);
 	}
 	return FALSE;

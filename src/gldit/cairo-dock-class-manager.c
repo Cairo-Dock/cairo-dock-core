@@ -1211,7 +1211,7 @@ static gchar *_search_class_desktop_file (const gchar *cClass)
 	{
 		cDesktopFile = NULL;
 		g_string_free (sDesktopFilePath, TRUE);
-		g_print ("couldn't find the .desktop for %s\n", cClass);
+		cd_debug ("couldn't find the .desktop for %s", cClass);
 	}
 	return cDesktopFile;
 }
@@ -1244,7 +1244,7 @@ static void _cairo_dock_find_class_attributes (const gchar *cClass)
 				if (str != NULL)
 					*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
 			}
-			g_print ("check: set command '%s' to class %s\n", pClassAppli->cCommand, cClass);
+			cd_debug ("check: set command '%s' to class %s", pClassAppli->cCommand, cClass);
 			g_key_file_free (pKeyFile);
 		}
 	}
@@ -1299,7 +1299,7 @@ void cairo_dock_get_class_attributes (const gchar *cClass, GKeyFile *pKeyFile)
 		if (str != NULL)
 			*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
 	}
-	g_print ("check: set command '%s' to class %s\n", pClassAppli->cCommand, cClass);
+	cd_debug ("check: set command '%s' to class %s", pClassAppli->cCommand, cClass);
 	
 	// modify the command if it should be launched in a terminal.
 	gchar *cCommandFull = NULL;

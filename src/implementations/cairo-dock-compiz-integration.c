@@ -60,7 +60,7 @@ static gboolean present_windows (void)
 
 static gboolean present_class (const gchar *cClass)
 {
-	g_print ("%s (%s)\n", __func__, cClass);
+	cd_debug ("%s (%s)", __func__, cClass);
 	const GList *pIcons = cairo_dock_list_existing_appli_with_class (cClass);
 	if (pIcons == NULL)
 		return FALSE;
@@ -277,7 +277,7 @@ static gboolean _check_widget_plugin (gpointer data)
 }
 static gboolean set_on_widget_layer (Window Xid, gboolean bOnWidgetLayer)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	static gboolean s_bFirst = TRUE;
 	if (bOnWidgetLayer)
 	{

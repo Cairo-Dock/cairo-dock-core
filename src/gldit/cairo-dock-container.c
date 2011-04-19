@@ -549,7 +549,7 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 static GtkWidget *s_pMenu = NULL;
 static gboolean _on_destroy_menu (GtkWidget *widget, GdkEvent  *event, gpointer   user_data)
 {
-	g_print ("*** menu destroyed\n");
+	cd_debug ("*** menu destroyed");
 	s_pMenu = NULL;
 	return FALSE;
 }
@@ -557,7 +557,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 {
 	if (s_pMenu != NULL)
 	{
-		g_print ("previous menu still alive\n");
+		cd_debug ("previous menu still alive");
 		gtk_widget_destroy (GTK_WIDGET (s_pMenu));
 		s_pMenu = NULL;
 	}

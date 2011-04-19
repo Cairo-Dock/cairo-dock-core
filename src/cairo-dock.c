@@ -159,7 +159,7 @@ static inline void _cancel_metacity_composite (void)
 }
 static void _accept_metacity_composition (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
 {
-	g_print ("%s (%d)\n", __func__, iClickedButton);
+	cd_debug ("%s (%d)", __func__, iClickedButton);
 	if (iClickedButton == 1 || iClickedButton == -2)  // clic explicite sur "cancel", ou Echap ou auto-delete.
 	{
 		_cancel_metacity_composite ();
@@ -170,7 +170,7 @@ static void _accept_metacity_composition (int iClickedButton, GtkWidget *pIntera
 static void _on_free_metacity_dialog (gpointer data)
 {
 	gboolean *bAccepted = data;
-	g_print ("%s (%d)\n", __func__, *bAccepted);
+	cd_debug ("%s (%d)", __func__, *bAccepted);
 	if (! *bAccepted)  // le dialogue s'est detruit sans que l'utilisateur n'ait valide la question => on annule tout.
 	{
 		_cancel_metacity_composite ();
@@ -296,7 +296,7 @@ static void _cairo_dock_set_signal_interception (void)
 
 static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	if (pBlockingLoop != NULL && g_main_loop_is_running (pBlockingLoop))
 	{
 		g_main_loop_quit (pBlockingLoop);

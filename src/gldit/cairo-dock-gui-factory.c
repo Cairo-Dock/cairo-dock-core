@@ -286,7 +286,7 @@ static GdkPixbuf* _cairo_dock_gui_get_package_state_icon (gint iState)
 
 static gboolean on_delete_async_widget (GtkWidget *pWidget, GdkEvent *event, gpointer data)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pWidget), "cd-task");
 	if (pTask != NULL)
 	{
@@ -311,7 +311,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
 		if (requisition.height > 1 && iPreviewHeight > requisition.height)
 			iPreviewHeight = requisition.width;
-		g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight);
+		cd_debug ("preview : %dx%d", iPreviewWidth, iPreviewHeight);
 		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 	}
 	if (pPreviewPixbuf == NULL)
@@ -400,7 +400,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		CAIRO_DOCK_MODEL_ICON, &pixbuf,
 		CAIRO_DOCK_MODEL_SIZE, &fSize,
 		CAIRO_DOCK_MODEL_STATE, &iState, -1);
-	g_print ("line selected (%s; %s; %f)\n", cDescriptionFilePath, cPreviewFilePath, fSize);
+	cd_debug ("line selected (%s; %s; %f)", cDescriptionFilePath, cPreviewFilePath, fSize);
 	
 	// fill the info bar.
 	if (pTitle)
@@ -838,7 +838,7 @@ static void _cairo_dock_key_grab_cb (GtkWidget *wizard_window, GdkEventKey *even
 		/* Generate the correct name for this key */
 		key = gtk_accelerator_name (event->keyval, event->state);
 
-		g_printerr ("KEY GRABBED: %s\n", key);
+		cd_warning ("KEY GRABBED: %s", key);
 
 		/* Re-enable widgets */
 		gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE);

@@ -382,20 +382,20 @@ static gchar * _make_simple_conf_file (void)
 
 static void _load_theme (gboolean bSuccess, GtkWidget *pWaitingDialog)
 {
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	if (s_pSimpleConfigWindow == NULL)  // si l'utilisateur a ferme la fenetre entre-temps, on considere qu'il a abandonne.
 	{
-		g_print ("user has given up\n");
+		cd_debug ("user has given up");
 		return ;
 	}
 	if (bSuccess)
 	{
-		g_print ("loading new current theme...\n");
+		cd_debug ("loading new current theme...");
 		cairo_dock_load_current_theme ();
 		
 		cairo_dock_set_status_message (s_pSimpleConfigWindow, "");
 		
-		g_print ("now reload window\n");
+		cd_debug ("now reload window");
 		gchar *cConfFilePath = _make_simple_conf_file ();
 		g_free (cConfFilePath);
 		s_bShowThemePage = TRUE;
@@ -403,7 +403,7 @@ static void _load_theme (gboolean bSuccess, GtkWidget *pWaitingDialog)
 	}
 	else
 	{
-		g_print ("Could not import the theme.\n");
+		cd_debug ("Could not import the theme.");
 		cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Could not import the theme."));
 	}
 	gtk_widget_destroy (pWaitingDialog);

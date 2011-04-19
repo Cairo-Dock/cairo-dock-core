@@ -62,7 +62,7 @@ static gboolean present_windows (void)
 
 static gboolean present_class (const gchar *cClass)
 {
-	g_print ("%s (%s)\n", __func__, cClass);
+	cd_debug ("%s (%s)", __func__, cClass);
 	GList *pIcons = (GList*)cairo_dock_list_existing_appli_with_class (cClass);
 	if (pIcons == NULL)
 		return FALSE;
@@ -126,7 +126,7 @@ static gboolean show_widget_layer (void)
 #define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIconsParam.fAmplitude * pDock->fMagnitudeMax)
 static void _set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
-	g_print ("%s (%s)\n", __func__, icon?icon->cName:"none");
+	cd_debug ("%s (%s)", __func__, icon?icon->cName:"none");
 	long data[1+6];
 	if (icon != NULL)
 	{

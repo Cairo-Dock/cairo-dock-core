@@ -173,7 +173,7 @@ static gboolean _pulse_bar (GtkWidget *pBar)
 static gboolean on_destroy_waiting_dialog (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
 {
 	guint iSidPulse = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pWidget), "pulse-id"));
-	g_print ("*** stop pulse\n");
+	cd_debug ("*** stop pulse");
 	g_source_remove (iSidPulse);
 	return FALSE;
 }
@@ -258,7 +258,7 @@ gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback, GtkWidget *
 		
 		gtk_widget_show_all (pWaitingDialog);
 		
-		g_print ("start importation...\n");
+		cd_debug ("start importation...");
 		s_pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)pCallback, pWaitingDialog);
 	}
 	else

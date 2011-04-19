@@ -727,7 +727,7 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
 	if (bFlushConfFileNeeded)
 	{
-		g_print ("update %s conf file\n", cDockName);
+		cd_debug ("update %s conf file", cDockName);
 		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, GLDI_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE);
 	}
 	
@@ -751,7 +751,7 @@ void cairo_dock_remove_root_dock_config (const gchar *cDockName)
 void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName)
 {
 	// on cree le fichier de conf a partir du template.
-	g_print ("%s (%s)\n", __func__, cDockName);
+	cd_debug ("%s (%s)", __func__, cDockName);
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 	gchar *cCommand = g_strdup_printf ("cp '%s' '%s'", GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 	int r = system (cCommand);
@@ -1128,7 +1128,7 @@ void cairo_dock_start_polling_screen_edge (void)
 
 void cairo_dock_stop_polling_screen_edge (void)
 {
-	g_print ("%s (%d)\n", __func__, s_iNbPolls);
+	cd_debug ("%s (%d)", __func__, s_iNbPolls);
 	s_iNbPolls --;
 	if (s_iNbPolls <= 0)
 	{

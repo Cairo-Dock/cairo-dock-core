@@ -93,7 +93,7 @@ static void _delete_current_launcher_widget (GtkWidget *pLauncherWindow)
 	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pLauncherWindow), "garbage");
 	if (pDataGarbage != NULL)
 	{
-		g_print ("free garbage...");
+		cd_debug ("free garbage...");
 		g_ptr_array_free (pDataGarbage, TRUE);
 		g_object_set_data (G_OBJECT (pLauncherWindow), "garbage", NULL);
 	}
@@ -276,7 +276,7 @@ static gboolean _search_item_in_model (GtkWidget *pTreeView, gpointer pItem, CDM
 
 static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, GtkWidget *pLauncherWindow)
 {
-	g_print ("%s (path_currently_selected:%d, %s)\n", __func__, path_currently_selected, gtk_tree_path_to_string(path));
+	cd_debug ("%s (path_currently_selected:%d, %s)", __func__, path_currently_selected, gtk_tree_path_to_string(path));
 	if (path_currently_selected)
 		return TRUE;
 	
@@ -292,7 +292,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 	g_free (cPrevPath);
 	cPrevPath = cPath;
 	
-	g_print ("load widgets\n");
+	cd_debug ("load widgets");
 	// delete previous widgets
 	_delete_current_launcher_widget (pLauncherWindow);  // remove all gobject data
 	
@@ -784,7 +784,7 @@ static void reload_items (void)
 CairoDockGroupKeyWidget *cairo_dock_gui_items_get_widget_from_name (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
 {
 	g_return_val_if_fail (s_pLauncherWindow != NULL, NULL);
-	g_print ("%s (%s, %s)\n", __func__, cGroupName, cKeyName);
+	cd_debug ("%s (%s, %s)", __func__, cGroupName, cKeyName);
 	return cairo_dock_gui_find_group_key_widget (s_pLauncherWindow, cGroupName, cKeyName);
 }
 
@@ -830,7 +830,7 @@ void cairo_dock_gui_items_update_module_instance_container (CairoDockModuleInsta
 void cairo_dock_gui_items_reload_current_widget (CairoDockModuleInstance *pInstance, int iShowPage)
 {
 	g_return_if_fail (s_pLauncherWindow != NULL && s_pLauncherTreeView != NULL);
-	g_print ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	
 	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
 	CairoDockModuleInstance *pModuleInstance = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-module");
@@ -887,7 +887,7 @@ void cairo_dock_gui_items_set_status_message_on_gui (const gchar *cMessage)
 	}
 	if (pStatusBar == NULL)
 		return ;
-	g_print ("%s (%s)\n", __func__, cMessage);
+	cd_debug ("%s (%s)", __func__, cMessage);
 	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
 }

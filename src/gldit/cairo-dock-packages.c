@@ -309,7 +309,7 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 		}
 		while (cProperty != NULL);
 		va_end (args);
-		g_print ("POST data: '%s'\n", sPostData->str);
+		// g_print ("POST data: '%s'\n", sPostData->str);
 		
 		curl_easy_setopt (handle, CURLOPT_POST, 1);
 		curl_easy_setopt (handle, CURLOPT_POSTFIELDS, sPostData->str);

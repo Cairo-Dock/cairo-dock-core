@@ -901,7 +901,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 			{
 				cLine = cLines[i];
 				cairo_dock_limit_string_width (cLine, pLayout, pLabelDescription->bUseMarkup, iMaxLineWidth);
-				g_print (" + %s\n", cLine);
+				cd_debug (" + %s", cLine);
 			}
 			
 			// on reforme le texte et on le passe a pango.

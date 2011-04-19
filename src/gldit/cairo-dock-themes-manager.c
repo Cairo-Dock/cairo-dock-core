@@ -495,7 +495,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 
 static void _import_theme (gpointer *pSharedMemory)
 {
-	g_print ("dl start\n");
+	cd_debug ("dl start");
 	
 	gchar *cNewThemeName = g_strdup (pSharedMemory[0]);
 	gchar *cNewThemePath = NULL;
@@ -533,7 +533,7 @@ static void _import_theme (gpointer *pSharedMemory)
 		cNewThemePath = cairo_dock_get_package_path (cNewThemeName, s_cLocalThemeDirPath, g_cThemesDirPath, s_cDistantThemeDirName, CAIRO_DOCK_ANY_PACKAGE);
 	}
 	
-	g_print ("dl over\n");
+	cd_debug ("dl over");
 }
 static gboolean _finish_import (gpointer *pSharedMemory)
 {

@@ -1004,7 +1004,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
-	g_print ("on a appuye sur une touche (%d)\n", pKey->keyval);
+	cd_debug ("on a appuye sur une touche (%d)", pKey->keyval);
 	if (pKey->type == GDK_KEY_PRESS)
 	{
 		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
@@ -1535,7 +1535,7 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 	//\_________________ On simule les evenements souris habituels.
 	if (! pDock->bIsDragging)
 	{
-		g_print ("start dragging\n");
+		cd_debug ("start dragging");
 		pDock->bIsDragging = TRUE;
 		
 		/*GdkAtom gdkAtom = gdk_drag_get_selection (dc);
@@ -1646,19 +1646,19 @@ static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 		gdk_window_get_pointer (pDock->container.pWidget->window, &iMouseX, &iMouseY, NULL);
 	else
 		gdk_window_get_pointer (pDock->container.pWidget->window, &iMouseY, &iMouseX, NULL);
-	g_print (" %d;%d\n", iMouseX, iMouseY);
+	cd_debug (" %d;%d", iMouseX, iMouseY);
 	
 	///pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
 	///pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY);
 	pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - (g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - pDock->container.iWidth) * pDock->fAlign - pDock->container.iWidth/2 - pDock->iScreenOffsetX;
 	pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY) - pDock->iScreenOffsetY;
-	g_print (" => %d;%d\n", g_pMainDock->iGapX, g_pMainDock->iGapY);
+	cd_debug (" => %d;%d", g_pMainDock->iGapX, g_pMainDock->iGapY);
 	
 	int iNewPositionX, iNewPositionY;
 	cairo_dock_get_window_position_at_balance (pDock,
 		pDock->container.iWidth, pDock->container.iHeight,
 		&iNewPositionX, &iNewPositionY);
-	g_print (" ==> %d;%d\n", iNewPositionX, iNewPositionY);
+	cd_debug (" ==> %d;%d", iNewPositionX, iNewPositionY);
 	if (iNewPositionX < 0)
 		iNewPositionX = 0;
 	else if (iNewPositionX + pDock->container.iWidth > g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal])
