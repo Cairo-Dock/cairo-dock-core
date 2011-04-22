@@ -1,6 +1,6 @@
 add_subdirectory(launchers)
 add_subdirectory(plug-ins)
-add_subdirectory(images)
+#add_subdirectory(images)
 
 ########### install files ###############
 
