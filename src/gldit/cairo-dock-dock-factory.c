@@ -339,8 +339,8 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	if (g_list_find (pDock->icons, icon) != NULL)  // elle est deja dans ce dock.
 		return ;
 
-	int iPreviousMinWidth = pDock->fFlatDockWidth;
-	int iPreviousMaxIconHeight = pDock->iMaxIconHeight;
+	///int iPreviousMinWidth = pDock->fFlatDockWidth;
+	///int iPreviousMaxIconHeight = pDock->iMaxIconHeight;
 
 	//\______________ On regarde si on doit inserer un separateur.
 	gboolean bSeparatorNeeded = FALSE;
@@ -422,8 +422,8 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
 	
-	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))
-		cairo_dock_reserve_space_for_dock (pDock, TRUE);
+	///if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE && bUpdateSize && ! pDock->bAutoHide && (pDock->fFlatDockWidth != iPreviousMinWidth || pDock->iMaxIconHeight != iPreviousMaxIconHeight))
+	///	cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	
 	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{

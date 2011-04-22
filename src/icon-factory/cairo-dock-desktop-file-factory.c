@@ -62,23 +62,6 @@ static gchar *_cairo_dock_generate_desktop_filename (const gchar *cBaseName, gch
 		return g_strdup_printf ("%02d%s", iPrefixNumber, cBaseName);
 }
 
-
-void cairo_dock_remove_html_spaces (gchar *cString)
-{
-	gchar *str = cString;
-	do
-	{
-		str = g_strstr_len (str, -1, "%20");
-		if (str == NULL)
-			break ;
-		*str = ' ';
-		str ++;
-		strcpy (str, str+2);
-	}
-	while (TRUE);
-}
-
-
 static inline const gchar *_cairo_dock_get_launcher_template_conf_file_path (CairoDockDesktopFileType iNewDesktopFileType)
 {
 	const gchar *cTemplateFile;
@@ -99,173 +82,75 @@ static inline const gchar *_cairo_dock_get_launcher_template_conf_file_path (Cai
 	return cTemplateFile;
 }
 
-static gchar *_cairo_dock_generate_desktop_file_for_launcher (const gchar *cDesktopURI, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
+static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, const gchar *cOrigin, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
 {
-	g_return_val_if_fail (cDesktopURI != NULL, NULL);
-	GError *tmp_erreur = NULL;
-	gchar *cFilePath = (*cDesktopURI == '/' ? g_strdup (cDesktopURI) : g_filename_from_uri (cDesktopURI, NULL, &tmp_erreur));
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
-		return NULL;
-	}
-
-	//\___________________ On ouvre le patron.
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cFilePath);
-	if (pKeyFile == NULL)
-		return NULL;
-
-	//\___________________ On renseigne nos champs.
-	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
-	g_key_file_set_string (pKeyFile, "Desktop Entry", "Container", cDockName);
+	//\__________________ open the template.
+	const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file_path (iLauncherType);
+	g_return_val_if_fail (cTemplateFile != NULL, NULL);
 	
-	//\___________________ On elimine les indesirables.
-	g_key_file_remove_key (pKeyFile, "Desktop Entry", "X-Ubuntu-Gettext-Domain", NULL);
-	gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", &tmp_erreur);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
-		g_key_file_free (pKeyFile);
-		return NULL;
-	}
-	gchar *str = strchr (cCommand, '%');
-	if (str != NULL)
-	{
-		*str = '\0';
-		g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", cCommand);
-	}
-	g_free (cCommand);
-
-	gchar *cIconName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", &tmp_erreur);
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
-		g_key_file_free (pKeyFile);
-		return NULL;
-	}
-	if (*cIconName != '/' && (g_str_has_suffix (cIconName, ".svg") || g_str_has_suffix (cIconName, ".png") || g_str_has_suffix (cIconName, ".xpm")))
-	{
-		cIconName[strlen(cIconName) - 4] = '\0';
-		g_key_file_set_string (pKeyFile, "Desktop Entry", "Icon", cIconName);
-	}
-	g_free (cIconName);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cTemplateFile);
+	g_return_val_if_fail (pKeyFile != NULL, NULL);
 	
-	gchar **pKeyList = g_key_file_get_keys (pKeyFile, "Desktop Entry", NULL, NULL);  // on enleve les cles 'Icon' traduites !
-	gchar *cKeyName;
-	int i;
-	for (i = 0; pKeyList[i] != NULL; i ++)
-	{
-		cKeyName = pKeyList[i];
-		if (strncmp (cKeyName, "Icon[", 5) == 0)
-			g_key_file_remove_key (pKeyFile, "Desktop Entry", cKeyName, NULL);
-	}
-	g_strfreev (pKeyList);
+	//\__________________ fill the parameters
+	gchar *cFilePath = NULL;
+	if (cOrigin != NULL && *cOrigin != '/')
+		cFilePath = g_filename_from_uri (cOrigin, NULL, NULL);
+	else
+		cFilePath = g_strdup (cOrigin);
+	g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cFilePath?cFilePath:"");
 	
+	if (iGroup != CAIRO_DOCK_LAUNCHER && iGroup != CAIRO_DOCK_APPLET)  // on n'autorise a placer des icones du theme que parmi les lanceurs ou les applets.
+		iGroup = CAIRO_DOCK_LAUNCHER;
 	g_key_file_set_integer (pKeyFile, "Desktop Entry", "group", iGroup);
 	
-	//\___________________ On lui choisit un nom de fichier tel qu'il n'y ait pas de collision.
-	gchar *cBaseName = g_path_get_basename (cFilePath);
+	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
+	
+	g_key_file_set_string (pKeyFile, "Desktop Entry", "Container", cDockName);
+	
+	//\__________________ in the case of a script, set ourselves a valid name and command.
+	if (cFilePath != NULL && g_str_has_suffix (cFilePath, ".sh"))
+	{
+		gchar *cName = g_path_get_basename (cFilePath);
+		g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cName);
+		g_free (cName);
+		g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", cFilePath);
+		g_key_file_set_boolean (pKeyFile, "Desktop Entry", "Terminal", TRUE);
+	}
+	
+	//\__________________ generate a unique and readable filename.
+	gchar *cBaseName = (cFilePath ? g_path_get_basename (cFilePath) : g_path_get_basename (cTemplateFile));
 	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename (cBaseName, g_cCurrentLaunchersPath);
 	g_free (cBaseName);
-
-	//\___________________ On ecrit tout ca dans un fichier base sur le template.
-	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
-	cairo_dock_flush_conf_file_full (pKeyFile, cNewDesktopFilePath, GLDI_SHARE_DATA_DIR, FALSE, CAIRO_DOCK_LAUNCHER_CONF_FILE);
 	
-	g_free (cNewDesktopFilePath);
-	g_key_file_free (pKeyFile);
-	g_free (cFilePath);
-
-	return cNewDesktopFileName;
-}
-
-static gchar *_cairo_dock_generate_desktop_file_for_script (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur)
-{
-	//\___________________ On ouvre le patron.
-	const gchar *cDesktopFileTemplate = _cairo_dock_get_launcher_template_conf_file_path (CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER);
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFileTemplate);
-	if (pKeyFile == NULL)
-		return NULL;
-	
-	//\___________________ On renseigne ce qu'on peut.
-	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
-	g_key_file_set_string (pKeyFile, "Desktop Entry", "Container", cDockName);
-	gchar *cName = g_path_get_basename (cURI);
-	g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cName);
-	g_free (cName);
-	gchar *cFilePath = (*cURI == '/' ? g_strdup (cURI) : g_filename_from_uri (cURI, NULL, NULL));
-	g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", cFilePath);
-	g_free (cFilePath);
-	g_key_file_set_boolean (pKeyFile, "Desktop Entry", "Terminal", TRUE);
-	
-	//\___________________ On lui choisit un nom de fichier tel qu'il n'y ait pas de collision.
-	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename ("script-launcher.desktop", g_cCurrentLaunchersPath);
-	
-	//\___________________ On ecrit tout.
+	//\__________________ write the keys.
 	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
 	cairo_dock_write_keys_to_file (pKeyFile, cNewDesktopFilePath);
 	g_free (cNewDesktopFilePath);
+	
+	g_free (cFilePath);
 	g_key_file_free (pKeyFile);
-
 	return cNewDesktopFileName;
 }
 
-
 gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
 {
-	g_return_val_if_fail (cURI != NULL, NULL);
-	if (iGroup != CAIRO_DOCK_LAUNCHER && iGroup != CAIRO_DOCK_APPLET)  // on n'autorise a placer des icones du theme que parmi les lanceurs ou les applets.
-		iGroup = CAIRO_DOCK_LAUNCHER;
-	cd_message ("%s (%s)", __func__, cURI);
-	
-	//\_________________ On cree determine le type de lanceur et on ajoute un fichier desktop correspondant.
-	GError *tmp_erreur = NULL;
-	gchar *cNewDesktopFileName = NULL;
-	if (g_str_has_suffix (cURI, ".desktop"))  // lanceur.
-	{
-		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_launcher (cURI, cDockName, fOrder, iGroup, &tmp_erreur);
-	}
-	else if (g_str_has_suffix (cURI, ".sh"))  // script.
-	{
-		cd_message ("This file will be treated as a launcher, not as a file.\nIf this doesn't fit you, you should use the Stack applet, which is dedicated to file stacking.");
-		cNewDesktopFileName = _cairo_dock_generate_desktop_file_for_script (cURI, cDockName, fOrder, &tmp_erreur);
-	}
-
-	if (tmp_erreur != NULL)
-	{
-		g_propagate_error (erreur, tmp_erreur);
-		g_free (cNewDesktopFileName);
-		cNewDesktopFileName = NULL;
-	}
-	return cNewDesktopFileName;
+	if (! (cURI == NULL || g_str_has_suffix (cURI, ".desktop") || g_str_has_suffix (cURI, ".sh")))
+		return NULL;
+	return _add_new_desktop_file (CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER, cURI, cDockName, fOrder, iGroup, erreur);
 }
 
 gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
 {
-	const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file_path (iLauncherType);
-	return cairo_dock_add_desktop_file_from_uri (cTemplateFile, cDockName, fOrder, iGroup, erreur);
+	return _add_new_desktop_file (iLauncherType, NULL, cDockName, fOrder, iGroup, erreur);
 }
 
 
-void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockDesktopFileType iLauncherType)
+void cairo_dock_update_launcher_key_file (GKeyFile *pKeyFile, const gchar *cDesktopFilePath, CairoDockDesktopFileType iLauncherType)
 {
-	GError *erreur = NULL;
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-	if (pKeyFile == NULL)
-		return ;
-
-	if (cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION))
-	{
-		const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file_path (iLauncherType);
-		cd_debug ("%s (%s)", __func__, cTemplateFile);
-		cairo_dock_flush_conf_file_full (pKeyFile,
-			cDesktopFilePath,
-			GLDI_SHARE_DATA_DIR,
-			FALSE,
-			cTemplateFile);
-	}
+	const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file_path (iLauncherType);
+	cd_debug ("%s (%s)", __func__, cTemplateFile);
 	
-	g_key_file_free (pKeyFile);
+	cairo_dock_upgrade_conf_file (cDesktopFilePath, pKeyFile, cTemplateFile);  // update keys
 }
 
 
@@ -303,4 +188,21 @@ void cairo_dock_write_order_in_conf_file (Icon *pIcon, double fOrder)
 			G_TYPE_DOUBLE, "Icon", "order", fOrder,
 			G_TYPE_INVALID);
 	}
+}
+
+
+// should not be here, and probably not be used either (only applets does).
+void cairo_dock_remove_html_spaces (gchar *cString)
+{
+	gchar *str = cString;
+	do
+	{
+		str = g_strstr_len (str, -1, "%20");
+		if (str == NULL)
+			break ;
+		*str = ' ';
+		str ++;
+		strcpy (str, str+2);
+	}
+	while (TRUE);
 }

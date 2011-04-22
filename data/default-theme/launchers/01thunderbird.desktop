@@ -1,58 +1,48 @@
-#!en
+#2.3.1~0alpha0
 
+#[gtk-about]
 [Desktop Entry]
-#s Launcher's name :
-Name=Mozilla Thunderbird Mail/News
-#s Command to launch on click :
-#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1 for the Applications Menu, <Ctrl>c or <Ctrl>v to copy or paste, etc}
-Exec=thunderbird 
-#S Image's name or path :
-Icon=thunderbird
-#E[_MainDock_;Quimper, France;Blog;Documents;Vidéos]  Name of the container it belongs to:
-#{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
+
+#F[Launcher]
+frame_maininfo=
+
+#d+ Name of the container it belongs to:
 Container=_MainDock_
+
+#s Launcher's name :
+Name=
+#s Command to launch on click :
+#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
+Exec=
+
+#F[Display]
+frame_display=
+
+#S+ Image's name or path :
+Icon=
+
 
 #X[Extra parameters]
 frame_extra=
-#f Order you want for this launcher among the others:
-Order=2.977783203125
+
 #b Prevent this launcher from stealing appli from taskbar ?
-#{Use this option for exemple if the launcher launches a script in a terminal but you don't want it to steal normal terminal's icons from the TaskBar, or if you explicitely want to use the original icon of the TaskBar because it provides some info, for exemple Pidgin's icons represent the avatar of the contact.}
+#{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate=false
 
-#s Class of the program :
+#K Class of the program :
 #{The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher.}
-StartupWMClass=Thunderbird-bin
+StartupWMClass=
 
-Is container=false
-
-Renderer=
-
-Base URI=
-Is mounting point=false
-Encoding=UTF-8
-Comment=Read/Write Mail/News with Mozilla Thunderbird
-GenericName=Mail Client
+#b Run in a terminal ?
 Terminal=false
-X-MultipleArgs=false
-Type=Application
-Categories=Application;Network;
-MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/vnd.mozilla.xul+xml;application/rss+xml;application/rdf+xml;image/gif;image/jpeg;image/png
-StartupNotify=true
-Name[cs]=Poštovní klient Thunderbird
-Name[ca]=Client de correu Thunderbird
-Name[fi]=Thunderbird-sähköposti
-Name[fr]=Thunderbird
-Name[pl]=Klient poczty Thunderbird
-Name[pt_BR]=Cliente de E-mail Thunderbird
-Name[sv]=E-postklienten Thunderbird
-Comment[ca]=Llegiu i escriviu correu
-Comment[cs]=Čtení a psaní pošty
-Comment[de]=Emails lesen und verfassen
-Comment[fi]=Lue ja kirjoita sähköposteja
-Comment[fr]=Lire et écrire des courriels
-Comment[it]=Leggere e scrivere email
-Comment[ja]=メールの読み書き
-Comment[pl]=Czytanie i wysyłanie e-maili
-Comment[pt_BR]=Ler e escrever suas mensagens
-Comment[sv]=Läs och skriv e-post
+
+#i-[0;16] Only show in this specific viewport
+#{If '0' the launcher will be displayed on every viewport.}
+ShowOnViewport=0
+
+#f[0;100] Order you want for this launcher among the others:
+Order=2.6907157897949219
+
+Type=0
+
+Origin=/usr/share/applications/thunderbird.desktop;evolution.desktop;kmail.desktop

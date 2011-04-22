@@ -1,4 +1,4 @@
-#2.3.1~0alpha0
+#@VERSION@
 
 #[gtk-about]
 [Desktop Entry]
@@ -7,7 +7,7 @@
 frame_maininfo=
 
 #d+ Name of the container it belongs to:
-Container=_MainDock_
+Container = 
 
 #F[Display]
 frame_display=
@@ -17,10 +17,10 @@ Icon=
 
 
 #X[Extra parameters]
-frame_extra=
+frame_extra =
 #f[0;100] Order you want for this launcher among the others:
-Order=-0.31805419921875
+Order=0
 
-group=4
+group = 0
 
-Type=2
+Type = 2

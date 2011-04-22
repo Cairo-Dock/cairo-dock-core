@@ -200,7 +200,7 @@ set_current_conf_file "plug-ins/weather/weather.conf"
 set_value "Icon"			"name"						""
 set_value "Configuration"	"nb days"					5
 set_value "Configuration"	"check interval"			15
-#set_value "Configuration"	"dialog duration"			0
+set_value "Configuration"	"dialog duration"			0
 set_value "Configuration"	"IS units"					true
 set_value "Configuration"	"display temperature"		true
 
@@ -211,6 +211,18 @@ set_value "Configuration"	"uri list"					""
 set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
 set_value "Icon"			"name"						""
 set_value "Configuration"	"initial gamma"				0
+
+for f in launchers/*.desktop; do
+	grep "Type" "$f" > /dev/null
+	if test "$?" != "0"; then
+		echo "warning: the file $f is out-dated!"
+	else
+		grep "Origin" "$f" | grep ";"  > /dev/null
+		if test "$?" != "0"; then
+			echo "warning: consider adding an alternative origin for $f"
+		fi
+	fi
+done
 
 echo ""
 echo "le theme a ete mis a jour."

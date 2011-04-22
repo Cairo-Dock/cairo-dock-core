@@ -316,7 +316,7 @@ static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, Cai
 	pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
 	pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
 	pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;*/
-	// g_print ("%s() : TESTER SANS LES 5 LIGNES DU DESSUS...\n", __func__);
+	//g_print ("%s() : TESTER SANS LES 5 LIGNES DU DESSUS...\n", __func__);
 	pFakeClassIcon->pSubDock = pClassDock;
 	return pFakeClassIcon;
 }
@@ -429,6 +429,9 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 		return NULL;
 	cd_message ("%s (%s, %d)", __func__, icon->cName, icon->Xid);
 	
+	if (myTaskbarParam.bAppliOnCurrentDesktopOnly && ! cairo_dock_appli_is_on_current_desktop (icon))
+		return NULL;
+		
 	//\_________________ On gere ses eventuels inhibiteurs.
 	if (myTaskbarParam.bMixLauncherAppli && cairo_dock_prevent_inhibited_class (icon))
 	{

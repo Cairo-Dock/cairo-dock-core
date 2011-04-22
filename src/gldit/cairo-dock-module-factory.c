@@ -283,13 +283,17 @@ static void _cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleI
 		if (pVisitCard->iSizeOfConfig != 0)
 			memset (((gpointer)pInstance)+sizeof(CairoDockModuleInstance), 0, pVisitCard->iSizeOfConfig);
 		
-		bFlushConfFileNeeded = g_key_file_has_group (pKeyFile, "Desklet") && ! g_key_file_has_key (pKeyFile, "Desklet", "accessibility", NULL);  // petit hack des familles ^_^
-		bFlushConfFileNeeded |= pInterface->read_conf_file (pInstance, pKeyFile);
+		bFlushConfFileNeeded = pInterface->read_conf_file (pInstance, pKeyFile);
 	}
 	if (! bFlushConfFileNeeded)
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, pVisitCard->cModuleVersion);
 	if (bFlushConfFileNeeded)
-		cairo_dock_flush_conf_file (pKeyFile, pInstance->cConfFilePath, pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
+	{
+		///cairo_dock_flush_conf_file (pKeyFile, pInstance->cConfFilePath, pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
+		gchar *cTemplate = g_strdup_printf ("%s/%s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
+		cairo_dock_upgrade_conf_file (pInstance->cConfFilePath, pKeyFile, cTemplate);
+		g_free (cTemplate);
+	}
 }
 
 GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)

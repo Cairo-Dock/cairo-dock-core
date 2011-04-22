@@ -178,7 +178,8 @@ void gldi_get_managers_config (const gchar *cConfFilePath, const gchar *cVersion
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, cVersion);
 	if (bFlushConfFileNeeded)
 	{
-		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, GLDI_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
+		///cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, GLDI_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
+		cairo_dock_upgrade_conf_file (cConfFilePath, pKeyFile, GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_CONF_FILE);
 	}
 	
 	g_key_file_free (pKeyFile);

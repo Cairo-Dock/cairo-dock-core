@@ -42,6 +42,7 @@
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"
+#include "cairo-dock-launcher-factory.h"  // cairo_dock_remove_version_from_string
 #include "cairo-dock-class-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -49,8 +50,23 @@ extern CairoDockDesktopEnv g_iDesktopEnv;
 
 static GHashTable *s_hClassTable = NULL;
 
-static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli);
 
+static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
+{
+	g_list_free (pClassAppli->pIconsOfClass);
+	g_list_free (pClassAppli->pAppliOfClass);
+	g_free (pClassAppli->cDesktopFile);
+	g_free (pClassAppli->cCommand);
+	g_free (pClassAppli->cName);
+	g_free (pClassAppli->cIcon);
+	g_free (pClassAppli->cStartupWMClass);
+	g_free (pClassAppli->cWorkingDirectory);
+	if (pClassAppli->pMimeTypes)
+		g_strfreev (pClassAppli->pMimeTypes);
+	g_list_foreach (pClassAppli->pMenuItems, (GFunc)g_strfreev, NULL);
+	g_list_free (pClassAppli->pMenuItems);
+	g_free (pClassAppli);
+}
 
 void cairo_dock_initialize_class_manager (void)
 {
@@ -62,7 +78,7 @@ void cairo_dock_initialize_class_manager (void)
 }
 
 
-static CairoDockClassAppli *_cairo_dock_lookup_class_appli (const gchar *cClass)
+static inline CairoDockClassAppli *_cairo_dock_lookup_class_appli (const gchar *cClass)
 {
 	return (cClass != NULL ? g_hash_table_lookup (s_hClassTable, cClass) : NULL);
 }
@@ -75,16 +91,6 @@ const GList *cairo_dock_list_existing_appli_with_class (const gchar *cClass)
 	return (pClassAppli != NULL ? pClassAppli->pAppliOfClass : NULL);
 }
 
-
-static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
-{
-	g_list_free (pClassAppli->pIconsOfClass);
-	g_list_free (pClassAppli->pAppliOfClass);
-	g_free (pClassAppli->cDesktopFile);
-	if (pClassAppli->pMimeTypes)
-		g_strfreev (pClassAppli->pMimeTypes);
-	g_free (pClassAppli);
-}
 
 static CairoDockClassAppli *cairo_dock_get_class (const gchar *cClass)
 {
@@ -552,6 +558,7 @@ cairo_surface_t *cairo_dock_duplicate_inhibitor_surface_for_appli (Icon *pInhibi
 cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int iWidth, int iHeight)
 {
 	cd_debug ("%s (%s)", __func__, cClass);
+	// first we try to get an icon from one of the inhibator.
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (pClassAppli != NULL)
 	{
@@ -582,13 +589,32 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 							iWidth,
 							iHeight);
 						g_free (cIconFilePath);
-						return pSurface;
+						if (pSurface)
+							return pSurface;
 					}
 				}
 			}
 		}
 	}
 	
+	// if we didn't find one, we use the icon defined in the class.
+	if (pClassAppli != NULL && pClassAppli->cIcon != NULL)
+	{
+		g_print ("get the class icon (%s)\n", pClassAppli->cIcon);
+		gchar *cIconFilePath = cairo_dock_search_icon_s_path (pClassAppli->cIcon);
+		cairo_surface_t *pSurface = cairo_dock_create_surface_from_image_simple (cIconFilePath,
+			iWidth,
+			iHeight);
+		g_free (cIconFilePath);
+		if (pSurface)
+			return pSurface;
+	}
+	else
+	{
+		g_print ("no icon for the class %s\n", cClass);
+	}
+	
+	// if not found or not defined, try to find an icon based on the name class.
 	gchar *cIconFilePath = cairo_dock_search_icon_s_path (cClass);
 	if (cIconFilePath != NULL)
 	{
@@ -597,10 +623,11 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 			iWidth,
 			iHeight);
 		g_free (cIconFilePath);
-		return pSurface;
+		if (pSurface)
+			return pSurface;
 	}
 	
-	cd_debug ("classe %s prend l'icone X", cClass);
+	cd_debug ("classe %s prendra l'icone X", cClass);
 	return NULL;
 }
 
@@ -1183,72 +1210,6 @@ void cairo_dock_reorder_classes (void)
 	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_reorder_one_class, &iMaxOrder);
 }
 
-static gchar *_search_class_desktop_file (const gchar *cClass)
-{
-	gboolean bFound = TRUE;
-	GString *sDesktopFilePath = g_string_new ("");
-	g_string_printf (sDesktopFilePath, "/usr/share/applications/%s.desktop", cClass);
-	if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-	{
-		g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s.desktop", cClass);
-		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-		{
-			g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s.desktop", cClass);
-			if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-			{
-				bFound = FALSE;
-			}
-		}
-	}
-	
-	gchar *cDesktopFile;
-	if (bFound)
-	{
-		cDesktopFile = sDesktopFilePath->str;
-		g_string_free (sDesktopFilePath, FALSE);
-	}
-	else
-	{
-		cDesktopFile = NULL;
-		g_string_free (sDesktopFilePath, TRUE);
-		cd_debug ("couldn't find the .desktop for %s", cClass);
-	}
-	return cDesktopFile;
-}
-
-static void _cairo_dock_find_class_attributes (const gchar *cClass)
-{
-	g_return_if_fail (cClass != NULL);
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
-	
-	// if we already searched the attributes beforehand, quit.
-	if (pClassAppli->bSearchedAttributes)
-		return;
-	pClassAppli->bSearchedAttributes = TRUE;
-	
-	// look for the .desktop file in the common locations.
-	pClassAppli->cDesktopFile = _search_class_desktop_file (cClass);
-	
-	// if found, get the attributes.
-	if (pClassAppli->cDesktopFile != NULL)
-	{
-		GKeyFile *pKeyFile = cairo_dock_open_key_file (pClassAppli->cDesktopFile);
-		if (pKeyFile)
-		{
-			gsize length = 0;
-			pClassAppli->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
-			pClassAppli->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
-			if (pClassAppli->cCommand != NULL)
-			{
-				gchar *str = strchr (pClassAppli->cCommand, '%');
-				if (str != NULL)
-					*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
-			}
-			cd_debug ("check: set command '%s' to class %s", pClassAppli->cCommand, cClass);
-			g_key_file_free (pKeyFile);
-		}
-	}
-}
 
 
 static inline CairoDockClassAppli *_get_class_appli_with_attributes (const gchar *cClass)
@@ -1256,7 +1217,8 @@ static inline CairoDockClassAppli *_get_class_appli_with_attributes (const gchar
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (! pClassAppli->bSearchedAttributes)
 	{
-		_cairo_dock_find_class_attributes (cClass);
+		gchar *cClass2 = cairo_dock_register_class (cClass);
+		g_free (cClass2);
 	}
 	return pClassAppli;
 }
@@ -1281,53 +1243,288 @@ const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass)
 	return pClassAppli->cDesktopFile;
 }
 
-
-void cairo_dock_get_class_attributes (const gchar *cClass, GKeyFile *pKeyFile)
+const GList *cairo_dock_get_class_menu_items (const gchar *cClass)
 {
-	g_return_if_fail (cClass != NULL && pKeyFile != NULL);
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	g_return_val_if_fail (cClass != NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _get_class_appli_with_attributes (cClass);
+	return pClassAppli->pMenuItems;
+}
+
+static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or even class
+{
+	if (*cDesktopFile == '/' && g_file_test (cDesktopFile, G_FILE_TEST_EXISTS))  // it's a path and it exists.
+	{
+		return g_strdup (cDesktopFile);
+	}
 	
-	// get mime types
-	gsize length = 0;
-	pClassAppli->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
+	gchar *cDesktopFileName = NULL;
+	if (*cDesktopFile == '/')
+		cDesktopFileName = g_path_get_basename (cDesktopFile);
+	else if (! g_str_has_suffix (cDesktopFile, ".desktop"))
+		cDesktopFileName = g_strdup_printf ("%s.desktop", cDesktopFile);
 	
-	// get command
+	const gchar *cFileName = (cDesktopFileName ? cDesktopFileName : cDesktopFile);
+	gboolean bFound = TRUE;
+	GString *sDesktopFilePath = g_string_new ("");
+	g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileName);
+	if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+	{
+		g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s", cFileName);
+		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+		{
+			g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s", cFileName);
+			if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+			{
+				bFound = FALSE;
+			}
+		}
+	}
+	g_free (cDesktopFileName);
+	
+	gchar *cResult;
+	if (bFound)
+	{
+		cResult = sDesktopFilePath->str;
+		g_string_free (sDesktopFilePath, FALSE);
+	}
+	else
+	{
+		cResult = NULL;
+		g_string_free (sDesktopFilePath, TRUE);
+	}
+	return cResult;
+}
+
+gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMClass)
+{
+	// plusieurs cas sont possibles :
+	// Exec=toto
+	// Exec=toto-1.2
+	// Exec=toto -x -y
+	// Exec=/path/to/toto -x -y
+	// Exec=gksu nautilus /
+	// Exec=gksu --description /usr/share/applications/synaptic.desktop /usr/sbin/synaptic
+	// Exec=wine "C:\Program Files\Starcraft\Starcraft.exe"
+	// Exec=wine "/path/to/prog.exe"
+	// Exec=env WINEPREFIX="/home/fab/.wine" wine "C:\Program Files\Starcraft\Starcraft.exe"
+	if (cCommand == NULL)
+		return NULL;
+	
+	g_print ("%s (%s, '%s')\n", __func__, cCommand, cStartupWMClass);
+	gchar *cResult = NULL;
+	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
+	{
+		gchar *cDefaultClass = g_ascii_strdown (cCommand, -1);
+		gchar *str, *cClass = cDefaultClass;
+
+		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0)  // on prend la fin .
+		{
+			while (cClass[strlen(cClass)-1] == ' ')  // par securite on enleve les espaces en fin de ligne.
+				cClass[strlen(cClass)-1] = '\0';
+			str = strchr (cClass, ' ');  // on cherche le premier espace.
+			if (str != NULL)  // on prend apres.
+			{
+				while (*str == ' ')
+					str ++;
+				cClass = str;
+			}  // la on a vire le gksu.
+			if (*cClass == '-')  // option, on prend le dernier argument de la commande.
+			{
+				str = strrchr (cClass, ' ');  // on cherche le dernier espace.
+				if (str != NULL)  // on prend apres.
+					cClass = str + 1;
+			}
+			else  // on prend le premier argument.
+			{
+				str = strchr (cClass, ' ');  // on cherche le premier espace.
+				if (str != NULL)  // on vire apres.
+					*str = '\0';
+			}
+
+			str = strrchr (cClass, '/');  // on cherche le dernier '/'.
+			if (str != NULL)  // on prend apres.
+				cClass = str + 1;
+		}
+		else if ((str = g_strstr_len (cClass, -1, "wine ")) != NULL)
+		{
+			cClass = str;  // on met deja la classe a "wine", c'est mieux que rien.
+			*(str+4) = '\0';
+			str += 5;
+			while (*str == ' ')  // on enleve les espaces supplementaires.
+				str ++;
+			gchar *exe = g_strstr_len (str, -1, ".exe");  // on cherche a isoler le nom de l'executable, puisque wine l'utilise dans le res_name.
+			if (exe)
+			{
+				*exe = '\0';  // vire l'extension par la meme occasion.
+				gchar *slash = strrchr (str, '\\');
+				if (slash)
+					cClass = slash+1;
+				else
+				{
+					slash = strrchr (str, '/');
+					if (slash)
+						cClass = slash+1;
+					else
+						cClass = str;
+				}
+			}
+			cd_debug ("  special case : wine application => class = '%s'", cClass);
+		}
+		else
+		{
+			while (*cClass == ' ')  // par securite on enleve les espaces en debut de ligne.
+				cClass ++;
+			str = strchr (cClass, ' ');  // on cherche le premier espace.
+			if (str != NULL)  // on vire apres.
+				*str = '\0';
+			str = strrchr (cClass, '/');  // on cherche le dernier '/'.
+			if (str != NULL)  // on prend apres.
+				cClass = str + 1;
+			str = strchr (cClass, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
+			if (str != NULL && str != cClass)
+				*str = '\0';
+		}
+
+		if (*cClass != '\0')
+			cResult = g_strdup (cClass);
+		g_free (cDefaultClass);
+	}
+	else
+	{
+		cResult = g_ascii_strdown (cStartupWMClass, -1);
+		gchar *str = strchr (cResult, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
+		if (str != NULL)
+			*str = '\0';
+	}
+	cairo_dock_remove_version_from_string (cResult);
+	g_print (" -> '%s'\n", cResult);
+	
+	return cResult;
+}
+
+
+gchar *cairo_dock_register_class (const gchar *cDesktopFile)
+{
+	g_return_val_if_fail (cDesktopFile != NULL, NULL);
+	g_print ("%s (%s)\n", __func__, cDesktopFile);
+	
+	//\__________________ if the class is already registered and filled, quit.
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cDesktopFile);
+	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes)
+		return g_strdup (cDesktopFile);
+	
+	//\__________________ search the desktop file's path.
+	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile);
+	if (cDesktopFilePath == NULL)
+	{
+		g_print ("couldn't find the desktop file %s\n", cDesktopFile);
+		return NULL;
+	}
+	
+	//\__________________ open it.
+	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
+	g_return_val_if_fail (pKeyFile != NULL, NULL);
+	
+	//\__________________ guess the class name.
 	gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+	gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
+	gchar *cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
+	if (cClass == NULL)
+	{
+		g_print ("couldn't guess the class for %s\n", cDesktopFile);
+		g_free (cDesktopFilePath);
+		g_free (cCommand);
+		g_free (cStartupWMClass);
+		return NULL;
+	}
+	
+	//\__________________ make a new class or get the existing one.
+	pClassAppli = cairo_dock_get_class (cClass);
+	g_return_val_if_fail (pClassAppli!= NULL, NULL);
+	
+	//\__________________ if we already searched the attributes beforehand, quit.
+	if (pClassAppli->bSearchedAttributes)
+	{
+		g_free (cDesktopFilePath);
+		g_free (cCommand);
+		g_free (cStartupWMClass);
+		return cClass;
+	}
+	pClassAppli->bSearchedAttributes = TRUE;
+	
+	//\__________________ get the attributes.
+	pClassAppli->cDesktopFile = cDesktopFilePath;
+	
 	if (cCommand != NULL)
 	{
 		gchar *str = strchr (cCommand, '%');
 		if (str != NULL)
 			*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
 	}
-	cd_debug ("check: set command '%s' to class %s", pClassAppli->cCommand, cClass);
-	
-	// modify the command if it should be launched in a terminal.
-	gchar *cCommandFull = NULL;
-	gboolean bExecInTerminal = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL);
-	if (bExecInTerminal)
-	{
-		const gchar *cTerm = g_getenv ("COLORTERM");
-		if (cTerm != NULL && strlen (cTerm) > 1)  // on filtre les cas COLORTERM=1 ou COLORTERM=y. ce qu'on veut c'est le nom d'un terminal.
-			cCommandFull = g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
-		else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-			cCommandFull = g_strdup_printf ("gnome-terminal -e \"%s\"", cCommand);
-		else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
-			cCommandFull = g_strdup_printf ("xfce4-terminal -e \"%s\"", cCommand);
-		else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
-			cCommandFull = g_strdup_printf ("konsole -e \"%s\"", cCommand);
-		else if (g_getenv ("TERM") != NULL)
-			cCommandFull = g_strdup_printf ("%s -e \"%s\"", g_getenv ("TERM"), cCommand);
-		else
-			cCommandFull = g_strdup_printf ("xterm -e \"%s\"", cCommand);
-	}
-	
-	// get the working directory.
-	gchar *cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
-	if (cWorkingDirectory != NULL && *cWorkingDirectory == '\0')
-	{
-		g_free (cWorkingDirectory);
-		cWorkingDirectory = NULL;
-	}
-	
 	pClassAppli->cCommand = cCommand;
+	
+	pClassAppli->cStartupWMClass = cStartupWMClass;
+	
+	pClassAppli->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+	
+	pClassAppli->cIcon = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
+	
+	gsize length = 0;
+	pClassAppli->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
+	
+	pClassAppli->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
+	
+	// get the Unity menus.
+	gchar **pMenuList = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "X-Ayatana-Desktop-Shortcuts", &length, NULL);  // oh crap, with a name like that you can be sure it will change 25 times before they decide a definite name :-/
+	if (pMenuList != NULL)
+	{
+		gchar *cGroup;
+		int i;
+		for (i = 0; pMenuList[i] != NULL; i++)
+		{
+			cGroup = g_strdup_printf ("%s Shortcut Group", pMenuList[i]);
+			if (g_key_file_has_group (pKeyFile, cGroup))
+			{
+				gchar **pMenuItem = g_new0 (gchar*, 4);
+				pMenuItem[0] = g_key_file_get_locale_string (pKeyFile, cGroup, "Name", NULL, NULL);
+				pMenuItem[1] = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
+				pMenuItem[2] = g_key_file_get_string (pKeyFile, cGroup, "Icon", NULL);
+				
+				pClassAppli->pMenuItems = g_list_append (pClassAppli->pMenuItems, pMenuItem);
+			}
+			g_free (cGroup);
+		}
+		g_strfreev (pMenuList);
+	}
+	
+	g_key_file_free (pKeyFile);
+	return cClass;
+}
+
+void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
+{
+	g_return_if_fail (cClass != NULL && pIcon != NULL);
+	g_print ("%s (%s)\n", __func__, cClass);
+	
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	if (pClassAppli == NULL || ! pClassAppli->bSearchedAttributes)
+	{
+		g_print ("no class %s or no attributes\n", cClass);
+		return;
+	}
+	
+	if (pIcon->cCommand == NULL)
+		pIcon->cCommand = g_strdup (pClassAppli->cCommand);
+	
+	if (pIcon->cWorkingDirectory == NULL)
+		pIcon->cWorkingDirectory = g_strdup (pClassAppli->cWorkingDirectory);
+	
+	if (pIcon->cName == NULL)
+		pIcon->cName = g_strdup (pClassAppli->cName);
+	
+	if (pIcon->cFileName == NULL)
+		pIcon->cFileName = g_strdup (pClassAppli->cIcon);
+	
+	if (pIcon->pMimeTypes == NULL)
+		pIcon->pMimeTypes = g_strdupv ((gchar**)pClassAppli->pMimeTypes);	
 }

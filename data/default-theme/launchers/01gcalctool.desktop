@@ -1,21 +1,30 @@
-#!en
+#2.3.1~0alpha0
 
+#[gtk-about]
 [Desktop Entry]
+
+#F[Launcher]
+frame_maininfo=
+
+#d+ Name of the container it belongs to:
+Container=_MainDock_
+
 #s Launcher's name :
-Name=Calculator
+Name=
 #s Command to launch on click :
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
-Exec=gcalctool
-#S Image's name or path :
-Icon=accessories-calculator
-#d Name of the container it belongs to:
-#{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
-Container=_MainDock_
+Exec=
+
+#F[Display]
+frame_display=
+
+#S+ Image's name or path :
+Icon=
+
 
 #X[Extra parameters]
 frame_extra=
-#f[0;100] Order you want for this launcher among the others:
-Order=0.272918701171875
+
 #b Prevent this launcher from stealing appli from taskbar ?
 #{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate=false
@@ -25,27 +34,15 @@ prevent inhibate=false
 StartupWMClass=
 
 #b Run in a terminal ?
-#{It will use 'xterm'.}
 Terminal=false
 
 #i-[0;16] Only show in this specific viewport
 #{If '0' the launcher will be displayed on every viewport.}
 ShowOnViewport=0
 
-Nb subicons=0
+#f[0;100] Order you want for this launcher among the others:
+Order=2.1480941772460938
 
-Renderer=
+Type=0
 
-Base URI=
-Is mounting point=false
-
-Comment=Perform arithmetic, scientific or financial calculations
-NotShowIn=KDE;
-Type=Application
-StartupNotify=true
-Categories=GNOME;GTK;Utility;Calculator
-X-GNOME-DocPath=gcalctool/gcalctool.xml
-X-GNOME-Bugzilla-Bugzilla=GNOME
-X-GNOME-Bugzilla-Product=gcalctool
-X-GNOME-Bugzilla-Component=general
-X-GNOME-Bugzilla-OtherBinaries=gnome-calculator
+Origin=/home/fab/.local/share/applications/gcalctool.desktop;kcalc.desktop

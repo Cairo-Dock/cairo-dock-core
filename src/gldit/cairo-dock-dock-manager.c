@@ -727,8 +727,9 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
 	if (bFlushConfFileNeeded)
 	{
-		cd_debug ("update %s conf file", cDockName);
-		cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, GLDI_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE);
+		//g_print ("update %s conf file\n", cDockName);
+		///cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, GLDI_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE);
+		cairo_dock_upgrade_conf_file (cConfFilePath, pKeyFile, GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE);
 	}
 	
 	g_key_file_free (pKeyFile);

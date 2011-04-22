@@ -1,4 +1,4 @@
-#!en
+#2.3.1~0alpha0
 
 #[gtk-about]
 [Desktop Entry]
@@ -6,11 +6,8 @@
 #F[Separator]
 frame_maininfo=
 
-#d Name of the container it belongs to:
+#d+ Name of the container it belongs to:
 Container = 
-
-Name = 
-Exec=
 
 #F[Display]
 frame_display=
@@ -18,13 +15,12 @@ frame_display=
 #> Separators' appearance is defined in the global configuration.
 Icon=
 
+
 #X[Extra parameters]
 frame_extra =
-#f[0;100] Order you want for this launcher among the others:
+#f+[0;100] Order you want for this launcher among the others:
 Order=0
 
-Is container = false
-
-Renderer = 
-
 group = 0
+
+Type = 2

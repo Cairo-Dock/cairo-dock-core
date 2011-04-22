@@ -193,7 +193,7 @@ static gchar * _make_simple_conf_file (void)
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
 	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
-		gchar *cCommand = g_strdup_printf ("cp \"%s/%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
+		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
 		int r = system (cCommand);
 		g_free (cCommand);
 	}
@@ -203,7 +203,9 @@ static gchar * _make_simple_conf_file (void)
 	
 	if (cairo_dock_conf_file_needs_update (pSimpleKeyFile, CAIRO_DOCK_VERSION))
 	{
-		cairo_dock_flush_conf_file (pSimpleKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_SIMPLE_CONF_FILE);
+		///cairo_dock_flush_conf_file (pSimpleKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_SIMPLE_CONF_FILE);
+		cairo_dock_upgrade_conf_file (cConfFilePath, pSimpleKeyFile, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE);
+		
 		g_key_file_free (pSimpleKeyFile);
 		pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
 		g_return_val_if_fail (pSimpleKeyFile != NULL, NULL);

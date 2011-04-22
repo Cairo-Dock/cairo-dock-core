@@ -558,6 +558,11 @@ static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
 	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR);
 }
 
+static void _cairo_dock_launch_class_action (GtkMenuItem *pMenuItem, gchar *cCommand)
+{
+	cairo_dock_launch_command (cCommand);
+}
+
 static void _cairo_dock_modify_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
@@ -861,26 +866,19 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 	
 	// on trouve le .desktop du programme.
 	cd_debug ("%s (%s)\n", __func__, icon->cClass);
-	gchar *cDesktopFilePath = g_strdup_printf ("/usr/share/applications/%s.desktop", icon->cClass);
-	if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))  // on n'a pas trouve la, on cherche chez KDE.
+	gchar *cDesktopFilePath = g_strdup (cairo_dock_get_class_desktop_file (icon->cClass));
+	if (cDesktopFilePath == NULL)
 	{
-		g_free (cDesktopFilePath);
-		cDesktopFilePath = g_strdup_printf ("/usr/share/applications/kde4/%s.desktop", icon->cClass);
-		if (! g_file_test (cDesktopFilePath, G_FILE_TEST_EXISTS))  // toujours rien, on utilise locate.
+		gchar *cCommand = g_strdup_printf ("locate /%s.desktop --limit=1 -i", icon->cClass);
+		gchar *cResult = cairo_dock_launch_command_sync (cCommand);
+		if (cResult != NULL && *cResult != '\0')
 		{
-			g_free (cDesktopFilePath);
-			cDesktopFilePath = NULL;
-			
-			gchar *cCommand = g_strdup_printf ("locate /%s.desktop --limit=1 -i", icon->cClass);
-			gchar *cResult = cairo_dock_launch_command_sync (cCommand);
-			if (cResult != NULL && *cResult != '\0')
-			{
-				if (cResult[strlen (cResult) - 1] == '\n')
-					cResult[strlen (cResult) - 1] = '\0';
-				cDesktopFilePath = cResult;
-				cResult = NULL;
-			}
-			// else chercher un desktop qui contiennent command=class...
+			if (cResult[strlen (cResult) - 1] == '\n')
+				cResult[strlen (cResult) - 1] = '\0';
+			cDesktopFilePath = cResult;
+		}
+		else  // chercher un desktop qui contienne command=class...
+		{
 			g_free (cResult);
 		}
 	}
@@ -1212,7 +1210,20 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		}
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	}
-
+	
+	//\_________________________ class actions.
+	if (icon && icon->cClass != NULL)
+	{
+		const GList *pClassMenuItems = cairo_dock_get_class_menu_items (icon->cClass);
+		gchar **pClassItem;
+		const GList *m;
+		for (m = pClassMenuItems; m != NULL; m = m->next)
+		{
+			pClassItem = m->data;
+			pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (pClassItem[0], pClassItem[2], (GFunc)_cairo_dock_launch_class_action, menu, pClassItem[1]);
+		}
+	}
+	
 	//\_________________________ On rajoute des actions de modifications sur le dock.
 	gboolean bAddNewEntries = FALSE;
 	if (! cairo_dock_is_locked () && CAIRO_DOCK_IS_DOCK (pContainer) && icon && (cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_LAUNCHER) || cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (CAIRO_DOCK_APPLET)))

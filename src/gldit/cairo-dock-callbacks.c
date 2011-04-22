@@ -92,7 +92,7 @@ static gboolean s_bIconDragged = FALSE;
 
 static gboolean _check_mouse_outside (CairoDock *pDock);
 
-static inline gboolean _mouse_is_really_outside (CairoDock *pDock)
+static gboolean _mouse_is_really_outside (CairoDock *pDock)
 {
 	/**return (pDock->container.iMouseX <= 0
 		|| pDock->container.iMouseX >= pDock->container.iWidth

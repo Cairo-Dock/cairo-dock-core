@@ -45,6 +45,11 @@ struct _CairoDockClassAppli {
 	gchar *cDesktopFile;
 	gchar **pMimeTypes;
 	gchar *cCommand;
+	gchar *cStartupWMClass;
+	gchar *cIcon;
+	gchar *cName;
+	gchar *cWorkingDirectory;
+	GList *pMenuItems;
 };
 
 /*
@@ -52,11 +57,6 @@ struct _CairoDockClassAppli {
 */
 void cairo_dock_initialize_class_manager (void);
 
-/*
-* Libere une classe d'appli, en enlevant au passage tous les indicateurs des inhibiteurs de cette classe.
-* @param pClassAppli la classe d'appli.
-*/
-//void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli);
 /*
 * Fournit la liste de toutes les applis connues du dock appartenant a cette classe.
 * @param cClass la classe.
@@ -205,13 +205,28 @@ void cairo_dock_reorder_classes (void);
 void cairo_dock_set_class_order (Icon *pIcon);
 
 
-void cairo_dock_find_class_attributes (const gchar *cClass);
-
 const gchar *cairo_dock_get_class_command (const gchar *cClass);
 
 const gchar **cairo_dock_get_class_mimetypes (const gchar *cClass);
 
 const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass);
+
+const GList *cairo_dock_get_class_menu_items (const gchar *cClass);
+
+
+gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMClass);
+
+/** Register a class corresponding to a desktop file. Launchers can then derive from the class.
+* @param cDesktopFile the desktop file path or name; if it's a name or if the path couldn't be found, it will be searched in the common directories.
+* @return the class ID in a newly allocated string.
+*/
+gchar *cairo_dock_register_class (const gchar *cDesktopFile);
+
+/** Make a launcher derive from a class. Parameters of the icon that are not NULL are not overwritten.
+* @param cClass the class name
+* @param pIcon the icon
+*/
+void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon);
 
 
 G_END_DECLS

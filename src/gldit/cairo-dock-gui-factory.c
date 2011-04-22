@@ -2528,7 +2528,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					///iNbControlledWidgets = 0;
 					break;
 				}
-				cValue = g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, NULL, NULL);  // nous permet de recuperer les ';' aussi.
+				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // nous permet de recuperer les ';' aussi.
 				// on construit la combo.
 				modele = _cairo_dock_gui_allocate_new_model ();
 				if (iElementType == CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY)
@@ -2633,7 +2633,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_TREE_VIEW_SORT_AND_MODIFY :  // same with possibility to add/remove some.
 			case CAIRO_DOCK_WIDGET_TREE_VIEW_MULTI_CHOICE :  // N strings that can be selected or not.
 				// on construit le tree view.
-				cValueList = g_key_file_get_locale_string_list (pKeyFile, cGroupName, cKeyName, NULL, &length, NULL);
+				cValueList = g_key_file_get_string_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
 				pOneWidget = gtk_tree_view_new ();
 				modele = _cairo_dock_gui_allocate_new_model ();
 				gtk_tree_view_set_model (GTK_TREE_VIEW (pOneWidget), GTK_TREE_MODEL (modele));
@@ -3475,7 +3475,7 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 		{
 			cValue = g_strdup (cWidgetValue);
 		}
-		const gchar* const * cPossibleLocales = g_get_language_names ();
+		/**const gchar* const * cPossibleLocales = g_get_language_names ();
 		gchar *cKeyNameFull, *cTranslatedValue;
 		// g_key_file_set_locale_string ne marche pas avec une locale NULL comme le fait 'g_key_file_get_locale_string', il faut donc le faire a la main !
 		
@@ -3493,7 +3493,7 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 		}
 		if (cPossibleLocales[i] != NULL)
 			g_key_file_set_locale_string (pKeyFile, cGroupName, cKeyName, cPossibleLocales[i], cValue);
-		else
+		else*/
 			g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cValue);
 
 		g_free( cValue );

@@ -73,29 +73,192 @@ void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePa
 }
 
 
-void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, const gchar *cShareDataDirPath, gboolean bUseFileKeys, const gchar *cTemplateFileName)
+// pOriginalKeyFile is an up-to-date key-file
+// pReplacementKeyFile is an old key-file containing values we want to use
+// keys are filtered by the identifier on the original key-file.
+// old keys not present in pOriginalKeyFile are added
+// new keys in pOriginalKeyFile not present in pReplacementKeyFile and having valid comment are removed
+void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gchar iIdentifier)
 {
-	gchar *cTemplateConfFilePath = (*cTemplateFileName == '/' ? g_strdup (cTemplateFileName) : g_strdup_printf ("%s/%s", cShareDataDirPath, cTemplateFileName));
-	cd_message ("%s (%s)", __func__, cTemplateConfFilePath);
+	// get the groups of the remplacement key-file.
+	GError *erreur = NULL;
+	gsize length = 0;
+	gchar **pKeyList;
+	gchar **pGroupList = g_key_file_get_groups (pReplacementKeyFile, &length);
+	g_return_if_fail (pGroupList != NULL);
+	gchar *cGroupName, *cKeyName, *cKeyValue, *cComment;
+	int i, j;
 	
-	if (! g_file_test (cTemplateConfFilePath, G_FILE_TEST_EXISTS))
+	for (i = 0; pGroupList[i] != NULL; i ++)
 	{
-		cd_warning ("Couldn't find any installed conf file in %s", cShareDataDirPath);
-	}
-	else
-	{
-		gchar *cCommand = g_strdup_printf ("/bin/cp \"%s\" \"%s\"", cTemplateConfFilePath, cConfFilePath);
-		int r = system (cCommand);
-		g_free (cCommand);
+		cGroupName = pGroupList[i];
 		
-		cairo_dock_replace_values_in_conf_file (cConfFilePath, pKeyFile, bUseFileKeys, 0);
+		// get the keys of the remplacement key-file.
+		length = 0;
+		pKeyList = g_key_file_get_keys (pReplacementKeyFile, cGroupName, NULL, NULL);
+		g_return_if_fail (pKeyList != NULL);
+		
+		for (j = 0; pKeyList[j] != NULL; j ++)
+		{
+			cKeyName = pKeyList[j];
+			
+			// check that the original identifier matches with the provided one.
+			if (iIdentifier != 0)
+			{
+				if (g_key_file_has_key (pOriginalKeyFile, cGroupName, cKeyName, NULL))  // if the key doesn't exist in the original key-file, don't check the identifier, and add it to the key-file; it probably means it's an old key that will be taken care of by the applet.
+				{
+					cComment = g_key_file_get_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL);
+					if (cComment == NULL || cComment[0] == '\0' || cComment[1] != iIdentifier)
+					{
+						g_free (cComment);
+						continue ;
+					}
+					g_free (cComment);
+				}
+			}
+			
+			// get the replacement value and set it to the key-file, creating it if it didn't exist (in this case, no need to add the comment, since the key will be removed again by the applet).
+			cKeyValue =  g_key_file_get_string (pReplacementKeyFile, cGroupName, cKeyName, &erreur);
+			if (erreur != NULL)
+			{
+				cd_warning (erreur->message);
+				g_error_free (erreur);
+				erreur = NULL;
+			}
+			else
+			{
+				if (cKeyValue && cKeyValue[strlen(cKeyValue) - 1] == '\n')
+					cKeyValue[strlen(cKeyValue) - 1] = '\0';
+				g_key_file_set_string (pOriginalKeyFile, cGroupName, cKeyName, (cKeyValue != NULL ? cKeyValue : ""));
+			}
+			g_free (cKeyValue);
+		}
+		g_strfreev (pKeyList);
 	}
-	g_free (cTemplateConfFilePath);
+	g_strfreev (pGroupList);
+	
+	// remove keys from the original key-file which are not in the remplacement key-file.
+	pGroupList = g_key_file_get_groups (pOriginalKeyFile, &length);
+	g_return_if_fail (pGroupList != NULL);
+	for (i = 0; pGroupList[i] != NULL; i ++)
+	{
+		cGroupName = pGroupList[i];
+		
+		// get the keys of the original key-file.
+		length = 0;
+		pKeyList = g_key_file_get_keys (pOriginalKeyFile, cGroupName, NULL, NULL);
+		g_return_if_fail (pKeyList != NULL);
+		
+		for (j = 0; pKeyList[j] != NULL; j ++)
+		{
+			cKeyName = pKeyList[j];
+			if (! g_key_file_has_key (pReplacementKeyFile, cGroupName, cKeyName, NULL))
+			{
+				g_key_file_remove_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL);
+				g_key_file_remove_key (pOriginalKeyFile, cGroupName, cKeyName, NULL);
+			}
+		}
+		g_strfreev (pKeyList);
+	}
+	g_strfreev (pGroupList);
+}
+
+void cairo_dock_merge_conf_files (const gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier)
+{
+	GKeyFile *pOriginalKeyFile = cairo_dock_open_key_file (cConfFilePath);
+	g_return_if_fail (pOriginalKeyFile != NULL);
+	GKeyFile *pReplacementKeyFile = cairo_dock_open_key_file (cReplacementConfFilePath);
+	g_return_if_fail (pReplacementKeyFile != NULL);
+	
+	cairo_dock_merge_key_files (pOriginalKeyFile, pReplacementKeyFile, iIdentifier);
+	cairo_dock_write_keys_to_file (pOriginalKeyFile, cConfFilePath);
+	
+	g_key_file_free (pOriginalKeyFile);
+	g_key_file_free (pReplacementKeyFile);
 }
 
 
+// update launcher key-file: use ukf keys (= template) => remove old, add news
+// update applet key-file: use vkf keys (= user) if exist in template or NULL/0 comment => keep user keys.
 
-void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier)
+// pValuesKeyFile is a key-file with correct values, but old comments and possibly missing or old keys.
+// pUptodateKeyFile is a template key-file with default values.
+// bUpdateKeys is TRUE to use up-to-date keys.
+static void _cairo_dock_replace_key_values (GKeyFile *pValuesKeyFile, GKeyFile *pUptodateKeyFile, gboolean bUpdateKeys)
+{
+	GKeyFile *pKeysKeyFile = (bUpdateKeys ? pUptodateKeyFile : pValuesKeyFile);
+	
+	// get the groups.
+	GError *erreur = NULL;
+	gsize length = 0;
+	gchar **pKeyList;
+	gchar **pGroupList = g_key_file_get_groups (pKeysKeyFile, &length);
+	g_return_if_fail (pGroupList != NULL);
+	gchar *cGroupName, *cKeyName, *cKeyValue, *cComment;
+	int i, j;
+	
+	for (i = 0; pGroupList[i] != NULL; i ++)
+	{
+		cGroupName = pGroupList[i];
+		
+		// get the keys.
+		length = 0;
+		pKeyList = g_key_file_get_keys (pKeysKeyFile, cGroupName, NULL, NULL);
+		g_return_if_fail (pKeyList != NULL);
+		
+		for (j = 0; pKeyList[j] != NULL; j ++)
+		{
+			cKeyName = pKeyList[j];
+			
+			// don't add old keys, except if they are hidden or persistent.
+			if (!g_key_file_has_key (pUptodateKeyFile, cGroupName, cKeyName, NULL))  // old key
+			{
+				cComment = g_key_file_get_comment (pValuesKeyFile, cGroupName, cKeyName, NULL);
+				if (cComment != NULL && cComment[0] != '\0' && cComment[1] != '0')  // not hidden nor persistent
+				{
+					g_free (cComment);
+					continue;
+				}
+				g_free (cComment);
+			}
+			
+			// get the replacement value and set it to the key-file, creating it if it didn't exist (in which case no need to add the comment, since the key will be removed again by the applet).
+			cKeyValue =  g_key_file_get_string (pValuesKeyFile, cGroupName, cKeyName, &erreur);
+			if (erreur != NULL)  // key doesn't exist
+			{
+				cd_warning (erreur->message);
+				g_error_free (erreur);
+				erreur = NULL;
+			}
+			else
+			{
+				g_key_file_set_string (pUptodateKeyFile, cGroupName, cKeyName, (cKeyValue != NULL ? cKeyValue : ""));
+			}
+			g_free (cKeyValue);
+		}
+		
+		g_strfreev (pKeyList);
+	}
+	g_strfreev (pGroupList);
+	
+}
+
+void cairo_dock_upgrade_conf_file_full (const gchar *cConfFilePath, GKeyFile *pKeyFile, const gchar *cDefaultConfFilePath, gboolean bUpdateKeys)
+{
+	GKeyFile *pUptodateKeyFile = cairo_dock_open_key_file (cDefaultConfFilePath);
+	g_return_if_fail (pUptodateKeyFile != NULL);
+	
+	_cairo_dock_replace_key_values (pKeyFile, pUptodateKeyFile, bUpdateKeys);
+	
+	cairo_dock_write_keys_to_file (pUptodateKeyFile, cConfFilePath);
+	
+	g_key_file_free (pUptodateKeyFile);
+}
+
+
+/**
+// deprecated
+static void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier)
 {
 	//g_print ("%s (%d, %d)\n", __func__, iIdentifier, bUseOriginalKeys);
 	GError *erreur = NULL;
@@ -229,8 +392,8 @@ void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pRepla
 	}
 }
 
-
-void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier)
+// deprecated
+static void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier)
 {
 	GKeyFile *pConfKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	if (pConfKeyFile == NULL)
@@ -244,6 +407,28 @@ void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFil
 	g_key_file_free (pConfKeyFile);
 }
 
+// deprecated
+void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, const gchar *cShareDataDirPath, gboolean bUseFileKeys, const gchar *cTemplateFileName)
+{
+	gchar *cTemplateConfFilePath = (*cTemplateFileName == '/' ? g_strdup (cTemplateFileName) : g_strdup_printf ("%s/%s", cShareDataDirPath, cTemplateFileName));
+	cd_message ("%s (%s)", __func__, cTemplateConfFilePath);
+	
+	if (! g_file_test (cTemplateConfFilePath, G_FILE_TEST_EXISTS))
+	{
+		cd_warning ("Couldn't find any installed conf file in %s", cShareDataDirPath);
+	}
+	else
+	{
+		gchar *cCommand = g_strdup_printf ("/bin/cp \"%s\" \"%s\"", cTemplateConfFilePath, cConfFilePath);
+		int r = system (cCommand);
+		g_free (cCommand);
+		
+		cairo_dock_replace_values_in_conf_file (cConfFilePath, pKeyFile, bUseFileKeys, 0);
+	}
+	g_free (cTemplateConfFilePath);
+}
+
+// deprecated
 void cairo_dock_replace_keys_by_identifier (const gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier)
 {
 	GKeyFile *pReplacementKeyFile = cairo_dock_open_key_file (cReplacementConfFilePath);
@@ -254,7 +439,7 @@ void cairo_dock_replace_keys_by_identifier (const gchar *cConfFilePath, gchar *c
 	cairo_dock_replace_values_in_conf_file (cConfFilePath, pReplacementKeyFile, TRUE, iIdentifier);
 
 	g_key_file_free (pReplacementKeyFile);
-}
+}*/
 
 
 
@@ -287,11 +472,7 @@ gboolean cairo_dock_conf_file_needs_update (GKeyFile *pKeyFile, const gchar *cVe
 {
 	gchar *cPreviousVersion = NULL;
 	cairo_dock_get_conf_file_version (pKeyFile, &cPreviousVersion);
-	gboolean bNeedsUpdate;
-	if (cPreviousVersion == NULL || strcmp (cPreviousVersion, cVersion) != 0)
-		bNeedsUpdate = TRUE;
-	else
-		bNeedsUpdate = FALSE;
+	gboolean bNeedsUpdate = (cPreviousVersion == NULL || strcmp (cPreviousVersion, cVersion) != 0);
 	
 	g_free (cPreviousVersion);
 	return bNeedsUpdate;
@@ -364,7 +545,7 @@ void cairo_dock_remove_group_key_from_conf_file (GKeyFile *pKeyFile, const gchar
 
 gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cNewGroupName)
 {
-	if (g_key_file_has_group (pKeyFile, cNewGroupName))
+	if (! g_key_file_has_group (pKeyFile, cGroupName))
 		return FALSE;
 	
 	gchar **pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, NULL, NULL);

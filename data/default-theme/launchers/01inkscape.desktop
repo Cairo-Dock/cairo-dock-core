@@ -1,21 +1,30 @@
-#!en
+#2.3.1~0alpha0
 
+#[gtk-about]
 [Desktop Entry]
+
+#F[Launcher]
+frame_maininfo=
+
+#d+ Name of the container it belongs to:
+Container=Graphics
+
 #s Launcher's name :
-Name=Inkscape
+Name=
 #s Command to launch on click :
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
-Exec=inkscape 
-#S Image's name or path :
-Icon=inkscape
-#d Name of the container it belongs to:
-#{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
-Container=Graphics
+Exec=
+
+#F[Display]
+frame_display=
+
+#S+ Image's name or path :
+Icon=
+
 
 #X[Extra parameters]
 frame_extra=
-#f[0;100] Order you want for this launcher among the others:
-Order=-1.6361083984375
+
 #b Prevent this launcher from stealing appli from taskbar ?
 #{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate=false
@@ -25,68 +34,15 @@ prevent inhibate=false
 StartupWMClass=
 
 #b Run in a terminal ?
-#{It will use 'xterm'.}
 Terminal=false
 
 #i-[0;16] Only show in this specific viewport
 #{If '0' the launcher will be displayed on every viewport.}
 ShowOnViewport=0
 
-Nb subicons=0
+#f[0;100] Order you want for this launcher among the others:
+Order=0.0513916015625
 
-Renderer=
+Type=0
 
-Base URI=
-Is mounting point=false
-
-Version=1.0
-GenericName=Vector Graphics Editor
-X-GNOME-FullName=Inkscape Vector Graphics Editor
-X-GNOME-FullName[ar]=إنكسكايب محرر الرسومات الشعاعية
-X-GNOME-FullName[be]=Рэдактар вэктарнай ґрафікі Inkscape
-X-GNOME-FullName[bg]=Inkscape илюстратор за векторна графика
-X-GNOME-FullName[br]=Inkscape Embanner kevregadoù sturiadel
-X-GNOME-FullName[ca]=Editor de gràfics vectorials Inkscape
-X-GNOME-FullName[cs]=Inkscape - editor vektorové grafiky
-X-GNOME-FullName[de]=Inkscape SVG-Vektorgrafik-Editor
-X-GNOME-FullName[en_GB]=Inkscape Vector Graphics Editor
-X-GNOME-FullName[en_US@piglatin]=Inkscape Ectorvay Aphicsgray Editorway
-X-GNOME-FullName[eo]=Inkscape: Ilustrilo por Vektoraj Bildoj
-X-GNOME-FullName[es]=Editor de gráficos vectoriales Inkscape
-X-GNOME-FullName[et]=Inkscape, vektorgraafika redaktor
-X-GNOME-FullName[eu]=Inkscape bektore-grafikoen editorea
-X-GNOME-FullName[fi]=Inkscape vektorigrafiikkatyökalu
-X-GNOME-FullName[fr]=Éditeur d'images vectorielles SVG Inkscape
-X-GNOME-FullName[gl]=Editor de imaxes vectoriais Inkscape
-X-GNOME-FullName[he]=אינקסקייפ עורך גרפיקה וקטורית
-X-GNOME-FullName[hr]=Inkscape - program za vektorsko crtanje
-X-GNOME-FullName[hu]=Inkscape - vektorgrafikai szerkesztő
-X-GNOME-FullName[hy]=Inkscape Վեկտորային Գրաֆիկայի Խմբագիր
-X-GNOME-FullName[it]=Inkscape - Grafica vettoriale SVG
-X-GNOME-FullName[ja]=Inkscape ベクターグラフィックエディタ
-X-GNOME-FullName[km]=កម្មវិធី​កែ​សម្រួល​ក្រាហ្វិក​វ៉ិចទ័រ Inkscape
-X-GNOME-FullName[ko]=Inkscape 벡터 그래픽 편집기
-X-GNOME-FullName[lt]=Inkscape vektorinės grafikos rengyklė
-X-GNOME-FullName[nb]=Inkscape vektor-tegneprogram
-X-GNOME-FullName[nl]=Inkscape SVG-vector-illustrator
-X-GNOME-FullName[pl]=Inkscape - edytor grafiki wektorowej
-X-GNOME-FullName[pt]=Inkscape Editor de Imagem Vectorial
-X-GNOME-FullName[pt_BR]=Editor de Imagens Vetoriais Inkscape
-X-GNOME-FullName[ro]=Inkscape editor de grafică vectorială
-X-GNOME-FullName[ru]=Редактор векторной графики Inkscape
-X-GNOME-FullName[sk]=Inkscape - editor vektorovej grafiky
-X-GNOME-FullName[sl]=Urejevalnik vektorskih slik Inkscape
-X-GNOME-FullName[sr]=Inkscape програм за векторско цртање
-X-GNOME-FullName[sr@latin]=Inkscape program za vektorsko crtanje
-X-GNOME-FullName[sv]=Vektorillustratören Inkscape
-X-GNOME-FullName[tr]=Inkscape Vektörel Grafik Düzenleyici
-X-GNOME-FullName[uk]=Редактор векторної графіки Inkscape
-X-GNOME-FullName[vi]=Inkscape - Trình Xử lý Ảnh Véc-tơ
-X-GNOME-FullName[zh_CN]=Inkscape矢量绘图软件
-X-GNOME-FullName[zh_TW]=Inkscape 向量繪圖軟體
-Comment=Create and edit Scalable Vector Graphics images
-Type=Application
-Categories=Graphics;VectorGraphics;GTK;
-MimeType=image/svg+xml;image/svg+xml-compressed;
-TryExec=inkscape
-StartupNotify=true
+Origin=/usr/share/applications/inkscape.desktop

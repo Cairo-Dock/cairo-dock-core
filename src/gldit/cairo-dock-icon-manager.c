@@ -92,8 +92,8 @@ void cairo_dock_free_icon (Icon *icon)
 		g_source_remove (icon->iSidLoadImage);
 	if (icon->iSidDoubleClickDelay != 0)
 		g_source_remove (icon->iSidDoubleClickDelay);
-	if (icon->cBaseURI != NULL)
-		cairo_dock_fm_remove_monitor_full (icon->cBaseURI, (icon->pSubDock != NULL), (icon->iVolumeID != 0 ? icon->cCommand : NULL));
+	///if (icon->cBaseURI != NULL)
+	///	cairo_dock_fm_remove_monitor_full (icon->cBaseURI, (icon->pSubDock != NULL), (icon->iVolumeID != 0 ? icon->cCommand : NULL));
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 		cairo_dock_unregister_appli (icon);
 	else if (icon->cClass != NULL)  // c'est un inhibiteur.
@@ -129,7 +129,7 @@ void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUse
  /// ICONS PER DESKTOP ///
 /////////////////////////
 
-static CairoDock *_cairo_dock_insert_floating_icon_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate)
+static CairoDock *_cairo_dock_insert_floating_icon_in_dock (Icon *icon, CairoDock *pMainDock)
 {
 	cd_message ("%s (%s)", __func__, icon->cName);
 	g_return_val_if_fail (pMainDock != NULL, NULL);
@@ -137,23 +137,11 @@ static CairoDock *_cairo_dock_insert_floating_icon_in_dock (Icon *icon, CairoDoc
 	//\_________________ On determine dans quel dock l'inserer.
 	CairoDock *pParentDock = pMainDock;
 	g_return_val_if_fail (pParentDock != NULL, NULL);
-
-	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate);
-	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fInsertRemoveFactor, icon->fWidth, icon->fHeight, icon->cParentDockName);
-
-	if (bAnimate && cairo_dock_animation_will_be_visible (pParentDock))
-	{
-		cairo_dock_launch_animation (CAIRO_CONTAINER (pParentDock));
-	}
-	else
-	{
-		icon->fInsertRemoveFactor = 0;
-		icon->fScale = 1.;
-	}
 	
-	cairo_dock_reserve_one_icon_geometry_for_window_manager (&icon->Xid, icon, pMainDock);
-
+	//\_________________ On l'insere dans son dock parent (sans animation, puisqu'on n'anime pas non plus son enlevement).
+	cairo_dock_insert_icon_in_dock (icon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fInsertRemoveFactor, icon->fWidth, icon->fHeight, icon->cParentDockName);
+	
 	return pParentDock;
 }
 static CairoDock * _cairo_dock_detach_launcher(Icon *pIcon)
@@ -189,7 +177,7 @@ static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, Cairo
 			// check that it is in the detached list
 			if( g_list_find(s_pFloatingIconsList, icon) != NULL )
 			{
-				pParentDock = _cairo_dock_insert_floating_icon_in_dock (icon, pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				pParentDock = _cairo_dock_insert_floating_icon_in_dock (icon, pMainDock);
 				s_pFloatingIconsList = g_list_remove(s_pFloatingIconsList, icon);
 			}
 		}

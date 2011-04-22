@@ -1,4 +1,4 @@
-#2.3.1~0alpha0
+#@VERSION@
 
 #[gtk-about]
 [Desktop Entry]
@@ -7,35 +7,35 @@
 frame_maininfo=
 
 #d+ Name of the container it belongs to:
-Container=_MainDock_
+Container = 
 
 #s Sub-dock's name :
-Name=Graphics
+Name = New sub-dock
 
 
 #F[Display]
 frame_display=
 
 #Y+[Use an image;1;1;Draw sub-dock's content as emblems;0;0;Draw sub-dock's content as stack;0;0;Draw sub-dock's content inside a box;0;0] How to render the icon :
-render=0
+render = 3
 
 #S+ Image's name or path :
-Icon=applications-graphics
+Icon=
 
 
 #X[Extra parameters]
-frame_extra=
+frame_extra =
 
 #n Name of the view used for the sub-dock :/
-Renderer=
+Renderer = 
 
 #i-[0;16] Only show in this specific viewport
 #{If '0' the container will be displayed on every viewport.}
-ShowOnViewport=0
+ShowOnViewport = 0
 
 #f[0;100] Order you want for this launcher among the others:
-Order=1.3184051513671875
+Order=0
 
-group=0
+group = 0
 
-Type=1
+Type = 1

@@ -42,7 +42,6 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_mark_current_theme_as_modified
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
-///#include "cairo-dock-gui-manager.h"  // cairo_dock_trigger_refresh_launcher_gui
 #include "cairo-dock-animations.h"  // cairo_dock_launch_animation
 #include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
@@ -219,6 +218,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	//\____________ On remplit ses buffers.
 	cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pParentDock));
 	
+	//\____________ On gere son role d'inhibiteur.
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
 	if (icon->cClass != NULL)
 	{
@@ -294,8 +294,8 @@ void cairo_dock_reload_launcher (Icon *icon)
 		return ;
 	}
 	
-	//\_____________ On assure la coherence du nouveau fichier de conf.
-	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
+	//\_____________ Ensure sub-dock's name unicity.
+	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
 	{
 		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 		GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
@@ -320,17 +320,6 @@ void cairo_dock_reload_launcher (Icon *icon)
 				g_free (cUniqueName);
 			}
 			g_free (cName);
-		}
-		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon))  // pas vraiment utile mais bon.
-		{
-			gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
-			if (cCommand == NULL || *cCommand == '\0')
-			{
-				cCommand = g_strdup ("enter a command");
-				g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", cCommand);
-				cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-			}
-			g_free (cCommand);
 		}
 		
 		g_key_file_free (pKeyFile);

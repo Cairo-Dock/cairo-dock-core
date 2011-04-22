@@ -1,4 +1,4 @@
-#!en;@VERSION@
+#@VERSION@
 ######## This is the conf file of Cairo-Dock, released under the GPL.##########
 ######## It is parsed by cairo-dock to automatically generate an appropriate GUI,##########
 ######## so don't mess into it, except if you know what you're doing ! ;-)##########

@@ -21,15 +21,40 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gldi-config.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-manager.h"
+#include "cairo-dock-class-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-file-manager.h"
+#include "cairo-dock-file-manager.h"  // g_iDesktopEnv
+#include "cairo-dock-desktop-file-factory.h"  // cairo_dock_update_launcher_key_file
 #include "cairo-dock-launcher-factory.h"
 
 extern gchar *g_cCurrentLaunchersPath;
 extern CairoDockDesktopEnv g_iDesktopEnv;
+
+/*
+insert new desktop file -> make a new user desktop file, set the path and set all other params to NULL
+load user desktop file
+
+insert new custom launcher -> make a new user desktop file, set path to NULL and set other params to default values
+load user desktop file
+
+load a user desktop file -> get the path + internal params (order, etc)
+if path not NULL: check path, or search based on the filename
+if not found: search for alternative desktop files
+ -> class
+get common data from the user desktop file
+if class is NULL: try to guess the class from Exec+StartupWMClass
+ -> class2 -> register -> class
+if class not NULL: get data from the class
+
+register class -> get the class from Exec+StartupWMClass -> make a class
+get other params (Name, Icon, Exec, Path, MimeType, StartupWMClass, Terminal, Unity Menu)
+insert in table
+return class
+*/
 
 gboolean cairo_dock_remove_version_from_string (gchar *cString)
 {
@@ -56,114 +81,6 @@ gboolean cairo_dock_remove_version_from_string (gchar *cString)
 	return FALSE;
 }
 
-void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
-{
-	// plusieurs cas sont possibles :
-	// Exec=toto
-	// Exec=toto-1.2
-	// Exec=toto -x -y
-	// Exec=/path/to/toto -x -y
-	// Exec=gksu nautilus /
-	// Exec=gksu --description /usr/share/applications/synaptic.desktop /usr/sbin/synaptic
-	// Exec=wine "C:\Program Files\Starcraft\Starcraft.exe"
-	// Exec=wine "/path/to/prog.exe"
-	// Exec=env WINEPREFIX="/home/fab/.wine" wine "C:\Program Files\Starcraft\Starcraft.exe"
-	g_free (icon->cClass);
-	if (icon->cCommand != NULL && icon->cBaseURI == NULL)
-	{
-		if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
-		{
-			gchar *cDefaultClass = g_ascii_strdown (icon->cCommand, -1);
-			gchar *str, *cClass = cDefaultClass;
-			
-			if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0)  // on prend la fin .
-			{
-				while (cClass[strlen(cClass)-1] == ' ')  // par securite on enleve les espaces en fin de ligne.
-					cClass[strlen(cClass)-1] = '\0';
-				str = strchr (cClass, ' ');  // on cherche le premier espace.
-				if (str != NULL)  // on prend apres.
-				{
-					while (*str == ' ')
-						str ++;
-					cClass = str;
-				}  // la on a vire le gksu.
-				if (*cClass == '-')  // option, on prend le dernier argument de la commande.
-				{
-					str = strrchr (cClass, ' ');  // on cherche le dernier espace.
-					if (str != NULL)  // on prend apres.
-						cClass = str + 1;
-				}
-				else  // on prend le premier argument.
-				{
-					str = strchr (cClass, ' ');  // on cherche le premier espace.
-					if (str != NULL)  // on vire apres.
-						*str = '\0';
-				}
-				
-				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
-				if (str != NULL)  // on prend apres.
-					cClass = str + 1;
-			}
-			else if ((str = g_strstr_len (cClass, -1, "wine ")) != NULL)
-			{
-				cClass = str;  // on met deja la classe a "wine", c'est mieux que rien.
-				*(str+4) = '\0';
-				str += 5;
-				while (*str == ' ')  // on enleve les espaces supplementaires.
-					str ++;
-				gchar *exe = g_strstr_len (str, -1, ".exe");  // on cherche a isoler le nom de l'executable, puisque wine l'utilise dans le res_name.
-				if (exe)
-				{
-					*exe = '\0';  // vire l'extension par la meme occasion.
-					gchar *slash = strrchr (str, '\\');
-					if (slash)
-						cClass = slash+1;
-					else
-					{
-						slash = strrchr (str, '/');
-						if (slash)
-							cClass = slash+1;
-						else
-							cClass = str;
-					}
-				}
-				cd_debug ("  special case : wine application => class = '%s'", cClass);
-			}
-			else
-			{
-				while (*cClass == ' ')  // par securite on enleve les espaces en debut de ligne.
-					cClass ++;
-				str = strchr (cClass, ' ');  // on cherche le premier espace.
-				if (str != NULL)  // on vire apres.
-					*str = '\0';
-				str = strrchr (cClass, '/');  // on cherche le dernier '/'.
-				if (str != NULL)  // on prend apres.
-					cClass = str + 1;
-				str = strchr (cClass, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
-				if (str != NULL && str != cClass)
-					*str = '\0';
-			}
-			
-			if (*cClass != '\0')
-				icon->cClass = g_strdup (cClass);
-			else
-				icon->cClass = NULL;
-			g_free (cDefaultClass);
-		}
-		else
-		{
-			icon->cClass = g_ascii_strdown (cStartupWMClass, -1);
-			gchar *str = strchr (icon->cClass, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
-			if (str != NULL)
-				*str = '\0';
-		}
-		cairo_dock_remove_version_from_string (icon->cClass);
-		cd_debug ("class of the launcher %s : '%s'", icon->cName, icon->cClass);
-	}
-	else
-		icon->cClass = NULL;
-}
-
 #define _print_error(cDesktopFileName, erreur)\
 	if (erreur != NULL) {\
 		cd_warning ("while trying to load %s : %s", cDesktopFileName, erreur->message);\
@@ -171,120 +88,72 @@ void cairo_dock_set_launcher_class (Icon *icon, const gchar *cStartupWMClass)
 		erreur = NULL; }
 CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon, gchar **cSubDockRendererName)
 {
+	g_print ("%s (%s)\n", __func__, cDesktopFileName);
 	CairoDockIconTrueType iType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
+	
+	//\__________________ open the desktop file
 	GError *erreur = NULL;
 	gchar *cDesktopFilePath = (*cDesktopFileName == '/' ? g_strdup (cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cDesktopFileName));
-	//g_print ("%s (%s)\n", __func__, cDesktopFilePath);
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
 	g_return_val_if_fail (pKeyFile != NULL, iType);
 	
 	g_free (icon->cDesktopFileName);
 	icon->cDesktopFileName = g_strdup (cDesktopFileName);
-
-	g_free (icon->cFileName);
-	icon->cFileName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", &erreur);
-	_print_error( cDesktopFileName, erreur);
-	if (icon->cFileName != NULL && *icon->cFileName == '\0')
-	{
-		g_free (icon->cFileName);
-		icon->cFileName = NULL;
-	}
 	
-	g_free (icon->cName);
-	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, &erreur);
-	_print_error( cDesktopFileName, erreur);
-	if (icon->cName != NULL && *icon->cName == '\0')
-	{
-		g_free (icon->cName);
-		icon->cName = NULL;
-	}
-
-	g_free (icon->cCommand);
-	icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", &erreur);
-	_print_error( cDesktopFileName, erreur);
-	if (icon->cCommand != NULL && *icon->cCommand == '\0')
-	{
-		g_free (icon->cCommand);
-		icon->cCommand = NULL;
-	}
+	gboolean bNeedUpdate = FALSE;
 	
-	if (icon->cCommand != NULL)
+	//\__________________ get the type of the icon
+	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Type", NULL))
 	{
-		g_free (icon->cWorkingDirectory);
-		icon->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
-		if (icon->cWorkingDirectory != NULL && *icon->cWorkingDirectory == '\0')
+		iType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Type", NULL);
+	}
+	else  // old desktop file
+	{
+		bNeedUpdate = TRUE;
+		
+		gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+		gboolean bIsContainer;
+		if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Is container", NULL))
+			bIsContainer = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is container", NULL);
+		else
+			bIsContainer = (g_key_file_get_integer (pKeyFile, "Desktop Entry", "Nb subicons", NULL) != 0);
+		
+		if (bIsContainer)
 		{
-			g_free (icon->cWorkingDirectory);
-			icon->cWorkingDirectory = NULL;
+			iType = CAIRO_DOCK_ICON_TYPE_CONTAINER;
 		}
+		else if (cCommand == NULL || *cCommand == '\0')
+		{
+			iType = CAIRO_DOCK_ICON_TYPE_SEPARATOR;
+		}
+		else
+		{
+			iType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
+		}
+		g_key_file_set_integer (pKeyFile, "Desktop Entry", "Type", iType);
+		g_free (cCommand);
 	}
 	
+	//\__________________ get internal params
 	icon->fOrder = g_key_file_get_double (pKeyFile, "Desktop Entry", "Order", &erreur);
-	_print_error( cDesktopFileName, erreur);
+	_print_error (cDesktopFileName, erreur);
 
 	g_free (icon->cParentDockName);
 	icon->cParentDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", &erreur);
-	_print_error( cDesktopFileName, erreur);
+	_print_error (cDesktopFileName, erreur);
 	if (icon->cParentDockName == NULL || *icon->cParentDockName == '\0')
 	{
 		g_free (icon->cParentDockName);
 		icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
 	}
 	
-	gboolean bIsContainer = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is container", &erreur);
-	if (erreur != NULL)
-	{
-		gint iNbSubIcons = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Nb subicons", NULL);
-		if (iNbSubIcons != 0)
-			bIsContainer = TRUE;
-		g_error_free (erreur);
-		erreur = NULL;
-	}
-	
-	if (bIsContainer && icon->cName != NULL)
+	if (iType == CAIRO_DOCK_ICON_TYPE_CONTAINER)
 	{
 		*cSubDockRendererName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Renderer", NULL);
 		icon->iSubdockViewType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "render", NULL);  // on a besoin d'un entier dans le panneau de conf pour pouvoir degriser des options selon le rendu choisi. De plus c'est utile aussi pour Animated Icons...
-		iType = CAIRO_DOCK_ICON_TYPE_CONTAINER;
 	}
 	else
 		*cSubDockRendererName = NULL;
-
-	gboolean bPreventFromInhibiting = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
-	if (bPreventFromInhibiting)
-	{
-		g_free (icon->cClass);
-		icon->cClass = NULL;
-	}
-	else
-	{
-		gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
-		cairo_dock_set_launcher_class (icon, cStartupWMClass);
-		g_free (cStartupWMClass);
-	}
-	
-	gboolean bExecInTerminal = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL);
-	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
-	{
-		gchar *cOldCommand = icon->cCommand;
-		const gchar *cTerm = g_getenv ("COLORTERM");
-		if (cTerm != NULL && strlen (cTerm) > 1)  // on filtre les cas COLORTERM=1 ou COLORTERM=y. ce qu'on veut c'est le nom d'un terminal.
-			icon->cCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cOldCommand);
-		else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-			icon->cCommand = g_strdup_printf ("gnome-terminal -e \"%s\"", cOldCommand);
-		else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
-			icon->cCommand = g_strdup_printf ("xfce4-terminal -e \"%s\"", cOldCommand);
-		else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
-			icon->cCommand = g_strdup_printf ("konsole -e \"%s\"", cOldCommand);
-		else if (g_getenv ("TERM") != NULL)
-			icon->cCommand = g_strdup_printf ("%s -e \"%s\"", g_getenv ("TERM"), cOldCommand);
-		else
-			icon->cCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
-		g_free (cOldCommand);
-	}
-	
-	gsize length = 0;
-	icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
 	
 	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "group", NULL))
 	{
@@ -295,10 +164,141 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	if (iSpecificDesktop != 0)
 		cairo_dock_set_specified_desktop_for_icon (icon, iSpecificDesktop);
 	
-	if (icon->cCommand == NULL && icon->cName == NULL && ! bIsContainer)
-		iType = CAIRO_DOCK_ICON_TYPE_SEPARATOR;
+	//\__________________ get common data as defined by the user.
+	g_free (icon->cFileName);
+	icon->cFileName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", &erreur);
+	_print_error (cDesktopFileName, erreur);
+	if (icon->cFileName != NULL && *icon->cFileName == '\0')
+	{
+		g_free (icon->cFileName);
+		icon->cFileName = NULL;
+	}
+	
+	g_free (icon->cName);
+	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, &erreur);
+	_print_error (cDesktopFileName, erreur);
+	if (icon->cName != NULL && *icon->cName == '\0')
+	{
+		g_free (icon->cName);
+		icon->cName = NULL;
+	}
+	
+	g_free (icon->cCommand);
+	icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", &erreur);
+	_print_error (cDesktopFileName, erreur);
+	if (icon->cCommand != NULL && *icon->cCommand == '\0')
+	{
+		g_free (icon->cCommand);
+		icon->cCommand = NULL;
+	}
+	
+	if (icon->pMimeTypes != NULL)
+	{
+		g_strfreev (icon->pMimeTypes);
+		icon->pMimeTypes = NULL;
+	}
+	
+	g_free (icon->cWorkingDirectory);
+	icon->cWorkingDirectory = NULL;
+	
+	//\__________________ in the case of a launcher, bind it to a class, and get the additionnal params.
+	if (iType == CAIRO_DOCK_ICON_TYPE_LAUNCHER)
+	{
+		// get the origin of the desktop file.
+		gchar *cClass = NULL;
+		gsize length = 0;
+		gchar **pOrigins = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "Origin", &length, NULL);
+		if (pOrigins != NULL)  // some origins are provided, try them one by one.
+		{
+			int i;
+			for (i = 0; pOrigins[i] != NULL; i++)
+			{
+				cClass = cairo_dock_register_class (pOrigins[i]);
+				if (cClass != NULL)  // neat, this origin is a valid one, let's use it from now.
+				{
+					break;
+				}
+			}
+			g_strfreev (pOrigins);
+		}
+
+		// if no origin class could be found, try to guess the class
+		gchar *cFallbackClass = NULL;
+		if (cClass == NULL)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
+		{
+			gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
+			cFallbackClass = cairo_dock_guess_class (icon->cCommand, cStartupWMClass);
+			cClass = cairo_dock_register_class (cFallbackClass);
+			g_free (cStartupWMClass);
+		}
+		
+		// get common data from the class
+		g_free (icon->cClass);
+		if (cClass != NULL)
+		{
+			icon->cClass = cClass;
+			g_free (cFallbackClass);
+			cairo_dock_set_data_from_class (cClass, icon);
+		}
+		else  // no class found, it's maybe an old launcher, take the remaining common params from the user desktop file.
+		{
+			icon->cClass = cFallbackClass;
+			gsize length = 0;
+			icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
+			
+			if (icon->cCommand != NULL)
+			{
+				icon->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
+				if (icon->cWorkingDirectory != NULL && *icon->cWorkingDirectory == '\0')
+				{
+					g_free (icon->cWorkingDirectory);
+					icon->cWorkingDirectory = NULL;
+				}
+			}
+		}
+		
+		
+		// take into account the execution in a terminal.
+		gboolean bExecInTerminal = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL);
+		if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
+		{
+			gchar *cOldCommand = icon->cCommand;
+			const gchar *cTerm = g_getenv ("COLORTERM");
+			if (cTerm != NULL && strlen (cTerm) > 1)  // on filtre les cas COLORTERM=1 ou COLORTERM=y. ce qu'on veut c'est le nom d'un terminal.
+				icon->cCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cOldCommand);
+			else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
+				icon->cCommand = g_strdup_printf ("gnome-terminal -e \"%s\"", cOldCommand);
+			else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
+				icon->cCommand = g_strdup_printf ("xfce4-terminal -e \"%s\"", cOldCommand);
+			else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
+				icon->cCommand = g_strdup_printf ("konsole -e \"%s\"", cOldCommand);
+			else if (g_getenv ("TERM") != NULL)
+				icon->cCommand = g_strdup_printf ("%s -e \"%s\"", g_getenv ("TERM"), cOldCommand);
+			else
+				icon->cCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
+			g_free (cOldCommand);
+		}
+		
+		gboolean bPreventFromInhibiting = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE si la cle n'existe pas.
+		if (bPreventFromInhibiting)
+		{
+			g_free (icon->cClass);
+			icon->cClass = NULL;
+		}
+	}
+	
+	//\__________________ update the key file if necessary.
+	if (! bNeedUpdate)
+		bNeedUpdate = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
+	if (bNeedUpdate)
+	{
+		cairo_dock_update_launcher_key_file (pKeyFile,
+			cDesktopFilePath,
+			iType == CAIRO_DOCK_ICON_TYPE_LAUNCHER ? CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER : iType == CAIRO_DOCK_ICON_TYPE_CONTAINER ? CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER : CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR);
+	}
 	
 	g_key_file_free (pKeyFile);
+	g_free (cDesktopFilePath);
 	return iType;
 }
 

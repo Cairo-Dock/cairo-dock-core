@@ -90,15 +90,12 @@ typedef enum {
 // Applis manager : core
 void cairo_dock_unregister_appli (Icon *icon);
 
-/** Start the applications manager. It will load all the applis, and keep monitoring them. If necessary, it will insert them into the dock.
+/** Start the applications manager. It will load all the applis, and keep monitoring them. If enabled, it will insert them into the dock.
 *@param pDock the main dock
 */
 void cairo_dock_start_applications_manager (CairoDock *pDock);
 
-void cairo_dock_reset_applications_manager (void);
-
-
-Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock);
+///void cairo_dock_reset_applications_manager (void);
 
 
 

@@ -109,7 +109,7 @@ void gldi_free_all (void)
 	gldi_unload_managers ();
 	
 	// reset specific managers.
-	cairo_dock_reset_applications_manager ();  // y compris les applis detachees ou blacklistees.
+	///cairo_dock_reset_applications_manager ();  // y compris les applis detachees ou blacklistees.
 	
 	cairo_dock_deactivate_all_modules ();  // y compris les modules qui n'ont pas d'icone.
 	

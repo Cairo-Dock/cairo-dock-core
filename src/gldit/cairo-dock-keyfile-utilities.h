@@ -40,21 +40,43 @@ GKeyFile *cairo_dock_open_key_file (const gchar *cConfFilePath);
 */
 void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePath);
 
+/** Merge the values of a key-file into another one. Keys are filtered by an identifier on the original key-file.
+*@param pOriginalKeyFile an up-to-date key-file with old values
+*@param pReplacementKeyFile an old key-file containing values we want to use
+*@param iIdentifier a character to filter the keys, or 0.
+*/
+void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gchar iIdentifier);
 
-void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, const gchar *cShareDataDirPath, gboolean bUseFileKeys, const gchar *cTemplateFileName);
+/** Merge the values of a conf-file into another one. Keys are filtered by an identifier on the original conf-file.
+*@param cConfFilePath an up-to-date conf-file with old values
+*@param cReplacementConfFilePath an old conf-file containing values we want to use
+*@param iIdentifier a character to filter the keys, or 0.
+*/
+void cairo_dock_merge_conf_files (const gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier);
+
+
+/** Update a conf-file, by merging values from a given key-file into a template conf-file.
+*@param cConfFilePath path to the conf-file to update.
+*@param pKeyFile a key-file with correct values, but old comments and possibly missing or old keys. It is not modified by the function.
+*@param cDefaultConfFilePath a template conf-file.
+*@param bUpdateKeys whether to remove old keys (hidden and persistent) or not.
+*/
+void cairo_dock_upgrade_conf_file_full (const gchar *cConfFilePath, GKeyFile *pKeyFile, const gchar *cDefaultConfFilePath, gboolean bUpdateKeys);
+#define cairo_dock_upgrade_conf_file(cConfFilePath, pKeyFile, cDefaultConfFilePath) cairo_dock_upgrade_conf_file_full (cConfFilePath, pKeyFile, cDefaultConfFilePath, TRUE)
+
+// deprecated	
+/**void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, const gchar *cShareDataDirPath, gboolean bUseFileKeys, const gchar *cTemplateFileName);
 #define cairo_dock_flush_conf_file(pKeyFile, cConfFilePath, cShareDataDirPath, cTemplateFileName) cairo_dock_flush_conf_file_full (pKeyFile, cConfFilePath, cShareDataDirPath, TRUE, cTemplateFileName)
 
-void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier);
-
-void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier);
+// deprecated	
 void cairo_dock_replace_keys_by_identifier (const gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier);
-
+*/
 
 /** Get the version of a conf file. The version is written on the first line of the file, as a comment.
 */
 void cairo_dock_get_conf_file_version (GKeyFile *pKeyFile, gchar **cConfFileVersion);
 
-/** Say if a conf file's version mismatches a giver version.
+/** Say if a conf file's version mismatches a given version.
 */
 gboolean cairo_dock_conf_file_needs_update (GKeyFile *pKeyFile, const gchar *cVersion);
 

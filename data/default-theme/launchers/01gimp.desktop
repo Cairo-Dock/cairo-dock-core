@@ -1,21 +1,30 @@
-#!en
+#2.3.1~0alpha0
 
+#[gtk-about]
 [Desktop Entry]
+
+#F[Launcher]
+frame_maininfo=
+
+#d+ Name of the container it belongs to:
+Container=Graphics
+
 #s Launcher's name :
-Name=Gimp
+Name=
 #s Command to launch on click :
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
-Exec=gimp
-#S Image's name or path :
-Icon=gimp
-#d Name of the container it belongs to:
-#{If you write here a container's name that doesn't exist yet, a new one will be created, with this icon inside.}
-Container=Graphics
+Exec=
+
+#F[Display]
+frame_display=
+
+#S+ Image's name or path :
+Icon=
+
 
 #X[Extra parameters]
 frame_extra=
-#f[0;100] Order you want for this launcher among the others:
-Order=0.6138916015625
+
 #b Prevent this launcher from stealing appli from taskbar ?
 #{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate=false
@@ -25,128 +34,15 @@ prevent inhibate=false
 StartupWMClass=
 
 #b Run in a terminal ?
-#{It will use 'xterm'.}
 Terminal=false
 
 #i-[0;16] Only show in this specific viewport
 #{If '0' the launcher will be displayed on every viewport.}
 ShowOnViewport=0
 
-Nb subicons=0
+#f[0;100] Order you want for this launcher among the others:
+Order=-0.2298583984375
 
-Renderer=
+Type=0
 
-Base URI=
-Is mounting point=false
-
-Is container=false
-Version=1.0
-Type=Application
-GenericName=Image Editor
-GenericName[ar]=محرر صور
-GenericName[be]=Рэдактар відарысаў
-GenericName[bg]=Редактор на изображения
-GenericName[ca]=Editor d'imatges
-GenericName[ca@valencia]=Editor d'imatges
-GenericName[cs]=Editor obrázků
-GenericName[da]=Billedredigering
-GenericName[de]=Bildeditor
-GenericName[dz]=གཟུགས་བརྙན་ ཞུན་དག་པ།
-GenericName[en_CA]=Image Editor
-GenericName[en_GB]=Image Editor
-GenericName[eo]=Bilada Redaktilo
-GenericName[es]=Editor de imagen
-GenericName[et]=Pildiredaktor
-GenericName[eu]=Irudi-editorea
-GenericName[fa]=ویرایشگر تصویر
-GenericName[fi]=Kuvaeditori
-GenericName[fr]=Éditeur d'image
-GenericName[gl]=Editor de imaxes
-GenericName[gu]=ચિત્ર સંપાદક
-GenericName[hu]=Képszerkesztő
-GenericName[is]=Myndvinnsluforrit
-GenericName[it]=Editor immagine
-GenericName[ja]=画像エディタ
-GenericName[ka]=გამოსახულებების რედაქტორი
-GenericName[km]=កម្មវិធី​និពន្ធ​រូបភាព
-GenericName[ko]=이미지 편집기
-GenericName[lt]=Paveikslėlių rengyklė
-GenericName[lv]=Attēla redaktors
-GenericName[mk]=Уредник за слики
-GenericName[nb]=Bildebehandler
-GenericName[ne]=छवि सम्पादक
-GenericName[nl]=Afbeeldingsbewerker
-GenericName[nn]=Biletbehandlar
-GenericName[pa]=ਚਿੱਤਰ ਐਡੀਟਰ
-GenericName[pl]=Edytor obrazu
-GenericName[pt_BR]=Editor de Imagens
-GenericName[ru]=Редактор изображений
-GenericName[sk]=Editor obrázkov
-GenericName[sl]=Urejevalnik slik
-GenericName[sr]=Обрада слика
-GenericName[sr@latin]=Obrada slika
-GenericName[sv]=Bildredigerare
-GenericName[th]=ตัวแก้ไขภาพ
-GenericName[tr]=Resim Düzenleyici
-GenericName[tt]=Sürät Tözätkeç
-GenericName[uk]=Редактор зображень
-GenericName[vi]=Bộ biên soạn ảnh
-GenericName[xh]=UmHleli woMfanekiso
-GenericName[zh_CN]=图像编辑器
-GenericName[zh_HK]=圖片編輯器
-GenericName[zh_TW]=圖片編輯器
-Comment=Create images and edit photographs
-Comment[ar]=أنشئ صورا وحرّر لقطات
-Comment[be]=Стварэньне відарысаў і рэдагаваньне фатаграфій
-Comment[bg]=Създаване на изображения и редакция на снимки
-Comment[ca]=Creeu imatges i editeu fotografies
-Comment[ca@valencia]=Creeu imatges i editeu fotografies
-Comment[cs]=Vytvářet obrázky a upravovat fotografie
-Comment[da]=Opret billeder og redigér fotografier
-Comment[de]=Bilder erstellen und Fotografien bearbeiten
-Comment[dz]=གཟུགས་བརྙན་ཚུ་ གསར་བསྐྲུན་འབད་ནི་དང་ དཔར་ཚུ་ཞུན་དག་འབད།
-Comment[en_CA]=Create images and edit photographs
-Comment[en_GB]=Create images and edit photographs
-Comment[eo]=Kreu bildojn aŭ redaktu fotojn
-Comment[es]=Cree imágenes y edite fotografías
-Comment[et]=Loo pilte ja redigeeri fotosid
-Comment[eu]=Sortu irudiak eta editatu argazkiak
-Comment[fi]=Luo kuvia ja muokkaa valokuvia
-Comment[fr]=Créer des images et modifier des photographies
-Comment[gl]=Crear imaxes e editar fotografías
-Comment[gu]=ચિત્રો બનાવો અને ફોટાઓમાં ફેરફાર કરો
-Comment[hu]=Képek létrehozása és fotók szerkesztése
-Comment[it]=Crea immagini o modifica fotografie
-Comment[ja]=画像の作成と写真の編集
-Comment[km]=បង្កើត​រូបភាព និង កែសម្រួល​រូបថត
-Comment[ko]=이미지를 만들거나 사진을 편집합니다.
-Comment[lt]=Kurti paveikslėlius ir redaguoti fotografijas
-Comment[lv]=Attēlu vai fotogrāfiju izveide un koriģēšana
-Comment[mk]=Направи слики и уреди фотографии
-Comment[nb]=Lag bilder og rediger fotografier
-Comment[ne]=छवि सिर्जना गर्नुहोस् र फोटोग्राफ सम्पादन गर्नुहोस्
-Comment[nl]=Afbeeldingen of foto's aanmaken en bewerken
-Comment[nn]=Lag teikningar eller rediger foto
-Comment[pa]=ਚਿੱਤਰ ਬਣਾਓ ਅਤੇ ਤਸਵੀਰਾਂ ਸੋਧੋ
-Comment[pl]=Program do tworzenia oraz obróbki obrazów i fotografii
-Comment[pt_BR]=Crie e edite imagens ou fotografias
-Comment[ru]=Создание изображений и редактирование фотографий
-Comment[sl]=Ustvari slike in uredi fotografije
-Comment[sr]=Направите слике и уредите фотографије
-Comment[sr@latin]=Napravite slike i uredite fotografije
-Comment[sv]=Skapa bilder och redigera fotografier
-Comment[tr]=Resim ya da fotoğrafları oluşturun ve düzenleyin
-Comment[uk]=Створення зображень та редагування фотографій
-Comment[vi]=Tạo và biên soạn ảnh hay ảnh chụp
-Comment[zh_CN]=创建图像或编辑照片
-Comment[zh_HK]=建立圖像與編輯照片
-Comment[zh_TW]=建立圖像與編輯照片
-TryExec=gimp-2.6
-Categories=Graphics;2DGraphics;RasterGraphics;GTK;
-X-GNOME-Bugzilla-Bugzilla=GNOME
-X-GNOME-Bugzilla-Product=GIMP
-X-GNOME-Bugzilla-Component=General
-X-GNOME-Bugzilla-Version=2.6.0
-X-GNOME-Bugzilla-OtherBinaries=gimp-2.6
-StartupNotify=true
-MimeType=application/postscript;application/pdf;image/bmp;image/g3fax;image/gif;image/x-fits;image/pcx;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-psd;image/x-sgi;image/x-tga;image/x-xbitmap;image/x-xwindowdump;image/x-xcf;image/x-compressed-xcf;image/tiff;image/jpeg;image/x-psd;image/png;image/x-icon;image/x-xpixmap;image/svg+xml;image/x-wmf;
+Origin=/usr/share/applications/gimp.desktop;inkscape.desktop;f-spot.desktop

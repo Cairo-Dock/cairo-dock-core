@@ -125,7 +125,8 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 			}
 			else
 			{
-				cairo_dock_replace_keys_by_identifier (cNewConfFilePath, g_cConfFile, '+');
+				///cairo_dock_replace_keys_by_identifier (cNewConfFilePath, g_cConfFile, '+');
+				cairo_dock_merge_conf_files (cNewConfFilePath, g_cConfFile, '+');
 			}
 			g_free (cNewConfFilePath);
 			
@@ -183,6 +184,8 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	
 	g_string_printf (sCommand, "rm -f \"%s/last-modif\"", cNewThemePath);
 	r = system (sCommand->str);
+	
+	/// TODO: draw the main dock into the "preview" file...
 	
 	//\___________________ Le theme n'est plus en etat 'modifie'.
 	g_free (cNewThemePath);
@@ -332,7 +335,8 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	else
 	{
 		gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
-		cairo_dock_replace_keys_by_identifier (g_cConfFile, cNewConfFilePath, '+');
+		///cairo_dock_replace_keys_by_identifier (g_cConfFile, cNewConfFilePath, '+');
+		cairo_dock_merge_conf_files (g_cConfFile, cNewConfFilePath, '+');
 		g_free (cNewConfFilePath);
 	}
 	
@@ -469,7 +473,8 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 			}
 			else
 			{
-				cairo_dock_replace_keys_by_identifier (cConfFilePath, cNewConfFilePath, '+');
+				///cairo_dock_replace_keys_by_identifier (cConfFilePath, cNewConfFilePath, '+');
+				cairo_dock_merge_conf_files (cConfFilePath, cNewConfFilePath, '+');
 			}
 			g_free (cNewConfFilePath);
 			g_free (cConfFilePath);

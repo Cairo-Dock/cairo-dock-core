@@ -92,7 +92,7 @@ static Window _cairo_dock_get_parent_window (Window Xid)
 	return xParentWindow;
 }
 
-static gchar *_cairo_dock_get_appli_command (Window Xid)
+/*static gchar *_cairo_dock_get_appli_command (Window Xid)
 {
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
@@ -116,9 +116,9 @@ static gchar *_cairo_dock_get_appli_command (Window Xid)
 	if (pPidBuffer != NULL)
 		XFree (pPidBuffer);
 	return cCommand;
-}
+}*/
 
-Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
+Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 {
 	//g_print ("%s (%d)\n", __func__, Xid);
 	if (s_XDisplay == NULL)
@@ -274,7 +274,7 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	
 	//\__________________ On renseigne les infos en provenance de X.
 	icon->cName = (cName ? cName : g_strdup (cClass));
-	icon->cClass = cClass;
+	icon->cClass = cClass;  // we'll register the class during the loading of the icon, since it can take some time, and we don't really need the class params right now.
 	icon->bIsHidden = bIsHidden;
 	icon->bIsMaximized = bIsMaximized;
 	icon->bIsFullScreen = bIsFullScreen;
@@ -294,7 +294,7 @@ Icon * cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	icon->windowGeometry.width = iWidthExtent;
 	icon->windowGeometry.height = iHeightExtent;
 	
-	cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);
+	///cairo_dock_set_xwindow_mask (Xid, PropertyChangeMask | StructureNotifyMask);
 
 	return icon;
 }

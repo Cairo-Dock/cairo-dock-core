@@ -27,7 +27,7 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-desktop-file-factory.h This class handles the creation of desktop files, which are group/key pair files used by Cairo-Dock to store information about icons : launchers and files, separators, sub-docks.
+*@file cairo-dock-desktop-file-factory.h This class handles the creation and update of desktop files, which are group/key pair files used by Cairo-Dock to store information about icons : launchers, separators, sub-docks.
 */
 
 typedef enum {
@@ -63,7 +63,7 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur);
 
 
-void cairo_dock_update_launcher_desktop_file (gchar *cDesktopFilePath, CairoDockDesktopFileType iLauncherType);
+void cairo_dock_update_launcher_key_file (GKeyFile *pKeyFile, const gchar *cDesktopFilePath, CairoDockDesktopFileType iLauncherType);
 
 
 void cairo_dock_write_container_name_in_conf_file (Icon *pIcon, const gchar *cParentDockName);

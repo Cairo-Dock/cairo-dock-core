@@ -394,16 +394,6 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 		//g_print ("on presente %s...\n", pIcon->cDesktopFileName);
 		gchar *cConfFilePath = (*pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName));
 		
-		// update launcher's conf file to get possible new keys/comments.
-		CairoDockDesktopFileType iLauncherType;
-		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
-			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR;
-		else if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon))
-			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER;
-		else
-			iLauncherType = CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER;
-		cairo_dock_update_launcher_desktop_file (cConfFilePath, iLauncherType);
-		
 		// build launcher's widgets
 		pDataGarbage = g_ptr_array_new ();
 		s_pCurrentLauncherWidget = cairo_dock_build_conf_file_widget (cConfFilePath,

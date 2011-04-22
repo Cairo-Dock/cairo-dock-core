@@ -218,7 +218,6 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 					///cairo_dock_show_dialog_with_question (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
 					cairo_dock_show_dialog_full (_("Do you want to keep this setting?\nIn 15 seconds, the previous setting will be restored."), pIcon, CAIRO_CONTAINER (g_pMainDock), 15e3, NULL, NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, g_new0 (gboolean, 1), (GFreeFunc)_on_free_metacity_dialog);
 				}
-				
 			}
 			else  // sinon il a droit a un "message a caractere informatif".
 			{

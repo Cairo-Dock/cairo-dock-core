@@ -1,4 +1,4 @@
-#!en
+#2.3.1~0alpha0
 
 #[gtk-about]
 [Desktop Entry]
@@ -6,20 +6,21 @@
 #F[Launcher]
 frame_maininfo=
 
-#d Name of the container it belongs to:
+#d+ Name of the container it belongs to:
 Container = 
 
 #s Launcher's name :
-Name = New Launcher
+Name =
 #s Command to launch on click :
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
-Exec=your command
+Exec=
 
 #F[Display]
 frame_display=
 
-#S Image's name or path :
+#S+ Image's name or path :
 Icon=
+
 
 #X[Extra parameters]
 frame_extra =
@@ -33,16 +34,15 @@ prevent inhibate = false
 StartupWMClass = 
 
 #b Run in a terminal ?
-#{It will use 'xterm'.}
 Terminal = false
 
 #i-[0;16] Only show in this specific viewport
 #{If '0' the launcher will be displayed on every viewport.}
 ShowOnViewport = 0
 
-#f[0;100] Order you want for this launcher among the others:
+#f+[0;100] Order you want for this launcher among the others:
 Order=0
 
-Is container = false
+Type = 0
 
-Renderer = 
+Origin =
