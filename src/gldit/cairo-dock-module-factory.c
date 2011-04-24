@@ -32,6 +32,7 @@
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
+#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-X-manager.h"  // g_desktopGeometry
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
@@ -221,43 +222,6 @@ gchar *cairo_dock_check_module_conf_dir (CairoDockModule *pModule)
 		pModule->cConfFilePath = g_strdup_printf ("%s/%s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
 	
 	return cUserDataDirPath;
-}
-
-gchar *cairo_dock_check_module_conf_file (CairoDockVisitCard *pVisitCard)
-{
-	if (pVisitCard->cConfFileName == NULL)
-		return NULL;
-	
-	int r;
-	gchar *cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, pVisitCard->cUserDataDir);
-	if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
-	{
-		cd_message ("directory %s doesn't exist, it will be added.", cUserDataDirPath);
-		
-		gchar *command = g_strdup_printf ("mkdir -p \"%s\"", cUserDataDirPath);
-		r = system (command);
-		g_free (command);
-	}
-	
-	gchar *cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pVisitCard->cConfFileName);
-	/*if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
-	{
-		cd_message ("no conf file %s, we will take the default one", cConfFilePath);
-		gchar *command = g_strdup_printf ("cp \"%s/%s\" \"%s\"", pVisitCard->cShareDataDir, pVisitCard->cConfFileName, cConfFilePath);
-		r = system (command);
-		g_free (command);
-	}
-	
-	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // la copie ne s'est pas bien passee.
-	{
-		cd_warning ("couldn't copy %s/%s in %s; check permissions and file's existence", pVisitCard->cShareDataDir, pVisitCard->cConfFileName, cUserDataDirPath);
-		g_free (cUserDataDirPath);
-		g_free (cConfFilePath);
-		return NULL;
-	}*/
-	
-	g_free (cUserDataDirPath);
-	return cConfFilePath;
 }
 
 void cairo_dock_free_visit_card (CairoDockVisitCard *pVisitCard)
@@ -829,7 +793,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 	
 	if (module->pVisitCard->cConfFileName != NULL)  // the module has a conf file -> create an instance for each of them.
 	{
-		// check that the module's config dir exists.
+		// check that the module's config dir exists or create it.
 		gchar *cUserDataDirPath = cairo_dock_check_module_conf_dir (module);
 		if (cUserDataDirPath == NULL)
 		{
@@ -837,8 +801,9 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 			return;
 		}
 		
+		// look for conf files inside this folder, and create an instance for each of them.
 		int n = 0;
-		if (module->pVisitCard->bMultiInstance)
+		if (module->pVisitCard->bMultiInstance)  // possibly several conf files.
 		{
 			// open it
 			GError *tmp_erreur = NULL;
@@ -867,7 +832,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 			}
 			g_dir_close (dir);
 		}
-		else
+		else  // only 1 conf file possible.
 		{
 			gchar *cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, module->pVisitCard->cConfFileName);
 			if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
@@ -881,14 +846,16 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 			}
 		}
 		
-		if (n == 0)  // no conf file was present, let's copy the default one and instanciate the module with it.
+		// if no conf file was present, copy the default one and instanciate the module with it.
+		if (n == 0)  // no conf file was present.
 		{
 			gchar *cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, module->pVisitCard->cConfFileName);
-			gchar *command = g_strdup_printf ("cp \"%s\" \"%s\"", module->cConfFilePath, cConfFilePath);
+			gboolean r = cairo_dock_copy_file (module->cConfFilePath, cConfFilePath);
+			/**gchar *command = g_strdup_printf ("cp \"%s\" \"%s\"", module->cConfFilePath, cConfFilePath);
 			int r = system (command);
-			g_free (command);
+			g_free (command);*/
 			
-			if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // the copy failed.
+			if (! r)  // the copy failed.
 			{
 				g_set_error (erreur, 1, 1, "couldn't copy %s into %s; check permissions and file's existence", module->cConfFilePath, cUserDataDirPath);
 				g_free (cConfFilePath);
@@ -907,35 +874,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 	{
 		cairo_dock_instanciate_module (module, NULL);
 	}
-
-	/*g_free (module->cConfFilePath);
-	module->cConfFilePath = cairo_dock_check_module_conf_file (module->pVisitCard);
 	
-	gchar *cInstanceFilePath = NULL;
-	int j = 0;
-	do
-	{
-		if (j == 0)
-			cInstanceFilePath = g_strdup (module->cConfFilePath);  // NULL si cConfFilePath l'est.
-		else
-			cInstanceFilePath = g_strdup_printf ("%s-%d",  module->cConfFilePath, j);
-		
-		if (cInstanceFilePath != NULL && ! g_file_test (cInstanceFilePath, G_FILE_TEST_EXISTS))  // la 1ere condition est pour xxx-integration par exemple .
-		{
-			g_free (cInstanceFilePath);
-			break ;
-		}
-		
-		cairo_dock_instanciate_module (module, cInstanceFilePath);  // prend possession de 'cInstanceFilePath'.
-		
-		j ++;
-	} while (cInstanceFilePath != NULL);
-	
-	if (j == 0)
-	{
-		g_set_error (erreur, 1, 1, "%s () : no instance of module %s could be created", __func__, module->pVisitCard->cModuleName);
-		return ;
-	}*/
 	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, TRUE);
 }
 

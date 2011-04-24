@@ -49,7 +49,7 @@ visibility = 4
 #F[Views;@pkgdatadir@/icon-views.svg]
 frame_view =
 
-#n Choose the view for this dock :/
+#n+ Choose the view for this dock :/
 #{Leave it empty to use the same view as the main dock.}
 main dock view = 
 
@@ -72,3 +72,6 @@ stripes color bright = 0.933; 0.933; 0.925; 0.4
 
 #C+ Dark colour:
 stripes color dark = 0.827; 0.843; 0.811; 0.6
+
+#b+ Stretch the dock to always fill the screen
+extended = false

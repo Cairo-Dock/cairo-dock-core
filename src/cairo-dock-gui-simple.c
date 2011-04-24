@@ -37,6 +37,7 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-desktop-file-factory.h"
+#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-backends-manager.h"
@@ -193,9 +194,10 @@ static gchar * _make_simple_conf_file (void)
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
 	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
-		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
+		cairo_dock_copy_file (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
+		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
 		int r = system (cCommand);
-		g_free (cCommand);
+		g_free (cCommand);*/
 	}
 	
 	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);

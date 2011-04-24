@@ -42,7 +42,7 @@ G_BEGIN_DECLS
 * @param pDock le dock.
 * @return TRUE ssi le dock doit remplir l'ecran.
 */
-#define cairo_dock_is_extended_dock(pDock) (myDocksParam.bExtendedMode && (pDock->iRefCount == 0))
+#define cairo_dock_is_extended_dock(pDock) ((pDock)->bExtendedMode && (pDock)->iRefCount == 0)
 
 #define cairo_dock_is_hidden(pDock) ((pDock)->iRefCount == 0 && (pDock)->bAutoHide && (pDock)->fHideOffset == 1 && (!g_pHidingBackend || !g_pHidingBackend->bCanDisplayHiddenDock))
 
@@ -96,6 +96,8 @@ void cairo_dock_update_input_shape (CairoDock *pDock);
 	gtk_widget_input_shape_combine_mask (pDock->container.pWidget, NULL, 0, 0);\
 	if (pDock->fMagnitudeMax == 0.)\
 		gtk_widget_input_shape_combine_mask (pDock->container.pWidget, pDock->pShapeBitmap, 0, 0);\
+	else if (pDock->pActiveShapeBitmap != NULL)\
+		gtk_widget_input_shape_combine_mask (pDock->container.pWidget, pDock->pActiveShapeBitmap, 0, 0);\
 	} while (0)
 #define cairo_dock_set_input_shape_at_rest(pDock) do {\
 	gtk_widget_input_shape_combine_mask (pDock->container.pWidget, NULL, 0, 0);\

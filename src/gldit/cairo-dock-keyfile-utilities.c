@@ -78,7 +78,7 @@ void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePa
 // keys are filtered by the identifier on the original key-file.
 // old keys not present in pOriginalKeyFile are added
 // new keys in pOriginalKeyFile not present in pReplacementKeyFile and having valid comment are removed
-void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gchar iIdentifier)
+static void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gchar iIdentifier)
 {
 	// get the groups of the remplacement key-file.
 	GError *erreur = NULL;
@@ -137,7 +137,7 @@ void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacem
 	}
 	g_strfreev (pGroupList);
 	
-	// remove keys from the original key-file which are not in the remplacement key-file.
+	// remove keys from the original key-file which are not in the remplacement key-file, except hidden and persistent keys.
 	pGroupList = g_key_file_get_groups (pOriginalKeyFile, &length);
 	g_return_if_fail (pGroupList != NULL);
 	for (i = 0; pGroupList[i] != NULL; i ++)
@@ -154,8 +154,12 @@ void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacem
 			cKeyName = pKeyList[j];
 			if (! g_key_file_has_key (pReplacementKeyFile, cGroupName, cKeyName, NULL))
 			{
-				g_key_file_remove_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL);
-				g_key_file_remove_key (pOriginalKeyFile, cGroupName, cKeyName, NULL);
+				cComment = g_key_file_get_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL);
+				if (cComment != NULL && cComment[0] != '\0' && cComment[1] != '0')  // not hidden nor peristent
+				{
+					g_key_file_remove_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL);
+					g_key_file_remove_key (pOriginalKeyFile, cGroupName, cKeyName, NULL);
+				}
 			}
 		}
 		g_strfreev (pKeyList);

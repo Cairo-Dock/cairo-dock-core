@@ -29,6 +29,7 @@
 
 #include "config.h"
 #include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-packages.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-manager.h"
@@ -62,9 +63,10 @@ static gchar *cairo_dock_build_temporary_themes_conf_file (void)
 	}
 	
 	//\___________________ On copie le fichier de conf par defaut dedans.
-	gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes.conf", cTmpConfFile);
+	cairo_dock_copy_file (CAIRO_DOCK_SHARE_DATA_DIR"/themes.conf", cTmpConfFile);
+	/*gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes.conf", cTmpConfFile);
 	int r = system (cCommand);
-	g_free (cCommand);
+	g_free (cCommand);*/
 
 	close(fds);
 	return cTmpConfFile;

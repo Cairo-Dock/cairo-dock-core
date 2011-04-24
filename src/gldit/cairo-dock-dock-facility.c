@@ -113,7 +113,13 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 			pDock->iMaxIconHeight = 10;
 		pDock->container.fRatio = 1.;
 	}
+	
+	pDock->iActiveWidth = pDock->iActiveHeight = 0;
 	pDock->pRenderer->compute_size (pDock);
+	if (pDock->iActiveWidth == 0)
+		pDock->iActiveWidth = pDock->iMaxDockWidth;
+	if (pDock->iActiveHeight == 0)
+		pDock->iActiveHeight = pDock->iMaxDockHeight;
 	
 	double hmax = pDock->iMaxIconHeight;
 	int iMaxAuthorizedWidth = cairo_dock_get_max_authorized_dock_width (pDock);
@@ -158,7 +164,12 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 			}
 			hmax *= pDock->container.fRatio / fPrevRatio;
 			
+			pDock->iActiveWidth = pDock->iActiveHeight = 0;
 			pDock->pRenderer->compute_size (pDock);
+			if (pDock->iActiveWidth == 0)
+				pDock->iActiveWidth = pDock->iMaxDockWidth;
+			if (pDock->iActiveHeight == 0)
+				pDock->iActiveHeight = pDock->iMaxDockHeight;
 		}
 		
 		//g_print ("*** ratio : %.3f -> %.3f\n", fPrevRatio, pDock->container.fRatio);
@@ -366,7 +377,7 @@ static GdkBitmap *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h
 {
 	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
-	//g_print ("%s (%dx%d / %dx%d)\n", __func__, w, h, W, H);
+	g_print ("%s (%dx%d / %dx%d)\n", __func__, w, h, W, H);
 	
 	GdkBitmap *pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
 		pDock->container.bIsHorizontal ? W : H,
@@ -416,6 +427,11 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 		g_object_unref ((gpointer) pDock->pHiddenShapeBitmap);
 		pDock->pHiddenShapeBitmap = NULL;
 	}
+	if (pDock->pActiveShapeBitmap != NULL)
+	{
+		g_object_unref ((gpointer) pDock->pActiveShapeBitmap);
+		pDock->pActiveShapeBitmap = NULL;
+	}
 	
 	//\_______________ on definit les tailles des zones.
 	int W = pDock->iMaxDockWidth;
@@ -430,6 +446,8 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	//\_______________ on verifie que les conditions sont toujours remplies.
 	if (w == 0 || h == 0 || pDock->iRefCount > 0 || W == 0 || H == 0)
 	{
+		if (pDock->iActiveWidth != pDock->iMaxDockWidth || pDock->iActiveHeight != pDock->iMaxDockHeight)  // else all the dock is active when the mouse is inside, so we can just set a NULL shape.
+			pDock->pActiveShapeBitmap = _cairo_dock_create_input_shape (pDock, pDock->iActiveWidth, pDock->iActiveHeight);
 		if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 		{
 			//g_print ("+++ input shape active on update input shape\n");
@@ -443,6 +461,9 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	pDock->pShapeBitmap = _cairo_dock_create_input_shape (pDock, w, h);
 	
 	pDock->pHiddenShapeBitmap = _cairo_dock_create_input_shape (pDock, w_, h_);
+	
+	if (pDock->iActiveWidth != pDock->iMaxDockWidth || pDock->iActiveHeight != pDock->iMaxDockHeight)  // else all the dock is active when the mouse is inside, so we can just set a NULL shape.
+		pDock->pActiveShapeBitmap = _cairo_dock_create_input_shape (pDock, pDock->iActiveWidth, pDock->iActiveHeight);
 }
 
 
@@ -737,7 +758,8 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 {
 	CairoDockMousePositionType iMousePositionType;
 	int iWidth = pDock->container.iWidth;
-	int iHeight = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
+	///int iHeight = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
+	int iHeight = pDock->iActiveHeight;
 	///int iExtraHeight = (pDock->bAtBottom ? 0 : myIconsParam.iLabelSize);
 	int iExtraHeight = 0;  /// il faudrait voir si on a un sous-dock ou un dialogue au dessus :-/
 	int iMouseX = pDock->container.iMouseX;
@@ -920,12 +942,12 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDoc
 	{
 		pSubDock->fAlign = 0.5;
 		pSubDock->iGapX = iX + pDock->container.iWindowPositionX - (pDock->container.bIsHorizontal ? pDock->iScreenOffsetX : pDock->iScreenOffsetY) - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] / 2;  // ici les sous-dock ont un alignement egal a 0.5
-		pSubDock->iGapY = pDock->iGapY + pDock->iMaxDockHeight;
+		pSubDock->iGapY = pDock->iGapY + pDock->iActiveHeight;
 	}
 	else
 	{
 		pSubDock->fAlign = (pDock->container.bDirectionUp ? 1 : 0);
-		pSubDock->iGapX = (pDock->iGapY + pDock->iMaxDockHeight) * (pDock->container.bDirectionUp ? -1 : 1);
+		pSubDock->iGapX = (pDock->iGapY + pDock->iActiveHeight) * (pDock->container.bDirectionUp ? -1 : 1);
 		if (pDock->container.bDirectionUp)
 			pSubDock->iGapY = g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - (iX + pDock->container.iWindowPositionX - (pDock->container.bIsHorizontal ? pDock->iScreenOffsetX : pDock->iScreenOffsetY)) - pSubDock->iMaxDockHeight / 2;  // les sous-dock ont un alignement egal a 1.
 		else
@@ -970,8 +992,8 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	}
 	
 	pSubDock->pRenderer->set_subdock_position (pPointedIcon, pParentDock);
-	if (pParentDock->fMagnitudeMax == 0)  // son input shape n'est pas la taille max mais iMinDockHeight.
-		pSubDock->iGapY -= (pParentDock->container.iHeight - pParentDock->iMinDockHeight);
+	///if (pParentDock->fMagnitudeMax == 0)  // son input shape n'est pas la taille max mais iMinDockHeight.
+	///	pSubDock->iGapY -= (pParentDock->container.iHeight - pParentDock->iMinDockHeight);
 	
 	if (pSubDock->icons != NULL)
 	{

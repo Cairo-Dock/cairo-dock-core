@@ -1243,6 +1243,13 @@ const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass)
 	return pClassAppli->cDesktopFile;
 }
 
+const gchar *cairo_dock_get_class_icon (const gchar *cClass)
+{
+	g_return_val_if_fail (cClass != NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _get_class_appli_with_attributes (cClass);
+	return pClassAppli->cIcon;
+}
+
 const GList *cairo_dock_get_class_menu_items (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, NULL);

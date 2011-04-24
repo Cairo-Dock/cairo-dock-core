@@ -125,7 +125,7 @@ struct _CairoDock {
 	gboolean bIsMainDock;
 	/// number of icons pointing on the dock (0 means it is a root dock, >0 a sub-dock).
 	gint iRefCount;
-
+	
 	//\_______________ Config parameters.
 	gint iGapX;  // ecart de la fenetre par rapport au bord de l'ecran.
 	gint iGapY;  // decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
@@ -151,7 +151,7 @@ struct _CairoDock {
 	gint iMaxRightMargin;
 	gint iLeftMargin;
 	gint iRightMargin;
-
+	
 	//\_______________ current state of the dock.
 	gboolean bAutoHide;  // auto-hide activated.
 	gint iScrollOffset;  // pour faire defiler les icones avec la molette.
@@ -170,7 +170,6 @@ struct _CairoDock {
 	gdouble fHideOffset;
 	/// counter for the post-hiding animation for icons always visible.
 	gdouble fPostHideOffset;
-	
 	
 	/// Whether the dock is in a popped up state or not.
 	gboolean bIsBelow;
@@ -192,6 +191,9 @@ struct _CairoDock {
 	gboolean bIsShowing;
 	/// whether an icon is being dragged away from the dock
 	gboolean bIconIsFlyingAway;
+	/// whether icons in the dock can be dragged with the mouse (inside and outside of the dock).
+	gboolean bPreventDraggingIcons;
+	gboolean bWMIconsNeedUpdate;
 	
 	//\_______________ Source ID of events running on the dock.
 	/// Source ID for window resizing.
@@ -236,6 +238,10 @@ struct _CairoDock {
 	gint iDecorationsHeight;
 	/// maximal magnitude of the zoom, between 0 and 1.
 	gdouble fMagnitudeMax;
+	/// width of the active zone of the dock.
+	gint iActiveWidth;
+	/// height of the active zone of the dock.
+	gint iActiveHeight;
 	
 	//\_______________ input shape.
 	/// state of the input shape (active, at rest, hidden).
@@ -244,9 +250,9 @@ struct _CairoDock {
 	GdkBitmap* pShapeBitmap;
 	/// input shape of the window when the dock is hidden.
 	GdkBitmap* pHiddenShapeBitmap;
+	/// input shape of the window when the dock is active (NULL to cover all dock).
+	GdkBitmap* pActiveShapeBitmap;
 	
-	gint iOffsetForExtend;
-	gboolean bWMIconsNeedUpdate;
 	GLuint iRedirectedTexture;
 	GLuint iFboId;
 	
@@ -263,11 +269,10 @@ struct _CairoDock {
 	gdouble fBgColorDark[4];
 	/// Background image buffer of the dock.
 	CairoDockImageBuffer backgroundBuffer;
+	gboolean bExtendedMode;
+	gint iOffsetForExtend;
 	
-	// whether icons in the dock can be dragged with the mouse (inside and outside of the dock).
-	gboolean bPreventDraggingIcons;
-	
-	gchar reserved[4];
+	gint reserved[4];
 };
 
 
@@ -301,7 +306,7 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock);
 */
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc);
 
-/** Insert an icon into a dock, at the position given by its 'fOrder' field.
+/** Insert an icon into a dock.
 * Insert an automatic separator if needed. Do nothing if the icon already exists inside the dock.
 * @param icon the icon to be inserted. It should have been filled beforehand.
 * @param pDock the dock to insert inside.
@@ -310,7 +315,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 */
 #define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, myIconsParam.iSeparateIcons, NULL)
 
-/** Detach an icon from its dock, removing the unnecessary separators. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but looses its dialogs. Do nothing if the icon doesn't exist inside the dock.
+/** Detach an icon from its dock. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but looses its dialogs. Do nothing if the icon doesn't exist inside the dock.
 *@param icon the icon to detach.
 *@param pDock the dock containing the icon.
 *@param bCheckUnusedSeparator TRUE to check and remove unnecessary separators.

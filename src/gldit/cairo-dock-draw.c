@@ -565,6 +565,9 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	{
 		cairo_save (pCairoContext);
 		
+		//int iLabelSize = icon->iTextHeight;
+		int iLabelSize = myIconsParam.iLabelSize;
+		//g_print ("%d / %d\n", icon->iTextHeight, myIconsParam.iLabelSize),
 		cairo_identity_matrix (pCairoContext);  // on positionne les etiquettes sur un pixels entier, sinon ca floute.
 		if (bIsHorizontal)
 			cairo_translate (pCairoContext, floor (icon->fDrawX + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1)), floor (icon->fDrawY));
@@ -585,11 +588,13 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				floor (fOffsetX),
-				floor (bDirectionUp ? -myIconsParam.iLabelSize : icon->fHeight * icon->fScale));
+				floor (bDirectionUp ? -iLabelSize : icon->fHeight * icon->fScale));
 		}
 		else if (myIconsParam.bTextAlwaysHorizontal)
 		{
-			if (fOffsetX < - icon->fDrawY)
+			if (icon->fDrawY + fOffsetX + icon->iTextWidth > pDock->container.iHeight)
+				fOffsetX = pDock->container.iHeight - icon->fDrawY - icon->iTextWidth;
+			if (icon->fDrawY + fOffsetX < 0)
 				fOffsetX = - icon->fDrawY;
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
@@ -602,7 +607,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				floor (bDirectionUp ? fOffsetX - icon->fWidth * icon->fScale : fOffsetX),
-				-floor (bDirectionUp ? myIconsParam.iLabelSize : icon->fHeight * icon->fScale + myIconsParam.iLabelSize));
+				-floor (bDirectionUp ? iLabelSize : icon->fHeight * icon->fScale + iLabelSize));
 		}
 		double fMagnitude;
 		if (myIconsParam.bLabelForPointedIconOnly || pDock->fMagnitudeMax == 0.)

@@ -29,6 +29,7 @@
 #include "gldi-config.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
@@ -423,9 +424,10 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 		GList *last = g_list_last (pModule->pInstancesList);
 		pFirstInstance = last->data;  // instances are prepended.
 		
-		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pFirstInstance->cConfFilePath, cConfFilePath);
+		cairo_dock_copy_file (pFirstInstance->cConfFilePath, cConfFilePath);
+		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pFirstInstance->cConfFilePath, cConfFilePath);
 		int r = system (cCommand);
-		g_free (cCommand);
+		g_free (cCommand);*/
 		
 		if (pFirstInstance->pDesklet)  // prevent desklets from overlapping.
 		{
@@ -446,9 +448,10 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 	}
 	else  // no instance yet, just copy the default conf file.
 	{
-		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath, cConfFilePath);
+		cairo_dock_copy_file (pModule->cConfFilePath, cConfFilePath);
+		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath, cConfFilePath);
 		int r = system (cCommand);
-		g_free (cCommand);
+		g_free (cCommand);*/
 	}
 	
 	g_free (cUserDataDirPath);

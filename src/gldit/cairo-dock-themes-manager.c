@@ -30,6 +30,7 @@
 #include "gldi-config.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-backends-manager.h"
@@ -119,9 +120,10 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 			gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
 			if (bSaveBehavior)
 			{
-				g_string_printf (sCommand, "/bin/cp \"%s\" \"%s\"", g_cConfFile, cNewConfFilePath);
+				cairo_dock_copy_file (g_cConfFile, cNewConfFilePath);
+				/**g_string_printf (sCommand, "/bin/cp \"%s\" \"%s\"", g_cConfFile, cNewConfFilePath);
 				cd_message ("%s", sCommand->str);
-				r = system (sCommand->str);
+				r = system (sCommand->str);*/
 			}
 			else
 			{
@@ -186,6 +188,32 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	r = system (sCommand->str);
 	
 	/// TODO: draw the main dock into the "preview" file...
+	if (g_pMainDock && g_pMainDock->pRenderer)
+	{
+		cairo_surface_t *pSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+			g_pMainDock->iActiveWidth,
+			g_pMainDock->iActiveHeight);
+		cairo_t *pCairoContext = cairo_create (pSurface);
+		
+		if (!g_pMainDock->container.bIsHorizontal)
+		{
+			cairo_translate (pCairoContext, g_pMainDock->iMaxDockWidth/2, g_pMainDock->iMaxDockHeight/2);
+			cairo_rotate (pCairoContext, -G_PI/2);
+			
+			if (!g_pMainDock->container.bDirectionUp)
+			{
+				
+			}
+			cairo_translate (pCairoContext, -g_pMainDock->iMaxDockHeight/2, -g_pMainDock->iMaxDockWidth/2);
+		}
+		g_pMainDock->pRenderer->render (pCairoContext, g_pMainDock);
+		
+		gchar *cPreviewPath = g_strdup_printf ("%s/preview", cNewThemePath);
+		cairo_surface_write_to_png (pSurface, cPreviewPath);
+		g_free (cPreviewPath);
+		cairo_destroy (pCairoContext);
+		cairo_surface_destroy (pSurface);
+	}
 	
 	//\___________________ Le theme n'est plus en etat 'modifie'.
 	g_free (cNewThemePath);
@@ -322,10 +350,10 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
 	//g_print ("cNewThemePath : %s ; cNewThemeName : %s\n", cNewThemePath, cNewThemeName);
 	
-	//\___________________ On charge les parametres de comportement.
+	//\___________________ On charge les parametres de comportement globaux et de chaque dock.
 	GString *sCommand = g_string_new ("");
 	int r;
-	cd_message ("Applying changes ...");
+	/**cd_message ("Applying changes ...");
 	if (g_pMainDock == NULL || bLoadBehavior)
 	{
 		g_string_printf (sCommand, "/bin/cp \"%s\"/%s \"%s\"", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
@@ -340,10 +368,42 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 		g_free (cNewConfFilePath);
 	}
 	
-	//\___________________ On charge les .conf des autres docks racines.
 	g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1 -name '*.conf' ! -name '%s' -exec /bin/cp '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_CONF_FILE, g_cCurrentThemePath);
 	cd_debug ("%s", sCommand->str);
-	r = system (sCommand->str);
+	r = system (sCommand->str);*/
+	
+	cd_message ("Applying changes ...");
+	if (g_pMainDock == NULL || bLoadBehavior)
+	{
+		g_string_printf (sCommand, "cp \"%s\"/*.conf \"%s\"", cNewThemePath, g_cCurrentThemePath);
+		cd_debug ("%s", sCommand->str);
+		r = system (sCommand->str);
+	}
+	else
+	{
+		GDir *dir = g_dir_open (cNewThemePath, 0, NULL);
+		const gchar* cDockConfFile;
+		gchar *cThemeDockConfFile, *cUserDockConfFile;
+		while ((cDockConfFile = g_dir_read_name (dir)) != NULL)
+		{
+			if (g_str_has_suffix (cDockConfFile, ".conf"))
+			{
+				cThemeDockConfFile = g_strdup_printf ("%s/%s", cNewThemePath, cDockConfFile);
+				cUserDockConfFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, cDockConfFile);
+				if (g_file_test (cUserDockConfFile, G_FILE_TEST_EXISTS))
+				{
+					cairo_dock_merge_conf_files (cUserDockConfFile, cThemeDockConfFile, '+');
+				}
+				else
+				{
+					cairo_dock_copy_file (cThemeDockConfFile, cUserDockConfFile);
+				}
+				g_free (cUserDockConfFile);
+				g_free (cThemeDockConfFile);
+			}
+		}
+		g_dir_close (dir);
+	}
 	
 	//\___________________ On charge les icones.
 	if (bLoadLaunchers)
@@ -468,8 +528,9 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 			if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 			{
 				cd_debug ("    no conf file %s, we will take the theme's one", cConfFilePath);
-				g_string_printf (sCommand, "cp \"%s\" \"%s\"", cNewConfFilePath, cConfFilePath);
-				r = system (sCommand->str);
+				cairo_dock_copy_file (cNewConfFilePath, cConfFilePath);
+				/**g_string_printf (sCommand, "cp \"%s\" \"%s\"", cNewConfFilePath, cConfFilePath);
+				r = system (sCommand->str);*/
 			}
 			else
 			{

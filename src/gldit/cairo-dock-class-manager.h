@@ -211,6 +211,8 @@ const gchar **cairo_dock_get_class_mimetypes (const gchar *cClass);
 
 const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass);
 
+const gchar *cairo_dock_get_class_icon (const gchar *cClass);
+
 const GList *cairo_dock_get_class_menu_items (const gchar *cClass);
 
 

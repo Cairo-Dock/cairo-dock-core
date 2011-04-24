@@ -612,7 +612,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	pLabels->iLabelSize = (pLabels->iconTextDescription.iSize != 0 ?
 		pLabels->iconTextDescription.iSize +
 		(pLabels->iconTextDescription.bOutlined ? 2 : 0) +
-		2 * pLabels->iconTextDescription.iMargin : 0);
+		2 * pLabels->iconTextDescription.iMargin
+		+ 6 : 0);
 	
 	//\___________________ labels visibility
 	int iShowLabel = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "show_labels", &bFlushConfFileNeeded, -1, NULL, NULL);

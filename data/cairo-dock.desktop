@@ -2,7 +2,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Exec=cairo-dock -o
+Exec=cairo-dock
 Icon=cairo-dock.svg
 Terminal=false
 

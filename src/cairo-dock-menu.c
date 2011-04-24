@@ -47,7 +47,7 @@
 #include "cairo-dock-gui-themes.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-file-manager.h"
+#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-X-utilities.h"
@@ -293,9 +293,10 @@ static void _cairo_dock_add_autostart (GtkMenuItem *pMenuItem, gpointer data)
 			return ;
 		}
 	}
-	gchar *cCommand = g_strdup_printf ("cp '/usr/share/applications/cairo-dock%s.desktop' '%s'", (g_bForceCairo ? "-cairo" : ""), cCairoAutoStartDirPath);
+	cairo_dock_copy_file ("/usr/share/applications/cairo-dock.desktop", cCairoAutoStartDirPath);
+	/**gchar *cCommand = g_strdup_printf ("cp '/usr/share/applications/cairo-dock%s.desktop' '%s'", (g_bForceCairo ? "-cairo" : ""), cCairoAutoStartDirPath);
 	int r = system (cCommand);
-	g_free (cCommand);
+	g_free (cCommand);*/
 	g_free (cCairoAutoStartDirPath);
 }
 
@@ -800,11 +801,16 @@ static void _cairo_dock_remove_custom_appli_icon (GtkMenuItem *pMenuItem, gpoint
 	CairoDock *pDock = data[1];
 	if (! CAIRO_DOCK_IS_APPLI (icon))
 		return;
-	gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, icon->cClass);
+	
+	const gchar *cClassIcon = cairo_dock_get_class_icon (icon->cClass);
+	if (cClassIcon == NULL)
+		cClassIcon = icon->cClass;
+	
+	gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, cClassIcon);
 	if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
 	{
 		g_free (cCustomIcon);
-		cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, icon->cClass);
+		cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, cClassIcon);
 		if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
 		{
 			g_free (cCustomIcon);
@@ -1307,11 +1313,15 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		{
 			if (myTaskbarParam.bOverWriteXIcons)
 			{
-				gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, icon->cClass);
+				const gchar *cClassIcon = cairo_dock_get_class_icon (icon->cClass);
+				if (cClassIcon == NULL)
+					cClassIcon = icon->cClass;
+				
+				gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, cClassIcon);
 				if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
 				{
 					g_free (cCustomIcon);
-					cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, icon->cClass);
+					cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, cClassIcon);
 					if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
 					{
 						g_free (cCustomIcon);

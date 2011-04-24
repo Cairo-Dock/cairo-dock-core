@@ -38,7 +38,7 @@
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-file-manager.h"
+#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
@@ -387,7 +387,7 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 	gchar *ext = strrchr (cFilePath, '.');
 	if (!ext)
 		return;
-	cd_debug ("%s (%s)", __func__, cFilePath);
+	g_print ("%s (%s)\n", __func__, cFilePath, icon->cFileName);
 	if ((strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0) && !myDocksParam.bLockAll && ! myDocksParam.bLockIcons)
 	{
 		if (!myTaskbarParam.bOverWriteXIcons)
@@ -405,10 +405,18 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 			cPath = g_filename_from_uri (cFilePath, NULL, NULL);
 		}
 		
-		gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s/%s%s\"", cPath?cPath:cFilePath, g_cCurrentIconsPath, icon->cClass, ext);
+		const gchar *cClassIcon = cairo_dock_get_class_icon (icon->cClass);
+		if (cClassIcon == NULL)
+			cClassIcon = icon->cClass;
+		
+		gchar *cDestPath = g_strdup_printf ("%s/%s%s", g_cCurrentIconsPath, cClassIcon, ext);
+		cairo_dock_copy_file (cPath?cPath:cFilePath, cDestPath);
+		g_free (cDestPath);
+		g_free (cPath);
+		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s/%s%s\"", cPath?cPath:cFilePath, g_cCurrentIconsPath, icon->cClass, ext);
 		cd_debug (" -> '%s'", cCommand);
 		int r = system (cCommand);
-		g_free (cCommand);
+		g_free (cCommand);*/
 		
 		cairo_dock_reload_icon_image (icon, pContainer);
 		cairo_dock_redraw_icon (icon, pContainer);

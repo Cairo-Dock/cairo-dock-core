@@ -260,6 +260,8 @@ gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, Cairo
 */
 int cairo_dock_get_file_size (const gchar *cFilePath);
 
+gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath);
+
 
 void gldi_register_desktop_environment_manager (void);
 

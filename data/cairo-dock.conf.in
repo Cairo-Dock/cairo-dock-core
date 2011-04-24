@@ -76,9 +76,6 @@ frame_extra =
 
 max_authorized_width = 0
 
-#b- Stretch the dock to always fill the screen
-extended = false
-
 #b- Automatically hide the dock when a window becomes full screen?
 #{This is only usefull if you do not already use auto-hide and if your Window Manager allows the dock in front of fullscreen windows (which is rare).}
 auto quick hide = false
@@ -318,7 +315,13 @@ stripes angle = 90.
 number of stripes = 0
 
 #f+[0;1] Percentage of the bright colour:
-stripes width = 0.2
+stripes width = 0.5
+
+#F
+frame3_=
+
+#b+ Stretch the dock to always fill the screen
+extended = false
 
 #F+[External Frame;@pkgdatadir@/icon-frame.png]
 frame_frame =

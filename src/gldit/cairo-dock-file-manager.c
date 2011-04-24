@@ -200,21 +200,6 @@ gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDock
 		return FALSE;
 }
 
-
-static void _cairo_dock_fm_action_after_mounting (gboolean bMounting, gboolean bSuccess, const gchar *cName, const gchar *cUri, gpointer *data)
-{
-	Icon *icon = data[0];
-	CairoContainer *pContainer = data[1];
-	cd_message ("%s (%s) : %d", __func__, (bMounting ? "mount" : "unmount"), bSuccess);  // en cas de demontage effectif, l'icone n'est plus valide !
-	if ((! bSuccess && pContainer != NULL) || icon == NULL)  // dans l'autre cas (succes), l'icone peut ne plus etre valide ! mais on s'en fout, puisqu'en cas de succes, il y'aura rechargement de l'icone, et donc on pourra balancer le message a ce moment-la.
-	{
-		///if (icon != NULL)
-			cairo_dock_show_temporary_dialog_with_icon_printf (bMounting ? _("failed to mount %s") : _("Failed to unmount %s"), icon, pContainer, 4000, "same icon", cName);
-		///else
-		///	cairo_dock_show_general_message (cMessage, 4000);
-	}
-}
-
 gchar *cairo_dock_fm_is_mounted (const gchar *cURI, gboolean *bIsMounted)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->is_mounted != NULL)
@@ -455,6 +440,44 @@ int cairo_dock_get_file_size (const gchar *cFilePath)
 		return 0;
 }
 
+gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
+{
+	GError *error = NULL;
+	gchar *cContent = NULL;
+	gsize length = 0;
+	g_file_get_contents (cFilePath,
+		&cContent,
+		&length,
+		&error);
+	if (error != NULL)
+	{
+		cd_warning ("couldn't copy file '%s' (%s)", cFilePath, error->message);
+		g_error_free (error);
+		return FALSE;
+	}
+	
+	gchar *cDestFilePath = NULL;
+	if (g_file_test (cDestPath, G_FILE_TEST_IS_DIR))
+	{
+		gchar *cFileName = g_path_get_basename (cFilePath);
+		cDestFilePath = g_strdup_printf ("%s/%s", cDestPath, cFileName);
+		g_free (cFileName);
+	}
+	
+	g_file_set_contents (cDestFilePath?cDestFilePath:cDestPath,
+		cContent,
+		length,
+		&error);
+	g_free (cDestFilePath);
+	g_free (cContent);
+	if (error != NULL)
+	{
+		cd_warning ("couldn't copy file '%s' (%s)", cFilePath, error->message);
+		g_error_free (error);
+		return FALSE;
+	}
+	return TRUE;
+}
 
   ////////////
  /// INIT ///

@@ -95,6 +95,7 @@ set_value "System"		"conn use proxy"		false
 set_value "System"		"conn timeout"			7
 set_value "Dialogs"		"custom"				false
 set_value "Labels"		"custom"				false
+set_value "Labels"		"always horizontal"		true
 modules=`get_value "System" "modules"`
 echo $modules | grep "icon effects"
 if test $? = 1; then

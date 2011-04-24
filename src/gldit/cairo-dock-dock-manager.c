@@ -53,6 +53,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-draw.h"
@@ -622,9 +623,10 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 		gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 		{
-			gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s'", GLDI_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+			cairo_dock_copy_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+			/**gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s'", GLDI_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 			int r = system (cCommand);
-			g_free (cCommand);
+			g_free (cCommand);*/
 		}
 		
 		cairo_dock_update_conf_file (cConfFilePath,
@@ -721,6 +723,7 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 		cairo_dock_get_double_list_key_value (pKeyFile, "Appearance", "stripes color bright", &bFlushConfFileNeeded, pDock->fBgColorBright, 4, couleur2, NULL, NULL);
 	}
 	
+	pDock->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Appearance", "extended", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	
 	//\______________ On met a jour le fichier de conf.
 	if (! bFlushConfFileNeeded)
@@ -754,9 +757,10 @@ void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName)
 	// on cree le fichier de conf a partir du template.
 	cd_debug ("%s (%s)", __func__, cDockName);
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-	gchar *cCommand = g_strdup_printf ("cp '%s' '%s'", GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+	cairo_dock_copy_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+	/**gchar *cCommand = g_strdup_printf ("cp '%s' '%s'", GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 	int r = system (cCommand);
-	g_free (cCommand);
+	g_free (cCommand);*/
 	
 	// on placera le nouveau dock a l'oppose du main dock, meme ecran et meme visibilite.
 	cairo_dock_update_conf_file (cConfFilePath,
@@ -1303,6 +1307,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 		pBackground->fStripesAngle = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes angle", &bFlushConfFileNeeded, 90., NULL, NULL);
 	}
 	
+	pAccessibility->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "extended", &bFlushConfFileNeeded, FALSE, "Accessibility", NULL);
+	
 	// position
 	pPosition->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);
 	pPosition->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);
@@ -1428,7 +1434,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	
 	//\____________________ Autres parametres.
 	pAccessibility->iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max_authorized_width", &bFlushConfFileNeeded, 0, "Position", NULL);  // obsolete, cache en conf.
-	pAccessibility->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "extended", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	
 	pAccessibility->iUnhideDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "unhide delay", &bFlushConfFileNeeded, 0, NULL, NULL);
 	
@@ -1517,6 +1522,7 @@ static void load (void)
 			g_pMainDock->iNumScreen = myDocksParam.iNumScreen;
 			cairo_dock_get_screen_offsets (myDocksParam.iNumScreen, &g_pMainDock->iScreenOffsetX, &g_pMainDock->iScreenOffsetY);
 		}
+		g_pMainDock->bExtendedMode = myDocksParam.bExtendedMode;
 		
 		cairo_dock_set_dock_orientation (g_pMainDock, myDocksParam.iScreenBorder);
 		cairo_dock_move_resize_dock (g_pMainDock);
@@ -1596,6 +1602,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	{
 		cairo_dock_set_dock_orientation (pDock, pPosition->iScreenBorder);
 	}
+	pDock->bExtendedMode = pBackground->bExtendedMode;
 	cairo_dock_update_dock_size (pDock);  // si l'ecran ou l'orientation a change, la taille max a change aussi.
 	
 	pDock->iGapX = pPosition->iGapX;
@@ -1635,11 +1642,11 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	}
 	
 	//\_______________ Max Size.
-	if (pAccessibility->iMaxAuthorizedWidth != pPrevAccessibility->iMaxAuthorizedWidth ||
+	/**if (pAccessibility->iMaxAuthorizedWidth != pPrevAccessibility->iMaxAuthorizedWidth ||
 		pAccessibility->bExtendedMode != pPrevAccessibility->bExtendedMode)
 	{
 		cairo_dock_set_all_views_to_default (1);  // 1 <=> tous les docks racines. met a jour la taille et reserve l'espace.
-	}
+	}*/
 	
 	//\_______________ Hiding effect.
 	if (cairo_dock_strings_differ (pAccessibility->cHideEffect, pPrevAccessibility->cHideEffect))

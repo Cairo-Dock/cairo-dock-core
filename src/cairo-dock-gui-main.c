@@ -152,14 +152,14 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 
 gchar *_get_valid_module_conf_file (CairoDockModule *pModule)
 {
-	if (pModule->pInstancesList != NULL)
+	if (pModule->pInstancesList != NULL)  // module is already instanciated, take the first instance's conf-file.
 	{
 		CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
 		return g_strdup (pModuleInstance->cConfFilePath);
 	}
-	else
+	else if (pModule->cConfFilePath != NULL)  // not instanciate yet, take a conf-file in the module's user dir, or the default conf-file.
 	{
-		//gchar *cUserDataDirPath = g_strdup_printf ("%s/plug-ins/%s", g_cCurrentThemePath, pModule->pVisitCard->cUserDataDir);
+		// open the module's user dir.
 		gchar *cUserDataDirPath = cairo_dock_check_module_conf_dir (pModule);
 		GDir *dir = g_dir_open (cUserDataDirPath, 0, NULL);
 		if (dir == NULL)
@@ -167,6 +167,7 @@ gchar *_get_valid_module_conf_file (CairoDockModule *pModule)
 			g_free (cUserDataDirPath);
 			return NULL;
 		}
+		// look for a conf-file.
 		const gchar *cFileName;
 		gchar *cInstanceFilePath = NULL;
 		while ((cFileName = g_dir_read_name (dir)) != NULL)
@@ -180,17 +181,20 @@ gchar *_get_valid_module_conf_file (CairoDockModule *pModule)
 			break;
 		}
 		g_dir_close (dir);
-		if (cInstanceFilePath == NULL)  // no conf file present yet, let's copy the default one into the applet's folder.
+		// if no conf-file, copy the default one into the folder and take this one.
+		if (cInstanceFilePath == NULL)  // no conf file present yet.
 		{
-			gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath, cUserDataDirPath);
+			gboolean r = cairo_dock_copy_file (pModule->cConfFilePath, cUserDataDirPath);
+			/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath, cUserDataDirPath);
 			int r = system (cCommand);
-			g_free (cCommand);
-			if (r == 0)
+			g_free (cCommand);*/
+			if (r)  // copy ok
 				cInstanceFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pModule->pVisitCard->cConfFileName);
 		}
 		g_free (cUserDataDirPath);
 		return cInstanceFilePath;
 	}
+	return NULL;
 }
 
 static GString *sBuffer = NULL;

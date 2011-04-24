@@ -676,7 +676,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			*bIsHorizontal = (pContainer->bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
 			int dy;
 			if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
-				dy = 0;
+				dy = pContainer->iHeight - pDock->iActiveHeight;
 			else if (cairo_dock_is_hidden (pDock))
 				dy = pContainer->iHeight-1;  // on laisse 1 pixels pour pouvoir sortir du dialogue avant de toucher le bord de l'ecran, et ainsi le faire se replacer, lorsqu'on fait apparaitre un dock en auto-hide.
 			else

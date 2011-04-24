@@ -362,7 +362,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			glTranslatef ((!pDock->container.bDirectionUp ? icon->fHeight * (- icon->fScale + 1)/2 : icon->fHeight * (icon->fScale - 1)/2), 0., 0.);
 		}
 	}
-	glTranslatef (0., 0., - icon->fHeight * (1+myIconsParam.fAmplitude));
 	if (icon->fOrientation != 0)
 	{
 		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
@@ -419,47 +418,82 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		((myIconsParam.fAmplitude < 0.001 || pDock->fMagnitudeMax < 0.001) && icon->bPointed) ))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		glPushMatrix ();
-		if (pDock->container.bIsHorizontal)
-			glTranslatef (floor (fX), floor (fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), - icon->fHeight * (1+myIconsParam.fAmplitude));
-		else
-			glTranslatef (floor (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), floor (fX), - icon->fHeight * (1+myIconsParam.fAmplitude));
-		
-		double fOffsetX = 0.;
-		if (icon->fDrawX + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2 < 0)  // l'etiquette deborde a gauche.
-			fOffsetX = icon->iTextWidth/2 - (icon->fDrawX + icon->fWidth * icon->fScale/2);
-		else if (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2 > pDock->container.iWidth)  // l'etiquette deborde a droite.
-			fOffsetX = pDock->container.iWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2);
-		if (icon->fOrientation != 0 && ! myIconsParam.bTextAlwaysHorizontal)
-		{
-			glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
-			glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
-			glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
-		}
 		
 		double dx = .5 * (icon->iTextWidth & 1);  // on decale la texture pour la coller sur la grille des coordonnees entieres.
 		double dy = .5 * (icon->iTextHeight & 1);
-		if (pDock->container.bIsHorizontal)
+		
+		if (pDock->container.bIsHorizontal || !myIconsParam.bTextAlwaysHorizontal)
 		{
-			glTranslatef (floor (fOffsetX) + dx,
-				floor ((pDock->container.bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myIconsParam.iLabelSize - icon->iTextHeight / 2)) + dy,
-				0.);
-		}
-		else if (myIconsParam.bTextAlwaysHorizontal)
-		{
-			fOffsetX = MIN (0, icon->fDrawY + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2);
-			double y = (icon->fWidth * icon->fScale + icon->iTextHeight) / 2;
-			if (fX + y + icon->iTextHeight/2 > pDock->container.iWidth)  // le teste deborde par le haut.
-				y = pDock->container.iWidth - fX - icon->iTextHeight/2;
-			glTranslatef (ceil (- fOffsetX) + dx,
-				floor (y) + dy,
-				0.);
+			if (fX + icon->iTextWidth/2 > pDock->container.iWidth)  // l'etiquette deborde a droite.
+				fX = pDock->container.iWidth - icon->iTextWidth/2;
+			if (fX - icon->iTextWidth/2 < 0)  // l'etiquette deborde a gauche.
+				fX = icon->iTextWidth/2;
+			
+			if (pDock->container.bIsHorizontal)
+				glTranslatef (floor (fX) + dx,
+					pDock->container.bDirectionUp ? 
+						floor (fY + myIconsParam.iLabelSize - icon->iTextHeight / 2) - dy:
+						floor (fY - icon->fHeight * icon->fScale - myIconsParam.iLabelSize + icon->iTextHeight / 2) + dy,
+					0.);
+			else
+			{
+				glTranslatef (pDock->container.bDirectionUp ? 
+						floor (fY - myIconsParam.iLabelSize + icon->iTextHeight / 2) - dy:
+						floor (fY + icon->fHeight * icon->fScale + myIconsParam.iLabelSize - icon->iTextHeight / 2) + dy,
+					floor (fX) + dx,
+					0.);
+				glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
+			}
+			if (icon->fOrientation != 0 && ! myIconsParam.bTextAlwaysHorizontal)
+			{
+				glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
+				glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
+				glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
+			}
+			/*if (pDock->container.bIsHorizontal)
+				glTranslatef (floor (fX), floor (fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), 0.);
+			else
+				glTranslatef (floor (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), floor (fX), 0.);
+			
+			double fOffsetX = 0.;
+			if (icon->fDrawX + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2 < 0)  // l'etiquette deborde a gauche.
+				fOffsetX = icon->iTextWidth/2 - (icon->fDrawX + icon->fWidth * icon->fScale/2);
+			else if (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2 > pDock->container.iWidth)  // l'etiquette deborde a droite.
+				fOffsetX = pDock->container.iWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2);
+			if (icon->fOrientation != 0 && ! myIconsParam.bTextAlwaysHorizontal)
+			{
+				glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
+				glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
+				glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
+			}
+			
+			if (pDock->container.bIsHorizontal)
+			{
+				glTranslatef (floor (fOffsetX) + dx,
+					floor ((pDock->container.bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myIconsParam.iLabelSize - icon->iTextHeight / 2)) + dy,
+					0.);
+			}
+			else
+			{
+				glTranslatef (floor ((pDock->container.bDirectionUp ? -.5:.5) * (icon->fHeight * icon->fScale + icon->iTextHeight)) + dx,
+					- floor (fOffsetX) + dy,
+					0.);
+				glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
+			}*/
 		}
 		else
 		{
-			glTranslatef (floor ((pDock->container.bDirectionUp ? -.5:.5) * (icon->fHeight * icon->fScale + icon->iTextHeight)) + dx,
-				- floor (fOffsetX) + dy,
-				0.);
-			glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
+			fY += icon->fHeight * icon->fScale/2;  // middle of the icon
+			
+			if (fY + icon->iTextWidth/2 > pDock->container.iHeight)  // out from the right
+				fY = pDock->container.iHeight - icon->iTextWidth/2;
+			if (fY - icon->iTextWidth/2 < 0)  // out from the left.
+				fY = icon->iTextWidth/2;
+			
+			double y = (icon->fWidth * icon->fScale + icon->iTextHeight) / 2;
+			if (fX + y + icon->iTextHeight/2 > pDock->container.iWidth)  // le texte deborde par le haut.
+				y = pDock->container.iWidth - fX - icon->iTextHeight/2;
+			glTranslatef (floor (fY) + dx, floor (fX) + floor (y) + dy, 0.);
 		}
 		
 		double fMagnitude;

@@ -109,13 +109,15 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 		x2 = pDock->container.iWidth;
 		if (pDock->container.bDirectionUp)
 		{
-			y1 = (pDock->fMagnitudeMax != 0 ? 0 : pDock->container.iHeight - pDock->iMinDockHeight);
+			///y1 = (pDock->fMagnitudeMax != 0 ? 0 : pDock->container.iHeight - pDock->iMinDockHeight);
+			y1 = pDock->container.iHeight - pDock->iActiveHeight;
 			y2 = pDock->container.iHeight;
 		}
 		else
 		{
 			y1 = 0;
-			y2 = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
+			///y2 = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
+			y2 = pDock->iActiveHeight;
 		}
 	}
 	else if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
@@ -1318,6 +1320,11 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		{
 			//g_print ("+++ input shape at rest on configure\n");
 			cairo_dock_set_input_shape_at_rest (pDock);
+		}
+		else if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
+		{
+			//g_print ("+++ input shape active on configure\n");
+			cairo_dock_set_input_shape_active (pDock);
 		}
 		
 		if (g_bUseOpenGL)
