@@ -204,6 +204,13 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	//\__________________ in the case of a launcher, bind it to a class, and get the additionnal params.
 	if (iType == CAIRO_DOCK_ICON_TYPE_LAUNCHER)
 	{
+		gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
+		if (cStartupWMClass && *cStartupWMClass == '\0')
+		{
+			g_free (cStartupWMClass);
+			cStartupWMClass = NULL;
+		}
+		
 		// get the origin of the desktop file.
 		gchar *cClass = NULL;
 		gsize length = 0;
@@ -213,7 +220,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 			int i;
 			for (i = 0; pOrigins[i] != NULL; i++)
 			{
-				cClass = cairo_dock_register_class (pOrigins[i]);
+				cClass = cairo_dock_register_class_full (pOrigins[i], cStartupWMClass);
 				if (cClass != NULL)  // neat, this origin is a valid one, let's use it from now.
 				{
 					break;
@@ -226,10 +233,8 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 		gchar *cFallbackClass = NULL;
 		if (cClass == NULL)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
 		{
-			gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
 			cFallbackClass = cairo_dock_guess_class (icon->cCommand, cStartupWMClass);
-			cClass = cairo_dock_register_class (cFallbackClass);
-			g_free (cStartupWMClass);
+			cClass = cairo_dock_register_class_full (cFallbackClass, cStartupWMClass);
 		}
 		
 		// get common data from the class
@@ -285,6 +290,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 			g_free (icon->cClass);
 			icon->cClass = NULL;
 		}
+		g_free (cStartupWMClass);
 	}
 	
 	//\__________________ update the key file if necessary.

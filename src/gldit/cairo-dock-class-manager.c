@@ -1410,13 +1410,13 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 }
 
 
-gchar *cairo_dock_register_class (const gchar *cDesktopFile)
+gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName)
 {
 	g_return_val_if_fail (cDesktopFile != NULL, NULL);
-	g_print ("%s (%s)\n", __func__, cDesktopFile);
+	g_print ("%s (%s, %s)\n", __func__, cDesktopFile, cClassName);
 	
 	//\__________________ if the class is already registered and filled, quit.
-	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cDesktopFile);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClassName?cClassName:cDesktopFile);
 	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes)
 		return g_strdup (cDesktopFile);
 	
@@ -1435,7 +1435,11 @@ gchar *cairo_dock_register_class (const gchar *cDesktopFile)
 	//\__________________ guess the class name.
 	gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
 	gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
-	gchar *cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
+	gchar *cClass = NULL;
+	if (cClassName == NULL)
+		cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
+	else
+		cClass = cairo_dock_guess_class (cCommand, cClassName);
 	if (cClass == NULL)
 	{
 		g_print ("couldn't guess the class for %s\n", cDesktopFile);
@@ -1505,6 +1509,7 @@ gchar *cairo_dock_register_class (const gchar *cDesktopFile)
 	}
 	
 	g_key_file_free (pKeyFile);
+	g_print (" - class '%s'\n", cClass);
 	return cClass;
 }
 

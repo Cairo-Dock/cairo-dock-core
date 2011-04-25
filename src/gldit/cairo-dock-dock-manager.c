@@ -723,7 +723,7 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 		cairo_dock_get_double_list_key_value (pKeyFile, "Appearance", "stripes color bright", &bFlushConfFileNeeded, pDock->fBgColorBright, 4, couleur2, NULL, NULL);
 	}
 	
-	pDock->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Appearance", "extended", &bFlushConfFileNeeded, NULL, NULL, NULL);
+	pDock->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Appearance", "extended", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	
 	//\______________ On met a jour le fichier de conf.
 	if (! bFlushConfFileNeeded)

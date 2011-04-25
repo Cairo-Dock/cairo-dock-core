@@ -218,11 +218,13 @@ const GList *cairo_dock_get_class_menu_items (const gchar *cClass);
 
 gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMClass);
 
+gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName);
+
 /** Register a class corresponding to a desktop file. Launchers can then derive from the class.
 * @param cDesktopFile the desktop file path or name; if it's a name or if the path couldn't be found, it will be searched in the common directories.
 * @return the class ID in a newly allocated string.
 */
-gchar *cairo_dock_register_class (const gchar *cDesktopFile);
+#define cairo_dock_register_class(cDesktopFile) cairo_dock_register_class_full (cDesktopFile, NULL)
 
 /** Make a launcher derive from a class. Parameters of the icon that are not NULL are not overwritten.
 * @param cClass the class name
