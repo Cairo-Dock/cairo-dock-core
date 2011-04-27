@@ -255,7 +255,7 @@ static void _cairo_dock_read_module_config (GKeyFile *pKeyFile, CairoDockModuleI
 	{
 		///cairo_dock_flush_conf_file (pKeyFile, pInstance->cConfFilePath, pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
 		gchar *cTemplate = g_strdup_printf ("%s/%s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
-		cairo_dock_upgrade_conf_file (pInstance->cConfFilePath, pKeyFile, cTemplate);
+		cairo_dock_upgrade_conf_file_full (pInstance->cConfFilePath, pKeyFile, cTemplate, FALSE);  // keep private keys.
 		g_free (cTemplate);
 	}
 }
@@ -293,6 +293,16 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 			pMinimalConfig->iDesiredIconHeight = 48;
 		
 		pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
+		if (pMinimalConfig->cLabel == NULL && !pInstance->pModule->pVisitCard->bAllowEmptyTitle)
+		{
+			pMinimalConfig->cLabel = g_strdup (dgettext (pInstance->pModule->pVisitCard->cGettextDomain, pInstance->pModule->pVisitCard->cTitle));
+		}
+		else if (pMinimalConfig->cLabel && strcmp (pMinimalConfig->cLabel, "none") == 0)
+		{
+			g_free (pMinimalConfig->cLabel);
+			pMinimalConfig->cLabel = NULL;
+		}
+		
 		pMinimalConfig->cIconFileName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "icon", NULL, NULL, NULL, NULL);
 		pMinimalConfig->fOrder = cairo_dock_get_double_key_value (pKeyFile, "Icon", "order", NULL, CAIRO_DOCK_LAST_ORDER, NULL, NULL);
 		if (pMinimalConfig->fOrder == CAIRO_DOCK_LAST_ORDER)
@@ -599,6 +609,17 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			if (pIcon != NULL)
 			{
 				cCurrentSubDockName = g_strdup (pIcon->cName);
+				
+				if (pMinimalConfig->cLabel == NULL && !pInstance->pModule->pVisitCard->bAllowEmptyTitle)
+				{
+					pMinimalConfig->cLabel = g_strdup (dgettext (pInstance->pModule->pVisitCard->cGettextDomain, pInstance->pModule->pVisitCard->cTitle));
+				}
+				else if (pMinimalConfig->cLabel && strcmp (pMinimalConfig->cLabel, "none") == 0)
+				{
+					g_free (pMinimalConfig->cLabel);
+					pMinimalConfig->cLabel = NULL;
+				}
+				
 				// on gere le changement de nom de son sous-dock.
 				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->cName, pMinimalConfig->cLabel))
 				{
@@ -612,10 +633,10 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				
 				g_free (pIcon->cName);
 				pIcon->cName = pMinimalConfig->cLabel;
-				pMinimalConfig->cLabel = NULL;  // astuce.
+				pMinimalConfig->cLabel = NULL;  // we won't need it any more, so skip a duplication.
 				g_free (pIcon->cFileName);
 				pIcon->cFileName = pMinimalConfig->cIconFileName;
-				pMinimalConfig->cIconFileName = NULL;
+				pMinimalConfig->cIconFileName = NULL;  // idem
 				pIcon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
 			}
 			

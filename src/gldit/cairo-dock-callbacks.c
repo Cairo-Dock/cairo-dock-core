@@ -1488,12 +1488,13 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 					gtk_drag_finish (dc, FALSE, FALSE, time);
 					return ;
 				}
-				///fMargin = 0.5;  // on ne sera jamais dessus.
-				fMargin = 0.25;
+				fMargin = 0.5;  // on ne sera jamais dessus.
+				///fMargin = 0.25;
 			}
 			else  // sinon on le lance si on est sur l'icone, et on l'ajoute autrement.
 				fMargin = 0.25;
-
+			g_print ("%d > %.2f\n", iDropX, icon->fX + icon->fWidth * icon->fScale * (1 - fMargin));
+			g_print ("%d < %.2f\n", iDropX, icon->fX + icon->fWidth * icon->fScale * fMargin);
 			if (iDropX > icon->fX + icon->fWidth * icon->fScale * (1 - fMargin))  // on est apres.
 			{
 				if (myDocksParam.bLockIcons || myDocksParam.bLockAll)
@@ -1521,6 +1522,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 		}
 	}
 	
+	g_print ("drop %.2f\n", fOrder);
 	cairo_dock_notify_drop_data (cReceivedData, pPointedIcon, fOrder, CAIRO_CONTAINER (pDock));
 	
 	gtk_drag_finish (dc, TRUE, FALSE, time);

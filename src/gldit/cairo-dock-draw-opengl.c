@@ -818,7 +818,8 @@ void cairo_dock_draw_texture_with_alpha (GLuint iTexture, int iWidth, int iHeigh
 	//~ if (fAlpha == 1)
 		//~ _cairo_dock_set_blend_over ();
 	//~ else
-		_cairo_dock_set_blend_alpha ();
+		///_cairo_dock_set_blend_alpha ();
+		_cairo_dock_set_blend_over ();
 	
 	_cairo_dock_apply_texture_at_size_with_alpha (iTexture, iWidth, iHeight, fAlpha);
 	

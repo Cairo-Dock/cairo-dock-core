@@ -213,21 +213,21 @@ static void _cairo_dock_replace_key_values (GKeyFile *pValuesKeyFile, GKeyFile *
 		for (j = 0; pKeyList[j] != NULL; j ++)
 		{
 			cKeyName = pKeyList[j];
+			cComment = NULL;
 			
 			// don't add old keys, except if they are hidden or persistent.
 			if (!g_key_file_has_key (pUptodateKeyFile, cGroupName, cKeyName, NULL))  // old key
 			{
 				cComment = g_key_file_get_comment (pValuesKeyFile, cGroupName, cKeyName, NULL);
-				if (cComment != NULL && cComment[0] != '\0' && cComment[1] != '0')  // not hidden nor persistent
+				if (cComment != NULL && cComment[0] != '\0' && cComment[1] != '0')  // not hidden nor persistent => skip it.
 				{
 					g_free (cComment);
 					continue;
 				}
-				g_free (cComment);
 			}
 			
-			// get the replacement value and set it to the key-file, creating it if it didn't exist (in which case no need to add the comment, since the key will be removed again by the applet).
-			cKeyValue =  g_key_file_get_string (pValuesKeyFile, cGroupName, cKeyName, &erreur);
+			// get the replacement value and set it to the key-file, creating it if it didn't exist.
+			cKeyValue = g_key_file_get_string (pValuesKeyFile, cGroupName, cKeyName, &erreur);
 			if (erreur != NULL)  // key doesn't exist
 			{
 				cd_warning (erreur->message);
@@ -237,8 +237,11 @@ static void _cairo_dock_replace_key_values (GKeyFile *pValuesKeyFile, GKeyFile *
 			else
 			{
 				g_key_file_set_string (pUptodateKeyFile, cGroupName, cKeyName, (cKeyValue != NULL ? cKeyValue : ""));
+				if (cComment != NULL)  // if we got the comment, it means the key doesn't exist in the up-to-date key-file, so add it.
+					g_key_file_set_comment (pUptodateKeyFile, cGroupName, cKeyName, cComment, NULL);
 			}
 			g_free (cKeyValue);
+			g_free (cComment);
 		}
 		
 		g_strfreev (pKeyList);

@@ -1314,13 +1314,13 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	// Exec=wine "C:\Program Files\Starcraft\Starcraft.exe"
 	// Exec=wine "/path/to/prog.exe"
 	// Exec=env WINEPREFIX="/home/fab/.wine" wine "C:\Program Files\Starcraft\Starcraft.exe"
-	if (cCommand == NULL)
-		return NULL;
 	
 	g_print ("%s (%s, '%s')\n", __func__, cCommand, cStartupWMClass);
 	gchar *cResult = NULL;
 	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 	{
+		if (cCommand == NULL)
+			return NULL;
 		gchar *cDefaultClass = g_ascii_strdown (cCommand, -1);
 		gchar *str, *cClass = cDefaultClass;
 
@@ -1410,15 +1410,35 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 }
 
 
+/*
+register from desktop-file name/path (+class-name):
+  if class-name: guess class -> lookup class -> if already registered => quit
+  search complete path -> not found => abort
+  get main info from file (Exec, StartupWMClass)
+  if class-name NULL: guess class from Exec+StartupWMClass
+  if already registered => quit
+  make new class
+  get additional params from file (MimeType, Icon, etc) and store them in the class
+
+register from class name (window or old launchers):
+  guess class
+  if already registered => quit
+  search complete path -> not found => abort
+  make new class
+  get additional params from file (MimeType, Icon, etc) and store them in the class
+*/
 gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName)
 {
 	g_return_val_if_fail (cDesktopFile != NULL, NULL);
 	g_print ("%s (%s, %s)\n", __func__, cDesktopFile, cClassName);
 	
 	//\__________________ if the class is already registered and filled, quit.
-	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClassName?cClassName:cDesktopFile);
+	gchar *cClass = NULL;
+	if (cClassName != NULL)
+		cClass = cairo_dock_guess_class (NULL, cClassName);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass?cClass:cDesktopFile);
 	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes)
-		return g_strdup (cDesktopFile);
+		return cClass?cClass:g_strdup (cDesktopFile);
 	
 	//\__________________ search the desktop file's path.
 	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile);
@@ -1435,11 +1455,8 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	//\__________________ guess the class name.
 	gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
 	gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
-	gchar *cClass = NULL;
 	if (cClassName == NULL)
 		cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
-	else
-		cClass = cairo_dock_guess_class (cCommand, cClassName);
 	if (cClass == NULL)
 	{
 		g_print ("couldn't guess the class for %s\n", cDesktopFile);
@@ -1509,7 +1526,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	}
 	
 	g_key_file_free (pKeyFile);
-	g_print (" - class '%s'\n", cClass);
+	g_print (" -> class '%s'\n", cClass);
 	return cClass;
 }
 

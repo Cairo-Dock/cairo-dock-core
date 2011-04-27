@@ -104,8 +104,10 @@ struct _CairoDockVisitCard {
 	const gchar *cTitle;
 	CairoDockModuleContainerType iContainerType;
 	gboolean bStaticDeskletSize;
+	// whether to display the applet's name on the icon's label if it's NULL or not.
+	gboolean bAllowEmptyTitle;
 	// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
-	char reserved[12];
+	char reserved[8];
 };
 
 /// Definition of the interface of a module.

@@ -162,6 +162,8 @@ CD_APPLET_DEFINE_PROTO \
 
 #define CD_APPLET_SET_UNRESIZABLE_DESKLET pVisitCard->bStaticDeskletSize = TRUE;
 
+#define CD_APPLET_ALLOW_EMPTY_TITLE pVisitCard->bAllowEmptyTitle = TRUE;
+
 /** Fin de la fonction de pre-initialisation de l'applet.
 */
 #define CD_APPLET_DEFINE_END \

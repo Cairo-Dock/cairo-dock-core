@@ -121,6 +121,7 @@ set_current_conf_file "plug-ins/AlsaMixer/AlsaMixer.conf"
 set_value "Icon"			"name"						""
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
+set_value "Icon"			"name"						""
 set_value "Configuration"	"item type"					3
 set_value "Configuration"	"paste selection"			true
 set_value "Configuration"	"paste clipboard"			true
@@ -139,7 +140,7 @@ set_current_conf_file "plug-ins/drop_indicator/drop_indicator.conf"
 set_value "Drag and drop indicator"	"speed" 			2
 
 set_current_conf_file "plug-ins/dustbin/dustbin.conf"
-set_value "Icon"			"name"						"Dustbin"
+set_value "Icon"			"name"						""
 set_value "Configuration"	"additionnal directories"	""
 set_value "Configuration"	"alternative file browser"	""
 

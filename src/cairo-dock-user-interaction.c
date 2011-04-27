@@ -322,6 +322,7 @@ gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, Ca
 
 gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)
 {
+	g_print ("DROP\n");
 	if (! CAIRO_DOCK_IS_DOCK (pContainer))
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
