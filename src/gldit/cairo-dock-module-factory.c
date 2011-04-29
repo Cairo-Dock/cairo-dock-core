@@ -610,16 +610,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			{
 				cCurrentSubDockName = g_strdup (pIcon->cName);
 				
-				if (pMinimalConfig->cLabel == NULL && !pInstance->pModule->pVisitCard->bAllowEmptyTitle)
-				{
-					pMinimalConfig->cLabel = g_strdup (dgettext (pInstance->pModule->pVisitCard->cGettextDomain, pInstance->pModule->pVisitCard->cTitle));
-				}
-				else if (pMinimalConfig->cLabel && strcmp (pMinimalConfig->cLabel, "none") == 0)
-				{
-					g_free (pMinimalConfig->cLabel);
-					pMinimalConfig->cLabel = NULL;
-				}
-				
 				// on gere le changement de nom de son sous-dock.
 				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->cName, pMinimalConfig->cLabel))
 				{

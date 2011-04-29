@@ -116,7 +116,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 		g_free (cQuestion);
 		if (answer == GTK_RESPONSE_YES)
 		{
-			//\___________________ On traite le fichier de conf (et ceux des docks principaux, on les recopiera sauvagement).
+			//\___________________ On traite le fichier de conf global et ceux des docks principaux.
 			gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
 			if (bSaveBehavior)
 			{

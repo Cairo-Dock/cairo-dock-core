@@ -322,7 +322,7 @@ gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, Ca
 
 gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)
 {
-	g_print ("DROP\n");
+	g_print ("take the drop\n");
 	if (! CAIRO_DOCK_IS_DOCK (pContainer))
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
@@ -330,18 +330,20 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 	CairoDock *pReceivingDock = pDock;
 	if (g_str_has_suffix (cReceivedData, ".desktop"))  // .desktop -> add a new launcher if dropped on or amongst launchers. 
 	{
-		if ((myIconsParam.iSeparateIcons == 1 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_IS_NORMAL_APPLI (icon))
+		g_print (" dropped a .desktop\n");
+		if ((myIconsParam.iSeparateIcons == 1 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		if ((myIconsParam.iSeparateIcons == 2 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_IS_APPLET (icon))
+		if ((myIconsParam.iSeparateIcons == 2 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		if (fOrder == CAIRO_DOCK_LAST_ORDER && icon && icon->pSubDock != NULL)  // drop onto a container icon.
+		g_print (" add it\n");
+		if (fOrder == CAIRO_DOCK_LAST_ORDER && CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && icon->pSubDock != NULL)  // drop onto a container icon.
 		{
 			pReceivingDock = icon->pSubDock;  // -> add into the pointed sub-dock.
 		}
 	}
 	else  // file.
 	{
-		if (fOrder == CAIRO_DOCK_LAST_ORDER)  // dropped on an icon
+		if (icon != NULL && fOrder == CAIRO_DOCK_LAST_ORDER)  // dropped on an icon
 		{
 			if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // sub-dock -> propagate to the sub-dock.
 			{
@@ -370,7 +372,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 			{
 				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 			}
-		}  // else: dropped between 2 icons -> try to add it.
+		}  // else: dropped between 2 icons -> try to add it (for instance a script).
 	}
 
 	if (g_bLocked || myDocksParam.bLockAll)

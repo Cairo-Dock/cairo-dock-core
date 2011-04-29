@@ -91,7 +91,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		}
 	}
 	
-	pDock->iMaxDockHeight = (int) ((1 + myIconsParam.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + myIconsParam.iLabelSize + myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin;
+	pDock->iMaxDockHeight = (int) ((1 + myIconsParam.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin + (pDock->container.bIsHorizontal || !myIconsParam.bTextAlwaysHorizontal ? myIconsParam.iLabelSize : 0);
 	//g_print ("myIconsParam.iLabelSize : %d => %d\n", myIconsParam.iLabelSize, (int)pDock->iMaxDockHeight);
 
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
@@ -132,8 +132,8 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	
 	pDock->iActiveWidth = pDock->iMaxDockWidth;
 	pDock->iActiveHeight = pDock->iMaxDockHeight;
-	if (! pDock->container.bIsHorizontal)
-		pDock->iMaxDockHeight += 5*myIconsParam.iLabelSize;  // vertical dock, add some padding to draw the labels.	
+	if (! pDock->container.bIsHorizontal && myIconsParam.bTextAlwaysHorizontal)
+		pDock->iMaxDockHeight += 6*myIconsParam.iLabelSize;  // vertical dock, add some padding to draw the labels.	
 }
 
 

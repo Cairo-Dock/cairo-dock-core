@@ -114,14 +114,18 @@ if test $? = 1; then
 fi
 #set_value "System"		"modules"				"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
 
+for f in plug-ins/*/data/*.conf; do
+	sed -i "s/^name *=.*/name=/g" $f
+done;
+
 set_current_conf_file "plug-ins/Animated-icons/Animated-icons.conf"
 set_value "Rotation"		"color"						"1;1;1;0"
 
 set_current_conf_file "plug-ins/AlsaMixer/AlsaMixer.conf"
-set_value "Icon"			"name"						""
+set_value "Configuration"			"card id"						""
+set_value "Configuration"			"mixer element"					""
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
-set_value "Icon"			"name"						""
 set_value "Configuration"	"item type"					3
 set_value "Configuration"	"paste selection"			true
 set_value "Configuration"	"paste clipboard"			true
@@ -129,7 +133,6 @@ set_value "Configuration"	"persistent"				""
 set_value "Configuration"	"enable actions"			false
 
 set_current_conf_file "plug-ins/clock/clock.conf"
-set_value "Icon"			"name"						""
 desklet=`get_value "Desklet" "initially detached"`
 if test "$desklet" = "false"; then
 	set_value "Configuration"	"show date"				2
@@ -140,17 +143,14 @@ set_current_conf_file "plug-ins/drop_indicator/drop_indicator.conf"
 set_value "Drag and drop indicator"	"speed" 			2
 
 set_current_conf_file "plug-ins/dustbin/dustbin.conf"
-set_value "Icon"			"name"						""
 set_value "Configuration"	"additionnal directories"	""
 set_value "Configuration"	"alternative file browser"	""
 
 set_current_conf_file "plug-ins/GMenu/GMenu.conf"
-set_value "Icon"			"name"						"Applications Menu"
 set_value "Configuration"	"has icons"					true
 set_value "Configuration"	"show recent"				true
 
 set_current_conf_file "plug-ins/logout/logout.conf"
-set_value "Icon"			"name"						"Log-out"
 set_value "Configuration"	"click"						0
 set_value "Configuration"	"middle-click"				1
 
@@ -159,7 +159,6 @@ set_value_on_all_groups		"username"					""
 set_value_on_all_groups		"password"					""
 
 set_current_conf_file "plug-ins/quick-browser/quick-browser.conf"
-set_value "Icon"			"name"						""
 set_value "Configuration"	"dir path"					""
 
 set_current_conf_file "plug-ins/rendering/rendering.conf"
@@ -177,7 +176,6 @@ set_value "Slide"			"simple_wide_grid"			true
 set_value "Slide"			"simple_max_size"			".7"
 
 set_current_conf_file "plug-ins/RSSreader/RSSreader.conf"
-set_value "Icon"			"name"						""
 set_value "Configuration"	"url_rss_feed"				""
 
 set_current_conf_file "plug-ins/shortcuts/shortcuts.conf"
@@ -194,12 +192,10 @@ set_value "Configuration"	"stack dir"					""
 set_value "Configuration"	"selection_"				false
 
 set_current_conf_file "plug-ins/switcher/switcher.conf"
-set_value "Icon"			"name"						""
 set_value "Configuration"	"preserve ratio"			false
 set_value "Configuration"	"Draw Windows"				true
 
 set_current_conf_file "plug-ins/weather/weather.conf"
-set_value "Icon"			"name"						""
 set_value "Configuration"	"nb days"					5
 set_value "Configuration"	"check interval"			15
 set_value "Configuration"	"dialog duration"			0
@@ -211,7 +207,6 @@ set_value "Configuration"	"weblet URI"				"http:\/\/www.google.com"
 set_value "Configuration"	"uri list"					""
 
 set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
-set_value "Icon"			"name"						""
 set_value "Configuration"	"initial gamma"				0
 
 for f in launchers/*.desktop; do

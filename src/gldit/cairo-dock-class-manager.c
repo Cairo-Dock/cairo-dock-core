@@ -857,6 +857,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			}
 			cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (g_pMainDock));
 		}
+		g_print ("no more dock\n");
 		return TRUE;
 	}
 	return FALSE;
@@ -1259,6 +1260,8 @@ const GList *cairo_dock_get_class_menu_items (const gchar *cClass)
 
 static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or even class
 {
+	if (cDesktopFile == NULL)
+		return NULL;
 	if (*cDesktopFile == '/' && g_file_test (cDesktopFile, G_FILE_TEST_EXISTS))  // it's a path and it exists.
 	{
 		return g_strdup (cDesktopFile);
@@ -1421,15 +1424,14 @@ register from desktop-file name/path (+class-name):
   get additional params from file (MimeType, Icon, etc) and store them in the class
 
 register from class name (window or old launchers):
-  guess class
-  if already registered => quit
+  guess class -> lookup class -> if already registered => quit
   search complete path -> not found => abort
   make new class
   get additional params from file (MimeType, Icon, etc) and store them in the class
 */
 gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName)
 {
-	g_return_val_if_fail (cDesktopFile != NULL, NULL);
+	g_return_val_if_fail (cDesktopFile != NULL || cClassName != NULL, NULL);
 	g_print ("%s (%s, %s)\n", __func__, cDesktopFile, cClassName);
 	
 	//\__________________ if the class is already registered and filled, quit.
@@ -1438,13 +1440,13 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		cClass = cairo_dock_guess_class (NULL, cClassName);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass?cClass:cDesktopFile);
 	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes)
-		return cClass?cClass:g_strdup (cDesktopFile);
+		return (cClass?cClass:g_strdup (cDesktopFile));
 	
 	//\__________________ search the desktop file's path.
-	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile);
+	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass);
 	if (cDesktopFilePath == NULL)
 	{
-		g_print ("couldn't find the desktop file %s\n", cDesktopFile);
+		g_print ("couldn't find the desktop file %s\n", cDesktopFile?cDesktopFile:cClass);
 		return NULL;
 	}
 	
@@ -1455,7 +1457,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	//\__________________ guess the class name.
 	gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
 	gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
-	if (cClassName == NULL)
+	if (cClass == NULL)
 		cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
 	if (cClass == NULL)
 	{

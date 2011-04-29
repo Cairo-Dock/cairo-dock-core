@@ -103,9 +103,9 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	gboolean bNeedUpdate = FALSE;
 	
 	//\__________________ get the type of the icon
-	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Type", NULL))
+	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Icon Type", NULL))
 	{
-		iType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Type", NULL);
+		iType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Icon Type", NULL);
 	}
 	else  // old desktop file
 	{
@@ -115,8 +115,10 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 		gboolean bIsContainer;
 		if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Is container", NULL))
 			bIsContainer = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Is container", NULL);
-		else
+		else if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Nb subicons", NULL))
 			bIsContainer = (g_key_file_get_integer (pKeyFile, "Desktop Entry", "Nb subicons", NULL) != 0);
+		else
+			bIsContainer = (g_key_file_get_integer (pKeyFile, "Desktop Entry", "Type", NULL) == 1);
 		
 		if (bIsContainer)
 		{
@@ -130,7 +132,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 		{
 			iType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
 		}
-		g_key_file_set_integer (pKeyFile, "Desktop Entry", "Type", iType);
+		g_key_file_set_integer (pKeyFile, "Desktop Entry", "Icon Type", iType);
 		g_free (cCommand);
 	}
 	
@@ -166,8 +168,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	
 	//\__________________ get common data as defined by the user.
 	g_free (icon->cFileName);
-	icon->cFileName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", &erreur);
-	_print_error (cDesktopFileName, erreur);
+	icon->cFileName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
 	if (icon->cFileName != NULL && *icon->cFileName == '\0')
 	{
 		g_free (icon->cFileName);
@@ -175,8 +176,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	}
 	
 	g_free (icon->cName);
-	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, &erreur);
-	_print_error (cDesktopFileName, erreur);
+	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
 	if (icon->cName != NULL && *icon->cName == '\0')
 	{
 		g_free (icon->cName);
@@ -184,8 +184,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	}
 	
 	g_free (icon->cCommand);
-	icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", &erreur);
-	_print_error (cDesktopFileName, erreur);
+	icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
 	if (icon->cCommand != NULL && *icon->cCommand == '\0')
 	{
 		g_free (icon->cCommand);
@@ -215,6 +214,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 		gchar *cClass = NULL;
 		gsize length = 0;
 		gchar **pOrigins = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "Origin", &length, NULL);
+		int iNumOrigin = -1;
 		if (pOrigins != NULL)  // some origins are provided, try them one by one.
 		{
 			int i;
@@ -223,6 +223,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 				cClass = cairo_dock_register_class_full (pOrigins[i], cStartupWMClass);
 				if (cClass != NULL)  // neat, this origin is a valid one, let's use it from now.
 				{
+					iNumOrigin = i;
 					break;
 				}
 			}
@@ -244,6 +245,12 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 			icon->cClass = cClass;
 			g_free (cFallbackClass);
 			cairo_dock_set_data_from_class (cClass, icon);
+			if (iNumOrigin != 0)  // it's not the first origin that gave us the correct class, so let's write it down to avoid searching the next time.
+			{
+				g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cairo_dock_get_class_desktop_file (cClass));
+				if (!bNeedUpdate)  // no update is scheduled, so write it now.
+					cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
+			}
 		}
 		else  // no class found, it's maybe an old launcher, take the remaining common params from the user desktop file.
 		{

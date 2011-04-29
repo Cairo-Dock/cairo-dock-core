@@ -265,6 +265,12 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	if (pDock->pShapeBitmap != NULL)
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
 	
+	if (pDock->pHiddenShapeBitmap != NULL)
+		g_object_unref ((gpointer) pDock->pHiddenShapeBitmap);
+	
+	if (pDock->pActiveShapeBitmap != NULL)
+		g_object_unref ((gpointer) pDock->pActiveShapeBitmap);
+	
 	if (pDock->pRenderer != NULL && pDock->pRenderer->free_data != NULL)
 	{
 		pDock->pRenderer->free_data (pDock);

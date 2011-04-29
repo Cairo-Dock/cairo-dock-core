@@ -520,8 +520,6 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 			if (icon->pSubDock->container.bInside)
 			{
 				//cd_debug ("on est dans le sous-dock, donc on ne le cache pas");
-				pDock->container.bInside = FALSE;
-				//pDock->bAtTop = FALSE;
 				return FALSE;
 			}
 			else if (icon->pSubDock->iSidLeaveDemand == 0)  // si on sort du dock sans passer par le sous-dock, par exemple en sortant par le bas.
@@ -997,7 +995,7 @@ static gboolean _cairo_dock_hide_back_dock (CairoDock *pDock)
 }
 static gboolean _cairo_dock_unhide_dock_delayed (CairoDock *pDock)
 {
-	if (pDock->container.bInside)  // on est deja dedans, inutile de le re-montrer.
+	if (pDock->container.bInside && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN && !pDock->bIsBelow)  // already inside and reachable (caution) => no need to show it again.
 	{
 		pDock->iSidUnhideDelayed = 0;
 		return FALSE;

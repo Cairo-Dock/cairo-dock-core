@@ -135,8 +135,8 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 			y2 = pDock->iMinDockHeight;
 		}		
 	}
-	else
-		return FALSE;
+	else  // hidden
+		return TRUE;
 	if (pDock->container.iMouseX <= x1
 	|| pDock->container.iMouseX >= x2)
 		return TRUE;
@@ -822,22 +822,6 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		pDock->iSidTestMouseOutside = 0;
 	}
 	
-	//\_______________ On enregistre la position de la souris.
-	if (pEvent != NULL)
-	{
-		if (pDock->container.bIsHorizontal)
-		{
-			pDock->container.iMouseX = pEvent->x;
-			pDock->container.iMouseY = pEvent->y;
-		}
-		else
-		{
-			pDock->container.iMouseX = pEvent->y;
-			pDock->container.iMouseY = pEvent->x;
-		}
-	}
-	//g_print (" notify leave...\n");
-	
 	gboolean bStartAnimation = FALSE;
 	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
@@ -916,7 +900,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 	
 	// si on etait deja dedans, ou qu'on etait cense l'etre, on relance juste le grossissement.
-	if (pDock->container.bInside || pDock->bIsHiding)
+	/**if (pDock->container.bInside || pDock->bIsHiding)
 	{
 		pDock->container.bInside = TRUE;
 		cairo_dock_start_growing (pDock);
@@ -926,7 +910,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			cairo_dock_start_showing (pDock);
 		}
 		return FALSE;
-	}
+	}*/
 	
 	pDock->container.bInside = TRUE;
 	// animation d'entree.
@@ -973,7 +957,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		cairo_dock_pop_up (pDock);
 	}
 	
-	// si on etait en auto-hide, on commence a monter.
+	// si on etait cache (entierement ou partiellement), on montre.
 	if (pDock->fHideOffset != 0 && pDock->iRefCount == 0)
 	{
 		//g_print ("  on commence a monter\n");
@@ -1468,9 +1452,59 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	
 	//\_________________ On calcule la position a laquelle on l'a lache.
 	cd_message (">>> cReceivedData : '%s'", cReceivedData);
-	int iDropX = (pDock->container.bIsHorizontal ? x : y);
-	double fOrder = CAIRO_DOCK_LAST_ORDER;
-	Icon *pPointedIcon = NULL, *pNeighboorIcon = NULL;
+	/* icon => drop on icon
+	no icon => if order undefined: drop on dock; else: drop between 2 icons.*/
+	Icon *pPointedIcon = NULL;
+	double fOrder;
+	if (pDock->bCanDrop || g_str_has_suffix (cReceivedData, ".desktop"))  // can drop on the dock (.desktop are always added, not .sh)
+	{
+		if (myDocksParam.bLockIcons || myDocksParam.bLockAll)  // locked, can't add anything.
+		{
+			gtk_drag_finish (dc, FALSE, FALSE, time);
+			return ;
+		}
+		
+		pPointedIcon = NULL;
+		fOrder = 0;
+		
+		// try to guess where we dropped.
+		int iDropX = (pDock->container.bIsHorizontal ? x : y);
+		Icon *pNeighboorIcon;
+		Icon *icon;
+		GList *ic;
+		for (ic = pDock->icons; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			if (icon->bPointed)
+			{
+				if (iDropX < icon->fDrawX + icon->fWidth * icon->fScale/2)  // on the left side of the icon
+				{
+					pNeighboorIcon = (ic->prev != NULL ? ic->prev->data : NULL);
+					fOrder = (pNeighboorIcon != NULL ? (icon->fOrder + pNeighboorIcon->fOrder) / 2 : icon->fOrder - 1);
+				}
+				else  // on the right side of the icon
+				{
+					pNeighboorIcon = (ic->next != NULL ? ic->next->data : NULL);
+					fOrder = (pNeighboorIcon != NULL ? (icon->fOrder + pNeighboorIcon->fOrder) / 2 : icon->fOrder + 1);
+				}
+				break;
+			}
+		}
+	}
+	else  // drop on an icon or nowhere.
+	{
+		pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
+		fOrder = CAIRO_DOCK_LAST_ORDER;
+		if (pPointedIcon == NULL)  // no icon => abort
+		{
+			g_print ("drop nowhere\n");
+			gtk_drag_finish (dc, FALSE, FALSE, time);
+			return;
+		}
+	}
+	g_print ("drop on %s (%.2f)\n", pPointedIcon?pPointedIcon->cName:"dock", fOrder);
+	/**int iDropX = (pDock->container.bIsHorizontal ? x : y);
+	Icon *pNeighboorIcon = NULL;
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -1481,7 +1515,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 			//g_print ("On pointe sur %s\n", icon->cName);
 			pPointedIcon = icon;
 			double fMargin;  /// deviendra obsolete si le drag-received fonctionne.
-			if (g_str_has_suffix (cReceivedData, ".desktop")/** || g_str_has_suffix (cReceivedData, ".sh")*/)  // si c'est un .desktop, on l'ajoute.
+			if (g_str_has_suffix (cReceivedData, ".desktop"))  // si c'est un .desktop, on l'ajoute.
 			{
 				if (myDocksParam.bLockIcons || myDocksParam.bLockAll)
 				{
@@ -1520,9 +1554,8 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 				fOrder = CAIRO_DOCK_LAST_ORDER;
 			}
 		}
-	}
+	}*/
 	
-	g_print ("drop %.2f\n", fOrder);
 	cairo_dock_notify_drop_data (cReceivedData, pPointedIcon, fOrder, CAIRO_CONTAINER (pDock));
 	
 	gtk_drag_finish (dc, TRUE, FALSE, time);

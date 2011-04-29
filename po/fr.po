@@ -3783,7 +3783,7 @@ msgstr "Supprimer de la liste les thèmes que vous ne voulez plus :"
 #: ../data/messages:1553
 #: ../data/messages:1589
 msgid "Desktop Entry"
-msgstr "Icône du menu"
+msgstr "Description"
 
 #: ../data/messages:1473
 msgid "Subdock"

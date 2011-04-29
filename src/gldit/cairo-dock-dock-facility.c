@@ -860,16 +860,15 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 	if (myIconsParam.fAmplitude != 0)\
 		icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIconsParam.fAmplitude * (icon->fPhase < G_PI/2 ? -1 : 1);
 
-static gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIconGroup iGroup, double fMargin)
+static inline gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIconGroup iGroup, double fMargin)
 {
 	gboolean bCanDrop = FALSE;
 	Icon *icon;
-	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
-	GList *ic = pFirstDrawnElement;
-	do
+	GList *ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		if (icon->bPointed)  // && icon->iAnimationState != CAIRO_DOCK_FOLLOW_MOUSE
+		if (icon->bPointed)
 		{
 			if (pDock->container.iMouseX < icon->fDrawX + icon->fWidth * icon->fScale * fMargin)  // on est a gauche.  // fDrawXAtRest
 			{
@@ -892,16 +891,12 @@ static gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIc
 					//g_print ("%s> <%s\n", icon->cName, next_icon->cName);
 					bCanDrop = TRUE;
 				}
-				ic = cairo_dock_get_next_element (ic, pDock->icons);  // on la saute.
-				if (ic == pFirstDrawnElement)
-					break ;
+				ic = ic->next;  // on la saute.
 			}  // else on est dessus.
 		}
 		else
 			cairo_dock_stop_marking_icon_as_avoiding_mouse (icon);
-		
-		ic = cairo_dock_get_next_element (ic, pDock->icons);
-	} while (ic != pFirstDrawnElement);
+	}
 	
 	return bCanDrop;
 }
@@ -909,13 +904,18 @@ static gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIc
 
 void cairo_dock_check_can_drop_linear (CairoDock *pDock)
 {
-	if (pDock->icons == NULL)
-		return;
-	
-	if (pDock->bIsDragging)
-		pDock->bCanDrop = _cairo_dock_check_can_drop_linear (pDock, pDock->iAvoidingMouseIconType, pDock->fAvoidingMouseMargin);
-	else
+	if (! pDock->bIsDragging)  // not dragging, so no drop possible.
+	{
 		pDock->bCanDrop = FALSE;
+	}
+	else if (pDock->icons == NULL)  // dragging but no icons, so drop always possible.
+	{
+		pDock->bCanDrop = TRUE;
+	}
+	else  // dragging and some icons.
+	{
+		pDock->bCanDrop = _cairo_dock_check_can_drop_linear (pDock, pDock->iAvoidingMouseIconType, pDock->fAvoidingMouseMargin);
+	}
 }
 
 void cairo_dock_stop_marking_icons (CairoDock *pDock)

@@ -23,4 +23,5 @@ Order=22.328125
 
 group=4
 
-Type=2
+Icon Type = 2
+Type = Separator

@@ -38,4 +38,5 @@ Order=1.3184051513671875
 
 group=0
 
-Type=1
+Icon Type = 1
+Type = Container

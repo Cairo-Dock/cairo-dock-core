@@ -378,7 +378,12 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				pIcon->fInsertRemoveFactor = 0.;  // on le fait avant le reload, sinon l'icone n'est pas rechargee.
 				if (!pIcon->bIsHidden && myTaskbarParam.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
 					cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
-				cairo_dock_detach_appli (pIcon);
+				pDock = cairo_dock_detach_appli (pIcon);
+				if (pDock == NULL)
+				{
+					cairo_dock_free_icon (pIcon);
+					return FALSE;
+				}
 			}
 			else
 			{
@@ -837,7 +842,8 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 {
 	cairo_dock_stop_icon_animation (pIcon);
-	cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));  // a faire avant, lorsque l'icone est encore en mode demande d'attention.
+	///cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));  // a faire avant, lorsque l'icone est encore en mode demande d'attention.
+	cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));  // a faire avant, lorsque l'icone est encore en mode demande d'attention.
 	pIcon->bIsDemandingAttention = FALSE;
 	
 	// on stoppe la demande d'attention recursivement vers le bas.

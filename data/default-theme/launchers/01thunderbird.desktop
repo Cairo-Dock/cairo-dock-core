@@ -43,6 +43,7 @@ ShowOnViewport=0
 #f[0;100] Order you want for this launcher among the others:
 Order=2.6907157897949219
 
-Type=0
+Icon Type = 0
+Type = Application
 
 Origin=/usr/share/applications/thunderbird.desktop;evolution.desktop;kmail.desktop

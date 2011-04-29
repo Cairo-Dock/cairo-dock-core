@@ -43,6 +43,7 @@ ShowOnViewport=0
 #f[0;100] Order you want for this launcher among the others:
 Order=2.1480941772460938
 
-Type=0
+Icon Type = 0
+Type = Application
 
 Origin=/home/fab/.local/share/applications/gcalctool.desktop;kcalc.desktop

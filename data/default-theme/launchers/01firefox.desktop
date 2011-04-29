@@ -43,6 +43,6 @@ ShowOnViewport=0
 #f[0;100] Order you want for this launcher among the others:
 Order=3.0259151458740234
 
-Type=0
-
+Icon Type = 0
+Type = Application
 Origin=/usr/share/applications/firefox.desktop;chromium.desktop;opera.desktop;epiphany.desktop;rekonq.desktop
