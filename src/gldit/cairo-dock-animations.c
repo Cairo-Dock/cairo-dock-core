@@ -378,7 +378,12 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				pIcon->fInsertRemoveFactor = 0.;  // on le fait avant le reload, sinon l'icone n'est pas rechargee.
 				if (!pIcon->bIsHidden && myTaskbarParam.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
 					cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
-				cairo_dock_detach_appli (pIcon);
+				pDock = cairo_dock_detach_appli (pIcon);
+				if (pDock == NULL)
+				{
+					cairo_dock_free_icon (pIcon);
+					return FALSE;
+				}
 			}
 			else
 			{
