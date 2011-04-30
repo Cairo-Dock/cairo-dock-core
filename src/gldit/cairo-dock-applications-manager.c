@@ -946,6 +946,11 @@ static gboolean _cairo_dock_remove_one_appli (Window *pXid, Icon *pIcon, gpointe
 	pIcon->Xid = 0;  // on ne veut pas passer dans le 'unregister'
 	g_free (pIcon->cClass);  // ni la gestion de la classe.
 	pIcon->cClass = NULL;
+	if (pIcon->iBackingPixmap != 0)
+	{
+		XFreePixmap (s_XDisplay, pIcon->iBackingPixmap);
+		pIcon->iBackingPixmap = 0;
+	}
 	cairo_dock_free_icon (pIcon);
 	return TRUE;
 }

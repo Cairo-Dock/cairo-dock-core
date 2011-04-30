@@ -421,6 +421,7 @@ gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const 
 }
 gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer)
 {
+	// actualize the coordinates of the pointer, since they are most probably out-dated (because the mouse has left the dock, or because a right-click generates an event with (0;0) coordinates)
 	if (pContainer->bIsHorizontal)
 		gdk_window_get_pointer (pContainer->pWidget->window, &pContainer->iMouseX, &pContainer->iMouseY, NULL);
 	else
@@ -438,9 +439,7 @@ static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
 	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
 	pDock->bMenuVisible = FALSE;
 	
-	g_print ("on quitte apres le menu\n");
-	pDock->container.bInside = TRUE;  /// TODO: check without this line...
-	// on recupere la position de la souris avant le leave, car le clic droit a genere precedemment un leave-event avec des coordonnees nulles (0;0), donc le dock a perdu la position de la souris; du coup, lors du leave qu'on s'apprete a envoyer, il ne verra pas si la souris est encore dedans, et donc se cachera/retrecira, ce qu'on ne veut pas.
+	///pDock->container.bInside = TRUE;
 	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 }
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer *data)

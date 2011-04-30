@@ -168,7 +168,7 @@ static gboolean _delete_launcher (Icon *icon)
 		r = TRUE;
 	}
 	
-	if (icon->pSubDock != NULL && icon->cClass == NULL)
+	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && icon->pSubDock != NULL)  /// really useful ?...
 	{
 		Icon *pSubIcon;
 		GList *ic;

@@ -64,7 +64,7 @@ extern gboolean g_bUseOpenGL;
 
 ///static cairo_surface_t *s_pHandSurface = NULL;
 ///static GLuint s_iHandTexture = 0;
-static double s_fHandWidth, s_fHandHeight;
+///static double s_fHandWidth, s_fHandHeight;
 static cairo_surface_t *s_pExplosionSurface = NULL;
 static GLuint s_iExplosionTexture = 0;
 static double s_fExplosionWidth, s_fExplosionHeight;

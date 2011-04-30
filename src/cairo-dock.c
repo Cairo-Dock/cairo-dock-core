@@ -895,7 +895,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	g_print ("\n\nTODO:\n - check GMenu from shortcut\n - set Powermanager Debian path\n - check drop (launchers, Folders, Shortcuts, Stack, between applets, etc)\n - try to remove the pDock->container.bInside = TRUE; in container.c line 442\n - check for _NET_WM_DESKTOP_FILE\n\n");
+	g_print ("\n\nTODO:\n - check GMenu from shortcut\n - check drop (launchers, Folders, Shortcuts, Stack, between applets, etc)\n - try to remove the pDock->container.bInside = TRUE; in container.c line 442\n - check vertical dock's height and labels\n\n");
 	
 	gtk_main ();
 	

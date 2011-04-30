@@ -15,7 +15,6 @@ install (FILES
 	depth-rotate-desklet.svg
 	cairo-dock-ok.svg
 	cairo-dock-cancel.svg
-	hand.svg
 	default-class-indicator.svg
 	default-icon-appli.svg
 	default-icon.svg

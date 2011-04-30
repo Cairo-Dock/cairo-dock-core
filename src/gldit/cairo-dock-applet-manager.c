@@ -85,7 +85,6 @@ static gboolean _delete_applet (Icon *icon)
 }
 
 Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance, CairoContainer *pContainer)
-
 {
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_applet_icon (pMinimalConfig, pModuleInstance);
