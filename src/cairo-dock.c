@@ -331,7 +331,7 @@ static void _register_help_module (void)
 	pVisitCard->cUserDataDir = "help";
 	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR;
 	pVisitCard->cConfFileName = "help.conf";
-	pVisitCard->cModuleVersion = "0.1.1";
+	pVisitCard->cModuleVersion = "0.1.2";
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_BEHAVIOR;
 	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.svg";
 	pVisitCard->iSizeOfConfig = 0;
