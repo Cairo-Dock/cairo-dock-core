@@ -269,7 +269,9 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
 	GdkRectangle rect;
 	cairo_dock_compute_icon_area (icon, pContainer, &rect);
 	
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && (cairo_dock_is_hidden (CAIRO_DOCK (pContainer)) && ! icon->bIsDemandingAttention && ! icon->bAlwaysVisible) || (CAIRO_DOCK (pContainer)->iRefCount != 0 && ! GTK_WIDGET_VISIBLE (pContainer->pWidget)))  // inutile de redessiner.
+	if (CAIRO_DOCK_IS_DOCK (pContainer) &&
+		( (cairo_dock_is_hidden (CAIRO_DOCK (pContainer)) && ! icon->bIsDemandingAttention && ! icon->bAlwaysVisible)
+		|| (CAIRO_DOCK (pContainer)->iRefCount != 0 && ! GTK_WIDGET_VISIBLE (pContainer->pWidget)) ) )  // inutile de redessiner.
 		return ;
 	_redraw_container_area (pContainer, &rect);
 }
