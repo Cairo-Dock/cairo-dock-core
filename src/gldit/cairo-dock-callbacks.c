@@ -1409,6 +1409,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 
 
 static gboolean s_bWaitForData = FALSE;
+static gboolean s_bCouldDrop = FALSE;
 
 void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint time, CairoDock *pDock)
 {
@@ -1451,13 +1452,14 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	}
 	
 	//\_________________ On calcule la position a laquelle on l'a lache.
-	cd_message (">>> cReceivedData : '%s'", cReceivedData);
+	g_print (">>> cReceivedData : '%s' (%d/%d)\n", cReceivedData, s_bCouldDrop, pDock->bCanDrop);
 	/* icon => drop on icon
 	no icon => if order undefined: drop on dock; else: drop between 2 icons.*/
 	Icon *pPointedIcon = NULL;
 	double fOrder;
-	if (pDock->bCanDrop || g_str_has_suffix (cReceivedData, ".desktop"))  // can drop on the dock (.desktop are always added, not .sh)
+	if (s_bCouldDrop/**pDock->bCanDrop*/ || g_str_has_suffix (cReceivedData, ".desktop"))  // can drop on the dock (.desktop are always added, not .sh)
 	{
+		g_print ("drop between icons\n");
 		if (myDocksParam.bLockIcons || myDocksParam.bLockAll)  // locked, can't add anything.
 		{
 			gtk_drag_finish (dc, FALSE, FALSE, time);
@@ -1666,6 +1668,7 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 	//g_print ("stop dragging 2\n");
 	s_bWaitForData = FALSE;
 	pDock->bIsDragging = FALSE;
+	s_bCouldDrop = pDock->bCanDrop;
 	pDock->bCanDrop = FALSE;
 	//cairo_dock_stop_marking_icons (pDock);
 	pDock->iAvoidingMouseIconType = -1;
