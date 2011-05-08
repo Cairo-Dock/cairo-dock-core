@@ -518,6 +518,13 @@ gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
 				//g_print ("leave from container %x\n", pContainer);
 				if (pContainer)
 					cairo_dock_emit_leave_signal (pContainer);
+				
+				if (pIcon->iHideLabel > 0)
+				{
+					pIcon->iHideLabel --;
+					if (pIcon->iHideLabel == 0 && pContainer)
+						gtk_widget_queue_draw (pContainer->pWidget);
+				}
 			}
 			cairo_dock_free_dialog (pDialog);
 			s_pDialogList = g_slist_remove (s_pDialogList, pDialog);
@@ -591,6 +598,12 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	CairoDialog *pDialog = cairo_dock_new_dialog (pAttribute, pIcon, pContainer);
 	if (pIcon && pIcon->pSubDock)  // un sous-dock par-dessus le dialogue est tres genant.
 		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pIcon->pSubDock));
+	if (pIcon)
+	{
+		if (pIcon->iHideLabel == 0 && pContainer)
+			gtk_widget_queue_draw (pContainer->pWidget);
+		pIcon->iHideLabel ++;
+	}
 	s_pDialogList = g_slist_prepend (s_pDialogList, pDialog);
 	if (pDialog->iNbButtons != 0 && (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL))
 		cairo_dock_load_dialog_buttons (myDialogsParam.cButtonOkImage, myDialogsParam.cButtonCancelImage);
@@ -1118,6 +1131,13 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog)
 			//g_print ("leave from container %x\n", pContainer);
 			if (pContainer)
 				cairo_dock_emit_leave_signal (pContainer);
+			
+			if (pIcon->iHideLabel > 0)
+			{
+				pIcon->iHideLabel --;
+				if (pIcon->iHideLabel == 0 && pContainer)
+					gtk_widget_queue_draw (pContainer->pWidget);
+			}
 		}
 	}
 }
@@ -1134,6 +1154,10 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 		{
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
 			cairo_dock_place_dialog (pDialog, pContainer);
+			
+			if (pIcon->iHideLabel == 0 && pContainer)
+				gtk_widget_queue_draw (pContainer->pWidget);
+			pIcon->iHideLabel ++;
 		}
 	}
 	pDialog->bPositionForced = FALSE;

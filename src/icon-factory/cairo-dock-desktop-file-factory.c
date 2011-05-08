@@ -93,9 +93,14 @@ static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, con
 	
 	//\__________________ fill the parameters
 	gchar *cFilePath = NULL;
-	if (cOrigin != NULL && *cOrigin != '/')
-		cFilePath = g_filename_from_uri (cOrigin, NULL, NULL);
-	else
+	if (cOrigin != NULL && *cOrigin != '/')  // transform the origin URI into a path or a file name.
+	{
+		if (strncmp (cOrigin, "application://", 14) == 0)  // Ubuntu >= 11.04: it's now an "app" URI
+			cFilePath = g_strdup (cOrigin + 14);  // in this case we don't have the actual path of the .desktop, but that doesn't matter.
+		else
+			cFilePath = g_filename_from_uri (cOrigin, NULL, NULL);
+	}
+	else  // no origin or already a path.
 		cFilePath = g_strdup (cOrigin);
 	g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cFilePath?cFilePath:"");
 	
@@ -118,7 +123,11 @@ static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, con
 	}
 	
 	//\__________________ generate a unique and readable filename.
-	gchar *cBaseName = (cFilePath ? g_path_get_basename (cFilePath) : g_path_get_basename (cTemplateFile));
+	gchar *cBaseName = (cFilePath ?
+		*cFilePath == '/' ?
+			g_path_get_basename (cFilePath) :
+			g_strdup (cFilePath) :
+		g_path_get_basename (cTemplateFile));
 	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename (cBaseName, g_cCurrentLaunchersPath);
 	g_free (cBaseName);
 	

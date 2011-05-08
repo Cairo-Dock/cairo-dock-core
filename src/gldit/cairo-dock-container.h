@@ -282,6 +282,15 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer
 */
 GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GFunc pFunction, GtkWidget *pMenu, gpointer pData);
 
+/** Add sub-menu to a given menu.
+*@param cLabel label of the sub-menu
+*@param pMenu the menu to insert the entry in
+*@param cImage a GTK stock or a path to an image
+* @return the new sub-menu that has been added.
+*/
+GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage);
+
+
 /** Build the main menu of a Container.
 *@param icon the icon that was left-clicked, or NULL if none.
 *@param pContainer the container that was left-clicked.

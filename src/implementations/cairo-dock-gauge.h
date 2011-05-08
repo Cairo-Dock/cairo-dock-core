@@ -23,8 +23,6 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-data-renderer-manager.h"
-#include <libxml/tree.h>
-#include <libxml/parser.h>
 G_BEGIN_DECLS
 
 /**
@@ -40,45 +38,6 @@ struct _CairoGaugeAttribute {
 	/// path to a gauge theme.
 	const gchar *cThemePath;
 };
-
-
-typedef struct {
-	RsvgHandle *pSvgHandle;
-	cairo_surface_t *pSurface;
-	gint sizeX;
-	gint sizeY;
-	GLuint iTexture;
-} GaugeImage;
-
-typedef struct {
-	// needle
-	gdouble posX, posY;
-	gdouble posStart, posStop;
-	gdouble direction;
-	gint iNeedleRealWidth, iNeedleRealHeight;
-	gdouble iNeedleOffsetX, iNeedleOffsetY;
-	gdouble fNeedleScale;
-	gint iNeedleWidth, iNeedleHeight;
-	GaugeImage *pImageNeedle;
-	// image list
-	gint iNbImages;
-	gint iNbImageLoaded;
-	GaugeImage *pImageList;
-	// value text zone
-	CairoDataRendererTextParam textZone;
-	// logo zone
-	CairoDataRendererEmblemParam emblem;
-	// label text zone
-	CairoDataRendererTextParam labelZone;
-} GaugeIndicator;
-
-typedef struct {
-	CairoDataRenderer dataRenderer;
-	gchar *cThemeName;
-	GaugeImage *pImageBackground;
-	GaugeImage *pImageForeground;
-	GList *pIndicatorList;
-} Gauge;
 
 
 void cairo_dock_register_data_renderer_gauge (void);

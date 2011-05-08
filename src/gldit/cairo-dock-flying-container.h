@@ -51,8 +51,6 @@ struct _CairoFlyingContainer {
 	CairoContainer container;
 	/// the flying icon
 	Icon *pIcon;
-	/// Whether to draw the hand or not.
-	gboolean bDrawHand;
 	/// time the container was created.
 	double fCreationTime;
 };
@@ -64,7 +62,7 @@ void cairo_dock_unload_flying_container_textures (void);  // merge with unload
 //gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext);
 
 
-CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock, gboolean bDrawHand);
+CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock);
 
 void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, CairoDock *pOriginDock);
 

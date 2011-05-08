@@ -21,7 +21,7 @@
 
 #include "gldi-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-module-factory.h"  // gldi_extend_manager
+#include "cairo-dock-module-factory.h"  // for gldi_extend_manager
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-manager.h"
 
@@ -91,7 +91,7 @@ void gldi_reload_manager (GldiManager *pManager, const gchar *cConfFilePath)  //
 }
  
 
-gboolean gldi_get_manager_config (GldiManager *pManager, GKeyFile *pKeyFile)
+static gboolean gldi_get_manager_config (GldiManager *pManager, GKeyFile *pKeyFile)
 {
 	if (! pManager->get_config || ! pManager->pConfig || pManager->iSizeOfConfig == 0)
 		return FALSE;

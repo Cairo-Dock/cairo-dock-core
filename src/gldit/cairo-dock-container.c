@@ -546,6 +546,33 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 	return pMenuItem;
 }
 
+GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage)
+{
+	GtkWidget *pMenuItem, *image, *pSubMenu = gtk_menu_new ();
+	if (cImage == NULL)
+	{
+		pMenuItem = gtk_menu_item_new_with_label (cLabel);
+	}
+	else
+	{
+		pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
+		if (*cImage == '/')
+		{
+			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, 24, 24, NULL);
+			image = gtk_image_new_from_pixbuf (pixbuf);
+			g_object_unref (pixbuf);
+		}
+		else
+		{
+			image = gtk_image_new_from_stock (cImage, GTK_ICON_SIZE_MENU);
+		}
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+	}
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem); 
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
+	return pSubMenu; 
+}
+
 
 static GtkWidget *s_pMenu = NULL;
 static gboolean _on_destroy_menu (GtkWidget *widget, GdkEvent  *event, gpointer   user_data)

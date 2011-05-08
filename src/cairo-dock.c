@@ -1,4 +1,4 @@
-/**
+/*
 * This file is a part of the Cairo-Dock project
 *
 * Copyright : (C) see the 'copyright' file.
@@ -895,7 +895,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	g_print ("\n\nTODO:\n - check GMenu from shortcut\n - check drop (launchers, Folders, Shortcuts, Stack, between applets, etc)\n - try to remove the pDock->container.bInside = TRUE; in container.c line 442\n - check vertical dock's height and labels\n\n");
+	g_print ("\n\nTODO:\n - fix drop (Shortcuts, between applets or applis, Panel view, etc)\n - try to remove the pDock->container.bInside = TRUE; in container.c line 442\n - vieux systray (dialog?)\n\n");
 	
 	gtk_main ();
 	

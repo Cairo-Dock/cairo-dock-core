@@ -62,33 +62,12 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 
-///static cairo_surface_t *s_pHandSurface = NULL;
-///static GLuint s_iHandTexture = 0;
-///static double s_fHandWidth, s_fHandHeight;
 static cairo_surface_t *s_pExplosionSurface = NULL;
 static GLuint s_iExplosionTexture = 0;
 static double s_fExplosionWidth, s_fExplosionHeight;
 static CairoEmblem *s_pEmblem = NULL;
 
-/**static void _cairo_dock_load_hand_image (int iWidth)
-{
-	if (s_pHandSurface != NULL || s_iHandTexture != 0)
-		return ;
-	
-	s_pHandSurface = cairo_dock_create_surface_from_image (GLDI_SHARE_DATA_DIR"/hand.svg",
-		1.,
-		iWidth, 0.,
-		CAIRO_DOCK_KEEP_RATIO,
-		&s_fHandWidth, &s_fHandHeight,
-		NULL, NULL);
-	if (s_pHandSurface != NULL && g_bUseOpenGL)
-	{
-		s_iHandTexture = cairo_dock_create_texture_from_surface (s_pHandSurface);
-		cairo_surface_destroy (s_pHandSurface);
-		s_pHandSurface = NULL;
-	}
-}*/
-static void _cairo_dock_load_emblem (Icon *pIcon, CairoFlyingManager *pFlyingContainer)
+static void _cairo_dock_load_emblem (Icon *pIcon, CairoFlyingContainer *pFlyingContainer)
 {
 	cairo_dock_free_emblem (s_pEmblem);
 	const gchar *cImage = NULL;
@@ -107,26 +86,26 @@ static void _cairo_dock_load_emblem (Icon *pIcon, CairoFlyingManager *pFlyingCon
 }
 static void _cairo_dock_load_explosion_image (int iWidth)
 {
-	if (s_pExplosionSurface != NULL || s_iExplosionTexture != 0)
-		return ;
-	
-	gchar *cExplosionFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, "explosion.png");
-	if (g_file_test (cExplosionFile, G_FILE_TEST_EXISTS))
+	if (s_pExplosionSurface == NULL)
 	{
-		s_pExplosionSurface = cairo_dock_create_surface_for_icon (cExplosionFile,
-			iWidth * EXPLOSION_NB_FRAMES,
-			iWidth);
+		gchar *cExplosionFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, "explosion.png");
+		if (g_file_test (cExplosionFile, G_FILE_TEST_EXISTS))
+		{
+			s_pExplosionSurface = cairo_dock_create_surface_for_icon (cExplosionFile,
+				iWidth * EXPLOSION_NB_FRAMES,
+				iWidth);
+		}
+		else
+		{
+			s_pExplosionSurface = cairo_dock_create_surface_for_icon (GLDI_SHARE_DATA_DIR"/explosion/explosion.png",
+				iWidth * EXPLOSION_NB_FRAMES,
+				iWidth);
+		}
+		g_free (cExplosionFile);
+		s_fExplosionWidth = iWidth;
+		s_fExplosionHeight = iWidth;
 	}
-	else
-	{
-		s_pExplosionSurface = cairo_dock_create_surface_for_icon (GLDI_SHARE_DATA_DIR"/explosion/explosion.png",
-			iWidth * EXPLOSION_NB_FRAMES,
-			iWidth);
-	}
-	g_free (cExplosionFile);
-	s_fExplosionWidth = iWidth;
-	s_fExplosionHeight = iWidth;
-	if (s_pExplosionSurface != NULL && g_bUseOpenGL)
+	if (s_pExplosionSurface != NULL && g_bUseOpenGL && s_iExplosionTexture == 0)
 	{
 		s_iExplosionTexture = cairo_dock_create_texture_from_surface (s_pExplosionSurface);
 		cairo_surface_destroy (s_pExplosionSurface);
@@ -134,25 +113,6 @@ static void _cairo_dock_load_explosion_image (int iWidth)
 	}
 }
 
-
-void cairo_dock_unload_flying_container_textures (void)
-{
-	/**if (s_iHandTexture != 0)
-	{
-		_cairo_dock_delete_texture (s_iHandTexture);
-		s_iHandTexture = 0;
-	}*/
-	if (s_iExplosionTexture != 0)
-	{
-		_cairo_dock_delete_texture (s_iExplosionTexture);
-		s_iExplosionTexture = 0;
-	}
-	if (s_pEmblem != NULL)
-	{
-		cairo_dock_free_emblem (s_pEmblem);
-		s_pEmblem = NULL;
-	}
-}
 
 static gboolean _cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
 {
@@ -181,9 +141,6 @@ static gboolean _cairo_dock_render_flying_container_notification (gpointer pUser
 			cairo_save (pCairoContext);
 			cairo_dock_render_one_icon (pIcon, CAIRO_CONTAINER (pFlyingContainer), pCairoContext, 1., FALSE);
 			cairo_restore (pCairoContext);
-			
-			///cairo_set_source_surface (pCairoContext, s_pHandSurface, 0., 0.);
-			///cairo_paint (pCairoContext);
 			
 			_cairo_dock_apply_emblem_surface (s_pEmblem, pFlyingContainer->container.iWidth, pFlyingContainer->container.iHeight, pCairoContext);
 		}
@@ -217,11 +174,6 @@ static gboolean _cairo_dock_render_flying_container_notification (gpointer pUser
 				- pFlyingContainer->container.iHeight);*/
 			cairo_dock_render_one_icon_opengl (pIcon, CAIRO_CONTAINER (pFlyingContainer), 1., FALSE);
 			glPopMatrix ();
-			
-			/**glTranslatef (pFlyingContainer->container.iWidth / 2,
-				pFlyingContainer->container.iHeight - s_fHandHeight/2,
-				- 3.);
-			cairo_dock_draw_texture (s_iHandTexture, s_fHandWidth, s_fHandHeight);*/
 			
 			glPushMatrix ();
 			glTranslatef (pFlyingContainer->container.iWidth/2,
@@ -324,7 +276,7 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 	return FALSE;
 }
 
-CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock, gboolean bDrawHand)
+CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock)
 {
 	g_return_val_if_fail (pFlyingIcon != NULL, NULL);
 	CairoFlyingContainer * pFlyingContainer = g_new0 (CairoFlyingContainer, 1);
@@ -352,10 +304,6 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	pFlyingContainer->container.bInside = TRUE;
 	pFlyingIcon->bPointed = TRUE;
 	pFlyingIcon->fScale = 1.;
-	/**pFlyingContainer->container.iWidth = pFlyingIcon->fWidth * pFlyingIcon->fScale * 3.7;
-	pFlyingContainer->container.iHeight = pFlyingIcon->fHeight * pFlyingIcon->fScale + 1.*pFlyingContainer->container.iWidth / HAND_WIDTH * HAND_HEIGHT * .6;
-	pFlyingIcon->fDrawX = (pFlyingContainer->container.iWidth - pFlyingIcon->fWidth * pFlyingIcon->fScale) / 2 * 1.2;
-	pFlyingIcon->fDrawY = pFlyingContainer->container.iHeight - pFlyingIcon->fHeight * pFlyingIcon->fScale;*/
 	
 	pFlyingContainer->container.iWidth = pFlyingIcon->fWidth * pFlyingIcon->fScale * 1.333;
 	pFlyingContainer->container.iHeight = pFlyingIcon->fHeight * pFlyingIcon->fScale * 1.333;
@@ -389,14 +337,8 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->container.iWindowPositionX,
 		pFlyingContainer->container.iWindowPositionY);*/
 	
-	///_cairo_dock_load_hand_image (pFlyingContainer->container.iWidth);
 	_cairo_dock_load_emblem (pFlyingIcon, pFlyingContainer);
 	_cairo_dock_load_explosion_image (pFlyingContainer->container.iWidth);
-	
-	pFlyingContainer->bDrawHand = bDrawHand;
-	if (bDrawHand)
-		cairo_dock_request_icon_animation (pFlyingIcon, CAIRO_CONTAINER (pFlyingContainer), bDrawHand ? "pulse" : "bounce", 1e6);
-	cairo_dock_launch_animation (CAIRO_CONTAINER (pFlyingContainer));  // au cas ou pas d'animation.
 	
 	struct timeval tv;
 	int r = gettimeofday (&tv, NULL);
@@ -435,6 +377,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 	Icon *pIcon = pFlyingContainer->pIcon;
 	pFlyingContainer->pIcon = NULL;
 	pFlyingContainer->container.iAnimationStep = EXPLOSION_NB_FRAMES+1;
+	cairo_dock_launch_animation (CAIRO_CONTAINER (pFlyingContainer));  // au cas ou pas d'animation.
 	
 	if (pIcon->cDesktopFileName != NULL)  // c'est un lanceur, ou un separateur manuel, ou un sous-dock.
 	{
@@ -460,7 +403,16 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 
 static void unload (void)
 {
-	cairo_dock_unload_flying_container_textures ();
+	if (s_iExplosionTexture != 0)
+	{
+		_cairo_dock_delete_texture (s_iExplosionTexture);
+		s_iExplosionTexture = 0;
+	}
+	if (s_pEmblem != NULL)
+	{
+		cairo_dock_free_emblem (s_pEmblem);
+		s_pEmblem = NULL;
+	}
 }
 
 

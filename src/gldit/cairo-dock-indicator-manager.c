@@ -64,104 +64,6 @@ static gboolean cairo_dock_pre_render_indicator_notification (gpointer pUserData
 static gboolean cairo_dock_render_indicator_notification (gpointer pUserData, Icon *icon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
 
 
-static inline void cairo_dock_load_task_indicator (const gchar *cIndicatorImagePath, double fMaxScale, double fIndicatorRatio)
-{
-	cairo_dock_unload_image_buffer (&s_indicatorBuffer);
-	
-	double fLauncherWidth = (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
-	double fLauncherHeight = (myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
-	double fScale = (myIndicatorsParam.bIndicatorOnIcon ? fMaxScale : 1.) * fIndicatorRatio;
-	
-	cairo_dock_load_image_buffer (&s_indicatorBuffer,
-		cIndicatorImagePath,
-		fLauncherWidth * fScale,
-		fLauncherHeight * fScale,
-		CAIRO_DOCK_KEEP_RATIO);
-}
-static inline void cairo_dock_load_active_window_indicator (const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor)
-{
-	cairo_dock_unload_image_buffer (&s_activeIndicatorBuffer);
-	
-	int iWidth = MAX (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
-	int iHeight = MAX (myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_APPLI], myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_APPLI]);
-	if (iWidth == 0)
-		iWidth = 48;
-	if (iHeight == 0)
-		iHeight = 48;
-	iWidth *= fMaxScale;
-	iHeight *= fMaxScale;
-	
-	if (cImagePath != NULL)
-	{
-		cairo_dock_load_image_buffer (&s_activeIndicatorBuffer,
-			cImagePath,
-			iWidth,
-			iHeight,
-			CAIRO_DOCK_FILL_SPACE);
-	}
-	else if (fActiveColor[3] > 0)
-	{
-		cairo_surface_t *pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
-		cairo_t *pCairoContext = cairo_create (pSurface);
-		
-		fCornerRadius = MIN (fCornerRadius, (iWidth - fLineWidth) / 2);
-		double fFrameWidth = iWidth - (2 * fCornerRadius + fLineWidth);
-		double fFrameHeight = iHeight - 2 * fLineWidth;
-		double fDockOffsetX = fCornerRadius + fLineWidth/2;
-		double fDockOffsetY = fLineWidth/2;
-		cairo_dock_draw_frame (pCairoContext, fCornerRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, 1, 0., CAIRO_DOCK_HORIZONTAL, TRUE);
-		
-		cairo_set_source_rgba (pCairoContext, fActiveColor[0], fActiveColor[1], fActiveColor[2], fActiveColor[3]);
-		if (fLineWidth > 0)
-		{
-			cairo_set_line_width (pCairoContext, fLineWidth);
-			cairo_stroke (pCairoContext);
-		}
-		else
-		{
-			cairo_fill (pCairoContext);
-		}
-		cairo_destroy (pCairoContext);
-		
-		cairo_dock_load_image_buffer_from_surface (&s_activeIndicatorBuffer,
-			pSurface,
-			iWidth,
-			iHeight);
-	}
-}
-static inline void cairo_dock_load_class_indicator (const gchar *cIndicatorImagePath, double fMaxScale)
-{
-	cairo_dock_unload_image_buffer (&s_classIndicatorBuffer);
-	
-	double fLauncherWidth = (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
-	double fLauncherHeight = (myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
-	
-	cairo_dock_load_image_buffer (&s_classIndicatorBuffer,
-		cIndicatorImagePath,
-		fLauncherWidth/3,
-		fLauncherHeight/3,
-		CAIRO_DOCK_KEEP_RATIO);
-}
-void cairo_dock_load_indicator_textures (void)
-{
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
-	
-	cairo_dock_load_task_indicator (myTaskbarParam.bShowAppli && (myTaskbarParam.bMixLauncherAppli || myIndicatorsParam.bDrawIndicatorOnAppli) ? myIndicatorsParam.cIndicatorImagePath : NULL, fMaxScale, myIndicatorsParam.fIndicatorRatio);
-	
-	cairo_dock_load_active_window_indicator (myIndicatorsParam.cActiveIndicatorImagePath, fMaxScale, myIndicatorsParam.iActiveCornerRadius, myIndicatorsParam.iActiveLineWidth, myIndicatorsParam.fActiveColor);
-	
-	cairo_dock_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? myIndicatorsParam.cClassIndicatorImagePath : NULL, fMaxScale);
-}
-
-
-void cairo_dock_unload_indicator_textures (void)
-{
-	cairo_dock_unload_image_buffer (&s_indicatorBuffer);
-	cairo_dock_unload_image_buffer (&s_activeIndicatorBuffer);
-	cairo_dock_unload_image_buffer (&s_classIndicatorBuffer);
-}
-
-
   /////////////////
  /// RENDERING ///
 /////////////////
@@ -386,16 +288,12 @@ static gboolean cairo_dock_pre_render_indicator_notification (gpointer pUserData
 	{
 		if (icon->bHasIndicator && ! myIndicatorsParam.bIndicatorAbove)
 		{
-			//glPushMatrix ();
 			_cairo_dock_draw_appli_indicator_opengl (icon, pDock);
-			//glPopMatrix ();
 		}
 		
 		if (bIsActive)
 		{
-			//glPushMatrix ();
 			_cairo_dock_draw_active_window_indicator_opengl (icon, pDock, pDock->container.fRatio);
-			//glPopMatrix ();
 		}
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -432,17 +330,11 @@ static gboolean cairo_dock_render_indicator_notification (gpointer pUserData, Ic
 		}
 		if (bIsActive)
 		{
-			//glPushMatrix ();
-			//glTranslatef (0., 0., icon->fHeight * (1+myIconsParam.fAmplitude) -1);  // avant-plan
 			_cairo_dock_draw_active_window_indicator_opengl (icon, pDock, pDock->container.fRatio);
-			//glPopMatrix ();
 		}
 		if (icon->pSubDock != NULL && icon->cClass != NULL && s_classIndicatorBuffer.iTexture != 0 && icon->Xid == 0)  // le dernier test est de la paranoia.
 		{
-			//glPushMatrix ();
-			//glTranslatef (0., 0., icon->fHeight * (1+myIconsParam.fAmplitude) -1);  // avant-plan
 			_cairo_dock_draw_class_indicator_opengl (icon, pDock->container.bIsHorizontal, pDock->container.fRatio, pDock->container.bDirectionUp);
-			//glPopMatrix ();
 		}
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -585,9 +477,93 @@ static void reset_config (CairoIndicatorsParam *pIndicators)
  /// LOAD ///
 ////////////
 
+static inline void _load_task_indicator (const gchar *cIndicatorImagePath, double fMaxScale, double fIndicatorRatio)
+{
+	cairo_dock_unload_image_buffer (&s_indicatorBuffer);
+	
+	double fLauncherWidth = (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
+	double fLauncherHeight = (myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
+	double fScale = (myIndicatorsParam.bIndicatorOnIcon ? fMaxScale : 1.) * fIndicatorRatio;
+	
+	cairo_dock_load_image_buffer (&s_indicatorBuffer,
+		cIndicatorImagePath,
+		fLauncherWidth * fScale,
+		fLauncherHeight * fScale,
+		CAIRO_DOCK_KEEP_RATIO);
+}
+static inline void _load_active_window_indicator (const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor)
+{
+	cairo_dock_unload_image_buffer (&s_activeIndicatorBuffer);
+	
+	int iWidth = MAX (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
+	int iHeight = MAX (myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_APPLI], myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_APPLI]);
+	if (iWidth == 0)
+		iWidth = 48;
+	if (iHeight == 0)
+		iHeight = 48;
+	iWidth *= fMaxScale;
+	iHeight *= fMaxScale;
+	
+	if (cImagePath != NULL)
+	{
+		cairo_dock_load_image_buffer (&s_activeIndicatorBuffer,
+			cImagePath,
+			iWidth,
+			iHeight,
+			CAIRO_DOCK_FILL_SPACE);
+	}
+	else if (fActiveColor[3] > 0)
+	{
+		cairo_surface_t *pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
+		cairo_t *pCairoContext = cairo_create (pSurface);
+		
+		fCornerRadius = MIN (fCornerRadius, (iWidth - fLineWidth) / 2);
+		double fFrameWidth = iWidth - (2 * fCornerRadius + fLineWidth);
+		double fFrameHeight = iHeight - 2 * fLineWidth;
+		double fDockOffsetX = fCornerRadius + fLineWidth/2;
+		double fDockOffsetY = fLineWidth/2;
+		cairo_dock_draw_frame (pCairoContext, fCornerRadius, fLineWidth, fFrameWidth, fFrameHeight, fDockOffsetX, fDockOffsetY, 1, 0., CAIRO_DOCK_HORIZONTAL, TRUE);
+		
+		cairo_set_source_rgba (pCairoContext, fActiveColor[0], fActiveColor[1], fActiveColor[2], fActiveColor[3]);
+		if (fLineWidth > 0)
+		{
+			cairo_set_line_width (pCairoContext, fLineWidth);
+			cairo_stroke (pCairoContext);
+		}
+		else
+		{
+			cairo_fill (pCairoContext);
+		}
+		cairo_destroy (pCairoContext);
+		
+		cairo_dock_load_image_buffer_from_surface (&s_activeIndicatorBuffer,
+			pSurface,
+			iWidth,
+			iHeight);
+	}
+}
+static inline void _load_class_indicator (const gchar *cIndicatorImagePath, double fMaxScale)
+{
+	cairo_dock_unload_image_buffer (&s_classIndicatorBuffer);
+	
+	double fLauncherWidth = (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
+	double fLauncherHeight = (myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
+	
+	cairo_dock_load_image_buffer (&s_classIndicatorBuffer,
+		cIndicatorImagePath,
+		fLauncherWidth/3,
+		fLauncherHeight/3,
+		CAIRO_DOCK_KEEP_RATIO);
+}
 static void load (void)
 {
-	cairo_dock_load_indicator_textures ();
+	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
+	
+	_load_task_indicator (myTaskbarParam.bShowAppli && (myTaskbarParam.bMixLauncherAppli || myIndicatorsParam.bDrawIndicatorOnAppli) ? myIndicatorsParam.cIndicatorImagePath : NULL, fMaxScale, myIndicatorsParam.fIndicatorRatio);
+	
+	_load_active_window_indicator (myIndicatorsParam.cActiveIndicatorImagePath, fMaxScale, myIndicatorsParam.iActiveCornerRadius, myIndicatorsParam.iActiveLineWidth, myIndicatorsParam.fActiveColor);
+	
+	_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? myIndicatorsParam.cClassIndicatorImagePath : NULL, fMaxScale);
 }
 
 
@@ -607,7 +583,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 		pPrevIndicators->bIndicatorOnIcon != pIndicators->bIndicatorOnIcon ||
 		pPrevIndicators->fIndicatorRatio != pIndicators->fIndicatorRatio)
 	{
-		cairo_dock_load_task_indicator (myTaskbarParam.bShowAppli && (myTaskbarParam.bMixLauncherAppli || myIndicatorsParam.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, fMaxScale, pIndicators->fIndicatorRatio);
+		_load_task_indicator (myTaskbarParam.bShowAppli && (myTaskbarParam.bMixLauncherAppli || myIndicatorsParam.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, fMaxScale, pIndicators->fIndicatorRatio);
 	}
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) ||
@@ -615,7 +591,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 		pPrevIndicators->iActiveLineWidth != pIndicators->iActiveLineWidth ||
 		cairo_dock_colors_differ (pPrevIndicators->fActiveColor, pIndicators->fActiveColor))
 	{
-		cairo_dock_load_active_window_indicator (pIndicators->cActiveIndicatorImagePath,
+		_load_active_window_indicator (pIndicators->cActiveIndicatorImagePath,
 			fMaxScale,
 			pIndicators->iActiveCornerRadius,
 			pIndicators->iActiveLineWidth,
@@ -625,7 +601,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	if (cairo_dock_strings_differ (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath) ||
 		pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
 	{
-		cairo_dock_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL, fMaxScale);
+		_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL, fMaxScale);
 		
 		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic && g_pMainDock)  // on recharge les icones pointant sur une classe (qui sont dans le main dock).
 		{
@@ -660,7 +636,9 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 
 static void unload (void)
 {
-	cairo_dock_unload_indicator_textures ();
+	cairo_dock_unload_image_buffer (&s_indicatorBuffer);
+	cairo_dock_unload_image_buffer (&s_activeIndicatorBuffer);
+	cairo_dock_unload_image_buffer (&s_classIndicatorBuffer);
 }
 
 

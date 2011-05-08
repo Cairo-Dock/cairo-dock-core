@@ -308,35 +308,6 @@ gchar *cairo_dock_get_theme_path_for_module (const gchar *cAppletConfFilePath, G
 }
 
 
-GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage)
-{
-	GtkWidget *pMenuItem, *image, *pSubMenu = gtk_menu_new ();
-	if (cImage == NULL)
-	{
-		pMenuItem = gtk_menu_item_new_with_label (cLabel);
-	}
-	else
-	{
-		pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
-		if (*cImage == '/')
-		{
-			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, 24, 24, NULL);
-			image = gtk_image_new_from_pixbuf (pixbuf);
-			g_object_unref (pixbuf);
-		}
-		else
-		{
-			image = gtk_image_new_from_stock (cImage, GTK_ICON_SIZE_MENU);
-		}
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-	}
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem); 
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
-	return pSubMenu; 
-}
-
-
-
 //Utile pour jouer des fichiers son depuis le dock.
 //A utiliser avec l'Objet UI 'u' dans les .conf
 void cairo_dock_play_sound (const gchar *cSoundPath)

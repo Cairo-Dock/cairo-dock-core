@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-manager.h This class defines the Managers. Managers are the core of Cairo-Dock. A Manager is a set of parameters and an interface, and manages all the ressources associated to its functions.
 * 
-* Each manager is initialized atr the beginning.
+* Each manager is initialized at the beginning.
 * When loading the current theme, get_config and load are called.
 * When unloading the current theme, unload and reset_config are called.
 * When reloading a part of the current theme, reset_config, get_config and load are called.

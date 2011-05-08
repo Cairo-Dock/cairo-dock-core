@@ -326,7 +326,9 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 	//\_________________________ On ajoute le sous-menu Cairo-Dock.
 	GtkWidget *pMenuItem, *image;
 	GdkPixbuf *pixbuf;
-	pMenuItem = gtk_image_menu_item_new_with_label ("Cairo-Dock");
+	
+	GtkWidget *pSubMenu = cairo_dock_create_sub_menu ("Cairo-Dock", menu, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+	/**pMenuItem = gtk_image_menu_item_new_with_label ("Cairo-Dock");
 	pixbuf = gdk_pixbuf_new_from_file_at_size (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, 32, 32, NULL);
 	image = gtk_image_new_from_pixbuf (pixbuf);
 	g_object_unref (pixbuf);
@@ -334,7 +336,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 	gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
 	
 	GtkWidget *pSubMenu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);*/
 	
 	if (! cairo_dock_is_locked ())
 	{
@@ -1174,9 +1176,10 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer *data
 }
 static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSeparator, gboolean bAddLauncher)
 {
-	GtkWidget *pMenuItem = _add_entry_in_menu (_("Add"), GTK_STOCK_ADD, NULL, pMenu);
+	GtkWidget *pSubMenuAdd = cairo_dock_create_sub_menu (_("Add"), pMenu, GTK_STOCK_ADD);
+	/**GtkWidget *pMenuItem = _add_entry_in_menu (_("Add"), GTK_STOCK_ADD, NULL, pMenu);
 	GtkWidget *pSubMenuAdd = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);*/
 	
 	_add_entry_in_menu (_("Sub-dock"), GTK_STOCK_ADD, cairo_dock_add_sub_dock, pSubMenuAdd);
 	
@@ -1187,7 +1190,7 @@ static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSepar
 	
 	if (bAddLauncher)
 	{
-		pMenuItem = _add_entry_in_menu (_("Custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
+		GtkWidget *pMenuItem = _add_entry_in_menu (_("Custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
 		gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it on the dock."));
 	}
 }
@@ -1257,9 +1260,10 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 				pMenuItem = _add_entry_in_menu (CAIRO_DOCK_IS_USER_SEPARATOR (icon) ? _("Remove this separator") : _("Remove this launcher"), GTK_STOCK_REMOVE, _cairo_dock_remove_launcher, menu);
 				gtk_widget_set_tooltip_text (pMenuItem, _("You can remove a launcher by dragging it out of the dock with the mouse ."));
 				
-				pMenuItem = _add_entry_in_menu (_("Move to another dock"), GTK_STOCK_JUMP_TO, NULL, menu);
+				GtkWidget *pSubMenuDocks = cairo_dock_create_sub_menu (_("Move to another dock"), menu, GTK_STOCK_JUMP_TO);
+				/**pMenuItem = _add_entry_in_menu (_("Move to another dock"), GTK_STOCK_JUMP_TO, NULL, menu);
 				GtkWidget *pSubMenuDocks = gtk_menu_new ();
-				gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuDocks);
+				gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuDocks);*/
 				g_object_set_data (G_OBJECT (pSubMenuDocks), "launcher", icon);
 				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("New main dock"), GTK_STOCK_NEW, (GFunc)_cairo_dock_move_launcher_to_dock, pSubMenuDocks, NULL);
 				g_object_set_data (G_OBJECT (pMenuItem), "launcher", icon);
@@ -1281,10 +1285,11 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		//\_________________________ On rajoute les actions supplementaires sur les icones d'applis.
 		Icon *pAppli = cairo_dock_get_icon_with_Xid (icon->Xid);  // un inhibiteur ne contient pas les donnees, mais seulement la reference a l'appli, donc on recupere celle-ci pour avoir son etat.
 		
-		pMenuItem = gtk_menu_item_new_with_label (_("Other actions"));
+		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
+		/**pMenuItem = gtk_menu_item_new_with_label (_("Other actions"));
 		gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
 		GtkWidget *pSubMenuOtherActions = gtk_menu_new ();
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuOtherActions);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuOtherActions);*/
 		
 		pMenuItem = _add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
 		if (pAppli && cairo_dock_appli_is_on_current_desktop (pAppli))
@@ -1378,10 +1383,11 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		bAddSeparator = TRUE;
 		
 		//\_________________________ On rajoute les actions supplementaires sur la classe.
-		pMenuItem = gtk_menu_item_new_with_label (_("Other actions"));
+		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
+		/**pMenuItem = gtk_menu_item_new_with_label (_("Other actions"));
 		gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
 		GtkWidget *pSubMenuOtherActions = gtk_menu_new ();
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuOtherActions);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuOtherActions);*/
 		
 		_add_entry_in_menu (_("Move all to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_class_to_current_desktop, pSubMenuOtherActions);
 		
@@ -1433,9 +1439,10 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			
 			if (CAIRO_DOCK_IS_DOCK (pContainer) && pIconModule->cParentDockName != NULL)  // sinon bien sur ca n'est pas la peine de presenter l'option (Cairo-Penguin par exemple)
 			{
-				pMenuItem = _add_entry_in_menu (_("Move to another dock"), GTK_STOCK_JUMP_TO, NULL, menu);
+				GtkWidget *pSubMenuDocks = cairo_dock_create_sub_menu (_("Move to another dock"), menu, GTK_STOCK_JUMP_TO);
+				/**pMenuItem = _add_entry_in_menu (_("Move to another dock"), GTK_STOCK_JUMP_TO, NULL, menu);
 				GtkWidget *pSubMenuDocks = gtk_menu_new ();
-				gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuDocks);
+				gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuDocks);*/
 				g_object_set_data (G_OBJECT (pSubMenuDocks), "launcher", pIconModule);
 				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("New main dock"), GTK_STOCK_NEW, (GFunc)_cairo_dock_move_launcher_to_dock, pSubMenuDocks, NULL);
 				g_object_set_data (G_OBJECT (pMenuItem), "launcher", pIconModule);
@@ -1454,9 +1461,10 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		}
 		bAddSeparator = TRUE;
 		
-		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Visibility"), GTK_STOCK_FIND, NULL, menu, NULL);
+		GtkWidget *pSubMenuAccessibility = cairo_dock_create_sub_menu (_("Visibility"), menu, GTK_STOCK_FIND);
+		/**pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Visibility"), GTK_STOCK_FIND, NULL, menu, NULL);
 		GtkWidget *pSubMenuAccessibility = gtk_menu_new ();
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAccessibility);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAccessibility);*/
 		
 		GSList *group = NULL;
 

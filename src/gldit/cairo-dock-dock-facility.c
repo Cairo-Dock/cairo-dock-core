@@ -854,12 +854,11 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 	}
 }
 
-#define make_icon_avoid_mouse(icon) \
+#define make_icon_avoid_mouse(icon, sens) do { \
 	cairo_dock_mark_icon_as_avoiding_mouse (icon);\
 	icon->fAlpha = 0.75;\
 	if (myIconsParam.fAmplitude != 0)\
-		icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIconsParam.fAmplitude * (icon->fPhase < G_PI/2 ? -1 : 1);
-
+		icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIconsParam.fAmplitude * sens; } while (0)
 static inline gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIconGroup iGroup, double fMargin)
 {
 	gboolean bCanDrop = FALSE;
@@ -870,28 +869,34 @@ static inline gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, Cair
 		icon = ic->data;
 		if (icon->bPointed)
 		{
-			if (pDock->container.iMouseX < icon->fDrawX + icon->fWidth * icon->fScale * fMargin)  // on est a gauche.  // fDrawXAtRest
+			g_print ("icon->fWidth: %d, %.2f\n", (int)icon->fWidth, icon->fScale);
+			g_print ("x: %d / %d\n", pDock->container.iMouseX, (int)icon->fDrawX);
+			if (pDock->container.iMouseX < icon->fDrawX + icon->fWidth * icon->fScale * fMargin * pDock->fMagnitudeMax)  // on est a gauche.  // fDrawXAtRest
 			{
 				Icon *prev_icon = cairo_dock_get_previous_element (ic, pDock->icons) -> data;
-				if ((cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (iGroup) || cairo_dock_get_icon_order (prev_icon) == cairo_dock_get_group_order (iGroup)))  // && prev_icon->iAnimationType != CAIRO_DOCK_FOLLOW_MOUSE
+				if ((cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (iGroup) || cairo_dock_get_icon_order (prev_icon) == cairo_dock_get_group_order (iGroup)))
 				{
-					make_icon_avoid_mouse (icon);
-					make_icon_avoid_mouse (prev_icon);
+					make_icon_avoid_mouse (icon, 1);
+					if (prev_icon)
+						make_icon_avoid_mouse (prev_icon, -1);
 					//g_print ("%s> <%s\n", prev_icon->cName, icon->cName);
 					bCanDrop = TRUE;
 				}
 			}
-			else if (pDock->container.iMouseX > icon->fDrawX + icon->fWidth * icon->fScale * (1 - fMargin))  // on est a droite.  // fDrawXAtRest
+			else if (pDock->container.iMouseX > icon->fDrawX + icon->fWidth * icon->fScale * (1 - fMargin) * pDock->fMagnitudeMax	)  // on est a droite.  // fDrawXAtRest
 			{
 				Icon *next_icon = cairo_dock_get_next_element (ic, pDock->icons) -> data;
-				if ((icon->iGroup == iGroup || next_icon->iGroup == iGroup))  // && next_icon->iAnimationType != CAIRO_DOCK_FOLLOW_MOUSE
+				if ((cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (iGroup) || cairo_dock_get_icon_order (next_icon) == cairo_dock_get_group_order (iGroup)))
 				{
-					make_icon_avoid_mouse (icon);
-					make_icon_avoid_mouse (next_icon);
+					make_icon_avoid_mouse (icon, -1);
+					if (next_icon)
+						make_icon_avoid_mouse (next_icon, 1);
 					//g_print ("%s> <%s\n", icon->cName, next_icon->cName);
 					bCanDrop = TRUE;
 				}
 				ic = ic->next;  // on la saute.
+				if (ic == NULL)
+					break;
 			}  // else on est dessus.
 		}
 		else

@@ -17,9 +17,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef __CAIRO_DOCK_GRAPH2__
-#define  __CAIRO_DOCK_GRAPH2__
+#ifndef __CAIRO_DOCK_GRAPH__
+#define  __CAIRO_DOCK_GRAPH__
 
 #include <gtk/gtk.h>
 G_BEGIN_DECLS
@@ -35,15 +34,15 @@ G_BEGIN_DECLS
 /// Types of graph.
 typedef enum {
 	/// a continuous line.
-	CAIRO_DOCK_GRAPH2_LINE=0,
+	CAIRO_DOCK_GRAPH_LINE=0,
 	/// a continuous plain graph.
-	CAIRO_DOCK_GRAPH2_PLAIN,
+	CAIRO_DOCK_GRAPH_PLAIN,
 	/// a histogram.
-	CAIRO_DOCK_GRAPH2_BAR,
+	CAIRO_DOCK_GRAPH_BAR,
 	/// a circle.
-	CAIRO_DOCK_GRAPH2_CIRCLE,
+	CAIRO_DOCK_GRAPH_CIRCLE,
 	/// a plain circle.
-	CAIRO_DOCK_GRAPH2_CIRCLE_PLAIN
+	CAIRO_DOCK_GRAPH_CIRCLE_PLAIN
 	} CairoDockTypeGraph;
 
 typedef struct _CairoGraphAttribute CairoGraphAttribute;
@@ -64,20 +63,6 @@ struct _CairoGraphAttribute {
 	/// TRUE to draw all the values on the same graph.
 	gboolean bMixGraphs;
 };
-
-typedef struct _CairoDockGraph {
-	CairoDataRenderer dataRenderer;
-	CairoDockTypeGraph iType;
-	gdouble *fHighColor;  // iNbValues triplets (r,v,b).
-	gdouble *fLowColor;  // idem.
-	cairo_pattern_t **pGradationPatterns;  // iNbValues patterns.
-	gdouble fBackGroundColor[4];
-	cairo_surface_t *pBackgroundSurface;
-	GLuint iBackgroundTexture;
-	gint iRadius;
-	gdouble fMargin;
-	gboolean bMixGraphs;
-	} CairoDockGraph;
 
 
 void cairo_dock_register_data_renderer_graph (void);

@@ -28,7 +28,7 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-indicator-manager.h This class loads the indicators and manages the associated ressources.
+*@file cairo-dock-indicator-manager.h This class manages the indicators.
 */
 
 typedef struct _CairoIndicatorsParam CairoIndicatorsParam;
@@ -70,11 +70,6 @@ struct _CairoIndicatorsManager {
 typedef enum {
 	NB_NOTIFICATIONS_INDICATORS
 	} CairoIndicatorsNotifications;
-
-
-//void cairo_dock_load_indicator_textures (void);
-
-//void cairo_dock_unload_indicator_textures (void);
 
 
 void gldi_register_indicators_manager (void);

@@ -575,7 +575,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		gtk_widget_queue_draw (pWidget);
 		
 		pDock->fAvoidingMouseMargin = .25;  // on peut dropper entre 2 icones ...
-		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;  // ... seulement entre 2 lanceurs.
+		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;  // ... seulement entre 2 icones du groupe "lanceurs".
 	}
 	
 	//\_______________ On gere le changement d'icone.
@@ -631,7 +631,7 @@ gboolean cairo_dock_on_leave_dock_notification2 (gpointer data, CairoDock *pDock
 			cairo_dock_update_dock_size (pOriginDock);
 			cairo_dock_stop_icon_glide (pOriginDock);
 			
-			s_pFlyingContainer = cairo_dock_create_flying_container (s_pIconClicked, pOriginDock, TRUE);
+			s_pFlyingContainer = cairo_dock_create_flying_container (s_pIconClicked, pOriginDock);
 			//g_print ("- s_pIconClicked <- NULL\n");
 			s_pIconClicked = NULL;
 			if (pDock->iRefCount > 0 || pDock->bAutoHide)  // pour garder le dock visible.
@@ -704,7 +704,7 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 			cairo_dock_update_dock_size (pOriginDock);
 			cairo_dock_stop_icon_glide (pOriginDock);
 			
-			s_pFlyingContainer = cairo_dock_create_flying_container (s_pIconClicked, pOriginDock, TRUE);
+			s_pFlyingContainer = cairo_dock_create_flying_container (s_pIconClicked, pOriginDock);
 			//g_print ("- s_pIconClicked <- NULL\n");
 			s_pIconClicked = NULL;
 			if (pDock->iRefCount > 0 || pDock->bAutoHide)  // pour garder le dock visible.
