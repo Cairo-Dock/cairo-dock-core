@@ -125,7 +125,7 @@
 // Nom du repertoire des themes de dock.
 #define CAIRO_DOCK_THEMES_DIR "themes"
 // Nom du repertoire des themes de dock sur le serveur
-#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes2.2"
+#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes2.4"
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentThemePath;
@@ -407,11 +407,11 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 	g_free (cConfFilePath);
 }
 
-static gboolean _wait (GMainLoop *loop)
+/**static gboolean _wait (GMainLoop *loop)
 {
 	g_main_loop_quit (loop);
 	return FALSE;
-}
+}*/
 
 int main (int argc, char** argv)
 {
@@ -589,10 +589,11 @@ int main (int argc, char** argv)
 	//\___________________ delay the startup if specified.
 	if (iDelay > 0)
 	{
-		GMainLoop *loop = g_main_loop_new (NULL, FALSE);
+		sleep (iDelay);
+		/**GMainLoop *loop = g_main_loop_new (NULL, FALSE);
 		g_timeout_add_seconds (iDelay, (GSourceFunc)_wait, loop);
 		g_main_loop_run (loop);
-		g_main_loop_unref (loop);
+		g_main_loop_unref (loop);*/
 	}
 	
 	//\___________________ initialize libgldi.
@@ -895,7 +896,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	g_print ("\n\nTODO:\n - fix drop (Shortcuts, between applets or applis, Panel view, etc)\n - try to remove the pDock->container.bInside = TRUE; in container.c line 442\n - vieux systray (dialog?)\n\n");
+	g_print ("\n\nTODO:\n - test drop (Shortcuts, between applets or applis, Panel view, etc).\n - old systray (in dialog mode?)\n - test Dbus remove launcher method\n - add locale on third-party applets\n\n");
 	
 	gtk_main ();
 	

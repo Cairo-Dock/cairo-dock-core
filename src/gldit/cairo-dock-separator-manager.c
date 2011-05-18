@@ -52,7 +52,8 @@ cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
 	else
 	{
 		gchar *cImagePath = cairo_dock_search_image_s_path (myIconsParam.cSeparatorImage);
-		
+		g_print ("%s (%dx%d)\n", __func__, iWidth,
+			iHeight);
 		pNewSurface = cairo_dock_create_surface_from_image_simple (cImagePath,
 			iWidth,
 			iHeight);

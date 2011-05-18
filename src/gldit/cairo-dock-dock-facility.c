@@ -776,17 +776,21 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 		if (/*cairo_dock_is_extended_dock (pDock) && */pDock->bAutoHide)  // c'est penible de sortir du dock trop facilement avec l'auto-hide.
 		{
 			if (iMouseY >= 0 && iMouseY < iHeight)
-				iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+				iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
 			else
 				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
 		}
 		else
 		{
-			double fSideMargin = fabs (pDock->fAlign - .5) * (iWidth - pDock->fFlatDockWidth);
+			/**double fSideMargin = fabs (pDock->fAlign - .5) * (iWidth - pDock->fFlatDockWidth);
 			if (x_abs < - fSideMargin || x_abs > pDock->fFlatDockWidth + fSideMargin)
 				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
 			else
+				iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;*/
+			if (iMouseY >= 0 && iMouseY < iHeight)
 				iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
+			else
+				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
 		}
 	}
 	else if (iMouseY >= 0 && iMouseY < iHeight)  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
@@ -797,7 +801,7 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 	}
 	else
 		iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-
+	
 	pDock->iMousePositionType = iMousePositionType;
 }
 
@@ -844,7 +848,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 				if (pDock->iRefCount > 0)
 				{
 					Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-					if (pPointingIcon && pPointingIcon->bPointed)  // sous-dock pointe, n le laisse en position haute.
+					if (pPointingIcon && pPointingIcon->bPointed)  // sous-dock pointe, on le laisse en position haute.
 						return;
 				}
 				//g_print ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)\n", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
@@ -871,7 +875,7 @@ static inline gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, Cair
 		{
 			g_print ("icon->fWidth: %d, %.2f\n", (int)icon->fWidth, icon->fScale);
 			g_print ("x: %d / %d\n", pDock->container.iMouseX, (int)icon->fDrawX);
-			if (pDock->container.iMouseX < icon->fDrawX + icon->fWidth * icon->fScale * fMargin * pDock->fMagnitudeMax)  // on est a gauche.  // fDrawXAtRest
+			if (pDock->container.iMouseX < icon->fDrawX + icon->fWidth * icon->fScale * fMargin)  // on est a gauche.  // fDrawXAtRest
 			{
 				Icon *prev_icon = cairo_dock_get_previous_element (ic, pDock->icons) -> data;
 				if ((cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (iGroup) || cairo_dock_get_icon_order (prev_icon) == cairo_dock_get_group_order (iGroup)))
@@ -883,7 +887,7 @@ static inline gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, Cair
 					bCanDrop = TRUE;
 				}
 			}
-			else if (pDock->container.iMouseX > icon->fDrawX + icon->fWidth * icon->fScale * (1 - fMargin) * pDock->fMagnitudeMax	)  // on est a droite.  // fDrawXAtRest
+			else if (pDock->container.iMouseX > icon->fDrawX + icon->fWidth * icon->fScale * (1 - fMargin))  // on est a droite.  // fDrawXAtRest
 			{
 				Icon *next_icon = cairo_dock_get_next_element (ic, pDock->icons) -> data;
 				if ((cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (iGroup) || cairo_dock_get_icon_order (next_icon) == cairo_dock_get_group_order (iGroup)))

@@ -122,6 +122,8 @@ static void _cairo_dock_delete_dock (GtkMenuItem *pMenuItem, CairoDock *pDock)
 	if (answer != GTK_RESPONSE_YES)
 		return ;
 	
+	cairo_dock_remove_icons_from_dock (pDock, NULL, NULL);
+	
 	const gchar *cDockName = cairo_dock_search_dock_name (pDock);
 	cairo_dock_destroy_dock (pDock, cDockName);
 }

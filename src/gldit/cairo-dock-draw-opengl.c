@@ -379,7 +379,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		}
 		else
 		{
+			glMatrixMode(GL_TEXTURE);
 			glRotatef (-90., 0., 0., 1.);
+			glMatrixMode (GL_MODELVIEW);
 			if (pDock->container.bDirectionUp)
 				glScalef (1., -1., 1.);
 		}
@@ -395,6 +397,13 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, NULL);
 	
 	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
+	
+	if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator && !pDock->container.bIsHorizontal)
+	{
+		glMatrixMode(GL_TEXTURE);
+		glLoadIdentity ();
+		glMatrixMode (GL_MODELVIEW);
+	}
 	
 	//\_____________________ On dessine les infos additionnelles.
 	if (icon->iQuickInfoTexture != 0)

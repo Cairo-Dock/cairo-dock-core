@@ -227,8 +227,16 @@ void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 		_set_icon_size_generic (pContainer, icon);
 	// la taille que devra avoir la texture s'en deduit.
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	icon->iImageWidth = (pContainer->bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
-	icon->iImageHeight = (pContainer->bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
+	if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator)
+	{
+		icon->iImageWidth = icon->fWidth * fMaxScale;
+		icon->iImageHeight = icon->fHeight * fMaxScale;
+	}
+	else
+	{
+		icon->iImageWidth = (pContainer->bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
+		icon->iImageHeight = (pContainer->bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
+	}
 }
 
 void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
