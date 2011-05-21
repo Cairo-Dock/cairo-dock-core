@@ -760,11 +760,10 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 		}
 		else
 		{
-			double fSideMargin = fabs (pDock->fAlign - .5) * (iWidth - pDock->fFlatDockWidth);
-			if (x_abs < - fSideMargin || x_abs > pDock->fFlatDockWidth + fSideMargin)
-				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-			else
+			if (iMouseY >= 0 && iMouseY < iHeight)
 				iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
+			else
+				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
 		}
 	}
 	else if (iMouseY >= 0 && iMouseY < iHeight)  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
