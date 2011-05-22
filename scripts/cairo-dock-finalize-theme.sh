@@ -16,18 +16,17 @@ do
 	if test -e web-browser.$suff; then
 		echo "    towards web-browser.$suff"
 		ln -s web-browser.$suff firefox.$suff
+		ln -s web-browser.$suff chromium-browser.$suff
 		ln -s web-browser.$suff opera.$suff
 		ln -s web-browser.$suff epiphany.$suff
 	fi
-	if test -e firefox.$suff; then
-		ln -s firefox.$suff firefox-3.0.$suff
-		ln -s firefox.$suff firefox-3.5.$suff
-		ln -s firefox.$suff firefox-4.0.$suff
-	fi
+	
 	if test -e file-browser.$suff; then
 		echo "    towards file-browser.$suff"
 		ln -s file-browser.$suff nautilus.$suff
+		ln -s file-browser.$suff system-file-manager.$suff
 		ln -s file-browser.$suff konqueror.$suff
+		ln -s file-browser.$suff dolphin.$suff
 		ln -s file-browser.$suff thunar.$suff
 		ln -s file-browser.$suff pcmanfm.$suff
 	fi
@@ -105,6 +104,7 @@ do
 		echo "    towards messenger.$suff"
 		ln -s messenger.$suff gaim.$suff
 		ln -s messenger.$suff pidgin.$suff
+		ln -s messenger.$suff empathy.$suff
 		ln -s messenger.$suff kopete.$suff
 		ln -s messenger.$suff amsn.$suff
 		ln -s messenger.$suff emessene.$suff
@@ -119,12 +119,15 @@ do
 	if test -e terminal.$suff; then
 		echo "    towards terminal.$suff"
 		ln -s terminal.$suff gnome-terminal.$suff
+		ln -s terminal.$suff utilities-terminal.$suff
 		ln -s terminal.$suff konsole.$suff
 		ln -s terminal.$suff xfce4-terminal.$suff
 	fi
 	if test -e packages.$suff; then
 		echo "    towards packages.$suff"
 		ln -s packages.$suff synaptic.$suff
+		ln -s packages.$suff softwarecenter.$suff
+		ln -s packages.$suff yast.$suff
 		ln -s packages.$suff adept.$suff
 		ln -s packages.$suff pacman-g2.$suff
 	fi
@@ -135,6 +138,9 @@ do
 	fi
 	if test -e calculator.$suff; then
 		echo "    towards calculator.$suff"
+		ln -s calculator.$suff accessories-calculator.$suff
+		ln -s calculator.$suff gcalctool.$suff
+		ln -s calculator.$suff kcalc.$suff
 		ln -s calculator.$suff gnome-calculator.$suff
 		ln -s calculator.$suff crunch.$suff
 	fi

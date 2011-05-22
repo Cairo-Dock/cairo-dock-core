@@ -160,7 +160,7 @@ static gboolean _delete_user_separator (Icon *icon)
 static gboolean _delete_launcher (Icon *icon)
 {
 	gboolean r = FALSE;
-	if (icon->cDesktopFileName != NULL)
+	if (icon->cDesktopFileName != NULL && icon->cDesktopFileName[0] != '/')
 	{
 		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 		g_remove (cDesktopFilePath);

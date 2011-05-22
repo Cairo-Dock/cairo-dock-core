@@ -407,11 +407,6 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 	g_free (cConfFilePath);
 }
 
-/**static gboolean _wait (GMainLoop *loop)
-{
-	g_main_loop_quit (loop);
-	return FALSE;
-}*/
 
 int main (int argc, char** argv)
 {
@@ -590,10 +585,6 @@ int main (int argc, char** argv)
 	if (iDelay > 0)
 	{
 		sleep (iDelay);
-		/**GMainLoop *loop = g_main_loop_new (NULL, FALSE);
-		g_timeout_add_seconds (iDelay, (GSourceFunc)_wait, loop);
-		g_main_loop_run (loop);
-		g_main_loop_unref (loop);*/
 	}
 	
 	//\___________________ initialize libgldi.
@@ -862,6 +853,10 @@ int main (int argc, char** argv)
 	if (bFirstLaunch)  // tout premier lancement -> bienvenue !
 	{
 		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
+		
+		/// TODO:
+		/// gsettings set org.gnome.desktop.interface buttons-have-icons true
+		/// gsettings set org.gnome.desktop.interface menus-have-icons true
 	}
 	else if (bNewVersion)  // nouvelle version -> changelog (si c'est le 1er lancement, inutile de dire ce qui est nouveau, et de plus on a deja le message de bienvenue).
 	{

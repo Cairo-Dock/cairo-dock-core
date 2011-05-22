@@ -679,7 +679,7 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 	if (s_pIconClicked != NULL
 	&& (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (s_pIconClicked)
 		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (s_pIconClicked)
-		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked) && s_pIconClicked->cDesktopFileName)
+		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked) && s_pIconClicked->cDesktopFileName && pDock->fMagnitudeMax != 0)
 		|| CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked))
 	&& s_pFlyingContainer == NULL
 	&& ! myDocksParam.bLockIcons

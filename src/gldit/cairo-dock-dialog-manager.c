@@ -598,7 +598,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	CairoDialog *pDialog = cairo_dock_new_dialog (pAttribute, pIcon, pContainer);
 	if (pIcon && pIcon->pSubDock)  // un sous-dock par-dessus le dialogue est tres genant.
 		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pIcon->pSubDock));
-	if (pIcon)
+	if (pIcon && CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->fMagnitudeMax == 0)  // view without zoom, the dialog is stuck to the icon, and therefore is under the label, so hide this one.
 	{
 		if (pIcon->iHideLabel == 0 && pContainer)
 			gtk_widget_queue_draw (pContainer->pWidget);
@@ -982,6 +982,10 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 	{
 		pDialog->fAppearanceCounter = 1.;
 		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);
+		if (CAIRO_DOCK_IS_DOCK (pContainer))
+		{
+			cairo_dock_emit_enter_signal (pContainer);  // to prevent the dock from hiding. We want to see it until the dialog is visible (a leave event will be emited when it disappears).
+		}
 		g_signal_connect (pDialog->container.pWidget,
 			"delete-event",
 			G_CALLBACK (_cairo_dock_dialog_destroyed),
@@ -1155,9 +1159,12 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
 			cairo_dock_place_dialog (pDialog, pContainer);
 			
-			if (pIcon->iHideLabel == 0 && pContainer)
-				gtk_widget_queue_draw (pContainer->pWidget);
-			pIcon->iHideLabel ++;
+			if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->fMagnitudeMax == 0)
+			{
+				if (pIcon->iHideLabel == 0 && pContainer)
+					gtk_widget_queue_draw (pContainer->pWidget);
+				pIcon->iHideLabel ++;
+			}
 		}
 	}
 	pDialog->bPositionForced = FALSE;

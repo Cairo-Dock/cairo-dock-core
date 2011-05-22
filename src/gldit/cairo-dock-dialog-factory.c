@@ -494,6 +494,10 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	if ((pDialog->pInteractiveWidget || pDialog->pButtons || pAttribute->iTimeLength == 0) && ! pDialog->bNoInput)
 	{
 		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);
+		if (CAIRO_DOCK_IS_DOCK (pContainer))
+		{
+			cairo_dock_emit_enter_signal (pContainer);  // to prevent the dock from hiding. We want to see it until the dialog is visible (a leave event will be emited when it disappears).
+		}
 	}
 	pDialog->bHideOnClick = pAttribute->bHideOnClick;
 	

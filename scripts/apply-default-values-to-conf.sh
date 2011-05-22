@@ -45,9 +45,11 @@ set_current_conf_file()  # (conf file)
 
 cd "$CURRENT_THEME_DIR"
 
-mkdir "images"
-mv *.svg images 2> /dev/null
-mv *.png images 2> /dev/null
+if test ! -e images; then
+	mkdir "images"
+	mv *.svg images 2> /dev/null
+	mv *.png images 2> /dev/null
+fi
 
 set_current_conf_file "cairo-dock.conf"
 set_value "Position"		"x gap"				0
@@ -59,7 +61,7 @@ set_value "Accessibility"	"leaving delay"		250
 set_value "Accessibility"	"show delay"		300
 set_value "Accessibility"	"lock icons"		false
 set_value "Accessibility"	"lock all"			false
-set_value "Accessibility"	"show_on_click"		0
+set_value "Accessibility"	"show_on_click"		1
 set_value "TaskBar"		"show applications"		true
 #set_value "TaskBar"		"hide visible"			false
 #set_value "TaskBar"		"current desktop only"		false
@@ -114,7 +116,7 @@ if test $? = 1; then
 fi
 #set_value "System"		"modules"				"dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
 
-for f in plug-ins/*/data/*.conf; do
+for f in plug-ins/*/*.conf; do
 	sed -i "s/^name *=.*/name=/g" $f
 done;
 
@@ -122,8 +124,8 @@ set_current_conf_file "plug-ins/Animated-icons/Animated-icons.conf"
 set_value "Rotation"		"color"						"1;1;1;0"
 
 set_current_conf_file "plug-ins/AlsaMixer/AlsaMixer.conf"
-set_value "Configuration"			"card id"						""
-set_value "Configuration"			"mixer element"					""
+set_value "Configuration"			"card id"			""
+set_value "Configuration"			"mixer element"		""
 
 set_current_conf_file "plug-ins/Clipper/Clipper.conf"
 set_value "Configuration"	"item type"					3
@@ -151,8 +153,12 @@ set_value "Configuration"	"has icons"					true
 set_value "Configuration"	"show recent"				true
 
 set_current_conf_file "plug-ins/logout/logout.conf"
-set_value "Configuration"	"click"						0
-set_value "Configuration"	"middle-click"				1
+set_value "Configuration"	"click"						1
+set_value "Configuration"	"middle-click"				0
+
+set_current_conf_file "plug-ins/musicPlayer/musicPlayer.conf"
+set_value "Configuration"	"inhibate appli"			true
+set_value "Configuration"	"pause on click"			0  # maybe 1 would be better ...
 
 set_current_conf_file "plug-ins/mail/mail.conf"
 set_value_on_all_groups		"username"					""
@@ -174,15 +180,20 @@ set_value "Slide"			"simple_arrowHeight"		15
 set_value "Slide"			"simple_arrowWidth"			30
 set_value "Slide"			"simple_wide_grid"			true
 set_value "Slide"			"simple_max_size"			".7"
+set_value "Slide"			"simple_lineaire"			false
+set_value "Slide"			"simple_sinW"				100
 
 set_current_conf_file "plug-ins/RSSreader/RSSreader.conf"
 set_value "Configuration"	"url_rss_feed"				""
 
 set_current_conf_file "plug-ins/shortcuts/shortcuts.conf"
 set_value "Configuration"	"list network"				false
-set_value "Configuration"	"use separator"				false
 set_value "Configuration"	"disk usage"				4
 set_value "Configuration"	"check interval"			10
+
+set_current_conf_file "plug-ins/showDesktop/showDesktop.conf"
+set_value "Configuration"	"left click"				0
+set_value "Configuration"	"middle click"				4
 
 set_current_conf_file "plug-ins/slider/slider.conf"
 set_value "Configuration"	"directory"					""
@@ -194,9 +205,11 @@ set_value "Configuration"	"selection_"				false
 set_current_conf_file "plug-ins/switcher/switcher.conf"
 set_value "Configuration"	"preserve ratio"			false
 set_value "Configuration"	"Draw Windows"				true
+set_value "Configuration"	"action on click"			3
 
 set_current_conf_file "plug-ins/weather/weather.conf"
 set_value "Configuration"	"nb days"					5
+set_value "Configuration"	"display nights"			false
 set_value "Configuration"	"check interval"			15
 set_value "Configuration"	"dialog duration"			0
 set_value "Configuration"	"IS units"					true

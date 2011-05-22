@@ -3,7 +3,7 @@
 Encoding=UTF-8
 Type=Application
 Exec=cairo-dock -c
-Icon=cairo-dock.svg
+Icon=cairo-dock
 Terminal=false
 
 Comment=A light and eye-candy dock and desklets for your desktop.
