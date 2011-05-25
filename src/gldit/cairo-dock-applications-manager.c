@@ -1511,7 +1511,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		if (pTaskBar->iMinimizedWindowRenderType == 0)
 			pTaskBar->fVisibleAppliAlpha = MIN (.6, cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL));
 		
-		pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 15, "Applications", NULL);
+		pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 25, "Applications", NULL);
 		
 		
 		// interaction

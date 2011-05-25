@@ -891,7 +891,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	g_print ("\n\nTODO:\n - test drop (Shortcuts, between applets or applis, Panel view, etc).\n - old systray (in dialog mode?)\n - test Dbus remove launcher method\n - add locale on third-party applets\n\n");
+	g_print ("\n\nTODO:\n - test drop (Shortcuts, between applets or applis, Panel view, etc).\n - old systray (in dialog mode?)\n - test new Dbus methods\n - test locale on third-party applets\n - test 'make it a launcher'\n - handle icon path in .desktop files.\n\n");
 	
 	gtk_main ();
 	

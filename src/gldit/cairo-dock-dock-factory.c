@@ -641,11 +641,6 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder, CairoDockIconGroup iGroup)
 {
 	//\_________________ On ajoute un fichier desktop dans le repertoire des lanceurs du theme courant.
-	gchar *cPath = NULL;
-	if (cExternDesktopFileURI && strncmp (cExternDesktopFileURI, "file://", 7) == 0)
-	{
-		cPath = g_filename_from_uri (cExternDesktopFileURI, NULL, NULL);
-	}
 	GError *erreur = NULL;
 	const gchar *cDockName = cairo_dock_search_dock_name (pReceivingDock);
 	if (fOrder == CAIRO_DOCK_LAST_ORDER && pReceivingDock != NULL)
@@ -658,10 +653,9 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 	}
 	gchar *cNewDesktopFileName;
 	if (cExternDesktopFileURI != NULL)
-		cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cPath ? cPath : cExternDesktopFileURI, cDockName, fOrder, iGroup, &erreur);
+		cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cExternDesktopFileURI, cDockName, fOrder, iGroup, &erreur);
 	else
 		cNewDesktopFileName = cairo_dock_add_desktop_file_from_type (iType, cDockName, fOrder, iGroup, &erreur);
-	g_free (cPath);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);

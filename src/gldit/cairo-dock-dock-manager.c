@@ -322,7 +322,10 @@ gchar *cairo_dock_get_readable_name_for_fock (CairoDock *pDock)
 	{
 		int i = 0;
 		gpointer data[3] = {pDock, &i, NULL};
-		cairo_dock_foreach_root_docks ((GFunc)_find_similar_root_dock, data);
+		///cairo_dock_foreach_root_docks ((GFunc)_find_similar_root_dock, data);
+		GList *d = g_list_last (s_pRootDockList);
+		for (;d != NULL; d = d->prev)  // parse the list from the end to get the main dock first (docks are prepended).
+			_find_similar_root_dock (d->data, data);
 		const gchar *cPosition;
 		if (pDock->container.bIsHorizontal)
 		{

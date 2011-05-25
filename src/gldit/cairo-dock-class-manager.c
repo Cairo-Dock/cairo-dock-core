@@ -1498,7 +1498,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	pClassAppli->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
 	
 	pClassAppli->cIcon = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
-	if (pClassAppli->cIcon != NULL)  // remove any extension.
+	if (pClassAppli->cIcon != NULL && *pClassAppli->cIcon != '/')  // remove any extension.
 	{
 		gchar *str = strrchr (pClassAppli->cIcon, '.');
 		if (str && (strcmp (str+1, "png") == 0 || strcmp (str+1, "svg") == 0 || strcmp (str+1, "xpm") == 0))

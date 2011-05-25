@@ -151,7 +151,7 @@ animation on active window = wobbly
 
 #i- Maximum number of caracters in application name:
 #{"..." will be added at the end if the name is too long.}
-max name length = 20
+max name length = 25
 
 #F-[Interaction;gtk-refresh]
 frame2 =

@@ -887,7 +887,7 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 				cResult[strlen (cResult) - 1] = '\0';
 			cDesktopFilePath = cResult;
 		}
-		else  // chercher un desktop qui contienne command=class...
+		else  // chercher un desktop qui contienne command="command from /proc"...
 		{
 			g_free (cResult);
 		}
