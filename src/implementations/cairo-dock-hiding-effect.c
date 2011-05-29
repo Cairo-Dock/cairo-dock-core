@@ -120,7 +120,8 @@ static void _post_render_move_down_opengl (CairoDock *pDock, double fOffset)
 		0);  // on detache la texture (precaution).
 	// dessin dans notre fenetre.
 	_cairo_dock_enable_texture ();
-	_cairo_dock_set_blend_alpha ();
+	///_cairo_dock_set_blend_alpha ();
+	_cairo_dock_set_blend_source ();
 	_cairo_dock_set_alpha (1.);
 	
 	int iWidth, iHeight;  // taille de la texture
@@ -164,9 +165,9 @@ static void _post_render_move_down_opengl (CairoDock *pDock, double fOffset)
 			x = (double)i/NB_POINTS;
 			x_ = (double)(i+1)/NB_POINTS;
 			coords[8*n+0] = x;  // haut gauche
-			coords[8*n+1] = 1.;
+			coords[8*n+1] = .99;  // not 1, to prevent an opengl artifact (black 1 pixel horizontal line on top)
 			coords[8*n+2] = x_;  // haut droit
-			coords[8*n+3] = 1.;
+			coords[8*n+3] = .99;
 			coords[8*n+4] = x_;  // bas droit
 			coords[8*n+5] = t;
 			coords[8*n+6] = x;  // bas gauche
@@ -543,9 +544,9 @@ static void _post_render_folding_opengl (CairoDock *pDock, double fOffset)
 		x = (double)i/NB_POINTS2;
 		x_ = (double)(i+1)/NB_POINTS2;
 		coords[8*n+0] = x;  // haut gauche
-		coords[8*n+1] = 1.;
+		coords[8*n+1] = .99;  // same as "move down".
 		coords[8*n+2] = x_;  // haut droit
-		coords[8*n+3] = 1.;
+		coords[8*n+3] = .99;
 		coords[8*n+4] = x_;  // bas droit
 		coords[8*n+5] = 0.;
 		coords[8*n+6] = x;  // bas gauche
