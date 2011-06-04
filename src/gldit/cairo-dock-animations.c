@@ -286,10 +286,11 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 
 static gboolean _cairo_dock_hide (CairoDock *pDock)
 {
+	//g_print ("%s (%d, %.2f, %.2f)\n", __func__, pDock->iMagnitudeIndex, pDock->fHideOffset, pDock->fPostHideOffset);
 	if (pDock->iMagnitudeIndex > 0)  // on retarde le cachage du dock pour apercevoir les effets.
 		return TRUE;
 	
-	if (pDock->fHideOffset < 1)
+	if (pDock->fHideOffset < 1)  // the hiding animation is running.
 	{
 		pDock->fHideOffset += 1./myBackendsParam.iHideNbSteps;
 		if (pDock->fHideOffset > .99)  // fin d'anim.
@@ -335,7 +336,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 			}
 		}
 	}
-	else if (pDock->fPostHideOffset > 0 && pDock->fPostHideOffset < 1)
+	else if (pDock->fPostHideOffset > 0 && pDock->fPostHideOffset < 1)  // the post-hiding animation is running.
 	{
 		pDock->fPostHideOffset += 1./myBackendsParam.iHideNbSteps;
 		if (pDock->fPostHideOffset > .99)
@@ -344,6 +345,8 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 			return FALSE;
 		}
 	}
+	else  // else no hiding animation is running.
+		return FALSE;
 	return TRUE;
 }
 

@@ -154,6 +154,7 @@ gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gc
 
 /** Retrieve the response of a POST request to a server.
 *@param cURL URL of the server
+*@param bGetOutputHeaders whether to retrieve the page's header.
 *@param erreur an error.
 *@param cFirstProperty first property of the POST data.
 *@param ... tuples of property and data to insert in POST data; the POST data will be formed with a=urlencode(b)&c=urlencode(d)&... End it with NULL.
