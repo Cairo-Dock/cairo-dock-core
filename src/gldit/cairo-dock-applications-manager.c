@@ -1291,7 +1291,7 @@ static void _load_appli (Icon *icon)
 	//\__________________ register the class to get its attributes, if it was not done yet.
 	if (icon->cClass && !icon->pMimeTypes && !icon->cCommand)
 	{
-		gchar *cClass = cairo_dock_register_class_full (NULL, icon->cClass);
+		gchar *cClass = cairo_dock_register_class_full (NULL, icon->cClass, icon->cWmClass);
 		if (cClass != NULL)
 		{
 			g_free (cClass);

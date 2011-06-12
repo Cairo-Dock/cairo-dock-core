@@ -23,9 +23,11 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 /**
-*@file cairo-dock-particle-system.h A particle system is a set of particles that evolve according to a given model. Each particle will see its parameters change with time : direction, speed, oscillation, color, size, etc.
-* Particle Systems fully take advantage of OpenGL and are able to render many thousand of particles at a high frequency refresh.
+*@file cairo-dock-particle-system.h A Particle System is a set of particles that evolve according to a given model. Each particle will see its parameters change with time : direction, speed, oscillation, color, size, etc.
+* Particle Systems fully take advantage of OpenGL and are able to render many thousands of particles at a high frequency refresh.
 * 
 */
 
@@ -108,5 +110,5 @@ void cairo_dock_free_particle_system (CairoParticleSystem *pParticleSystem);
 */
 gboolean cairo_dock_update_default_particle_system (CairoParticleSystem *pParticleSystem, CairoDockRewindParticleFunc pRewindParticle);
 
-
+G_END_DECLS
 #endif

@@ -203,7 +203,8 @@ struct _Icon {
 	gchar **pMimeTypes;
 	
 	gint iHideLabel;
-	gpointer reserved[3];
+	gchar *cWmClass;
+	gpointer reserved[2];
 };
 
 typedef void (*CairoIconContainerLoadFunc) (void);

@@ -93,4 +93,5 @@ void gldi_load_managers (void);
 void gldi_unload_managers (void);
 
 
+G_END_DECLS
 #endif

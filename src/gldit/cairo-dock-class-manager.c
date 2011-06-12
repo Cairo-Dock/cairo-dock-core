@@ -1258,6 +1258,13 @@ const GList *cairo_dock_get_class_menu_items (const gchar *cClass)
 	return pClassAppli->pMenuItems;
 }
 
+const gchar *cairo_dock_get_class_wm_class (const gchar *cClass)
+{
+	g_return_val_if_fail (cClass != NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _get_class_appli_with_attributes (cClass);
+	return pClassAppli->cStartupWMClass;
+}
+
 static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or even class
 {
 	if (cDesktopFile == NULL)
@@ -1322,15 +1329,17 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	gchar *cResult = NULL;
 	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 	{
-		if (cCommand == NULL)
+		if (cCommand == NULL || *cCommand == '\0')
 			return NULL;
 		gchar *cDefaultClass = g_ascii_strdown (cCommand, -1);
-		gchar *str, *cClass = cDefaultClass;
-
+		gchar *str;
+		const gchar *cClass = cDefaultClass;  // pointer to the current class.
+		
 		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0)  // on prend la fin .
 		{
-			while (cClass[strlen(cClass)-1] == ' ')  // par securite on enleve les espaces en fin de ligne.
-				cClass[strlen(cClass)-1] = '\0';
+			str = (gchar*)cClass + strlen(cClass) - 1;  // last char.
+			while (*str == ' ')  // par securite on enleve les espaces en fin de ligne.
+				*(str--) = '\0';
 			str = strchr (cClass, ' ');  // on cherche le premier espace.
 			if (str != NULL)  // on prend apres.
 			{
@@ -1350,7 +1359,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 				if (str != NULL)  // on vire apres.
 					*str = '\0';
 			}
-
+			
 			str = strrchr (cClass, '/');  // on cherche le dernier '/'.
 			if (str != NULL)  // on prend apres.
 				cClass = str + 1;
@@ -1394,9 +1403,16 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 			if (str != NULL && str != cClass)
 				*str = '\0';
 		}
-
+		
 		if (*cClass != '\0')
+		{
+			if (strncmp (cClass, "oo", 2) == 0)
+			{
+				if (strcmp (cClass, "ooffice") == 0 || strcmp (cClass, "oowriter") == 0 || strcmp (cClass, "oocalc") == 0 || strcmp (cClass, "oodraw") == 0 || strcmp (cClass, "ooimpress") == 0)  // openoffice poor design: there is no way to bind its windows to the launcher without this trick.
+					cClass = "openoffice";
+			}
 			cResult = g_strdup (cClass);
+		}
 		g_free (cDefaultClass);
 	}
 	else
@@ -1429,7 +1445,7 @@ register from class name (window or old launchers):
   make new class
   get additional params from file (MimeType, Icon, etc) and store them in the class
 */
-gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName)
+gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName, const gchar *cWmClass)
 {
 	g_return_val_if_fail (cDesktopFile != NULL || cClassName != NULL, NULL);
 	g_print ("%s (%s, %s)\n", __func__, cDesktopFile, cClassName);
@@ -1451,6 +1467,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	}
 	
 	//\__________________ open it.
+	g_print ("+ parsing class desktop file %s...\n", cDesktopFilePath);
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
 	g_return_val_if_fail (pKeyFile != NULL, NULL);
 	
@@ -1493,7 +1510,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	}
 	pClassAppli->cCommand = cCommand;
 	
-	pClassAppli->cStartupWMClass = cStartupWMClass;
+	pClassAppli->cStartupWMClass = (cStartupWMClass ? cStartupWMClass : g_strdup (cWmClass));
 	
 	pClassAppli->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
 	

@@ -41,4 +41,5 @@ void gldi_init (GldiRenderingMethod iRendering);
 void gldi_free_all (void);
 
 
+G_END_DECLS
 #endif

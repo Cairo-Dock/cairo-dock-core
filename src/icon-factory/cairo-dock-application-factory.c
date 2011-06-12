@@ -224,9 +224,11 @@ Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	
 	//\__________________ On recupere la classe.
 	XClassHint *pClassHint = XAllocClassHint ();
-	gchar *cClass = NULL;
+	gchar *cClass = NULL, *cWmClass = NULL;
 	if (XGetClassHint (s_XDisplay, Xid, pClassHint) != 0 && pClassHint->res_class)
 	{
+		cWmClass = g_strdup (pClassHint->res_class);
+		
 		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", pClassHint->res_name, pClassHint->res_name, pClassHint->res_class, pClassHint->res_class);
 		if (strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && g_str_has_suffix (pClassHint->res_name, ".exe"))
 		{
@@ -275,6 +277,7 @@ Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	//\__________________ On renseigne les infos en provenance de X.
 	icon->cName = (cName ? cName : g_strdup (cClass));
 	icon->cClass = cClass;  // we'll register the class during the loading of the icon, since it can take some time, and we don't really need the class params right now.
+	icon->cWmClass = cWmClass;
 	icon->bIsHidden = bIsHidden;
 	icon->bIsMaximized = bIsMaximized;
 	icon->bIsFullScreen = bIsFullScreen;

@@ -220,7 +220,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 			int i;
 			for (i = 0; pOrigins[i] != NULL; i++)
 			{
-				cClass = cairo_dock_register_class_full (pOrigins[i], cStartupWMClass);
+				cClass = cairo_dock_register_class_full (pOrigins[i], cStartupWMClass, NULL);
 				if (cClass != NULL)  // neat, this origin is a valid one, let's use it from now.
 				{
 					iNumOrigin = i;
@@ -235,7 +235,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 		if (cClass == NULL)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
 		{
 			cFallbackClass = cairo_dock_guess_class (icon->cCommand, cStartupWMClass);
-			cClass = cairo_dock_register_class_full (cFallbackClass, cStartupWMClass);
+			cClass = cairo_dock_register_class_full (cFallbackClass, cStartupWMClass, NULL);
 		}
 		
 		// get common data from the class

@@ -141,4 +141,5 @@ void cairo_dock_set_gl_capabilities (GtkWidget *pWindow);
 
 void cairo_dock_set_default_gl_context (void);
 
+G_END_DECLS
 #endif

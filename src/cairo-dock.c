@@ -152,31 +152,60 @@ static gchar *s_cDefaulBackend = NULL;
 static gboolean s_bTestComposite = TRUE;
 static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 static gint s_iLastYear = 0;
+static void (*s_activate_composite) (gboolean) = NULL;
 
-static inline void _cancel_metacity_composite (void)
+static void _set_metacity_composite (gboolean bActive)
 {
-	int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false");
+	int r;
+	if (bActive)
+		r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
+	else
+		r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false");
 }
-static void _accept_metacity_composition (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
+
+static void _set_xfwm_composite (gboolean bActive)
+{
+	int r;
+	if (bActive)
+		r = system ("xfconf-query -c xfwm4 -p '/general/use_compositing' -t 'bool' -s 'true'");
+	else
+		r = system ("xfconf-query -c xfwm4 -p '/general/use_compositing' -t 'bool' -s 'false'");
+}
+
+static void _set_kwin_composite (gboolean bActive)
+{
+	int r;
+	if (bActive)
+		r = system ("[ \"$(qdbus org.kde.kwin /KWin compositingActive)\" == \"false\" ] && qdbus org.kde.kwin /KWin toggleCompositing");  // not active, so activating
+	else
+		r = system ("[ \"$(qdbus org.kde.kwin /KWin compositingActive)\" == \"true\" ] && qdbus org.kde.kwin /KWin toggleCompositing");  // active, so deactivating
+}
+
+static inline void _cancel_wm_composite (void)
+{
+	s_activate_composite (FALSE);
+}
+static void _accept_wm_composite (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
 {
 	cd_debug ("%s (%d)", __func__, iClickedButton);
 	if (iClickedButton == 1 || iClickedButton == -2)  // clic explicite sur "cancel", ou Echap ou auto-delete.
 	{
-		_cancel_metacity_composite ();
+		_cancel_wm_composite ();
 	}
 	gboolean *bAccepted = data;
 	*bAccepted = TRUE;  // l'utilisateur a valide son choix.
 }
-static void _on_free_metacity_dialog (gpointer data)
+static void _on_free_wm_dialog (gpointer data)
 {
 	gboolean *bAccepted = data;
 	cd_debug ("%s (%d)", __func__, *bAccepted);
 	if (! *bAccepted)  // le dialogue s'est detruit sans que l'utilisateur n'ait valide la question => on annule tout.
 	{
-		_cancel_metacity_composite ();
+		_cancel_wm_composite ();
 	}
 	g_free (data);
 }
+
 static void _toggle_remember_choice (GtkCheckButton *pButton, GtkWidget *pDialog)
 {
 	g_object_set_data (G_OBJECT (pDialog), "remember", GINT_TO_POINTER (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pButton))));
@@ -193,9 +222,31 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 		if (! myContainersParam.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
 		{
 			cd_warning ("no composite manager found");
-			// Si l'utilisateur utilise Metacity, on lui propose d'activer le composite.
+			// find the current WM.
 			gchar *cPsef = cairo_dock_launch_command_sync ("pgrep metacity");  // 'ps' ne marche pas, il faut le lancer dans un script :-/
-			if (cPsef != NULL && *cPsef != '\0')  // "metacity" a ete trouve.
+			if (cPsef != NULL && *cPsef != '\0')
+			{
+				s_activate_composite = _set_metacity_composite;
+			}
+			else
+			{
+				cPsef = cairo_dock_launch_command_sync ("pgrep xfwm");
+				if (cPsef != NULL && *cPsef != '\0')
+				{
+					s_activate_composite = _set_xfwm_composite;
+				}
+				else
+				{
+					cPsef = cairo_dock_launch_command_sync ("pgrep kwin");
+					if (cPsef != NULL && *cPsef != '\0')
+					{
+						s_activate_composite = _set_kwin_composite;
+					}
+				}
+			}
+			
+			// if the WM can handle the composite, ask the user if he wants to activate it.
+			if (s_activate_composite != NULL)  // the WM can activate the composite.
 			{
 				Icon *pIcon = cairo_dock_get_dialogless_icon ();
 				GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
@@ -214,9 +265,9 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 				}
 				if (iClickedButton == 0 || iClickedButton == -1)  // ok or Enter.
 				{
-					int r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
-					///cairo_dock_show_dialog_with_question (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, NULL, NULL);
-					cairo_dock_show_dialog_full (_("Do you want to keep this setting?\nIn 15 seconds, the previous setting will be restored."), pIcon, CAIRO_CONTAINER (g_pMainDock), 15e3, NULL, NULL, (CairoDockActionOnAnswerFunc) _accept_metacity_composition, g_new0 (gboolean, 1), (GFreeFunc)_on_free_metacity_dialog);
+					s_activate_composite (TRUE);
+					///cairo_dock_show_dialog_with_question (_("Do you want to keep this setting?"), pIcon, CAIRO_CONTAINER (g_pMainDock), NULL, (CairoDockActionOnAnswerFunc) _accept_wm_composite, NULL, NULL);
+					cairo_dock_show_dialog_full (_("Do you want to keep this setting?\nIn 15 seconds, the previous setting will be restored."), pIcon, CAIRO_CONTAINER (g_pMainDock), 15e3, NULL, NULL, (CairoDockActionOnAnswerFunc) _accept_wm_composite, g_new0 (gboolean, 1), (GFreeFunc)_on_free_wm_dialog);
 				}
 			}
 			else  // sinon il a droit a un "message a caractere informatif".
@@ -261,6 +312,23 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 		g_free (cMessage);
 	}
 	return FALSE;
+}
+static gboolean _cairo_dock_first_launch_setup (gpointer data)
+{
+	/// TODO: launch command (script)
+	/**
+	if test -n "`which gsettings`"; then
+		gsettings set org.gnome.desktop.interface buttons-have-icons true
+		gsettings set org.gnome.desktop.interface menus-have-icons true
+	elif test -n "`which gconftool-2`"; then
+		gconftool-2 -s '/apps/gnome/desktop/interface/buttons-have-icons' --type bool true
+		gconftool-2 -s '/apps/gnome/desktop/interface/menus-have-icons' --type bool true
+	fi
+	if test -n "`which compiz`"; then
+		enable Dbus in Compiz
+		enable scale and expose
+	fi
+	*/
 }
 static void _cairo_dock_quit (int signal)
 {
@@ -854,9 +922,7 @@ int main (int argc, char** argv)
 	{
 		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
 		
-		/// TODO:
-		/// gsettings set org.gnome.desktop.interface buttons-have-icons true
-		/// gsettings set org.gnome.desktop.interface menus-have-icons true
+		g_timeout_add_seconds (4, _cairo_dock_first_launch_setup, NULL);
 	}
 	else if (bNewVersion)  // nouvelle version -> changelog (si c'est le 1er lancement, inutile de dire ce qui est nouveau, et de plus on a deja le message de bienvenue).
 	{
@@ -891,7 +957,21 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
 	
-	g_print ("\n\nTODO:\n - test drop (Shortcuts, between applets or applis, Panel view, etc).\n - old systray (in dialog mode?)\n - test new Dbus methods\n - test locale on third-party applets\n - test 'make it a launcher'\n - handle icon path in .desktop files.\n\n");
+	g_print ("\n\nTODO:\n"
+	"- old systray (in dialog mode?)\n"
+	"- test drop (Shortcuts, between applets or applis, Panel view, etc).\n"
+	"- test new Dbus methods\n"
+	"- test locale on third-party applets\n - test 'make it a launcher'\n - handle icon path in .desktop files.\n"
+	"- test 'make it a launcher'\n"
+	"- handle icon path in .desktop files.\n"
+	"- compil kde integration\n"
+	"- add python watcher\n"
+	"- fix cardapio\n"
+	"- update default theme launchers\n"
+	"- improve Compiz icon\n"
+	"- set up Compiz & Gnome on first launch\n"
+	"- test Widget Layer\n"
+	"\n");
 	
 	gtk_main ();
 	

@@ -823,9 +823,10 @@ static void _cairo_dock_remove_custom_appli_icon (GtkMenuItem *pMenuItem, gpoint
 	}
 	if (cCustomIcon != NULL)
 	{
-		gchar *cCommand = g_strdup_printf ("rm -f \"%s\"", cCustomIcon);
+		g_remove (cCustomIcon);
+		/**gchar *cCommand = g_strdup_printf ("rm -f \"%s\"", cCustomIcon);
 		int r = system (cCommand);
-		g_free (cCommand);
+		g_free (cCommand);*/
 		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
 		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
 	}

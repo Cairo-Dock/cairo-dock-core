@@ -74,6 +74,7 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 	g_free (icon->cBaseURI);
 	g_free (icon->cParentDockName);  // on ne liberera pas le sous-dock ici sous peine de se mordre la queue, donc il faut l'avoir fait avant.
 	g_free (icon->cClass);
+	g_free (icon->cWmClass);
 	g_free (icon->cQuickInfo);
 	g_free (icon->cLastAttentionDemand);
 	if (icon->pMimeTypes)
@@ -422,9 +423,8 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
-		/*while (gtk_events_pending ())
-			gtk_main_iteration ();*/
-		///gtk_main_iteration_do (FALSE);  /// check the consequences...	
+		//g_print ("icon-factory: do 1 main loop iteration\n");
+		//gtk_main_iteration_do (FALSE);  /// check the consequences...	
 	}
 	return FALSE;
 }

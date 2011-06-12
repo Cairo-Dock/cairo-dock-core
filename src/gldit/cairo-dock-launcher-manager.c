@@ -145,18 +145,6 @@ static void _load_user_separator (Icon *icon)
 	}
 }
 
-static gboolean _delete_user_separator (Icon *icon)
-{
-	if (icon->cDesktopFileName != NULL)
-	{
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-		g_remove (cDesktopFilePath);
-		g_free (cDesktopFilePath);
-		return TRUE;
-	}
-	return FALSE;
-}
-
 static gboolean _delete_launcher (Icon *icon)
 {
 	gboolean r = FALSE;
@@ -202,14 +190,13 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	if (icon->iTrueType == CAIRO_DOCK_ICON_TYPE_SEPARATOR)
 	{
 		icon->iface.load_image = _load_user_separator;
-		icon->iface.on_delete = _delete_user_separator;
 	}
 	else
 	{
 		icon->iface.load_image = _load_launcher;
-		icon->iface.on_delete = _delete_launcher;
 		icon->iface.action_on_drag_hover = _show_appli_for_drop;
 	}
+	icon->iface.on_delete = _delete_launcher;
 	
 	//\____________ On gere son dock et sous-dock.
 	CairoDock *pParentDock = _cairo_dock_handle_container (icon, cRendererName);

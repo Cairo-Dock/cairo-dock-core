@@ -81,8 +81,13 @@ static gboolean present_class (const gchar *cClass)
 	if (s_pScaleProxy != NULL)
 	{
 		GError *erreur = NULL;
-		gchar *cMatch = g_strdup_printf ("class=.%s*", cClass+1);  /// we need the real class here...
-		//g_print ("match %s\n", cMatch);
+		const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
+		gchar *cMatch;
+		if (cWmClass)
+			cMatch = g_strdup_printf ("class=%s", cWmClass);
+		else
+			cMatch = g_strdup_printf ("class=.%s*", cClass+1);
+		g_print ("Compiz: match '%s'\n", cMatch);
 		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
 			G_TYPE_INT, cairo_dock_get_root_id (),
