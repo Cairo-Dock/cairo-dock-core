@@ -376,7 +376,7 @@ static gboolean _cairo_dock_search_icon_from_subdock (gchar *cDockName, CairoDoc
 }
 Icon *cairo_dock_search_icon_pointing_on_dock (CairoDock *pDock, CairoDock **pParentDock)  // pParentDock peut etre NULL.
 {
-	if (pDock->bIsMainDock)  // par definition. On n'utilise pas iRefCount, car si on est en train de detruire un dock, sa reference est deja decrementee. C'est dommage mais c'est comme ca.
+	if (pDock == NULL || pDock->bIsMainDock)  // par definition. On n'utilise pas iRefCount, car si on est en train de detruire un dock, sa reference est deja decrementee. C'est dommage mais c'est comme ca.
 		return NULL;
 	Icon *pPointingIcon = NULL;
 	gpointer data[3] = {pDock, &pPointingIcon, pParentDock};
