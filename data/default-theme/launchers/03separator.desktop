@@ -1,16 +1,16 @@
-#2.3.1~0alpha0
+#2.4.0~0beta0
 
 #[gtk-about]
 [Desktop Entry]
 
-#F[Separator]
+#F[Icon]
 frame_maininfo=
 
 #d+ Name of the container it belongs to:
 Container=_MainDock_
 
-#F[Display]
-frame_display=
+#v
+sep_display=
 
 #> Separators' appearance is defined in the global configuration.
 Icon=
@@ -19,9 +19,10 @@ Icon=
 #X[Extra parameters]
 frame_extra=
 #f[0;100] Order you want for this launcher among the others:
-Order=-0.31805419921875
+Order=8.375
 
-group=4
+group=0
 
-Icon Type = 2
-Type = Separator
+Icon Type=2
+Type=Separator
+Origin=

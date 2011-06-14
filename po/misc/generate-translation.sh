@@ -1,6 +1,5 @@
 #!/bin/sh
 # Thanks to Jiro Kawada for his help !
-echo $1
 
 if test "$1" = "plug-ins"; then
 	sources="../*/src/*.[ch] ../*/data/messages"  # plug-ins
@@ -8,7 +7,7 @@ if test "$1" = "plug-ins"; then
 elif test "$1" = "extras"; then
 	sources=""
 	for f in `sed -n "/^\[/p" ../list.conf | tr -d []`; do
-		test -d ../$f && sources="${sources} ../$f/$f"
+		test -e ../$f/$f && sources="${sources} ../$f/$f"
 	done;
 	sources="${sources} ../*/*.py ../*/messages" # plug-ins-extra
 	lang=Python

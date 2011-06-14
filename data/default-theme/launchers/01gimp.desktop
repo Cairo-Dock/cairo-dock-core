@@ -1,25 +1,26 @@
-#2.3.1~0alpha0
+#2.4.0~0beta0
 
 #[gtk-about]
 [Desktop Entry]
 
-#F[Launcher]
+#F[Icon]
 frame_maininfo=
 
 #d+ Name of the container it belongs to:
-Container=Graphics
+Container=_MainDock_
+
+#v
+sep_display=
 
 #s Launcher's name :
 Name=
-#s Command to launch on click :
-#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
-Exec=
-
-#F[Display]
-frame_display=
 
 #S+ Image's name or path :
 Icon=
+
+#s Command to launch on click :
+#{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
+Exec=
 
 
 #X[Extra parameters]
@@ -41,9 +42,8 @@ Terminal=false
 ShowOnViewport=0
 
 #f[0;100] Order you want for this launcher among the others:
-Order=-0.2298583984375
+Order=3
 
-Icon Type = 0
-Type = Application
-
-Origin=/usr/share/applications/gimp.desktop;inkscape.desktop;f-spot.desktop
+Icon Type=0
+Type=Application
+Origin=/usr/share/applications/gimp.desktop;krita.desktop;f-spot.desktop;inkscape.desktop

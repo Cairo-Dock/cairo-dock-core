@@ -970,7 +970,7 @@ int main (int argc, char** argv)
 	"- update default theme launchers\n"
 	"- improve Compiz icon\n"
 	"- set up Compiz & Gnome on first launch\n"
-	"- test Widget Layer\n"
+	"- test Widget Layer on Compiz 0.9\n"
 	"\n");
 	
 	gtk_main ();
