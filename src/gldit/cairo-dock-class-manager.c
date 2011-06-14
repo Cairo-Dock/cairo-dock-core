@@ -1004,7 +1004,9 @@ void cairo_dock_set_class_order (Icon *pIcon)
 			if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon) && myIconsParam.iSeparateIcons)
 				continue;
 			pDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
-			if (!pDock || !pDock->bIsMainDock)
+			if (!pDock)  // not inside a dock, for instance a desklet; no interest for us here.
+				continue;
+			if (pDock->iRefCount != 0)  // inside a sub-dock, take the pointing icon inside the main dock.
 				pInhibitorIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 			pSameClassIcon = pInhibitorIcon;
 			if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon))  // on prend les lanceurs de preference.
