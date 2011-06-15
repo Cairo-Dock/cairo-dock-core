@@ -634,7 +634,12 @@ int main (int argc, char** argv)
 	gchar *cRootDataDirPath;
 	if (cUserDefinedDataDir != NULL)
 	{
-		cRootDataDirPath = cUserDefinedDataDir;
+		if (*cUserDefinedDataDir == '/')
+			cRootDataDirPath = cUserDefinedDataDir;
+		else if (*cUserDefinedDataDir == '~') // maybe useless
+			cRootDataDirPath = g_strdup_printf ("%s%s", getenv("HOME"), cUserDefinedDataDir + 1);
+		else
+			cRootDataDirPath = g_strdup_printf ("%s/%s", g_get_current_dir(), cUserDefinedDataDir);
 		cUserDefinedDataDir = NULL;
 	}
 	else
