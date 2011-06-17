@@ -10,7 +10,7 @@ include (CheckSymbolExists)
 ########### project ###############
 
 project ("cairo-dock")
-set (VERSION "2.3.0~2")
+set (VERSION "2.3.0~3")
 
 add_definitions (-std=c99 -Wstrict-prototypes -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration) #-Wunreachable-code -Wno-unused-parameter -Wall 
 if (NOT ${CMAKE_BUILD_TYPE})
