@@ -73,9 +73,8 @@ static gboolean _cairo_dock_update_desklet_notification (gpointer data, CairoDes
 static gboolean _cairo_dock_enter_leave_desklet_notification (gpointer data, CairoDesklet *pDesklet, gboolean *bStartAnimation);
 static gboolean _cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet, cairo_t *pCairoContext);
 
-#define CD_NB_ITER_FOR_ENTER_ANIMATION 10
 #define _no_input_button_alpha(pDesklet) (pDesklet->bNoInput ? .4+.6*pDesklet->fButtonsAlpha : pDesklet->fButtonsAlpha)
-
+#define ANGLE_MIN .1  // under this angle, the rotation is ignored.
 
 void cairo_dock_load_desklet_buttons (void)
 {
@@ -191,7 +190,7 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 		cairo_scale (pCairoContext, pDesklet->container.fRatio, pDesklet->container.fRatio);
 	}
 	
-	if (pDesklet->fRotation != 0)
+	if (fabs (pDesklet->fRotation) > ANGLE_MIN)
 	{
 		double fZoom = _compute_zoom_for_rotation (pDesklet);
 		
@@ -269,9 +268,11 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 
 static inline void _cairo_dock_set_desklet_matrix (CairoDesklet *pDesklet)
 {
+	double fDepthRotationY = (fabs (pDesklet->fDepthRotationY) > ANGLE_MIN ? pDesklet->fDepthRotationY : 0.);
+	double fDepthRotationX = (fabs (pDesklet->fDepthRotationX) > ANGLE_MIN ? pDesklet->fDepthRotationX : 0.);
 	glTranslatef (0., 0., -pDesklet->container.iHeight * sqrt(3)/2 - 
-		.45 * MAX (pDesklet->container.iWidth * fabs (sin (pDesklet->fDepthRotationY)),
-			pDesklet->container.iHeight * fabs (sin (pDesklet->fDepthRotationX)))
+		.45 * MAX (pDesklet->container.iWidth * fabs (sin (fDepthRotationY)),
+			pDesklet->container.iHeight * fabs (sin (fDepthRotationX)))
 		);  // avec 60 deg de perspective
 	
 	if (pDesklet->container.fRatio != 1)
@@ -279,19 +280,19 @@ static inline void _cairo_dock_set_desklet_matrix (CairoDesklet *pDesklet)
 		glScalef (pDesklet->container.fRatio, pDesklet->container.fRatio, 1.);
 	}
 	
-	if (pDesklet->fRotation != 0)
+	if (fabs (pDesklet->fRotation) > ANGLE_MIN)
 	{
 		double fZoom = _compute_zoom_for_rotation (pDesklet);
 		glScalef (fZoom, fZoom, 1.);
 		glRotatef (- pDesklet->fRotation / G_PI * 180., 0., 0., 1.);
 	}
 	
-	if (pDesklet->fDepthRotationY != 0)
+	if (fDepthRotationY != 0)
 	{
 		glRotatef (- pDesklet->fDepthRotationY / G_PI * 180., 0., 1., 0.);
 	}
 	
-	if (pDesklet->fDepthRotationX != 0)
+	if (fDepthRotationX != 0)
 	{
 		glRotatef (- pDesklet->fDepthRotationX / G_PI * 180., 1., 0., 0.);
 	}
@@ -787,7 +788,7 @@ Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)
 	}
 	
 	int iMouseX = pDesklet->container.iMouseX, iMouseY = pDesklet->container.iMouseY;
-	if (pDesklet->fRotation != 0)
+	if (fabs (pDesklet->fRotation) > ANGLE_MIN)
 	{
 		//g_print (" clic en (%d;%d) rotations : %.2frad\n", iMouseX, iMouseY, pDesklet->fRotation);
 		double x, y;  // par rapport au centre du desklet.
