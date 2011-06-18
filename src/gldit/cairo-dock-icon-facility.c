@@ -264,6 +264,18 @@ Icon* cairo_dock_get_last_icon_until_order (GList *pIconList, CairoDockIconGroup
 	}
 	return icon;
 }
+Icon* cairo_dock_get_first_icon_of_true_type (GList *pIconList, CairoDockIconTrueType iType)
+{
+	GList* ic;
+	Icon *icon;
+	for (ic = pIconList; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		if (icon->iTrueType == iType)
+			return icon;
+	}
+	return NULL;
+}
 
 Icon* cairo_dock_get_pointed_icon (GList *pIconList)
 {

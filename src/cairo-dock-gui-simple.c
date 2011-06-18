@@ -192,12 +192,9 @@ static gchar * _make_simple_conf_file (void)
 	//\_____________ On actualise le fichier de conf simple.
 	// on cree le fichier au besoin, et on l'ouvre.
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
-	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+	///if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // since we remove the opengl effects params, we need to overwrite the file each time. TODO: fix this ...
 	{
 		cairo_dock_copy_file (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
-		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
-		int r = system (cCommand);
-		g_free (cCommand);*/
 	}
 	
 	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);

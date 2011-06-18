@@ -187,7 +187,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	g_string_printf (sCommand, "rm -f \"%s/last-modif\"", cNewThemePath);
 	r = system (sCommand->str);
 	
-	/// TODO: draw the main dock into the "preview" file...
+	/// TODO: check vertical docks, and handle opengl ...
 	if (g_pMainDock && g_pMainDock->pRenderer)
 	{
 		cairo_surface_t *pSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,

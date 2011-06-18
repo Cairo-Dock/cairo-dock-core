@@ -46,4 +46,4 @@ Order=7
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/firefox.desktop;chromium-browser.desktop;rekonq.desktop;konqueror.desktop
+Origin=/usr/share/applications/firefox.desktop;iceweasel.desktop;chromium-browser.desktop;rekonq.desktop;konqueror.desktop

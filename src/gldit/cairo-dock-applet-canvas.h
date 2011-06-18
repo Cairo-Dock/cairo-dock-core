@@ -167,6 +167,7 @@ CD_APPLET_DEFINE_PROTO \
 /** Fin de la fonction de pre-initialisation de l'applet.
 */
 #define CD_APPLET_DEFINE_END \
+	pVisitCard->cTitle = dgettext (MY_APPLET_GETTEXT_DOMAIN, pVisitCard->cTitle);\
 	return TRUE ;\
 }
 /** Fonction de pre-initialisation generique. Ne fais que definir l'applet (en appelant les 2 macros precedentes), la plupart du temps cela est suffisant.

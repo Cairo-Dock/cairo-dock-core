@@ -477,7 +477,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	if (CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))  // separator
 		cName = "---------";
 	else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet
-		cName = dgettext (pIcon->pModuleInstance->pModule->pVisitCard->cGettextDomain, pIcon->pModuleInstance->pModule->pVisitCard->cTitle);
+		cName = pIcon->pModuleInstance->pModule->pVisitCard->cTitle;
 	else  // launcher
 		cName = (pIcon->cInitialName ? pIcon->cInitialName : pIcon->cName);
 	

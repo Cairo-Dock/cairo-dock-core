@@ -680,7 +680,7 @@ static void _cairo_dock_remove_module_instance (GtkMenuItem *pMenuItem, gpointer
 		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module !
 	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
-	gchar *question = g_strdup_printf (_("You're about to remove this applet (%s) from the dock. Are you sure?"), dgettext (icon->pModuleInstance->pModule->pVisitCard->cGettextDomain, icon->pModuleInstance->pModule->pVisitCard->cTitle));
+	gchar *question = g_strdup_printf (_("You're about to remove this applet (%s) from the dock. Are you sure?"), icon->pModuleInstance->pModule->pVisitCard->cTitle);
 	int answer = cairo_dock_ask_question_and_wait (question, icon, CAIRO_CONTAINER (pContainer));
 	if (answer == GTK_RESPONSE_YES)
 	{

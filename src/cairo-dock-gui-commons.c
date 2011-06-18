@@ -286,7 +286,7 @@ gboolean cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockModule *p
 		memset (&iter, 0, sizeof (GtkTreeIter));
 		gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
 		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-			CAIRO_DOCK_MODEL_NAME, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cTitle),
+			CAIRO_DOCK_MODEL_NAME, pModule->pVisitCard->cTitle,
 			CAIRO_DOCK_MODEL_RESULT, cModuleName,
 			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cDescription),
 			CAIRO_DOCK_MODEL_IMAGE, pModule->pVisitCard->cPreviewFilePath,

@@ -7,6 +7,7 @@ add_subdirectory(icons)
 
 ########### install files ###############
 
+# images
 install (FILES
 	# lib
 	rotate-desklet.svg
@@ -69,11 +70,14 @@ install (FILES
 	icon-wave.png
 	DESTINATION ${pkgdatadir})
 
-# appli
-install (FILES help_scripts.sh
+# scripts
+install (FILES
+	help_scripts.sh
+	initial-setup.sh
 	DESTINATION ${pkgdatadir}
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
+# conf files
 install (FILES
 	# lib
 	${CMAKE_CURRENT_BINARY_DIR}/main-dock.conf
@@ -87,11 +91,12 @@ install (FILES
 	${CMAKE_CURRENT_BINARY_DIR}/separator.desktop
 	DESTINATION ${pkgdatadir})
 
-# appli
+# appli icon
 install (FILES
 	cairo-dock.svg
 	DESTINATION ${datadir}/pixmaps)
 
+# appli desktop file
 install (FILES
 	cairo-dock.desktop 		cairo-dock-cairo.desktop
 	DESTINATION ${datadir}/applications)

@@ -295,7 +295,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
 		if (pMinimalConfig->cLabel == NULL && !pInstance->pModule->pVisitCard->bAllowEmptyTitle)
 		{
-			pMinimalConfig->cLabel = g_strdup (dgettext (pInstance->pModule->pVisitCard->cGettextDomain, pInstance->pModule->pVisitCard->cTitle));
+			pMinimalConfig->cLabel = g_strdup (pInstance->pModule->pVisitCard->cTitle);
 		}
 		else if (pMinimalConfig->cLabel && strcmp (pMinimalConfig->cLabel, "none") == 0)
 		{

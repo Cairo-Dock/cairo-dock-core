@@ -79,9 +79,7 @@ static int _sort_module_by_alphabetical_order (CairoDockModule *m1, CairoDockMod
 		return 1;
 	if (!m2 || !m2->pVisitCard || !m2->pVisitCard->cTitle)
 		return -1;
-	return g_ascii_strncasecmp (dgettext (m1->pVisitCard->cGettextDomain, m1->pVisitCard->cTitle),
-		dgettext (m2->pVisitCard->cGettextDomain, m2->pVisitCard->cTitle),
-		-1);
+	return g_ascii_strncasecmp (m1->pVisitCard->cTitle, m2->pVisitCard->cTitle, -1);
 }
 CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc pCallback, gpointer user_data)
 {

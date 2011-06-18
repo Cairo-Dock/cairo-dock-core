@@ -445,7 +445,8 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 	if (sBuffer == NULL)
 		sBuffer = g_string_new ("");
 	CairoDockGroupDescription *pGroupDescription, *pInternalGroupDescription;
-	gchar *cKeyWord, *str = NULL, *cModifiedText = NULL, *cDescription, *cToolTip = NULL;
+	gchar *cKeyWord, *str = NULL, *cModifiedText = NULL;
+	const gchar *cDescription, *cToolTip = NULL;
 	gboolean bFound, bFrameVisible;
 	GtkWidget *pGroupBox, *pLabel, *pCategoryFrame, *pCurrentCategoryFrame = NULL;
 	GKeyFile *pKeyFile;
@@ -486,7 +487,7 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 		cGettextDomain = pGroupDescription->cGettextDomain;
 		bFound = FALSE;
 		
-		cDescription = dgettext (cGettextDomain, pGroupDescription->cTitle);
+		cDescription = pGroupDescription->cTitle;
 		if (bSearchInToolTip)
 			cToolTip = dgettext (cGettextDomain, pGroupDescription->cDescription);
 		//g_print ("cDescription : %s (%s)(%x,%x)\n", cDescription, cToolTip, cModifiedText, str);
@@ -582,11 +583,11 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 				for (iNbWords = 0; pKeyWords[iNbWords] != NULL; iNbWords ++);
 				gboolean *bFoundWords = g_new0 (gboolean , iNbWords);
 				
-				gchar *cUsefulComment;
+				const gchar *cUsefulComment;
 				gchar iElementType;
 				guint iNbElements;
 				gchar **pAuthorizedValuesList;
-				gchar *cTipString;
+				const gchar *cTipString;
 				gboolean bIsAligned;
 				gchar **pKeyList;
 				gchar *cGroupName, *cKeyName, *cKeyComment;
@@ -1388,7 +1389,7 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 	GtkWidget *pButtonHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	GtkWidget *pImage = _make_image (cIconPath, CAIRO_DOCK_GROUP_ICON_SIZE);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox), pImage, FALSE, FALSE, 0);
-	pGroupDescription->pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
+	pGroupDescription->pLabel = gtk_label_new (pGroupDescription->cTitle);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox),
 		pGroupDescription->pLabel,
 		FALSE,
@@ -2291,7 +2292,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 		// on rajoute la page du module interne en 1er dans le notebook.
 		if (pNoteBook != NULL)
 		{
-			GtkWidget *pLabel = gtk_label_new (dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
+			GtkWidget *pLabel = gtk_label_new (pGroupDescription->cTitle);
 			GtkWidget *pLabelContainer = NULL;
 			GtkWidget *pAlign = NULL;
 			if (pGroupDescription->cIcon != NULL && *pGroupDescription->cIcon != '\0')
@@ -2334,7 +2335,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 	
 	s_pCurrentGroup = pGroupDescription;
 	
-	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
+	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), pGroupDescription->cTitle);
 	
 	if (pInstance != NULL && pGroupDescription->load_custom_widget != NULL)
 		pGroupDescription->load_custom_widget (pInstance, pKeyFile);
@@ -2345,7 +2346,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 	
 	//\_______________ On met a jour la frame du groupe (label + check-button).
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><u><b>%s</b></u></span>", dgettext (pGroupDescription->cGettextDomain, pGroupDescription->cTitle));
+	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><u><b>%s</b></u></span>", pGroupDescription->cTitle);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
 	gtk_frame_set_label_widget (GTK_FRAME (s_pGroupFrame), pLabel);

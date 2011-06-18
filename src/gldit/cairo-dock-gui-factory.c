@@ -1707,7 +1707,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 		_pack_subwidget (pOneWidget);\
 		g_free (cValue); } } while (0)
 
-gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, guint *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, gchar **cTipString)
+const gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, guint *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, const gchar **cTipString)
 {
 	if (cKeyComment == NULL || *cKeyComment == '\0')
 		return NULL;
@@ -1841,7 +1841,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	///GtkWidget *pControlContainer=NULL;
 	GList *pControlWidgets = NULL;
 	int iFirstSensitiveWidget = 0, iNbControlledWidgets = 0, iNbSensitiveWidgets = 0;
-	gchar *cGroupComment, *cKeyName, *cKeyComment, *cUsefulComment, *cAuthorizedValuesChain, *cTipString, **pAuthorizedValuesList, *cSmallGroupIcon=NULL, *cDisplayedGroupName=NULL;  // ne pas effacer 'cTipString' et 'cUsefulComment', ils pointent dans cKeyComment.
+	gchar *cGroupComment, *cKeyName, *cKeyComment, *cAuthorizedValuesChain, **pAuthorizedValuesList, *cSmallGroupIcon=NULL, *cDisplayedGroupName=NULL;
+	const gchar *cUsefulComment, *cTipString;
 	CairoDockGroupKeyWidget *pGroupKeyWidget;
 	int i, j;
 	guint k, iNbElements;
