@@ -99,7 +99,7 @@ static inline cairo_surface_t *_cairo_dock_load_button_icon (const gchar *cButto
 		iTexture = cairo_dock_create_texture_from_surface (pSurface);\
 	else\
 		iTexture = 0; } while (0)
-void cairo_dock_load_dialog_buttons (gchar *cButtonOkImage, gchar *cButtonCancelImage)
+static void cairo_dock_load_dialog_buttons (gchar *cButtonOkImage, gchar *cButtonCancelImage)
 {
 	//g_print ("%s (%s ; %s)\n", __func__, cButtonOkImage, cButtonCancelImage);
 	if (s_pButtonOkSurface != NULL)
@@ -117,7 +117,7 @@ void cairo_dock_load_dialog_buttons (gchar *cButtonOkImage, gchar *cButtonCancel
 	}
 }
 
-void cairo_dock_unload_dialog_buttons (void)
+static void cairo_dock_unload_dialog_buttons (void)
 {
 	if (s_pButtonOkSurface != NULL)
 	{
@@ -913,6 +913,7 @@ static inline GtkWidget *_cairo_dock_make_hscale_for_dialog (double fValueForHSc
 	gtk_range_set_value (GTK_RANGE (pWidget), fValueForHScale);
 
 	gtk_widget_set (pWidget, "width-request", CAIRO_DIALOG_MIN_SCALE_WIDTH, NULL);
+	cairo_dock_set_dialog_widget_text_color (pWidget);
 	return pWidget;
 }
 
@@ -1079,11 +1080,15 @@ Icon *cairo_dock_get_dialogless_icon_full (CairoDock *pDock)
 	if (pDock == NULL || pDock->icons == NULL)
 		return NULL;
 
-	Icon *pIcon = cairo_dock_get_first_icon_of_type (pDock->icons, CAIRO_DOCK_SEPARATOR12);
+	Icon *pIcon = cairo_dock_get_first_icon_of_group (pDock->icons, CAIRO_DOCK_SEPARATOR12);
 	if (pIcon != NULL && ! cairo_dock_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
 		return pIcon;
 	
-	pIcon = cairo_dock_get_first_icon_of_type (pDock->icons, CAIRO_DOCK_SEPARATOR23);
+	pIcon = cairo_dock_get_first_icon_of_group (pDock->icons, CAIRO_DOCK_SEPARATOR23);
+	if (pIcon != NULL && ! cairo_dock_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
+		return pIcon;
+	
+	pIcon = cairo_dock_get_first_icon_of_true_type (pDock->icons, CAIRO_DOCK_ICON_TYPE_SEPARATOR);
 	if (pIcon != NULL && ! cairo_dock_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
 		return pIcon;
 	

@@ -789,6 +789,15 @@ GtkWidget *cairo_dock_steal_interactive_widget_from_dialog (CairoDialog *pDialog
 	return pInteractiveWidget;
 }
 
+void cairo_dock_set_dialog_widget_text_color (GtkWidget *pWidget)
+{
+	static GdkColor color;
+	color.red = myDialogsParam.dialogTextDescription.fColorStart[0] * 65535;
+	color.green = myDialogsParam.dialogTextDescription.fColorStart[1] * 65535;
+	color.blue = myDialogsParam.dialogTextDescription.fColorStart[2] * 65535;
+	gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
+}
+
 void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSurface, int iNewTextWidth, int iNewTextHeight)
 {
 	int iPrevMessageWidth = pDialog->iMessageWidth;
@@ -809,6 +818,11 @@ void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface
 		gtk_widget_set (pDialog->pMessageWidget, "width-request", pDialog->iMessageWidth, "height-request", pDialog->iMessageHeight, NULL);  // inutile de replacer le dialogue puisque sa gravite fera le boulot.
 		
 		gtk_widget_queue_draw (pDialog->container.pWidget);
+		
+		gboolean bInside = pDialog->container.bInside;
+		pDialog->container.bInside = FALSE;  // unfortunately the gravity is really badly handled by many WMs, so we have to replace he dialog ourselves :-/
+		cairo_dock_replace_all_dialogs ();
+		pDialog->container.bInside = bInside;
 	}
 	else
 	{
