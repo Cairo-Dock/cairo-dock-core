@@ -1288,13 +1288,17 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 	g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileName);
 	if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
 	{
-		g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s", cFileName);
+		g_string_printf (sDesktopFilePath, "/usr/share/applications/%c%s", g_ascii_toupper (*cFileName), cFileName+1);  // handle stupid cases like Thunar.desktop
 		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
 		{
-			g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s", cFileName);
+			g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s", cFileName);
 			if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
 			{
-				bFound = FALSE;
+				g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s", cFileName);
+				if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+				{
+					bFound = FALSE;
+				}
 			}
 		}
 	}
@@ -1321,7 +1325,8 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	// Exec=toto-1.2
 	// Exec=toto -x -y
 	// Exec=/path/to/toto -x -y
-	// Exec=gksu nautilus /
+	// Exec=gksu nautilus /  (or kdesu)
+	// Exec=su-to-root -X -c /usr/sbin/synaptic
 	// Exec=gksu --description /usr/share/applications/synaptic.desktop /usr/sbin/synaptic
 	// Exec=wine "C:\Program Files\Starcraft\Starcraft.exe"
 	// Exec=wine "/path/to/prog.exe"
@@ -1337,7 +1342,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 		gchar *str;
 		const gchar *cClass = cDefaultClass;  // pointer to the current class.
 		
-		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0)  // on prend la fin .
+		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0 || strncmp (cClass, "su-to-root", 10) == 0)  // on prend la fin.
 		{
 			str = (gchar*)cClass + strlen(cClass) - 1;  // last char.
 			while (*str == ' ')  // par securite on enleve les espaces en fin de ligne.
@@ -1406,12 +1411,27 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 				*str = '\0';
 		}
 		
+		// handle the cases of brainless programs (where command != class)
 		if (*cClass != '\0')
 		{
 			if (strncmp (cClass, "oo", 2) == 0)
 			{
 				if (strcmp (cClass, "ooffice") == 0 || strcmp (cClass, "oowriter") == 0 || strcmp (cClass, "oocalc") == 0 || strcmp (cClass, "oodraw") == 0 || strcmp (cClass, "ooimpress") == 0)  // openoffice poor design: there is no way to bind its windows to the launcher without this trick.
 					cClass = "openoffice";
+			}
+			else if (strncmp (cClass, "libreoffice", 12) == 0)
+			{
+				gchar *str = strchr (cCommand, ' ');
+				if (str)
+				{
+					*str = '\0';
+					g_free (cDefaultClass);
+					cDefaultClass = g_strdup_printf ("%s%s", cCommand, str+1);
+					str = strchr (cDefaultClass, ' ');
+					if (str)
+						*str = '\0';
+					cClass = cDefaultClass;  // "libreoffice-writer"
+				}
 			}
 			cResult = g_strdup (cClass);
 		}
