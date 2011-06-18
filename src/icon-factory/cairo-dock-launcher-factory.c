@@ -326,5 +326,12 @@ Icon * cairo_dock_new_launcher_icon (const gchar *cDesktopFileName, gchar **cSub
 	icon->iTrueType = cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon, cSubDockRendererName);
 	g_return_val_if_fail (icon->cDesktopFileName != NULL, NULL);
 	
+	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) && icon->cCommand == NULL)  // probably a launcher in a theme which does not correspond to any installed program => skip it.
+	{
+		cd_debug ("this launcher (%s) does not correspond to any installed program", cDesktopFileName);
+		cairo_dock_free_icon (icon);
+		return NULL;
+	}
+	
 	return icon;
 }
