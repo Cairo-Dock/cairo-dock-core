@@ -405,14 +405,14 @@ static gboolean _cairo_dock_remove_icon_from_class (Icon *pInhibitorIcon)
 	if (pClassAppli != NULL)
 	{
 		pClassAppli->pIconsOfClass = g_list_remove (pClassAppli->pIconsOfClass, pInhibitorIcon);
-		if (pClassAppli->pIconsOfClass == NULL && pClassAppli->pAppliOfClass == NULL && ! pClassAppli->bUseXIcon)  // cette classe ne sert plus a rien.
+		/**if (pClassAppli->pIconsOfClass == NULL && pClassAppli->pAppliOfClass == NULL && ! pClassAppli->bUseXIcon)  // cette classe ne sert plus a rien.
 		{
 			cd_message ("  cette classe n'a plus d'interet");
 			g_hash_table_remove (s_hClassTable, pInhibitorIcon->cClass);  // detruit pClassAppli.
 			bStillInhibited = FALSE;
 		}
-		else
-			bStillInhibited = (pClassAppli->pIconsOfClass != NULL);
+		else*/
+			bStillInhibited = (pClassAppli->pIconsOfClass != NULL);  // don't delete the class even if it's totally empty, as we don't want to read the .desktop file again if it appears again.
 	}
 	return bStillInhibited;
 }
@@ -1411,7 +1411,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 				*str = '\0';
 		}
 		
-		// handle the cases of brainless programs (where command != class)
+		// handle the cases of programs where command != class.
 		if (*cClass != '\0')
 		{
 			if (strncmp (cClass, "oo", 2) == 0)
@@ -1424,10 +1424,11 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 				gchar *str = strchr (cCommand, ' ');
 				if (str)
 				{
-					*str = '\0';
+					gchar *base = g_strndup (cCommand, str - cCommand);
 					g_free (cDefaultClass);
-					cDefaultClass = g_strdup_printf ("%s%s", cCommand, str+1);
-					str = strchr (cDefaultClass, ' ');
+					cDefaultClass = g_strdup_printf ("%s%s", base, str+1);
+					g_free (base);
+					str = strchr (cDefaultClass, ' ');  // remove the additionnal params of the command.
 					if (str)
 						*str = '\0';
 					cClass = cDefaultClass;  // "libreoffice-writer"
@@ -1470,15 +1471,20 @@ register from class name (window or old launchers):
 gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName, const gchar *cWmClass)
 {
 	g_return_val_if_fail (cDesktopFile != NULL || cClassName != NULL, NULL);
-	g_print ("%s (%s, %s)\n", __func__, cDesktopFile, cClassName);
+	g_print ("%s (%s, %s, %s)\n", __func__, cDesktopFile, cClassName, cWmClass);
 	
 	//\__________________ if the class is already registered and filled, quit.
 	gchar *cClass = NULL;
 	if (cClassName != NULL)
 		cClass = cairo_dock_guess_class (NULL, cClassName);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass?cClass:cDesktopFile);
+	
 	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes)
+	{
+		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // we already searched this class before, but we couldn't have its WM class.
+			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 		return (cClass?cClass:g_strdup (cDesktopFile));
+	}
 	
 	//\__________________ search the desktop file's path.
 	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass);
@@ -1496,6 +1502,11 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	//\__________________ guess the class name.
 	gchar *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
 	gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
+	if (cStartupWMClass && *cStartupWMClass == '\0')
+	{
+		g_free (cStartupWMClass);
+		cStartupWMClass = NULL;
+	}
 	if (cClass == NULL)
 		cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
 	if (cClass == NULL)
@@ -1514,6 +1525,8 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	//\__________________ if we already searched the attributes beforehand, quit.
 	if (pClassAppli->bSearchedAttributes)
 	{
+		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // we already searched this class before, but we couldn't have its WM class.
+			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 		g_free (cDesktopFilePath);
 		g_free (cCommand);
 		g_free (cStartupWMClass);
@@ -1532,7 +1545,8 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	}
 	pClassAppli->cCommand = cCommand;
 	
-	pClassAppli->cStartupWMClass = (cStartupWMClass ? cStartupWMClass : g_strdup (cWmClass));
+	if (pClassAppli->cStartupWMClass == NULL)
+		pClassAppli->cStartupWMClass = (cStartupWMClass ? cStartupWMClass : g_strdup (cWmClass));
 	
 	pClassAppli->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
 	
