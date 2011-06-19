@@ -782,8 +782,9 @@ cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurfac
 }
 
 
-void cairo_dock_limit_string_width (gchar *cLine, PangoLayout *pLayout, gboolean bUseMarkup, int iMaxWidth)
+static void _cairo_dock_limit_string_width (gchar *cLine, PangoLayout *pLayout, gboolean bUseMarkup, int iMaxWidth)
 {
+	//g_print ("%s (%s)\n", __func__, cLine);
 	// on insere des retours chariot pour tenir dans la largeur donnee.
 	PangoRectangle ink, log;
 	gchar *sp, *last_sp=NULL;
@@ -889,7 +890,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	{
 		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
 		int w = ink.width;
-		//g_print ("text width : %d / %d\n", w, iMaxLineWidth);
+		g_print ("text width : %d / %d\n", w, iMaxLineWidth);
 		if (w > iMaxLineWidth)  // le texte est trop long.
 		{
 			// on decoupe le texte en lignes et on limite chaque ligne trop longue.
@@ -900,8 +901,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 			for (i = 0; cLines[i] != NULL; i ++)
 			{
 				cLine = cLines[i];
-				cairo_dock_limit_string_width (cLine, pLayout, pLabelDescription->bUseMarkup, iMaxLineWidth);
-				cd_debug (" + %s", cLine);
+				_cairo_dock_limit_string_width (cLine, pLayout, FALSE/*pLabelDescription->bUseMarkup*/, iMaxLineWidth);  // we can't use the markups inside this func, because it works on parts of the string, which can contain piece of markups.
 			}
 			
 			// on reforme le texte et on le passe a pango.
