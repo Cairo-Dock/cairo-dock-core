@@ -157,6 +157,8 @@ static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 static gint s_iLastYear = 0;
 static void (*s_activate_composite) (gboolean) = NULL;
 
+static void _on_tips_category_changed (GtkComboBox *pWidget, gpointer *data);
+
 static void _set_metacity_composite (gboolean bActive)
 {
 	int r;
@@ -417,6 +419,7 @@ typedef struct {
 	gint iNumTipGroup;  // current group being displayed.
 	gint iNumTipKey;  // current key being displayed.
 	gboolean bSkipTips;
+	GtkWidget *pCategoryCombo;
 	} CDTipsData;
 
 static void _cairo_dock_get_next_tip (CDTipsData *pTips)
@@ -438,6 +441,23 @@ static void _cairo_dock_get_next_tip (CDTipsData *pTips)
 			g_strfreev (pTips->pKeyList);
 			cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
 			pTips->pKeyList = g_key_file_get_keys (pTips->pKeyFile, cGroupName, &pTips->iNbKeys, NULL);
+			
+			// and update the category in the comb
+			g_signal_handlers_block_matched (pTips->pCategoryCombo,
+				G_SIGNAL_MATCH_FUNC,
+				0,
+				0,
+				0,
+				_on_tips_category_changed,
+				NULL);
+			gtk_combo_box_set_active (GTK_COMBO_BOX (pTips->pCategoryCombo), pTips->iNumTipGroup);
+			g_signal_handlers_unblock_matched (pTips->pCategoryCombo,
+				G_SIGNAL_MATCH_FUNC,
+				0,
+				0,
+				0,
+				_on_tips_category_changed,
+				NULL);
 		}
 		
 		// check if the key is an expander widget.
@@ -469,6 +489,23 @@ static void _cairo_dock_get_previous_tip (CDTipsData *pTips)
 			pTips->pKeyList = g_key_file_get_keys (pTips->pKeyFile, cGroupName, &pTips->iNbKeys, NULL);
 
 			pTips->iNumTipKey = pTips->iNbKeys - 2;
+			
+			// and update the category in the comb
+			g_signal_handlers_block_matched (pTips->pCategoryCombo,
+				G_SIGNAL_MATCH_FUNC,
+				0,
+				0,
+				0,
+				_on_tips_category_changed,
+				NULL);
+			gtk_combo_box_set_active (GTK_COMBO_BOX (pTips->pCategoryCombo), pTips->iNumTipGroup);
+			g_signal_handlers_unblock_matched (pTips->pCategoryCombo,
+				G_SIGNAL_MATCH_FUNC,
+				0,
+				0,
+				0,
+				_on_tips_category_changed,
+				NULL);
 		}
 		
 		// check if the key is an expander widget.
@@ -639,6 +676,7 @@ void cairo_dock_show_tips (int iLastGroup, int iLastKey)
 		gtk_combo_box_append_text (GTK_COMBO_BOX (pComboBox), gettext (pGroupList[i]));
 	}
 	gtk_combo_box_set_active (GTK_COMBO_BOX (pComboBox), pTips->iNumTipGroup);
+	pTips->pCategoryCombo = pComboBox;
 	static gpointer data_combo[2];
 	data_combo[0] = pTips;  // the 2nd data is the dialog, we'll set it after we make it.
 	g_signal_connect (G_OBJECT (pComboBox), "changed", G_CALLBACK(_on_tips_category_changed), data_combo);
@@ -1251,17 +1289,24 @@ int main (int argc, char** argv)
 	"- test new Dbus methods\n"
 	"- draw a preview of the dock in opengl\n"
 	"- test locale on third-party applets\n"
-	"- test 'make it a launcher'\n"
 	"- handle icon path in .desktop files.\n"
 	"- compil kde integration\n"
-	"- class libreoffice-writer\n"
-	"- compiz match xfce4-terminal\n"
-	"- add python watcher\n"
-	"- set a message when zeitgeist is not running\n"
 	"- find Kwin config tool for Composite-manager\n"
-	"- set up Compiz & Gnome on first launch\n"
+	"- use Power-Manager dbus API\n"
 	"- test Widget Layer on Compiz 0.9\n"
 	"\n");
+	
+	GList *pApps = cairo_dock_fm_list_apps_for_file ("trash:/");
+	GList *a;
+	gchar **pAppInfo;
+	gchar *cIconPath;
+	gpointer *app;
+	for (a = pApps; a != NULL; a = a->next)
+	{
+		pAppInfo = a->data;
+		
+		g_print (" === %s / %s\n", pAppInfo[0], pAppInfo[1]);
+	}
 	
 	gtk_main ();
 	

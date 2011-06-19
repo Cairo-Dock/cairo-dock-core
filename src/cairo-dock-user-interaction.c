@@ -216,7 +216,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		}
 	}
 	
-	// else handle sub-docks showing on click, applis and launchers.
+	// else handle sub-docks showing on click, applis and launchers (not applets).
 	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
 	{
 		cairo_dock_show_subdock (icon, pDock);

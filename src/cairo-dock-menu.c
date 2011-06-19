@@ -234,15 +234,13 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 <b>Suggestions/Comments/Beta-Testers :</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Franksuse64\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
 	
 	gtk_widget_show_all (pDialog);
-	///gtk_window_set_position (GTK_WINDOW (pDialog), GTK_WIN_POS_CENTER_ALWAYS);  // un GTK_WIN_POS_CENTER simple ne marche pas, probablement parceque la fenetre n'est pas encore realisee. le 'always' ne pose pas de probleme, puisqu'on ne peut pas redimensionner le dialogue.
 	
 	gtk_window_resize (GTK_WINDOW (pDialog),
 		MIN (CAIRO_DOCK_ABOUT_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
 		MIN (CAIRO_DOCK_ABOUT_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	gtk_window_set_keep_above (GTK_WINDOW (pDialog), TRUE);
-	gtk_dialog_run (GTK_DIALOG (pDialog));
-	gtk_widget_destroy (pDialog);
+	//don't use gtk_dialog_run(), as we don't want to block the dock
 }
 
 static void _launch_url (const gchar *cURL)
@@ -419,19 +417,19 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 	g_free (cCairoAutoStartEntryPath2);
 	g_free (cCairoAutoStartDirPath);
 	
-	pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Help"),
-		GTK_STOCK_HELP,
-		(GFunc)_cairo_dock_present_help,
-		pSubMenu,
-		NULL);
-	gtk_widget_set_tooltip_text (pMenuItem, _("There are no problems, only solutions (and a lot of useful hints!)"));
-	
 	pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Get more applets!"),
 		GTK_STOCK_ADD,
 		(GFunc)_cairo_dock_show_third_party_applets,
 		pSubMenu,
 		NULL);
 	gtk_widget_set_tooltip_text (pMenuItem, _("Third-party applets provide integration with many programs, like Pidgin"));
+	
+	pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Help"),
+		GTK_STOCK_HELP,
+		(GFunc)_cairo_dock_present_help,
+		pSubMenu,
+		NULL);
+	gtk_widget_set_tooltip_text (pMenuItem, _("There are no problems, only solutions (and a lot of useful hints!)"));
 	
 	cairo_dock_add_in_menu_with_stock_and_data (_("About"),
 		GTK_STOCK_ABOUT,

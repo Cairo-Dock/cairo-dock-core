@@ -238,6 +238,8 @@ gboolean cairo_dock_fm_shutdown (void);
 */
 gboolean cairo_dock_fm_lock_screen (void);
 
+gboolean cairo_dock_fm_can_setup_time (void);
+
 /** Raise the panel to configure the time.
 */
 gboolean cairo_dock_fm_setup_time (void);

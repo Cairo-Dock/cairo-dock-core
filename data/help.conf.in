@@ -1,315 +1,320 @@
-#!en;0.1.0
 
+#[gtk-execute]
+[General]
+
+#X[Using the dock]
+Using the dock =
+#>Most icons in the dock have several actions: the primary action on left-click, a secondary action on middle-click, and additionnal actions on right-click (in the menu).
+#Some applets let you bind a shortkey to an action, and decide which action sould be on middle-click.
+_Using the dock =
+
+#X[Adding features]
+Adding features =
+#>Cairo-Dock has a lot of applets. Applets are small applications that live inside the dock, for instance a clock or a log-out button.
+#To enable new applets, open the settings (right-click -> Cairo-Dock -> configure), go to "Add-ons", and tick the applet you want.
+#More applets can be installed easily: in the configuration window, click on the "More applets" button (which will lead you to our applets web page) and then just drag-and-drop the link of an applet into your dock.
+_Adding features =
+
+#[@pkgdatadir@/icon-icons.svg]
 [Icons]
 
-#> Note : many answers have an extra hint.
-#To popup the hint, simply leave the mouse over the sentence for 1 second, a tooltip will appear.
-#{Yes, like that :-)}
-hint=
+#X[Adding a launcher]
+Adding a launcher =
+#>You can add a launcher by drag-and-dropping it from the Applications Menu into the dock. An animated arrow will appear when you can drop.
+#Alternatively, if an application is already opened, you can right-click on its icon and select "make it a launcher".
+_Adding a launcher =
 
-#v
-sep_intro=
+#X[Removing a launcher]
+Removing a launcher =
+#>You can remove a launcher by drag-and-dropping it outside the dock. A "delete" emblem will appear on it when you can drop it.
+_Removing a launcher =
 
-#X [How do I re-order my icons?]]
-Xreorder=
-#> Simply drag with the mouse, and drop wherever you wish.
-#{Tip: you can even re-order icons of active applications.}
-reorder=
-#X [How do I position applets and taskbar icons at the beginning of the dock?]
-Xplace=
-#> In the «icons» module, at the bottom, you can select icon order according to type (launcher/appli/applet).
-#{Tip: you can also position applets amongst launchers, by ticking the box below.}
-place=
-#M[Icons] Go to the «Icons» module.
-config_icon = 
-#X [How do I change an icon image?]
-Xtheme=
-#> In the “Icons” module, you can choose an <b>icon theme</b>. Just choose a theme, and apply.
-#All the themes installed on your system are listed, plus the 'Custom icons' theme, which represent the icons provided by the Cairo-Dock's theme;
-# they are located in ~/.config/cairo-dock/current_theme/icons, and you can add personal icons there.
-#If you choose nothing, the default icon theme of your system will be used.
-#{Tip: you can also edit a launcher's configuration directly and set a path for an image. If you do not enter a path, but simply the name of an image, do not give the extension (.svg, .png, etc.), so as to let the dock choose the best.}
-theme=
-#M[Icons] Go to the «Icons» module.
-config_icon2 = 
-#X [How do I remove many icons quickly?]
-Xremove=
-#> Just drag and drop them out of the dock, they will disappear in an explosion !
-#{Hint : if you delete an icon pointing to a sub-dock, you will be offered to either delete the sub-dock’s icons or to move them in the main dock.}
-remove=
-#X [How can I resize my icons?]
-Xsize=
-#> In the 'Icons' modules, you can setup the default size of your icons by type : launchers, apps, applets and separators.
-#You can also setup the zoom factor.
-#{Hint : You can define the size of each applet independently, to any size smaller or equal to the default size. Set it to 0x0 to use the default size.}
-size=
-#M[Icons] Go to the «Icons» module.
-config_icon3 = 
-#X [I want to see a preview of opened applications by moving my cursor over its icon]
-#>If you're using Compiz, you can open the Compiz Config Setting Mananger (ccsm) and enable the 'Thumbnail' module.
+#X[Grouping icons into a sub-dock]
+Grouping icons into a sub-dock =
+#>You can group icons into a "sub-dock".
+#To add a sub-dock, right-click on the dock -> add -> a sub-dock.
+#To move an icon into the sub-dock, right-click on an icon -> move to another dock -> select the sub-dock's name.
+_Grouping icons into a sub-dock =
+
+#X[Moving icons]
+Moving icons =
+#> You can drag any icon to a new location inside its dock.
+#You can move an icon into another dock by right-clicking on it -> move to another dock -> select the dock you want.
+#If you select "a new main dock", a main dock will be created with this icon inside.
+_Moving icons =
+
+#X[Changing an icon's image]
+Changing an icon's image =
+#>- For a launcher or an applet:
+#Open the settings of the icon, and set a path to an image.
+#- For an aplication icon:
+#Right-click on the icon -> "set a custom icon". Then choose an image you'd like to use, and apply. To remove the custom image, right-click on the icon -> "remove the custom icon".
+#If you have installed some icons themes on your PC, you can also select one of them to be used instead of the default icon theme, in the global config window.
+_Changing an icon's image =
+
+#X[Resizing icons]
+Resizing icons =
+#>You can make the icons and the zoom effect smaller or bigger. Open the settings (right-click -> Cairo-Dock -> configure), and go to Appearance (or Icons in advanced mode).
+#Note that if there are too many icons inside the dock, they will be zoomed out to fit in the screen.
+#Also, you can define the size of each applet independently in their own settings.
+_Resizing icons =
+
+#X[Separating icons]
+Separators =
+#>You can add separators between icons by right-clicking on the dock -> add -> a separator.
+#Also, if you enabled the option to separate icons of different types (launchers/applications/applets), a separator will be added automatically between each group.
+#In the "panel" view, separators are represented as gap between icons.
+_Separators =
+
+
+#[@pkgdatadir@/icon-taskbar.png]
+[Taskbar]
+
+#X[Using the dock as a taskbar]
+Using the dock as a taskbar =
+#>When an application is running, a corresponding icon will appear in the dock.
+#If the application already has a launcher, the icon will not appear, instead its launcher will have a small indicator.
+#Note that you can decide which applications should appear in the dock: only the windows of the current desktop, only the hidden windows, separated from the launcher, etc.
+_Using the dock as a taskbar =
+
+#X[Closing a window]
+Closing a window =
+#>You can close a window by middle-clicking on its icon (or from the menu).
+_Closing a window =
+
+#X[Minimizing / restauring a window]
+Minimizing / restauring a window =
+#>Clicking on its icon will bring the window on top.
+#When the window has the focus, clicking on its icon will minimize the window.
+_Minimizing / restauring a window =
+
+#X[Launching an application several times]
+Launching an application several times =
+#>You can launch an application several times by SHIFT+clicking on its icon (or from the menu).
+_Launching an application several times =
+
+#X[Switching between the windows of a same application]
+Switching between the windows of a same application =
+#>With your mouse, scroll up/down on one of the icons of the application. Each time you scroll, the next/previous window will be presented to you.
+_Switching between the windows of a same application =
+
+#X[Grouping windows of a given application]
+Grouping windows of a given application =
+#>When an application has several windows, one icon for each window will appear in the dock; they will be grouped togather into a sub-dock.
+#Clicking on the main icon will display all the windows of the application side-by-side (if your Window Manager is able to do that).
+_Grouping windows of a given application =
+
+#X[Setting a custom icon for an application]
+Setting a custom icon for an application =
+#>See "Changing an icon's image" in the "Icons" category.
+_Setting a custom icon for an application =
+
+#X[Showing windows preview over the icons]
+Showing windows preview =
+#>You need to run Compiz, and enable the "Window Preview" plug-in in Compiz. Install "ccsm" to be able to configure Compiz.
+_Showing windows preview =
 preview_compiz =
 #G [sh '@pkgdatadir@/help_scripts.sh' compiz_plugin thumbnail && dbus-send --session --dest=org.freedesktop.compiz /org/freedesktop/compiz/thumbnail/screen0/current_viewport org.freedesktop.compiz.set boolean:false;sh -c "ps aux | grep -v grep | grep -c 'compiz'"]If you're using Compiz, you can click on this button:
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 preview_compiz_button=
 
 
+#[@pkgdatadir@/icon-background.svg]
+[Docks]
 
-[Dock]
-#X [How do I position my dock on the screen?]
-Xscreen=
-#> Everything is in the «Position» module. You can choose to position it on the bottom, top, left or right side of your screen.
-#Moreover, you can also position it at the beginning, centre or end of the screen border.
-#{Tip: If you have multiple screens managed by Xinerama, you can tick the option «Use Xinerama», and choose the screen where you wish your dock to be positioned.}
-screen=
-#M[Position] Go to the «Position» module.
-config_position = 
-#X [How do I adjust the position of the dock above the Gnome-panel?]
-Xadjust=
-#> In the «Position» module, you can add an offset to the screen border.
-#{Tip: you can also simply drag your dock with the mouse by pressing the ALT key at the same time.}
-adjust=
-#M[Position] Go to the «Position» module.
-config_position2 = 
-#X [The dock is hidden by the Gnome-panel]
-Xhidden=
-#> This is normal, because they are both «docks».
-# You can either move the dock out of the panel, or launch it wih the command «cairo-dock --keep-above».
-# But you can also (re)move the Gnome-Panel by doing a right click on it.
-hidden=
-#X [I don’t want other windows covering the dock]
-Xreserve=
-#> Just choose the corresponding option in the “Accessibility” module.
-#This will reserve the space for the dock only.
-#{Tip: You can even do that with desklets: making a desklet's panel !.}
-reserve=
-#M[Accessibility] Go to the «Accessibility» module.
-config_accessibility = 
-#X [I don’t want that the dock covers windows]
-Xkeep below=
-#> Two choices are available in the “Accessibility” module:
-# - either choose to “keep the dock below other windows”. The dock will then pop-up when you place the mouse on its screen border.
-# - or choose the auto-hide. The dock will then hide itself and reappear when you enter the trigger zone.
-#{Tip: You can choose to pop-up the dock only when the mouse hits the screen corner instead of the whole screen border.
-#You can also set-up the size of the trigger zone, and even set an image to it.}
-keep below=
-#M[Accessibility] Go to the «Accessibility» module.
-config_accessibility = 
-#v
-sep_apparence=
-#X [How can I add a separator?]
-Xseparator=
-#> Simply right-click on the dock where you wish to add a separator and select «add a separator».
-#You can position it wherever you wish (except in amongst taskbar icons) by dragging it with the mouse.
-#{Tip: if you choose to mix applets and launchers in the 'Icons' module, you can also place separators between applets then.}
-separator=
-#X [I don't want to have a separator between launchers , applications and applets.]
-Xauto sep=
-#> In the «Icons» module, in the «separator» section, untick the box that says «add automatic separators».
-auto sep=
-#M[Icons] Go to the «Icons» module.
-config_icon3 = 
-#X [How do I add a sub-dock?]
-Xsubdock=
-#> Just right-click on the dock, then select «Add a sub-dock». Fill the config panel with a name and image, then confirm.
-#{Tip: If you want to move an icon into another dock, right-click on it, go to 'Move to', and choose the one you want in the list. You can do the same with applets as well, allowing you to group many applets in a sub-dock. You can also create new main docks this way.}
-subdock=
-#X [How can I have many main docks?]
-Xmaindock=
-#> Right-click on a launcher or an applet, go to 'Move to', and choose 'a new main dock'. A new dock will be created, with this icon inside.
-#{Hint: you can then move icons inside this new dock by following the previous method and selecting the dock you've just created.
-#To place this new dock, right click on it, and in the Cairo-dock sub-menu choose “configure this dock”.}
-maindock=
-#X [How can I have a 3D dock?]
-Xview=
-#> Any dock can be displayed with one view, and many views are available (3D, Curve, etc).
-#Then, go to the «Views» module, and choose the view you wish to use for main dock, and for sub-dock.
-#{Tip: you can set up the view for each sub-dock. Simply edit the icon pointing to the sub-dock and choose the view you wish to use for it.}
-view=
-#M[Views] Go to the «Views» module.
-config_views = 
-#X [How can I change the background of my docks?]
-Xbg=
-#> In the 'Background' module, you can either choose an image, or a color gradation.
-#If you set an image, it will be used as the background, if you don't, the gradatoin will be used.
-#{Hint : the Parabolic view doe not have a background, but the Slide and Rainbow views have their own background parameters.}
-bg=
-#M[Background] Go to the «Background» module.
-config_background = 
-#X [I find the dock too flashy, can it be more sober?]
-Xflashy=
-#> Who can do more can do less ! You can for instance deactivate the "Icon effects" plug-in,
-# or deactivate the effect on mouse hovering in "Animated Icon" plug-in.
-#You can also decrease the zoom effect or lower the icons' reflect in the "Icon" module,
-# change the background colors in the "Background" module, or change the view to the "default" view in the "Views" module.
-#In brief, you can easily have something as much sober as a gnome-panel, but this would be a shame ! ^_^
-#{Hint : try different themes, some are already very sober, like Dust-Sand or Elementary.}
-flashy=
+#X[Positionning the dock on the screen]
+Positionning the dock on the screen =
+#>The dock can be placed anywhere on the screen.
+#In the case of the main dock, right-click -> Cairo-Dock -> configure, and then select the position you want.
+#In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this dock, and then select the position you want.
+_Positionning the dock on the screen=
+
+#X[Hiding the dock to use all the screen]
+Hiding the dock to use all the screen=
+#>The dock can hide itself to let all the screen for applications. But it can also be always visible like a panel.
+#To change that, right-click -> Cairo-Dock -> configure, and then select the visibility you want.
+#In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this dock, and then select the visibility you want.
+_Hiding the dock to use all the screen=
+
+#X[Having more than one dock]
+Having more than one dock=
+#>TODO
+_Having more than one dock=
+
+#X[Deleting a dock]
+Deleting a dock=
+#>TODO
+_Deleting a dock=
+
+#X[Changing the look of a dock]
+Changing the look of a dock=
+#>TODO
+_Changing the look of a dock=
 
 
 
-[Desklet]
-#X [What are «desklets»?]
-Xdesklet=
-#> Desklets are widgets which are displayed on your desktop. Each applet can be detached from the dock to act as a desklet.
-#{Tip: to detach an applet, you can drag and drop its icon from the dock to the desktop}
-desklet=
-#X [How do I configure their position?]
-Xposition=
-#> Simply drag them with the mouse.
-#{Tip: If you don't want to move it any more, you can lock its position. Simply right click on the desklet, and select «lock position». To unlock it, de-select this option.}
-position=
-#X [How do I configure their behaviour?]
-Xattitude=
-#> There are small buttons on the top and left side of the desklet. They allow  you to rotate the desklet in 3D !
-#{Tip: if you lock the desklet, the buttons will not appear. You can reset a rotation by middle-clicking on the appropriate button.}
-attitude=
-#X [How do I change their decorations?]
-Xdecorations=
-#> The default decoration is defined in the «Desklets» module.
-#Moreover, each desklet can have its own decoration. To change a desklet's decoration,
-# go to the applet's configuration, click on the «desklet» tab, and then choose the decoration you wish to use.
-#{Tip: you can add new decorations by choosing «Personalised» decoration, and providing a background and/or foreground image. You can configure the offsets of these images to adjust the position of the drawings inside the decorations.}
-decorations=
-#M[Desklets] Go to the «Desklets» module.
-config_desklets = 
-#X [How do I insert a desklet into the dock?]
-Xinsert=
-#> Simply click on the top right button.
-#{Hint :  if the desklet is locked, the button won’t appear.}
-insert=
-#X [How do I place a desklet on the <i>Compiz Widget Layer</i>?]
-Xwlayer=
-#> In the Compiz-Fusion config, enable the 'Widget Layer' plugin, and set the rule (name=cairo-dock &amp; type=utility).
-#You can then switch an applet to the Widget Layer by left-clicking on its desklet and selecting 'Compiz-Fusion Widget'.
-#{Tip: you may have to switch to the Widget Layer once so that Compiz takes the change into account.}
-wlayer=
-#G [sh -c "gconftool-2 --type string --set /apps/compiz/plugins/widget/screen0/options/match '(name=cairo-dock & type=utility)'";sh -c "ps aux | grep -v grep | grep -c 'compiz'"]If you're using Compiz, you can click on this button:
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-widget_compiz=
+#[@pkgdatadir@/icon-desklets.png]
+[Desklets]
+
+#X[Placing applets on your desktop]
+Placing applets on your desktop =
+#>Applets can live inside desklets, which are small windows that can be placed wherever on your desktop.
+#To detach an applet from the dock, simply drag and drop it outside the dock.
+_Placing applets on your desktop =
+
+#X[Moving desklets]
+Moving desklets  =
+#>Desklets can be moved anywhere simply with the mouse.
+#They can also be rotated by dragging the small arrows on the top and left sides.
+#If you don't want to move it any more, you can lock its position by right-clicking on it -> "lock position". To unlock it, de-select this option.
+_Moving desklets  =
+
+#X[Placing desklets]
+Placing desklets =
+#>From the menu (right-click -> visibility), you can also decide to keep it above other windows, or on the Widget Layer (if you use Compiz), or make a "desklet bar" by placing them on a side of the screen and selecting "reserve space".
+#Desklets that don't need interaction (like the clock) can be set transparent to the mouse (means you can click on what is behind them), by clicking on the small bottom-right button.
+_Placing desklets =
+
+#X[Changing the desklets decorations]
+Changing the desklets decorations =
+#>Desklets can have decorations. To change that, open the settings of the applet, go to Desklet, and select the decoration you want (you can provide your own one).
+_Changing the desklets decorations =
 
 
-[Taskbar]
-#X [How do I enable the Taskbar?]
-Xactivate=
-#> Go to the «Taskbar» module, then tick the first box, and apply.
-#{Tip: All the Taskbar options are grouped together in this module.
-activate=
-#M[TaskBar] Go to the «TaskBar» module.
-config_taskbar = 
-#X [I don't want to have lots of icons in the dock when I use Gimp/Pidgin/etc]
-Xgroup=
-#> In the «TaskBar» module, you can use the «Group windows from the same application in a sub-dock» option. Only a single icon will appear in the dock.
-#If there are several windows, they will be grouped together in a sub-dock above this icon.
-#{Tip: You can then scroll on this icon to switch from a window to another, in an ALT+TAB style.
-group=
-#M[TaskBar] Go to the «TaskBar» module.
-config_taskbar2 = 
-#X [I have ugly icons for some applications.]
-Xoverwrite=
-#> This is because X provides small icons for applications which look ugly when zoomed.
-# In the «TaskBar» module, you can use the «Overwrite the X icon with the launchers' icon?» option to tell the dock not to use them.
-#{Tip: This way, you can configure your personal icon for any application. Just place an icon with the same name as the class of the application in a folder used by the dock (by default, ~/.config/cairo-dock/current_theme/icons)
-#The class of an application can be found by typing «xprop |grep CLASS» in a terminal, then clicking on the window of the application.}
-overwrite=
-#M[TaskBar] Go to the «TaskBar» module.
-config_taskbar3 = 
-#X [When I launch a program with its launcher, I don't want an additional icon in the taskbar]
-Xmix=
-#> In the «TaskBar» module, you can use the «Mix launchers and applications» option.
-#When a program is launched, if it has a launcher in the dock, the launcher icon will be marked with an icon to indicate that the corresponding application is running.
-#You can then act on the window as if it were a taskbar icon.
-#{Tip: to launch another instance of the program, shift+click on the launcher.}
-mix=
-#M[TaskBar] Go to the «TaskBar» module.
-config_taskbar3 = 
-#X [I'm using Pidgin, and I want to see my friends' avatars.]
-Xnot overwrite=
-#> If you chose to overwrite X icons, you can add an exception for Pidgin just before this option.
-#If you chose to mix applications and launchers, you can edit the Pidgin launcher,
-# and in the «Extra parameters», tick the option to not steal the icon for this application.
-not overwrite=
-#M[TaskBar] Go to the «TaskBar» module.
-config_taskbar4 = 
-#X [How can I quickly navigate between many windows of the same application quickly?]
-Xalt-tab=
-#> Scroll on the icon of one of the windows of this application, or even on the icon pointing to the sub-dock if you group windows in a sub-dock.
-#{Tip: you can also close all the windows of this application by middle-clicking on the icon pointing to the sub-dock.}
-alt-tab=
+#[@pkgdatadir@/icon-system.svg]
+[Useful Features]
 
+#X[Having a calendar with tasks]
+Having a calendar with tasks =
+#>Activate the Clock applet.
+#Clicking on it will display a calendar.
+#Double-clicking on a day will pop-up a task-editor. Here you can add/remove taks.
+#When a task has been or is going to be scheduled, the applet will warn you (15mn before the event, and also 1 day before in the case of an anniversary).
+_Having a calendar with tasks =
 
+#X[Having a list of all windows]
+Having a list of all windows =
+#>Activate the Switcher applet.
+#Right-clicking on it will give you access to a list containing all the windows, sorted by desktops.
+#You can also display the windows side-by-side if your Window-Manager is able to do that.
+#You can bind this action to the middle-click.
+_Having a list of all windows =
 
-[Replacing the Gnome-panel]
-#X [How can I add the main menu?]
-Xmain menu=
-#> Enable the GMenu applet.
-#{Tip: if you have removed your Gnome-panel, then the «alt+F1» shortkey will no longer work. This applet lets you configure a shortcut to pop up the menu at the mouse's location.}
-main menu=
-#M[GMenu] Go to the «GMenu» module.
-config_gmenu = 
-#X [How can I add a simple «quick launch» panel?]
-Xquick launch=
-#> Enable the Gmenu applet. then you can have it by middle-clicking on its icon.
-#{Tip: if you removed your Gnome-panel, then the «alt+F2» shortkey will no longer work. This applet lets you configure a shortcut to pop up the quick-launch dialog.}
-quick launch=
-#M[GMenu] Go to the «GMenu» module.
-config_gmenu2 = 
-#X [How can I add a Log-out icon?]
-Xlogout=
-#> Enable the «Log-out» applet.
-#{Tip: In the latest version of GNOME, there are 2 panels: one to log out, and one to turn off the computer. The first one is raised by a click on the icon, the second by a middle-click, but the applet lets you reverse this order, and even lets you enter your own commands.}
-logout=
-#M[logout] Go to the «Log-out» module.
-config_logout = 
-#X [How can I access the dustbin?]
-Xdustbin=
-#> Simply enable the «Dustbin» applet.
-#{Tip: you can delete a file by dragging it into the dustbin. You can even unmount a mount-point this way!}
-dustbin=
-#M[dustbin] Go to the «Dustbin» module.
-config_dustbin = 
-#X [How can I access my mount points?]
-Xmount=
-#> Simply enable the «Shortcuts» applet.
-#{Tip: you can mount a volume by clicking on its icon. To unmount it, middle-click on its icon, or right-click and select «unmount».}
-mount=
-#M[shortcuts] Go to the «Shortcuts» module.
-config_shortcuts = 
-#X [How can I access my Nautilus bookmarks?]
-Xbookmarks=
-#> Simply enable the «shortcuts» applet.
-#{Tip: you can add a bookmark by dragging the folder onto the applet or into its sub-dock. You can also rename and remove bookmarks. This will also take effect in Nautilus immediately, and vice versa.}
-bookmarks=
-#M[shortcuts] Go to the «Shortcuts» module.
-config_shortcuts2 = 
-#X [How can I access my desktop?]
-Xshow desktop=
-#> Simply enable the «showDesktop» applet.
-#{Tip: middle-clicking on the icon will hide all windows, but not desklets.}
-show desktop=
-#M[showDesktop] Go to the «Show Desktop» module.
-config_showdesktop = 
-#X [How can I add an easy-to-acces calendar?]
-Xcalendar=
-#> Enable the «Clock» applet. Clicking on it will display a calendar, clicking again will hide it.
-calendar=
-#M[clock] Go to the «Clock» module.
-config_clock = 
-#X [How can I add the notification area (systray)?]
-Xsystray=
-#> Enable the «Systray» applet. For the moment it cannot be displayed directly in the dock,
-#so clicking on the icon will pop-up a dialog containing the systray, middle-click will hide it.
-#We recommend detaching this applet to make it a desklet. Place it in a corner of your screen and keep it above other windows.
-systray=
-#M[systray] Go to the «Systray» module.
-config_systray = 
-#X [How can I add an easy-to-access terminal with real transparency, like Tilda?]
-Xterminal=
-#> Enable the «Terminal» applet. You can detach it and place it on the Widget Layer for instance, or configure a shortkey to make it pop up instantly.
-#{Tip: clicking next to the last tab will create a new tab. Double-clicking on a tab allows you to rename it. You can even change the colour of a tab!}
-terminal=
-#M[terminal] Go to the «terminal» module.
-config_terminal = 
-#X [So then, how can I remove completely the gnome-panel?]
+#X[Showing all the desktops]
+Showing all the desktops =
+#>Activate either the Switcher applet or the Show-Desktop applet.
+#Right-click on it -> "show all the desktop".
+#You can bind this action to the middle-click.
+_Showing all the desktops =
+
+#X[Changing the screen resolution]
+Changing the screen resolution =
+#>Activate the Show-Desktop applet.
+#Right-click on it -> "change resolution" -> select the one you want.
+_Changing the screen resolution =
+
+#X[Locking your session]
+Locking your session =
+#>Activate the Log-out applet.
+#Right-click on it -> "lock screen".
+#You can bind this action to the middle-click.
+_Locking your session =
+
+#X[Quick-launching a program from keyboard (replacing ALT+F2)]
+Quick-launching a program from keyboard (replacing ALT+F2) =
+#>Activate the Applications Menu applet.
+#Middle-click on it, or right-click -> "quick-launch".
+#You can bin a shortkey for this action.
+#The text is automatically completed (for instance, typing "fir" will be completed into "firefox").
+_Quick-launching a program from keyboard (replacing ALT+F2) =
+
+#X[Turning Composite OFF during games]
+Turning Composite OFF during games =
+#>Activate the Composite Manager applet.
+#Clicking on it will disable the Composite, which often makes games more smooth.
+#Clicking again on it will enable the Composite.
+_Turning Composite OFF during games =
+
+#X[Seeing the hourly weather forecast]
+Seeing the hourly weather forecast =
+#>Activate the Weather applet.
+#Open its settings, go to Configure, and type the name of your city. Press Enter, and select your city from the list that will appear.
+#Then validate to close the settings window.
+#Now, double-clicking on a day will lead you to the web page of the hourly forecast for this day.
+_Seeing the hourly weather forecast =
+
+#X[Adding a file or a web page into the dock]
+Adding a file or a web page into the dock =
+#>Simply drag a file or an html link and drop it onto the dock (an animated arrow should appear when you can drop).
+#It will be added into the Stack. The Stack is a sub-dock that can contain any file or link you want to access quickly.
+#You can have several Stacks, and you can drop files/links onto a Stack directly.
+_Adding a file or a web page into the dock =
+
+#X[Importing a folder into the dock]
+Importing a folder into the dock =
+#>Simply drag a folder and drop it onto the dock (an animated arrow should appear when you can drop).
+#You can choose to import the folder's files or not.
+_Importing a folder into the dock =
+
+#X[Accessing the recent events]
+Accessing the recent events =
+#>Activate the Recent-Events applet.
+#You need to have the Zeitgeist daemon to be running. Install it if it's not present.
+#The applet can then display all the files, folders, web pages, songs, videos and documents you have accessed recently, so that you can access them quickly.
+_Accessing the recent events =
+
+#X[Quickly opening a recent file with a launcher]
+Quickly opening a recent file with a launcher =
+#>Activate the Recent-Events applet.
+#You need to have the Zeitgeist daemon to be running. Install it if it's not present.
+#Now when you right-click on a launcher, all the recent files that can be opened with this launcher will appear in its menu.
+_Quickly opening a recent file with a launcher =
+
+#X[Accessing disks]
+Accessing disks  =
+#>Activate the Shortcuts applet.
+#Then all the disks (including USB key or external hard drives) will be listed in a sub-dock.
+#To unmount a disk before disconnecting it, middle-click on its icon.
+_Accessing disks  =
+
+#X[Accessing folder bookmarks]
+Accessing folder bookmarks =
+#>Activate the Shortcuts applet.
+#Then all the folders bookmarks (the ones that appear in Nautilus) will be listed in a sub-dock.
+#To add a bookmark, simply drag-and-drop a folder onto the applet's icon.
+#To remove a boorkmark, right-click on its icon -> remove
+_Accessing folder bookmarks =
+
+#X[Having multiple instances of an applet]
+Having multiple instances of an applet =
+#>Some applets can have several instances running at the same time: Clock, Stack, Weather, ...
+#Right click on the applet's icon -> "launch another instance".
+#You can configure each instance independantely. This allows you, for example, to have the current time for different countries in your dock or the weather in different cities.
+_Having multiple instances of an applet =
+
+#X[Adding / removing a desktop]
+Adding / removing a desktop =
+#>Activate the Switcher applet.
+#Right-click on it -> "add a desktop" or "remove this desktop".
+#You can even name each of them.
+_Adding / removing a desktop =
+
+#X[Controling the sound volume]
+Controling the sound volume =
+#>Activate the Sound Volume applet.
+#Then scroll up/down to increase/decrease the sound.
+#Alternatively, you can click on the icon and move the scroll bar.
+#Middle-click will mute/unmute.
+_Controling the sound volume =
+
+#X[Controling the screen brightness]
+Controling the screen brightness =
+#>Activate the Screen Luminosity applet.
+#Then scroll up/down to increase/decrease the brightness.
+#Alternatively, you can click on the icon and move the scroll bar.
+_Controling the screen brightness =
+
+#X [Removing completely the gnome-panel]
 Xremove=
 #> Open gconf-editor, edit the key /desktop/gnome/session/required_components/panel, and replace its content with "cairo-dock".
 #Then restart your session : the gnome-panel has not been started, and the dock has been started (if not, you can add it to the startup programs).
@@ -317,57 +322,6 @@ remove=
 #G [sh -c "gconftool-2 --type string --set /desktop/gnome/session/required_components/panel '(cairo-dock'";sh -c "ps aux | grep -v grep | grep -c 'gnome-settings-daemon'"]If you are on Gnome, you can click on this button in order to automatically modify this key:
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 widget_compiz=
-
-
-[Other applets]
-#X [How do I run the same applet multiple times?]
-Xmany=
-#> Some applets can have several instances running at the same time: Clock, Cairo-Penguin, Weather, Netspeed, ...
-#Right click on the applet's icon, and select «launch another instance». A new instance of this applet appears in the main dock.
-#You can configure this new applet just like any other.
-#{Tip: This allows you, for example, to have the current time for different countries in your dock or to have several animated characters in your dock or the weather in different cities.}
-many=
-#X [I have a personal gauge that I want to use in the dock (for System-Monitor or others).] 
-Xgauge=
-#> Move the folder containing your gauge to ~/.config/cairo-dock/extras/gauges
-gauge=
-#X [I have a personal Cairo-Clock theme that I want to use in the «clock» applet.]
-Xclock=
-#> Move the folder containing your theme to ~/.config/cairo-dock/extras/clock
-#{Tip: the same goes on for all applets that propose a theme: dustbin, Cairo-Penguin, weather, etc.}
-clock=
-#X [How do I change the brightness of my screen quickly?]
-Xgamma=
-#> Enable the Xgamma applet, then you can scroll up/down on the icon with the mouse.
-gamma=
-#M[Xgamma] Go to the «Xgamma» module.
-config_xgamma = 
-#X [How can I change the speaker volume quickly?]
-Xalsa=
-#> Enable the AlsaMixer applet, then you can scroll up/down on the icon with the mouse.
-alsa=
-#M[AlsaMixer] Go to the «AlsaMixer» module.
-config_AlsaMixer = 
-#X [How can I quickly switch to another desktop?]
-Xswitcher=
-#> Activate the Switcher applet, then you can scroll up/down on the icon with the mouse to go to the previous/next desktop,
-# or click on the icon to select a desktop.
-#{Tip: This applet even lets you add or remove quickly a desktop !}
-switcher=
-#M[switcher] Go to the «Switcher» module.
-config_switcher = 
-#X [How can I control my dock from the keyboard?]
-Xkeyboard=
-#> Many applets have events that can be triggered by a keyboard shortcut :
-# - the <i>AlsaMixer</i> applet allows you to pop-up a <b>volume button</b> that can be controlled with the left/right arrows.
-# - the <i>Terminal</i> applet allows you to pop-up the <b>terminal window</b> and directly write inside it.
-# - the <i>Systray</i> applet allows you to pop-up the <b>notification area</b>.
-# - the <i>Quick Browser</i> applet allows you to pop-up the <b>menu browser</b>, you can then navigate inside it with the arrows.
-# - the <i>GMenu</i> applet allows you to pop-up the <b>Applications</b> menu, and also a <b>quick-launcher</b> dialog box.
-# - the <i>Clipper</i> applet allows you to pop-up the <b>clipboard history</b> menu.
-# - and of course, the <i>Scooby-Do</i> plug-in let you <b>navigate inside your docks</b> and quickly <b>find and launch</b> applications and files !
-#{Tip: When you define a shortkey, try it before to be sure that it is not already used by another application!}
-keyboard=
 
 
 [Troubleshooting]
@@ -458,7 +412,7 @@ frame_website=
 community_site=http://glx-dock.org
 #W[Development site] Find the latest version of Cairo-Dock here !
 dev_site=https://launchpad.net/cairo-dock
-#W[Cairo-Dock-Plug-ins-Extras] Other applets
+#W[Cairo-Dock-Plug-ins-Extras] More applets available online!
 extras_site=http://extras.glx-dock.org
 
 #F [Repositories]

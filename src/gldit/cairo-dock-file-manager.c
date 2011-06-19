@@ -339,6 +339,11 @@ gboolean cairo_dock_fm_lock_screen (void)
 		return FALSE;
 }
 
+gboolean cairo_dock_fm_can_setup_time (void)
+{
+	return (s_pEnvBackend != NULL && s_pEnvBackend->setup_time!= NULL);
+}
+
 gboolean cairo_dock_fm_setup_time (void)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->setup_time!= NULL)
