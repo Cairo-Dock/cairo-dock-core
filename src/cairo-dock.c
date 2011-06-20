@@ -952,16 +952,23 @@ int main (int argc, char** argv)
 	//\___________________ get global config.
 	gboolean bFirstLaunch = FALSE;
 	gchar *cRootDataDirPath;
+	// if the user has specified the '-d' parameter.
 	if (cUserDefinedDataDir != NULL)
 	{
-		cRootDataDirPath = cUserDefinedDataDir;
+		// if 'cRootDataDirPath' is not a full path, we will have a few problems with image in the config panel without a full path (e.g. 'bg.svg' in the default theme)
+		if (*cUserDefinedDataDir == '/')
+			cRootDataDirPath = cUserDefinedDataDir;
+		else if (*cUserDefinedDataDir == '~')
+			cRootDataDirPath = g_strdup_printf ("%s%s", getenv("HOME"), cUserDefinedDataDir + 1);
+		else
+			cRootDataDirPath = g_strdup_printf ("%s/%s", g_get_current_dir(), cUserDefinedDataDir);
 		cUserDefinedDataDir = NULL;
 	}
 	else
 	{
 		cRootDataDirPath = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
-		bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	}
+	bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	_cairo_dock_get_global_config (cRootDataDirPath);
 	
 	//\___________________ internationalize the app.
@@ -1241,8 +1248,8 @@ int main (int argc, char** argv)
 	g_print ("bFirstLaunch: %d; s_bShowTips: %d; bNewVersion: %d\n", bFirstLaunch, s_bShowTips, bNewVersion);
 	if (bFirstLaunch)  // tout premier lancement -> bienvenue !
 	{
-		g_idle_add ((GSourceFunc)_show_tips_idle, NULL);
-		//cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
+		//g_idle_add ((GSourceFunc)_show_tips_idle, NULL);
+		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
 		
 		g_timeout_add_seconds (4, _cairo_dock_first_launch_setup, NULL);
 	}
@@ -1265,6 +1272,8 @@ int main (int argc, char** argv)
 			}
 			g_key_file_free (pKeyFile);
 		}
+		// a new version but there is maybe a new version of Compiz and Gtk...
+		g_timeout_add_seconds (4, _cairo_dock_first_launch_setup, NULL);
 	}
 	else if (cExcludeModule != NULL && ! bMaintenance)
 	{
