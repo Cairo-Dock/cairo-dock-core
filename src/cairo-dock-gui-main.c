@@ -1479,28 +1479,28 @@ static void _add_main_groups_buttons (void)
 		"icon-position.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Set the position of the main dock."),
-		N_("Position"));
+		_("Position"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Docks");
 	
 	pGroupDescription = _add_one_main_group_button ("Accessibility",
 		"icon-visibility.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Do you like your dock to be always visible,\n or on the contrary unobtrusive?\nConfigure the way you access your docks and sub-docks!"),
-		N_("Visibility"));
+		_("Visibility"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Docks");
 	
 	pGroupDescription = _add_one_main_group_button ("TaskBar",
 		"icon-taskbar.png",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Display and interact with currently open windows."),
-		N_("Taskbar"));
+		_("Taskbar"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Taskbar");
 	
 	pGroupDescription = _add_one_main_group_button ("System",
 		"icon-system.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("All of the parameters you will never want to tweak."),
-		N_("System"));
+		_("System"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Docks");
 	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Connection");
 	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Containers");
@@ -1510,14 +1510,14 @@ static void _add_main_groups_buttons (void)
 		"icon-background.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Set a background for your dock."),
-		N_("Background"));
+		_("Background"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Docks");
 	
 	pGroupDescription = _add_one_main_group_button ("Views",
 		"icon-views.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Select a view for each of your docks."),
-		N_("Views"));
+		_("Views"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Backends");
 	pGroupDescription->pExtensions = g_list_prepend (NULL, (gchar*)"dock rendering");
 	
@@ -1525,7 +1525,7 @@ static void _add_main_groups_buttons (void)
 		"icon-dialogs.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Configure text bubble appearance."),
-		N_("Dialog boxes"));
+		_("Dialog boxes"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Dialogs");
 	pGroupDescription->pExtensions = g_list_prepend (NULL, (gchar*)"dialog rendering");
 	
@@ -1533,7 +1533,7 @@ static void _add_main_groups_buttons (void)
 		"icon-desklets.png",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Applets can be displayed on your desktop as widgets."),
-		N_("Desklets"));
+		_("Desklets"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Desklets");
 	pGroupDescription->pExtensions = g_list_prepend (NULL, (gchar*)"desklet rendering");
 	
@@ -1541,14 +1541,14 @@ static void _add_main_groups_buttons (void)
 		"icon-icons.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("All about icons:\n size, reflection, icon theme,..."),
-		N_("Icons"));
+		_("Icons"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Icons");
 	
 	pGroupDescription = _add_one_main_group_button ("Indicators",
 		"icon-indicators.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Indicators are additional markers for your icons."),
-		N_("Indicators"));
+		_("Indicators"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Indicators");
 	pGroupDescription->pExtensions = g_list_prepend (NULL, (gchar*)"drop indicator");
 	
@@ -1556,7 +1556,7 @@ static void _add_main_groups_buttons (void)
 		"icon-labels.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Define icon caption and quick-info style."),
-		N_("Captions"));
+		_("Captions"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Icons");
 }
 

@@ -1301,6 +1301,7 @@ int main (int argc, char** argv)
 	"- handle icon path in .desktop files.\n"
 	"- compil kde integration\n"
 	"- find Kwin config tool for Composite-manager\n"
+	"- test multi-stacks\n"
 	"- use Power-Manager dbus API\n"
 	"- test Widget Layer on Compiz 0.9\n"
 	"\n");
