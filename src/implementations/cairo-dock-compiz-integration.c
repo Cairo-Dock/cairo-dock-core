@@ -169,11 +169,11 @@ static void _on_got_widget_match_rule (DBusGProxy *proxy, DBusGProxyCall *call_i
 	cd_debug ("got rule : %s", cRule);
 	
 	// if our rule is not present yet, add it.
-	if (cRule == NULL || *cRule == '\0' || (g_strstr_len (cRule, -1, "class=Cairo-dock & type=utility") == NULL && g_strstr_len (cRule, -1, "(class=Cairo-dock) & (type=utility)") == NULL && g_strstr_len (cRule, -1, "name=cairo-dock & type=utility") == NULL))
+	if (cRule == NULL || *cRule == '\0' || (g_strstr_len (cRule, -1, "class=Cairo-dock & type=Utility") == NULL && g_strstr_len (cRule, -1, "(class=Cairo-dock) & (type=Utility)") == NULL && g_strstr_len (cRule, -1, "name=cairo-dock & type=Utility") == NULL))
 	{
 		gchar *cNewRule = (cRule == NULL || *cRule == '\0' ?
-			g_strdup ("(class=Cairo-dock & type=utility)") :
-			g_strdup_printf ("(%s) | (class=Cairo-dock & type=utility)", cRule));
+			g_strdup ("(class=Cairo-dock & type=Utility)") :
+			g_strdup_printf ("(%s) | (class=Cairo-dock & type=Utility)", cRule));
 		cd_debug ("set rule : %s", cNewRule);
 		
 		dbus_g_proxy_call_no_reply (proxy,

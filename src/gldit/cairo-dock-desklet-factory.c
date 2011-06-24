@@ -1159,8 +1159,6 @@ static void _cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gbool
 	pDesklet->bSpaceReserved = bReserve;
 }
 
-//for compiz fusion "widget layer"
-//set behaviour in compiz to: (class=Cairo-dock & type=utility)
 void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibility iVisibility, gboolean bSaveState)
 {
 	cd_debug ("%s (%d)", __func__, iVisibility);
