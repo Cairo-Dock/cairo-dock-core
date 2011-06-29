@@ -63,18 +63,6 @@ debian_unstable() {
 	up_install
 }
 
-debian_stable_weekly() {
-	addRepo "deb http://ppa.launchpad.net/cairo-dock-team/weekly/ubuntu hardy main" "Cairo-Dock-PPA-Weekly"
-	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E80D6BF5
-	up_install
-}
-
-debian_unstable_weekly() {
-	addRepo "deb http://ppa.launchpad.net/cairo-dock-team/weekly/ubuntu maverick main" "Cairo-Dock-PPA-Weekly"
-	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E80D6BF5
-	up_install
-}
-
 compiz_plugin() {
 	COMPIZ_PLUGINS=`gconftool-2 --get /apps/compiz/general/allscreens/options/active_plugins`
 	if [ `echo $COMPIZ_PLUGINS |grep -c $ARG2` -eq 0 ]; then
@@ -98,12 +86,6 @@ case $ARG in
 	;;
 	"debian_unstable")
 		debian_unstable
-	;;
-	"debian_stable_weekly")
-		debian_stable_weekly
-	;;
-	"debian_unstable_weekly")
-		debian_unstable_weekly
 	;;
 	"compiz_plugin")
 		compiz_plugin
