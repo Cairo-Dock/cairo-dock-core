@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
+#include <dlfcn.h>
 
 #include <cairo.h>
 
@@ -84,8 +85,10 @@ static gchar *_cairo_dock_extract_default_module_name_from_path (gchar *cSoFileP
 
 static void _cairo_dock_close_module (CairoDockModule *module)
 {
-	if (module->pModule)
-		g_module_close (module->pModule);
+	/**if (module->pModule)
+		g_module_close (module->pModule);*/
+	if (module->handle)
+		dlclose (module->handle);
 	
 	g_free (module->pInterface);
 	module->pInterface = NULL;
@@ -100,19 +103,26 @@ static void _cairo_dock_close_module (CairoDockModule *module)
 static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **erreur)
 {
 	//\__________________ On ouvre le .so.
-	GModule *module = g_module_open (pCairoDockModule->cSoFilePath, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+	/**GModule *module = g_module_open (pCairoDockModule->cSoFilePath, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
 	if (!module)
 	{
 		g_set_error (erreur, 1, 1, "while opening module '%s' : (%s)", pCairoDockModule->cSoFilePath, g_module_error ());
 		return ;
 	}
-	pCairoDockModule->pModule = module;
-
+	pCairoDockModule->pModule = module;*/
+	pCairoDockModule->handle = dlopen (pCairoDockModule->cSoFilePath, RTLD_LAZY | RTLD_LOCAL | RTLD_DEEPBIND);
+	if (! pCairoDockModule->handle)
+	{
+		g_set_error (erreur, 1, 1, "while opening module '%s' : (%s)", pCairoDockModule->cSoFilePath, dlerror ());
+		return ;
+	}
 	//\__________________ On identifie le module.
 	gboolean bSymbolFound;
 	CairoDockModulePreInit function_pre_init = NULL;
-	bSymbolFound = g_module_symbol (module, "pre_init", (gpointer) &function_pre_init);
-	if (bSymbolFound && function_pre_init != NULL)
+	function_pre_init = dlsym (pCairoDockModule->handle, "pre_init");
+	/**bSymbolFound = g_module_symbol (module, "pre_init", (gpointer) &function_pre_init);
+	if (bSymbolFound && function_pre_init != NULL)*/
+	if (function_pre_init != NULL)
 	{
 		pCairoDockModule->pVisitCard = g_new0 (CairoDockVisitCard, 1);
 		pCairoDockModule->pInterface = g_new0 (CairoDockModuleInterface, 1);

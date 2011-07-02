@@ -156,7 +156,8 @@ struct _CairoDockModule {
 	/// path to the .so file.
 	gchar *cSoFilePath;
 	/// internal structure of the .so file, once it has been opened.
-	GModule *pModule;
+	//GModule *pModule;
+	gpointer handle;
 	/// interface of the module.
 	CairoDockModuleInterface *pInterface;
 	/// visit card of the module.
