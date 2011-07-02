@@ -1488,8 +1488,16 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	
 	//\__________________ search the desktop file's path.
 	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass);
-	if (cDesktopFilePath == NULL)
+	if (cDesktopFilePath == NULL)  // couldn't find the .desktop
 	{
+		if (pClassAppli == NULL)  // make a class anyway to store the few info we have.
+			pClassAppli = cairo_dock_get_class (cClass);
+		if (pClassAppli != NULL)
+		{
+			if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
+				pClassAppli->cStartupWMClass = g_strdup (cWmClass);
+			pClassAppli->bSearchedAttributes = TRUE;
+		}
 		g_print ("couldn't find the desktop file %s\n", cDesktopFile?cDesktopFile:cClass);
 		return NULL;
 	}
