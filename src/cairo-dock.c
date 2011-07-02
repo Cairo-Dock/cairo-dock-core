@@ -27,51 +27,22 @@
 **    If you don't know what that means take a look at:
 **       http://www.gnu.org/licenses/licenses.html#GPL
 **
-** Original idea :
-**    Mirco Mueller, June 2006.
+*********************** VERSION 0 (2006) *********************
 **
-*********************** VERSION 0 (2006)*********************
-** author(s):
-**    Mirco "MacSlow" Mueller <macslow@bangang.de>
+** Original idea :
+**    Mirco "MacSlow" Mueller <macslow@bangang.de>, June 2006.
+** With the help of:
 **    Behdad Esfahbod <behdad@behdad.org>
 **    David Reveman <davidr@novell.com>
 **    Karl Lattimer <karl@qdh.org.uk>
+** Originally conceived as a stress-test for cairo, librsvg, and glitz.
 **
-** notes :
-**    Originally conceived as a stress-test for cairo, librsvg, and glitz.
-**
-** notes from original author:
-**
-**    I just know that some folks will bug me regarding this, so... yes there's
-**    nearly everything hard-coded, it is not nice, it is not very usable for
-**    easily (without any hard work) making a full dock-like application out of
-**    this, please don't email me asking to me to do so... for everybody else
-**    feel free to make use of it beyond this being a small but heavy stress
-**    test. I've written this on an Ubuntu-6.06 box running Xgl/compiz. The
-**    icons used are from the tango-project...
-**
-**        http://tango-project.org/
-**
-**    Over the last couple of days Behdad and David helped me (MacSlow) out a
-**    great deal by sending me additional tweaked and optimized versions. I've
-**    now merged all that with my recent additions.
-**
-*********************** VERSION 0.1.0 and above (2007-2011)*********************
+*********************** VERSION 0.1 and above (2007-2011) *********************
 **
 ** author(s) :
 **     Fabrice Rey <fabounet@glx-dock.org>
-**
-** notes :
-**     I've completely rewritten the calculation part, and the callback system.
-**     Plus added a conf file that allows to dynamically modify most of the parameters.
-**     Plus a visible zone that make the hiding/showing more friendly.
-**     Plus a menu and the drag'n'drop ability.
-**     Also I've separated functions in several files in order to make the code more readable.
-**     Now it sems more like a real dock !
-**
-**     Edit : plus a taskbar, plus an applet system,
-**            plus the container ability, plus different views, plus the top and vertical position, ...
-**
+** With the help of:
+**     A lot of people !!!
 **
 *******************************************************************************/
 
@@ -107,12 +78,13 @@
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_sync
+#include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command
 
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-items.h"
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
+#include "cairo-dock-help.h"
 #include "cairo-dock-core.h"
 
 //#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
@@ -145,163 +117,27 @@ extern CairoDockModuleInstance *g_pCurrentModule;
 gboolean g_bForceCairo = FALSE;
 gboolean g_bLocked;
 
+static gboolean s_bSucessfulLaunch = FALSE;
 static gchar *s_cLaunchCommand = NULL;
 static gchar *s_cLastVersion = NULL;
-gboolean g_bEnterHelpOnce = FALSE;
-static gboolean s_bShowTips = TRUE;
-static int s_iLastTipGroup = -1;
-static int s_iLastTipKey = -1;
 static gchar *s_cDefaulBackend = NULL;
-static gboolean s_bTestComposite = TRUE;
 static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 static gint s_iLastYear = 0;
 static void (*s_activate_composite) (gboolean) = NULL;
 
-static void _on_tips_category_changed (GtkComboBox *pWidget, gpointer *data);
-
-static void _set_metacity_composite (gboolean bActive)
-{
-	int r;
-	if (bActive)
-		r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
-	else
-		r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false");
-}
-
-static void _set_xfwm_composite (gboolean bActive)
-{
-	int r;
-	if (bActive)
-		r = system ("xfconf-query -c xfwm4 -p '/general/use_compositing' -t 'bool' -s 'true'");
-	else
-		r = system ("xfconf-query -c xfwm4 -p '/general/use_compositing' -t 'bool' -s 'false'");
-}
-
-static void _set_kwin_composite (gboolean bActive)
-{
-	int r;
-	if (bActive)
-		r = system ("[ \"$(qdbus org.kde.kwin /KWin compositingActive)\" == \"false\" ] && qdbus org.kde.kwin /KWin toggleCompositing");  // not active, so activating
-	else
-		r = system ("[ \"$(qdbus org.kde.kwin /KWin compositingActive)\" == \"true\" ] && qdbus org.kde.kwin /KWin toggleCompositing");  // active, so deactivating
-}
-
-static inline void _cancel_wm_composite (void)
-{
-	s_activate_composite (FALSE);
-}
-static void _accept_wm_composite (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
-{
-	cd_debug ("%s (%d)", __func__, iClickedButton);
-	if (iClickedButton == 1 || iClickedButton == -2)  // clic explicite sur "cancel", ou Echap ou auto-delete.
-	{
-		_cancel_wm_composite ();
-	}
-	gboolean *bAccepted = data;
-	*bAccepted = TRUE;  // l'utilisateur a valide son choix.
-}
-static void _on_free_wm_dialog (gpointer data)
-{
-	gboolean *bAccepted = data;
-	cd_debug ("%s (%d)", __func__, *bAccepted);
-	if (! *bAccepted)  // le dialogue s'est detruit sans que l'utilisateur n'ait valide la question => on annule tout.
-	{
-		_cancel_wm_composite ();
-	}
-	g_free (data);
-}
-
-static void _toggle_remember_choice (GtkCheckButton *pButton, GtkWidget *pDialog)
-{
-	g_object_set_data (G_OBJECT (pDialog), "remember", GINT_TO_POINTER (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pButton))));
-}
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
+	// successful launch, remove the maintenance mode from the command line.
 	if (g_str_has_suffix (s_cLaunchCommand, " -m"))
 		s_cLaunchCommand[strlen (s_cLaunchCommand)-3] = '\0';  // on enleve le mode maintenance.
+	s_bSucessfulLaunch = TRUE;
 	
-	//\___________________ On teste le composite maintenant (au demarrage, le composite manager peut ne pas etre lance).
-	if (s_bTestComposite)
-	{
-		GdkScreen *pScreen = gdk_screen_get_default ();
-		if (! myContainersParam.bUseFakeTransparency && ! gdk_screen_is_composited (pScreen))
-		{
-			cd_warning ("no composite manager found");
-			// find the current WM.
-			gchar *cPsef = cairo_dock_launch_command_sync ("pgrep metacity");  // 'ps' ne marche pas, il faut le lancer dans un script :-/
-			if (cPsef != NULL && *cPsef != '\0')
-			{
-				s_activate_composite = _set_metacity_composite;
-			}
-			else
-			{
-				cPsef = cairo_dock_launch_command_sync ("pgrep xfwm");
-				if (cPsef != NULL && *cPsef != '\0')
-				{
-					s_activate_composite = _set_xfwm_composite;
-				}
-				else
-				{
-					cPsef = cairo_dock_launch_command_sync ("pgrep kwin");
-					if (cPsef != NULL && *cPsef != '\0')
-					{
-						s_activate_composite = _set_kwin_composite;
-					}
-				}
-			}
-			
-			// if the WM can handle the composite, ask the user if he wants to activate it.
-			if (s_activate_composite != NULL)  // the WM can activate the composite.
-			{
-				Icon *pIcon = cairo_dock_get_dialogless_icon ();
-				GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
-				GtkWidget *label = gtk_label_new (_("Don't ask me any more"));
-				cairo_dock_set_dialog_widget_text_color (label);
-				GtkWidget *pCheckBox = gtk_check_button_new ();
-				gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
-				gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
-				g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), pAskBox);
-				int iClickedButton = cairo_dock_show_dialog_and_wait (_("To remove the black rectangle around the dock, you need to activate a composite manager.\nDo you want to activate it now?"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., NULL, pAskBox);
-				
-				gboolean bRememberChoice = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pCheckBox));
-				gtk_widget_destroy (pAskBox); // le widget survit a un dialogue bloquant.
-				if (bRememberChoice)
-				{
-					s_bTestComposite = FALSE;
-				}
-				if (iClickedButton == 0 || iClickedButton == -1)  // ok or Enter.
-				{
-					s_activate_composite (TRUE);
-					pIcon = cairo_dock_get_dialogless_icon ();
-					cairo_dock_show_dialog_full (_("Do you want to keep this setting?\nIn 15 seconds, the previous setting will be restored."), pIcon, CAIRO_CONTAINER (g_pMainDock), 15e3, NULL, NULL, (CairoDockActionOnAnswerFunc) _accept_wm_composite, g_new0 (gboolean, 1), (GFreeFunc)_on_free_wm_dialog);
-				}
-			}
-			else  // sinon il a droit a un "message a caractere informatif".
-			{
-				cairo_dock_show_general_message (_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it. This option is in the 'System' module of the configuration, at the bottom of the page."), 0);
-			}
-			g_free (cPsef);
-		}
-		else  // a priori peu utile de le retester, surtout que le composite risque de ne pas etre actif tout de suite au demarrage.
-		{
-			s_bTestComposite = FALSE;
-		}
-		
-		if (! s_bTestComposite)
-		{
-			gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
-			cairo_dock_update_conf_file (cConfFilePath,
-				G_TYPE_BOOLEAN, "Launch", "test composite", s_bTestComposite,
-				G_TYPE_INVALID);
-			g_free (cConfFilePath);
-		}
-	}
-	
+	// new year greetings.
 	time_t t = time (NULL);
 	struct tm st;
 	localtime_r (&t, &st);
 	
-	if (st.tm_mday <= 15 && st.tm_mon == 0 && s_iLastYear < st.tm_year + 1900)  // 2 premieres semaines de janvier.
+	if (!data && st.tm_mday <= 15 && st.tm_mon == 0 && s_iLastYear < st.tm_year + 1900)  // first 2 weeks of january + not first launch
 	{
 		s_iLastYear = st.tm_year + 1900;
 		gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
@@ -365,362 +201,6 @@ static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, 
 	return FALSE;  // TRUE <=> ne pas detruire la fenetre.
 }
 
-static void _entered_help_once (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile)
-{
-	if (!g_bEnterHelpOnce)
-	{
-		g_bEnterHelpOnce = TRUE;
-		gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
-		cairo_dock_update_conf_file (cConfFilePath,
-			G_TYPE_BOOLEAN, "Help", "entered once", g_bEnterHelpOnce,
-			G_TYPE_INVALID);
-		g_free (cConfFilePath);
-	}
-}
-static void _register_help_module (void)
-{
-	//\________________ ceci est un vilain hack ...mais je trouvais ca lourd de compiler un truc qui n'a aucun code, et puis comme ca on a l'aide meme sans les plug-ins.
-	CairoDockModule *pHelpModule = g_new0 (CairoDockModule, 1);
-	CairoDockVisitCard *pVisitCard = g_new0 (CairoDockVisitCard, 1);
-	pVisitCard->cModuleName = "Help";
-	pVisitCard->cTitle = _("Help");
-	pVisitCard->iMajorVersionNeeded = 2;
-	pVisitCard->iMinorVersionNeeded = 0;
-	pVisitCard->iMicroVersionNeeded = 0;
-	pVisitCard->cPreviewFilePath = NULL;
-	pVisitCard->cGettextDomain = NULL;
-	pVisitCard->cDockVersionOnCompilation = CAIRO_DOCK_VERSION;
-	pVisitCard->cUserDataDir = "help";
-	pVisitCard->cShareDataDir = CAIRO_DOCK_SHARE_DATA_DIR;
-	pVisitCard->cConfFileName = "help.conf";
-	pVisitCard->cModuleVersion = "0.1.2";
-	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_BEHAVIOR;
-	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.svg";
-	pVisitCard->iSizeOfConfig = 0;
-	pVisitCard->iSizeOfData = 0;
-	pVisitCard->cDescription = N_("A useful FAQ which also contains a lot of hints.\nRoll your mouse over a sentence to make helpful popups appear.");
-	pVisitCard->cAuthor = "Fabounet";
-	
-	CairoDockModuleInterface *pInterface = g_new0 (CairoDockModuleInterface, 1);
-	pInterface->load_custom_widget = _entered_help_once;
-	
-	pHelpModule->pVisitCard = pVisitCard;
-	pHelpModule->pInterface = pInterface;
-	cairo_dock_register_module (pHelpModule);  // il sera vu par le modules-manager comme un module auto-loaded. 
-}
-
-
-typedef struct {
-	GKeyFile *pKeyFile;
-	gchar **pGroupList;
-	gint iNbGroups;
-	gchar **pKeyList;  // keys of the current group
-	gint iNbKeys;
-	gint iNumTipGroup;  // current group being displayed.
-	gint iNumTipKey;  // current key being displayed.
-	gboolean bSkipTips;
-	GtkWidget *pCategoryCombo;
-	} CDTipsData;
-
-static void _cairo_dock_get_next_tip (CDTipsData *pTips)
-{
-	pTips->iNumTipKey ++;  // skip the current expander to go to the current label, which will be skipped in the first iteration.
-	const gchar *cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-	gboolean bOk;
-	do
-	{
-		pTips->iNumTipKey ++;
-		if (pTips->iNumTipKey >= pTips->iNbKeys)  // no more key, go to next group.
-		{
-			pTips->iNumTipGroup ++;
-			if (pTips->iNumTipGroup >= pTips->iNbGroups)  // no more group, restart from first group.
-				pTips->iNumTipGroup = 0;
-			pTips->iNumTipKey = 0;
-			
-			// since the group has changed, get the keys again.
-			g_strfreev (pTips->pKeyList);
-			cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-			pTips->pKeyList = g_key_file_get_keys (pTips->pKeyFile, cGroupName, &pTips->iNbKeys, NULL);
-			
-			// and update the category in the comb
-			g_signal_handlers_block_matched (pTips->pCategoryCombo,
-				G_SIGNAL_MATCH_FUNC,
-				0,
-				0,
-				0,
-				_on_tips_category_changed,
-				NULL);
-			gtk_combo_box_set_active (GTK_COMBO_BOX (pTips->pCategoryCombo), pTips->iNumTipGroup);
-			g_signal_handlers_unblock_matched (pTips->pCategoryCombo,
-				G_SIGNAL_MATCH_FUNC,
-				0,
-				0,
-				0,
-				_on_tips_category_changed,
-				NULL);
-		}
-		
-		// check if the key is an expander widget.
-		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
-		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
-		g_free (cKeyComment);
-	} while (!bOk);
-}
-
-static void _cairo_dock_get_previous_tip (CDTipsData *pTips)
-{
-	pTips->iNumTipKey --;
-	
-	const gchar *cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-	gboolean bOk;
-	do
-	{
-		pTips->iNumTipKey --;
-		if (pTips->iNumTipKey < 0)  // no more key, go to previous group.
-		{
-			pTips->iNumTipGroup --;
-			if (pTips->iNumTipGroup < 0)  // no more group, restart from the last group.
-				pTips->iNumTipGroup = pTips->iNbGroups - 1;
-			
-			// since the group has changed, get the keys again.
-			g_strfreev (pTips->pKeyList);
-			cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-			pTips->pKeyList = g_key_file_get_keys (pTips->pKeyFile, cGroupName, &pTips->iNbKeys, NULL);
-
-			pTips->iNumTipKey = pTips->iNbKeys - 2;
-			
-			// and update the category in the comb
-			g_signal_handlers_block_matched (pTips->pCategoryCombo,
-				G_SIGNAL_MATCH_FUNC,
-				0,
-				0,
-				0,
-				_on_tips_category_changed,
-				NULL);
-			gtk_combo_box_set_active (GTK_COMBO_BOX (pTips->pCategoryCombo), pTips->iNumTipGroup);
-			g_signal_handlers_unblock_matched (pTips->pCategoryCombo,
-				G_SIGNAL_MATCH_FUNC,
-				0,
-				0,
-				0,
-				_on_tips_category_changed,
-				NULL);
-		}
-		
-		// check if the key is an expander widget.
-		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
-		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
-	} while (!bOk);
-}
-
-static gchar *_build_tip_text (CDTipsData *pTips)
-{
-	const gchar *cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-	const gchar *cKeyName1 = pTips->pKeyList[pTips->iNumTipKey];
-	const gchar *cKeyName2 = pTips->pKeyList[pTips->iNumTipKey+1];
-	
-	char iElementType;
-	guint iNbElements = 0;
-	gboolean bAligned;
-	const gchar *cHint1 = NULL;  // points on the comment.
-	gchar **pAuthorizedValuesList1 = NULL;
-	gchar *cKeyComment1 =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName1, NULL);
-	const gchar *cText1 = cairo_dock_parse_key_comment (cKeyComment1, &iElementType, &iNbElements, &pAuthorizedValuesList1, &bAligned, &cHint1);  // points on the comment.
-	
-	const gchar *cHint2 = NULL;
-	gchar **pAuthorizedValuesList2 = NULL;
-	gchar *cKeyComment2 =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName2, NULL);
-	const gchar *cText2 = cairo_dock_parse_key_comment (cKeyComment2, &iElementType, &iNbElements, &pAuthorizedValuesList2, &bAligned, &cHint2);
-	
-	gchar *cText = g_strdup_printf ("<b>%s</b>\n\n<i>%s</i>\n\n%s",
-		_("Tips and Tricks"),
-		gettext (pAuthorizedValuesList1?pAuthorizedValuesList1[0]:""),
-		cText2);
-	
-	g_strfreev (pAuthorizedValuesList1);
-	g_strfreev (pAuthorizedValuesList2);
-	g_free (cKeyComment1);
-	g_free (cKeyComment2);
-	return cText;
-}
-static void _update_tip_text (CDTipsData *pTips, CairoDialog *pDialog)
-{
-	gchar *cText = _build_tip_text (pTips);
-	
-	myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
-	cairo_dock_set_dialog_message (pDialog, cText);
-	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
-	
-	g_free (cText);
-}
-static void _tips_dialog_action (int iClickedButton, GtkWidget *pInteractiveWidget, CDTipsData *pTips, CairoDialog *pDialog)
-{
-	cd_debug ("%s (%d)", __func__, iClickedButton);
-	if (iClickedButton == 2 || iClickedButton == -1)  // click on "next", or Enter.
-	{
-		// show the next tip
-		_cairo_dock_get_next_tip (pTips);
-		
-		_update_tip_text (pTips, pDialog);
-		
-		cairo_dock_dialog_reference (pDialog);  // keep the dialog alive.
-	}
-	else if (iClickedButton == 1)  // click on "previous"
-	{
-		// show the previous tip
-		_cairo_dock_get_previous_tip (pTips);
-		
-		_update_tip_text (pTips, pDialog);
-		
-		cairo_dock_dialog_reference (pDialog);  // keep the dialog alive.
-	}
-	else  // click on "close" or Escape
-	{
-		
-		gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
-		cairo_dock_update_conf_file (cConfFilePath,
-			G_TYPE_BOOLEAN, "Help", "skip tips", pTips->bSkipTips,
-			G_TYPE_INT, "Help", "last tip group", pTips->iNumTipGroup,
-			G_TYPE_INT, "Help", "last tip key", pTips->iNumTipKey,
-			G_TYPE_INVALID);
-		g_free (cConfFilePath);
-	}
-}
-static void _on_free_tips_dialog (CDTipsData *pTips)
-{
-	g_key_file_free (pTips->pKeyFile);
-	g_strfreev (pTips->pGroupList);
-	g_strfreev (pTips->pKeyList);
-	g_free (pTips);
-}
-
-static void _on_tips_on_startup_toggled (GtkCheckButton *pButton, CDTipsData *pTips)
-{
-	pTips->bSkipTips = ! gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pButton));
-}
-static void _on_tips_category_changed (GtkComboBox *pWidget, gpointer *data)
-{
-	CDTipsData *pTips = data[0];
-	CairoDialog *pDialog = data[1];
-	
-	int iNumItem = gtk_combo_box_get_active (pWidget);
-	g_return_if_fail (iNumItem < pTips->iNbGroups);
-	
-	pTips->iNumTipGroup = iNumItem;
-	
-	// since the group has changed, get the keys again.
-	g_strfreev (pTips->pKeyList);
-	const gchar *cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-	pTips->pKeyList = g_key_file_get_keys (pTips->pKeyFile, cGroupName, &pTips->iNbKeys, NULL);
-	pTips->iNumTipKey = 0;
-	
-	_update_tip_text (pTips, pDialog);
-}
-void cairo_dock_show_tips (int iLastGroup, int iLastKey)
-{
-	// open the tips file
-	const gchar *cConfFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/help.conf";
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_if_fail (pKeyFile != NULL);
-	
-	gsize iNbGroups = 0;
-	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &iNbGroups);
-	iNbGroups -= 2;   // skip the last 2 groups (Troubleshooting and Contribute)
-	g_return_if_fail (pGroupList != NULL && iNbGroups > 0);
-	
-	// get the last displayed tip.
-	guint iNumTipGroup, iNumTipKey;
-	if (iLastGroup < 0 || iLastKey < 0)  // first time we display a tip.
-	{
-		iNumTipGroup = iNumTipKey = 0;
-	}
-	else
-	{
-		iNumTipGroup = iLastGroup;
-		iNumTipKey = iLastKey;
-		if (iNumTipGroup >= iNbGroups)  // be sure to stay inside the limits.
-		{
-			iNumTipGroup = iNbGroups - 1;
-			iNumTipKey = 0;
-		}
-	}
-	const gchar *cGroupName = pGroupList[iNumTipGroup];
-	
-	gsize iNbKeys = 0;
-	gchar **pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, &iNbKeys, NULL);
-	g_return_if_fail (pKeyList != NULL && iNbKeys > 0);
-	if (iNumTipKey >= iNbKeys)  // be sure to stay inside the limits.
-		iNumTipKey = 0;
-	
-	CDTipsData *pTips = g_new0 (CDTipsData, 1);
-	pTips->pKeyFile = pKeyFile;
-	pTips->pGroupList = pGroupList;
-	pTips->iNbGroups = iNbGroups;
-	pTips->pKeyList = pKeyList;
-	pTips->iNbKeys = iNbKeys;
-	pTips->iNumTipGroup = iNumTipGroup;
-	pTips->iNumTipKey = iNumTipKey;
-	
-	// update to the next tip.
-	if (iLastGroup >= 0 && iLastKey >= 0)  // a previous tip exist => take the next one;
-		_cairo_dock_get_next_tip (pTips);
-	
-	// build a list of the available groups.
-	GtkWidget *pInteractiveWidget = gtk_vbox_new (FALSE, 3);
-	GtkWidget *pComboBox = gtk_combo_box_new_text ();
-	guint i;
-	for (i = 0; i < iNbGroups; i ++)
-	{
-		gtk_combo_box_append_text (GTK_COMBO_BOX (pComboBox), gettext (pGroupList[i]));
-	}
-	gtk_combo_box_set_active (GTK_COMBO_BOX (pComboBox), pTips->iNumTipGroup);
-	pTips->pCategoryCombo = pComboBox;
-	static gpointer data_combo[2];
-	data_combo[0] = pTips;  // the 2nd data is the dialog, we'll set it after we make it.
-	g_signal_connect (G_OBJECT (pComboBox), "changed", G_CALLBACK(_on_tips_category_changed), data_combo);
-	GtkWidget *pJumpBox = gtk_hbox_new (FALSE, 3);
-	GtkWidget *label = gtk_label_new (_("Category"));
-	cairo_dock_set_dialog_widget_text_color (label);
-	gtk_box_pack_end (GTK_BOX (pJumpBox), pComboBox, FALSE, FALSE, 0);
-	gtk_box_pack_end (GTK_BOX (pJumpBox), label, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (pInteractiveWidget), pJumpBox, FALSE, FALSE, 0);
-	
-	// build a check-button to display or not on startup.
-	GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
-	label = gtk_label_new (_("Show tips on startup"));
-	cairo_dock_set_dialog_widget_text_color (label);
-	GtkWidget *pCheckBox = gtk_check_button_new ();
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pCheckBox), TRUE);
-	g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_on_tips_on_startup_toggled), pTips);
-	gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
-	gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (pInteractiveWidget), pAskBox, FALSE, FALSE, 0);
-	
-	// build the dialog.
-	gchar *cText = _build_tip_text (pTips);
-	CairoDialogAttribute attr;
-	memset (&attr, 0, sizeof (CairoDialogAttribute));
-	attr.cText = cText;
-	attr.cImageFilePath = NULL;
-	attr.pInteractiveWidget = pInteractiveWidget;
-	attr.pActionFunc = (CairoDockActionOnAnswerFunc)_tips_dialog_action;
-	attr.pUserData = pTips;
-	attr.pFreeDataFunc = (GFreeFunc)_on_free_tips_dialog;
-	const gchar *cButtons[] = {"cancel", GTK_STOCK_GO_FORWARD"-rtl", GTK_STOCK_GO_FORWARD"-ltr", NULL};
-	attr.cButtonsImage = cButtons;
-	
-	Icon *pIcon = cairo_dock_get_dialogless_icon ();
-	myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
-	CairoDialog *pTipsDialog = cairo_dock_build_dialog (&attr, pIcon, CAIRO_CONTAINER (g_pMainDock));
-	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
-	
-	data_combo[1] = pTipsDialog;
-	
-	g_free (cText);
-}
-
 static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 {
 	gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", cCairoDockDataDir);
@@ -735,18 +215,11 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 			g_free (s_cDefaulBackend);
 			s_cDefaulBackend = NULL;
 		}
-		s_bTestComposite = g_key_file_get_boolean (pKeyFile, "Launch", "test composite", NULL);
-		g_bEnterHelpOnce = g_key_file_get_boolean (pKeyFile, "Help", "entered once", NULL);
-		s_bShowTips = ! g_key_file_get_boolean (pKeyFile, "Help", "skip tips", NULL);  // TRUE by default
-		if (g_key_file_has_key (pKeyFile, "Help", "last tip group", NULL))
-		{
-			s_iLastTipGroup = g_key_file_get_integer (pKeyFile, "Help", "last tip group", NULL);
-			s_iLastTipKey = g_key_file_get_integer (pKeyFile, "Help", "last tip key", NULL);
-		}
+		
 		s_iGuiMode = g_key_file_get_integer (pKeyFile, "Gui", "mode", NULL);  // 0 by default
 		s_iLastYear = g_key_file_get_integer (pKeyFile, "Launch", "last year", NULL);  // 0 by default
 	}
-	else  // ancienne methode.
+	else  // first launch or old version, the file doesn't exist yet.
 	{
 		gchar *cLastVersionFilePath = g_strdup_printf ("%s/.cairo-dock-last-version", cCairoDockDataDir);
 		if (g_file_test (cLastVersionFilePath, G_FILE_TEST_EXISTS))
@@ -762,23 +235,6 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 		g_key_file_set_string (pKeyFile, "Launch", "last version", s_cLastVersion);
 		
 		g_key_file_set_string (pKeyFile, "Launch", "default backend", "");
-		g_key_file_set_boolean (pKeyFile, "Launch", "test composite", TRUE);
-		
-		gchar *cHelpHistory = g_strdup_printf ("%s/.help/entered-once", cCairoDockDataDir);
-		if (g_file_test (cHelpHistory, G_FILE_TEST_EXISTS))
-		{
-			g_bEnterHelpOnce = TRUE;
-		}
-		gchar *cCommand = g_strdup_printf ("rm -rf \"%s/.help\"", cCairoDockDataDir);
-		int r = system (cCommand);
-		g_free (cCommand);
-		g_free (cHelpHistory);
-		g_key_file_set_boolean (pKeyFile, "Help", "entered once", g_bEnterHelpOnce);
-		
-		g_key_file_set_boolean (pKeyFile, "Help", "skip tips", !s_bShowTips);
-		
-		g_key_file_set_integer (pKeyFile, "Help", "last tip group", s_iLastTipGroup);
-		g_key_file_set_integer (pKeyFile, "Help", "last tip key", s_iLastTipKey);
 		
 		g_key_file_set_integer (pKeyFile, "Gui", "mode", s_iGuiMode);
 		
@@ -790,11 +246,6 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 	g_free (cConfFilePath);
 }
 
-static gboolean _show_tips_idle (gpointer data)
-{
-	cairo_dock_show_tips (s_iLastTipGroup, s_iLastTipKey);
-	return FALSE;
-}
 
 int main (int argc, char** argv)
 {
@@ -807,7 +258,11 @@ int main (int argc, char** argv)
 		//g_print ("'%s'\n", argv[i]);
 		if (strcmp (argv[i], "-m") == 0)
 			iNbMaintenance ++;
-		
+		if (strcmp (argv[i], "-q") == 0)
+		{
+			argc = i;
+			break;
+		}
 		g_string_append_printf (sCommandString, " %s", argv[i]);
 	}
 	if (iNbMaintenance > 1)
@@ -815,7 +270,7 @@ int main (int argc, char** argv)
 		g_print ("Sorry, Cairo-Dock has encoutered some problems, and will quit.\n");
 		return 1;
 	}
-	g_string_append (sCommandString, " -m");  // on relance avec le mode maintenance.
+	g_string_append (sCommandString, " -m");  // if it crashes before 5s, we'll restart it quietly 1 time.
 	s_cLaunchCommand = sCommandString->str;
 	g_string_free (sCommandString, FALSE);
 	
@@ -1027,12 +482,13 @@ int main (int argc, char** argv)
 			GtkWidget *pCheckBox = gtk_check_button_new ();
 			gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
 			gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
-			g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), dialog);
+			///g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), dialog);
 			
 			gtk_widget_show_all (dialog);
 			
 			gint iAnswer = gtk_dialog_run (GTK_DIALOG (dialog));  // lance sa propre main loop, c'est pourquoi on peut le faire avant le gtk_main().
-			gboolean bRememberChoice = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (dialog), "remember"));
+			///gboolean bRememberChoice = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (dialog), "remember"));
+			gboolean bRememberChoice = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pCheckBox));
 			gtk_widget_destroy (dialog);
 			if (iAnswer == GTK_RESPONSE_NO)
 			{
@@ -1084,8 +540,7 @@ int main (int argc, char** argv)
 			cUserDefinedModuleDir = NULL;
 		}
 	}
-	
-	_register_help_module ();
+	cairo_dock_register_help_module ();  // this applet is made for Cairo-Dock, not gldi; therefore, it's not installed as a separate library, so we manually register it.
 	
 	//\___________________ define GUI backend.
 	cairo_dock_load_user_gui_backend (s_iGuiMode);
@@ -1234,7 +689,7 @@ int main (int argc, char** argv)
 		return 0;
 	}
 	
-	//\___________________ On affiche un petit message de bienvenue ou de changelog ou d'erreur.
+	//\___________________ display the changelog in case of a new version.
 	gboolean bNewVersion = (s_cLastVersion == NULL || strcmp (s_cLastVersion, CAIRO_DOCK_VERSION) != 0);
 	if (bNewVersion)
 	{
@@ -1245,12 +700,9 @@ int main (int argc, char** argv)
 		g_free (cConfFilePath);
 	}
 	
-	g_print ("bFirstLaunch: %d; s_bShowTips: %d; bNewVersion: %d\n", bFirstLaunch, s_bShowTips, bNewVersion);
-	if (bFirstLaunch)  // tout premier lancement -> bienvenue !
+	g_print ("bFirstLaunch: %d; bNewVersion: %d\n", bFirstLaunch, bNewVersion);
+	if (bFirstLaunch)  // first launch => set up config
 	{
-		//g_idle_add ((GSourceFunc)_show_tips_idle, NULL);
-		cairo_dock_show_general_message (_("Welcome in Cairo-Dock2 !\nA default and simple theme has been loaded.\nYou can either familiarize yourself with the dock or choose another theme with right-click -> Cairo-Dock -> Manage themes.\nA useful help is available by right-click -> Cairo-Dock -> Help.\nIf you have any question/request/remark, please pay us a visit at http://glx-dock.org.\nHope you will enjoy this soft !\n  (you can now click on this dialog to close it)"), 0);
-		
 		g_timeout_add_seconds (4, _cairo_dock_first_launch_setup, NULL);
 	}
 	else if (bNewVersion)  // nouvelle version -> changelog (si c'est le 1er lancement, inutile de dire ce qui est nouveau, et de plus on a deja le message de bienvenue).
@@ -1272,7 +724,7 @@ int main (int argc, char** argv)
 			}
 			g_key_file_free (pKeyFile);
 		}
-		// a new version but there is maybe a new version of Compiz and Gtk...
+		// In case something has changed in Compiz/Gtk/others, we also run the script on a new version of the dock.
 		g_timeout_add_seconds (4, _cairo_dock_first_launch_setup, NULL);
 	}
 	else if (cExcludeModule != NULL && ! bMaintenance)
@@ -1284,39 +736,22 @@ int main (int argc, char** argv)
 		cairo_dock_show_temporary_dialog_with_icon (cMessage, icon, CAIRO_CONTAINER (g_pMainDock), 15000., (pModule ? pModule->pVisitCard->cIconFilePath : NULL));
 		g_free (cMessage);
 	}
-	else if (s_bShowTips)
-	{
-		g_idle_add ((GSourceFunc)_show_tips_idle, NULL);
-	}
 	
 	if (! bTesting)
-		g_timeout_add_seconds (5, _cairo_dock_successful_launch, NULL);
+		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
 	g_print ("\n\nTODO:\n"
 	"- old systray (in dialog mode?)\n"
 	"- test drop (Shortcuts, between applets or applis, Panel view, etc).\n"
-	"- test new Dbus methods\n"
 	"- draw a preview of the dock in opengl\n"
 	"- test locale on third-party applets\n"
 	"- handle icon path in .desktop files.\n"
 	"- compil kde integration\n"
 	"- find Kwin config tool for Composite-manager\n"
 	"- test multi-stacks\n"
-	"- use Power-Manager dbus API\n"
-	"- test Widget Layer on Compiz 0.9\n"
+	"- review Help hints\n"
+	"- handle first crash nicely\n"
 	"\n");
-	
-	GList *pApps = cairo_dock_fm_list_apps_for_file ("trash:/");
-	GList *a;
-	gchar **pAppInfo;
-	gchar *cIconPath;
-	gpointer *app;
-	for (a = pApps; a != NULL; a = a->next)
-	{
-		pAppInfo = a->data;
-		
-		g_print (" === %s / %s\n", pAppInfo[0], pAppInfo[1]);
-	}
 	
 	gtk_main ();
 	

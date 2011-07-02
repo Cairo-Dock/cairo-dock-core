@@ -534,8 +534,9 @@ gboolean cairo_dock_is_loading (void)
 void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...)  // type, groupe, cle, valeur, etc. finir par G_TYPE_INVALID.
 {
 	cd_message ("%s (%s)", __func__, cConfFilePath);
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_if_fail (pKeyFile != NULL);
+	
+	GKeyFile *pKeyFile = g_key_file_new ();  // if the key-file doesn't exist, it will be created.
+	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
 	
 	va_list args;
 	va_start (args, iFirstDataType);

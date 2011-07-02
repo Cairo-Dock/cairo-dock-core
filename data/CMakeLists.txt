@@ -85,7 +85,7 @@ install (FILES
 	# appli
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-simple.conf
 	${CMAKE_CURRENT_BINARY_DIR}/themes.conf
-	${CMAKE_CURRENT_BINARY_DIR}/help.conf
+	${CMAKE_CURRENT_BINARY_DIR}/Help.conf
 	${CMAKE_CURRENT_BINARY_DIR}/launcher.desktop
 	${CMAKE_CURRENT_BINARY_DIR}/container.desktop
 	${CMAKE_CURRENT_BINARY_DIR}/separator.desktop

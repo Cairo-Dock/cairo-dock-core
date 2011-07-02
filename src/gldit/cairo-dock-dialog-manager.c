@@ -668,7 +668,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 			continue ;
 		if (pDialogOnOurWay != pDialog)  // check if this dialog can overlap us.
 		{
-			if (GTK_WIDGET_VISIBLE (pDialogOnOurWay->container.pWidget) && pDialogOnOurWay->pIcon != NULL)
+			if (pDialogOnOurWay->container.pWidget && GTK_WIDGET_VISIBLE (pDialogOnOurWay->container.pWidget) && pDialogOnOurWay->pIcon != NULL)
 			{
 				iTopY = pDialogOnOurWay->container.iWindowPositionY;
 				iBottomY = pDialogOnOurWay->container.iWindowPositionY + pDialogOnOurWay->container.iHeight;
@@ -879,8 +879,8 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 {
 	g_return_val_if_fail (cText != NULL, NULL);
 	
-	gchar *cIconPath = g_strdup_printf ("%s/%s", GLDI_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
-	cIconPath = g_strdup_printf ("%s/%s", GLDI_SHARE_DATA_DIR, "cairo-dock-animated.xpm");
+	const gchar *cIconPath = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
+	//cIconPath = GLDI_SHARE_DATA_DIR"/cairo-dock-animated.xpm";
 	
 	CairoDialogAttribute attr;
 	memset (&attr, 0, sizeof (CairoDialogAttribute));
@@ -891,7 +891,6 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 	attr.iTimeLength = (int) fTimeLength;
 	CairoDialog *pDialog = cairo_dock_build_dialog (&attr, pIcon, pContainer);
 	
-	g_free (cIconPath);
 	return pDialog;
 }
 

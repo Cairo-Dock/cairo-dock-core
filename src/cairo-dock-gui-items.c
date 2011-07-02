@@ -585,8 +585,15 @@ static GtkTreeModel *_build_tree_model (void)
 	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _add_one_desklet_to_model, model);
 	cairo_dock_foreach_module ((GHRFunc)_add_one_module_to_model, model);
 	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
-	CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
-	_add_one_module ("Help", pModuleInstance, model);
+	if (pModule != NULL)
+	{
+		if (pModule->pInstancesList == NULL)  // Help is not active, so is not already in the icons list.
+		{
+			///CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
+			///_add_one_module ("Help", pModuleInstance, model);
+			/// add it ...
+		}
+	}
 	return GTK_TREE_MODEL (model);
 }
 

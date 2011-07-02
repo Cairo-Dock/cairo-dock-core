@@ -10,7 +10,7 @@ include (CheckSymbolExists)
 ########### project ###############
 
 project ("cairo-dock")
-set (VERSION "2.4.0~0beta0")
+set (VERSION "2.4.0~0beta1")
 
 add_definitions (-std=c99 -Wstrict-prototypes -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration) #-Wunreachable-code -Wno-unused-parameter -Wall 
 if (NOT ${CMAKE_BUILD_TYPE})
@@ -124,7 +124,7 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/launcher.desktop.in ${CMAKE_CUR
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/container.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/data/container.desktop)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/separator.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/data/separator.desktop)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/themes.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/themes.conf)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/help.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/help.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/Help.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/Help.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.pc.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY)
 

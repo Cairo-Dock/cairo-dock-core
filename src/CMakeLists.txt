@@ -2,6 +2,7 @@
 add_subdirectory (icon-factory)
 add_subdirectory (gldit)
 add_subdirectory (implementations)
+add_subdirectory (help)
 
 SET(cairo_dock_SRCS
 	cairo-dock-menu.c 					cairo-dock-menu.h 
@@ -31,7 +32,8 @@ link_directories(
 	${XEXTEND_LIBRARY_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/icon-factory
-	${CMAKE_SOURCE_DIR}/src/implementations)
+	${CMAKE_SOURCE_DIR}/src/implementations
+	${CMAKE_SOURCE_DIR}/src/help)
 
 # Add executable that is built from the source files.
 add_executable (${PROJECT_NAME}
@@ -45,7 +47,8 @@ target_link_libraries (${PROJECT_NAME}
 	${LIBCRYPT_LIBS}
 	gldi
 	icon-factory
-	implementations)
+	implementations
+	help)
 
 # install the program once it is built.
 install(

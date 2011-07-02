@@ -96,7 +96,7 @@ set_target_properties ("gldi" PROPERTIES
 
 # Link the result to the librairies.
 target_link_libraries("gldi"
-	${PACKAGE_LIBRARIES}
+	${PACKAGE_LIBRARIES} -ldl
 	${XEXTEND_LIBRARIES}
 	${LIBCRYPT_LIBS}
 	icon-factory
@@ -159,8 +159,8 @@ install(FILES
 	cairo-dock-animations.h
 	cairo-dock-gui-factory.h
 	
-	DESTINATION ${includedir}/cairo-dock/cairo-dock)
+	DESTINATION ${includedir}/cairo-dock/gldit)
 
-if (NOT "${enable_gtk_grip}" STREQUAL "")
+if (NOT "${enable_gtk_grip}" STREQUAL "")  # actually it's more "disable-gtk-grip" ...
 	add_definitions (-DENABLE_GTK_GRIP=1)
 endif()

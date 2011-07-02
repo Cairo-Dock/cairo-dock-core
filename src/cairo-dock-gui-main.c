@@ -61,7 +61,6 @@
 #define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
-extern gboolean g_bEnterHelpOnce;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 extern gchar *g_cConfFile;
@@ -2525,37 +2524,9 @@ static void cairo_dock_apply_current_filter (gchar **pKeyWords, gboolean bAllWor
 }
 
 
-
-static void _present_help_from_dialog (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
-{
-	if (iClickedButton == 0 || iClickedButton == -1)  // click OK or press Enter.
-	{
-		CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
-		g_return_if_fail (pModule != NULL);
-		cairo_dock_build_main_ihm (g_cConfFile, FALSE);
-		cairo_dock_present_module_gui (pModule);
-	}
-}
 static GtkWidget * show_main_gui (void)
 {
 	GtkWidget *pWindow = cairo_dock_build_main_ihm (g_cConfFile, FALSE);
-	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
-	if (pModule != NULL)
-	{
-		if (! g_bEnterHelpOnce)
-		{
-			Icon *pIcon = cairo_dock_get_dialogless_icon ();
-			cairo_dock_show_dialog_full (_("It appears that you've never entered the help module before.\nIf you are having difficulty configuring the dock, or if you want to customise it,\nthe Help module is here for you!\nWould you like to take a look at it now?"),
-				pIcon,
-				CAIRO_CONTAINER (g_pMainDock),
-				10e3,
-				CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
-				NULL,
-				(CairoDockActionOnAnswerFunc) _present_help_from_dialog,
-				NULL,
-				NULL);
-		}
-	}
 	return pWindow;
 }
 
