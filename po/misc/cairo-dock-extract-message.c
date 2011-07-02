@@ -263,7 +263,8 @@ main (int argc, char** argv)
 						{
 							for (k = 0; pAuthorizedValuesList[k] != NULL; k ++)
 							{
-								write_message (pAuthorizedValuesList[k]);
+								if (pAuthorizedValuesList[k][0] != '\0')
+									write_message (pAuthorizedValuesList[k]);
 							}
 						}
 					break;
