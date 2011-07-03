@@ -627,10 +627,10 @@ void gldi_register_backends_manager (void)
 	myBackendsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
 	myBackendsMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
 	// Config
-	myBackendsMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myBackendsParam;
+	myBackendsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myBackendsParam;
 	myBackendsMgr.mgr.iSizeOfConfig = sizeof (CairoBackendsParam);
 	// data
-	myBackendsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myBackendsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myBackendsMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myBackendsMgr, NB_NOTIFICATIONS_BACKENDS);

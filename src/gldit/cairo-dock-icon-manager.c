@@ -941,11 +941,11 @@ void gldi_register_icons_manager (void)
 	myIconsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myIconsParam, 0, sizeof (CairoIconsParam));
-	myIconsMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myIconsParam;
+	myIconsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myIconsParam;
 	myIconsMgr.mgr.iSizeOfConfig = sizeof (CairoIconsParam);
 	// data
 	memset (&g_pIconBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
-	myIconsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myIconsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myIconsMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myIconsMgr, NB_NOTIFICATIONS_ICON);

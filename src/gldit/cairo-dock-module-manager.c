@@ -657,10 +657,10 @@ void gldi_register_modules_manager (void)
 	myModulesMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myModulesParam, 0, sizeof (CairoModulesParam));
-	myModulesMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myModulesParam;
+	myModulesMgr.mgr.pConfig = (GldiManagerConfigPtr)&myModulesParam;
 	myModulesMgr.mgr.iSizeOfConfig = sizeof (CairoModulesParam);
 	// data
-	myModulesMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myModulesMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myModulesMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myModulesMgr, NB_NOTIFICATIONS_MODULES);

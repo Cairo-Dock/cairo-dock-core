@@ -461,10 +461,10 @@ void gldi_register_shortcuts_manager (void)
 	myShortcutsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
 	myShortcutsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myShortcutsMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
+	myShortcutsMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
 	myShortcutsMgr.mgr.iSizeOfConfig = 0;
 	// data
-	myShortcutsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myShortcutsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myShortcutsMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myShortcutsMgr, NB_NOTIFICATIONS_SHORTCUTS);

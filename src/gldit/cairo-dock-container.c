@@ -706,10 +706,10 @@ void gldi_register_containers_manager (void)
 	myContainersMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
 	myContainersMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myContainersMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myContainersParam;
+	myContainersMgr.mgr.pConfig = (GldiManagerConfigPtr)&myContainersParam;
 	myContainersMgr.mgr.iSizeOfConfig = sizeof (CairoContainersParam);
 	// data
-	myContainersMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myContainersMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myContainersMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myContainersMgr, NB_NOTIFICATIONS_CONTAINER);

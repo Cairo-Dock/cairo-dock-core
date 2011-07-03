@@ -969,7 +969,7 @@ void gldi_register_desklets_manager (void)
 	myDeskletsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myDeskletsParam, 0, sizeof (CairoDeskletsParam));
-	myDeskletsMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myDeskletsParam;
+	myDeskletsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDeskletsParam;
 	myDeskletsMgr.mgr.iSizeOfConfig = sizeof (CairoDeskletsParam);
 	// data
 	memset (&s_pRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
@@ -977,7 +977,7 @@ void gldi_register_desklets_manager (void)
 	memset (&s_pDepthRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&s_pNoInputButtonBuffer, 0, sizeof (CairoDockImageBuffer));
 	myDeskletsMgr.mgr.iSizeOfData = 0;
-	myDeskletsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myDeskletsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	// signals
 	cairo_dock_install_notifications_on_object (&myDeskletsMgr, NB_NOTIFICATIONS_DESKLET);
 	// register

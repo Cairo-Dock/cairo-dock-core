@@ -907,10 +907,10 @@ void gldi_register_connection_manager (void)
 	myConnectionMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
 	myConnectionMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
-	myConnectionMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myConnectionParam;
+	myConnectionMgr.mgr.pConfig = (GldiManagerConfigPtr)&myConnectionParam;
 	myConnectionMgr.mgr.iSizeOfConfig = sizeof (CairoConnectionParam);
 	// data
-	myConnectionMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myConnectionMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myConnectionMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myConnectionMgr, NB_NOTIFICATIONS_CONNECTION);

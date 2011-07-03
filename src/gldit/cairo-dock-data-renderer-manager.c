@@ -203,10 +203,10 @@ void gldi_register_data_renderers_manager (void)
 	myDataRenderersMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
 	myDataRenderersMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myDataRenderersMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
+	myDataRenderersMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
 	myDataRenderersMgr.mgr.iSizeOfConfig = 0;
 	// data
-	myDataRenderersMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myDataRenderersMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myDataRenderersMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myDataRenderersMgr, NB_NOTIFICATIONS_DATA_RENDERERS);

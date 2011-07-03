@@ -538,10 +538,10 @@ void gldi_register_desktop_environment_manager (void)
 	myDesktopEnvMgr.mgr.get_config 		= (GldiManagerGetConfigFunc)NULL;
 	myDesktopEnvMgr.mgr.reset_config	 = (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myDesktopEnvMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
+	myDesktopEnvMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
 	myDesktopEnvMgr.mgr.iSizeOfConfig = 0;
 	// data
-	myDesktopEnvMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myDesktopEnvMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myDesktopEnvMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myDesktopEnvMgr, NB_NOTIFICATIONS_DESKTOP_ENV);

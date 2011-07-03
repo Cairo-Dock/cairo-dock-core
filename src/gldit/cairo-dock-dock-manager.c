@@ -1743,11 +1743,11 @@ void gldi_register_docks_manager (void)
 	myDocksMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myDocksParam, 0, sizeof (CairoDocksParam));
-	myDocksMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myDocksParam;
+	myDocksMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDocksParam;
 	myDocksMgr.mgr.iSizeOfConfig = sizeof (CairoDocksParam);
 	// data
 	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
-	myDocksMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myDocksMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myDocksMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myDocksMgr, NB_NOTIFICATIONS_DOCKS);

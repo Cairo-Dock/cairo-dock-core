@@ -1323,11 +1323,11 @@ void gldi_register_dialogs_manager (void)
 	myDialogsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myDialogsParam, 0, sizeof (CairoDialogsParam));
-	myDialogsMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myDialogsParam;
+	myDialogsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDialogsParam;
 	myDialogsMgr.mgr.iSizeOfConfig = sizeof (CairoDialogsParam);
 	// data
 	myDialogsMgr.mgr.iSizeOfData = 0;
-	myDialogsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myDialogsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	// signals
 	cairo_dock_install_notifications_on_object (&myDialogsMgr, NB_NOTIFICATIONS_DIALOG);
 	// register

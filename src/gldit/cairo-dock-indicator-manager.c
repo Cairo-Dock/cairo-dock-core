@@ -676,13 +676,13 @@ void gldi_register_indicators_manager (void)
 	myIndicatorsMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myIndicatorsParam, 0, sizeof (CairoIndicatorsParam));
-	myIndicatorsMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myIndicatorsParam;
+	myIndicatorsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myIndicatorsParam;
 	myIndicatorsMgr.mgr.iSizeOfConfig = sizeof (CairoIndicatorsParam);
 	// data
 	memset (&s_indicatorBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&s_activeIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&s_classIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
-	myIndicatorsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myIndicatorsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myIndicatorsMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myIndicatorsMgr, NB_NOTIFICATIONS_INDICATORS);

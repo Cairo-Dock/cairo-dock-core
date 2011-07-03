@@ -579,11 +579,11 @@ void gldi_register_desktop_manager (void)
 	myDesktopMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
 	myDesktopMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myDesktopMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
+	myDesktopMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
 	myDesktopMgr.mgr.iSizeOfConfig = 0;
 	// data
 	myDesktopMgr.mgr.iSizeOfData = 0;
-	myDesktopMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myDesktopMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	// signals
 	cairo_dock_install_notifications_on_object (&myDesktopMgr, NB_NOTIFICATIONS_DESKTOP);
 	// connect to X (now, because other modules may need it for their init)

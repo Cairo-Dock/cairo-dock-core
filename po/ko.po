@@ -4,7 +4,6 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 # jincreator <Unknown>, 2011.
 #
-#: ../src/cairo-dock-help.c:221 ../src/help/applet-tips-dialog.c:153
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
@@ -332,29 +331,6 @@ msgstr "테마를 불러오는 중..."
 msgid "Manage Themes"
 msgstr "테마 관리"
 
-#: ../src/cairo-dock-help.c:54 ../src/cairo-dock-menu.c:427
-#: ../src/help/applet-init.c:28 ../src/help/applet-notifications.c:65
-msgid "Help"
-msgstr "도움말"
-
-#: ../src/cairo-dock-help.c:69 ../src/help/applet-init.c:31
-msgid ""
-"This applet is made to help you.\n"
-"Click on its icon to pop up useful tips about the possibilities of Cairo-"
-"Dock.\n"
-"Middle-click to open the configuration window.\n"
-"Right-click to access some troubleshooting actions."
-msgstr ""
-
-#: ../src/cairo-dock-help.c:220 ../src/help/applet-tips-dialog.c:152
-msgid "Tips and Tricks"
-msgstr ""
-
-#: ../src/cairo-dock-help.c:380 ../src/help/applet-tips-dialog.c:299
-#, fuzzy
-msgid "Category"
-msgstr "범주"
-
 #: ../src/cairo-dock-menu.c:121
 msgid "Delete this dock?"
 msgstr ""
@@ -468,6 +444,11 @@ msgstr "더 많은 애플릿 받기!"
 #: ../src/cairo-dock-menu.c:425
 msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr "서드 파티 애플릿은 피진과 같은 많은 프로그램과의 통합을 제공합니다."
+
+#: ../src/cairo-dock-menu.c:427 ../src/help/applet-init.c:28
+#: ../src/help/applet-notifications.c:65
+msgid "Help"
+msgstr "도움말"
 
 #: ../src/cairo-dock-menu.c:432
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
@@ -1026,6 +1007,15 @@ msgstr ""
 "여 모방할 수 있습니다. 이 옵션은 설정 페이지의 바닥에 있는 '시스템' 모듈에 있"
 "습니다."
 
+#: ../src/help/applet-init.c:31
+msgid ""
+"This applet is made to help you.\n"
+"Click on its icon to pop up useful tips about the possibilities of Cairo-"
+"Dock.\n"
+"Middle-click to open the configuration window.\n"
+"Right-click to access some troubleshooting actions."
+msgstr ""
+
 #: ../src/help/applet-notifications.c:59
 msgid "Open global settings"
 msgstr ""
@@ -1033,6 +1023,15 @@ msgstr ""
 #: ../src/help/applet-notifications.c:64
 msgid "Activate composite"
 msgstr ""
+
+#: ../src/help/applet-tips-dialog.c:152
+msgid "Tips and Tricks"
+msgstr ""
+
+#: ../src/help/applet-tips-dialog.c:299
+#, fuzzy
+msgid "Category"
+msgstr "범주"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:453
 #: ../data/messages:621

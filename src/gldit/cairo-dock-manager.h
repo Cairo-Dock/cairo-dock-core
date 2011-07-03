@@ -39,9 +39,9 @@ typedef gpointer GldiManagerDataPtr;
 typedef void (*GldiManagerInitFunc) (void);
 typedef void (*GldiManagerLoadFunc) (void);
 typedef void (*GldiManagerUnloadFunc) (void);
-typedef void (* GldiManagerReloadFunc) (GldiManagerConfigPtr *pPrevConfig, GldiManagerConfigPtr *pNewConfig);
-typedef gboolean (* GldiManagerGetConfigFunc) (GKeyFile *pKeyFile, GldiManagerConfigPtr *pConfig);
-typedef void (* GldiManagerResetConfigFunc) (GldiManagerConfigPtr *pConfig);
+typedef void (* GldiManagerReloadFunc) (GldiManagerConfigPtr pPrevConfig, GldiManagerConfigPtr pNewConfig);
+typedef gboolean (* GldiManagerGetConfigFunc) (GKeyFile *pKeyFile, GldiManagerConfigPtr pConfig);
+typedef void (* GldiManagerResetConfigFunc) (GldiManagerConfigPtr pConfig);
 struct _GldiManager {
 	// list of available notifications.
 	GPtrArray *pNotificationsTab;

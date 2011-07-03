@@ -449,10 +449,10 @@ void gldi_register_flying_manager (void)
 	myFlyingsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
 	myFlyingsMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myFlyingsMgr.mgr.pConfig = (GldiManagerConfigPtr*)NULL;
+	myFlyingsMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
 	myFlyingsMgr.mgr.iSizeOfConfig = 0;
 	// data
-	myFlyingsMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myFlyingsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myFlyingsMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myFlyingsMgr, NB_NOTIFICATIONS_FLYING_CONTAINER);

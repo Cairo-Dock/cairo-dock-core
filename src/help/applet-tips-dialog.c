@@ -150,7 +150,7 @@ static gchar *_build_tip_text (CDTipsData *pTips)
 	
 	gchar *cText = g_strdup_printf ("<b>%s</b>\n\n<i>%s</i>\n\n%s",
 		_("Tips and Tricks"),
-		gettext (pAuthorizedValuesList1?pAuthorizedValuesList1[0]):"",
+		(pAuthorizedValuesList1 ? gettext (pAuthorizedValuesList1[0]) : ""),
 		cText2);
 	
 	g_strfreev (pAuthorizedValuesList1);

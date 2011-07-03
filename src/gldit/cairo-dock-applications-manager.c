@@ -1705,10 +1705,10 @@ void gldi_register_applications_manager (void)
 	myTaskbarMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myTaskbarParam, 0, sizeof (CairoTaskbarParam));
-	myTaskbarMgr.mgr.pConfig = (GldiManagerConfigPtr*)&myTaskbarParam;
+	myTaskbarMgr.mgr.pConfig = (GldiManagerConfigPtr)&myTaskbarParam;
 	myTaskbarMgr.mgr.iSizeOfConfig = sizeof (CairoTaskbarParam);
 	// data
-	myTaskbarMgr.mgr.pData = (GldiManagerDataPtr*)NULL;
+	myTaskbarMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myTaskbarMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myTaskbarMgr, NB_NOTIFICATIONS_TASKBAR);
