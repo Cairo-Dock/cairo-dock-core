@@ -84,7 +84,7 @@
 #include "cairo-dock-gui-items.h"
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
-#include "cairo-dock-help.h"
+#include "help/cairo-dock-help.h"
 #include "cairo-dock-core.h"
 
 //#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
@@ -125,6 +125,20 @@ static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 static gint s_iLastYear = 0;
 static void (*s_activate_composite) (gboolean) = NULL;
 
+
+/*
+-o -w 2 -T -m -x clock
+
+main:
+remove "-w n", '-q n', -x, -m
+start
+wait 5s
+
+1st crash before 5s (q = 0) -> restart with -w 2 -q 1
+q-th crash before 5s (q > 0) -> if module && q<3: restart with -x -q n+1, else: restart with -m -q n+1
+3rd crash before 5s -> restart with -x or -m
+crash after 5s -> restart -x toto or ""
+*/
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
 	// successful launch, remove the maintenance mode from the command line.
@@ -250,7 +264,7 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 int main (int argc, char** argv)
 {
 	//\___________________ show the config panel if something has gone wrong in a previous life, or just quit to prevent infinite crash loop.
-	int i, iNbMaintenance=0;
+	int i, iNbCrashes = 0, iNbMaintenance=0;
 	GString *sCommandString = g_string_new (argv[0]);
 	gchar *cDisableApplet = NULL;
 	for (i = 1; i < argc; i ++)
@@ -258,19 +272,33 @@ int main (int argc, char** argv)
 		//g_print ("'%s'\n", argv[i]);
 		if (strcmp (argv[i], "-m") == 0)
 			iNbMaintenance ++;
-		if (strcmp (argv[i], "-q") == 0)
+		if (strcmp (argv[i], "-q") == 0)  // this option is only set by the dock itself, at the end of the command line.
 		{
-			argc = i;
+			iNbCrashes = atoi (argv[i+1]);
+			argc = i;  // remove this option, as it doesn't belong to the options table.
+			argv[i] = NULL;
 			break;
 		}
-		g_string_append_printf (sCommandString, " %s", argv[i]);
+		else if (strcmp (argv[i], "-w") == 0 || strcmp (argv[i], "-x") == 0)  // skip this option and its argument.
+		{
+			i ++;
+		}
+		else if (strcmp (argv[i], "-m") == 0)  // skip this option
+		{
+			// nothing else to do.
+		}
+		else  // keep this option in the command line.
+		{
+			g_string_append_printf (sCommandString, " %s", argv[i]);
+		}
 	}
 	if (iNbMaintenance > 1)
 	{
 		g_print ("Sorry, Cairo-Dock has encoutered some problems, and will quit.\n");
 		return 1;
 	}
-	g_string_append (sCommandString, " -m");  // if it crashes before 5s, we'll restart it quietly 1 time.
+	///g_string_append (sCommandString, " -m");  // if it crashes before 5s, we'll restart it quietly 1 time.
+	g_print (">>> restart cmd line: %s\n", sCommandString->str);
 	s_cLaunchCommand = sCommandString->str;
 	g_string_free (sCommandString, FALSE);
 	
@@ -283,7 +311,7 @@ int main (int argc, char** argv)
 	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	int iDelay = 0;
-	GOptionEntry TableDesOptions[] =
+	GOptionEntry pOptionsTable[] =
 	{
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cVerbosity,
@@ -356,7 +384,7 @@ int main (int argc, char** argv)
 	};
 
 	GOptionContext *context = g_option_context_new ("Cairo-Dock");
-	g_option_context_add_main_entries (context, TableDesOptions, NULL);
+	g_option_context_add_main_entries (context, pOptionsTable, NULL);
 	g_option_context_parse (context, &argc, &argv, &erreur);
 	if (erreur != NULL)
 	{
