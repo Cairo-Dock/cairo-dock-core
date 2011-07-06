@@ -118,32 +118,18 @@ gboolean g_bForceCairo = FALSE;
 gboolean g_bLocked;
 
 static gboolean s_bSucessfulLaunch = FALSE;
-static gchar *s_cLaunchCommand = NULL;
+static GString *s_pLaunchCommand = NULL;
 static gchar *s_cLastVersion = NULL;
 static gchar *s_cDefaulBackend = NULL;
 static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 static gint s_iLastYear = 0;
 static void (*s_activate_composite) (gboolean) = NULL;
+static gint s_iNbCrashes = 0;
 
 
-/*
--o -w 2 -T -m -x clock
-
-main:
-remove "-w n", '-q n', -x, -m
-start
-wait 5s
-
-1st crash before 5s (q = 0) -> restart with -w 2 -q 1
-q-th crash before 5s (q > 0) -> if module && q<3: restart with -x -q n+1, else: restart with -m -q n+1
-3rd crash before 5s -> restart with -x or -m
-crash after 5s -> restart -x toto or ""
-*/
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
 	// successful launch, remove the maintenance mode from the command line.
-	if (g_str_has_suffix (s_cLaunchCommand, " -m"))
-		s_cLaunchCommand[strlen (s_cLaunchCommand)-3] = '\0';  // on enleve le mode maintenance.
 	s_bSucessfulLaunch = TRUE;
 	
 	// new year greetings.
@@ -180,20 +166,35 @@ static void _cairo_dock_quit (int signal)
 }
 static void _cairo_dock_intercept_signal (int signal)
 {
-	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now (%s).\nFeel free to report this bug on glx-dock.org to help improving the dock !", signal, s_cLaunchCommand);
+	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on glx-dock.org to help improving the dock!", signal);
 	g_print ("info on the system :\n");
 	int r = system ("uname -a");
+	
+	// if a module is responsible, expose it to public shame.
 	if (g_pCurrentModule != NULL)
 	{
 		g_print ("The applet '%s' may be the culprit", g_pCurrentModule->pModule->pVisitCard->cModuleName);
-		s_cLaunchCommand = g_strdup_printf ("%s -x \"%s\"", s_cLaunchCommand, g_pCurrentModule->pModule->pVisitCard->cModuleName);
+		if (! s_bSucessfulLaunch)  // else, be quiet.
+			g_string_append_printf (s_pLaunchCommand, " -x \"%s\"", g_pCurrentModule->pModule->pVisitCard->cModuleName);
 	}
 	else
 	{
 		g_print ("Couldn't guess if it was an applet's fault or not. It may have crashed inside the core or inside a thread\n");
 	}
-	execl ("/bin/sh", "/bin/sh", "-c", s_cLaunchCommand, (char *)NULL);  // on ne revient pas de cette fonction.
-	//execlp ("cairo-dock", "cairo-dock", s_cLaunchCommand, (char *)0);
+	
+	// if the crash occurs on startup, take additionnal measures; else just respawn quietly.
+	if (! s_bSucessfulLaunch)  // a crash on startup,
+	{
+		if (s_iNbCrashes < 2)  // the first 2 crashes, restart with a delay (in case we were launched too early on startup).
+			g_string_append (s_pLaunchCommand, " -w 2");  // 2s delay.
+		else if (g_pCurrentModule == NULL)  // several crashes, and no culprit => start in maintenance mode.
+			g_string_append (s_pLaunchCommand, " -m");
+		g_string_append_printf (s_pLaunchCommand, " -q %d", s_iNbCrashes + 1);  // increment the first-crash counter.
+	}  // else a random crash, respawn quietly.
+	
+	g_print ("restarting with '%s'...\n", s_pLaunchCommand->str);
+	execl ("/bin/sh", "/bin/sh", "-c", s_pLaunchCommand->str, (char *)NULL);  // on ne revient pas de cette fonction.
+	//execlp ("cairo-dock", "cairo-dock", s_pLaunchCommand->str, (char *)0);
 	cd_warning ("Sorry, couldn't restart the dock");
 }
 static void _cairo_dock_set_signal_interception (void)
@@ -263,18 +264,16 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 
 int main (int argc, char** argv)
 {
-	//\___________________ show the config panel if something has gone wrong in a previous life, or just quit to prevent infinite crash loop.
-	int i, iNbCrashes = 0, iNbMaintenance=0;
-	GString *sCommandString = g_string_new (argv[0]);
+	//\___________________ build the command line used to respawn, and check if we have been launched from another life.
+	s_pLaunchCommand = g_string_new (argv[0]);
 	gchar *cDisableApplet = NULL;
+	int i;
 	for (i = 1; i < argc; i ++)
 	{
 		//g_print ("'%s'\n", argv[i]);
-		if (strcmp (argv[i], "-m") == 0)
-			iNbMaintenance ++;
 		if (strcmp (argv[i], "-q") == 0)  // this option is only set by the dock itself, at the end of the command line.
 		{
-			iNbCrashes = atoi (argv[i+1]);
+			s_iNbCrashes = atoi (argv[i+1]);
 			argc = i;  // remove this option, as it doesn't belong to the options table.
 			argv[i] = NULL;
 			break;
@@ -289,18 +288,15 @@ int main (int argc, char** argv)
 		}
 		else  // keep this option in the command line.
 		{
-			g_string_append_printf (sCommandString, " %s", argv[i]);
+			g_string_append_printf (s_pLaunchCommand, " %s", argv[i]);
 		}
 	}
-	if (iNbMaintenance > 1)
+	if (s_iNbCrashes > 3)
 	{
 		g_print ("Sorry, Cairo-Dock has encoutered some problems, and will quit.\n");
 		return 1;
 	}
-	///g_string_append (sCommandString, " -m");  // if it crashes before 5s, we'll restart it quietly 1 time.
-	g_print (">>> restart cmd line: %s\n", sCommandString->str);
-	s_cLaunchCommand = sCommandString->str;
-	g_string_free (sCommandString, FALSE);
+	g_print (">>> restart cmd line: %s\n", s_pLaunchCommand->str);
 	
 	gtk_init (&argc, &argv);
 	gtk_gl_init (&argc, &argv);
@@ -674,22 +670,6 @@ int main (int argc, char** argv)
 		g_main_loop_unref (pBlockingLoop);
 	}
 	
-	if (cExcludeModule != NULL)
-	{
-		//g_print ("on enleve %s de '%s'\n", cExcludeModule, s_cLaunchCommand);
-		gchar *str = g_strstr_len (s_cLaunchCommand, -1, " -x ");
-		if (str)
-		{
-			*str = '\0';  // enleve le module de la ligne de commande, ainsi que le le -m courant.
-			g_print ("s_cLaunchCommand <- '%s'\n", s_cLaunchCommand);
-		}
-		else
-		{
-			g_free (cExcludeModule);
-			cExcludeModule = NULL;
-		}
-	}
-	
 	//\___________________ load the current theme.
 	cd_message ("loading theme ...");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))  // no theme yet, copy the default theme first.
@@ -757,7 +737,11 @@ int main (int argc, char** argv)
 	}
 	else if (cExcludeModule != NULL && ! bMaintenance)
 	{
-		gchar *cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restored successfully, but if it happens again, please report it at http://glx-dock.org"), cExcludeModule);
+		gchar *cMessage;
+		if (s_iNbCrashes < 2)
+			cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restored successfully, but if it happens again, please report it at http://glx-dock.org"), cExcludeModule);
+		else
+			cMessage = g_strdup_printf ("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org", cExcludeModule);
 		
 		CairoDockModule *pModule = cairo_dock_find_module_from_name (cExcludeModule);
 		Icon *icon = cairo_dock_get_dialogless_icon ();
@@ -769,16 +753,20 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
 	g_print ("\n\nTODO:\n"
-	"- old systray (in dialog mode?)\n"
 	"- test drop (Shortcuts, between applets or applis, Panel view, etc).\n"
 	"- draw a preview of the dock in opengl\n"
 	"- test locale on third-party applets\n"
 	"- handle icon path in .desktop files.\n"
-	"- compil kde integration\n"
+	"- kde integration ++\n"
 	"- find Kwin config tool for Composite-manager\n"
-	"- test multi-stacks\n"
 	"- review Help hints\n"
 	"- handle first crash nicely\n"
+	"- configure non active applets (Help, ...) in both modes\n"
+	"- test import question in Folders\n"
+	"- \n"
+	"- \n"
+	"- \n"
+	"- \n"
 	"\n");
 	
 	gtk_main ();
@@ -792,6 +780,7 @@ int main (int argc, char** argv)
 	
 	rsvg_term ();
 	xmlCleanupParser ();
+	g_string_free (s_pLaunchCommand, TRUE);
 	
 	cd_message ("Bye bye !");
 	g_print ("\033[0m\n");
