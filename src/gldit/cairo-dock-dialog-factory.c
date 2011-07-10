@@ -60,7 +60,7 @@ extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
 static void _cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 {
 	pDialog->iMessageWidth = pDialog->iIconSize + _drawn_text_width (pDialog) + (pDialog->iTextWidth != 0 ? 2 : 0) * CAIRO_DIALOG_TEXT_MARGIN - pDialog->iIconOffsetX;  // icone + marge + texte + marge.
-	pDialog->iMessageHeight = MAX (pDialog->iIconSize, pDialog->iTextHeight) + (pDialog->pInteractiveWidget != NULL ? CAIRO_DIALOG_VGAP : 0);  // (icone/texte + marge) + widget + (marge + boutons) + pointe.
+	pDialog->iMessageHeight = MAX (pDialog->iIconSize - pDialog->iIconOffsetY, pDialog->iTextHeight) + (pDialog->pInteractiveWidget != NULL ? CAIRO_DIALOG_VGAP : 0);  // (icone/texte + marge) + widget + (marge + boutons) + pointe.
 	
 	if (pDialog->pButtons != NULL)
 	{
@@ -795,6 +795,15 @@ void cairo_dock_set_dialog_widget_text_color (GtkWidget *pWidget)
 	color.red = myDialogsParam.dialogTextDescription.fColorStart[0] * 65535;
 	color.green = myDialogsParam.dialogTextDescription.fColorStart[1] * 65535;
 	color.blue = myDialogsParam.dialogTextDescription.fColorStart[2] * 65535;
+	gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
+}
+
+void cairo_dock_set_dialog_widget_bg_color (GtkWidget *pWidget)
+{
+	static GdkColor color;
+	color.red = myDialogsParam.fDialogColor[0] * 65535;
+	color.green = myDialogsParam.fDialogColor[1] * 65535;
+	color.blue = myDialogsParam.fDialogColor[2] * 65535;
 	gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
 }
 
