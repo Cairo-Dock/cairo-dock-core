@@ -173,10 +173,16 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	GtkWidget *pDialog = gtk_dialog_new_with_buttons (_("About Cairo-Dock"),
 		GTK_WINDOW (pContainer->pWidget),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
-		"gtk-close",
+		GTK_STOCK_CLOSE,
 		GTK_RESPONSE_CLOSE,
 		NULL);
-	
+
+	// the dialog box is destroyed when the user responds
+	g_signal_connect_swapped (pDialog,
+		"response",
+		G_CALLBACK (gtk_widget_destroy),
+		pDialog);
+
 #if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 14)
 	GtkWidget *pContentBox = gtk_dialog_get_content_area (GTK_DIALOG(pDialog));
 #else
@@ -218,20 +224,20 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Development"),
-		"<b>Main developer :</b>\n  Fabounet (Fabrice Rey)\n\
-<b>Original idea/first development :</b>\n  Mac Slow\n\
-<b>Applets :</b>\n  Fabounet\n  Necropotame\n  Ctaf\n  ChAnGFu\n  Tofe\n  Paradoxxx_Zero\n  Mav\n  Nochka85\n  Ours_en_pluche\n  Eduardo Mucelli\n\
-<b>Patchs :</b>\n  Special thanks to Augur for his great help with OpenGL\n  Ctaf\n  M.Tasaka\n  Matttbe\n  Necropotame\n  Robrob\n  Smidgey\n  Tshirtman\n");
+		"<b>Main developer:</b>\n  Fabounet (Fabrice Rey)\n\
+<b>Original idea / first development:</b>\n  Mac Slow\n\
+<b>Applets:</b>\n  Fabounet\n  Necropotame\n  Ctaf\n  ChAnGFu\n  Tofe\n  Paradoxxx_Zero\n  Mav\n  Nochka85\n  Ours_en_pluche\n  Eduardo Mucelli\n\
+<b>Patches:</b>\n  Special thanks to Augur for his great help with OpenGL\n  Ctaf\n  M.Tasaka\n  Matttbe\n  Necropotame\n  Robrob\n  Smidgey\n  Tshirtman\n");
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Artwork"),
-		"<b>Themes :</b>\n  Fabounet\n  Chilperik\n  Djoole\n  Glattering\n  Vilraleur\n  Lord Northam\n  Paradoxxx_Zero\n  Coz\n  Benoit2600\n  Nochka85\n  Taiebot65\n  Lylambda\n  MastroPino\n  Matttbe\n\
-<b>Translations :</b>\n  Fabounet\n  Ppmt \n  Jiro Kawada (Kawaji)\n  BiAji\n  Mattia Tavernini (Maathias)\n  Peter Thornqvist\n  Yannis Kaskamanidis\n  Eduardo Mucelli\n");
+		"<b>Themes:</b>\n  Fabounet\n  Chilperik\n  Djoole\n  Glattering\n  Vilraleur\n  Lord Northam\n  Paradoxxx_Zero\n  Coz\n  Benoit2600\n  Nochka85\n  Taiebot65\n  Lylambda\n  MastroPino\n  Matttbe\n\
+<b>Translations:</b>\n  Fabounet\n  Ppmt \n  Jiro Kawada (Kawaji)\n  BiAji\n  Mattia Tavernini (Maathias)\n  Peter Thornqvist\n  Yannis Kaskamanidis\n  Eduardo Mucelli\n");
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Support"),
-		"<b>Installation script and web hosting :</b>\n  Mav\n\
-<b>Site (glx-dock.org) :</b>\n  Necropotame\n  Matttbe\n  Tdey\n\
-<b>LaunchPad :</b>\n  Matttbe\n  Mav\n\
-<b>Suggestions/Comments/Beta-Testers :</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Franksuse64\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
+		"<b>Installation script and web hosting:</b>\n  Mav\n\
+<b>Site (glx-dock.org):</b>\n  Necropotame\n  Matttbe\n  Tdey\n\
+<b>LaunchPad:</b>\n  Matttbe\n  Mav\n\
+<b>Suggestions / Comments / Beta-Testers:</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Franksuse64\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
 	
 	gtk_widget_show_all (pDialog);
 	

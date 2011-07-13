@@ -43,7 +43,9 @@ target_link_libraries (${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${LIBCRYPT_LIBS}
-	-lgldi
+	gldi
+	icon-factory
+	implementations
 	help)
 
 # install the program once it is built.
