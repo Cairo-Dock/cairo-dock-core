@@ -31,7 +31,7 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_sync
+#include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_syncl
 #include "cairo-dock-X-utilities.h"  // cairo_dock_property_is_present_on_root
 #define _MANAGER_DEF_
 #include "cairo-dock-file-manager.h"
@@ -310,6 +310,9 @@ gboolean cairo_dock_fm_logout (void)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->logout!= NULL)
 	{
+		const gchar *sm = g_getenv ("SESSION_MANAGER");
+		if (sm == NULL || *sm == '\0')  // if there is no session-manager, the desktop methods are useless.
+			return FALSE;
 		s_pEnvBackend->logout ();
 		return TRUE;
 	}
@@ -321,6 +324,9 @@ gboolean cairo_dock_fm_shutdown (void)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->shutdown!= NULL)
 	{
+		const gchar *sm = g_getenv ("SESSION_MANAGER");
+		if (sm == NULL || *sm == '\0')  // idem
+			return FALSE;
 		s_pEnvBackend->shutdown ();
 		return TRUE;
 	}
