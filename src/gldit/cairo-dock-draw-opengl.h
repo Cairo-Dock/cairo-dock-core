@@ -156,6 +156,13 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 	glTexCoord2f(1., 1.); glVertex3f( .5*w, -.5*h, 0.);\
 	glTexCoord2f(0., 1.); glVertex3f(-.5*w, -.5*h, 0.);\
 	glEnd(); } while (0)
+#define _cairo_dock_apply_current_texture_at_size_crop(iTexture, w, h, ratio) do { \
+	glBegin(GL_QUADS);\
+	glTexCoord2f(0., 1-ratio); glVertex3f(-.5*w,  (ratio -.5)*h, 0.);\
+	glTexCoord2f(1., 1-ratio); glVertex3f( .5*w,  (ratio -.5)*h, 0.);\
+	glTexCoord2f(1., 1); glVertex3f( .5*w, -.5*h, 0.);\
+	glTexCoord2f(0., 1); glVertex3f(-.5*w, -.5*h, 0.);\
+	glEnd(); } while (0)
 #define _cairo_dock_apply_current_texture_at_size_with_offset(w, h, x, y) do { \
 	glBegin(GL_QUADS);\
 	glTexCoord2f(0., 0.); glVertex3f(x-.5*w, y+.5*h, 0.);\

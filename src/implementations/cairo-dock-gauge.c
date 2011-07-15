@@ -45,6 +45,16 @@ typedef struct {
 	GLuint iTexture;
 } GaugeImage;
 
+// Effect applied on Indicator image.
+typedef enum {
+	CD_GAUGE_EFFECT_NONE=0,
+	CD_GAUGE_EFFECT_CROP,
+	CD_GAUGE_EFFECT_STRETCH,
+	CD_GAUGE_EFFECT_ZOOM,
+	CD_GAUGE_EFFECT_FADE,
+	CD_GAUGE_NB_EFFECTS
+	} GaugeIndicatorEffect; 
+
 typedef struct {
 	// needle
 	gdouble posX, posY;
@@ -65,6 +75,8 @@ typedef struct {
 	CairoDataRendererEmblemParam emblem;
 	// label text zone
 	CairoDataRendererTextParam labelZone;
+	// indicator image effect
+	GaugeIndicatorEffect iEffect;
 } GaugeIndicator;
 
 typedef struct {
@@ -368,6 +380,8 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 					pGaugeIndicator->iNeedleRealHeight = atoi (cNodeContent);
 					pGaugeIndicator->iNeedleOffsetY = .5 * pGaugeIndicator->iNeedleRealHeight;
 				}
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "effect") == 0)
+					pGaugeIndicator->iEffect = atoi (cNodeContent);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "file") == 0)
 				{
 					ap = xmlHasProp(pGaugeSubNode, "key");
@@ -624,7 +638,28 @@ static void _draw_gauge_image_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndic
 	
 	if (pGaugeImage->iTexture != 0)
 	{
-		_cairo_dock_apply_texture_at_size (pGaugeImage->iTexture, iWidth, iHeight);
+		glBindTexture (GL_TEXTURE_2D, pGaugeImage->iTexture);\
+		switch (pGaugeIndicator->iEffect)
+		{
+			case CD_GAUGE_EFFECT_CROP :
+				_cairo_dock_apply_current_texture_at_size_crop (pGaugeImage->iTexture, iWidth, iHeight, fValue);
+			break;
+
+			case CD_GAUGE_EFFECT_STRETCH :
+				_cairo_dock_apply_current_texture_portion_at_size_with_offset (0. , 0., 1., 1., iWidth, iHeight * fValue, 0., iHeight * (fValue - 1)/2);
+			break;
+
+			case CD_GAUGE_EFFECT_ZOOM :
+				_cairo_dock_apply_current_texture_portion_at_size_with_offset (0. , 0., 1., 1., iWidth * fValue, iHeight * fValue, 0., 0.);
+			break;
+
+			case CD_GAUGE_EFFECT_FADE :
+				_cairo_dock_set_alpha(fValue); // no break, we need the default texture draw
+
+			default :
+				_cairo_dock_apply_current_texture_at_size (iWidth, iHeight);
+			break;
+		}
 	}
 }
 static void _draw_gauge_needle_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
