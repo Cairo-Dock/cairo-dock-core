@@ -7,7 +7,7 @@ if test "$1" = "plug-ins"; then
 elif test "$1" = "extras"; then
 	sources=""
 	for f in `sed -n "/^\[/p" ../list.conf | tr -d []`; do  # plug-ins-extra
-		test -e ../$f/$f -a ! -x ../$f/$f && sources="${sources} ../$f/$f"  # not an executable
+		test -e ../$f/$f && sources="${sources} ../$f/$f"
 		test -e ../$f/messages && sources="${sources} ../$f/messages"
 		if test -e $f/translated_files.txt; then
 			for g in `cat $f/translated_files.txt`; do  # a file where we can list the specific source files to be translated.

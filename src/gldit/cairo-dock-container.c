@@ -37,6 +37,7 @@
 #include "cairo-dock-module-factory.h"  // cairo_dock_search_container_from_icon
 #include "cairo-dock-dock-manager.h"  // cairo_dock_search_dock_from_name
 #include "cairo-dock-desklet-factory.h"  // cairo_dock_search_container_from_icon
+#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-opengl.h"

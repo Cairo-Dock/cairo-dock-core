@@ -504,6 +504,8 @@ static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
 {
 	int r;
 	r = system (cCommand);
+	if (r != 0)
+		cd_warning ("couldn't launch this command (%s)", cCommand);
 	g_free (cCommand);
 	return NULL;
 }

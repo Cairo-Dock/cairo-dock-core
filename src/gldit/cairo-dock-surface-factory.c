@@ -890,7 +890,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	{
 		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
 		int w = ink.width;
-		g_print ("text width : %d / %d\n", w, iMaxLineWidth);
+		//g_print ("text width : %d / %d\n", w, iMaxLineWidth);
 		if (w > iMaxLineWidth)  // le texte est trop long.
 		{
 			// on decoupe le texte en lignes et on limite chaque ligne trop longue.

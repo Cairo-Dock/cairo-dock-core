@@ -505,7 +505,7 @@ msgid ""
 "move to another dock"
 msgstr ""
 "Le nouveau dock a été créé.\n"
-"Maintenant déplacer quelques lanceurs ou applets sur celui-ci grâce à un "
+"Maintenant déplacez des lanceurs ou applets sur celui-ci grâce à un "
 "clic-droit sur l'icône -> Déplacer vers un autre dock."
 
 #: ../src/cairo-dock-menu.c:576

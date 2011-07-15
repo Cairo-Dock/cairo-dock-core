@@ -755,18 +755,15 @@ int main (int argc, char** argv)
 	g_print ("\n\nTODO:\n"
 	"- test drop (Shortcuts, between applets or applis, Panel view, etc).\n"
 	"- draw a preview of the dock in opengl\n"
-	"- test locale on third-party applets\n"
 	"- handle icon path in .desktop files.\n"
 	"- kde integration ++\n"
 	"- find Kwin config tool for Composite-manager\n"
 	"- review Help hints\n"
-	"- handle first crash nicely\n"
-	"- configure non active applets (Help, ...) in both modes\n"
-	"- test import question in Folders\n"
-	"- \n"
-	"- \n"
-	"- \n"
-	"- \n"
+	"- display Help GUI in simple mode\n"
+	"- drop folder: wrong icon order\n"
+	"- Drop2Share: Uppix\n"
+	"- clean traces (especially from the class manager)\n"
+	"- add actions for the Help module\n"
 	"\n");
 	
 	gtk_main ();
