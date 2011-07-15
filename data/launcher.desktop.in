@@ -20,7 +20,7 @@ Icon=
 
 #s Command to launch on click :
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
-Exec=
+Exec=Enter your command
 
 
 #X[Extra parameters]
