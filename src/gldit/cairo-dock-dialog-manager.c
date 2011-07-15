@@ -715,12 +715,12 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pContainer)
 {
 	//g_print ("%s (%x;%d, %s)\n", __func__, pDialog->pIcon, pContainer, pDialog->pIcon?pDialog->pIcon->cParentDockName:"none");
-	if (pDialog->container.bInside)
+	if (pDialog->container.bInside && ! (pDialog->pInteractiveWidget || pDialog->action_on_answer))  // in the case of a modal dialog, the dialog takes the dock's events, including the "enter-event" one. So we are inside the dialog as soon as we enter the dock, and consequently, the dialog is not replaced when the dock unhides itself.
 		return;
 	
 	int w, h;
 	GdkGravity iGravity;
-	if (pContainer != NULL && pDialog->pIcon != NULL)
+	if (pContainer != NULL/* && pDialog->pIcon != NULL*/)
 	{
 		cairo_dock_set_dialog_orientation (pDialog, pContainer);
 		

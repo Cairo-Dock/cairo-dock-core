@@ -664,8 +664,8 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 
 static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContainer *pContainer, int *iX, int *iY, gboolean *bRight, gboolean *bIsHorizontal, gboolean *bDirectionUp, double fAlign)
 {
-	g_return_if_fail (pIcon != NULL && pContainer != NULL);
-	//g_print ("%s (%.2f, %.2f)\n", __func__, pIcon->fXAtRest, pIcon->fDrawX);
+	g_return_if_fail (/*pIcon != NULL && */pContainer != NULL);
+	//g_print ("%s (%.2f, %.2f)\n", __func__, pIcon?pIcon->fXAtRest:0, pIcon?pIcon->fDrawX:0);
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
@@ -675,7 +675,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			_cairo_dock_dialog_calculate_aimed_point (pPointingIcon, CAIRO_CONTAINER (pParentDock), iX, iY, bRight, bIsHorizontal, bDirectionUp, fAlign);
 		}
-		else  // dock principal ou sous-dock wisible.
+		else  // dock principal ou sous-dock visible.
 		{
 			*bIsHorizontal = (pContainer->bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
 			int dy;
@@ -741,7 +741,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 
 void cairo_dock_set_dialog_orientation (CairoDialog *pDialog, CairoContainer *pContainer)
 {
-	if (pContainer != NULL && pDialog->pIcon != NULL)
+	if (pContainer != NULL/* && pDialog->pIcon != NULL*/)
 	{
 		_cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bTopBottomDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);
 	}
@@ -804,7 +804,7 @@ void cairo_dock_set_dialog_widget_bg_color (GtkWidget *pWidget)
 	color.red = myDialogsParam.fDialogColor[0] * 65535;
 	color.green = myDialogsParam.fDialogColor[1] * 65535;
 	color.blue = myDialogsParam.fDialogColor[2] * 65535;
-	gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
+	gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
 }
 
 void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSurface, int iNewTextWidth, int iNewTextHeight)
