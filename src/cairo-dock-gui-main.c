@@ -156,16 +156,18 @@ gchar *_get_valid_module_conf_file (CairoDockModule *pModule)
 		CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
 		return g_strdup (pModuleInstance->cConfFilePath);
 	}
-	else if (pModule->cConfFilePath != NULL)  // not instanciate yet, take a conf-file in the module's user dir, or the default conf-file.
+	else if (pModule->pVisitCard->cConfFileName != NULL)  // not instanciated yet, take a conf-file in the module's user dir, or the default conf-file.
 	{
 		// open the module's user dir.
 		gchar *cUserDataDirPath = cairo_dock_check_module_conf_dir (pModule);
+		g_print ("cUserDataDirPath: %s\n", cUserDataDirPath);
 		GDir *dir = g_dir_open (cUserDataDirPath, 0, NULL);
 		if (dir == NULL)
 		{
 			g_free (cUserDataDirPath);
 			return NULL;
 		}
+		
 		// look for a conf-file.
 		const gchar *cFileName;
 		gchar *cInstanceFilePath = NULL;
@@ -2484,15 +2486,7 @@ static void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 	}
 	else  // c'est un module, on recupere son fichier de conf en entier.
 	{
-		if (pModule->pInstancesList != NULL)
-		{
-			pModuleInstance = pModule->pInstancesList->data;
-			cConfFilePath = g_strdup (pModuleInstance->cConfFilePath);
-		}
-		else
-		{
-			cConfFilePath = _get_valid_module_conf_file (pModule);
-		}
+		cConfFilePath = _get_valid_module_conf_file (pModule);
 		
 		bSingleGroup = FALSE;
 	}
