@@ -1545,11 +1545,15 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	//\__________________ get the attributes.
 	pClassAppli->cDesktopFile = cDesktopFilePath;
 	
-	if (cCommand != NULL)
+	if (cCommand != NULL)  // remove the launching options %x.
 	{
-		gchar *str = strchr (cCommand, '%');
+		gchar *str = strchr (cCommand, '%');  // search the first one.
 		if (str != NULL)
+		{
+			if (str != cCommand && (*(str-1) == '"' || *(str-1) == '\''))  // take care of "" around the option.
+				str --;
 			*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
+		}
 	}
 	pClassAppli->cCommand = cCommand;
 	
