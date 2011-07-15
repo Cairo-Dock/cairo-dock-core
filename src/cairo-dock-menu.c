@@ -549,6 +549,14 @@ static void cairo_dock_add_sub_dock (GtkMenuItem *pMenuItem, gpointer *data)
 	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER);
 }
 
+static gboolean _show_new_dock_msg (gchar *cDockName)
+{
+	CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
+	if (pDock)
+		cairo_dock_show_temporary_dialog_with_default_icon (_("The new dock has been created.\nNow move some launchers or applets into it by right-clicking on the icon -> move to another dock"), NULL, CAIRO_CONTAINER (pDock), 10000);
+	g_free (cDockName);
+	return FALSE;
+}
 static void cairo_dock_add_main_dock (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	gchar *cDockName = cairo_dock_add_root_dock_config ();
@@ -557,7 +565,7 @@ static void cairo_dock_add_main_dock (GtkMenuItem *pMenuItem, gpointer *data)
 	
 	cairo_dock_gui_trigger_reload_items ();  // pas de signal "new_dock"
 	
-	cairo_dock_show_general_message (_("The new dock has been created.\nNow move some launchers or applets into it by right-clicking on the icon -> move to another dock"), 10000);  // on le place pas sur le nouveau dock, car sa fenetre n'est pas encore bien placee (0,0).
+	g_timeout_add_seconds (1, (GSourceFunc)_show_new_dock_msg, g_strdup (cDockName));  // delai, car sa fenetre n'est pas encore bien placee (0,0).
 }
 
 static void cairo_dock_add_separator (GtkMenuItem *pMenuItem, gpointer *data)
@@ -1184,9 +1192,6 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer *data
 static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSeparator, gboolean bAddLauncher)
 {
 	GtkWidget *pSubMenuAdd = cairo_dock_create_sub_menu (_("Add"), pMenu, GTK_STOCK_ADD);
-	/**GtkWidget *pMenuItem = _add_entry_in_menu (_("Add"), GTK_STOCK_ADD, NULL, pMenu);
-	GtkWidget *pSubMenuAdd = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAdd);*/
 	
 	_add_entry_in_menu (_("Sub-dock"), GTK_STOCK_ADD, cairo_dock_add_sub_dock, pSubMenuAdd);
 	
@@ -1215,13 +1220,13 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	gchar *cLabel;
 	gboolean bAddSeparator = ! (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount > 0);  // pas sur les sous-docks.
 	
-	//\_________________________ Si pas d'icone dans un dock, on s'arrete la.
+	//\_________________________ Clic en-dehors d'une icone utile => on s'arrete la.
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && (icon == NULL || CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon)))
 	{
 		if (! cairo_dock_is_locked ())
 		{
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
-			if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
+			if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon) || CAIRO_DOCK (pContainer)->iRefCount == 0)
 				_add_add_entry (menu, data, TRUE, TRUE);
 		}
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
