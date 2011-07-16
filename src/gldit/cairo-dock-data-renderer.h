@@ -36,6 +36,13 @@ G_BEGIN_DECLS
 * To remove the Data Renderer from an icon, use /ref cairo_dock_remove_data_renderer_on_icon.
 */
 
+typedef enum _RendererRotateTheme {
+	CD_RENDERER_ROTATE_NO=0,
+	CD_RENDERER_ROTATE_WITH_CONTAINER,
+	CD_RENDERER_ROTATE_YES,
+	CD_RENDERER_NB_ROTATE
+	} RendererRotateTheme; 
+
 //
 // Structures
 //
@@ -66,6 +73,8 @@ struct _CairoDataRendererAttribute {
 	gboolean bUpdateMinMax;
 	/// whether to write the values on the icon. [false by default].
 	gboolean bWriteValues;
+	/// an option to rotate applet, no, automatic or always.
+	RendererRotateTheme iRotateTheme;
 	/// time needed to update to the new values. The update is smooth in OpenGL mode. [0 by default]
 	gint iLatencyTime;
 	/// a function used to format the values into a string. Only useful if you make te DataRenderer write the values [optionnal, by default the values are formatted with 2 decimals].
@@ -156,6 +165,10 @@ struct _CairoDataRenderer {
 	gboolean bCanRenderValueAsText;
 	/// set to TRUE <=> the drawing will be rotated if the container is vertical.
 	gboolean bRotateWithContainer;
+	/// an option to rotate applet, no, automatic or always.
+	RendererRotateTheme iRotateTheme;
+	/// set to TRUE <=> the theme images are rotated 90° clockwise.
+	gboolean bisRotate;
 	/// an optionnal list of labels to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
 	CairoDataRendererText *pLabels;
 	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
@@ -220,6 +233,7 @@ void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iN
 
 void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iNumValue);
 
+void cairo_data_renderer_get_size (CairoDataRenderer *pRenderer, gint *iWidth, gint *iHeight);
 
 ///
 /// Structure Access

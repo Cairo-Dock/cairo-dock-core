@@ -647,7 +647,8 @@ static void _draw_gauge_image_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndic
 	g_return_if_fail (iNumImage < pGaugeIndicator->iNbImages);
 	
 	GaugeImage *pGaugeImage = &pGaugeIndicator->pImageList[iNumImage];
-	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
+	int iWidth, iHeight;
+	cairo_data_renderer_get_size (CAIRO_DATA_RENDERER (pGauge), &iWidth, &iHeight);
 	
 	if (pGaugeImage->iTexture != 0)
 	{
@@ -705,7 +706,10 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 	_cairo_dock_set_blend_pbuffer ();  // ceci reste un mystere...
 	_cairo_dock_set_alpha (1.);
 	
-	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
+	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
+	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
+	int iWidth, iHeight;
+	cairo_data_renderer_get_size (pRenderer, &iWidth, &iHeight);
 	GaugeImage *pGaugeImage;
 	
 	//\________________ On affiche le fond.
@@ -721,8 +725,6 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 	GList *pValueList;
 	double fValue;
 	GaugeIndicator *pIndicator;
-	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
-	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
 	int i;
 	for (i = iDataOffset, pIndicatorElement = pGauge->pIndicatorList; i < pData->iNbValues && pIndicatorElement != NULL; i++, pIndicatorElement = pIndicatorElement->next)
 	{
@@ -762,6 +764,8 @@ static void render_opengl (Gauge *pGauge)
 	int iNbDrawings = (int) ceil (1. * pData->iNbValues / pRenderer->iRank);
 	int i, iDataOffset = 0;
 	float ratio = (float) 1 / iNbDrawings;
+	int iWidth, iHeight;
+	cairo_data_renderer_get_size (pRenderer, &iWidth, &iHeight);
 	gboolean bDisplay = TRUE;
 	for (i = 0; i < iNbDrawings; i ++)
 	{
@@ -777,29 +781,29 @@ static void render_opengl (Gauge *pGauge)
 					* move 1/2 box left : -w / 2n 
 					* =w(-0.5 +i/n -1/2n)
 					*/
-					glTranslatef (pRenderer->iWidth * (i * ratio - 0.5 + ratio / 2), 0., 0.);
+					glTranslatef (iWidth * (i * ratio - 0.5 + ratio / 2), 0., 0.);
 					glScalef (ratio, 1., 1.);
 					break;
 	
 				case CD_GAUGE_MULTI_DISPLAY_SCATTERED :
 					if (i == 0)  /// tester avec 1/2, 1/2
 					{
-						glTranslatef (-pRenderer->iWidth / 6, pRenderer->iHeight / 6, 0.);
+						glTranslatef (-iWidth / 6, iHeight / 6, 0.);
 						glScalef (2./3, 2./3, 1.);
 					}
 					else if (i == 1)
 					{
-						glTranslatef (pRenderer->iWidth / 3, - pRenderer->iHeight / 3, 0.);
+						glTranslatef (iWidth / 3, - iHeight / 3, 0.);
 						glScalef (1./3, 1./3, 1.);
 					}
 					else if (i == 2)
 					{
-						glTranslatef (pRenderer->iWidth / 3, pRenderer->iHeight / 3, 0.);
+						glTranslatef (iWidth / 3, iHeight / 3, 0.);
 						glScalef (1./3, 1./3, 1.);
 					}
 					else if (i == 3)
 					{
-						glTranslatef (-pRenderer->iWidth / 3, -pRenderer->iHeight / 3, 0.);
+						glTranslatef (-iWidth / 3, -iHeight / 3, 0.);
 						glScalef (1./3, 1./3, 1.);
 					}
 					else  // 5 valeurs faut pas pousser non plus.

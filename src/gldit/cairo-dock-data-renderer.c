@@ -109,15 +109,36 @@ static void _cairo_dock_init_data_renderer (CairoDataRenderer *pRenderer, CairoC
 	//\_______________ On charge les parametres generaux.
 	pRenderer->bUpdateMinMax = pAttribute->bUpdateMinMax;
 	pRenderer->bWriteValues = pAttribute->bWriteValues;
+	pRenderer->iRotateTheme = pAttribute->iRotateTheme;
 	pRenderer->iLatencyTime = pAttribute->iLatencyTime;
 	pRenderer->iSmoothAnimationStep = 0;
 	pRenderer->format_value = pAttribute->format_value;
 	pRenderer->pFormatData = pAttribute->pFormatData;
 }
 
+void cairo_data_renderer_get_size (CairoDataRenderer *pRenderer, gint *iWidth, gint *iHeight) 
+{
+	if (pRenderer->bisRotate)
+	{
+		*iWidth = pRenderer->iHeight;
+		*iHeight = pRenderer->iWidth;
+	}
+	else
+	{
+		*iWidth = pRenderer->iWidth;
+		*iHeight = pRenderer->iHeight;
+	}
+}
+
 
 void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iNumValue)
 {
+	gint iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
+	cairo_data_renderer_get_size (pRenderer, &iWidth, &iHeight);
+	glPushMatrix ();
+	if (pRenderer->bisRotate)
+		glRotatef (90., 0., 0., 1.);
+	
 	if (pRenderer->pEmblems != NULL)
 	{
 		_cairo_dock_enable_texture ();
@@ -130,10 +151,10 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 			glBindTexture (GL_TEXTURE_2D, pEmblem->iTexture);
 			_cairo_dock_set_alpha (pEmblem->param.fAlpha);
 			_cairo_dock_apply_current_texture_at_size_with_offset (
-				pEmblem->param.fWidth * pRenderer->iWidth,
-				pEmblem->param.fHeight * pRenderer->iHeight,
-				pEmblem->param.fX * pRenderer->iWidth,
-				pEmblem->param.fY * pRenderer->iHeight);
+				pEmblem->param.fWidth * iWidth,
+				pEmblem->param.fHeight * iHeight,
+				pEmblem->param.fX * iWidth,
+				pEmblem->param.fY * iHeight);
 		}
 		_cairo_dock_disable_texture ();
 	}
@@ -148,7 +169,7 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 		pLabel = &pRenderer->pLabels[iNumValue];
 		if (pLabel->iTexture != 0)
 		{
-			double f = MIN (pLabel->param.fWidth * pRenderer->iWidth / pLabel->iTextWidth, pLabel->param.fHeight * pRenderer->iHeight / pLabel->iTextHeight);  // on garde le ratio du texte.
+			double f = MIN (pLabel->param.fWidth * iWidth / pLabel->iTextWidth, pLabel->param.fHeight * iHeight / pLabel->iTextHeight);  // on garde le ratio du texte.
 			w = pLabel->iTextWidth * f;
 			h = pLabel->iTextHeight * f;
 			dw = w & 1;
@@ -159,8 +180,8 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 			_cairo_dock_apply_current_texture_at_size_with_offset (
 				w + dw,
 				h + dh,
-				pLabel->param.fX * pRenderer->iWidth,
-				pLabel->param.fY * pRenderer->iHeight);
+				pLabel->param.fX * iWidth,
+				pLabel->param.fY * iHeight);
 		}
 		_cairo_dock_disable_texture ();
 	}
@@ -184,8 +205,8 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 			dh = h & 1;
 			cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer,
 				pFont,
-				floor (pText->fX * pRenderer->iWidth) + .5*dw,
-				floor (pText->fY * pRenderer->iHeight) + .5*dh,
+				floor (pText->fX * iWidth) + .5*dw,
+				floor (pText->fY * iHeight) + .5*dh,
 				w,
 				h,
 				TRUE);
@@ -194,6 +215,7 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 			glColor3f (1.0, 1.0, 1.0);
 		}
 	}
+	glPopMatrix ();
 }
 
 static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer)
@@ -203,11 +225,10 @@ static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *p
 	
 	//\________________ On dessine.
 	glPushMatrix ();
-	if (!pContainer->bIsHorizontal && pRenderer->bRotateWithContainer)
+	if ((pRenderer->iRotateTheme == CD_RENDERER_ROTATE_WITH_CONTAINER && pContainer->bIsHorizontal == CAIRO_DOCK_VERTICAL) || pRenderer->iRotateTheme == CD_RENDERER_ROTATE_YES)
 	{
-		glTranslatef (pRenderer->iWidth/2, pRenderer->iHeight/2, 0.);
 		glRotatef (-90., 0., 0., 1.);
-		glTranslatef (-pRenderer->iHeight/2, -pRenderer->iWidth/2, 0.);
+		pRenderer->bisRotate = TRUE;
 	}
 	
 	glPushMatrix ();
@@ -308,11 +329,12 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 	
 	//\________________ On dessine.
 	cairo_save (pCairoContext);
-	if (!pContainer->bIsHorizontal && pRenderer->bRotateWithContainer)
+	if ((pRenderer->iRotateTheme == CD_RENDERER_ROTATE_WITH_CONTAINER && pContainer->bIsHorizontal == CAIRO_DOCK_VERTICAL) || pRenderer->iRotateTheme == CD_RENDERER_ROTATE_YES)
 	{
-		cairo_translate (pCairoContext, pRenderer->iWidth/2, pRenderer->iHeight/2);
+		//cairo_translate (pCairoContext, pRenderer->iWidth/2, pRenderer->iHeight/2);
 		cairo_rotate (pCairoContext, G_PI/2);
-		cairo_translate (pCairoContext, -pRenderer->iHeight/2, -pRenderer->iWidth/2);
+		pRenderer->bisRotate = TRUE;
+		//cairo_translate (pCairoContext, -pRenderer->iHeight/2, -pRenderer->iWidth/2);
 	}
 	
 	cairo_save (pCairoContext);
