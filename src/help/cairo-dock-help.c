@@ -47,7 +47,7 @@ void cairo_dock_register_help_module (void)
 	pVisitCard->cConfFileName = "Help.conf";
 	pVisitCard->cModuleVersion = "0.2.0";
 	pVisitCard->iCategory = CAIRO_DOCK_CATEGORY_BEHAVIOR;
-	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icon-help.svg";
+	pVisitCard->cIconFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-help.svg";
 	pVisitCard->iSizeOfConfig = sizeof (AppletConfig);
 	pVisitCard->iSizeOfData = sizeof (AppletData);
 	pVisitCard->cDescription = N_("This applet is made to help you.\n"

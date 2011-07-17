@@ -80,7 +80,7 @@ max_authorized_width = 0
 #{This is only usefull if you do not already use auto-hide and if your Window Manager allows the dock in front of fullscreen windows (which is rare).}
 auto quick hide = false
 
-#F-[Sub-docks' visibility;@pkgdatadir@/icon-subdock.png]
+#F-[Sub-docks' visibility;@pkgdatadir@/icons/icon-subdock.png]
 frame_sub =
 
 #Y-[Appear on mouse over;1;1;Appear on click;0;0] Visibility:
@@ -184,7 +184,7 @@ animation on demands attention = rotate
 
 [System]
 
-#X-[Animations speed;@pkgdatadir@/icon-movment.png]
+#X-[Animations speed;@pkgdatadir@/icons/icon-movment.png]
 frame_mov =
 
 #B- Animate sub-docks when they appear
@@ -296,7 +296,7 @@ image alpha = 1
 #b+ Repeat image as a pattern to fill background?
 repeat image = true
 
-#F+[Colour gradation;@pkgdatadir@/icon-gradation.png]
+#F+[Colour gradation;@pkgdatadir@/icons/icon-gradation.png]
 #{Use a colour gradation.}
 frame3 = 
 
@@ -323,7 +323,7 @@ frame3_=
 #b+ Stretch the dock to always fill the screen
 extended = false
 
-#F+[External Frame;@pkgdatadir@/icon-frame.png]
+#F+[External Frame;@pkgdatadir@/icons/icon-frame.png]
 frame_frame =
 #i+[0;30] Corner radius :
 #{in pixels.}
@@ -366,7 +366,7 @@ relative icon size = .8
 
 [Dialogs]
 
-#F+[Bubble;@pkgdatadir@/icon-bubble.png]
+#F+[Bubble;@pkgdatadir@/icons/icon-bubble.png]
 frame_bubble =
 
 #C+ Background colour of the bubble:
@@ -394,7 +394,7 @@ outlined = false
 #c+ Text color:
 text color = 0.0; 0.0; 0.0
 
-#F+[Buttons;@pkgdatadir@/icon-buttons.png]
+#F+[Buttons;@pkgdatadir@/icons/icon-buttons.png]
 frame_button =
 
 #j+[10;64] Size of buttons in the info-bubbles (width x height) :
@@ -488,7 +488,7 @@ default icon directory =
 #{Any format allowed; leave this field empty if you don't want to use an image as background.}
 icons bg =
 
-#F+[Zoom effect;@pkgdatadir@/icon-wave.png]
+#F+[Zoom effect;@pkgdatadir@/icons/icon-wave.png]
 frame_shape =
 #f+[1;5] Maximum zoom of the icons :
 #{set to 1 if you don't want the icons to zoom when you hover over them.}

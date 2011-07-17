@@ -1375,7 +1375,7 @@ static void _load_appli (Icon *icon)
 		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
 		if (cIconPath == NULL)  // image non trouvee.
 		{
-			cIconPath = g_strdup (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+			cIconPath = g_strdup (GLDI_SHARE_DATA_DIR"/icons/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
 		}
 		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
 			iWidth,

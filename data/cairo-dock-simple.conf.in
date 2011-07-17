@@ -1,16 +1,16 @@
 #@VERSION@
 
-#[@pkgdatadir@/icon-behavior.svg]
+#[@pkgdatadir@/icons/icon-behavior.svg]
 [Behavior]
 
-#F-[Position on the screen;@pkgdatadir@/icon-position.svg]
+#F-[Position on the screen;@pkgdatadir@/icons/icon-position.svg]
 frame_pos =
 
 #l-[bottom;top;right;left] Choose which border of the screen the dock will be placed on:
 screen border = 0
 
 
-#F-[Visibility of the main dock;@pkgdatadir@/icon-visibility.svg]
+#F-[Visibility of the main dock;@pkgdatadir@/icons/icon-visibility.svg]
 frame_visi =
 
 #Y-[Always on top;0;0;Reserve space for the dock;0;0;Keep the dock below;0;0;Hide the dock when it overlaps the current window;1;1;Hide the dock whenever it overlaps any window;1;1;Keep the dock hidden;1;1;Pop-up on shortcut;2;1] Visibility:
@@ -26,7 +26,7 @@ hide effect = Move down
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 raise shortcut = 
 
-#F-[Visibility of sub-docks;@pkgdatadir@/icon-subdock.png]
+#F-[Visibility of sub-docks;@pkgdatadir@/icons/icon-subdock.png]
 frame_sub =
 
 #l-[Appear on mouse over;Appear on click] Visibility:
@@ -34,7 +34,7 @@ frame_sub =
 show_on_click = 0
 
 
-#F-[Taskbar;@pkgdatadir@/icon-taskbar.png]
+#F-[Taskbar;@pkgdatadir@/icons/icon-taskbar.png]
 frame_task =
 
 #l-[None;MacOSX;KDE;Gnome] Behaviour of the Taskbar:
@@ -45,7 +45,7 @@ frame_task =
 taskbar = 2
 
 
-#F[Icons' animations and effects;@pkgdatadir@/icon-movment.png]
+#F[Icons' animations and effects;@pkgdatadir@/icons/icon-movment.png]
 frame_anim=
 
 #_ On mouse hover:
@@ -58,10 +58,10 @@ anim_click=
 anim_disappear=
 
 
-#[@pkgdatadir@/icon-appearance.svg]
+#[@pkgdatadir@/icons/icon-appearance.svg]
 [Appearance]
 
-#F[Icons;@pkgdatadir@/icon-icons.svg]
+#F[Icons;@pkgdatadir@/icons/icon-icons.svg]
 frame_icons=
 
 #w Choose a theme of icons :
@@ -82,7 +82,7 @@ separate icons = true
 icon's type order = 0;1;2
 
 
-#F[Views;@pkgdatadir@/icon-views.svg]
+#F[Views;@pkgdatadir@/icons/icon-views.svg]
 frame_view =
 
 #n Choose the default view for main docks :/
@@ -96,10 +96,10 @@ sev_view=
 sub-dock view = default
 
 
-#[@pkgdatadir@/icon-plug-ins.svg]
+#[@pkgdatadir@/icons/icon-plug-ins.svg]
 [Add-ons]
 
-#F[Add or remove any applet;@pkgdatadir@/icon-accessories.svg]
+#F[Add or remove any applet;@pkgdatadir@/icons/icon-accessories.svg]
 frame_mod=
 
 #_ 
@@ -113,7 +113,7 @@ modules=
 third party=http://forum.glx-dock.org
 
 
-#[@pkgdatadir@/icon-controler.svg]
+#[@pkgdatadir@/icons/icon-controler.svg]
 [Themes]
 
 #_

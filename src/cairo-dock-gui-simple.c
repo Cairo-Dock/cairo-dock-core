@@ -855,7 +855,7 @@ static void _make_modules_widget (GtkWidget *pSimpleConfigWindow)
 	//\______________ On construit le widget de prevue et on le rajoute a la suite.
 	gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
 	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pSimpleConfigWindow), "garbage");
-	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (pSimpleConfigWindow, pOneWidget, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
+	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (pSimpleConfigWindow, pOneWidget, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
 	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pPreviewBox, FALSE, FALSE, 0);
 	g_free (cDefaultMessage);
 }

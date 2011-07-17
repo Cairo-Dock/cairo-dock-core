@@ -198,26 +198,26 @@ static void _cairo_dock_load_box_surface (void)
 		iSize = 48;
 	iSize *= fMaxScale;
 	
-	gchar *cUserPath = cairo_dock_generate_file_path ("box-front.png");
+	gchar *cUserPath = cairo_dock_generate_file_path ("box-front");
 	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
 	{
 		g_free (cUserPath);
 		cUserPath = NULL;
 	}
 	cairo_dock_load_image_buffer (&g_pBoxAboveBuffer,
-		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/box-front.png",
+		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/icons/box-front.png",
 		iSize,
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);
 	
-	cUserPath = cairo_dock_generate_file_path ("box-back.png");
+	cUserPath = cairo_dock_generate_file_path ("box-back");
 	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
 	{
 		g_free (cUserPath);
 		cUserPath = NULL;
 	}
 	cairo_dock_load_image_buffer (&g_pBoxBelowBuffer,
-		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/box-back.png",
+		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/icons/box-back.png",
 		iSize,
 		iSize,
 		CAIRO_DOCK_FILL_SPACE);

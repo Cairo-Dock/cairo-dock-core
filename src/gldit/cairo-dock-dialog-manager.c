@@ -104,11 +104,11 @@ static void cairo_dock_load_dialog_buttons (gchar *cButtonOkImage, gchar *cButto
 	//g_print ("%s (%s ; %s)\n", __func__, cButtonOkImage, cButtonCancelImage);
 	if (s_pButtonOkSurface != NULL)
 		cairo_surface_destroy (s_pButtonOkSurface);
-	s_pButtonOkSurface = _cairo_dock_load_button_icon (cButtonOkImage, GLDI_SHARE_DATA_DIR"/cairo-dock-ok.svg");
+	s_pButtonOkSurface = _cairo_dock_load_button_icon (cButtonOkImage, GLDI_SHARE_DATA_DIR"/icons/cairo-dock-ok.svg");
 
 	if (s_pButtonCancelSurface != NULL)
 		cairo_surface_destroy (s_pButtonCancelSurface);
-	s_pButtonCancelSurface = _cairo_dock_load_button_icon (cButtonCancelImage, GLDI_SHARE_DATA_DIR"/cairo-dock-cancel.svg");
+	s_pButtonCancelSurface = _cairo_dock_load_button_icon (cButtonCancelImage, GLDI_SHARE_DATA_DIR"/icons/cairo-dock-cancel.svg");
 	
 	if (0 && g_bUseOpenGL)
 	{
@@ -879,8 +879,8 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 {
 	g_return_val_if_fail (cText != NULL, NULL);
 	
-	const gchar *cIconPath = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
-	//cIconPath = GLDI_SHARE_DATA_DIR"/cairo-dock-animated.xpm";
+	//const gchar *cIconPath = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
+	const gchar *cIconPath = GLDI_SHARE_DATA_DIR"/icons/cairo-dock-animated.xpm"; // it's animated
 	
 	CairoDialogAttribute attr;
 	memset (&attr, 0, sizeof (CairoDialogAttribute));

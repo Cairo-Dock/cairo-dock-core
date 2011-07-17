@@ -1269,7 +1269,7 @@ static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
 			{
 				g_free (cIconPath);
-				cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/", cImage, NULL);
+				cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/icons/", cImage, NULL);
 			}
 		}
 		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIconPath ? cIconPath : cImage, iSize, iSize, NULL);
@@ -1348,7 +1348,7 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
 			{
 				g_free (cIconPath);
-				cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/", cIcon, NULL);
+				cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/icons/", cIcon, NULL);
 			}
 		}
 	}

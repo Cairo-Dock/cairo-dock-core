@@ -157,7 +157,7 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 }
 static gboolean _cairo_dock_first_launch_setup (gpointer data)
 {
-	cairo_dock_launch_command (CAIRO_DOCK_SHARE_DATA_DIR"/initial-setup.sh");
+	cairo_dock_launch_command (CAIRO_DOCK_SHARE_DATA_DIR"/scripts/initial-setup.sh");
 	return FALSE;
 }
 static void _cairo_dock_quit (int signal)

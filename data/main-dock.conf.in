@@ -3,7 +3,7 @@
 ######## It is parsed by cairo-dock to automatically generate an appropriate GUI,##########
 ######## so don't mess into it, except if you know what you're doing ! ;-)##########
 
-#[@pkgdatadir@/icon-behavior.svg]
+#[@pkgdatadir@/icons/icon-behavior.svg]
 [Behavior]
 
 #F-[Position on the screen;gtk-fullscreen]
@@ -33,7 +33,7 @@ sep_other =
 #{starting from 0}
 num screen = 0
 
-#F-[Visibility of the dock;@pkgdatadir@/icon-visibility.svg]
+#F-[Visibility of the dock;@pkgdatadir@/icons/icon-visibility.svg]
 frame_visi =
 
 #l-[Always on top;Reserve space for the dock;Keep the dock below;Hide the dock when it overlaps the current window;Hide the dock whenever it overlaps any window;Keep the dock hidden;Pop-up on shortcut] Visibility:
@@ -43,10 +43,10 @@ frame_visi =
 visibility = 4
 
 
-#[@pkgdatadir@/icon-appearance.svg]
+#[@pkgdatadir@/icons/icon-appearance.svg]
 [Appearance]
 
-#F[Views;@pkgdatadir@/icon-views.svg]
+#F[Views;@pkgdatadir@/icons/icon-views.svg]
 frame_view =
 
 #n+ Choose the view for this dock :/

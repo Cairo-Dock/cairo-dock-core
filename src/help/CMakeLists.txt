@@ -13,13 +13,13 @@ add_library(help STATIC ${help_SRCS})
 add_definitions (-fPIC)
 
 add_definitions (-DMY_APPLET_SHARE_DATA_DIR="${pkgdatadir}")
-add_definitions (-DMY_APPLET_PREVIEW_FILE="help-preview.jpg")
+add_definitions (-DMY_APPLET_PREVIEW_FILE="images/help-preview.jpg")
 add_definitions (-DMY_APPLET_CONF_FILE="Help.conf")
 add_definitions (-DMY_APPLET_USER_DATA_DIR="Help")
-add_definitions (-DMY_APPLET_VERSION="0.9.99")
+add_definitions (-DMY_APPLET_VERSION="${VERSION_HELP}")
 add_definitions (-DMY_APPLET_GETTEXT_DOMAIN="${GETTEXT_PACKAGE}")
 add_definitions (-DMY_APPLET_DOCK_VERSION="${VERSION}")
-add_definitions (-DMY_APPLET_ICON_FILE="icon-help.svg")
+add_definitions (-DMY_APPLET_ICON_FILE="icons/icon-help.svg")
 
 link_directories(
 	${PACKAGE_LIBRARY_DIRS})

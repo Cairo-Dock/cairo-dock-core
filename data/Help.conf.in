@@ -1,6 +1,6 @@
 #@VERSION_HELP@
 
-#[gtk-execute]
+#[@pkgdatadir@/icons/icon-help.svg]
 [General]
 
 #X[Using the dock]
@@ -16,7 +16,7 @@ Adding features =
 #More applets can be installed easily: in the configuration window, click on the "More applets" button (which will lead you to our applets web page) and then just drag-and-drop the link of an applet into your dock.
 _Adding features =
 
-#[@pkgdatadir@/icon-icons.svg]
+#[@pkgdatadir@/icons/icon-icons.svg]
 [Icons]
 
 #X[Adding a launcher]
@@ -68,7 +68,7 @@ Separators =
 _Separators =
 
 
-#[@pkgdatadir@/icon-taskbar.png]
+#[@pkgdatadir@/icons/icon-taskbar.png]
 [Taskbar]
 
 #X[Using the dock as a taskbar]
@@ -115,12 +115,12 @@ Showing windows preview =
 #>You need to run Compiz, and enable the "Window Preview" plug-in in Compiz. Install "ccsm" to be able to configure Compiz.
 _Showing windows preview =
 preview_compiz =
-#G [sh '@pkgdatadir@/help_scripts.sh' compiz_plugin thumbnail && dbus-send --session --dest=org.freedesktop.compiz /org/freedesktop/compiz/thumbnail/screen0/current_viewport org.freedesktop.compiz.set boolean:false;sh -c "ps aux | grep -v grep | grep -c 'compiz'"]If you're using Compiz, you can click on this button:
+#G [sh '@pkgdatadir@/scripts/help_scripts.sh' compiz_plugin thumbnail && dbus-send --session --dest=org.freedesktop.compiz /org/freedesktop/compiz/thumbnail/screen0/current_viewport org.freedesktop.compiz.set boolean:false;sh -c "ps aux | grep -v grep | grep -c 'compiz'"]If you're using Compiz, you can click on this button:
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 preview_compiz_button=
 
 
-#[@pkgdatadir@/icon-background.svg]
+#[@pkgdatadir@/icons/icon-background.svg]
 [Docks]
 
 #X[Positionning the dock on the screen]
@@ -154,7 +154,7 @@ _Changing the look of a dock=
 
 
 
-#[@pkgdatadir@/icon-desklets.png]
+#[@pkgdatadir@/icons/icon-desklets.png]
 [Desklets]
 
 #X[Placing applets on your desktop]
@@ -182,7 +182,7 @@ Changing the desklets decorations =
 _Changing the desklets decorations =
 
 
-#[@pkgdatadir@/icon-system.svg]
+#[@pkgdatadir@/icons/icon-system.svg]
 [Useful Features]
 
 #X[Having a calendar with tasks]
@@ -325,6 +325,7 @@ remove=
 widget_compiz=
 
 
+#[@pkgdatadir@/icons/icon-behavior.svg]
 [Troubleshooting]
 #W[Forum] If you have any question, don't hesitate to ask on our forum.
 forum=http://forum.glx-dock.org
@@ -387,6 +388,7 @@ Menu=
 MenuGnome=
 
 
+#[@pkgdatadir@/cairo-dock.svg]
 [The Project]
 #F [Join the project!]
 frame_project=
@@ -425,11 +427,11 @@ reposit_wiki_site=http://www.glx-dock.org/ww_page.php?p=From the repository&lang
 #> If you on (x/k/l)Ubuntu, you can easily add our repositories with these buttons
 #  (if you're using a fork of Ubuntu like Linux Mint, please have a look at our wiki).
 ubuntu=
-#G [gksu "sh '@pkgdatadir@/help_scripts.sh' repository no";sh -c "lsb_release -i | grep -c Ubuntu"]If you're on Ubuntu, you can add our 'stable' repository by clicking on this button:
+#G [gksu "sh '@pkgdatadir@/scripts/help_scripts.sh' repository no";sh -c "lsb_release -i | grep -c Ubuntu"]If you're on Ubuntu, you can add our 'stable' repository by clicking on this button:
 # After that, you can launch your update manager in order to install the latest stable version.
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 addUbuntuRepo=
-#G [gksu "sh '@pkgdatadir@/help_scripts.sh' weekly no";sh -c "lsb_release -i | grep -c Ubuntu"]If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) by clicking on this button:
+#G [gksu "sh '@pkgdatadir@/scripts/help_scripts.sh' weekly no";sh -c "lsb_release -i | grep -c Ubuntu"]If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) by clicking on this button:
 # After that, you can launch your update manager in order to install the latest weekly version.
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 addWeeklyRepo=
@@ -437,22 +439,14 @@ addWeeklyRepo=
 #> If you on Debian, you can easily add our repositories with these buttons
 #  (Please check if you're using the Stable or the Unstable version of Debian).
 debian=
-#G [gksu "sh '@pkgdatadir@/help_scripts.sh' debian_stable no";sh -c "grep -c ^Debian /etc/issue"]If you're on Debian Stable, you can add our 'stable' repository by clicking on this button:
+#G [gksu "sh '@pkgdatadir@/scripts/help_scripts.sh' debian_stable no";sh -c "grep -c ^Debian /etc/issue"]If you're on Debian Stable, you can add our 'stable' repository by clicking on this button:
 # After that, you can purge all 'cairo-dock*' packages, update the your system and reinstall 'cairo-dock' package.
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 addDebianStableRepo=
-#G [gksu "sh '@pkgdatadir@/help_scripts.sh' debian_unstable no";sh -c "grep -c ^Debian /etc/issue"]If you're on Debian Unstable, you can add our 'stable' repository by clicking on this button:
+#G [gksu "sh '@pkgdatadir@/scripts/help_scripts.sh' debian_unstable no";sh -c "grep -c ^Debian /etc/issue"]If you're on Debian Unstable, you can add our 'stable' repository by clicking on this button:
 # After that, you can purge all 'cairo-dock*' packages, update the your system and reinstall 'cairo-dock' package.
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 addDebianUnStableRepo=
-#G [gksu "sh '@pkgdatadir@/help_scripts.sh' debian_stable_weekly no";sh -c "grep -c ^Debian /etc/issue"]If you're on Debian Stable, you can add our 'weekly' ppa (can be unstable) by clicking on this button:
-# After that, you can purge all 'cairo-dock*' packages, update the your system and reinstall 'cairo-dock' package.
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-addDebianStableWeeklyRepo=
-#G [gksu "sh '@pkgdatadir@/help_scripts.sh' debian_unstable_weekly no";sh -c "grep -c ^Debian /etc/issue"]If you're on Debian Unstable, you can add our 'weekly' ppa (can be unstable) by clicking on this button:
-# After that, you can purge all 'cairo-dock*' packages, update the your system and reinstall 'cairo-dock' package.
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-addDebianUnStableWeeklyRepo=
 
 
 #[gtk-about]

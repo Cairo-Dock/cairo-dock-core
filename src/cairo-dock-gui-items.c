@@ -384,7 +384,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 				FALSE,  // vertical packaging
 				0,  // no info bar
 				cDefaultMessage,
-				CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO,
+				CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO,
 				pDataGarbage);
 			g_free (cDefaultMessage);
 		}

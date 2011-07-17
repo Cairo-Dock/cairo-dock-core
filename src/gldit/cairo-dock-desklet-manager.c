@@ -90,7 +90,7 @@ void cairo_dock_load_desklet_buttons (void)
 	if (s_pRotateButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pRotateButtonBuffer,
-			GLDI_SHARE_DATA_DIR"/rotate-desklet.svg",
+			GLDI_SHARE_DATA_DIR"/icons/rotate-desklet.svg",
 			myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
@@ -107,7 +107,7 @@ void cairo_dock_load_desklet_buttons (void)
 	if (s_pRetachButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pRetachButtonBuffer,
-			GLDI_SHARE_DATA_DIR"/retach-desklet.svg",
+			GLDI_SHARE_DATA_DIR"/icons/retach-desklet.svg",
 			myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
@@ -124,7 +124,7 @@ void cairo_dock_load_desklet_buttons (void)
 	if (s_pDepthRotateButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pDepthRotateButtonBuffer,
-			GLDI_SHARE_DATA_DIR"/depth-rotate-desklet.svg",
+			GLDI_SHARE_DATA_DIR"/icons/depth-rotate-desklet.svg",
 			myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);
@@ -141,7 +141,7 @@ void cairo_dock_load_desklet_buttons (void)
 	if (s_pNoInputButtonBuffer.pSurface == NULL)
 	{
 		cairo_dock_load_image_buffer (&s_pNoInputButtonBuffer,
-			GLDI_SHARE_DATA_DIR"/no-input-desklet.png",
+			GLDI_SHARE_DATA_DIR"/icons/no-input-desklet.png",
 			myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
 			CAIRO_DOCK_FILL_SPACE);

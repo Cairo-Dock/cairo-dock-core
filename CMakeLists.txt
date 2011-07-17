@@ -50,6 +50,7 @@ set (exec_prefix ${prefix})
 set (datadir ${prefix}/share)
 set (pkgdatadir ${datadir}/cairo-dock)
 set (mandir ${datadir}/man)
+set (VERSION_HELP "0.9.99") # needed to parse Help.conf.in
 
 if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT "${FORCE_LIB64}" STREQUAL "")  # 64bits and force install in lib64
 	set (libdir ${prefix}/lib64)

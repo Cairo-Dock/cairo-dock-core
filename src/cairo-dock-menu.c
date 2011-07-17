@@ -193,7 +193,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	GtkWidget *pHBox = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pContentBox), pHBox, FALSE, FALSE, 0);
 	
-	const gchar *cImagePath = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_LOGO;
+	const gchar *cImagePath = CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO;
 	GtkWidget *pImage = gtk_image_new_from_file (cImagePath);
 	gtk_box_pack_start (GTK_BOX (pHBox), pImage, FALSE, FALSE, 0);
 	
@@ -372,7 +372,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		if (! cairo_dock_theme_manager_is_integrated ())
 		{
 			pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Manage themes"),
-				CAIRO_DOCK_SHARE_DATA_DIR"/icon-appearance.svg",
+				CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-appearance.svg",
 				(GFunc)_cairo_dock_initiate_theme_management,
 				pSubMenu,
 				NULL);
@@ -383,7 +383,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenu), pMenuItem);
 		
 		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (myDocksParam.bLockIcons ? _("Unlock icons") : _("Lock icons"),
-			CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg",
+			CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lock-icons.svg",
 			(GFunc)_cairo_dock_lock_icons,
 			pSubMenu, NULL);
 		gtk_widget_set_tooltip_text (pMenuItem, _("This will (un)lock the position of the icons."));
@@ -391,7 +391,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 	if (! g_bLocked)
 	{
 		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (myDocksParam.bLockAll ? _("Unlock dock") : _("Lock dock"),
-			CAIRO_DOCK_SHARE_DATA_DIR"/icon-lock-icons.svg",
+			CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lock-icons.svg",
 			(GFunc)_cairo_dock_lock_all,
 			pSubMenu,
 			NULL);
@@ -1366,7 +1366,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 		_add_entry_in_menu (_("Show"), GTK_STOCK_FIND, _cairo_dock_show_appli, menu);
 		
-		_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximise") : _("Maximise"), icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icon-restore.png" : CAIRO_DOCK_SHARE_DATA_DIR"/icon-maximize.png", _cairo_dock_maximize_appli, menu);
+		_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximise") : _("Maximise"), icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg", _cairo_dock_maximize_appli, menu);
 		
 		if (! icon->bIsHidden)
 		{
@@ -1374,7 +1374,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 				cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
 			else
 				cLabel = g_strdup (_("Minimise"));
-			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icon-minimize.png", _cairo_dock_minimize_appli, menu);
+			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_appli, menu);
 			g_free (cLabel);
 		}
 		
@@ -1382,7 +1382,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
 		else
 			cLabel = g_strdup (_("Close"));
-		_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icon-close.png", _cairo_dock_close_appli, menu);
+		_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_appli, menu);
 		g_free (cLabel);
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
@@ -1409,9 +1409,9 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 		_add_entry_in_menu (_("Show all"), GTK_STOCK_FIND, _cairo_dock_show_class, menu);
 
-		_add_entry_in_menu (_("Minimise all"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-minimize.png", _cairo_dock_minimize_class, menu);
+		_add_entry_in_menu (_("Minimise all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_class, menu);
 		
-		_add_entry_in_menu (_("Close all"), CAIRO_DOCK_SHARE_DATA_DIR"/icon-close.png", _cairo_dock_close_class, menu);
+		_add_entry_in_menu (_("Close all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_class, menu);
 	}
 	
 	//\_________________________ On rajoute les actions sur les applets/desklets.
