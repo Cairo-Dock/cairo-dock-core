@@ -457,7 +457,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 			if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 			{
 				g_free (cImagePath);
-				cImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_DEFAULT_ICON_NAME);
+				cImagePath = g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/icons/"CAIRO_DOCK_DEFAULT_ICON_NAME);
 			}
 		}
 	}
