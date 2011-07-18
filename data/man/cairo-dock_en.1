@@ -30,7 +30,7 @@ It can use
 .B hardware acceleration
 (OpenGL) to be very fast and low on CPU.
 .PP
-It is recommended to install the PLUG\-INS package (
+It's recommended to install the PLUG\-INS package (
 .B cairo\-dock\-plug\-ins
 ) to have acces to more views, dialogs and many plug\-ins and applets.
 .PP
@@ -52,84 +52,74 @@ with several options :
 (Note : you can use these options in one block. For example : cairo\-dock\ \-oia )
 .TP
 .B \-c, \-\-cairo
-force Cairo backend (Use this option if you have issue with the OpenGL mode. It removes the window at startup)
+Force Cairo backend. Use this option if you have issue with the OpenGL mode.
 .TP
 .B \-o, \-\-opengl
-force OpenGL backend (Cairo\-Dock with OpenGL. It removes the window at startup)
+Force OpenGL backend. Cairo\-Dock with OpenGL/Hardware acceleration.
+.TP
+.B \-O, \-\-indirect-opengl
+Use OpenGL backend with indirect rendering. There are very few case where this option should be used.
 .TP
 .B \-i, \-\-indirect
-use Indirect Rendering mode for OpenGL
+Deprecated \- see -O.
 .TP
 .B \-l, \-\-log [option]
-log verbosity (options : debug, message, warning, critical, error \- default is 'warning')
+Log verbosity (options : debug, message, warning, critical, error \- default is 'warning').
 .br
 For example : cairo\-dock \-l debug
 .TP
+.B \-A, \-\-colors
+Force to display some output messages with colors even if these messages are not displayed into a tty.
+.TP
 .B \-w, \-\-wait
-wait for N seconds before starting; this is useful if you notice some problems when the dock starts with the session.
+Wait for N seconds before starting. This is useful if you notice some problems when the dock starts with the session.
 .TP
 .B \-a, \-\-keep\-above
-force to keep the dock above other windows whatever
-.TP
-.B \-p, \-\-no\-skip\-pager
-show the dock in pager
-.TP
-.B \-b, \-\-no\-skip\-taskbar
-show the dock in taskbar
+Force to keep the dock above other windows whatever.
 .TP
 .B \-s, \-\-no\-sticky
-don't make the dock appear on all desktops
-.TP
-.B \-t, \-\-toolbar\-hint
-force the window manager to consider Cairo\-Dock as a toolbar rather than as a dock
-.TP
-.B \-n, \-\-normal\-hint
-force the window manager to consider Cairo\-Dock as a normal application rather than as a dock
+Don't make the dock appear on all desktops.
 .TP
 .B \-e, \-\-env
-force the dock to consider this environment (gnome, xfce, etc.) \- it may crash
+Force the dock to consider this environment (gnome, xfce, etc.) \- it may crash
 the dock if not set properly.
 .TP
 .B \-d, \-\-dir
-force the dock to load the configuration in this directory  (default is ~/.config/cairo\-dock).
+Force the dock to load the configuration in this directory  (default is ~/.config/cairo\-dock).
 .TP
 .B \-m, \-\-maintenance
-allow to edit the config before the dock is started and show the config panel
-on startup
+Allow to edit the config before the dock is started and show the config panel
+on startup.
 .TP
 .B \-f, \-\-safe\-mode
-don't load any plug\-ins and show the theme manager on startup
+Don't load any plug\-ins and show the theme manager on startup.
 .TP
 .B \-M, \-\-modules\-dir
-ask the dock to load additional modules contained in this directory
+Ask the dock to load additional modules contained in this directory
 (though it is unsafe for your dock to load unofficial modules).
 .TP
 .B \-T, \-\-testing
-for debugging purpose only. The crash manager will not be started to hunt down the bugs.
+For debugging purpose only. The crash manager will not be started to hunt down the bugs.
 .TP
 .B \-E, \-\-easter\-eggs
-for debugging purpose only. Some hidden and still unstable options will be activated.
+For debugging purpose only. Some hidden and still unstable options will be activated.
 .TP
 .B \-S, \-\-server
-address of a server containing additional themes. This will overwrite the default server address.
+Address of a server containing additional themes. This will overwrite the default server address.
 .TP
 .B \-k, \-\-locked
-lock the dock so that any modification is impossible for users.
+Lock the dock so that any modification is impossible for users.
 
 .SH OTHER
 Some other options with an output in the terminal :
 .TP 10
 .B \-v, \-\-version
-print version and quit.
+Print version and quit.
 .TP
 .B \-h, \-\-help
-Show the help and quit
+Show the help and quit.
 .TP
 .B \-C, \-\-capuccino
-.TP
-.B \-X, \-\-expresso
-.TP
-.B \-L, \-\-cafe\-latte
 Cairo\-Dock makes anything, including coffee !
 
 .SH FILES

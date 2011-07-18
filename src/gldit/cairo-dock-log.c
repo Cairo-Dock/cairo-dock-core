@@ -26,11 +26,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <unistd.h>
 
 #include "cairo-dock-log.h"
 
 static char s_iLogColor = '0';
 static GLogLevelFlags s_gLogLevel = G_LOG_LEVEL_WARNING;
+static gboolean bForceColors = FALSE;
 
 /* #    'default'     => "\033[1m", */
 
@@ -46,20 +48,41 @@ static GLogLevelFlags s_gLogLevel = G_LOG_LEVEL_WARNING;
 
 const char*_cd_log_level_to_string(const GLogLevelFlags loglevel)
 {
-  switch(loglevel)
+  if (isatty (1) || bForceColors)
   {
-  case G_LOG_LEVEL_CRITICAL:
-    return "\033[1;31mCRITICAL: \033[0m ";
-  case G_LOG_LEVEL_ERROR:
-    return "\033[1;31mERROR   : \033[0m ";
-  case G_LOG_LEVEL_WARNING:
-    return "\033[1;38mwarning : \033[0m ";
-  case G_LOG_LEVEL_MESSAGE:
-    return "\033[1;32mmessage : \033[0m ";
-  case G_LOG_LEVEL_INFO:
-    return "\033[1;33minfo    : \033[0m ";
-  case G_LOG_LEVEL_DEBUG:
-    return "\033[1;35mdebug   : \033[0m ";
+    switch(loglevel)
+    {
+    case G_LOG_LEVEL_CRITICAL:
+      return "\033[1;31mCRITICAL: \033[0m ";
+    case G_LOG_LEVEL_ERROR:
+      return "\033[1;31mERROR   : \033[0m ";
+    case G_LOG_LEVEL_WARNING:
+      return "\033[1;38mwarning : \033[0m ";
+    case G_LOG_LEVEL_MESSAGE:
+      return "\033[1;32mmessage : \033[0m ";
+    case G_LOG_LEVEL_INFO:
+      return "\033[1;33minfo    : \033[0m ";
+    case G_LOG_LEVEL_DEBUG:
+      return "\033[1;35mdebug   : \033[0m ";
+    }
+  }
+  else
+  {
+    switch(loglevel)
+    {
+    case G_LOG_LEVEL_CRITICAL:
+      return "CRITICAL: ";
+    case G_LOG_LEVEL_ERROR:
+      return "ERROR   : ";
+    case G_LOG_LEVEL_WARNING:
+      return "warning : ";
+    case G_LOG_LEVEL_MESSAGE:
+      return "message : ";
+    case G_LOG_LEVEL_INFO:
+      return "info    : ";
+    case G_LOG_LEVEL_DEBUG:
+      return "debug   : ";
+    }
   }
   return "";
 }
@@ -76,7 +99,10 @@ void cd_log_location(const GLogLevelFlags loglevel,
   if (loglevel > s_gLogLevel)
     return;
   g_print(_cd_log_level_to_string(loglevel));
-  g_print("\033[0;37m(%s:%s:%d) \033[%cm \n  ", file, func, line, s_iLogColor);
+  if (isatty (1) || bForceColors)
+    g_print("\033[0;37m(%s:%s:%d) \033[%cm \n  ", file, func, line, s_iLogColor);
+  else
+    g_print("(%s:%s:%d)\n  ", file, func, line);
   va_start(args, format);
   g_logv(G_LOG_DOMAIN, loglevel, format, args);
   va_end(args);
@@ -122,4 +148,9 @@ void cd_log_set_level_from_name (const gchar *cVerbosity)
 		cd_log_set_level(G_LOG_LEVEL_WARNING);
 		cd_warning("bad verbosity option: default to warning");
 	}
+}
+
+void cd_log_set_force_color(gboolean forceColor)
+{
+  bForceColors = forceColor;
 }

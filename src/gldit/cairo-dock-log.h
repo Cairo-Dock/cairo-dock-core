@@ -54,6 +54,11 @@ void cd_log_set_level(GLogLevelFlags loglevel);
  */
 void cd_log_set_level_from_name (const gchar *cVerbosity);
 
+/**
+ * Set if there are some colors in the output messages even if these messages are not displayed into a tty.
+ */
+void cd_log_set_force_color(gboolean forceColor);
+
 
 /* Write an error message on the terminal. Error messages are used to indicate the cause of the program stop.
 *@param ... the message format and parameters, in a 'printf' style.

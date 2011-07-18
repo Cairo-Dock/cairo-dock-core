@@ -216,6 +216,8 @@ static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, 
 	return FALSE;  // TRUE <=> ne pas detruire la fenetre.
 }
 
+static void PrintFunc(const gchar *string) {}
+
 static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 {
 	gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", cCairoDockDataDir);
@@ -296,6 +298,11 @@ int main (int argc, char** argv)
 		g_print ("Sorry, Cairo-Dock has encoutered some problems, and will quit.\n");
 		return 1;
 	}
+
+	// muted output messages if CD is not launched from a terminal
+	if (getenv("TERM") == NULL)
+		g_set_print_handler(PrintFunc);
+
 	g_print (">>> restart cmd line: %s\n", s_pLaunchCommand->str);
 	
 	gtk_init (&argc, &argv);
@@ -304,76 +311,79 @@ int main (int argc, char** argv)
 	GError *erreur = NULL;
 	
 	//\___________________ get app's options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	int iDelay = 0;
 	GOptionEntry pOptionsTable[] =
 	{
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cVerbosity,
-			"log verbosity (debug,message,warning,critical,error); default is warning", NULL},
+			_("Log verbosity (debug,message,warning,critical,error); default is warning."), NULL},
+		{"colors", 'A', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bForceColors,
+			_("Force to display some output messages with colors."), NULL},
 		{"wait", 'w', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_INT,
 			&iDelay,
-			"wait for N seconds before starting; this is useful if you notice some problems when the dock starts with the session.", NULL},
+			_("Wait for N seconds before starting; this is useful if you notice some problems when the dock starts with the session."), NULL},
 #ifdef HAVE_GLITZ
 		{"glitz", 'g', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bUseGlitz,
-			"force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled libcairo)", NULL},
+			_("Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled libcairo)."), NULL},
 #endif
 		{"cairo", 'c', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bForceCairo,
-			"use Cairo backend", NULL},
+			_("Use Cairo backend."), NULL},
 		{"opengl", 'o', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceOpenGL,
-			"use OpenGL backend", NULL},
+			_("Use OpenGL backend."), NULL},
 		{"indirect-opengl", 'O', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bToggleIndirectRendering,
-			"use OpenGL backend with indirect rendering. There are very few case where this option should be used.", NULL},
+			_("Use OpenGL backend with indirect rendering. There are very few case where this option should be used."), NULL},
 		{"indirect", 'i', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceIndirectRendering,
-			"deprecated - see -O", NULL},
+			_("Deprecated - see -O."), NULL},
 		{"keep-above", 'a', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bKeepAbove,
-			"keep the dock above other windows whatever", NULL},
+			_("Keep the dock above other windows whatever."), NULL},
 		{"no-sticky", 's', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bNoSticky,
-			"don't make the dock appear on all desktops", NULL},
+			_("Don't make the dock appear on all desktops."), NULL},
 		{"env", 'e', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cEnvironment,
-			"force the dock to consider this environnement - use it with care.", NULL},
+			_("Force the dock to consider this environnement - use it with care."), NULL},
 		{"dir", 'd', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cUserDefinedDataDir,
-			"force the dock to load from this directory, instead of ~/.config/cairo-dock.", NULL},
+			_("Force the dock to load from this directory, instead of ~/.config/cairo-dock."), NULL},
 		{"maintenance", 'm', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bMaintenance,
-			"allow to edit the config before the dock is started and show the config panel on start", NULL},
+			_("Allow to edit the config before the dock is started and show the config panel on start."), NULL},
 		{"exclude", 'x', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cExcludeModule,
-			"exclude a given plug-in from activating (it is still loaded though)", NULL},
+			_("Exclude a given plug-in from activating (it is still loaded though)."), NULL},
 		{"safe-mode", 'f', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bSafeMode,
-			"don't load any plug-ins", NULL},
+			_("Don't load any plug-ins."), NULL},
 		{"capuccino", 'C', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bCappuccino,
-			"Cairo-Dock makes anything, including coffee !", NULL},
+			_("Cairo-Dock makes anything, including coffee !"), NULL},
 		{"version", 'v', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bPrintVersion,
-			"print version and quit.", NULL},
+			_("Print version and quit."), NULL},
 		{"modules-dir", 'M', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cUserDefinedModuleDir,
-			"ask the dock to load additionnal modules contained in this directory (though it is unsafe for your dock to load unnofficial modules).", NULL},
+			_("Ask the dock to load additionnal modules contained in this directory (though it is unsafe for your dock to load unnofficial modules)."), NULL},
 		{"testing", 'T', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bTesting,
-			"for debugging purpose only. The crash manager will not be started to hunt down the bugs.", NULL},
+			_("For debugging purpose only. The crash manager will not be started to hunt down the bugs."), NULL},
 		{"easter-eggs", 'E', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bEasterEggs,
-			"for debugging purpose only. Some hidden and still unstable options will be activated.", NULL},
+			_("For debugging purpose only. Some hidden and still unstable options will be activated."), NULL},
 		{"server", 'S', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cThemeServerAdress,
-			"address of a server containing additional themes. This will overwrite the default server address.", NULL},
+			_("Address of a server containing additional themes. This will overwrite the default server address."), NULL},
 		{"locked", 'k', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bLocked,
-			"lock the dock so that any modification is impossible for users.", NULL},
+			_("Lock the dock so that any modification is impossible for users."), NULL},
 		{NULL, 0, 0, 0,
 			NULL,
 			NULL, NULL}
@@ -402,6 +412,8 @@ int main (int argc, char** argv)
 		cd_log_set_level_from_name (cVerbosity);
 		g_free (cVerbosity);
 	}
+	
+	cd_log_set_force_color (bForceColors);
 	
 	CairoDockDesktopEnv iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 	if (cEnvironment != NULL)
