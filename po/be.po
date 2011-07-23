@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-04-19 12:35+0100\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2011-07-03 00:01+0000\n"
+"PO-Revision-Date: 2011-05-14 11:34+0000\n"
+"Last-Translator: Iryna Nikanchuk <defragbrain@gmail.com>\n"
 "Language-Team: Belarusian <be@li.org>\n"
-"Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-16 04:34+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-07-04 04:32+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
+"Language: be\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -69,7 +70,8 @@ msgid "category"
 msgstr "катэгорыя"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:621
@@ -287,7 +289,8 @@ msgid "Effects:"
 msgstr "Эфекты:"
 
 #: ../src/cairo-dock-gui-simple.c:856
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Пстрыкніце па аплеце, каб убачыць яго апісанне і прыкладны выгляд."
 
 #: ../src/cairo-dock-gui-simple.c:865 ../data/messages:493
@@ -384,7 +387,8 @@ msgstr "Наладзіць гэтую панэль"
 
 #: ../src/cairo-dock-menu.c:357
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Наладзьце месцазнаходжанне, бачнасць і знешні выгляд асноўнай панэлі."
+msgstr ""
+"Наладзьце месцазнаходжанне, бачнасць і знешні выгляд асноўнай панэлі."
 
 #: ../src/cairo-dock-menu.c:359
 msgid "Delete this dock"
@@ -440,7 +444,8 @@ msgid "Get more applets!"
 msgstr "Атрымаць больш аплетов!"
 
 #: ../src/cairo-dock-menu.c:425
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Апплеты трэціх бакоў забяспечваюць інтэграцыю з рознымі праграмамі, "
 "напрыклад Pidgin"
@@ -956,7 +961,6 @@ msgid "Are you sure you want to delete these themes?"
 msgstr "Вы ўпэўненыя, што жадаеце выдаліць гэтыя тэмы?"
 
 #: ../src/help/applet-composite.c:65
-#, fuzzy
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "This applet is here to help you start using the dock; just click on it.\n"
@@ -965,16 +969,6 @@ msgid ""
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
-"Сардэчна запрашаем у Cairo-Dock 2!\n"
-"Зараз загружана стандартная тэма.\n"
-"Вы зможаце наладзіць уласную або выбраць адну з гатовых праз Правы націск -> "
-"Cairo-Dock -> Кіраванне тэмамі.\n"
-"Карысную дапамогу вы зможаце знайсці ў Правы націск -> Cairo-Dock -> "
-"Даведка.\n"
-"Па любых пытаннях/прапановах/выпраўленнях звяртайцеся на http://cairo-dock."
-"org.\n"
-"Спадзяемся вам спадабацца наша праграма!\n"
-"  (цяпер можаце націснуць па гэтым паведамлення, каб закрыць яго)"
 
 #: ../src/help/applet-composite.c:160
 msgid "Don't ask me any more"
@@ -1033,9 +1027,8 @@ msgid "Tips and Tricks"
 msgstr ""
 
 #: ../src/help/applet-tips-dialog.c:299
-#, fuzzy
 msgid "Category"
-msgstr "катэгорыя"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:453
 #: ../data/messages:621
@@ -1067,9 +1060,8 @@ msgid "General"
 msgstr ""
 
 #: ../data/messages:3
-#, fuzzy
 msgid "Using the dock"
-msgstr "Вярнуць на панэль"
+msgstr ""
 
 #: ../data/messages:5
 msgid ""
@@ -1096,9 +1088,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:13
-#, fuzzy
 msgid "Adding a launcher"
-msgstr "Зрабіць значком запуску"
+msgstr ""
 
 #: ../data/messages:15
 msgid ""
@@ -1109,21 +1100,18 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:17
-#, fuzzy
 msgid "Removing a launcher"
-msgstr "Выдаліць гэты значок запуску"
+msgstr ""
 
 #: ../data/messages:19
-#, fuzzy
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
-msgstr "Вы можаце выдаліць любы значок проста перацягнуў яго за межы панэлі."
+msgstr ""
 
 #: ../data/messages:21
-#, fuzzy
 msgid "Grouping icons into a sub-dock"
-msgstr "Згрупаваць вокны адной праграмы ў суб-панэль?"
+msgstr ""
 
 #: ../data/messages:23
 msgid ""
@@ -1134,9 +1122,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:25
-#, fuzzy
 msgid "Moving icons"
-msgstr "Заблакаваць значкі"
+msgstr ""
 
 #: ../data/messages:27
 msgid ""
@@ -1148,9 +1135,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:29
-#, fuzzy
 msgid "Changing an icon's image"
-msgstr "Як мне памяняць малюнак на значку?"
+msgstr ""
 
 #: ../data/messages:31
 msgid ""
@@ -1181,9 +1167,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:37
-#, fuzzy
 msgid "Separating icons"
-msgstr "Падзельнікі"
+msgstr ""
 
 #: ../data/messages:39
 msgid ""
@@ -1230,9 +1215,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:55
-#, fuzzy
 msgid "Launching an application several times"
-msgstr "Аб'яднаць значкі запуску з іх праграмамі?"
+msgstr ""
 
 #: ../data/messages:57
 msgid ""
@@ -1251,9 +1235,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:63
-#, fuzzy
 msgid "Grouping windows of a given application"
-msgstr "Згрупаваць вокны адной праграмы ў суб-панэль?"
+msgstr ""
 
 #: ../data/messages:65
 msgid ""
@@ -1264,9 +1247,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:67
-#, fuzzy
 msgid "Setting a custom icon for an application"
-msgstr "Аб'яднаць значкі запуску з іх праграмамі?"
+msgstr ""
 
 #: ../data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
@@ -1294,14 +1276,12 @@ msgid "If you're using Compiz, you can click on this button:"
 msgstr ""
 
 #: ../data/messages:79
-#, fuzzy
 msgid "Docks"
-msgstr "Суб-панэлі"
+msgstr ""
 
 #: ../data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Месцазнаходжанне на экране"
+msgstr ""
 
 #: ../data/messages:83
 msgid ""
@@ -1313,9 +1293,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:85
-#, fuzzy
 msgid "Hiding the dock to use all the screen"
-msgstr "Расцягваць панэль на ўсю шырыню экрана?"
+msgstr ""
 
 #: ../data/messages:87
 msgid ""
@@ -1328,9 +1307,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:89
-#, fuzzy
 msgid "Having more than one dock"
-msgstr "Дотык да месца дзе панэль"
+msgstr ""
 
 #: ../data/messages:91 ../data/messages:95 ../data/messages:99
 msgid "TODO"
@@ -1345,9 +1323,8 @@ msgid "Changing the look of a dock"
 msgstr ""
 
 #: ../data/messages:103
-#, fuzzy
 msgid "Placing applets on your desktop"
-msgstr "Паказваць праграмы толькі цяперашнага рабочага стала?"
+msgstr ""
 
 #: ../data/messages:105
 msgid ""
@@ -1357,9 +1334,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:107
-#, fuzzy
 msgid "Moving desklets"
-msgstr "Дэсклеты"
+msgstr ""
 
 #: ../data/messages:109
 msgid ""
@@ -1429,9 +1405,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:129
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "На ўсіх працоўных сталах"
+msgstr ""
 
 #: ../data/messages:131
 msgid ""
@@ -1451,9 +1426,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:137
-#, fuzzy
 msgid "Locking your session"
-msgstr "Замацаваць месцазнаходжанне"
+msgstr ""
 
 #: ../data/messages:139
 msgid ""
@@ -1554,9 +1528,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:169
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Аксэсуары"
+msgstr ""
 
 #: ../data/messages:171
 msgid ""
@@ -1580,9 +1553,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:177
-#, fuzzy
 msgid "Having multiple instances of an applet"
-msgstr "Запусціць яшчэ копію гэтага аплета"
+msgstr ""
 
 #: ../data/messages:179
 msgid ""
@@ -1634,8 +1606,9 @@ msgstr ""
 
 #: ../data/messages:195
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1683,8 +1656,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219
@@ -1851,9 +1824,8 @@ msgid "Websites"
 msgstr ""
 
 #: ../data/messages:285
-#, fuzzy
 msgid "More applets available online!"
-msgstr "Атрымаць больш апплетов!"
+msgstr ""
 
 #: ../data/messages:287
 msgid "Cairo-Dock-Plug-ins-Extras"
@@ -1932,14 +1904,12 @@ msgstr ""
 
 #: ../data/messages:323 ../data/messages:325 ../data/messages:1415
 #: ../data/messages:1495 ../data/messages:1527
-#, fuzzy
 msgid "Icon"
-msgstr "Значкі"
+msgstr ""
 
 #: ../data/messages:327
-#, fuzzy
 msgid "Name of the dock it belongs to:"
-msgstr "Трымаць ззаду"
+msgstr ""
 
 #: ../data/messages:329
 msgid "Name of the icon as it will appear in its caption in the dock:"
@@ -1950,9 +1920,8 @@ msgid "Leave empty to use the default one."
 msgstr ""
 
 #: ../data/messages:333
-#, fuzzy
 msgid "Image filename:"
-msgstr "Малюнак:"
+msgstr ""
 
 #: ../data/messages:335
 msgid "Set to 0 to use the default applet size"
@@ -1963,14 +1932,12 @@ msgid "Desired icon size for this applet"
 msgstr ""
 
 #: ../data/messages:339
-#, fuzzy
 msgid "Applet's Handbook"
-msgstr "Даведка па аплетаў"
+msgstr ""
 
 #: ../data/messages:341
-#, fuzzy
 msgid "Desklet"
-msgstr "Дэсклеты"
+msgstr ""
 
 #: ../data/messages:345
 msgid ""
@@ -1979,9 +1946,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:347
-#, fuzzy
 msgid "Lock position?"
-msgstr "Замацаваць месцазнаходжанне"
+msgstr ""
 
 #: ../data/messages:349
 msgid ""
@@ -1990,9 +1956,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:351
-#, fuzzy
 msgid "Desklet dimensions (width x height):"
-msgstr "Памер значкоў у стане спакою (шырыня х вышыня):"
+msgstr ""
 
 #: ../data/messages:353
 msgid ""
@@ -2011,21 +1976,18 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:359
-#, fuzzy
 msgid "Rotation:"
-msgstr "Анімацыя:"
+msgstr ""
 
 #: ../data/messages:363
-#, fuzzy
 msgid "Is detached from the dock"
-msgstr "Зарэзерваваць месца пад панэль"
+msgstr ""
 
 #: ../data/messages:365
-#, fuzzy
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=utility)"
-msgstr "ўсталюйце паводзіны ў Compiz на: (імя = cairo-dock & тып = utility)"
+msgstr ""
 
 #: ../data/messages:367 ../data/messages:433 ../data/messages:471
 #: ../data/messages:601 ../data/messages:663 ../data/messages:1323
@@ -2033,111 +1995,87 @@ msgid "Visibility:"
 msgstr "Бачнасць:"
 
 #: ../data/messages:373
-#, fuzzy
 msgid "Keep below"
-msgstr "Трымаць вышэй"
+msgstr ""
 
 #: ../data/messages:375
 msgid "Keep on widget layer"
 msgstr ""
 
 #: ../data/messages:379
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "На ўсіх працоўных сталах"
+msgstr ""
 
 #: ../data/messages:381 ../data/messages:977
 msgid "Decorations"
 msgstr "Афармленне"
 
 #: ../data/messages:383
-#, fuzzy
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
-"Вы можаце наладзіць асобна для кожнага десклета асобна.\n"
-"Выберыце 'Змяніць афармленне', каб наладзіць яго самастойна."
 
 #: ../data/messages:385
-#, fuzzy
 msgid "Choose a decoration theme for this desklet:"
-msgstr "Выберыце афармленне для ўсіх десклетов:"
+msgstr ""
 
 #: ../data/messages:387
-#, fuzzy
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
-"Выява паказвае ззаду малюнка, напрыклад рамка. Пакіньце пустым, каб не "
-"выкарыстоўваць."
 
 #: ../data/messages:389
-#, fuzzy
 msgid "Background image:"
-msgstr "Фонавае выява:"
+msgstr ""
 
 #: ../data/messages:391
-#, fuzzy
 msgid "Background transparency:"
-msgstr "Фонавая празрыстасць:"
+msgstr ""
 
 #: ../data/messages:393
-#, fuzzy
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr "у піксэлях. Вызначае левую пазіцыю малюнка."
+msgstr ""
 
 #: ../data/messages:395
-#, fuzzy
 msgid "Left offset:"
-msgstr "Левае зрушэнне:"
+msgstr ""
 
 #: ../data/messages:397
-#, fuzzy
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr "у піксэлях. Вызначае верхнюю пазіцыю малюнка."
+msgstr ""
 
 #: ../data/messages:399
-#, fuzzy
 msgid "Top offset:"
-msgstr "Верхняе зрушэнне:"
+msgstr ""
 
 #: ../data/messages:401
-#, fuzzy
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr "у піксэлях. Вызначае правую пазіцыю малюнка."
+msgstr ""
 
 #: ../data/messages:403
-#, fuzzy
 msgid "Right offset:"
-msgstr "Правае зрушэнне:"
+msgstr ""
 
 #: ../data/messages:405
-#, fuzzy
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr "у піксэлях. Вызначае ніжнюю пазіцыю малюнка."
+msgstr ""
 
 #: ../data/messages:407
-#, fuzzy
 msgid "Bottom offset:"
-msgstr "Ніжняе зрушэнне:"
+msgstr ""
 
 #: ../data/messages:409
-#, fuzzy
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
-"Выява паказваная над малюнкам, напрыклад адлюстраванне. Пакіньце пустым, каб "
-"не выкарыстоўваць."
 
 #: ../data/messages:411
-#, fuzzy
 msgid "Foreground image:"
-msgstr "Выява пярэдняга плана:"
+msgstr ""
 
 #: ../data/messages:413
-#, fuzzy
 msgid "Foreground tansparency:"
-msgstr "Празрыстасць пярэдняга плана:"
+msgstr ""
 
 #: ../data/messages:415 ../data/messages:1287
 msgid "Behavior"
@@ -3215,7 +3153,8 @@ msgid "Zoom effect"
 msgstr "Эфект набліжэння"
 
 #: ../data/messages:1053
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Усталюйце значэнне 1, калі не жадаеце каб абразкі павялічваліся пры "
 "навядзенні на іх."
@@ -3288,9 +3227,9 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Наколькі будуць празрыстыя значкі ў стане спакою; Яны будуць \"матэрыялізацца"
-"\" па меры з'яўлення панэлі. Чым бліжэй значэнне да 0, тым празрыстай яны "
-"будуць."
+"Наколькі будуць празрыстыя значкі ў стане спакою; Яны будуць "
+"\"матэрыялізацца\" па меры з'яўлення панэлі. Чым бліжэй значэнне да 0, тым "
+"празрыстай яны будуць."
 
 #: ../data/messages:1085
 msgid "Icons' transparency at rest :"
@@ -3545,8 +3484,8 @@ msgstr "большы"
 
 #: ../data/messages:1207
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Выкарыстоўвайце, каб арыентаваць індыкатар адносна размяшчэння панэлі "
 "(зверху, знізу, справа, злева)."
@@ -4092,8 +4031,8 @@ msgstr ""
 #: ../data/messages:1563
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4140,8 +4079,8 @@ msgstr ""
 " Таму просім прабачэння за магчымыя нязручнасці ^ _ ^\n"
 " - А цяпер толькі добрыя навіны!\n"
 " - Паведамленні 2 новых аплета: Clipper і GMenu.\n"
-" - Мноства паляпшэнняў для десклетов: афармленне, кручэнне, перацягвання і г."
-"д.\n"
+" - Мноства паляпшэнняў для десклетов: афармленне, кручэнне, перацягвання і "
+"г.д.\n"
 " - Cpusage і іншыя аплеты зараз прыемна выглядаюць.\n"
 " - Цяпер вы можаце выдаляць значкі запуску проста перацягнуўшы іх з панэлі,\n"
 " адмацаваць аплеты можна такім жа чынам.\n"
@@ -4178,9 +4117,9 @@ msgid ""
 " - Added functionnalities on grouped applications icons."
 msgstr ""
 "2.0.5:\n"
-" - Мноства багфиксов.\n"
-" - Паляпшэнні ў аплеце RB.\n"
-" - Дададзеная функцыянальнасць да згрупаваных значка прыкладанняў."
+" - Гэтая вэрсія мае найбольшую колькасьць выпраўленых памылак.\n"
+" - Паляпшэньні ў аплеце RB.\n"
+" - Дададзеная функцыянальнасьць да згрупаваных значкаў праграмаў."
 
 #: ../data/messages:1573
 msgid ""
@@ -4199,8 +4138,8 @@ msgid ""
 "documentation on http://doc.glx-dock.org."
 msgstr ""
 "2.1.0: Па-сапраўднаму сур'ёзным версія!\n"
-" - Кіруйце музычнымі прайгравальнікамі з дапамогай аплета «Муз."
-"Проигрыватель» \n"
+" - Кіруйце музычнымі прайгравальнікамі з дапамогай аплета "
+"«Муз.Проигрыватель» \n"
 " Дзяліцеся файламі з дапамогай сусветнага аплета dnd2share,\n"
 " Адсочвайце стан сістэмы з аплетаў Сістэмнага манітора\n"
 " Стварайце запіскі хутка і лёгка з дапамогай аплета Notes.\n"
@@ -4216,8 +4155,8 @@ msgstr ""
 #: ../data/messages:1575
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4370,6 +4309,1285 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
+#, c-format
+#~ msgid "%s is now unmounted"
+#~ msgstr "%s адлучаны"
+
+#, c-format
+#~ msgid "%s is now mounted"
+#~ msgstr "%s далучаны"
+
+#, c-format
+#~ msgid "failed to unmount %s"
+#~ msgstr "не ўдалося адлучыць %s"
+
+#, c-format
+#~ msgid "failed to mount %s"
+#~ msgstr "не ўдалося далучыць %s"
+
+#~ msgid ""
+#~ "the theme couldn't be found; the default theme will be used instead.\n"
+#~ " You can change this by opening the configuration of this module; do you "
+#~ "want to do it now ?"
+#~ msgstr ""
+#~ "Не атрымалася знайсці тэму; будзе выкарыстана стандартная.\n"
+#~ " Вы можаце змяніць яе ў настройках гэтага модуля. Зрабіць гэта зараз?"
+
+#~ msgid ""
+#~ "the gauge theme couldn't be found; a default gauge will be used instead.\n"
+#~ " You can change this by opening the configuration of this module; do you "
+#~ "want to do it now ?"
+#~ msgstr ""
+#~ "Не атрымалася знайсці тэму для датчыка; будзе выкарыстана стандартная.\n"
+#~ " Вы можаце змяніць яе ў настройках гэтага модуля. Зрабіць гэта зараз?"
+
+#~ msgid "Do you want to mount this point ?"
+#~ msgstr "Вы жадаеце падключыць гэтую кропку?"
+
+#~ msgid "Do you want to monitor the content of the directory ?"
+#~ msgstr "Адсочваць змесціва каталога?"
+
+#~ msgid "rate me"
+#~ msgstr "дай адзнаку"
+
+#~ msgid "Controler"
+#~ msgstr "Кіраванне"
+
+#~ msgid "Plug-in"
+#~ msgstr "Плагін"
+
+#~ msgid ""
+#~ "Click on an applet in order to have a preview and a description of it."
+#~ msgstr "Пстрыкніце па аплеце, каб убачыць яго апісанне і прыкладны выгляд."
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' module was not found.\n"
+#~ "Be sure to install it in the same version as the dock to enjoy these "
+#~ "features."
+#~ msgstr ""
+#~ "Модуль '%s' не быў знойдзены.\n"
+#~ "Пераканайцеся, што вы ўстанавілі версію гэтага модуля ідэнтычную версіі "
+#~ "самой панэлі."
+
+#~ msgid "theme"
+#~ msgstr "тэма"
+
+#~ msgid "rating"
+#~ msgstr "рэйтынг"
+
+#~ msgid "You have to try the theme before you can rate it."
+#~ msgstr "Перш чым ставіць рэйтынг, вы павінны паспрабаваць тэму."
+
+#~ msgid "state"
+#~ msgstr "Стан"
+
+#~ msgid "module"
+#~ msgstr "модуль"
+
+#~ msgid "grab"
+#~ msgstr "захапіць"
+
+#~ msgid "sobriety"
+#~ msgstr "умеранасць"
+
+#~ msgid "Configuration of the launchers"
+#~ msgstr "Канфігурацыя значкоў запуску"
+
+#~ msgid "Plug-ins"
+#~ msgstr "Модулі"
+
+#~ msgid "Controlers"
+#~ msgstr "Датчыкі"
+
+#~ msgid ""
+#~ "The advanced mode lets you tweak every single parameter of the dock. It is a "
+#~ "powerful tool to customize your current theme."
+#~ msgstr ""
+#~ "Пашыраны рэжым дазволіць тонка наладзіць кожны параметр панэлі. Акрамя таго, "
+#~ "з ім вы зможаце больш дэталёва наладзіць уласную тэму."
+
+#~ msgid ""
+#~ "It seems that you've never entered the help module yet.\n"
+#~ "If you have some difficulty to configure the dock, or if you are willing to "
+#~ "customize it,\n"
+#~ "the Help module is here for you !\n"
+#~ "Do you want to take a look at it now ?"
+#~ msgstr ""
+#~ "Здаецца, вы ў першы раз выкарыстоўваеце модуль дапамогі.\n"
+#~ "Калі вы адчуваеце цяжкасці ў наладцы панэлі або хочаце падфарбаваць яе,\n"
+#~ "модуль Дапамогі дапаможа вам у гэтым!\n"
+#~ "Хочаце перайсці ў модуль Дапамогі зараз?"
+
+#, c-format
+#~ msgid "Importing theme %s ..."
+#~ msgstr "Імпарт тэмы %s ..."
+
+#, c-format
+#~ msgid ""
+#~ "The module '%s' is not present. You need to install it or its dependencies "
+#~ "to make the most of this module."
+#~ msgstr ""
+#~ "Модуль '%s' не усталяваны. Вам варта ўсталяваць яго або яго залежнасці, каб "
+#~ "у поўнай меры яго выкарыстоўваць."
+
+#~ msgid "Do you want to activate it now ?"
+#~ msgstr "Актывiраваць яго зараз?"
+
+#, c-format
+#~ msgid "The module '%s' is not activated."
+#~ msgstr "Модуль '%s' не актываваны."
+
+#~ msgid ""
+#~ "This is the simple config panel of Cairo-Dock.\n"
+#~ " After you got familiar with it, and if you want to customise your theme\n"
+#~ ", you can switch to an advanced mode.\n"
+#~ " You can switch from a mode to another at any time."
+#~ msgstr ""
+#~ "Гэта даступны рэжым панэлі настроек Cairo-Dock.\n"
+#~ " Пасля знаёмства з ім і каб змяніць тэму,\n"
+#~ "вам варта пераключыцца ў пашыраны рэжым.\n"
+#~ "У любы момант вы можаце змяніць рэжым панэлі настроек."
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' plug-in is not active.\n"
+#~ "Be sure to activate it to enjoy these features."
+#~ msgstr ""
+#~ "Плагін '%s' не актыўны.\n"
+#~ "Актывуе яго, каб выкарыстоўваць яго магчымасці."
+
+#~ msgid "Highlight words"
+#~ msgstr "Падсвятляць слова"
+
+#~ msgid "Activate this module"
+#~ msgstr "Актываваць гэты модуль"
+
+#~ msgid ""
+#~ "Do you like your dock to be always visible,\n"
+#~ " or on the contrary unobstrusive ?\n"
+#~ "Configure the way you access to your docks and sub-docks !"
+#~ msgstr ""
+#~ "Вы хочаце каб ваша панэль была заўсёды на ўвазе\n"
+#~ " ці наадварот, схаваная ад вачэй?\n"
+#~ "Наладзьце тут выгляд адлюстравання вашай панэлі і суб-панэляў!"
+
+#~ msgid "Configuration of Cairo-Dock"
+#~ msgstr "Настройка Cairo-Dock"
+
+#~ msgid "The applets can be set on your desktop as widgets."
+#~ msgstr "Аплеты могуць размяшчацца на вашым працоўным стале, як віджеты."
+
+#~ msgid "Set a background to your dock."
+#~ msgstr "Выберыце задні фон для Вашай панэлі."
+
+#~ msgid "Indicators are extra indications on your icons."
+#~ msgstr "Індыкатары адлюстроўваюць дадатковую інфармацыю на значках."
+
+#~ msgid ""
+#~ "All about icons :\n"
+#~ " size, reflection, icon theme, ..."
+#~ msgstr ""
+#~ "Усё аб значках:\n"
+#~ " памер, адлюстраванне, тэма значкоў, ..."
+
+#~ msgid "Define the appearance of the dock when it's hidden."
+#~ msgstr "Як будзе выглядаць панэль калі будзе схавана."
+
+#~ msgid "It provides many animations to your icons."
+#~ msgstr "Прапануе розныя анімацыі для значкоў."
+
+#~ msgid "Configure the look of the dialog bubbles."
+#~ msgstr "Наладзьце знешні выгляд воблачкаў напамін."
+
+#~ msgid "Hidden Dock"
+#~ msgstr "Схаваная панэль"
+
+#~ msgid ""
+#~ "It provides different window decorators. Activate it first if you want to "
+#~ "select a different decorator for your dialogs."
+#~ msgstr ""
+#~ "Дае розныя афармлення для вокнаў. Актывіруце яго, каб змяняць афармлення "
+#~ "вокнаў."
+
+#~ msgid "Display and interact with the currently open windows."
+#~ msgstr "Адлюстраванне і ўзаемадзеянне з цяперашнімі адкрытымі вокнамі."
+
+#~ msgid ""
+#~ "It provides different views to Cairo-Dock. Activate it first if you want to "
+#~ "select a different view for your docks."
+#~ msgstr ""
+#~ "Прапаноўвае розныя віды Cairo-Dock. Актывіруце, каб выбраць іншы від панэлі."
+
+#~ msgid "Define the style of the icons' labels and quick-info."
+#~ msgstr "Выберыце знешні выгляд подпісаў і інфа-паведамленняў."
+
+#~ msgid "All the parameters you will never want to tweak."
+#~ msgstr "Не змяняйце гэтыя параметры без асаблівай патрэбы."
+
+#~ msgid "unlock dock"
+#~ msgstr "Разблакаваць панэль"
+
+#~ msgid "Set up this dock"
+#~ msgstr "Наладзіць гэтую панэль"
+
+#~ msgid "lock icons"
+#~ msgstr "Заблакаваць значкі"
+
+#~ msgid "unlock icons"
+#~ msgstr "разблакаваць значкі"
+
+#~ msgid "Configure the behaviour, appearance, and applets."
+#~ msgstr "Наладзіць паводзіны, знешні выгляд і аплеты."
+
+#~ msgid "Set up the position of this main dock."
+#~ msgstr "Задайце месцазнаходжанне асноўны панэлі."
+
+#~ msgid ""
+#~ "Choose amongst many themes on the server, and save your current theme."
+#~ msgstr "Выберыце сярод многіх тым на сэрвэры і захавайце вашу ўласную."
+
+#~ msgid ""
+#~ "There is no problem, there is only solution (and a lot of useful hints !)."
+#~ msgstr "Няма праблем, адны рашэнні (і мноства карысных саветаў!)"
+
+#~ msgid "It will hide the dock until you enter inside with the mouse."
+#~ msgstr "Гэта схавае панэль, пакуль вы не навядзе на яе мышшу."
+
+#, c-format
+#~ msgid "You're about removing this icon (%s) from the dock. Sure ?"
+#~ msgstr "Вы зьбіраецеся выдаліць значок (%s) з панэлі. Вы ўпэўнены?"
+
+#~ msgid "lock dock"
+#~ msgstr "Заблакаваць панэль"
+
+#~ msgid ""
+#~ "Do you want to re-dispatch the icons contained inside this container into "
+#~ "the dock ?\n"
+#~ " (otherwise they will be destroyed)"
+#~ msgstr ""
+#~ "Перанесьці змяшчаючыеся тут значкі на панэль?\n"
+#~ " (у адваротным выпадку яны будуць выдаленыя)"
+
+#, c-format
+#~ msgid ""
+#~ "Attention : couldn't rename %s.\n"
+#~ "Check that you have writing rights,\n"
+#~ " and that the new name does not already exist."
+#~ msgstr ""
+#~ "Увага: не ўдалося перайменаваць %s.\n"
+#~ "Пераканайцеся, што вы маеце права на запіс,\n"
+#~ " і новае імя ўжо не прысутнічае на панэлі."
+
+#~ msgid "Rename to :"
+#~ msgstr "Перайменаваць у:"
+
+#, c-format
+#~ msgid ""
+#~ "You're about deleting this file\n"
+#~ "  (%s)\n"
+#~ "from your hard-disk. Sure ?"
+#~ msgstr ""
+#~ "Вы зьбіраецеся выдаліць файл\n"
+#~ "  (%s)\n"
+#~ "з жорсткага дыска. Вы ўпэўнены?"
+
+#~ msgid ""
+#~ "Attention : couldn't delete this file.\n"
+#~ "Check that you have writing rights on it."
+#~ msgstr ""
+#~ "Увага: не ўдалося выдаліць гэты файл.\n"
+#~ "Пераканайцеся, што вы маеце права на запіс."
+
+#~ msgid "Undefined"
+#~ msgstr "Не вызначана"
+
+#, c-format
+#~ msgid "You're about removing this applet (%s) from the dock. Sure ?"
+#~ msgstr "Вы зьбіраецеся выдаліць аплет (%s) з панэлі. Вы ўпэўнены?"
+
+#~ msgid ""
+#~ "Sorry, couldn't find the corresponding description file.\n"
+#~ "Consider drag and dropping the launcher from the Applications Menu."
+#~ msgstr ""
+#~ "Не атрымалася знайсці адпаведны файл з апісаннем.\n"
+#~ "Паспрабуйце перацягнуць і палажыць запушчык з Галоўнага Меню."
+
+#~ msgid "This icon doesn't have a desktop file."
+#~ msgstr "Гэты значок не мае значка працоўнага стала."
+
+#~ msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
+#~ msgstr "Праблема? Прапанова? Хочаце з намі паразмаўляць? З задавальненнем!"
+
+#~ msgid "Community's site"
+#~ msgstr "Сайт супольнасці"
+
+#, c-format
+#~ msgid "Set position for the dock '%s'"
+#~ msgstr "Задаць месцазнаходжанне для панэлі '%s'"
+
+#~ msgid "Quit Cairo-Dock ?"
+#~ msgstr "Выйсці з Cairo-Dock?"
+
+#~ msgid "Find out the latest version of Cairo-Dock here !."
+#~ msgstr "Высветліце тут, якая апошняя версія Cairo-Dock даступная!"
+
+#~ msgid "Development's site"
+#~ msgstr "Сайт распрацоўшчыкаў"
+
+#~ msgid "Mount"
+#~ msgstr "Далучыць"
+
+#~ msgid "Add a separator"
+#~ msgstr "Дадаць падзельнік"
+
+#~ msgid "Rename this file"
+#~ msgstr "Перайменаваць гэты файл"
+
+#~ msgid "Eject"
+#~ msgstr "Выняць"
+
+#~ msgid "Unmount"
+#~ msgstr "Адлучыць"
+
+#~ msgid "Add a sub-dock"
+#~ msgstr "Дадаць суб-панэль"
+
+#~ msgid "Delete this file"
+#~ msgstr "Выдаліць гэты файл"
+
+#~ msgid "Add a custom launcher"
+#~ msgstr "Дадаць свой значок"
+
+#~ msgid ""
+#~ "Usually you would drag a launcher from the menu and drop it into the dock."
+#~ msgstr "Дастаткова проста перацягнуць значок з меню прама на панэль."
+
+#~ msgid "A new main dock"
+#~ msgstr "Новая асноўная панэль"
+
+#~ msgid ""
+#~ "You can remove a launcher by dragging it with the mouse out of the dock."
+#~ msgstr "Вы можаце выдаліць любы значок проста перацягнуў яго за межы панэлі."
+
+#~ msgid "Properties"
+#~ msgstr "Ўласцівасці"
+
+#~ msgid "Unmaximize"
+#~ msgstr "Аднавіць ранейшы памер"
+
+#~ msgid "Maximize"
+#~ msgstr "Разгарнуць на ўвесь экран"
+
+#~ msgid "Return to dock"
+#~ msgstr "Вярнуць на панэль"
+
+#~ msgid "Minimize all"
+#~ msgstr "Згарнуць усе"
+
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgstr "ўсталюйце паводзіны ў Compiz на: (імя = cairo-dock & тып = utility)"
+
+#~ msgid "default"
+#~ msgstr "па змоўчванні"
+
+#~ msgid ""
+#~ "A useful FAQ that contains also a lot of hints.\n"
+#~ "Let the mouse over a sentence to make the hint dialog popups."
+#~ msgstr ""
+#~ "Карысны зборнік чаво, з мноствам саветаў.\n"
+#~ "Правядзіце мышшу над прапановамі, каб убачыць падказку."
+
+#~ msgid "Couldn't import the theme."
+#~ msgstr "Не ўдалося імпартаваць тэму."
+
+#~ msgid "The theme couldn't be saved"
+#~ msgstr "Тэма не можа быць захавана"
+
+#~ msgid "The theme has been deleted"
+#~ msgstr "Тэма была выдалена"
+
+#, c-format
+#~ msgid "Are you sure you want to overwrite theme %s ?"
+#~ msgstr "Вы ўпэўненыя, што жадаеце перазапісаных тэму %s ?"
+
+#, c-format
+#~ msgid "Are you sure you want to delete theme %s ?"
+#~ msgstr "Вы ўпэўненыя, што жадаеце выдаліць тэму %s ?"
+
+#~ msgid "The theme has been saved"
+#~ msgstr "Тэма была захавана"
+
+#~ msgid ""
+#~ "You made some modifications in the current theme.\n"
+#~ "You will loose them if you don't save before choosing a new theme. Continue "
+#~ "anyway ?"
+#~ msgstr ""
+#~ "У гэтай тэме былі зроблены некаторыя змены.\n"
+#~ "Яны будуць згублены, калі перад выбарам новай тэмы іх не захаваць.\n"
+#~ "У любым выпадку працягваць?"
+
+#~ msgid "Are you sure you want to delete these themes ?"
+#~ msgstr "Вы ўпэўненыя, што жадаеце выдаліць гэтыя тэмы?"
+
+#, c-format
+#~ msgid ""
+#~ "couldn't get distant file %s/%s, maybe the server is down.\n"
+#~ "Please retry later or contact us at glx-dock.org."
+#~ msgstr ""
+#~ "не ўдалося атрымаць файл %s/%s, магчыма сервер не працуе.\n"
+#~ "Паспрабуйце пазьней ці зьвяжыцеся з намі на glx-dock.org."
+
+#~ msgid "The theme couldn't be deleted"
+#~ msgstr "Тэма не можа быць выдалена"
+
+#~ msgid "The themes have been deleted"
+#~ msgstr "Тэмы былі выдалены"
+
+#~ msgid "Do you want to keep this setting ?"
+#~ msgstr "Захаваць наладкі?"
+
+#~ msgid ""
+#~ "To remove the black rectangle around the dock, you need to activate a "
+#~ "composite manager.\n"
+#~ "For instance, it can be done by activating the desktop effects, launching "
+#~ "Compiz, or activating the composition in Metacity.\n"
+#~ "If your machine can't support composition, Cairo-Dock can emulate it; this "
+#~ "option is in the 'System' module of the configuration, at the bottom of the "
+#~ "page."
+#~ msgstr ""
+#~ "Каб пазбавіцца ад чорнага прамавугольніка вакол панэлі, вам варта актываваць "
+#~ "кампазітны менеджэр.\n"
+#~ "Для гэтага вы можаце задзейнічаць эфекты працоўнага стала, запусціўшы Compiz "
+#~ "ці ж ўключыць Кампазітныя ў Metacity.\n"
+#~ "Калі ваш кампутар не падтрымлівае Кампазітныя, то Cairo-Dock можа "
+#~ "симулировать яе; гэтая опцыя знаходзіцца ў модулі канфігурацыі 'Сістэма', у "
+#~ "самым версе акна."
+
+#~ msgid ""
+#~ "To remove the black rectangle around the dock, you need to activate a "
+#~ "composite manager.\n"
+#~ "For instance, it can be done by activating the desktop effects, launching "
+#~ "Compiz, or activating the composition in Metacity.\n"
+#~ "I can do this lattest operation for you, do you want to proceed ?"
+#~ msgstr ""
+#~ "Каб пазбавіцца ад чорнага прамавугольніка вакол панэлі, вам варта актываваць "
+#~ "кампазітны менеджэр.\n"
+#~ "Для гэтага вы можаце задзейнічаць эфекты працоўнага стала, запусціўшы Compiz "
+#~ "ці ж ўключыць Кампазітнасць ў Metacity.\n"
+#~ "Я магу выканаць апошняе за вас, працягваць?"
+
+#, c-format
+#~ msgid ""
+#~ "The module '%s' may have encountered a problem.\n"
+#~ "It has been restared successfully, but if it happens again, thanks to report "
+#~ "it to us at http://glx-dock.org"
+#~ msgstr ""
+#~ "У модулі '%s' ўзнікла якая-та праблема.\n"
+#~ "Перазагрузка прайшла паспяхова, але калі гэта зноў паўторыцца, то будзем "
+#~ "ўдзячныя за справаздачу пра памылку на http://glx-dock.org"
+
+#~ msgid "The themes couldn't be deleted"
+#~ msgstr "Тэмы не могуць быць выдалены"
+
+#~ msgid "Use OpenGL in Cairo-Dock ?"
+#~ msgstr "Выкарыстаць OpenGL у Cairo-Dock?"
+
+#~ msgid ""
+#~ "Welcome in Cairo-Dock2 !\n"
+#~ "A default and simple theme has been loaded.\n"
+#~ "You can either familiarize yourself with the dock or choose another theme "
+#~ "with right-click -> Cairo-Dock -> Manage themes.\n"
+#~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
+#~ "If you have any question/request/remark, please pay us a visit at http://glx-"
+#~ "dock.org.\n"
+#~ "Hope you will enjoy this soft !\n"
+#~ "  (you can now click on this dialog to close it)"
+#~ msgstr ""
+#~ "Сардэчна запрашаем у Cairo-Dock 2!\n"
+#~ "Зараз загружана стандартная тэма.\n"
+#~ "Вы зможаце наладзіць уласную або выбраць адну з гатовых праз Правы націск -> "
+#~ "Cairo-Dock -> Кіраванне тэмамі.\n"
+#~ "Карысную дапамогу вы зможаце знайсці ў Правы націск -> Cairo-Dock -> "
+#~ "Даведка.\n"
+#~ "Па любых пытаннях/прапановах/выпраўленнях звяртайцеся на http://cairo-"
+#~ "dock.org.\n"
+#~ "Спадзяемся вам спадабацца наша праграма!\n"
+#~ "  (цяпер можаце націснуць па гэтым паведамлення, каб закрыць яго)"
+
+#~ msgid ""
+#~ "No plug-in were found.\n"
+#~ "To make the most of Cairo-Dock, please consider installing its plug-ins.\n"
+#~ "They provide a lot of interesting functionnalities, animations, etc,\n"
+#~ " that you certainly don't want to miss !"
+#~ msgstr ""
+#~ "Плагіны не знойдзены.\n"
+#~ "Для эфектыўнай работы Cairo-Dock варта ўсталяваць плягіны.\n"
+#~ "Яны ўключаюць у сябе мноства цікавых функцый, анімацыі і ўсяго астатняга,\n"
+#~ " чаго б вы дакладна не хацелі прапусціць!"
+
+#~ msgid "Choose which screen border the dock will placed on :"
+#~ msgstr "З якога боку экрана размясціць панэль:"
+
+#~ msgid ""
+#~ "The icons will scroll according to the chosen placement type. Of course the "
+#~ "dock can be placed anywhere on the screen, here we specify regarding to what."
+#~ msgstr ""
+#~ "Значкі будуць пракручвалася адносна абранага месцазнаходжання панэлі. Бо "
+#~ "панэль можа размяшчацца ў любым месцы экрана і тут мы вызначаем дзе менавіта."
+
+#~ msgid "Visibility :"
+#~ msgstr "Бачнасць:"
+
+#~ msgid "Visibility of the sub-docks"
+#~ msgstr "Бачнасць суб-панэляў"
+
+#~ msgid "Keep the dock below windows"
+#~ msgstr "Трымаць ззаду вокнаў"
+
+#~ msgid "Prevent windows from overlapping the dock"
+#~ msgstr "Не дапускаць перакрыцця панэлі іншымі вокнамі"
+
+#~ msgid "Automatically hide when a window is maximized"
+#~ msgstr "Аўта-схванне пры разгортванні акна на ўвесь экран"
+
+#~ msgid "Automatically hide the dock"
+#~ msgstr "Аўта-схванне"
+
+#~ msgid ""
+#~ "Prevent windows from overlapping the dock : reserve space at the edge of the "
+#~ "screen for the dock.\n"
+#~ "Auto-hide : the dock will automatically hide itself outside of the scren "
+#~ "when the mouse leaves it. Instead, it will show a zone where placing the "
+#~ "mouse will trigger the dock and make it re-appear.\n"
+#~ "Keep the dock below windows : the dock will pop-up on the foreground when "
+#~ "you place the mouse on its screen border.\n"
+#~ "Pop-up on shortcut : When you press the shortcut, the dock will pop-up at "
+#~ "the position of your mouse. The rest of the time, it stays invisible, thus "
+#~ "acting like a menu."
+#~ msgstr ""
+#~ "Не дапускаць перакрыцця панэлі іншымі вокнамі: зарэзерваваць месца пад "
+#~ "панэль на мяжы экрана. \n"
+#~ "Аўто-ўцёкі: Панэль будзе аўтаматычна хавацца, пакідаючы толькі зону "
+#~ "рэагавання. Калі змясціць курсор у гэтую зону, то панэль адразу ж з'явіцца. "
+#~ "\n"
+#~ "Трымаць ззаду вокнаў: Панэль будзе всплывает з задняга фону, калі змясціць "
+#~ "курсор на яе мяжу. \n"
+#~ "Усплывае па клавіятурным скарачэнні: Пры націску на пэўных клявішаў, панэль "
+#~ "з'явіцца ў пазіцыі курсора мышы. Астатні час застаючыся нябачнай. Гэты рэжым "
+#~ "падобны з дзеяннем сістэмнага меню."
+
+#~ msgid "Keyboard shortcut to pop-up the dock :"
+#~ msgstr "Клавіятурны скарачэнне:"
+
+#~ msgid "Behaviour of the Taskbar :"
+#~ msgstr "Паводзіны панэлі задач:"
+
+#~ msgid "Windows7"
+#~ msgstr "Windows7"
+
+#~ msgid ""
+#~ "None     : Don't show opened windows in the dock.\n"
+#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
+#~ "they are minimized.\n"
+#~ "Windows7 : Mix applications with its launcher, show all others windows and "
+#~ "group windows togather in sub-dock.\n"
+#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
+#~ "that are on the current desktop."
+#~ msgstr ""
+#~ "None: Не паказваць запушчаныя праграмы ў панэлі.\n"
+#~ "MacOSX: Сумясціць праграмы з іх значкамі, паказваць астатнія акна толькі "
+#~ "калі яны мінімізаваныя.\n"
+#~ "Windows7: Сумясціць праграмы з іх значкамі, паказваць усе астатнія акна і "
+#~ "групіраваць падобныя вокны ў суб-панэль.\n"
+#~ "Gnome: Аддзяліць панэль задач ад значкоў запуску і паказваць акна толькі з "
+#~ "бягучага працоўнага стала."
+
+#~ msgid "Animations"
+#~ msgstr "Анімацыя"
+
+#~ msgid "Icons size :"
+#~ msgstr "Памер значкоў:"
+
+#~ msgid ""
+#~ "Configure icons animations on appearing/disappearing (require OpenGL "
+#~ "capacity)."
+#~ msgstr ""
+#~ "Наладзіць анімацыю значкоў пры з'яўленні/зьнікненьні (патрабуецца падтрымка "
+#~ "OpenGL)."
+
+#~ msgid ""
+#~ "Let empty to use the current icons theme of your system. You can enter the "
+#~ "name of a theme that is installed on your system (like 'Gartoon' or "
+#~ "'Human'), or even a path to a folder containing icons."
+#~ msgstr ""
+#~ "Пакіньце пустым, каб выкарыстоўваць сістэмную тэму значкоў. Або вы можаце "
+#~ "ўвесці назву любой тэмы устаноўленай ў вашай сістэме (напрыклад 'Gartoon' ці "
+#~ "'Human'), або нават ўказаць любы каталог са значкамі."
+
+#~ msgid "Configure icons special effects (require OpenGL capacity)."
+#~ msgstr "Наладзіць спецыяльныя эфекты значкоў (патрабуецца падтрымка OpenGL)."
+
+#~ msgid "Configure icons animations."
+#~ msgstr "Наладзіць анімацыю значкоў."
+
+#~ msgid ""
+#~ "This will separate launchers, applis, and applets. Separators will be "
+#~ "automatically inserted then."
+#~ msgstr ""
+#~ "Значкі запуску, праграмы і аплеты будуць аддзеленыя адзін ад аднаго. "
+#~ "Падзельнікі ўставяцца аўтаматычна."
+
+#~ msgid "Separate the different types of icons ?"
+#~ msgstr "Аддзяляць розныя тыпы значкоў?"
+
+#~ msgid "Applets"
+#~ msgstr "Аплеты"
+
+#~ msgid ""
+#~ "So if you check this box, your launchers will be deleted and replaced by the "
+#~ "ones provided in the new theme. Otherwise the current launchers will be "
+#~ "kept, only icons will be replaced."
+#~ msgstr ""
+#~ "Калі вы адзначыце гэты параметр, вашыя значкі запуску будуць заменены на "
+#~ "значкі з прадстаўленай тэмы. У адваротным выпадку, бягучыя значкі запуску "
+#~ "будуць захаваны і толькі іх выявы будуць заменены."
+
+#~ msgid "Use the new theme's launchers ?"
+#~ msgstr "Выкарыстоўваць значкі запуску з новай тэмы?"
+
+#~ msgid ""
+#~ "Otherwise the current behaviour will be kept. It's all about the dock's "
+#~ "position, behaviour parameters such as auto-hide, using taskbar or not, etc."
+#~ msgstr ""
+#~ "У адваротным выпадку сучасныя паводзіны будзе захавана. Да іх адносіцца: "
+#~ "размяшчэнне на панэлі, параметры паводзінаў, такія як аўто-схаванні, "
+#~ "выкарыстанне панэлі задач і г.д."
+
+#~ msgid "Choose one of the available themes :"
+#~ msgstr "Выберыце адну з даступных тэм:"
+
+#~ msgid "Add or remove any applet :"
+#~ msgstr "Дадаць або выдаліць аплет:"
+
+#~ msgid ""
+#~ "Select a line to get a preview and a description of the applet.\n"
+#~ "Click on the left checkbox to (de)activate an applet.\n"
+#~ "Once an applet is active, you can configure it by right clicking on its icon."
+#~ msgstr ""
+#~ "Вылучыце радок з аплетаў, каб атрымаць яго апісанне і прыкладны выгляд.\n"
+#~ "Пастаўце галачку, каб (дэ) актываваць яго.\n"
+#~ "Пасля актывавання аплетаў вы зможаце наладзіць яго націснуўшы правай кнопкай "
+#~ "на яго значкі ў панэлі."
+
+#~ msgid "Distance to the screen's edge :"
+#~ msgstr "Дыстанцыя да мяжы экрана:"
+
+#~ msgid ""
+#~ "in pixels. You can also move the dock by holding ALT or CTRL key and left "
+#~ "mouse button."
+#~ msgstr ""
+#~ "у піксэлях. Таксама вы можаце перетаскивать панэль утрымліваючы націснутай "
+#~ "клавішу ALT або CTRL і левай кнопкі мышы."
+
+#~ msgid "Relative alignment :"
+#~ msgstr "Выраўноўваць адносна:"
+
+#~ msgid ""
+#~ "Gap from the absolute position on the screen's edge, in pixels. You can also "
+#~ "move the dock by holding ALT or CTRL key and left mouse button."
+#~ msgstr ""
+#~ "Зрух ад абсалютнай пазіцыі на экране, у піксэлях. Таксама вы можаце "
+#~ "перетаскивать панэль утрымліваючы націснутай клавішу ALT або CTRL і левай "
+#~ "кнопкі мышы."
+
+#~ msgid ""
+#~ "At 0, the dock will place itself regarding the left corner if horizontal and "
+#~ "the top corner if vertical, at 1 regarding the right corner if horizontal "
+#~ "and the bottom corner if vertical, and at 0.5, regarding the middle of the "
+#~ "screen's edge."
+#~ msgstr ""
+#~ "Пры значэнні 0, размяшчэнне гарызантальнай панэлі будзе выравниваться "
+#~ "адносна левага вугла, а вертыкальнай, адносна верхняга; пры значэнні 1, "
+#~ "гарызантальнай - адносна правага і вертыкальнай - адносна ніжняга вугла і "
+#~ "пры значэнні 0.5 размяшчэнне будзе выравниваться адносна сярэдзіны экрана."
+
+#~ msgid "Use the new theme's behaviour ?"
+#~ msgstr "Выкарыстоўваць паводзіны з новай тэмы?"
+
+#~ msgid "Use Xinerama ?"
+#~ msgstr "Выкарыстоўваць Xinerama?"
+
+#~ msgid "Lateral offset :"
+#~ msgstr "Бакавое зрушэнне:"
+
+#~ msgid "Offset to the screen's edge"
+#~ msgstr "Зрушэнне ад мяжы экрана"
+
+#~ msgid "Size of the callback zone (width x height, in pixels) :"
+#~ msgstr "Памер зоны рэагавання (шырыня x вышыня, у піксэлях):"
+
+#~ msgid "Place the mouse into it will make the dock re-appear."
+#~ msgstr "Калі змясціць курсор у гэтую зону, то панэль адразу ж з'явіцца."
+
+#~ msgid "Pop-up only if the mouse hits a screen corner ?"
+#~ msgstr "Всплывае толькі калі курсор задевает край экрана?"
+
+#~ msgid "Extend the dock to always fill the screen ?"
+#~ msgstr "Расцягваць панэль на ўсю шырыню экрана?"
+
+#~ msgid "Automatically hide the dock when a window becomes fullscreen ?"
+#~ msgstr "Хаваць панэль пры разворачивании акна на ўвесь экран?"
+
+#~ msgid "Number of the screen where the dock should be located :"
+#~ msgstr "Нумары экранаў на якіх адлюстроўваць панэль:"
+
+#~ msgid ""
+#~ "This is only usefull if you don't already use the auto-hide, and if your WM "
+#~ "let the dock in front of fullscreen windows (which is rare)."
+#~ msgstr ""
+#~ "Будзе выкарыстана толькі калі вы яшчэ не задзейнічалі рэжым аўта-прыхаваная "
+#~ "і ваш аконны мэнэджэр дазваляе панэлі быць над полноэкранных вокнаў (што "
+#~ "рэдка)."
+
+#~ msgid "Additionnal parameters"
+#~ msgstr "Дадатковыя параметры"
+
+#~ msgid "Close (middle-click)"
+#~ msgstr "Закрыць (сярэдні-клік)"
+
+#~ msgid "Delay before you effectively leave from a sub-dock or to a sub-dock :"
+#~ msgstr "Затрымка перад фактычным выхадам або уваходам у суб-панэлі:"
+
+#~ msgid ""
+#~ "Otherwise they will appear when you linger over the icon pointing on it."
+#~ msgstr ""
+#~ "У адваротным выпадку, яна з'явіцца толькі калі вы затрымаецесь паказальнікам "
+#~ "над значком на некаторы час."
+
+#~ msgid "Click to show sub-docks ?"
+#~ msgstr "Уваходзіць у суб-панэль па пстрычцы?"
+
+#~ msgid "Get more applets !"
+#~ msgstr "Атрымаць больш аплетаў!"
+
+#~ msgid "Group windows of the same application in a sub-dock ?"
+#~ msgstr "Згрупаваць акна адзінай праграмы ў суб-панэль?"
+
+#~ msgid ""
+#~ "This allows to group all the windows of a given application into a unique "
+#~ "sub-dock, and to act on all of the windows at the same time."
+#~ msgstr ""
+#~ "Дазволіць згрупаваць усе вокны пэўнай праграмы ў адной суб-панэлі, што "
+#~ "забяспечыць адначасовае кіраванне гэтымі вокнамі."
+
+#~ msgid "Only show icons whose window is minimized ?"
+#~ msgstr "Паказваць значкі толькі мінімізаваныя вокнаў?"
+
+#~ msgid "Only show applis on current desktop ?"
+#~ msgstr "Паказваць праграмы толькі бягучага працоўнага стала?"
+
+#~ msgid ""
+#~ "Allows launchers to act as applis when their program is running, and "
+#~ "displays an indicator on their icon to signal it. You can launch other "
+#~ "occurences of the program with SHIFT+click."
+#~ msgstr ""
+#~ "Значкі прыкладанняў будуць рэагаваць як самі праграмы, калі іх праграма "
+#~ "запушчана, пры гэтым на значкі з'явіцца Сігнальны індыкатар. Таксама, вы "
+#~ "можаце запусціць іншую копію дадатку з дапамогай камбінацыі SHIFT + пстрычка."
+
+#~ msgid "Mix launchers and applis ?"
+#~ msgstr "Аб'яднаць значкі запуску з іх праграмамі?"
+
+#~ msgid ""
+#~ "Cairo-Dock will then replace your taskbar. It is recommanded to remove any "
+#~ "other taskbar, and to not force the dock's type to normal."
+#~ msgstr ""
+#~ "Cairo-Dock заменіць вашу панэль задач. Рэкамендуецца выдаліць усе астатнія "
+#~ "панэлі задач і не выстаўляць рэжым панэлі ў нармальны."
+
+#~ msgid "Delay before displaying a sub-dock :"
+#~ msgstr "Затрымка з'яўлення суб-панэлі:"
+
+#~ msgid "in ms. Unused if you set up to click to show sub-docks."
+#~ msgstr ""
+#~ "у мсек. Не выкарыстоўвайце, калі задзейнічалі адлюстраванне суб-панэлі па "
+#~ "пстрычцы."
+
+#~ msgid "Show currently opened applications in the dock ?"
+#~ msgstr "Паказваць запушчаныя праграмы ў панэлі?"
+
+#~ msgid "How to draw minimized windows ?"
+#~ msgstr "Як адлюстраваць згорнутыя вокны?"
+
+#~ msgid "Overwrite X icons with launchers' one ?"
+#~ msgstr "Замясціць значкі прыкладанняў?"
+
+#~ msgid "enter the class of the applications, separated by a semi-colon ';'"
+#~ msgstr "увядзіце клас прыкладанняў, падзяляючы іх знакам \";\""
+
+#~ msgid "\t\tExcept the following classes :"
+#~ msgstr "\t\tАкрамя наступных класаў:"
+
+#~ msgid ""
+#~ "If not set, will use the icon provided by X for each appli. If set, the same "
+#~ "icon as the corresponding launcher will be used for each appli."
+#~ msgstr ""
+#~ "Калі не актываванна, то для кожнага прыкладання будзе выкарыстаны значок "
+#~ "прадастаўлены графічнай асяроддзем. У адваротным выпадку, будуць выкарыстаны "
+#~ "значкі саміх прыкладанняў."
+
+#~ msgid "Show the window thumbnail"
+#~ msgstr "Паказаць мініятуру акна"
+
+#~ msgid "Display an indicator even if the icon is not a launcher ?"
+#~ msgstr "Паказваць індыкатар нават калі значок не з'яўляецца значком запуску?"
+
+#~ msgid "Play a short animation of the icon when its window becomes active ?"
+#~ msgstr "Аніміраваныя значок, калі яго акно становіцца актыўным?"
+
+#~ msgid "Maximum number of caracters in application's name :"
+#~ msgstr "Максімальная колькасць знакаў у імя:"
+
+#~ msgid "Transparency of icons whose window is minimized :"
+#~ msgstr "Празрыстасць абразкоў мінімізаваныя вокнаў:"
+
+#~ msgid ""
+#~ "The indicator is drawn on active launchers, but you may want to display it "
+#~ "on applis too."
+#~ msgstr ""
+#~ "Індыкатар адлюстроўваецца толькі на актыўных значках, але вы можаце "
+#~ "наладзіць паказ і на дадатках."
+
+#~ msgid "opaque"
+#~ msgstr "непразрысты"
+
+#~ msgid "transparent"
+#~ msgstr "празрысты"
+
+#~ msgid "It is the default behaviour of most of taskbars."
+#~ msgstr "Стандартныя паводзіны большасці панэлі задач."
+
+#~ msgid ""
+#~ "Minimize the window when its icon is clicked, if it was already the active "
+#~ "window ?"
+#~ msgstr "Пры націсканні мінімізаваць акно, калі яно ў дадзены момант актыўна?"
+
+#~ msgid "In a Firefox's tabs manner."
+#~ msgstr "На манер паводзінаў укладак Firefox."
+
+#~ msgid "Duration of the dialog :"
+#~ msgstr "Працягласць паведамлення:"
+
+#~ msgid "Force the following applications to demand your attention ?"
+#~ msgstr "Прымусова уведомлять вас аб наступных праграмах?"
+
+#~ msgid "Signal the applications demanding your attention with an animation ?"
+#~ msgstr "Калі патрабуецца ваша ўвага, апавяшчаць з дапамогай анімацыі?"
+
+#~ msgid ""
+#~ "It will notify you even if, for instance, you are watching a movie in "
+#~ "fullscreen or you are on another desktop.\n"
+#~ msgstr ""
+#~ "Вы атрымаеце апавяшчэнне, нават калі вы глядзіце фільм на поўным экране або "
+#~ "знаходзіцеся на іншым працоўным стале.\n"
+
+#~ msgid ""
+#~ "The dock will unfold when it hides/shows itself. No effect if auto-hide is "
+#~ "not activated or unfold acceleration is nul."
+#~ msgstr ""
+#~ "Пры з'яўленні або схавацца панэль будзе раскрывацца. Не спрацуе, калі рэжым "
+#~ "аўта-схавання не задзейнічаны або хуткасць раскрыцця ўстаноўлена ў нуль."
+
+#~ msgid "Animate the dock when auto-hiding ?"
+#~ msgstr "Аніміраваць панэль пры аўта-схаванях?"
+
+#~ msgid "Middle click on an icon closes its relative application ?"
+#~ msgstr "Сярэдняя пстрычка закрывае звязанае дадатак?"
+
+#~ msgid ""
+#~ "Signal the applications demanding your attention with a dialog bubble ?"
+#~ msgstr "Калі патрабуецца ваша ўвага, апавяшчаць аблачынка напамін?"
+
+#~ msgid ""
+#~ "This is the animation when the dock goes below a window; The greater, the "
+#~ "slower it will be"
+#~ msgstr ""
+#~ "Анімацыя панэлі пры пераходзе яе пад акно; Чым вышэй значэнне, тым плаўнее "
+#~ "анімацыя"
+
+#~ msgid "Number of steps in the fade out animation :"
+#~ msgstr "Колькасць крокаў у паступовым знікненні анімацыі:"
+
+#~ msgid "Number of steps in the zoom animation (grow up/shrink down) :"
+#~ msgstr "Колькасць крокаў анімацыі набліжэння (ўзрастаць / звужаецца):"
+
+#~ msgid "Unfolding animation duration :"
+#~ msgstr "Хуткасць анімацыі разгортвання:"
+
+#~ msgid "Number of steps in the auto-hide animation (move up/move down) :"
+#~ msgstr "Колькасць крокаў анімацыі аўта-схавання (рухаў уверх / ўніз):"
+
+#~ msgid "Animate sub-docks when they appear ?"
+#~ msgstr "Аніміраваць суб-панэль пры з'яўленні?"
+
+#~ msgid ""
+#~ "The icons will appear folded on themselves, then will unfold untill they "
+#~ "fill the whole dock. The smaller, the faster it will be."
+#~ msgstr ""
+#~ "Значкі з'явяцца згорнутыя ў сябе, затым яны пачнуць разгортвацца да тых пор, "
+#~ "пакуль не запоўняць усю панэль. Чым менш значэнне, тым хутчэй разгорнуцца."
+
+#~ msgid ""
+#~ "the bigger, the more the labels next to the pointed icon will be transparent."
+#~ msgstr ""
+#~ "Чым больш значэнне, тым празрыстыя будуць подпісы побач з навядзеннем "
+#~ "значком."
+
+#~ msgid "in Hz. This is to adjust regarding your CPU power."
+#~ msgstr "у Гц. Залежыць ад магутнасці вашага працэсара."
+
+#~ msgid "Refresh frequency when mouving cursor into the dock :"
+#~ msgstr "Частата абнаўлення пры руху курсора па панэлі:"
+
+#~ msgid "Label readability"
+#~ msgstr "Чытальнасць подпісаў"
+
+#~ msgid "Animation frequency for the cairo backend :"
+#~ msgstr "Частата анімацыі для бэкэнда cairo:"
+
+#~ msgid "Should the labels be always horizontal, even when dock is vertical ?"
+#~ msgstr ""
+#~ "Заўсёды паказваць гарызантальныя подпісы, нават калі панэль вертыкальна?"
+
+#~ msgid ""
+#~ "The transparency gradation pattern will then be re-calculated in real time. "
+#~ "May needs more CPU power."
+#~ msgstr ""
+#~ "Шаблон градацыі празрыстасці будзе пралічвацца ў рэальным часе. Можа "
+#~ "спатрэбіцца больш рэсурсаў працэсара."
+
+#~ msgid "Refresh frequency"
+#~ msgstr "Частата абнаўлення"
+
+#~ msgid "Animation frequency for the opengl backend :"
+#~ msgstr "Частата анімацыі для бэкэнда OpenGL:"
+
+#~ msgid "Reflections should be calculated in real-time ?"
+#~ msgstr "Апрацоўваць адлюстравання ў рэальным часе?"
+
+#~ msgid "Show hidden files ?"
+#~ msgstr "Паказваць скрытыя файлы?"
+
+#~ msgid "Configure labels appearence."
+#~ msgstr "Знешні выгляд подпісаў."
+
+#~ msgid ""
+#~ "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
+#~ "etc and have a black background around your dock. For esthetic reason, the "
+#~ "dock will be kept under other windows."
+#~ msgstr ""
+#~ "Выкарыстоўвайце толькі калі не запушчаны кампазітны менеджэр як Compiz, "
+#~ "xcompmgr, і г.д. ці ў вас чорны фон вакол панэлі. Па эстэтычным меркаваннях, "
+#~ "панэль будзе знаходзіцца ззаду вокнаў."
+
+#~ msgid "Connection to the themes server"
+#~ msgstr "Падключэнне да сервера з тэмамі"
+
+#~ msgid "Make the config panel transparent ?"
+#~ msgstr "Зрабіць панэль настроек празрыстай?"
+
+#~ msgid "Maximum time to download a theme :"
+#~ msgstr "Максімальны час загрузкі тэмы:"
+
+#~ msgid ""
+#~ "Maximum time in seconds that you allow the whole operation to take. Some "
+#~ "themes can take up to a few MB."
+#~ msgstr ""
+#~ "Максімальны час для завяршэння ўсёй загрузкі. Некаторыя тэмы маюць памер у "
+#~ "некалькі МБ."
+
+#~ msgid "Number of retries :"
+#~ msgstr "Колькасць спробаў:"
+
+#~ msgid ""
+#~ "If an error occurs during downloading a theme, it will retry this number of "
+#~ "times before giving up."
+#~ msgstr ""
+#~ "Калі падчас загрузкі ўзнікае памылка, то будзе прадпрынята пазначаная "
+#~ "колькасць спробаў перападключэняў."
+
+#~ msgid "Emulates composition with fake transparency ?"
+#~ msgstr "Эмуляваць кампазітнасць з падробленай празрыстасцю?"
+
+#~ msgid "Connection timeout to the themes server :"
+#~ msgstr "Час падключэння да сервера:"
+
+#~ msgid "Use a color gradation."
+#~ msgstr "Выкарыстоўваць каляровы градыент."
+
+#~ msgid "Color gradation"
+#~ msgstr "Градыентам"
+
+#~ msgid ""
+#~ "Any format allowed; if empty, the color gradation will be used as a fallback."
+#~ msgstr ""
+#~ "Можна выкарыстоўваць любы фармат; калі пакінуць пустым, то будзе выкарыстаны "
+#~ "градыент."
+
+#~ msgid "Fill the background with :"
+#~ msgstr "Запоўніць задні фон:"
+
+#~ msgid "Bright color :"
+#~ msgstr "Светлы колер:"
+
+#~ msgid "Repeat image as a pattern to fill background ?"
+#~ msgstr "Паўтараць адлюстраванні ў выглядзе шаблону?"
+
+#~ msgid "Image's filename to use as a background :"
+#~ msgstr "Выява для фону:"
+
+#~ msgid "Dark color :"
+#~ msgstr "Цёмны колер:"
+
+#~ msgid "Extern Frame"
+#~ msgstr "Знешняя рамка"
+
+#~ msgid "Linewidth of the extern line :"
+#~ msgstr "Шырыня лініі знешняй рамкі:"
+
+#~ msgid "Percentage of the bright color :"
+#~ msgstr "Працэнт светлага колеру:"
+
+#~ msgid "Repeat the gradation this number of times :"
+#~ msgstr "Паўтараць градыент наступныя колькасці разоў:"
+
+#~ msgid ""
+#~ "This is what you see when the dock hides itselfs. Any format is allowed. Let "
+#~ "this field empty to have an invisible zone."
+#~ msgstr ""
+#~ "Можна выкарыстоўваць любы фармат; пакіньце не запоўненай, каб зона "
+#~ "рэагавання была празрыстая. Зона рэагавання - гэта тое, што вы бачыце калі "
+#~ "панэль схаваная."
+
+#~ msgid "Filename of an image to put on :"
+#~ msgstr "Выява для зоны:"
+
+#~ msgid "Transparency of the image :"
+#~ msgstr "Празрыстасць выявы:"
+
+#~ msgid "Hidden dock"
+#~ msgstr "Схаваная панэль"
+
+#~ msgid ""
+#~ "Use it when the image is an arrow pointing to the center of the screen for "
+#~ "exemple."
+#~ msgstr ""
+#~ "Выкарыстоўвайце, напрыклад, калі ў вас ёсць малюнак у выглядзе стрэлкі "
+#~ "паказваюцца ў цэнтр панэлі."
+
+#~ msgid "Rotate the image when the dock is on top/left/right ?"
+#~ msgstr "Круціць выяву калі панэль знаходзіцца зьверху/злева/справа?"
+
+#~ msgid "Configure the dock's appearence when hidden."
+#~ msgstr "Наладзіць выгляд панэлі ў схаванай стане."
+
+#~ msgid "Are the bottom left and right corners rounded ?"
+#~ msgstr "Закруглять левы і правы ніжнія куты?"
+
+#~ msgid "Color of the extern line :"
+#~ msgstr "Колер знешніх ліній:"
+
+#~ msgid "Follow the mouse"
+#~ msgstr "Рухацца за курсорам"
+
+#~ msgid "Speed :"
+#~ msgstr "Хуткасць:"
+
+#~ msgid "Link with the mouse"
+#~ msgstr "Аб'яднаць з курсорам"
+
+#~ msgid "Move the background image along with the cursor ?"
+#~ msgstr "Рухаць выяву фона ўслед за курсорам?"
+
+#~ msgid "Background movement"
+#~ msgstr "Рух фону"
+
+#~ msgid "Configure the auto-hide behaviour."
+#~ msgstr "Наладзіць паводзіны аўта-схавання."
+
+#~ msgid "Show labels :"
+#~ msgstr "Паказваць подпісы:"
+
+#~ msgid ""
+#~ "The smaller, the slower the decorations will move along with the cursor."
+#~ msgstr ""
+#~ "Чым менш значэнне, тым менш будзе анімацыі пры перамяшчэнні курсора ўздоўж "
+#~ "значкоў. Пры значэнні 0, значкі будуць статычныя."
+
+#~ msgid "Color"
+#~ msgstr "Колер"
+
+#~ msgid ""
+#~ "It's the second color of the gradation. Set it to the same value as the "
+#~ "first if you just don't want to have a gradation."
+#~ msgstr ""
+#~ "Гэта канчатковы колер градацыі. Усталюйце яго такім жа, як і пачатковы, каб "
+#~ "не выкарыстоўваць градацыю."
+
+#~ msgid "Draw the outline of the text ?"
+#~ msgstr "Абрысаваць тэкст?"
+
+#~ msgid "Use a custom font for labels ?"
+#~ msgstr "Выкарыстаць іншы шрыфт для подпісаў?"
+
+#~ msgid "Otherwise the default system one will be used."
+#~ msgstr "У адваротным выпадку будзе выкарыстаны сістэмны шрыфт."
+
+#~ msgid "Pattern should be vertical ?"
+#~ msgstr "Шаблон павінен быць вертыкальным?"
+
+#~ msgid ""
+#~ "If you set it to fully transparent, there will be no background for the "
+#~ "text, but the margin around the text will still be effective."
+#~ msgstr ""
+#~ "Калі ўсталяваць поўную празрыстасць, то фону у подпісаў не стане, але "
+#~ "акантоўка вакол тэксту ўсё яшчэ будзе бачная."
+
+#~ msgid "Color of the label's background :"
+#~ msgstr "Колер фону подпісаў:"
+
+#~ msgid "If false, only the quick-info will have this background color."
+#~ msgstr ""
+#~ "Калі не задзейнічана, то колер фону будзе выкарыстаны толькі ў падказках."
+
+#~ msgid "Use background color for labels ?"
+#~ msgstr "Выкарыстоўваць колер фону для подпісаў?"
+
+#~ msgid ""
+#~ "Any format allowed; let this field empty if you don't want to use an image "
+#~ "as background."
+#~ msgstr ""
+#~ "Можаце выкарыстоўваць любы фармат; пакіньце поле пустым, каб не "
+#~ "выкарыстоўваць фонавае выява."
+
+#~ msgid "Reflecting power of the plane :"
+#~ msgstr "Сіла адлюстравання на плоскасць:"
+
+#~ msgid ""
+#~ "It is its albedo; at 1 the icons reflect to the maximum, at 0 reflects are "
+#~ "not used."
+#~ msgstr ""
+#~ "Каэфіцыент адлюстравання; пры значэнні 1, значкі будуць поўнасцю "
+#~ "адлюстроўвацца на плоскасць, пры значэнні 0, адлюстраванне не будзе "
+#~ "выкарыстоўвацца."
+
+#~ msgid "Image's filename to use as a background for icons :"
+#~ msgstr "Выява для фону значкоў:"
+
+#~ msgid "Width of the interval in which the zoom will be effective :"
+#~ msgstr "Радыус дзеяння эфекту набліжэння:"
+
+#~ msgid ""
+#~ "in pixels. Outside of this interval (centered on the mouse), there is no "
+#~ "zoom."
+#~ msgstr ""
+#~ "у піксэлях. Эфекту набліжэння не будзе звыш гэтага радыусу (цэнтр па курсор "
+#~ "мышы)."
+
+#~ msgid "set to 1 if you don't want the icons to zoom when you hover them."
+#~ msgstr ""
+#~ "Усталюйце значэнне 1, калі не хочаце каб абразкі павялічваліся пры "
+#~ "навядзенні на іх."
+
+#~ msgid "Height of the reflect :"
+#~ msgstr "Вышыня адлюстравання:"
+
+#~ msgid "How to draw the separators :"
+#~ msgstr "Як намаляваць падзельнікі:"
+
+#~ msgid "Appli's size at rest (width x height) :"
+#~ msgstr "Памер значкоў прыкладанняў у стане спакою (шырыня х вышыня):"
+
+#~ msgid ""
+#~ "If you separate a type of icons, the icons of this type will be placed "
+#~ "togather, separated from the others by a separator.\n"
+#~ "If you don't separate the icons, you can place them wherever you want, and "
+#~ "insert separators manually. Applications will then be placed next to their "
+#~ "launcher if they have, or after the last launcher."
+#~ msgstr ""
+#~ "Калі вы аддзяліце якой-та тып значкоў, то ўсе яны будуць змешчаныя асобна ад "
+#~ "астатніх за падзяліўшы.\n"
+#~ "Калі не аддзяляць, то вы зможаце змясціць іх у любым месцы панэлі і ўставіць "
+#~ "падзельнік ўручную. Дадатку ў такім выпадку, будуць размяшчацца побач з іх "
+#~ "значкамі запуску, калі такія маюцца, альбо пасля апошняга значка."
+
+#~ msgid "Force separator's image size to stay constant ?"
+#~ msgstr "Прымусова астаўляць памер выявы падзельніка пастаянным?"
+
+#~ msgid "Color of flat separators :"
+#~ msgstr "Колер плоскага падзельнік"
+
+#~ msgid ""
+#~ "Make the separator's image revolve when dock is on top/on the left/on the "
+#~ "right ?"
+#~ msgstr "Круціць падзельнік, калі панэль знаходзіцца з'верху/злева/справа?"
+
+#~ msgid "Background color of the bubble :"
+#~ msgstr "Фонавы колер воблачка:"
+
+#~ msgid ""
+#~ "You can specify a ratio for the size of the sub-docks' icons, regarding the "
+#~ "main docks' icons size"
+#~ msgstr ""
+#~ "Вы можаце пазначыць адносіны памераў значкоў на суб-панэлях адносна памераў "
+#~ "значкоў на галоўнай панэлі"
+
+#~ msgid "Color of the string (red, blue, green, alpha) :"
+#~ msgstr "Колер радка (чырвоны, блакітны, зялёны, альфа):"
+
+#~ msgid "Use a custom font for the text ?"
+#~ msgstr "Выкарыстаць іншы шрыфт для тэксту?"
+
+#~ msgid "Text font :"
+#~ msgstr "Шрыфт:"
+
+#~ msgid "Shape of the bubble :"
+#~ msgstr "Форма воблачка:"
+
+#~ msgid "Text color :"
+#~ msgstr "Колер тексту:"
+
+#~ msgid ""
+#~ "It's an image that will be displayed below the drawings, like a frame for "
+#~ "exemple. Let empty to not use any."
+#~ msgstr ""
+#~ "Выява якая паказваецца ззаду малюнка, напрыклад рамка. Пакіньце пустым, каб "
+#~ "не выкарыстоўваць."
+
+#~ msgid "Background tansparency :"
+#~ msgstr "Фонавая празрыстасць:"
+
+#~ msgid ""
+#~ "It's an image that will be displayed above the drawings, like a reflect for "
+#~ "exemple. Let empty to not use any."
+#~ msgstr ""
+#~ "Выява паказаная зверху малюнка, напрыклад адлюстраванне. Пакіньце пустым, "
+#~ "каб не выкарыстоўваць."
+
+#~ msgid "Do you want to mount this device?"
+#~ msgstr "Вы жадаеце падключыць гэтую кропку?"
+
+#, c-format
+#~ msgid "Failed to unmount %s"
+#~ msgstr "не ўдалося адлучыць %s"
+
+#~ msgid "Controller"
+#~ msgstr "Кіраванне"
+
+#~ msgid "Controllers"
+#~ msgstr "Датчыкі"
+
 #~ msgid ""
 #~ "It appears that you've never entered the help module before.\n"
 #~ "If you are having difficulty configuring the dock, or if you want to "
@@ -4382,135 +5600,18 @@ msgstr ""
 #~ "модуль Дапамогі дапаможа вам у гэтым!\n"
 #~ "Хочаце перайсці ў модуль Дапамогі зараз?"
 
-#~ msgid ""
-#~ "To remove the black rectangle around the dock, you will need to activate "
-#~ "a composite manager.\n"
-#~ "For instance, this can be done by activating desktop effects, launching "
-#~ "Compiz, or activating the composition in Metacity.\n"
-#~ "I can perform this last operation for you. Do you want to proceed ?"
-#~ msgstr ""
-#~ "Каб пазбавіцца ад чорнага прамавугольніка вакол панэлі, вам варта "
-#~ "актываваць кампазітны менеджэр.\n"
-#~ "Для гэтага вы можаце задзейнічаць эфекты працоўнага стала, запусціўшы "
-#~ "Compiz ці ж ўключыць Кампазітнасць ў Metacity.\n"
-#~ "Я магу выканаць апошняе за вас, працягваць?"
+#~ msgid "The theme could not be saved"
+#~ msgstr "Тэма не можа быць захавана"
+
+#~ msgid "The theme could not be deleted"
+#~ msgstr "Тэма не можа быць выдалена"
+
+#~ msgid "The themes could not be deleted"
+#~ msgstr "Тэмы не могуць быць выдалены"
 
 #~ msgid ""
-#~ "A useful FAQ which also contains a lot of hints.\n"
-#~ "Roll your mouse over a sentence to make helpful popups appear."
-#~ msgstr ""
-#~ "Карысны зборнік чаво, з мноствам саветаў.\n"
-#~ "Правядзіце мышшу над прапановамі, каб убачыць падказку."
-
-#~ msgid "Yes, like that :-)"
-#~ msgstr "Так, менавіта так :-)"
-
-#~ msgid ""
-#~ "Note : many answers have an extra hint.\n"
-#~ "To popup the hint, simply leave the mouse over the sentence for 1 second, "
-#~ "a tooltip will appear."
-#~ msgstr ""
-#~ "Савет: Многія адказы ўтрымліваюць яшчэ і парады.\n"
-#~ "Каб убачыць савет, проста затрымаеце курсор мышы над прапановай на 1 "
-#~ "секунду."
-
-#~ msgid "How do I re-order my icons?"
-#~ msgstr "Якім чынам пераўпарадкаваць значкі?"
-
-#~ msgid "Simply drag with the mouse, and drop wherever you wish."
-#~ msgstr "Проста захопіце іх мышкай, і перацягнуць куды вам хочацца."
-
-#~ msgid ""
-#~ "How do I position applets and taskbar icons at the beginning of the dock?"
-#~ msgstr "Як мне размясціць аплеты і значкі панэлі задач спачатку панэлі?"
-
-#~ msgid ""
-#~ "Tip: you can also position applets amongst launchers, by ticking the box "
-#~ "below."
-#~ msgstr ""
-#~ "Савет: вы можаце змясціць аплеты сярод значкоў запуску, паставіўшы "
-#~ "галачку ніжэй."
-
-#~ msgid ""
-#~ "In the «icons» module, at the bottom, you can select icon order according "
-#~ "to type (launcher/appli/applet)."
-#~ msgstr ""
-#~ "У модулі \"Значкі\", у самым нізе, вы можаце выбраць парадак размяшчэння "
-#~ "значкоў адносна іх тыпу (значкі запуску, дадаткі, аплеты)."
-
-#~ msgid "Go to the «Icons» module."
-#~ msgstr "Перайсці ў модуль «Значкі»"
-
-#~ msgid ""
-#~ "Tip: you can also edit a launcher's configuration directly and set a path "
-#~ "for an image. If you do not enter a path, but simply the name of an "
-#~ "image, do not give the extension (.svg, .png, etc.), so as to let the "
-#~ "dock choose the best."
-#~ msgstr ""
-#~ "Савет: Вы можаце ўручную паказаць шлях да выявы ў запуску значка "
-#~ "параметрах. Калі вы не пакажыце шлях, а проста ўпішыце імя значка, не "
-#~ "дапісваць яго пашырэнне (. SVG,. PNG, і г.д.), Cairo-Dock сам абярэ "
-#~ "якасны варыянт."
-
-#~ msgid ""
-#~ "In the “Icons” module, you can choose an <b>icon theme</b>. Just choose a "
-#~ "theme, and apply.\n"
-#~ "All the themes installed on your system are listed, plus the 'Custom "
-#~ "icons' theme, which represent the icons provided by the Cairo-Dock's "
-#~ "theme;\n"
-#~ " they are located in ~/.config/cairo-dock/current_theme/icons, and you "
-#~ "can add personal icons there.\n"
-#~ "If you choose nothing, the default icon theme of your system will be used."
-#~ msgstr ""
-#~ "У модулі \"Значкі» вы можаце выбраць <b>тэму значкоў</b>. Проста адзначце "
-#~ "любую тэму і націсніце прымяніць.\n"
-#~ "\"Свая тэма 'Тут пералічаныя ўсе тэмы устаноўленыя ў вашай сістэме плюс, "
-#~ "у якой знаходзяцца значкі тэмы Cairo-Dock;\n"
-#~ "Яна знаходзіцца ў ~/.config/cairo-dock/current_theme/icons, вы можаце "
-#~ "ўручную адрэдагаваць значкі, калі захочаце.\n"
-#~ "Калі вы нічога не выберыце, то будзе ўжытая сістэмная тэма значкоў па "
-#~ "змаўчанні."
-
-#~ msgid "How do I remove many icons quickly?"
-#~ msgstr "Як мне выдаліць адразу некалькі значкоў?"
-
-#~ msgid ""
-#~ "Hint : if you delete an icon pointing to a sub-dock, you will be offered "
-#~ "to either delete the sub-dock’s icons or to move them in the main dock."
-#~ msgstr ""
-#~ "Савет: Калі вы выдаляеце значок размешчаны ў суб-панэлі, то вам будзе "
-#~ "прапанавана альбо выдаліць сам значок, альбо перамясціць яго ў асноўную "
-#~ "панэль."
-
-#~ msgid ""
-#~ "Just drag and drop them out of the dock, they will disappear in an "
-#~ "explosion !"
-#~ msgstr "Проста захопіце і перацягніце яго за панэль і ён адыдзе ў нябыт!"
-
-#~ msgid "How can I resize my icons?"
-#~ msgstr "Як мне змяніць памер значкоў?"
-
-#~ msgid ""
-#~ "Hint : You can define the size of each applet independently, to any size "
-#~ "smaller or equal to the default size. Set it to 0x0 to use the default "
-#~ "size."
-#~ msgstr ""
-#~ "Савет: Вы можаце вызначаць памер для кожнага аплета індывідуальна, ад "
-#~ "памеру менш стандартнага да роўнаму стандартнага. Усталюйце значэнне 0x0, "
-#~ "каб выкарыстаць стандартны памер."
-
-#~ msgid "Other applets"
-#~ msgstr "Астатнія апплеты"
-
-#~ msgid "failed to mount %s"
-#~ msgstr "не ўдалося далучыць %s"
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "не ўдалося адлучыць %s"
-
-#~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want "
-#~ "to select a different decorator for your dialog boxes."
+#~ "This provides different window decorators. Enable this first if you want to "
+#~ "select a different decorator for your dialog boxes."
 #~ msgstr ""
 #~ "Дае розныя афармлення для вокнаў. Актывіруце яго, каб змяняць афармлення "
 #~ "вокнаў."
@@ -4522,5 +5623,218 @@ msgstr ""
 #~ "Provides different views for Cairo-Dock. Enable this first if you want to "
 #~ "select a different view for your docks."
 #~ msgstr ""
-#~ "Прапаноўвае розныя віды Cairo-Dock. Актывіруце, каб выбраць іншы від "
-#~ "панэлі."
+#~ "Прапаноўвае розныя віды Cairo-Dock. Актывіруце, каб выбраць іншы від панэлі."
+
+#, c-format
+#~ msgid "Set position for the '%s' dock"
+#~ msgstr "Задаць месцазнаходжанне для панэлі '%s'"
+
+#~ msgid "Set the position of this main dock."
+#~ msgstr "Задайце месцазнаходжанне асноўны панэлі."
+
+#~ msgid ""
+#~ "Warning: could not delete this file.\n"
+#~ "Please check file permissions."
+#~ msgstr ""
+#~ "Увага: не ўдалося выдаліць гэты файл.\n"
+#~ "Пераканайцеся, што вы маеце права на запіс."
+
+#~ msgid "Rename to:"
+#~ msgstr "Перайменаваць у:"
+
+#, c-format
+#~ msgid ""
+#~ "Warning: could not rename %s.\n"
+#~ "Check file permissions \n"
+#~ "and that the new name does not already exist."
+#~ msgstr ""
+#~ "Увага: не ўдалося перайменаваць %s.\n"
+#~ "Пераканайцеся, што вы маеце права на запіс,\n"
+#~ " і новае імя ўжо не прысутнічае на панэлі."
+
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgstr "ўсталюйце паводзіны ў Compiz на: (імя = cairo-dock & тып = utility)"
+
+#~ msgid ""
+#~ "A useful FAQ which also contains a lot of hints.\n"
+#~ "Roll your mouse over a sentence to make helpful popups appear."
+#~ msgstr ""
+#~ "Карысны зборнік чаво, з мноствам саветаў.\n"
+#~ "Правядзіце мышшу над прапановамі, каб убачыць падказку."
+
+#~ msgid ""
+#~ "To remove the black rectangle around the dock, you will need to activate a "
+#~ "composite manager.\n"
+#~ "For instance, this can be done by activating desktop effects, launching "
+#~ "Compiz, or activating the composition in Metacity.\n"
+#~ "I can perform this last operation for you. Do you want to proceed ?"
+#~ msgstr ""
+#~ "Каб пазбавіцца ад чорнага прамавугольніка вакол панэлі, вам варта актываваць "
+#~ "кампазітны менеджэр.\n"
+#~ "Для гэтага вы можаце задзейнічаць эфекты працоўнага стала, запусціўшы Compiz "
+#~ "ці ж ўключыць Кампазітнасць ў Metacity.\n"
+#~ "Я магу выканаць апошняе за вас, працягваць?"
+
+#~ msgid "Do you want to keep this setting?"
+#~ msgstr "Захаваць наладкі?"
+
+#~ msgid ""
+#~ "Icons will scroll according to what positioning model is selected. The dock "
+#~ "can of course can be positioned anywhere on the screen. Here we specify this "
+#~ "relative position."
+#~ msgstr ""
+#~ "Значкі будуць пракручвалася адносна абранага месцазнаходжання панэлі. Бо "
+#~ "панэль можа размяшчацца ў любым месцы экрана і тут мы вызначаем дзе менавіта."
+
+#~ msgid ""
+#~ "Prevent windows from overlapping the dock: reserve space at the edge of the "
+#~ "screen for the dock.\n"
+#~ "Auto-hide: the dock will automatically hide itself outside of the screen "
+#~ "when the mouse leaves it. Instead, it will show a zone where placing the "
+#~ "mouse will trigger the dock and make it re-appear.\n"
+#~ "Keep the dock below windows: the dock will pop-up on the foreground when you "
+#~ "place the mouse on its screen border.\n"
+#~ "Pop-up on shortcut : When you press the shortcut, the dock will pop-up at "
+#~ "the position of your mouse. The rest of the time, it stays invisible, thus "
+#~ "acting like a menu."
+#~ msgstr ""
+#~ "Не дапускаць перакрыцця панэлі іншымі вокнамі: зарэзерваваць месца пад "
+#~ "панэль на мяжы экрана. \n"
+#~ "Аўто-ўцёкі: Панэль будзе аўтаматычна хавацца, пакідаючы толькі зону "
+#~ "рэагавання. Калі змясціць курсор у гэтую зону, то панэль адразу ж з'явіцца. "
+#~ "\n"
+#~ "Трымаць ззаду вокнаў: Панэль будзе всплывает з задняга фону, калі змясціць "
+#~ "курсор на яе мяжу. \n"
+#~ "Усплывае па клавіятурным скарачэнні: Пры націску на пэўных клявішаў, панэль "
+#~ "з'явіцца ў пазіцыі курсора мышы. Астатні час застаючыся нябачнай. Гэты рэжым "
+#~ "падобны з дзеяннем сістэмнага меню."
+
+#~ msgid "Choose one of the available themes:"
+#~ msgstr "Выберыце адну з даступных тэм:"
+
+#~ msgid "Pop-up only if the mouse hits a screen corner"
+#~ msgstr "Всплывае толькі калі курсор задевает край экрана?"
+
+#~ msgid "Placing the mouse into it will make the dock re-appear."
+#~ msgstr "Калі змясціць курсор у гэтую зону, то панэль адразу ж з'явіцца."
+
+#~ msgid "Size of the callback zone (width x height, in pixels):"
+#~ msgstr "Памер зоны рэагавання (шырыня x вышыня, у піксэлях):"
+
+#~ msgid "Do you want to monitor the content of this directory?"
+#~ msgstr "Адсочваць змесціва каталога?"
+
+#~ msgid "Other applets"
+#~ msgstr "Астатнія апплеты"
+
+#, c-format
+#~ msgid "Configuration of the '%s' dock"
+#~ msgstr "Настройка '%s' панэлі"
+
+#~ msgid "Add a main dock"
+#~ msgstr "Дадаць асноўную панэль"
+
+#~ msgid "Middle-clicking on an icon closes the related application"
+#~ msgstr "Сярэдняя пстрычка закрывае звязаную праграму?"
+
+#~ msgid "In the style of Firefox tabs"
+#~ msgstr "На манер паводзінаў вкладок Firefox."
+
+#~ msgid "Yes, like that :-)"
+#~ msgstr "Так, менавіта так :-)"
+
+#~ msgid ""
+#~ "How do I position applets and taskbar icons at the beginning of the dock?"
+#~ msgstr "Як мне размясціць аплеты і значкі панэлі задач спачатку панэлі?"
+
+#~ msgid "Simply drag with the mouse, and drop wherever you wish."
+#~ msgstr "Проста захопіце іх мышкай, і перацягнуць куды вам хочацца."
+
+#~ msgid "How do I re-order my icons?"
+#~ msgstr "Якім чынам пераўпарадкаваць значкі?"
+
+#~ msgid ""
+#~ "Note : many answers have an extra hint.\n"
+#~ "To popup the hint, simply leave the mouse over the sentence for 1 second, a "
+#~ "tooltip will appear."
+#~ msgstr ""
+#~ "Савет: Многія адказы ўтрымліваюць яшчэ і парады.\n"
+#~ "Каб убачыць савет, проста затрымаеце курсор мышы над прапановай на 1 секунду."
+
+#~ msgid "Use background color for labels?"
+#~ msgstr "Выкарыстоўваць колер фону для подпісаў?"
+
+#~ msgid "Go to the «Icons» module."
+#~ msgstr "Перайсці ў модуль «Значкі»"
+
+#~ msgid ""
+#~ "Hint : if you delete an icon pointing to a sub-dock, you will be offered to "
+#~ "either delete the sub-dock’s icons or to move them in the main dock."
+#~ msgstr ""
+#~ "Савет: Калі вы выдаляеце значок размешчаны ў суб-панэлі, то вам будзе "
+#~ "прапанавана альбо выдаліць сам значок, альбо перамясціць яго ў асноўную "
+#~ "панэль."
+
+#~ msgid ""
+#~ "Just drag and drop them out of the dock, they will disappear in an explosion "
+#~ "!"
+#~ msgstr "Проста захопіце і перацягніце яго за панэль і ён адыдзе ў нябыт!"
+
+#~ msgid ""
+#~ "In the «icons» module, at the bottom, you can select icon order according to "
+#~ "type (launcher/appli/applet)."
+#~ msgstr ""
+#~ "У модулі \"Значкі\", у самым нізе, вы можаце выбраць парадак размяшчэння "
+#~ "значкоў адносна іх тыпу (значкі запуску, дадаткі, аплеты)."
+
+#~ msgid ""
+#~ "Tip: you can also position applets amongst launchers, by ticking the box "
+#~ "below."
+#~ msgstr ""
+#~ "Савет: вы можаце змясціць аплеты сярод значкоў запуску, паставіўшы галачку "
+#~ "ніжэй."
+
+#~ msgid ""
+#~ "Tip: you can also edit a launcher's configuration directly and set a path "
+#~ "for an image. If you do not enter a path, but simply the name of an image, "
+#~ "do not give the extension (.svg, .png, etc.), so as to let the dock choose "
+#~ "the best."
+#~ msgstr ""
+#~ "Савет: Вы можаце ўручную паказаць шлях да выявы ў запуску значка параметрах. "
+#~ "Калі вы не пакажыце шлях, а проста ўпішыце імя значка, не дапісваць яго "
+#~ "пашырэнне (. SVG,. PNG, і г.д.), Cairo-Dock сам абярэ якасны варыянт."
+
+#~ msgid "How do I change an icon image?"
+#~ msgstr "Як мне памяняць малюнак на значку?"
+
+#~ msgid "How can I resize my icons?"
+#~ msgstr "Як мне змяніць памер значкоў?"
+
+#~ msgid ""
+#~ "In the “Icons” module, you can choose an <b>icon theme</b>. Just choose a "
+#~ "theme, and apply.\n"
+#~ "All the themes installed on your system are listed, plus the 'Custom icons' "
+#~ "theme, which represent the icons provided by the Cairo-Dock's theme;\n"
+#~ " they are located in ~/.config/cairo-dock/current_theme/icons, and you can "
+#~ "add personal icons there.\n"
+#~ "If you choose nothing, the default icon theme of your system will be used."
+#~ msgstr ""
+#~ "У модулі \"Значкі» вы можаце выбраць <b>тэму значкоў</b>. Проста адзначце "
+#~ "любую тэму і націсніце прымяніць.\n"
+#~ "\"Свая тэма 'Тут пералічаныя ўсе тэмы устаноўленыя ў вашай сістэме плюс, у "
+#~ "якой знаходзяцца значкі тэмы Cairo-Dock;\n"
+#~ "Яна знаходзіцца ў ~/.config/cairo-dock/current_theme/icons, вы можаце "
+#~ "ўручную адрэдагаваць значкі, калі захочаце.\n"
+#~ "Калі вы нічога не выберыце, то будзе ўжытая сістэмная тэма значкоў па "
+#~ "змаўчанні."
+
+#~ msgid "How do I remove many icons quickly?"
+#~ msgstr "Як мне выдаліць адразу некалькі значкоў?"
+
+#~ msgid ""
+#~ "Hint : You can define the size of each applet independently, to any size "
+#~ "smaller or equal to the default size. Set it to 0x0 to use the default size."
+#~ msgstr ""
+#~ "Савет: Вы можаце вызначаць памер для кожнага аплета індывідуальна, ад памеру "
+#~ "менш стандартнага да роўнаму стандартнага. Усталюйце значэнне 0x0, каб "
+#~ "выкарыстаць стандартны памер."

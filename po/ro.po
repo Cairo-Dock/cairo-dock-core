@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-04-19 12:33+0100\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2011-07-03 00:01+0000\n"
+"PO-Revision-Date: 2011-03-15 13:22+0000\n"
+"Last-Translator: bert <crinbert@yahoo.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
-"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-16 04:37+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-07-04 04:36+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
+"Language: ro\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -66,7 +67,8 @@ msgid "category"
 msgstr "categorie"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Parametri doc principal sunt disponibile în fereastra de configurare "
 "principală."
@@ -281,7 +283,8 @@ msgid "Effects:"
 msgstr "Efecte"
 
 #: ../src/cairo-dock-gui-simple.c:856
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:865 ../data/messages:493
@@ -428,7 +431,8 @@ msgid "Get more applets!"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:425
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:427 ../src/help/applet-init.c:28
@@ -966,9 +970,8 @@ msgid "Tips and Tricks"
 msgstr ""
 
 #: ../src/help/applet-tips-dialog.c:299
-#, fuzzy
 msgid "Category"
-msgstr "categorie"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:453
 #: ../data/messages:621
@@ -1000,9 +1003,8 @@ msgid "General"
 msgstr ""
 
 #: ../data/messages:3
-#, fuzzy
 msgid "Using the dock"
-msgstr "Revenire la doc"
+msgstr ""
 
 #: ../data/messages:5
 msgid ""
@@ -1063,9 +1065,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:25
-#, fuzzy
 msgid "Moving icons"
-msgstr "Blocare pictograme"
+msgstr ""
 
 #: ../data/messages:27
 msgid ""
@@ -1109,9 +1110,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:37
-#, fuzzy
 msgid "Separating icons"
-msgstr "Separatori"
+msgstr ""
 
 #: ../data/messages:39
 msgid ""
@@ -1190,9 +1190,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:67
-#, fuzzy
 msgid "Setting a custom icon for an application"
-msgstr "Am pictograme urâte la unele aplicații."
+msgstr ""
 
 #: ../data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
@@ -1220,14 +1219,12 @@ msgid "If you're using Compiz, you can click on this button:"
 msgstr ""
 
 #: ../data/messages:79
-#, fuzzy
 msgid "Docks"
-msgstr "Doc"
+msgstr ""
 
 #: ../data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Poziția pe ecran"
+msgstr ""
 
 #: ../data/messages:83
 msgid ""
@@ -1351,9 +1348,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:129
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "Pe toate spațiile de lucru"
+msgstr ""
 
 #: ../data/messages:131
 msgid ""
@@ -1373,9 +1369,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:137
-#, fuzzy
 msgid "Locking your session"
-msgstr "Blochează poziția"
+msgstr ""
 
 #: ../data/messages:139
 msgid ""
@@ -1476,9 +1471,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:169
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Accesorii"
+msgstr ""
 
 #: ../data/messages:171
 msgid ""
@@ -1550,14 +1544,14 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:193
-#, fuzzy
 msgid "Removing completely the gnome-panel"
-msgstr "Înlocuire panel-Gnome"
+msgstr ""
 
 #: ../data/messages:195
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1605,8 +1599,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219
@@ -1856,9 +1850,8 @@ msgstr ""
 
 #: ../data/messages:323 ../data/messages:325 ../data/messages:1415
 #: ../data/messages:1495 ../data/messages:1527
-#, fuzzy
 msgid "Icon"
-msgstr "Pictograme"
+msgstr ""
 
 #: ../data/messages:327
 msgid "Name of the dock it belongs to:"
@@ -1873,9 +1866,8 @@ msgid "Leave empty to use the default one."
 msgstr ""
 
 #: ../data/messages:333
-#, fuzzy
 msgid "Image filename:"
-msgstr "Fișier-imagine:"
+msgstr ""
 
 #: ../data/messages:335
 msgid "Set to 0 to use the default applet size"
@@ -1886,9 +1878,8 @@ msgid "Desired icon size for this applet"
 msgstr ""
 
 #: ../data/messages:339
-#, fuzzy
 msgid "Applet's Handbook"
-msgstr "Manualul mini-aplicației"
+msgstr ""
 
 #: ../data/messages:341
 msgid "Desklet"
@@ -1901,9 +1892,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:347
-#, fuzzy
 msgid "Lock position?"
-msgstr "Blochează poziția"
+msgstr ""
 
 #: ../data/messages:349
 msgid ""
@@ -1912,9 +1902,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:351
-#, fuzzy
 msgid "Desklet dimensions (width x height):"
-msgstr "Dimensiune pictogramă la repaus (lățime x înălțime):"
+msgstr ""
 
 #: ../data/messages:353
 msgid ""
@@ -1933,14 +1922,12 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:359
-#, fuzzy
 msgid "Rotation:"
-msgstr "Documentație"
+msgstr ""
 
 #: ../data/messages:363
-#, fuzzy
 msgid "Is detached from the dock"
-msgstr "Rezervare spaţiu pentru doc"
+msgstr ""
 
 #: ../data/messages:365
 msgid ""
@@ -1954,18 +1941,16 @@ msgid "Visibility:"
 msgstr "Vizibilitate:"
 
 #: ../data/messages:373
-#, fuzzy
 msgid "Keep below"
-msgstr "Menține deasupra"
+msgstr ""
 
 #: ../data/messages:375
 msgid "Keep on widget layer"
 msgstr ""
 
 #: ../data/messages:379
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "Pe toate spațiile de lucru"
+msgstr ""
 
 #: ../data/messages:381 ../data/messages:977
 msgid "Decorations"
@@ -1976,9 +1961,8 @@ msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
 
 #: ../data/messages:385
-#, fuzzy
 msgid "Choose a decoration theme for this desklet:"
-msgstr "Alege o tema pentru pictogramă"
+msgstr ""
 
 #: ../data/messages:387
 msgid ""
@@ -1986,14 +1970,12 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:389
-#, fuzzy
 msgid "Background image:"
-msgstr "Imagine fundal"
+msgstr ""
 
 #: ../data/messages:391
-#, fuzzy
 msgid "Background transparency:"
-msgstr "Transparență fundal"
+msgstr ""
 
 #: ../data/messages:393
 msgid "in pixels. Use this to adjust the left position of drawings."
@@ -2034,14 +2016,12 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:411
-#, fuzzy
 msgid "Foreground image:"
-msgstr "Imagine fundal"
+msgstr ""
 
 #: ../data/messages:413
-#, fuzzy
 msgid "Foreground tansparency:"
-msgstr "Transparență fundal"
+msgstr ""
 
 #: ../data/messages:415 ../data/messages:1287
 msgid "Behavior"
@@ -3034,7 +3014,8 @@ msgid "Zoom effect"
 msgstr "Efect lupă"
 
 #: ../data/messages:1053
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1055
@@ -3329,8 +3310,8 @@ msgstr "mai mare"
 
 #: ../data/messages:1207
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1209
@@ -3862,8 +3843,8 @@ msgstr ""
 #: ../data/messages:1563
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3944,8 +3925,8 @@ msgstr ""
 #: ../data/messages:1575
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4035,8 +4016,17 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
+#~ msgid "Provides various animations for your icons."
+#~ msgstr "Oferă diverse animaţii pentru pictograme"
+
+#~ msgid "Draw an image"
+#~ msgstr "Desenaţi o imagine"
+
 #~ msgid "Yes, like that :-)"
 #~ msgstr "Da, îmi place :-)"
+
+#~ msgid "Dock"
+#~ msgstr "Doc"
 
 #~ msgid "How can I resize my icons?"
 #~ msgstr "Cum pot redimensiona pictogramele?"
@@ -4047,11 +4037,11 @@ msgstr ""
 #~ msgid "How can I add a separator?"
 #~ msgstr "Cum adaug un separator?"
 
-#~ msgid "How can I have many main docks?"
-#~ msgstr "Cum pot să am mai multe docuri principale?"
-
 #~ msgid "How can I have a 3D dock?"
 #~ msgstr "Cum pot avea un doc 3D?"
+
+#~ msgid "How can I have many main docks?"
+#~ msgstr "Cum pot să am mai multe docuri principale?"
 
 #~ msgid "How can I change the background of my docks?"
 #~ msgstr "Cum pot schimba fundalul docului?"
@@ -4062,14 +4052,17 @@ msgstr ""
 #~ msgid "How do I enable the Taskbar?"
 #~ msgstr "Cum activez Bara de Aplicații?"
 
+#~ msgid "I have ugly icons for some applications."
+#~ msgstr "Am pictograme urâte la unele aplicații."
+
 #~ msgid "How can I add the main menu?"
 #~ msgstr "Cum adaug un meniu principal?"
 
+#~ msgid "Replacing the Gnome-panel"
+#~ msgstr "Înlocuire panel-Gnome"
+
 #~ msgid "How can I access the dustbin?"
 #~ msgstr "Cum accesez coșul de gunoi?"
-
-#~ msgid "Provides various animations for your icons."
-#~ msgstr "Oferă diverse animaţii pentru pictograme"
 
 #~ msgid "Display"
 #~ msgstr "Afișaj"

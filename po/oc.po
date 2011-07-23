@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-04-19 12:33+0100\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2011-07-03 00:01+0000\n"
+"PO-Revision-Date: 2010-09-18 12:47+0000\n"
+"Last-Translator: Cédric VALMARY (Tot en òc) <cvalmary@yahoo.fr>\n"
 "Language-Team: Occitan (post 1500) <oc@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-16 04:37+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-07-04 04:35+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -66,7 +67,8 @@ msgid "category"
 msgstr "categoria"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:621
@@ -277,7 +279,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:856
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:865 ../data/messages:493
@@ -424,7 +427,8 @@ msgid "Get more applets!"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:425
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:427 ../src/help/applet-init.c:28
@@ -960,9 +964,8 @@ msgid "Tips and Tricks"
 msgstr ""
 
 #: ../src/help/applet-tips-dialog.c:299
-#, fuzzy
 msgid "Category"
-msgstr "categoria"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:453
 #: ../data/messages:621
@@ -1022,9 +1025,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:13
-#, fuzzy
 msgid "Adding a launcher"
-msgstr "Aviadors"
+msgstr ""
 
 #: ../data/messages:15
 msgid ""
@@ -1102,9 +1104,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:37
-#, fuzzy
 msgid "Separating icons"
-msgstr "Separadors"
+msgstr ""
 
 #: ../data/messages:39
 msgid ""
@@ -1216,9 +1217,8 @@ msgid "Docks"
 msgstr ""
 
 #: ../data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Posicion sus l'ecran"
+msgstr ""
 
 #: ../data/messages:83
 msgid ""
@@ -1271,9 +1271,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:107
-#, fuzzy
 msgid "Moving desklets"
-msgstr "Desklets"
+msgstr ""
 
 #: ../data/messages:109
 msgid ""
@@ -1343,9 +1342,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:129
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "Sus totes los burèus"
+msgstr ""
 
 #: ../data/messages:131
 msgid ""
@@ -1467,9 +1465,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:169
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Accessòris"
+msgstr ""
 
 #: ../data/messages:171
 msgid ""
@@ -1546,8 +1543,9 @@ msgstr ""
 
 #: ../data/messages:195
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1595,8 +1593,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219
@@ -1843,9 +1841,8 @@ msgstr ""
 
 #: ../data/messages:323 ../data/messages:325 ../data/messages:1415
 #: ../data/messages:1495 ../data/messages:1527
-#, fuzzy
 msgid "Icon"
-msgstr "Icònas"
+msgstr ""
 
 #: ../data/messages:327
 msgid "Name of the dock it belongs to:"
@@ -1876,9 +1873,8 @@ msgid "Applet's Handbook"
 msgstr ""
 
 #: ../data/messages:341
-#, fuzzy
 msgid "Desklet"
-msgstr "Desklets"
+msgstr ""
 
 #: ../data/messages:345
 msgid ""
@@ -1887,9 +1883,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:347
-#, fuzzy
 msgid "Lock position?"
-msgstr "Composicion"
+msgstr ""
 
 #: ../data/messages:349
 msgid ""
@@ -1918,9 +1913,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:359
-#, fuzzy
 msgid "Rotation:"
-msgstr "Representacion"
+msgstr ""
 
 #: ../data/messages:363
 msgid "Is detached from the dock"
@@ -1938,18 +1932,16 @@ msgid "Visibility:"
 msgstr ""
 
 #: ../data/messages:373
-#, fuzzy
 msgid "Keep below"
-msgstr "Gardar en dessús"
+msgstr ""
 
 #: ../data/messages:375
 msgid "Keep on widget layer"
 msgstr ""
 
 #: ../data/messages:379
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "Sus totes los burèus"
+msgstr ""
 
 #: ../data/messages:381 ../data/messages:977
 msgid "Decorations"
@@ -1969,14 +1961,12 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:389
-#, fuzzy
 msgid "Background image:"
-msgstr "Rèire plan"
+msgstr ""
 
 #: ../data/messages:391
-#, fuzzy
 msgid "Background transparency:"
-msgstr "Transparéncia de l'imatge :"
+msgstr ""
 
 #: ../data/messages:393
 msgid "in pixels. Use this to adjust the left position of drawings."
@@ -2021,9 +2011,8 @@ msgid "Foreground image:"
 msgstr ""
 
 #: ../data/messages:413
-#, fuzzy
 msgid "Foreground tansparency:"
-msgstr "Transparéncia de l'imatge :"
+msgstr ""
 
 #: ../data/messages:415 ../data/messages:1287
 msgid "Behavior"
@@ -3016,7 +3005,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1053
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1055
@@ -3311,8 +3301,8 @@ msgstr ""
 
 #: ../data/messages:1207
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1209
@@ -3840,8 +3830,8 @@ msgstr ""
 #: ../data/messages:1563
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3922,8 +3912,8 @@ msgstr ""
 #: ../data/messages:1575
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4012,3 +4002,156 @@ msgid ""
 " - Better integration with <b>Compiz and Kwin</b>.\n"
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
+
+#~ msgid "rate me"
+#~ msgstr "Notatz-me !"
+
+#~ msgid "Controler"
+#~ msgstr "Contrarotlador"
+
+#~ msgid "Plug-in"
+#~ msgstr "Ensèrt"
+
+#~ msgid "state"
+#~ msgstr "estat"
+
+#~ msgid "theme"
+#~ msgstr "tèma"
+
+#~ msgid "rating"
+#~ msgstr "nòta"
+
+#~ msgid "module"
+#~ msgstr "modul"
+
+#~ msgid "grab"
+#~ msgstr "picar"
+
+#~ msgid "sobriety"
+#~ msgstr "sobrietat"
+
+#~ msgid "Plug-ins"
+#~ msgstr "Ensèrts"
+
+#~ msgid "Controlers"
+#~ msgstr "Contrarotladors"
+
+#~ msgid "Configuration of Cairo-Dock"
+#~ msgstr "Configuracion de Cairo-Dock"
+
+#~ msgid "Activate this module"
+#~ msgstr "Activar aqueste modul"
+
+#~ msgid "Couldn't import the theme."
+#~ msgstr "Impossible de recuperar lo tèma."
+
+#~ msgid "Community's site"
+#~ msgstr "Site de la comunautat"
+
+#~ msgid "Development's site"
+#~ msgstr "Site de desvolopament"
+
+#~ msgid "Quit Cairo-Dock ?"
+#~ msgstr "Quitar Cairo-Dock ?"
+
+#~ msgid "Set up this dock"
+#~ msgstr "Reglar aqueste depaus"
+
+#~ msgid "lock icons"
+#~ msgstr "Varrolhar las icònas"
+
+#~ msgid "lock dock"
+#~ msgstr "Varrolhar lo depaus"
+
+#~ msgid "unlock dock"
+#~ msgstr "Desvarrolhar lo depaus"
+
+#~ msgid "unlock icons"
+#~ msgstr "Desvarrolhar las icònas"
+
+#~ msgid "Rename to :"
+#~ msgstr "Tornar nomenar en :"
+
+#~ msgid "Rename this file"
+#~ msgstr "Tornar nomenar aqueste fichièr"
+
+#~ msgid "Eject"
+#~ msgstr "Ejectar"
+
+#~ msgid "Mount"
+#~ msgstr "Montar"
+
+#~ msgid "Unmount"
+#~ msgstr "Desmontar"
+
+#~ msgid "Properties"
+#~ msgstr "Proprietats"
+
+#~ msgid "Unmaximize"
+#~ msgstr "Restablir"
+
+#~ msgid "Maximize"
+#~ msgstr "Maximizar"
+
+#~ msgid "Minimize all"
+#~ msgstr "Minimizar tot"
+
+#~ msgid "default"
+#~ msgstr "per defaut"
+
+#~ msgid "Visibility :"
+#~ msgstr "Visibilitat :"
+
+#~ msgid "Behaviour of the Taskbar :"
+#~ msgstr "Compòrtament de la barra dels prètzfaches :"
+
+#~ msgid "Animations"
+#~ msgstr "Animacions"
+
+#~ msgid "Windows7"
+#~ msgstr "Windows7"
+
+#~ msgid "Applets"
+#~ msgstr "Applets"
+
+#~ msgid "Relative alignment :"
+#~ msgstr "Alinhament relatiu :"
+
+#~ msgid "Additionnal parameters"
+#~ msgstr "Paramètres addicionals"
+
+#~ msgid "Use Xinerama ?"
+#~ msgstr "Utilizar Xinerama ?"
+
+#~ msgid "transparent"
+#~ msgstr "transparent"
+
+#~ msgid "opaque"
+#~ msgstr "opac"
+
+#~ msgid "Duration of the dialog :"
+#~ msgstr "Durada del dialòg :"
+
+#~ msgid "Number of retries :"
+#~ msgstr "Nombre de temptativas :"
+
+#~ msgid "Bright color :"
+#~ msgstr "Color clara :"
+
+#~ msgid "Dark color :"
+#~ msgstr "Color escura :"
+
+#~ msgid "Speed :"
+#~ msgstr "Velocitat :"
+
+#~ msgid "Color"
+#~ msgstr "Color"
+
+#~ msgid "Text font :"
+#~ msgstr "Poliça del tèxte :"
+
+#~ msgid "Shape of the bubble :"
+#~ msgstr "Forma de la bulla :"
+
+#~ msgid "Text color :"
+#~ msgstr "Color del tèxte :"

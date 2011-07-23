@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-04-19 12:34+0100\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2011-07-03 00:01+0000\n"
+"PO-Revision-Date: 2011-03-16 00:49+0000\n"
+"Last-Translator: EspenK <espen.kromke@beatradar.no>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
-"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-16 04:37+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-07-04 04:35+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
+"Language: nb\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -69,7 +70,8 @@ msgid "category"
 msgstr "kategori"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Hoved-dokkens innstillinger er tilgjengelige i hovedvinduet til "
 "innstillingene."
@@ -289,7 +291,8 @@ msgid "Effects:"
 msgstr "Effekter:"
 
 #: ../src/cairo-dock-gui-simple.c:856
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klikk på et av de små programmene for å få en forhåndsvisning og beskrivelse."
 
@@ -347,7 +350,8 @@ msgstr "Fellesskapets nettside"
 
 #: ../src/cairo-dock-menu.c:201 ../data/messages:277
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
+msgstr ""
+"Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
 
 #: ../src/cairo-dock-menu.c:204 ../data/messages:283
 msgid "Development site"
@@ -444,7 +448,8 @@ msgid "Get more applets!"
 msgstr "Skaff deg flere panelprogram!"
 
 #: ../src/cairo-dock-menu.c:425
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Tredjeparts-panelprogram tilbyr integrasjon med mange program, eksempelvis "
 "Pidgin"
@@ -968,7 +973,6 @@ msgid "Are you sure you want to delete these themes?"
 msgstr "Ønsker du å slette disse draktene?"
 
 #: ../src/help/applet-composite.c:65
-#, fuzzy
 msgid ""
 "Welcome in Cairo-Dock2 !\n"
 "This applet is here to help you start using the dock; just click on it.\n"
@@ -977,15 +981,6 @@ msgid ""
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
-"Velkommen til Cairo-dokk2!\n"
-"Et enkelt standardtema er lastet inn.\n"
-"Du kan enten gjøre deg kjent med dokken eller velge et annet tema med høyre-"
-"klikk -> Cairo-dokk -> Administrer tema.\n"
-"En enkel brukerguide finner du ved å høyreklikke -> Cairo-dokk -> Hjelp.\n"
-"Om du har noen spørsmål/forespørsler/kommentarer er du hjertelig velkommen "
-"på http://glx-dock.org.\n"
-"Vi håper du blir fornøyd med denne programvaren!\n"
-"  (Du kan nå klikke på denne dialogen for å lukke den)"
 
 #: ../src/help/applet-composite.c:160
 msgid "Don't ask me any more"
@@ -1046,9 +1041,8 @@ msgid "Tips and Tricks"
 msgstr ""
 
 #: ../src/help/applet-tips-dialog.c:299
-#, fuzzy
 msgid "Category"
-msgstr "kategori"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:453
 #: ../data/messages:621
@@ -1080,9 +1074,8 @@ msgid "General"
 msgstr ""
 
 #: ../data/messages:3
-#, fuzzy
 msgid "Using the dock"
-msgstr "Høyre dokk"
+msgstr ""
 
 #: ../data/messages:5
 msgid ""
@@ -1109,9 +1102,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:13
-#, fuzzy
 msgid "Adding a launcher"
-msgstr "Gjør til oppstarter"
+msgstr ""
 
 #: ../data/messages:15
 msgid ""
@@ -1122,22 +1114,18 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:17
-#, fuzzy
 msgid "Removing a launcher"
-msgstr "Fjern denne oppstarteren"
+msgstr ""
 
 #: ../data/messages:19
-#, fuzzy
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
 msgstr ""
-"Du kan fjerne en oppstarter ved å trekke den ut av samlevinduet med musen."
 
 #: ../data/messages:21
-#, fuzzy
 msgid "Grouping icons into a sub-dock"
-msgstr "Samle vinduer fra samme program i et under-panel?"
+msgstr ""
 
 #: ../data/messages:23
 msgid ""
@@ -1148,9 +1136,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:25
-#, fuzzy
 msgid "Moving icons"
-msgstr "Lås ikoner"
+msgstr ""
 
 #: ../data/messages:27
 msgid ""
@@ -1162,9 +1149,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:29
-#, fuzzy
 msgid "Changing an icon's image"
-msgstr "Hvordan kan jeg endre ikonets bilde?"
+msgstr ""
 
 #: ../data/messages:31
 msgid ""
@@ -1195,9 +1181,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:37
-#, fuzzy
 msgid "Separating icons"
-msgstr "Skiller"
+msgstr ""
 
 #: ../data/messages:39
 msgid ""
@@ -1244,9 +1229,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:55
-#, fuzzy
 msgid "Launching an application several times"
-msgstr "Bland oppstartere og programmer."
+msgstr ""
 
 #: ../data/messages:57
 msgid ""
@@ -1265,9 +1249,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:63
-#, fuzzy
 msgid "Grouping windows of a given application"
-msgstr "Samle vinduer fra samme program i et under-panel?"
+msgstr ""
 
 #: ../data/messages:65
 msgid ""
@@ -1278,9 +1261,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:67
-#, fuzzy
 msgid "Setting a custom icon for an application"
-msgstr "Bland oppstartere og programmer."
+msgstr ""
 
 #: ../data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
@@ -1310,14 +1292,12 @@ msgid "If you're using Compiz, you can click on this button:"
 msgstr "Dersom du bruker Compiz kan du klikke på denne knappen:"
 
 #: ../data/messages:79
-#, fuzzy
 msgid "Docks"
-msgstr "Dokk"
+msgstr ""
 
 #: ../data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Plassering på skjerm"
+msgstr ""
 
 #: ../data/messages:83
 msgid ""
@@ -1329,9 +1309,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:85
-#, fuzzy
 msgid "Hiding the dock to use all the screen"
-msgstr "Strekk samlevinduet til å alltid fylle skjermen"
+msgstr ""
 
 #: ../data/messages:87
 msgid ""
@@ -1344,9 +1323,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:89
-#, fuzzy
 msgid "Having more than one dock"
-msgstr "Treff der dokken er"
+msgstr ""
 
 #: ../data/messages:91 ../data/messages:95 ../data/messages:99
 msgid "TODO"
@@ -1361,9 +1339,8 @@ msgid "Changing the look of a dock"
 msgstr ""
 
 #: ../data/messages:103
-#, fuzzy
 msgid "Placing applets on your desktop"
-msgstr "Vis kun programmer på gjeldende skrivebord"
+msgstr ""
 
 #: ../data/messages:105
 msgid ""
@@ -1373,12 +1350,10 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:107
-#, fuzzy
 msgid "Moving desklets"
-msgstr "Skrivebordsprogrammer"
+msgstr ""
 
 #: ../data/messages:109
-#, fuzzy
 msgid ""
 "Desklets can be moved anywhere simply with the mouse.\n"
 "They can also be rotated by dragging the small arrows on the top and left "
@@ -1386,9 +1361,6 @@ msgid ""
 "If you don't want to move it any more, you can lock its position by right-"
 "clicking on it -> \"lock position\". To unlock it, de-select this option."
 msgstr ""
-"Tips: Dersom du ikke ønsker å flytte den mer så kan du låse dens posisjon. "
-"Bare høyre-klikk på skrivebordsprogrammet og velg «lås posisjon». Velg bort "
-"dette valget igjen for å låse den opp."
 
 #: ../data/messages:111
 msgid "Placing desklets"
@@ -1449,9 +1421,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:129
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "På alle skrivebord"
+msgstr ""
 
 #: ../data/messages:131
 msgid ""
@@ -1471,9 +1442,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:137
-#, fuzzy
 msgid "Locking your session"
-msgstr "Lås posisjon"
+msgstr ""
 
 #: ../data/messages:139
 msgid ""
@@ -1574,9 +1544,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:169
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Tilbehør"
+msgstr ""
 
 #: ../data/messages:171
 msgid ""
@@ -1600,9 +1569,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:177
-#, fuzzy
 msgid "Having multiple instances of an applet"
-msgstr "Start en ny instans av dette miniprogrammet"
+msgstr ""
 
 #: ../data/messages:179
 msgid ""
@@ -1654,8 +1622,9 @@ msgstr ""
 
 #: ../data/messages:195
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1703,8 +1672,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219
@@ -1871,9 +1840,8 @@ msgid "Websites"
 msgstr ""
 
 #: ../data/messages:285
-#, fuzzy
 msgid "More applets available online!"
-msgstr "Få flere miniprogram på nettet!"
+msgstr ""
 
 #: ../data/messages:287
 msgid "Cairo-Dock-Plug-ins-Extras"
@@ -1952,14 +1920,12 @@ msgstr ""
 
 #: ../data/messages:323 ../data/messages:325 ../data/messages:1415
 #: ../data/messages:1495 ../data/messages:1527
-#, fuzzy
 msgid "Icon"
-msgstr "Ikoner"
+msgstr ""
 
 #: ../data/messages:327
-#, fuzzy
 msgid "Name of the dock it belongs to:"
-msgstr "Legg panelet bakerst"
+msgstr ""
 
 #: ../data/messages:329
 msgid "Name of the icon as it will appear in its caption in the dock:"
@@ -1970,9 +1936,8 @@ msgid "Leave empty to use the default one."
 msgstr ""
 
 #: ../data/messages:333
-#, fuzzy
 msgid "Image filename:"
-msgstr "Bildefil:"
+msgstr ""
 
 #: ../data/messages:335
 msgid "Set to 0 to use the default applet size"
@@ -1983,9 +1948,8 @@ msgid "Desired icon size for this applet"
 msgstr ""
 
 #: ../data/messages:339
-#, fuzzy
 msgid "Applet's Handbook"
-msgstr "Manual for miniprogram"
+msgstr ""
 
 #: ../data/messages:341
 msgid "Desklet"
@@ -1998,9 +1962,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:347
-#, fuzzy
 msgid "Lock position?"
-msgstr "Lås posisjon"
+msgstr ""
 
 #: ../data/messages:349
 msgid ""
@@ -2009,9 +1972,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:351
-#, fuzzy
 msgid "Desklet dimensions (width x height):"
-msgstr "Ikonets passive størrelse (bredde X høyde):"
+msgstr ""
 
 #: ../data/messages:353
 msgid ""
@@ -2030,21 +1992,18 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:359
-#, fuzzy
 msgid "Rotation:"
-msgstr "Animasjon:"
+msgstr ""
 
 #: ../data/messages:363
-#, fuzzy
 msgid "Is detached from the dock"
-msgstr "Reserver plass til panelet"
+msgstr ""
 
 #: ../data/messages:365
-#, fuzzy
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=utility)"
-msgstr "Sett oppførsel i Compiz til: (name=cairo-dock & type=utility)"
+msgstr ""
 
 #: ../data/messages:367 ../data/messages:433 ../data/messages:471
 #: ../data/messages:601 ../data/messages:663 ../data/messages:1323
@@ -2052,111 +2011,87 @@ msgid "Visibility:"
 msgstr "Synlighet:"
 
 #: ../data/messages:373
-#, fuzzy
 msgid "Keep below"
-msgstr "Behold ovenpå"
+msgstr ""
 
 #: ../data/messages:375
 msgid "Keep on widget layer"
 msgstr ""
 
 #: ../data/messages:379
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "På alle skrivebord"
+msgstr ""
 
 #: ../data/messages:381 ../data/messages:977
 msgid "Decorations"
 msgstr "Dekorasjoner"
 
 #: ../data/messages:383
-#, fuzzy
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
-"Dette kan tilpasses for hver skrivebordsdings individuelt.\n"
-"Velg \"Tilpasset dekorasjon\" for å definere din egen dekorasjon nedenfor"
 
 #: ../data/messages:385
-#, fuzzy
 msgid "Choose a decoration theme for this desklet:"
-msgstr "Velg standard dekorasjon for alle skrivebordsdingser:"
+msgstr ""
 
 #: ../data/messages:387
-#, fuzzy
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
-"Dette er et bilde som vil bli vist nedenfor tegningene, for eksempel en "
-"ramme. La stå tom om du ikke ønsker å bruke noen."
 
 #: ../data/messages:389
-#, fuzzy
 msgid "Background image:"
-msgstr "Bakgrunnsbilde:"
+msgstr ""
 
 #: ../data/messages:391
-#, fuzzy
 msgid "Background transparency:"
-msgstr "Bakgrunnens gjennomsiktighet:"
+msgstr ""
 
 #: ../data/messages:393
-#, fuzzy
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr "i pixler. Bruk denne for å justere tegningens venstre posisjon."
+msgstr ""
 
 #: ../data/messages:395
-#, fuzzy
 msgid "Left offset:"
-msgstr "Venstre forskyvning:"
+msgstr ""
 
 #: ../data/messages:397
-#, fuzzy
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr "i pixler. Bruk denne for å justere tegningens øvre posisjon."
+msgstr ""
 
 #: ../data/messages:399
-#, fuzzy
 msgid "Top offset:"
-msgstr "Øvre forskyvning:"
+msgstr ""
 
 #: ../data/messages:401
-#, fuzzy
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr "i pixler. Brukes til å justere tegningens høyre posisjon."
+msgstr ""
 
 #: ../data/messages:403
-#, fuzzy
 msgid "Right offset:"
-msgstr "Høyre forskyvning:"
+msgstr ""
 
 #: ../data/messages:405
-#, fuzzy
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr "i pixler. Bruk denne for å justere tegningens bunnposisjon."
+msgstr ""
 
 #: ../data/messages:407
-#, fuzzy
 msgid "Bottom offset:"
-msgstr "Bunn-forskyvning:"
+msgstr ""
 
 #: ../data/messages:409
-#, fuzzy
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
-"Dette er bildet som vil vises over tegningene, for eksempel en refleksjon. "
-"La stå tom for å ikke bruke noen."
 
 #: ../data/messages:411
-#, fuzzy
 msgid "Foreground image:"
-msgstr "Forgrunnsbilde:"
+msgstr ""
 
 #: ../data/messages:413
-#, fuzzy
 msgid "Foreground tansparency:"
-msgstr "Forgrunnens gjennomsiktighet:"
+msgstr ""
 
 #: ../data/messages:415 ../data/messages:1287
 msgid "Behavior"
@@ -2726,7 +2661,8 @@ msgstr ""
 
 #: ../data/messages:749
 msgid "Highlight applications requiring your attention with a dialog bubble"
-msgstr "Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
+msgstr ""
+"Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
 
 #: ../data/messages:751
 msgid "in seconds"
@@ -3236,7 +3172,8 @@ msgid "Zoom effect"
 msgstr "Forstørringseffekt"
 
 #: ../data/messages:1053
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Sett til 1 dersom du ikke ønsker at ikonene skal forstørres når musen "
 "beveger seg over dem."
@@ -3310,8 +3247,8 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere seg"
-"\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
+"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere "
+"seg\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
 "gjennomsiktig blir de."
 
 #: ../data/messages:1085
@@ -3568,11 +3505,11 @@ msgstr "større"
 
 #: ../data/messages:1207
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Bruk denne for å la indikatoren følge dokkens orientering (topp/bunn/høyre/"
-"venstre)."
+"Bruk denne for å la indikatoren følge dokkens orientering "
+"(topp/bunn/høyre/venstre)."
 
 #: ../data/messages:1209
 msgid "Rotate the indicator with dock?"
@@ -4114,8 +4051,8 @@ msgstr ""
 #: ../data/messages:1563
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4196,8 +4133,8 @@ msgstr ""
 #: ../data/messages:1575
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4287,6 +4224,311 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
+#, c-format
+#~ msgid "%s is now mounted"
+#~ msgstr "%s er nå montert"
+
+#~ msgid "Use OpenGL in Cairo-Dock ?"
+#~ msgstr "Bruke OpenGL i Cairo-Dock?"
+
+#, c-format
+#~ msgid "failed to mount %s"
+#~ msgstr "kunne ikke montere %s"
+
+#~ msgid "Do you want to mount this point ?"
+#~ msgstr "Ønsker du å montere denne?"
+
+#~ msgid "Do you want to monitor the content of the directory ?"
+#~ msgstr "Ønsker du å overvåke innholdet i denne mappen?"
+
+#~ msgid "theme"
+#~ msgstr "drakt"
+
+#~ msgid "rating"
+#~ msgstr "vurdering"
+
+#~ msgid "You have to try the theme before you can rate it."
+#~ msgstr "Du må prøve ut drakten før du kan vurdere den."
+
+#~ msgid "Highlight words"
+#~ msgstr "Marker ord"
+
+#~ msgid "Plug-ins"
+#~ msgstr "Tillegg"
+
+#~ msgid "Activate this module"
+#~ msgstr "Aktiver denne modulen"
+
+#~ msgid "Configuration of Cairo-Dock"
+#~ msgstr "Konfigurer Cairo-Dock"
+
+#~ msgid "Do you want to activate it now ?"
+#~ msgstr "Ønsker du å aktivere den nå?"
+
+#~ msgid "Set a background to your dock."
+#~ msgstr "Velg en bakgrunn for samlevinduet."
+
+#~ msgid "Hidden Dock"
+#~ msgstr "Skjult samlevindu"
+
+#~ msgid "Configure the look of the dialog bubbles."
+#~ msgstr "Velg utseende for meldingsbobler."
+
+#~ msgid "Quit Cairo-Dock ?"
+#~ msgstr "Avslutte Cairo-Dock?"
+
+#~ msgid "Undefined"
+#~ msgstr "Ikke angitt"
+
+#, c-format
+#~ msgid "%s is now unmounted"
+#~ msgstr "%s er nå avmontert"
+
+#, c-format
+#~ msgid "failed to unmount %s"
+#~ msgstr "avmontering av %s mislyktes"
+
+#, c-format
+#~ msgid "The module '%s' is not activated."
+#~ msgstr "Modulen %s er ikke aktivert"
+
+#~ msgid "The applets can be set on your desktop as widgets."
+#~ msgstr "Miniprogrammene kan brukes på skrivebordet som widgets."
+
+#~ msgid ""
+#~ "the theme couldn't be found; the default theme will be used instead.\n"
+#~ " You can change this by opening the configuration of this module; do you "
+#~ "want to do it now ?"
+#~ msgstr ""
+#~ "drakten kunne ikke hentes; standarddrakten vil brukes istedet.\n"
+#~ " Du kan endre dette ved å åpne konfigurasjonen av denne modulen; ønsker du å "
+#~ "gjøre dette nå?"
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' plug-in is not active.\n"
+#~ "Be sure to activate it to enjoy these features."
+#~ msgstr ""
+#~ "Utvidelsen '%s' er ikke aktivert.\n"
+#~ "Denne må aktiveres for å kunne bruke disse funksjonene."
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' module was not found.\n"
+#~ "Be sure to install it in the same version as the dock to enjoy these "
+#~ "features."
+#~ msgstr ""
+#~ "Modulen '%s' ble ikke funnet.\n"
+#~ "Vær sikker på at denne er installert i samme versjon som samlevinduet for å "
+#~ "kunne bruke alle funksjonene."
+
+#~ msgid "Configuration of the launchers"
+#~ msgstr "Konfigurere oppstartere"
+
+#~ msgid "Indicators are extra indications on your icons."
+#~ msgstr "Indikatorer er ytterligere indikasjoner på ikonene dine."
+
+#~ msgid "Rename to :"
+#~ msgstr "Gi nytt navn:"
+
+#~ msgid "This icon doesn't have a desktop file."
+#~ msgstr "Dette ikonet har ingen skrivebordsfil."
+
+#~ msgid "Set up this dock"
+#~ msgstr "Sett opp dette samlevinduet"
+
+#~ msgid "Set up the position of this main dock."
+#~ msgstr "Velg posisjonen til hovedsamlevinduet."
+
+#~ msgid "unlock dock"
+#~ msgstr "lås opp samlevindu"
+
+#~ msgid "lock dock"
+#~ msgstr "lås samlevindu"
+
+#~ msgid "Add a separator"
+#~ msgstr "Legg til separator"
+
+#~ msgid "Add a custom launcher"
+#~ msgstr "Legg til egendefinert oppstarter"
+
+#~ msgid "Eject"
+#~ msgstr "Løs ut"
+
+#~ msgid "Mount"
+#~ msgstr "Monter"
+
+#~ msgid "Unmount"
+#~ msgstr "Avmonter"
+
+#~ msgid "Add a sub-dock"
+#~ msgstr "Legg til i under-samlevindu"
+
+#~ msgid "Delete this file"
+#~ msgstr "Slett denne filen"
+
+#~ msgid "A new main dock"
+#~ msgstr "Et nytt hovedsamlevindu"
+
+#~ msgid "Properties"
+#~ msgstr "Egenskaper"
+
+#~ msgid "Rename this file"
+#~ msgstr "Gi nytt navn til denne filen"
+
+#~ msgid "Maximize"
+#~ msgstr "Maksimer"
+
+#~ msgid "Return to dock"
+#~ msgstr "Returner til samlevindu"
+
+#~ msgid "Are you sure you want to delete these themes ?"
+#~ msgstr "Ønsker du å slette disse draktene?"
+
+#~ msgid "default"
+#~ msgstr "standard"
+
+#~ msgid "The theme couldn't be saved"
+#~ msgstr "Drakten kunne ikke lagres"
+
+#~ msgid "The theme has been deleted"
+#~ msgstr "Drakten har blitt slettet"
+
+#, c-format
+#~ msgid "Downloading file %s ..."
+#~ msgstr "Laster ned fil %s ..."
+
+#, c-format
+#~ msgid "Are you sure you want to overwrite theme %s ?"
+#~ msgstr "Ønsker du å overskrive drakt %s?"
+
+#~ msgid "Now reloading theme ..."
+#~ msgstr "Laster drakt på nytt ..."
+
+#~ msgid "Applying changes ..."
+#~ msgstr "Utfører endringer ..."
+
+#~ msgid "Do you want to keep this setting ?"
+#~ msgstr "Ønsker du å beholde disse innstillingene?"
+
+#~ msgid "Distance to the screen's edge :"
+#~ msgstr "Avstand fra skjermkant:"
+
+#~ msgid "Relative alignment :"
+#~ msgstr "Relativ plassering:"
+
+#~ msgid "Use Xinerama ?"
+#~ msgstr "Bruke Xinerama?"
+
+#~ msgid "Visibility :"
+#~ msgstr "Synlighet:"
+
+#~ msgid "Automatically hide when a window is maximized"
+#~ msgstr "Skjul automatisk når vinduer maksimeres"
+
+#~ msgid "Automatically hide the dock"
+#~ msgstr "Skjul samlevindu automatisk"
+
+#, c-format
+#~ msgid "You're about removing this icon (%s) from the dock. Sure ?"
+#~ msgstr ""
+#~ "Du er i ferd med å fjerne dette ikonet (%s) fra samlevinduet. Er du sikker?"
+
+#~ msgid "Define the style of the icons' labels and quick-info."
+#~ msgstr "Bestem ikonetikettenes stil og beskrivelse"
+
+#~ msgid ""
+#~ "All about icons :\n"
+#~ " size, reflection, icon theme, ..."
+#~ msgstr ""
+#~ "Alt om ikoner:\n"
+#~ " størrelse, gjenskinn, ikondrakt, ..."
+
+#~ msgid "All the parameters you will never want to tweak."
+#~ msgstr "Alle innstillingene som du aldri vil ønske å endre på."
+
+#~ msgid "It provides many animations to your icons."
+#~ msgstr "Tilfører animasjoner til ikonene dine."
+
+#, c-format
+#~ msgid ""
+#~ "You're about deleting this file\n"
+#~ "  (%s)\n"
+#~ "from your hard-disk. Sure ?"
+#~ msgstr ""
+#~ "Du er i ferd med å slette denne filen\n"
+#~ "  (%s)\n"
+#~ "fra harddisken. Er du sikker?"
+
+#~ msgid "unlock icons"
+#~ msgstr "lås opp ikoner"
+
+#~ msgid ""
+#~ "There is no problem, there is only solution (and a lot of useful hints !)."
+#~ msgstr ""
+#~ "Det finnes ikke problemer, kun løsninger (og massevis av nyttige hint og "
+#~ "vink!)."
+
+#~ msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
+#~ msgstr ""
+#~ "Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
+
+#~ msgid "Find out the latest version of Cairo-Dock here !."
+#~ msgstr "Skaff siste versjon av Cairo-Dock her!"
+
+#~ msgid "lock icons"
+#~ msgstr "lås ikoner"
+
+#~ msgid "Development's site"
+#~ msgstr "Utviklers nettside"
+
+#~ msgid "Unmaximize"
+#~ msgstr "Gjenopprett"
+
+#~ msgid "Do you want to monitor the content of this directory?"
+#~ msgstr "Ønsker du å overvåke innholdet i denne mappen?"
+
+#~ msgid "Provides various animations for your icons."
+#~ msgstr "Tilfører animasjoner til ikonene dine."
+
+#~ msgid "Rename to:"
+#~ msgstr "Gi nytt navn:"
+
+#~ msgid "Set the position of this main dock."
+#~ msgstr "Velg posisjonen til hovedsamlevinduet."
+
+#~ msgid "The theme could not be saved"
+#~ msgstr "Drakten kunne ikke lagres"
+
+#~ msgid "Do you want to keep this setting?"
+#~ msgstr "Ønsker du å beholde disse innstillingene?"
+
+#~ msgid "Do you want to mount this device?"
+#~ msgstr "Ønsker du å montere denne enheten?"
+
+#, c-format
+#~ msgid "Failed to unmount %s"
+#~ msgstr "Avmontering av %s mislyktes"
+
+#~ msgid "Controller"
+#~ msgstr "Kontroller"
+
+#~ msgid "Plug-in"
+#~ msgstr "Programtillegg"
+
+#~ msgid "state"
+#~ msgstr "tilstand"
+
+#~ msgid "module"
+#~ msgstr "modul"
+
+#~ msgid "Controllers"
+#~ msgstr "Kontrollører"
+
+#, c-format
+#~ msgid "Importing theme %s ..."
+#~ msgstr "Importer drakt %s ..."
+
 #~ msgid ""
 #~ "It appears that you've never entered the help module before.\n"
 #~ "If you are having difficulty configuring the dock, or if you want to "
@@ -4300,9 +4542,147 @@ msgstr ""
 #~ "så er hjelpemodulen det du trenger!\n"
 #~ "Ønsker du se på den nå?"
 
+#~ msgid "The theme has been saved"
+#~ msgstr "Drakten ble lagret"
+
+#~ msgid "The themes could not be deleted"
+#~ msgstr "Draktene kunne ikke slettes"
+
+#~ msgid "The theme could not be deleted"
+#~ msgstr "Drakten kunne ikke slettes"
+
+#~ msgid "The themes have been deleted"
+#~ msgstr "Drakten ble slettet"
+
 #~ msgid ""
-#~ "To remove the black rectangle around the dock, you will need to activate "
-#~ "a composite manager.\n"
+#~ "This provides different window decorators. Enable this first if you want to "
+#~ "select a different decorator for your dialog boxes."
+#~ msgstr ""
+#~ "Dette gir forskjellige vindudekorasjoner. Skru på dette hvis du ønsker velge "
+#~ "en annen dekoratør for dine dialogvinduer."
+
+#~ msgid "Define the appearance of the dock when it's hidden."
+#~ msgstr "Definer utseendet på samlevinduet når det er skjult."
+
+#~ msgid ""
+#~ "Provides different views for Cairo-Dock. Enable this first if you want to "
+#~ "select a different view for your docks."
+#~ msgstr ""
+#~ "Tilbyr forskjellige visninger for Cairo-Dock. Skru på dette hvis du ønsker "
+#~ "velge en annen visning for ditt samlevindu."
+
+#, c-format
+#~ msgid "Set position for the '%s' dock"
+#~ msgstr "Angi posisjon for samlevinduet '%s'"
+
+#~ msgid "Other applets"
+#~ msgstr "Andre miniprogrammer"
+
+#~ msgid ""
+#~ "Warning: could not delete this file.\n"
+#~ "Please check file permissions."
+#~ msgstr ""
+#~ "Advarsel: kunne ikke slette denne filen.\n"
+#~ "Vennligst kontroller filens rettigheter."
+
+#, c-format
+#~ msgid ""
+#~ "Warning: could not rename %s.\n"
+#~ "Check file permissions \n"
+#~ "and that the new name does not already exist."
+#~ msgstr ""
+#~ "Advarsel: kunne ikke gi nytt til %s.\n"
+#~ "Vennligst kontroller filens rettigheter \n"
+#~ "og at det nye navnet ikke allerede finnes."
+
+#~ msgid "Close (middle-click)"
+#~ msgstr "Lukk (midt-klikk)"
+
+#~ msgid ""
+#~ "A useful FAQ which also contains a lot of hints.\n"
+#~ "Roll your mouse over a sentence to make helpful popups appear."
+#~ msgstr ""
+#~ "En nyttig FAQ som også inneholder mange hint.\n"
+#~ "Hold musen over en setning for å se hjelpsomme ledetekster."
+
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgstr "Sett oppførsel i Compiz til: (name=cairo-dock & type=utility)"
+
+#~ msgid "Windows7"
+#~ msgstr "Windows7"
+
+#~ msgid "Animations"
+#~ msgstr "Animasjoner"
+
+#~ msgid "Applets"
+#~ msgstr "Miniprogrammer"
+
+#~ msgid "Choose one of the available themes:"
+#~ msgstr "Velg en av de tilgjengelige draktene:"
+
+#~ msgid "Add or remove any applet :"
+#~ msgstr "Legg til eller fjern et miniprogram:"
+
+#~ msgid "Size of the callback zone (width x height, in pixels):"
+#~ msgstr "Størrelse på tilbakekallingssonen (bredde x høyde, i piksler):"
+
+#~ msgid "Placing the mouse into it will make the dock re-appear."
+#~ msgstr "Å plassere musen inn i det vil vise samlevinduet."
+
+#~ msgid "Pop-up only if the mouse hits a screen corner"
+#~ msgstr "Popup bare hvis musen treffer et av skjermens hjørner"
+
+#~ msgid ""
+#~ "Otherwise they will appear when you hover over the icon pointing to it."
+#~ msgstr "Ellers vil de vises når du holder musen over ikonet det peker til."
+
+#~ msgid "Click to show sub-docks"
+#~ msgstr "Klikk for å vise under-samlevinduer"
+
+#~ msgid "Delay before leaving or entering a sub-dock takes effect:"
+#~ msgstr ""
+#~ "Forsinkelse før effekt av å gå inn i eller ut av et under-samlevindu:"
+
+#~ msgid "in ms. Unused if you activate the click to show sub-docks."
+#~ msgstr "i ms. Ubrukt hvis du aktiverer klikk for å vise under-samlevindu."
+
+#~ msgid "Customize the position, visibility and view of this main dock."
+#~ msgstr "Bestem posisjon, synlighet og utseende til dette hovedpanelet."
+
+#~ msgid "Add a main dock"
+#~ msgstr "Legg til et hovedpanel"
+
+#~ msgid "rate me"
+#~ msgstr "vurder meg"
+
+#~ msgid ""
+#~ "Welcome in Cairo-Dock2 !\n"
+#~ "A default and simple theme has been loaded.\n"
+#~ "You can either familiarize yourself with the dock or choose another theme "
+#~ "with right-click -> Cairo-Dock -> Manage themes.\n"
+#~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
+#~ "If you have any question/request/remark, please pay us a visit at http://glx-"
+#~ "dock.org.\n"
+#~ "Hope you will enjoy this soft !\n"
+#~ "  (you can now click on this dialog to close it)"
+#~ msgstr ""
+#~ "Velkommen til Cairo-dokk2!\n"
+#~ "Et enkelt standardtema er lastet inn.\n"
+#~ "Du kan enten gjøre deg kjent med dokken eller velge et annet tema med høyre-"
+#~ "klikk -> Cairo-dokk -> Administrer tema.\n"
+#~ "En enkel brukerguide finner du ved å høyreklikke -> Cairo-dokk -> Hjelp.\n"
+#~ "Om du har noen spørsmål/forespørsler/kommentarer er du hjertelig velkommen "
+#~ "på http://glx-dock.org.\n"
+#~ "Vi håper du blir fornøyd med denne programvaren!\n"
+#~ "  (Du kan nå klikke på denne dialogen for å lukke den)"
+
+#, c-format
+#~ msgid "Configuration of the '%s' dock"
+#~ msgstr "Konfigurasjon av '%s'"
+
+#~ msgid ""
+#~ "To remove the black rectangle around the dock, you will need to activate a "
+#~ "composite manager.\n"
 #~ "For instance, this can be done by activating desktop effects, launching "
 #~ "Compiz, or activating the composition in Metacity.\n"
 #~ "I can perform this last operation for you. Do you want to proceed ?"
@@ -4313,39 +4693,94 @@ msgstr ""
 #~ "Compiz eller aktivisere funksjonen i Metacity.\n"
 #~ "Jeg kan utføre sistnevnte oppgave for deg. Ønsker du å fortsette?"
 
-#~ msgid ""
-#~ "A useful FAQ which also contains a lot of hints.\n"
-#~ "Roll your mouse over a sentence to make helpful popups appear."
-#~ msgstr ""
-#~ "En nyttig FAQ som også inneholder mange hint.\n"
-#~ "Hold musen over en setning for å se hjelpsomme ledetekster."
+#~ msgid "Middle-clicking on an icon closes the related application"
+#~ msgstr "Klikking på midterste museknapp lukker ikonets applikasjon"
+
+#~ msgid "In the style of Firefox tabs"
+#~ msgstr "På samme måte som fanene i Firefox"
+
+#~ msgid "Configure labels appearence."
+#~ msgstr "Konfigurer tittelens utseende."
+
+#~ msgid "Label readability"
+#~ msgstr "Tittelens lesevennlighet"
+
+#~ msgid "Connection to the themes' server"
+#~ msgstr "Kobling til tema-servereren"
+
+#~ msgid "Show hidden files?"
+#~ msgstr "Vis skjulte filer?"
+
+#~ msgid "Maximum time to download a theme:"
+#~ msgstr "Lengste tid for å laste ned et tema:"
+
+#~ msgid "Connection timeout to the themes' server :"
+#~ msgstr "Tidsgrense for oppkoblingstid til tema-serveren:"
+
+#~ msgid "Draw an image"
+#~ msgstr "Tegn et bilde"
+
+#~ msgid "Use background color for labels?"
+#~ msgstr "Bruke bakgrunnsfarge på titlene?"
 
 #~ msgid "Yes, like that :-)"
 #~ msgstr "Ja, akkurat sånn :-)"
 
 #~ msgid ""
 #~ "Note : many answers have an extra hint.\n"
-#~ "To popup the hint, simply leave the mouse over the sentence for 1 second, "
-#~ "a tooltip will appear."
+#~ "To popup the hint, simply leave the mouse over the sentence for 1 second, a "
+#~ "tooltip will appear."
 #~ msgstr ""
 #~ "Mange svar har et ekstra hint.\n"
 #~ "For å se tipset trenger du bare plassere musepekeren over setningen i ett "
 #~ "sekund."
 
-#~ msgid "How do I re-order my icons?"
-#~ msgstr "Hvordan omorganiserer jeg mine ikoner?"
-
-#~ msgid "Tip: you can even re-order icons of active applications."
-#~ msgstr "Tips: Du kan også flytte aktive programs ikoner."
+#~ msgid ""
+#~ "How do I position applets and taskbar icons at the beginning of the dock?"
+#~ msgstr ""
+#~ "Hvordan plasserer jeg miniprogram og oppgaveikoner på begynnelsen av dokken?"
 
 #~ msgid "Simply drag with the mouse, and drop wherever you wish."
 #~ msgstr "Ganske enkelt dra den med musen og slipp den der du ønsker det."
 
+#~ msgid "Tip: you can even re-order icons of active applications."
+#~ msgstr "Tips: Du kan også flytte aktive programs ikoner."
+
+#~ msgid "How do I re-order my icons?"
+#~ msgstr "Hvordan omorganiserer jeg mine ikoner?"
+
+#~ msgid "Go to the «Icons» module."
+#~ msgstr "Gå til modulen «Ikoner»."
+
+#~ msgid "How can I resize my icons?"
+#~ msgstr "Hvordan kan jeg endre størrelsen på ikonene?"
+
 #~ msgid ""
-#~ "How do I position applets and taskbar icons at the beginning of the dock?"
+#~ "Just drag and drop them out of the dock, they will disappear in an explosion "
+#~ "!"
 #~ msgstr ""
-#~ "Hvordan plasserer jeg miniprogram og oppgaveikoner på begynnelsen av "
-#~ "dokken?"
+#~ "Bare dra og slipp dem utenfor dokken og de vil forsvinne med en eksplosjon!"
+
+#~ msgid "How do I change an icon image?"
+#~ msgstr "Hvordan kan jeg endre ikonets bilde?"
+
+#~ msgid "How do I remove many icons quickly?"
+#~ msgstr "Hvordan fjerner jeg mange ikoner raskt?"
+
+#~ msgid "Dock"
+#~ msgstr "Dokk"
+
+#~ msgid "Go to the «Position» module."
+#~ msgstr "Gå til modulen «Posisjon»."
+
+#~ msgid "How do I adjust the position of the dock above the Gnome-panel?"
+#~ msgstr "Hvordan justerer jeg dokkens posisjon over Gnome-panelet?"
+
+#~ msgid "How do I position my dock on the screen?"
+#~ msgstr "Hvordan velger jeg dokkens plassering på skjermen?"
+
+#~ msgid "If false, only the quick-info will have this background color."
+#~ msgstr "Dersom ikke vil bare kvikk-informasjonen ha denne bakgrunnsfargen."
 
 #~ msgid ""
 #~ "Tip: you can also position applets amongst launchers, by ticking the box "
@@ -4355,34 +4790,52 @@ msgstr ""
 #~ "boksen nedenfor."
 
 #~ msgid ""
-#~ "In the «icons» module, at the bottom, you can select icon order according "
-#~ "to type (launcher/appli/applet)."
+#~ "Tip: you can also simply drag your dock with the mouse by pressing the ALT "
+#~ "key at the same time."
 #~ msgstr ""
-#~ "I modulen «ikoner» nederst kan du bestemme ikonenes rekkefølge ut ifra "
-#~ "type (oppstarter/miniprogram/program)."
-
-#~ msgid "Go to the «Icons» module."
-#~ msgstr "Gå til modulen «Ikoner»."
+#~ "Tips: Du kan også ganske enkelt dra dokken med musen ved å holde inne ALT-"
+#~ "tasten samtidig."
 
 #~ msgid ""
 #~ "Tip: you can also edit a launcher's configuration directly and set a path "
-#~ "for an image. If you do not enter a path, but simply the name of an "
-#~ "image, do not give the extension (.svg, .png, etc.), so as to let the "
-#~ "dock choose the best."
+#~ "for an image. If you do not enter a path, but simply the name of an image, "
+#~ "do not give the extension (.svg, .png, etc.), so as to let the dock choose "
+#~ "the best."
 #~ msgstr ""
 #~ "Tips: Du kan også endre en oppstarter direkte og oppgi filbanen til et "
-#~ "bilde. Dersom du ikke gjør dette, men bare skriver bildets navn så unngå "
-#~ "da også å skrive noe filetternavn (f.eks. .svg, .png osv) og la dokken "
-#~ "gjøre det beste valget."
+#~ "bilde. Dersom du ikke gjør dette, men bare skriver bildets navn så unngå da "
+#~ "også å skrive noe filetternavn (f.eks. .svg, .png osv) og la dokken gjøre "
+#~ "det beste valget."
+
+#~ msgid ""
+#~ "In the «icons» module, at the bottom, you can select icon order according to "
+#~ "type (launcher/appli/applet)."
+#~ msgstr ""
+#~ "I modulen «ikoner» nederst kan du bestemme ikonenes rekkefølge ut ifra type "
+#~ "(oppstarter/miniprogram/program)."
+
+#~ msgid ""
+#~ "I want to see a preview of opened applications by moving my cursor over its "
+#~ "icon"
+#~ msgstr ""
+#~ "Jeg ønsker å se en forhåndsvisning av oppstartede program når jeg beveger "
+#~ "musepekeren over deres ikon."
+
+#~ msgid ""
+#~ "Hint : if you delete an icon pointing to a sub-dock, you will be offered to "
+#~ "either delete the sub-dock’s icons or to move them in the main dock."
+#~ msgstr ""
+#~ "Tips: Dersom du sletter et ikon som er rettet mot en underliggende dokk så "
+#~ "vil du få valget mellom å enten slette underdokkens ikoner eller flytte dem "
+#~ "til hoved-dokken."
 
 #~ msgid ""
 #~ "In the “Icons” module, you can choose an <b>icon theme</b>. Just choose a "
 #~ "theme, and apply.\n"
-#~ "All the themes installed on your system are listed, plus the 'Custom "
-#~ "icons' theme, which represent the icons provided by the Cairo-Dock's "
-#~ "theme;\n"
-#~ " they are located in ~/.config/cairo-dock/current_theme/icons, and you "
-#~ "can add personal icons there.\n"
+#~ "All the themes installed on your system are listed, plus the 'Custom icons' "
+#~ "theme, which represent the icons provided by the Cairo-Dock's theme;\n"
+#~ " they are located in ~/.config/cairo-dock/current_theme/icons, and you can "
+#~ "add personal icons there.\n"
 #~ "If you choose nothing, the default icon theme of your system will be used."
 #~ msgstr ""
 #~ "I modulen «ikoner» kan du velge et <i>ikontema</i>. Bare velg tema, og "
@@ -4394,115 +4847,24 @@ msgstr ""
 #~ "Dersom du ikke gjør noe valg vil ikontemaet som gjelder for resten av "
 #~ "maskinen din bli brukt."
 
-#~ msgid "How do I remove many icons quickly?"
-#~ msgstr "Hvordan fjerner jeg mange ikoner raskt?"
-
-#~ msgid ""
-#~ "Hint : if you delete an icon pointing to a sub-dock, you will be offered "
-#~ "to either delete the sub-dock’s icons or to move them in the main dock."
-#~ msgstr ""
-#~ "Tips: Dersom du sletter et ikon som er rettet mot en underliggende dokk "
-#~ "så vil du få valget mellom å enten slette underdokkens ikoner eller "
-#~ "flytte dem til hoved-dokken."
-
-#~ msgid ""
-#~ "Just drag and drop them out of the dock, they will disappear in an "
-#~ "explosion !"
-#~ msgstr ""
-#~ "Bare dra og slipp dem utenfor dokken og de vil forsvinne med en "
-#~ "eksplosjon!"
-
-#~ msgid "How can I resize my icons?"
-#~ msgstr "Hvordan kan jeg endre størrelsen på ikonene?"
-
-#~ msgid ""
-#~ "Hint : You can define the size of each applet independently, to any size "
-#~ "smaller or equal to the default size. Set it to 0x0 to use the default "
-#~ "size."
-#~ msgstr ""
-#~ "Tips: Du kan fritt definere størrelsen på hvert enkelt miniprogram "
-#~ "uavhengig av hverandre, både større eller mindre enn deres standard "
-#~ "størrelse. Sett dimensjonene til 0x0 for å bruke standard størrelse."
-
-#~ msgid ""
-#~ "In the 'Icons' modules, you can setup the default size of your icons by "
-#~ "type : launchers, apps, applets and separators.\n"
-#~ "You can also setup the zoom factor."
-#~ msgstr ""
-#~ "I modulen 'ikoner' bestemmer du standard størrelse på dine ikoner etter "
-#~ "type: Oppstartere, program og skillelinjer.\n"
-#~ "Du kan også justere skaleringsfaktoren."
-
-#~ msgid ""
-#~ "I want to see a preview of opened applications by moving my cursor over "
-#~ "its icon"
-#~ msgstr ""
-#~ "Jeg ønsker å se en forhåndsvisning av oppstartede program når jeg beveger "
-#~ "musepekeren over deres ikon."
-
-#~ msgid "How do I position my dock on the screen?"
-#~ msgstr "Hvordan velger jeg dokkens plassering på skjermen?"
-
-#~ msgid ""
-#~ "Tip: If you have multiple screens managed by Xinerama, you can tick the "
-#~ "option «Use Xinerama», and choose the screen where you wish your dock to "
-#~ "be positioned."
-#~ msgstr ""
-#~ "Tips: Dersom du har flere skjermer håndtert av Xinerama så kan du klikke "
-#~ "på \"Bruk Xinerama\" og velge den skjermen du ønsker at dokken skal vises "
-#~ "på."
-
-#~ msgid ""
-#~ "Everything is in the «Position» module. You can choose to position it on "
-#~ "the bottom, top, left or right side of your screen.\n"
-#~ "Moreover, you can also position it at the beginning, centre or end of the "
-#~ "screen border."
-#~ msgstr ""
-#~ "Alt finnes i modulen «Plassering». Du kan velge å plassere den på bunnen, "
-#~ "toppen, venstre eller høyre side av skjermen.\n"
-#~ "I tillegg kan du ytterligere justere plasseringen i forhold til "
-#~ "skjermkantens ytterpunkter og senter."
-
-#~ msgid "Go to the «Position» module."
-#~ msgstr "Gå til modulen «Posisjon»."
-
-#~ msgid "How do I adjust the position of the dock above the Gnome-panel?"
-#~ msgstr "Hvordan justerer jeg dokkens posisjon over Gnome-panelet?"
-
-#~ msgid ""
-#~ "Tip: you can also simply drag your dock with the mouse by pressing the "
-#~ "ALT key at the same time."
-#~ msgstr ""
-#~ "Tips: Du kan også ganske enkelt dra dokken med musen ved å holde inne ALT-"
-#~ "tasten samtidig."
-
-#~ msgid ""
-#~ "In the «Position» module, you can add an offset to the screen border."
-#~ msgstr ""
-#~ "I modulen «Plassering» kan du legge til en forskyvning i forhold til "
-#~ "skjermens kant."
-
-#~ msgid "The dock is hidden by the Gnome-panel"
-#~ msgstr "Dokken er skjult bak Gnome-panelet"
-
-#~ msgid ""
-#~ "This is normal, because they are both «docks».\n"
-#~ " You can either move the dock out of the panel, or launch it wih the "
-#~ "command «cairo-dock --keep-above».\n"
-#~ " But you can also (re)move the Gnome-Panel by doing a right click on it."
-#~ msgstr ""
-#~ "Dette er normalt fordi de begge er «dokker».\n"
-#~ "Du kan enten flytte dokken bort fra panelet, eller starte den med "
-#~ "kommandoen «cairo-dock --keep-above».\n"
-#~ "Men du kan også flytte/fjerne Gnome-panelet ved å høyreklikke på det."
-
-#~ msgid "I don’t want other windows covering the dock"
-#~ msgstr "Jeg ønsker ikke at andre vinduer skal kunne overlappe dokken."
-
 #~ msgid "Tip: You can even do that with desklets: making a desklet's panel !."
 #~ msgstr ""
 #~ "Tips: Du kan til og med gjøre dette med miniprogram plassert på "
 #~ "skrivebordet: Lag et panel for dem!"
+
+#~ msgid ""
+#~ "This is normal, because they are both «docks».\n"
+#~ " You can either move the dock out of the panel, or launch it wih the command "
+#~ "«cairo-dock --keep-above».\n"
+#~ " But you can also (re)move the Gnome-Panel by doing a right click on it."
+#~ msgstr ""
+#~ "Dette er normalt fordi de begge er «dokker».\n"
+#~ "Du kan enten flytte dokken bort fra panelet, eller starte den med kommandoen "
+#~ "«cairo-dock --keep-above».\n"
+#~ "Men du kan også flytte/fjerne Gnome-panelet ved å høyreklikke på det."
+
+#~ msgid "Go to the «Accessibility» module."
+#~ msgstr "Gå til modulen «Tilgjengelighet»."
 
 #~ msgid ""
 #~ "Just choose the corresponding option in the “Accessibility” module.\n"
@@ -4511,57 +4873,17 @@ msgstr ""
 #~ "Bare gjør det tilsvarende valget i modulen «tilgjengelighet».\n"
 #~ "Dette vil reservere plass kun for dokken."
 
-#~ msgid "Go to the «Accessibility» module."
-#~ msgstr "Gå til modulen «Tilgjengelighet»."
+#~ msgid "The dock is hidden by the Gnome-panel"
+#~ msgstr "Dokken er skjult bak Gnome-panelet"
+
+#~ msgid "I don’t want other windows covering the dock"
+#~ msgstr "Jeg ønsker ikke at andre vinduer skal kunne overlappe dokken."
 
 #~ msgid "I don’t want that the dock covers windows"
 #~ msgstr "Jeg ønsker ikke at dokken skal overlappe vinduer."
 
-#~ msgid ""
-#~ "Tip: You can choose to pop-up the dock only when the mouse hits the "
-#~ "screen corner instead of the whole screen border.\n"
-#~ "You can also set-up the size of the trigger zone, and even set an image "
-#~ "to it."
-#~ msgstr ""
-#~ "Tips: Du kan velge at dokken kun skal vises dersom musen beveger seg ved "
-#~ "skjermens hjørne istedet for hele skjermkanten.\n"
-#~ "Du kan også bestemme størrelsen utløserområdet, og til og med sette inn "
-#~ "et bilde der."
-
-#~ msgid ""
-#~ "Two choices are available in the “Accessibility” module:\n"
-#~ " - either choose to “keep the dock below other windows”. The dock will "
-#~ "then pop-up when you place the mouse on its screen border.\n"
-#~ " - or choose the auto-hide. The dock will then hide itself and reappear "
-#~ "when you enter the trigger zone."
-#~ msgstr ""
-#~ "To valg er tilgjengelige i modulen \"Tilgjengelighet\":\n"
-#~ " - Enten å \"holde dokken bak andre vinduer\". Dokken vil da vises i "
-#~ "front når du beveger musen ved dokkens skjermkant.\n"
-#~ " - eller la den gå i skjul automatisk. Dokken vil da forsvinne fra "
-#~ "skjermen og dukke opp igjen når du beveger deg i utløserområdet."
-
 #~ msgid "How can I add a separator?"
 #~ msgstr "Hvordan legger jeg til et skille?"
-
-#~ msgid ""
-#~ "Tip: if you choose to mix applets and launchers in the 'Icons' module, "
-#~ "you can also place separators between applets then."
-#~ msgstr ""
-#~ "Tips: Dersom du velger å mikse program og oppstartere i modulen 'ikoner' "
-#~ "så får du også muligheten til å gruppere miniprogrammene med egne "
-#~ "skillelinjer."
-
-#~ msgid ""
-#~ "Simply right-click on the dock where you wish to add a separator and "
-#~ "select «add a separator».\n"
-#~ "You can position it wherever you wish (except in amongst taskbar icons) "
-#~ "by dragging it with the mouse."
-#~ msgstr ""
-#~ "Ganske enkelt høyreklikk på dokken der du ønsker å plassere et skilletegn "
-#~ "og velg \"legg til skille\".\n"
-#~ "Du kan flytte den hvor som helst (på lik linje med vanlige ikon) ved å "
-#~ "dra den med musen."
 
 #~ msgid ""
 #~ "I don't want to have a separator between launchers , applications and "
@@ -4569,41 +4891,136 @@ msgstr ""
 #~ msgstr ""
 #~ "Jeg ønsker ikke å separere oppstartere, applikasjoner og miniprogram."
 
-#~ msgid ""
-#~ "In the «Icons» module, in the «separator» section, untick the box that "
-#~ "says «add automatic separators»."
-#~ msgstr ""
-#~ "I modulen «Ikoner» under kategorien «Separator» klikk bort haken i "
-#~ "avkrysningsboksen som velger «legg til skillelinjer automatisk»."
-
 #~ msgid "How do I add a sub-dock?"
 #~ msgstr "Hvordan lage en underliggende dokk?"
-
-#~ msgid ""
-#~ "Tip: If you want to move an icon into another dock, right-click on it, go "
-#~ "to 'Move to', and choose the one you want in the list. You can do the "
-#~ "same with applets as well, allowing you to group many applets in a sub-"
-#~ "dock. You can also create new main docks this way."
-#~ msgstr ""
-#~ "Tips: Dersom du ønsker å flytte et ikon til en annen dokk så høyreklikk "
-#~ "på den, gå til \"flytt til\" og gjør ditt valg på listen. Du kan du det "
-#~ "samme med miniprogram også, noe som gjør det mulig å gruppere mange "
-#~ "miniprogram i en under-dokk. Du kan også lage nye hoved-dokker på denne "
-#~ "måten."
-
-#~ msgid ""
-#~ "Just right-click on the dock, then select «Add a sub-dock». Fill the "
-#~ "config panel with a name and image, then confirm."
-#~ msgstr ""
-#~ "Bare høyreklikk på dokken og velg «Legg til sub-dokk». Så fyller du ut "
-#~ "navn og bilde i konfigurasjonsvinduet og velger bekreft."
 
 #~ msgid "How can I have many main docks?"
 #~ msgstr "Hvordan kan jeg lage flere hoved-dokker?"
 
 #~ msgid ""
-#~ "Hint: you can then move icons inside this new dock by following the "
-#~ "previous method and selecting the dock you've just created.\n"
+#~ "Tip: if you choose to mix applets and launchers in the 'Icons' module, you "
+#~ "can also place separators between applets then."
+#~ msgstr ""
+#~ "Tips: Dersom du velger å mikse program og oppstartere i modulen 'ikoner' så "
+#~ "får du også muligheten til å gruppere miniprogrammene med egne skillelinjer."
+
+#~ msgid ""
+#~ "Hint : You can define the size of each applet independently, to any size "
+#~ "smaller or equal to the default size. Set it to 0x0 to use the default size."
+#~ msgstr ""
+#~ "Tips: Du kan fritt definere størrelsen på hvert enkelt miniprogram uavhengig "
+#~ "av hverandre, både større eller mindre enn deres standard størrelse. Sett "
+#~ "dimensjonene til 0x0 for å bruke standard størrelse."
+
+#~ msgid ""
+#~ "Tip: You can choose to pop-up the dock only when the mouse hits the screen "
+#~ "corner instead of the whole screen border.\n"
+#~ "You can also set-up the size of the trigger zone, and even set an image to "
+#~ "it."
+#~ msgstr ""
+#~ "Tips: Du kan velge at dokken kun skal vises dersom musen beveger seg ved "
+#~ "skjermens hjørne istedet for hele skjermkanten.\n"
+#~ "Du kan også bestemme størrelsen utløserområdet, og til og med sette inn et "
+#~ "bilde der."
+
+#~ msgid "In the «Position» module, you can add an offset to the screen border."
+#~ msgstr ""
+#~ "I modulen «Plassering» kan du legge til en forskyvning i forhold til "
+#~ "skjermens kant."
+
+#~ msgid ""
+#~ "Everything is in the «Position» module. You can choose to position it on the "
+#~ "bottom, top, left or right side of your screen.\n"
+#~ "Moreover, you can also position it at the beginning, centre or end of the "
+#~ "screen border."
+#~ msgstr ""
+#~ "Alt finnes i modulen «Plassering». Du kan velge å plassere den på bunnen, "
+#~ "toppen, venstre eller høyre side av skjermen.\n"
+#~ "I tillegg kan du ytterligere justere plasseringen i forhold til "
+#~ "skjermkantens ytterpunkter og senter."
+
+#~ msgid ""
+#~ "In the «Icons» module, in the «separator» section, untick the box that says "
+#~ "«add automatic separators»."
+#~ msgstr ""
+#~ "I modulen «Ikoner» under kategorien «Separator» klikk bort haken i "
+#~ "avkrysningsboksen som velger «legg til skillelinjer automatisk»."
+
+#~ msgid ""
+#~ "Tip: If you have multiple screens managed by Xinerama, you can tick the "
+#~ "option «Use Xinerama», and choose the screen where you wish your dock to be "
+#~ "positioned."
+#~ msgstr ""
+#~ "Tips: Dersom du har flere skjermer håndtert av Xinerama så kan du klikke på "
+#~ "\"Bruk Xinerama\" og velge den skjermen du ønsker at dokken skal vises på."
+
+#~ msgid ""
+#~ "In the 'Icons' modules, you can setup the default size of your icons by type "
+#~ ": launchers, apps, applets and separators.\n"
+#~ "You can also setup the zoom factor."
+#~ msgstr ""
+#~ "I modulen 'ikoner' bestemmer du standard størrelse på dine ikoner etter "
+#~ "type: Oppstartere, program og skillelinjer.\n"
+#~ "Du kan også justere skaleringsfaktoren."
+
+#~ msgid ""
+#~ "Two choices are available in the “Accessibility” module:\n"
+#~ " - either choose to “keep the dock below other windows”. The dock will then "
+#~ "pop-up when you place the mouse on its screen border.\n"
+#~ " - or choose the auto-hide. The dock will then hide itself and reappear when "
+#~ "you enter the trigger zone."
+#~ msgstr ""
+#~ "To valg er tilgjengelige i modulen \"Tilgjengelighet\":\n"
+#~ " - Enten å \"holde dokken bak andre vinduer\". Dokken vil da vises i front "
+#~ "når du beveger musen ved dokkens skjermkant.\n"
+#~ " - eller la den gå i skjul automatisk. Dokken vil da forsvinne fra skjermen "
+#~ "og dukke opp igjen når du beveger deg i utløserområdet."
+
+#~ msgid ""
+#~ "Tip: If you want to move an icon into another dock, right-click on it, go to "
+#~ "'Move to', and choose the one you want in the list. You can do the same with "
+#~ "applets as well, allowing you to group many applets in a sub-dock. You can "
+#~ "also create new main docks this way."
+#~ msgstr ""
+#~ "Tips: Dersom du ønsker å flytte et ikon til en annen dokk så høyreklikk på "
+#~ "den, gå til \"flytt til\" og gjør ditt valg på listen. Du kan du det samme "
+#~ "med miniprogram også, noe som gjør det mulig å gruppere mange miniprogram i "
+#~ "en under-dokk. Du kan også lage nye hoved-dokker på denne måten."
+
+#~ msgid ""
+#~ "Simply right-click on the dock where you wish to add a separator and select "
+#~ "«add a separator».\n"
+#~ "You can position it wherever you wish (except in amongst taskbar icons) by "
+#~ "dragging it with the mouse."
+#~ msgstr ""
+#~ "Ganske enkelt høyreklikk på dokken der du ønsker å plassere et skilletegn og "
+#~ "velg \"legg til skille\".\n"
+#~ "Du kan flytte den hvor som helst (på lik linje med vanlige ikon) ved å dra "
+#~ "den med musen."
+
+#~ msgid ""
+#~ "Just right-click on the dock, then select «Add a sub-dock». Fill the config "
+#~ "panel with a name and image, then confirm."
+#~ msgstr ""
+#~ "Bare høyreklikk på dokken og velg «Legg til sub-dokk». Så fyller du ut navn "
+#~ "og bilde i konfigurasjonsvinduet og velger bekreft."
+
+#~ msgid "Go to the «Views» module."
+#~ msgstr "Gå til modulen «visninger»."
+
+#~ msgid ""
+#~ "Tip: you can set up the view for each sub-dock. Simply edit the icon "
+#~ "pointing to the sub-dock and choose the view you wish to use for it."
+#~ msgstr ""
+#~ "Tips: Du kan bestemme utseende for hver under-dokk. Bare rediger ikonet som "
+#~ "peker mot dokken og velg hvilken visningsvariant du ønsker å bruke på den."
+
+#~ msgid "How can I have a 3D dock?"
+#~ msgstr "Hvordan kan jeg ha en 3D dokk?"
+
+#~ msgid ""
+#~ "Hint: you can then move icons inside this new dock by following the previous "
+#~ "method and selecting the dock you've just created.\n"
 #~ "To place this new dock, right click on it, and in the Cairo-dock sub-menu "
 #~ "choose “configure this dock”."
 #~ msgstr ""
@@ -4613,42 +5030,6 @@ msgstr ""
 #~ "velger du \"konfigurer denne dokken\"."
 
 #~ msgid ""
-#~ "Right-click on a launcher or an applet, go to 'Move to', and choose 'a "
-#~ "new main dock'. A new dock will be created, with this icon inside."
-#~ msgstr ""
-#~ "Høyreklikk på en oppstarter eller miniprogram, velg \"flytt til\", "
-#~ "deretter \"en ny dokk\". En ny dokk vil bli laget med dette ikonet "
-#~ "plassert."
-
-#~ msgid "How can I have a 3D dock?"
-#~ msgstr "Hvordan kan jeg ha en 3D dokk?"
-
-#~ msgid ""
-#~ "Tip: you can set up the view for each sub-dock. Simply edit the icon "
-#~ "pointing to the sub-dock and choose the view you wish to use for it."
-#~ msgstr ""
-#~ "Tips: Du kan bestemme utseende for hver under-dokk. Bare rediger ikonet "
-#~ "som peker mot dokken og velg hvilken visningsvariant du ønsker å bruke på "
-#~ "den."
-
-#~ msgid ""
-#~ "Any dock can be displayed with one view, and many views are available "
-#~ "(3D, Curve, etc).\n"
-#~ "Then, go to the «Views» module, and choose the view you wish to use for "
-#~ "main dock, and for sub-dock."
-#~ msgstr ""
-#~ "Du kan velge visning til en dokk, og det er mange visningsvarianter "
-#~ "tilgjengelig (3D, kurve, osv).\n"
-#~ "Deretter gå til modulen \"Visninger\" og velg den varianten du ønsker å "
-#~ "bruke for hoved-dokken samt underdokkene."
-
-#~ msgid "Go to the «Views» module."
-#~ msgstr "Gå til modulen «visninger»."
-
-#~ msgid "How can I change the background of my docks?"
-#~ msgstr "Hvordan kan jeg endre dokkenes bakgrunner?"
-
-#~ msgid ""
 #~ "Hint : the Parabolic view doe not have a background, but the Slide and "
 #~ "Rainbow views have their own background parameters."
 #~ msgstr ""
@@ -4656,118 +5037,131 @@ msgstr ""
 #~ "deres egne bakgrunnsparametre."
 
 #~ msgid ""
-#~ "In the 'Background' module, you can either choose an image, or a color "
-#~ "gradation.\n"
-#~ "If you set an image, it will be used as the background, if you don't, the "
-#~ "gradatoin will be used."
+#~ "Any dock can be displayed with one view, and many views are available (3D, "
+#~ "Curve, etc).\n"
+#~ "Then, go to the «Views» module, and choose the view you wish to use for main "
+#~ "dock, and for sub-dock."
 #~ msgstr ""
-#~ "I 'Bakgrunn'-modulen kan du enten velge et bilde eller en "
-#~ "fargegradering.\n"
-#~ "Dersom du velger et bilde blir det brukt som bakgrunn, ellers vil "
-#~ "fargegradering bli brukt."
+#~ "Du kan velge visning til en dokk, og det er mange visningsvarianter "
+#~ "tilgjengelig (3D, kurve, osv).\n"
+#~ "Deretter gå til modulen \"Visninger\" og velg den varianten du ønsker å "
+#~ "bruke for hoved-dokken samt underdokkene."
+
+#~ msgid ""
+#~ "Right-click on a launcher or an applet, go to 'Move to', and choose 'a new "
+#~ "main dock'. A new dock will be created, with this icon inside."
+#~ msgstr ""
+#~ "Høyreklikk på en oppstarter eller miniprogram, velg \"flytt til\", deretter "
+#~ "\"en ny dokk\". En ny dokk vil bli laget med dette ikonet plassert."
+
+#~ msgid "How can I change the background of my docks?"
+#~ msgstr "Hvordan kan jeg endre dokkenes bakgrunner?"
 
 #~ msgid "Go to the «Background» module."
 #~ msgstr "Gå til modulen «Bakgrunn»."
+
+#~ msgid "How do I configure their position?"
+#~ msgstr "Hvordan setter jeg deres posisjon?"
+
+#~ msgid ""
+#~ "Tip: If you don't want to move it any more, you can lock its position. "
+#~ "Simply right click on the desklet, and select «lock position». To unlock it, "
+#~ "de-select this option."
+#~ msgstr ""
+#~ "Tips: Dersom du ikke ønsker å flytte den mer så kan du låse dens posisjon. "
+#~ "Bare høyre-klikk på skrivebordsprogrammet og velg «lås posisjon». Velg bort "
+#~ "dette valget igjen for å låse den opp."
 
 #~ msgid "I find the dock too flashy, can it be more sober?"
 #~ msgstr "Jeg synes dokken er litt for flashy, kan den være mer nøytral?"
 
 #~ msgid ""
-#~ "Hint : try different themes, some are already very sober, like Dust-Sand "
-#~ "or Elementary."
+#~ "Tip: to detach an applet, you can drag and drop its icon from the dock to "
+#~ "the desktop"
 #~ msgstr ""
-#~ "Tips: Test forskjellige tema, noen er allerede veldig nøytrale som Dust-"
-#~ "Sand eller Elementary."
+#~ "Tips: For å løsne et miniprogram kan du dra og slippe dens ikon fra dokken "
+#~ "til skrivebordet"
 
 #~ msgid ""
 #~ "Who can do more can do less ! You can for instance deactivate the \"Icon "
 #~ "effects\" plug-in,\n"
-#~ " or deactivate the effect on mouse hovering in \"Animated Icon\" plug-"
-#~ "in.\n"
+#~ " or deactivate the effect on mouse hovering in \"Animated Icon\" plug-in.\n"
 #~ "You can also decrease the zoom effect or lower the icons' reflect in the "
 #~ "\"Icon\" module,\n"
 #~ " change the background colors in the \"Background\" module, or change the "
 #~ "view to the \"default\" view in the \"Views\" module.\n"
-#~ "In brief, you can easily have something as much sober as a gnome-panel, "
-#~ "but this would be a shame ! ^_^"
+#~ "In brief, you can easily have something as much sober as a gnome-panel, but "
+#~ "this would be a shame ! ^_^"
 #~ msgstr ""
 #~ "Den som kan gjøre mye kan gjøre lite! Du kan for eksempel deaktivere "
 #~ "programtillegget \"Ikon-effekter\",\n"
-#~ " eller deaktivere effekten når musen går over ikonet i tillegget "
-#~ "\"Animerte ikon\".\n"
-#~ "Du kan også dempe zoom-effekten eller minske ikonenes refleksjon i \"Ikon"
-#~ "\"-tillegget,\n"
+#~ " eller deaktivere effekten når musen går over ikonet i tillegget \"Animerte "
+#~ "ikon\".\n"
+#~ "Du kan også dempe zoom-effekten eller minske ikonenes refleksjon i \"Ikon\"-"
+#~ "tillegget,\n"
 #~ " endre bakgrunnsfargen i \"Bakgrunn\"-modulen, eller endre visning til "
 #~ "\"standard\" visning i \"Visninger\"-modulen.\n"
-#~ "Rent generelt så kan du enkelt gjøre ting så anonymt som et gnome-panel, "
-#~ "men det ville jo vært en skam! ^_^"
+#~ "Rent generelt så kan du enkelt gjøre ting så anonymt som et gnome-panel, men "
+#~ "det ville jo vært en skam! ^_^"
+
+#~ msgid ""
+#~ "Hint : try different themes, some are already very sober, like Dust-Sand or "
+#~ "Elementary."
+#~ msgstr ""
+#~ "Tips: Test forskjellige tema, noen er allerede veldig nøytrale som Dust-Sand "
+#~ "eller Elementary."
+
+#~ msgid "How do I configure their behaviour?"
+#~ msgstr "Hvordan setter jeg deres oppførsel?"
+
+#~ msgid "Simply drag them with the mouse."
+#~ msgstr "Ganske enkelt dra dem med musa."
+
+#~ msgid ""
+#~ "Tip: if you lock the desklet, the buttons will not appear. You can reset a "
+#~ "rotation by middle-clicking on the appropriate button."
+#~ msgstr ""
+#~ "Tips: Dersom du låser skrivebordsprogrammet så vil knappene ikke vises. Du "
+#~ "kan tilbakestille en rotasjon ved å klikke med midterste museknapp på ønsket "
+#~ "knapp."
+
+#~ msgid ""
+#~ "In the 'Background' module, you can either choose an image, or a color "
+#~ "gradation.\n"
+#~ "If you set an image, it will be used as the background, if you don't, the "
+#~ "gradatoin will be used."
+#~ msgstr ""
+#~ "I 'Bakgrunn'-modulen kan du enten velge et bilde eller en fargegradering.\n"
+#~ "Dersom du velger et bilde blir det brukt som bakgrunn, ellers vil "
+#~ "fargegradering bli brukt."
+
+#~ msgid "sub-dock"
+#~ msgstr "under-dokk"
+
+#~ msgid "main dock"
+#~ msgstr "hoved-dokk"
+
+#~ msgid "How do I change their decorations?"
+#~ msgstr "Hvordan endrer jeg deres dekorasjoner?"
+
+#~ msgid ""
+#~ "Desklets are widgets which are displayed on your desktop. Each applet can be "
+#~ "detached from the dock to act as a desklet."
+#~ msgstr ""
+#~ "Skrivebordprogram er små applikasjoner som vises på ditt skrivebord. Alle "
+#~ "miniprogram kan løsnes fra dokken og brukes som skrivebordprogram."
 
 #~ msgid "What are «desklets»?"
 #~ msgstr "Hva er \"skrivebordprogram\"?"
 
 #~ msgid ""
-#~ "Tip: to detach an applet, you can drag and drop its icon from the dock to "
-#~ "the desktop"
-#~ msgstr ""
-#~ "Tips: For å løsne et miniprogram kan du dra og slippe dens ikon fra "
-#~ "dokken til skrivebordet"
-
-#~ msgid ""
-#~ "Desklets are widgets which are displayed on your desktop. Each applet can "
-#~ "be detached from the dock to act as a desklet."
-#~ msgstr ""
-#~ "Skrivebordprogram er små applikasjoner som vises på ditt skrivebord. Alle "
-#~ "miniprogram kan løsnes fra dokken og brukes som skrivebordprogram."
-
-#~ msgid "How do I configure their position?"
-#~ msgstr "Hvordan setter jeg deres posisjon?"
-
-#~ msgid "Simply drag them with the mouse."
-#~ msgstr "Ganske enkelt dra dem med musa."
-
-#~ msgid "How do I configure their behaviour?"
-#~ msgstr "Hvordan setter jeg deres oppførsel?"
-
-#~ msgid ""
-#~ "Tip: if you lock the desklet, the buttons will not appear. You can reset "
-#~ "a rotation by middle-clicking on the appropriate button."
-#~ msgstr ""
-#~ "Tips: Dersom du låser skrivebordsprogrammet så vil knappene ikke vises. "
-#~ "Du kan tilbakestille en rotasjon ved å klikke med midterste museknapp på "
-#~ "ønsket knapp."
-
-#~ msgid ""
-#~ "There are small buttons on the top and left side of the desklet. They "
-#~ "allow  you to rotate the desklet in 3D !"
+#~ "There are small buttons on the top and left side of the desklet. They allow  "
+#~ "you to rotate the desklet in 3D !"
 #~ msgstr ""
 #~ "Det er små knapper på toppen og venstre side av skrivebordsprogrammet. De "
 #~ "lar deg rotere applikasjonen i 3D!"
 
-#~ msgid "How do I change their decorations?"
-#~ msgstr "Hvordan endrer jeg deres dekorasjoner?"
-
-#~ msgid "Other applets"
-#~ msgstr "Andre miniprogrammer"
-
-#~ msgid "failed to mount %s"
-#~ msgstr "kunne ikke montere %s"
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "Avmontering av %s mislyktes"
-
 #~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want "
-#~ "to select a different decorator for your dialog boxes."
+#~ "Main dock's paramaters are available in the main configuration window."
 #~ msgstr ""
-#~ "Dette gir forskjellige vindudekorasjoner. Skru på dette hvis du ønsker "
-#~ "velge en annen dekoratør for dine dialogvinduer."
-
-#~ msgid "Provides various animations for your icons."
-#~ msgstr "Tilfører animasjoner til ikonene dine."
-
-#~ msgid ""
-#~ "Provides different views for Cairo-Dock. Enable this first if you want to "
-#~ "select a different view for your docks."
-#~ msgstr ""
-#~ "Tilbyr forskjellige visninger for Cairo-Dock. Skru på dette hvis du "
-#~ "ønsker velge en annen visning for ditt samlevindu."
+#~ "Hoved-dokkens parametre er tilgjengelig i vindu for hovedkonfigurasjon."

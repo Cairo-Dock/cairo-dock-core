@@ -8,15 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-04-19 12:35+0100\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2011-07-03 00:01+0000\n"
+"PO-Revision-Date: 2011-03-02 21:52+0000\n"
+"Last-Translator: ferran <Unknown>\n"
 "Language-Team: Catalan <ca@li.org>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-16 04:34+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-07-04 04:32+0000\n"
+"X-Generator: Launchpad (build 13168)\n"
+"Language: ca\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -69,7 +70,8 @@ msgid "category"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:621
@@ -282,7 +284,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:856
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:865 ../data/messages:493
@@ -429,7 +432,8 @@ msgid "Get more applets!"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:425
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:427 ../src/help/applet-init.c:28
@@ -456,7 +460,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:471
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
+msgstr ""
+"Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
 
 #: ../src/cairo-dock-menu.c:482
 msgid ""
@@ -487,8 +492,8 @@ msgstr ""
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
-"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs "
-"segur ?"
+"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs segur "
+"?"
 
 #: ../src/cairo-dock-menu.c:903
 msgid ""
@@ -994,9 +999,8 @@ msgid "Tips and Tricks"
 msgstr ""
 
 #: ../src/help/applet-tips-dialog.c:299
-#, fuzzy
 msgid "Category"
-msgstr "Categories"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:453
 #: ../data/messages:621
@@ -1028,9 +1032,8 @@ msgid "General"
 msgstr ""
 
 #: ../data/messages:3
-#, fuzzy
 msgid "Using the dock"
-msgstr "Dock dret"
+msgstr ""
 
 #: ../data/messages:5
 msgid ""
@@ -1057,9 +1060,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:13
-#, fuzzy
 msgid "Adding a launcher"
-msgstr "llançadors"
+msgstr ""
 
 #: ../data/messages:15
 msgid ""
@@ -1080,10 +1082,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:21
-#, fuzzy
 msgid "Grouping icons into a sub-dock"
 msgstr ""
-"Voleu agrupar en un sol sub-dock les finestres d'una mateixa aplicació?"
 
 #: ../data/messages:23
 msgid ""
@@ -1094,9 +1094,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:25
-#, fuzzy
 msgid "Moving icons"
-msgstr "blocar icones"
+msgstr ""
 
 #: ../data/messages:27
 msgid ""
@@ -1188,9 +1187,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:55
-#, fuzzy
 msgid "Launching an application several times"
-msgstr "Mescla llançadors i aplicacions"
+msgstr ""
 
 #: ../data/messages:57
 msgid ""
@@ -1209,10 +1207,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:63
-#, fuzzy
 msgid "Grouping windows of a given application"
 msgstr ""
-"Voleu agrupar en un sol sub-dock les finestres d'una mateixa aplicació?"
 
 #: ../data/messages:65
 msgid ""
@@ -1223,9 +1219,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:67
-#, fuzzy
 msgid "Setting a custom icon for an application"
-msgstr "Mescla llançadors i aplicacions"
+msgstr ""
 
 #: ../data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
@@ -1257,9 +1252,8 @@ msgid "Docks"
 msgstr ""
 
 #: ../data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Posició a la pantalla"
+msgstr ""
 
 #: ../data/messages:83
 msgid ""
@@ -1271,9 +1265,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:85
-#, fuzzy
 msgid "Hiding the dock to use all the screen"
-msgstr "Eixampla sempre el Dock fins abastar la pantalla"
+msgstr ""
 
 #: ../data/messages:87
 msgid ""
@@ -1302,9 +1295,8 @@ msgid "Changing the look of a dock"
 msgstr ""
 
 #: ../data/messages:103
-#, fuzzy
 msgid "Placing applets on your desktop"
-msgstr "Mostra només les aplicacions del escriptori actual"
+msgstr ""
 
 #: ../data/messages:105
 msgid ""
@@ -1385,9 +1377,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:129
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "Mou-ho tot a l'escriptori %d"
+msgstr ""
 
 #: ../data/messages:131
 msgid ""
@@ -1509,9 +1500,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:169
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Accessoris"
+msgstr ""
 
 #: ../data/messages:171
 msgid ""
@@ -1588,8 +1578,9 @@ msgstr ""
 
 #: ../data/messages:195
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1637,8 +1628,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219
@@ -1885,9 +1876,8 @@ msgstr ""
 
 #: ../data/messages:323 ../data/messages:325 ../data/messages:1415
 #: ../data/messages:1495 ../data/messages:1527
-#, fuzzy
 msgid "Icon"
-msgstr "Icones"
+msgstr ""
 
 #: ../data/messages:327
 msgid "Name of the dock it belongs to:"
@@ -1898,9 +1888,8 @@ msgid "Name of the icon as it will appear in its caption in the dock:"
 msgstr ""
 
 #: ../data/messages:331
-#, fuzzy
 msgid "Leave empty to use the default one."
-msgstr "Deixeu-ho buit per usar la mateixa vista que el Dock principal."
+msgstr ""
 
 #: ../data/messages:333
 msgid "Image filename:"
@@ -1915,14 +1904,12 @@ msgid "Desired icon size for this applet"
 msgstr ""
 
 #: ../data/messages:339
-#, fuzzy
 msgid "Applet's Handbook"
-msgstr "Manual de la miniaplicació"
+msgstr ""
 
 #: ../data/messages:341
-#, fuzzy
 msgid "Desklet"
-msgstr "Escriptori"
+msgstr ""
 
 #: ../data/messages:345
 msgid ""
@@ -1931,9 +1918,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:347
-#, fuzzy
 msgid "Lock position?"
-msgstr "blocar icones"
+msgstr ""
 
 #: ../data/messages:349
 msgid ""
@@ -1962,9 +1948,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:359
-#, fuzzy
 msgid "Rotation:"
-msgstr "Representació"
+msgstr ""
 
 #: ../data/messages:363
 msgid "Is detached from the dock"
@@ -1990,9 +1975,8 @@ msgid "Keep on widget layer"
 msgstr ""
 
 #: ../data/messages:379
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "Mou-ho tot a l'escriptori %d"
+msgstr ""
 
 #: ../data/messages:381 ../data/messages:977
 msgid "Decorations"
@@ -2003,9 +1987,8 @@ msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
 
 #: ../data/messages:385
-#, fuzzy
 msgid "Choose a decoration theme for this desklet:"
-msgstr "Tria la vista per aquest Dock:/"
+msgstr ""
 
 #: ../data/messages:387
 msgid ""
@@ -2013,50 +1996,44 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:389
-#, fuzzy
 msgid "Background image:"
-msgstr "Fons"
+msgstr ""
 
 #: ../data/messages:391
-#, fuzzy
 msgid "Background transparency:"
-msgstr "Fes les icones transparents"
+msgstr ""
 
 #: ../data/messages:393
 msgid "in pixels. Use this to adjust the left position of drawings."
 msgstr ""
 
 #: ../data/messages:395
-#, fuzzy
 msgid "Left offset:"
-msgstr "Desplaçament lateral:"
+msgstr ""
 
 #: ../data/messages:397
 msgid "in pixels. Use this to adjust the top position of drawings."
 msgstr ""
 
 #: ../data/messages:399
-#, fuzzy
 msgid "Top offset:"
-msgstr "Desplaçament lateral:"
+msgstr ""
 
 #: ../data/messages:401
 msgid "in pixels. Use this to adjust the right position of drawings."
 msgstr ""
 
 #: ../data/messages:403
-#, fuzzy
 msgid "Right offset:"
-msgstr "Desplaçament lateral:"
+msgstr ""
 
 #: ../data/messages:405
 msgid "in pixels. Use this to adjust the bottom position of drawings."
 msgstr ""
 
 #: ../data/messages:407
-#, fuzzy
 msgid "Bottom offset:"
-msgstr "Dock inferior"
+msgstr ""
 
 #: ../data/messages:409
 msgid ""
@@ -3111,7 +3088,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1053
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1055
@@ -3408,8 +3386,8 @@ msgstr ""
 
 #: ../data/messages:1207
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1209
@@ -3943,8 +3921,8 @@ msgstr ""
 #: ../data/messages:1563
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
+":\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -4025,8 +4003,8 @@ msgstr ""
 #: ../data/messages:1575
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
+"!)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4117,6 +4095,223 @@ msgid ""
 msgstr ""
 
 #~ msgid ""
+#~ "the theme couldn't be found; the default theme will be used instead.\n"
+#~ " You can change this by opening the configuration of this module; do you "
+#~ "want to do it now ?"
+#~ msgstr ""
+#~ "no s'ha pogut trobar el tema; en el seu lloc s'utilitzarà el tema per "
+#~ "defecte.\n"
+#~ " Pots canviar això obrint la configuració d'aquest mòdul; vols fer-ho ara?"
+
+#, c-format
+#~ msgid "%s is now unmounted"
+#~ msgstr "%s està desmuntat"
+
+#, c-format
+#~ msgid "%s is now mounted"
+#~ msgstr "%s està muntat"
+
+#~ msgid "Use OpenGL in Cairo-Dock ?"
+#~ msgstr "Utilitzar OpenGL a Cairo-Dock ?"
+
+#, c-format
+#~ msgid "failed to mount %s"
+#~ msgstr "ha fallat el muntatge de %s"
+
+#~ msgid "Do you want to monitor the content of the directory ?"
+#~ msgstr "Vols monitoritzar el contingut de la carpeta?"
+
+#~ msgid "theme"
+#~ msgstr "tema"
+
+#, c-format
+#~ msgid "failed to unmount %s"
+#~ msgstr "no s'ha pogut desmuntar %s"
+
+#~ msgid "rating"
+#~ msgstr "valoració"
+
+#~ msgid "Plug-ins"
+#~ msgstr "Connectors"
+
+#, c-format
+#~ msgid ""
+#~ "The module '%s' is not present. You need to install it or its dependencies "
+#~ "to make the most of this module."
+#~ msgstr ""
+#~ "No hi ha el mòdul '%s'. Hauries d'instal·lar el mòdul o les seves "
+#~ "dependències per treure'n el màxim profit."
+
+#~ msgid "Highlight words"
+#~ msgstr "Realçar les paraules"
+
+#~ msgid "Configuration of Cairo-Dock"
+#~ msgstr "Configuració de Cairo-Dock"
+
+#~ msgid "Do you want to activate it now ?"
+#~ msgstr "Vols activar-ho immediatament?"
+
+#, c-format
+#~ msgid "The module '%s' is not activated."
+#~ msgstr "El mòdul '%s' no està activat."
+
+#~ msgid "Configuration of the launchers"
+#~ msgstr "Configuració dels llançadors"
+
+#~ msgid "Activate this module"
+#~ msgstr "Activa aquest mòdul"
+
+#~ msgid "Configure the look of the dialog bubbles."
+#~ msgstr "Configurar l'aspecte de les notificacions"
+
+#~ msgid "Set a background to your dock."
+#~ msgstr "Estableix un fons al teu acoblador"
+
+#~ msgid ""
+#~ "It provides different window decorators. Activate it first if you want to "
+#~ "select a different decorator for your dialogs."
+#~ msgstr ""
+#~ "Proporciona diferents decoracions de finestra. Activa-ho primer si vols "
+#~ "seleccionar una decoració diferent per als teus diàlegs."
+
+#~ msgid "Hidden Dock"
+#~ msgstr "Barra Oculta"
+
+#~ msgid "Display and interact with the currently open windows."
+#~ msgstr "Mostra i interacciona amb les finestres obertes actualment."
+
+#~ msgid ""
+#~ "It seems that you've never entered the help module yet.\n"
+#~ "If you have some difficulty to configure the dock, or if you are willing to "
+#~ "customize it,\n"
+#~ "the Help module is here for you !\n"
+#~ "Do you want to take a look at it now ?"
+#~ msgstr ""
+#~ "Sembla que encara no has entrat al módul d'ajuda.\n"
+#~ "El mòdul d'Ajuda hi és per si tens alguna dificultat per configurar la "
+#~ "barra, \n"
+#~ "o vols personalitzar-la !\n"
+#~ "Vols fer-hi una ullada ?"
+
+#~ msgid "Quit Cairo-Dock ?"
+#~ msgstr "Tancar Cairo-Dock ?"
+
+#, c-format
+#~ msgid ""
+#~ "You're about deleting this file\n"
+#~ "  (%s)\n"
+#~ "from your hard-disk. Sure ?"
+#~ msgstr ""
+#~ "Estàs a punt d'esborrar aquest arxiu\n"
+#~ "  (%s)\n"
+#~ "del disc dur. N'estàs segur ?"
+
+#~ msgid "Rename to :"
+#~ msgstr "Canvia el nom per:"
+
+#~ msgid "Undefined"
+#~ msgstr "No s'ha definit"
+
+#, c-format
+#~ msgid "You're about removing this icon (%s) from the dock. Sure ?"
+#~ msgstr ""
+#~ "Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
+
+#~ msgid ""
+#~ "Attention : couldn't delete this file.\n"
+#~ "Check that you have writing rights on it."
+#~ msgstr ""
+#~ "Alerta: no s'ha pogut esborrar aquest arxiu.\n"
+#~ "Comprova que en tens drets d'escriptura."
+
+#, c-format
+#~ msgid ""
+#~ "Attention : couldn't rename %s.\n"
+#~ "Check that you have writing rights,\n"
+#~ " and that the new name does not already exist."
+#~ msgstr ""
+#~ "Alerta: no s'ha pogut canviar el nom de %s.\n"
+#~ "Comprova que en tens drets d'escriptura,\n"
+#~ " i que el nou nom no existeixi."
+
+#, c-format
+#~ msgid "You're about removing this applet (%s) from the dock. Sure ?"
+#~ msgstr ""
+#~ "Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs segur "
+#~ "?"
+
+#, c-format
+#~ msgid "Set position for the dock '%s'"
+#~ msgstr "Estableix la posició de la barra '%s'"
+
+#~ msgid "Set up this dock"
+#~ msgstr "Configurar aquesta barra"
+
+#~ msgid "Configure the behaviour, appearance, and applets."
+#~ msgstr "Configurar el comportament, aparença i miniaplicacions."
+
+#~ msgid "Set up the position of this main dock."
+#~ msgstr "Estableix la posició d'aquesta barra principal."
+
+#~ msgid "lock icons"
+#~ msgstr "blocar icones"
+
+#~ msgid "lock dock"
+#~ msgstr "bloca la barra"
+
+#~ msgid "It will hide the dock until you enter inside with the mouse."
+#~ msgstr "Amagarà la barra fins que hi entris amb el ratolí."
+
+#~ msgid "unlock dock"
+#~ msgstr "desbloca la barra"
+
+#~ msgid "unlock icons"
+#~ msgstr "desblocar icones"
+
+#~ msgid "Find out the latest version of Cairo-Dock here !."
+#~ msgstr "Troba aquí la darrera versió de Cairo-Dock !."
+
+#~ msgid "Mount"
+#~ msgstr "Munta"
+
+#~ msgid "Unmount"
+#~ msgstr "Desmunta"
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' plug-in is not active.\n"
+#~ "Be sure to activate it to enjoy these features."
+#~ msgstr ""
+#~ "La miniaplicació '%s' no està activa.\n"
+#~ "Assegura't d'activar-la per disposar d'aquestes característiques."
+
+#, c-format
+#~ msgid ""
+#~ "The '%s' module was not found.\n"
+#~ "Be sure to install it in the same version as the dock to enjoy these "
+#~ "features."
+#~ msgstr ""
+#~ "No s'ha pogut trobar el mòdul '%s'.\n"
+#~ "Assegura't que l'instal·les a la mateixa versió que la barra per disposar "
+#~ "d'aquestes característiques."
+
+#~ msgid "grab"
+#~ msgstr "agafa"
+
+#~ msgid "sobriety"
+#~ msgstr "sobrietat"
+
+#~ msgid "You have to try the theme before you can rate it."
+#~ msgstr "Per poder valorar el tema, l'has d'haver provat."
+
+#~ msgid "Do you want to monitor the content of this directory?"
+#~ msgstr "Vols monitoritzar el contingut de la carpeta?"
+
+#, c-format
+#~ msgid "Failed to unmount %s"
+#~ msgstr "no s'ha pogut desmuntar %s"
+
+#~ msgid ""
 #~ "It appears that you've never entered the help module before.\n"
 #~ "If you are having difficulty configuring the dock, or if you want to "
 #~ "customise it,\n"
@@ -4129,18 +4324,104 @@ msgstr ""
 #~ "o vols personalitzar-la !\n"
 #~ "Vols fer-hi una ullada ?"
 
-#~ msgid "failed to mount %s"
-#~ msgstr "ha fallat el muntatge de %s"
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "no s'ha pogut desmuntar %s"
-
 #~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want "
-#~ "to select a different decorator for your dialog boxes."
+#~ "This provides different window decorators. Enable this first if you want to "
+#~ "select a different decorator for your dialog boxes."
 #~ msgstr ""
 #~ "Proporciona diferents decoracions de finestra. Activa-ho primer si vols "
 #~ "seleccionar una decoració diferent per als teus diàlegs."
 
+#~ msgid ""
+#~ "Warning: could not delete this file.\n"
+#~ "Please check file permissions."
+#~ msgstr ""
+#~ "Alerta: no s'ha pogut esborrar aquest arxiu.\n"
+#~ "Comprova que en tens drets d'escriptura."
+
+#~ msgid "Rename to:"
+#~ msgstr "Canvia el nom per:"
+
+#, c-format
+#~ msgid ""
+#~ "Warning: could not rename %s.\n"
+#~ "Check file permissions \n"
+#~ "and that the new name does not already exist."
+#~ msgstr ""
+#~ "Alerta: no s'ha pogut canviar el nom de %s.\n"
+#~ "Comprova que en tens drets d'escriptura,\n"
+#~ " i que el nou nom no existeixi."
+
+#~ msgid "Set the position of this main dock."
+#~ msgstr "Estableix la posició d'aquesta barra principal."
+
+#, c-format
+#~ msgid "Set position for the '%s' dock"
+#~ msgstr "Estableix la posició del Dock '%s'"
+
+#~ msgid "This icon doesn't have a desktop file."
+#~ msgstr "Aquesta icona no té un arxiu d'escriptori"
+
+#~ msgid "Automatically hide the dock"
+#~ msgstr "Amaga automàticament el Dock"
+
+#~ msgid "Hide the dock whenever it overlaps a window"
+#~ msgstr "Amaga el Dock quant tingui una finestra per sobre"
+
+#~ msgid "The last effect requires opengl."
+#~ msgstr "El darrer efecte necessita opengl."
+
+#~ msgid "Add or remove any applet :"
+#~ msgstr "Afegeix o elimina subprogrames :"
+
+#~ msgid "Choose one of the available themes:"
+#~ msgstr "Trieu un tema dels disponibles:"
+
+#~ msgid ""
+#~ "Icons will scroll according to what positioning model is selected. The dock "
+#~ "can of course can be positioned anywhere on the screen. Here we specify this "
+#~ "relative position."
+#~ msgstr ""
+#~ "Les icones es desplaçaran d'acord amb el que s'ha seleccionat en el model de "
+#~ "posicionament. Per descomptat, el Dock es pot col·locar en qualsevol lloc de "
+#~ "la pantalla. Aquí s'especifica aquesta posició relativa."
+
+#~ msgid ""
+#~ "Prevent windows from overlapping the dock: reserve space at the edge of the "
+#~ "screen for the dock.\n"
+#~ "Auto-hide: when the dock is hidden, place the mouse on the screen's border "
+#~ "to call it back.\n"
+#~ "Pop-up on shortcut : When you press the shortcut, the dock will pop-up at "
+#~ "the position of your mouse. The rest of the time, it stays invisible, thus "
+#~ "acting like a menu."
+#~ msgstr ""
+#~ "Evita que les finestres es superposin al Dock: reserva espai al voltant de "
+#~ "la superfície del Dock.\n"
+#~ "Amaga automàticament: quan el Dock està amagat, situeu el cursor sobre el "
+#~ "marge de la pantalla on hi ha el Dock amagat i tornarà a aparèixer.\n"
+#~ "Emergents de dreceres: Quan es prem una drecera apareix un Dock  emergent en "
+#~ "la posició del ratolí. La resta del temps, roman invisible, actuant com un "
+#~ "menú."
+
+#~ msgid "Pop-up only if the mouse hits a screen corner"
+#~ msgstr "Emergeix només si es clica una cantonada de la pantalla"
+
+#~ msgid "Position relative to the selected screen edge"
+#~ msgstr "Posició relativa per les superfícies seleccionades"
+
+#~ msgid "Display an indicator even when the icon is not a launcher ?"
+#~ msgstr "Voleu mostrar un indicador quan la icona no sigui un llançador?"
+
+#~ msgid "In the style of Firefox tabs"
+#~ msgstr "A l'estil de les pestanyes del Firefox"
+
+#~ msgid "Middle-clicking on an icon closes the related application"
+#~ msgstr "Clic del mig sobre una icona tanca l'aplicació corresponent"
+
 #~ msgid "It will use 'xterm'."
 #~ msgstr "Usarà 'xterm'."
+
+#~ msgid "Activate auto-hide?"
+#~ msgstr "Voleu activar auto-amaga?"
+
+#~ msgid "Choose a theme"
+#~ msgstr "Tria un tema"
