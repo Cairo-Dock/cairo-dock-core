@@ -1,28 +1,29 @@
 /*
-** cairo-dock-keybinder.h
-** Login : <ctaf42@localhost.localdomain>
-** Started on  Thu Jan 31 03:57:17 2008 Cedric GESTES
-** $Id$
-**
-** Author(s)
-**  - Cedric GESTES <ctaf42@gmail.com>
-**  - Havoc Pennington
-**  - Tim Janik
-**
-** Copyright (C) 2008 Cedric GESTES
-** This program is free software; you can redistribute it and/or modify
-** it under the terms of the GNU General Public License as published by
-** the Free Software Foundation; either version 3 of the License, or
-** (at your option) any later version.
-**
-** This program is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
-**
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* cairo-dock-keybinder.h
+* This file is a part of the Cairo-Dock project
+* Login : <ctaf42@localhost.localdomain>
+* Started on  Thu Jan 31 03:57:17 2008 Cedric GESTES
+* $Id$
+*
+* Author(s)
+*  - Cedric GESTES <ctaf42@gmail.com>
+*  - Havoc Pennington
+*  - Tim Janik
+*
+* Copyright : (C) 2008 Cedric GESTES
+* E-mail    : see the 'copyright' file.
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 3
+* of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 * imported from tomboy_key_binder.h
 */
