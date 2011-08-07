@@ -46,4 +46,4 @@ Order=3
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/gimp.desktop;krita.desktop;f-spot.desktop;inkscape.desktop
+Origin=/usr/share/applications/gimp.desktop;krita.desktop;shotwell.desktop;f-spot.desktop;inkscape.desktop;mtpaint.desktop
