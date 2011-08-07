@@ -465,7 +465,7 @@ sep_display=
 
 #S+ Image filename:
 #{Leave empty to use the default one.}
-icon = 
+icon=preferences-desktop-accessibility
 
 #j[0;128] Desired icon size for this applet
 #{Set to 0 to use the default applet size}

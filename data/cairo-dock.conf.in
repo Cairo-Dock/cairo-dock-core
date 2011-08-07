@@ -696,7 +696,7 @@ frame_bg =
 
 #C+ Colour of the label's background :
 #{If you set it to fully transparent, there will be no background for the text, but the margin around the text will still be in effect.}
-text background color = 0;0;0;.6
+text background color=0;0;0;0;
 
 #i+[0;20] Margin around the text (in pixels) :
 text margin = 4
