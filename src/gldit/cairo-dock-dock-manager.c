@@ -835,6 +835,7 @@ static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoD
 		cairo_dock_move_resize_dock (pDock);
 		gtk_widget_show (pDock->container.pWidget);
 		gtk_widget_queue_draw (pDock->container.pWidget);
+		cairo_dock_synchronize_sub_docks_orientation (pDock, FALSE);
 	}
 }
 void cairo_dock_reposition_root_docks (gboolean bExceptMainDock)
