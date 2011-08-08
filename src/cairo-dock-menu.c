@@ -1480,13 +1480,15 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 		GSList *group = NULL;
 
-		Window Xid = GDK_WINDOW_XID (pContainer->pWidget->window);
-		/*gboolean bIsAbove=FALSE, bIsBelow=FALSE;
+		/* Window Xid = GDK_WINDOW_XID (pContainer->pWidget->window);
+		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		cairo_dock_xwindow_is_above_or_below (Xid, &bIsAbove, &bIsBelow);  // gdk_window_get_state bugue.
 		gboolean bIsUtility = cairo_dock_window_is_utility (Xid);  // gtk_window_get_type_hint me renvoie toujours 0 !
 		gboolean bIsDock = (CAIRO_DESKLET (pContainer)->bSpaceReserved);
-		gboolean bIsNormal = (!bIsAbove && !bIsBelow && !bIsUtility && !bIsDock);*/
-		gboolean bIsSticky = cairo_dock_xwindow_is_sticky (Xid);
+		gboolean bIsNormal = (!bIsAbove && !bIsBelow && !bIsUtility && !bIsDock);
+		gboolean bIsSticky = cairo_dock_xwindow_is_sticky (Xid); //FIXME: always FALSE... */
+
+		gboolean bIsSticky = cairo_dock_gdkwindow_is_sticky (pContainer->pWidget->window);
 		CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
 		CairoDeskletVisibility iVisibility = pDesklet->iVisibility;
 		
@@ -1536,7 +1538,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		
 		pMenuItem = gtk_check_menu_item_new_with_label(_("Lock position"));
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
-		if (CAIRO_DESKLET (pContainer)->bPositionLocked)
+		if (pDesklet->bPositionLocked)
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(pMenuItem), TRUE);
 		g_signal_connect(G_OBJECT(pMenuItem), "toggled", G_CALLBACK(_cairo_dock_lock_position), data);
 	}

@@ -254,10 +254,12 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 		int iRelativePositionX = (pDesklet->container.iWindowPositionX + pDesklet->container.iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? pDesklet->container.iWindowPositionX : pDesklet->container.iWindowPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
 		int iRelativePositionY = (pDesklet->container.iWindowPositionY + pDesklet->container.iHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? pDesklet->container.iWindowPositionY : pDesklet->container.iWindowPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		
-		Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
+		GdkWindow *window = pDesklet->container.pWidget->window;
 		int iNumDesktop = -1;
-		if (! cairo_dock_xwindow_is_sticky (Xid))
+		if (! cairo_dock_gdkwindow_is_sticky (window))
 		{
+			Window Xid = GDK_WINDOW_XID (window);
+			cd_debug ("This window (%d) is not sticky", (int) Xid);
 			int iDesktop = cairo_dock_get_xwindow_desktop (Xid);
 			int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;
 			cairo_dock_get_xwindow_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);
