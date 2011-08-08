@@ -9,8 +9,8 @@ if test -n "`which gsettings`"; then
 fi
 if test -n "`which gconftool-2`"; then  # both gsettings and gconf can be present on the system, so we do both.
 	GCONFTOOL_CHECK=1
-	gconftool-2 -s '/apps/gnome/desktop/interface/buttons-have-icons' --type bool true
-	gconftool-2 -s '/apps/gnome/desktop/interface/menus-have-icons' --type bool true
+	gconftool-2 -s '/desktop/gnome/interface/buttons_have_icons' --type bool true
+	gconftool-2 -s '/desktop/gnome/interface/menus_have_icons' --type bool true
 fi
 
 # Enable dbus, scale and expo plug-ins in Compiz.
