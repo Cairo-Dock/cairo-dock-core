@@ -31,9 +31,9 @@ G_BEGIN_DECLS
 * DBus is used to communicate and interact with other running applications.
 */ 
 
-#define G_VALUE_INIT {0,{{0}}}  // bonne idée d'un dev de GTK, pour eviter les warnings de gcc.
+#define G_VALUE_INIT {0,{{0}}}  // bonne idee d'un dev de GTK, pour eviter les warnings de gcc.
 
-typedef void (*CairoDockDbusNameOwnerChangedFunc) (gboolean bOwned, gpointer data);
+typedef void (*CairoDockDbusNameOwnerChangedFunc) (const gchar *cName, gboolean bOwned, gpointer data);
 
 /** Get the connection to the 'session' Bus.
 *@return the connection to the bus.

@@ -2,17 +2,28 @@
 ########### install files ###############
 
 install (FILES
-	balloons.png
-	box-back.png
-	box-front.png
-	cairo-dock-animated.xpm
-	cairo-dock-cancel.svg
+	# lib
 	cairo-dock-ok.svg
+	cairo-dock-cancel.svg
 	default-class-indicator.svg
 	default-icon.svg
 	default-icon-appli.svg
 	default-indicator.png
 	depth-rotate-desklet.svg
+	no-input-desklet.png
+	retach-desklet.svg
+	rotate-desklet.svg
+	theme-distant.svg
+	theme-local.svg
+	theme-new.svg
+	theme-updated.svg
+	theme-user.svg
+	# implementations
+	box-back.png
+	box-front.png
+	# appli
+	balloons.png
+	cairo-dock-animated.xpm
 	icon-accessories.svg
 	icon-all.svg
 	icon-appearance.svg
@@ -51,13 +62,4 @@ install (FILES
 	icon-views.svg
 	icon-visibility.svg
 	icon-wave.png
-	no-input-desklet.png
-	retach-desklet.svg
-	rotate-desklet.svg
-	theme-distant.svg
-	theme-local.svg
-	theme-new.svg
-	theme-updated.svg
-	theme-user.svg
 	DESTINATION ${pkgdatadir}/icons )
-

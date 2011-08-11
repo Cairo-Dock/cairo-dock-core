@@ -28,7 +28,7 @@ static DBusGConnection *s_pSystemConnexion = NULL;
 static DBusGProxy *s_pDBusSessionProxy = NULL;
 static DBusGProxy *s_pDBusSystemProxy = NULL;
 static GHashTable *s_pFilterTable = NULL;
-
+static GList *s_pFilterList = NULL;
 
 DBusGConnection *cairo_dock_get_session_connection (void)
 {
@@ -80,7 +80,7 @@ DBusGProxy *cairo_dock_get_main_system_proxy (void)
 		s_pDBusSystemProxy = cairo_dock_create_new_system_proxy (DBUS_SERVICE_DBUS,
 			DBUS_PATH_DBUS,
 			DBUS_INTERFACE_DBUS);
-	} 
+	}
 	return s_pDBusSystemProxy;
 }
 
@@ -117,18 +117,32 @@ static void on_name_owner_changed (DBusGProxy *pProxy, const gchar *cName, const
 	{
 		gpointer *p = f->data;
 		CairoDockDbusNameOwnerChangedFunc pCallback = p[0];
-		pCallback (bOwned, p[1]);
+		pCallback (cName, bOwned, p[1]);
+	}
+	
+	for (f = s_pFilterList; f != NULL; f = f->next)
+	{
+		gpointer *p = f->data;
+		if (strncmp (cName, p[2], GPOINTER_TO_INT (p[3])) == 0)
+		{
+			CairoDockDbusNameOwnerChangedFunc pCallback = p[0];
+			pCallback (cName, bOwned, p[1]);
+		}
 	}
 }
 void cairo_dock_watch_dbus_name_owner (const char *cName, CairoDockDbusNameOwnerChangedFunc pCallback, gpointer data)
 {
-	if (s_pFilterTable == NULL)
+	if (cName == NULL)
+		return;
+	if (s_pFilterTable == NULL)  // first call to this function.
 	{
+		// create the table
 		s_pFilterTable = g_hash_table_new_full (g_str_hash,
 			g_str_equal,
 			g_free,
 			NULL);
-
+		
+		// and register to the 'NameOwnerChanged' signal
 		DBusGProxy *pProxy = cairo_dock_get_main_proxy ();
 		g_return_if_fail (pProxy != NULL);
 		
@@ -139,21 +153,64 @@ void cairo_dock_watch_dbus_name_owner (const char *cName, CairoDockDbusNameOwner
 			G_CALLBACK (on_name_owner_changed),
 			NULL, NULL);
 	}
-	GList *pFilter = g_hash_table_lookup (s_pFilterTable, cName);
-	gpointer *p = g_new0 (gpointer, 1);
+	
+	// record the callback.
+	gpointer *p = g_new0 (gpointer, 4);
 	p[0] = pCallback;
 	p[1] = data;
-	pFilter = g_list_prepend (pFilter, p);
-	g_hash_table_insert (s_pFilterTable, g_strdup (cName), pFilter);
+	int n = strlen(cName);
+	if (cName[n-1] == '*')
+	{
+		p[2] = g_strdup (cName);
+		p[3] = GINT_TO_POINTER (n-1);
+		s_pFilterList = g_list_prepend (s_pFilterList, p);
+	}
+	else
+	{
+		GList *pFilter = g_hash_table_lookup (s_pFilterTable, cName);
+		pFilter = g_list_prepend (pFilter, p);
+		g_hash_table_insert (s_pFilterTable, g_strdup (cName), pFilter);
+	}
 }
 
 void cairo_dock_stop_watching_dbus_name_owner (const char *cName, CairoDockDbusNameOwnerChangedFunc pCallback)
 {
-	GList *pFilter = g_hash_table_lookup (s_pFilterTable, cName);
-	if (pFilter == NULL)
+	if (cName == NULL || *cName == '\0')
 		return;
-	pFilter = g_list_remove (pFilter, pCallback);
-	g_hash_table_insert (s_pFilterTable, g_strdup (cName), pFilter);
+	int n = strlen(cName);
+	if (cName[n-1] == '*')
+	{
+		GList *f;
+		for (f = s_pFilterList; f != NULL; f = f->next)
+		{
+			gpointer *p = f->data;
+			if (strncmp (cName, p[2], strlen (cName)-1) == 0 && pCallback == p[0])
+			{
+				g_free (p[2]);
+				g_free (p);
+				s_pFilterList = g_list_delete_link (s_pFilterList, f);
+			}
+		}
+	}
+	else
+	{
+		GList *pFilter = g_hash_table_lookup (s_pFilterTable, cName);
+		if (pFilter != NULL)
+		{
+			GList *f;
+			for (f = pFilter; f != NULL; f = f->next)
+			{
+				gpointer *p = f->data;
+				if (pCallback == p[0])
+				{
+					g_free (p);
+					pFilter = g_list_delete_link (pFilter, f);
+					g_hash_table_insert (s_pFilterTable, g_strdup (cName), pFilter);
+					break;
+				}
+			}
+		}
+	}
 }
 
 
@@ -199,23 +256,39 @@ static void _on_detect_application (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	gboolean bPresent = FALSE;
 	cd_message ("detection du service %s ...", cName);
 	int i;
-	for (i = 0; name_list[i] != NULL; i ++)
+	int n = strlen(cName);
+	if (cName[n-1] == '*')
 	{
-		if (strcmp (name_list[i], cName) == 0)
+		for (i = 0; name_list[i] != NULL; i ++)
 		{
-			bPresent = TRUE;
-			break;
+			if (strncmp (name_list[i], cName, n) == 0)
+			{
+				bPresent = TRUE;
+				break;
+			}
 		}
 	}
+	else
+	{
+		for (i = 0; name_list[i] != NULL; i ++)
+		{
+			if (strcmp (name_list[i], cName) == 0)
+			{
+				bPresent = TRUE;
+				break;
+			}
+		}
+	}
+	
+	pCallback (bPresent, user_data);
+	
 	g_strfreev (name_list);
 	g_free (cName);
 	data[2] = NULL;
-	
-	pCallback (bPresent, user_data);
 }
 static void _free_detect_application (gpointer *data)
 {
-	cd_debug ("free data\n");
+	cd_debug ("free detection data\n");
 	g_free (data[2]);
 	g_free (data);
 }

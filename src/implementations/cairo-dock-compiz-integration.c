@@ -320,7 +320,7 @@ static void _unregister_compiz_backend (void)
 	cairo_dock_wm_register_backend (NULL);
 }
 
-static void _on_compiz_owner_changed (gboolean bOwned, gpointer data)
+static void _on_compiz_owner_changed (const gchar *cName, gboolean bOwned, gpointer data)
 {
 	cd_debug ("Compiz is on the bus (%d)", bOwned);
 	
@@ -384,7 +384,7 @@ static void _on_detect_compiz (gboolean bPresent, gpointer data)
 	cd_debug ("Compiz is present: %d", bPresent);
 	if (bPresent)
 	{
-		_on_compiz_owner_changed (TRUE, NULL);
+		_on_compiz_owner_changed ("", TRUE, NULL);
 	}
 	cairo_dock_watch_dbus_name_owner (CD_COMPIZ_BUS,
 		(CairoDockDbusNameOwnerChangedFunc) _on_compiz_owner_changed,

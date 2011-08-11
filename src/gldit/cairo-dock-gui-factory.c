@@ -271,11 +271,11 @@ static GdkPixbuf* _cairo_dock_gui_get_package_state_icon (gint iState)
 	const gchar *cType;
 	switch (iState)
 	{
-		case CAIRO_DOCK_LOCAL_PACKAGE: 		cType = "icons/theme-local.svg"; break; // "icon-internet.svg"
-		case CAIRO_DOCK_USER_PACKAGE: 		cType = "icons/theme-user.svg"; break; // "plug-ins/MeMenu/icon.svg"
-		case CAIRO_DOCK_DISTANT_PACKAGE: 	cType = "icons/theme-distant.svg"; break; // icon-internet.svg plug-ins/wifi/link-5.svg
+		case CAIRO_DOCK_LOCAL_PACKAGE: 		cType = "icons/theme-local.svg"; break;
+		case CAIRO_DOCK_USER_PACKAGE: 		cType = "icons/theme-user.svg"; break;
+		case CAIRO_DOCK_DISTANT_PACKAGE: 	cType = "icons/theme-distant.svg"; break;
 		case CAIRO_DOCK_NEW_PACKAGE: 		cType = "icons/theme-new.svg"; break;
-		case CAIRO_DOCK_UPDATED_PACKAGE:	cType = "icons/theme-updated.svg"; break; // rotate-desklet.svg
+		case CAIRO_DOCK_UPDATED_PACKAGE:	cType = "icons/theme-updated.svg"; break;
 		default: 							cType = NULL; break;
 	}
 	gchar *cStateIcon = g_strconcat (GLDI_SHARE_DATA_DIR"/", cType, NULL);

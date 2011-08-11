@@ -26,16 +26,17 @@ install (FILES
 	# lib
 	${CMAKE_CURRENT_BINARY_DIR}/main-dock.conf
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.conf
+	${CMAKE_CURRENT_BINARY_DIR}/launcher.desktop
+	${CMAKE_CURRENT_BINARY_DIR}/container.desktop
+	${CMAKE_CURRENT_BINARY_DIR}/separator.desktop
 	# appli
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-simple.conf
 	${CMAKE_CURRENT_BINARY_DIR}/themes.conf
 	${CMAKE_CURRENT_BINARY_DIR}/Help.conf
-	${CMAKE_CURRENT_BINARY_DIR}/launcher.desktop
-	${CMAKE_CURRENT_BINARY_DIR}/container.desktop
-	${CMAKE_CURRENT_BINARY_DIR}/separator.desktop
 	DESTINATION ${pkgdatadir})
 
 # appli desktop file
 install (FILES
-	cairo-dock.desktop 		cairo-dock-cairo.desktop
+	cairo-dock.desktop
+	cairo-dock-cairo.desktop
 	DESTINATION ${datadir}/applications)

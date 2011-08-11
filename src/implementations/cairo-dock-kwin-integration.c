@@ -202,7 +202,7 @@ static void _unregister_kwin_backend (void)
 		(CairoDockNotificationFunc) _on_enter_icon, NULL);*/
 }
 
-static void _on_kwin_owner_changed (gboolean bOwned, gpointer data)
+static void _on_kwin_owner_changed (const gchar *cName, gboolean bOwned, gpointer data)
 {
 	cd_debug ("Kwin is on the bus (%d)", bOwned);
 	
@@ -235,7 +235,7 @@ static void _on_detect_kwin (gboolean bPresent, gpointer data)
 	cd_debug ("Kwin is present: %d", bPresent);
 	if (bPresent)
 	{
-		_on_kwin_owner_changed (TRUE, NULL);
+		_on_kwin_owner_changed ("", TRUE, NULL);
 	}
 	cairo_dock_watch_dbus_name_owner (CD_KWIN_BUS,
 		(CairoDockDbusNameOwnerChangedFunc) _on_kwin_owner_changed,

@@ -1084,7 +1084,7 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 	return bValid;
 }
 
-// Seems not working.... FIXME
+// Seems not working with Gnome3 ...
 gboolean cairo_dock_xwindow_is_sticky (Window Xid)
 {
 	g_return_val_if_fail (Xid > 0, FALSE);
@@ -1117,7 +1117,7 @@ gboolean cairo_dock_xwindow_is_sticky (Window Xid)
 gboolean cairo_dock_gdkwindow_is_sticky (GdkWindow *window)
 {
 	#if (GDK_MAJOR_VERSION >= 3)
-	if ((window->state & GDK_WINDOW_STATE_STICKY) // TO CHECK: http://mail.gnome.org/archives/commits-list/2010-July/msg00002.html
+	if ((window->state & GDK_WINDOW_STATE_STICKY) // API change: http://mail.gnome.org/archives/commits-list/2010-July/msg00002.html
 	#else
 	if (((GdkWindowObject*) window)->state & GDK_WINDOW_STATE_STICKY)
 	#endif
