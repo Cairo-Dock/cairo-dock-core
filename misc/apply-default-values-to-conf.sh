@@ -1,10 +1,11 @@
 #!/bin/sh
-
-# Compiz check for Cairo-Dock
 #
-# Copyright : (C) 2009 by Fabounet
+# Set default values for common parameters in the current theme.
+# These are parameters that shouldn't be modified in order to distribute the theme.
+# This is to ensure coherence between the different themes we provide.
+#
+# Copyright : (C) 2010 by Fabounet
 # E-mail    : fabounet@glx-dock.org
-#
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,57 +18,236 @@
 # GNU General Public License for more details.
 # http://www.gnu.org/licenses/licenses.html#GPL
 
-export CONF_FILE="cairo-dock.conf"
+export CAIRO_DOCK_DIR="$HOME/.config/cairo-dock"
 
-function set_value()
+if test "x$1" = "x"; then
+    export CURRENT_THEME_DIR="$CAIRO_DOCK_DIR/current_theme"
+    echo "repertoire du theme : ${CURRENT_THEME_DIR}"
+else
+    export CURRENT_THEME_DIR="$1"
+fi
+
+if test ! -d "$CURRENT_THEME_DIR"; then
+    echo "wrong theme path ($CURRENT_THEME_DIR)"
+    exit 1
+fi
+
+export CURRENT_CONF_FILE=""
+
+set_value()  # (group, key, value)
 {
-	sed -i "s/^$1 *=/$1 = $2/g"
-	echo -n "."
+    sed -i "/^\[$1\]/,/^\[.*\]/ s/^$2 *=.*/$2 = $3/g" "${CURRENT_CONF_FILE}"
+    echo -n "."
 }
 
-set_value "auto-hide"				false
-set_value "reserve space"			true
-set_value "x gap"					0
-set_value "y gap"					0
-set_value "xinerama"				false
-set_value "max autorized width"		0
-set_value "pop-up"					false
-set_value "raise shortcut"			""
-set_value "leaving delay"			250
-set_value "show delay"				300
-set_value "lock icons"				false
-set_value "show applications"		true
-set_value "unique PID"				false
-set_value "group by class"			false
-set_value "group exception"			""
-set_value "hide visible"			false
-set_value "current desktop only"	false
-set_value "mix launcher appli"		true
-set_value "overwrite xicon"			true
-set_value "overwrite exception"		"pidgin;xchat;amsn"
-set_value "window thumbnail"		true
-set_value "minimize on click"		true
-set_value "close on middle click"	true
-set_value "auto quick hide"			false
-set_value "auto quick hide on max"	false
-set_value "demands attention with dialog" true
-set_value "animation on demands attention" "rotate"
-set_value "animation on active window" "wobbly
-set_value "max name length"			15
-set_value "visibility alpha"		"0.2"
-set_value "animate subdocks"		true
-#set_value "unfold factor"			8
-#set_value "shrink down steps"		12
-#set_value "move down speed"		"0.25"
-set_value "refresh frequency"		35
-set_value "dynamic reflection"		false
-set_value "opengl anim freq"		33
-set_value "cairo anim freq"			25
-set_value "always horizontal"		true
-set_value "show hidden files"		false
-set_value "fake transparency"		false
-set_value "modules"					"dock-rendering;dialog-rendering;Animated icons;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
+get_value()  # (group, key) -> value
+{
+    sed -n "/^\[$1\]/,/^\[.*\]/ {/^$2 *=.*/p}" "${CURRENT_CONF_FILE}" | sed "s/^$2 *= *//g"
+}
 
-echo ""
-echo "le thème a été mis à jour."
-exit 0
+set_value_on_all_groups()  # (key, value)
+{
+    sed -i "s/^$1 *=.*/$1 = $2/g" "${CURRENT_CONF_FILE}"
+    echo -n "."
+}
+
+set_current_conf_file()  # (conf file)
+{
+    if test -e "$1"; then
+	    echo "applying default values to "${1%.conf}" ..."
+	    export CURRENT_CONF_FILE="$1"
+    else
+	    export CURRENT_CONF_FILE=""
+    fi
+}
+
+cd "$CURRENT_THEME_DIR"
+
+if test ! -e images; then
+    mkdir "images"
+    mv *.svg images 2> /dev/null
+    mv *.png images 2> /dev/null
+fi
+
+set_current_conf_file "cairo-dock.conf"
+set_value "Position"	    "x gap" 			    0
+set_value "Position"	    "y gap" 			    0
+set_value "Position"	    "xinerama"		    false
+set_value "Accessibility"   "max autorized width"   0
+set_value "Accessibility"   "visibility"  	    4
+set_value "Accessibility"   "leaving delay"	    250
+set_value "Accessibility"   "show delay"  	    300
+set_value "Accessibility"   "lock icons"  	    false
+set_value "Accessibility"   "lock all"		    false
+set_value "Accessibility"   "show_on_click"	    1
+set_value "TaskBar"	    "show applications" 	    true
+#set_value "TaskBar"	    "hide visible"		    false
+#set_value "TaskBar"	    "current desktop only"	    false
+#set_value "TaskBar"	    "group by class"	    true
+set_value "TaskBar"	    "group exception"	    ""
+set_value "TaskBar"	    "mix launcher appli"    true
+set_value "TaskBar"	    "overwrite xicon"	    true
+set_value "TaskBar"	    "overwrite exception"   ""
+set_value "TaskBar"	    "minimized"			    1
+set_value "TaskBar"	    "minimize on click" 	    true
+set_value "TaskBar"	    "close on middle click"	    true
+set_value "TaskBar"	    "demands attention with dialog" true
+set_value "TaskBar"	    "demands attention with dialog" true
+set_value "TaskBar"	    "duration"			    2
+set_value "TaskBar"	    "animation on active window"  "wobbly"
+set_value "TaskBar"	    "max name length"	    20
+set_value "TaskBar"	    "visibility alpha"  	    "0.35"
+set_value "TaskBar"	    "animate subdocks"  	    true
+set_value "System"	    "unfold duration"	    300
+set_value "System"	    "grow nb steps"	    10
+set_value "System"	    "shrink nb steps"	    8
+set_value "System"	    "move up nb steps"  	    10
+set_value "System"	    "move down nb steps"    16
+set_value "System"	    "refresh frequency" 	    35
+set_value "System"	    "dynamic reflection"    false
+set_value "System"	    "opengl anim freq"  	    33
+set_value "System"	    "cairo anim freq"	    25
+set_value "System"	    "always horizontal" 	    true
+set_value "System"	    "show hidden files" 	    false
+set_value "System"	    "fake transparency" 	    false
+set_value "System"	    "config transparency"   false
+set_value "System"	    "conn use proxy"	    false
+set_value "System"	    "conn timeout"		    7
+set_value "Dialogs"	    "custom"			    false
+set_value "Labels"	    "custom"			    false
+set_value "Labels"	    "always horizontal" 	    true
+modules=`get_value "System" "modules"`
+echo $modules | grep "icon effects"
+if test $? = 1; then
+    modules="${modules};icon effects"
+    set_value "System" "modules" "$modules"
+fi
+echo $modules | grep "illusion"
+if test $? = 1; then
+    modules="${modules};illusion"
+    set_value "System" "modules" "$modules"
+fi
+echo $modules | grep "Dbus"
+if test $? = 1; then
+    modules="${modules};Dbus"
+    set_value "System" "modules" "$modules"
+fi
+#set_value "System"	    "modules"			    "dock rendering;dialog rendering;Animated icons;drop indicator;clock;logout;dustbin;stack;shortcuts;GMenu;switcher;icon effects;illusion"
+
+for f in plug-ins/*/*.conf; do
+    sed -i "s/^name *=.*/name=/g" $f
+done;
+
+set_current_conf_file "plug-ins/Animated-icons/Animated-icons.conf"
+set_value "Rotation"	    "color" 					    "1;1;1;0"
+
+set_current_conf_file "plug-ins/AlsaMixer/AlsaMixer.conf"
+set_value "Configuration"		    "card id"		    ""
+set_value "Configuration"		    "mixer element"	    ""
+
+set_current_conf_file "plug-ins/Clipper/Clipper.conf"
+set_value "Configuration"   "item type"				    3
+set_value "Configuration"   "paste selection"		    true
+set_value "Configuration"   "paste clipboard"		    true
+set_value "Configuration"   "persistent"  			    ""
+set_value "Configuration"   "enable actions"		    false
+
+set_current_conf_file "plug-ins/clock/clock.conf"
+desklet=`get_value "Desklet" "initially detached"`
+if test "$desklet" = "false"; then
+    set_value "Configuration"     "show date"			    2
+    set_value "Configuration"     "show seconds"		    false
+fi
+
+set_current_conf_file "plug-ins/drop_indicator/drop_indicator.conf"
+set_value "Drag and drop indicator"     "speed" 		    2
+
+set_current_conf_file "plug-ins/dustbin/dustbin.conf"
+set_value "Configuration"   "additionnal directories"     ""
+set_value "Configuration"   "alternative file browser"    ""
+
+set_current_conf_file "plug-ins/GMenu/GMenu.conf"
+set_value "Configuration"   "has icons"				    true
+set_value "Configuration"   "show recent" 			    true
+
+set_current_conf_file "plug-ins/logout/logout.conf"
+set_value "Configuration"   "click" 					    1
+set_value "Configuration"   "middle-click"			    0
+
+set_current_conf_file "plug-ins/musicPlayer/musicPlayer.conf"
+set_value "Configuration"   "inhibate appli"		    true
+set_value "Configuration"   "pause on click"		    0  # maybe 1 would be better ...
+
+set_current_conf_file "plug-ins/mail/mail.conf"
+set_value_on_all_groups 	    "username"				    ""
+set_value_on_all_groups 	    "password"				    ""
+
+set_current_conf_file "plug-ins/quick-browser/quick-browser.conf"
+set_value "Configuration"   "dir path"				    ""
+
+set_current_conf_file "plug-ins/rendering/rendering.conf"
+set_value "Inclinated Plane" "vanishing point y"	    300
+set_value "Curve" 		    "curvature"				    70
+set_value "Parabolic"	    "curvature"				    ".3"
+set_value "Parabolic"	    "ratio" 					    5
+set_value "Slide" 		    "simple_iconGapX"		    50    
+set_value "Slide" 		    "simple_iconGapY"		    50    
+set_value "Slide" 		    "simple_fScaleMax"  		    "1.5"
+set_value "Slide" 		    "simple_arrowShift" 		    0
+set_value "Slide" 		    "simple_arrowHeight"	    15
+set_value "Slide" 		    "simple_arrowWidth" 		    30
+set_value "Slide" 		    "simple_wide_grid"  		    true
+set_value "Slide" 		    "simple_max_size"		    ".7"
+set_value "Slide" 		    "simple_lineaire"		    false
+set_value "Slide" 		    "simple_sinW" 			    100
+
+set_current_conf_file "plug-ins/RSSreader/RSSreader.conf"
+set_value "Configuration"   "url_rss_feed"			    ""
+
+set_current_conf_file "plug-ins/shortcuts/shortcuts.conf"
+set_value "Configuration"   "list network"			    false
+set_value "Configuration"   "disk usage"  			    4
+set_value "Configuration"   "check interval"		    10
+
+set_current_conf_file "plug-ins/showDesktop/showDesktop.conf"
+set_value "Configuration"   "left click"  			    0
+set_value "Configuration"   "middle click"			    4
+
+set_current_conf_file "plug-ins/slider/slider.conf"
+set_value "Configuration"   "directory"				    ""
+
+set_current_conf_file "plug-ins/stack/stack.conf"
+set_value "Configuration"   "stack dir"				    ""
+set_value "Configuration"   "selection_"  			    false
+
+set_current_conf_file "plug-ins/switcher/switcher.conf"
+set_value "Configuration"   "preserve ratio"		    false
+set_value "Configuration"   "Draw Windows"			    true
+set_value "Configuration"   "action on click"		    3
+
+set_current_conf_file "plug-ins/weather/weather.conf"
+set_value "Configuration"   "nb days"				    5
+set_value "Configuration"   "display nights"		    false
+set_value "Configuration"   "check interval"		    15
+set_value "Configuration"   "dialog duration"		    0
+set_value "Configuration"   "IS units"				    true
+set_value "Configuration"   "display temperature"	    true
+
+set_current_conf_file "plug-ins/weblets/weblets.conf"
+set_value "Configuration"   "weblet URI"  			    "http:\/\/www.google.com"
+set_value "Configuration"   "uri list"				    ""
+
+set_current_conf_file "plug-ins/Xgamma/Xgamma.conf"
+set_value "Configuration"   "initial gamma"			    0
+
+for f in launchers/*.desktop; do
+    grep "Type" "$f" > /dev/null
+    if test "$?" != "0"; then
+	    echo "warning: the file $f is out-dated!"
+    else
+	    grep "Origin" "$f" | grep ";"  > /dev/null
+	    if test "$?" != "0"; then
+		    echo "warning: consider adding an alternative origin for $f"
+	    fi
+    fi
+done
