@@ -185,7 +185,8 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	//\____________ On cree l'icone.
 	gchar *cRendererName = NULL;
 	Icon *icon = cairo_dock_new_launcher_icon (cDesktopFileName, &cRendererName);
-	g_return_val_if_fail (icon != NULL, NULL);
+	if (icon == NULL)  // couldn't load the icon (unreadable desktop file, unvalid or does not correspond to any installed program)
+		return NULL;
 	
 	if (icon->iTrueType == CAIRO_DOCK_ICON_TYPE_SEPARATOR)
 	{
@@ -253,10 +254,12 @@ void cairo_dock_build_docks_tree_with_desktop_files (const gchar *cDirectory)
 		if (g_str_has_suffix (cFileName, ".desktop"))
 		{
 			icon = cairo_dock_create_icon_from_desktop_file (cFileName);
-			if (!icon || icon->cParentDockName == NULL)
+			if (icon == NULL)  // if the icon couldn't be loaded, remove it from the theme (it's useless to try and fail to load it each time).
 			{
-				cd_warning ("the desktop file '%s/%s' is invalid !\n you should probably remove it.", cDirectory, cFileName);
-				g_free (icon);
+				cd_warning ("Unable to load a valid icon from '%s/%s'; the file is either unreadable, unvalid or does not correspond to any installed program, and will be deleted", g_cCurrentLaunchersPath, cFileName);
+				gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cFileName);
+				g_remove (cDesktopFilePath);
+				g_free (cDesktopFilePath);
 				continue;
 			}
 			

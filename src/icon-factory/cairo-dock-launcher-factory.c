@@ -318,20 +318,18 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 
 Icon * cairo_dock_new_launcher_icon (const gchar *cDesktopFileName, gchar **cSubDockRendererName)
 {
-	//\____________ On cree l'icone.
+	//\____________ create an empty icon.
 	Icon *icon = cairo_dock_new_icon ();
 	icon->iGroup = CAIRO_DOCK_LAUNCHER;
 	
-	//\____________ On recupere les infos de son .desktop.
+	//\____________ fill it with the information from its .desktop file.
 	icon->iTrueType = cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon, cSubDockRendererName);
-	g_return_val_if_fail (icon->cDesktopFileName != NULL, NULL);
 	
-	/* If we create a new custom launcher, the icon is a launcher and the command is null but it's name is XYlauncher.desktop.
-	 * TODO? Maybe we can also full in this new launcher ("New Launcher", "Enter your command") => we have to write it in the desktop file and reload it.*/
-	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) && icon->cCommand == NULL && strstr(cDesktopFileName, "launcher.desktop") == NULL)  // probably a launcher in a theme which does not correspond to any installed program => skip it.
+	//\____________ check the validity of the icon.
+	if (icon->cDesktopFileName == NULL || (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) && icon->cCommand == NULL))  // either a non readable .desktop file, or a launcher in a theme which does not correspond to any installed program => skip it.
 	{
-		cd_debug ("this launcher (%s) does not correspond to any installed program", cDesktopFileName);
-		cairo_dock_free_icon (icon); // TODO? should we have to remove the desktop file too (if it's a launcher with an empty command and not a new launcher) ?
+		cd_debug ("this launcher (%s) is not valid or does not correspond to any installed program", cDesktopFileName);
+		cairo_dock_free_icon (icon);
 		return NULL;
 	}
 	
