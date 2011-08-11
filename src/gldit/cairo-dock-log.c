@@ -32,7 +32,7 @@
 
 static char s_iLogColor = '0';
 static GLogLevelFlags s_gLogLevel = G_LOG_LEVEL_WARNING;
-static gboolean bForceColors = FALSE;
+static gboolean s_bUseColors = TRUE;
 
 /* #    'default'     => "\033[1m", */
 
@@ -48,7 +48,7 @@ static gboolean bForceColors = FALSE;
 
 const char*_cd_log_level_to_string(const GLogLevelFlags loglevel)
 {
-  if (isatty (1) || bForceColors)
+  if (s_bUseColors)
   {
     switch(loglevel)
     {
@@ -99,7 +99,7 @@ void cd_log_location(const GLogLevelFlags loglevel,
   if (loglevel > s_gLogLevel)
     return;
   g_print(_cd_log_level_to_string(loglevel));
-  if (isatty (1) || bForceColors)
+  if (s_bUseColors)
     g_print("\033[0;37m(%s:%s:%d) \033[%cm \n  ", file, func, line, s_iLogColor);
   else
     g_print("(%s:%s:%d)\n  ", file, func, line);
@@ -118,17 +118,18 @@ static void cairo_dock_log_handler(const gchar *log_domain,
   g_print("%s\n", message);
 }
 
-void cd_log_init(gboolean bBlackTerminal)
+
+void cd_log_init (gboolean bBlackTerminal)
 {
-  g_log_set_default_handler(cairo_dock_log_handler, NULL);
-  s_iLogColor = (bBlackTerminal ? '1' : '0');
+	g_log_set_default_handler(cairo_dock_log_handler, NULL);
+	s_iLogColor = (bBlackTerminal ? '1' : '0');
+	s_bUseColors = isatty (1);  // use colors iif our output is associated with a terminal (otherwise it's probably redirected into log file, color characters will be annoying).
 }
 
-void cd_log_set_level(GLogLevelFlags loglevel)
+void cd_log_set_level (GLogLevelFlags loglevel)
 {
-  s_gLogLevel = loglevel;
+	s_gLogLevel = loglevel;
 }
-
 
 void cd_log_set_level_from_name (const gchar *cVerbosity)
 {
@@ -150,7 +151,7 @@ void cd_log_set_level_from_name (const gchar *cVerbosity)
 	}
 }
 
-void cd_log_set_force_color(gboolean forceColor)
+void cd_log_force_use_color (void)
 {
-  bForceColors = forceColor;
+	s_bUseColors = TRUE;
 }

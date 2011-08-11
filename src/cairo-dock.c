@@ -216,7 +216,7 @@ static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, 
 	return FALSE;  // TRUE <=> ne pas detruire la fenetre.
 }
 
-static void PrintFunc(const gchar *string) {}
+static void PrintMuteFunc(const gchar *string) {}
 
 static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 {
@@ -299,11 +299,9 @@ int main (int argc, char** argv)
 		return 1;
 	}
 
-	// muted output messages if CD is not launched from a terminal
-	if (getenv("TERM") == NULL)
-		g_set_print_handler(PrintFunc);
-
-	g_print (">>> restart cmd line: %s\n", s_pLaunchCommand->str);
+	// mute all output messages if CD is not launched from a terminal
+	if (getenv("TERM") == NULL)  /// why not isatty(stdout) ?...
+		g_set_print_handler(PrintMuteFunc);
 	
 	gtk_init (&argc, &argv);
 	gtk_gl_init (&argc, &argv);
@@ -316,44 +314,32 @@ int main (int argc, char** argv)
 	int iDelay = 0;
 	GOptionEntry pOptionsTable[] =
 	{
-		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
-			&cVerbosity,
-			_("Log verbosity (debug,message,warning,critical,error); default is warning."), NULL},
-		{"colors", 'A', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bForceColors,
-			_("Force to display some output messages with colors."), NULL},
-		{"wait", 'w', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_INT,
-			&iDelay,
-			_("Wait for N seconds before starting; this is useful if you notice some problems when the dock starts with the session."), NULL},
-#ifdef HAVE_GLITZ
-		{"glitz", 'g', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&g_bUseGlitz,
-			_("Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled libcairo)."), NULL},
-#endif
 		{"cairo", 'c', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bForceCairo,
 			_("Use Cairo backend."), NULL},
 		{"opengl", 'o', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceOpenGL,
 			_("Use OpenGL backend."), NULL},
+#ifdef HAVE_GLITZ
+		{"glitz", 'g', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bUseGlitz,
+			_("Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled libcairo)."), NULL},
+#endif
 		{"indirect-opengl", 'O', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bToggleIndirectRendering,
 			_("Use OpenGL backend with indirect rendering. There are very few case where this option should be used."), NULL},
-		{"indirect", 'i', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bForceIndirectRendering,
-			_("Deprecated - see -O."), NULL},
-		{"keep-above", 'a', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bKeepAbove,
-			_("Keep the dock above other windows whatever."), NULL},
-		{"no-sticky", 's', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bNoSticky,
-			_("Don't make the dock appear on all desktops."), NULL},
 		{"env", 'e', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cEnvironment,
 			_("Force the dock to consider this environnement - use it with care."), NULL},
 		{"dir", 'd', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cUserDefinedDataDir,
 			_("Force the dock to load from this directory, instead of ~/.config/cairo-dock."), NULL},
+		{"server", 'S', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
+			&cThemeServerAdress,
+			_("Address of a server containing additional themes. This will overwrite the default server address."), NULL},
+		{"wait", 'w', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_INT,
+			&iDelay,
+			_("Wait for N seconds before starting; this is useful if you notice some problems when the dock starts with the session."), NULL},
 		{"maintenance", 'm', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bMaintenance,
 			_("Allow to edit the config before the dock is started and show the config panel on start."), NULL},
@@ -363,12 +349,28 @@ int main (int argc, char** argv)
 		{"safe-mode", 'f', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bSafeMode,
 			_("Don't load any plug-ins."), NULL},
-		{"capuccino", 'C', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bCappuccino,
-			_("Cairo-Dock makes anything, including coffee !"), NULL},
+		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
+			&cVerbosity,
+			_("Log verbosity (debug,message,warning,critical,error); default is warning."), NULL},
+		{"colors", 'A', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bForceColors,
+			_("Force to display some output messages with colors."), NULL},
 		{"version", 'v', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bPrintVersion,
 			_("Print version and quit."), NULL},
+		{"locked", 'k', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bLocked,
+			_("Lock the dock so that any modification is impossible for users."), NULL},
+		// below options are probably useless for most of people.
+		{"keep-above", 'a', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bKeepAbove,
+			_("Keep the dock above other windows whatever."), NULL},
+		{"no-sticky", 's', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bNoSticky,
+			_("Don't make the dock appear on all desktops."), NULL},
+		{"capuccino", 'C', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bCappuccino,
+			_("Cairo-Dock makes anything, including coffee !"), NULL},
 		{"modules-dir", 'M', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cUserDefinedModuleDir,
 			_("Ask the dock to load additionnal modules contained in this directory (though it is unsafe for your dock to load unnofficial modules)."), NULL},
@@ -378,12 +380,6 @@ int main (int argc, char** argv)
 		{"easter-eggs", 'E', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bEasterEggs,
 			_("For debugging purpose only. Some hidden and still unstable options will be activated."), NULL},
-		{"server", 'S', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
-			&cThemeServerAdress,
-			_("Address of a server containing additional themes. This will overwrite the default server address."), NULL},
-		{"locked", 'k', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&g_bLocked,
-			_("Lock the dock so that any modification is impossible for users."), NULL},
 		{NULL, 0, 0, 0,
 			NULL,
 			NULL, NULL}
@@ -394,7 +390,7 @@ int main (int argc, char** argv)
 	g_option_context_parse (context, &argc, &argv, &erreur);
 	if (erreur != NULL)
 	{
-		g_print ("ERROR in options : %s\n", erreur->message);
+		g_print ("ERROR in options: %s\n", erreur->message);
 		return 1;
 	}
 	
@@ -413,7 +409,8 @@ int main (int argc, char** argv)
 		g_free (cVerbosity);
 	}
 	
-	cd_log_set_force_color (bForceColors);
+	if (bForceColors)
+		cd_log_force_use_color ();
 	
 	CairoDockDesktopEnv iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 	if (cEnvironment != NULL)
@@ -765,17 +762,16 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
 	g_print ("\n\nTODO:\n"
+	"- check that applet's default icon is used if the specified one doesn't exist\n"
 	"- test drop (Shortcuts, between applets or applis, Panel view, etc).\n"
-	"- draw a preview of the dock in opengl\n"
-	"- handle icon path in .desktop files.\n"
-	"- kde integration ++\n"
-	"- find Kwin config tool for Composite-manager\n"
 	"- review Help hints\n"
-	"- display Help GUI in simple mode\n"
 	"- drop folder: wrong icon order\n"
-	"- Drop2Share: Uppix\n"
 	"- clean traces (especially from the class manager)\n"
+	"- find Kwin config tool for Composite-manager\n"
+	"- draw a preview of the dock in opengl\n"
+	"- display Help GUI in simple mode\n"
 	"- add actions for the Help module\n"
+	"- kde integration ++\n"
 	"\n");
 	
 	gtk_main ();
