@@ -786,7 +786,7 @@ static void _cairo_dock_load_icon_theme (void)
 		s_pIconTheme = gtk_icon_theme_get_default ();
 		g_signal_connect (G_OBJECT (s_pIconTheme), "changed", G_CALLBACK (_on_icon_theme_changed), NULL);
 		s_bUseDefaultTheme = TRUE;
-		s_bUseLocalIcons = (myIconsParam.cIconTheme == NULL);
+		s_bUseLocalIcons = (myIconsParam.cIconTheme != NULL);
 	}
 	else  // use the given icon theme
 	{

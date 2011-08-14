@@ -88,7 +88,7 @@ gboolean cairo_dock_remove_version_from_string (gchar *cString)
 		erreur = NULL; }
 CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *cDesktopFileName, Icon *icon, gchar **cSubDockRendererName)
 {
-	g_print ("%s (%s)\n", __func__, cDesktopFileName);
+	cd_debug ("%s (%s)", __func__, cDesktopFileName);
 	CairoDockIconTrueType iType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
 	
 	//\__________________ open the desktop file

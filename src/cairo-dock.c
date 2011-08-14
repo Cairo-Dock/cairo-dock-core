@@ -762,11 +762,9 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
 	g_print ("\n\nTODO:\n"
-	"- check that applet's default icon is used if the specified one doesn't exist\n"
 	"- test drop (Shortcuts, between applets or applis, Panel view, etc).\n"
 	"- review Help hints\n"
 	"- drop folder: wrong icon order\n"
-	"- clean traces (especially from the class manager)\n"
 	"- find Kwin config tool for Composite-manager\n"
 	"- draw a preview of the dock in opengl\n"
 	"- display Help GUI in simple mode\n"

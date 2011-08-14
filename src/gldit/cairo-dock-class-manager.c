@@ -600,7 +600,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 	// if we didn't find one, we use the icon defined in the class.
 	if (pClassAppli != NULL && pClassAppli->cIcon != NULL)
 	{
-		g_print ("get the class icon (%s)\n", pClassAppli->cIcon);
+		cd_debug ("get the class icon (%s)", pClassAppli->cIcon);
 		gchar *cIconFilePath = cairo_dock_search_icon_s_path (pClassAppli->cIcon);
 		cairo_surface_t *pSurface = cairo_dock_create_surface_from_image_simple (cIconFilePath,
 			iWidth,
@@ -611,7 +611,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 	}
 	else
 	{
-		g_print ("no icon for the class %s\n", cClass);
+		cd_debug ("no icon for the class %s", cClass);
 	}
 	
 	// if not found or not defined, try to find an icon based on the name class.
@@ -828,7 +828,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer. (c'est souvent lorsqu'on ferme toutes une classe d'un coup. donc les animations sont pratiquement dans le meme etat, donc la derniere icone en est aussi a la fin, donc on ne verrait de toute facon aucune animation.
 			{
-				cd_debug ("inutile de re-inserer l'icone restante\n");
+				cd_debug ("inutile de re-inserer l'icone restante");
 				cairo_dock_free_icon (pLastClassIcon);
 				cairo_dock_update_dock_size (pFakeParentDock);
 				cairo_dock_calculate_dock_icons (pFakeParentDock);
@@ -857,7 +857,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			}
 			cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (g_pMainDock));
 		}
-		g_print ("no more dock\n");
+		cd_debug ("no more dock");
 		return TRUE;
 	}
 	return FALSE;
@@ -1332,7 +1332,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	// Exec=wine "/path/to/prog.exe"
 	// Exec=env WINEPREFIX="/home/fab/.wine" wine "C:\Program Files\Starcraft\Starcraft.exe"
 	
-	g_print ("%s (%s, '%s')\n", __func__, cCommand, cStartupWMClass);
+	cd_debug ("%s (%s, '%s')", __func__, cCommand, cStartupWMClass);
 	gchar *cResult = NULL;
 	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 	{
@@ -1446,7 +1446,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 			*str = '\0';
 	}
 	cairo_dock_remove_version_from_string (cResult);
-	g_print (" -> '%s'\n", cResult);
+	cd_debug (" -> '%s'", cResult);
 	
 	return cResult;
 }
@@ -1471,7 +1471,7 @@ register from class name (window or old launchers):
 gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName, const gchar *cWmClass)
 {
 	g_return_val_if_fail (cDesktopFile != NULL || cClassName != NULL, NULL);
-	g_print ("%s (%s, %s, %s)\n", __func__, cDesktopFile, cClassName, cWmClass);
+	cd_message ("%s (%s, %s, %s)", __func__, cDesktopFile, cClassName, cWmClass);
 	
 	//\__________________ if the class is already registered and filled, quit.
 	gchar *cClass = NULL;
@@ -1498,12 +1498,12 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 				pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 			pClassAppli->bSearchedAttributes = TRUE;
 		}
-		g_print ("couldn't find the desktop file %s\n", cDesktopFile?cDesktopFile:cClass);
+		cd_debug ("couldn't find the desktop file %s", cDesktopFile?cDesktopFile:cClass);
 		return NULL;
 	}
 	
 	//\__________________ open it.
-	g_print ("+ parsing class desktop file %s...\n", cDesktopFilePath);
+	cd_debug ("+ parsing class desktop file %s...", cDesktopFilePath);
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
 	g_return_val_if_fail (pKeyFile != NULL, NULL);
 	
@@ -1519,7 +1519,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
 	if (cClass == NULL)
 	{
-		g_print ("couldn't guess the class for %s\n", cDesktopFile);
+		cd_debug ("couldn't guess the class for %s", cDesktopFile);
 		g_free (cDesktopFilePath);
 		g_free (cCommand);
 		g_free (cStartupWMClass);
@@ -1599,19 +1599,19 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	}
 	
 	g_key_file_free (pKeyFile);
-	g_print (" -> class '%s'\n", cClass);
+	cd_debug (" -> class '%s'", cClass);
 	return cClass;
 }
 
 void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
 {
 	g_return_if_fail (cClass != NULL && pIcon != NULL);
-	g_print ("%s (%s)\n", __func__, cClass);
+	cd_debug ("%s (%s)", __func__, cClass);
 	
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli == NULL || ! pClassAppli->bSearchedAttributes)
 	{
-		g_print ("no class %s or no attributes\n", cClass);
+		cd_debug ("no class %s or no attributes", cClass);
 		return;
 	}
 	
