@@ -277,12 +277,6 @@ Icon *cairo_dock_new_icon (void);
 void cairo_dock_free_icon_buffers (Icon *icon);
 
 
-/** Search the path of an icon into the defined icons themes. It also handles the '~' caracter in paths.
- * @param cFileName name of the icon file.
- * @return the complete path of the icon, or NULL if not found.
- */
-gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
-
 /* Cree la surface de reflection d'une icone (pour cairo).
 *@param pIcon l'icone.
 *@param pContainer le container de l'icone.

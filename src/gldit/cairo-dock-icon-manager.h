@@ -62,8 +62,6 @@ struct _CairoIconsParam {
 	gdouble fAlphaAtRest;
 	gdouble fReflectSize;
 	gchar *cIconTheme;
-	gpointer *pDefaultIconDirectory;
-	gint iNbIconPlaces;
 	gchar *cBackgroundImagePath;
 	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_GROUPS];
 	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_GROUPS];
@@ -130,6 +128,11 @@ void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock);
 
 void cairo_dock_set_specified_desktop_for_icon (Icon *pIcon, int iSpecificDesktop);
 
+/** Search the path of an icon into the defined icons themes. It also handles the '~' caracter in paths.
+ * @param cFileName name of the icon file.
+ * @return the complete path of the icon, or NULL if not found.
+ */
+gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
 
 void gldi_register_icons_manager (void);
 

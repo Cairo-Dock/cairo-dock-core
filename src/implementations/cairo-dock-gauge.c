@@ -45,6 +45,16 @@ typedef struct {
 	GLuint iTexture;
 } GaugeImage;
 
+// Effect applied on Indicator image.
+typedef enum {
+	CD_GAUGE_EFFECT_NONE=0,
+	CD_GAUGE_EFFECT_CROP,
+	CD_GAUGE_EFFECT_STRETCH,
+	CD_GAUGE_EFFECT_ZOOM,
+	CD_GAUGE_EFFECT_FADE,
+	CD_GAUGE_NB_EFFECTS
+	} GaugeIndicatorEffect; 
+
 typedef struct {
 	// needle
 	gdouble posX, posY;
@@ -65,7 +75,16 @@ typedef struct {
 	CairoDataRendererEmblemParam emblem;
 	// label text zone
 	CairoDataRendererTextParam labelZone;
+	// indicator image effect
+	GaugeIndicatorEffect iEffect;
 } GaugeIndicator;
+
+// Multi gauge position options.
+typedef enum {
+	CD_GAUGE_MULTI_DISPLAY_SCATTERED=0,
+	CD_GAUGE_MULTI_DISPLAY_SHARED,
+	CD_GAUGE_NB_MULTI_DISPLAY
+	} GaugeMultiDisplay; 
 
 typedef struct {
 	CairoDataRenderer dataRenderer;
@@ -73,6 +92,7 @@ typedef struct {
 	GaugeImage *pImageBackground;
 	GaugeImage *pImageForeground;
 	GList *pIndicatorList;
+	GaugeMultiDisplay iMultiDisplay;
 } Gauge;
 
 
@@ -250,6 +270,11 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 			xmlFree (cNodeContent);
 			xmlFree (cAttribute);
 		}
+		else if(xmlStrcmp (pGaugeNode->name, (const xmlChar *) "multi_display") == 0)
+		{
+			cNodeContent = xmlNodeGetContent (pGaugeNode);
+			pGauge->iMultiDisplay = atoi (cNodeContent);
+		}
 		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "indicator") == 0)
 		{
 			if (pRenderer->iRank == 0)
@@ -368,6 +393,8 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 					pGaugeIndicator->iNeedleRealHeight = atoi (cNodeContent);
 					pGaugeIndicator->iNeedleOffsetY = .5 * pGaugeIndicator->iNeedleRealHeight;
 				}
+				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "effect") == 0)
+					pGaugeIndicator->iEffect = atoi (cNodeContent);
 				else if(xmlStrcmp (pGaugeSubNode->name, (const xmlChar *) "file") == 0)
 				{
 					ap = xmlHasProp(pGaugeSubNode, "key");
@@ -620,11 +647,33 @@ static void _draw_gauge_image_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndic
 	g_return_if_fail (iNumImage < pGaugeIndicator->iNbImages);
 	
 	GaugeImage *pGaugeImage = &pGaugeIndicator->pImageList[iNumImage];
-	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
+	int iWidth, iHeight;
+	cairo_data_renderer_get_size (CAIRO_DATA_RENDERER (pGauge), &iWidth, &iHeight);
 	
 	if (pGaugeImage->iTexture != 0)
 	{
-		_cairo_dock_apply_texture_at_size (pGaugeImage->iTexture, iWidth, iHeight);
+		glBindTexture (GL_TEXTURE_2D, pGaugeImage->iTexture);\
+		switch (pGaugeIndicator->iEffect)
+		{
+			case CD_GAUGE_EFFECT_CROP :
+				_cairo_dock_apply_current_texture_at_size_crop (pGaugeImage->iTexture, iWidth, iHeight, fValue);
+			break;
+
+			case CD_GAUGE_EFFECT_STRETCH :
+				_cairo_dock_apply_current_texture_portion_at_size_with_offset (0. , 0., 1., 1., iWidth, iHeight * fValue, 0., iHeight * (fValue - 1)/2);
+			break;
+
+			case CD_GAUGE_EFFECT_ZOOM :
+				_cairo_dock_apply_current_texture_portion_at_size_with_offset (0. , 0., 1., 1., iWidth * fValue, iHeight * fValue, 0., 0.);
+			break;
+
+			case CD_GAUGE_EFFECT_FADE :
+				_cairo_dock_set_alpha(fValue); // no break, we need the default texture draw
+
+			default :
+				_cairo_dock_apply_current_texture_at_size (iWidth, iHeight);
+			break;
+		}
 	}
 }
 static void _draw_gauge_needle_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
@@ -657,7 +706,10 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 	_cairo_dock_set_blend_pbuffer ();  // ceci reste un mystere...
 	_cairo_dock_set_alpha (1.);
 	
-	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
+	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
+	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
+	int iWidth, iHeight;
+	cairo_data_renderer_get_size (pRenderer, &iWidth, &iHeight);
 	GaugeImage *pGaugeImage;
 	
 	//\________________ On affiche le fond.
@@ -673,8 +725,6 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 	GList *pValueList;
 	double fValue;
 	GaugeIndicator *pIndicator;
-	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
-	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
 	int i;
 	for (i = iDataOffset, pIndicatorElement = pGauge->pIndicatorList; i < pData->iNbValues && pIndicatorElement != NULL; i++, pIndicatorElement = pIndicatorElement->next)
 	{
@@ -713,36 +763,56 @@ static void render_opengl (Gauge *pGauge)
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
 	int iNbDrawings = (int) ceil (1. * pData->iNbValues / pRenderer->iRank);
 	int i, iDataOffset = 0;
+	float ratio = (float) 1 / iNbDrawings;
+	int iWidth, iHeight;
+	cairo_data_renderer_get_size (pRenderer, &iWidth, &iHeight);
+	gboolean bDisplay = TRUE;
 	for (i = 0; i < iNbDrawings; i ++)
 	{
 		if (iNbDrawings > 1)  // on va dessiner la jauges plusieurs fois, la 1ere en grand et les autres en petit autour.
 		{
 			glPushMatrix ();
-			if (i == 0)  /// tester avec 1/2, 1/2
+			switch (pGauge->iMultiDisplay)
 			{
-				glTranslatef (-pRenderer->iWidth / 6, pRenderer->iHeight / 6, 0.);
-				glScalef (2./3, 2./3, 1.);
+				case CD_GAUGE_MULTI_DISPLAY_SHARED :
+					/** box positions : 
+					* change axis to left border : -w / 2
+					* move to box #i : w * i / n
+					* move 1/2 box left : -w / 2n 
+					* =w(-0.5 +i/n -1/2n)
+					*/
+					glTranslatef (iWidth * (i * ratio - 0.5 + ratio / 2), 0., 0.);
+					glScalef (ratio, 1., 1.);
+					break;
+	
+				case CD_GAUGE_MULTI_DISPLAY_SCATTERED :
+					if (i == 0)  /// tester avec 1/2, 1/2
+					{
+						glTranslatef (-iWidth / 6, iHeight / 6, 0.);
+						glScalef (2./3, 2./3, 1.);
+					}
+					else if (i == 1)
+					{
+						glTranslatef (iWidth / 3, - iHeight / 3, 0.);
+						glScalef (1./3, 1./3, 1.);
+					}
+					else if (i == 2)
+					{
+						glTranslatef (iWidth / 3, iHeight / 3, 0.);
+						glScalef (1./3, 1./3, 1.);
+					}
+					else if (i == 3)
+					{
+						glTranslatef (-iWidth / 3, -iHeight / 3, 0.);
+						glScalef (1./3, 1./3, 1.);
+					}
+					else  // 5 valeurs faut pas pousser non plus.
+						bDisplay = FALSE;
 			}
-			else if (i == 1)
-			{
-				glTranslatef (pRenderer->iWidth / 3, - pRenderer->iHeight / 3, 0.);
-				glScalef (1./3, 1./3, 1.);
-			}
-			else if (i == 2)
-			{
-				glTranslatef (pRenderer->iWidth / 3, pRenderer->iHeight / 3, 0.);
-				glScalef (1./3, 1./3, 1.);
-			}
-			else if (i == 3)
-			{
-				glTranslatef (-pRenderer->iWidth / 3, -pRenderer->iHeight / 3, 0.);
-				glScalef (1./3, 1./3, 1.);
-			}
-			else  // 5 valeurs faut pas pousser non plus.
-				break ;
 		}
 		
-		cairo_dock_draw_one_gauge_opengl (pGauge, iDataOffset);
+		if (bDisplay)
+			cairo_dock_draw_one_gauge_opengl (pGauge, iDataOffset);
 		
 		if (iNbDrawings > 1)
 			glPopMatrix ();

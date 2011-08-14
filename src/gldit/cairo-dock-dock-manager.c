@@ -558,10 +558,10 @@ static void _cairo_dock_draw_one_subdock_icon (const gchar *cDockName, CairoDock
 	{
 		icon = ic->data;
 		if (icon->pSubDock != NULL
-		&& (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) || CAIRO_DOCK_IS_MULTI_APPLI (icon))
+		&& (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) || CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_IS_APPLET (icon))
 		&& (icon->iSubdockViewType != 0
 			|| (CAIRO_DOCK_IS_MULTI_APPLI (icon) && !myIndicatorsParam.bUseClassIndic))
-		&& icon->iSidRedrawSubdockContent == 0)  // icone de sous-dock ou de classe; les applets font ce qu'elles veulent.
+		&& icon->iSidRedrawSubdockContent == 0)  // icone de sous-dock ou de classe ou d'applets.
 		{
 			cairo_dock_trigger_redraw_subdock_content_on_icon (icon);
 		}

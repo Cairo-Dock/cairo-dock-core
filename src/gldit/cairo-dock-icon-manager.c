@@ -75,8 +75,12 @@ extern CairoDock *g_pMainDock;
 // private
 static GList *s_pFloatingIconsList = NULL;
 static int s_iNbNonStickyLaunchers = 0;
+static GtkIconTheme *s_pIconTheme = NULL;
+static gboolean s_bUseLocalIcons = FALSE;
+static gboolean s_bUseDefaultTheme = TRUE;
 
 static void _cairo_dock_unload_icon_textures (void);
+static void _cairo_dock_unload_icon_theme (void);
 
 
 void cairo_dock_free_icon (Icon *icon)
@@ -92,8 +96,6 @@ void cairo_dock_free_icon (Icon *icon)
 		g_source_remove (icon->iSidLoadImage);
 	if (icon->iSidDoubleClickDelay != 0)
 		g_source_remove (icon->iSidDoubleClickDelay);
-	///if (icon->cBaseURI != NULL)
-	///	cairo_dock_fm_remove_monitor_full (icon->cBaseURI, (icon->pSubDock != NULL), (icon->iVolumeID != 0 ? icon->cCommand : NULL));
 	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
 		cairo_dock_unregister_appli (icon);
 	else if (icon->cClass != NULL)  // c'est un inhibiteur.
@@ -243,6 +245,120 @@ void cairo_dock_set_specified_desktop_for_icon (Icon *pIcon, int iSpecificDeskto
 
 
   //////////////////
+ /// ICON THEME ///
+//////////////////
+
+gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
+{
+	g_return_val_if_fail (cFileName != NULL, NULL);
+	
+	//\_______________________ cas faciles : l'entree est deja un chemin.
+	if (*cFileName == '~')
+	{
+		return g_strdup_printf ("%s%s", g_getenv ("HOME"), cFileName+1);
+	}
+	
+	if (*cFileName == '/')
+	{
+		return g_strdup (cFileName);
+	}
+	
+	//\_______________________ check for the presence of suffix and version number.
+	g_return_val_if_fail (s_pIconTheme != NULL, NULL);
+	
+	GString *sIconPath = g_string_new ("");
+	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
+	gboolean bHasSuffix=FALSE, bFileFound=FALSE, bHasVersion=FALSE;
+	GtkIconInfo* pIconInfo = NULL;
+	int i, j;
+	gchar *str = strrchr (cFileName, '.');
+	bHasSuffix = (str != NULL && g_ascii_isalpha (*(str+1)));  // exemple : "firefox.svg", but not "firefox-3.0"
+	bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)) && str-1 != cFileName);  // doit finir par x.y, x et y ayant autant de chiffres que l'on veut.
+	
+	//\_______________________ search in the local icons folder if enabled.
+	if (s_bUseLocalIcons)
+	{
+		if (! bHasSuffix)  // test all the suffix one by one.
+		{
+			j = 0;
+			while (cSuffixTab[j] != NULL)
+			{
+				g_string_printf (sIconPath, "%s/%s%s", g_cCurrentIconsPath, cFileName, cSuffixTab[j]);
+				if ( g_file_test (sIconPath->str, G_FILE_TEST_EXISTS) )
+				{
+					bFileFound = TRUE;
+					break;
+				}
+				j ++;
+			}
+		}
+		else  // just test the file.
+		{
+			g_string_printf (sIconPath, "%s/%s", g_cCurrentIconsPath, cFileName);
+			bFileFound = g_file_test (sIconPath->str, G_FILE_TEST_EXISTS);
+		}
+	}
+	
+	//\_______________________ search in the icon theme
+	if (! bFileFound)  // didn't found/search in the local icons, so try the icon theme.
+	{
+		g_string_assign (sIconPath, cFileName);
+		if (bHasSuffix)  // on vire le suffixe pour chercher tous les formats dans le theme d'icones.
+		{
+			gchar *str = strrchr (sIconPath->str, '.');
+			if (str != NULL)
+				*str = '\0';
+		}
+		pIconInfo = gtk_icon_theme_lookup_icon (s_pIconTheme,
+			sIconPath->str,
+			128,
+			GTK_ICON_LOOKUP_FORCE_SVG);
+		if (pIconInfo != NULL)
+		{
+			g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
+			bFileFound = TRUE;
+			gtk_icon_info_free (pIconInfo);
+		}
+	}
+	
+	
+	//\_______________________ si rien trouve, on cherche sans le numero de version.
+	if (! bFileFound && bHasVersion)
+	{
+		cd_debug ("on cherche sans le numero de version...");
+		g_string_assign (sIconPath, cFileName);
+		gchar *str = strrchr (sIconPath->str, '.');
+		str --;  // on sait que c'est un digit.
+		str --;
+		while ((g_ascii_isdigit (*str) || *str == '.' || *str == '-') && (str != sIconPath->str))
+			str --;
+		if (str != sIconPath->str)
+		{
+			*(str+1) = '\0';
+			cd_debug (" on cherche '%s'...\n", sIconPath->str);
+			gchar *cPath = cairo_dock_search_icon_s_path (sIconPath->str);
+			if (cPath != NULL)
+			{
+				bFileFound = TRUE;
+				g_string_assign (sIconPath, cPath);
+				g_free (cPath);
+			}
+		}
+	}
+	
+	if (! bFileFound)
+	{
+		g_string_free (sIconPath, TRUE);
+		return NULL;
+	}
+	
+	gchar *cIconPath = sIconPath->str;
+	g_string_free (sIconPath, FALSE);
+	return cIconPath;
+}
+
+
+  //////////////////
  /// GET CONFIG ///
 //////////////////
 
@@ -367,48 +483,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 			g_key_file_set_string (pKeyFile, "Icons", "default icon directory", pIcons->cIconTheme);
 		}
 	}
-	pIcons->pDefaultIconDirectory = g_new0 (gpointer, 2 * 4);  // theme d'icone + theme local + theme default + NULL final.
-	int j = 0;
-	gboolean bLocalIconsUsed = FALSE, bDefaultThemeUsed = FALSE;
-	
-	if (pIcons->cIconTheme == NULL || *pIcons->cIconTheme == '\0')  // theme systeme.
-	{
-		j ++;
-		bDefaultThemeUsed = TRUE;
-	}
-	else if (pIcons->cIconTheme[0] == '~')
-	{
-		pIcons->pDefaultIconDirectory[2*j] = g_strdup_printf ("%s%s", getenv ("HOME"), pIcons->cIconTheme+1);
-		j ++;
-	}
-	else if (pIcons->cIconTheme[0] == '/')
-	{
-		pIcons->pDefaultIconDirectory[2*j] = g_strdup (pIcons->cIconTheme);
-		j ++;
-	}
-	else if (strncmp (pIcons->cIconTheme, "_LocalTheme_", 12) == 0 || strncmp (pIcons->cIconTheme, "_ThemeDirectory_", 16) == 0 || strncmp (pIcons->cIconTheme, "_Custom Icons_", 14) == 0)
-	{
-		pIcons->pDefaultIconDirectory[2*j] = g_strdup (g_cCurrentIconsPath);
-		j ++;
-		bLocalIconsUsed = TRUE;
-	}
-	else
-	{
-		pIcons->pDefaultIconDirectory[2*j+1] = gtk_icon_theme_new ();
-		gtk_icon_theme_set_custom_theme (pIcons->pDefaultIconDirectory[2*j+1], pIcons->cIconTheme);
-		j ++;
-	}
-	
-	if (! bLocalIconsUsed)
-	{
-		pIcons->pDefaultIconDirectory[2*j] = g_strdup (g_cCurrentIconsPath);
-		j ++;
-	}
-	if (! bDefaultThemeUsed)
-	{
-		j ++;
-	}
-	pIcons->iNbIconPlaces = j;
 	
 	gchar *cLauncherBackgroundImageName = cairo_dock_get_string_key_value (pKeyFile, "Icons", "icons bg", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	if (cLauncherBackgroundImageName != NULL)
@@ -656,19 +730,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 
 static void reset_config (CairoIconsParam *pIcons)
 {
-	if (pIcons->pDefaultIconDirectory != NULL)
-	{
-		gpointer data;
-		int i;
-		for (i = 0; i < pIcons->iNbIconPlaces; i ++)
-		{
-			if (pIcons->pDefaultIconDirectory[2*i] != NULL)
-				g_free (pIcons->pDefaultIconDirectory[2*i]);
-			else if (pIcons->pDefaultIconDirectory[2*i+1] != NULL)
-				g_object_unref (pIcons->pDefaultIconDirectory[2*i+1]);
-		}
-		g_free (pIcons->pDefaultIconDirectory);
-	}
 	g_free (pIcons->cSeparatorImage);
 	g_free (pIcons->cBackgroundImagePath);
 	g_free (pIcons->cIconTheme);
@@ -712,12 +773,37 @@ static void _cairo_dock_load_icon_textures (void)
 	
 	cairo_dock_foreach_icon_container_renderer ((GHFunc)_load_renderer, NULL);
 }
+static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data)
+{
+	g_print ("theme has changed\n");
+	cairo_dock_reload_buffers_in_all_docks (TRUE);  // TRUE <=> y compris les applets.
+}
+static void _cairo_dock_load_icon_theme (void)
+{
+	if (myIconsParam.cIconTheme == NULL  // no icon theme defined => use the default one.
+	|| strcmp (myIconsParam.cIconTheme, "_Custom Icons_") == 0)  // use custom icons and default theme as fallback
+	{
+		s_pIconTheme = gtk_icon_theme_get_default ();
+		g_signal_connect (G_OBJECT (s_pIconTheme), "changed", G_CALLBACK (_on_icon_theme_changed), NULL);
+		s_bUseDefaultTheme = TRUE;
+		s_bUseLocalIcons = (myIconsParam.cIconTheme == NULL);
+	}
+	else  // use the given icon theme
+	{
+		s_pIconTheme = gtk_icon_theme_new ();
+		gtk_icon_theme_set_custom_theme (s_pIconTheme, myIconsParam.cIconTheme);
+		s_bUseLocalIcons = FALSE;
+		s_bUseDefaultTheme = FALSE;
+	}
+}
 
 static void load (void)
 {
 	_cairo_dock_load_icon_textures ();
 	
 	cairo_dock_create_icon_fbo ();
+	
+	_cairo_dock_load_icon_theme ();
 }
 
 
@@ -800,6 +886,12 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	}
 	
 	gboolean bThemeChanged = cairo_dock_strings_differ (pIcons->cIconTheme, pPrevIcons->cIconTheme);
+	if (bThemeChanged)
+	{
+		_cairo_dock_unload_icon_theme ();
+		
+		_cairo_dock_load_icon_theme ();
+	}
 	
 	gboolean bIconBackgroundImagesChanged = FALSE;
 	// if background images are different, reload them and trigger the reload of all icons
@@ -881,12 +973,17 @@ static void _cairo_dock_unload_icon_textures (void)
 	
 	cairo_dock_foreach_icon_container_renderer ((GHFunc)_unload_renderer, NULL);
 }
-
+static void _cairo_dock_unload_icon_theme (void)
+{
+	if (s_bUseDefaultTheme)
+		g_signal_handlers_disconnect_by_func (G_OBJECT(s_pIconTheme), G_CALLBACK(_on_icon_theme_changed), NULL);
+	else
+		g_object_unref (s_pIconTheme);
+	s_pIconTheme = NULL;
+}
 static void unload (void)
 {
-	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
-	
-	cairo_dock_foreach_icon_container_renderer ((GHFunc)_unload_renderer, NULL);
+	_cairo_dock_unload_icon_textures ();
 	
 	cairo_dock_destroy_icon_fbo ();
 	
@@ -904,6 +1001,8 @@ static void unload (void)
 	}
 	
 	cairo_dock_reset_source_context ();
+	
+	_cairo_dock_unload_icon_theme ();
 }
 
 
