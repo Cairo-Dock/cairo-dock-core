@@ -102,8 +102,8 @@ struct _CairoDockPackage {
 	gint iRating;
 	/// sobriety/simplicity of the package.
 	gint iSobriety;
-	/// category of the package.
-	gint iCategory;
+	/// hint of the package, for instance "sound" or "battery" for a gauge, "internet" or "desktop" for a third-party applet.
+	gchar *cHint;
 	/// date of creation of the package.
 	gint iCreationDate;
 	/// date of latest changes in the package.
@@ -220,7 +220,7 @@ gchar *cairo_dock_get_package_path (const gchar *cPackageName, const gchar *cSha
 CairoDockPackageType cairo_dock_extract_package_type_from_name (const gchar *cPackageName);
 
 
-void cairo_dock_init_package_manager (gchar *cPackageServerAdress);
+void cairo_dock_set_packages_server (gchar *cPackageServerAdress);
 
 
 void gldi_register_connection_manager (void);

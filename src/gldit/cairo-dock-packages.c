@@ -417,6 +417,7 @@ void cairo_dock_free_package (CairoDockPackage *pPackage)
 		return ;
 	g_free (pPackage->cPackagePath);
 	g_free (pPackage->cAuthor);
+	g_free (pPackage->cHint);
 	g_free (pPackage->cDisplayedName);
 	g_free (pPackage);
 }
@@ -514,8 +515,9 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 	CairoDockPackage *pPackage;
 	CairoDockPackageType iType;
 	double fSize;
-	int iCreationDate, iLastModifDate, iLocalDate, iSobriety, iCategory;
+	int iCreationDate, iLastModifDate, iLocalDate, iSobriety;
 	int last_modif, creation_date;
+	gchar *cHint;
 	guint i;
 	for (i = 0; i < length; i ++)
 	{
@@ -523,7 +525,12 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 		iCreationDate = g_key_file_get_integer (pKeyFile, cPackageName, "creation", NULL);
 		iLastModifDate = g_key_file_get_integer (pKeyFile, cPackageName, "last modif", NULL);
 		iSobriety = g_key_file_get_integer (pKeyFile, cPackageName, "sobriety", NULL);
-		iCategory = g_key_file_get_integer (pKeyFile, cPackageName, "category", NULL);
+		cHint = g_key_file_get_string (pKeyFile, cPackageName, "hint", NULL);
+		if (cHint && *cHint == '\0')
+		{
+			g_free (cHint);
+			cHint = NULL;
+		}
 		fSize = g_key_file_get_double (pKeyFile, cPackageName, "size", NULL);
 		cAuthor = g_key_file_get_string (pKeyFile, cPackageName, "author", NULL);
 		if (cAuthor && *cAuthor == '\0')
@@ -586,13 +593,15 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 				g_free (pSamePackage->cDisplayedName);
 				pSamePackage->cDisplayedName = (cName ? cName : g_strdup (cPackageName));
 				pSamePackage->cAuthor = cAuthor;  // et l'auteur original.
+				pSamePackage->cHint = cHint;  // et le hint.
 				g_free (cPackageName);
 				continue;
 			}
 			
-			pPackage = pSamePackage;
+			pPackage = pSamePackage;  // we'll update the characteristics of the package with the one from the server.
 			g_free (pPackage->cPackagePath);
 			g_free (pPackage->cAuthor);
+			g_free (pPackage->cHint);
 			g_free (pPackage->cDisplayedName);
 		}
 		else  // package encore jamais telecharge.
@@ -618,7 +627,7 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 		pPackage->cAuthor = cAuthor;
 		pPackage->cDisplayedName = (cName ? cName : g_strdup (cPackageName));
 		pPackage->iSobriety = iSobriety;
-		pPackage->iCategory = iCategory;
+		pPackage->cHint = cHint;
 		pPackage->iCreationDate = iCreationDate;
 		pPackage->iLastModifDate = iLastModifDate;
 		g_free (cPackageName);
@@ -763,7 +772,7 @@ gchar *cairo_dock_get_package_path (const gchar *cPackageName, const gchar *cSha
 	gchar *cPackagePath = NULL;
 	
 	//g_print ("iType : %d\n", iType);
-	if (cUserPackagesDir != NULL && /*iType != CAIRO_DOCK_DISTANT_PACKAGE && iType != CAIRO_DOCK_NEW_PACKAGE && */iType != CAIRO_DOCK_UPDATED_PACKAGE)
+	if (cUserPackagesDir != NULL && iType != CAIRO_DOCK_UPDATED_PACKAGE)
 	{
 		cPackagePath = g_strdup_printf ("%s/%s", cUserPackagesDir, cPackageName);
 		
@@ -837,12 +846,9 @@ CairoDockPackageType cairo_dock_extract_package_type_from_name (const gchar *cPa
 }
 
 
-void cairo_dock_init_package_manager (gchar *cPackageServerAdress)
+void cairo_dock_set_packages_server (gchar *cPackageServerAdress)
 {
 	s_cPackageServerAdress = cPackageServerAdress;
-	
-	//\___________________ On initialise le gestionnaire de download.
-	curl_global_init (CURL_GLOBAL_DEFAULT);  /// merge with init
 }
 
 
@@ -917,6 +923,3 @@ void gldi_register_connection_manager (void)
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myConnectionMgr));
 }
-
-
-
