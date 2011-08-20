@@ -283,6 +283,8 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletV
 */
 void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky);
 
+gboolean cairo_dock_desklet_is_sticky (CairoDesklet *pDesklet);
+
 /** Lock the position of a desklet. This makes the desklet impossible to rotate, drag with the mouse, or retach to the dock. The new state is saved in conf.
 *@param pDesklet the desklet.
 *@param bPositionLocked whether the position should be locked or not.

@@ -102,8 +102,6 @@ gboolean cairo_dock_xwindow_is_fullscreen (Window Xid);
 gboolean cairo_dock_xwindow_skip_taskbar (Window Xid);
 void cairo_dock_xwindow_is_above_or_below (Window Xid, gboolean *bIsAbove, gboolean *bIsBelow);
 gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention);
-gboolean cairo_dock_xwindow_is_sticky (Window Xid);
-gboolean cairo_dock_gdkwindow_is_sticky (GdkWindow *window);
 gboolean cairo_dock_window_is_utility (int Xid);
 gboolean cairo_dock_window_is_dock (int Xid);
 

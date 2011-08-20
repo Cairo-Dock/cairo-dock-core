@@ -254,10 +254,10 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 		int iRelativePositionX = (pDesklet->container.iWindowPositionX + pDesklet->container.iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? pDesklet->container.iWindowPositionX : pDesklet->container.iWindowPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
 		int iRelativePositionY = (pDesklet->container.iWindowPositionY + pDesklet->container.iHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? pDesklet->container.iWindowPositionY : pDesklet->container.iWindowPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		
-		GdkWindow *window = pDesklet->container.pWidget->window;
 		int iNumDesktop = -1;
-		if (! cairo_dock_gdkwindow_is_sticky (window))
+		if (! cairo_dock_desklet_is_sticky (pDesklet))
 		{
+			GdkWindow *window = pDesklet->container.pWidget->window;
 			Window Xid = GDK_WINDOW_XID (window);
 			cd_debug ("This window (%d) is not sticky", (int) Xid);
 			int iDesktop = cairo_dock_get_xwindow_desktop (Xid);
@@ -1218,6 +1218,16 @@ void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky)
 			G_TYPE_BOOLEAN, "Desklet", "sticky", bSticky,
 			G_TYPE_INT, "Desklet", "num desktop", iNumDesktop,
 			G_TYPE_INVALID);
+}
+
+gboolean cairo_dock_desklet_is_sticky (CairoDesklet *pDesklet)
+{
+	GdkWindow *window = pDesklet->container.pWidget->window;
+	#if (GDK_MAJOR_VERSION >= 3)
+	return (window->state & GDK_WINDOW_STATE_STICKY);  // API change: http://mail.gnome.org/archives/commits-list/2010-July/msg00002.html
+	#else
+	return (((GdkWindowObject*) window)->state & GDK_WINDOW_STATE_STICKY);
+	#endif
 }
 
 void cairo_dock_lock_desklet_position (CairoDesklet *pDesklet, gboolean bPositionLocked)
