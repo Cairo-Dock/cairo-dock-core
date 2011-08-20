@@ -133,6 +133,12 @@ void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 
 void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 {
+	CairoDockModuleInstance *pInstance = icon->pModuleInstance;  // this is the only function where we destroy/create the icon's surface, so we must handle the cairo-context here.
+	if (pInstance && pInstance->pDrawContext != NULL)
+	{
+		cairo_destroy (pInstance->pDrawContext);
+		pInstance->pDrawContext = NULL;
+	}
 	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
 	{
 		if (icon->pIconBuffer != NULL)
@@ -223,6 +229,15 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	if (iPrevTexture != 0)
 		_cairo_dock_delete_texture (iPrevTexture);
 	
+	if (pInstance && icon->pIconBuffer != NULL)
+	{
+		pInstance->pDrawContext = cairo_create (icon->pIconBuffer);
+		if (!pInstance->pDrawContext || cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
+		{
+			cd_warning ("couldn't initialize drawing context, applet won't be able to draw itself !");
+			pInstance->pDrawContext = NULL;
+		}
+	}
 }
 
 void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDescription)
@@ -404,7 +419,7 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 		return;
 	
 	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 	pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,
 		iWidth,
 		iHeight,
@@ -429,7 +444,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	cd_debug ("%s (%s)", __func__, pIcon->cName);
 	
 	int w, h;
-	cairo_dock_get_icon_extent (pIcon, CAIRO_CONTAINER (pDock), &w, &h);
+	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	
 	cairo_t *pCairoContext = NULL;
 	if (pIcon->iIconTexture != 0 && pRenderer->render_opengl)  // dessin opengl

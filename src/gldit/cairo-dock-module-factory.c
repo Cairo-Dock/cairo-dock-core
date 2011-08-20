@@ -408,7 +408,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	cd_message ("%s (%s)", __func__, cConfFilePath);
 	
 	//\____________________ On cree une instance du module.
-	CairoDockModuleInstance *pInstance = calloc (1, sizeof (CairoDockModuleInstance) + pModule->pVisitCard->iSizeOfConfig + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
+	CairoDockModuleInstance *pInstance = g_malloc0 (sizeof (CairoDockModuleInstance) + pModule->pVisitCard->iSizeOfConfig + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
 	pInstance->pModule = pModule;
 	pInstance->cConfFilePath = cConfFilePath;
 	if (pModule->pVisitCard->iSizeOfConfig > 0)
@@ -466,7 +466,6 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		{
 			pDesklet->pIcon = pIcon;
 			gtk_window_set_title (GTK_WINDOW(pContainer->pWidget), pInstance->pModule->pVisitCard->cModuleName);
-			///gtk_widget_queue_draw (pContainer->pWidget);
 		}
 		cairo_dock_free_minimal_config (pMinimalConfig);
 	}
@@ -487,7 +486,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		_cairo_dock_read_module_config (pKeyFile, pInstance);
 	
 	gboolean bCanInit = TRUE;
-	pInstance->pDrawContext = NULL;
+	/**pInstance->pDrawContext = NULL;
 	if (pDock && pIcon)  // applet dans un dock (dans un desklet, il faut attendre que l'applet ait mis une vue pour que l'icone soit chargee).
 	{
 		if (pIcon->pIconBuffer == NULL)
@@ -506,7 +505,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 				bCanInit = FALSE;
 			}
 		}
-	}
+	}*/
 	
 	if (bCanInit && pModule->pInterface->initModule)
 		pModule->pInterface->initModule (pInstance, pKeyFile);
@@ -733,7 +732,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		_cairo_dock_read_module_config (pKeyFile, pInstance);
 	}
 	
-	if (pInstance->pDrawContext != NULL)
+	/**if (pInstance->pDrawContext != NULL)
 	{
 		cairo_destroy (pInstance->pDrawContext);
 		pInstance->pDrawContext = NULL;
@@ -747,7 +746,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			bCanReload = FALSE;
 			pInstance->pDrawContext = NULL;
 		}
-	}
+	}*/
 
 	//\_______________________ On recharge l'instance.
 	if (bCanReload && module->pInterface->reloadModule != NULL)

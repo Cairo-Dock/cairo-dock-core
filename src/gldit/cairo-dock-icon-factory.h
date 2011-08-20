@@ -320,6 +320,8 @@ void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer);
 
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock);
 
+#define cairo_dock_set_subdock_content_renderer(pIcon, view) (pIcon)->iSubdockViewType = view
+
 
 G_END_DECLS
 #endif
