@@ -545,9 +545,8 @@ void cairo_dock_reset_class_table (void)
 
 cairo_surface_t *cairo_dock_duplicate_inhibitor_surface_for_appli (Icon *pInhibitorIcon, int iWidth, int iHeight)
 {
-	CairoContainer *pInhibhatorContainer = cairo_dock_search_container_from_icon (pInhibitorIcon);
 	int w, h;
-	cairo_dock_get_icon_extent (pInhibitorIcon, pInhibhatorContainer, &w, &h);
+	cairo_dock_get_icon_extent (pInhibitorIcon, &w, &h);
 	
 	return cairo_dock_duplicate_surface (pInhibitorIcon->pIconBuffer,
 		w,

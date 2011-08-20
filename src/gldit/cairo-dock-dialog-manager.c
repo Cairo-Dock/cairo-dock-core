@@ -197,7 +197,7 @@ static int _cairo_dock_find_clicked_button_in_dialog (GdkEventButton* pButton, C
 	iButtonY = (pDialog->container.bDirectionUp ?
 		pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP :
 		pDialog->container.iHeight - (pDialog->iTopMargin + pDialog->iButtonsHeight));
-	int iMinButtonX = .5 * (pDialog->container.iWidth - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogsParam.iDialogButtonWidth);
+	int iMinButtonX = .5 * ((pDialog->container.iWidth - pDialog->iLeftMargin - pDialog->iRightMargin) - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogsParam.iDialogButtonWidth) + pDialog->iLeftMargin;
 	for (i = 0; i < pDialog->iNbButtons; i++)
 	{
 		iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogsParam.iDialogButtonWidth);
@@ -342,7 +342,7 @@ static void _cairo_dock_draw_inside_dialog_opengl (CairoDialog *pDialog, double 
 		int iButtonX, iButtonY;
 		int i, n = pDialog->iNbButtons;
 		iButtonY = (pDialog->container.bDirectionUp ? pDialog->iTopMargin + pDialog->iMessageHeight + pDialog->iInteractiveHeight + CAIRO_DIALOG_VGAP : pDialog->container.iHeight - pDialog->iTopMargin - pDialog->iButtonsHeight - CAIRO_DIALOG_VGAP);
-		int iMinButtonX = .5 * (pDialog->container.iWidth - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogsParam.iDialogButtonWidth);
+		int iMinButtonX = .5 * ((pDialog->container.iWidth - pDialog->iLeftMargin - pDialog->iRightMargin) - (n - 1) * CAIRO_DIALOG_BUTTON_GAP - n * myDialogsParam.iDialogButtonWidth) + pDialog->iLeftMargin;
 		for (i = 0; i < pDialog->iNbButtons; i++)
 		{
 			iButtonX = iMinButtonX + i * (CAIRO_DIALOG_BUTTON_GAP + myDialogsParam.iDialogButtonWidth);

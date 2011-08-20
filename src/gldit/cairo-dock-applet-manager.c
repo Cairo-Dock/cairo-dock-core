@@ -65,12 +65,12 @@ static void _load_applet (Icon *icon)
 	icon->pIconBuffer = cairo_dock_create_applet_surface (icon->cFileName,
 		iWidth,
 		iHeight);
-	if (icon->pIconBuffer == NULL && icon->pModuleInstance != NULL)  // une image inexistante a ete definie en conf => on met l'icone par defaut.
+	if (icon->pIconBuffer == NULL && icon->pModuleInstance != NULL)  // une image inexistante a ete definie en conf => on met l'icone par defaut. Si aucune image n'est definie, alors c'est a l'applet de faire qqch (dessiner qqch, mettre une image par defaut, etc).
 	{
 		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath,
 			iWidth,
 			iHeight);
-	}  // on ne recharge pas myDrawContext car de toute facon l'icone de l'applet est chargee par le module-manager lors de l'init ou du reload, donc c'est lui qui gere le contexte.
+	}  // on ne recharge pas myDrawContext ici, mais plutot dans cairo_dock_load_icon_image(), puisqu'elle gere aussi la destruction de la surface.
 }
 
 static gboolean _delete_applet (Icon *icon)
@@ -93,7 +93,7 @@ Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalC
 	
 	//\____________ On remplit ses buffers.
 	if (pContainer != NULL)
-		cairo_dock_load_icon_buffers (icon, pContainer);  // ne cree rien si w ou h < 0.
+		cairo_dock_load_icon_buffers (icon, pContainer);  // ne cree rien si w ou h < 0 (par exemple si l'applet est detachee).
 	
 	return icon;
 }

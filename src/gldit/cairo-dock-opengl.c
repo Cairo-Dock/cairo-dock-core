@@ -485,7 +485,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 	else if (g_openglConfig.iFboId != 0)
 	{
 		// on attache la texture au FBO.
-		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 		if (pContainer == NULL)
 			pContainer = g_pPrimaryContainer;
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pContainer->pWidget);
@@ -566,7 +566,7 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 		glColor4f(1., 1., 1., 1.);
 		
 		int iWidth, iHeight;  // taille de la texture
-		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 		int x = (pContainer->iWidth - iWidth)/2;
 		int y = (pContainer->iHeight - iHeight)/2;
 		glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, x, y, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
@@ -587,7 +587,7 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 			_cairo_dock_set_blend_source ();
 			
 			int iWidth, iHeight;  // taille de la texture
-			cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 			
 			glLoadIdentity ();
 			glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
@@ -660,7 +660,7 @@ void cairo_dock_set_perspective_view (CairoContainer *pContainer)
 void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, CairoContainer *pContainer)
 {
 	int w, h;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
+	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	_cairo_dock_set_perspective_view (w, h);
 }
 
@@ -698,7 +698,7 @@ void cairo_dock_set_ortho_view (CairoContainer *pContainer)
 void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer)
 {
 	int w, h;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
+	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	_cairo_dock_set_ortho_view (w, h);
 }
 

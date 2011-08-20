@@ -123,13 +123,11 @@ static gchar *s_cLastVersion = NULL;
 static gchar *s_cDefaulBackend = NULL;
 static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 static gint s_iLastYear = 0;
-static void (*s_activate_composite) (gboolean) = NULL;
 static gint s_iNbCrashes = 0;
 
 
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
-	// successful launch, remove the maintenance mode from the command line.
 	s_bSucessfulLaunch = TRUE;
 	
 	// new year greetings.
@@ -764,7 +762,6 @@ int main (int argc, char** argv)
 	g_print ("\n\nTODO:\n"
 	"- test drop (Shortcuts, between applets or applis, Panel view, etc).\n"
 	"- review Help hints\n"
-	"- drop folder: wrong icon order\n"
 	"- find Kwin config tool for Composite-manager\n"
 	"- draw a preview of the dock in opengl\n"
 	"- display Help GUI in simple mode\n"

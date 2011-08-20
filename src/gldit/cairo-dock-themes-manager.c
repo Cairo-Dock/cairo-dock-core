@@ -670,6 +670,6 @@ void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar 
 	_check_dir (g_cCurrentPlugInsPath);
 	g_cConfFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE);
 	
-	//\___________________ On initialise le gestionnaire de paquets.
-	cairo_dock_init_package_manager (cThemeServerAdress);
+	//\___________________ On initialise l'adresse du serveur de themes.
+	cairo_dock_set_packages_server (cThemeServerAdress);
 }

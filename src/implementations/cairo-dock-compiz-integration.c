@@ -384,7 +384,7 @@ static void _on_detect_compiz (gboolean bPresent, gpointer data)
 	cd_debug ("Compiz is present: %d", bPresent);
 	if (bPresent)
 	{
-		_on_compiz_owner_changed ("", TRUE, NULL);
+		_on_compiz_owner_changed (CD_COMPIZ_BUS, TRUE, NULL);
 	}
 	cairo_dock_watch_dbus_name_owner (CD_COMPIZ_BUS,
 		(CairoDockDbusNameOwnerChangedFunc) _on_compiz_owner_changed,

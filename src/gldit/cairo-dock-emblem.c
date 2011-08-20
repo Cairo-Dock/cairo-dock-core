@@ -38,14 +38,14 @@ static double f = .5;
 
 //merci a Necropotame et ChAnGFu !
 
-CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, CairoContainer *pContainer)
+CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon)
 {
 	CairoEmblem *pEmblem = g_new0 (CairoEmblem, 1);
 	pEmblem->fScale = f;
 	
 	//\___________ On calcule les dimensions de l'embleme.
 	int w, h;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
+	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	pEmblem->iWidth = f * w;
 	pEmblem->iHeight = f * h;
 	
@@ -63,20 +63,20 @@ CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, Cairo
 	return pEmblem;
 }
 
-CairoEmblem *cairo_dock_make_emblem_from_surface (cairo_surface_t *pSurface, int iSurfaceWidth, int iSurfaceHeight, Icon *pIcon, CairoContainer *pContainer)
+CairoEmblem *cairo_dock_make_emblem_from_surface (cairo_surface_t *pSurface, int iSurfaceWidth, int iSurfaceHeight, Icon *pIcon)
 {
 	CairoEmblem *pEmblem = g_new0 (CairoEmblem, 1);
 	pEmblem->fScale = f;
 	
 	int w, h;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
+	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	pEmblem->iWidth = (iSurfaceWidth > 0 ? iSurfaceWidth : w);
 	pEmblem->iHeight = (iSurfaceHeight > 0 ? iSurfaceHeight : h);
 	pEmblem->pSurface = pSurface;
 	return pEmblem;
 }
 
-CairoEmblem *cairo_dock_make_emblem_from_texture (GLuint iTexture, Icon *pIcon, CairoContainer *pContainer)
+CairoEmblem *cairo_dock_make_emblem_from_texture (GLuint iTexture, Icon *pIcon)
 {
 	CairoEmblem *pEmblem = g_new0 (CairoEmblem, 1);
 	pEmblem->fScale = f;
@@ -171,7 +171,7 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 	g_return_if_fail (pEmblem != NULL);
 	
 	int w, h;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &w, &h);
+	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	
 	if (pIcon->iIconTexture != 0 && pEmblem->iTexture != 0)  // dessin opengl : on dessine sur la texture de l'icone avec le mecanisme habituel.
 	{

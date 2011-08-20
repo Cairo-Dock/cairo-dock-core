@@ -36,13 +36,6 @@ G_BEGIN_DECLS
 * If you just want to load an image into a mere cairo_surface, use the functions of the surface-factory.
 */
 
-/// Definition of a Desktop Background Buffer. It has a reference count so that it can be shared across all the lib.
-struct _CairoDockDesktopBackground {
-	cairo_surface_t *pSurface;
-	GLuint iTexture;
-	guint iSidDestroyBg;
-	gint iRefCount;
-	} ;
 
 /// Definition of an Image Buffer. It provides an unified interface for a cairo/opengl image buffer.
 struct _CairoDockImageBuffer {
@@ -68,9 +61,9 @@ CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabe
 */
 #define cairo_dock_colors_differ(c1, c2) (cairo_dock_colors_rvb_differ (c1, c2) || (c1[3] != c2[3]))
 
-/** Generate a complete path from a file name. '~' is handled, and files are supposed to be in the root folder of the current theme.
+/** Find the path of an image. '~' is handled, as well as the 'images' folder of the current theme. Use \ref cairo_dock_search_icon_s_path to search theme icons.
 *@param cImageFile a file name or path. If it's already a path, it will just be duplicated.
-*@return the path of the file.
+*@return the path of the file, or NULL if it has not been found.
 */
 gchar *cairo_dock_search_image_s_path (const gchar *cImageFile);
 #define cairo_dock_generate_file_path cairo_dock_search_image_s_path

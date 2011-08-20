@@ -73,7 +73,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoContai
 		}
 		e.iPosition = i;
 		e.pSurface = icon->pIconBuffer;
-		cairo_dock_get_icon_extent (icon, CAIRO_CONTAINER (pIcon->pSubDock), &e.iWidth, &e.iHeight);
+		cairo_dock_get_icon_extent (icon, &e.iWidth, &e.iHeight);
 		
 		cairo_save (pCairoContext);
 		_cairo_dock_apply_emblem_surface (&e, w, h, pCairoContext);
@@ -139,7 +139,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoContain
 		}
 		
 		e.pSurface = icon->pIconBuffer;
-		cairo_dock_get_icon_extent (icon, CAIRO_CONTAINER (pIcon->pSubDock), &e.iWidth, &e.iHeight);
+		cairo_dock_get_icon_extent (icon, &e.iWidth, &e.iHeight);
 		
 		cairo_save (pCairoContext);
 		_cairo_dock_apply_emblem_surface (&e, w, h, pCairoContext);

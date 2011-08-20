@@ -68,11 +68,12 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 
 /** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect.
 *@param pIconContext the drawing context; is not altered by the function.
-*@param cImagePath path of an image to apply on the icon.
+*@param cImagePath name or path to an icon image.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
+*@return TRUE if everything went smoothly.
 */
-void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer);
+gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer);
 
 /** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless.
 *@param pIconContext the drawing context; is not altered by the function.
@@ -528,31 +529,23 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
 /** Apply an image on the applet's icon. The image is resized at the same size as the icon. Does not trigger the icon refresh.
-*@param cImagePath path to an image.
+*@param cIconName name of an icon or path to an image.
 */
-#define CD_APPLET_SET_IMAGE_ON_MY_ICON(cImagePath)  \
-	cairo_dock_set_image_on_icon (myDrawContext, cImagePath, myIcon, myContainer)
-
-/** Apply an image, taken inside the installation folder of the applet, on the applet's icon. The image is resized at the same size as the icon. Does not trigger the icon refresh.
-*@param cImageName name of an image 
-*/
-#define CD_APPLET_SET_LOCAL_IMAGE_ON_MY_ICON(cImageName) do { \
-	gchar *_cImageFilePath = g_strconcat (MY_APPLET_SHARE_DATA_DIR, "/", cImageName, NULL); \
-	CD_APPLET_SET_IMAGE_ON_MY_ICON (_cImageFilePath); \
-	g_free (_cImageFilePath); } while (0)
+#define CD_APPLET_SET_IMAGE_ON_MY_ICON(cIconName) \
+	cairo_dock_set_image_on_icon_with_default (myDrawContext, cIconName, myIcon, myContainer, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE)
 
 /** Apply an image on the applet's icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless (taken in the installation folder of the applet).
-*@param cImageName name of an image.
+*@param cIconName name of an icon or path to an image.
 *@param cDefaultLocalImageName name of an image to use as a fallback (taken in the applet's installation folder).
 */
-#define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cImageName, cDefaultLocalImageName) \
-	cairo_dock_set_image_on_icon_with_default (myDrawContext, cImageName, myIcon, myContainer, MY_APPLET_SHARE_DATA_DIR"/"cDefaultLocalImageName)
+#define CD_APPLET_SET_USER_IMAGE_ON_MY_ICON(cIconName, cDefaultLocalImageName) \
+	cairo_dock_set_image_on_icon_with_default (myDrawContext, cIconName, myIcon, myContainer, MY_APPLET_SHARE_DATA_DIR"/"cDefaultLocalImageName)
 
 /** Apply the default icon on the applet's icon if there is no image yet.
 */
 #define CD_APPLET_SET_DEFAULT_IMAGE_ON_MY_ICON_IF_NONE do { \
 	if (myIcon->cFileName == NULL) { \
-		CD_APPLET_SET_IMAGE_ON_MY_ICON (MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE); } } while (0)
+		cairo_dock_set_image_on_icon (myDrawContext, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, myIcon, myContainer); } } while (0)
 
 
   ///////////
@@ -649,7 +642,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param iWidthPtr pointer to the width.
 *@param iHeightPtr pointer to the height.
 */
-#define CD_APPLET_GET_MY_ICON_EXTENT(iWidthPtr, iHeightPtr) cairo_dock_get_icon_extent (myIcon, myContainer, iWidthPtr, iHeightPtr)
+#define CD_APPLET_GET_MY_ICON_EXTENT(iWidthPtr, iHeightPtr) cairo_dock_get_icon_extent (myIcon, iWidthPtr, iHeightPtr)
 
 /** Initiate an OpenGL drawing session on the applet's icon.
 */
@@ -670,7 +663,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param cImageFile name of an image file.
 *@return a newly allocated CairoEmblem.
 */
-#define CD_APPLET_MAKE_EMBLEM(cImageFile) cairo_dock_make_emblem (cImageFile, myIcon, myContainer)
+#define CD_APPLET_MAKE_EMBLEM(cImageFile) cairo_dock_make_emblem (cImageFile, myIcon)
 
 /** Draw an emblem on the applet's icon. The emblem is drawn directly on the icon, and is erased if the icon is redrawn.
 *@param pEmblem an emblem.
@@ -678,7 +671,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_DRAW_EMBLEM_ON_MY_ICON(pEmblem) cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer)
 
 #define CD_APPLET_SET_EMBLEM_ON_MY_ICON(cImageFile, iPosition) do {\
-	CairoEmblem *pEmblem = cairo_dock_make_emblem (cImageFile, myIcon, myContainer);\
+	CairoEmblem *pEmblem = cairo_dock_make_emblem (cImageFile, myIcon);\
 	cairo_dock_set_emblem_position (pEmblem, iPosition);\
 	cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer);\
 	cairo_dock_free_emblem (pEmblem); } while (0)

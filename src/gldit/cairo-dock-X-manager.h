@@ -84,8 +84,17 @@ struct _CairoDockWMBackend {
 	gboolean (*set_on_widget_layer) (Window Xid, gboolean bOnWidgetLayer);
 	};
 
+/// Definition of a Desktop Background Buffer. It has a reference count so that it can be shared across all the lib.
+struct _CairoDockDesktopBackground {
+	cairo_surface_t *pSurface;
+	GLuint iTexture;
+	guint iSidDestroyBg;
+	gint iRefCount;
+	} ;
+
 
 /** Register a Window Manager backend, overwriting any previous one.
+*@param pBackend a Window Manager backend; the function takes ownership of the pointer.
 */
 void cairo_dock_wm_register_backend (CairoDockWMBackend *pBackend);
 

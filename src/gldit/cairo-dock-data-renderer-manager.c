@@ -130,11 +130,11 @@ gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, cons
 	if (pRecord->cThemeDirName == NULL && pRecord->cDistantThemeDirName == NULL)
 		return NULL;
 	
-	const gchar *cGaugeShareDir = g_strdup_printf ("%s/%s", GLDI_SHARE_DATA_DIR, pRecord->cThemeDirName);
+	const gchar *cGaugeShareDir = g_strdup_printf (GLDI_SHARE_DATA_DIR"/%s", pRecord->cThemeDirName);
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
-	gchar *cGaugePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName, iType);
+	gchar *cThemePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName, iType);
 	g_free (cGaugeUserDir);
-	return cGaugePath;
+	return cThemePath;
 }
 
 gchar *cairo_dock_get_package_path_for_data_renderer (const gchar *cRendererName, const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName)
@@ -147,19 +147,19 @@ gchar *cairo_dock_get_package_path_for_data_renderer (const gchar *cRendererName
 		cChosenThemeName = g_strdup (pRecord->cDefaultTheme);
 	
 	CairoDockPackageType iType = cairo_dock_extract_package_type_from_name (cChosenThemeName);
-	gchar *cGaugePath = cairo_dock_get_data_renderer_theme_path (cRendererName, cChosenThemeName, iType);
+	gchar *cThemePath = cairo_dock_get_data_renderer_theme_path (cRendererName, cChosenThemeName, iType);
 	
-	if (cGaugePath == NULL)  // theme introuvable.
-		cGaugePath = g_strdup_printf (GLDI_SHARE_DATA_DIR"/%s/%s", pRecord->cThemeDirName, pRecord->cDefaultTheme);
+	if (cThemePath == NULL)  // theme introuvable.
+		cThemePath = g_strdup_printf (GLDI_SHARE_DATA_DIR"/%s/%s", pRecord->cThemeDirName, pRecord->cDefaultTheme);
 	
 	if (iType != CAIRO_DOCK_ANY_PACKAGE)
 	{
 		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cChosenThemeName);
 		cairo_dock_write_keys_to_file (pKeyFile, cAppletConfFilePath);
 	}
-	cd_debug ("DataRenderer's theme : %s", cGaugePath);
+	cd_debug ("DataRenderer's theme : %s", cThemePath);
 	g_free (cChosenThemeName);
-	return cGaugePath;
+	return cThemePath;
 }
 
 

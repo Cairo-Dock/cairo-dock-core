@@ -221,11 +221,10 @@ Icon *cairo_dock_get_icon_with_module (GList *pIconList, CairoDockModule *pModul
 
 /** Get the dimension allocated to the surface/texture of an icon.
 @param pIcon the icon.
-@param pContainer its container.
 @param iWidth pointer to the width.
 @param iHeight pointer to the height.
 */
-void cairo_dock_get_icon_extent (Icon *pIcon, CairoContainer *pContainer, int *iWidth, int *iHeight);
+void cairo_dock_get_icon_extent (Icon *pIcon, int *iWidth, int *iHeight);
 
 /** Get the current size of an icon as it is seen on the screen (taking into account the zoom and the ratio).
 @param pIcon the icon

@@ -864,7 +864,7 @@ static inline void  _draw_icon_bent_backwards (Icon *pIcon, CairoContainer *pCon
 	cairo_dock_set_perspective_view_for_icon (pIcon, pContainer);
 	
 	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 	glScalef (1., -1., 1.);
 	glTranslatef (0., -iHeight/2, 0.);  // rotation de 50° sur l'axe des X a la base de l'icone.
 	glRotatef (-50.*f, 1., 0., 0.);
@@ -912,7 +912,7 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 		cairo_dock_remove_transition_on_icon (pIcon);
 		
 		int iWidth, iHeight;
-		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 		
 		GLuint iOriginalTexture;
 		if (pIcon->bIsHidden)

@@ -235,7 +235,7 @@ static void _on_detect_kwin (gboolean bPresent, gpointer data)
 	cd_debug ("Kwin is present: %d", bPresent);
 	if (bPresent)
 	{
-		_on_kwin_owner_changed ("", TRUE, NULL);
+		_on_kwin_owner_changed (CD_KWIN_BUS, TRUE, NULL);
 	}
 	cairo_dock_watch_dbus_name_owner (CD_KWIN_BUS,
 		(CairoDockDbusNameOwnerChangedFunc) _on_kwin_owner_changed,

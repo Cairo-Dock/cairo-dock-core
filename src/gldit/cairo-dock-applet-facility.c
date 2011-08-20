@@ -66,7 +66,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 		//cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
 		cairo_save (pIconContext);
 		int iWidth, iHeight;
-		cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 		cairo_scale(pIconContext,
 			iWidth / g_pIconBackgroundBuffer.iWidth,
 			iHeight / g_pIconBackgroundBuffer.iHeight);
@@ -86,7 +86,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 		if (fScale != 1 && pIcon != NULL)
 		{
 			int iWidth, iHeight;
-			cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
+			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 			cairo_translate (pIconContext, .5 * iWidth * (1 - fScale) , .5 * iHeight * (1 - fScale));
 			cairo_scale (pIconContext, fScale, fScale);
 		}
@@ -116,44 +116,36 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 }
 
 
-void cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cImagePath, Icon *pIcon, CairoContainer *pContainer)
+gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer)
 {
-	if (cImagePath != pIcon->cFileName)
-	{
-		g_free (pIcon->cFileName);
-		pIcon->cFileName = g_strdup (cImagePath);
-	}
-	
+	// load the image in a surface.
 	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (pIcon, pContainer, &iWidth, &iHeight);
-	cairo_surface_t *pImageSurface = cairo_dock_create_surface_from_icon (cImagePath,
+	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
+	cairo_surface_t *pImageSurface = cairo_dock_create_surface_from_icon (cIconName,
 		iWidth,
 		iHeight);
 	
+	// check that it's ok.
+	if (pImageSurface == NULL)  // let the icon in its current state.
+		return FALSE;
+	
+	// set the new image on the icon
 	cairo_dock_set_icon_surface_with_reflect (pIconContext, pImageSurface, pIcon, pContainer);
 	
 	cairo_surface_destroy (pImageSurface);
+	
+	if (cIconName != pIcon->cFileName)
+	{
+		g_free (pIcon->cFileName);
+		pIcon->cFileName = g_strdup (cIconName);
+	}
+	return TRUE;
 }
 
-void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cImage, Icon *pIcon, CairoContainer *pContainer, const gchar *cDefaultImagePath)
+void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer, const gchar *cDefaultImagePath)
 {
-	gchar *cFoundImage = NULL;
-	if (cImage != NULL)
-	{
-		if (*cImage == '/' || *cImage == '~')  // chemin, on se contente de verifier son existence.
-		{
-			cFoundImage = cairo_dock_search_image_s_path (cImage);
-		}
-		else  // nom d'image ou d'icone, on cherche.
-		{
-			cFoundImage = cairo_dock_search_icon_s_path (cImage);  // on cherche en priorite une icone.
-			if (cFoundImage == NULL)  // si aucune icone, on regarde dans les repertoires d'images.
-				cFoundImage = cairo_dock_search_image_s_path (cImage);
-		}
-	}
-	
-	cairo_dock_set_image_on_icon (pIconContext, cFoundImage ? cFoundImage : cDefaultImagePath, pIcon, pContainer);
-	g_free (cFoundImage);
+	if (! cIconName || ! cairo_dock_set_image_on_icon (pIconContext, cIconName, pIcon, pContainer))
+		cairo_dock_set_image_on_icon (pIconContext, cDefaultImagePath, pIcon, pContainer);
 }
 
 void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon)
@@ -441,8 +433,6 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 			pIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, pIcon->cName, pInstance->pDock);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
-			if (pIcon->iSubdockViewType != 0)
-				cairo_dock_trigger_redraw_subdock_content_on_icon (pIcon);
 		}
 		else
 		{
@@ -459,6 +449,9 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 		}
 		cairo_dock_set_renderer (pIcon->pSubDock, cDockRenderer);
 		cairo_dock_update_dock_size (pIcon->pSubDock);
+		
+		if (pIcon->iSubdockViewType != 0)  // trigger the redraw after the icons are loaded.
+			cairo_dock_trigger_redraw_subdock_content_on_icon (pIcon);
 	}
 	else if (pInstance->pDesklet)
 	{
@@ -613,7 +606,7 @@ void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
 		pIcon->iImageHeight = 0;  // will be updated when the icon is reloaded.
 		cairo_dock_load_icon_image (pIcon, pContainer);
 		
-		if (pInstance->pDrawContext)
+		/**if (pInstance->pDrawContext)
 		{
 			cairo_destroy (pInstance->pDrawContext);
 			pInstance->pDrawContext = NULL;
@@ -621,7 +614,7 @@ void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
 		if (pIcon->pIconBuffer)
 			pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
 		if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
-			pInstance->pDrawContext = NULL;
+			pInstance->pDrawContext = NULL;*/
 		
 		cairo_dock_update_dock_size (pInstance->pDock);
 	}

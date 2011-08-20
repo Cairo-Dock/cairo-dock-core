@@ -1328,38 +1328,18 @@ static void _load_appli (Icon *icon)
 		if (icon->iIconTexture != 0 && iPrevTexture != 0)
 		{
 			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-			if (pParentDock)  // le dessin de l'embleme utilise cairo_dock_get_icon_extent()
-			{
-				icon->fWidth *= pParentDock->container.fRatio;
-				icon->fHeight *= pParentDock->container.fRatio;
-			}
-			CairoEmblem *e = cairo_dock_make_emblem_from_texture (iPrevTexture,icon, CAIRO_CONTAINER (pParentDock));
+			CairoEmblem *e = cairo_dock_make_emblem_from_texture (iPrevTexture,icon);
 			cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
 			cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
 			g_free (e);  // on n'utilise pas cairo_dock_free_emblem pour ne pas detruire la texture avec.
-			if (pParentDock)
-			{
-				icon->fWidth /= pParentDock->container.fRatio;
-				icon->fHeight /= pParentDock->container.fRatio;
-			}
 		}
 		else if (icon->pIconBuffer != NULL && pPrevSurface != NULL)
 		{
 			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-			if (pParentDock)  // le dessin de l'embleme utilise cairo_dock_get_icon_extent()
-			{
-				icon->fWidth *= pParentDock->container.fRatio;
-				icon->fHeight *= pParentDock->container.fRatio;
-			}
-			CairoEmblem *e = cairo_dock_make_emblem_from_surface (pPrevSurface, 0, 0, icon, CAIRO_CONTAINER (pParentDock));
+			CairoEmblem *e = cairo_dock_make_emblem_from_surface (pPrevSurface, 0, 0, icon);
 			cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
 			cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
 			g_free (e);  // meme remarque.
-			if (pParentDock)
-			{
-				icon->fWidth /= pParentDock->container.fRatio;
-				icon->fHeight /= pParentDock->container.fRatio;
-			}
 		}
 	}
 	// or use the class icon

@@ -1212,6 +1212,7 @@ static void _add_add_entry (GtkWidget *pMenu, gpointer *data, gboolean bAddSepar
 		gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it on the dock."));
 	}
 }
+
 gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu)
 {
 	static gpointer *data = NULL;
@@ -1480,21 +1481,10 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		bAddSeparator = TRUE;
 		
 		GtkWidget *pSubMenuAccessibility = cairo_dock_create_sub_menu (_("Visibility"), menu, GTK_STOCK_FIND);
-		/**pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Visibility"), GTK_STOCK_FIND, NULL, menu, NULL);
-		GtkWidget *pSubMenuAccessibility = gtk_menu_new ();
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenuAccessibility);*/
 		
 		GSList *group = NULL;
 
-		/* Window Xid = GDK_WINDOW_XID (pContainer->pWidget->window);
-		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
-		cairo_dock_xwindow_is_above_or_below (Xid, &bIsAbove, &bIsBelow);  // gdk_window_get_state bugue.
-		gboolean bIsUtility = cairo_dock_window_is_utility (Xid);  // gtk_window_get_type_hint me renvoie toujours 0 !
-		gboolean bIsDock = (CAIRO_DESKLET (pContainer)->bSpaceReserved);
-		gboolean bIsNormal = (!bIsAbove && !bIsBelow && !bIsUtility && !bIsDock);
-		gboolean bIsSticky = cairo_dock_xwindow_is_sticky (Xid); //FIXME: always FALSE... */
-
-		gboolean bIsSticky = cairo_dock_gdkwindow_is_sticky (pContainer->pWidget->window);
+		gboolean bIsSticky = cairo_dock_desklet_is_sticky (CAIRO_DESKLET (pContainer));
 		CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
 		CairoDeskletVisibility iVisibility = pDesklet->iVisibility;
 		

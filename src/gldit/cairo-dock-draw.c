@@ -43,6 +43,7 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-image-buffer.h"
+#include "cairo-dock-X-manager.h"
 #include "cairo-dock-draw-opengl.h"  // pour cairo_dock_render_one_icon
 #include "cairo-dock-draw.h"
 

@@ -67,7 +67,7 @@ static GLuint s_iExplosionTexture = 0;
 static double s_fExplosionWidth, s_fExplosionHeight;
 static CairoEmblem *s_pEmblem = NULL;
 
-static void _cairo_dock_load_emblem (Icon *pIcon, CairoFlyingContainer *pFlyingContainer)
+static void _cairo_dock_load_emblem (Icon *pIcon)
 {
 	cairo_dock_free_emblem (s_pEmblem);
 	const gchar *cImage = NULL;
@@ -80,7 +80,7 @@ static void _cairo_dock_load_emblem (Icon *pIcon, CairoFlyingContainer *pFlyingC
 		cImage = GTK_STOCK_DELETE;
 	}
 	gchar *cIcon = cairo_dock_search_icon_s_path (cImage);
-	s_pEmblem = cairo_dock_make_emblem (cIcon, pIcon, CAIRO_CONTAINER (pFlyingContainer));
+	s_pEmblem = cairo_dock_make_emblem (cIcon, pIcon);
 	cairo_dock_set_emblem_position (s_pEmblem, CAIRO_DOCK_EMBLEM_UPPER_LEFT);
 	g_free (cIcon);
 }
@@ -337,7 +337,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->container.iWindowPositionX,
 		pFlyingContainer->container.iWindowPositionY);*/
 	
-	_cairo_dock_load_emblem (pFlyingIcon, pFlyingContainer);
+	_cairo_dock_load_emblem (pFlyingIcon);
 	_cairo_dock_load_explosion_image (pFlyingContainer->container.iWidth);
 	
 	struct timeval tv;

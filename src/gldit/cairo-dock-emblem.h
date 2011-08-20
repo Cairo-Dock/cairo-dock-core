@@ -62,28 +62,25 @@ struct _CairoEmblem {
 /** Create an emblem from an image, that suits the given icon and container. If the image is given by its sole name, it is searched inside the current theme root folder.
 *@param cImageFile an image.
 *@param pIcon an icon.
-*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@return the newly allocated emblem.
 */
-CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon, CairoContainer *pContainer);
+CairoEmblem *cairo_dock_make_emblem (const gchar *cImageFile, Icon *pIcon);
 
 /** Create an emblem from an existing surface. The surface is appropriated by the emblem, so if you free it with \ref cairo_dock_free_emblem, it will also free the surface. Use g_free to destroy the emblem if you don't want the surface to be destroyed with.
 *@param pSurface a surface.
 *@param iSurfaceWidth width of the surface, 0 means it has the same width as the icon.
 *@param iSurfaceHeight height of the surface, 0 means it has the same height as the icon.
 *@param pIcon an icon.
-*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@return the newly allocated emblem.
 */
-CairoEmblem *cairo_dock_make_emblem_from_surface (cairo_surface_t *pSurface, int iSurfaceWidth, int iSurfaceHeight, Icon *pIcon, CairoContainer *pContainer);
+CairoEmblem *cairo_dock_make_emblem_from_surface (cairo_surface_t *pSurface, int iSurfaceWidth, int iSurfaceHeight, Icon *pIcon);
 
 /** Create an emblem from an existing texture. The texture is appropriated by the emblem, so if you free it with \ref cairo_dock_free_emblem, it will also free the texture. Use g_free to destroy the emblem if you don't want the texture to be destroyed with.
 *@param iTexture a texture.
 *@param pIcon an icon.
-*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@return the newly allocated emblem.
 */
-CairoEmblem *cairo_dock_make_emblem_from_texture (GLuint iTexture, Icon *pIcon, CairoContainer *pContainer);
+CairoEmblem *cairo_dock_make_emblem_from_texture (GLuint iTexture, Icon *pIcon);
 
 /** Set the position of an emblem.
 *@param pEmblem the emblem

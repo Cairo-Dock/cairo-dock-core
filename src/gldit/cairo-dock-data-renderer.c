@@ -487,7 +487,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 	
 	_cairo_dock_init_data_renderer (pRenderer, pContainer, pAttribute);
 	
-	cairo_dock_get_icon_extent (pIcon, pContainer, &pRenderer->iWidth, &pRenderer->iHeight);
+	cairo_dock_get_icon_extent (pIcon, &pRenderer->iWidth, &pRenderer->iHeight);
 	
 	gboolean bLoadTextures = FALSE;
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
@@ -652,7 +652,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 	if (pAttribute == NULL)  // rien ne change dans les parametres du data-renderer, on se contente de le recharger a la taille de l'icone.
 	{
 		g_return_if_fail (pOldRenderer->interface.reload != NULL);
-		cairo_dock_get_icon_extent (pIcon, pContainer, &pOldRenderer->iWidth, &pOldRenderer->iHeight);
+		cairo_dock_get_icon_extent (pIcon, &pOldRenderer->iWidth, &pOldRenderer->iHeight);
 		pOldRenderer->interface.reload (pOldRenderer);
 		
 		gboolean bLoadTextures = (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pOldRenderer->interface.render_opengl);
