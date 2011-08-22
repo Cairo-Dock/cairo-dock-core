@@ -17,6 +17,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <X11/Xatom.h>
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
@@ -30,10 +31,13 @@
 static DBusGProxy *s_pScaleProxy = NULL;
 static DBusGProxy *s_pExposeProxy = NULL;
 static DBusGProxy *s_pWidgetLayerProxy = NULL;
+static Atom s_aCompizWidget = 0;
+static Atom s_aNetWmWindowType = 0;
 
 #define CD_COMPIZ_BUS "org.freedesktop.compiz"
 #define CD_COMPIZ_OBJECT "/org/freedesktop/compiz"
 #define CD_COMPIZ_INTERFACE "org.freedesktop.compiz"
+///#define OLD_WIDGET_LAYER 1  // seems better to rely on the _COMPIZ_WIDGET atom than on a rule.
 
 static gboolean present_windows (void)
 {
@@ -148,6 +152,7 @@ static gboolean show_widget_layer (void)
 	return bSuccess;
 }
 
+#ifdef OLD_WIDGET_LAYER
 static void _on_got_widget_match_rule (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
 {
 	//g_print ("%s ()\n", __func__);
@@ -203,6 +208,7 @@ static gboolean _check_widget_rule (gpointer data)
 	///g_object_unref (pWidgetProxy);
 	return FALSE;
 }
+#endif
 static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
 {
 	cd_debug ("%s ()", __func__);
@@ -253,6 +259,7 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	g_strfreev (plugins);
 	
 	// now get the matching rule.
+	#ifdef OLD_WIDGET_LAYER
 	if (bFound)  // the plug-in was already active
 	{
 		_check_widget_rule (NULL);
@@ -261,6 +268,7 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	{
 		g_timeout_add_seconds (2, _check_widget_rule, NULL);
 	}
+	#endif
 }
 static gboolean _check_widget_plugin (gpointer data)
 {
@@ -284,19 +292,37 @@ static gboolean set_on_widget_layer (Window Xid, gboolean bOnWidgetLayer)
 {
 	cd_debug ("%s ()", __func__);
 	static gboolean s_bFirst = TRUE;
+	Display *dpy = cairo_dock_get_Xdisplay ();
 	if (bOnWidgetLayer)
 	{
+		// set the window type to "utility"
+		#ifdef OLD_WIDGET_LAYER
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");
+		#endif
 		// the first time, trigger a check to ensure the 'widget' plug-in is operationnal.
 		if (s_bFirst)
 		{
 			g_timeout_add_seconds (2, _check_widget_plugin, NULL);
+			
+			s_aCompizWidget = XInternAtom (dpy, "_COMPIZ_WIDGET", False);
 			s_bFirst = FALSE;
 		}
+		// set the _COMPIZ_WIDGET atom on the window to mark it.
+		gulong widget = 1;
+		XChangeProperty (dpy,
+			Xid,
+			s_aCompizWidget,
+			XA_WINDOW, 32, PropModeReplace,
+			(guchar *) &widget, 1);
 	}
 	else
 	{
+		#ifdef OLD_WIDGET_LAYER
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
+		#endif
+		XDeleteProperty (dpy,
+			Xid,
+			s_aCompizWidget);
 	}
 	return TRUE;
 }
