@@ -1836,7 +1836,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	for (j = 0; pKeyList[j] != NULL; j ++)
 	{
 		cKeyName = pKeyList[j];
-		g_print ("%d) %s\n", j, cKeyName);
 		
 		//\______________ On parse le commentaire.
 		pAuthorizedValuesList = NULL;
@@ -2500,10 +2499,21 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					g_free (cResult);
 					
 					// on active l'element courant.
-					if (iElementType != CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY && iSelectedItem == -1)  // si le choix courant n'etait pas dans la liste, on decide de selectionner le 1er.
-						iSelectedItem = 0;
-					if (k != 0)  // rien dans le gtktree => plantage.
-						gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
+					if (iElementType != CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY)
+					{
+						if (iSelectedItem == -1)  // si le choix courant n'etait pas dans la liste, on decide de selectionner le 1er.
+							iSelectedItem = 0;
+						if (k != 0)  // rien dans le gtktree => plantage.
+							gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
+					}
+					else
+					{
+						GtkEntry *e =  gtk_bin_get_child (pOneWidget);
+						if (iSelectedItem == -1)
+							gtk_entry_set_text (e, cValue);
+						else
+							gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
+					}
 					if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE)
 					{
 						_allocate_new_buffer;
