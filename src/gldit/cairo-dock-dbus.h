@@ -31,7 +31,9 @@ G_BEGIN_DECLS
 * DBus is used to communicate and interact with other running applications.
 */ 
 
+#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 29) // not needed before => http://developer.gnome.org/gobject/unstable/gobject-Generic-values.html#G-VALUE-INIT:CAPS
 #define G_VALUE_INIT {0,{{0}}}  // bonne idee d'un dev de GTK, pour eviter les warnings de gcc.
+#endif
 
 typedef void (*CairoDockDbusNameOwnerChangedFunc) (const gchar *cName, gboolean bOwned, gpointer data);
 

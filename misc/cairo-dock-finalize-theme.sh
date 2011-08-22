@@ -37,6 +37,8 @@ do
 		ln -s web-browser.$suff chromium-browser.$suff
 		ln -s web-browser.$suff opera.$suff
 		ln -s web-browser.$suff epiphany.$suff
+		ln -s web-browser.$suff midori.$suff
+		ln -s web-browser.$suff rekonq.$suff
 	fi
 	
 	if test -e file-browser.$suff; then
@@ -55,6 +57,7 @@ do
 		ln -s mail-reader.$suff thunderbird.$suff
 		ln -s mail-reader.$suff kmail.$suff
 		ln -s mail-reader.$suff evolution.$suff
+		ln -s mail-reader.$suff sylpheed.$suff
 	fi
 	if test -e image-reader.$suff; then
 		echo "    towards image-reader.$suff"
@@ -62,6 +65,8 @@ do
 		ln -s image-reader.$suff gqview.$suff
 		ln -s image-reader.$suff gwenview.$suff
 		ln -s image-reader.$suff f-spot.$suff
+		ln -s image-reader.$suff shotwell.$suff
+		ln -s image-reader.$suff gthumb.$suff
 	fi
 	if test -e audio-player.$suff; then
 		echo "    towards audio-player.$suff"
@@ -70,6 +75,15 @@ do
 		ln -s audio-player.$suff beep-media-player.$suff
 		ln -s audio-player.$suff rhythmbox.$suff
 		ln -s audio-player.$suff amarok.$suff
+		ln -s audio-player.$suff banshee.$suff
+		ln -s audio-player.$suff audacious.$suff
+		ln -s audio-player.$suff clementine.$suff
+		ln -s audio-player.$suff exaile.$suff
+		ln -s audio-player.$suff gmusicbrowser.$suff
+		ln -s audio-player.$suff guayadeque.$suff
+		ln -s audio-player.$suff qmmp.$suff
+		ln -s audio-player.$suff quotlibet.$suff
+		ln -s audio-player.$suff songbird.$suff
 	fi
 	if test -e video-player.$suff; then
 		echo "    towards video-player.$suff"
@@ -78,6 +92,7 @@ do
 		ln -s video-player.$suff vlc.$suff
 		ln -s video-player.$suff xine.$suff
 		ln -s video-player.$suff kaffeine.$suff
+		ln -s video-player.$suff gnome-player.$suff
 	fi
 	
 	if test -e writer.$suff; then
@@ -88,6 +103,7 @@ do
 		ln -s writer.$suff ooo-writer.$suff
 		ln -s writer.$suff abiword.$suff
 		ln -s writer.$suff emacs.$suff
+		ln -s writer.$suff libreoffice-writer.$suff
 	fi
 	if test -e bittorrent.$suff; then
 		echo "    towards bittorrent.$suff"
@@ -101,7 +117,7 @@ do
 		echo "    towards download.$suff"
 		ln -s download.$suff amule.$suff
 		ln -s download.$suff emule.$suff
-		ln -s download.$suff filezilla.$suff
+		ln -s download.$suff jdownloader.$suff
 	fi
 	if test -e cd-burner.$suff; then
 		echo "    towards cd-burner.$suff"
@@ -116,6 +132,7 @@ do
 		ln -s image.$suff gimp.$suff
 		ln -s image.$suff inkscape.$suff
 		ln -s image.$suff krita.$suff
+		ln -s image.$suff mtpaint.$suff
 	fi
 	
 	if test -e messenger.$suff; then
@@ -125,7 +142,7 @@ do
 		ln -s messenger.$suff empathy.$suff
 		ln -s messenger.$suff kopete.$suff
 		ln -s messenger.$suff amsn.$suff
-		ln -s messenger.$suff emessene.$suff
+		ln -s messenger.$suff emesene.$suff
 	fi
 	if test -e irc.$suff; then
 		echo "    towards irc.$suff"
@@ -140,6 +157,7 @@ do
 		ln -s terminal.$suff utilities-terminal.$suff
 		ln -s terminal.$suff konsole.$suff
 		ln -s terminal.$suff xfce4-terminal.$suff
+		ln -s terminal.$suff lxterminal.$suff
 	fi
 	if test -e packages.$suff; then
 		echo "    towards packages.$suff"
@@ -148,6 +166,8 @@ do
 		ln -s packages.$suff yast.$suff
 		ln -s packages.$suff adept.$suff
 		ln -s packages.$suff pacman-g2.$suff
+		ln -s packages.$suff yum.$suff
+		ln -s packages.$suff ubuntu-software-center.$suff
 	fi
 	if test -e system-monitor.$suff; then
 		echo "    towards system-monitor.$suff"
@@ -161,6 +181,7 @@ do
 		ln -s calculator.$suff kcalc.$suff
 		ln -s calculator.$suff gnome-calculator.$suff
 		ln -s calculator.$suff crunch.$suff
+		ln -s calculator.$suff galculator.$suff
 	fi
 done;
 
