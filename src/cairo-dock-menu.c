@@ -72,6 +72,7 @@
 #define CAIRO_DOCK_SITE_URL "http://glx-dock.org"  // http://cairo-dock.vef.fr
 #define CAIRO_DOCK_FORUM_URL "http://forum.glx-dock.org"  // http://cairo-dock.vef.fr/bg_forumlist.php
 #define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
+#define CAIRO_DOCK_PAYPAL_URL "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=UWQ3VVRB2ZTZS&lc=GB&item_name=Support%20Cairo%2dDock&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"
 #define CAIRO_DOCK_FLATTR_URL "http://flattr.com/thing/370779/Support-Cairo-Dock-development"
 
 extern CairoDock *g_pMainDock;
@@ -90,6 +91,16 @@ extern gboolean g_bEasterEggs;
 #define cairo_dock_icons_are_locked(...) (myDocksParam.bLockIcons || myDocksParam.bLockAll || g_bLocked)
 #define cairo_dock_is_locked(...) (myDocksParam.bLockAll || g_bLocked)
 
+/** paypal button HTML code:
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal — The safer, easier way to pay online.">
+<img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+</form>
+
+*/
 
 static void _cairo_dock_edit_and_reload_conf (GtkMenuItem *pMenuItem, gpointer data)
 {
@@ -213,11 +224,19 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
 	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
-	pLink = gtk_link_button_new_with_label (cAdress, _("More applets"));
+	pLink = gtk_link_button_new_with_label (cAdress, _("Get more applets!"));
 	g_free (cAdress);
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
-	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_FLATTR_URL, _("Donate"));
+	gchar *cLabel = g_strdup_printf ("%s (Flattr)", _("Donate"));
+	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_FLATTR_URL, cLabel);
+	g_free (cLabel);
+	gtk_widget_set_tooltip_text (pLink, _("Support the people who spend countless hours to bring you the best dock ever."));
+	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
+	
+	cLabel = g_strdup_printf ("%s (Paypal)", _("Donate"));
+	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_PAYPAL_URL, _("Donate"));
+	g_free (cLabel);
 	gtk_widget_set_tooltip_text (pLink, _("Support the people who spend countless hours to bring you the best dock ever."));
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
