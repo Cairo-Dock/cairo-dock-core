@@ -235,7 +235,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
 	cLabel = g_strdup_printf ("%s (Paypal)", _("Donate"));
-	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_PAYPAL_URL, _("Donate"));
+	pLink = gtk_link_button_new_with_label (CAIRO_DOCK_PAYPAL_URL, cLabel);
 	g_free (cLabel);
 	gtk_widget_set_tooltip_text (pLink, _("Support the people who spend countless hours to bring you the best dock ever."));
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);

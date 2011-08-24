@@ -862,7 +862,7 @@ void cairo_dock_manage_mouse_position (CairoDock *pDock)
 	cairo_dock_mark_icon_as_avoiding_mouse (icon);\
 	icon->fAlpha = 0.75;\
 	if (myIconsParam.fAmplitude != 0)\
-		icon->fDrawX += icon->fWidth / 2 * (icon->fScale - 1) / myIconsParam.fAmplitude * sens; } while (0)
+		icon->fDrawX += icon->fWidth * icon->fScale / 4 * sens; } while (0)
 static inline gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, CairoDockIconGroup iGroup, double fMargin)
 {
 	gboolean bCanDrop = FALSE;
