@@ -71,6 +71,7 @@ typedef enum {
 	CD_MODEL_NB_COLUMNS
 	} CDModelColumns;
 
+
   ///////////////
  // CALLBACKS //
 ///////////////

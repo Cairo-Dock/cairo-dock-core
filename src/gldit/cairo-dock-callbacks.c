@@ -183,6 +183,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	CairoDock *pDock)
 {
 	//g_print ("%s ((%d;%d) %dx%d)\n", __func__, pExpose->area.x, pExpose->area.y, pExpose->area.width, pExpose->area.height);
+	//\________________ OpenGL rendering
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)
 	{
 		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDock->container.pWidget);
@@ -226,9 +227,10 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		return FALSE ;
 	}
 	
+	//\________________ Cairo optimized rendering
 	if (pExpose->area.x + pExpose->area.y != 0)  // x et/ou y sont > 0.
 	{
-		//if (! cairo_dock_is_hidden (pDock) || (g_pHidingBackend != NULL && g_pHidingBackend->bCanDisplayHiddenDock))
+		if (! cairo_dock_is_hidden (pDock) || (g_pHidingBackend != NULL && g_pHidingBackend->bCanDisplayHiddenDock))  // if the dock is invisible, we don't use the optimized rendering (for always-visible icons for instance)
 		{
 			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &pExpose->area, NULL);
 			
@@ -253,11 +255,12 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER_DOCK, pDock, pCairoContext);
 			
 			cairo_destroy (pCairoContext);
+			return FALSE;
 		}
-		return FALSE;
+		
 	}
 	
-	
+	//\________________ Cairo rendering
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDock));
 	
 	if (cairo_dock_is_loading ())  // transparent pendant le chargement.
