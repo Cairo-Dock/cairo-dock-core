@@ -91,7 +91,7 @@ static gboolean present_class (const gchar *cClass)
 			cMatch = g_strdup_printf ("class=%s", cWmClass);
 		else
 			cMatch = g_strdup_printf ("class=.%s*", cClass+1);
-		g_print ("Compiz: match '%s'\n", cMatch);
+		cd_message ("Compiz: match '%s'", cMatch);
 		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
 			G_TYPE_INT, cairo_dock_get_root_id (),
