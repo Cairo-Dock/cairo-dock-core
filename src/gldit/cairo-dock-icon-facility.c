@@ -33,6 +33,7 @@
 #include <cairo-glitz.h>
 #endif
 
+#include "cairo-dock-struct.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
@@ -40,9 +41,11 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-manager.h"  // cairo_dock_trigger_refresh_launcher_gui
+#include "cairo-dock-animations.h"  // CairoDockHidingEffect
 #include "cairo-dock-icon-facility.h"
 
 extern gchar *g_cCurrentLaunchersPath;
+extern CairoDockHidingEffect *g_pHidingBackend;
 
 
 CairoDockIconGroup cairo_dock_get_icon_type (Icon *icon)
@@ -447,6 +450,14 @@ void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRe
 	fX += icon->fWidth * icon->fScale * (1 - fabs (icon->fWidthFactor))/2 + icon->fGlideOffset * icon->fWidth * icon->fScale;
 	
 	double fY = icon->fDrawY;
+	if (CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		CairoDock *pDock = CAIRO_DOCK (pContainer);
+		if (cairo_dock_is_hidden (pDock) && (g_pHidingBackend == NULL || !g_pHidingBackend->bCanDisplayHiddenDock))
+		{
+			fY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
+		}
+	}
 	fY += (pContainer->bDirectionUp ? icon->fHeight * icon->fScale * (1 - icon->fHeightFactor)/2 : - fReflectSize);
 	if (fY < 0)
 		fY = 0;
