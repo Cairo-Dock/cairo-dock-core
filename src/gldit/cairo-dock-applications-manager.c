@@ -1498,6 +1498,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		pTaskBar->iActionOnMiddleClick = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "action on middle click", &bFlushConfFileNeeded, 1, NULL, NULL);
 		pTaskBar->bMinimizeOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "minimize on click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 		
+		pTaskBar->bPresentClassOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "present class on click", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+		
 		pTaskBar->bDemandsAttentionWithDialog = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "demands attention with dialog", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 		pTaskBar->iDialogDuration = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "duration", &bFlushConfFileNeeded, 2, NULL, NULL);
 		pTaskBar->cAnimationOnDemandsAttention = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on demands attention", &bFlushConfFileNeeded, "fire", NULL, NULL);

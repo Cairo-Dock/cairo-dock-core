@@ -163,6 +163,10 @@ action on middle click = 1
 #{This is the default behaviour of most taskbars.}
 minimize on click = true
 
+#b- Present windows preview on click when several windows are grouped togather
+#{Only if your Window Manager supports it.}
+present class on click = true
+
 #v- 
 sep_att =
 

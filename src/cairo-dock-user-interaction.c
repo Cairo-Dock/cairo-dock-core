@@ -208,11 +208,12 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	// scale on an icon holding a class sub-dock.
 	if (CAIRO_DOCK_IS_MULTI_APPLI(icon))
 	{
-		if ((!myDocksParam.bShowSubDockOnClick || // if sub-docks are shown on mouse over
-			(myDocksParam.bShowSubDockOnClick && GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))) && // or shown on click and this sub-dock is visible
-				cairo_dock_wm_present_class (icon->cClass)) // we use the scale plugin if it's possible
+		if ( (!myDocksParam.bShowSubDockOnClick  // if sub-docks are shown on mouse over
+		|| GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)  // or this sub-dock is already visible
+		|| myTaskbarParam.bPresentClassOnClick)  // or we explicitely allowed to skip the sub-dock
+		&& cairo_dock_wm_present_class (icon->cClass)) // we use the scale plugin if it's possible
 		{
-			if (icon->pSubDock)
+			if (icon->pSubDock)  // in case the dock is visible or about to be visible, hide it, as it would confuse the user to have both.
 				cairo_dock_emit_leave_signal (CAIRO_CONTAINER (icon->pSubDock));
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		}
