@@ -204,7 +204,9 @@ struct _Icon {
 	
 	gint iHideLabel;
 	gchar *cWmClass;
-	gpointer reserved[2];
+	GList *pOverlays;
+	gdouble *pHiddenBgColor;
+	//gpointer reserved[0];
 };
 
 typedef void (*CairoIconContainerLoadFunc) (void);

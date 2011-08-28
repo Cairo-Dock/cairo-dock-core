@@ -45,6 +45,7 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-draw-opengl.h"  // pour cairo_dock_render_one_icon
+#include "cairo-dock-overlay.h"
 #include "cairo-dock-draw.h"
 
 extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
@@ -646,6 +647,8 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		else
 			cairo_paint_with_alpha (pCairoContext, icon->fAlpha);
 	}
+	
+	cairo_dock_draw_icon_overlays_cairo (icon, fRatio, pCairoContext);
 }
 
 
@@ -969,6 +972,8 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	double y;
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
+	double pHiddenBgColor[4];
+	double r = 3;
 	do
 	{
 		icon = ic->data;
@@ -976,6 +981,25 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 		{
 			y = icon->fDrawY;
 			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
+			
+			if (icon->pHiddenBgColor)
+			{
+				cairo_save (pCairoContext);
+				cairo_set_source_rgba (pCairoContext, icon->pHiddenBgColor[0], icon->pHiddenBgColor[1], icon->pHiddenBgColor[2], icon->pHiddenBgColor[3] * pDock->fPostHideOffset);
+				if (pDock->container.bIsHorizontal)
+				{
+					cairo_translate (pCairoContext, icon->fDrawX, icon->fDrawY);
+					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, icon->fWidth - 2*r, icon->fHeight);
+				}
+				else
+				{
+					cairo_translate (pCairoContext, icon->fDrawY, icon->fDrawX);
+					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, icon->fHeight - 2*r, icon->fWidth);
+				}
+				cairo_fill (pCairoContext);
+				cairo_restore (pCairoContext);
+			}
+			
 			cairo_save (pCairoContext);
 			icon->fAlpha = pDock->fPostHideOffset;
 			cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);

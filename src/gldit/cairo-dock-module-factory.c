@@ -328,6 +328,16 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		}
 		pMinimalConfig->cDockName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "dock name", NULL, NULL, NULL, NULL);
 		pMinimalConfig->bAlwaysVisible = g_key_file_get_boolean (pKeyFile, "Icon", "always visi", NULL);
+		if (pMinimalConfig->bAlwaysVisible)
+		{
+			gsize length;
+			pMinimalConfig->pHiddenBgColor = g_key_file_get_double_list (pKeyFile, "Icon", "bg color", &length, NULL);
+			if (length < 4 || pMinimalConfig->pHiddenBgColor[3] == 0.)
+			{
+				g_free (pMinimalConfig->pHiddenBgColor);
+				pMinimalConfig->pHiddenBgColor = NULL;
+			}
+		}
 	}
 	
 	//\____________________ on recupere les parametres de son desklet.
@@ -398,6 +408,7 @@ void cairo_dock_free_minimal_config (CairoDockMinimalAppletConfig *pMinimalConfi
 	g_free (pMinimalConfig->cDockName);
 	g_free (pMinimalConfig->deskletAttribute.cDecorationTheme);
 	cairo_dock_free_desklet_decoration (pMinimalConfig->deskletAttribute.pUserDecoration);
+	g_free (pMinimalConfig->pHiddenBgColor);
 	g_free (pMinimalConfig);
 }
 
@@ -467,8 +478,8 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 			pDesklet->pIcon = pIcon;
 			gtk_window_set_title (GTK_WINDOW(pContainer->pWidget), pInstance->pModule->pVisitCard->cModuleName);
 		}
-		cairo_dock_free_minimal_config (pMinimalConfig);
 	}
+	cairo_dock_free_minimal_config (pMinimalConfig);
 
 	//\____________________ On initialise l'instance.
 	if (pDock)  //  on met la taille qu'elle aura une fois dans le dock.
@@ -637,6 +648,8 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				pIcon->cFileName = pMinimalConfig->cIconFileName;
 				pMinimalConfig->cIconFileName = NULL;  // idem
 				pIcon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
+				pIcon->pHiddenBgColor = pMinimalConfig->pHiddenBgColor;
+				pMinimalConfig->pHiddenBgColor = NULL;
 			}
 			
 			// on recupere son dock (cree au besoin).

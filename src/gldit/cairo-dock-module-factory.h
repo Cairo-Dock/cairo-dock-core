@@ -180,6 +180,7 @@ struct _CairoDockMinimalAppletConfig {
 	gdouble fOrder;
 	gchar *cDockName;
 	gboolean bAlwaysVisible;
+	gdouble *pHiddenBgColor;
 	CairoDeskletAttribute deskletAttribute;
 	gboolean bIsDetached;
 };

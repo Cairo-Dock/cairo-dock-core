@@ -52,6 +52,8 @@
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.fVisibleAppliAlpha
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-overlay.h"
+#include "cairo-dock-opengl-path.h"
 #include "cairo-dock-draw-opengl.h"
 
 #include "texture-gradation.h"
@@ -420,6 +422,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glPopMatrix ();
 	}
 	
+	cairo_dock_draw_icon_overlays_opengl (icon, fRatio);
+	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
 	glPopMatrix ();  // retour au debut de la fonction.
 	if (bUseText && icon->iLabelTexture != 0 && icon->iHideLabel == 0 &&
@@ -580,6 +584,9 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	double y;
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
+	double pHiddenBgColor[4];
+	double r = 3;
+	_cairo_dock_set_blend_alpha ();
 	do
 	{
 		icon = ic->data;
@@ -588,6 +595,29 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 			//g_print ("%s : %d (%d)\n", icon->cName, icon->bIsDemandingAttention, icon->Xid);
 			y = icon->fDrawY;
 			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
+			
+			if (icon->pHiddenBgColor)
+			{
+				glPushMatrix ();
+				memcpy (pHiddenBgColor, icon->pHiddenBgColor, 4*sizeof (gdouble));
+				pHiddenBgColor[3] *= pDock->fPostHideOffset;
+				if (pDock->container.bIsHorizontal)
+				{
+					glTranslatef (icon->fDrawX + icon->fWidth/2,
+						pDock->container.iHeight - icon->fDrawY - icon->fHeight/2,
+						0.);
+					cairo_dock_draw_rounded_rectangle_opengl (icon->fWidth - 2*r, icon->fHeight, r, 0, pHiddenBgColor);
+				}
+				else
+				{
+					glTranslatef (icon->fDrawY + icon->fHeight/2,
+						pDock->container.iWidth - icon->fDrawX - icon->fWidth/2,
+						0.);
+					cairo_dock_draw_rounded_rectangle_opengl (icon->fHeight - 2*r, icon->fWidth, r, 0, pHiddenBgColor);
+				}
+				glPopMatrix ();
+			}
+			
 			glPushMatrix ();
 			icon->fAlpha = pDock->fPostHideOffset * pDock->fPostHideOffset;
 			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);

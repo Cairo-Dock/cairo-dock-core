@@ -41,6 +41,7 @@
 #include "cairo-dock-dock-manager.h"  // cairo_dock_synchronize_one_sub_dock_orientation
 #include "cairo-dock-backends-manager.h"  // cairo_dock_get_icon_container_renderer
 #include "cairo-dock-icon-facility.h"
+#include "cairo-dock-overlay.h"
 #include "cairo-dock-icon-factory.h"
 
 CairoDockImageBuffer g_pIconBackgroundBuffer;
@@ -77,6 +78,7 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 	g_free (icon->cWmClass);
 	g_free (icon->cQuickInfo);
 	g_free (icon->cLastAttentionDemand);
+	g_free (icon->pHiddenBgColor);
 	if (icon->pMimeTypes)
 		g_strfreev (icon->pMimeTypes);
 	
@@ -91,6 +93,7 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 		_cairo_dock_delete_texture (icon->iLabelTexture);
 	if (icon->iQuickInfoTexture != 0)
 		_cairo_dock_delete_texture (icon->iQuickInfoTexture);
+	cairo_dock_destroy_icon_overlays (icon);
 }
 
   //////////////

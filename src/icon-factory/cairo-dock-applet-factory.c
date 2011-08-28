@@ -37,11 +37,15 @@ Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, 
 	icon->pModuleInstance = pModuleInstance;
 	
 	//\____________ On recupere les infos de sa config.
-	icon->cName = g_strdup (pMinimalConfig->cLabel);
-	icon->cFileName = g_strdup (pMinimalConfig->cIconFileName);
+	icon->cName = pMinimalConfig->cLabel;
+	pMinimalConfig->cLabel = NULL;
+	icon->cFileName = pMinimalConfig->cIconFileName;
+	pMinimalConfig->cIconFileName = NULL;
 	
 	icon->fOrder = pMinimalConfig->fOrder;
 	icon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
+	icon->pHiddenBgColor = pMinimalConfig->pHiddenBgColor;
+	pMinimalConfig->pHiddenBgColor = NULL;
 	
 	if (! pMinimalConfig->bIsDetached)
 	{
