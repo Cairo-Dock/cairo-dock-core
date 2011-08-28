@@ -129,7 +129,7 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 	pImage->iWidth = w;
 	pImage->iHeight = h;
 	
-	if (fAlpha < 1)
+	if (fAlpha < 1 && pImage->pSurface != NULL)
 	{
 		cairo_surface_t *pNewSurfaceAlpha = cairo_dock_create_blank_surface (
 			w,

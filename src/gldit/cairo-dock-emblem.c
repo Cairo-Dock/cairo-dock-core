@@ -180,9 +180,9 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 		
 		_cairo_dock_enable_texture ();
 		
-		_cairo_dock_set_blend_source ();
+		///_cairo_dock_set_blend_source ();
 		
-		_cairo_dock_apply_texture_at_size (pIcon->iIconTexture, w, h);
+		///_cairo_dock_apply_texture_at_size (pIcon->iIconTexture, w, h);
 		
 		_cairo_dock_set_blend_alpha ();
 		

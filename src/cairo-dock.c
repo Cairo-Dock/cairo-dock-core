@@ -760,7 +760,7 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
 	g_print ("\n\nTODO:\n"
-	"- test drop (Shortcuts, between applets or applis, Panel view, etc).\n"
+	"- check for config panel (g_object_unref assertion)\n"
 	"- review Help hints\n"
 	"- find Kwin config tool for Composite-manager\n"
 	"- draw a preview of the dock in opengl\n"

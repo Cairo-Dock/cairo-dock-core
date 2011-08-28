@@ -56,6 +56,7 @@ SET(core_lib_SRCS
 	cairo-dock-packages.c 				cairo-dock-packages.h
 	cairo-dock-particle-system.c 		cairo-dock-particle-system.h
 	cairo-dock-emblem.c 				cairo-dock-emblem.h
+	cairo-dock-overlay.c 				cairo-dock-overlay.h
 	cairo-dock-task.c 					cairo-dock-task.h
 	cairo-dock-config.c 				cairo-dock-config.h 
 	texture-gradation.h
@@ -150,7 +151,7 @@ install(FILES
 	
 	cairo-dock-draw.h					cairo-dock-draw-opengl.h
 	cairo-dock-opengl-path.h 			cairo-dock-opengl-font.h 
-	cairo-dock-particle-system.h		cairo-dock-emblem.h
+	cairo-dock-particle-system.h		cairo-dock-emblem.h cairo-dock-overlay.h
 	cairo-dock-X-utilities.h			cairo-dock-dbus.h
 	cairo-dock-keyfile-utilities.h		cairo-dock-surface-factory.h
 	cairo-dock-log.h					cairo-dock-keybinder.h

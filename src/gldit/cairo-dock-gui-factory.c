@@ -2508,9 +2508,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 					else
 					{
-						GtkEntry *e =  gtk_bin_get_child (pOneWidget);
 						if (iSelectedItem == -1)
-							gtk_entry_set_text (e, cValue);
+						{
+							GtkWidget *e = gtk_bin_get_child (GTK_BIN (pOneWidget));
+							gtk_entry_set_text (GTK_ENTRY (e), cValue);
+						}
 						else
 							gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iSelectedItem);
 					}
