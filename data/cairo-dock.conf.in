@@ -30,7 +30,7 @@ frame_xin =
 
 #B- Use Xinerama?
 #{This option is to use if you have a dual-screen and use Xinerama to manage them.}
-xinerama = false
+xinerama = true
 
 #i-[0;12] Number of the screen where the dock should be located:
 #{0 is the first screen.}
@@ -363,7 +363,7 @@ frame_sub =
 #{You can overwrite this parameter for each sub-dock.}/
 sub-dock view = default
 
-#e+[0.1;1.;smaller;same size] Ratio for the size of the sub-docks' icons :
+#e+[0.1;1.5;smaller;same size] Ratio for the size of the sub-docks' icons :
 #{You can specify a ratio for the size of the sub-docks' icons, in relation to the main docks' icons size}
 relative icon size = .8
 
@@ -496,11 +496,11 @@ icons bg =
 frame_shape =
 #f+[1;5] Maximum zoom of the icons :
 #{set to 1 if you don't want the icons to zoom when you hover over them.}
-zoom max = 2.0
+zoom max = 1.75
 
 #i+[1;999] Width of the space in which the zoom will be effective :
 #{in pixels. Outside of this space (centered on the mouse), there is no zoom.}
-sinusoid width = 300
+sinusoid width = 150
 
 #i+[0;50] Space between icons :
 #{in pixels.}
@@ -525,13 +525,13 @@ alpha at rest = 1
 frame_size =
 
 #j+[10;128] Launcher's size at rest (width x height) :
-launcher size = 48;48
+launcher size = 40;40
 
 #j+[10;128] Application's size at rest (width x height) :
-appli size = 48;48
+appli size = 40;40
 
 #j+[10;128] Applet's size at rest (width x height) :
-applet size = 48;48
+applet size = 40;40
 
 #m[Animated icons] Configure icons' animations.
 config_anim = 
@@ -545,8 +545,8 @@ config_illusion =
 #X+[Separators]
 frame_sep =
 
-#j+[4;64] Icon size at rest (width x height) :
-separator size = 48;48
+#j+[4;128] Icon size at rest (width x height) :
+separator size = 8;40
 
 #b+ Force separator's image size to stay constant?
 force size = false
@@ -690,20 +690,20 @@ frame_font =
 custom = false
 
 #P+ Font used for labels :
-police = 
+police = Sans 10
 
 #b+ Draw the outline of the text?
-text oulined = true
+text oulined = false
 
 #F+[Background;gtk-orientation-portrait]
 frame_bg =
 
 #C+ Colour of the label's background :
 #{If you set it to fully transparent, there will be no background for the text, but the margin around the text will still be in effect.}
-text background color=0;0;0;0;
+text background color=0;0;0;1;
 
 #i+[0;20] Margin around the text (in pixels) :
-text margin = 4
+text margin = 3
 
 #F+[Colour;gtk-select-color]
 frame_col =
@@ -725,11 +725,11 @@ vertical label pattern = false
 frame_qi =
 
 #B[-2] Use the same look as the labels?
-qi same = true
+qi same = false
 
 #c+ Text color:
 qi text color = 1;1;1
 
 #C+ Background color:
-qi bg color = 0;0;0;0.8
+qi bg color = 0;0;0;0.667
 
