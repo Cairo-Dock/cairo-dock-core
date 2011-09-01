@@ -33,6 +33,7 @@
 static char s_iLogColor = '0';
 static GLogLevelFlags s_gLogLevel = G_LOG_LEVEL_WARNING;
 static gboolean s_bUseColors = TRUE;
+gboolean bForceColors = FALSE;
 
 /* #    'default'     => "\033[1m", */
 
@@ -48,7 +49,7 @@ static gboolean s_bUseColors = TRUE;
 
 const char*_cd_log_level_to_string(const GLogLevelFlags loglevel)
 {
-  if (s_bUseColors)
+  if (s_bUseColors || bForceColors)
   {
     switch(loglevel)
     {
@@ -153,5 +154,5 @@ void cd_log_set_level_from_name (const gchar *cVerbosity)
 
 void cd_log_force_use_color (void)
 {
-	s_bUseColors = TRUE;
+	bForceColors = TRUE;
 }
