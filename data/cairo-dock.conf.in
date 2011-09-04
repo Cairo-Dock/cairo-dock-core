@@ -363,7 +363,7 @@ frame_sub =
 #{You can overwrite this parameter for each sub-dock.}/
 sub-dock view = default
 
-#e+[0.1;1.5;smaller;same size] Ratio for the size of the sub-docks' icons :
+#e+[0.5;1.5;smaller;larger] Ratio for the size of the sub-docks' icons :
 #{You can specify a ratio for the size of the sub-docks' icons, in relation to the main docks' icons size}
 relative icon size = .8
 
