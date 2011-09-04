@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2011-07-03 00:01+0000\n"
 "PO-Revision-Date: 2010-05-25 12:56+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2011-07-04 04:37+0000\n"
 "X-Generator: Launchpad (build 13168)\n"
-"Language: vi\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -67,8 +66,7 @@ msgid "category"
 msgstr "thể loại"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:621
@@ -287,8 +285,7 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:856
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:865 ../data/messages:493
@@ -343,8 +340,7 @@ msgstr "Trang cộng đồng"
 
 #: ../src/cairo-dock-menu.c:201 ../data/messages:277
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr ""
-"Có vấn đề ? Có đề xuất ? Muốn nói chuyện với chúng tôi ? Xin mời bạn !"
+msgstr "Có vấn đề ? Có đề xuất ? Muốn nói chuyện với chúng tôi ? Xin mời bạn !"
 
 #: ../src/cairo-dock-menu.c:204 ../data/messages:283
 msgid "Development site"
@@ -440,8 +436,7 @@ msgid "Get more applets!"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:425
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:427 ../src/help/applet-init.c:28
@@ -1574,9 +1569,8 @@ msgstr ""
 
 #: ../data/messages:195
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1624,8 +1618,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219
@@ -3036,8 +3030,7 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1053
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1055
@@ -3332,8 +3325,8 @@ msgstr ""
 
 #: ../data/messages:1207
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 
 #: ../data/messages:1209
@@ -3861,8 +3854,8 @@ msgstr ""
 #: ../data/messages:1563
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
-":\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
+"you :\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3943,8 +3936,8 @@ msgstr ""
 #: ../data/messages:1575
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
-"!)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
+"that !)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4034,18 +4027,15 @@ msgid ""
 " - Several <b>bug-fixes</b> and improvments."
 msgstr ""
 
-#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s đã được tháo gắn kết"
 
 #~ msgid "Use OpenGL in Cairo-Dock ?"
 #~ msgstr "Sử dụng OpenGL trong Cairo-Dock ?"
 
-#, c-format
 #~ msgid "failed to mount %s"
 #~ msgstr "không thể gắn kết %s"
 
-#, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s đã được gắn kết"
 
@@ -4055,8 +4045,8 @@ msgstr ""
 #~ "want to do it now ?"
 #~ msgstr ""
 #~ "không tìm thấy chủ đề; chủ đề mặc định sẽ được sử dụng.\n"
-#~ " Bạn có thể thay đổi bằng cách mở cấu hình cho mô-đun này; bạn có muốn thực "
-#~ "hiện nó ngay bây giờ ?"
+#~ " Bạn có thể thay đổi bằng cách mở cấu hình cho mô-đun này; bạn có muốn "
+#~ "thực hiện nó ngay bây giờ ?"
 
 #~ msgid ""
 #~ "the gauge theme couldn't be found; a default gauge will be used instead.\n"
@@ -4064,8 +4054,8 @@ msgstr ""
 #~ "want to do it now ?"
 #~ msgstr ""
 #~ "không tìm thấy chủ đề chuẩn; chuẩn mặc định sẽ được sử dụng.\n"
-#~ " Bạn có thể thay đổi bằng cách mở cấu hình cho mô-đun này; bạn có muốn thực "
-#~ "hiện nó ngay bây giờ ?"
+#~ " Bạn có thể thay đổi bằng cách mở cấu hình cho mô-đun này; bạn có muốn "
+#~ "thực hiện nó ngay bây giờ ?"
 
 #~ msgid "Do you want to monitor the content of the directory ?"
 #~ msgstr "Bạn có muốn giám sát nội dung của thư mục ?"
@@ -4073,7 +4063,6 @@ msgstr ""
 #~ msgid "Do you want to mount this point ?"
 #~ msgstr "Bạn có muốn gắn kết với điểm này ?"
 
-#, c-format
 #~ msgid "failed to unmount %s"
 #~ msgstr "không thể tháo gắn kết %s"
 
@@ -4086,7 +4075,6 @@ msgstr ""
 #~ msgid "You have to try the theme before you can rate it."
 #~ msgstr "Bạn phải dùng thử chủ đề trước khi bạn có thể đánh giá nó."
 
-#, c-format
 #~ msgid ""
 #~ "The '%s' plug-in is not active.\n"
 #~ "Be sure to activate it to enjoy these features."
@@ -4094,15 +4082,14 @@ msgstr ""
 #~ "Plug-in '%s' không hoạt động.\n"
 #~ "Hãy đảm bảo bạn đã kích hoạt nó để tận hưởng các tính năng này."
 
-#, c-format
 #~ msgid ""
 #~ "The '%s' module was not found.\n"
 #~ "Be sure to install it in the same version as the dock to enjoy these "
 #~ "features."
 #~ msgstr ""
 #~ "Không tìm thấy mô-đun '%s'.\n"
-#~ "Hãy đảm bảo bạn đã cài nó cùng phiên bản với thanh neo để tận hưởng các tính "
-#~ "năng này."
+#~ "Hãy đảm bảo bạn đã cài nó cùng phiên bản với thanh neo để tận hưởng các "
+#~ "tính năng này."
 
 #~ msgid "theme"
 #~ msgstr "chủ đề"
@@ -4127,8 +4114,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "It seems that you've never entered the help module yet.\n"
-#~ "If you have some difficulty to configure the dock, or if you are willing to "
-#~ "customize it,\n"
+#~ "If you have some difficulty to configure the dock, or if you are willing "
+#~ "to customize it,\n"
 #~ "the Help module is here for you !\n"
 #~ "Do you want to take a look at it now ?"
 #~ msgstr ""
@@ -4141,13 +4128,12 @@ msgstr ""
 #~ msgid "Highlight words"
 #~ msgstr "Tô sáng từ"
 
-#, c-format
 #~ msgid ""
-#~ "The module '%s' is not present. You need to install it or its dependencies "
-#~ "to make the most of this module."
+#~ "The module '%s' is not present. You need to install it or its "
+#~ "dependencies to make the most of this module."
 #~ msgstr ""
-#~ "Mô-đun '%s' không hiện hữu. Bạn cần phải cài đặt nó hoặc các phần phụ thuộc "
-#~ "của nó để sử dụng mô-đun này."
+#~ "Mô-đun '%s' không hiện hữu. Bạn cần phải cài đặt nó hoặc các phần phụ "
+#~ "thuộc của nó để sử dụng mô-đun này."
 
 #~ msgid "Configuration of Cairo-Dock"
 #~ msgstr "Cấu hình Cairo-Dock"
@@ -4155,7 +4141,6 @@ msgstr ""
 #~ msgid "Do you want to activate it now ?"
 #~ msgstr "Bạn có muốn kích hoạt nó ngay bây giờ ?"
 
-#, c-format
 #~ msgid "The module '%s' is not activated."
 #~ msgstr "Mô-đun '%s' chưa được kích hoạt."
 
@@ -4178,7 +4163,8 @@ msgstr ""
 #~ " You can switch from a mode to another at any time."
 #~ msgstr ""
 #~ "Đây là thanh cấu hình đơn giản của Cairo-Dock.\n"
-#~ " Sau khi bạn đã làm quen với nó, và nếu bạn muốn tùy chỉnh chủ đề của mình\n"
+#~ " Sau khi bạn đã làm quen với nó, và nếu bạn muốn tùy chỉnh chủ đề của "
+#~ "mình\n"
 #~ ", bạn có thể chuyển sang chế độ nâng cao.\n"
 #~ " Bạn có thể chuyển từ chế độ này sang chế độ khác vào bất cứ lúc nào."
 
@@ -4215,18 +4201,18 @@ msgstr ""
 #~ "It provides different window decorators. Activate it first if you want to "
 #~ "select a different decorator for your dialogs."
 #~ msgstr ""
-#~ "Nó cung cấp những bộ trang trí cửa sổ khác nhau. Hãy kích hoạt nó trước nếu "
-#~ "bạn muốn lựa chọn một bộ trang trí khác cho hộp thoại của bạn."
+#~ "Nó cung cấp những bộ trang trí cửa sổ khác nhau. Hãy kích hoạt nó trước "
+#~ "nếu bạn muốn lựa chọn một bộ trang trí khác cho hộp thoại của bạn."
 
 #~ msgid "Display and interact with the currently open windows."
 #~ msgstr "Hiển thị và tương tác với các cửa sổ hiện đang mở."
 
 #~ msgid ""
-#~ "It provides different views to Cairo-Dock. Activate it first if you want to "
-#~ "select a different view for your docks."
+#~ "It provides different views to Cairo-Dock. Activate it first if you want "
+#~ "to select a different view for your docks."
 #~ msgstr ""
-#~ "Nó cung cách các góc nhìn khác nhau của Cairo-Dock. Kích hoạt nó trước nếu "
-#~ "bạn muốn lựa chọn một góc nhìn khác của thanh neo."
+#~ "Nó cung cách các góc nhìn khác nhau của Cairo-Dock. Kích hoạt nó trước "
+#~ "nếu bạn muốn lựa chọn một góc nhìn khác của thanh neo."
 
 #~ msgid "Define the style of the icons' labels and quick-info."
 #~ msgstr "Xác định phong cách nhãn biểu tượng và thông tin nhanh."
@@ -4240,9 +4226,9 @@ msgstr ""
 #~ msgid "Find out the latest version of Cairo-Dock here !."
 #~ msgstr "Dùng thử phiên bản mới nhất của Cairo-Dock tại đây !."
 
-#, c-format
 #~ msgid "You're about removing this icon (%s) from the dock. Sure ?"
-#~ msgstr "Bạn sắp bỏ biểu tượng này (%s) ra khỏi thanh neo. Bạn có chắc chắn ?"
+#~ msgstr ""
+#~ "Bạn sắp bỏ biểu tượng này (%s) ra khỏi thanh neo. Bạn có chắc chắn ?"
 
 #~ msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
 #~ msgstr ""
@@ -4260,7 +4246,6 @@ msgstr ""
 #~ msgid "Do you want to monitor the content of this directory?"
 #~ msgstr "Bạn có muốn giám sát nội dung của thư mục ?"
 
-#, c-format
 #~ msgid "Failed to unmount %s"
 #~ msgstr "không thể tháo gắn kết %s"
 
@@ -4281,11 +4266,11 @@ msgstr ""
 #~ "Bạn có muốn xem nó ngay bây giờ ?"
 
 #~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want to "
-#~ "select a different decorator for your dialog boxes."
+#~ "This provides different window decorators. Enable this first if you want "
+#~ "to select a different decorator for your dialog boxes."
 #~ msgstr ""
-#~ "Nó cung cấp những bộ trang trí cửa sổ khác nhau. Hãy kích hoạt nó trước nếu "
-#~ "bạn muốn lựa chọn một bộ trang trí khác cho hộp thoại của bạn."
+#~ "Nó cung cấp những bộ trang trí cửa sổ khác nhau. Hãy kích hoạt nó trước "
+#~ "nếu bạn muốn lựa chọn một bộ trang trí khác cho hộp thoại của bạn."
 
 #~ msgid "Provides various animations for your icons."
 #~ msgstr "Nó cung cấp nhiều hoạt cảnh cho biểu tượng của bạn."
@@ -4294,5 +4279,5 @@ msgstr ""
 #~ "Provides different views for Cairo-Dock. Enable this first if you want to "
 #~ "select a different view for your docks."
 #~ msgstr ""
-#~ "Nó cung cách các góc nhìn khác nhau của Cairo-Dock. Kích hoạt nó trước nếu "
-#~ "bạn muốn lựa chọn một góc nhìn khác của thanh neo."
+#~ "Nó cung cách các góc nhìn khác nhau của Cairo-Dock. Kích hoạt nó trước "
+#~ "nếu bạn muốn lựa chọn một góc nhìn khác của thanh neo."

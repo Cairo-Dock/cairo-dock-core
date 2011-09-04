@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2011-07-03 00:01+0000\n"
 "PO-Revision-Date: 2011-06-08 13:24+0000\n"
 "Last-Translator: Szymon Sieciński <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2011-07-04 04:35+0000\n"
 "X-Generator: Launchpad (build 13168)\n"
-"Language: pl\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -70,10 +69,8 @@ msgid "category"
 msgstr "kategoria"
 
 #: ../src/cairo-dock-gui-items.c:381
-msgid ""
-"Main dock's parameters are available in the main configuration window."
-msgstr ""
-"Najważniejsze opcje docka są dostępne w głównym oknie konfiguracyjnym."
+msgid "Main dock's parameters are available in the main configuration window."
+msgstr "Najważniejsze opcje docka są dostępne w głównym oknie konfiguracyjnym."
 
 #: ../src/cairo-dock-gui-items.c:621
 msgid "Launcher configuration"
@@ -290,8 +287,7 @@ msgid "Effects:"
 msgstr "Efekt:"
 
 #: ../src/cairo-dock-gui-simple.c:856
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknij na aplet żeby zobaczyć jego podgląd i opis."
 
 #: ../src/cairo-dock-gui-simple.c:865 ../data/messages:493
@@ -444,8 +440,7 @@ msgid "Get more applets!"
 msgstr "Pobierz więcej apletów"
 
 #: ../src/cairo-dock-menu.c:425
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Aplety innych dostawców zapewniają integrację z wieloma programami, na "
 "przykład Pidginem"
@@ -1605,9 +1600,8 @@ msgstr ""
 
 #: ../data/messages:195
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1655,8 +1649,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219
@@ -3076,8 +3070,7 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1053
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1055
@@ -3372,8 +3365,8 @@ msgstr ""
 
 #: ../data/messages:1207
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 
 #: ../data/messages:1209
@@ -3901,8 +3894,8 @@ msgstr ""
 #: ../data/messages:1563
 msgid ""
 "v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer you "
-":\n"
+"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
+"you :\n"
 " - Once again a new view : Curve !\n"
 " - A long time waited applet : the desktop Switcher.\n"
 " - A very complete theme : Brit\n"
@@ -3983,8 +3976,8 @@ msgstr ""
 #: ../data/messages:1575
 msgid ""
 "2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for that "
-"!)\n"
+" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
+"that !)\n"
 " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
 " - Applis can now be placed amongst launchers and applets.\n"
 " - A new and convenient config panel for launchers.\n"
@@ -4098,11 +4091,9 @@ msgstr ""
 #~ msgid "Controler"
 #~ msgstr "Kontroler"
 
-#, c-format
 #~ msgid "%s is now unmounted"
 #~ msgstr "%s jest teraz odmontowany"
 
-#, c-format
 #~ msgid "%s is now mounted"
 #~ msgstr "%s jest teraz zamontowany"
 
@@ -4151,7 +4142,6 @@ msgstr ""
 #~ "moduł Pomocy może Ci w tym pomóc.\n"
 #~ "Czy chcesz do niego zajrzeć?"
 
-#, c-format
 #~ msgid "Configuration of the '%s' dock"
 #~ msgstr "Konfiguracja doku '%s'"
 
@@ -4174,7 +4164,6 @@ msgstr ""
 #~ "Użyteczne FAQ zawierające wiele wskazówek.\n"
 #~ "Najedź myszką na zdanie żeby pokazać dodatkowe informacje."
 
-#, c-format
 #~ msgid "Failed to unmount %s"
 #~ msgstr "Nie udało się odmontować %s"
 
@@ -4182,19 +4171,18 @@ msgstr ""
 #~ msgstr "Zapewnia różne animacje dla Twoich ikon."
 
 #~ msgid ""
-#~ "To remove the black rectangle around the dock, you will need to activate a "
-#~ "composite manager.\n"
+#~ "To remove the black rectangle around the dock, you will need to activate "
+#~ "a composite manager.\n"
 #~ "For instance, this can be done by activating desktop effects, launching "
 #~ "Compiz, or activating the composition in Metacity.\n"
 #~ "I can perform this last operation for you. Do you want to proceed ?"
 #~ msgstr ""
 #~ "Aby usunąć czarny prostokąt wokół doku musisz uaktywnić menadżer "
 #~ "kompozycji.\n"
-#~ "Możesz to zrobić włączając efekty pulpitu, uruchamiając Compiz lub aktywując "
-#~ "kompozycje w Metacity.\n"
+#~ "Możesz to zrobić włączając efekty pulpitu, uruchamiając Compiz lub "
+#~ "aktywując kompozycje w Metacity.\n"
 #~ "Czy chcesz abym zrobił to za Ciebie?"
 
-#, c-format
 #~ msgid "failed to mount %s"
 #~ msgstr "nie można zamontować %s"
 
@@ -4204,8 +4192,8 @@ msgstr ""
 #~ "You can either familiarize yourself with the dock or choose another theme "
 #~ "with right-click -> Cairo-Dock -> Manage themes.\n"
 #~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-#~ "If you have any question/request/remark, please pay us a visit at http://glx-"
-#~ "dock.org.\n"
+#~ "If you have any question/request/remark, please pay us a visit at http://"
+#~ "glx-dock.org.\n"
 #~ "Hope you will enjoy this soft !\n"
 #~ "  (you can now click on this dialog to close it)"
 #~ msgstr ""
