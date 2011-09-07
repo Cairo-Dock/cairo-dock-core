@@ -43,6 +43,13 @@ typedef struct {
 	gchar *cImagePath;
 } GaugeImage;
 
+typedef enum {
+	CD_GAUGE_TYPE_UNKNOWN=0,
+	CD_GAUGE_TYPE_NEEDLE,
+	CD_GAUGE_TYPE_IMAGES,
+	CD_NB_GAUGE_TYPES
+} GaugeType;
+
 // Effect applied on Indicator image.
 typedef enum {
 	CD_GAUGE_EFFECT_NONE=0,
@@ -225,7 +232,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 	xmlChar *cAttribute, *cNodeContent, *cTextNodeContent;
 	GString *sImagePath = g_string_new ("");
 	gchar *cNeedleImage;
-	int iType;  // type of the current indicator.
+	GaugeType iType;  // type of the current indicator.
 	gboolean next;
 	GaugeImage *pGaugeImage;
 	GaugeIndicator *pGaugeIndicator = NULL;
@@ -245,7 +252,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 		{
 			cNodeContent = xmlNodeGetContent (pGaugeNode);
 			int iVersion = atoi (cNodeContent);
-			if (iVersion == 2)
+			if (iVersion >= 2)
 			{
 				ratio_text = 1.;
 				ratio_xy = 2.;
@@ -290,19 +297,19 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 			}
 			
 			// get the type if the indicator.
-			iType = 0;  // until we know the indicator type, it can be any one.
+			iType = CD_GAUGE_TYPE_UNKNOWN;  // until we know the indicator type, it can be any one.
 			cAttribute = xmlGetProp (pGaugeNode, "type");
 			if (cAttribute != NULL)
 			{
 				if (strcmp (cAttribute, "needle") == 0)
 				{
-					iType = 1;
+					iType = CD_GAUGE_TYPE_NEEDLE;
 				}
-				else if (strcmp (cAttribute, "image") == 0)
+				else if (strcmp (cAttribute, "images") == 0)
 				{
-					iType = 2;
+					iType = CD_GAUGE_TYPE_IMAGES;
 				}
-				else
+				else  // wrong attribute, skip this indicator.
 				{
 					pRenderer->iRank --;
 					continue;
@@ -310,7 +317,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 				xmlFree (cAttribute);
 			}
 			
-			// load the indicator.
+			// load the indicators.
 			pGaugeIndicator = g_new0 (GaugeIndicator, 1);
 			pGaugeIndicator->direction = 1;
 			
@@ -324,7 +331,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 				cNodeContent = xmlNodeGetContent (pIndicatorNode);
 				
 				next = FALSE;
-				if (iType != 2)  // needle or unknown
+				if (iType != CD_GAUGE_TYPE_IMAGES)  // needle or unknown
 				{
 					if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "posX") == 0)
 						pGaugeIndicator->posX = _str2double (cNodeContent) * ratio_xy;
@@ -354,7 +361,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 					else
 						next = TRUE;
 				}
-				if (iType != 1)  // image or unknown
+				if (iType != CD_GAUGE_TYPE_NEEDLE)  // image or unknown
 				{
 					if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "effect") == 0)
 					{
@@ -363,22 +370,24 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 					else
 						next = TRUE;
 				}
-				if (next)
+				if (next)  // other parameters
 				{
 					if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "file") == 0)
 					{
-						if (iType == 0)
+						// if the type is still unknown, try to get it here (version <= 2)
+						if (iType == CD_GAUGE_TYPE_UNKNOWN)
 						{
 							cAttribute = xmlGetProp (pIndicatorNode, "key");
 							if (cAttribute && strcmp (cAttribute, "needle") == 0)
-								iType = 1;
+								iType = CD_GAUGE_TYPE_NEEDLE;
 							else
-								iType = 2;
+								iType = CD_GAUGE_TYPE_IMAGES;
 							xmlFree (cAttribute);
 						}
-						if (iType == 1)
+						// get/load the image(s).
+						if (iType == CD_GAUGE_TYPE_NEEDLE)
 						{
-							cNeedleImage = cNodeContent;  // juste remember the image name, we'll load it in the end.
+							cNeedleImage = cNodeContent;  // just remember the image name, we'll load it in the end.
 							cNodeContent = NULL;
 						}
 						else  // load the images.
@@ -947,7 +956,7 @@ void cairo_dock_register_data_renderer_gauge (void)
 	pRecord->interface.unload		= (CairoDataRendererUnloadFunc) unload;
 	pRecord->iStructSize			= sizeof (Gauge);
 	pRecord->cThemeDirName 			= "gauges";
-	pRecord->cDistantThemeDirName 	= "gauges2";
+	pRecord->cDistantThemeDirName 	= "gauges3";
 	pRecord->cDefaultTheme 			= "Turbo-night-fuel";
 	
 	cairo_dock_register_data_renderer ("gauge", pRecord);
