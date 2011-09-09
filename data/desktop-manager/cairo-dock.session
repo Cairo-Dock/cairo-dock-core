@@ -1,0 +1,8 @@
+[GNOME Session]
+Name=Cairo-Dock Session
+RequiredComponents=gnome-settings-daemon;
+RequiredProviders=windowmanager;panel;
+DefaultProvider-windowmanager=compiz
+DefaultProvider-panel=cairo-dock
+FallbackSession=cairo-dock-fallback
+DesktopName=GNOME

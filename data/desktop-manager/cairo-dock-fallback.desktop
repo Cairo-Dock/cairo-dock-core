@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Cairo-Dock (with Gnome and without effect)
+Comment=This session logs you into GNOME with Cairo-Dock and without any graphical effect.
+Exec=gnome-session --session=cairo-dock-fallback
+TryExec=gnome-session
+Icon=
+Type=Application
