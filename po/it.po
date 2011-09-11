@@ -2384,7 +2384,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -6841,7 +6841,7 @@ msgstr ""
 #~ msgid "Return to dock"
 #~ msgstr "Ritorna alla dock"
 
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr ""
 #~ "Imposta il comportamento in Compiz a: (name=cairo-dock & tipe=utility)"
 
@@ -8269,13 +8269,13 @@ msgstr ""
 
 #~ msgid ""
 #~ "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
-#~ "the rule (name=cairo-dock &amp; type=utility).\n"
+#~ "the rule (name=cairo-dock &amp; type=Utility).\n"
 #~ "You can then switch an applet to the Widget Layer by left-clicking on its "
 #~ "desklet and selecting 'Compiz-Fusion Widget'."
 #~ msgstr ""
 #~ "Nella configurazione di Compiz-Fusion, attiva il componente aggiuntivo "
 #~ "\"Livello Widget\", e imposta la regola (name=cairo-dock & "
-#~ "type=utility).\n"
+#~ "type=Utility).\n"
 #~ "Dopo potrai spostare un'applet al livello Widget con click sinistro sulla "
 #~ "desklet e scegliendo 'Compiz-Fusion Widget'."
 
@@ -8543,7 +8543,7 @@ msgstr ""
 #~ "Verifica i tuoi permessi di scrittura,\n"
 #~ " e che il nome scelto non esista già."
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr ""
 #~ "Imposta il comportamento in Compiz a: (name=cairo-dock & tipe=utility)"
 
@@ -10085,13 +10085,13 @@ msgstr ""
 
 #~ msgid ""
 #~ "In the Compiz-Fusion config, enable the 'Widget Layer' plugin, and set "
-#~ "the rule (name=cairo-dock &amp; type=utility).\n"
+#~ "the rule (name=cairo-dock &amp; type=Utility).\n"
 #~ "You can then switch an applet to the Widget Layer by left-clicking on its "
 #~ "desklet and selecting 'Compiz-Fusion Widget'."
 #~ msgstr ""
 #~ "Nella configurazione di Compiz-Fusion, attiva il componente aggiuntivo "
 #~ "\"Livello Widget\", e imposta la regola (name=cairo-dock & "
-#~ "type=utility).\n"
+#~ "type=Utility).\n"
 #~ "Dopo potrai spostare un'applet al livello Widget con clic sinistro sulla "
 #~ "desklet e scegliendo 'Compiz-Fusion Widget'."
 

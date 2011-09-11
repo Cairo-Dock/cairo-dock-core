@@ -2150,7 +2150,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -5176,8 +5176,8 @@ msgstr ""
 #~ msgid "Configuration of the '%s' dock"
 #~ msgstr "Konfiguracija '%s' doka"
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-#~ msgstr "Postavi ponašanje u Compiz na: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
+#~ msgstr "Postavi ponašanje u Compiz na: (name=cairo-dock & type=Utility)"
 
 #~ msgid "In the style of Firefox tabs"
 #~ msgstr "U stilu Firefox tabova"

@@ -2104,7 +2104,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -4443,8 +4443,8 @@ msgstr ""
 #~ "En nyttig FAQ som også inneholder mange hint.\n"
 #~ "Hold musen over en setning for å se hjelpsomme ledetekster."
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-#~ msgstr "Sett oppførsel i Compiz til: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
+#~ msgstr "Sett oppførsel i Compiz til: (name=cairo-dock & type=Utility)"
 
 #~ msgid "Windows7"
 #~ msgstr "Windows7"

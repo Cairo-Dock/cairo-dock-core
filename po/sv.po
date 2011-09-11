@@ -2068,7 +2068,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -4295,8 +4295,8 @@ msgstr ""
 #~ msgid "Return to dock"
 #~ msgstr "Fäst vid dockan"
 
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-#~ msgstr "Ange beteendet i Compiz med: (name=cairo-dock & type=utility)"
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
+#~ msgstr "Ange beteendet i Compiz med: (name=cairo-dock & type=Utility)"
 
 #~ msgid ""
 #~ "You made some modifications in the current theme.\n"
@@ -5423,8 +5423,8 @@ msgstr ""
 #~ "Kontrollera att du har skrivrättigheter för filen\n"
 #~ "och att filen inte redan existerar."
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-#~ msgstr "Ange beteendet i Compiz med: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
+#~ msgstr "Ange beteendet i Compiz med: (name=cairo-dock & type=Utility)"
 
 #~ msgid ""
 #~ "Icons will scroll according to what positioning model is selected. The "

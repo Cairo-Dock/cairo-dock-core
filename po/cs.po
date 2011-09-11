@@ -2087,7 +2087,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -4319,8 +4319,8 @@ msgstr ""
 #~ msgid "Minimize all"
 #~ msgstr "Minimalizovat vše"
 
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-#~ msgstr "nastavte chování v Compizu na: (name=cairo-dock & type=utility)"
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
+#~ msgstr "nastavte chování v Compizu na: (name=cairo-dock & type=Utility)"
 
 #~ msgid "default"
 #~ msgstr "výchozí"
@@ -4821,8 +4821,8 @@ msgstr ""
 #~ "aktivováním kompozitu v Metacity.\n"
 #~ "Posledně jmenované pro vás mohu udělat. Mám tak učinit nyní?"
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-#~ msgstr "Nastavte chování v Compizu na: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
+#~ msgstr "Nastavte chování v Compizu na: (name=cairo-dock & type=Utility)"
 
 #~ msgid ""
 #~ "A useful FAQ which also contains a lot of hints.\n"

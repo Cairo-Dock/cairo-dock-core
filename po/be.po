@@ -2089,7 +2089,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -4654,7 +4654,7 @@ msgstr ""
 #~ msgid "Minimize all"
 #~ msgstr "Згарнуць усе"
 
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr "ўсталюйце паводзіны ў Compiz на: (імя = cairo-dock & тып = utility)"
 
 #~ msgid "default"
@@ -5627,7 +5627,7 @@ msgstr ""
 #~ "Пераканайцеся, што вы маеце права на запіс,\n"
 #~ " і новае імя ўжо не прысутнічае на панэлі."
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr "ўсталюйце паводзіны ў Compiz на: (імя = cairo-dock & тып = utility)"
 
 #~ msgid ""

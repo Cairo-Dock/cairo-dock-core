@@ -2190,7 +2190,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -5148,7 +5148,7 @@ msgstr ""
 #~ msgid "Return to dock"
 #~ msgstr "Повернути на панель"
 
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr "встановіть поведінку в Compiz на: (ім'я=cairo-dock·&·тип=utility)"
 
 #~ msgid ""
@@ -6382,7 +6382,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "In the Compiz-Fusion config, activate the 'Widget Layer' plug-in, and set "
-#~ "the rule (name=cairo-dock &amp; type=utility).\n"
+#~ "the rule (name=cairo-dock &amp; type=Utility).\n"
 #~ "You can then switch an applet to the Widget Layer by left-clicking on its "
 #~ "desklet and selecting 'Compiz-Fusion Widget'."
 #~ msgstr ""
@@ -8272,7 +8272,7 @@ msgstr ""
 #~ "Впевніться, що ви маєте права на запис,\n"
 #~ " та нового імені вже не має на панелі."
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr "встановіть поведінку в Compiz на: (ім'я=cairo-dock·&·тип=utility)"
 
 #~ msgid ""
@@ -8809,7 +8809,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "In the Compiz-Fusion config, enable the 'Widget Layer' plugin, and set "
-#~ "the rule (name=cairo-dock &amp; type=utility).\n"
+#~ "the rule (name=cairo-dock &amp; type=Utility).\n"
 #~ "You can then switch an applet to the Widget Layer by left-clicking on its "
 #~ "desklet and selecting 'Compiz-Fusion Widget'."
 #~ msgstr ""

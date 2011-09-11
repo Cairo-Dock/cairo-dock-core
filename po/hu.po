@@ -2313,7 +2313,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -4330,9 +4330,9 @@ msgstr ""
 #~ msgid "Return to dock"
 #~ msgstr "Vissza a dokkra"
 
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr ""
-#~ "Viselkedés beállítása a Compizban erre: (name=cairo-dock & type=utility)"
+#~ "Viselkedés beállítása a Compizban erre: (name=cairo-dock & type=Utility)"
 
 #~ msgid "The theme has been deleted"
 #~ msgstr "A téma törölve"
@@ -6385,9 +6385,9 @@ msgstr ""
 #~ msgid "Rename to:"
 #~ msgstr "Átnevezés erre:"
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr ""
-#~ "Viselkedés beállítása a Compizban erre: (name=cairo-dock & type=utility)"
+#~ "Viselkedés beállítása a Compizban erre: (name=cairo-dock & type=Utility)"
 
 #~ msgid "Do you want to keep this setting?"
 #~ msgstr "Megtartja ezeket a beállításokat?"

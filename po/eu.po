@@ -2094,7 +2094,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -4465,7 +4465,7 @@ msgstr ""
 #~ msgid "Do you want to keep this setting ?"
 #~ msgstr "Ezarpen hauek mantendu nahi duzu?"
 
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr "Ezarri Compiz portaera honela: (izena=cairo-dock & mota=utility)"
 
 #~ msgid ""
@@ -5611,7 +5611,7 @@ msgstr ""
 #~ "Ziurtatu idazteko eskubideak dituzula,\n"
 #~ " eta izen berria jadanik existitzen ez dela."
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr "Ezarri Compiz portaera honela: (izena=cairo-dock & mota=utility)"
 
 #~ msgid ""

@@ -6,4 +6,4 @@ install (FILES
 install (FILES
 	cairo-dock.session
 	cairo-dock-fallback.session
-	DESTINATION /usr/share/gnome-session/sessions/)
+	DESTINATION /usr/share/gnome-session/sessions)

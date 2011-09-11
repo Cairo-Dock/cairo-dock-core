@@ -2108,7 +2108,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -4075,7 +4075,7 @@ msgstr ""
 #~ msgid "Close (middle-click)"
 #~ msgstr "닫기(휠 클릭)"
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr "컴피즈에 동작을 다음과 같이 설정: (이름=cairo-dock & 유형=utility)"
 
 #~ msgid ""

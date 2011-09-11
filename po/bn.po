@@ -2044,7 +2044,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -3900,8 +3900,8 @@ msgstr ""
 #~ msgid "Close (middle-click)"
 #~ msgstr "বন্ধ (মিডল-ক্লিক)"
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-#~ msgstr "কম্পিজে আচরণকে সেট করুনঃ (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
+#~ msgstr "কম্পিজে আচরণকে সেট করুনঃ (name=cairo-dock & type=Utility)"
 
 #~ msgid "Failed to unmount %s"
 #~ msgstr "%s এর আনমাউন্ট ব্যর্থ হয়েছে"

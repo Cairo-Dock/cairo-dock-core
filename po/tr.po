@@ -2068,7 +2068,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -4404,7 +4404,7 @@ msgstr ""
 #~ msgid "Add a main dock"
 #~ msgstr "Bir ana rıhtım ekle"
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
 #~ msgstr "Compiz davranışını ayarla (isim=cairo-dock ve tür=araç)"
 
 #~ msgid "sub-dock"

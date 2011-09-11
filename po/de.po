@@ -2116,7 +2116,7 @@ msgstr ""
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
-"(class=Cairo-dock & type=utility)"
+"(class=Cairo-dock & type=Utility)"
 msgstr ""
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
@@ -4510,8 +4510,8 @@ msgstr ""
 #~ msgid "Downloading file %s ..."
 #~ msgstr "Datei %s wird herunterladen..."
 
-#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-#~ msgstr "Verhalten in Compiz auf (name=cairo-dock & type=utility) festlegen"
+#~ msgid "set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
+#~ msgstr "Verhalten in Compiz auf (name=cairo-dock & type=Utility) festlegen"
 
 #~ msgid ""
 #~ "A useful FAQ that contains also a lot of hints.\n"
@@ -5937,8 +5937,8 @@ msgstr ""
 #~ "Prüfen Sie, ob Sie die Schreibrechte dafür besitzen\n"
 #~ " und dass der neue Name nicht bereits existiert."
 
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=utility)"
-#~ msgstr "Verhalten in Compiz auf (name=cairo-dock & type=utility) festlegen"
+#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
+#~ msgstr "Verhalten in Compiz auf (name=cairo-dock & type=Utility) festlegen"
 
 #~ msgid ""
 #~ "A useful FAQ which also contains a lot of hints.\n"
