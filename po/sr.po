@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
+#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
@@ -31,7 +32,7 @@ msgstr ""
 msgid "Please wait while importing the theme..."
 msgstr ""
 
-#: ../src/cairo-dock-gui-commons.c:364 ../src/cairo-dock-menu.c:1427
+#: ../src/cairo-dock-gui-commons.c:364 ../src/cairo-dock-menu.c:1464
 msgid "Configure this applet"
 msgstr "Podesi ovaj aplet"
 
@@ -52,7 +53,7 @@ msgid "Accessory"
 msgstr "Dodaci"
 
 #: ../src/cairo-dock-gui-commons.c:421 ../src/cairo-dock-gui-main.c:135
-#: ../src/cairo-dock-gui-main.c:1502 ../data/messages:761
+#: ../src/cairo-dock-gui-main.c:1504 ../data/messages:757
 msgid "System"
 msgstr "Sistem"
 
@@ -68,19 +69,19 @@ msgstr "Dodatak"
 msgid "category"
 msgstr "kategorija"
 
-#: ../src/cairo-dock-gui-items.c:381
+#: ../src/cairo-dock-gui-items.c:383
 msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 
-#: ../src/cairo-dock-gui-items.c:621
+#: ../src/cairo-dock-gui-items.c:623
 msgid "Launcher configuration"
 msgstr "Konfiguracija pokretča"
 
-#: ../src/cairo-dock-gui-main.c:129 ../data/messages:679
+#: ../src/cairo-dock-gui-main.c:129 ../data/messages:671
 msgid "Behaviour"
 msgstr "Ponašanje"
 
-#: ../src/cairo-dock-gui-main.c:130 ../data/messages:499 ../data/messages:1339
+#: ../src/cairo-dock-gui-main.c:130 ../data/messages:491 ../data/messages:1657
 msgid "Appearance"
 msgstr "Izgled"
 
@@ -88,20 +89,20 @@ msgstr "Izgled"
 msgid "Accessories"
 msgstr "Dodaci"
 
-#: ../src/cairo-dock-gui-main.c:137 ../src/cairo-dock-gui-main.c:1651
-#: ../data/messages:1473
+#: ../src/cairo-dock-gui-main.c:137 ../src/cairo-dock-gui-main.c:1653
+#: ../data/messages:1791
 msgid "All"
 msgstr "Svi"
 
-#: ../src/cairo-dock-gui-main.c:1480
+#: ../src/cairo-dock-gui-main.c:1482
 msgid "Set the position of the main dock."
 msgstr "Podesite poziciju glavnog doka."
 
-#: ../src/cairo-dock-gui-main.c:1481 ../data/messages:343 ../data/messages:553
+#: ../src/cairo-dock-gui-main.c:1483 ../data/messages:335 ../data/messages:545
 msgid "Position"
 msgstr "Pozicija"
 
-#: ../src/cairo-dock-gui-main.c:1487
+#: ../src/cairo-dock-gui-main.c:1489
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -111,58 +112,60 @@ msgstr ""
 " ili neupadljiv?\n"
 "Podesite način pristupanja dokovima i pod-dokovima!"
 
-#: ../src/cairo-dock-gui-main.c:1488 ../src/cairo-dock-menu.c:1465
-#: ../data/messages:361
+#: ../src/cairo-dock-gui-main.c:1490 ../src/cairo-dock-menu.c:1502
+#: ../data/messages:353
 msgid "Visibility"
 msgstr "Vidljivost"
 
-#: ../src/cairo-dock-gui-main.c:1494
+#: ../src/cairo-dock-gui-main.c:1496
 msgid "Display and interact with currently open windows."
 msgstr "Prikaži i vrši interakciju sa trenutno otvorenim prozorima."
 
-#: ../src/cairo-dock-gui-main.c:1495 ../data/messages:41 ../data/messages:477
+#: ../src/cairo-dock-gui-main.c:1497 ../data/messages:41 ../data/messages:469
+#: ../data/messages:1323
 msgid "Taskbar"
 msgstr "Traka zadataka"
 
-#: ../src/cairo-dock-gui-main.c:1501
+#: ../src/cairo-dock-gui-main.c:1503
 msgid "All of the parameters you will never want to tweak."
 msgstr "Svi parametri koje nikada nećete želeti da podešavata."
 
-#: ../src/cairo-dock-gui-main.c:1511
+#: ../src/cairo-dock-gui-main.c:1513
 msgid "Set a background for your dock."
 msgstr "Podesite pozadinu vašeg doka."
 
-#: ../src/cairo-dock-gui-main.c:1512 ../data/messages:857
-#: ../data/messages:1255 ../data/messages:1347
+#: ../src/cairo-dock-gui-main.c:1514 ../data/messages:853
+#: ../data/messages:1251 ../data/messages:1665
 msgid "Background"
 msgstr "Pozadina"
 
-#: ../src/cairo-dock-gui-main.c:1518
+#: ../src/cairo-dock-gui-main.c:1520
 msgid "Select a view for each of your docks."
 msgstr "Odaberite prikaz za svaki vaš dok."
 
-#: ../src/cairo-dock-gui-main.c:1519 ../data/messages:531 ../data/messages:919
-#: ../data/messages:1341
+#: ../src/cairo-dock-gui-main.c:1521 ../data/messages:523 ../data/messages:915
+#: ../data/messages:1659
 msgid "Views"
 msgstr "Prikazi"
 
-#: ../src/cairo-dock-gui-main.c:1526
+#: ../src/cairo-dock-gui-main.c:1528
 msgid "Configure text bubble appearance."
 msgstr "Podesite pojavljivanje teksta u balonu."
 
-#: ../src/cairo-dock-gui-main.c:1527
+#: ../src/cairo-dock-gui-main.c:1529
 msgid "Dialog boxes"
 msgstr "Dijalozi"
 
-#: ../src/cairo-dock-gui-main.c:1534
+#: ../src/cairo-dock-gui-main.c:1536
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "Apleti mogu biti prikazan na radnoj površini kao widgeti."
 
-#: ../src/cairo-dock-gui-main.c:1535 ../data/messages:101 ../data/messages:975
+#: ../src/cairo-dock-gui-main.c:1537 ../data/messages:101 ../data/messages:971
+#: ../data/messages:1383
 msgid "Desklets"
 msgstr "Desklets"
 
-#: ../src/cairo-dock-gui-main.c:1542
+#: ../src/cairo-dock-gui-main.c:1544
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -170,77 +173,76 @@ msgstr ""
 "Sve o ikonama:\n"
 " veličina, refleksija, teme ikona, ..."
 
-#: ../src/cairo-dock-gui-main.c:1543 ../data/messages:11 ../data/messages:501
-#: ../data/messages:1039
+#: ../src/cairo-dock-gui-main.c:1545 ../data/messages:11 ../data/messages:493
+#: ../data/messages:1035 ../data/messages:1293
 msgid "Icons"
 msgstr "Ikone"
 
-#: ../src/cairo-dock-gui-main.c:1549
+#: ../src/cairo-dock-gui-main.c:1551
 msgid "Indicators are additional markers for your icons."
 msgstr "Indikatori su dodatni označivači za vaše ikone."
 
-#: ../src/cairo-dock-gui-main.c:1550 ../data/messages:1157
+#: ../src/cairo-dock-gui-main.c:1552 ../data/messages:1153
 msgid "Indicators"
 msgstr "Indikatori"
 
-#: ../src/cairo-dock-gui-main.c:1557
+#: ../src/cairo-dock-gui-main.c:1559
 msgid "Define icon caption and quick-info style."
 msgstr "Odredite natpis ikone i stil za brzi-info"
 
-#: ../src/cairo-dock-gui-main.c:1558
+#: ../src/cairo-dock-gui-main.c:1560
 msgid "Captions"
 msgstr "Natpis"
 
-#: ../src/cairo-dock-gui-main.c:1627
+#: ../src/cairo-dock-gui-main.c:1629
 msgid "Categories"
 msgstr "Kategorije"
 
-#: ../src/cairo-dock-gui-main.c:1765
+#: ../src/cairo-dock-gui-main.c:1767
 msgid "Filter"
 msgstr "Filter"
 
-#: ../src/cairo-dock-gui-main.c:1812
+#: ../src/cairo-dock-gui-main.c:1814
 msgid "Options"
 msgstr "Opcije"
 
-#: ../src/cairo-dock-gui-main.c:1822
+#: ../src/cairo-dock-gui-main.c:1824
 msgid "All words"
 msgstr "Sve reči"
 
-#: ../src/cairo-dock-gui-main.c:1826
+#: ../src/cairo-dock-gui-main.c:1828
 msgid "Highlighted words"
 msgstr "Naglašene reči"
 
-#: ../src/cairo-dock-gui-main.c:1831
+#: ../src/cairo-dock-gui-main.c:1833
 msgid "Hide others"
 msgstr "Sakrij ostale"
 
-#: ../src/cairo-dock-gui-main.c:1836
+#: ../src/cairo-dock-gui-main.c:1838
 msgid "Search in description"
 msgstr "Pretraži u opisu"
 
-#: ../src/cairo-dock-gui-main.c:1850
+#: ../src/cairo-dock-gui-main.c:1852
 msgid "Enable this module"
 msgstr "Omogući ovaj modul"
 
-#: ../src/cairo-dock-gui-main.c:1914 ../src/cairo-dock-menu.c:209
-#: ../data/messages:549
+#: ../src/cairo-dock-gui-main.c:1916 ../data/messages:541
 msgid "More applets"
 msgstr "Još apleta"
 
-#: ../src/cairo-dock-gui-main.c:1915 ../data/messages:547
+#: ../src/cairo-dock-gui-main.c:1917 ../data/messages:539
 msgid "Get more applets online !"
 msgstr "Pribaviti još apleta preko mreže!"
 
-#: ../src/cairo-dock-gui-main.c:1949 ../src/cairo-dock.c:632
+#: ../src/cairo-dock-gui-main.c:1951 ../src/cairo-dock.c:663
 msgid "< Maintenance mode >"
 msgstr "< Mod održavanja >"
 
-#: ../src/cairo-dock-gui-main.c:2039 ../src/cairo-dock-gui-simple.c:901
+#: ../src/cairo-dock-gui-main.c:2041 ../src/cairo-dock-gui-simple.c:901
 msgid "Cairo-Dock configuration"
 msgstr "Cairo-Dok konfiguracija"
 
-#: ../src/cairo-dock-gui-main.c:2394
+#: ../src/cairo-dock-gui-main.c:2396
 #, c-format
 msgid ""
 "The '%s' module is not present. You need to install it and all its "
@@ -249,16 +251,16 @@ msgstr ""
 "Modul '%s' nije prisutan. Da bi se taj modul koristio, potrebno ga je "
 "instalirati, kao i sve njegove međuzavisnosti."
 
-#: ../src/cairo-dock-gui-main.c:2400
+#: ../src/cairo-dock-gui-main.c:2402
 #, c-format
 msgid "The '%s' module is not enabled."
 msgstr "Modul '%s' nije omogućen."
 
-#: ../src/cairo-dock-gui-main.c:2401
+#: ../src/cairo-dock-gui-main.c:2403
 msgid "Do you want to enable it now?"
 msgstr "Da li želite da ga omogućite sada?"
 
-#: ../src/cairo-dock-gui-main.c:2756
+#: ../src/cairo-dock-gui-main.c:2750
 msgid "Simple Mode"
 msgstr "Jednostavni mod"
 
@@ -290,11 +292,11 @@ msgstr "Efekti:"
 msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Da bi dobili pregled i objašnjenje u vezi apleta, kliknite u njega."
 
-#: ../src/cairo-dock-gui-simple.c:865 ../data/messages:493
+#: ../src/cairo-dock-gui-simple.c:865 ../data/messages:485
 msgid "On mouse hover:"
 msgstr "Kada je miš iznad:"
 
-#: ../src/cairo-dock-gui-simple.c:867 ../data/messages:495
+#: ../src/cairo-dock-gui-simple.c:867 ../data/messages:487
 msgid "On click:"
 msgstr "Na klik:"
 
@@ -330,147 +332,165 @@ msgstr "Uvozim temu ..."
 msgid "Manage Themes"
 msgstr "Uredi teme"
 
-#: ../src/cairo-dock-menu.c:121
+#: ../src/cairo-dock-help.c:54 ../src/cairo-dock-menu.c:458
+#: ../src/help/applet-init.c:28 ../src/help/applet-notifications.c:65
+msgid "Help"
+msgstr "Pomoć"
+
+#: ../src/cairo-dock-help.c:69 ../src/help/applet-init.c:31
+msgid ""
+"This applet is made to help you.\n"
+"Click on its icon to pop up useful tips about the possibilities of Cairo-"
+"Dock.\n"
+"Middle-click to open the configuration window.\n"
+"Right-click to access some troubleshooting actions."
+msgstr ""
+
+#: ../src/cairo-dock-help.c:220 ../src/help/applet-tips-dialog.c:152
+msgid "Tips and Tricks"
+msgstr ""
+
+#: ../src/cairo-dock-help.c:380 ../src/help/applet-tips-dialog.c:299
+msgid "Category"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:133
 msgid "Delete this dock?"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:173
+#: ../src/cairo-dock-menu.c:185
 msgid "About Cairo-Dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:200 ../data/messages:279
-msgid "Community site"
-msgstr "Sajt zajednice"
-
-#: ../src/cairo-dock-menu.c:201 ../data/messages:277
-msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Problemi? Predlozi? Želite samo da popričate sa nama? Navratite!"
-
-#: ../src/cairo-dock-menu.c:204 ../data/messages:283
+#: ../src/cairo-dock-menu.c:222 ../data/messages:283 ../data/messages:1565
 msgid "Development site"
 msgstr "Razvojni sajt"
 
-#: ../src/cairo-dock-menu.c:205 ../data/messages:281
+#: ../src/cairo-dock-menu.c:223 ../data/messages:281 ../data/messages:1563
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Ovde pronađi najnoviju Cairo-dok verziju!"
 
-#: ../src/cairo-dock-menu.c:220
+#: ../src/cairo-dock-menu.c:227 ../src/cairo-dock-menu.c:451
+msgid "Get more applets!"
+msgstr "Nabavite još apleta!"
+
+#: ../src/cairo-dock-menu.c:231 ../src/cairo-dock-menu.c:237
+msgid "Donate"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:234 ../src/cairo-dock-menu.c:240
+msgid ""
+"Support the people who spend countless hours to bring you the best dock ever."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:251
 msgid "Development"
 msgstr "Razvoj"
 
-#: ../src/cairo-dock-menu.c:226
+#: ../src/cairo-dock-menu.c:257
 msgid "Artwork"
 msgstr "Galerija"
 
-#: ../src/cairo-dock-menu.c:230
+#: ../src/cairo-dock-menu.c:261
 msgid "Support"
 msgstr "Podrška"
 
-#: ../src/cairo-dock-menu.c:312
+#: ../src/cairo-dock-menu.c:343
 msgid "Quit Cairo-Dock?"
 msgstr "Napuštate Cairo-dok?"
 
-#: ../src/cairo-dock-menu.c:343
+#: ../src/cairo-dock-menu.c:374
 msgid "Configure"
 msgstr "Podesi"
 
-#: ../src/cairo-dock-menu.c:348
+#: ../src/cairo-dock-menu.c:379
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Podesi ponašanje, izgled i aplete."
 
-#: ../src/cairo-dock-menu.c:352
+#: ../src/cairo-dock-menu.c:383
 msgid "Configure this dock"
 msgstr "Podesite ovaj dok"
 
-#: ../src/cairo-dock-menu.c:357
+#: ../src/cairo-dock-menu.c:388
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Podesite poziciju, vidljivost i izgled ovog glavnog doka."
 
-#: ../src/cairo-dock-menu.c:359
+#: ../src/cairo-dock-menu.c:390
 msgid "Delete this dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:368
+#: ../src/cairo-dock-menu.c:399
 msgid "Manage themes"
 msgstr "Uredi teme"
 
-#: ../src/cairo-dock-menu.c:373
+#: ../src/cairo-dock-menu.c:404
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 "Odaberi temu među mnogim temama na serveru ili snimi svoju trenutnu temu."
 
-#: ../src/cairo-dock-menu.c:379
+#: ../src/cairo-dock-menu.c:410
 msgid "Unlock icons"
 msgstr "Otključaj ikone"
 
-#: ../src/cairo-dock-menu.c:379
+#: ../src/cairo-dock-menu.c:410
 msgid "Lock icons"
 msgstr "Zaključaj ikone"
 
-#: ../src/cairo-dock-menu.c:383
+#: ../src/cairo-dock-menu.c:414
 msgid "This will (un)lock the position of the icons."
 msgstr "Ovo će otključati pozicije ikona"
 
-#: ../src/cairo-dock-menu.c:387
+#: ../src/cairo-dock-menu.c:418
 msgid "Unlock dock"
 msgstr "Otključaj dok"
 
-#: ../src/cairo-dock-menu.c:387
+#: ../src/cairo-dock-menu.c:418
 msgid "Lock dock"
 msgstr "Zaključaj dok"
 
-#: ../src/cairo-dock-menu.c:392
+#: ../src/cairo-dock-menu.c:423
 msgid "This will (un)lock the whole dock."
 msgstr "Ovo će otključati celokupni dok"
 
-#: ../src/cairo-dock-menu.c:397
+#: ../src/cairo-dock-menu.c:428
 msgid "Quick-Hide"
 msgstr "Brzo sakrivanje"
 
-#: ../src/cairo-dock-menu.c:402
+#: ../src/cairo-dock-menu.c:433
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Ovo će sakriti dok dok ne pređete mišem preko njega."
 
-#: ../src/cairo-dock-menu.c:410
+#: ../src/cairo-dock-menu.c:441
 msgid "Launch Cairo-Dock on startup"
 msgstr "Startuj Cairo-dok pri pokretanju sistema"
 
-#: ../src/cairo-dock-menu.c:420
-msgid "Get more applets!"
-msgstr "Nabavite još apleta!"
-
-#: ../src/cairo-dock-menu.c:425
+#: ../src/cairo-dock-menu.c:456
 msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr "Apleti omogućavaju integraciju sa mnogim programima, na primer Pidgin"
 
-#: ../src/cairo-dock-menu.c:427 ../src/help/applet-init.c:28
-#: ../src/help/applet-notifications.c:65
-msgid "Help"
-msgstr "Pomoć"
-
-#: ../src/cairo-dock-menu.c:432
+#: ../src/cairo-dock-menu.c:463
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr "Nema problema, samo rešenja (i mnogo korisnih saveta!)"
 
-#: ../src/cairo-dock-menu.c:434
+#: ../src/cairo-dock-menu.c:465
 msgid "About"
 msgstr "О"
 
-#: ../src/cairo-dock-menu.c:442
+#: ../src/cairo-dock-menu.c:473
 msgid "Quit"
 msgstr "Izađi"
 
-#: ../src/cairo-dock-menu.c:467
+#: ../src/cairo-dock-menu.c:498
 msgid "separator"
 msgstr "odvajač"
 
-#: ../src/cairo-dock-menu.c:471
+#: ../src/cairo-dock-menu.c:502
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr "Uklanjate ikonu (%s) sa doka. Stvarno?"
 
-#: ../src/cairo-dock-menu.c:482
+#: ../src/cairo-dock-menu.c:513
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -479,7 +499,7 @@ msgstr ""
 "Želite da preraspodelite ikone koje se nalaze u spremištu u dok?\n"
 "(u suprotnom, biće uništene)"
 
-#: ../src/cairo-dock-menu.c:554
+#: ../src/cairo-dock-menu.c:581
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -489,11 +509,11 @@ msgstr ""
 "Sada premestite neke pokretačeili aplete koristeći desni klikom na ikonu -> "
 "premeštaj na sledeći dok"
 
-#: ../src/cairo-dock-menu.c:576
+#: ../src/cairo-dock-menu.c:615
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Izvinite, ova ikona nema konfiguracioni fajl"
 
-#: ../src/cairo-dock-menu.c:620
+#: ../src/cairo-dock-menu.c:659
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -502,12 +522,12 @@ msgstr ""
 "Novi dok je kreiran.\n"
 "Možete ga prilagoditi desnim klikom na  -> cairo-dock -> podesi ovaj dok."
 
-#: ../src/cairo-dock-menu.c:681
+#: ../src/cairo-dock-menu.c:720
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Uklanjate aplet (%s) sa doka. Stvarno?"
 
-#: ../src/cairo-dock-menu.c:903
+#: ../src/cairo-dock-menu.c:942
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -515,219 +535,219 @@ msgstr ""
 "Izvinite, ne mogu da pronađem odgovarajući opisni fajl.\n"
 "Možda da prevučete i pustite pokretač sa programskog menija."
 
-#: ../src/cairo-dock-menu.c:1138
+#: ../src/cairo-dock-menu.c:1177
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Premestite sve na radnu površinu %d - strana %d"
 
-#: ../src/cairo-dock-menu.c:1138
+#: ../src/cairo-dock-menu.c:1177
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Premesti radnu površinu %d - strana %d"
 
-#: ../src/cairo-dock-menu.c:1140
+#: ../src/cairo-dock-menu.c:1179
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Premestite sve na radnu površinu %d"
 
-#: ../src/cairo-dock-menu.c:1140
+#: ../src/cairo-dock-menu.c:1179
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Premestite na radnu površinu %d"
 
-#: ../src/cairo-dock-menu.c:1142
+#: ../src/cairo-dock-menu.c:1181
 #, c-format
 msgid "Move all to face %d"
 msgstr "Premestite sve na stranu %d"
 
-#: ../src/cairo-dock-menu.c:1142
+#: ../src/cairo-dock-menu.c:1181
 #, c-format
 msgid "Move to face %d"
 msgstr "Premestite na stranu %d"
 
-#: ../src/cairo-dock-menu.c:1180
+#: ../src/cairo-dock-menu.c:1219
 msgid "Add"
 msgstr "Dodaj"
 
-#: ../src/cairo-dock-menu.c:1185
+#: ../src/cairo-dock-menu.c:1221
 msgid "Sub-dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1187
+#: ../src/cairo-dock-menu.c:1223
 msgid "Main dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1190
+#: ../src/cairo-dock-menu.c:1226
 msgid "Separator"
 msgstr "Odvajač"
 
-#: ../src/cairo-dock-menu.c:1194
+#: ../src/cairo-dock-menu.c:1230
 msgid "Custom launcher"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1195
+#: ../src/cairo-dock-menu.c:1231
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr "Obično je potrebno prevući pokretač sa menija i pustiti ga na dok."
 
-#: ../src/cairo-dock-menu.c:1259
+#: ../src/cairo-dock-menu.c:1296
 msgid "Modify this separator"
 msgstr "Izmeni ovaj odvajač"
 
-#: ../src/cairo-dock-menu.c:1259
+#: ../src/cairo-dock-menu.c:1296
 msgid "Modify this launcher"
 msgstr "Izmeni ovaj pokretač"
 
-#: ../src/cairo-dock-menu.c:1261
+#: ../src/cairo-dock-menu.c:1298
 msgid "Remove this separator"
 msgstr "Ukloni ovaj odvajač"
 
-#: ../src/cairo-dock-menu.c:1261
+#: ../src/cairo-dock-menu.c:1298
 msgid "Remove this launcher"
 msgstr "Ukloni ovaj pokretač"
 
-#: ../src/cairo-dock-menu.c:1262
+#: ../src/cairo-dock-menu.c:1299
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr "Možete mišem ukloniti pokretač prevlačenjem van doka ."
 
-#: ../src/cairo-dock-menu.c:1264 ../src/cairo-dock-menu.c:1443
+#: ../src/cairo-dock-menu.c:1301 ../src/cairo-dock-menu.c:1480
 msgid "Move to another dock"
 msgstr "Premesti na sledeći dok"
 
-#: ../src/cairo-dock-menu.c:1269 ../src/cairo-dock-menu.c:1448
-#: ../src/gldit/cairo-dock-gui-factory.c:1110
+#: ../src/cairo-dock-menu.c:1306 ../src/cairo-dock-menu.c:1485
+#: ../src/gldit/cairo-dock-gui-factory.c:1104
 msgid "New main dock"
 msgstr "Novi glavni dok"
 
-#: ../src/cairo-dock-menu.c:1289 ../src/cairo-dock-menu.c:1387
+#: ../src/cairo-dock-menu.c:1326 ../src/cairo-dock-menu.c:1424
 msgid "Other actions"
 msgstr "Ostale akcije"
 
-#: ../src/cairo-dock-menu.c:1295
+#: ../src/cairo-dock-menu.c:1332
 msgid "Move to this desktop"
 msgstr "Premesti na radnu površinu"
 
-#: ../src/cairo-dock-menu.c:1310
+#: ../src/cairo-dock-menu.c:1347
 msgid "Not Fullscreen"
 msgstr "Nije preko celog ekrana"
 
-#: ../src/cairo-dock-menu.c:1310
+#: ../src/cairo-dock-menu.c:1347
 msgid "Fullscreen"
 msgstr "Ceo ekran"
 
-#: ../src/cairo-dock-menu.c:1314
+#: ../src/cairo-dock-menu.c:1351
 msgid "Don't keep above"
 msgstr "Ne zadržavaj iznad"
 
-#: ../src/cairo-dock-menu.c:1314 ../data/messages:371
+#: ../src/cairo-dock-menu.c:1351 ../data/messages:363
 msgid "Keep above"
 msgstr "Zadržavaj iznad"
 
-#: ../src/cairo-dock-menu.c:1339
+#: ../src/cairo-dock-menu.c:1376
 msgid "Remove custom icon"
 msgstr "Ukloni ikone korisnika"
 
-#: ../src/cairo-dock-menu.c:1343
+#: ../src/cairo-dock-menu.c:1380
 msgid "Set a custom icon"
 msgstr "Postavite proizvoljnu ikonu"
 
-#: ../src/cairo-dock-menu.c:1346
+#: ../src/cairo-dock-menu.c:1383
 msgid "Kill"
 msgstr "Ubij"
 
-#: ../src/cairo-dock-menu.c:1351
+#: ../src/cairo-dock-menu.c:1388
 msgid "Make it a launcher"
 msgstr "Učini od njega pokretač"
 
-#: ../src/cairo-dock-menu.c:1354 ../src/cairo-dock-menu.c:1397
+#: ../src/cairo-dock-menu.c:1391 ../src/cairo-dock-menu.c:1434
 msgid "Launch a new (Shift+clic)"
 msgstr "Pokreni novi (Shift + klik)"
 
-#: ../src/cairo-dock-menu.c:1356
+#: ../src/cairo-dock-menu.c:1393
 msgid "Show"
 msgstr "Prikaži"
 
-#: ../src/cairo-dock-menu.c:1358
+#: ../src/cairo-dock-menu.c:1395
 msgid "Unmaximise"
 msgstr "Poništi maksimalno uvećanje"
 
-#: ../src/cairo-dock-menu.c:1358
+#: ../src/cairo-dock-menu.c:1395
 msgid "Maximise"
 msgstr "Maksimalno uvećaj"
 
-#: ../src/cairo-dock-menu.c:1363 ../src/cairo-dock-menu.c:1365
+#: ../src/cairo-dock-menu.c:1400 ../src/cairo-dock-menu.c:1402
 msgid "Minimise"
 msgstr "Umanji"
 
-#: ../src/cairo-dock-menu.c:1363 ../src/cairo-dock-menu.c:1371
+#: ../src/cairo-dock-menu.c:1400 ../src/cairo-dock-menu.c:1408
 #: ../src/help/applet-notifications.c:59
 msgid "middle-click"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1371 ../src/cairo-dock-menu.c:1373
-#: ../data/messages:739
+#: ../src/cairo-dock-menu.c:1408 ../src/cairo-dock-menu.c:1410
+#: ../data/messages:731
 msgid "Close"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1393
+#: ../src/cairo-dock-menu.c:1430
 msgid "Move all to this desktop"
 msgstr "Premesti sve na ovu radnu površinu"
 
-#: ../src/cairo-dock-menu.c:1399
+#: ../src/cairo-dock-menu.c:1436
 msgid "Show all"
 msgstr "Prikaži sve"
 
-#: ../src/cairo-dock-menu.c:1401
+#: ../src/cairo-dock-menu.c:1438
 msgid "Minimise all"
 msgstr "Umanji sve"
 
-#: ../src/cairo-dock-menu.c:1403
+#: ../src/cairo-dock-menu.c:1440
 msgid "Close all"
 msgstr "Zatvori sve"
 
-#: ../src/cairo-dock-menu.c:1431
+#: ../src/cairo-dock-menu.c:1468
 msgid "Detach this applet"
 msgstr "Otkači ovaj aplet"
 
-#: ../src/cairo-dock-menu.c:1431
+#: ../src/cairo-dock-menu.c:1468
 msgid "Return to the dock"
 msgstr "Vrati na dok"
 
-#: ../src/cairo-dock-menu.c:1434
+#: ../src/cairo-dock-menu.c:1471
 msgid "Remove this applet"
 msgstr "Ukloni ovaj aplet"
 
-#: ../src/cairo-dock-menu.c:1438
+#: ../src/cairo-dock-menu.c:1475
 msgid "Launch another instance of this applet"
 msgstr "Pokreni još jedan primerak ovog apleta"
 
-#: ../src/cairo-dock-menu.c:1482 ../data/messages:369
+#: ../src/cairo-dock-menu.c:1510 ../data/messages:361
 msgid "Normal"
 msgstr "Uobičajeno"
 
-#: ../src/cairo-dock-menu.c:1488 ../data/messages:435 ../data/messages:603
-#: ../data/messages:1325
+#: ../src/cairo-dock-menu.c:1516 ../data/messages:427 ../data/messages:595
+#: ../data/messages:1643
 msgid "Always on top"
 msgstr "Uvek na vrhu"
 
-#: ../src/cairo-dock-menu.c:1495
+#: ../src/cairo-dock-menu.c:1523
 msgid "Always below"
 msgstr "Uvek ispod"
 
-#: ../src/cairo-dock-menu.c:1513 ../data/messages:377
+#: ../src/cairo-dock-menu.c:1541 ../data/messages:369
 msgid "Reserve space"
 msgstr "Obezbedi prostor"
 
-#: ../src/cairo-dock-menu.c:1520
+#: ../src/cairo-dock-menu.c:1548
 msgid "On all desktops"
 msgstr "Na svim radnim površinama"
 
-#: ../src/cairo-dock-menu.c:1526
+#: ../src/cairo-dock-menu.c:1554
 msgid "Lock position"
 msgstr "Zaključaj poziciju"
 
-#: ../src/cairo-dock-user-interaction.c:402
+#: ../src/cairo-dock-user-interaction.c:405
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -736,16 +756,120 @@ msgstr ""
 "Opcija 'prebriši X ikone' je automatski omogućena u fajlu sa podešavanjima.\n"
 "Koji se nalazi u modulu 'Traka zadataka' ."
 
-#: ../src/cairo-dock.c:150
+#: ../src/cairo-dock.c:148
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr ""
 
-#: ../src/cairo-dock.c:468
+#: ../src/cairo-dock.c:317
+#, fuzzy
+msgid "Use Cairo backend."
+msgstr "Koristi sliku za pozadinu"
+
+#: ../src/cairo-dock.c:320
+#, fuzzy
+msgid "Use OpenGL backend."
+msgstr "Koristi OpenGL u Cairo-doku"
+
+#: ../src/cairo-dock.c:324
+msgid ""
+"Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled "
+"libcairo)."
+msgstr ""
+
+#: ../src/cairo-dock.c:328
+msgid ""
+"Use OpenGL backend with indirect rendering. There are very few case where "
+"this option should be used."
+msgstr ""
+
+#: ../src/cairo-dock.c:331
+msgid "Force the dock to consider this environnement - use it with care."
+msgstr ""
+
+#: ../src/cairo-dock.c:334
+msgid ""
+"Force the dock to load from this directory, instead of ~/.config/cairo-dock."
+msgstr ""
+
+#: ../src/cairo-dock.c:337
+msgid ""
+"Address of a server containing additional themes. This will overwrite the "
+"default server address."
+msgstr ""
+
+#: ../src/cairo-dock.c:340
+msgid ""
+"Wait for N seconds before starting; this is useful if you notice some "
+"problems when the dock starts with the session."
+msgstr ""
+
+#: ../src/cairo-dock.c:343
+msgid ""
+"Allow to edit the config before the dock is started and show the config "
+"panel on start."
+msgstr ""
+
+#: ../src/cairo-dock.c:346
+msgid "Exclude a given plug-in from activating (it is still loaded though)."
+msgstr ""
+
+#: ../src/cairo-dock.c:349
+msgid "Don't load any plug-ins."
+msgstr ""
+
+#: ../src/cairo-dock.c:352
+msgid ""
+"Log verbosity (debug,message,warning,critical,error); default is warning."
+msgstr ""
+
+#: ../src/cairo-dock.c:355
+msgid "Force to display some output messages with colors."
+msgstr ""
+
+#: ../src/cairo-dock.c:358
+msgid "Print version and quit."
+msgstr ""
+
+#: ../src/cairo-dock.c:361
+msgid "Lock the dock so that any modification is impossible for users."
+msgstr ""
+
+#: ../src/cairo-dock.c:365
+msgid "Keep the dock above other windows whatever."
+msgstr ""
+
+#: ../src/cairo-dock.c:368
+msgid "Don't make the dock appear on all desktops."
+msgstr ""
+
+#: ../src/cairo-dock.c:371
+msgid "Cairo-Dock makes anything, including coffee !"
+msgstr ""
+
+#: ../src/cairo-dock.c:374
+msgid ""
+"Ask the dock to load additionnal modules contained in this directory (though "
+"it is unsafe for your dock to load unnofficial modules)."
+msgstr ""
+
+#: ../src/cairo-dock.c:377
+msgid ""
+"For debugging purpose only. The crash manager will not be started to hunt "
+"down the bugs."
+msgstr ""
+
+#: ../src/cairo-dock.c:380
+msgid ""
+"For debugging purpose only. Some hidden and still unstable options will be "
+"activated."
+msgstr ""
+
+#: ../src/cairo-dock.c:499
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Koristi OpenGL u Cairo-doku"
 
-#: ../src/cairo-dock.c:476
+#: ../src/cairo-dock.c:507
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -765,11 +889,11 @@ msgstr ""
 " (Da se ovaj dijalog ne pojavi, startujte dok preko Programskog menija,\n"
 "  ili uz opciju -o za OpenGL i -c za Cairo.)"
 
-#: ../src/cairo-dock.c:481
+#: ../src/cairo-dock.c:512
 msgid "Remember this choice"
 msgstr "Zapamti ovaj izbor"
 
-#: ../src/cairo-dock.c:732
+#: ../src/cairo-dock.c:749
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -780,7 +904,7 @@ msgstr ""
 "Uspešno je povraćen, ali ako se to ponovo dogodi, molim vas da prijavite na "
 "http://glx-dock.org"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:276
+#: ../src/gldit/cairo-dock-applet-facility.h:277
 msgid ""
 "The theme could not be found; the default theme will be used instead.\n"
 " You can change this by opening the configuration of this module. Do you "
@@ -790,14 +914,14 @@ msgstr ""
 " Ovo možete promeniti otvaranjem fajla za podešavanje ovog modula. Da li "
 "želite to da uradite sada?"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:291
+#: ../src/gldit/cairo-dock-applet-facility.h:292
 msgid ""
 "The gauge theme could not be found; a default gauge will be used instead.\n"
 "You can change this by opening the configuration of this module. Do you want "
 "to do it now?"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-applet-facility.h:373
+#: ../src/gldit/cairo-dock-applet-facility.h:374
 msgid "Applet's handbook"
 msgstr "Priručnik apleta"
 
@@ -835,44 +959,39 @@ msgid "MB"
 msgstr "MB"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:259
-#: ../src/gldit/cairo-dock-gui-factory.c:1507
 msgid "Local"
 msgstr "Lokalni"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:260
-#: ../src/gldit/cairo-dock-gui-factory.c:1510
 msgid "User"
 msgstr "Korisnik"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:261
-#: ../src/gldit/cairo-dock-gui-factory.c:1513
 msgid "Net"
 msgstr "Mreža"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:262
-#: ../src/gldit/cairo-dock-gui-factory.c:1516
 msgid "New"
 msgstr "Novi"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:263
-#: ../src/gldit/cairo-dock-gui-factory.c:1520
 msgid "Updated"
 msgstr "Ažuriran"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:989
+#: ../src/gldit/cairo-dock-gui-factory.c:983
 msgid "_Custom Icons_"
 msgstr "_Prilagođene ikone_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1332
+#: ../src/gldit/cairo-dock-gui-factory.c:1347
 msgid "Rate me"
 msgstr "Oceni me"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1431
-#: ../src/gldit/cairo-dock-gui-factory.c:1433
+#: ../src/gldit/cairo-dock-gui-factory.c:1446
+#: ../src/gldit/cairo-dock-gui-factory.c:1448
 msgid "You must try the theme before you can rate it."
 msgstr "Morate prvo isprobati temu pre nego što je ocenite."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1456
+#: ../src/gldit/cairo-dock-gui-factory.c:1471
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -883,7 +1002,7 @@ msgstr ""
 "Postarajte se da ga instalirate sa istom verzijom doka da bi koristili "
 "njegove mogućnosti."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1465
+#: ../src/gldit/cairo-dock-gui-factory.c:1480
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -892,29 +1011,29 @@ msgstr ""
 "Dodatak '%s'  nije aktivan.\n"
 "Da ga aktiviram sada?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2331
-#: ../src/gldit/cairo-dock-gui-factory.c:2918
+#: ../src/gldit/cairo-dock-gui-factory.c:2252
+#: ../src/gldit/cairo-dock-gui-factory.c:2831
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Lista tema u '%s' ..."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2848
+#: ../src/gldit/cairo-dock-gui-factory.c:2769
 msgid "Theme"
 msgstr "Tema"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2861
+#: ../src/gldit/cairo-dock-gui-factory.c:2782
 msgid "Rating"
 msgstr "Ocena"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2867
+#: ../src/gldit/cairo-dock-gui-factory.c:2788
 msgid "Sobriety"
 msgstr "Uravnoteženost"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2944
+#: ../src/gldit/cairo-dock-gui-factory.c:2857
 msgid "link"
 msgstr "veza"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2997
+#: ../src/gldit/cairo-dock-gui-factory.c:2910
 msgid "Grab"
 msgstr "Uhvati"
 
@@ -993,15 +1112,6 @@ msgstr ""
 "Ako vaš računar ne podržava composition, Cari-dok je može emulirati. Ova "
 "opcija je u 'System' modulu podešavanja, na dnu stranice."
 
-#: ../src/help/applet-init.c:31
-msgid ""
-"This applet is made to help you.\n"
-"Click on its icon to pop up useful tips about the possibilities of Cairo-"
-"Dock.\n"
-"Middle-click to open the configuration window.\n"
-"Right-click to access some troubleshooting actions."
-msgstr ""
-
 #: ../src/help/applet-notifications.c:59
 msgid "Open global settings"
 msgstr ""
@@ -1010,48 +1120,50 @@ msgstr ""
 msgid "Activate composite"
 msgstr ""
 
-#: ../src/help/applet-tips-dialog.c:152
-msgid "Tips and Tricks"
-msgstr ""
+#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
+#, fuzzy
+msgid "Enter a command"
+msgstr "Interakcija"
 
-#: ../src/help/applet-tips-dialog.c:299
-msgid "Category"
-msgstr ""
+#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
+#, fuzzy
+msgid "New launcher"
+msgstr "pokretači"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:453
-#: ../data/messages:621
+#: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
+#: ../data/messages:613
 msgid "Move down"
 msgstr "Pomeri dole"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:610 ../data/messages:455
-#: ../data/messages:623
+#: ../src/implementations/cairo-dock-hiding-effect.c:610 ../data/messages:447
+#: ../data/messages:615
 msgid "Fade out"
 msgstr "Utapanje"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:457
-#: ../data/messages:625
+#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:449
+#: ../data/messages:617
 msgid "Semi transparent"
 msgstr "Poluprovidno"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:459
-#: ../data/messages:627
+#: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:451
+#: ../data/messages:619
 msgid "Zoom out"
 msgstr "Umanji"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:461
-#: ../data/messages:629
+#: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:453
+#: ../data/messages:621
 msgid "Folding"
 msgstr "Sklapanje"
 
-#: ../data/messages:1
+#: ../data/messages:1 ../data/messages:1283
 msgid "General"
 msgstr ""
 
-#: ../data/messages:3
+#: ../data/messages:3 ../data/messages:1285
 msgid "Using the dock"
 msgstr ""
 
-#: ../data/messages:5
+#: ../data/messages:5 ../data/messages:1287
 msgid ""
 "Most icons in the dock have several actions: the primary action on left-"
 "click, a secondary action on middle-click, and additionnal actions on right-"
@@ -1060,11 +1172,11 @@ msgid ""
 "sould be on middle-click."
 msgstr ""
 
-#: ../data/messages:7
+#: ../data/messages:7 ../data/messages:1289
 msgid "Adding features"
 msgstr ""
 
-#: ../data/messages:9
+#: ../data/messages:9 ../data/messages:1291
 msgid ""
 "Cairo-Dock has a lot of applets. Applets are small applications that live "
 "inside the dock, for instance a clock or a log-out button.\n"
@@ -1075,11 +1187,11 @@ msgid ""
 "and then just drag-and-drop the link of an applet into your dock."
 msgstr ""
 
-#: ../data/messages:13
+#: ../data/messages:13 ../data/messages:1295
 msgid "Adding a launcher"
 msgstr ""
 
-#: ../data/messages:15
+#: ../data/messages:15 ../data/messages:1297
 msgid ""
 "You can add a launcher by drag-and-dropping it from the Applications Menu "
 "into the dock. An animated arrow will appear when you can drop.\n"
@@ -1087,21 +1199,21 @@ msgid ""
 "its icon and select \"make it a launcher\"."
 msgstr ""
 
-#: ../data/messages:17
+#: ../data/messages:17 ../data/messages:1299
 msgid "Removing a launcher"
 msgstr ""
 
-#: ../data/messages:19
+#: ../data/messages:19 ../data/messages:1301
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
 msgstr ""
 
-#: ../data/messages:21
+#: ../data/messages:21 ../data/messages:1303
 msgid "Grouping icons into a sub-dock"
 msgstr ""
 
-#: ../data/messages:23
+#: ../data/messages:23 ../data/messages:1305
 msgid ""
 "You can group icons into a \"sub-dock\".\n"
 "To add a sub-dock, right-click on the dock -> add -> a sub-dock.\n"
@@ -1109,11 +1221,11 @@ msgid ""
 "dock -> select the sub-dock's name."
 msgstr ""
 
-#: ../data/messages:25
+#: ../data/messages:25 ../data/messages:1307
 msgid "Moving icons"
 msgstr ""
 
-#: ../data/messages:27
+#: ../data/messages:27 ../data/messages:1309
 msgid ""
 "You can drag any icon to a new location inside its dock.\n"
 "You can move an icon into another dock by right-clicking on it -> move to "
@@ -1122,7 +1234,7 @@ msgid ""
 "icon inside."
 msgstr ""
 
-#: ../data/messages:29
+#: ../data/messages:29 ../data/messages:1311
 msgid "Changing an icon's image"
 msgstr ""
 
@@ -1131,19 +1243,20 @@ msgid ""
 "For a launcher or an applet:\n"
 "Open the settings of the icon, and set a path to an image.\n"
 "- For an aplication icon:\n"
-"Right-click on the icon -> \"set a custom icon\". Then choose an image you'd "
-"like to use, and apply. To remove the custom image, right-click on the icon -"
-"> \"remove the custom icon\".\n"
+"Right-click on the icon -> \"Other actions\" -> \"set a custom icon\", and "
+"choose an image. To remove the custom image, right-click on the icon -> "
+"\"Other actions\" -> \"remove the custom icon\".\n"
+"\n"
 "If you have installed some icons themes on your PC, you can also select one "
 "of them to be used instead of the default icon theme, in the global config "
 "window."
 msgstr ""
 
-#: ../data/messages:33
+#: ../data/messages:33 ../data/messages:1315
 msgid "Resizing icons"
 msgstr ""
 
-#: ../data/messages:35
+#: ../data/messages:35 ../data/messages:1317
 msgid ""
 "You can make the icons and the zoom effect smaller or bigger. Open the "
 "settings (right-click -> Cairo-Dock -> configure), and go to Appearance (or "
@@ -1154,11 +1267,11 @@ msgid ""
 "settings."
 msgstr ""
 
-#: ../data/messages:37
+#: ../data/messages:37 ../data/messages:1319
 msgid "Separating icons"
 msgstr ""
 
-#: ../data/messages:39
+#: ../data/messages:39 ../data/messages:1321
 msgid ""
 "You can add separators between icons by right-clicking on the dock -> add -> "
 "a separator.\n"
@@ -1168,11 +1281,11 @@ msgid ""
 "In the \"panel\" view, separators are represented as gap between icons."
 msgstr ""
 
-#: ../data/messages:43
+#: ../data/messages:43 ../data/messages:1325
 msgid "Using the dock as a taskbar"
 msgstr ""
 
-#: ../data/messages:45
+#: ../data/messages:45 ../data/messages:1327
 msgid ""
 "When an application is running, a corresponding icon will appear in the "
 "dock.\n"
@@ -1183,50 +1296,50 @@ msgid ""
 "the launcher, etc."
 msgstr ""
 
-#: ../data/messages:47
+#: ../data/messages:47 ../data/messages:1329
 msgid "Closing a window"
 msgstr ""
 
-#: ../data/messages:49
+#: ../data/messages:49 ../data/messages:1331
 msgid ""
 "You can close a window by middle-clicking on its icon (or from the menu)."
 msgstr ""
 
-#: ../data/messages:51
+#: ../data/messages:51 ../data/messages:1333
 msgid "Minimizing / restauring a window"
 msgstr ""
 
-#: ../data/messages:53
+#: ../data/messages:53 ../data/messages:1335
 msgid ""
 "Clicking on its icon will bring the window on top.\n"
 "When the window has the focus, clicking on its icon will minimize the window."
 msgstr ""
 
-#: ../data/messages:55
+#: ../data/messages:55 ../data/messages:1337
 msgid "Launching an application several times"
 msgstr ""
 
-#: ../data/messages:57
+#: ../data/messages:57 ../data/messages:1339
 msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
 msgstr ""
 
-#: ../data/messages:59
+#: ../data/messages:59 ../data/messages:1341
 msgid "Switching between the windows of a same application"
 msgstr ""
 
-#: ../data/messages:61
+#: ../data/messages:61 ../data/messages:1343
 msgid ""
 "With your mouse, scroll up/down on one of the icons of the application. Each "
 "time you scroll, the next/previous window will be presented to you."
 msgstr ""
 
-#: ../data/messages:63
+#: ../data/messages:63 ../data/messages:1345
 msgid "Grouping windows of a given application"
 msgstr ""
 
-#: ../data/messages:65
+#: ../data/messages:65 ../data/messages:1347
 msgid ""
 "When an application has several windows, one icon for each window will "
 "appear in the dock; they will be grouped togather into a sub-dock.\n"
@@ -1234,19 +1347,19 @@ msgid ""
 "side-by-side (if your Window Manager is able to do that)."
 msgstr ""
 
-#: ../data/messages:67
+#: ../data/messages:67 ../data/messages:1349
 msgid "Setting a custom icon for an application"
 msgstr ""
 
-#: ../data/messages:69
+#: ../data/messages:69 ../data/messages:1351
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
 msgstr ""
 
-#: ../data/messages:71
+#: ../data/messages:71 ../data/messages:1353
 msgid "Showing windows preview over the icons"
 msgstr ""
 
-#: ../data/messages:73
+#: ../data/messages:73 ../data/messages:1355
 msgid ""
 "You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
@@ -1254,24 +1367,26 @@ msgstr ""
 
 #: ../data/messages:75 ../data/messages:197 ../data/messages:217
 #: ../data/messages:255 ../data/messages:297 ../data/messages:301
-#: ../data/messages:307 ../data/messages:311 ../data/messages:315
-#: ../data/messages:319
+#: ../data/messages:307 ../data/messages:311 ../data/messages:1357
+#: ../data/messages:1479 ../data/messages:1499 ../data/messages:1537
+#: ../data/messages:1579 ../data/messages:1583 ../data/messages:1589
+#: ../data/messages:1593 ../data/messages:1597 ../data/messages:1601
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
 msgstr "Savet: Ako je ova linija siva, to znači da se savet ne odnosi na vas."
 
-#: ../data/messages:77
+#: ../data/messages:77 ../data/messages:1359
 msgid "If you're using Compiz, you can click on this button:"
 msgstr "Ako koristite Compiz, možete kliknuti na ovo dugme:"
 
-#: ../data/messages:79
+#: ../data/messages:79 ../data/messages:1361
 msgid "Docks"
 msgstr ""
 
-#: ../data/messages:81
+#: ../data/messages:81 ../data/messages:1363
 msgid "Positionning the dock on the screen"
 msgstr ""
 
-#: ../data/messages:83
+#: ../data/messages:83 ../data/messages:1365
 msgid ""
 "The dock can be placed anywhere on the screen.\n"
 "In the case of the main dock, right-click -> Cairo-Dock -> configure, and "
@@ -1280,11 +1395,11 @@ msgid ""
 "dock, and then select the position you want."
 msgstr ""
 
-#: ../data/messages:85
+#: ../data/messages:85 ../data/messages:1367
 msgid "Hiding the dock to use all the screen"
 msgstr ""
 
-#: ../data/messages:87
+#: ../data/messages:87 ../data/messages:1369
 msgid ""
 "The dock can hide itself to let all the screen for applications. But it can "
 "also be always visible like a panel.\n"
@@ -1294,38 +1409,39 @@ msgid ""
 "dock, and then select the visibility you want."
 msgstr ""
 
-#: ../data/messages:89
+#: ../data/messages:89 ../data/messages:1371
 msgid "Having more than one dock"
 msgstr ""
 
 #: ../data/messages:91 ../data/messages:95 ../data/messages:99
+#: ../data/messages:1373 ../data/messages:1377 ../data/messages:1381
 msgid "TODO"
 msgstr ""
 
-#: ../data/messages:93
+#: ../data/messages:93 ../data/messages:1375
 msgid "Deleting a dock"
 msgstr ""
 
-#: ../data/messages:97
+#: ../data/messages:97 ../data/messages:1379
 msgid "Changing the look of a dock"
 msgstr ""
 
-#: ../data/messages:103
+#: ../data/messages:103 ../data/messages:1385
 msgid "Placing applets on your desktop"
 msgstr ""
 
-#: ../data/messages:105
+#: ../data/messages:105 ../data/messages:1387
 msgid ""
 "Applets can live inside desklets, which are small windows that can be placed "
 "wherever on your desktop.\n"
 "To detach an applet from the dock, simply drag and drop it outside the dock."
 msgstr ""
 
-#: ../data/messages:107
+#: ../data/messages:107 ../data/messages:1389
 msgid "Moving desklets"
 msgstr ""
 
-#: ../data/messages:109
+#: ../data/messages:109 ../data/messages:1391
 msgid ""
 "Desklets can be moved anywhere simply with the mouse.\n"
 "They can also be rotated by dragging the small arrows on the top and left "
@@ -1334,11 +1450,11 @@ msgid ""
 "clicking on it -> \"lock position\". To unlock it, de-select this option."
 msgstr ""
 
-#: ../data/messages:111
+#: ../data/messages:111 ../data/messages:1393
 msgid "Placing desklets"
 msgstr ""
 
-#: ../data/messages:113
+#: ../data/messages:113 ../data/messages:1395
 msgid ""
 "From the menu (right-click -> visibility), you can also decide to keep it "
 "above other windows, or on the Widget Layer (if you use Compiz), or make a "
@@ -1349,26 +1465,26 @@ msgid ""
 "the small bottom-right button."
 msgstr ""
 
-#: ../data/messages:115
+#: ../data/messages:115 ../data/messages:1397
 msgid "Changing the desklets decorations"
 msgstr ""
 
-#: ../data/messages:117
+#: ../data/messages:117 ../data/messages:1399
 msgid ""
 "Desklets can have decorations. To change that, open the settings of the "
 "applet, go to Desklet, and select the decoration you want (you can provide "
 "your own one)."
 msgstr ""
 
-#: ../data/messages:119
+#: ../data/messages:119 ../data/messages:1401
 msgid "Useful Features"
 msgstr ""
 
-#: ../data/messages:121
+#: ../data/messages:121 ../data/messages:1403
 msgid "Having a calendar with tasks"
 msgstr ""
 
-#: ../data/messages:123
+#: ../data/messages:123 ../data/messages:1405
 msgid ""
 "Activate the Clock applet.\n"
 "Clicking on it will display a calendar.\n"
@@ -1378,11 +1494,11 @@ msgid ""
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
 
-#: ../data/messages:125
+#: ../data/messages:125 ../data/messages:1407
 msgid "Having a list of all windows"
 msgstr ""
 
-#: ../data/messages:127
+#: ../data/messages:127 ../data/messages:1409
 msgid ""
 "Activate the Switcher applet.\n"
 "Right-clicking on it will give you access to a list containing all the "
@@ -1392,43 +1508,43 @@ msgid ""
 "You can bind this action to the middle-click."
 msgstr ""
 
-#: ../data/messages:129
+#: ../data/messages:129 ../data/messages:1411
 msgid "Showing all the desktops"
 msgstr ""
 
-#: ../data/messages:131
+#: ../data/messages:131 ../data/messages:1413
 msgid ""
 "Activate either the Switcher applet or the Show-Desktop applet.\n"
 "Right-click on it -> \"show all the desktop\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
 
-#: ../data/messages:133
+#: ../data/messages:133 ../data/messages:1415
 msgid "Changing the screen resolution"
 msgstr ""
 
-#: ../data/messages:135
+#: ../data/messages:135 ../data/messages:1417
 msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
 msgstr ""
 
-#: ../data/messages:137
+#: ../data/messages:137 ../data/messages:1419
 msgid "Locking your session"
 msgstr ""
 
-#: ../data/messages:139
+#: ../data/messages:139 ../data/messages:1421
 msgid ""
 "Activate the Log-out applet.\n"
 "Right-click on it -> \"lock screen\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
 
-#: ../data/messages:141
+#: ../data/messages:141 ../data/messages:1423
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
 msgstr ""
 
-#: ../data/messages:143
+#: ../data/messages:143 ../data/messages:1425
 msgid ""
 "Activate the Applications Menu applet.\n"
 "Middle-click on it, or right-click -> \"quick-launch\".\n"
@@ -1437,11 +1553,11 @@ msgid ""
 "completed into \"firefox\")."
 msgstr ""
 
-#: ../data/messages:145
+#: ../data/messages:145 ../data/messages:1427
 msgid "Turning Composite OFF during games"
 msgstr ""
 
-#: ../data/messages:147
+#: ../data/messages:147 ../data/messages:1429
 msgid ""
 "Activate the Composite Manager applet.\n"
 "Clicking on it will disable the Composite, which often makes games more "
@@ -1449,11 +1565,11 @@ msgid ""
 "Clicking again on it will enable the Composite."
 msgstr ""
 
-#: ../data/messages:149
+#: ../data/messages:149 ../data/messages:1431
 msgid "Seeing the hourly weather forecast"
 msgstr ""
 
-#: ../data/messages:151
+#: ../data/messages:151 ../data/messages:1433
 msgid ""
 "Activate the Weather applet.\n"
 "Open its settings, go to Configure, and type the name of your city. Press "
@@ -1463,11 +1579,11 @@ msgid ""
 "forecast for this day."
 msgstr ""
 
-#: ../data/messages:153
+#: ../data/messages:153 ../data/messages:1435
 msgid "Adding a file or a web page into the dock"
 msgstr ""
 
-#: ../data/messages:155
+#: ../data/messages:155 ../data/messages:1437
 msgid ""
 "Simply drag a file or an html link and drop it onto the dock (an animated "
 "arrow should appear when you can drop).\n"
@@ -1477,22 +1593,22 @@ msgid ""
 "directly."
 msgstr ""
 
-#: ../data/messages:157
+#: ../data/messages:157 ../data/messages:1439
 msgid "Importing a folder into the dock"
 msgstr ""
 
-#: ../data/messages:159
+#: ../data/messages:159 ../data/messages:1441
 msgid ""
 "Simply drag a folder and drop it onto the dock (an animated arrow should "
 "appear when you can drop).\n"
 "You can choose to import the folder's files or not."
 msgstr ""
 
-#: ../data/messages:161
+#: ../data/messages:161 ../data/messages:1443
 msgid "Accessing the recent events"
 msgstr ""
 
-#: ../data/messages:163
+#: ../data/messages:163 ../data/messages:1445
 msgid ""
 "Activate the Recent-Events applet.\n"
 "You need to have the Zeitgeist daemon to be running. Install it if it's not "
@@ -1502,11 +1618,11 @@ msgid ""
 "quickly."
 msgstr ""
 
-#: ../data/messages:165
+#: ../data/messages:165 ../data/messages:1447
 msgid "Quickly opening a recent file with a launcher"
 msgstr ""
 
-#: ../data/messages:167
+#: ../data/messages:167 ../data/messages:1449
 msgid ""
 "Activate the Recent-Events applet.\n"
 "You need to have the Zeitgeist daemon to be running. Install it if it's not "
@@ -1515,11 +1631,11 @@ msgid ""
 "opened with this launcher will appear in its menu."
 msgstr ""
 
-#: ../data/messages:169
+#: ../data/messages:169 ../data/messages:1451
 msgid "Accessing disks"
 msgstr ""
 
-#: ../data/messages:171
+#: ../data/messages:171 ../data/messages:1453
 msgid ""
 "Activate the Shortcuts applet.\n"
 "Then all the disks (including USB key or external hard drives) will be "
@@ -1527,7 +1643,7 @@ msgid ""
 "To unmount a disk before disconnecting it, middle-click on its icon."
 msgstr ""
 
-#: ../data/messages:173
+#: ../data/messages:173 ../data/messages:1455
 msgid "Accessing folder bookmarks"
 msgstr ""
 
@@ -1537,14 +1653,14 @@ msgid ""
 "Then all the folders bookmarks (the ones that appear in Nautilus) will be "
 "listed in a sub-dock.\n"
 "To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
-"To remove a boorkmark, right-click on its icon -> remove"
+"To remove a bookmark, right-click on its icon -> remove"
 msgstr ""
 
-#: ../data/messages:177
+#: ../data/messages:177 ../data/messages:1459
 msgid "Having multiple instances of an applet"
 msgstr ""
 
-#: ../data/messages:179
+#: ../data/messages:179 ../data/messages:1461
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Stack, Weather, ...\n"
@@ -1554,22 +1670,22 @@ msgid ""
 "the weather in different cities."
 msgstr ""
 
-#: ../data/messages:181
+#: ../data/messages:181 ../data/messages:1463
 msgid "Adding / removing a desktop"
 msgstr ""
 
-#: ../data/messages:183
+#: ../data/messages:183 ../data/messages:1465
 msgid ""
 "Activate the Switcher applet.\n"
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
 "You can even name each of them."
 msgstr ""
 
-#: ../data/messages:185
+#: ../data/messages:185 ../data/messages:1467
 msgid "Controling the sound volume"
 msgstr ""
 
-#: ../data/messages:187
+#: ../data/messages:187 ../data/messages:1469
 msgid ""
 "Activate the Sound Volume applet.\n"
 "Then scroll up/down to increase/decrease the sound.\n"
@@ -1577,22 +1693,22 @@ msgid ""
 "Middle-click will mute/unmute."
 msgstr ""
 
-#: ../data/messages:189
+#: ../data/messages:189 ../data/messages:1471
 msgid "Controling the screen brightness"
 msgstr ""
 
-#: ../data/messages:191
+#: ../data/messages:191 ../data/messages:1473
 msgid ""
 "Activate the Screen Luminosity applet.\n"
 "Then scroll up/down to increase/decrease the brightness.\n"
 "Alternatively, you can click on the icon and move the scroll bar."
 msgstr ""
 
-#: ../data/messages:193
+#: ../data/messages:193 ../data/messages:1475
 msgid "Removing completely the gnome-panel"
 msgstr ""
 
-#: ../data/messages:195
+#: ../data/messages:195 ../data/messages:1477
 msgid ""
 "Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
 "panel, and replace its content with \"cairo-dock\".\n"
@@ -1600,7 +1716,7 @@ msgid ""
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
 
-#: ../data/messages:199
+#: ../data/messages:199 ../data/messages:1481
 msgid ""
 "If you are on Gnome, you can click on this button in order to automatically "
 "modify this key:"
@@ -1608,33 +1724,33 @@ msgstr ""
 "Ako koristite Gnome, možete kliknuti na ovo dugme da bi automatski izmenili "
 "ovaj taster:"
 
-#: ../data/messages:201
+#: ../data/messages:201 ../data/messages:1483
 msgid "Troubleshooting"
 msgstr "Pronalaženje rešenja"
 
-#: ../data/messages:203
+#: ../data/messages:203 ../data/messages:1485
 msgid "If you have any question, don't hesitate to ask on our forum."
 msgstr ""
 "Ako imate bilo koje pitanje, nemojte se ustručavati da pitate na forumu."
 
-#: ../data/messages:205
+#: ../data/messages:205 ../data/messages:1487
 msgid "Forum"
 msgstr "Forum"
 
-#: ../data/messages:207
+#: ../data/messages:207 ../data/messages:1489
 msgid "Our wiki can also help you, it is more complete on some points."
 msgstr ""
 "Naša wiki stranica može takođe pomoći, u nekim delovima je kompletnija."
 
-#: ../data/messages:209
+#: ../data/messages:209 ../data/messages:1491
 msgid "Wiki"
 msgstr "Wiki"
 
-#: ../data/messages:211
+#: ../data/messages:211 ../data/messages:1493
 msgid "I have a black background around my dock."
 msgstr "Imam crnu pozadinu oko doka."
 
-#: ../data/messages:213
+#: ../data/messages:213 ../data/messages:1495
 msgid ""
 "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
 "first, because their drivers are not yet perfect."
@@ -1642,7 +1758,7 @@ msgstr ""
 "Savet: Ako posedujete ATI ili Intel karticu, treba prvo da probate bez "
 "OpenGL, zato što drajveri za njih nisu baš najbolji."
 
-#: ../data/messages:215
+#: ../data/messages:215 ../data/messages:1497
 msgid ""
 "You need to turn on compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
@@ -1653,18 +1769,18 @@ msgid ""
 "compositing_manager' and set it to 'true'."
 msgstr ""
 
-#: ../data/messages:219
+#: ../data/messages:219 ../data/messages:1501
 msgid ""
 "If you're on Gnome with Metacity (without Compiz), you can click on this "
 "button:"
 msgstr ""
 "Ako koristite Gnome sa Metacity (bez Compiz), možete kliknuti na ovo dugme:"
 
-#: ../data/messages:221
+#: ../data/messages:221 ../data/messages:1503
 msgid "My machine is too old to run a composite manager."
 msgstr "Moj računar je suviše star za kompozitni menadžer."
 
-#: ../data/messages:223
+#: ../data/messages:223 ../data/messages:1505
 msgid ""
 "Don't panic, Cairo-Dock can emulate the transparency.\n"
 "To get rid of the black background, simply enable the corresponding option "
@@ -1674,11 +1790,11 @@ msgstr ""
 "Da bi ste se oslobodili crne pozadine, jednostavno omogućite odgovarajuću "
 "opciju na kraju modula «Sistem»"
 
-#: ../data/messages:225
+#: ../data/messages:225 ../data/messages:1507
 msgid "The dock is horribly slow when I move the mouse into it."
 msgstr "Dok je užasno spor kada pomerim miša u njega."
 
-#: ../data/messages:227
+#: ../data/messages:227 ../data/messages:1509
 msgid ""
 "If you have an Nvidia GeForce8 graphics card, please install the latest "
 "drivers, as the first ones were really buggy.\n"
@@ -1694,11 +1810,11 @@ msgstr ""
 "Ako se dok izvršava sa OpenGL, probajte da ga onemogućite tako što ćete ga "
 "pokrenuti sa «cairo-dock -c»."
 
-#: ../data/messages:229
+#: ../data/messages:229 ../data/messages:1511
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
 msgstr "Nemam one divne efekte kao što su vatra, rotiranje kocke, itd."
 
-#: ../data/messages:231
+#: ../data/messages:231 ../data/messages:1513
 msgid ""
 "Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
 "might get a lot of visual artifacts."
@@ -1706,7 +1822,7 @@ msgstr ""
 "Savet: Možete prisiliti OpenGL pokretanjem doka sa «cairo-dock -o», ali "
 "imaćete dosta neželjenih vizualnih efekata."
 
-#: ../data/messages:233
+#: ../data/messages:233 ../data/messages:1515
 msgid ""
 "You need a graphics card with drivers that support OpenGL2.0. Most Nvidia "
 "cards can do this, as can more and more Intel cards. Most ATI cards do not "
@@ -1716,15 +1832,15 @@ msgstr ""
 "Većina Nvidia kartica podržava ovo i sve više i više Intel kartica. Većina "
 "ATI kartica ne podržava OpenGL 2.0."
 
-#: ../data/messages:235
+#: ../data/messages:235 ../data/messages:1517
 msgid "I don't have any themes in the Theme Manager, except the default one."
 msgstr "Nemam ni jednu temu, osim podrazumevane, u Menadžeru tema."
 
-#: ../data/messages:237
+#: ../data/messages:237 ../data/messages:1519
 msgid "Hint : Up to version 2.1.1-2, wget was used."
 msgstr "Savet: sve do verzije 2.1.1-2, koristio se wget."
 
-#: ../data/messages:239
+#: ../data/messages:239 ../data/messages:1521
 msgid ""
 "Be sure that you are connected to the Net.\n"
 " If your connection is very slow, you can increase the connection timeout in "
@@ -1740,11 +1856,11 @@ msgstr ""
 "potražite na webu kako se to radi (u suštini, treba da postavite "
 "promenjljivu okruženja \"http_proxy\")."
 
-#: ../data/messages:241
+#: ../data/messages:241 ../data/messages:1523
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
 msgstr "Aplet «brzina neta» pokazuje 0 čak i kada preuzimam neki fajl"
 
-#: ../data/messages:243
+#: ../data/messages:243 ../data/messages:1525
 msgid ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
@@ -1752,7 +1868,7 @@ msgstr ""
 "Savet: možete pokrenuti više kopija ovog apleta ako želite da nadgledate "
 "više interfejsa."
 
-#: ../data/messages:245
+#: ../data/messages:245 ../data/messages:1527
 msgid ""
 "You must tell the applet which interface you're using to connect to the Net "
 "(by default, this is «eth0»).\n"
@@ -1766,11 +1882,11 @@ msgstr ""
 "terminalu otkucajte «ifconfig» i ignorišite «loop» interfejs. Verovatno je "
 "nešto kao «eth1», «ath0», ili «wifi0»."
 
-#: ../data/messages:247
+#: ../data/messages:247 ../data/messages:1529
 msgid "The dustbin remains empty even when I delete a file."
 msgstr "Kanta za otpatke ostaje prazna čak i kada obrišem fajl."
 
-#: ../data/messages:249
+#: ../data/messages:249 ../data/messages:1531
 msgid ""
 "if you're using KDE, you may have to specify the path to the trash folder.\n"
 "Just edit the applet's configuration, and fill in the Trash path; it is "
@@ -1784,12 +1900,12 @@ msgstr ""
 "kada ovde unosite putanju!!! (nemojte unositi praznine i nevidljive "
 "karaktere)."
 
-#: ../data/messages:251
+#: ../data/messages:251 ../data/messages:1533
 msgid ""
 "There is no icon in the Applications Menu even though I enable the option."
 msgstr "Nema ikona u Programskom meniju, iako sam omogućio ovu opciju."
 
-#: ../data/messages:253
+#: ../data/messages:253 ../data/messages:1535
 msgid ""
 "In Gnome, there is an option that override the dock's one. To enable icons "
 "in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable "
@@ -1799,19 +1915,19 @@ msgstr ""
 "ikone, otvorili 'gconf-editor', idite na Desktop/Gnome/Interface i omogućite "
 "opcije \"menus have icons\" i \"buttons have icons\". "
 
-#: ../data/messages:257
+#: ../data/messages:257 ../data/messages:1539
 msgid "If you're on Gnome you can click on this button:"
 msgstr "Ako koristite Gnome možete kliknuti na ovo dugme:"
 
-#: ../data/messages:259
+#: ../data/messages:259 ../data/messages:1541
 msgid "The Project"
 msgstr "Projekt"
 
-#: ../data/messages:261
+#: ../data/messages:261 ../data/messages:1543
 msgid "Join the project!"
 msgstr "Pridruži se projektu!"
 
-#: ../data/messages:263
+#: ../data/messages:263 ../data/messages:1545
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
@@ -1822,17 +1938,17 @@ msgid ""
 "we’ll be happy to integrate it on our server !"
 msgstr ""
 
-#: ../data/messages:265
+#: ../data/messages:265 ../data/messages:1547
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
 msgstr ""
 "Ako želite da izradite aplet, kompletna dokumentacje je na raspolaganju ovde."
 
-#: ../data/messages:267
+#: ../data/messages:267 ../data/messages:1549
 msgid "Documentation"
 msgstr "Dokumentacija"
 
-#: ../data/messages:269
+#: ../data/messages:269 ../data/messages:1551
 msgid ""
 "If you wish to develop an applet in Python, Perl or any other language,\n"
 "or to interact with the dock in any kind of way, a full DBus API is "
@@ -1843,11 +1959,11 @@ msgstr ""
 "ili želite interakciju sa dokom na bilo koji način, potpuno objašnjenje DBus "
 "API je ovde."
 
-#: ../data/messages:271
+#: ../data/messages:271 ../data/messages:1553
 msgid "DBus API"
 msgstr "DBus API"
 
-#: ../data/messages:273
+#: ../data/messages:273 ../data/messages:1555
 msgid ""
 "\n"
 "\n"
@@ -1857,23 +1973,31 @@ msgstr ""
 "\n"
 "Cairo-dok Tim"
 
-#: ../data/messages:275
+#: ../data/messages:275 ../data/messages:1557
 msgid "Websites"
 msgstr "Internet stranice"
 
-#: ../data/messages:285
+#: ../data/messages:277 ../data/messages:1559
+msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
+msgstr "Problemi? Predlozi? Želite samo da popričate sa nama? Navratite!"
+
+#: ../data/messages:279 ../data/messages:1561
+msgid "Community site"
+msgstr "Sajt zajednice"
+
+#: ../data/messages:285 ../data/messages:1567
 msgid "More applets available online!"
 msgstr ""
 
-#: ../data/messages:287
+#: ../data/messages:287 ../data/messages:1569
 msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr "Cairo-Dock-Plug-ins-Extras"
 
-#: ../data/messages:289
+#: ../data/messages:289 ../data/messages:1571
 msgid "Repositories"
 msgstr "Skladišta"
 
-#: ../data/messages:291
+#: ../data/messages:291 ../data/messages:1573
 msgid ""
 "We maintain two repositories for Debian, Ubuntu and other Debian-forked:\n"
 " One for stable releases and another which is updated weekly (unstable "
@@ -1883,15 +2007,15 @@ msgstr ""
 "Debian:\n"
 " Jednu stabilnu verziju i jednu koja se ažurira nedeljno (nestabilna verzija)"
 
-#: ../data/messages:293
+#: ../data/messages:293 ../data/messages:1575
 msgid "Debian/Ubuntu"
 msgstr "Debian/Ubuntu"
 
-#: ../data/messages:295
+#: ../data/messages:295 ../data/messages:1577
 msgid "Ubuntu"
 msgstr "Ubuntu"
 
-#: ../data/messages:299
+#: ../data/messages:299 ../data/messages:1581
 msgid ""
 "If you're on Ubuntu, you can add our 'stable' repository by clicking on this "
 "button:\n"
@@ -1902,7 +2026,7 @@ msgstr ""
 " Nakon toga, možete pokrenuti vaš upravljač za ažuriranje da bi instalili "
 "najnoviju stabilnu verziju."
 
-#: ../data/messages:303
+#: ../data/messages:303 ../data/messages:1585
 msgid ""
 "If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) by "
 "clicking on this button:\n"
@@ -1914,11 +2038,11 @@ msgstr ""
 " Nakon toga, možete pokrenuti vaš upravljač za ažuriranje da bi instalili "
 "najnoviju nedeljnu verziju."
 
-#: ../data/messages:305
+#: ../data/messages:305 ../data/messages:1587
 msgid "Debian"
 msgstr "Debian"
 
-#: ../data/messages:309
+#: ../data/messages:309 ../data/messages:1591
 msgid ""
 "If you're on Debian Stable, you can add our 'stable' repository by clicking "
 "on this button:\n"
@@ -1930,7 +2054,7 @@ msgstr ""
 " Nakon toga, možete ukloniti sve 'cairo-dock*' pakete, ažurirajte vaš sistem "
 "i ponovo instalirajte 'cairo-dock' paket."
 
-#: ../data/messages:313
+#: ../data/messages:313 ../data/messages:1595
 msgid ""
 "If you're on Debian Unstable, you can add our 'stable' repository by "
 "clicking on this button:\n"
@@ -1942,240 +2066,216 @@ msgstr ""
 " Nakon toga, možete ukloniti sve 'cairo-dock*' pakete, ažurirajte vaš sistem "
 "i ponovo instalirajte 'cairo-dock' paket."
 
-#: ../data/messages:317
-msgid ""
-"If you're on Debian Stable, you can add our 'weekly' ppa (can be unstable) "
-"by clicking on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the your "
-"system and reinstall 'cairo-dock' package."
-msgstr ""
-"Ako ste u Debianu (stabilnom), možete dodati naše 'nedeljne' lične arhive "
-"paketa - ppa (mogu biti nestabilne) klikom na ovo dugme:\n"
-" Nakon toga, možete ukloniti sve 'cairo-dock*' pakete, ažurirajte vaš sistem "
-"i ponovo instalirajte 'cairo-dock' paket."
-
-#: ../data/messages:321
-msgid ""
-"If you're on Debian Unstable, you can add our 'weekly' ppa (can be unstable) "
-"by clicking on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the your "
-"system and reinstall 'cairo-dock' package."
-msgstr ""
-"Ako ste u Debianu (nestabilnom), možete dodati naše 'nedeljne' lične arhive "
-"paketa - ppa (mogu biti nestabilne) klikom na ovo dugme:\n"
-" Nakon toga, možete ukloniti sve 'cairo-dock*' pakete, ažurirajte vaš sistem "
-"i ponovo instalirajte 'cairo-dock' paket."
-
-#: ../data/messages:323 ../data/messages:325 ../data/messages:1415
-#: ../data/messages:1495 ../data/messages:1527
+#: ../data/messages:315 ../data/messages:317 ../data/messages:1733
+#: ../data/messages:1813 ../data/messages:1845
 msgid "Icon"
 msgstr ""
 
-#: ../data/messages:327
+#: ../data/messages:319
 msgid "Name of the dock it belongs to:"
 msgstr ""
 
-#: ../data/messages:329
+#: ../data/messages:321
 msgid "Name of the icon as it will appear in its caption in the dock:"
 msgstr ""
 
-#: ../data/messages:331
+#: ../data/messages:323
 msgid "Leave empty to use the default one."
 msgstr ""
 
-#: ../data/messages:333
+#: ../data/messages:325
 msgid "Image filename:"
 msgstr ""
 
-#: ../data/messages:335
+#: ../data/messages:327
 msgid "Set to 0 to use the default applet size"
 msgstr ""
 
-#: ../data/messages:337
+#: ../data/messages:329
 msgid "Desired icon size for this applet"
 msgstr ""
 
-#: ../data/messages:339
+#: ../data/messages:331
 msgid "Applet's Handbook"
 msgstr ""
 
-#: ../data/messages:341
+#: ../data/messages:333
 msgid "Desklet"
 msgstr "Programčić radne površine"
 
-#: ../data/messages:345
+#: ../data/messages:337
 msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
 msgstr ""
 
-#: ../data/messages:347
+#: ../data/messages:339
 msgid "Lock position?"
 msgstr ""
 
-#: ../data/messages:349
+#: ../data/messages:341
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
 
-#: ../data/messages:351
+#: ../data/messages:343
 msgid "Desklet dimensions (width x height):"
 msgstr ""
 
-#: ../data/messages:353
+#: ../data/messages:345
 msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
 
-#: ../data/messages:355
+#: ../data/messages:347
 msgid "Desklet position (x, y):"
 msgstr ""
 
-#: ../data/messages:357
+#: ../data/messages:349
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
 msgstr ""
 
-#: ../data/messages:359
+#: ../data/messages:351
 msgid "Rotation:"
 msgstr ""
 
-#: ../data/messages:363
+#: ../data/messages:355
 msgid "Is detached from the dock"
 msgstr ""
 
-#: ../data/messages:365
+#: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=utility)"
 msgstr ""
 
-#: ../data/messages:367 ../data/messages:433 ../data/messages:471
-#: ../data/messages:601 ../data/messages:663 ../data/messages:1323
+#: ../data/messages:359 ../data/messages:425 ../data/messages:463
+#: ../data/messages:593 ../data/messages:655 ../data/messages:1641
 msgid "Visibility:"
 msgstr "Vidljivost:"
 
-#: ../data/messages:373
+#: ../data/messages:365
 msgid "Keep below"
 msgstr ""
 
-#: ../data/messages:375
+#: ../data/messages:367
 msgid "Keep on widget layer"
 msgstr ""
 
-#: ../data/messages:379
+#: ../data/messages:371
 msgid "Should be visible on all desktops?"
 msgstr ""
 
-#: ../data/messages:381 ../data/messages:977
+#: ../data/messages:373 ../data/messages:973
 msgid "Decorations"
 msgstr "Ukrašavanja"
 
-#: ../data/messages:383
+#: ../data/messages:375
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
 
-#: ../data/messages:385
+#: ../data/messages:377
 msgid "Choose a decoration theme for this desklet:"
 msgstr ""
 
-#: ../data/messages:387
+#: ../data/messages:379
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
 
-#: ../data/messages:389
+#: ../data/messages:381
 msgid "Background image:"
 msgstr ""
 
-#: ../data/messages:391
+#: ../data/messages:383
 msgid "Background transparency:"
 msgstr ""
 
-#: ../data/messages:393
+#: ../data/messages:385
 msgid "in pixels. Use this to adjust the left position of drawings."
 msgstr ""
 
-#: ../data/messages:395
+#: ../data/messages:387
 msgid "Left offset:"
 msgstr ""
 
-#: ../data/messages:397
+#: ../data/messages:389
 msgid "in pixels. Use this to adjust the top position of drawings."
 msgstr ""
 
-#: ../data/messages:399
+#: ../data/messages:391
 msgid "Top offset:"
 msgstr ""
 
-#: ../data/messages:401
+#: ../data/messages:393
 msgid "in pixels. Use this to adjust the right position of drawings."
 msgstr ""
 
-#: ../data/messages:403
+#: ../data/messages:395
 msgid "Right offset:"
 msgstr ""
 
-#: ../data/messages:405
+#: ../data/messages:397
 msgid "in pixels. Use this to adjust the bottom position of drawings."
 msgstr ""
 
-#: ../data/messages:407
+#: ../data/messages:399
 msgid "Bottom offset:"
 msgstr ""
 
-#: ../data/messages:409
+#: ../data/messages:401
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
 
-#: ../data/messages:411
+#: ../data/messages:403
 msgid "Foreground image:"
 msgstr ""
 
-#: ../data/messages:413
+#: ../data/messages:405
 msgid "Foreground tansparency:"
 msgstr ""
 
-#: ../data/messages:415 ../data/messages:1287
+#: ../data/messages:407 ../data/messages:1605
 msgid "Behavior"
 msgstr "Ponašanje"
 
-#: ../data/messages:417 ../data/messages:555 ../data/messages:1289
+#: ../data/messages:409 ../data/messages:547 ../data/messages:1607
 msgid "Position on the screen"
 msgstr "Položaj na ekranu"
 
-#: ../data/messages:419 ../data/messages:557 ../data/messages:1291
+#: ../data/messages:411 ../data/messages:549 ../data/messages:1609
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr "Odaberite na koju ivicu ekrana će biti postavljen dok:"
 
-#: ../data/messages:421 ../data/messages:559 ../data/messages:1293
+#: ../data/messages:413 ../data/messages:551 ../data/messages:1611
 msgid "bottom"
 msgstr "dno"
 
-#: ../data/messages:423 ../data/messages:561 ../data/messages:1295
+#: ../data/messages:415 ../data/messages:553 ../data/messages:1613
 msgid "top"
 msgstr "vrh"
 
-#: ../data/messages:425 ../data/messages:563 ../data/messages:573
-#: ../data/messages:1297
+#: ../data/messages:417 ../data/messages:555 ../data/messages:565
+#: ../data/messages:1615
 msgid "right"
 msgstr "desno"
 
-#: ../data/messages:427 ../data/messages:565 ../data/messages:571
-#: ../data/messages:1299
+#: ../data/messages:419 ../data/messages:557 ../data/messages:563
+#: ../data/messages:1617
 msgid "left"
 msgstr "levo"
 
-#: ../data/messages:429 ../data/messages:597
+#: ../data/messages:421 ../data/messages:589
 msgid "Visibility of the main dock"
 msgstr "Vidljivost glavnog doka"
 
-#: ../data/messages:431 ../data/messages:599 ../data/messages:1321
+#: ../data/messages:423 ../data/messages:591 ../data/messages:1639
 msgid ""
 "Modes are sorted from the most intrusive to the less intrusive.\n"
 "When the dock is hidden or below a window, place the mouse on the screen's "
@@ -2189,40 +2289,40 @@ msgstr ""
 "Kada dok iskoči nakon poziva preko prečice, pojaviće se na položaju miša. "
 "Ostatak vremena će biti nevidljiv, to jest, ponašaće se kao meni."
 
-#: ../data/messages:437 ../data/messages:605 ../data/messages:1327
+#: ../data/messages:429 ../data/messages:597 ../data/messages:1645
 msgid "Reserve space for the dock"
 msgstr "Obezbedi prostor za dok"
 
-#: ../data/messages:439 ../data/messages:607 ../data/messages:1329
+#: ../data/messages:431 ../data/messages:599 ../data/messages:1647
 msgid "Keep the dock below"
 msgstr "Zadrži dok ispod"
 
-#: ../data/messages:441 ../data/messages:609 ../data/messages:1331
+#: ../data/messages:433 ../data/messages:601 ../data/messages:1649
 msgid "Hide the dock when it overlaps the current window"
 msgstr "Sakrij dok kada preklapa trenutni prozor"
 
-#: ../data/messages:443 ../data/messages:611 ../data/messages:1333
+#: ../data/messages:435 ../data/messages:603 ../data/messages:1651
 msgid "Hide the dock whenever it overlaps any window"
 msgstr "Sakrij dok kada preklapa bilo koji prozor"
 
-#: ../data/messages:445 ../data/messages:613 ../data/messages:1335
+#: ../data/messages:437 ../data/messages:605 ../data/messages:1653
 msgid "Keep the dock hidden"
 msgstr "Zadrži dok skriven"
 
-#: ../data/messages:447 ../data/messages:615 ../data/messages:1337
+#: ../data/messages:439 ../data/messages:607 ../data/messages:1655
 msgid "Pop-up on shortcut"
 msgstr "Iskoči na prečicu"
 
-#: ../data/messages:449 ../data/messages:617
+#: ../data/messages:441 ../data/messages:609
 msgid "Effect used to hide the dock:"
 msgstr "Efekat koji se koristi za skrivanje doka"
 
-#: ../data/messages:451 ../data/messages:483 ../data/messages:619
-#: ../data/messages:1463
+#: ../data/messages:443 ../data/messages:475 ../data/messages:611
+#: ../data/messages:1781
 msgid "None"
 msgstr "Nijedan"
 
-#: ../data/messages:463 ../data/messages:649
+#: ../data/messages:455 ../data/messages:641
 msgid ""
 "When you press the shortcut, the dock will show itself at the potition of "
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
@@ -2231,30 +2331,30 @@ msgstr ""
 "Kada pritisnete prečicu, dok će se prikazati na položaju miša. Ostatak "
 "vremena će biti nevidljiv, to jest ponašaće se kao meni."
 
-#: ../data/messages:465 ../data/messages:651
+#: ../data/messages:457 ../data/messages:643
 msgid "Keyboard shortcut to pop-up the dock:"
 msgstr "Prečica sa tastature za iskakanje doka:"
 
-#: ../data/messages:467
+#: ../data/messages:459
 msgid "Visibility of sub-docks"
 msgstr "Vidljivost pod-dokova"
 
-#: ../data/messages:469 ../data/messages:661
+#: ../data/messages:461 ../data/messages:653
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
 msgstr ""
 "pojaviće se ili kada kliknete na ikonu ili kada zadržite miša iznad nje."
 
-#: ../data/messages:473 ../data/messages:665
+#: ../data/messages:465 ../data/messages:657
 msgid "Appear on mouse over"
 msgstr "Pojavi se kad je miš iznad"
 
-#: ../data/messages:475 ../data/messages:667
+#: ../data/messages:467 ../data/messages:659
 msgid "Appear on click"
 msgstr "Pojavi se na klik"
 
-#: ../data/messages:479
+#: ../data/messages:471
 msgid ""
 "None     : Don't show opened windows in the dock.\n"
 "MacOSX   : Mix applications with its launcher, show other windows only if "
@@ -2272,31 +2372,31 @@ msgstr ""
 "Gnome: Razdvoj traku zadataka od pokretača i prikaži samo prozore koji se "
 "nalaze na trenutnoj radnoj površini."
 
-#: ../data/messages:481
+#: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
 msgstr "Ponašanje trake zadataka"
 
-#: ../data/messages:485
+#: ../data/messages:477
 msgid "MacOSX"
 msgstr "MacOSX"
 
-#: ../data/messages:487
+#: ../data/messages:479
 msgid "KDE"
 msgstr "KDE"
 
-#: ../data/messages:489
+#: ../data/messages:481
 msgid "Gnome"
 msgstr "Gnome"
 
-#: ../data/messages:491
+#: ../data/messages:483
 msgid "Icons' animations and effects"
 msgstr "Animacije i efekti ikona"
 
-#: ../data/messages:497
+#: ../data/messages:489
 msgid "On appearance/disappearance:"
 msgstr "Na pojavljivanje/nestajanje"
 
-#: ../data/messages:503 ../data/messages:1043
+#: ../data/messages:495 ../data/messages:1039
 msgid ""
 "Leave empty to use the current icon theme of your system. You can enter the "
 "name of a theme that is installed on your system (like 'Gartoon' or "
@@ -2306,35 +2406,35 @@ msgstr ""
 "naziv teme koja je instalirana na vašem sistemu (na primer 'Gartoon' ili "
 "'Human') ili putanju do fascikle koja sadrži ikone."
 
-#: ../data/messages:505
+#: ../data/messages:497
 msgid "Choose a theme of icons :"
 msgstr "Odaberi temu za ikone:"
 
-#: ../data/messages:507
+#: ../data/messages:499
 msgid "Icons size:"
 msgstr "Dimenzije ikona:"
 
-#: ../data/messages:509
+#: ../data/messages:501
 msgid "Very small"
 msgstr "Vrlo male"
 
-#: ../data/messages:511
+#: ../data/messages:503
 msgid "Small"
 msgstr "Male"
 
-#: ../data/messages:513
+#: ../data/messages:505
 msgid "Medium"
 msgstr "Srednje"
 
-#: ../data/messages:515
+#: ../data/messages:507
 msgid "Big"
 msgstr "Velike"
 
-#: ../data/messages:517
+#: ../data/messages:509
 msgid "Very Big"
 msgstr "Vrlo velike"
 
-#: ../data/messages:519
+#: ../data/messages:511
 msgid ""
 "This will separate launchers, application, and applets from each others. "
 "Separators will be automatically inserted then."
@@ -2342,47 +2442,47 @@ msgstr ""
 "Ovo će međusobno razdvojiti pokretače, programe i aplete. Odvajači će biti "
 "automatski umetnuti."
 
-#: ../data/messages:521 ../data/messages:1133
+#: ../data/messages:513 ../data/messages:1129
 msgid "Separate the different types of icons?"
 msgstr "Ovojiti različite vrste ikona?"
 
-#: ../data/messages:523 ../data/messages:1143
+#: ../data/messages:515 ../data/messages:1139
 msgid "Order of the different types of icons :"
 msgstr "Raspered različitih vrsta ikona:"
 
-#: ../data/messages:525 ../data/messages:1145
+#: ../data/messages:517 ../data/messages:1141
 msgid "launchers"
 msgstr "pokretači"
 
-#: ../data/messages:527 ../data/messages:1147
+#: ../data/messages:519 ../data/messages:1143
 msgid "applications"
 msgstr "programi"
 
-#: ../data/messages:529 ../data/messages:1149
+#: ../data/messages:521 ../data/messages:1145
 msgid "applets"
 msgstr "apleti"
 
-#: ../data/messages:533 ../data/messages:923
+#: ../data/messages:525 ../data/messages:919
 msgid "Choose the default view for main docks :"
 msgstr "Odaberite podrazumevani izgled glavnog doka:"
 
-#: ../data/messages:535 ../data/messages:927
+#: ../data/messages:527 ../data/messages:923
 msgid "You can overwrite this parameter for each sub-dock."
 msgstr "Možete prebrisati ovaj parametar za svaki pod-dok."
 
-#: ../data/messages:537 ../data/messages:929
+#: ../data/messages:529 ../data/messages:925
 msgid "Choose the default view for sub-docks :"
 msgstr "Odaberite podrazumevani izgled pod-dokova:"
 
-#: ../data/messages:539
+#: ../data/messages:531
 msgid "Add-ons"
 msgstr "Dodaci"
 
-#: ../data/messages:541
+#: ../data/messages:533
 msgid "Add or remove any applet"
 msgstr "Dodaj ili ukoni bilo koji aplet"
 
-#: ../data/messages:543
+#: ../data/messages:535
 msgid ""
 "Select a line to get a preview and a description of the applet.\n"
 "Click on the left check-box to (de)activate an applet.\n"
@@ -2393,17 +2493,17 @@ msgstr ""
 "Jednom, kada je aplet aktivan, možete ga podesiti desnim klikom na njegovu "
 "ikonu."
 
-#: ../data/messages:545
+#: ../data/messages:537
 msgid ""
 "You can install them by simply drag-and-dropping the link onto your dock."
 msgstr ""
 "Možete ih instalirati jednostavno povlačenjem i ispuštanjem veze u dok."
 
-#: ../data/messages:551 ../data/messages:1369
+#: ../data/messages:543 ../data/messages:1687
 msgid "Themes"
 msgstr "Teme"
 
-#: ../data/messages:567 ../data/messages:1301
+#: ../data/messages:559 ../data/messages:1619
 msgid ""
 "When set to 0 the dock will position itself relative to the left corner if "
 "horizontal and the top corner if vertical. When set to 1 it will position "
@@ -2416,15 +2516,15 @@ msgstr ""
 "na 1, dok će se pozicionirati relativno u odnosu na desnu ivicu ako je "
 "horizonatalan i donji ugao ako je vertikalan."
 
-#: ../data/messages:569 ../data/messages:1303
+#: ../data/messages:561 ../data/messages:1621
 msgid "Relative alignment:"
 msgstr "Relativno poravnanje:"
 
-#: ../data/messages:575 ../data/messages:1305
+#: ../data/messages:567 ../data/messages:1623
 msgid "Offset from the screen's edge"
 msgstr "Razmak od ivice ekrana"
 
-#: ../data/messages:577 ../data/messages:1307
+#: ../data/messages:569 ../data/messages:1625
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
@@ -2432,11 +2532,11 @@ msgstr ""
 "Razmak od apsolutnog položaja u odnosu na ivicu ekrana, u pikselima. Možete "
 "pomerati dok držeći pritisnut ALT ili CTRL taster i levi taster miša."
 
-#: ../data/messages:579 ../data/messages:1309
+#: ../data/messages:571 ../data/messages:1627
 msgid "Lateral offset:"
 msgstr "Bočno pomeranje:"
 
-#: ../data/messages:581 ../data/messages:1311
+#: ../data/messages:573 ../data/messages:1629
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
@@ -2444,15 +2544,15 @@ msgstr ""
 "u pikselima. Možete pomerati dok držeći pritisnut ALT ili CTRL taster i levi "
 "taster miša."
 
-#: ../data/messages:583 ../data/messages:1313
+#: ../data/messages:575 ../data/messages:1631
 msgid "Distance to the screen edge:"
 msgstr "Odstojanje od ivice ekrana:"
 
-#: ../data/messages:585
+#: ../data/messages:577
 msgid "Multiple screens"
 msgstr "Višestruki ekrani"
 
-#: ../data/messages:587
+#: ../data/messages:579
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama to manage "
 "them."
@@ -2460,63 +2560,63 @@ msgstr ""
 "Opcija se koristi ako imate dupli ekran i koristite Xinerama da upravljate "
 "njima."
 
-#: ../data/messages:589
+#: ../data/messages:581
 msgid "Use Xinerama?"
 msgstr "Koristi Xinerama?"
 
-#: ../data/messages:591
+#: ../data/messages:583
 msgid "0 is the first screen."
 msgstr "0 je prvi ekran."
 
-#: ../data/messages:593 ../data/messages:1317
+#: ../data/messages:585 ../data/messages:1635
 msgid "Number of the screen where the dock should be located:"
 msgstr "Broj ekrana u koji dok treba da se smesti:"
 
-#: ../data/messages:595
+#: ../data/messages:587
 msgid "Accessibility"
 msgstr "Dostupnost"
 
-#: ../data/messages:631
+#: ../data/messages:623
 msgid "in ms. 0 means no delay."
 msgstr "u ms. 0 znači nema kašnjenja."
 
-#: ../data/messages:633
+#: ../data/messages:625
 msgid "Delay before the dock unhides itself:"
 msgstr "Kašnjenje pre nego što se dok prikaže:"
 
-#: ../data/messages:635
+#: ../data/messages:627
 msgid "How to call the dock back:"
 msgstr "Kako opozvati dok:"
 
-#: ../data/messages:637
+#: ../data/messages:629
 msgid "Hit the screen's border"
 msgstr "Udari u ivicu ekrana"
 
-#: ../data/messages:639
+#: ../data/messages:631
 msgid "Hit where the dock is"
 msgstr "Udari na mesto gde je dok"
 
-#: ../data/messages:641
+#: ../data/messages:633
 msgid "Hit the screen's corner"
 msgstr "Udari u ivicu ekrana"
 
-#: ../data/messages:643
+#: ../data/messages:635
 msgid "Hit a zone"
 msgstr "Udari yonu"
 
-#: ../data/messages:645
+#: ../data/messages:637
 msgid "Size of the zone :"
 msgstr "Dimenzije zone:"
 
-#: ../data/messages:647
+#: ../data/messages:639
 msgid "Image to display on the zone :"
 msgstr "Slika koja će biti prikazana u zoni:"
 
-#: ../data/messages:653
+#: ../data/messages:645
 msgid "Additional parameters"
 msgstr "Dodatni parametri"
 
-#: ../data/messages:655
+#: ../data/messages:647
 msgid ""
 "This is only usefull if you do not already use auto-hide and if your Window "
 "Manager allows the dock in front of fullscreen windows (which is rare)."
@@ -2525,31 +2625,31 @@ msgstr ""
 "prozora dozvoljava dok u prednjem planu prozora koji je preko celog ekrana "
 "(što je retko)."
 
-#: ../data/messages:657
+#: ../data/messages:649
 msgid "Automatically hide the dock when a window becomes full screen?"
 msgstr "Automatski sakrij dok kada je prozor povećan preko celog ekrana?"
 
-#: ../data/messages:659
+#: ../data/messages:651
 msgid "Sub-docks' visibility"
 msgstr "Vidljivost pod-doka"
 
-#: ../data/messages:669 ../data/messages:673
+#: ../data/messages:661 ../data/messages:665
 msgid "in ms."
 msgstr "u ms."
 
-#: ../data/messages:671
+#: ../data/messages:663
 msgid "Delay before displaying a sub-dock:"
 msgstr "Kašnjenje pre prikazivanja pod-doka:"
 
-#: ../data/messages:675
+#: ../data/messages:667
 msgid "Delay before leaving a sub-dock takes effect:"
 msgstr "Košnjenje pre napuštanja pod-doka koristi efekat:"
 
-#: ../data/messages:677
+#: ../data/messages:669
 msgid "TaskBar"
 msgstr "Traka zadataka"
 
-#: ../data/messages:681
+#: ../data/messages:673
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
@@ -2557,19 +2657,19 @@ msgstr ""
 "Cairo-dok će se ponašati kao vaša traka zadataka. Preporučujemo da uklonite "
 "bilo koju drufu traku zadataka."
 
-#: ../data/messages:683
+#: ../data/messages:675
 msgid "Show currently opened applications in the dock?"
 msgstr "Prikaži trenutno otvorene programe u doku?"
 
-#: ../data/messages:685
+#: ../data/messages:677
 msgid "Only show icons whose windows are minimised"
 msgstr "Prikaži samo ikone prozora koji su minimizovani."
 
-#: ../data/messages:687
+#: ../data/messages:679
 msgid "Only show applications on current desktop"
 msgstr "Prikaži programe samo na trenutnoj radnoj površini"
 
-#: ../data/messages:689
+#: ../data/messages:681
 msgid ""
 "Allows launchers to act as applications when their programs are running and "
 "displays a marker on icons to indicate this. You can launch other occurences "
@@ -2579,11 +2679,11 @@ msgstr ""
 "aktivirani i da prikaže marker na ikoni da pi to pokazao. Možete pokrenuti "
 "sledeći primerak programa preko SHIFT +klik."
 
-#: ../data/messages:691
+#: ../data/messages:683
 msgid "Mix launchers and applications"
 msgstr "Izmešaj pokretače i programe"
 
-#: ../data/messages:693
+#: ../data/messages:685
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
@@ -2591,23 +2691,23 @@ msgstr ""
 "Ovo vam omogućava da grupišete sve prozore određenog programa u specifičan "
 "pod-dok, i da vršite akcije nad svim prozorima u isto vreme."
 
-#: ../data/messages:695
+#: ../data/messages:687
 msgid "Group windows from the same application in a sub-dock ?"
 msgstr "Grupisati prozore istog programa u pod-dok?"
 
-#: ../data/messages:697 ../data/messages:707
+#: ../data/messages:689 ../data/messages:699
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
 msgstr "Unesite klasu programa, odvojeno sa tačka-zarez ';'"
 
-#: ../data/messages:699 ../data/messages:709
+#: ../data/messages:691 ../data/messages:701
 msgid "\t\tExcept the following classes:"
 msgstr "\t\tOsim sledećih klasa:"
 
-#: ../data/messages:701
+#: ../data/messages:693
 msgid "Representation"
 msgstr "Predstavljanje"
 
-#: ../data/messages:703
+#: ../data/messages:695
 msgid ""
 "If not set, the icon provided by X for each application will be used. If "
 "set, the same icon as the corresponding launcher will be used for each "
@@ -2617,11 +2717,11 @@ msgstr ""
 "Ako jeste, ista ikona kao odgovarajući pokretač će biti korišćena za svaki "
 "program."
 
-#: ../data/messages:705
+#: ../data/messages:697
 msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Prebriši X ikonu ikonom pokretača?"
 
-#: ../data/messages:711
+#: ../data/messages:703
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
@@ -2629,73 +2729,73 @@ msgstr ""
 "Potreban je kompzitni menadžer da bi se prikazale sličice.\n"
 "OpenGL je potreban za iscrtavanje unazad savijenih ikona."
 
-#: ../data/messages:713
+#: ../data/messages:705
 msgid "How to draw minimised windows ?"
 msgstr "Kako da iscrtam minimizovane ikone?"
 
-#: ../data/messages:715
+#: ../data/messages:707
 msgid "Make the icon transparent"
 msgstr "Načini ikone providnim"
 
-#: ../data/messages:717
+#: ../data/messages:709
 msgid "Show a window's thumbnail"
 msgstr "Prikaži sličice prozora"
 
-#: ../data/messages:719
+#: ../data/messages:711
 msgid "Draw it bent backwards"
 msgstr "Iscrtaj ih savijene unazad"
 
-#: ../data/messages:721
+#: ../data/messages:713
 msgid "Transparency of icons whose window is minimised:"
 msgstr "Providnost ikona čiji su prozori minimizovani:"
 
-#: ../data/messages:723 ../data/messages:877 ../data/messages:991
-#: ../data/messages:1017 ../data/messages:1089
+#: ../data/messages:715 ../data/messages:873 ../data/messages:987
+#: ../data/messages:1013 ../data/messages:1085
 msgid "Opaque"
 msgstr "Neprovidno"
 
-#: ../data/messages:725 ../data/messages:875 ../data/messages:989
-#: ../data/messages:1015 ../data/messages:1087
+#: ../data/messages:717 ../data/messages:871 ../data/messages:985
+#: ../data/messages:1011 ../data/messages:1083
 msgid "Transparent"
 msgstr "Providno"
 
-#: ../data/messages:727
+#: ../data/messages:719
 msgid "Play a short animation of the icon when its window becomes active"
 msgstr "Pusti kratku animaciju ikone kada njen prozor postane aktivan"
 
-#: ../data/messages:729
+#: ../data/messages:721
 msgid "\"...\" will be added at the end if the name is too long."
 msgstr "ako je ime predugačko, \"...\" će biti dodato na kraj imena"
 
-#: ../data/messages:731
+#: ../data/messages:723
 msgid "Maximum number of caracters in application name:"
 msgstr "Maksimalan broj znakova u nazivu programa:"
 
-#: ../data/messages:733
+#: ../data/messages:725
 msgid "Interaction"
 msgstr "Interakcija"
 
-#: ../data/messages:735
+#: ../data/messages:727
 msgid "Action on middle-click on the related application"
 msgstr ""
 
-#: ../data/messages:737
+#: ../data/messages:729
 msgid "Nothing"
 msgstr ""
 
-#: ../data/messages:741
+#: ../data/messages:733
 msgid "Minimize"
 msgstr ""
 
-#: ../data/messages:743
+#: ../data/messages:735
 msgid "Launch new"
 msgstr "Pokreni novi"
 
-#: ../data/messages:745
+#: ../data/messages:737
 msgid "This is the default behaviour of most taskbars."
 msgstr "Ovo je podrazumevano ponašanje većine traka zadataka."
 
-#: ../data/messages:747
+#: ../data/messages:739
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
@@ -2703,19 +2803,28 @@ msgstr ""
 "Minimizuj prozor kada je njegova ikona kliknuta, ako je već bio aktivni "
 "prozor?"
 
-#: ../data/messages:749
+#: ../data/messages:741
+msgid "Only if your Window Manager supports it."
+msgstr ""
+
+#: ../data/messages:743
+msgid ""
+"Present windows preview on click when several windows are grouped togather"
+msgstr ""
+
+#: ../data/messages:745
 msgid "Highlight applications requiring your attention with a dialog bubble"
 msgstr "Isticanje programa zahteva obraćanje pažnje na dijalog balončić"
 
-#: ../data/messages:751
+#: ../data/messages:747
 msgid "in seconds"
 msgstr "u sekundama"
 
-#: ../data/messages:753
+#: ../data/messages:749
 msgid "Duration of the dialog:"
 msgstr "Trajanje dijaloga:"
 
-#: ../data/messages:755
+#: ../data/messages:751
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
@@ -2723,23 +2832,23 @@ msgstr ""
 "Bićete obavešteni čak i ako, na primer, gledate film preko celog ekrana ili "
 "se nalazite na drugoj radnoj površini.\n"
 
-#: ../data/messages:757
+#: ../data/messages:753
 msgid "Force the following applications to demand your attention"
 msgstr "Prisilite sledeće programe da zahtevaju vašu pažnju"
 
-#: ../data/messages:759
+#: ../data/messages:755
 msgid "Highlight applications demanding your attention with an animation"
 msgstr "Programi koji su naglašeni zahtevaju vašu pažnju u vezi animacije"
 
-#: ../data/messages:763
+#: ../data/messages:759
 msgid "Animations speed"
 msgstr "Brzina animacije"
 
-#: ../data/messages:765
+#: ../data/messages:761
 msgid "Animate sub-docks when they appear"
 msgstr "Animiraj pod-dokove kada se pojave"
 
-#: ../data/messages:767
+#: ../data/messages:763
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
@@ -2747,54 +2856,54 @@ msgstr ""
 "Ikone će se pojaviti umotane u same sebe i onda će se odmotavati dok ne "
 "popune ceo dok. Što je veličina manja, odmotavanje će biti brže."
 
-#: ../data/messages:769
+#: ../data/messages:765
 msgid "Animation unfolding duration:"
 msgstr "Trajanje odvijanja animacije:"
 
-#: ../data/messages:771 ../data/messages:779 ../data/messages:783
-#: ../data/messages:791 ../data/messages:795
+#: ../data/messages:767 ../data/messages:775 ../data/messages:779
+#: ../data/messages:787 ../data/messages:791
 msgid "fast"
 msgstr "brzo"
 
-#: ../data/messages:773 ../data/messages:781 ../data/messages:785
-#: ../data/messages:793 ../data/messages:797
+#: ../data/messages:769 ../data/messages:777 ../data/messages:781
+#: ../data/messages:789 ../data/messages:793
 msgid "slow"
 msgstr "sporo"
 
-#: ../data/messages:775 ../data/messages:787
+#: ../data/messages:771 ../data/messages:783
 msgid "The more there are, the slower it will be"
 msgstr "Što je ovde više, biće sporije"
 
-#: ../data/messages:777
+#: ../data/messages:773
 msgid "Number of steps in the zoom animation (grow/shrink):"
 msgstr "Broj koraka pri zumiranju animacije (porast/smanjenje):"
 
-#: ../data/messages:789
+#: ../data/messages:785
 msgid "Number of steps in the auto-hide animation (move up/move down):"
 msgstr ""
 "Broj koraka pri animaciji auto-sakrivanja  (pomeranje gore/pomeranje dole):"
 
-#: ../data/messages:799
+#: ../data/messages:795
 msgid "Refresh rate"
 msgstr "Učestalost osvežavanja"
 
-#: ../data/messages:801 ../data/messages:805 ../data/messages:809
+#: ../data/messages:797 ../data/messages:801 ../data/messages:805
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
 
-#: ../data/messages:803
+#: ../data/messages:799
 msgid "Refresh rate when mouving cursor into the dock :"
 msgstr "Učestalost osvežavanja kada se kusor pomera na dok:"
 
-#: ../data/messages:807
+#: ../data/messages:803
 msgid "Animation frequency for the OpenGL backend :"
 msgstr "Frekvencija animacije za pozadinski OpenGL:"
 
-#: ../data/messages:811
+#: ../data/messages:807
 msgid "Animation frequency for the Cairo backend :"
 msgstr "Frekvencija animacije za pozadinski Cairo:"
 
-#: ../data/messages:813
+#: ../data/messages:809
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
@@ -2802,15 +2911,15 @@ msgstr ""
 "Providnost gradacionog uzorka će piti ponovo izračunat u realnom vremenu. "
 "Možda je potrebna veća snaga procesora."
 
-#: ../data/messages:815
+#: ../data/messages:811
 msgid "Reflections should be calculated in real-time?"
 msgstr "Refleksijei treba da budu izračunate u realnom vremenu?"
 
-#: ../data/messages:817
+#: ../data/messages:813
 msgid "Composition"
 msgstr "Sastav"
 
-#: ../data/messages:819
+#: ../data/messages:815
 msgid ""
 "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
 "etc and have a black background around your dock. For aesthetic reasons, the "
@@ -2820,23 +2929,23 @@ msgstr ""
 "xcompmgr, itd i imate crnu pozadinu oko vašeg doka. Iz estetskih razloga, "
 "dok će biti držan ispod ostalih prozora."
 
-#: ../data/messages:821
+#: ../data/messages:817
 msgid "Emulate composition with fake transparency?"
 msgstr "Oponašaj sastav lažnom providnošću?"
 
-#: ../data/messages:823
+#: ../data/messages:819
 msgid "You need to re-open the panel. It is deactivated by default on KDE."
 msgstr "Treba da ponovo otvorite panel. KDE ga je podrazumevano deaktivirao."
 
-#: ../data/messages:825
+#: ../data/messages:821
 msgid "Make the config panel transparent?"
 msgstr "Podesi konfig panel da bude providan?"
 
-#: ../data/messages:827
+#: ../data/messages:823
 msgid "Connection to the Internet"
 msgstr "Povezanost na internet"
 
-#: ../data/messages:829
+#: ../data/messages:825
 msgid ""
 "Maximum time in seconds that you allow the connection to the server to take. "
 "This only limits the connection phase,  once the dock has connected this "
@@ -2846,11 +2955,11 @@ msgstr ""
 "Ovo ograničava samo fazu uspostavljanja veze, kada dok uspostavi vezu, ova "
 "opcija više nema uticaja."
 
-#: ../data/messages:831
+#: ../data/messages:827
 msgid "Connection timeout :"
 msgstr "Isteklo je vreme za povezivanje:"
 
-#: ../data/messages:833
+#: ../data/messages:829
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
@@ -2858,67 +2967,67 @@ msgstr ""
 "Maksimalno vreme u sekundama koje je želiš da omogućiš za kompletnu "
 "operaciju. Neke teme mogu imati par MB."
 
-#: ../data/messages:835
+#: ../data/messages:831
 msgid "Maximum time to download a file:"
 msgstr "Maksimalno vreme za preuzimanje fajla:"
 
-#: ../data/messages:837
+#: ../data/messages:833
 msgid "Use this option if you experience problems to connect."
 msgstr "Koristite ovu opciju ako imate problema sa povezivanjem"
 
-#: ../data/messages:839
+#: ../data/messages:835
 msgid "Force IPv4 ?"
 msgstr "Forsirati IPv4?"
 
-#: ../data/messages:841
+#: ../data/messages:837
 msgid "Use this option if you connect to the Internet through a proxy."
 msgstr "Koristite ovu opciju ako vam je veza sa internetom preko prokxy."
 
-#: ../data/messages:843
+#: ../data/messages:839
 msgid "Are you behind a proxy ?"
 msgstr "Vi ste iza proksija?"
 
-#: ../data/messages:845
+#: ../data/messages:841
 msgid "Proxy name :"
 msgstr "Naziv proksija:"
 
-#: ../data/messages:847
+#: ../data/messages:843
 msgid "Port :"
 msgstr "Port:"
 
-#: ../data/messages:849 ../data/messages:853
+#: ../data/messages:845 ../data/messages:849
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
 "Ostavite prazno ako vam nije potrebna prijava na proxy koristeći ime "
 "korisnika/lozinku."
 
-#: ../data/messages:851
+#: ../data/messages:847
 msgid "User :"
 msgstr "Korisnik:"
 
-#: ../data/messages:855
+#: ../data/messages:851
 msgid "Password :"
 msgstr "Lozinka:"
 
-#: ../data/messages:859 ../data/messages:1349
+#: ../data/messages:855 ../data/messages:1667
 msgid "Fill the background with:"
 msgstr "Popuni pozadinu sa:"
 
-#: ../data/messages:861 ../data/messages:867 ../data/messages:1163
-#: ../data/messages:1353
+#: ../data/messages:857 ../data/messages:863 ../data/messages:1159
+#: ../data/messages:1671
 msgid "Image"
 msgstr "Slika"
 
-#: ../data/messages:863 ../data/messages:883 ../data/messages:1355
+#: ../data/messages:859 ../data/messages:879 ../data/messages:1673
 msgid "Colour gradation"
 msgstr "Gradacija boje"
 
-#: ../data/messages:865
+#: ../data/messages:861
 msgid "Use a background image."
 msgstr "Koristi sliku za pozadinu"
 
-#: ../data/messages:869 ../data/messages:1357
+#: ../data/messages:865 ../data/messages:1675
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
@@ -2926,92 +3035,92 @@ msgstr ""
 "Dozvoljen je bilo koji format; ako je prazno, gradacija u boji će se "
 "koristiti."
 
-#: ../data/messages:871 ../data/messages:1359
+#: ../data/messages:867 ../data/messages:1677
 msgid "Image filename to use as a background :"
 msgstr "Naziv fajla sa slikom koja će se koristiti za pozadinu:"
 
-#: ../data/messages:873
+#: ../data/messages:869
 msgid "Image's transparency :"
 msgstr "Pozirnost slike:"
 
-#: ../data/messages:879 ../data/messages:1361
+#: ../data/messages:875 ../data/messages:1679
 msgid "Repeat image as a pattern to fill background?"
 msgstr "Ponavljaj sliku kao uzorak za popunjavanje pozadine?"
 
-#: ../data/messages:881
+#: ../data/messages:877
 msgid "Use a colour gradation."
 msgstr "Koristi gradaciju boje"
 
-#: ../data/messages:885 ../data/messages:1363
+#: ../data/messages:881 ../data/messages:1681
 msgid "Bright colour:"
 msgstr "Svetle boje:"
 
-#: ../data/messages:887 ../data/messages:1365
+#: ../data/messages:883 ../data/messages:1683
 msgid "Dark colour:"
 msgstr "Tamne boje:"
 
-#: ../data/messages:889
+#: ../data/messages:885
 msgid "In degrees, in relation to the vertical"
 msgstr "U stepenima, u odnosu na vertikalu"
 
-#: ../data/messages:891
+#: ../data/messages:887
 msgid "Angle of the gradation :"
 msgstr "Ugao gradacije:"
 
-#: ../data/messages:893
+#: ../data/messages:889
 msgid "If not nul, it will form stripes."
 msgstr "Ako nije prazno,  biće popunjeno prugama."
 
-#: ../data/messages:895
+#: ../data/messages:891
 msgid "Repeat the gradation this number of times:"
 msgstr "Ponovi gradaciju ovaj broj puta:"
 
-#: ../data/messages:897
+#: ../data/messages:893
 msgid "Percentage of the bright colour:"
 msgstr "Procenat svetle boje:"
 
-#: ../data/messages:899 ../data/messages:1367
+#: ../data/messages:895 ../data/messages:1685
 msgid "Stretch the dock to always fill the screen"
 msgstr "Razvuci dok da uvek prekrije ekran"
 
-#: ../data/messages:901
+#: ../data/messages:897
 msgid "External Frame"
 msgstr "Spoljni okvir"
 
-#: ../data/messages:903 ../data/messages:907 ../data/messages:913
-#: ../data/messages:961 ../data/messages:1061
+#: ../data/messages:899 ../data/messages:903 ../data/messages:909
+#: ../data/messages:957 ../data/messages:1057
 msgid "in pixels."
 msgstr "u pikselima,"
 
-#: ../data/messages:905
+#: ../data/messages:901
 msgid "Corner radius :"
 msgstr "Zaobljenje ugla:"
 
-#: ../data/messages:909
+#: ../data/messages:905
 msgid "Linewidth of the external line :"
 msgstr "Debljina spoljne linije"
 
-#: ../data/messages:911
+#: ../data/messages:907
 msgid "Colour of the external line:"
 msgstr "Boja spoljne linije"
 
-#: ../data/messages:915
+#: ../data/messages:911
 msgid "Margin between the frame and the icons or their reflects :"
 msgstr "Margina između okvira i ikona ili njihovih odraza:"
 
-#: ../data/messages:917
+#: ../data/messages:913
 msgid "Are the bottom left and right corners rounded?"
 msgstr "Da li su donji levi i desni uglovi zaobljeni?"
 
-#: ../data/messages:921
+#: ../data/messages:917
 msgid "Main Dock"
 msgstr "Glavni dok"
 
-#: ../data/messages:925
+#: ../data/messages:921
 msgid "Sub-Docks"
 msgstr "Pod-dokovi"
 
-#: ../data/messages:931
+#: ../data/messages:927
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
@@ -3019,84 +3128,84 @@ msgstr ""
 "Možete odrediti odnos ikona pod-doka u odnosu na dimenzije ikona glavniog "
 "doka"
 
-#: ../data/messages:933
+#: ../data/messages:929
 msgid "Ratio for the size of the sub-docks' icons :"
 msgstr "Odnos dimenzija ikona pod-doka:"
 
-#: ../data/messages:935 ../data/messages:1203
+#: ../data/messages:931 ../data/messages:1199
 msgid "smaller"
 msgstr "manji"
 
-#: ../data/messages:937
-msgid "same size"
-msgstr "ista veličina"
+#: ../data/messages:933
+msgid "larger"
+msgstr ""
 
-#: ../data/messages:939
+#: ../data/messages:935
 msgid "Dialogs"
 msgstr "Dijalozi"
 
-#: ../data/messages:941
+#: ../data/messages:937
 msgid "Bubble"
 msgstr "Balon"
 
-#: ../data/messages:943
+#: ../data/messages:939
 msgid "Background colour of the bubble:"
 msgstr "Boja pozadine balona:"
 
-#: ../data/messages:945
+#: ../data/messages:941
 msgid "Shape of the bubble:"
 msgstr "Oblik balona"
 
-#: ../data/messages:947
+#: ../data/messages:943
 msgid "Text"
 msgstr "Tekst"
 
-#: ../data/messages:949 ../data/messages:1247
+#: ../data/messages:945 ../data/messages:1243
 msgid "Otherwise the default's system one will be used."
 msgstr "U suprotnom će biti korišćen podrazumevani sistem jedan."
 
-#: ../data/messages:951
+#: ../data/messages:947
 msgid "Use a custom font for the text?"
 msgstr "Koristiti korisnički font za tekst?"
 
-#: ../data/messages:953
+#: ../data/messages:949
 msgid "Text font:"
 msgstr "Font teksta:"
 
-#: ../data/messages:955 ../data/messages:1253
+#: ../data/messages:951 ../data/messages:1249
 msgid "Draw the outline of the text?"
 msgstr "Iscrtati obrise teksta?"
 
-#: ../data/messages:957 ../data/messages:1283
+#: ../data/messages:953 ../data/messages:1279
 msgid "Text color:"
 msgstr "Boja teksta:"
 
-#: ../data/messages:959 ../data/messages:1019
+#: ../data/messages:955 ../data/messages:1015
 msgid "Buttons"
 msgstr "Dugmad"
 
-#: ../data/messages:963
+#: ../data/messages:959
 msgid "Size of buttons in the info-bubbles (width x height) :"
 msgstr "Veličina dugmadi u info-balončiću (širina x visina):"
 
-#: ../data/messages:965 ../data/messages:969 ../data/messages:1023
-#: ../data/messages:1027 ../data/messages:1031 ../data/messages:1035
+#: ../data/messages:961 ../data/messages:965 ../data/messages:1019
+#: ../data/messages:1023 ../data/messages:1027 ../data/messages:1031
 msgid "If you don't provide any, a default image will be used."
 msgstr "Ako ne odredite ni jednu, koristiće se podrazumevana slika."
 
-#: ../data/messages:967
+#: ../data/messages:963
 msgid "Name of an image to use for the yes/ok button :"
 msgstr "Naziv slike koja će se koristiti za da/ok dugme:"
 
-#: ../data/messages:971
+#: ../data/messages:967
 msgid "Name of an image to use for the no/cancel button :"
 msgstr "Naziv slike koja će se koristiti za ne/odustani dugme:"
 
-#: ../data/messages:973
+#: ../data/messages:969
 msgid "Size of the icon displayed next to the text :"
 msgstr "Veličina ikone koja se prikazuje odmah do teksta:"
 
-#: ../data/messages:979
+#: ../data/messages:975
 msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
@@ -3104,11 +3213,11 @@ msgstr ""
 "Ovo može biti prilagođeno za svaki programčiće radne površine odvojeno.\n"
 "Odaberite 'Korisničko ukrašavanje' da bi dole definisali vlastia ulepšavanja"
 
-#: ../data/messages:981
+#: ../data/messages:977
 msgid "Choose a default decoration for all desklets :"
 msgstr "Odaberite podrazumevano ulepšavanje za sve programčiće radne površine:"
 
-#: ../data/messages:983
+#: ../data/messages:979
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
@@ -3116,47 +3225,47 @@ msgstr ""
 "Ovo je slika koja će biti prikazana ispod crteža, na primer kao okvir. "
 "Ostavite prazno ako ne želite da koristite."
 
-#: ../data/messages:985
+#: ../data/messages:981
 msgid "Background image :"
 msgstr "Slika za pozadinu:"
 
-#: ../data/messages:987
+#: ../data/messages:983
 msgid "Background transparency :"
 msgstr "Providnost pozadine:"
 
-#: ../data/messages:993
+#: ../data/messages:989
 msgid "in pixels. Use this to adjust the left position of the drawings."
 msgstr "u pikselima. Koristite ovo da podesite levi položaj crteža."
 
-#: ../data/messages:995
+#: ../data/messages:991
 msgid "Left offset :"
 msgstr "Levo odstojanje:"
 
-#: ../data/messages:997
+#: ../data/messages:993
 msgid "in pixels. Use this to adjust the top position of the drawings."
 msgstr "u pikselima. Koristite ovo da podesite gornji položaj crteža."
 
-#: ../data/messages:999
+#: ../data/messages:995
 msgid "Top offset :"
 msgstr "Gornje odstojanje:"
 
-#: ../data/messages:1001
+#: ../data/messages:997
 msgid "in pixels. Use this to adjust the right position of the drawings."
 msgstr "u pikselima. Koristite ovo da podesite desni položaj crteža."
 
-#: ../data/messages:1003
+#: ../data/messages:999
 msgid "Right offset :"
 msgstr "Desno odstojanje:"
 
-#: ../data/messages:1005
+#: ../data/messages:1001
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
 msgstr "u pikselima. Koristite ovo da podesite donji položaj crteža."
 
-#: ../data/messages:1007
+#: ../data/messages:1003
 msgid "Bottom offset :"
 msgstr "Donje odstojanje:"
 
-#: ../data/messages:1009
+#: ../data/messages:1005
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
@@ -3164,39 +3273,39 @@ msgstr ""
 "Ovo je slika koja će biti prikazana iznad crteža, kao na primer odraz. "
 "Ostavite prazno ako ne želite da koristite."
 
-#: ../data/messages:1011
+#: ../data/messages:1007
 msgid "Foreground image :"
 msgstr "Slika za prednji plan:"
 
-#: ../data/messages:1013
+#: ../data/messages:1009
 msgid "Foreground tansparency :"
 msgstr "Providnost prednjeg plana:"
 
-#: ../data/messages:1021
+#: ../data/messages:1017
 msgid "Buttons size :"
 msgstr "Veličina dugmadi:"
 
-#: ../data/messages:1025 ../data/messages:1037
+#: ../data/messages:1021 ../data/messages:1033
 msgid "Name of an image to use for the 'rotate' button :"
 msgstr "Naziv slike koja će se koristiti za dugme 'rotacija':"
 
-#: ../data/messages:1029
+#: ../data/messages:1025
 msgid "Name of an image to use for the 'reattach' button :"
 msgstr "Naziv slike koja će se koristiti za dugme 'dodavanje':"
 
-#: ../data/messages:1033
+#: ../data/messages:1029
 msgid "Name of an image to use for the 'depth rotate' button :"
 msgstr "Naziv slike koja će se koristiti za dugme 'rotacija po dubini':"
 
-#: ../data/messages:1041
+#: ../data/messages:1037
 msgid "Icons' themes"
 msgstr "Teme za ikone"
 
-#: ../data/messages:1045
+#: ../data/messages:1041
 msgid "Choose an icon theme :"
 msgstr "Odaberi temu za ikone:"
 
-#: ../data/messages:1047
+#: ../data/messages:1043
 msgid ""
 "Any format allowed; leave this field empty if you don't want to use an image "
 "as background."
@@ -3204,79 +3313,79 @@ msgstr ""
 "Dozvoljen je bilo koji format; ostavite nepopunjeno ako ne želite sliku za "
 "pozadinu."
 
-#: ../data/messages:1049
+#: ../data/messages:1045
 msgid "Image filename to use as a background for icons :"
 msgstr "Naziv fajla sa slikom koja će se koristiti za pozadinu ikona:"
 
-#: ../data/messages:1051
+#: ../data/messages:1047
 msgid "Zoom effect"
 msgstr "Efekti zumiranja"
 
-#: ../data/messages:1053
+#: ../data/messages:1049
 msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "postavite na 1 ako ne želite da ikone budu zumirane kada je miš iznad njih."
 
-#: ../data/messages:1055
+#: ../data/messages:1051
 msgid "Maximum zoom of the icons :"
 msgstr "Maksimalni zum ikona:"
 
-#: ../data/messages:1057
+#: ../data/messages:1053
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 msgstr "u pikselima. Van ovog prostora (centrirano na miša), nema zumiranja."
 
-#: ../data/messages:1059
+#: ../data/messages:1055
 msgid "Width of the space in which the zoom will be effective :"
 msgstr "Širina prostora u kojem će se vršiti zumiranje:"
 
-#: ../data/messages:1063
+#: ../data/messages:1059
 msgid "Space between icons :"
 msgstr "Rastojanje između ikona:"
 
-#: ../data/messages:1065
+#: ../data/messages:1061
 msgid "Reflections"
 msgstr "Odraz"
 
-#: ../data/messages:1067
+#: ../data/messages:1063
 msgid ""
 "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 "
 "reflections are not used."
 msgstr ""
 "Ovo je nivo odraza; za 1 odraz ikone je maksimalan, za 0 odraz se ne koristi."
 
-#: ../data/messages:1069
+#: ../data/messages:1065
 msgid "Reflective power of the plane :"
 msgstr "Jačina odraza površine:"
 
-#: ../data/messages:1071
+#: ../data/messages:1067
 msgid "light"
 msgstr "svetlo"
 
-#: ../data/messages:1073
+#: ../data/messages:1069
 msgid "strong"
 msgstr "snažan"
 
-#: ../data/messages:1075
+#: ../data/messages:1071
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
 msgstr ""
 "u procentima od veličine ikone. Parametar utiče na ukupnu veličinu doka."
 
-#: ../data/messages:1077
+#: ../data/messages:1073
 msgid "Height of the reflection:"
 msgstr "Visina odraza:"
 
-#: ../data/messages:1079
+#: ../data/messages:1075
 msgid "small"
 msgstr "mali"
 
-#: ../data/messages:1081
+#: ../data/messages:1077
 msgid "tall"
 msgstr "visok"
 
-#: ../data/messages:1083
+#: ../data/messages:1079
 msgid ""
 "It is their transparency when the dock is at rest; they will \"materialize\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
@@ -3285,35 +3394,35 @@ msgstr ""
 "Ovo je njihova providnost kada je dok neaktivan; oni će se \"materijalizovati"
 "\" postepeno kako dok raste. Što je bliže 0, biće više providan."
 
-#: ../data/messages:1085
+#: ../data/messages:1081
 msgid "Icons' transparency at rest :"
 msgstr "Providnost neaktivnog doka:"
 
-#: ../data/messages:1091
+#: ../data/messages:1087
 msgid "Icons size"
 msgstr "Veličina ikona"
 
-#: ../data/messages:1093
+#: ../data/messages:1089
 msgid "Launcher's size at rest (width x height) :"
 msgstr "Veličina neaktivnog pokretača (širina x visina):"
 
-#: ../data/messages:1095
+#: ../data/messages:1091
 msgid "Application's size at rest (width x height) :"
 msgstr "Dimenzije programa kada je naeaktivan (širina x visina):"
 
-#: ../data/messages:1097
+#: ../data/messages:1093
 msgid "Applet's size at rest (width x height) :"
 msgstr "Dimenzije apleta kada je naeaktivan (širina x visina):"
 
-#: ../data/messages:1099
+#: ../data/messages:1095
 msgid "Configure icons' animations."
 msgstr "Podesite animacije ikona."
 
-#: ../data/messages:1101
+#: ../data/messages:1097
 msgid "Configure icons' special effects (requires OpenGL)."
 msgstr "Podesite specijalne efekte (potreban je OpenGL)."
 
-#: ../data/messages:1103
+#: ../data/messages:1099
 msgid ""
 "Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
@@ -3321,19 +3430,19 @@ msgstr ""
 "Podesite animacije ikona pri pojavljivanju/nestajanju (potrebane su OpenGL "
 "sposobnosti)."
 
-#: ../data/messages:1105
+#: ../data/messages:1101
 msgid "Separators"
 msgstr "Odvajači"
 
-#: ../data/messages:1107
+#: ../data/messages:1103
 msgid "Icon size at rest (width x height) :"
 msgstr "Dimenzije ikone kada je naeaktivna (širina x visina):"
 
-#: ../data/messages:1109
+#: ../data/messages:1105
 msgid "Force separator's image size to stay constant?"
 msgstr "Prolagodi dimenzije slike odvajača da ostanu konstantne?"
 
-#: ../data/messages:1111
+#: ../data/messages:1107
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
@@ -3342,45 +3451,45 @@ msgstr ""
 "odvajače. Obični odvajači se iscrtavaju različito, u zavisnosti od načina "
 "posmatranja."
 
-#: ../data/messages:1113
+#: ../data/messages:1109
 msgid "How to draw the separators?"
 msgstr "Kako iscrtati razdvajače?"
 
-#: ../data/messages:1115
+#: ../data/messages:1111
 msgid "Use an image."
 msgstr "Koristi sliku."
 
-#: ../data/messages:1117
+#: ../data/messages:1113
 msgid "Flat separator"
 msgstr "Običan razdvajač."
 
-#: ../data/messages:1119
+#: ../data/messages:1115
 msgid "Physical separator"
 msgstr "Fizički odvajač"
 
-#: ../data/messages:1121
+#: ../data/messages:1117
 msgid "If you don't provide one, blanks will be used."
 msgstr "Ako ništa ne unesete koristiće se prazna mesta."
 
-#: ../data/messages:1123
+#: ../data/messages:1119
 msgid "Filename of an image to use for separators :"
 msgstr "Naziv fajla sa slikom koja će se koristiti kao odvajač:"
 
-#: ../data/messages:1125
+#: ../data/messages:1121
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr "Neka se slika odvajača okrene kada je dok na vrhu, levo ili desno?"
 
-#: ../data/messages:1127
+#: ../data/messages:1123
 msgid "Colour of flat separators :"
 msgstr "Boja ravnog odvajača:"
 
-#: ../data/messages:1129
+#: ../data/messages:1125
 msgid "Icons order"
 msgstr "Raspored ikona"
 
-#: ../data/messages:1131
+#: ../data/messages:1127
 msgid ""
 "If you separate a type of icons, the icons of this type will be placed "
 "together, separated from the others by a separator.\n"
@@ -3394,79 +3503,79 @@ msgstr ""
 "razdvajače ručno. Programi će tada biti postavljeni odmah do njihovog "
 "pokretača, ako ga imaju, ili posle poslednjeg pokretsča."
 
-#: ../data/messages:1135 ../data/messages:1233
+#: ../data/messages:1131 ../data/messages:1229
 msgid "No"
 msgstr "Ne"
 
-#: ../data/messages:1137
+#: ../data/messages:1133
 msgid "Separate applications from others"
 msgstr "Odvoj programe od ostalih"
 
-#: ../data/messages:1139
+#: ../data/messages:1135
 msgid "Separate applets from others"
 msgstr "Odvoj aplete od ostalih"
 
-#: ../data/messages:1141
+#: ../data/messages:1137
 msgid "Separate all"
 msgstr "Odvoj sve"
 
-#: ../data/messages:1151
+#: ../data/messages:1147
 msgid "Link the icons with a string"
 msgstr "Poveži ikonu sa nizom znakova"
 
-#: ../data/messages:1153
+#: ../data/messages:1149
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
 msgstr "Dužina linije niza znakova, u pikselima (0 ne koristiti niz znakova):"
 
-#: ../data/messages:1155
+#: ../data/messages:1151
 msgid "Colour of the string (red, blue, green, alpha) :"
 msgstr "Boja niza znakova (crvena, plava, zelena, alfa):"
 
-#: ../data/messages:1159
+#: ../data/messages:1155
 msgid "Indicator of the active window"
 msgstr "Indikator aktivnog prozora"
 
-#: ../data/messages:1161
+#: ../data/messages:1157
 msgid "Type of indicator:"
 msgstr "Vrsta indikatora:"
 
-#: ../data/messages:1165
+#: ../data/messages:1161
 msgid "Frame"
 msgstr "Okvir"
 
-#: ../data/messages:1167 ../data/messages:1185 ../data/messages:1223
+#: ../data/messages:1163 ../data/messages:1181 ../data/messages:1219
 msgid "Image file:"
 msgstr "Fajl koji sadrži sliku:"
 
-#: ../data/messages:1169
+#: ../data/messages:1165
 msgid "Set transparency to 0 if you don't want to use an indicator."
 msgstr "Postavi providnost na 0 ako ne želiš da koristiš indikator."
 
-#: ../data/messages:1171
+#: ../data/messages:1167
 msgid "Colour of the frame :"
 msgstr "Boja okvira:"
 
-#: ../data/messages:1173
+#: ../data/messages:1169
 msgid "Set 0 to fill the frame."
 msgstr "Postavi na 0 da bi popunio okvir."
 
-#: ../data/messages:1175
+#: ../data/messages:1171
 msgid "Linewidth of the frame around the active window :"
 msgstr "Dužina linije okvira oko aktivnog prozora:"
 
-#: ../data/messages:1177
+#: ../data/messages:1173
 msgid "Corner radius of the frame around the active window :"
 msgstr "Poluprečnik zaobljenja ugla okvira oko aktivnog prozora:"
 
-#: ../data/messages:1179 ../data/messages:1211
+#: ../data/messages:1175 ../data/messages:1207
 msgid "Draw indicator above the icon?"
 msgstr "Iscrtati indikator iznad ikone?"
 
-#: ../data/messages:1181
+#: ../data/messages:1177
 msgid "Indicator of active launcher"
 msgstr "Indikator aktivnog pokretača"
 
-#: ../data/messages:1183
+#: ../data/messages:1179
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
@@ -3474,7 +3583,7 @@ msgstr ""
 "Indikatori su iscrtani na ikonama pokretača da bi pokazali da su već "
 "pokrenuti. Ako hoćete da koristite podrazumevane, ostavite prazno."
 
-#: ../data/messages:1187
+#: ../data/messages:1183
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
@@ -3482,11 +3591,11 @@ msgstr ""
 "Indikatori su iscrtani na ikonama aktivnih pokretača, ali vi želite da ih "
 "takože prikažete i na programima."
 
-#: ../data/messages:1189
+#: ../data/messages:1185
 msgid "Display an indicator on application icons too ?"
 msgstr "Prikazati indikator takođe i na ikoni?"
 
-#: ../data/messages:1191
+#: ../data/messages:1187
 msgid ""
 "Relatively to the icons' size. You can use this parameter to adjust the "
 "indicator's vertical position.\n"
@@ -3498,11 +3607,11 @@ msgstr ""
 "Ako je indikator povezan sa ikonom, pomeraj će biti naviše, u suprotnom "
 "naniže."
 
-#: ../data/messages:1193
+#: ../data/messages:1189
 msgid "Vertical offset :"
 msgstr "Vertikalno rastojanje:"
 
-#: ../data/messages:1195
+#: ../data/messages:1191
 msgid ""
 "If the indicator is linked to the icon, it will then be zoomed like the icon "
 "and the offset will be upwards.\n"
@@ -3513,11 +3622,11 @@ msgstr ""
 "rastojanje će biti naviše.\n"
 "U suprotnom, biće iscrtan direktno na doku i rastojanje će biti naniže."
 
-#: ../data/messages:1197
+#: ../data/messages:1193
 msgid "Link the indicator with its icon?"
 msgstr "Povezati indikator sa ikonom?"
 
-#: ../data/messages:1199
+#: ../data/messages:1195
 msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
@@ -3527,42 +3636,42 @@ msgstr ""
 "veća, veći je indikator. 1 znači da će indikator imati iste dimenzije kao i "
 "ikona."
 
-#: ../data/messages:1201
+#: ../data/messages:1197
 msgid "Indicator size ratio :"
 msgstr "Odnoos stranica indikatora:"
 
-#: ../data/messages:1205
+#: ../data/messages:1201
 msgid "bigger"
 msgstr "veće"
 
-#: ../data/messages:1207
+#: ../data/messages:1203
 msgid ""
 "Use it to make the indicator follow the orientation of the dock (top/bottom/"
 "right/left)."
 msgstr ""
 "Koristi se da indikator prati orijentaciju doka (gore/dole/levo/desno)."
 
-#: ../data/messages:1209
+#: ../data/messages:1205
 msgid "Rotate the indicator with dock?"
 msgstr "Rotiraj indikator sa dokom?"
 
-#: ../data/messages:1213
+#: ../data/messages:1209
 msgid "Indicator of grouped windows"
 msgstr "Indikator grupiranoih prozora"
 
-#: ../data/messages:1215
+#: ../data/messages:1211
 msgid "How to show that several icons are grouped :"
 msgstr "Kako prikazati da je više ikona grupisano:"
 
-#: ../data/messages:1217
+#: ../data/messages:1213
 msgid "Draw an emblem"
 msgstr ""
 
-#: ../data/messages:1219
+#: ../data/messages:1215
 msgid "Draw the sub-dock's icons as a stack"
 msgstr "Iscrtaj ikone pod-doka jednu iznad druge"
 
-#: ../data/messages:1221
+#: ../data/messages:1217
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
@@ -3570,58 +3679,58 @@ msgstr ""
 "Ima smisla samo ako grupirate programe iste klase. Ostavite prazno da "
 "koristite podrazumevano stanje."
 
-#: ../data/messages:1225
+#: ../data/messages:1221
 msgid "Zoom the indicator with its icon?"
 msgstr "Zumirati indikator sa ikonom?"
 
-#: ../data/messages:1227
+#: ../data/messages:1223
 msgid "Labels"
 msgstr "Natpisi"
 
-#: ../data/messages:1229
+#: ../data/messages:1225
 msgid "Label visibility"
 msgstr "Vidljivost oznake"
 
-#: ../data/messages:1231
+#: ../data/messages:1227
 msgid "Show labels:"
 msgstr "Prikaži natpis:"
 
-#: ../data/messages:1235
+#: ../data/messages:1231
 msgid "On pointed icon"
 msgstr "Na pokazanim ikonama"
 
-#: ../data/messages:1237
+#: ../data/messages:1233
 msgid "On all icons"
 msgstr "Na svim ikonama"
 
-#: ../data/messages:1239
+#: ../data/messages:1235
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
 msgstr "kada je veći, više natpisa susednih izabranoj ikoni će biti providno."
 
-#: ../data/messages:1241
+#: ../data/messages:1237
 msgid "label's visibility threshold :"
 msgstr "Prag vidljivosti natpisa:"
 
-#: ../data/messages:1243
+#: ../data/messages:1239
 msgid "Should the labels always be horizontal, even when dock is vertical?"
 msgstr ""
 "Da li natpis uvek treba da bude horizontalan, čak i kada je dok vertikalan?"
 
-#: ../data/messages:1245
+#: ../data/messages:1241
 msgid "Font"
 msgstr "Font"
 
-#: ../data/messages:1249
+#: ../data/messages:1245
 msgid "Use a custom font for labels?"
 msgstr "Koristiti neki drugi font za natpise?"
 
-#: ../data/messages:1251
+#: ../data/messages:1247
 msgid "Font used for labels :"
 msgstr "Font za natpise:"
 
-#: ../data/messages:1257
+#: ../data/messages:1253
 msgid ""
 "If you set it to fully transparent, there will be no background for the "
 "text, but the margin around the text will still be in effect."
@@ -3629,27 +3738,27 @@ msgstr ""
 "Ako postavite na potpuno providno, neće biti pozadine za tekst, ali će "
 "margine oko teksta još uvek biti vidljive."
 
-#: ../data/messages:1259
+#: ../data/messages:1255
 msgid "Colour of the label's background :"
 msgstr "Boja pozadine natpisa:"
 
-#: ../data/messages:1261
+#: ../data/messages:1257
 msgid "Margin around the text (in pixels) :"
 msgstr "Margina oko teksta (u pikselima):"
 
-#: ../data/messages:1263
+#: ../data/messages:1259
 msgid "Colour"
 msgstr "Boja"
 
-#: ../data/messages:1265
+#: ../data/messages:1261
 msgid "It's the first color of the gradation."
 msgstr "Ovo je prva boja za gradaciju."
 
-#: ../data/messages:1267
+#: ../data/messages:1263
 msgid "Start color :"
 msgstr "Početna boja:"
 
-#: ../data/messages:1269
+#: ../data/messages:1265
 msgid ""
 "It's the second color of the gradation. Set it to the same value as the "
 "first if you don't want to have any gradation."
@@ -3657,11 +3766,11 @@ msgstr ""
 "Ovo je druga boja za gradaciju. Postavite je na istu vrednost kao prvu ako "
 "ne želite gradaciju."
 
-#: ../data/messages:1271
+#: ../data/messages:1267
 msgid "Stop color :"
 msgstr "Krajnja boja:"
 
-#: ../data/messages:1273
+#: ../data/messages:1269
 msgid ""
 "If checked, the pattern will go from top to bottom, otherwise from left to "
 "right."
@@ -3669,59 +3778,105 @@ msgstr ""
 "ako je odabrano, uzorak će se prostirati od vrha ka dnu, u suprotnom od "
 "lavog ka desnom."
 
-#: ../data/messages:1275
+#: ../data/messages:1271
 msgid "Pattern should be vertical?"
 msgstr "Obrazac treba da bude vertikalan?"
 
-#: ../data/messages:1277
+#: ../data/messages:1273
 msgid "Quick-info are short information drawn on the icons."
 msgstr ""
 
-#: ../data/messages:1279
+#: ../data/messages:1275
 msgid "Quick-info"
 msgstr ""
 
-#: ../data/messages:1281
+#: ../data/messages:1277
 msgid "Use the same look as the labels?"
 msgstr ""
 
-#: ../data/messages:1285
+#: ../data/messages:1281
 msgid "Background color:"
 msgstr ""
 
-#: ../data/messages:1315
+#: ../data/messages:1313
+msgid ""
+"For a launcher or an applet:\n"
+"Open the settings of the icon, and set a path to an image.\n"
+"- For an aplication icon:\n"
+"Right-click on the icon -> \"set a custom icon\". Then choose an image you'd "
+"like to use, and apply. To remove the custom image, right-click on the icon -"
+"> \"remove the custom icon\".\n"
+"If you have installed some icons themes on your PC, you can also select one "
+"of them to be used instead of the default icon theme, in the global config "
+"window."
+msgstr ""
+
+#: ../data/messages:1457
+msgid ""
+"Activate the Shortcuts applet.\n"
+"Then all the folders bookmarks (the ones that appear in Nautilus) will be "
+"listed in a sub-dock.\n"
+"To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
+"To remove a boorkmark, right-click on its icon -> remove"
+msgstr ""
+
+#: ../data/messages:1599
+msgid ""
+"If you're on Debian Stable, you can add our 'weekly' ppa (can be unstable) "
+"by clicking on this button:\n"
+" After that, you can purge all 'cairo-dock*' packages, update the your "
+"system and reinstall 'cairo-dock' package."
+msgstr ""
+"Ako ste u Debianu (stabilnom), možete dodati naše 'nedeljne' lične arhive "
+"paketa - ppa (mogu biti nestabilne) klikom na ovo dugme:\n"
+" Nakon toga, možete ukloniti sve 'cairo-dock*' pakete, ažurirajte vaš sistem "
+"i ponovo instalirajte 'cairo-dock' paket."
+
+#: ../data/messages:1603
+msgid ""
+"If you're on Debian Unstable, you can add our 'weekly' ppa (can be unstable) "
+"by clicking on this button:\n"
+" After that, you can purge all 'cairo-dock*' packages, update the your "
+"system and reinstall 'cairo-dock' package."
+msgstr ""
+"Ako ste u Debianu (nestabilnom), možete dodati naše 'nedeljne' lične arhive "
+"paketa - ppa (mogu biti nestabilne) klikom na ovo dugme:\n"
+" Nakon toga, možete ukloniti sve 'cairo-dock*' pakete, ažurirajte vaš sistem "
+"i ponovo instalirajte 'cairo-dock' paket."
+
+#: ../data/messages:1633
 msgid "starting from 0"
 msgstr "počev od 0"
 
-#: ../data/messages:1319
+#: ../data/messages:1637
 msgid "Visibility of the dock"
 msgstr "Vidljivost doka"
 
-#: ../data/messages:1343
+#: ../data/messages:1661
 msgid "Leave it empty to use the same view as the main dock."
 msgstr "Ostavite nepopunjeno da bi koristili isti izgled kao za glavni dok."
 
-#: ../data/messages:1345
+#: ../data/messages:1663
 msgid "Choose the view for this dock :/"
 msgstr "Odaberite izgled za ovaj dok:"
 
-#: ../data/messages:1351
+#: ../data/messages:1669
 msgid "Same as main dock"
 msgstr "Isto kao i glavni dok"
 
-#: ../data/messages:1371
+#: ../data/messages:1689
 msgid "You can even paste an internet URL."
 msgstr "Možete čak da prilepite internet adresu (URL)."
 
-#: ../data/messages:1373
+#: ../data/messages:1691
 msgid "...or drag and drop a theme package here :"
 msgstr "... ili prevucite i ispustite paket sa temom ovde:"
 
-#: ../data/messages:1375
+#: ../data/messages:1693
 msgid "Theme loading options"
 msgstr "Opcije za učitavanje tema"
 
-#: ../data/messages:1377
+#: ../data/messages:1695
 msgid ""
 "If you tick this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -3731,11 +3886,11 @@ msgstr ""
 "pokretačem iz nove teme. U suprotnom vaš pokretač će biti zadržan, samo će "
 "ikone biti zamenjene."
 
-#: ../data/messages:1379
+#: ../data/messages:1697
 msgid "Use the new theme's launchers?"
 msgstr "Upotrebi novu temu za pokretače?"
 
-#: ../data/messages:1381
+#: ../data/messages:1699
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
@@ -3744,35 +3899,35 @@ msgstr ""
 "podešavanja u vezi ponašanja, kao što je auto-sakrivanje, korišćenje trake "
 "sa zadacima ili ne, itd."
 
-#: ../data/messages:1383
+#: ../data/messages:1701
 msgid "Use the new theme's behaviour?"
 msgstr "Upotrebi novo ponašanje tema?"
 
-#: ../data/messages:1385
+#: ../data/messages:1703
 msgid "Save"
 msgstr "Sačuvaj"
 
-#: ../data/messages:1387
+#: ../data/messages:1705
 msgid "Save current theme"
 msgstr "Sačuvaj trenutnu temu"
 
-#: ../data/messages:1389
+#: ../data/messages:1707
 msgid "You will then be able to re-open it at any time."
 msgstr "Tada ćete moći ponovo da otvorite u bilo koje vreme."
 
-#: ../data/messages:1391
+#: ../data/messages:1709
 msgid "Save as:"
 msgstr "Snimi kao:"
 
-#: ../data/messages:1393
+#: ../data/messages:1711
 msgid "Save current behaviour also?"
 msgstr "Ssačuvati takođe trenutno ponašanje?"
 
-#: ../data/messages:1395
+#: ../data/messages:1713
 msgid "Save current launchers also?"
 msgstr "Sačuvati takođe i trenutne pokretače?"
 
-#: ../data/messages:1397
+#: ../data/messages:1715
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
@@ -3780,132 +3935,132 @@ msgstr ""
 "Dok će napraviti kompletnu tar arhivu vaše trenutne teme, što vam omogućava "
 "jednostavnu razmenu sa ostalim ljudima."
 
-#: ../data/messages:1399
+#: ../data/messages:1717
 msgid "Build a package of the theme?"
 msgstr "Napraviti paket od teme?"
 
-#: ../data/messages:1401
+#: ../data/messages:1719
 msgid "Delete"
 msgstr "Obriši"
 
-#: ../data/messages:1403
+#: ../data/messages:1721
 msgid "List of your personal themes"
 msgstr "Lista ličnih tema"
 
-#: ../data/messages:1405
+#: ../data/messages:1723
 msgid "Delete from the list themes that you don't need anymore :"
 msgstr "Obriši sa liste teme koje ti više nisu potrebne:"
 
-#: ../data/messages:1407 ../data/messages:1409 ../data/messages:1411
-#: ../data/messages:1413 ../data/messages:1443 ../data/messages:1493
-#: ../data/messages:1525
+#: ../data/messages:1725 ../data/messages:1727 ../data/messages:1729
+#: ../data/messages:1731 ../data/messages:1761 ../data/messages:1811
+#: ../data/messages:1843
 msgid "Desktop Entry"
 msgstr "Ulaz na radnu površinu"
 
-#: ../data/messages:1417 ../data/messages:1487 ../data/messages:1497
-#: ../data/messages:1529
+#: ../data/messages:1735 ../data/messages:1805 ../data/messages:1815
+#: ../data/messages:1847
 msgid "Name of the container it belongs to:"
 msgstr "Naziv kontejnera kom pripada:"
 
-#: ../data/messages:1419
+#: ../data/messages:1737
 msgid "Sub-dock's name :"
 msgstr "Naziv pod-doka:"
 
-#: ../data/messages:1421 ../data/messages:1447
+#: ../data/messages:1739 ../data/messages:1765
 msgid "How to render the icon :"
 msgstr "Kako iscrtati ikonu:"
 
-#: ../data/messages:1423 ../data/messages:1449
+#: ../data/messages:1741 ../data/messages:1767
 msgid "Use an image"
 msgstr "Koristi sliku"
 
-#: ../data/messages:1425 ../data/messages:1451
+#: ../data/messages:1743 ../data/messages:1769
 msgid "Draw sub-dock's content as emblems"
 msgstr "Isrtaj sadržaj pod-doka kao simbol"
 
-#: ../data/messages:1427 ../data/messages:1453
+#: ../data/messages:1745 ../data/messages:1771
 msgid "Draw sub-dock's content as stack"
 msgstr "Iscrtaj sadržaj pod-doka naslagano"
 
-#: ../data/messages:1429 ../data/messages:1455
+#: ../data/messages:1747 ../data/messages:1773
 msgid "Draw sub-dock's content inside a box"
 msgstr "Iscrtaj sadržaj pod-doka u okviru"
 
-#: ../data/messages:1431 ../data/messages:1457 ../data/messages:1501
+#: ../data/messages:1749 ../data/messages:1775 ../data/messages:1819
 msgid "Image's name or path :"
 msgstr "Naziv slike ili putanja:"
 
-#: ../data/messages:1433 ../data/messages:1483 ../data/messages:1507
-#: ../data/messages:1533
+#: ../data/messages:1751 ../data/messages:1801 ../data/messages:1825
+#: ../data/messages:1851
 msgid "Extra parameters"
 msgstr "Dodatni parametri"
 
-#: ../data/messages:1435
+#: ../data/messages:1753
 msgid "Name of the view used for the sub-dock :"
 msgstr "Naziv prikaza koji se koristi za pod-dok:"
 
-#: ../data/messages:1437
+#: ../data/messages:1755
 msgid "If '0' the container will be displayed on every viewport."
 msgstr "Ako je '0', kontejner će biti prikazan u svakom viewportu."
 
-#: ../data/messages:1439 ../data/messages:1491 ../data/messages:1521
+#: ../data/messages:1757 ../data/messages:1809 ../data/messages:1839
 msgid "Only show in this specific viewport"
 msgstr "Prikaži samo na određenom viewportu"
 
-#: ../data/messages:1441 ../data/messages:1485 ../data/messages:1523
-#: ../data/messages:1535
+#: ../data/messages:1759 ../data/messages:1803 ../data/messages:1841
+#: ../data/messages:1853
 msgid "Order you want for this launcher among the others:"
 msgstr "Redosled koji, između ostalih, želite za ovaj pokretač:"
 
-#: ../data/messages:1445 ../data/messages:1499
+#: ../data/messages:1763 ../data/messages:1817
 msgid "Launcher's name :"
 msgstr "Naziv pokretača"
 
-#: ../data/messages:1459
+#: ../data/messages:1777
 msgid "URI of the file :"
 msgstr "URI fajla:"
 
-#: ../data/messages:1461
+#: ../data/messages:1779
 msgid "Number of files to list in the sub-dock :"
 msgstr "Broj linija za listanje u pod-doku:"
 
-#: ../data/messages:1465
+#: ../data/messages:1783
 msgid "5"
 msgstr "5"
 
-#: ../data/messages:1467
+#: ../data/messages:1785
 msgid "10"
 msgstr "10"
 
-#: ../data/messages:1469
+#: ../data/messages:1787
 msgid "20"
 msgstr "20"
 
-#: ../data/messages:1471
+#: ../data/messages:1789
 msgid "30"
 msgstr "30"
 
-#: ../data/messages:1475
+#: ../data/messages:1793
 msgid "Sort files by :"
 msgstr "Sortiraj fajlove po:"
 
-#: ../data/messages:1477
+#: ../data/messages:1795
 msgid "Name"
 msgstr "Naziv"
 
-#: ../data/messages:1479
+#: ../data/messages:1797
 msgid "Size"
 msgstr "Veličina"
 
-#: ../data/messages:1481
+#: ../data/messages:1799
 msgid "Date"
 msgstr "Datum"
 
-#: ../data/messages:1489 ../data/messages:1519
+#: ../data/messages:1807 ../data/messages:1837
 msgid "If '0' the launcher will be displayed on every viewport."
 msgstr "Ako je '0', pokretač će biti prikazan u svakom Viewportu."
 
-#: ../data/messages:1503
+#: ../data/messages:1821
 msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
@@ -3913,11 +4068,11 @@ msgstr ""
 "Primer: nautilus --no-desktop, gedit, itd. Možete uneti čak i prečice sa "
 "tastature, na primer <Alt>F1, <Ctrl>c, <Ctrl>v, itd"
 
-#: ../data/messages:1505
+#: ../data/messages:1823
 msgid "Command to launch on click :"
 msgstr "Naredba koju treba pokrenuti na klik:"
 
-#: ../data/messages:1509
+#: ../data/messages:1827
 msgid ""
 "If you choosed to mix launcher and applis, this option will deactivate this "
 "behaviour for this launcher only. It can be useful for instance for a "
@@ -3929,11 +4084,11 @@ msgstr ""
 "koji pokreće skript u terminali, ali ne želite da oduzmete ikonu terminala "
 "sa trake poslova."
 
-#: ../data/messages:1511
+#: ../data/messages:1829
 msgid "Prevent this launcher from stealing appli from taskbar ?"
 msgstr "Onemogućiti ovaj pokretač da ukrade program sa trake poslova?"
 
-#: ../data/messages:1513
+#: ../data/messages:1831
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -3945,399 +4100,209 @@ msgstr ""
 "izmene. Ovaj paremetar definiše klasu programa, što je korisno za linkovanje "
 "appli(ja) sa svojim pokretačem."
 
-#: ../data/messages:1515
+#: ../data/messages:1833
 msgid "Class of the program :"
 msgstr "Klasa programa:"
 
-#: ../data/messages:1517
+#: ../data/messages:1835
 msgid "Run in a terminal ?"
 msgstr "Pokrenuti u terminalu?"
 
-#: ../data/messages:1531
+#: ../data/messages:1849
 msgid "Separators' appearance is defined in the global configuration."
 msgstr ""
 
-#: ../data/messages:1537
-msgid "pouet"
-msgstr "pouet"
-
-#: ../data/messages:1539 ../data/messages:1541 ../data/messages:1543
-#: ../data/messages:1545
+#: ../data/messages:1855
 msgid ""
-"v1.4.6.3 :\n"
-"Just to say :\n"
-"*** Happy new Year 2008 ! ***\n"
-"  the Cairo-Dock's team."
-msgstr ""
-"1.4.6.3 :\n"
-"Imamo samo da kažemo:\n"
-"*** Srećna nova godina 2008! ***\n"
-"  Cairo-dok tim."
-
-#: ../data/messages:1547
-msgid ""
-"v1.5.0 : it's been 1 month since previous release, and we worked hardly to "
-"bring you :\n"
-" - A parabolic view : perfect for sub-docks with a dozen of icons.\n"
-" - A big pack of new applets :\n"
-"   Cairo-Dock has now its own terminal.\n"
-"   It can handle your systray instead of your panel,\n"
-"   monitor your laptop's battery,\n"
-"   and change your screen's luminosity through the dock\n"
-"   The integration into the GNOME desktop is provided by the 'gnome-"
-"integration' plug-in.\n"
-"    Wanted : a KDE user who could do the same for KDE !\n"
-" - Dustbin v2 can now handle drag'n'drops and display nice info.\n"
-" - Manual separators, better sub-dock accessibility, 64bits works smoothly, "
-"etc\n"
-" - And cherry on the cake, a new theme (I, Cairo) !\n"
-"  Now, why not try to make an applet for Cairo-Dock ? ;-)"
-msgstr ""
-"v1.5.0 : prošlo je mesec dana od prethodne verzije. Vredno smo radili da bi "
-"vam omogućili:\n"
-" - Prarabolički prikaz: idealan za pod-dokove sa puno ikona.\n"
-" - Veliko pakovanje novih apleta:\n"
-"   Cairo-dok sada ima sopstveni terminal.\n"
-"   Može da opslužuje systray umesto vašeg panela,\n"
-"   i da nadgleda baterije laptopa,\n"
-"   i da promeni osvetljenost ekrana preko doka\n"
-"   Integracija u GNOME je itvršena preko dodatka 'gnome-integration'\n"
-"   Traži se: KDE korisnik koji može isto da uradi za KDE!\n"
-" - Đubre v2 podržava povlačenje i ispuštanje i može da prikaže lep info.\n"
-" - I višnje na kolaču, nova tema!\n"
-"   Sada, zašto ne probati pravljenje apleta za Cairo-dok? ;-)"
-
-#: ../data/messages:1549
-msgid ""
-"v1.5.1 :\n"
-" - The 1.5 branch is still young, so this version brings a lot of bug fixes\n"
-" - Cairo-Dock is now translated in Japanese, thanks to Jiro Kawada for his "
-"work !\n"
-" - A new view has appeared : Rainbow\n"
-" - Cairo-Dock has become a desklet manager !\n"
-"  most of applets can now detached themselves from the dock\n"
-" and behave as real desklets."
-msgstr ""
-"v1.5.1 :\n"
-" - 1.5 grana je jošuvek mlada, pa ova verzija donosi puno ispravki\n"
-" - Cairo-dok je sada preveden na japanski, zahvaljujući Jiro Kawada!\n"
-" - Novi izgled se pojavio: Duga\n"
-" - Cairo-dok je postao desklet menadžer!/n  većina apleta sada može sebe "
-"otkačiti sa doka\n"
-"  i da se ponašaju kao pravi deskleti."
-
-#: ../data/messages:1551
-msgid ""
-"v1.5.2.1 :\n"
-" - a lot of bug fixes, especially on desklets.\n"
-" - New applet : weather !\n"
-" - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !"
-msgstr ""
-"v1.5.2.1 :\n"
-" - puno ispravki, posebno deskleta.\n"
-" - Novi applet : vremenska situacija!\n"
-" - Cairo-dok je u potpunosti preveden na Japanski, zahvaljujući Jiro Kawada!"
-
-#: ../data/messages:1553
-msgid ""
-"v1.5.3.2 :\n"
-" - Themes have been deeply reviewed\n"
-" to switch from one to another completely.\n"
-" - New applet : alsaMixer !\n"
-" - Desklets improvment with the 'showDesklets' applet.\n"
-" - The 'Shortcuts' applet can now detached itself from the dock.\n"
-" - The dock can now behave like a menu 'on-the-mouse'\n"
-" - Updates in translations and the usual bug fixes. ^_^\n"
-"  By the way, we are still searching someone\n"
-"  who could help cairo-dock to be well-integrated into KDE ;-)"
+"<b><span color='red'>GLX-Dock 2.4.0</span></b>\n"
+" - The <b>Power-Manager applet</b> has been rewritten to work on any "
+"plateform.\n"
+" - A <b>new Help applet</b> has been added to help our beloved users :-)\n"
+" - <b>Integration in the XFCE desktop</b> has been improved\n"
+" - Several <b>new DBus methods</b> lets you interact on the dock more "
+"easily.\n"
+" - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
 
-#: ../data/messages:1555
-msgid ""
-"v1.5.4.2 : a huge release !\n"
-" - add a cute pinguin in your dock with the new applet Cairo-Penguin\n"
-" - monitor your wifi connection with the Wifi applet\n"
-" - control xmms, audacious, banshee and exaile with the Xmms applet\n"
-" - Cairo-Dock is now fully integrated into XFCE environment !\n"
-" - better detection of battery in the Powermanager applet\n"
-" - lot of improvments in the Terminal applet.\n"
-" - the dock can auto-resize when it grows too large\n"
-" - refresh your dock with the new theme : Wood\n"
-" - 3 more themes in Weather"
-msgstr ""
+#~ msgid "same size"
+#~ msgstr "ista veličina"
 
-#: ../data/messages:1557
-msgid ""
-"v1.5.5.4 :\n"
-" - Huge enhancements in the TaskBar :\n"
-"  launchers and applets can now behave as applications.\n"
-"  windows can show up during drag and drop if mouse stay on them\n"
-" - hiqh quality launchers' icons can be used instead of X ones\n"
-" - Quickly manage Compiz with the 'Compiz-Icon' applet\n"
-" - Control Cairo-Dock from an external program thanks to the Dbus plug-in.\n"
-" - Added a 'ShowDesktop' applet for convenience.\n"
-" - Some fix in PowerManager (now ok !)\n"
-" - The ability to have many docks for a single instance of Cairo-Dock.\n"
-" - Cairo-Dock is not yet well integrated into Gnome 2.22, but it will come "
-"soon ;-)"
-msgstr ""
+#~ msgid "pouet"
+#~ msgstr "pouet"
 
-#: ../data/messages:1559
-msgid ""
-"v1.5.6 :\n"
-" - Integration into the last Gnome 2.22 (Ubuntu8.04, Fedora9, ...) - still "
-"experimental\n"
-" - You can now have many docks in 1 instance of Cairo-Dock.\n"
-" Just place a launcher or an applet in a dock, giving this dock a name that "
-"doesn't exist yet\n"
-" a new one will be created.\n"
-" - SHIFT+mouse wheel on AlsaMixer, Xmms, Rhythmbox, etc.\n"
-" - Launchers can now launch keyboard shortcuts.\n"
-" - The dock can now auto-hide itself when a window is maximized.\n"
-" - Improvment in drag and drop with animated indicator.\n"
-" - Physical separator in 3D-plane view.\n"
-" - Bug fixes in XGamma/Weather.\n"
-" - Any help would be welcome to integrate the dock into KDE !"
-msgstr ""
+#~ msgid ""
+#~ "v1.4.6.3 :\n"
+#~ "Just to say :\n"
+#~ "*** Happy new Year 2008 ! ***\n"
+#~ "  the Cairo-Dock's team."
+#~ msgstr ""
+#~ "1.4.6.3 :\n"
+#~ "Imamo samo da kažemo:\n"
+#~ "*** Srećna nova godina 2008! ***\n"
+#~ "  Cairo-dok tim."
 
-#: ../data/messages:1561
-msgid ""
-"v1.6.0 :\n"
-" - A new view has appeared : Diapositive !\n"
-" - A huge stock of new applets :\n"
-"   cpusage\n"
-"   ram-meter\n"
-"   netspeed\n"
-"   tomboy\n"
-"   nVidia\n"
-" - 2 new themes : Neon & Clear\n"
-" - A new cute character for Cairo-Penguin : Wanda the Cairo-Fish ^_^\n"
-" - Cairo-Dock can now run without composite manager, with fake "
-"transparency.\n"
-" - The dock can now stay below windows and be popped up on demand.\n"
-" - Auto-reload on crash.\n"
-" - Real window thumbnail when minimized."
-msgstr ""
-"v1.6.0:\n"
-" - Pojavio se novi prikaz : Diapozitiv!\n"
-" - Puno novih apleta:\n"
-"   cpusage\n"
-"   ram-meter\n"
-"   netspeed\n"
-"   tomboy\n"
-"   nVidia\n"
-" - dve nove teme: Neon & Clear\n"
-" - Novi ljupki lik za kairo pingvina: Wanda the Cairo-Fish ^_^\n"
-" - Kairo dok se sada može pokrenuti bez komplozitnog menadžera, sa lažnom "
-"providnošću.\n"
-" - Sat sada može ostati ispod prozora i po potrebi može da se pojavi.\n"
-" - Automatsko ponovno učitavanje nakon greške.\n"
-" - Stvaran prikaz umanjenih slika prozora, kada su minimizovani."
+#~ msgid ""
+#~ "v1.5.0 : it's been 1 month since previous release, and we worked hardly "
+#~ "to bring you :\n"
+#~ " - A parabolic view : perfect for sub-docks with a dozen of icons.\n"
+#~ " - A big pack of new applets :\n"
+#~ "   Cairo-Dock has now its own terminal.\n"
+#~ "   It can handle your systray instead of your panel,\n"
+#~ "   monitor your laptop's battery,\n"
+#~ "   and change your screen's luminosity through the dock\n"
+#~ "   The integration into the GNOME desktop is provided by the 'gnome-"
+#~ "integration' plug-in.\n"
+#~ "    Wanted : a KDE user who could do the same for KDE !\n"
+#~ " - Dustbin v2 can now handle drag'n'drops and display nice info.\n"
+#~ " - Manual separators, better sub-dock accessibility, 64bits works "
+#~ "smoothly, etc\n"
+#~ " - And cherry on the cake, a new theme (I, Cairo) !\n"
+#~ "  Now, why not try to make an applet for Cairo-Dock ? ;-)"
+#~ msgstr ""
+#~ "v1.5.0 : prošlo je mesec dana od prethodne verzije. Vredno smo radili da "
+#~ "bi vam omogućili:\n"
+#~ " - Prarabolički prikaz: idealan za pod-dokove sa puno ikona.\n"
+#~ " - Veliko pakovanje novih apleta:\n"
+#~ "   Cairo-dok sada ima sopstveni terminal.\n"
+#~ "   Može da opslužuje systray umesto vašeg panela,\n"
+#~ "   i da nadgleda baterije laptopa,\n"
+#~ "   i da promeni osvetljenost ekrana preko doka\n"
+#~ "   Integracija u GNOME je itvršena preko dodatka 'gnome-integration'\n"
+#~ "   Traži se: KDE korisnik koji može isto da uradi za KDE!\n"
+#~ " - Đubre v2 podržava povlačenje i ispuštanje i može da prikaže lep info.\n"
+#~ " - I višnje na kolaču, nova tema!\n"
+#~ "   Sada, zašto ne probati pravljenje apleta za Cairo-dok? ;-)"
 
-#: ../data/messages:1563
-msgid ""
-"v1.6.1 :\n"
-"Cairo-Dock has one year ! To celebrate this event, we are happy to offer "
-"you :\n"
-" - Once again a new view : Curve !\n"
-" - A long time waited applet : the desktop Switcher.\n"
-" - A very complete theme : Brit\n"
-" - Translation in italian and chinese.\n"
-" - And we are still hoping someone would help us writing a kde-integration "
-"plug-in ^_^"
-msgstr ""
+#~ msgid ""
+#~ "v1.5.1 :\n"
+#~ " - The 1.5 branch is still young, so this version brings a lot of bug "
+#~ "fixes\n"
+#~ " - Cairo-Dock is now translated in Japanese, thanks to Jiro Kawada for "
+#~ "his work !\n"
+#~ " - A new view has appeared : Rainbow\n"
+#~ " - Cairo-Dock has become a desklet manager !\n"
+#~ "  most of applets can now detached themselves from the dock\n"
+#~ " and behave as real desklets."
+#~ msgstr ""
+#~ "v1.5.1 :\n"
+#~ " - 1.5 grana je jošuvek mlada, pa ova verzija donosi puno ispravki\n"
+#~ " - Cairo-dok je sada preveden na japanski, zahvaljujući Jiro Kawada!\n"
+#~ " - Novi izgled se pojavio: Duga\n"
+#~ " - Cairo-dok je postao desklet menadžer!/n  većina apleta sada može sebe "
+#~ "otkačiti sa doka\n"
+#~ "  i da se ponašaju kao pravi deskleti."
 
-#: ../data/messages:1565
-msgid ""
-"v1.6.2 : the first version integrated in the Ubuntu repositories !\n"
-" - 2 new applets have been released :\n"
-"  Slider and Stack. Enjoy !\n"
-" - Applets can now be launched many times\n"
-" (Clock, Cairo-Penguin, Slider, Stack), each with a different config.\n"
-" - Cairo-Dock is now able to load themes on its own server,\n"
-" so feel free to send us all your themes, we can distribute them ! :-)\n"
-" - And we are still searching someone motivated to write a kde-integration "
-"plug-in ^_^"
-msgstr ""
+#~ msgid ""
+#~ "v1.5.2.1 :\n"
+#~ " - a lot of bug fixes, especially on desklets.\n"
+#~ " - New applet : weather !\n"
+#~ " - Cairo-Dock is now fully translated in Japanese, thanks to Jiro Kawada !"
+#~ msgstr ""
+#~ "v1.5.2.1 :\n"
+#~ " - puno ispravki, posebno deskleta.\n"
+#~ " - Novi applet : vremenska situacija!\n"
+#~ " - Cairo-dok je u potpunosti preveden na Japanski, zahvaljujući Jiro "
+#~ "Kawada!"
 
-#: ../data/messages:1567
-msgid ""
-"v1.6.3 : \n"
-" - first the bad news :\n"
-" user datas have been moved into ~/.config to respect the FreeDesktop "
-"standards.\n"
-" and local icons are now in a dedicated 'icons' sub-folder.\n"
-" So in advance, sorry for the possible inconvenience ^_^\n"
-" - And now the very good news !\n"
-" - 2 new applets have just been born : Clipper and GMenu. \n"
-" - Lot of improvements for Desklets : decorations, rotation, dragging, etc\n"
-" - Cpusage and other applets can now display nice graphics.\n"
-" - You can now remove launchers by dragging them out of the dock\n"
-"  and detach applet in the same way.\n"
-" - Smooth icons movement when dragging them inside the dock\n"
-" - The dock is now translated in Sweden and partially in Greek."
-msgstr ""
+#~ msgid ""
+#~ "v1.6.0 :\n"
+#~ " - A new view has appeared : Diapositive !\n"
+#~ " - A huge stock of new applets :\n"
+#~ "   cpusage\n"
+#~ "   ram-meter\n"
+#~ "   netspeed\n"
+#~ "   tomboy\n"
+#~ "   nVidia\n"
+#~ " - 2 new themes : Neon & Clear\n"
+#~ " - A new cute character for Cairo-Penguin : Wanda the Cairo-Fish ^_^\n"
+#~ " - Cairo-Dock can now run without composite manager, with fake "
+#~ "transparency.\n"
+#~ " - The dock can now stay below windows and be popped up on demand.\n"
+#~ " - Auto-reload on crash.\n"
+#~ " - Real window thumbnail when minimized."
+#~ msgstr ""
+#~ "v1.6.0:\n"
+#~ " - Pojavio se novi prikaz : Diapozitiv!\n"
+#~ " - Puno novih apleta:\n"
+#~ "   cpusage\n"
+#~ "   ram-meter\n"
+#~ "   netspeed\n"
+#~ "   tomboy\n"
+#~ "   nVidia\n"
+#~ " - dve nove teme: Neon & Clear\n"
+#~ " - Novi ljupki lik za kairo pingvina: Wanda the Cairo-Fish ^_^\n"
+#~ " - Kairo dok se sada može pokrenuti bez komplozitnog menadžera, sa lažnom "
+#~ "providnošću.\n"
+#~ " - Sat sada može ostati ispod prozora i po potrebi može da se pojavi.\n"
+#~ " - Automatsko ponovno učitavanje nakon greške.\n"
+#~ " - Stvaran prikaz umanjenih slika prozora, kada su minimizovani."
 
-#: ../data/messages:1569
-msgid ""
-"Cairo-Dock II\n"
-" - Cairo-Dock is now a full OpenGL dock ! (the cairo backend is still "
-"available for old graphic cards or ATI)\n"
-" - New plug-ins provide many visual affects : Animated icons, icon effects, "
-"illusion, drop indicator, motion blur, dialog rendering\n"
-" - The config panel has been widely rewritten.\n"
-" - Desklets are now in 3D\n"
-" - New applets : mail, keyboard indicator, quick folder, Toons.\n"
-" - Lot of bug fixes and upgrades in all plug-ins."
-msgstr ""
+#~ msgid ""
+#~ "2.0.5 :\n"
+#~ " - This is mainly a bug-fix version\n"
+#~ " - improvment in the RB applet\n"
+#~ " - Added functionnalities on grouped applications icons."
+#~ msgstr ""
+#~ "2.0.5 :\n"
+#~ " - Ovo je uglavnom verzija za ispravljanje grešaka\n"
+#~ " - poboljšanja u apletu RB\n"
+#~ " - dodate mogućnosti kod rupnih programskih ikona."
 
-#: ../data/messages:1571
-msgid ""
-"2.0.5 :\n"
-" - This is mainly a bug-fix version\n"
-" - improvment in the RB applet\n"
-" - Added functionnalities on grouped applications icons."
-msgstr ""
-"2.0.5 :\n"
-" - Ovo je uglavnom verzija za ispravljanje grešaka\n"
-" - poboljšanja u apletu RB\n"
-" - dodate mogućnosti kod rupnih programskih ikona."
+#~ msgid ""
+#~ "2.1.1 : more stable and user-friendly !\n"
+#~ " - This version corrects many bugs appeared with the v2.1.0 (sorry for "
+#~ "that !)\n"
+#~ " - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
+#~ " - Applis can now be placed amongst launchers and applets.\n"
+#~ " - A new and convenient config panel for launchers.\n"
+#~ " - Switcher provides a list of all opened windows on middle-click,\n"
+#~ "    and allows you to name your desktops.\n"
+#~ " - Logout can be programmed to shutdown at a given time.\n"
+#~ " - The dock fades out smoothly when it hides below other windows.\n"
+#~ " - Clipper has an option to copy all items at once.\n"
+#~ " - The DBus plug-in provides a new and powerful API that lets you control "
+#~ "your dock from an extern application.\n"
+#~ "    You can even write an applet in any language with it !"
+#~ msgstr ""
+#~ "2.1.1 : stabilnija i korisnički nastrojena!\n"
+#~ " - Ova verzija je ispravile mnoge greške iz v2.1.0 (izvinjenje se zbog "
+#~ "toga!)\n"
+#~ " - Više nema neželjenih vizualnih efekata u Metacity,OpenBox,KDE,itd.\n"
+#~ " - Programi mogu biti smešteni i u pokretače i u aplete.\n"
+#~ " - Nov i prigodan panel za podešavanje pokretača.\n"
+#~ " - Birač daje listu svih otvorenih prozora na srednji klik,\n"
+#~ "    i omogućava davanje naziva vašim radnim površinama.\n"
+#~ " - Može se programirati odjava sa sistema i gašenje u određeno vreme.\n"
+#~ " - Dok glatko nestaje, kada se skriva iza ostalih prozora.\n"
+#~ " - Kliper ima opciju da kopira sve stavke u isto vreme.\n"
+#~ " - DBus dodatak omogućava novi moćni API koji vam omogućava upravljanje "
+#~ "dokom preko spoljnog programa.\n"
+#~ "    Možete čak, koristeći ga, napisati aplet u bilo kom jeziku!"
 
-#: ../data/messages:1573
-msgid ""
-"2.1.0 : A really heavy version !\n"
-" - Control any music player with the MusicPlayer applet\n"
-"   Share your files easily with the world thanks to the dnd2share applet,\n"
-"   Monitor your system thanks to the System-Monitor applet\n"
-"   Take notes quickly thanks to the Notes applet.\n"
-" - The dock has an \"extended panel\" mode and a new theme selector.\n"
-" - Lot of updates in the Keyboard-indicator and Shortcuts applets\n"
-" - New animation for the 'Slide' view\n"
-" - Bug fixes in the Taskbar, Clipper, Powermanager, Clock and Cairo-Penguin "
-"modules.\n"
-" - OpenGL mode works on ATI and Intel with the latest drivers !\n"
-" - Finally, Cairo-Dock has its own ppa on LaunchPad, and a complete "
-"documentation on http://doc.glx-dock.org."
-msgstr ""
-
-#: ../data/messages:1575
-msgid ""
-"2.1.1 : more stable and user-friendly !\n"
-" - This version corrects many bugs appeared with the v2.1.0 (sorry for "
-"that !)\n"
-" - There is no more visual artifact under Metacity,OpenBox,KDE,etc.\n"
-" - Applis can now be placed amongst launchers and applets.\n"
-" - A new and convenient config panel for launchers.\n"
-" - Switcher provides a list of all opened windows on middle-click,\n"
-"    and allows you to name your desktops.\n"
-" - Logout can be programmed to shutdown at a given time.\n"
-" - The dock fades out smoothly when it hides below other windows.\n"
-" - Clipper has an option to copy all items at once.\n"
-" - The DBus plug-in provides a new and powerful API that lets you control "
-"your dock from an extern application.\n"
-"    You can even write an applet in any language with it !"
-msgstr ""
-"2.1.1 : stabilnija i korisnički nastrojena!\n"
-" - Ova verzija je ispravile mnoge greške iz v2.1.0 (izvinjenje se zbog "
-"toga!)\n"
-" - Više nema neželjenih vizualnih efekata u Metacity,OpenBox,KDE,itd.\n"
-" - Programi mogu biti smešteni i u pokretače i u aplete.\n"
-" - Nov i prigodan panel za podešavanje pokretača.\n"
-" - Birač daje listu svih otvorenih prozora na srednji klik,\n"
-"    i omogućava davanje naziva vašim radnim površinama.\n"
-" - Može se programirati odjava sa sistema i gašenje u određeno vreme.\n"
-" - Dok glatko nestaje, kada se skriva iza ostalih prozora.\n"
-" - Kliper ima opciju da kopira sve stavke u isto vreme.\n"
-" - DBus dodatak omogućava novi moćni API koji vam omogućava upravljanje "
-"dokom preko spoljnog programa.\n"
-"    Možete čak, koristeći ga, napisati aplet u bilo kom jeziku!"
-
-#: ../data/messages:1577
-msgid ""
-"2.1.2 : \n"
-" - The config panel has been improved again (new icons, more clear, better "
-"option naming)\n"
-" - Desklets can be fixed on their current desktop, not only on the first "
-"one.\n"
-" - Launchers can also be assigned to a given desktop\n"
-" - Auto-hide has been rewritten\n"
-" - Welcome to the new \"RSS-reader\" applet !\n"
-" - Light up your dock with the new \"firework\" icon effects !\n"
-" - ShowDesktop can now show the desklets, the Widget Layer, and the Expose "
-"on middle-click.\n"
-" - The Mail applet can mark all messages as read.\n"
-" - A KDE-integration plug-in has been started, any help is greatly welcome "
-"to achieve it !"
-msgstr ""
-
-#: ../data/messages:1579
-msgid ""
-"GLX-Dock 2.1.3\n"
-" - A new and simplified configuration panel has been written\n"
-" - Thumbnails of windows inside the dock now have an emblem.\n"
-" - Icons pointing on sub-docks can display the sub-dock's content.\n"
-" - When an application demands your attention, only its icon will appear "
-"when the dock is hidden.\n"
-" - The DBus plug-in now allows to automatically load external applets, "
-"written in any language.\n"
-" - ShowDesktop can now quickly change the resolution of the screen.\n"
-" - Dnd2Share can now directly sends the clipboard's content.\n"
-" - This version also fixes a huge number of problems."
-msgstr ""
-"GLX-Dock 2.1.3\n"
-" - Nov, pojednostavljen konfiguracioni panel je napravljwn\n"
-" - Sličice prozora unutar doka sada sadrže simbol.\n"
-" - Jokne koje pokazuju na pod-dok mogu prikazati sadržaj pod-doka.\n"
-" - Kada neki program zahteva vašu pažnju, pojaviće se samo njegova ikona "
-"kada je dok sakriven.\n"
-" - DBus dodatak sada omogućava automatsko učitavanje spoljnih apleta, koji "
-"su napisani u bilo kom jeziku.\n"
-" - PrikažiRadnuPovršinu sada omogućava brzu promenu rezolucije ekrana.\n"
-" - Dnd2Share sada može poslati sadržaj klipborda.\n"
-" - Takođe, ova verzija ispravlja veliki broj problema."
-
-#: ../data/messages:1581
-msgid ""
-"<b><span color='red'>GLX-Dock 2.2.0</span></b>\n"
-" - The dock has gained 2 <b>new visibility modes</b> and several <b>auto-"
-"hide animations</b>.\n"
-" - Icons can be <b>displayed even when the dock is hidden</b> (Clock, System-"
-"Monitor, applications demanding your attention, etc)\n"
-" - Icons pointing on a sub-dock can be displayed <b>inside a box</b> with a "
-"nice opening animation.\n"
-" - A <b>new view</b> is available : <u>panel</u>\n"
-" - The <b>Me-Menu</b> and <b>Messaging-Menu</b> are now available inside the "
-"dock.\n"
-" - <b>Clock</b> applet has now a real <b>calendar with tasks management</b> "
-"(available with left-click).\n"
-" - You can now <b>lock your screen</b> with the <b>Logout</b> applet.\n"
-" - <b>Desklets</b> can now be <b>transparent to mouse</b>, that is to say "
-"you can click on what is behind the desklet.\n"
-" - Better support of <b>old graphic cards</b> thanks to FBOs.\n"
-" - The <b>config panel icons</b> have been refreshed, with a more Tango-"
-"friendly theme and better options layout.\n"
-" - A <b>new default theme</b> is also available; it should integrate itself "
-"better on any desktop."
-msgstr ""
-
-#: ../data/messages:1583
-msgid ""
-"<b><span color='red'>GLX-Dock 2.3.0</span></b>\n"
-" - A lot of <b>new applets</b> are available in our new repository! "
-"(Transmission, Deluge, MintMenu, Translator, Quote of the day, etc)\n"
-"   You can install them for free in a single click!\n"
-" - The new <i>\"Recent-Events\"</i> applet lets you browse your <b>last "
-"activties</b> (music, videos, documents, web pages, etc).\n"
-" - The <i>System-Monitor</i> applet can now monitor <b>CPU temperature</b> "
-"and <b>fan speed</b>.\n"
-" - The <i>menus</i> have a <b>better layout</b>.\n"
-" - The <i>Logout applet</i> now warns you when the computer <b>needs to be "
-"restarted</b>.\n"
-" - The <i>Stack</i> applet now displays the <b>web page's favicon</b>.\n"
-" - The <i>Drop and Share</i> applet now handles <b>UbuntuOne</b>.\n"
-" - Better integration with <b>Compiz and Kwin</b>.\n"
-" - Several <b>bug-fixes</b> and improvments."
-msgstr ""
+#~ msgid ""
+#~ "GLX-Dock 2.1.3\n"
+#~ " - A new and simplified configuration panel has been written\n"
+#~ " - Thumbnails of windows inside the dock now have an emblem.\n"
+#~ " - Icons pointing on sub-docks can display the sub-dock's content.\n"
+#~ " - When an application demands your attention, only its icon will appear "
+#~ "when the dock is hidden.\n"
+#~ " - The DBus plug-in now allows to automatically load external applets, "
+#~ "written in any language.\n"
+#~ " - ShowDesktop can now quickly change the resolution of the screen.\n"
+#~ " - Dnd2Share can now directly sends the clipboard's content.\n"
+#~ " - This version also fixes a huge number of problems."
+#~ msgstr ""
+#~ "GLX-Dock 2.1.3\n"
+#~ " - Nov, pojednostavljen konfiguracioni panel je napravljwn\n"
+#~ " - Sličice prozora unutar doka sada sadrže simbol.\n"
+#~ " - Jokne koje pokazuju na pod-dok mogu prikazati sadržaj pod-doka.\n"
+#~ " - Kada neki program zahteva vašu pažnju, pojaviće se samo njegova ikona "
+#~ "kada je dok sakriven.\n"
+#~ " - DBus dodatak sada omogućava automatsko učitavanje spoljnih apleta, "
+#~ "koji su napisani u bilo kom jeziku.\n"
+#~ " - PrikažiRadnuPovršinu sada omogućava brzu promenu rezolucije ekrana.\n"
+#~ " - Dnd2Share sada može poslati sadržaj klipborda.\n"
+#~ " - Takođe, ova verzija ispravlja veliki broj problema."
 
 #~ msgid "Plug-ins"
 #~ msgstr "Dodaci"
