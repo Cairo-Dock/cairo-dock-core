@@ -278,8 +278,8 @@ void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iN
 					f);
 				cairo_set_source_surface (pCairoContext,
 					pLabel->pSurface,
-					(.5 + pLabel->param.fX) * pRenderer->iWidth/f - pLabel->iTextWidth /2,
-					(.5 - pLabel->param.fY) * pRenderer->iHeight/f - pLabel->iTextHeight /2);
+					.5+floor ((.5 + pLabel->param.fX) * pRenderer->iWidth/f - pLabel->iTextWidth /2),
+					.5+floor ((.5 - pLabel->param.fY) * pRenderer->iHeight/f - pLabel->iTextHeight /2));
 				cairo_paint_with_alpha (pCairoContext, pLabel->param.pColor[3]);
 				cairo_restore (pCairoContext);
 			}
@@ -523,7 +523,7 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 	for (i = 0; i < pData->iNbValues; i ++)
 	{
 		fNewValue = pNewValues[i];
-		if (pRenderer->bUpdateMinMax)
+		if (pRenderer->bUpdateMinMax && fNewValue > CAIRO_DATA_RENDERER_UNDEF_VALUE + 1)
 		{
 			if (fNewValue < pData->pMinMaxValues[2*i])
 				pData->pMinMaxValues[2*i] = fNewValue;

@@ -43,6 +43,8 @@ typedef enum _RendererRotateTheme {
 	CD_RENDERER_NB_ROTATE
 	} RendererRotateTheme; 
 
+#define CAIRO_DATA_RENDERER_UNDEF_VALUE ((double)-1.e9)
+
 //
 // Structures
 //
@@ -302,7 +304,13 @@ void cairo_data_renderer_get_size (CairoDataRenderer *pRenderer, gint *iWidth, g
 *@param i the number of the value
 *@param t the time (in number of steps)
 *@return a double in [0,1]*/
-#define cairo_data_renderer_get_normalized_value(pRenderer, i, t) MAX (0, MIN (1, (cairo_data_renderer_get_value (pRenderer, i, t) - cairo_data_renderer_get_min_value (pRenderer, i)) / (cairo_data_renderer_get_max_value (pRenderer, i) - cairo_data_renderer_get_min_value (pRenderer, i))))
+#define cairo_data_renderer_get_normalized_value(pRenderer, i, t) \
+__extension__ ({\
+	double _x = cairo_data_renderer_get_value (pRenderer, i, t);\
+	if ( _x > CAIRO_DATA_RENDERER_UNDEF_VALUE+1) {\
+		_x = MAX (0, MIN (1, (_x - cairo_data_renderer_get_min_value (pRenderer, i)) / (cairo_data_renderer_get_max_value (pRenderer, i) - cairo_data_renderer_get_min_value (pRenderer, i)))); }\
+	_x; })
+
 /**Get the normalized current i-th value (between 0 and 1).
 *@param pRenderer a data renderer
 *@param i the number of the value
