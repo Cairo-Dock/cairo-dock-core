@@ -49,7 +49,8 @@ Changing an icon's image =
 #>- For a launcher or an applet:
 #Open the settings of the icon, and set a path to an image.
 #- For an aplication icon:
-#Right-click on the icon -> "set a custom icon". Then choose an image you'd like to use, and apply. To remove the custom image, right-click on the icon -> "remove the custom icon".
+#Right-click on the icon -> "Other actions" -> "set a custom icon", and choose an image. To remove the custom image, right-click on the icon -> "Other actions" -> "remove the custom icon".
+#
 #If you have installed some icons themes on your PC, you can also select one of them to be used instead of the default icon theme, in the global config window.
 _Changing an icon's image =
 
@@ -283,7 +284,7 @@ Accessing folder bookmarks =
 #>Activate the Shortcuts applet.
 #Then all the folders bookmarks (the ones that appear in Nautilus) will be listed in a sub-dock.
 #To add a bookmark, simply drag-and-drop a folder onto the applet's icon.
-#To remove a boorkmark, right-click on its icon -> remove
+#To remove a bookmark, right-click on its icon -> remove
 _Accessing folder bookmarks =
 
 #X[Having multiple instances of an applet]

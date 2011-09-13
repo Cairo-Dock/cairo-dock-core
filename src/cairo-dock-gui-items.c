@@ -43,9 +43,10 @@
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-gui-items.h"
 
-#define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1150
+#define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1200
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 700
 #define CAIRO_DOCK_LEFT_PANE_MIN_WIDTH 100
+#define CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH 340
 #define CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH 800
 
 extern gchar *g_cCurrentLaunchersPath;
@@ -731,6 +732,8 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 	
 	if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] < CAIRO_DOCK_LAUNCHER_PANEL_WIDTH)  // ecran trop petit, on va essayer de reserver au moins R pixels pour le panneau de droite (avec un minimum de L pixels pour celui de gauche).
 		gtk_paned_set_position (GTK_PANED (s_pLauncherPane), MAX (CAIRO_DOCK_LEFT_PANE_MIN_WIDTH, w - CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH));
+	else  // we set a default width rather than letting GTK guess the best, because the right panel is more important than the left one.
+		gtk_paned_set_position (GTK_PANED (s_pLauncherPane), CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH);
 	
 	gtk_widget_show_all (s_pLauncherWindow);
 	
