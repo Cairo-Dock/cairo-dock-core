@@ -96,9 +96,11 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 			cairo_set_line_width (pCairoContext, 1);
 			cairo_set_line_join (pCairoContext, CAIRO_LINE_JOIN_ROUND);
 			fValue = cairo_data_renderer_get_normalized_current_value (pRenderer, i);
+			if (fValue <= CAIRO_DATA_RENDERER_UNDEF_VALUE+1)  // undef value -> let's draw 0
+				fValue = 0;
 			cairo_move_to (pCairoContext, fMargin + fWidth, fMargin + (1 - fValue) * fHeight);
-			int t, n = pData->iMemorySize - 1;
-			for (t = 1; t < pData->iMemorySize; t ++)
+			int t, n = MIN (pData->iMemorySize - 1, fWidth);
+			for (t = 1; t <= n; t ++)
 			{
 				fValue = cairo_data_renderer_get_normalized_value (pRenderer, i, -t);
 				cairo_line_to (pCairoContext,
@@ -120,19 +122,23 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 		}
 		else if (pGraph->iType == CAIRO_DOCK_GRAPH_BAR)
 		{
-			double fBarWidth = fWidth / pData->iMemorySize / 4;
+			///double fBarWidth = fWidth / pData->iMemorySize / 4;
+			double fBarWidth = 1;
 			cairo_set_line_width (pCairoContext, fBarWidth);
-			int t, n = pData->iMemorySize - 1;
-			for (t = 0; t < pData->iMemorySize; t ++)
+			int t, n = MIN (pData->iMemorySize - 1, fWidth);
+			for (t = 1; t <= n; t ++)
 			{
 				fValue = cairo_data_renderer_get_normalized_value (pRenderer, i, -t);
-				cairo_move_to (pCairoContext,
-					fMargin + (n - t) * fWidth / n,
-					fMargin + fHeight);
-				cairo_rel_line_to (pCairoContext,
-					0.,
-					- fValue * fHeight);
-				cairo_stroke (pCairoContext);
+				if (fValue * fHeight > .5)  // if we'll see at least 1 pixel height.
+				{
+					cairo_move_to (pCairoContext,
+						fMargin + (n - t) * fWidth / n,
+						fMargin + fHeight);
+					cairo_rel_line_to (pCairoContext,
+						0.,
+						- fValue * fHeight);
+					cairo_stroke (pCairoContext);
+				}
 			}
 		}
 		else
@@ -149,8 +155,8 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 			cairo_line_to (pCairoContext,
 				fMargin + fWidth/2 + radius * (fValue * cos (angle)),
 				fMargin + fHeight/2 + radius * (fValue * sin (angle)));
-			int t;
-			for (t = 1; t < pData->iMemorySize; t ++)
+			int t, n = MIN (pData->iMemorySize - 1, fWidth);
+			for (t = 1; t <= n; t ++)
 			{
 				fValue = cairo_data_renderer_get_normalized_value (pRenderer, i, -t);
 				angle = -2*G_PI*((t-.5)/pData->iMemorySize);
@@ -353,10 +359,10 @@ static void _set_overlay_zones (Graph *pGraph)
 				}
 				pLabel->param.fWidth = (double)iLabelWidth / iWidth;
 				pLabel->param.fHeight = (double)iLabelHeight / iHeight;
-				pLabel->param.pColor[0] = myIconsParam.quickInfoTextDescription.fBackgroundColor[0];
-				pLabel->param.pColor[1] = myIconsParam.quickInfoTextDescription.fBackgroundColor[1];
-				pLabel->param.pColor[2] = myIconsParam.quickInfoTextDescription.fBackgroundColor[2];
-				pLabel->param.pColor[3] = 1.;  // meme couleur que les axes.
+				pLabel->param.pColor[0] = 1.;
+                pLabel->param.pColor[1] = 1.;
+                pLabel->param.pColor[2] = 1.;
+                pLabel->param.pColor[3] = 1.;  // white, a little transparent
 			}
 			else
 			{
@@ -428,7 +434,7 @@ static void load (Graph *pGraph, CairoContainer *pContainer, CairoGraphAttribute
 			0.);
 	}
 	
-	pGraph->iRadius = MAX (pAttribute->iRadius, MIN (iWidth, iHeight)/3.);
+	pGraph->iRadius = MIN (iWidth, iHeight)/12.;
 	pGraph->fMargin = pGraph->iRadius * (1. - sqrt(2)/2);
 	if (pAttribute->fBackGroundColor != NULL)
 		memcpy (pGraph->fBackGroundColor, pAttribute->fBackGroundColor, 4 * sizeof (double));
@@ -453,6 +459,8 @@ static void reload (Graph *pGraph)
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
+	pGraph->iRadius = MIN (iWidth, iHeight)/12.;
+	pGraph->fMargin = pGraph->iRadius * (1. - sqrt(2)/2);
 	if (pGraph->pBackgroundSurface != NULL)
 		cairo_surface_destroy (pGraph->pBackgroundSurface);
 	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (iWidth, iHeight, pGraph->iRadius, pGraph->fMargin, pGraph->fBackGroundColor, pGraph->iType, iNbValues / pRenderer->iRank);
