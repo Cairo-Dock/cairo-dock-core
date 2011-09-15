@@ -583,7 +583,7 @@ static void _draw_gauge_needle (cairo_t *pCairoContext, Gauge *pGauge, GaugeIndi
 		cairo_translate (pCairoContext, fHalfX, fHalfY);
 		cairo_rotate (pCairoContext, -G_PI/2 + fAngle);
 		
-		cairo_set_source_surface (pCairoContext, pGaugeImage->image.pSurface, 0.0f, 0.0f);
+		cairo_set_source_surface (pCairoContext, pGaugeImage->image.pSurface, -pGaugeIndicator->iNeedleOffsetX, -pGaugeIndicator->iNeedleOffsetY);
 		cairo_paint (pCairoContext);
 		
 		

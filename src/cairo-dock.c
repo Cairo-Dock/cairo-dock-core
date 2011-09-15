@@ -759,7 +759,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
-	g_print ("\n\nTODO:\n"
+	/*g_print ("\n\nTODO (2.5):\n"
 	"- check for config panel (g_object_unref assertion)\n"
 	"- review Help hints\n"
 	"- find Kwin config tool for Composite-manager\n"
@@ -768,7 +768,7 @@ int main (int argc, char** argv)
 	"- add actions for the Help module\n"
 	"- kde integration ++\n"
 	"- stack: enable iSubdockViewType\n"
-	"\n");
+	"\n");*/
 	
 	gtk_main ();
 	
