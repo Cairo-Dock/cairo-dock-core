@@ -116,7 +116,7 @@ Showing windows preview =
 #>You need to run Compiz, and enable the "Window Preview" plug-in in Compiz. Install "ccsm" to be able to configure Compiz.
 _Showing windows preview =
 preview_compiz =
-#G [sh '@pkgdatadir@/scripts/help_scripts.sh' compiz_plugin thumbnail && dbus-send --session --dest=org.freedesktop.compiz /org/freedesktop/compiz/thumbnail/screen0/current_viewport org.freedesktop.compiz.set boolean:false;sh -c "ps aux | grep -v grep | grep -c 'compiz'"]If you're using Compiz, you can click on this button:
+#G [bash '@pkgdatadir@/scripts/help_scripts.sh' compiz_plugin thumbnail && dbus-send --session --dest=org.freedesktop.compiz /org/freedesktop/compiz/thumbnail/screen0/current_viewport org.freedesktop.compiz.set boolean:false;sh -c "ps aux | grep -v grep | grep -c 'compiz'"]If you're using Compiz, you can click on this button:
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 preview_compiz_button=
 

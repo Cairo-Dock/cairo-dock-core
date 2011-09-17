@@ -29,8 +29,14 @@ G_BEGIN_DECLS
 *@file cairo-dock-compiz-integration.h This class implements the integration of Compiz inside Cairo-Dock.
 */
 
+#define CD_COMPIZ_BUS "org.freedesktop.compiz"
+#define CD_COMPIZ_OBJECT "/org/freedesktop/compiz"
+#define CD_COMPIZ_INTERFACE "org.freedesktop.compiz"
+///#define OLD_WIDGET_LAYER 1  // seems better to rely on the _COMPIZ_WIDGET atom than on a rule.
 
 void cd_init_compiz_backend (void);
+
+gboolean cd_is_the_new_compiz (void);
 
 
 G_END_DECLS

@@ -22,14 +22,13 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-gui-backend.h"
+#include "implementations/cairo-dock-compiz-integration.h"
 #include "applet-struct.h"
 #include "applet-tips-dialog.h"
 #include "applet-composite.h"
 #include "applet-notifications.h"
 
-#define CD_COMPIZ_BUS "org.freedesktop.compiz"
-#define CD_COMPIZ_OBJECT "/org/freedesktop/compiz"
-#define CD_COMPIZ_INTERFACE "org.freedesktop.compiz"
+#define CAIRO_DOCK_WIKI_URL "http://wiki.glx-dock.org" // it's in French if the locale is FR with Firefox. If not, the user can choose its language.
 
 //\___________ Define here the action to be taken when the user left-clicks on your icon or on its subdock or your desklet. The icon and the container that were clicked are available through the macros CD_APPLET_CLICKED_ICON and CD_APPLET_CLICKED_CONTAINER. CD_APPLET_CLICKED_ICON may be NULL if the user clicked in the container but out of icons.
 CD_APPLET_ON_CLICK_BEGIN
@@ -78,7 +77,7 @@ which opera > /dev/null && opera %s ",
 }
 static void _cd_show_help_online (GtkMenuItem *menu_item, gpointer data)
 {
-	_launch_url ("http://www.glx-dock.org/ww_page.php?p=Accueil&lang=en");  // let's show the english page by default, it's easy to switch to another language from there.
+	_launch_url (CAIRO_DOCK_WIKI_URL);
 }
 
 static void _cd_remove_gnome_panel (GtkMenuItem *menu_item, gpointer data)
@@ -121,7 +120,8 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	int i;
 	for (i = 0; plugins[i] != NULL; i++)
 	{
-		if (strcmp (plugins[i], "Unity") == 0)  // needs to confirm the name (is it a 'U' or a 'u' ?)...
+		cd_debug ("Compiz Plugin: %s", plugins[i]);
+		if (strcmp (plugins[i], "unityshell") == 0)
 		{
 			bFound = TRUE;
 			break;
@@ -139,11 +139,17 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 			plugins[i-1] = plugins[i];
 			plugins[i] = NULL;
 		}
-		dbus_g_proxy_call_no_reply (proxy,
+		/*dbus_g_proxy_call_no_reply (proxy,
 			"set",
 			G_TYPE_STRV,
 			plugins,
-			G_TYPE_INVALID);
+			G_TYPE_INVALID);*/ // It seems it doesn't work :-? => compiz (core) - Warn: Can't set Value with type 12 to option "active_plugins" with type 11 (with dbus-send too...)
+		gchar *cPluginsList = g_strjoinv (",", plugins);
+		cd_debug ("Compiz Plugins List: %s", cPluginsList);
+		cairo_dock_launch_command_printf ("bash "MY_APPLET_SHARE_DATA_DIR"/scripts/help_scripts.sh \"compiz_new_replace_list_plugins\" \"%s\"",
+			NULL,
+			cPluginsList);
+		g_free (cPluginsList);
 	}
 	else
 	{
@@ -158,7 +164,7 @@ static void _cd_remove_unity (GtkMenuItem *menu_item, gpointer data)
 	// first get the active plug-ins.
 	DBusGProxy *pActivePluginsProxy = cairo_dock_create_new_session_proxy (
 		CD_COMPIZ_BUS,
-		CD_COMPIZ_OBJECT"/core/allscreens/active_plugins",
+		CD_COMPIZ_OBJECT"/core/screen0/active_plugins",
 		CD_COMPIZ_INTERFACE);
 	
 	dbus_g_proxy_begin_call (pActivePluginsProxy,
@@ -179,9 +185,10 @@ CD_APPLET_ON_BUILD_MENU_BEGIN
 	g_free (cLabel);
 	GdkScreen *pScreen = gdk_screen_get_default ();
 	if (! gdk_screen_is_composited (pScreen))
-		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Activate composite"), GTK_STOCK_EXECUTE, cd_help_enable_composite, CD_APPLET_MY_MENU);
-	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable the gnome-panel"), GTK_STOCK_REMOVE, _cd_remove_gnome_panel, CD_APPLET_MY_MENU);
-	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable Unity"), GTK_STOCK_REMOVE, _cd_remove_unity, CD_APPLET_MY_MENU);
+		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Activate composite"), GTK_STOCK_EXECUTE, cd_help_enable_composite, pSubMenu);
+	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable the gnome-panel"), GTK_STOCK_REMOVE, _cd_remove_gnome_panel, pSubMenu);
+	if (cd_is_the_new_compiz ())
+		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable Unity"), GTK_STOCK_REMOVE, _cd_remove_unity, pSubMenu);
 	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Help"), GTK_STOCK_HELP, _cd_show_help_gui, CD_APPLET_MY_MENU);
 	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Online help"), GTK_STOCK_HELP, _cd_show_help_online, CD_APPLET_MY_MENU);
 CD_APPLET_ON_BUILD_MENU_END

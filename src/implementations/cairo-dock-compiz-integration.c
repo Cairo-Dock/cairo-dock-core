@@ -34,11 +34,6 @@ static DBusGProxy *s_pWidgetLayerProxy = NULL;
 static Atom s_aCompizWidget = 0;
 static Atom s_aNetWmWindowType = 0;
 
-#define CD_COMPIZ_BUS "org.freedesktop.compiz"
-#define CD_COMPIZ_OBJECT "/org/freedesktop/compiz"
-#define CD_COMPIZ_INTERFACE "org.freedesktop.compiz"
-///#define OLD_WIDGET_LAYER 1  // seems better to rely on the _COMPIZ_WIDGET atom than on a rule.
-
 static gboolean present_windows (void)
 {
 	gboolean bSuccess = FALSE;
@@ -247,12 +242,24 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 		gchar **plugins2 = g_new0 (gchar*, i+2);  // +1 for 'widget' and +1 for NULL
 		memcpy (plugins2, plugins, i * sizeof (gchar*));
 		plugins2[i] = (gchar*)"widget";  // elements of 'plugins2' are not freed.
-		
-		dbus_g_proxy_call_no_reply (proxy,
-			"set",
-			G_TYPE_STRV,
-			plugins2,
-			G_TYPE_INVALID);
+
+		if (cd_is_the_new_compiz ())
+		{
+			gchar *cPluginsList = g_strjoinv (",", plugins2);
+			cd_debug ("Compiz Plugins List: %s", cPluginsList);
+			cairo_dock_launch_command_printf ("bash "SHARE_DATA_DIR"/scripts/help_scripts.sh \"compiz_new_replace_list_plugins\" \"%s\"",
+				NULL,
+				cPluginsList);
+			g_free (cPluginsList);
+		}
+		else
+		{	// It seems it doesn't work with Compiz 0.9 :-? => compiz (core) - Warn: Can't set Value with type 12 to option "active_plugins" with type 11 (with dbus-send too...)
+			dbus_g_proxy_call_no_reply (proxy,
+				"set",
+				G_TYPE_STRV,
+				plugins2,
+				G_TYPE_INVALID);
+		}
 		
 		g_free (plugins2);  // elements belong to 'plugins' or are const.
 	}
@@ -275,7 +282,9 @@ static gboolean _check_widget_plugin (gpointer data)
 	// first get the active plug-ins.
 	DBusGProxy *pActivePluginsProxy = cairo_dock_create_new_session_proxy (
 		CD_COMPIZ_BUS,
-		CD_COMPIZ_OBJECT"/core/allscreens/active_plugins",
+		cd_is_the_new_compiz () ?
+			CD_COMPIZ_OBJECT"/core/screen0/active_plugins":
+			CD_COMPIZ_OBJECT"/core/allscreens/active_plugins",
 		CD_COMPIZ_INTERFACE);
 	
 	dbus_g_proxy_begin_call (pActivePluginsProxy,
@@ -346,6 +355,25 @@ static void _unregister_compiz_backend (void)
 	cairo_dock_wm_register_backend (NULL);
 }
 
+gboolean cd_is_the_new_compiz (void)
+{
+	gboolean bNewCompiz = FALSE;
+	gchar *cVersion = cairo_dock_launch_command_sync ("compiz --version");
+	if (cVersion != NULL)
+	{
+		gchar *str = strchr (cVersion, ' ');  // "compiz 0.8.6"
+		if (str != NULL)
+		{
+			int iMajorVersion, iMinorVersion, iMicroVersion;
+			cairo_dock_get_version_from_string (str+1, &iMajorVersion, &iMinorVersion, &iMicroVersion);
+			if (iMajorVersion > 0 || iMinorVersion > 8)
+				bNewCompiz = TRUE;
+		}
+	}
+	g_free (cVersion);
+	return bNewCompiz;
+}
+
 static void _on_compiz_owner_changed (const gchar *cName, gboolean bOwned, gpointer data)
 {
 	cd_debug ("Compiz is on the bus (%d)", bOwned);
@@ -354,20 +382,8 @@ static void _on_compiz_owner_changed (const gchar *cName, gboolean bOwned, gpoin
 	{
 		g_return_if_fail (s_pScaleProxy == NULL);
 		
-		gboolean bNewCompiz = FALSE;
-			
-		gchar *cVersion = cairo_dock_launch_command_sync ("compiz --version");
-		if (cVersion != NULL)
-		{
-			gchar *str = strchr (cVersion, ' ');  // "compiz 0.8.6"
-			if (str != NULL)
-			{
-				int iMajorVersion, iMinorVersion, iMicroVersion;
-				cairo_dock_get_version_from_string (str+1, &iMajorVersion, &iMinorVersion, &iMicroVersion);
-				if (iMajorVersion > 0 || iMinorVersion > 8)
-					bNewCompiz = TRUE;
-			}
-		}
+		gboolean bNewCompiz = cd_is_the_new_compiz ();
+		
 		cd_debug ("NewCompiz: %d", bNewCompiz);
 		
 		s_pScaleProxy = cairo_dock_create_new_session_proxy (
