@@ -91,17 +91,6 @@ extern gboolean g_bEasterEggs;
 #define cairo_dock_icons_are_locked(...) (myDocksParam.bLockIcons || myDocksParam.bLockAll || g_bLocked)
 #define cairo_dock_is_locked(...) (myDocksParam.bLockAll || g_bLocked)
 
-/** paypal button HTML code:
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHLwYJKoZIhvcNAQcEoIIHIDCCBxwCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYAkcjqcpHu2HydTiPh4utPx/WV60oxP67QmRaqPRgGLel7DMG9OU/uXQFL3QvX0cY93XR0qepAUEtM6euqig/UzMZBaOEK5OE5pIfXa54j+dpH/wlJYA4mtKT0P7drJ8rBJlDY6s9XYbnLgcoRWB68fFKRZMsOmFJEyjGCNZbs6DDELMAkGBSsOAwIaBQAwgawGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIwowB3MT3AmSAgYjQ37DLwxdU5ojBVf6Yao5VA8j/UD9xSMENwkrTv1aDHmGchuS5eX7zeswdfvCPSpz1PO05YQG9GoE4+t518xUf/G5hVwntUdlyQrNH4Kc5ofgNgZPLwWgDp/vGSVvI/p0Qjtr3bQ3u33nhSPTxH6KVghrSaI/gStW1PJJ0rNz8gcDl1GQuKthQoIIDhzCCA4MwggLsoAMCAQICAQAwDQYJKoZIhvcNAQEFBQAwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tMB4XDTA0MDIxMzEwMTMxNVoXDTM1MDIxMzEwMTMxNVowgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDBR07d/ETMS1ycjtkpkvjXZe9k+6CieLuLsPumsJ7QC1odNz3sJiCbs2wC0nLE0uLGaEtXynIgRqIddYCHx88pb5HTXv4SZeuv0Rqq4+axW9PLAAATU8w04qqjaSXgbGLP3NmohqM6bV9kZZwZLR/klDaQGo1u9uDb9lr4Yn+rBQIDAQABo4HuMIHrMB0GA1UdDgQWBBSWn3y7xm8XvVk/UtcKG+wQ1mSUazCBuwYDVR0jBIGzMIGwgBSWn3y7xm8XvVk/UtcKG+wQ1mSUa6GBlKSBkTCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb22CAQAwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOBgQCBXzpWmoBa5e9fo6ujionW1hUhPkOBakTr3YCDjbYfvJEiv/2P+IobhOGJr85+XHhN0v4gUkEDI8r2/rNk1m0GA8HKddvTjyGw/XqXa+LSTlDYkqI8OwR8GEYj4efEtcRpRYBxV8KxAW93YDWzFGvruKnnLbDAF6VR5w/cCMn5hzGCAZowggGWAgEBMIGUMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbQIBADAJBgUrDgMCGgUAoF0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMTEwODIzMjM1MzM4WjAjBgkqhkiG9w0BCQQxFgQULeKYxZCTbYQRQvjF4S41HjcflxwwDQYJKoZIhvcNAQEBBQAEgYCEzzWO3kTDJNmAIOFUb9EZESk6LtqyUwwPHPHWKDuBz1vHj27cMeUIZNmiriVCXm9EauUVFmQstLaKiOjhKCYXdYyvldeRvjjo/pGtPZYF3fSBFj7zTAKt50AHMiBlpdF4h+kkO3Em9+r5J2+b55e9gfJS9jY26Bp0kS2O9ibp2w==-----END PKCS7-----
-">
-<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal — The safer, easier way to pay online.">
-<img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-*/
-
 static void _cairo_dock_edit_and_reload_conf (GtkMenuItem *pMenuItem, gpointer data)
 {
 	cairo_dock_show_main_gui ();
@@ -420,7 +409,14 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 			(GFunc)_cairo_dock_lock_all,
 			pSubMenu,
 			NULL);
-			gtk_widget_set_tooltip_text (pMenuItem, _("This will (un)lock the whole dock."));
+			if (myDocksParam.bLockAll)
+			{
+				gtk_widget_set_tooltip_text (pMenuItem, _("This will allow you to add or remove launchers and applets, and configure the program."));
+			}
+			else
+			{
+				gtk_widget_set_tooltip_text (pMenuItem, _("This will prevent any modification of the current theme, and hide all the unnecessary entries in the menus."));
+			}
 	}
 	
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bAutoHide)

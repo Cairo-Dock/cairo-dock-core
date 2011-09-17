@@ -242,7 +242,7 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	}
 	
 	// if not present, add it to the list and send it back to Compiz.
-	if (!bFound)
+	if (!bFound)  // then we parsed all the 'plugins' array, so i = nb-elements.
 	{
 		gchar **plugins2 = g_new0 (gchar*, i+2);  // +1 for 'widget' and +1 for NULL
 		memcpy (plugins2, plugins, i * sizeof (gchar*));

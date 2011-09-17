@@ -27,6 +27,9 @@
 #include "applet-composite.h"
 #include "applet-notifications.h"
 
+#define CD_COMPIZ_BUS "org.freedesktop.compiz"
+#define CD_COMPIZ_OBJECT "/org/freedesktop/compiz"
+#define CD_COMPIZ_INTERFACE "org.freedesktop.compiz"
 
 //\___________ Define here the action to be taken when the user left-clicks on your icon or on its subdock or your desklet. The icon and the container that were clicked are available through the macros CD_APPLET_CLICKED_ICON and CD_APPLET_CLICKED_CONTAINER. CD_APPLET_CLICKED_ICON may be NULL if the user clicked in the container but out of icons.
 CD_APPLET_ON_CLICK_BEGIN
@@ -49,10 +52,125 @@ static void _cd_show_config (GtkMenuItem *menu_item, gpointer data)
 {
 	cairo_dock_show_main_gui ();
 }
+
 static void _cd_show_help_gui (GtkMenuItem *menu_item, gpointer data)
 {
 	cairo_dock_show_module_gui ("Help");
 }
+static void _launch_url (const gchar *cURL)
+{
+	if  (! cairo_dock_fm_launch_uri (cURL))
+	{
+		gchar *cCommand = g_strdup_printf ("\
+which xdg-open > /dev/null && xdg-open %s || \
+which firefox > /dev/null && firefox %s || \
+which konqueror > /dev/null && konqueror %s || \
+which iceweasel > /dev/null && konqueror %s || \
+which opera > /dev/null && opera %s ",
+			cURL,
+			cURL,
+			cURL,
+			cURL,
+			cURL);  // pas super beau mais efficace ^_^
+		int r = system (cCommand);
+		g_free (cCommand);
+	}
+}
+static void _cd_show_help_online (GtkMenuItem *menu_item, gpointer data)
+{
+	_launch_url ("http://www.glx-dock.org/ww_page.php?p=Accueil&lang=en");  // let's show the english page by default, it's easy to switch to another language from there.
+}
+
+static void _cd_remove_gnome_panel (GtkMenuItem *menu_item, gpointer data)
+{
+	gchar *cPanel = cairo_dock_launch_command_sync ("gconftool-2 -g '/desktop/gnome/session/required_components/panel'");
+	if (cPanel && strcmp (cPanel, "gnome-panel") == 0)
+	{
+		int r = system ("gconftool-2 -s '/desktop/gnome/session/required_components/panel' --type string \"\"");
+	}
+	else
+	{
+		cairo_dock_remove_dialog_if_any (myIcon);
+		cairo_dock_show_temporary_dialog_with_icon (D_("The gnome-panel is already disabled."),
+			myIcon, myContainer, 10e3, "same icon");
+	}
+}
+
+static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
+{
+	cd_debug ("%s ()", __func__);
+	// get the active plug-ins.
+	GError *error = NULL;
+	gchar **plugins = NULL;
+	dbus_g_proxy_end_call (proxy,
+		call_id,
+		&error,
+		G_TYPE_STRV,
+		&plugins,
+		G_TYPE_INVALID);
+	if (error)
+	{
+		cd_warning ("compiz active plug-ins error: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+	g_return_if_fail (plugins != NULL);
+	
+	// look for the 'Unity' plug-in.
+	gboolean bFound = FALSE;
+	int i;
+	for (i = 0; plugins[i] != NULL; i++)
+	{
+		if (strcmp (plugins[i], "Unity") == 0)  // needs to confirm the name (is it a 'U' or a 'u' ?)...
+		{
+			bFound = TRUE;
+			break;
+		}
+	}
+	
+	// if present, remove it from the list and send it back to Compiz.
+	if (bFound)
+	{
+		g_free (plugins[i]);  // remove this entry
+		plugins[i] = NULL;
+		i ++;
+		for (;plugins[i] != NULL; i++)  // move all other entries after it to the left.
+		{
+			plugins[i-1] = plugins[i];
+			plugins[i] = NULL;
+		}
+		dbus_g_proxy_call_no_reply (proxy,
+			"set",
+			G_TYPE_STRV,
+			plugins,
+			G_TYPE_INVALID);
+	}
+	else
+	{
+		cairo_dock_remove_dialog_if_any (myIcon);
+		cairo_dock_show_temporary_dialog_with_icon (D_("Unity is already disabled."),
+			myIcon, myContainer, 10e3, "same icon");
+	}
+	g_strfreev (plugins);
+}
+static void _cd_remove_unity (GtkMenuItem *menu_item, gpointer data)
+{
+	// first get the active plug-ins.
+	DBusGProxy *pActivePluginsProxy = cairo_dock_create_new_session_proxy (
+		CD_COMPIZ_BUS,
+		CD_COMPIZ_OBJECT"/core/allscreens/active_plugins",
+		CD_COMPIZ_INTERFACE);
+	
+	dbus_g_proxy_begin_call (pActivePluginsProxy,
+		"get",
+		(DBusGProxyCallNotify) _on_got_active_plugins,
+		NULL,
+		NULL,
+		G_TYPE_INVALID);
+	///g_object_unref (pActivePluginsProxy);
+}
+
+
 CD_APPLET_ON_BUILD_MENU_BEGIN
 	GtkWidget *pSubMenu = CD_APPLET_CREATE_MY_SUB_MENU ();
 		CD_APPLET_ADD_ABOUT_IN_MENU (pSubMenu);
@@ -62,5 +180,8 @@ CD_APPLET_ON_BUILD_MENU_BEGIN
 	GdkScreen *pScreen = gdk_screen_get_default ();
 	if (! gdk_screen_is_composited (pScreen))
 		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Activate composite"), GTK_STOCK_EXECUTE, cd_help_enable_composite, CD_APPLET_MY_MENU);
+	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable the gnome-panel"), GTK_STOCK_REMOVE, _cd_remove_gnome_panel, CD_APPLET_MY_MENU);
+	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable Unity"), GTK_STOCK_REMOVE, _cd_remove_unity, CD_APPLET_MY_MENU);
 	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Help"), GTK_STOCK_HELP, _cd_show_help_gui, CD_APPLET_MY_MENU);
+	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Online help"), GTK_STOCK_HELP, _cd_show_help_online, CD_APPLET_MY_MENU);
 CD_APPLET_ON_BUILD_MENU_END

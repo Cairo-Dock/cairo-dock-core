@@ -247,7 +247,7 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 		}
 		g_remove (cLastVersionFilePath);
 		g_free (cLastVersionFilePath);
-		g_key_file_set_string (pKeyFile, "Launch", "last version", s_cLastVersion);
+		g_key_file_set_string (pKeyFile, "Launch", "last version", s_cLastVersion?s_cLastVersion:"");
 		
 		g_key_file_set_string (pKeyFile, "Launch", "default backend", "");
 		
@@ -715,7 +715,7 @@ int main (int argc, char** argv)
 		g_free (cConfFilePath);
 	}
 	
-	g_print ("bFirstLaunch: %d; bNewVersion: %d\n", bFirstLaunch, bNewVersion);
+	//g_print ("bFirstLaunch: %d; bNewVersion: %d\n", bFirstLaunch, bNewVersion);
 	if (bFirstLaunch)  // first launch => set up config
 	{
 		g_timeout_add_seconds (4, _cairo_dock_first_launch_setup, NULL);
@@ -765,7 +765,6 @@ int main (int argc, char** argv)
 	"- find Kwin config tool for Composite-manager\n"
 	"- draw a preview of the dock in opengl\n"
 	"- display Help GUI in simple mode\n"
-	"- add actions for the Help module\n"
 	"- kde integration ++\n"
 	"- stack: enable iSubdockViewType\n"
 	"\n");*/
