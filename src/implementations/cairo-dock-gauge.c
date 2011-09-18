@@ -590,12 +590,14 @@ static void _draw_gauge_needle (cairo_t *pCairoContext, Gauge *pGauge, GaugeIndi
 		cairo_restore (pCairoContext);
 	}
 }
-static void _draw_gauge_image (cairo_t *pCairoContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
+static GaugeImage *_get_nth_image (Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
 {
 	GaugeImage *pGaugeImage;
 	if (fValue <= CAIRO_DATA_RENDERER_UNDEF_VALUE+1)
 	{
 		pGaugeImage = pGaugeIndicator->pImageUndef;
+		if (pGaugeIndicator->pImageUndef == NULL && pGauge->pImageBackground == NULL)  // the theme doesn't define an "undef" image, and there is no bg image => to avoid having an empty icon, we draw the 0-th image.
+			pGaugeImage = &pGaugeIndicator->pImageList[0];
 	}
 	else
 	{
@@ -606,6 +608,11 @@ static void _draw_gauge_image (cairo_t *pCairoContext, Gauge *pGauge, GaugeIndic
 			iNumImage = pGaugeIndicator->iNbImages - 1;
 		pGaugeImage = &pGaugeIndicator->pImageList[iNumImage];
 	}
+	return pGaugeImage;
+}
+static void _draw_gauge_image (cairo_t *pCairoContext, Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
+{
+	GaugeImage *pGaugeImage = _get_nth_image (pGauge, pGaugeIndicator, fValue);
 	
 	if (pGaugeImage && pGaugeImage->image.pSurface != NULL)
 	{
@@ -712,21 +719,7 @@ void render (Gauge *pGauge, cairo_t *pCairoContext)
 ///////////////////////////////////////////////
 static void _draw_gauge_image_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndicator, double fValue)
 {
-	GaugeImage *pGaugeImage;
-	
-	if (fValue <= CAIRO_DATA_RENDERER_UNDEF_VALUE+1)
-	{
-		pGaugeImage = pGaugeIndicator->pImageUndef;
-	}
-	else
-	{
-		int iNumImage = fValue * (pGaugeIndicator->iNbImages - 1) + 0.5;
-		if (iNumImage < 0)
-			iNumImage = 0;
-		if (iNumImage > pGaugeIndicator->iNbImages - 1)
-			iNumImage = pGaugeIndicator->iNbImages - 1;
-		pGaugeImage = &pGaugeIndicator->pImageList[iNumImage];
-	}
+	GaugeImage *pGaugeImage = _get_nth_image (pGauge, pGaugeIndicator, fValue);
 	
 	int iWidth, iHeight;
 	cairo_data_renderer_get_size (CAIRO_DATA_RENDERER (pGauge), &iWidth, &iHeight);
