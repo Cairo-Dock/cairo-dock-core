@@ -80,19 +80,24 @@ static void _cd_show_help_online (GtkMenuItem *menu_item, gpointer data)
 	_launch_url (CAIRO_DOCK_WIKI_URL);
 }
 
+static gboolean _is_gnome_panel_running (void) // only for Gnome2
+{
+	gboolean bResult = FALSE;
+	gchar *cWhich = cairo_dock_launch_command_sync ("which gconftool-2");
+	if (cWhich != NULL && *cWhich == '/')
+	{
+		gchar *cPanel = cairo_dock_launch_command_sync ("gconftool-2 -g '/desktop/gnome/session/required_components/panel'");
+		if (cPanel && strcmp (cPanel, "gnome-panel") == 0)
+			bResult = TRUE;
+		g_free (cPanel);
+	}
+	g_free (cWhich);
+	return bResult;
+}
+
 static void _cd_remove_gnome_panel (GtkMenuItem *menu_item, gpointer data)
 {
-	gchar *cPanel = cairo_dock_launch_command_sync ("gconftool-2 -g '/desktop/gnome/session/required_components/panel'");
-	if (cPanel && strcmp (cPanel, "gnome-panel") == 0)
-	{
-		int r = system ("gconftool-2 -s '/desktop/gnome/session/required_components/panel' --type string \"\"");
-	}
-	else
-	{
-		cairo_dock_remove_dialog_if_any (myIcon);
-		cairo_dock_show_temporary_dialog_with_icon (D_("The gnome-panel is already disabled."),
-			myIcon, myContainer, 10e3, "same icon");
-	}
+	int r = system ("gconftool-2 -s '/desktop/gnome/session/required_components/panel' --type string \"\"");
 }
 
 static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
@@ -127,7 +132,14 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 			break;
 		}
 	}
-	
+
+	if (data != NULL)
+	{	// only check if unity is Running
+		data = &bFound;
+		g_strfreev (plugins);
+		return;
+	}
+
 	// if present, remove it from the list and send it back to Compiz.
 	if (bFound)
 	{
@@ -159,6 +171,7 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	}
 	g_strfreev (plugins);
 }
+
 static void _cd_remove_unity (GtkMenuItem *menu_item, gpointer data)
 {
 	// first get the active plug-ins.
@@ -176,6 +189,28 @@ static void _cd_remove_unity (GtkMenuItem *menu_item, gpointer data)
 	///g_object_unref (pActivePluginsProxy);
 }
 
+static gboolean _is_unity_running (void)
+{
+	if (cd_is_the_new_compiz ())
+		return FALSE; // it's just to not have useless warning (but it will launch 'compiz --version' command)
+
+	DBusGProxy *pActivePluginsProxy = cairo_dock_create_new_session_proxy (
+		CD_COMPIZ_BUS,
+		CD_COMPIZ_OBJECT"/core/screen0/active_plugins",
+		CD_COMPIZ_INTERFACE);
+
+	gboolean bResult = FALSE;
+
+	dbus_g_proxy_begin_call (pActivePluginsProxy,
+		"get",
+		(DBusGProxyCallNotify) _on_got_active_plugins,
+		&bResult, // data != NULL => only check if unity is running
+		NULL,
+		G_TYPE_INVALID);
+
+	return bResult;
+}
+
 
 CD_APPLET_ON_BUILD_MENU_BEGIN
 	GtkWidget *pSubMenu = CD_APPLET_CREATE_MY_SUB_MENU ();
@@ -186,8 +221,9 @@ CD_APPLET_ON_BUILD_MENU_BEGIN
 	GdkScreen *pScreen = gdk_screen_get_default ();
 	if (! gdk_screen_is_composited (pScreen))
 		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Activate composite"), GTK_STOCK_EXECUTE, cd_help_enable_composite, pSubMenu);
-	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable the gnome-panel"), GTK_STOCK_REMOVE, _cd_remove_gnome_panel, pSubMenu);
-	if (cd_is_the_new_compiz ())
+	if (_is_gnome_panel_running ())
+		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable the gnome-panel"), GTK_STOCK_REMOVE, _cd_remove_gnome_panel, pSubMenu);
+	if (_is_unity_running ())
 		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable Unity"), GTK_STOCK_REMOVE, _cd_remove_unity, pSubMenu);
 	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Help"), GTK_STOCK_HELP, _cd_show_help_gui, CD_APPLET_MY_MENU);
 	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Online help"), GTK_STOCK_HELP, _cd_show_help_online, CD_APPLET_MY_MENU);
