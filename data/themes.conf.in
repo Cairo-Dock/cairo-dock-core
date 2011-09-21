@@ -3,7 +3,7 @@
 #[gtk-open]
 [Themes]
 
-#R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes2.2] /
+#R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes2.4] /
 chosen theme = 
 
 #S ...or drag and drop a theme package here :
