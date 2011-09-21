@@ -496,6 +496,7 @@ static gboolean on_apply_config_simple (gpointer data)
 	int iTaskbarType = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "taskbar", NULL);
 	if (iTaskbarType != s_iTaskbarType)
 	{
+		g_print ("s_iTaskbarType : %d / %d\n", s_iTaskbarType, iTaskbarType);
 		gboolean bShowAppli = TRUE, bHideVisible, bCurrentDesktopOnly, bMixLauncherAppli, bGroupAppliByClass;
 		switch (iTaskbarType)
 		{
@@ -529,7 +530,9 @@ static gboolean on_apply_config_simple (gpointer data)
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "current desktop only", bCurrentDesktopOnly);
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "mix launcher appli", bMixLauncherAppli);
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "group by class", bGroupAppliByClass);
+			g_print (" taskbar : %d; %d; %d; %d\n", bHideVisible, bCurrentDesktopOnly, bMixLauncherAppli, bGroupAppliByClass);
 		}
+		s_iTaskbarType = iTaskbarType;
 	}
 	
 	// animations
@@ -620,6 +623,7 @@ static gboolean on_apply_config_simple (gpointer data)
 				G_TYPE_INT, "Global", "appearance", iEffectOnDisappearance,
 				G_TYPE_INVALID);
 		}
+		s_iEffectOnDisappearance = iEffectOnDisappearance;
 	}
 	
 	g_strfreev (cOnMouseHover);
@@ -687,6 +691,7 @@ static gboolean on_apply_config_simple (gpointer data)
 	if (bSeparateIcons != s_bSeparateIcons)
 	{
 		g_key_file_set_integer (pKeyFile, "Icons", "separate_icons", (bSeparateIcons ? 3 : 0));
+		s_bSeparateIcons = bSeparateIcons;
 	}
 	
 	gchar *cIconOrder = g_key_file_get_string (pSimpleKeyFile, "Appearance", "icon's type order", NULL);
