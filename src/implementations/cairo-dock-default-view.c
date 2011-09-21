@@ -680,7 +680,7 @@ void cairo_dock_register_default_renderer (void)
 {
 	CairoDockRenderer *pDefaultRenderer = g_new0 (CairoDockRenderer, 1);
 	pDefaultRenderer->cReadmeFilePath = g_strdup_printf ("%s/readme-default-view", GLDI_SHARE_DATA_DIR);
-	pDefaultRenderer->cPreviewFilePath = g_strdup_printf ("%s/icons/preview-default.png", GLDI_SHARE_DATA_DIR);
+	pDefaultRenderer->cPreviewFilePath = g_strdup_printf ("%s/images/preview-default.png", GLDI_SHARE_DATA_DIR);
 	pDefaultRenderer->compute_size = cd_calculate_max_dock_size_default;
 	pDefaultRenderer->calculate_icons = cd_calculate_icons_default;
 	pDefaultRenderer->render = cd_render_default;
