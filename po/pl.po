@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-06-08 13:24+0000\n"
-"Last-Translator: Szymon Sieciński <Unknown>\n"
+"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"PO-Revision-Date: 2011-09-20 09:30+0000\n"
+"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-04 04:35+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-21 04:46+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+"Language: pl\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -348,11 +348,11 @@ msgstr ""
 
 #: ../src/cairo-dock-help.c:220 ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "Sztuczki i kruczki"
 
 #: ../src/cairo-dock-help.c:380 ../src/help/applet-tips-dialog.c:299
 msgid "Category"
-msgstr ""
+msgstr "Kategoria"
 
 #: ../src/cairo-dock-menu.c:122
 msgid "Delete this dock?"
@@ -775,9 +775,8 @@ msgid "Use Cairo backend."
 msgstr ""
 
 #: ../src/cairo-dock.c:320
-#, fuzzy
 msgid "Use OpenGL backend."
-msgstr "Używać OpenGL w Cairo-Dock ?"
+msgstr ""
 
 #: ../src/cairo-dock.c:324
 msgid ""
@@ -1099,6 +1098,9 @@ msgid ""
 "composite manager.\n"
 "Do you want to activate it now?"
 msgstr ""
+"Aby usunąć czarny prostokąt wokół docka, musisz uruchomić kompozytowy "
+"menedżer okien.\n"
+"Czy chcesz to zrobić teraz?"
 
 #: ../src/help/applet-composite.c:177
 msgid ""
@@ -1150,14 +1152,12 @@ msgid "Online help"
 msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
-#, fuzzy
 msgid "Enter a command"
-msgstr "Interakcja"
+msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
-#, fuzzy
 msgid "New launcher"
-msgstr "Własny skrót"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
 #: ../data/messages:613
@@ -1283,7 +1283,7 @@ msgstr ""
 
 #: ../data/messages:33 ../data/messages:1315
 msgid "Resizing icons"
-msgstr ""
+msgstr "Zmiana rozmiaru ikon"
 
 #: ../data/messages:35 ../data/messages:1317
 msgid ""
@@ -3946,149 +3946,3 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
-
-#~ msgid "This will (un)lock the whole dock."
-#~ msgstr "To zablokuje\\odblokuje cały dok."
-
-#~ msgid "same size"
-#~ msgstr "ten sam rozmiar"
-
-#~ msgid "Use OpenGL in Cairo-Dock ?"
-#~ msgstr "Używać OpenGL w Cairo-Dock ?"
-
-#~ msgid ""
-#~ "the theme couldn't be found; the default theme will be used instead.\n"
-#~ " You can change this by opening the configuration of this module; do you "
-#~ "want to do it now ?"
-#~ msgstr ""
-#~ "wygląd nie został znaleziony; zostanie użyty wygląd domyślny\n"
-#~ " Możesz to zmienić otwierając okno konfiguracji modułu; chcesz to teraz "
-#~ "zrobić ?"
-
-#~ msgid "Do you want to mount this point ?"
-#~ msgstr "Czy chcesz zamontować ten punkt ?"
-
-#~ msgid "Do you want to monitor the content of the directory ?"
-#~ msgstr "Czy chcesz monitorować zawartość tego katalogu ?"
-
-#~ msgid "Controlers"
-#~ msgstr "Kontrolery"
-
-#~ msgid "Controler"
-#~ msgstr "Kontroler"
-
-#~ msgid "%s is now unmounted"
-#~ msgstr "%s jest teraz odmontowany"
-
-#~ msgid "%s is now mounted"
-#~ msgstr "%s jest teraz zamontowany"
-
-#~ msgid "Plug-in"
-#~ msgstr "Wtyczka"
-
-#~ msgid "rate me"
-#~ msgstr "oceń mnie"
-
-#~ msgid "How can I resize my icons ?"
-#~ msgstr "Jak mogę zmieniać rozmiar ikon?"
-
-#~ msgid "How can I change the image of an icon ?"
-#~ msgstr "Jak mogę zmienić obraz ikony?"
-
-#~ msgid "How can I quickly remove many icons ?"
-#~ msgstr "Jak mogę szybko usunąć wiele ikon?"
-
-#~ msgid "How can I change their decorations ?"
-#~ msgstr "Jak mogę zmienić ich dekorację?"
-
-#~ msgid "How do I setup their position ?"
-#~ msgstr "Jak mogę ustawić ich pozycję?"
-
-#~ msgid "Do you want to mount this device?"
-#~ msgstr "Czy chcesz zamontować ten punkt ?"
-
-#~ msgid "Do you want to monitor the content of this directory?"
-#~ msgstr "Czy chcesz monitorować zawartość tego katalogu ?"
-
-#~ msgid "Controller"
-#~ msgstr "Kontroler"
-
-#~ msgid "Controllers"
-#~ msgstr "Kontrolery"
-
-#~ msgid ""
-#~ "It appears that you've never entered the help module before.\n"
-#~ "If you are having difficulty configuring the dock, or if you want to "
-#~ "customise it,\n"
-#~ "the Help module is here for you!\n"
-#~ "Would you like to take a look at it now?"
-#~ msgstr ""
-#~ "Wygląda na to, że nigdy wcześniej nie używałeś modułu Pomocy.\n"
-#~ "Jeśli masz trudności z konfiguracją doku lub chcesz go spersonalizować,\n"
-#~ "moduł Pomocy może Ci w tym pomóc.\n"
-#~ "Czy chcesz do niego zajrzeć?"
-
-#~ msgid "Configuration of the '%s' dock"
-#~ msgstr "Konfiguracja doku '%s'"
-
-#~ msgid "custom launcher"
-#~ msgstr "własny aktywator"
-
-#~ msgid "sub-dock"
-#~ msgstr "dok podrzędny"
-
-#~ msgid "main dock"
-#~ msgstr "główny dok"
-
-#~ msgid "Close (middle-click)"
-#~ msgstr "Zamknij (środkowy przycisk myszki)"
-
-#~ msgid ""
-#~ "A useful FAQ which also contains a lot of hints.\n"
-#~ "Roll your mouse over a sentence to make helpful popups appear."
-#~ msgstr ""
-#~ "Użyteczne FAQ zawierające wiele wskazówek.\n"
-#~ "Najedź myszką na zdanie żeby pokazać dodatkowe informacje."
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "Nie udało się odmontować %s"
-
-#~ msgid "Provides various animations for your icons."
-#~ msgstr "Zapewnia różne animacje dla Twoich ikon."
-
-#~ msgid ""
-#~ "To remove the black rectangle around the dock, you will need to activate "
-#~ "a composite manager.\n"
-#~ "For instance, this can be done by activating desktop effects, launching "
-#~ "Compiz, or activating the composition in Metacity.\n"
-#~ "I can perform this last operation for you. Do you want to proceed ?"
-#~ msgstr ""
-#~ "Aby usunąć czarny prostokąt wokół doku musisz uaktywnić menadżer "
-#~ "kompozycji.\n"
-#~ "Możesz to zrobić włączając efekty pulpitu, uruchamiając Compiz lub "
-#~ "aktywując kompozycje w Metacity.\n"
-#~ "Czy chcesz abym zrobił to za Ciebie?"
-
-#~ msgid "failed to mount %s"
-#~ msgstr "nie można zamontować %s"
-
-#~ msgid ""
-#~ "Welcome in Cairo-Dock2 !\n"
-#~ "A default and simple theme has been loaded.\n"
-#~ "You can either familiarize yourself with the dock or choose another theme "
-#~ "with right-click -> Cairo-Dock -> Manage themes.\n"
-#~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-#~ "If you have any question/request/remark, please pay us a visit at http://"
-#~ "glx-dock.org.\n"
-#~ "Hope you will enjoy this soft !\n"
-#~ "  (you can now click on this dialog to close it)"
-#~ msgstr ""
-#~ "Witamy w Cairo-Dock2!\n"
-#~ "Został wczytany prosty motyw.\n"
-#~ "Możesz zapoznać się z dockiem lub wybrać inny motyw: PPM -> Cairo-Dock -> "
-#~ "Zarządzaj motywami.\n"
-#~ "Pomoc jest dostępna przez kliknięcie prawego przycisku myszy i menu Cairo-"
-#~ "Dock -> Pomoc.\n"
-#~ "Jeśli masz pytania, sugestie, pomysły, zajrzyj na http://glx-dock.org.\n"
-#~ "Mamy nadzieję, że spodobał si się ten program!\n"
-#~ "  (teraz możesz kliknąć ta to okno, aby je zamknąć)"

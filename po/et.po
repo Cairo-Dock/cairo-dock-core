@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-03-31 14:29+0000\n"
-"Last-Translator: lyyser <Unknown>\n"
+"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"PO-Revision-Date: 2011-09-20 09:09+0000\n"
+"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Estonian <et@li.org>\n"
-"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-04 04:33+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-21 04:45+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+"Language: et\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -758,9 +758,8 @@ msgid "Use Cairo backend."
 msgstr ""
 
 #: ../src/cairo-dock.c:320
-#, fuzzy
 msgid "Use OpenGL backend."
-msgstr "Kasuta OpenGL  Cairo-Dock'is"
+msgstr ""
 
 #: ../src/cairo-dock.c:324
 msgid ""
@@ -1111,9 +1110,8 @@ msgid "Enter a command"
 msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
-#, fuzzy
 msgid "New launcher"
-msgstr "Kohandatud käivitaja"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
 #: ../data/messages:613
@@ -3896,66 +3894,3 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
-
-#~ msgid "This will (un)lock the whole dock."
-#~ msgstr "See avab/lukustab terve dock'i."
-
-#~ msgid "Importing theme %s ..."
-#~ msgstr "Importditav teema %s..."
-
-#~ msgid "The themes could not be deleted"
-#~ msgstr "Teemasid ei saa kustutada"
-
-#~ msgid "The theme could not be deleted"
-#~ msgstr "Teemat ei saa kustutada"
-
-#~ msgid "The theme could not be saved"
-#~ msgstr "Teemat ei saa salvestada"
-
-#~ msgid "The theme has been deleted"
-#~ msgstr "Teema on kustutatud"
-
-#~ msgid "The theme has been saved"
-#~ msgstr "Teema on salvestatud"
-
-#~ msgid "The themes have been deleted"
-#~ msgstr "Teemad on kustutatud"
-
-#~ msgid "Provides various animations for your icons."
-#~ msgstr "Pakub erinevaid animatsioone sinu ikoonidele."
-
-#~ msgid "Add a separator"
-#~ msgstr "Lisa eraldaja"
-
-#~ msgid "Close (middle-click)"
-#~ msgstr "Sulge (kesk-klikk)"
-
-#~ msgid "rate me"
-#~ msgstr "hinda mind"
-
-#~ msgid "Applets"
-#~ msgstr "Apletid"
-
-#~ msgid "Choose one of the available themes:"
-#~ msgstr "Vali üks saadaolevatest teemadest:"
-
-#~ msgid "Do you want to keep this setting?"
-#~ msgstr "Kas soovite säilitada käesolevat seadet?"
-
-#~ msgid "Other applets"
-#~ msgstr "Muud apletid"
-
-#~ msgid "Configuration of the '%s' dock"
-#~ msgstr "'%s' doki seadistus"
-
-#~ msgid "Add a custom launcher"
-#~ msgstr "Lisa kohandatud käivitaja"
-
-#~ msgid "Add a sub-dock"
-#~ msgstr "Lisa alamdokk"
-
-#~ msgid "Add a main dock"
-#~ msgstr "Lisa peadokk"
-
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
-#~ msgstr "Seadke käitumine Compiz-is nii: (name=cairo-dock & type=Utility)"

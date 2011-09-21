@@ -4,20 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 # ferran <ferro66@ya.com>, 2010.
 # ferran <traductor@ferrranroig.com>, 2010.
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-03-02 21:52+0000\n"
-"Last-Translator: ferran <Unknown>\n"
+"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"PO-Revision-Date: 2011-09-20 08:58+0000\n"
+"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Catalan <ca@li.org>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-04 04:32+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-21 04:45+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+"Language: ca\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -753,9 +753,8 @@ msgid "Use Cairo backend."
 msgstr ""
 
 #: ../src/cairo-dock.c:320
-#, fuzzy
 msgid "Use OpenGL backend."
-msgstr "Utilitzar OpenGL a Cairo-Dock ?"
+msgstr ""
 
 #: ../src/cairo-dock.c:324
 msgid ""
@@ -1123,14 +1122,12 @@ msgid "Online help"
 msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
-#, fuzzy
 msgid "Enter a command"
-msgstr "Interacció"
+msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
-#, fuzzy
 msgid "New launcher"
-msgstr "llançadors"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
 #: ../data/messages:613
@@ -3966,322 +3963,3 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
-
-#~ msgid "This will (un)lock the whole dock."
-#~ msgstr "Això (des)blocarà tota la barra"
-
-#~ msgid ""
-#~ "the theme couldn't be found; the default theme will be used instead.\n"
-#~ " You can change this by opening the configuration of this module; do you "
-#~ "want to do it now ?"
-#~ msgstr ""
-#~ "no s'ha pogut trobar el tema; en el seu lloc s'utilitzarà el tema per "
-#~ "defecte.\n"
-#~ " Pots canviar això obrint la configuració d'aquest mòdul; vols fer-ho ara?"
-
-#~ msgid "%s is now unmounted"
-#~ msgstr "%s està desmuntat"
-
-#~ msgid "%s is now mounted"
-#~ msgstr "%s està muntat"
-
-#~ msgid "Use OpenGL in Cairo-Dock ?"
-#~ msgstr "Utilitzar OpenGL a Cairo-Dock ?"
-
-#~ msgid "failed to mount %s"
-#~ msgstr "ha fallat el muntatge de %s"
-
-#~ msgid "Do you want to monitor the content of the directory ?"
-#~ msgstr "Vols monitoritzar el contingut de la carpeta?"
-
-#~ msgid "theme"
-#~ msgstr "tema"
-
-#~ msgid "failed to unmount %s"
-#~ msgstr "no s'ha pogut desmuntar %s"
-
-#~ msgid "rating"
-#~ msgstr "valoració"
-
-#~ msgid "Plug-ins"
-#~ msgstr "Connectors"
-
-#~ msgid ""
-#~ "The module '%s' is not present. You need to install it or its "
-#~ "dependencies to make the most of this module."
-#~ msgstr ""
-#~ "No hi ha el mòdul '%s'. Hauries d'instal·lar el mòdul o les seves "
-#~ "dependències per treure'n el màxim profit."
-
-#~ msgid "Highlight words"
-#~ msgstr "Realçar les paraules"
-
-#~ msgid "Configuration of Cairo-Dock"
-#~ msgstr "Configuració de Cairo-Dock"
-
-#~ msgid "Do you want to activate it now ?"
-#~ msgstr "Vols activar-ho immediatament?"
-
-#~ msgid "The module '%s' is not activated."
-#~ msgstr "El mòdul '%s' no està activat."
-
-#~ msgid "Configuration of the launchers"
-#~ msgstr "Configuració dels llançadors"
-
-#~ msgid "Activate this module"
-#~ msgstr "Activa aquest mòdul"
-
-#~ msgid "Configure the look of the dialog bubbles."
-#~ msgstr "Configurar l'aspecte de les notificacions"
-
-#~ msgid "Set a background to your dock."
-#~ msgstr "Estableix un fons al teu acoblador"
-
-#~ msgid ""
-#~ "It provides different window decorators. Activate it first if you want to "
-#~ "select a different decorator for your dialogs."
-#~ msgstr ""
-#~ "Proporciona diferents decoracions de finestra. Activa-ho primer si vols "
-#~ "seleccionar una decoració diferent per als teus diàlegs."
-
-#~ msgid "Hidden Dock"
-#~ msgstr "Barra Oculta"
-
-#~ msgid "Display and interact with the currently open windows."
-#~ msgstr "Mostra i interacciona amb les finestres obertes actualment."
-
-#~ msgid ""
-#~ "It seems that you've never entered the help module yet.\n"
-#~ "If you have some difficulty to configure the dock, or if you are willing "
-#~ "to customize it,\n"
-#~ "the Help module is here for you !\n"
-#~ "Do you want to take a look at it now ?"
-#~ msgstr ""
-#~ "Sembla que encara no has entrat al módul d'ajuda.\n"
-#~ "El mòdul d'Ajuda hi és per si tens alguna dificultat per configurar la "
-#~ "barra, \n"
-#~ "o vols personalitzar-la !\n"
-#~ "Vols fer-hi una ullada ?"
-
-#~ msgid "Quit Cairo-Dock ?"
-#~ msgstr "Tancar Cairo-Dock ?"
-
-#~ msgid ""
-#~ "You're about deleting this file\n"
-#~ "  (%s)\n"
-#~ "from your hard-disk. Sure ?"
-#~ msgstr ""
-#~ "Estàs a punt d'esborrar aquest arxiu\n"
-#~ "  (%s)\n"
-#~ "del disc dur. N'estàs segur ?"
-
-#~ msgid "Rename to :"
-#~ msgstr "Canvia el nom per:"
-
-#~ msgid "Undefined"
-#~ msgstr "No s'ha definit"
-
-#~ msgid "You're about removing this icon (%s) from the dock. Sure ?"
-#~ msgstr ""
-#~ "Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
-
-#~ msgid ""
-#~ "Attention : couldn't delete this file.\n"
-#~ "Check that you have writing rights on it."
-#~ msgstr ""
-#~ "Alerta: no s'ha pogut esborrar aquest arxiu.\n"
-#~ "Comprova que en tens drets d'escriptura."
-
-#~ msgid ""
-#~ "Attention : couldn't rename %s.\n"
-#~ "Check that you have writing rights,\n"
-#~ " and that the new name does not already exist."
-#~ msgstr ""
-#~ "Alerta: no s'ha pogut canviar el nom de %s.\n"
-#~ "Comprova que en tens drets d'escriptura,\n"
-#~ " i que el nou nom no existeixi."
-
-#~ msgid "You're about removing this applet (%s) from the dock. Sure ?"
-#~ msgstr ""
-#~ "Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs "
-#~ "segur ?"
-
-#~ msgid "Set position for the dock '%s'"
-#~ msgstr "Estableix la posició de la barra '%s'"
-
-#~ msgid "Set up this dock"
-#~ msgstr "Configurar aquesta barra"
-
-#~ msgid "Configure the behaviour, appearance, and applets."
-#~ msgstr "Configurar el comportament, aparença i miniaplicacions."
-
-#~ msgid "Set up the position of this main dock."
-#~ msgstr "Estableix la posició d'aquesta barra principal."
-
-#~ msgid "lock icons"
-#~ msgstr "blocar icones"
-
-#~ msgid "lock dock"
-#~ msgstr "bloca la barra"
-
-#~ msgid "It will hide the dock until you enter inside with the mouse."
-#~ msgstr "Amagarà la barra fins que hi entris amb el ratolí."
-
-#~ msgid "unlock dock"
-#~ msgstr "desbloca la barra"
-
-#~ msgid "unlock icons"
-#~ msgstr "desblocar icones"
-
-#~ msgid "Find out the latest version of Cairo-Dock here !."
-#~ msgstr "Troba aquí la darrera versió de Cairo-Dock !."
-
-#~ msgid "Mount"
-#~ msgstr "Munta"
-
-#~ msgid "Unmount"
-#~ msgstr "Desmunta"
-
-#~ msgid ""
-#~ "The '%s' plug-in is not active.\n"
-#~ "Be sure to activate it to enjoy these features."
-#~ msgstr ""
-#~ "La miniaplicació '%s' no està activa.\n"
-#~ "Assegura't d'activar-la per disposar d'aquestes característiques."
-
-#~ msgid ""
-#~ "The '%s' module was not found.\n"
-#~ "Be sure to install it in the same version as the dock to enjoy these "
-#~ "features."
-#~ msgstr ""
-#~ "No s'ha pogut trobar el mòdul '%s'.\n"
-#~ "Assegura't que l'instal·les a la mateixa versió que la barra per disposar "
-#~ "d'aquestes característiques."
-
-#~ msgid "grab"
-#~ msgstr "agafa"
-
-#~ msgid "sobriety"
-#~ msgstr "sobrietat"
-
-#~ msgid "You have to try the theme before you can rate it."
-#~ msgstr "Per poder valorar el tema, l'has d'haver provat."
-
-#~ msgid "Do you want to monitor the content of this directory?"
-#~ msgstr "Vols monitoritzar el contingut de la carpeta?"
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "no s'ha pogut desmuntar %s"
-
-#~ msgid ""
-#~ "It appears that you've never entered the help module before.\n"
-#~ "If you are having difficulty configuring the dock, or if you want to "
-#~ "customise it,\n"
-#~ "the Help module is here for you!\n"
-#~ "Would you like to take a look at it now?"
-#~ msgstr ""
-#~ "Sembla que encara no has entrat al módul d'ajuda.\n"
-#~ "El mòdul d'Ajuda hi és per si tens alguna dificultat per configurar la "
-#~ "barra, \n"
-#~ "o vols personalitzar-la !\n"
-#~ "Vols fer-hi una ullada ?"
-
-#~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want "
-#~ "to select a different decorator for your dialog boxes."
-#~ msgstr ""
-#~ "Proporciona diferents decoracions de finestra. Activa-ho primer si vols "
-#~ "seleccionar una decoració diferent per als teus diàlegs."
-
-#~ msgid ""
-#~ "Warning: could not delete this file.\n"
-#~ "Please check file permissions."
-#~ msgstr ""
-#~ "Alerta: no s'ha pogut esborrar aquest arxiu.\n"
-#~ "Comprova que en tens drets d'escriptura."
-
-#~ msgid "Rename to:"
-#~ msgstr "Canvia el nom per:"
-
-#~ msgid ""
-#~ "Warning: could not rename %s.\n"
-#~ "Check file permissions \n"
-#~ "and that the new name does not already exist."
-#~ msgstr ""
-#~ "Alerta: no s'ha pogut canviar el nom de %s.\n"
-#~ "Comprova que en tens drets d'escriptura,\n"
-#~ " i que el nou nom no existeixi."
-
-#~ msgid "Set the position of this main dock."
-#~ msgstr "Estableix la posició d'aquesta barra principal."
-
-#~ msgid "Set position for the '%s' dock"
-#~ msgstr "Estableix la posició del Dock '%s'"
-
-#~ msgid "This icon doesn't have a desktop file."
-#~ msgstr "Aquesta icona no té un arxiu d'escriptori"
-
-#~ msgid "Automatically hide the dock"
-#~ msgstr "Amaga automàticament el Dock"
-
-#~ msgid "Hide the dock whenever it overlaps a window"
-#~ msgstr "Amaga el Dock quant tingui una finestra per sobre"
-
-#~ msgid "The last effect requires opengl."
-#~ msgstr "El darrer efecte necessita opengl."
-
-#~ msgid "Add or remove any applet :"
-#~ msgstr "Afegeix o elimina subprogrames :"
-
-#~ msgid "Choose one of the available themes:"
-#~ msgstr "Trieu un tema dels disponibles:"
-
-#~ msgid ""
-#~ "Icons will scroll according to what positioning model is selected. The "
-#~ "dock can of course can be positioned anywhere on the screen. Here we "
-#~ "specify this relative position."
-#~ msgstr ""
-#~ "Les icones es desplaçaran d'acord amb el que s'ha seleccionat en el model "
-#~ "de posicionament. Per descomptat, el Dock es pot col·locar en qualsevol "
-#~ "lloc de la pantalla. Aquí s'especifica aquesta posició relativa."
-
-#~ msgid ""
-#~ "Prevent windows from overlapping the dock: reserve space at the edge of "
-#~ "the screen for the dock.\n"
-#~ "Auto-hide: when the dock is hidden, place the mouse on the screen's "
-#~ "border to call it back.\n"
-#~ "Pop-up on shortcut : When you press the shortcut, the dock will pop-up at "
-#~ "the position of your mouse. The rest of the time, it stays invisible, "
-#~ "thus acting like a menu."
-#~ msgstr ""
-#~ "Evita que les finestres es superposin al Dock: reserva espai al voltant "
-#~ "de la superfície del Dock.\n"
-#~ "Amaga automàticament: quan el Dock està amagat, situeu el cursor sobre el "
-#~ "marge de la pantalla on hi ha el Dock amagat i tornarà a aparèixer.\n"
-#~ "Emergents de dreceres: Quan es prem una drecera apareix un Dock  emergent "
-#~ "en la posició del ratolí. La resta del temps, roman invisible, actuant "
-#~ "com un menú."
-
-#~ msgid "Pop-up only if the mouse hits a screen corner"
-#~ msgstr "Emergeix només si es clica una cantonada de la pantalla"
-
-#~ msgid "Position relative to the selected screen edge"
-#~ msgstr "Posició relativa per les superfícies seleccionades"
-
-#~ msgid "Display an indicator even when the icon is not a launcher ?"
-#~ msgstr "Voleu mostrar un indicador quan la icona no sigui un llançador?"
-
-#~ msgid "In the style of Firefox tabs"
-#~ msgstr "A l'estil de les pestanyes del Firefox"
-
-#~ msgid "Middle-clicking on an icon closes the related application"
-#~ msgstr "Clic del mig sobre una icona tanca l'aplicació corresponent"
-
-#~ msgid "It will use 'xterm'."
-#~ msgstr "Usarà 'xterm'."
-
-#~ msgid "Activate auto-hide?"
-#~ msgstr "Voleu activar auto-amaga?"
-
-#~ msgid "Choose a theme"
-#~ msgstr "Tria un tema"

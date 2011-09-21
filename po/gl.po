@@ -3,20 +3,24 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-04-11 07:25+0000\n"
+"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"PO-Revision-Date: 2011-09-20 09:17+0000\n"
 "Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
 "Language-Team: Galician <gl@li.org>\n"
-"Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-04 04:34+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-21 04:45+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+"Language: gl\n"
+
+#: ../src/cairo-dock-gui-main.c:129 ../data/messages:671
+msgid "Behaviour"
+msgstr "Comportamento"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -78,10 +82,6 @@ msgstr ""
 #: ../src/cairo-dock-gui-items.c:600
 msgid "Launcher configuration"
 msgstr "Configuracion do iniciador"
-
-#: ../src/cairo-dock-gui-main.c:129 ../data/messages:671
-msgid "Behaviour"
-msgstr "Comportamento"
 
 #: ../src/cairo-dock-gui-main.c:130 ../data/messages:491 ../data/messages:1657
 msgid "Appearance"
@@ -783,9 +783,8 @@ msgid "Use Cairo backend."
 msgstr ""
 
 #: ../src/cairo-dock.c:320
-#, fuzzy
 msgid "Use OpenGL backend."
-msgstr "Usar OpenGL en Cairo-Dock"
+msgstr ""
 
 #: ../src/cairo-dock.c:324
 msgid ""
@@ -1143,9 +1142,8 @@ msgid "Enter a command"
 msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
-#, fuzzy
 msgid "New launcher"
-msgstr "iniciadores"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
 #: ../data/messages:613
@@ -3968,46 +3966,3 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
-
-#~ msgid "This will (un)lock the whole dock."
-#~ msgstr "Isto (des)bloqueará completamente a doca."
-
-#~ msgid ""
-#~ "It appears that you've never entered the help module before.\n"
-#~ "If you are having difficulty configuring the dock, or if you want to "
-#~ "customise it,\n"
-#~ "the Help module is here for you!\n"
-#~ "Would you like to take a look at it now?"
-#~ msgstr ""
-#~ "Semella que nunca antes fixo uso do módulo de axuda.\n"
-#~ "Se ten problemas configurando a doca, ou tenta personalizala,\n"
-#~ "aquí ten o módulo de axuda!\n"
-#~ "Quere velo agora?"
-
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
-#~ msgstr ""
-#~ "Estabelecer o comportamento en Compiz a: (nome=cairo-dock & "
-#~ "tipo=utilidade [utility])"
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "Non foi posíbel desmontar %s"
-
-#~ msgid "failed to mount %s"
-#~ msgstr "Non foi posíbel montar %s"
-
-#~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want "
-#~ "to select a different decorator for your dialog boxes."
-#~ msgstr ""
-#~ "Isto fornece diferentes decoracións de xanelas. Actíveo primeiro se quere "
-#~ "seleccionar un decorador diferente para as caixas de diálogo."
-
-#~ msgid "Provides various animations for your icons."
-#~ msgstr "Fornece varias animacións para as súas iconas."
-
-#~ msgid ""
-#~ "Provides different views for Cairo-Dock. Enable this first if you want to "
-#~ "select a different view for your docks."
-#~ msgstr ""
-#~ "Fornece diferentes vistas para Cairo-Dock. Actíveo primeiro se desexa "
-#~ "seleccionar unha vista diferente para as súas docas."

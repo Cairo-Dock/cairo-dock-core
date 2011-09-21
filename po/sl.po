@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-04-20 16:35+0000\n"
-"Last-Translator: jodlajodla <Unknown>\n"
+"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"PO-Revision-Date: 2011-09-20 09:23+0000\n"
+"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
-"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-04 04:36+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-21 04:47+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+"Language: sl\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -773,14 +773,12 @@ msgid "Happy new year %d !!!"
 msgstr "Srečno novo leto %d !!!"
 
 #: ../src/cairo-dock.c:317
-#, fuzzy
 msgid "Use Cairo backend."
-msgstr "Uporabi sliko za ozadje."
+msgstr ""
 
 #: ../src/cairo-dock.c:320
-#, fuzzy
 msgid "Use OpenGL backend."
-msgstr "Uporabi OpenGL v Cairo-Dock sidrišču"
+msgstr ""
 
 #: ../src/cairo-dock.c:324
 msgid ""
@@ -1154,14 +1152,12 @@ msgid "Online help"
 msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
-#, fuzzy
 msgid "Enter a command"
-msgstr "Interackcije"
+msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
-#, fuzzy
 msgid "New launcher"
-msgstr "zaganjalniki"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
 #: ../data/messages:613
@@ -4061,172 +4057,3 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
-
-#~ msgid "This will (un)lock the whole dock."
-#~ msgstr "To bo odklenilo/zaklenilo celotno sidrišče."
-
-#~ msgid "same size"
-#~ msgstr "enako"
-
-#~ msgid "The theme could not be deleted"
-#~ msgstr "Izgled ne mora biti izbrisan"
-
-#~ msgid "The theme could not be saved"
-#~ msgstr "Izgled ni bil shranjen"
-
-#~ msgid "The theme has been deleted"
-#~ msgstr "Izgled je bil izbrisan"
-
-#~ msgid "The theme has been saved"
-#~ msgstr "Izgled je bil shranjen"
-
-#~ msgid "The themes could not be deleted"
-#~ msgstr "Izgledi ne morejo biti izbrisani"
-
-#~ msgid "The themes have been deleted"
-#~ msgstr "Izgledi so bili izbrisani"
-
-#~ msgid "Add a separator"
-#~ msgstr "Dodaj ločilnik"
-
-#~ msgid "Add a custom launcher"
-#~ msgstr "Dodaj poljuben zaganjalnik"
-
-#~ msgid "Close (middle-click)"
-#~ msgstr "Zapri (sredinski gumb)"
-
-#~ msgid "Configuration of the '%s' dock"
-#~ msgstr "Konfiguracija '%s' sidrišča"
-
-#~ msgid "sub-dock"
-#~ msgstr "podsidrišče"
-
-#~ msgid "main dock"
-#~ msgstr "glavno sidrišče"
-
-#~ msgid "custom launcher"
-#~ msgstr "poljuben zaganjalnik"
-
-#~ msgid "failed to mount %s"
-#~ msgstr "Napaka pri zagonu %s"
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "Napaka pri odklopu %s"
-
-#~ msgid "Provides various animations for your icons."
-#~ msgstr "Omogoči različne animacije za vaše ikone."
-
-#~ msgid "Middle-clicking on an icon closes the related application"
-#~ msgstr "Srednji gumb na miški ob kliku na ikono zapre izbrano aplikacijo"
-
-#~ msgid "In the style of Firefox tabs"
-#~ msgstr "V stilu Firefox-ovih zavihkov"
-
-#~ msgid ""
-#~ "Main dock's paramaters are available in the main configuration window."
-#~ msgstr ""
-#~ "Parametri osnovnega sidrišča so na voljo v osnovnem nastavitvenem oknu."
-
-#~ msgid ""
-#~ "A useful FAQ which also contains a lot of hints.\n"
-#~ "Roll your mouse over a sentence to make helpful popups appear."
-#~ msgstr ""
-#~ "Koristen FAQ vsebuje tudi veliko trikov.\n"
-#~ "Premaknite miško nad stavek, da se bo odprlo okno pomoči."
-
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
-#~ msgstr "Nastavite vedenju v Compiz-u na: (ime=cairo-dock & tip=utility)"
-
-#~ msgid ""
-#~ "Welcome in Cairo-Dock2 !\n"
-#~ "A default and simple theme has been loaded.\n"
-#~ "You can either familiarize yourself with the dock or choose another theme "
-#~ "with right-click -> Cairo-Dock -> Manage themes.\n"
-#~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-#~ "If you have any question/request/remark, please pay us a visit at http://"
-#~ "glx-dock.org.\n"
-#~ "Hope you will enjoy this soft !\n"
-#~ "  (you can now click on this dialog to close it)"
-#~ msgstr ""
-#~ "Pozdravljeni v Cairo-Dock2!\n"
-#~ "Privzeta enostavna tema je naložena.\n"
-#~ "Če želite temo urediti ali zamenjati, to lahko storite z desnim klikom na "
-#~ "sidrišče -> Cairo-Dock -> Upravljaj teme.\n"
-#~ "Priročno pomoč lahko najdete ob kliku z desnim miškinim gumbom na "
-#~ "sidrišče -> Cairo-Dock -> Pomoč.\n"
-#~ "Če imate kakršnakoli vprašanja/predloge/sporočila, nas prosim obiščite na "
-#~ "http://glx-dock.org.\n"
-#~ "Upamo, da boste uživali s to aplikacijo!\n"
-#~ "  (sedaj lahko kliknete zapri za izhod iz tega okna)"
-
-#~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want "
-#~ "to select a different decorator for your dialog boxes."
-#~ msgstr ""
-#~ "To omogoči različne izglede oken. Najprej omogočite to, če želite izbrati "
-#~ "drugačen izgled prikaznih oken."
-
-#~ msgid ""
-#~ "Provides different views for Cairo-Dock. Enable this first if you want to "
-#~ "select a different view for your docks."
-#~ msgstr ""
-#~ "Naredi različne poglede za Cairo-Dock. Najprej omogočite to, če želite "
-#~ "različne poglede vaših sidrišč."
-
-#~ msgid ""
-#~ "To remove the black rectangle around the dock, you will need to activate "
-#~ "a composite manager.\n"
-#~ "For instance, this can be done by activating desktop effects, launching "
-#~ "Compiz, or activating the composition in Metacity.\n"
-#~ "I can perform this last operation for you. Do you want to proceed ?"
-#~ msgstr ""
-#~ "Če želite odstraniti črn pravokotnik okoli sidrišča, morate vklopiti "
-#~ "upravljalnik efektov.\n"
-#~ "Za odstranitev morate vklopiti efekte namizja, zagnati Compiz ali "
-#~ "vklopiti efekte v Metacity.\n"
-#~ "Če želite, to lahko storim samodejno. Želite nadaljevati?"
-
-#~ msgid ""
-#~ "It appears that you've never entered the help module before.\n"
-#~ "If you are having difficulty configuring the dock, or if you want to "
-#~ "customise it,\n"
-#~ "the Help module is here for you!\n"
-#~ "Would you like to take a look at it now?"
-#~ msgstr ""
-#~ "Zdi se, da še nikoli prej niste obiskali pomoči.\n"
-#~ "Če imate težave z nastavitvami sidrišča oziroma, ga želite prilagoditi,\n"
-#~ "je pomoč na voljo za Vas!\n"
-#~ "Ali želite odpreti pomoč sedaj?"
-
-#~ msgid "Draw an image"
-#~ msgstr "Nariši sliko"
-
-#~ msgid "If false, only the quick-info will have this background color."
-#~ msgstr "Ob napaki naj ima le opozorilno območje to barvo za ozadje."
-
-#~ msgid "Use background color for labels?"
-#~ msgstr "Uporabim barvo ozadja za oznake?"
-
-#~ msgid ""
-#~ "Note : many answers have an extra hint.\n"
-#~ "To popup the hint, simply leave the mouse over the sentence for 1 second, "
-#~ "a tooltip will appear."
-#~ msgstr ""
-#~ "Beri: veliko odgovorov ima posebne namige.\n"
-#~ "Za prikaz namiga, enostavno pustite kazalec nad stavkom za eno sekund in "
-#~ "namig se bo pojavil."
-
-#~ msgid "How do I re-order my icons?"
-#~ msgstr "Kako preuredim moje ikone?"
-
-#~ msgid "Yes, like that :-)"
-#~ msgstr "Ja, všeč mi je :-)"
-
-#~ msgid "Simply drag with the mouse, and drop wherever you wish."
-#~ msgstr "Enostavno premaknite s kazalcem in spustite, kadar želite."
-
-#~ msgid "Tip: you can even re-order icons of active applications."
-#~ msgstr "Nasvet: lahko preurejate ikone aktivnih aplikacij."
-
-#~ msgid "Other applets"
-#~ msgstr "Ostali vtičniki"

@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-02-05 22:46+0000\n"
-"Last-Translator: H. Fatih ATASEVER <Unknown>\n"
+"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"PO-Revision-Date: 2011-09-20 09:21+0000\n"
+"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-04 04:37+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-21 04:47+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+"Language: tr\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -108,9 +108,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
-"Dock'unuzun her zaman görünür olmasını ister misiniz,\n"
-"veya aksine gizlemek ?\n"
-"Dock'larınız ve alt dock'larınız için erişim yolunu ayarlayın !"
+"Rıhtımızın her zaman görünür olmasını ister misiniz,\n"
+" veya aksine göz batmamasını?\n"
+"Rıhtımlarınız ve alt-rıhtımlarınız için erişim yolunu ayarlayın!"
 
 #: ../src/cairo-dock-gui-main.c:1490 ../src/cairo-dock-menu.c:1494
 #: ../data/messages:353
@@ -154,7 +154,7 @@ msgstr "İletişim baloncuklarının görünüşünü ayarla."
 
 #: ../src/cairo-dock-gui-main.c:1529
 msgid "Dialog boxes"
-msgstr "İletişim Kutuları"
+msgstr "İletişim kutuları"
 
 #: ../src/cairo-dock-gui-main.c:1536
 msgid "Applets can be displayed on your desktop as widgets."
@@ -170,8 +170,8 @@ msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
 msgstr ""
-"Simgeler hakkında herşey :\n"
-"boyut,yansıma,simge teması, ..."
+"Simgeler hakkında herşey:\n"
+" boyut, yansıma, simge teması,..."
 
 #: ../src/cairo-dock-gui-main.c:1545 ../data/messages:11 ../data/messages:493
 #: ../data/messages:1035 ../data/messages:1293
@@ -232,7 +232,7 @@ msgstr "Daha fazla uygulamacık"
 
 #: ../src/cairo-dock-gui-main.c:1917 ../data/messages:539
 msgid "Get more applets online !"
-msgstr "İnternet'ten daha fazla uygulamacık alın !"
+msgstr "Daha fazla uygulamacığı çevrimiçi alın !"
 
 #: ../src/cairo-dock-gui-main.c:1951 ../src/cairo-dock.c:663
 msgid "< Maintenance mode >"
@@ -248,8 +248,8 @@ msgid ""
 "The '%s' module is not present. You need to install it and all its "
 "dependencies in order to use this module."
 msgstr ""
-"'%s' modülü mevcut değil.Bu modülü kurmak için ona veya onun "
-"bağımlılıklarına ihtiyacın var."
+"'%s' modülü mevcut değil. Bu modülü kullanabilmek için onu ve onun tüm "
+"bağımlılıklarını kurmalısınız."
 
 #: ../src/cairo-dock-gui-main.c:2402
 #, c-format
@@ -262,11 +262,11 @@ msgstr "Şimdi aktifleştirmek istiyor musunuz?"
 
 #: ../src/cairo-dock-gui-main.c:2750
 msgid "Simple Mode"
-msgstr "Basit kip"
+msgstr "Basit Kip"
 
 #: ../src/cairo-dock-gui-simple.c:408 ../src/cairo-dock-gui-themes.c:114
 msgid "Could not import the theme."
-msgstr "Tema ithal edilemedi."
+msgstr "Tema alınamadı."
 
 #: ../src/cairo-dock-gui-simple.c:428
 msgid "Importing theme..."
@@ -330,7 +330,7 @@ msgstr "Temayı aktarıyor..."
 
 #: ../src/cairo-dock-gui-themes.c:182
 msgid "Manage Themes"
-msgstr "Temaları yönet"
+msgstr "Temaları Yönet"
 
 #: ../src/cairo-dock-help.c:54 ../src/cairo-dock-menu.c:454
 #: ../src/help/applet-init.c:28 ../src/help/applet-notifications.c:228
@@ -348,7 +348,7 @@ msgstr ""
 
 #: ../src/cairo-dock-help.c:220 ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "İpuçları ve İncelikler"
 
 #: ../src/cairo-dock-help.c:380 ../src/help/applet-tips-dialog.c:299
 msgid "Category"
@@ -360,7 +360,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:174
 msgid "About Cairo-Dock"
-msgstr "cairo dock hakkında."
+msgstr "Cario-Dock Hakkında"
 
 #: ../src/cairo-dock-menu.c:211 ../data/messages:283 ../data/messages:1565
 msgid "Development site"
@@ -417,7 +417,7 @@ msgstr "Bu ana rıhtımın konum, görünürlük ve görünümünü özelleştir
 
 #: ../src/cairo-dock-menu.c:379
 msgid "Delete this dock"
-msgstr ""
+msgstr "Bu rıhtımı sil"
 
 #: ../src/cairo-dock-menu.c:388
 msgid "Manage themes"
@@ -430,7 +430,7 @@ msgstr "Sunucudan bir şablon seçin ya da geçerli şablonu kayıt edin."
 
 #: ../src/cairo-dock-menu.c:399
 msgid "Unlock icons"
-msgstr "simgelerin kilidini aç"
+msgstr "Simgelerin kilidini aç"
 
 #: ../src/cairo-dock-menu.c:399
 msgid "Lock icons"
@@ -582,11 +582,11 @@ msgstr "Ekle"
 
 #: ../src/cairo-dock-menu.c:1213
 msgid "Sub-dock"
-msgstr ""
+msgstr "Alt-rıhtım"
 
 #: ../src/cairo-dock-menu.c:1215
 msgid "Main dock"
-msgstr ""
+msgstr "Ana rıhtım"
 
 #: ../src/cairo-dock-menu.c:1218
 msgid "Separator"
@@ -768,17 +768,15 @@ msgstr ""
 #: ../src/cairo-dock.c:148
 #, c-format
 msgid "Happy new year %d !!!"
-msgstr ""
+msgstr "Yeni yılın kutlu olsun %d !!!"
 
 #: ../src/cairo-dock.c:317
-#, fuzzy
 msgid "Use Cairo backend."
-msgstr "Arkaplan görüntüsünü kullan."
+msgstr ""
 
 #: ../src/cairo-dock.c:320
-#, fuzzy
 msgid "Use OpenGL backend."
-msgstr "Cario-Dock'ta OpenGL kullan"
+msgstr ""
 
 #: ../src/cairo-dock.c:324
 msgid ""
@@ -953,11 +951,11 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:248
 msgid "kB"
-msgstr ""
+msgstr "kB"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:250
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:259
 msgid "Local"
@@ -1057,6 +1055,9 @@ msgid ""
 "Could not access remote file %s/%s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
+"Uzaktaki %s/%s dosyasına ulaşılamıyor. Sunucu devre dışı olabilir.\n"
+"Lütfen daha sonra tekrar deneyin ya da glx-dock.org üzerinden bizimle "
+"iletişime geçin."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:291
 #, c-format
@@ -1076,6 +1077,13 @@ msgid ""
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
+"Cario-Dock2'ye hoşgeldiniz !\n"
+"Bu uygulamacık, size rıhtımı kullanmaya başlamanız için yardımcı olmak için "
+"burada; sadece onun üzerine tıklayın.\n"
+"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi http://"
+"glx-dock.org adresinde ziyaret edin.\n"
+"Bu yazılımın hoşunuza gideceğini umarız !\n"
+"  (şimdi bu iletişim kutusunun üzerine, onu kapatmak üzere tıklayabilirsiniz)"
 
 #: ../src/help/applet-composite.c:160
 msgid "Don't ask me any more"
@@ -1132,14 +1140,12 @@ msgid "Online help"
 msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
-#, fuzzy
 msgid "Enter a command"
-msgstr "Etkileşim"
+msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
-#, fuzzy
 msgid "New launcher"
-msgstr "başlatıcılar"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
 #: ../data/messages:613
@@ -1159,7 +1165,7 @@ msgstr "Yarı saydam"
 #: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:451
 #: ../data/messages:619
 msgid "Zoom out"
-msgstr "Küçült"
+msgstr "Uzaklaştır"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:453
 #: ../data/messages:621
@@ -1168,11 +1174,11 @@ msgstr "Katlanır"
 
 #: ../data/messages:1 ../data/messages:1283
 msgid "General"
-msgstr ""
+msgstr "Genel"
 
 #: ../data/messages:3 ../data/messages:1285
 msgid "Using the dock"
-msgstr ""
+msgstr "Rıhtımı kullanmak"
 
 #: ../data/messages:5 ../data/messages:1287
 msgid ""
@@ -1185,7 +1191,7 @@ msgstr ""
 
 #: ../data/messages:7 ../data/messages:1289
 msgid "Adding features"
-msgstr ""
+msgstr "Özellik eklemek"
 
 #: ../data/messages:9 ../data/messages:1291
 msgid ""
@@ -1200,7 +1206,7 @@ msgstr ""
 
 #: ../data/messages:13 ../data/messages:1295
 msgid "Adding a launcher"
-msgstr ""
+msgstr "Bir başlatıcı ekleme"
 
 #: ../data/messages:15 ../data/messages:1297
 msgid ""
@@ -1212,7 +1218,7 @@ msgstr ""
 
 #: ../data/messages:17 ../data/messages:1299
 msgid "Removing a launcher"
-msgstr ""
+msgstr "Bir başlatıcıyı kaldırma"
 
 #: ../data/messages:19 ../data/messages:1301
 msgid ""
@@ -1234,7 +1240,7 @@ msgstr ""
 
 #: ../data/messages:25 ../data/messages:1307
 msgid "Moving icons"
-msgstr ""
+msgstr "Simgeleri taşıma"
 
 #: ../data/messages:27 ../data/messages:1309
 msgid ""
@@ -1265,7 +1271,7 @@ msgstr ""
 
 #: ../data/messages:33 ../data/messages:1315
 msgid "Resizing icons"
-msgstr ""
+msgstr "Simgeleri yeniden boyutlandırma"
 
 #: ../data/messages:35 ../data/messages:1317
 msgid ""
@@ -1309,7 +1315,7 @@ msgstr ""
 
 #: ../data/messages:47 ../data/messages:1329
 msgid "Closing a window"
-msgstr ""
+msgstr "Bir pencereyi kapatma"
 
 #: ../data/messages:49 ../data/messages:1331
 msgid ""
@@ -1360,7 +1366,7 @@ msgstr ""
 
 #: ../data/messages:67 ../data/messages:1349
 msgid "Setting a custom icon for an application"
-msgstr ""
+msgstr "Bir uygulama için bir özel simge belirlemek"
 
 #: ../data/messages:69 ../data/messages:1351
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
@@ -1391,7 +1397,7 @@ msgstr ""
 
 #: ../data/messages:79 ../data/messages:1361
 msgid "Docks"
-msgstr ""
+msgstr "Rıhtımlar"
 
 #: ../data/messages:81 ../data/messages:1363
 msgid "Positionning the dock on the screen"
@@ -1408,7 +1414,7 @@ msgstr ""
 
 #: ../data/messages:85 ../data/messages:1367
 msgid "Hiding the dock to use all the screen"
-msgstr ""
+msgstr "Ekranın tümünü kullanmak için rıhtımı gizleme"
 
 #: ../data/messages:87 ../data/messages:1369
 msgid ""
@@ -1431,11 +1437,11 @@ msgstr ""
 
 #: ../data/messages:93 ../data/messages:1375
 msgid "Deleting a dock"
-msgstr ""
+msgstr "Bir rıhtımı silmek"
 
 #: ../data/messages:97 ../data/messages:1379
 msgid "Changing the look of a dock"
-msgstr ""
+msgstr "Bir rıhtımın görünümünü değiştirmek"
 
 #: ../data/messages:103 ../data/messages:1385
 msgid "Placing applets on your desktop"
@@ -1532,7 +1538,7 @@ msgstr ""
 
 #: ../data/messages:133 ../data/messages:1415
 msgid "Changing the screen resolution"
-msgstr ""
+msgstr "Ekran çözünürlüğünü değiştirmek"
 
 #: ../data/messages:135 ../data/messages:1417
 msgid ""
@@ -1885,11 +1891,11 @@ msgstr ""
 
 #: ../data/messages:257 ../data/messages:1539
 msgid "If you're on Gnome you can click on this button:"
-msgstr ""
+msgstr "Eğer Gnome üzerindeyseniz bu düğmeye tıklayabilirsiniz:"
 
 #: ../data/messages:259 ../data/messages:1541
 msgid "The Project"
-msgstr ""
+msgstr "Proje"
 
 #: ../data/messages:261 ../data/messages:1543
 msgid "Join the project!"
@@ -1935,11 +1941,13 @@ msgstr ""
 
 #: ../data/messages:275 ../data/messages:1557
 msgid "Websites"
-msgstr ""
+msgstr "İnternet siteleri"
 
 #: ../data/messages:277 ../data/messages:1559
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "bir sorununuz var ve öneri istiyorsanız bize takılın!"
+msgstr ""
+"Sorunlarınız var? Önerileriniz? Sadece bizimle konuşmak istiyorsunuz? Hadi "
+"gelin!"
 
 #: ../data/messages:279 ../data/messages:1561
 msgid "Community site"
@@ -2011,7 +2019,7 @@ msgstr ""
 #: ../data/messages:315 ../data/messages:317 ../data/messages:1733
 #: ../data/messages:1813 ../data/messages:1845
 msgid "Icon"
-msgstr ""
+msgstr "Simge"
 
 #: ../data/messages:319
 msgid "Name of the dock it belongs to:"
@@ -2023,7 +2031,7 @@ msgstr ""
 
 #: ../data/messages:323
 msgid "Leave empty to use the default one."
-msgstr ""
+msgstr "Varsayılanı kullanmak için boş bırakınız."
 
 #: ../data/messages:325
 msgid "Image filename:"
@@ -2135,7 +2143,7 @@ msgstr ""
 
 #: ../data/messages:383
 msgid "Background transparency:"
-msgstr ""
+msgstr "Arkaplan şeffaflığı:"
 
 #: ../data/messages:385
 msgid "in pixels. Use this to adjust the left position of drawings."
@@ -3927,560 +3935,3 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
-
-#~ msgid "This will (un)lock the whole dock."
-#~ msgstr "Bu, tüm rıhtımı kilitleyecek veya kilidini açacak."
-
-#~ msgid "same size"
-#~ msgstr "aynı boyut"
-
-#~ msgid ""
-#~ "v1.4.6.3 :\n"
-#~ "Just to say :\n"
-#~ "*** Happy new Year 2008 ! ***\n"
-#~ "  the Cairo-Dock's team."
-#~ msgstr ""
-#~ "v1.4.6.3 :\n"
-#~ "Sadece söylemek istedik :\n"
-#~ "*** Yeni Yılınız Kutlu Olsun 2008 ! ***\n"
-#~ "  Cairo-Dock takımı."
-
-#~ msgid "%s is now mounted"
-#~ msgstr "%s şimdi bağlı"
-
-#~ msgid "%s is now unmounted"
-#~ msgstr "%s şimdi bağlı değil"
-
-#~ msgid "Use OpenGL in Cairo-Dock ?"
-#~ msgstr "Cario-Dock da OpenGL kullan"
-
-#~ msgid "You have to try the theme before you can rate it."
-#~ msgstr "Temayı oylamadan önce denemelisin."
-
-#~ msgid "Plug-ins"
-#~ msgstr "Eklentiler"
-
-#~ msgid "theme"
-#~ msgstr "tema"
-
-#~ msgid "Configuration of Cairo-Dock"
-#~ msgstr "Cairo-Dock ayarları"
-
-#~ msgid "Do you want to activate it now ?"
-#~ msgstr "Şimdi aktifleştirmek istiyor musunuz?"
-
-#~ msgid "The module '%s' is not activated."
-#~ msgstr "'%s' modülü aktifleştirilmedi."
-
-#~ msgid "Activate this module"
-#~ msgstr "Bu modülü aktifleştir"
-
-#~ msgid "failed to unmount %s"
-#~ msgstr "%s'in bağını kaldırma başarısız"
-
-#~ msgid "failed to mount %s"
-#~ msgstr "bağlanamadı %s"
-
-#~ msgid "Do you want to monitor the content of the directory ?"
-#~ msgstr "Dizin içeriğini takip etmek istiyor musunuz?"
-
-#~ msgid "rate me"
-#~ msgstr "derecelendir"
-
-#~ msgid "Plug-in"
-#~ msgstr "Eklenti"
-
-#~ msgid "rating"
-#~ msgstr "beğeni"
-
-#~ msgid "module"
-#~ msgstr "modül"
-
-#~ msgid ""
-#~ "The '%s' plug-in is not active.\n"
-#~ "Be sure to activate it to enjoy these features."
-#~ msgstr ""
-#~ "'%s' eklentisi aktif değil.\n"
-#~ "Bu özelliklerden yararlanmak için etkinleştirdiğinizden emin olun."
-
-#~ msgid "Do you want to mount this point ?"
-#~ msgstr "Bu noktayı bağlamak istiyor musunuz?"
-
-#~ msgid "Configuration of the launchers"
-#~ msgstr "Başlatıcıların Yapılandırılması"
-
-#~ msgid ""
-#~ "the theme couldn't be found; the default theme will be used instead.\n"
-#~ " You can change this by opening the configuration of this module; do you "
-#~ "want to do it now ?"
-#~ msgstr ""
-#~ "tema, bulunamadı; Hazır gelen tema, onun yerine kullanılacak. \n"
-#~ " Bu modülün konumunu açarak bunu değiştirebilirsin; hemen yapmayı "
-#~ "istermisin?"
-
-#~ msgid ""
-#~ "the gauge theme couldn't be found; a default gauge will be used instead.\n"
-#~ " You can change this by opening the configuration of this module; do you "
-#~ "want to do it now ?"
-#~ msgstr ""
-#~ "Ölçek teması, bulunamazdı; Hazır gelen bir ölçek, onun yerine "
-#~ "kullanılacak.\n"
-#~ " Bu modülün konumunu açarak bunu değiştirebilirsin; hemen yapmayı "
-#~ "istermisin?"
-
-#~ msgid "Controler"
-#~ msgstr "Kontrol edici"
-
-#~ msgid "state"
-#~ msgstr "konum"
-
-#~ msgid "grab"
-#~ msgstr "yakala"
-
-#~ msgid "sobriety"
-#~ msgstr "itidal"
-
-#~ msgid "Controlers"
-#~ msgstr "Kontrol ediciler"
-
-#~ msgid ""
-#~ "It seems that you've never entered the help module yet.\n"
-#~ "If you have some difficulty to configure the dock, or if you are willing "
-#~ "to customize it,\n"
-#~ "the Help module is here for you !\n"
-#~ "Do you want to take a look at it now ?"
-#~ msgstr ""
-#~ "Görünüyor ki henüz hiç yardım modülü girmemişsin.\n"
-#~ "Eğer dock'unu yapılandırmanda  bazı engeller varsa,yada eğer isteğine "
-#~ "göre değiştimek istiyorsun,\n"
-#~ "yardım modülü senin için burada !\n"
-#~ "Şimdi bakmak ister misin?"
-
-#~ msgid ""
-#~ "The module '%s' is not present. You need to install it or its "
-#~ "dependencies to make the most of this module."
-#~ msgstr ""
-#~ "'%s' modülü mevcut değil.Bu modülü kurmak için ona veya onun "
-#~ "bağımlılıklarına ihtiyacın var."
-
-#~ msgid ""
-#~ "This is the simple config panel of Cairo-Dock.\n"
-#~ " After you got familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-#~ msgstr ""
-#~ "Bu  Cairo-Dock'un basit yapılandırma panelidir.\n"
-#~ "Sen onla aşina olduktan sonra, ve eğer temanı özelleştirmeyi istersen\n"
-#~ ",bir ileri moda geçiş yapabilirsin.\n"
-#~ "Bir moddan diğerine istediğin zamanda geçiş yapabilirsin."
-
-#~ msgid "Importing theme %s..."
-#~ msgstr "Tema ithal ediliyor %s..."
-
-#~ msgid "Hidden Dock"
-#~ msgstr "Dock gizle"
-
-#~ msgid "The applets can be set on your desktop as widgets."
-#~ msgstr "Uygulamalar küçük uygulamacıklar olarak masaüstünde olabilir."
-
-#~ msgid "Set a background to your dock."
-#~ msgstr "Dock'unuz için bir geri plan ayarlayın."
-
-#~ msgid "Configure the look of the dialog bubbles."
-#~ msgstr "İletişim baloncuklarının görünüşünü ayarla."
-
-#~ msgid "Highlight words"
-#~ msgstr "Kelimeleri vurgula"
-
-#~ msgid "Indicators are extra indications on your icons."
-#~ msgstr "Göstergeler simgelerin üzerindeki ek belirtimlerdir."
-
-#~ msgid "It provides many animations to your icons."
-#~ msgstr "Simgelerinize çok sayıda animasyon sağlar."
-
-#~ msgid ""
-#~ "Click on an applet in order to have a preview and a description of it."
-#~ msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
-
-#~ msgid ""
-#~ "The '%s' module was not found.\n"
-#~ "Be sure to install it in the same version as the dock to enjoy these "
-#~ "features."
-#~ msgstr ""
-#~ "'%s' modülü bulunamadı.\n"
-#~ "Dock'un bu özelliklerinden yararlanmak için aynı sürümün yüklendiğinden "
-#~ "emin ol."
-
-#~ msgid ""
-#~ "Do you like your dock to be always visible,\n"
-#~ " or on the contrary unobstrusive ?\n"
-#~ "Configure the way you access to your docks and sub-docks !"
-#~ msgstr ""
-#~ "Dock'unuzun her zaman görünür olmasını ister misiniz,\n"
-#~ "veya aksine gizlemek ?\n"
-#~ "Dock'larınız ve alt dock'larınız için erişim yolunu ayarlayın !"
-
-#~ msgid "Define the style of the icons' labels and quick-info."
-#~ msgstr "Simgelere stil etiket ve hızlı-bilgi tanımlayın."
-
-#~ msgid ""
-#~ "All about icons :\n"
-#~ " size, reflection, icon theme, ..."
-#~ msgstr ""
-#~ "Simgeler hakkında herşey :\n"
-#~ "boyut,yansıma,simge teması, ..."
-
-#~ msgid "Define the appearance of the dock when it's hidden."
-#~ msgstr "Dock'un ne zaman belirip gizleneceğini tanımlayın."
-
-#~ msgid "A problem ? A suggestion ? Want to talk to us ? You're welcome !"
-#~ msgstr ""
-#~ "Bir sorun mu var ? Bir öneri ? Bizimle konuşmak mı istiyor sun ? Hoş "
-#~ "geldin !"
-
-#~ msgid "Set position for the dock '%s'"
-#~ msgstr "Dock için konum ayarlama '%s'"
-
-#~ msgid "Community's site"
-#~ msgstr "Topluluk sitesi"
-
-#~ msgid "Quit Cairo-Dock ?"
-#~ msgstr "Cairo-Dock'tan çık ?"
-
-#~ msgid "Development's site"
-#~ msgstr "Geliştirme sitesi"
-
-#~ msgid "unlock dock"
-#~ msgstr "dock kilidini aç"
-
-#~ msgid "lock dock"
-#~ msgstr "dock kilitle"
-
-#~ msgid "lock icons"
-#~ msgstr "simgeleri kilitle"
-
-#~ msgid "unlock icons"
-#~ msgstr "simgelerin kilidini aç"
-
-#~ msgid "Undefined"
-#~ msgstr "Tanımlanmamış"
-
-#~ msgid ""
-#~ "It provides different window decorators. Activate it first if you want to "
-#~ "select a different decorator for your dialogs."
-#~ msgstr ""
-#~ "Farklı pencere dekoratörleri sağlayıcı.Eğer diyaloglarınız için farklı "
-#~ "bir dekoratör seçmek isterseniz ilk önce onları aktif hale getirin."
-
-#~ msgid "All the parameters you will never want to tweak."
-#~ msgstr "Asla oynamamanız gereken tüm parametreler."
-
-#~ msgid "Set up this dock"
-#~ msgstr "Bu docku kur"
-
-#~ msgid "Get more applets !"
-#~ msgstr "Daha fazla uygulama alın !"
-
-#~ msgid "Find out the latest version of Cairo-Dock here !."
-#~ msgstr "Cairo-Dock en son sürümü bulmak için buradan"
-
-#~ msgid "Set up the position of this main dock."
-#~ msgstr "Bu ana dock konumunu ayarlayın."
-
-#~ msgid "Rename to :"
-#~ msgstr "Yeniden adlandırmak :"
-
-#~ msgid "Mount"
-#~ msgstr "Üzerine yerleştir"
-
-#~ msgid "Add a separator"
-#~ msgstr "Ayırıcı ekle"
-
-#~ msgid "Add a custom launcher"
-#~ msgstr "Özel bir başlatıcı ekle"
-
-#~ msgid "Properties"
-#~ msgstr "Özellikleri"
-
-#~ msgid "Rename this file"
-#~ msgstr "Bu dosyayı yeniden isimlendir"
-
-#~ msgid "Delete this file"
-#~ msgstr "Bu dosyayı sil"
-
-#~ msgid "Close (middle-click)"
-#~ msgstr "Kapat (orta-tıkla)"
-
-#~ msgid "A new main dock"
-#~ msgstr "Yeni bir ana dock"
-
-#~ msgid "Maximize"
-#~ msgstr "Ekranı Kapla"
-
-#~ msgid "The themes couldn't be deleted"
-#~ msgstr "Temalar silinemedi"
-
-#~ msgid "The themes have been deleted"
-#~ msgstr "Temalar silindi"
-
-#~ msgid "Do you want to mount this device?"
-#~ msgstr "Bu noktayı bağlamak istiyor musunuz?"
-
-#~ msgid "Do you want to monitor the content of this directory?"
-#~ msgstr "Dizin içeriğini takip etmek istiyor musunuz?"
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "%s'in bağını kaldırma başarısız"
-
-#~ msgid "Controller"
-#~ msgstr "Kontrol edici"
-
-#~ msgid "Controllers"
-#~ msgstr "Kontrol ediciler"
-
-#~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want "
-#~ "to select a different decorator for your dialog boxes."
-#~ msgstr ""
-#~ "Farklı pencere dekoratörleri sağlayıcı.Eğer diyaloglarınız için farklı "
-#~ "bir dekoratör seçmek isterseniz ilk önce onları aktif hale getirin."
-
-#~ msgid "Provides various animations for your icons."
-#~ msgstr "Simgelerinize çok sayıda animasyon sağlar."
-
-#~ msgid "Set position for the '%s' dock"
-#~ msgstr "Dock için konum ayarlama '%s'"
-
-#~ msgid "The themes could not be deleted"
-#~ msgstr "Temalar silinemedi"
-
-#~ msgid "The theme could not be deleted"
-#~ msgstr "Tema silinemedi"
-
-#~ msgid "The theme could not be saved"
-#~ msgstr "Tema kaydedilemedi"
-
-#~ msgid "The theme has been deleted"
-#~ msgstr "Tema silindi"
-
-#~ msgid "The theme has been saved"
-#~ msgstr "Tema kaydedildi"
-
-#~ msgid "Other applets"
-#~ msgstr "Diğer uygulamalar"
-
-#~ msgid "Set the position of this main dock."
-#~ msgstr "Bu ana dockun konumunu ayarla."
-
-#~ msgid "This icon doesn't have a desktop file."
-#~ msgstr "Bu simgenin masaüstü dosyası yok."
-
-#~ msgid "Animations"
-#~ msgstr "Animasyonlar"
-
-#~ msgid "Windows7"
-#~ msgstr "Windows7"
-
-#~ msgid "Do you want to keep this setting?"
-#~ msgstr "Bu ayarları korumak istiyor musunuz?"
-
-#~ msgid "Choose one of the available themes:"
-#~ msgstr "Uygun temalardan birini seçiniz:"
-
-#~ msgid "Label readability"
-#~ msgstr "Etiket okunabilirliği"
-
-#~ msgid "Make the icon transparent?"
-#~ msgstr "Simgeyi şeffaflaştırsın mı?"
-
-#~ msgid "Show hidden files?"
-#~ msgstr "Gizli dosyalar gösterilsin mi?"
-
-#~ msgid "Number of retries:"
-#~ msgstr "Deneme sayısı:"
-
-#~ msgid "Transparency of the image :"
-#~ msgstr "Görüntünün şeffaflığı :"
-
-#~ msgid "Follow the mouse"
-#~ msgstr "Fareyi takip et"
-
-#~ msgid "Speed :"
-#~ msgstr "Hız :"
-
-#~ msgid "How can I add a separator?"
-#~ msgstr "Nasıl ayıraç ekleyebilirim?"
-
-#~ msgid "Configure labels appearence."
-#~ msgstr "Etiketlerin görünümünü yapılandır."
-
-#~ msgid "Connection to the themes' server"
-#~ msgstr "Temaların sunucu bağlantısı"
-
-#~ msgid "Yes, like that :-)"
-#~ msgstr "Evet, hoşuma gitti :-)"
-
-#~ msgid "Use background color for labels?"
-#~ msgstr "Etiketler için arkaplan rengi kullanılsın mı?"
-
-#~ msgid "Simply drag with the mouse, and drop wherever you wish."
-#~ msgstr "Basitçe fareyle sürükle ve nereye istersen oraya bırak."
-
-#~ msgid "How do I change an icon image?"
-#~ msgstr "Simge görüntüsünü nasıl değiştirebilirim?"
-
-#~ msgid "How do I remove many icons quickly?"
-#~ msgstr "Bir sürü simgeyi çabucak nasıl kaldırabilirim?"
-
-#~ msgid "Simply drag them with the mouse."
-#~ msgstr "Basitçe, onları fareyle sürükleyin."
-
-#~ msgid "How do I configure their position?"
-#~ msgstr "Pozisyonlarını nasıl yapılandırabilirim?"
-
-#~ msgid "How do I change their decorations?"
-#~ msgstr "Dekorasyonlarını nasıl değiştirebilirim?"
-
-#~ msgid "I have ugly icons for some applications."
-#~ msgstr "Bazı uygulamalar için çirkin simgelerim var."
-
-#~ msgid "How do I enable the Taskbar?"
-#~ msgstr "Görev çubuğunu nasıl etkinleştirebilirim?"
-
-#~ msgid "How can I access my desktop?"
-#~ msgstr "Masaüstüme nasıl erişebilirim?"
-
-#~ msgid "documentation"
-#~ msgstr "belgelendirme"
-
-#~ msgid ""
-#~ "\n"
-#~ "The Cairo-Dock Team"
-#~ msgstr ""
-#~ "\n"
-#~ "Cairo-Dock Takımı"
-
-#~ msgid "Choose a theme"
-#~ msgstr "Tema seç"
-
-#~ msgid "Eject"
-#~ msgstr "Çıkart"
-
-#~ msgid "Add or remove any applet :"
-#~ msgstr "Uygulamacık ekle veya kaldır:"
-
-#~ msgid "Applets"
-#~ msgstr "Uygulamacıklar"
-
-#~ msgid "Automatically hide the dock"
-#~ msgstr "Rıhtımı otomatik olarak gizle"
-
-#~ msgid "Background movement"
-#~ msgstr "Arkaplan hareketi"
-
-#~ msgid "Draw an image"
-#~ msgstr "Görüntü çiz"
-
-#~ msgid "Dock"
-#~ msgstr "Rıhtım"
-
-#~ msgid "How can I add the main menu?"
-#~ msgstr "Ana menüyü nasıl eklerim?"
-
-#~ msgid "Simply click on the top right button."
-#~ msgstr "Basitçe üst sağ butona tıklayın."
-
-#~ msgid "How do I configure their behaviour?"
-#~ msgstr "Davranışlarını nasıl yapılandırabilirim?"
-
-#~ msgid "Rename to:"
-#~ msgstr "Yeniden adlandır:"
-
-#~ msgid ""
-#~ "Warning: could not delete this file.\n"
-#~ "Please check file permissions."
-#~ msgstr ""
-#~ "Uyarı: bu dosyayı silemezsiniz.\n"
-#~ "Lütfen dosya öz niteliklerini gözden geçiriniz."
-
-#~ msgid "Unmount"
-#~ msgstr "Bağı Kaldır"
-
-#~ msgid "Importing theme %s ..."
-#~ msgstr "Tema yükleniyor... %s"
-
-#~ msgid ""
-#~ "It appears that you've never entered the help module before.\n"
-#~ "If you are having difficulty configuring the dock, or if you want to "
-#~ "customise it,\n"
-#~ "the Help module is here for you!\n"
-#~ "Would you like to take a look at it now?"
-#~ msgstr ""
-#~ "Henüz hiç yardım modülü girmemişsiniz.\n"
-#~ "Eğer rıhtımı yapılandırmakta zorluk çekiyorsanız veya özelleştirmek "
-#~ "istiyorsanız,\n"
-#~ "Yardım modülü sizin için burada!\n"
-#~ "Şimdi bir göz atmak ister misiniz?"
-
-#~ msgid "Configuration of the '%s' dock"
-#~ msgstr "'%s' rıhtımı yapılandırması"
-
-#~ msgid "Add a sub-dock"
-#~ msgstr "Bir alt rıhtım ekle"
-
-#~ msgid "Add a main dock"
-#~ msgstr "Bir ana rıhtım ekle"
-
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
-#~ msgstr "Compiz davranışını ayarla (isim=cairo-dock ve tür=araç)"
-
-#~ msgid "sub-dock"
-#~ msgstr "Alt-panel"
-
-#~ msgid "main dock"
-#~ msgstr "Ana panel"
-
-#~ msgid "custom launcher"
-#~ msgstr "özel kısayol"
-
-#~ msgid ""
-#~ "Main dock's paramaters are available in the main configuration window."
-#~ msgstr "ana sehpanın ayarları,ana ayar seçenekleri menüsündedir."
-
-#~ msgid ""
-#~ "A useful FAQ which also contains a lot of hints.\n"
-#~ "Roll your mouse over a sentence to make helpful popups appear."
-#~ msgstr ""
-#~ "kullanışlı  FAQ,birsürü kullanım ipucu verebilir.\n"
-#~ "yardımcı uyarıları görmek için, farenizi, yardım istediğiniz cümlenin "
-#~ "üzerine götürün"
-
-#~ msgid ""
-#~ "Welcome in Cairo-Dock2 !\n"
-#~ "A default and simple theme has been loaded.\n"
-#~ "You can either familiarize yourself with the dock or choose another theme "
-#~ "with right-click -> Cairo-Dock -> Manage themes.\n"
-#~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-#~ "If you have any question/request/remark, please pay us a visit at http://"
-#~ "glx-dock.org.\n"
-#~ "Hope you will enjoy this soft !\n"
-#~ "  (you can now click on this dialog to close it)"
-#~ msgstr ""
-#~ "Cairo-Dock2'ye hoşgeldiniz !\n"
-#~ "Öntanımlı ve basit bir tema etkinleştirildi.\n"
-#~ "Mevcut Dock'unuza biraz daha alışabilir veya sağ tık -> Cairo-Dock -> "
-#~ "Temaları yönet  yolunu izleyerek başka bir tema \n"
-#~ "seçebilirsiniz.\n"
-#~ "sağ tık -> Cairo-Dock -> Yardım  yolunu izleyerek kullanışlı bilgilere "
-#~ "ulaşabilirsiniz.\n"
-#~ "İstek, soru ve önerileriniz için bizi http://glx-dock.org  adresinden "
-#~ "ziyaret edebilirsiniz.\n"
-#~ "Yazılımdan memnun kalmanızı dileriz !\n"
-#~ "  (kapatmak için bu kutuya tıklayabilirsiniz)"
-
-#~ msgid ""
-#~ "Provides different views for Cairo-Dock. Enable this first if you want to "
-#~ "select a different view for your docks."
-#~ msgstr ""
-#~ "Cairo-Dock için farklı görünümler sağlar.Dock'larınızı özelleştirmek "
-#~ "istiyorsanız öncelikle bunu aktifleştirin."

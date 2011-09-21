@@ -4,20 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 # jincreator <Unknown>, 2011.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-02-26 13:06+0000\n"
+"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"PO-Revision-Date: 2011-09-20 09:34+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
-"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-04 04:35+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-21 04:46+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+"Language: ko\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -772,14 +772,12 @@ msgid "Happy new year %d !!!"
 msgstr ""
 
 #: ../src/cairo-dock.c:317
-#, fuzzy
 msgid "Use Cairo backend."
-msgstr "배경 그림을 사용합니다."
+msgstr ""
 
 #: ../src/cairo-dock.c:320
-#, fuzzy
 msgid "Use OpenGL backend."
-msgstr "카이로-독의 OpenGL을 사용합니다."
+msgstr ""
 
 #: ../src/cairo-dock.c:324
 msgid ""
@@ -1137,9 +1135,8 @@ msgid "Activate composite"
 msgstr ""
 
 #: ../src/help/applet-notifications.c:225
-#, fuzzy
 msgid "Disable the gnome-panel"
-msgstr "그놈-패널을 대체"
+msgstr ""
 
 #: ../src/help/applet-notifications.c:227
 msgid "Disable Unity"
@@ -1150,14 +1147,12 @@ msgid "Online help"
 msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
-#, fuzzy
 msgid "Enter a command"
-msgstr "상호 작용"
+msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
-#, fuzzy
 msgid "New launcher"
-msgstr "실행 아이콘"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
 #: ../data/messages:613
@@ -4069,254 +4064,3 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
-
-#~ msgid "This will (un)lock the whole dock."
-#~ msgstr "모든 독을 잠금(해제합)니다."
-
-#~ msgid "same size"
-#~ msgstr "같은 크기"
-
-#~ msgid ""
-#~ "It appears that you've never entered the help module before.\n"
-#~ "If you are having difficulty configuring the dock, or if you want to "
-#~ "customise it,\n"
-#~ "the Help module is here for you!\n"
-#~ "Would you like to take a look at it now?"
-#~ msgstr ""
-#~ "이 도움말은 당신이 처음 도움말 모듈에 접속했을 때 나타납니다.\n"
-#~ "만약 당신이 독을 설정하거나 당신이 원하는 대로 커스터마이징하고 싶을 때,\n"
-#~ "이 도움말 모듈의 당신을 위해 나타납니다!\n"
-#~ "이에 대하여 보시겠습니까?"
-
-#~ msgid "Configuration of the '%s' dock"
-#~ msgstr "독 '%s' 설정"
-
-#~ msgid "sub-dock"
-#~ msgstr "부가 독"
-
-#~ msgid "main dock"
-#~ msgstr "주 독"
-
-#~ msgid "custom launcher"
-#~ msgstr "사용자 정의 독"
-
-#~ msgid "Close (middle-click)"
-#~ msgstr "닫기(휠 클릭)"
-
-#~ msgid "Set behaviour in Compiz to: (name=cairo-dock & type=Utility)"
-#~ msgstr "컴피즈에 동작을 다음과 같이 설정: (이름=cairo-dock & 유형=utility)"
-
-#~ msgid ""
-#~ "To remove the black rectangle around the dock, you will need to activate "
-#~ "a composite manager.\n"
-#~ "For instance, this can be done by activating desktop effects, launching "
-#~ "Compiz, or activating the composition in Metacity.\n"
-#~ "I can perform this last operation for you. Do you want to proceed ?"
-#~ msgstr ""
-#~ "독 주위의 검은 사각형을 없애려면, 컴퍼지트 매니저를 활성화해야 합니다.\n"
-#~ "예를 들어, 화면 효과를 활성화하거나, 컴피즈를 실행하거나, 메타시티의 컴퍼"
-#~ "지션을 활성화하면 됩니다.\n"
-#~ "당신을 위해 예로 든 작업 중 마지막 것을 실행할 수 있습니다. 계속하시겠습니"
-#~ "까?"
-
-#~ msgid ""
-#~ "A useful FAQ which also contains a lot of hints.\n"
-#~ "Roll your mouse over a sentence to make helpful popups appear."
-#~ msgstr ""
-#~ "수많은 힌트를 포함하는 유용한 FAQ.\n"
-#~ "도움이 되는 팝업이 나타나게 하려면 문장 위에 마우스 포인터를 올리세요."
-
-#~ msgid "failed to mount %s"
-#~ msgstr "%s 마운트 실패"
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "%s 추출 실패"
-
-#~ msgid ""
-#~ "Main dock's paramaters are available in the main configuration window."
-#~ msgstr "주 독의 파라미터는 주 설정 창에서 관리합니다."
-
-#~ msgid ""
-#~ "Welcome in Cairo-Dock2 !\n"
-#~ "A default and simple theme has been loaded.\n"
-#~ "You can either familiarize yourself with the dock or choose another theme "
-#~ "with right-click -> Cairo-Dock -> Manage themes.\n"
-#~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-#~ "If you have any question/request/remark, please pay us a visit at http://"
-#~ "glx-dock.org.\n"
-#~ "Hope you will enjoy this soft !\n"
-#~ "  (you can now click on this dialog to close it)"
-#~ msgstr ""
-#~ "카이로-독 2에 오신 것을 환영합니다.\n"
-#~ "간단한 기본 테마가 로드되었습니다.\n"
-#~ "독을 당신에게 익숙한 테마로 바꾸려면 오른 클릭 -> 카이로-독 -> 테마 관리"
-#~ "를 누르십시오.\n"
-#~ "유용한 도움말을 열려면 오른 클릭 -> 카이로-독 -> 도움말을 누르십시오.\n"
-#~ "질문/요청/발언이 있으면 http://glx-dock.org로 들어오십시오.\n"
-#~ "이 프로그램을 즐기기 바랍니다!\n"
-#~ "  (이 대화창을 누르시면 닫으실 수 있습니다.)"
-
-#~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want "
-#~ "to select a different decorator for your dialog boxes."
-#~ msgstr ""
-#~ "이는 다른 창 장식을 제공합니다. 대화 상자에 다른 장식을 적용하려면 이를 먼"
-#~ "저 활성화시키십시오."
-
-#~ msgid "Provides various animations for your icons."
-#~ msgstr "아이콘에 다양한 애니메이션 효과를 제공합니다."
-
-#~ msgid ""
-#~ "Provides different views for Cairo-Dock. Enable this first if you want to "
-#~ "select a different view for your docks."
-#~ msgstr ""
-#~ "카이로-독에 다른 보이기 방식을 제공합니다. 독에 다른 보이기 방식을 적용하"
-#~ "려면 이를 먼저 활성화시키십시오."
-
-#~ msgid "Middle-clicking on an icon closes the related application"
-#~ msgstr "아이콘을 가운데-클릭해서 프로그램 닫기"
-
-#~ msgid "In the style of Firefox tabs"
-#~ msgstr "파이어폭스 탭 방식"
-
-#~ msgid "Draw an image"
-#~ msgstr "그림 표시"
-
-#~ msgid "If false, only the quick-info will have this background color."
-#~ msgstr "해제한 경우, 빠른-정보만이 이 배경 색깔을 사용합니다."
-
-#~ msgid "Use background color for labels?"
-#~ msgstr "이름표에 배경 색을 사용하시겠습니까?"
-
-#~ msgid "Yes, like that :-)"
-#~ msgstr "네, 바로 그런 식으로요 ^^"
-
-#~ msgid ""
-#~ "Note : many answers have an extra hint.\n"
-#~ "To popup the hint, simply leave the mouse over the sentence for 1 second, "
-#~ "a tooltip will appear."
-#~ msgstr ""
-#~ "참고 : 많은 답은 별도의 귀띔이 있습니다.\n"
-#~ "귀띔을 보려면 마우스를 문장 위에 1초 이상 두십시오."
-
-#~ msgid "How do I re-order my icons?"
-#~ msgstr "아이콘의 순서를 어떻게 바꾸나요?"
-
-#~ msgid "Tip: you can even re-order icons of active applications."
-#~ msgstr "귀띔: 활성화된 프로그램의 순서도 바꿀 수 있습니다."
-
-#~ msgid "Simply drag with the mouse, and drop wherever you wish."
-#~ msgstr "마우스로 드래그해서 원하는 곳에 놓으십시오."
-
-#~ msgid ""
-#~ "How do I position applets and taskbar icons at the beginning of the dock?"
-#~ msgstr "애플릿과 작업표시줄 아이콘을 어떻게 독의 시작쪽에 놓습니까?"
-
-#~ msgid ""
-#~ "Tip: you can also position applets amongst launchers, by ticking the box "
-#~ "below."
-#~ msgstr ""
-#~ "귀띔: 아래 단추를 눌러 애플릿을 실행 아이콘 사이에 놓을 수 있습니다."
-
-#~ msgid ""
-#~ "In the «icons» module, at the bottom, you can select icon order according "
-#~ "to type (launcher/appli/applet)."
-#~ msgstr ""
-#~ "«아이콘» 모듈의 바닥쪽에서 아이콘 순서를 형식(실행 아이콘/프로그램/애플릿)"
-#~ "에 따라 정할 수 있습니다."
-
-#~ msgid "Go to the «Icons» module."
-#~ msgstr "«아이콘» 모듈로 가기."
-
-#~ msgid "How do I change an icon image?"
-#~ msgstr "아이콘 그림은 어떻게 바꿉니까?"
-
-#~ msgid ""
-#~ "Tip: you can also edit a launcher's configuration directly and set a path "
-#~ "for an image. If you do not enter a path, but simply the name of an "
-#~ "image, do not give the extension (.svg, .png, etc.), so as to let the "
-#~ "dock choose the best."
-#~ msgstr ""
-#~ "귀띔: 실행 아이콘의 설정을 바꿔 그림의 경로를 지정해줄 수 있습니다. 만약 "
-#~ "경로로 들어가지 않았지만 그림의 이름을 알 때 독이 고를 수 있도록 확장자(."
-#~ "svg, .png, 기타)를 붙이지 마십시오."
-
-#~ msgid ""
-#~ "In the “Icons” module, you can choose an <b>icon theme</b>. Just choose a "
-#~ "theme, and apply.\n"
-#~ "All the themes installed on your system are listed, plus the 'Custom "
-#~ "icons' theme, which represent the icons provided by the Cairo-Dock's "
-#~ "theme;\n"
-#~ " they are located in ~/.config/cairo-dock/current_theme/icons, and you "
-#~ "can add personal icons there.\n"
-#~ "If you choose nothing, the default icon theme of your system will be used."
-#~ msgstr ""
-#~ "\"아이콘\" 모듈에서 아이콘 테마를 고를 수 있습니다. 테마를 고르고 적용하십"
-#~ "시오.\n"
-#~ "시스템에 설치된 모든 테마가 뜹니다. 또한  카이로-독의 테마에서 제공하는 "
-#~ "'사용자 지정 아이콘'도 뜹니다;\n"
-#~ "~/.config/cairo-dock/current_theme/icons에서 뜨며 개인적인 아이콘을 더할 "
-#~ "수 있습니다.\n"
-#~ "아무것도 고르지 않으면 시스템의 기본 테마를 쓰게 됩니다."
-
-#~ msgid "How do I remove many icons quickly?"
-#~ msgstr "많은 아이콘을 어떻게 빨리 지우나요?"
-
-#~ msgid ""
-#~ "Hint : if you delete an icon pointing to a sub-dock, you will be offered "
-#~ "to either delete the sub-dock’s icons or to move them in the main dock."
-#~ msgstr ""
-#~ "귀띔 : 만약 부-독을 부르는 아이콘을 지운다면, 부-독의 모든 아이콘을 지우거"
-#~ "나 모두 주 독에 넣을 수 있습니다."
-
-#~ msgid ""
-#~ "Just drag and drop them out of the dock, they will disappear in an "
-#~ "explosion !"
-#~ msgstr "독 밖으로 드래그해서 놓으면 터지면서 사라집니다!"
-
-#~ msgid "How can I resize my icons?"
-#~ msgstr "아이콘 크기를 어떻게 바꾸나요?"
-
-#~ msgid ""
-#~ "Hint : You can define the size of each applet independently, to any size "
-#~ "smaller or equal to the default size. Set it to 0x0 to use the default "
-#~ "size."
-#~ msgstr ""
-#~ "귀띔 : 각 애플릿의 크기를 작거나 기본 값과 같게 하는 식으로 따로따로 정해"
-#~ "줄 수 있습니다. 0x0으로 정하면 기본 크기가 됩니다."
-
-#~ msgid "Dock"
-#~ msgstr "독"
-
-#~ msgid "What are «desklets»?"
-#~ msgstr "«데스크렛»이 뭐죠?"
-
-#~ msgid "Other applets"
-#~ msgstr "다른 애플릿"
-
-#~ msgid ""
-#~ "We value your help! If you see a bug, if you think something could be "
-#~ "improved,\n"
-#~ "or if you just made a dream about the dock, pay us a visit on cairo-dock."
-#~ "org.\n"
-#~ "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
-#~ "\n"
-#~ "If you made a theme for the dock or one of the applet, and want to share "
-#~ "it, we’ll be happy to integrate it on our server !"
-#~ msgstr ""
-#~ "우리는 당신의 도움을 소중히 합니다! 버그를 보거나, 개선할 점이 있다고 생각"
-#~ "하거나,\n"
-#~ "독에 대한 꿈이 있다면 glx-dock.org로 방문해 주세요.\n"
-#~ "영어(그리고 다른 언어도!) 사용자들을 환영하니 수줍어하지 마세요! ;-)\n"
-#~ "\n"
-#~ "독의 테마나 애플릿을 만들었고 공유하고 싶어 우리의 서버에 포함시킨다면 우"
-#~ "리는 기쁠 것입니다!"
-
-#~ msgid "Subdock"
-#~ msgstr "부독"
-
-#~ msgid "Launcher"
-#~ msgstr "실행 아이콘"
-
-#~ msgid "It will use 'xterm'."
-#~ msgstr "'xterm'을 사용합니다."

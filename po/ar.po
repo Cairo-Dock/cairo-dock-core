@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-10-12 19:55+0000\n"
+"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"PO-Revision-Date: 2011-09-20 08:48+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
-"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-04 04:32+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-21 04:44+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+"Language: ar\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -750,14 +750,12 @@ msgid "Happy new year %d !!!"
 msgstr ""
 
 #: ../src/cairo-dock.c:317
-#, fuzzy
 msgid "Use Cairo backend."
-msgstr "استخدام صوره كخلفيه."
+msgstr ""
 
 #: ../src/cairo-dock.c:320
-#, fuzzy
 msgid "Use OpenGL backend."
-msgstr "استخدام OpenGL في شريط كيرو"
+msgstr ""
 
 #: ../src/cairo-dock.c:324
 msgid ""
@@ -824,9 +822,8 @@ msgid "Lock the dock so that any modification is impossible for users."
 msgstr ""
 
 #: ../src/cairo-dock.c:365
-#, fuzzy
 msgid "Keep the dock above other windows whatever."
-msgstr "ابقاء الشريط خلف النوافذ"
+msgstr ""
 
 #: ../src/cairo-dock.c:368
 msgid "Don't make the dock appear on all desktops."
@@ -1110,14 +1107,12 @@ msgid "Online help"
 msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
-#, fuzzy
 msgid "Enter a command"
-msgstr "تفاعل"
+msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
-#, fuzzy
 msgid "New launcher"
-msgstr "المشغلات"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
 #: ../data/messages:613
@@ -3897,372 +3892,3 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
-
-#~ msgid "This will (un)lock the whole dock."
-#~ msgstr "هذا سيلغي قفل كامل الشريط."
-
-#~ msgid "same size"
-#~ msgstr "نفس الحجم"
-
-#~ msgid "Do you want to mount this device?"
-#~ msgstr "هل تريد تحميل هذا الجهاز؟"
-
-#~ msgid "%s is now mounted"
-#~ msgstr "%s يحمل الان"
-
-#~ msgid "Plug-in"
-#~ msgstr "مكونات"
-
-#~ msgid "module"
-#~ msgstr "وحدة"
-
-#~ msgid "Plug-ins"
-#~ msgstr "ملحقات"
-
-#~ msgid "Importing theme %s ..."
-#~ msgstr "استيراد السمة %s"
-
-#~ msgid "The theme has been saved"
-#~ msgstr "تم حفظ السمة"
-
-#~ msgid "The themes could not be deleted"
-#~ msgstr "سمات لم يتم حذفها ."
-
-#~ msgid "The theme could not be deleted"
-#~ msgstr "سمة لا يمكن حذفها ."
-
-#~ msgid "The theme could not be saved"
-#~ msgstr "ﻻ يمكن حفظ السمة ."
-
-#~ msgid "The theme has been deleted"
-#~ msgstr "تم حذف السمة ."
-
-#~ msgid "The themes have been deleted"
-#~ msgstr "السمات تم حذفها ."
-
-#~ msgid "Hidden Dock"
-#~ msgstr "إخفاء الشريط ."
-
-#~ msgid "Properties"
-#~ msgstr "الخصائص"
-
-#~ msgid "Delete this file"
-#~ msgstr "إحذف هذا الملف"
-
-#~ msgid "Eject"
-#~ msgstr "أخرج"
-
-#~ msgid "Mount"
-#~ msgstr "وصل"
-
-#~ msgid "Unmount"
-#~ msgstr "افصل"
-
-#~ msgid "Windows7"
-#~ msgstr "وندوز سفن"
-
-#~ msgid "Animations"
-#~ msgstr "مؤثرات"
-
-#~ msgid "Click to show sub-docks"
-#~ msgstr "انقر على  لاظهار الشريط"
-
-#~ msgid "Make the icon transparent?"
-#~ msgstr "جعل الايقون شفاف ؟"
-
-#~ msgid "Show hidden files?"
-#~ msgstr "اظهار الملفات المخفية ؟"
-
-#~ msgid "Number of retries:"
-#~ msgstr "عدد المحاولات:"
-
-#~ msgid "Speed :"
-#~ msgstr "سرعة :"
-
-#~ msgid "Other applets"
-#~ msgstr "تطبقات اخرى"
-
-#~ msgid "Rename to:"
-#~ msgstr "إعادة تسمية :"
-
-#~ msgid "rate me"
-#~ msgstr "قيّمني"
-
-#~ msgid "Controllers"
-#~ msgstr "المتحكمات"
-
-#~ msgid "Add a separator"
-#~ msgstr "اضافة فاصل"
-
-#~ msgid "Rename this file"
-#~ msgstr "إعادة تسمية هذا الملف"
-
-#~ msgid "Failed to unmount %s"
-#~ msgstr "فشل إلغاء تحميل %s"
-
-#~ msgid "Define the appearance of the dock when it's hidden."
-#~ msgstr "تحديد مظهر الشريط عندم يختفي ."
-
-#~ msgid "Provides various animations for your icons."
-#~ msgstr "يوفر العديد من الحركات لأيقوناتك"
-
-#~ msgid "Close (middle-click)"
-#~ msgstr "أغلق"
-
-#~ msgid "Do you want to keep this setting?"
-#~ msgstr "هل تريد ابقاء هذا الإعداد"
-
-#~ msgid ""
-#~ "Welcome in Cairo-Dock2 !\n"
-#~ "A default and simple theme has been loaded.\n"
-#~ "You can either familiarize yourself with the dock or choose another theme "
-#~ "with right-click -> Cairo-Dock -> Manage themes.\n"
-#~ "A useful help is available by right-click -> Cairo-Dock -> Help.\n"
-#~ "If you have any question/request/remark, please pay us a visit at http://"
-#~ "glx-dock.org.\n"
-#~ "Hope you will enjoy this soft !\n"
-#~ "  (you can now click on this dialog to close it)"
-#~ msgstr ""
-#~ "مرحبا بك في شريط كيرو ديوك الثاني !\n"
-#~ "تم تعيين السمة الافتراضية \n"
-#~ "يمكنك التعرف بنفسك على شريط كيرو دوك واختيار سمة اخرى بالنقر بزر الماوس "
-#~ "الأيمن -> Cairo-Dock  -> مدير السمات.\n"
-#~ "للمساعدة انقر بالزر الايمن على -> Cairo-Dock -> مساعدة.\n"
-#~ "اذا كان لديك اي سؤال او طلب او ملاحظة تفضل بزيرتنا http://glx-dock.org.\n"
-#~ "نتمنا ان تستمتع !\n"
-#~ "  (يمكن النقر على هذا الحوار لإغلاقه)"
-
-#~ msgid "This icon doesn't have a desktop file."
-#~ msgstr "الايقونه ليس لها ملف لسطح المكتب"
-
-#~ msgid "Automatically hide when a window is maximized"
-#~ msgstr "إخفاء تلقائي عند تكبير النوافذ"
-
-#~ msgid "Prevent windows from overlapping the dock"
-#~ msgstr "منع النوافذ من التداخل مع الشريط"
-
-#~ msgid "Automatically hide the dock"
-#~ msgstr "اخفاء تلقائي"
-
-#~ msgid "Applets"
-#~ msgstr "تطبيقات"
-
-#~ msgid "Choose one of the available themes:"
-#~ msgstr "اختر واحد من السمات المتاحة :"
-
-#~ msgid "Add or remove any applet :"
-#~ msgstr "اضافة او حذف اي اضافة"
-
-#~ msgid "%s is now unmounted"
-#~ msgstr "%s الان غير محمل"
-
-#~ msgid ""
-#~ "A useful FAQ which also contains a lot of hints.\n"
-#~ "Roll your mouse over a sentence to make helpful popups appear."
-#~ msgstr ""
-#~ "حقائق مفيده والعديد من التلميحات.\n"
-#~ "حرك المؤشر على إحدى الجمل لتظهر لك فقاعه مفيده."
-
-#~ msgid ""
-#~ "Warning: could not delete this file.\n"
-#~ "Please check file permissions."
-#~ msgstr ""
-#~ "تحذير: ﻻيمكن حذف هذا الملف .\n"
-#~ "راجع اذونات الملف ."
-
-#~ msgid ""
-#~ "Warning: could not rename %s.\n"
-#~ "Check file permissions \n"
-#~ "and that the new name does not already exist."
-#~ msgstr ""
-#~ "تحذير : ﻻيمكن إعادة تسمية %s\n"
-#~ "راجع اذونات الملف"
-
-#~ msgid "failed to mount %s"
-#~ msgstr "فشل تحميل %s"
-
-#~ msgid "Controller"
-#~ msgstr "التحكم"
-
-#~ msgid "state"
-#~ msgstr "ولايه"
-
-#~ msgid ""
-#~ "This provides different window decorators. Enable this first if you want "
-#~ "to select a different decorator for your dialog boxes."
-#~ msgstr ""
-#~ "هذا يوفر لك العديد من الزخارف للنافذه . قم بتمكين هذا الخيار الاول اذا "
-#~ "كنت تريد اختيار زخرفه مختلفه لصندوق المحادثه."
-
-#~ msgid ""
-#~ "You're about deleting this file\n"
-#~ "  (%s)\n"
-#~ "from your hard-disk. Sure ?"
-#~ msgstr ""
-#~ "سيتم حذف الملف نهائيا:\n"
-#~ "  (%s)\n"
-#~ "هل انت متأكد ؟"
-
-#~ msgid "Add a custom launcher"
-#~ msgstr "إضافه مشغل معدل"
-
-#~ msgid "Add a sub-dock"
-#~ msgstr "إضافه شريط فرعي"
-
-#~ msgid "Set the position of this main dock."
-#~ msgstr "تحديد موضع الشريط الرئيسي."
-
-#~ msgid "Set position for the '%s' dock"
-#~ msgstr "تحديد موضع للشريط '%s'"
-
-#~ msgid ""
-#~ "It appears that you've never entered the help module before.\n"
-#~ "If you are having difficulty configuring the dock, or if you want to "
-#~ "customise it,\n"
-#~ "the Help module is here for you!\n"
-#~ "Would you like to take a look at it now?"
-#~ msgstr ""
-#~ "من المتوقع انك لم تزر المساعدة من قبل.\n"
-#~ "إذا كنت تواجه صعوبات في إعداد الشريط او تخصيصه,\n"
-#~ "المساعده دائما موجودة معك.\n"
-#~ "هل تريد إالقاء نظره عليها؟"
-
-#~ msgid "Overwrite the X icon with the launchers' icon"
-#~ msgstr "إستبدل الايقونه X بأيقونه المشغلات"
-
-#~ msgid "Choose a theme"
-#~ msgstr "إختر سمه"
-
-#~ msgid "Activate auto-hide?"
-#~ msgstr "هل تريد تفعيل الإخفاء التلقائي ؟"
-
-#~ msgid "Position relative to the selected screen edge"
-#~ msgstr "الموقع بالنسبه لحافه الشاشه التي تم اختيارها"
-
-#~ msgid "Lateral gap:"
-#~ msgstr "المساحه الفارغه الخارجيه"
-
-#~ msgid "Pop-up only if the mouse hits a screen corner"
-#~ msgstr "إظهار الشريط فقط عندما يتواجد المؤشر في احدى زوايا الشاشه"
-
-#~ msgid "Animate the dock when auto-hiding"
-#~ msgstr "إضافه حركه عند الإخفاء التلقائي للشريط"
-
-#~ msgid "Connection to the themes' server"
-#~ msgstr "الإتصال بخادم السمات"
-
-#~ msgid "Maximum time to download a theme:"
-#~ msgstr "الوقت الاقصى لتحميل السمه :"
-
-#~ msgid "Configure the dock's appearence when hidden."
-#~ msgstr "تعديل مظهر الشريط عندما يكون مخفيا."
-
-#~ msgid "Filename of an image to put on :"
-#~ msgstr "اسم ملف الصوره ليتم وضعها :"
-
-#~ msgid "Transparency of the image :"
-#~ msgstr "شفافيه الصوره :"
-
-#~ msgid "Hidden dock"
-#~ msgstr "شريط مخفي"
-
-#~ msgid "Background movement"
-#~ msgstr "حركه الخلفيه"
-
-#~ msgid "Follow the mouse"
-#~ msgstr "ملاحقه المؤشر"
-
-#~ msgid "Configure the auto-hide behaviour."
-#~ msgstr "تعديل سلوك إخفاء تلقائي."
-
-#~ msgid "Link with the mouse"
-#~ msgstr "ربط بالمؤشر"
-
-#~ msgid "How can I add a separator?"
-#~ msgstr "كيف يمكن إضافة فاصل ؟"
-
-#~ msgid "Yes, like that :-)"
-#~ msgstr "نعم، هكذا :-)"
-
-#~ msgid "Simply drag with the mouse, and drop wherever you wish."
-#~ msgstr "ببساطه اسحب بالمؤشر وإفلته حيثما تشاء."
-
-#~ msgid "How do I re-order my icons?"
-#~ msgstr "كيف يمكنك إعاده ترتيب الأيقونات ؟"
-
-#~ msgid "Use background color for labels?"
-#~ msgstr "هل تريد استخدام لون الخلفية للعلامات ؟"
-
-#~ msgid "How do I change an icon image?"
-#~ msgstr "كيف تغير صورة أيقونة ؟"
-
-#~ msgid "How can I resize my icons?"
-#~ msgstr "كيف تغير حجم أيقوناتك ؟"
-
-#~ msgid "How do I remove many icons quickly?"
-#~ msgstr "كيف تزيل الأيقونة بسرعه ؟"
-
-#~ msgid "Dock"
-#~ msgstr "شريط"
-
-#~ msgid "How do I position my dock on the screen?"
-#~ msgstr "كيف تختار موضع شريطك على الشاشة ؟"
-
-#~ msgid "I don’t want that the dock covers windows"
-#~ msgstr "لا أريد ان يغطي الشريط على النوافذ"
-
-#~ msgid "How do I add a sub-dock?"
-#~ msgstr "كيف يمكنك إضافه شريط فرعي ؟"
-
-#~ msgid "I don’t want other windows covering the dock"
-#~ msgstr "لا أريد أن تغطي أي نوافذ الشريط"
-
-#~ msgid "How can I change the background of my docks?"
-#~ msgstr "كيف تغير خلفيه أشرطتك ؟"
-
-#~ msgid "How can I have a 3D dock?"
-#~ msgstr "كيف يمكنك إضافه شريط ثلاثي الأبعاد"
-
-#~ msgid "How can I have many main docks?"
-#~ msgstr "كيف يمكنك إضافة العديد من الأشرطه ؟"
-
-#~ msgid "How do I configure their behaviour?"
-#~ msgstr "كيف يمكن تعديل سلوكها ؟"
-
-#~ msgid "How do I configure their position?"
-#~ msgstr "كيف يمكن تعديل أماكنها ؟"
-
-#~ msgid "Simply drag them with the mouse."
-#~ msgstr "ببساطة اسحبهم بالمؤشر ."
-
-#~ msgid "How do I enable the Taskbar?"
-#~ msgstr "كيف يتم تمكين شريط المهام ؟"
-
-#~ msgid "Placing the mouse into it will make the dock re-appear."
-#~ msgstr "سيعاود الشريط الظهور بتمرير المؤشر عليه ."
-
-#~ msgid "in ms. Unused if you activate the click to show sub-docks."
-#~ msgstr ""
-#~ "أدخل القيمه بالملي ثانية ، وفي حال فعلت إظهار الشريط بنقره لا تستخدم هذه "
-#~ "الخانة ."
-
-#~ msgid "Delay before leaving or entering a sub-dock takes effect:"
-#~ msgstr "تأخير ظهور او إخفاء الشريط الفرعي :"
-
-#~ msgid "Transparency of icons whose window is or isn't minimised:"
-#~ msgstr "شفافية أيقونات النوافذ المصغره والغير مصغرة :"
-
-#~ msgid "Display an indicator even when the icon is not a launcher ?"
-#~ msgstr "عرض المؤشر ولو كانت الأيقونه ليست مشغل ؟"
-
-#~ msgid "In the style of Firefox tabs"
-#~ msgstr "في نمط ألسنه فايرفوكس"
-
-#~ msgid "Configure labels appearence."
-#~ msgstr "تعديل ظهور العلامات ."
-
-#~ msgid "Hide the dock whenever it overlaps a window"
-#~ msgstr "إخفاء الشريط عندما يتداخل مع احدى النوافذ"
-
-#~ msgid "Label readability"
-#~ msgstr "إمكانيه قراءه الوصف"

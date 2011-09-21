@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2010-09-18 12:47+0000\n"
+"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"PO-Revision-Date: 2011-09-20 09:31+0000\n"
 "Last-Translator: Cédric VALMARY (Tot en òc) <cvalmary@yahoo.fr>\n"
 "Language-Team: Occitan (post 1500) <oc@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-04 04:35+0000\n"
-"X-Generator: Launchpad (build 13168)\n"
+"X-Launchpad-Export-Date: 2011-09-21 04:46+0000\n"
+"X-Generator: Launchpad (build 13996)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:216
 msgid ""
@@ -1088,14 +1088,12 @@ msgid "Online help"
 msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
-#, fuzzy
 msgid "Enter a command"
-msgstr "Interaccion"
+msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
-#, fuzzy
 msgid "New launcher"
-msgstr "Aviadors"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
 #: ../data/messages:613
@@ -3875,156 +3873,3 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
-
-#~ msgid "rate me"
-#~ msgstr "Notatz-me !"
-
-#~ msgid "Controler"
-#~ msgstr "Contrarotlador"
-
-#~ msgid "Plug-in"
-#~ msgstr "Ensèrt"
-
-#~ msgid "state"
-#~ msgstr "estat"
-
-#~ msgid "theme"
-#~ msgstr "tèma"
-
-#~ msgid "rating"
-#~ msgstr "nòta"
-
-#~ msgid "module"
-#~ msgstr "modul"
-
-#~ msgid "grab"
-#~ msgstr "picar"
-
-#~ msgid "sobriety"
-#~ msgstr "sobrietat"
-
-#~ msgid "Plug-ins"
-#~ msgstr "Ensèrts"
-
-#~ msgid "Controlers"
-#~ msgstr "Contrarotladors"
-
-#~ msgid "Configuration of Cairo-Dock"
-#~ msgstr "Configuracion de Cairo-Dock"
-
-#~ msgid "Activate this module"
-#~ msgstr "Activar aqueste modul"
-
-#~ msgid "Couldn't import the theme."
-#~ msgstr "Impossible de recuperar lo tèma."
-
-#~ msgid "Community's site"
-#~ msgstr "Site de la comunautat"
-
-#~ msgid "Development's site"
-#~ msgstr "Site de desvolopament"
-
-#~ msgid "Quit Cairo-Dock ?"
-#~ msgstr "Quitar Cairo-Dock ?"
-
-#~ msgid "Set up this dock"
-#~ msgstr "Reglar aqueste depaus"
-
-#~ msgid "lock icons"
-#~ msgstr "Varrolhar las icònas"
-
-#~ msgid "lock dock"
-#~ msgstr "Varrolhar lo depaus"
-
-#~ msgid "unlock dock"
-#~ msgstr "Desvarrolhar lo depaus"
-
-#~ msgid "unlock icons"
-#~ msgstr "Desvarrolhar las icònas"
-
-#~ msgid "Rename to :"
-#~ msgstr "Tornar nomenar en :"
-
-#~ msgid "Rename this file"
-#~ msgstr "Tornar nomenar aqueste fichièr"
-
-#~ msgid "Eject"
-#~ msgstr "Ejectar"
-
-#~ msgid "Mount"
-#~ msgstr "Montar"
-
-#~ msgid "Unmount"
-#~ msgstr "Desmontar"
-
-#~ msgid "Properties"
-#~ msgstr "Proprietats"
-
-#~ msgid "Unmaximize"
-#~ msgstr "Restablir"
-
-#~ msgid "Maximize"
-#~ msgstr "Maximizar"
-
-#~ msgid "Minimize all"
-#~ msgstr "Minimizar tot"
-
-#~ msgid "default"
-#~ msgstr "per defaut"
-
-#~ msgid "Visibility :"
-#~ msgstr "Visibilitat :"
-
-#~ msgid "Behaviour of the Taskbar :"
-#~ msgstr "Compòrtament de la barra dels prètzfaches :"
-
-#~ msgid "Animations"
-#~ msgstr "Animacions"
-
-#~ msgid "Windows7"
-#~ msgstr "Windows7"
-
-#~ msgid "Applets"
-#~ msgstr "Applets"
-
-#~ msgid "Relative alignment :"
-#~ msgstr "Alinhament relatiu :"
-
-#~ msgid "Additionnal parameters"
-#~ msgstr "Paramètres addicionals"
-
-#~ msgid "Use Xinerama ?"
-#~ msgstr "Utilizar Xinerama ?"
-
-#~ msgid "transparent"
-#~ msgstr "transparent"
-
-#~ msgid "opaque"
-#~ msgstr "opac"
-
-#~ msgid "Duration of the dialog :"
-#~ msgstr "Durada del dialòg :"
-
-#~ msgid "Number of retries :"
-#~ msgstr "Nombre de temptativas :"
-
-#~ msgid "Bright color :"
-#~ msgstr "Color clara :"
-
-#~ msgid "Dark color :"
-#~ msgstr "Color escura :"
-
-#~ msgid "Speed :"
-#~ msgstr "Velocitat :"
-
-#~ msgid "Color"
-#~ msgstr "Color"
-
-#~ msgid "Text font :"
-#~ msgstr "Poliça del tèxte :"
-
-#~ msgid "Shape of the bubble :"
-#~ msgstr "Forma de la bulla :"
-
-#~ msgid "Text color :"
-#~ msgstr "Color del tèxte :"
