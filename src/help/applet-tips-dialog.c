@@ -30,7 +30,7 @@ typedef struct {
 	gchar **pGroupList;
 	gint iNbGroups;
 	gchar **pKeyList;  // keys of the current group
-	gint iNbKeys;
+	gsize iNbKeys;
 	gint iNumTipGroup;  // current group being displayed.
 	gint iNumTipKey;  // current key being displayed.
 	GtkWidget *pCategoryCombo;
@@ -44,7 +44,7 @@ static void _cairo_dock_get_next_tip (CDTipsData *pTips)
 	do
 	{
 		pTips->iNumTipKey ++;
-		if (pTips->iNumTipKey >= pTips->iNbKeys)  // no more key, go to next group.
+		if (pTips->iNumTipKey >= (gint) pTips->iNbKeys)  // no more key, go to next group.
 		{
 			pTips->iNumTipGroup ++;
 			if (pTips->iNumTipGroup >= pTips->iNbGroups)  // no more group, restart from first group.
@@ -151,7 +151,7 @@ static gchar *_build_tip_text (CDTipsData *pTips)
 	gchar *cText = g_strdup_printf ("<b>%s</b>\n\n<i>%s</i>\n\n%s",
 		_("Tips and Tricks"),
 		(pAuthorizedValuesList1 ? gettext (pAuthorizedValuesList1[0]) : ""),
-		cText2);
+		gettext (cText2));
 	
 	g_strfreev (pAuthorizedValuesList1);
 	g_strfreev (pAuthorizedValuesList2);
@@ -201,7 +201,7 @@ static void _tips_dialog_action (int iClickedButton, GtkWidget *pInteractiveWidg
 			G_TYPE_INVALID);
 		g_free (cConfFilePath);
 	}
-	g_print ("tips : %d/%d\n", pTips->iNumTipGroup, pTips->iNumTipKey);
+	cd_debug ("tips : %d/%d", pTips->iNumTipGroup, pTips->iNumTipKey);
 }
 static void _on_free_tips_dialog (CDTipsData *pTips)
 {
