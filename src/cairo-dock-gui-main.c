@@ -160,7 +160,7 @@ gchar *_get_valid_module_conf_file (CairoDockModule *pModule)
 	{
 		// open the module's user dir.
 		gchar *cUserDataDirPath = cairo_dock_check_module_conf_dir (pModule);
-		g_print ("cUserDataDirPath: %s\n", cUserDataDirPath);
+		cd_debug ("cUserDataDirPath: %s", cUserDataDirPath);
 		GDir *dir = g_dir_open (cUserDataDirPath, 0, NULL);
 		if (dir == NULL)
 		{

@@ -1455,14 +1455,14 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	}
 	
 	//\_________________ On calcule la position a laquelle on l'a lache.
-	g_print (">>> cReceivedData : '%s' (%d/%d)\n", cReceivedData, s_bCouldDrop, pDock->bCanDrop);
+	cd_debug (">>> cReceivedData : '%s' (%d/%d)", cReceivedData, s_bCouldDrop, pDock->bCanDrop);
 	/* icon => drop on icon
 	no icon => if order undefined: drop on dock; else: drop between 2 icons.*/
 	Icon *pPointedIcon = NULL;
 	double fOrder;
 	if (s_bCouldDrop/**pDock->bCanDrop*/ || g_str_has_suffix (cReceivedData, ".desktop"))  // can drop on the dock (.desktop are always added, not .sh)
 	{
-		g_print ("drop between icons\n");
+		cd_debug ("drop between icons");
 		if (myDocksParam.bLockIcons || myDocksParam.bLockAll)  // locked, can't add anything.
 		{
 			gtk_drag_finish (dc, FALSE, FALSE, time);
@@ -1502,12 +1502,12 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 		fOrder = CAIRO_DOCK_LAST_ORDER;
 		if (pPointedIcon == NULL)  // no icon => abort
 		{
-			g_print ("drop nowhere\n");
+			cd_debug ("drop nowhere");
 			gtk_drag_finish (dc, FALSE, FALSE, time);
 			return;
 		}
 	}
-	g_print ("drop on %s (%.2f)\n", pPointedIcon?pPointedIcon->cName:"dock", fOrder);
+	cd_debug ("drop on %s (%.2f)", pPointedIcon?pPointedIcon->cName:"dock", fOrder);
 	/**int iDropX = (pDock->container.bIsHorizontal ? x : y);
 	Icon *pNeighboorIcon = NULL;
 	Icon *icon;
@@ -1532,8 +1532,8 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 			}
 			else  // sinon on le lance si on est sur l'icone, et on l'ajoute autrement.
 				fMargin = 0.25;
-			g_print ("%d > %.2f\n", iDropX, icon->fX + icon->fWidth * icon->fScale * (1 - fMargin));
-			g_print ("%d < %.2f\n", iDropX, icon->fX + icon->fWidth * icon->fScale * fMargin);
+			cd_debug ("%d > %.2f", iDropX, icon->fX + icon->fWidth * icon->fScale * (1 - fMargin));
+			cd_debug ("%d < %.2f", iDropX, icon->fX + icon->fWidth * icon->fScale * fMargin);
 			if (iDropX > icon->fX + icon->fWidth * icon->fScale * (1 - fMargin))  // on est apres.
 			{
 				if (myDocksParam.bLockIcons || myDocksParam.bLockAll)

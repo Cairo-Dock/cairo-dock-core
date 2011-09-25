@@ -325,7 +325,7 @@ gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, Ca
 
 gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)
 {
-	g_print ("take the drop\n");
+	cd_debug ("take the drop");
 	if (! CAIRO_DOCK_IS_DOCK (pContainer))
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
@@ -333,12 +333,12 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 	CairoDock *pReceivingDock = pDock;
 	if (g_str_has_suffix (cReceivedData, ".desktop"))  // .desktop -> add a new launcher if dropped on or amongst launchers. 
 	{
-		g_print (" dropped a .desktop\n");
+		cd_debug (" dropped a .desktop");
 		if ((myIconsParam.iSeparateIcons == 1 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 		if ((myIconsParam.iSeparateIcons == 2 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		g_print (" add it\n");
+		cd_debug (" add it");
 		if (fOrder == CAIRO_DOCK_LAST_ORDER && CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && icon->pSubDock != NULL)  // drop onto a container icon.
 		{
 			pReceivingDock = icon->pSubDock;  // -> add into the pointed sub-dock.
@@ -393,7 +393,7 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 	gchar *ext = strrchr (cFilePath, '.');
 	if (!ext)
 		return;
-	g_print ("%s (%s)\n", __func__, cFilePath, icon->cFileName);
+	cd_debug ("%s (%s)", __func__, cFilePath, icon->cFileName);
 	if ((strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0) && !myDocksParam.bLockAll && ! myDocksParam.bLockIcons)
 	{
 		if (!myTaskbarParam.bOverWriteXIcons)

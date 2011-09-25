@@ -388,7 +388,7 @@ int main (int argc, char** argv)
 	g_option_context_parse (context, &argc, &argv, &erreur);
 	if (erreur != NULL)
 	{
-		g_print ("ERROR in options: %s\n", erreur->message);
+		cd_error ("ERROR in options: %s", erreur->message);
 		return 1;
 	}
 	
@@ -426,7 +426,7 @@ int main (int argc, char** argv)
 		g_free (cEnvironment);
 	}
 #ifdef HAVE_GLITZ
-	g_print ("Compiled with Glitz (hardware acceleration support for cairo)\n");
+	cd_warning ("Compiled with Glitz (hardware acceleration support for cairo)");
 #endif
 	
 	if (bCappuccino)
@@ -670,9 +670,9 @@ int main (int argc, char** argv)
 			G_CALLBACK (on_delete_maintenance_gui),
 			pBlockingLoop);
 		
-		g_print ("showing the maintenance mode ...\n");
+		cd_warning ("showing the maintenance mode ...");
 		g_main_loop_run (pBlockingLoop);  // pas besoin de GDK_THREADS_LEAVE/ENTER vu qu'on est pas encore dans la main loop de GTK. En fait cette boucle va jouer le role de la main loop GTK.
-		g_print ("end of the maintenance mode.\n");
+		cd_warning ("end of the maintenance mode.");
 		
 		g_main_loop_unref (pBlockingLoop);
 	}

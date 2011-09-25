@@ -1237,7 +1237,7 @@ static void _got_themes_list (GHashTable *pThemeTable, gpointer *data)
 
 static void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTable, gchar *cActiveTheme, gchar *cHint)
 {
-	g_print ("%s (%s, %s)\n", __func__, cActiveTheme, cHint);
+	cd_debug ("%s (%s, %s)", __func__, cActiveTheme, cHint);
 	GtkTreeModel *modele = gtk_combo_box_get_model (GTK_COMBO_BOX (pCombo));
 	g_return_if_fail (modele != NULL);
 	gpointer data[2];

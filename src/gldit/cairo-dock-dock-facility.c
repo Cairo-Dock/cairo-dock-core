@@ -873,8 +873,8 @@ static inline gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, Cair
 		icon = ic->data;
 		if (icon->bPointed)
 		{
-			g_print ("icon->fWidth: %d, %.2f\n", (int)icon->fWidth, icon->fScale);
-			g_print ("x: %d / %d\n", pDock->container.iMouseX, (int)icon->fDrawX);
+			cd_debug ("icon->fWidth: %d, %.2f", (int)icon->fWidth, icon->fScale);
+			cd_debug ("x: %d / %d", pDock->container.iMouseX, (int)icon->fDrawX);
 			if (pDock->container.iMouseX < icon->fDrawX + icon->fWidth * icon->fScale * fMargin)  // on est a gauche.  // fDrawXAtRest
 			{
 				Icon *prev_icon = cairo_dock_get_previous_element (ic, pDock->icons) -> data;

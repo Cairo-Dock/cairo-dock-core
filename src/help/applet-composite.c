@@ -130,7 +130,7 @@ void cd_help_enable_composite (void)
 	// find the current WM.
 	s_activate_composite = NULL;
 	gchar *cPsef = cairo_dock_launch_command_sync ("pgrep metacity");  // 'ps | grep' ne marche pas, il faut le lancer dans un script :-/
-	g_print ("cPsef: '%s'\n", cPsef);
+	cd_debug ("cPsef: '%s'", cPsef);
 	if (cPsef != NULL && *cPsef != '\0')
 	{
 		s_activate_composite = _set_metacity_composite;
@@ -207,7 +207,7 @@ static gboolean cd_help_check_composite (gpointer data)
 	GdkScreen *pScreen = gdk_screen_get_default ();
 	if (! gdk_screen_is_composited (pScreen))  // no composite yet.
 	{
-		g_print ("no composite (%d)\n", myData.iNbTestComposite);
+		cd_debug ("no composite (%d)", myData.iNbTestComposite);
 		myData.iNbTestComposite ++;
 		if (myData.iNbTestComposite < 4)  // check during 4 seconds.
 			return TRUE;

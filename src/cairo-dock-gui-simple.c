@@ -496,7 +496,7 @@ static gboolean on_apply_config_simple (gpointer data)
 	int iTaskbarType = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "taskbar", NULL);
 	if (iTaskbarType != s_iTaskbarType)
 	{
-		g_print ("s_iTaskbarType : %d / %d\n", s_iTaskbarType, iTaskbarType);
+		cd_debug ("s_iTaskbarType : %d / %d", s_iTaskbarType, iTaskbarType);
 		gboolean bShowAppli = TRUE, bHideVisible, bCurrentDesktopOnly, bMixLauncherAppli, bGroupAppliByClass;
 		switch (iTaskbarType)
 		{
@@ -530,7 +530,7 @@ static gboolean on_apply_config_simple (gpointer data)
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "current desktop only", bCurrentDesktopOnly);
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "mix launcher appli", bMixLauncherAppli);
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "group by class", bGroupAppliByClass);
-			g_print (" taskbar : %d; %d; %d; %d\n", bHideVisible, bCurrentDesktopOnly, bMixLauncherAppli, bGroupAppliByClass);
+			cd_debug (" taskbar : %d; %d; %d; %d", bHideVisible, bCurrentDesktopOnly, bMixLauncherAppli, bGroupAppliByClass);
 		}
 		s_iTaskbarType = iTaskbarType;
 	}

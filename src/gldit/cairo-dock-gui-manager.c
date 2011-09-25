@@ -62,7 +62,7 @@ void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend)
 
 void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 {
-	g_print ("%s (%s)\n", __func__, cMessage);
+	cd_debug ("%s (%s)", __func__, cMessage);
 	GtkWidget *pStatusBar;
 	if (pWindow != NULL)
 	{

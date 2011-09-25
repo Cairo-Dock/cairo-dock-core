@@ -775,7 +775,7 @@ static void _cairo_dock_load_icon_textures (void)
 }
 static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data)
 {
-	g_print ("theme has changed\n");
+	cd_message ("theme has changed");
 	cairo_dock_reload_buffers_in_all_docks (TRUE);  // TRUE <=> y compris les applets.
 }
 static void _cairo_dock_load_icon_theme (void)

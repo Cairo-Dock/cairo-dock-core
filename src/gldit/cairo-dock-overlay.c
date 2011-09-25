@@ -60,7 +60,7 @@ static void _free_overlay (CairoOverlay *pOverlay)
 gboolean cairo_dock_add_overlay_from_image (Icon *pIcon, const gchar *cImageFile, CairoOverlayPosition iPosition)
 {
 	CairoOverlay *pOverlay = g_new0 (CairoOverlay, 1);
-	g_print ("%s (%s)\n", __func__, cImageFile);
+	cd_debug ("%s (%s)", __func__, cImageFile);
 	
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
