@@ -133,13 +133,14 @@ static gboolean _cairo_dock_update_flying_container_notification (gpointer pUser
 
 static gboolean _cairo_dock_render_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext)
 {
+	// it seems this function is called 2 times
 	Icon *pIcon = pFlyingContainer->pIcon;
 	if (pCairoContext != NULL)
 	{
 		if (pIcon != NULL)
 		{
 			cairo_save (pCairoContext);
-			cairo_dock_render_one_icon (pIcon, CAIRO_CONTAINER (pFlyingContainer), pCairoContext, 1., FALSE);
+			cairo_dock_render_one_icon (pIcon, CAIRO_DOCK (pFlyingContainer), pCairoContext, 1., FALSE); // CAIRO_CONTAINER (pFlyingContainer) ?
 			cairo_restore (pCairoContext);
 			
 			_cairo_dock_apply_emblem_surface (s_pEmblem, pFlyingContainer->container.iWidth, pFlyingContainer->container.iHeight, pCairoContext);
@@ -172,7 +173,7 @@ static gboolean _cairo_dock_render_flying_container_notification (gpointer pUser
 			/*glTranslatef (pFlyingContainer->container.iWidth / 2,
 				pIcon->fHeight * pIcon->fScale/2,
 				- pFlyingContainer->container.iHeight);*/
-			cairo_dock_render_one_icon_opengl (pIcon, CAIRO_CONTAINER (pFlyingContainer), 1., FALSE);
+			cairo_dock_render_one_icon_opengl (pIcon, CAIRO_DOCK (pFlyingContainer), 1., FALSE); // CAIRO_CONTAINER (pFlyingContainer)
 			glPopMatrix ();
 			
 			glPushMatrix ();

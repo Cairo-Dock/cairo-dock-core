@@ -47,7 +47,7 @@ gboolean bForceColors = FALSE;
 /* #    'white'     => "\033[37m", */
 
 
-const char*_cd_log_level_to_string(const GLogLevelFlags loglevel)
+const char *_cd_log_level_to_string (const GLogLevelFlags loglevel)
 {
   if (s_bUseColors || bForceColors)
   {
@@ -99,7 +99,7 @@ void cd_log_location(const GLogLevelFlags loglevel,
 
   if (loglevel > s_gLogLevel)
     return;
-  g_print(_cd_log_level_to_string(loglevel));
+  g_print("%s", _cd_log_level_to_string (loglevel));
   if (s_bUseColors)
     g_print("\033[0;37m(%s:%s:%d) \033[%cm \n  ", file, func, line, s_iLogColor);
   else

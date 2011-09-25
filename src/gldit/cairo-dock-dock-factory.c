@@ -82,7 +82,7 @@ extern gboolean g_bUseGlitz;
 #endif
 
 
-static void _cairo_dock_set_icon_size (CairoDock *pDock, Icon *icon)
+static void _cairo_dock_set_icon_size (CairoContainer *pDock, Icon *icon)
 {
 	CairoDockIconGroup iType = cairo_dock_get_icon_type (icon);
 	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
@@ -115,7 +115,7 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 	pDock->fPostHideOffset = 1.;
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
-	pDock->container.iface.set_icon_size = _cairo_dock_set_icon_size;
+	pDock->container.iface.set_icon_size = _cairo_dock_set_icon_size; // warning: assignment from incompatible pointer type
 	
 	//\__________________ On cree la fenetre GTK.
 	GtkWidget *pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDock));
