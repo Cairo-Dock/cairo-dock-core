@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"POT-Creation-Date: 2011-09-23 23:42+0000\n"
 "PO-Revision-Date: 2011-09-20 08:57+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Bengali <bn@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-21 04:44+0000\n"
-"X-Generator: Launchpad (build 13996)\n"
+"X-Launchpad-Export-Date: 2011-09-25 04:34+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 "Language: bn\n"
 
 #: ../src/cairo-dock-gui-commons.c:216
@@ -25,8 +25,8 @@ msgid ""
 "anyway?"
 msgstr ""
 "আপনি বর্তমান থীমে কিছু পরিবর্তন করেছেন।\n"
-"আপনি সেগুলি হারিয়ে ফেলবেন যদি নতুন থীম বাছাই করার পূর্বে সংরক্ষণ না করেন। তবুও "
-"এগোবেন?"
+"আপনি সেগুলি হারিয়ে ফেলবেন যদি নতুন থীম বাছাই করার পূর্বে সংরক্ষণ না করেন। "
+"তবুও এগোবেন?"
 
 #: ../src/cairo-dock-gui-commons.c:242
 msgid "Please wait while importing the theme..."
@@ -70,7 +70,8 @@ msgid "category"
 msgstr "ক্যাটেগরী"
 
 #: ../src/cairo-dock-gui-items.c:384
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:600
@@ -284,7 +285,8 @@ msgid "Effects:"
 msgstr "ইফেক্ট সমূহঃ"
 
 #: ../src/cairo-dock-gui-simple.c:856
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:865 ../data/messages:485
@@ -422,7 +424,8 @@ msgstr "থীম ব্যবস্থাপনা করুন"
 #: ../src/cairo-dock-menu.c:393
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "আপনার বর্তমান থীমটি সংরক্ষণ করুন কিংবা সার্ভারের অনেক থীম হতে বাছাই করুন"
+msgstr ""
+"আপনার বর্তমান থীমটি সংরক্ষণ করুন কিংবা সার্ভারের অনেক থীম হতে বাছাই করুন"
 
 #: ../src/cairo-dock-menu.c:399
 msgid "Unlock icons"
@@ -469,8 +472,10 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "স্টার্টআপে কায়রো-ডক লঞ্চ কর"
 
 #: ../src/cairo-dock-menu.c:452
-msgid "Third-party applets provide integration with many programs, like Pidgin"
-msgstr "তৃতীর-পক্ষের এ্যাপ্লেট পিজিনের পত প্রোগ্রামের সাথে ইন্টিগ্রেশন সরবরাহ করে"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
+msgstr ""
+"তৃতীর-পক্ষের এ্যাপ্লেট পিজিনের পত প্রোগ্রামের সাথে ইন্টিগ্রেশন সরবরাহ করে"
 
 #: ../src/cairo-dock-menu.c:459
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
@@ -507,8 +512,8 @@ msgid ""
 "move to another dock"
 msgstr ""
 "নতুন ডকটি তৈরী করা হয়েছে।\n"
-"এখন, '-> অন্য ডকে সরিয়ে নিন' আইকনে ক্লিক করে কিছু লঞ্চার বা এ্যাপ্লেট এর ভেতর "
-"সরিয়ে আনুন"
+"এখন, '-> অন্য ডকে সরিয়ে নিন' আইকনে ক্লিক করে কিছু লঞ্চার বা এ্যাপ্লেট এর "
+"ভেতর সরিয়ে আনুন"
 
 #: ../src/cairo-dock-menu.c:611
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -527,7 +532,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:712
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr "আপনি কিন্তু এই এ্যাপ্লেট (%s) ডকটি থেকে সরিয়ে ফেলছেন। আপনি কি নিশ্চিত?"
+msgstr ""
+"আপনি কিন্তু এই এ্যাপ্লেট (%s) ডকটি থেকে সরিয়ে ফেলছেন। আপনি কি নিশ্চিত?"
 
 #: ../src/cairo-dock-menu.c:934
 msgid ""
@@ -1695,8 +1701,9 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1477
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1744,8 +1751,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1501
@@ -3157,7 +3164,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1049
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1051
@@ -3452,8 +3460,8 @@ msgstr ""
 
 #: ../data/messages:1203
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1205

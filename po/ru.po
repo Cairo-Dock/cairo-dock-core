@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cairo-Dock II\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2011-09-20 07:57+0000\n"
+"POT-Creation-Date: 2011-09-23 23:42+0000\n"
 "PO-Revision-Date: 2011-09-20 09:24+0000\n"
 "Last-Translator: Alex Nikolaenko <ceekay80@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-21 04:46+0000\n"
-"X-Generator: Launchpad (build 13996)\n"
+"X-Launchpad-Export-Date: 2011-09-25 04:36+0000\n"
+"X-Generator: Launchpad (build 14012)\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "Language: ru\n"
 "X-Poedit-Language: Russian\n"
@@ -72,7 +72,8 @@ msgid "category"
 msgstr "категория"
 
 #: ../src/cairo-dock-gui-items.c:384
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "Параметры основной панели можно настроить в главном окне настроек."
 
 #: ../src/cairo-dock-gui-items.c:600
@@ -291,7 +292,8 @@ msgid "Effects:"
 msgstr "Эффекты:"
 
 #: ../src/cairo-dock-gui-simple.c:856
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Щелкните по апплету, чтобы увидеть его описание и примерный вид."
 
 #: ../src/cairo-dock-gui-simple.c:865 ../data/messages:485
@@ -480,7 +482,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Запускать Cairo-Dock при старте системы"
 
 #: ../src/cairo-dock-menu.c:452
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Апплеты третьих сторон обеспечивают интеграцию с различными приложениями, "
 "например Pidgin"
@@ -626,7 +629,8 @@ msgstr "Удалить этот значок запуска"
 #: ../src/cairo-dock-menu.c:1291
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Вы можете удалить любой значок просто перетащив его за пределы панели."
+msgstr ""
+"Вы можете удалить любой значок просто перетащив его за пределы панели."
 
 #: ../src/cairo-dock-menu.c:1293 ../src/cairo-dock-menu.c:1472
 msgid "Move to another dock"
@@ -804,7 +808,8 @@ msgstr ""
 
 #: ../src/cairo-dock.c:331
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr "Принудительно определять это окружение - используйте с осторожностью."
+msgstr ""
+"Принудительно определять это окружение - используйте с осторожностью."
 
 #: ../src/cairo-dock.c:334
 msgid ""
@@ -1362,8 +1367,8 @@ msgid ""
 "settings."
 msgstr ""
 "Вы можете сделать значки и эффект приближения меньше или больше. Откройте "
-"настройки (правй щелчок -> Cairo-Dock -> настройка) и перейдите в \"Видимость"
-"\" (в расширенном режиме \"Значки\").\n"
+"настройки (правй щелчок -> Cairo-Dock -> настройка) и перейдите в "
+"\"Видимость\" (в расширенном режиме \"Значки\").\n"
 "Имейте в виду, что при большом количестве значков на панели, при изменении "
 "размера, они могут не вписаться в размер экрана.\n"
 "Кроме того, вы можете указать размер индивидуально каждого апплета в его "
@@ -1407,8 +1412,8 @@ msgstr ""
 "При этом, если приложение уже имеет свой значок на панели, то он не "
 "появится, вместо этого на значке запуска появится индикатор.\n"
 "Вы можете определить какие из приложений должны появляться на панели:  "
-"только окна текущего стола, только свёрнутые окна, отдельно от апплетов и т."
-"д."
+"только окна текущего стола, только свёрнутые окна, отдельно от апплетов и "
+"т.д."
 
 #: ../data/messages:47 ../data/messages:1329
 msgid "Closing a window"
@@ -1856,16 +1861,17 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1477
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Запустите gconf-editor, отредактируйте ключ /desktop/gnome/session/"
-"required_components/panel, заменив его значение на \"cairo-dock\". Затем "
-"перезапустите сеанс: панель Gnome больше не появится, вместо неё должна "
-"запуститься cairo-dock (если не запуститься, то добавьте её в приложения "
-"автозапуска)."
+"Запустите gconf-editor, отредактируйте ключ "
+"/desktop/gnome/session/required_components/panel, заменив его значение на "
+"\"cairo-dock\". Затем перезапустите сеанс: панель Gnome больше не появится, "
+"вместо неё должна запуститься cairo-dock (если не запуститься, то добавьте "
+"её в приложения автозапуска)."
 
 #: ../data/messages:199 ../data/messages:1481
 msgid ""
@@ -1916,8 +1922,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Вам необходимо включить композитность. Для этого вы можете запустить Compiz "
 "или xcompmgr.\n"
@@ -1925,8 +1931,8 @@ msgstr ""
 "композитность в настройках менеджера окон.\n"
 "Если же вы используете Gnome, то вы можете задействовать Metacity следующим "
 "образом:\n"
-" Откройте gconf-editor, установите ключ '/apps/metacity/general/"
-"compositing_manager' в значение 'true'."
+" Откройте gconf-editor, установите ключ "
+"'/apps/metacity/general/compositing_manager' в значение 'true'."
 
 #: ../data/messages:219 ../data/messages:1501
 msgid ""
@@ -1938,7 +1944,8 @@ msgstr ""
 
 #: ../data/messages:221 ../data/messages:1503
 msgid "My machine is too old to run a composite manager."
-msgstr "У меня слишком старый компьютер, чтобы запускать композитный менеджер."
+msgstr ""
+"У меня слишком старый компьютер, чтобы запускать композитный менеджер."
 
 #: ../data/messages:223 ../data/messages:1505
 msgid ""
@@ -3369,7 +3376,8 @@ msgstr "Размер кнопок в облачках напоминаний (ш
 #: ../data/messages:961 ../data/messages:965 ../data/messages:1019
 #: ../data/messages:1023 ../data/messages:1027 ../data/messages:1031
 msgid "If you don't provide any, a default image will be used."
-msgstr "Если ничего не укажете, то будет использовано стандартное изображение."
+msgstr ""
+"Если ничего не укажете, то будет использовано стандартное изображение."
 
 #: ../data/messages:963
 msgid "Name of an image to use for the yes/ok button :"
@@ -3500,7 +3508,8 @@ msgid "Zoom effect"
 msgstr "Эффект приближения"
 
 #: ../data/messages:1049
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Установите значение 1, если не хотите чтобы иконки увеличивались при "
 "наведении на них."
@@ -3829,8 +3838,8 @@ msgstr "больший"
 
 #: ../data/messages:1203
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Используйте, чтобы ориентировать индикатор относительно расположения панели "
 "(сверху, снизу, справа, слева)."
@@ -4039,7 +4048,8 @@ msgstr "Видимость панели"
 
 #: ../data/messages:1661
 msgid "Leave it empty to use the same view as the main dock."
-msgstr "Оставьте пустым, чтобы использовать тот же вид, что и основная панель."
+msgstr ""
+"Оставьте пустым, чтобы использовать тот же вид, что и основная панель."
 
 #: ../data/messages:1663
 msgid "Choose the view for this dock :/"
