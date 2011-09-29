@@ -796,9 +796,14 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	}
 }
 
-void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
+void cairo_dock_request_icon_animation (Icon *pIcon, CairoContainer *pContainer, const gchar *cAnimation, int iNbRounds)
 {
 	//g_print ("%s (%s, state:%d)\n", __func__, pIcon->cName, pIcon->iAnimationState);
+	CairoDock *pDock;
+	if (! CAIRO_DOCK_IS_DOCK (pContainer))  // at the moment, only docks can animate their icons
+		return;
+	else
+		pDock = CAIRO_DOCK (pContainer);
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)  // on le fait avant de changer d'animation, pour le cas ou l'icone ne serait plus placee au meme endroit (rebond).
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	cairo_dock_stop_icon_animation (pIcon);
@@ -825,7 +830,7 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 			cAnimation = "rotate";
 	}
 	
-	cairo_dock_request_icon_animation (pIcon, pDock, cAnimation, iNbRounds);
+	cairo_dock_request_icon_animation (pIcon, CAIRO_CONTAINER (pDock), cAnimation, iNbRounds);
 	cairo_dock_mark_icon_as_clicked (pIcon);  // pour eviter qu'un simple survol ne stoppe l'animation.
 	
 	// on reporte la demande d'attention recursivement vers le bas.

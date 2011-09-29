@@ -128,11 +128,11 @@ void cairo_dock_start_icon_animation (Icon *icon, CairoDock *pDock);
 
 /** Launch a given animation on an Icon. Do nothing if the icon will not be animated or if the animation doesn't exist.
 *@param pIcon the icon to animate.
-*@param pDock the dock containing the icon.
+*@param pContainer the container containing the icon.
 *@param cAnimation name of the animation.
 *@param iNbRounds number of rounds the animation will be played.
 */
-void cairo_dock_request_icon_animation (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds);
+void cairo_dock_request_icon_animation (Icon *pIcon, CairoContainer *pContainer, const gchar *cAnimation, int iNbRounds);
 
 /** Stop any animation on an Icon, except the disappearance/appearance animation.
 *@param pIcon the icon.
