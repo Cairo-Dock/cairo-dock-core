@@ -147,25 +147,26 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 			plugins[i-1] = plugins[i];
 			plugins[i] = NULL;
 		}
-		dbus_g_proxy_call (proxy,
+		/** dbus_g_proxy_call (proxy,
 			"set",
 			&error,
 			G_TYPE_STRV,
 			plugins,
 			G_TYPE_INVALID,
 			G_TYPE_INVALID); // It seems it doesn't work with dbus_g_proxy_call_no_reply() and Compiz-0.9 (compiz (core) - Warn: Can't set Value with type 12 to option "active_plugins" with type 11 (with dbus-send too...) => it may be better with dbus_g_proxy_call(), at least maybe we can get a more comprehensive error message. if nothing works, we should report a bug to Compiz.
+			// it's a known bug in Compiz...
 		if (error)
 		{
 			cd_warning ("compiz activate plug-ins error: %s", error->message);
 			g_error_free (error);
 			return;
-		}
-		/**gchar *cPluginsList = g_strjoinv (",", plugins);
+		}*/
+		gchar *cPluginsList = g_strjoinv (",", plugins);
 		cd_debug ("Compiz Plugins List: %s", cPluginsList);
 		cairo_dock_launch_command_printf ("bash "MY_APPLET_SHARE_DATA_DIR"/scripts/help_scripts.sh \"compiz_new_replace_list_plugins\" \"%s\"",
 			NULL,
 			cPluginsList);
-		g_free (cPluginsList);*/
+		g_free (cPluginsList);
 	}
 	else  // should not happen since we detect Unity before proposing this action.
 	{
@@ -194,7 +195,7 @@ static void _cd_remove_unity (GtkMenuItem *menu_item, gpointer data)
 static gboolean _is_unity_running (void)
 {
 	// Compiz < 0.9 can't have Unity.
-	if (cd_is_the_new_compiz ())
+	if (! cd_is_the_new_compiz ())
 		return FALSE;  // it's just to not have useless warning (but it will launch 'compiz --version' command)
 	
 	// get the list of active plug-ins
