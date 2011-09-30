@@ -357,21 +357,27 @@ static void _unregister_compiz_backend (void)
 
 gboolean cd_is_the_new_compiz (void)
 {
-	gboolean bNewCompiz = FALSE;
-	gchar *cVersion = cairo_dock_launch_command_sync ("compiz --version");
-	if (cVersion != NULL)
+	static gboolean s_bNewCompiz = FALSE;
+	static gboolean s_bHasBeenChecked = FALSE;  // only check it once, as it's likely to not change.
+	if (!s_bHasBeenChecked)
 	{
-		gchar *str = strchr (cVersion, ' ');  // "compiz 0.8.6"
-		if (str != NULL)
+		s_bHasBeenChecked = TRUE;
+		gchar *cVersion = cairo_dock_launch_command_sync ("compiz --version");
+		if (cVersion != NULL)
 		{
-			int iMajorVersion, iMinorVersion, iMicroVersion;
-			cairo_dock_get_version_from_string (str+1, &iMajorVersion, &iMinorVersion, &iMicroVersion);
-			if (iMajorVersion > 0 || iMinorVersion > 8)
-				bNewCompiz = TRUE;
+			gchar *str = strchr (cVersion, ' ');  // "compiz 0.8.6"
+			if (str != NULL)
+			{
+				int iMajorVersion, iMinorVersion, iMicroVersion;
+				cairo_dock_get_version_from_string (str+1, &iMajorVersion, &iMinorVersion, &iMicroVersion);
+				if (iMajorVersion > 0 || iMinorVersion > 8)
+					s_bNewCompiz = TRUE;
+			}
 		}
+		g_free (cVersion);
+		cd_debug ("NewCompiz: %d", s_bNewCompiz);
 	}
-	g_free (cVersion);
-	return bNewCompiz;
+	return s_bNewCompiz;
 }
 
 static void _on_compiz_owner_changed (const gchar *cName, gboolean bOwned, gpointer data)
@@ -383,8 +389,6 @@ static void _on_compiz_owner_changed (const gchar *cName, gboolean bOwned, gpoin
 		g_return_if_fail (s_pScaleProxy == NULL);
 		
 		gboolean bNewCompiz = cd_is_the_new_compiz ();
-		
-		cd_debug ("NewCompiz: %d", bNewCompiz);
 		
 		s_pScaleProxy = cairo_dock_create_new_session_proxy (
 			CD_COMPIZ_BUS,

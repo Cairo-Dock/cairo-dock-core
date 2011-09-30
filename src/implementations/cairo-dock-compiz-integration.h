@@ -36,7 +36,8 @@ G_BEGIN_DECLS
 
 void cd_init_compiz_backend (void);
 
-gboolean cd_is_the_new_compiz (void);
+
+gboolean cd_is_the_new_compiz (void);  // this function is exported for the Help applet.
 
 
 G_END_DECLS
