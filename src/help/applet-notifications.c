@@ -29,8 +29,7 @@
 #include "applet-notifications.h"
 
 #define CAIRO_DOCK_WIKI_URL "http://wiki.glx-dock.org" // it's in French if the locale is FR with Firefox. If not, the user can choose its language.
-///#define CD_UNITY_COMPIZ_PLUGIN "unityshell"
-#define CD_UNITY_COMPIZ_PLUGIN "widget"  // for tests only
+#define CD_UNITY_COMPIZ_PLUGIN "unityshell"
 
 
 //\___________ Define here the action to be taken when the user left-clicks on your icon or on its subdock or your desklet. The icon and the container that were clicked are available through the macros CD_APPLET_CLICKED_ICON and CD_APPLET_CLICKED_CONTAINER. CD_APPLET_CLICKED_ICON may be NULL if the user clicked in the container but out of icons.
