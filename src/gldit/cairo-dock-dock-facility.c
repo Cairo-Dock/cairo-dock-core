@@ -378,6 +378,10 @@ static GdkBitmap *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h
 	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
 	//g_print ("%s (%dx%d / %dx%d)\n", __func__, w, h, W, H);
+	if (W == 0 || H == 0)  // very unlikely to happen, but anyway avoid this case.
+	{
+		return NULL;
+	}
 	
 	GdkBitmap *pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
 		pDock->container.bIsHorizontal ? W : H,
@@ -385,6 +389,7 @@ static GdkBitmap *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h
 		1);
 	
 	cairo_t *pCairoContext = gdk_cairo_create (pShapeBitmap);
+	g_return_val_if_fail (pCairoContext != NULL, NULL);  // if no context, abort (https://bugs.launchpad.net/cairo-dock-plug-ins/+bug/861725)
 	cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
 	cairo_paint (pCairoContext);
