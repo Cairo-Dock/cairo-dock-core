@@ -140,7 +140,19 @@ static gboolean _cairo_dock_render_flying_container_notification (gpointer pUser
 		if (pIcon != NULL)
 		{
 			cairo_save (pCairoContext);
-			cairo_dock_render_one_icon (pIcon, CAIRO_DOCK (pFlyingContainer), pCairoContext, 1., FALSE); // CAIRO_CONTAINER (pFlyingContainer) ?
+			
+			cairo_translate (pCairoContext, pIcon->fDrawX, pIcon->fDrawY);
+			if (pIcon->pIconBuffer != NULL)  // we can't use cairo_dock_render_one_icon() here since it's not a dock, and anyway we don't need it.
+			{
+				cairo_save (pCairoContext);
+				
+				cairo_dock_set_icon_scale_on_context (pCairoContext, pIcon, pFlyingContainer->container.bIsHorizontal, pFlyingContainer->container.fRatio, pFlyingContainer->container.bDirectionUp);
+				cairo_set_source_surface (pCairoContext, pIcon->pIconBuffer, 0.0, 0.0);
+				cairo_paint (pCairoContext);
+				
+				cairo_restore (pCairoContext);
+			}
+			
 			cairo_restore (pCairoContext);
 			
 			_cairo_dock_apply_emblem_surface (s_pEmblem, pFlyingContainer->container.iWidth, pFlyingContainer->container.iHeight, pCairoContext);
@@ -170,10 +182,10 @@ static gboolean _cairo_dock_render_flying_container_notification (gpointer pUser
 		if (pIcon != NULL)
 		{
 			glPushMatrix ();
-			/*glTranslatef (pFlyingContainer->container.iWidth / 2,
-				pIcon->fHeight * pIcon->fScale/2,
-				- pFlyingContainer->container.iHeight);*/
-			cairo_dock_render_one_icon_opengl (pIcon, CAIRO_DOCK (pFlyingContainer), 1., FALSE); // CAIRO_CONTAINER (pFlyingContainer)
+
+			cairo_dock_translate_on_icon_opengl (pIcon, CAIRO_CONTAINER (pFlyingContainer), 1.);
+			cairo_dock_draw_icon_texture (pIcon, CAIRO_CONTAINER (pFlyingContainer));
+
 			glPopMatrix ();
 			
 			glPushMatrix ();
@@ -305,6 +317,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	pFlyingContainer->container.bInside = TRUE;
 	pFlyingIcon->bPointed = TRUE;
 	pFlyingIcon->fScale = 1.;
+	pFlyingIcon->fAlpha = 1.;
 	
 	pFlyingContainer->container.iWidth = pFlyingIcon->fWidth * pFlyingIcon->fScale * 1.333;
 	pFlyingContainer->container.iHeight = pFlyingIcon->fHeight * pFlyingIcon->fScale * 1.333;
