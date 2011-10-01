@@ -95,7 +95,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			if (pParentDock)
 				cairo_dock_show_subdock (pPointedIcon, pParentDock);
 		}*/
-		cairo_dock_request_icon_animation (icon, pDock, myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
+		cairo_dock_request_icon_animation (icon, CAIRO_CONTAINER (pDock), myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
 	}
 }
@@ -181,7 +181,7 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 		if (myTaskbarParam.cAnimationOnActiveWindow)
 		{
 			if (cairo_dock_animation_will_be_visible (pParentDock) && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
-				cairo_dock_request_icon_animation (icon, pParentDock, myTaskbarParam.cAnimationOnActiveWindow, 1);
+				cairo_dock_request_icon_animation (icon, CAIRO_CONTAINER (pParentDock), myTaskbarParam.cAnimationOnActiveWindow, 1);
 		}
 		else
 		{

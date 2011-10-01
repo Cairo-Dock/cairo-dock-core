@@ -29,6 +29,8 @@
 #include "applet-notifications.h"
 
 #define CAIRO_DOCK_WIKI_URL "http://wiki.glx-dock.org" // it's in French if the locale is FR with Firefox. If not, the user can choose its language.
+#define CD_UNITY_COMPIZ_PLUGIN "unityshell"
+
 
 //\___________ Define here the action to be taken when the user left-clicks on your icon or on its subdock or your desklet. The icon and the container that were clicked are available through the macros CD_APPLET_CLICKED_ICON and CD_APPLET_CLICKED_CONTAINER. CD_APPLET_CLICKED_ICON may be NULL if the user clicked in the container but out of icons.
 CD_APPLET_ON_CLICK_BEGIN
@@ -56,6 +58,7 @@ static void _cd_show_help_gui (GtkMenuItem *menu_item, gpointer data)
 {
 	cairo_dock_show_module_gui ("Help");
 }
+
 static void _launch_url (const gchar *cURL)
 {
 	if  (! cairo_dock_fm_launch_uri (cURL))
@@ -114,7 +117,7 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 		G_TYPE_INVALID);
 	if (error)
 	{
-		cd_warning ("compiz active plug-ins error: %s", error->message);
+		cd_warning ("compiz got active plug-ins error: %s", error->message);
 		g_error_free (error);
 		return;
 	}
@@ -126,18 +129,11 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	for (i = 0; plugins[i] != NULL; i++)
 	{
 		cd_debug ("Compiz Plugin: %s", plugins[i]);
-		if (strcmp (plugins[i], "unityshell") == 0)
+		if (strcmp (plugins[i], CD_UNITY_COMPIZ_PLUGIN) == 0)
 		{
 			bFound = TRUE;
 			break;
 		}
-	}
-
-	if (data != NULL)
-	{	// only check if unity is Running
-		data = &bFound;
-		g_strfreev (plugins);
-		return;
 	}
 
 	// if present, remove it from the list and send it back to Compiz.
@@ -151,11 +147,20 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 			plugins[i-1] = plugins[i];
 			plugins[i] = NULL;
 		}
-		/*dbus_g_proxy_call_no_reply (proxy,
+		/** dbus_g_proxy_call (proxy,
 			"set",
+			&error,
 			G_TYPE_STRV,
 			plugins,
-			G_TYPE_INVALID);*/ // It seems it doesn't work :-? => compiz (core) - Warn: Can't set Value with type 12 to option "active_plugins" with type 11 (with dbus-send too...)
+			G_TYPE_INVALID,
+			G_TYPE_INVALID); // It seems it doesn't work with dbus_g_proxy_call_no_reply() and Compiz-0.9 (compiz (core) - Warn: Can't set Value with type 12 to option "active_plugins" with type 11 (with dbus-send too...) => it may be better with dbus_g_proxy_call(), at least maybe we can get a more comprehensive error message. if nothing works, we should report a bug to Compiz.
+			// it's a known bug in Compiz...
+		if (error)
+		{
+			cd_warning ("compiz activate plug-ins error: %s", error->message);
+			g_error_free (error);
+			return;
+		}*/
 		gchar *cPluginsList = g_strjoinv (",", plugins);
 		cd_debug ("Compiz Plugins List: %s", cPluginsList);
 		cairo_dock_launch_command_printf ("bash "MY_APPLET_SHARE_DATA_DIR"/scripts/help_scripts.sh \"compiz_new_replace_list_plugins\" \"%s\"",
@@ -163,11 +168,9 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 			cPluginsList);
 		g_free (cPluginsList);
 	}
-	else
+	else  // should not happen since we detect Unity before proposing this action.
 	{
-		cairo_dock_remove_dialog_if_any (myIcon);
-		cairo_dock_show_temporary_dialog_with_icon (D_("Unity is already disabled."),
-			myIcon, myContainer, 10e3, "same icon");
+		cd_warning ("Unity is already disabled.");
 	}
 	g_strfreev (plugins);
 }
@@ -177,7 +180,7 @@ static void _cd_remove_unity (GtkMenuItem *menu_item, gpointer data)
 	// first get the active plug-ins.
 	DBusGProxy *pActivePluginsProxy = cairo_dock_create_new_session_proxy (
 		CD_COMPIZ_BUS,
-		CD_COMPIZ_OBJECT"/core/screen0/active_plugins",
+		CD_COMPIZ_OBJECT"/core/screen0/active_plugins",  // this code runs for Compiz > 0.9 only.
 		CD_COMPIZ_INTERFACE);
 	
 	dbus_g_proxy_begin_call (pActivePluginsProxy,
@@ -191,24 +194,51 @@ static void _cd_remove_unity (GtkMenuItem *menu_item, gpointer data)
 
 static gboolean _is_unity_running (void)
 {
-	if (cd_is_the_new_compiz ())
-		return FALSE; // it's just to not have useless warning (but it will launch 'compiz --version' command)
-
+	// Compiz < 0.9 can't have Unity.
+	if (! cd_is_the_new_compiz ())
+		return FALSE;  // it's just to not have useless warning (but it will launch 'compiz --version' command)
+	
+	// get the list of active plug-ins
+	// (we can't use dbus_g_proxy_begin_call(), because we need the answer now, to know if we'll add an entry in the menu or not. We could modify the menu afterwards, but that seems unnecessarily complicated.
+	gboolean bIsPresent = FALSE;
+	
 	DBusGProxy *pActivePluginsProxy = cairo_dock_create_new_session_proxy (
 		CD_COMPIZ_BUS,
-		CD_COMPIZ_OBJECT"/core/screen0/active_plugins",
+		CD_COMPIZ_OBJECT"/core/screen0/active_plugins",  // this code runs for Compiz > 0.9 only.
 		CD_COMPIZ_INTERFACE);
-
-	gboolean bResult = FALSE;
-
-	dbus_g_proxy_begin_call (pActivePluginsProxy,
-		"get",
-		(DBusGProxyCallNotify) _on_got_active_plugins,
-		&bResult, // data != NULL => only check if unity is running
-		NULL,
+	
+	gchar **plugins = NULL;
+	GError *erreur=NULL;
+	dbus_g_proxy_call (pActivePluginsProxy, "get", &erreur,
+		G_TYPE_INVALID,
+		G_TYPE_STRV, &plugins,
 		G_TYPE_INVALID);
-
-	return bResult;
+		
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		g_object_unref (pActivePluginsProxy);
+		return FALSE;
+	}
+	
+	g_return_val_if_fail (plugins != NULL, FALSE);
+	
+	// look for the 'Unity' plug-in.
+	int i;
+	for (i = 0; plugins[i] != NULL; i++)
+	{
+		cd_debug ("Compiz Plugin: %s", plugins[i]);
+		if (strcmp (plugins[i], CD_UNITY_COMPIZ_PLUGIN) == 0)
+		{
+			bIsPresent = TRUE;
+			break;
+		}
+	}
+		
+	g_strfreev (plugins);
+	g_object_unref (pActivePluginsProxy);
+	return bIsPresent;
 }
 
 

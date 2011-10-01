@@ -182,7 +182,7 @@ static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 	}
 	if (! bSuccess)
 	{
-		cairo_dock_request_icon_animation (icon, pDock, "blink", 1);  // 1 blink if fail.
+		cairo_dock_request_icon_animation (icon, CAIRO_CONTAINER (pDock), "blink", 1);  // 1 blink if fail.
 	}
 	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 }
@@ -368,7 +368,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 				g_spawn_command_line_async (cCommand, NULL);
 				g_free (cPath);
 				g_free (cCommand);
-				cairo_dock_request_icon_animation (icon, pDock, "blink", 2);
+				cairo_dock_request_icon_animation (icon, CAIRO_CONTAINER (pDock), "blink", 2);
 				return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 			}
 			else  // skip any other case.

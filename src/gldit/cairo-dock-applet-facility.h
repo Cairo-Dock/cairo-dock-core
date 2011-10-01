@@ -612,9 +612,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param iAnimationLength number of rounds the animation should be played.
 */
 #define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \
-	do {\
-		if (myDock) \
-			cairo_dock_request_icon_animation (myIcon, myDock, cAnimationName, iAnimationLength); } while (0)
+	cairo_dock_request_icon_animation (myIcon, myContainer, cAnimationName, iAnimationLength)
 
 /** Stop any animation on the applet's icon.
 */
