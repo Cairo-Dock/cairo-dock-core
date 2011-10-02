@@ -1149,7 +1149,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 
 						if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked))
 						{
-							cairo_dock_request_icon_animation (s_pIconClicked, pDock, "bounce", 2);
+							cairo_dock_request_icon_animation (s_pIconClicked, CAIRO_CONTAINER (pDock), "bounce", 2);
 						}
 						gtk_widget_queue_draw (pDock->container.pWidget);
 					}
