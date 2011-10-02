@@ -718,7 +718,7 @@ static void _cairo_dock_pick_a_file (GtkButton *button, gpointer *data)
 	GtkWindow *pParentWindow = data[2];
 
 	GtkWidget* pFileChooserDialog = gtk_file_chooser_dialog_new (
-		(iFileType == 0 ? "Pick up a file" : "Pick up a directory"),
+		(iFileType == 0 ? _("Pick up a file") : _("Pick up a directory")),
 		pParentWindow,
 		(iFileType == 0 ? GTK_FILE_CHOOSER_ACTION_OPEN : GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER),
 		GTK_STOCK_OK,

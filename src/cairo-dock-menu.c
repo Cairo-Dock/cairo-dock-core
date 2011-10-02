@@ -769,7 +769,7 @@ static void _cairo_dock_set_custom_appli_icon (GtkMenuItem *pMenuItem, gpointer 
 		return;
 	
 	GtkWidget* pFileChooserDialog = gtk_file_chooser_dialog_new (
-		"Pick up an image",
+		_("Pick up an image"),
 		GTK_WINDOW (pDock->container.pWidget),
 		GTK_FILE_CHOOSER_ACTION_OPEN,
 		GTK_STOCK_OK,
