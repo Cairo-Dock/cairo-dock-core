@@ -21,6 +21,7 @@
 #include <unistd.h>
 #define __USE_XOPEN_EXTENDED
 #include <stdlib.h>
+#include <sys/time.h>
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
@@ -62,20 +63,49 @@ static gchar *cPrevPath = NULL;
 
 static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTreeIter *pParentIter);
 static void reload_items (void);
+static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);
+static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer data);
 
 typedef enum {
-	CD_MODEL_NAME = 0,
-	CD_MODEL_PIXBUF,
-	CD_MODEL_ICON,
-	CD_MODEL_CONTAINER,
-	CD_MODEL_MODULE,
+	CD_MODEL_NAME = 0,  // displayed name
+	CD_MODEL_PIXBUF,  // icon image
+	CD_MODEL_ICON,  // Icon (for launcher/separator/sub-dock/applet)
+	CD_MODEL_CONTAINER,  // CairoContainer (for main docks)
+	CD_MODEL_MODULE,  // CairoDockModuleInstance (for plug-ins with no icon)
 	CD_MODEL_NB_COLUMNS
 	} CDModelColumns;
 
 
-  ///////////////
- // CALLBACKS //
-///////////////
+  ///////////
+ // MODEL //
+///////////
+
+static gboolean _search_item_in_line (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
+{
+	gpointer pItem = NULL;
+	gtk_tree_model_get (model, iter,
+		GPOINTER_TO_INT (data[1]), &pItem, -1);
+	if (pItem == data[0])
+	{
+		//g_print (" found !\n");
+		memcpy (data[2], iter, sizeof (GtkTreeIter));
+		data[3] = GINT_TO_POINTER (TRUE);
+		return TRUE;  // stop iterating.
+	}
+	return FALSE;
+}
+static gboolean _search_item_in_model (GtkWidget *pTreeView, gpointer pItem, CDModelColumns iItemType, GtkTreeIter *iter)
+{
+	if (pItem == NULL)
+		return FALSE;
+	//g_print ("%s (%s)\n", __func__, ((Icon*)pItem)->cName);
+	GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
+	gpointer data[4] = {pItem, GINT_TO_POINTER (iItemType), iter, GINT_TO_POINTER (FALSE)};
+	gtk_tree_model_foreach (model,
+		(GtkTreeModelForeachFunc) _search_item_in_line,
+		data);
+	return GPOINTER_TO_INT (data[3]);
+}
 
 static void _delete_current_launcher_widget (GtkWidget *pLauncherWindow)
 {
@@ -103,177 +133,6 @@ static void _delete_current_launcher_widget (GtkWidget *pLauncherWindow)
 	g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", NULL);
 	g_object_set_data (G_OBJECT (pLauncherWindow), "current-container", NULL);
 	g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", NULL);
-}
-
-static void _free_launcher_gui (void)
-{
-	s_pLauncherWindow = NULL;
-	s_pCurrentLauncherWidget = NULL;
-	s_pLauncherPane = NULL;
-	s_pLauncherTreeView = NULL;
-}
-static gboolean on_delete_launcher_gui (GtkWidget *pWidget, GdkEvent *event, gpointer data)
-{
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWidget), "widget-list");
-	cairo_dock_free_generated_widget_list (pWidgetList);
-	
-	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWidget), "garbage");
-	/// nettoyer.
-	
-	_free_launcher_gui ();
-	
-	return FALSE;
-}
-
-static void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
-{
-	//g_print ("%s ()\n", __func__);
-	
-	Icon *pIcon = g_object_get_data (G_OBJECT (pWindow), "current-icon");
-	CairoContainer *pContainer = g_object_get_data (G_OBJECT (pWindow), "current-container");
-	CairoDockModuleInstance *pModuleInstance = g_object_get_data (G_OBJECT (pWindow), "current-module");
-	
-	if (CAIRO_DOCK_IS_APPLET (pIcon))
-		pModuleInstance = pIcon->pModuleInstance;
-	
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
-	
-	if (pModuleInstance)
-	{
-		// open the conf file.
-		GKeyFile *pKeyFile = cairo_dock_open_key_file (pModuleInstance->cConfFilePath);
-		g_return_if_fail (pKeyFile != NULL);
-		
-		// update the keys with the widgets.
-		cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
-		
-		// if the parent dock doesn't exist (new dock), add a conf file for it with a nominal name.
-		if (g_key_file_has_key (pKeyFile, "Icon", "dock name", NULL))
-		{
-			gchar *cDockName = g_key_file_get_string (pKeyFile, "Icon", "dock name", NULL);
-			gboolean bIsDetached = g_key_file_get_boolean (pKeyFile, "Desklet", "initially detached", NULL);
-			if (!bIsDetached)
-			{
-				CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
-				if (pDock == NULL)
-				{
-					gchar *cNewDockName = cairo_dock_add_root_dock_config ();
-					g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewDockName);
-					g_free (cNewDockName);
-				}
-			}
-			g_free (cDockName);
-		}
-		
-		if (pModuleInstance->pModule->pInterface->save_custom_widget != NULL)
-			pModuleInstance->pModule->pInterface->save_custom_widget (pModuleInstance, pKeyFile);
-		
-		// write everything in the conf file.
-		cairo_dock_write_keys_to_file (pKeyFile, pModuleInstance->cConfFilePath);
-		g_key_file_free (pKeyFile);
-		
-		// reload module.
-		cairo_dock_reload_module_instance (pModuleInstance, TRUE);
-	}
-	else if (CAIRO_DOCK_IS_DOCK (pContainer))
-	{
-		CairoDock *pDock = CAIRO_DOCK (pContainer);
-		if (!pDock->bIsMainDock)  // pour l'instant le main dock n'a pas de fichier de conf
-		{
-			const gchar *cDockName = cairo_dock_search_dock_name (pDock);  // CD_MODEL_NAME contient le nom affiche, qui peut differer.
-			g_return_if_fail (cDockName != NULL);
-			
-			gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-			
-			// open the conf file.
-			GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-			g_return_if_fail (pKeyFile != NULL);
-			
-			// update the keys with the widgets.
-			cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
-			
-			// write everything in the conf file.
-			cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
-			g_key_file_free (pKeyFile);
-			g_free (cConfFilePath);
-			
-			// reload dock's config.
-			cairo_dock_reload_one_root_dock (cDockName, pDock);
-		}
-	}
-	else if (pIcon)
-	{
-		gchar *cConfFilePath = (*pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName));
-		
-		// open the conf file.
-		GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-		g_return_if_fail (pKeyFile != NULL);
-		
-		// update the keys with the widgets.
-		cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
-		
-		// if the parent dock doesn't exist (new dock), add a conf file for it with a nominal name.
-		if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Container", NULL))
-		{
-			gchar *cDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", NULL);
-			CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
-			if (pDock == NULL)
-			{
-				gchar *cNewDockName = cairo_dock_add_root_dock_config ();
-				g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewDockName);
-				g_free (cNewDockName);
-			}
-			g_free (cDockName);
-		}
-		
-		// write everything in the conf file.
-		cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
-		g_key_file_free (pKeyFile);
-		g_free (cConfFilePath);
-		
-		// reload widgets.
-		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et declenche le rechargement de l'IHM.
-	}
-	reload_items ();
-}
-
-static void on_click_launcher_quit (GtkButton *button, GtkWidget *pWindow)
-{
-	//g_print ("%s ()\n", __func__);
-	on_delete_launcher_gui (pWindow, NULL, NULL);
-	gtk_widget_destroy (pWindow);
-}
-
-
-  ////////////
- // MODELE //
-////////////
-
-static gboolean _search_item_in_line (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
-{
-	gpointer pItem = NULL;
-	gtk_tree_model_get (model, iter,
-		GPOINTER_TO_INT (data[1]), &pItem, -1);
-	if (pItem == data[0])
-	{
-		//g_print (" found !\n");
-		memcpy (data[2], iter, sizeof (GtkTreeIter));
-		data[3] = GINT_TO_POINTER (TRUE);
-		return TRUE;  // stop iterating.
-	}
-	return FALSE;
-}
-static gboolean _search_item_in_model (GtkWidget *pTreeView, gpointer pItem, CDModelColumns iItemType, GtkTreeIter *iter)
-{
-	if (pItem == NULL)
-		return FALSE;
-	//g_print ("%s (%s)\n", __func__, ((Icon*)pItem)->cName);
-	GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (pTreeView));
-	gpointer data[4] = {pItem, GINT_TO_POINTER (iItemType), iter, GINT_TO_POINTER (FALSE)};
-	gtk_tree_model_foreach (model,
-		(GtkTreeModelForeachFunc) _search_item_in_line,
-		data);
-	return GPOINTER_TO_INT (data[3]);
 }
 
 static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, GtkWidget *pLauncherWindow)
@@ -575,30 +434,6 @@ static gboolean _add_one_module_to_model (const gchar *cModuleName, CairoDockMod
 	return FALSE; // FALSE => keep going
 }
 
-static GtkTreeModel *_build_tree_model (void)
-{
-	GtkTreeStore *model = gtk_tree_store_new (CD_MODEL_NB_COLUMNS,
-		G_TYPE_STRING,  // displayed name
-		GDK_TYPE_PIXBUF,  // displayed icon
-		G_TYPE_POINTER,  // Icon
-		G_TYPE_POINTER,  // Container
-		G_TYPE_POINTER);  // Module
-	cairo_dock_foreach_docks ((GHFunc) _add_one_root_dock_to_model, model);  // on n'utilise pas cairo_dock_foreach_root_docks(), de facon a avoir le nom du dock.
-	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _add_one_desklet_to_model, model);
-	cairo_dock_foreach_module ((GHRFunc)_add_one_module_to_model, model);
-	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
-	if (pModule != NULL)
-	{
-		if (pModule->pInstancesList == NULL)  // Help is not active, so is not already in the icons list.
-		{
-			///CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
-			///_add_one_module ("Help", pModuleInstance, model);
-			/// add it ...
-		}
-	}
-	return GTK_TREE_MODEL (model);
-}
-
 static void _select_item (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, GtkWidget *pLauncherWindow)
 {
 	g_free (cPrevPath);
@@ -627,11 +462,437 @@ static void _select_item (Icon *pIcon, CairoContainer *pContainer, CairoDockModu
 	}
 }
 
+static GtkTreeModel *_build_tree_model (void)
+{
+	GtkTreeStore *model = gtk_tree_store_new (CD_MODEL_NB_COLUMNS,
+		G_TYPE_STRING,  // displayed name
+		GDK_TYPE_PIXBUF,  // displayed icon
+		G_TYPE_POINTER,  // Icon
+		G_TYPE_POINTER,  // Container
+		G_TYPE_POINTER);  // Module
+	cairo_dock_foreach_docks ((GHFunc) _add_one_root_dock_to_model, model);  // on n'utilise pas cairo_dock_foreach_root_docks(), de facon a avoir le nom du dock.
+	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _add_one_desklet_to_model, model);
+	cairo_dock_foreach_module ((GHRFunc)_add_one_module_to_model, model);
+	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
+	if (pModule != NULL)
+	{
+		if (pModule->pInstancesList == NULL)  // Help is not active, so is not already in the icons list.
+		{
+			///CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
+			///_add_one_module ("Help", pModuleInstance, model);
+			/// add it ...
+		}
+	}
+	g_signal_connect (G_OBJECT (model), "row-inserted", G_CALLBACK (on_row_inserted), NULL);
+	g_signal_connect (G_OBJECT (model), "row-deleted", G_CALLBACK (on_row_deleted), NULL);
+	return GTK_TREE_MODEL (model);
+}
 
-  /////////
- // GUI //
-/////////
 
+  //////////////////
+ // USER ACTIONS //
+//////////////////
+
+static GtkTreeIter lastInsertedIter;
+static gboolean s_bHasPendingInsertion = FALSE;
+static struct timeval lastTime = {0, 0};
+
+static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
+{
+	// we only receive this event from an intern drag'n'drop
+	// when we receive this event, the row is still empty, so we can't perform any task here.
+	// so we just remember the event, and treat it later (when we receive the "row-deleted" signal).
+	memcpy (&lastInsertedIter, iter, sizeof (GtkTreeIter));
+	gettimeofday (&lastTime, NULL);
+	s_bHasPendingInsertion = TRUE;
+}
+static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer data)
+{
+	g_print ("- row\n");
+	// when drag'n'droping a row, the "row-deleted" signal is emitted after the "row-inserted"
+	// however the row pointed by 'path' is already invalid, but the previously inserted iter is now filled, and we remembered it, so we can use it now.
+	if (s_bHasPendingInsertion)
+	{
+		struct timeval current_time;
+		gettimeofday (&current_time, NULL);
+		if ((current_time.tv_sec + current_time.tv_usec / 1.e6) - (lastTime.tv_sec + lastTime.tv_usec / 1.e6) < .3)  // just to be sure we don't get a "row-deleted" that has no link with a drag'n'drop (it's a rough precaution, I've never seen this case happen).
+		{
+			// get the item that has been moved.
+			gchar *cName = NULL;
+			Icon *pIcon = NULL;
+			CairoContainer *pContainer = NULL;
+			CairoDockModuleInstance *pInstance = NULL;
+			gtk_tree_model_get (model, &lastInsertedIter,
+				CD_MODEL_NAME, &cName,
+				CD_MODEL_ICON, &pIcon,
+				CD_MODEL_CONTAINER, &pContainer,
+				CD_MODEL_MODULE, &pInstance, -1);
+			g_print ("+ row %s\n", cName);
+			
+			if (pIcon)  // launcher/separator/sub-dock-icon or applet
+			{
+				// get the icon and container.
+				/**if (pIcon == NULL)
+					pIcon = pInstance->pIcon;*/
+				if (pContainer == NULL)
+				{
+					if (pInstance != NULL)
+						pContainer = pInstance->pContainer;
+					else if (pIcon != NULL)
+					{
+						pContainer = CAIRO_CONTAINER (cairo_dock_search_dock_from_name (pIcon->cParentDockName));
+					}
+				}
+				
+				// get the new parent in the tree, hence the possibly new container
+				GtkTreeIter parent_iter;
+				if (CAIRO_DOCK_IS_DOCK (pContainer)  // with this, we prevent from moving desklets; we may add this possibility it later.
+				&& gtk_tree_model_iter_parent (model, &parent_iter, &lastInsertedIter))
+				{
+					gchar *cParentName = NULL;
+					Icon *pParentIcon = NULL;
+					CairoContainer *pParentContainer = NULL;
+					gtk_tree_model_get (model, &parent_iter,
+						CD_MODEL_NAME, &cParentName,
+						CD_MODEL_ICON, &pParentIcon,
+						CD_MODEL_CONTAINER, &pParentContainer, -1);
+					g_print (" parent: %s, %p, %p\n", cParentName, pParentIcon, pParentContainer);
+					
+					if (pParentContainer == NULL && pParentIcon != NULL)  // dropped on an icon, if it's a sub-dock icon, insert into the sub-dock, else do as if we dropped next to the icon.
+					{
+						if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pParentIcon))  // put our item in the sub-dock
+						{
+							pParentContainer = CAIRO_CONTAINER (pParentIcon->pSubDock);
+						}
+						else  // not an icon that can contain our item, so place it next to it.
+						{
+							pParentContainer = CAIRO_CONTAINER (cairo_dock_search_dock_from_name (pParentIcon->cParentDockName));
+							// we'll search the parent instead.
+							lastInsertedIter = parent_iter;
+							gtk_tree_model_iter_parent (model, &parent_iter, &lastInsertedIter);
+							g_print (" search parent %s\n", pParentIcon->cParentDockName);
+						}
+					}
+					if (CAIRO_DOCK_IS_DOCK (pParentContainer))  // not nul and dock-type.
+					{
+						// if it has changed, update the conf file and the icon.
+						if (pParentContainer != pContainer)
+						{
+							g_print (" parent has changed\n");
+							const gchar *cNewParentDockName = cairo_dock_search_dock_name (CAIRO_DOCK (pParentContainer));
+							if (cNewParentDockName != NULL)
+							{
+								cairo_dock_write_container_name_in_conf_file (pIcon, cNewParentDockName);
+							}
+							
+							g_print (" reload the icon...\n");
+							if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
+								|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
+								|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+							&& pIcon->cDesktopFileName != NULL)  // user icon.
+							{
+								cairo_dock_reload_launcher (pIcon);
+							}
+							else if (CAIRO_DOCK_IS_APPLET (pIcon))
+							{
+								cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
+							}
+						}
+						
+						// find the new order of the row in the tree
+						double fOrder = 0;
+						GtkTreeIter it;
+						Icon *pLeftIcon = NULL;
+						gchar *last_iter_s = gtk_tree_model_get_string_from_iter (model, &lastInsertedIter);
+						g_print ("search for '%s'\n", last_iter_s);
+						
+						///gtk_tree_model_get_iter_first (model, &iter);
+						if (gtk_tree_model_iter_children (model, &it, &parent_iter))  // point on the first iter.
+						{
+							g_print (" got first iter\n");
+							// iterate on the rows until we reach our row.
+							do
+							{
+								gchar *iter_s = gtk_tree_model_get_string_from_iter (model, &it);
+								g_print (" test iter %s / %s\n", iter_s, last_iter_s);
+								if (strcmp (last_iter_s, iter_s) == 0)  // it's our row
+								{
+									g_print (" reached our row, break\n");
+									break;
+								}
+								else  // not yet our row, let's remember the left icon.
+								{
+									gchar *name=NULL;
+									gtk_tree_model_get (model, &it,
+										CD_MODEL_NAME, &name,
+										CD_MODEL_ICON, &pLeftIcon, -1);
+									g_print ("  (%s)\n", name);
+								}
+							}
+							while (gtk_tree_model_iter_next (model, &it));
+						}
+						
+						// move the icon (will update the conf file and trigger the signal to reload the GUI).
+						g_print (" move the icon...\n");
+						cairo_dock_move_icon_after_icon (CAIRO_DOCK (pParentContainer), pIcon, pLeftIcon);
+					}
+					else  // the row may have been dropped on a launcher or a desklet, in which case we must reload the model because this has no meaning.
+					{
+						reload_items ();
+					}
+					
+				}  // else this row has no parent, so it was either a main dock or a desklet, and we have nothing to do.
+				else
+				{
+					reload_items ();
+				}
+			}
+			else  // no icon (for instance a plug-in like Remote-control)
+			{
+				reload_items ();
+			}
+		}
+		
+		s_bHasPendingInsertion = FALSE;
+	}
+}
+
+static void _cairo_dock_remove_item (GtkMenuItem *pMenuItem, GtkWidget *pTreeView)
+{
+	// get the selected line
+	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pTreeView));
+	GtkTreeModel *pModel = NULL;
+	GList *paths = gtk_tree_selection_get_selected_rows (pSelection, &pModel);
+	g_return_if_fail (paths != NULL && pModel != NULL);
+	GtkTreePath *path = paths->data;
+	
+	GtkTreeIter iter;
+	if (! gtk_tree_model_get_iter (pModel, &iter, path))
+		return;
+	
+	g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
+	g_list_free (paths);
+	
+	// get the corresponding item, and the next line.
+	Icon *pIcon = NULL;
+	CairoContainer *pContainer = NULL;
+	CairoDockModuleInstance *pInstance = NULL;
+	gtk_tree_model_get (pModel, &iter,
+		CD_MODEL_ICON, &pIcon,
+		CD_MODEL_CONTAINER, &pContainer,
+		CD_MODEL_MODULE, &pInstance, -1);
+	
+	if (!gtk_tree_model_iter_next (pModel, &iter))
+		gtk_tree_model_get_iter_first (pModel, &iter);
+	
+	// remove it.
+	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
+		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
+		|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))  // launcher/separator/sub-dock
+	{
+		if (pIcon->pSubDock != NULL)  // on bazarde le sous-dock.
+		{
+			cairo_dock_destroy_dock (pIcon->pSubDock, (CAIRO_DOCK_IS_APPLI (pIcon) && pIcon->cClass != NULL ? pIcon->cClass : pIcon->cName));
+			pIcon->pSubDock = NULL;
+		}
+		
+		cairo_dock_trigger_icon_removal_from_dock (pIcon);
+	}
+	else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet
+	{
+		cairo_dock_trigger_icon_removal_from_dock (pIcon);
+	}
+	else if (pInstance != NULL)  // plug-in
+	{
+		cairo_dock_remove_module_instance (pInstance);
+	}
+	else if (CAIRO_DOCK_IS_DOCK (pContainer))  // main-dock
+	{
+		CairoDock *pDock = CAIRO_DOCK (pContainer);
+		if (! pDock->bIsMainDock)
+		{
+			cairo_dock_remove_icons_from_dock (pDock, NULL, NULL);
+		
+			const gchar *cDockName = cairo_dock_search_dock_name (pDock);
+			cairo_dock_destroy_dock (pDock, cDockName);
+		}
+	}
+	
+	// select the next item to avoid having no selection
+	gtk_tree_selection_unselect_all (pSelection);
+	gtk_tree_selection_select_iter (pSelection, &iter);
+}
+
+
+static void _free_launcher_gui (void)
+{
+	s_pLauncherWindow = NULL;
+	s_pCurrentLauncherWidget = NULL;
+	s_pLauncherPane = NULL;
+	s_pLauncherTreeView = NULL;
+}
+static gboolean on_delete_launcher_gui (GtkWidget *pWidget, GdkEvent *event, gpointer data)
+{
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWidget), "widget-list");
+	cairo_dock_free_generated_widget_list (pWidgetList);
+	
+	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWidget), "garbage");
+	/// nettoyer.
+	
+	_free_launcher_gui ();
+	
+	return FALSE;
+}
+
+static void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
+{
+	//g_print ("%s ()\n", __func__);
+	
+	Icon *pIcon = g_object_get_data (G_OBJECT (pWindow), "current-icon");
+	CairoContainer *pContainer = g_object_get_data (G_OBJECT (pWindow), "current-container");
+	CairoDockModuleInstance *pModuleInstance = g_object_get_data (G_OBJECT (pWindow), "current-module");
+	
+	if (CAIRO_DOCK_IS_APPLET (pIcon))
+		pModuleInstance = pIcon->pModuleInstance;
+	
+	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
+	
+	if (pModuleInstance)
+	{
+		// open the conf file.
+		GKeyFile *pKeyFile = cairo_dock_open_key_file (pModuleInstance->cConfFilePath);
+		g_return_if_fail (pKeyFile != NULL);
+		
+		// update the keys with the widgets.
+		cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
+		
+		// if the parent dock doesn't exist (new dock), add a conf file for it with a nominal name.
+		if (g_key_file_has_key (pKeyFile, "Icon", "dock name", NULL))
+		{
+			gchar *cDockName = g_key_file_get_string (pKeyFile, "Icon", "dock name", NULL);
+			gboolean bIsDetached = g_key_file_get_boolean (pKeyFile, "Desklet", "initially detached", NULL);
+			if (!bIsDetached)
+			{
+				CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
+				if (pDock == NULL)
+				{
+					gchar *cNewDockName = cairo_dock_add_root_dock_config ();
+					g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewDockName);
+					g_free (cNewDockName);
+				}
+			}
+			g_free (cDockName);
+		}
+		
+		if (pModuleInstance->pModule->pInterface->save_custom_widget != NULL)
+			pModuleInstance->pModule->pInterface->save_custom_widget (pModuleInstance, pKeyFile);
+		
+		// write everything in the conf file.
+		cairo_dock_write_keys_to_file (pKeyFile, pModuleInstance->cConfFilePath);
+		g_key_file_free (pKeyFile);
+		
+		// reload module.
+		cairo_dock_reload_module_instance (pModuleInstance, TRUE);
+	}
+	else if (CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		CairoDock *pDock = CAIRO_DOCK (pContainer);
+		if (!pDock->bIsMainDock)  // pour l'instant le main dock n'a pas de fichier de conf
+		{
+			const gchar *cDockName = cairo_dock_search_dock_name (pDock);  // CD_MODEL_NAME contient le nom affiche, qui peut differer.
+			g_return_if_fail (cDockName != NULL);
+			
+			gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
+			
+			// open the conf file.
+			GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+			g_return_if_fail (pKeyFile != NULL);
+			
+			// update the keys with the widgets.
+			cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
+			
+			// write everything in the conf file.
+			cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+			g_key_file_free (pKeyFile);
+			g_free (cConfFilePath);
+			
+			// reload dock's config.
+			cairo_dock_reload_one_root_dock (cDockName, pDock);
+		}
+	}
+	else if (pIcon)
+	{
+		gchar *cConfFilePath = (*pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName));
+		
+		// open the conf file.
+		GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
+		g_return_if_fail (pKeyFile != NULL);
+		
+		// update the keys with the widgets.
+		cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
+		
+		// if the parent dock doesn't exist (new dock), add a conf file for it with a nominal name.
+		if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Container", NULL))
+		{
+			gchar *cDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", NULL);
+			CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
+			if (pDock == NULL)
+			{
+				gchar *cNewDockName = cairo_dock_add_root_dock_config ();
+				g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewDockName);
+				g_free (cNewDockName);
+			}
+			g_free (cDockName);
+		}
+		
+		// write everything in the conf file.
+		cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+		g_key_file_free (pKeyFile);
+		g_free (cConfFilePath);
+		
+		// reload widgets.
+		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et declenche le rechargement de l'IHM.
+	}
+	reload_items ();
+}
+
+static void on_click_launcher_quit (GtkButton *button, GtkWidget *pWindow)
+{
+	//g_print ("%s ()\n", __func__);
+	on_delete_launcher_gui (pWindow, NULL, NULL);
+	gtk_widget_destroy (pWindow);
+}
+
+
+  /////////////////
+ // GUI BACKEND //
+/////////////////
+
+static gboolean on_button_press_event (GtkWidget *pWidget,
+	GdkEventButton *pButton,
+	gpointer data)
+{
+	if (pButton->button == 3)  // clic droit.
+	{
+		GtkWidget *pMenu = gtk_menu_new ();
+			
+		GtkWidget *pMenuItem;
+		
+		/// TODO: check that we can actually remove it (ex.: not the main dock), and maybe display the item's name...
+		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Remove this item"), GTK_STOCK_REMOVE, G_CALLBACK (_cairo_dock_remove_item), pMenu, pWidget);
+		
+		gtk_widget_show_all (pMenu);
+		
+		gtk_menu_popup (GTK_MENU (pMenu),
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			pButton->button,
+			gtk_get_current_event_time ());
+	}
+	return FALSE;
+}
 static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
 {
 	//g_print ("%s (%x)\n", __func__, pIcon);
@@ -668,6 +929,11 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 	g_object_unref (model);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (s_pLauncherTreeView), FALSE);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (s_pLauncherTreeView), TRUE);
+	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (s_pLauncherTreeView), TRUE);  // enables drag and drop of rows -> row-inserted and row-deleted signals
+	g_signal_connect (G_OBJECT (s_pLauncherTreeView),
+		"button-release-event",  // on release, so that the clicked line is already selected
+		G_CALLBACK (on_button_press_event),
+		NULL);
 	
 	// line selection
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
@@ -748,12 +1014,12 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 	return s_pLauncherWindow;
 }
 
-
 static void reload_items (void)
 {
 	if (s_pLauncherWindow == NULL)
 		return ;
 	
+	g_print ("%s ()\n", __func__);
 	int iNotebookPage;
 	if (s_pCurrentLauncherWidget && GTK_IS_NOTEBOOK (s_pCurrentLauncherWidget))
 		iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentLauncherWidget));
@@ -781,6 +1047,20 @@ static void reload_items (void)
 	gtk_widget_show_all (s_pLauncherWindow);
 }
 
+void cairo_dock_register_default_items_gui_backend (void)
+{
+	CairoDockItemsGuiBackend *pBackend = g_new0 (CairoDockItemsGuiBackend, 1);
+	
+	pBackend->show_gui 			= show_gui;
+	pBackend->reload_items 		= reload_items;
+	
+	cairo_dock_register_items_gui_backend (pBackend);
+}
+
+
+  ////////////////////
+ // ACTIONS ON GUI //
+////////////////////
 
 CairoDockGroupKeyWidget *cairo_dock_gui_items_get_widget_from_name (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
 {
@@ -891,14 +1171,4 @@ void cairo_dock_gui_items_set_status_message_on_gui (const gchar *cMessage)
 	cd_debug ("%s (%s)", __func__, cMessage);
 	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
-}
-
-void cairo_dock_register_default_items_gui_backend (void)
-{
-	CairoDockItemsGuiBackend *pBackend = g_new0 (CairoDockItemsGuiBackend, 1);
-	
-	pBackend->show_gui 			= show_gui;
-	pBackend->reload_items 		= reload_items;
-	
-	cairo_dock_register_items_gui_backend (pBackend);
 }

@@ -26,6 +26,9 @@
 G_BEGIN_DECLS
 
 
+void cairo_dock_register_default_items_gui_backend (void);
+
+
 CairoDockGroupKeyWidget *cairo_dock_gui_items_get_widget_from_name (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName);
 
 void cairo_dock_gui_items_update_desklet_params (CairoDesklet *pDesklet);
@@ -37,8 +40,6 @@ void cairo_dock_update_desklet_visibility_params (CairoDesklet *pDesklet);
 void cairo_dock_gui_items_reload_current_widget (CairoDockModuleInstance *pInstance, int iShowPage);
 
 void cairo_dock_gui_items_set_status_message_on_gui (const gchar *cMessage);
-
-void cairo_dock_register_default_items_gui_backend (void);
 
 
 G_END_DECLS
