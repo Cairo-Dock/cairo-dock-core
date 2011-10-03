@@ -35,7 +35,5 @@ ShowOnViewport = 0
 #f[0;100] Order you want for this launcher among the others:
 Order=0
 
-group = 0
-
 Icon Type = 1
 Type = Container

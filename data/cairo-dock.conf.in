@@ -114,9 +114,12 @@ hide visible = false
 #b- Only show applications on current desktop
 current desktop only = false
 
-#b- Mix launchers and applications
+#B-[-1] Mix launchers and applications
 #{Allows launchers to act as applications when their programs are running and displays a marker on icons to indicate this. You can launch other occurences of the program with SHIFT+click.}
 mix launcher appli = true
+
+#l-[Before the first icon;After the last icon] Place new icons
+place icons = 1
 
 #B- Group windows from the same application in a sub-dock ?
 #{This allows you to group all the windows of a given application into a unique sub-dock, and to act on all of the windows at the same time.}
@@ -492,6 +495,12 @@ default icon directory =
 #{Any format allowed; leave this field empty if you don't want to use an image as background.}
 icons bg =
 
+#F+[Icons size;gtk-zoom-fit]
+frame_size =
+
+#j+[10;128] Icons' size at rest (width x height) :
+launcher size = 40;40
+
 #F+[Zoom effect;@pkgdatadir@/icons/icon-wave.png]
 frame_shape =
 #f+[1;5] Maximum zoom of the icons :
@@ -506,7 +515,7 @@ sinusoid width = 150
 #{in pixels.}
 icon gap = 0
 
-#F+[Reflections]
+#X+[Reflections]
 frame_refl =
 
 #e+[0;1;light;strong] Reflective power of the plane :
@@ -520,27 +529,6 @@ field depth = 0.5
 #e+[0;1;Transparent;Opaque] Icons' transparency at rest :
 #{It is their transparency when the dock is at rest; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
 alpha at rest = 1
-
-#X+[Icons size]
-frame_size =
-
-#j+[10;128] Launcher's size at rest (width x height) :
-launcher size = 40;40
-
-#j+[10;128] Application's size at rest (width x height) :
-appli size = 40;40
-
-#j+[10;128] Applet's size at rest (width x height) :
-applet size = 40;40
-
-#m[Animated icons] Configure icons' animations.
-config_anim = 
-
-#M[icon effects] Configure icons' special effects (requires OpenGL).
-config_effect = 
-
-#M[illusion] Configure icons' animations on appearing/disappearing (require OpenGL capacity).
-config_illusion = 
 
 #X+[Separators]
 frame_sep =
@@ -564,19 +552,6 @@ revolve separator image = true
 
 #C+ Colour of flat separators :
 separator color = 0.9;0.9;0.9;1.0
-
-
-#X+[Icons order]
-frame_order =
-
-#Y+[No;0;0;Separate applications from others;1;1;Separate applets from others;1;1;Separate all;1;1] Separate the different types of icons?
-#{If you separate a type of icons, the icons of this type will be placed together, separated from the others by a separator.
-#If you don't separate the icons, you can place them wherever you want, and insert separators manually. Applications will then be placed next to their launcher if they have one, or after the last launcher.}
-separate_icons = 0
-
-#T+[launchers;applications;applets] Order of the different types of icons :
-icon's type order = 0;1;2
-
 
 #X+[Link the icons with a string]
 frame_string =

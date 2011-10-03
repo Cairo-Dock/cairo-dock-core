@@ -280,7 +280,7 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer
 *@param pData data to feed the callback with
 * @return the new menu-entry that has been added.
 */
-GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GFunc pFunction, GtkWidget *pMenu, gpointer pData);
+GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GCallback pFunction, GtkWidget *pMenu, gpointer pData);
 
 /** Add sub-menu to a given menu.
 *@param cLabel label of the sub-menu

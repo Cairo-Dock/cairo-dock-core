@@ -313,7 +313,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 * @param bUpdateSize TRUE to update the size of the dock after the insertion.
 * @param bAnimated TRUE to arm the icon's animation for insertion.
 */
-#define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, myIconsParam.iSeparateIcons, NULL)
+#define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, TRUE, NULL)
 
 /** Detach an icon from its dock. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but looses its dialogs. Do nothing if the icon doesn't exist inside the dock.
 *@param icon the icon to detach.
@@ -321,7 +321,8 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 *@param bCheckUnusedSeparator TRUE to check and remove unnecessary separators.
 *@return TRUE if the icon has been detached.
 */
-gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator);
+gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator);
+#define cairo_dock_detach_icon_from_dock(icon, pDock) cairo_dock_detach_icon_from_dock_full (icon, pDock, TRUE)
 
 void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator);
 
@@ -351,7 +352,7 @@ void cairo_dock_remove_automatic_separators (CairoDock *pDock);
 */
 void cairo_dock_insert_separators_in_dock (CairoDock *pDock);
 
-Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder, CairoDockIconGroup iGroup);
+Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder);
 
 /** Add a launcher from a common desktop file : create and add the corresponding .desktop file with the others, load the corresponding icon, and insert it inside a dock with an animtion.
 *@param cExternDesktopFileURI path to a desktop file.
@@ -359,7 +360,7 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 *@param fOrder the order of the icon inside the dock.
 *@return the newly created Icon corresponding to the file, or NULL if an error occured.
 */
-#define cairo_dock_add_new_launcher_by_uri(cExternDesktopFileURI, pReceivingDock, fOrder) cairo_dock_add_new_launcher_by_uri_or_type (cExternDesktopFileURI, 0, pReceivingDock, fOrder, CAIRO_DOCK_LAUNCHER)
+#define cairo_dock_add_new_launcher_by_uri(cExternDesktopFileURI, pReceivingDock, fOrder) cairo_dock_add_new_launcher_by_uri_or_type (cExternDesktopFileURI, CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER, pReceivingDock, fOrder)
 
 /** Add an empty default launcher of a given type : create and add the corresponding .desktop file with the others, load the corresponding icon, and insert it inside a dock with an animtion. The launcher is then suitable for being edited by the user to add real properties.
 *@param iType type of the launcher.
@@ -368,7 +369,7 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 *@param iGroup the group it will belong to
 *@return the newly created Icon corresponding to the type, or NULL if an error occured.
 */
-#define cairo_dock_add_new_launcher_by_type(iType, pReceivingDock, fOrder, iGroup) cairo_dock_add_new_launcher_by_uri_or_type (NULL, iType, pReceivingDock, fOrder, iGroup)
+#define cairo_dock_add_new_launcher_by_type(iType, pReceivingDock, fOrder) cairo_dock_add_new_launcher_by_uri_or_type (NULL, iType, pReceivingDock, fOrder)
 
 /** Remove all icons from a dock (and its sub-docks). If the receiving dock is NULL, the icons are destroyed and removed from the current theme itself.
 *@param pDock a dock.

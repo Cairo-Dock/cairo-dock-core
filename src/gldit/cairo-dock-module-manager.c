@@ -273,15 +273,26 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList)
 
 static void _cairo_dock_deactivate_one_module (gchar *cModuleName, CairoDockModule *pModule, gpointer data)
 {
-	cairo_dock_deactivate_module (pModule);
+	if (! cairo_dock_module_is_auto_loaded (pModule))
+		cairo_dock_deactivate_module (pModule);
 }
 void cairo_dock_deactivate_all_modules (void)
 {
+	// first deactivate applets
 	g_hash_table_foreach (s_hModuleTable, (GHFunc) _cairo_dock_deactivate_one_module, NULL);
 	if (s_iSidWriteModules != 0)
 	{
 		g_source_remove (s_iSidWriteModules);
 		s_iSidWriteModules = 0;
+	}
+	
+	// then deactivate auto-loaded modules (that have been loaded first)
+	CairoDockModule *pModule;
+	GList *m;
+	for (m = s_AutoLoadedModules; m != NULL; m = m->next)
+	{
+		pModule = m->data;
+		cairo_dock_deactivate_module (pModule);
 	}
 }
 

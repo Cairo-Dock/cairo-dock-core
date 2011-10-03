@@ -356,7 +356,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		if (pSameTypeIcon == NULL && pDock->icons != NULL)
 		{
 			bSeparatorNeeded = TRUE;
-			//g_print ("separateur necessaire\n");
+			g_print ("separateur necessaire\n");
 		}
 	}
 
@@ -457,7 +457,7 @@ static gboolean _destroy_empty_dock (CairoDock *pDock)
 	}
 	return FALSE;
 }
-gboolean cairo_dock_detach_icon_from_dock (Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator)
+gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator)
 {
 	if (pDock == NULL)
 		return FALSE;
@@ -581,7 +581,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 	
 	//\___________________ On detache l'icone du dock.
 	if (pDock != NULL)
-		cairo_dock_detach_icon_from_dock (icon, pDock, bCheckUnusedSeparator);  // on le fait maintenant, pour que l'icone ait son type correct, et ne soit pas confondue avec un separateur
+		cairo_dock_detach_icon_from_dock_full (icon, pDock, bCheckUnusedSeparator);  // on le fait maintenant, pour que l'icone ait son type correct, et ne soit pas confondue avec un separateur
 	
 	//\___________________ On supprime l'icone du theme courant.
 	if (icon->iface.on_delete)
@@ -627,7 +627,6 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 				next_icon = ic->next->data;
 				if (! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (next_icon) && abs (cairo_dock_get_icon_order (icon) - cairo_dock_get_icon_order (next_icon)) > 1)  // icon->iType != next_icon->iType
 				{
-					///int iSeparatorType = myIconsParam.tIconTypeOrder[next_icon->iGroup] - 1;
 					int iSeparatorType = cairo_dock_get_icon_order (next_icon) - 1;
 					cd_debug ("+ un separateur entre %s et %s, dans le groupe %d\n", icon->cName, next_icon->cName, iSeparatorType);
 					cairo_dock_insert_automatic_separator_in_dock (iSeparatorType, next_icon->cParentDockName, pDock);
@@ -638,7 +637,7 @@ void cairo_dock_insert_separators_in_dock (CairoDock *pDock)
 }
 
 
-Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder, CairoDockIconGroup iGroup)
+Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder)
 {
 	//\_________________ On ajoute un fichier desktop dans le repertoire des lanceurs du theme courant.
 	GError *erreur = NULL;
@@ -653,9 +652,9 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 	}
 	gchar *cNewDesktopFileName;
 	if (cExternDesktopFileURI != NULL)
-		cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cExternDesktopFileURI, cDockName, fOrder, iGroup, &erreur);
+		cNewDesktopFileName = cairo_dock_add_desktop_file_from_uri (cExternDesktopFileURI, cDockName, fOrder, &erreur);
 	else
-		cNewDesktopFileName = cairo_dock_add_desktop_file_from_type (iType, cDockName, fOrder, iGroup, &erreur);
+		cNewDesktopFileName = cairo_dock_add_desktop_file_from_type (iType, cDockName, fOrder, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);

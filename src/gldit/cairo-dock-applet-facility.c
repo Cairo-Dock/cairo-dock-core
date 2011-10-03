@@ -533,7 +533,7 @@ gboolean cairo_dock_detach_icon_from_applet (CairoDockModuleInstance *pInstance,
 	{
 		if (pIcon->pSubDock != NULL)
 		{
-			bRemoved = cairo_dock_detach_icon_from_dock (pOneIcon, pIcon->pSubDock, FALSE);
+			bRemoved = cairo_dock_detach_icon_from_dock_full (pOneIcon, pIcon->pSubDock, FALSE);
 			cairo_dock_update_dock_size (pIcon->pSubDock);
 		}
 	}

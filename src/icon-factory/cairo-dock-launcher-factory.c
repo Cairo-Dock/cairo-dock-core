@@ -157,11 +157,6 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 	else
 		*cSubDockRendererName = NULL;
 	
-	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "group", NULL))
-	{
-		icon->iGroup = g_key_file_get_integer (pKeyFile, "Desktop Entry", "group", NULL);
-	}
-	
 	int iSpecificDesktop = g_key_file_get_integer (pKeyFile, "Desktop Entry", "ShowOnViewport", NULL);
 	if (iSpecificDesktop != 0)
 		cairo_dock_set_specified_desktop_for_icon (icon, iSpecificDesktop);

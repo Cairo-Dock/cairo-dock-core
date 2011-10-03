@@ -361,7 +361,7 @@ static void _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* 
 		{
 			GtkWidget *pMenu = gtk_menu_new ();
 			
-			cairo_dock_add_in_menu_with_stock_and_data (_("Configure this applet"), GTK_STOCK_PROPERTIES, (GFunc)_cairo_dock_initiate_config_module, pMenu, pModule);
+			cairo_dock_add_in_menu_with_stock_and_data (_("Configure this applet"), GTK_STOCK_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_config_module), pMenu, pModule);
 			
 			gtk_widget_show_all (pMenu);
 			gtk_menu_popup (GTK_MENU (pMenu),

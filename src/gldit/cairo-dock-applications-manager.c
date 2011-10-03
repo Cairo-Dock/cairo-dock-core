@@ -87,6 +87,8 @@ static Atom s_aWmHints;
 static void cairo_dock_blacklist_appli (Window Xid);
 static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock);
 
+/// mix : ff,ff... || g
+
   //////////////////////////
  // Appli manager : core //
 //////////////////////////
@@ -842,6 +844,26 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	cairo_dock_set_overwrite_exceptions (myTaskbarParam.cOverwriteException);
 	cairo_dock_set_group_exceptions (myTaskbarParam.cGroupException);
 	
+	if (myTaskbarParam.bMixLauncherAppli)
+	{
+		myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 0;
+		myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 0;
+	}
+	else  // separated taskbar
+	{
+		if (myTaskbarParam.iIconPlacement == 0)  // before the first icon
+		{
+			myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 2;
+			myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 0;
+		}
+		else  // after the last icon
+		{
+			myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 0;
+			myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 2;
+		}
+	}
+	myIconsParam.tIconTypeOrder[CAIRO_DOCK_SEPARATOR12] = 1;
+	
 	//\__________________ On recupere l'ensemble des fenetres presentes.
 	gulong i, iNbWindows = 0;
 	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, FALSE);  // on recupere les fenetres par ordre de creation, de facon a ce que si on redemarre la barre des taches, les lanceurs soient lies aux memes fenetres. Au prochain update, la liste sera recuperee par z-order, ce qui remettra le z-order de chaque icone a jour.
@@ -919,7 +941,7 @@ static gboolean _cairo_dock_remove_one_appli (Window *pXid, Icon *pIcon, gpointe
 	{
 		gchar *cParentDockName = pIcon->cParentDockName;
 		pIcon->cParentDockName = NULL;  // astuce.
-		cairo_dock_detach_icon_from_dock (pIcon, pDock, myIconsParam.iSeparateIcons);
+		cairo_dock_detach_icon_from_dock_full (pIcon, pDock, !myTaskbarParam.bMixLauncherAppli);
 		if (! pDock->bIsMainDock)  // la taille du main dock est mis a jour 1 fois a la fin.
 		{
 			if (pDock->icons == NULL)  // le dock degage, le fake aussi.
@@ -929,7 +951,7 @@ static gboolean _cairo_dock_remove_one_appli (Window *pXid, Icon *pIcon, gpointe
 				if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon)) // fake launcher
 				{
 					cd_debug ("on degage le fake qui pointe sur %s", cParentDockName);
-					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock, myIconsParam.iSeparateIcons);
+					cairo_dock_detach_icon_from_dock_full (pFakeClassIcon, pFakeClassParentDock, !myTaskbarParam.bMixLauncherAppli);
 					cairo_dock_free_icon (pFakeClassIcon);
 					if (! pFakeClassParentDock->bIsMainDock)
 						cairo_dock_update_dock_size (pFakeClassParentDock);
@@ -982,7 +1004,7 @@ static void _cairo_dock_stop_application_manager (void)
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 	if (pDock != NULL)
 	{
-		cairo_dock_detach_icon_from_dock (pIcon, pDock, FALSE);
+		cairo_dock_detach_icon_from_dock_full (pIcon, pDock, FALSE);
 	}
 	
 	// make it an invalid appli, and free it.
@@ -1461,6 +1483,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		
 		pTaskBar->bHideVisibleApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "hide visible", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 		
+		pTaskBar->iIconPlacement = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "place icons", &bFlushConfFileNeeded, 1, NULL, NULL);  // after the last icon by default.
 		
 		// representation
 		pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
@@ -1548,35 +1571,30 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
 	CairoDock *pDock = g_pMainDock;
 	
 	gboolean bUpdateSize = FALSE;
-	if (pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass ||
-		pPrevTaskBar->bHideVisibleApplis != pTaskBar->bHideVisibleApplis ||
-		pPrevTaskBar->bAppliOnCurrentDesktopOnly != pTaskBar->bAppliOnCurrentDesktopOnly ||
-		pPrevTaskBar->bMixLauncherAppli != pTaskBar->bMixLauncherAppli ||
-		pPrevTaskBar->bOverWriteXIcons != pTaskBar->bOverWriteXIcons ||
-		pPrevTaskBar->iMinimizedWindowRenderType != pTaskBar->iMinimizedWindowRenderType ||
-		pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength ||
-		cairo_dock_strings_differ (pPrevTaskBar->cGroupException, pTaskBar->cGroupException) ||
-		cairo_dock_strings_differ (pPrevTaskBar->cOverwriteException, pTaskBar->cOverwriteException) ||
-		pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli)
+	if (pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass
+		|| pPrevTaskBar->bHideVisibleApplis != pTaskBar->bHideVisibleApplis
+		|| pPrevTaskBar->bAppliOnCurrentDesktopOnly != pTaskBar->bAppliOnCurrentDesktopOnly
+		|| pPrevTaskBar->bMixLauncherAppli != pTaskBar->bMixLauncherAppli
+		|| pPrevTaskBar->bOverWriteXIcons != pTaskBar->bOverWriteXIcons
+		|| pPrevTaskBar->iMinimizedWindowRenderType != pTaskBar->iMinimizedWindowRenderType
+		|| pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength
+		|| cairo_dock_strings_differ (pPrevTaskBar->cGroupException, pTaskBar->cGroupException)
+		|| cairo_dock_strings_differ (pPrevTaskBar->cOverwriteException, pTaskBar->cOverwriteException)
+		|| pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli
+		|| pPrevTaskBar->iIconPlacement != pTaskBar->iIconPlacement)
 	{
 		_cairo_dock_stop_application_manager ();
-		bUpdateSize = TRUE;
-	}
-	
-	if (! s_bAppliManagerIsRunning)  // maintenant on veut voir les applis !
-	{
-		cairo_dock_start_applications_manager (pDock);  // va inserer le separateur si necessaire.
-		bUpdateSize = TRUE;
-	}
-	else
-		gtk_widget_queue_draw (pDock->container.pWidget);  // pour le fVisibleAlpha
-	
-	if (bUpdateSize)
-	{
+		
+		cairo_dock_start_applications_manager (pDock);
+		
 		cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
 		
 		cairo_dock_move_resize_dock (pDock);
+	}
+	else
+	{
+		gtk_widget_queue_draw (pDock->container.pWidget);  // pour le fVisibleAlpha
 	}
 }
 
@@ -1624,6 +1642,8 @@ static void unload (void)
 	
 	// empty the applis table.
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _remove_appli, NULL);
+	
+	s_bAppliManagerIsRunning = FALSE;
 }
 
 

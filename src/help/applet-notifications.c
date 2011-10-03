@@ -154,7 +154,7 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 			plugins,
 			G_TYPE_INVALID,
 			G_TYPE_INVALID); // It seems it doesn't work with dbus_g_proxy_call_no_reply() and Compiz-0.9 (compiz (core) - Warn: Can't set Value with type 12 to option "active_plugins" with type 11 (with dbus-send too...) => it may be better with dbus_g_proxy_call(), at least maybe we can get a more comprehensive error message. if nothing works, we should report a bug to Compiz.
-			// it's a known bug in Compiz...
+			// it's a known bug in Compiz (https://bugs.launchpad.net/ubuntu/+source/compiz/+bug/749084)
 		if (error)
 		{
 			cd_warning ("compiz activate plug-ins error: %s", error->message);

@@ -61,6 +61,7 @@ struct _CairoTaskbarParam {
 	gchar *cOverwriteException;
 	gchar *cGroupException;
 	gchar *cForceDemandsAttention;
+	gint iIconPlacement;
 	} ;
 
 // manager

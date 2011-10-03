@@ -235,7 +235,7 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean b
 		cd_debug ("detachement de l'icone %s (%d;%d)", pIcon->cName, bDetachAll, XFirstFoundId);
 		gchar *cParentDockName = pIcon->cParentDockName;
 		pIcon->cParentDockName = NULL;  // astuce.
-		bDetached = cairo_dock_detach_icon_from_dock (pIcon, pParentDock, myIconsParam.iSeparateIcons);
+		bDetached = cairo_dock_detach_icon_from_dock_full (pIcon, pParentDock, !myTaskbarParam.bMixLauncherAppli);
 		if (bDetached)  // detachee => on met a jour son dock.
 		{
 			if (! pParentDock->bIsMainDock)  // sous-dock de classe => on le met a jour / detruit.
@@ -499,7 +499,7 @@ void cairo_dock_update_Xid_on_inhibitors (Window Xid, const gchar *cClass)
 						CairoDock *pClassSubDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
 						if (pClassSubDock != NULL)
 						{
-							cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassSubDock, myIconsParam.iSeparateIcons);
+							cairo_dock_detach_icon_from_dock_full (pSameClassIcon, pClassSubDock, !myTaskbarParam.bMixLauncherAppli);
 							if (pClassSubDock->icons == NULL && pClassSubDock == cairo_dock_search_dock_from_name (cClass))  // le sous-dock de la classe devient vide.
 								cairo_dock_destroy_dock (pClassSubDock, cClass);
 							else
@@ -803,7 +803,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		{
 			cd_debug ("trouve l'icone en papier (%x;%x)", pFakeClassIcon, pFakeParentDock);
 			gboolean bLastIconIsRemoving = cairo_dock_icon_is_being_removed (pLastClassIcon);  // keep the removing state because when we detach the icon, it returns to normal state.
-			cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
+			cairo_dock_detach_icon_from_dock_full (pLastClassIcon, pDock, FALSE);
 			g_free (pLastClassIcon->cParentDockName);
 			pLastClassIcon->cParentDockName = g_strdup (pFakeClassIcon->cParentDockName);
 			pLastClassIcon->fOrder = pFakeClassIcon->fOrder;
@@ -837,7 +837,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		else  // le sous-dock est pointe par un inhibiteur (normal launcher ou applet).
 		{
 			gboolean bLastIconIsRemoving = cairo_dock_icon_is_being_removed (pLastClassIcon);  // keep the removing state because when we detach the icon, it returns to normal state.
-			cairo_dock_detach_icon_from_dock (pLastClassIcon, pDock, FALSE);
+			cairo_dock_detach_icon_from_dock_full (pLastClassIcon, pDock, FALSE);
 			g_free (pLastClassIcon->cParentDockName);
 			pLastClassIcon->cParentDockName = NULL;
 			
@@ -1028,8 +1028,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 		for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
 		{
 			pInhibitorIcon = ic->data;
-			if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon) && myIconsParam.iSeparateIcons)
-				continue;
+
 			pDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 			if (!pDock)  // not inside a dock, for instance a desklet; no interest for us here.
 				continue;
@@ -1090,7 +1089,8 @@ void cairo_dock_set_class_order (Icon *pIcon)
 		for (ic = g_list_last (g_pMainDock->icons); ic != NULL; ic = ic->prev)
 		{
 			icon = ic->data;
-			if (CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) && ! cairo_dock_class_is_inhibited (icon->cClass))  // on verifie qu'elle n'est pas placé a cote de son lanceur, sinon cela cree des incoherences suivants que l'appli est lancee 2 fois ou pas.
+			if ( (CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon))
+			&& ! cairo_dock_class_is_inhibited (icon->cClass))  // on verifie qu'elle n'est pas placé a cote de son lanceur, sinon cela cree des incoherences suivants que l'appli est lancee 2 fois ou pas.
 			{
 				break ;
 			}
@@ -1129,7 +1129,7 @@ void cairo_dock_set_class_order (Icon *pIcon)
 	pIcon->fOrder = fOrder;
 }
 
-static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *pClassAppli, int *iMaxOrder)
+/**static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *pClassAppli, int *iMaxOrder)
 {
 	// on touve un inhibiteur par rapport auquel se placer.
 	Icon *pSameClassIcon = NULL;
@@ -1139,8 +1139,6 @@ static void _cairo_dock_reorder_one_class (gchar *cClass, CairoDockClassAppli *p
 	for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
 	{
 		pInhibitorIcon = ic->data;
-		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon) && myIconsParam.iSeparateIcons)
-			continue;
 		
 		pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 		CairoDock *pDock;
@@ -1210,7 +1208,7 @@ void cairo_dock_reorder_classes (void)
 	Icon *pLastIcon = cairo_dock_get_last_icon (g_pMainDock->icons);
 	int iMaxOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 1);
 	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_reorder_one_class, &iMaxOrder);
-}
+}*/
 
 
 

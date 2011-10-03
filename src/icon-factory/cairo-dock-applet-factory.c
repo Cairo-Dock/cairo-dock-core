@@ -33,7 +33,7 @@ Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, 
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_icon ();
 	icon->iTrueType = CAIRO_DOCK_ICON_TYPE_APPLET;
-	icon->iGroup = CAIRO_DOCK_APPLET;
+	icon->iGroup = CAIRO_DOCK_LAUNCHER;
 	icon->pModuleInstance = pModuleInstance;
 	
 	//\____________ On recupere les infos de sa config.

@@ -53,13 +53,11 @@ typedef enum {
 	CAIRO_DOCK_NB_ICON_TYPES
 	} CairoDockIconTrueType;
 
-/// Definition of the groups of icons.
+/// Available groups of icons.
 typedef enum {
-	CAIRO_DOCK_LAUNCHER = 0,
+	CAIRO_DOCK_LAUNCHER = 0,  // launchers and applets, and applis if mixed
 	CAIRO_DOCK_SEPARATOR12,
 	CAIRO_DOCK_APPLI,
-	CAIRO_DOCK_SEPARATOR23,
-	CAIRO_DOCK_APPLET,
 	CAIRO_DOCK_NB_GROUPS
 	} CairoDockIconGroup;
 

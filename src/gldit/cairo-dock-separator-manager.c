@@ -76,9 +76,6 @@ static void _load_separator (Icon *icon)
 Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
-	if ((iSeparatorType & 1) && ! myIconsParam.iSeparateIcons)
-		return NULL;
-	
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_separator_icon (iSeparatorType);
 	icon->iface.load_image = _load_separator;

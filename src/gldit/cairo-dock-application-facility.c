@@ -405,7 +405,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				
 				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
 				cd_debug (" on detache %s pour la passer dans le sous-dock de sa classe", pSameClassIcon->cName);
-				cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassMateParentDock, FALSE);
+				cairo_dock_detach_icon_from_dock_full (pSameClassIcon, pClassMateParentDock, FALSE);
 				g_free (pSameClassIcon->cParentDockName);
 				pSameClassIcon->cParentDockName = g_strdup (pSameClassIcon->cClass);
 				cairo_dock_insert_icon_in_dock_full (pSameClassIcon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
@@ -451,7 +451,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	if ((myIconsParam.iSeparateIcons == 0 || myIconsParam.iSeparateIcons == 2) && pParentDock->iRefCount == 0)
+	if (myTaskbarParam.bMixLauncherAppli && pParentDock->iRefCount == 0)
 	{
 		cairo_dock_set_class_order (icon);
 	}
@@ -480,7 +480,7 @@ CairoDock * cairo_dock_detach_appli (Icon *pIcon)
 	if (pParentDock == NULL)
 		return NULL;
 	
-	cairo_dock_detach_icon_from_dock (pIcon, pParentDock, TRUE);
+	cairo_dock_detach_icon_from_dock (pIcon, pParentDock);
 	
 	if (pIcon->cClass != NULL && pParentDock == cairo_dock_search_dock_from_name (pIcon->cClass))
 	{
@@ -532,7 +532,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 					y = y_icon_geometry (pClassmate, pClassmateDock);
 				}
 			}
-			else if (!myIconsParam.iSeparateIcons && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
+			else if (myTaskbarParam.bMixLauncherAppli && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{
 				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
 				if (cairo_dock_is_hidden (pClassmateDock))

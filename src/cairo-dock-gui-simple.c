@@ -68,7 +68,6 @@ static const  gchar *s_cCurrentModuleName = NULL;
 // GSList *s_pCurrentModuleWidgetList;  // liste des widgets du module courant.
 static int s_iIconSize;
 static int s_iTaskbarType;
-static gboolean s_bSeparateIcons;
 static gchar *s_cHoverAnim = NULL;
 static gchar *s_cHoverEffect = NULL;
 static gchar *s_cClickAnim = NULL;
@@ -360,11 +359,6 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "icon size", iIconSize);
 	s_iIconSize = iIconSize;
 	
-	g_key_file_set_boolean (pSimpleKeyFile, "Appearance", "separate icons", myIconsParam.iSeparateIcons);
-	s_bSeparateIcons = myIconsParam.iSeparateIcons;
-	
-	g_key_file_set_integer_list (pSimpleKeyFile, "Appearance", "icon's type order", myIconsParam.iIconsTypesList, 3);
-	
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "main dock view", myBackendsParam.cMainDockDefaultRendererName);
 	
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myBackendsParam.cSubDockDefaultRendererName);
@@ -496,7 +490,6 @@ static gboolean on_apply_config_simple (gpointer data)
 	int iTaskbarType = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "taskbar", NULL);
 	if (iTaskbarType != s_iTaskbarType)
 	{
-		cd_debug ("s_iTaskbarType : %d / %d", s_iTaskbarType, iTaskbarType);
 		gboolean bShowAppli = TRUE, bHideVisible, bCurrentDesktopOnly, bMixLauncherAppli, bGroupAppliByClass;
 		switch (iTaskbarType)
 		{
@@ -530,7 +523,6 @@ static gboolean on_apply_config_simple (gpointer data)
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "current desktop only", bCurrentDesktopOnly);
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "mix launcher appli", bMixLauncherAppli);
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "group by class", bGroupAppliByClass);
-			cd_debug (" taskbar : %d; %d; %d; %d", bHideVisible, bCurrentDesktopOnly, bMixLauncherAppli, bGroupAppliByClass);
 		}
 		s_iTaskbarType = iTaskbarType;
 	}
@@ -676,8 +668,6 @@ static gboolean on_apply_config_simple (gpointer data)
 		}
 		gint tab[2] = {iLauncherSize, iLauncherSize};
 		g_key_file_set_integer_list (pKeyFile, "Icons", "launcher size", tab, 2);
-		g_key_file_set_integer_list (pKeyFile, "Icons", "appli size", tab, 2);
-		g_key_file_set_integer_list (pKeyFile, "Icons", "applet size", tab, 2);
 		tab[0] = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
 		g_key_file_set_integer_list (pKeyFile, "Icons", "separator size", tab, 2);
 		
@@ -686,17 +676,6 @@ static gboolean on_apply_config_simple (gpointer data)
 		g_key_file_set_integer (pKeyFile, "Icons", "icon gap", iIconGap);
 		s_iIconSize = iIconSize;
 	}
-	
-	gboolean bSeparateIcons = g_key_file_get_boolean (pSimpleKeyFile, "Appearance", "separate icons", NULL);
-	if (bSeparateIcons != s_bSeparateIcons)
-	{
-		g_key_file_set_integer (pKeyFile, "Icons", "separate_icons", (bSeparateIcons ? 3 : 0));
-		s_bSeparateIcons = bSeparateIcons;
-	}
-	
-	gchar *cIconOrder = g_key_file_get_string (pSimpleKeyFile, "Appearance", "icon's type order", NULL);
-	g_key_file_set_string (pKeyFile, "Icons", "icon's type order", cIconOrder);
-	g_free (cIconOrder);
 	
 	gchar *cMainDockDefaultRendererName = g_key_file_get_string (pSimpleKeyFile, "Appearance", "main dock view", NULL);
 	g_key_file_set_string (pKeyFile, "Views", "main dock view", cMainDockDefaultRendererName);

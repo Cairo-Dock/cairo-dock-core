@@ -396,7 +396,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		// on la detache de son container actuel et on l'insere dans le nouveau.
 		gchar *tmp = icon->cParentDockName;  // le detach_icon remet a 0 ce champ, il faut le donc conserver avant.
 		icon->cParentDockName = NULL;
-		cairo_dock_detach_icon_from_dock (icon, pDock, TRUE);
+		cairo_dock_detach_icon_from_dock_full (icon, pDock, TRUE);
 		if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // le dock devient vide, il se fera detruire automatiquement.
 		{
 			pDock = NULL;

@@ -82,7 +82,7 @@ static inline const gchar *_cairo_dock_get_launcher_template_conf_file_path (Cai
 	return cTemplateFile;
 }
 
-static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, const gchar *cOrigin, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
+static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, const gchar *cOrigin, const gchar *cDockName, double fOrder, GError **erreur)
 {
 	//\__________________ open the template.
 	const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file_path (iLauncherType);
@@ -103,10 +103,6 @@ static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, con
 	else  // no origin or already a path.
 		cFilePath = g_strdup (cOrigin);
 	g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cFilePath?cFilePath:"");
-	
-	if (iGroup != CAIRO_DOCK_LAUNCHER && iGroup != CAIRO_DOCK_APPLET)  // on n'autorise a placer des icones du theme que parmi les lanceurs ou les applets.
-		iGroup = CAIRO_DOCK_LAUNCHER;
-	g_key_file_set_integer (pKeyFile, "Desktop Entry", "group", iGroup);
 	
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
 	
@@ -148,16 +144,16 @@ static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, con
 	return cNewDesktopFileName;
 }
 
-gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
+gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur)
 {
 	if (! (cURI == NULL || g_str_has_suffix (cURI, ".desktop") || g_str_has_suffix (cURI, ".sh")))
 		return NULL;
-	return _add_new_desktop_file (CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER, cURI, cDockName, fOrder, iGroup, erreur);
+	return _add_new_desktop_file (CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER, cURI, cDockName, fOrder, erreur);
 }
 
-gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur)
+gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, GError **erreur)
 {
-	return _add_new_desktop_file (iLauncherType, NULL, cDockName, fOrder, iGroup, erreur);
+	return _add_new_desktop_file (iLauncherType, NULL, cDockName, fOrder, erreur);
 }
 
 

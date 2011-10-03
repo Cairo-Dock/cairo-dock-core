@@ -33,6 +33,7 @@
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
+#include "cairo-dock-applications-manager.h"  // myTaskbarParam.bMixLauncherAppli
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-X-manager.h"  // g_desktopGeometry
 #include "cairo-dock-desklet-manager.h"
@@ -294,11 +295,11 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		gboolean bUseless;
 		cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
 		if (pMinimalConfig->iDesiredIconWidth == 0)
-			pMinimalConfig->iDesiredIconWidth = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_APPLET];
+			pMinimalConfig->iDesiredIconWidth = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
 		if (pMinimalConfig->iDesiredIconWidth == 0)
 			pMinimalConfig->iDesiredIconWidth = 48;
 		if (pMinimalConfig->iDesiredIconHeight == 0)
-			pMinimalConfig->iDesiredIconHeight = myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_APPLET];
+			pMinimalConfig->iDesiredIconHeight = myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
 		if (pMinimalConfig->iDesiredIconHeight == 0)
 			pMinimalConfig->iDesiredIconHeight = 48;
 		
@@ -670,7 +671,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			{
 				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
 				cOldDockName = g_strdup (pIcon->cParentDockName);
-				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock, myIconsParam.iSeparateIcons);
+				cairo_dock_detach_icon_from_dock_full (pIcon, pCurrentDock, !myTaskbarParam.bMixLauncherAppli);
 			}
 			
 			// on recupere son desklet (cree au besoin).

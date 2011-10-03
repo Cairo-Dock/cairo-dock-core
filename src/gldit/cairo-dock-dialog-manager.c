@@ -1083,10 +1083,6 @@ Icon *cairo_dock_get_dialogless_icon_full (CairoDock *pDock)
 	if (pIcon != NULL && ! cairo_dock_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
 		return pIcon;
 	
-	pIcon = cairo_dock_get_first_icon_of_group (pDock->icons, CAIRO_DOCK_SEPARATOR23);
-	if (pIcon != NULL && ! cairo_dock_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
-		return pIcon;
-	
 	pIcon = cairo_dock_get_first_icon_of_true_type (pDock->icons, CAIRO_DOCK_ICON_TYPE_SEPARATOR);
 	if (pIcon != NULL && ! cairo_dock_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
 		return pIcon;

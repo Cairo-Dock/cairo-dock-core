@@ -70,9 +70,7 @@ struct _CairoIconsParam {
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
 	gdouble fSeparatorColor[4];
-	gint iSeparateIcons;
 	CairoDockIconGroup tIconTypeOrder[CAIRO_DOCK_NB_GROUPS];
-	gint iIconsTypesList[3];  // pour la conf simple.
 	// labels
 	CairoDockLabelDescription iconTextDescription;
 	CairoDockLabelDescription quickInfoTextDescription;

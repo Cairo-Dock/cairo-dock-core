@@ -50,7 +50,7 @@ void cairo_dock_remove_html_spaces (gchar *cString);
 *@param erreur an error filled if something went wrong.
 * @return the name of the new desktop file, in a newly allocated string, or NULL if failed.
 */
-gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur);
+gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDockName, double fOrder, GError **erreur);
 
 /** Create and add an empty default desktop file for a given type.
 *@param iLauncherType type of the icon it will represent : launcher, file, container icon, separator.
@@ -60,7 +60,7 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 *@param erreur an error filled if something went wrong.
 * @return the name of the new desktop file, in a newly allocated string, or NULL if failed.
 */
-gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, CairoDockIconGroup iGroup, GError **erreur);
+gchar *cairo_dock_add_desktop_file_from_type (CairoDockDesktopFileType iLauncherType, const gchar *cDockName, double fOrder, GError **erreur);
 
 
 void cairo_dock_update_launcher_key_file (GKeyFile *pKeyFile, const gchar *cDesktopFilePath, CairoDockDesktopFileType iLauncherType);

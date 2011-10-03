@@ -629,8 +629,8 @@ gboolean cairo_dock_on_leave_dock_notification2 (gpointer data, CairoDock *pDock
 			pOriginDock->bIconIsFlyingAway = TRUE;
 			gchar *cParentDockName = s_pIconClicked->cParentDockName;
 			s_pIconClicked->cParentDockName = NULL;
-			cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock, TRUE);
-			s_pIconClicked->cParentDockName = cParentDockName;
+			cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock);
+			s_pIconClicked->cParentDockName = cParentDockName;  // we keep the parent dock name, to be able to re-insert it. we'll have to remove it when the icon is dropped.
 			cairo_dock_update_dock_size (pOriginDock);
 			cairo_dock_stop_icon_glide (pOriginDock);
 			
@@ -702,8 +702,8 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 			pOriginDock->bIconIsFlyingAway = TRUE;
 			gchar *cParentDockName = s_pIconClicked->cParentDockName;
 			s_pIconClicked->cParentDockName = NULL;
-			cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock, TRUE);
-			s_pIconClicked->cParentDockName = cParentDockName;
+			cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock);
+			s_pIconClicked->cParentDockName = cParentDockName;  // we keep the parent dock name, to be able to re-insert it. we'll have to remove it when the icon is dropped.
 			cairo_dock_update_dock_size (pOriginDock);
 			cairo_dock_stop_icon_glide (pOriginDock);
 			
@@ -1115,7 +1115,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						CairoDock *pOriginDock = CAIRO_DOCK (cairo_dock_search_container_from_icon (s_pIconClicked));
 						if (pOriginDock != NULL && pDock != pOriginDock)
 						{
-							cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock, TRUE);
+							cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock);
 							cairo_dock_update_dock_size (pOriginDock);
 							
 							cairo_dock_update_icon_s_container_name (s_pIconClicked, icon->cParentDockName);
@@ -1169,6 +1169,9 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						}
 						else
 						{
+							Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
+							g_free (pFlyingIcon->cParentDockName);  // we have to remove it ourselves here, since we kept this data.
+							pFlyingIcon->cParentDockName = NULL;
 							cairo_dock_terminate_flying_container (s_pFlyingContainer);  // supprime ou detache l'icone, l'animation se terminera toute seule.
 						}
 						s_pFlyingContainer = NULL;

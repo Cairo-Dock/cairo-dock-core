@@ -71,16 +71,6 @@ default icon directory =
 #l[Very small;Small;Medium;Big;Very Big] Icons size:
 icon size = 2
 
-#v
-sev_order=
-
-#B Separate the different types of icons?
-#{This will separate launchers, application, and applets from each others. Separators will be automatically inserted then.}
-separate icons = true
-
-#T[launchers;applications;applets] Order of the different types of icons :
-icon's type order = 0;1;2
-
 
 #F[Views;@pkgdatadir@/icons/icon-views.svg]
 frame_view =

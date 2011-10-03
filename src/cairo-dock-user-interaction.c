@@ -334,9 +334,7 @@ gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cRe
 	if (g_str_has_suffix (cReceivedData, ".desktop"))  // .desktop -> add a new launcher if dropped on or amongst launchers. 
 	{
 		cd_debug (" dropped a .desktop");
-		if ((myIconsParam.iSeparateIcons == 1 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
-			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-		if ((myIconsParam.iSeparateIcons == 2 || myIconsParam.iSeparateIcons == 3) && CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
+		if (! myTaskbarParam.bMixLauncherAppli && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
 			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 		cd_debug (" add it");
 		if (fOrder == CAIRO_DOCK_LAST_ORDER && CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && icon->pSubDock != NULL)  // drop onto a container icon.
@@ -521,6 +519,8 @@ gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gch
 {
 	//g_print ("module %s (de)activated (%d)\n", cModuleName, bActivated);
 	cairo_dock_gui_trigger_update_module_state (cModuleName);
+	
+	cairo_dock_gui_trigger_reload_items ();  // for plug-ins that don't have an applet, like Cairo-Pinguin.
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }

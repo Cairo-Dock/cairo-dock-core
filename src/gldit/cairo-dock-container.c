@@ -523,7 +523,7 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer
 }
 
 
-GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GFunc pFunction, GtkWidget *pMenu, gpointer pData)
+GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GCallback pFunction, GtkWidget *pMenu, gpointer pData)
 {
 	GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
 	if (gtkStock)
