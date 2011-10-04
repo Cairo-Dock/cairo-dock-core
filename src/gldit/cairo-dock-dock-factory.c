@@ -84,18 +84,17 @@ extern gboolean g_bUseGlitz;
 
 static void _cairo_dock_set_icon_size (CairoContainer *pDock, Icon *icon)
 {
-	CairoDockIconGroup iType = cairo_dock_get_icon_type (icon);
 	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
 	{
 		if (icon->fWidth == 0)
-			icon->fWidth = myIconsParam.tIconAuthorizedWidth[iType];
+			icon->fWidth = myIconsParam.iIconWidth;
 		if (icon->fHeight == 0)
-			icon->fHeight = myIconsParam.tIconAuthorizedHeight[iType];
+			icon->fHeight = myIconsParam.iIconHeight;
 	}
 	else
 	{
-		icon->fWidth = myIconsParam.tIconAuthorizedWidth[iType];
-		icon->fHeight = myIconsParam.tIconAuthorizedHeight[iType];
+		icon->fWidth = myIconsParam.iIconWidth;
+		icon->fHeight = myIconsParam.iIconHeight;
 	}
 }
 

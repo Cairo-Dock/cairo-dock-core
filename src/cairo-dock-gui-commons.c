@@ -46,12 +46,16 @@
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-gui-commons.h"
 
+#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
+
 static CairoDockTask *s_pImportTask = NULL;
 
 extern gchar *g_cThemesDirPath;
 extern gchar *g_cConfFile;
 extern CairoContainer *g_pPrimaryContainer;
 extern CairoDockDesktopGeometry g_desktopGeometry;
+extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
+
 
 static void _cairo_dock_fill_model_with_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModele)
 {
@@ -561,4 +565,10 @@ void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidget
 	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (pOneWidget), bIsDetached);
+}
+
+
+gchar *cairo_dock_get_third_party_applets_adress (void)
+{
+	return g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
 }

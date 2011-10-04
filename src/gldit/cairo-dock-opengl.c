@@ -322,17 +322,9 @@ void cairo_dock_create_icon_fbo (void)  // it has been found that you get a spee
 	
 	glGenFramebuffersEXT(1, &g_openglConfig.iFboId);
 	
-	int iWidth = 0, iHeight = 0;
-	int i;
-	for (i = 0; i < CAIRO_DOCK_NB_GROUPS; i += 2)
-	{
-		iWidth = MAX (iWidth, myIconsParam.tIconAuthorizedWidth[i]);
-		iHeight = MAX (iHeight, myIconsParam.tIconAuthorizedHeight[i]);
-	}
-	if (iWidth == 0)
-		iWidth = 48;
-	if (iHeight == 0)
-		iHeight = 48;
+	int iWidth = myIconsParam.iIconWidth;
+	int iHeight = myIconsParam.iIconHeight;
+	
 	iWidth *= (1 + myIconsParam.fAmplitude);
 	iHeight *= (1 + myIconsParam.fAmplitude);
 	g_openglConfig.iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL, iWidth, iHeight);

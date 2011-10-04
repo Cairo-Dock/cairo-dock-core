@@ -59,7 +59,6 @@
 #define ICON_MEDIUM 48
 #define ICON_SMALL 42
 #define ICON_TINY 36
-#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
 #define CAIRO_DOCK_THEMES_PAGE 3
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
@@ -79,7 +78,6 @@ extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bUseOpenGL;
-extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
 /*#define cd_reload(module_name) do {\
@@ -341,7 +339,7 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIconsParam.cIconTheme);
 	
 	int iIconSize;
-	int s = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	int s = myIconsParam.iIconWidth;
 	if (s <= ICON_TINY+2)  // icones toutes petites.
 		iIconSize = 0;
 	else if (s >= ICON_HUGE-2)  // icones tres grandes.
@@ -364,7 +362,7 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myBackendsParam.cSubDockDefaultRendererName);
 	
 	// applets
-	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
+	gchar *cAdress = cairo_dock_get_third_party_applets_adress ();
 	g_key_file_set_string (pSimpleKeyFile, "Add-ons", "third party", cAdress);
 	g_free (cAdress);
 	
@@ -668,7 +666,7 @@ static gboolean on_apply_config_simple (gpointer data)
 		}
 		gint tab[2] = {iLauncherSize, iLauncherSize};
 		g_key_file_set_integer_list (pKeyFile, "Icons", "launcher size", tab, 2);
-		tab[0] = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12];
+		tab[0] = myIconsParam.iSeparatorWidth;
 		g_key_file_set_integer_list (pKeyFile, "Icons", "separator size", tab, 2);
 		
 		g_key_file_set_double (pKeyFile, "Icons", "zoom max", fMaxScale);

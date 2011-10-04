@@ -482,7 +482,7 @@ msgid ""
 "This will prevent any modification of the current theme, and hide all the "
 "unnecessary entries in the menus."
 msgstr ""
-"Ceci vous empêchera toutes modifications dans le thème courant et cacher "
+"Ceci empêchera toute modification dans le thème courant et cachera "
 "toutes les entrées non utiles des menus."
 
 #: ../src/cairo-dock-menu.c:424
@@ -3753,7 +3753,7 @@ msgstr "Espace entre les icônes :"
 
 #: ../data/messages:1061
 msgid "Reflections"
-msgstr "Réflections"
+msgstr "Reflets"
 
 #: ../data/messages:1063
 msgid ""

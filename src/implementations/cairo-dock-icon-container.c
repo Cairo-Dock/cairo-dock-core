@@ -193,7 +193,7 @@ static void _cairo_dock_load_box_surface (void)
 	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
 	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
 	
-	int iSize = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+	int iSize = myIconsParam.iIconWidth;
 	if (iSize == 0)
 		iSize = 48;
 	iSize *= fMaxScale;

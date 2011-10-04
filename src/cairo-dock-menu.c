@@ -71,7 +71,6 @@
 #define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
 #define CAIRO_DOCK_SITE_URL "http://glx-dock.org"  // http://cairo-dock.vef.fr
 #define CAIRO_DOCK_FORUM_URL "http://forum.glx-dock.org"  // http://cairo-dock.vef.fr/bg_forumlist.php
-#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
 #define CAIRO_DOCK_PAYPAL_URL "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=UWQ3VVRB2ZTZS&lc=GB&item_name=Support%20Cairo%2dDock&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"
 #define CAIRO_DOCK_FLATTR_URL "http://flattr.com/thing/370779/Support-Cairo-Dock-development"
 
@@ -83,7 +82,6 @@ extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentIconsPath;
 
-extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern gboolean g_bLocked;
 extern gboolean g_bForceCairo;
 extern gboolean g_bEasterEggs;
@@ -212,7 +210,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	gtk_widget_set_tooltip_text (pLink, _("Find the latest version of Cairo-Dock here !"));
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
-	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
+	gchar *cAdress = cairo_dock_get_third_party_applets_adress ();
 	pLink = gtk_link_button_new_with_label (cAdress, _("Get more applets!"));
 	g_free (cAdress);
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
@@ -284,7 +282,7 @@ which opera > /dev/null && opera %s ",
 }
 static void _cairo_dock_show_third_party_applets (GtkMenuItem *pMenuItem, gpointer data)
 {
-	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
+	gchar *cAdress = cairo_dock_get_third_party_applets_adress ();
 	_launch_url (cAdress);
 	g_free (cAdress);
 }

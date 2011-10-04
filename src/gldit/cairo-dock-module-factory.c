@@ -295,11 +295,11 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		gboolean bUseless;
 		cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
 		if (pMinimalConfig->iDesiredIconWidth == 0)
-			pMinimalConfig->iDesiredIconWidth = myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
+			pMinimalConfig->iDesiredIconWidth = myIconsParam.iIconWidth;
 		if (pMinimalConfig->iDesiredIconWidth == 0)
 			pMinimalConfig->iDesiredIconWidth = 48;
 		if (pMinimalConfig->iDesiredIconHeight == 0)
-			pMinimalConfig->iDesiredIconHeight = myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
+			pMinimalConfig->iDesiredIconHeight = myIconsParam.iIconHeight;
 		if (pMinimalConfig->iDesiredIconHeight == 0)
 			pMinimalConfig->iDesiredIconHeight = 48;
 		

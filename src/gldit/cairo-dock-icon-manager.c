@@ -420,22 +420,20 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	}
 		
 	//\___________________ icons size
-	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "launcher ", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER]);
-	if (pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] == 0)
-		pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] = 48;
-	if (pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] == 0)
-		pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] = 48;
-	
-	pIcons->tIconAuthorizedWidth[CAIRO_DOCK_APPLI] = pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
-	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_APPLI] = pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "launcher ", bFlushConfFileNeeded, pIcons->iIconWidth, pIcons->iIconHeight);
+	if (pIcons->iIconWidth == 0)
+		pIcons->iIconWidth = 48;
+	if (pIcons->iIconHeight == 0)
+		pIcons->iIconHeight = 48;
 	
 	//\___________________ Parametres des separateurs.
-	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "separator ", bFlushConfFileNeeded, pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12]);
-	if (pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] == 0)
-		pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] = pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER];
-	if (pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] == 0)
-		pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] = pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER];
-	pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] = MIN (pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12], pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER]);
+	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "separator ", bFlushConfFileNeeded, pIcons->iSeparatorWidth, pIcons->iSeparatorHeight);
+	if (pIcons->iSeparatorWidth == 0)
+		pIcons->iSeparatorWidth = pIcons->iIconWidth;
+	if (pIcons->iSeparatorHeight == 0)
+		pIcons->iSeparatorHeight = pIcons->iIconHeight;
+	if (pIcons->iSeparatorHeight > pIcons->iIconHeight)
+		pIcons->iSeparatorHeight = pIcons->iIconHeight;
 	
 	pIcons->iSeparatorType = cairo_dock_get_integer_key_value (pKeyFile, "Icons", "separator type", &bFlushConfFileNeeded, -1, NULL, NULL);
 	if (pIcons->iSeparatorType >= CAIRO_DOCK_NB_SEPARATOR_TYPES)  // nouveau parametre, avant il etait dans dock-rendering.
@@ -488,27 +486,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 
 	pIcons->bConstantSeparatorSize = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "force size", &bFlushConfFileNeeded, TRUE, "Separators", NULL);
 	
-	
-	pIcons->fReflectSize = 0;
-	int i;
-	for (i = 0; i < CAIRO_DOCK_NB_GROUPS; i ++)
-	{
-		if (pIcons->tIconAuthorizedHeight[i] > 0)
-			pIcons->fReflectSize = MAX (pIcons->fReflectSize, pIcons->tIconAuthorizedHeight[i]);
-	}
-	if (pIcons->fReflectSize == 0)  // on n'a pas trouve de hauteur, on va essayer avec la largeur.
-	{
-		for (i = 0; i < CAIRO_DOCK_NB_GROUPS; i ++)
-		{
-			if (pIcons->tIconAuthorizedWidth[i] > 0)
-				pIcons->fReflectSize = MAX (pIcons->fReflectSize, pIcons->tIconAuthorizedWidth[i]);
-		}
-		if (pIcons->fReflectSize > 0)
-			pIcons->fReflectSize = MIN (48, pIcons->fReflectSize);
-		else
-			pIcons->fReflectSize = 48;
-	}
-	pIcons->fReflectSize *= pIcons->fReflectHeightRatio;
+	pIcons->fReflectSize = pIcons->iIconHeight * pIcons->fReflectHeightRatio;
 	
 	
 	//\___________________ labels font
@@ -664,7 +642,7 @@ static void _cairo_dock_load_icons_background_surface (const gchar *cImagePath, 
 {
 	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
 	
-	int iSize = MAX (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
+	int iSize = myIconsParam.iIconWidth;
 	if (iSize == 0)
 		iSize = 48;
 	iSize *= fMaxScale;
@@ -766,8 +744,8 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	gboolean bInsertSeparators = FALSE;
 	
 	if (cairo_dock_strings_differ (pPrevIcons->cSeparatorImage, pIcons->cSeparatorImage) ||
-		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] ||
-		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] ||
+		pPrevIcons->iSeparatorWidth != pIcons->iSeparatorWidth ||
+		pPrevIcons->iSeparatorHeight != pIcons->iSeparatorHeight ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		bInsertSeparators = TRUE;
@@ -795,10 +773,10 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	cairo_dock_destroy_icon_fbo ();
 	cairo_dock_create_icon_fbo ();
 	
-	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
-		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||
-		pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_SEPARATOR12] ||
-		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_SEPARATOR12] ||
+	if (pPrevIcons->iIconWidth != pIcons->iIconWidth ||
+		pPrevIcons->iIconHeight != pIcons->iIconHeight ||
+		pPrevIcons->iSeparatorWidth != pIcons->iSeparatorWidth ||
+		pPrevIcons->iSeparatorHeight != pIcons->iSeparatorHeight ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude ||
 		(!g_bUseOpenGL && pPrevIcons->fReflectHeightRatio != pIcons->fReflectHeightRatio) ||
 		(!g_bUseOpenGL && pPrevIcons->fAlbedo != pIcons->fAlbedo) ||
@@ -813,8 +791,8 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		cairo_dock_foreach_docks ((GHFunc)_insert_separators, NULL);
 	}
 	
-	if (pPrevIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] ||
-		pPrevIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != pIcons->tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] ||
+	if (pPrevIcons->iIconWidth != pIcons->iIconWidth ||
+		pPrevIcons->iIconHeight != pIcons->iIconHeight ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		_cairo_dock_unload_icon_textures ();

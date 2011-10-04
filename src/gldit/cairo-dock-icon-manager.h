@@ -52,6 +52,7 @@ typedef enum {
 
 struct _CairoIconsParam {
 	// icons
+	CairoDockIconGroup tIconTypeOrder[CAIRO_DOCK_NB_GROUPS];
 	gdouble fReflectHeightRatio;
 	gdouble fAlbedo;
 	gdouble fAmplitude;
@@ -63,14 +64,16 @@ struct _CairoIconsParam {
 	gdouble fReflectSize;
 	gchar *cIconTheme;
 	gchar *cBackgroundImagePath;
-	gint tIconAuthorizedWidth[CAIRO_DOCK_NB_GROUPS];
-	gint tIconAuthorizedHeight[CAIRO_DOCK_NB_GROUPS];
+	gint iIconWidth;  // default icon size
+	gint iIconHeight;
+	// separators
 	CairoDockSpeparatorType iSeparatorType;
+	gint iSeparatorWidth;
+	gint iSeparatorHeight;
 	gchar *cSeparatorImage;
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
 	gdouble fSeparatorColor[4];
-	CairoDockIconGroup tIconTypeOrder[CAIRO_DOCK_NB_GROUPS];
 	// labels
 	CairoDockLabelDescription iconTextDescription;
 	CairoDockLabelDescription quickInfoTextDescription;

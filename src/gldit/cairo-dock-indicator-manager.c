@@ -481,8 +481,8 @@ static inline void _load_task_indicator (const gchar *cIndicatorImagePath, doubl
 {
 	cairo_dock_unload_image_buffer (&s_indicatorBuffer);
 	
-	double fLauncherWidth = (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
-	double fLauncherHeight = (myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
+	double fLauncherWidth = myIconsParam.iIconWidth;
+	double fLauncherHeight = myIconsParam.iIconHeight;
 	double fScale = (myIndicatorsParam.bIndicatorOnIcon ? fMaxScale : 1.) * fIndicatorRatio;
 	
 	cairo_dock_load_image_buffer (&s_indicatorBuffer,
@@ -495,12 +495,8 @@ static inline void _load_active_window_indicator (const gchar *cImagePath, doubl
 {
 	cairo_dock_unload_image_buffer (&s_activeIndicatorBuffer);
 	
-	int iWidth = MAX (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER], myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_APPLI]);
-	int iHeight = MAX (myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_APPLI], myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_APPLI]);
-	if (iWidth == 0)
-		iWidth = 48;
-	if (iHeight == 0)
-		iHeight = 48;
+	int iWidth = myIconsParam.iIconWidth;
+	int iHeight = myIconsParam.iIconHeight;
 	iWidth *= fMaxScale;
 	iHeight *= fMaxScale;
 	
@@ -546,8 +542,8 @@ static inline void _load_class_indicator (const gchar *cIndicatorImagePath, doub
 {
 	cairo_dock_unload_image_buffer (&s_classIndicatorBuffer);
 	
-	double fLauncherWidth = (myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedWidth[CAIRO_DOCK_LAUNCHER] : 48);
-	double fLauncherHeight = (myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] != 0 ? myIconsParam.tIconAuthorizedHeight[CAIRO_DOCK_LAUNCHER] : 48);
+	double fLauncherWidth = myIconsParam.iIconWidth;
+	double fLauncherHeight = myIconsParam.iIconHeight;
 	
 	cairo_dock_load_image_buffer (&s_classIndicatorBuffer,
 		cIndicatorImagePath,

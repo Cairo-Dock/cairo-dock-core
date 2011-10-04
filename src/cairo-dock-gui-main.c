@@ -58,10 +58,8 @@
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_ICON_MARGIN 6
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
-#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
-extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
 extern gchar *g_cConfFile;
 extern CairoContainer *g_pPrimaryContainer;
@@ -1912,7 +1910,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		FALSE,
 		0);
 	
-	gchar *cAdress = g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);
+	gchar *cAdress = cairo_dock_get_third_party_applets_adress ();
 	GtkWidget *pThirdPartyButton = gtk_link_button_new_with_label (cAdress, _("More applets"));
 	gtk_widget_set_tooltip_text (pThirdPartyButton, _("Get more applets online !"));
 	pImage = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);

@@ -47,8 +47,8 @@
 #define CAIRO_DOCK_ICON_MARGIN 6
 #define CAIRO_DOCK_PREVIEW_WIDTH 350
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
-#define CAIRO_DOCK_README_WIDTH 400
-#define CAIRO_DOCK_HANDBOOK_WIDTH 500
+#define CAIRO_DOCK_README_WIDTH_MIN 400
+#define CAIRO_DOCK_README_WIDTH 500
 #define CAIRO_DOCK_APPLET_ICON_SIZE 32
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
@@ -1527,7 +1527,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 	gtk_label_set_use_markup  (GTK_LABEL (pDescriptionLabel), TRUE);
 	if (bHorizontalPackaging)
 	{
-		gtk_widget_set_size_request (pDescriptionLabel, MIN (iMinSize * 1.5, CAIRO_DOCK_README_WIDTH), CAIRO_DOCK_PREVIEW_HEIGHT);
+		gtk_widget_set_size_request (pDescriptionLabel, MIN (iMinSize * 1.5, CAIRO_DOCK_README_WIDTH_MIN), CAIRO_DOCK_PREVIEW_HEIGHT);
 	}
 	else
 		gtk_widget_set_size_request (pDescriptionLabel, CAIRO_DOCK_README_WIDTH, -1);
@@ -1945,7 +1945,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							pModule->pVisitCard->cDescription));
 					pLabel = gtk_label_new (cDescription);
 					gtk_label_set_use_markup (GTK_LABEL (pLabel), TRUE);
-					gtk_widget_set (pLabel, "width-request", CAIRO_DOCK_HANDBOOK_WIDTH, NULL);
+					gtk_widget_set (pLabel, "width-request", CAIRO_DOCK_README_WIDTH, NULL);
 					gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
 					gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
 					g_free (cDescription);

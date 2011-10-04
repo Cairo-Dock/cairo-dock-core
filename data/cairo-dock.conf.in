@@ -515,21 +515,6 @@ sinusoid width = 150
 #{in pixels.}
 icon gap = 0
 
-#X+[Reflections]
-frame_refl =
-
-#e+[0;1;light;strong] Reflective power of the plane :
-#{It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 reflections are not used.}
-albedo = .8
-
-#e+[0;1;small;tall] Height of the reflection:
-#{In percent of the icon's size. This parameter influence the total height of the dock.}
-field depth = 0.5
-
-#e+[0;1;Transparent;Opaque] Icons' transparency at rest :
-#{It is their transparency when the dock is at rest; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
-alpha at rest = 1
-
 #X+[Separators]
 frame_sep =
 
@@ -552,6 +537,21 @@ revolve separator image = true
 
 #C+ Colour of flat separators :
 separator color = 0.9;0.9;0.9;1.0
+
+#X+[Reflections]
+frame_refl =
+
+#e+[0;1;light;strong] Reflective power of the plane :
+#{It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 reflections are not used.}
+albedo = .8
+
+#e+[0;1;small;tall] Height of the reflection:
+#{In percent of the icon's size. This parameter influence the total height of the dock.}
+field depth = 0.5
+
+#e+[0;1;Transparent;Opaque] Icons' transparency at rest :
+#{It is their transparency when the dock is at rest; they will "materialize" progressively as the dock grows up. The closer to 0, the more transparent they will be.}
+alpha at rest = 1
 
 #X+[Link the icons with a string]
 frame_string =
