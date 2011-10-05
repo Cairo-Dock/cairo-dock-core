@@ -50,7 +50,7 @@ void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSLis
 void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidgetList);
 
 
-gchar *cairo_dock_get_third_party_applets_adress (void);
+gchar *cairo_dock_get_third_party_applets_link (void);
 
 G_END_DECLS
 #endif

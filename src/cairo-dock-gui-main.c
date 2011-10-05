@@ -1910,12 +1910,12 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		FALSE,
 		0);
 	
-	gchar *cAdress = cairo_dock_get_third_party_applets_adress ();
-	GtkWidget *pThirdPartyButton = gtk_link_button_new_with_label (cAdress, _("More applets"));
+	gchar *cLink = cairo_dock_get_third_party_applets_link ();
+	GtkWidget *pThirdPartyButton = gtk_link_button_new_with_label (cLink, _("More applets"));
 	gtk_widget_set_tooltip_text (pThirdPartyButton, _("Get more applets online !"));
 	pImage = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (pThirdPartyButton), pImage);
-	g_free (cAdress);
+	g_free (cLink);
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
 		pThirdPartyButton,
 		FALSE,

@@ -362,9 +362,9 @@ static gchar * _make_simple_conf_file (void)
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myBackendsParam.cSubDockDefaultRendererName);
 	
 	// applets
-	gchar *cAdress = cairo_dock_get_third_party_applets_adress ();
-	g_key_file_set_string (pSimpleKeyFile, "Add-ons", "third party", cAdress);
-	g_free (cAdress);
+	gchar *cLink = cairo_dock_get_third_party_applets_link ();
+	g_key_file_set_string (pSimpleKeyFile, "Add-ons", "third party", cLink);
+	g_free (cLink);
 	
 	cairo_dock_write_keys_to_file (pSimpleKeyFile, cConfFilePath);
 	

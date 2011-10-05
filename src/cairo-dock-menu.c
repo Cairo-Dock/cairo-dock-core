@@ -210,9 +210,9 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	gtk_widget_set_tooltip_text (pLink, _("Find the latest version of Cairo-Dock here !"));
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
-	gchar *cAdress = cairo_dock_get_third_party_applets_adress ();
-	pLink = gtk_link_button_new_with_label (cAdress, _("Get more applets!"));
-	g_free (cAdress);
+	gchar *cLink = cairo_dock_get_third_party_applets_link ();
+	pLink = gtk_link_button_new_with_label (cLink, _("Get more applets!"));
+	g_free (cLink);
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
 	gchar *cLabel = g_strdup_printf ("%s (Flattr)", _("Donate"));
@@ -282,9 +282,9 @@ which opera > /dev/null && opera %s ",
 }
 static void _cairo_dock_show_third_party_applets (GtkMenuItem *pMenuItem, gpointer data)
 {
-	gchar *cAdress = cairo_dock_get_third_party_applets_adress ();
-	_launch_url (cAdress);
-	g_free (cAdress);
+	gchar *cLink = cairo_dock_get_third_party_applets_link ();
+	_launch_url (cLink);
+	g_free (cLink);
 }
 
 static void _cairo_dock_present_help (GtkMenuItem *pMenuItem, gpointer data)
@@ -771,7 +771,7 @@ static void _cairo_dock_set_custom_appli_icon (GtkMenuItem *pMenuItem, gpointer 
 		GTK_STOCK_CANCEL,
 		GTK_RESPONSE_CANCEL,
 		NULL);
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), "~/.config/cairo-dock/current_theme/icons");
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), "~/.config/cairo-dock/current_theme/icons"); // TODO? To change? => images on the home ($ xdg-user-dir PICTURES), /usr/share/icons
 	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), FALSE);
 	
 	GtkWidget *pPreviewImage = gtk_image_new ();
