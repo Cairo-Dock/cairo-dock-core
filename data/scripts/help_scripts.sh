@@ -115,7 +115,7 @@ compiz_new_replace_list_plugins() {
 		# flat file
 		if test -f "$HOME/.config/compiz-1/compizconfig/Default.ini"; then
 			pluginsList="s0_active_plugins = "`echo $ARG2 |sed -e 's/,/;/g'`";" # , => ;
-			sed -i "/s0_active_plugins/ s/.*/$ARG2/g" $HOME/.config/compiz-1/compizconfig/Default.ini
+			sed -i "/s0_active_plugins/ s/.*/$pluginsList/g" $HOME/.config/compiz-1/compizconfig/Default.ini
 		fi
 		# gconf
 		gconftool-2 -s /apps/compiz-1/general/screen0/options/active_plugins --type=list --list-type=string "[$ARG2]"
