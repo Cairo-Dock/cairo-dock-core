@@ -166,6 +166,7 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 		cairo_dock_launch_command_printf ("bash "MY_APPLET_SHARE_DATA_DIR"/scripts/help_scripts.sh \"compiz_new_replace_list_plugins\" \"%s\"",
 			NULL,
 			cPluginsList);
+		int r = system ("killall unity-panel-service"); // to have the main gtk menu back.
 		g_free (cPluginsList);
 	}
 	else  // should not happen since we detect Unity before proposing this action.

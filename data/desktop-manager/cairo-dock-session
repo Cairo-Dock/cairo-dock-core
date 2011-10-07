@@ -31,6 +31,7 @@ if test -d "$HOME/.config/compiz-1"; then # compiz >= 0.9
 		if test `echo $pluginsFlat | grep -c $UNITY_NAME` -gt 0; then
 			pluginsFlatWithoutUnity=`echo $pluginsFlat | sed -e "s/$UNITY_NAME;//g"`
 			sed -i "/s0_active_plugins/ s/$pluginsFlat/$pluginsFlatWithoutUnity/g" $COMPIZ_FLAT_FILE
+			killall unity-panel-service
 		fi
 	fi
 	# gconf
@@ -38,6 +39,7 @@ if test -d "$HOME/.config/compiz-1"; then # compiz >= 0.9
 	if test `echo $plugins | grep -c $UNITY_NAME` -gt 0; then
 		pluginsWithoutUnity=`echo $plugins | sed -e "s/$UNITY_NAME,//g"`
 		gconftool-2 -s $COMPIZ_GCONF --type=list --list-type=string "$pluginsWithoutUnity"
+		killall unity-panel-service
 	fi
 fi
 
