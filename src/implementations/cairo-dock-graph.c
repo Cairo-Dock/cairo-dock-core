@@ -75,7 +75,7 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 	double fValue;
 	cairo_pattern_t *pGradationPattern;
 	int t, n = MIN (pData->iMemorySize, iWidth);  // for iteration over the memorized values.
-	int i, iCurrentGraph, iGraphTop, iGraphBottom, iHeight;
+	int i, iCurrentGraph, iGraphTop, iGraphBottom, iHeight = 0;
 	for (i = 0; i < iNbValues; i ++)
 	{
 		cairo_save (pCairoContext);
