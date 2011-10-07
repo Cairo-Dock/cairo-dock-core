@@ -39,7 +39,7 @@ typedef struct _Graph {
 	gdouble fBackGroundColor[4];
 	cairo_surface_t *pBackgroundSurface;
 	GLuint iBackgroundTexture;
-	gint iRadius;
+	gint iRadius; // deprecated
 	gint iMargin;
 	gboolean bMixGraphs;
 	} Graph;
@@ -69,20 +69,33 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 	
 	int iMargin = pGraph->iMargin;
 	int iWidth = pRenderer->iWidth - 2*iMargin;
-	int iHeight = pRenderer->iHeight - 2*iMargin;
-	iHeight /= iNbDrawings;
+	double fHeight = pRenderer->iHeight - 2*iMargin;
+	fHeight /= iNbDrawings;
 	
 	double fValue;
 	cairo_pattern_t *pGradationPattern;
 	int t, n = MIN (pData->iMemorySize, iWidth);  // for iteration over the memorized values.
-	int i;
+	int i, iCurrentGraph, iGraphTop, iGraphBottom, iHeight;
 	for (i = 0; i < iNbValues; i ++)
 	{
 		cairo_save (pCairoContext);
-		if (! pGraph->bMixGraphs)
+		if (pGraph->iType == CAIRO_DOCK_GRAPH_CIRCLE || pGraph->iType == CAIRO_DOCK_GRAPH_CIRCLE_PLAIN)
+		{
+			if (! pGraph->bMixGraphs)
+				cairo_translate (pCairoContext,
+					0.,
+					i * fHeight);
+		}
+		else
+		{
+			iCurrentGraph = pGraph->bMixGraphs ? 0 : i;
+			iGraphTop = floor (iCurrentGraph * fHeight) + iMargin; // Position of previous graph axis (if any).
+			iGraphBottom = floor ((iCurrentGraph + 1) * fHeight) + iMargin; // Position of current graph axis
+			iHeight = iGraphBottom - iGraphTop; // Current graph height.
 			cairo_translate (pCairoContext,
-				0.,
-				i * iHeight);
+				iMargin,
+				iGraphTop);
+		}
 		pGradationPattern = pGraph->pGradationPatterns[i];
 		if (pGradationPattern != NULL)
 			cairo_set_source (pCairoContext, pGradationPattern);
@@ -103,24 +116,24 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 				if (fValue <= CAIRO_DATA_RENDERER_UNDEF_VALUE+1)  // undef value -> let's draw 0
 					fValue = 0;
 				cairo_move_to (pCairoContext,
-					iMargin + iWidth - .5,
-					iMargin + (1 - fValue) * iHeight - .5);
+					iWidth - .5,
+					(1 - fValue) * (iHeight - 1) + .5) ; // - .5 to align line draw on pixel and + 1 px down because size is reduced
 				for (t = 1; t < n; t ++)
 				{
 					fValue = cairo_data_renderer_get_normalized_value (pRenderer, i, -t);
 					if (fValue <= CAIRO_DATA_RENDERER_UNDEF_VALUE+1)  // undef value -> let's draw 0
 						fValue = 0;
 					cairo_line_to (pCairoContext,
-						iMargin + (n - t) * iWidth / n - .5,
-						iMargin + (1 - fValue) * iHeight - .5);
+						iWidth - t - .5,
+						(1 - fValue) * (iHeight - 1) + .5); // - .5 to align line draw on pixel and + 1 px down because size is reduced
 				}
 				if (pGraph->iType == CAIRO_DOCK_GRAPH_PLAIN)
 				{
 					cairo_line_to (pCairoContext,
-						iMargin - .5,
-						iMargin + iHeight - .5);
+						.5, // - .5 to align line draw on pixel and + 1 to align with last value position
+						iHeight - .5); // - .5 to align next line draw on pixel
 					cairo_rel_line_to (pCairoContext,
-						iWidth,
+						iWidth - 1,
 						0.);
 					cairo_close_path (pCairoContext);
 					cairo_fill_preserve (pCairoContext);
@@ -130,19 +143,15 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 			
 			case CAIRO_DOCK_GRAPH_BAR:
 			{
-				///double fBarWidth = iWidth / pData->iMemorySize / 4;
-				double fBarWidth = 1;
-				cairo_set_line_width (pCairoContext, fBarWidth);
-				for (t = 1; t < n; t ++)
+				cairo_set_line_width (pCairoContext, 1);
+				for (t = 0; t < n; t ++)
 				{
 					fValue = cairo_data_renderer_get_normalized_value (pRenderer, i, -t);
-					if (fValue <= CAIRO_DATA_RENDERER_UNDEF_VALUE+1)  // undef value -> let's draw 0
-						fValue = 0;
-					if (fValue > 0)
+					if (fValue > CAIRO_DATA_RENDERER_UNDEF_VALUE+1)  // undef value -> no draw
 					{
 						cairo_move_to (pCairoContext,
-							iMargin + (n - t) * iWidth / n - .5,
-							iMargin + iHeight - .5);
+							iWidth - t - .5, // - .5 to align line draw on pixel
+							iHeight);
 						cairo_rel_line_to (pCairoContext,
 							0.,
 							- fValue * iHeight);
@@ -159,15 +168,15 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 				fValue = cairo_data_renderer_get_normalized_current_value (pRenderer, i);
 				if (fValue <= CAIRO_DATA_RENDERER_UNDEF_VALUE+1)  // undef value -> let's draw 0
 					fValue = 0;
-				double angle, radius = MIN (iWidth, iHeight)/2;
+				double angle, radius = MIN (iWidth, fHeight)/2;
 				angle = -2*G_PI*(-.5/pData->iMemorySize);
 				cairo_move_to (pCairoContext,
 					iMargin + iWidth/2 + radius * (fValue * cos (angle)),
-					iMargin + iHeight/2 + radius * (fValue * sin (angle)));
+					iMargin + fHeight/2 + radius * (fValue * sin (angle)));
 				angle = -2*G_PI*(.5/pData->iMemorySize);
 				cairo_line_to (pCairoContext,
 					iMargin + iWidth/2 + radius * (fValue * cos (angle)),
-					iMargin + iHeight/2 + radius * (fValue * sin (angle)));
+					iMargin + fHeight/2 + radius * (fValue * sin (angle)));
 				for (t = 1; t < n; t ++)
 				{
 					fValue = cairo_data_renderer_get_normalized_value (pRenderer, i, -t);
@@ -176,11 +185,11 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 					angle = -2*G_PI*((t-.5)/n);
 					cairo_line_to (pCairoContext,
 						iMargin + iWidth/2 + radius * (fValue * cos (angle)),
-						iMargin + iHeight/2 + radius * (fValue * sin (angle)));
+						iMargin + fHeight/2 + radius * (fValue * sin (angle)));
 					angle = -2*G_PI*((t+.5)/n);
 					cairo_line_to (pCairoContext,
 						iMargin + iWidth/2 + radius * (fValue * cos (angle)),
-						iMargin + iHeight/2 + radius * (fValue * sin (angle)));
+						iMargin + fHeight/2 + radius * (fValue * sin (angle)));
 				}
 				if (pGraph->iType == CAIRO_DOCK_GRAPH_CIRCLE_PLAIN)
 				{
@@ -216,7 +225,7 @@ static void render_opengl (Graph *pGraph)
 }
 
 
-static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidth, double fHeight, int iRadius, int iMargin, gdouble *pBackGroundColor, CairoDockTypeGraph iType, int iNbDrawings)
+static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidth, double fHeight, int iMargin, gdouble *pBackGroundColor, CairoDockTypeGraph iType, int iNbDrawings)
 {
 	// on cree la surface.
 	cairo_surface_t *pBackgroundSurface = cairo_dock_create_blank_surface (
@@ -232,7 +241,9 @@ static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidt
 		pBackGroundColor[2],
 		pBackGroundColor[3]);
 	
-	double fRadius = iRadius;
+	// The first argument is the radius ratio factor to change how corners are displayed.
+	// It can be adjusted between 1 (half radius space unused) to 2 (no radius space reserved).
+	double fRadius = floor (1.5 * iMargin / (1. - sqrt(2)/2));
 	cairo_set_line_width (pCairoContext, fRadius);
 	cairo_set_line_join (pCairoContext, CAIRO_LINE_JOIN_ROUND);
 	cairo_move_to (pCairoContext, .5*fRadius, .5*fRadius);
@@ -271,14 +282,14 @@ static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidt
 	}
 	else
 	{
-		cairo_move_to (pCairoContext, iMargin-.5, iMargin-.5);
-		cairo_rel_line_to (pCairoContext, 0., fHeight - 2*iMargin);
-		cairo_stroke (pCairoContext);
+		// cairo_move_to (pCairoContext, iMargin-.5, iMargin-.5);
+		// cairo_rel_line_to (pCairoContext, 0., fHeight - 2*iMargin);
+		// cairo_stroke (pCairoContext);
 		int i;
 		for (i = 0; i < iNbDrawings; i ++)
 		{
 			cairo_move_to (pCairoContext,
-				iMargin - .5,
+				iMargin,
 				floor ((fHeight - 2 * iMargin) * (i + 1) / iNbDrawings) + iMargin - .5);
 			cairo_rel_line_to (pCairoContext, fWidth - 2*iMargin, 0.);
 			cairo_stroke (pCairoContext);
@@ -288,12 +299,12 @@ static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidt
 	cairo_destroy (pCairoContext);
 	return  pBackgroundSurface;
 }
-static cairo_pattern_t *_cairo_dock_create_graph_pattern (Graph *pGraph, gdouble *fLowColor, gdouble *fHighColor, double fOffsetY)
+static cairo_pattern_t *_cairo_dock_create_graph_pattern (Graph *pGraph, gdouble *fLowColor, gdouble *fHighColor, int iCurrentGraph, double fOffsetY)
 {
 	cairo_pattern_t *pGradationPattern = NULL;
 	if (fLowColor[0] != fHighColor[0] || fLowColor[1] != fHighColor[1] || fLowColor[2] != fHighColor[2])  // un degrade existe.
 	{
-		int iMargin = pGraph->iMargin;
+		int iHeight, iMargin = pGraph->iMargin;
 		double fWidth = pGraph->dataRenderer.iWidth - 2*iMargin;
 		double fHeight = pGraph->dataRenderer.iHeight - 2*iMargin;
 		fHeight /= (pGraph->dataRenderer.data.iNbValues / pGraph->dataRenderer.iRank);
@@ -309,10 +320,16 @@ static cairo_pattern_t *_cairo_dock_create_graph_pattern (Graph *pGraph, gdouble
 				radius);
 		}
 		else
+		{
+			if (pGraph->bMixGraphs) 
+				iCurrentGraph = 0;
+			iHeight = floor ((iCurrentGraph + 1) * fHeight) - floor (iCurrentGraph * fHeight);
+			
 			pGradationPattern = cairo_pattern_create_linear (0.,
-				iMargin + fHeight + fOffsetY,
+				iHeight + fOffsetY,
 				0.,
-				iMargin + fOffsetY);
+				fOffsetY);
+		}
 		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);	
 		
 		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_PAD);
@@ -377,9 +394,9 @@ static void _set_overlay_zones (Graph *pGraph)
 				pLabel->param.fWidth = (double)iLabelWidth / iWidth;
 				pLabel->param.fHeight = (double)iLabelHeight / iHeight;
 				pLabel->param.pColor[0] = 1.;
-                pLabel->param.pColor[1] = 1.;
-                pLabel->param.pColor[2] = 1.;
-                pLabel->param.pColor[3] = 1.;  // white, a little transparent
+				pLabel->param.pColor[1] = 1.;
+				pLabel->param.pColor[2] = 1.;
+				pLabel->param.pColor[3] = 1.;  // white, a little transparent
 			}
 			else
 			{
@@ -448,17 +465,17 @@ static void load (Graph *pGraph, CairoContainer *pContainer, CairoGraphAttribute
 		pGraph->pGradationPatterns[i] = _cairo_dock_create_graph_pattern (pGraph,
 			&pGraph->fLowColor[3*i],
 			&pGraph->fHighColor[3*i],
+			i,
 			0.);
 	}
 	
-	pGraph->iRadius = MIN (iWidth, iHeight)/12.;
-	pGraph->iMargin = pGraph->iRadius * (1. - sqrt(2)/2);
+	pGraph->iMargin = floor (MIN (iWidth, iHeight) / 32);
+
 	if (pAttribute->fBackGroundColor != NULL)
 		memcpy (pGraph->fBackGroundColor, pAttribute->fBackGroundColor, 4 * sizeof (double));
 	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (
 		iWidth,
 		iHeight,
-		pGraph->iRadius,
 		pGraph->iMargin,
 		pGraph->fBackGroundColor,
 		pGraph->iType,
@@ -476,11 +493,10 @@ static void reload (Graph *pGraph)
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
-	pGraph->iRadius = MIN (iWidth, iHeight)/12.;
-	pGraph->iMargin = pGraph->iRadius * (1. - sqrt(2)/2);
+	pGraph->iMargin = floor (MIN (iWidth, iHeight) / 32);
 	if (pGraph->pBackgroundSurface != NULL)
 		cairo_surface_destroy (pGraph->pBackgroundSurface);
-	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (iWidth, iHeight, pGraph->iRadius, pGraph->iMargin, pGraph->fBackGroundColor, pGraph->iType, iNbValues / pRenderer->iRank);
+	pGraph->pBackgroundSurface = _cairo_dock_create_graph_background (iWidth, iHeight, pGraph->iMargin, pGraph->fBackGroundColor, pGraph->iType, iNbValues / pRenderer->iRank);
 	if (pGraph->iBackgroundTexture != 0)
 		_cairo_dock_delete_texture (pGraph->iBackgroundTexture);
 	if (g_bUseOpenGL && 0)
@@ -492,7 +508,7 @@ static void reload (Graph *pGraph)
 	{
 		if (pGraph->pGradationPatterns[i] != NULL)
 			cairo_pattern_destroy (pGraph->pGradationPatterns[i]);
-		pGraph->pGradationPatterns[i] = _cairo_dock_create_graph_pattern (pGraph, &pGraph->fLowColor[3*i], &pGraph->fHighColor[3*i], 0.);
+		pGraph->pGradationPatterns[i] = _cairo_dock_create_graph_pattern (pGraph, &pGraph->fLowColor[3*i], &pGraph->fHighColor[3*i], i, 0.);
 	}
 	
 	// on re-complete le data-renderer.
