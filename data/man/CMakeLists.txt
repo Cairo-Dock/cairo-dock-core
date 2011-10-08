@@ -12,7 +12,7 @@ set(cairo_dock_man_src cairo-dock_en.1) # cairo-dock_fr.1 cairo-dock_it.1)
 # Compression of the manuals
 foreach(man ${cairo_dock_man_src})
 	message(STATUS "Building ${man}.gz")
-	execute_process(COMMAND ${GZIP_TOOL} -c ${CMAKE_CURRENT_SOURCE_DIR}/${man}
+	execute_process(COMMAND ${GZIP_TOOL} -9c ${CMAKE_CURRENT_SOURCE_DIR}/${man}
 						OUTPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/${man}.gz)
 endforeach(man)
 
