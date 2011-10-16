@@ -690,12 +690,6 @@ static void _cairo_dock_remove_item (GtkMenuItem *pMenuItem, GtkWidget *pTreeVie
 		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
 		|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))  // launcher/separator/sub-dock
 	{
-		if (pIcon->pSubDock != NULL)  // on bazarde le sous-dock.
-		{
-			cairo_dock_destroy_dock (pIcon->pSubDock, (CAIRO_DOCK_IS_APPLI (pIcon) && pIcon->cClass != NULL ? pIcon->cClass : pIcon->cName));
-			pIcon->pSubDock = NULL;
-		}
-		
 		cairo_dock_trigger_icon_removal_from_dock (pIcon);
 	}
 	else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet
