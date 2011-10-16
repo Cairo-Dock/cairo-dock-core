@@ -64,7 +64,7 @@
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-emblem.h"
+///#include "cairo-dock-emblem.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-dock-facility.h"
 

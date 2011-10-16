@@ -59,7 +59,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-emblem.h"
+///#include "cairo-dock-emblem.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic

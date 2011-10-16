@@ -68,7 +68,7 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-emblem.h"
+///#include "cairo-dock-emblem.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-factory.h"

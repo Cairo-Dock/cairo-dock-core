@@ -56,7 +56,7 @@
 #include <gldit/cairo-dock-opengl-font.h>
 #include <gldit/cairo-dock-draw-opengl.h>
 #include <gldit/cairo-dock-draw.h>
-#include <gldit/cairo-dock-emblem.h>
+///#include <gldit/cairo-dock-emblem.h>
 #include <gldit/cairo-dock-overlay.h>
 #include <gldit/cairo-dock-dock-facility.h>
 #include <gldit/cairo-dock-animations.h>
