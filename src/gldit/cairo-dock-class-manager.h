@@ -207,6 +207,8 @@ void cairo_dock_set_class_order (Icon *pIcon);
 
 const gchar *cairo_dock_get_class_command (const gchar *cClass);
 
+const gchar *cairo_dock_get_class_name (const gchar *cClass);
+
 const gchar **cairo_dock_get_class_mimetypes (const gchar *cClass);
 
 const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass);

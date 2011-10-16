@@ -91,6 +91,11 @@ static void _cairo_dock_set_icon_size (CairoContainer *pDock, Icon *icon)
 		if (icon->fHeight == 0)
 			icon->fHeight = myIconsParam.iIconHeight;
 	}
+	else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+	{
+		icon->fWidth = myIconsParam.iSeparatorWidth;
+		icon->fHeight = myIconsParam.iSeparatorHeight;
+	}
 	else
 	{
 		icon->fWidth = myIconsParam.iIconWidth;

@@ -161,6 +161,15 @@ void cairo_dock_load_image_buffer_from_surface (CairoDockImageBuffer *pImage, ca
 		pImage->iTexture = cairo_dock_create_texture_from_surface (pImage->pSurface);
 }
 
+void cairo_dock_load_image_buffer_from_texture (CairoDockImageBuffer *pImage, GLuint iTexture)
+{
+	pImage->iTexture = iTexture;
+	pImage->iWidth = 1.;
+	pImage->iHeight = 1.;
+	pImage->fZoomX = 1.;
+	pImage->fZoomY = 1.;
+}
+
 CairoDockImageBuffer *cairo_dock_create_image_buffer (const gchar *cImageFile, int iWidth, int iHeight, CairoDockLoadImageModifier iLoadModifier)
 {
 	CairoDockImageBuffer *pImage = g_new0 (CairoDockImageBuffer, 1);

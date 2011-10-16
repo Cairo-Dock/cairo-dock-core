@@ -327,7 +327,8 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Create and add the default sub-menu of an applet to the main menu. This sub-menu is named according to the name of the applet, and is represented by the default icon of the applet.
 *@return the sub-menu, newly created and attached to the main menu.
 */
-#define CD_APPLET_CREATE_MY_SUB_MENU(...) (myDocksParam.bLockAll ? CD_APPLET_MY_MENU : CD_APPLET_ADD_SUB_MENU_WITH_IMAGE (myApplet->pModule->pVisitCard->cTitle, CD_APPLET_MY_MENU, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE))
+///#define CD_APPLET_CREATE_MY_SUB_MENU(...) (myDocksParam.bLockAll ? CD_APPLET_MY_MENU : CD_APPLET_ADD_SUB_MENU_WITH_IMAGE (myApplet->pModule->pVisitCard->cTitle, CD_APPLET_MY_MENU, MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE))
+#define CD_APPLET_CREATE_MY_SUB_MENU(...) CD_APPLET_MY_MENU
 
 /** Create and add an entry to a menu, with an icon.
 *@param cLabel name of the entry.
@@ -371,7 +372,8 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Create and add an entry to a menu for the 'about' function.
 *@param pMenu menu to add the entry to.
 */
-#define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("Applet's handbook"), GTK_STOCK_ABOUT, cairo_dock_pop_up_about_applet, pMenu)
+///#define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) CD_APPLET_ADD_IN_MENU_WITH_STOCK (_("Applet's handbook"), GTK_STOCK_ABOUT, cairo_dock_pop_up_about_applet, pMenu)
+#define CD_APPLET_ADD_ABOUT_IN_MENU(pMenu) 
 
 /** Pop-up a menu on the applet's icon.
 *@param pMenu menu to show
@@ -663,12 +665,19 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
  *@param iPosition position where to display the overlay
  *@return TRUE if the overlay has been successfuly added.
  */
-#define CD_APPLET_ADD_OVERLAY(cImageFile, iPosition) cairo_dock_add_overlay_from_image (myIcon, cImageFile, iPosition)
+#define CD_APPLET_ADD_OVERLAY_ON_MY_ICON(cImageFile, iPosition) cairo_dock_add_overlay_from_image (myIcon, cImageFile, iPosition)
+
+/** Print an overlay from an image on the applet's icon (it can't be removed without erasing the icon).
+ *@param cImageFile an image (if it's not a path, it is searched amongst the current theme's images)
+ *@param iPosition position where to display the overlay
+ *@return TRUE if the overlay has been successfuly added.
+ */
+#define CD_APPLET_PRINT_OVERLAY_ON_MY_ICON(cImageFile, iPosition) cairo_dock_print_overlay_on_icon (myIcon, myContainer, cImageFile, iPosition)
 
 /** Remove an overlay the applet's icon, given its position (there is only one overlay at a given position).
  *@param iPosition position of the overlay
  */
-#define CD_APPLET_REMOVE_OVERLAY(iPosition) cairo_dock_remove_overlay_at_position (iPosition)
+#define CD_APPLET_REMOVE_OVERLAY_ON_MY_ICON(iPosition) cairo_dock_remove_overlay_at_position (myIcon, iPosition)
 
 
 /** Make an emblem from an image. If the image is given by its sole name, it is looked up inside the root theme folder. Free it with cairo_dock_free_emblem.
@@ -681,12 +690,6 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param pEmblem an emblem.
 */
 #define CD_APPLET_DRAW_EMBLEM_ON_MY_ICON(pEmblem) cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer)
-
-#define CD_APPLET_SET_EMBLEM_ON_MY_ICON(cImageFile, iPosition) do {\
-	CairoEmblem *pEmblem = cairo_dock_make_emblem (cImageFile, myIcon);\
-	cairo_dock_set_emblem_position (pEmblem, iPosition);\
-	cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer);\
-	cairo_dock_free_emblem (pEmblem); } while (0)
 
 
 /** Add a Data Renderer the applet's icon.

@@ -90,8 +90,13 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio);
  *@param pContainer container of the icon
  *@param cImageFile an image (if it's not a path, it is searched amongst the current theme's images)
  *@param iPosition position where to display the overlay
+ *@return TRUE if the overlay has been successfuly printed.
  */
-void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, const gchar *cImageFile, CairoOverlayPosition iPosition);
+gboolean cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, const gchar *cImageFile, CairoOverlayPosition iPosition);
+
+void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, CairoContainer *pContainer, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition);
+
+void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, CairoContainer *pContainer, GLuint iTexture, CairoOverlayPosition iPosition);
 
 
 G_END_DECLS

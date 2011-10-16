@@ -42,25 +42,13 @@ struct _CairoOverlay
 typedef struct _CairoOverlay CairoOverlay;
 
 
-static void _add_overlay_to_icon (Icon *pIcon, CairoOverlay *pOverlay, CairoOverlayPosition iPosition)
-{
-	pOverlay->iPosition = iPosition;
-	
-	cairo_dock_remove_overlay_at_position (pIcon, iPosition);
-	
-	pIcon->pOverlays = g_list_prepend (pIcon->pOverlays, pOverlay);
-}
+  /////////////////////
+ /// CREATE / FREE ///
+/////////////////////
 
-static void _free_overlay (CairoOverlay *pOverlay)
-{
-	cairo_dock_unload_image_buffer (&pOverlay->image);
-	g_free (pOverlay);
-}
-
-gboolean cairo_dock_add_overlay_from_image (Icon *pIcon, const gchar *cImageFile, CairoOverlayPosition iPosition)
+static CairoOverlay *cairo_dock_create_overlay_from_image (Icon *pIcon, const gchar *cImageFile)
 {
 	CairoOverlay *pOverlay = g_new0 (CairoOverlay, 1);
-	cd_debug ("%s (%s)", __func__, cImageFile);
 	
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
@@ -68,18 +56,79 @@ gboolean cairo_dock_add_overlay_from_image (Icon *pIcon, const gchar *cImageFile
 	if (pOverlay->image.pSurface == NULL)
 	{
 		g_free (pOverlay);
-		return FALSE;
+		return NULL;
 	}
+	return pOverlay;
+}
+
+static CairoOverlay *cairo_dock_create_overlay_from_surface (Icon *pIcon, cairo_surface_t *pSurface, int iWidth, int iHeight)
+{
+	CairoOverlay *pOverlay = g_new0 (CairoOverlay, 1);
+	
+	int w, h;
+	cairo_dock_get_icon_extent (pIcon, &w, &h);
+	cairo_dock_load_image_buffer_from_surface (&pOverlay->image, pSurface, iWidth > 0 ? iWidth : w, iHeight > 0 ? iHeight : h);
+	
+	return pOverlay;
+}
+
+static CairoOverlay *cairo_dock_create_overlay_from_texture (Icon *pIcon, GLuint iTexture)
+{
+	CairoOverlay *pOverlay = g_new0 (CairoOverlay, 1);
+	
+	cairo_dock_load_image_buffer_from_texture (&pOverlay->image, iTexture);
+	
+	return pOverlay;
+}
+
+static void _free_overlay (CairoOverlay *pOverlay)
+{
+	if (!pOverlay)
+		return;
+	cairo_dock_unload_image_buffer (&pOverlay->image);
+	g_free (pOverlay);
+}
+
+
+  ////////////////////
+ /// ADD / REMOVE ///
+////////////////////
+
+static void _add_overlay_to_icon (Icon *pIcon, CairoOverlay *pOverlay, CairoOverlayPosition iPosition)
+{
+	if (! pOverlay)
+		return;
+	
+	pOverlay->iPosition = iPosition;
+	
+	cairo_dock_remove_overlay_at_position (pIcon, iPosition);
+	
+	pIcon->pOverlays = g_list_prepend (pIcon->pOverlays, pOverlay);
+}
+
+gboolean cairo_dock_add_overlay_from_image (Icon *pIcon, const gchar *cImageFile, CairoOverlayPosition iPosition)
+{
+	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_image (pIcon, cImageFile);
+	if (! pOverlay)
+		return FALSE;
 	
 	_add_overlay_to_icon (pIcon, pOverlay, iPosition);
+	
 	return TRUE;
 }
 
 void cairo_dock_add_overlay_from_surface (Icon *pIcon, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition)
 {
+	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_surface (pIcon, pSurface, iWidth, iHeight);
+	
+	_add_overlay_to_icon (pIcon, pOverlay, iPosition);
+}
+
+void cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture, CairoOverlayPosition iPosition)
+{
 	CairoOverlay *pOverlay = g_new0 (CairoOverlay, 1);
 	
-	cairo_dock_load_image_buffer_from_surface (&pOverlay->image, pSurface, iWidth, iHeight);
+	cairo_dock_load_image_buffer_from_texture (&pOverlay->image, iTexture);
 	
 	_add_overlay_to_icon (pIcon, pOverlay, iPosition);
 }
@@ -100,6 +149,7 @@ void cairo_dock_remove_overlay_at_position (Icon *pIcon, CairoOverlayPosition iP
 	}
 }
 
+
 CairoDockImageBuffer *cairo_dock_get_overlay_buffer_at_position (Icon *pIcon, CairoOverlayPosition iPosition)
 {
 	GList* ov;
@@ -115,6 +165,7 @@ CairoDockImageBuffer *cairo_dock_get_overlay_buffer_at_position (Icon *pIcon, Ca
 	return NULL;
 }
 
+
 void cairo_dock_destroy_icon_overlays (Icon *pIcon)
 {
 	g_list_foreach (pIcon->pOverlays, (GFunc)_free_overlay, NULL);
@@ -122,6 +173,10 @@ void cairo_dock_destroy_icon_overlays (Icon *pIcon)
 	pIcon->pOverlays = NULL;
 }
 
+
+  ////////////
+ /// DRAW ///
+////////////
 
 static void _get_overlay_position (CairoOverlay *pOverlay, int w, int h, int *x, int *y)  // from the center of the icon.
 {
@@ -258,9 +313,15 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio)
 }
 
 
+  /////////////
+ /// PRINT ///
+/////////////
 
 static void _print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoOverlay *pOverlay, CairoOverlayPosition iPosition)
 {
+	if (! pOverlay)
+		return;
+	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	
@@ -268,6 +329,7 @@ static void _print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, Cai
 	pOverlay->iPosition = iPosition;
 	_get_overlay_position (pOverlay, w, h, &x, &y);
 	
+	g_print (" overlay on %s: %d,%d\n", pIcon->cName, x, y);
 	if (pIcon->iIconTexture != 0 && pOverlay->image.iTexture != 0)  // dessin opengl : on dessine sur la texture de l'icone avec le mecanisme habituel.
 	{
 		if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 1))  // 1 = keep current drawing
@@ -303,15 +365,34 @@ static void _print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, Cai
 	}
 }
 
-void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, const gchar *cImageFile, CairoOverlayPosition iPosition)
+gboolean cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, const gchar *cImageFile, CairoOverlayPosition iPosition)
 {
-	CairoOverlay *pOverlay = g_new0 (CairoOverlay, 1);
-	
-	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
-	cairo_dock_load_image_buffer (&pOverlay->image, cImageFile, iWidth * f, iHeight * f, 0);
+	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_image (pIcon, cImageFile);
+	if (! pOverlay)
+		return FALSE;
 	
 	_print_overlay_on_icon (pIcon, pContainer, pOverlay, iPosition);
 	
+	_free_overlay (pOverlay);
+	return TRUE;
+}
+
+void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, CairoContainer *pContainer, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition)
+{
+	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_surface (pIcon, pSurface, iWidth, iHeight);
+	
+	_print_overlay_on_icon (pIcon, pContainer, pOverlay, iPosition);
+	
+	pOverlay->image.pSurface = NULL;  // we don't want to free the surface.
+	_free_overlay (pOverlay);
+}
+
+void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, CairoContainer *pContainer, GLuint iTexture, CairoOverlayPosition iPosition)
+{
+	CairoOverlay *pOverlay = g_new0 (CairoOverlay, 1);
+	
+	_print_overlay_on_icon (pIcon, pContainer, pOverlay, iPosition);
+	
+	pOverlay->image.iTexture = 0;  // we don't want to free the texture.
 	_free_overlay (pOverlay);
 }

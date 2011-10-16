@@ -1229,6 +1229,13 @@ const gchar *cairo_dock_get_class_command (const gchar *cClass)
 	return pClassAppli->cCommand;
 }
 
+const gchar *cairo_dock_get_class_name (const gchar *cClass)
+{
+	g_return_val_if_fail (cClass != NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _get_class_appli_with_attributes (cClass);
+	return pClassAppli->cName;
+}
+
 const gchar **cairo_dock_get_class_mimetypes (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, NULL);

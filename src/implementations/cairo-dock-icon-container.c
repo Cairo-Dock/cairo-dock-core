@@ -36,7 +36,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-icon-manager.h"
-#include "cairo-dock-emblem.h"
+///#include "cairo-dock-emblem.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-icon-container.h"
@@ -57,7 +57,7 @@ extern gboolean g_bUseOpenGL;
 static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en embleme.
-	CairoEmblem e;
+	/**CairoEmblem e;
 	memset (&e, 0, sizeof (CairoEmblem));
 	e.fScale = .5;
 	int i;
@@ -78,13 +78,37 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoContai
 		cairo_save (pCairoContext);
 		_cairo_dock_apply_emblem_surface (&e, w, h, pCairoContext);
 		cairo_restore (pCairoContext);
+	}
+	*/
+	int wi, hi;
+	int i;
+	Icon *icon;
+	GList *ic;
+	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next)
+	{
+		icon = ic->data;
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->pIconBuffer == NULL)
+			continue;
+		
+		cairo_dock_get_icon_extent (icon, &wi, &hi);
+		
+		cairo_save (pCairoContext);
+		cairo_translate (pCairoContext, (i&1) * w/2, (i/2) * h/2);
+		
+		cairo_scale (pCairoContext, .5 * w / wi, .5 * h / hi);
+		cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0, 0);
+		cairo_paint (pCairoContext);
+		
+		cairo_restore (pCairoContext);
+		
+		i ++;
 	}
 }
 
 static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, CairoContainer *pContainer, int w, int h)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en embleme.
-	CairoEmblem e;
+	/**CairoEmblem e;
 	memset (&e, 0, sizeof (CairoEmblem));
 	e.fScale = .5;
 	int i;
@@ -102,12 +126,67 @@ static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, Cair
 		e.iTexture = icon->iIconTexture;
 		_cairo_dock_apply_emblem_texture (&e, w, h);
 	}
+	*/
+	int i;
+	Icon *icon;
+	GList *ic;
+	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next)
+	{
+		icon = ic->data;
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->iIconTexture == 0)
+			continue;
+		
+		glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
+		_cairo_dock_apply_current_texture_at_size_with_offset (w/2, h/2, ((i&1)-.5)*w/2, (.5-(i/2))*h/2);
+		
+		i ++;
+	}
 }
 
 static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en pile.
-	CairoEmblem e;
+	int wi, hi;
+	int i, k=0;
+	Icon *icon;
+	GList *ic;
+	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next)
+	{
+		icon = ic->data;
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || !icon->pIconBuffer)
+			continue;
+		
+		switch (i)
+		{
+			case 0:
+				k = 0;
+			break;
+			case 1:
+				if (ic->next == NULL)
+					k = 2;
+				else
+					k = 1;
+			break;
+			case 2:
+				k = 2;
+			break;
+			default : break;
+		}
+		
+		cairo_dock_get_icon_extent (icon, &wi, &hi);
+		
+		cairo_save (pCairoContext);
+		cairo_translate (pCairoContext, k * w / 10, k * h / 10);
+		
+		cairo_scale (pCairoContext, .8 * w / wi, .8 * h / hi);
+		cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0, 0);
+		cairo_paint (pCairoContext);
+		
+		cairo_restore (pCairoContext);
+		
+		i ++;
+	}
+	/**CairoEmblem e;
 	memset (&e, 0, sizeof (CairoEmblem));
 	e.fScale = .8;
 	int i;
@@ -144,13 +223,13 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoContain
 		cairo_save (pCairoContext);
 		_cairo_dock_apply_emblem_surface (&e, w, h, pCairoContext);
 		cairo_restore (pCairoContext);
-	}
+	}*/
 }
 
 static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, CairoContainer *pContainer, int w, int h)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en pile.
-	CairoEmblem e;
+	/**CairoEmblem e;
 	memset (&e, 0, sizeof (CairoEmblem));
 	e.fScale = .8;
 	int i;
@@ -182,6 +261,37 @@ static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, Cairo
 		}
 		e.iTexture = icon->iIconTexture;
 		_cairo_dock_apply_emblem_texture (&e, w, h);
+	}*/
+	int i,k=0;
+	Icon *icon;
+	GList *ic;
+	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next)
+	{
+		icon = ic->data;
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->iIconTexture == 0)
+			continue;
+		
+		switch (i)
+		{
+			case 0:
+				k = 1;
+			break;
+			case 1:
+				if (ic->next == NULL)
+					k = -1;
+				else
+					k = 0;
+			break;
+			case 2:
+				k = -1;
+			break;
+			default : break;
+		}
+		
+		glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
+		_cairo_dock_apply_current_texture_at_size_with_offset (w*.8, h*.8, -k*w/10, k*h/10);
+		
+		i ++;
 	}
 }
 

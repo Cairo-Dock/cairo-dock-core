@@ -729,7 +729,7 @@ static void _cairo_dock_pick_a_file (GtkButton *button, gpointer *data)
 	const gchar *cFilePath = gtk_entry_get_text (pEntry);
 	gchar *cDirectoryPath = (cFilePath == NULL || *cFilePath != '/' ? g_strdup (g_cCurrentThemePath) : g_path_get_dirname (cFilePath));
 	//g_print (">>> on se place sur '%s'\n", cDirectoryPath);
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), cDirectoryPath);  // TODO? To change? => images on the home ($ xdg-user-dir PICTURES), /usr/share/icons
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), cDirectoryPath);  // set the current folder to the current value in conf.
 	g_free (cDirectoryPath);
 	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), FALSE);
 

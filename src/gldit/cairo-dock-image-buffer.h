@@ -68,6 +68,7 @@ CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabe
 gchar *cairo_dock_search_image_s_path (const gchar *cImageFile);
 #define cairo_dock_generate_file_path cairo_dock_search_image_s_path
 
+
 /** Load an image into an ImageBuffer with a given transparency. If the image is given by its sole name, it is taken in the root folder of the current theme.
 *@param pImage an ImageBuffer.
 *@param cImageFile name of a file
@@ -92,6 +93,9 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 *@param iHeight height of the surface
 */
 void cairo_dock_load_image_buffer_from_surface (CairoDockImageBuffer *pImage, cairo_surface_t *pSurface, int iWidth, int iHeight);
+
+void cairo_dock_load_image_buffer_from_texture (CairoDockImageBuffer *pImage, GLuint iTexture);
+
 /** Create and load an image into an ImageBuffer. If the image is given by its sole name, it is taken in the root folder of the current theme.
 *@param cImageFile name of a file
 *@param iWidth width it should be loaded.
@@ -101,6 +105,7 @@ void cairo_dock_load_image_buffer_from_surface (CairoDockImageBuffer *pImage, ca
 */
 CairoDockImageBuffer *cairo_dock_create_image_buffer (const gchar *cImageFile, int iWidth, int iHeight, CairoDockLoadImageModifier iLoadModifier);
 
+
 /** Reset an ImageBuffer's ressources. It can be used to load another image then.
 *@param pImage an ImageBuffer.
 */
@@ -109,6 +114,15 @@ void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
 *@param pImage an ImageBuffer.
 */
 void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
+
+
+#define cairo_dock_apply_image_buffer_surface(pImage, pCairoContext) do { \
+	cairo_set_source_surface (pCairoContext, pImage->pSurface, 0., 0.); \
+	cairo_paint (pCairoContext); } while (0)
+
+#define cairo_dock_apply_image_buffer_texture(pImage) do { \
+	glBindTexture (GL_TEXTURE_2D, pImage->iTexture); \
+	_cairo_dock_apply_current_texture_at_size (pImage->iWidth, pImage->iHeight); } while (0)
 
 
 G_END_DECLS
