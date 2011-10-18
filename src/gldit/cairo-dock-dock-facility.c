@@ -94,7 +94,10 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	int iPrevMaxDockHeight = pDock->iMaxDockHeight;
 	int iPrevMaxDockWidth = pDock->iMaxDockWidth;
 	
-	if (pDock->container.fRatio != 0/* && pDock->container.fRatio != 1*/)  // on remet leur taille reelle aux icones, sinon le calcul de max_dock_size sera biaise.
+	//\__________________________ First compute the dock's size.
+	
+	// set the icons' size back to their default
+	if (pDock->container.fRatio != 0)  // on remet leur taille reelle aux icones, sinon le calcul de max_dock_size sera biaise.
 	{
 		GList *ic;
 		Icon *icon;
@@ -114,6 +117,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		pDock->container.fRatio = 1.;
 	}
 	
+	// compute the size of the dock.
 	pDock->iActiveWidth = pDock->iActiveHeight = 0;
 	pDock->pRenderer->compute_size (pDock);
 	if (pDock->iActiveWidth == 0)
@@ -121,9 +125,10 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	if (pDock->iActiveHeight == 0)
 		pDock->iActiveHeight = pDock->iMaxDockHeight;
 	
+	// in case it's larger than the screen, iterate on the ratio until it fits the screen's width
 	double hmax = pDock->iMaxIconHeight;
 	int iMaxAuthorizedWidth = cairo_dock_get_max_authorized_dock_width (pDock);
-	int n = 0;
+	int n = 0;  // counter to ensure we'll not loop forever.
 	do
 	{
 		double fPrevRatio = pDock->container.fRatio;
@@ -178,21 +183,28 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	pDock->iMaxIconHeight = hmax;
 	//g_print (">>> iMaxIconHeight : %d, ratio : %.2f, fFlatDockWidth : %.2f\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio, pDock->fFlatDockWidth);
 	
+	//\__________________________ Then take the necessary actions due to the new size.
+	
+	// calculate the position of icons in the new frame.
 	pDock->pRenderer->calculate_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
+	
+	// update the dock's shape.
+	cairo_dock_update_input_shape (pDock);  // done after the icons' position is known.
 	
 	pDock->bWMIconsNeedUpdate = TRUE;
 	///cairo_dock_trigger_set_WM_icons_geometry (pDock);
 	
-	cairo_dock_update_input_shape (pDock);
-	
+	// if the size has changed, move the dock to keep it centered.
 	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget) && (iPrevMaxDockHeight != pDock->iMaxDockHeight || iPrevMaxDockWidth != pDock->iMaxDockWidth))
 	{
 		//g_print ("*******%s (%dx%d -> %dx%d)\n", __func__, iPrevMaxDockWidth, iPrevMaxDockHeight, pDock->iMaxDockWidth, pDock->iMaxDockHeight);
 		cairo_dock_move_resize_dock (pDock);
 	}
 	
+	// reload its background.
 	cairo_dock_trigger_load_dock_background (pDock);
 	
+	// update the space reserved on the screen.
 	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE && iPrevMaxDockHeight != pDock->iMaxDockHeight)
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 }
@@ -469,6 +481,9 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	
 	if (pDock->iActiveWidth != pDock->iMaxDockWidth || pDock->iActiveHeight != pDock->iMaxDockHeight)  // else all the dock is active when the mouse is inside, so we can just set a NULL shape.
 		pDock->pActiveShapeBitmap = _cairo_dock_create_input_shape (pDock, pDock->iActiveWidth, pDock->iActiveHeight);
+	
+	if (pDock->pRenderer->set_input_shape != NULL)
+		pDock->pRenderer->set_input_shape (pDock);
 }
 
 

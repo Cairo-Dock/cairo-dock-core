@@ -63,6 +63,7 @@ typedef void (*CairoDockRenderOptimizedFunc) (cairo_t *pCairoContext, CairoDock 
 typedef void (*CairoDockSetSubDockPositionFunc) (Icon *pPointedIcon, CairoDock *pParentDock);
 typedef void (*CairoDockGLRenderFunc) (CairoDock *pDock);
 typedef void (*CairoDockRenderFreeDataFunc) (CairoDock *pDock);
+typedef void (*CairoDockSetInputShapeFunc) (CairoDock *pDock);
 
 /// Dock's renderer, also known as 'view'.
 struct _CairoDockRenderer {
@@ -80,6 +81,8 @@ struct _CairoDockRenderer {
 	CairoDockSetSubDockPositionFunc set_subdock_position;
 	/// function called when the renderer is unset from the dock.
 	CairoDockRenderFreeDataFunc free_data;
+	/// function called just after the dock is resized, to set its input shape
+	CairoDockSetInputShapeFunc set_input_shape;
 	/// TRUE if the view uses the OpenGL stencil buffer.
 	gboolean bUseStencil;
 	/// TRUE is the view uses reflects.
