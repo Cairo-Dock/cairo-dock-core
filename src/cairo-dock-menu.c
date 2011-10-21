@@ -365,7 +365,8 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 		cIconFile = g_strdup (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath);
 	else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
-		cIconFile = cairo_dock_search_image_s_path (myIconsParam.cSeparatorImage);
+		if (myIconsParam.cSeparatorImage)
+			cIconFile = cairo_dock_search_image_s_path (myIconsParam.cSeparatorImage);
 	}
 	else if (icon->cFileName != NULL)
 	{
@@ -763,7 +764,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 	// global lock
 	if (! g_bLocked)
 	{
-		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (myDocksParam.bLockAll ? _("Unlock everything") : _("Lock everything"),
+		/**pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (myDocksParam.bLockAll ? _("Unlock everything") : _("Lock everything"),
 			CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lock-icons.svg",
 			G_CALLBACK (_cairo_dock_lock_all),
 			pSubMenu,
@@ -775,7 +776,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		else
 		{
 			gtk_widget_set_tooltip_text (pMenuItem, _("This will prevent any modification of the current theme, and hide all the unnecessary entries in the menus."));
-		}
+		}*/
 	}
 	
 	// quick-hide
