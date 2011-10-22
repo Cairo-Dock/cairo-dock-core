@@ -601,7 +601,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				floor (fOffsetX),
-				0.);
+				-icon->iTextHeight);
 		}
 		else
 		{

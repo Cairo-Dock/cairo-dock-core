@@ -398,7 +398,7 @@ typedef struct _CairoDockWMBackend CairoDockWMBackend;
 
 typedef struct _CairoDockImageBuffer CairoDockImageBuffer;
 
-typedef struct _CairoEmblem CairoEmblem;
+typedef struct _CairoOverlay CairoOverlay;
 
 typedef struct _GldiManager GldiManager;
 
