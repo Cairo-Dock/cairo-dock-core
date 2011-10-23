@@ -681,6 +681,15 @@ static void _cairo_dock_add_module_instance (GtkMenuItem *pMenuItem, gpointer *d
 	cairo_dock_add_module_instance (icon->pModuleInstance->pModule);
 }
 
+static void _cairo_dock_set_sensitive_quit_menu (GtkWidget *pMenuItem, GdkEventKey *pKey, GtkWidget *pQuitEntry)
+{
+	// pMenuItem not used because we want to only modify one entry
+	if (pKey->type == GDK_KEY_PRESS && (pKey->state & GDK_SHIFT_MASK) == 0) // pressed
+		gtk_widget_set_sensitive (pQuitEntry, TRUE); // unlocked
+	else if (pKey->type == GDK_KEY_RELEASE && (pKey->state & GDK_SHIFT_MASK) == 1) // released
+		gtk_widget_set_sensitive (pQuitEntry, FALSE); // locked)
+}
+
 
   /////////////////////////////////////////
  /// BUILD CONTAINER MENU NOTIFICATION ///
@@ -827,15 +836,24 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		G_CALLBACK (_cairo_dock_about),
 		pSubMenu,
 		pContainer);
-	
+
 	// quit
 	if (! g_bLocked)
 	{
-		cairo_dock_add_in_menu_with_stock_and_data (_("Quit"),
+		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Quit"),
 			GTK_STOCK_QUIT,
 			G_CALLBACK (_cairo_dock_quit),
 			pSubMenu,
 			pContainer);
+		// if we're using a Cairo-Dock session and we quit the dock we have... nothing to relaunch it!
+		if (g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "cairo-dock") == 0)
+		{
+			gtk_widget_set_sensitive (pMenuItem, FALSE); // locked
+			gtk_widget_set_tooltip_text (pMenuItem, _("You're using a Cairo-Dock Session!\nIt's not advised to quit the dock but you can press Shift to unlock this menu entry."));
+			// signal to unlock the entry (signal monitored only in the submenu)
+			g_signal_connect (pSubMenu, "key-press-event", G_CALLBACK (_cairo_dock_set_sensitive_quit_menu), pMenuItem);
+			g_signal_connect (pSubMenu, "key-release-event", G_CALLBACK (_cairo_dock_set_sensitive_quit_menu), pMenuItem);
+		}
 	}
 	
 	//\_________________________ Second item is the Icon sub-menu.
