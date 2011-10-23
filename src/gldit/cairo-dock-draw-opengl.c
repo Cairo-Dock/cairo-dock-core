@@ -586,7 +586,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
 	double pHiddenBgColor[4];
-	double r = 3;
+	const double r = 3;
 	double w, h;
 	_cairo_dock_set_blend_alpha ();
 	do

@@ -973,7 +973,8 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
 	double pHiddenBgColor[4];
-	double r = 3;
+	const double r = 3;
+	double w, h;
 	do
 	{
 		icon = ic->data;
@@ -986,15 +987,17 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 			{
 				cairo_save (pCairoContext);
 				cairo_set_source_rgba (pCairoContext, icon->pHiddenBgColor[0], icon->pHiddenBgColor[1], icon->pHiddenBgColor[2], icon->pHiddenBgColor[3] * pDock->fPostHideOffset);
+				w = icon->fWidth * icon->fScale;
+				h = icon->fHeight * icon->fScale;
 				if (pDock->container.bIsHorizontal)
 				{
 					cairo_translate (pCairoContext, icon->fDrawX, icon->fDrawY);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, icon->fWidth - 2*r, icon->fHeight);
+					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, w - 2*r, h);
 				}
 				else
 				{
 					cairo_translate (pCairoContext, icon->fDrawY, icon->fDrawX);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, icon->fHeight - 2*r, icon->fWidth);
+					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r, w);
 				}
 				cairo_fill (pCairoContext);
 				cairo_restore (pCairoContext);
