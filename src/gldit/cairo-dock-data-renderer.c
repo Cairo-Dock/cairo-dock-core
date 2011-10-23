@@ -499,6 +499,9 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 			CAIRO_DOCK_RUN_AFTER, NULL);  // pour l'affichage fluide.
 	}
 	
+	if (pRenderer->bCanRenderValueAsText && pRenderer->bWriteValues)
+		cairo_dock_set_quick_info (pIcon, pContainer, NULL);
+	
 	//\___________________ On le charge.
 	pRenderer->interface.load (pRenderer, pContainer, pAttribute);
 	
@@ -575,8 +578,6 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 		cairo_dock_set_quick_info (pIcon, pContainer, cBuffer);
 		g_free (cBuffer);
 	}
-	else
-		cairo_dock_set_quick_info (pIcon, pContainer, NULL);
 	
 	cairo_dock_redraw_icon (pIcon, pContainer);
 }
@@ -639,6 +640,9 @@ void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
 	
 	cairo_dock_free_data_renderer (pRenderer);
 	cairo_dock_set_data_renderer_on_icon (pIcon, NULL);
+	
+	if (! pRenderer->bCanRenderValueAsText && pRenderer->bWriteValues)
+		cairo_dock_set_quick_info (pIcon, NULL, NULL);
 }
 
 
