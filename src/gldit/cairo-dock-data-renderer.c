@@ -635,14 +635,16 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	
-	cairo_dock_remove_notification_func_on_object (pIcon, NOTIFICATION_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
-	
-	cairo_dock_free_data_renderer (pRenderer);
-	cairo_dock_set_data_renderer_on_icon (pIcon, NULL);
-	
-	if (! pRenderer->bCanRenderValueAsText && pRenderer->bWriteValues)
-		cairo_dock_set_quick_info (pIcon, NULL, NULL);
+	if (pRenderer != NULL)
+	{
+		cairo_dock_remove_notification_func_on_object (pIcon, NOTIFICATION_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
+		
+		if (! pRenderer->bCanRenderValueAsText && pRenderer->bWriteValues)
+			cairo_dock_set_quick_info (pIcon, NULL, NULL);
+		
+		cairo_dock_free_data_renderer (pRenderer);
+		cairo_dock_set_data_renderer_on_icon (pIcon, NULL);
+	}
 }
 
 
