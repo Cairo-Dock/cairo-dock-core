@@ -188,7 +188,6 @@ static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 }
 gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer, guint iButtonState)
 {
-	g_print ("+ %s (%s, %d)\n", __func__, icon ? icon->cCommand : "no icon", CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon));
 	if (icon == NULL || ! CAIRO_DOCK_IS_DOCK (pContainer))
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
