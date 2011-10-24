@@ -598,10 +598,15 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 				fOffsetX = pDock->container.iHeight - icon->fDrawY - icon->iTextWidth;
 			if (icon->fDrawY + fOffsetX < 0)
 				fOffsetX = - icon->fDrawY;
+			double y = -icon->iTextHeight;
+			if (icon->fDrawX + y < 0)  // text is out from the top of the screen
+			{
+				y = -icon->fDrawX;
+			}
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				floor (fOffsetX),
-				-icon->iTextHeight);
+				floor (y));
 		}
 		else
 		{
