@@ -605,8 +605,8 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			}
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				floor (fOffsetX),
-				floor (y));
+				floor (fOffsetX) - icon->fHeight * icon->fScale - 2*(myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin),
+				floor (y + icon->fWidth * icon->fScale/2 + icon->iTextHeight/2));
 		}
 		else
 		{
