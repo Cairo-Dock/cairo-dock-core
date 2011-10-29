@@ -24,13 +24,14 @@
 G_BEGIN_DECLS
 
 /**
- *@file cairo-dock-overlay.h This class defines Overlays, that are small images superimposed on the icon at a given position. This means that overlays can be added/removed without modifying the icon's surface/texture, and they will remain even if you erase the icon's surface/texture.
- * Only one overlay can exist at a given position. 
+ *@file cairo-dock-overlay.h This class defines Overlays, that are small images superimposed on the icon at a given position.
+ * You can either print the overlay directly on the icon's surface/texture, or add it (i nthis case it is drawn separately, and can be removed without modifying the icon's surface/texture, and will remain even if you erase the icon's surface/texture).
+ * Only one overlay can be added at a given position.
  * 
  * To add an overlay to an icon, use \ref cairo_dock_add_overlay_from_image or \ref cairo_dock_add_overlay_from_surface.
  * To remove an overlay, use \ref cairo_dock_remove_overlay_at_position.
  * If you need to modify an overlay directly, you can get its image buffer with \ref cairo_dock_get_overlay_buffer_at_position.
- * If you're never going to update nor remove an overlay, you can choose to print it directly onto the icon with \ref cairo_dock_print_overlay_on_icon. This can avoid to draw it at each refresh.
+ * If you're never going to update nor remove an overlay, you can choose to print it directly onto the icon with \ref cairo_dock_print_overlay_on_icon_from_image or \ref cairo_dock_print_overlay_on_icon_from_surface, which is slightly optimized.
  */
 
 /// Available position of an overlay on an icon.
@@ -49,8 +50,7 @@ typedef enum {
 
 
 /// Definition of an Icon Overlay.
-struct _CairoOverlay
-{
+struct _CairoOverlay {
 	/// image buffer
 	CairoDockImageBuffer image;
 	/// position on the icon
