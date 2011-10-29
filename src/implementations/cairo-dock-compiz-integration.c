@@ -147,63 +147,6 @@ static gboolean show_widget_layer (void)
 	return bSuccess;
 }
 
-#ifdef OLD_WIDGET_LAYER
-static void _on_got_widget_match_rule (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
-{
-	//g_print ("%s ()\n", __func__);
-	// get the matching rule.
-	GError *error = NULL;
-	gchar *cRule = NULL;
-	dbus_g_proxy_end_call (proxy,
-		call_id,
-		&error,
-		G_TYPE_STRING,
-		&cRule,
-		G_TYPE_INVALID);
-	if (error)
-	{
-		cd_warning ("compiz widget match error: %s", error->message);
-		g_error_free (error);
-		return;
-	}
-	cd_debug ("got rule : %s", cRule);
-	
-	// if our rule is not present yet, add it.
-	if (cRule == NULL || *cRule == '\0' || (g_strstr_len (cRule, -1, "class=Cairo-dock & type=Utility") == NULL && g_strstr_len (cRule, -1, "(class=Cairo-dock) & (type=Utility)") == NULL && g_strstr_len (cRule, -1, "name=cairo-dock & type=Utility") == NULL))
-	{
-		gchar *cNewRule = (cRule == NULL || *cRule == '\0' ?
-			g_strdup ("(class=Cairo-dock & type=Utility)") :
-			g_strdup_printf ("(%s) | (class=Cairo-dock & type=Utility)", cRule));
-		cd_debug ("set rule : %s", cNewRule);
-		
-		dbus_g_proxy_call_no_reply (proxy,
-			"set",
-			G_TYPE_STRING,
-			cNewRule,
-			G_TYPE_INVALID);
-		
-		g_free (cNewRule);
-	}
-	g_free (cRule);
-}
-static gboolean _check_widget_rule (gpointer data)
-{
-	cd_debug ("%s ()", __func__);
-	// get the matching rule.
-	DBusGProxy *pWidgetProxy = cairo_dock_create_new_session_proxy (
-			CD_COMPIZ_BUS,
-			CD_COMPIZ_OBJECT"/widget/screen0/match",
-			CD_COMPIZ_INTERFACE);
-	dbus_g_proxy_begin_call (pWidgetProxy,
-		"get",
-		(DBusGProxyCallNotify) _on_got_widget_match_rule,
-		NULL,
-		NULL,
-		G_TYPE_INVALID);
-	///g_object_unref (pWidgetProxy);
-	return FALSE;
-}
-#endif
 static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
 {
 	cd_debug ("%s ()", __func__);
@@ -264,18 +207,6 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 		g_free (plugins2);  // elements belong to 'plugins' or are const.
 	}
 	g_strfreev (plugins);
-	
-	// now get the matching rule.
-	#ifdef OLD_WIDGET_LAYER
-	if (bFound)  // the plug-in was already active
-	{
-		_check_widget_rule (NULL);
-	}
-	else  // the plug-in was not active yet, let it create its object on the bus.
-	{
-		g_timeout_add_seconds (2, _check_widget_rule, NULL);
-	}
-	#endif
 }
 static gboolean _check_widget_plugin (gpointer data)
 {
@@ -304,10 +235,6 @@ static gboolean set_on_widget_layer (Window Xid, gboolean bOnWidgetLayer)
 	Display *dpy = cairo_dock_get_Xdisplay ();
 	if (bOnWidgetLayer)
 	{
-		// set the window type to "utility"
-		#ifdef OLD_WIDGET_LAYER
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_UTILITY");
-		#endif
 		// the first time, trigger a check to ensure the 'widget' plug-in is operationnal.
 		if (s_bFirst)
 		{
@@ -326,9 +253,6 @@ static gboolean set_on_widget_layer (Window Xid, gboolean bOnWidgetLayer)
 	}
 	else
 	{
-		#ifdef OLD_WIDGET_LAYER
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");
-		#endif
 		XDeleteProperty (dpy,
 			Xid,
 			s_aCompizWidget);
