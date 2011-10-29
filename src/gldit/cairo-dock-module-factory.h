@@ -106,8 +106,10 @@ struct _CairoDockVisitCard {
 	gboolean bStaticDeskletSize;
 	// whether to display the applet's name on the icon's label if it's NULL or not.
 	gboolean bAllowEmptyTitle;
+	// if TRUE and the applet inhibite a class, then appli icons will be placed after the applet icon.
+	gboolean bActAsLauncher;
 	// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
-	char reserved[8];
+	char reserved[4];
 };
 
 /// Definition of the interface of a module.

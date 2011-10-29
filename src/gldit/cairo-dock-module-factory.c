@@ -33,7 +33,6 @@
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
-#include "cairo-dock-applications-manager.h"  // myTaskbarParam.bMixLauncherAppli
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-X-manager.h"  // g_desktopGeometry
 #include "cairo-dock-desklet-manager.h"
@@ -671,7 +670,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			{
 				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
 				cOldDockName = g_strdup (pIcon->cParentDockName);
-				cairo_dock_detach_icon_from_dock_full (pIcon, pCurrentDock, !myTaskbarParam.bMixLauncherAppli);
+				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock);
 			}
 			
 			// on recupere son desklet (cree au besoin).

@@ -164,6 +164,8 @@ CD_APPLET_DEFINE_PROTO \
 
 #define CD_APPLET_ALLOW_EMPTY_TITLE pVisitCard->bAllowEmptyTitle = TRUE;
 
+#define CD_APPLET_ACT_AS_LAUNCHER pVisitCard->bActAsLauncher = TRUE;
+
 /** Fin de la fonction de pre-initialisation de l'applet.
 */
 #define CD_APPLET_DEFINE_END \
@@ -299,7 +301,7 @@ CD_APPLET_ON_BUILD_MENU_PROTO \
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{ \
 		GtkWidget *pMenuItem, *image; \
-		if (pClickedIcon == myIcon) {\
+		if (pClickedIcon == myIcon || (pClickedContainer == CAIRO_CONTAINER (myDesklet) && pClickedIcon == NULL)) {\
 			pMenuItem = gtk_separator_menu_item_new (); \
 			gtk_menu_shell_append(GTK_MENU_SHELL (pAppletMenu), pMenuItem); }
 /** Fin de la fonction de notification de construction du menu. Par defaut elle intercepte la notification si elle l'a recue.
