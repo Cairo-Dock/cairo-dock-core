@@ -586,7 +586,8 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
 	double pHiddenBgColor[4];
-	const double r = 3;
+	const double r = 3; // corner radius of the background
+	const double gap = 3;  // gap to the screen
 	double w, h;
 	_cairo_dock_set_blend_alpha ();
 	do
@@ -596,7 +597,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 		{
 			//g_print ("%s : %d (%d)\n", icon->cName, icon->bIsDemandingAttention, icon->Xid);
 			y = icon->fDrawY;
-			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
+			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale - gap : gap);
 			
 			if (icon->pHiddenBgColor)
 			{

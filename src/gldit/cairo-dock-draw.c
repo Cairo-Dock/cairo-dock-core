@@ -978,7 +978,8 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
 	double pHiddenBgColor[4];
-	const double r = 3;
+	const double r = 3; // corner radius of the background
+	const double gap = 3;  // gap to the screen
 	double w, h;
 	do
 	{
@@ -986,7 +987,7 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 		if (icon->bIsDemandingAttention || icon->bAlwaysVisible)
 		{
 			y = icon->fDrawY;
-			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale : 0.);
+			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale  - gap: gap);
 			
 			if (icon->pHiddenBgColor)
 			{
