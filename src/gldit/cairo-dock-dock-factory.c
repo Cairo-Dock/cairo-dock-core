@@ -410,7 +410,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 			int iSeparatorGroup = cairo_dock_get_icon_order (icon) -
 				(cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pPrevIcon) ? 0 : 1);  // for separators, group = order.
 			double fOrder = (cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pPrevIcon) ? (icon->fOrder + pPrevIcon->fOrder) / 2 : 0);
-			cairo_dock_insert_automatic_separator_in_dock (iSeparatorGroup, fOrder, pNextIcon->cParentDockName, pDock);
+			cairo_dock_insert_automatic_separator_in_dock (iSeparatorGroup, fOrder, pPrevIcon->cParentDockName, pDock);
 		}
 	}
 	
