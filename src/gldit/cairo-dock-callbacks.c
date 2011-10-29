@@ -557,8 +557,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			s_pIconClicked->fDrawX = pDock->container.iMouseX  - s_pIconClicked->fWidth * s_pIconClicked->fScale / 2;
 			s_pIconClicked->fDrawY = pDock->container.iMouseY - s_pIconClicked->fHeight * s_pIconClicked->fScale / 2 ;
 			s_pIconClicked->fAlpha = 0.75;
-			if (myIconsParam.fAmplitude == 0)
-				gtk_widget_queue_draw (pWidget);
 		}
 
 		//gdk_event_request_motions (pMotion);  // ce sera pour GDK 2.12.
@@ -587,7 +585,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	{
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 		
-		if (pPointedIcon != NULL && s_pIconClicked != NULL && cairo_dock_get_icon_order (s_pIconClicked) == cairo_dock_get_icon_order (pPointedIcon) && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)
+		if (pPointedIcon != NULL && s_pIconClicked != NULL && s_pIconClicked->iGroup == pPointedIcon->iGroup && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)
 		{
 			_cairo_dock_make_icon_glide (pPointedIcon, s_pIconClicked, pDock);
 			bStartAnimation = TRUE;
@@ -1084,7 +1082,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						pDock->iAvoidingMouseIconType = -1;
 						cairo_dock_stop_icon_glide (pDock);
 					}
-					if (icon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && icon == s_pIconClicked)
+					if (icon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && icon == s_pIconClicked)  // released the button on the clicked icon => trigger the CLICK signal.
 					{
 						s_pIconClicked = NULL;  // il faut le faire ici au cas ou le clic induirait un dialogue bloquant qui nous ferait sortir du dock par exemple.
 						//g_print ("+ click on '%s' (%s)\n", icon->cName, icon->cCommand);
@@ -1109,7 +1107,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							}
 						}
 					}
-					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)  //  && icon->iType == s_pIconClicked->iType
+					else if (s_pIconClicked != NULL && icon != NULL && icon != s_pIconClicked && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)  // released the icon on another one.
 					{
 						//g_print ("deplacement de %s\n", s_pIconClicked->cName);
 						CairoDock *pOriginDock = CAIRO_DOCK (cairo_dock_search_container_from_icon (s_pIconClicked));
@@ -1135,14 +1133,16 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							prev_icon = cairo_dock_get_previous_icon (pDock->icons, icon);
 							next_icon = icon;
 						}
-						if ((prev_icon == NULL || cairo_dock_get_icon_order (prev_icon) != cairo_dock_get_icon_order (s_pIconClicked)) && (next_icon == NULL || cairo_dock_get_icon_order (next_icon) != cairo_dock_get_icon_order (s_pIconClicked)))
+						if (icon->iGroup != s_pIconClicked->iGroup
+						&& (prev_icon == NULL || prev_icon->iGroup != s_pIconClicked->iGroup)
+						&& (next_icon == NULL || next_icon->iGroup != s_pIconClicked->iGroup))
 						{
 							s_pIconClicked = NULL;
 							return FALSE;
 						}
 						//g_print ("deplacement de %s\n", s_pIconClicked->cName);
-						if (prev_icon != NULL && cairo_dock_get_icon_order (prev_icon) != cairo_dock_get_icon_order (s_pIconClicked))
-							prev_icon = NULL;
+						///if (prev_icon != NULL && prev_icon->iGroup != s_pIconClicked->iGroup)  // the previous icon is in a different group -> we'll be at the beginning of our group.
+						///	prev_icon = NULL;  // => move to the beginning of the group/dock
 						cairo_dock_move_icon_after_icon (pDock, s_pIconClicked, prev_icon);
 
 						pDock->pRenderer->calculate_icons (pDock);
@@ -1197,7 +1197,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 					//g_print ("+ clic sur %s (%.2f)!\n", icon ? icon->cName : "rien", icon ? icon->fInsertRemoveFactor : 0.);
 					s_iClickX = pButton->x;
 					s_iClickY = pButton->y;
-					if (icon && ! cairo_dock_icon_is_being_removed (icon))
+					if (icon && ! cairo_dock_icon_is_being_removed (icon) && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
 					{
 						s_pIconClicked = icon;  // on ne definit pas l'animation FOLLOW_MOUSE ici , on le fera apres le 1er mouvement, pour eviter que l'icone soit dessinee comme tel quand on clique dessus alors que le dock est en train de jouer une animation (ca provoque un flash desagreable).
 						cd_debug ("clicked on %s", icon->cName);
