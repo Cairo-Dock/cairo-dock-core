@@ -141,8 +141,6 @@ Icon* cairo_dock_get_first_icon_of_order (GList *pIconList, CairoDockIconGroup i
 */
 Icon* cairo_dock_get_last_icon_of_order (GList *pIconList, CairoDockIconGroup iGroup);
 
-Icon* cairo_dock_get_last_icon_until_order (GList *pIconList, CairoDockIconGroup iGroup);
-
 Icon* cairo_dock_get_first_icon_of_true_type (GList *pIconList, CairoDockIconTrueType iType);
 
 /** Get the currently pointed icon in a list of icons.
@@ -247,22 +245,13 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconGroup iGro
 
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2);
 
-/** Run an action on all the icons of a given group. The action can even destroy or remove the icon from the list.
-*@param pIconList a list of icons.
-*@param iGroup the group.
-*@param pFuntion the callback.
-*@param data data passed as a parameter of the callback.
-*@return the first automatic separator with another group, or NULL if there is none.
-*/
-Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconGroup iGroup, CairoDockForeachIconFunc pFuntion, gpointer data);
-
 /** Update the container's name of an icon with the name of a dock. In the case of a launcher or an applet, the conf file is updated too.
 *@param icon an icon.
 *@param cNewParentDockName the name of its new dock.
 */
 void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParentDockName);
 
-/** Make an icon static. Static icon are not animated when mouse hovers them.
+/** Make an icon static. Static icons are not animated when mouse hovers them.
 *@param icon an icon.
 */
 #define cairo_dock_set_icon_static(icon) ((icon)->bStatic = TRUE)

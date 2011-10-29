@@ -81,8 +81,8 @@ struct _CairoDockRenderer {
 	CairoDockSetSubDockPositionFunc set_subdock_position;
 	/// function called when the renderer is unset from the dock.
 	CairoDockRenderFreeDataFunc free_data;
-	/// function called just after the dock is resized, to set its input shape
-	CairoDockSetInputShapeFunc set_input_shape;
+	/// function called when the input zones are defined.
+	CairoDockSetInputShapeFunc update_input_shape;
 	/// TRUE if the view uses the OpenGL stencil buffer.
 	gboolean bUseStencil;
 	/// TRUE is the view uses reflects.
@@ -350,10 +350,10 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 */
 void cairo_dock_remove_automatic_separators (CairoDock *pDock);
 
-/** Add automatic separators between the different types of icons inside a dock.
+/** Add automatic separators between the different groups of icons inside a dock.
 *@param pDock the dock.
 */
-void cairo_dock_insert_separators_in_dock (CairoDock *pDock);
+void cairo_dock_insert_automatic_separators_in_dock (CairoDock *pDock);
 
 Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFileURI, CairoDockDesktopFileType iType, CairoDock *pReceivingDock, double fOrder);
 

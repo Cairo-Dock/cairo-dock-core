@@ -433,7 +433,7 @@ static GdkBitmap *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h
 
 void cairo_dock_update_input_shape (CairoDock *pDock)
 {
-	//\_______________ On detruit les zones d'input actuelles.
+	//\_______________ destroy the current input zones.
 	if (pDock->pShapeBitmap != NULL)
 	{
 		g_object_unref ((gpointer) pDock->pShapeBitmap);
@@ -450,7 +450,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 		pDock->pActiveShapeBitmap = NULL;
 	}
 	
-	//\_______________ on definit les tailles des zones.
+	//\_______________ define the input zones' geometry
 	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
 	int w = pDock->iMinDockWidth;
@@ -460,7 +460,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	int w_ = 1;
 	int h_ = 1;
 	
-	//\_______________ on verifie que les conditions sont toujours remplies.
+	//\_______________ check that the dock can have input zones.
 	if (w == 0 || h == 0 || pDock->iRefCount > 0 || W == 0 || H == 0)
 	{
 		if (pDock->iActiveWidth != pDock->iMaxDockWidth || pDock->iActiveHeight != pDock->iMaxDockHeight)  // else all the dock is active when the mouse is inside, so we can just set a NULL shape.
@@ -474,7 +474,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 		return ;
 	}
 	
-	//\_______________ on cree les zones.
+	//\_______________ create the input zones based on the previous geometries.
 	pDock->pShapeBitmap = _cairo_dock_create_input_shape (pDock, w, h);
 	
 	pDock->pHiddenShapeBitmap = _cairo_dock_create_input_shape (pDock, w_, h_);
@@ -482,8 +482,9 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	if (pDock->iActiveWidth != pDock->iMaxDockWidth || pDock->iActiveHeight != pDock->iMaxDockHeight)  // else all the dock is active when the mouse is inside, so we can just set a NULL shape.
 		pDock->pActiveShapeBitmap = _cairo_dock_create_input_shape (pDock, pDock->iActiveWidth, pDock->iActiveHeight);
 	
-	if (pDock->pRenderer->set_input_shape != NULL)
-		pDock->pRenderer->set_input_shape (pDock);
+	//\_______________ if the renderer can define the input shape, let it finish the job.
+	if (pDock->pRenderer->update_input_shape != NULL)
+		pDock->pRenderer->update_input_shape (pDock);
 }
 
 
@@ -897,8 +898,8 @@ static inline gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, Cair
 			cd_debug ("x: %d / %d", pDock->container.iMouseX, (int)icon->fDrawX);
 			if (pDock->container.iMouseX < icon->fDrawX + icon->fWidth * icon->fScale * fMargin)  // on est a gauche.  // fDrawXAtRest
 			{
-				Icon *prev_icon = cairo_dock_get_previous_element (ic, pDock->icons) -> data;
-				if ((cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (iGroup) || cairo_dock_get_icon_order (prev_icon) == cairo_dock_get_group_order (iGroup)))
+				Icon *prev_icon = (ic->prev ? ic->prev->data : NULL);
+				if (icon->iGroup == iGroup || (prev_icon && prev_icon->iGroup == iGroup))
 				{
 					make_icon_avoid_mouse (icon, 1);
 					if (prev_icon)
@@ -909,8 +910,8 @@ static inline gboolean _cairo_dock_check_can_drop_linear (CairoDock *pDock, Cair
 			}
 			else if (pDock->container.iMouseX > icon->fDrawX + icon->fWidth * icon->fScale * (1 - fMargin))  // on est a droite.  // fDrawXAtRest
 			{
-				Icon *next_icon = cairo_dock_get_next_element (ic, pDock->icons) -> data;
-				if ((cairo_dock_get_icon_order (icon) == cairo_dock_get_group_order (iGroup) || cairo_dock_get_icon_order (next_icon) == cairo_dock_get_group_order (iGroup)))
+				Icon *next_icon = (ic->next ? ic->next->data : NULL);
+				if (icon->iGroup == iGroup || (next_icon && next_icon->iGroup == iGroup))
 				{
 					make_icon_avoid_mouse (icon, -1);
 					if (next_icon)

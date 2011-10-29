@@ -248,25 +248,6 @@ Icon* cairo_dock_get_last_icon_of_order (GList *pIconList, CairoDockIconGroup iG
 	}
 	return NULL;
 }
-Icon* cairo_dock_get_last_icon_until_order (GList *pIconList, CairoDockIconGroup iGroup)
-{
-	CairoDockIconGroup iGroupOrder = cairo_dock_get_group_order (iGroup);
-	GList* ic;
-	Icon *icon = NULL;
-	for (ic = pIconList; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (cairo_dock_get_icon_order (icon) > iGroupOrder)
-		{
-			if (ic->prev != NULL)
-				icon = ic->prev->data;
-			else
-				icon = NULL;
-			break;
-		}
-	}
-	return icon;
-}
 Icon* cairo_dock_get_first_icon_of_true_type (GList *pIconList, CairoDockIconTrueType iType)
 {
 	GList* ic;
@@ -513,7 +494,7 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconGroup iGro
 	g_string_free (sDesktopFilePath, TRUE);
 }
 
-void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2)
+void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2)  // move icon1 after icon2,or at the beginning of the dock/group if icon2 is NULL.
 {
 	//g_print ("%s (%s, %.2f, %x)\n", __func__, icon1->cName, icon1->fOrder, icon2);
 	if ((icon2 != NULL) && fabs (cairo_dock_get_icon_order (icon1) - cairo_dock_get_icon_order (icon2)) > 1)
@@ -571,43 +552,6 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	//\_________________ Notify everybody.
 	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_ICON_MOVED, icon1, pDock);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_ICON_MOVED, icon1, pDock);
-}
-
-
-Icon *cairo_dock_foreach_icons_of_type (GList *pIconList, CairoDockIconGroup iGroup, CairoDockForeachIconFunc pFuntion, gpointer data)
-{
-	//g_print ("%s (%d)\n", __func__, iGroup);
-	if (pIconList == NULL)
-		return NULL;
-
-	Icon *icon;
-	GList *ic = pIconList, *next_ic;
-	gboolean bOneIconFound = FALSE;
-	Icon *pSeparatorIcon = NULL;
-	while (ic != NULL)  // on parcourt tout, inutile de complexifier la chose pour gagner 3ns.
-	{
-		icon = ic->data;
-		next_ic = ic->next;
-		if (icon->iGroup == iGroup)
-		{
-			bOneIconFound = TRUE;
-			pFuntion (icon, NULL, data);
-		}
-		else
-		{
-			if (CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
-			{
-				if ( (bOneIconFound && pSeparatorIcon == NULL) || (! bOneIconFound) )
-					pSeparatorIcon = icon;
-			}
-		}
-		ic = next_ic;
-	}
-
-	if (bOneIconFound)
-		return pSeparatorIcon;
-	else
-		return NULL;
 }
 
 

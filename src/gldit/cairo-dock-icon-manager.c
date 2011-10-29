@@ -154,14 +154,14 @@ static CairoDock * _cairo_dock_detach_launcher(Icon *pIcon)
 		return NULL;
 
 	gchar *cParentDockName = g_strdup(pIcon->cParentDockName);
-	cairo_dock_detach_icon_from_dock_full (pIcon, pParentDock, TRUE); // this will set cParentDockName to NULL
+	cairo_dock_detach_icon_from_dock (pIcon, pParentDock); // this will set cParentDockName to NULL
 	
 	pIcon->cParentDockName = cParentDockName; // put it back !
 
 	cairo_dock_update_dock_size (pParentDock);
 	return pParentDock;
 }
-static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, CairoContainer *pContainer, CairoDock *pMainDock)
+static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, CairoDock *pMainDock)
 {
 	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
 	{
@@ -202,10 +202,10 @@ void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock)
 {
 	if (s_iNbNonStickyLaunchers <= 0)
 		return ;
-	// first we detach what shouldn't be show on this viewport
-	cairo_dock_foreach_icons_of_type (pDock->icons, CAIRO_DOCK_LAUNCHER, (CairoDockForeachIconFunc)_cairo_dock_hide_show_launchers_on_other_desktops, pDock);
+	// first we detach what shouldn't be shown on this viewport
+	g_list_foreach (pDock->icons, (GFunc)_cairo_dock_hide_show_launchers_on_other_desktops, pDock);
 	// then we reattach what was eventually missing
-	cairo_dock_foreach_icons_of_type (s_pFloatingIconsList, CAIRO_DOCK_LAUNCHER, (CairoDockForeachIconFunc)_cairo_dock_hide_show_launchers_on_other_desktops, pDock);
+	g_list_foreach (s_pFloatingIconsList, (GFunc)_cairo_dock_hide_show_launchers_on_other_desktops, pDock);
 }
 
 static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
@@ -720,7 +720,7 @@ static void _insert_separators (const gchar *cDockName, CairoDock *pDock, gpoint
 			cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
 		}
 	}
-	cairo_dock_insert_separators_in_dock (pDock);
+	cairo_dock_insert_automatic_separators_in_dock (pDock);
 }
 static void _calculate_icons (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
