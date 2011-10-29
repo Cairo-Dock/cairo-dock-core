@@ -431,7 +431,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	
 	if (myTaskbarParam.bAppliOnCurrentDesktopOnly && ! cairo_dock_appli_is_on_current_desktop (icon))
 		return NULL;
-		
+	
 	//\_________________ On gere ses eventuels inhibiteurs.
 	if (myTaskbarParam.bMixLauncherAppli && cairo_dock_prevent_inhibited_class (icon))
 	{
@@ -451,12 +451,14 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	if (myTaskbarParam.bMixLauncherAppli && pParentDock->iRefCount == 0)
+	if (myTaskbarParam.bMixLauncherAppli && pParentDock->iRefCount == 0)  // this appli is amongst the launchers in the main dock
 	{
-		cairo_dock_set_class_order (icon);
+		cairo_dock_set_class_order_in_dock (icon, pParentDock);
 	}
-	else
-		icon->fOrder == CAIRO_DOCK_LAST_ORDER;  // en dernier.
+	else  // this appli is either in a different group or in the class sub-dock
+	{
+		cairo_dock_set_class_order_amongst_applis (icon, pParentDock);
+	}
 	cairo_dock_insert_icon_in_dock (icon, pParentDock, bUpdateSize, bAnimate);
 	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fInsertRemoveFactor, icon->fWidth, icon->fHeight, icon->cParentDockName);
 
@@ -514,8 +516,10 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && icon->cParentDockName == NULL)
 	{
+		/// TODO: use the same algorithm as the class-manager to find the future position of the icon ...
+		
 		Icon *pInhibitor = cairo_dock_get_inhibitor (icon, FALSE);  // FALSE <=> meme en-dehors d'un dock
-		if (pInhibitor == NULL)  // cette icone n'est pas inhinbee, donc se minimisera dans le dock en une nouvelle icone.
+		if (pInhibitor == NULL)  // cette icone n'est pas inhibee, donc se minimisera dans le dock en une nouvelle icone.
 		{
 			int x, y;
 			Icon *pClassmate = cairo_dock_get_classmate (icon);
@@ -546,17 +550,31 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 			}
 			else  // on va se placer a la fin de la barre des taches.
 			{
-				Icon *pLastAppli = cairo_dock_get_last_icon_until_order (pMainDock->icons, CAIRO_DOCK_APPLI);
-				if (pLastAppli != NULL)  // on se placera juste apres.
+				Icon *pIcon, *pLastLauncher = NULL;
+				GList *ic, *last_launcher_ic = NULL;
+				for (ic = pMainDock->icons; ic != NULL; ic = ic->next)
 				{
-					x = x_icon_geometry (pLastAppli, pMainDock) + pLastAppli->fWidth/2;
+					pIcon = ic->data;
+					if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)  // launcher, even without class
+					|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)  // container icon (likely to contain some launchers)
+					|| (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon) && pIcon->cClass != NULL)  // applet acting like a launcher
+					|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)))  // separator (user or auto).
+					{
+						pLastLauncher = pIcon;
+						last_launcher_ic = ic;
+					}
+				}
+						
+				if (pLastLauncher != NULL)  // on se placera juste apres.
+				{
+					x = x_icon_geometry (pLastLauncher, pMainDock) + pLastLauncher->fWidth/2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
 						y = (pMainDock->container.bDirectionUp ? 0 : g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 					}
 					else
 					{
-						y = y_icon_geometry (pLastAppli, pMainDock);
+						y = y_icon_geometry (pLastLauncher, pMainDock);
 					}
 				}
 				else  // aucune icone avant notre groupe, on sera insere en 1er.

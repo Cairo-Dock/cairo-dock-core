@@ -50,6 +50,7 @@ struct _CairoDockClassAppli {
 	gchar *cName;
 	gchar *cWorkingDirectory;
 	GList *pMenuItems;
+	gint iAge;  // age of the first created window of this class
 };
 
 /*
@@ -202,7 +203,9 @@ Icon *cairo_dock_get_inhibitor (Icon *pIcon, gboolean bOnlyInDock);
 
 ///void cairo_dock_reorder_classes (void);
 
-void cairo_dock_set_class_order (Icon *pIcon);
+void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock);
+
+void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock);
 
 
 const gchar *cairo_dock_get_class_command (const gchar *cClass);

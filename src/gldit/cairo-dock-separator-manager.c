@@ -88,11 +88,12 @@ Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 }
 
 
-void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, const gchar *cParentDockName, CairoDock *pDock)
+void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, double fOrder, const gchar *cParentDockName, CairoDock *pDock)
 {
 	Icon *pSeparatorIcon = cairo_dock_create_separator_icon (iSeparatorType, pDock);
 	if (pSeparatorIcon != NULL)
 	{
+		pSeparatorIcon->fOrder = fOrder;
 		pSeparatorIcon->cParentDockName = g_strdup (cParentDockName);
 		pDock->icons = g_list_insert_sorted (pDock->icons,
 			pSeparatorIcon,
@@ -100,6 +101,5 @@ void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, const gc
 		pSeparatorIcon->fWidth *= pDock->container.fRatio;
 		pSeparatorIcon->fHeight *= pDock->container.fRatio;
 		pDock->fFlatDockWidth += myIconsParam.iIconGap + pSeparatorIcon->fWidth;
-		///pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pSeparatorIcon->fHeight);
 	}
 }

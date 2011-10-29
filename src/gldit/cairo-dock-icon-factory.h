@@ -148,6 +148,7 @@ struct _Icon {
 	gint iLastCheckTime;
 	gchar *cInitialName;
 	gchar *cLastAttentionDemand;
+	gint iAge;  // age of the window (a mere growing integer).
 	Pixmap iBackingPixmap;
 	//Damage iDamageHandle;
 	
@@ -204,7 +205,8 @@ struct _Icon {
 	gchar *cWmClass;
 	GList *pOverlays;
 	gdouble *pHiddenBgColor;
-	//gpointer reserved[0];
+	
+	gpointer reserved[2];
 };
 
 typedef void (*CairoIconContainerLoadFunc) (void);

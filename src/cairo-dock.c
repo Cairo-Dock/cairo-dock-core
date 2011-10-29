@@ -307,7 +307,7 @@ int main (int argc, char** argv)
 	GError *erreur = NULL;
 	
 	//\___________________ get app's options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE, bAskBackend = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	int iDelay = 0;
 	GOptionEntry pOptionsTable[] =
@@ -326,6 +326,9 @@ int main (int argc, char** argv)
 		{"indirect-opengl", 'O', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bToggleIndirectRendering,
 			_("Use OpenGL backend with indirect rendering. There are very few case where this option should be used."), NULL},
+		{"indirect-opengl", 'A', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bAskBackend,
+			_("Ask again on startup which backend to use."), NULL},
 		{"env", 'e', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cEnvironment,
 			_("Force the dock to consider this environnement - use it with care."), NULL},
@@ -456,6 +459,11 @@ int main (int argc, char** argv)
 	}
 	bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	_cairo_dock_get_global_config (cRootDataDirPath);
+	if (bAskBackend)
+	{
+		g_free (s_cDefaulBackend);
+		s_cDefaulBackend = NULL;
+	}
 	
 	//\___________________ internationalize the app.
 	bindtextdomain (CAIRO_DOCK_GETTEXT_PACKAGE, CAIRO_DOCK_LOCALE_DIR);

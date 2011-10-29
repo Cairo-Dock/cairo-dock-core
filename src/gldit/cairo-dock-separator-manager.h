@@ -37,7 +37,7 @@ cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight);
 Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock);
 
 
-void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, const gchar *cParentDockName, CairoDock *pDock);
+void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, double fOrder, const gchar *cParentDockName, CairoDock *pDock);
 
 
 G_END_DECLS

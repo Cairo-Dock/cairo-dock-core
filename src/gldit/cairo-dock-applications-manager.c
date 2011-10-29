@@ -74,6 +74,7 @@ static Display *s_XDisplay = NULL;
 static GHashTable *s_hXWindowTable = NULL;  // table des fenetres X affichees dans le dock.
 static int s_bAppliManagerIsRunning = FALSE;
 static int s_iTime = 1;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
+static int s_iNumWindow = 1;  // used to order appli icons by age (=creation date).
 static Window s_iCurrentActiveWindow = 0;
 static Atom s_aNetWmState;
 static Atom s_aNetWmDesktop;
@@ -281,7 +282,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 		return;
 	s_iTime ++;
 	gulong i, iNbWindows = 0;
-	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, TRUE);
+	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, TRUE);  // TRUE => ordered by z-stack.
 	
 	Window Xid;
 	Icon *icon;
@@ -306,22 +307,15 @@ static void _on_update_applis_list (CairoDock *pDock)
 				icon->iStackOrder = iStackOrder ++;
 				if (myTaskbarParam.bShowAppli)
 				{
-					///if ((! myTaskbarParam.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (icon)))  // bHideVisibleApplis est gere lors de l'insertion.
-					///{
-						cd_message (" insertion de %s ... (%d)", icon->cName, icon->iLastCheckTime);
-						pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-						if (pParentDock != NULL)
-						{
-							if (pParentDock->bIsMainDock)  // update the main dock at once in the end.
-								bUpdateMainDockSize = TRUE;
-							else
-								cairo_dock_update_dock_size (pParentDock);
-						}
-					/**}
-					else if (myTaskbarParam.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
+					cd_message (" insertion de %s ... (%d)", icon->cName, icon->iLastCheckTime);
+					pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+					if (pParentDock != NULL)
 					{
-						cairo_dock_prevent_inhibited_class (icon);
-					}*/
+						if (pParentDock->bIsMainDock)  // update the main dock at once in the end.
+							bUpdateMainDockSize = TRUE;
+						else
+							cairo_dock_update_dock_size (pParentDock);
+					}
 				}
 				
 				// visibilite
@@ -866,7 +860,7 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	
 	//\__________________ On recupere l'ensemble des fenetres presentes.
 	gulong i, iNbWindows = 0;
-	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, FALSE);  // on recupere les fenetres par ordre de creation, de facon a ce que si on redemarre la barre des taches, les lanceurs soient lies aux memes fenetres. Au prochain update, la liste sera recuperee par z-order, ce qui remettra le z-order de chaque icone a jour.
+	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, FALSE);  // ordered by creation date; this allows us to set the correct age to the icon, which is constant. On the next updates, the z-order (which is dynamic) will be set.
 	
 	if (s_iCurrentActiveWindow == 0)
 		s_iCurrentActiveWindow = cairo_dock_get_active_xwindow ();
@@ -875,8 +869,6 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	CairoDock *pParentDock;
 	gboolean bUpdateMainDockSize = FALSE;
 	
-	/*Icon * pLastAppli = cairo_dock_get_last_appli (pDock->icons);
-	int iOrder = (pLastAppli != NULL ? pLastAppli->fOrder + 1 : 1);*/
 	Window Xid;
 	Icon *pIcon;
 	for (i = 0; i < iNbWindows; i ++)
@@ -884,28 +876,19 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 		Xid = pXWindowsList[i];
 		pIcon = cairo_dock_create_icon_from_xwindow (Xid, pDock);
 		
-		if (pIcon != NULL)
+		if (pIcon != NULL)  // authorised window.
 		{
-			//pIcon->fOrder = iOrder++;
 			pIcon->iLastCheckTime = s_iTime;
 			if (myTaskbarParam.bShowAppli && pDock)
 			{
-				///if (! myTaskbarParam.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pIcon))  // le filtre 'bHideVisibleApplis' est gere dans la fonction d'insertion.
-				///{
-					pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
-					//g_print (">>>>>>>>>>>> Xid : %d\n", Xid);
-					if (pParentDock != NULL)
-					{
-						if (pParentDock->bIsMainDock)
-							bUpdateMainDockSize = TRUE;
-						else
-							cairo_dock_update_dock_size (pParentDock);
-					}
-				/**}
-				else if (myTaskbarParam.bMixLauncherAppli)  // on met tout de meme l'indicateur sur le lanceur.
+				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				if (pParentDock != NULL)  // appli has been inserted
 				{
-					cairo_dock_prevent_inhibited_class (pIcon);
-				}*/
+					if (pParentDock->bIsMainDock)
+						bUpdateMainDockSize = TRUE;
+					else
+						cairo_dock_update_dock_size (pParentDock);
+				}
 			}
 		}
 		else
@@ -941,7 +924,7 @@ static gboolean _cairo_dock_remove_one_appli (Window *pXid, Icon *pIcon, gpointe
 	{
 		gchar *cParentDockName = pIcon->cParentDockName;
 		pIcon->cParentDockName = NULL;  // astuce.
-		cairo_dock_detach_icon_from_dock_full (pIcon, pDock, !myTaskbarParam.bMixLauncherAppli);
+		cairo_dock_detach_icon_from_dock (pIcon, pDock);
 		if (! pDock->bIsMainDock)  // la taille du main dock est mis a jour 1 fois a la fin.
 		{
 			if (pDock->icons == NULL)  // le dock degage, le fake aussi.
@@ -951,7 +934,7 @@ static gboolean _cairo_dock_remove_one_appli (Window *pXid, Icon *pIcon, gpointe
 				if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon)) // fake launcher
 				{
 					cd_debug ("on degage le fake qui pointe sur %s", cParentDockName);
-					cairo_dock_detach_icon_from_dock_full (pFakeClassIcon, pFakeClassParentDock, !myTaskbarParam.bMixLauncherAppli);
+					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock);
 					cairo_dock_free_icon (pFakeClassIcon);
 					if (! pFakeClassParentDock->bIsMainDock)
 						cairo_dock_update_dock_size (pFakeClassParentDock);
@@ -1451,8 +1434,9 @@ static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	}
 	
 	//\____________ On enregistre l'appli et on commence a la surveiller.
+	icon->iAge = s_iNumWindow ++;
 	cairo_dock_register_appli (icon);
-
+	
 	return icon;
 }
 

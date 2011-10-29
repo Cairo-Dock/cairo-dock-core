@@ -431,7 +431,7 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 			if (cairo_dock_check_unique_subdock_name (pIcon))
 				cairo_dock_set_icon_name (pIcon->cName, pIcon, pContainer);
 			pIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, pIcon->cName, pInstance->pDock);
-			cairo_dock_insert_separators_in_dock (pIcon->pSubDock);
+			cairo_dock_insert_automatic_separators_in_dock (pIcon->pSubDock);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
 		}
