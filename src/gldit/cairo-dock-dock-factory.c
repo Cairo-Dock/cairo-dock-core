@@ -395,7 +395,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	{
 		// insert a separator after if needed
 		Icon *pNextIcon = cairo_dock_get_next_icon (pDock->icons, icon);
-		if (pNextIcon != NULL && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pNextIcon))
+		if (pNextIcon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pNextIcon))  // CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pNextIcon)
 		{
 			int iSeparatorGroup = cairo_dock_get_icon_order (icon) +
 				(cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pNextIcon) ? 0 : 1);  // for separators, group = order.
@@ -405,7 +405,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		
 		// insert a separator before if needed
 		Icon *pPrevIcon = cairo_dock_get_previous_icon (pDock->icons, icon);
-		if (pPrevIcon != NULL && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon))
+		if (pPrevIcon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPrevIcon))  // CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon)
 		{
 			int iSeparatorGroup = cairo_dock_get_icon_order (icon) -
 				(cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pPrevIcon) ? 0 : 1);  // for separators, group = order.
@@ -512,7 +512,7 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 	//\___________________ On enleve le separateur si c'est la derniere icone de son type.
 	if (bCheckUnusedSeparator && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
 	{
-		if ((pPrevIcon == NULL || CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pNextIcon))
+		if ((pPrevIcon == NULL || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPrevIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pNextIcon))
 		{
 			pDock->icons = g_list_delete_link (pDock->icons, next_ic);
 			next_ic = NULL;
@@ -520,7 +520,7 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 			cairo_dock_free_icon (pNextIcon);
 			pNextIcon = NULL;
 		}
-		if (pNextIcon == NULL && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon))
+		if ((pNextIcon == NULL || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pNextIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon))
 		{
 			pDock->icons = g_list_delete_link (pDock->icons, prev_ic);
 			prev_ic = NULL;

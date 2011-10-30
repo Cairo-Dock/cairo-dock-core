@@ -658,7 +658,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
  *@param iPosition position where to display the overlay
  *@return TRUE if the overlay has been successfuly added.
  */
-#define CD_APPLET_PRINT_OVERLAY_ON_MY_ICON(cImageFile, iPosition) cairo_dock_print_overlay_on_icon (myIcon, myContainer, cImageFile, iPosition)
+#define CD_APPLET_PRINT_OVERLAY_ON_MY_ICON(cImageFile, iPosition) cairo_dock_print_overlay_on_icon_from_image (myIcon, myContainer, cImageFile, iPosition)
 
 /** Remove an overlay the applet's icon, given its position (there is only one overlay at a given position).
  *@param iPosition position of the overlay
