@@ -80,12 +80,6 @@ extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
-/*#define cd_reload(module_name) do {\
-	pInternalModule = cairo_dock_find_internal_module_from_name (module_name);\
-	if (pInternalModule != NULL) \
-		cairo_dock_reload_internal_module_from_keyfile (pInternalModule, pKeyFile);\
-	} while (0)*/
-
 #define cd_reload(module_name) do {\
 	pManager = gldi_get_manager (module_name);\
 	if (pManager != NULL)\
@@ -199,7 +193,6 @@ static gchar * _make_simple_conf_file (void)
 	
 	if (cairo_dock_conf_file_needs_update (pSimpleKeyFile, CAIRO_DOCK_VERSION))
 	{
-		///cairo_dock_flush_conf_file (pSimpleKeyFile, cConfFilePath, CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_SIMPLE_CONF_FILE);
 		cairo_dock_upgrade_conf_file (cConfFilePath, pSimpleKeyFile, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE);
 		
 		g_key_file_free (pSimpleKeyFile);
@@ -841,6 +834,23 @@ static void _make_modules_widget (GtkWidget *pSimpleConfigWindow)
 	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pPreviewBox, FALSE, FALSE, 0);
 	g_free (cDefaultMessage);
 }
+static void _make_shortkeys_widget (GtkWidget *pSimpleConfigWindow)
+{
+	//\_____________ On recupere notre emplacement perso dans la fenetre.
+	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, "Shortkeys", "shortkeys");
+	g_return_if_fail (myWidget != NULL);
+	
+	//\_____________ On construit le tree-view.
+	GtkWidget *pOneWidget = cairo_dock_build_shortkeys_widget ();
+	
+	//\_____________ On l'ajoute a la fenetre.
+	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+	gtk_widget_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
+	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.
+	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow, FALSE, FALSE, 0);
+}
 static void _make_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
 {
 	//\_____________ On ajoute le widget des animations au survol.
@@ -851,6 +861,8 @@ static void _make_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
 	_make_theme_manager_widget (pSimpleConfigWindow);
 	//\_____________ On ajoute le widget des modules.
 	_make_modules_widget (pSimpleConfigWindow);
+	//\_____________ On ajoute le widget des shortkeys.
+	_make_shortkeys_widget (pSimpleConfigWindow);
 	//\_____________ On montre la page des themes si necessaire.
 	if (s_bShowThemePage)
 	{

@@ -249,6 +249,27 @@ void cairo_dock_gui_trigger_update_modules_list (void)
 }
 
 
+static guint s_iSidReloadShortkeys = 0;
+static gboolean _update_shortkeys (gpointer data)
+{
+	if (s_pMainGuiBackend && s_pMainGuiBackend->update_shortkeys)
+		s_pMainGuiBackend->update_shortkeys ();
+	
+	s_iSidReloadShortkeys = 0;
+	return FALSE;
+}
+void cairo_dock_gui_trigger_update_shortkeys (void)
+{
+	if (s_iSidReloadShortkeys == 0)
+	{
+		s_iSidReloadShortkeys = g_idle_add_full (G_PRIORITY_LOW,
+			(GSourceFunc) _update_shortkeys,
+			NULL,
+			NULL);
+	}
+}
+
+
 void cairo_dock_gui_trigger_update_module_container (CairoDockModuleInstance *pInstance, gboolean bIsDetached)
 {
 	if (s_pMainGuiBackend && s_pMainGuiBackend->update_module_instance_container)

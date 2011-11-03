@@ -39,6 +39,7 @@ struct _CairoDockMainGuiBackend {
 	void (*update_desklet_params) (CairoDesklet *pDesklet);
 	void (*update_desklet_visibility_params) (CairoDesklet *pDesklet);
 	void (*update_modules_list) (void);
+	void (*update_shortkeys) (void);
 	gboolean bCanManageThemes;
 	const gchar *cDisplayedName;
 	const gchar *cTooltip;
@@ -74,6 +75,8 @@ void cairo_dock_gui_trigger_update_module_state (const gchar *cModuleName);
 void cairo_dock_gui_trigger_update_modules_list (void);
 
 void cairo_dock_gui_trigger_update_module_container (CairoDockModuleInstance *pInstance, gboolean bIsDetached);
+
+void cairo_dock_gui_trigger_update_shortkeys (void);
 
 
 void cairo_dock_register_config_gui_backend (CairoDockMainGuiBackend *pBackend);

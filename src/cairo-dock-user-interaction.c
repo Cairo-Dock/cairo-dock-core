@@ -170,7 +170,7 @@ static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 	gboolean bSuccess = FALSE;
 	if (*icon->cCommand == '<')  // shortkey
 	{
-		bSuccess = cairo_dock_simulate_key_sequence (icon->cCommand);
+		bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
 		if (!bSuccess)
 			bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
 	}
@@ -178,7 +178,7 @@ static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 	{
 		bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
 		if (! bSuccess)
-			bSuccess = cairo_dock_simulate_key_sequence (icon->cCommand);
+			bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
 	}
 	if (! bSuccess)
 	{

@@ -348,6 +348,8 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 	else if (CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon))
 	{
 		cName = cairo_dock_get_class_name (icon->cClass);  // better than the current window title.
+		if (cName == NULL)
+			cName = icon->cClass;
 	}
 	else if (CAIRO_DOCK_IS_APPLET (icon))
 	{

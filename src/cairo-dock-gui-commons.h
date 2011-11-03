@@ -42,6 +42,8 @@ gboolean cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockModule *p
 
 GtkWidget *cairo_dock_build_modules_treeview (void);
 
+GtkWidget *cairo_dock_build_shortkeys_widget (void);
+
 
 void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
 
