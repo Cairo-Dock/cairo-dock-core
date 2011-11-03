@@ -1017,7 +1017,7 @@ static gboolean _double_click_delay_over (Icon *icon)
 	{
 		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
 		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
-		if (myDocksParam.cRaiseDockShortcut != NULL)
+		if (pDock->bIsMainDock && pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 			s_bHideAfterShortcut = TRUE;
 		
 		cairo_dock_start_icon_animation (icon, pDock);
@@ -1099,7 +1099,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							{
 								cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, pButton->state);
 								cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, pButton->state);
-								if (myDocksParam.cRaiseDockShortcut != NULL)
+								if (pDock->bIsMainDock && pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 									s_bHideAfterShortcut = TRUE;
 								
 								cairo_dock_start_icon_animation (icon, pDock);

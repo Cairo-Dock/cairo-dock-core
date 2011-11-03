@@ -819,7 +819,7 @@ static void _cairo_dock_set_original_value (GtkButton *button, CairoDockGroupKey
 static void _cairo_dock_key_grab_cb (GtkWidget *wizard_window, GdkEventKey *event, GtkEntry *pEntry)
 {
 	gchar *key;
-	cd_message ("key press event\n");
+	cd_debug ("key pressed");
 	if (gtk_accelerator_valid (event->keyval, event->state))
 	{
 		/* This lets us ignore all ignorable modifier keys, including
@@ -832,7 +832,7 @@ static void _cairo_dock_key_grab_cb (GtkWidget *wizard_window, GdkEventKey *even
 		/* Generate the correct name for this key */
 		key = gtk_accelerator_name (event->keyval, event->state);
 
-		cd_warning ("KEY GRABBED: %s", key);
+		cd_debug ("KEY GRABBED: '%s'", key);
 
 		/* Re-enable widgets */
 		gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE);
@@ -853,10 +853,8 @@ static void _cairo_dock_key_grab_clicked (GtkButton *button, gpointer *data)
 	GtkEntry *pEntry = data[0];
 	GtkWindow *pParentWindow = data[1];
 
-	cd_message ("clicked\n");
 	//set widget insensitive
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE);
-	//  gtk_widget_set_sensitive (wizard_notebook, FALSE);
 
 	g_signal_connect (GTK_WIDGET(pParentWindow), "key-press-event", GTK_SIGNAL_FUNC(_cairo_dock_key_grab_cb), pEntry);
 }
@@ -866,7 +864,7 @@ static void _cairo_dock_key_grab_class (GtkButton *button, gpointer *data)
 	GtkEntry *pEntry = data[0];
 	GtkWindow *pParentWindow = data[1];
 
-	cd_message ("clicked\n");
+	cd_debug ("clicked");
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE); // locked (plus zoli :) )
 
 	gchar *cProp = cairo_dock_launch_command_sync ("xprop"); // avec "| grep CLASS | cut -d\\\" -f2", ca ne fonctionne pas et Fab n'aime pas les g_spawn_command_line_sync :) --> c'est surtout que c'est g_spawn_command_line_sync qui n'aime pas les grep.

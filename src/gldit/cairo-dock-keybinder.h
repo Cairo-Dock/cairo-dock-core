@@ -39,69 +39,108 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-keybinder.h This class contains functions to easily bind a keyboard shortcut to an action. These shortcuts are defined globally in your session, that is to say they will be effective whatever window has the focus.
-* Shortcuts are of the form &lt;alt&gt;F1 or &lt;ctrl&gt;&lt;shift&gt;s.
+*@file cairo-dock-keybinder.h This class contains functions to easily bind a keyboard shortcut to an action. These shortkeys are defined globally in your session, that is to say they will be effective whatever window has the focus.
+* Shortkeys are of the form &lt;alt&gt;F1 or &lt;ctrl&gt;&lt;shift&gt;s.
 * 
-* You bind an action to a shortcut with \ref cd_keybinder_bind, and unbind it with \ref cd_keybinder_unbind.
+* You bind an action to a shortkey with \ref cd_keybinder_bind, and unbind it with \ref cd_keybinder_unbind.
 */
 
-typedef struct _CairoShortcutsManager CairoShortcutsManager;
-
-#ifndef _MANAGER_DEF_
-extern CairoShortcutsManager myShortcutsMgr;
-#endif
 
 /// Definition of a callback, called when a shortcut is pressed by the user.
-typedef void (* CDBindkeyHandler) (const char *keystring, gpointer user_data);
+typedef void (* CDBindkeyHandler) (const gchar *keystring, gpointer user_data);
+
+struct _CairoKeyBinding {
+	gchar            *keystring;
+	CDBindkeyHandler  handler;
+	gpointer          user_data;
+	guint             keycode;
+	guint             modifiers;
+	gboolean          bSuccess;
+	gchar            *cDemander;
+	gchar            *cDescription;
+	gchar            *cIconFilePath;
+	gchar            *cConfFilePath;
+	gchar            *cGroupName;
+	gchar            *cKeyName;
+} ;
+typedef struct _CairoKeyBinding CairoKeyBinding;
+
+
+typedef struct _CairoShortkeysManager CairoShortkeysManager;
+
+#ifndef _MANAGER_DEF_
+extern CairoShortkeysManager myShortkeysMgr;
+#endif
 
 // params
 
 // manager
-struct _CairoShortcutsManager {
+struct _CairoShortkeysManager {
 	GldiManager mgr;
-	gboolean (*bind) (const char *keystring, CDBindkeyHandler handler, gpointer user_data);
-	void (*unbind) (const char *keystring, CDBindkeyHandler handler);
-	gboolean (*simulate_key_sequence) (const gchar *cKeyString);
+	gboolean (*bind) (const gchar *keystring, CDBindkeyHandler handler, gpointer user_data);
+	void (*unbind) (const gchar *keystring, CDBindkeyHandler handler);
+	gboolean (*trigger_shortkey) (const gchar *cKeyString);
 	} ;
 
 // signals
 typedef enum {
-	NB_NOTIFICATIONS_SHORTCUTS
-	} CairoShortcutsNotifications;
+	NB_NOTIFICATIONS_SHORTKEYS
+	} CairoShortkeysNotifications;
 
 
-void cd_keybinder_init (void);  /// merge with init
-void cd_keybinder_stop (void);  /// useless
-
-/** Bind a shortcut to an action. Unbind it when you don't want it anymore, or when 'user_data' is freed.
+/** Bind a shortkey to an action. Unbind it when you don't want it anymore, or when 'user_data' is freed.
  * @param keystring a shortcut.
- * @param handler callback to register for this shortcut.
- * @param user_data data passed to the callback.
+ * @param cDemander the actor making the demand
+ * @param cDescription a short description of the action
+ * @param cIconFilePath an icon that represents the demander
+ * @param cConfFilePath conf file where the shortkey stored
+ * @param cGroupName group name where it's stored in the conf file
+ * @param cKeyName key name where it's stored in the conf file
+ * @param handler function called when the shortkey is pressed by the user
+ * @param user_data data passed to the callback
+ * @return the key binding
+*/
+CairoKeyBinding *cd_keybinder_bind (const gchar *keystring,
+	const gchar *cDemander,
+	const gchar *cDescription,
+	const gchar *cIconFilePath,
+	const gchar *cConfFilePath,
+	const gchar *cGroupName,
+	const gchar *cKeyName,
+	CDBindkeyHandler handler,
+	gpointer user_data);
+
+/** Says if the shortkey of a key binding could be grabbed.
+ * @param binding a key binding.
+ * @return TRUE iif the shortkey has been successfuly grabbed by the key binding.
+*/
+#define cd_keybinder_could_grab(binding) ((binding)->bSuccess)
+
+/** Unbind a shortkey. The binding is destroyed.
+ * @param binding a key binding.
+*/
+void cd_keybinder_unbind (CairoKeyBinding *binding);
+
+
+/** Rebind a shortkey to a new one.
+ * @param binding a key binding.
+ * @param .cNewKeyString the new shortkey
+ * @return TRUE on success
+*/
+gboolean cd_keybinder_rebind (CairoKeyBinding *binding,
+	const gchar *cNewKeyString);
+
+
+void cd_keybinder_foreach (GFunc pCallback, gpointer data);
+
+/** Trigger the given shortkey. It will be as if the user effectively pressed the shortkey on its keyboard. It uses the 'XTest' X extension.
+ * @param cKeyString a shortkey.
  * @return TRUE if success.
 */
-gboolean cd_keybinder_bind (const char           *keystring,
-                            CDBindkeyHandler  handler,
-                            gpointer              user_data);
-
-/** Unbind a shortcut to an action.
- * @param keystring a shortcut.
- * @param handler the callback that was registered for this shortcut.
-*/
-void cd_keybinder_unbind   (const char           *keystring,
-                            CDBindkeyHandler  handler);
-
-gboolean cd_keybinder_is_modifier (guint keycode);
-
-//guint32 cd_keybinder_get_current_event_time (void);
-
-/** Trigger the given shortcut. It will be as if the user effectively pressed the shortcut on its keyboard. It uses the 'XTest' X extension.
- * @param cKeyString a shortcut.
- * @return TRUE if success.
-*/
-gboolean cairo_dock_simulate_key_sequence (gchar *cKeyString);
+gboolean cairo_dock_trigger_shortkey (const gchar *cKeyString);
 
 
-void gldi_register_shortcuts_manager (void);
+void gldi_register_shortkeys_manager (void);
 
 G_END_DECLS
 

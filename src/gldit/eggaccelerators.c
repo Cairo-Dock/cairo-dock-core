@@ -653,7 +653,7 @@ egg_keymap_get_modmap (GdkKeymap *keymap)
 
 
 
-int *egg_keystring_to_keysyms (gchar *accelerator, int *iNbKeys)
+int *egg_keystring_to_keysyms (const gchar *accelerator, int *iNbKeys)
 {
 	int i = 0, iNbKeyMax = 10;  // on limite a 10, c'est bien assez.
 	gint *pKeySyms = g_new0 (int, iNbKeyMax);

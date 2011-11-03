@@ -441,6 +441,16 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_SCROLL_DOWN (CD_APPLET_SCROLL_DIRECTION == GDK_SCROLL_DOWN)
 
+/** Bind a shortkey to an action. Unbind it when you don't want it anymore. myApplet is passed as the callback data.
+ * @param cShortKey a shortkey.
+ * @param cDescription a short description of the action
+ * @param cGroupName group name where it's stored in the applet's conf file
+ * @param cKeyName key name where it's stored in the applet's conf file
+ * @param handler function called when the shortkey is pressed by the user
+ * @return the key binding
+*/
+#define CD_APPLET_BIND_KEY(cShortKey, cDescription, cGroupName, cKeyName, handler) \
+cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescription, myApplet->pModule->pVisitCard->cIconFilePath, myApplet->cConfFilePath, cGroupName, cKeyName, handler, myApplet)
 
   /////////////////////
  // DRAWING SURFACE //

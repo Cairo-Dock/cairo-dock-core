@@ -87,6 +87,7 @@ static guint s_iSidPollScreenEdge = 0;
 static int s_iNbPolls = 0;
 static gboolean s_bQuickHide = FALSE;
 static gboolean s_bKeepAbove = FALSE;
+static CairoKeyBinding *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
 
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock);
 
@@ -1158,7 +1159,7 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 	gboolean bKeepBelow0 = (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW);
 	gboolean bAutoHideOnOverlap0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP);
 	gboolean bAutoHideOnAnyOverlap0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY);
-		gboolean bAutoHide0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE);
+	gboolean bAutoHide0 = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE);
 	gboolean bShortKey0 = (pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY);
 	
 	pDock->iVisibility = iVisibility;
@@ -1207,25 +1208,23 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 		}
 	}
 	
-	//\_______________ changement dans le raccourci.
-	if (pDock->bIsMainDock && bShortKey != bShortKey0)
+	//\_______________ shortkey
+	if (pDock->bIsMainDock)
 	{
-		if (bShortKey0)  // option desormais non active => on remontre (le unbind s'est fait dans le Accessibility manager quand on avait encore le raccourci).
+		if (bShortKey)  // option is enabled.
 		{
-			cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
-		}
-		else  // option nouvellement active => on bind et on cache.
-		{
-			if (cd_keybinder_bind (myDocksParam.cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))  // succes => on cache.
+			if (s_pPopupBinding && cd_keybinder_could_grab (s_pPopupBinding))  // a shortkey has been registered and grabbed to show/hide the dock => hide the dock.
 			{
 				gtk_widget_hide (pDock->container.pWidget);
 			}
-			else  // le bind n'a pas pu se faire.
+			else  // bind couldn't be done (no shortkey or couldn't grab it).
 			{
-				g_free (myDocksParam.cRaiseDockShortcut);
-				myDocksParam.cRaiseDockShortcut = NULL;
 				pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
 			}
+		}
+		else if (bShortKey0)  // option is now disabled => show the dock.
+		{
+			cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
 		}
 	}
 	
@@ -1532,6 +1531,27 @@ static void load (void)
 		
 		g_pMainDock->fFlatDockWidth = - myIconsParam.iIconGap;  // car on ne le connaissait pas encore au moment de sa creation.
 		
+		// register a key binding
+		if (myDocksParam.iVisibility == CAIRO_DOCK_VISI_SHORTKEY)  // register a key binding
+		{
+			if (s_pPopupBinding == NULL)
+			{
+				s_pPopupBinding = cd_keybinder_bind (myDocksParam.cRaiseDockShortcut,
+					"Cairo-Dock",
+					_("Pop up the main dock"),
+					GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
+					g_cCurrentThemePath,
+					"Accessibility",
+					"raise shortcut",
+					(CDBindkeyHandler) cairo_dock_raise_from_shortcut,
+					NULL);
+			}
+			else
+			{
+				cd_keybinder_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut);
+			}
+		}
+		
 		cairo_dock_set_dock_visibility (g_pMainDock, myDocksParam.iVisibility);
 	}
 }
@@ -1618,38 +1638,31 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	gtk_widget_queue_draw (pDock->container.pWidget);
 	
 	// accessibility
-	if (! pDock)
+	//\_______________ Shortkey.
+	if (pAccessibility->iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 	{
-		if (pPrevAccessibility->cRaiseDockShortcut != NULL)
-			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-		return ;
-	}
-	
-	//\_______________ Shortcut.
-	if (pPrevAccessibility->cRaiseDockShortcut != NULL)  // il y'a un ancien raccourci.
-	{
-		if (pAccessibility->cRaiseDockShortcut == NULL || strcmp (pAccessibility->cRaiseDockShortcut, pPrevAccessibility->cRaiseDockShortcut) != 0)  // le raccourci a change, ou n'est plus d'actualite => on le un-bind ou on le re-bind.
+		if (s_pPopupBinding == NULL)
 		{
-			cd_keybinder_unbind (pPrevAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut);
-			
-			if (pAccessibility->cRaiseDockShortcut != NULL)  // le raccourci a seulement change, mais l'option est toujours d'actualite, le set_visibility ne verra pas la difference, donc on re-binde.
-			{
-				if (! cd_keybinder_bind (pAccessibility->cRaiseDockShortcut, (CDBindkeyHandler) cairo_dock_raise_from_shortcut, NULL))  // le bind n'a pas pu se faire.
-				{
-					g_free (pAccessibility->cRaiseDockShortcut);
-					pAccessibility->cRaiseDockShortcut = NULL;
-					pAccessibility->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
-				}
-			}
+			s_pPopupBinding = cd_keybinder_bind (myDocksParam.cRaiseDockShortcut,
+				"Cairo-Dock",
+				_("Pop up the main dock"),
+				GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
+				g_cCurrentThemePath,
+				"Accessibility",
+				"raise shortcut",
+				(CDBindkeyHandler) cairo_dock_raise_from_shortcut,
+				NULL);
+		}
+		else
+		{
+			cd_keybinder_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut);
 		}
 	}
-	
-	//\_______________ Max Size.
-	/**if (pAccessibility->iMaxAuthorizedWidth != pPrevAccessibility->iMaxAuthorizedWidth ||
-		pAccessibility->bExtendedMode != pPrevAccessibility->bExtendedMode)
+	else
 	{
-		cairo_dock_set_all_views_to_default (1);  // 1 <=> tous les docks racines. met a jour la taille et reserve l'espace.
-	}*/
+		cd_keybinder_unbind (s_pPopupBinding);
+		s_pPopupBinding = NULL;
+	}
 	
 	//\_______________ Hiding effect.
 	if (cairo_dock_strings_differ (pAccessibility->cHideEffect, pPrevAccessibility->cHideEffect))
@@ -1686,6 +1699,9 @@ static void unload (void)
 	
 	_cairo_dock_stop_polling_screen_edge ();
 	s_bQuickHide = FALSE;
+	
+	cd_keybinder_unbind (s_pPopupBinding);
+	s_pPopupBinding = NULL;
 }
 
 

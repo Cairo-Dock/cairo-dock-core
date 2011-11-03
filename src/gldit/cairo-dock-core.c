@@ -62,7 +62,7 @@ static void _gldi_register_core_managers (void)
 	gldi_register_desktop_manager ();
 	gldi_register_connection_manager ();
 	gldi_register_indicators_manager ();
-	gldi_register_shortcuts_manager ();
+	gldi_register_shortkeys_manager ();
 	gldi_register_data_renderers_manager ();
 	gldi_register_desktop_environment_manager ();
 }
