@@ -750,17 +750,20 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 	for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
 	{
 		pFriendIcon = pElement->data;
-		if (pFriendIcon == NULL || pFriendIcon->cParentDockName == NULL)  // on ne prend pas les inhibiteurs situes dans un desklet.
+		if (pFriendIcon == NULL || pFriendIcon->cParentDockName == NULL)  // if not inside a dock, ignore.
 			continue ;
 		cd_debug (" friend : %s (%d)", pFriendIcon->cName, pFriendIcon->Xid);
-		if (pFriendIcon->Xid != 0 || pFriendIcon->pSubDock != NULL)
+		if (pFriendIcon->Xid != 0 || pFriendIcon->pSubDock != NULL)  // is linked to a window, 1 or several times (Xid or class sub-dock).
 			return pFriendIcon;
 	}
 	
 	for (pElement = pClassAppli->pAppliOfClass; pElement != NULL; pElement = pElement->next)
 	{
 		pFriendIcon = pElement->data;
-		if (pFriendIcon != pIcon && pFriendIcon->cParentDockName != NULL && strcmp (pFriendIcon->cParentDockName, CAIRO_DOCK_MAIN_DOCK_NAME) == 0)
+		if (pFriendIcon == pIcon)  // skip ourselves
+			continue ;
+		if (pFriendIcon->cParentDockName != NULL && strcmp (pFriendIcon->cParentDockName, pIcon->cClass) != 0)  // inside a dock, but not the class sub-dock
+		//if (pFriendIcon != pIcon && pFriendIcon->cParentDockName != NULL && strcmp (pFriendIcon->cParentDockName, CAIRO_DOCK_MAIN_DOCK_NAME) == 0)  // is inside a dock
 			return pFriendIcon;
 	}
 	
@@ -1029,6 +1032,8 @@ static gboolean _appli_is_older (Icon *pIcon1, Icon *pIcon2, CairoDockClassAppli
 
 static inline double _get_previous_order (GList *ic)
 {
+	if (ic == NULL)
+		return 0;
 	double fOrder;
 	Icon *icon = ic->data;
 	Icon *prev_icon = (ic->prev ? ic->prev->data : NULL);
@@ -1041,6 +1046,8 @@ static inline double _get_previous_order (GList *ic)
 }
 static inline double _get_next_order (GList *ic)
 {
+	if (ic == NULL)
+		return 0;
 	double fOrder;
 	Icon *icon = ic->data;
 	Icon *next_icon = (ic->next ? ic->next->data : NULL);
@@ -1071,6 +1078,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 	GList *same_class_ic = NULL;
 
 	// First look for an inhibitor of this class, preferably a launcher.
+	CairoDock *pHostDock = pDock;
 	CairoDock *pParentDock;
 	Icon *pInhibitorIcon;
 	GList *ic;
@@ -1081,10 +1089,11 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 		pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 		if (!pParentDock)  // not inside a dock, for instance a desklet -> skip
 			continue;
-		if (pParentDock->iRefCount != 0)  // inside a sub-dock, take the pointing icon inside the main dock.
-			pInhibitorIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, NULL);
+		///if (pParentDock->iRefCount != 0)  // inside a sub-dock, take the pointing icon inside the main dock.
+		///	pInhibitorIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, NULL);
 		pSameClassIcon = pInhibitorIcon;
 		same_class_ic = ic;
+		pHostDock = pParentDock;
 		g_print (" found an inhibitor of this class: %s (%d)\n", pSameClassIcon->cName, pSameClassIcon->iAge);
 		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon))  // it's a launcher, we wont't find better -> quit
 			break ;
@@ -1100,16 +1109,18 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 			if (pAppliIcon == pIcon)  // skip ourself
 				continue;
 			pParentDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
-			if (pParentDock && pParentDock->bIsMainDock)
+			if (pParentDock != NULL)  // && pParentDock->bIsMainDock
 			{
 				pSameClassIcon = pAppliIcon;
 				same_class_ic = ic;
+				pHostDock = pParentDock;
 				g_print (" found an appli of this class: %s (%d)\n", pSameClassIcon->cName, pSameClassIcon->iAge);
 				break ;
 			}
 		}
+		pIcon->iGroup = CAIRO_DOCK_APPLI;  // no inhibitor, so we'll go in the taskbar group.
 	}
-	else  // an inhibitor is present, we'll go next to it, so we'll be in the 'launcher' group.
+	else  // an inhibitor is present, we'll go next to it, so we'll be in its group.
 	{
 		pIcon->iGroup = pSameClassIcon->iGroup;
 	}
@@ -1126,8 +1137,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 			g_print ("  next icon: %s (%d)\n", pNextIcon->cName, pNextIcon->iAge);
 			if (!pNextIcon->cClass || strcmp (pNextIcon->cClass, pIcon->cClass) != 0)  // not our class any more, quit.
 				break;
-
-			//if (_appli_is_older (pNextIcon, pIcon, pClassAppli))  // this icon is older than us => go after => continue
+			
 			if (pIcon->iAge > pNextIcon->iAge)  // we are more recent than this icon -> place on its right -> continue
 			{
 				pSameClassIcon = pNextIcon;  // 'pSameClassIcon' will be the last icon of our class older than us.
@@ -1139,7 +1149,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 			}
 		}
 		g_print (" pNextIcon: %s (%d)\n", pNextIcon?pNextIcon->cName:"none", pNextIcon?pNextIcon->iAge:-1);
-
+		
 		if (pNextIcon != NULL && cairo_dock_get_icon_order (pNextIcon) == cairo_dock_get_icon_order (pSameClassIcon))  // l'icone suivante est dans le meme groupe que nous, on s'intercalle entre elle et pSameClassIcon.
 			pIcon->fOrder = (pNextIcon->fOrder + pSameClassIcon->fOrder) / 2;
 		else  // aucune icone apres notre classe, ou alors dans un groupe different, on se place juste apres pSameClassIcon.
@@ -1151,18 +1161,23 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 	// if no icon of our class is present in the dock, place it amongst the other appli icons, after the first appli or after the launchers, and ordered by age.
 	// search the last launcher and the first appli.
 	Icon *icon;
-	Icon *pLastLauncher = NULL, *pFirstAppli = NULL;
-	GList *last_launcher_ic = NULL, *first_appli_ic = NULL;
+	Icon *pFirstAppli = NULL, *pLastLauncher = NULL, *pFirstLauncher = NULL;
+	GList *first_appli_ic = NULL, *last_launcher_ic = NULL, *first_launcher_ic = NULL;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
 		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)  // launcher, even without class
 		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon)  // container icon (likely to contain some launchers)
-		|| (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cClass != NULL && icon->pModuleInstance->pModule->pVisitCard->bActAsLauncher)  // applet acting like a launcher
+		|| (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && /**icon->cClass != NULL &&*/ icon->pModuleInstance->pModule->pVisitCard->bActAsLauncher)  // applet acting like a launcher
 		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon)))  // separator (user or auto).
 		{
 			pLastLauncher = icon;
 			last_launcher_ic = ic;
+			if (pFirstLauncher == NULL)
+			{
+				pFirstLauncher = icon;
+				first_launcher_ic = ic;
+			}
 		}
 		else if ((CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon))
 		&& ! cairo_dock_class_is_inhibited (icon->cClass))  // an appli not placed next to its inhibitor.
@@ -1226,14 +1241,43 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 			pIcon->fOrder = _get_next_order (last_appli_ic);
 		}
 	}
-	else if (last_launcher_ic != NULL) // no appli yet in the dock -> place it after the last launcher.
+	else  // no appli yet in the dock -> place it at the taskbar position defined in conf.
 	{
-		g_print (" go just after the last launcher (%s)\n", ((Icon*)last_launcher_ic->data)->cName);
-		pIcon->fOrder = _get_next_order (last_launcher_ic);  // we have already skipped the separators, so we can just take the next order.
-	}
-	else  // no launcher nor appli, go to the beginning of the dock.
-	{
-		pIcon->fOrder = 0;
+		switch (myTaskbarParam.iIconPlacement)
+		{
+			case CAIRO_APPLI_BEFORE_FIRST_ICON:
+				pIcon->fOrder = _get_previous_order (pDock->icons);
+			break;
+			
+			case CAIRO_APPLI_BEFORE_FIRST_LAUNCHER:
+				if (first_launcher_ic != NULL)
+				{
+					g_print (" go just before the first launcher (%s)\n", ((Icon*)first_launcher_ic->data)->cName);
+					pIcon->fOrder = _get_previous_order (first_launcher_ic);  // 'first_launcher_ic' includes the separators, so we can just take the previousorder.
+				}
+				else  // no launcher, go to the beginning of the dock.
+				{
+					pIcon->fOrder = _get_previous_order (pDock->icons);
+				}
+			break;
+			
+			case CAIRO_APPLI_AFTER_LAST_LAUNCHER:
+			default:
+				if (last_launcher_ic != NULL)
+				{
+					g_print (" go just after the last launcher (%s)\n", ((Icon*)last_launcher_ic->data)->cName);
+					pIcon->fOrder = _get_next_order (last_launcher_ic);  // we have already skipped the separators, so we can just take the next order.
+				}
+				else  // no launcher, go to the beginning of the dock.
+				{
+					pIcon->fOrder = _get_previous_order (pDock->icons);
+				}
+			break;
+			
+			case CAIRO_APPLI_AFTER_LAST_ICON:
+				pIcon->fOrder = _get_next_order (g_list_last (pDock->icons));
+			break;
+		}
 	}
 }
 
@@ -1243,9 +1287,11 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 	g_return_if_fail (pClassAppli != NULL);
 	
 	// place the icon amongst the other appli icons of this class, or after the last appli if none.
+	pIcon->iGroup = CAIRO_DOCK_APPLI;
 	Icon *pSameClassIcon = NULL;
 	Icon *icon;
-	GList *ic, *last_ic = NULL, *first_appli_ic = NULL;;
+	GList *ic, *last_ic = NULL, *first_appli_ic = NULL;
+	GList *last_launcher_ic = NULL, *first_launcher_ic = NULL;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
@@ -1266,8 +1312,19 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 				}
 			}
 		}
+		else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)  // launcher, even without class
+		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon)  // container icon (likely to contain some launchers)
+		|| (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cClass != NULL && icon->pModuleInstance->pModule->pVisitCard->bActAsLauncher)  // applet acting like a launcher
+		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon)))  // separator (user or auto).
+		{
+			last_launcher_ic = ic;
+			if (first_launcher_ic == NULL)
+			{
+				first_launcher_ic = ic;
+			}
+		}
 	}
-
+	
 	if (last_ic != NULL)  // there are some applis of our class, but none are more recent than us, so we are the most recent => go just after the last one we found previously.
 	{
 		pIcon->fOrder = _get_next_order (last_ic);
@@ -1301,6 +1358,8 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 						icon = ic->next->data;
 						if (icon->cClass && strcmp (icon->cClass, pOldestAppli->cClass) == 0)  // next icon is of the same class -> skip
 							ic = ic->next;
+						else
+							break;
 					}
 					last_appli_ic = ic;
 				}
@@ -1319,9 +1378,43 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 				pIcon->fOrder = _get_next_order (last_appli_ic);
 			}
 		}
-		else  // no appli, go to the beginning of the group/dock.
+		else  // no appli, use the defined placement.
 		{
-			pIcon->fOrder = 0;
+			switch (myTaskbarParam.iIconPlacement)
+			{
+				case CAIRO_APPLI_BEFORE_FIRST_ICON:
+					pIcon->fOrder = _get_previous_order (pDock->icons);
+				break;
+
+				case CAIRO_APPLI_BEFORE_FIRST_LAUNCHER:
+					if (first_launcher_ic != NULL)
+					{
+						g_print (" go just before the first launcher (%s)\n", ((Icon*)first_launcher_ic->data)->cName);
+						pIcon->fOrder = _get_previous_order (first_launcher_ic);  // 'first_launcher_ic' includes the separators, so we can just take the previousorder.
+					}
+					else  // no launcher, go to the beginning of the dock.
+					{
+						pIcon->fOrder = _get_previous_order (pDock->icons);
+					}
+				break;
+
+				case CAIRO_APPLI_AFTER_LAST_LAUNCHER:
+				default:
+					if (last_launcher_ic != NULL)
+					{
+						g_print (" go just after the last launcher (%s)\n", ((Icon*)last_launcher_ic->data)->cName);
+						pIcon->fOrder = _get_next_order (last_launcher_ic);  // we have already skipped the separators, so we can just take the next order.
+					}
+					else  // no launcher, go to the beginning of the dock.
+					{
+						pIcon->fOrder = _get_previous_order (pDock->icons);
+					}
+				break;
+
+				case CAIRO_APPLI_AFTER_LAST_ICON:
+					pIcon->fOrder = _get_next_order (g_list_last (pDock->icons));
+				break;
+			}
 		}
 	}
 }

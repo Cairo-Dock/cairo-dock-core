@@ -60,7 +60,6 @@ typedef enum {
 	NOTIFICATION_WINDOW_ACTIVATED,
 	/// notification called when a window's property has changed. data : {Window, Atom, int}
 	NOTIFICATION_WINDOW_PROPERTY_CHANGED,
-	/// 
 	NB_NOTIFICATIONS_DESKTOP
 	} CairoDesktopNotifications;
 
@@ -98,14 +97,32 @@ struct _CairoDockDesktopBackground {
 */
 void cairo_dock_wm_register_backend (CairoDockWMBackend *pBackend);
 
+/** Present all the windows of a given class.
+*@param cClass the class.
+*@return TRUE on success
+*/
 gboolean cairo_dock_wm_present_class (const gchar *cClass);
 
+/** Present all the windows of the current desktop.
+*@return TRUE on success
+*/
 gboolean cairo_dock_wm_present_windows (void);
 
+/** Present all the desktops.
+*@return TRUE on success
+*/
 gboolean cairo_dock_wm_present_desktops (void);
 
+/** Show the Widget Layer.
+*@return TRUE on success
+*/
 gboolean cairo_dock_wm_show_widget_layer (void);
 
+/** Set a window to be displayed on the Widget Layer.
+*@param Xid X ID of the window.
+*@param bOnWidgetLayer whether to set or unset the option.
+*@return TRUE on success
+*/
 gboolean cairo_dock_wm_set_on_widget_layer (Window Xid, gboolean bOnWidgetLayer);
 
 gboolean cairo_dock_wm_can_present_class (void);

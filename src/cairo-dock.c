@@ -77,6 +77,7 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-keybinder.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command
 
@@ -650,6 +651,18 @@ int main (int argc, char** argv)
 	cairo_dock_register_notification_on_object (&myDeskletsMgr,
 		NOTIFICATION_NEW_DESKLET,
 		(CairoDockNotificationFunc) cairo_dock_notification_desklet_destroyed,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myShortkeysMgr,
+		NOTIFICATION_SHORTKEY_ADDED,
+		(CairoDockNotificationFunc) cairo_dock_notification_shortkey_added_or_removed,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myShortkeysMgr,
+		NOTIFICATION_SHORTKEY_REMOVED,
+		(CairoDockNotificationFunc) cairo_dock_notification_shortkey_added_or_removed,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myShortkeysMgr,
+		NOTIFICATION_SHORTKEY_CHANGED,
+		(CairoDockNotificationFunc) cairo_dock_notification_shortkey_added_or_removed,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	
 	//\___________________ handle crashes.

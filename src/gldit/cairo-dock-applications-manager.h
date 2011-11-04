@@ -40,6 +40,14 @@ extern CairoTaskbarParam myTaskbarParam;
 extern CairoTaskbarManager myTaskbarMgr;
 #endif
 
+typedef enum {
+	CAIRO_APPLI_BEFORE_FIRST_ICON,
+	CAIRO_APPLI_BEFORE_FIRST_LAUNCHER,
+	CAIRO_APPLI_AFTER_LAST_LAUNCHER,
+	CAIRO_APPLI_AFTER_LAST_ICON,
+	CAIRO_APPLI_NB_PLACEMENTS
+} CairoTaskbarPlacement;
+
 // params
 struct _CairoTaskbarParam {
 	gboolean bShowAppli;
@@ -61,7 +69,7 @@ struct _CairoTaskbarParam {
 	gchar *cOverwriteException;
 	gchar *cGroupException;
 	gchar *cForceDemandsAttention;
-	gint iIconPlacement;
+	CairoTaskbarPlacement iIconPlacement;
 	} ;
 
 // manager

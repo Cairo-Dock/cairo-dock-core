@@ -400,6 +400,8 @@ typedef struct _CairoDockImageBuffer CairoDockImageBuffer;
 
 typedef struct _CairoOverlay CairoOverlay;
 
+typedef struct _CairoKeyBinding CairoKeyBinding;
+
 typedef struct _GldiManager GldiManager;
 
 typedef void (* _CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);

@@ -108,18 +108,18 @@ frame1 =
 #{Cairo-Dock will then act as your taskbar. It is recommended to remove any other taskbars.}
 show applications = true
 
-#b- Only show icons whose windows are minimised
-hide visible = false
+#b- Mix launchers and applications
+#{Allows launchers to act as applications when their programs are running and displays a marker on icons to indicate this. You can launch other occurences of the program with SHIFT+click.}
+mix launcher appli = true
 
 #b- Only show applications on current desktop
 current desktop only = false
 
-#B-[-1] Mix launchers and applications
-#{Allows launchers to act as applications when their programs are running and displays a marker on icons to indicate this. You can launch other occurences of the program with SHIFT+click.}
-mix launcher appli = true
+#b- Only show icons whose windows are minimised
+hide visible = false
 
-#l-[Before the first icon;After the last icon] Place new icons
-place icons = 1
+#l-[At the beginning of the dock;Before the launchers;After the launchers;At the end of the dock] Place new icons
+place icons = 2
 
 #B- Group windows from the same application in a sub-dock ?
 #{This allows you to group all the windows of a given application into a unique sub-dock, and to act on all of the windows at the same time.}
@@ -187,6 +187,18 @@ force demands attention =
 
 #a- Highlight applications demanding your attention with an animation
 animation on demands attention = rotate
+
+
+#[gtk-select-font]
+[Shortkeys]
+
+#F[Keyboard shortcuts currently available;gtk-select-font]
+frame_key=
+
+#_ 
+#{Many applets provide shortkeys for their actions. As soon as an applet is enabled, its shortkeys become available.
+#Double-click on a line, and press the shortkey you want to use for the corresponding action.}
+shortkeys=
 
 
 [System]

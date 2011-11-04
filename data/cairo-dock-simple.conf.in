@@ -94,7 +94,7 @@ frame_key=
 
 #_ 
 #{Many applets provide shortkeys for their actions. As soon as an applet is enabled, its shortkeys become available.
-#Click on the 'grab' button, and press the shortkey you want to use for the corresponding action.}
+#Double-click on a line, and press the shortkey you want to use for the corresponding action.}
 shortkeys=
 
 

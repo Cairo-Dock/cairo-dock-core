@@ -311,34 +311,28 @@ static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, Cai
 	pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
 	pFakeClassIcon->bHasIndicator = pSameClassIcon->bHasIndicator;
 	
-	/**pFakeClassIcon->fWidth = pSameClassIcon->fWidth / pClassMateParentDock->container.fRatio;
-	pFakeClassIcon->fHeight = pSameClassIcon->fHeight / pClassMateParentDock->container.fRatio;
-	pFakeClassIcon->fXMax = pSameClassIcon->fXMax;
-	pFakeClassIcon->fXMin = pSameClassIcon->fXMin;
-	pFakeClassIcon->fXAtRest = pSameClassIcon->fXAtRest;*/
-	//g_print ("%s() : TESTER SANS LES 5 LIGNES DU DESSUS...\n", __func__);
 	pFakeClassIcon->pSubDock = pClassDock;
 	return pFakeClassIcon;
 }
 
-static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoDock *pMainDock)
+static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoDock *pMainDock, const gchar *cMainDockName)
 {
 	cd_message ("%s (%s)", __func__, icon->cName);
 	CairoDock *pParentDock = pMainDock;
 	g_free (icon->cParentDockName);
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))
 	{
-		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);  // un inhibiteur dans un dock OU une appli de meme classe dans le main dock.
-		if (pSameClassIcon == NULL)  // aucun classmate => elle va dans le main dock.
+		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);  // un inhibiteur dans un dock OU une appli de meme classe dans un dock != class-sub-dock.
+		if (pSameClassIcon == NULL)  // aucun classmate => elle va dans son class sub-dock ou dans le main dock.
 		{
 			cd_message ("  classe %s encore vide", icon->cClass);
 			pParentDock = cairo_dock_search_dock_from_name (icon->cClass);
-			if (pParentDock == NULL)
+			if (pParentDock == NULL)  // no class sub-dock => go to main dock
 			{
-				pParentDock = pMainDock;
-				icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
+				pParentDock = cairo_dock_search_dock_from_name (cMainDockName);
+				icon->cParentDockName = g_strdup (cMainDockName);
 			}
-			else
+			else  // go to class sub-dock
 			{
 				icon->cParentDockName = g_strdup (icon->cClass);
 			}
@@ -418,8 +412,9 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 		}
 	}
 	else
-		icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
-
+	{
+		icon->cParentDockName = g_strdup (cMainDockName);
+	}
 	return pParentDock;
 }
 
@@ -446,8 +441,8 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 		return NULL;
 	}
 	
-	//\_________________ On determine dans quel dock l'inserer.
-	CairoDock *pParentDock = _cairo_dock_set_parent_dock_name_for_appli (icon, pMainDock);  // renseigne cParentDockName.
+	//\_________________ On determine dans quel dock l'inserer (cree au besoin).
+	CairoDock *pParentDock = _cairo_dock_set_parent_dock_name_for_appli (icon, pMainDock, CAIRO_DOCK_MAIN_DOCK_NAME);  // renseigne cParentDockName.   /// TODO: we should actually use the name of 'pMainDock' if one day we want to place the taskbar inside another dock...
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.

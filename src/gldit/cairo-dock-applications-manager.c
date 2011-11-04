@@ -838,14 +838,18 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	cairo_dock_set_overwrite_exceptions (myTaskbarParam.cOverwriteException);
 	cairo_dock_set_group_exceptions (myTaskbarParam.cGroupException);
 	
-	if (myTaskbarParam.bMixLauncherAppli)
+	myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 0;
+	myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 0;
+	myIconsParam.tIconTypeOrder[CAIRO_DOCK_SEPARATOR12] = 0;
+	/// TODO: don't separate both cases ...
+	/**if (myTaskbarParam.bMixLauncherAppli)
 	{
 		myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 0;
 		myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 0;
 	}
 	else  // separated taskbar
 	{
-		if (myTaskbarParam.iIconPlacement == 0)  // before the first icon
+		if (myTaskbarParam.iIconPlacement == CAIRO_APPLI_BEFORE_FIRST_ICON)  // before the first icon
 		{
 			myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 2;
 			myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 0;
@@ -856,7 +860,7 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 			myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 2;
 		}
 	}
-	myIconsParam.tIconTypeOrder[CAIRO_DOCK_SEPARATOR12] = 1;
+	myIconsParam.tIconTypeOrder[CAIRO_DOCK_SEPARATOR12] = 1;*/
 	
 	//\__________________ On recupere l'ensemble des fenetres presentes.
 	gulong i, iNbWindows = 0;
@@ -1469,7 +1473,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		
 		pTaskBar->bHideVisibleApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "hide visible", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 		
-		pTaskBar->iIconPlacement = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "place icons", &bFlushConfFileNeeded, 1, NULL, NULL);  // after the last icon by default.
+		pTaskBar->iIconPlacement = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "place icons", &bFlushConfFileNeeded, CAIRO_APPLI_AFTER_LAST_LAUNCHER, NULL, NULL);  // after the last launcher by default.
 		
 		// representation
 		pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
