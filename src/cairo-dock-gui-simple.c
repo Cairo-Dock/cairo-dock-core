@@ -41,6 +41,7 @@
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-keybinder.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
@@ -1019,7 +1020,24 @@ static void update_modules_list (void)
 	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
 	g_return_if_fail (pModel != NULL);
 	gtk_list_store_clear (GTK_LIST_STORE (pModel));
+	
 	cairo_dock_foreach_module ((GHRFunc) cairo_dock_add_module_to_modele, pModel);
+}
+
+
+static void update_shortkeys (void)
+{
+	if (s_pSimpleConfigWindow == NULL)
+		return;
+	
+	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget (s_pSimpleConfigWindow, "Shortkeys", "shortkeys");
+	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	
+	GtkWidget *pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
+	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
+	g_return_if_fail (pModel != NULL);
+	gtk_list_store_clear (GTK_LIST_STORE (pModel));
+	cd_keybinder_foreach ((GFunc) cairo_dock_add_shortkey_to_model, pModel);
 }
 
 
@@ -1053,6 +1071,7 @@ void cairo_dock_register_simple_gui_backend (void)
 	pBackend->update_desklet_params 		= cairo_dock_gui_items_update_desklet_params;
 	pBackend->update_desklet_visibility_params = cairo_dock_update_desklet_visibility_params;
 	pBackend->update_modules_list 			= update_modules_list;
+	pBackend->update_shortkeys 				= update_shortkeys;
 	pBackend->bCanManageThemes 				= TRUE;
 	pBackend->cDisplayedName 				= _("Advanced Mode");
 	pBackend->cTooltip 						= _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme.");

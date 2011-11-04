@@ -28,7 +28,6 @@
 * imported from tomboy_key_binder.h
 */
 
-
 #ifndef __CD_KEY_BINDER_H__
 #define __CD_KEY_BINDER_H__
 
@@ -63,7 +62,6 @@ struct _CairoKeyBinding {
 	gchar            *cGroupName;
 	gchar            *cKeyName;
 } ;
-typedef struct _CairoKeyBinding CairoKeyBinding;
 
 
 typedef struct _CairoShortkeysManager CairoShortkeysManager;
@@ -84,6 +82,9 @@ struct _CairoShortkeysManager {
 
 // signals
 typedef enum {
+	NOTIFICATION_SHORTKEY_ADDED,
+	NOTIFICATION_SHORTKEY_REMOVED,
+	NOTIFICATION_SHORTKEY_CHANGED,
 	NB_NOTIFICATIONS_SHORTKEYS
 	} CairoShortkeysNotifications;
 

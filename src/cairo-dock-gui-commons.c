@@ -341,7 +341,7 @@ static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, CairoDoc
 	else
 		cairo_dock_show_module_gui (pModule->pVisitCard->cModuleName);
 }
-static void _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer data)
+static gboolean _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer data)
 {
 	if ((pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)  // right click
 	|| (pButton->button == 1 && pButton->type == GDK_2BUTTON_PRESS))  // double click
@@ -350,17 +350,17 @@ static void _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* 
 		GtkTreeModel *pModel;
 		GtkTreeIter iter;
 		if (! gtk_tree_selection_get_selected (pSelection, &pModel, &iter))
-			return ;
+			return FALSE;
 		
 		gchar *cModuleName = NULL;
 		gtk_tree_model_get (pModel, &iter,
 			CAIRO_DOCK_MODEL_RESULT, &cModuleName, -1);
 		CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 		if (pModule == NULL)
-			return ;
+			return FALSE;
 		
 		if (pModule->pInstancesList == NULL)  // on ne gere pas la config d'un module no nactif, donc inutile de presenter le menu dans ce cas-la.
-			return ;
+			return FALSE;
 		
 		if (pButton->button == 3)
 		{
@@ -382,7 +382,7 @@ static void _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* 
 			_cairo_dock_initiate_config_module (NULL, pModule);
 		}
 	}
-	return ;
+	return FALSE;
 }
 static void _cairo_dock_render_module_name (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
 {
@@ -448,6 +448,7 @@ GtkWidget *cairo_dock_build_modules_treeview (void)
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
 	gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (pOneWidget), TRUE);
 	g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_module_tree_view), NULL);  // pour le menu du clic droit
+	g_signal_connect (G_OBJECT (pOneWidget), "button-press-event", G_CALLBACK (_on_click_module_tree_view), NULL);  // pour le menu du clic droit
 	
 	GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
@@ -548,40 +549,63 @@ static void on_cancel_shortkey (GtkButton *button, GtkWidget *pInputDialog)
 {
 	gtk_widget_destroy (pInputDialog);
 }
+static void _cairo_dock_initiate_change_shortkey (GtkMenuItem *pMenuItem, GtkTreeView *pTreeView)
+{
+	// ensure a line is selected
+	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (pTreeView);
+	GtkTreeModel *pModel;
+	GtkTreeIter iter;
+	if (! gtk_tree_selection_get_selected (pSelection, &pModel, &iter))
+		return ;
+
+	// build a small modal input dialog, mainly to prevent any other interaction.
+	GtkWidget *pInputDialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_decorated (GTK_WINDOW (pInputDialog), FALSE);
+	gtk_window_set_skip_taskbar_hint (GTK_WINDOW (pInputDialog), TRUE);
+	gtk_window_set_skip_pager_hint (GTK_WINDOW (pInputDialog), TRUE);
+	//gtk_window_set_transient_for (GTK_WINDOW (pInputDialog), GTK_WINDOW (pMainWindow));
+	gtk_window_set_modal (GTK_WINDOW (pInputDialog), TRUE);
+
+	gtk_widget_add_events (pInputDialog, GDK_KEY_PRESS_MASK);
+	g_signal_connect (GTK_WIDGET(pInputDialog), "key-press-event", GTK_SIGNAL_FUNC(_on_key_grab_cb), pTreeView);
+
+	GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	gtk_container_add (GTK_CONTAINER (pInputDialog), pMainVBox);
+
+	GtkWidget *pLabel = gtk_label_new (_("Press the shortkey"));
+	gtk_box_pack_start(GTK_BOX (pMainVBox), pLabel, FALSE, FALSE, 0);
+
+	GtkWidget *pCancelButton = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+	g_signal_connect (G_OBJECT (pCancelButton), "clicked", G_CALLBACK(on_cancel_shortkey), pInputDialog);
+	gtk_box_pack_start (GTK_BOX (pMainVBox), pCancelButton, FALSE, FALSE, 0);
+
+	gtk_widget_show_all (pInputDialog);
+}
 static gboolean _on_click_shortkey_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer data)
 {
 	GtkWidget *pMainWindow = NULL;
-	if (pButton->button == 1 && pButton->type == GDK_2BUTTON_PRESS)  // double click
+	if ((pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)  // right click
+	|| (pButton->button == 1 && pButton->type == GDK_2BUTTON_PRESS))  // double click
 	{
-		// ensure a line is selected
-		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (pTreeView);
-		GtkTreeModel *pModel;
-		GtkTreeIter iter;
-		if (! gtk_tree_selection_get_selected (pSelection, &pModel, &iter))
-			return FALSE;
-		
-		// build a small modal input dialog, mainly to prevent any other interaction.
-		GtkWidget *pInputDialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-		gtk_window_set_decorated (GTK_WINDOW (pInputDialog), FALSE);
-		gtk_window_set_skip_taskbar_hint (GTK_WINDOW (pInputDialog), TRUE);
-		gtk_window_set_skip_pager_hint (GTK_WINDOW (pInputDialog), TRUE);
-		gtk_window_set_transient_for (GTK_WINDOW (pInputDialog), GTK_WINDOW (pMainWindow));
-		gtk_window_set_modal (GTK_WINDOW (pInputDialog), TRUE);
-		
-		gtk_widget_add_events (pInputDialog, GDK_KEY_PRESS_MASK);
-		g_signal_connect (GTK_WIDGET(pInputDialog), "key-press-event", GTK_SIGNAL_FUNC(_on_key_grab_cb), pTreeView);
-		
-		GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
-		gtk_container_add (GTK_CONTAINER (pInputDialog), pMainVBox);
-
-		GtkWidget *pLabel = gtk_label_new (_("Press the shortkey"));
-		gtk_box_pack_start(GTK_BOX (pMainVBox), pLabel, FALSE, FALSE, 0);
-
-		GtkWidget *pCancelButton = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-		g_signal_connect (G_OBJECT (pCancelButton), "clicked", G_CALLBACK(on_cancel_shortkey), pInputDialog);
-		gtk_box_pack_start (GTK_BOX (pMainVBox), pCancelButton, FALSE, FALSE, 0);
-
-		gtk_widget_show_all (pInputDialog);
+		if (pButton->button == 3)
+		{
+			GtkWidget *pMenu = gtk_menu_new ();
+			
+			cairo_dock_add_in_menu_with_stock_and_data (_("Change the shortkey"), GTK_STOCK_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_change_shortkey), pMenu, pTreeView);
+			
+			gtk_widget_show_all (pMenu);
+			gtk_menu_popup (GTK_MENU (pMenu),
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				1,
+				gtk_get_current_event_time ());
+		}
+		else
+		{
+			_cairo_dock_initiate_change_shortkey (NULL, pTreeView);
+		}
 	}
 	return FALSE;
 }
@@ -595,12 +619,12 @@ static void _cairo_dock_render_shortkey (GtkTreeViewColumn *tree_column, GtkCell
 	
 	if (bActive)
 	{
-		g_object_set (cell, "foreground", "#116E08", NULL);  // vert
+		g_object_set (cell, "foreground", "#108000", NULL);  // vert
 		g_object_set (cell, "foreground-set", TRUE, NULL);
 	}
 	else if (cShortkey != NULL)
 	{
-		g_object_set (cell, "foreground", "#900009", NULL);  // rouge
+		g_object_set (cell, "foreground", "#A00000", NULL);  // rouge
 		g_object_set (cell, "foreground-set", TRUE, NULL);
 	}
 	else
@@ -609,7 +633,7 @@ static void _cairo_dock_render_shortkey (GtkTreeViewColumn *tree_column, GtkCell
 	}
 	g_free (cShortkey);
 }
-static void _add_one_shortkey (CairoKeyBinding *binding, GtkListStore *pModel)
+void cairo_dock_add_shortkey_to_model (CairoKeyBinding *binding, GtkListStore *pModel)
 {
 	//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (binding->cIconFilePath, 32, 32, NULL);
@@ -637,13 +661,14 @@ GtkWidget *cairo_dock_build_shortkeys_widget (void)
 		G_TYPE_BOOLEAN,  // grabbed or not
 		G_TYPE_POINTER);  // binding
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pModel), CD_SHORTKEY_MODEL_NAME, GTK_SORT_ASCENDING);
-	cd_keybinder_foreach ((GFunc) _add_one_shortkey, pModel);
+	cd_keybinder_foreach ((GFunc) cairo_dock_add_shortkey_to_model, pModel);
 	
 	// make the treeview
 	GtkWidget *pOneWidget = gtk_tree_view_new_with_model (GTK_TREE_MODEL (pModel));
 	g_object_unref (pModel);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
 	g_signal_connect (G_OBJECT (pOneWidget), "button-press-event", G_CALLBACK (_on_click_shortkey_tree_view), NULL);
+	g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_shortkey_tree_view), NULL);
 	
 	// define the rendering of the treeview
 	GtkTreeViewColumn* col;

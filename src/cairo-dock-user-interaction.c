@@ -541,3 +541,10 @@ gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockM
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
+
+gboolean cairo_dock_notification_shortkey_added_or_removed (gpointer pUserData, CairoKeyBinding *pKeyBinding)
+{
+	cairo_dock_gui_trigger_reload_shortkeys ();
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}

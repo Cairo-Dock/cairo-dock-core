@@ -56,6 +56,8 @@ gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gc
 
 gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockModuleInstance *pInstance, gboolean bIsDetached);
 
+gboolean cairo_dock_notification_shortkey_added_or_removed (gpointer pUserData, CairoKeyBinding *pKeyBinding);
+
 
 G_END_DECLS
 #endif

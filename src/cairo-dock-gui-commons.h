@@ -39,9 +39,9 @@ gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback, GtkWidget *
 
 
 gboolean cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, GtkListStore *pModele);
-
 GtkWidget *cairo_dock_build_modules_treeview (void);
 
+void cairo_dock_add_shortkey_to_model (CairoKeyBinding *binding, GtkListStore *pModel);
 GtkWidget *cairo_dock_build_shortkeys_widget (void);
 
 

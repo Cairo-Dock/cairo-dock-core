@@ -258,7 +258,7 @@ static gboolean _update_shortkeys (gpointer data)
 	s_iSidReloadShortkeys = 0;
 	return FALSE;
 }
-void cairo_dock_gui_trigger_update_shortkeys (void)
+void cairo_dock_gui_trigger_reload_shortkeys (void)
 {
 	if (s_iSidReloadShortkeys == 0)
 	{

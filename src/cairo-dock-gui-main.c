@@ -38,6 +38,7 @@
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-keybinder.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
@@ -1456,6 +1457,24 @@ static gboolean _cairo_dock_add_one_module_widget (CairoDockModule *pModule, con
 	return TRUE;  // continue.
 }
 
+static void _load_shortkeys_widget (CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile)
+{
+	//\_____________ On recupere notre emplacement perso dans la fenetre.
+	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget_in_list (s_pCurrentWidgetList, "Shortkeys", "shortkeys");
+	g_return_if_fail (myWidget != NULL);
+	
+	//\_____________ On construit le tree-view.
+	GtkWidget *pOneWidget = cairo_dock_build_shortkeys_widget ();
+	
+	//\_____________ On l'ajoute a la fenetre.
+	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+	gtk_widget_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
+	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.
+	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow, FALSE, FALSE, 0);
+}
+
 #define _add_one_main_group_button(cGroupName, cIcon, iCategory, cDescription, cTitle) \
 _add_group_button (cGroupName,\
 		cIcon,\
@@ -1494,6 +1513,13 @@ static void _add_main_groups_buttons (void)
 		N_("Display and interact with currently open windows."),
 		_("Taskbar"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Taskbar");
+	
+	pGroupDescription = _add_one_main_group_button ("Shortkeys",
+		"gtk-select-font",  /// TODO: trouver une meilleure icone, et l'utiliser aussi pour le backend "simple"...
+		CAIRO_DOCK_CATEGORY_BEHAVIOR,
+		N_("Define all the keyboard shortcuts currently available."),
+		_("Shortkeys"));
+	pGroupDescription->load_custom_widget = _load_shortkeys_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("System",
 		"icon-system.svg",
@@ -2336,7 +2362,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 	
 	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), pGroupDescription->cTitle);
 	
-	if (pInstance != NULL && pGroupDescription->load_custom_widget != NULL)
+	if (/**pInstance != NULL && */pGroupDescription->load_custom_widget != NULL)
 		pGroupDescription->load_custom_widget (pInstance, pKeyFile);
 	
 	cairo_dock_insert_extern_widget_in_gui (pWidget);  // devient le widget courant.
@@ -2701,6 +2727,21 @@ static void update_modules_list (void)
 	gtk_widget_show_all (s_pMainWindow);
 }
 
+static void update_shortkeys (void)
+{
+	if (s_pMainWindow == NULL)
+		return ;
+	
+	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (s_pCurrentWidgetList, "Shortkeys", "shortkeys");
+	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	
+	GtkWidget *pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
+	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
+	g_return_if_fail (pModel != NULL);
+	gtk_list_store_clear (GTK_LIST_STORE (pModel));
+	cd_keybinder_foreach ((GFunc) cairo_dock_add_shortkey_to_model, pModel);
+}
+
 static void set_status_message_on_gui (const gchar *cMessage)
 {
 	if (s_pStatusBar == NULL)
@@ -2744,6 +2785,7 @@ void cairo_dock_register_main_gui_backend (void)
 	pBackend->update_desklet_visibility_params 	= update_desklet_visibility_params;
 	pBackend->update_module_instance_container 	= update_module_instance_container;
 	pBackend->update_modules_list 				= update_modules_list;
+	pBackend->update_shortkeys 				= update_shortkeys;
 	pBackend->bCanManageThemes 					= FALSE;
 	pBackend->cDisplayedName 					= _("Simple Mode");
 	pBackend->cTooltip 							= NULL;

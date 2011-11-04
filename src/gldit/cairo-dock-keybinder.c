@@ -284,6 +284,8 @@ cd_keybinder_bind (const gchar *keystring,
 		}
 	}
 	
+	cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_ADDED, binding);
+	
 	return binding;
 }
 
@@ -319,6 +321,8 @@ cd_keybinder_unbind (CairoKeyBinding *binding)
 	cd_debug (" --- remove key binding '%s'\n", binding->keystring);
 	s_pKeyBindings = g_slist_delete_link (s_pKeyBindings, iter);
 	
+	cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_REMOVED, binding);
+	
 	_free_binding (binding);
 }
 
@@ -349,6 +353,8 @@ gboolean cd_keybinder_rebind (CairoKeyBinding *binding,
 	}
 	
 	binding->bSuccess = do_grab_key (binding);
+	
+	cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_CHANGED, binding);
 	
 	return binding->bSuccess;
 }
@@ -427,6 +433,8 @@ static void unload (void)
 		
 		cd_debug (" --- remove key binding '%s'\n", binding->keystring);
 		do_ungrab_key (binding);
+		
+		cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_REMOVED, binding);
 		
 		_free_binding (binding);
 	}
