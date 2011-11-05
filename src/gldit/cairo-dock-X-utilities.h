@@ -109,7 +109,7 @@ int cairo_dock_get_xwindow_desktop (Window Xid);
 void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLocalPositionY, int *iWidthExtent, int *iHeightExtent);
 void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY);
 
-gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid);
+///gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid);
 
 Window *cairo_dock_get_windows_list (gulong *iNbWindows, gboolean bStackOrder);
 Window cairo_dock_get_active_xwindow (void);

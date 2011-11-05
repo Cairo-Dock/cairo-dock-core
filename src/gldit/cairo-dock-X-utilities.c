@@ -1138,13 +1138,18 @@ void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLo
 		&root_return,
 		&x_return, &y_return,
 		&width_return, &height_return,
-		&border_width_return, &depth_return);  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel.
+		&border_width_return, &depth_return);  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel. Note: on startup, until our window is mapped, we are nowhere, so there is no current viewport, and coordinates are 0... it's not a big deal, since we're most likely launched on session startup (no window yet).
+	int dest_x_return, dest_y_return;
+	Window child_return;
+	XTranslateCoordinates (s_XDisplay, Xid, root_return, x_return, y_return, &dest_x_return, &dest_y_return, &child_return);  // translate into the coordinate space of the root window. we need to do this, because (x_return,;y_return) is always (0;0)
+	//g_print (" %d;%d %dx%d\n", x_return, y_return, width_return, height_return);
+	//g_print (" -> %d;%d\n", newx, newy);
 	
-	*iLocalPositionX = x_return;  // on pourrait tenir compte de border_width_return...
-	*iLocalPositionY = y_return;  // idem.
+	*iLocalPositionX = dest_x_return/**x_return*/;  // on pourrait tenir compte de border_width_return...
+	*iLocalPositionY = dest_y_return/**y_return*/;  // idem.
 	*iWidthExtent = width_return;  // idem.
 	*iHeightExtent = height_return;  // idem.
-	//g_print ("%s () -> %d;%d %dx%d / %d,%d\n", __func__, x_return, y_return, *iWidthExtent, *iHeightExtent, border_width_return, depth_return);
+	///g_print ("%s () -> %d;%d %dx%d / %d,%d\n", __func__, x_return, y_return, *iWidthExtent, *iHeightExtent, border_width_return, depth_return);
 }
 
 void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY)
@@ -1166,7 +1171,7 @@ void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelative
 	//cd_debug ("position relative : (%d;%d) taille : %dx%d", *iRelativePositionX, *iRelativePositionY, iWidthExtent, iHeightExtent);
 }
 
-gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid)
+/**gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid)
 {
 	int iWindowDesktopNumber, iLocalPositionX, iLocalPositionY, iWidthExtent, iHeightExtent;  // coordonnees du coin haut gauche dans le referentiel du viewport actuel.
 	iWindowDesktopNumber = cairo_dock_get_xwindow_desktop (Xid);
@@ -1178,7 +1183,7 @@ gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid)
 		iLocalPositionX < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
 		iLocalPositionY + iHeightExtent > 0 &&
 		iLocalPositionY < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
-}
+}*/
 
 
 Window *cairo_dock_get_windows_list (gulong *iNbWindows, gboolean bStackOrder)
