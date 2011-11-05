@@ -592,21 +592,15 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 				floor (fOffsetX),
 				floor (bDirectionUp ? -iLabelSize : icon->fHeight * icon->fScale));
 		}
-		else if (myIconsParam.bTextAlwaysHorizontal)
+		else if (myIconsParam.bTextAlwaysHorizontal)  // horizontal label on a vertical dock -> draw them next to the icon, vertically centered (like the Parabolic view)
 		{
-			if (icon->fDrawY + fOffsetX + icon->iTextWidth > pDock->container.iHeight)
-				fOffsetX = pDock->container.iHeight - icon->fDrawY - icon->iTextWidth;
-			if (icon->fDrawY + fOffsetX < 0)
-				fOffsetX = - icon->fDrawY;
-			double y = -icon->iTextHeight;
-			if (icon->fDrawX + y < 0)  // text is out from the top of the screen
-			{
-				y = -icon->fDrawX;
-			}
+			const int pad = 3;
 			cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
-				floor (fOffsetX) - icon->fHeight * icon->fScale - 2*(myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin),
-				floor (y + icon->fWidth * icon->fScale/2 + icon->iTextHeight/2));
+				bDirectionUp ? 
+					floor (0 - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->iTextWidth):
+					floor (0 + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad),
+				floor (0 + icon->fWidth * icon->fScale/2 - icon->iTextHeight/2));
 		}
 		else
 		{

@@ -464,38 +464,17 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 				glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
 				glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
 			}
-			/*if (pDock->container.bIsHorizontal)
-				glTranslatef (floor (fX), floor (fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), 0.);
-			else
-				glTranslatef (floor (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), floor (fX), 0.);
-			
-			double fOffsetX = 0.;
-			if (icon->fDrawX + icon->fWidth * icon->fScale/2 - icon->iTextWidth/2 < 0)  // l'etiquette deborde a gauche.
-				fOffsetX = icon->iTextWidth/2 - (icon->fDrawX + icon->fWidth * icon->fScale/2);
-			else if (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2 > pDock->container.iWidth)  // l'etiquette deborde a droite.
-				fOffsetX = pDock->container.iWidth - (icon->fDrawX + icon->fWidth * icon->fScale/2 + icon->iTextWidth/2);
-			if (icon->fOrientation != 0 && ! myIconsParam.bTextAlwaysHorizontal)
-			{
-				glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
-				glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
-				glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
-			}
-			
-			if (pDock->container.bIsHorizontal)
-			{
-				glTranslatef (floor (fOffsetX) + dx,
-					floor ((pDock->container.bDirectionUp ? 1:-1) * (icon->fHeight * icon->fScale/2 + myIconsParam.iLabelSize - icon->iTextHeight / 2)) + dy,
-					0.);
-			}
-			else
-			{
-				glTranslatef (floor ((pDock->container.bDirectionUp ? -.5:.5) * (icon->fHeight * icon->fScale + icon->iTextHeight)) + dx,
-					- floor (fOffsetX) + dy,
-					0.);
-				glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
-			}*/
 		}
-		else
+		else  // horizontal label on a vertical dock -> draw them next to the icon, vertically centered (like the Parabolic view)
+		{
+			const int pad = 3;
+			glTranslatef (pDock->container.bDirectionUp ? 
+					floor (fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->iTextWidth/2) + dx :
+					floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad + icon->iTextWidth/2) + dx,
+				floor (fX) + dy,
+				0.);
+		}
+		/*else
 		{
 			fY += icon->fHeight * icon->fScale/2;  // middle of the icon
 			
@@ -508,7 +487,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			if (fX + y + icon->iTextHeight/2 > pDock->container.iWidth)  // le texte deborde par le haut.
 				y = pDock->container.iWidth - fX - icon->iTextHeight/2;
 			glTranslatef (floor (fY) + dx, floor (fX) + floor (y) + dy, 0.);
-		}
+		}*/
 		
 		double fMagnitude;
 		if (myIconsParam.bLabelForPointedIconOnly ||pDock->fMagnitudeMax == 0.)
