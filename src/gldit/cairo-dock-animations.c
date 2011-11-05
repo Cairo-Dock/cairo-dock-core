@@ -382,9 +382,9 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				if (!pIcon->bIsHidden && myTaskbarParam.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
 					cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
 				pDock = cairo_dock_detach_appli (pIcon);
-				if (pDock == NULL)
+				if (pDock == NULL)  // the dock has been destroyed (empty class sub-dock).
 				{
-					cairo_dock_free_icon (pIcon);
+					///cairo_dock_free_icon (pIcon);
 					return FALSE;
 				}
 			}

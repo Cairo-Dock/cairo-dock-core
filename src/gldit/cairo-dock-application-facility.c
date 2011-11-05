@@ -479,10 +479,10 @@ CairoDock * cairo_dock_detach_appli (Icon *pIcon)
 	
 	cairo_dock_detach_icon_from_dock (pIcon, pParentDock);
 	
-	if (pIcon->cClass != NULL && pParentDock == cairo_dock_search_dock_from_name (pIcon->cClass))
+	if (pIcon->cClass != NULL && pParentDock == cairo_dock_search_dock_from_name (pIcon->cClass))  // is in the sub-dock class -> check if we must destroy it.
 	{
 		gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pParentDock, pIcon->cClass);
-		if (bEmptyClassSubDock)
+		if (bEmptyClassSubDock)  // has been destroyed.
 			return NULL;
 	}
 	cairo_dock_update_dock_size (pParentDock);

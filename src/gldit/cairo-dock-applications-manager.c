@@ -88,7 +88,6 @@ static Atom s_aWmHints;
 static void cairo_dock_blacklist_appli (Window Xid);
 static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock);
 
-/// mix : ff,ff... || g
 
   //////////////////////////
  // Appli manager : core //
@@ -111,7 +110,10 @@ static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *
 		else
 		{
 			cd_debug (" => n'est pas sur le bureau actuel.");
-			pParentDock = cairo_dock_detach_appli (icon);
+			if (icon->cParentDockName != NULL)  // if in a dock, detach it
+				pParentDock = cairo_dock_detach_appli (icon);
+			else  // else if inhibited, detach from the inhibitor
+				cairo_dock_detach_Xid_from_inhibitors (icon->Xid, icon->cClass);
 		}
 		if (pParentDock != NULL)
 			gtk_widget_queue_draw (pParentDock->container.pWidget);
@@ -612,14 +614,19 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	icon->iViewPortY = e->y / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportY;
 	
 	// on regarde si l'appli est sur le viewport courant.
-	if (e->x + e->width <= 0 || e->x >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || e->y + e->height <= 0 || e->y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // en fait il faudrait faire ca modulo le nombre de viewports * la largeur d'un bureau, car avec une fenetre a droite, elle peut revenir sur le bureau par la gauche si elle est tres large...
+	if (e->x + e->width <= 0 || e->x >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || e->y + e->height <= 0 || e->y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // not on this desktop (actually, it may be only a little bit on this desktop ... maybe we should use a % of the width, or a margin ...)
 	{
 		// applis du bureau courant seulement.
-		if (myTaskbarParam.bAppliOnCurrentDesktopOnly && icon->cParentDockName != NULL)
+		if (myTaskbarParam.bAppliOnCurrentDesktopOnly)
 		{
-			CairoDock *pParentDock = cairo_dock_detach_appli (icon);
-			if (pParentDock)
-				gtk_widget_queue_draw (pParentDock->container.pWidget);
+			if (icon->cParentDockName != NULL)
+			{
+				CairoDock *pParentDock = cairo_dock_detach_appli (icon);
+				if (pParentDock)
+					gtk_widget_queue_draw (pParentDock->container.pWidget);
+			}
+			else
+				cairo_dock_detach_Xid_from_inhibitors (icon->Xid, icon->cClass);
 		}
 		
 		// visibilite
@@ -631,9 +638,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		if (myTaskbarParam.bAppliOnCurrentDesktopOnly && icon->cParentDockName == NULL && myTaskbarParam.bShowAppli)
 		{
 			cd_message ("cette fenetre est sur le bureau courant (%d;%d)", e->x, e->y);
-			///gboolean bInsideDock = (icon->cParentDockName != NULL);
-			///if (! bInsideDock)
-				cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+			cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		
 		// visibilite
@@ -815,7 +820,7 @@ void cairo_dock_unregister_appli (Icon *icon)
 		
 		// remove from class
 		cairo_dock_remove_appli_from_class (icon);  // n'efface pas sa classe (on peut en avoir besoin encore).
-		cairo_dock_update_Xid_on_inhibitors (icon->Xid, icon->cClass);
+		cairo_dock_detach_Xid_from_inhibitors (icon->Xid, icon->cClass);
 		
 		// stop watching events
 		cairo_dock_set_xwindow_mask (icon->Xid, None);
@@ -837,30 +842,6 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	
 	cairo_dock_set_overwrite_exceptions (myTaskbarParam.cOverwriteException);
 	cairo_dock_set_group_exceptions (myTaskbarParam.cGroupException);
-	
-	myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 0;
-	myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 0;
-	myIconsParam.tIconTypeOrder[CAIRO_DOCK_SEPARATOR12] = 0;
-	/// TODO: don't separate both cases ...
-	/**if (myTaskbarParam.bMixLauncherAppli)
-	{
-		myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 0;
-		myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 0;
-	}
-	else  // separated taskbar
-	{
-		if (myTaskbarParam.iIconPlacement == CAIRO_APPLI_BEFORE_FIRST_ICON)  // before the first icon
-		{
-			myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 2;
-			myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 0;
-		}
-		else  // after the last icon
-		{
-			myIconsParam.tIconTypeOrder[CAIRO_DOCK_LAUNCHER] = 0;
-			myIconsParam.tIconTypeOrder[CAIRO_DOCK_APPLI] = 2;
-		}
-	}
-	myIconsParam.tIconTypeOrder[CAIRO_DOCK_SEPARATOR12] = 1;*/
 	
 	//\__________________ On recupere l'ensemble des fenetres presentes.
 	gulong i, iNbWindows = 0;

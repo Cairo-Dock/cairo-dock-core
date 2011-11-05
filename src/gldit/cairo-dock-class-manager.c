@@ -460,41 +460,43 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 }
 
 
-void cairo_dock_update_Xid_on_inhibitors (Window Xid, const gchar *cClass)
+void cairo_dock_detach_Xid_from_inhibitors (Window Xid, const gchar *cClass)
 {
 	cd_message ("%s (%s)", __func__, cClass);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli != NULL)
 	{
-		int iNextXid = -1;
+		int iNextXid = -1;  // next window that will be inhibited.
 		Icon *pSameClassIcon = NULL;
 		Icon *pIcon;
 		GList *pElement;
 		for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
 		{
 			pIcon = pElement->data;
-			if (pIcon->Xid == Xid)
+			if (pIcon->Xid == Xid)  // this inhibitor controls the given window -> make it control another (possibly none).
 			{
-				if (iNextXid == -1)  // on prend la 1ere appli de meme classe.
+				if (iNextXid == -1)  // we didn't search the next window yet, do it now.
 				{
-					GList *pList = pClassAppli->pAppliOfClass;
 					Icon *pOneIcon;
 					GList *ic;
-					for (ic = pList; ic != NULL; ic = ic->next)
+					for (ic = g_list_last (pClassAppli->pAppliOfClass); ic != NULL; ic = ic->prev)  // reverse order, to take the oldest window of this class.
 					{
 						pOneIcon = ic->data;
-						if (pOneIcon != NULL && ! cairo_dock_icon_is_being_removed (pOneIcon) && pOneIcon->Xid != Xid)  // la 2eme condition est a priori toujours vraie.
+						if (pOneIcon != NULL
+						&& ! cairo_dock_icon_is_being_removed (pOneIcon)  // small optimization
+						&& pOneIcon->Xid != Xid  // not the window we precisely want to avoid
+						&& (! myTaskbarParam.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pOneIcon)))  // can actually be displayed
 						{
 							pSameClassIcon = pOneIcon;
 							break ;
 						}
 					}
 					iNextXid = (pSameClassIcon != NULL ? pSameClassIcon->Xid : 0);
-					if (pSameClassIcon != NULL)
+					if (pSameClassIcon != NULL)  // this icon will be inhibited, we need to detach it if needed
 					{
 						cd_message ("  c'est %s qui va la remplacer", pSameClassIcon->cName);
 						CairoDock *pClassSubDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
-						if (pClassSubDock != NULL)
+						if (pClassSubDock != NULL)  // it's inside a dock -> detach it
 						{
 							cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassSubDock);
 							if (pClassSubDock->icons == NULL && pClassSubDock == cairo_dock_search_dock_from_name (cClass))  // le sous-dock de la classe devient vide.
@@ -508,6 +510,9 @@ void cairo_dock_update_Xid_on_inhibitors (Window Xid, const gchar *cClass)
 				pIcon->bHasIndicator = (iNextXid != 0);
 				_cairo_dock_set_same_indicator_on_sub_dock (pIcon);
 				cd_message (" %s : bHasIndicator <- %d, Xid <- %d", pIcon->cName, pIcon->bHasIndicator, pIcon->Xid);
+				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+				if (pParentDock)
+					gtk_widget_queue_draw (pParentDock->container.pWidget);
 			}
 		}
 	}
@@ -769,7 +774,6 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 	
 	return NULL;
 }
-
 
 
 

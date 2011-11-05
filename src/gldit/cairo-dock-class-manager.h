@@ -141,7 +141,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon);
 * @param Xid l'ID de l'appli.
 * @param cClass sa classe.
 */
-void cairo_dock_update_Xid_on_inhibitors (Window Xid, const gchar *cClass);
+void cairo_dock_detach_Xid_from_inhibitors (Window Xid, const gchar *cClass);
 /*
 * Enleve toutes les applis de toutes les classes, et met a jour les inhibiteurs.
 */
