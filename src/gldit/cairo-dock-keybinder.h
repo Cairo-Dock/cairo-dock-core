@@ -42,6 +42,7 @@ G_BEGIN_DECLS
 * Shortkeys are of the form &lt;alt&gt;F1 or &lt;ctrl&gt;&lt;shift&gt;s.
 * 
 * You bind an action to a shortkey with \ref cd_keybinder_bind, and unbind it with \ref cd_keybinder_unbind.
+* To update a binding (on shortkey or description chenge, or just to re-grab it), use \ref cd_keybinder_rebind.
 */
 
 
@@ -123,13 +124,15 @@ CairoKeyBinding *cd_keybinder_bind (const gchar *keystring,
 void cd_keybinder_unbind (CairoKeyBinding *binding);
 
 
-/** Rebind a shortkey to a new one.
+/** Rebind a shortkey to a new one. If the shortkey is the same, don't re-bind it.
  * @param binding a key binding.
  * @param .cNewKeyString the new shortkey
+ * @param .cNewDescription the new description, or NULL to keep the current one.
  * @return TRUE on success
 */
 gboolean cd_keybinder_rebind (CairoKeyBinding *binding,
-	const gchar *cNewKeyString);
+	const gchar *cNewKeyString,
+	const gchar *cNewDescription);
 
 
 void cd_keybinder_foreach (GFunc pCallback, gpointer data);

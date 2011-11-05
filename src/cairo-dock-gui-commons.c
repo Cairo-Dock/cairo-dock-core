@@ -524,7 +524,7 @@ static void _on_key_grab_cb (GtkWidget *pInputDialog, GdkEventKey *event, GtkTre
 			gtk_tree_model_get (pModel, &iter,
 				CD_SHORTKEY_MODEL_BINDING, &binding, -1);
 			
-			cd_keybinder_rebind (binding, key);
+			cd_keybinder_rebind (binding, key, NULL);
 			
 			// update the model
 			gtk_list_store_set (GTK_LIST_STORE (pModel), &iter,

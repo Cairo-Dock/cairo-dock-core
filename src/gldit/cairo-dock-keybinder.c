@@ -328,7 +328,8 @@ cd_keybinder_unbind (CairoKeyBinding *binding)
 
 
 gboolean cd_keybinder_rebind (CairoKeyBinding *binding,
-	const gchar *cNewKeyString)
+	const gchar *cNewKeyString,
+	const gchar *cNewDescription)
 {
 	g_return_val_if_fail (binding != NULL, FALSE);
 	cd_debug ("%s (%s)", __func__, binding->keystring);
@@ -336,6 +337,13 @@ gboolean cd_keybinder_rebind (CairoKeyBinding *binding,
 	// ensure it's a registerd binding
 	GSList *iter = g_slist_find (s_pKeyBindings, binding);
 	g_return_val_if_fail (iter != NULL, FALSE);
+	
+	// update the description if needed
+	if (cNewDescription != NULL)
+	{
+		g_free (binding->cDescription);
+		binding->cDescription = g_strdup (cNewDescription);
+	}
 	
 	// if the shortkey is the same and already bound, no need to re-grab it.
 	if (g_strcmp0 (cNewKeyString, binding->keystring) == 0 && binding->bSuccess)

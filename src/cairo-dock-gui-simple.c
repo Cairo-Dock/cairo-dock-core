@@ -60,12 +60,12 @@
 #define ICON_MEDIUM 48
 #define ICON_SMALL 42
 #define ICON_TINY 36
-#define CAIRO_DOCK_THEMES_PAGE 3
+#define CAIRO_DOCK_SHORTKEY_PAGE 2
+#define CAIRO_DOCK_ADDONS_PAGE 3
+#define CAIRO_DOCK_THEMES_PAGE 4
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
 static const  gchar *s_cCurrentModuleName = NULL;
-// GSList *s_pCurrentWidgetList;  // liste des widgets du main panel.
-// GSList *s_pCurrentModuleWidgetList;  // liste des widgets du module courant.
 static int s_iIconSize;
 static int s_iTaskbarType;
 static gchar *s_cHoverAnim = NULL;
@@ -449,11 +449,16 @@ static gboolean on_apply_config_simple (gpointer data)
 	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
 	GtkWidget *pGroupWidget = children->data;
 	g_list_free (children);
-	if (gtk_notebook_get_current_page (GTK_NOTEBOOK (pGroupWidget)) == CAIRO_DOCK_THEMES_PAGE)
+	int iNumPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (pGroupWidget));
+	if (iNumPage == CAIRO_DOCK_THEMES_PAGE)
 	{
 		CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (s_pSimpleConfigWindow, "Themes", "notebook");
 		g_return_val_if_fail (myWidget != NULL && myWidget->pSubWidgetList != NULL, TRUE);
 		return on_apply_theme_simple (myWidget->pSubWidgetList->data, data);
+	}
+	else if (iNumPage == CAIRO_DOCK_SHORTKEY_PAGE || iNumPage == CAIRO_DOCK_ADDONS_PAGE)
+	{
+		return TRUE;
 	}
 	
 	//\_____________ On actualise le fichier de conf principal.

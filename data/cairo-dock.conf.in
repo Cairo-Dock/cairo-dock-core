@@ -59,7 +59,7 @@ hide effect = Move down
 unhide delay = 0
 
 #Y-[Hit the screen's border;0;0;Hit where the dock is;0;0;Hit the screen's corner;0;0;Hit a zone;1;2] How to call the dock back:
-callback = 0
+callback = 1
 
 #j-[2;999] Size of the zone :
 zone size = 80;10
@@ -104,7 +104,7 @@ lock all = false
 #F-[Behaviour;gtk-properties]
 frame1 =
 
-#B-[5] Show currently opened applications in the dock?
+#B-[8] Show currently opened applications in the dock?
 #{Cairo-Dock will then act as your taskbar. It is recommended to remove any other taskbars.}
 show applications = true
 

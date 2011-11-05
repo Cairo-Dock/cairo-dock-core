@@ -91,6 +91,14 @@ static CairoKeyBinding *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
 
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock);
 
+typedef enum {
+	CAIRO_HIT_SCREEN_BORDER,
+	CAIRO_HIT_DOCK_PLACE,
+	CAIRO_HIT_SCREEN_CORNER,
+	CAIRO_HIT_ZONE,
+	CAIRO_HIT_NB_METHODS
+} CairoCallbackMethod;
+
   /////////////
  // MANAGER //
 /////////////
@@ -1062,13 +1070,13 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 	gboolean bShow = FALSE;
 	switch (myDocksParam.iCallbackMethod)
 	{
-		case 0:
+		case CAIRO_HIT_SCREEN_BORDER:
 		default:
 			if (y != 0)
 				break;
 			bShow = TRUE;
 		break;
-		case 1:
+		case CAIRO_HIT_DOCK_PLACE:
 			if (y != 0)
 				break;
 			x1 = pDock->container.iWindowPositionX + MIN (15, pDock->container.iWidth/3);  // on evite les coins, car c'est en fait le but de cette option (les coins peuvent etre utilises par le WM pour declencher des actions).
@@ -1077,14 +1085,14 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 				break;
 			bShow = TRUE;
 		break;
-		case 2:
+		case CAIRO_HIT_SCREEN_CORNER:
 			if (y != 0)
 				break;
 			if (x > 0 && x < g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - 1)
 				break ;
 			bShow = TRUE;
 		break;
-		case 3:
+		case CAIRO_HIT_ZONE:
 			if (y > myDocksParam.iZoneHeight)
 				break;
 			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - myDocksParam.iZoneWidth)/2;  // on evite les coins, car c'est en fait le but de cette option (les coins peuvent etre utilises par le WM pour declencher des actions).
@@ -1414,9 +1422,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 		g_key_file_set_string (pKeyFile, "Accessibility", "hide effect", pAccessibility->cHideEffect);
 	}
 	
-	pAccessibility->iCallbackMethod = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "callback", &bFlushConfFileNeeded, 0, NULL, NULL);
+	pAccessibility->iCallbackMethod = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "callback", &bFlushConfFileNeeded, CAIRO_HIT_DOCK_PLACE, NULL, NULL);
 	
-	if (pAccessibility->iCallbackMethod == 3)
+	if (pAccessibility->iCallbackMethod == CAIRO_HIT_ZONE)
 	{
 		if (! g_key_file_has_key (pKeyFile, "Accessibility", "zone size", NULL))
 		{
@@ -1548,7 +1556,7 @@ static void load (void)
 			}
 			else
 			{
-				cd_keybinder_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut);
+				cd_keybinder_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut, NULL);
 			}
 		}
 		
@@ -1655,7 +1663,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 		}
 		else
 		{
-			cd_keybinder_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut);
+			cd_keybinder_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut, NULL);
 		}
 	}
 	else
