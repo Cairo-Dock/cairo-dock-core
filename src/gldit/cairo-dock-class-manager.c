@@ -1418,15 +1418,13 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 				if (strcmp (cClass, "ooffice") == 0 || strcmp (cClass, "oowriter") == 0 || strcmp (cClass, "oocalc") == 0 || strcmp (cClass, "oodraw") == 0 || strcmp (cClass, "ooimpress") == 0)  // openoffice poor design: there is no way to bind its windows to the launcher without this trick.
 					cClass = "openoffice";
 			}
-			else if (strncmp (cClass, "libreoffice", 12) == 0)
+			else if (strncmp (cClass, "libreoffice", 11) == 0)  // libreoffice has different classes according to the launching option (--writer => libreoffice-writer, --calc => libreoffice-calc, etc)
 			{
 				gchar *str = strchr (cCommand, ' ');
-				if (str)
+				if (str && *(str+1) == '-')
 				{
-					gchar *base = g_strndup (cCommand, str - cCommand);
 					g_free (cDefaultClass);
-					cDefaultClass = g_strdup_printf ("%s%s", base, str+1);
-					g_free (base);
+					cDefaultClass = g_strdup_printf ("%s%s", "libreoffice", str+2);
 					str = strchr (cDefaultClass, ' ');  // remove the additionnal params of the command.
 					if (str)
 						*str = '\0';
