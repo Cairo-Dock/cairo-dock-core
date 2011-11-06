@@ -59,7 +59,6 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
-///#include "cairo-dock-emblem.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
@@ -1227,6 +1226,7 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 			}
 			else  // bind couldn't be done (no shortkey or couldn't grab it).
 			{
+				g_print ("bind couldn't be done (no shortkey or couldn't grab it).\n");
 				pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
 			}
 		}
@@ -1402,12 +1402,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 		}
 		if (iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 		{
-			if (cShortkey == NULL)
+			/**if (cShortkey == NULL)
 			{
 				cd_warning ("no shortcut defined to make the dock appear, we'll keep it above.");
 				iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
 			}
-			else
+			else*/
 			{
 				pAccessibility->cRaiseDockShortcut = cShortkey;
 				cShortkey = NULL;
@@ -1548,7 +1548,7 @@ static void load (void)
 					"Cairo-Dock",
 					_("Pop up the main dock"),
 					GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
-					g_cCurrentThemePath,
+					g_cConfFile,
 					"Accessibility",
 					"raise shortcut",
 					(CDBindkeyHandler) cairo_dock_raise_from_shortcut,

@@ -2729,7 +2729,10 @@ static void update_modules_list (void)
 
 static void update_shortkeys (void)
 {
-	if (s_pMainWindow == NULL)
+	if (s_pMainWindow == NULL
+	|| s_pCurrentGroup == NULL
+	|| s_pCurrentGroup->cGroupName == NULL
+	|| strcmp (s_pCurrentGroup->cGroupName, "Shortkeys") != 0)  // the Shortkeys widget is not currently displayed => nothing to do.
 		return ;
 	
 	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (s_pCurrentWidgetList, "Shortkeys", "shortkeys");
@@ -2785,7 +2788,7 @@ void cairo_dock_register_main_gui_backend (void)
 	pBackend->update_desklet_visibility_params 	= update_desklet_visibility_params;
 	pBackend->update_module_instance_container 	= update_module_instance_container;
 	pBackend->update_modules_list 				= update_modules_list;
-	pBackend->update_shortkeys 				= update_shortkeys;
+	pBackend->update_shortkeys 					= update_shortkeys;
 	pBackend->bCanManageThemes 					= FALSE;
 	pBackend->cDisplayedName 					= _("Simple Mode");
 	pBackend->cTooltip 							= NULL;
