@@ -433,6 +433,18 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glPushMatrix ();
 		glLoadIdentity ();
 		
+		double fMagnitude;
+		if (myIconsParam.bLabelForPointedIconOnly ||pDock->fMagnitudeMax == 0.)
+		{
+			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / myIconsParam.fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
+		}
+		else
+		{
+			fMagnitude = (icon->fScale - 1) / myIconsParam.fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
+			fMagnitude = pow (fMagnitude, myIconsParam.fLabelAlphaThreshold);
+			///fMagnitude *= (fMagnitude * myIconsParam.fLabelAlphaThreshold + 1) / (myIconsParam.fLabelAlphaThreshold + 1);
+		}
+		
 		double dx = .5 * (icon->iTextWidth & 1);  // on decale la texture pour la coller sur la grille des coordonnees entieres.
 		double dy = .5 * (icon->iTextHeight & 1);
 		
@@ -473,6 +485,10 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 					floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad + icon->iTextWidth/2) + dx,
 				floor (fX) + dy,
 				0.);
+			if (icon->pSubDock && GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))
+			{
+				fMagnitude /= 3;
+			}
 		}
 		/*else
 		{
@@ -488,18 +504,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 				y = pDock->container.iWidth - fX - icon->iTextHeight/2;
 			glTranslatef (floor (fY) + dx, floor (fX) + floor (y) + dy, 0.);
 		}*/
-		
-		double fMagnitude;
-		if (myIconsParam.bLabelForPointedIconOnly ||pDock->fMagnitudeMax == 0.)
-		{
-			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / myIconsParam.fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
-		}
-		else
-		{
-			fMagnitude = (icon->fScale - 1) / myIconsParam.fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
-			fMagnitude = pow (fMagnitude, myIconsParam.fLabelAlphaThreshold);
-			///fMagnitude *= (fMagnitude * myIconsParam.fLabelAlphaThreshold + 1) / (myIconsParam.fLabelAlphaThreshold + 1);
-		}
 		
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_alpha ();

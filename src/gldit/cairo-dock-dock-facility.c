@@ -1048,12 +1048,15 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 			iNewWidth,
 			iNewHeight);
 	else
+	{
 		gdk_window_move_resize (pSubDock->container.pWidget->window,
 			iNewPositionY,
 			iNewPositionX,
 			iNewHeight,
 			iNewWidth);
-	
+		if (myIconsParam.bTextAlwaysHorizontal)  // in this case, the sub-dock is over the label, so this one is drawn with a low transparency, so we trigger the redraw.
+			gtk_widget_queue_draw (pParentDock->container.pWidget);
+	}
 	if (pSubDock->fFoldingFactor == 0.)
 	{
 		cd_debug ("  on montre le sous-dock sans animation");

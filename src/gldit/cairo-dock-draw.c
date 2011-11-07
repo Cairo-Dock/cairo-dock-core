@@ -567,6 +567,18 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	{
 		cairo_save (pCairoContext);
 		
+		double fMagnitude;
+		if (myIconsParam.bLabelForPointedIconOnly || pDock->fMagnitudeMax == 0.)
+		{
+			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / myIconsParam.fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
+		}
+		else
+		{
+			fMagnitude = (icon->fScale - 1) / myIconsParam.fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
+			fMagnitude = pow (fMagnitude, myIconsParam.fLabelAlphaThreshold);
+			///fMagnitude *= (fMagnitude * myIconsParam.fLabelAlphaThreshold + 1) / (myIconsParam.fLabelAlphaThreshold + 1);
+		}
+		
 		//int iLabelSize = icon->iTextHeight;
 		int iLabelSize = myIconsParam.iLabelSize;
 		//g_print ("%d / %d\n", icon->iTextHeight, myIconsParam.iLabelSize),
@@ -601,6 +613,10 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 					floor (0 - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->iTextWidth):
 					floor (0 + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad),
 				floor (0 + icon->fWidth * icon->fScale/2 - icon->iTextHeight/2));
+			if (icon->pSubDock && GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))
+			{
+				fMagnitude /= 3;
+			}
 		}
 		else
 		{
@@ -610,17 +626,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 				floor (bDirectionUp ? fOffsetX - icon->fWidth * icon->fScale : fOffsetX),
 				-floor (bDirectionUp ? iLabelSize : icon->fHeight * icon->fScale + iLabelSize));
 		}
-		double fMagnitude;
-		if (myIconsParam.bLabelForPointedIconOnly || pDock->fMagnitudeMax == 0.)
-		{
-			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / myIconsParam.fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
-		}
-		else
-		{
-			fMagnitude = (icon->fScale - 1) / myIconsParam.fAmplitude;  /// il faudrait diviser par pDock->fMagnitudeMax ...
-			fMagnitude = pow (fMagnitude, myIconsParam.fLabelAlphaThreshold);
-			///fMagnitude *= (fMagnitude * myIconsParam.fLabelAlphaThreshold + 1) / (myIconsParam.fLabelAlphaThreshold + 1);
-		}
+		
 		if (fMagnitude > .1)
 			cairo_paint_with_alpha (pCairoContext, fMagnitude);
 		cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).

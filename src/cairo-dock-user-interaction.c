@@ -226,8 +226,8 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 		&& cairo_dock_wm_present_class (icon->cClass)) // we use the scale plugin if it's possible
 		{
 			_show_all_windows (icon->pSubDock->icons); // show all windows
-			if (icon->pSubDock)  // in case the dock is visible or about to be visible, hide it, as it would confuse the user to have both.
-				cairo_dock_emit_leave_signal (CAIRO_CONTAINER (icon->pSubDock));
+			// in case the dock is visible or about to be visible, hide it, as it would confuse the user to have both.
+			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (icon->pSubDock));
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		}
 	}
