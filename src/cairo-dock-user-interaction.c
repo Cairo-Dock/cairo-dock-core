@@ -220,9 +220,9 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	// scale on an icon holding a class sub-dock.
 	if (CAIRO_DOCK_IS_MULTI_APPLI(icon))
 	{
-		if ( (!myDocksParam.bShowSubDockOnClick  // if sub-docks are shown on mouse over
-		|| GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)  // or this sub-dock is already visible
-		|| myTaskbarParam.bPresentClassOnClick)  // or we explicitely allowed to skip the sub-dock
+		if (myTaskbarParam.bPresentClassOnClick // if we want to use this feature
+		&& (!myDocksParam.bShowSubDockOnClick  // if sub-docks are shown on mouse over
+			|| GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))  // or this sub-dock is already visible
 		&& cairo_dock_wm_present_class (icon->cClass)) // we use the scale plugin if it's possible
 		{
 			_show_all_windows (icon->pSubDock->icons); // show all windows
