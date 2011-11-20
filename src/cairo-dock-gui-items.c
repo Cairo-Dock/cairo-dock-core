@@ -306,7 +306,8 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 		g_free (cImagePath);
 		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 		{
-			cImagePath = cairo_dock_search_image_s_path (myIconsParam.cSeparatorImage);
+			if (myIconsParam.cSeparatorImage)
+				cImagePath = cairo_dock_search_image_s_path (myIconsParam.cSeparatorImage);
 		}
 		else if (CAIRO_DOCK_IS_APPLET (pIcon))
 		{
