@@ -1693,9 +1693,10 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		cClass = cairo_dock_guess_class (NULL, cClassName);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass?cClass:cDesktopFile);
 	
-	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes)
+	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes && pClassAppli->cDesktopFile)  // we already searched this class, and we did find its .desktop file, so let's end here.
 	{
-		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // we already searched this class before, but we couldn't have its WM class.
+		g_print ("class %s already known (%s)\n", cClass, pClassAppli->cDesktopFile);
+		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // if the cStartupWMClass was not defined in the .desktop file, store it now.
 			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 		return (cClass?cClass:g_strdup (cDesktopFile));
 	}
@@ -1744,8 +1745,8 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	pClassAppli = cairo_dock_get_class (cClass);
 	g_return_val_if_fail (pClassAppli!= NULL, NULL);
 	
-	//\__________________ if we already searched the attributes beforehand, quit.
-	if (pClassAppli->bSearchedAttributes)
+	//\__________________ if we already searched and found the attributes beforehand, quit.
+	if (pClassAppli->bSearchedAttributes && pClassAppli->cDesktopFile)
 	{
 		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // we already searched this class before, but we couldn't have its WM class.
 			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
