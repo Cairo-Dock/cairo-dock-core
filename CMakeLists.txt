@@ -64,23 +64,26 @@ set (bindir ${prefix}/bin)
 ########### dependencies ###############
 
 set (packages_required "cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox")  # for the .pc
-pkg_check_modules ("PACKAGE" REQUIRED ${packages_required} "libcurl")  # @FABOUNET: should we have to put libcurl in the .pc?
+pkg_check_modules ("PACKAGE" REQUIRED "${packages_required} libcurl")  # @FABOUNET: should we have to put libcurl in the .pc?
 
 set (xextend_required "xtst xcomposite xinerama")  # for the .pc
-pkg_check_modules ("XEXTEND" ${xextend_required})
+pkg_check_modules ("XEXTEND" "${xextend_required}")
 if (${XEXTEND_FOUND})
 	set (HAVE_XEXTEND 1)
 else()
 	set (xextend_required)
 endif()
 
-set (gtk_required "gtk+-3.0 gthread-2.0")  # for the .pc
-pkg_check_modules ("GTK" ${gtk_required})
+if (NOT "${force-gtk3}" STREQUAL "")
+	set (gtk_required "gtk+-3.0 gthread-2.0")  # for the .pc
+	pkg_check_modules ("GTK" "${gtk_required}")
+endif()
+
 if (${GTK_FOUND})
 	set (HAVE_GTK3 1)
 else()
 	set (gtk_required "gtk+-2.0 gthread-2.0")  # for the .pc
-	pkg_check_modules ("GTK" REQUIRED ${gtk_required})
+	pkg_check_modules ("GTK" REQUIRED "${gtk_required}")
 	set (HAVE_GTK2 1)
 endif()
 
