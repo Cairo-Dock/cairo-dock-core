@@ -63,7 +63,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include <gtk/gtkgl.h>
 
 #include "config.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_first_icon
@@ -307,7 +306,6 @@ int main (int argc, char** argv)
 		g_set_print_handler(PrintMuteFunc);
 	
 	gtk_init (&argc, &argv);
-	gtk_gl_init (&argc, &argv);
 	
 	GError *erreur = NULL;
 	

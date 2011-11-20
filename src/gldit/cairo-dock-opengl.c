@@ -25,6 +25,7 @@
 #include <GL/glx.h>
 #include <GL/glxext.h>
 #include <GL/glu.h>
+#include <gdk/gdkx.h>
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-icon-facility.h"

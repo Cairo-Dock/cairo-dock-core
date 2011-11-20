@@ -30,11 +30,9 @@
 #include <math.h>
 #include <time.h>
 
-#include <gtk/gtkgl.h>
 #include <GL/gl.h> 
 #include <GL/glu.h> 
 #include <GL/glx.h> 
-#include <gdk/x11/gdkglx.h>
 #include <gdk/gdkx.h>
 
 #include "gldi-config.h"

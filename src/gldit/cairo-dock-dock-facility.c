@@ -36,13 +36,11 @@
 #include <cairo-glitz.h>
 #endif
 
-#include <gtk/gtkgl.h>
 #include <X11/extensions/Xrender.h>
 #include <X11/extensions/shape.h>
 #include <GL/gl.h> 
 #include <GL/glu.h> 
 #include <GL/glx.h> 
-#include <gdk/x11/gdkglx.h>
 
 #include "cairo-dock-draw.h"
 #include "cairo-dock-applications-manager.h"

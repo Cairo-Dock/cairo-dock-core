@@ -292,18 +292,14 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 		
 		if (g_bUseOpenGL)
 		{
-			GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
-			GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
 			GLsizei w = pEvent->width;
 			GLsizei h = pEvent->height;
-			if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+			if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pFlyingContainer)))
 				return FALSE;
 			
 			glViewport(0, 0, w, h);
 			
 			cairo_dock_set_ortho_view (CAIRO_CONTAINER (pFlyingContainer));
-			
-			gdk_gl_drawable_gl_end (pGlDrawable);
 		}
 	}
 	return FALSE;

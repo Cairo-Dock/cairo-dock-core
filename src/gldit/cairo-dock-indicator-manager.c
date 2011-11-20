@@ -29,7 +29,6 @@
 #include <cairo-glitz.h>
 #endif
 
-#include <gtk/gtkgl.h>
 
 #include "gldi-config.h"  // GLDI_SHARE_DATA_DIR
 #include "cairo-dock-draw.h"

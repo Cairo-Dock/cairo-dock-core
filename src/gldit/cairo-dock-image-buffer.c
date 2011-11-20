@@ -29,7 +29,6 @@
 #include <cairo-glitz.h>
 #endif
 
-#include <gtk/gtkgl.h>
 
 #include "cairo-dock-draw.h"
 #include "cairo-dock-surface-factory.h"

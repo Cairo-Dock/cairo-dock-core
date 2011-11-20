@@ -29,7 +29,6 @@
 #include <cairo-glitz.h>
 #endif
 
-#include <gtk/gtkgl.h>
 #include <GL/gl.h> 
 
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area

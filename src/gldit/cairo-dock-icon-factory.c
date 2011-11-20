@@ -29,7 +29,6 @@
 #include <cairo-glitz.h>
 #endif
 
-#include <gtk/gtkgl.h>
 
 #include "gldi-config.h"
 #include "cairo-dock-draw.h"  // cairo_dock_erase_cairo_context

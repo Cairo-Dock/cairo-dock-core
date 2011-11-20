@@ -36,7 +36,6 @@
 #include <glitz-glx.h>
 #include <cairo-glitz.h>
 #endif
-#include <gtk/gtkgl.h>
 #include <GL/glu.h>
 
 #include "cairo-dock-animations.h"  // definition of CairoDockHidingEffect

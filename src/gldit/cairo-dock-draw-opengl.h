@@ -23,8 +23,6 @@
 
 #include <glib.h>
 
-#include <gdk/x11/gdkglx.h>
-#include <gtk/gtkgl.h>
 #include <GL/glu.h>
 
 #include "cairo-dock-struct.h"

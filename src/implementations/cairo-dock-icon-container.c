@@ -29,7 +29,6 @@
 #include <cairo-glitz.h>
 #endif
 
-#include <gtk/gtkgl.h>
 
 #include "gldi-config.h"
 #include "cairo-dock-log.h"

@@ -22,11 +22,9 @@
 #include <math.h>
 #include <gdk/gdkkeysyms.h>
 
-#include <gtk/gtkgl.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glx.h>
-#include <gdk/x11/gdkglx.h>
 
 #include "gldi-config.h"
 #include "cairo-dock-icon-factory.h"

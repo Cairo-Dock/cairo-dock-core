@@ -7,7 +7,7 @@ pluginsdatadir=@datadir@/@PACKAGE@/plug-ins
 
 Name: gldi
 Description: OpenGL Desktop Interface. A library to build eye-candy interfaces for the desktop (dock, panel, desklet, dialog, ...)
-Requires: gtk+-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gtkglext-1.0 @xextend_required@ @glitz_required@ @libgio_required@
+Requires: @gtk_required@ @packages_required@ @xextend_required@ @glitz_required@ @libgio_required@
 Libs: -L${libdir} -lgldi
 Cflags: -I${includedir}/cairo-dock -I${includedir}/cairo-dock/gldit -I${includedir}/cairo-dock/icon-factory -I${includedir}/cairo-dock/implementations
 Version: @VERSION@

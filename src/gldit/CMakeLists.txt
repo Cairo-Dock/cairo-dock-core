@@ -99,7 +99,7 @@ set_target_properties ("gldi" PROPERTIES
 
 # Link the result to the librairies.
 target_link_libraries("gldi"
-	${PACKAGE_LIBRARIES} -ldl
+	${PACKAGE_LIBRARIES}
 	${GTK_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${LIBCRYPT_LIBS}

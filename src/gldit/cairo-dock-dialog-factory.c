@@ -21,12 +21,11 @@
 #include <string.h>
 #include <math.h>
 #include <gdk/gdkkeysyms.h>
+#include <gdk/gdkx.h> // GDK_WINDOW_XID
 
-#include <gtk/gtkgl.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glx.h>
-#include <gdk/x11/gdkglx.h>
 
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
@@ -88,11 +87,10 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 {
 	//g_print ("%s (%dx%d ; %d;%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight, pExpose->area.x, pExpose->area.y);
 	int x, y;
+	// @ FABOUNET: if (0)?
 	if (0 && g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
 	{
-		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDialog->container.pWidget);
-		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDialog->container.pWidget);
-		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDialog)))
 			return FALSE;
 		
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -110,11 +108,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 		cairo_dock_notify_on_object (&myDialogsMgr, NOTIFICATION_RENDER_DIALOG, pDialog, NULL);
 		cairo_dock_notify_on_object (pDialog, NOTIFICATION_RENDER_DIALOG, pDialog, NULL);
 		
-		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
-			gdk_gl_drawable_swap_buffers (pGlDrawable);
-		else
-			glFlush ();
-		gdk_gl_drawable_gl_end (pGlDrawable);
+		gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pDialog));
 	}
 	else
 	{

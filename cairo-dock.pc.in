@@ -7,7 +7,7 @@ pluginsdatadir=@datadir@/@PACKAGE@/plug-ins
 
 Name: cairo-dock
 Description: An eye-candy fully animated and configurable dock.
-Requires: cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gtkglext-1.0 @xextend_required@ @gtk_required@
+Requires: @packages_required@ @xextend_required@ @gtk_required@
 Libs: -L${libdir}
 Cflags: -I${includedir}/cairo-dock -I${includedir}/cairo-dock/gldit -I${includedir}/cairo-dock/icon-factory -I${includedir}/cairo-dock/implementations
 Version: @VERSION@
