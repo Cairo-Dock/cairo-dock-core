@@ -83,6 +83,7 @@ void cairo_dock_set_containers_non_sticky (void)
 GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow)
 {
 	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	pContainer->pWidget = pWindow;
 	
 	if (s_bSticky)
 		gtk_window_stick (GTK_WINDOW (pWindow));
@@ -97,7 +98,7 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	cairo_dock_set_colormap_for_window (pWindow);
 	if (g_bUseOpenGL && bOpenGLWindow)
 	{
-		cairo_dock_set_gl_capabilities (pWindow);
+		cairo_dock_set_gl_capabilities (pContainer);
 		pContainer->iAnimationDeltaT = myContainersParam.iGLAnimationDeltaT;
 	}
 	else
@@ -112,7 +113,6 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	
 	gtk_widget_set_app_paintable (pWindow, TRUE);
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
-	pContainer->pWidget = pWindow;
 	
 	cairo_dock_install_notifications_on_object (pContainer, NB_NOTIFICATIONS_CONTAINER);  // l'implementation du container installera par-dessus ses notifications.
 	
@@ -125,6 +125,12 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 
 void cairo_dock_finish_container (CairoContainer *pContainer)
 {
+	if (pContainer->glContext != 0)
+	{
+		Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+		glXDestroyContext (dpy, pContainer->glContext);
+	}
+	
 	gtk_widget_destroy (pContainer->pWidget);  // enleve les signaux.
 	pContainer->pWidget = NULL;
 	if (pContainer->iSidGLAnimation != 0)
@@ -145,16 +151,17 @@ void cairo_dock_finish_container (CairoContainer *pContainer)
 */
 void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
 {
-	GdkScreen* pScreen = gtk_widget_get_screen (pWidget);
-	GdkColormap* pColormap = gdk_screen_get_rgba_colormap (pScreen);
-	if (!pColormap)
-		pColormap = gdk_screen_get_rgb_colormap (pScreen);
-	
-	/// est-ce que ca vaut le coup de plutot faire ca avec le visual obtenu pour l'openGL ?...
-	//GdkVisual *visual = gdkx_visual_get (pVisInfo->visualid);
-	//pColormap = gdk_colormap_new (visual, TRUE);
-
-	gtk_widget_set_colormap (pWidget, pColormap);
+	if (g_openglConfig.pColormap)
+		gtk_widget_set_colormap (pWidget, g_openglConfig.pColormap);
+	else
+	{
+		GdkScreen* pScreen = gtk_widget_get_screen (pWidget);
+		GdkColormap* pColormap = gdk_screen_get_rgba_colormap (pScreen);
+		if (!pColormap)
+			pColormap = gdk_screen_get_rgb_colormap (pScreen);
+		
+		gtk_widget_set_colormap (pWidget, pColormap);
+	}
 }
 
 /* Apply the scren colormap to a container, providing it transparency, and activate Glitz if possible.

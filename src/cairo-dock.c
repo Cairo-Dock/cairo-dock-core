@@ -263,6 +263,10 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 }
 
 
+static void _on_shortkey (const gchar *cShortkey, gpointer data)
+{
+	g_print ("pouet\n");
+}
 int main (int argc, char** argv)
 {
 	//\___________________ build the command line used to respawn, and check if we have been launched from another life.
@@ -780,7 +784,12 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
-	/*g_print ("\n\nTODO (2.5):\n"
+	g_print ("\n\nTODO (2.5):\n"
+	"- Icon bg: add ratio\n"
+	"- Default theme more consistent\n"
+	"- Remote Control: launcher num shortkey\n"
+	"- Recent Events: handle recent apps\n"
+	"- Firefox launcher: handle recent URLs\n"
 	"- check for config panel (g_object_unref assertion)\n"
 	"- review Help hints\n"
 	"- find Kwin config tool for Composite-manager\n"
@@ -788,7 +797,17 @@ int main (int argc, char** argv)
 	"- display Help GUI in simple mode\n"
 	"- kde integration ++\n"
 	"- stack: enable iSubdockViewType\n"
-	"\n");*/
+	"\n");
+	
+	cd_keybinder_bind ("<Super>Z",
+		"Cairo-Dock",
+		_("Test"),
+		CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
+		NULL,
+		NULL,
+		NULL,
+		(CDBindkeyHandler) _on_shortkey,
+		NULL);
 	
 	gtk_main ();
 	

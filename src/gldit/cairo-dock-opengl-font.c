@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
+#include <pango/pangox.h>
 #include <cairo.h>
 #include <pango/pango.h>
 #include <librsvg/rsvg.h>
@@ -103,6 +104,78 @@ GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gch
 }
 
 
+// taken from gdkgl
+// pango_x_ functions are deprecated, but as long as they work, we shouldn't care too much.
+// use XLoadQueryFont() if needed...
+static PangoFont *
+gldi_font_use_pango_font_common (PangoFontMap               *font_map,
+                                   const PangoFontDescription *font_desc,
+                                   int                         first,
+                                   int                         count,
+                                   int                         list_base)
+{
+	PangoFont *font = NULL;
+	const gchar *charset = NULL;
+	PangoXSubfont subfont_id;
+	gchar *xlfd = NULL;  // X Logical Font Description
+	PangoXFontCache *font_cache;
+	XFontStruct *fs;
+
+	font = pango_font_map_load_font (font_map, NULL, font_desc);
+	if (font == NULL)
+	{
+		g_warning ("cannot load PangoFont");
+		goto FAIL;
+	}
+
+	charset = "iso8859-1";
+	if (!pango_x_find_first_subfont (font, (gchar **)&charset, 1, &subfont_id))
+	{
+		g_warning ("cannot find PangoXSubfont");
+		font = NULL;
+		goto FAIL;
+	}
+
+	xlfd = pango_x_font_subfont_xlfd (font, subfont_id);
+	if (xlfd == NULL)
+	{
+		g_warning ("cannot get XLFD");
+		font = NULL;
+		goto FAIL;
+	}
+
+	font_cache = pango_x_font_map_get_font_cache (font_map);
+
+	fs = pango_x_font_cache_load (font_cache, xlfd);
+
+	glXUseXFont (fs->fid, first, count, list_base);
+
+	pango_x_font_cache_unload (font_cache, fs);
+
+	FAIL:
+
+	if (xlfd != NULL)
+		g_free (xlfd);
+
+	return font;
+}
+static PangoFont *
+gldi_font_use_pango_font (const PangoFontDescription *font_desc,
+                            int                         first,
+                            int                         count,
+                            int                         list_base)
+{
+	PangoFontMap *font_map;
+
+	g_return_val_if_fail (font_desc != NULL, NULL);
+	
+	font_map = pango_x_font_map_for_display (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
+
+	return gldi_font_use_pango_font_common (font_map, font_desc,
+											first, count, list_base);
+}
+
+
 CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int first, int count)
 {
 	g_return_val_if_fail (cFontDescription != NULL && count > 0, NULL);
@@ -116,7 +189,7 @@ CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int
 	pFont->iCharBase = first;
 	
 	PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
-	PangoFont *font = gdk_gl_font_use_pango_font (fd,
+	PangoFont *font = gldi_font_use_pango_font (fd,
 		first,
 		count,
 		iListBase);

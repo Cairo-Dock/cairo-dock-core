@@ -637,9 +637,7 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 	GLint hits=0;
 	GLint viewport[4];
 	
-	GdkGLContext* pGlContext = gtk_widget_get_gl_context (pDesklet->container.pWidget);
-	GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pDesklet->container.pWidget);
-	if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+	if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDesklet)))
 		return NULL;
 	
 	glGetIntegerv (GL_VIEWPORT, viewport);
@@ -777,7 +775,6 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 		}
 	}
 	
-	gdk_gl_drawable_gl_end (pGlDrawable);
 	return pFoundIcon;
 }
 Icon *cairo_dock_find_clicked_icon_in_desklet (CairoDesklet *pDesklet)

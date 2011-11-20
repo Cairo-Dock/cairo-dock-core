@@ -78,9 +78,7 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 		//g_print ("on saute le dessin\n");
 		if (g_bUseOpenGL)
 		{
-			GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDesklet->container.pWidget);
-			GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDesklet->container.pWidget);
-			if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+			if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDesklet)))
 				return FALSE;
 			
 			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -88,11 +86,7 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 			
 			cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDesklet));
 			
-			if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
-				gdk_gl_drawable_swap_buffers (pGlDrawable);
-			else
-				glFlush ();
-			gdk_gl_drawable_gl_end (pGlDrawable);
+			gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pDesklet));
 		}
 		else
 		{
@@ -104,9 +98,7 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 	
 	if (g_bUseOpenGL && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl)
 	{
-		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDesklet->container.pWidget);
-		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDesklet->container.pWidget);
-		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDesklet)))
 			return FALSE;
 		
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -117,11 +109,7 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_RENDER_DESKLET, pDesklet, NULL);
 		cairo_dock_notify_on_object (pDesklet, NOTIFICATION_RENDER_DESKLET, pDesklet, NULL);
 		
-		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
-			gdk_gl_drawable_swap_buffers (pGlDrawable);
-		else
-			glFlush ();
-		gdk_gl_drawable_gl_end (pGlDrawable);
+		gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pDesklet));
 	}
 	else
 	{
@@ -322,18 +310,15 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 		
 		if (g_bUseOpenGL)
 		{
-			GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
-			GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
 			GLsizei w = pEvent->width;
 			GLsizei h = pEvent->height;
-			if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+			
+			if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDesklet)))
 				return FALSE;
 			
 			glViewport(0, 0, w, h);
 			
 			cairo_dock_set_perspective_view (CAIRO_CONTAINER (pDesklet));
-			
-			gdk_gl_drawable_gl_end (pGlDrawable);
 		}
 		
 		if (pDesklet->bNoInput)

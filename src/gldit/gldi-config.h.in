@@ -5,6 +5,12 @@
 /* Defined if we can use X Extensions. */
 #cmakedefine HAVE_XEXTEND @HAVE_XEXTEND@
 
+/* Defined if we have GTK3. */
+#cmakedefine HAVE_GTK3 @HAVE_GTK3@
+
+/* Defined if we have GTK2. */
+#cmakedefine HAVE_GTK2 @HAVE_GTK2@
+
 /* Defined if we can crypt passwords. */
 #cmakedefine HAVE_LIBCRYPT @HAVE_LIBCRYPT@
 

@@ -23,7 +23,7 @@
 
 #include <glib.h>
 
-#include <gdk/x11/gdkglx.h>
+#include <GL/glx.h>
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-container.h"
@@ -36,7 +36,11 @@ G_BEGIN_DECLS
 
 /// This strucure summarizes the available OpenGL configuration on the system.
 struct _CairoDockGLConfig {
-	GdkGLConfig *pGlConfig;
+	///GdkGLConfig *pGlConfig;
+	GLXContext context;
+	XVisualInfo *pVisInfo;
+	Colormap xcolormap;
+	GdkColormap *pColormap;
 	gboolean bIndirectRendering;
 	gboolean bAlphaAvailable;
 	gboolean bStencilBufferAvailable;
@@ -49,11 +53,6 @@ struct _CairoDockGLConfig {
 	gint iRedirectWidth, iRedirectHeight;
 	gboolean bRedirected;
 	gboolean bSetPerspective;
-	/**gboolean bPBufferAvailable;
-	gint iGlxMajor, iGlxMinor;
-	GLXPbuffer iconPbuffer;
-	GLXContext iconContext;
-	gint iIconPbufferWidth, iIconPbufferHeight;*/
 	void (*bindTexImage) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
 	void (*releaseTexImage) (Display *display, GLXDrawable drawable, int buffer);
 	} ;
@@ -68,7 +67,7 @@ struct _CairoDockGLConfig {
 */
 gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL);
 
-#define cairo_dock_opengl_is_safe(...) (g_openglConfig.pGlConfig != NULL && ! g_openglConfig.bIndirectRendering && g_openglConfig.bAlphaAvailable && g_openglConfig.bStencilBufferAvailable)  // bNonPowerOfTwoAvailable et FBO sont detectes une fois qu'on a un contexte OpenGL, on ne peut donc pas les inclure ici.
+#define cairo_dock_opengl_is_safe(...) (g_openglConfig.context != 0 && ! g_openglConfig.bIndirectRendering && g_openglConfig.bAlphaAvailable && g_openglConfig.bStencilBufferAvailable)  // bNonPowerOfTwoAvailable et FBO sont detectes une fois qu'on a un contexte OpenGL, on ne peut donc pas les inclure ici.
 
 /* Toggle on/off the indirect rendering mode (for cards like Radeon 35xx).
 *@param bToggleIndirectRendering whether to toggle on/off the indirect rendering mode that have been detected by the function (for cards like Radeon 35xx).
@@ -77,7 +76,13 @@ void cairo_dock_force_indirect_rendering (void);
 
 #define cairo_dock_deactivate_opengl(...) do {\
 	g_bUseOpenGL = FALSE;\
-	memset (&g_openglConfig, 0, sizeof (CairoDockGLConfig)); } while (0)
+	g_openglConfig.context = 0; } while (0)
+
+
+gboolean gldi_opengl_rendering_begin (CairoContainer *pContainer);
+
+void gldi_opengl_rendering_swap_buffers (CairoContainer *pContainer);
+
 
   ///////////////////////
  // RENDER TO TEXTURE //
@@ -135,9 +140,9 @@ void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer
 void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer);
 
 /** Set a shared default-initialized GL context on a window.
-*@param pWindow the window, not yet realized.
+*@param pContainer the container, not yet realized.
 */
-void cairo_dock_set_gl_capabilities (GtkWidget *pWindow);
+void cairo_dock_set_gl_capabilities (CairoContainer *pContainer);
 
 void cairo_dock_set_default_gl_context (void);
 

@@ -22,10 +22,12 @@ add_definitions (-DMY_APPLET_DOCK_VERSION="${VERSION}")
 add_definitions (-DMY_APPLET_ICON_FILE="icons/icon-help.svg")
 
 link_directories(
-	${PACKAGE_LIBRARY_DIRS})
+	${PACKAGE_LIBRARY_DIRS}
+	${GTK_LIBRARY_DIRS})
 
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
+	${GTK_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src
 	${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/gldit)

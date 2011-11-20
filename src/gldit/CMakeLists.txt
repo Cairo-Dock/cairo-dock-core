@@ -69,6 +69,7 @@ SET(core_lib_SRCS
 # Make sure the compiler can find include files from the libraries.
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
+	${GTK_INCLUDE_DIRS}
 	${XEXTEND_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/icon-factory
@@ -77,6 +78,7 @@ include_directories(
 # Make sure the linker can find the libraries.
 link_directories(
 	${PACKAGE_LIBRARY_DIRS}
+	${GTK_LIBRARY_DIRS}
 	${XEXTEND_LIBRARY_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/icon-factory
@@ -98,6 +100,7 @@ set_target_properties ("gldi" PROPERTIES
 # Link the result to the librairies.
 target_link_libraries("gldi"
 	${PACKAGE_LIBRARIES} -ldl
+	${GTK_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${LIBCRYPT_LIBS}
 	icon-factory

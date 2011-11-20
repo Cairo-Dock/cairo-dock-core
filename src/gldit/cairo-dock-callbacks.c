@@ -36,7 +36,7 @@
 #include <glitz-glx.h>
 #include <cairo-glitz.h>
 #endif
-#include <gtk/gtkgl.h>
+#include <GL/gl.h>
 #include <GL/glu.h>
 
 #include "cairo-dock-draw.h"
@@ -186,9 +186,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	//\________________ OpenGL rendering
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)
 	{
-		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pDock->container.pWidget);
-		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pDock->container.pWidget);
-		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDock)))
 			return FALSE;
 		
 		glLoadIdentity ();
@@ -218,11 +216,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		}
 		glDisable (GL_SCISSOR_TEST);
 		
-		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
-			gdk_gl_drawable_swap_buffers (pGlDrawable);
-		else
-			glFlush ();
-		gdk_gl_drawable_gl_end (pGlDrawable);
+		gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pDock));
 		
 		return FALSE ;
 	}
@@ -1319,11 +1313,9 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		
 		if (g_bUseOpenGL)
 		{
-			GdkGLContext* pGlContext = gtk_widget_get_gl_context (pWidget);
-			GdkGLDrawable* pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
 			GLsizei w = pEvent->width;
 			GLsizei h = pEvent->height;
-			if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+			if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDock)))
 				return FALSE;
 			
 			glViewport(0, 0, w, h);
@@ -1349,8 +1341,6 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				_cairo_dock_delete_texture (pDock->iRedirectedTexture);
 				pDock->iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL, pEvent->width, pEvent->height);
 			}
-			
-			gdk_gl_drawable_gl_end (pGlDrawable);
 		}
 		
 		#ifdef HAVE_GLITZ

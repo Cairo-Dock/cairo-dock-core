@@ -307,7 +307,7 @@ cd_keybinder_unbind (CairoKeyBinding *binding)
 {
 	if (binding == NULL)
 		return;
-	cd_debug ("%s (%s)", __func__, binding->keystring);
+	g_print ("%s (%s)\n", __func__, binding->keystring);
 	
 	// ensure it's a registerd binding
 	GSList *iter = g_slist_find (s_pKeyBindings, binding);
@@ -432,23 +432,26 @@ static void init (void)
 }
 
 
-static void unload (void)
+/**static void unload (void)
 {
 	GSList *iter;
-	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)  // normalement la liste devrait etre vide.
+	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
 	{
 		CairoKeyBinding *binding = (CairoKeyBinding *) iter->data;
 		
 		cd_debug (" --- remove key binding '%s'\n", binding->keystring);
-		do_ungrab_key (binding);
-		
+		if (binding->bSuccess)
+		{
+			do_ungrab_key (binding);
+			binding->bSuccess = FALSE;
+		}
 		cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_REMOVED, binding);
 		
 		_free_binding (binding);
 	}
 	g_slist_free (s_pKeyBindings);
 	s_pKeyBindings = NULL;
-}
+}*/
 
   ///////////////
  /// MANAGER ///
@@ -461,7 +464,7 @@ void gldi_register_shortkeys_manager (void)
 	myShortkeysMgr.mgr.cModuleName 	= "Shortkeys";
 	myShortkeysMgr.mgr.init 		= init;
 	myShortkeysMgr.mgr.load 		= NULL;
-	myShortkeysMgr.mgr.unload 		= unload;
+	myShortkeysMgr.mgr.unload 		= NULL;  /// unload
 	myShortkeysMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
 	myShortkeysMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
 	myShortkeysMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;

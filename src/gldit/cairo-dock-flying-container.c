@@ -255,9 +255,7 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 {
 	if (g_bUseOpenGL)
 	{
-		GdkGLContext *pGlContext = gtk_widget_get_gl_context (pWidget);
-		GdkGLDrawable *pGlDrawable = gtk_widget_get_gl_drawable (pWidget);
-		if (!gdk_gl_drawable_gl_begin (pGlDrawable, pGlContext))
+		if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pFlyingContainer)))
 			return FALSE;
 		
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -268,11 +266,7 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
 		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
 		
-		if (gdk_gl_drawable_is_double_buffered (pGlDrawable))
-			gdk_gl_drawable_swap_buffers (pGlDrawable);
-		else
-			glFlush ();
-		gdk_gl_drawable_gl_end (pGlDrawable);
+		gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pFlyingContainer));
 	}
  	else
 	{
