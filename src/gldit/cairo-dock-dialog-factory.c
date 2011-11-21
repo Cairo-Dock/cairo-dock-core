@@ -87,8 +87,8 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 {
 	//g_print ("%s (%dx%d ; %d;%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight, pExpose->area.x, pExpose->area.y);
 	int x, y;
-	// @ FABOUNET: if (0)?
-	if (0 && g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
+	// we doesn't need to render a dialog with the OpenGL...
+	/*if (0 && g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
 	{
 		if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDialog)))
 			return FALSE;
@@ -111,7 +111,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 		gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pDialog));
 	}
 	else
-	{
+	{*/
 		cairo_t *pCairoContext;
 		
 		if ((pExpose->area.x != 0 || pExpose->area.y != 0))
@@ -148,7 +148,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 		}
 		
 		cairo_destroy (pCairoContext);
-	}
+	//}
 	return FALSE;
 }
 

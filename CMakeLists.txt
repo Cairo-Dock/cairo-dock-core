@@ -63,8 +63,8 @@ set (bindir ${prefix}/bin)
 
 ########### dependencies ###############
 
-set (packages_required "cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox")  # for the .pc
-pkg_check_modules ("PACKAGE" REQUIRED "${packages_required} libcurl")  # @FABOUNET: should we have to put libcurl in the .pc?
+set (packages_required "cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox libcurl")  # for the .pc
+pkg_check_modules ("PACKAGE" REQUIRED "${packages_required}")
 
 set (xextend_required "xtst xcomposite xinerama")  # for the .pc
 pkg_check_modules ("XEXTEND" "${xextend_required}")
