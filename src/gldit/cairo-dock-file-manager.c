@@ -334,6 +334,20 @@ gboolean cairo_dock_fm_shutdown (void)
 		return FALSE;
 }
 
+gboolean cairo_dock_fm_reboot (void)
+{
+	if (s_pEnvBackend != NULL && s_pEnvBackend->reboot!= NULL)
+	{
+		const gchar *sm = g_getenv ("SESSION_MANAGER");
+		if (sm == NULL || *sm == '\0')  // idem
+			return FALSE;
+		s_pEnvBackend->reboot ();
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
+
 gboolean cairo_dock_fm_lock_screen (void)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->lock_screen != NULL)

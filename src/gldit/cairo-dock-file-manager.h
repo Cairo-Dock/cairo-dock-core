@@ -136,6 +136,7 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMUserActionFunc		logout;
 	CairoDockFMUserActionFunc		lock_screen;
 	CairoDockFMUserActionFunc		shutdown;
+	CairoDockFMUserActionFunc		reboot;
 	CairoDockFMUserActionFunc		setup_time;
 	CairoDockFMUserActionFunc		show_system_monitor;
 };
@@ -233,6 +234,9 @@ gboolean cairo_dock_fm_logout (void);
 /** Raise the shutdown panel.
 */
 gboolean cairo_dock_fm_shutdown (void);
+/** Raise the reboot panel.
+*/
+gboolean cairo_dock_fm_reboot (void);
 
 /** Lock the screen.
 */
