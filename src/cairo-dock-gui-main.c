@@ -1468,7 +1468,7 @@ static void _load_shortkeys_widget (CairoDockModuleInstance *pInstance, GKeyFile
 	
 	//\_____________ On l'ajoute a la fenetre.
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	gtk_widget_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
+	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.
@@ -1663,7 +1663,11 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		0);
 	
 	s_pToolBar = gtk_toolbar_new ();
+	#if (GTK_MAJOR_VERSION < 3)
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (s_pToolBar), GTK_ORIENTATION_VERTICAL);
+	#else
+	gtk_orientable_set_orientation (GTK_ORIENTABLE (s_pToolBar), GTK_ORIENTATION_VERTICAL);
+	#endif
 	gtk_toolbar_set_style (GTK_TOOLBAR (s_pToolBar), GTK_TOOLBAR_BOTH_HORIZ);
 	gtk_toolbar_set_show_arrow (GTK_TOOLBAR (s_pToolBar), TRUE);  /// FALSE
 	//gtk_widget_set (s_pToolBar, "height-request", 300, NULL);
@@ -1950,7 +1954,9 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	
 	//\_____________ On ajoute la barre de status a la fin.
 	s_pStatusBar = gtk_statusbar_new ();
+	#if (GTK_MAJOR_VERSION < 3)
 	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (s_pStatusBar), FALSE);
+	#endif
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
 		s_pStatusBar,
 		TRUE,

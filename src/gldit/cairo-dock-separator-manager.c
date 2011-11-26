@@ -22,11 +22,6 @@
 #include <cairo.h>
 #include <stdlib.h>
 
-#ifdef HAVE_GLITZ
-#include <gdk/gdkx.h>
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"

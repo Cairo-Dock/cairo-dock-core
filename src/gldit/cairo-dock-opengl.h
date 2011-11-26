@@ -39,8 +39,12 @@ struct _CairoDockGLConfig {
 	///GdkGLConfig *pGlConfig;
 	GLXContext context;
 	XVisualInfo *pVisInfo;
+	#ifdef HAVE_GTK2
 	Colormap xcolormap;
 	GdkColormap *pColormap;
+	#else  // GTK3
+	GdkVisual *pGdkVisual;
+	#endif
 	gboolean bIndirectRendering;
 	gboolean bAlphaAvailable;
 	gboolean bStencilBufferAvailable;
@@ -79,11 +83,6 @@ void cairo_dock_force_indirect_rendering (void);
 	g_openglConfig.context = 0; } while (0)
 
 
-gboolean gldi_opengl_rendering_begin (CairoContainer *pContainer);
-
-void gldi_opengl_rendering_swap_buffers (CairoContainer *pContainer);
-
-
   ///////////////////////
  // RENDER TO TEXTURE //
 ///////////////////////
@@ -93,13 +92,6 @@ void cairo_dock_create_icon_fbo (void);
 /** Destroy the icons FBO.
 */
 void cairo_dock_destroy_icon_fbo (void);
-
-/* Create a pbuffer that will fit the icons of the docks. Do nothing it a pbuffer with the correct size already exists.
-*/
-//void cairo_dock_create_icon_pbuffer (void);
-/* Destroy the icons pbuffer.
-*/
-//void cairo_dock_destroy_icon_pbuffer (void);
 
 /** Initiate an OpenGL drawing session on an icon's texture.
 *@param pIcon the icon on which to draw.
@@ -119,6 +111,16 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
   /////////////
  // CONTEXT //
 /////////////
+
+gboolean gldi_glx_make_current (CairoContainer *pContainer);
+
+gboolean gldi_glx_begin_draw_container_full (CairoContainer *pContainer, gboolean bClear);
+
+#define gldi_glx_begin_draw_container(pContainer) gldi_glx_begin_draw_container_full (pContainer, TRUE)
+
+void gldi_glx_end_draw_container (CairoContainer *pContainer);
+
+
 /** Set a perspective view to the current GL context to fit a given ontainer. Perspective view accentuates the depth effect of the scene, but can distort it on the edges, and is difficult to manipulate because the size of objects depends on their position.
 *@param pContainer the container
 */
@@ -137,14 +139,15 @@ void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer
 /** Apply the desktop background onto a container, to emulate fake transparency.
 *@param pContainer the container
 */
-void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer);
+void gldi_glx_apply_desktop_background (CairoContainer *pContainer);
 
 /** Set a shared default-initialized GL context on a window.
 *@param pContainer the container, not yet realized.
 */
-void cairo_dock_set_gl_capabilities (CairoContainer *pContainer);
+void gldi_glx_init_container (CairoContainer *pContainer);
 
-void cairo_dock_set_default_gl_context (void);
+void gldi_glx_finish_container (CairoContainer *pContainer);
+
 
 G_END_DECLS
 #endif

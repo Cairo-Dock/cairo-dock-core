@@ -23,12 +23,6 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
-#ifdef HAVE_GLITZ
-#include <gdk/gdkx.h>
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
-
 #include "gldi-config.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-opengl.h"
@@ -250,23 +244,22 @@ static gboolean _cairo_dock_render_flying_container_notification (gpointer pUser
 
 
 static gboolean on_expose_flying_icon (GtkWidget *pWidget,
+#if (GTK_MAJOR_VERSION < 3)
 	GdkEventExpose *pExpose,
+#else
+	cairo_t *ctx,
+#endif
 	CairoFlyingContainer *pFlyingContainer)
 {
 	if (g_bUseOpenGL)
 	{
-		if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pFlyingContainer)))
+		if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pFlyingContainer)))
 			return FALSE;
-		
-		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glLoadIdentity ();
-		
-		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pFlyingContainer));
 		
 		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
 		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
 		
-		gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pFlyingContainer));
+		gldi_glx_end_draw_container (CAIRO_CONTAINER (pFlyingContainer));
 	}
  	else
 	{
@@ -294,7 +287,7 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 		{
 			GLsizei w = pEvent->width;
 			GLsizei h = pEvent->height;
-			if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pFlyingContainer)))
+			if (! gldi_glx_make_current (CAIRO_CONTAINER (pFlyingContainer)))
 				return FALSE;
 			
 			glViewport(0, 0, w, h);
@@ -321,7 +314,11 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	pFlyingContainer->container.fRatio = 1.;
 	pFlyingContainer->container.bUseReflect = FALSE;
 	g_signal_connect (G_OBJECT (pWindow),
+		#if (GTK_MAJOR_VERSION < 3)
 		"expose-event",
+		#else
+		"draw",
+		#endif
 		G_CALLBACK (on_expose_flying_icon),
 		pFlyingContainer);
 	g_signal_connect (G_OBJECT (pWindow),
@@ -353,7 +350,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->container.iWindowPositionY,
 		pFlyingContainer->container.iWidth,
 		pFlyingContainer->container.iHeight);*/
-	gdk_window_move_resize (pWindow->window,
+	gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pFlyingContainer)),
 		pFlyingContainer->container.iWindowPositionX,
 		pFlyingContainer->container.iWindowPositionY,
 		pFlyingContainer->container.iWidth,

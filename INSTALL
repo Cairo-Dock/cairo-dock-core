@@ -32,10 +32,6 @@ For 64bits (x86_64) architectures, the libraries are installed in a 'lib64' dire
 You can also force another prefix for this librairy directory with "LIB_SUFFIX" flag, e.g. for 'lib32' directory:
     $ cmake CMakeLists.txt -DCMAKE_INSTALL_PREFIX=/usr -DLIB_SUFFIX=32
 
-<deprecated>
-If your libcairo is compiled with glitz support (that is, with --enable-glitz option), you can benefit from glitz hardware acceleration in cairo-dock too.
-Just add the -Denable-glitz option.
-</deprecated>
 
 Plug-ins are compiled all at once, but you can skip some of them. Unstable plug-ins are skipped by default, unless you add "-Denable-xxx=yes", where xxx is the name of the plug-in.
 See the "Applets.stable" file in the "plug-ins" folder for an exhaustive list of stable applets (that are effectively integrated into the official package).

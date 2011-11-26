@@ -90,7 +90,6 @@ typedef enum {
 	NOTIFICATION_UPDATE_DEFAULT_CONTAINER_SLOW,
 	/// notification called when a default container is rendered.
 	NOTIFICATION_RENDER_DEFAULT_CONTAINER,
-	/// 
 	NB_NOTIFICATIONS_CONTAINER
 	} CairoContainerNotifications;
 
@@ -135,13 +134,6 @@ struct _CairoContainer {
 	CairoDockTypeHorizontality bIsHorizontal;
 	/// TRUE if the container is oriented upwards, FALSE if downwards.
 	gboolean bDirectionUp;
-#ifdef HAVE_GLITZ
-	glitz_drawable_format_t *pDrawFormat;
-	glitz_drawable_t* pGlitzDrawable;
-	glitz_format_t* pGlitzFormat;
-#else
-	gpointer padding[3];
-#endif
 	/// Source ID of the animation loop.
 	guint iSidGLAnimation;
 	/// interval of time between 2 animation steps.
@@ -171,6 +163,7 @@ struct _CairoContainer {
 /// Get the Container part of a pointer.
 #define CAIRO_CONTAINER(p) ((CairoContainer *) (p))
 
+
   /////////////
  // WINDOW //
 ///////////
@@ -180,11 +173,14 @@ void cairo_dock_set_containers_non_sticky (void);
 GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow);
 
 /** Initialize a Container : create a GTK window with transparency and OpenGL support. To be called when you create a new container.
+*@param pContainer a Container.
 *@return the newly allocated GTK window.
 */
 #define cairo_dock_init_container(pContainer) cairo_dock_init_container_full (pContainer, TRUE)
+
 /** Same as above, but with no OpenGL support.
- */
+*@param pContainer a Container.
+*/
 #define cairo_dock_init_container_no_opengl(pContainer) cairo_dock_init_container_full (pContainer, FALSE)
 
 /** Finish a Container. To be called before you free it.
@@ -192,7 +188,37 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 */
 void cairo_dock_finish_container (CairoContainer *pContainer);
 
-void cairo_dock_set_colormap_for_window (GtkWidget *pWidget);
+
+#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 14)
+#define gldi_container_get_gdk_window(pContainer) (pContainer)->pWidget->window
+#else
+#define gldi_container_get_gdk_window(pContainer) gtk_widget_get_window ((pContainer)->pWidget)
+#endif
+
+#define gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
+
+#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 18)
+#define gldi_container_is_visible(pContainer) GTK_WIDGET_VISIBLE ((pContainer)->pWidget)
+#else
+#define gldi_container_is_visible(pContainer) gtk_widget_get_visible ((pContainer)->pWidget)
+#endif
+
+#if (GTK_MAJOR_VERSION < 3)
+#define GLDI_KEY(x) GDK_##x
+#else
+#define GLDI_KEY(x) GDK_KEY_##x
+#endif
+
+#define gldi_container_get_pointer(pContainer) \
+	if ((pContainer)->bIsHorizontal) \
+		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseX, &pContainer->iMouseY, NULL); \
+	else \
+		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseY, &pContainer->iMouseX, NULL);
+
+gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const gchar *cSignal);
+gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer);
+gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer);
+
 
   ////////////
  // REDRAW //
@@ -255,9 +281,9 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 #define cairo_dock_get_max_scale(pContainer) (CAIRO_DOCK_IS_DOCK (pContainer) ? (1 + myIconsParam.fAmplitude) : 1)
 
 
-gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const gchar *cSignal);
-gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer);
-gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer);
+  //////////
+ // MENU //
+//////////
 
 /** Pop-up a menu on an icon. The menu is placed so that it touches the icon, without overlapping it. If the icon is NULL, it will be placed it at the mouse's position. In the case of a dock, it prevents this one from shrinking down.
 *@param menu the menu.
@@ -297,6 +323,27 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 *@return the menu.
 */
 GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
+
+
+  /////////////////
+ // INPUT SHAPE //
+/////////////////
+
+GldiShape *gldi_container_create_input_shape (CairoContainer *pContainer, int x, int y, int w, int h);
+
+#if (GTK_MAJOR_VERSION < 3)
+#define gldi_container_set_input_shape(pContainer, pShape) \
+gtk_widget_input_shape_combine_mask ((pContainer)->pWidget, pShape, 0, 0)
+#else // GTK3, cairo_region_t
+#define gldi_container_set_input_shape(pContainer, pShape) \
+gtk_widget_input_shape_combine_region ((pContainer)->pWidget, pShape)
+#endif
+
+#if (GTK_MAJOR_VERSION < 3)
+#define gldi_shape_destroy(pShape) g_object_unref (pShape)
+#else
+#define gldi_shape_destroy(pShape) cairo_region_destroy (pShape)
+#endif
 
 
 void gldi_register_containers_manager (void);

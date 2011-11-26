@@ -31,10 +31,6 @@
 #include <librsvg/rsvg.h>
 #include <librsvg/rsvg-cairo.h>
 
-#ifdef HAVE_GLITZ
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include <X11/extensions/Xrender.h>
 #include <X11/extensions/shape.h>
@@ -193,7 +189,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	///cairo_dock_trigger_set_WM_icons_geometry (pDock);
 	
 	// if the size has changed, move the dock to keep it centered.
-	if (GTK_WIDGET_VISIBLE (pDock->container.pWidget) && (iPrevMaxDockHeight != pDock->iMaxDockHeight || iPrevMaxDockWidth != pDock->iMaxDockWidth))
+	if (gldi_container_is_visible (CAIRO_CONTAINER (pDock)) && (iPrevMaxDockHeight != pDock->iMaxDockHeight || iPrevMaxDockWidth != pDock->iMaxDockWidth))
 	{
 		//g_print ("*******%s (%dx%d -> %dx%d)\n", __func__, iPrevMaxDockWidth, iPrevMaxDockHeight, pDock->iMaxDockWidth, pDock->iMaxDockHeight);
 		cairo_dock_move_resize_dock (pDock);
@@ -222,7 +218,7 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
 
 void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 {
-	Window Xid = GDK_WINDOW_XID (pDock->container.pWidget->window);
+	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDock));
 	int left=0, right=0, top=0, bottom=0;
 	int left_start_y=0, left_end_y=0, right_start_y=0, right_end_y=0, top_start_x=0, top_end_x=0, bottom_start_x=0, bottom_end_x=0;
 
@@ -268,12 +264,6 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 	}
 	
 	cairo_dock_set_strut_partial (Xid, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
-	/*if ((bReserve && ! pDock->container.bDirectionUp) || (g_iWmHint == GDK_WINDOW_TYPE_HINT_DOCK))  // merci a Robrob pour le patch !
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // gtk_window_set_type_hint ne marche que sur une fenetre avant de la rendre visible !
-	else if (g_iWmHint == GDK_WINDOW_TYPE_HINT_NORMAL)
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_NORMAL");  // idem.
-	else if (g_iWmHint == GDK_WINDOW_TYPE_HINT_TOOLBAR)
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_TOOLBAR");  // idem.*/
 }
 
 void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock)
@@ -350,7 +340,7 @@ static gboolean _move_resize_dock (CairoDock *pDock)
 	
 	if (pDock->container.bIsHorizontal)
 	{
-		gdk_window_move_resize (pDock->container.pWidget->window,
+		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
 			iNewPositionX,
 			iNewPositionY,
 			iNewWidth,
@@ -358,7 +348,7 @@ static gboolean _move_resize_dock (CairoDock *pDock)
 	}
 	else
 	{
-		gdk_window_move_resize (pDock->container.pWidget->window,
+		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
 			iNewPositionY,
 			iNewPositionX,
 			iNewHeight,
@@ -382,50 +372,32 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
   ///////////////////
  /// INPUT SHAPE ///
 ///////////////////
-
-static GdkBitmap *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
+static GldiShape *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
 {
 	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
-	//g_print ("%s (%dx%d / %dx%d)\n", __func__, w, h, W, H);
 	if (W == 0 || H == 0)  // very unlikely to happen, but anyway avoid this case.
 	{
 		return NULL;
 	}
 	
-	GdkBitmap *pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
-		pDock->container.bIsHorizontal ? W : H,
-		pDock->container.bIsHorizontal ? H : W,
-		1);
-	
-	cairo_t *pCairoContext = gdk_cairo_create (pShapeBitmap);
-	g_return_val_if_fail (pCairoContext != NULL, NULL);  // if no context, abort (https://bugs.launchpad.net/cairo-dock-plug-ins/+bug/861725)
-	cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-	cairo_paint (pCairoContext);
-	if (w != 0 && h != 0)
+	GldiShape *pShapeBitmap;
+	if (pDock->container.bIsHorizontal)
 	{
-		if (pDock->container.bIsHorizontal)
-		{
-			cairo_rectangle (pCairoContext,
-				(W - w) / 2,  // centre en x.
-				pDock->container.bDirectionUp ? H - h : 0,
-				w,
-				h);
-		}
-		else
-		{
-			cairo_rectangle (pCairoContext,
-				pDock->container.bDirectionUp ? H - h : 0,
-				(W - w) / 2,  // centre en x.
-				h,
-				w);
-		}
-		cairo_set_source_rgba (pCairoContext, 1., 1., 1., 1.);
-		cairo_fill (pCairoContext);
+		pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDock),
+			(W - w) / 2,  // centre en x.
+			pDock->container.bDirectionUp ? H - h : 0,
+			w,
+			h);
 	}
-	cairo_destroy (pCairoContext);
-
+	else
+	{
+		pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDock),
+			pDock->container.bDirectionUp ? H - h : 0,
+			(W - w) / 2,  // centre en x.
+			h,
+			w);
+	}
 	return pShapeBitmap;
 }
 
@@ -434,17 +406,17 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	//\_______________ destroy the current input zones.
 	if (pDock->pShapeBitmap != NULL)
 	{
-		g_object_unref ((gpointer) pDock->pShapeBitmap);
+		gldi_shape_destroy (pDock->pShapeBitmap);
 		pDock->pShapeBitmap = NULL;
 	}
 	if (pDock->pHiddenShapeBitmap != NULL)
 	{
-		g_object_unref ((gpointer) pDock->pHiddenShapeBitmap);
+		gldi_shape_destroy (pDock->pHiddenShapeBitmap);
 		pDock->pHiddenShapeBitmap = NULL;
 	}
 	if (pDock->pActiveShapeBitmap != NULL)
 	{
-		g_object_unref ((gpointer) pDock->pActiveShapeBitmap);
+		gldi_shape_destroy (pDock->pActiveShapeBitmap);
 		pDock->pActiveShapeBitmap = NULL;
 	}
 	
@@ -1010,7 +982,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	CairoDock *pSubDock = pPointedIcon->pSubDock;
 	g_return_if_fail (pSubDock != NULL);
 	
-	if (GTK_WIDGET_VISIBLE (pSubDock->container.pWidget))  // il est deja visible.
+	if (gldi_container_is_visible (CAIRO_CONTAINER (pSubDock)))  // il est deja visible.
 	{
 		if (pSubDock->bIsShrinkingDown)  // il est en cours de diminution, on renverse le processus.
 		{
@@ -1040,14 +1012,14 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
 	
 	if (pSubDock->container.bIsHorizontal)
-		gdk_window_move_resize (pSubDock->container.pWidget->window,
+		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
 			iNewPositionX,
 			iNewPositionY,
 			iNewWidth,
 			iNewHeight);
 	else
 	{
-		gdk_window_move_resize (pSubDock->container.pWidget->window,
+		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
 			iNewPositionY,
 			iNewPositionX,
 			iNewHeight,

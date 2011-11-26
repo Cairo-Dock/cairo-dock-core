@@ -24,11 +24,6 @@
 
 #include <cairo.h>
 
-#ifdef HAVE_GLITZ
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
-
 #include <GL/gl.h> 
 
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area
@@ -63,12 +58,6 @@ extern CairoDockDesktopGeometry g_desktopGeometry;  // _place_menu_on_icon
 static gboolean s_bSticky = TRUE;
 
 
-static gboolean _cairo_dock_on_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
-{
-	cd_debug ("pas de alt+f4");
-	return TRUE;  // on empeche les ALT+F4 malheureux.
-}
-
 void cairo_dock_set_containers_non_sticky (void)
 {
 	if (g_pPrimaryContainer != NULL)
@@ -79,39 +68,64 @@ void cairo_dock_set_containers_non_sticky (void)
 	s_bSticky = FALSE;
 }
 
+
+static gboolean _prevent_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
+{
+	cd_debug ("pas de alt+f4");
+	return TRUE;  // on empeche les ALT+F4 malheureux.
+}
+static void cairo_dock_set_default_rgba_visual (GtkWidget *pWidget)
+{
+	GdkScreen* pScreen = gtk_widget_get_screen (pWidget);
+	
+	#if (GTK_MAJOR_VERSION < 3)
+	GdkColormap* pColormap = gdk_screen_get_rgba_colormap (pScreen);
+	if (!pColormap)
+		pColormap = gdk_screen_get_rgb_colormap (pScreen);
+	
+	gtk_widget_set_colormap (pWidget, pColormap);
+	#else
+	GdkVisual *pGdkVisual = gdk_screen_get_rgba_visual (pScreen);
+	if (pGdkVisual == NULL)
+		pGdkVisual = gdk_screen_get_system_visual (pScreen);
+	
+	gtk_widget_set_visual (pWidget, pGdkVisual);
+	#endif
+}
 GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow)
 {
 	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	pContainer->pWidget = pWindow;
 	
-	if (s_bSticky)
-		gtk_window_stick (GTK_WINDOW (pWindow));
-	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
-	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
-
-	// needed since gtk+-3.0 but it's possible that this resize grip has been backported to gtk+-2.0 (e.g. in Ubuntu Natty...)
-	#if (GTK_MAJOR_VERSION >= 3 || ENABLE_GTK_GRIP == 1)
-	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
-	#endif
-	
-	cairo_dock_set_colormap_for_window (pWindow);
 	if (g_bUseOpenGL && bOpenGLWindow)
 	{
-		cairo_dock_set_gl_capabilities (pContainer);
+		gldi_glx_init_container (pContainer);
 		pContainer->iAnimationDeltaT = myContainersParam.iGLAnimationDeltaT;
 	}
 	else
+	{
+		cairo_dock_set_default_rgba_visual (pWindow);
 		pContainer->iAnimationDeltaT = myContainersParam.iCairoAnimationDeltaT;
+	}
 	if (pContainer->iAnimationDeltaT == 0)
 		pContainer->iAnimationDeltaT = 30;
 	
 	g_signal_connect (G_OBJECT (pWindow),
 		"delete-event",
-		G_CALLBACK (_cairo_dock_on_delete),
+		G_CALLBACK (_prevent_delete),
 		NULL);
 	
 	gtk_widget_set_app_paintable (pWindow, TRUE);
 	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
+	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
+	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
+	if (s_bSticky)
+		gtk_window_stick (GTK_WINDOW (pWindow));
+	
+	// needed since gtk+-3.0 but it's possible that this resize grip has been backported to gtk+-2.0 (e.g. in Ubuntu Natty...)
+	#if (GTK_MAJOR_VERSION >= 3 || ENABLE_GTK_GRIP == 1)
+	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
+	#endif
 	
 	cairo_dock_install_notifications_on_object (pContainer, NB_NOTIFICATIONS_CONTAINER);  // l'implementation du container installera par-dessus ses notifications.
 	
@@ -124,11 +138,7 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 
 void cairo_dock_finish_container (CairoContainer *pContainer)
 {
-	if (pContainer->glContext != 0)
-	{
-		Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
-		glXDestroyContext (dpy, pContainer->glContext);
-	}
+	gldi_glx_finish_container (pContainer);
 	
 	gtk_widget_destroy (pContainer->pWidget);  // enleve les signaux.
 	pContainer->pWidget = NULL;
@@ -139,99 +149,10 @@ void cairo_dock_finish_container (CairoContainer *pContainer)
 	}
 	cairo_dock_clear_notifications_on_object (pContainer);
 	pContainer->pNotificationsTab = NULL;
+	
 	if (g_pPrimaryContainer == pContainer)
 		g_pPrimaryContainer = NULL;
-	else if (g_bUseOpenGL && g_pPrimaryContainer != NULL)
-		cairo_dock_set_default_gl_context ();
 }
-
-/* Apply the scren colormap to a window, providing it transparency.
-*@param pWidget a GTK window.
-*/
-void cairo_dock_set_colormap_for_window (GtkWidget *pWidget)
-{
-	if (g_openglConfig.pColormap)
-		gtk_widget_set_colormap (pWidget, g_openglConfig.pColormap);
-	else
-	{
-		GdkScreen* pScreen = gtk_widget_get_screen (pWidget);
-		GdkColormap* pColormap = gdk_screen_get_rgba_colormap (pScreen);
-		if (!pColormap)
-			pColormap = gdk_screen_get_rgb_colormap (pScreen);
-		
-		gtk_widget_set_colormap (pWidget, pColormap);
-	}
-}
-
-/* Apply the scren colormap to a container, providing it transparency, and activate Glitz if possible.
-* @param pContainer the container.
-*/
-void cairo_dock_set_colormap (CairoContainer *pContainer)
-{
-	GdkColormap* pColormap;
-#ifdef HAVE_GLITZ
-	if (g_bUseGlitz)
-	{
-		glitz_drawable_format_t templ, *format;
-		unsigned long	    mask = GLITZ_FORMAT_DOUBLEBUFFER_MASK;
-		XVisualInfo		    *vinfo = NULL;
-		int			    screen = 0;
-		GdkVisual		    *visual;
-		GdkDisplay		    *gdkdisplay;
-		Display		    *xdisplay;
-
-		templ.doublebuffer = 1;
-		gdkdisplay = gtk_widget_get_display (pContainer->pWidget);
-		xdisplay   = gdk_x11_display_get_xdisplay (gdkdisplay);
-
-		int i = 0;
-		do
-		{
-			format = glitz_glx_find_window_format (xdisplay,
-				screen,
-				mask,
-				&templ,
-				i++);
-			if (format)
-			{
-				vinfo = glitz_glx_get_visual_info_from_format (xdisplay,
-					screen,
-					format);
-				if (vinfo->depth == 32)
-				{
-					pContainer->pDrawFormat = format;
-					break;
-				}
-				else if (!pContainer->pDrawFormat)
-				{
-					pContainer->pDrawFormat = format;
-				}
-			}
-		} while (format);
-
-		if (! pContainer->pDrawFormat)
-		{
-			cd_warning ("no double buffered GLX visual");
-		}
-		else
-		{
-			vinfo = glitz_glx_get_visual_info_from_format (xdisplay,
-				screen,
-				pContainer->pDrawFormat);
-
-			visual = gdkx_visual_get (vinfo->visualid);
-			pColormap = gdk_colormap_new (visual, TRUE);
-
-			gtk_widget_set_colormap (pContainer->pWidget, pColormap);
-			gtk_widget_set_double_buffered (pContainer->pWidget, FALSE);
-			return ;
-		}
-	}
-#endif
-	
-	cairo_dock_set_colormap_for_window (pContainer->pWidget);
-}
-
 
 
 void cairo_dock_redraw_container (CairoContainer *pContainer)
@@ -249,7 +170,7 @@ void cairo_dock_redraw_container (CairoContainer *pContainer)
 static inline void _redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea)
 {
 	g_return_if_fail (pContainer != NULL);
-	if (! GTK_WIDGET_VISIBLE (pContainer->pWidget))
+	if (! gldi_container_is_visible (pContainer))
 		return ;
 	
 	if (pArea->y < 0)
@@ -260,7 +181,7 @@ static inline void _redraw_container_area (CairoContainer *pContainer, GdkRectan
 		pArea->width = pContainer->iHeight - pArea->x;
 	
 	if (pArea->width > 0 && pArea->height > 0)
-		gdk_window_invalidate_rect (pContainer->pWidget->window, pArea, FALSE);
+		gdk_window_invalidate_rect (gldi_container_get_gdk_window (pContainer), pArea, FALSE);
 }
 
 void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea)
@@ -278,7 +199,7 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
 	
 	if (CAIRO_DOCK_IS_DOCK (pContainer) &&
 		( (cairo_dock_is_hidden (CAIRO_DOCK (pContainer)) && ! icon->bIsDemandingAttention && ! icon->bAlwaysVisible)
-		|| (CAIRO_DOCK (pContainer)->iRefCount != 0 && ! GTK_WIDGET_VISIBLE (pContainer->pWidget)) ) )  // inutile de redessiner.
+		|| (CAIRO_DOCK (pContainer)->iRefCount != 0 && ! gldi_container_is_visible (pContainer)) ) )  // inutile de redessiner.
 		return ;
 	_redraw_container_area (pContainer, &rect);
 }
@@ -432,9 +353,9 @@ gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer)
 {
 	// actualize the coordinates of the pointer, since they are most probably out-dated (because the mouse has left the dock, or because a right-click generates an event with (0;0) coordinates)
 	if (pContainer->bIsHorizontal)
-		gdk_window_get_pointer (pContainer->pWidget->window, &pContainer->iMouseX, &pContainer->iMouseY, NULL);
+		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseX, &pContainer->iMouseY, NULL);
 	else
-		gdk_window_get_pointer (pContainer->pWidget->window, &pContainer->iMouseY, &pContainer->iMouseX, NULL);
+		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseY, &pContainer->iMouseX, NULL);
 	return cairo_dock_emit_signal_on_container (pContainer, "leave-notify-event");
 }
 gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer)
@@ -625,6 +546,49 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	return menu;
 }
 
+
+GldiShape *gldi_container_create_input_shape (CairoContainer *pContainer, int x, int y, int w, int h)
+{
+	if (pContainer->iWidth == 0 || pContainer->iHeight == 0)  // very unlikely to happen, but anyway avoid this case.
+		return NULL;
+	
+	#if (GTK_MAJOR_VERSION < 3)
+	int W, H;
+	if (pContainer->bIsHorizontal)
+	{
+		W = pContainer->iWidth;
+		H = pContainer->iHeight;
+	}
+	else
+	{
+		W = pContainer->iHeight;
+		H = pContainer->iWidth;
+	}
+	GdkBitmap *pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
+		W,
+		H,
+		1);
+
+	cairo_t *pCairoContext = gdk_cairo_create (pShapeBitmap);
+	g_return_val_if_fail (pCairoContext != NULL, NULL);  // if no context, abort (https://bugs.launchpad.net/cairo-dock-plug-ins/+bug/861725)
+	cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
+	cairo_paint (pCairoContext);
+	
+	cairo_set_source_rgba (pCairoContext, 1., 1., 1., 1.);
+	cairo_rectangle (pCairoContext,
+		x,
+		y,
+		w,
+		h);
+	cairo_fill (pCairoContext);
+	cairo_destroy (pCairoContext);
+	#else
+	cairo_rectangle_int_t rect = {x, y, w, h};
+	cairo_region_t *pShapeBitmap = cairo_region_create_rectangle (&rect);  // for a more complex shape, we would need to draw it on a cairo_surface_t, and then make it a region with gdk_cairo_region_from_surface().
+	#endif
+	return pShapeBitmap;
+}
 
 
   //////////////////

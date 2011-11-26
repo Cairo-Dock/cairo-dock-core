@@ -24,11 +24,6 @@
 #include <pango/pango.h>
 #include <gtk/gtk.h>
 
-#ifdef HAVE_GLITZ
-#include <gdk/gdkx.h>
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
@@ -57,40 +52,7 @@ extern gboolean g_bUseOpenGL;
 
 cairo_t * cairo_dock_create_drawing_context_generic (CairoContainer *pContainer)
 {
-#ifdef HAVE_GLITZ
-	if (pContainer->pGlitzDrawable)
-	{
-		//g_print ("creation d'un contexte lie a une surface glitz\n");
-		glitz_surface_t* pGlitzSurface;
-		cairo_surface_t* pCairoSurface;
-		cairo_t* pCairoContext;
-
-		pGlitzSurface = glitz_surface_create (pContainer->pGlitzDrawable,
-			pContainer->pGlitzFormat,
-			pContainer->iWidth,
-			pContainer->iHeight,
-			0,
-			NULL);
-
-		if (pContainer->pDrawFormat->doublebuffer)
-			glitz_surface_attach (pGlitzSurface,
-				pContainer->pGlitzDrawable,
-				GLITZ_DRAWABLE_BUFFER_BACK_COLOR);
-		else
-			glitz_surface_attach (pGlitzSurface,
-				pContainer->pGlitzDrawable,
-				GLITZ_DRAWABLE_BUFFER_FRONT_COLOR);
-
-		pCairoSurface = cairo_glitz_surface_create (pGlitzSurface);
-		pCairoContext = cairo_create (pCairoSurface);
-
-		cairo_surface_destroy (pCairoSurface);
-		glitz_surface_destroy (pGlitzSurface);
-
-		return pCairoContext;
-	}
-#endif // HAVE_GLITZ
-	return gdk_cairo_create (pContainer->pWidget->window);
+	return gdk_cairo_create (gldi_container_get_gdk_window (pContainer));
 }
 
 cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContainer)
@@ -119,7 +81,7 @@ cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContai
 	return pCairoContext;
 }
 
-cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor)
+cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, cairo_rectangle_int_t *pArea, double *fBgColor)
 {
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (pContainer);
 	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, pCairoContext);
@@ -613,7 +575,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 					floor (0 - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->iTextWidth):
 					floor (0 + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad),
 				floor (0 + icon->fWidth * icon->fScale/2 - icon->iTextHeight/2));
-			if (icon->pSubDock && GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))
+			if (icon->pSubDock && gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))
 			{
 				fMagnitude /= 3;
 			}

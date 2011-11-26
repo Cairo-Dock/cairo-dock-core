@@ -31,11 +31,6 @@
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
 
-#ifdef HAVE_GLITZ
-#include <gdk/gdkx.h>
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -158,8 +153,7 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 	if (! pCairoContext)  // on n'a pas mis le rendu cairo ici a cause du rendu optimise.
 	{
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
-		
-		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
+		gldi_glx_apply_desktop_background (CAIRO_CONTAINER (pDock));
 		
 		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render_opengl)
 			g_pHidingBackend->pre_render_opengl (pDock, pDock->fHideOffset);
@@ -179,26 +173,40 @@ gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDo
 }
 
 gboolean cairo_dock_on_expose (GtkWidget *pWidget,
+#if (GTK_MAJOR_VERSION < 3)
 	GdkEventExpose *pExpose,
+#else
+	cairo_t *ctx,
+#endif
 	CairoDock *pDock)
 {
-	//g_print ("%s ((%d;%d) %dx%d)\n", __func__, pExpose->area.x, pExpose->area.y, pExpose->area.width, pExpose->area.height);
+	//g_print ("%s ((%d;%d) %dx%d)\n", __func__, area.x, area.y, area.width, area.height);
+	GdkRectangle area;
+	#if (GTK_MAJOR_VERSION < 3)
+	memcpy (&area, &pExpose->area, sizeof (GdkRectangle
+	#else
+	double x1, x2, y1, y2;
+	cairo_clip_extents (ctx, &x1, &y1, &x2, &y2);
+	area.x = x1;
+	area.y = y1;
+	area.width = x2 - x1;
+	area.height = y2 - y1;  /// or the opposite ?...
+	#endif
+	
 	//\________________ OpenGL rendering
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)
 	{
-		if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDock)))
+		if (! gldi_glx_begin_draw_container_full (CAIRO_CONTAINER (pDock), FALSE))  // FALSE to keep the color buffer (motion-blur).
 			return FALSE;
 		
-		glLoadIdentity ();
-		
-		if (pExpose->area.x + pExpose->area.y != 0)
+		if (area.x + area.y != 0)
 		{
 			glEnable (GL_SCISSOR_TEST);  // ou comment diviser par 4 l'occupation CPU !
-			glScissor ((int) pExpose->area.x,
+			glScissor ((int) area.x,
 				(int) (pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth) -
-					pExpose->area.y - pExpose->area.height,  // lower left corner of the scissor box.
-				(int) pExpose->area.width,
-				(int) pExpose->area.height);
+					area.y - area.height,  // lower left corner of the scissor box.
+				(int) area.width,
+				(int) area.height);
 		}
 		
 		if (cairo_dock_is_loading ())
@@ -216,17 +224,17 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		}
 		glDisable (GL_SCISSOR_TEST);
 		
-		gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pDock));
+		gldi_glx_end_draw_container (CAIRO_CONTAINER (pDock));
 		
 		return FALSE ;
 	}
 	
 	//\________________ Cairo optimized rendering
-	if (pExpose->area.x + pExpose->area.y != 0)  // x et/ou y sont > 0.
+	if (area.x + area.y != 0)  // x et/ou y sont > 0.
 	{
 		if (! cairo_dock_is_hidden (pDock) || (g_pHidingBackend != NULL && g_pHidingBackend->bCanDisplayHiddenDock))  // if the dock is invisible, we don't use the optimized rendering (for always-visible icons for instance)
 		{
-			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &pExpose->area, NULL);
+			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &area, NULL);
 			
 			if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
 				g_pHidingBackend->pre_render (pDock, pDock->fHideOffset, pCairoContext);
@@ -235,7 +243,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 				g_pKeepingBelowBackend->pre_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
 			
 			if (pDock->pRenderer->render_optimized != NULL)
-				pDock->pRenderer->render_optimized (pCairoContext, pDock, &pExpose->area);
+				pDock->pRenderer->render_optimized (pCairoContext, pDock, &area);
 			else
 				pDock->pRenderer->render (pCairoContext, pDock);
 			
@@ -286,11 +294,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	}
 	
 	cairo_destroy (pCairoContext);
-	
-#ifdef HAVE_GLITZ
-	if (pDock->container.pDrawFormat && pDock->container.pDrawFormat->doublebuffer)
-		glitz_drawable_swap_buffers (pDock->container.pGlitzDrawable);
-#endif
 	return FALSE;
 }
 
@@ -358,7 +361,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 	if ((pDock == s_pLastPointedDock || s_pLastPointedDock == NULL) && pLastPointedIcon != NULL && pLastPointedIcon->pSubDock != NULL)  // on a quitte une icone ayant un sous-dock.
 	{
 		CairoDock *pSubDock = pLastPointedIcon->pSubDock;
-		if (GTK_WIDGET_VISIBLE (pSubDock->container.pWidget))  // le sous-dock est visible, on retarde son cachage.
+		if (gldi_container_is_visible (CAIRO_CONTAINER (pSubDock)))  // le sous-dock est visible, on retarde son cachage.
 		{
 			//g_print ("on cache %s en changeant d'icone\n", pLastPointedIcon->cName);
 			if (pSubDock->iSidLeaveDemand == 0)
@@ -560,10 +563,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	{
 		//g_print ("motion on drag\n");
 		//\_______________ On recupere la position de la souris.
-		if (pDock->container.bIsHorizontal)
- 			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
-		else
-			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
+		gldi_container_get_pointer (CAIRO_CONTAINER (pDock));
 		
 		//\_______________ On recalcule toutes les icones et on redessine.
 		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
@@ -788,7 +788,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			{
 				//g_print (" leave event : %.1f;%.1f (%dx%d)\n", pEvent->x, pEvent->y, pDock->container.iWidth, pDock->container.iHeight);
 				Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-				if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && GTK_WIDGET_VISIBLE (pPointedIcon->pSubDock->container.pWidget)) || (pDock->bAutoHide))
+				if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && gldi_container_is_visible (CAIRO_CONTAINER (pPointedIcon->pSubDock))) || (pDock->bAutoHide))
 				{
 					//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myDocksParam.iLeaveSubDockDelay, 330));
 					pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 330), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
@@ -1028,10 +1028,8 @@ static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principa
 		pDock->iSidTestMouseOutside = 0;
 		return FALSE;
 	}
-	if (pDock->container.bIsHorizontal)
-		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
-	else
-		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
+	
+	gldi_container_get_pointer (CAIRO_CONTAINER (pDock));
 	cd_debug (" -> (%d, %d)\n", pDock->container.iMouseX, pDock->container.iMouseY);
 	
 	cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
@@ -1224,7 +1222,6 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	{
 		GtkWidget *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
 		
-		///cairo_dock_popup_menu_on_container (menu, CAIRO_CONTAINER (pDock));
 		cairo_dock_popup_menu_on_icon (menu, icon, CAIRO_CONTAINER (pDock));
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
@@ -1257,6 +1254,7 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, CairoDock *pDock)
 {
 	//g_print ("%s (main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
+	// set the new actual size of the container
 	gint iNewWidth, iNewHeight, iNewX, iNewY;
 	if (pDock->container.bIsHorizontal)
 	{
@@ -1282,19 +1280,15 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 	pDock->container.iWindowPositionX = iNewX;
 	pDock->container.iWindowPositionY = iNewY;
 	
+	// if the size has changed, also update everything that depends on it.
 	if (bSizeUpdated && iNewWidth > 1)  // changement de taille
 	{
-		//g_print ("--------------------------------> %dx%d\n", iNewWidth, iNewHeight);
-		
-		if (pDock->container.bIsHorizontal)
-			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
-		else
-			gdk_window_get_pointer (pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
+		// update mouse relative position inside the window
+		gldi_container_get_pointer (CAIRO_CONTAINER (pDock));
 		if (pDock->container.iMouseX < 0 || pDock->container.iMouseX > pDock->container.iWidth)  // utile ?
 			pDock->container.iMouseX = 0;
-		//g_print ("x,y : %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
 		
-		// les dimensions ont change, il faut remettre l'input shape a la bonne place (le bitmap a ete recalcule auparavant dans cairo_dock_update_input_shape).
+		// update the input shape (it has been calculated in the function that made the resize)
 		if (pDock->pHiddenShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
 			//g_print ("+++ input shape hidden on configure\n");
@@ -1311,26 +1305,12 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			cairo_dock_set_input_shape_active (pDock);
 		}
 		
+		// update the GL context
 		if (g_bUseOpenGL)
 		{
-			GLsizei w = pEvent->width;
-			GLsizei h = pEvent->height;
-			if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDock)))
+			if (! gldi_glx_make_current (CAIRO_CONTAINER (pDock)))
 				return FALSE;
 			
-			glViewport(0, 0, w, h);
-			
-			/*glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glOrtho(0, w, 0, h, 0.0, 500.0);
-			
-			glMatrixMode (GL_MODELVIEW);
-			glLoadIdentity ();
-			gluLookAt (w/2, h/2, 3.,
-				w/2, h/2, 0.,
-				0.0f, 1.0f, 0.0f);
-			glTranslatef (0.0f, 0.0f, -3.);*/
-			///cairo_dock_set_ortho_view (w, h);
 			cairo_dock_set_ortho_view (CAIRO_CONTAINER (pDock));
 			
 			glClearAccum (0., 0., 0., 0.);
@@ -1342,15 +1322,6 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				pDock->iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL, pEvent->width, pEvent->height);
 			}
 		}
-		
-		#ifdef HAVE_GLITZ
-		if (pDock->container.pGlitzDrawable)
-		{
-			glitz_drawable_update_size (pDock->container.pGlitzDrawable,
-				pEvent->width,
-				pEvent->height);
-		}
-		#endif
 		
 		cairo_dock_calculate_dock_icons (pDock);
 		//g_print ("configure size\n");
@@ -1413,7 +1384,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	if (cairo_dock_is_hidden (pDock))  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
 		return ;
 	//\_________________ On recupere l'URI.
-	gchar *cReceivedData = (gchar *) selection_data->data;  // gtk_selection_data_get_text
+	gchar *cReceivedData = (gchar *) gtk_selection_data_get_text (selection_data);
 	g_return_if_fail (cReceivedData != NULL);
 	int length = strlen (cReceivedData);
 	if (cReceivedData[length-1] == '\n')
@@ -1684,9 +1655,9 @@ static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 	g_return_if_fail (pDock != NULL);
 	int iMouseX, iMouseY;
 	if (pDock->container.bIsHorizontal)
-		gdk_window_get_pointer (pDock->container.pWidget->window, &iMouseX, &iMouseY, NULL);
+		gdk_window_get_pointer (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), &iMouseX, &iMouseY, NULL);
 	else
-		gdk_window_get_pointer (pDock->container.pWidget->window, &iMouseY, &iMouseX, NULL);
+		gdk_window_get_pointer (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), &iMouseY, &iMouseX, NULL);
 	cd_debug (" %d;%d", iMouseX, iMouseY);
 	
 	///pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
@@ -1717,7 +1688,7 @@ static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 }
 void cairo_dock_raise_from_shortcut (const char *cKeyShortcut, gpointer data)
 {
-	if (GTK_WIDGET_VISIBLE (g_pMainDock->container.pWidget))
+	if (gldi_container_is_visible (CAIRO_CONTAINER (g_pMainDock)))
 	{
 		gtk_widget_hide (g_pMainDock->container.pWidget);
 	}
@@ -1732,7 +1703,7 @@ void cairo_dock_raise_from_shortcut (const char *cKeyShortcut, gpointer data)
 
 void cairo_dock_hide_after_shortcut (void)
 {
-	if (s_bHideAfterShortcut && GTK_WIDGET_VISIBLE (g_pMainDock->container.pWidget))
+	if (s_bHideAfterShortcut && gldi_container_is_visible (CAIRO_CONTAINER (g_pMainDock)))
 	{
 		gtk_widget_hide (g_pMainDock->container.pWidget);
 		s_bHideAfterShortcut = FALSE;

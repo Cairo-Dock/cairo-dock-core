@@ -68,23 +68,22 @@ static void on_drag_data_received_desklet (GtkWidget *pWidget, GdkDragContext *d
 ///////////////
 
 static gboolean on_expose_desklet(GtkWidget *pWidget,
+#if (GTK_MAJOR_VERSION < 3)
 	GdkEventExpose *pExpose,
+#else
+	cairo_t *ctx,
+#endif
 	CairoDesklet *pDesklet)
 {
-	if (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0 && (pDesklet->iKnownWidth != pDesklet->iDesiredWidth || pDesklet->iKnownHeight != pDesklet->iDesiredHeight))  // skip the drawing until the desklet has reached its size.
+	if (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0 && (pDesklet->iKnownWidth != pDesklet->iDesiredWidth || pDesklet->iKnownHeight != pDesklet->iDesiredHeight))  // skip the drawing until the desklet has reached its size, only make it transparent.
 	{
 		//g_print ("on saute le dessin\n");
 		if (g_bUseOpenGL)
 		{
-			if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDesklet)))
+			if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pDesklet)))
 				return FALSE;
 			
-			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glLoadIdentity ();
-			
-			cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDesklet));
-			
-			gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pDesklet));
+			gldi_glx_end_draw_container (CAIRO_CONTAINER (pDesklet));
 		}
 		else
 		{
@@ -96,18 +95,13 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 	
 	if (g_bUseOpenGL && pDesklet->pRenderer && pDesklet->pRenderer->render_opengl)
 	{
-		if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDesklet)))
+		if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pDesklet)))
 			return FALSE;
-		
-		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glLoadIdentity ();
-		
-		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDesklet));
 		
 		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_RENDER_DESKLET, pDesklet, NULL);
 		cairo_dock_notify_on_object (pDesklet, NOTIFICATION_RENDER_DESKLET, pDesklet, NULL);
 		
-		gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pDesklet));
+		gldi_glx_end_draw_container (CAIRO_CONTAINER (pDesklet));
 	}
 	else
 	{
@@ -124,35 +118,19 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 
 static void _cairo_dock_set_desklet_input_shape (CairoDesklet *pDesklet)
 {
-	gtk_widget_input_shape_combine_mask (pDesklet->container.pWidget,
-		NULL,
-		0,
-		0);
+	gldi_container_set_input_shape (CAIRO_CONTAINER (pDesklet), NULL);
+	
 	if (pDesklet->bNoInput)
 	{
-		GdkBitmap *pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
-			pDesklet->container.iWidth,
-			pDesklet->container.iHeight,
-			1);
-		
-		cairo_t *pCairoContext = gdk_cairo_create (pShapeBitmap);
-		cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
-		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-		cairo_paint (pCairoContext);
-		cairo_set_source_rgba (pCairoContext, 1., 1., 1., 1.);
-		cairo_rectangle (pCairoContext,
+		GldiShape *pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDesklet),
 			pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize,
 			pDesklet->container.iHeight - myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize);
-		cairo_fill (pCairoContext);
-		cairo_destroy (pCairoContext);
-		gtk_widget_input_shape_combine_mask (pDesklet->container.pWidget,
-			pShapeBitmap,
-			0,
-			0);
-		g_object_unref (pShapeBitmap);
-		//g_print ("input shape : %dx%d\n", pDesklet->container.iWidth, pDesklet->container.iHeight);
+		
+		gldi_container_set_input_shape (CAIRO_CONTAINER (pDesklet), pShapeBitmap);
+		
+		gldi_shape_destroy (pShapeBitmap);
 	}
 }
 
@@ -221,7 +199,6 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 			gtk_widget_queue_draw (pDesklet->container.pWidget);  // sinon on ne redessine que l'interieur.
 		}
 		
-		Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
 		if (pDesklet->bSpaceReserved)  // l'espace est reserve, on reserve la nouvelle taille.
 		{
 			_cairo_dock_reserve_space_for_desklet (pDesklet, TRUE);
@@ -241,8 +218,7 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 		int iNumDesktop = -1;
 		if (! cairo_dock_desklet_is_sticky (pDesklet))
 		{
-			GdkWindow *window = pDesklet->container.pWidget->window;
-			Window Xid = GDK_WINDOW_XID (window);
+			Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 			cd_debug ("This window (%d) is not sticky", (int) Xid);
 			int iDesktop = cairo_dock_get_xwindow_desktop (Xid);
 			int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;
@@ -298,7 +274,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	{
 		if ((pEvent->width < pDesklet->container.iWidth || pEvent->height < pDesklet->container.iHeight) && (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0))
 		{
-			gdk_window_resize (pDesklet->container.pWidget->window,
+			gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet)),
 				pDesklet->iDesiredWidth,
 				pDesklet->iDesiredHeight);
 		}
@@ -311,7 +287,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 			GLsizei w = pEvent->width;
 			GLsizei h = pEvent->height;
 			
-			if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDesklet)))
+			if (! gldi_glx_make_current (CAIRO_CONTAINER (pDesklet)))
 				return FALSE;
 			
 			glViewport(0, 0, w, h);
@@ -378,7 +354,7 @@ static gboolean on_unmap_desklet (GtkWidget* pWidget,
 	CairoDesklet *pDesklet)
 {
 	cd_debug ("unmap desklet (bAllowMinimize:%d)\n", pDesklet->bAllowMinimize);
-	Window Xid = GDK_WINDOW_XID (pWidget->window);
+	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 	if (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)  // on the widget layer, let pass the unmap event..
 	//if (cairo_dock_window_is_utility (Xid))  // sur la couche des widgets, on ne fait rien.
 		return FALSE;
@@ -576,7 +552,7 @@ static void on_drag_data_received_desklet (GtkWidget *pWidget, GdkDragContext *d
 	//g_print ("%s (%dx%d)\n", __func__, x, y);
 	
 	//\_________________ On recupere l'URI.
-	gchar *cReceivedData = (gchar *) selection_data->data;  // gtk_selection_data_get_text
+	gchar *cReceivedData = (gchar *) gtk_selection_data_get_text (selection_data);
 	g_return_if_fail (cReceivedData != NULL);
 	int length = strlen (cReceivedData);
 	if (cReceivedData[length-1] == '\n')
@@ -714,7 +690,8 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
 {
 	//g_print ("%s (%d)\n", __func__, pDesklet->container.bInside);
 	int iMouseX, iMouseY;
-	gdk_window_get_pointer (pWidget->window, &iMouseX, &iMouseY, NULL);
+	GdkWindow *window = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet));
+	gdk_window_get_pointer (window, &iMouseX, &iMouseY, NULL);
 	if (gtk_bin_get_child (GTK_BIN (pDesklet->container.pWidget)) != NULL && iMouseX > 0 && iMouseX < pDesklet->container.iWidth && iMouseY > 0 && iMouseY < pDesklet->container.iHeight)  // en fait on est dans un widget fils, donc on ne fait rien.
 	{
 		return FALSE;
@@ -765,7 +742,11 @@ CairoDesklet *cairo_dock_new_desklet (void)
 	gtk_window_set_default_size(GTK_WINDOW(pWindow), 10, 10);  // idem.
 
 	g_signal_connect (G_OBJECT (pWindow),
+		#if (GTK_MAJOR_VERSION < 3)
 		"expose-event",
+		#else
+		"draw",
+		#endif
 		G_CALLBACK (on_expose_desklet),
 		pDesklet);
 	g_signal_connect (G_OBJECT (pWindow),
@@ -863,7 +844,7 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 	{
 		pDesklet->iDesiredWidth = pAttribute->iDeskletWidth;
 		pDesklet->iDesiredHeight = pAttribute->iDeskletHeight;
-		gdk_window_resize (pDesklet->container.pWidget->window,
+		gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet)),
 			pAttribute->iDeskletWidth,
 			pAttribute->iDeskletHeight);
 	}
@@ -879,7 +860,7 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 	iAbsolutePositionY = MAX (0, MIN (g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pAttribute->iDeskletHeight, iAbsolutePositionY));
 	
 	if (pAttribute->bOnAllDesktops)
-		gdk_window_move(pDesklet->container.pWidget->window,
+		gdk_window_move (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet)),
 			iAbsolutePositionX,
 			iAbsolutePositionY);
 	//g_print (" let's place the deklet at (%d;%d)", iAbsolutePositionX, iAbsolutePositionY);
@@ -893,7 +874,7 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 	else
 	{
 		gtk_window_unstick (GTK_WINDOW (pDesklet->container.pWidget));
-		Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
+		Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 		if (g_desktopGeometry.iNbViewportX > 0 && g_desktopGeometry.iNbViewportY > 0)
 		{
 			int iNumDesktop, iNumViewportX, iNumViewportY;
@@ -1016,7 +997,7 @@ void cairo_dock_add_interactive_widget_to_desklet_full (GtkWidget *pInteractiveW
 	if (iRightMargin != 0)
 	{
 		GtkWidget *pMarginBox = gtk_vbox_new (FALSE, 0);
-		gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
+		g_object_set (pMarginBox, "width-request", iRightMargin, NULL);
 		gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);  // a tester ...
 	}
 	
@@ -1036,12 +1017,12 @@ void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin)
 			if (pChildList->next != NULL)
 			{
 				GtkWidget *pMarginBox = GTK_WIDGET (pChildList->next->data);
-				gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
+				g_object_set (pMarginBox, "width-request", iRightMargin, NULL);
 			}
 			else  // on rajoute le widget de la marge.
 			{
 				GtkWidget *pMarginBox = gtk_vbox_new (FALSE, 0);
-				gtk_widget_set (pMarginBox, "width-request", iRightMargin, NULL);
+				g_object_set (pMarginBox, "width-request", iRightMargin, NULL);
 				gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);
 			}
 			g_list_free (pChildList);
@@ -1097,7 +1078,7 @@ void cairo_dock_zoom_out_desklet (CairoDesklet *pDesklet)
 static void _cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve)
 {
 	cd_debug ("%s (%d)\n", __func__, bReserve);
-	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
+	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 	int left=0, right=0, top=0, bottom=0;
 	int left_start_y=0, left_end_y=0, right_start_y=0, right_end_y=0, top_start_x=0, top_end_x=0, bottom_start_x=0, bottom_end_x=0;
 	int iHeight = pDesklet->container.iHeight, iWidth = pDesklet->container.iWidth;
@@ -1149,7 +1130,7 @@ void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletV
 	
 	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_ABOVE);
 
-	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
+	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 	cairo_dock_wm_set_on_widget_layer (Xid, iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER);
 	
 	if (iVisibility == CAIRO_DESKLET_RESERVE_SPACE)
@@ -1201,9 +1182,9 @@ void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky)
 
 gboolean cairo_dock_desklet_is_sticky (CairoDesklet *pDesklet)
 {
-	GdkWindow *window = pDesklet->container.pWidget->window;
-	#if (GDK_MAJOR_VERSION >= 3)
-	return (window->state & GDK_WINDOW_STATE_STICKY);  // API change: http://mail.gnome.org/archives/commits-list/2010-July/msg00002.html
+	GdkWindow *window = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet));
+	#if (GTK_MAJOR_VERSION >= 3)
+	return ((gdk_window_get_state (window)) & GDK_WINDOW_STATE_STICKY);
 	#else
 	return (((GdkWindowObject*) window)->state & GDK_WINDOW_STATE_STICKY);
 	#endif

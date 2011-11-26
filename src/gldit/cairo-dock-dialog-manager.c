@@ -155,7 +155,7 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 {
 	Icon *pIcon = pDialog->pIcon;
 	int iMouseX, iMouseY;
-	gdk_window_get_pointer (pDialog->container.pWidget->window, &iMouseX, &iMouseY, NULL);
+	gdk_window_get_pointer (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDialog)), &iMouseX, &iMouseY, NULL);
 	
 	if (iMouseX > 0 && iMouseX < pDialog->container.iWidth && iMouseY > 0 && iMouseY < pDialog->container.iHeight && pDialog->pInteractiveWidget != NULL)  // en fait on est dedans (peut arriver si le dialogue a un widget a l'interieur).
 	{
@@ -261,6 +261,8 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 	return FALSE;
 }
 
+#define KEY(x) GDK_KEY_##x
+
 static gboolean on_key_press_dialog (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDialog *pDialog)
@@ -271,11 +273,11 @@ static gboolean on_key_press_dialog (GtkWidget *pWidget,
 	{
 		switch (pKey->keyval)
 		{
-			case GDK_Return :
+			case GLDI_KEY(Return) :
 				pDialog->action_on_answer (-1, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
 				cairo_dock_dialog_unreference (pDialog);
 			break ;
-			case GDK_Escape :
+			case GLDI_KEY(Escape) :
 				pDialog->action_on_answer (-2, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
 				cairo_dock_dialog_unreference (pDialog);
 			break ;
@@ -666,7 +668,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 			continue ;
 		if (pDialogOnOurWay != pDialog)  // check if this dialog can overlap us.
 		{
-			if (pDialogOnOurWay->container.pWidget && GTK_WIDGET_VISIBLE (pDialogOnOurWay->container.pWidget) && pDialogOnOurWay->pIcon != NULL)
+			if (pDialogOnOurWay->container.pWidget && gldi_container_is_visible (CAIRO_CONTAINER (pDialogOnOurWay)) && pDialogOnOurWay->pIcon != NULL)
 			{
 				iTopY = pDialogOnOurWay->container.iWindowPositionY;
 				iBottomY = pDialogOnOurWay->container.iWindowPositionY + pDialogOnOurWay->container.iHeight;
@@ -785,7 +787,7 @@ void cairo_dock_refresh_all_dialogs (gboolean bReplace)
 		pDialog = ic->data;
 		
 		pIcon = pDialog->pIcon;
-		if (pIcon != NULL && GTK_WIDGET_VISIBLE (pDialog->container.pWidget))  // on ne replace pas les dialogues en cours de destruction ou caches.
+		if (pIcon != NULL && gldi_container_is_visible (CAIRO_CONTAINER (pDialog)))  // on ne replace pas les dialogues en cours de destruction ou caches.
 		{
 			pContainer = cairo_dock_search_container_from_icon (pIcon);
 			//if (CAIRO_DOCK_IS_DOCK (pContainer))
@@ -898,7 +900,7 @@ static inline GtkWidget *_cairo_dock_make_entry_for_dialog (const gchar *cTextFo
 {
 	GtkWidget *pWidget = gtk_entry_new ();
 	gtk_entry_set_has_frame (GTK_ENTRY (pWidget), FALSE);
-	gtk_widget_set (pWidget, "width-request", CAIRO_DIALOG_MIN_ENTRY_WIDTH, NULL);
+	g_object_set (pWidget, "width-request", CAIRO_DIALOG_MIN_ENTRY_WIDTH, NULL);
 	if (cTextForEntry != NULL)
 		gtk_entry_set_text (GTK_ENTRY (pWidget), cTextForEntry);
 	return pWidget;
@@ -909,7 +911,7 @@ static inline GtkWidget *_cairo_dock_make_hscale_for_dialog (double fValueForHSc
 	gtk_scale_set_digits (GTK_SCALE (pWidget), 2);
 	gtk_range_set_value (GTK_RANGE (pWidget), fValueForHScale);
 
-	gtk_widget_set (pWidget, "width-request", CAIRO_DIALOG_MIN_SCALE_WIDTH, NULL);
+	g_object_set (pWidget, "width-request", CAIRO_DIALOG_MIN_SCALE_WIDTH, NULL);
 	cairo_dock_set_dialog_widget_text_color (pWidget);
 	return pWidget;
 }
@@ -1118,7 +1120,7 @@ int cairo_dock_ask_general_question_and_wait (const gchar *cQuestion)
 void cairo_dock_hide_dialog (CairoDialog *pDialog)
 {
 	cd_debug ("%s ()", __func__);
-	if (GTK_WIDGET_VISIBLE (pDialog->container.pWidget))
+	if (gldi_container_is_visible (CAIRO_CONTAINER (pDialog)))
 	{
 		pDialog->bAllowMinimize = TRUE;
 		gtk_widget_hide (pDialog->container.pWidget);
@@ -1147,7 +1149,7 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog)
 void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 {
 	cd_debug ("%s ()", __func__);
-	if (! GTK_WIDGET_VISIBLE (pDialog->container.pWidget))
+	if (! gldi_container_is_visible (CAIRO_CONTAINER (pDialog)))
 	{
 		if (pDialog->pInteractiveWidget != NULL)
 			gtk_widget_grab_focus (pDialog->pInteractiveWidget);
@@ -1171,7 +1173,7 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 
 void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog)
 {
-	if (GTK_WIDGET_VISIBLE (pDialog->container.pWidget))
+	if (gldi_container_is_visible (CAIRO_CONTAINER (pDialog)))
 		cairo_dock_hide_dialog (pDialog);
 	else
 		cairo_dock_unhide_dialog (pDialog);

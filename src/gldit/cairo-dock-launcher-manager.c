@@ -25,11 +25,6 @@
 #include <string.h>
 #include <glib/gstdio.h>
 
-#ifdef HAVE_GLITZ
-#include <gdk/gdkx.h>
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compare_icons_order
 #include "cairo-dock-config.h"  // cairo_dock_update_conf_file

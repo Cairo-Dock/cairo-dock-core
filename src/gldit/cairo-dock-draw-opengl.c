@@ -32,10 +32,6 @@
 #include <librsvg/rsvg.h>
 #include <librsvg/rsvg-cairo.h>
 
-#ifdef HAVE_GLITZ
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include <X11/extensions/Xrender.h>
 #include <GL/glx.h>
@@ -485,25 +481,11 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 					floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad + icon->iTextWidth/2) + dx,
 				floor (fX) + dy,
 				0.);
-			if (icon->pSubDock && GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))
+			if (icon->pSubDock && gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))
 			{
 				fMagnitude /= 3;
 			}
 		}
-		/*else
-		{
-			fY += icon->fHeight * icon->fScale/2;  // middle of the icon
-			
-			if (fY + icon->iTextWidth/2 > pDock->container.iHeight)  // out from the right
-				fY = pDock->container.iHeight - icon->iTextWidth/2;
-			if (fY - icon->iTextWidth/2 < 0)  // out from the left.
-				fY = icon->iTextWidth/2;
-			
-			double y = (icon->fWidth * icon->fScale + icon->iTextHeight) / 2;
-			if (fX + y + icon->iTextHeight/2 > pDock->container.iWidth)  // le texte deborde par le haut.
-				y = pDock->container.iWidth - fX - icon->iTextHeight/2;
-			glTranslatef (floor (fY) + dx, floor (fX) + floor (y) + dy, 0.);
-		}*/
 		
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_alpha ();
@@ -522,9 +504,9 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %x)\n", __func__, pDock->bIsMainDock, g_pVisibleZoneSurface);
 	//\_____________________ on dessine la zone de rappel.
-	glLoadIdentity ();  // annule l'offset de cachage.
+	///glLoadIdentity ();  // annule l'offset de cachage.
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
-	cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDock));
+	gldi_glx_apply_desktop_background (CAIRO_CONTAINER (pDock));
 	
 	if (g_pVisibleZoneBuffer.iTexture != 0)
 	{
@@ -720,7 +702,11 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 
 GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, double *fImageWidth, double *fImageHeight)
 {
+	#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 20)
 	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pPrimaryContainer->pWidget), 0);
+	#else
+	g_return_val_if_fail (gtk_widget_get_realized (g_pPrimaryContainer->pWidget), 0);
+	#endif
 	double fWidth=0, fHeight=0;
 	if (cImageFile == NULL)
 		return 0;
@@ -928,9 +914,6 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 	if (bStateChanged)
 	{
 		cairo_dock_remove_transition_on_icon (pIcon);
-		
-		int iWidth, iHeight;
-		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 		
 		GLuint iOriginalTexture;
 		if (pIcon->bIsHidden)

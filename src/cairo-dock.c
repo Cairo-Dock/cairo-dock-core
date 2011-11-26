@@ -108,7 +108,6 @@ extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern CairoDock *g_pMainDock;
 extern CairoDockGLConfig g_openglConfig;
 
-extern gboolean g_bUseGlitz;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 
@@ -315,21 +314,17 @@ int main (int argc, char** argv)
 	int iDelay = 0;
 	GOptionEntry pOptionsTable[] =
 	{
+		// GLDI options: cairo, opengl, indirect-opengl, env, keep-above, no-sticky
 		{"cairo", 'c', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bForceCairo,
 			_("Use Cairo backend."), NULL},
 		{"opengl", 'o', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceOpenGL,
 			_("Use OpenGL backend."), NULL},
-#ifdef HAVE_GLITZ
-		{"glitz", 'g', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&g_bUseGlitz,
-			_("Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled libcairo)."), NULL},
-#endif
 		{"indirect-opengl", 'O', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bToggleIndirectRendering,
 			_("Use OpenGL backend with indirect rendering. There are very few case where this option should be used."), NULL},
-		{"indirect-opengl", 'A', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+		{"ask-backend", 'A', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bAskBackend,
 			_("Ask again on startup which backend to use."), NULL},
 		{"env", 'e', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
@@ -431,9 +426,6 @@ int main (int argc, char** argv)
 			cd_warning ("unknown environnment '%s'", cEnvironment);
 		g_free (cEnvironment);
 	}
-#ifdef HAVE_GLITZ
-	cd_warning ("Compiled with Glitz (hardware acceleration support for cairo)");
-#endif
 	
 	if (bCappuccino)
 	{
@@ -516,20 +508,24 @@ int main (int argc, char** argv)
 				GTK_RESPONSE_NO,
 				NULL);
 			GtkWidget *label = gtk_label_new (_("OpenGL allows you to use the hardware acceleration, reducing the CPU load to the minimum.\nIt also allows some pretty visual effects similar to Compiz.\nHowever, some cards and/or their drivers don't fully support it, which may prevent the dock from running correctly.\nDo you want to activate OpenGL ?\n (To not show this dialog, launch the dock from the Application menu,\n  or with the -o option to force OpenGL and -c to force cairo.)"));
-			gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), label, FALSE, FALSE, 0);
+			#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 14)
+				GtkWidget *pContentBox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
+			#else
+				GtkWidget *pContentBox =  GTK_DIALOG(dialog)->vbox;
+			#endif
+
+			gtk_box_pack_start (GTK_BOX (pContentBox), label, FALSE, FALSE, 0);
 			
 			GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
-			gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), pAskBox, FALSE, FALSE, 0);
+			gtk_box_pack_start (GTK_BOX (pContentBox), pAskBox, FALSE, FALSE, 0);
 			label = gtk_label_new (_("Remember this choice"));
 			GtkWidget *pCheckBox = gtk_check_button_new ();
 			gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
 			gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
-			///g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), dialog);
 			
 			gtk_widget_show_all (dialog);
 			
 			gint iAnswer = gtk_dialog_run (GTK_DIALOG (dialog));  // lance sa propre main loop, c'est pourquoi on peut le faire avant le gtk_main().
-			///gboolean bRememberChoice = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (dialog), "remember"));
 			gboolean bRememberChoice = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pCheckBox));
 			gtk_widget_destroy (dialog);
 			if (iAnswer == GTK_RESPONSE_NO)
@@ -796,16 +792,6 @@ int main (int argc, char** argv)
 	"- kde integration ++\n"
 	"- stack: enable iSubdockViewType\n"
 	"\n");
-	
-	cd_keybinder_bind ("<Super>Z",
-		"Cairo-Dock",
-		_("Test"),
-		CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
-		NULL,
-		NULL,
-		NULL,
-		(CDBindkeyHandler) _on_shortkey,
-		NULL);
 	
 	gtk_main ();
 	

@@ -426,6 +426,7 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 	//g_print ("%s (%d) : %ux%ux%u (%d;%d)\n", __func__, XPixmapID, iWidth, iHeight, iDepth, x, y);
 
 	//\__________________ On recupere le drawable associe.
+	#if (GTK_MAJOR_VERSION < 3)
 	GdkDrawable *pGdkDrawable = gdk_xid_table_lookup (XPixmapID);
 	if (pGdkDrawable)
 	{
@@ -461,6 +462,20 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 		iWidth,
 		iHeight);
 	g_object_unref (G_OBJECT (pGdkDrawable));
+	#else
+	GdkWindow *pWindow = gdk_x11_window_lookup_for_display (gdk_display_get_default (), XPixmapID);
+	if (pWindow)
+	{
+		g_object_ref (G_OBJECT (pWindow));
+	}
+	else
+	{
+		pWindow = gdk_x11_window_foreign_new_for_display (gdk_display_get_default (), XPixmapID);
+	}
+	//\__________________ On recupere le buffer dans un GdkPixbuf.
+	GdkPixbuf *pIconPixbuf = gdk_pixbuf_get_from_window (pWindow, 0, 0, iWidth, iHeight);
+	g_object_unref (G_OBJECT (pWindow));
+	#endif
 	g_return_val_if_fail (pIconPixbuf != NULL, NULL);
 
 	//\__________________ On lui ajoute un canal alpha si necessaire.

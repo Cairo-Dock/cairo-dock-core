@@ -31,11 +31,6 @@
 #include <librsvg/rsvg.h>
 #include <librsvg/rsvg-cairo.h>
 
-#ifdef HAVE_GLITZ
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
-
 #include <X11/extensions/Xrender.h>
 #include <X11/extensions/shape.h>
 #include <GL/gl.h> 
@@ -75,9 +70,6 @@ extern gchar *g_cCurrentLaunchersPath;
 
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
-#ifdef HAVE_GLITZ
-extern gboolean g_bUseGlitz;
-#endif
 
 
 static void _cairo_dock_set_icon_size (CairoContainer *pDock, Icon *icon)
@@ -136,7 +128,11 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 		GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
 	
 	g_signal_connect (G_OBJECT (pWindow),
+		#if (GTK_MAJOR_VERSION < 3)
 		"expose-event",
+		#else
+		"draw",
+		#endif
 		G_CALLBACK (cairo_dock_on_expose),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
@@ -193,49 +189,11 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 
 	gtk_window_get_size (GTK_WINDOW (pWindow), &pDock->container.iWidth, &pDock->container.iHeight);  // ca n'est que la taille initiale allouee par GTK.
 	gtk_widget_show_all (pWindow);
+	#if (GTK_MAJOR_VERSION < 3)
 	gdk_window_set_back_pixmap (pWindow->window, NULL, FALSE);  // vraiment plus rapide ?
-	
-#ifdef HAVE_GLITZ
-	if (g_bUseGlitz && pDock->container.pDrawFormat != NULL)
-	{
-		glitz_format_t templ;
-		GdkDisplay	   *gdkdisplay;
-		Display	   *XDisplay;
-		Window	   xid;
-
-		gdkdisplay = gdk_display_get_default ();
-		XDisplay   = gdk_x11_display_get_xdisplay (gdkdisplay);
-		xid = gdk_x11_drawable_get_xid (GDK_DRAWABLE (pWindow->window));
-		pDock->container.pGlitzDrawable = glitz_glx_create_drawable_for_window (XDisplay,
-			0,
-			pDock->container.pDrawFormat,
-			xid,
-			pDock->container.iWidth,
-			pDock->container.iHeight);
-		if (! pDock->container.pGlitzDrawable)
-		{
-			cd_warning ("failed to create glitz drawable");
-		}
-		else
-		{
-			templ.color        = pDock->container.pDrawFormat->color;
-			templ.color.fourcc = GLITZ_FOURCC_RGB;
-			pDock->container.pGlitzFormat = glitz_find_format (pDock->container.pGlitzDrawable,
-				GLITZ_FORMAT_RED_SIZE_MASK   |
-				GLITZ_FORMAT_GREEN_SIZE_MASK |
-				GLITZ_FORMAT_BLUE_SIZE_MASK  |
-				GLITZ_FORMAT_ALPHA_SIZE_MASK |
-				GLITZ_FORMAT_FOURCC_MASK,
-				&templ,
-				0);
-			if (! pDock->container.pGlitzFormat)
-			{
-				cd_warning ("couldn't find glitz surface format");
-			}
-		}
-	}
-#endif
-	
+	#else
+	gdk_window_set_background_pattern (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), NULL);
+	#endif
 	return pDock;
 }
 
@@ -265,13 +223,13 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	pDock->icons = NULL;
 	
 	if (pDock->pShapeBitmap != NULL)
-		g_object_unref ((gpointer) pDock->pShapeBitmap);
+		gldi_shape_destroy (pDock->pShapeBitmap);
 	
 	if (pDock->pHiddenShapeBitmap != NULL)
-		g_object_unref ((gpointer) pDock->pHiddenShapeBitmap);
+		gldi_shape_destroy (pDock->pHiddenShapeBitmap);
 	
 	if (pDock->pActiveShapeBitmap != NULL)
-		g_object_unref ((gpointer) pDock->pActiveShapeBitmap);
+		gldi_shape_destroy (pDock->pActiveShapeBitmap);
 	
 	if (pDock->pRenderer != NULL && pDock->pRenderer->free_data != NULL)
 	{
@@ -328,7 +286,7 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock)
 	
 	if (pDock->pShapeBitmap != NULL)
 	{
-		g_object_unref ((gpointer) pDock->pShapeBitmap);
+		gldi_shape_destroy (pDock->pShapeBitmap);
 		pDock->pShapeBitmap = NULL;
 		if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 		{

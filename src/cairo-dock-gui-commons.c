@@ -101,7 +101,7 @@ void cairo_dock_make_tree_view_for_delete_themes (GtkWidget *pWindow)
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 	
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	gtk_widget_set (pScrolledWindow, "height-request", 160, NULL);  // environ 8 lignes.
+	g_object_set (pScrolledWindow, "height-request", 160, NULL);  // environ 8 lignes.
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 	
@@ -567,7 +567,7 @@ static void _cairo_dock_initiate_change_shortkey (GtkMenuItem *pMenuItem, GtkTre
 	gtk_window_set_modal (GTK_WINDOW (pInputDialog), TRUE);
 
 	gtk_widget_add_events (pInputDialog, GDK_KEY_PRESS_MASK);
-	g_signal_connect (GTK_WIDGET(pInputDialog), "key-press-event", GTK_SIGNAL_FUNC(_on_key_grab_cb), pTreeView);
+	g_signal_connect (GTK_WIDGET(pInputDialog), "key-press-event", G_CALLBACK(_on_key_grab_cb), pTreeView);
 
 	GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_container_add (GTK_CONTAINER (pInputDialog), pMainVBox);

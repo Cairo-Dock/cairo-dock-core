@@ -26,11 +26,6 @@
 
 #include <cairo.h>
 
-#ifdef HAVE_GLITZ
-#include <gdk/gdkx.h>
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include "gldi-config.h"
 #include "cairo-dock-animations.h"  // implicit

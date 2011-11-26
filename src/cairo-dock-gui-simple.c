@@ -804,7 +804,7 @@ static void _make_theme_manager_widget (GtkWidget *pSimpleConfigWindow)
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
 	}
 	
-	gtk_widget_set (pThemeNotebook, "height-request", MIN (CAIRO_DOCK_SIMPLE_PANEL_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 100), NULL);  // sinon le notebook est tout petit :-/
+	g_object_set (pThemeNotebook, "height-request", MIN (CAIRO_DOCK_SIMPLE_PANEL_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 100), NULL);  // sinon le notebook est tout petit :-/
 	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox),
 		pThemeNotebook,
 		TRUE,
@@ -827,7 +827,7 @@ static void _make_modules_widget (GtkWidget *pSimpleConfigWindow)
 	
 	//\_____________ On l'ajoute a la fenetre.
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	gtk_widget_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
+	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.
@@ -851,7 +851,7 @@ static void _make_shortkeys_widget (GtkWidget *pSimpleConfigWindow)
 	
 	//\_____________ On l'ajoute a la fenetre.
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	gtk_widget_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
+	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.

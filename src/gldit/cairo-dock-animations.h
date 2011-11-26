@@ -91,7 +91,10 @@ struct _CairoDockHidingEffect {
 /** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it will be invisible).
 *@param pDock the Dock to animate.
 */
-#define cairo_dock_animation_will_be_visible(pDock) ((pDock)->iRefCount != 0 && GTK_WIDGET_VISIBLE ((CAIRO_CONTAINER(pDock)->pWidget)) || ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || (pDock)->fHideOffset < 1)))
+#define cairo_dock_animation_will_be_visible(pDock) ( \
+((pDock)->iRefCount != 0 && gldi_container_is_visible (CAIRO_CONTAINER(pDock))) \
+|| ((pDock)->iRefCount == 0 && (! (pDock)->bAutoHide || CAIRO_CONTAINER(pDock)->bInside || (pDock)->fHideOffset < 1)) \
+)
 
 
 /** Pop up a Dock above other windows, if it is in mode "keep below other windows"; otherwise do nothing.

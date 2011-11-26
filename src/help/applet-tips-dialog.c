@@ -284,11 +284,19 @@ void cairo_dock_show_tips (void)
 	
 	// build a list of the available groups.
 	GtkWidget *pInteractiveWidget = gtk_vbox_new (FALSE, 3);
+	#if (GTK_MAJOR_VERSION < 3)
 	GtkWidget *pComboBox = gtk_combo_box_new_text ();
+	#else
+	GtkWidget *pComboBox = gtk_combo_box_text_new ();
+	#endif
 	guint i;
 	for (i = 0; i < iNbGroups; i ++)
 	{
+		#if (GTK_MAJOR_VERSION < 3)
 		gtk_combo_box_append_text (GTK_COMBO_BOX (pComboBox), gettext (pGroupList[i]));
+		#else
+		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (pComboBox), gettext (pGroupList[i]));
+		#endif
 	}
 	gtk_combo_box_set_active (GTK_COMBO_BOX (pComboBox), pTips->iNumTipGroup);
 	pTips->pCategoryCombo = pComboBox;

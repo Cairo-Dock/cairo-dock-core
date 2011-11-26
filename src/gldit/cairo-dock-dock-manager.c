@@ -31,10 +31,6 @@
 #include <librsvg/rsvg.h>
 #include <librsvg/rsvg-cairo.h>
 
-#ifdef HAVE_GLITZ
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include "gldi-config.h"
 #include "cairo-dock-applications-manager.h"
@@ -526,7 +522,7 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 		icon = ic->data;
 		if (icon->pSubDock == NULL)
 			continue;
-		if (GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))
+		if (gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))
 		{
 			if (icon->pSubDock->container.bInside)
 			{

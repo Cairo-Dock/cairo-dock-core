@@ -30,12 +30,6 @@
 #include <glib/gi18n.h>
 //#include <X11/extensions/Xdamage.h>
 
-#ifdef HAVE_GLITZ
-#include <gdk/gdkx.h>
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
-
 #include <GL/gl.h>
 #include <GL/glx.h>
 
@@ -406,6 +400,12 @@ typedef struct _GldiManager GldiManager;
 
 typedef void (* _CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
 typedef _CairoDockForeachIconFunc CairoDockForeachIconFunc;
+
+#ifdef HAVE_GTK2
+#define GldiShape GdkBitmap
+#else  // GTK3
+#define GldiShape cairo_region_t
+#endif
 
 
 #define CAIRO_DOCK_NB_DATA_SLOT 12

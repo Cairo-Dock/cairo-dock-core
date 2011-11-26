@@ -565,7 +565,7 @@ void cairo_dock_reload_desklets_decorations (gboolean bDefaultThemeOnly)  // tou
 static void _cairo_dock_set_one_desklet_visible (CairoDesklet *pDesklet, gpointer data)
 {
 	gboolean bOnWidgetLayerToo = GPOINTER_TO_INT (data);
-	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
+	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 	//gboolean bIsOnWidgetLayer = cairo_dock_window_is_utility (Xid);
 	gboolean bIsOnWidgetLayer = (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER);
 	if (bOnWidgetLayerToo || ! bIsOnWidgetLayer)
@@ -622,7 +622,7 @@ CairoDesklet *cairo_dock_get_desklet_by_Xid (Window Xid)
 	for (dl = s_pDeskletList; dl != NULL; dl = dl->next)
 	{
 		pDesklet = dl->data;
-		if (GDK_WINDOW_XID (pDesklet->container.pWidget->window) == Xid)
+		if (gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet)) == Xid)
 			return pDesklet;
 	}
 	return NULL;
@@ -635,7 +635,7 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 	GLint hits=0;
 	GLint viewport[4];
 	
-	if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDesklet)))
+	if (! gldi_glx_make_current (CAIRO_CONTAINER (pDesklet)))
 		return NULL;
 	
 	glGetIntegerv (GL_VIEWPORT, viewport);

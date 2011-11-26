@@ -76,16 +76,15 @@ endif()
 
 if (NOT "${force-gtk3}" STREQUAL "")
 	set (gtk_required "gtk+-3.0 gthread-2.0")  # for the .pc
-	pkg_check_modules ("GTK" "${gtk_required}")
+	pkg_check_modules ("GTK" "${gtk_required}")  # the check is not requiered because we can do with GTK2
 endif()
 
-if (${GTK_FOUND})
-	set (HAVE_GTK3 1)
-else()
+if (NOT "${GTK_FOUND}")
 	set (gtk_required "gtk+-2.0 gthread-2.0")  # for the .pc
-	pkg_check_modules ("GTK" REQUIRED "${gtk_required}")
-	set (HAVE_GTK2 1)
+	pkg_check_modules ("GTK" REQUIRED "${gtk_required}")  # the check is requiered this time because we need GTK anyway.
 endif()
+
+STRING (REGEX REPLACE "\\..*" "" GTK_MAJOR "${GTK_VERSION}")
 
 # We use crypt(3) which may be in libc, or in libcrypt (eg FreeBSD)
 check_library_exists (crypt encrypt "" HAVE_LIBCRYPT)
@@ -109,11 +108,7 @@ if (${HAVE_LIBCRYPT})
 else()
 	MESSAGE (STATUS " * crypt passwords : no")
 endif()
-if (${HAVE_GTK3})
-	MESSAGE (STATUS " * GTK version : 3")
-else()
-	MESSAGE (STATUS " * GTK version : 2")
-endif()
+MESSAGE (STATUS " * GTK version : ${GTK_MAJOR}")
 MESSAGE (STATUS)
 
 ########### next steps ###############

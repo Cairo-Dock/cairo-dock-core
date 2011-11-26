@@ -160,7 +160,7 @@ static void _set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pD
 	}
 	
 	Atom atom = XInternAtom (cairo_dock_get_Xdisplay(), "_KDE_WINDOW_PREVIEW", False);
-	Window Xid = GDK_WINDOW_XID (pDock->container.pWidget->window);
+	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDock));
 	XChangeProperty (cairo_dock_get_Xdisplay(), Xid, atom, atom, 32, PropModeReplace, (const unsigned char*)data, 1+6);
 }
 static gboolean _on_enter_icon (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bStartAnimation)

@@ -21,7 +21,9 @@
 #ifndef __EGG_ACCELERATORS_H__
 #define __EGG_ACCELERATORS_H__
 
-#include <gtk/gtkaccelgroup.h>
+#if (GTK_MAJOR_VERSION < 3)
+#include <gdk/gdkkeysyms-compat.h>
+#endif
 #include <gdk/gdk.h>
 
 G_BEGIN_DECLS

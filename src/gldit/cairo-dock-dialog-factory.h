@@ -174,7 +174,7 @@ struct _CairoDialog {
 	gint iSidAnimateIcon, iSidAnimateText;// timers these 2 animations.
 	gboolean bNoInput;// whether the dialog is transparent to mouse input.
 	gboolean bAllowMinimize;// TRUE to allow the dialog to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
-	GdkBitmap* pShapeBitmap;
+	GldiShape* pShapeBitmap;
 	GTimer *pUnmapTimer;
 	gboolean bPositionForced;
 	gdouble fAppearanceCounter;

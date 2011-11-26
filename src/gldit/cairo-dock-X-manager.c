@@ -248,7 +248,7 @@ void cairo_dock_get_current_desktop_and_viewport (int *iCurrentDesktop, int *iCu
 
 static gboolean _set_desklets_on_widget_layer (CairoDesklet *pDesklet, gpointer data)
 {
-	Window Xid = GDK_WINDOW_XID (pDesklet->container.pWidget->window);
+	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 	if (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
 		cairo_dock_wm_set_on_widget_layer (Xid, TRUE);
 	return FALSE;  // continue

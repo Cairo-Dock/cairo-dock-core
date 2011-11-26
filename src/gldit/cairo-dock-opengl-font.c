@@ -33,10 +33,6 @@
 #include <librsvg/rsvg.h>
 #include <librsvg/rsvg-cairo.h>
 
-#ifdef HAVE_GLITZ
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include <X11/extensions/Xrender.h>
 #include <GL/glx.h>

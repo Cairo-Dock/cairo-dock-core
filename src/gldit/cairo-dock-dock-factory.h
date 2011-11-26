@@ -118,6 +118,7 @@ typedef enum {
 	CAIRO_DOCK_NB_VISI
 	} CairoDockVisibility;
 
+
 /// Definition of a Dock, which derives from a Container.
 struct _CairoDock {
 	/// container.
@@ -250,11 +251,11 @@ struct _CairoDock {
 	/// state of the input shape (active, at rest, hidden).
 	CairoDockInputState iInputState;
 	/// input shape of the window when the dock is at rest.
-	GdkBitmap* pShapeBitmap;
+	GldiShape* pShapeBitmap;
 	/// input shape of the window when the dock is hidden.
-	GdkBitmap* pHiddenShapeBitmap;
+	GldiShape* pHiddenShapeBitmap;
 	/// input shape of the window when the dock is active (NULL to cover all dock).
-	GdkBitmap* pActiveShapeBitmap;
+	GldiShape* pActiveShapeBitmap;
 	
 	GLuint iRedirectedTexture;
 	GLuint iFboId;

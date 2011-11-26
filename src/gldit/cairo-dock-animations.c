@@ -23,11 +23,6 @@
 #include <cairo.h>
 #include <gtk/gtk.h>
 
-#ifdef HAVE_GLITZ
-#include <gdk/gdkx.h>
-#include <glitz-glx.h>
-#include <cairo-glitz.h>
-#endif
 
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
@@ -170,10 +165,7 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 			pDock->fFoldingFactor = 0;
 	}
 	
-	if (pDock->container.bIsHorizontal)
-		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
-	else
-		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
+	gldi_container_get_pointer (CAIRO_CONTAINER (pDock));
 	
 	Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	Icon *pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
@@ -222,10 +214,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 		pDock->fDecorationsOffsetX = 0.;
 	
 	//\_________________ On recupere la position de la souris manuellement (car a priori on est hors du dock).
-	if (pDock->container.bIsHorizontal)  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
-		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseX, &pDock->container.iMouseY, NULL);
-	else
-		gdk_window_get_pointer (pDock->container.pWidget->window, &pDock->container.iMouseY, &pDock->container.iMouseX, NULL);
+	gldi_container_get_pointer (CAIRO_CONTAINER (pDock));  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
 	
 	//\_________________ On recalcule les icones.
 	///if (iPrevMagnitudeIndex != 0)

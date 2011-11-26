@@ -36,13 +36,18 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-opengl.h"
 
+// public (manager, config, data)
 CairoDockGLConfig g_openglConfig;
 gboolean g_bUseOpenGL = FALSE;
 
+// dependancies
 extern CairoContainer *g_pPrimaryContainer;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bEasterEggs;
+
+// private
+static gboolean s_bInitialized = FALSE;
 
 static inline gboolean _check_extension (const char *extName, const gchar *cExtensions)
 {
@@ -89,14 +94,12 @@ static gboolean _check_client_glx_extension (const char *extName)
 
 static void _post_initialize_opengl_backend (GtkWidget *pWidget, CairoContainer *pContainer)  // initialisation necessitant un contexte opengl.
 {
-	static gboolean bChecked=FALSE;
-	if (bChecked)
-		return;
+	g_return_if_fail (!s_bInitialized);
 	
-	if (! gldi_opengl_rendering_begin (pContainer))
+	if (! gldi_glx_make_current (pContainer))
 		return ;
 	
-	bChecked = TRUE;
+	s_bInitialized = TRUE;
 	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
 	g_openglConfig.bFboAvailable = _check_gl_extension ("GL_EXT_framebuffer_object");
 	if (!g_openglConfig.bFboAvailable)
@@ -275,9 +278,14 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL)  // taken 
 	
 	//\_________________ create a colormap based on this visual.
 	GdkScreen *screen = gdk_screen_get_default ();
-	GdkVisual *visual = gdk_x11_screen_lookup_visual (screen, pVisInfo->visualid);
+	GdkVisual *pGdkVisual = gdk_x11_screen_lookup_visual (screen, pVisInfo->visualid);
+	#if (GTK_MAJOR_VERSION < 3)
 	g_openglConfig.xcolormap = XCreateColormap (dpy, DefaultRootWindow (dpy), pVisInfo->visual, AllocNone);
-	g_openglConfig.pColormap = gdk_x11_colormap_foreign_new (visual, g_openglConfig.xcolormap);
+	g_openglConfig.pColormap = gdk_x11_colormap_foreign_new (pGdkVisual, g_openglConfig.xcolormap);
+	#else
+	g_openglConfig.pGdkVisual = pGdkVisual;
+	g_return_val_if_fail (g_openglConfig.pGdkVisual != NULL, FALSE);
+	#endif
 	g_openglConfig.pVisInfo = pVisInfo;
 	
 	/**
@@ -344,7 +352,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 	int iWidth, iHeight;
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
-		if (! gldi_opengl_rendering_begin (pContainer))
+		if (! gldi_glx_make_current (pContainer))
 			return FALSE;
 		
 		iWidth = pContainer->iWidth;
@@ -357,7 +365,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 		if (pContainer == NULL)
 			pContainer = g_pPrimaryContainer;
-		if (! gldi_opengl_rendering_begin (pContainer))
+		if (! gldi_glx_make_current (pContainer))
 			return FALSE;
 		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, g_openglConfig.iFboId);  // on redirige sur notre FBO.
 		g_openglConfig.bRedirected = (iRenderingMode == 2);
@@ -545,7 +553,7 @@ void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer
 }
 
 
-void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer)
+void gldi_glx_apply_desktop_background (CairoContainer *pContainer)
 {
 	if (! myContainersParam.bUseFakeTransparency || ! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
@@ -599,31 +607,43 @@ void cairo_dock_apply_desktop_background_opengl (CairoContainer *pContainer)
 }
 
 
-gboolean gldi_opengl_rendering_begin (CairoContainer *pContainer)
+gboolean gldi_glx_make_current (CairoContainer *pContainer)
 {
-	GdkWindow *window = gtk_widget_get_window (pContainer->pWidget);
-	Display *display = gdk_x11_drawable_get_xdisplay (window);
-	Window Xid = gdk_x11_drawable_get_xid (window);
+	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+	Window Xid = gldi_container_get_Xid (pContainer);
 
-	return glXMakeCurrent (display, Xid, pContainer->glContext);
+	return glXMakeCurrent (dpy, Xid, pContainer->glContext);
 }
 
-void gldi_opengl_rendering_swap_buffers (CairoContainer *pContainer)
+gboolean gldi_glx_begin_draw_container_full (CairoContainer *pContainer, gboolean bClear)
 {
-	GdkWindow *window = gtk_widget_get_window (pContainer->pWidget);
-	Display *display = gdk_x11_drawable_get_xdisplay (window);
-	Window Xid = gdk_x11_drawable_get_xid (window);
-
-	glXSwapBuffers (display, Xid);
+	if (! gldi_glx_make_current (pContainer))
+		return FALSE;
+	
+	if (bClear)
+	{
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		gldi_glx_apply_desktop_background (pContainer);
+	}
+	glLoadIdentity ();
+	
+	return TRUE;
 }
 
+void gldi_glx_end_draw_container (CairoContainer *pContainer)
+{
+	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+	Window Xid = gldi_container_get_Xid (pContainer);
 
-static void _reset_opengl_context (GtkWidget* pWidget, CairoContainer *pContainer)
+	glXSwapBuffers (dpy, Xid);
+}
+
+static void _init_opengl_context (GtkWidget* pWidget, CairoContainer *pContainer)
 {
 	if (! g_bUseOpenGL)
 		return ;
 	
-	if (! gldi_opengl_rendering_begin (pContainer))
+	if (! gldi_glx_make_current (pContainer))
 		return;
 	
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
@@ -645,36 +665,53 @@ static void _reset_opengl_context (GtkWidget* pWidget, CairoContainer *pContaine
 		GL_TEXTURE_MAG_FILTER,
 		GL_LINEAR);
 }
-void cairo_dock_set_gl_capabilities (CairoContainer *pContainer)
+void gldi_glx_init_container (CairoContainer *pContainer)
 {
-	gboolean bFirstContainer = (! g_pPrimaryContainer || ! g_pPrimaryContainer->pWidget);
+	// Set the visual we found during the init
+	#if (GTK_MAJOR_VERSION < 3)
+	gtk_widget_set_colormap (pContainer->pWidget, g_openglConfig.pColormap);
+	#else
+	gtk_widget_set_visual (pContainer->pWidget, g_openglConfig.pGdkVisual);
+	#endif
+	
 	// create a GL context for this container (this way, we can set the viewport once and for all).
 	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+	///gboolean bFirstContainer = (! g_pPrimaryContainer || ! g_pPrimaryContainer->pWidget);
 	///GLXContext context = (bFirstContainer ? NULL : g_pPrimaryContainer->glContext);
 	GLXContext context = g_openglConfig.context;
 	pContainer->glContext = glXCreateContext (dpy, g_openglConfig.pVisInfo, context, TRUE);
+	
+	// handle the double buffer manually.
+	gtk_widget_set_double_buffered (pContainer->pWidget, FALSE);
+	
 	// finish the initialisation of the opengl backend, now that we have a context (and a window to bind it to)
-	if (bFirstContainer)
+	if (! s_bInitialized)
 		g_signal_connect (G_OBJECT (pContainer->pWidget),
 			"realize",
 			G_CALLBACK (_post_initialize_opengl_backend),
 			pContainer);
-	// when the window will be realised, initialise the context.
+	
+	// when the window will be realised, initialise its GL context.
 	g_signal_connect_after (G_OBJECT (pContainer->pWidget),
 		"realize",
-		G_CALLBACK (_reset_opengl_context),
+		G_CALLBACK (_init_opengl_context),
 		pContainer);
 }
 
-void cairo_dock_set_default_gl_context (void)
+void gldi_glx_finish_container (CairoContainer *pContainer)
 {
-	if (g_pPrimaryContainer)
+	if (pContainer->glContext != 0)
 	{
-		gldi_opengl_rendering_begin (g_pPrimaryContainer);
-	}
-	else
-	{
-		Display *display = gdk_x11_get_default_xdisplay ();
-		glXMakeCurrent (display, 0, g_openglConfig.context);
+		Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+		
+		if (glXGetCurrentContext() == pContainer->glContext)
+		{
+			if (g_pPrimaryContainer != NULL && pContainer != g_pPrimaryContainer)
+				gldi_glx_make_current (g_pPrimaryContainer);
+			else
+				glXMakeCurrent (dpy, 0, g_openglConfig.context);
+		}
+		
+		glXDestroyContext (dpy, pContainer->glContext);
 	}
 }

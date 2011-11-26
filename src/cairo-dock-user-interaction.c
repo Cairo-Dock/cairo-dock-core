@@ -222,7 +222,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	{
 		if (myTaskbarParam.bPresentClassOnClick // if we want to use this feature
 		&& (!myDocksParam.bShowSubDockOnClick  // if sub-docks are shown on mouse over
-			|| GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget))  // or this sub-dock is already visible
+			|| gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))  // or this sub-dock is already visible
 		&& cairo_dock_wm_present_class (icon->cClass)) // we use the scale plugin if it's possible
 		{
 			_show_all_windows (icon->pSubDock->icons); // show all windows
@@ -233,7 +233,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 	}
 	
 	// else handle sub-docks showing on click, applis and launchers (not applets).
-	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !GTK_WIDGET_VISIBLE (icon->pSubDock->container.pWidget)))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
+	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock))))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
 	{
 		cairo_dock_show_subdock (icon, pDock);
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;

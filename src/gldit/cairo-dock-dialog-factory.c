@@ -82,21 +82,20 @@ static void _cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 }
 
 static gboolean on_expose_dialog (GtkWidget *pWidget,
+#if (GTK_MAJOR_VERSION < 3)
 	GdkEventExpose *pExpose,
+#else
+	cairo_t *ctx,
+#endif
 	CairoDialog *pDialog)
 {
 	//g_print ("%s (%dx%d ; %d;%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight, pExpose->area.x, pExpose->area.y);
 	int x, y;
-	// we doesn't need to render a dialog with the OpenGL...
-	/*if (0 && g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
+	// OpenGL renderers are not ready for dialogs.
+	/*if (g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
 	{
-		if (! gldi_opengl_rendering_begin (CAIRO_CONTAINER (pDialog)))
+		if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pDialog)))
 			return FALSE;
-		
-		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glLoadIdentity ();
-		
-		cairo_dock_apply_desktop_background_opengl (CAIRO_CONTAINER (pDialog));
 		
 		if (pDialog->pDecorator != NULL && pDialog->pDecorator->render_opengl != NULL)
 		{
@@ -108,15 +107,27 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 		cairo_dock_notify_on_object (&myDialogsMgr, NOTIFICATION_RENDER_DIALOG, pDialog, NULL);
 		cairo_dock_notify_on_object (pDialog, NOTIFICATION_RENDER_DIALOG, pDialog, NULL);
 		
-		gldi_opengl_rendering_swap_buffers (CAIRO_CONTAINER (pDialog));
+		gldi_glx_end_draw_container (CAIRO_CONTAINER (pDialog));
 	}
 	else
 	{*/
 		cairo_t *pCairoContext;
 		
-		if ((pExpose->area.x != 0 || pExpose->area.y != 0))
+		GdkRectangle area;
+		#if (GTK_MAJOR_VERSION < 3)
+		memcpy (&area, &pExpose->area, sizeof (GdkRectangle
+		#else
+		double x1, x2, y1, y2;
+		cairo_clip_extents (ctx, &x1, &y1, &x2, &y2);
+		area.x = x1;
+		area.y = y1;
+		area.width = x2 - x1;
+		area.height = y2 - y1;  /// or the opposite ?...
+		#endif
+		
+		if ((area.x != 0 || area.y != 0))
 		{
-			pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &pExpose->area, myDialogsParam.fDialogColor);
+			pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &area, myDialogsParam.fDialogColor);
 		}
 		else
 		{
@@ -154,26 +165,16 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 
 static void _cairo_dock_set_dialog_input_shape (CairoDialog *pDialog)
 {
-	pDialog->pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
-		pDialog->container.iWidth,
-		pDialog->container.iHeight,
-		1);
-	cairo_t *pCairoContext = gdk_cairo_create (pDialog->pShapeBitmap);
-	cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-	cairo_paint (pCairoContext);
-	cairo_set_source_rgba (pCairoContext, 1.0f, 1.0f, 1.0f, 1.0f);
-	cairo_rectangle (pCairoContext,
+	if (pDialog->pShapeBitmap != NULL)
+		gldi_shape_destroy (pDialog->pShapeBitmap);
+	
+	pDialog->pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDialog),
 		0,
 		0,
 		1,
-		1);
-	cairo_fill (pCairoContext);  // workaround sur un bug de X...
-	cairo_destroy (pCairoContext);
-	gtk_widget_input_shape_combine_mask (pDialog->container.pWidget,
-		pDialog->pShapeBitmap,
-		0,
-		0);
+		1);  // workaround a bug in X with fully transparent window => let 1 pixel ON.
+
+	gldi_container_set_input_shape (CAIRO_CONTAINER (pDialog), pDialog->pShapeBitmap);
 }
 
 static gboolean on_configure_dialog (GtkWidget* pWidget,
@@ -272,11 +273,11 @@ static GtkWidget *_cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int
 {
 	GtkWidget *pBox = gtk_hbox_new (0, FALSE);
 	if (iWidth != 0 && iHeight != 0)
-		gtk_widget_set (pBox, "height-request", iHeight, "width-request", iWidth, NULL);
+		g_object_set (pBox, "height-request", iHeight, "width-request", iWidth, NULL);
 	else if (iWidth != 0)
-			gtk_widget_set (pBox, "width-request", iWidth, NULL);
+			g_object_set (pBox, "width-request", iWidth, NULL);
 	else if (iHeight != 0)
-			gtk_widget_set (pBox, "height-request", iHeight, NULL);
+			g_object_set (pBox, "height-request", iHeight, NULL);
 	gtk_box_pack_start (GTK_BOX (pDialog->pWidgetLayout),
 		pBox,
 		bCanResize,
@@ -399,7 +400,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	if (pAttribute->bForceAbove)
 	{
 		gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
-		Window Xid = GDK_WINDOW_XID (pDialog->container.pWidget->window);
+		Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDialog));
 		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
 	}
 	
@@ -512,7 +513,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	GtkWidget *pMainHBox = gtk_hbox_new (0, FALSE);
 	gtk_container_add (GTK_CONTAINER (pDialog->container.pWidget), pMainHBox);
 	pDialog->pLeftPaddingBox = gtk_vbox_new (0, FALSE);
-	gtk_widget_set (pDialog->pLeftPaddingBox, "width-request", pDialog->iLeftMargin, NULL);
+	g_object_set (pDialog->pLeftPaddingBox, "width-request", pDialog->iLeftMargin, NULL);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pLeftPaddingBox,
 		FALSE,
@@ -527,7 +528,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		0);
 	
 	pDialog->pRightPaddingBox = gtk_vbox_new (0, FALSE);
-	gtk_widget_set (pDialog->pRightPaddingBox, "width-request", pDialog->iRightMargin, NULL);
+	g_object_set (pDialog->pRightPaddingBox, "width-request", pDialog->iRightMargin, NULL);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pRightPaddingBox,
 		FALSE,
@@ -545,13 +546,11 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	}
 	if (pDialog->pInteractiveWidget != NULL)
 	{
-		cd_debug (" ref = %d", pAttribute->pInteractiveWidget->object.parent_instance.ref_count);
 		gtk_box_pack_start (GTK_BOX (pDialog->pWidgetLayout),
 			pDialog->pInteractiveWidget,
 			FALSE,
 			FALSE,
 			0);
-		cd_debug (" pack -> ref = %d", pAttribute->pInteractiveWidget->object.parent_instance.ref_count);
 		cd_debug ("grab focus");
 		gtk_window_present (GTK_WINDOW (pDialog->container.pWidget));
 		gtk_widget_grab_focus (pDialog->pInteractiveWidget);
@@ -573,7 +572,11 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	}
 	//\________________ On connecte les signaux utiles.
 	g_signal_connect (G_OBJECT (pDialog->container.pWidget),
+		#if (GTK_MAJOR_VERSION < 3)
 		"expose-event",
+		#else
+		"draw",
+		#endif
 		G_CALLBACK (on_expose_dialog),
 		pDialog);
 	g_signal_connect (G_OBJECT (pDialog->container.pWidget),
@@ -647,7 +650,7 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 		g_timer_destroy (pDialog->pUnmapTimer);
 	
 	if (pDialog->pShapeBitmap != NULL)
-		g_object_unref ((gpointer) pDialog->pShapeBitmap);
+		gldi_shape_destroy (pDialog->pShapeBitmap);
 	
 	if (pDialog->pUserData != NULL && pDialog->pFreeUserDataFunc != NULL)
 		pDialog->pFreeUserDataFunc (pDialog->pUserData);
@@ -663,7 +666,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
-		if (pDock->iRefCount > 0 && ! GTK_WIDGET_VISIBLE (pContainer->pWidget))  // sous-dock invisible.
+		if (pDock->iRefCount > 0 && ! gldi_container_is_visible (pContainer))  // sous-dock invisible.
 		{
 			CairoDock *pParentDock = NULL;
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
@@ -752,10 +755,8 @@ GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget)
 	GtkWidget *pContainer = gtk_widget_get_parent (pWidget);
 	if (pContainer != NULL)
 	{
-		cd_debug (" ref : %d", pWidget->object.parent_instance.ref_count);
 		g_object_ref (G_OBJECT (pWidget));
 		gtk_container_remove (GTK_CONTAINER (pContainer), pWidget);
-		cd_debug (" -> %d", pWidget->object.parent_instance.ref_count);
 		
 		// if we were monitoring the click events on the widget, stop it.
 		g_signal_handlers_disconnect_matched (pWidget,
@@ -818,7 +819,7 @@ void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface
 
 	if (pDialog->iMessageWidth != iPrevMessageWidth || pDialog->iMessageHeight != iPrevMessageHeight)
 	{
-		gtk_widget_set (pDialog->pMessageWidget, "width-request", pDialog->iMessageWidth, "height-request", pDialog->iMessageHeight, NULL);  // inutile de replacer le dialogue puisque sa gravite fera le boulot.
+		g_object_set (pDialog->pMessageWidget, "width-request", pDialog->iMessageWidth, "height-request", pDialog->iMessageHeight, NULL);  // inutile de replacer le dialogue puisque sa gravite fera le boulot.
 		
 		gtk_widget_queue_draw (pDialog->container.pWidget);
 		
@@ -855,7 +856,7 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 
 	if (pDialog->iMessageWidth != iPrevMessageWidth || pDialog->iMessageHeight != iPrevMessageHeight)
 	{
-		gtk_widget_set (pDialog->pMessageWidget, "width-request", pDialog->iMessageWidth, "height-request", pDialog->iMessageHeight, NULL);  // inutile de replacer le dialogue puisque sa gravite fera le boulot.
+		g_object_set (pDialog->pMessageWidget, "width-request", pDialog->iMessageWidth, "height-request", pDialog->iMessageHeight, NULL);  // inutile de replacer le dialogue puisque sa gravite fera le boulot.
 		
 		gtk_widget_queue_draw (pDialog->container.pWidget);
 	}
