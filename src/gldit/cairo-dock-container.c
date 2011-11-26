@@ -549,24 +549,15 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 
 GldiShape *gldi_container_create_input_shape (CairoContainer *pContainer, int x, int y, int w, int h)
 {
-	if (pContainer->iWidth == 0 || pContainer->iHeight == 0)  // very unlikely to happen, but anyway avoid this case.
+	int W = CAIRO_DOCK (pContainer)->iMaxDockWidth;
+	int H = CAIRO_DOCK (pContainer)->iMaxDockHeight;
+	if (W == 0 || H == 0)  // very unlikely to happen, but anyway avoid this case.
 		return NULL;
 	
 	#if (GTK_MAJOR_VERSION < 3)
-	int W, H;
-	if (pContainer->bIsHorizontal)
-	{
-		W = pContainer->iWidth;
-		H = pContainer->iHeight;
-	}
-	else
-	{
-		W = pContainer->iHeight;
-		H = pContainer->iWidth;
-	}
 	GdkBitmap *pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
-		W,
-		H,
+		pContainer->bIsHorizontal ? W : H,
+		pContainer->bIsHorizontal ? H : W,
 		1);
 
 	cairo_t *pCairoContext = gdk_cairo_create (pShapeBitmap);
