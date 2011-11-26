@@ -12,13 +12,13 @@ Container =
 #v
 sep_display=
 
-#s Launcher's name :
+#s[default] Launcher's name :
 Name =
 
-#S+ Image's name or path :
+#S+[default] Image's name or path :
 Icon=
 
-#s Command to launch on click :
+#s[default] Command to launch on click :
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
 Exec=
 
@@ -30,7 +30,7 @@ frame_extra =
 #{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate = false
 
-#K Class of the program :
+#K[default] Class of the program :
 #{The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher.}
 StartupWMClass = 
 
