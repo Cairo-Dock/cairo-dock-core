@@ -183,7 +183,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	//g_print ("%s ((%d;%d) %dx%d)\n", __func__, area.x, area.y, area.width, area.height);
 	GdkRectangle area;
 	#if (GTK_MAJOR_VERSION < 3)
-	memcpy (&area, &pExpose->area, sizeof (GdkRectangle
+	memcpy (&area, &pExpose->area, sizeof (GdkRectangle));
 	#else
 	double x1, x2, y1, y2;
 	cairo_clip_extents (ctx, &x1, &y1, &x2, &y2);

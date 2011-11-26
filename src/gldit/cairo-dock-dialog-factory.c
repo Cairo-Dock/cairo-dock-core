@@ -115,7 +115,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 		
 		GdkRectangle area;
 		#if (GTK_MAJOR_VERSION < 3)
-		memcpy (&area, &pExpose->area, sizeof (GdkRectangle
+		memcpy (&area, &pExpose->area, sizeof (GdkRectangle));
 		#else
 		double x1, x2, y1, y2;
 		cairo_clip_extents (ctx, &x1, &y1, &x2, &y2);
@@ -125,7 +125,7 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 		area.height = y2 - y1;  /// or the opposite ?...
 		#endif
 		
-		if ((area.x != 0 || area.y != 0))
+		if (area.x != 0 || area.y != 0)
 		{
 			pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &area, myDialogsParam.fDialogColor);
 		}

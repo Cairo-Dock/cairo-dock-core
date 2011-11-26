@@ -2128,7 +2128,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				for (k = 0; k < iNbElements; k ++)
 				{
 					iValue =  (k < length ? iValueList[k] : 0);
+					#if (GTK_MAJOR_VERSION < 3)
+					GtkObject *pAdjustment = gtk_adjustment_new (iValue,
+					#else
 					GtkAdjustment *pAdjustment = gtk_adjustment_new (iValue,
+					#endif
 						0,
 						1,
 						1,
@@ -2196,8 +2200,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				for (k = 0; k < iNbElements; k ++)
 				{
 					fValue =  (k < length ? fValueList[k] : 0);
-					
+
+					#if (GTK_MAJOR_VERSION < 3)
+					GtkObject *pAdjustment = gtk_adjustment_new (fValue,
+					#else
 					GtkAdjustment *pAdjustment = gtk_adjustment_new (fValue,
+					#endif
 						0,
 						1,
 						(fMaxValue - fMinValue) / 20.,
@@ -2853,10 +2861,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_sobriety, NULL, NULL);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				// barres de defilement
-				GtkAdjustment *adj = gtk_adjustment_new (0., 0., 100., 1, 10, 10);
 				#if (GTK_MAJOR_VERSION < 3)
+				GtkObject *adj = gtk_adjustment_new (0., 0., 100., 1, 10, 10);
 				gtk_tree_view_set_vadjustment (GTK_TREE_VIEW (pOneWidget), GTK_ADJUSTMENT (adj));
 				#else
+				GtkAdjustment *adj = gtk_adjustment_new (0., 0., 100., 1, 10, 10);
 				gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (pOneWidget), GTK_ADJUSTMENT (adj));
 				#endif
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);

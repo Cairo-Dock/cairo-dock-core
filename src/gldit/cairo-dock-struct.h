@@ -401,7 +401,7 @@ typedef struct _GldiManager GldiManager;
 typedef void (* _CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
 typedef _CairoDockForeachIconFunc CairoDockForeachIconFunc;
 
-#ifdef HAVE_GTK2
+#if (GTK_MAJOR_VERSION < 3)
 #define GldiShape GdkBitmap
 #else  // GTK3
 #define GldiShape cairo_region_t

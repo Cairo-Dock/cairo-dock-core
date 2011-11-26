@@ -39,7 +39,7 @@ struct _CairoDockGLConfig {
 	///GdkGLConfig *pGlConfig;
 	GLXContext context;
 	XVisualInfo *pVisInfo;
-	#ifdef HAVE_GTK2
+	#if (GTK_MAJOR_VERSION < 3)
 	Colormap xcolormap;
 	GdkColormap *pColormap;
 	#else  // GTK3
