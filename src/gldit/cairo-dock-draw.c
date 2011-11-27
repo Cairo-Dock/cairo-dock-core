@@ -81,11 +81,7 @@ cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContai
 	return pCairoContext;
 }
 
-#if (GTK_MAJOR_VERSION < 3)
 cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor)
-#else
-cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, cairo_rectangle_int_t *pArea, double *fBgColor)
-#endif
 {
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (pContainer);
 	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, pCairoContext);

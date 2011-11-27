@@ -55,11 +55,7 @@ cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContai
 *@param fBgColor background color (rgba) to fill the area with, or NULL to let it transparent.
 *@return the newly allocated context, with a clip corresponding to the area, to be destroyed with 'cairo_destroy'.
 */
-#if (GTK_MAJOR_VERSION < 3)
 cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor);
-#else
-cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, cairo_rectangle_int_t *pArea, double *fBgColor);
-#endif
 
 
 double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double fInclination, double fRadius, double fLineWidth);

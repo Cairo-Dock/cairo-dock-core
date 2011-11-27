@@ -1289,6 +1289,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			pDock->container.iMouseX = 0;
 		
 		// update the input shape (it has been calculated in the function that made the resize)
+		cairo_dock_update_input_shape (pDock);
 		if (pDock->pHiddenShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
 			//g_print ("+++ input shape hidden on configure\n");
