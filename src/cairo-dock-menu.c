@@ -140,7 +140,7 @@ static void _cairo_dock_add_about_page (GtkWidget *pNoteBook, const gchar *cPage
 	GtkWidget *pPageLabel, *pAboutLabel;
 	
 	pPageLabel = gtk_label_new (cPageLabel);
-	pVBox = gtk_vbox_new (FALSE, 0);
+	pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pVBox);
@@ -192,14 +192,14 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 #endif
 	
 	// logo + links
-	GtkWidget *pHBox = gtk_hbox_new (FALSE, 0);
+	GtkWidget *pHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start (GTK_BOX (pContentBox), pHBox, FALSE, FALSE, 0);
 	
 	const gchar *cImagePath = CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO;
 	GtkWidget *pImage = gtk_image_new_from_file (cImagePath);
 	gtk_box_pack_start (GTK_BOX (pHBox), pImage, FALSE, FALSE, 0);
 	
-	GtkWidget *pVBox = gtk_vbox_new (FALSE, 0);
+	GtkWidget *pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start (GTK_BOX (pHBox), pVBox, FALSE, FALSE, 0);
 	
 	GtkWidget *pLink = gtk_link_button_new_with_label (CAIRO_DOCK_SITE_URL, "Cairo-Dock (2007-2011)\n version "CAIRO_DOCK_VERSION);

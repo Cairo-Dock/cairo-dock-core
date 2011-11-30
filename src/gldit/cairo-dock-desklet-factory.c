@@ -988,7 +988,7 @@ void cairo_dock_add_interactive_widget_to_desklet_full (GtkWidget *pInteractiveW
 	}
 	
 	//gtk_container_add (GTK_CONTAINER (pDesklet->container.pWidget), pInteractiveWidget);
-	GtkWidget *pHBox = gtk_hbox_new (FALSE, 0);
+	GtkWidget *pHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (pDesklet->container.pWidget), pHBox);
 	
 	gtk_box_pack_start (GTK_BOX (pHBox), pInteractiveWidget, TRUE, TRUE, 0);
@@ -996,7 +996,7 @@ void cairo_dock_add_interactive_widget_to_desklet_full (GtkWidget *pInteractiveW
 	
 	if (iRightMargin != 0)
 	{
-		GtkWidget *pMarginBox = gtk_vbox_new (FALSE, 0);
+		GtkWidget *pMarginBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 		g_object_set (pMarginBox, "width-request", iRightMargin, NULL);
 		gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);  // a tester ...
 	}
@@ -1021,7 +1021,7 @@ void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin)
 			}
 			else  // on rajoute le widget de la marge.
 			{
-				GtkWidget *pMarginBox = gtk_vbox_new (FALSE, 0);
+				GtkWidget *pMarginBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 				g_object_set (pMarginBox, "width-request", iRightMargin, NULL);
 				gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);
 			}

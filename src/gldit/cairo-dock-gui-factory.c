@@ -53,6 +53,12 @@
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
 
+#if (GTK_MAJOR_VERSION < 3)
+#define Adjustment GtkObject
+#else
+#define Adjustment GtkAdjustment
+#endif
+
 extern CairoContainer *g_pPrimaryContainer;
 extern gchar *g_cExtrasDirPath;
 extern gchar *g_cThemesDirPath;
@@ -300,7 +306,11 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 {
 	int iPreviewWidth, iPreviewHeight;
 	GtkRequisition requisition;
+	#if (GTK_MAJOR_VERSION < 3)
 	gtk_widget_size_request (GTK_WIDGET (pPreviewImage), &requisition);
+	#else
+	gtk_widget_get_preferred_size (GTK_WIDGET (pPreviewImage), &requisition, NULL);
+	#endif
 	
 	GdkPixbuf *pPreviewPixbuf = NULL;
 	if (gdk_pixbuf_get_file_info (cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)
@@ -780,7 +790,7 @@ static void _cairo_dock_set_original_value (GtkButton *button, CairoDockGroupKey
 		return ;
 	}
 	
-	if (GTK_IS_SPIN_BUTTON (pOneWidget) || GTK_IS_HSCALE (pOneWidget))
+	if (GTK_IS_SPIN_BUTTON (pOneWidget) || GTK_IS_SCALE (pOneWidget))
 	{
 		gboolean bIsSpin = GTK_IS_SPIN_BUTTON (pOneWidget);
 		double *fValuesList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, &erreur);
@@ -1512,11 +1522,20 @@ static void _set_default_text (GtkWidget *pEntry, gchar *cDefaultValue)
 
 	g_object_set_data (G_OBJECT (pEntry), "ignore-value", GINT_TO_POINTER (TRUE));
 
+	#if (GTK_MAJOR_VERSION < 3)
 	GdkColor color;
 	color.red = .5 * 65535;
 	color.green = .5 * 65535;
 	color.blue = .5 * 65535;
 	gtk_widget_modify_fg (pEntry, GTK_STATE_NORMAL, &color);
+	#else
+	static GdkRGBA color;
+	color.red = .5;
+	color.green = .5;
+	color.blue = .5;
+	color.alpha = 1.;
+	gtk_widget_override_color (pEntry, GTK_STATE_NORMAL, &color);
+	#endif
 }
 static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue)
 {
@@ -1530,7 +1549,11 @@ static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue)
 	{
 		g_object_set_data (G_OBJECT (pEntry), "ignore-value", GINT_TO_POINTER (FALSE));
 		
-		gtk_widget_modify_fg (pEntry, GTK_STATE_NORMAL, NULL);  /// TODO: check that NULL <=> default color
+		#if (GTK_MAJOR_VERSION < 3)
+		gtk_widget_modify_fg (pEntry, GTK_STATE_NORMAL, NULL);  // NULL = undo the effect of previous calls to of gtk_widget_modify_fg().
+		#else
+		gtk_widget_override_color (pEntry, GTK_STATE_NORMAL, NULL);
+		#endif
 	}
 }
 static gboolean on_text_focus_in (GtkWidget *pEntry, GdkEventFocus *event, gchar *cDefaultValue)  // user takes the focus
@@ -1597,7 +1620,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 		// vertical frame.
 		pDescriptionFrame = gtk_frame_new (NULL);
 		gtk_frame_set_shadow_type(GTK_FRAME(pDescriptionFrame), GTK_SHADOW_OUT);
-		GtkWidget* pFrameVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+		GtkWidget* pFrameVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
 		gtk_container_add (GTK_CONTAINER(pDescriptionFrame), pFrameVBox);
 		
 		// title
@@ -1612,7 +1635,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 		data[3] = pAuthor;
 		
 		// pack in 1 or 2 lines.
-		GtkWidget* pFirstLine = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+		GtkWidget* pFirstLine = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
 		GtkWidget *pSecondLine = NULL;
 		
 		gtk_box_pack_start (GTK_BOX (pFirstLine), pTitle, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);
@@ -1630,7 +1653,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 			GtkWidget* pStateIcon = gtk_image_new_from_pixbuf (NULL);
 			gtk_box_pack_end (GTK_BOX (pFirstLine), pStateIcon, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);  // icon next to state.
 			
-			pSecondLine = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+			pSecondLine = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
 			
 			gtk_box_pack_start (GTK_BOX (pSecondLine), pAuthor, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);  // author below title.
 			
@@ -1669,7 +1692,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 	}
 	
 	// pack eveything in a box.
-	GtkWidget *pPreviewBox = (bHorizontalPackaging ? gtk_hbox_new : gtk_vbox_new) (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pPreviewBox = gtk_box_new (bHorizontalPackaging ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionFrame ? pDescriptionFrame : pDescriptionLabel, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);
 	
@@ -1688,7 +1711,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 #define _pack_hscale(pSubWidget) do {\
 	GtkWidget *pExtendedWidget;\
 	if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && pAuthorizedValuesList[1] != NULL && pAuthorizedValuesList[2] != NULL && pAuthorizedValuesList[3] != NULL) {\
-		pExtendedWidget = gtk_hbox_new (FALSE, 0);\
+		pExtendedWidget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);\
 		GtkWidget *label = gtk_label_new (dgettext (cGettextDomain, pAuthorizedValuesList[2]));\
 		GtkWidget *pAlign = gtk_alignment_new (1., 1., 0., 0.);\
 		gtk_container_add (GTK_CONTAINER (pAlign), label);\
@@ -1920,7 +1943,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 		//\______________ On cree la boite du groupe si c'est la 1ere cle valide.
 		if (pGroupBox == NULL)  // maintenant qu'on a au moins un element dans ce groupe, on cree sa page dans le notebook.
 		{
-			pGroupBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+			pGroupBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
 			gtk_container_set_border_width (GTK_CONTAINER (pGroupBox), CAIRO_DOCK_GUI_MARGIN);
 		}
 		
@@ -1933,13 +1956,13 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			//\______________ On cree la boite de la cle.
 			if (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST || iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY || iElementType == CAIRO_DOCK_WIDGET_VIEW_LIST)
 			{
-				pAdditionalItemsVBox = gtk_vbox_new (FALSE, 0);
+				pAdditionalItemsVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 				gtk_box_pack_start (pFrameVBox != NULL ? GTK_BOX (pFrameVBox) :  GTK_BOX (pGroupBox),
 					pAdditionalItemsVBox,
 					FALSE,
 					FALSE,
 					0);
-				pKeyBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				pKeyBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
 				gtk_box_pack_start (GTK_BOX (pAdditionalItemsVBox),
 					pKeyBox,
 					FALSE,
@@ -1948,7 +1971,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			else
 			{
-				pKeyBox = (bIsAligned ? gtk_hbox_new : gtk_vbox_new) (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				pKeyBox = gtk_box_new (bIsAligned ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
 				gtk_box_pack_start (pFrameVBox != NULL ? GTK_BOX (pFrameVBox) : GTK_BOX (pGroupBox),
 					pKeyBox,
 					FALSE,
@@ -2034,7 +2057,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			if (iElementType != CAIRO_DOCK_WIDGET_EMPTY_WIDGET)  // inutile si rien dans dedans.
 			{
-				pWidgetBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);  // cette boite permet d'empiler les widgets a droite, mais en les rangeant de gauche a droite normalement.
+				pWidgetBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);  // cette boite permet d'empiler les widgets a droite, mais en les rangeant de gauche a droite normalement.
 				gtk_box_pack_end (GTK_BOX (pKeyBox),
 					pWidgetBox,
 					FALSE,
@@ -2128,11 +2151,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				for (k = 0; k < iNbElements; k ++)
 				{
 					iValue =  (k < length ? iValueList[k] : 0);
-					#if (GTK_MAJOR_VERSION < 3)
-					GtkObject *pAdjustment = gtk_adjustment_new (iValue,
-					#else
-					GtkAdjustment *pAdjustment = gtk_adjustment_new (iValue,
-					#endif
+					Adjustment *pAdjustment = gtk_adjustment_new (iValue,
 						0,
 						1,
 						1,
@@ -2141,7 +2160,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					if (iElementType == CAIRO_DOCK_WIDGET_HSCALE_INTEGER)
 					{
-						pOneWidget = gtk_hscale_new (GTK_ADJUSTMENT (pAdjustment));
+						pOneWidget = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (pAdjustment));
 						gtk_scale_set_digits (GTK_SCALE (pOneWidget), 0);
 						g_object_set (pOneWidget, "width-request", 150, NULL);
 						
@@ -2201,11 +2220,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				{
 					fValue =  (k < length ? fValueList[k] : 0);
 
-					#if (GTK_MAJOR_VERSION < 3)
-					GtkObject *pAdjustment = gtk_adjustment_new (fValue,
-					#else
-					GtkAdjustment *pAdjustment = gtk_adjustment_new (fValue,
-					#endif
+					Adjustment *pAdjustment = gtk_adjustment_new (fValue,
 						0,
 						1,
 						(fMaxValue - fMinValue) / 20.,
@@ -2214,7 +2229,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					if (iElementType == CAIRO_DOCK_WIDGET_HSCALE_DOUBLE)
 					{
-						pOneWidget = gtk_hscale_new (GTK_ADJUSTMENT (pAdjustment));
+						pOneWidget = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (pAdjustment));
 						gtk_scale_set_digits (GTK_SCALE (pOneWidget), 3);
 						g_object_set (pOneWidget, "width-request", 150, NULL);
 						
@@ -2661,7 +2676,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				if (iElementType != CAIRO_DOCK_WIDGET_TREE_VIEW_MULTI_CHOICE)
 				{
-					pSmallVBox = gtk_vbox_new (FALSE, 3);
+					pSmallVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
 					_pack_in_widget_box (pSmallVBox);
 					
 					pButtonUp = gtk_button_new_from_stock (GTK_STOCK_GO_UP);
@@ -2861,11 +2876,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_sobriety, NULL, NULL);
 				gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 				// barres de defilement
+				Adjustment *adj = gtk_adjustment_new (0., 0., 100., 1, 10, 10);
 				#if (GTK_MAJOR_VERSION < 3)
-				GtkObject *adj = gtk_adjustment_new (0., 0., 100., 1, 10, 10);
 				gtk_tree_view_set_vadjustment (GTK_TREE_VIEW (pOneWidget), GTK_ADJUSTMENT (adj));
 				#else
-				GtkAdjustment *adj = gtk_adjustment_new (0., 0., 100., 1, 10, 10);
 				gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (pOneWidget), GTK_ADJUSTMENT (adj));
 				#endif
 				pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
@@ -3013,11 +3027,20 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						gtk_entry_set_text (GTK_ENTRY (pOneWidget), cDefaultText);
 						g_object_set_data (G_OBJECT (pOneWidget), "ignore-value", GINT_TO_POINTER (TRUE));
 						
+						#if (GTK_MAJOR_VERSION < 3)
 						GdkColor color;
 						color.red = .5 * 65535;
 						color.green = .5 * 65535;
 						color.blue = .5 * 65535;
 						gtk_widget_modify_fg (pOneWidget, GTK_STATE_NORMAL, &color);
+						#else
+						static GdkRGBA color;
+						color.red = .5;
+						color.green = .5;
+						color.blue = .5;
+						color.alpha = 1.;
+						gtk_widget_override_color (pOneWidget, GTK_STATE_NORMAL, &color);
+						#endif
 					}
 					g_signal_connect (pOneWidget, "changed", G_CALLBACK (_on_text_changed), cDefaultText);
 					g_signal_connect (pOneWidget, "focus-in-event", G_CALLBACK (on_text_focus_in), cDefaultText);
@@ -3097,16 +3120,26 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					pLabelContainer = NULL;
 					if (cSmallIcon != NULL)
 					{
-						pLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_ICON_MARGIN/2);
+						pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN/2);
 						GtkWidget *pImage = gtk_image_new ();
 						GdkPixbuf *pixbuf;
 						if (*cSmallIcon != '/')
+						{
+							#if (GTK_MAJOR_VERSION < 3)
 							pixbuf = gtk_widget_render_icon (pImage,
 								cSmallIcon ,
 								GTK_ICON_SIZE_MENU,
 								NULL);
+							#else
+							pixbuf = gtk_widget_render_icon_pixbuf (pImage,
+								cSmallIcon ,
+								GTK_ICON_SIZE_MENU);
+							#endif
+						}
 						else
+						{
 							pixbuf = gdk_pixbuf_new_from_file_at_size (cSmallIcon, CAIRO_DOCK_FRAME_ICON_SIZE, CAIRO_DOCK_FRAME_ICON_SIZE, NULL);
+						}
 						if (pixbuf != NULL)
 						{
 							gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
@@ -3148,7 +3181,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						FALSE,
 						0);
 
-					pFrameVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+					pFrameVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
 					gtk_container_add (GTK_CONTAINER (pFrame),
 						pFrameVBox);
 					
@@ -3195,7 +3228,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			{
 				GtkWidget *pAlign = gtk_alignment_new (.5, .5, 0.8, 1.);
 				g_object_set (pAlign, "height-request", 12, NULL);
-				pOneWidget = gtk_hseparator_new ();
+				pOneWidget = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 				gtk_container_add (GTK_CONTAINER (pAlign), pOneWidget);
 				gtk_box_pack_start (GTK_BOX (pFrameVBox != NULL ? pFrameVBox : pGroupBox),
 					pAlign,
@@ -3292,19 +3325,29 @@ GtkWidget *cairo_dock_build_key_file_widget (GKeyFile* pKeyFile, const gchar *cG
 		pAlign = NULL;
 		if (cIcon != NULL)
 		{
-			pLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_ICON_MARGIN);
+			pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN);
 			pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
 			gtk_container_add (GTK_CONTAINER (pAlign), pLabelContainer);
 
 			GtkWidget *pImage = gtk_image_new ();
 			GdkPixbuf *pixbuf;
 			if (*cIcon != '/')
+			{
+				#if (GTK_MAJOR_VERSION < 3)
 				pixbuf = gtk_widget_render_icon (pImage,
 					cIcon ,
 					GTK_ICON_SIZE_BUTTON,
 					NULL);
+				#else
+				pixbuf = gtk_widget_render_icon_pixbuf (pImage,
+					cIcon ,
+					GTK_ICON_SIZE_BUTTON);
+				#endif
+			}
 			else
+			{
 				pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, CAIRO_DOCK_TAB_ICON_SIZE, CAIRO_DOCK_TAB_ICON_SIZE, NULL);
+			}
 			if (pixbuf != NULL)
 			{
 				gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
@@ -3371,7 +3414,7 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 			g_key_file_set_boolean (pKeyFile, cGroupName, cKeyName, tBooleanValues[0]);
 		g_free (tBooleanValues);
 	}
-	else if (GTK_IS_SPIN_BUTTON (pOneWidget) || GTK_IS_HSCALE (pOneWidget))
+	else if (GTK_IS_SPIN_BUTTON (pOneWidget) || GTK_IS_SCALE (pOneWidget))
 	{
 		gboolean bIsSpin = GTK_IS_SPIN_BUTTON (pOneWidget);
 		

@@ -907,7 +907,7 @@ static inline GtkWidget *_cairo_dock_make_entry_for_dialog (const gchar *cTextFo
 }
 static inline GtkWidget *_cairo_dock_make_hscale_for_dialog (double fValueForHScale, double fMaxValueForHScale)
 {
-	GtkWidget *pWidget = gtk_hscale_new_with_range (0, fMaxValueForHScale, fMaxValueForHScale / 100.);
+	GtkWidget *pWidget = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, fMaxValueForHScale, fMaxValueForHScale / 100.);
 	gtk_scale_set_digits (GTK_SCALE (pWidget), 2);
 	gtk_range_set_value (GTK_RANGE (pWidget), fValueForHScale);
 

@@ -200,7 +200,11 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 	{
 		int w = pDialog->iInteractiveWidth, h = pDialog->iInteractiveHeight;
 		GtkRequisition requisition;
+		#if (GTK_MAJOR_VERSION < 3)
 		gtk_widget_size_request (pDialog->pInteractiveWidget, &requisition);
+		#else
+		gtk_widget_get_preferred_size (pDialog->pInteractiveWidget, &requisition, NULL);
+		#endif
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
 		//g_print ("  pInteractiveWidget : %dx%d\n", pDialog->iInteractiveWidth, pDialog->iInteractiveHeight);
@@ -271,7 +275,7 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 
 static GtkWidget *_cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize)
 {
-	GtkWidget *pBox = gtk_hbox_new (0, FALSE);
+	GtkWidget *pBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	if (iWidth != 0 && iHeight != 0)
 		g_object_set (pBox, "height-request", iHeight, "width-request", iWidth, NULL);
 	else if (iWidth != 0)
@@ -436,7 +440,11 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		pDialog->pInteractiveWidget = pAttribute->pInteractiveWidget;
 		
 		GtkRequisition requisition;
+		#if (GTK_MAJOR_VERSION < 3)
 		gtk_widget_size_request (pAttribute->pInteractiveWidget, &requisition);
+		#else
+		gtk_widget_get_preferred_size (pAttribute->pInteractiveWidget, &requisition, NULL);
+		#endif
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
 	}
@@ -510,9 +518,9 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	cairo_dock_set_dialog_orientation (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
 	
 	//\________________ On reserve l'espace pour les decorations.
-	GtkWidget *pMainHBox = gtk_hbox_new (0, FALSE);
+	GtkWidget *pMainHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (pDialog->container.pWidget), pMainHBox);
-	pDialog->pLeftPaddingBox = gtk_vbox_new (0, FALSE);
+	pDialog->pLeftPaddingBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	g_object_set (pDialog->pLeftPaddingBox, "width-request", pDialog->iLeftMargin, NULL);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pLeftPaddingBox,
@@ -520,14 +528,14 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		FALSE,
 		0);
 	
-	pDialog->pWidgetLayout = gtk_vbox_new (0, FALSE);
+	pDialog->pWidgetLayout = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pWidgetLayout,
 		FALSE,
 		FALSE,
 		0);
 	
-	pDialog->pRightPaddingBox = gtk_vbox_new (0, FALSE);
+	pDialog->pRightPaddingBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	g_object_set (pDialog->pRightPaddingBox, "width-request", pDialog->iRightMargin, NULL);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pRightPaddingBox,
@@ -786,20 +794,38 @@ GtkWidget *cairo_dock_steal_interactive_widget_from_dialog (CairoDialog *pDialog
 
 void cairo_dock_set_dialog_widget_text_color (GtkWidget *pWidget)
 {
+	#if (GTK_MAJOR_VERSION < 3)
 	static GdkColor color;
 	color.red = myDialogsParam.dialogTextDescription.fColorStart[0] * 65535;
 	color.green = myDialogsParam.dialogTextDescription.fColorStart[1] * 65535;
 	color.blue = myDialogsParam.dialogTextDescription.fColorStart[2] * 65535;
 	gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
+	#else
+	static GdkRGBA color;
+	color.red = myDialogsParam.dialogTextDescription.fColorStart[0] * 65535;
+	color.green = myDialogsParam.dialogTextDescription.fColorStart[1] * 65535;
+	color.blue = myDialogsParam.dialogTextDescription.fColorStart[2] * 65535;
+	color.alpha = 1.;
+	gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, &color);
+	#endif
 }
 
 void cairo_dock_set_dialog_widget_bg_color (GtkWidget *pWidget)
 {
+	#if (GTK_MAJOR_VERSION < 3)
 	static GdkColor color;
 	color.red = myDialogsParam.fDialogColor[0] * 65535;
 	color.green = myDialogsParam.fDialogColor[1] * 65535;
 	color.blue = myDialogsParam.fDialogColor[2] * 65535;
 	gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
+	#else
+	static GdkRGBA color;
+	color.red = myDialogsParam.fDialogColor[0] * 65535;
+	color.green = myDialogsParam.fDialogColor[1] * 65535;
+	color.blue = myDialogsParam.fDialogColor[2] * 65535;
+	color.alpha = 1.;
+	gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, &color);
+	#endif
 }
 
 void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSurface, int iNewTextWidth, int iNewTextHeight)

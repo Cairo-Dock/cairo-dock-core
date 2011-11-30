@@ -86,6 +86,8 @@ endif()
 
 STRING (REGEX REPLACE "\\..*" "" GTK_MAJOR "${GTK_VERSION}")
 
+add_definitions (-DGTK_DISABLE_DEPRECATED="1")
+
 # We use crypt(3) which may be in libc, or in libcrypt (eg FreeBSD)
 check_library_exists (crypt encrypt "" HAVE_LIBCRYPT)
 if (${HAVE_LIBCRYPT})

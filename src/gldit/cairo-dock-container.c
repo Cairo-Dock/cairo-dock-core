@@ -382,7 +382,11 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	
 	int w, h;  // taille menu
 	GtkRequisition requisition;
+	#if (GTK_MAJOR_VERSION < 3)
 	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
+	#else
+	gtk_widget_get_preferred_size (GTK_WIDGET (menu), &requisition, NULL);
+	#endif
 	w = requisition.width;
 	h = requisition.height;
 	

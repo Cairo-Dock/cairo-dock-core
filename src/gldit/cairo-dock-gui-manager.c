@@ -235,11 +235,11 @@ GtkWidget *cairo_dock_build_generic_gui_window (const gchar *cTitle, int iWidth,
 	if (cTitle != NULL)
 		gtk_window_set_title (GTK_WINDOW (pMainWindow), cTitle);
 	
-	GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	GtkWidget *pMainVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_container_add (GTK_CONTAINER (pMainWindow), pMainVBox);
 	
 	//\_____________ On ajoute les boutons.
-	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN*2);
+	GtkWidget *pButtonsHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN*2);
 	gtk_box_pack_end (GTK_BOX (pMainVBox),
 		pButtonsHBox,
 		FALSE,
