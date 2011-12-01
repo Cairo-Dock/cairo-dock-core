@@ -1620,7 +1620,11 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 		// vertical frame.
 		pDescriptionFrame = gtk_frame_new (NULL);
 		gtk_frame_set_shadow_type(GTK_FRAME(pDescriptionFrame), GTK_SHADOW_OUT);
+		#if (GTK_MAJOR_VERSION < 3)
+		GtkWidget* pFrameVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+		#else
 		GtkWidget* pFrameVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
+		#endif
 		gtk_container_add (GTK_CONTAINER(pDescriptionFrame), pFrameVBox);
 		
 		// title
@@ -1635,7 +1639,11 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 		data[3] = pAuthor;
 		
 		// pack in 1 or 2 lines.
+		#if (GTK_MAJOR_VERSION < 3)
+		GtkWidget* pFirstLine = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+		#else
 		GtkWidget* pFirstLine = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
+		#endif
 		GtkWidget *pSecondLine = NULL;
 		
 		gtk_box_pack_start (GTK_BOX (pFirstLine), pTitle, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);
@@ -1652,8 +1660,12 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 			
 			GtkWidget* pStateIcon = gtk_image_new_from_pixbuf (NULL);
 			gtk_box_pack_end (GTK_BOX (pFirstLine), pStateIcon, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);  // icon next to state.
-			
+
+			#if (GTK_MAJOR_VERSION < 3)
+			pSecondLine = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+			#else
 			pSecondLine = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
+			#endif
 			
 			gtk_box_pack_start (GTK_BOX (pSecondLine), pAuthor, FALSE, FALSE, CAIRO_DOCK_ICON_MARGIN);  // author below title.
 			
@@ -1692,7 +1704,11 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 	}
 	
 	// pack eveything in a box.
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pPreviewBox = (bHorizontalPackaging ? gtk_hbox_new : gtk_vbox_new) (FALSE, CAIRO_DOCK_GUI_MARGIN);
+	#else
 	GtkWidget *pPreviewBox = gtk_box_new (bHorizontalPackaging ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
+	#endif
 	gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionFrame ? pDescriptionFrame : pDescriptionLabel, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pPreviewBox), pPreviewImage, FALSE, FALSE, 0);
 	
@@ -1708,6 +1724,25 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 #define _pack_subwidget(pSubWidget) do {\
 	pSubWidgetList = g_slist_append (pSubWidgetList, pSubWidget);\
 	_pack_in_widget_box (pSubWidget); } while (0)
+#if (GTK_MAJOR_VERSION < 3)
+#define _pack_hscale(pSubWidget) do {\
+	GtkWidget *pExtendedWidget;\
+	if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && pAuthorizedValuesList[1] != NULL && pAuthorizedValuesList[2] != NULL && pAuthorizedValuesList[3] != NULL) {\
+		pExtendedWidget = gtk_hbox_new (FALSE, 0);\
+		GtkWidget *label = gtk_label_new (dgettext (cGettextDomain, pAuthorizedValuesList[2]));\
+		GtkWidget *pAlign = gtk_alignment_new (1., 1., 0., 0.);\
+		gtk_container_add (GTK_CONTAINER (pAlign), label);\
+		gtk_box_pack_start (GTK_BOX (pExtendedWidget), pAlign, FALSE, FALSE, 0);\
+		gtk_box_pack_start (GTK_BOX (pExtendedWidget), pSubWidget, FALSE, FALSE, 0);\
+		label = gtk_label_new (dgettext (cGettextDomain, pAuthorizedValuesList[3]));\
+		pAlign = gtk_alignment_new (1., 1., 0., 0.);\
+		gtk_container_add (GTK_CONTAINER (pAlign), label);\
+		gtk_box_pack_start (GTK_BOX (pExtendedWidget), pAlign, FALSE, FALSE, 0); }\
+	else {\
+		pExtendedWidget = pOneWidget; }\
+	pSubWidgetList = g_slist_append (pSubWidgetList, pSubWidget);\
+	_pack_in_widget_box (pExtendedWidget); } while (0)
+#else
 #define _pack_hscale(pSubWidget) do {\
 	GtkWidget *pExtendedWidget;\
 	if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && pAuthorizedValuesList[1] != NULL && pAuthorizedValuesList[2] != NULL && pAuthorizedValuesList[3] != NULL) {\
@@ -1725,15 +1760,14 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 		pExtendedWidget = pOneWidget; }\
 	pSubWidgetList = g_slist_append (pSubWidgetList, pSubWidget);\
 	_pack_in_widget_box (pExtendedWidget); } while (0)
-#if (GTK_MAJOR_VERSION < 3)
-	#define _combo_box_entry_new gtk_combo_box_entry_new
-#else
-	#define _combo_box_entry_new gtk_combo_box_new_with_entry
 #endif
-#if (GTK_MAJOR_VERSION < 3)
+
+#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 24)
+#define _combo_box_entry_new gtk_combo_box_entry_new
 #define _combo_box_entry_new_with_model(modele, column) \
 	gtk_combo_box_entry_new_with_model (modele, column)
 #else
+#define _combo_box_entry_new gtk_combo_box_new_with_entry
 static inline GtkWidget *_combo_box_entry_new_with_model (GtkTreeModel *modele, int column)
 {
 	GtkWidget *w = gtk_combo_box_new_with_model_and_entry (modele);
@@ -1741,6 +1775,7 @@ static inline GtkWidget *_combo_box_entry_new_with_model (GtkTreeModel *modele, 
 	return w;
 }
 #endif
+
 #define _add_combo_from_modele(modele, bAddPreviewWidgets, bWithEntry) do {\
 	if (modele == NULL) { \
 		pOneWidget = _combo_box_entry_new ();\
@@ -1943,7 +1978,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 		//\______________ On cree la boite du groupe si c'est la 1ere cle valide.
 		if (pGroupBox == NULL)  // maintenant qu'on a au moins un element dans ce groupe, on cree sa page dans le notebook.
 		{
+			#if (GTK_MAJOR_VERSION < 3)
+			pGroupBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+			#else
 			pGroupBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
+			#endif
 			gtk_container_set_border_width (GTK_CONTAINER (pGroupBox), CAIRO_DOCK_GUI_MARGIN);
 		}
 		
@@ -1956,13 +1995,21 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			//\______________ On cree la boite de la cle.
 			if (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST || iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY || iElementType == CAIRO_DOCK_WIDGET_VIEW_LIST)
 			{
+				#if (GTK_MAJOR_VERSION < 3)
+				pAdditionalItemsVBox = gtk_vbox_new (FALSE, 0);
+				#else
 				pAdditionalItemsVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+				#endif
 				gtk_box_pack_start (pFrameVBox != NULL ? GTK_BOX (pFrameVBox) :  GTK_BOX (pGroupBox),
 					pAdditionalItemsVBox,
 					FALSE,
 					FALSE,
 					0);
+				#if (GTK_MAJOR_VERSION < 3)
+				pKeyBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				#else
 				pKeyBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
+				#endif
 				gtk_box_pack_start (GTK_BOX (pAdditionalItemsVBox),
 					pKeyBox,
 					FALSE,
@@ -1971,7 +2018,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			else
 			{
+				#if (GTK_MAJOR_VERSION < 3)
+				pKeyBox = (bIsAligned ? gtk_hbox_new : gtk_vbox_new) (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				#else
 				pKeyBox = gtk_box_new (bIsAligned ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
+				#endif
 				gtk_box_pack_start (pFrameVBox != NULL ? GTK_BOX (pFrameVBox) : GTK_BOX (pGroupBox),
 					pKeyBox,
 					FALSE,
@@ -2056,8 +2107,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			
 			if (iElementType != CAIRO_DOCK_WIDGET_EMPTY_WIDGET)  // inutile si rien dans dedans.
-			{
-				pWidgetBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);  // cette boite permet d'empiler les widgets a droite, mais en les rangeant de gauche a droite normalement.
+			{	// cette boite permet d'empiler les widgets a droite, mais en les rangeant de gauche a droite normalement.
+				#if (GTK_MAJOR_VERSION < 3)
+				pWidgetBox = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+				#else
+				pWidgetBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
+				#endif
 				gtk_box_pack_end (GTK_BOX (pKeyBox),
 					pWidgetBox,
 					FALSE,
@@ -2160,7 +2215,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					if (iElementType == CAIRO_DOCK_WIDGET_HSCALE_INTEGER)
 					{
+						#if (GTK_MAJOR_VERSION < 3)
+						pOneWidget = gtk_hscale_new (GTK_ADJUSTMENT (pAdjustment));
+						#else
 						pOneWidget = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (pAdjustment));
+						#endif
 						gtk_scale_set_digits (GTK_SCALE (pOneWidget), 0);
 						g_object_set (pOneWidget, "width-request", 150, NULL);
 						
@@ -2229,7 +2288,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					
 					if (iElementType == CAIRO_DOCK_WIDGET_HSCALE_DOUBLE)
 					{
+						#if (GTK_MAJOR_VERSION < 3)
+						pOneWidget = gtk_hscale_new (GTK_ADJUSTMENT (pAdjustment));
+						#else
 						pOneWidget = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (pAdjustment));
+						#endif
 						gtk_scale_set_digits (GTK_SCALE (pOneWidget), 3);
 						g_object_set (pOneWidget, "width-request", 150, NULL);
 						
@@ -2676,7 +2739,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				if (iElementType != CAIRO_DOCK_WIDGET_TREE_VIEW_MULTI_CHOICE)
 				{
+					#if (GTK_MAJOR_VERSION < 3)
+					pSmallVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+					#else
 					pSmallVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
+					#endif
 					_pack_in_widget_box (pSmallVBox);
 					
 					pButtonUp = gtk_button_new_from_stock (GTK_STOCK_GO_UP);
@@ -3120,7 +3187,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					pLabelContainer = NULL;
 					if (cSmallIcon != NULL)
 					{
+						#if (GTK_MAJOR_VERSION < 3)
+						pLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_ICON_MARGIN/2);
+						#else
 						pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN/2);
+						#endif
 						GtkWidget *pImage = gtk_image_new ();
 						GdkPixbuf *pixbuf;
 						if (*cSmallIcon != '/')
@@ -3181,7 +3252,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						FALSE,
 						0);
 
+					#if (GTK_MAJOR_VERSION < 3)
+					pFrameVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
+					#else
 					pFrameVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
+					#endif
 					gtk_container_add (GTK_CONTAINER (pFrame),
 						pFrameVBox);
 					
@@ -3228,7 +3303,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			{
 				GtkWidget *pAlign = gtk_alignment_new (.5, .5, 0.8, 1.);
 				g_object_set (pAlign, "height-request", 12, NULL);
+				#if (GTK_MAJOR_VERSION < 3)
+				pOneWidget = gtk_hseparator_new ();
+				#else
 				pOneWidget = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+				#endif
 				gtk_container_add (GTK_CONTAINER (pAlign), pOneWidget);
 				gtk_box_pack_start (GTK_BOX (pFrameVBox != NULL ? pFrameVBox : pGroupBox),
 					pAlign,
@@ -3325,7 +3404,11 @@ GtkWidget *cairo_dock_build_key_file_widget (GKeyFile* pKeyFile, const gchar *cG
 		pAlign = NULL;
 		if (cIcon != NULL)
 		{
+			#if (GTK_MAJOR_VERSION < 3)
+			pLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_ICON_MARGIN);
+			#else
 			pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN);
+			#endif
 			pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
 			gtk_container_add (GTK_CONTAINER (pAlign), pLabelContainer);
 
@@ -3694,7 +3777,7 @@ gchar *cairo_dock_gui_get_active_row_in_combo (GtkWidget *pOneWidget)
 	GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));  // toutes nos combo sont crees avec un modele.
 	if (model != NULL && gtk_combo_box_get_active_iter (GTK_COMBO_BOX (pOneWidget), &iter))
 		gtk_tree_model_get (model, &iter, CAIRO_DOCK_MODEL_RESULT, &cValue, -1);
-	#if (GTK_MAJOR_VERSION < 3)
+	#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 24)
 	if (cValue == NULL && GTK_IS_COMBO_BOX_ENTRY (pOneWidget))  // dans le cas d'une combo-entry, si on a entre un nouveau text, il n'y a pas d'active-iter, donc il faut recuperer le texte entre.
 	{
 		cValue = gtk_combo_box_get_active_text (GTK_COMBO_BOX (pOneWidget));

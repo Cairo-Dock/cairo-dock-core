@@ -1363,7 +1363,11 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 		return pGroupDescription;
 	
 	//\____________ On construit le bouton du groupe.
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pGroupHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	#else
 	GtkWidget *pGroupHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
+	#endif
 	pGroupDescription->pGroupHBox = pGroupHBox;
 	
 	pGroupDescription->pActivateButton = gtk_check_button_new ();
@@ -1385,8 +1389,12 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 		gtk_widget_set_sensitive (pGroupButton, FALSE);
 	g_signal_connect (G_OBJECT (pGroupButton), "enter", G_CALLBACK(on_enter_group_button), pGroupDescription);
 	g_signal_connect (G_OBJECT (pGroupButton), "leave", G_CALLBACK(on_leave_group_button), NULL);
-	
+
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pButtonHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	#else
 	GtkWidget *pButtonHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
+	#endif
 	GtkWidget *pImage = _make_image (cIconPath, CAIRO_DOCK_GROUP_ICON_SIZE);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox), pImage, FALSE, FALSE, 0);
 	pGroupDescription->pLabel = gtk_label_new (pGroupDescription->cTitle);
@@ -1599,8 +1607,12 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
 	gtk_window_set_icon_from_file (GTK_WINDOW (s_pMainWindow), cIconPath, NULL);
 	g_free (cIconPath);
-	
+
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pMainHBox = gtk_hbox_new (FALSE, 0);
+	#else
 	GtkWidget *pMainHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+	#endif
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
 	
 	if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH)
@@ -1620,21 +1632,34 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		s_iPreviewWidth = CAIRO_DOCK_PREVIEW_WIDTH_MIN;
 		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN;
 	}
+
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pCategoriesVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	#else
 	GtkWidget *pCategoriesVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
+	#endif
 	gtk_widget_set_size_request (pCategoriesVBox, s_iPreviewWidth+2*CAIRO_DOCK_FRAME_MARGIN, CAIRO_DOCK_PREVIEW_HEIGHT);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pCategoriesVBox,
 		FALSE,
 		FALSE,
 		0);
-	
+
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pVBox = gtk_vbox_new (FALSE, 0);
+	#else
 	GtkWidget *pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+	#endif
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pVBox,
 		TRUE,
 		TRUE,
 		0);
+	#if (GTK_MAJOR_VERSION < 3)
+	s_pGroupsVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_TABLE_MARGIN);
+	#else
 	s_pGroupsVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_TABLE_MARGIN);
+	#endif
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), s_pGroupsVBox);
@@ -1663,7 +1688,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		0);
 	
 	s_pToolBar = gtk_toolbar_new ();
-	#if (GTK_MAJOR_VERSION < 3)
+	#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 16)
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (s_pToolBar), GTK_ORIENTATION_VERTICAL);
 	#else
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (s_pToolBar), GTK_ORIENTATION_VERTICAL);
@@ -1793,7 +1818,11 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	// frame
 	GtkWidget *pFilterFrame = gtk_frame_new (NULL);
 	cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Filter"));
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pFilterLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	#else
 	GtkWidget *pFilterLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
+	#endif
 	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
 	gtk_container_add (GTK_CONTAINER (pFilterLabelContainer), pImage);
 	
@@ -1810,12 +1839,20 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 		FALSE,
 		FALSE,
 		0);
-	
+
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pOptionVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	#else
 	GtkWidget *pOptionVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
+	#endif
 	gtk_container_add (GTK_CONTAINER (pFilterFrame), pOptionVBox);
 	
 	// entree de texte
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pFilterBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	#else
 	GtkWidget *pFilterBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
+	#endif
 	gtk_box_pack_start (GTK_BOX (pOptionVBox),
 		pFilterBox,
 		FALSE,
@@ -1883,7 +1920,11 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gtk_widget_show_all (s_pActivateButton);
 	
 	//\_____________ On ajoute la zone de prevue.
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pInfoVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	#else
 	GtkWidget *pInfoVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
+	#endif
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		pInfoVBox,
 		FALSE,
@@ -1894,7 +1935,11 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gtk_container_add (GTK_CONTAINER (pInfoVBox), s_pPreviewImage);
 	
 	//\_____________ On ajoute les boutons.
+	#if (GTK_MAJOR_VERSION < 3)
+	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
+	#else
 	GtkWidget *pButtonsHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
+	#endif
 	gtk_box_pack_end (GTK_BOX (pVBox),
 		pButtonsHBox,
 		FALSE,
@@ -2328,7 +2373,11 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 			GtkWidget *pAlign = NULL;
 			if (pGroupDescription->cIcon != NULL && *pGroupDescription->cIcon != '\0')
 			{
+				#if (GTK_MAJOR_VERSION < 3)
+				pLabelContainer = gtk_hbox_new (FALSE, CAIRO_DOCK_ICON_MARGIN);
+				#else
 				pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN);
+				#endif
 				pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
 				gtk_container_add (GTK_CONTAINER (pAlign), pLabelContainer);
 

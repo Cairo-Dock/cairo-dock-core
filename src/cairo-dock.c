@@ -515,8 +515,12 @@ int main (int argc, char** argv)
 			#endif
 
 			gtk_box_pack_start (GTK_BOX (pContentBox), label, FALSE, FALSE, 0);
-			
+
+			#if (GTK_MAJOR_VERSION < 3)
+			GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
+			#else
 			GtkWidget *pAskBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+			#endif
 			gtk_box_pack_start (GTK_BOX (pContentBox), pAskBox, FALSE, FALSE, 0);
 			label = gtk_label_new (_("Remember this choice"));
 			GtkWidget *pCheckBox = gtk_check_button_new ();
@@ -550,10 +554,10 @@ int main (int argc, char** argv)
 	}
 	g_print ("\n"
 	" ============================================================================\n"
-	"\tCairo-Dock version : %s\n"
+	"\tCairo-Dock version :  %s\n"
 	"\tCompiled date      :  %s %s\n"
-	"\tBulit with GTK     :  %d.%d\n"
-	"\tRunning with OpenGL: %d\n"
+	"\tBuilt with GTK     :  %d.%d\n"
+	"\tRunning with OpenGL:  %d\n"
 	" ============================================================================\n\n",
 		CAIRO_DOCK_VERSION,
 		__DATE__, __TIME__,

@@ -156,7 +156,11 @@ void cd_help_enable_composite (void)
 	if (s_activate_composite != NULL)  // the WM can activate the composite.
 	{
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
+		#if (GTK_MAJOR_VERSION < 3)
+		GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
+		#else
 		GtkWidget *pAskBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+		#endif
 		GtkWidget *label = gtk_label_new (D_("Don't ask me any more"));
 		cairo_dock_set_dialog_widget_text_color (label);
 		GtkWidget *pCheckBox = gtk_check_button_new ();
