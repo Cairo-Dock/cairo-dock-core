@@ -37,11 +37,11 @@ show_on_click = 0
 #F-[Taskbar;@pkgdatadir@/icons/icon-taskbar.png]
 frame_task =
 
-#l-[None;MacOSX;KDE;Gnome] Behaviour of the Taskbar:
-#{None     : Don't show opened windows in the dock.
-#MacOSX   : Mix applications with its launcher, show other windows only if they are minimized.
-#KDE : Mix applications with its launcher, show all others windows and group windows togather in sub-dock.
-#Gnome    : Separate the taskbar from the launchers and only show windows that are on the current desktop.}
+#l-[None;Minimalistic;Integrated;Separated] Behaviour of the Taskbar:
+#{None       : Don't show opened windows in the dock.
+#Minimalistic: Mix applications with its launcher, show other windows only if they are minimized (like in MacOSX).
+#Integrated  : Mix applications with its launcher, show all others windows and group windows togather in sub-dock (default).
+#Separated   : Separate the taskbar from the launchers and only show windows that are on the current desktop.}
 taskbar = 2
 
 

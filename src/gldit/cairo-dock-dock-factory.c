@@ -171,7 +171,7 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 		"leave-notify-event",
 		G_CALLBACK (cairo_dock_on_leave_notify),
 		pDock);
-	cairo_dock_allow_widget_to_receive_data (pWindow,
+	gldi_container_enable_drop (CAIRO_CONTAINER (pDock),
 		G_CALLBACK (cairo_dock_on_drag_data_received),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),
@@ -190,7 +190,7 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 	gtk_window_get_size (GTK_WINDOW (pWindow), &pDock->container.iWidth, &pDock->container.iHeight);  // ca n'est que la taille initiale allouee par GTK.
 	gtk_widget_show_all (pWindow);
 	#if (GTK_MAJOR_VERSION < 3)
-	gdk_window_set_back_pixmap (pWindow->window, NULL, FALSE);  // vraiment plus rapide ?
+	gdk_window_set_back_pixmap (pWindow->window, NULL, FALSE);
 	#else
 	gdk_window_set_background_pattern (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), NULL);
 	#endif

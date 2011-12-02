@@ -270,9 +270,9 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 		data);
 }
 
-void cairo_dock_disallow_widget_to_receive_data (GtkWidget *pWidget)
+void gldi_container_disable_drop (CairoContainer *pContainer)
 {
-	gtk_drag_dest_set_target_list (pWidget, NULL);
+	gtk_drag_dest_set_target_list (pContainer->pWidget, NULL);
 }
 
 gboolean cairo_dock_string_is_adress (const gchar *cString)

@@ -458,10 +458,10 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 						G_TYPE_INVALID);
 					_cairo_dock_set_desklet_input_shape (pDesklet);
 					gtk_widget_queue_draw (pDesklet->container.pWidget);
-					if (pDesklet->bNoInput)
-						cairo_dock_allow_widget_to_receive_data (pDesklet->container.pWidget, G_CALLBACK (on_drag_data_received_desklet), pDesklet);
+					/**if (pDesklet->bNoInput)
+						gldi_container_enable_drop (CAIRO_CONTAINER (pDesklet), G_CALLBACK (on_drag_data_received_desklet), pDesklet);
 					else
-						cairo_dock_disallow_widget_to_receive_data (pDesklet->container.pWidget);
+						gldi_container_disable_drop (CAIRO_CONTAINER (pDesklet));*/
 				}
 			}
 			else if (pDesklet->rotatingY)
@@ -789,7 +789,7 @@ CairoDesklet *cairo_dock_new_desklet (void)
 		"scroll-event",
 		G_CALLBACK (on_scroll_desklet),
 		pDesklet);
-	cairo_dock_allow_widget_to_receive_data (pWindow, G_CALLBACK (on_drag_data_received_desklet), pDesklet);
+	gldi_container_enable_drop (CAIRO_CONTAINER (pDesklet), G_CALLBACK (on_drag_data_received_desklet), pDesklet);
 	
 	gtk_widget_show_all (pWindow);
 	
@@ -896,8 +896,8 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 	}
 	pDesklet->bPositionLocked = pAttribute->bPositionLocked;
 	pDesklet->bNoInput = pAttribute->bNoInput;
-	if (pDesklet->bNoInput)
-		cairo_dock_disallow_widget_to_receive_data (pDesklet->container.pWidget);
+	/**if (pDesklet->bNoInput)
+		gldi_container_disable_drop (CAIRO_CONTAINER (pDesklet));*/
 	pDesklet->fRotation = pAttribute->iRotation / 180. * G_PI ;
 	pDesklet->fDepthRotationY = pAttribute->iDepthRotationY / 180. * G_PI ;
 	pDesklet->fDepthRotationX = pAttribute->iDepthRotationX / 180. * G_PI ;

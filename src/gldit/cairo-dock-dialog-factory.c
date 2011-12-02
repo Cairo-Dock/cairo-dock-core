@@ -822,10 +822,10 @@ void cairo_dock_set_dialog_widget_text_color (GtkWidget *pWidget)
 	gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
 	#else
 	static GdkRGBA color;
-	color.red = myDialogsParam.dialogTextDescription.fColorStart[0] * 65535;
-	color.green = myDialogsParam.dialogTextDescription.fColorStart[1] * 65535;
-	color.blue = myDialogsParam.dialogTextDescription.fColorStart[2] * 65535;
-	color.alpha = 1.;
+	color.red = myDialogsParam.dialogTextDescription.fColorStart[0];
+	color.green = myDialogsParam.dialogTextDescription.fColorStart[1];
+	color.blue = myDialogsParam.dialogTextDescription.fColorStart[2];
+	color.alpha = myDialogsParam.dialogTextDescription.fColorStart[3];
 	gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, &color);
 	#endif
 }
@@ -840,10 +840,10 @@ void cairo_dock_set_dialog_widget_bg_color (GtkWidget *pWidget)
 	gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
 	#else
 	static GdkRGBA color;
-	color.red = myDialogsParam.fDialogColor[0] * 65535;
-	color.green = myDialogsParam.fDialogColor[1] * 65535;
-	color.blue = myDialogsParam.fDialogColor[2] * 65535;
-	color.alpha = 1.;
+	color.red = myDialogsParam.fDialogColor[0];
+	color.green = myDialogsParam.fDialogColor[1];
+	color.blue = myDialogsParam.fDialogColor[2];
+	color.alpha = myDialogsParam.fDialogColor[3];
 	gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, &color);
 	#endif
 }

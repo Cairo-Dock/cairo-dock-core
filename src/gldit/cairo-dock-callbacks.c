@@ -985,11 +985,11 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDock *pDock)
 {
-	cd_debug ("on a appuye sur une touche (%d)", pKey->keyval);
+	cd_debug ("on a appuye sur une touche (%d/%d)", pKey->keyval, pKey->hardware_keycode);
 	if (pKey->type == GDK_KEY_PRESS)
 	{
-		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
-		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string);
+		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string, pKey->hardware_keycode);
+		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string, pKey->hardware_keycode);
 	}
 	else if (pKey->type == GDK_KEY_RELEASE)
 	{

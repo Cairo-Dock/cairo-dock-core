@@ -250,14 +250,16 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer);
 CairoContainer *cairo_dock_search_container_from_icon (Icon *icon);
 
 
-/** Let a widget accepts drag-and-drops.
-* @param pWidget a widget.
+void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data);
+
+/** Enable a Container to accept drag-and-drops.
+* @param pContainer a container.
 * @param pCallBack the function that will be called when some data is received.
 * @param data data passed to the callback.
 */
-void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data);
+#define gldi_container_enable_drop(pContainer, pCallBack, data) cairo_dock_allow_widget_to_receive_data (pContainer->pWidget, pCallBack, data)
 
-void cairo_dock_disallow_widget_to_receive_data (GtkWidget *pWidget);
+void gldi_container_disable_drop (CairoContainer *pContainer);
 
 /** Say if a string is an adress (file://xxx, http://xxx, ftp://xxx, etc).
 * @param cString a string.

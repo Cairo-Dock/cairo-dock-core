@@ -554,10 +554,10 @@ int main (int argc, char** argv)
 	}
 	g_print ("\n"
 	" ============================================================================\n"
-	"\tCairo-Dock version :  %s\n"
-	"\tCompiled date      :  %s %s\n"
-	"\tBuilt with GTK     :  %d.%d\n"
-	"\tRunning with OpenGL:  %d\n"
+	"\tCairo-Dock version : %s\n"
+	"\tCompiled date      : %s %s\n"
+	"\tBuilt with GTK     : %d.%d\n"
+	"\tRunning with OpenGL: %d\n"
 	" ============================================================================\n\n",
 		CAIRO_DOCK_VERSION,
 		__DATE__, __TIME__,
@@ -789,10 +789,9 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
-	g_print ("\n\nTODO (2.5):\n"
+	g_print ("\n\nTODO (3.0):\n"
 	"- Icon bg: add ratio\n"
 	"- Default theme more consistent\n"
-	"- Remote Control: launcher num shortkey\n"
 	"- Recent Events: handle recent apps\n"
 	"- Firefox launcher: handle recent URLs\n"
 	"- check for config panel (g_object_unref assertion)\n"
