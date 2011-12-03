@@ -241,11 +241,7 @@ gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback, GtkWidget *
 		gtk_window_set_transient_for (GTK_WINDOW (pWaitingDialog), GTK_WINDOW (pMainWindow));
 		gtk_window_set_modal (GTK_WINDOW (pWaitingDialog), TRUE);
 
-		#if (GTK_MAJOR_VERSION < 3)
-		GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
-		#else
-		GtkWidget *pMainVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
-		#endif
+		GtkWidget *pMainVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
 		gtk_container_add (GTK_CONTAINER (pWaitingDialog), pMainVBox);
 		
 		GtkWidget *pLabel = gtk_label_new (_("Please wait while importing the theme..."));
@@ -573,11 +569,7 @@ static void _cairo_dock_initiate_change_shortkey (GtkMenuItem *pMenuItem, GtkTre
 	gtk_widget_add_events (pInputDialog, GDK_KEY_PRESS_MASK);
 	g_signal_connect (GTK_WIDGET(pInputDialog), "key-press-event", G_CALLBACK(_on_key_grab_cb), pTreeView);
 
-	#if (GTK_MAJOR_VERSION < 3)
-	GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
-	#else
-	GtkWidget *pMainVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
-	#endif
+	GtkWidget *pMainVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
 	gtk_container_add (GTK_CONTAINER (pInputDialog), pMainVBox);
 
 	GtkWidget *pLabel = gtk_label_new (_("Press the shortkey"));

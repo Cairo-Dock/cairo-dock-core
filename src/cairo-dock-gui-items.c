@@ -906,11 +906,7 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 	s_pLauncherWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_icon_from_file (GTK_WINDOW (s_pLauncherWindow), CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 
-	#if (GTK_MAJOR_VERSION < 3)
-	GtkWidget *pMainVBox = gtk_vbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN);
-	#else
-	GtkWidget *pMainVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
-	#endif
+	GtkWidget *pMainVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
 	gtk_container_add (GTK_CONTAINER (s_pLauncherWindow), pMainVBox);
 	
 	#if (GTK_MAJOR_VERSION < 3)
@@ -961,11 +957,7 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 	gtk_paned_pack1 (GTK_PANED (s_pLauncherPane), pLauncherWindow, TRUE, FALSE);
 	
 	//\_____________ We add boutons.
-	#if (GTK_MAJOR_VERSION < 3)
-	GtkWidget *pButtonsHBox = gtk_hbox_new (FALSE, CAIRO_DOCK_FRAME_MARGIN*2);
-	#else
-	GtkWidget *pButtonsHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN*2);
-	#endif
+	GtkWidget *pButtonsHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN*2);
 	gtk_box_pack_end (GTK_BOX (pMainVBox),
 		pButtonsHBox,
 		FALSE,

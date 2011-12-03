@@ -746,11 +746,7 @@ static void _make_double_anim_widget (GtkWidget *pSimpleConfigWindow, GKeyFile *
 	gsize length = 0;
 	gchar **cValues = g_key_file_get_string_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
 
-	#if (GTK_MAJOR_VERSION < 3)
-	GtkWidget *box = gtk_hbox_new (FALSE, CAIRO_DOCK_GUI_MARGIN);
-	#else
-	GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
-	#endif
+	GtkWidget *box = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
 	gtk_box_pack_end (GTK_BOX (myWidget->pKeyBox), box, FALSE, FALSE, 0);
 	
 	GtkWidget *pLabel = gtk_label_new (_("Animation:"));

@@ -215,6 +215,14 @@ void cairo_dock_finish_container (CairoContainer *pContainer);
 	else \
 		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseY, &pContainer->iMouseX, NULL);
 
+#if (GTK_MAJOR_VERSION < 3)
+#define _gtk_hbox_new(m) gtk_hbox_new (FALSE, m)
+#define _gtk_vbox_new(m) gtk_vbox_new (FALSE, m)
+#else
+#define _gtk_hbox_new(m) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, m)
+#define _gtk_vbox_new(m) gtk_box_new (GTK_ORIENTATION_VERTICAL, m)
+#endif
+
 gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const gchar *cSignal);
 gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer);
 gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer);

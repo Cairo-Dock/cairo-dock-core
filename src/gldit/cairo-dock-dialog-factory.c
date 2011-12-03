@@ -275,11 +275,7 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 
 static GtkWidget *_cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize)
 {
-	#if (GTK_MAJOR_VERSION < 3)
-	GtkWidget *pBox = gtk_hbox_new (FALSE, 0);
-	#else
-	GtkWidget *pBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-	#endif
+	GtkWidget *pBox = _gtk_hbox_new (0);
 	if (iWidth != 0 && iHeight != 0)
 		g_object_set (pBox, "height-request", iHeight, "width-request", iWidth, NULL);
 	else if (iWidth != 0)
@@ -522,17 +518,9 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	cairo_dock_set_dialog_orientation (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
 	
 	//\________________ On reserve l'espace pour les decorations.
-	#if (GTK_MAJOR_VERSION < 3)
-	GtkWidget *pMainHBox = gtk_hbox_new (FALSE, 0);
-	#else
-	GtkWidget *pMainHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-	#endif
+	GtkWidget *pMainHBox = _gtk_hbox_new (0);
 	gtk_container_add (GTK_CONTAINER (pDialog->container.pWidget), pMainHBox);
-	#if (GTK_MAJOR_VERSION < 3)
-	pDialog->pLeftPaddingBox = gtk_vbox_new (FALSE, 0);
-	#else
-	pDialog->pLeftPaddingBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-	#endif
+	pDialog->pLeftPaddingBox = _gtk_vbox_new (0);
 	g_object_set (pDialog->pLeftPaddingBox, "width-request", pDialog->iLeftMargin, NULL);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pLeftPaddingBox,
@@ -540,22 +528,14 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		FALSE,
 		0);
 
-	#if (GTK_MAJOR_VERSION < 3)
-	pDialog->pWidgetLayout = gtk_vbox_new (FALSE, 0);
-	#else
-	pDialog->pWidgetLayout = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-	#endif
+	pDialog->pWidgetLayout = _gtk_vbox_new (0);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pWidgetLayout,
 		FALSE,
 		FALSE,
 		0);
 
-	#if (GTK_MAJOR_VERSION < 3)
-	pDialog->pRightPaddingBox = gtk_vbox_new (FALSE, 0);
-	#else
-	pDialog->pRightPaddingBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-	#endif
+	pDialog->pRightPaddingBox = _gtk_vbox_new (0);
 	g_object_set (pDialog->pRightPaddingBox, "width-request", pDialog->iRightMargin, NULL);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pRightPaddingBox,

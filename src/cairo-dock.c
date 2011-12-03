@@ -516,11 +516,7 @@ int main (int argc, char** argv)
 
 			gtk_box_pack_start (GTK_BOX (pContentBox), label, FALSE, FALSE, 0);
 
-			#if (GTK_MAJOR_VERSION < 3)
-			GtkWidget *pAskBox = gtk_hbox_new (FALSE, 3);
-			#else
-			GtkWidget *pAskBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-			#endif
+			GtkWidget *pAskBox = _gtk_hbox_new (3);
 			gtk_box_pack_start (GTK_BOX (pContentBox), pAskBox, FALSE, FALSE, 0);
 			label = gtk_label_new (_("Remember this choice"));
 			GtkWidget *pCheckBox = gtk_check_button_new ();
