@@ -6,6 +6,7 @@ include (CheckLibraryExists)
 include (CheckIncludeFiles)
 include (CheckFunctionExists)
 include (CheckSymbolExists)
+include ("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/GNUInstallDirs.cmake")
 
 ########### project ###############
 
@@ -45,25 +46,27 @@ endif( WIN32 )
 
 set (PACKAGE ${CMAKE_PROJECT_NAME})
 set (GETTEXT_PACKAGE ${PACKAGE})
-set (prefix ${CMAKE_INSTALL_PREFIX})
+
+set (prefix ${CMAKE_INSTALL_PREFIX})  # /usr/local
 set (exec_prefix ${prefix})
-set (datadir ${prefix}/share)
-set (pkgdatadir ${datadir}/cairo-dock)
-set (mandir ${datadir}/man)
+set (datadir "${prefix}/${CMAKE_INSTALL_DATAROOTDIR}")  # (...)/share
+set (pkgdatadir "${datadir}/${CMAKE_PROJECT_NAME}")  # (...)/cairo-dock
+set (mandir "${prefix}/${CMAKE_INSTALL_MANDIR}")  # (...)/man
+
 set (VERSION_HELP "0.9.99") # needed to parse Help.conf.in
 
-if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT "${FORCE_LIB64}" STREQUAL "")  # 64bits and force install in lib64
-	set (libdir ${prefix}/lib64)
+if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND "${FORCE_LIB64}" STREQUAL "yes")  # 64bits and force install in lib64
+	set (libdir "${prefix}/lib64")
 else()
-	set (libdir ${prefix}/lib${LIB_SUFFIX})
+	set (libdir "${prefix}/${CMAKE_INSTALL_LIBDIR}${LIB_SUFFIX}")  # (...)/lib
 endif()
 
-set (includedir ${prefix}/include)
-set (bindir ${prefix}/bin)
+set (includedir "${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")  # (...)/include
+set (bindir "${prefix}/${CMAKE_INSTALL_BINDIR}")  # (...)/bin
 
 ########### dependencies ###############
 
-set (packages_required "cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox libcurl")  # for the .pc
+set (packages_required "gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox libcurl")  # for the .pc
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required}")
 
 set (xextend_required "xtst xcomposite xinerama")  # for the .pc
@@ -74,13 +77,13 @@ else()
 	set (xextend_required)
 endif()
 
-if (NOT "${force-gtk3}" STREQUAL "")
-	set (gtk_required "gtk+-3.0 gthread-2.0")  # for the .pc
-	pkg_check_modules ("GTK" "${gtk_required}")  # the check is not requiered because we can do with GTK2
+if (NOT "${force-gtk2}" STREQUAL "yes")  # by default, we use GTK+3 except if we force the use of GTK+2
+	set (gtk_required "gtk+-3.0")  # for the .pc
+	pkg_check_modules ("GTK" "${gtk_required}")  # the check is not set as 'required' because we can use GTK+2 if GTK+3 isn't available
 endif()
 
 if (NOT "${GTK_FOUND}")
-	set (gtk_required "gtk+-2.0 gthread-2.0")  # for the .pc
+	set (gtk_required "gtk+-2.0")  # for the .pc
 	pkg_check_modules ("GTK" REQUIRED "${gtk_required}")  # the check is requiered this time because we need GTK anyway.
 endif()
 
@@ -124,13 +127,14 @@ add_subdirectory (po)
 set (CAIRO_DOCK_SHARE_DATA_DIR ${pkgdatadir})
 set (CAIRO_DOCK_SHARE_THEMES_DIR ${pkgdatadir}/themes)
 #set (CAIRO_DOCK_MODULES_DIR ${libdir}/cairo-dock)
-set (CAIRO_DOCK_LOCALE_DIR ${datadir}/locale)
+set (CAIRO_DOCK_LOCALE_DIR ${CMAKE_INSTALL_LOCALEDIR})
 set (CAIRO_DOCK_THEMES_DIR "themes")
 set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 
 set (GLDI_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 set (GLDI_SHARE_DATA_DIR ${pkgdatadir})
 set (GLDI_MODULES_DIR ${libdir}/cairo-dock)
+set (GLDI_BIN_DIR ${bindir})
 
 ########### file generation ###############
 

@@ -235,7 +235,7 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 	
 	cd_message ("building theme package ...");
 	int r;
-	if (g_file_test (GLDI_SHARE_DATA_DIR"/../../bin/cairo-dock-package-theme", G_FILE_TEST_EXISTS))
+	if (g_file_test (GLDI_BIN_DIR"/cairo-dock-package-theme", G_FILE_TEST_EXISTS))
 	{
 		gchar *cCommand;
 		const gchar *cTerm = g_getenv ("TERM");

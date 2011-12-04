@@ -2,9 +2,9 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 libdir = @libdir@
 includedir = @includedir@
-pluginsdir=@libdir@/@PACKAGE@
-pluginsdatadir=@datadir@/@PACKAGE@/plug-ins
-gtkversion=@GTK_MAJOR@
+pluginsdir = @libdir@/@PACKAGE@
+pluginsdatadir = @datadir@/@PACKAGE@/plug-ins
+gtkversion = @GTK_MAJOR@
 
 Name: gldi
 Description: openGL Desktop Interface. A library to build advanced interfaces for the desktop (dock, panel, desklet, dialog, ...); it supports both cairo and openGL.
