@@ -1385,7 +1385,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	if (cairo_dock_is_hidden (pDock))  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
 		return ;
 	//\_________________ On recupere l'URI.
-	gchar *cReceivedData = (gchar *) gtk_selection_data_get_text (selection_data);
+	gchar *cReceivedData = (gchar *)gtk_selection_data_get_data (selection_data);
 	g_return_if_fail (cReceivedData != NULL);
 	int length = strlen (cReceivedData);
 	if (cReceivedData[length-1] == '\n')
