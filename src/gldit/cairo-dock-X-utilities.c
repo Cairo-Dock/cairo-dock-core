@@ -1146,6 +1146,7 @@ int cairo_dock_get_xwindow_desktop (Window Xid)
 
 void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLocalPositionY, int *iWidthExtent, int *iHeightExtent)  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel. // sous KDE, x et y sont toujours nuls ! (meme avec XGetWindowAttributes).
 {
+	// get the geometry from X.
 	Window root_return;
 	int x_return=1, y_return=1;
 	unsigned int width_return, height_return, border_width_return, depth_return;
@@ -1153,18 +1154,19 @@ void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLo
 		&root_return,
 		&x_return, &y_return,
 		&width_return, &height_return,
-		&border_width_return, &depth_return);  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel. Note: on startup, until our window is mapped, we are nowhere, so there is no current viewport, and coordinates are 0... it's not a big deal, since we're most likely launched on session startup (no window yet).
+		&border_width_return, &depth_return);  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel.
+	
+	// make another round trip to the server to query the coordinates of the window relatively to the root window (which basically gives us the (x,y) of the window); we need to do this to workaround a strange X bug: x_return and y_return are wrong (0,0, modulo the borders) (on Ubuntu 11.10 + Compiz 0.9/Metacity, not on Debian 6 + Compiz 0.8).
 	int dest_x_return, dest_y_return;
 	Window child_return;
-	XTranslateCoordinates (s_XDisplay, Xid, root_return, x_return, y_return, &dest_x_return, &dest_y_return, &child_return);  // translate into the coordinate space of the root window. we need to do this, because (x_return,;y_return) is always (0;0)
+	XTranslateCoordinates (s_XDisplay, Xid, root_return, 0, 0, &dest_x_return, &dest_y_return, &child_return);  // translate into the coordinate space of the root window. we need to do this, because (x_return,;y_return) is always (0;0)
 	//g_print (" %d;%d %dx%d\n", x_return, y_return, width_return, height_return);
-	//g_print (" -> %d;%d\n", newx, newy);
+	//g_print (" -> %d;%d\n", dest_x_return, dest_y_return);
 	
-	*iLocalPositionX = dest_x_return/**x_return*/;  // on pourrait tenir compte de border_width_return...
-	*iLocalPositionY = dest_y_return/**y_return*/;  // idem.
-	*iWidthExtent = width_return;  // idem.
-	*iHeightExtent = height_return;  // idem.
-	///g_print ("%s () -> %d;%d %dx%d / %d,%d\n", __func__, x_return, y_return, *iWidthExtent, *iHeightExtent, border_width_return, depth_return);
+	*iLocalPositionX = dest_x_return;
+	*iLocalPositionY = dest_y_return;
+	*iWidthExtent = width_return;  // unfortunately border_width_return is always 0, so we can't use it here :-/
+	*iHeightExtent = height_return;
 }
 
 void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY)

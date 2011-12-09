@@ -591,9 +591,11 @@ static void _on_change_window_desktop (Icon *icon)
 static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 {
 	Window Xid = icon->Xid;
+	int x, y;
+	int w = e->width, h = e->height;
 	
 	#ifdef HAVE_XEXTEND
-	if (e->width != icon->windowGeometry.width || e->height != icon->windowGeometry.height)
+	if (w != icon->windowGeometry.width || h != icon->windowGeometry.height)
 	{
 		if (icon->iBackingPixmap != 0)
 			XFreePixmap (s_XDisplay, icon->iBackingPixmap);
@@ -606,15 +608,22 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 			icon->iBackingPixmap = 0;
 	}
 	#endif
-	icon->windowGeometry.width = e->width;
-	icon->windowGeometry.height = e->height;
-	icon->windowGeometry.x = e->x;
-	icon->windowGeometry.y = e->y;
-	icon->iViewPortX = e->x / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportX;
-	icon->iViewPortY = e->y / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportY;
+	
+	// get the correct coordinates (same reason as in cairo_dock_get_xwindow_geometry(), this is a workaround to a bug in X; we didn't need that before Ubuntu 11.10).
+	Window child, root = DefaultRootWindow (s_XDisplay);
+	XTranslateCoordinates (s_XDisplay, Xid, root, 0, 0, &x, &y, &child);
+	//g_print ("%s ((%d;%d) <> (%d;%d), %dx%d)\n", __func__, x, y, e->x, e->y, w, h);
+	
+	icon->windowGeometry.width = w;
+	icon->windowGeometry.height = h;
+	icon->windowGeometry.x = x;
+	icon->windowGeometry.y = y;
+	icon->iViewPortX = x / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportX;
+	icon->iViewPortY = y / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportY;
+	
 	
 	// on regarde si l'appli est sur le viewport courant.
-	if (e->x + e->width <= 0 || e->x >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || e->y + e->height <= 0 || e->y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // not on this desktop (actually, it may be only a little bit on this desktop ... maybe we should use a % of the width, or a margin ...)
+	if (x + w <= 0 || x >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || y + h <= 0 || y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // not on this desktop (actually, it may be only a little bit on this desktop ... maybe we should use a % of the width, or a margin ...)
 	{
 		// applis du bureau courant seulement.
 		if (myTaskbarParam.bAppliOnCurrentDesktopOnly)
@@ -637,7 +646,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		// applis du bureau courant seulement.
 		if (myTaskbarParam.bAppliOnCurrentDesktopOnly && icon->cParentDockName == NULL && myTaskbarParam.bShowAppli)
 		{
-			cd_message ("cette fenetre est sur le bureau courant (%d;%d)", e->x, e->y);
+			cd_message ("cette fenetre est sur le bureau courant (%d;%d)", x, y);
 			cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		
