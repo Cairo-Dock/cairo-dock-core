@@ -21,7 +21,7 @@
 #ifndef __EGG_ACCELERATORS_H__
 #define __EGG_ACCELERATORS_H__
 
-#if (GTK_MAJOR_VERSION < 3)
+#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION > 20)
 #include <gdk/gdkkeysyms-compat.h>
 #endif
 #include <gdk/gdk.h>
