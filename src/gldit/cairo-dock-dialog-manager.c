@@ -274,6 +274,7 @@ static gboolean on_key_press_dialog (GtkWidget *pWidget,
 		switch (pKey->keyval)
 		{
 			case GLDI_KEY(Return) :
+			case GLDI_KEY(KP_Enter) :
 				pDialog->action_on_answer (-1, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
 				cairo_dock_dialog_unreference (pDialog);
 			break ;
