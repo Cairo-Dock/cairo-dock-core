@@ -32,6 +32,7 @@
 #include "cairo-dock-module-factory.h"  // cairo_dock_reload_module_instance
 #include "cairo-dock-log.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iAppliMaxNameLength
+#include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"  // cairo_dock_synchronize_one_sub_dock_orientation
 #include "cairo-dock-backends-manager.h"  // cairo_dock_get_icon_container_renderer
 #include "cairo-dock-icon-facility.h"
@@ -347,10 +348,10 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContain
 
 void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadAppletsToo, gboolean bRecursive)
 {
-	cd_message ("%s (%d, %d)", __func__, bReloadAppletsToo, bRecursive);
+	g_print ("************%s (%d, %d, %d)\n", __func__, pDock->bIsMainDock, bReloadAppletsToo, bRecursive);
 
-	double fFlatDockWidth = - myIconsParam.iIconGap;
-	pDock->iMaxIconHeight = 0;
+	///double fFlatDockWidth = - myIconsParam.iIconGap;
+	///pDock->iMaxIconHeight = 0;
 	Icon* icon;
 	GList* ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -379,11 +380,12 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadApplet
 		}
 		
 		//g_print (" =size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);
-		fFlatDockWidth += myIconsParam.iIconGap + icon->fWidth;
+		/**fFlatDockWidth += myIconsParam.iIconGap + icon->fWidth;
 		if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
-			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
+			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);*/
 	}
-	pDock->fFlatDockWidth = (int) fFlatDockWidth;  /// (int) n'est plus tellement necessaire ...
+	///pDock->fFlatDockWidth = (int) fFlatDockWidth;  /// (int) n'est plus tellement necessaire ...
+	cairo_dock_update_dock_size (pDock);
 }
 
 void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer)
