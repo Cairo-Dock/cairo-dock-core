@@ -221,6 +221,8 @@ static gchar * _make_simple_conf_file (void)
 		iTaskbarType = 3;
 	s_iTaskbarType = iTaskbarType;
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "taskbar", iTaskbarType);
+
+	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "place icons", myTaskbarParam.iIconPlacement);
 	
 	// animations
 	CairoDockModule *pModule;
@@ -523,6 +525,9 @@ static gboolean on_apply_config_simple (gpointer data)
 		}
 		s_iTaskbarType = iTaskbarType;
 	}
+
+	int iPlaceIcons = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "place icons", NULL);
+	g_key_file_set_integer (pKeyFile, "TaskBar", "place icons", iPlaceIcons);
 	
 	// animations
 	gsize length;

@@ -37,12 +37,15 @@ show_on_click = 0
 #F-[Taskbar;@pkgdatadir@/icons/icon-taskbar.png]
 frame_task =
 
-#l-[None;Minimalistic;Integrated;Separated] Behaviour of the Taskbar:
+#Y-[None;0;0;Minimalistic;1;1;Integrated;1;1;Separated;1;1] Behaviour of the Taskbar:
 #{None       : Don't show opened windows in the dock.
 #Minimalistic: Mix applications with its launcher, show other windows only if they are minimized (like in MacOSX).
 #Integrated  : Mix applications with its launcher, show all others windows and group windows togather in sub-dock (default).
 #Separated   : Separate the taskbar from the launchers and only show windows that are on the current desktop.}
 taskbar = 2
+
+#l-[At the beginning of the dock;Before the launchers;After the launchers;At the end of the dock] Place new icons
+place icons = 2
 
 
 #F[Icons' animations and effects;@pkgdatadir@/icons/icon-movment.png]
