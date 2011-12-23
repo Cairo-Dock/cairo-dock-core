@@ -430,10 +430,10 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 				cairo_dock_set_icon_name (pInstance->pModule->pVisitCard->cModuleName, pIcon, pContainer);
 			if (cairo_dock_check_unique_subdock_name (pIcon))
 				cairo_dock_set_icon_name (pIcon->cName, pIcon, pContainer);
-			pIcon->pSubDock = cairo_dock_create_subdock_from_scratch (pIconsList, pIcon->cName, pInstance->pDock);
-			cairo_dock_insert_automatic_separators_in_dock (pIcon->pSubDock);
+			pIcon->pSubDock = cairo_dock_create_subdock (pIcon->cName, cDockRenderer, pInstance->pDock, pIconsList);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
+			///cairo_dock_update_dock_size (pIcon->pSubDock);
 		}
 		else
 		{
@@ -447,9 +447,10 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 				cairo_dock_trigger_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
 			}
 			g_list_free (pIconsList);
+			
+			cairo_dock_set_renderer (pIcon->pSubDock, cDockRenderer);
+			cairo_dock_update_dock_size (pIcon->pSubDock);
 		}
-		cairo_dock_set_renderer (pIcon->pSubDock, cDockRenderer);
-		cairo_dock_update_dock_size (pIcon->pSubDock);
 		
 		if (pIcon->iSubdockViewType != 0)  // trigger the redraw after the icons are loaded.
 			cairo_dock_trigger_redraw_subdock_content_on_icon (pIcon);
@@ -487,7 +488,7 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 				cairo_dock_set_icon_name (pInstance->pModule->pVisitCard->cModuleName, pIcon, pContainer);
 			if (cairo_dock_check_unique_subdock_name (pIcon))
 				cairo_dock_set_icon_name (pIcon->cName, pIcon, pContainer);
-			pIcon->pSubDock = cairo_dock_create_subdock_from_scratch (NULL, pIcon->cName, pInstance->pDock);
+			pIcon->pSubDock = cairo_dock_create_subdock (pIcon->cName, NULL, pInstance->pDock, NULL);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
 		}

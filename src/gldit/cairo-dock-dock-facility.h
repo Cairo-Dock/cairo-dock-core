@@ -121,7 +121,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock);
 *@param iXOffset an offset on the position of the first icon.
 *@return the element containing the most left icon.
 */
-GList * cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth, int iXOffset);
+GList * cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth);
 
 double cairo_dock_calculate_max_dock_width (CairoDock *pDock, GList *pFirstDrawnElement, double fFlatDockWidth, double fWidthConstraintFactor, double fExtraWidth);
 

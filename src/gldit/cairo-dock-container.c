@@ -109,6 +109,7 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	}
 	if (pContainer->iAnimationDeltaT == 0)
 		pContainer->iAnimationDeltaT = 30;
+	pContainer->fRatio = 1;
 	
 	g_signal_connect (G_OBJECT (pWindow),
 		"delete-event",

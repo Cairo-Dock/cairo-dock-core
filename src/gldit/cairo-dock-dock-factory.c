@@ -93,18 +93,17 @@ static void _cairo_dock_set_icon_size (CairoContainer *pDock, Icon *icon)
 	}
 }
 
-CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
+CairoDock *cairo_dock_new_dock (void)
 {
 	//\__________________ On cree un dock.
 	CairoDock *pDock = g_new0 (CairoDock, 1);
 	pDock->container.iType = CAIRO_DOCK_TYPE_DOCK;
 	
 	pDock->iRefCount = 0;  // c'est un dock racine par defaut.
-	pDock->container.fRatio = 1.;
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fFlatDockWidth = - myIconsParam.iIconGap;
-	pDock->container.iMouseX = -1; // utile ?
-	pDock->container.iMouseY = -1;
+	///pDock->container.iMouseX = -1; // utile ?
+	///pDock->container.iMouseY = -1;
 	pDock->fMagnitudeMax = 1.;
 	pDock->fPostHideOffset = 1.;
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
@@ -118,9 +117,6 @@ CairoDock *cairo_dock_new_dock (const gchar *cRendererName)
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
-	
-	//\__________________ On associe un renderer.
-	cairo_dock_set_renderer (pDock, cRendererName);
 	
 	//\__________________ On connecte les evenements a la fenetre.
 	gtk_widget_add_events (pWindow,
@@ -251,22 +247,19 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	g_free (pDock);
 }
 
-void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock)
+void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName)
 {
-	CairoDockPositionType iScreenBorder = ((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp);
-	cd_debug ("sub-dock's position : %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
-	pDock->container.bIsHorizontal = pParentDock->container.bIsHorizontal;
-	pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
-	if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
-	{
-		cd_debug ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
-		cairo_dock_reload_reflects_in_dock (pDock);
-	}
-	pDock->iScreenOffsetX = pParentDock->iScreenOffsetX;
-	pDock->iScreenOffsetY = pParentDock->iScreenOffsetY;
+	//\__________________ set sub-dock flag
+	pDock->iRefCount = 1;
 	gtk_window_set_title (GTK_WINDOW (pDock->container.pWidget), "cairo-dock-sub");
 	
-	pDock->bAutoHide = FALSE;
+	//\__________________ set the orientation relatively to the parent dock
+	pDock->container.bIsHorizontal = pParentDock->container.bIsHorizontal;
+	pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
+	pDock->iScreenOffsetX = pParentDock->iScreenOffsetX;
+	pDock->iScreenOffsetY = pParentDock->iScreenOffsetY;
+	
+	//\__________________ update the ratio on the icons
 	double fPrevRatio = pDock->container.fRatio;
 	pDock->container.fRatio = MIN (pDock->container.fRatio, myBackendsParam.fSubDockSizeRatio);
 	
@@ -276,14 +269,14 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock)
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		icon->fWidth *= pDock->container.fRatio / fPrevRatio;
-		icon->fHeight *= pDock->container.fRatio / fPrevRatio;
+		cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
+		icon->fWidth *= pDock->container.fRatio;
+		icon->fHeight *= pDock->container.fRatio;
 		pDock->fFlatDockWidth += icon->fWidth + myIconsParam.iIconGap;
 	}
 	pDock->iMaxIconHeight *= pDock->container.fRatio / fPrevRatio;
-
-	cairo_dock_set_default_renderer (pDock);
 	
+	//\__________________ remove any input shape
 	if (pDock->pShapeBitmap != NULL)
 	{
 		gldi_shape_destroy (pDock->pShapeBitmap);
@@ -294,7 +287,14 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock)
 			pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
 		}
 	}
+	
+	//\__________________ hide the dock
+	pDock->bAutoHide = FALSE;
 	gtk_widget_hide (pDock->container.pWidget);
+	
+	//\__________________ set a renderer
+	cairo_dock_set_renderer (pDock, cRendererName);
+	
 	cairo_dock_update_dock_size (pDock);
 }
 
@@ -382,6 +382,8 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		icon->fInsertRemoveFactor = 0.;
 	if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
+	if (pDock->iRefCount == 0)
+		g_print ("update -> %d/%d\n", (int)pDock->fFlatDockWidth, pDock->iMaxDockWidth);
 	
 	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{

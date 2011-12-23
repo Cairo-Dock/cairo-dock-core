@@ -382,7 +382,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				cd_message (" - %s va etre supprimee", pIcon->cName);
 				cairo_dock_remove_icon_from_dock (pDock, pIcon);  // enleve le separateur automatique avec; supprime le .desktop et le sous-dock des lanceurs; stoppe les applets; marque le theme.
 				
-				if (pIcon->cClass != NULL && pDock == cairo_dock_search_dock_from_name (pIcon->cClass))
+				if (pIcon->cClass != NULL && pDock == cairo_dock_get_class_subdock (pIcon->cClass))
 				{
 					gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pDock, pIcon->cClass);
 					if (bEmptyClassSubDock)

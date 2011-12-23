@@ -499,7 +499,8 @@ static void _cairo_dock_remove_launcher (GtkMenuItem *pMenuItem, gpointer *data)
 	if (answer != GTK_RESPONSE_YES)
 		return ;
 	
-	if (icon->pSubDock != NULL)  // on bazarde le sous-dock.
+	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon)
+	&& icon->pSubDock != NULL)  // remove the sub-dock's content from the theme or dispatch it in the main dock.
 	{
 		gboolean bDestroyIcons = TRUE;
 		if (icon->pSubDock->icons != NULL)  // on propose de repartir les icones de son sous-dock dans le dock principal.
@@ -920,7 +921,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 				
 				if (pIcon->pModuleInstance->pModule->pVisitCard->bMultiInstance)
 				{
-					_add_entry_in_menu (_("Launch another instance of this applet"), GTK_STOCK_ADD, _cairo_dock_add_module_instance, pItemSubMenu);
+					_add_entry_in_menu (_("Duplicate"), GTK_STOCK_ADD, _cairo_dock_add_module_instance, pItemSubMenu);  // Launch another instance of this applet
 				}
 				
 				if (CAIRO_DOCK_IS_DOCK (pContainer) && pIcon->cParentDockName != NULL)  // sinon bien sur ca n'est pas la peine de presenter l'option (Cairo-Penguin par exemple)
@@ -1086,6 +1087,15 @@ static void _cairo_dock_minimize_appli (GtkMenuItem *pMenuItem, gpointer *data)
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		cairo_dock_minimize_xwindow (icon->Xid);
+	}
+}
+static void _cairo_dock_lower_appli (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	if (CAIRO_DOCK_IS_APPLI (icon))
+	{
+		cairo_dock_lower_xwindow (icon->Xid);
 	}
 }
 
@@ -1510,21 +1520,30 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		//\_________________________ On rajoute les actions courantes sur les icones d'applis.
 		_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
 		
-		_add_entry_in_menu (_("Show"), GTK_STOCK_FIND, _cairo_dock_show_appli, menu);
+		if (pAppli
+		&& (pAppli->bIsHidden || pAppli->Xid != cairo_dock_get_current_active_window () || !cairo_dock_appli_is_on_current_desktop (pAppli)))
+			_add_entry_in_menu (_("Show"), GTK_STOCK_FIND, _cairo_dock_show_appli, menu);
 		
 		_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximise") : _("Maximise"), icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg", _cairo_dock_maximize_appli, menu);
 		
 		if (! icon->bIsHidden)
 		{
-			if (myTaskbarParam.iActionOnMiddleClick == 2)  // minimize
+			if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
 				cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
 			else
 				cLabel = g_strdup (_("Minimise"));
 			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_appli, menu);
 			g_free (cLabel);
+			
+			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
+				cLabel = g_strdup_printf ("%s (%s)", _("Lower"), _("middle-click"));
+			else
+				cLabel = g_strdup (_("Lower"));
+			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, menu);
+			g_free (cLabel);
 		}
 		
-		if (myTaskbarParam.iActionOnMiddleClick == 1)  // close
+		if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
 			cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
 		else
 			cLabel = g_strdup (_("Close"));

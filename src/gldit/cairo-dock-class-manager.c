@@ -117,6 +117,53 @@ static gboolean _cairo_dock_add_inhibitor_to_class (const gchar *cClass, Icon *p
 	return TRUE;
 }
 
+CairoDock *cairo_dock_get_class_subdock (const gchar *cClass)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	g_return_val_if_fail (pClassAppli!= NULL, NULL);
+	
+	return cairo_dock_search_dock_from_name (pClassAppli->cDockName);
+}
+
+gchar *cairo_dock_get_class_subdock_name (const gchar *cClass)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	g_return_val_if_fail (pClassAppli!= NULL, NULL);
+	
+	return pClassAppli->cDockName;
+}
+
+CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pParentDock)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	g_return_val_if_fail (pClassAppli!= NULL, NULL);
+	
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pClassAppli->cDockName);
+	if (pDock == NULL)  // cDockName not yet defined, or previous class subdock no longer exists
+	{
+		g_free (pClassAppli->cDockName);
+		pClassAppli->cDockName = cairo_dock_get_unique_dock_name (cClass);
+		pDock = cairo_dock_create_subdock (pClassAppli->cDockName, NULL, pParentDock, NULL);
+	}
+	
+	return pDock;
+}
+
+static void cairo_dock_destroy_class_subdock (const gchar *cClass)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	g_return_val_if_fail (pClassAppli!= NULL, NULL);
+	
+	CairoDock *pDock = cairo_dock_search_dock_from_name (pClassAppli->cDockName);
+	if (pDock)
+	{
+		cairo_dock_destroy_dock (pDock, pClassAppli->cDockName);
+	}
+	
+	g_free (pClassAppli->cDockName);
+	pClassAppli->cDockName = NULL;
+}
+
 gboolean cairo_dock_add_appli_to_class (Icon *pIcon)
 {
 	g_return_val_if_fail (pIcon!= NULL, FALSE);
@@ -219,7 +266,7 @@ static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 	}
 }
 
-static Window _cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean bDetachAll)
+static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, 0);
 	
@@ -236,28 +283,28 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean b
 		if (pParentDock == NULL)  // pas dans un dock => rien a faire.
 			continue;
 		
-		cd_debug ("detachement de l'icone %s (%d;%d)", pIcon->cName, bDetachAll, XFirstFoundId);
+		cd_debug ("detachement de l'icone %s (%d)", pIcon->cName, XFirstFoundId);
 		gchar *cParentDockName = pIcon->cParentDockName;
 		pIcon->cParentDockName = NULL;  // astuce.
 		bDetached = cairo_dock_detach_icon_from_dock (pIcon, pParentDock);
 		if (bDetached)  // detachee => on met a jour son dock.
 		{
-			if (! pParentDock->bIsMainDock)  // sous-dock de classe => on le met a jour / detruit.
+			if (pParentDock == cairo_dock_get_class_subdock (cClass))  // sous-dock de classe => on le met a jour / detruit.
 			{
 				if (pParentDock->icons == NULL)  // devient vide => on le detruit.
 				{
 					if (pParentDock->iRefCount != 0)  // on vire l'icone de paille qui pointe sur ce sous-dock.
 					{
-						CairoDock *pMainDock=NULL;
+						CairoDock *pMainDock = NULL;
 						Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pMainDock);
-						if (pMainDock && pPointingIcon && pPointingIcon->cDesktopFileName == NULL)
+						if (pMainDock && CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))
 						{
 							cairo_dock_remove_icon_from_dock (pMainDock, pPointingIcon);
 							bNeedsRedraw |= pMainDock->bIsMainDock;
 							cairo_dock_free_icon (pPointingIcon);
 						}
 					}
-					cairo_dock_destroy_dock (pParentDock, cParentDockName);
+					cairo_dock_destroy_class_subdock (cClass);
 				}
 				else  // non vide => on le met a jour.
 					cairo_dock_update_dock_size (pParentDock);
@@ -270,8 +317,6 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass, gboolean b
 		if (XFirstFoundId == 0)  // on recupere la 1ere appli de la classe.
 		{
 			XFirstFoundId = pIcon->Xid;
-			if (! bDetachAll)
-				break;
 		}
 	}
 	if (! cairo_dock_is_loading () && bNeedsRedraw)  // mise a jour du main dock en 1 coup.
@@ -301,7 +346,7 @@ gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 	// if launchers are mixed with applis, steal applis icons.
 	if (!myTaskbarParam.bMixLauncherAppli)
 		return TRUE;
-	Window XFirstFoundId = _cairo_dock_detach_appli_of_class (cClass, TRUE);  // detach existing applis, and then retach them to the inhibitor.
+	Window XFirstFoundId = _cairo_dock_detach_appli_of_class (cClass);  // detach existing applis, and then retach them to the inhibitor.
 	if (pInhibitorIcon != NULL)
 	{
 		// inhibitor takes control of the first existing appli of the class.
@@ -495,14 +540,11 @@ void cairo_dock_detach_Xid_from_inhibitors (Window Xid, const gchar *cClass)
 					if (pSameClassIcon != NULL)  // this icon will be inhibited, we need to detach it if needed
 					{
 						cd_message ("  c'est %s qui va la remplacer", pSameClassIcon->cName);
-						CairoDock *pClassSubDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
-						if (pClassSubDock != NULL)  // it's inside a dock -> detach it
+						CairoDock *pSameClassDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
+						if (pSameClassDock != NULL)  // it's inside a dock -> detach it
 						{
-							cairo_dock_detach_icon_from_dock (pSameClassIcon, pClassSubDock);
-							if (pClassSubDock->icons == NULL && pClassSubDock == cairo_dock_search_dock_from_name (cClass))  // le sous-dock de la classe devient vide.
-								cairo_dock_destroy_dock (pClassSubDock, cClass);
-							else
-								cairo_dock_update_dock_size (pClassSubDock);
+							cairo_dock_detach_icon_from_dock (pSameClassIcon, pSameClassDock);
+							cairo_dock_update_dock_size (pSameClassDock);  // it can't be the class sub-dock, because pIcon had the Xid, so it doesn't hold the class sub-dock and the class is not grouped (otherwise they would all be in the class sub-dock).
 						}
 					}
 				}
@@ -782,20 +824,23 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 	cd_debug ("%s (%s, %d)", __func__, cClass, g_list_length (pDock->icons));
 	if (pDock->iRefCount == 0)
 		return FALSE;
-	if (pDock->icons == NULL)  // ne devrait plus arriver.
+	if (pDock->icons == NULL)  // shouldn't happen, handle this case and make some noise.
 	{
 		cd_warning ("the %s class sub-dock has no element, which is probably an error !\nit will be destroyed.", cClass);
 		CairoDock *pFakeParentDock = NULL;
 		Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
-		cairo_dock_destroy_dock (pDock, cClass);
+		cairo_dock_destroy_class_subdock (cClass);
 		pFakeClassIcon->pSubDock = NULL;
-		cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
-		cairo_dock_free_icon (pFakeClassIcon);
-		cairo_dock_update_dock_size (pFakeParentDock);
-		cairo_dock_calculate_dock_icons (pFakeParentDock);
+		if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon))
+		{
+			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
+			cairo_dock_free_icon (pFakeClassIcon);
+			cairo_dock_update_dock_size (pFakeParentDock);
+			cairo_dock_calculate_dock_icons (pFakeParentDock);
+		}
 		return TRUE;
 	}
-	else if (pDock->icons->next == NULL)
+	else if (pDock->icons->next == NULL)  // only 1 icon left in the sub-dock -> destroy it.
 	{
 		cd_debug ("   le sous-dock de la classe %s n'a plus que 1 element et va etre vide puis detruit", cClass);
 		Icon *pLastClassIcon = pDock->icons->data;
@@ -812,12 +857,12 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			pLastClassIcon->cParentDockName = g_strdup (pFakeClassIcon->cParentDockName);
 			pLastClassIcon->fOrder = pFakeClassIcon->fOrder;
 			
-			cd_debug ("on enleve l'icone de paille");
-			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);  // a faire avant que l'icone n'ait plus de sous-dock, sinon elle est consideree comme un separateur auto, et du coup le separateur n'est pas enleve.
-			
 			cd_debug (" on detruit le sous-dock...");
-			cairo_dock_destroy_dock (pDock, cClass);
+			cairo_dock_destroy_class_subdock (cClass);
 			pFakeClassIcon->pSubDock = NULL;
+			
+			cd_debug ("on enleve l'icone de paille");
+			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
 			
 			cd_debug ("on detruit l'icone de paille");
 			cairo_dock_free_icon (pFakeClassIcon);
@@ -845,7 +890,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			g_free (pLastClassIcon->cParentDockName);
 			pLastClassIcon->cParentDockName = NULL;
 			
-			cairo_dock_destroy_dock (pDock, cClass);
+			cairo_dock_destroy_class_subdock (cClass);
 			pFakeClassIcon->pSubDock = NULL;
 			cd_debug ("sanity check : pFakeClassIcon->Xid : %d", pFakeClassIcon->Xid);
 			if (! bLastIconIsRemoving)
@@ -1695,7 +1740,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	
 	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes && pClassAppli->cDesktopFile)  // we already searched this class, and we did find its .desktop file, so let's end here.
 	{
-		g_print ("class %s already known (%s)\n", cClass, pClassAppli->cDesktopFile);
+		g_print ("class %s already known (%s)\n", cClass?cClass:cDesktopFile, pClassAppli->cDesktopFile);
 		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // if the cStartupWMClass was not defined in the .desktop file, store it now.
 			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 		return (cClass?cClass:g_strdup (cDesktopFile));

@@ -62,7 +62,7 @@ static gboolean cd_default_view_free_data (gpointer pUserData, CairoDock *pDock)
 
 static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
-	pDock->pFirstDrawnElement = cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth, pDock->iScrollOffset);
+	pDock->pFirstDrawnElement = cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth);
 
 	pDock->iDecorationsHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myDocksParam.iFrameMargin;
 

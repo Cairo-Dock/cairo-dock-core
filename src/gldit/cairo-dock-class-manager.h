@@ -51,6 +51,7 @@ struct _CairoDockClassAppli {
 	gchar *cWorkingDirectory;
 	GList *pMenuItems;
 	gint iAge;  // age of the first created window of this class
+	gchar *cDockName;  // unique name of the class sub-dock
 };
 
 /*
@@ -64,6 +65,12 @@ void cairo_dock_initialize_class_manager (void);
 * @return la liste des applis de cettte classe.
 */
 const GList *cairo_dock_list_existing_appli_with_class (const gchar *cClass);
+
+CairoDock *cairo_dock_get_class_subdock (const gchar *cClass);
+
+gchar *cairo_dock_get_class_subdock_name (const gchar *cClass);
+
+CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pParentDock);
 
 /*
 * Enregistre une icone de lanceur/applet dans sa classe. N'inhinibe pas la classe.

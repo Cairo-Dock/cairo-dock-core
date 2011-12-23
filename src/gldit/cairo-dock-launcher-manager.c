@@ -61,9 +61,9 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 	if (icon->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER && icon->cName != NULL)
 	{
 		CairoDock *pChildDock = cairo_dock_search_dock_from_name (icon->cName);
-		if (pChildDock && pChildDock->iRefCount > 0 && pChildDock != icon->pSubDock)  // un sous-dock de meme nom existe deja, on change le nom de l'icone.
+		if (pChildDock && (pChildDock->iRefCount > 0 || pChildDock->bIsMainDock))  // un sous-dock de meme nom existe deja, on change le nom de l'icone.
 		{
-			gchar *cUniqueDockName = cairo_dock_get_unique_dock_name ("New sub-dock");
+			gchar *cUniqueDockName = cairo_dock_get_unique_dock_name (icon->cName);
 			cd_warning ("A sub-dock with the same name (%s) already exists, we'll change it to %s", icon->cName, cUniqueDockName);
 			gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 			cairo_dock_update_conf_file (cDesktopFilePath,
@@ -76,19 +76,14 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 		}
 		if (pChildDock == NULL)
 		{
-			cd_message ("le dock fils (%s) n'existe pas, on le cree avec la vue %s", icon->cName, cRendererName);
-			icon->pSubDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cName, pParentDock);
+			cd_message ("le dock fils (%s) n'existe pas, on le cree avec la vue %s", icon->cName);
+			icon->pSubDock = cairo_dock_create_subdock (icon->cName, cRendererName, pParentDock, NULL);
 		}
-		else if (pChildDock != icon->pSubDock)
+		else
 		{
-			cairo_dock_reference_dock (pChildDock, pParentDock);
+			cairo_dock_main_dock_to_sub_dock (pChildDock, pParentDock, cRendererName);
 			icon->pSubDock = pChildDock;
 			cd_message ("le dock devient un dock fils (%d, %d)", pChildDock->container.bIsHorizontal, pChildDock->container.bDirectionUp);
-		}
-		if (cRendererName != NULL && icon->pSubDock != NULL)
-		{
-			cairo_dock_set_renderer (icon->pSubDock, cRendererName);
-			cairo_dock_update_dock_size (icon->pSubDock);
 		}
 	}
 	
@@ -279,33 +274,43 @@ void cairo_dock_reload_launcher (Icon *icon)
 		return ;
 	}
 	
-	//\_____________ Ensure sub-dock's name unicity.
+	//\_____________ Rename sub-dock and ensure sub-dock's name unicity before we reload the icon.
 	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
 	{
+		// get the new name of the icon (and therefore of its sub-dock).
 		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 		GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
 		g_return_if_fail (pKeyFile != NULL);
+		gchar *cName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Name", NULL);
 		
-		if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // on assure l'unicite du nom du sous-dock ici, car cela n'est volontairement pas fait dans la fonction de creation de l'icone.
+		// set a default name if none.
+		if (cName == NULL || *cName == '\0')  // no name defined, we need one.
 		{
-			gchar *cName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Name", NULL);
-			if (cName == NULL || *cName == '\0')
-				cName = g_strdup ("dock");
-			if (icon->cName == NULL || strcmp (icon->cName, cName) != 0)  // le nom a change.
-			{
-				gchar *cUniqueName = cairo_dock_get_unique_dock_name (cName);
-				if (strcmp (cName, cUniqueName) != 0)
-				{
-					g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
-					cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-					cd_debug ("on renomme a l'avance le sous-dock en %s", cUniqueName);
-					if (icon->pSubDock != NULL)
-						cairo_dock_rename_dock (icon->cName, icon->pSubDock, cUniqueName);  // on le renomme ici pour eviter de transvaser dans un nouveau dock (ca marche aussi ceci dit).
-				}
-				g_free (cUniqueName);
-			}
-			g_free (cName);
+			if (icon->cName != NULL)
+				cName = g_strdup (icon->cName);
+			else
+				cName = cairo_dock_get_unique_dock_name ("sub-dock");
+			g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cName);
+			cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
 		}
+		
+		// if it has changed, ensure its unicity, and rename the sub-dock to be able to link with it again.
+		if (icon->cName == NULL || strcmp (icon->cName, cName) != 0)  // name has changed -> rename the sub-dock.
+		{
+			// ensure unicity
+			gchar *cUniqueName = cairo_dock_get_unique_dock_name (cName);
+			if (strcmp (cName, cUniqueName) != 0)
+			{
+				g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
+				cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
+			}
+			// rename sub-dock
+			cd_debug ("on renomme a l'avance le sous-dock en %s", cUniqueName);
+			if (icon->pSubDock != NULL)
+				cairo_dock_rename_dock (icon->cName, icon->pSubDock, cUniqueName);  // on le renomme ici pour eviter de transvaser dans un nouveau dock (ca marche aussi ceci dit).
+			g_free (cUniqueName);
+		}
+		g_free (cName);
 		
 		g_key_file_free (pKeyFile);
 		g_free (cDesktopFilePath);
@@ -317,76 +322,29 @@ void cairo_dock_reload_launcher (Icon *icon)
 	CairoDock *pDock = cairo_dock_search_dock_from_name (cPrevDockName);  // changement de l'ordre ou du container.
 	double fOrder = icon->fOrder;
 	
-	CairoDock *pSubDock = icon->pSubDock;
-	///icon->pSubDock = NULL;
 	gchar *cClass = icon->cClass;
 	icon->cClass = NULL;
 	gchar *cDesktopFileName = icon->cDesktopFileName;
 	icon->cDesktopFileName = NULL;
 	gchar *cName = icon->cName;
 	icon->cName = NULL;
-	gchar *cRendererName = NULL;
-	if (pSubDock != NULL)
-	{
-		cRendererName = pSubDock->cRendererName;
-		pSubDock->cRendererName = NULL;
-	}
 	
-	//\_____________ On recharge l'icone.
+	//\_____________ get its new params.
 	gchar *cSubDockRendererName = NULL;
 	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon, &cSubDockRendererName);
 	g_return_if_fail (icon->cDesktopFileName != NULL);
 	
-	CairoDock *pNewDock = _cairo_dock_handle_container (icon, cSubDockRendererName);
-	g_free (cSubDockRendererName);
+	// get its (possibly new) container.
+	CairoDock *pNewDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	if (pNewDock == NULL)
+	{
+		cd_message ("le dock parent (%s) n'existe pas, on le cree", icon->cParentDockName);
+		pNewDock = cairo_dock_create_dock (icon->cParentDockName, NULL);
+	}
 	g_return_if_fail (pNewDock != NULL);
 	
-	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // petite optimisation : vu que la taille du lanceur n'a pas change, on evite de detruire et refaire sa surface.
-	{
-		cairo_dock_draw_subdock_content_on_icon (icon, pNewDock);
-	}
-	else
-	{
-		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pNewDock));
-	}
-	
-	//g_print ("icon : %.1fx%.1f", icon->fWidth, icon->fHeight);
-	
-	if (cName && ! icon->cName)
-		icon->cName = g_strdup (" ");
-	
-	if (cairo_dock_strings_differ (cName, icon->cName))
-		cairo_dock_load_icon_text (icon, &myIconsParam.iconTextDescription);
-	
-	//\_____________ On gere son sous-dock.
-	if (icon->Xid != 0)
-	{
-		if (icon->pSubDock == NULL)
-			icon->pSubDock = pSubDock;
-		else  // ne devrait pas arriver (une icone de container n'est pas un lanceur pouvant prendre un Xid).
-			cairo_dock_destroy_dock (pSubDock, cName);
-	}
-	else
-	{
-		if (pSubDock != NULL && pSubDock != icon->pSubDock)  // ca n'est plus le meme container, on transvase ou on detruit.
-		{
-			cd_debug ("on transvase dans le nouveau sous-dock");
-			cairo_dock_remove_icons_from_dock (pSubDock, icon->pSubDock, icon->cName);
-			cairo_dock_destroy_dock (pSubDock, cName);
-			pSubDock = NULL;
-		}
-	}
-	
-	if (icon->pSubDock != NULL && pSubDock == icon->pSubDock)  // c'est le meme sous-dock, son rendu a pu changer.
-	{
-		if (cairo_dock_strings_differ (cRendererName, icon->pSubDock->cRendererName))
-			cairo_dock_update_dock_size (icon->pSubDock);
-		cairo_dock_synchronize_one_sub_dock_orientation (pSubDock, pNewDock, TRUE);
-	}
-
-	//\_____________ On gere le changement de container ou d'ordre.
-	//g_print ("%x -> %x\n", pDock, pNewDock);
-	if (pDock != pNewDock)  // changement de container.
+	//\_____________ manage the change of container or order.
+	if (pDock != pNewDock)  // container has changed.
 	{
 		// on la detache de son container actuel et on l'insere dans le nouveau.
 		gchar *tmp = icon->cParentDockName;  // le detach_icon remet a 0 ce champ, il faut le donc conserver avant.
@@ -406,7 +364,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pNewDock));
 		icon->cParentDockName = tmp;
 	}
-	else  // le container est identique, on gere juste le changement d'ordre.
+	else  // same container, but different order.
 	{
 		icon->fWidth *= pNewDock->container.fRatio / pDock->container.fRatio;
 		icon->fHeight *= pNewDock->container.fRatio / pDock->container.fRatio;
@@ -424,10 +382,39 @@ void cairo_dock_reload_launcher (Icon *icon)
 		{
 			cairo_dock_redraw_subdock_content (pNewDock);
 		}
-		///cairo_dock_trigger_refresh_launcher_gui ();  // a faire par l'app
 	}
 	
-	//\_____________ On gere l'inhibition de sa classe.
+	//\_____________ reload icon
+	// redraw icon
+	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // petite optimisation : vu que la taille du lanceur n'a pas change, on evite de detruire et refaire sa surface.
+	{
+		cairo_dock_draw_subdock_content_on_icon (icon, pNewDock);
+	}
+	else
+	{
+		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pNewDock));
+	}
+	
+	// reload label
+	if (cName && ! icon->cName)
+		icon->cName = g_strdup (" ");
+	
+	if (cairo_dock_strings_differ (cName, icon->cName))
+		cairo_dock_load_icon_text (icon, &myIconsParam.iconTextDescription);
+	
+	// refresh sub-dock
+	if (icon->pSubDock != NULL)  // son rendu a pu changer.
+	{
+		if (cairo_dock_strings_differ (cSubDockRendererName, icon->pSubDock->cRendererName))
+		{
+			cairo_dock_set_renderer (icon->pSubDock, cSubDockRendererName);
+			cairo_dock_update_dock_size (icon->pSubDock);
+		}
+		cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pNewDock, TRUE);
+	}
+	g_free (cSubDockRendererName);
+	
+	//\_____________ handle class inhibition.
 	gchar *cNowClass = icon->cClass;
 	if (cClass != NULL && (cNowClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on desinhibe l'ancienne.
 	{
@@ -439,15 +426,14 @@ void cairo_dock_reload_launcher (Icon *icon)
 	if (myTaskbarParam.bMixLauncherAppli && cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on inhibe la nouvelle.
 		cairo_dock_inhibite_class (cNowClass, icon);
 
-	//\_____________ On redessine les docks impactes.
-	cairo_dock_calculate_dock_icons (pNewDock);
+	//\_____________ redraw dock.
+	///cairo_dock_calculate_dock_icons (pNewDock);
 	cairo_dock_redraw_container (CAIRO_CONTAINER (pNewDock));
 
 	g_free (cPrevDockName);
 	g_free (cClass);
 	g_free (cDesktopFileName);
 	g_free (cName);
-	g_free (cRendererName);
 	cairo_dock_mark_current_theme_as_modified (TRUE);
 }
 

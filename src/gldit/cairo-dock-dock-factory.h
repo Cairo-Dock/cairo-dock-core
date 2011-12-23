@@ -158,7 +158,6 @@ struct _CairoDock {
 	
 	//\_______________ current state of the dock.
 	gboolean bAutoHide;  // auto-hide activated.
-	gint iScrollOffset;  // pour faire defiler les icones avec la molette.
 	gint iMagnitudeIndex;  // indice de calcul du coef multiplicateur de l'amplitude de la sinusoide (entre 0 et CAIRO_DOCK_NB_MAX_ITERATIONS).
 	/// (un)folding factor, between 0(unfolded) to 1(folded). It's up to the renderer on how to make use of it.
 	gdouble fFoldingFactor;
@@ -293,11 +292,11 @@ struct _CairoDock {
 #define CAIRO_DOCK(pDock) ((CairoDock *)pDock)
 
 
-CairoDock *cairo_dock_new_dock (const gchar *cRendererName);
+CairoDock *cairo_dock_new_dock (void);
 
 void cairo_dock_free_dock (CairoDock *pDock);
 
-void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock);
+void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName);
 
 /** Insert an icon into a dock.
 * Do nothing if the icon already exists inside the dock.

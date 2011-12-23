@@ -83,7 +83,7 @@ void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 
 void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatDockWidth doivent avoir ete mis a jour au prealable.
 {
-	//g_print ("%s ()\n", __func__);
+	g_print ("%s (%d)\n", __func__, pDock->iRefCount);
 	g_return_if_fail (pDock != NULL);
 	int iPrevMaxDockHeight = pDock->iMaxDockHeight;
 	int iPrevMaxDockWidth = pDock->iMaxDockWidth;
@@ -464,10 +464,10 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
  /// LINEAR DOCK ///
 ///////////////////
 
-GList *cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth, int iXOffset)
+GList *cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth)
 {
-	//g_print ("%s (%d, +%d)\n", __func__, fFlatDockWidth, iXOffset);
-	double x_cumulated = iXOffset;
+	//g_print ("%s (%d, +%d)\n", __func__, fFlatDockWidth);
+	double x_cumulated = 0;
 	double fXMin = 99999;
 	GList* ic, *pFirstDrawnElement = NULL;
 	Icon *icon;

@@ -3518,7 +3518,7 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 				cValue = g_strdup (cWidgetValue);
 			}
 		}
-		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cValue);
+		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cValue?cValue:"");
 
 		g_free( cValue );
 	}

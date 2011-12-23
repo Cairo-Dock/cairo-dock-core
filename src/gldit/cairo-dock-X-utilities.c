@@ -807,6 +807,12 @@ void cairo_dock_minimize_xwindow (Window Xid)
 	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
 }
 
+void cairo_dock_lower_xwindow (Window Xid)
+{
+	g_return_if_fail (Xid > 0);
+	XLowerWindow (s_XDisplay, Xid);
+}
+
 
 
 static void _cairo_dock_change_window_state (Window Xid, gulong iNewValue, Atom iProperty1, Atom iProperty2)
@@ -1162,6 +1168,9 @@ void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLo
 	XTranslateCoordinates (s_XDisplay, Xid, root_return, 0, 0, &dest_x_return, &dest_y_return, &child_return);  // translate into the coordinate space of the root window. we need to do this, because (x_return,;y_return) is always (0;0)
 	//g_print (" %d;%d %dx%d\n", x_return, y_return, width_return, height_return);
 	//g_print (" -> %d;%d\n", dest_x_return, dest_y_return);
+	
+	/// TODO: get the borders' width with:
+	/// _NET_FRAME_EXTENTS, left, right, top, bottom, CARDINAL[4]/32
 	
 	*iLocalPositionX = dest_x_return;
 	*iLocalPositionY = dest_y_return;

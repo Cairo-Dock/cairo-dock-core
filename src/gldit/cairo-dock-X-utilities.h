@@ -88,6 +88,7 @@ void cairo_dock_close_xwindow (Window Xid);
 void cairo_dock_kill_xwindow (Window Xid);
 void cairo_dock_show_xwindow (Window Xid);
 void cairo_dock_minimize_xwindow (Window Xid);
+void cairo_dock_lower_xwindow (Window Xid);
 void cairo_dock_maximize_xwindow (Window Xid, gboolean bMaximize);
 void cairo_dock_set_xwindow_fullscreen (Window Xid, gboolean bFullScreen);
 void cairo_dock_set_xwindow_above (Window Xid, gboolean bAbove);

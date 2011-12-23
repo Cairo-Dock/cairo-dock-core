@@ -40,6 +40,14 @@ extern CairoDocksParam myDocksParam;
 extern CairoDocksManager myDocksMgr;
 #endif
 
+typedef enum {
+	CAIRO_HIT_SCREEN_BORDER,
+	CAIRO_HIT_DOCK_PLACE,
+	CAIRO_HIT_SCREEN_CORNER,
+	CAIRO_HIT_ZONE,
+	CAIRO_HIT_NB_METHODS
+} CairoCallbackMethod;
+
 // params
 struct _CairoDocksParam {
 	// frame
@@ -66,7 +74,7 @@ struct _CairoDocksParam {
 	// Root dock visibility
 	CairoDockVisibility iVisibility;
 	gchar *cHideEffect;
-	gint iCallbackMethod;
+	CairoCallbackMethod iCallbackMethod;
 	gint iZoneWidth, iZoneHeight;
 	gchar *cZoneImage;
 	gdouble fZoneAlpha;
@@ -131,20 +139,17 @@ void cairo_dock_reset_docks_table (void);
 */
 CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendererName);
 
-/** Increase by 1 the number of pointing icons. If the dock was a root dock, it becomes a sub-dock.
-* @param pDock a dock.
-* @param pParentDock its parent dock, if it becomes a sub-dock, otherwise it can be NULL.
-*/
-void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock);
-
-
 /** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
-* @param pIconList a list of icons that will be loaded and inserted into the new dock.
 * @param cDockName desired name for the new dock.
+* @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
 * @param pParentDock the parent dock.
+* @param pIconList a list of icons that will be loaded and inserted into the new dock.
 * @return the newly allocated dock.
 */
-CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDockName, CairoDock *pParentDock);
+CairoDock *cairo_dock_create_subdock (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList);
+
+void cairo_dock_main_dock_to_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName);
+
 
 /** Destroy a dock and its icons.
 * @param pDock the dock.

@@ -315,18 +315,19 @@ static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, Cai
 	return pFakeClassIcon;
 }
 
+// this function is used when we have an appli that is not inhibited. we can place it either in its subdock or in the dock next to an inhibitor or in the main dock amongst the other applis
 static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoDock *pMainDock, const gchar *cMainDockName)
 {
 	cd_message ("%s (%s)", __func__, icon->cName);
 	CairoDock *pParentDock = pMainDock;
 	g_free (icon->cParentDockName);
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))  // if this is a valid appli and we want to group the classes.
 	{
-		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);  // un inhibiteur dans un dock OU une appli de meme classe dans un dock != class-sub-dock.
+		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);  // un inhibiteur dans un dock avec Xid ou subdock OU une appli de meme classe dans un dock != class-sub-dock.
 		if (pSameClassIcon == NULL)  // aucun classmate => elle va dans son class sub-dock ou dans le main dock.
 		{
-			cd_message ("  classe %s encore vide", icon->cClass);
-			pParentDock = cairo_dock_search_dock_from_name (icon->cClass);
+			cd_message ("  no classmate for %s", icon->cClass);
+			pParentDock = cairo_dock_get_class_subdock (icon->cClass);
 			if (pParentDock == NULL)  // no class sub-dock => go to main dock
 			{
 				pParentDock = cairo_dock_search_dock_from_name (cMainDockName);
@@ -334,24 +335,25 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			}
 			else  // go to class sub-dock
 			{
-				icon->cParentDockName = g_strdup (icon->cClass);
+				icon->cParentDockName = g_strdup (cairo_dock_get_class_subdock_name (icon->cClass));
 			}
 		}
 		else  // on la met dans le sous-dock de sa classe.
 		{
-			icon->cParentDockName = g_strdup (icon->cClass);
+			icon->cParentDockName = g_strdup (cairo_dock_get_class_subdock_name (icon->cClass));
 
-			//\____________ On cree ce sous-dock si necessaire.
-			pParentDock = cairo_dock_search_dock_from_name (icon->cClass);
+			//\____________ create the class sub-dock if necessary
+			pParentDock = cairo_dock_get_class_subdock (icon->cClass);
 			if (pParentDock == NULL)  // alors il faut creer le sous-dock, qu'on associera soit a pSameClassIcon soit a un fake.
 			{
 				cd_message ("  creation du dock pour la classe %s", icon->cClass);
 				pMainDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);  // can be NULL (even if in practice will never be).
-				pParentDock = cairo_dock_create_subdock_from_scratch (NULL, icon->cClass, pMainDock);
+				pParentDock = cairo_dock_create_class_subdock (icon->cClass, pMainDock);
 			}
 			else
 				cd_message ("  sous-dock de la classe %s existant", icon->cClass);
 			
+			//\____________ link this sub-dock to the inhibitor, or to a fake appli icon.
 			if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.
 			{
 				if (pSameClassIcon->Xid != 0)  // actuellement l'inhibiteur inhibe 1 seule appli.
@@ -380,7 +382,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 					{
 						cd_debug (" on insere %s dans le dock de la classe", pInhibitedIcon->cName);
 						g_free (pInhibitedIcon->cParentDockName);
-						pInhibitedIcon->cParentDockName = g_strdup (icon->cClass);
+						pInhibitedIcon->cParentDockName = g_strdup (icon->cParentDockName);
 						cairo_dock_insert_icon_in_dock_full (pInhibitedIcon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 					}
 				}
@@ -401,7 +403,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				cd_debug (" on detache %s pour la passer dans le sous-dock de sa classe", pSameClassIcon->cName);
 				cairo_dock_detach_icon_from_dock_full (pSameClassIcon, pClassMateParentDock, FALSE);
 				g_free (pSameClassIcon->cParentDockName);
-				pSameClassIcon->cParentDockName = g_strdup (pSameClassIcon->cClass);
+				pSameClassIcon->cParentDockName = g_strdup (icon->cParentDockName);
 				cairo_dock_insert_icon_in_dock_full (pSameClassIcon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 				
 				cd_debug (" on lui substitue le fake");
@@ -411,7 +413,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			}
 		}
 	}
-	else
+	else  /// TODO: look for an inhibitor or a classmate to go in its dock (it's not necessarily the main dock) ...
 	{
 		icon->cParentDockName = g_strdup (cMainDockName);
 	}
@@ -446,7 +448,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
-	if (myTaskbarParam.bMixLauncherAppli && pParentDock->iRefCount == 0)  // this appli is amongst the launchers in the main dock
+	if (myTaskbarParam.bMixLauncherAppli && pParentDock != cairo_dock_get_class_subdock (icon->cClass))  // this appli is amongst the launchers in the main dock
 	{
 		cairo_dock_set_class_order_in_dock (icon, pParentDock);
 	}
@@ -479,7 +481,7 @@ CairoDock * cairo_dock_detach_appli (Icon *pIcon)
 	
 	cairo_dock_detach_icon_from_dock (pIcon, pParentDock);
 	
-	if (pIcon->cClass != NULL && pParentDock == cairo_dock_search_dock_from_name (pIcon->cClass))  // is in the sub-dock class -> check if we must destroy it.
+	if (pIcon->cClass != NULL && pParentDock == cairo_dock_get_class_subdock (pIcon->cClass))  // is in the sub-dock class -> check if we must destroy it.
 	{
 		gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pParentDock, pIcon->cClass);
 		if (bEmptyClassSubDock)  // has been destroyed.

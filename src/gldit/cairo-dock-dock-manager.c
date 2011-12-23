@@ -86,13 +86,6 @@ static CairoKeyBinding *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
 
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock);
 
-typedef enum {
-	CAIRO_HIT_SCREEN_BORDER,
-	CAIRO_HIT_DOCK_PLACE,
-	CAIRO_HIT_SCREEN_CORNER,
-	CAIRO_HIT_ZONE,
-	CAIRO_HIT_NB_METHODS
-} CairoCallbackMethod;
 
   /////////////
  // MANAGER //
@@ -148,25 +141,10 @@ void cairo_dock_reset_docks_table (void)
 }
 
 
-CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendererName)
+static inline CairoDock *_create_dock (const gchar *cDockName)
 {
-	cd_message ("%s (%s)", __func__, cDockName);
-	g_return_val_if_fail (cDockName != NULL, NULL);
-	
-	//\__________________ On verifie qu'il n'existe pas deja.
-	CairoDock *pExistingDock = g_hash_table_lookup (s_hDocksTable, cDockName);
-	if (pExistingDock != NULL)
-	{
-		return pExistingDock;
-	}
-	
 	//\__________________ On cree un nouveau dock.
-	CairoDock *pDock = cairo_dock_new_dock (cRendererName);
-	
-	if (s_bKeepAbove)
-		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), s_bKeepAbove);
-	if (myContainersParam.bUseFakeTransparency)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+	CairoDock *pDock = cairo_dock_new_dock ();
 	
 	//\__________________ On l'enregistre.
 	if (g_hash_table_size (s_hDocksTable) == 0)  // c'est le 1er.
@@ -176,44 +154,64 @@ CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendere
 		pDock->bGlobalBg = TRUE;
 	}
 	g_hash_table_insert (s_hDocksTable, g_strdup (cDockName), pDock);
-	s_pRootDockList = g_list_prepend (s_pRootDockList, pDock);
 	
-	//\__________________ On le positionne si ce n'est pas le main dock.
-	if (! pDock->bIsMainDock)
-	{
-		if (cairo_dock_read_root_dock_config (cDockName, pDock))  // si pas de config (sub-dock ou config inexistante), se contente de lui mettre la meme position et renvoit FALSE.
-			cairo_dock_move_resize_dock (pDock);
-	}
+	if (s_bKeepAbove)
+		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), s_bKeepAbove);
+	if (myContainersParam.bUseFakeTransparency)
+		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+	
 	return pDock;
 }
 
-void cairo_dock_reference_dock (CairoDock *pDock, CairoDock *pParentDock)
+CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendererName)
 {
-	pDock->iRefCount ++;
+	cd_message ("%s (%s)", __func__, cDockName);
+	g_return_val_if_fail (cDockName != NULL, NULL);
 	
-	if (pDock->iRefCount == 1)  // il devient un sous-dock.
+	//\__________________ if it already exists, return it.
+	CairoDock *pExistingDock = g_hash_table_lookup (s_hDocksTable, cDockName);
+	if (pExistingDock != NULL)
 	{
-		if (pParentDock == NULL)
-			pParentDock = g_pMainDock;
-		cairo_dock_make_sub_dock (pDock, pParentDock);
-		
-		const gchar *cDockName = cairo_dock_search_dock_name (pDock);
-		cairo_dock_remove_root_dock_config (cDockName);
-		
-		cairo_dock_set_dock_visibility (pDock, CAIRO_DOCK_VISI_KEEP_ABOVE);  // si la visibilite n'avait pas ete mise (sub-dock), ne fera rien (vu que la visibilite par defaut est KEEP_ABOVE).
-		
-		s_pRootDockList = g_list_remove (s_pRootDockList, pDock);
+		return pExistingDock;
 	}
+	
+	//\__________________ create a new dock.
+	CairoDock *pDock = _create_dock (cDockName);
+	
+	//\__________________ register it as a main dock
+	s_pRootDockList = g_list_prepend (s_pRootDockList, pDock);
+	
+	//\__________________ get its config params
+	if (! pDock->bIsMainDock)
+	{
+		if (cairo_dock_read_root_dock_config (cDockName, pDock))  // si pas de config (sub-dock ou config inexistante), se contente de lui mettre la meme position et renvoit FALSE.
+			cairo_dock_move_resize_dock (pDock);  /// TODO: try without...
+	}
+	
+	//\__________________ set a renderer (got from the conf, or the default one).
+	cairo_dock_set_default_renderer (pDock);
+	
+	return pDock;
 }
 
-CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDockName, CairoDock *pParentDock)
+CairoDock *cairo_dock_create_subdock (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList)
 {
-	CairoDock *pSubDock = cairo_dock_create_dock (cDockName, NULL);
-	g_return_val_if_fail (pSubDock != NULL, NULL);
+	//\__________________ create it if needed.
+	CairoDock *pSubDock = g_hash_table_lookup (s_hDocksTable, cDockName);
+	if (pSubDock == NULL)
+	{
+		pSubDock = _create_dock (cDockName);
+	}
 	
-	cairo_dock_reference_dock (pSubDock, pParentDock);  // on le fait tout de suite pour avoir la bonne reference avant le 'load'.
+	pSubDock->icons = pIconList;  // set icons now, before we set the ratio and the renderer. 
+	cairo_dock_insert_automatic_separators_in_dock (pSubDock);  // it will update fFlatDockWidth, but we don't care as we'll recalculate it.
 	
-	pSubDock->icons = pIconList;
+	//\__________________ make it a sub-dock.
+	if (pParentDock == NULL)
+		pParentDock = g_pMainDock;
+	cairo_dock_make_sub_dock (pSubDock, pParentDock, cRendererName);
+	
+	//\__________________ load the icons.
 	if (pIconList != NULL)
 	{
 		Icon *icon;
@@ -224,10 +222,39 @@ CairoDock *cairo_dock_create_subdock_from_scratch (GList *pIconList, gchar *cDoc
 			if (icon->cParentDockName == NULL)
 				icon->cParentDockName = g_strdup (cDockName);
 		}
-		cairo_dock_load_buffers_in_one_dock (pSubDock);  // reload en idle.
+		cairo_dock_load_buffers_in_one_dock (pSubDock);  // idle reload.
 	}
 	return pSubDock;
 }
+
+void cairo_dock_main_dock_to_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName)
+{
+	g_print ("%s (%s)\n", __func__, cRendererName);
+	if (pDock->iRefCount == 0)  // il devient un sous-dock.
+	{
+		//\__________________ make it a sub-dock.
+		CairoDockPositionType iScreenBorder = ((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp);
+		
+		if (pParentDock == NULL)
+			pParentDock = g_pMainDock;
+		cairo_dock_make_sub_dock (pDock, pParentDock, cRendererName);
+		
+		if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
+		{
+			cd_debug ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
+			cairo_dock_reload_reflects_in_dock (pDock);
+		}
+		
+		//\__________________ remove from main-dock land
+		const gchar *cDockName = cairo_dock_search_dock_name (pDock);
+		cairo_dock_remove_root_dock_config (cDockName);  // just in case.
+		
+		s_pRootDockList = g_list_remove (s_pRootDockList, pDock);
+		
+		cairo_dock_set_dock_visibility (pDock, CAIRO_DOCK_VISI_KEEP_ABOVE);  // si la visibilite n'avait pas ete mise (sub-dock), ne fera rien (vu que la visibilite par defaut est KEEP_ABOVE).
+	}
+}
+
 
 void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 {
@@ -479,28 +506,22 @@ void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpoi
 
 static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pDock, CairoDock *pChildDock)
 {
+	if (pDock == pChildDock)
+		return FALSE;
 	if (pDock->container.bInside)
 		return FALSE;
 		
 	Icon *pPointedIcon = cairo_dock_get_icon_with_subdock (pDock->icons, pChildDock);
 	if (pPointedIcon != NULL)
 	{
-		//g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);
+		g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);  /// TODO: check for infinite loop...
 		if (pDock->iRefCount == 0)
 		{
 			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 		}
 		else
 		{
-			if (pDock->iScrollOffset != 0)  // on remet systematiquement a 0 l'offset pour les containers.
-			{
-				pDock->iScrollOffset = 0;
-				pDock->container.iMouseX = pDock->container.iWidth / 2;  // utile ?
-				pDock->container.iMouseY = 0;
-				cairo_dock_calculate_dock_icons (pDock);
-			}
-
-			//cd_message ("on cache %s par parente", cDockName);
+			cd_message ("on cache %s par parente", cDockName);
 			gtk_widget_hide (pDock->container.pWidget);
 			cairo_dock_hide_parent_dock (pDock);
 		}
@@ -532,7 +553,6 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 			else if (icon->pSubDock->iSidLeaveDemand == 0)  // si on sort du dock sans passer par le sous-dock, par exemple en sortant par le bas.
 			{
 				//cd_debug ("on cache %s par filiation", icon->cName);
-				icon->pSubDock->iScrollOffset = 0;
 				icon->pSubDock->fFoldingFactor = (myDocksParam.bAnimateSubDock ? 1 : 0);  /// 0
 				gtk_widget_hide (icon->pSubDock->container.pWidget);
 			}
@@ -736,7 +756,6 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	if (bFlushConfFileNeeded)
 	{
 		//g_print ("update %s conf file\n", cDockName);
-		///cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, GLDI_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE);
 		cairo_dock_upgrade_conf_file (cConfFilePath, pKeyFile, GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE);
 	}
 	

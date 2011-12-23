@@ -350,8 +350,8 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadApplet
 {
 	g_print ("************%s (%d, %d, %d)\n", __func__, pDock->bIsMainDock, bReloadAppletsToo, bRecursive);
 
-	///double fFlatDockWidth = - myIconsParam.iIconGap;
-	///pDock->iMaxIconHeight = 0;
+	/**double fFlatDockWidth = - myIconsParam.iIconGap;
+	pDock->iMaxIconHeight = 0;*/
 	Icon* icon;
 	GList* ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
@@ -385,7 +385,8 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadApplet
 			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);*/
 	}
 	///pDock->fFlatDockWidth = (int) fFlatDockWidth;  /// (int) n'est plus tellement necessaire ...
-	cairo_dock_update_dock_size (pDock);
+	/// TODO: check...
+	//cairo_dock_update_dock_size (pDock);
 }
 
 void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer)

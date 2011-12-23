@@ -49,6 +49,7 @@ install (FILES
 	icon-internet.svg
 	icon-labels.svg
 	icon-lock-icons.svg
+	icon-lower.svg
 	icon-maximize.svg
 	icon-minimize.svg
 	icon-mouse.svg
