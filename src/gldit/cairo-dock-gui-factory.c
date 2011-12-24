@@ -52,6 +52,7 @@
 #define CAIRO_DOCK_APPLET_ICON_SIZE 32
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
+#define DEFAULT_TEXT_COLOR .4  // light grey
 
 #if (GTK_MAJOR_VERSION < 3)
 #define Adjustment GtkObject
@@ -1524,15 +1525,15 @@ static void _set_default_text (GtkWidget *pEntry, gchar *cDefaultValue)
 
 	#if (GTK_MAJOR_VERSION < 3)
 	GdkColor color;
-	color.red = .5 * 65535;
-	color.green = .5 * 65535;
-	color.blue = .5 * 65535;
-	gtk_widget_modify_fg (pEntry, GTK_STATE_NORMAL, &color);
+	color.red = DEFAULT_TEXT_COLOR * 65535;
+	color.green = DEFAULT_TEXT_COLOR * 65535;
+	color.blue = DEFAULT_TEXT_COLOR * 65535;
+	gtk_widget_modify_text (pEntry, GTK_STATE_NORMAL, &color);
 	#else
 	static GdkRGBA color;
-	color.red = .5;
-	color.green = .5;
-	color.blue = .5;
+	color.red = DEFAULT_TEXT_COLOR;
+	color.green = DEFAULT_TEXT_COLOR;
+	color.blue = DEFAULT_TEXT_COLOR;
 	color.alpha = 1.;
 	gtk_widget_override_color (pEntry, GTK_STATE_NORMAL, &color);
 	#endif
@@ -3036,15 +3037,15 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						
 						#if (GTK_MAJOR_VERSION < 3)
 						GdkColor color;
-						color.red = .5 * 65535;
-						color.green = .5 * 65535;
-						color.blue = .5 * 65535;
-						gtk_widget_modify_fg (pOneWidget, GTK_STATE_NORMAL, &color);
+						color.red = DEFAULT_TEXT_COLOR * 65535;
+						color.green = DEFAULT_TEXT_COLOR * 65535;
+						color.blue = DEFAULT_TEXT_COLOR * 65535;
+						gtk_widget_modify_text (pOneWidget, GTK_STATE_NORMAL, &color);
 						#else
 						static GdkRGBA color;
-						color.red = .5;
-						color.green = .5;
-						color.blue = .5;
+						color.red = DEFAULT_TEXT_COLOR;
+						color.green = DEFAULT_TEXT_COLOR;
+						color.blue = DEFAULT_TEXT_COLOR;
 						color.alpha = 1.;
 						gtk_widget_override_color (pOneWidget, GTK_STATE_NORMAL, &color);
 						#endif

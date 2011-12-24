@@ -214,21 +214,6 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 	return TRUE;
 }
 
-static void cairo_dock_initialize_X_manager (Display *pDisplay)
-{
-	s_XDisplay = pDisplay;
-
-	s_aNetClientList		= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
-	s_aNetActiveWindow		= XInternAtom (s_XDisplay, "_NET_ACTIVE_WINDOW", False);
-	s_aNetCurrentDesktop	= XInternAtom (s_XDisplay, "_NET_CURRENT_DESKTOP", False);
-	s_aNetDesktopViewport	= XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
-	s_aNetDesktopGeometry	= XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
-	s_aNetShowingDesktop 	= XInternAtom (s_XDisplay, "_NET_SHOWING_DESKTOP", False);
-	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
-	s_aNetNbDesktops		= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
-	s_aXKlavierState		= XInternAtom (s_XDisplay, "XKLAVIER_STATE", False);
-}
-
 
   ////////////////////////
  /// X desktop access ///

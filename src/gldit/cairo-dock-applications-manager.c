@@ -246,7 +246,7 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 	//g_print ("%s (%s(%ld) %d / %d)\n", __func__, icon->cName, icon->Xid, icon->iLastCheckTime, iTime);
 	if (icon->iLastCheckTime >= 0 && icon->iLastCheckTime < iTime && ! cairo_dock_icon_is_being_removed (icon))
 	{
-		cd_message ("cette fenetre (%ld(%ld), %s) est trop vieille (%d / %d)", *Xid, icon->Xid, icon->cName, icon->iLastCheckTime, iTime);
+		cd_message ("cette fenetre (%ld(%ld), %s) est trop vieille (%d / %d, %s)", *Xid, icon->Xid, icon->cName, icon->iLastCheckTime, iTime, icon->cParentDockName);
 		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
 			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);

@@ -340,8 +340,6 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 		}
 		else  // on la met dans le sous-dock de sa classe.
 		{
-			icon->cParentDockName = g_strdup (cairo_dock_get_class_subdock_name (icon->cClass));
-
 			//\____________ create the class sub-dock if necessary
 			pParentDock = cairo_dock_get_class_subdock (icon->cClass);
 			if (pParentDock == NULL)  // alors il faut creer le sous-dock, qu'on associera soit a pSameClassIcon soit a un fake.
@@ -352,6 +350,8 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			}
 			else
 				cd_message ("  sous-dock de la classe %s existant", icon->cClass);
+			
+			icon->cParentDockName = g_strdup (cairo_dock_get_class_subdock_name (icon->cClass));
 			
 			//\____________ link this sub-dock to the inhibitor, or to a fake appli icon.
 			if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.

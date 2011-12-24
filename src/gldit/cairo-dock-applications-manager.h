@@ -131,7 +131,7 @@ Icon * cairo_dock_search_window_covering_dock (CairoDock *pDock, gboolean bMaxim
 Icon *cairo_dock_search_window_overlapping_dock (CairoDock *pDock);
 
 
-/** Get the list of appli's icons currently known by Cairo-Dock, including the icons not displayed in the dock. You can then order the list by z-order, name, etc.
+/** Get the list of appli's icons currently known by Cairo-Dock, including the icons not currently displayed in the dock. You can then order the list by z-order, name, etc.
 *@return a newly allocated list of applis's icons. You must free the list when you're done with it, but not the icons.
 */
 GList *cairo_dock_get_current_applis_list (void);

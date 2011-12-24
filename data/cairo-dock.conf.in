@@ -159,7 +159,7 @@ max name length = 25
 #F-[Interaction;gtk-refresh]
 frame2 =
 
-#l-[Nothing;Close;Minimize;Launch new] Action on middle-click on the related application
+#l-[Nothing;Close;Minimize;Launch new;Lower] Action on middle-click on the related application
 action on middle click = 1
 
 #b- Minimise the window when its icon is clicked, if it was already the active window ?

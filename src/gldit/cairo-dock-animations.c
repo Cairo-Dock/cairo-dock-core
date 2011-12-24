@@ -373,7 +373,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				pDock = cairo_dock_detach_appli (pIcon);
 				if (pDock == NULL)  // the dock has been destroyed (empty class sub-dock).
 				{
-					///cairo_dock_free_icon (pIcon);
+					cairo_dock_free_icon (pIcon);
 					return FALSE;
 				}
 			}

@@ -1518,7 +1518,8 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
 		
 		//\_________________________ On rajoute les actions courantes sur les icones d'applis.
-		_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
+		if (icon->cCommand != NULL)
+			_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
 		
 		if (pAppli
 		&& (pAppli->bIsHidden || pAppli->Xid != cairo_dock_get_current_active_window () || !cairo_dock_appli_is_on_current_desktop (pAppli)))
