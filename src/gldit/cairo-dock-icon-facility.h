@@ -251,16 +251,17 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 */
 void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParentDockName);
 
-/** Make an icon static. Static icons are not animated when mouse hovers them.
+/** Make an icon static or not. Static icons are not animated when mouse hovers them.
 *@param icon an icon.
+*@param bStatic static or not.
 */
-#define cairo_dock_set_icon_static(icon) ((icon)->bStatic = TRUE)
+#define cairo_dock_set_icon_static(icon, _bStatic) (icon)->bStatic = _bStatic
 
 /** Make an icon always visible, even when the dock is hidden.
 *@param icon an icon.
 *@param bAlwaysVisible whether the icon is always visible or not.
 */
-#define cairo_dock_set_icon_always_visible(icon, bAlwaysVisible) ((bAlwaysVisible)->bStatic = bAlwaysVisible)
+#define cairo_dock_set_icon_always_visible(icon, _bAlwaysVisible) (icon)->bAlwaysVisible = _bAlwaysVisible
 
 /** Set the label of an icon. If it has a sub-dock, it is renamed (the name is possibly altered to stay unique). The label buffer is updated too.
 *@param cIconName the new label of the icon. You can even pass pIcon->cName.

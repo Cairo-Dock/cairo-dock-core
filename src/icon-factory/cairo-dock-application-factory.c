@@ -223,50 +223,13 @@ Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	cd_debug ("recuperation de '%s' (bIsHidden : %d)", cName, bIsHidden);
 	
 	//\__________________ On recupere la classe.
-	XClassHint *pClassHint = XAllocClassHint ();
 	gchar *cClass = NULL, *cWmClass = NULL;
-	if (XGetClassHint (s_XDisplay, Xid, pClassHint) != 0 && pClassHint->res_class)
-	{
-		cWmClass = g_strdup (pClassHint->res_class);
-		
-		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", pClassHint->res_name, pClassHint->res_name, pClassHint->res_class, pClassHint->res_class);
-		if (strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && g_str_has_suffix (pClassHint->res_name, ".exe"))
-		{
-			cd_debug ("  wine application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
-			cClass = g_ascii_strdown (pClassHint->res_name, -1);
-		}
-		else if (*pClassHint->res_class == '/' && g_str_has_suffix (pClassHint->res_class, ".exe"))  // cas des applications Mono telles que tomboy ...
-		{
-			gchar *str = strrchr (pClassHint->res_class, '/');
-			if (str)
-				str ++;
-			else
-				str = pClassHint->res_class;
-			cClass = g_ascii_strdown (str, -1);
-			cClass[strlen (cClass) - 4] = '\0';
-		}
-		else
-		{
-			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // on la passe en minuscule, car certaines applis ont la bonne idee de donner des classes avec une majuscule ou non suivant les fenetres.
-		}
-		
-		cairo_dock_remove_version_from_string (cClass);  // on enleve les numeros de version (Openoffice.org-3.1)
-		
-		gchar *str = strchr (cClass, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
-		if (str != NULL)
-			*str = '\0';
-		cd_debug ("got an application with class '%s'", cClass);
-		
-		XFree (pClassHint->res_name);
-		XFree (pClassHint->res_class);
-		XFree (pClassHint);
-	}
-	else
+	cClass = cairo_dock_get_xwindow_class (Xid, &cWmClass);
+	if (cClass == NULL)
 	{
 		cd_warning ("this window doesn't belong to any class, skip it.");
-		XFree (pClassHint);
 		return NULL;
-	}	
+	}
 	
 	//\__________________ On cree l'icone.
 	Icon *icon = cairo_dock_new_icon ();

@@ -698,6 +698,7 @@ static void _on_change_window_icon (Icon *icon, CairoDock *pDock)
 		if (pDock->iRefCount != 0)
 			cairo_dock_trigger_redraw_subdock_content (pDock);
 		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
+		cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_ICON_CHANGED, icon, CAIRO_CONTAINER (pDock));
 	}
 }
 
@@ -734,6 +735,51 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 		if (icon->bIsDemandingAttention)
 			cairo_dock_appli_stops_demanding_attention (icon);
 	}
+}
+
+static void _on_change_window_class (Icon *icon, CairoDock *pDock)
+{
+	g_print ("WM_CLASS changed (%p, %s)!\n", icon->pMimeTypes, icon->cCommand);
+	// retrieve the new class
+	gchar *cClass = NULL, *cWmClass = NULL;
+	cClass = cairo_dock_get_xwindow_class (icon->Xid, &cWmClass);
+	if (! cairo_dock_strings_differ (cClass, icon->cClass) || ! cClass)  // cClass can be NULL (libreoffice when closing a window).
+	{
+		g_print ("fausse alerte\n");
+		g_free (cClass);
+		g_free (cWmClass);
+		return;
+	}
+	g_print (" %s -> %s\n", icon->cClass, cClass);
+	
+	// remove the icon from the dock, and then from its class
+	CairoDock *pParentDock = NULL;
+	if (icon->cParentDockName != NULL)  // if in a dock, detach it
+		pParentDock = cairo_dock_detach_appli (icon);
+	else  // else if inhibited, detach from the inhibitor
+		cairo_dock_detach_Xid_from_inhibitors (icon->Xid, icon->cClass);
+	if (pParentDock)
+		cairo_dock_update_dock_size (pParentDock);
+	cairo_dock_remove_appli_from_class (icon);
+	
+	// set the new class
+	g_free (icon->cClass);
+	icon->cClass = cClass;
+	g_free (icon->cWmClass);
+	icon->cWmClass = cWmClass;
+	cairo_dock_add_appli_to_class (icon);
+	
+	// re-insert the icon
+	pParentDock = cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+	if (pParentDock != NULL)
+		gtk_widget_queue_draw (pParentDock->container.pWidget);
+	
+	// reload the icon
+	g_strfreev (icon->pMimeTypes);
+	icon->pMimeTypes = g_strdupv ((gchar**)cairo_dock_get_class_mimetypes (icon->cClass));
+	g_free (icon->cCommand);
+	icon->cCommand = g_strdup (cairo_dock_get_class_command (icon->cClass));
+	cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pParentDock));
 }
 
 static gboolean _on_property_changed_notification (gpointer data, Window Xid, Atom aProperty, int iState)
@@ -774,6 +820,10 @@ static gboolean _on_property_changed_notification (gpointer data, Window Xid, At
 		else if (aProperty == s_aWmHints)
 		{
 			_on_change_window_hints (icon, pParentDock, iState);
+		}
+		else if (aProperty == XInternAtom (s_XDisplay, "WM_CLASS", False))
+		{
+			_on_change_window_class (icon, pParentDock);
 		}
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;

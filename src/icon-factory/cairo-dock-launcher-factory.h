@@ -29,12 +29,6 @@ G_BEGIN_DECLS
 /** *@file cairo-dock-launcher-factory.h This class handles the creation launcher icons, from the desktop files contained inside the 'launchers' folder. The files holding the information are common desktop files, with additionnal keys added by the dock on the launcher creation.
 */
 
-/** Remove the version number from a string. Directly modifies the string.
- * @param cString a string.
- * @return TRUE if a version has been removed.
- */
-gboolean cairo_dock_remove_version_from_string (gchar *cString);
-
 /** Set the class of a launcher. You can safely free the paramater 'cStartupWMClass' after calling this function. This function is to be called on a launcher well defined (all other parameters should be already filled).
  * @param icon a launcher.
  * @param cStartupWMClass the class of the launcher defined in its .desktop file, or NULL. You can't expect the resulting class to be the one you provide, because this function makes a lot of guesses.

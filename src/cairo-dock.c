@@ -786,7 +786,7 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
 	g_print ("\n\nTODO (3.0):\n"
-	"- Panel view: fix the update of fXAtRest for the placement of sub-docks\n"
+	"- Optimize the loading (update_dock_size in idle, avoid reloading applets, etc)\n"
 	"- Icon bg: add ratio\n"
 	"- Default theme more consistent\n"
 	"- Recent Events: handle recent apps\n"

@@ -52,7 +52,7 @@
 #define CAIRO_DOCK_APPLET_ICON_SIZE 32
 #define CAIRO_DOCK_TAB_ICON_SIZE 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
-#define DEFAULT_TEXT_COLOR .4  // light grey
+#define DEFAULT_TEXT_COLOR .6  // light grey
 
 #if (GTK_MAJOR_VERSION < 3)
 #define Adjustment GtkObject
@@ -1535,7 +1535,7 @@ static void _set_default_text (GtkWidget *pEntry, gchar *cDefaultValue)
 	color.green = DEFAULT_TEXT_COLOR;
 	color.blue = DEFAULT_TEXT_COLOR;
 	color.alpha = 1.;
-	gtk_widget_override_color (pEntry, GTK_STATE_NORMAL, &color);
+	gtk_widget_override_color (pEntry, GTK_STATE_FLAG_NORMAL, &color);
 	#endif
 }
 static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue)

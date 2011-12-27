@@ -607,6 +607,7 @@ void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
 		pIcon->iImageWidth = 0;  // will be updated when the icon is reloaded.
 		pIcon->iImageHeight = 0;  // will be updated when the icon is reloaded.
 		cairo_dock_load_icon_image (pIcon, pContainer);
+		g_print ("%s (%dx%d / %.1fx%.1f)\n", __func__, pIcon->iImageWidth, pIcon->iImageHeight, pIcon->fWidth, pIcon->fHeight);
 		
 		/**if (pInstance->pDrawContext)
 		{

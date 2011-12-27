@@ -76,6 +76,7 @@ static void _cairo_dock_set_icon_size (CairoContainer *pDock, Icon *icon)
 {
 	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
 	{
+		g_print ("%s (%s, %.1fx%.1f\n", __func__, icon->pModuleInstance->pModule->pVisitCard->cModuleName, icon->fWidth, icon->fHeight);
 		if (icon->fWidth == 0)
 			icon->fWidth = myIconsParam.iIconWidth;
 		if (icon->fHeight == 0)
@@ -301,6 +302,7 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc)
 {
+	g_print ("%s (%s)\n", __func__, icon->cName);
 	g_return_if_fail (icon != NULL);
 	if (g_list_find (pDock->icons, icon) != NULL)  // elle est deja dans ce dock.
 		return ;
@@ -382,8 +384,6 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		icon->fInsertRemoveFactor = 0.;
 	if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
-	if (pDock->iRefCount == 0)
-		g_print ("update -> %d/%d\n", (int)pDock->fFlatDockWidth, pDock->iMaxDockWidth);
 	
 	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{

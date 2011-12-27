@@ -43,7 +43,7 @@
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"
-#include "cairo-dock-launcher-factory.h"  // cairo_dock_remove_version_from_string
+#include "cairo-dock-X-utilities.h"  // cairo_dock_remove_version_from_string
 #include "cairo-dock-class-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -152,7 +152,7 @@ CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pPar
 static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
-	g_return_val_if_fail (pClassAppli!= NULL, NULL);
+	g_return_if_fail (pClassAppli!= NULL);
 	
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pClassAppli->cDockName);
 	if (pDock)
@@ -1730,7 +1730,7 @@ register from class name (window or old launchers):
 gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName, const gchar *cWmClass)
 {
 	g_return_val_if_fail (cDesktopFile != NULL || cClassName != NULL, NULL);
-	cd_message ("%s (%s, %s, %s)", __func__, cDesktopFile, cClassName, cWmClass);
+	g_print ("%s (%s, %s, %s)\n", __func__, cDesktopFile, cClassName, cWmClass);
 	
 	//\__________________ if the class is already registered and filled, quit.
 	gchar *cClass = NULL;

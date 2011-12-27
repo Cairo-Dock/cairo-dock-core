@@ -606,7 +606,10 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 ///////////////
 /** Prevent the applet's icon to be animated when the mouse hovers it (call it once at init).
 */
-#define CD_APPLET_SET_STATIC_ICON cairo_dock_set_icon_static (myIcon)
+#define CD_APPLET_SET_STATIC_ICON cairo_dock_set_icon_static (myIcon, TRUE)
+/** Prevent the applet's icon to be animated when the mouse hovers it (call it once at init).
+*/
+#define CD_APPLET_UNSET_STATIC_ICON cairo_dock_set_icon_static (myIcon, FALSE)
 
 /** Make the applet's icon always visible, even when the dock is hidden.
 */

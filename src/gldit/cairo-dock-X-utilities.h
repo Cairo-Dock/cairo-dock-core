@@ -98,6 +98,14 @@ void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumbe
 // GET //
 gulong cairo_dock_get_xwindow_timestamp (Window Xid);
 gchar *cairo_dock_get_xwindow_name (Window Xid, gboolean bSearchWmName);
+
+/** Remove the version number from a string. Directly modifies the string.
+ * @param cString a string.
+ * @return TRUE if a version has been removed.
+ */
+gboolean cairo_dock_remove_version_from_string (gchar *cString);
+
+gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass);
 gboolean cairo_dock_xwindow_is_maximized (Window Xid);
 gboolean cairo_dock_xwindow_is_fullscreen (Window Xid);
 gboolean cairo_dock_xwindow_skip_taskbar (Window Xid);
