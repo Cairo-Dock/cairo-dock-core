@@ -1542,11 +1542,7 @@ static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue)
 {
 	const gchar *cText = gtk_entry_get_text (GTK_ENTRY (pEntry));
 	g_print (" -> '%s' (%s)\n", cText, cDefaultValue);
-	if (! cText || *cText == '\0')  // text has been erased
-	{
-		_set_default_text (pEntry, cDefaultValue);
-	}
-	else  // text has been modified by the user.
+	if (cText && *cText != '\0')  // text has been modified by the user. (we don't have to add the default value if the user is editing the widget because it will add cDefaultValue next to the text of the user)
 	{
 		g_object_set_data (G_OBJECT (pEntry), "ignore-value", GINT_TO_POINTER (FALSE));
 		
