@@ -114,11 +114,11 @@ static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, con
 	}
 	
 	//\__________________ in the case of a custom launcher, set a command (the launcher would be invalid without).
-	/*if (cFilePath == NULL && iLauncherType == CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER)
+	if (cFilePath == NULL && iLauncherType == CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER)
 	{
 		g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", _("Enter a command"));
 		g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", _("New launcher"));
-	}*/
+	}
 	
 	//\__________________ generate a unique and readable filename.
 	gchar *cBaseName = (cFilePath ?
