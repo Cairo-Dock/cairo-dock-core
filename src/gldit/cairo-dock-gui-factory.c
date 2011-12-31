@@ -1505,13 +1505,12 @@ static void _cairo_dock_widget_launch_command (GtkButton *button, gpointer *data
 {
 	GtkTreeView *pCombo = data[0];
 	GtkWindow *pDialog = data[1];
-	gchar *cCommandToLaunch = g_strdup (data[2]);
+	gchar *cCommandToLaunch = data[2];
 	
-	gchar *cCommand = cairo_dock_launch_command_sync (cCommandToLaunch);
-	if (cCommand != NULL)
-		cd_debug ("%s: %s => %s\n", __func__, cCommandToLaunch, cCommand);
-	//g_free (cCommand);
-	//g_free (cCommandToLaunch);
+	gchar *cResult = cairo_dock_launch_command_sync (cCommandToLaunch);
+	if (cResult != NULL)
+		cd_debug ("%s: %s => %s\n", __func__, cCommandToLaunch, cResult);
+	g_free (cResult);
 }
 
 static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue);
@@ -1540,18 +1539,14 @@ static void _set_default_text (GtkWidget *pEntry, gchar *cDefaultValue)
 }
 static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue)
 {
-	const gchar *cText = gtk_entry_get_text (GTK_ENTRY (pEntry));
-	g_print (" -> '%s' (%s)\n", cText, cDefaultValue);
-	if (cText && *cText != '\0')  // text has been modified by the user. (we don't have to add the default value if the user is editing the widget because it will add cDefaultValue next to the text of the user)
-	{
-		g_object_set_data (G_OBJECT (pEntry), "ignore-value", GINT_TO_POINTER (FALSE));
-		
-		#if (GTK_MAJOR_VERSION < 3)
-		gtk_widget_modify_fg (pEntry, GTK_STATE_NORMAL, NULL);  // NULL = undo the effect of previous calls to of gtk_widget_modify_fg().
-		#else
-		gtk_widget_override_color (pEntry, GTK_STATE_NORMAL, NULL);
-		#endif
-	}
+	// if the text has changed, it means the user has modified it (because we block this callback when we set the default value) -> mark the value as 'valid' and reset the color to the normal style.
+	g_object_set_data (G_OBJECT (pEntry), "ignore-value", GINT_TO_POINTER (FALSE));
+	
+	#if (GTK_MAJOR_VERSION < 3)
+	gtk_widget_modify_fg (pEntry, GTK_STATE_NORMAL, NULL);  // NULL = undo the effect of previous calls to of gtk_widget_modify_fg().
+	#else
+	gtk_widget_override_color (pEntry, GTK_STATE_NORMAL, NULL);
+	#endif
 }
 static gboolean on_text_focus_in (GtkWidget *pEntry, GdkEventFocus *event, gchar *cDefaultValue)  // user takes the focus
 {
@@ -2505,15 +2500,15 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						break ;
 					}
 					gchar *cSecondCommand = pAuthorizedValuesList[1];
-					gchar *cCommand = cairo_dock_launch_command_sync (cSecondCommand);
-					cd_debug ("%s: %s => %s", __func__, cSecondCommand, cCommand);
-					if (cCommand == NULL || *cCommand == '0' || *cCommand == '\0')
-					{ // d'autres mauvaises conditions ?
+					gchar *cResult = cairo_dock_launch_command_sync (cSecondCommand);
+					cd_debug ("%s: %s => %s", __func__, cSecondCommand, cResult);
+					if (cResult == NULL || *cResult == '0' || *cResult == '\0')  // result is 'fail'
+					{
 						gtk_widget_set_sensitive (pLabel, FALSE);
+						g_free (cResult);
 						break ;
 					}
-					//g_free (cCommand); // pas de g_free s'il break?
-					//g_free (cSecondCommand);
+					g_free (cResult);
 				}
 				pOneWidget = gtk_button_new_from_stock (GTK_STOCK_JUMP_TO);
 				_allocate_new_buffer;
