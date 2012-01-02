@@ -75,14 +75,7 @@ struct _CairoDialogsManager {
 
 /// signals
 typedef enum {
-	/// notification called when a Dialog is updated in the fast rendering loop.
-	NOTIFICATION_UPDATE_DIALOG = NB_NOTIFICATIONS_CONTAINER,
-	/// notification called when a Dialog is updated in the slow rendering loop.
-	NOTIFICATION_UPDATE_DIALOG_SLOW,
-	/// notification called when a Dialog is rendered.
-	NOTIFICATION_RENDER_DIALOG,
-	/// 
-	NB_NOTIFICATIONS_DIALOG
+	NB_NOTIFICATIONS_DIALOG = NB_NOTIFICATIONS_CONTAINER
 	} CairoDialogNotifications;
 	
 

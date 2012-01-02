@@ -79,12 +79,6 @@ typedef enum {
 	NOTIFICATION_ENTER_DESKLET = NB_NOTIFICATIONS_CONTAINER,
 	/// notification called when the mouse leave a desklet.
 	NOTIFICATION_LEAVE_DESKLET,
-	/// notification called when a desklet is updated in the fast rendering loop.
-	NOTIFICATION_UPDATE_DESKLET,
-	/// notification called when a desklet is updated in the slow rendering loop.
-	NOTIFICATION_UPDATE_DESKLET_SLOW,
-	/// notification called when a desklet is rendered.
-	NOTIFICATION_RENDER_DESKLET,
 	/// notification called when a desklet is stopped, for instance before it is destroyed.
 	NOTIFICATION_STOP_DESKLET,
 	/// notification called when a desklet is resized or moved on the screen.

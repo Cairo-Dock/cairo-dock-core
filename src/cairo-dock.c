@@ -37,7 +37,7 @@
 **    Karl Lattimer <karl@qdh.org.uk>
 ** Originally conceived as a stress-test for cairo, librsvg, and glitz.
 **
-*********************** VERSION 0.1 and above (2007-2011) *********************
+*********************** VERSION 0.1 and above (2007-2012) *********************
 **
 ** author(s) :
 **     Fabrice Rey <fabounet@glx-dock.org>

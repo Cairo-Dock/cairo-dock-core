@@ -92,10 +92,45 @@ static void cairo_dock_set_default_rgba_visual (GtkWidget *pWidget)
 	gtk_widget_set_visual (pWidget, pGdkVisual);
 	#endif
 }
+
+static gboolean _cairo_default_container_animation_loop (CairoContainer *pContainer)
+{
+	gboolean bContinue = FALSE;
+	
+	gboolean bUpdateSlowAnimation = FALSE;
+	pContainer->iAnimationStep ++;
+	if (pContainer->iAnimationStep * pContainer->iAnimationDeltaT >= CAIRO_DOCK_MIN_SLOW_DELTA_T)
+	{
+		bUpdateSlowAnimation = TRUE;
+		pContainer->iAnimationStep = 0;
+		pContainer->bKeepSlowAnimation = FALSE;
+	}
+	
+	if (bUpdateSlowAnimation)
+	{
+		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_UPDATE_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
+		cairo_dock_notify_on_object (pContainer, NOTIFICATION_UPDATE_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
+	}
+	
+	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_UPDATE, pContainer, &bContinue);
+	cairo_dock_notify_on_object (pContainer, NOTIFICATION_UPDATE, pContainer, &bContinue);
+	
+	if (! bContinue && ! pContainer->bKeepSlowAnimation)
+	{
+		pContainer->iSidGLAnimation = 0;
+		return FALSE;
+	}
+	else
+		return TRUE;
+}
+
 GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow)
 {
 	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	pContainer->pWidget = pWindow;
+	
+	if (!pContainer->iface.animation_loop)
+		pContainer->iface.animation_loop = _cairo_default_container_animation_loop;
 	
 	if (g_bUseOpenGL && bOpenGLWindow)
 	{

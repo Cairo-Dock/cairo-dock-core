@@ -102,7 +102,7 @@ void cairo_dock_init_dock_manager (void)
 			NULL);  // donc on peut utiliser g_hash_table_remove plutot que g_hash_table_steal.
 		
 		cairo_dock_register_notification_on_object (&myDocksMgr,
-			NOTIFICATION_RENDER_DOCK,
+			NOTIFICATION_RENDER,
 			(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
 			CAIRO_DOCK_RUN_FIRST, NULL);
 		cairo_dock_register_notification_on_object (&myDocksMgr,
@@ -1740,7 +1740,7 @@ static void init (void)
 		NULL);  // donc on peut utiliser g_hash_table_remove plutot que g_hash_table_steal.
 	
 	cairo_dock_register_notification_on_object (&myDocksMgr,
-		NOTIFICATION_RENDER_DOCK,
+		NOTIFICATION_RENDER,
 		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	cairo_dock_register_notification_on_object (&myDocksMgr,

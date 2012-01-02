@@ -1301,7 +1301,7 @@ static void unload (void)
 static void init (void)
 {
 	cairo_dock_register_notification_on_object (&myDialogsMgr,
-		NOTIFICATION_RENDER_DIALOG,
+		NOTIFICATION_RENDER,
 		(CairoDockNotificationFunc) _cairo_dock_render_dialog_notification,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 }

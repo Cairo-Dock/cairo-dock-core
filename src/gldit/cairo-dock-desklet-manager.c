@@ -929,7 +929,7 @@ static void unload (void)
 static void init (void)
 {
 	cairo_dock_register_notification_on_object (&myDeskletsMgr,
-		NOTIFICATION_UPDATE_DESKLET,
+		NOTIFICATION_UPDATE,
 		(CairoDockNotificationFunc) _cairo_dock_update_desklet_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	cairo_dock_register_notification_on_object (&myDeskletsMgr,
@@ -941,7 +941,7 @@ static void init (void)
 		(CairoDockNotificationFunc) _cairo_dock_enter_leave_desklet_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	cairo_dock_register_notification_on_object (&myDeskletsMgr,
-		NOTIFICATION_RENDER_DESKLET,
+		NOTIFICATION_RENDER,
 		(CairoDockNotificationFunc) _cairo_dock_render_desklet_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	s_iStartupTime = time (NULL);  // on startup, the WM can take a long time before it has positionned all the desklets. To avoid irrelevant configure events, we set a delay.

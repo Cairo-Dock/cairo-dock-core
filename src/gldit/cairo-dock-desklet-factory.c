@@ -98,8 +98,8 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 		if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pDesklet)))
 			return FALSE;
 		
-		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_RENDER_DESKLET, pDesklet, NULL);
-		cairo_dock_notify_on_object (pDesklet, NOTIFICATION_RENDER_DESKLET, pDesklet, NULL);
+		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_RENDER, pDesklet, NULL);
+		cairo_dock_notify_on_object (pDesklet, NOTIFICATION_RENDER, pDesklet, NULL);
 		
 		gldi_glx_end_draw_container (CAIRO_CONTAINER (pDesklet));
 	}
@@ -107,8 +107,8 @@ static gboolean on_expose_desklet(GtkWidget *pWidget,
 	{
 		cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDesklet));
 		
-		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_RENDER_DESKLET, pDesklet, pCairoContext);
-		cairo_dock_notify_on_object (pDesklet, NOTIFICATION_RENDER_DESKLET, pDesklet, pCairoContext);
+		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_RENDER, pDesklet, pCairoContext);
+		cairo_dock_notify_on_object (pDesklet, NOTIFICATION_RENDER, pDesklet, pCairoContext);
 		
 		cairo_destroy (pCairoContext);
 	}
@@ -721,6 +721,56 @@ static void _cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 		pDesklet->pRenderer->set_icon_size (pDesklet, icon);*/
 }
 
+static gboolean _cairo_desklet_animation_loop (CairoContainer *pContainer)
+{
+	CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
+	gboolean bContinue = FALSE;
+	gboolean bUpdateSlowAnimation = FALSE;
+	pContainer->iAnimationStep ++;
+	if (pContainer->iAnimationStep * pContainer->iAnimationDeltaT >= CAIRO_DOCK_MIN_SLOW_DELTA_T)
+	{
+		bUpdateSlowAnimation = TRUE;
+		pContainer->iAnimationStep = 0;
+		pContainer->bKeepSlowAnimation = FALSE;
+	}
+	
+	if (pDesklet->pIcon != NULL)
+	{
+		gboolean bIconIsAnimating = FALSE;
+		
+		if (bUpdateSlowAnimation)
+		{
+			cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+			cairo_dock_notify_on_object (pDesklet->pIcon, NOTIFICATION_UPDATE_ICON_SLOW, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+			pDesklet->container.bKeepSlowAnimation |= bIconIsAnimating;
+		}
+		
+		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+		cairo_dock_notify_on_object (pDesklet->pIcon, NOTIFICATION_UPDATE_ICON, pDesklet->pIcon, pDesklet, &bIconIsAnimating);
+		if (! bIconIsAnimating)
+			pDesklet->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+		else
+			bContinue = TRUE;
+	}
+	
+	if (bUpdateSlowAnimation)
+	{
+		cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_UPDATE_SLOW, pDesklet, &pContainer->bKeepSlowAnimation);
+		cairo_dock_notify_on_object (pDesklet, NOTIFICATION_UPDATE_SLOW, pDesklet, &pContainer->bKeepSlowAnimation);
+	}
+	
+	cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_UPDATE, pDesklet, &bContinue);
+	cairo_dock_notify_on_object (pDesklet, NOTIFICATION_UPDATE, pDesklet, &bContinue);
+	
+	if (! bContinue && ! pContainer->bKeepSlowAnimation)
+	{
+		pContainer->iSidGLAnimation = 0;
+		return FALSE;
+	}
+	else
+		return TRUE;
+}
+
 CairoDesklet *cairo_dock_new_desklet (void)
 {
 	cd_message ("%s ()", __func__);
@@ -732,6 +782,7 @@ CairoDesklet *cairo_dock_new_desklet (void)
 	pDesklet->container.fRatio = 1;
 	
 	pDesklet->container.iface.set_icon_size = _cairo_dock_set_icon_size;
+	pDesklet->container.iface.animation_loop = _cairo_desklet_animation_loop;
 	
 	GtkWidget* pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDesklet));
 	cairo_dock_install_notifications_on_object (pDesklet, NB_NOTIFICATIONS_DESKLET);

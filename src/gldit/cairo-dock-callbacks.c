@@ -219,8 +219,8 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		}
 		else
 		{
-			cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER_DOCK, pDock, NULL);
-			cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER_DOCK, pDock, NULL);
+			cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER, pDock, NULL);
+			cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER, pDock, NULL);
 		}
 		glDisable (GL_SCISSOR_TEST);
 		
@@ -253,8 +253,8 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
 				g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
 			
-			cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER_DOCK, pDock, pCairoContext);
-			cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER_DOCK, pDock, pCairoContext);
+			cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER, pDock, pCairoContext);
+			cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER, pDock, pCairoContext);
 			
 			cairo_destroy (pCairoContext);
 			return FALSE;
@@ -289,8 +289,8 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
 			g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
 		
-		cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER_DOCK, pDock, pCairoContext);
-		cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER_DOCK, pDock, pCairoContext);
+		cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER, pDock, pCairoContext);
+		cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER, pDock, pCairoContext);
 	}
 	
 	cairo_destroy (pCairoContext);
@@ -939,6 +939,12 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 				cairo_dock_free_flying_container (s_pFlyingContainer);
 				cairo_dock_stop_icon_animation (pFlyingIcon);
 				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+				// reinsert the icon where it was dropped, not at its original position.
+				Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
+				if (icon != NULL && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon))
+				{
+					cairo_dock_move_icon_after_icon (pDock, pFlyingIcon, icon);
+				}
 				cairo_dock_start_icon_animation (pFlyingIcon, pDock);
 				s_pFlyingContainer = NULL;
 				pDock->bIconIsFlyingAway = FALSE;

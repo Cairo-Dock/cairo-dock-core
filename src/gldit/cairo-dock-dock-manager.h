@@ -106,12 +106,6 @@ typedef enum {
 	NOTIFICATION_ENTER_DOCK = NB_NOTIFICATIONS_CONTAINER,
 	/// notification called when the mouse leave a dock.
 	NOTIFICATION_LEAVE_DOCK,
-	/// notification called when a dock is updated in the fast rendering loop.
-	NOTIFICATION_UPDATE_DOCK,
-	/// notification called when when a dock is updated in the slow rendering loop.
-	NOTIFICATION_UPDATE_DOCK_SLOW,
-	/// notification called when a dock is rendered.
-	NOTIFICATION_RENDER_DOCK,
 	/// notification called when a dock is stopped, for instance before it is destroyed.
 	NOTIFICATION_STOP_DOCK,
 	/// notification called when an icon has just been inserted into a dock. data : {Icon, CairoDock}
@@ -120,7 +114,6 @@ typedef enum {
 	NOTIFICATION_REMOVE_ICON,
 	/// notification called when an icon is moved inside a dock. data : {Icon, CairoDock}
 	NOTIFICATION_ICON_MOVED,
-	/// 
 	NB_NOTIFICATIONS_DOCKS
 	} CairoDocksNotifications;
 

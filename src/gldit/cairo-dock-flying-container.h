@@ -38,11 +38,7 @@ struct _CairoFlyingManager {
 
 // signals
 typedef enum {
-	/// notification called when a FlyingContainer is updated in the fast rendering loop.
-	NOTIFICATION_UPDATE_FLYING_CONTAINER = NB_NOTIFICATIONS_CONTAINER,
-	/// notification called when a FlyingContainer is rendered.
-	NOTIFICATION_RENDER_FLYING_CONTAINER,
-	NB_NOTIFICATIONS_FLYING_CONTAINER
+	NB_NOTIFICATIONS_FLYING_CONTAINER = NB_NOTIFICATIONS_CONTAINER
 	} CairoFlyingNotifications;
 
 // factory
@@ -52,8 +48,14 @@ struct _CairoFlyingContainer {
 	/// the flying icon
 	Icon *pIcon;
 	/// time the container was created.
-	double fCreationTime;
+	double fCreationTime;  // see callbacks.c for the usage of this.
 };
+
+/** Cast a Container into a FlyingIconff .
+*@param pContainer the container.
+*@return the desklet.
+*/
+#define CAIRO_FLYING_CONTAINER(pContainer) ((CairoFlyingContainer *)pContainer)
 
 void cairo_dock_unload_flying_container_textures (void);  // merge with unload
 

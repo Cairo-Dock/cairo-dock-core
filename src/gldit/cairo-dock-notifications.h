@@ -38,118 +38,6 @@ typedef struct {
 	gpointer pUserData;
 	} CairoDockNotificationRecord;
 
-// The list of all notifications.
-/*typedef enum {
-	/// notification called when use clicks on an icon data : {Icon, CairoDock, int}
-	CAIRO_DOCK_CLICK_ICON=0,
-	/// notification called when the user double-clicks on an icon. data : {Icon, CairoDock}
-	CAIRO_DOCK_DOUBLE_CLICK_ICON,
-	/// notification called when the user middle-clicks on an icon. data : {Icon, CairoDock}
-	CAIRO_DOCK_MIDDLE_CLICK_ICON,
-	/// notification called when the user scrolls on an icon. data : {Icon, CairoDock, int}
-	CAIRO_DOCK_SCROLL_ICON,
-	/// notification called when the menu is being built on an icon (possibly NULL). data : {Icon, CairoContainer, GtkMenu}
-	CAIRO_DOCK_BUILD_ICON_MENU,
-	/// notification called when the mouse enters a dock while dragging an object.
-	CAIRO_DOCK_START_DRAG_DATA,
-	/// notification called when something is dropped inside a container. data : {gchar*, Icon, double*, CairoDock}
-	CAIRO_DOCK_DROP_DATA,
-	/// notification called when the mouse has moved inside a container.
-	CAIRO_DOCK_MOUSE_MOVED,
-	/// notification called when a key is pressed in a container that has the focus.
-	CAIRO_DOCK_KEY_PRESSED,
-	
-	/// notification called when the user switches to another desktop/viewport. data : NULL
-	CAIRO_DOCK_DESKTOP_CHANGED,
-	/// notification called when a window is resized or moved, or when the z-order of windows has changed. data : {Xid, XConfigureEvent or NULL}.
-	CAIRO_DOCK_WINDOW_CONFIGURED,
-	/// notification called when the geometry of the desktop has changed (number of viewports/desktops, dimensions). data : NULL
-	CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED,
-	/// notification called when the active window has changed. data : Window* or NULL
-	CAIRO_DOCK_WINDOW_ACTIVATED,
-	/// notification called when the state of the keyboard has changed.
-	CAIRO_DOCK_KBD_STATE_CHANGED,
-	
-	/// notification called when an icon has just been inserted into a dock. data : {Icon, CairoDock}
-	CAIRO_DOCK_INSERT_ICON,
-	/// notification called when an icon is going to be removed from a dock. data : {Icon, CairoDock}
-	CAIRO_DOCK_REMOVE_ICON,
-	/// notification called when someone asks for an animation for a given icon.
-	CAIRO_DOCK_REQUEST_ICON_ANIMATION,
-	
-	/// notification called when the mouse enters an icon. data : {Icon, CairoDock, gboolean*}
-	CAIRO_DOCK_ENTER_ICON,
-	/// notification called when an icon is updated in the fast rendering loop.
-	CAIRO_DOCK_UPDATE_ICON,
-	/// notification called when an icon is updated in the slow rendering loop.
-	CAIRO_DOCK_UPDATE_ICON_SLOW,
-	/// notification called when the background of an icon is rendered.
-	CAIRO_DOCK_PRE_RENDER_ICON,
-	/// notification called when an icon is rendered.
-	CAIRO_DOCK_RENDER_ICON,
-	/// notification called when an icon is stopped, for instance before it is removed.
-	CAIRO_DOCK_STOP_ICON,
-	
-	/// notification called when the mouse enters a dock.
-	CAIRO_DOCK_ENTER_DOCK,
-	/// notification called when a dock is updated in the fast rendering loop.
-	CAIRO_DOCK_UPDATE_DOCK,
-	/// notification called when when a dock is updated in the slow rendering loop.
-	CAIRO_DOCK_UPDATE_DOCK_SLOW,
-	/// notification called when a dock is rendered.
-	CAIRO_DOCK_RENDER_DOCK,
-	/// notification called when a dock is stopped, for instance before it is destroyed.
-	CAIRO_DOCK_STOP_DOCK,
-	
-	/// notification called when the mouse enters a desklet.
-	CAIRO_DOCK_ENTER_DESKLET,
-	/// notification called when a desklet is updated in the fast rendering loop.
-	CAIRO_DOCK_UPDATE_DESKLET,
-	/// notification called when a desklet is updated in the slow rendering loop.
-	CAIRO_DOCK_UPDATE_DESKLET_SLOW,
-	/// notification called when a desklet is rendered.
-	CAIRO_DOCK_RENDER_DESKLET,
-	/// notification called when a desklet is stopped, for instance before it is destroyed.
-	CAIRO_DOCK_STOP_DESKLET,
-	
-	/// notification called when a FlyingContainer is updated in the fast rendering loop.
-	CAIRO_DOCK_UPDATE_FLYING_CONTAINER,
-	/// notification called when a FlyingContainer is rendered.
-	CAIRO_DOCK_RENDER_FLYING_CONTAINER,
-	
-	/// notification called when a Dialog is updated in the fast rendering loop.
-	CAIRO_DOCK_UPDATE_DIALOG,
-	/// notification called when a Dialog is updated in the slow rendering loop.
-	CAIRO_DOCK_UPDATE_DIALOG_SLOW,
-	/// notification called when a Dialog is rendered.
-	CAIRO_DOCK_RENDER_DIALOG,
-	
-	/// notification called for the fast rendering loop on a default container.
-	CAIRO_DOCK_UPDATE_DEFAULT_CONTAINER,
-	/// notification called for the slow rendering loop on a default container.
-	CAIRO_DOCK_UPDATE_DEFAULT_CONTAINER_SLOW,
-	/// notification called when a default container is rendered.
-	CAIRO_DOCK_RENDER_DEFAULT_CONTAINER,
-	
-	/// notification called when the mouse leave a dock.
-	CAIRO_DOCK_LEAVE_DOCK,
-	/// notification called when the mouse leave a desklet.
-	CAIRO_DOCK_LEAVE_DESKLET,
-	
-	/// notification called when the desktop is shown/hidden. data:NULL.
-	CAIRO_DOCK_DESKTOP_VISIBILITY_CHANGED,
-	/// notification called when the menu is being built on a container. data : {Icon, CairoContainer, GtkMenu, gboolean*}
-	CAIRO_DOCK_BUILD_CONTAINER_MENU,
-	
-	/// notification called when an icon's sub-dock is starting to (un)fold. data : {Icon}
-	CAIRO_DOCK_UNFOLD_SUBDOCK,
-	
-	/// notification called when a window's property has changed. data : {Window, Atom, int}
-	CAIRO_DOCK_WINDOW_PROPERTY_CHANGED,
-	
-	CAIRO_DOCK_NB_NOTIFICATIONS
-	} CairoDockNotificationType;
-*/
 
 typedef guint CairoDockNotificationType;
 
@@ -223,71 +111,6 @@ typedef gboolean (* CairoDockLeaveContainerFunc) (gpointer pUserData, CairoConta
 #define CAIRO_DOCK_LET_PASS_NOTIFICATION FALSE
 
 
-//GSList *cairo_dock_get_notifications_list (CairoDockNotificationType iNotifType);
-
-/* Register an action to be called when a given notification is broadcasted.
-*@param iNotifType type of the notification.
-*@param pFunction callback.
-*@param bRunFirst CAIRO_DOCK_RUN_FIRST to be called before Cairo-Dock, CAIRO_DOCK_RUN_AFTER to be called after.
-*@param pUserData data to be passed as the first parameter of the callback.
-*/
-//void cairo_dock_register_notification (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
-
-/* Remove a callback from the list of callbacks for a given notification and a given data.
-*@param iNotifType type of the notification.
-*@param pFunction callback.
-*@param pUserData data that was registerd with the callback.
-*/
-//void cairo_dock_remove_notification_func (CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
-
-
-#define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
-	if (pNotificationRecordList != NULL) {\
-		CairoDockNotificationRecord *pNotificationRecord;\
-		GSList *pElement = pNotificationRecordList, *pNextElement;\
-		while (pElement != NULL && ! bStop) {\
-			pNotificationRecord = pElement->data;\
-			pNextElement = pElement->next;\
-			bStop = pNotificationRecord->pFunction (pNotificationRecord->pUserData, ##__VA_ARGS__);\
-			pElement = pNextElement; } }\
-	} while (0)
-
-/* Broadcast a notification.
-*@param iNotifType type of the notification.
-*@param ... parameters to be passed to the callbacks that has registerd to this notification.
-*/
-/*#define cairo_dock_notify(iNotifType, ...) do {\
-	gboolean bStop = FALSE;\
-	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
-	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
-	} while (0)*/
-
-/* Broadcast a notification from a given icon.
-*@param pIcon the icon.
-*@param iNotifType type of the notification.
-*@param ... parameters to be passed to the callbacks that has registerd to this notification.
-*/
-/*#define cairo_dock_notify_on_icon(pIcon, iNotifType, ...) do {\
-	gboolean bStop = FALSE;\
-	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
-	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
-	if (! bStop && pIcon) {\
-		cairo_dock_notify_on_object (pIcon, iNotifType, ##__VA_ARGS__); }\
-	} while (0)*/
-
-/* Broadcast a notification from a given container.
-*@param pContainer the container.
-*@param iNotifType type of the notification.
-*@param ... parameters to be passed to the callbacks that has registerd to this notification.
-*/
-/*#define cairo_dock_notify_on_container(pContainer, iNotifType, ...) do {\
-	gboolean bStop = FALSE;\
-	GSList *pNotificationRecordList = cairo_dock_get_notifications_list (iNotifType);\
-	_cairo_dock_notify(pNotificationRecordList, bStop, ##__VA_ARGS__);\
-	if (! bStop && pContainer) {\
-		cairo_dock_notify_on_object (pContainer, iNotifType, ##__VA_ARGS__); }\
-	} while (0)*/
-
 
 void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab);
 
@@ -313,12 +136,25 @@ void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab);
 void cairo_dock_register_notification_on_object (gpointer pObject, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);
 
 /** Remove a callback from the list of callbacks of a given object for a given notification and a given data.
+Note: it is safe to remove the callback when it is called, but not another one.
 *@param pObject the object (Icon, Container, Manager) for which the action has been registered.
 *@param iNotifType type of the notification.
 *@param pFunction callback.
 *@param pUserData data that was registerd with the callback.
 */
 void cairo_dock_remove_notification_func_on_object (gpointer pObject, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
+
+
+#define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
+	if (pNotificationRecordList != NULL) {\
+		CairoDockNotificationRecord *pNotificationRecord;\
+		GSList *pElement = pNotificationRecordList, *pNextElement;\
+		while (pElement != NULL && ! bStop) {\
+			pNotificationRecord = pElement->data;\
+			pNextElement = pElement->next;\
+			bStop = pNotificationRecord->pFunction (pNotificationRecord->pUserData, ##__VA_ARGS__);\
+			pElement = pNextElement; } }\
+	} while (0)
 
 /** Broadcast a notification on a given object.
 *@param pObject the object (Icon, Container, Manager).

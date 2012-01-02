@@ -84,12 +84,12 @@ typedef enum {
 	NOTIFICATION_MOUSE_MOVED,
 	/// notification called when a key is pressed in a container that has the focus.
 	NOTIFICATION_KEY_PRESSED,
-	/// notification called for the fast rendering loop on a default container.
-	NOTIFICATION_UPDATE_DEFAULT_CONTAINER,
-	/// notification called for the slow rendering loop on a default container.
-	NOTIFICATION_UPDATE_DEFAULT_CONTAINER_SLOW,
-	/// notification called when a default container is rendered.
-	NOTIFICATION_RENDER_DEFAULT_CONTAINER,
+	/// notification called for the fast rendering loop on a container.
+	NOTIFICATION_UPDATE,
+	/// notification called for the slow rendering loop on a container.
+	NOTIFICATION_UPDATE_SLOW,
+	/// notification called when a container is rendered.
+	NOTIFICATION_RENDER,
 	NB_NOTIFICATIONS_CONTAINER
 	} CairoContainerNotifications;
 
@@ -112,6 +112,7 @@ typedef enum {
 
 struct _CairoContainerInterface {
 	void (*set_icon_size) (CairoContainer *pContainer, Icon *icon);
+	gboolean (*animation_loop) (CairoContainer *pContainer);
 	};
 
 /// Definition of a Container, whom derive Dock, Desklet, Dialog and FlyingContainer. 

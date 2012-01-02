@@ -256,8 +256,8 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 		if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pFlyingContainer)))
 			return FALSE;
 		
-		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
-		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, NULL);
+		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER, pFlyingContainer, NULL);
+		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER, pFlyingContainer, NULL);
 		
 		gldi_glx_end_draw_container (CAIRO_CONTAINER (pFlyingContainer));
 	}
@@ -265,8 +265,8 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 	{
 		cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pFlyingContainer));
 		
-		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, pCairoContext);
-		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER_FLYING_CONTAINER, pFlyingContainer, pCairoContext);
+		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER, pFlyingContainer, pCairoContext);
+		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER, pFlyingContainer, pCairoContext);
 		
 		cairo_destroy (pCairoContext);
 	}
@@ -298,6 +298,35 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 	return FALSE;
 }
 
+static gboolean _cairo_flying_container_animation_loop (CairoContainer *pContainer)
+{
+	CairoFlyingContainer *pFlyingContainer = CAIRO_FLYING_CONTAINER (pContainer);
+	gboolean bContinue = FALSE;
+	
+	if (pFlyingContainer->pIcon != NULL)
+	{
+		gboolean bIconIsAnimating = FALSE;
+		
+		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
+		cairo_dock_notify_on_object (pFlyingContainer->pIcon, NOTIFICATION_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
+		if (! bIconIsAnimating)
+			pFlyingContainer->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
+		else
+			bContinue = TRUE;
+	}
+	
+	cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_UPDATE, pFlyingContainer, &bContinue);
+	cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_UPDATE, pFlyingContainer, &bContinue);
+	
+	if (! bContinue)
+	{
+		cairo_dock_free_flying_container (pFlyingContainer);
+		return FALSE;
+	}
+	else
+		return TRUE;
+}
+
 CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock)
 {
 	g_return_val_if_fail (pFlyingIcon != NULL, NULL);
@@ -307,6 +336,8 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	cairo_dock_install_notifications_on_object (pFlyingContainer, NB_NOTIFICATIONS_FLYING_CONTAINER);
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
+	
+	pFlyingContainer->container.iface.animation_loop = _cairo_flying_container_animation_loop;
 	
 	pFlyingContainer->pIcon = pFlyingIcon;
 	pFlyingContainer->container.bIsHorizontal = TRUE;
@@ -451,11 +482,11 @@ static void unload (void)
 static void init (void)
 {
 	cairo_dock_register_notification_on_object (&myFlyingsMgr,
-		NOTIFICATION_UPDATE_FLYING_CONTAINER,
+		NOTIFICATION_UPDATE,
 		(CairoDockNotificationFunc) _cairo_dock_update_flying_container_notification,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification_on_object (&myFlyingsMgr,
-		NOTIFICATION_RENDER_FLYING_CONTAINER,
+		NOTIFICATION_RENDER,
 		(CairoDockNotificationFunc) _cairo_dock_render_flying_container_notification,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 }
