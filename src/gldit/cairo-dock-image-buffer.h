@@ -45,6 +45,8 @@ struct _CairoDockImageBuffer {
 	gint iHeight;
 	gdouble fZoomX;
 	gdouble fZoomY;
+	gint iNbFrames;  // nb frames in the case of an animated image.
+	gint iCurrentFrame;
 	} ;
 
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);
@@ -105,6 +107,11 @@ void cairo_dock_load_image_buffer_from_texture (CairoDockImageBuffer *pImage, GL
 */
 CairoDockImageBuffer *cairo_dock_create_image_buffer (const gchar *cImageFile, int iWidth, int iHeight, CairoDockLoadImageModifier iLoadModifier);
 
+#define cairo_dock_image_buffer_is_animated(pImage) ((pImage)->iNbFrames > 0)
+#define cairo_dock_image_buffer_next_frame(pImage) do {\
+	(pImage)->iCurrentFrame ++;\
+	if ((pImage)->iCurrentFrame >= (pImage)->iNbFrames)\
+		(pImage)->iCurrentFrame = 0; } while (0)
 
 /** Reset an ImageBuffer's ressources. It can be used to load another image then.
 *@param pImage an ImageBuffer.
@@ -116,14 +123,13 @@ void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
 void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
 
 
-#define cairo_dock_apply_image_buffer_surface(pImage, pCairoContext) do { \
-	cairo_set_source_surface (pCairoContext, pImage->pSurface, 0., 0.); \
-	cairo_paint (pCairoContext); } while (0)
+void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha);
 
-#define cairo_dock_apply_image_buffer_texture(pImage) do { \
-	glBindTexture (GL_TEXTURE_2D, pImage->iTexture); \
-	_cairo_dock_apply_current_texture_at_size (pImage->iWidth, pImage->iHeight); } while (0)
+#define cairo_dock_apply_image_buffer_surface(pImage, pCairoContext) cairo_dock_apply_image_buffer_surface_with_offset (pImage, pCairoContext, 0., 0., 1.)
 
+void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pImage, double x, double y);
+
+#define cairo_dock_apply_image_buffer_texture(pImage) cairo_dock_apply_image_buffer_texture_with_offset (pImage, 0., 0.)
 
 G_END_DECLS
 #endif

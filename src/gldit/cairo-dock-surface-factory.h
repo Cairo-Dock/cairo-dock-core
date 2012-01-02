@@ -62,7 +62,9 @@ typedef enum {
 	/// orientation 90° rotation + vertical flip
 	CAIRO_DOCK_ORIENTATION_ROT_90_VFLIP = 6<<3,
 	/// orientation 270° rotation
-	CAIRO_DOCK_ORIENTATION_ROT_270 	= 7<<3
+	CAIRO_DOCK_ORIENTATION_ROT_270 	= 7<<3,
+	/// load the image as a strip if possible.
+	CAIRO_DOCK_ANIMATED_IMAGE = 1<<6
 	} CairoDockLoadImageModifier;
 /// mask to get the orientation from a CairoDockLoadImageModifier.
 #define CAIRO_DOCK_ORIENTATION_MASK (7<<3)

@@ -85,6 +85,7 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 	gboolean bFillSpace = iLoadingModifier & CAIRO_DOCK_FILL_SPACE;
 	gboolean bKeepRatio = iLoadingModifier & CAIRO_DOCK_KEEP_RATIO;
 	gboolean bNoZoomUp = iLoadingModifier & CAIRO_DOCK_DONT_ZOOM_IN;
+	gboolean bAnimated = iLoadingModifier & CAIRO_DOCK_ANIMATED_IMAGE;
 	gint iOrientation = iLoadingModifier & CAIRO_DOCK_ORIENTATION_MASK;
 	if (iOrientation > CAIRO_DOCK_ORIENTATION_VFLIP)  // inversion x/y
 	{
@@ -92,6 +93,33 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 		*fImageWidth = *fImageHeight;
 		*fImageHeight = tmp;
 	}
+	
+	if (bAnimated)
+	{
+		if (*fImageWidth > *fImageHeight)
+		{
+			if (((int)*fImageWidth) % ((int)*fImageHeight) == 0)  // w = k*h
+			{
+				iWidthConstraint = *fImageWidth / *fImageHeight * iHeightConstraint;
+			}
+			else if (*fImageWidth > 2 * *fImageHeight)  // if we're pretty sure this image is an animated one, try to be smart, to handle the case of non-square frames.
+			{
+				// assume we have wide frames => w > h
+				int w = *fImageHeight + 1, h = *fImageHeight;
+				do
+				{
+					if ((int)*fImageWidth % w == 0)
+					{
+						iWidthConstraint = *fImageWidth / w * iHeightConstraint;
+						g_print ("frame: %d, %d\n", w, iWidthConstraint);
+						break;
+					}
+					w ++;
+				} while (w < (*fImageWidth) / 2);
+			}
+		}
+	}
+	
 	if (bKeepRatio)
 	{
 		cairo_dock_calculate_size_constant_ratio (fImageWidth,

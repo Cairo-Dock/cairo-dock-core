@@ -123,6 +123,34 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 	pImage->iWidth = w;
 	pImage->iHeight = h;
 	
+	if (iLoadModifier & CAIRO_DOCK_ANIMATED_IMAGE)
+	{
+		g_print ("%dx%d\n", (int)w, (int)h);
+		if (w > h)
+		{
+			if ((int)w % (int)h == 0)  // w = k*h
+			{
+				pImage->iNbFrames = w / h;
+			}
+			else if (w > 2 * h)  // if we're pretty sure this image is an animated one, try to be smart, to handle the case of non-square frames.
+			{
+				// assume we have wide frames => w > h
+				int w_ = h+1, h_ = h;
+				do
+				{
+					g_print (" %d/%d\n", w_, (int)w);
+					if ((int)w % w_ == 0)
+					{
+						pImage->iNbFrames = w / w_;
+						break;
+					}
+					w_ ++;
+				} while (w_ < w / 2);
+			}
+		}
+		g_print ("CAIRO_DOCK_ANIMATED_IMAGE -> %d frames\n", pImage->iNbFrames);
+	}
+	
 	if (fAlpha < 1 && pImage->pSurface != NULL)
 	{
 		cairo_surface_t *pNewSurfaceAlpha = cairo_dock_create_blank_surface (
@@ -194,3 +222,38 @@ void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage)
 	g_free (pImage);
 }
 
+void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha)
+{
+	if (cairo_dock_image_buffer_is_animated (pImage))
+	{
+		cairo_save (pCairoContext);
+		cairo_translate (pCairoContext, x, y);
+		cairo_rectangle (pCairoContext, 0, 0, pImage->iHeight, pImage->iHeight);
+		cairo_clip (pCairoContext);
+		cairo_set_source_surface (pCairoContext, pImage->pSurface, - pImage->iCurrentFrame * pImage->iHeight, 0.);
+		cairo_paint_with_alpha (pCairoContext, fAlpha);
+		cairo_restore (pCairoContext);
+	}
+	else
+	{
+		cairo_set_source_surface (pCairoContext, pImage->pSurface, 0., 0.);
+		cairo_paint_with_alpha (pCairoContext, fAlpha);
+	}
+}
+
+void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pImage, double x, double y)
+{
+	glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
+	if (cairo_dock_image_buffer_is_animated (pImage))
+	{
+		int iFrameWidth = pImage->iWidth / pImage->iNbFrames;
+		_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double)pImage->iCurrentFrame / pImage->iNbFrames, 0,
+			1. / pImage->iNbFrames, 1.,
+			iFrameWidth, pImage->iHeight,
+			x, y);
+	}
+	else
+	{
+		_cairo_dock_apply_current_texture_at_size_with_offset (pImage->iWidth, pImage->iHeight, x, y);
+	}
+}
