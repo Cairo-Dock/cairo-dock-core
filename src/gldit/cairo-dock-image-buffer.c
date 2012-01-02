@@ -126,7 +126,7 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 	if (iLoadModifier & CAIRO_DOCK_ANIMATED_IMAGE)
 	{
 		g_print ("%dx%d\n", (int)w, (int)h);
-		if (w > h)
+		if (w * h != 0 && w > h)
 		{
 			if ((int)w % (int)h == 0)  // w = k*h
 			{
