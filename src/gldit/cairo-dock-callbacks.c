@@ -76,7 +76,8 @@ static int s_iSidActionOnDragHover = 0;
 static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
 static CairoDock *s_pSubDockShowing = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
 static CairoFlyingContainer *s_pFlyingContainer = NULL;
-
+static s_iFirstClickX=0, s_iFirstClickY=0;  // for double-click.
+	
 extern CairoDock *g_pMainDock;  // pour le raise-on-shortcut
 
 extern gboolean g_bUseOpenGL;
@@ -1015,6 +1016,8 @@ static gboolean _double_click_delay_over (Icon *icon)
 	CairoDock *pDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pDock)
 	{
+		pDock->container.iMouseX = s_iFirstClickX;
+		pDock->container.iMouseY = s_iFirstClickY;
 		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
 		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
 		if (pDock->bIsMainDock && pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
@@ -1091,6 +1094,8 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 								if (icon->iSidDoubleClickDelay == 0)  // 1er release.
 								{
 									icon->iSidDoubleClickDelay = g_timeout_add (CD_DOUBLE_CLICK_DELAY, (GSourceFunc)_double_click_delay_over, icon);
+									s_iFirstClickX = pDock->container.iMouseX;  // the mouse can move between the first and the second clicks; since the event is triggered when the second click occurs, the coordinates may be wrong -> we have to remember the position of the first click.
+									s_iFirstClickY = pDock->container.iMouseY;
 								}
 							}
 							else
