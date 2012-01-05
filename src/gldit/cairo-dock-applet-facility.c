@@ -228,7 +228,7 @@ void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, CairoContainer 
 {
 	int minutes = iTimeInSeconds / 60;
 	int secondes = iTimeInSeconds % 60;
-	cd_debug ("%s (%d:%d)\n", __func__, minutes, secondes);
+	//cd_debug ("%s (%d:%d)\n", __func__, minutes, secondes);
 	if (minutes != 0)
 		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%d:%02d", minutes, abs (secondes));
 	else

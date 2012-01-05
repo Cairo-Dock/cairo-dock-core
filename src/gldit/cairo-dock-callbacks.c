@@ -76,7 +76,7 @@ static int s_iSidActionOnDragHover = 0;
 static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
 static CairoDock *s_pSubDockShowing = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
 static CairoFlyingContainer *s_pFlyingContainer = NULL;
-static s_iFirstClickX=0, s_iFirstClickY=0;  // for double-click.
+static int s_iFirstClickX=0, s_iFirstClickY=0;  // for double-click.
 	
 extern CairoDock *g_pMainDock;  // pour le raise-on-shortcut
 

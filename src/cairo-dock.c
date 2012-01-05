@@ -786,7 +786,13 @@ int main (int argc, char** argv)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
 	g_print ("\n\nTODO (3.0):\n"
+	"** Must-Be-Done **\n"
 	"- Optimize the loading (update_dock_size in idle, avoid reloading applets, etc)\n"
+	"- dialogs above a vertical right dock\n"
+	"- check Notification Area, there might be a bug (bitecoin, litecoin, skype)\n"
+	"- PM: crash when no battery is plugged ?\n"
+	"- check that Kfind now appears in the taskbar\n"
+	"** That-Would-Be-Nice **\n"
 	"- Icon bg: add ratio\n"
 	"- Default theme more consistent\n"
 	"- Recent Events: handle recent apps\n"

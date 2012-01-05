@@ -109,7 +109,7 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 	if (cImageFile == NULL)
 		return;
 	gchar *cImagePath = cairo_dock_search_image_s_path (cImageFile);
-	double w, h;
+	double w=0, h=0;
 	pImage->pSurface = cairo_dock_create_surface_from_image (
 		cImagePath,
 		1.,
@@ -123,10 +123,10 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 	pImage->iWidth = w;
 	pImage->iHeight = h;
 	
-	if (iLoadModifier & CAIRO_DOCK_ANIMATED_IMAGE)
+	if ((iLoadModifier & CAIRO_DOCK_ANIMATED_IMAGE) && h != 0)
 	{
 		g_print ("%dx%d\n", (int)w, (int)h);
-		if (w * h != 0 && w > h)
+		if (w >= 2*h)  // we need at least 2 frames (Note: we assume that frames are wide).
 		{
 			if ((int)w % (int)h == 0)  // w = k*h
 			{

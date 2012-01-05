@@ -42,7 +42,7 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 static Display *s_XDisplay = NULL;
 static Atom s_aNetWmIcon;
 static Atom s_aNetWmState;
-static Atom s_aNetWmSkipPager;
+//static Atom s_aNetWmSkipPager;
 static Atom s_aNetWmSkipTaskbar;
 static Atom s_aNetWmWindowType;
 static Atom s_aNetWmWindowTypeNormal;
@@ -62,7 +62,7 @@ static void _cairo_dock_initialize_application_factory (void)
 	s_aNetWmIcon = XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
 
 	s_aNetWmState = XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
-	s_aNetWmSkipPager = XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_PAGER", False);
+	//s_aNetWmSkipPager = XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_PAGER", False);
 	s_aNetWmSkipTaskbar = XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_TASKBAR", False);
 	s_aNetWmHidden = XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
 
@@ -80,6 +80,7 @@ static void _cairo_dock_initialize_application_factory (void)
 
 static Window _cairo_dock_get_parent_window (Window Xid)
 {
+	/// seems like XGetTransientForHint (s_XDisplay, Xid, &xParentWindow) doesn't work ... yet it does exactly the same ...
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements = 0;
@@ -176,32 +177,31 @@ Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 		guint i;
 		for (i = 0; i < iBufferNbElements; i ++)  // The Client SHOULD specify window types in order of preference (the first being most preferable) but MUST include at least one of the basic window type atoms.
 		{
-			if (pTypeBuffer[i] == s_aNetWmWindowTypeNormal)  // une fenetre normale, on prend.
+			if (pTypeBuffer[i] == s_aNetWmWindowTypeNormal)  // normal window -> take it
 			{
 				bKeep = TRUE;
 				break;
 			}
-			if (pTypeBuffer[i] == s_aNetWmWindowTypeDialog)  // on saute si c'est un dialogue modal, sinon on garde.
+			if (pTypeBuffer[i] == s_aNetWmWindowTypeDialog)  // dialog -> skip modal dialog, because it's most probably a dialog box (like an open/save dialog)
 			{
-				/*Window iPropWindow;
-				XGetTransientForHint (s_XDisplay, Xid, &iPropWindow);
-				cd_debug ("%s\n", gdk_x11_get_xatom_name (iPropWindow));*/
-				Window XMainAppliWindow = _cairo_dock_get_parent_window (Xid);
-				if (XMainAppliWindow != 0)
+				Window XMainAppliWindow = _cairo_dock_get_parent_window (Xid);  // maybe we should also get the _NET_WM_STATE_MODAL property, although if a dialog is set modal but not transient, that would probably be an error from the application.
+				if (XMainAppliWindow != None && XMainAppliWindow != DefaultRootWindow (s_XDisplay))  // transient dialog, don't keep it, unless it also has the "normal" type further in the buffer.
 				{
-					cd_debug ("  dialogue 'transient for %d' => on ignore", XMainAppliWindow);
+					cd_debug ("  dialog 'transient for %d' => ignore", XMainAppliWindow);
 					if (bDemandsAttention)
 						*XParentWindow = XMainAppliWindow;
+				}
+				else
+				{
+					bKeep = TRUE;
 					break;
 				}
-				bKeep = TRUE;
-				break;
-			}  // autre type : on saute.
+			}  // skip any other type (dock, menu, etc)
 		}
 		XFree (pTypeBuffer);
 		if (! bKeep)
 		{
-			cd_debug ("type indesirable (%d)\n", *pTypeBuffer);
+			cd_debug ("ignore this window");
 			return NULL;
 		}
 	}
@@ -211,7 +211,7 @@ Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 		XGetTransientForHint (s_XDisplay, Xid, &XMainAppliWindow);
 		if (XMainAppliWindow != 0)
 		{
-			cd_debug ("  fenetre modale => on saute.");
+			cd_debug ("  transient window => skip it");
 			if (bDemandsAttention)
 				*XParentWindow = XMainAppliWindow;
 			return NULL;
