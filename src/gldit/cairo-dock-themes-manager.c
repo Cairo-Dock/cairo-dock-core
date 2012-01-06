@@ -258,23 +258,18 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 	gchar *cNewThemePath = NULL;
 	if (*cPackagePath == '/' || strncmp (cPackagePath, "file://", 7) == 0)  // paquet en local.
 	{
-		cd_debug (" paquet local\n");
+		cd_debug (" paquet local");
 		gchar *cFilePath = (*cPackagePath == '/' ? g_strdup (cPackagePath) : g_filename_from_uri (cPackagePath, NULL, NULL));
 		cNewThemePath = cairo_dock_uncompress_file (cFilePath, g_cThemesDirPath, NULL);
 		g_free (cFilePath);
 	}
 	else  // paquet distant.
 	{
-		cd_debug (" paquet distant\n");
-		gchar *str = strrchr (cPackagePath, '/');
-		if (str != NULL)
+		cd_debug (" paquet distant");
+		cNewThemePath = cairo_dock_download_archive (cPackagePath, g_cThemesDirPath);
+		if (cNewThemePath == NULL)
 		{
-			*str = '\0';
-			cNewThemePath = cairo_dock_download_file (cPackagePath, "", str+1, g_cThemesDirPath, NULL);
-			if (cNewThemePath == NULL)
-			{
-				cairo_dock_show_temporary_dialog_with_icon_printf (_("Could not access remote file %s/%s. Maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath, str+1);
-			}
+			cairo_dock_show_temporary_dialog_with_icon_printf (_("Could not access remote file %s. Maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath);
 		}
 	}
 	return cNewThemePath;

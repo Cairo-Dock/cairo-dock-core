@@ -47,6 +47,7 @@ CairoConnectionManager myConnectionMgr;
 #define CAIRO_DOCK_DEFAULT_PACKAGES_LIST_FILE "list.conf"
 static gchar *s_cPackageServerAdress = NULL;
 
+
   ////////////////////
  /// DOWNLOAD API ///
 ////////////////////
@@ -155,131 +156,153 @@ static size_t _write_data_to_file (gpointer buffer, size_t size, size_t nmemb, F
 {
 	return fwrite (buffer, size, nmemb, fd);
 }
-gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GError **erreur)
+gboolean cairo_dock_download_file (const gchar *cURL, const gchar *cLocalPath)
 {
-	//g_print ("%s (%s, %s, %s, %s)\n", __func__, cServerAdress, cDistantFilePath, cDistantFileName, cExtractTo);
-	//\_______________ On reserve un fichier temporaire.
-	gchar *cTmpFilePath = g_strdup ("/tmp/cairo-dock-net-file.XXXXXX");
-	int fds = mkstemp (cTmpFilePath);
-	if (fds == -1)
-	{
-		g_set_error (erreur, 1, 1, "couldn't create temporary file '%s'", cTmpFilePath);
-		g_free (cTmpFilePath);
-		return NULL;
-	}
+	g_return_val_if_fail (cLocalPath != NULL && cURL != NULL, FALSE);
 	
-	//\_______________ On lance le download.
-	gchar *cURL = (cServerAdress ? g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName) : g_strdup (cDistantFileName));
-	cd_debug ("cURL : %s\n", cURL);
-	FILE *f = fopen (cTmpFilePath, "wb");
-	g_return_val_if_fail (f, NULL);
+	// download the file
+	FILE *f = fopen (cLocalPath, "wb");
+	g_return_val_if_fail (f, FALSE);
 	
 	CURL *handle = _init_curl_connection (cURL);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, _write_data_to_file);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, f);
 	
 	CURLcode r = curl_easy_perform (handle);
+	fclose (f);
 	
-	if (r != CURLE_OK)
+	// check the result
+	gboolean bOk;
+	if (r != CURLE_OK)  // an error occured
 	{
 		cd_warning ("an error occured while downloading '%s'", cURL);
-		g_remove (cTmpFilePath);
-		g_free (cTmpFilePath);
-		cTmpFilePath = NULL;
+		g_remove (cLocalPath);
+		bOk = FALSE;
+	}
+	else  // download ok, check the file is not empty.
+	{
+		struct stat buf;
+		stat (cLocalPath, &buf);
+		if (buf.st_size > 0)
+		{
+			bOk = TRUE;
+		}
+		else
+		{
+			cd_warning ("empty file from '%s'", cURL);
+			g_remove (cLocalPath);
+			bOk = FALSE;
+		}
 	}
 	
 	curl_easy_cleanup (handle);
-	g_free (cURL);
-	fclose (f);
-	
-	//\_______________ On teste que le fichier est non vide.
-	gboolean bOk = (cTmpFilePath != NULL);
-	if (bOk)
+	return bOk;
+}
+
+gchar *cairo_dock_download_file_in_tmp (const gchar *cURL)
+{
+	int fds = 0;
+	gchar *cTmpFilePath = g_strdup ("/tmp/cairo-dock-net-file.XXXXXX");
+	fds = mkstemp (cTmpFilePath);
+	if (fds == -1)
 	{
-		struct stat buf;
-		stat (cTmpFilePath, &buf);
-		bOk = (buf.st_size > 0);
+		cd_warning ("couldn't create temporary file '%s'", cTmpFilePath);
+		g_free (cTmpFilePath);
+		return NULL;
 	}
+	
+	gboolean bOk = cairo_dock_download_file (cURL, cTmpFilePath);
+	
 	if (! bOk)
 	{
-		g_set_error (erreur, 1, 1, "couldn't get distant file %s", cDistantFileName);
 		g_remove (cTmpFilePath);
 		g_free (cTmpFilePath);
 		cTmpFilePath = NULL;
 	}
 	close(fds);
-	
-	//\_______________ On l'extrait si c'est une archive.
-	if (cTmpFilePath != NULL && cExtractTo != NULL)
-	{
-		cd_debug ("uncompressing ...\n");
-		gchar *cPath = cairo_dock_uncompress_file (cTmpFilePath, cExtractTo, cDistantFileName);
-		g_remove (cTmpFilePath);
-		g_free (cTmpFilePath);
-		cTmpFilePath = cPath;
-	}
-	
 	return cTmpFilePath;
 }
 
+gchar *cairo_dock_download_archive (const gchar *cURL, const gchar *cExtractTo)
+{
+	g_return_val_if_fail (cURL != NULL, NULL);
+	
+	// download the archive
+	gchar *cArchivePath = cairo_dock_download_file_in_tmp (cURL);
+	
+	// if success, uncompress it.
+	gchar *cPath = NULL;
+	if (cArchivePath != NULL)
+	{
+		if (cExtractTo != NULL)
+		{
+			cd_debug ("uncompressing archive...");
+			cPath = cairo_dock_uncompress_file (cArchivePath, cExtractTo, cURL);
+			g_remove (cArchivePath);
+		}
+		else
+		{
+			cPath = cArchivePath;
+			cArchivePath = NULL;
+		}
+	}
+	
+	g_free (cArchivePath);
+	return cPath;
+}
+
+
 static void _dl_file (gpointer *pSharedMemory)
 {
-	GError *erreur = NULL;
-	pSharedMemory[6] = cairo_dock_download_file (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2], pSharedMemory[3], &erreur);
-	if (erreur != NULL)
+	gchar *cPath;
+	if (pSharedMemory[1] != NULL)  // download to the given location
 	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
+		if (cairo_dock_download_file (pSharedMemory[0], pSharedMemory[1]))
+		{
+			pSharedMemory[4] = pSharedMemory[1];
+			pSharedMemory[1] = NULL;
+		}
+	}
+	else  // download in /tmp
+	{
+		pSharedMemory[4] = cairo_dock_download_file_in_tmp (pSharedMemory[0]);
 	}
 }
 static gboolean _finish_dl (gpointer *pSharedMemory)
 {
-	if (pSharedMemory[6] == NULL)
-		cd_warning ("couldn't get distant file %s", pSharedMemory[2]);
+	if (pSharedMemory[4] == NULL)
+		cd_warning ("couldn't get distant file %s", pSharedMemory[0]);
 	
-	GFunc pCallback = pSharedMemory[4];
-	pCallback (pSharedMemory[6], pSharedMemory[5]);
+	GFunc pCallback = pSharedMemory[2];
+	pCallback (pSharedMemory[4], pSharedMemory[3]);
 	return FALSE;
 }
 static void _free_dl (gpointer *pSharedMemory)
 {
 	g_free (pSharedMemory[0]);
 	g_free (pSharedMemory[1]);
-	g_free (pSharedMemory[2]);
-	g_free (pSharedMemory[3]);
-	g_free (pSharedMemory[6]);
+	g_free (pSharedMemory[4]);
 	g_free (pSharedMemory);
 }
-CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GFunc pCallback, gpointer data)
+CairoDockTask *cairo_dock_download_file_async (const gchar *cURL, const gchar *cLocalPath, GFunc pCallback, gpointer data)
 {
-	gpointer *pSharedMemory = g_new0 (gpointer, 7);
-	pSharedMemory[0] = g_strdup (cServerAdress);
-	pSharedMemory[1] = g_strdup (cDistantFilePath);
-	pSharedMemory[2] = g_strdup (cDistantFileName);
-	pSharedMemory[3] = g_strdup (cExtractTo);
-	pSharedMemory[4] = pCallback;
-	pSharedMemory[5] = data;
+	gpointer *pSharedMemory = g_new0 (gpointer, 5);
+	pSharedMemory[0] = g_strdup (cURL);
+	pSharedMemory[1] = g_strdup (cLocalPath);
+	pSharedMemory[2] = pCallback;
+	pSharedMemory[3] = data;
 	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _dl_file, (CairoDockUpdateSyncFunc) _finish_dl, (GFreeFunc) _free_dl, pSharedMemory);
 	cairo_dock_launch_task (pTask);
 	return pTask;
 }
 
 
-gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GError **erreur)
-{
-	gchar *cURL = g_strdup_printf ("%s/%s/%s", cServerAdress, cDistantFilePath, cDistantFileName);
-	gchar *cContent = cairo_dock_get_url_data (cURL, erreur);
-	g_free (cURL);
-	return cContent;
-}
 
-static size_t _write_data_to_buffer (gpointer buffer, size_t size, size_t nmemb, GList **list_ptr)
+static size_t _write_data_to_buffer (gpointer data, size_t size, size_t nmemb, GString *buffer)
 {
-	GList *pList = *list_ptr;
-	*list_ptr = g_list_prepend (*list_ptr, g_strndup (buffer, size * nmemb));
+	g_string_append_len (buffer, data, size * nmemb);
 	return size * nmemb;
 }
-
 gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutputHeaders, GError **erreur, const gchar *cFirstProperty, ...)
 {
 	//\_______________ On lance le download.
@@ -317,16 +340,16 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 			curl_easy_setopt (handle, CURLOPT_HEADER, 1);
 	}
 	curl_easy_setopt (handle, CURLOPT_WRITEFUNCTION, (curl_write_callback)_write_data_to_buffer);
-	gpointer *pointer_to_list = g_new0 (gpointer, 1);
-	curl_easy_setopt (handle, CURLOPT_WRITEDATA, pointer_to_list);
+	GString *buffer = g_string_sized_new (1024);
+	curl_easy_setopt (handle, CURLOPT_WRITEDATA, buffer);
 	
 	CURLcode r = curl_easy_perform (handle);
 	
 	if (r != CURLE_OK)
 	{
 		cd_warning ("an error occured while downloading '%s' : %s", cURL, curl_easy_strerror (r));
-		g_free (pointer_to_list);
-		pointer_to_list = NULL;
+		g_string_free (buffer, TRUE);
+		buffer = NULL;
 	}
 	
 	curl_easy_cleanup (handle);
@@ -335,42 +358,20 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 	
 	//\_______________ On recupere les donnees.
 	gchar *cContent = NULL;
-	if (pointer_to_list != NULL)
+	if (buffer != NULL)
 	{
-		GList *l, *pList = *pointer_to_list;
-		int n = 0;
-		for (l = pList; l != NULL; l = l->next)
-		{
-			if (l->data != NULL)
-				n += strlen (l->data);
-		}
-		
-		if (n != 0)
-		{
-			cContent = g_new0 (char, n+1);
-			char *ptr = cContent;
-			for (l = g_list_last (pList); l != NULL; l = l->prev)
-			{
-				if (l->data != NULL)
-				{
-					n = strlen (l->data);
-					memcpy (ptr, l->data, n);
-					ptr += n;
-					g_free (l->data);
-				}
-			}
-		}
-		g_list_free (pList);
-		g_free (pointer_to_list);
+		cContent = buffer->str;
+		g_string_free (buffer, FALSE);
 	}
 	
 	return cContent;
 }
 
+
 static void _dl_file_content (gpointer *pSharedMemory)
 {
 	GError *erreur = NULL;
-	pSharedMemory[5] = cairo_dock_get_distant_file_content (pSharedMemory[0], pSharedMemory[1], pSharedMemory[2], &erreur);
+	pSharedMemory[3] = cairo_dock_get_url_data (pSharedMemory[0], &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
@@ -379,33 +380,30 @@ static void _dl_file_content (gpointer *pSharedMemory)
 }
 static gboolean _finish_dl_content (gpointer *pSharedMemory)
 {
-	if (pSharedMemory[5] == NULL)
-		cd_warning ("couldn't get distant file %s", pSharedMemory[2]);
+	if (pSharedMemory[3] == NULL)
+		cd_warning ("request on '%s' failed", pSharedMemory[0]);
 	
-	GFunc pCallback = pSharedMemory[3];
-	pCallback (pSharedMemory[5], pSharedMemory[4]);
+	GFunc pCallback = pSharedMemory[1];
+	pCallback (pSharedMemory[3], pSharedMemory[2]);
 	return TRUE;
 }
 static void _free_dl_content (gpointer *pSharedMemory)
 {
 	g_free (pSharedMemory[0]);
-	g_free (pSharedMemory[1]);
-	g_free (pSharedMemory[2]);
-	g_free (pSharedMemory[5]);
+	g_free (pSharedMemory[3]);
 	g_free (pSharedMemory);
 }
-CairoDockTask *cairo_dock_get_distant_file_content_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GFunc pCallback, gpointer data)
+CairoDockTask *cairo_dock_get_url_data_async (const gchar *cURL, GFunc pCallback, gpointer data)
 {
 	gpointer *pSharedMemory = g_new0 (gpointer, 6);
-	pSharedMemory[0] = g_strdup (cServerAdress);
-	pSharedMemory[1] = g_strdup (cDistantFilePath);
-	pSharedMemory[2] = g_strdup (cDistantFileName);
-	pSharedMemory[3] = pCallback;
-	pSharedMemory[4] = data;
+	pSharedMemory[0] = g_strdup (cURL);
+	pSharedMemory[1] = pCallback;
+	pSharedMemory[2] = data;
 	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _dl_file_content, (CairoDockUpdateSyncFunc) _finish_dl_content, (GFreeFunc) _free_dl_content, pSharedMemory);
 	cairo_dock_launch_task (pTask);
 	return pTask;
 }
+
 
   ////////////////////
  /// PACKAGES API ///
@@ -641,7 +639,9 @@ GHashTable *cairo_dock_list_net_packages (const gchar *cServerAdress, const gcha
 	
 	// On recupere la liste des packages distants.
 	GError *tmp_erreur = NULL;
-	gchar *cContent = cairo_dock_get_distant_file_content (cServerAdress, cDirectory, cListFileName, &tmp_erreur);
+	gchar *cURL = g_strdup_printf ("%s/%s/%s", cServerAdress, cDirectory, cListFileName);
+	gchar *cContent = cairo_dock_get_url_data (cURL, &tmp_erreur);
+	g_free (cURL);
 	if (tmp_erreur != NULL)
 	{
 		cd_warning ("couldn't retrieve packages on %s (check that your connection is alive, or retry later)", cServerAdress);
@@ -796,16 +796,11 @@ gchar *cairo_dock_get_package_path (const gchar *cPackageName, const gchar *cSha
 	
 	if (cDistantPackagesDir != NULL && s_cPackageServerAdress)
 	{
-		gchar *cDistantFileName = g_strdup_printf ("%s/%s.tar.gz", cPackageName, cPackageName);
-		GError *erreur = NULL;
-		cPackagePath = cairo_dock_download_file (s_cPackageServerAdress, cDistantPackagesDir, cDistantFileName, cUserPackagesDir, &erreur);
+		gchar *cDistantFileName = g_strdup_printf ("%s/%s/%s/%s.tar.gz", s_cPackageServerAdress, cDistantPackagesDir, cPackageName, cPackageName);
+		cPackagePath = cairo_dock_download_archive (cDistantFileName, cUserPackagesDir);
 		g_free (cDistantFileName);
-		if (erreur != NULL)
-		{
-			cd_warning ("couldn't retrieve distant package %s : %s" , cPackageName, erreur->message);
-			g_error_free (erreur);
-		}
-		else  // on se souvient de la date a laquelle on a mis a jour le package pour la derniere fois.
+		
+		if (cPackagePath != NULL)  // on se souvient de la date a laquelle on a mis a jour le package pour la derniere fois.
 		{
 			gchar *cVersionFile = g_strdup_printf ("%s/last-modif", cPackagePath);
 			time_t epoch = (time_t) time (NULL);

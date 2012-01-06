@@ -453,12 +453,8 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		{
 			cd_debug ("fichier readme distant (%s)", cDescriptionFilePath);
 			
-			gchar *str = strrchr (cDescriptionFilePath, '/');
-			g_return_if_fail (str != NULL);
-			*str = '\0';
-			
 			gtk_label_set_markup (pDescriptionLabel, "loading...");
-			pTask = cairo_dock_get_distant_file_content_async (cDescriptionFilePath, "", str+1, (GFunc) _on_got_readme, pDescriptionLabel);
+			pTask = cairo_dock_get_url_data_async (cDescriptionFilePath, (GFunc) _on_got_readme, pDescriptionLabel);
 			g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", pTask);
 			//g_print ("new task : %x\n", pTask);
 		}
@@ -497,11 +493,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			cd_debug ("fichier preview distant (%s)", cPreviewFilePath);
 			gtk_image_set_from_pixbuf (pPreviewImage, NULL);  // set blank image while downloading.
 			
-			gchar *str = strrchr (cPreviewFilePath, '/');
-			g_return_if_fail (str != NULL);
-			*str = '\0';
-			
-			pTask = cairo_dock_download_file_async (cPreviewFilePath, "", str+1, NULL, (GFunc) _on_got_preview_file, pPreviewImage);
+			pTask = cairo_dock_download_file_async (cPreviewFilePath, NULL, (GFunc) _on_got_preview_file, pPreviewImage);  // NULL <=> as a temporary file
 			g_object_set_data (G_OBJECT (pPreviewImage), "cd-task", pTask);
 		}
 		else  // fichier local ou rien.

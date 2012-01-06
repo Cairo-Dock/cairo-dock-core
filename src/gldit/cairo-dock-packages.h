@@ -31,10 +31,10 @@ G_BEGIN_DECLS
 * Packages are listed on the server in a file named "list.conf". It's a group-key file starting with "#!CD" on the first line; each package is described in its own group. Packages are stored on the server in a folder that has the same name, and contains the tarball, a "readme" file, and a "preview" file.
 *
 * The class offers a high level of abstraction that allows to manipulate packages without having to care their location, version, etc.
-* It also provides convenient utility functions to get remote data.
+* It also provides convenient utility functions to download a file or make a request to a server.
 *
 * To get the list of available packages, use \ref cairo_dock_list_packages, or its asynchronous version \ref cairo_dock_list_packages_async.
-* To get the path of a package, use \ref cairo_dock_get_package_path; it will look for the the best
+* To access a package, use \ref cairo_dock_get_package_path.
 */
 
 typedef struct _CairoConnectionParam CairoConnectionParam;
@@ -115,62 +115,59 @@ typedef void (* CairoDockGetPackagesFunc ) (GHashTable *pPackagesTable, gpointer
 
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName);
 
-/** Download a distant file into a given folder, possibly extracting it.
-*@param cServerAdress adress of the server.
-*@param cDistantFilePath path of the file on the server.
-*@param cDistantFileName name of the file.
-*@param cExtractTo a local path where to extract the file, if this one is a .tar.gz/.tar.bz2/.tgz archive, or NULL.
-*@param erreur an error.
-*@return the local path of the downloaded file. If it was an archive, the path of the extracted file. Free the string after using it.
+/** Download a distant file into a given location.
+*@param cURL adress of the file.
+*@param cLocalPath a local path where to store the file.
+*@return TRUE on success, else FALSE..
 */
-gchar *cairo_dock_download_file (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GError **erreur);
+gboolean cairo_dock_download_file (const gchar *cURL, const gchar *cLocalPath);
 
-/** Asynchronously download a distant file into a given folder, possibly extracting it. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the path of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
-*@param cServerAdress adress of the server.
-*@param cDistantFilePath path of the file on the server.
-*@param cDistantFileName name of the file.
-*@param cExtractTo a local path where to extract the file, if this one is a .tar.gz/.tar.bz2/.tgz archive, or NULL.
+/** Download a distant file as a temporary file.
+*@param cURL adress of the file.
+*@return the local path of the file on success, else NULL. Free the string after using it.
+*/
+gchar *cairo_dock_download_file_in_tmp (const gchar *cURL);
+
+/** Download an archive and extract it into a given folder.
+*@param cURL adress of the file.
+*@param cExtractTo folder where to extract the archive (the archive is deleted then).
+*@return the local path of the file on success, else NULL. Free the string after using it.
+*/
+gchar *cairo_dock_download_archive (const gchar *cURL, const gchar *cExtractTo);
+
+/** Asynchronously download a distant file into a given location. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the path of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
+*@param cURL adress of the file.
+*@param cLocalPath a local path where to store the file, or NULL for a temporary file.
 *@param pCallback function called when the download is finished. It takes the path of the downloaded file (it belongs to the task so don't free it) and the data you've set here.
 *@param data data to be passed to the callback.
 *@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it), or \ref cairo_dock_free_task inside your callback.
 */
-CairoDockTask *cairo_dock_download_file_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, const gchar *cExtractTo, GFunc pCallback, gpointer data);
-
-/** Retrieve the content of a distant text file.
-*@param cServerAdress adress of the server.
-*@param cDistantFilePath path of the file on the server.
-*@param cDistantFileName name of the file.
-*@param erreur an error.
-*@return the content of the file. Free the string after using it.
-*/
-gchar *cairo_dock_get_distant_file_content (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GError **erreur);
-
-/** Retrieve the data of a distant URL.
-*@param cURL distant adress to get data from.
-*@param erreur an error.
-*@return the data. Free the string after using it.
-*/
-#define cairo_dock_get_url_data(cURL, erreur) cairo_dock_get_url_data_with_post (cURL, FALSE, erreur, NULL)
+CairoDockTask *cairo_dock_download_file_async (const gchar *cURL, const gchar *cLocalPath, GFunc pCallback, gpointer data);
 
 /** Retrieve the response of a POST request to a server.
-*@param cURL URL of the server
+*@param cURL the URL request
 *@param bGetOutputHeaders whether to retrieve the page's header.
 *@param erreur an error.
 *@param cFirstProperty first property of the POST data.
 *@param ... tuples of property and data to insert in POST data; the POST data will be formed with a=urlencode(b)&c=urlencode(d)&... End it with NULL.
-*@return the data. Free the string after using it.
+*@return the data (NULL if failed). It's an array of chars, possibly containing nul chars. Free it after using.
 */
 gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutputHeaders, GError **erreur, const gchar *cFirstProperty, ...);
 
-/** Asynchronously retrieve the content of a distant text file. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the content of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
-*@param cServerAdress adress of the server.
-*@param cDistantFilePath path of the file on the server.
-*@param cDistantFileName name of the file.
+/** Retrieve the data of a distant URL.
+*@param cURL distant adress to get data from.
+*@param erreur an error.
+*@return the data (NULL if failed). It's an array of chars, possibly containing nul chars. Free it after using.
+*/
+#define cairo_dock_get_url_data(cURL, erreur) cairo_dock_get_url_data_with_post (cURL, FALSE, erreur, NULL)
+
+/** Asynchronously retrieve the content of a distant URL. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the content of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
+*@param cURL distant adress to get data from.
 *@param pCallback function called when the download is finished. It takes the content of the downloaded file (it belongs to the task so don't free it) and the data you've set here.
 *@param data data to be passed to the callback.
 *@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it), or \ref cairo_dock_free_task inside your callback.
 */
-CairoDockTask *cairo_dock_get_distant_file_content_async (const gchar *cServerAdress, const gchar *cDistantFilePath, const gchar *cDistantFileName, GFunc pCallback, gpointer data);
+CairoDockTask *cairo_dock_get_url_data_async (const gchar *cURL, GFunc pCallback, gpointer data);
 
 
   ////////////////
