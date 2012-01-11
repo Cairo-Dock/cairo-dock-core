@@ -226,8 +226,8 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 static gboolean _cairo_dock_hide (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %.2f, %.2f)\n", __func__, pDock->iMagnitudeIndex, pDock->fHideOffset, pDock->fPostHideOffset);
-	if (pDock->iMagnitudeIndex > 0)  // on retarde le cachage du dock pour apercevoir les effets.
-		return TRUE;
+	///if (pDock->iMagnitudeIndex > 0)  // on retarde le cachage du dock pour apercevoir les effets.
+	///	return TRUE;
 	
 	if (pDock->fHideOffset < 1)  // the hiding animation is running.
 	{

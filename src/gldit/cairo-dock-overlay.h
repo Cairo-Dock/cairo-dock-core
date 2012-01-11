@@ -78,6 +78,13 @@ void cairo_dock_free_overlay (CairoOverlay *pOverlay);
  // ADD / REMOVE //
 //////////////////
 
+/** Add an overlay on an icon.
+ *@param pIcon the icon
+ *@param pOverlay the overlay
+ *@param iPosition position where to display the overlay
+ */
+void cairo_dock_add_overlay_to_icon (Icon *pIcon, CairoOverlay *pOverlay, CairoOverlayPosition iPosition);
+
 /** Add an overlay on an icon from an image.
  *@param pIcon the icon
  *@param cImageFile an image (if it's not a path, it is searched amongst the current theme's images)
