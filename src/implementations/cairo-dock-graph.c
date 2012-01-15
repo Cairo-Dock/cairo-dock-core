@@ -62,7 +62,8 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 		cairo_set_source_surface (pCairoContext, pGraph->pBackgroundSurface, 0., 0.);
 		cairo_paint (pCairoContext);
 	}
-	
+
+	g_return_if_fail (pRenderer->iRank != 0); // workaround: FIXME
 	int iNbDrawings = iNbValues / pRenderer->iRank;
 	if (iNbDrawings == 0)
 		return;
