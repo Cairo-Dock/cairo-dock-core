@@ -104,7 +104,6 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 			glPopMatrix ();
 		}
 		
-		cairo_dock_notify_on_object (&myDialogsMgr, NOTIFICATION_RENDER, pDialog, NULL);
 		cairo_dock_notify_on_object (pDialog, NOTIFICATION_RENDER, pDialog, NULL);
 		
 		gldi_glx_end_draw_container (CAIRO_CONTAINER (pDialog));
@@ -141,7 +140,6 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 			cairo_restore (pCairoContext);
 		}
 		
-		cairo_dock_notify_on_object (&myDialogsMgr, NOTIFICATION_RENDER, pDialog, pCairoContext);
 		cairo_dock_notify_on_object (pDialog, NOTIFICATION_RENDER, pDialog, pCairoContext);
 		
 		if (pDialog->fAppearanceCounter < 1.)
@@ -318,11 +316,9 @@ static gboolean _cairo_dialog_animation_loop (CairoContainer *pContainer)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify_on_object (&myDialogsMgr, NOTIFICATION_UPDATE_SLOW, pDialog, &pContainer->bKeepSlowAnimation);
 		cairo_dock_notify_on_object (pDialog, NOTIFICATION_UPDATE_SLOW, pDialog, &pContainer->bKeepSlowAnimation);
 	}
 	
-	cairo_dock_notify_on_object (&myDialogsMgr, NOTIFICATION_UPDATE, pDialog, &bContinue);
 	cairo_dock_notify_on_object (pDialog, NOTIFICATION_UPDATE, pDialog, &bContinue);
 	
 	cairo_dock_redraw_container (CAIRO_CONTAINER (pDialog));
@@ -346,7 +342,8 @@ static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 	//\________________ On construit la fenetre du dialogue.
 	//GtkWidget* pWindow = gtk_window_new (bInteractiveWindow ? GTK_WINDOW_TOPLEVEL : GTK_WINDOW_POPUP);  // les popups ne prennent pas le focus. En fait, ils ne sont meme pas controles par le WM.
 	GtkWidget* pWindow = cairo_dock_init_container_no_opengl (CAIRO_CONTAINER (pDialog));
-	cairo_dock_install_notifications_on_object (pDialog, NB_NOTIFICATIONS_DIALOG);
+	///cairo_dock_install_notifications_on_object (pDialog, NB_NOTIFICATIONS_DIALOG);
+	gldi_object_set_manager (GLDI_OBJECT (pDialog), GLDI_MANAGER (&myDialogsMgr));
 	
 	pDialog->container.iface.animation_loop = _cairo_dialog_animation_loop;
 	

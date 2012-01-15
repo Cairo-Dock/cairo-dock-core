@@ -263,193 +263,6 @@ void cairo_dock_upgrade_conf_file_full (const gchar *cConfFilePath, GKeyFile *pK
 }
 
 
-/**
-// deprecated
-static void cairo_dock_replace_key_values (GKeyFile *pOriginalKeyFile, GKeyFile *pReplacementKeyFile, gboolean bUseOriginalKeys, gchar iIdentifier)
-{
-	//g_print ("%s (%d, %d)\n", __func__, iIdentifier, bUseOriginalKeys);
-	GError *erreur = NULL;
-	gsize length = 0;
-	gchar **pKeyList;
-	gchar **pGroupList = g_key_file_get_groups ((bUseOriginalKeys ? pOriginalKeyFile : pReplacementKeyFile), &length);
-	g_return_if_fail (pGroupList != NULL);
-	gchar *cGroupName, *cKeyName, *cKeyValue, *cComment;
-	int i, j;
-
-	i = 0;
-	while (pGroupList[i] != NULL)
-	{
-		cGroupName = pGroupList[i];
-
-		length = 0;
-		pKeyList = g_key_file_get_keys ((bUseOriginalKeys ? pOriginalKeyFile : pReplacementKeyFile), cGroupName, NULL, NULL);
-		g_return_if_fail (pKeyList != NULL);
-		
-		j = 0;
-		while (pKeyList[j] != NULL)
-		{
-			cKeyName = pKeyList[j];
-			//g_print ("%s\n  %s", cKeyName, g_key_file_get_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL));
-
-			if (iIdentifier != 0)
-			{
-				cComment = g_key_file_get_comment (bUseOriginalKeys ? pOriginalKeyFile : pReplacementKeyFile, cGroupName, cKeyName, NULL);
-				//g_print ("%s\n  %s", cKeyName, cComment);
-				if (cComment == NULL || strlen (cComment) < 2 || cComment[1] != iIdentifier)
-				{
-					//g_print ("  on saute %s;%s (%s)\n", cGroupName, cKeyName, cComment);
-					g_free (cComment);
-					j ++;
-					continue ;
-				}
-				g_free (cComment);
-			}
-
-			cKeyValue =  g_key_file_get_string (pReplacementKeyFile, cGroupName, cKeyName, &erreur);
-			if (erreur != NULL)
-			{
-				cd_warning (erreur->message);
-				g_error_free (erreur);
-				erreur = NULL;
-			}
-			else
-			{
-				//g_print (" -> %s\n", cKeyValue);
-				if (cKeyValue[strlen(cKeyValue) - 1] == '\n')
-					cKeyValue[strlen(cKeyValue) - 1] = '\0';
-				g_key_file_set_string (pOriginalKeyFile, cGroupName, cKeyName, (cKeyValue != NULL ? cKeyValue : ""));
-			}
-			g_free (cKeyValue);
-			j ++;
-		}
-
-		g_strfreev (pKeyList);
-		i ++;
-	}
-	g_strfreev (pGroupList);
-	
-	if (bUseOriginalKeys)
-	{
-		pGroupList = g_key_file_get_groups (pReplacementKeyFile, &length);
-		i = 0;
-		while (pGroupList[i] != NULL)
-		{
-			cGroupName = pGroupList[i];
-
-			length = 0;
-			pKeyList = g_key_file_get_keys (pReplacementKeyFile, cGroupName, NULL, NULL);
-
-			j = 0;
-			while (pKeyList[j] != NULL)
-			{
-				cKeyName = pKeyList[j];
-				//g_print ("%s\n  %s", cKeyName, g_key_file_get_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL));
-
-				cComment = g_key_file_get_comment (pReplacementKeyFile, cGroupName, cKeyName, NULL);
-				if (cComment == NULL || strlen (cComment) < 3 || (cComment[1] != '0' && cComment[2] != '0'))
-				{
-					g_free (cComment);
-					j ++;
-					continue ;
-				}
-				if (iIdentifier != 0)
-				{
-					if (cComment == NULL || strlen (cComment) < 2 || cComment[1] != iIdentifier)
-					{
-						//g_print ("  on saute %s;%s (%s)\n", cGroupName, cKeyName, cComment);
-						g_free (cComment);
-						j ++;
-						continue ;
-					}
-				}
-
-				cKeyValue =  g_key_file_get_string (pReplacementKeyFile, cGroupName, cKeyName, &erreur);
-				if (erreur != NULL)
-				{
-					cd_warning (erreur->message);
-					g_error_free (erreur);
-					erreur = NULL;
-				}
-				else
-				{
-					//g_print (" -> %s\n", cKeyValue);
-					if (cKeyValue[strlen(cKeyValue) - 1] == '\n')
-						cKeyValue[strlen(cKeyValue) - 1] = '\0';
-					g_key_file_set_string (pOriginalKeyFile, cGroupName, cKeyName, (cKeyValue != NULL ? cKeyValue : ""));
-					if (cComment != NULL)
-					{
-						g_key_file_set_comment (pOriginalKeyFile, cGroupName, cKeyName, cComment, &erreur);
-						if (erreur != NULL)
-						{
-							cd_warning (erreur->message);
-							g_error_free (erreur);
-							erreur = NULL;
-						}
-					}
-				}
-				g_free (cKeyValue);
-				g_free (cComment);
-				j ++;
-			}
-
-			g_strfreev (pKeyList);
-			i ++;
-		}
-		g_strfreev (pGroupList);
-	}
-}
-
-// deprecated
-static void cairo_dock_replace_values_in_conf_file (const gchar *cConfFilePath, GKeyFile *pValidKeyFile, gboolean bUseFileKeys, gchar iIdentifier)
-{
-	GKeyFile *pConfKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	if (pConfKeyFile == NULL)
-		return ;
-
-	cd_debug ("%s (%s)\n", __func__,cConfFilePath );
-	cairo_dock_replace_key_values (pConfKeyFile, pValidKeyFile, bUseFileKeys, iIdentifier);
-
-	cairo_dock_write_keys_to_file (pConfKeyFile, cConfFilePath);
-
-	g_key_file_free (pConfKeyFile);
-}
-
-// deprecated
-void cairo_dock_flush_conf_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, const gchar *cShareDataDirPath, gboolean bUseFileKeys, const gchar *cTemplateFileName)
-{
-	gchar *cTemplateConfFilePath = (*cTemplateFileName == '/' ? g_strdup (cTemplateFileName) : g_strdup_printf ("%s/%s", cShareDataDirPath, cTemplateFileName));
-	cd_message ("%s (%s)", __func__, cTemplateConfFilePath);
-	
-	if (! g_file_test (cTemplateConfFilePath, G_FILE_TEST_EXISTS))
-	{
-		cd_warning ("Couldn't find any installed conf file in %s", cShareDataDirPath);
-	}
-	else
-	{
-		gchar *cCommand = g_strdup_printf ("/bin/cp \"%s\" \"%s\"", cTemplateConfFilePath, cConfFilePath);
-		int r = system (cCommand);
-		g_free (cCommand);
-		
-		cairo_dock_replace_values_in_conf_file (cConfFilePath, pKeyFile, bUseFileKeys, 0);
-	}
-	g_free (cTemplateConfFilePath);
-}
-
-// deprecated
-void cairo_dock_replace_keys_by_identifier (const gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier)
-{
-	GKeyFile *pReplacementKeyFile = cairo_dock_open_key_file (cReplacementConfFilePath);
-	if (pReplacementKeyFile == NULL)
-		return ;
-	
-	cd_debug ("%s (%s <- %s, '%c')\n", __func__, cConfFilePath, cReplacementConfFilePath, iIdentifier);
-	cairo_dock_replace_values_in_conf_file (cConfFilePath, pReplacementKeyFile, TRUE, iIdentifier);
-
-	g_key_file_free (pReplacementKeyFile);
-}*/
-
-
-
 void cairo_dock_get_conf_file_version (GKeyFile *pKeyFile, gchar **cConfFileVersion)
 {
 	*cConfFileVersion = NULL;
@@ -571,3 +384,57 @@ gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *
 	
 	return TRUE;
 }
+
+
+void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...)  // type, groupe, cle, valeur, etc. finir par G_TYPE_INVALID.
+{
+	cd_message ("%s (%s)", __func__, cConfFilePath);
+	
+	GKeyFile *pKeyFile = g_key_file_new ();  // if the key-file doesn't exist, it will be created.
+	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
+	
+	va_list args;
+	va_start (args, iFirstDataType);
+	
+	GType iType = iFirstDataType;
+	gboolean bValue;
+	gint iValue;
+	double fValue;
+	gchar *cValue;
+	gchar *cGroupName, *cGroupKey;
+	while (iType != G_TYPE_INVALID)
+	{
+		cGroupName = va_arg (args, gchar *);
+		cGroupKey = va_arg (args, gchar *);
+
+		switch (iType)
+		{
+			case G_TYPE_BOOLEAN :
+				bValue = va_arg (args, gboolean);
+				g_key_file_set_boolean (pKeyFile, cGroupName, cGroupKey, bValue);
+			break ;
+			case G_TYPE_INT :
+				iValue = va_arg (args, gint);
+				g_key_file_set_integer (pKeyFile, cGroupName, cGroupKey, iValue);
+			break ;
+			case G_TYPE_DOUBLE :
+				fValue = va_arg (args, gdouble);
+				g_key_file_set_double (pKeyFile, cGroupName, cGroupKey, fValue);
+			break ;
+			case G_TYPE_STRING :
+				cValue = va_arg (args, gchar *);
+				g_key_file_set_string (pKeyFile, cGroupName, cGroupKey, cValue);
+			break ;
+			default :
+			break ;
+		}
+
+		iType = va_arg (args, GType);
+	}
+
+	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+	g_key_file_free (pKeyFile);
+
+	va_end (args);
+}
+

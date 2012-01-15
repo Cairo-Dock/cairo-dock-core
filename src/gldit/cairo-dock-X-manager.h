@@ -47,7 +47,7 @@ struct _CairoDockDesktopManager {
 /// signals
 typedef enum {
 	/// notification called when the user switches to another desktop/viewport. data : NULL
-	NOTIFICATION_DESKTOP_CHANGED,
+	NOTIFICATION_DESKTOP_CHANGED = NB_NOTIFICATIONS_OBJECT,
 	/// notification called when the geometry of the desktop has changed (number of viewports/desktops, dimensions). data : NULL
 	NOTIFICATION_SCREEN_GEOMETRY_ALTERED,
 	/// notification called when the desktop is shown/hidden. data:NULL.

@@ -96,7 +96,7 @@ struct _CairoDocksParam {
 // manager
 struct _CairoDocksManager {
 	GldiManager mgr;
-	CairoDock *(*cairo_dock_create_dock) (const gchar *cDockName, const gchar *cRendererName);
+	CairoDock *(*cairo_dock_create_dock) (const gchar *cDockName);
 	void (*destroy_dock) (CairoDock *pDock, const gchar *cDockName);
 	} ;
 
@@ -126,11 +126,10 @@ void cairo_dock_force_docks_above (void);
 void cairo_dock_reset_docks_table (void);
 
 /** Create a new root dock.
-* @param cDockName name of the dock, used to identify it quickly. If the name is already used, the corresponding dock is returned.
-* @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
-* @return the newly allocated dock, to destroy with #cairo_dock_destroy_dock
+* @param cDockName name (= ID) of the dock. If the name is already used, the corresponding dock is returned.
+* @return the dock, to destroy with #cairo_dock_destroy_dock
 */
-CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendererName);
+CairoDock *cairo_dock_create_dock (const gchar *cDockName);
 
 /** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
 * @param cDockName desired name for the new dock.
@@ -224,7 +223,9 @@ void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo);
 
 void cairo_dock_draw_subdock_icons (void);
 
-void cairo_dock_reset_all_views (void);
+void cairo_dock_update_all_docks_size (void);
+
+///void cairo_dock_reset_all_views (void);
 void cairo_dock_set_all_views_to_default (int iDockType);
 
 

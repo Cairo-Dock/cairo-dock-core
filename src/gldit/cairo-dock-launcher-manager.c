@@ -54,7 +54,7 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 	if (pParentDock == NULL)
 	{
 		cd_message ("le dock parent (%s) n'existe pas, on le cree", icon->cParentDockName);
-		pParentDock = cairo_dock_create_dock (icon->cParentDockName, NULL);
+		pParentDock = cairo_dock_create_dock (icon->cParentDockName);
 	}
 	
 	//\____________ On cree son sous-dock si necessaire.
@@ -229,7 +229,7 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 }
 
 
-void cairo_dock_build_docks_tree_with_desktop_files (const gchar *cDirectory)
+void cairo_dock_load_launchers_from_dir (const gchar *cDirectory)
 {
 	cd_message ("%s (%s)", __func__, cDirectory);
 	GDir *dir = g_dir_open (cDirectory, 0, NULL);
@@ -339,7 +339,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	if (pNewDock == NULL)
 	{
 		cd_message ("le dock parent (%s) n'existe pas, on le cree", icon->cParentDockName);
-		pNewDock = cairo_dock_create_dock (icon->cParentDockName, NULL);
+		pNewDock = cairo_dock_create_dock (icon->cParentDockName);
 	}
 	g_return_if_fail (pNewDock != NULL);
 	

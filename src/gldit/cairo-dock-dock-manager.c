@@ -27,10 +27,6 @@
 #include <gdk/gdkx.h>
 
 #include <cairo.h>
-#include <pango/pango.h>
-#include <librsvg/rsvg.h>
-#include <librsvg/rsvg-cairo.h>
-
 
 #include "gldi-config.h"
 #include "cairo-dock-applications-manager.h"
@@ -163,7 +159,7 @@ static inline CairoDock *_create_dock (const gchar *cDockName)
 	return pDock;
 }
 
-CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendererName)
+CairoDock *cairo_dock_create_dock (const gchar *cDockName)
 {
 	cd_message ("%s (%s)", __func__, cDockName);
 	g_return_val_if_fail (cDockName != NULL, NULL);
@@ -185,7 +181,8 @@ CairoDock *cairo_dock_create_dock (const gchar *cDockName, const gchar *cRendere
 	if (! pDock->bIsMainDock)
 	{
 		if (cairo_dock_read_root_dock_config (cDockName, pDock))  // si pas de config (sub-dock ou config inexistante), se contente de lui mettre la meme position et renvoit FALSE.
-			cairo_dock_move_resize_dock (pDock);  /// TODO: try without...
+			//cairo_dock_move_resize_dock (pDock);  /// TODO: try without...
+			g_print ("NO MOVE\n");
 	}
 	
 	//\__________________ set a renderer (got from the conf, or the default one).
@@ -297,7 +294,6 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 	}
 	
 	cairo_dock_free_dock (pDock);  // -> NOTIFICATION_STOP_DOCK
-	///cairo_dock_trigger_refresh_launcher_gui ();
 }
 
 
@@ -353,7 +349,6 @@ gchar *cairo_dock_get_readable_name_for_fock (CairoDock *pDock)
 	{
 		int i = 0;
 		gpointer data[3] = {pDock, &i, NULL};
-		///cairo_dock_foreach_root_docks ((GFunc)_find_similar_root_dock, data);
 		GList *d = g_list_last (s_pRootDockList);
 		for (;d != NULL; d = d->prev)  // parse the list from the end to get the main dock first (docks are prepended).
 			_find_similar_root_dock (d->data, data);
@@ -585,7 +580,7 @@ static void _cairo_dock_draw_one_subdock_icon (const gchar *cDockName, CairoDock
 		&& (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) || CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_IS_APPLET (icon))
 		&& (icon->iSubdockViewType != 0
 			|| (CAIRO_DOCK_IS_MULTI_APPLI (icon) && !myIndicatorsParam.bUseClassIndic))
-		&& icon->iSidRedrawSubdockContent == 0)  // icone de sous-dock ou de classe ou d'applets.
+		/**&& icon->iSidRedrawSubdockContent == 0*/)  // icone de sous-dock ou de classe ou d'applets.
 		{
 			cairo_dock_trigger_redraw_subdock_content_on_icon (icon);
 		}
@@ -598,7 +593,16 @@ void cairo_dock_draw_subdock_icons (void)
 }
 
 
-static void _cairo_dock_reset_one_dock_view (gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _update_dock_size (const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
+{
+	cairo_dock_update_dock_size (pDock);
+}
+void cairo_dock_update_all_docks_size (void)
+{
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _update_dock_size, NULL);
+}
+
+/*static void _cairo_dock_reset_one_dock_view (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	cairo_dock_set_renderer (pDock, NULL);  // on met NULL plutot que CAIRO_DOCK_DEFAULT_RENDERER_NAME pour ne pas ecraser le nom de la vue.
 }
@@ -606,7 +610,7 @@ void cairo_dock_reset_all_views (void)
 {
 	//g_print ("%s ()\n", __func__);
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_reset_one_dock_view, NULL);
-}
+}*/
 
 static void _cairo_dock_set_one_dock_view_to_default (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
@@ -616,9 +620,6 @@ static void _cairo_dock_set_one_dock_view_to_default (gchar *cDockName, CairoDoc
 	{
 		cairo_dock_set_default_renderer (pDock);
 		cairo_dock_update_dock_size (pDock);
-		pDock->pRenderer->calculate_icons (pDock);
-		if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)
-			cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	}
 }
 void cairo_dock_set_all_views_to_default (int iDockType)
@@ -1791,6 +1792,7 @@ void gldi_register_docks_manager (void)
 	myDocksMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myDocksMgr, NB_NOTIFICATIONS_DOCKS);
+	gldi_object_set_manager (GLDI_OBJECT (&myDocksMgr), GLDI_MANAGER (&myContainersMgr));
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myDocksMgr));
 }

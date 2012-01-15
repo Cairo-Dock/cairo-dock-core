@@ -491,13 +491,13 @@ void cairo_dock_load_current_theme (void)
 	gldi_get_managers_config (g_cConfFile, GLDI_VERSION);  /// en fait, CAIRO_DOCK_VERSION ...
 	
 	//\___________________ Create the primary container (needed to have a cairo/opengl context).
-	CairoDock *pMainDock = cairo_dock_create_dock (CAIRO_DOCK_MAIN_DOCK_NAME, NULL);  // on ne lui assigne pas de vues, puisque la vue par defaut des docks principaux sera definie plus tard.
+	CairoDock *pMainDock = cairo_dock_create_dock (CAIRO_DOCK_MAIN_DOCK_NAME);
 	
 	//\___________________ Load all managers data.
 	gldi_load_managers ();
 	
 	//\___________________ Now load the launchers.
-	cairo_dock_build_docks_tree_with_desktop_files (g_cCurrentLaunchersPath);
+	cairo_dock_load_launchers_from_dir (g_cCurrentLaunchersPath);
 	
 	cairo_dock_hide_show_launchers_on_other_desktops (pMainDock);
 	
@@ -508,10 +508,11 @@ void cairo_dock_load_current_theme (void)
 	cairo_dock_start_applications_manager (pMainDock);
 	
 	//\___________________ Draw everything.
-	cairo_dock_draw_subdock_icons ();  // maintenant que les sous-docks sont tous definis.
+	///cairo_dock_draw_subdock_icons ();  // maintenant que les sous-docks sont tous definis.
 	
-	cairo_dock_set_all_views_to_default (0);  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
-	cairo_dock_redraw_root_docks (FALSE);  // FALSE <=> main dock inclus.
+	//cairo_dock_update_all_docks_size ();
+	///cairo_dock_set_all_views_to_default (0);  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
+	///cairo_dock_redraw_root_docks (FALSE);  // FALSE <=> main dock inclus.
 	
 	//\___________________ On charge les decorations des desklets.
 	/**if (myDeskletsParam.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
@@ -520,8 +521,6 @@ void cairo_dock_load_current_theme (void)
 	}*/
 	
 	s_bLoading = FALSE;
-	
-	///cairo_dock_trigger_refresh_launcher_gui (); // a faire par l'app
 }
 
 
@@ -530,58 +529,6 @@ gboolean cairo_dock_is_loading (void)
 	return s_bLoading;
 }
 
-
-void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...)  // type, groupe, cle, valeur, etc. finir par G_TYPE_INVALID.
-{
-	cd_message ("%s (%s)", __func__, cConfFilePath);
-	
-	GKeyFile *pKeyFile = g_key_file_new ();  // if the key-file doesn't exist, it will be created.
-	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
-	
-	va_list args;
-	va_start (args, iFirstDataType);
-	
-	GType iType = iFirstDataType;
-	gboolean bValue;
-	gint iValue;
-	double fValue;
-	gchar *cValue;
-	gchar *cGroupName, *cGroupKey;
-	while (iType != G_TYPE_INVALID)
-	{
-		cGroupName = va_arg (args, gchar *);
-		cGroupKey = va_arg (args, gchar *);
-
-		switch (iType)
-		{
-			case G_TYPE_BOOLEAN :
-				bValue = va_arg (args, gboolean);
-				g_key_file_set_boolean (pKeyFile, cGroupName, cGroupKey, bValue);
-			break ;
-			case G_TYPE_INT :
-				iValue = va_arg (args, gint);
-				g_key_file_set_integer (pKeyFile, cGroupName, cGroupKey, iValue);
-			break ;
-			case G_TYPE_DOUBLE :
-				fValue = va_arg (args, gdouble);
-				g_key_file_set_double (pKeyFile, cGroupName, cGroupKey, fValue);
-			break ;
-			case G_TYPE_STRING :
-				cValue = va_arg (args, gchar *);
-				g_key_file_set_string (pKeyFile, cGroupName, cGroupKey, cValue);
-			break ;
-			default :
-			break ;
-		}
-
-		iType = va_arg (args, GType);
-	}
-
-	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
-	g_key_file_free (pKeyFile);
-
-	va_end (args);
-}
 
 
 void cairo_dock_update_conf_file_with_position (const gchar *cConfFilePath, int x, int y)

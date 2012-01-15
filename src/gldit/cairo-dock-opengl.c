@@ -274,7 +274,6 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL)  // taken 
 	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
 	g_openglConfig.context = glXCreateContext (dpy, pVisInfo, NULL, TRUE);
 	g_return_val_if_fail (g_openglConfig.context != 0, FALSE);
-	glXMakeCurrent (dpy, 0, g_openglConfig.context);
 	
 	//\_________________ create a colormap based on this visual.
 	GdkScreen *screen = gdk_screen_get_default ();
@@ -332,7 +331,7 @@ void cairo_dock_create_icon_fbo (void)  // it has been found that you get a spee
 	
 	iWidth *= (1 + myIconsParam.fAmplitude);
 	iHeight *= (1 + myIconsParam.fAmplitude);
-	g_openglConfig.iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL, iWidth, iHeight);
+	g_openglConfig.iRedirectedTexture = cairo_dock_create_texture_from_raw_data (NULL, iWidth, iHeight);
 }
 
 void cairo_dock_destroy_icon_fbo (void)
@@ -366,7 +365,10 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 		if (pContainer == NULL)
 			pContainer = g_pPrimaryContainer;
 		if (! gldi_glx_make_current (pContainer))
+		{
+			cd_warning ("couldn't set the opengl context");
 			return FALSE;
+		}
 		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, g_openglConfig.iFboId);  // on redirige sur notre FBO.
 		g_openglConfig.bRedirected = (iRenderingMode == 2);
 		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
@@ -646,21 +648,25 @@ static void _init_opengl_context (GtkWidget* pWidget, CairoContainer *pContainer
 	if (! gldi_glx_make_current (pContainer))
 		return;
 	
+	g_print ("INIT OPENGL ctx\n");
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth (1.0f);
 	glClearStencil (0);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	
 	/// a tester ...
-	if (g_bEasterEggs)
-		glEnable (GL_MULTISAMPLE_ARB);
+	///if (g_bEasterEggs)
+	///	glEnable (GL_MULTISAMPLE_ARB);
 	
+	// set once and for all
 	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri (GL_TEXTURE_2D,
 		GL_TEXTURE_MIN_FILTER,
-		GL_LINEAR_MIPMAP_LINEAR);
+		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+	if (g_bEasterEggs)
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri (GL_TEXTURE_2D,
 		GL_TEXTURE_MAG_FILTER,
 		GL_LINEAR);

@@ -50,7 +50,7 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 * All the icons are created and placed inside their dock, which is created if necessary.
 * @param cDirectory a folder containing some .desktop files.
 */
-void cairo_dock_build_docks_tree_with_desktop_files (const gchar *cDirectory);
+void cairo_dock_load_launchers_from_dir (const gchar *cDirectory);
 
 
 /** Reload completely a launcher. It handles all the side-effects like modifying the class, the sub-dock's view, the container, etc.

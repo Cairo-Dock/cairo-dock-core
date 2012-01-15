@@ -243,7 +243,7 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoContainer *pContainer,
 	
 	if (cAnimation == NULL || iNbRounds == 0 || pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)
 		return ;
-	cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
+	///cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_notify_on_object (pIcon, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_start_icon_animation (pIcon, pDock);
 }
@@ -324,7 +324,7 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
 			pIcon->fInsertRemoveFactor = 1.0;
 		else
 			pIcon->fInsertRemoveFactor = 0.05;
-		cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
+		///cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
 		cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
 		cairo_dock_start_icon_animation (pIcon, pDock);
 	}

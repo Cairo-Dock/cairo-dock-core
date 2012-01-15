@@ -123,7 +123,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		pDock->iMinDockWidth = MAX (1, pDock->fFlatDockWidth);  // fFlatDockWidth peut etre meme negatif avec un dock vide.
 	
 	if (g_bUseOpenGL && s_iFlatSeparatorTexture == 0 && myIconsParam.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
-		s_iFlatSeparatorTexture = cairo_dock_load_texture_from_raw_data (blurTex, 32, 32);
+		s_iFlatSeparatorTexture = cairo_dock_create_texture_from_raw_data (blurTex, 32, 32);
 	
 	pDock->iActiveWidth = pDock->iMaxDockWidth;
 	pDock->iActiveHeight = pDock->iMaxDockHeight;

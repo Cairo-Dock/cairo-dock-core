@@ -325,7 +325,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	if (g_pGradationTexture[pDock->container.bIsHorizontal] == 0)
 	{
 		//g_pGradationTexture[pDock->container.bIsHorizontal] = cairo_dock_load_local_texture (pDock->container.bIsHorizontal ? "texture-gradation-vert.png" : "texture-gradation-horiz.png", GLDI_SHARE_DATA_DIR);
-		g_pGradationTexture[pDock->container.bIsHorizontal] = cairo_dock_load_texture_from_raw_data (gradationTex,
+		g_pGradationTexture[pDock->container.bIsHorizontal] = cairo_dock_create_texture_from_raw_data (gradationTex,
 			pDock->container.bIsHorizontal ? 1:48,
 			pDock->container.bIsHorizontal ? 48:1);
 		cd_debug ("g_pGradationTexture(%d) <- %d", pDock->container.bIsHorizontal, g_pGradationTexture[pDock->container.bIsHorizontal]);
@@ -422,9 +422,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
 	glPopMatrix ();  // retour au debut de la fonction.
-	if (bUseText && icon->iLabelTexture != 0 && icon->iHideLabel == 0 &&
-		( (icon->fScale > 1.01 && (! myIconsParam.bLabelForPointedIconOnly || icon->bPointed)) ||
-		((myIconsParam.fAmplitude < 0.001 || pDock->fMagnitudeMax < 0.001) && icon->bPointed) ))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
+	if (bUseText && icon->pTextBuffer != NULL && icon->iHideLabel == 0
+	&& (icon->bPointed || (icon->fScale > 1.01 && ! myIconsParam.bLabelForPointedIconOnly)))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		glPushMatrix ();
 		glLoadIdentity ();
@@ -634,12 +633,16 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures (1, &iTexture);
-	//cd_debug ("+ texture %d generee (%x, %dx%d)", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
+	//g_print ("+ texture %d generee (%p, %dx%d)\n", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
 	glBindTexture (GL_TEXTURE_2D, iTexture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri (GL_TEXTURE_2D,
+		GL_TEXTURE_MIN_FILTER,
+		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+	if (g_bEasterEggs)
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	if (g_bEasterEggs)
-		gluBuild2DMipmaps (GL_TEXTURE_2D,
+		gluBuild2DMipmaps (GL_TEXTURE_2D,  /// see for automatic mipmaps generation, or at least how to update the mipmaps...
 			4,
 			w,
 			h,
@@ -662,7 +665,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	return iTexture;
 }
 
-GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight)
+GLuint cairo_dock_create_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight)
 {
 	/*cd_debug ("%dx%d\n", iWidth, iHeight);
 	int i;
@@ -691,10 +694,23 @@ GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWi
 	glGenTextures(1, &iTexture);
 	glBindTexture(GL_TEXTURE_2D, iTexture);
 	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri (GL_TEXTURE_2D,
+		GL_TEXTURE_MIN_FILTER,
+		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+	if (g_bEasterEggs)
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pTextureRaw);
+	if (g_bEasterEggs && pTextureRaw)
+		gluBuild2DMipmaps (GL_TEXTURE_2D,
+			4,
+			iWidth,
+			iHeight,
+			GL_RGBA,
+			GL_UNSIGNED_BYTE,
+			pTextureRaw);
+	else
+		glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pTextureRaw);
 	glBindTexture (GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 	return iTexture;
@@ -749,18 +765,31 @@ void cairo_dock_update_icon_texture (Icon *pIcon)
 		int w = cairo_image_surface_get_width (pIcon->pIconBuffer);
 		int h = cairo_image_surface_get_height (pIcon->pIconBuffer);
 		glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri (GL_TEXTURE_2D,
+			GL_TEXTURE_MIN_FILTER,
+			g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+		if (g_bEasterEggs)
+			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		
-		glTexImage2D (GL_TEXTURE_2D,
-			0,
-			4,  // GL_ALPHA / GL_BGRA
-			w,
-			h,
-			0,
-			GL_BGRA,  // GL_ALPHA / GL_BGRA
-			GL_UNSIGNED_BYTE,
-			cairo_image_surface_get_data (pIcon->pIconBuffer));
+		if (g_bEasterEggs)
+			gluBuild2DMipmaps (GL_TEXTURE_2D,
+				4,
+				w,
+				h,
+				GL_BGRA,
+				GL_UNSIGNED_BYTE,
+				cairo_image_surface_get_data (pIcon->pIconBuffer));
+		else
+			glTexImage2D (GL_TEXTURE_2D,
+				0,
+				4,  // GL_ALPHA / GL_BGRA
+				w,
+				h,
+				0,
+				GL_BGRA,  // GL_ALPHA / GL_BGRA
+				GL_UNSIGNED_BYTE,
+				cairo_image_surface_get_data (pIcon->pIconBuffer));
 		glDisable (GL_TEXTURE_2D);
 	}
 }
@@ -779,7 +808,11 @@ void cairo_dock_update_label_texture (Icon *pIcon)
 		int w = cairo_image_surface_get_width (pIcon->pTextBuffer);
 		int h = cairo_image_surface_get_height (pIcon->pTextBuffer);
 		glBindTexture (GL_TEXTURE_2D, pIcon->iLabelTexture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri (GL_TEXTURE_2D,
+			GL_TEXTURE_MIN_FILTER,
+			g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+		if (g_bEasterEggs)
+			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexImage2D (GL_TEXTURE_2D,
 			0,
@@ -808,7 +841,11 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon)
 		int w = cairo_image_surface_get_width (pIcon->pQuickInfoBuffer);
 		int h = cairo_image_surface_get_height (pIcon->pQuickInfoBuffer);
 		glBindTexture (GL_TEXTURE_2D, pIcon->iQuickInfoTexture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri (GL_TEXTURE_2D,
+			GL_TEXTURE_MIN_FILTER,
+			g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+		if (g_bEasterEggs)
+			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexImage2D (GL_TEXTURE_2D,
 			0,
@@ -1016,16 +1053,16 @@ void cairo_dock_update_animated_image_opengl (CairoAnimatedImage *pAnimatedImage
 
 
 
-typedef void (*GLXBindTexImageProc) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
-typedef void (*GLXReleaseTexImageProc) (Display *display, GLXDrawable drawable, int buffer);
+//typedef void (*GLXBindTexImageProc) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
+//typedef void (*GLXReleaseTexImageProc) (Display *display, GLXDrawable drawable, int buffer);
 
 // Bind redirected window to texture:
 GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 {
-	if (!g_bEasterEggs)
-		return 0;  /// ca ne marche pas. :-(
+	///if (!g_bEasterEggs)
+	///	return 0;  /// ca ne marche pas. :-(
 	
-	if (! g_openglConfig.bTextureFromPixmapAvailable)
+	if (!iBackingPixmap || ! g_openglConfig.bTextureFromPixmapAvailable)
 		return 0;
 	
 	Display *display = gdk_x11_get_default_xdisplay ();
@@ -1106,7 +1143,11 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	
 	g_openglConfig.bindTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT, NULL);
 	
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri (GL_TEXTURE_2D,
+		GL_TEXTURE_MIN_FILTER,
+		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+	if (g_bEasterEggs)
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
 	// draw using iBackingPixmap as texture

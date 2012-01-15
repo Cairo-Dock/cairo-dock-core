@@ -68,7 +68,7 @@ struct _CairoIndicatorsManager {
 
 // signals
 typedef enum {
-	NB_NOTIFICATIONS_INDICATORS
+	NB_NOTIFICATIONS_INDICATORS = NB_NOTIFICATIONS_OBJECT
 	} CairoIndicatorsNotifications;
 
 

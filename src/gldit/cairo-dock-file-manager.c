@@ -20,6 +20,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-desklet-factory.h"  // cairo_dock_fm_create_icon_from_URI

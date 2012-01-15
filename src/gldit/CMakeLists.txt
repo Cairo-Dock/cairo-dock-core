@@ -4,6 +4,7 @@ SET(core_lib_SRCS
 	cairo-dock-global-variables.h 
 	cairo-dock-core.c 					cairo-dock-core.h
 	cairo-dock-manager.c 				cairo-dock-manager.h
+	cairo-dock-object.c 				cairo-dock-object.h
 	# icons
 	cairo-dock-icon-manager.c 			cairo-dock-icon-manager.h
 	cairo-dock-icon-factory.c 			cairo-dock-icon-factory.h
@@ -120,6 +121,7 @@ install(FILES
 	cairo-dock-struct.h 			cairo-dock-global-variables.h
 	gldi-config.h
 	cairo-dock-core.h			cairo-dock-manager.h
+	cairo-dock-object.h
 	cairo-dock-icon-factory.h		cairo-dock-icon-manager.h
 	cairo-dock-icon-facility.h
 	cairo-dock-applications-manager.h 	cairo-dock-launcher-manager.h

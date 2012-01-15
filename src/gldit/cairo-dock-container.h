@@ -63,7 +63,7 @@ struct _CairoContainersManager {
 /// signals
 typedef enum {
 	/// notification called when the menu is being built on a container. data : {Icon, CairoContainer, GtkMenu, gboolean*}
-	NOTIFICATION_BUILD_CONTAINER_MENU,
+	NOTIFICATION_BUILD_CONTAINER_MENU = NB_NOTIFICATIONS_OBJECT,
 	/// notification called when the menu is being built on an icon (possibly NULL). data : {Icon, CairoContainer, GtkMenu}
 	NOTIFICATION_BUILD_ICON_MENU,
 	/// notification called when use clicks on an icon data : {Icon, CairoDock, int}
@@ -117,12 +117,12 @@ struct _CairoContainerInterface {
 
 /// Definition of a Container, whom derive Dock, Desklet, Dialog and FlyingContainer. 
 struct _CairoContainer {
-	/// list of available notifications.
-	GPtrArray *pNotificationsTab;
-	/// type of container.
-	CairoDockTypeContainer iType;
+	/// object.
+	GldiObject object;
 	/// External data.
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
+	/// type of container.
+	CairoDockTypeContainer iType;
 	/// window of the container.
 	GtkWidget *pWidget;
 	/// size of the container.

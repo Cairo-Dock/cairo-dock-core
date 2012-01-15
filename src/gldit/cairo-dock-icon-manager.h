@@ -95,7 +95,7 @@ struct _CairoIconsManager {
 /// signals
 typedef enum {
 	/// notification called when an icon's sub-dock is starting to (un)fold. data : {Icon}
-	NOTIFICATION_UNFOLD_SUBDOCK,
+	NOTIFICATION_UNFOLD_SUBDOCK = NB_NOTIFICATIONS_OBJECT,
 	/// notification called when an icon is updated in the fast rendering loop.
 	NOTIFICATION_UPDATE_ICON,
 	/// notification called when an icon is updated in the slow rendering loop.

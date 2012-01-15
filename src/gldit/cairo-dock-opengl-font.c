@@ -58,8 +58,6 @@ extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
 
-extern gboolean g_bEasterEggs;
-
 
 GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gchar *cFontDescription, cairo_t* pSourceContext, int *iWidth, int *iHeight)
 {

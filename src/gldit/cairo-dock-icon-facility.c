@@ -29,11 +29,12 @@
 
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-indicator-manager.h"
-#include "cairo-dock-config.h"
+#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-manager.h"  // cairo_dock_trigger_refresh_launcher_gui
 #include "cairo-dock-animations.h"  // CairoDockHidingEffect
@@ -545,7 +546,6 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 		cairo_dock_normalize_icons_order (pDock->icons, icon1->iGroup);
 	
 	//\_________________ Notify everybody.
-	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_ICON_MOVED, icon1, pDock);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_ICON_MOVED, icon1, pDock);
 }
 

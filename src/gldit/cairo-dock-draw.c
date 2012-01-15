@@ -523,9 +523,8 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
-	if (bUseText && icon->pTextBuffer != NULL && icon->iHideLabel == 0 &&
-		( (icon->fScale > 1.01 && (! myIconsParam.bLabelForPointedIconOnly || icon->bPointed)) ||
-		((myIconsParam.fAmplitude < 0.001 || pDock->fMagnitudeMax < 0.001) && icon->bPointed) ))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
+	if (bUseText && icon->pTextBuffer != NULL && icon->iHideLabel == 0
+	&& (icon->bPointed || (icon->fScale > 1.01 && ! myIconsParam.bLabelForPointedIconOnly)))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		cairo_save (pCairoContext);
 		

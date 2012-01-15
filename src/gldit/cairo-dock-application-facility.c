@@ -27,6 +27,7 @@
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
 
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_name
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-animations.h"
@@ -408,8 +409,9 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				
 				cd_debug (" on lui substitue le fake");
 				cairo_dock_insert_icon_in_dock_full (pFakeClassIcon, pClassMateParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
-				cairo_dock_calculate_dock_icons (pClassMateParentDock);
-				cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
+				///cairo_dock_calculate_dock_icons (pClassMateParentDock);
+				///cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
+				cairo_dock_redraw_container (CAIRO_CONTAINER (pClassMateParentDock));
 			}
 		}
 	}
@@ -487,7 +489,7 @@ CairoDock * cairo_dock_detach_appli (Icon *pIcon)
 		if (bEmptyClassSubDock)  // has been destroyed.
 			return NULL;
 	}
-	cairo_dock_update_dock_size (pParentDock);
+	///cairo_dock_update_dock_size (pParentDock);
 	return pParentDock;
 }
 

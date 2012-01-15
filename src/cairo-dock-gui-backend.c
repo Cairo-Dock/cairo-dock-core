@@ -24,7 +24,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
-#include "cairo-dock-config.h"
+#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-gui-main.h"
 #include "cairo-dock-gui-simple.h"
 #include "cairo-dock-gui-manager.h"

@@ -64,7 +64,7 @@ struct _CairoConnectionManager {
 
 // signals
 typedef enum {
-	NOTIFICATION_CONNECTION_UP,
+	NOTIFICATION_CONNECTION_UP = NB_NOTIFICATIONS_OBJECT,  // not yet implemented
 	NB_NOTIFICATIONS_CONNECTION
 	} CairoConnectionNotifications;
 

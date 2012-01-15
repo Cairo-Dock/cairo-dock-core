@@ -256,7 +256,6 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 		if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pFlyingContainer)))
 			return FALSE;
 		
-		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER, pFlyingContainer, NULL);
 		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER, pFlyingContainer, NULL);
 		
 		gldi_glx_end_draw_container (CAIRO_CONTAINER (pFlyingContainer));
@@ -265,7 +264,6 @@ static gboolean on_expose_flying_icon (GtkWidget *pWidget,
 	{
 		cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pFlyingContainer));
 		
-		cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_RENDER, pFlyingContainer, pCairoContext);
 		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER, pFlyingContainer, pCairoContext);
 		
 		cairo_destroy (pCairoContext);
@@ -307,7 +305,6 @@ static gboolean _cairo_flying_container_animation_loop (CairoContainer *pContain
 	{
 		gboolean bIconIsAnimating = FALSE;
 		
-		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
 		cairo_dock_notify_on_object (pFlyingContainer->pIcon, NOTIFICATION_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
 		if (! bIconIsAnimating)
 			pFlyingContainer->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
@@ -315,7 +312,6 @@ static gboolean _cairo_flying_container_animation_loop (CairoContainer *pContain
 			bContinue = TRUE;
 	}
 	
-	cairo_dock_notify_on_object (&myFlyingsMgr, NOTIFICATION_UPDATE, pFlyingContainer, &bContinue);
 	cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_UPDATE, pFlyingContainer, &bContinue);
 	
 	if (! bContinue)
@@ -333,7 +329,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	CairoFlyingContainer * pFlyingContainer = g_new0 (CairoFlyingContainer, 1);
 	pFlyingContainer->container.iType = CAIRO_DOCK_TYPE_FLYING_CONTAINER;
 	GtkWidget* pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pFlyingContainer));
-	cairo_dock_install_notifications_on_object (pFlyingContainer, NB_NOTIFICATIONS_FLYING_CONTAINER);
+	gldi_object_set_manager (GLDI_OBJECT (pFlyingContainer), GLDI_MANAGER (&myFlyingsMgr));
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
 	
@@ -515,6 +511,7 @@ void gldi_register_flying_manager (void)
 	myFlyingsMgr.mgr.iSizeOfData = 0;
 	// signals
 	cairo_dock_install_notifications_on_object (&myFlyingsMgr, NB_NOTIFICATIONS_FLYING_CONTAINER);
+	gldi_object_set_manager (GLDI_OBJECT (&myFlyingsMgr), GLDI_MANAGER (&myContainersMgr));
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myFlyingsMgr));
 }

@@ -162,11 +162,6 @@ void cairo_dock_load_config (const gchar *cConfFilePath);
 */
 gboolean cairo_dock_is_loading (void);
 
-/** Update a conf file with a list of values of the form : {type, name of the groupe, name of the key, value}. Must end with G_TYPE_INVALID.
-*@param cConfFilePath path to the conf file.
-*@param iFirstDataType type of the first value.
-*/
-void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...);
 
 /* Met a jour un fichier de conf de dock racine avec sa position définie par les écarts en x et en y.
 *@param cConfFilePath chemin du fichier de conf.

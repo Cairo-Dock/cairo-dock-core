@@ -446,7 +446,7 @@ static gboolean _show_new_dock_msg (gchar *cDockName)
 static void cairo_dock_add_main_dock (GtkMenuItem *pMenuItem, gpointer *data)
 {
 	gchar *cDockName = cairo_dock_add_root_dock_config ();
-	CairoDock *pDock = cairo_dock_create_dock (cDockName, NULL);
+	CairoDock *pDock = cairo_dock_create_dock (cDockName);
 	cairo_dock_reload_one_root_dock (cDockName, pDock);
 	
 	cairo_dock_gui_trigger_reload_items ();  // pas de signal "new_dock"
@@ -1115,7 +1115,7 @@ static void _cairo_dock_launch_new (GtkMenuItem *pMenuItem, gpointer *data)
 	CairoDock *pDock = data[1];
 	if (icon->cCommand != NULL)
 	{
-		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+		///cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 	}
 }

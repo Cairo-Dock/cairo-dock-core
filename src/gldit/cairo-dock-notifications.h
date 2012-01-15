@@ -38,67 +38,7 @@ typedef struct {
 	gpointer pUserData;
 	} CairoDockNotificationRecord;
 
-
 typedef guint CairoDockNotificationType;
-
-/// prototype of the callback to the CAIRO_DOCK_CLICK_ICON notification.
-typedef gboolean (* CairoDockClickIconFunc) (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, int iState);
-/// prototype of the callback to the CAIRO_DOCK_DOUBLE_CLICK_ICON notification.
-typedef gboolean (* CairoDockDoubleClickIconFunc) (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer);
-/// prototype of the callback to the CAIRO_DOCK_MIDDLE_CLICK_ICON notification.
-typedef gboolean (* CairoDockMiddleClickIconFunc) (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer);
-/// prototype of the callback to the CAIRO_DOCK_SCROLL_ICON notification.
-typedef gboolean (* CairoDockScrollIconFunc) (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, int iDirection);
-/// prototype of the callback to the CAIRO_DOCK_BUILD_ICON_MENU notification.
-typedef gboolean (* CairoDockBuildMenuFunc) (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, GtkMenu *pMenu);
-/// prototype of the callback to the CAIRO_DOCK_START_DRAG_DATA notification.
-typedef gboolean (* CairoDockStartDragDataFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);
-/// prototype of the callback to the CAIRO_DOCK_DROP_DATA notification.
-typedef gboolean (* CairoDockDropDataFunc) (gpointer pUserData, gchar *cData, Icon *pIcon, double fPosition, CairoContainer *pContainer);
-/// prototype of the callback to the CAIRO_DOCK_MOUSE_MOVED notification.
-typedef gboolean (* CairoDockMouseMovedFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);
-/// prototype of the callback to the CAIRO_DOCK_KEY_PRESSED notification.
-typedef gboolean (* CairoDockKeyPressedFunc) (gpointer pUserData, CairoDock *pDock, int keyval, int state, gchar *string);
-
-/// prototype of the callback to the CAIRO_DOCK_DESKTOP_CHANGED notification.
-typedef gboolean (* CairoDockDesktopChangedFunc) (gpointer pUserData);
-/// prototype of the callback to the CAIRO_DOCK_WINDOW_CONFIGURED notification.
-typedef gboolean (* CairoDockWindowConfiguredFunc) (gpointer pUserData, XConfigureEvent *pXEvent);
-/// prototype of the callback to the CAIRO_DOCK_SCREEN_GEOMETRY_ALTERED notification.
-typedef gboolean (* CairoDockScreenGeometryAlteredFunc) (gpointer pUserData);
-/// prototype of the callback to the CAIRO_DOCK_WINDOW_ACTIVATED notification.
-typedef gboolean (* CairoDockWindowActivatedFunc) (gpointer pUserData, Window *Xid);
-/// prototype of the callback to the CAIRO_DOCK_KBD_STATE_CHANGED notification.
-typedef gboolean (* CairoDockKeyboardStateChangedFunc) (gpointer pUserData, Window *Xid);
-
-/// prototype of the callback to the CAIRO_DOCK_INSERT_ICON and CAIRO_DOCK_REMOVE_ICON notifications.
-typedef gboolean (* CairoDockInsertRemoveIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
-/// prototype of the callback to the CAIRO_DOCK_REQUEST_ICON_ANIMATION notification.
-typedef gboolean (* CairoDockRequestAnimationFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gchar *cAnimationName, gint iNbRounds);
-
-/// prototype of the callback to the CAIRO_DOCK_ENTER_ICON notification.
-typedef gboolean (* CairoDockEnterIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bStartAnimation);
-/// prototype of the callback to the CAIRO_DOCK_UPDATE_ICON and CAIRO_DOCK_UPDATE_ICON_SLOW notifications.
-typedef gboolean (* CairoDockUpdateIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation);
-
-/// prototype of the callback to the CAIRO_DOCK_PRE_RENDER_ICON notification.
-typedef gboolean (* CairoDockPreRenderIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
-/// prototype of the callback to the CAIRO_DOCK_RENDER_ICON notification.
-typedef gboolean (* CairoDockRenderIconFunc) (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext);
-/// prototype of the callback to the CAIRO_DOCK_STOP_ICON notification.
-typedef gboolean (* CairoDockStopIconFunc) (gpointer pUserData, Icon *pIcon);
-
-/// prototype of the callback to the CAIRO_DOCK_ENTER_DOCK and CAIRO_DOCK_ENTER_DESKLET notifications.
-typedef gboolean (* CairoDockEnterContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);
-/// prototype of the callback to the CAIRO_DOCK_UPDATE_DOCK, CAIRO_DOCK_UPDATE_DOCK_SLOW, CAIRO_DOCK_UPDATE_DESKLET, CAIRO_DOCK_UPDATE_DESKLET_SLOW, CAIRO_DOCK_UPDATE_DIALOG and CAIRO_DOCK_UPDATE_FLYING_CONTAINER notifications.
-typedef gboolean (* CairoDockUpdateContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bContinueAnimation);
-/// prototype of the callback to the CAIRO_DOCK_RENDER_DOCK, CAIRO_DOCK_RENDER_DESKLET, CAIRO_DOCK_RENDER_DIALOG, CAIRO_DOCK_RENDER_FLYING_CONTAINER notifications. 'pCairoContext' is NULL for an OpenGL rendering.
-typedef gboolean (* CairoDockRenderContainerFunc) (gpointer pUserData, CairoContainer *pContainer, cairo_t *pCairoContext);
-/// prototype of the callback to the CAIRO_DOCK_STOP_DOCK and CAIRO_DOCK_STOP_DESKLET notifications.
-typedef gboolean (* CairoDockStopContainerFunc) (gpointer pUserData, CairoContainer *pContainer);
-/// prototype of the callback to the CAIRO_DOCK_LEAVE_DOCK and CAIRO_DOCK_LEAVE_DESKLET notifications.
-typedef gboolean (* CairoDockLeaveContainerFunc) (gpointer pUserData, CairoContainer *pContainer, gboolean *bStartAnimation);
-
 
 /// Use this in \ref cairo_dock_register_notification_on_object to be called before the dock.
 #define CAIRO_DOCK_RUN_FIRST TRUE
@@ -111,20 +51,20 @@ typedef gboolean (* CairoDockLeaveContainerFunc) (gpointer pUserData, CairoConta
 #define CAIRO_DOCK_LET_PASS_NOTIFICATION FALSE
 
 
-
 void cairo_dock_free_notification_table (GPtrArray *pNotificationsTab);
 
-
 #define cairo_dock_install_notifications_on_object(pObject, iNbNotifs) do {\
-	GPtrArray **pNotificationsTabPtr = (GPtrArray**) pObject;\
-	GPtrArray *pNotificationsTab = g_ptr_array_new ();\
-	g_ptr_array_set_size (pNotificationsTab, iNbNotifs);\
-	*pNotificationsTabPtr = pNotificationsTab; } while (0)
+	GPtrArray *pNotificationsTab = ((GldiObject*)pObject)->pNotificationsTab;\
+	if (pNotificationsTab == NULL) {\
+		pNotificationsTab = g_ptr_array_new ();\
+		((GldiObject*)pObject)->pNotificationsTab = pNotificationsTab; }\
+	if (pNotificationsTab->len < iNbNotifs)\
+		g_ptr_array_set_size (pNotificationsTab, iNbNotifs); } while (0)
 
 #define cairo_dock_clear_notifications_on_object(pObject) do {\
-	GPtrArray **pNotificationsTabPtr = (GPtrArray**) pObject;\
-	GPtrArray *pNotificationsTab = *pNotificationsTabPtr;\
-	cairo_dock_free_notification_table (pNotificationsTab); } while (0)
+	GPtrArray *pNotificationsTab = ((GldiObject*)pObject)->pNotificationsTab;\
+	cairo_dock_free_notification_table (pNotificationsTab);\
+	((GldiObject*)pObject)->pNotificationsTab = NULL; } while (0)
 
 /** Register an action to be called when a given notification is broadcasted from a given object.
 *@param pObject the object (Icon, Container, Manager).
@@ -145,33 +85,39 @@ Note: it is safe to remove the callback when it is called, but not another one.
 void cairo_dock_remove_notification_func_on_object (gpointer pObject, CairoDockNotificationType iNotifType, CairoDockNotificationFunc pFunction, gpointer pUserData);
 
 
-#define _cairo_dock_notify(pNotificationRecordList, bStop, ...) do {\
-	if (pNotificationRecordList != NULL) {\
-		CairoDockNotificationRecord *pNotificationRecord;\
-		GSList *pElement = pNotificationRecordList, *pNextElement;\
-		while (pElement != NULL && ! bStop) {\
-			pNotificationRecord = pElement->data;\
-			pNextElement = pElement->next;\
-			bStop = pNotificationRecord->pFunction (pNotificationRecord->pUserData, ##__VA_ARGS__);\
-			pElement = pNextElement; } }\
+#define _notify(pNotificationRecordList, bStop, ...) do {\
+	CairoDockNotificationRecord *pNotificationRecord;\
+	GSList *pElement = pNotificationRecordList, *pNextElement;\
+	while (pElement != NULL && ! bStop) {\
+		pNotificationRecord = pElement->data;\
+		pNextElement = pElement->next;\
+		bStop = pNotificationRecord->pFunction (pNotificationRecord->pUserData, ##__VA_ARGS__);\
+		pElement = pNextElement; }\
 	} while (0)
 
-/** Broadcast a notification on a given object.
-*@param pObject the object (Icon, Container, Manager).
+#define _notify_on_object(pObject, iNotifType, ...) \
+	__extension__ ({\
+	gboolean _stop = FALSE;\
+	GPtrArray *pNotificationsTab = (pObject)->pNotificationsTab;\
+	if (pNotificationsTab && iNotifType < pNotificationsTab->len) {\
+		GSList *pNotificationRecordList = g_ptr_array_index (pNotificationsTab, iNotifType);\
+		_notify (pNotificationRecordList, _stop, ##__VA_ARGS__);} \
+	else {_stop = TRUE;}\
+	_stop; })
+
+/** Broadcast a notification on a given object, and on all its managers.
+*@param pObject the object (Icon, Container, Manager, ...).
 *@param iNotifType type of the notification.
-*@param ... parameters to be passed to the callbacks that has registerd to this notification.
-*@return whether the notification has been intercepted or not.
+*@param ... parameters to be passed to the callbacks that have registered to this notification.
 */
 #define cairo_dock_notify_on_object(pObject, iNotifType, ...) \
 	__extension__ ({\
 	gboolean _bStop = FALSE;\
-	if (pObject != NULL) {\
-		GPtrArray **pNotificationsTabPtr = (GPtrArray**) pObject;\
-		GPtrArray *pNotificationsTab = *pNotificationsTabPtr;\
-		if (pNotificationsTab && iNotifType < pNotificationsTab->len) {\
-			GSList *pNotificationRecordList = g_ptr_array_index (pNotificationsTab, iNotifType);\
-			_cairo_dock_notify (pNotificationRecordList, _bStop, ##__VA_ARGS__);} }\
-	_bStop; })
+	GldiObject *_obj = (GldiObject*)pObject;\
+	while (_obj && !_bStop) {\
+		_bStop = _notify_on_object (_obj, iNotifType, ##__VA_ARGS__);\
+		_obj = GLDI_OBJECT (_obj->mgr); }\
+	})
 
 G_END_DECLS
 #endif

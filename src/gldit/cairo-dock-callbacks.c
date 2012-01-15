@@ -181,7 +181,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 #endif
 	CairoDock *pDock)
 {
-	//g_print ("%s ((%d;%d) %dx%d)\n", __func__, area.x, area.y, area.width, area.height);
 	GdkRectangle area;
 	#if (GTK_MAJOR_VERSION < 3)
 	memcpy (&area, &pExpose->area, sizeof (GdkRectangle));
@@ -193,6 +192,7 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 	area.width = x2 - x1;
 	area.height = y2 - y1;  /// or the opposite ?...
 	#endif
+	//g_print ("%s ((%d;%d) %dx%d)\n", __func__, area.x, area.y, area.width, area.height);
 	
 	//\________________ OpenGL rendering
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)
@@ -220,7 +220,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		}
 		else
 		{
-			cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER, pDock, NULL);
 			cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER, pDock, NULL);
 		}
 		glDisable (GL_SCISSOR_TEST);
@@ -254,7 +253,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 			if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
 				g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
 			
-			cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER, pDock, pCairoContext);
 			cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER, pDock, pCairoContext);
 			
 			cairo_destroy (pCairoContext);
@@ -290,7 +288,6 @@ gboolean cairo_dock_on_expose (GtkWidget *pWidget,
 		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
 			g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
 		
-		cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_RENDER, pDock, pCairoContext);
 		cairo_dock_notify_on_object (pDock, NOTIFICATION_RENDER, pDock, pCairoContext);
 	}
 	
@@ -403,8 +400,7 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 	if (pPointedIcon != NULL /**&& pDock->pRenderer->render_opengl != NULL */&& ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPointedIcon)/** && pPointedIcon->iAnimationState <= CAIRO_DOCK_STATE_MOUSE_HOVERED*/)
 	{
 		gboolean bStartAnimation = FALSE;
-		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
-		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
+		cairo_dock_notify_on_object (pDock, NOTIFICATION_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
 		
 		if (bStartAnimation)
 		{
@@ -588,8 +584,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	}
 	
 	//\_______________ On notifie tout le monde.
-	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_MOUSE_MOVED, pDock, &bStartAnimation);
-	cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_MOUSE_MOVED, pDock, &bStartAnimation);
+	cairo_dock_notify_on_object (pDock, NOTIFICATION_MOUSE_MOVED, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	
@@ -731,7 +726,6 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 		pDock->fFoldingFactor = (myDocksParam.bAnimateSubDock ? 0.001 : 0.);
 		Icon *pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 		//g_print ("'%s' se replie\n", pIcon?pIcon->cName:"none");
-		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UNFOLD_SUBDOCK, pIcon);
 		cairo_dock_notify_on_object (pIcon, NOTIFICATION_UNFOLD_SUBDOCK, pIcon);
 	}
 	//g_print ("start shrinking\n");
@@ -789,11 +783,21 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			{
 				//g_print (" leave event : %.1f;%.1f (%dx%d)\n", pEvent->x, pEvent->y, pDock->container.iWidth, pDock->container.iHeight);
 				Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-				if ((pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && gldi_container_is_visible (CAIRO_CONTAINER (pPointedIcon->pSubDock))) || (pDock->bAutoHide))
+				if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && gldi_container_is_visible (CAIRO_CONTAINER (pPointedIcon->pSubDock)))
 				{
 					//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myDocksParam.iLeaveSubDockDelay, 330));
 					pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 250), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 					return TRUE;
+				}
+				else if (pDock->bAutoHide)
+				{
+					const int delay = 0;  // 250
+					if (delay != 0)  /// maybe try to se if we leaved the dock frankly, or just by a few pixels...
+					{
+						g_print (" delay the leave event by %dms\n", delay);
+						pDock->iSidLeaveDemand = g_timeout_add (250, (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
+						return TRUE;
+					}
 				}
 			}
 			else if (myDocksParam.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
@@ -818,7 +822,6 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	gboolean bStartAnimation = FALSE;
-	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
@@ -910,7 +913,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	pDock->container.bInside = TRUE;
 	// animation d'entree.
 	gboolean bStartAnimation = FALSE;
-	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_ENTER_DOCK, pDock, &bStartAnimation);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_ENTER_DOCK, pDock, &bStartAnimation);
 	if (bStartAnimation)
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
@@ -994,8 +996,7 @@ gboolean cairo_dock_on_key_release (GtkWidget *pWidget,
 	cd_debug ("on a appuye sur une touche (%d/%d)", pKey->keyval, pKey->hardware_keycode);
 	if (pKey->type == GDK_KEY_PRESS)
 	{
-		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string, pKey->hardware_keycode);
-		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string, pKey->hardware_keycode);
+		cairo_dock_notify_on_object (pDock, NOTIFICATION_KEY_PRESSED, pDock, pKey->keyval, pKey->state, pKey->string, pKey->hardware_keycode);
 	}
 	else if (pKey->type == GDK_KEY_RELEASE)
 	{
@@ -1017,8 +1018,7 @@ static gboolean _double_click_delay_over (Icon *icon)
 	{
 		pDock->container.iMouseX = s_iFirstClickX;
 		pDock->container.iMouseY = s_iFirstClickY;
-		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
-		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
+		cairo_dock_notify_on_object (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
 		if (pDock->bIsMainDock && pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 			s_bHideAfterShortcut = TRUE;
 		
@@ -1099,8 +1099,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							}
 							else
 							{
-								cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, pButton->state);
-								cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, pButton->state);
+								cairo_dock_notify_on_object (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, pButton->state);
 								if (pDock->bIsMainDock && pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 									s_bHideAfterShortcut = TRUE;
 								
@@ -1181,7 +1180,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						cairo_dock_stop_icon_glide (pDock);
 					}
 					/// a implementer ...
-					///cairo_dock_notify_on_container (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RELEASE_ICON, icon, pDock);
+					///cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), CAIRO_DOCK_RELEASE_ICON, icon, pDock);
 				}
 				else
 				{
@@ -1217,8 +1216,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						g_source_remove (icon->iSidDoubleClickDelay);
 						icon->iSidDoubleClickDelay = 0;
 					}
-					cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, icon, pDock);
-					cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_DOUBLE_CLICK_ICON, icon, pDock);
+					cairo_dock_notify_on_object (pDock, NOTIFICATION_DOUBLE_CLICK_ICON, icon, pDock);
 					if (icon->iNbDoubleClickListeners > 0)
 						pDock->container.bIgnoreNextReleaseEvent = TRUE;
 				}
@@ -1238,8 +1236,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 	{
 		if (icon && ! cairo_dock_icon_is_being_removed (icon))
 		{
-			cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, icon, pDock);
-			cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_MIDDLE_CLICK_ICON, icon, pDock);
+			cairo_dock_notify_on_object (pDock, NOTIFICATION_MIDDLE_CLICK_ICON, icon, pDock);
 		}
 	}
 
@@ -1254,8 +1251,7 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 		return FALSE;
 	}
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // can be NULL
-	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_SCROLL_ICON, icon, pDock, pScroll->direction);
-	cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_SCROLL_ICON, icon, pDock, pScroll->direction);
+	cairo_dock_notify_on_object (pDock, NOTIFICATION_SCROLL_ICON, icon, pDock, pScroll->direction);
 	
 	return FALSE;
 }
@@ -1330,7 +1326,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			if (pDock->iRedirectedTexture != 0)
 			{
 				_cairo_dock_delete_texture (pDock->iRedirectedTexture);
-				pDock->iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL, pEvent->width, pEvent->height);
+				pDock->iRedirectedTexture = cairo_dock_create_texture_from_raw_data (NULL, pEvent->width, pEvent->height);
 			}
 		}
 		
@@ -1566,8 +1562,7 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 		cd_debug (" <%s>\n", cairo_dock_get_property_name_on_xwindow (Xid, xAtom));*/
 		
 		gboolean bStartAnimation = FALSE;
-		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_START_DRAG_DATA, pDock, &bStartAnimation);
-		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_START_DRAG_DATA, pDock, &bStartAnimation);
+		cairo_dock_notify_on_object (pDock, NOTIFICATION_START_DRAG_DATA, pDock, &bStartAnimation);
 		if (bStartAnimation)
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 		

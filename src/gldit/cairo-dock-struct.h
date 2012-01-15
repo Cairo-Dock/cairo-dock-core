@@ -398,6 +398,8 @@ typedef struct _CairoKeyBinding CairoKeyBinding;
 
 typedef struct _GldiManager GldiManager;
 
+typedef struct _GldiObject GldiObject;
+
 typedef void (* _CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
 typedef _CairoDockForeachIconFunc CairoDockForeachIconFunc;
 

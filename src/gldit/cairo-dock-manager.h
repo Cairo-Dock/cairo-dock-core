@@ -23,6 +23,8 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-object.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -43,9 +45,9 @@ typedef void (* GldiManagerReloadFunc) (GldiManagerConfigPtr pPrevConfig, GldiMa
 typedef gboolean (* GldiManagerGetConfigFunc) (GKeyFile *pKeyFile, GldiManagerConfigPtr pConfig);
 typedef void (* GldiManagerResetConfigFunc) (GldiManagerConfigPtr pConfig);
 struct _GldiManager {
-	// list of available notifications.
-	GPtrArray *pNotificationsTab;
-	//\_____________ Carte de visite.
+	/// object
+	GldiObject object;
+	//\_____________ Visit card.
 	const gchar *cModuleName;
 	gint iSizeOfConfig;
 	gint iSizeOfData;

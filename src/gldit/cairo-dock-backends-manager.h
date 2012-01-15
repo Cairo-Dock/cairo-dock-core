@@ -59,7 +59,7 @@ struct _CairoBackendsManager {
 
 // signals
 typedef enum {
-	NB_NOTIFICATIONS_BACKENDS
+	NB_NOTIFICATIONS_BACKENDS = NB_NOTIFICATIONS_OBJECT
 	} CairoBackendsNotifications;
 
 

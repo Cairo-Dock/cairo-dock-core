@@ -27,9 +27,6 @@
 #include <gdk/gdkx.h>
 
 #include <cairo.h>
-#include <pango/pango.h>
-#include <librsvg/rsvg.h>
-#include <librsvg/rsvg-cairo.h>
 
 #include <X11/extensions/Xrender.h>
 #include <X11/extensions/shape.h>
@@ -40,7 +37,6 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-image-buffer.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-icon-factory.h"
@@ -63,7 +59,6 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-desktop-file-factory.h"
-///#include "cairo-dock-emblem.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-factory.h"
@@ -75,25 +70,58 @@ extern CairoDockHidingEffect *g_pHidingBackend;
 extern gboolean g_bUseOpenGL;
 
 
-static void _cairo_dock_set_icon_size (CairoContainer *pDock, Icon *icon)
+static void _cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 {
-	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // une applet peut definir la taille de son icone elle-meme.
+	CairoDock *pDock = CAIRO_DOCK (pContainer);
+	if (pDock->pRenderer && pDock->pRenderer->set_icon_size)
 	{
-		g_print ("%s (%s, %.1fx%.1f\n", __func__, icon->pModuleInstance->pModule->pVisitCard->cModuleName, icon->fWidth, icon->fHeight);
-		if (icon->fWidth == 0)
-			icon->fWidth = myIconsParam.iIconWidth;
-		if (icon->fHeight == 0)
-			icon->fHeight = myIconsParam.iIconHeight;
-	}
-	else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
-	{
-		icon->fWidth = myIconsParam.iSeparatorWidth;
-		icon->fHeight = myIconsParam.iSeparatorHeight;
+		pDock->pRenderer->set_icon_size (icon, pDock);
 	}
 	else
 	{
-		icon->fWidth = myIconsParam.iIconWidth;
-		icon->fHeight = myIconsParam.iIconHeight;
+		int wi, hi;
+		if (pDock->iIconSize != 0)
+		{
+			wi = hi = pDock->iIconSize;
+		}
+		else  // same size as main dock.
+		{
+			wi = myIconsParam.iIconWidth;
+			hi = myIconsParam.iIconHeight;
+		}
+		// set the visible size at rest.
+		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // for applets, consider (fWidth,fHeight) as a requested size, if not 0.
+		{
+			//g_print ("%s (%s, %.1fx%.1f\n", __func__, icon->pModuleInstance->pModule->pVisitCard->cModuleName, icon->fWidth, icon->fHeight);
+			if (icon->fWidth == 0)
+				icon->fWidth = wi;
+			if (icon->fHeight == 0 || icon->fHeight > hi)
+				icon->fHeight = hi;
+		}
+		else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // separators have their own size.
+		{
+			icon->fWidth = myIconsParam.iSeparatorWidth;
+			icon->fHeight = MIN (myIconsParam.iSeparatorHeight, hi);
+		}
+		else  // any other icon use the global size
+		{
+			icon->fWidth = wi;
+			icon->fHeight = hi;
+		}
+		
+		// texture size can be deduced then.
+		double fMaxScale = cairo_dock_get_max_scale (pContainer);
+		if (pContainer->bIsHorizontal
+		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator))
+		{
+			icon->iImageWidth = icon->fWidth * fMaxScale;
+			icon->iImageHeight = icon->fHeight * fMaxScale;
+		}
+		else
+		{
+			icon->iImageWidth = icon->fHeight * fMaxScale;
+			icon->iImageHeight = icon->fWidth * fMaxScale;
+		}
 	}
 }
 
@@ -226,8 +254,6 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 static gboolean _cairo_dock_hide (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %.2f, %.2f)\n", __func__, pDock->iMagnitudeIndex, pDock->fHideOffset, pDock->fPostHideOffset);
-	///if (pDock->iMagnitudeIndex > 0)  // on retarde le cachage du dock pour apercevoir les effets.
-	///	return TRUE;
 	
 	if (pDock->fHideOffset < 1)  // the hiding animation is running.
 	{
@@ -343,7 +369,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				}
 				
 				cairo_dock_free_icon (pIcon);
-				cairo_dock_update_dock_size (pDock);  // si on le fait avant le free, le dock se fige (mais continue a tourner)...
+				///cairo_dock_update_dock_size (pDock);  // si on le fait avant le free, le dock se fige (mais continue a tourner)...
 			}
 		}
 		else if (pIcon->fInsertRemoveFactor == (gdouble)-0.05)
@@ -419,11 +445,9 @@ static gboolean _cairo_dock_dock_animation_loop (CairoContainer *pContainer)
 		bIconIsAnimating = FALSE;
 		if (bUpdateSlowAnimation)
 		{
-			cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
 			cairo_dock_notify_on_object (icon, NOTIFICATION_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
 			pContainer->bKeepSlowAnimation |= bIconIsAnimating;
 		}
-		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
 		cairo_dock_notify_on_object (icon, NOTIFICATION_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
 		
 		if ((icon->bIsDemandingAttention || icon->bAlwaysVisible) && cairo_dock_is_hidden (pDock))  // animation d'une icone demandant l'attention dans un dock cache => on force le dessin qui normalement ne se fait pas.
@@ -458,10 +482,8 @@ static gboolean _cairo_dock_dock_animation_loop (CairoContainer *pContainer)
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_UPDATE_SLOW, pDock, &pContainer->bKeepSlowAnimation);
 		cairo_dock_notify_on_object (pDock, NOTIFICATION_UPDATE_SLOW, pDock, &pContainer->bKeepSlowAnimation);
 	}
-	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_UPDATE, pDock, &bContinue);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_UPDATE, pDock, &bContinue);
 	
 	if (! bContinue && ! pContainer->bKeepSlowAnimation)
@@ -488,12 +510,13 @@ CairoDock *cairo_dock_new_dock (void)
 	pDock->fPostHideOffset = 1.;
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
-	pDock->container.iface.set_icon_size = _cairo_dock_set_icon_size; // warning: assignment from incompatible pointer type
+	pDock->container.iface.set_icon_size = _cairo_dock_set_icon_size;
 	pDock->container.iface.animation_loop = _cairo_dock_dock_animation_loop;
 	
 	//\__________________ On cree la fenetre GTK.
 	GtkWidget *pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDock));
-	cairo_dock_install_notifications_on_object (pDock, NB_NOTIFICATIONS_DOCKS);
+	///cairo_dock_install_notifications_on_object (pDock, NB_NOTIFICATIONS_DOCKS);
+	gldi_object_set_manager (GLDI_OBJECT (pDock), GLDI_MANAGER (&myDocksMgr));
 	gtk_container_set_border_width (GTK_CONTAINER (pWindow), 0);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
@@ -592,7 +615,8 @@ void cairo_dock_free_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidDestroyEmptyDock);
 	if (pDock->iSidTestMouseOutside != 0)
 		g_source_remove (pDock->iSidTestMouseOutside);
-	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_STOP_DOCK, pDock);
+	if (pDock->iSidUpdateDockSize != 0)
+		g_source_remove (pDock->iSidUpdateDockSize);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_STOP_DOCK, pDock);
 	
 	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
@@ -640,7 +664,10 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 	pDock->iScreenOffsetX = pParentDock->iScreenOffsetX;
 	pDock->iScreenOffsetY = pParentDock->iScreenOffsetY;
 	
-	//\__________________ update the ratio on the icons
+	//\__________________ set a renderer
+	cairo_dock_set_renderer (pDock, cRendererName);
+	
+	//\__________________ update the icons size and the ratio.
 	double fPrevRatio = pDock->container.fRatio;
 	pDock->container.fRatio = MIN (pDock->container.fRatio, myBackendsParam.fSubDockSizeRatio);
 	
@@ -672,9 +699,6 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 	//\__________________ hide the dock
 	pDock->bAutoHide = FALSE;
 	gtk_widget_hide (pDock->container.pWidget);
-	
-	//\__________________ set a renderer
-	cairo_dock_set_renderer (pDock, cRendererName);
 	
 	cairo_dock_update_dock_size (pDock);
 }
@@ -716,10 +740,11 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		pCompareFunc);
 	icon->pContainerForLoad = CAIRO_CONTAINER (pDock);
 	
-	if (icon->fWidth == 0)
-	{
-		cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
-	}
+	//\______________ set the icon size, now that it's inside a container.
+	int wi = icon->iImageWidth, hi = icon->iImageHeight;
+	cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
+	if (wi != icon->iImageWidth || hi != icon->iImageHeight)  // if size has changed, reload the buffers
+		cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
 	
 	icon->fWidth *= pDock->container.fRatio;
 	icon->fHeight *= pDock->container.fRatio;
@@ -762,8 +787,10 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	}
 	else
 		icon->fInsertRemoveFactor = 0.;
-	if (bUpdateSize)
+	/**if (bUpdateSize)
 		cairo_dock_update_dock_size (pDock);
+	else*/
+		cairo_dock_trigger_update_dock_size (pDock);
 	
 	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{
@@ -771,7 +798,6 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	}
 	
 	//\______________ Notify everybody.
-	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_INSERT_ICON, icon, pDock);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);
 }
 
@@ -901,10 +927,13 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 		if (pDock->iSidDestroyEmptyDock == 0)
 			pDock->iSidDestroyEmptyDock = g_idle_add ((GSourceFunc) _destroy_empty_dock, pDock);  // on ne passe pas le nom du dock en parametre, car le dock peut se faire renommer (improbable, mais bon).
 	}
+	else
+	{
+		cairo_dock_trigger_update_dock_size (pDock);
+	}
 	
 	//\___________________ Notify everybody.
 	icon->fInsertRemoveFactor = 0.;
-	cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_REMOVE_ICON, icon, pDock);
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, icon, pDock);
 	
 	return TRUE;
@@ -1082,12 +1111,12 @@ void cairo_dock_create_redirect_texture_for_dock (CairoDock *pDock)
 {
 	if (! g_openglConfig.bFboAvailable)
 		return ;
-	if (pDock->iRedirectedTexture != 0)
-		return ;
-	
-	pDock->iRedirectedTexture = cairo_dock_load_texture_from_raw_data (NULL,
-		(pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight),
-		(pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth));
-	
-	glGenFramebuffersEXT(1, &pDock->iFboId);
+	if (pDock->iRedirectedTexture == 0)
+	{
+		pDock->iRedirectedTexture = cairo_dock_create_texture_from_raw_data (NULL,
+			(pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight),
+			(pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth));
+	}
+	if (pDock->iFboId == 0)
+		glGenFramebuffersEXT(1, &pDock->iFboId);
 }

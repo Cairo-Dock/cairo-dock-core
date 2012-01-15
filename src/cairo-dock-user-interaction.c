@@ -41,7 +41,7 @@
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-config.h"
+#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-animations.h"
@@ -288,7 +288,7 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 			case 3:  // launch new
 				if (icon->cCommand != NULL)
 				{
-					cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					///cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 					cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 				}
 			break;
@@ -308,7 +308,7 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 			case 3:  // launch new
 				if (icon->cCommand != NULL)
 				{
-					cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					///cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 					cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 				}
 			break;

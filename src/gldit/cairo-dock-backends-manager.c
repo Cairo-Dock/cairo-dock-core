@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-callbacks.h"

@@ -26,6 +26,7 @@
 
 #include <GL/gl.h> 
 
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area
 #include "cairo-dock-dock-facility.h"  // cairo_dock_is_hidden
 #include "cairo-dock-module-factory.h"  // cairo_dock_search_container_from_icon
@@ -108,11 +109,9 @@ static gboolean _cairo_default_container_animation_loop (CairoContainer *pContai
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_UPDATE_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
 		cairo_dock_notify_on_object (pContainer, NOTIFICATION_UPDATE_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
 	}
 	
-	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_UPDATE, pContainer, &bContinue);
 	cairo_dock_notify_on_object (pContainer, NOTIFICATION_UPDATE, pContainer, &bContinue);
 	
 	if (! bContinue && ! pContainer->bKeepSlowAnimation)
@@ -163,7 +162,8 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
 	#endif
 	
-	cairo_dock_install_notifications_on_object (pContainer, NB_NOTIFICATIONS_CONTAINER);  // l'implementation du container installera par-dessus ses notifications.
+	///cairo_dock_install_notifications_on_object (pContainer, NB_NOTIFICATIONS_CONTAINER);  // l'implementation du container installera par-dessus ses notifications.
+	gldi_object_set_manager (GLDI_OBJECT (pContainer), GLDI_MANAGER (&myContainersMgr));  // the implementation of the container will set its manager on top of this one.
 	
 	if (g_pPrimaryContainer == NULL)
 	{
@@ -184,7 +184,6 @@ void cairo_dock_finish_container (CairoContainer *pContainer)
 		pContainer->iSidGLAnimation = 0;
 	}
 	cairo_dock_clear_notifications_on_object (pContainer);
-	pContainer->pNotificationsTab = NULL;
 	
 	if (g_pPrimaryContainer == pContainer)
 		g_pPrimaryContainer = NULL;
@@ -370,7 +369,6 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 		
 		cData = sArg->str;
 		cd_debug (" notification de drop '%s'", cData);
-		cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_DROP_DATA, cData, pPointedIcon, fOrder, pContainer);
 		cairo_dock_notify_on_object (pContainer, NOTIFICATION_DROP_DATA, cData, pPointedIcon, fOrder, pContainer);
 	}
 	
@@ -570,7 +568,6 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	
 	//\_________________________ On passe la main a ceux qui veulent y rajouter des choses.
 	gboolean bDiscardMenu = FALSE;
-	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_BUILD_CONTAINER_MENU, icon, pContainer, menu, &bDiscardMenu);
 	cairo_dock_notify_on_object (pContainer, NOTIFICATION_BUILD_CONTAINER_MENU, icon, pContainer, menu, &bDiscardMenu);
 	if (bDiscardMenu)
 	{
@@ -578,7 +575,6 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 		return NULL;
 	}
 	
-	cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, icon, pContainer, menu);
 	cairo_dock_notify_on_object (pContainer, NOTIFICATION_BUILD_ICON_MENU, icon, pContainer, menu);
 	g_signal_connect (G_OBJECT (menu), "destroy", G_CALLBACK (_on_destroy_menu), NULL);  // apparemment inutile.
 	

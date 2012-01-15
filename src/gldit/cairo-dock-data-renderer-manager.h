@@ -66,7 +66,7 @@ struct _CairoDataRenderersManager {
 
 // signals
 typedef enum {
-	NB_NOTIFICATIONS_DATA_RENDERERS
+	NB_NOTIFICATIONS_DATA_RENDERERS = NB_NOTIFICATIONS_OBJECT
 	} CairoDataRendererNotifications;
 
 

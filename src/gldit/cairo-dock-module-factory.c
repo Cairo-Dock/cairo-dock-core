@@ -28,6 +28,7 @@
 #include <cairo.h>
 
 #include "gldi-config.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
@@ -464,7 +465,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 			pDock = cairo_dock_search_dock_from_name (cDockName);
 			if (pDock == NULL)
 			{
-				pDock = cairo_dock_create_dock (cDockName, NULL);
+				pDock = cairo_dock_create_dock (cDockName);
 			}
 			pContainer = CAIRO_CONTAINER (pDock);
 		}
@@ -660,7 +661,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				if (pNewDock == NULL)  // c'est un nouveau dock.
 				{
 					cairo_dock_add_root_dock_config_for_name (cDockName);
-					pNewDock = cairo_dock_create_dock (cDockName, NULL);
+					pNewDock = cairo_dock_create_dock (cDockName);
 				}
 				pNewContainer = CAIRO_CONTAINER (pNewDock);
 			}

@@ -46,7 +46,7 @@ struct _CairoDesktopEnvManager {
 
 // signals
 typedef enum {
-	NB_NOTIFICATIONS_DESKTOP_ENV
+	NB_NOTIFICATIONS_DESKTOP_ENV = NB_NOTIFICATIONS_OBJECT
 	} CairoDesktopEnvNotifications;
 
 

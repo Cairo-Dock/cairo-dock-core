@@ -26,6 +26,7 @@
 
 
 #include "gldi-config.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-module-factory.h"  // cairo_dock_deinstanciate_module
 #include "cairo-dock-log.h"
@@ -96,8 +97,8 @@ void cairo_dock_free_icon (Icon *icon)
 		cairo_dock_deinhibite_class (icon->cClass, icon);
 	if (icon->pModuleInstance != NULL)
 		cairo_dock_deinstanciate_module (icon->pModuleInstance);
-	cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_STOP_ICON, icon);
 	cairo_dock_notify_on_object (icon, NOTIFICATION_STOP_ICON, icon);
+	cairo_dock_notify_on_object (icon, NOTIFICATION_DESTROY, icon);
 	cairo_dock_remove_transition_on_icon (icon);
 	cairo_dock_remove_data_renderer_on_icon (icon);
 	

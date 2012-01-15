@@ -80,5 +80,12 @@ void cairo_dock_remove_group_key_from_conf_file (GKeyFile *pKeyFile, const gchar
 */
 gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cNewGroupName);
 
+
+/** Update a conf file with a list of values of the form : {type, name of the groupe, name of the key, value}. Must end with G_TYPE_INVALID.
+*@param cConfFilePath path to the conf file.
+*@param iFirstDataType type of the first value.
+*/
+void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...);
+
 G_END_DECLS
 #endif

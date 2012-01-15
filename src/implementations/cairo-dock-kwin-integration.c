@@ -23,6 +23,7 @@
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-X-manager.h"

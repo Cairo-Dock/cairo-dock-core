@@ -51,7 +51,9 @@ const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est j
 inline Icon *cairo_dock_new_icon (void)
 {
 	Icon *_icon = g_new0 (Icon, 1);
-	cairo_dock_install_notifications_on_object (_icon, NB_NOTIFICATIONS_ICON);
+	///cairo_dock_install_notifications_on_object (_icon, NB_NOTIFICATIONS_ICON);
+	_icon->object.ref = 1;
+	gldi_object_set_manager (GLDI_OBJECT (_icon), GLDI_MANAGER (&myIconsMgr));
 	return _icon;
 }
 
@@ -96,13 +98,13 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 //////////////
 
 
-static void _set_icon_size_generic (CairoContainer *pContainer, Icon *icon)
+/**static void _set_icon_size_generic (CairoContainer *pContainer, Icon *icon)
 {
 	if (icon->fWidth == 0)
 		icon->fWidth = 48;
 	if (icon->fHeight == 0)
 		icon->fHeight = 48;
-}
+}*/
 void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 {
 	if (! pContainer)
@@ -113,7 +115,7 @@ void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 	// taille de l'icone dans le container (hors ratio).
 	if (pContainer->iface.set_icon_size)
 		pContainer->iface.set_icon_size (pContainer, icon);
-	else
+	/**else
 		_set_icon_size_generic (pContainer, icon);
 	// la taille que devra avoir la texture s'en deduit.
 	double fMaxScale = cairo_dock_get_max_scale (pContainer);
@@ -126,7 +128,7 @@ void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 	{
 		icon->iImageWidth = (pContainer->bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
 		icon->iImageHeight = (pContainer->bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
-	}
+	}*/
 }
 
 void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
@@ -151,7 +153,7 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 		return;
 	}
 	
-	if (icon->fWidth == 0 || icon->iImageWidth <= 0)
+	if (icon->fWidth == 0 || icon->iImageWidth <= 0)  // if the size is not set, set it now, or we can't load the buffer.
 	{
 		cairo_dock_set_icon_size (pContainer, icon);
 	}
@@ -322,30 +324,31 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 	if (pContainer)
 	{
 		cairo_dock_load_icon_image (pIcon, pContainer);
-
+		
 		double fMaxScale = cairo_dock_get_max_scale (pContainer);
 		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
 		//g_print ("icon-factory: do 1 main loop iteration\n");
-		//gtk_main_iteration_do (FALSE);  /// check the consequences...	
+		//gtk_main_iteration_do (FALSE);  /// "unforseen consequences" : if _redraw_subdock_content_idle is planned just after, the container-icon stays blank in opengl only. :-/
 	}
 	return FALSE;
 }
 void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 {
-	cairo_dock_set_icon_size (pContainer, pIcon);
+	cairo_dock_set_icon_size (pContainer, pIcon);  /// TODO: no need here, it should be done when the icon is inserted into the container
 	pIcon->pContainerForLoad = pContainer;
 	if (pIcon->iSidLoadImage == 0)
 	{
 		//g_print ("trigger load for %s (%x)\n", pIcon->cName, pContainer);
-		//cairo_dock_load_icon_buffers (pIcon, pContainer);
-		cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);  // la vue peut avoir besoin de connaitre la taille du texte.
+		if (!pIcon->pTextBuffer)
+			cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);  // la vue peut avoir besoin de connaitre la taille du texte.
 		pIcon->iSidLoadImage = g_idle_add ((GSourceFunc)_load_icon_buffer_idle, pIcon);
 	}
 }
 
 
+/// TODO: c'est le bordel, revoir...
 void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadAppletsToo, gboolean bRecursive)
 {
 	g_print ("************%s (%d, %d, %d)\n", __func__, pDock->bIsMainDock, bReloadAppletsToo, bRecursive);

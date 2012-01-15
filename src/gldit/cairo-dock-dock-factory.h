@@ -64,6 +64,7 @@ typedef void (*CairoDockSetSubDockPositionFunc) (Icon *pPointedIcon, CairoDock *
 typedef void (*CairoDockGLRenderFunc) (CairoDock *pDock);
 typedef void (*CairoDockRenderFreeDataFunc) (CairoDock *pDock);
 typedef void (*CairoDockSetInputShapeFunc) (CairoDock *pDock);
+typedef void (*CairoDockSetIconSizeFunc) (Icon *pIcon, CairoDock *pDock);
 
 /// Dock's renderer, also known as 'view'.
 struct _CairoDockRenderer {
@@ -83,6 +84,8 @@ struct _CairoDockRenderer {
 	CairoDockRenderFreeDataFunc free_data;
 	/// function called when the input zones are defined.
 	CairoDockSetInputShapeFunc update_input_shape;
+	/// function called to define the size of an icon, or NULL to let the container handles that.
+	CairoDockSetIconSizeFunc set_icon_size;
 	/// TRUE if the view uses the OpenGL stencil buffer.
 	gboolean bUseStencil;
 	/// TRUE is the view uses reflects.
@@ -275,7 +278,10 @@ struct _CairoDock {
 	gboolean bExtendedMode;
 	gint iOffsetForExtend;
 	
-	gint reserved[4];
+	/// icon size, as specified in the config of the dock
+	gint iIconSize;
+	guint iSidUpdateDockSize;
+	gint reserved[2];
 };
 
 

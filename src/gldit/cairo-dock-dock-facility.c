@@ -83,8 +83,13 @@ void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 
 void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatDockWidth doivent avoir ete mis a jour au prealable.
 {
-	g_print ("%s (%d)\n", __func__, pDock->iRefCount);
 	g_return_if_fail (pDock != NULL);
+	g_print ("%s (%p, %d)\n", __func__, pDock, pDock->iRefCount);
+	if (pDock->iSidUpdateDockSize != 0)
+	{
+		g_print (" -> delayed\n");
+		return;
+	}
 	int iPrevMaxDockHeight = pDock->iMaxDockHeight;
 	int iPrevMaxDockWidth = pDock->iMaxDockWidth;
 	
@@ -129,14 +134,14 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		//g_print ("  %s (%d / %d)\n", __func__, (int)pDock->iMaxDockWidth, iMaxAuthorizedWidth);
 		if (pDock->iMaxDockWidth > iMaxAuthorizedWidth)
 		{
-			pDock->container.fRatio *= 1. * iMaxAuthorizedWidth / pDock->iMaxDockWidth;
+			pDock->container.fRatio *= (double)iMaxAuthorizedWidth / pDock->iMaxDockWidth;
 		}
 		else
 		{
 			double fMaxRatio = (pDock->iRefCount == 0 ? 1 : myBackendsParam.fSubDockSizeRatio);
 			if (pDock->container.fRatio < fMaxRatio)
 			{
-				pDock->container.fRatio *= 1. * iMaxAuthorizedWidth / pDock->iMaxDockWidth;
+				pDock->container.fRatio *= (double)iMaxAuthorizedWidth / pDock->iMaxDockWidth;
 				pDock->container.fRatio = MIN (pDock->container.fRatio, fMaxRatio);
 			}
 			else
@@ -175,7 +180,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		n ++;
 	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] || (pDock->container.fRatio < 1 && pDock->iMaxDockWidth < iMaxAuthorizedWidth-5)) && n < 8);
 	pDock->iMaxIconHeight = hmax;
-	//g_print (">>> iMaxIconHeight : %d, ratio : %.2f, fFlatDockWidth : %.2f\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio, pDock->fFlatDockWidth);
+	g_print (">>> iMaxIconHeight : %d, ratio : %.2f, fFlatDockWidth : %.2f\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio, pDock->fFlatDockWidth);
 	
 	//\__________________________ Then take the necessary actions due to the new size.
 	
@@ -200,8 +205,23 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	cairo_dock_trigger_load_dock_background (pDock);
 	
 	// update the space reserved on the screen.
-	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE && iPrevMaxDockHeight != pDock->iMaxDockHeight)
+	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)
 		cairo_dock_reserve_space_for_dock (pDock, TRUE);
+}
+
+static gboolean _update_dock_size_idle (CairoDock *pDock)
+{
+	pDock->iSidUpdateDockSize = 0;
+	cairo_dock_update_dock_size (pDock);
+	gtk_widget_queue_draw (pDock->container.pWidget);
+	return FALSE;
+}
+void cairo_dock_trigger_update_dock_size (CairoDock *pDock)
+{
+	if (pDock->iSidUpdateDockSize == 0)
+	{
+		pDock->iSidUpdateDockSize = g_idle_add ((GSourceFunc) _update_dock_size_idle, pDock);
+	}
 }
 
 Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
@@ -1000,7 +1020,6 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	if (pSubDock->icons != NULL)
 	{
 		pSubDock->fFoldingFactor = (myDocksParam.bAnimateSubDock ? .99 : 0.);
-		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
 		cairo_dock_notify_on_object (pPointedIcon, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
 	}
 	else
@@ -1051,8 +1070,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 
 static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 {
-	cd_debug ("%s()", __func__);
-	cd_debug (" %s", pIcon->cName);
+	g_print ("%s (%s)\n", __func__, pIcon->cName);
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 	if (pDock != NULL)
 	{
@@ -1082,8 +1100,10 @@ void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
 
 void cairo_dock_trigger_redraw_subdock_content_on_icon (Icon *icon)
 {
-	if (icon->iSidRedrawSubdockContent == 0)
-		icon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content_idle, icon);
+	///if (icon->iSidRedrawSubdockContent == 0)
+	if (icon->iSidRedrawSubdockContent != 0)
+		g_source_remove (icon->iSidRedrawSubdockContent);
+	icon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content_idle, icon);
 }
 
 void cairo_dock_redraw_subdock_content (CairoDock *pDock)
@@ -1252,6 +1272,7 @@ void cairo_dock_load_dock_background (CairoDock *pDock)
 		cairo_surface_t *pSurface = _cairo_dock_make_stripes_background (iWidth, iHeight, pDock->fBgColorBright, pDock->fBgColorDark, 0, 0., 90);
 		cairo_dock_load_image_buffer_from_surface (&pDock->backgroundBuffer, pSurface, iWidth, iHeight);
 	}
+	gtk_widget_queue_draw (pDock->container.pWidget);
 }
 
 static gboolean _load_background_idle (CairoDock *pDock)

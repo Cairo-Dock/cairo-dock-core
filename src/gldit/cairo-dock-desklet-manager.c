@@ -480,8 +480,7 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, CairoDeskletAttribute *pAt
 	
 	s_pDeskletList = g_list_prepend (s_pDeskletList, pDesklet);
 	
-	cairo_dock_notify_on_object (&myDeskletsMgr, NOTIFICATION_NEW_DESKLET, pDesklet);
-	cairo_dock_notify_on_object (pDesklet, NOTIFICATION_NEW_DESKLET, pDesklet);
+	cairo_dock_notify_on_object (pDesklet, NOTIFICATION_NEW_DESKLET, pDesklet);  // in practice, only the notification on the manager can be caught, since 'pDesklet' is brand new.
 	
 	return pDesklet;
 }
@@ -975,6 +974,7 @@ void gldi_register_desklets_manager (void)
 	myDeskletsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	// signals
 	cairo_dock_install_notifications_on_object (&myDeskletsMgr, NB_NOTIFICATIONS_DESKLET);
+	gldi_object_set_manager (GLDI_OBJECT (&myDeskletsMgr), GLDI_MANAGER (&myContainersMgr));
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myDeskletsMgr));
 }

@@ -23,7 +23,8 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-notifications.h"
+#include "cairo-dock-object.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -85,15 +86,15 @@ struct _IconInterface {
 /// Definition of an Icon.
 struct _Icon {
 	//\____________ Definition.
-	/// list of available notifications.
-	GPtrArray *pNotificationsTab;
+	/// object
+	GldiObject object;
+	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	/// type of the icon.
 	CairoDockIconTrueType iTrueType;
 	/// group of the icon.
 	CairoDockIconGroup iGroup;
 	/// interface
 	IconInterface iface;
-	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
 	
 	//\____________ properties.
 	// generic.

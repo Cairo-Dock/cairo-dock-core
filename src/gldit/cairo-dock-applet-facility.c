@@ -606,18 +606,8 @@ void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
 		pIcon->fHeight = h / fMaxScale;  // set the height too, because at the moment it takes into account the dock's ratio.
 		pIcon->iImageWidth = 0;  // will be updated when the icon is reloaded.
 		pIcon->iImageHeight = 0;  // will be updated when the icon is reloaded.
-		cairo_dock_load_icon_image (pIcon, pContainer);
-		g_print ("%s (%dx%d / %.1fx%.1f)\n", __func__, pIcon->iImageWidth, pIcon->iImageHeight, pIcon->fWidth, pIcon->fHeight);
-		
-		/**if (pInstance->pDrawContext)
-		{
-			cairo_destroy (pInstance->pDrawContext);
-			pInstance->pDrawContext = NULL;
-		}
-		if (pIcon->pIconBuffer)
-			pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
-		if (cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
-			pInstance->pDrawContext = NULL;*/
+		cairo_dock_load_icon_image (pIcon, pContainer);  // handles the applet's context
+		//g_print ("%s (%dx%d / %.1fx%.1f)\n", __func__, pIcon->iImageWidth, pIcon->iImageHeight, pIcon->fWidth, pIcon->fHeight);
 		
 		cairo_dock_update_dock_size (pInstance->pDock);
 	}

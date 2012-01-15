@@ -306,8 +306,8 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 					}
 					cairo_dock_destroy_class_subdock (cClass);
 				}
-				else  // non vide => on le met a jour.
-					cairo_dock_update_dock_size (pParentDock);
+				///else  // non vide => on le met a jour.
+				///	cairo_dock_update_dock_size (pParentDock);
 			}
 			else  // main dock => on le met a jour a la fin.
 				bNeedsRedraw = TRUE;
@@ -319,12 +319,12 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 			XFirstFoundId = pIcon->Xid;
 		}
 	}
-	if (! cairo_dock_is_loading () && bNeedsRedraw)  // mise a jour du main dock en 1 coup.
+	/**if (! cairo_dock_is_loading () && bNeedsRedraw)  // mise a jour du main dock en 1 coup.
 	{
 		cairo_dock_update_dock_size (g_pMainDock);
 		cairo_dock_calculate_dock_icons (g_pMainDock);
 		gtk_widget_queue_draw (g_pMainDock->container.pWidget);
-	}
+	}*/
 	return XFirstFoundId;
 }
 gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
@@ -544,7 +544,7 @@ void cairo_dock_detach_Xid_from_inhibitors (Window Xid, const gchar *cClass)
 						if (pSameClassDock != NULL)  // it's inside a dock -> detach it
 						{
 							cairo_dock_detach_icon_from_dock (pSameClassIcon, pSameClassDock);
-							cairo_dock_update_dock_size (pSameClassDock);  // it can't be the class sub-dock, because pIcon had the Xid, so it doesn't hold the class sub-dock and the class is not grouped (otherwise they would all be in the class sub-dock).
+							///cairo_dock_update_dock_size (pSameClassDock);  // it can't be the class sub-dock, because pIcon had the Xid, so it doesn't hold the class sub-dock and the class is not grouped (otherwise they would all be in the class sub-dock).
 						}
 					}
 				}
@@ -871,16 +871,17 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			if (! bLastIconIsRemoving)
 			{
 				cairo_dock_insert_icon_in_dock (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
-				cairo_dock_calculate_dock_icons (pFakeParentDock);
-				cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
+				///cairo_dock_calculate_dock_icons (pFakeParentDock);
+				///cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
+				///cairo_dock_redraw_container (CAIRO_CONTAINER (pFakeParentDock));
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer. (c'est souvent lorsqu'on ferme toutes une classe d'un coup. donc les animations sont pratiquement dans le meme etat, donc la derniere icone en est aussi a la fin, donc on ne verrait de toute facon aucune animation.
 			{
 				cd_debug ("inutile de re-inserer l'icone restante");
 				cairo_dock_free_icon (pLastClassIcon);
-				cairo_dock_update_dock_size (pFakeParentDock);
-				cairo_dock_calculate_dock_icons (pFakeParentDock);
-				cairo_dock_redraw_container (CAIRO_CONTAINER (pFakeParentDock));
+				///cairo_dock_update_dock_size (pFakeParentDock);
+				///cairo_dock_calculate_dock_icons (pFakeParentDock);
+				///cairo_dock_redraw_container (CAIRO_CONTAINER (pFakeParentDock));
 			}
 		}
 		else  // le sous-dock est pointe par un inhibiteur (normal launcher ou applet).
@@ -1750,16 +1751,19 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass);
 	if (cDesktopFilePath == NULL)  // couldn't find the .desktop
 	{
-		if (pClassAppli == NULL)  // make a class anyway to store the few info we have.
-			pClassAppli = cairo_dock_get_class (cClass);
-		if (pClassAppli != NULL)
+		if (cClass != NULL)  // make a class anyway to store the few info we have.
 		{
-			if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
-				pClassAppli->cStartupWMClass = g_strdup (cWmClass);
-			pClassAppli->bSearchedAttributes = TRUE;
+			if (pClassAppli == NULL)
+				pClassAppli = cairo_dock_get_class (cClass);
+			if (pClassAppli != NULL)
+			{
+				if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
+					pClassAppli->cStartupWMClass = g_strdup (cWmClass);
+				pClassAppli->bSearchedAttributes = TRUE;
+			}
 		}
 		cd_debug ("couldn't find the desktop file %s", cDesktopFile?cDesktopFile:cClass);
-		return NULL;
+		return cClass;  /// NULL
 	}
 	
 	//\__________________ open it.

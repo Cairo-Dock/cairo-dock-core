@@ -70,7 +70,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface);
 *@param iHeight height of the image.
 *@return the newly allocated texture, to be destroyed with _cairo_dock_delete_texture.
 */
-GLuint cairo_dock_load_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight);
+GLuint cairo_dock_create_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight);
 
 /** Load an image on the dock into an OpenGL texture. The texture will have the same size as the image. The size is given as an output, if you need it for some reason.
 *@param cImagePath path to an image.

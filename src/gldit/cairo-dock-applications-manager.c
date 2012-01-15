@@ -291,7 +291,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 	int iStackOrder = 0;
 	gpointer pOriginalXid;
 	gboolean bAppliAlreadyRegistered;
-	gboolean bUpdateMainDockSize = FALSE;
+	///gboolean bUpdateMainDockSize = FALSE;
 	CairoDock *pParentDock;
 	
 	for (i = 0; i < iNbWindows; i ++)
@@ -311,13 +311,13 @@ static void _on_update_applis_list (CairoDock *pDock)
 				{
 					cd_message (" insertion de %s ... (%d)", icon->cName, icon->iLastCheckTime);
 					pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-					if (pParentDock != NULL)
+					/**if (pParentDock != NULL)
 					{
 						if (pParentDock->bIsMainDock)  // update the main dock at once in the end.
 							bUpdateMainDockSize = TRUE;
 						else
 							cairo_dock_update_dock_size (pParentDock);
-					}
+					}*/
 				}
 				
 				// visibilite
@@ -336,8 +336,8 @@ static void _on_update_applis_list (CairoDock *pDock)
 	
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_old_applis, GINT_TO_POINTER (s_iTime));
 	
-	if (bUpdateMainDockSize)  // will stay at FALSE if pDock is NULL.
-		cairo_dock_update_dock_size (pDock);
+	/**if (bUpdateMainDockSize)  // will stay at FALSE if pDock is NULL.
+		cairo_dock_update_dock_size (pDock);*/
 
 	XFree (pXWindowsList);
 }
@@ -758,8 +758,8 @@ static void _on_change_window_class (Icon *icon, CairoDock *pDock)
 		pParentDock = cairo_dock_detach_appli (icon);
 	else  // else if inhibited, detach from the inhibitor
 		cairo_dock_detach_Xid_from_inhibitors (icon->Xid, icon->cClass);
-	if (pParentDock)
-		cairo_dock_update_dock_size (pParentDock);
+	///if (pParentDock)
+	///	cairo_dock_update_dock_size (pParentDock);
 	cairo_dock_remove_appli_from_class (icon);
 	
 	// set the new class
@@ -911,7 +911,7 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	
 	//\__________________ On cree les icones de toutes ces applis.
 	CairoDock *pParentDock;
-	gboolean bUpdateMainDockSize = FALSE;
+	///gboolean bUpdateMainDockSize = FALSE;
 	
 	Window Xid;
 	Icon *pIcon;
@@ -926,13 +926,13 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 			if (myTaskbarParam.bShowAppli && pDock)
 			{
 				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
-				if (pParentDock != NULL)  // appli has been inserted
+				/**if (pParentDock != NULL)  // appli has been inserted
 				{
 					if (pParentDock->bIsMainDock)
 						bUpdateMainDockSize = TRUE;
 					else
 						cairo_dock_update_dock_size (pParentDock);
-				}
+				}*/
 			}
 		}
 		else
@@ -941,8 +941,8 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	if (pXWindowsList != NULL)
 		XFree (pXWindowsList);
 	
-	if (bUpdateMainDockSize)
-		cairo_dock_update_dock_size (pDock);
+	/**if (bUpdateMainDockSize)
+		cairo_dock_update_dock_size (pDock);*/
 	
 	// masquage du dock, une fois que sa taille est correcte.
 	Icon *pActiveAppli = cairo_dock_get_current_active_icon ();
@@ -986,8 +986,8 @@ static gboolean _cairo_dock_remove_one_appli (Window *pXid, Icon *pIcon, gpointe
 				
 				cairo_dock_destroy_dock (pDock, cParentDockName);
 			}
-			else
-				cairo_dock_update_dock_size (pDock);
+			///else
+			///	cairo_dock_update_dock_size (pDock);
 		}
 		g_free (cParentDockName);
 	}
@@ -1010,7 +1010,7 @@ static void _cairo_dock_stop_application_manager (void)
 	cairo_dock_remove_all_applis_from_class_table ();  // enleve aussi les indicateurs.
 	
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_one_appli, NULL);  // libere toutes les icones d'appli.
-	cairo_dock_update_dock_size (g_pMainDock);
+	///cairo_dock_update_dock_size (g_pMainDock);
 	
 	cairo_dock_foreach_root_docks ((GFunc)_unhide_all_docks, NULL);
 }

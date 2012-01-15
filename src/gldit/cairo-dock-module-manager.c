@@ -27,6 +27,7 @@
 #include <cairo.h>
 
 #include "gldi-config.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file

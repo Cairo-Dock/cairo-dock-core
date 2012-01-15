@@ -1331,6 +1331,7 @@ void gldi_register_dialogs_manager (void)
 	myDialogsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	// signals
 	cairo_dock_install_notifications_on_object (&myDialogsMgr, NB_NOTIFICATIONS_DIALOG);
+	gldi_object_set_manager (GLDI_OBJECT (&myDialogsMgr), GLDI_MANAGER (&myContainersMgr));
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myDialogsMgr));
 }

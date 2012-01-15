@@ -59,6 +59,8 @@ void cairo_dock_reload_reflects_in_dock (CairoDock *pDock);
 */
 void cairo_dock_update_dock_size (CairoDock *pDock);
 
+void cairo_dock_trigger_update_dock_size (CairoDock *pDock);
+
 /** Calculate the position of all icons inside a dock, and triggers the enter/leave events according to the position of the mouse.
 *@param pDock the dock.
 *@return the pointed icon, or NULL if none is pointed.
