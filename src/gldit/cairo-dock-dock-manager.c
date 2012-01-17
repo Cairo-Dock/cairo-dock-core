@@ -83,12 +83,13 @@ static CairoKeyBinding *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock);
 
 typedef enum {
-	ICON_DEFALUT,
+	ICON_DEFAULT,
 	ICON_TINY,
 	ICON_SMALL,
 	ICON_MEDIUM,
 	ICON_BIG,
 	ICON_HUGE,
+	ICON_CUSTOM
 	} GldiIconSizeEnum;
 
 /// TODO: harmonize the values with the simple config -> make some public functions...
@@ -732,9 +733,10 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	
 	//\______________ Icons size.
 	int s = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "icon size", &bFlushConfFileNeeded, 0, NULL, NULL);  // 0 <=> same as main dock
+	int iCustomIconsSize = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "custom icons size", &bFlushConfFileNeeded, 40, NULL, NULL);
 	switch (s)
 	{
-		case ICON_DEFALUT:
+		case ICON_DEFAULT:
 		default:
 			pDock->iIconSize = myIconsParam.iIconWidth;
 		break;
@@ -752,6 +754,9 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 		break;
 		case ICON_HUGE:
 			pDock->iIconSize = ICON_SIZE_HUGE;
+		break;
+		case ICON_CUSTOM:
+			pDock->iIconSize = iCustomIconsSize;
 		break;
 	}  /// TODO: we should probably also handle fMaxScale, fReflectSize, and iIconGap here...
 	
