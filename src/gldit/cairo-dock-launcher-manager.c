@@ -53,7 +53,7 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)
 	{
-		cd_message ("le dock parent (%s) n'existe pas, on le cree", icon->cParentDockName);
+		cd_message ("The parent dock (%s) doesn't exist: we create it", icon->cParentDockName);
 		pParentDock = cairo_dock_create_dock (icon->cParentDockName);
 	}
 	
@@ -76,14 +76,14 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 		}
 		if (pChildDock == NULL)
 		{
-			cd_message ("le dock fils (%s) n'existe pas, on le cree avec la vue %s", icon->cName);
+			cd_message ("The child dock (%s) doesn't exist, we create it with this view: %s", icon->cName, cRendererName);
 			icon->pSubDock = cairo_dock_create_subdock (icon->cName, cRendererName, pParentDock, NULL);
 		}
 		else
 		{
 			cairo_dock_main_dock_to_sub_dock (pChildDock, pParentDock, cRendererName);
 			icon->pSubDock = pChildDock;
-			cd_message ("le dock devient un dock fils (%d, %d)", pChildDock->container.bIsHorizontal, pChildDock->container.bDirectionUp);
+			cd_message ("The dock is now a 'child-dock' (%d, %d)", pChildDock->container.bIsHorizontal, pChildDock->container.bDirectionUp);
 		}
 	}
 	
@@ -338,7 +338,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	CairoDock *pNewDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pNewDock == NULL)
 	{
-		cd_message ("le dock parent (%s) n'existe pas, on le cree", icon->cParentDockName);
+		cd_message ("The parent dock (%s) doesn't exist, we create it", icon->cParentDockName);
 		pNewDock = cairo_dock_create_dock (icon->cParentDockName);
 	}
 	g_return_if_fail (pNewDock != NULL);
