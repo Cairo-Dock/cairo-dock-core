@@ -809,10 +809,10 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	{
 		cairo_dock_foreach_docks ((GHFunc) _cairo_dock_resize_one_dock, NULL);
 	}
-	if (pPrevLabels->bTextAlwaysHorizontal != pLabels->bTextAlwaysHorizontal)
+	/**if (pPrevLabels->bTextAlwaysHorizontal != pLabels->bTextAlwaysHorizontal)
 	{
 		cairo_dock_reload_buffers_in_all_docks (TRUE);  // les modules aussi.
-	}
+	}*/
 }
 
 

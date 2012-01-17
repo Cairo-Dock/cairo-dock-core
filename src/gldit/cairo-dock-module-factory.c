@@ -292,16 +292,16 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	//\____________________ on recupere les parametres de l'icone.
 	if (pInstance->pModule->pVisitCard->iContainerType & CAIRO_DOCK_MODULE_CAN_DOCK)  // l'applet peut aller dans un dock.
 	{
-		gboolean bUseless;
-		cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUseless, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
-		if (pMinimalConfig->iDesiredIconWidth == 0)
+		gboolean bUnused;
+		cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUnused, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);  // for a dock, if 0, will just get the default size; for a desklet, unused.
+		/**if (pMinimalConfig->iDesiredIconWidth == 0)
 			pMinimalConfig->iDesiredIconWidth = myIconsParam.iIconWidth;
 		if (pMinimalConfig->iDesiredIconWidth == 0)
 			pMinimalConfig->iDesiredIconWidth = 48;
 		if (pMinimalConfig->iDesiredIconHeight == 0)
 			pMinimalConfig->iDesiredIconHeight = myIconsParam.iIconHeight;
 		if (pMinimalConfig->iDesiredIconHeight == 0)
-			pMinimalConfig->iDesiredIconHeight = 48;
+			pMinimalConfig->iDesiredIconHeight = 48;*/
 		
 		pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
 		if (pMinimalConfig->cLabel == NULL && !pInstance->pModule->pVisitCard->bAllowEmptyTitle)
@@ -472,8 +472,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		
 		// on cree son icone.
 		pIcon = cairo_dock_create_icon_for_applet (pMinimalConfig,
-			pInstance,
-			pContainer);
+			pInstance);
 		if (pDesklet)
 		{
 			pDesklet->pIcon = pIcon;
@@ -482,11 +481,20 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	}
 	cairo_dock_free_minimal_config (pMinimalConfig);
 
-	//\____________________ On initialise l'instance.
+	//\____________________ insert the icon in its container.
 	if (pDock)  //  on met la taille qu'elle aura une fois dans le dock.
 	{
-		pIcon->fWidth *= pDock->container.fRatio;
-		pIcon->fHeight *= pDock->container.fRatio;
+		cairo_dock_insert_icon_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! cairo_dock_is_loading ());  // animate the icon if it's instanciated by the user, not from the theme loading.
+		if (! cairo_dock_is_loading ())
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+		
+		// we need to load the icon's buffer before we init the module.
+		cairo_dock_load_icon_buffers (pIcon, pContainer);  // ne cree rien si w ou h < 0 (par exemple si l'applet est detachee).
+	}
+	else if (pDesklet)
+	{
+		pDesklet->pIcon = pIcon;
+		gtk_window_set_title (GTK_WINDOW(pContainer->pWidget), pInstance->pModule->pVisitCard->cModuleName);
 	}
 	
 	pInstance->pIcon = pIcon;
@@ -494,50 +502,16 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	pInstance->pDesklet = pDesklet;
 	pInstance->pContainer = pContainer;
 	
+	//\____________________ initialise the instance.
 	if (pKeyFile)
 		_cairo_dock_read_module_config (pKeyFile, pInstance);
 	
-	gboolean bCanInit = TRUE;
-	/**pInstance->pDrawContext = NULL;
-	if (pDock && pIcon)  // applet dans un dock (dans un desklet, il faut attendre que l'applet ait mis une vue pour que l'icone soit chargee).
-	{
-		if (pIcon->pIconBuffer == NULL)
-		{
-			cd_warning ("icon's buffer is NULL, applet won't be able to draw to it !");
-			pInstance->pDrawContext = NULL;
-			bCanInit = FALSE;
-		}
-		else
-		{
-			pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
-			if (!pInstance->pDrawContext || cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
-			{
-				cd_warning ("couldn't initialize drawing context, applet won't be able to draw itself !");
-				pInstance->pDrawContext = NULL;
-				bCanInit = FALSE;
-			}
-		}
-	}*/
-	
-	if (bCanInit && pModule->pInterface->initModule)
+	if (pModule->pInterface->initModule)
 		pModule->pInterface->initModule (pInstance, pKeyFile);
 	
-	if (pDock)
-	{
-		pIcon->fWidth /= pDock->container.fRatio;
-		pIcon->fHeight /= pDock->container.fRatio;
-		if (cairo_dock_is_loading ())
-		{
-			cairo_dock_insert_icon_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
-		}
-		else
-		{
-			cairo_dock_insert_icon_in_dock (pIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
-		}
-	}
-	else if (pDesklet && pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0)  // peut arriver si le desklet a fini de se redimensionner avant l'init.
+	if (pDesklet && pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0)  // peut arriver si le desklet a fini de se redimensionner avant l'init.
 		gtk_widget_queue_draw (pDesklet->container.pWidget);
+	
 	if (pKeyFile != NULL)
 		g_key_file_free (pKeyFile);
 	return pInstance;
@@ -584,7 +558,7 @@ static void _cairo_dock_stop_module_instance (CairoDockModuleInstance *pInstance
 	}
 }
 
-void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance)
+void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance)  // stop an instance of a module
 {
 	_cairo_dock_stop_module_instance (pInstance);
 	
@@ -711,32 +685,34 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			g_key_file_free (pKeyFile);
 			pKeyFile = NULL;
 		}
-		pIcon->fWidth = pMinimalConfig->iDesiredIconWidth;
+		pIcon->fWidth = pMinimalConfig->iDesiredIconWidth;  // requested size
 		pIcon->fHeight = pMinimalConfig->iDesiredIconHeight;
 		
 		// on charge l'icone a la bonne taille.
-		cairo_dock_set_icon_size (pNewContainer, pIcon);
-		cairo_dock_load_icon_buffers (pIcon, pNewContainer);
+		///cairo_dock_set_icon_size (pNewContainer, pIcon);
+		///cairo_dock_load_icon_buffers (pIcon, pNewContainer);
 		
 		// on insere l'icone dans le dock ou on met a jour celui-ci.
-		if (pNewDock != pCurrentDock)  // on l'insere dans son nouveau dock.
+		if (pNewDock != pCurrentDock)  // insert in its new dock.
 		{
 			cairo_dock_insert_icon_in_dock (pIcon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
 			pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 			cairo_dock_start_icon_animation (pIcon, pNewDock);
 		}
-		else  // le dock n'a pas change, on le met a jour.
+		else  // same dock, just update its size.
 		{
+			cairo_dock_set_icon_size (pNewContainer, pIcon);
 			pIcon->fWidth *= pNewContainer->fRatio;
 			pIcon->fHeight *= pNewContainer->fRatio;
 			
-			if (bReloadAppletConf)
+			if (bReloadAppletConf)  // requested size may have changed.
 			{
 				cairo_dock_update_dock_size (pNewDock);
 				cairo_dock_calculate_dock_icons (pNewDock);
 				gtk_widget_queue_draw (pNewContainer->pWidget);
 			}
 		}
+		cairo_dock_load_icon_buffers (pIcon, pNewContainer);
 	}
 	
 	//\_______________________ On recharge la config.
@@ -746,22 +722,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		_cairo_dock_read_module_config (pKeyFile, pInstance);
 	}
 	
-	/**if (pInstance->pDrawContext != NULL)
-	{
-		cairo_destroy (pInstance->pDrawContext);
-		pInstance->pDrawContext = NULL;
-	}
-	if (pIcon && pIcon->pIconBuffer)  // applet, on lui associe un contexte de dessin avant le reload.
-	{
-		pInstance->pDrawContext = cairo_create (pIcon->pIconBuffer);
-		if (!pInstance->pDrawContext || cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
-		{
-			cd_warning ("couldn't initialize drawing context, applet won't be reloaded !");
-			bCanReload = FALSE;
-			pInstance->pDrawContext = NULL;
-		}
-	}*/
-
 	//\_______________________ On recharge l'instance.
 	if (bCanReload && module->pInterface->reloadModule != NULL)
 		module->pInterface->reloadModule (pInstance, pCurrentContainer, pKeyFile);
@@ -775,8 +735,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	{
 		cairo_dock_redraw_subdock_content (pNewDock);
 	}
-	
-	///cairo_dock_trigger_refresh_launcher_gui ();  /// voir s'il y'a besoin de qqch ici...
 	
 	//\_______________________ On nettoie derriere nous.
 	cairo_dock_free_minimal_config (pMinimalConfig);
@@ -885,10 +843,6 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 		{
 			gchar *cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, module->pVisitCard->cConfFileName);
 			gboolean r = cairo_dock_copy_file (module->cConfFilePath, cConfFilePath);
-			/**gchar *command = g_strdup_printf ("cp \"%s\" \"%s\"", module->cConfFilePath, cConfFilePath);
-			int r = system (command);
-			g_free (command);*/
-			
 			if (! r)  // the copy failed.
 			{
 				g_set_error (erreur, 1, 1, "couldn't copy %s into %s; check permissions and file's existence", module->cConfFilePath, cUserDataDirPath);
@@ -912,7 +866,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, TRUE);
 }
 
-void cairo_dock_deactivate_module (CairoDockModule *module)
+void cairo_dock_deactivate_module (CairoDockModule *module)  // stop all instances of a module
 {
 	g_return_if_fail (module != NULL);
 	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);

@@ -82,6 +82,23 @@ static CairoKeyBinding *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
 
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock);
 
+typedef enum {
+	ICON_DEFALUT,
+	ICON_TINY,
+	ICON_SMALL,
+	ICON_MEDIUM,
+	ICON_BIG,
+	ICON_HUGE,
+	} GldiIconSizeEnum;
+
+/// TODO: harmonize the values with the simple config -> make some public functions...
+typedef enum {
+	ICON_SIZE_TINY = 32,
+	ICON_SIZE_SMALL = 38,
+	ICON_SIZE_MEDIUM = 48,
+	ICON_SIZE_BIG = 56,
+	ICON_SIZE_HUGE = 64
+	} GldiIconSize;
 
   /////////////
  // MANAGER //
@@ -650,9 +667,6 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 		{
 			cairo_dock_copy_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
-			/**gchar *cCommand = g_strdup_printf ("cp '%s/%s' '%s'", GLDI_SHARE_DATA_DIR, CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
-			int r = system (cCommand);
-			g_free (cCommand);*/
 		}
 		
 		cairo_dock_update_conf_file (cConfFilePath,
@@ -712,11 +726,36 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	else
 		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
 	
-	//\______________ Visibilite.
+	//\______________ Visibility.
 	CairoDockVisibility iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "visibility", &bFlushConfFileNeeded, FALSE, "Position", NULL);
 	cairo_dock_set_dock_visibility (pDock, iVisibility);
 	
-	//\______________ Vue.
+	//\______________ Icons size.
+	int s = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "icon size", &bFlushConfFileNeeded, 0, NULL, NULL);  // 0 <=> same as main dock
+	switch (s)
+	{
+		case ICON_DEFALUT:
+		default:
+			pDock->iIconSize = myIconsParam.iIconWidth;
+		break;
+		case ICON_TINY:
+			pDock->iIconSize = ICON_SIZE_TINY;
+		break;
+		case ICON_SMALL:
+			pDock->iIconSize = ICON_SIZE_SMALL;
+		break;
+		case ICON_MEDIUM:
+			pDock->iIconSize = ICON_SIZE_MEDIUM;
+		break;
+		case ICON_BIG:
+			pDock->iIconSize = ICON_SIZE_BIG;
+		break;
+		case ICON_HUGE:
+			pDock->iIconSize = ICON_SIZE_HUGE;
+		break;
+	}  /// TODO: we should probably also handle fMaxScale, fReflectSize, and iIconGap here...
+	
+	//\______________ View.
 	g_free (pDock->cRendererName);
 	pDock->cRendererName = cairo_dock_get_string_key_value (pKeyFile, "Appearance", "main dock view", &bFlushConfFileNeeded, NULL, "Views", NULL);
 	
@@ -783,9 +822,6 @@ void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName)
 	cd_debug ("%s (%s)", __func__, cDockName);
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 	cairo_dock_copy_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
-	/**gchar *cCommand = g_strdup_printf ("cp '%s' '%s'", GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
-	int r = system (cCommand);
-	g_free (cCommand);*/
 	
 	// on placera le nouveau dock a l'oppose du main dock, meme ecran et meme visibilite.
 	cairo_dock_update_conf_file (cConfFilePath,

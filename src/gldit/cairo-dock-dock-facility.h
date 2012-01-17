@@ -46,6 +46,8 @@ G_BEGIN_DECLS
 
 #define cairo_dock_is_hidden(pDock) ((pDock)->iRefCount == 0 && (pDock)->bAutoHide && (pDock)->fHideOffset == 1 && (!g_pHidingBackend || !g_pHidingBackend->bCanDisplayHiddenDock))
 
+#define cairo_dock_get_icon_size(pDock) ((pDock)->iIconSize != 0 ? (pDock)->iIconSize : myIconsParam.iIconWidth)
+
 /*
 * Recharge les reflets (cairo) d'un dock. Utile si le dock a changé de position.
 * @param pDock un dock.

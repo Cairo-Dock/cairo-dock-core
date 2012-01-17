@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 *@param pModuleInstance l'instance du module (necessaire pour que l'icone soit consideree comme une applet lors de son remplissage).
 *@return l'icone nouvellement cree. Elle n'est _pas_ inseree dans le dock, c'est le gestionnaire de module qui se charge d'inserer les icones renvoyees par les modules.
 */
-Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance, CairoContainer *pContainer);
+Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance);
 
 
 G_END_DECLS

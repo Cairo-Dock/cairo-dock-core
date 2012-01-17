@@ -70,7 +70,7 @@ extern CairoDockHidingEffect *g_pHidingBackend;
 extern gboolean g_bUseOpenGL;
 
 
-static void _cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
+static void _set_icon_size_dock (CairoContainer *pContainer, Icon *icon)
 {
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	if (pDock->pRenderer && pDock->pRenderer->set_icon_size)
@@ -89,6 +89,8 @@ static void _cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 			wi = myIconsParam.iIconWidth;
 			hi = myIconsParam.iIconHeight;
 		}
+		g_print (" size: %d => %dx%d\n", pDock->iIconSize, wi, hi);
+		
 		// set the visible size at rest.
 		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // for applets, consider (fWidth,fHeight) as a requested size, if not 0.
 		{
@@ -510,7 +512,7 @@ CairoDock *cairo_dock_new_dock (void)
 	pDock->fPostHideOffset = 1.;
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
-	pDock->container.iface.set_icon_size = _cairo_dock_set_icon_size;
+	pDock->container.iface.set_icon_size = _set_icon_size_dock;
 	pDock->container.iface.animation_loop = _cairo_dock_dock_animation_loop;
 	
 	//\__________________ On cree la fenetre GTK.
@@ -784,13 +786,14 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 			icon->fInsertRemoveFactor = - 0.95;
 		else
 			icon->fInsertRemoveFactor = - 0.05;
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 	else
 		icon->fInsertRemoveFactor = 0.;
-	/**if (bUpdateSize)
-		cairo_dock_update_dock_size (pDock);
-	else*/
-		cairo_dock_trigger_update_dock_size (pDock);
+	
+	///if (bUpdateSize)
+	///	cairo_dock_update_dock_size (pDock);
+	cairo_dock_trigger_update_dock_size (pDock);
 	
 	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{
@@ -1100,8 +1103,8 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pReceivingDock));
 		}
 	}
-	if (pReceivingDock != NULL)
-		cairo_dock_update_dock_size (pReceivingDock);
+	///if (pReceivingDock != NULL)
+	///	cairo_dock_update_dock_size (pReceivingDock);
 
 	g_list_free (pIconsList);
 }

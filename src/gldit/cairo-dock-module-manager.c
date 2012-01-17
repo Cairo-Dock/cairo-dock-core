@@ -330,8 +330,8 @@ void cairo_dock_activate_module_and_load (const gchar *cModuleName)
 		pInstance = pElement->data;
 		if (pInstance->pDock)
 		{
-			cairo_dock_update_dock_size (pInstance->pDock);
-			gtk_widget_queue_draw (pInstance->pDock->container.pWidget);
+			cairo_dock_trigger_update_dock_size (pInstance->pDock);
+			///gtk_widget_queue_draw (pInstance->pDock->container.pWidget);
 		}
 	}
 	
@@ -505,7 +505,6 @@ void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance)
 		if (pInstance->pDesklet)  // on a bien detache l'applet.
 			cairo_dock_zoom_out_desklet (pInstance->pDesklet);
 		//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
-		///cairo_dock_update_desklet_detached_state_in_gui (pInstance, !bIsDetached);
 		cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_INSTANCE_DETACHED, pInstance, !bIsDetached);
 	}
 }
@@ -539,8 +538,6 @@ void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pIn
 	g_key_file_free (pKeyFile);
 	
 	//\__________________ On met a jour le panneau de conf s'il etait ouvert sur cette applet.
-	///cairo_dock_update_desklet_position_in_gui (pInstance, iDeskletPositionX, iDeskletPositionY);
-	///cairo_dock_update_desklet_detached_state_in_gui (pInstance, TRUE);
 	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_INSTANCE_DETACHED, pInstance, TRUE);  // inutile de notifier du changement de taille, le configure-event du desklet s'en chargera.
 	
 	//\__________________ On detache l'applet.

@@ -76,8 +76,8 @@ Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 	icon->iface.load_image = _load_separator;
 	
 	//\____________ On remplit ses buffers.
-	if (pDock)
-		cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
+	///if (pDock)
+	///	cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
 
 	return icon;
 }
@@ -90,11 +90,14 @@ void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, double f
 	{
 		pSeparatorIcon->fOrder = fOrder;
 		pSeparatorIcon->cParentDockName = g_strdup (cParentDockName);
-		pDock->icons = g_list_insert_sorted (pDock->icons,
+		
+		cairo_dock_insert_icon_in_dock_full (pSeparatorIcon, pDock, 0, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+		
+		/**pDock->icons = g_list_insert_sorted (pDock->icons,
 			pSeparatorIcon,
 			(GCompareFunc) cairo_dock_compare_icons_order);
 		pSeparatorIcon->fWidth *= pDock->container.fRatio;
 		pSeparatorIcon->fHeight *= pDock->container.fRatio;
-		pDock->fFlatDockWidth += myIconsParam.iIconGap + pSeparatorIcon->fWidth;
+		pDock->fFlatDockWidth += myIconsParam.iIconGap + pSeparatorIcon->fWidth;*/
 	}
 }

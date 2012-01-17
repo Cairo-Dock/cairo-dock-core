@@ -804,6 +804,7 @@ int main (int argc, char** argv)
 	"- display Help GUI in simple mode\n"
 	"- kde integration ++\n"
 	"- stack: enable iSubdockViewType\n"
+	"- link launchers with class+command\n"
 	"\n");
 	
 	gtk_main ();

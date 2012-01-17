@@ -49,7 +49,7 @@ Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, 
 	
 	if (! pMinimalConfig->bIsDetached)
 	{
-		icon->fWidth = pMinimalConfig->iDesiredIconWidth;
+		icon->fWidth = pMinimalConfig->iDesiredIconWidth;  // requested size
 		icon->fHeight = pMinimalConfig->iDesiredIconHeight;
 		icon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 	}

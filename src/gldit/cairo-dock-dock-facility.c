@@ -185,7 +185,8 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	//\__________________________ Then take the necessary actions due to the new size.
 	
 	// calculate the position of icons in the new frame.
-	pDock->pRenderer->calculate_icons (pDock);  // le calcul de max_dock_size a altere les fX et fY.
+	///pDock->pRenderer->calculate_icons (pDock);
+	cairo_dock_calculate_dock_icons (pDock);
 	
 	// update the dock's shape.
 	if (iPrevMaxDockHeight == pDock->iMaxDockHeight && iPrevMaxDockWidth == pDock->iMaxDockWidth && pDock->pRenderer->update_input_shape != NULL)  // if the size has changed, shapes will be updated by the "configure" callback, so we don't need to do it here; if not, we do it in case the icons define a new shape (ex.: separators in Panel view).

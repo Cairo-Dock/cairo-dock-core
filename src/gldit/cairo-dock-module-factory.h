@@ -108,8 +108,7 @@ struct _CairoDockVisitCard {
 	gboolean bAllowEmptyTitle;
 	// if TRUE and the applet inhibite a class, then appli icons will be placed after the applet icon.
 	gboolean bActAsLauncher;
-	// octets reserves pour preserver la compatibilite binaire lors de futurs ajouts sur l'interface entre plug-ins et dock.
-	char reserved[4];
+	gpointer reserved[2];
 };
 
 /// Definition of the interface of a module.
@@ -148,6 +147,7 @@ struct _CairoDockModuleInstance {
 	gpointer pConfig;
 	/// pointer to a structure containing the data of the applet.
 	gpointer pData;
+	gpointer reserved[2];
 };
 
 /// Pre-init function of a module. Fills the visit card and the interface of a module.
@@ -158,8 +158,7 @@ struct _CairoDockModule {
 	/// path to the .so file.
 	gchar *cSoFilePath;
 	/// internal structure of the .so file, once it has been opened.
-	//GModule *pModule;
-	gpointer handle;
+	gpointer handle;  // we want to use RTLD_DEEPBIND, that's why we can't use a 'GModule'.
 	/// interface of the module.
 	CairoDockModuleInterface *pInterface;
 	/// visit card of the module.
@@ -168,10 +167,9 @@ struct _CairoDockModule {
 	gchar *cConfFilePath;
 	/// TRUE if the appet can be detached from a dock (desklet mode).
 	gboolean bCanDetach;
-	/// last time the module was (re)activated.
-	gdouble fLastLoadingTime;
 	/// List of instances of the module.
 	GList *pInstancesList;
+	gpointer reserved[2];
 };
 
 struct _CairoDockMinimalAppletConfig {

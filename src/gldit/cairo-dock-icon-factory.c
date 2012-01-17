@@ -301,8 +301,9 @@ void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTex
 
 void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 {
-	if (pIcon->iSidLoadImage != 0)
+	if (pIcon->iSidLoadImage != 0)  // if a load was sheduled, cancel it and do it now (we need to load the applets' buffer before initializing the module).
 	{
+		g_print (" load %s immediately\n", pIcon->cName);
 		g_source_remove (pIcon->iSidLoadImage);
 		pIcon->iSidLoadImage = 0;
 	}
