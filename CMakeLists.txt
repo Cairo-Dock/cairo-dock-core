@@ -67,10 +67,12 @@ set (bindir "${prefix}/${CMAKE_INSTALL_BINDIR}")  # (...)/bin
 ########### dependencies ###############
 
 set (packages_required "gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox libcurl")  # for the .pc
-pkg_check_modules ("PACKAGE" REQUIRED "${packages_required}")
+STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace space by ; => to have more details if one package is missing.
+pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
 set (xextend_required "xtst xcomposite xinerama")  # for the .pc
-pkg_check_modules ("XEXTEND" "${xextend_required}")
+STRING (REGEX REPLACE " " ";" xextend_required_semicolon ${xextend_required})
+pkg_check_modules ("XEXTEND" "${xextend_required_semicolon}")
 if (${XEXTEND_FOUND})
 	set (HAVE_XEXTEND 1)
 else()
@@ -90,6 +92,7 @@ endif()
 STRING (REGEX REPLACE "\\..*" "" GTK_MAJOR "${GTK_VERSION}")
 
 add_definitions (-DGTK_DISABLE_DEPRECATED="1")
+# add_definitions (-DG_DISABLE_DEPRECATED="1")
 
 # We use crypt(3) which may be in libc, or in libcrypt (eg FreeBSD)
 check_library_exists (crypt encrypt "" HAVE_LIBCRYPT)
