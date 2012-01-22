@@ -62,13 +62,13 @@ static gboolean cairo_dock_render_indicator_notification (gpointer pUserData, Ic
  /// RENDERING ///
 /////////////////
 
-static inline double _compute_delta_y (Icon *icon, double py, gboolean bOnIcon, double fRatio, gboolean bUseReflect, double fMaxScale)
+static inline double _compute_delta_y (Icon *icon, double py, gboolean bOnIcon, gboolean bUseReflect)
 {
 	double dy;
 	if (bOnIcon)  // decalage vers le haut et zoom avec l'icone.
 		dy = py * icon->fHeight * icon->fScale + icon->fDeltaYReflection / 2;
 	else  // decalage vers le bas sans zoom.
-		dy = - py * ((bUseReflect ? myIconsParam.fReflectSize * fRatio : 0.) + myDocksParam.iFrameMargin + .5*myDocksParam.iDockLineWidth);
+		dy = - py * ((bUseReflect ? /**myIconsParam.fReflectSize * fRatio*/icon->fHeight * myIconsParam.fReflectHeightRatio : 0.) + myDocksParam.iFrameMargin + .5*myDocksParam.iDockLineWidth);
 	return dy;
 }
 
@@ -83,9 +83,10 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, CairoDock *pDoc
 	//\__________________ On calcule l'offset et le zoom.
 	double w = s_indicatorBuffer.iWidth;
 	double h = s_indicatorBuffer.iHeight;
-	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	double z = (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
-	double fY = _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, fRatio, pDock->container.bUseReflect, fMaxScale);
+	///double fMaxScale = cairo_dock_get_max_scale (pDock);
+	///double z = (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
+	double z = icon->fWidth / w * (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale : 1.);
+	double fY = _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, pDock->container.bUseReflect);
 	fY += - icon->fHeight * icon->fScale/2 + h*z/2;  // a 0, le bas de l'indicateur correspond au bas de l'icone.
 	
 	//\__________________ On place l'indicateur.
@@ -160,9 +161,10 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cair
 	//\__________________ On calcule l'offset et le zoom.
 	double w = s_indicatorBuffer.iWidth;
 	double h = s_indicatorBuffer.iHeight;
-	double fMaxScale = cairo_dock_get_max_scale (pDock);
-	double z = (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
-	double fY = - _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, fRatio, pDock->container.bUseReflect, fMaxScale);  // a 0, le bas de l'indicateur correspond au bas de l'icone.
+	///double fMaxScale = cairo_dock_get_max_scale (pDock);
+	///double z = (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
+	double z = icon->fWidth / w * (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale : 1.);
+	double fY = - _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, pDock->container.bUseReflect);  // a 0, le bas de l'indicateur correspond au bas de l'icone.
 	
 	//\__________________ On place l'indicateur.
 	cairo_save (pCairoContext);

@@ -31,10 +31,9 @@ cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight);
 
 /** Create an icon that will act as a separator.
 *@param iSeparatorType the type of separator (CAIRO_DOCK_SEPARATOR12, CAIRO_DOCK_SEPARATOR23 or any other odd number)
-*@param pDock the dock it will belong to
 *@return the newly allocated icon, with all buffers filled.
 */
-Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock);
+Icon *cairo_dock_create_separator_icon (int iSeparatorType);
 
 
 void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, double fOrder, const gchar *cParentDockName, CairoDock *pDock);

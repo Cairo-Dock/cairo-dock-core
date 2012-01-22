@@ -61,7 +61,7 @@ struct _CairoIconsParam {
 	gint iStringLineWidth;
 	gdouble fStringColor[4];
 	gdouble fAlphaAtRest;
-	gdouble fReflectSize;
+	///gdouble fReflectSize;
 	gchar *cIconTheme;
 	gchar *cBackgroundImagePath;
 	gint iIconWidth;  // default icon size

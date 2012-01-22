@@ -57,8 +57,6 @@
 |_|____|
 
 */
-/**#define HAND_WIDTH 80
-#define HAND_HEIGHT 50*/
 #define EXPLOSION_NB_FRAMES 10
 
 CairoFlyingManager myFlyingsMgr;
@@ -276,6 +274,7 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoFlyingContainer *pFlyingContainer)
 {
+	g_print ("%s (%dx%d / %dx%d)\n", __func__, pFlyingContainer->container.iWidth, pFlyingContainer->container.iHeight, pEvent->width, pEvent->height);
 	if (pFlyingContainer->container.iWidth != pEvent->width || pFlyingContainer->container.iHeight != pEvent->height)
 	{
 		pFlyingContainer->container.iWidth = pEvent->width;
@@ -336,6 +335,8 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	pFlyingContainer->container.iface.animation_loop = _cairo_flying_container_animation_loop;
 	
 	pFlyingContainer->pIcon = pFlyingIcon;
+	cairo_dock_set_icon_container (pFlyingIcon, pFlyingContainer);
+	
 	pFlyingContainer->container.bIsHorizontal = TRUE;
 	pFlyingContainer->container.bDirectionUp = TRUE;
 	pFlyingContainer->container.fRatio = 1.;
@@ -357,20 +358,20 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	pFlyingIcon->bPointed = TRUE;
 	pFlyingIcon->fAlpha = 1.;
 	
-	pFlyingContainer->container.iWidth = pFlyingIcon->fWidth * pFlyingIcon->fScale * 1.25;
-	pFlyingContainer->container.iHeight = pFlyingIcon->fHeight * pFlyingIcon->fScale * 1.25;
+	int iWidth = pFlyingIcon->fWidth * pFlyingIcon->fScale * 1.25;
+	int iHeight = pFlyingIcon->fHeight * pFlyingIcon->fScale * 1.25;
 	pFlyingIcon->fDrawX = pFlyingIcon->fWidth * pFlyingIcon->fScale / 4;
 	pFlyingIcon->fDrawY = pFlyingIcon->fHeight * pFlyingIcon->fScale / 4;
 	
 	if (pOriginDock->container.bIsHorizontal)
 	{
-		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
-		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
+		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - iWidth/2;
+		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - iHeight/2;
 	}
 	else
 	{
-		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
-		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
+		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - iWidth/2;
+		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - iHeight/2;
 	}
 	gtk_window_present (GTK_WINDOW (pWindow));
 	/*cd_debug ("%s (%d;%d %dx%d)\n", __func__ pFlyingContainer->container.iWindowPositionX,
@@ -380,8 +381,8 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pFlyingContainer)),
 		pFlyingContainer->container.iWindowPositionX,
 		pFlyingContainer->container.iWindowPositionY,
-		pFlyingContainer->container.iWidth,
-		pFlyingContainer->container.iHeight);
+		iWidth,
+		iHeight);
 	/*gtk_window_resize (GTK_WINDOW (pWindow),
 		pFlyingContainer->container.iWidth,
 		pFlyingContainer->container.iHeight);
@@ -390,7 +391,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->container.iWindowPositionY);*/
 	
 	_cairo_dock_load_emblem (pFlyingIcon);
-	_cairo_dock_load_explosion_image (pFlyingContainer->container.iWidth);
+	_cairo_dock_load_explosion_image (iWidth);
 	
 	struct timeval tv;
 	int r = gettimeofday (&tv, NULL);
@@ -430,6 +431,7 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 {
 	Icon *pIcon = pFlyingContainer->pIcon;
 	pFlyingContainer->pIcon = NULL;
+	cairo_dock_set_icon_container (pIcon, NULL);
 	pFlyingContainer->container.iAnimationStep = EXPLOSION_NB_FRAMES+1;
 	cairo_dock_launch_animation (CAIRO_CONTAINER (pFlyingContainer));  // au cas ou pas d'animation.
 	

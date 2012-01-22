@@ -43,7 +43,7 @@ CairoOverlay *cairo_dock_create_overlay_from_image (Icon *pIcon, const gchar *cI
 {
 	CairoOverlay *pOverlay = g_new0 (CairoOverlay, 1);
 	pOverlay->fScale = CD_DEFAULT_SCALE;
-			
+	
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 	cairo_dock_load_image_buffer (&pOverlay->image, cImageFile, iWidth * pOverlay->fScale, iHeight * pOverlay->fScale, 0);
@@ -236,6 +236,8 @@ void cairo_dock_draw_icon_overlays_cairo (Icon *pIcon, double fRatio, cairo_t *p
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	
+	double fMaxScale = (pIcon->fHeight != 0 ? (pIcon->pContainer && pIcon->pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
+	
 	GList* ov;
 	CairoOverlay *p;
 	int wo, ho;
@@ -255,13 +257,13 @@ void cairo_dock_draw_icon_overlays_cairo (Icon *pIcon, double fRatio, cairo_t *p
 		
 		// scale like the icon
 		cairo_scale (pCairoContext,
-			fRatio * pIcon->fScale / (1 + myIconsParam.fAmplitude),
-			fRatio * pIcon->fScale / (1 + myIconsParam.fAmplitude));
+			fRatio * pIcon->fScale / fMaxScale,
+			fRatio * pIcon->fScale / fMaxScale);
 		
 		// translate to the overlay top-left corner.
 		cairo_translate (pCairoContext,
-			x - wo,
-			- y - ho);
+			x - wo/2 - 1,  /// -1 to compensate the round errors; TODO: use double
+			- y - ho/2 + 1);
 		
 		// draw.
 		cairo_scale (pCairoContext,
@@ -288,6 +290,7 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio)
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
+	double fMaxScale = (pIcon->fHeight != 0 ? (pIcon->pContainer && pIcon->pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
 	
 	GList* ov;
 	CairoOverlay *p;
@@ -304,8 +307,8 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio)
 		// scale/rotate like the icon
 		glRotatef (-pIcon->fOrientation/G_PI*180., 0., 0., 1.);
 		
-		glScalef (fRatio * pIcon->fScale / (1 + myIconsParam.fAmplitude),
-			fRatio * pIcon->fScale / (1 + myIconsParam.fAmplitude),
+		glScalef (fRatio * pIcon->fScale / fMaxScale,
+			fRatio * pIcon->fScale / fMaxScale,
 			1.);
 		
 		// translate to the overlay center.

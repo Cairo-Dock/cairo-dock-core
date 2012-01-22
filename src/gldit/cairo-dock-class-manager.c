@@ -273,7 +273,8 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 	const GList *pList = cairo_dock_list_existing_appli_with_class (cClass);
 	Icon *pIcon;
 	const GList *pElement;
-	gboolean bNeedsRedraw = FALSE, bDetached;
+	///gboolean bNeedsRedraw = FALSE;
+	gboolean bDetached;
 	CairoDock *pParentDock;
 	Window XFirstFoundId = 0;
 	for (pElement = pList; pElement != NULL; pElement = pElement->next)
@@ -300,7 +301,7 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 						if (pMainDock && CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))
 						{
 							cairo_dock_remove_icon_from_dock (pMainDock, pPointingIcon);
-							bNeedsRedraw |= pMainDock->bIsMainDock;
+							///bNeedsRedraw |= pMainDock->bIsMainDock;
 							cairo_dock_free_icon (pPointingIcon);
 						}
 					}
@@ -309,8 +310,8 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 				///else  // non vide => on le met a jour.
 				///	cairo_dock_update_dock_size (pParentDock);
 			}
-			else  // main dock => on le met a jour a la fin.
-				bNeedsRedraw = TRUE;
+			///else  // main dock => on le met a jour a la fin.
+			///	bNeedsRedraw = TRUE;
 		}
 		g_free (cParentDockName);
 		
@@ -363,7 +364,7 @@ gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 			pIcon = pElement->data;
 			cd_debug ("une appli detachee (%s)", pIcon->cParentDockName);
 			if (pIcon->Xid != XFirstFoundId && pIcon->cParentDockName == NULL)  // s'est faite detacher et doit etre rattachee.
-				cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 	}
 	
@@ -482,7 +483,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 				cd_message ("rajout de l'icone precedemment inhibee (Xid:%d)", pIcon->Xid);
 				pIcon->fInsertRemoveFactor = 0;
 				pIcon->fScale = 1.;
-				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 				bNeedsRedraw = (pParentDock != NULL && pParentDock->bIsMainDock);
 				//if (pInhibitorIcon != NULL)
 				//	break ;
@@ -870,7 +871,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			cd_debug (" puis on re-insere l'appli restante");
 			if (! bLastIconIsRemoving)
 			{
-				cairo_dock_insert_icon_in_dock (pLastClassIcon, pFakeParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				cairo_dock_insert_icon_in_dock (pLastClassIcon, pFakeParentDock, ! CAIRO_DOCK_ANIMATE_ICON);
 				///cairo_dock_calculate_dock_icons (pFakeParentDock);
 				///cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
 				///cairo_dock_redraw_container (CAIRO_CONTAINER (pFakeParentDock));
@@ -896,7 +897,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			cd_debug ("sanity check : pFakeClassIcon->Xid : %d", pFakeClassIcon->Xid);
 			if (! bLastIconIsRemoving)
 			{
-				cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);  // a priori inutile.
+				cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);  // a priori inutile.
 				cairo_dock_update_name_on_inhibitors (cClass, pLastClassIcon->Xid, pLastClassIcon->cName);
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer

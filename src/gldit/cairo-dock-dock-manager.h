@@ -48,6 +48,26 @@ typedef enum {
 	CAIRO_HIT_NB_METHODS
 } CairoCallbackMethod;
 
+typedef enum {
+	ICON_DEFAULT,  // same as main dock
+	ICON_TINY,
+	ICON_VERY_SMALL,
+	ICON_SMALL,
+	ICON_MEDIUM,
+	ICON_BIG,
+	ICON_HUGE
+	} GldiIconSizeEnum;
+
+/// TODO: harmonize the values with the simple config -> make some public functions...
+typedef enum {
+	ICON_SIZE_TINY = 28,
+	ICON_SIZE_VERY_SMALL = 36,
+	ICON_SIZE_SMALL = 42,
+	ICON_SIZE_MEDIUM = 48,
+	ICON_SIZE_BIG = 56,
+	ICON_SIZE_HUGE = 64
+	} GldiIconSize;
+
 // params
 struct _CairoDocksParam {
 	// frame
@@ -217,9 +237,8 @@ void cairo_dock_hide_parent_dock (CairoDock *pDock);
 gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
 
 /** (Re)load all buffers of all icons in all docks.
-*@param bReloadAppletsToo TRUE to reload applet icons too.
 */
-void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo);
+void cairo_dock_reload_buffers_in_all_docks (void);
 
 void cairo_dock_draw_subdock_icons (void);
 

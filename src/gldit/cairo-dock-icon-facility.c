@@ -418,7 +418,7 @@ void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRe
 	double fReflectSize = 0;
 	if (pContainer->bUseReflect)
 	{
-		fReflectSize = myIconsParam.fReflectSize * icon->fScale * fabs (icon->fHeightFactor) + icon->fDeltaYReflection + myDocksParam.iFrameMargin;  // un peu moyen le iFrameMargin mais bon ...
+		fReflectSize = /**myIconsParam.fReflectSize*/icon->fHeight * myIconsParam.fReflectHeightRatio * icon->fScale * fabs (icon->fHeightFactor) + icon->fDeltaYReflection + myDocksParam.iFrameMargin;  // un peu moyen le iFrameMargin mais bon ...
 	}
 	if (! myIndicatorsParam.bIndicatorOnIcon)
 		fReflectSize = MAX (fReflectSize, myIndicatorsParam.fIndicatorDeltaY * icon->fHeight);
@@ -594,15 +594,16 @@ void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer_us
 
 void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo)
 {
-	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
-
+	g_return_if_fail (pIcon != NULL);
+	
 	if (pIcon->cQuickInfo != cQuickInfo)
 	{
 		g_free (pIcon->cQuickInfo);
 		pIcon->cQuickInfo = g_strdup (cQuickInfo);
 	}
 	
-	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	///double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	double fMaxScale = (pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
 	cairo_dock_load_icon_quickinfo (pIcon,
 		&myIconsParam.quickInfoTextDescription,
 		fMaxScale);

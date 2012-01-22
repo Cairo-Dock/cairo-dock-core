@@ -177,6 +177,8 @@ void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pI
 {
 	int iWidth = pIcon->iImageWidth;
 	int iHeight = pIcon->iImageHeight;
+	double fMaxScale = (pIcon->fHeight != 0 ? (pIcon->pContainer && pIcon->pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
+	double lw = 2 * fMaxScale;  // line demi-width
 	
 	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
 		0.,
@@ -201,11 +203,11 @@ void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pI
 	cairo_save (pIconContext);
 	cairo_set_operator (pIconContext, CAIRO_OPERATOR_OVER);
 	
-	cairo_set_line_width (pIconContext, 6);
+	cairo_set_line_width (pIconContext, 2 * lw);
 	cairo_set_line_cap (pIconContext, CAIRO_LINE_CAP_ROUND);
 	
-	cairo_move_to (pIconContext, 3, iHeight - 3);
-	cairo_rel_line_to (pIconContext, (iWidth - 6) * fabs (fValue), 0);
+	cairo_move_to (pIconContext, lw, iHeight - lw);
+	cairo_rel_line_to (pIconContext, (iWidth - 2*lw) * fabs (fValue), 0);
 	
 	cairo_set_source (pIconContext, pGradationPattern);
 	cairo_stroke (pIconContext);
@@ -433,7 +435,6 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 			pIcon->pSubDock = cairo_dock_create_subdock (pIcon->cName, cDockRenderer, pInstance->pDock, pIconsList);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
-			///cairo_dock_update_dock_size (pIcon->pSubDock);
 		}
 		else
 		{
@@ -442,7 +443,7 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 			for (ic = pIconsList; ic != NULL; ic = ic->next)
 			{
 				pOneIcon = ic->data;
-				cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, ! CAIRO_DOCK_ANIMATE_ICON);
 				pOneIcon->cParentDockName = g_strdup (pIcon->cName);
 				cairo_dock_trigger_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
 			}
@@ -461,6 +462,13 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 		{
 			cairo_dock_destroy_dock (pIcon->pSubDock, pIcon->cName);
 			pIcon->pSubDock = NULL;
+		}
+		Icon *pOneIcon;
+		GList *ic;
+		for (ic = pIconsList; ic != NULL; ic = ic->next)
+		{
+			pOneIcon = ic->data;
+			cairo_dock_set_icon_container (pOneIcon, pInstance->pDesklet);
 		}
 		pInstance->pDesklet->icons = g_list_concat (pInstance->pDesklet->icons, pIconsList);
 		cairo_dock_set_desklet_renderer_by_name (pInstance->pDesklet, cDeskletRenderer, (CairoDeskletRendererConfigPtr) pDeskletRendererData);
@@ -498,8 +506,10 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 			pOneIcon->fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 0);
 		}
 		cairo_dock_trigger_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
-		cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+		cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		pOneIcon->cParentDockName = g_strdup (pIcon->cName);
+		if (pIcon->iSubdockViewType != 0)
+			cairo_dock_trigger_redraw_subdock_content_on_icon (pIcon);
 	}
 	else if (pInstance->pDesklet)
 	{
@@ -601,15 +611,17 @@ void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
 	
 	if (pInstance->pDock)
 	{
-		double fMaxScale = cairo_dock_get_max_scale (pContainer);
-		pIcon->fWidth = w / fMaxScale;
-		pIcon->fHeight = h / fMaxScale;  // set the height too, because at the moment it takes into account the dock's ratio.
-		pIcon->iImageWidth = 0;  // will be updated when the icon is reloaded.
-		pIcon->iImageHeight = 0;  // will be updated when the icon is reloaded.
+		///double fMaxScale = cairo_dock_get_max_scale (pContainer);
+		pIcon->iImageWidth = w;  // request the buffe rsize, this is the one we care to draw stuff on the icon.
+		pIcon->iImageHeight = h;
+		pIcon->fWidth = 0;
+		pIcon->fHeight = 0;
+		cairo_dock_set_icon_size (pContainer, pIcon);
+		
 		cairo_dock_load_icon_image (pIcon, pContainer);  // handles the applet's context
 		//g_print ("%s (%dx%d / %.1fx%.1f)\n", __func__, pIcon->iImageWidth, pIcon->iImageHeight, pIcon->fWidth, pIcon->fHeight);
 		
-		cairo_dock_update_dock_size (pInstance->pDock);
+		cairo_dock_update_dock_size (pInstance->pDock);  // sets back the container ratio.
 	}
 	else  // in desklet mode, just resize the desklet, it will trigger the reload of the applet when the 'configure' event is received.
 	{

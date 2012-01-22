@@ -82,24 +82,6 @@ static CairoKeyBinding *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
 
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock);
 
-typedef enum {
-	ICON_DEFAULT,
-	ICON_TINY,
-	ICON_SMALL,
-	ICON_MEDIUM,
-	ICON_BIG,
-	ICON_HUGE,
-	ICON_CUSTOM
-	} GldiIconSizeEnum;
-
-/// TODO: harmonize the values with the simple config -> make some public functions...
-typedef enum {
-	ICON_SIZE_TINY = 32,
-	ICON_SIZE_SMALL = 38,
-	ICON_SIZE_MEDIUM = 48,
-	ICON_SIZE_BIG = 56,
-	ICON_SIZE_HUGE = 64
-	} GldiIconSize;
 
   /////////////
  // MANAGER //
@@ -159,6 +141,7 @@ static inline CairoDock *_create_dock (const gchar *cDockName)
 {
 	//\__________________ On cree un nouveau dock.
 	CairoDock *pDock = cairo_dock_new_dock ();
+	pDock->iIconSize = myIconsParam.iIconWidth;  // by default, until the renderer possibly overloads it
 	
 	//\__________________ On l'enregistre.
 	if (g_hash_table_size (s_hDocksTable) == 0)  // c'est le 1er.
@@ -236,9 +219,11 @@ CairoDock *cairo_dock_create_subdock (const gchar *cDockName, const gchar *cRend
 			icon = ic->data;
 			if (icon->cParentDockName == NULL)
 				icon->cParentDockName = g_strdup (cDockName);
+			cairo_dock_set_icon_container (icon, pSubDock);
 		}
 		cairo_dock_load_buffers_in_one_dock (pSubDock);  // idle reload.
 	}
+	/// cairo_dock_update_dock_size ?...
 	return pSubDock;
 }
 
@@ -577,11 +562,11 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 
 static void _reload_buffer_in_one_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	cairo_dock_reload_buffers_in_dock (pDock, GPOINTER_TO_INT (data), FALSE);
+	cairo_dock_reload_buffers_in_dock (pDock, FALSE);
 }
-void cairo_dock_reload_buffers_in_all_docks (gboolean bReloadAppletsToo)
+void cairo_dock_reload_buffers_in_all_docks (void)
 {
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, GINT_TO_POINTER (bReloadAppletsToo));
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, NULL);
 	
 	cairo_dock_draw_subdock_icons ();
 }
@@ -732,8 +717,7 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	cairo_dock_set_dock_visibility (pDock, iVisibility);
 	
 	//\______________ Icons size.
-	int s = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "icon size", &bFlushConfFileNeeded, 0, NULL, NULL);  // 0 <=> same as main dock
-	int iCustomIconsSize = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "custom icons size", &bFlushConfFileNeeded, 40, NULL, NULL);
+	int s = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "icon size", &bFlushConfFileNeeded, ICON_DEFAULT, NULL, NULL);  // ICON_DEFAULT <=> same as main dock
 	switch (s)
 	{
 		case ICON_DEFAULT:
@@ -742,6 +726,9 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 		break;
 		case ICON_TINY:
 			pDock->iIconSize = ICON_SIZE_TINY;
+		break;
+		case ICON_VERY_SMALL:
+			pDock->iIconSize = ICON_SIZE_VERY_SMALL;
 		break;
 		case ICON_SMALL:
 			pDock->iIconSize = ICON_SIZE_SMALL;
@@ -754,9 +741,6 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 		break;
 		case ICON_HUGE:
 			pDock->iIconSize = ICON_SIZE_HUGE;
-		break;
-		case ICON_CUSTOM:
-			pDock->iIconSize = iCustomIconsSize;
 		break;
 	}  /// TODO: we should probably also handle fMaxScale, fReflectSize, and iIconGap here...
 	
@@ -857,8 +841,7 @@ void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock)
 {
 	cairo_dock_read_root_dock_config (cDockName, pDock);
 	
-	///cairo_dock_load_buffers_in_one_dock (pDock);  // recharge les icones et les applets.
-	cairo_dock_reload_buffers_in_dock (pDock, TRUE, TRUE);  // recharge les icones et les applets, recursivement.
+	cairo_dock_reload_buffers_in_dock (pDock, TRUE);  // recharge les icones recursivement.
 	
 	pDock->backgroundBuffer.iWidth ++;  // pour forcer le chargement du fond.
 	cairo_dock_set_default_renderer (pDock);
@@ -1459,16 +1442,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 		}
 		if (iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 		{
-			/**if (cShortkey == NULL)
-			{
-				cd_warning ("no shortcut defined to make the dock appear, we'll keep it above.");
-				iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
-			}
-			else*/
-			{
-				pAccessibility->cRaiseDockShortcut = cShortkey;
-				cShortkey = NULL;
-			}
+			pAccessibility->cRaiseDockShortcut = cShortkey;
+			cShortkey = NULL;
 		}
 	}
 	pAccessibility->iVisibility = iVisibility;

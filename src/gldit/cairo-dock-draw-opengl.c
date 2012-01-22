@@ -137,15 +137,17 @@ void cairo_dock_draw_icon_reflect_opengl (Icon *pIcon, CairoDock *pDock)
 		glPushMatrix ();
 		double x0, y0, x1, y1;
 		double fScale = ((myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
-		double fReflectSize = MIN (myIconsParam.fReflectSize, pIcon->fHeight/pDock->container.fRatio*fScale);
-		double fReflectRatio = fReflectSize * pDock->container.fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
-		double fOffsetY = pIcon->fHeight * fScale/2 + fReflectSize * pDock->container.fRatio/2 + pIcon->fDeltaYReflection;
+		///double fReflectSize = MIN (myIconsParam.fReflectSize, pIcon->fHeight/pDock->container.fRatio*fScale);
+		double fReflectSize = pIcon->fHeight * myIconsParam.fReflectHeightRatio * fScale;
+		///double fReflectRatio = fReflectSize * pDock->container.fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
+		double fReflectRatio = myIconsParam.fReflectHeightRatio;
+		double fOffsetY = pIcon->fHeight * fScale/2 + fReflectSize/** * pDock->container.fRatio*/ / 2 + pIcon->fDeltaYReflection;
 		if (pDock->container.bIsHorizontal)
 		{
 			if (pDock->container.bDirectionUp)
 			{
 				glTranslatef (0., - fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - fReflectSize * pDock->container.fRatio, 1.);  // taille du reflet et on se retourne.
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, - fReflectSize/** * pDock->container.fRatio*/, 1.);  // taille du reflet et on se retourne.
 				x0 = 0.;
 				y0 = 1. - fReflectRatio;
 				x1 = 1.;
@@ -154,7 +156,7 @@ void cairo_dock_draw_icon_reflect_opengl (Icon *pIcon, CairoDock *pDock)
 			else
 			{
 				glTranslatef (0., fOffsetY, 0.);
-				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, fReflectSize * pDock->container.fRatio, 1.);
+				glScalef (pIcon->fWidth * pIcon->fWidthFactor * fScale, fReflectSize/** * pDock->container.fRatio*/, 1.);
 				x0 = 0.;
 				y0 = fReflectRatio;
 				x1 = 1.;
@@ -166,7 +168,7 @@ void cairo_dock_draw_icon_reflect_opengl (Icon *pIcon, CairoDock *pDock)
 			if (pDock->container.bDirectionUp)
 			{
 				glTranslatef (fOffsetY, 0., 0.);
-				glScalef (- fReflectSize * pDock->container.fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (- fReflectSize/** * pDock->container.fRatio*/, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = 1. - fReflectRatio;
 				y0 = 0.;
 				x1 = 1.;
@@ -175,7 +177,7 @@ void cairo_dock_draw_icon_reflect_opengl (Icon *pIcon, CairoDock *pDock)
 			else
 			{
 				glTranslatef (- fOffsetY, 0., 0.);
-				glScalef (fReflectSize * pDock->container.fRatio, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
+				glScalef (fReflectSize/** * pDock->container.fRatio*/, pIcon->fWidth * pIcon->fWidthFactor * fScale, 1.);
 				x0 = fReflectRatio;
 				y0 = 0.;
 				x1 = 0.;
@@ -309,11 +311,12 @@ void cairo_dock_translate_on_icon_opengl (Icon *icon, CairoContainer *pContainer
 {
 	double fX=0, fY=0;
 	_compute_icon_coordinate (icon, pContainer, fDockMagnitude, &fX, &fY);
+	double fMaxScale = (icon->fHeight != 0 ? (pContainer->bIsHorizontal ? icon->iImageHeight : icon->iImageWidth) / icon->fHeight : 1.);
 	
 	if (pContainer->bIsHorizontal)
-		glTranslatef ( (fX),  (fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), - icon->fHeight * (1+myIconsParam.fAmplitude));
+		glTranslatef ( (fX),  (fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), - icon->fHeight * fMaxScale);
 	else
-		glTranslatef ( (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)),  (fX), - icon->fHeight * (1+myIconsParam.fAmplitude));
+		glTranslatef ( (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)),  (fX), - icon->fHeight * fMaxScale);
 }
 
 void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude, gboolean bUseText)
@@ -343,9 +346,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	glPushMatrix ();
 	if (pDock->container.bIsHorizontal)
-		glTranslatef (fX, fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2), - icon->fHeight * (1+myIconsParam.fAmplitude));
+		glTranslatef (fX, fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2), - icon->fHeight * icon->fScale);
 	else
-		glTranslatef (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2), fX, - icon->fHeight * (1+myIconsParam.fAmplitude));
+		glTranslatef (fY + icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2), fX, - icon->fHeight * icon->fScale);
 	
 	//\_____________________ On positionne l'icone.
 	glPushMatrix ();
@@ -406,13 +409,15 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	//\_____________________ On dessine les infos additionnelles.
 	if (icon->iQuickInfoTexture != 0)
 	{
+		double fMaxScale = (icon->fHeight != 0 ? (pDock->container.bIsHorizontal ? icon->iImageHeight : icon->iImageWidth) / icon->fHeight : 1.);
+		
 		glPushMatrix ();
 		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
-		glTranslatef (0., (- icon->fHeight + icon->iQuickInfoHeight * fRatio) * icon->fScale/2, 0.);
+		glTranslatef (0., (- icon->fHeight + icon->iQuickInfoHeight / fMaxScale * fRatio) * icon->fScale/2, 0.);
 		
 		cairo_dock_draw_texture_with_alpha (icon->iQuickInfoTexture,
-			icon->iQuickInfoWidth * fRatio * icon->fScale,
-			icon->iQuickInfoHeight * fRatio * icon->fScale,
+			icon->iQuickInfoWidth / fMaxScale * fRatio * icon->fScale,
+			icon->iQuickInfoHeight / fMaxScale * fRatio * icon->fScale,
 			icon->fAlpha);
 		
 		glPopMatrix ();
@@ -631,16 +636,20 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 		}
 	}
 	
-	glEnable(GL_TEXTURE_2D);
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_source ();
+	glColor4f (1., 1., 1., 1.);
 	glGenTextures (1, &iTexture);
 	//g_print ("+ texture %d generee (%p, %dx%d)\n", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
 	glBindTexture (GL_TEXTURE_2D, iTexture);
+	
 	glTexParameteri (GL_TEXTURE_2D,
 		GL_TEXTURE_MIN_FILTER,
 		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 	if (g_bEasterEggs)
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
 	if (g_bEasterEggs)
 		gluBuild2DMipmaps (GL_TEXTURE_2D,  /// see for automatic mipmaps generation, or at least how to update the mipmaps...
 			4,
@@ -662,6 +671,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	if (pPowerOfwoSurface != pImageSurface)
 		cairo_surface_destroy (pPowerOfwoSurface);
 	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 	return iTexture;
 }
 
@@ -690,7 +700,9 @@ GLuint cairo_dock_create_texture_from_raw_data (const guchar *pTextureRaw, int i
 	pTextureRaw = pPixelBuffer2;*/
 	GLuint iTexture = 0;
 	
-	glEnable (GL_TEXTURE_2D);
+	_cairo_dock_enable_texture ();
+	_cairo_dock_set_blend_source ();
+	glColor4f (1., 1., 1., 1.);
 	glGenTextures(1, &iTexture);
 	glBindTexture(GL_TEXTURE_2D, iTexture);
 	
@@ -759,12 +771,16 @@ void cairo_dock_update_icon_texture (Icon *pIcon)
 {
 	if (pIcon != NULL && pIcon->pIconBuffer != NULL)
 	{
-		glEnable (GL_TEXTURE_2D);
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_source ();
+		glColor4f (1., 1., 1., 1.);
+		
 		if (pIcon->iIconTexture == 0)
 			glGenTextures (1, &pIcon->iIconTexture);
 		int w = cairo_image_surface_get_width (pIcon->pIconBuffer);
 		int h = cairo_image_surface_get_height (pIcon->pIconBuffer);
 		glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
+		
 		glTexParameteri (GL_TEXTURE_2D,
 			GL_TEXTURE_MIN_FILTER,
 			g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
@@ -803,17 +819,22 @@ void cairo_dock_update_label_texture (Icon *pIcon)
 	}
 	if (pIcon != NULL && pIcon->pTextBuffer != NULL)
 	{
-		glEnable (GL_TEXTURE_2D);
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_source ();
+		glColor4f (1., 1., 1., 1.);
+		
 		glGenTextures (1, &pIcon->iLabelTexture);
 		int w = cairo_image_surface_get_width (pIcon->pTextBuffer);
 		int h = cairo_image_surface_get_height (pIcon->pTextBuffer);
 		glBindTexture (GL_TEXTURE_2D, pIcon->iLabelTexture);
+		
 		glTexParameteri (GL_TEXTURE_2D,
 			GL_TEXTURE_MIN_FILTER,
 			g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 		if (g_bEasterEggs)
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		
 		glTexImage2D (GL_TEXTURE_2D,
 			0,
 			4,  // GL_ALPHA / GL_BGRA
@@ -836,17 +857,22 @@ void cairo_dock_update_quick_info_texture (Icon *pIcon)
 	}
 	if (pIcon != NULL && pIcon->pQuickInfoBuffer != NULL)
 	{
-		glEnable (GL_TEXTURE_2D);
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_source ();
+		glColor4f (1., 1., 1., 1.);
+		
 		glGenTextures (1, &pIcon->iQuickInfoTexture);
 		int w = cairo_image_surface_get_width (pIcon->pQuickInfoBuffer);
 		int h = cairo_image_surface_get_height (pIcon->pQuickInfoBuffer);
 		glBindTexture (GL_TEXTURE_2D, pIcon->iQuickInfoTexture);
+		
 		glTexParameteri (GL_TEXTURE_2D,
 			GL_TEXTURE_MIN_FILTER,
 			g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 		if (g_bEasterEggs)
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		
 		glTexImage2D (GL_TEXTURE_2D,
 			0,
 			4,  // GL_ALPHA / GL_BGRA

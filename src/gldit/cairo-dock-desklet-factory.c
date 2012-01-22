@@ -35,6 +35,7 @@
 #include <gdk/gdkx.h>
 #include "cairo-dock-draw.h"
 #include "cairo-dock-module-factory.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_container
 #include "cairo-dock-module-manager.h"  // cairo_dock_detach_module_instance
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-icon-factory.h"
@@ -1274,7 +1275,7 @@ void cairo_dock_insert_icon_in_desklet (Icon *icon, CairoDesklet *pDesklet)
 	pDesklet->icons = g_list_insert_sorted (pDesklet->icons,
 		icon,
 		(GCompareFunc)cairo_dock_compare_icons_order);
-	icon->pContainerForLoad = CAIRO_CONTAINER (pDesklet);
+	cairo_dock_set_icon_container (icon, pDesklet);
 	
 	// calculate icons
 	cairo_dock_update_desklet_icons (pDesklet);
@@ -1292,7 +1293,7 @@ gboolean cairo_dock_detach_icon_from_desklet (Icon *icon, CairoDesklet *pDesklet
 	// remove icon
 	pDesklet->icons = g_list_delete_link (pDesklet->icons, ic);
 	ic =  NULL;
-	icon->pContainerForLoad = NULL;
+	cairo_dock_set_icon_container (icon, NULL);
 	
 	// calculate icons
 	cairo_dock_update_desklet_icons (pDesklet);

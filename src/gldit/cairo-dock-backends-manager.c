@@ -313,7 +313,7 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 		
 		Icon* pIcon = pDesklet->pIcon;
 		if (pIcon)
-			cairo_dock_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));
+			cairo_dock_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));  // immediately, because the applet may need it to draw its stuff.
 		
 		GList* ic;
 		for (ic = pDesklet->icons; ic != NULL; ic = ic->next)

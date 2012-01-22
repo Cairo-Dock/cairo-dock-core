@@ -450,13 +450,14 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 		pInstance->bCanDetach = pMinimalConfig->deskletAttribute.iDeskletWidth > 0;
 		pModule->bCanDetach = pInstance->bCanDetach;  // pas encore clair ...
 		
-		// on trouve/cree son container.
+		// create the icon.
+		pIcon = cairo_dock_create_icon_for_applet (pMinimalConfig,
+			pInstance);
+		
+		// create/find its container and insert the icon inside.
 		if (pModule->bCanDetach && pMinimalConfig->bIsDetached)
 		{
-			pDesklet = cairo_dock_create_desklet (NULL, &pMinimalConfig->deskletAttribute);
-			/*cd_debug ("transparence du desklet...\n");
-			while (gtk_events_pending ())  // pour la transparence initiale.
-				gtk_main_iteration ();*/
+			pDesklet = cairo_dock_create_desklet (pIcon, &pMinimalConfig->deskletAttribute);
 			pContainer = CAIRO_CONTAINER (pDesklet);
 		}
 		else
@@ -468,39 +469,22 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 				pDock = cairo_dock_create_dock (cDockName);
 			}
 			pContainer = CAIRO_CONTAINER (pDock);
+			
+			if (pDock)
+			{
+				cairo_dock_insert_icon_in_dock (pIcon, pDock, ! cairo_dock_is_loading ());  // animate the icon if it's instanciated by the user, not during the initial loading.
+				
+				// we need to load the icon's buffer before we init the module, because the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
+				cairo_dock_load_icon_buffers (pIcon, pContainer);  // ne cree rien si w ou h < 0 (par exemple si l'applet est detachee).
+			}
 		}
-		
-		// on cree son icone.
-		pIcon = cairo_dock_create_icon_for_applet (pMinimalConfig,
-			pInstance);
-		if (pDesklet)
-		{
-			pDesklet->pIcon = pIcon;
-			gtk_window_set_title (GTK_WINDOW(pContainer->pWidget), pInstance->pModule->pVisitCard->cModuleName);
-		}
+
+		pInstance->pIcon = pIcon;
+		pInstance->pDock = pDock;
+		pInstance->pDesklet = pDesklet;
+		pInstance->pContainer = pContainer;
 	}
 	cairo_dock_free_minimal_config (pMinimalConfig);
-
-	//\____________________ insert the icon in its container.
-	if (pDock)  //  on met la taille qu'elle aura une fois dans le dock.
-	{
-		cairo_dock_insert_icon_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! cairo_dock_is_loading ());  // animate the icon if it's instanciated by the user, not from the theme loading.
-		if (! cairo_dock_is_loading ())
-			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
-		
-		// we need to load the icon's buffer before we init the module.
-		cairo_dock_load_icon_buffers (pIcon, pContainer);  // ne cree rien si w ou h < 0 (par exemple si l'applet est detachee).
-	}
-	else if (pDesklet)
-	{
-		pDesklet->pIcon = pIcon;
-		gtk_window_set_title (GTK_WINDOW(pContainer->pWidget), pInstance->pModule->pVisitCard->cModuleName);
-	}
-	
-	pInstance->pIcon = pIcon;
-	pInstance->pDock = pDock;
-	pInstance->pDesklet = pDesklet;
-	pInstance->pContainer = pContainer;
 	
 	//\____________________ initialise the instance.
 	if (pKeyFile)
@@ -687,17 +671,14 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		}
 		pIcon->fWidth = pMinimalConfig->iDesiredIconWidth;  // requested size
 		pIcon->fHeight = pMinimalConfig->iDesiredIconHeight;
-		
-		// on charge l'icone a la bonne taille.
-		///cairo_dock_set_icon_size (pNewContainer, pIcon);
-		///cairo_dock_load_icon_buffers (pIcon, pNewContainer);
+		pIcon->iImageWidth = 0;
+		pIcon->iImageHeight = 0;
 		
 		// on insere l'icone dans le dock ou on met a jour celui-ci.
 		if (pNewDock != pCurrentDock)  // insert in its new dock.
 		{
-			cairo_dock_insert_icon_in_dock (pIcon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+			cairo_dock_insert_icon_in_dock (pIcon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);
 			pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
-			cairo_dock_start_icon_animation (pIcon, pNewDock);
 		}
 		else  // same dock, just update its size.
 		{
@@ -712,7 +693,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				gtk_widget_queue_draw (pNewContainer->pWidget);
 			}
 		}
-		cairo_dock_load_icon_buffers (pIcon, pNewContainer);
+		cairo_dock_load_icon_buffers (pIcon, pNewContainer);  // do it now, since the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
 	}
 	
 	//\_______________________ On recharge la config.

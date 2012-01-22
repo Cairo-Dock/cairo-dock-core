@@ -97,16 +97,9 @@ void cairo_dock_free_icon_buffers (Icon *icon)
  /// LOADER ///
 //////////////
 
-
-/**static void _set_icon_size_generic (CairoContainer *pContainer, Icon *icon)
-{
-	if (icon->fWidth == 0)
-		icon->fWidth = 48;
-	if (icon->fHeight == 0)
-		icon->fHeight = 48;
-}*/
 void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 {
+	g_print ("%s (%s, %p)\n", __func__, icon?icon->cName:NULL, pContainer);
 	if (! pContainer)
 	{
 		cd_debug ("icone dans aucun container => pas chargee");
@@ -115,30 +108,23 @@ void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
 	// taille de l'icone dans le container (hors ratio).
 	if (pContainer->iface.set_icon_size)
 		pContainer->iface.set_icon_size (pContainer, icon);
-	/**else
-		_set_icon_size_generic (pContainer, icon);
-	// la taille que devra avoir la texture s'en deduit.
-	double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator)
-	{
-		icon->iImageWidth = icon->fWidth * fMaxScale;
-		icon->iImageHeight = icon->fHeight * fMaxScale;
-	}
-	else
-	{
-		icon->iImageWidth = (pContainer->bIsHorizontal ? icon->fWidth : icon->fHeight) * fMaxScale;
-		icon->iImageHeight = (pContainer->bIsHorizontal ? icon->fHeight : icon->fWidth) * fMaxScale;
-	}*/
 }
 
 void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 {
+	if (icon->pContainer == NULL)
+	{
+		g_print ("/!\\ Icon %s is not inside a container !!!\n", icon->cName);
+		return;
+	}
 	CairoDockModuleInstance *pInstance = icon->pModuleInstance;  // this is the only function where we destroy/create the icon's surface, so we must handle the cairo-context here.
 	if (pInstance && pInstance->pDrawContext != NULL)
 	{
 		cairo_destroy (pInstance->pDrawContext);
 		pInstance->pDrawContext = NULL;
 	}
+	
+	g_print ("%s (%s, %dx%d)\n", __func__, icon->cName, (int)icon->fWidth, (int)icon->fHeight);
 	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
 	{
 		if (icon->pIconBuffer != NULL)
@@ -153,11 +139,12 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 		return;
 	}
 	
-	if (icon->fWidth == 0 || icon->iImageWidth <= 0)  // if the size is not set, set it now, or we can't load the buffer.
+	g_return_if_fail (icon->fWidth > 0 & icon->iImageWidth > 0);  // the renderer of the container must have set the size beforehand, when the icon has been inserted into the container.
+	/**if (icon->fWidth == 0 || icon->iImageWidth <= 0)  // if the size is not set, set it now, or we can't load the buffer.
 	{
 		cairo_dock_set_icon_size (pContainer, icon);
 	}
-	//g_print ("%s (%.2fx%.2f ; %dx%d)\n", __func__, icon->fWidth, icon->fHeight, icon->iImageWidth, icon->iImageHeight);
+	g_print (" -> %dx%d, %dx%d)\n", (int)icon->fWidth, (int)icon->fHeight, icon->iImageWidth, icon->iImageHeight);*/
 	
 	//\______________ on reset les buffers (on garde la surface/texture actuelle pour les emblemes).
 	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
@@ -187,7 +174,6 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 			icon->iImageHeight);
 		g_free (cIconPath);
 	}
-	cd_debug ("%s (%s) -> %.2fx%.2f", __func__, icon->cName, icon->fWidth, icon->fHeight);
 	
 	//\_____________ On met le background de l'icone si necessaire
 	if (icon->pIconBuffer != NULL && g_pIconBackgroundBuffer.pSurface != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
@@ -208,13 +194,14 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	//\______________ le reflet en mode cairo.
 	if (! g_bUseOpenGL && myIconsParam.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cFileName == NULL))
 	{
-		icon->pReflectionBuffer = cairo_dock_create_reflection_surface (icon->pIconBuffer,
+		cairo_dock_add_reflection_to_icon (icon, pContainer);
+		/**icon->pReflectionBuffer = cairo_dock_create_reflection_surface (icon->pIconBuffer,
 			icon->iImageWidth,
 			icon->iImageHeight,
 			myIconsParam.fReflectSize * cairo_dock_get_max_scale (pContainer),
 			myIconsParam.fAlbedo,
 			pContainer ? pContainer->bIsHorizontal : TRUE,
-			pContainer ? pContainer->bDirectionUp : TRUE);
+			pContainer ? pContainer->bDirectionUp : TRUE);*/
 	}
 	
 	//\______________ on charge la texture si elle ne l'a pas ete.
@@ -290,7 +277,7 @@ void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTex
 		pTextDescription,
 		fMaxScale,
 		icon->fWidth * fMaxScale,
-		&icon->iQuickInfoWidth, &icon->iQuickInfoHeight, NULL, NULL);
+		&icon->iQuickInfoWidth, &icon->iQuickInfoHeight);
 	
 	if (g_bUseOpenGL && icon->pQuickInfoBuffer != NULL)
 	{
@@ -312,33 +299,33 @@ void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 
 	cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
 
-	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	///double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	double fMaxScale = (pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
 	cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
 }
 
 static gboolean _load_icon_buffer_idle (Icon *pIcon)
 {
-	//g_print ("%s (%s; %dx%d; %.2fx%.2f; %x)\n", __func__, pIcon->cName, pIcon->iImageWidth, pIcon->iImageHeight, pIcon->fWidth, pIcon->fHeight, pIcon->pContainerForLoad);
+	//g_print ("%s (%s; %dx%d; %.2fx%.2f; %x)\n", __func__, pIcon->cName, pIcon->iImageWidth, pIcon->iImageHeight, pIcon->fWidth, pIcon->fHeight, pIcon->pContainer);
 	pIcon->iSidLoadImage = 0;
 	
-	CairoContainer *pContainer = pIcon->pContainerForLoad;
+	CairoContainer *pContainer = pIcon->pContainer;
 	if (pContainer)
 	{
 		cairo_dock_load_icon_image (pIcon, pContainer);
 		
-		double fMaxScale = cairo_dock_get_max_scale (pContainer);
+		///double fMaxScale = cairo_dock_get_max_scale (pContainer);
+		double fMaxScale = (pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
 		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
 		//g_print ("icon-factory: do 1 main loop iteration\n");
-		//gtk_main_iteration_do (FALSE);  /// "unforseen consequences" : if _redraw_subdock_content_idle is planned just after, the container-icon stays blank in opengl only. :-/
+		//gtk_main_iteration_do (FALSE);  /// "unforseen consequences" : if _redraw_subdock_content_idle is planned just after, the container-icon stays blank in opengl only. couldn't figure why exactly :-/
 	}
 	return FALSE;
 }
 void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 {
-	cairo_dock_set_icon_size (pContainer, pIcon);  /// TODO: no need here, it should be done when the icon is inserted into the container
-	pIcon->pContainerForLoad = pContainer;
 	if (pIcon->iSidLoadImage == 0)
 	{
 		//g_print ("trigger load for %s (%x)\n", pIcon->cName, pContainer);
@@ -349,63 +336,47 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContain
 }
 
 
-/// TODO: c'est le bordel, revoir...
-void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bReloadAppletsToo, gboolean bRecursive)
+void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive)
 {
-	g_print ("************%s (%d, %d, %d)\n", __func__, pDock->bIsMainDock, bReloadAppletsToo, bRecursive);
-
-	/**double fFlatDockWidth = - myIconsParam.iIconGap;
-	pDock->iMaxIconHeight = 0;*/
+	g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
+	
+	// for each icon, reload its buffer (size may change).
 	Icon* icon;
 	GList* ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
 		
-		if (CAIRO_DOCK_IS_APPLET (icon))
+		if (CAIRO_DOCK_IS_APPLET (icon))  // for an applet, we need to let the module know that the size or the theme has changed, so that it can reload its private buffers.
 		{
-			if (bReloadAppletsToo)  /// modif du 23/05/2009 : utiliser la taille avec ratio ici. les applets doivent faire attention a utiliser la fonction get_icon_extent().
-			{
-				cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
-			}
+			cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
 		}
 		else
 		{
-			///cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
-			cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));  // fait un set_icon_size
-			icon->fWidth *= pDock->container.fRatio;
-			icon->fHeight *= pDock->container.fRatio;
+			cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
 			
 			if (bRecursive && icon->pSubDock != NULL)
 			{
 				cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
-				cairo_dock_reload_buffers_in_dock (icon->pSubDock, bReloadAppletsToo, bRecursive);
+				cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive);
 			}
 		}
-		
-		//g_print (" =size <- %.2fx%.2f\n", icon->fWidth, icon->fHeight);
-		/**fFlatDockWidth += myIconsParam.iIconGap + icon->fWidth;
-		if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
-			pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);*/
 	}
-	///pDock->fFlatDockWidth = (int) fFlatDockWidth;  /// (int) n'est plus tellement necessaire ...
-	/// TODO: check...
-	//cairo_dock_update_dock_size (pDock);
 }
 
 void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer)
 {
-	if (pContainer)
+	/**if (pContainer)
 	{
 		icon->fWidth /= pContainer->fRatio;
 		icon->fHeight /= pContainer->fRatio;
-	}
+	}*/
 	cairo_dock_load_icon_image (icon, pContainer);
-	if (pContainer)
+	/**if (pContainer)
 	{
 		icon->fWidth *= pContainer->fRatio;
 		icon->fHeight *= pContainer->fRatio;
-	}
+	}*/
 }
 
 void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
@@ -427,7 +398,8 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 	pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,
 		iWidth,
 		iHeight,
-		myIconsParam.fReflectSize * cairo_dock_get_max_scale (pContainer),
+		myIconsParam.fReflectHeightRatio * iHeight,
+		///myIconsParam.fReflectSize * cairo_dock_get_max_scale (pContainer),
 		myIconsParam.fAlbedo,
 		pContainer->bIsHorizontal,
 		pContainer->bDirectionUp);

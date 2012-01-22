@@ -104,7 +104,7 @@ static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *
 			cd_debug (" => est sur le bureau actuel.");
 			if (icon->cParentDockName == NULL)
 			{
-				pParentDock = cairo_dock_insert_appli_in_dock (icon, pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+				pParentDock = cairo_dock_insert_appli_in_dock (icon, pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 			}
 		}
 		else
@@ -291,7 +291,6 @@ static void _on_update_applis_list (CairoDock *pDock)
 	int iStackOrder = 0;
 	gpointer pOriginalXid;
 	gboolean bAppliAlreadyRegistered;
-	///gboolean bUpdateMainDockSize = FALSE;
 	CairoDock *pParentDock;
 	
 	for (i = 0; i < iNbWindows; i ++)
@@ -310,14 +309,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 				if (myTaskbarParam.bShowAppli)
 				{
 					cd_message (" insertion de %s ... (%d)", icon->cName, icon->iLastCheckTime);
-					pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-					/**if (pParentDock != NULL)
-					{
-						if (pParentDock->bIsMainDock)  // update the main dock at once in the end.
-							bUpdateMainDockSize = TRUE;
-						else
-							cairo_dock_update_dock_size (pParentDock);
-					}*/
+					pParentDock = cairo_dock_insert_appli_in_dock (icon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 				}
 				
 				// visibilite
@@ -335,9 +327,6 @@ static void _on_update_applis_list (CairoDock *pDock)
 	}
 	
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_old_applis, GINT_TO_POINTER (s_iTime));
-	
-	/**if (bUpdateMainDockSize)  // will stay at FALSE if pDock is NULL.
-		cairo_dock_update_dock_size (pDock);*/
 
 	XFree (pXWindowsList);
 }
@@ -493,10 +482,9 @@ static void _on_change_window_state (Icon *icon)
 		// affichage des applis minimisees.
 		if (g_bUseOpenGL && myTaskbarParam.iMinimizedWindowRenderType == 2)
 		{
-			CairoDock *pDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
-			if (pDock != NULL)
+			if (pParentDock != NULL)
 			{
-				cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pDock), TRUE);
+				cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pParentDock), TRUE);
 			}
 		}
 		else if (myTaskbarParam.iMinimizedWindowRenderType == 0)
@@ -513,7 +501,7 @@ static void _on_change_window_state (Icon *icon)
 				cd_message (" => se cache");
 				///if (! myTaskbarParam.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (icon))
 				///{
-					pParentDock = cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+					pParentDock = cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_ANIMATE_ICON);
 					if (pParentDock != NULL)
 					{
 						if (g_bUseOpenGL && myTaskbarParam.iMinimizedWindowRenderType == 2)  // quand on est passe dans ce cas tout a l'heure l'icone n'etait pas encore dans son dock.
@@ -647,7 +635,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		if (myTaskbarParam.bAppliOnCurrentDesktopOnly && icon->cParentDockName == NULL && myTaskbarParam.bShowAppli)
 		{
 			cd_message ("cette fenetre est sur le bureau courant (%d;%d)", x, y);
-			cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+			cairo_dock_insert_appli_in_dock (icon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		
 		// visibilite
@@ -758,8 +746,6 @@ static void _on_change_window_class (Icon *icon, CairoDock *pDock)
 		pParentDock = cairo_dock_detach_appli (icon);
 	else  // else if inhibited, detach from the inhibitor
 		cairo_dock_detach_Xid_from_inhibitors (icon->Xid, icon->cClass);
-	///if (pParentDock)
-	///	cairo_dock_update_dock_size (pParentDock);
 	cairo_dock_remove_appli_from_class (icon);
 	
 	// set the new class
@@ -770,7 +756,7 @@ static void _on_change_window_class (Icon *icon, CairoDock *pDock)
 	cairo_dock_add_appli_to_class (icon);
 	
 	// re-insert the icon
-	pParentDock = cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+	pParentDock = cairo_dock_insert_appli_in_dock (icon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 	if (pParentDock != NULL)
 		gtk_widget_queue_draw (pParentDock->container.pWidget);
 	
@@ -911,7 +897,6 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	
 	//\__________________ On cree les icones de toutes ces applis.
 	CairoDock *pParentDock;
-	///gboolean bUpdateMainDockSize = FALSE;
 	
 	Window Xid;
 	Icon *pIcon;
@@ -925,14 +910,7 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 			pIcon->iLastCheckTime = s_iTime;
 			if (myTaskbarParam.bShowAppli && pDock)
 			{
-				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
-				/**if (pParentDock != NULL)  // appli has been inserted
-				{
-					if (pParentDock->bIsMainDock)
-						bUpdateMainDockSize = TRUE;
-					else
-						cairo_dock_update_dock_size (pParentDock);
-				}*/
+				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_ANIMATE_ICON);
 			}
 		}
 		else
@@ -940,9 +918,6 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	}
 	if (pXWindowsList != NULL)
 		XFree (pXWindowsList);
-	
-	/**if (bUpdateMainDockSize)
-		cairo_dock_update_dock_size (pDock);*/
 	
 	// masquage du dock, une fois que sa taille est correcte.
 	Icon *pActiveAppli = cairo_dock_get_current_active_icon ();

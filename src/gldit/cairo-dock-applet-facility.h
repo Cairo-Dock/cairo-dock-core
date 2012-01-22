@@ -481,7 +481,7 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 *@return the newly allocated surface.
 */
 #define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \
-	cairo_dock_create_surface_from_image_simple (cImagePath, myIcon->fWidth * (myDock ? (1 + myIconsParam.fAmplitude) / myDock->container.fRatio : 1), myIcon->fHeight* (myDock ? (1 + myIconsParam.fAmplitude) / myDock->container.fRatio : 1))
+	cairo_dock_create_surface_from_image_simple (cImagePath, myIcon->iImageWidth, myIcon->iImageHeight)
 
 /** Load a user image into a surface, at the same size as the applet's icon, or a default image taken in the installed folder of the applet if the first one is NULL. If the user image is given by its sole name, it is searched inside the current theme root folder.
 *@param cUserImageName name or path of an user image.

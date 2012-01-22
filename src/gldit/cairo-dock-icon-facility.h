@@ -45,6 +45,8 @@ G_BEGIN_DECLS
 */
 #define cairo_dock_get_icon_order(icon) cairo_dock_get_group_order ((icon)->iGroup)
 
+#define cairo_dock_set_icon_container(_pIcon, _pContainer) (_pIcon)->pContainer = CAIRO_CONTAINER (_pContainer)
+
 /** Get the type of an icon according to its content (launcher, appli, applet). This can be different from its group.
 *@param icon the icon.
 *@return the type of the icon.

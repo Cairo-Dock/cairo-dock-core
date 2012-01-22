@@ -68,7 +68,7 @@ static void _load_separator (Icon *icon)
 		iHeight);
 }
 
-Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
+Icon *cairo_dock_create_separator_icon (int iSeparatorType)
 {
 	//g_print ("%s ()\n", __func__);
 	//\____________ On cree l'icone.
@@ -85,13 +85,13 @@ Icon *cairo_dock_create_separator_icon (int iSeparatorType, CairoDock *pDock)
 
 void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, double fOrder, const gchar *cParentDockName, CairoDock *pDock)
 {
-	Icon *pSeparatorIcon = cairo_dock_create_separator_icon (iSeparatorType, pDock);
+	Icon *pSeparatorIcon = cairo_dock_create_separator_icon (iSeparatorType);
 	if (pSeparatorIcon != NULL)
 	{
 		pSeparatorIcon->fOrder = fOrder;
 		pSeparatorIcon->cParentDockName = g_strdup (cParentDockName);
 		
-		cairo_dock_insert_icon_in_dock_full (pSeparatorIcon, pDock, 0, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+		cairo_dock_insert_icon_in_dock_full (pSeparatorIcon, pDock, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 		
 		/**pDock->icons = g_list_insert_sorted (pDock->icons,
 			pSeparatorIcon,

@@ -136,7 +136,7 @@ static CairoDock *_cairo_dock_insert_floating_icon_in_dock (Icon *icon, CairoDoc
 	g_return_val_if_fail (pParentDock != NULL, NULL);
 	
 	//\_________________ On l'insere dans son dock parent (sans animation, puisqu'on n'anime pas non plus son enlevement).
-	cairo_dock_insert_icon_in_dock (icon, pParentDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON);
+	cairo_dock_insert_icon_in_dock (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON);
 	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fInsertRemoveFactor, icon->fWidth, icon->fHeight, icon->cParentDockName);
 	
 	return pParentDock;
@@ -153,7 +153,7 @@ static CairoDock * _cairo_dock_detach_launcher(Icon *pIcon)
 	
 	pIcon->cParentDockName = cParentDockName; // put it back !
 
-	cairo_dock_update_dock_size (pParentDock);
+	///cairo_dock_update_dock_size (pParentDock);
 	return pParentDock;
 }
 static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, CairoDock *pMainDock)
@@ -481,8 +481,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 
 	pIcons->bConstantSeparatorSize = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "force size", &bFlushConfFileNeeded, TRUE, "Separators", NULL);
 	
-	pIcons->fReflectSize = pIcons->iIconHeight * pIcons->fReflectHeightRatio;
-	
+	///pIcons->fReflectSize = pIcons->iIconHeight * pIcons->fReflectHeightRatio;
 	
 	//\___________________ labels font
 	CairoIconsParam *pLabels = pIcons;
@@ -633,14 +632,17 @@ static void reset_config (CairoIconsParam *pIcons)
  /// LOAD ///
 ////////////
 
-static void _cairo_dock_load_icons_background_surface (const gchar *cImagePath, double fMaxScale)
+static void _cairo_dock_load_icons_background_surface (const gchar *cImagePath)
 {
 	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
 	
 	int iSize = myIconsParam.iIconWidth;
 	if (iSize == 0)
 		iSize = 48;
+	
+	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
 	iSize *= fMaxScale;
+	
 	cairo_dock_load_image_buffer (&g_pIconBackgroundBuffer,
 		cImagePath,
 		iSize,
@@ -655,16 +657,22 @@ static void _load_renderer (const gchar *cRenderername, CairoIconContainerRender
 }
 static void _cairo_dock_load_icon_textures (void)
 {
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
-	
-	_cairo_dock_load_icons_background_surface (myIconsParam.cBackgroundImagePath, fMaxScale);
+	_cairo_dock_load_icons_background_surface (myIconsParam.cBackgroundImagePath);
 	
 	cairo_dock_foreach_icon_container_renderer ((GHFunc)_load_renderer, NULL);
+}
+static void _reload_in_desklet (CairoDesklet *pDesklet, gpointer data)
+{
+	if (CAIRO_DOCK_IS_APPLET (pDesklet->pIcon))
+	{
+		cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, FALSE);
+	}
 }
 static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data)
 {
 	cd_message ("theme has changed");
-	cairo_dock_reload_buffers_in_all_docks (TRUE);  // TRUE <=> y compris les applets.
+	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _reload_in_desklet, NULL);
+	cairo_dock_reload_buffers_in_all_docks ();
 }
 static void _cairo_dock_load_icon_theme (void)
 {
@@ -725,7 +733,8 @@ static void _calculate_icons (const gchar *cDockName, CairoDock *pDock, gpointer
 static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, CairoIconsParam *pLabels)
 {
 	cairo_dock_load_icon_text (pIcon, &pLabels->iconTextDescription);
-	double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	///double fMaxScale = cairo_dock_get_max_scale (pContainer);
+	double fMaxScale = (pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
 	cairo_dock_load_icon_quickinfo (pIcon, &pLabels->quickInfoTextDescription, fMaxScale);
 }
 static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
@@ -735,7 +744,6 @@ static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpo
 
 static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 {
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
 	gboolean bInsertSeparators = FALSE;
 	
 	if (cairo_dock_strings_differ (pPrevIcons->cSeparatorImage, pIcons->cSeparatorImage) ||
@@ -761,7 +769,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		bIconBackgroundImagesChanged = TRUE;
-		_cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath, fMaxScale);
+		_cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath);
 	}
 	
 	///cairo_dock_create_icon_pbuffer ();
@@ -778,7 +786,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		bThemeChanged ||
 		bIconBackgroundImagesChanged)  // oui on ne fait pas dans la finesse.
 	{
-		cairo_dock_reload_buffers_in_all_docks (TRUE);  // TRUE <=> y compris les applets.
+		cairo_dock_reload_buffers_in_all_docks ();
 	}
 	
 	if (bInsertSeparators)
@@ -809,10 +817,6 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	{
 		cairo_dock_foreach_docks ((GHFunc) _cairo_dock_resize_one_dock, NULL);
 	}
-	/**if (pPrevLabels->bTextAlwaysHorizontal != pLabels->bTextAlwaysHorizontal)
-	{
-		cairo_dock_reload_buffers_in_all_docks (TRUE);  // les modules aussi.
-	}*/
 }
 
 

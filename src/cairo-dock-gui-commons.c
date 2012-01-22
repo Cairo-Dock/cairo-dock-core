@@ -624,7 +624,7 @@ static void _cairo_dock_render_shortkey (GtkTreeViewColumn *tree_column, GtkCell
 	}
 	else if (cShortkey != NULL)
 	{
-		g_object_set (cell, "foreground", "#A00000", NULL);  // rouge
+		g_object_set (cell, "foreground", "#B00000", NULL);  // rouge
 		g_object_set (cell, "foreground-set", TRUE, NULL);
 	}
 	else

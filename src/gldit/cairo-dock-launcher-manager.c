@@ -37,7 +37,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_mark_current_theme_as_modified
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
-#include "cairo-dock-animations.h"  // cairo_dock_launch_animation
+//#include "cairo-dock-animations.h"  // cairo_dock_launch_animation
 #include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
 #include "cairo-dock-X-utilities.h"  // cairo_dock_show_xwindow
@@ -77,14 +77,16 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 		if (pChildDock == NULL)
 		{
 			cd_message ("The child dock (%s) doesn't exist, we create it with this view: %s", icon->cName, cRendererName);
-			icon->pSubDock = cairo_dock_create_subdock (icon->cName, cRendererName, pParentDock, NULL);
+			pChildDock = cairo_dock_create_subdock (icon->cName, cRendererName, pParentDock, NULL);
 		}
 		else
 		{
-			cairo_dock_main_dock_to_sub_dock (pChildDock, pParentDock, cRendererName);
-			icon->pSubDock = pChildDock;
 			cd_message ("The dock is now a 'child-dock' (%d, %d)", pChildDock->container.bIsHorizontal, pChildDock->container.bDirectionUp);
+			cairo_dock_main_dock_to_sub_dock (pChildDock, pParentDock, cRendererName);
 		}
+		icon->pSubDock = pChildDock;
+		if (icon->iSubdockViewType != 0)
+			cairo_dock_trigger_redraw_subdock_content_on_icon (icon);
 	}
 	
 	return pParentDock;
@@ -194,7 +196,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	g_free (cRendererName);
 	
 	//\____________ On remplit ses buffers.
-	cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pParentDock));
+	///cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pParentDock));
 	
 	//\____________ On gere son role d'inhibiteur.
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
@@ -256,7 +258,7 @@ void cairo_dock_load_launchers_from_dir (const gchar *cDirectory)
 			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock != NULL)  // a priori toujours vrai.
 			{
-				cairo_dock_insert_icon_in_dock_full (icon, pParentDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+				cairo_dock_insert_icon_in_dock_full (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 				/// synchroniser icon->pSubDock avec pParentDock ?...
 			}
 		}
@@ -360,8 +362,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 			cairo_dock_calculate_dock_icons (pDock);
 			gtk_widget_queue_draw (pDock->container.pWidget);
 		}
-		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
-		cairo_dock_launch_animation (CAIRO_CONTAINER (pNewDock));
+		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
 		icon->cParentDockName = tmp;
 	}
 	else  // same container, but different order.

@@ -37,7 +37,7 @@ gboolean cairo_dock_appli_covers_dock (Icon *pIcon, CairoDock *pDock);
 gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock);
 
 
-CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bUpdateSize, gboolean bAnimate);
+CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bAnimate);
 CairoDock *cairo_dock_detach_appli (Icon *pIcon);
 
 

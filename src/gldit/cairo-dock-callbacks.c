@@ -453,13 +453,14 @@ static void _cairo_dock_make_icon_glide (Icon *pPointedIcon, Icon *pMovingicon, 
 		}
 		else
 		{
-			//g_print ("deplacement de %s vers la gauche (%.2f / %d)\n", icon->cName, icon->fDrawX + icon->fWidth * (1+myIconsParam.fAmplitude) + myIconsParam.iIconGap, pDock->container.iMouseX);
-			if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIconsParam.fAmplitude) + myIconsParam.iIconGap >= pDock->container.iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
+			double fMaxScale = (icon->fHeight != 0 ? (pDock->container.bIsHorizontal ? icon->iImageHeight : icon->iImageWidth) / icon->fHeight : 1.);
+			//g_print ("deplacement de %s vers la gauche (%.2f / %d)\n", icon->cName, icon->fDrawX + icon->fWidth * fMaxScale + myIconsParam.iIconGap, pDock->container.iMouseX);
+			if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * fMaxScale + myIconsParam.iIconGap >= pDock->container.iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
 			{
 				//g_print ("  %s glisse vers la droite\n", icon->cName);
 				icon->iGlideDirection = 1;
 			}
-			else if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * (1+myIconsParam.fAmplitude) + myIconsParam.iIconGap <= pDock->container.iMouseX && icon->fGlideOffset != 0)
+			else if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * fMaxScale + myIconsParam.iIconGap <= pDock->container.iMouseX && icon->fGlideOffset != 0)
 			{
 				//g_print ("  %s glisse vers la gauche\n", icon->cName);
 				icon->iGlideDirection = -1;
@@ -845,8 +846,7 @@ gboolean cairo_dock_on_enter_notification (gpointer pData, CairoDock *pDock, gbo
 				cd_debug ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
 				cairo_dock_free_flying_container (s_pFlyingContainer);
 				cairo_dock_stop_icon_animation (pFlyingIcon);
-				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-				cairo_dock_start_icon_animation (pFlyingIcon, pDock);
+				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 				s_pFlyingContainer = NULL;
 				pDock->bIconIsFlyingAway = FALSE;
 			}
@@ -940,14 +940,13 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 				cd_debug ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
 				cairo_dock_free_flying_container (s_pFlyingContainer);
 				cairo_dock_stop_icon_animation (pFlyingIcon);
-				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
+				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 				// reinsert the icon where it was dropped, not at its original position.
 				Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 				if (icon != NULL && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon))
 				{
 					cairo_dock_move_icon_after_icon (pDock, pFlyingIcon, icon);
 				}
-				cairo_dock_start_icon_animation (pFlyingIcon, pDock);
 				s_pFlyingContainer = NULL;
 				pDock->bIconIsFlyingAway = FALSE;
 			}
@@ -1115,12 +1114,11 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						if (pOriginDock != NULL && pDock != pOriginDock)
 						{
 							cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock);
-							cairo_dock_update_dock_size (pOriginDock);
+							///cairo_dock_update_dock_size (pOriginDock);
 							
 							cairo_dock_update_icon_s_container_name (s_pIconClicked, icon->cParentDockName);
 							
-							cairo_dock_insert_icon_in_dock (s_pIconClicked, pDock, ! CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-							cairo_dock_start_icon_animation (s_pIconClicked, pDock);
+							cairo_dock_insert_icon_in_dock (s_pIconClicked, pDock, CAIRO_DOCK_ANIMATE_ICON);
 						}
 						
 						Icon *prev_icon, *next_icon;
@@ -1165,8 +1163,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 							cairo_dock_free_flying_container (s_pFlyingContainer);
 							cairo_dock_stop_marking_icon_as_following_mouse (pFlyingIcon);
 							cairo_dock_stop_icon_animation (pFlyingIcon);
-							cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_UPDATE_DOCK_SIZE, CAIRO_DOCK_ANIMATE_ICON);
-							cairo_dock_start_icon_animation (pFlyingIcon, pDock);
+							cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 						}
 						else
 						{

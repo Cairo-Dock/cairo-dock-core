@@ -240,11 +240,9 @@ cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurfac
 *@param iMaxWidth maximum authorized width for the surface; it will be zoomed in to fits this limit. 0 for no limit.
 *@param iTextWidth will be filled the width of the resulting surface.
 *@param iTextHeight will be filled the height of the resulting surface.
-*@param fTextXOffset if non NULL, will be filled the horizontal offset to apply to center the text horizontally.
-*@param fTextYOffset if non NULL, will be filled the vertical offset to apply to center the text vertically.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset);
+cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight);
 
 /** Create a surface representing a text, according to a given text description.
 *@param cText the text.
@@ -253,7 +251,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 *@param iTextHeightPtr will be filled the height of the resulting surface.
 *@return the newly allocated surface.
 */
-#define cairo_dock_create_surface_from_text(cText, pLabelDescription, iTextWidthPtr, iTextHeightPtr) cairo_dock_create_surface_from_text_full (cText, pLabelDescription, 1., 0, iTextWidthPtr, iTextHeightPtr, NULL, NULL) 
+#define cairo_dock_create_surface_from_text(cText, pLabelDescription, iTextWidthPtr, iTextHeightPtr) cairo_dock_create_surface_from_text_full (cText, pLabelDescription, 1., 0, iTextWidthPtr, iTextHeightPtr) 
 
 /** Create a surface identical to another, possibly resizing it.
 *@param pSurface surface to duplicate.

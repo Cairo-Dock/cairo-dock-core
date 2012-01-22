@@ -1091,6 +1091,7 @@ static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
 {
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+	g_print ("%s (%s, %d)\n", __func__, pPointingIcon?pPointingIcon->cName:NULL, pPointingIcon?pPointingIcon->iSubdockViewType:0);
 	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || (pPointingIcon->cClass != NULL && ! myIndicatorsParam.bUseClassIndic && (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pPointingIcon)))))
 	{
 		if (pPointingIcon->iSidRedrawSubdockContent != 0)  // s'il y'a deja un redessin de prevu, on le passe a la fin de facon a ce qu'il ne se fasse  pas avant le redessin de l'icone responsable de ce trigger.
@@ -1101,7 +1102,6 @@ void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
 
 void cairo_dock_trigger_redraw_subdock_content_on_icon (Icon *icon)
 {
-	///if (icon->iSidRedrawSubdockContent == 0)
 	if (icon->iSidRedrawSubdockContent != 0)
 		g_source_remove (icon->iSidRedrawSubdockContent);
 	icon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content_idle, icon);

@@ -52,7 +52,6 @@ typedef enum {
 	CAIRO_DOCK_NB_POSITIONS
 	} CairoDockPositionType;
 
-#define CAIRO_DOCK_UPDATE_DOCK_SIZE TRUE
 #define CAIRO_DOCK_ANIMATE_ICON TRUE
 #define CAIRO_DOCK_INSERT_SEPARATOR TRUE
 
@@ -280,6 +279,7 @@ struct _CairoDock {
 	
 	/// icon size, as specified in the config of the dock
 	gint iIconSize;
+	/// Source ID for updating the dock's size and icons layout.
 	guint iSidUpdateDockSize;
 	gint reserved[2];
 };
@@ -308,21 +308,19 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 * Do nothing if the icon already exists inside the dock.
 * @param icon the icon to be inserted. It should have been filled beforehand.
 * @param pDock the dock to insert inside.
-* @param bUpdateSize TRUE to update the size of the dock after the insertion.
 * @param bAnimated TRUE to arm the icon's animation for insertion.
 * @param bInsertSeparator TRUE to insert an automatic separator if needed.
 * @param pCompareFunc a sorting function to place the new icon amongst the others, or NULL to sort by group/order.
 */
-void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bUpdateSize, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc);
+void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc);
 
 /** Insert an icon into a dock.
 * Insert an automatic separator if needed. Do nothing if the icon already exists inside the dock.
 * @param icon the icon to be inserted. It should have been filled beforehand.
 * @param pDock the dock to insert inside.
-* @param bUpdateSize TRUE to update the size of the dock after the insertion.
 * @param bAnimated TRUE to arm the icon's animation for insertion.
 */
-#define cairo_dock_insert_icon_in_dock(icon, pDock, bUpdateSize, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bUpdateSize, bAnimated, TRUE, NULL)
+#define cairo_dock_insert_icon_in_dock(icon, pDock, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bAnimated, TRUE, NULL)
 
 /** Detach an icon from its dock. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but looses its dialogs. Do nothing if the icon doesn't exist inside the dock.
 *@param icon the icon to detach.

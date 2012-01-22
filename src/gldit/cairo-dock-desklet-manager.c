@@ -38,6 +38,7 @@
 #include "gldi-config.h"
 #include "cairo-dock-module-factory.h"  // cairo_dock_pre_read_module_instance_config
 #include "cairo-dock-config.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_container
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-log.h"
@@ -469,6 +470,9 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, CairoDeskletAttribute *pAt
 {
 	CairoDesklet *pDesklet = cairo_dock_new_desklet ();
 	pDesklet->pIcon = pIcon;
+	cairo_dock_set_icon_container (pIcon, pDesklet);
+	if (CAIRO_DOCK_IS_APPLET (pIcon))
+		gtk_window_set_title (GTK_WINDOW (pDesklet->container.pWidget), pIcon->pModuleInstance->pModule->pVisitCard->cModuleName);
 	
 	if (pAttributes != NULL)
 		cairo_dock_configure_desklet (pDesklet, pAttributes);

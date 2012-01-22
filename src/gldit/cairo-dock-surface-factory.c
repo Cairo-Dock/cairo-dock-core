@@ -884,7 +884,7 @@ static void _cairo_dock_limit_string_width (gchar *cLine, PangoLayout *pLayout, 
 	}
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight, double *fTextXOffset, double *fTextYOffset)
+cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight)
 {
 	g_return_val_if_fail (cText != NULL && pLabelDescription != NULL, NULL);
 	cairo_t *pSourceContext = _get_source_context ();
@@ -1050,18 +1050,8 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	
 	cairo_destroy (pCairoContext);
 	
-	/* set_device_offset is buggy, doesn't work for positive offsets. so we use explicit offsets... so unfortunate.
-	cairo_surface_set_device_offset (pNewSurface,
-					 log.width / 2. - ink.x,
-					 log.height     - ink.y);*/
-	if (fTextXOffset != NULL)
-		*fTextXOffset = (log.width * fZoomX / 2. - ink.x) / fMaxScale;
-	if (fTextYOffset != NULL)
-		*fTextYOffset = - (pLabelDescription->iSize - (log.height - ink.y)) / fMaxScale ;  // en tenant compte de l'ecart du bas du texte.
-	// *fTextYOffset = - (ink.y) / fMaxScale;  // pour tenir compte de l'ecart du bas du texte.
-	
-	*iTextWidth = *iTextWidth / fMaxScale;
-	*iTextHeight = *iTextHeight / fMaxScale;
+	*iTextWidth = *iTextWidth/** / fMaxScale*/;
+	*iTextHeight = *iTextHeight/** / fMaxScale*/;
 	
 	g_object_unref (pLayout);
 	return pNewSurface;
