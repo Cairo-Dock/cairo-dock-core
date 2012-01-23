@@ -512,14 +512,14 @@ static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pD
 	Icon *pPointedIcon = cairo_dock_get_icon_with_subdock (pDock->icons, pChildDock);
 	if (pPointedIcon != NULL)
 	{
-		g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);  /// TODO: check for infinite loop...
+		//g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);
 		if (pDock->iRefCount == 0)
 		{
 			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 		}
 		else
 		{
-			cd_message ("on cache %s par parente", cDockName);
+			//cd_message ("on cache %s par parente", cDockName);
 			gtk_widget_hide (pDock->container.pWidget);
 			cairo_dock_hide_parent_dock (pDock);
 		}

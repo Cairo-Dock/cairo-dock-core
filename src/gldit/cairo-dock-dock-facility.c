@@ -960,7 +960,7 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDoc
 {
 	CairoDock *pSubDock = pPointedIcon->pSubDock;
 	///int iX = pPointedIcon->fXAtRest - (pDock->fFlatDockWidth - pDock->iMaxDockWidth) / 2 + pPointedIcon->fWidth / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2);
-	int iX = pPointedIcon->fDrawX + pPointedIcon->fWidth / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2);
+	int iX = pPointedIcon->fDrawX + pPointedIcon->fWidth * pPointedIcon->fScale / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2);
 	if (pSubDock->container.bIsHorizontal == pDock->container.bIsHorizontal)
 	{
 		pSubDock->fAlign = 0.5;

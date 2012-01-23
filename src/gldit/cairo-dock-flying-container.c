@@ -197,6 +197,13 @@ static gboolean _cairo_dock_render_flying_container_notification (gpointer pUser
 	}
 	else
 	{
+		glClear (GL_COLOR_BUFFER_BIT);
+		_cairo_dock_set_blend_source ();
+		_cairo_dock_set_alpha (1.);
+		
+		gldi_glx_apply_desktop_background (CAIRO_CONTAINER (pFlyingContainer));
+		glLoadIdentity ();
+		
 		if (pIcon != NULL)
 		{
 			glPushMatrix ();
@@ -274,7 +281,7 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoFlyingContainer *pFlyingContainer)
 {
-	g_print ("%s (%dx%d / %dx%d)\n", __func__, pFlyingContainer->container.iWidth, pFlyingContainer->container.iHeight, pEvent->width, pEvent->height);
+	//g_print ("%s (%dx%d / %dx%d)\n", __func__, pFlyingContainer->container.iWidth, pFlyingContainer->container.iHeight, pEvent->width, pEvent->height);
 	if (pFlyingContainer->container.iWidth != pEvent->width || pFlyingContainer->container.iHeight != pEvent->height)
 	{
 		pFlyingContainer->container.iWidth = pEvent->width;
@@ -287,11 +294,11 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 			if (! gldi_glx_make_current (CAIRO_CONTAINER (pFlyingContainer)))
 				return FALSE;
 			
-			glViewport(0, 0, w, h);
-			
 			cairo_dock_set_ortho_view (CAIRO_CONTAINER (pFlyingContainer));
 		}
 	}
+	
+	gtk_widget_queue_draw (pWidget);
 	return FALSE;
 }
 
@@ -331,6 +338,8 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	gldi_object_set_manager (GLDI_OBJECT (pFlyingContainer), GLDI_MANAGER (&myFlyingsMgr));
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
+	
+	gtk_widget_set_double_buffered (pFlyingContainer->container.pWidget, ! g_bUseOpenGL);
 	
 	pFlyingContainer->container.iface.animation_loop = _cairo_flying_container_animation_loop;
 	

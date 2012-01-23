@@ -937,12 +937,12 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			double t = tv.tv_sec + tv.tv_usec * 1e-6;
 			if (t - s_pFlyingContainer->fCreationTime > 1)  // on empeche le cas ou enlever l'icone fait augmenter le ratio du dock, et donc sa hauteur, et nous fait rentrer dedans des qu'on sort l'icone.
 			{
-				cd_debug ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
+				//g_print ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
 				cairo_dock_free_flying_container (s_pFlyingContainer);
 				cairo_dock_stop_icon_animation (pFlyingIcon);
-				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 				// reinsert the icon where it was dropped, not at its original position.
-				Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
+				Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
+				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 				if (icon != NULL && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon))
 				{
 					cairo_dock_move_icon_after_icon (pDock, pFlyingIcon, icon);
@@ -1158,12 +1158,18 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						cd_debug ("on relache l'icone volante");
 						if (pDock->container.bInside)
 						{
-							//g_print ("  on la remet dans son dock d'origine\n");
+							g_print ("  on la remet dans son dock d'origine\n");
 							Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
 							cairo_dock_free_flying_container (s_pFlyingContainer);
 							cairo_dock_stop_marking_icon_as_following_mouse (pFlyingIcon);
 							cairo_dock_stop_icon_animation (pFlyingIcon);
+							// reinsert the icon where it was dropped, not at its original position.
+							Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
 							cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
+							if (icon != NULL && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon))
+							{
+								cairo_dock_move_icon_after_icon (pDock, pFlyingIcon, icon);
+							}
 						}
 						else
 						{
