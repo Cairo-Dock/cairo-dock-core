@@ -723,6 +723,12 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 		else  // dock principal ou sous-dock visible.
 		{
 			*bIsHorizontal = (pContainer->bIsHorizontal == CAIRO_DOCK_HORIZONTAL);
+			if (! *bIsHorizontal)
+			{
+				int *tmp = iX;
+				iX = iY;
+				iY = tmp;
+			}
 			int dy;
 			if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 				dy = pContainer->iHeight - pDock->iActiveHeight;
@@ -789,6 +795,7 @@ void cairo_dock_set_dialog_orientation (CairoDialog *pDialog, CairoContainer *pC
 	if (pContainer != NULL/* && pDialog->pIcon != NULL*/)
 	{
 		_cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bTopBottomDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);
+		//g_print ("%s (%d,%d %d %d %d)\n", __func__, pDialog->iAimedX, pDialog->iAimedY, pDialog->bRight, pDialog->bTopBottomDialog, pDialog->container.bDirectionUp);
 	}
 	else
 	{

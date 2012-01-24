@@ -679,21 +679,14 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		{
 			cairo_dock_insert_icon_in_dock (pIcon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);
 			pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
+			cairo_dock_load_icon_buffers (pIcon, pNewContainer);  // do it now, since the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
 		}
 		else  // same dock, just update its size.
 		{
-			cairo_dock_set_icon_size (pNewContainer, pIcon);
-			pIcon->fWidth *= pNewContainer->fRatio;
-			pIcon->fHeight *= pNewContainer->fRatio;
-			
-			if (bReloadAppletConf)  // requested size may have changed.
-			{
-				cairo_dock_update_dock_size (pNewDock);
-				cairo_dock_calculate_dock_icons (pNewDock);
-				gtk_widget_queue_draw (pNewContainer->pWidget);
-			}
+			cairo_dock_resize_icon_in_dock (pIcon, pNewDock);
+			if (bReloadAppletConf)
+				cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
 		}
-		cairo_dock_load_icon_buffers (pIcon, pNewContainer);  // do it now, since the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
 	}
 	
 	//\_______________________ On recharge la config.
@@ -734,7 +727,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		else
 		{
 			cairo_dock_update_dock_size (pCurrentDock);
-			cairo_dock_calculate_dock_icons (pCurrentDock);
 			gtk_widget_queue_draw (pCurrentContainer->pWidget);
 		}
 	}

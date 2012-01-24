@@ -1005,7 +1005,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	CairoDock *pSubDock = pPointedIcon->pSubDock;
 	g_return_if_fail (pSubDock != NULL);
 	
-	if (gldi_container_is_visible (CAIRO_CONTAINER (pSubDock)))  // il est deja visible.
+	if (gldi_container_is_visible (CAIRO_CONTAINER (pSubDock)))  // already visible.
 	{
 		if (pSubDock->bIsShrinkingDown)  // il est en cours de diminution, on renverse le processus.
 		{
@@ -1014,17 +1014,8 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 		return ;
 	}
 	
+	// place the sub-dock
 	pSubDock->pRenderer->set_subdock_position (pPointedIcon, pParentDock);
-	///if (pParentDock->fMagnitudeMax == 0)  // son input shape n'est pas la taille max mais iMinDockHeight.
-	///	pSubDock->iGapY -= (pParentDock->container.iHeight - pParentDock->iMinDockHeight);
-	
-	if (pSubDock->icons != NULL)
-	{
-		pSubDock->fFoldingFactor = (myDocksParam.bAnimateSubDock ? .99 : 0.);
-		cairo_dock_notify_on_object (pPointedIcon, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
-	}
-	else
-		pSubDock->fFoldingFactor = 0.;
 	
 	int iNewWidth = pSubDock->iMaxDockWidth;
 	int iNewHeight = pSubDock->iMaxDockHeight;
@@ -1034,11 +1025,13 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
 	
 	if (pSubDock->container.bIsHorizontal)
+	{
 		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
 			iNewPositionX,
 			iNewPositionY,
 			iNewWidth,
 			iNewHeight);
+	}
 	else
 	{
 		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
@@ -1049,20 +1042,20 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 		if (myIconsParam.bTextAlwaysHorizontal)  // in this case, the sub-dock is over the label, so this one is drawn with a low transparency, so we trigger the redraw.
 			gtk_widget_queue_draw (pParentDock->container.pWidget);
 	}
-	if (pSubDock->fFoldingFactor == 0.)
+	
+	// animate it
+	if (myDocksParam.bAnimateSubDock && pSubDock->icons != NULL)
 	{
-		cd_debug ("  on montre le sous-dock sans animation");
-		gtk_widget_queue_draw (pSubDock->container.pWidget);
-	}
-	else
-	{
-		cd_debug ("  on montre le sous-dock avec animation");
+		pSubDock->fFoldingFactor = .99;
 		cairo_dock_start_growing (pSubDock);  // on commence a faire grossir les icones.
 		pSubDock->pRenderer->calculate_icons (pSubDock);  // on recalcule les icones car sinon le 1er dessin se fait avec les parametres tels qu'ils etaient lorsque le dock s'est cache; or l'animation de pliage peut prendre plus de temps que celle de cachage.
 	}
-	//g_print ("  -> Gap %d;%d -> W(%d;%d) (%d)\n", pSubDock->iGapX, pSubDock->iGapY, pSubDock->container.iWindowPositionX, pSubDock->container.iWindowPositionY, pSubDock->container.bIsHorizontal);
-	
-	///gtk_window_set_keep_above (GTK_WINDOW (pSubDock->container.pWidget), myDocksParam.bPopUp);
+	else
+	{
+		pSubDock->fFoldingFactor = 0;
+		///gtk_widget_queue_draw (pSubDock->container.pWidget);
+	}
+	cairo_dock_notify_on_object (pPointedIcon, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
 	
 	cairo_dock_replace_all_dialogs ();
 }
@@ -1130,6 +1123,18 @@ void cairo_dock_trigger_set_WM_icons_geometry (CairoDock *pDock)
 	{
 		pDock->iSidUpdateWMIcons = g_idle_add ((GSourceFunc) _update_WM_icons, pDock);
 	}
+}
+
+void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)
+{
+	cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), pIcon);
+	pIcon->fWidth *= pDock->container.fRatio;
+	pIcon->fHeight *= pDock->container.fRatio;
+	
+	cairo_dock_load_icon_image (pIcon, CAIRO_CONTAINER (pDock));  // handles the applet's context
+	
+	cairo_dock_trigger_update_dock_size (pDock);
+	gtk_widget_queue_draw (pDock->container.pWidget);
 }
 
 

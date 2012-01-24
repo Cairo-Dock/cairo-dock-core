@@ -176,6 +176,10 @@ void cairo_dock_redraw_subdock_content (CairoDock *pDock);
 
 void cairo_dock_trigger_set_WM_icons_geometry (CairoDock *pDock);
 
+
+void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock);
+
+
 void cairo_dock_load_dock_background (CairoDock *pDock);
 void cairo_dock_trigger_load_dock_background (CairoDock *pDock);  // peu utile
 

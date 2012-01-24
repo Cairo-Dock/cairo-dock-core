@@ -732,9 +732,9 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 		}
 		else  // dialogue lie a un dock vertical, on ne cherche pas a optimiser le placement.
 		{
-			int tmp = pDialog->iAimedX;
+			/**int tmp = pDialog->iAimedX;
 			pDialog->iAimedX = pDialog->iAimedY;
-			pDialog->iAimedY = tmp;
+			pDialog->iAimedY = tmp;*/
 			
 			pDialog->iComputedPositionX = (pDialog->bRight ? MAX (0, pDialog->iAimedX - pDialog->container.iWidth) : pDialog->iAimedX);
 			pDialog->iComputedPositionY = (pDialog->container.bDirectionUp ? MAX (0, pDialog->iAimedY - pDialog->iComputedHeight) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.

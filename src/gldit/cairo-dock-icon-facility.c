@@ -603,7 +603,7 @@ void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const g
 	}
 	
 	///double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	double fMaxScale = (pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
+	double fMaxScale = (pContainer && pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
 	cairo_dock_load_icon_quickinfo (pIcon,
 		&myIconsParam.quickInfoTextDescription,
 		fMaxScale);

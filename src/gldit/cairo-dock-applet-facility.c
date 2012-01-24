@@ -600,7 +600,6 @@ void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance
 }
 
 
-
 void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
 {
 	Icon *pIcon = pInstance->pIcon;
@@ -611,22 +610,16 @@ void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
 	
 	if (pInstance->pDock)
 	{
-		///double fMaxScale = cairo_dock_get_max_scale (pContainer);
-		pIcon->iImageWidth = w;  // request the buffe rsize, this is the one we care to draw stuff on the icon.
+		pIcon->iImageWidth = w;  // request the buffer size, this is the one we care to draw stuff on the icon.
 		pIcon->iImageHeight = h;
 		pIcon->fWidth = 0;
 		pIcon->fHeight = 0;
-		cairo_dock_set_icon_size (pContainer, pIcon);
-		
-		cairo_dock_load_icon_image (pIcon, pContainer);  // handles the applet's context
-		//g_print ("%s (%dx%d / %.1fx%.1f)\n", __func__, pIcon->iImageWidth, pIcon->iImageHeight, pIcon->fWidth, pIcon->fHeight);
-		
-		cairo_dock_update_dock_size (pInstance->pDock);  // sets back the container ratio.
+		cairo_dock_resize_icon_in_dock (pIcon, pInstance->pDock);
 	}
 	else  // in desklet mode, just resize the desklet, it will trigger the reload of the applet when the 'configure' event is received.
 	{
 		gtk_window_resize (GTK_WINDOW (pContainer->pWidget),
 			w,
-			h);
+			h);  /// TODO: actually, the renderer should handle this, because except with the 'Simple' view, we can't know the actual size of the icon.
 	}
 }

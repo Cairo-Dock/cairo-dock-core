@@ -300,7 +300,7 @@ void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 	cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
 
 	///double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	double fMaxScale = (pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
+	double fMaxScale = (pContainer && pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
 	cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
 }
 
@@ -315,7 +315,7 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 		cairo_dock_load_icon_image (pIcon, pContainer);
 		
 		///double fMaxScale = cairo_dock_get_max_scale (pContainer);
-		double fMaxScale = (pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
+		double fMaxScale = (pContainer && pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
 		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);

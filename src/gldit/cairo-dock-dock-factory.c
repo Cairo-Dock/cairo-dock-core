@@ -1096,8 +1096,8 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 		else  // on les re-attribue au dock receveur.
 		{
 			cairo_dock_update_icon_s_container_name (icon, cReceivingDockName);
-
-			icon->fWidth /= pDock->container.fRatio;
+			
+			icon->fWidth /= pDock->container.fRatio;  // optimization: no need to detach the icon, we just steal all of them.
 			icon->fHeight /= pDock->container.fRatio;
 			
 			cd_debug (" on re-attribue %s au dock %s", icon->cName, icon->cParentDockName);

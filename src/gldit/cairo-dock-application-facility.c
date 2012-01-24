@@ -99,6 +99,9 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		cairo_dock_request_icon_animation (icon, CAIRO_CONTAINER (pDock), myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
 	}
+	
+	// notify everybody
+	cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_ATTENTION_CHANGED, pHiddenIcon?pHiddenIcon:icon, TRUE);
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
 {
@@ -108,9 +111,8 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 		cd_message ("cette fenetre a deja le focus, elle ne peut demander l'attention en plus.");
 		return ;
 	}
-	if (icon->bIsDemandingAttention &&
-		/*cairo_dock_icon_has_dialog (icon) &&*/
-		icon->cLastAttentionDemand && icon->cName && strcmp (icon->cLastAttentionDemand, icon->cName) == 0)  // le message n'a pas change entre les 2 demandes.
+	if (icon->bIsDemandingAttention  // already demanding attention
+	&& icon->cLastAttentionDemand && icon->cName && strcmp (icon->cLastAttentionDemand, icon->cName) == 0)  // and message has not changed between the 2 demands.
 	{
 		return ;
 	}
@@ -154,6 +156,9 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 	icon->bIsDemandingAttention = FALSE;
 	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow && ! pDock->container.bInside)
 		cairo_dock_pop_down (pDock);
+	
+	// notify everybody
+	cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_ATTENTION_CHANGED, icon, FALSE);
 }
 void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 {

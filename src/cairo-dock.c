@@ -787,6 +787,8 @@ int main (int argc, char** argv)
 	
 	g_print ("\n\nTODO (3.0):\n"
 	"** Must-Be-Done **\n"
+	"- load views' config before launchers (my_fPanelRatio)\n"
+	"- Sys-monitor: ... and 0.0 on quick-info\n"
 	"- Optimize the loading (update_dock_size in idle, avoid reloading applets, etc)\n"
 	"- cairo_dock_get_max_scale & myIconsParam.fReflectSize must die\n"
 	"- dialogs above a vertical right dock ?\n"
