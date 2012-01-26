@@ -1358,6 +1358,7 @@ static void _load_appli (Icon *icon)
 		if (g_bUseOpenGL)
 		{
 			icon->iIconTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);
+			g_print ("iBackingPixmap %d -> %d\n", icon->iBackingPixmap, icon->iIconTexture);
 		}
 		if (icon->iIconTexture == 0)
 		{

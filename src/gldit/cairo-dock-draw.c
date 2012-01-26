@@ -296,7 +296,7 @@ void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, g
 		if (myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			cairo_translate (pCairoContext,
-				1 * icon->fWidthFactor * icon->fWidth * (icon->fScale - 1) / 2,
+				icon->fWidthFactor * icon->fWidth * (icon->fScale - 1) / 2,
 				(bDirectionUp ? 1 * icon->fHeightFactor * icon->fHeight * (icon->fScale - 1) : 0));
 			cairo_scale (pCairoContext,
 				icon->fWidth / icon->iImageWidth * icon->fWidthFactor/**fRatio * icon->fWidthFactor / (1 + myIconsParam.fAmplitude)*/,
@@ -312,16 +312,16 @@ void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, g
 		if (myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		{
 			cairo_translate (pCairoContext,
-				1 * icon->fHeightFactor * icon->fHeight * (icon->fScale - 1) / 2,
+				icon->fHeightFactor * icon->fHeight * (icon->fScale - 1) / 2,
 				(bDirectionUp ? 1 * icon->fWidthFactor * icon->fWidth * (icon->fScale - 1) : 0));
 			cairo_scale (pCairoContext,
-				fRatio * icon->fHeightFactor / (1 + myIconsParam.fAmplitude),
-				fRatio * icon->fWidthFactor / (1 + myIconsParam.fAmplitude));
+				icon->fHeight / icon->iImageHeight * icon->fHeightFactor/**fRatio * icon->fHeightFactor / (1 + myIconsParam.fAmplitude)*/,
+				icon->fWidth / icon->iImageWidth * icon->fWidthFactor/**fRatio * icon->fWidthFactor / (1 + myIconsParam.fAmplitude)*/);
 		}
 		else
 			cairo_scale (pCairoContext,
-				fRatio * icon->fHeightFactor * icon->fScale / (1 + myIconsParam.fAmplitude) * icon->fGlideScale,
-				fRatio * icon->fWidthFactor * icon->fScale / (1 + myIconsParam.fAmplitude) * icon->fGlideScale);
+				icon->fHeight / icon->iImageHeight * icon->fHeightFactor * icon->fScale/**fRatio * icon->fHeightFactor * icon->fScale / (1 + myIconsParam.fAmplitude)*/ * icon->fGlideScale,
+				icon->fWidth / icon->iImageWidth * icon->fWidthFactor * icon->fScale/**fRatio * icon->fWidthFactor * icon->fScale / (1 + myIconsParam.fAmplitude)*/ * icon->fGlideScale);
 		
 	}
 }

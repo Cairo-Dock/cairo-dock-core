@@ -246,11 +246,12 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoContainer
 		if (! pContainer->bDirectionUp)
 			cairo_translate (pCairoContext, .2*h, 0.);
 	}
-	cairo_scale(pCairoContext,
+	/**cairo_scale (pCairoContext,
 		.8,
-		.8);
+		.8);*/
 	int i;
 	double dx, dy;
+	int wi, hi;
 	Icon *icon;
 	GList *ic;
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next, i++)
@@ -278,11 +279,18 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoContainer
 			else
 				dx = - .1*i*h;
 		}
+		
+		cairo_dock_get_icon_extent (icon, &wi, &hi);
+		
+		cairo_save (pCairoContext);
+		cairo_translate (pCairoContext, dx, dy);
+		cairo_scale (pCairoContext, .8 * w / wi, .8 * h / hi);
 		cairo_set_source_surface (pCairoContext,
 			icon->pIconBuffer,
-			dx,
-			dy);
+			0,
+			0);
 		cairo_paint (pCairoContext);
+		cairo_restore (pCairoContext);
 	}
 	cairo_restore (pCairoContext);
 	

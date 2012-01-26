@@ -348,6 +348,7 @@ void cairo_dock_destroy_icon_fbo (void)
 
 gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode)
 {
+	g_print ("%s (%s, %d)\n", __func__, pIcon->cName, iRenderingMode);
 	int iWidth, iHeight;
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{

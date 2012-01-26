@@ -49,7 +49,7 @@ visibility = 4
 #F[Icons;@pkgdatadir@/icons/icon-icons.svg]
 frame_icons=
 
-#l[Same as main dock;Very small;Small;Medium;Big;Very Big] Icons size:
+#l[Same as main dock;Tiny;Very small;Small;Medium;Big;Very Big] Icons size:
 icon size = 0
 
 #F[Views;@pkgdatadir@/icons/icon-views.svg]
