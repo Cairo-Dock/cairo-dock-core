@@ -1171,7 +1171,7 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 {
 	if (! s_bAppliManagerIsRunning)
 		return ;
-	cd_debug ("%s (main:%d)", __func__, pDock->bIsMainDock);
+	g_print ("%s (main:%d, ref:%d)\n", __func__, pDock->bIsMainDock, pDock->iRefCount);
 	
 	/*long *data = g_new0 (long, 1+6*g_list_length (pDock->icons));
 	int i = 0;*/

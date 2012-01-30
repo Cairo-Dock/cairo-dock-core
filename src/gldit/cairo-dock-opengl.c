@@ -173,18 +173,18 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL)  // taken 
 	GLXFBConfig *pFBConfigs;
 	XRenderPictFormat *pPictFormat = NULL;
 	int doubleBufferAttributes[] = {
-		GLX_DRAWABLE_TYPE, 	GLX_WINDOW_BIT,
+		GLX_DRAWABLE_TYPE, 		GLX_WINDOW_BIT,
 		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
-		GLX_DOUBLEBUFFER, 	True,
-		GLX_RED_SIZE, 		1,
+		GLX_DOUBLEBUFFER, 		True,
+		GLX_RED_SIZE, 			1,
 		GLX_GREEN_SIZE, 		1,
-		GLX_BLUE_SIZE, 		1,
+		GLX_BLUE_SIZE, 			1,
 		GLX_DEPTH_SIZE, 		1,
 		GLX_ALPHA_SIZE, 		1,
-		GLX_STENCIL_SIZE, 	1,
+		GLX_STENCIL_SIZE, 		1,
 		/// a tester ...
 		GLX_SAMPLE_BUFFERS_ARB, 1,
-		GLX_SAMPLES_ARB, 4,
+		GLX_SAMPLES_ARB, 		4,
 		/*GL_MULTISAMPLEBUFFERS, 	1,
 		GL_MULTISAMPLESAMPLES, 	2,*/
 		None};
@@ -348,8 +348,9 @@ void cairo_dock_destroy_icon_fbo (void)
 
 gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode)
 {
-	g_print ("%s (%s, %d)\n", __func__, pIcon->cName, iRenderingMode);
+	//g_print ("%s (%s, %d)\n", __func__, pIcon->cName, iRenderingMode);
 	int iWidth, iHeight;
+	/// TODO: test without FBO and dock when iRenderingMode == 2
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		if (! gldi_glx_make_current (pContainer))

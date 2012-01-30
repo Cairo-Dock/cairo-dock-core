@@ -173,27 +173,6 @@ Icon* cairo_dock_get_last_icon (GList *pIconList)
 	return (pListTail != NULL ? pListTail->data : NULL);
 }
 
-Icon *cairo_dock_get_first_drawn_icon (CairoDock *pDock)
-{
-	if (pDock->pFirstDrawnElement != NULL)
-		return pDock->pFirstDrawnElement->data;
-	else
-		return cairo_dock_get_first_icon (pDock->icons);
-}
-
-Icon *cairo_dock_get_last_drawn_icon (CairoDock *pDock)
-{
-	if (pDock->pFirstDrawnElement != NULL)
-	{
-		if (pDock->pFirstDrawnElement->prev != NULL)
-			return pDock->pFirstDrawnElement->prev->data;
-		else
-			return cairo_dock_get_last_icon (pDock->icons);
-	}
-	else
-		return cairo_dock_get_last_icon (pDock->icons);;
-}
-
 Icon* cairo_dock_get_first_icon_of_group (GList *pIconList, CairoDockIconGroup iGroup)
 {
 	GList* ic;
@@ -523,7 +502,6 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	cairo_dock_write_order_in_conf_file (icon1, icon1->fOrder);
 	
 	//\_________________ On change sa place dans la liste.
-	pDock->pFirstDrawnElement = NULL;
 	pDock->icons = g_list_remove (pDock->icons, icon1);
 	pDock->icons = g_list_insert_sorted (pDock->icons,
 		icon1,

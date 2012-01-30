@@ -208,6 +208,8 @@ struct _Icon {
 	GList *pOverlays;
 	gdouble *pHiddenBgColor;
 	
+	gint iThumbnailX, iThumbnailY;  // X icon geometry for apps
+	gint iThumbnailWidth, iThumbnailHeight;
 	gpointer reserved[2];
 };
 

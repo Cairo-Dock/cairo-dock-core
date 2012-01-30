@@ -62,13 +62,13 @@ static gboolean cd_default_view_free_data (gpointer pUserData, CairoDock *pDock)
 
 static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
-	pDock->pFirstDrawnElement = cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth);
+	cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth);
 
 	pDock->iDecorationsHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myDocksParam.iFrameMargin;
 
 	double fRadius = MIN (myDocksParam.iDockRadius, (pDock->iDecorationsHeight + myDocksParam.iDockLineWidth) / 2 - 1);
 	double fExtraWidth = myDocksParam.iDockLineWidth + 2 * (fRadius + myDocksParam.iFrameMargin);
-	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));
+	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->fFlatDockWidth, 1., fExtraWidth));
 	pDock->iOffsetForExtend = 0;
 	
 	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
@@ -81,7 +81,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 				cd_debug ("iOffsetForExtend : %d; iMaxDockWidth : %d; fExtraWidth : %d\n", pDock->iOffsetForExtend, pDock->iMaxDockWidth, (int) fExtraWidth);
 			}
 			fExtraWidth += (cairo_dock_get_max_authorized_dock_width (pDock) - pDock->iMaxDockWidth);
-			pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->pFirstDrawnElement, pDock->fFlatDockWidth, 1., fExtraWidth));  // on pourra optimiser, ce qui nous interesse ici c'est les fXMin/fXMax.
+			pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->fFlatDockWidth, 1., fExtraWidth));  // on pourra optimiser, ce qui nous interesse ici c'est les fXMin/fXMax.
 			//g_print ("mode etendu : pDock->iMaxDockWidth : %d\n", pDock->iMaxDockWidth);
 		}
 	}
@@ -237,7 +237,7 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 	else
 	{
 		fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
-		Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
+		Icon *pFirstIcon = cairo_dock_get_first_icon (pDock->icons);
 		fDockOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX - fMargin : fExtraWidth / 2);
 		if (fDockOffsetX < fExtraWidth / 2)
 			fDockOffsetX = fExtraWidth / 2;
@@ -342,7 +342,7 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 	}
 	else
 	{
-		Icon *pFirstIcon = cairo_dock_get_first_drawn_icon (pDock);
+		Icon *pFirstIcon = cairo_dock_get_first_icon (pDock->icons);
 		fOffsetX = (pFirstIcon != NULL ? pFirstIcon->fX - fMargin : fRadius + fLineWidth / 2);
 	}
 	double fDockWidth = cairo_dock_get_current_dock_width_linear (pDock);
@@ -387,7 +387,7 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 	//\____________________ On dessine les icones impactees.
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 
-	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
+	GList *pFirstDrawnElement = pDock->icons;
 	if (pFirstDrawnElement != NULL)
 	{
 		double fXMin = (pDock->container.bIsHorizontal ? pArea->x : pArea->y), fXMax = (pDock->container.bIsHorizontal ? pArea->x + pArea->width : pArea->y + pArea->height);
@@ -542,7 +542,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	double fFrameHeight = pDock->iDecorationsHeight + fLineWidth;
 	
 	double fDockOffsetX, fDockOffsetY;  // Offset du coin haut gauche du cadre.
-	GList *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
+	GList *pFirstDrawnElement = pDock->icons;
 	if (pFirstDrawnElement == NULL)
 		return ;
 	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.

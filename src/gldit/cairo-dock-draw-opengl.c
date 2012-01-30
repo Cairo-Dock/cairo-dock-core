@@ -555,7 +555,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
 	double pHiddenBgColor[4];
-	const double r = 3; // corner radius of the background
+	const double r = 4; // corner radius of the background
 	const double gap = 3;  // gap to the screen
 	double w, h;
 	_cairo_dock_set_blend_alpha ();

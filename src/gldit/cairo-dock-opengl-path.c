@@ -387,7 +387,7 @@ const CairoDockGLPath *cairo_dock_generate_string_path_opengl (CairoDock *pDock,
 	if (pPath == NULL)
 		pPath = cairo_dock_new_gl_path (100*NB_VERTEX_PER_ICON_PAIR + 1, 0., 0., 0., 0.);
 	
-	GList *ic, *next_ic, *next2_ic, *pFirstDrawnElement = (pDock->pFirstDrawnElement != NULL ? pDock->pFirstDrawnElement : pDock->icons);
+	GList *ic, *next_ic, *next2_ic, *pFirstDrawnElement = pDock->icons;
 	Icon *pIcon, *pNextIcon, *pNext2Icon;
 	double x0,y0, x1,y1, x2,y2;  // centres des icones P0, P1, P2, en coordonnees opengl.
 	double norme;  // pour normaliser les pentes.

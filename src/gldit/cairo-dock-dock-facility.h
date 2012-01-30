@@ -123,13 +123,12 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock);
 *@param pIconList a list of icons.
 *@param fFlatDockWidth width of all the icons placed next to each other.
 *@param iXOffset an offset on the position of the first icon.
-*@return the element containing the most left icon.
 */
-GList * cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth);
+void cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth);
 
-double cairo_dock_calculate_max_dock_width (CairoDock *pDock, GList *pFirstDrawnElement, double fFlatDockWidth, double fWidthConstraintFactor, double fExtraWidth);
+double cairo_dock_calculate_max_dock_width (CairoDock *pDock, double fFlatDockWidth, double fWidthConstraintFactor, double fExtraWidth);
 
-Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, GList *pFirstDrawnElement, int x_abs, gdouble fMagnitude, double fFlatDockWidth, int iWidth, int iHeight, double fAlign, double fLateralFactor, gboolean bDirectionUp);
+Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, int x_abs, gdouble fMagnitude, double fFlatDockWidth, int iWidth, int iHeight, double fAlign, double fLateralFactor, gboolean bDirectionUp);
 
 /** Apply a wave effect on the icons of a linear dock. It is the famous zoom when the mouse hovers an icon.
 *@param pDock a linear dock.
@@ -149,7 +148,7 @@ double cairo_dock_get_current_dock_width_linear (CairoDock *pDock);
 */
 void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock);
 
-void cairo_dock_manage_mouse_position (CairoDock *pDock);
+///void cairo_dock_manage_mouse_position (CairoDock *pDock);
 
 /** Check if one can drop inside a linear dock.
 *Drop is allowed between 2 icons of the launchers group, if the user is dragging something over the dock. Update the 'bCanDrop' field.

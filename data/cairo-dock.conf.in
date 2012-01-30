@@ -555,7 +555,7 @@ frame_refl =
 
 #e+[0;1;light;strong] Reflective power of the plane :
 #{It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 reflections are not used.}
-albedo = .8
+albedo = .45
 
 #e+[0;1;small;tall] Height of the reflection:
 #{In percent of the icon's size. This parameter influence the total height of the dock.}

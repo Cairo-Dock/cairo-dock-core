@@ -99,20 +99,6 @@ Icon *cairo_dock_get_first_icon (GList *pIconList);
 */
 Icon *cairo_dock_get_last_icon (GList *pIconList);
 
-/*
-*Renvoie la 1ere icon a etre dessinee dans un dock (qui n'est pas forcement la 1ere icon de la liste, si l'utilisateur a scrolle).
-*@param pDock le dock.
-*@return la 1ere icon a etre dessinee, ou NULL si la liste is vide.
-*/
-Icon *cairo_dock_get_first_drawn_icon (CairoDock *pDock);
-
-/*
-*Renvoie la derniere icon a etre dessinee dans un dock (qui n'est pas forcement la derniere icon de la liste, si l'utilisateur a scrolle).
-*@param pDock le dock.
-*@return la derniere icon a etre dessinee, ou NULL si la liste is vide.
-*/
-Icon *cairo_dock_get_last_drawn_icon (CairoDock *pDock);
-
 /** Get the first icon of a given group.
 *@param pIconList a list of icons.
 *@param iGroup the group of icon.

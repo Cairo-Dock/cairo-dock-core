@@ -371,7 +371,6 @@ void cairo_dock_reload_launcher (Icon *icon)
 		icon->fHeight *= pNewDock->container.fRatio / pDock->container.fRatio;
 		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
 		{
-			pNewDock->pFirstDrawnElement = NULL;
 			pNewDock->icons = g_list_remove (pNewDock->icons, icon);
 			pNewDock->icons = g_list_insert_sorted (pNewDock->icons,
 				icon,

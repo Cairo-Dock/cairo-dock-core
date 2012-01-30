@@ -70,7 +70,6 @@ extern CairoDockGLConfig g_openglConfig;
 
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
 static int s_iClickX, s_iClickY;  // coordonnees du clic dans le dock, pour pouvoir initialiser le deplacement apres un seuil.
-static CairoDock *s_pLastPointedDock = NULL;  // pour savoir quand on passe d'un dock a un autre.
 static int s_iSidShowSubDockDemand = 0;
 static int s_iSidActionOnDragHover = 0;
 static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
@@ -342,21 +341,24 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		s_pSubDockShowing = NULL;
 	}
 	
+	// take action when dragging something onto an icon
 	if (s_iSidActionOnDragHover != 0)
 	{
 		//cd_debug ("on annule la demande de montrage d'appli");
 		g_source_remove (s_iSidActionOnDragHover);
 		s_iSidActionOnDragHover = 0;
 	}
-	///cairo_dock_replace_all_dialogs ();
-	cairo_dock_refresh_all_dialogs (FALSE);
+	
 	if (pDock->bIsDragging && pPointedIcon && pPointedIcon->iface.action_on_drag_hover)
 	{
 		s_iSidActionOnDragHover = g_timeout_add (600, (GSourceFunc) _cairo_dock_action_on_drag_hover, pPointedIcon);
 	}
 	
-	//g_print ("%x/%x , %x, %x\n", pDock, s_pLastPointedDock, pLastPointedIcon, pLastPointedIcon?pLastPointedIcon->pSubDock:NULL);
-	if ((pDock == s_pLastPointedDock || s_pLastPointedDock == NULL) && pLastPointedIcon != NULL && pLastPointedIcon->pSubDock != NULL)  // on a quitte une icone ayant un sous-dock.
+	// replace dialogs
+	cairo_dock_refresh_all_dialogs (FALSE);
+	
+	// hide the sub-dock of the previous pointed icon
+	if (pLastPointedIcon != NULL && pLastPointedIcon->pSubDock != NULL)  // on a quitte une icone ayant un sous-dock.
 	{
 		CairoDock *pSubDock = pLastPointedIcon->pSubDock;
 		if (gldi_container_is_visible (CAIRO_CONTAINER (pSubDock)))  // le sous-dock est visible, on retarde son cachage.
@@ -369,35 +371,31 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 			}
 		}
 	}
-	if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && pPointedIcon->pSubDock != s_pLastPointedDock && (! myDocksParam.bShowSubDockOnClick || CAIRO_DOCK_IS_APPLI (pPointedIcon) || pDock->bIsDragging))  // on entre sur une icone ayant un sous-dock.
+	
+	// show the sub-dock of the current pointed icon
+	if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && (! myDocksParam.bShowSubDockOnClick || CAIRO_DOCK_IS_APPLI (pPointedIcon) || pDock->bIsDragging))  // on entre sur une icone ayant un sous-dock.
 	{
-		//cd_debug ("il faut montrer un sous-dock");
+		// if we were leaving the sub-dock, cancel that.
 		if (pPointedIcon->pSubDock->iSidLeaveDemand != 0)
 		{
 			g_source_remove (pPointedIcon->pSubDock->iSidLeaveDemand);
 			pPointedIcon->pSubDock->iSidLeaveDemand = 0;
 		}
+		// and show the sub-dock, possibly with a delay.
 		if (myDocksParam.iShowSubDockDelay > 0)
 		{
-			//pDock->container.iMouseX = iX;
 			if (s_iSidShowSubDockDemand != 0)
 				g_source_remove (s_iSidShowSubDockDemand);
-			s_iSidShowSubDockDemand = g_timeout_add (myDocksParam.iShowSubDockDelay, (GSourceFunc) _cairo_dock_show_sub_dock_delayed, pDock);
+			s_iSidShowSubDockDemand = g_timeout_add (myDocksParam.iShowSubDockDelay, (GSourceFunc) _cairo_dock_show_sub_dock_delayed, pDock);  // we can't be showing more than 1 sub-dock, so this timeout can be global to all docks.
 			s_pDockShowingSubDock = pDock;
 			s_pSubDockShowing = pPointedIcon->pSubDock;
-			//g_print ("s_iSidShowSubDockDemand <- %d\n", s_iSidShowSubDockDemand);
 		}
 		else
 			cairo_dock_show_subdock (pPointedIcon, pDock);
-		s_pLastPointedDock = pDock;
 	}
-
-	if (s_pLastPointedDock == NULL)
-	{
-		//g_print ("pLastPointedDock n'est plus null\n");
-		s_pLastPointedDock = pDock;
-	}
-	if (pPointedIcon != NULL /**&& pDock->pRenderer->render_opengl != NULL */&& ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPointedIcon)/** && pPointedIcon->iAnimationState <= CAIRO_DOCK_STATE_MOUSE_HOVERED*/)
+	
+	// notify everybody
+	if (pPointedIcon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPointedIcon))
 	{
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify_on_object (pDock, NOTIFICATION_ENTER_ICON, pPointedIcon, pDock, &bStartAnimation);
@@ -561,7 +559,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	{
 		//g_print ("motion on drag\n");
 		//\_______________ On recupere la position de la souris.
-		gldi_container_get_pointer (CAIRO_CONTAINER (pDock));
+		gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
 		
 		//\_______________ On recalcule toutes les icones et on redessine.
 		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
@@ -573,7 +571,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	
 	//\_______________ On gere le changement d'icone.
 	gboolean bStartAnimation = FALSE;
-	if (pPointedIcon != pLastPointedIcon || s_pLastPointedDock == NULL)
+	if (pPointedIcon != pLastPointedIcon)
 	{
 		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 		
@@ -659,8 +657,6 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 		s_pSubDockShowing = NULL;
 	}
 	
-	/// position de la souris
-	
 	//g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bMenuVisible);
 	
 	//\_______________ On quitte si le menu est leve, pour rester en position haute.
@@ -737,7 +733,7 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & GDK_MOD1_MASK) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -801,10 +797,10 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 					}
 				}
 			}
-			else if (myDocksParam.iLeaveSubDockDelay != 0)  // cas d'un sous-dock : on retarde le cachage.
+			else/** if (myDocksParam.iLeaveSubDockDelay != 0)*/  // cas d'un sous-dock : on retarde le cachage.
 			{
 				//g_print ("  on retarde la sortie du sous-dock de %dms\n", myDocksParam.iLeaveSubDockDelay);
-				pDock->iSidLeaveDemand = g_timeout_add (myDocksParam.iLeaveSubDockDelay, (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
+				pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 50), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 				return TRUE;
 			}
 		}
@@ -858,7 +854,6 @@ gboolean cairo_dock_on_enter_notification (gpointer pData, CairoDock *pDock, gbo
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
 	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%x; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
-	s_pLastPointedDock = NULL;  // ajoute le 04/10/07 pour permettre aux sous-docks d'apparaitre si on entre en pointant tout de suite sur l'icone.
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
 		cd_message ("* entree non autorisee");
@@ -966,19 +961,13 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		cairo_dock_start_showing (pDock);  // on a mis a jour la zone d'input avant, sinon la fonction le ferait, ce qui serait inutile.
 	}
 	
-	// cas special.
+	// since we've just entered the dock, the pointed icon has changed from none to the current one.
 	if (pEvent != NULL)
 	{
 		Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 		if (icon != NULL)
 		{
-			//g_print (">>> we've just entered the dock, pointed icon becomes NULL\n");
-			if (_mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
-			{
-				icon->bPointed = FALSE;  // sinon on ne detecte pas l'arrive sur l'icone, c'est genant si elle a un sous-dock.
-			}
-			//else
-			//	cd_debug (">>> we already are inside the dock, why does this stupid WM make us enter one more time ???\n");
+			cairo_dock_on_change_icon (NULL, icon, pDock);  // we were out of the dock, so there is no previous pointed icon.
 		}
 	}
 	// on lance le grossissement.
@@ -1036,7 +1025,7 @@ static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principa
 		return FALSE;
 	}
 	
-	gldi_container_get_pointer (CAIRO_CONTAINER (pDock));
+	gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
 	cd_debug (" -> (%d, %d)\n", pDock->container.iMouseX, pDock->container.iMouseY);
 	
 	cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
@@ -1293,7 +1282,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 	if (bSizeUpdated && iNewWidth > 1)  // changement de taille
 	{
 		// update mouse relative position inside the window
-		gldi_container_get_pointer (CAIRO_CONTAINER (pDock));
+		gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
 		if (pDock->container.iMouseX < 0 || pDock->container.iMouseX > pDock->container.iWidth)  // utile ?
 			pDock->container.iMouseX = 0;
 		

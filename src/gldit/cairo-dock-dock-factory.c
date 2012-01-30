@@ -159,7 +159,7 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 			pDock->fFoldingFactor = 0;
 	}
 	
-	gldi_container_get_pointer (CAIRO_CONTAINER (pDock));
+	gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
 	
 	Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	Icon *pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
@@ -171,11 +171,12 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 
 	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement et de depliage.
 	{
-		if (pDock->bWMIconsNeedUpdate)
+		/// TODO: check doing this in update_dock_size directly...
+		/**if (pDock->bWMIconsNeedUpdate)
 		{
 			cairo_dock_trigger_set_WM_icons_geometry (pDock);
 			pDock->bWMIconsNeedUpdate = FALSE;
-		}
+		}*/
 		
 		cairo_dock_replace_all_dialogs ();
 		return FALSE;
@@ -208,7 +209,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 		pDock->fDecorationsOffsetX = 0.;
 	
 	//\_________________ On recupere la position de la souris manuellement (car a priori on est hors du dock).
-	gldi_container_get_pointer (CAIRO_CONTAINER (pDock));  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
+	gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
 	
 	//\_________________ On recalcule les icones.
 	///if (iPrevMagnitudeIndex != 0)
@@ -871,18 +872,6 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 	}
 	
 	//\___________________ On l'enleve de la liste.
-	if (pDock->pFirstDrawnElement != NULL && pDock->pFirstDrawnElement->data == icon)
-	{
-		if (pDock->pFirstDrawnElement->next != NULL)
-			pDock->pFirstDrawnElement = pDock->pFirstDrawnElement->next;
-		else
-		{
-			if (pDock->icons != NULL && pDock->icons->next != NULL)  // la liste n'a pas qu'un seul element.
-				pDock->pFirstDrawnElement = pDock->icons;
-			else
-				pDock->pFirstDrawnElement = NULL;
-		}
-	}
 	pDock->icons = g_list_delete_link (pDock->icons, ic);
 	ic = NULL;
 	pDock->fFlatDockWidth -= icon->fWidth + myIconsParam.iIconGap;

@@ -210,7 +210,7 @@ void cairo_dock_finish_container (CairoContainer *pContainer);
 #define GLDI_KEY(x) GDK_KEY_##x
 #endif
 
-#define gldi_container_get_pointer(pContainer) \
+#define gldi_container_update_mouse_position(pContainer) \
 	if ((pContainer)->bIsHorizontal) \
 		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseX, &pContainer->iMouseY, NULL); \
 	else \

@@ -95,7 +95,7 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 
 void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp);
 
-void cairo_dock_draw_icon_reflect_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext);
+void cairo_dock_draw_icon_reflect_cairo (Icon *icon, CairoContainer *pContainer, cairo_t *pCairoContext);
 
 /** Draw an icon and its reflect on a dock. Only draw the icon's image and reflect, and nothing else.
 *@param icon the icon to draw.

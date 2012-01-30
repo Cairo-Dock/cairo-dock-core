@@ -588,7 +588,6 @@ void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance
 			g_list_foreach (pIcon->pSubDock->icons, (GFunc) cairo_dock_free_icon, NULL);
 			g_list_free (pIcon->pSubDock->icons);
 			pIcon->pSubDock->icons = NULL;
-			pIcon->pSubDock->pFirstDrawnElement = NULL;
 		}
 		else  // precaution pas chere
 		{
