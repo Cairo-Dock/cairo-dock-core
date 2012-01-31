@@ -457,8 +457,8 @@ static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, Ca
 	else if (pTransition->render != NULL)
 	{
 		bContinue = pTransition->render (pIcon, pTransition->pUserData);
-		if (pContainer->bUseReflect)
-			cairo_dock_add_reflection_to_icon (pIcon, pContainer);
+		/**if (pContainer->bUseReflect)
+			cairo_dock_add_reflection_to_icon (pIcon, pContainer);*/
 	}
 	
 	cairo_dock_redraw_icon (pIcon, pContainer);

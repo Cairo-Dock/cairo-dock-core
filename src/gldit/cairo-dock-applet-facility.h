@@ -36,18 +36,18 @@ G_BEGIN_DECLS
 /** Apply a surface on a context, with a zoom and a transparency factor. The context is cleared beforehand with the default icon background.
 *@param pIconContext the drawing context; is not altered by the function.
 *@param pSurface the surface to apply.
-*@param fScale zoom fastor.
+*@param fScale zoom factor.
 *@param fAlpha transparency in [0,1].
 *@param pIcon the icon.
-*@param pContainer the container of the icon.
 */
-void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *pSurface, double fScale, double fAlpha, Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *pSurface, double fScale, double fAlpha, Icon *pIcon);
 
 /** Apply a surface on a context. The context is cleared beforehand with the default icon background..
 *@param pIconContext the drawing context; is not altered by the function.
 *@param pSurface the surface to apply.
+*@param pIcon the icon.
 */
-#define cairo_dock_set_icon_surface(pIconContext, pSurface) cairo_dock_set_icon_surface_full (pIconContext, pSurface, 1, 1, NULL, NULL)
+#define cairo_dock_set_icon_surface(pIconContext, pSurface, pIcon) cairo_dock_set_icon_surface_full (pIconContext, pSurface, 1, 1, pIcon)
 
 /** Draw a bar at the bottom of an Icon, with a gradation from red to green and a given length.
 *@param pIconContext the drawing context; is not altered by the function.
@@ -471,10 +471,6 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 */
 #define CAIRO_DOCK_REDRAW_MY_CONTAINER \
 	cairo_dock_redraw_container (myContainer)
-/** Reload the reflect of the applet's icon (do nothing in OpenGL mode).
-*/
-#define CD_APPLET_UPDATE_REFLECT_ON_MY_ICON \
-	if (myContainer->bUseReflect) cairo_dock_add_reflection_to_icon (myIcon, myContainer)
 
 /** Load an image into a surface, at the same size as the applet's icon. If the image is given by its sole name, it is searched inside the current theme root folder. 
 *@param cImagePath path or name of an image.
@@ -511,8 +507,7 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 *@param fScale zoom factor (at 1 the surface will fill all the icon).
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ZOOM(pSurface, fScale) do { \
-	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, fScale, 1., myIcon, myContainer); \
-	cairo_dock_add_reflection_to_icon (myIcon, myContainer); \
+	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, fScale, 1., myIcon); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
 /** Apply a surface on the applet's icon with a transparency factor, and redraw it.
@@ -520,8 +515,7 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 *@param fAlpha transparency (in [0,1]).
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ALPHA(pSurface, fAlpha) do { \
-	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, 1., fAlpha, myIcon, myContainer); \
-	cairo_dock_add_reflection_to_icon (myIcon, myContainer); \
+	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, 1., fAlpha, myIcon); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
 /** Apply a surface on the applet's icon with add a bar at the bottom, and redraw it. The bar is drawn at the bottom of the icon with a gradation from red to green and a given length.
@@ -530,7 +524,6 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_BAR(pSurface, fValue) do { \
 	cairo_dock_set_icon_surface_with_bar (myDrawContext, pSurface, fValue, myIcon); \
-	cairo_dock_add_reflection_to_icon (myIcon, myContainer); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
 /** Apply an image on the applet's icon. The image is resized at the same size as the icon. Does not trigger the icon refresh.

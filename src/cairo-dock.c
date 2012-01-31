@@ -626,7 +626,7 @@ int main (int argc, char** argv)
 		(CairoDockNotificationFunc) cairo_dock_notification_icon_moved,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification_on_object (&myDocksMgr,
-		NOTIFICATION_STOP_DOCK,
+		NOTIFICATION_DESTROY,
 		(CairoDockNotificationFunc) cairo_dock_notification_dock_destroyed,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification_on_object (&myModulesMgr,
@@ -650,7 +650,7 @@ int main (int argc, char** argv)
 		(CairoDockNotificationFunc) cairo_dock_notification_icon_removed,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification_on_object (&myDeskletsMgr,
-		NOTIFICATION_STOP_DESKLET,
+		NOTIFICATION_DESTROY,
 		(CairoDockNotificationFunc) cairo_dock_notification_desklet_destroyed,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 	cairo_dock_register_notification_on_object (&myDeskletsMgr,
@@ -788,7 +788,8 @@ int main (int argc, char** argv)
 	g_print ("\n\nTODO (3.0):\n"
 	"** Must-Be-Done **\n"
 	"- load views' config before launchers (my_fPanelRatio)\n"
-	"- remove reflect buffer in cairo backend\n"
+	"- test icon reflects in cairo\n"
+	"- uniformize icons size selector\n"
 	"- fix quick-info size/drawing\n"
 	"- let the view place the X thumbnail\n"
 	"- remove the redirection texture, use the container gl buffer instead\n"

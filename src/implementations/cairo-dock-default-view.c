@@ -689,7 +689,7 @@ void cairo_dock_register_default_renderer (void)
 	
 	// when and only when the current theme is unloaded, the main dock is destroyed, and we must release our data.
 	cairo_dock_register_notification_on_object (&myDocksMgr,
-		NOTIFICATION_STOP_DOCK,  // on ne fait cette fonction qu'une fois, donc on peut s'enregistrer ici.
+		NOTIFICATION_DESTROY,  // on ne fait cette fonction qu'une fois, donc on peut s'enregistrer ici.
 		(CairoDockNotificationFunc) cd_default_view_free_data,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 }

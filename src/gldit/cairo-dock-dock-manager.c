@@ -239,11 +239,11 @@ void cairo_dock_main_dock_to_sub_dock (CairoDock *pDock, CairoDock *pParentDock,
 			pParentDock = g_pMainDock;
 		cairo_dock_make_sub_dock (pDock, pParentDock, cRendererName);
 		
-		if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
+		/**if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
 		{
 			cd_debug ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
 			cairo_dock_reload_reflects_in_dock (pDock);
-		}
+		}*/
 		
 		//\__________________ remove from main-dock land
 		const gchar *cDockName = cairo_dock_search_dock_name (pDock);
@@ -296,7 +296,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 		cairo_dock_stop_polling_screen_edge ();
 	}
 	
-	cairo_dock_free_dock (pDock);  // -> NOTIFICATION_STOP_DOCK
+	cairo_dock_free_dock (pDock);  // -> NOTIFICATION_STOP_DOCK, NOTIFICATION_DESTROY
 }
 
 
@@ -663,6 +663,43 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 	}
 }
 
+int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s)
+{
+	int iIconSize;
+	switch (s)
+	{
+		case ICON_DEFAULT:
+		default:
+			iIconSize = myIconsParam.iIconWidth;
+		break;
+		case ICON_TINY:
+			iIconSize = ICON_SIZE_TINY;
+		break;
+		case ICON_VERY_SMALL:
+			iIconSize = ICON_SIZE_VERY_SMALL;
+		break;
+		case ICON_SMALL:
+			iIconSize = ICON_SIZE_SMALL;
+		break;
+		case ICON_MEDIUM:
+			iIconSize = ICON_SIZE_MEDIUM;
+		break;
+		case ICON_BIG:
+			iIconSize = ICON_SIZE_BIG;
+		break;
+		case ICON_HUGE:
+			iIconSize = ICON_SIZE_HUGE;
+		break;
+	}  /// TODO: we should probably also handle fMaxScale, fReflectSize, and iIconGap here...
+	return iIconSize;
+}
+
+int cairo_dock_convert_icon_size_to_enum (int iIconSize)
+{
+	GldiIconSizeEnum s = ICON_DEFAULT;
+	return s;
+}
+
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock)
 {
 	g_return_val_if_fail (cDockName != NULL && pDock != NULL, FALSE);
@@ -897,8 +934,8 @@ void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, Cairo
 	{
 		pSubDock->container.bDirectionUp = pDock->container.bDirectionUp;
 		pSubDock->container.bIsHorizontal = pDock->container.bIsHorizontal;
-		if (bReloadBuffersIfNecessary)
-			cairo_dock_reload_reflects_in_dock (pSubDock);
+		/**if (bReloadBuffersIfNecessary)
+			cairo_dock_reload_reflects_in_dock (pSubDock);*/
 		cairo_dock_update_dock_size (pSubDock);
 		
 		cairo_dock_synchronize_sub_docks_orientation (pSubDock, bReloadBuffersIfNecessary);

@@ -116,7 +116,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude, gboolean bUseText);
 void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock);
 
-void cairo_dock_render_one_icon_in_desklet (Icon *icon, cairo_t *pCairoContext, gboolean bUseReflect, gboolean bUseText, int iWidth);
+void cairo_dock_render_one_icon_in_desklet (Icon *icon, CairoContainer *pContainer, cairo_t *pCairoContext, gboolean bUseText);
 
 
 /** Draw a string linking the center of all the icons of a dock.

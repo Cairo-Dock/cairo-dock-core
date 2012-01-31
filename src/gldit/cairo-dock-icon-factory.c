@@ -80,7 +80,7 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 		g_strfreev (icon->pMimeTypes);
 	
 	cairo_surface_destroy (icon->pIconBuffer);
-	cairo_surface_destroy (icon->pReflectionBuffer);
+	///cairo_surface_destroy (icon->pReflectionBuffer);
 	cairo_surface_destroy (icon->pTextBuffer);
 	cairo_surface_destroy (icon->pQuickInfoBuffer);
 	
@@ -133,9 +133,9 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 		if (icon->iIconTexture != 0)
 			_cairo_dock_delete_texture (icon->iIconTexture);
 		icon->iIconTexture = 0;
-		if (icon->pReflectionBuffer != NULL)
+		/**if (icon->pReflectionBuffer != NULL)
 			cairo_surface_destroy (icon->pReflectionBuffer);
-		icon->pReflectionBuffer = NULL;
+		icon->pReflectionBuffer = NULL;*/
 		return;
 	}
 	
@@ -150,11 +150,11 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
 	GLuint iPrevTexture = icon->iIconTexture;
 	
-	if (icon->pReflectionBuffer != NULL)
+	/**if (icon->pReflectionBuffer != NULL)
 	{
 		cairo_surface_destroy (icon->pReflectionBuffer);
 		icon->pReflectionBuffer = NULL;
-	}
+	}*/
 	
 	//\______________ on charge la surface/texture.
 	if (icon->iface.load_image)
@@ -192,17 +192,10 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	}
 	
 	//\______________ le reflet en mode cairo.
-	if (! g_bUseOpenGL && myIconsParam.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cFileName == NULL))
+	/**if (! g_bUseOpenGL && myIconsParam.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cFileName == NULL))
 	{
 		cairo_dock_add_reflection_to_icon (icon, pContainer);
-		/**icon->pReflectionBuffer = cairo_dock_create_reflection_surface (icon->pIconBuffer,
-			icon->iImageWidth,
-			icon->iImageHeight,
-			myIconsParam.fReflectSize * cairo_dock_get_max_scale (pContainer),
-			myIconsParam.fAlbedo,
-			pContainer ? pContainer->bIsHorizontal : TRUE,
-			pContainer ? pContainer->bDirectionUp : TRUE);*/
-	}
+	}*/
 	
 	//\______________ on charge la texture si elle ne l'a pas ete.
 	if (g_bUseOpenGL && (icon->iIconTexture == iPrevTexture || icon->iIconTexture == 0))
@@ -260,7 +253,7 @@ void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDesc
 	}
 }
 
-void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTextDescription, double fMaxScale)
+void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTextDescription)
 {
 	cairo_surface_destroy (icon->pQuickInfoBuffer);
 	icon->pQuickInfoBuffer = NULL;
@@ -272,7 +265,7 @@ void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTex
 	if (icon->cQuickInfo == NULL)
 		return ;
 
-	double fQuickInfoXOffset, fQuickInfoYOffset;
+	double fMaxScale = cairo_dock_get_icon_max_scale (icon);
 	icon->pQuickInfoBuffer = cairo_dock_create_surface_from_text_full (icon->cQuickInfo,
 		pTextDescription,
 		fMaxScale,
@@ -299,9 +292,7 @@ void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 
 	cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
 
-	///double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	double fMaxScale = (pContainer && pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
-	cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
+	cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription);
 }
 
 static gboolean _load_icon_buffer_idle (Icon *pIcon)
@@ -314,9 +305,7 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 	{
 		cairo_dock_load_icon_image (pIcon, pContainer);
 		
-		///double fMaxScale = cairo_dock_get_max_scale (pContainer);
-		double fMaxScale = (pContainer && pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
-		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription, fMaxScale);
+		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
 		//g_print ("icon-factory: do 1 main loop iteration\n");
@@ -379,7 +368,7 @@ void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer)
 	}*/
 }
 
-void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
+/**void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 {
 	if (g_bUseOpenGL)
 		return ;
@@ -403,7 +392,7 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 		myIconsParam.fAlbedo,
 		pContainer->bIsHorizontal,
 		pContainer->bDirectionUp);
-}
+}*/
 
 
   ///////////////////////
@@ -490,8 +479,8 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		//\______________ On finit le dessin.
 		if (g_bUseOpenGL)
 			cairo_dock_update_icon_texture (pIcon);
-		else
-			cairo_dock_add_reflection_to_icon (pIcon, CAIRO_CONTAINER (pDock));
+		/**else
+			cairo_dock_add_reflection_to_icon (pIcon, CAIRO_CONTAINER (pDock));*/
 		cairo_destroy (pCairoContext);
 	}
 }

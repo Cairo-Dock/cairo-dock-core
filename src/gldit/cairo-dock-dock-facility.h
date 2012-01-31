@@ -52,7 +52,7 @@ G_BEGIN_DECLS
 * Recharge les reflets (cairo) d'un dock. Utile si le dock a changé de position.
 * @param pDock un dock.
 */
-void cairo_dock_reload_reflects_in_dock (CairoDock *pDock);
+///void cairo_dock_reload_reflects_in_dock (CairoDock *pDock);
 
 
 /** Compute the maximum size of a dock, and resize it if necessary.

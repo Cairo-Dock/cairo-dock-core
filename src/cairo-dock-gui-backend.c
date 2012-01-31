@@ -103,7 +103,7 @@ static gboolean _update_desklet_params (gpointer data)
 	s_iSidUpdateDesklet = 0;
 	return FALSE;
 }
-static gboolean _on_stop_desklet (gpointer pUserData, CairoDesklet *pDesklet)
+static gboolean _on_desklet_destroyed (gpointer pUserData, CairoDesklet *pDesklet)
 {
 	if (s_DeskletToUpdate == pDesklet)  // the desklet we were about to update has been destroyed, cancel.
 	{
@@ -136,8 +136,8 @@ void cairo_dock_gui_trigger_update_desklet_params (CairoDesklet *pDesklet)
 			NULL);
 		s_DeskletToUpdate = pDesklet;
 		cairo_dock_register_notification_on_object (pDesklet,
-			NOTIFICATION_STOP_DESKLET,
-			(CairoDockNotificationFunc) _on_stop_desklet,
+			NOTIFICATION_DESTROY,
+			(CairoDockNotificationFunc) _on_desklet_destroyed,
 			CAIRO_DOCK_RUN_AFTER, NULL);
 	}
 }
@@ -175,8 +175,8 @@ void cairo_dock_gui_trigger_update_desklet_visibility (CairoDesklet *pDesklet)
 			NULL);
 		s_DeskletToUpdate = pDesklet;
 		cairo_dock_register_notification_on_object (pDesklet,
-			NOTIFICATION_STOP_DESKLET,
-			(CairoDockNotificationFunc) _on_stop_desklet,
+			NOTIFICATION_DESTROY,
+			(CairoDockNotificationFunc) _on_desklet_destroyed,
 			CAIRO_DOCK_RUN_AFTER, NULL);
 	}
 }

@@ -64,7 +64,7 @@
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
-void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
+/**void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 {
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
 	Icon *icon;
@@ -78,7 +78,7 @@ void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 		}
 	}
 	cairo_destroy (pCairoContext);
-}
+}*/
 
 
 void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatDockWidth doivent avoir ete mis a jour au prealable.

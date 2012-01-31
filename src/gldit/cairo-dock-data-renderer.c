@@ -350,10 +350,10 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 	}*/
 	cairo_restore (pCairoContext);
 	
-	if (pContainer->bUseReflect)
+	/**if (pContainer->bUseReflect)
 	{
 		cairo_dock_add_reflection_to_icon (pIcon, pContainer);
-	}
+	}*/
 	
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
 		cairo_dock_update_icon_texture (pIcon);

@@ -733,9 +733,7 @@ static void _calculate_icons (const gchar *cDockName, CairoDock *pDock, gpointer
 static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, CairoIconsParam *pLabels)
 {
 	cairo_dock_load_icon_text (pIcon, &pLabels->iconTextDescription);
-	///double fMaxScale = cairo_dock_get_max_scale (pContainer);
-	double fMaxScale = (pContainer && pIcon->fHeight != 0 ? (pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
-	cairo_dock_load_icon_quickinfo (pIcon, &pLabels->quickInfoTextDescription, fMaxScale);
+	cairo_dock_load_icon_quickinfo (pIcon, &pLabels->quickInfoTextDescription);
 }
 static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {

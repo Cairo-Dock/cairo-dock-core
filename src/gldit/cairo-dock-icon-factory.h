@@ -162,7 +162,7 @@ struct _Icon {
 	gint iImageWidth, iImageHeight;  // taille de la surface/texture telle qu'elle a ete creee.
 	cairo_surface_t* pIconBuffer;
 	GLuint iIconTexture;
-	cairo_surface_t* pReflectionBuffer;
+	cairo_surface_t* pReflectionBuffer_deprecated;
 	
 	gint iTextWidth, iTextHeight;
 	cairo_surface_t* pTextBuffer;
@@ -306,9 +306,8 @@ void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDesc
 /**Fill the quick-info buffer (surface & texture) of a given icon, according to a text description.
 *@param icon the icon.
 *@param pTextDescription desctiption of the text rendering.
-*@param fMaxScale maximum zoom.
 */
-void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTextDescription, double fMaxScale);
+void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTextDescription);
 
 /** Fill all the buffers (surfaces & textures) of a given icon, according to its type. Set its size accordingly, and fills the reflection buffer for cairo. Label and quick-info are loaded with the current global text description.
 *@param pIcon the icon.

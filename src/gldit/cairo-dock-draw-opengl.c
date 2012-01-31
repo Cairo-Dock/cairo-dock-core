@@ -311,7 +311,7 @@ void cairo_dock_translate_on_icon_opengl (Icon *icon, CairoContainer *pContainer
 {
 	double fX=0, fY=0;
 	_compute_icon_coordinate (icon, pContainer, fDockMagnitude, &fX, &fY);
-	double fMaxScale = (icon->fHeight != 0 ? (pContainer->bIsHorizontal ? icon->iImageHeight : icon->iImageWidth) / icon->fHeight : 1.);
+	double fMaxScale = cairo_dock_get_icon_max_scale (icon);
 	
 	if (pContainer->bIsHorizontal)
 		glTranslatef ( (fX),  (fY - icon->fHeight * icon->fScale * (1 - icon->fGlideScale/2)), - icon->fHeight * fMaxScale);
@@ -409,7 +409,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	//\_____________________ On dessine les infos additionnelles.
 	if (icon->iQuickInfoTexture != 0)
 	{
-		double fMaxScale = (icon->fHeight != 0 ? (pDock->container.bIsHorizontal ? icon->iImageHeight : icon->iImageWidth) / icon->fHeight : 1.);
+		double fMaxScale = cairo_dock_get_icon_max_scale (icon);
 		
 		glPushMatrix ();
 		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);

@@ -50,7 +50,7 @@ extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 extern gboolean g_bUseOpenGL;
 
 
-void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *pSurface, double fScale, double fAlpha, Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *pSurface, double fScale, double fAlpha, Icon *pIcon)
 {
 	g_return_if_fail (cairo_status (pIconContext) == CAIRO_STATUS_SUCCESS);
 	
@@ -110,9 +110,9 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 
 void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surface_t *pSurface, Icon *pIcon, CairoContainer *pContainer)
 {
-	cairo_dock_set_icon_surface_full (pIconContext, pSurface, 1., 1., pIcon, pContainer);
+	cairo_dock_set_icon_surface (pIconContext, pSurface, pIcon);
 	
-	cairo_dock_add_reflection_to_icon (pIcon, pContainer);
+	///cairo_dock_add_reflection_to_icon (pIcon, pContainer);
 }
 
 

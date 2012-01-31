@@ -183,6 +183,7 @@ void cairo_dock_finish_container (CairoContainer *pContainer)
 		g_source_remove (pContainer->iSidGLAnimation);
 		pContainer->iSidGLAnimation = 0;
 	}
+	cairo_dock_notify_on_object (pContainer, NOTIFICATION_DESTROY, pContainer);
 	cairo_dock_clear_notifications_on_object (pContainer);
 	
 	if (g_pPrimaryContainer == pContainer)
