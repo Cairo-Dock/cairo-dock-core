@@ -1357,8 +1357,7 @@ static void _load_appli (Icon *icon)
 		// create the thumbnail (window preview).
 		if (g_bUseOpenGL)
 		{
-			icon->iIconTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);
-			g_print ("iBackingPixmap %d -> %d\n", icon->iBackingPixmap, icon->iIconTexture);
+			///icon->iIconTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);  // doesn't work any more since Compiz 0.9 :-(
 		}
 		if (icon->iIconTexture == 0)
 		{
@@ -1389,13 +1388,13 @@ static void _load_appli (Icon *icon)
 		}
 	}
 	// or use the class icon
-	if (icon->pIconBuffer == NULL && myTaskbarParam.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
+	if (icon->iIconTexture == 0 && icon->pIconBuffer == NULL && myTaskbarParam.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
 		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, iWidth, iHeight);
 	// or use the X icon
-	if (icon->pIconBuffer == NULL)
+	if (icon->iIconTexture == 0 && icon->pIconBuffer == NULL)
 		icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, iWidth, iHeight);
 	// or use a default image
-	if (icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
+	if (icon->iIconTexture == 0 && icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
 	{
 		cd_debug ("%s (%ld) doesn't define any icon, we set the default one.", icon->cName, icon->Xid);
 		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);

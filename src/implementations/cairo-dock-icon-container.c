@@ -179,15 +179,13 @@ static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, Cairo
 
 static void _cairo_dock_load_box_surface (void)
 {
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
-	
 	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
 	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
 	
-	int iSize = myIconsParam.iIconWidth;
+	int iSize = myIconsParam.iIconWidth;  // base size, the image is then scaled up/down.
 	if (iSize == 0)
 		iSize = 48;
-	iSize *= fMaxScale;
+	iSize *= cairo_dock_get_max_scale (g_pMainDock);
 	
 	gchar *cUserPath = cairo_dock_generate_file_path ("box-front");
 	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))

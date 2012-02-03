@@ -705,7 +705,7 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double f
 }
 
 
-static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bDirectionUp)
+/**static cairo_surface_t * cairo_dock_create_reflection_surface_horizontal (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bDirectionUp)
 {
 	//g_print ("%s (%d)\n", __func__, bDirectionUp);
 
@@ -807,7 +807,7 @@ cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurfac
 		return cairo_dock_create_reflection_surface_horizontal (pSurface, fImageWidth, fImageHeight, fReflectSize, fAlbedo, bDirectionUp);
 	else
 		return cairo_dock_create_reflection_surface_vertical (pSurface, fImageWidth, fImageHeight, fReflectSize, fAlbedo, bDirectionUp);
-}
+}*/
 
 
 static void _cairo_dock_limit_string_width (gchar *cLine, PangoLayout *pLayout, gboolean bUseMarkup, int iMaxWidth)

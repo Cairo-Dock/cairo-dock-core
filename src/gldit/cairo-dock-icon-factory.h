@@ -317,8 +317,8 @@ void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer);
 
 void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer);
 
-void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive);
-#define cairo_dock_load_buffers_in_one_dock(pDock) cairo_dock_reload_buffers_in_dock (pDock, FALSE)
+void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize);
+#define cairo_dock_load_buffers_in_one_dock(pDock) cairo_dock_reload_buffers_in_dock (pDock, FALSE, FALSE)
 
 void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer);
 

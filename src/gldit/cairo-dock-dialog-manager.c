@@ -599,7 +599,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 	CairoDialog *pDialog = cairo_dock_new_dialog (pAttribute, pIcon, pContainer);
 	if (pIcon && pIcon->pSubDock)  // un sous-dock par-dessus le dialogue est tres genant.
 		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pIcon->pSubDock));
-	if (pIcon && CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->fMagnitudeMax == 0)  // view without zoom, the dialog is stuck to the icon, and therefore is under the label, so hide this one.
+	if (pIcon && CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_get_icon_max_scale (pIcon) < 1.01)  // view without zoom, the dialog is stuck to the icon, and therefore is under the label, so hide this one.
 	{
 		if (pIcon->iHideLabel == 0 && pContainer)
 			gtk_widget_queue_draw (pContainer->pWidget);
@@ -1164,7 +1164,7 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
 			cairo_dock_place_dialog (pDialog, pContainer);
 			
-			if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->fMagnitudeMax == 0)
+			if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_get_icon_max_scale (pIcon) < 1.01)  // same remark
 			{
 				if (pIcon->iHideLabel == 0 && pContainer)
 					gtk_widget_queue_draw (pContainer->pWidget);

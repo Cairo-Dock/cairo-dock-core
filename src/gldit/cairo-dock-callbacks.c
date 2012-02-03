@@ -546,7 +546,7 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
 			//pDock->fAvoidingMouseMargin = .5;
 			pDock->iAvoidingMouseIconType = s_pIconClicked->iGroup;  // on pourrait le faire lors du clic aussi.
-			s_pIconClicked->fScale = 1 + myIconsParam.fAmplitude * pDock->fMagnitudeMax;
+			s_pIconClicked->fScale = cairo_dock_get_icon_max_scale (s_pIconClicked);
 			s_pIconClicked->fDrawX = pDock->container.iMouseX  - s_pIconClicked->fWidth * s_pIconClicked->fScale / 2;
 			s_pIconClicked->fDrawY = pDock->container.iMouseY - s_pIconClicked->fHeight * s_pIconClicked->fScale / 2 ;
 			s_pIconClicked->fAlpha = 0.75;
@@ -667,7 +667,7 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 	if (s_pIconClicked != NULL
 	&& (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (s_pIconClicked)
 		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (s_pIconClicked)
-		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked) && s_pIconClicked->cDesktopFileName && pDock->fMagnitudeMax != 0)
+		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked) && s_pIconClicked->cDesktopFileName && pDock->iMaxDockHeight > 30)  // if the dock is narrow (like a panel), prevent from dragging separators outside of the dock. TODO: maybe we need a parameter in the view...
 		|| CAIRO_DOCK_IS_DETACHABLE_APPLET (s_pIconClicked))
 	&& s_pFlyingContainer == NULL
 	&& ! myDocksParam.bLockIcons

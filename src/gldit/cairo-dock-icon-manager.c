@@ -672,7 +672,7 @@ static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data)
 {
 	cd_message ("theme has changed");
 	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _reload_in_desklet, NULL);
-	cairo_dock_reload_buffers_in_all_docks ();
+	cairo_dock_reload_buffers_in_all_docks (FALSE);
 }
 static void _cairo_dock_load_icon_theme (void)
 {
@@ -784,7 +784,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		bThemeChanged ||
 		bIconBackgroundImagesChanged)  // oui on ne fait pas dans la finesse.
 	{
-		cairo_dock_reload_buffers_in_all_docks ();
+		cairo_dock_reload_buffers_in_all_docks (TRUE);
 	}
 	
 	if (bInsertSeparators)

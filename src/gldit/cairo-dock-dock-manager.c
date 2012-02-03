@@ -562,11 +562,11 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 
 static void _reload_buffer_in_one_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	cairo_dock_reload_buffers_in_dock (pDock, FALSE);
+	cairo_dock_reload_buffers_in_dock (pDock, FALSE, GPOINTER_TO_INT (data));
 }
-void cairo_dock_reload_buffers_in_all_docks (void)
+void cairo_dock_reload_buffers_in_all_docks (gboolean bUpdateIconSize)
 {
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, NULL);
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));
 	
 	cairo_dock_draw_subdock_icons ();
 }
@@ -596,7 +596,7 @@ void cairo_dock_draw_subdock_icons (void)
 }
 
 
-static void _update_dock_size (const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
+/**static void _update_dock_size (const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_update_dock_size (pDock);
 }
@@ -605,7 +605,7 @@ void cairo_dock_update_all_docks_size (void)
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _update_dock_size, NULL);
 }
 
-/*static void _cairo_dock_reset_one_dock_view (gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_reset_one_dock_view (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	cairo_dock_set_renderer (pDock, NULL);  // on met NULL plutot que CAIRO_DOCK_DEFAULT_RENDERER_NAME pour ne pas ecraser le nom de la vue.
 }
@@ -663,7 +663,7 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 	}
 }
 
-int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s)
+int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s, double *fMaxScale, double *fReflectSize, int *iIconGap)
 {
 	int iIconSize;
 	switch (s)
@@ -671,32 +671,68 @@ int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s)
 		case ICON_DEFAULT:
 		default:
 			iIconSize = myIconsParam.iIconWidth;
+			*fMaxScale = 1 + myIconsParam.fAmplitude;
+			*iIconGap = myIconsParam.iIconGap;
+			*fReflectSize = myIconsParam.fReflectHeightRatio;
 		break;
 		case ICON_TINY:
 			iIconSize = ICON_SIZE_TINY;
+			*fMaxScale = 2;
+			*iIconGap = 4;
+			*fReflectSize = .4;
 		break;
 		case ICON_VERY_SMALL:
 			iIconSize = ICON_SIZE_VERY_SMALL;
+			*fMaxScale = 1.8;
+			*iIconGap = 4;
+			*fReflectSize = .4;
 		break;
 		case ICON_SMALL:
 			iIconSize = ICON_SIZE_SMALL;
+			*fMaxScale = 1.8;
+			*iIconGap = 4;
+			*fReflectSize = .4;
 		break;
 		case ICON_MEDIUM:
 			iIconSize = ICON_SIZE_MEDIUM;
+			*fMaxScale = 1.6;
+			*iIconGap = 3;
+			*fReflectSize = .5;
 		break;
 		case ICON_BIG:
 			iIconSize = ICON_SIZE_BIG;
+			*fMaxScale = 1.5;
+			*iIconGap = 2;
+			*fReflectSize = .6;
 		break;
 		case ICON_HUGE:
 			iIconSize = ICON_SIZE_HUGE;
+			*fMaxScale = 1.3;
+			*iIconGap = 2;
+			*fReflectSize = .6;
 		break;
-	}  /// TODO: we should probably also handle fMaxScale, fReflectSize, and iIconGap here...
+	}
 	return iIconSize;
 }
 
-int cairo_dock_convert_icon_size_to_enum (int iIconSize)
+GldiIconSizeEnum cairo_dock_convert_icon_size_to_enum (int iIconSize)
 {
 	GldiIconSizeEnum s = ICON_DEFAULT;
+	if (iIconSize <= ICON_SIZE_TINY+2)
+		s = ICON_TINY;
+	else if (iIconSize <= ICON_SIZE_VERY_SMALL+2)
+		s = ICON_VERY_SMALL;
+	else if (iIconSize >= ICON_SIZE_HUGE-2)
+		s = ICON_HUGE;
+	else if (iIconSize > ICON_SIZE_MEDIUM)
+		s = ICON_BIG;
+	else
+	{
+		if (myIconsParam.fAmplitude >= 2 || iIconSize <= ICON_SIZE_SMALL)
+			s = ICON_SMALL;
+		else
+			s = ICON_MEDIUM;  // moyennes.
+	}
 	return s;
 }
 
@@ -755,31 +791,10 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	
 	//\______________ Icons size.
 	int s = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "icon size", &bFlushConfFileNeeded, ICON_DEFAULT, NULL, NULL);  // ICON_DEFAULT <=> same as main dock
-	switch (s)
-	{
-		case ICON_DEFAULT:
-		default:
-			pDock->iIconSize = myIconsParam.iIconWidth;
-		break;
-		case ICON_TINY:
-			pDock->iIconSize = ICON_SIZE_TINY;
-		break;
-		case ICON_VERY_SMALL:
-			pDock->iIconSize = ICON_SIZE_VERY_SMALL;
-		break;
-		case ICON_SMALL:
-			pDock->iIconSize = ICON_SIZE_SMALL;
-		break;
-		case ICON_MEDIUM:
-			pDock->iIconSize = ICON_SIZE_MEDIUM;
-		break;
-		case ICON_BIG:
-			pDock->iIconSize = ICON_SIZE_BIG;
-		break;
-		case ICON_HUGE:
-			pDock->iIconSize = ICON_SIZE_HUGE;
-		break;
-	}  /// TODO: we should probably also handle fMaxScale, fReflectSize, and iIconGap here...
+	double fMaxScale, fReflectSize;
+	int iIconGap;
+	pDock->iIconSize = cairo_dock_convert_icon_size_to_pixels (s, &fMaxScale, &fReflectSize, &iIconGap);
+	pDock->bGlobalIconSize = (s == ICON_DEFAULT);
 	
 	//\______________ View.
 	g_free (pDock->cRendererName);
@@ -878,16 +893,11 @@ void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock)
 {
 	cairo_dock_read_root_dock_config (cDockName, pDock);
 	
-	cairo_dock_reload_buffers_in_dock (pDock, TRUE);  // recharge les icones recursivement.
+	cairo_dock_set_default_renderer (pDock);
 	
 	pDock->backgroundBuffer.iWidth ++;  // pour forcer le chargement du fond.
-	cairo_dock_set_default_renderer (pDock);
-	cairo_dock_update_dock_size (pDock);
-	cairo_dock_calculate_dock_icons (pDock);
+	cairo_dock_reload_buffers_in_dock (pDock, TRUE, TRUE);
 	
-	cairo_dock_move_resize_dock (pDock);
-	if (pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)  // la position/taille a change, il faut refaire la reservation.
-		cairo_dock_reserve_space_for_dock (pDock, TRUE);
 	gtk_widget_queue_draw (pDock->container.pWidget);
 }
 

@@ -325,7 +325,7 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContain
 }
 
 
-void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive)
+void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize)
 {
 	g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
 	
@@ -342,14 +342,29 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive)
 		}
 		else
 		{
+			if (bUpdateIconSize)
+			{
+				icon->fWidth = icon->fHeight = 0;  // invalidate the icon size, so that the 'update_dock_size' will recalculate them.
+			}
 			cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
 			
 			if (bRecursive && icon->pSubDock != NULL)
 			{
 				cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
-				cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive);
+				cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);
 			}
 		}
+	}
+	
+	if (bUpdateIconSize)
+	{
+		cairo_dock_update_dock_size (pDock);
+		cairo_dock_calculate_dock_icons (pDock);
+
+		cairo_dock_move_resize_dock (pDock);
+		if (pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)  // la position/taille a change, il faut refaire la reservation.
+			cairo_dock_reserve_space_for_dock (pDock, TRUE);
+		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
 }
 

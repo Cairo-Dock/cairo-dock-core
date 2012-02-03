@@ -238,17 +238,21 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
 
 /** (Re)load all buffers of all icons in all docks.
 */
-void cairo_dock_reload_buffers_in_all_docks (void);
+void cairo_dock_reload_buffers_in_all_docks (gboolean bUpdateIconSize);
 
 void cairo_dock_draw_subdock_icons (void);
 
-void cairo_dock_update_all_docks_size (void);
+///void cairo_dock_update_all_docks_size (void);
 
 ///void cairo_dock_reset_all_views (void);
 void cairo_dock_set_all_views_to_default (int iDockType);
 
 
 void cairo_dock_write_root_dock_gaps (CairoDock *pDock);
+
+int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s, double *fMaxScale, double *fReflectSize, int *iIconGap);
+
+GldiIconSizeEnum cairo_dock_convert_icon_size_to_enum (int iIconSize);
 
 /** Reload the config of a root dock and update it accordingly.
 *@param cDockName name of the dock.

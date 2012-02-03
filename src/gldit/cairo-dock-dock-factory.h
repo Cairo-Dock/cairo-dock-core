@@ -281,7 +281,9 @@ struct _CairoDock {
 	gint iIconSize;
 	/// Source ID for updating the dock's size and icons layout.
 	guint iSidUpdateDockSize;
-	gint reserved[2];
+	/// whether the dock should use the global icons size parameters.
+	gboolean bGlobalIconSize;
+	gint reserved[1];
 };
 
 

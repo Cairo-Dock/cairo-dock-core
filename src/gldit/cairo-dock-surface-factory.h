@@ -221,7 +221,7 @@ cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile
 */
 cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fRotationAngle);
 
-/** Create a surface by reflection of another. Apply a transparency gradation. The size of the reflect is given by the global config,and its position if given by the orientation of the icon; if this changes, the reflect needs to be re-created.
+/* Create a surface by reflection of another. Apply a transparency gradation. The size of the reflect is given by the global config,and its position if given by the orientation of the icon; if this changes, the reflect needs to be re-created.
 *@param pSurface surface to reflect.
 *@param fImageWidth the width of the surface.
 *@param fImageHeight the height of the surface.
@@ -231,7 +231,7 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double f
 *@param bDirectionUp TRUE if the surface is in a container whose direction is towards.
 *@return the newly allocated surface.
 */
-cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bIsHorizontal, gboolean bDirectionUp);
+//cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bIsHorizontal, gboolean bDirectionUp);
 
 /** Create a surface representing a text, according to a given text description.
 *@param cText the text.

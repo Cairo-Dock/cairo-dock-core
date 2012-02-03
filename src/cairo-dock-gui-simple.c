@@ -55,11 +55,6 @@
 #define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1024
 #define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 700
 #define CAIRO_DOCK_SIMPLE_CONF_FILE "cairo-dock-simple.conf"
-#define ICON_HUGE 60
-#define ICON_BIG 56
-#define ICON_MEDIUM 48
-#define ICON_SMALL 42
-#define ICON_TINY 36
 #define CAIRO_DOCK_SHORTKEY_PAGE 2
 #define CAIRO_DOCK_ADDONS_PAGE 3
 #define CAIRO_DOCK_THEMES_PAGE 4
@@ -334,21 +329,8 @@ static gchar * _make_simple_conf_file (void)
 	// apparence
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIconsParam.cIconTheme);
 	
-	int iIconSize;
-	int s = myIconsParam.iIconWidth;
-	if (s <= ICON_TINY+2)  // icones toutes petites.
-		iIconSize = 0;
-	else if (s >= ICON_HUGE-2)  // icones tres grandes.
-		iIconSize = 4;
-	else if (s <= ICON_MEDIUM)
-	{
-		if (myIconsParam.fAmplitude >= 2 || s <= ICON_SMALL)  // icones petites.
-			iIconSize = 1;
-		else
-			iIconSize = 2;  // moyennes.
-	}
-	else  // grandes.
-		iIconSize = 3;
+	int iIconSize = cairo_dock_convert_icon_size_to_enum (myIconsParam.iIconWidth);
+	iIconSize --;  // skip the "default" enum
 	
 	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "icon size", iIconSize);
 	s_iIconSize = iIconSize;
@@ -633,49 +615,16 @@ static gboolean on_apply_config_simple (gpointer data)
 	{
 		int iLauncherSize, iIconGap;
 		double fMaxScale, fReflectSize;
-		switch (iIconSize)
-		{
-			case 0:  // tres petites
-				iLauncherSize = ICON_TINY;
-				fMaxScale = 2.2;
-				iIconGap = 5;
-				fReflectSize = .4;
-			break;
-			case 1:  // petites
-				iLauncherSize = ICON_SMALL;
-				fMaxScale = 2.;
-				iIconGap = 4;
-				fReflectSize = .4;
-			break;
-			case 2:  // moyennes
-				iLauncherSize = ICON_MEDIUM;
-				fMaxScale = 1.7;
-				iIconGap = 2;
-				fReflectSize = .5;
-			break;
-			case 3:  // grandes
-			default:
-				iLauncherSize = ICON_BIG;
-				fMaxScale = 1.5;
-				iIconGap = 2;
-				fReflectSize = .6;
-			break;
-			case 4:  // tres grandes
-				iLauncherSize = ICON_HUGE;
-				fMaxScale = 1.3;
-				iIconGap = 2;
-				fReflectSize = .6;
-			break;
-			
-		}
+		iLauncherSize = cairo_dock_convert_icon_size_to_pixels (iIconSize+1, &fMaxScale, &fReflectSize, &iIconGap);  // +1 to skip the "default" enum
+		
 		gint tab[2] = {iLauncherSize, iLauncherSize};
 		g_key_file_set_integer_list (pKeyFile, "Icons", "launcher size", tab, 2);
 		tab[0] = myIconsParam.iSeparatorWidth;
 		g_key_file_set_integer_list (pKeyFile, "Icons", "separator size", tab, 2);
-		
 		g_key_file_set_double (pKeyFile, "Icons", "zoom max", fMaxScale);
 		g_key_file_set_double (pKeyFile, "Icons", "field depth", fReflectSize);
 		g_key_file_set_integer (pKeyFile, "Icons", "icon gap", iIconGap);
+		
 		s_iIconSize = iIconSize;
 	}
 	
