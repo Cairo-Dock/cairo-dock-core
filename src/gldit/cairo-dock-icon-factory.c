@@ -328,6 +328,8 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContain
 void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize)
 {
 	g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
+	if (bUpdateIconSize && pDock->bGlobalIconSize)
+		pDock->iIconSize = myIconsParam.iIconWidth;
 	
 	// for each icon, reload its buffer (size may change).
 	Icon* icon;
@@ -345,14 +347,18 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 			if (bUpdateIconSize)
 			{
 				icon->fWidth = icon->fHeight = 0;  // invalidate the icon size, so that the 'update_dock_size' will recalculate them.
+				icon->iImageWidth = icon->iImageHeight = 0;
+				cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
 			}
 			cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
-			
-			if (bRecursive && icon->pSubDock != NULL)
-			{
-				cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
-				cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);
-			}
+		}
+		
+		if (bRecursive && icon->pSubDock != NULL)  // we handle the sub-dock for applets too, so that they don't need to care.
+		{
+			cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
+			if (bUpdateIconSize)
+				icon->pSubDock->iIconSize = pDock->iIconSize;
+			cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);
 		}
 	}
 	

@@ -23,8 +23,6 @@
 
 #include <gtk/gtk.h>
 
-
-
 #include "gldi-config.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-icon-factory.h"

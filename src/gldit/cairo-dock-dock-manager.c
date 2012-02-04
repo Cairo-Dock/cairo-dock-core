@@ -141,7 +141,7 @@ static inline CairoDock *_create_dock (const gchar *cDockName)
 {
 	//\__________________ On cree un nouveau dock.
 	CairoDock *pDock = cairo_dock_new_dock ();
-	pDock->iIconSize = myIconsParam.iIconWidth;  // by default, until the renderer possibly overloads it
+	pDock->iIconSize = myIconsParam.iIconWidth;  // by default
 	
 	//\__________________ On l'enregistre.
 	if (g_hash_table_size (s_hDocksTable) == 0)  // c'est le 1er.
@@ -149,6 +149,7 @@ static inline CairoDock *_create_dock (const gchar *cDockName)
 		pDock->bIsMainDock = TRUE;
 		g_pMainDock = pDock;
 		pDock->bGlobalBg = TRUE;
+		pDock->bGlobalIconSize = TRUE;
 	}
 	g_hash_table_insert (s_hDocksTable, g_strdup (cDockName), pDock);
 	
@@ -560,13 +561,14 @@ gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
 }
 
 
-static void _reload_buffer_in_one_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _reload_buffer_in_one_dock (/**const gchar *cDockName, */CairoDock *pDock, gpointer data)
 {
-	cairo_dock_reload_buffers_in_dock (pDock, FALSE, GPOINTER_TO_INT (data));
+	cairo_dock_reload_buffers_in_dock (pDock, TRUE, GPOINTER_TO_INT (data));
 }
 void cairo_dock_reload_buffers_in_all_docks (gboolean bUpdateIconSize)
 {
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));
+	///g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));
+	g_list_foreach (s_pRootDockList, (GFunc)_reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));
 	
 	cairo_dock_draw_subdock_icons ();
 }

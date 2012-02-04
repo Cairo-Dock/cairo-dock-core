@@ -686,6 +686,7 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 	//\__________________ update the icons size and the ratio.
 	double fPrevRatio = pDock->container.fRatio;
 	pDock->container.fRatio = MIN (pDock->container.fRatio, myBackendsParam.fSubDockSizeRatio);
+	pDock->iIconSize = pParentDock->iIconSize;
 	
 	Icon *icon;
 	GList *ic;

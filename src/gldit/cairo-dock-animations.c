@@ -434,8 +434,10 @@ static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, Ca
 	int iDetlaT = (pTransition->bFastPace ? cairo_dock_get_animation_delta_t (pContainer) : cairo_dock_get_slow_animation_delta_t (pContainer));
 	//int iNbSteps = 1.*pTransition->iDuration / iDetlaT;
 	pTransition->iElapsedTime += iDetlaT;
+	if (pTransition->iElapsedTime > pTransition->iDuration)
+		pTransition->iElapsedTime = pTransition->iDuration;
 	
-	if (! pTransition->bRemoveWhenFinished && pTransition->iDuration != 0 && pTransition->iElapsedTime > pTransition->iDuration)  // skip
+	if (! pTransition->bRemoveWhenFinished && pTransition->iDuration != 0 && pTransition->iElapsedTime >= pTransition->iDuration)  // skip
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	gboolean bContinue = FALSE;
