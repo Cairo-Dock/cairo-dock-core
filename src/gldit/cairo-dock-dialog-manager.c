@@ -719,7 +719,6 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	if (pDialog->container.bInside && ! (pDialog->pInteractiveWidget || pDialog->action_on_answer))  // in the case of a modal dialog, the dialog takes the dock's events, including the "enter-event" one. So we are inside the dialog as soon as we enter the dock, and consequently, the dialog is not replaced when the dock unhides itself.
 		return;
 	
-	int w, h;
 	GdkGravity iGravity;
 	if (pContainer != NULL/* && pDialog->pIcon != NULL*/)
 	{

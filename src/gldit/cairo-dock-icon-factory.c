@@ -23,8 +23,6 @@
 
 #include <gtk/gtk.h>
 
-
-
 #include "gldi-config.h"
 #include "cairo-dock-draw.h"  // cairo_dock_erase_cairo_context
 #include "cairo-dock-draw-opengl.h"
@@ -355,7 +353,7 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 		
 		if (bRecursive && icon->pSubDock != NULL)  // we handle the sub-dock for applets too, so that they don't need to care.
 		{
-			cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
+			///cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);  /// should probably not be here.
 			if (bUpdateIconSize)
 				icon->pSubDock->iIconSize = pDock->iIconSize;
 			cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);

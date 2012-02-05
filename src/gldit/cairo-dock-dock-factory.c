@@ -144,8 +144,6 @@ static void _set_icon_size_dock (CairoContainer *pContainer, Icon *icon)
 static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 {
 	//g_print ("%s (%d ; %2f ; bInside:%d)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->container.bInside);
-	if (pDock->bIsShrinkingDown)
-		return TRUE;  // on se met en attente de fin d'animation.
 	
 	pDock->iMagnitudeIndex += myBackendsParam.iGrowUpInterval;
 	if (pDock->iMagnitudeIndex > CAIRO_DOCK_NB_MAX_ITERATIONS)
@@ -339,7 +337,7 @@ static gboolean _cairo_dock_show (CairoDock *pDock)
 	{
 		pDock->fHideOffset = 0;
 		cairo_dock_allow_entrance (pDock);
-		
+		cairo_dock_replace_all_dialogs ();  // we need it here so that a modal dialog is replaced when the dock unhides (else it would stay behind).
 		return FALSE;
 	}
 	return TRUE;
@@ -812,6 +810,9 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	{
 		cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
+	
+	if (icon->pSubDock != NULL)
+		cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, TRUE);
 	
 	//\______________ Notify everybody.
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);

@@ -642,8 +642,8 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 		// applis du bureau courant seulement.
 		if (myTaskbarParam.bAppliOnCurrentDesktopOnly && icon->cParentDockName == NULL && myTaskbarParam.bShowAppli)
 		{
-			cd_message ("cette fenetre est sur le bureau courant (%d;%d)", x, y);
-			cairo_dock_insert_appli_in_dock (icon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
+			//cd_message ("cette fenetre est sur le bureau courant (%d;%d)", x, y);
+			cairo_dock_insert_appli_in_dock (icon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);  // the icon might be on this desktop and yet not in a dock (inhibited), in which case this function does nothing.
 		}
 		
 		// visibilite
@@ -915,8 +915,6 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 		s_iCurrentActiveWindow = cairo_dock_get_active_xwindow ();
 	
 	//\__________________ On cree les icones de toutes ces applis.
-	CairoDock *pParentDock;
-	
 	Window Xid;
 	Icon *pIcon;
 	for (i = 0; i < iNbWindows; i ++)
@@ -929,7 +927,7 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 			pIcon->iLastCheckTime = s_iTime;
 			if (myTaskbarParam.bShowAppli && pDock)
 			{
-				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_ANIMATE_ICON);
+				cairo_dock_insert_appli_in_dock (pIcon, pDock, ! CAIRO_DOCK_ANIMATE_ICON);
 			}
 		}
 		else

@@ -259,7 +259,6 @@ void cairo_dock_load_launchers_from_dir (const gchar *cDirectory)
 			if (pParentDock != NULL)  // a priori toujours vrai.
 			{
 				cairo_dock_insert_icon_in_dock_full (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
-				/// synchroniser icon->pSubDock avec pParentDock ?...
 			}
 		}
 	}
@@ -352,30 +351,19 @@ void cairo_dock_reload_launcher (Icon *icon)
 		gchar *tmp = icon->cParentDockName;  // le detach_icon remet a 0 ce champ, il faut le donc conserver avant.
 		icon->cParentDockName = NULL;
 		cairo_dock_detach_icon_from_dock_full (icon, pDock, TRUE);
-		if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // le dock devient vide, il se fera detruire automatiquement.
-		{
-			pDock = NULL;
-		}
-		else
-		{
-			cairo_dock_update_dock_size (pDock);
-			cairo_dock_calculate_dock_icons (pDock);
-			gtk_widget_queue_draw (pDock->container.pWidget);
-		}
+		
 		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
 		icon->cParentDockName = tmp;
 	}
 	else  // same container, but different order.
 	{
-		icon->fWidth *= pNewDock->container.fRatio / pDock->container.fRatio;
-		icon->fHeight *= pNewDock->container.fRatio / pDock->container.fRatio;
 		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
 		{
 			pNewDock->icons = g_list_remove (pNewDock->icons, icon);
 			pNewDock->icons = g_list_insert_sorted (pNewDock->icons,
 				icon,
 				(GCompareFunc) cairo_dock_compare_icons_order);
-			cairo_dock_update_dock_size (pDock);  // la largeur max peut avoir ete influencee par le changement d'ordre.
+			cairo_dock_update_dock_size (pDock);  // -> recalculate icons and update input shape
 		}
 		// on redessine l'icone pointant sur le sous-dock, pour le cas ou l'ordre et/ou l'image du lanceur aurait change.
 		if (pNewDock->iRefCount != 0)
@@ -402,7 +390,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	if (cairo_dock_strings_differ (cName, icon->cName))
 		cairo_dock_load_icon_text (icon, &myIconsParam.iconTextDescription);
 	
-	// refresh sub-dock
+	// set sub-dock renderer
 	if (icon->pSubDock != NULL)  // son rendu a pu changer.
 	{
 		if (cairo_dock_strings_differ (cSubDockRendererName, icon->pSubDock->cRendererName))
@@ -410,7 +398,6 @@ void cairo_dock_reload_launcher (Icon *icon)
 			cairo_dock_set_renderer (icon->pSubDock, cSubDockRendererName);
 			cairo_dock_update_dock_size (icon->pSubDock);
 		}
-		cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pNewDock, TRUE);
 	}
 	g_free (cSubDockRendererName);
 	

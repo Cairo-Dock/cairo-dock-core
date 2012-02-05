@@ -568,7 +568,7 @@ static void _reload_buffer_in_one_dock (/**const gchar *cDockName, */CairoDock *
 void cairo_dock_reload_buffers_in_all_docks (gboolean bUpdateIconSize)
 {
 	///g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));
-	g_list_foreach (s_pRootDockList, (GFunc)_reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));
+	g_list_foreach (s_pRootDockList, (GFunc)_reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));  // we load the root docks first, so that sub-docks can have the correct icon size.
 	
 	cairo_dock_draw_subdock_icons ();
 }
@@ -1650,17 +1650,10 @@ static void load (void)
  /// RELOAD ///
 //////////////
 
-static void _reload_bg (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _reload_bg (CairoDock *pDock, gpointer data)
 {
-	cairo_dock_update_dock_size (pDock);
-	if (pDock->iRefCount == 0)
-	{
-		cairo_dock_load_dock_background (pDock);  // pour forcer le chargement du fond.
-		cairo_dock_calculate_dock_icons (pDock);
-		gtk_widget_queue_draw (pDock->container.pWidget);
-	}
-	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)
-		cairo_dock_reserve_space_for_dock (pDock, TRUE);
+	pDock->backgroundBuffer.iWidth ++;  // force the reload
+	cairo_dock_trigger_load_dock_background (pDock);
 }
 static void _init_hiding (CairoDock *pDock, gpointer data)
 {
@@ -1684,7 +1677,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	CairoDock *pDock = g_pMainDock;
 	
 	// background
-	cairo_dock_foreach_docks ((GHFunc)_reload_bg, NULL);
+	cairo_dock_foreach_root_docks ((GFunc)_reload_bg, NULL);
 	
 	// position
 	if (pPosition->bUseXinerama)

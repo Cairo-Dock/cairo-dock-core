@@ -193,7 +193,7 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 
 void cairo_dock_start_showing (CairoDock *pDock)
 {
-	//g_print ("%s (%d)\n", __func__, pDock->bIsShowing);
+	g_print ("%s (%d)\n", __func__, pDock->bIsShowing);
 	if (! pDock->bIsShowing)  // on lance l'animation.
 	{
 		pDock->bIsShowing = TRUE;
@@ -201,7 +201,7 @@ void cairo_dock_start_showing (CairoDock *pDock)
 		
 		if (pDock->pShapeBitmap && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
-			//g_print ("+++ input shape at rest on start showing\n");
+			g_print ("+++ input shape at rest on start showing\n");
 			cairo_dock_set_input_shape_at_rest (pDock);
 			pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
 			

@@ -733,7 +733,7 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 
 gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & GDK_MOD1_MASK) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -741,9 +741,10 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin) ou meme de X (changement de bureau).
-	if (pEvent)
+	//if (pEvent)
+	//	g_print ("leave event: %d;%d; %d;%d; %d; %d\n", (int)pEvent->x, (int)pEvent->y, (int)pEvent->x_root, (int)pEvent->y_root, pEvent->mode, pEvent->detail);
+	if (pEvent && (pEvent->x != 0 ||  pEvent->y != 0 || pEvent->x_root != 0 || pEvent->y_root != 0))  // strange leave events occur (detail = GDK_NOTIFY_NONLINEAR, nil coordinates); let's ignore them!
 	{
-		//g_print ("leave event: %d;%d\n", (int)pEvent->x, (int)pEvent->y);
 		if (pDock->container.bIsHorizontal)
 		{
 			pDock->container.iMouseX = pEvent->x;
@@ -853,7 +854,7 @@ gboolean cairo_dock_on_enter_notification (gpointer pData, CairoDock *pDock, gbo
 }
 gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%x; event:%ld)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
+	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%x; event:%p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
 		cd_message ("* entree non autorisee");
@@ -906,6 +907,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}*/
 	
 	pDock->container.bInside = TRUE;
+	
 	// animation d'entree.
 	gboolean bStartAnimation = FALSE;
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_ENTER_DOCK, pDock, &bStartAnimation);
@@ -937,6 +939,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 				cairo_dock_stop_icon_animation (pFlyingIcon);
 				// reinsert the icon where it was dropped, not at its original position.
 				Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
+				g_print (" pointed icon: %s\n", icon?icon->cName:"none");
 				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 				if (icon != NULL && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon))
 				{
@@ -955,7 +958,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	}
 	
 	// si on etait cache (entierement ou partiellement), on montre.
-	if (pDock->fHideOffset != 0 && pDock->iRefCount == 0)
+	if ((pDock->bIsHiding || cairo_dock_is_hidden (pDock)) && pDock->iRefCount == 0)
 	{
 		//g_print ("  on commence a monter\n");
 		cairo_dock_start_showing (pDock);  // on a mis a jour la zone d'input avant, sinon la fonction le ferait, ce qui serait inutile.
@@ -1018,15 +1021,15 @@ static gboolean _double_click_delay_over (Icon *icon)
 }
 static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principalement fait pour detecter les cas ou X nous envoit un signal leave errone alors qu'on est dedans (=> sortie refusee, bInside reste a TRUE), puis du coup ne nous en envoit pas de leave lorsqu'on quitte reellement le dock.
 {
-	cd_debug ("%s (%d, %d, %d)\n", __func__, pDock->bIsShrinkingDown, pDock->iMagnitudeIndex, pDock->container.bInside);
-	if (pDock->bIsShrinkingDown || pDock->iMagnitudeIndex == 0 || ! pDock->container.bInside)  // cas triviaux : si le dock est deja retrcit, ou qu'on est deja plus dedans, on peut quitter.
+	//g_print ("%s (%d, %d, %d)\n", __func__, pDock->bIsShrinkingDown, pDock->iMagnitudeIndex, pDock->container.bInside);
+	if (pDock->bIsShrinkingDown || pDock->iMagnitudeIndex == 0 || ! pDock->container.bInside)  // cas triviaux : si le dock est deja retrecit, ou qu'on est deja plus dedans, on peut quitter.
 	{
 		pDock->iSidTestMouseOutside = 0;
 		return FALSE;
 	}
 	
 	gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
-	cd_debug (" -> (%d, %d)\n", pDock->container.iMouseX, pDock->container.iMouseY);
+	//g_print (" -> (%d, %d)\n", pDock->container.iMouseX, pDock->container.iMouseY);
 	
 	cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
 	return TRUE;

@@ -183,13 +183,12 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	g_print (">>> iMaxIconHeight : %d, ratio : %.2f, fFlatDockWidth : %.2f\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio, pDock->fFlatDockWidth);
 	
 	//\__________________________ Then take the necessary actions due to the new size.
-	
 	// calculate the position of icons in the new frame.
 	///pDock->pRenderer->calculate_icons (pDock);
 	cairo_dock_calculate_dock_icons (pDock);
 	
 	// update the dock's shape.
-	if (iPrevMaxDockHeight == pDock->iMaxDockHeight && iPrevMaxDockWidth == pDock->iMaxDockWidth && pDock->pRenderer->update_input_shape != NULL)  // if the size has changed, shapes will be updated by the "configure" callback, so we don't need to do it here; if not, we do it in case the icons define a new shape (ex.: separators in Panel view).
+	if (iPrevMaxDockHeight == pDock->iMaxDockHeight && iPrevMaxDockWidth == pDock->iMaxDockWidth)  // if the size has changed, shapes will be updated by the "configure" callback, so we don't need to do it here; if not, we do it in case the icons define a new shape (ex.: separators in Panel view) or in case the screen edge has changed.
 	{
 		cairo_dock_update_input_shape (pDock);  // done after the icons' position is known.
 	}
@@ -287,7 +286,7 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
 {
 	Icon *pPointedIcon = pDock->pRenderer->calculate_icons (pDock);
 	cairo_dock_manage_mouse_position (pDock);
-	if (pDock->iMousePositionType == CAIRO_DOCK_MOUSE_INSIDE)
+	if (1||pDock->iMousePositionType == CAIRO_DOCK_MOUSE_INSIDE)
 	{
 		return pPointedIcon;
 	}
@@ -515,6 +514,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	int H = pDock->iMaxDockHeight;
 	int w = pDock->iMinDockWidth;
 	int h = pDock->iMinDockHeight;
+	g_print ("%s (%dx%d; %dx%d)\n", __func__, w, h, W, H);
 	///int w_ = MIN (myDocksParam.iVisibleZoneWidth, pDock->iMaxDockWidth);
 	///int h_ = MIN (myDocksParam.iVisibleZoneHeight, pDock->iMaxDockHeight);
 	int w_ = 1;

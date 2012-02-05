@@ -700,11 +700,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	if (bCanReload && module->pInterface->reloadModule != NULL)
 		module->pInterface->reloadModule (pInstance, pCurrentContainer, pKeyFile);
 	
-	if (pNewContainer != pCurrentContainer && pNewDock != NULL && pCurrentDock != NULL && pIcon != NULL && pIcon->pSubDock != NULL)
-	{
-		cairo_dock_synchronize_one_sub_dock_orientation (pIcon->pSubDock, pNewDock, TRUE);
-	}
-	
 	if (pNewDock != NULL && pNewDock->iRefCount != 0)  // on redessine l'icone pointant sur le sous-dock contenant l'applet, au cas ou son image aurait change.
 	{
 		cairo_dock_redraw_subdock_content (pNewDock);

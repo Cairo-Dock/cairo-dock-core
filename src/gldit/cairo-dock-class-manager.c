@@ -412,10 +412,10 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 					cd_message (">>> %s prendra un indicateur au prochain redraw ! (Xid : %d)", pInhibitorIcon->cName, pInhibitorIcon->Xid);
 					pInhibitorIcon->bHasIndicator = TRUE;
 					_cairo_dock_set_same_indicator_on_sub_dock (pInhibitorIcon);
-				}
+				/**}
 				
 				if (pInhibitorIcon->Xid == pIcon->Xid)  // cette icone nous controle.
-				{
+				{*/
 					CairoDock *pInhibatorDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 					//\______________ On place l'icone pour X.
 					if (! bToBeInhibited)  // on ne met le thumbnail que sur la 1ere.
@@ -425,7 +425,6 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 							//g_print ("on positionne la miniature sur l'inhibiteur %s\n", pInhibitorIcon->cName);
 							cairo_dock_set_one_icon_geometry_for_window_manager (pInhibitorIcon, pInhibatorDock);
 						}
-						bToBeInhibited = TRUE;
 					}
 					//\______________ On met a jour l'etiquette de l'inhibiteur.
 					if (pInhibatorDock != NULL && pIcon->cName != NULL)
@@ -438,6 +437,7 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 						cairo_dock_set_icon_name (pIcon->cName, pInhibitorIcon, CAIRO_CONTAINER (pInhibatorDock));
 					}
 				}
+				bToBeInhibited = (pInhibitorIcon->Xid == pIcon->Xid);
 			}
 		}
 	}
@@ -552,6 +552,10 @@ void cairo_dock_detach_Xid_from_inhibitors (Window Xid, const gchar *cClass)
 				pIcon->Xid = iNextXid;
 				pIcon->bHasIndicator = (iNextXid != 0);
 				_cairo_dock_set_same_indicator_on_sub_dock (pIcon);
+				if (! pIcon->bHasIndicator)
+				{
+					cairo_dock_set_icon_name (pIcon->cInitialName ,pIcon, NULL);
+				}
 				cd_message (" %s : bHasIndicator <- %d, Xid <- %d", pIcon->cName, pIcon->bHasIndicator, pIcon->Xid);
 				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 				if (pParentDock)
