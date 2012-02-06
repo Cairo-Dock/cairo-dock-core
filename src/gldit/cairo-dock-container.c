@@ -521,7 +521,7 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 	GtkWidget *pMenuItem, *image, *pSubMenu = gtk_menu_new ();
 	if (cImage == NULL)
 	{
-		pMenuItem = gtk_menu_item_new_with_label (cLabel);
+		pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
 	}
 	else
 	{

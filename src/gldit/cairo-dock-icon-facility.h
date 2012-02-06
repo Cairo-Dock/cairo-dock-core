@@ -300,5 +300,8 @@ void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer, 
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
 
 
+GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon);
+
+
 G_END_DECLS
 #endif

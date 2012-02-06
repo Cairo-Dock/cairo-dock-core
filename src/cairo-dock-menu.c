@@ -380,10 +380,40 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 		cIconFile = cairo_dock_search_icon_s_path (icon->cFileName);
 	}
 	if (cIconFile == NULL && icon->cClass != NULL)
-		cIconFile = cairo_dock_search_icon_s_path (cairo_dock_get_class_icon (icon->cClass));
-
-	GtkWidget *pItemSubMenu = cairo_dock_create_sub_menu (cName, pMenu, cIconFile);
-
+	{
+		const gchar *cClassIcon = cairo_dock_get_class_icon (icon->cClass);
+		if (cClassIcon)
+			cIconFile = cairo_dock_search_icon_s_path (cClassIcon);
+	}
+	
+	GtkWidget *pItemSubMenu;
+	GdkPixbuf *pixbuf = NULL;
+	
+	if (!cIconFile)  // no icon file (for instance a class that has no icon defined in its desktop file, like gnome-setting-daemon) => use its buffer directly.
+	{
+		pixbuf = cairo_dock_icon_buffer_to_pixbuf (icon);
+	}
+	
+	if (pixbuf)
+	{
+		GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label (cName);
+		GtkWidget *image = gtk_image_new_from_pixbuf (pixbuf);
+		g_object_unref (pixbuf);
+		#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
+		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
+		#endif
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+		
+		gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem); 
+		
+		pItemSubMenu = gtk_menu_new ();
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pItemSubMenu);
+	}
+	else
+	{
+		pItemSubMenu = cairo_dock_create_sub_menu (cName, pMenu, cIconFile);
+	}
+	
 	g_free (cIconFile);
 	return pItemSubMenu;
 }
