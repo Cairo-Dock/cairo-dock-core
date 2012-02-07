@@ -900,6 +900,8 @@ void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock)
 	pDock->backgroundBuffer.iWidth ++;  // pour forcer le chargement du fond.
 	cairo_dock_reload_buffers_in_dock (pDock, TRUE, TRUE);
 	
+	_cairo_dock_draw_one_subdock_icon (NULL, pDock, NULL);  // container-icons may be drawn differently according to the orientation (ex.: box). must be done after sub-docks are reloaded.
+	
 	gtk_widget_queue_draw (pDock->container.pWidget);
 }
 
@@ -1706,6 +1708,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
 		cairo_dock_set_dock_orientation (pDock, pPosition->iScreenBorder);
+		_cairo_dock_draw_one_subdock_icon (NULL, g_pMainDock, NULL);  // container-icons may be drawn differently according to the orientation (ex.: box).
 	}
 	pDock->bExtendedMode = pBackground->bExtendedMode;
 	cairo_dock_update_dock_size (pDock);  // si l'ecran ou l'orientation a change, la taille max a change aussi.
