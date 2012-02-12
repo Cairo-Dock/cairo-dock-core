@@ -8,102 +8,127 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2011-09-23 23:42+0000\n"
 "PO-Revision-Date: 2011-09-20 09:34+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2011-09-25 04:35+0000\n"
 "X-Generator: Launchpad (build 14012)\n"
-"Language: ko\n"
 
-#: ../src/cairo-dock-gui-commons.c:216
+#: ../src/cairo-dock-gui-commons.c:221
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
 "현재 테마가 변형되었습니다.\n"
-"저장하지 않고 새 테마를 고르면 변형된 정보가 모두 사라집니다. 계속하시겠습니까?"
+"저장하지 않고 새 테마를 고르면 변형된 정보가 모두 사라집니다. 계속하시겠습니"
+"까?"
 
-#: ../src/cairo-dock-gui-commons.c:242
+#: ../src/cairo-dock-gui-commons.c:247
 msgid "Please wait while importing the theme..."
 msgstr "테마를 불러오는 중입니다..."
 
-#: ../src/cairo-dock-gui-commons.c:364 ../src/cairo-dock-menu.c:1456
+#: ../src/cairo-dock-gui-commons.c:369
 msgid "Configure this applet"
 msgstr "이 애플릿 설정"
 
-#: ../src/cairo-dock-gui-commons.c:401 ../src/cairo-dock-gui-main.c:131
+#: ../src/cairo-dock-gui-commons.c:406 ../src/cairo-dock-gui-main.c:130
 msgid "Files"
 msgstr "파일"
 
-#: ../src/cairo-dock-gui-commons.c:406 ../src/cairo-dock-gui-main.c:132
+#: ../src/cairo-dock-gui-commons.c:411 ../src/cairo-dock-gui-main.c:131
 msgid "Internet"
 msgstr "인터넷"
 
-#: ../src/cairo-dock-gui-commons.c:411 ../src/cairo-dock-gui-main.c:133
+#: ../src/cairo-dock-gui-commons.c:416 ../src/cairo-dock-gui-main.c:132
 msgid "Desktop"
 msgstr "데스크톱"
 
-#: ../src/cairo-dock-gui-commons.c:416
+#: ../src/cairo-dock-gui-commons.c:421
 msgid "Accessory"
 msgstr "보조기능"
 
-#: ../src/cairo-dock-gui-commons.c:421 ../src/cairo-dock-gui-main.c:135
-#: ../src/cairo-dock-gui-main.c:1504 ../data/messages:757
+#: ../src/cairo-dock-gui-commons.c:426 ../src/cairo-dock-gui-main.c:134
+#: ../src/cairo-dock-gui-main.c:1528 ../data/messages:757
 msgid "System"
 msgstr "시스템"
 
-#: ../src/cairo-dock-gui-commons.c:426 ../src/cairo-dock-gui-main.c:136
+#: ../src/cairo-dock-gui-commons.c:431 ../src/cairo-dock-gui-main.c:135
 msgid "Fun"
 msgstr "재미"
 
-#: ../src/cairo-dock-gui-commons.c:468
+#: ../src/cairo-dock-gui-commons.c:474
 msgid "plug-in"
 msgstr "플러그인"
 
-#: ../src/cairo-dock-gui-commons.c:474
+#: ../src/cairo-dock-gui-commons.c:480
 msgid "category"
 msgstr "범주"
 
-#: ../src/cairo-dock-gui-items.c:384
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+#: ../src/cairo-dock-gui-commons.c:575
+msgid "Press the shortkey"
+msgstr ""
+
+#: ../src/cairo-dock-gui-commons.c:594
+msgid "Change the shortkey"
+msgstr ""
+
+#: ../src/cairo-dock-gui-commons.c:681
+msgid "Origin"
+msgstr ""
+
+#: ../src/cairo-dock-gui-commons.c:686
+#, fuzzy
+msgid "Action"
+msgstr "애니메이션:"
+
+#: ../src/cairo-dock-gui-commons.c:690
+msgid "Shortkey"
+msgstr ""
+
+#: ../src/cairo-dock-gui-items.c:242
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr "주 독의 파라미터는 주 설정 창에서 관리합니다."
 
-#: ../src/cairo-dock-gui-items.c:600
+#: ../src/cairo-dock-gui-items.c:459
 msgid "Launcher configuration"
 msgstr "실행 아이콘 설정"
 
-#: ../src/cairo-dock-gui-main.c:129 ../data/messages:671
+#: ../src/cairo-dock-gui-items.c:877
+#, fuzzy
+msgid "Remove this item"
+msgstr "이 애플릿 제거"
+
+#: ../src/cairo-dock-gui-main.c:128 ../data/messages:671
 msgid "Behaviour"
 msgstr "동작"
 
-#: ../src/cairo-dock-gui-main.c:130 ../data/messages:491 ../data/messages:1657
+#: ../src/cairo-dock-gui-main.c:129 ../data/messages:491 ../data/messages:1657
 msgid "Appearance"
 msgstr "모양새"
 
-#: ../src/cairo-dock-gui-main.c:134
+#: ../src/cairo-dock-gui-main.c:133
 msgid "Accessories"
 msgstr "보조 프로그램"
 
-#: ../src/cairo-dock-gui-main.c:137 ../src/cairo-dock-gui-main.c:1653
+#: ../src/cairo-dock-gui-main.c:136 ../src/cairo-dock-gui-main.c:1682
 #: ../data/messages:1791
 msgid "All"
 msgstr "전체"
 
-#: ../src/cairo-dock-gui-main.c:1482
+#: ../src/cairo-dock-gui-main.c:1499
 msgid "Set the position of the main dock."
 msgstr "주 독의 위치를 지정합니다."
 
-#: ../src/cairo-dock-gui-main.c:1483 ../data/messages:335 ../data/messages:545
+#: ../src/cairo-dock-gui-main.c:1500 ../data/messages:335 ../data/messages:545
 msgid "Position"
 msgstr "위치"
 
-#: ../src/cairo-dock-gui-main.c:1489
+#: ../src/cairo-dock-gui-main.c:1506
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -113,60 +138,68 @@ msgstr ""
 "반대로 눈에 띄지 않는 걸 좋아하시나요?\n"
 "독에 접근하는 방법을 설정하십시오!"
 
-#: ../src/cairo-dock-gui-main.c:1490 ../src/cairo-dock-menu.c:1494
+#: ../src/cairo-dock-gui-main.c:1507 ../src/cairo-dock-menu.c:1651
 #: ../data/messages:353
 msgid "Visibility"
 msgstr "보이는 방식"
 
-#: ../src/cairo-dock-gui-main.c:1496
+#: ../src/cairo-dock-gui-main.c:1513
 msgid "Display and interact with currently open windows."
 msgstr "현재 열려 있는 창을 보여주고 반응합니다."
 
-#: ../src/cairo-dock-gui-main.c:1497 ../data/messages:41 ../data/messages:469
+#: ../src/cairo-dock-gui-main.c:1514 ../data/messages:41 ../data/messages:469
 #: ../data/messages:1323
 msgid "Taskbar"
 msgstr "작업표시줄"
 
-#: ../src/cairo-dock-gui-main.c:1503
+#: ../src/cairo-dock-gui-main.c:1520
+msgid "Define all the keyboard shortcuts currently available."
+msgstr ""
+
+#: ../src/cairo-dock-gui-main.c:1521
+msgid "Shortkeys"
+msgstr ""
+
+#: ../src/cairo-dock-gui-main.c:1527
 msgid "All of the parameters you will never want to tweak."
 msgstr "당신이 절대로 바꾸고 싶지 않은 모든 파라미터."
 
-#: ../src/cairo-dock-gui-main.c:1513
+#: ../src/cairo-dock-gui-main.c:1537
 msgid "Set a background for your dock."
 msgstr "독의 배경을 지정합니다."
 
-#: ../src/cairo-dock-gui-main.c:1514 ../data/messages:853
+#: ../src/cairo-dock-gui-main.c:1538 ../data/messages:853
 #: ../data/messages:1251 ../data/messages:1665
 msgid "Background"
 msgstr "배경"
 
-#: ../src/cairo-dock-gui-main.c:1520
+#: ../src/cairo-dock-gui-main.c:1544
 msgid "Select a view for each of your docks."
 msgstr "각 독의 보이는 방식을 선택하세요."
 
-#: ../src/cairo-dock-gui-main.c:1521 ../data/messages:523 ../data/messages:915
+#: ../src/cairo-dock-gui-main.c:1545 ../data/messages:523 ../data/messages:915
 #: ../data/messages:1659
 msgid "Views"
 msgstr "겉모습"
 
-#: ../src/cairo-dock-gui-main.c:1528
+#: ../src/cairo-dock-gui-main.c:1552
 msgid "Configure text bubble appearance."
 msgstr "말풍선을 설정합니다."
 
-#: ../src/cairo-dock-gui-main.c:1529
+#: ../src/cairo-dock-gui-main.c:1553
 msgid "Dialog boxes"
 msgstr "대화 상자"
 
-#: ../src/cairo-dock-gui-main.c:1536
+#: ../src/cairo-dock-gui-main.c:1560
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "애플릿은 데스크탑에서 위젯으로 보여질 수 있습니다."
 
-#: ../src/cairo-dock-gui-main.c:1537 ../data/messages:101 ../data/messages:971
+#: ../src/cairo-dock-gui-main.c:1561 ../data/messages:101 ../data/messages:971
 #: ../data/messages:1383
 msgid "Desklets"
 msgstr "데스크렛"
 
-#: ../src/cairo-dock-gui-main.c:1544
+#: ../src/cairo-dock-gui-main.c:1568
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -174,133 +207,134 @@ msgstr ""
 "아이콘에 관한 모든 것:\n"
 " 크기, 반사, 아이콘 테마"
 
-#: ../src/cairo-dock-gui-main.c:1545 ../data/messages:11 ../data/messages:493
+#: ../src/cairo-dock-gui-main.c:1569 ../data/messages:11 ../data/messages:493
 #: ../data/messages:1035 ../data/messages:1293
 msgid "Icons"
 msgstr "아이콘"
 
-#: ../src/cairo-dock-gui-main.c:1551
+#: ../src/cairo-dock-gui-main.c:1575
 msgid "Indicators are additional markers for your icons."
 msgstr "알리미는 아이콘의 부가적인 표지입니다."
 
-#: ../src/cairo-dock-gui-main.c:1552 ../data/messages:1153
+#: ../src/cairo-dock-gui-main.c:1576 ../data/messages:1153
 msgid "Indicators"
 msgstr "알리미"
 
-#: ../src/cairo-dock-gui-main.c:1559
+#: ../src/cairo-dock-gui-main.c:1583
 msgid "Define icon caption and quick-info style."
 msgstr "아이콘 캡션과 간단한-정보 방식을 지정합니다."
 
-#: ../src/cairo-dock-gui-main.c:1560
+#: ../src/cairo-dock-gui-main.c:1584
 msgid "Captions"
 msgstr "캡션"
 
-#: ../src/cairo-dock-gui-main.c:1629
+#: ../src/cairo-dock-gui-main.c:1654
 msgid "Categories"
 msgstr "분류"
 
-#: ../src/cairo-dock-gui-main.c:1767
+#: ../src/cairo-dock-gui-main.c:1796
 msgid "Filter"
 msgstr "거르개"
 
-#: ../src/cairo-dock-gui-main.c:1814
+#: ../src/cairo-dock-gui-main.c:1843
 msgid "Options"
 msgstr "선택 사항"
 
-#: ../src/cairo-dock-gui-main.c:1824
+#: ../src/cairo-dock-gui-main.c:1853
 msgid "All words"
 msgstr "모든 단어"
 
-#: ../src/cairo-dock-gui-main.c:1828
+#: ../src/cairo-dock-gui-main.c:1857
 msgid "Highlighted words"
 msgstr "강조된 단어"
 
-#: ../src/cairo-dock-gui-main.c:1833
+#: ../src/cairo-dock-gui-main.c:1862
 msgid "Hide others"
 msgstr "다른 것 숨기기"
 
-#: ../src/cairo-dock-gui-main.c:1838
+#: ../src/cairo-dock-gui-main.c:1867
 msgid "Search in description"
 msgstr "기술된 설명에서 찾기"
 
-#: ../src/cairo-dock-gui-main.c:1852
+#: ../src/cairo-dock-gui-main.c:1881
 msgid "Enable this module"
 msgstr "이 모듈 활성화"
 
-#: ../src/cairo-dock-gui-main.c:1916 ../data/messages:541
+#: ../src/cairo-dock-gui-main.c:1945 ../data/messages:541
 msgid "More applets"
 msgstr "더 많은 애플릿"
 
-#: ../src/cairo-dock-gui-main.c:1917 ../data/messages:539
+#: ../src/cairo-dock-gui-main.c:1946 ../data/messages:539
 msgid "Get more applets online !"
 msgstr "온라인으로 더 많은 애플릿을 받아옵니다!"
 
-#: ../src/cairo-dock-gui-main.c:1951 ../src/cairo-dock.c:663
+#: ../src/cairo-dock-gui-main.c:1982 ../src/cairo-dock.c:689
 msgid "< Maintenance mode >"
 msgstr "<정비 모드>"
 
-#: ../src/cairo-dock-gui-main.c:2041 ../src/cairo-dock-gui-simple.c:901
+#: ../src/cairo-dock-gui-main.c:2072 ../src/cairo-dock-gui-simple.c:859
 msgid "Cairo-Dock configuration"
 msgstr "카이로-독 설정"
 
-#: ../src/cairo-dock-gui-main.c:2396
+#: ../src/cairo-dock-gui-main.c:2437
 #, c-format
 msgid ""
 "The '%s' module is not present. You need to install it and all its "
 "dependencies in order to use this module."
-msgstr "모듈 '%s'이(가) 존재하지 않습니다. 의존성을 포함하여 설치해야 이 모듈을 사용할 수 있습니다."
+msgstr ""
+"모듈 '%s'이(가) 존재하지 않습니다. 의존성을 포함하여 설치해야 이 모듈을 사용"
+"할 수 있습니다."
 
-#: ../src/cairo-dock-gui-main.c:2402
+#: ../src/cairo-dock-gui-main.c:2443
 #, c-format
 msgid "The '%s' module is not enabled."
 msgstr "모듈 '%s'이(가) 활성화되지 않았습니다."
 
-#: ../src/cairo-dock-gui-main.c:2403
+#: ../src/cairo-dock-gui-main.c:2444
 msgid "Do you want to enable it now?"
 msgstr "활성화시키겠습니까?"
 
-#: ../src/cairo-dock-gui-main.c:2750
+#: ../src/cairo-dock-gui-main.c:2810
 msgid "Simple Mode"
 msgstr "간단한 모드"
 
-#: ../src/cairo-dock-gui-simple.c:408 ../src/cairo-dock-gui-themes.c:114
+#: ../src/cairo-dock-gui-simple.c:378 ../src/cairo-dock-gui-themes.c:114
 msgid "Could not import the theme."
 msgstr "테마를 불러올 수 없습니다."
 
-#: ../src/cairo-dock-gui-simple.c:428
+#: ../src/cairo-dock-gui-simple.c:398
 msgid "Importing theme..."
 msgstr "테마를 불러오는 중..."
 
-#: ../src/cairo-dock-gui-simple.c:435 ../src/cairo-dock-gui-themes.c:156
+#: ../src/cairo-dock-gui-simple.c:405 ../src/cairo-dock-gui-themes.c:156
 msgid "Theme has been saved"
 msgstr "테마가 저장되었습니다."
 
-#: ../src/cairo-dock-gui-simple.c:441 ../src/cairo-dock-gui-themes.c:162
+#: ../src/cairo-dock-gui-simple.c:411 ../src/cairo-dock-gui-themes.c:162
 msgid "Themes have been deleted"
 msgstr "테마가 삭제되었습니다."
 
-#: ../src/cairo-dock-gui-simple.c:771
+#: ../src/cairo-dock-gui-simple.c:706
 msgid "Animation:"
 msgstr "애니메이션:"
 
-#: ../src/cairo-dock-gui-simple.c:788
+#: ../src/cairo-dock-gui-simple.c:727
 msgid "Effects:"
 msgstr "효과:"
 
-#: ../src/cairo-dock-gui-simple.c:856
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+#: ../src/cairo-dock-gui-simple.c:795
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "미리보기와 설명을 보고 싶으면 애플릿을 클릭하세요."
 
-#: ../src/cairo-dock-gui-simple.c:865 ../data/messages:485
+#: ../src/cairo-dock-gui-simple.c:821 ../data/messages:485
 msgid "On mouse hover:"
 msgstr "마우스 호버 시:"
 
-#: ../src/cairo-dock-gui-simple.c:867 ../data/messages:487
+#: ../src/cairo-dock-gui-simple.c:823 ../data/messages:487
 msgid "On click:"
 msgstr "클릭 시:"
 
-#: ../src/cairo-dock-gui-simple.c:938
+#: ../src/cairo-dock-gui-simple.c:896
 msgid ""
 "This is the simple configuration panel of Cairo-Dock.\n"
 " After you get familiar with it, and if you want to customise your theme\n"
@@ -312,16 +346,17 @@ msgstr ""
 ", 당신은 고급 모드로 바꿀 수 있습니다.\n"
 " 당신은 다른 모드로 아무 때나 바꿀 수 있습니다."
 
-#: ../src/cairo-dock-gui-simple.c:1063
+#: ../src/cairo-dock-gui-simple.c:1039
 msgid "Advanced Mode"
 msgstr "고급 모드"
 
-#: ../src/cairo-dock-gui-simple.c:1064
+#: ../src/cairo-dock-gui-simple.c:1040
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
-"이 고급 모드는 당신이 독의 모든 하나의 매개변수를 수정할 수 있게 해줍니다. 이는 당신의 현재 테마를 커스터마이징해줄 강력한 도구입니다."
+"이 고급 모드는 당신이 독의 모든 하나의 매개변수를 수정할 수 있게 해줍니다. 이"
+"는 당신의 현재 테마를 커스터마이징해줄 강력한 도구입니다."
 
 #: ../src/cairo-dock-gui-themes.c:149
 msgid "Importing theme ..."
@@ -331,173 +366,100 @@ msgstr "테마를 불러오는 중..."
 msgid "Manage Themes"
 msgstr "테마 관리"
 
-#: ../src/cairo-dock-help.c:54 ../src/cairo-dock-menu.c:454
-#: ../src/help/applet-init.c:28 ../src/help/applet-notifications.c:228
-msgid "Help"
-msgstr "도움말"
-
-#: ../src/cairo-dock-help.c:69 ../src/help/applet-init.c:31
-msgid ""
-"This applet is made to help you.\n"
-"Click on its icon to pop up useful tips about the possibilities of Cairo-"
-"Dock.\n"
-"Middle-click to open the configuration window.\n"
-"Right-click to access some troubleshooting actions."
-msgstr ""
-
-#: ../src/cairo-dock-help.c:220 ../src/help/applet-tips-dialog.c:152
-msgid "Tips and Tricks"
-msgstr ""
-
-#: ../src/cairo-dock-help.c:380 ../src/help/applet-tips-dialog.c:299
-msgid "Category"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:122
+#: ../src/cairo-dock-menu.c:123
 msgid "Delete this dock?"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:174
+#: ../src/cairo-dock-menu.c:175
 msgid "About Cairo-Dock"
 msgstr "카이로-독에 대하여"
 
-#: ../src/cairo-dock-menu.c:211 ../data/messages:283 ../data/messages:1565
+#: ../src/cairo-dock-menu.c:212 ../data/messages:283 ../data/messages:1565
 msgid "Development site"
 msgstr "개발 사이트"
 
-#: ../src/cairo-dock-menu.c:212 ../data/messages:281 ../data/messages:1563
+#: ../src/cairo-dock-menu.c:213 ../data/messages:281 ../data/messages:1563
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "카이로-독의 최신판을 여기서 찾으세요!"
 
-#: ../src/cairo-dock-menu.c:216 ../src/cairo-dock-menu.c:447
+#: ../src/cairo-dock-menu.c:217 ../src/cairo-dock-menu.c:889
 msgid "Get more applets!"
 msgstr "더 많은 애플릿 받기!"
 
-#: ../src/cairo-dock-menu.c:220 ../src/cairo-dock-menu.c:226
+#: ../src/cairo-dock-menu.c:221 ../src/cairo-dock-menu.c:227
 msgid "Donate"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
+#: ../src/cairo-dock-menu.c:224 ../src/cairo-dock-menu.c:230
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:240
+#: ../src/cairo-dock-menu.c:241
 msgid "Development"
 msgstr "개발"
 
-#: ../src/cairo-dock-menu.c:246
+#: ../src/cairo-dock-menu.c:256
 msgid "Artwork"
 msgstr "아트워크"
 
-#: ../src/cairo-dock-menu.c:250
+#: ../src/cairo-dock-menu.c:283
+msgid "translator-credits"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:285
 msgid "Support"
 msgstr "지원"
 
-#: ../src/cairo-dock-menu.c:332
+#: ../src/cairo-dock-menu.c:362
 msgid "Quit Cairo-Dock?"
 msgstr "카이로-독을 종료하시겠습니까?"
 
-#: ../src/cairo-dock-menu.c:363
-msgid "Configure"
-msgstr "설정"
+#: ../src/cairo-dock-menu.c:392 ../src/cairo-dock-menu.c:534
+msgid "Separator"
+msgstr "구분선"
 
-#: ../src/cairo-dock-menu.c:368
-msgid "Configure behaviour, appearance, and applets."
-msgstr "동작, 모양새, 애플릿을 설정합니다."
-
-#: ../src/cairo-dock-menu.c:372
-msgid "Configure this dock"
-msgstr "이 독 설정"
-
-#: ../src/cairo-dock-menu.c:377
-msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "이 독의 위치, 보이는 방식, 모양새를 설정합니다."
-
-#: ../src/cairo-dock-menu.c:379
-msgid "Delete this dock"
+#: ../src/cairo-dock-menu.c:504
+msgid ""
+"The new dock has been created.\n"
+"Now move some launchers or applets into it by right-clicking on the icon -> "
+"move to another dock"
 msgstr ""
+"새 독이 만들어졌습니다.\n"
+"이제 아이콘을 오른쪽 클릭 후 \"다른 독으로 옮기기\"를 선택하여 실행 아이콘이"
+"나 애플릿을 여기로 옮기십시오."
 
-#: ../src/cairo-dock-menu.c:388
-msgid "Manage themes"
-msgstr "테마 관리"
+#: ../src/cairo-dock-menu.c:528
+msgid "Add"
+msgstr "추가"
 
-#: ../src/cairo-dock-menu.c:393
+#: ../src/cairo-dock-menu.c:530
+msgid "Sub-dock"
+msgstr "보조 독"
+
+#: ../src/cairo-dock-menu.c:532
+msgid "Main dock"
+msgstr "주 독"
+
+#: ../src/cairo-dock-menu.c:536
+msgid "Custom launcher"
+msgstr "사용자 지정 실행 아이콘"
+
+#: ../src/cairo-dock-menu.c:537
 msgid ""
-"Choose from amongst many themes on the server or save your current theme."
-msgstr "서버의 여러 테마에서 선택하거나 현재 테마를 저장합니다."
+"Usually you would drag a launcher from the menu and drop it on the dock."
+msgstr "주로 메뉴에서 실행 아이콘을 드래그하여 독에 떨어뜨립니다."
 
-#: ../src/cairo-dock-menu.c:399
-msgid "Unlock icons"
-msgstr "아이콘 잠금 해제"
-
-#: ../src/cairo-dock-menu.c:399
-msgid "Lock icons"
-msgstr "아이콘 잠금"
-
-#: ../src/cairo-dock-menu.c:403
-msgid "This will (un)lock the position of the icons."
-msgstr "아이콘의 위치를 잠금(해제)합니다."
-
-#: ../src/cairo-dock-menu.c:407
-msgid "Unlock dock"
-msgstr "독 잠금 해제"
-
-#: ../src/cairo-dock-menu.c:407
-msgid "Lock dock"
-msgstr "독 잠금"
-
-#: ../src/cairo-dock-menu.c:414
-msgid ""
-"This will allow you to add or remove launchers and applets, and configure "
-"the program."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:418
-msgid ""
-"This will prevent any modification of the current theme, and hide all the "
-"unnecessary entries in the menus."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:424
-msgid "Quick-Hide"
-msgstr "빠른 숨김"
-
-#: ../src/cairo-dock-menu.c:429
-msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "마우스 포인터가 올라와 있는 동안 독을 숨김니다."
-
-#: ../src/cairo-dock-menu.c:437
-msgid "Launch Cairo-Dock on startup"
-msgstr "시동시 카이로-독 시작"
-
-#: ../src/cairo-dock-menu.c:452
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
-msgstr "서드 파티 애플릿은 피진과 같은 많은 프로그램과의 통합을 제공합니다."
-
-#: ../src/cairo-dock-menu.c:459
-msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "여기에 문제는 없으며, 오로지 해법(그리고 수많은 유용한 귀띔!)만 있습니다."
-
-#: ../src/cairo-dock-menu.c:461
-msgid "About"
-msgstr "정보"
-
-#: ../src/cairo-dock-menu.c:469
-msgid "Quit"
-msgstr "끝내기"
-
-#: ../src/cairo-dock-menu.c:494
+#: ../src/cairo-dock-menu.c:554
 msgid "separator"
 msgstr "구분선"
 
-#: ../src/cairo-dock-menu.c:498
+#: ../src/cairo-dock-menu.c:558
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr "아이콘 (%s)을(를) 독에서 제거하시겠습니까?"
 
-#: ../src/cairo-dock-menu.c:509
+#: ../src/cairo-dock-menu.c:570
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -506,34 +468,21 @@ msgstr ""
 "독의 상자 안에 담겨있는 아이콘을 다시 배정하시겠습니까?\n"
 "(그렇지 않으면 모두 사라집니다)"
 
-#: ../src/cairo-dock-menu.c:577
-msgid ""
-"The new dock has been created.\n"
-"Now move some launchers or applets into it by right-clicking on the icon -> "
-"move to another dock"
-msgstr ""
-"새 독이 만들어졌습니다.\n"
-"이제 아이콘을 오른쪽 클릭 후 \"다른 독으로 옮기기\"를 선택하여 실행 아이콘이나 애플릿을 여기로 옮기십시오."
-
-#: ../src/cairo-dock-menu.c:611
+#: ../src/cairo-dock-menu.c:594
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "죄송합니다. 이 아이콘은 설정 파일이 없습니다."
 
-#: ../src/cairo-dock-menu.c:651
+#: ../src/cairo-dock-menu.c:634
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
 "새 독이 만들어졌습니다.\n"
-"오른쪽 클릭 후 \"카이로-독\"메뉴의 \"이 독 설정하기\"를 통해 자신에게 맞게 설정할 수 있습니다."
+"오른쪽 클릭 후 \"카이로-독\"메뉴의 \"이 독 설정하기\"를 통해 자신에게 맞게 설"
+"정할 수 있습니다."
 
-#: ../src/cairo-dock-menu.c:712
-#, c-format
-msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr "애플릿 (%s)을(를) 독에서 제거하시겠습니까?"
-
-#: ../src/cairo-dock-menu.c:934
+#: ../src/cairo-dock-menu.c:692
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -541,219 +490,284 @@ msgstr ""
 "죄송합니다. 해당하는 설명 파일을 찾을 수 없습니다.\n"
 "메뉴 모음에서 실행 아이콘을 드래그하여 독에 넣는 것을 추천합니다."
 
-#: ../src/cairo-dock-menu.c:1169
+#: ../src/cairo-dock-menu.c:733
 #, c-format
-msgid "Move all to desktop %d - face %d"
-msgstr "모두 %d번 데스크톱 - %d면으로 이동시킵니다."
+msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
+msgstr "애플릿 (%s)을(를) 독에서 제거하시겠습니까?"
 
-#: ../src/cairo-dock-menu.c:1169
-#, c-format
-msgid "Move to desktop %d - face %d"
-msgstr "%d번 데스크톱 - %d 면으로 이동합니다."
+#: ../src/cairo-dock-menu.c:791
+msgid "Configure"
+msgstr "설정"
 
-#: ../src/cairo-dock-menu.c:1171
-#, c-format
-msgid "Move all to desktop %d"
-msgstr "모두 %d번 데스크톱으로 이동합니다."
+#: ../src/cairo-dock-menu.c:796
+msgid "Configure behaviour, appearance, and applets."
+msgstr "동작, 모양새, 애플릿을 설정합니다."
 
-#: ../src/cairo-dock-menu.c:1171
-#, c-format
-msgid "Move to desktop %d"
-msgstr "%d번 데스크톱으로 이동합니다."
+#: ../src/cairo-dock-menu.c:801
+msgid "Configure this dock"
+msgstr "이 독 설정"
 
-#: ../src/cairo-dock-menu.c:1173
-#, c-format
-msgid "Move all to face %d"
-msgstr "모두 %d 면으로 이동합니다."
+#: ../src/cairo-dock-menu.c:806
+msgid "Customize the position, visibility and appearance of this main dock."
+msgstr "이 독의 위치, 보이는 방식, 모양새를 설정합니다."
 
-#: ../src/cairo-dock-menu.c:1173
-#, c-format
-msgid "Move to face %d"
-msgstr "%d 면으로 이동합니다."
+#: ../src/cairo-dock-menu.c:808
+msgid "Delete this dock"
+msgstr ""
 
-#: ../src/cairo-dock-menu.c:1211
-msgid "Add"
-msgstr "추가"
+#: ../src/cairo-dock-menu.c:818
+msgid "Manage themes"
+msgstr "테마 관리"
 
-#: ../src/cairo-dock-menu.c:1213
-msgid "Sub-dock"
-msgstr "보조 독"
-
-#: ../src/cairo-dock-menu.c:1215
-msgid "Main dock"
-msgstr "주 독"
-
-#: ../src/cairo-dock-menu.c:1218
-msgid "Separator"
-msgstr "구분선"
-
-#: ../src/cairo-dock-menu.c:1222
-msgid "Custom launcher"
-msgstr "사용자 지정 실행 아이콘"
-
-#: ../src/cairo-dock-menu.c:1223
+#: ../src/cairo-dock-menu.c:823
 msgid ""
-"Usually you would drag a launcher from the menu and drop it on the dock."
-msgstr "주로 메뉴에서 실행 아이콘을 드래그하여 독에 떨어뜨립니다."
+"Choose from amongst many themes on the server or save your current theme."
+msgstr "서버의 여러 테마에서 선택하거나 현재 테마를 저장합니다."
 
-#: ../src/cairo-dock-menu.c:1288
-msgid "Modify this separator"
-msgstr "이 구분선 수정"
+#: ../src/cairo-dock-menu.c:836
+#, fuzzy
+msgid "Unlock icons position"
+msgstr "아이콘 잠금 해제"
 
-#: ../src/cairo-dock-menu.c:1288
-msgid "Modify this launcher"
-msgstr "이 실행 아이콘 수정"
+#: ../src/cairo-dock-menu.c:836
+#, fuzzy
+msgid "Lock icons position"
+msgstr "위치 잠금"
 
-#: ../src/cairo-dock-menu.c:1290
-msgid "Remove this separator"
-msgstr "이 구분선 제거"
+#: ../src/cairo-dock-menu.c:840
+msgid "This will (un)lock the position of the icons."
+msgstr "아이콘의 위치를 잠금(해제)합니다."
 
-#: ../src/cairo-dock-menu.c:1290
-msgid "Remove this launcher"
-msgstr "이 실행 아이콘 제거"
+#: ../src/cairo-dock-menu.c:864
+msgid "Quick-Hide"
+msgstr "빠른 숨김"
 
-#: ../src/cairo-dock-menu.c:1291
+#: ../src/cairo-dock-menu.c:869
+msgid "This will hide the dock until you hover over it with the mouse."
+msgstr "마우스 포인터가 올라와 있는 동안 독을 숨김니다."
+
+#: ../src/cairo-dock-menu.c:878
+msgid "Launch Cairo-Dock on startup"
+msgstr "시동시 카이로-독 시작"
+
+#: ../src/cairo-dock-menu.c:894
+msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgstr "서드 파티 애플릿은 피진과 같은 많은 프로그램과의 통합을 제공합니다."
+
+#: ../src/cairo-dock-menu.c:897 ../src/help/applet-init.c:28
+#: ../src/help/applet-notifications.c:257
+msgid "Help"
+msgstr "도움말"
+
+#: ../src/cairo-dock-menu.c:902
+msgid "There are no problems, only solutions (and a lot of useful hints!)"
+msgstr ""
+"여기에 문제는 없으며, 오로지 해법(그리고 수많은 유용한 귀띔!)만 있습니다."
+
+#: ../src/cairo-dock-menu.c:904
+msgid "About"
+msgstr "정보"
+
+#: ../src/cairo-dock-menu.c:913
+msgid "Quit"
+msgstr "끝내기"
+
+#: ../src/cairo-dock-menu.c:922
+msgid ""
+"You're using a Cairo-Dock Session!\n"
+"It's not advised to quit the dock but you can press Shift to unlock this "
+"menu entry."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:954 ../src/cairo-dock-menu.c:975
+msgid "Modify"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:956 ../src/cairo-dock-menu.c:982
+msgid "Remove"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:957
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr "실행 아이콘을 제거하려면 독 밖으로 드래그하십시오."
 
-#: ../src/cairo-dock-menu.c:1293 ../src/cairo-dock-menu.c:1472
+#: ../src/cairo-dock-menu.c:959 ../src/cairo-dock-menu.c:991
 msgid "Move to another dock"
 msgstr "다른 독으로 옮김"
 
-#: ../src/cairo-dock-menu.c:1298 ../src/cairo-dock-menu.c:1477
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
+#: ../src/cairo-dock-menu.c:961 ../src/cairo-dock-menu.c:993
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "New main dock"
 msgstr "새 주 독"
 
-#: ../src/cairo-dock-menu.c:1318 ../src/cairo-dock-menu.c:1416
-msgid "Other actions"
-msgstr "다른 동작"
-
-#: ../src/cairo-dock-menu.c:1324
-msgid "Move to this desktop"
-msgstr "이 데스크톱으로 옮김"
-
-#: ../src/cairo-dock-menu.c:1339
-msgid "Not Fullscreen"
-msgstr "최대화면 안함"
-
-#: ../src/cairo-dock-menu.c:1339
-msgid "Fullscreen"
-msgstr "전체화면"
-
-#: ../src/cairo-dock-menu.c:1343
-msgid "Don't keep above"
-msgstr "맨 위로 하지 않음"
-
-#: ../src/cairo-dock-menu.c:1343 ../data/messages:363
-msgid "Keep above"
-msgstr "맨 위로"
-
-#: ../src/cairo-dock-menu.c:1368
-msgid "Remove custom icon"
-msgstr "사용자 정의 아이콘 제거"
-
-#: ../src/cairo-dock-menu.c:1372
-msgid "Set a custom icon"
-msgstr "사용자 정의 아이콘 설정"
-
-#: ../src/cairo-dock-menu.c:1375
-msgid "Kill"
-msgstr "종료"
-
-#: ../src/cairo-dock-menu.c:1380
+#: ../src/cairo-dock-menu.c:970
 msgid "Make it a launcher"
 msgstr "실행 아이콘으로 만들기"
 
-#: ../src/cairo-dock-menu.c:1383 ../src/cairo-dock-menu.c:1426
+#: ../src/cairo-dock-menu.c:979
+msgid "Detach"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:979
+msgid "Return to the dock"
+msgstr "독으로 돌아가기"
+
+#: ../src/cairo-dock-menu.c:986
+msgid "Duplicate"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1001
+msgid "Applet's handbook"
+msgstr "애플릿 안내"
+
+#: ../src/cairo-dock-menu.c:1046
+#, fuzzy
+msgid "Pick up an image"
+msgstr "그림 사용"
+
+#: ../src/cairo-dock-menu.c:1277
+#, c-format
+msgid "Move all to desktop %d - face %d"
+msgstr "모두 %d번 데스크톱 - %d면으로 이동시킵니다."
+
+#: ../src/cairo-dock-menu.c:1277
+#, c-format
+msgid "Move to desktop %d - face %d"
+msgstr "%d번 데스크톱 - %d 면으로 이동합니다."
+
+#: ../src/cairo-dock-menu.c:1279
+#, c-format
+msgid "Move all to desktop %d"
+msgstr "모두 %d번 데스크톱으로 이동합니다."
+
+#: ../src/cairo-dock-menu.c:1279
+#, c-format
+msgid "Move to desktop %d"
+msgstr "%d번 데스크톱으로 이동합니다."
+
+#: ../src/cairo-dock-menu.c:1281
+#, c-format
+msgid "Move all to face %d"
+msgstr "모두 %d 면으로 이동합니다."
+
+#: ../src/cairo-dock-menu.c:1281
+#, c-format
+msgid "Move to face %d"
+msgstr "%d 면으로 이동합니다."
+
+#: ../src/cairo-dock-menu.c:1527 ../src/cairo-dock-menu.c:1626
+msgid "Other actions"
+msgstr "다른 동작"
+
+#: ../src/cairo-dock-menu.c:1529
+msgid "Move to this desktop"
+msgstr "이 데스크톱으로 옮김"
+
+#: ../src/cairo-dock-menu.c:1544
+msgid "Not Fullscreen"
+msgstr "최대화면 안함"
+
+#: ../src/cairo-dock-menu.c:1544
+msgid "Fullscreen"
+msgstr "전체화면"
+
+#: ../src/cairo-dock-menu.c:1548
+msgid "Don't keep above"
+msgstr "맨 위로 하지 않음"
+
+#: ../src/cairo-dock-menu.c:1548 ../data/messages:363
+msgid "Keep above"
+msgstr "맨 위로"
+
+#: ../src/cairo-dock-menu.c:1573
+msgid "Remove custom icon"
+msgstr "사용자 정의 아이콘 제거"
+
+#: ../src/cairo-dock-menu.c:1577
+msgid "Set a custom icon"
+msgstr "사용자 정의 아이콘 설정"
+
+#: ../src/cairo-dock-menu.c:1580
+msgid "Kill"
+msgstr "종료"
+
+#: ../src/cairo-dock-menu.c:1584 ../src/cairo-dock-menu.c:1632
 msgid "Launch a new (Shift+clic)"
 msgstr "새로 실행(Shift+클릭)"
 
-#: ../src/cairo-dock-menu.c:1385
+#: ../src/cairo-dock-menu.c:1588
 msgid "Show"
 msgstr "보이기"
 
-#: ../src/cairo-dock-menu.c:1387
+#: ../src/cairo-dock-menu.c:1590
 msgid "Unmaximise"
 msgstr "최대화 취소"
 
-#: ../src/cairo-dock-menu.c:1387
+#: ../src/cairo-dock-menu.c:1590
 msgid "Maximise"
 msgstr "최대화"
 
-#: ../src/cairo-dock-menu.c:1392 ../src/cairo-dock-menu.c:1394
+#: ../src/cairo-dock-menu.c:1595 ../src/cairo-dock-menu.c:1597
 msgid "Minimise"
 msgstr "최소화"
 
-#: ../src/cairo-dock-menu.c:1392 ../src/cairo-dock-menu.c:1400
-#: ../src/help/applet-notifications.c:218
+#: ../src/cairo-dock-menu.c:1595 ../src/cairo-dock-menu.c:1602
+#: ../src/cairo-dock-menu.c:1610 ../src/help/applet-notifications.c:247
 msgid "middle-click"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1400 ../src/cairo-dock-menu.c:1402
+#: ../src/cairo-dock-menu.c:1602 ../src/cairo-dock-menu.c:1604
+msgid "Lower"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1610 ../src/cairo-dock-menu.c:1612
 #: ../data/messages:731
 msgid "Close"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1422
+#: ../src/cairo-dock-menu.c:1628
 msgid "Move all to this desktop"
 msgstr "모두 이 데스크톱으로 옮기기"
 
-#: ../src/cairo-dock-menu.c:1428
+#: ../src/cairo-dock-menu.c:1634
 msgid "Show all"
 msgstr "모두 보기"
 
-#: ../src/cairo-dock-menu.c:1430
+#: ../src/cairo-dock-menu.c:1636
 msgid "Minimise all"
 msgstr "모두 최소화"
 
-#: ../src/cairo-dock-menu.c:1432
+#: ../src/cairo-dock-menu.c:1638
 msgid "Close all"
 msgstr "모두 닫기"
 
-#: ../src/cairo-dock-menu.c:1460
-msgid "Detach this applet"
-msgstr "이 애플릿 떼기"
-
-#: ../src/cairo-dock-menu.c:1460
-msgid "Return to the dock"
-msgstr "독으로 돌아가기"
-
-#: ../src/cairo-dock-menu.c:1463
-msgid "Remove this applet"
-msgstr "이 애플릿 제거"
-
-#: ../src/cairo-dock-menu.c:1467
-msgid "Launch another instance of this applet"
-msgstr "이 애플릿 대신 실행하기"
-
-#: ../src/cairo-dock-menu.c:1502 ../data/messages:361
+#: ../src/cairo-dock-menu.c:1659 ../data/messages:361
 msgid "Normal"
 msgstr "일반"
 
-#: ../src/cairo-dock-menu.c:1508 ../data/messages:427 ../data/messages:595
+#: ../src/cairo-dock-menu.c:1665 ../data/messages:427 ../data/messages:595
 #: ../data/messages:1643
 msgid "Always on top"
 msgstr "항상 위"
 
-#: ../src/cairo-dock-menu.c:1515
+#: ../src/cairo-dock-menu.c:1672
 msgid "Always below"
 msgstr "항상 아래"
 
-#: ../src/cairo-dock-menu.c:1533 ../data/messages:369
+#: ../src/cairo-dock-menu.c:1689 ../data/messages:369
 msgid "Reserve space"
 msgstr "공간 할당"
 
-#: ../src/cairo-dock-menu.c:1540
+#: ../src/cairo-dock-menu.c:1696
 msgid "On all desktops"
 msgstr "모든 데스크톱에 보이기"
 
-#: ../src/cairo-dock-menu.c:1546
+#: ../src/cairo-dock-menu.c:1702
 msgid "Lock position"
 msgstr "위치 잠금"
 
-#: ../src/cairo-dock-user-interaction.c:405
+#: ../src/cairo-dock-user-interaction.c:416
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -762,118 +776,116 @@ msgstr ""
 "'X 아이콘 덮어쓰기' 가 설정에서 자동으로 활성화되었습니다.\n"
 "이는 '작업표시줄' 모듈에 있습니다."
 
-#: ../src/cairo-dock.c:148
+#: ../src/cairo-dock.c:147
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr ""
 
-#: ../src/cairo-dock.c:317
+#: ../src/cairo-dock.c:320
 msgid "Use Cairo backend."
 msgstr ""
 
-#: ../src/cairo-dock.c:320
+#: ../src/cairo-dock.c:323
 msgid "Use OpenGL backend."
 msgstr ""
 
-#: ../src/cairo-dock.c:324
-msgid ""
-"Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled "
-"libcairo)."
-msgstr ""
-
-#: ../src/cairo-dock.c:328
+#: ../src/cairo-dock.c:326
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 msgstr ""
 
-#: ../src/cairo-dock.c:331
+#: ../src/cairo-dock.c:329
+msgid "Ask again on startup which backend to use."
+msgstr ""
+
+#: ../src/cairo-dock.c:332
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr ""
 
-#: ../src/cairo-dock.c:334
+#: ../src/cairo-dock.c:335
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
 
-#: ../src/cairo-dock.c:337
+#: ../src/cairo-dock.c:338
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr ""
 
-#: ../src/cairo-dock.c:340
+#: ../src/cairo-dock.c:341
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 msgstr ""
 
-#: ../src/cairo-dock.c:343
+#: ../src/cairo-dock.c:344
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
 msgstr ""
 
-#: ../src/cairo-dock.c:346
+#: ../src/cairo-dock.c:347
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr ""
 
-#: ../src/cairo-dock.c:349
+#: ../src/cairo-dock.c:350
 msgid "Don't load any plug-ins."
 msgstr ""
 
-#: ../src/cairo-dock.c:352
+#: ../src/cairo-dock.c:353
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
 
-#: ../src/cairo-dock.c:355
+#: ../src/cairo-dock.c:356
 msgid "Force to display some output messages with colors."
 msgstr ""
 
-#: ../src/cairo-dock.c:358
+#: ../src/cairo-dock.c:359
 msgid "Print version and quit."
 msgstr ""
 
-#: ../src/cairo-dock.c:361
+#: ../src/cairo-dock.c:362
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr ""
 
-#: ../src/cairo-dock.c:365
+#: ../src/cairo-dock.c:366
 msgid "Keep the dock above other windows whatever."
 msgstr ""
 
-#: ../src/cairo-dock.c:368
+#: ../src/cairo-dock.c:369
 msgid "Don't make the dock appear on all desktops."
 msgstr ""
 
-#: ../src/cairo-dock.c:371
+#: ../src/cairo-dock.c:372
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr ""
 
-#: ../src/cairo-dock.c:374
+#: ../src/cairo-dock.c:375
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
 
-#: ../src/cairo-dock.c:377
+#: ../src/cairo-dock.c:378
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
 msgstr ""
 
-#: ../src/cairo-dock.c:380
+#: ../src/cairo-dock.c:381
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
 msgstr ""
 
-#: ../src/cairo-dock.c:499
+#: ../src/cairo-dock.c:502
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "카이로-독의 OpenGL을 사용합니다."
 
-#: ../src/cairo-dock.c:507
+#: ../src/cairo-dock.c:510
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -886,16 +898,18 @@ msgid ""
 msgstr ""
 "OpenGL은 하드웨어 가속을 통해 CPU 부하를 최소화할수 있습니다.\n"
 "또한 컴피즈와 비슷한 일부 화려한 시각 효과를 제공합니다. \n"
-"하지만, 일부 그래픽 카드와(또는) 드라이버가 완전히 지원하지 않아 독이 정상적으로 실행되는 것을 막습니다.\n"
+"하지만, 일부 그래픽 카드와(또는) 드라이버가 완전히 지원하지 않아 독이 정상적"
+"으로 실행되는 것을 막습니다.\n"
 "OpenGL을 활성화시키겠습니까?\n"
 " (이 대화 상자를 보지 않으려면, 독을 메뉴 모음에서 실행시키거나,\n"
-"  -o 옵션을 붙여 OpenGL을 강제로 활성화하고 -c옵션으로 cairo 또한 강제로 활성화시키십시오.)"
+"  -o 옵션을 붙여 OpenGL을 강제로 활성화하고 -c옵션으로 cairo 또한 강제로 활성"
+"화시키십시오.)"
 
-#: ../src/cairo-dock.c:512
+#: ../src/cairo-dock.c:521
 msgid "Remember this choice"
 msgstr "이 선택을 저장합니다."
 
-#: ../src/cairo-dock.c:749
+#: ../src/cairo-dock.c:775
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -903,7 +917,8 @@ msgid ""
 "at http://glx-dock.org"
 msgstr ""
 "'%s' 모듈에 문제가 생겼습니다.\n"
-"성공적으로 복원되었지만, 이러한 일이 다시 일어나면 http://glx-dock.org로 보고해주십시오."
+"성공적으로 복원되었지만, 이러한 일이 다시 일어나면 http://glx-dock.org로 보고"
+"해주십시오."
 
 #: ../src/gldit/cairo-dock-applet-facility.h:277
 msgid ""
@@ -923,77 +938,87 @@ msgstr ""
 "게이지 테마를 찾지 못해 기본 게이지가 대신 사용됩니다.\n"
 " 모듈 설정을 열어 바꿀 수 있습니다. 지금 하시겠습니까?"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:374
-msgid "Applet's handbook"
-msgstr "애플릿 안내"
-
-#: ../src/gldit/cairo-dock-desklet-manager.c:860
+#: ../src/gldit/cairo-dock-desklet-manager.c:858
 msgid "_custom decoration_"
 msgstr "_사용자 지정 장식_"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:333
+#: ../src/gldit/cairo-dock-dock-manager.c:363
 msgid "Bottom dock"
 msgstr "아래쪽 독"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:335
+#: ../src/gldit/cairo-dock-dock-manager.c:365
 msgid "Top dock"
 msgstr "위쪽 독"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:340
+#: ../src/gldit/cairo-dock-dock-manager.c:370
 msgid "Right dock"
 msgstr "오른쪽 독"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:342
+#: ../src/gldit/cairo-dock-dock-manager.c:372
 msgid "Left dock"
 msgstr "왼쪽 독"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:236
+#: ../src/gldit/cairo-dock-dock-manager.c:1632
+#: ../src/gldit/cairo-dock-dock-manager.c:1733
+#, fuzzy
+msgid "Pop up the main dock"
+msgstr "새 주 독"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
 msgid "by %s"
 msgstr "%s에 의한"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:248
+#: ../src/gldit/cairo-dock-gui-factory.c:255
 msgid "kB"
 msgstr "kB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:250
+#: ../src/gldit/cairo-dock-gui-factory.c:257
 msgid "MB"
 msgstr "MB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:259
+#: ../src/gldit/cairo-dock-gui-factory.c:266
 msgid "Local"
 msgstr "로컬"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:260
+#: ../src/gldit/cairo-dock-gui-factory.c:267
 msgid "User"
 msgstr "사용자"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:261
+#: ../src/gldit/cairo-dock-gui-factory.c:268
 msgid "Net"
 msgstr "네트워크"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:262
+#: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "New"
 msgstr "새로나옴"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:263
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "Updated"
 msgstr "업데이트됨"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:983
+#: ../src/gldit/cairo-dock-gui-factory.c:724
+msgid "Pick up a file"
+msgstr ""
+
+#: ../src/gldit/cairo-dock-gui-factory.c:724
+msgid "Pick up a directory"
+msgstr ""
+
+#: ../src/gldit/cairo-dock-gui-factory.c:984
 msgid "_Custom Icons_"
 msgstr "_사용자 지정 아이콘_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1347
+#: ../src/gldit/cairo-dock-gui-factory.c:1348
 msgid "Rate me"
 msgstr "평가하기"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1446
-#: ../src/gldit/cairo-dock-gui-factory.c:1448
+#: ../src/gldit/cairo-dock-gui-factory.c:1447
+#: ../src/gldit/cairo-dock-gui-factory.c:1449
 msgid "You must try the theme before you can rate it."
 msgstr "테마를 평가하기 전 반드시 사용해보아야 합니다."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1471
+#: ../src/gldit/cairo-dock-gui-factory.c:1472
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1003,7 +1028,7 @@ msgstr ""
 "모듈' %s'을 찾을 수 없습니다.\n"
 "이 기능을 즐기려면 같은 버전을 설치하십시오."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1480
+#: ../src/gldit/cairo-dock-gui-factory.c:1481
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1012,33 +1037,33 @@ msgstr ""
 "플러그인 '%s'가 비활성화되어있습니다.\n"
 "활성화시키겠습니까?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2252
-#: ../src/gldit/cairo-dock-gui-factory.c:2831
+#: ../src/gldit/cairo-dock-gui-factory.c:2329
+#: ../src/gldit/cairo-dock-gui-factory.c:2912
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "'%s'의 테마 목록"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2769
+#: ../src/gldit/cairo-dock-gui-factory.c:2846
 msgid "Theme"
 msgstr "테마"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2782
+#: ../src/gldit/cairo-dock-gui-factory.c:2859
 msgid "Rating"
 msgstr "평가"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2788
+#: ../src/gldit/cairo-dock-gui-factory.c:2865
 msgid "Sobriety"
 msgstr "신뢰도"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2857
+#: ../src/gldit/cairo-dock-gui-factory.c:2938
 msgid "link"
 msgstr "링크"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2910
+#: ../src/gldit/cairo-dock-gui-factory.c:2991
 msgid "Grab"
 msgstr "잡기"
 
-#: ../src/gldit/cairo-dock-struct.h:419
+#: ../src/gldit/cairo-dock-struct.h:423
 msgid "Default"
 msgstr "기본"
 
@@ -1051,21 +1076,21 @@ msgstr "%s 테마를 덮어씌우시겠습니까?"
 msgid "Last modification on:"
 msgstr "마지막으로 수정:"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:276
-#, c-format
+#: ../src/gldit/cairo-dock-themes-manager.c:272
+#, fuzzy, c-format
 msgid ""
-"Could not access remote file %s/%s. Maybe the server is down.\n"
+"Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
 "원격지에 있는 파일 %s/%s에 접근할 수 없습니다. 서버에 문제가 있어 보입니다.\n"
 "나중에 다시 시도하거나 glx-dock.org에 연락해 주십시오."
 
-#: ../src/gldit/cairo-dock-themes-manager.c:291
+#: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "테마 %s를 지우시겠습니까?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:293
+#: ../src/gldit/cairo-dock-themes-manager.c:288
 msgid "Are you sure you want to delete these themes?"
 msgstr "이 테마들을 지우시겠습니까?"
 
@@ -1109,63 +1134,78 @@ msgid ""
 "page."
 msgstr ""
 "독 주위의 검은 사각형을 없애려면, 컴퍼지트 매니저를 활성화해야 합니다.\n"
-"예를 들어, 화면 효과를 활성화하거나, 컴피즈를 실행하거나, 메타시티의 컴퍼지션을 활성화하면 됩니다.\n"
-"만약 당신의 시스템이 컴퍼지션을 지원하지 않는다면, Cairo-Dock이 이를 대신하여 모방할 수 있습니다. 이 옵션은 설정 페이지의 "
-"바닥에 있는 '시스템' 모듈에 있습니다."
+"예를 들어, 화면 효과를 활성화하거나, 컴피즈를 실행하거나, 메타시티의 컴퍼지션"
+"을 활성화하면 됩니다.\n"
+"만약 당신의 시스템이 컴퍼지션을 지원하지 않는다면, Cairo-Dock이 이를 대신하"
+"여 모방할 수 있습니다. 이 옵션은 설정 페이지의 바닥에 있는 '시스템' 모듈에 있"
+"습니다."
 
-#: ../src/help/applet-notifications.c:169
-msgid "Unity is already disabled."
+#: ../src/help/applet-init.c:31
+msgid ""
+"This applet is made to help you.\n"
+"Click on its icon to pop up useful tips about the possibilities of Cairo-"
+"Dock.\n"
+"Middle-click to open the configuration window.\n"
+"Right-click to access some troubleshooting actions."
 msgstr ""
 
-#: ../src/help/applet-notifications.c:218
+#: ../src/help/applet-notifications.c:247
 msgid "Open global settings"
 msgstr ""
 
-#: ../src/help/applet-notifications.c:223
+#: ../src/help/applet-notifications.c:252
 msgid "Activate composite"
 msgstr ""
 
-#: ../src/help/applet-notifications.c:225
+#: ../src/help/applet-notifications.c:254
 msgid "Disable the gnome-panel"
 msgstr ""
 
-#: ../src/help/applet-notifications.c:227
+#: ../src/help/applet-notifications.c:256
 msgid "Disable Unity"
 msgstr ""
 
-#: ../src/help/applet-notifications.c:229
+#: ../src/help/applet-notifications.c:258
 msgid "Online help"
 msgstr ""
 
-#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
+#: ../src/help/applet-tips-dialog.c:152
+msgid "Tips and Tricks"
+msgstr ""
+
+#: ../src/help/applet-tips-dialog.c:307
+msgid "Category"
+msgstr ""
+
+#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:119
 msgid "Enter a command"
 msgstr ""
 
-#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
+#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:120
 msgid "New launcher"
 msgstr ""
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
+#: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:445
 #: ../data/messages:613
 msgid "Move down"
 msgstr "아래로 내리기"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:610 ../data/messages:447
+#: ../src/implementations/cairo-dock-hiding-effect.c:604 ../data/messages:447
 #: ../data/messages:615
 msgid "Fade out"
 msgstr "점차 희미해지기"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:449
+#: ../src/implementations/cairo-dock-hiding-effect.c:612 ../data/messages:449
 #: ../data/messages:617
 msgid "Semi transparent"
 msgstr "반투명"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:451
+#: ../src/implementations/cairo-dock-hiding-effect.c:621 ../data/messages:451
 #: ../data/messages:619
 msgid "Zoom out"
 msgstr "축소"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:453
+#: ../src/implementations/cairo-dock-hiding-effect.c:629 ../data/messages:453
 #: ../data/messages:621
 msgid "Folding"
 msgstr "접기"
@@ -1725,9 +1765,8 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1477
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1775,8 +1814,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1501
@@ -1927,7 +1966,8 @@ msgid ""
 "described here."
 msgstr ""
 "애플릿을 파이썬, 펄, 또는 다른 어떤 언어로 개발하고 싶거나,\n"
-"독에 작용하는 것을 개발하고 싶다면 DBus API에 대해 설명한 전체 문서가 여기 있습니다."
+"독에 작용하는 것을 개발하고 싶다면 DBus API에 대해 설명한 전체 문서가 여기 있"
+"습니다."
 
 #: ../data/messages:271 ../data/messages:1553
 msgid "DBus API"
@@ -1949,7 +1989,8 @@ msgstr "웹사이트"
 
 #: ../data/messages:277 ../data/messages:1559
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "문제가 있습니까? 제안하실 것이 있나요? 저희에게 할 말이 있다고요? 오십시오!"
+msgstr ""
+"문제가 있습니까? 제안하실 것이 있나요? 저희에게 할 말이 있다고요? 오십시오!"
 
 #: ../data/messages:279 ../data/messages:1561
 msgid "Community site"
@@ -1973,7 +2014,8 @@ msgid ""
 " One for stable releases and another which is updated weekly (unstable "
 "version)"
 msgstr ""
-"데비안, 우분투, 그리고 데비안에서 갈라져 나온 배포판들을 위해 우리는 두 저장소를 운영합니다:\n"
+"데비안, 우분투, 그리고 데비안에서 갈라져 나온 배포판들을 위해 우리는 두 저장"
+"소를 운영합니다:\n"
 " 하나는 안정판이고 다른 하나(불안정 버전)는 매주 업데이트 됩니다."
 
 #: ../data/messages:293 ../data/messages:1575
@@ -1992,7 +2034,8 @@ msgid ""
 "latest stable version."
 msgstr ""
 "우분투면 우리의 '안정' 저장소를 이 단추를 눌러 추가할 수 있습니다:\n"
-" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-dock' 패키지를 다시 설치하십시오."
+" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-"
+"dock' 패키지를 다시 설치하십시오."
 
 #: ../data/messages:303 ../data/messages:1585
 msgid ""
@@ -2002,7 +2045,8 @@ msgid ""
 "latest weekly version."
 msgstr ""
 "우분투면 우리의 '주간' 저장소를 이 단추를 눌러 추가할 수 있습니다:\n"
-" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-dock' 패키지를 다시 설치하십시오."
+" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-"
+"dock' 패키지를 다시 설치하십시오."
 
 #: ../data/messages:305 ../data/messages:1587
 msgid "Debian"
@@ -2016,7 +2060,8 @@ msgid ""
 "system and reinstall 'cairo-dock' package."
 msgstr ""
 "데비안 Stable이면 우리의 '안정' 저장소를 이 단추를 눌러 추가할 수 있습니다:\n"
-" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-dock' 패키지를 다시 설치하십시오."
+" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-"
+"dock' 패키지를 다시 설치하십시오."
 
 #: ../data/messages:313 ../data/messages:1595
 msgid ""
@@ -2025,8 +2070,10 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
-"데비안 Unstable이면 우리의 '안정' 저장소를 이 단추를 눌러 추가할 수 있습니다:\n"
-" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-dock' 패키지를 다시 설치하십시오."
+"데비안 Unstable이면 우리의 '안정' 저장소를 이 단추를 눌러 추가할 수 있습니"
+"다:\n"
+" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-"
+"dock' 패키지를 다시 설치하십시오."
 
 #: ../data/messages:315 ../data/messages:317 ../data/messages:1733
 #: ../data/messages:1813 ../data/messages:1845
@@ -2246,8 +2293,10 @@ msgid ""
 "mouse. The rest of the time, it stays invisible, thus acting like a menu."
 msgstr ""
 "각 모드는 화면에 자주 나타나는 것부터 그렇지 않은 순으로 나열되어 있습니다.\n"
-"독이 숨겨지거나 창 아래에 있을 경우, 마우스 포인터를 화면 가장자리로 가져가 다시 나타낼 수 있습니다.\n"
-"단축키를 통해 독을 불러올 경우, 마우스 포인터가 있는 위치에 나타납니다. 평소에는 보이지 않으며 메뉴처럼 동작합니다."
+"독이 숨겨지거나 창 아래에 있을 경우, 마우스 포인터를 화면 가장자리로 가져가 "
+"다시 나타낼 수 있습니다.\n"
+"단축키를 통해 독을 불러올 경우, 마우스 포인터가 있는 위치에 나타납니다. 평소"
+"에는 보이지 않으며 메뉴처럼 동작합니다."
 
 #: ../data/messages:429 ../data/messages:597 ../data/messages:1645
 msgid "Reserve space for the dock"
@@ -2287,7 +2336,9 @@ msgid ""
 "When you press the shortcut, the dock will show itself at the potition of "
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
-msgstr "단축키를 통해 독을 불러올 경우, 마우스 포인터가 있는 위치에 나타납니다. 평소에는 보이지 않으며 메뉴처럼 동작합니다."
+msgstr ""
+"단축키를 통해 독을 불러올 경우, 마우스 포인터가 있는 위치에 나타납니다. 평소"
+"에는 보이지 않으며 메뉴처럼 동작합니다."
 
 #: ../data/messages:457 ../data/messages:643
 msgid "Keyboard shortcut to pop-up the dock:"
@@ -2301,7 +2352,9 @@ msgstr "부 독의 보이는 방식"
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "아이콘을 누르거나 마우스 포인터를 아이콘 위에 놓음으로서 부 독을 표시할 수 있습니다."
+msgstr ""
+"아이콘을 누르거나 마우스 포인터를 아이콘 위에 놓음으로서 부 독을 표시할 수 있"
+"습니다."
 
 #: ../data/messages:465 ../data/messages:657
 msgid "Appear on mouse over"
@@ -2323,8 +2376,10 @@ msgid ""
 msgstr ""
 "없음     : 독에 열린 창을 보이지 않습니다.\n"
 "MacOSX   : 실행 아이콘과 프로그램을 섞고 최소화된 창을 보여줍니다.\n"
-"KDE : 프로그램과 실행 아이콘을 섞고 다른 모든 창을 보여주고 창을 함께 묶어 보조 독에 넣습니다.\n"
-"그놈    : 작업표시줄과 실행 아이콘을 분리하고 현재 데스크톱에 있는 창만 보여줍니다."
+"KDE : 프로그램과 실행 아이콘을 섞고 다른 모든 창을 보여주고 창을 함께 묶어 보"
+"조 독에 넣습니다.\n"
+"그놈    : 작업표시줄과 실행 아이콘을 분리하고 현재 데스크톱에 있는 창만 보여"
+"줍니다."
 
 #: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
@@ -2356,8 +2411,9 @@ msgid ""
 "name of a theme that is installed on your system (like 'Gartoon' or "
 "'Human'), or even a path to a folder containing icons."
 msgstr ""
-"시스템의 기본 아이콘을 사용하려면 비워놓으십시오. ('Gartoon'이나 'Human'과 같은)시스템에 설치되어 있는 테마의 이름이나 "
-"아이콘을 담고 있는 폴더의 경로를 적어도 됩니다."
+"시스템의 기본 아이콘을 사용하려면 비워놓으십시오. ('Gartoon'이나 'Human'과 같"
+"은)시스템에 설치되어 있는 테마의 이름이나 아이콘을 담고 있는 폴더의 경로를 적"
+"어도 됩니다."
 
 #: ../data/messages:497
 msgid "Choose a theme of icons :"
@@ -2391,7 +2447,8 @@ msgstr "매우 큼"
 msgid ""
 "This will separate launchers, application, and applets from each others. "
 "Separators will be automatically inserted then."
-msgstr "실행 아이콘, 프로그램, 애플릿을 서로 분리합니다. 구분선은 스스로 들어갑니다."
+msgstr ""
+"실행 아이콘, 프로그램, 애플릿을 서로 분리합니다. 구분선은 스스로 들어갑니다."
 
 #: ../data/messages:513 ../data/messages:1129
 msgid "Separate the different types of icons?"
@@ -2446,7 +2503,9 @@ msgstr ""
 #: ../data/messages:537
 msgid ""
 "You can install them by simply drag-and-dropping the link onto your dock."
-msgstr "간단하게 링크를 드래그 & 드롭을 통해 독으로 가져오는 방법을 통해 설치할 수 있습니다"
+msgstr ""
+"간단하게 링크를 드래그 & 드롭을 통해 독으로 가져오는 방법을 통해 설치할 수 있"
+"습니다"
 
 #: ../data/messages:543 ../data/messages:1687
 msgid "Themes"
@@ -2460,8 +2519,10 @@ msgid ""
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
 msgstr ""
-"0으로 맞추면 독은 가로로 놓일 경우 왼쪽 모서리에 위치하고 세로로 놓일 경우 위쪽 모서리에 위치합니다. 1로 맞추면 가로로 놓일 경우 "
-"오른쪽 모서리에 세로로 놓일 경우 아래쪽 모서리에 위치합니다.0.5로 맞출 경우 화면 가장자리의 중간에 위치합니다."
+"0으로 맞추면 독은 가로로 놓일 경우 왼쪽 모서리에 위치하고 세로로 놓일 경우 위"
+"쪽 모서리에 위치합니다. 1로 맞추면 가로로 놓일 경우 오른쪽 모서리에 세로로 놓"
+"일 경우 아래쪽 모서리에 위치합니다.0.5로 맞출 경우 화면 가장자리의 중간에 위"
+"치합니다."
 
 #: ../data/messages:561 ../data/messages:1621
 msgid "Relative alignment:"
@@ -2476,7 +2537,8 @@ msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 msgstr ""
-"화면 가장자리의 간격을 픽셀 단위로 조정합니다. Alt나 Ctrl 키를 누르고 왼쪽 클릭을 통해 독을 움직일 수도 있습니다."
+"화면 가장자리의 간격을 픽셀 단위로 조정합니다. Alt나 Ctrl 키를 누르고 왼쪽 클"
+"릭을 통해 독을 움직일 수도 있습니다."
 
 #: ../data/messages:571 ../data/messages:1627
 msgid "Lateral offset:"
@@ -2486,7 +2548,8 @@ msgstr "옆으로 치우치기"
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
-msgstr "픽셀 단위. Alt나 Ctrl 키를 누르고 왼쪽 클릭을 통해 독을 움직일 수도 있습니다."
+msgstr ""
+"픽셀 단위. Alt나 Ctrl 키를 누르고 왼쪽 클릭을 통해 독을 움직일 수도 있습니다."
 
 #: ../data/messages:575 ../data/messages:1631
 msgid "Distance to the screen edge:"
@@ -2500,7 +2563,8 @@ msgstr "여러 화면"
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama to manage "
 "them."
-msgstr "이 옵션은 이중 모니터를 가지고 있고 Xinerama를 통해 관리할 때 사용합니다."
+msgstr ""
+"이 옵션은 이중 모니터를 가지고 있고 Xinerama를 통해 관리할 때 사용합니다."
 
 #: ../data/messages:581
 msgid "Use Xinerama?"
@@ -2562,7 +2626,9 @@ msgstr "부가적인 파라미터"
 msgid ""
 "This is only usefull if you do not already use auto-hide and if your Window "
 "Manager allows the dock in front of fullscreen windows (which is rare)."
-msgstr "자동 숨기기를 사용하지 않고 창 관리자가 독을 최대화된 창 앞에 있는 것을 허용할 때만(굉장히 드문 경우) 유용합니다."
+msgstr ""
+"자동 숨기기를 사용하지 않고 창 관리자가 독을 최대화된 창 앞에 있는 것을 허용"
+"할 때만(굉장히 드문 경우) 유용합니다."
 
 #: ../data/messages:649
 msgid "Automatically hide the dock when a window becomes full screen?"
@@ -2592,7 +2658,9 @@ msgstr "작업표시줄"
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
-msgstr "카이로-독은 작업표시줄같이 반응합니다. 다른 모든 작업표시줄을 지우는 것을 권합니다."
+msgstr ""
+"카이로-독은 작업표시줄같이 반응합니다. 다른 모든 작업표시줄을 지우는 것을 권"
+"합니다."
 
 #: ../data/messages:675
 msgid "Show currently opened applications in the dock?"
@@ -2612,8 +2680,8 @@ msgid ""
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 msgstr ""
-"프로그램이 돌아가고 있고 표지가 아이콘에 나타나 이를 알려주면 실행 아이콘이 프로그램처럼 동작합니다.SHIFT+클릭으로 프로그램을 새로 "
-"실행할 수 있습니다."
+"프로그램이 돌아가고 있고 표지가 아이콘에 나타나 이를 알려주면 실행 아이콘이 "
+"프로그램처럼 동작합니다.SHIFT+클릭으로 프로그램을 새로 실행할 수 있습니다."
 
 #: ../data/messages:683
 msgid "Mix launchers and applications"
@@ -2623,7 +2691,9 @@ msgstr "실행 아이콘와 프로그램 합치기"
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
-msgstr "해당하는 프로그램의 모든 창을 모아 고유한 부-독에 넣고 모든 창이 같은 시간에 동작하게 합니다."
+msgstr ""
+"해당하는 프로그램의 모든 창을 모아 고유한 부-독에 넣고 모든 창이 같은 시간에 "
+"동작하게 합니다."
 
 #: ../data/messages:687
 msgid "Group windows from the same application in a sub-dock ?"
@@ -2647,7 +2717,8 @@ msgid ""
 "set, the same icon as the corresponding launcher will be used for each "
 "application."
 msgstr ""
-"지정하지 않으면, X에서 제공하는 각 프로그램 아이콘을 사용합니다. 지정할 경우, 해당하는 실행 아이콘을 각 프로그램에 대해 사용합니다."
+"지정하지 않으면, X에서 제공하는 각 프로그램 아이콘을 사용합니다. 지정할 경"
+"우, 해당하는 실행 아이콘을 각 프로그램에 대해 사용합니다."
 
 #: ../data/messages:697
 msgid "Overwrite the X icon with the launchers' icon?"
@@ -2758,7 +2829,9 @@ msgstr "대화상자 지속 시간:"
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
-msgstr "심지어는 예를 들어 화면에 꽉차게 영화를 보거나 다른 데스크톱에 있는 경우에도 알려줍니다.\n"
+msgstr ""
+"심지어는 예를 들어 화면에 꽉차게 영화를 보거나 다른 데스크톱에 있는 경우에도 "
+"알려줍니다.\n"
 
 #: ../data/messages:753
 msgid "Force the following applications to demand your attention"
@@ -2780,7 +2853,9 @@ msgstr "부 독이 나타날 때 애니메이션"
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
-msgstr "아이콘은 접혀서 나타나고 독을 채우기 전까지 다시 펴집니다. 이 값이 작을수록 빨라집니다."
+msgstr ""
+"아이콘은 접혀서 나타나고 독을 채우기 전까지 다시 펴집니다. 이 값이 작을수록 "
+"빨라집니다."
 
 #: ../data/messages:765
 msgid "Animation unfolding duration:"
@@ -2832,7 +2907,9 @@ msgstr "카이로 기반에서 애니메이션 진동수 :"
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
-msgstr "투명 그라디에이션 패턴이 실시간으로 계산됩니다. 조금 더 높은 성능의 CPU가 필요합니다."
+msgstr ""
+"투명 그라디에이션 패턴이 실시간으로 계산됩니다. 조금 더 높은 성능의 CPU가 필"
+"요합니다."
 
 #: ../data/messages:811
 msgid "Reflections should be calculated in real-time?"
@@ -2848,8 +2925,8 @@ msgid ""
 "etc and have a black background around your dock. For aesthetic reasons, the "
 "dock will be kept under other windows."
 msgstr ""
-"컴피즈나 xcompmgr과 같은 컴퍼지트 관리자가 없고 독 주위에 검은 그림자가 생기는 경우에만 사용하십시오. 미적 이유로 독은 다른 창 "
-"아래에 있는 상태가 됩니다."
+"컴피즈나 xcompmgr과 같은 컴퍼지트 관리자가 없고 독 주위에 검은 그림자가 생기"
+"는 경우에만 사용하십시오. 미적 이유로 독은 다른 창 아래에 있는 상태가 됩니다."
 
 #: ../data/messages:817
 msgid "Emulate composition with fake transparency?"
@@ -2857,7 +2934,8 @@ msgstr "가짜 투명으로 컴퍼지션을 가상으로 돌리시겠습니까?"
 
 #: ../data/messages:819
 msgid "You need to re-open the panel. It is deactivated by default on KDE."
-msgstr "패널을 다시 열으셔야 합니다. KDE에서는 기본적으로 비활성화되어 있습니다."
+msgstr ""
+"패널을 다시 열으셔야 합니다. KDE에서는 기본적으로 비활성화되어 있습니다."
 
 #: ../data/messages:821
 msgid "Make the config panel transparent?"
@@ -2873,7 +2951,8 @@ msgid ""
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
-"서버와의 연결을 허용할 초 단위의 최대 시간. 이는 연결 단계만 제한하며, 독이 연결되면 이 옵션은 더이상 사용되지 않습니다."
+"서버와의 연결을 허용할 초 단위의 최대 시간. 이는 연결 단계만 제한하며, 독이 "
+"연결되면 이 옵션은 더이상 사용되지 않습니다."
 
 #: ../data/messages:827
 msgid "Connection timeout :"
@@ -2883,7 +2962,9 @@ msgstr "연결 시간 :"
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
-msgstr "전체 작업에서 허용할 초 단위의 최대 시간. 이는 연결 단계만 제한하며, 일부 테마는 수 MB입니다."
+msgstr ""
+"전체 작업에서 허용할 초 단위의 최대 시간. 이는 연결 단계만 제한하며, 일부 테"
+"마는 수 MB입니다."
 
 #: ../data/messages:831
 msgid "Maximum time to download a file:"
@@ -2947,7 +3028,8 @@ msgstr "배경 그림을 사용합니다."
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
-msgstr "어떤 형식이든 상관없습니다. 비어있으면, 색 그라데이션이 이전으로 돌아옵니다."
+msgstr ""
+"어떤 형식이든 상관없습니다. 비어있으면, 색 그라데이션이 이전으로 돌아옵니다."
 
 #: ../data/messages:867 ../data/messages:1677
 msgid "Image filename to use as a background :"
@@ -3038,7 +3120,8 @@ msgstr "부-독"
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
-msgstr "부-독의 아이콘 크기를 주 독의 아이콘을 기준으로 해서 비율을 정할 수 있습니다."
+msgstr ""
+"부-독의 아이콘 크기를 주 독의 아이콘을 기준으로 해서 비율을 정할 수 있습니다."
 
 #: ../data/messages:929
 msgid "Ratio for the size of the sub-docks' icons :"
@@ -3133,7 +3216,9 @@ msgstr "모든 데스크렛에 적용할 장식 고르기 :"
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
-msgstr "프레임처럼 표시할 대상 아래에 나타나는 그림입니다. 사용하지 않으시려면 비워두십시오."
+msgstr ""
+"프레임처럼 표시할 대상 아래에 나타나는 그림입니다. 사용하지 않으시려면 비워두"
+"십시오."
 
 #: ../data/messages:981
 msgid "Background image :"
@@ -3179,7 +3264,9 @@ msgstr "아래쪽으로 치우치기 :"
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
-msgstr "반사처럼 표시할 대상 위에 나타나는 그림입니다. 사용하지 않으시려면 비워두십시오."
+msgstr ""
+"반사처럼 표시할 대상 위에 나타나는 그림입니다. 사용하지 않으시려면 비워두십시"
+"오."
 
 #: ../data/messages:1007
 msgid "Foreground image :"
@@ -3217,7 +3304,9 @@ msgstr "아이콘 테마를 고르시요 :"
 msgid ""
 "Any format allowed; leave this field empty if you don't want to use an image "
 "as background."
-msgstr "어떤 형식이든지 상관없습니다; 배경 그림을 사용하지 않으려면 빈칸으로 남겨두십시오."
+msgstr ""
+"어떤 형식이든지 상관없습니다; 배경 그림을 사용하지 않으려면 빈칸으로 남겨두십"
+"시오."
 
 #: ../data/messages:1045
 msgid "Image filename to use as a background for icons :"
@@ -3228,9 +3317,10 @@ msgid "Zoom effect"
 msgstr "확대 효과"
 
 #: ../data/messages:1049
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "마우스 포인터를 위에 올렸을 때 아이콘이 확대되기를 원하지 않으면 1로 설정하십시오."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"마우스 포인터를 위에 올렸을 때 아이콘이 확대되기를 원하지 않으면 1로 설정하십"
+"시오."
 
 #: ../data/messages:1051
 msgid "Maximum zoom of the icons :"
@@ -3239,7 +3329,8 @@ msgstr "아이콘 최대 확대 :"
 #: ../data/messages:1053
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
-msgstr "픽셀 단위. 이 공간(마우스 가운데) 밖으로 벗어나면 확대가 되지 않습니다."
+msgstr ""
+"픽셀 단위. 이 공간(마우스 가운데) 밖으로 벗어나면 확대가 되지 않습니다."
 
 #: ../data/messages:1055
 msgid "Width of the space in which the zoom will be effective :"
@@ -3257,7 +3348,9 @@ msgstr "반사"
 msgid ""
 "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 "
 "reflections are not used."
-msgstr "반사도입니다; 1일 경우 아이콘이 최대로 반사되고 0의 경우 반사가 적용되지 않습니다."
+msgstr ""
+"반사도입니다; 1일 경우 아이콘이 최대로 반사되고 0의 경우 반사가 적용되지 않습"
+"니다."
 
 #: ../data/messages:1065
 msgid "Reflective power of the plane :"
@@ -3275,7 +3368,8 @@ msgstr "강함"
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
-msgstr "아이콘 크기에 대한 퍼센트 단위. 이 파라미터는 독의 총 높이에 영향을 줍니다."
+msgstr ""
+"아이콘 크기에 대한 퍼센트 단위. 이 파라미터는 독의 총 높이에 영향을 줍니다."
 
 #: ../data/messages:1073
 msgid "Height of the reflection:"
@@ -3294,7 +3388,9 @@ msgid ""
 "It is their transparency when the dock is at rest; they will \"materialize\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
-msgstr "독에 있을 때의 투명도입니다; 독이 커질수록 점점 \"구체화\"됩니다. 0에 가까울수록 더욱 투명해집니다."
+msgstr ""
+"독에 있을 때의 투명도입니다; 독이 커질수록 점점 \"구체화\"됩니다. 0에 가까울"
+"수록 더욱 투명해집니다."
 
 #: ../data/messages:1081
 msgid "Icons' transparency at rest :"
@@ -3328,7 +3424,8 @@ msgstr "아이콘의 특수 효과를 설정합니다. (OpenGL 필요)"
 msgid ""
 "Configure icons' animations on appearing/disappearing (require OpenGL "
 "capacity)."
-msgstr "아이콘이 나타나거나 사라질 때의 애니메이션을 설정합니다. (Opel GL 필요)"
+msgstr ""
+"아이콘이 나타나거나 사라질 때의 애니메이션을 설정합니다. (Opel GL 필요)"
 
 #: ../data/messages:1101
 msgid "Separators"
@@ -3346,7 +3443,9 @@ msgstr "구분선의 그림 크기를 강제로 일정하게 유지하시겠습�
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
-msgstr "기본값으로, 3D-판과 휨은 평평하고 물리적인 구분선 표시를 지원합니다. 평평한 구분선은 보기와 다르게 표현됩니다."
+msgstr ""
+"기본값으로, 3D-판과 휨은 평평하고 물리적인 구분선 표시를 지원합니다. 평평한 "
+"구분선은 보기와 다르게 표현됩니다."
 
 #: ../data/messages:1109
 msgid "How to draw the separators?"
@@ -3393,7 +3492,9 @@ msgid ""
 "If you don't separate the icons, you can place them wherever you want, and "
 "insert separators manually. Applications will then be placed next to their "
 "launcher if they have one, or after the last launcher."
-msgstr "아이콘 형식을 가른다면 아이콘은 같은 형식끼리 모이고 다른 형식과는 구분선으로 떼어놓습니다."
+msgstr ""
+"아이콘 형식을 가른다면 아이콘은 같은 형식끼리 모이고 다른 형식과는 구분선으"
+"로 떼어놓습니다."
 
 #: ../data/messages:1131 ../data/messages:1229
 msgid "No"
@@ -3471,13 +3572,17 @@ msgstr "활성화된 실행 아이콘의 알리미"
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
-msgstr "알리미는 실행 아이콘 위에 표시되어 이미 실행되었음을 나타냅니다. 기본값을 사용하려면 비워두십시오."
+msgstr ""
+"알리미는 실행 아이콘 위에 표시되어 이미 실행되었음을 나타냅니다. 기본값을 사"
+"용하려면 비워두십시오."
 
 #: ../data/messages:1183
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
-msgstr "알리미는 활성화된 실행 아이콘 위에 표시되지만 프로그램 위에 표시할 수도 있습니다."
+msgstr ""
+"알리미는 활성화된 실행 아이콘 위에 표시되지만 프로그램 위에 표시할 수도 있습"
+"니다."
 
 #: ../data/messages:1185
 msgid "Display an indicator on application icons too ?"
@@ -3490,8 +3595,10 @@ msgid ""
 "If the indicator is linked to the icon, the offset will be upwards, "
 "otherwise downwards."
 msgstr ""
-"아이콘 크기와 관련이 있습니다. 이 파라미터를 통해 알리미의 높이를 조정합니다.\n"
-"만약 알리미가 아이콘과 이어져 있다면 위로 치우지고, 그렇지 않다면 아래로 치우집니다."
+"아이콘 크기와 관련이 있습니다. 이 파라미터를 통해 알리미의 높이를 조정합니"
+"다.\n"
+"만약 알리미가 아이콘과 이어져 있다면 위로 치우지고, 그렇지 않다면 아래로 치우"
+"집니다."
 
 #: ../data/messages:1189
 msgid "Vertical offset :"
@@ -3517,7 +3624,8 @@ msgid ""
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
 "have the same size as the icons."
 msgstr ""
-"알리미를 아이콘보다 크거나 작게 만들 수 있습니다. 값이 커질수록 알리미가 커집니다.1은 알리미가 아이콘과 같은 크기임을 뜻합니다."
+"알리미를 아이콘보다 크거나 작게 만들 수 있습니다. 값이 커질수록 알리미가 커집"
+"니다.1은 알리미가 아이콘과 같은 크기임을 뜻합니다."
 
 #: ../data/messages:1197
 msgid "Indicator size ratio :"
@@ -3529,8 +3637,8 @@ msgstr "더 큼"
 
 #: ../data/messages:1203
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr "알리미가 독의 위치(위, 아래, 오른쪽, 왼쪽)를 따르게 합니다."
 
 #: ../data/messages:1205
@@ -3557,7 +3665,9 @@ msgstr "부 독의 아이콘을 스택처럼 표시"
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
-msgstr "같은 프로그램을 묶기로 선택했을 경우에만 됩니다. 기본값을 쓰려면 비워두십시오."
+msgstr ""
+"같은 프로그램을 묶기로 선택했을 경우에만 됩니다. 기본값을 쓰려면 비워두십시"
+"오."
 
 #: ../data/messages:1221
 msgid "Zoom the indicator with its icon?"
@@ -3613,7 +3723,9 @@ msgstr "이름표에 사용될 글꼴 :"
 msgid ""
 "If you set it to fully transparent, there will be no background for the "
 "text, but the margin around the text will still be in effect."
-msgstr "완전히 투명하게 설정하면 글자에 배경이 없지만 글자 가장자리의 여백은 여전히 효과를 미칩니다."
+msgstr ""
+"완전히 투명하게 설정하면 글자에 배경이 없지만 글자 가장자리의 여백은 여전히 "
+"효과를 미칩니다."
 
 #: ../data/messages:1255
 msgid "Colour of the label's background :"
@@ -3639,7 +3751,9 @@ msgstr "시작 색깔 :"
 msgid ""
 "It's the second color of the gradation. Set it to the same value as the "
 "first if you don't want to have any gradation."
-msgstr "그라데이션의 두번째 색깔입니다. 그라데이션을 하지 않으려면 시작 색깔과 똑같이 하십시오."
+msgstr ""
+"그라데이션의 두번째 색깔입니다. 그라데이션을 하지 않으려면 시작 색깔과 똑같"
+"이 하십시오."
 
 #: ../data/messages:1267
 msgid "Stop color :"
@@ -3649,7 +3763,9 @@ msgstr "멈춤 색깔 :"
 msgid ""
 "If checked, the pattern will go from top to bottom, otherwise from left to "
 "right."
-msgstr "체크된 경우, 무늬는 위에서 아래로 가고, 그렇지 않으면 왼쪽에서 오른쪽으로 갑니다."
+msgstr ""
+"체크된 경우, 무늬는 위에서 아래로 가고, 그렇지 않으면 왼쪽에서 오른쪽으로 갑"
+"니다."
 
 #: ../data/messages:1271
 msgid "Pattern should be vertical?"
@@ -3701,7 +3817,8 @@ msgid ""
 "system and reinstall 'cairo-dock' package."
 msgstr ""
 "데비안 Stable이면 우리의 '주간' 저장소를 이 단추를 눌러 추가할 수 있습니다:\n"
-" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-dock' 패키지를 다시 설치하십시오."
+" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-"
+"dock' 패키지를 다시 설치하십시오."
 
 #: ../data/messages:1603
 msgid ""
@@ -3710,8 +3827,10 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
-"데비안 Unstable이면 우리의 '주간' 저장소를 이 단추를 눌러 추가할 수 있습니다:\n"
-" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-dock' 패키지를 다시 설치하십시오."
+"데비안 Unstable이면 우리의 '주간' 저장소를 이 단추를 눌러 추가할 수 있습니"
+"다:\n"
+" 그 다음 모든 'cairo-dock*' 패키지를 완전히 지우고 시스템 업데이트 후 'cairo-"
+"dock' 패키지를 다시 설치하십시오."
 
 #: ../data/messages:1633
 msgid "starting from 0"
@@ -3976,3 +4095,30 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
+
+#~ msgid "Lock icons"
+#~ msgstr "아이콘 잠금"
+
+#~ msgid "Unlock dock"
+#~ msgstr "독 잠금 해제"
+
+#~ msgid "Lock dock"
+#~ msgstr "독 잠금"
+
+#~ msgid "Modify this separator"
+#~ msgstr "이 구분선 수정"
+
+#~ msgid "Modify this launcher"
+#~ msgstr "이 실행 아이콘 수정"
+
+#~ msgid "Remove this separator"
+#~ msgstr "이 구분선 제거"
+
+#~ msgid "Remove this launcher"
+#~ msgstr "이 실행 아이콘 제거"
+
+#~ msgid "Detach this applet"
+#~ msgstr "이 애플릿 떼기"
+
+#~ msgid "Launch another instance of this applet"
+#~ msgstr "이 애플릿 대신 실행하기"

@@ -126,8 +126,7 @@ typedef enum {
 	NOTIFICATION_ENTER_DOCK = NB_NOTIFICATIONS_CONTAINER,
 	/// notification called when the mouse leave a dock.
 	NOTIFICATION_LEAVE_DOCK,
-	/// notification called when a dock is stopped, for instance before it is destroyed.
-	NOTIFICATION_STOP_DOCK,
+	NOTIFICATION_STOP_DOCK_DEPRECATED,
 	/// notification called when an icon has just been inserted into a dock. data : {Icon, CairoDock}
 	NOTIFICATION_INSERT_ICON,
 	/// notification called when an icon is going to be removed from a dock. data : {Icon, CairoDock}

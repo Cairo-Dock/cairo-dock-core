@@ -8,18 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2011-09-23 23:42+0000\n"
 "PO-Revision-Date: 2011-09-20 08:58+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Catalan <ca@li.org>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2011-09-25 04:34+0000\n"
 "X-Generator: Launchpad (build 14012)\n"
-"Language: ca\n"
 
-#: ../src/cairo-dock-gui-commons.c:216
+#: ../src/cairo-dock-gui-commons.c:221
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -28,217 +27,249 @@ msgstr ""
 "Heu fet canvis en el tema actual.\n"
 "Si no els deseu els perdreu al triar un tema nou. Voleu continuar tot i això?"
 
-#: ../src/cairo-dock-gui-commons.c:242
+#: ../src/cairo-dock-gui-commons.c:247
 msgid "Please wait while importing the theme..."
 msgstr "Esperi mentre s'importa el tema..."
 
-#: ../src/cairo-dock-gui-commons.c:364 ../src/cairo-dock-menu.c:1456
+#: ../src/cairo-dock-gui-commons.c:369
 msgid "Configure this applet"
 msgstr "Configurar aquesta mini-aplicació"
 
-#: ../src/cairo-dock-gui-commons.c:401 ../src/cairo-dock-gui-main.c:131
+#: ../src/cairo-dock-gui-commons.c:406 ../src/cairo-dock-gui-main.c:130
 msgid "Files"
 msgstr "Fitxers"
 
-#: ../src/cairo-dock-gui-commons.c:406 ../src/cairo-dock-gui-main.c:132
+#: ../src/cairo-dock-gui-commons.c:411 ../src/cairo-dock-gui-main.c:131
 msgid "Internet"
 msgstr "Internet"
 
-#: ../src/cairo-dock-gui-commons.c:411 ../src/cairo-dock-gui-main.c:133
+#: ../src/cairo-dock-gui-commons.c:416 ../src/cairo-dock-gui-main.c:132
 msgid "Desktop"
 msgstr "Escriptori"
 
-#: ../src/cairo-dock-gui-commons.c:416
+#: ../src/cairo-dock-gui-commons.c:421
 msgid "Accessory"
 msgstr ""
 
-#: ../src/cairo-dock-gui-commons.c:421 ../src/cairo-dock-gui-main.c:135
-#: ../src/cairo-dock-gui-main.c:1504 ../data/messages:757
+#: ../src/cairo-dock-gui-commons.c:426 ../src/cairo-dock-gui-main.c:134
+#: ../src/cairo-dock-gui-main.c:1528 ../data/messages:757
 msgid "System"
 msgstr "Sistema"
 
-#: ../src/cairo-dock-gui-commons.c:426 ../src/cairo-dock-gui-main.c:136
+#: ../src/cairo-dock-gui-commons.c:431 ../src/cairo-dock-gui-main.c:135
 msgid "Fun"
 msgstr ""
 
-#: ../src/cairo-dock-gui-commons.c:468
+#: ../src/cairo-dock-gui-commons.c:474
 msgid "plug-in"
 msgstr "Connector"
 
-#: ../src/cairo-dock-gui-commons.c:474
+#: ../src/cairo-dock-gui-commons.c:480
 msgid "category"
 msgstr ""
 
-#: ../src/cairo-dock-gui-items.c:384
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+#: ../src/cairo-dock-gui-commons.c:575
+msgid "Press the shortkey"
 msgstr ""
 
-#: ../src/cairo-dock-gui-items.c:600
+#: ../src/cairo-dock-gui-commons.c:594
+msgid "Change the shortkey"
+msgstr ""
+
+#: ../src/cairo-dock-gui-commons.c:681
+msgid "Origin"
+msgstr ""
+
+#: ../src/cairo-dock-gui-commons.c:686
+#, fuzzy
+msgid "Action"
+msgstr "Opcions"
+
+#: ../src/cairo-dock-gui-commons.c:690
+msgid "Shortkey"
+msgstr ""
+
+#: ../src/cairo-dock-gui-items.c:242
+msgid "Main dock's parameters are available in the main configuration window."
+msgstr ""
+
+#: ../src/cairo-dock-gui-items.c:459
 msgid "Launcher configuration"
 msgstr "Configuració dels llançadors"
 
-#: ../src/cairo-dock-gui-main.c:129 ../data/messages:671
+#: ../src/cairo-dock-gui-items.c:877
+msgid "Remove this item"
+msgstr ""
+
+#: ../src/cairo-dock-gui-main.c:128 ../data/messages:671
 msgid "Behaviour"
 msgstr "Comportament"
 
-#: ../src/cairo-dock-gui-main.c:130 ../data/messages:491 ../data/messages:1657
+#: ../src/cairo-dock-gui-main.c:129 ../data/messages:491 ../data/messages:1657
 msgid "Appearance"
 msgstr "Aparença"
 
-#: ../src/cairo-dock-gui-main.c:134
+#: ../src/cairo-dock-gui-main.c:133
 msgid "Accessories"
 msgstr "Accessoris"
 
-#: ../src/cairo-dock-gui-main.c:137 ../src/cairo-dock-gui-main.c:1653
+#: ../src/cairo-dock-gui-main.c:136 ../src/cairo-dock-gui-main.c:1682
 #: ../data/messages:1791
 msgid "All"
 msgstr "Tot"
 
-#: ../src/cairo-dock-gui-main.c:1482
+#: ../src/cairo-dock-gui-main.c:1499
 msgid "Set the position of the main dock."
 msgstr "Estableix la posició de la barra principal."
 
-#: ../src/cairo-dock-gui-main.c:1483 ../data/messages:335 ../data/messages:545
+#: ../src/cairo-dock-gui-main.c:1500 ../data/messages:335 ../data/messages:545
 msgid "Position"
 msgstr "Posició"
 
-#: ../src/cairo-dock-gui-main.c:1489
+#: ../src/cairo-dock-gui-main.c:1506
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1490 ../src/cairo-dock-menu.c:1494
+#: ../src/cairo-dock-gui-main.c:1507 ../src/cairo-dock-menu.c:1651
 #: ../data/messages:353
 msgid "Visibility"
 msgstr "Visibilitat"
 
-#: ../src/cairo-dock-gui-main.c:1496
+#: ../src/cairo-dock-gui-main.c:1513
 msgid "Display and interact with currently open windows."
 msgstr "Mostra i interacciona amb les finestres obertes actualment."
 
-#: ../src/cairo-dock-gui-main.c:1497 ../data/messages:41 ../data/messages:469
+#: ../src/cairo-dock-gui-main.c:1514 ../data/messages:41 ../data/messages:469
 #: ../data/messages:1323
 msgid "Taskbar"
 msgstr "Barra de tasques"
 
-#: ../src/cairo-dock-gui-main.c:1503
+#: ../src/cairo-dock-gui-main.c:1520
+msgid "Define all the keyboard shortcuts currently available."
+msgstr ""
+
+#: ../src/cairo-dock-gui-main.c:1521
+msgid "Shortkeys"
+msgstr ""
+
+#: ../src/cairo-dock-gui-main.c:1527
 msgid "All of the parameters you will never want to tweak."
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1513
+#: ../src/cairo-dock-gui-main.c:1537
 msgid "Set a background for your dock."
 msgstr "Estableix un fons al teu acoblador"
 
-#: ../src/cairo-dock-gui-main.c:1514 ../data/messages:853
+#: ../src/cairo-dock-gui-main.c:1538 ../data/messages:853
 #: ../data/messages:1251 ../data/messages:1665
 msgid "Background"
 msgstr "Fons"
 
-#: ../src/cairo-dock-gui-main.c:1520
+#: ../src/cairo-dock-gui-main.c:1544
 msgid "Select a view for each of your docks."
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1521 ../data/messages:523 ../data/messages:915
+#: ../src/cairo-dock-gui-main.c:1545 ../data/messages:523 ../data/messages:915
 #: ../data/messages:1659
 msgid "Views"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1528
+#: ../src/cairo-dock-gui-main.c:1552
 msgid "Configure text bubble appearance."
 msgstr "Configurar l'aspecte de les notificacions"
 
-#: ../src/cairo-dock-gui-main.c:1529
+#: ../src/cairo-dock-gui-main.c:1553
 msgid "Dialog boxes"
 msgstr "Diàlegs"
 
-#: ../src/cairo-dock-gui-main.c:1536
+#: ../src/cairo-dock-gui-main.c:1560
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1537 ../data/messages:101 ../data/messages:971
+#: ../src/cairo-dock-gui-main.c:1561 ../data/messages:101 ../data/messages:971
 #: ../data/messages:1383
 msgid "Desklets"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1544
+#: ../src/cairo-dock-gui-main.c:1568
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1545 ../data/messages:11 ../data/messages:493
+#: ../src/cairo-dock-gui-main.c:1569 ../data/messages:11 ../data/messages:493
 #: ../data/messages:1035 ../data/messages:1293
 msgid "Icons"
 msgstr "Icones"
 
-#: ../src/cairo-dock-gui-main.c:1551
+#: ../src/cairo-dock-gui-main.c:1575
 msgid "Indicators are additional markers for your icons."
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1552 ../data/messages:1153
+#: ../src/cairo-dock-gui-main.c:1576 ../data/messages:1153
 msgid "Indicators"
 msgstr "Indicadors"
 
-#: ../src/cairo-dock-gui-main.c:1559
+#: ../src/cairo-dock-gui-main.c:1583
 msgid "Define icon caption and quick-info style."
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1560
+#: ../src/cairo-dock-gui-main.c:1584
 msgid "Captions"
 msgstr "Etiquetes"
 
-#: ../src/cairo-dock-gui-main.c:1629
+#: ../src/cairo-dock-gui-main.c:1654
 msgid "Categories"
 msgstr "Categories"
 
-#: ../src/cairo-dock-gui-main.c:1767
+#: ../src/cairo-dock-gui-main.c:1796
 msgid "Filter"
 msgstr "Filtrar"
 
-#: ../src/cairo-dock-gui-main.c:1814
+#: ../src/cairo-dock-gui-main.c:1843
 msgid "Options"
 msgstr "Opcions"
 
-#: ../src/cairo-dock-gui-main.c:1824
+#: ../src/cairo-dock-gui-main.c:1853
 msgid "All words"
 msgstr "Totes les paraules"
 
-#: ../src/cairo-dock-gui-main.c:1828
+#: ../src/cairo-dock-gui-main.c:1857
 msgid "Highlighted words"
 msgstr "Realçar les paraules"
 
-#: ../src/cairo-dock-gui-main.c:1833
+#: ../src/cairo-dock-gui-main.c:1862
 msgid "Hide others"
 msgstr "Amaga altres"
 
-#: ../src/cairo-dock-gui-main.c:1838
+#: ../src/cairo-dock-gui-main.c:1867
 msgid "Search in description"
 msgstr "Cerca a la descripció"
 
-#: ../src/cairo-dock-gui-main.c:1852
+#: ../src/cairo-dock-gui-main.c:1881
 msgid "Enable this module"
 msgstr "Activa aquest mòdul"
 
-#: ../src/cairo-dock-gui-main.c:1916 ../data/messages:541
+#: ../src/cairo-dock-gui-main.c:1945 ../data/messages:541
 msgid "More applets"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1917 ../data/messages:539
+#: ../src/cairo-dock-gui-main.c:1946 ../data/messages:539
 msgid "Get more applets online !"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:1951 ../src/cairo-dock.c:663
+#: ../src/cairo-dock-gui-main.c:1982 ../src/cairo-dock.c:689
 msgid "< Maintenance mode >"
 msgstr "< Mode de manteniment >"
 
-#: ../src/cairo-dock-gui-main.c:2041 ../src/cairo-dock-gui-simple.c:901
+#: ../src/cairo-dock-gui-main.c:2072 ../src/cairo-dock-gui-simple.c:859
 msgid "Cairo-Dock configuration"
 msgstr "Configuració de Cairo-Dock"
 
-#: ../src/cairo-dock-gui-main.c:2396
+#: ../src/cairo-dock-gui-main.c:2437
 #, c-format
 msgid ""
 "The '%s' module is not present. You need to install it and all its "
@@ -247,57 +278,56 @@ msgstr ""
 "No hi ha el mòdul '%s'. Hauries d'instal·lar el mòdul o les seves "
 "dependències per treure'n el màxim profit."
 
-#: ../src/cairo-dock-gui-main.c:2402
+#: ../src/cairo-dock-gui-main.c:2443
 #, c-format
 msgid "The '%s' module is not enabled."
 msgstr "El mòdul '%s' no està activat."
 
-#: ../src/cairo-dock-gui-main.c:2403
+#: ../src/cairo-dock-gui-main.c:2444
 msgid "Do you want to enable it now?"
 msgstr "Vols activar-ho immediatament?"
 
-#: ../src/cairo-dock-gui-main.c:2750
+#: ../src/cairo-dock-gui-main.c:2810
 msgid "Simple Mode"
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:408 ../src/cairo-dock-gui-themes.c:114
+#: ../src/cairo-dock-gui-simple.c:378 ../src/cairo-dock-gui-themes.c:114
 msgid "Could not import the theme."
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:428
+#: ../src/cairo-dock-gui-simple.c:398
 msgid "Importing theme..."
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:435 ../src/cairo-dock-gui-themes.c:156
+#: ../src/cairo-dock-gui-simple.c:405 ../src/cairo-dock-gui-themes.c:156
 msgid "Theme has been saved"
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:441 ../src/cairo-dock-gui-themes.c:162
+#: ../src/cairo-dock-gui-simple.c:411 ../src/cairo-dock-gui-themes.c:162
 msgid "Themes have been deleted"
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:771
+#: ../src/cairo-dock-gui-simple.c:706
 msgid "Animation:"
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:788
+#: ../src/cairo-dock-gui-simple.c:727
 msgid "Effects:"
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:856
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+#: ../src/cairo-dock-gui-simple.c:795
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:865 ../data/messages:485
+#: ../src/cairo-dock-gui-simple.c:821 ../data/messages:485
 msgid "On mouse hover:"
 msgstr "Al passar per sobre el ratolí:"
 
-#: ../src/cairo-dock-gui-simple.c:867 ../data/messages:487
+#: ../src/cairo-dock-gui-simple.c:823 ../data/messages:487
 msgid "On click:"
 msgstr "Al clicar:"
 
-#: ../src/cairo-dock-gui-simple.c:938
+#: ../src/cairo-dock-gui-simple.c:896
 msgid ""
 "This is the simple configuration panel of Cairo-Dock.\n"
 " After you get familiar with it, and if you want to customise your theme\n"
@@ -305,11 +335,11 @@ msgid ""
 " You can switch from a mode to another at any time."
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:1063
+#: ../src/cairo-dock-gui-simple.c:1039
 msgid "Advanced Mode"
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:1064
+#: ../src/cairo-dock-gui-simple.c:1040
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
@@ -323,542 +353,514 @@ msgstr ""
 msgid "Manage Themes"
 msgstr ""
 
-#: ../src/cairo-dock-help.c:54 ../src/cairo-dock-menu.c:454
-#: ../src/help/applet-init.c:28 ../src/help/applet-notifications.c:228
-msgid "Help"
-msgstr "Ajuda"
-
-#: ../src/cairo-dock-help.c:69 ../src/help/applet-init.c:31
-msgid ""
-"This applet is made to help you.\n"
-"Click on its icon to pop up useful tips about the possibilities of Cairo-"
-"Dock.\n"
-"Middle-click to open the configuration window.\n"
-"Right-click to access some troubleshooting actions."
-msgstr ""
-
-#: ../src/cairo-dock-help.c:220 ../src/help/applet-tips-dialog.c:152
-msgid "Tips and Tricks"
-msgstr ""
-
-#: ../src/cairo-dock-help.c:380 ../src/help/applet-tips-dialog.c:299
-msgid "Category"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:122
+#: ../src/cairo-dock-menu.c:123
 msgid "Delete this dock?"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:174
+#: ../src/cairo-dock-menu.c:175
 msgid "About Cairo-Dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:211 ../data/messages:283 ../data/messages:1565
+#: ../src/cairo-dock-menu.c:212 ../data/messages:283 ../data/messages:1565
 msgid "Development site"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:212 ../data/messages:281 ../data/messages:1563
+#: ../src/cairo-dock-menu.c:213 ../data/messages:281 ../data/messages:1563
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Troba aquí la darrera versió de Cairo-Dock !."
 
-#: ../src/cairo-dock-menu.c:216 ../src/cairo-dock-menu.c:447
+#: ../src/cairo-dock-menu.c:217 ../src/cairo-dock-menu.c:889
 msgid "Get more applets!"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:220 ../src/cairo-dock-menu.c:226
+#: ../src/cairo-dock-menu.c:221 ../src/cairo-dock-menu.c:227
 msgid "Donate"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
+#: ../src/cairo-dock-menu.c:224 ../src/cairo-dock-menu.c:230
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:240
+#: ../src/cairo-dock-menu.c:241
 msgid "Development"
 msgstr "Desenvolupament"
 
-#: ../src/cairo-dock-menu.c:246
+#: ../src/cairo-dock-menu.c:256
 msgid "Artwork"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:250
+#: ../src/cairo-dock-menu.c:283
+msgid "translator-credits"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:285
 msgid "Support"
 msgstr "Assistència"
 
-#: ../src/cairo-dock-menu.c:332
+#: ../src/cairo-dock-menu.c:362
 msgid "Quit Cairo-Dock?"
 msgstr "Tancar Cairo-Dock ?"
 
-#: ../src/cairo-dock-menu.c:363
-msgid "Configure"
-msgstr "Configurar"
-
-#: ../src/cairo-dock-menu.c:368
-msgid "Configure behaviour, appearance, and applets."
-msgstr "Configurar el comportament, aparença i miniaplicacions."
-
-#: ../src/cairo-dock-menu.c:372
-msgid "Configure this dock"
-msgstr "Configurar aquesta barra"
-
-#: ../src/cairo-dock-menu.c:377
-msgid "Customize the position, visibility and appearance of this main dock."
+#: ../src/cairo-dock-menu.c:392 ../src/cairo-dock-menu.c:534
+msgid "Separator"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:379
-msgid "Delete this dock"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:388
-msgid "Manage themes"
-msgstr "Gestiona temes"
-
-#: ../src/cairo-dock-menu.c:393
-msgid ""
-"Choose from amongst many themes on the server or save your current theme."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:399
-msgid "Unlock icons"
-msgstr "desblocar icones"
-
-#: ../src/cairo-dock-menu.c:399
-msgid "Lock icons"
-msgstr "blocar icones"
-
-#: ../src/cairo-dock-menu.c:403
-msgid "This will (un)lock the position of the icons."
-msgstr "Això (des)blocarà la posició de les icones."
-
-#: ../src/cairo-dock-menu.c:407
-msgid "Unlock dock"
-msgstr "desbloca la barra"
-
-#: ../src/cairo-dock-menu.c:407
-msgid "Lock dock"
-msgstr "bloca la barra"
-
-#: ../src/cairo-dock-menu.c:414
-msgid ""
-"This will allow you to add or remove launchers and applets, and configure "
-"the program."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:418
-msgid ""
-"This will prevent any modification of the current theme, and hide all the "
-"unnecessary entries in the menus."
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:424
-msgid "Quick-Hide"
-msgstr "Oculta automàticament"
-
-#: ../src/cairo-dock-menu.c:429
-msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "Amagarà la barra fins que hi entris amb el ratolí."
-
-#: ../src/cairo-dock-menu.c:437
-msgid "Launch Cairo-Dock on startup"
-msgstr "Executa Cairo-Dock a l'inici"
-
-#: ../src/cairo-dock-menu.c:452
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:459
-msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:461
-msgid "About"
-msgstr "Quant a"
-
-#: ../src/cairo-dock-menu.c:469
-msgid "Quit"
-msgstr "Surt"
-
-#: ../src/cairo-dock-menu.c:494
-msgid "separator"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:498
-#, c-format
-msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr ""
-"Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
-
-#: ../src/cairo-dock-menu.c:509
-msgid ""
-"Do you want to re-dispatch the icons contained inside this container into "
-"the dock?\n"
-"(otherwise they will be destroyed)"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:577
+#: ../src/cairo-dock-menu.c:504
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:611
+#: ../src/cairo-dock-menu.c:528
+msgid "Add"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:530
+msgid "Sub-dock"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:532
+msgid "Main dock"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:536
+msgid "Custom launcher"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:537
+msgid ""
+"Usually you would drag a launcher from the menu and drop it on the dock."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:554
+msgid "separator"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:558
+#, c-format
+msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
+msgstr "Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
+
+#: ../src/cairo-dock-menu.c:570
+msgid ""
+"Do you want to re-dispatch the icons contained inside this container into "
+"the dock?\n"
+"(otherwise they will be destroyed)"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:594
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:651
+#: ../src/cairo-dock-menu.c:634
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:712
-#, c-format
-msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr ""
-"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs segur "
-"?"
-
-#: ../src/cairo-dock-menu.c:934
+#: ../src/cairo-dock-menu.c:692
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1169
+#: ../src/cairo-dock-menu.c:733
 #, c-format
-msgid "Move all to desktop %d - face %d"
+msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
+msgstr ""
+"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs "
+"segur ?"
+
+#: ../src/cairo-dock-menu.c:791
+msgid "Configure"
+msgstr "Configurar"
+
+#: ../src/cairo-dock-menu.c:796
+msgid "Configure behaviour, appearance, and applets."
+msgstr "Configurar el comportament, aparença i miniaplicacions."
+
+#: ../src/cairo-dock-menu.c:801
+msgid "Configure this dock"
+msgstr "Configurar aquesta barra"
+
+#: ../src/cairo-dock-menu.c:806
+msgid "Customize the position, visibility and appearance of this main dock."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1169
-#, c-format
-msgid "Move to desktop %d - face %d"
+#: ../src/cairo-dock-menu.c:808
+msgid "Delete this dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1171
-#, c-format
-msgid "Move all to desktop %d"
-msgstr "Mou-ho tot a l'escriptori %d"
+#: ../src/cairo-dock-menu.c:818
+msgid "Manage themes"
+msgstr "Gestiona temes"
 
-#: ../src/cairo-dock-menu.c:1171
-#, c-format
-msgid "Move to desktop %d"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1173
-#, c-format
-msgid "Move all to face %d"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1173
-#, c-format
-msgid "Move to face %d"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1211
-msgid "Add"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1213
-msgid "Sub-dock"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1215
-msgid "Main dock"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1218
-msgid "Separator"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1222
-msgid "Custom launcher"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1223
+#: ../src/cairo-dock-menu.c:823
 msgid ""
-"Usually you would drag a launcher from the menu and drop it on the dock."
+"Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1288
-msgid "Modify this separator"
+#: ../src/cairo-dock-menu.c:836
+#, fuzzy
+msgid "Unlock icons position"
+msgstr "desblocar icones"
+
+#: ../src/cairo-dock-menu.c:836
+#, fuzzy
+msgid "Lock icons position"
+msgstr "blocar icones"
+
+#: ../src/cairo-dock-menu.c:840
+msgid "This will (un)lock the position of the icons."
+msgstr "Això (des)blocarà la posició de les icones."
+
+#: ../src/cairo-dock-menu.c:864
+msgid "Quick-Hide"
+msgstr "Oculta automàticament"
+
+#: ../src/cairo-dock-menu.c:869
+msgid "This will hide the dock until you hover over it with the mouse."
+msgstr "Amagarà la barra fins que hi entris amb el ratolí."
+
+#: ../src/cairo-dock-menu.c:878
+msgid "Launch Cairo-Dock on startup"
+msgstr "Executa Cairo-Dock a l'inici"
+
+#: ../src/cairo-dock-menu.c:894
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1288
-msgid "Modify this launcher"
+#: ../src/cairo-dock-menu.c:897 ../src/help/applet-init.c:28
+#: ../src/help/applet-notifications.c:257
+msgid "Help"
+msgstr "Ajuda"
+
+#: ../src/cairo-dock-menu.c:902
+msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1290
-msgid "Remove this separator"
+#: ../src/cairo-dock-menu.c:904
+msgid "About"
+msgstr "Quant a"
+
+#: ../src/cairo-dock-menu.c:913
+msgid "Quit"
+msgstr "Surt"
+
+#: ../src/cairo-dock-menu.c:922
+msgid ""
+"You're using a Cairo-Dock Session!\n"
+"It's not advised to quit the dock but you can press Shift to unlock this "
+"menu entry."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1290
-msgid "Remove this launcher"
+#: ../src/cairo-dock-menu.c:954 ../src/cairo-dock-menu.c:975
+msgid "Modify"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1291
+#: ../src/cairo-dock-menu.c:956 ../src/cairo-dock-menu.c:982
+msgid "Remove"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:957
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1293 ../src/cairo-dock-menu.c:1472
+#: ../src/cairo-dock-menu.c:959 ../src/cairo-dock-menu.c:991
 msgid "Move to another dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1298 ../src/cairo-dock-menu.c:1477
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
+#: ../src/cairo-dock-menu.c:961 ../src/cairo-dock-menu.c:993
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "New main dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1318 ../src/cairo-dock-menu.c:1416
-msgid "Other actions"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1324
-msgid "Move to this desktop"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1339
-msgid "Not Fullscreen"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1339
-msgid "Fullscreen"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1343
-msgid "Don't keep above"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1343 ../data/messages:363
-msgid "Keep above"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1368
-msgid "Remove custom icon"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1372
-msgid "Set a custom icon"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1375
-msgid "Kill"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1380
+#: ../src/cairo-dock-menu.c:970
 msgid "Make it a launcher"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1383 ../src/cairo-dock-menu.c:1426
+#: ../src/cairo-dock-menu.c:979
+msgid "Detach"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:979
+msgid "Return to the dock"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:986
+msgid "Duplicate"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1001
+msgid "Applet's handbook"
+msgstr "Manual de la miniaplicació"
+
+#: ../src/cairo-dock-menu.c:1046
+msgid "Pick up an image"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1277
+#, c-format
+msgid "Move all to desktop %d - face %d"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1277
+#, c-format
+msgid "Move to desktop %d - face %d"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1279
+#, c-format
+msgid "Move all to desktop %d"
+msgstr "Mou-ho tot a l'escriptori %d"
+
+#: ../src/cairo-dock-menu.c:1279
+#, c-format
+msgid "Move to desktop %d"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1281
+#, c-format
+msgid "Move all to face %d"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1281
+#, c-format
+msgid "Move to face %d"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1527 ../src/cairo-dock-menu.c:1626
+msgid "Other actions"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1529
+msgid "Move to this desktop"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1544
+msgid "Not Fullscreen"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1544
+msgid "Fullscreen"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1548
+msgid "Don't keep above"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1548 ../data/messages:363
+msgid "Keep above"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1573
+msgid "Remove custom icon"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1577
+msgid "Set a custom icon"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1580
+msgid "Kill"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1584 ../src/cairo-dock-menu.c:1632
 msgid "Launch a new (Shift+clic)"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1385
+#: ../src/cairo-dock-menu.c:1588
 msgid "Show"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1387
+#: ../src/cairo-dock-menu.c:1590
 msgid "Unmaximise"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1387
+#: ../src/cairo-dock-menu.c:1590
 msgid "Maximise"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1392 ../src/cairo-dock-menu.c:1394
+#: ../src/cairo-dock-menu.c:1595 ../src/cairo-dock-menu.c:1597
 msgid "Minimise"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1392 ../src/cairo-dock-menu.c:1400
-#: ../src/help/applet-notifications.c:218
+#: ../src/cairo-dock-menu.c:1595 ../src/cairo-dock-menu.c:1602
+#: ../src/cairo-dock-menu.c:1610 ../src/help/applet-notifications.c:247
 msgid "middle-click"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1400 ../src/cairo-dock-menu.c:1402
+#: ../src/cairo-dock-menu.c:1602 ../src/cairo-dock-menu.c:1604
+msgid "Lower"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1610 ../src/cairo-dock-menu.c:1612
 #: ../data/messages:731
 msgid "Close"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1422
+#: ../src/cairo-dock-menu.c:1628
 msgid "Move all to this desktop"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1428
+#: ../src/cairo-dock-menu.c:1634
 msgid "Show all"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1430
+#: ../src/cairo-dock-menu.c:1636
 msgid "Minimise all"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1432
+#: ../src/cairo-dock-menu.c:1638
 msgid "Close all"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1460
-msgid "Detach this applet"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1460
-msgid "Return to the dock"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1463
-msgid "Remove this applet"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1467
-msgid "Launch another instance of this applet"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1502 ../data/messages:361
+#: ../src/cairo-dock-menu.c:1659 ../data/messages:361
 msgid "Normal"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1508 ../data/messages:427 ../data/messages:595
+#: ../src/cairo-dock-menu.c:1665 ../data/messages:427 ../data/messages:595
 #: ../data/messages:1643
 msgid "Always on top"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1515
+#: ../src/cairo-dock-menu.c:1672
 msgid "Always below"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1533 ../data/messages:369
+#: ../src/cairo-dock-menu.c:1689 ../data/messages:369
 msgid "Reserve space"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1540
+#: ../src/cairo-dock-menu.c:1696
 msgid "On all desktops"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1546
+#: ../src/cairo-dock-menu.c:1702
 msgid "Lock position"
 msgstr ""
 
-#: ../src/cairo-dock-user-interaction.c:405
+#: ../src/cairo-dock-user-interaction.c:416
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
 "It is located in the 'Taskbar' module."
 msgstr ""
 
-#: ../src/cairo-dock.c:148
+#: ../src/cairo-dock.c:147
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr ""
 
-#: ../src/cairo-dock.c:317
+#: ../src/cairo-dock.c:320
 msgid "Use Cairo backend."
 msgstr ""
 
-#: ../src/cairo-dock.c:320
+#: ../src/cairo-dock.c:323
 msgid "Use OpenGL backend."
 msgstr ""
 
-#: ../src/cairo-dock.c:324
-msgid ""
-"Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled "
-"libcairo)."
-msgstr ""
-
-#: ../src/cairo-dock.c:328
+#: ../src/cairo-dock.c:326
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 msgstr ""
 
-#: ../src/cairo-dock.c:331
+#: ../src/cairo-dock.c:329
+msgid "Ask again on startup which backend to use."
+msgstr ""
+
+#: ../src/cairo-dock.c:332
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr ""
 
-#: ../src/cairo-dock.c:334
+#: ../src/cairo-dock.c:335
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
 
-#: ../src/cairo-dock.c:337
+#: ../src/cairo-dock.c:338
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr ""
 
-#: ../src/cairo-dock.c:340
+#: ../src/cairo-dock.c:341
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 msgstr ""
 
-#: ../src/cairo-dock.c:343
+#: ../src/cairo-dock.c:344
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
 msgstr ""
 
-#: ../src/cairo-dock.c:346
+#: ../src/cairo-dock.c:347
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr ""
 
-#: ../src/cairo-dock.c:349
+#: ../src/cairo-dock.c:350
 msgid "Don't load any plug-ins."
 msgstr ""
 
-#: ../src/cairo-dock.c:352
+#: ../src/cairo-dock.c:353
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
 
-#: ../src/cairo-dock.c:355
+#: ../src/cairo-dock.c:356
 msgid "Force to display some output messages with colors."
 msgstr ""
 
-#: ../src/cairo-dock.c:358
+#: ../src/cairo-dock.c:359
 msgid "Print version and quit."
 msgstr ""
 
-#: ../src/cairo-dock.c:361
+#: ../src/cairo-dock.c:362
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr ""
 
-#: ../src/cairo-dock.c:365
+#: ../src/cairo-dock.c:366
 msgid "Keep the dock above other windows whatever."
 msgstr ""
 
-#: ../src/cairo-dock.c:368
+#: ../src/cairo-dock.c:369
 msgid "Don't make the dock appear on all desktops."
 msgstr ""
 
-#: ../src/cairo-dock.c:371
+#: ../src/cairo-dock.c:372
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr ""
 
-#: ../src/cairo-dock.c:374
+#: ../src/cairo-dock.c:375
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
 
-#: ../src/cairo-dock.c:377
+#: ../src/cairo-dock.c:378
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
 msgstr ""
 
-#: ../src/cairo-dock.c:380
+#: ../src/cairo-dock.c:381
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
 msgstr ""
 
-#: ../src/cairo-dock.c:499
+#: ../src/cairo-dock.c:502
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Utilitzar OpenGL a Cairo-Dock ?"
 
-#: ../src/cairo-dock.c:507
+#: ../src/cairo-dock.c:510
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -879,11 +881,11 @@ msgstr ""
 "d'Aplicacions.\n"
 "  o amb la opció -o per forçar l'ús d'OpenGL i -c per forçar l'ús de cairo.)"
 
-#: ../src/cairo-dock.c:512
+#: ../src/cairo-dock.c:521
 msgid "Remember this choice"
 msgstr ""
 
-#: ../src/cairo-dock.c:749
+#: ../src/cairo-dock.c:775
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -911,77 +913,87 @@ msgid ""
 "to do it now?"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-applet-facility.h:374
-msgid "Applet's handbook"
-msgstr "Manual de la miniaplicació"
-
-#: ../src/gldit/cairo-dock-desklet-manager.c:860
+#: ../src/gldit/cairo-dock-desklet-manager.c:858
 msgid "_custom decoration_"
 msgstr "_decoració personalitzada_"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:333
+#: ../src/gldit/cairo-dock-dock-manager.c:363
 msgid "Bottom dock"
 msgstr "Dock inferior"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:335
+#: ../src/gldit/cairo-dock-dock-manager.c:365
 msgid "Top dock"
 msgstr "Dock superior"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:340
+#: ../src/gldit/cairo-dock-dock-manager.c:370
 msgid "Right dock"
 msgstr "Dock dret"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:342
+#: ../src/gldit/cairo-dock-dock-manager.c:372
 msgid "Left dock"
 msgstr "Dock esquerra"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:236
+#: ../src/gldit/cairo-dock-dock-manager.c:1632
+#: ../src/gldit/cairo-dock-dock-manager.c:1733
+#, fuzzy
+msgid "Pop up the main dock"
+msgstr "Visibilitat del Dock principal"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
 msgid "by %s"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:248
+#: ../src/gldit/cairo-dock-gui-factory.c:255
 msgid "kB"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:250
+#: ../src/gldit/cairo-dock-gui-factory.c:257
 msgid "MB"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:259
+#: ../src/gldit/cairo-dock-gui-factory.c:266
 msgid "Local"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:260
+#: ../src/gldit/cairo-dock-gui-factory.c:267
 msgid "User"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:261
+#: ../src/gldit/cairo-dock-gui-factory.c:268
 msgid "Net"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:262
+#: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "New"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:263
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "Updated"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:983
+#: ../src/gldit/cairo-dock-gui-factory.c:724
+msgid "Pick up a file"
+msgstr ""
+
+#: ../src/gldit/cairo-dock-gui-factory.c:724
+msgid "Pick up a directory"
+msgstr ""
+
+#: ../src/gldit/cairo-dock-gui-factory.c:984
 msgid "_Custom Icons_"
 msgstr "_Icones Personalitzades_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1347
+#: ../src/gldit/cairo-dock-gui-factory.c:1348
 msgid "Rate me"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1446
-#: ../src/gldit/cairo-dock-gui-factory.c:1448
+#: ../src/gldit/cairo-dock-gui-factory.c:1447
+#: ../src/gldit/cairo-dock-gui-factory.c:1449
 msgid "You must try the theme before you can rate it."
 msgstr "Per poder valorar el tema, l'has d'haver provat."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1471
+#: ../src/gldit/cairo-dock-gui-factory.c:1472
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -992,7 +1004,7 @@ msgstr ""
 "Assegura't que l'instal·les a la mateixa versió que la barra per disposar "
 "d'aquestes característiques."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1480
+#: ../src/gldit/cairo-dock-gui-factory.c:1481
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1001,33 +1013,33 @@ msgstr ""
 "El connector '%s' està desactivat.‎\n"
 "Voleu activar-lo?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2252
-#: ../src/gldit/cairo-dock-gui-factory.c:2831
+#: ../src/gldit/cairo-dock-gui-factory.c:2329
+#: ../src/gldit/cairo-dock-gui-factory.c:2912
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2769
+#: ../src/gldit/cairo-dock-gui-factory.c:2846
 msgid "Theme"
 msgstr "tema"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2782
+#: ../src/gldit/cairo-dock-gui-factory.c:2859
 msgid "Rating"
 msgstr "valoració"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2788
+#: ../src/gldit/cairo-dock-gui-factory.c:2865
 msgid "Sobriety"
 msgstr "sobrietat"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2857
+#: ../src/gldit/cairo-dock-gui-factory.c:2938
 msgid "link"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2910
+#: ../src/gldit/cairo-dock-gui-factory.c:2991
 msgid "Grab"
 msgstr "agafa"
 
-#: ../src/gldit/cairo-dock-struct.h:419
+#: ../src/gldit/cairo-dock-struct.h:423
 msgid "Default"
 msgstr ""
 
@@ -1040,19 +1052,19 @@ msgstr ""
 msgid "Last modification on:"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-themes-manager.c:276
+#: ../src/gldit/cairo-dock-themes-manager.c:272
 #, c-format
 msgid ""
-"Could not access remote file %s/%s. Maybe the server is down.\n"
+"Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
 
-#: ../src/gldit/cairo-dock-themes-manager.c:291
+#: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-themes-manager.c:293
+#: ../src/gldit/cairo-dock-themes-manager.c:288
 msgid "Are you sure you want to delete these themes?"
 msgstr ""
 
@@ -1101,59 +1113,72 @@ msgstr ""
 "Aquesta opció està en el mòdul de configuració del 'Sistema', al peu de la "
 "pàgina."
 
-#: ../src/help/applet-notifications.c:169
-msgid "Unity is already disabled."
+#: ../src/help/applet-init.c:31
+msgid ""
+"This applet is made to help you.\n"
+"Click on its icon to pop up useful tips about the possibilities of Cairo-"
+"Dock.\n"
+"Middle-click to open the configuration window.\n"
+"Right-click to access some troubleshooting actions."
 msgstr ""
 
-#: ../src/help/applet-notifications.c:218
+#: ../src/help/applet-notifications.c:247
 msgid "Open global settings"
 msgstr ""
 
-#: ../src/help/applet-notifications.c:223
+#: ../src/help/applet-notifications.c:252
 msgid "Activate composite"
 msgstr ""
 
-#: ../src/help/applet-notifications.c:225
+#: ../src/help/applet-notifications.c:254
 msgid "Disable the gnome-panel"
 msgstr ""
 
-#: ../src/help/applet-notifications.c:227
+#: ../src/help/applet-notifications.c:256
 msgid "Disable Unity"
 msgstr ""
 
-#: ../src/help/applet-notifications.c:229
+#: ../src/help/applet-notifications.c:258
 msgid "Online help"
 msgstr ""
 
-#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
+#: ../src/help/applet-tips-dialog.c:152
+msgid "Tips and Tricks"
+msgstr ""
+
+#: ../src/help/applet-tips-dialog.c:307
+msgid "Category"
+msgstr ""
+
+#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:119
 msgid "Enter a command"
 msgstr ""
 
-#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
+#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:120
 msgid "New launcher"
 msgstr ""
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
+#: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:445
 #: ../data/messages:613
 msgid "Move down"
 msgstr "Mou avall"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:610 ../data/messages:447
+#: ../src/implementations/cairo-dock-hiding-effect.c:604 ../data/messages:447
 #: ../data/messages:615
 msgid "Fade out"
 msgstr "Fosa"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:449
+#: ../src/implementations/cairo-dock-hiding-effect.c:612 ../data/messages:449
 #: ../data/messages:617
 msgid "Semi transparent"
 msgstr "Semitransparent"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:451
+#: ../src/implementations/cairo-dock-hiding-effect.c:621 ../data/messages:451
 #: ../data/messages:619
 msgid "Zoom out"
 msgstr "Allunya"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:453
+#: ../src/implementations/cairo-dock-hiding-effect.c:629 ../data/messages:453
 #: ../data/messages:621
 msgid "Folding"
 msgstr "Plegable"
@@ -1713,9 +1738,8 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1477
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1763,8 +1787,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1501
@@ -3224,8 +3248,7 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1049
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1051
@@ -3522,8 +3545,8 @@ msgstr ""
 
 #: ../data/messages:1203
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 
 #: ../data/messages:1205
@@ -3969,3 +3992,9 @@ msgid ""
 "easily.\n"
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
+
+#~ msgid "Unlock dock"
+#~ msgstr "desbloca la barra"
+
+#~ msgid "Lock dock"
+#~ msgstr "bloca la barra"

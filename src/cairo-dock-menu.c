@@ -239,20 +239,52 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Development"),
-		"<b>Main developer:</b>\n  Fabounet (Fabrice Rey)\n\
-<b>Original idea / first development:</b>\n  Mac Slow\n\
-<b>Applets:</b>\n  Fabounet\n  Necropotame\n  Ctaf\n  ChAnGFu\n  Tofe\n  Paradoxxx_Zero\n  Mav\n  Nochka85\n  Ours_en_pluche\n  Eduardo Mucelli\n\
-<b>Patches:</b>\n  Special thanks to Augur for his great help with OpenGL\n  Ctaf\n  M.Tasaka\n  Matttbe\n  Necropotame\n  Robrob\n  Smidgey\n  SQP\n  Tshirtman\n");
+		"<b>Developers:</b>\n"
+		"  Fabounet (Fabrice Rey)\n"
+		"  Matttbe (Matthieu Baerts)\n"
+		"Thanks to all the contributors:\n"
+		"  ChAnGFu\n"
+		"  Ctaf\n"
+		"  Eduardo Mucelli\n"
+		"  Necropotame\n"
+		"  Nochka85\n"
+		"  Paradoxxx_Zero\n"
+		"  SQP\n"
+		"  Tofe\n"
+		"  Mac Slow (original idea)\n");
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Artwork"),
-		"<b>Themes:</b>\n  Fabounet\n  Chilperik\n  Djoole\n  Glattering\n  Vilraleur\n  Lord Northam\n  Paradoxxx_Zero\n  Coz\n  Benoit2600\n  Nochka85\n  Taiebot65\n  Lylambda\n  MastroPino\n  Matttbe\n\
-<b>Translations:</b>\n  Fabounet\n  Ppmt \n  Jiro Kawada (Kawaji)\n  BiAji\n  Mattia Tavernini (Maathias)\n  Peter Thornqvist\n  Yannis Kaskamanidis\n  Eduardo Mucelli\n");
+		"<b>Themes:</b>\n"
+		"  Benoit2600\n"
+		"  Coz\n"
+		"  Fabounet\n"
+		"  Lord Northam\n"
+		"  Lylambda\n"
+		"  MastroPino\n"
+		"  Matttbe\n"
+		"  Nochka85\n"
+		"  Paradoxxx_Zero\n"
+		"  Taiebot65\n");
+	gchar *text = g_strdup_printf ("<b>Site:</b>\n"
+		"  Matttbe\n"
+		"  Mav\n"
+		"  Necropotame\n"
+		"<b>Beta-testing / Suggestions / Forum animation:</b>\n"
+		"  Franksuse64\n"
+		"  Kawaji\n"
+		"  Mav\n"
+		"  Ours_en_pluche\n"
+		"  Ppmt\n"
+		"  Rhinopierroce\n"
+		"  Rom1\n"
+		"  Tshirtman\n"
+		"  Vilraleur\n"
+		"<b>Translations:</b>\n"
+		"  %s", _("translator-credits"));
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Support"),
-		"<b>Installation script and web hosting:</b>\n  Mav\n\
-<b>Site (glx-dock.org):</b>\n  Necropotame\n  Matttbe\n  Tdey\n\
-<b>LaunchPad:</b>\n  Matttbe\n  Mav\n\
-<b>Suggestions / Comments / Beta-Testers:</b>\n  AuraHxC\n  Chilperik\n  Cybergoll\n  Damster\n  Djoole\n  Glattering\n  Franksuse64\n  Mav\n  Necropotame\n  Nochka85\n  Ppmt\n  RavanH\n  Rhinopierroce\n  Rom1\n  Sombrero\n  Vilraleur");
+		text);
+	g_free (text);
 	
 	gtk_widget_show_all (pDialog);
 	
@@ -919,7 +951,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 				|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 			&& icon->cDesktopFileName != NULL)  // user icon
 			{
-				_add_entry_in_menu (_("Modify"), GTK_STOCK_EDIT, _cairo_dock_modify_launcher, pItemSubMenu);
+				_add_entry_in_menu (_("Edit"), GTK_STOCK_EDIT, _cairo_dock_modify_launcher, pItemSubMenu);
 				
 				pMenuItem = _add_entry_in_menu (_("Remove"), GTK_STOCK_REMOVE, _cairo_dock_remove_launcher, pItemSubMenu);
 				gtk_widget_set_tooltip_text (pMenuItem, _("You can remove a launcher by dragging it out of the dock with the mouse ."));
@@ -940,7 +972,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 			}
 			else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet (icon or desklet) (the sub-icons have been filtered before and won't have this menu).
 			{
-				_add_entry_in_menu (_("Modify"), GTK_STOCK_EDIT, _cairo_dock_initiate_config_module, pItemSubMenu);
+				_add_entry_in_menu (_("Edit"), GTK_STOCK_EDIT, _cairo_dock_initiate_config_module, pItemSubMenu);
 				
 				if (pIcon->pModuleInstance->bCanDetach)
 				{

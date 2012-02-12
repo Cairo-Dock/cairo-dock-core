@@ -7,102 +7,127 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2011-09-23 23:42+0000\n"
 "PO-Revision-Date: 2011-09-22 11:12+0000\n"
 "Last-Translator: kawaji <jiro.kawada@gmail.com>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2011-09-25 04:35+0000\n"
 "X-Generator: Launchpad (build 14012)\n"
-"Language: \n"
 
-#: ../src/cairo-dock-gui-commons.c:216
+#: ../src/cairo-dock-gui-commons.c:221
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
 "現在のテーマには変更が加えられています。\n"
-"新しいテーマの選択前にあらかじめ保存を行っておかないと、変更が失われてしまいます。かまわず続行しますか？"
+"新しいテーマの選択前にあらかじめ保存を行っておかないと、変更が失われてしまい"
+"ます。かまわず続行しますか？"
 
-#: ../src/cairo-dock-gui-commons.c:242
+#: ../src/cairo-dock-gui-commons.c:247
 msgid "Please wait while importing the theme..."
 msgstr "テーマをインポートしている間、お待ちください…"
 
-#: ../src/cairo-dock-gui-commons.c:364 ../src/cairo-dock-menu.c:1456
+#: ../src/cairo-dock-gui-commons.c:369
 msgid "Configure this applet"
 msgstr "このモジュールの設定"
 
-#: ../src/cairo-dock-gui-commons.c:401 ../src/cairo-dock-gui-main.c:131
+#: ../src/cairo-dock-gui-commons.c:406 ../src/cairo-dock-gui-main.c:130
 msgid "Files"
 msgstr "ファイル"
 
-#: ../src/cairo-dock-gui-commons.c:406 ../src/cairo-dock-gui-main.c:132
+#: ../src/cairo-dock-gui-commons.c:411 ../src/cairo-dock-gui-main.c:131
 msgid "Internet"
 msgstr "インターネット"
 
-#: ../src/cairo-dock-gui-commons.c:411 ../src/cairo-dock-gui-main.c:133
+#: ../src/cairo-dock-gui-commons.c:416 ../src/cairo-dock-gui-main.c:132
 msgid "Desktop"
 msgstr "デスクトップ"
 
-#: ../src/cairo-dock-gui-commons.c:416
+#: ../src/cairo-dock-gui-commons.c:421
 msgid "Accessory"
 msgstr "アクセサリ"
 
-#: ../src/cairo-dock-gui-commons.c:421 ../src/cairo-dock-gui-main.c:135
-#: ../src/cairo-dock-gui-main.c:1504 ../data/messages:757
+#: ../src/cairo-dock-gui-commons.c:426 ../src/cairo-dock-gui-main.c:134
+#: ../src/cairo-dock-gui-main.c:1528 ../data/messages:757
 msgid "System"
 msgstr "システム"
 
-#: ../src/cairo-dock-gui-commons.c:426 ../src/cairo-dock-gui-main.c:136
+#: ../src/cairo-dock-gui-commons.c:431 ../src/cairo-dock-gui-main.c:135
 msgid "Fun"
 msgstr "娯楽"
 
-#: ../src/cairo-dock-gui-commons.c:468
+#: ../src/cairo-dock-gui-commons.c:474
 msgid "plug-in"
 msgstr "プラグイン"
 
-#: ../src/cairo-dock-gui-commons.c:474
+#: ../src/cairo-dock-gui-commons.c:480
 msgid "category"
 msgstr "カテゴリ"
 
-#: ../src/cairo-dock-gui-items.c:384
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+#: ../src/cairo-dock-gui-commons.c:575
+msgid "Press the shortkey"
+msgstr ""
+
+#: ../src/cairo-dock-gui-commons.c:594
+msgid "Change the shortkey"
+msgstr ""
+
+#: ../src/cairo-dock-gui-commons.c:681
+msgid "Origin"
+msgstr ""
+
+#: ../src/cairo-dock-gui-commons.c:686
+#, fuzzy
+msgid "Action"
+msgstr "アニメーション:"
+
+#: ../src/cairo-dock-gui-commons.c:690
+msgid "Shortkey"
+msgstr ""
+
+#: ../src/cairo-dock-gui-items.c:242
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr "メイン・ドックのパラメータはメインの設定画面から利用可能です。"
 
-#: ../src/cairo-dock-gui-items.c:600
+#: ../src/cairo-dock-gui-items.c:459
 msgid "Launcher configuration"
 msgstr "ランチャーの設定"
 
-#: ../src/cairo-dock-gui-main.c:129 ../data/messages:671
+#: ../src/cairo-dock-gui-items.c:877
+#, fuzzy
+msgid "Remove this item"
+msgstr "このモジュールの削除"
+
+#: ../src/cairo-dock-gui-main.c:128 ../data/messages:671
 msgid "Behaviour"
 msgstr "動作"
 
-#: ../src/cairo-dock-gui-main.c:130 ../data/messages:491 ../data/messages:1657
+#: ../src/cairo-dock-gui-main.c:129 ../data/messages:491 ../data/messages:1657
 msgid "Appearance"
 msgstr "外観"
 
-#: ../src/cairo-dock-gui-main.c:134
+#: ../src/cairo-dock-gui-main.c:133
 msgid "Accessories"
 msgstr "アクセサリ"
 
-#: ../src/cairo-dock-gui-main.c:137 ../src/cairo-dock-gui-main.c:1653
+#: ../src/cairo-dock-gui-main.c:136 ../src/cairo-dock-gui-main.c:1682
 #: ../data/messages:1791
 msgid "All"
 msgstr "全て"
 
-#: ../src/cairo-dock-gui-main.c:1482
+#: ../src/cairo-dock-gui-main.c:1499
 msgid "Set the position of the main dock."
 msgstr "メイン・ドックの配置位置の設定"
 
-#: ../src/cairo-dock-gui-main.c:1483 ../data/messages:335 ../data/messages:545
+#: ../src/cairo-dock-gui-main.c:1500 ../data/messages:335 ../data/messages:545
 msgid "Position"
 msgstr "位置"
 
-#: ../src/cairo-dock-gui-main.c:1489
+#: ../src/cairo-dock-gui-main.c:1506
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -112,60 +137,68 @@ msgstr ""
 "または逆に、邪魔にならないように隠したい？\n"
 "ドックやサブ・ドックへのアクセス方法を設定しましょう！"
 
-#: ../src/cairo-dock-gui-main.c:1490 ../src/cairo-dock-menu.c:1494
+#: ../src/cairo-dock-gui-main.c:1507 ../src/cairo-dock-menu.c:1651
 #: ../data/messages:353
 msgid "Visibility"
 msgstr "表示"
 
-#: ../src/cairo-dock-gui-main.c:1496
+#: ../src/cairo-dock-gui-main.c:1513
 msgid "Display and interact with currently open windows."
 msgstr "現在開いているウィンドウの表示や操作"
 
-#: ../src/cairo-dock-gui-main.c:1497 ../data/messages:41 ../data/messages:469
+#: ../src/cairo-dock-gui-main.c:1514 ../data/messages:41 ../data/messages:469
 #: ../data/messages:1323
 msgid "Taskbar"
 msgstr "タスクバー"
 
-#: ../src/cairo-dock-gui-main.c:1503
+#: ../src/cairo-dock-gui-main.c:1520
+msgid "Define all the keyboard shortcuts currently available."
+msgstr ""
+
+#: ../src/cairo-dock-gui-main.c:1521
+msgid "Shortkeys"
+msgstr ""
+
+#: ../src/cairo-dock-gui-main.c:1527
 msgid "All of the parameters you will never want to tweak."
 msgstr "積極的に手を加えたくはないと思われるパラメータ群"
 
-#: ../src/cairo-dock-gui-main.c:1513
+#: ../src/cairo-dock-gui-main.c:1537
 msgid "Set a background for your dock."
 msgstr "ドックの背景の設定"
 
-#: ../src/cairo-dock-gui-main.c:1514 ../data/messages:853
+#: ../src/cairo-dock-gui-main.c:1538 ../data/messages:853
 #: ../data/messages:1251 ../data/messages:1665
 msgid "Background"
 msgstr "背景"
 
-#: ../src/cairo-dock-gui-main.c:1520
+#: ../src/cairo-dock-gui-main.c:1544
 msgid "Select a view for each of your docks."
 msgstr "各ドックに適用するビュー形式の選択"
 
-#: ../src/cairo-dock-gui-main.c:1521 ../data/messages:523 ../data/messages:915
+#: ../src/cairo-dock-gui-main.c:1545 ../data/messages:523 ../data/messages:915
 #: ../data/messages:1659
 msgid "Views"
 msgstr "ビュー形式"
 
-#: ../src/cairo-dock-gui-main.c:1528
+#: ../src/cairo-dock-gui-main.c:1552
 msgid "Configure text bubble appearance."
 msgstr "吹き出し状のダイアログの外観に関わる設定"
 
-#: ../src/cairo-dock-gui-main.c:1529
+#: ../src/cairo-dock-gui-main.c:1553
 msgid "Dialog boxes"
 msgstr "ダイアログ"
 
-#: ../src/cairo-dock-gui-main.c:1536
+#: ../src/cairo-dock-gui-main.c:1560
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "アプレットはウィジェットとしてデスクトップに配置可能"
 
-#: ../src/cairo-dock-gui-main.c:1537 ../data/messages:101 ../data/messages:971
+#: ../src/cairo-dock-gui-main.c:1561 ../data/messages:101 ../data/messages:971
 #: ../data/messages:1383
 msgid "Desklets"
 msgstr "デスクレット"
 
-#: ../src/cairo-dock-gui-main.c:1544
+#: ../src/cairo-dock-gui-main.c:1568
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -173,133 +206,134 @@ msgstr ""
 "アイコンに関する設定 :\n"
 "大きさ、反射、アイコンのテーマ…"
 
-#: ../src/cairo-dock-gui-main.c:1545 ../data/messages:11 ../data/messages:493
+#: ../src/cairo-dock-gui-main.c:1569 ../data/messages:11 ../data/messages:493
 #: ../data/messages:1035 ../data/messages:1293
 msgid "Icons"
 msgstr "アイコン"
 
-#: ../src/cairo-dock-gui-main.c:1551
+#: ../src/cairo-dock-gui-main.c:1575
 msgid "Indicators are additional markers for your icons."
 msgstr "アイコン上の追加的な情報表示としての目印"
 
-#: ../src/cairo-dock-gui-main.c:1552 ../data/messages:1153
+#: ../src/cairo-dock-gui-main.c:1576 ../data/messages:1153
 msgid "Indicators"
 msgstr "標示"
 
-#: ../src/cairo-dock-gui-main.c:1559
+#: ../src/cairo-dock-gui-main.c:1583
 msgid "Define icon caption and quick-info style."
 msgstr "アイコンのラベルやクイック情報のスタイルの定義"
 
-#: ../src/cairo-dock-gui-main.c:1560
+#: ../src/cairo-dock-gui-main.c:1584
 msgid "Captions"
 msgstr "ラベル"
 
-#: ../src/cairo-dock-gui-main.c:1629
+#: ../src/cairo-dock-gui-main.c:1654
 msgid "Categories"
 msgstr "カテゴリ"
 
-#: ../src/cairo-dock-gui-main.c:1767
+#: ../src/cairo-dock-gui-main.c:1796
 msgid "Filter"
 msgstr "フィルタ"
 
-#: ../src/cairo-dock-gui-main.c:1814
+#: ../src/cairo-dock-gui-main.c:1843
 msgid "Options"
 msgstr "オプション"
 
-#: ../src/cairo-dock-gui-main.c:1824
+#: ../src/cairo-dock-gui-main.c:1853
 msgid "All words"
 msgstr "アンド検索"
 
-#: ../src/cairo-dock-gui-main.c:1828
+#: ../src/cairo-dock-gui-main.c:1857
 msgid "Highlighted words"
 msgstr "該当ワードを強調表示"
 
-#: ../src/cairo-dock-gui-main.c:1833
+#: ../src/cairo-dock-gui-main.c:1862
 msgid "Hide others"
 msgstr "該当外を隠す"
 
-#: ../src/cairo-dock-gui-main.c:1838
+#: ../src/cairo-dock-gui-main.c:1867
 msgid "Search in description"
 msgstr "ツールチップも検索"
 
-#: ../src/cairo-dock-gui-main.c:1852
+#: ../src/cairo-dock-gui-main.c:1881
 msgid "Enable this module"
 msgstr "このモジュールを有効化"
 
-#: ../src/cairo-dock-gui-main.c:1916 ../data/messages:541
+#: ../src/cairo-dock-gui-main.c:1945 ../data/messages:541
 msgid "More applets"
 msgstr "追加アプレット"
 
-#: ../src/cairo-dock-gui-main.c:1917 ../data/messages:539
+#: ../src/cairo-dock-gui-main.c:1946 ../data/messages:539
 msgid "Get more applets online !"
 msgstr "追加のアプレットをオンラインで取得！"
 
-#: ../src/cairo-dock-gui-main.c:1951 ../src/cairo-dock.c:663
+#: ../src/cairo-dock-gui-main.c:1982 ../src/cairo-dock.c:689
 msgid "< Maintenance mode >"
 msgstr "< メンテナンスモード >"
 
-#: ../src/cairo-dock-gui-main.c:2041 ../src/cairo-dock-gui-simple.c:901
+#: ../src/cairo-dock-gui-main.c:2072 ../src/cairo-dock-gui-simple.c:859
 msgid "Cairo-Dock configuration"
 msgstr "Cairo-Dock の設定"
 
-#: ../src/cairo-dock-gui-main.c:2396
+#: ../src/cairo-dock-gui-main.c:2437
 #, c-format
 msgid ""
 "The '%s' module is not present. You need to install it and all its "
 "dependencies in order to use this module."
-msgstr "'%s' モジュールが存在しません。モジュールとその全ての依存関係をインストールする必要があります。"
+msgstr ""
+"'%s' モジュールが存在しません。モジュールとその全ての依存関係をインストールす"
+"る必要があります。"
 
-#: ../src/cairo-dock-gui-main.c:2402
+#: ../src/cairo-dock-gui-main.c:2443
 #, c-format
 msgid "The '%s' module is not enabled."
 msgstr "'%s' モジュールが有効になっていません。"
 
-#: ../src/cairo-dock-gui-main.c:2403
+#: ../src/cairo-dock-gui-main.c:2444
 msgid "Do you want to enable it now?"
 msgstr "直ちに有効にしますか？"
 
-#: ../src/cairo-dock-gui-main.c:2750
+#: ../src/cairo-dock-gui-main.c:2810
 msgid "Simple Mode"
 msgstr "簡易設定モード"
 
-#: ../src/cairo-dock-gui-simple.c:408 ../src/cairo-dock-gui-themes.c:114
+#: ../src/cairo-dock-gui-simple.c:378 ../src/cairo-dock-gui-themes.c:114
 msgid "Could not import the theme."
 msgstr "テーマをインポートできませんでした。"
 
-#: ../src/cairo-dock-gui-simple.c:428
+#: ../src/cairo-dock-gui-simple.c:398
 msgid "Importing theme..."
 msgstr "テーマをインポートしています…"
 
-#: ../src/cairo-dock-gui-simple.c:435 ../src/cairo-dock-gui-themes.c:156
+#: ../src/cairo-dock-gui-simple.c:405 ../src/cairo-dock-gui-themes.c:156
 msgid "Theme has been saved"
 msgstr "テーマを保存しました"
 
-#: ../src/cairo-dock-gui-simple.c:441 ../src/cairo-dock-gui-themes.c:162
+#: ../src/cairo-dock-gui-simple.c:411 ../src/cairo-dock-gui-themes.c:162
 msgid "Themes have been deleted"
 msgstr "テーマを削除しました"
 
-#: ../src/cairo-dock-gui-simple.c:771
+#: ../src/cairo-dock-gui-simple.c:706
 msgid "Animation:"
 msgstr "アニメーション:"
 
-#: ../src/cairo-dock-gui-simple.c:788
+#: ../src/cairo-dock-gui-simple.c:727
 msgid "Effects:"
 msgstr "効果:"
 
-#: ../src/cairo-dock-gui-simple.c:856
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+#: ../src/cairo-dock-gui-simple.c:795
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "アプレットをクリックすると、そのプレビューや説明が表示されます。"
 
-#: ../src/cairo-dock-gui-simple.c:865 ../data/messages:485
+#: ../src/cairo-dock-gui-simple.c:821 ../data/messages:485
 msgid "On mouse hover:"
 msgstr "マウス・ホバー時:"
 
-#: ../src/cairo-dock-gui-simple.c:867 ../data/messages:487
+#: ../src/cairo-dock-gui-simple.c:823 ../data/messages:487
 msgid "On click:"
 msgstr "クリック時:"
 
-#: ../src/cairo-dock-gui-simple.c:938
+#: ../src/cairo-dock-gui-simple.c:896
 msgid ""
 "This is the simple configuration panel of Cairo-Dock.\n"
 " After you get familiar with it, and if you want to customise your theme\n"
@@ -311,15 +345,17 @@ msgstr ""
 "詳細設定モードに切り替えることができます。\n"
 "モードの交互切り替えはいつでも好きな時に行えます。"
 
-#: ../src/cairo-dock-gui-simple.c:1063
+#: ../src/cairo-dock-gui-simple.c:1039
 msgid "Advanced Mode"
 msgstr "詳細設定モード"
 
-#: ../src/cairo-dock-gui-simple.c:1064
+#: ../src/cairo-dock-gui-simple.c:1040
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
-msgstr "詳細モードはドックに関するあらゆる設定が変更可能で、現在のテーマをカスタマイズするための強力なツールです。"
+msgstr ""
+"詳細モードはドックに関するあらゆる設定が変更可能で、現在のテーマをカスタマイ"
+"ズするための強力なツールです。"
 
 #: ../src/cairo-dock-gui-themes.c:149
 msgid "Importing theme ..."
@@ -329,177 +365,103 @@ msgstr "テーマをインポートしています…"
 msgid "Manage Themes"
 msgstr "テーマの管理"
 
-#: ../src/cairo-dock-help.c:54 ../src/cairo-dock-menu.c:454
-#: ../src/help/applet-init.c:28 ../src/help/applet-notifications.c:228
-msgid "Help"
-msgstr "ヘルプ"
-
-#: ../src/cairo-dock-help.c:69 ../src/help/applet-init.c:31
-msgid ""
-"This applet is made to help you.\n"
-"Click on its icon to pop up useful tips about the possibilities of Cairo-"
-"Dock.\n"
-"Middle-click to open the configuration window.\n"
-"Right-click to access some troubleshooting actions."
-msgstr ""
-"あなたを手助けするためのアプレット。\n"
-"このアプレットのアイコンをクリックすると、Cairo-Dock の機能に関する役に立つヒントがポップアップします。\n"
-"中クリックするとドックの設定画面が開きます。\n"
-"右クリックするといくつかの問題解決のためのアクションにアクセスできます。"
-
-#: ../src/cairo-dock-help.c:220 ../src/help/applet-tips-dialog.c:152
-msgid "Tips and Tricks"
-msgstr "ヒントやコツ"
-
-#: ../src/cairo-dock-help.c:380 ../src/help/applet-tips-dialog.c:299
-msgid "Category"
-msgstr "カテゴリ"
-
-#: ../src/cairo-dock-menu.c:122
+#: ../src/cairo-dock-menu.c:123
 msgid "Delete this dock?"
 msgstr "このドックを削除しますか？"
 
-#: ../src/cairo-dock-menu.c:174
+#: ../src/cairo-dock-menu.c:175
 msgid "About Cairo-Dock"
 msgstr "Cairo-Dock について"
 
-#: ../src/cairo-dock-menu.c:211 ../data/messages:283 ../data/messages:1565
+#: ../src/cairo-dock-menu.c:212 ../data/messages:283 ../data/messages:1565
 msgid "Development site"
 msgstr "開発サイト"
 
-#: ../src/cairo-dock-menu.c:212 ../data/messages:281 ../data/messages:1563
+#: ../src/cairo-dock-menu.c:213 ../data/messages:281 ../data/messages:1563
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Cairo-Dock の最新版はこちら！"
 
-#: ../src/cairo-dock-menu.c:216 ../src/cairo-dock-menu.c:447
+#: ../src/cairo-dock-menu.c:217 ../src/cairo-dock-menu.c:889
 msgid "Get more applets!"
 msgstr "追加アプレットを取得！"
 
-#: ../src/cairo-dock-menu.c:220 ../src/cairo-dock-menu.c:226
+#: ../src/cairo-dock-menu.c:221 ../src/cairo-dock-menu.c:227
 msgid "Donate"
 msgstr "寄附"
 
-#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
+#: ../src/cairo-dock-menu.c:224 ../src/cairo-dock-menu.c:230
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
-msgstr "最高のドックを提供するために多大な時間を割いている人たちを支援してください。"
+msgstr ""
+"最高のドックを提供するために多大な時間を割いている人たちを支援してください。"
 
-#: ../src/cairo-dock-menu.c:240
+#: ../src/cairo-dock-menu.c:241
 msgid "Development"
 msgstr "開発"
 
-#: ../src/cairo-dock-menu.c:246
+#: ../src/cairo-dock-menu.c:256
 msgid "Artwork"
 msgstr "アートワーク"
 
-#: ../src/cairo-dock-menu.c:250
+#: ../src/cairo-dock-menu.c:283
+msgid "translator-credits"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:285
 msgid "Support"
 msgstr "サポート"
 
-#: ../src/cairo-dock-menu.c:332
+#: ../src/cairo-dock-menu.c:362
 msgid "Quit Cairo-Dock?"
 msgstr "Cairo-Dock を終了しますか？"
 
-#: ../src/cairo-dock-menu.c:363
-msgid "Configure"
-msgstr "設定"
+#: ../src/cairo-dock-menu.c:392 ../src/cairo-dock-menu.c:534
+msgid "Separator"
+msgstr "区切り"
 
-#: ../src/cairo-dock-menu.c:368
-msgid "Configure behaviour, appearance, and applets."
-msgstr "挙動や外観、アプレットを設定します。"
-
-#: ../src/cairo-dock-menu.c:372
-msgid "Configure this dock"
-msgstr "このドックの設定"
-
-#: ../src/cairo-dock-menu.c:377
-msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "このメイン・ドックの配置位置や表示方法、外観をカスタマイズします。"
-
-#: ../src/cairo-dock-menu.c:379
-msgid "Delete this dock"
-msgstr "このドックの削除"
-
-#: ../src/cairo-dock-menu.c:388
-msgid "Manage themes"
-msgstr "テーマ管理"
-
-#: ../src/cairo-dock-menu.c:393
+#: ../src/cairo-dock-menu.c:504
 msgid ""
-"Choose from amongst many themes on the server or save your current theme."
-msgstr "サーバ上にある多くのテーマから選択したり、現在のテーマを保存します。"
+"The new dock has been created.\n"
+"Now move some launchers or applets into it by right-clicking on the icon -> "
+"move to another dock"
+msgstr ""
+"新しいドックが作成されました。\n"
+"ランチャーやアプレットのアイコンを右クリック -> 別のドックに移す により、それ"
+"らを当該ドックに移動させることができます。"
 
-#: ../src/cairo-dock-menu.c:399
-msgid "Unlock icons"
-msgstr "アイコンのロック解除"
+#: ../src/cairo-dock-menu.c:528
+msgid "Add"
+msgstr "追加"
 
-#: ../src/cairo-dock-menu.c:399
-msgid "Lock icons"
-msgstr "アイコンのロック"
+#: ../src/cairo-dock-menu.c:530
+msgid "Sub-dock"
+msgstr "サブ・ドック"
 
-#: ../src/cairo-dock-menu.c:403
-msgid "This will (un)lock the position of the icons."
-msgstr "アイコンの位置をロック（または解除）します。"
+#: ../src/cairo-dock-menu.c:532
+msgid "Main dock"
+msgstr "メイン・ドック"
 
-#: ../src/cairo-dock-menu.c:407
-msgid "Unlock dock"
-msgstr "ドックのロック解除"
+#: ../src/cairo-dock-menu.c:536
+msgid "Custom launcher"
+msgstr "カスタム・ランチャー"
 
-#: ../src/cairo-dock-menu.c:407
-msgid "Lock dock"
-msgstr "ドックのロック"
-
-#: ../src/cairo-dock-menu.c:414
+#: ../src/cairo-dock-menu.c:537
 msgid ""
-"This will allow you to add or remove launchers and applets, and configure "
-"the program."
-msgstr "ランチャーやアプレットの追加や削除を行ったり、プログラムの設定変更が行えます。"
+"Usually you would drag a launcher from the menu and drop it on the dock."
+msgstr ""
+"大抵の場合、メニューからランチャーをドラッグしてドックにドロップするだけで済"
+"みます。"
 
-#: ../src/cairo-dock-menu.c:418
-msgid ""
-"This will prevent any modification of the current theme, and hide all the "
-"unnecessary entries in the menus."
-msgstr "現在のテーマの変更を禁止して、メニューにある不必要なエントリを全て隠します。"
-
-#: ../src/cairo-dock-menu.c:424
-msgid "Quick-Hide"
-msgstr "一時的に隠す"
-
-#: ../src/cairo-dock-menu.c:429
-msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "マウスがトリガーゾーン内に置かれるまでドックを隠します。"
-
-#: ../src/cairo-dock-menu.c:437
-msgid "Launch Cairo-Dock on startup"
-msgstr "Cairo-Dock 自動起動"
-
-#: ../src/cairo-dock-menu.c:452
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
-msgstr "サードパーティ製のアプレットは、Pidgin など様々なプログラムとの統合を提供します。"
-
-#: ../src/cairo-dock-menu.c:459
-msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "問題なんて存在しません。ただ解決法（それに数多くの有益なヒント！）があるのみです。"
-
-#: ../src/cairo-dock-menu.c:461
-msgid "About"
-msgstr "情報"
-
-#: ../src/cairo-dock-menu.c:469
-msgid "Quit"
-msgstr "終了"
-
-#: ../src/cairo-dock-menu.c:494
+#: ../src/cairo-dock-menu.c:554
 msgid "separator"
 msgstr "区切り"
 
-#: ../src/cairo-dock-menu.c:498
+#: ../src/cairo-dock-menu.c:558
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr "ドックからこのアイコン(%s)を削除しようとしています。よろしいですか？"
 
-#: ../src/cairo-dock-menu.c:509
+#: ../src/cairo-dock-menu.c:570
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -508,257 +470,316 @@ msgstr ""
 "このコンテナ内にあるアイコンをドックに戻しますか？\n"
 "（戻さない場合、アイコンは削除されます。）"
 
-#: ../src/cairo-dock-menu.c:577
-msgid ""
-"The new dock has been created.\n"
-"Now move some launchers or applets into it by right-clicking on the icon -> "
-"move to another dock"
-msgstr ""
-"新しいドックが作成されました。\n"
-"ランチャーやアプレットのアイコンを右クリック -> 別のドックに移す により、それらを当該ドックに移動させることができます。"
-
-#: ../src/cairo-dock-menu.c:611
+#: ../src/cairo-dock-menu.c:594
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "申し訳ありませんが、このアイコンには設定ファイルがありません。"
 
-#: ../src/cairo-dock-menu.c:651
+#: ../src/cairo-dock-menu.c:634
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
 "新しいドックが作成されました。\n"
-"このドックを右クリックして cairo-dock -> このドックの設定 でカスタマイズできます。"
+"このドックを右クリックして cairo-dock -> このドックの設定 でカスタマイズでき"
+"ます。"
 
-#: ../src/cairo-dock-menu.c:712
-#, c-format
-msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr "このモジュール(%s)をドックから削除しようとしています。よろしいですか？"
-
-#: ../src/cairo-dock-menu.c:934
+#: ../src/cairo-dock-menu.c:692
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
 msgstr ""
 "申し訳ありませんが、対応する記述ファイルが見つかりませんでした。\n"
-"アプリケーション・メニューからランチャーをドラッグ＆ドロップして登録することを検討してください。"
+"アプリケーション・メニューからランチャーをドラッグ＆ドロップして登録すること"
+"を検討してください。"
 
-#: ../src/cairo-dock-menu.c:1169
+#: ../src/cairo-dock-menu.c:733
 #, c-format
-msgid "Move all to desktop %d - face %d"
-msgstr "全てをデスクトップ %d - 面 %d へ移す"
+msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
+msgstr "このモジュール(%s)をドックから削除しようとしています。よろしいですか？"
 
-#: ../src/cairo-dock-menu.c:1169
-#, c-format
-msgid "Move to desktop %d - face %d"
-msgstr "デスクトップ %d - 面 %d へ移す"
+#: ../src/cairo-dock-menu.c:791
+msgid "Configure"
+msgstr "設定"
 
-#: ../src/cairo-dock-menu.c:1171
-#, c-format
-msgid "Move all to desktop %d"
-msgstr "全てをデスクトップ %d へ移す"
+#: ../src/cairo-dock-menu.c:796
+msgid "Configure behaviour, appearance, and applets."
+msgstr "挙動や外観、アプレットを設定します。"
 
-#: ../src/cairo-dock-menu.c:1171
-#, c-format
-msgid "Move to desktop %d"
-msgstr "デスクトップ %d へ移す"
+#: ../src/cairo-dock-menu.c:801
+msgid "Configure this dock"
+msgstr "このドックの設定"
 
-#: ../src/cairo-dock-menu.c:1173
-#, c-format
-msgid "Move all to face %d"
-msgstr "全てを面 %d へ移す"
+#: ../src/cairo-dock-menu.c:806
+msgid "Customize the position, visibility and appearance of this main dock."
+msgstr "このメイン・ドックの配置位置や表示方法、外観をカスタマイズします。"
 
-#: ../src/cairo-dock-menu.c:1173
-#, c-format
-msgid "Move to face %d"
-msgstr "全てを面 %d へ移す"
+#: ../src/cairo-dock-menu.c:808
+msgid "Delete this dock"
+msgstr "このドックの削除"
 
-#: ../src/cairo-dock-menu.c:1211
-msgid "Add"
-msgstr "追加"
+#: ../src/cairo-dock-menu.c:818
+msgid "Manage themes"
+msgstr "テーマ管理"
 
-#: ../src/cairo-dock-menu.c:1213
-msgid "Sub-dock"
-msgstr "サブ・ドック"
-
-#: ../src/cairo-dock-menu.c:1215
-msgid "Main dock"
-msgstr "メイン・ドック"
-
-#: ../src/cairo-dock-menu.c:1218
-msgid "Separator"
-msgstr "区切り"
-
-#: ../src/cairo-dock-menu.c:1222
-msgid "Custom launcher"
-msgstr "カスタム・ランチャー"
-
-#: ../src/cairo-dock-menu.c:1223
+#: ../src/cairo-dock-menu.c:823
 msgid ""
-"Usually you would drag a launcher from the menu and drop it on the dock."
-msgstr "大抵の場合、メニューからランチャーをドラッグしてドックにドロップするだけで済みます。"
+"Choose from amongst many themes on the server or save your current theme."
+msgstr "サーバ上にある多くのテーマから選択したり、現在のテーマを保存します。"
 
-#: ../src/cairo-dock-menu.c:1288
-msgid "Modify this separator"
-msgstr "この区切りの編集"
+#: ../src/cairo-dock-menu.c:836
+#, fuzzy
+msgid "Unlock icons position"
+msgstr "アイコンのロック解除"
 
-#: ../src/cairo-dock-menu.c:1288
-msgid "Modify this launcher"
-msgstr "このランチャーの編集"
+# #################################
+# ########### cairo-dock.conf #############
+# #################################
+#: ../src/cairo-dock-menu.c:836
+#, fuzzy
+msgid "Lock icons position"
+msgstr "位置固定"
 
-#: ../src/cairo-dock-menu.c:1290
-msgid "Remove this separator"
-msgstr "この区切りの削除"
+#: ../src/cairo-dock-menu.c:840
+msgid "This will (un)lock the position of the icons."
+msgstr "アイコンの位置をロック（または解除）します。"
 
-#: ../src/cairo-dock-menu.c:1290
-msgid "Remove this launcher"
-msgstr "このランチャーの削除"
+#: ../src/cairo-dock-menu.c:864
+msgid "Quick-Hide"
+msgstr "一時的に隠す"
 
-#: ../src/cairo-dock-menu.c:1291
+#: ../src/cairo-dock-menu.c:869
+msgid "This will hide the dock until you hover over it with the mouse."
+msgstr "マウスがトリガーゾーン内に置かれるまでドックを隠します。"
+
+#: ../src/cairo-dock-menu.c:878
+msgid "Launch Cairo-Dock on startup"
+msgstr "Cairo-Dock 自動起動"
+
+#: ../src/cairo-dock-menu.c:894
+msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgstr ""
+"サードパーティ製のアプレットは、Pidgin など様々なプログラムとの統合を提供しま"
+"す。"
+
+#: ../src/cairo-dock-menu.c:897 ../src/help/applet-init.c:28
+#: ../src/help/applet-notifications.c:257
+msgid "Help"
+msgstr "ヘルプ"
+
+#: ../src/cairo-dock-menu.c:902
+msgid "There are no problems, only solutions (and a lot of useful hints!)"
+msgstr ""
+"問題なんて存在しません。ただ解決法（それに数多くの有益なヒント！）があるのみ"
+"です。"
+
+#: ../src/cairo-dock-menu.c:904
+msgid "About"
+msgstr "情報"
+
+#: ../src/cairo-dock-menu.c:913
+msgid "Quit"
+msgstr "終了"
+
+#: ../src/cairo-dock-menu.c:922
+msgid ""
+"You're using a Cairo-Dock Session!\n"
+"It's not advised to quit the dock but you can press Shift to unlock this "
+"menu entry."
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:954 ../src/cairo-dock-menu.c:975
+msgid "Modify"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:956 ../src/cairo-dock-menu.c:982
+msgid "Remove"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:957
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr "ランチャーはマウスでドックの外にドラッグして削除することができます。"
 
-#: ../src/cairo-dock-menu.c:1293 ../src/cairo-dock-menu.c:1472
+#: ../src/cairo-dock-menu.c:959 ../src/cairo-dock-menu.c:991
 msgid "Move to another dock"
 msgstr "別のドックに移す"
 
-#: ../src/cairo-dock-menu.c:1298 ../src/cairo-dock-menu.c:1477
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
+#: ../src/cairo-dock-menu.c:961 ../src/cairo-dock-menu.c:993
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "New main dock"
 msgstr "新しいメイン・ドック"
 
-#: ../src/cairo-dock-menu.c:1318 ../src/cairo-dock-menu.c:1416
-msgid "Other actions"
-msgstr "その他のアクション"
-
-#: ../src/cairo-dock-menu.c:1324
-msgid "Move to this desktop"
-msgstr "このデスクトップに移す"
-
-#: ../src/cairo-dock-menu.c:1339
-msgid "Not Fullscreen"
-msgstr "全画面表示解除"
-
-#: ../src/cairo-dock-menu.c:1339
-msgid "Fullscreen"
-msgstr "全画面表示"
-
-#: ../src/cairo-dock-menu.c:1343
-msgid "Don't keep above"
-msgstr "最前面表示解除"
-
-#: ../src/cairo-dock-menu.c:1343 ../data/messages:363
-msgid "Keep above"
-msgstr "最前面表示"
-
-#: ../src/cairo-dock-menu.c:1368
-msgid "Remove custom icon"
-msgstr "カスタム・アイコン削除"
-
-#: ../src/cairo-dock-menu.c:1372
-msgid "Set a custom icon"
-msgstr "カスタム・アイコン使用"
-
-#: ../src/cairo-dock-menu.c:1375
-msgid "Kill"
-msgstr "強制終了"
-
-#: ../src/cairo-dock-menu.c:1380
+#: ../src/cairo-dock-menu.c:970
 msgid "Make it a launcher"
 msgstr "ランチャーとして登録"
 
-#: ../src/cairo-dock-menu.c:1383 ../src/cairo-dock-menu.c:1426
+#: ../src/cairo-dock-menu.c:979
+msgid "Detach"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:979
+msgid "Return to the dock"
+msgstr "ドックに戻す"
+
+#: ../src/cairo-dock-menu.c:986
+msgid "Duplicate"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1001
+msgid "Applet's handbook"
+msgstr "アプレットの手引き"
+
+#: ../src/cairo-dock-menu.c:1046
+#, fuzzy
+msgid "Pick up an image"
+msgstr "画像を使用"
+
+#: ../src/cairo-dock-menu.c:1277
+#, c-format
+msgid "Move all to desktop %d - face %d"
+msgstr "全てをデスクトップ %d - 面 %d へ移す"
+
+#: ../src/cairo-dock-menu.c:1277
+#, c-format
+msgid "Move to desktop %d - face %d"
+msgstr "デスクトップ %d - 面 %d へ移す"
+
+#: ../src/cairo-dock-menu.c:1279
+#, c-format
+msgid "Move all to desktop %d"
+msgstr "全てをデスクトップ %d へ移す"
+
+#: ../src/cairo-dock-menu.c:1279
+#, c-format
+msgid "Move to desktop %d"
+msgstr "デスクトップ %d へ移す"
+
+#: ../src/cairo-dock-menu.c:1281
+#, c-format
+msgid "Move all to face %d"
+msgstr "全てを面 %d へ移す"
+
+#: ../src/cairo-dock-menu.c:1281
+#, c-format
+msgid "Move to face %d"
+msgstr "全てを面 %d へ移す"
+
+#: ../src/cairo-dock-menu.c:1527 ../src/cairo-dock-menu.c:1626
+msgid "Other actions"
+msgstr "その他のアクション"
+
+#: ../src/cairo-dock-menu.c:1529
+msgid "Move to this desktop"
+msgstr "このデスクトップに移す"
+
+#: ../src/cairo-dock-menu.c:1544
+msgid "Not Fullscreen"
+msgstr "全画面表示解除"
+
+#: ../src/cairo-dock-menu.c:1544
+msgid "Fullscreen"
+msgstr "全画面表示"
+
+#: ../src/cairo-dock-menu.c:1548
+msgid "Don't keep above"
+msgstr "最前面表示解除"
+
+#: ../src/cairo-dock-menu.c:1548 ../data/messages:363
+msgid "Keep above"
+msgstr "最前面表示"
+
+#: ../src/cairo-dock-menu.c:1573
+msgid "Remove custom icon"
+msgstr "カスタム・アイコン削除"
+
+#: ../src/cairo-dock-menu.c:1577
+msgid "Set a custom icon"
+msgstr "カスタム・アイコン使用"
+
+#: ../src/cairo-dock-menu.c:1580
+msgid "Kill"
+msgstr "強制終了"
+
+#: ../src/cairo-dock-menu.c:1584 ../src/cairo-dock-menu.c:1632
 msgid "Launch a new (Shift+clic)"
 msgstr "追加起動 (Shift+クリック)"
 
-#: ../src/cairo-dock-menu.c:1385
+#: ../src/cairo-dock-menu.c:1588
 msgid "Show"
 msgstr "表示"
 
-#: ../src/cairo-dock-menu.c:1387
+#: ../src/cairo-dock-menu.c:1590
 msgid "Unmaximise"
 msgstr "最大化解除"
 
-#: ../src/cairo-dock-menu.c:1387
+#: ../src/cairo-dock-menu.c:1590
 msgid "Maximise"
 msgstr "最大化"
 
-#: ../src/cairo-dock-menu.c:1392 ../src/cairo-dock-menu.c:1394
+#: ../src/cairo-dock-menu.c:1595 ../src/cairo-dock-menu.c:1597
 msgid "Minimise"
 msgstr "最小化"
 
-#: ../src/cairo-dock-menu.c:1392 ../src/cairo-dock-menu.c:1400
-#: ../src/help/applet-notifications.c:218
+#: ../src/cairo-dock-menu.c:1595 ../src/cairo-dock-menu.c:1602
+#: ../src/cairo-dock-menu.c:1610 ../src/help/applet-notifications.c:247
 msgid "middle-click"
 msgstr "中クリック"
 
-#: ../src/cairo-dock-menu.c:1400 ../src/cairo-dock-menu.c:1402
+#: ../src/cairo-dock-menu.c:1602 ../src/cairo-dock-menu.c:1604
+msgid "Lower"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1610 ../src/cairo-dock-menu.c:1612
 #: ../data/messages:731
 msgid "Close"
 msgstr "閉じる"
 
-#: ../src/cairo-dock-menu.c:1422
+#: ../src/cairo-dock-menu.c:1628
 msgid "Move all to this desktop"
 msgstr "全てをこのデスクトップに移す"
 
-#: ../src/cairo-dock-menu.c:1428
+#: ../src/cairo-dock-menu.c:1634
 msgid "Show all"
 msgstr "全て表示"
 
-#: ../src/cairo-dock-menu.c:1430
+#: ../src/cairo-dock-menu.c:1636
 msgid "Minimise all"
 msgstr "全て最小化"
 
-#: ../src/cairo-dock-menu.c:1432
+#: ../src/cairo-dock-menu.c:1638
 msgid "Close all"
 msgstr "全て閉じる"
 
-#: ../src/cairo-dock-menu.c:1460
-msgid "Detach this applet"
-msgstr "このモジュールの分離"
-
-#: ../src/cairo-dock-menu.c:1460
-msgid "Return to the dock"
-msgstr "ドックに戻す"
-
-#: ../src/cairo-dock-menu.c:1463
-msgid "Remove this applet"
-msgstr "このモジュールの削除"
-
-#: ../src/cairo-dock-menu.c:1467
-msgid "Launch another instance of this applet"
-msgstr "このアプレットの追加起動"
-
-#: ../src/cairo-dock-menu.c:1502 ../data/messages:361
+#: ../src/cairo-dock-menu.c:1659 ../data/messages:361
 msgid "Normal"
 msgstr "通常"
 
-#: ../src/cairo-dock-menu.c:1508 ../data/messages:427 ../data/messages:595
+#: ../src/cairo-dock-menu.c:1665 ../data/messages:427 ../data/messages:595
 #: ../data/messages:1643
 msgid "Always on top"
 msgstr "常に最前面に表示"
 
-#: ../src/cairo-dock-menu.c:1515
+#: ../src/cairo-dock-menu.c:1672
 msgid "Always below"
 msgstr "常に最後面に表示"
 
-#: ../src/cairo-dock-menu.c:1533 ../data/messages:369
+#: ../src/cairo-dock-menu.c:1689 ../data/messages:369
 msgid "Reserve space"
 msgstr "空間確保"
 
-#: ../src/cairo-dock-menu.c:1540
+#: ../src/cairo-dock-menu.c:1696
 msgid "On all desktops"
 msgstr "全デスクトップに配置"
 
 # #################################
 # ########### cairo-dock.conf #############
 # #################################
-#: ../src/cairo-dock-menu.c:1546
+#: ../src/cairo-dock-menu.c:1702
 msgid "Lock position"
 msgstr "位置固定"
 
-#: ../src/cairo-dock-user-interaction.c:405
+#: ../src/cairo-dock-user-interaction.c:416
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -767,119 +788,131 @@ msgstr ""
 "「X アイコンを上書き」オプションが設定ファイルで自動的に有効化されました。\n"
 "当該オプションは「タスクバー」モジュールの設定画面にあります。"
 
-#: ../src/cairo-dock.c:148
+#: ../src/cairo-dock.c:147
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr "Happy new year %d !!!"
 
-#: ../src/cairo-dock.c:317
+#: ../src/cairo-dock.c:320
 msgid "Use Cairo backend."
 msgstr "Cairoバックエンドを使用します。"
 
-#: ../src/cairo-dock.c:320
+#: ../src/cairo-dock.c:323
 msgid "Use OpenGL backend."
 msgstr "OpenGLバックエンドを使用します。"
 
-#: ../src/cairo-dock.c:324
-msgid ""
-"Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled "
-"libcairo)."
-msgstr "強制的にGlitzバックエンドを使用します（cairo用のハードウェア支援です。glitzを有効化した libcairo が必要です）。"
-
-#: ../src/cairo-dock.c:328
+#: ../src/cairo-dock.c:326
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
-msgstr "indirect rendering で OpenGL を使用します。このオプションを使用しなければならないケースは極稀です。"
+msgstr ""
+"indirect rendering で OpenGL を使用します。このオプションを使用しなければなら"
+"ないケースは極稀です。"
 
-#: ../src/cairo-dock.c:331
+#: ../src/cairo-dock.c:329
+msgid "Ask again on startup which backend to use."
+msgstr ""
+
+#: ../src/cairo-dock.c:332
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr "ドックにこの環境を強制的に考慮させます。 - このオプションは慎重に使用してください。"
+msgstr ""
+"ドックにこの環境を強制的に考慮させます。 - このオプションは慎重に使用してくだ"
+"さい。"
 
-#: ../src/cairo-dock.c:334
+#: ../src/cairo-dock.c:335
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
-msgstr "~/.config/cairo-dock の代わりに、このディレクトリからの読み込みをドックに強制します。"
+msgstr ""
+"~/.config/cairo-dock の代わりに、このディレクトリからの読み込みをドックに強制"
+"します。"
 
-#: ../src/cairo-dock.c:337
+#: ../src/cairo-dock.c:338
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
-msgstr "追加的なテーマを含むサーバのアドレスです。デフォルトのサーバ・アドレスを上書きします。"
+msgstr ""
+"追加的なテーマを含むサーバのアドレスです。デフォルトのサーバ・アドレスを上書"
+"きします。"
 
-#: ../src/cairo-dock.c:340
+#: ../src/cairo-dock.c:341
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
-msgstr "ドック起動前に N 秒待ちます。セッション開始と同時にドックが起動したとき何か問題がある場合に便利です。"
+msgstr ""
+"ドック起動前に N 秒待ちます。セッション開始と同時にドックが起動したとき何か問"
+"題がある場合に便利です。"
 
-#: ../src/cairo-dock.c:343
+#: ../src/cairo-dock.c:344
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
-msgstr "ドック起動前に設定パネルを表示して、ドックの設定変更が行えるようにします。"
+msgstr ""
+"ドック起動前に設定パネルを表示して、ドックの設定変更が行えるようにします。"
 
-#: ../src/cairo-dock.c:346
+#: ../src/cairo-dock.c:347
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr "指定プラグインを動作させません（しかし、ドックには読み込まれます）。"
 
-#: ../src/cairo-dock.c:349
+#: ../src/cairo-dock.c:350
 msgid "Don't load any plug-ins."
 msgstr "プラグインを一切読み込みません。"
 
-#: ../src/cairo-dock.c:352
+#: ../src/cairo-dock.c:353
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
-msgstr "詳細なログ（デバグ、メッセージ、警告、クリティカル、エラー）。デフォルトのログレベルは警告です。"
+msgstr ""
+"詳細なログ（デバグ、メッセージ、警告、クリティカル、エラー）。デフォルトのロ"
+"グレベルは警告です。"
 
-#: ../src/cairo-dock.c:355
+#: ../src/cairo-dock.c:356
 msgid "Force to display some output messages with colors."
 msgstr "強制的に出力メッセージを色付きで表示します。"
 
-#: ../src/cairo-dock.c:358
+#: ../src/cairo-dock.c:359
 msgid "Print version and quit."
 msgstr "バージョンを表示して終了します。"
 
-#: ../src/cairo-dock.c:361
+#: ../src/cairo-dock.c:362
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr "ドックをロックして、ユーザーによる変更が行えないようにします。"
 
-#: ../src/cairo-dock.c:365
+#: ../src/cairo-dock.c:366
 msgid "Keep the dock above other windows whatever."
 msgstr "ドックを常に他のウィンドウより手前に表示します。"
 
-#: ../src/cairo-dock.c:368
+#: ../src/cairo-dock.c:369
 msgid "Don't make the dock appear on all desktops."
 msgstr "ドックを全てのデスクトップには表示しないようにします。"
 
-#: ../src/cairo-dock.c:371
+#: ../src/cairo-dock.c:372
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr "万能な Cairo-Dock はコーヒーまで淹れちゃいます！"
 
-#: ../src/cairo-dock.c:374
+#: ../src/cairo-dock.c:375
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
-"このディレクトリ内の追加的なモジュールをドックに読み込ませます（しかし、非公式なモジュールの読み込みはドックにとって安全ではありません）。"
+"このディレクトリ内の追加的なモジュールをドックに読み込ませます（しかし、非公"
+"式なモジュールの読み込みはドックにとって安全ではありません）。"
 
-#: ../src/cairo-dock.c:377
+#: ../src/cairo-dock.c:378
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
 msgstr "用途はデバグ限定です。クラッシュマネージャはバグの捕獲を開始しません。"
 
-#: ../src/cairo-dock.c:380
+#: ../src/cairo-dock.c:381
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
 msgstr "用途はデバグ限定です。未発表のまだ不安定なオプションを有効化します。"
 
-#: ../src/cairo-dock.c:499
+#: ../src/cairo-dock.c:502
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Cairo-Dock で OpenGL を使用？"
 
-#: ../src/cairo-dock.c:507
+#: ../src/cairo-dock.c:510
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -890,18 +923,22 @@ msgid ""
 " (To not show this dialog, launch the dock from the Application menu,\n"
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
-"OpenGL を使用すると、ハードウェア支援が利用されて CPU 負荷が最小限に減るとともに、\n"
+"OpenGL を使用すると、ハードウェア支援が利用されて CPU 負荷が最小限に減るとと"
+"もに、\n"
 "Compiz に似た視覚効果の利用もできるようになります。\n"
-"しかし、グラフィックカードやドライバによっては対応が完全ではないため、ドックの正常な実行に支障が出る可能性があります。\n"
+"しかし、グラフィックカードやドライバによっては対応が完全ではないため、ドック"
+"の正常な実行に支障が出る可能性があります。\n"
 "OpenGL を有効にしますか？\n"
-"（このダイアログを表示しないようにするには、アプリケーション・メニューからドックを起動するか、\n"
-"　OpenGL を強制使用する -o オプション、または Cairo を強制使用する -c オプションを付けて起動します。）"
+"（このダイアログを表示しないようにするには、アプリケーション・メニューから"
+"ドックを起動するか、\n"
+"　OpenGL を強制使用する -o オプション、または Cairo を強制使用する -c オプ"
+"ションを付けて起動します。）"
 
-#: ../src/cairo-dock.c:512
+#: ../src/cairo-dock.c:521
 msgid "Remember this choice"
 msgstr "この選択を記憶する"
 
-#: ../src/cairo-dock.c:749
+#: ../src/cairo-dock.c:775
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -918,7 +955,8 @@ msgid ""
 "want to do it now?"
 msgstr ""
 "テーマが見つかりませんでした。代わりにデフォルトのテーマを使用します。\n"
-"このモジュールの設定画面を開いてテーマを変更することができます。直ちに変更しますか？"
+"このモジュールの設定画面を開いてテーマを変更することができます。直ちに変更し"
+"ますか？"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:292
 msgid ""
@@ -926,80 +964,92 @@ msgid ""
 "You can change this by opening the configuration of this module. Do you want "
 "to do it now?"
 msgstr ""
-"ゲージ用テーマが見つかりませんでした。代わりにデフォルトのゲージを使用します。\n"
-"このモジュールの設定画面を開いてテーマを変更することができます。直ちに変更しますか？"
+"ゲージ用テーマが見つかりませんでした。代わりにデフォルトのゲージを使用しま"
+"す。\n"
+"このモジュールの設定画面を開いてテーマを変更することができます。直ちに変更し"
+"ますか？"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:374
-msgid "Applet's handbook"
-msgstr "アプレットの手引き"
-
-#: ../src/gldit/cairo-dock-desklet-manager.c:860
+#: ../src/gldit/cairo-dock-desklet-manager.c:858
 msgid "_custom decoration_"
 msgstr "カスタム装飾"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:333
+#: ../src/gldit/cairo-dock-dock-manager.c:363
 msgid "Bottom dock"
 msgstr "画面の下のドック"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:335
+#: ../src/gldit/cairo-dock-dock-manager.c:365
 msgid "Top dock"
 msgstr "画面の上のドック"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:340
+#: ../src/gldit/cairo-dock-dock-manager.c:370
 msgid "Right dock"
 msgstr "画面の右のドック"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:342
+#: ../src/gldit/cairo-dock-dock-manager.c:372
 msgid "Left dock"
 msgstr "画面の左のドック"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:236
+#: ../src/gldit/cairo-dock-dock-manager.c:1632
+#: ../src/gldit/cairo-dock-dock-manager.c:1733
+#, fuzzy
+msgid "Pop up the main dock"
+msgstr "新しいメイン・ドック"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
 msgid "by %s"
 msgstr "by %s"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:248
+#: ../src/gldit/cairo-dock-gui-factory.c:255
 msgid "kB"
 msgstr "kB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:250
+#: ../src/gldit/cairo-dock-gui-factory.c:257
 msgid "MB"
 msgstr "MB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:259
+#: ../src/gldit/cairo-dock-gui-factory.c:266
 msgid "Local"
 msgstr "ローカル"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:260
+#: ../src/gldit/cairo-dock-gui-factory.c:267
 msgid "User"
 msgstr "ユーザー"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:261
+#: ../src/gldit/cairo-dock-gui-factory.c:268
 msgid "Net"
 msgstr "ネット"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:262
+#: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "New"
 msgstr "新着"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:263
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "Updated"
 msgstr "更新有り"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:983
+#: ../src/gldit/cairo-dock-gui-factory.c:724
+msgid "Pick up a file"
+msgstr ""
+
+#: ../src/gldit/cairo-dock-gui-factory.c:724
+msgid "Pick up a directory"
+msgstr ""
+
+#: ../src/gldit/cairo-dock-gui-factory.c:984
 msgid "_Custom Icons_"
 msgstr "カスタム・アイコン"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1347
+#: ../src/gldit/cairo-dock-gui-factory.c:1348
 msgid "Rate me"
 msgstr "評価ください"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1446
-#: ../src/gldit/cairo-dock-gui-factory.c:1448
+#: ../src/gldit/cairo-dock-gui-factory.c:1447
+#: ../src/gldit/cairo-dock-gui-factory.c:1449
 msgid "You must try the theme before you can rate it."
 msgstr "評価点を付ける前に、テーマを使用してみる必要があります。"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1471
+#: ../src/gldit/cairo-dock-gui-factory.c:1472
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1007,9 +1057,10 @@ msgid ""
 "features."
 msgstr ""
 "'%s' モジュールが見つかりません。\n"
-"これにより提供される機能の利用には、ドック本体と同バージョンのモジュールのインストールが必要です。"
+"これにより提供される機能の利用には、ドック本体と同バージョンのモジュールのイ"
+"ンストールが必要です。"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1480
+#: ../src/gldit/cairo-dock-gui-factory.c:1481
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1018,8 +1069,8 @@ msgstr ""
 "'%s' プラグインは有効ではありません。\n"
 "直ちに有効にしますか？"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2252
-#: ../src/gldit/cairo-dock-gui-factory.c:2831
+#: ../src/gldit/cairo-dock-gui-factory.c:2329
+#: ../src/gldit/cairo-dock-gui-factory.c:2912
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "'%s' にあるテーマを一覧化中..."
@@ -1027,27 +1078,27 @@ msgstr "'%s' にあるテーマを一覧化中..."
 # #################################
 # ########### themes.conf #############
 # #################################
-#: ../src/gldit/cairo-dock-gui-factory.c:2769
+#: ../src/gldit/cairo-dock-gui-factory.c:2846
 msgid "Theme"
 msgstr "テーマ"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2782
+#: ../src/gldit/cairo-dock-gui-factory.c:2859
 msgid "Rating"
 msgstr "評価点"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2788
+#: ../src/gldit/cairo-dock-gui-factory.c:2865
 msgid "Sobriety"
 msgstr "地味度"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2857
+#: ../src/gldit/cairo-dock-gui-factory.c:2938
 msgid "link"
 msgstr "リンク"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2910
+#: ../src/gldit/cairo-dock-gui-factory.c:2991
 msgid "Grab"
 msgstr "取得"
 
-#: ../src/gldit/cairo-dock-struct.h:419
+#: ../src/gldit/cairo-dock-struct.h:423
 msgid "Default"
 msgstr "デフォルト"
 
@@ -1060,21 +1111,22 @@ msgstr "本当に %s テーマを上書きしますか？"
 msgid "Last modification on:"
 msgstr "最終修正日時："
 
-#: ../src/gldit/cairo-dock-themes-manager.c:276
-#, c-format
+#: ../src/gldit/cairo-dock-themes-manager.c:272
+#, fuzzy, c-format
 msgid ""
-"Could not access remote file %s/%s. Maybe the server is down.\n"
+"Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"遠隔ファイル %s/%s の取得ができませんでした。サーバがダウンしているのかもしれません。\n"
+"遠隔ファイル %s/%s の取得ができませんでした。サーバがダウンしているのかもしれ"
+"ません。\n"
 "後でもう一度試すか、glx-dock.org に連絡を取ってみてください。"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:291
+#: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "本当に %s テーマを削除しますか？"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:293
+#: ../src/gldit/cairo-dock-themes-manager.c:288
 msgid "Are you sure you want to delete these themes?"
 msgstr "本当にこれらのテーマを削除しますか？"
 
@@ -1088,8 +1140,10 @@ msgid ""
 "  (you can now click on this dialog to close it)"
 msgstr ""
 "Cairo-Dock2 にようこそ！\n"
-"ドックの使用開始を手助けしますので、まずこのアプレットをクリックしてください。\n"
-"質問やリクエスト、意見がありましたら、http://glx-dock.org を訪れてみてください。このソフトを楽しんでもらえることを願っています！\n"
+"ドックの使用開始を手助けしますので、まずこのアプレットをクリックしてくださ"
+"い。\n"
+"質問やリクエスト、意見がありましたら、http://glx-dock.org を訪れてみてくださ"
+"い。このソフトを楽しんでもらえることを願っています！\n"
 " （このダイアログはクリックすると閉じます。）"
 
 #: ../src/help/applet-composite.c:160
@@ -1102,7 +1156,8 @@ msgid ""
 "composite manager.\n"
 "Do you want to activate it now?"
 msgstr ""
-"ドックの周囲の黒い矩形を取り除くには、コンポジット・マネージャを有効にする必要があります。\n"
+"ドックの周囲の黒い矩形を取り除くには、コンポジット・マネージャを有効にする必"
+"要があります。\n"
 "直ちに有効にしますか？"
 
 #: ../src/help/applet-composite.c:177
@@ -1123,64 +1178,85 @@ msgid ""
 "option is in the 'System' module of the configuration, at the bottom of the "
 "page."
 msgstr ""
-"ドックの周囲の黒い矩形を取り除くには、コンポジット・マネージャを有効にする必要があります。\n"
-"そのためには、例えばデスクトップ効果を有効にしたり、Compiz を起動したり、Metacity のコンポジット機能を有効にします。\n"
-"使用マシンがコンポジットをサポートしていない場合でも、Cairo-Dock "
-"の「システム」モジュール設定ページの一番下にあるオプションにより、そのエミュレートを行うことができます。"
+"ドックの周囲の黒い矩形を取り除くには、コンポジット・マネージャを有効にする必"
+"要があります。\n"
+"そのためには、例えばデスクトップ効果を有効にしたり、Compiz を起動したり、"
+"Metacity のコンポジット機能を有効にします。\n"
+"使用マシンがコンポジットをサポートしていない場合でも、Cairo-Dock の「システ"
+"ム」モジュール設定ページの一番下にあるオプションにより、そのエミュレートを行"
+"うことができます。"
 
-#: ../src/help/applet-notifications.c:169
-msgid "Unity is already disabled."
-msgstr "Unity はすでに無効化されています。"
+#: ../src/help/applet-init.c:31
+msgid ""
+"This applet is made to help you.\n"
+"Click on its icon to pop up useful tips about the possibilities of Cairo-"
+"Dock.\n"
+"Middle-click to open the configuration window.\n"
+"Right-click to access some troubleshooting actions."
+msgstr ""
+"あなたを手助けするためのアプレット。\n"
+"このアプレットのアイコンをクリックすると、Cairo-Dock の機能に関する役に立つヒ"
+"ントがポップアップします。\n"
+"中クリックするとドックの設定画面が開きます。\n"
+"右クリックするといくつかの問題解決のためのアクションにアクセスできます。"
 
-#: ../src/help/applet-notifications.c:218
+#: ../src/help/applet-notifications.c:247
 msgid "Open global settings"
 msgstr "グローバル設定を開く"
 
-#: ../src/help/applet-notifications.c:223
+#: ../src/help/applet-notifications.c:252
 msgid "Activate composite"
 msgstr "コンポジット有効化"
 
-#: ../src/help/applet-notifications.c:225
+#: ../src/help/applet-notifications.c:254
 msgid "Disable the gnome-panel"
 msgstr "Gnomeパネル無効化"
 
-#: ../src/help/applet-notifications.c:227
+#: ../src/help/applet-notifications.c:256
 msgid "Disable Unity"
 msgstr "Unity 無効化"
 
-#: ../src/help/applet-notifications.c:229
+#: ../src/help/applet-notifications.c:258
 msgid "Online help"
 msgstr "オンラインヘルプ"
 
-#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:128
+#: ../src/help/applet-tips-dialog.c:152
+msgid "Tips and Tricks"
+msgstr "ヒントやコツ"
+
+#: ../src/help/applet-tips-dialog.c:307
+msgid "Category"
+msgstr "カテゴリ"
+
+#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:119
 msgid "Enter a command"
 msgstr "コマンドを入力"
 
-#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:129
+#: ../src/icon-factory/cairo-dock-desktop-file-factory.c:120
 msgid "New launcher"
 msgstr "新しいランチャー"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:602 ../data/messages:445
+#: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:445
 #: ../data/messages:613
 msgid "Move down"
 msgstr "降下"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:610 ../data/messages:447
+#: ../src/implementations/cairo-dock-hiding-effect.c:604 ../data/messages:447
 #: ../data/messages:615
 msgid "Fade out"
 msgstr "溶暗"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:449
+#: ../src/implementations/cairo-dock-hiding-effect.c:612 ../data/messages:449
 #: ../data/messages:617
 msgid "Semi transparent"
 msgstr "半透明"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:627 ../data/messages:451
+#: ../src/implementations/cairo-dock-hiding-effect.c:621 ../data/messages:451
 #: ../data/messages:619
 msgid "Zoom out"
 msgstr "ズームアウト"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:635 ../data/messages:453
+#: ../src/implementations/cairo-dock-hiding-effect.c:629 ../data/messages:453
 #: ../data/messages:621
 msgid "Folding"
 msgstr "折りたたみ"
@@ -1201,9 +1277,11 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
-"ドック上の大抵のアイコンにはアクションが備わっています： "
-"左クリックで第1のアクション、中クリックで第2のアクション、右クリックで追加的アクション（メニュー表示）。\n"
-"アプレットのなかには、アクションにショートキーを割り当てたり、中クリック時のアクションの内容を選択できるものもあります。"
+"ドック上の大抵のアイコンにはアクションが備わっています： 左クリックで第1のア"
+"クション、中クリックで第2のアクション、右クリックで追加的アクション（メニュー"
+"表示）。\n"
+"アプレットのなかには、アクションにショートキーを割り当てたり、中クリック時の"
+"アクションの内容を選択できるものもあります。"
 
 #: ../data/messages:7 ../data/messages:1289
 msgid "Adding features"
@@ -1219,12 +1297,13 @@ msgid ""
 "the \"More applets\" button (which will lead you to our applets web page) "
 "and then just drag-and-drop the link of an applet into your dock."
 msgstr ""
-"Cairo-Dock "
-"には数多くのアプレットが用意されています。例えば時計やログアウト・ボタンのように、ドック内で動作する小さなアプリケーションがアプレットです。\n"
-"新しいアプレットを有効にするには、設定画面を開き（右クリック -> Cairo-Dock -> "
-"設定）、「アドオン」に進み、任意のアプレットにチェックを入れます。\n"
-"用意された以外の他のアプレットも簡単にインストールできます： "
-"設定画面にある「追加アプレット」ボタンをクリックして（アプレットのウェブページが開かれます）、アプレットのリンクをドックにドラッグ＆ドロップするだけです。"
+"Cairo-Dock には数多くのアプレットが用意されています。例えば時計やログアウト・"
+"ボタンのように、ドック内で動作する小さなアプリケーションがアプレットです。\n"
+"新しいアプレットを有効にするには、設定画面を開き（右クリック -> Cairo-Dock -"
+"> 設定）、「アドオン」に進み、任意のアプレットにチェックを入れます。\n"
+"用意された以外の他のアプレットも簡単にインストールできます： 設定画面にある"
+"「追加アプレット」ボタンをクリックして（アプレットのウェブページが開かれま"
+"す）、アプレットのリンクをドックにドラッグ＆ドロップするだけです。"
 
 #: ../data/messages:13 ../data/messages:1295
 msgid "Adding a launcher"
@@ -1237,9 +1316,11 @@ msgid ""
 "Alternatively, if an application is already opened, you can right-click on "
 "its icon and select \"make it a launcher\"."
 msgstr ""
-"アプリケーション・メニューからドックへドラッグ＆ドラップしてランチャーを追加することができます。ドロップ可能な場合、矢印のアニメーションが表示されます。"
-"\n"
-"アプリケーションがすでに開かれた状態の場合、そのアイコンを右クリックして「ランチャーとして登録」を選択する方法もあります。"
+"アプリケーション・メニューからドックへドラッグ＆ドラップしてランチャーを追加"
+"することができます。ドロップ可能な場合、矢印のアニメーションが表示されま"
+"す。\n"
+"アプリケーションがすでに開かれた状態の場合、そのアイコンを右クリックして「ラ"
+"ンチャーとして登録」を選択する方法もあります。"
 
 #: ../data/messages:17 ../data/messages:1299
 msgid "Removing a launcher"
@@ -1250,7 +1331,8 @@ msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
 msgstr ""
-"ドック外へランチャーをドラッグ＆ドロップして削除することができます。ドロップ可能な場合、そのランチャー上に”削除”のエンブレムが表示されます。"
+"ドック外へランチャーをドラッグ＆ドロップして削除することができます。ドロップ"
+"可能な場合、そのランチャー上に”削除”のエンブレムが表示されます。"
 
 #: ../data/messages:21 ../data/messages:1303
 msgid "Grouping icons into a sub-dock"
@@ -1265,7 +1347,8 @@ msgid ""
 msgstr ""
 "複数のアイコンを”サブ・ドック”にグループ化できます。\n"
 "サブ・ドックの追加は、ドック上での右クリック -> 追加 -> サブ・ドック です。\n"
-"追加したサブ・ドックへアイコンを移動させるには、アイコン上での右クリック -> 別のドックに移す -> 当該ドックの名前を選択します。"
+"追加したサブ・ドックへアイコンを移動させるには、アイコン上での右クリック -> "
+"別のドックに移す -> 当該ドックの名前を選択します。"
 
 #: ../data/messages:25 ../data/messages:1307
 msgid "Moving icons"
@@ -1280,8 +1363,9 @@ msgid ""
 "icon inside."
 msgstr ""
 "どのアイコンも、その帰属ドック内の任意の場所にドラッグできます。\n"
-"アイコンを別のドックへ移動させるには、アイコンの右クリック -> 別のドックに移す -> "
-"任意のドックを選択します。”新しいメイン・ドック”を選択した場合、当該アイコンを含んだメイン・ドックが新規作成されます。"
+"アイコンを別のドックへ移動させるには、アイコンの右クリック -> 別のドックに移"
+"す -> 任意のドックを選択します。”新しいメイン・ドック”を選択した場合、当該ア"
+"イコンを含んだメイン・ドックが新規作成されます。"
 
 #: ../data/messages:29 ../data/messages:1311
 msgid "Changing an icon's image"
@@ -1304,8 +1388,10 @@ msgstr ""
 "アイコンの設定画面を開き、画像へのパスを指定します。\n"
 "アプリケーション（タスク）・アイコンの場合：\n"
 "アイコン上での右クリック -> ”その他のアクション” -> ”カスタム・アイコン使用” "
-"に進み、画像を選択します。カスタム画像の削除は、アイコンを右クリック -> ”その他のアクション” -> ”カスタム・アイコン削除” です。\n"
-"PC にアイコンのテーマをインストールした場合は、そのうちの１つのテーマをデフォルトのテーマの代わりにドックの設定画面から選択することもできます。"
+"に進み、画像を選択します。カスタム画像の削除は、アイコンを右クリック -> ”その"
+"他のアクション” -> ”カスタム・アイコン削除” です。\n"
+"PC にアイコンのテーマをインストールした場合は、そのうちの１つのテーマをデフォ"
+"ルトのテーマの代わりにドックの設定画面から選択することもできます。"
 
 #: ../data/messages:33 ../data/messages:1315
 msgid "Resizing icons"
@@ -1321,10 +1407,13 @@ msgid ""
 "Also, you can define the size of each applet independently in their own "
 "settings."
 msgstr ""
-"アイコンやズーム効果を大きくしたり小さくすることができます。設定画面を開き（右クリック -> Cairo-Dock -> "
-"設定）、「外観」（詳細設定モードの場合は「アイコン」）にて指定します。\n"
-"ドックに非常に多くのアイコンがある場合は、画面に収まるようにするためズームアウトすることに留意してください。\n"
-"アプレットのアイコンについては、各アプレットそれぞれの設定画面で独自の大きさを指定できます。"
+"アイコンやズーム効果を大きくしたり小さくすることができます。設定画面を開き"
+"（右クリック -> Cairo-Dock -> 設定）、「外観」（詳細設定モードの場合は「アイ"
+"コン」）にて指定します。\n"
+"ドックに非常に多くのアイコンがある場合は、画面に収まるようにするためズームア"
+"ウトすることに留意してください。\n"
+"アプレットのアイコンについては、各アプレットそれぞれの設定画面で独自の大きさ"
+"を指定できます。"
 
 #: ../data/messages:37 ../data/messages:1319
 msgid "Separating icons"
@@ -1339,10 +1428,13 @@ msgid ""
 "between each group.\n"
 "In the \"panel\" view, separators are represented as gap between icons."
 msgstr ""
-"ドック上で右クリック -> 追加 -> 区切り を選択して、アイコン同士の間に区切りを追加できます。\n"
-"また、アイコンを種類ごとに区分け（ランチャー/アプリケーション/アプレット）するオプションを有効にした場合、区切りが各グループの間に自動的に追加されます。"
-"\n"
-"ドックのビュー形式の１つ”パネル”では、区切りがアイコンの間の隙間として表されます。"
+"ドック上で右クリック -> 追加 -> 区切り を選択して、アイコン同士の間に区切りを"
+"追加できます。\n"
+"また、アイコンを種類ごとに区分け（ランチャー/アプリケーション/アプレット）す"
+"るオプションを有効にした場合、区切りが各グループの間に自動的に追加されま"
+"す。\n"
+"ドックのビュー形式の１つ”パネル”では、区切りがアイコンの間の隙間として表され"
+"ます。"
 
 #: ../data/messages:43 ../data/messages:1325
 msgid "Using the dock as a taskbar"
@@ -1358,10 +1450,13 @@ msgid ""
 "the windows of the current desktop, only the hidden windows, separated from "
 "the launcher, etc."
 msgstr ""
-"アプリケーションが実行されている時、それに関連付けられたアイコンがドックに表示されます。\n"
-"当該アプリケーションのランチャーがすでにドックにある場合はアイコンが表示されず、代わりに小さな標示がそのランチャーに現れます。\n"
-"どのアプリケーションをドックに表示するか選択できることに留意してください： "
-"現在のデスクトップのウィンドウのみ、最小化ウィンドウのみ、ランチャーとの分離、等々"
+"アプリケーションが実行されている時、それに関連付けられたアイコンがドックに表"
+"示されます。\n"
+"当該アプリケーションのランチャーがすでにドックにある場合はアイコンが表示され"
+"ず、代わりに小さな標示がそのランチャーに現れます。\n"
+"どのアプリケーションをドックに表示するか選択できることに留意してください： 現"
+"在のデスクトップのウィンドウのみ、最小化ウィンドウのみ、ランチャーとの分離、"
+"等々"
 
 #: ../data/messages:47 ../data/messages:1329
 msgid "Closing a window"
@@ -1370,7 +1465,9 @@ msgstr "ウィンドウの閉じ方"
 #: ../data/messages:49 ../data/messages:1331
 msgid ""
 "You can close a window by middle-clicking on its icon (or from the menu)."
-msgstr "アイコンを中クリックするとウィンドウを閉じることができます（または、メニューから当該アクションを選択します）。"
+msgstr ""
+"アイコンを中クリックするとウィンドウを閉じることができます（または、メニュー"
+"から当該アクションを選択します）。"
 
 #: ../data/messages:51 ../data/messages:1333
 msgid "Minimizing / restauring a window"
@@ -1382,7 +1479,8 @@ msgid ""
 "When the window has the focus, clicking on its icon will minimize the window."
 msgstr ""
 "アイコンをクリックすると、そのウィンドウが一番手前に来ます。\n"
-"ウィンドウにフォーカスがある時、そのアイコンをクリックすると当該ウィンドウは最小化します。"
+"ウィンドウにフォーカスがある時、そのアイコンをクリックすると当該ウィンドウは"
+"最小化します。"
 
 #: ../data/messages:55 ../data/messages:1337
 msgid "Launching an application several times"
@@ -1393,7 +1491,8 @@ msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
 msgstr ""
-"SHIFTキーを押しながらアイコンをクリックすると、アプリケーションの複数起動が可能です（またはメニューから当該アクションを選択します）。"
+"SHIFTキーを押しながらアイコンをクリックすると、アプリケーションの複数起動が可"
+"能です（またはメニューから当該アクションを選択します）。"
 
 #: ../data/messages:59 ../data/messages:1341
 msgid "Switching between the windows of a same application"
@@ -1403,7 +1502,9 @@ msgstr "同じアプリケーションのウィンドウ同士での切り替え
 msgid ""
 "With your mouse, scroll up/down on one of the icons of the application. Each "
 "time you scroll, the next/previous window will be presented to you."
-msgstr "アプリケーションのアイコン上でマウスをスクロールアップ/ダウンすると、スクロールの度に前/次のウィンドウが現れます。"
+msgstr ""
+"アプリケーションのアイコン上でマウスをスクロールアップ/ダウンすると、スクロー"
+"ルの度に前/次のウィンドウが現れます。"
 
 #: ../data/messages:63 ../data/messages:1345
 msgid "Grouping windows of a given application"
@@ -1416,8 +1517,10 @@ msgid ""
 "Clicking on the main icon will display all the windows of the application "
 "side-by-side (if your Window Manager is able to do that)."
 msgstr ""
-"１つのアプリケーションに複数のウィンドウがある時、各ウィンドウごとのアイコンがドックに現れ、それらはサブ・ドック内にグループ化されます。\n"
-"メインのアイコンをクリックすると、アプリケーションのウィンドウが並べて表示されます（使用しているウィンドウ・マネージャがそれに対応している場合）。"
+"１つのアプリケーションに複数のウィンドウがある時、各ウィンドウごとのアイコン"
+"がドックに現れ、それらはサブ・ドック内にグループ化されます。\n"
+"メインのアイコンをクリックすると、アプリケーションのウィンドウが並べて表示さ"
+"れます（使用しているウィンドウ・マネージャがそれに対応している場合）。"
 
 #: ../data/messages:67 ../data/messages:1349
 msgid "Setting a custom icon for an application"
@@ -1425,7 +1528,9 @@ msgstr "アプリケーションに任意のアイコンの使用"
 
 #: ../data/messages:69 ../data/messages:1351
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr "このヘルプの”アイコン”カテゴリにある”アイコン画像の変更”の項を参照してください。"
+msgstr ""
+"このヘルプの”アイコン”カテゴリにある”アイコン画像の変更”の項を参照してくださ"
+"い。"
 
 #: ../data/messages:71 ../data/messages:1353
 msgid "Showing windows preview over the icons"
@@ -1436,8 +1541,8 @@ msgid ""
 "You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
-"Compiz を実行して、Compiz の”ウィンドウ・プレビュー”プラグインを有効にする必要があります。”CCSM”をインストールすると、Compiz "
-"の設定変更が行えます。"
+"Compiz を実行して、Compiz の”ウィンドウ・プレビュー”プラグインを有効にする必"
+"要があります。”CCSM”をインストールすると、Compiz の設定変更が行えます。"
 
 #: ../data/messages:75 ../data/messages:197 ../data/messages:217
 #: ../data/messages:255 ../data/messages:297 ../data/messages:301
@@ -1469,8 +1574,10 @@ msgid ""
 "dock, and then select the position you want."
 msgstr ""
 "ドックは画面上の任意の場所に配置できます。\n"
-"メイン・ドックの場合、右クリック -> Cairo-Dock -> 設定 で好みの場所を選択します。\n"
-"第2、第3のドックの場合は、右クリック -> Cairo-Dock -> このドックの設定 で場所を選択します。"
+"メイン・ドックの場合、右クリック -> Cairo-Dock -> 設定 で好みの場所を選択しま"
+"す。\n"
+"第2、第3のドックの場合は、右クリック -> Cairo-Dock -> このドックの設定 で場所"
+"を選択します。"
 
 #: ../data/messages:85 ../data/messages:1367
 msgid "Hiding the dock to use all the screen"
@@ -1485,9 +1592,12 @@ msgid ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the visibility you want."
 msgstr ""
-"画面全体をアプリケーションに供するため、ドック自体を隠し、パネルのようにいつでも再表示させることが可能です。\n"
-"表示に関する振る舞いを変更するには、右クリック -> Cairo-Dock -> 設定 で任意の表示方法を選択します。\n"
-"第2、第3のドックの場合、右クリック -> Cairo-Dock -> このドックの設定 で表示方法を選択します。"
+"画面全体をアプリケーションに供するため、ドック自体を隠し、パネルのようにいつ"
+"でも再表示させることが可能です。\n"
+"表示に関する振る舞いを変更するには、右クリック -> Cairo-Dock -> 設定 で任意の"
+"表示方法を選択します。\n"
+"第2、第3のドックの場合、右クリック -> Cairo-Dock -> このドックの設定 で表示方"
+"法を選択します。"
 
 #: ../data/messages:89 ../data/messages:1371
 msgid "Having more than one dock"
@@ -1516,8 +1626,10 @@ msgid ""
 "wherever on your desktop.\n"
 "To detach an applet from the dock, simply drag and drop it outside the dock."
 msgstr ""
-"アプレットはデスクレットの内部で動作することが可能です。デスクトップのどの場所でも配置可能な小さなウィンドウがデスクレットです。\n"
-"アプレットをドックから分離させるには、ドックの外部へドラッグ＆ドロップするだけです。"
+"アプレットはデスクレットの内部で動作することが可能です。デスクトップのどの場"
+"所でも配置可能な小さなウィンドウがデスクレットです。\n"
+"アプレットをドックから分離させるには、ドックの外部へドラッグ＆ドロップするだ"
+"けです。"
 
 #: ../data/messages:107 ../data/messages:1389
 msgid "Moving desklets"
@@ -1532,8 +1644,10 @@ msgid ""
 "clicking on it -> \"lock position\". To unlock it, de-select this option."
 msgstr ""
 "デスクレットはどの位置にもマウスで移動可能です。\n"
-"デスクレットの一番上や左端にある小さい矢印をドラッグすると、回転させることもできます。\n"
-"逆に移動させたくない場合は、右クリック -> ”位置固定” を選択してロックすることが可能です。このオプションの選択を外せばロックは解除されます。"
+"デスクレットの一番上や左端にある小さい矢印をドラッグすると、回転させることも"
+"できます。\n"
+"逆に移動させたくない場合は、右クリック -> ”位置固定” を選択してロックすること"
+"が可能です。このオプションの選択を外せばロックは解除されます。"
 
 #: ../data/messages:111 ../data/messages:1393
 msgid "Placing desklets"
@@ -1549,11 +1663,13 @@ msgid ""
 "to the mouse (means you can click on what is behind them), by clicking on "
 "the small bottom-right button."
 msgstr ""
-"メニューから（右クリック -> "
-"表示）、デスクレットを他のウィンドウよりも手前に表示させるか、ウィジェット・レイヤ（Compiz使用の場合）に表示させるか、または画面の横に整列させたうえ"
-"で”空間確保”を選択することで”デスクレットバー”のようにさせるか、選ぶことができます。\n"
-"普段操作の必要のない（例えば時計のような）デスクレットの場合、右下の小さいボタンをクリックすることで、マウスに対する透過性（デスクレットの背後をクリックす"
-"ることが可能になる）を持たせることができます。"
+"メニューから（右クリック -> 表示）、デスクレットを他のウィンドウよりも手前に"
+"表示させるか、ウィジェット・レイヤ（Compiz使用の場合）に表示させるか、または"
+"画面の横に整列させたうえで”空間確保”を選択することで”デスクレットバー”のよう"
+"にさせるか、選ぶことができます。\n"
+"普段操作の必要のない（例えば時計のような）デスクレットの場合、右下の小さいボ"
+"タンをクリックすることで、マウスに対する透過性（デスクレットの背後をクリック"
+"することが可能になる）を持たせることができます。"
 
 #: ../data/messages:115 ../data/messages:1397
 msgid "Changing the desklets decorations"
@@ -1565,7 +1681,8 @@ msgid ""
 "applet, go to Desklet, and select the decoration you want (you can provide "
 "your own one)."
 msgstr ""
-"デスクレットには装飾を持たせることができます。その変更を行うには、アプレットの設定画面を開き、”デスクレット”タブに進み、そこで好みの装飾を選択します（自"
+"デスクレットには装飾を持たせることができます。その変更を行うには、アプレット"
+"の設定画面を開き、”デスクレット”タブに進み、そこで好みの装飾を選択します（自"
 "分で用意した素材の使用も可能です）。"
 
 #: ../data/messages:119 ../data/messages:1401
@@ -1587,8 +1704,10 @@ msgid ""
 msgstr ""
 "時計アプレットを有効化します。\n"
 "アプレットをクリックするとカレンダーが表示されます。\n"
-"日にちをダブルクリックするとタスク・エディタがポップアップ表示され、タスクの追加/削除が行えます\n"
-"タスクの時間が到来した、またはしようとしている時、アプレットはそれを通知します（イベントの15分前、周年の場合は1日前にも）。"
+"日にちをダブルクリックするとタスク・エディタがポップアップ表示され、タスクの"
+"追加/削除が行えます\n"
+"タスクの時間が到来した、またはしようとしている時、アプレットはそれを通知しま"
+"す（イベントの15分前、周年の場合は1日前にも）。"
 
 #: ../data/messages:125 ../data/messages:1407
 msgid "Having a list of all windows"
@@ -1604,8 +1723,10 @@ msgid ""
 "You can bind this action to the middle-click."
 msgstr ""
 "スイッチャー・アプレットを有効化します。\n"
-"アプレットを右クリックすると、デスクトップごとに並べられた全てのウィンドウのリストにアクセスできます。\n"
-"使用中のウィンドウ・マネージャが対応している場合は、ウィンドウを並べて表示させることもできます。\n"
+"アプレットを右クリックすると、デスクトップごとに並べられた全てのウィンドウの"
+"リストにアクセスできます。\n"
+"使用中のウィンドウ・マネージャが対応している場合は、ウィンドウを並べて表示さ"
+"せることもできます。\n"
 "このアクションを中クリックに割り当て可能です。"
 
 #: ../data/messages:129 ../data/messages:1411
@@ -1663,7 +1784,8 @@ msgstr ""
 "アプリケーション・メニュー・アプレットを有効化します。\n"
 "中クリック、または 右クリック -> ”クイック起動”。\n"
 "このアクションにショートキーを割り当て可能です。\n"
-"入力テキストは自動的に補完されます（例えば、”fir”と打つと”firefox”で補完されます）。"
+"入力テキストは自動的に補完されます（例えば、”fir”と打つと”firefox”で補完され"
+"ます）。"
 
 #: ../data/messages:145 ../data/messages:1427
 msgid "Turning Composite OFF during games"
@@ -1677,7 +1799,8 @@ msgid ""
 "Clicking again on it will enable the Composite."
 msgstr ""
 "コンポジット・マネージャ・アプレットを有効化します。\n"
-"アプレットをクリックすると、コンポジットが無効化され、ゲームがより滑らかになる可能性があります。\n"
+"アプレットをクリックすると、コンポジットが無効化され、ゲームがより滑らかにな"
+"る可能性があります。\n"
 "アプレットを再度クリックすると、コンポジットが有効化されます。"
 
 #: ../data/messages:149 ../data/messages:1431
@@ -1694,9 +1817,11 @@ msgid ""
 "forecast for this day."
 msgstr ""
 "天気予報アプレットを有効化します。\n"
-"その設定画面を開いて、自分の都市の名前を入力します。Enterを押して表示されるリストから自分の都市を選択します。\n"
+"その設定画面を開いて、自分の都市の名前を入力します。Enterを押して表示されるリ"
+"ストから自分の都市を選択します。\n"
 "設定画面を閉じるためOKボタンを押します。\n"
-"ある曜日をダブルクリックすると、その日の1時間ごとの天気予報のウェブページが開かれます。"
+"ある曜日をダブルクリックすると、その日の1時間ごとの天気予報のウェブページが開"
+"かれます。"
 
 #: ../data/messages:153 ../data/messages:1435
 msgid "Adding a file or a web page into the dock"
@@ -1711,9 +1836,12 @@ msgid ""
 "You can have several Stacks, and you can drop files/links onto a Stack "
 "directly."
 msgstr ""
-"単純にファイルやhtmlリンクをドックにドロップします（ドロップ可能な場合、矢印のアニメーションが表示されます）。\n"
-"ドロップしたものはスタックに追加されます。素早くアクセスしたファイルやリンクを含んだサブ・ドックがスタックです。\n"
-"スタックは複数持つことができ、ファイルやリンクをスタックに直接ドロップすることが可能です。"
+"単純にファイルやhtmlリンクをドックにドロップします（ドロップ可能な場合、矢印"
+"のアニメーションが表示されます）。\n"
+"ドロップしたものはスタックに追加されます。素早くアクセスしたファイルやリンク"
+"を含んだサブ・ドックがスタックです。\n"
+"スタックは複数持つことができ、ファイルやリンクをスタックに直接ドロップするこ"
+"とが可能です。"
 
 #: ../data/messages:157 ../data/messages:1439
 msgid "Importing a folder into the dock"
@@ -1725,8 +1853,10 @@ msgid ""
 "appear when you can drop).\n"
 "You can choose to import the folder's files or not."
 msgstr ""
-"単純にフォルダをドラッグしてドックへドロップするだけです（ドロップ可能な場合、矢印のアニメーションが表示されます）。\n"
-"ドロップした際に、フォルダに含まれるファイルも一緒にインポートするか否か選択できます。"
+"単純にフォルダをドラッグしてドックへドロップするだけです（ドロップ可能な場"
+"合、矢印のアニメーションが表示されます）。\n"
+"ドロップした際に、フォルダに含まれるファイルも一緒にインポートするか否か選択"
+"できます。"
 
 #: ../data/messages:161 ../data/messages:1443
 msgid "Accessing the recent events"
@@ -1742,8 +1872,11 @@ msgid ""
 "quickly."
 msgstr ""
 "最近のイベント・アプレットを有効化します。\n"
-"このアプレットの動作には Zeitgeist デーモンの実行が必要です。デーモンが存在しない場合はインストールしてください。\n"
-"アプレットは、最近アクセスした全てのファイルやフォルダ、ウェブページ、楽曲、動画、ドキュメントが表示可能なので、それらに素早くアクセスすることができます。"
+"このアプレットの動作には Zeitgeist デーモンの実行が必要です。デーモンが存在し"
+"ない場合はインストールしてください。\n"
+"アプレットは、最近アクセスした全てのファイルやフォルダ、ウェブページ、楽曲、"
+"動画、ドキュメントが表示可能なので、それらに素早くアクセスすることができま"
+"す。"
 
 #: ../data/messages:165 ../data/messages:1447
 msgid "Quickly opening a recent file with a launcher"
@@ -1758,8 +1891,10 @@ msgid ""
 "opened with this launcher will appear in its menu."
 msgstr ""
 "最近のイベント・アプレットを有効化します。\n"
-"このアプレットの動作には Zeitgeist デーモンの実行が必要です。デーモンが存在しない場合はインストールしてください。\n"
-"ランチャーを右クリックすると、当該ランチャーで開くことのできる最近のファイルがメニューに表示されるようになります。"
+"このアプレットの動作には Zeitgeist デーモンの実行が必要です。デーモンが存在し"
+"ない場合はインストールしてください。\n"
+"ランチャーを右クリックすると、当該ランチャーで開くことのできる最近のファイル"
+"がメニューに表示されるようになります。"
 
 #: ../data/messages:169 ../data/messages:1451
 msgid "Accessing disks"
@@ -1773,7 +1908,8 @@ msgid ""
 "To unmount a disk before disconnecting it, middle-click on its icon."
 msgstr ""
 "ショートカット・アプレットを有効化します。\n"
-"全ディスク（USBキーや外部ハードディスクを含む）がサブ・ドックに一覧化されます。\n"
+"全ディスク（USBキーや外部ハードディスクを含む）がサブ・ドックに一覧化されま"
+"す。\n"
 "ディスクを取り外す前にアンマウントするには、アイコンを中クリックします。"
 
 #: ../data/messages:173 ../data/messages:1455
@@ -1789,8 +1925,10 @@ msgid ""
 "To remove a bookmark, right-click on its icon -> remove"
 msgstr ""
 "ショートカット・アプレットを有効化します。\n"
-"フォルダの全ブックマーク（Nautilusで表示されるもの）がサブ・ドックで一覧化されます。\n"
-"ブックマークを追加するには、単純にフォルダをアプレットのアイコンにドラッグ＆ドロップします。\n"
+"フォルダの全ブックマーク（Nautilusで表示されるもの）がサブ・ドックで一覧化さ"
+"れます。\n"
+"ブックマークを追加するには、単純にフォルダをアプレットのアイコンにドラッグ＆"
+"ドロップします。\n"
 "ブックマークの削除はアイコンを右クリック -> 削除 です。"
 
 #: ../data/messages:177 ../data/messages:1459
@@ -1806,9 +1944,11 @@ msgid ""
 "example, to have the current time for different countries in your dock or "
 "the weather in different cities."
 msgstr ""
-"アプレットのなかには、複数同時に実行させることが可能なものがあります： 時計、スタック、天気予報…\n"
+"アプレットのなかには、複数同時に実行させることが可能なものがあります： 時計、"
+"スタック、天気予報…\n"
 "アプレットのアイコンを右クリック -> ”このアプレットの追加起動”。\n"
-"設定はそれぞれ別個に変更できます。従って、例えば異なる国々の現在時間や異なる都市の天気予報をドックに同時に表示させることができます。"
+"設定はそれぞれ別個に変更できます。従って、例えば異なる国々の現在時間や異なる"
+"都市の天気予報をドックに同時に表示させることができます。"
 
 #: ../data/messages:181 ../data/messages:1463
 msgid "Adding / removing a desktop"
@@ -1821,7 +1961,8 @@ msgid ""
 "You can even name each of them."
 msgstr ""
 "スイッチャー・アプレットを有効化します。\n"
-"右クリック -> ”デスクトップの追加” または ”このデスクトップの削除” を選択します。\n"
+"右クリック -> ”デスクトップの追加” または ”このデスクトップの削除” を選択しま"
+"す。\n"
 "各デスクトップに名前をつけることもできます。"
 
 #: ../data/messages:185 ../data/messages:1467
@@ -1860,23 +2001,25 @@ msgstr "Gnomeパネルの完全な除去"
 
 #: ../data/messages:195 ../data/messages:1477
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Gnomeの設定エディタ(gconf-editor)を開き、 キー "
-"/desktop/gnome/session/required_components/panel を編集して、その内容を \"cairo-dock\" "
-"に置き換えます。\n"
-"セッションを再スタートさせると、Gnomeパネル(gnome-panel)の代わりにCairo-"
-"Dockがスタートします（そうならない場合は、「自動起動するアプリ」に追加してください）。"
+"Gnomeの設定エディタ(gconf-editor)を開き、 キー /desktop/gnome/session/"
+"required_components/panel を編集して、その内容を \"cairo-dock\" に置き換えま"
+"す。\n"
+"セッションを再スタートさせると、Gnomeパネル(gnome-panel)の代わりにCairo-Dock"
+"がスタートします（そうならない場合は、「自動起動するアプリ」に追加してくださ"
+"い）。"
 
 #: ../data/messages:199 ../data/messages:1481
 msgid ""
 "If you are on Gnome, you can click on this button in order to automatically "
 "modify this key:"
-msgstr "Gnome の場合、このボタンをクリックして、自動的にこのキーを編集することができます :"
+msgstr ""
+"Gnome の場合、このボタンをクリックして、自動的にこのキーを編集することができ"
+"ます :"
 
 #: ../data/messages:201 ../data/messages:1483
 msgid "Troubleshooting"
@@ -1892,7 +2035,8 @@ msgstr "フォーラム"
 
 #: ../data/messages:207 ../data/messages:1489
 msgid "Our wiki can also help you, it is more complete on some points."
-msgstr "Wiki の方でより詳細に説明している点もあるので、そちらも参考になります。"
+msgstr ""
+"Wiki の方でより詳細に説明している点もあるので、そちらも参考になります。"
 
 #: ../data/messages:209 ../data/messages:1491
 msgid "Wiki"
@@ -1907,7 +2051,8 @@ msgid ""
 "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
 "first, because their drivers are not yet perfect."
 msgstr ""
-"ヒント : ATI または Intel を使用している場合、それらのドライバは未だ完全ではないので、まず最初に OpenGL 不使用で試してみてください。"
+"ヒント : ATI または Intel を使用している場合、それらのドライバは未だ完全では"
+"ないので、まず最初に OpenGL 不使用で試してみてください。"
 
 #: ../data/messages:215 ../data/messages:1497
 msgid ""
@@ -1916,14 +2061,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
-"コンポジットを有効にする必要があります。例えば、Compiz や xcompmgr などの実行です。\n"
-"XFCE や KDE を使用している場合、ウィンドウ・マネージャの設定オプションにあるコンポジットを有効にするだけです。\n"
+"コンポジットを有効にする必要があります。例えば、Compiz や xcompmgr などの実行"
+"です。\n"
+"XFCE や KDE を使用している場合、ウィンドウ・マネージャの設定オプションにある"
+"コンポジットを有効にするだけです。\n"
 "Gnome を使用している場合、次の方法で Metacity の当該機能を有効にできます。:\n"
-" gconf-editor(設定エディタ)を開いて、キー '/apps/metacity/general/compositing_manager' "
-"の値を 'true' に編集。"
+" gconf-editor(設定エディタ)を開いて、キー '/apps/metacity/general/"
+"compositing_manager' の値を 'true' に編集。"
 
 #: ../data/messages:219 ../data/messages:1501
 msgid ""
@@ -1942,7 +2089,8 @@ msgid ""
 "in the end of the «System» module"
 msgstr ""
 "慌てる必要はありません。Cairo-Dock は透過処理のエミュレートが可能です。\n"
-"黒い背景を取り除くには、「システム」モジュール設定画面の最後にある擬似透過オプションを有効にします。"
+"黒い背景を取り除くには、「システム」モジュール設定画面の最後にある擬似透過オ"
+"プションを有効にします。"
 
 #: ../data/messages:225 ../data/messages:1507
 msgid "The dock is horribly slow when I move the mouse into it."
@@ -1957,9 +2105,12 @@ msgid ""
 "If the dock is running with OpenGL, try to disable it by launching the dock "
 "with «cairo-dock -c»."
 msgstr ""
-"GeForce8 を使用している場合、古いドライバはかなりバグがあるため、最新のドライバをインストールする必要があります。\n"
-"OpenGL なしでドックを実行している場合は、メイン・ドックに置くアイコンの数を減らしたり、ドックの大きさを小さくしてみてください。\n"
-"OpenGL ありで実行している場合は、\"cairo-dock -c\" コマンドでドックを起動して、OpenGL を無効化してみてください。"
+"GeForce8 を使用している場合、古いドライバはかなりバグがあるため、最新のドライ"
+"バをインストールする必要があります。\n"
+"OpenGL なしでドックを実行している場合は、メイン・ドックに置くアイコンの数を減"
+"らしたり、ドックの大きさを小さくしてみてください。\n"
+"OpenGL ありで実行している場合は、\"cairo-dock -c\" コマンドでドックを起動し"
+"て、OpenGL を無効化してみてください。"
 
 #: ../data/messages:229 ../data/messages:1511
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
@@ -1970,7 +2121,8 @@ msgid ""
 "Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
 "might get a lot of visual artifacts."
 msgstr ""
-"ヒント: ドックを cairo-dock -o で起動させると、OpenGL を強制できますが、崩れた表示部分が多く見られるようになる可能性があります。"
+"ヒント: ドックを cairo-dock -o で起動させると、OpenGL を強制できますが、崩れ"
+"た表示部分が多く見られるようになる可能性があります。"
 
 #: ../data/messages:233 ../data/messages:1515
 msgid ""
@@ -1979,7 +2131,8 @@ msgid ""
 "support OpenGL2.0."
 msgstr ""
 "OpenGL2.0 対応のドライバを使用するグラフィックカードが必要です。\n"
-"Nvidia カードのほとんどがこれに該当し、対応する Intel カードも増えてきています。\n"
+"Nvidia カードのほとんどがこれに該当し、対応する Intel カードも増えてきていま"
+"す。\n"
 "ATI カードはほとんど対応していません。"
 
 #: ../data/messages:235 ../data/messages:1517
@@ -2000,9 +2153,11 @@ msgid ""
 "\"http_proxy\" environment variable)."
 msgstr ""
 "ネットに接続しているか確かめてください。\n"
-"回線速度が非常に遅い場合、「システム」モジュールの設定画面で接続のタイムアウトを長くすることができます。\n"
-"プロキシ下にある場合は、\"curl\" の設定変更をする必要があります。方法についてはウェブで検索してください（基本的には、環境変数である "
-"\"http_proxy\" を設定します）。"
+"回線速度が非常に遅い場合、「システム」モジュールの設定画面で接続のタイムアウ"
+"トを長くすることができます。\n"
+"プロキシ下にある場合は、\"curl\" の設定変更をする必要があります。方法について"
+"はウェブで検索してください（基本的には、環境変数である \"http_proxy\" を設定"
+"します）。"
 
 #: ../data/messages:241 ../data/messages:1523
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
@@ -2012,7 +2167,9 @@ msgstr "ダウンロード中であってもネット速度アプレットは 0 
 msgid ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
-msgstr "ヒント : 監視したいインターフェイスが複数の場合、このアプレットを複数同時に利用することが可能です。"
+msgstr ""
+"ヒント : 監視したいインターフェイスが複数の場合、このアプレットを複数同時に利"
+"用することが可能です。"
 
 #: ../data/messages:245 ../data/messages:1527
 msgid ""
@@ -2022,10 +2179,13 @@ msgid ""
 "«ifconfig» in a terminal, and ignore the «loop» interface. It's probably "
 "something like «eth1», «ath0», or «wifi0».."
 msgstr ""
-"ネット接続に使用しているインターフェイスを指定する必要があります（デフォルトは \"eth0\"）。\n"
+"ネット接続に使用しているインターフェイスを指定する必要があります（デフォルト"
+"は \"eth0\"）。\n"
 "アプレットの設定を編集してインターフェイスの名前を入力します。\n"
-"名前を知るには端末から \"ifconfig\" を実行します。\"loop\" インターフェイスは無視してください。\n"
-"恐らく \"eth1\" や \"ath0\" 、\"wifi0\" のような名前になっていると思われます。"
+"名前を知るには端末から \"ifconfig\" を実行します。\"loop\" インターフェイスは"
+"無視してください。\n"
+"恐らく \"eth1\" や \"ath0\" 、\"wifi0\" のような名前になっていると思われま"
+"す。"
 
 #: ../data/messages:247 ../data/messages:1529
 msgid "The dustbin remains empty even when I delete a file."
@@ -2039,13 +2199,16 @@ msgid ""
 "here!!! (do not insert spaces or some invisible caracters)."
 msgstr ""
 "KDE 環境の場合は、ゴミ箱フォルダのパスを指定する必要があるかもしれません。\n"
-"アプレットの設定を編集してゴミ箱へのパス（恐らく ”~/.locale/share/Trash/files\" ）を入力します。\n"
-"パスの入力には十分注意してください！！！（スペース等の見えない文字記号を挿入しないように）"
+"アプレットの設定を編集してゴミ箱へのパス（恐らく ”~/.locale/share/Trash/files"
+"\" ）を入力します。\n"
+"パスの入力には十分注意してください！！！（スペース等の見えない文字記号を挿入"
+"しないように）"
 
 #: ../data/messages:251 ../data/messages:1533
 msgid ""
 "There is no icon in the Applications Menu even though I enable the option."
-msgstr "オプションを有効にしてもアプリケーション・メニューにアイコンがありません"
+msgstr ""
+"オプションを有効にしてもアプリケーション・メニューにアイコンがありません"
 
 #: ../data/messages:253 ../data/messages:1535
 msgid ""
@@ -2053,9 +2216,11 @@ msgid ""
 "in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable "
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
-"Gnome にはドックの当該オプションより優先して適用されるオプションがあります。\n"
-"メニューでのアイコンを有効にするには、'gconf-editor'（設定エディタ）を開き、Desktop / Gnome / Interface "
-"に移動して、\"menus have icons\" と \"buttons have icons\" オプションを有効にします。 "
+"Gnome にはドックの当該オプションより優先して適用されるオプションがありま"
+"す。\n"
+"メニューでのアイコンを有効にするには、'gconf-editor'（設定エディタ）を開き、"
+"Desktop / Gnome / Interface に移動して、\"menus have icons\" と \"buttons "
+"have icons\" オプションを有効にします。 "
 
 #: ../data/messages:257 ../data/messages:1539
 msgid "If you're on Gnome you can click on this button:"
@@ -2080,10 +2245,13 @@ msgid ""
 "we’ll be happy to integrate it on our server !"
 msgstr ""
 "ユーザーからの支援を重視しています！\n"
-"バグを発見したり改善点を思いついた場合には、glx-dock.org を訪問してみてください。\n"
-"単にドックのことを思い浮かべたときでも結構です。英語等を話す人も歓迎なので遠慮なく！ ^_−☆\n"
+"バグを発見したり改善点を思いついた場合には、glx-dock.org を訪問してみてくださ"
+"い。\n"
+"単にドックのことを思い浮かべたときでも結構です。英語等を話す人も歓迎なので遠"
+"慮なく！ ^_−☆\n"
 "\n"
-"ドック用のテーマやアプレットを作成して他のユーザーと共有したい場合には、喜んで私たちのサーバに組み入れます！"
+"ドック用のテーマやアプレットを作成して他のユーザーと共有したい場合には、喜ん"
+"で私たちのサーバに組み入れます！"
 
 #: ../data/messages:265 ../data/messages:1547
 msgid ""
@@ -2100,7 +2268,8 @@ msgid ""
 "or to interact with the dock in any kind of way, a full DBus API is "
 "described here."
 msgstr ""
-"Python や Perl、その他の言語でアプレットの開発やドックとの様々なやり取りを行いたい場合、DBus API についてこちらで解説しています。"
+"Python や Perl、その他の言語でアプレットの開発やドックとの様々なやり取りを行"
+"いたい場合、DBus API についてこちらで解説しています。"
 
 #: ../data/messages:271 ../data/messages:1553
 msgid "DBus API"
@@ -2146,7 +2315,8 @@ msgid ""
 " One for stable releases and another which is updated weekly (unstable "
 "version)"
 msgstr ""
-"Debian や Ubuntu その他の Debian 派生向けに2つのリポジトリを用意しています :\n"
+"Debian や Ubuntu その他の Debian 派生向けに2つのリポジトリを用意していま"
+"す :\n"
 " 1つはドックの安定版リリース用で、もう1つは週次更新されています（不安定版）"
 
 #: ../data/messages:293 ../data/messages:1575
@@ -2164,8 +2334,10 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest stable version."
 msgstr ""
-"Ubuntu の場合、このボタンをクリックすることで「安定版」リポジトリの追加が可能です :\n"
-" その後、アップデート・マネージャを起動して、最新の安定版をインストールできます。"
+"Ubuntu の場合、このボタンをクリックすることで「安定版」リポジトリの追加が可能"
+"です :\n"
+" その後、アップデート・マネージャを起動して、最新の安定版をインストールできま"
+"す。"
 
 #: ../data/messages:303 ../data/messages:1585
 msgid ""
@@ -2174,8 +2346,10 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
-"Ubuntu の場合、このボタンをクリックすることで「開発版の週次発行」PPA（不安定の可能性あり）を追加することも可能です :\n"
-" その後、アップデート・マネージャを起動して最新の開発版をインストールできます。"
+"Ubuntu の場合、このボタンをクリックすることで「開発版の週次発行」PPA（不安定"
+"の可能性あり）を追加することも可能です :\n"
+" その後、アップデート・マネージャを起動して最新の開発版をインストールできま"
+"す。"
 
 #: ../data/messages:305 ../data/messages:1587
 msgid "Debian"
@@ -2188,8 +2362,10 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
-"安定版 Debian の場合、このボタンをクリックすることでドックの「安定版」リポジトリの追加が可能です :\n"
-" その後、'cairo-dock*'パッケージを全てパージして、システムをアップデートし、'cairo-dock'パッケージを再インストールできます。"
+"安定版 Debian の場合、このボタンをクリックすることでドックの「安定版」リポジ"
+"トリの追加が可能です :\n"
+" その後、'cairo-dock*'パッケージを全てパージして、システムをアップデート"
+"し、'cairo-dock'パッケージを再インストールできます。"
 
 #: ../data/messages:313 ../data/messages:1595
 msgid ""
@@ -2198,8 +2374,10 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
-"不安定版 Debian の場合、このボタンをクリックすることでドックの「安定版」リポジトリの追加が可能です :\n"
-" その後、'cairo-dock*'パッケージを全てパージして、システムをアップデートし、'cairo-dock'パッケージを再インストールできます。"
+"不安定版 Debian の場合、このボタンをクリックすることでドックの「安定版」リポ"
+"ジトリの追加が可能です :\n"
+" その後、'cairo-dock*'パッケージを全てパージして、システムをアップデート"
+"し、'cairo-dock'パッケージを再インストールできます。"
 
 #: ../data/messages:315 ../data/messages:317 ../data/messages:1733
 #: ../data/messages:1813 ../data/messages:1845
@@ -2243,8 +2421,9 @@ msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
 msgstr ""
-"固定した場合、デスクレットはマウスの左ボタンだけを押しながらのドラッグでは移動出来なくなりますが、その場合でも ALT + "
-"左クリックを使用すれば移動は可能です。"
+"固定した場合、デスクレットはマウスの左ボタンだけを押しながらのドラッグでは移"
+"動出来なくなりますが、その場合でも ALT + 左クリックを使用すれば移動は可能で"
+"す。"
 
 #: ../data/messages:339
 msgid "Lock position?"
@@ -2254,7 +2433,9 @@ msgstr "位置を固定？"
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
-msgstr "使用中のウィンドウ・マネージャによって異なりますが、例えば ALT + 中クリック、または ALT + 左クリックでサイズ変更できます。"
+msgstr ""
+"使用中のウィンドウ・マネージャによって異なりますが、例えば ALT + 中クリック、"
+"または ALT + 左クリックでサイズ変更できます。"
 
 #: ../data/messages:343
 msgid "Desklet dimensions (width x height):"
@@ -2265,7 +2446,8 @@ msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
-"使用中のウィンドウ・マネージャによって異なりますが、例えば ALT + 左クリックで移動させることができます... 負の値は画面の右下から数えられます。"
+"使用中のウィンドウ・マネージャによって異なりますが、例えば ALT + 左クリックで"
+"移動させることができます... 負の値は画面の右下から数えられます。"
 
 #: ../data/messages:347
 msgid "Desklet position (x, y):"
@@ -2275,7 +2457,9 @@ msgstr "デスクレットの位置（X ; Y） :"
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
-msgstr "デスクレットの左側や上側にある小さなボタンをマウスでドラッグして、デスクレットを素早く回転させることができます。"
+msgstr ""
+"デスクレットの左側や上側にある小さなボタンをマウスでドラッグして、デスクレッ"
+"トを素早く回転させることができます。"
 
 #: ../data/messages:351
 msgid "Rotation:"
@@ -2290,8 +2474,8 @@ msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=Utility)"
 msgstr ""
-"CompizFusion の \"ウィジェット・レイヤ\" プラグインのための、Compiz における動作設定での指定法 : (Class=Cairo-"
-"dock & type=Utility)"
+"CompizFusion の \"ウィジェット・レイヤ\" プラグインのための、Compiz における"
+"動作設定での指定法 : (Class=Cairo-dock & type=Utility)"
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
 #: ../data/messages:593 ../data/messages:655 ../data/messages:1641
@@ -2316,7 +2500,8 @@ msgstr "装飾"
 
 #: ../data/messages:375
 msgid "Choose 'Custom decorations' to define your own decorations below."
-msgstr "自分の装飾を定義するには以下で 'Custom decorations' を選択してください。"
+msgstr ""
+"自分の装飾を定義するには以下で 'Custom decorations' を選択してください。"
 
 #: ../data/messages:377
 msgid "Choose a decoration theme for this desklet:"
@@ -2325,7 +2510,9 @@ msgstr "このデスクレットの装飾テーマの選択 :"
 #: ../data/messages:379
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
-msgstr "例えば外枠のように、描画物の背後に表示する画像です。画像を使用しない場合は空欄のままにしてください。"
+msgstr ""
+"例えば外枠のように、描画物の背後に表示する画像です。画像を使用しない場合は空"
+"欄のままにしてください。"
 
 #: ../data/messages:381
 msgid "Background image:"
@@ -2371,7 +2558,9 @@ msgstr "下方向のオフセット :"
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
-msgstr "例えばテカリ表現用など、描画物の手前に表示する画像です。画像を使用しない場合は空欄のままにしてください。"
+msgstr ""
+"例えばテカリ表現用など、描画物の手前に表示する画像です。画像を使用しない場合"
+"は空欄のままにしてください。"
 
 #: ../data/messages:403
 msgid "Foreground image:"
@@ -2423,9 +2612,11 @@ msgid ""
 "When the dock pops up on shortcut, it will appear at the position of your "
 "mouse. The rest of the time, it stays invisible, thus acting like a menu."
 msgstr ""
-"この表示モード選択肢の一覧は、デスクトップ画面に対する干渉度の最も高いものから低いものへと順に並んでいます。ドックが隠れていたり、ウィンドウの背後にある時"
-"は、マウスを画面の境界上に置いて呼び戻します。\n"
-"ドックをショートカットでポップアップさせる場合は、マウスの位置にドックが表示され、呼び出し時以外は非表示となり、メニューのように振る舞います。"
+"この表示モード選択肢の一覧は、デスクトップ画面に対する干渉度の最も高いものか"
+"ら低いものへと順に並んでいます。ドックが隠れていたり、ウィンドウの背後にある"
+"時は、マウスを画面の境界上に置いて呼び戻します。\n"
+"ドックをショートカットでポップアップさせる場合は、マウスの位置にドックが表示"
+"され、呼び出し時以外は非表示となり、メニューのように振る舞います。"
 
 #: ../data/messages:429 ../data/messages:597 ../data/messages:1645
 msgid "Reserve space for the dock"
@@ -2466,7 +2657,8 @@ msgid ""
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
 msgstr ""
-"ショートカットを押すと、マウスの位置にドックが表示されます。それ以外の時は画面に表示されないので、右クリックメニューのような動作となります。"
+"ショートカットを押すと、マウスの位置にドックが表示されます。それ以外の時は画"
+"面に表示されないので、右クリックメニューのような動作となります。"
 
 #: ../data/messages:457 ../data/messages:643
 msgid "Keyboard shortcut to pop-up the dock:"
@@ -2480,7 +2672,9 @@ msgstr "サブ・ドックの表示"
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "サブ・ドックは、それを内包するアイコンをクリック、または一定時間マウスを置いたときに表示されます。"
+msgstr ""
+"サブ・ドックは、それを内包するアイコンをクリック、または一定時間マウスを置い"
+"たときに表示されます。"
 
 #: ../data/messages:465 ../data/messages:657
 msgid "Appear on mouse over"
@@ -2500,13 +2694,16 @@ msgid ""
 "Gnome    : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
-"なし :  開いているアプリケーションのウィンドウを示すアイコンをドック上に一切表示しません。\n"
-"MacOSX :  "
-"開いているアプリのウィンドウ・アイコンをそのランチャーと一体化させ、ドックにランチャーがないアプリのウィンドウ・アイコンは最小化時にのみ表示します。\n"
-"KDE :  "
-"ウィンドウ・アイコンをそのランチャーと一体化させ、ランチャーがないアプリのウィンドウ・アイコンも常に表示し、同じアプリのウィンドウ同士はサブ・ドックにグル"
-"ープ化します。\n"
-"Gnome :  タスクバー機能とランチャーは完全に切り離し、現在のデスクトップにあるウィンドウのアイコンのみ表示します。"
+"なし :  開いているアプリケーションのウィンドウを示すアイコンをドック上に一切"
+"表示しません。\n"
+"MacOSX :  開いているアプリのウィンドウ・アイコンをそのランチャーと一体化さ"
+"せ、ドックにランチャーがないアプリのウィンドウ・アイコンは最小化時にのみ表示"
+"します。\n"
+"KDE :  ウィンドウ・アイコンをそのランチャーと一体化させ、ランチャーがないアプ"
+"リのウィンドウ・アイコンも常に表示し、同じアプリのウィンドウ同士はサブ・ドッ"
+"クにグループ化します。\n"
+"Gnome :  タスクバー機能とランチャーは完全に切り離し、現在のデスクトップにある"
+"ウィンドウのアイコンのみ表示します。"
 
 #: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
@@ -2538,8 +2735,9 @@ msgid ""
 "name of a theme that is installed on your system (like 'Gartoon' or "
 "'Human'), or even a path to a folder containing icons."
 msgstr ""
-"システムの現在のアイコン・テーマを使用するには、空欄のままにしてください。ここには、システムにインストールされているテーマの名前（'Gartoon' や "
-"'Human' など）、またはアイコンを含んだフォルダのパスを入力できます。"
+"システムの現在のアイコン・テーマを使用するには、空欄のままにしてください。こ"
+"こには、システムにインストールされているテーマの名前（'Gartoon' や 'Human' な"
+"ど）、またはアイコンを含んだフォルダのパスを入力できます。"
 
 #: ../data/messages:497
 msgid "Choose a theme of icons :"
@@ -2573,7 +2771,8 @@ msgstr "非常に大きい"
 msgid ""
 "This will separate launchers, application, and applets from each others. "
 "Separators will be automatically inserted then."
-msgstr "ランチャーやアプリ、アプレットを区分します。区切りは自動的に挿入されます。"
+msgstr ""
+"ランチャーやアプリ、アプレットを区分します。区切りは自動的に挿入されます。"
 
 #: ../data/messages:513 ../data/messages:1129
 msgid "Separate the different types of icons?"
@@ -2628,7 +2827,9 @@ msgstr ""
 #: ../data/messages:537
 msgid ""
 "You can install them by simply drag-and-dropping the link onto your dock."
-msgstr "リンクをドックにドラッグ＆ドロップするだけで、アプレットのインストールができます。"
+msgstr ""
+"リンクをドックにドラッグ＆ドロップするだけで、アプレットのインストールができ"
+"ます。"
 
 # #################################
 # ########### themes.conf #############
@@ -2645,8 +2846,9 @@ msgid ""
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
 msgstr ""
-"0 に指定すると、ドックが水平の場合は左隅に配置され、垂直の場合は上隅に配置されます。1 "
-"に指定すると、水平の場合は右隅に配置され、垂直の場合は下隅に配置されます。0.5 に指定すると、画面端の中央に配置されます。"
+"0 に指定すると、ドックが水平の場合は左隅に配置され、垂直の場合は上隅に配置さ"
+"れます。1 に指定すると、水平の場合は右隅に配置され、垂直の場合は下隅に配置さ"
+"れます。0.5 に指定すると、画面端の中央に配置されます。"
 
 #: ../data/messages:561 ../data/messages:1621
 msgid "Relative alignment:"
@@ -2661,8 +2863,9 @@ msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 msgstr ""
-"上で選択した画面端での基本配置位置からのずれの大きさ（ピクセル単位）です。ALT または CTRL "
-"キーとマウス左ボタンを押しながらドラッグして、ドックを移動させることも可能です。"
+"上で選択した画面端での基本配置位置からのずれの大きさ（ピクセル単位）です。"
+"ALT または CTRL キーとマウス左ボタンを押しながらドラッグして、ドックを移動さ"
+"せることも可能です。"
 
 #: ../data/messages:571 ../data/messages:1627
 msgid "Lateral offset:"
@@ -2672,7 +2875,9 @@ msgstr "相対的なオフセット :"
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
-msgstr "ピクセル単位。ALT または CTRL キーとマウス左ボタンを押しながらドラッグして、ドックを移動させることも可能です。"
+msgstr ""
+"ピクセル単位。ALT または CTRL キーとマウス左ボタンを押しながらドラッグして、"
+"ドックを移動させることも可能です。"
 
 #: ../data/messages:575 ../data/messages:1631
 msgid "Distance to the screen edge:"
@@ -2686,7 +2891,9 @@ msgstr "マルチ・スクリーン"
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama to manage "
 "them."
-msgstr "このオプションは、デュアル・スクリーンを Xinerama で管理している場合に使用します。"
+msgstr ""
+"このオプションは、デュアル・スクリーンを Xinerama で管理している場合に使用し"
+"ます。"
 
 #: ../data/messages:581
 msgid "Use Xinerama?"
@@ -2749,7 +2956,8 @@ msgid ""
 "This is only usefull if you do not already use auto-hide and if your Window "
 "Manager allows the dock in front of fullscreen windows (which is rare)."
 msgstr ""
-"自動で隠す機能を使用していない場合や、（稀なケースですが）ウィンドウ・マネージャがドックを全画面ウィンドウの手前に表示させてしまう場合に有用です。"
+"自動で隠す機能を使用していない場合や、（稀なケースですが）ウィンドウ・マネー"
+"ジャがドックを全画面ウィンドウの手前に表示させてしまう場合に有用です。"
 
 #: ../data/messages:649
 msgid "Automatically hide the dock when a window becomes full screen?"
@@ -2779,7 +2987,9 @@ msgstr "タスクバー"
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
-msgstr "有効にすると、Cairo-Dock はタスクバーとして働きます。他のタスクバーを取り除くことをお勧めします。"
+msgstr ""
+"有効にすると、Cairo-Dock はタスクバーとして働きます。他のタスクバーを取り除く"
+"ことをお勧めします。"
 
 #: ../data/messages:675
 msgid "Show currently opened applications in the dock?"
@@ -2799,8 +3009,9 @@ msgid ""
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 msgstr ""
-"ランチャーの起動対象プログラムが実行中の時、そのランチャーをアプリケーション（タスクボタン）として動作させ、それを示す標示をアイコン上に表示します。そのプ"
-"ログラムを新たに追加的に開くには SHIFT+クリック を使用します。"
+"ランチャーの起動対象プログラムが実行中の時、そのランチャーをアプリケーション"
+"（タスクボタン）として動作させ、それを示す標示をアイコン上に表示します。その"
+"プログラムを新たに追加的に開くには SHIFT+クリック を使用します。"
 
 #: ../data/messages:683
 msgid "Mix launchers and applications"
@@ -2810,7 +3021,9 @@ msgstr "ランチャーとアプリケーションを一体化？"
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
-msgstr "同一アプリケーションの全てのウィンドウを１つのサブ・ドック内にグループ化して、全ウィンドウを対象にした操作を一度に行えるようにします。"
+msgstr ""
+"同一アプリケーションの全てのウィンドウを１つのサブ・ドック内にグループ化し"
+"て、全ウィンドウを対象にした操作を一度に行えるようにします。"
 
 #: ../data/messages:687
 msgid "Group windows from the same application in a sub-dock ?"
@@ -2818,7 +3031,8 @@ msgstr "同一アプリケーションのウィンドウをサブドック内に
 
 #: ../data/messages:689 ../data/messages:699
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
-msgstr "アプリケーションのクラス名を入力（複数の場合はセミコロン「;」で区切る）"
+msgstr ""
+"アプリケーションのクラス名を入力（複数の場合はセミコロン「;」で区切る）"
 
 #: ../data/messages:691 ../data/messages:701
 msgid "\t\tExcept the following classes:"
@@ -2834,8 +3048,9 @@ msgid ""
 "set, the same icon as the corresponding launcher will be used for each "
 "application."
 msgstr ""
-"これが有効でない場合、X により提供されるアイコンが各アプリケーションに使用されます。 "
-"有効にした場合、ランチャーに使用しているアイコンがそのランチャーに対応するアプリケーションにそのまま使用されます。"
+"これが有効でない場合、X により提供されるアイコンが各アプリケーションに使用さ"
+"れます。 有効にした場合、ランチャーに使用しているアイコンがそのランチャーに対"
+"応するアプリケーションにそのまま使用されます。"
 
 #: ../data/messages:697
 msgid "Overwrite the X icon with the launchers' icon?"
@@ -2919,7 +3134,9 @@ msgstr "これは大抵のタスクバーのデフォルトの振る舞いです
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
-msgstr "アイコン・クリック時にそれがアクティブ・ウィンドウだった場合は当該ウィンドウを最小化？"
+msgstr ""
+"アイコン・クリック時にそれがアクティブ・ウィンドウだった場合は当該ウィンドウ"
+"を最小化？"
 
 #: ../data/messages:741
 msgid "Only if your Window Manager supports it."
@@ -2928,7 +3145,9 @@ msgstr "使用しているウィンドウ・マネージャが対応している
 #: ../data/messages:743
 msgid ""
 "Present windows preview on click when several windows are grouped togather"
-msgstr "複数のウィンドウがグループ化されているときにクリックした場合はウィンドウ・プレビュー表示"
+msgstr ""
+"複数のウィンドウがグループ化されているときにクリックした場合はウィンドウ・プ"
+"レビュー表示"
 
 #: ../data/messages:745
 msgid "Highlight applications requiring your attention with a dialog bubble"
@@ -2946,7 +3165,9 @@ msgstr "プレビュー・ダイアログの表示継続時間 :"
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
-msgstr "例えば、映画を全画面表示で鑑賞していたり、別のデスクトップを表示させているときであっても通知を行います。\n"
+msgstr ""
+"例えば、映画を全画面表示で鑑賞していたり、別のデスクトップを表示させていると"
+"きであっても通知を行います。\n"
 
 #: ../data/messages:753
 msgid "Force the following applications to demand your attention"
@@ -2969,7 +3190,8 @@ msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
 msgstr ""
-"アイコンはドック配置点において折り重なった状態で現れ、その後ドック全体を埋めるまで展開していきます。小さい数字ほど、展開速度は速くなります。"
+"アイコンはドック配置点において折り重なった状態で現れ、その後ドック全体を埋め"
+"るまで展開していきます。小さい数字ほど、展開速度は速くなります。"
 
 #: ../data/messages:765
 msgid "Animation unfolding duration:"
@@ -3021,7 +3243,9 @@ msgstr "Cairoバックエンド使用時のアニメーション更新頻度 :"
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
-msgstr "有効にすると、半透明なグラデーション・パターンをリアルタイムで再計算します。より多くの CPU パワーが要求される可能性があります。"
+msgstr ""
+"有効にすると、半透明なグラデーション・パターンをリアルタイムで再計算します。"
+"より多くの CPU パワーが要求される可能性があります。"
 
 #: ../data/messages:811
 msgid "Reflections should be calculated in real-time?"
@@ -3040,9 +3264,9 @@ msgid ""
 "etc and have a black background around your dock. For aesthetic reasons, the "
 "dock will be kept under other windows."
 msgstr ""
-"Compiz や xcompmgr "
-"等の合成マネージャを実行しないため、ドックの周囲の背景が黒くなる場合にのみ使用してください。見た目の理由で、ドックは常に他のウィンドウの後ろに表示されます"
-"。"
+"Compiz や xcompmgr 等の合成マネージャを実行しないため、ドックの周囲の背景が黒"
+"くなる場合にのみ使用してください。見た目の理由で、ドックは常に他のウィンドウ"
+"の後ろに表示されます。"
 
 #: ../data/messages:817
 msgid "Emulate composition with fake transparency?"
@@ -3050,7 +3274,9 @@ msgstr "擬似透過によって合成処理をエミュレート？"
 
 #: ../data/messages:819
 msgid "You need to re-open the panel. It is deactivated by default on KDE."
-msgstr "変更適用のためにはパネルを再度開く必要があります。KDE の場合このオプションは無効がデフォルトです。"
+msgstr ""
+"変更適用のためにはパネルを再度開く必要があります。KDE の場合このオプションは"
+"無効がデフォルトです。"
 
 #: ../data/messages:821
 msgid "Make the config panel transparent?"
@@ -3066,8 +3292,9 @@ msgid ""
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
-"サーバへの接続に要する時間の秒単位の許容上限。あくまで接続の段階に対してのみ働く制限です。サーバへの接続が一旦確率されると、このオプションは使用されません"
-"。"
+"サーバへの接続に要する時間の秒単位の許容上限。あくまで接続の段階に対してのみ"
+"働く制限です。サーバへの接続が一旦確率されると、このオプションは使用されませ"
+"ん。"
 
 #: ../data/messages:827
 msgid "Connection timeout :"
@@ -3077,7 +3304,9 @@ msgstr "接続試行のタイムアウト："
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
-msgstr "取得作業全体にかかる所要時間の秒単位での上限。テーマのなかには、数MBのものもあります。"
+msgstr ""
+"取得作業全体にかかる所要時間の秒単位での上限。テーマのなかには、数MBのものも"
+"あります。"
 
 #: ../data/messages:831
 msgid "Maximum time to download a file:"
@@ -3093,7 +3322,9 @@ msgstr "IPv4 を強制？"
 
 #: ../data/messages:837
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "プロキシを通じてインターネットに接続している場合は、このオプションを使用してください。"
+msgstr ""
+"プロキシを通じてインターネットに接続している場合は、このオプションを使用して"
+"ください。"
 
 #: ../data/messages:839
 msgid "Are you behind a proxy ?"
@@ -3110,7 +3341,9 @@ msgstr "ポート :"
 #: ../data/messages:845 ../data/messages:849
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
-msgstr "プロキシにユーザー名やパスワード付きでログインする必要がない場合は空欄のままにしてください。"
+msgstr ""
+"プロキシにユーザー名やパスワード付きでログインする必要がない場合は空欄のまま"
+"にしてください。"
 
 #: ../data/messages:847
 msgid "User :"
@@ -3141,7 +3374,9 @@ msgstr "背景画像を使用します。"
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
-msgstr "画像形式は問いません。空欄の場合、色のグラデーションが代替処置として使用されます。"
+msgstr ""
+"画像形式は問いません。空欄の場合、色のグラデーションが代替処置として使用され"
+"ます。"
 
 #: ../data/messages:867 ../data/messages:1677
 msgid "Image filename to use as a background :"
@@ -3232,7 +3467,9 @@ msgstr "サブ・ドック"
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
-msgstr "メイン・ドックのアイコンの大きさに対する、サブ・ドックのアイコンの大きさの割合を指定できます。"
+msgstr ""
+"メイン・ドックのアイコンの大きさに対する、サブ・ドックのアイコンの大きさの割"
+"合を指定できます。"
 
 #: ../data/messages:929
 msgid "Ratio for the size of the sub-docks' icons :"
@@ -3327,7 +3564,9 @@ msgstr "すべてのデスクレットに適用するデフォルトの装飾の
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
-msgstr "例えば外枠のように、描画物の背後に表示する画像です。画像を使用しない場合は空欄のままにしてください。"
+msgstr ""
+"例えば外枠のように、描画物の背後に表示する画像です。画像を使用しない場合は空"
+"欄のままにしてください。"
 
 #: ../data/messages:981
 msgid "Background image :"
@@ -3373,7 +3612,9 @@ msgstr "下方向のオフセット :"
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
-msgstr "例えばテカリ表現のように、描画物の手前に表示する画像です。画像を使用しない場合は空欄のままにしてください。"
+msgstr ""
+"例えばテカリ表現のように、描画物の手前に表示する画像です。画像を使用しない場"
+"合は空欄のままにしてください。"
 
 #: ../data/messages:1007
 msgid "Foreground image :"
@@ -3411,7 +3652,9 @@ msgstr "アイコンのテーマの選択 :"
 msgid ""
 "Any format allowed; leave this field empty if you don't want to use an image "
 "as background."
-msgstr "画像形式は問いません。背景に画像を使用したくない場合、ここを空欄にしてください。"
+msgstr ""
+"画像形式は問いません。背景に画像を使用したくない場合、ここを空欄にしてくださ"
+"い。"
 
 #: ../data/messages:1045
 msgid "Image filename to use as a background for icons :"
@@ -3422,9 +3665,10 @@ msgid "Zoom effect"
 msgstr "ズーム効果"
 
 #: ../data/messages:1049
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "アイコン上にマウスが置かれたときにアイコンをズームさせたくない場合は 1 に設定してください。"
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"アイコン上にマウスが置かれたときにアイコンをズームさせたくない場合は 1 に設定"
+"してください。"
 
 #: ../data/messages:1051
 msgid "Maximum zoom of the icons :"
@@ -3433,7 +3677,9 @@ msgstr "アイコンのズームの最大値 :"
 #: ../data/messages:1053
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
-msgstr "ピクセル単位。マウスを中心としたこの指定幅の外側は、アイコンのうねりがない平坦な状態になります。"
+msgstr ""
+"ピクセル単位。マウスを中心としたこの指定幅の外側は、アイコンのうねりがない平"
+"坦な状態になります。"
 
 #: ../data/messages:1055
 msgid "Width of the space in which the zoom will be effective :"
@@ -3451,7 +3697,9 @@ msgstr "反射"
 msgid ""
 "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 "
 "reflections are not used."
-msgstr "地面の光の反射率です。1 に指定するとアイコンの反射は最高になり、0 にすると反射は使用されません。"
+msgstr ""
+"地面の光の反射率です。1 に指定するとアイコンの反射は最高になり、0 にすると反"
+"射は使用されません。"
 
 #: ../data/messages:1065
 msgid "Reflective power of the plane :"
@@ -3469,7 +3717,8 @@ msgstr "強い"
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
-msgstr "アイコンの大きさに対する割合。このパラメータはドック全体の高さに影響します。"
+msgstr ""
+"アイコンの大きさに対する割合。このパラメータはドック全体の高さに影響します。"
 
 #: ../data/messages:1073
 msgid "Height of the reflection:"
@@ -3489,7 +3738,8 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"アイコンが波のようにうねっていない平坦な状態ときの透明度です。ドックが伸びるにつれてアイコンが徐々に姿を現します。0 に近い数字ほど透明になります。"
+"アイコンが波のようにうねっていない平坦な状態ときの透明度です。ドックが伸びる"
+"につれてアイコンが徐々に姿を現します。0 に近い数字ほど透明になります。"
 
 #: ../data/messages:1081
 msgid "Icons' transparency at rest :"
@@ -3542,8 +3792,9 @@ msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
 msgstr ""
-"平坦な区切りや物理的な区切りに対応しているのは、デフォルトや3Dプレーン、カーブのビュー形式だけです。ビュー形式にしたがい、平坦な区切りの描画は異なります"
-"。"
+"平坦な区切りや物理的な区切りに対応しているのは、デフォルトや3Dプレーン、カー"
+"ブのビュー形式だけです。ビュー形式にしたがい、平坦な区切りの描画は異なりま"
+"す。"
 
 #: ../data/messages:1109
 msgid "How to draw the separators?"
@@ -3591,9 +3842,11 @@ msgid ""
 "insert separators manually. Applications will then be placed next to their "
 "launcher if they have one, or after the last launcher."
 msgstr ""
-"区分するアイコンの種類を選択すると、その種類のアイコンは同じ場所にまとめられ、区切りによって他の種類のアイコンから区分されます。\n"
-"アイコンを区分しない選択をした場合、任意の場所に配置して手動で区切りを挿入できます。この場合、アプリケーションがランチャーを有するならばそのランチャーの隣"
-"にアプリが配置され、有しないときは最後尾のランチャーの後に配置されます。"
+"区分するアイコンの種類を選択すると、その種類のアイコンは同じ場所にまとめら"
+"れ、区切りによって他の種類のアイコンから区分されます。\n"
+"アイコンを区分しない選択をした場合、任意の場所に配置して手動で区切りを挿入で"
+"きます。この場合、アプリケーションがランチャーを有するならばそのランチャーの"
+"隣にアプリが配置され、有しないときは最後尾のランチャーの後に配置されます。"
 
 #: ../data/messages:1131 ../data/messages:1229
 msgid "No"
@@ -3671,13 +3924,17 @@ msgstr "アクティブ・ランチャーの標示"
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
-msgstr "ランチャーのアイコン上に標示を描画して、それらが起動済みであることを示します。デフォルトの画像を使用するには空欄のままにしてください。"
+msgstr ""
+"ランチャーのアイコン上に標示を描画して、それらが起動済みであることを示しま"
+"す。デフォルトの画像を使用するには空欄のままにしてください。"
 
 #: ../data/messages:1183
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
-msgstr "標示はアクティブ状態のランチャーに描画されますが、アプリにも標示させたいと思われるかもしれません"
+msgstr ""
+"標示はアクティブ状態のランチャーに描画されますが、アプリにも標示させたいと思"
+"われるかもしれません"
 
 #: ../data/messages:1185
 msgid "Display an indicator on application icons too ?"
@@ -3690,8 +3947,10 @@ msgid ""
 "If the indicator is linked to the icon, the offset will be upwards, "
 "otherwise downwards."
 msgstr ""
-"アイコンの大きさに対する相対値です。このパラメータを使用して、標示の垂直方向位置を調節できます。\n"
-"標示をアイコンに結合させている場合、オフセットは上方になり、それ以外の場合は下方になります。"
+"アイコンの大きさに対する相対値です。このパラメータを使用して、標示の垂直方向"
+"位置を調節できます。\n"
+"標示をアイコンに結合させている場合、オフセットは上方になり、それ以外の場合は"
+"下方になります。"
 
 #: ../data/messages:1189
 msgid "Vertical offset :"
@@ -3704,7 +3963,8 @@ msgid ""
 "Otherwise it will be drawn directly on the dock and the offset will be "
 "downwards."
 msgstr ""
-"標示をアイコンに結合させた場合、アイコンと同様にズームされるようになり、オフセットは上方になります。\n"
+"標示をアイコンに結合させた場合、アイコンと同様にズームされるようになり、オフ"
+"セットは上方になります。\n"
 "結合させない場合、ドックに直接描画されて、オフセットは下方になります。"
 
 #: ../data/messages:1193
@@ -3717,7 +3977,8 @@ msgid ""
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
 "have the same size as the icons."
 msgstr ""
-"標示をアイコンよりも大きくするか小さくするか選択できます。大きな数値ほど、大きな標示になります。1 に設定すると、標示はアイコンと同じ大きさになります。"
+"標示をアイコンよりも大きくするか小さくするか選択できます。大きな数値ほど、大"
+"きな標示になります。1 に設定すると、標示はアイコンと同じ大きさになります。"
 
 #: ../data/messages:1197
 msgid "Indicator size ratio :"
@@ -3729,8 +3990,8 @@ msgstr "大きく"
 
 #: ../data/messages:1203
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr "標示をドックの配置方向（上/下/右/左）に従わせるために使用します。"
 
 #: ../data/messages:1205
@@ -3758,7 +4019,8 @@ msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
 msgstr ""
-"同じクラス名のアプリケーション（タスク）同士をグループ化する選択をしている場合にのみ有用です。デフォルトの画像を使用するには空欄のままにしてください。"
+"同じクラス名のアプリケーション（タスク）同士をグループ化する選択をしている場"
+"合にのみ有用です。デフォルトの画像を使用するには空欄のままにしてください。"
 
 #: ../data/messages:1221
 msgid "Zoom the indicator with its icon?"
@@ -3788,7 +4050,9 @@ msgstr "全てのアイコン"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr "数値が大きいほど、ポインタが置かれたアイコンの隣のラベルがより透明になります。"
+msgstr ""
+"数値が大きいほど、ポインタが置かれたアイコンの隣のラベルがより透明になりま"
+"す。"
 
 #: ../data/messages:1237
 msgid "label's visibility threshold :"
@@ -3814,7 +4078,9 @@ msgstr "ラベルに使用するフォント :"
 msgid ""
 "If you set it to fully transparent, there will be no background for the "
 "text, but the margin around the text will still be in effect."
-msgstr "完全に透明に設定すると、テキストは背景なしになりますが、テキストの周囲の余白の設定は有効です。"
+msgstr ""
+"完全に透明に設定すると、テキストは背景なしになりますが、テキストの周囲の余白"
+"の設定は有効です。"
 
 #: ../data/messages:1255
 msgid "Colour of the label's background :"
@@ -3840,7 +4106,9 @@ msgstr "開始色 :"
 msgid ""
 "It's the second color of the gradation. Set it to the same value as the "
 "first if you don't want to have any gradation."
-msgstr "グラデーションの終了色です。グラデーションを使用したくない場合は、開始色と同じ色に設定してください。"
+msgstr ""
+"グラデーションの終了色です。グラデーションを使用したくない場合は、開始色と同"
+"じ色に設定してください。"
 
 #: ../data/messages:1267
 msgid "Stop color :"
@@ -3850,7 +4118,9 @@ msgstr "終了色 :"
 msgid ""
 "If checked, the pattern will go from top to bottom, otherwise from left to "
 "right."
-msgstr "チェックを入れると、上から下へのパターンになります。チェックを入れない場合は左から右へのパターンになります。"
+msgstr ""
+"チェックを入れると、上から下へのパターンになります。チェックを入れない場合は"
+"左から右へのパターンになります。"
 
 #: ../data/messages:1271
 msgid "Pattern should be vertical?"
@@ -3885,12 +4155,15 @@ msgid ""
 "window."
 msgstr ""
 "ランチャーまたはアプレット：\n"
-"各ランチャー（またはアプレット）の設定画面を開いて、画像へのパスを指定します。\n"
+"各ランチャー（またはアプレット）の設定画面を開いて、画像へのパスを指定しま"
+"す。\n"
 "アプリケーション（タスク）のアイコン：\n"
-"アイコンを右クリック -> ”カスタム・アイコン使用”を選択し、使用したい画像を指定して適用を押します。カスタム画像を削除するには、アイコンを右クリック "
-"-> ”カスタム・アイコン削除” です。\n"
-"PCにアイコンのテーマがインストールされている場合、デフォルトのテーマの代わりにそれらから1つ選択することもできます。この場合、ドックのグローバル設定画面"
-"で変更を行います。"
+"アイコンを右クリック -> ”カスタム・アイコン使用”を選択し、使用したい画像を指"
+"定して適用を押します。カスタム画像を削除するには、アイコンを右クリック -> ”カ"
+"スタム・アイコン削除” です。\n"
+"PCにアイコンのテーマがインストールされている場合、デフォルトのテーマの代わり"
+"にそれらから1つ選択することもできます。この場合、ドックのグローバル設定画面で"
+"変更を行います。"
 
 #: ../data/messages:1457
 msgid ""
@@ -3901,8 +4174,10 @@ msgid ""
 "To remove a boorkmark, right-click on its icon -> remove"
 msgstr ""
 "ショートカット・アプレットを有効化します。\n"
-"フォルダの全ブックマーク（Nautilusで表示されるもの）がサブ・ドックで一覧化されます。\n"
-"ブックマークを追加するには、単純にフォルダをアプレットのアイコンにドラッグ＆ドロップします。\n"
+"フォルダの全ブックマーク（Nautilusで表示されるもの）がサブ・ドックで一覧化さ"
+"れます。\n"
+"ブックマークを追加するには、単純にフォルダをアプレットのアイコンにドラッグ＆"
+"ドロップします。\n"
 "ブックマークの削除はアイコンを右クリック -> 削除 です。"
 
 #: ../data/messages:1599
@@ -3912,8 +4187,10 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
-"安定版 Debian の場合、このボタンをクリックすることで「開発版の週次発行」PPA（不安定の可能性あり）を追加することも可能です :\n"
-" その後、'cairo-dock*'パッケージを全てパージして、システムをアップデートし、'cairo-dock'パッケージを再インストールできます。"
+"安定版 Debian の場合、このボタンをクリックすることで「開発版の週次発行」PPA"
+"（不安定の可能性あり）を追加することも可能です :\n"
+" その後、'cairo-dock*'パッケージを全てパージして、システムをアップデート"
+"し、'cairo-dock'パッケージを再インストールできます。"
 
 #: ../data/messages:1603
 msgid ""
@@ -3922,8 +4199,10 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
-"不安定版 Debian の場合、このボタンをクリックすることで「開発版の週次発行」PPA（不安定の可能性あり）を追加することも可能です :\n"
-" その後、'cairo-dock*'パッケージを全てパージして、システムをアップデートし、'cairo-dock'パッケージを再インストールできます。"
+"不安定版 Debian の場合、このボタンをクリックすることで「開発版の週次発行」PPA"
+"（不安定の可能性あり）を追加することも可能です :\n"
+" その後、'cairo-dock*'パッケージを全てパージして、システムをアップデート"
+"し、'cairo-dock'パッケージを再インストールできます。"
 
 #: ../data/messages:1633
 msgid "starting from 0"
@@ -3963,8 +4242,9 @@ msgid ""
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
 msgstr ""
-"これにチェックを入れた場合、現在のランチャーは削除され、新しいテーマによって提供されるものに置き換えられます。チェックを入れない場合は現在のランチャーが保"
-"持され、アイコンのみが置き換えられます。"
+"これにチェックを入れた場合、現在のランチャーは削除され、新しいテーマによって"
+"提供されるものに置き換えられます。チェックを入れない場合は現在のランチャーが"
+"保持され、アイコンのみが置き換えられます。"
 
 #: ../data/messages:1697
 msgid "Use the new theme's launchers?"
@@ -3975,7 +4255,8 @@ msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
 msgstr ""
-"使用しない場合は現在の動作、すなわちドックの配置位置や自動で隠すか否かの設定、タスクバー使用不使用の設定などといった動作パラメータが維持されます。"
+"使用しない場合は現在の動作、すなわちドックの配置位置や自動で隠すか否かの設"
+"定、タスクバー使用不使用の設定などといった動作パラメータが維持されます。"
 
 #: ../data/messages:1701
 msgid "Use the new theme's behaviour?"
@@ -4009,7 +4290,9 @@ msgstr "現在のランチャーも保存？"
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
-msgstr "ドックは現在のテーマ一式の tarball を作成して、他のユーザーと簡単にテーマの交換ができるようにします。"
+msgstr ""
+"ドックは現在のテーマ一式の tarball を作成して、他のユーザーと簡単にテーマの交"
+"換ができるようにします。"
 
 #: ../data/messages:1717
 msgid "Build a package of the theme?"
@@ -4144,8 +4427,8 @@ msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
-"例えば nautilus --no-desktop や gedit などのように指定します。<Alt>F1 や、<Ctrl>c , <Ctrl>v "
-"のようにキーボードショートカットも指定できます。"
+"例えば nautilus --no-desktop や gedit などのように指定します。<Alt>F1 や、"
+"<Ctrl>c , <Ctrl>v のようにキーボードショートカットも指定できます。"
 
 #: ../data/messages:1823
 msgid "Command to launch on click :"
@@ -4158,8 +4441,9 @@ msgid ""
 "launcher that launches a script in a terminal, but you don't want it to "
 "steal the Terminal's icon from the Taskbar."
 msgstr ""
-"ランチャーとアプリの一体化を選択している場合、このオプションによってその対象からこのランチャーだけ除外します。例えば、端末の中でスクリプトを開くランチャー"
-"に端末アイコンをタスクバーから奪取させたくない場合などに有用です。"
+"ランチャーとアプリの一体化を選択している場合、このオプションによってその対象"
+"からこのランチャーだけ除外します。例えば、端末の中でスクリプトを開くラン"
+"チャーに端末アイコンをタスクバーから奪取させたくない場合などに有用です。"
 
 #: ../data/messages:1829
 msgid "Prevent this launcher from stealing appli from taskbar ?"
@@ -4172,9 +4456,11 @@ msgid ""
 "nearly sure that you shouldn't touch it. It defines the class of the "
 "program, which is useful to link the appli with its launcher."
 msgstr ""
-"このパラメータを変更したいと思われる可能性があるのは、各入力項目を1つ1つ手動で埋めてこのランチャーを作成した場合です。既存のランチャーをメニューからドッ"
-"クにドロップして作成した場合、このパラメータを編集する必要はほとんどありません。このパラメータはプログラムのクラス名を定義し、ランチャーとアプリケーション"
-"を結びつけるのに有用です。"
+"このパラメータを変更したいと思われる可能性があるのは、各入力項目を1つ1つ手動"
+"で埋めてこのランチャーを作成した場合です。既存のランチャーをメニューからドッ"
+"クにドロップして作成した場合、このパラメータを編集する必要はほとんどありませ"
+"ん。このパラメータはプログラムのクラス名を定義し、ランチャーとアプリケーショ"
+"ンを結びつけるのに有用です。"
 
 #: ../data/messages:1833
 msgid "Class of the program :"
@@ -4200,8 +4486,63 @@ msgid ""
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
 "<b><span color='red'>GLX-Dock 2.4.0</span></b>\n"
-" - <b>電源管理アプレット</b>は、どのプラットフォームでも動作するように書き直されました。 \n"
-" - <b>新しいヘルプ・アプレット</b>が親愛なるユーザーの助けとなるよう追加されました。 ^_^\n"
+" - <b>電源管理アプレット</b>は、どのプラットフォームでも動作するように書き直"
+"されました。 \n"
+" - <b>新しいヘルプ・アプレット</b>が親愛なるユーザーの助けとなるよう追加され"
+"ました。 ^_^\n"
 " - <b>XFCE デスクトップ環境での統合性</b>が向上しました。 \n"
-" - <b>新しい DBus メソッド</b>により、ドックとの交信がさらに簡単になりました。 \n"
-" - スタンドアロンなCompiz環境でのシェルとしてドックを使用できるようになりました。"
+" - <b>新しい DBus メソッド</b>により、ドックとの交信がさらに簡単になりまし"
+"た。 \n"
+" - スタンドアロンなCompiz環境でのシェルとしてドックを使用できるようになりまし"
+"た。"
+
+#~ msgid "Lock icons"
+#~ msgstr "アイコンのロック"
+
+#~ msgid "Unlock dock"
+#~ msgstr "ドックのロック解除"
+
+#~ msgid "Lock dock"
+#~ msgstr "ドックのロック"
+
+#~ msgid ""
+#~ "This will allow you to add or remove launchers and applets, and configure "
+#~ "the program."
+#~ msgstr ""
+#~ "ランチャーやアプレットの追加や削除を行ったり、プログラムの設定変更が行えま"
+#~ "す。"
+
+#~ msgid ""
+#~ "This will prevent any modification of the current theme, and hide all the "
+#~ "unnecessary entries in the menus."
+#~ msgstr ""
+#~ "現在のテーマの変更を禁止して、メニューにある不必要なエントリを全て隠しま"
+#~ "す。"
+
+#~ msgid "Modify this separator"
+#~ msgstr "この区切りの編集"
+
+#~ msgid "Modify this launcher"
+#~ msgstr "このランチャーの編集"
+
+#~ msgid "Remove this separator"
+#~ msgstr "この区切りの削除"
+
+#~ msgid "Remove this launcher"
+#~ msgstr "このランチャーの削除"
+
+#~ msgid "Detach this applet"
+#~ msgstr "このモジュールの分離"
+
+#~ msgid "Launch another instance of this applet"
+#~ msgstr "このアプレットの追加起動"
+
+#~ msgid ""
+#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-"
+#~ "enabled libcairo)."
+#~ msgstr ""
+#~ "強制的にGlitzバックエンドを使用します（cairo用のハードウェア支援です。"
+#~ "glitzを有効化した libcairo が必要です）。"
+
+#~ msgid "Unity is already disabled."
+#~ msgstr "Unity はすでに無効化されています。"
