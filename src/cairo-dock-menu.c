@@ -67,8 +67,8 @@
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 1000
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 600
-#define CAIRO_DOCK_ABOUT_WIDTH 600
-#define CAIRO_DOCK_ABOUT_HEIGHT 600
+#define CAIRO_DOCK_ABOUT_WIDTH 400
+#define CAIRO_DOCK_ABOUT_HEIGHT 500
 #define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
 #define CAIRO_DOCK_SITE_URL "http://glx-dock.org"  // http://cairo-dock.vef.fr
 #define CAIRO_DOCK_FORUM_URL "http://forum.glx-dock.org"  // http://cairo-dock.vef.fr/bg_forumlist.php
@@ -148,11 +148,13 @@ static void _cairo_dock_add_about_page (GtkWidget *pNoteBook, const gchar *cPage
 	
 	pAboutLabel = gtk_label_new (NULL);
 	gtk_label_set_use_markup (GTK_LABEL (pAboutLabel), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (pAboutLabel), 0.0, 0.0);
+	gtk_misc_set_padding (GTK_MISC (pAboutLabel), 30, 0);
 	gtk_box_pack_start (GTK_BOX (pVBox),
 		pAboutLabel,
 		FALSE,
 		FALSE,
-		0);
+		15);
 	gtk_label_set_markup (GTK_LABEL (pAboutLabel), cAboutText);
 }
 static void _cairo_dock_lock_icons (GtkMenuItem *pMenuItem, gpointer data)
@@ -236,25 +238,70 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 	gtk_notebook_set_scrollable (GTK_NOTEBOOK (pNoteBook), TRUE);
 	gtk_notebook_popup_enable (GTK_NOTEBOOK (pNoteBook));
 	gtk_box_pack_start (GTK_BOX (pContentBox), pNoteBook, TRUE, TRUE, 0);
-	
+
+	// About
+	/* gchar *text = g_strdup_printf ("\n\n<b>%s</b>\n\n\n"
+		"<a href=\"http://glx-dock.org\">http://glx-dock.org</a>",
+		_("<b>Cairo-Dock is a pretty, light and convenient interface\n"
+			" to your desktop, able to replace advantageously your system panel!</b>"));
+	_cairo_dock_add_about_page (pNoteBook,
+		_("About"),
+		text);*/
+	// Development
+	gchar *text = g_strdup_printf ("%s\n\n"
+	"<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
+		"  Fabounet (Fabrice Rey)\n"
+		"\t<span size=\"smaller\">%s</span>\n\n"
+		"  Matttbe (Matthieu Baerts)\n"
+		"\n\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
+		"  Eduardo Mucelli\n"
+		"  Jesuisbenjamin\n"
+		"  SQP\n",
+		_("Here is a list of the current developers and contributors"),
+		_("Developers"),
+		_("Main developer and project leader"),
+		_("Contributors / Hackers"));
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Development"),
-		"<b>Developers:</b>\n"
-		"  Fabounet (Fabrice Rey)\n"
-		"  Matttbe (Matthieu Baerts)\n"
-		"Thanks to all the contributors:\n"
+		text);
+	// Support
+		text = g_strdup_printf ("<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
+		"  Matttbe\n"
+		"  Mav\n"
+		"  Necropotame\n"
+		"\n\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
+		"  BobH\n"
+		"  Franksuse64\n"
+		"  Lylambda\n"
+		"  Ppmt\n"
+		"  Taiebot65\n"
+		"\n\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
+		"%s",
+		_("Website"),
+		_("Beta-testing / Suggestions / Forum animation"),
+		_("Translators for this language"),
+		_("translator-credits"));
+	_cairo_dock_add_about_page (pNoteBook,
+		_("Support"),
+		text);
+	// Thanks
+		text = g_strdup_printf ("%s\n"
+		"<a href=\"http://glx-dock.org/ww_page.php?p=How to help us\">%s</a>: %s\n\n"
+		"\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
+		"  Augur\n"
 		"  ChAnGFu\n"
 		"  Ctaf\n"
-		"  Eduardo Mucelli\n"
+		"  Mav\n"
 		"  Necropotame\n"
 		"  Nochka85\n"
 		"  Paradoxxx_Zero\n"
-		"  SQP\n"
+		"  Rom1\n"
 		"  Tofe\n"
-		"  Mac Slow (original idea)\n");
-	_cairo_dock_add_about_page (pNoteBook,
-		_("Artwork"),
-		"<b>Themes:</b>\n"
+		"  Mac Slow (original idea)\n"
+		"\t<span size=\"smaller\">%s</span>\n"
+		"\n\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
+		"\t<a href=\"http://glx-dock.org/userlist_messages.php\">List of our forum's members</a>\n"
+		"\n\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
 		"  Benoit2600\n"
 		"  Coz\n"
 		"  Fabounet\n"
@@ -264,34 +311,26 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 		"  Matttbe\n"
 		"  Nochka85\n"
 		"  Paradoxxx_Zero\n"
-		"  Taiebot65\n");
-	gchar *text = g_strdup_printf ("<b>Site:</b>\n"
-		"  Matttbe\n"
-		"  Mav\n"
-		"  Necropotame\n"
-		"<b>Beta-testing / Suggestions / Forum animation:</b>\n"
-		"  Franksuse64\n"
-		"  Kawaji\n"
-		"  Mav\n"
-		"  Ours_en_pluche\n"
-		"  Ppmt\n"
-		"  Rhinopierroce\n"
-		"  Rom1\n"
-		"  Tshirtman\n"
-		"  Vilraleur\n"
-		"<b>Translations:</b>\n"
-		"  %s", _("translator-credits"));
+		"  Taiebot65\n",
+		_("Thanks to all people that help us to improve the Cairo-Dock project.\n"
+			"Thanks to all current, former and future contributors."),
+		_("How to help us?"),
+		_("Don't hesitate to join the project, we need you ;)"),
+		_("Former contributors"),
+		_("For a complete list, please have a look to BZR logs"),
+		_("Users of our forum"),
+		_("Artwork"));
 	_cairo_dock_add_about_page (pNoteBook,
-		_("Support"),
+		_("Thanks"),
 		text);
 	g_free (text);
-	
-	gtk_widget_show_all (pDialog);
 	
 	gtk_window_resize (GTK_WINDOW (pDialog),
 		MIN (CAIRO_DOCK_ABOUT_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
 		MIN (CAIRO_DOCK_ABOUT_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
-	
+
+	gtk_widget_show_all (pDialog);
+
 	gtk_window_set_keep_above (GTK_WINDOW (pDialog), TRUE);
 	//don't use gtk_dialog_run(), as we don't want to block the dock
 }
