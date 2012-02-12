@@ -1463,10 +1463,10 @@ static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 		}
 		#endif
 		
-		if (pDock)
+		/**if (pDock)
 		{
-			cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
-		}
+			cairo_dock_trigger_load_icon_buffers (icon);
+		}*/
 	}
 	
 	//\____________ On enregistre l'appli et on commence a la surveiller.

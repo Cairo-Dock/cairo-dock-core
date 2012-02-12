@@ -445,7 +445,7 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 				pOneIcon = ic->data;
 				cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, ! CAIRO_DOCK_ANIMATE_ICON);
 				pOneIcon->cParentDockName = g_strdup (pIcon->cName);
-				cairo_dock_trigger_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
+				cairo_dock_trigger_load_icon_buffers (pOneIcon);
 			}
 			g_list_free (pIconsList);
 			
@@ -505,9 +505,9 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 			Icon *pLastIcon = cairo_dock_get_last_icon (pIcon->pSubDock->icons);
 			pOneIcon->fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 0);
 		}
-		cairo_dock_trigger_load_icon_buffers (pOneIcon, CAIRO_CONTAINER (pIcon->pSubDock));
 		cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		pOneIcon->cParentDockName = g_strdup (pIcon->cName);
+		cairo_dock_trigger_load_icon_buffers (pOneIcon);
 		if (pIcon->iSubdockViewType != 0)
 			cairo_dock_trigger_redraw_subdock_content_on_icon (pIcon);
 	}

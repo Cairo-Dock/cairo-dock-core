@@ -196,7 +196,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	g_free (cRendererName);
 	
 	//\____________ On remplit ses buffers.
-	///cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pParentDock));
+	///cairo_dock_trigger_load_icon_buffers (icon);
 	
 	//\____________ On gere son role d'inhibiteur.
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);

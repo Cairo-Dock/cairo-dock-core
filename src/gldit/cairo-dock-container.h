@@ -111,8 +111,8 @@ typedef enum {
 	} CairoDockTypeContainer;
 
 struct _CairoContainerInterface {
-	void (*set_icon_size) (CairoContainer *pContainer, Icon *icon);
 	gboolean (*animation_loop) (CairoContainer *pContainer);
+	void (*setup_menu) (CairoContainer *pContainer, Icon *pIcon, GtkWidget *pMenu);
 	};
 
 /// Definition of a Container, whom derive Dock, Desklet, Dialog and FlyingContainer. 

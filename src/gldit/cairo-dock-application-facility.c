@@ -403,9 +403,6 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);  // c'est en fait le main dock.
 				Icon *pFakeClassIcon = cairo_dock_create_icon_for_class_subdock (pSameClassIcon, pParentDock);
 				
-				//\______________ On la charge.
-				///cairo_dock_trigger_load_icon_buffers (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
-				
 				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
 				cd_debug (" on detache %s pour la passer dans le sous-dock de sa classe", pSameClassIcon->cName);
 				cairo_dock_detach_icon_from_dock_full (pSameClassIcon, pClassMateParentDock, FALSE);
@@ -415,8 +412,6 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				
 				cd_debug (" on lui substitue le fake");
 				cairo_dock_insert_icon_in_dock_full (pFakeClassIcon, pClassMateParentDock, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
-				///cairo_dock_calculate_dock_icons (pClassMateParentDock);
-				///cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (pClassMateParentDock));
 				cairo_dock_redraw_container (CAIRO_CONTAINER (pClassMateParentDock));
 				
 				if (pFakeClassIcon->iSubdockViewType != 0)

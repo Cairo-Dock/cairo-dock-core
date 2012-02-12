@@ -289,7 +289,6 @@ void cairo_dock_free_icon_buffers (Icon *icon);
 */
 void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer);
 
-void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon);
 
 /**Fill the image buffer (surface & texture) of a given icon, according to its type. Set its size if necessary, and fills the reflection buffer for cairo.
 *@param icon the icon.
@@ -315,10 +314,7 @@ void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTex
 */
 void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer);
 
-void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer);
-
-void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize);
-#define cairo_dock_load_buffers_in_one_dock(pDock) cairo_dock_reload_buffers_in_dock (pDock, FALSE, FALSE)
+void cairo_dock_trigger_load_icon_buffers (Icon *pIcon);
 
 void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer);
 

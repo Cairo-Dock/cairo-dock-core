@@ -202,7 +202,17 @@ CairoDock *cairo_dock_create_subdock (const gchar *cDockName, const gchar *cRend
 		pSubDock = _create_dock (cDockName);
 	}
 	
+	//\__________________ set the icons.
 	pSubDock->icons = pIconList;  // set icons now, before we set the ratio and the renderer. 
+	Icon *icon;
+	GList *ic;
+	for (ic = pIconList; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		if (icon->cParentDockName == NULL)
+			icon->cParentDockName = g_strdup (cDockName);
+		cairo_dock_set_icon_container (icon, pSubDock);
+	}
 	cairo_dock_insert_automatic_separators_in_dock (pSubDock);  // it will update fFlatDockWidth, but we don't care as we'll recalculate it.
 	
 	//\__________________ make it a sub-dock.
@@ -213,18 +223,8 @@ CairoDock *cairo_dock_create_subdock (const gchar *cDockName, const gchar *cRend
 	//\__________________ load the icons.
 	if (pIconList != NULL)
 	{
-		Icon *icon;
-		GList *ic;
-		for (ic = pIconList; ic != NULL; ic = ic->next)
-		{
-			icon = ic->data;
-			if (icon->cParentDockName == NULL)
-				icon->cParentDockName = g_strdup (cDockName);
-			cairo_dock_set_icon_container (icon, pSubDock);
-		}
-		cairo_dock_load_buffers_in_one_dock (pSubDock);  // idle reload.
+		cairo_dock_reload_buffers_in_dock (pSubDock, FALSE, FALSE);  // idle reload; FALSE = don't compute their size, since it has been done in cairo_dock_make_sub_dock().
 	}
-	/// cairo_dock_update_dock_size ?...
 	return pSubDock;
 }
 
@@ -297,7 +297,7 @@ void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName)
 		cairo_dock_stop_polling_screen_edge ();
 	}
 	
-	cairo_dock_free_dock (pDock);  // -> NOTIFICATION_STOP_DOCK, NOTIFICATION_DESTROY
+	cairo_dock_free_dock (pDock);  // -> NOTIFICATION_DESTROY
 }
 
 

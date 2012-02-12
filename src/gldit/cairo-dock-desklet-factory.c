@@ -183,7 +183,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 					{
 						pIcon->iImageWidth = pIcon->fWidth;
 						pIcon->iImageHeight = pIcon->fHeight;
-						cairo_dock_trigger_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));
+						cairo_dock_trigger_load_icon_buffers (pIcon);
 					}
 				}
 				
@@ -701,12 +701,6 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
  /// FACTORY ///
 ///////////////
 
-static void _cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
-{
-	CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
-	/**if (pDesklet->pRenderer && pDesklet->pRenderer->set_icon_size)
-		pDesklet->pRenderer->set_icon_size (pDesklet, icon);*/
-}
 
 static gboolean _cairo_desklet_animation_loop (CairoContainer *pContainer)
 {
@@ -764,11 +758,9 @@ CairoDesklet *cairo_dock_new_desklet (void)
 	pDesklet->container.fRatio = 1;
 	pDesklet->container.fRatio = 1;
 	
-	pDesklet->container.iface.set_icon_size = _cairo_dock_set_icon_size;
 	pDesklet->container.iface.animation_loop = _cairo_desklet_animation_loop;
 	
 	GtkWidget* pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDesklet));
-	///cairo_dock_install_notifications_on_object (pDesklet, NB_NOTIFICATIONS_DESKLET);
 	gldi_object_set_manager (GLDI_OBJECT (pDesklet), GLDI_MANAGER (&myDeskletsMgr));
 	
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-desklet");
@@ -840,11 +832,10 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 		g_source_remove (pDesklet->iSidWriteSize);
 	if (pDesklet->iSidWritePosition != 0)
 		g_source_remove (pDesklet->iSidWritePosition);
-	cairo_dock_notify_on_object (pDesklet, NOTIFICATION_STOP_DESKLET, pDesklet);
 	
 	cairo_dock_steal_interactive_widget_from_desklet (pDesklet);
 
-	cairo_dock_finish_container (CAIRO_CONTAINER (pDesklet));
+	cairo_dock_finish_container (CAIRO_CONTAINER (pDesklet));  // -> NOTIFICATION_DESTROY
 	
 	if (pDesklet->pRenderer != NULL)
 	{
@@ -1257,7 +1248,7 @@ void cairo_dock_update_desklet_icons (CairoDesklet *pDesklet)
 		{
 			pIcon->iImageWidth = pIcon->fWidth;
 			pIcon->iImageHeight = pIcon->fHeight;
-			cairo_dock_trigger_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));
+			cairo_dock_trigger_load_icon_buffers (pIcon);
 		}
 	}
 	

@@ -95,18 +95,6 @@ void cairo_dock_free_icon_buffers (Icon *icon)
  /// LOADER ///
 //////////////
 
-void cairo_dock_set_icon_size (CairoContainer *pContainer, Icon *icon)
-{
-	g_print ("%s (%s, %p)\n", __func__, icon?icon->cName:NULL, pContainer);
-	if (! pContainer)
-	{
-		cd_debug ("icone dans aucun container => pas chargee");
-		return;
-	}
-	// taille de l'icone dans le container (hors ratio).
-	if (pContainer->iface.set_icon_size)
-		pContainer->iface.set_icon_size (pContainer, icon);
-}
 
 void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 {
@@ -138,11 +126,6 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	}
 	
 	g_return_if_fail (icon->fWidth > 0 & icon->iImageWidth > 0);  // the renderer of the container must have set the size beforehand, when the icon has been inserted into the container.
-	/**if (icon->fWidth == 0 || icon->iImageWidth <= 0)  // if the size is not set, set it now, or we can't load the buffer.
-	{
-		cairo_dock_set_icon_size (pContainer, icon);
-	}
-	g_print (" -> %dx%d, %dx%d)\n", (int)icon->fWidth, (int)icon->fHeight, icon->iImageWidth, icon->iImageHeight);*/
 	
 	//\______________ on reset les buffers (on garde la surface/texture actuelle pour les emblemes).
 	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
@@ -311,7 +294,7 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 	}
 	return FALSE;
 }
-void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_trigger_load_icon_buffers (Icon *pIcon)
 {
 	if (pIcon->iSidLoadImage == 0)
 	{
@@ -322,55 +305,6 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon, CairoContainer *pContain
 	}
 }
 
-
-void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize)
-{
-	g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
-	if (bUpdateIconSize && pDock->bGlobalIconSize)
-		pDock->iIconSize = myIconsParam.iIconWidth;
-	
-	// for each icon, reload its buffer (size may change).
-	Icon* icon;
-	GList* ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		
-		if (CAIRO_DOCK_IS_APPLET (icon))  // for an applet, we need to let the module know that the size or the theme has changed, so that it can reload its private buffers.
-		{
-			cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
-		}
-		else
-		{
-			if (bUpdateIconSize)
-			{
-				icon->fWidth = icon->fHeight = 0;  // invalidate the icon size, so that the 'update_dock_size' will recalculate them.
-				icon->iImageWidth = icon->iImageHeight = 0;
-				cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
-			}
-			cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
-		}
-		
-		if (bRecursive && icon->pSubDock != NULL)  // we handle the sub-dock for applets too, so that they don't need to care.
-		{
-			///cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);  /// should probably not be here.
-			if (bUpdateIconSize)
-				icon->pSubDock->iIconSize = pDock->iIconSize;
-			cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);
-		}
-	}
-	
-	if (bUpdateIconSize)
-	{
-		cairo_dock_update_dock_size (pDock);
-		cairo_dock_calculate_dock_icons (pDock);
-
-		cairo_dock_move_resize_dock (pDock);
-		if (pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)  // la position/taille a change, il faut refaire la reservation.
-			cairo_dock_reserve_space_for_dock (pDock, TRUE);
-		gtk_widget_queue_draw (pDock->container.pWidget);
-	}
-}
 
 void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer)
 {

@@ -430,7 +430,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 			}
 		}
 	}
-	cairo_dock_trigger_load_icon_buffers (pNewIcon, pContainer);
+	///cairo_dock_trigger_load_icon_buffers (pNewIcon);
 
 	return pNewIcon;
 }

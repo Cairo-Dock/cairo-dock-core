@@ -387,6 +387,9 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 */
 void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock, const gchar *cReceivingDockName);
 
+void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize);
+
+void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon);
 
 void cairo_dock_create_redirect_texture_for_dock (CairoDock *pDock);
 

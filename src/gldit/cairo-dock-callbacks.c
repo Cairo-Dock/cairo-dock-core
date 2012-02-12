@@ -478,6 +478,8 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	static double fLastTime = 0;
 	if (s_bFrozenDock && pMotion != NULL && pMotion->time != 0)
 		return FALSE;
+	if (pDock->bMenuVisible)
+		return FALSE;
 	Icon *pPointedIcon=NULL, *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	int iLastMouseX = pDock->container.iMouseX;
 	//g_print ("%s (%.2f;%.2f, %d)\n", __func__, pMotion->x, pMotion->y, pDock->iInputState);

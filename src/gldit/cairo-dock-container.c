@@ -75,6 +75,7 @@ static gboolean _prevent_delete (GtkWidget *pWidget, GdkEvent *event, gpointer d
 	cd_debug ("pas de alt+f4");
 	return TRUE;  // on empeche les ALT+F4 malheureux.
 }
+
 static void cairo_dock_set_default_rgba_visual (GtkWidget *pWidget)
 {
 	GdkScreen* pScreen = gtk_widget_get_screen (pWidget);
@@ -162,7 +163,6 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
 	#endif
 	
-	///cairo_dock_install_notifications_on_object (pContainer, NB_NOTIFICATIONS_CONTAINER);  // l'implementation du container installera par-dessus ses notifications.
 	gldi_object_set_manager (GLDI_OBJECT (pContainer), GLDI_MANAGER (&myContainersMgr));  // the implementation of the container will set its manager on top of this one.
 	
 	if (g_pPrimaryContainer == NULL)
@@ -399,14 +399,6 @@ gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer)
 }
 
 
-static void _cairo_dock_delete_menu (GtkMenuShell *menu, CairoDock *pDock)
-{
-	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
-	pDock->bMenuVisible = FALSE;
-	
-	///pDock->container.bInside = TRUE;
-	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
-}
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer *data)
 {
 	*push_in = TRUE;
@@ -445,37 +437,20 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 }
 void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer *pContainer)
 {
-	static gpointer *data = NULL;  // 1 seul menu a la fois, donc on peut la faire statique.
+	static gpointer data[2];  // 1 seul menu a la fois, donc on peut la faire statique.
 	
 	if (menu == NULL)
 		return;
-	GtkMenuPositionFunc place_menu = NULL;
+	GtkMenuPositionFunc place_menu = NULL;  // if 'place_menu' is NULL, then 'data' is ignored.
 	if (pIcon != NULL && pContainer != NULL)
 	{
 		place_menu = (GtkMenuPositionFunc)_place_menu_on_icon;
-		if (data == NULL)
-			data = g_new0 (gpointer, 2);
 		data[0] = pIcon;
 		data[1] = pContainer;
 	}
 	
-	if (CAIRO_DOCK_IS_DOCK (pContainer))
-	{
-		if (g_signal_handler_find (menu,
-			G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-			0,
-			0,
-			NULL,
-			_cairo_dock_delete_menu,
-			pContainer) == 0)  // on evite de connecter 2 fois ce signal, donc la fonction est appelable plusieurs fois sur un meme menu.
-		{
-			g_signal_connect (G_OBJECT (menu),
-				"deactivate",
-				G_CALLBACK (_cairo_dock_delete_menu),
-				pContainer);
-		}
-		CAIRO_DOCK (pContainer)->bMenuVisible = TRUE;
-	}
+	if (pContainer->iface.setup_menu)
+		pContainer->iface.setup_menu (pContainer, pIcon, menu);
 	
 	gtk_widget_show_all (GTK_WIDGET (menu));
 	
@@ -547,20 +522,13 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 }
 
 
-static GtkWidget *s_pMenu = NULL;
-static gboolean _on_destroy_menu (GtkWidget *widget, GdkEvent  *event, gpointer   user_data)
-{
-	cd_debug ("*** menu destroyed");
-	s_pMenu = NULL;
-	return FALSE;
-}
+static GtkWidget *s_pMenu = NULL;  // right-click menu
 GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 {
 	if (s_pMenu != NULL)
 	{
-		cd_debug ("previous menu still alive");
-		gtk_widget_destroy (GTK_WIDGET (s_pMenu));
-		s_pMenu = NULL;
+		//g_print ("previous menu still alive\n");
+		gtk_widget_destroy (GTK_WIDGET (s_pMenu));  // -> 's_pMenu' becomes NULL thanks to the weak pointer.
 	}
 	g_return_val_if_fail (pContainer != NULL, NULL);
 	
@@ -577,9 +545,9 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	}
 	
 	cairo_dock_notify_on_object (pContainer, NOTIFICATION_BUILD_ICON_MENU, icon, pContainer, menu);
-	g_signal_connect (G_OBJECT (menu), "destroy", G_CALLBACK (_on_destroy_menu), NULL);  // apparemment inutile.
 	
 	s_pMenu = menu;
+	g_object_add_weak_pointer (G_OBJECT (menu), (gpointer*)&s_pMenu);  // will nullify 's_pMenu' as soon as the menu is destroyed.
 	return menu;
 }
 

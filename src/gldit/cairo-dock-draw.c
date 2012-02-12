@@ -357,9 +357,9 @@ void cairo_dock_draw_icon_reflect_cairo (Icon *icon, CairoContainer *pContainer,
 				0);
 			cairo_rectangle (pCairoContext, 0, 0, icon->fHeight * myIconsParam.fReflectHeightRatio, icon->fWidth * icon->fScale);
 			if (pContainer->bDirectionUp)
-				cairo_translate (pCairoContext, icon->fHeight * fScale, 0);
+				cairo_translate (pCairoContext, icon->fHeight * icon->fHeightFactor * fScale, 0);
 			else
-				cairo_translate (pCairoContext, icon->fHeight * myIconsParam.fReflectHeightRatio, 0);  // go back to top of icon, since we will flip y axis
+				cairo_translate (pCairoContext, icon->fHeight * icon->fHeightFactor * myIconsParam.fReflectHeightRatio, 0);  // go back to top of icon, since we will flip y axis
 		}
 		cairo_clip (pCairoContext);
 		

@@ -70,77 +70,6 @@ extern CairoDockHidingEffect *g_pHidingBackend;
 extern gboolean g_bUseOpenGL;
 
 
-static void _set_icon_size_dock (CairoContainer *pContainer, Icon *icon)
-{
-	CairoDock *pDock = CAIRO_DOCK (pContainer);
-	if (pDock->pRenderer && pDock->pRenderer->set_icon_size)
-	{
-		pDock->pRenderer->set_icon_size (icon, pDock);
-	}
-	else
-	{
-		int wi, hi;
-		if (pDock->iIconSize != 0)
-		{
-			wi = hi = pDock->iIconSize;
-		}
-		else  // same size as main dock.
-		{
-			wi = myIconsParam.iIconWidth;
-			hi = myIconsParam.iIconHeight;
-		}
-		g_print (" size: %d => %dx%d\n", pDock->iIconSize, wi, hi);
-		double fMaxScale = cairo_dock_get_max_scale (pContainer);
-		
-		// set the visible size at rest.
-		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // for applets, consider (fWidth,fHeight) as a requested size, if not 0.
-		{
-			//g_print ("%s (%s, %.1fx%.1f\n", __func__, icon->pModuleInstance->pModule->pVisitCard->cModuleName, icon->fWidth, icon->fHeight);
-			if (icon->iImageWidth != 0)
-			{
-				if (pContainer->bIsHorizontal)
-					icon->fWidth = icon->iImageWidth / fMaxScale;
-				else
-					icon->fHeight = icon->iImageWidth / fMaxScale;
-			}
-			if (icon->iImageHeight != 0)
-			{
-				if (pContainer->bIsHorizontal)
-					icon->fHeight = icon->iImageHeight / fMaxScale;
-				else
-					icon->fWidth = icon->iImageHeight / fMaxScale;
-			}
-			if (icon->fWidth == 0)
-				icon->fWidth = wi;
-			if (icon->fHeight == 0 || icon->fHeight > hi)
-				icon->fHeight = hi;
-		}
-		else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // separators have their own size.
-		{
-			icon->fWidth = myIconsParam.iSeparatorWidth;
-			icon->fHeight = MIN (myIconsParam.iSeparatorHeight, hi);
-		}
-		else  // any other icon use the global size
-		{
-			icon->fWidth = wi;
-			icon->fHeight = hi;
-		}
-		
-		// texture size can be deduced then.
-		if (pContainer->bIsHorizontal
-		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator))
-		{
-			icon->iImageWidth = icon->fWidth * fMaxScale;
-			icon->iImageHeight = icon->fHeight * fMaxScale;
-		}
-		else
-		{
-			icon->iImageWidth = icon->fHeight * fMaxScale;
-			icon->iImageHeight = icon->fWidth * fMaxScale;
-		}
-	}
-}
-
 static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 {
 	//g_print ("%s (%d ; %2f ; bInside:%d)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->container.bInside);
@@ -509,6 +438,74 @@ static gboolean _cairo_dock_dock_animation_loop (CairoContainer *pContainer)
 		return TRUE;
 }
 
+static gboolean _on_dock_destroyed (GtkWidget *menu, CairoContainer *pContainer);
+static void _on_menu_deactivated (GtkMenuShell *menu, CairoDock *pDock)
+{
+	//g_print ("\n+++ %s ()\n\n", __func__);
+	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
+	pDock->bMenuVisible = FALSE;
+	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+}
+static void _on_menu_destroyed (GtkWidget *menu, CairoDock *pDock)
+{
+	//g_print ("\n+++ %s ()\n\n", __func__);
+	cairo_dock_remove_notification_func_on_object (pDock,
+		NOTIFICATION_DESTROY,
+		(CairoDockNotificationFunc) _on_dock_destroyed,
+		menu);
+}
+static gboolean _on_dock_destroyed (GtkWidget *menu, CairoContainer *pContainer)
+{
+	//g_print ("\n+++ %s ()\n\n", __func__);
+	g_signal_handlers_disconnect_matched
+		(menu,
+		G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+		0,
+		0,
+		NULL,
+		_on_menu_deactivated,
+		pContainer);
+	g_signal_handlers_disconnect_matched
+		(menu,
+		G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+		0,
+		0,
+		NULL,
+		_on_menu_destroyed,
+		pContainer);
+}
+static void _setup_menu (CairoContainer *pContainer, Icon *pIcon, GtkWidget *pMenu)
+{
+	// keep the dock visible
+	CAIRO_DOCK (pContainer)->bMenuVisible = TRUE;
+	
+	// connect signals
+	if (g_signal_handler_find (pMenu,
+		G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+		0,
+		0,
+		NULL,
+		_on_menu_deactivated,
+		pContainer) == 0)  // on evite de connecter 2 fois ce signal, donc la fonction est appelable plusieurs fois sur un meme menu.
+	{
+		// when the menu is deactivated, hide the dock back if necessary.
+		g_signal_connect (G_OBJECT (pMenu),
+			"deactivate",
+			G_CALLBACK (_on_menu_deactivated),
+			pContainer);
+		// when the menu is destroyed, remove the 'destroyed' notification on the dock.
+		g_signal_connect (G_OBJECT (pMenu),
+			"destroy",
+			G_CALLBACK (_on_menu_destroyed),
+			pContainer);
+		// when the dock is destroyed, remove the 2 signals on the menu.
+		cairo_dock_register_notification_on_object (pContainer,
+			NOTIFICATION_DESTROY,
+			(CairoDockNotificationFunc) _on_dock_destroyed,
+			CAIRO_DOCK_RUN_AFTER, pMenu);  // the menu can stay alive even if the container disappear, so we need to ensure we won't call the callbacks then.
+	}
+}
+
 CairoDock *cairo_dock_new_dock (void)
 {
 	//\__________________ On cree un dock.
@@ -524,8 +521,8 @@ CairoDock *cairo_dock_new_dock (void)
 	pDock->fPostHideOffset = 1.;
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
-	pDock->container.iface.set_icon_size = _set_icon_size_dock;
 	pDock->container.iface.animation_loop = _cairo_dock_dock_animation_loop;
+	pDock->container.iface.setup_menu = _setup_menu;
 	
 	//\__________________ On cree la fenetre GTK.
 	GtkWidget *pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDock));
@@ -631,7 +628,6 @@ void cairo_dock_free_dock (CairoDock *pDock)
 		g_source_remove (pDock->iSidTestMouseOutside);
 	if (pDock->iSidUpdateDockSize != 0)
 		g_source_remove (pDock->iSidUpdateDockSize);
-	cairo_dock_notify_on_object (pDock, NOTIFICATION_STOP_DOCK, pDock);
 	
 	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
 	g_list_free (pDock->icons);
@@ -661,7 +657,7 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	if (pDock->iRedirectedTexture != 0)
 		_cairo_dock_delete_texture (pDock->iRedirectedTexture);
 	
-	cairo_dock_finish_container (CAIRO_CONTAINER (pDock));
+	cairo_dock_finish_container (CAIRO_CONTAINER (pDock));  // -> NOTIFICATION_DESTROY
 	
 	g_free (pDock);
 }
@@ -692,9 +688,10 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
-		icon->fWidth *= pDock->container.fRatio / fPrevRatio;
-		icon->fHeight *= pDock->container.fRatio / fPrevRatio;
+		icon->fWidth = icon->fHeight = icon->iImageWidth = icon->iImageHeight = 0;  // no request
+		cairo_dock_set_icon_size_in_dock (pDock, icon);
+		icon->fWidth *= pDock->container.fRatio;
+		icon->fHeight *= pDock->container.fRatio;
 		pDock->fFlatDockWidth += icon->fWidth + myIconsParam.iIconGap;
 	}
 	pDock->iMaxIconHeight *= pDock->container.fRatio / fPrevRatio;
@@ -757,13 +754,13 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	
 	//\______________ set the icon size, now that it's inside a container.
 	int wi = icon->iImageWidth, hi = icon->iImageHeight;
-	cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), icon);
-	if (wi != icon->iImageWidth || hi != icon->iImageHeight)  // if size has changed, reload the buffers
-		cairo_dock_trigger_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));
-	
+	cairo_dock_set_icon_size_in_dock (pDock, icon);
 	icon->fWidth *= pDock->container.fRatio;
 	icon->fHeight *= pDock->container.fRatio;
-
+	
+	if (wi != icon->iImageWidth || hi != icon->iImageHeight)  // if size has changed, reload the buffers
+		cairo_dock_trigger_load_icon_buffers (icon);
+	
 	pDock->fFlatDockWidth += myIconsParam.iIconGap + icon->fWidth;
 	if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 		pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
@@ -1104,6 +1101,127 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 	}
 
 	g_list_free (pIconsList);
+}
+
+
+void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize)
+{
+	g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
+	if (bUpdateIconSize && pDock->bGlobalIconSize)
+		pDock->iIconSize = myIconsParam.iIconWidth;
+	
+	// for each icon, reload its buffer (size may change).
+	Icon* icon;
+	GList* ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		
+		if (CAIRO_DOCK_IS_APPLET (icon))  // for an applet, we need to let the module know that the size or the theme has changed, so that it can reload its private buffers.
+		{
+			cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
+		}
+		else
+		{
+			if (bUpdateIconSize)
+			{
+				icon->fWidth = icon->fHeight = 0;  // no request
+				icon->iImageWidth = icon->iImageHeight = 0;
+				cairo_dock_set_icon_size_in_dock (pDock, icon);
+			}
+			cairo_dock_trigger_load_icon_buffers (icon);
+		}
+		
+		if (bRecursive && icon->pSubDock != NULL)  // we handle the sub-dock for applets too, so that they don't need to care.
+		{
+			///cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);  /// should probably not be here.
+			if (bUpdateIconSize)
+				icon->pSubDock->iIconSize = pDock->iIconSize;
+			cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);
+		}
+	}
+	
+	if (bUpdateIconSize)
+	{
+		cairo_dock_update_dock_size (pDock);
+		cairo_dock_calculate_dock_icons (pDock);
+
+		cairo_dock_move_resize_dock (pDock);
+		if (pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)  // la position/taille a change, il faut refaire la reservation.
+			cairo_dock_reserve_space_for_dock (pDock, TRUE);
+		gtk_widget_queue_draw (pDock->container.pWidget);
+	}
+}
+
+
+void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
+{
+	if (pDock->pRenderer && pDock->pRenderer->set_icon_size)
+	{
+		pDock->pRenderer->set_icon_size (icon, pDock);
+	}
+	else
+	{
+		int wi, hi;
+		if (pDock->iIconSize != 0)
+		{
+			wi = hi = pDock->iIconSize;
+		}
+		else  // same size as main dock.
+		{
+			wi = myIconsParam.iIconWidth;
+			hi = myIconsParam.iIconHeight;
+		}
+		g_print (" size: %d => %dx%d\n", pDock->iIconSize, wi, hi);
+		double fMaxScale = cairo_dock_get_max_scale (pDock);
+		
+		// set the visible size at rest.
+		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // for applets, consider (fWidth,fHeight) as a requested size, if not 0.
+		{
+			//g_print ("%s (%s, %.1fx%.1f\n", __func__, icon->pModuleInstance->pModule->pVisitCard->cModuleName, icon->fWidth, icon->fHeight);
+			if (icon->iImageWidth != 0)
+			{
+				if (pDock->container.bIsHorizontal)
+					icon->fWidth = icon->iImageWidth / fMaxScale;
+				else
+					icon->fHeight = icon->iImageWidth / fMaxScale;
+			}
+			if (icon->iImageHeight != 0)
+			{
+				if (pDock->container.bIsHorizontal)
+					icon->fHeight = icon->iImageHeight / fMaxScale;
+				else
+					icon->fWidth = icon->iImageHeight / fMaxScale;
+			}
+			if (icon->fWidth == 0)
+				icon->fWidth = wi;
+			if (icon->fHeight == 0 || icon->fHeight > hi)
+				icon->fHeight = hi;
+		}
+		else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // separators have their own size.
+		{
+			icon->fWidth = myIconsParam.iSeparatorWidth;
+			icon->fHeight = MIN (myIconsParam.iSeparatorHeight, hi);
+		}
+		else  // any other icon use the global size
+		{
+			icon->fWidth = wi;
+			icon->fHeight = hi;
+		}
+		
+		// texture size can be deduced then.
+		if (pDock->container.bIsHorizontal
+		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator))
+		{
+			icon->iImageWidth = icon->fWidth * fMaxScale;
+			icon->iImageHeight = icon->fHeight * fMaxScale;
+		}
+		else
+		{
+			icon->iImageWidth = icon->fHeight * fMaxScale;
+			icon->iImageHeight = icon->fWidth * fMaxScale;
+		}
+	}
 }
 
 

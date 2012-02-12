@@ -184,7 +184,6 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	
 	//\__________________________ Then take the necessary actions due to the new size.
 	// calculate the position of icons in the new frame.
-	///pDock->pRenderer->calculate_icons (pDock);
 	cairo_dock_calculate_dock_icons (pDock);
 	
 	// update the dock's shape.
@@ -1117,9 +1116,9 @@ void cairo_dock_trigger_set_WM_icons_geometry (CairoDock *pDock)
 	}
 }
 
-void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)
+void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)  // the request size is already set on the icon.
 {
-	cairo_dock_set_icon_size (CAIRO_CONTAINER (pDock), pIcon);
+	cairo_dock_set_icon_size_in_dock (pDock, pIcon);
 	pIcon->fWidth *= pDock->container.fRatio;
 	pIcon->fHeight *= pDock->container.fRatio;
 	
