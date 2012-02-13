@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-09-20 09:23+0000\n"
+"POT-Creation-Date: 2012-02-13 01:12+0000\n"
+"PO-Revision-Date: 2012-02-13 02:52+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
-"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-25 04:36+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:36+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
+"Language: sk\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -29,7 +30,7 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:247
 msgid "Please wait while importing the theme..."
-msgstr ""
+msgstr "Počkajte prosím na import témy..."
 
 #: ../src/cairo-dock-gui-commons.c:369
 msgid "Configure this applet"
@@ -81,26 +82,26 @@ msgid "Origin"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
-#, fuzzy
 msgid "Action"
-msgstr "Animácia:"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
+"Parametre hlavného panelu sú k dispozícii v hlavnom okne konfigurácie."
 
 #: ../src/cairo-dock-gui-items.c:459
 msgid "Launcher configuration"
 msgstr "Konfigurácia spúšťača"
 
 #: ../src/cairo-dock-gui-items.c:877
-#, fuzzy
 msgid "Remove this item"
-msgstr "Odstrániť tento applet"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:128 ../data/messages:675
 msgid "Behaviour"
@@ -303,15 +304,15 @@ msgstr "Nedá sa importovať téma vzhľadu."
 
 #: ../src/cairo-dock-gui-simple.c:398
 msgid "Importing theme..."
-msgstr ""
+msgstr "Importujem tému..."
 
 #: ../src/cairo-dock-gui-simple.c:405 ../src/cairo-dock-gui-themes.c:156
 msgid "Theme has been saved"
-msgstr ""
+msgstr "Téma bola uložená"
 
 #: ../src/cairo-dock-gui-simple.c:411 ../src/cairo-dock-gui-themes.c:162
 msgid "Themes have been deleted"
-msgstr ""
+msgstr "Téma bola odstránená"
 
 #: ../src/cairo-dock-gui-simple.c:706
 msgid "Animation:"
@@ -322,7 +323,8 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-gui-simple.c:795
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknite na applet, a získate náhľad a jeho popis."
 
 #: ../src/cairo-dock-gui-simple.c:821 ../data/messages:495
@@ -359,7 +361,7 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-themes.c:149
 msgid "Importing theme ..."
-msgstr ""
+msgstr "Importujem tému..."
 
 #: ../src/cairo-dock-gui-themes.c:182
 msgid "Manage Themes"
@@ -367,11 +369,11 @@ msgstr "Spravovať témy"
 
 #: ../src/cairo-dock-menu.c:123
 msgid "Delete this dock?"
-msgstr ""
+msgstr "Odstrániť tento panel?"
 
 #: ../src/cairo-dock-menu.c:177
 msgid "About Cairo-Dock"
-msgstr ""
+msgstr "O programe"
 
 #: ../src/cairo-dock-menu.c:214 ../data/messages:283 ../data/messages:1555
 msgid "Development site"
@@ -387,7 +389,7 @@ msgstr "Získajte viac appletov!"
 
 #: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
 msgid "Donate"
-msgstr ""
+msgstr "Prispejte"
 
 #: ../src/cairo-dock-menu.c:226 ../src/cairo-dock-menu.c:232
 msgid ""
@@ -399,9 +401,8 @@ msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:261
-#, fuzzy
 msgid "Developers"
-msgstr "Vývojové"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
@@ -430,6 +431,10 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  DAG Software https://launchpad.net/~dagsoftware\n"
+"  Fabounet https://launchpad.net/~fabounet03\n"
+"  milboy https://launchpad.net/~milboys"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -570,7 +575,7 @@ msgstr "Upraviť pozíciu, viditeľnosť a vzhľad hlavného panelu."
 
 #: ../src/cairo-dock-menu.c:847
 msgid "Delete this dock"
-msgstr ""
+msgstr "Odstrániť tento panel"
 
 #: ../src/cairo-dock-menu.c:857
 msgid "Manage themes"
@@ -582,14 +587,12 @@ msgid ""
 msgstr "Vyberte si z mnohých tém na serveri, a uložte svoju aktuálnu tému."
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Unlock icons position"
-msgstr "odomknúť ikony"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Lock icons position"
-msgstr "Zamknúť pozíciu"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:879
 msgid "This will (un)lock the position of the icons."
@@ -608,7 +611,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustiť Cairo-dock pri štarte"
 
 #: ../src/cairo-dock-menu.c:933
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Aplety tretej strany poskytujú integráciu do mnohých programov, ako je Pidgin"
 
@@ -680,9 +684,8 @@ msgid "Applet's handbook"
 msgstr "Príručka appletov"
 
 #: ../src/cairo-dock-menu.c:1085
-#, fuzzy
 msgid "Pick up an image"
-msgstr "Použiť obrázok"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1316
 #, c-format
@@ -1022,9 +1025,8 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1632
 #: ../src/gldit/cairo-dock-dock-manager.c:1733
-#, fuzzy
 msgid "Pop up the main dock"
-msgstr "Nový hlavný panel"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1139,13 +1141,11 @@ msgid "Last modification on:"
 msgstr "Posledná úprava:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"nemôžem získať vzdialený súbor %s/%s, možno je spadnutý server.\n"
-"Prosím, skúste to neskôr alebo nás kontaktujte na glx-dock.org."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
@@ -1208,6 +1208,10 @@ msgid ""
 "Middle-click to open the configuration window.\n"
 "Right-click to access some troubleshooting actions."
 msgstr ""
+"Tento aplet je tu na to, aby ti pomáhal.\n"
+"Kliknutim na ikonu sa ti zobrazia tipy a možnosti Cairo-Dock.\n"
+"Stredným kliknutím sa otvorí okno konfigurácie.\n"
+"Pravé kliknutie ti ukáže nejaké riešenia problémov."
 
 #: ../src/help/applet-notifications.c:247
 msgid "Open global settings"
@@ -1231,11 +1235,11 @@ msgstr ""
 
 #: ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "Tipy a triky"
 
 #: ../src/help/applet-tips-dialog.c:307
 msgid "Category"
-msgstr ""
+msgstr "Kategória"
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:119
 msgid "Enter a command"
@@ -1825,8 +1829,9 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1467
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1877,15 +1882,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Musíte zapnúť kompozíciu. Napríklad, môžete spustiť Compiz alebo xcompmgr. \n"
 "Ak používate XFCE alebo KDE, stačí povoliť kompozície v nastavení správcu "
 "okien.\n"
 "Ak používate Gnome, môžete to povoliť v Metacity týmto spôsobom:\n"
-" Otvorte gconf-editor, upravte kľúč '/apps/metacity/general/"
-"compositing_manager' a nastavte na 'true'."
+" Otvorte gconf-editor, upravte kľúč "
+"'/apps/metacity/general/compositing_manager' a nastavte na 'true'."
 
 #: ../data/messages:219 ../data/messages:1491
 msgid ""
@@ -2443,7 +2448,6 @@ msgid "Appear on click"
 msgstr "Zobrazí sa ak kliknete"
 
 #: ../data/messages:471
-#, fuzzy
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2453,57 +2457,42 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
-"None: Nezobrazovať otvorené okná v doku.\n"
-"MacOSX: Mix aplikácií so spúšťačom, zobrazujú ostatné okná len v prípade, že "
-"sú minimalizované.\n"
-"KDE: Mix aplikácií so spúšťačom, zobrazujú všetky ostatné okná a skupiny "
-"okien spolu v sub-docku.\n"
-"Gnome: Oddelený panel od spúšťačov a ukazuje len okná, ktoré sú na súčasnej "
-"ploche."
 
 #: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
 msgstr "Správanie sa panela úloh"
 
 #: ../data/messages:477
-#, fuzzy
 msgid "Minimalistic"
-msgstr "Minimalizovať"
+msgstr ""
 
 #: ../data/messages:479
-#, fuzzy
 msgid "Integrated"
-msgstr "Internet"
+msgstr ""
 
 #: ../data/messages:481
-#, fuzzy
 msgid "Separated"
-msgstr "Oddeliť všetko"
+msgstr ""
 
 #: ../data/messages:483 ../data/messages:689
-#, fuzzy
 msgid "Place new icons"
-msgstr "Priestor medzi ikonami :"
+msgstr ""
 
 #: ../data/messages:485 ../data/messages:691
-#, fuzzy
 msgid "At the beginning of the dock"
-msgstr "Nastaviť pozíciu hlavného docku."
+msgstr ""
 
 #: ../data/messages:487 ../data/messages:693
-#, fuzzy
 msgid "Before the launchers"
-msgstr "Odstrániť tento spúšťač"
+msgstr ""
 
 #: ../data/messages:489 ../data/messages:695
-#, fuzzy
 msgid "After the launchers"
-msgstr "Upraviť tento spúšťač"
+msgstr ""
 
 #: ../data/messages:491 ../data/messages:697
-#, fuzzy
 msgid "At the end of the dock"
-msgstr "Nastaviť pozíciu hlavného docku."
+msgstr ""
 
 #: ../data/messages:493
 msgid "Icons' animations and effects"
@@ -3422,16 +3411,16 @@ msgid "Icons size"
 msgstr "Veľkosť ikôn"
 
 #: ../data/messages:1071
-#, fuzzy
 msgid "Icons' size at rest (width x height) :"
-msgstr "Veľkosť ikony v kľude (šírka x výška):"
+msgstr ""
 
 #: ../data/messages:1073
 msgid "Zoom effect"
 msgstr "Efekt priblíženia"
 
 #: ../data/messages:1075
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "nastavený na hodnotu 1, ak nechcete zväčšujúce sa ikony, keď  nad nimi "
 "podržíte kurzor."
@@ -3684,8 +3673,8 @@ msgstr "väčší"
 
 #: ../data/messages:1193
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1195
@@ -4118,9 +4107,8 @@ msgstr ""
 "panela."
 
 #: ../data/messages:1835
-#, fuzzy
 msgid "Prevent this launcher from stealing this application from taskbar ?"
-msgstr "Zabrániť spúšťačom kradnúť žiadostí z panela?"
+msgstr ""
 
 #: ../data/messages:1837
 msgid ""
@@ -4183,11 +4171,47 @@ msgstr ""
 #~ msgid "MacOSX"
 #~ msgstr "MacOSX"
 
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
 #~ msgid "Gnome"
 #~ msgstr "Gnome"
+
+#~ msgid "applets"
+#~ msgstr "applety"
+
+#~ msgid "applications"
+#~ msgstr "aplikácie"
+
+#~ msgid "Order of the different types of icons :"
+#~ msgstr "Poradie rôznych typov ikôn :"
+
+#~ msgid "launchers"
+#~ msgstr "Spúšťače"
+
+#~ msgid "Launcher's size at rest (width x height) :"
+#~ msgstr "Veľkosť spúšťača v kľude (šírka x výška):"
+
+#~ msgid "Applet's size at rest (width x height) :"
+#~ msgstr "Veľkosť appletu v kľude (šírka x výška):"
+
+#~ msgid "Separate applications from others"
+#~ msgstr "Oddelené od ostatných aplikácií"
+
+#~ msgid "Separate all"
+#~ msgstr "Oddeliť všetko"
+
+#~ msgid "Icons order"
+#~ msgstr "Poradie ikôn"
+
+#~ msgid "Prevent this launcher from stealing appli from taskbar ?"
+#~ msgstr "Zabrániť spúšťačom kradnúť žiadostí z panela?"
+
+#~ msgid "Separate applets from others"
+#~ msgstr "Oddelené od ostatných appletov"
+
+#~ msgid "Configure icons' animations."
+#~ msgstr "Konfigurovať animácie ikôn."
+
+#~ msgid "Configure icons' special effects (requires OpenGL)."
+#~ msgstr "Konfigurovať špeciálne efekty ikôn. (Vyžaduje OpenGL funkcie)."
 
 #~ msgid ""
 #~ "This will separate launchers, application, and applets from each others. "
@@ -4198,61 +4222,47 @@ msgstr ""
 #~ msgid "Separate the different types of icons?"
 #~ msgstr "Oddeliť rôzne typy ikôn ?"
 
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Poradie rôznych typov ikôn :"
-
-#~ msgid "launchers"
-#~ msgstr "Spúšťače"
-
-#~ msgid "applications"
-#~ msgstr "aplikácie"
-
-#~ msgid "applets"
-#~ msgstr "applety"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Veľkosť spúšťača v kľude (šírka x výška):"
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "Veľkosť aplikácie v kľude (šírka x výška):"
-
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Veľkosť appletu v kľude (šírka x výška):"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Konfigurovať animácie ikôn."
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "Konfigurovať špeciálne efekty ikôn. (Vyžaduje OpenGL funkcie)."
-
 #~ msgid ""
 #~ "Configure icons' animations on appearing/disappearing (require OpenGL "
 #~ "capacity)."
 #~ msgstr ""
-#~ "Konfigurácia animácie ikôn pre ukázanie/strácanie (vyžaduje funkčné "
-#~ "OpenGL)."
+#~ "Konfigurácia animácie ikôn pre ukázanie/strácanie (vyžaduje funkčné OpenGL)."
 
-#~ msgid "Icons order"
-#~ msgstr "Poradie ikôn"
+#~ msgid "Application's size at rest (width x height) :"
+#~ msgstr "Veľkosť aplikácie v kľude (šírka x výška):"
 
 #~ msgid ""
 #~ "If you separate a type of icons, the icons of this type will be placed "
 #~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
+#~ "If you don't separate the icons, you can place them wherever you want, and "
+#~ "insert separators manually. Applications will then be placed next to their "
+#~ "launcher if they have one, or after the last launcher."
 #~ msgstr ""
 #~ "Ak máte oddelené typy ikôn, ikony tohto typu budú umiestnené spoločne, "
 #~ "oddelené od ostatných oddeľovačom.\n"
-#~ "Ak nemáte samostatné ikony, môžete ich umiestniť kamkoľvek budete chcieť, "
-#~ "a oddeľovače vložiť ručne. Aplikácie budú následne umiestnené vedľa ich "
+#~ "Ak nemáte samostatné ikony, môžete ich umiestniť kamkoľvek budete chcieť, a "
+#~ "oddeľovače vložiť ručne. Aplikácie budú následne umiestnené vedľa ich "
 #~ "spúšťačov,  alebo za posledným spúšťačom."
 
-#~ msgid "Separate applications from others"
-#~ msgstr "Oddelené od ostatných aplikácií"
+#~ msgid ""
+#~ "None     : Don't show opened windows in the dock.\n"
+#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
+#~ "they are minimized.\n"
+#~ "KDE : Mix applications with its launcher, show all others windows and group "
+#~ "windows togather in sub-dock.\n"
+#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
+#~ "that are on the current desktop."
+#~ msgstr ""
+#~ "None: Nezobrazovať otvorené okná v doku.\n"
+#~ "MacOSX: Mix aplikácií so spúšťačom, zobrazujú ostatné okná len v prípade, že "
+#~ "sú minimalizované.\n"
+#~ "KDE: Mix aplikácií so spúšťačom, zobrazujú všetky ostatné okná a skupiny "
+#~ "okien spolu v sub-docku.\n"
+#~ "Gnome: Oddelený panel od spúšťačov a ukazuje len okná, ktoré sú na súčasnej "
+#~ "ploche."
 
-#~ msgid "Separate applets from others"
-#~ msgstr "Oddelené od ostatných appletov"
+#~ msgid "KDE"
+#~ msgstr "KDE"
 
 #~ msgid "Lock icons"
 #~ msgstr "zamknúť ikony"

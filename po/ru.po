@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cairo-Dock II\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-09-20 09:24+0000\n"
+"POT-Creation-Date: 2012-02-13 01:12+0000\n"
+"PO-Revision-Date: 2012-02-13 02:54+0000\n"
 "Last-Translator: Alex Nikolaenko <ceekay80@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-25 04:36+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:36+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
+"Language: ru\n"
 "X-Poedit-Language: Russian\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
@@ -60,7 +61,7 @@ msgstr "Система"
 
 #: ../src/cairo-dock-gui-commons.c:431 ../src/cairo-dock-gui-main.c:135
 msgid "Fun"
-msgstr "Забавы"
+msgstr "Развлечения"
 
 #: ../src/cairo-dock-gui-commons.c:474
 msgid "plug-in"
@@ -83,16 +84,16 @@ msgid "Origin"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
-#, fuzzy
 msgid "Action"
-msgstr "Анимация:"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "Параметры основной панели можно настроить в главном окне настроек."
 
 #: ../src/cairo-dock-gui-items.c:459
@@ -100,9 +101,8 @@ msgid "Launcher configuration"
 msgstr "Настройка значков запуска"
 
 #: ../src/cairo-dock-gui-items.c:877
-#, fuzzy
 msgid "Remove this item"
-msgstr "Удалить этот апплет"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:128 ../data/messages:675
 msgid "Behaviour"
@@ -324,7 +324,8 @@ msgid "Effects:"
 msgstr "Эффекты:"
 
 #: ../src/cairo-dock-gui-simple.c:795
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Щелкните по апплету, чтобы увидеть его описание и примерный вид."
 
 #: ../src/cairo-dock-gui-simple.c:821 ../data/messages:495
@@ -402,9 +403,8 @@ msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:261
-#, fuzzy
 msgid "Developers"
-msgstr "Разработчики"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
@@ -419,14 +419,12 @@ msgid "Development"
 msgstr "Разработчики"
 
 #: ../src/cairo-dock-menu.c:280
-#, fuzzy
 msgid "Website"
-msgstr "Сайты"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:281
-#, fuzzy
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr "Установка другого изображения для приложения"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
@@ -435,6 +433,13 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Alex Nikolaenko https://launchpad.net/~ceekay80\n"
+"  Alexander 'FONTER' Zinin https://launchpad.net/~spore-09\n"
+"  John Akulov https://launchpad.net/~gxoptg\n"
+"  Nikita Putko https://launchpad.net/~ktototam98\n"
+"  Peter Belyaev https://launchpad.net/~kapone2002\n"
+"  andreylosev https://launchpad.net/~andreylosev"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -588,14 +593,12 @@ msgid ""
 msgstr "Выберите среди многих тем на сервере и сохраните вашу собственную."
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Unlock icons position"
-msgstr "разблокировать значки"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Lock icons position"
-msgstr "Закрепить местоположение"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:879
 msgid "This will (un)lock the position of the icons."
@@ -614,7 +617,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Запускать Cairo-Dock при старте системы"
 
 #: ../src/cairo-dock-menu.c:933
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Апплеты третьих сторон обеспечивают интеграцию с различными приложениями, "
 "например Pidgin"
@@ -654,7 +658,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:996
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Вы можете удалить любой значок просто перетащив его за пределы панели."
+msgstr ""
+"Вы можете удалить любой значок просто перетащив его за пределы панели."
 
 #: ../src/cairo-dock-menu.c:998 ../src/cairo-dock-menu.c:1030
 msgid "Move to another dock"
@@ -686,9 +691,8 @@ msgid "Applet's handbook"
 msgstr "Справка по апплету"
 
 #: ../src/cairo-dock-menu.c:1085
-#, fuzzy
 msgid "Pick up an image"
-msgstr "Использовать изображение"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1316
 #, c-format
@@ -868,7 +872,8 @@ msgstr ""
 
 #: ../src/cairo-dock.c:332
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr "Принудительно определять это окружение - используйте с осторожностью."
+msgstr ""
+"Принудительно определять это окружение - используйте с осторожностью."
 
 #: ../src/cairo-dock.c:335
 msgid ""
@@ -1045,9 +1050,8 @@ msgstr "Левая панель"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1632
 #: ../src/gldit/cairo-dock-dock-manager.c:1733
-#, fuzzy
 msgid "Pop up the main dock"
-msgstr "Новая основная панель"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1163,13 +1167,11 @@ msgid "Last modification on:"
 msgstr "Последние изменения:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"не удалось получить файл %s/%s, возможно сервер не работает.\n"
-"Попробуйте позже или свяжитесь с нами на glx-dock.org."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
@@ -1258,15 +1260,15 @@ msgstr "Включить композитность"
 
 #: ../src/help/applet-notifications.c:254
 msgid "Disable the gnome-panel"
-msgstr ""
+msgstr "Отключить gnome-panel"
 
 #: ../src/help/applet-notifications.c:256
 msgid "Disable Unity"
-msgstr ""
+msgstr "Отключить Unity"
 
 #: ../src/help/applet-notifications.c:258
 msgid "Online help"
-msgstr ""
+msgstr "Справка в Интернете"
 
 #: ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
@@ -1453,8 +1455,8 @@ msgid ""
 "settings."
 msgstr ""
 "Вы можете сделать значки и эффект приближения меньше или больше. Откройте "
-"настройки (правй щелчок -> Cairo-Dock -> настройка) и перейдите в \"Видимость"
-"\" (в расширенном режиме \"Значки\").\n"
+"настройки (правй щелчок -> Cairo-Dock -> настройка) и перейдите в "
+"\"Видимость\" (в расширенном режиме \"Значки\").\n"
 "Имейте в виду, что при большом количестве значков на панели, при изменении "
 "размера, они могут не вписаться в размер экрана.\n"
 "Кроме того, вы можете указать размер индивидуально каждого апплета в его "
@@ -1498,8 +1500,8 @@ msgstr ""
 "При этом, если приложение уже имеет свой значок на панели, то он не "
 "появится, вместо этого на значке запуска появится индикатор.\n"
 "Вы можете определить какие из приложений должны появляться на панели:  "
-"только окна текущего стола, только свёрнутые окна, отдельно от апплетов и т."
-"д."
+"только окна текущего стола, только свёрнутые окна, отдельно от апплетов и "
+"т.д."
 
 #: ../data/messages:47 ../data/messages:1319
 msgid "Closing a window"
@@ -1689,7 +1691,7 @@ msgstr ""
 
 #: ../data/messages:111 ../data/messages:1383
 msgid "Placing desklets"
-msgstr ""
+msgstr "Размещение десклетов"
 
 #: ../data/messages:113 ../data/messages:1385
 msgid ""
@@ -1701,10 +1703,17 @@ msgid ""
 "to the mouse (means you can click on what is behind them), by clicking on "
 "the small bottom-right button."
 msgstr ""
+"Через меню (щелчок правой кнопкой мыши -> «Видимость»), также можно "
+"закрепить его над другими окнами или на слое виджетов (если используется "
+"Compiz), или создать «панель десклетов», размещая их на боковой стороне "
+"экрана и включения параметра «Зарезервировать пространство».\n"
+"Десклеты, которым не нужно взаимодействие (например, «Часы»), могут быть "
+"сделаны прозрачными при наведении мыши (при щелчке по окнам за ними) щелчком "
+"по небольшой кнопке в нижнем правом углу."
 
 #: ../data/messages:115 ../data/messages:1387
 msgid "Changing the desklets decorations"
-msgstr ""
+msgstr "Изменение оформления десклетов"
 
 #: ../data/messages:117 ../data/messages:1389
 msgid ""
@@ -1712,14 +1721,17 @@ msgid ""
 "applet, go to Desklet, and select the decoration you want (you can provide "
 "your own one)."
 msgstr ""
+"Десклеты могут иметь оформление. Для его изменения откройте параметры "
+"апплета, перейдите на вкладку «Десклет» и выберите нужное оформление (можно "
+"использовать собственное)."
 
 #: ../data/messages:119 ../data/messages:1391
 msgid "Useful Features"
-msgstr ""
+msgstr "Полезные функции"
 
 #: ../data/messages:121 ../data/messages:1393
 msgid "Having a calendar with tasks"
-msgstr ""
+msgstr "Календарь с возможностью добавления задач"
 
 #: ../data/messages:123 ../data/messages:1395
 msgid ""
@@ -1730,10 +1742,16 @@ msgid ""
 "When a task has been or is going to be scheduled, the applet will warn you "
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
+"Активировать апплет Часы.\n"
+"При нажатии на него появится календарь.\n"
+"Двойной щелчок внизу вызовет список задач. Здесь вы можете добавлять/удалять "
+"Ваши задания.\n"
+"Когда задача прошла или запланировалась, апплет будет предупреждать вас (за "
+"15 минут до начала мероприятия, а также за 1 день в случае дня рождения)."
 
 #: ../data/messages:125 ../data/messages:1397
 msgid "Having a list of all windows"
-msgstr ""
+msgstr "Список всех окон"
 
 #: ../data/messages:127 ../data/messages:1399
 msgid ""
@@ -1744,10 +1762,16 @@ msgid ""
 "to do that.\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Активировать апплет Переключатель.\n"
+"При щелчке на нем правой кнопкой мыши высветится список всех окон, "
+"отсортированных по рабочим столам.\n"
+"Вы также можете отобразить окна бок-о-бок, если ваш менеджер окон "
+"поддерживает это.\n"
+"Вы можете привязать это действие к щелчку средней кнопкой мыши."
 
 #: ../data/messages:129 ../data/messages:1401
 msgid "Showing all the desktops"
-msgstr ""
+msgstr "Показывать на всех рабочих столах"
 
 #: ../data/messages:131 ../data/messages:1403
 msgid ""
@@ -1755,20 +1779,26 @@ msgid ""
 "Right-click on it -> \"show all the desktop\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Активировать апплет Переключатель или апплет \"Показать рабочий стол\".\n"
+"Щелчок правой кнопкой на нем -> \"Показать \n"
+"Вы можете привязать это действие к щелчку средней кнопкой мыши."
 
 #: ../data/messages:133 ../data/messages:1405
 msgid "Changing the screen resolution"
-msgstr ""
+msgstr "Изменение разрешения экрана"
 
 #: ../data/messages:135 ../data/messages:1407
 msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
 msgstr ""
+"Активировать апплет \"Показать рабочий стол\".\n"
+"Щелчок правой кнопкой на нем -> \"Изменить разрешение экрана\" -> выберите "
+"нужное."
 
 #: ../data/messages:137 ../data/messages:1409
 msgid "Locking your session"
-msgstr ""
+msgstr "Заблокировать сеанс"
 
 #: ../data/messages:139 ../data/messages:1411
 msgid ""
@@ -1776,10 +1806,13 @@ msgid ""
 "Right-click on it -> \"lock screen\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Активировать апплет завершения сеанса.\n"
+"Щелчок правой кнопкой мыши -> «Заблокировать экран».\n"
+"Можно назначить это действие на щелчок средней кнопкой мыши."
 
 #: ../data/messages:141 ../data/messages:1413
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr ""
+msgstr "Быстрый запуск программы с клавиатуры (заменяет диалог ALT+F2)"
 
 #: ../data/messages:143 ../data/messages:1415
 msgid ""
@@ -1789,10 +1822,13 @@ msgid ""
 "The text is automatically completed (for instance, typing \"fir\" will be "
 "completed into \"firefox\")."
 msgstr ""
+"Активировать апплет Меню приложений.\n"
+"Щелчок средней или правой кнопкой на нем -> \"быстрый запуск\".\n"
+"Вы можете привязать это действие к сочетанию клавиш."
 
 #: ../data/messages:145 ../data/messages:1417
 msgid "Turning Composite OFF during games"
-msgstr ""
+msgstr "ОТКЛЮЧЕНИЕ композитного рабочего стола при запуске игр."
 
 #: ../data/messages:147 ../data/messages:1419
 msgid ""
@@ -1801,10 +1837,13 @@ msgid ""
 "smooth.\n"
 "Clicking again on it will enable the Composite."
 msgstr ""
+"Активировать апплет Менеджер Compiz.\n"
+"Щелчок на нем отключает Compiz, что часто делает игры более гладкими.\n"
+"Повторный щелчок на нем включает Compiz"
 
 #: ../data/messages:149 ../data/messages:1421
 msgid "Seeing the hourly weather forecast"
-msgstr ""
+msgstr "Отображение прогноза погоды на следующие часы"
 
 #: ../data/messages:151 ../data/messages:1423
 msgid ""
@@ -1818,7 +1857,7 @@ msgstr ""
 
 #: ../data/messages:153 ../data/messages:1425
 msgid "Adding a file or a web page into the dock"
-msgstr ""
+msgstr "Добавление файла или веб-страницы в панель"
 
 #: ../data/messages:155 ../data/messages:1427
 msgid ""
@@ -1832,7 +1871,7 @@ msgstr ""
 
 #: ../data/messages:157 ../data/messages:1429
 msgid "Importing a folder into the dock"
-msgstr ""
+msgstr "Импорт папки в панель"
 
 #: ../data/messages:159 ../data/messages:1431
 msgid ""
@@ -1843,7 +1882,7 @@ msgstr ""
 
 #: ../data/messages:161 ../data/messages:1433
 msgid "Accessing the recent events"
-msgstr ""
+msgstr "Доступ к последним событиям"
 
 #: ../data/messages:163 ../data/messages:1435
 msgid ""
@@ -1854,10 +1893,15 @@ msgid ""
 "and documents you have accessed recently, so that you can access them "
 "quickly."
 msgstr ""
+"Активировать апплет «Последние события».\n"
+"Для его работы необходим запущенный демон «Zeitgeist». Установите его при "
+"необходимости.\n"
+"Апплет может отображать все недавно открытые папки, веб-страницы, песни и "
+"видеозаписи для быстрого обращения к ним."
 
 #: ../data/messages:165 ../data/messages:1437
 msgid "Quickly opening a recent file with a launcher"
-msgstr ""
+msgstr "Быстрое открытие последнего файла с помощью кнопки запуска"
 
 #: ../data/messages:167 ../data/messages:1439
 msgid ""
@@ -1867,10 +1911,15 @@ msgid ""
 "Now when you right-click on a launcher, all the recent files that can be "
 "opened with this launcher will appear in its menu."
 msgstr ""
+"Активировать апплет «Последние события».\n"
+"Для его работы необходим запущенный демон «Zeitgeist». Установите его при "
+"необходимости.\n"
+"Теперь при щелчке правой кнопкой мыши по кнопке запуска все поледние файлы "
+"могут быть открыты через меню."
 
 #: ../data/messages:169 ../data/messages:1441
 msgid "Accessing disks"
-msgstr ""
+msgstr "Доступ к дискам"
 
 #: ../data/messages:171 ../data/messages:1443
 msgid ""
@@ -1879,10 +1928,15 @@ msgid ""
 "listed in a sub-dock.\n"
 "To unmount a disk before disconnecting it, middle-click on its icon."
 msgstr ""
+"Активировать апплет «Ярлыки».\n"
+"Тогда все диски, включая съёмные носители USB или внешние жёсткие диски, "
+"будут доступны через суб-панель.\n"
+"Для размонтирования диска до его отключения щёлкните средней кнопкой мыши по "
+"его значку."
 
 #: ../data/messages:173 ../data/messages:1445
 msgid "Accessing folder bookmarks"
-msgstr ""
+msgstr "Доступ к закладкам"
 
 #: ../data/messages:175
 msgid ""
@@ -1895,7 +1949,7 @@ msgstr ""
 
 #: ../data/messages:177 ../data/messages:1449
 msgid "Having multiple instances of an applet"
-msgstr ""
+msgstr "Запуск нескольких копий апплета"
 
 #: ../data/messages:179 ../data/messages:1451
 msgid ""
@@ -1909,7 +1963,7 @@ msgstr ""
 
 #: ../data/messages:181 ../data/messages:1453
 msgid "Adding / removing a desktop"
-msgstr ""
+msgstr "Добавление (удаление) рабочего стола"
 
 #: ../data/messages:183 ../data/messages:1455
 msgid ""
@@ -1917,10 +1971,14 @@ msgid ""
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
 "You can even name each of them."
 msgstr ""
+"Активировать апплет «Переключение рабочих столов».\n"
+"Щелчок правой кнопкой мыши -> «Добавить рабочий стол» или «Удалить рабочий "
+"стол».\n"
+"Можно присвоить имя каждому рабочему столу."
 
 #: ../data/messages:185 ../data/messages:1457
 msgid "Controling the sound volume"
-msgstr ""
+msgstr "Настройка громкости звука"
 
 #: ../data/messages:187 ../data/messages:1459
 msgid ""
@@ -1932,7 +1990,7 @@ msgstr ""
 
 #: ../data/messages:189 ../data/messages:1461
 msgid "Controling the screen brightness"
-msgstr ""
+msgstr "Настройка яркости экрана"
 
 #: ../data/messages:191 ../data/messages:1463
 msgid ""
@@ -1943,20 +2001,21 @@ msgstr ""
 
 #: ../data/messages:193 ../data/messages:1465
 msgid "Removing completely the gnome-panel"
-msgstr ""
+msgstr "Полное удаление gnome-panel"
 
 #: ../data/messages:195 ../data/messages:1467
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Запустите gconf-editor, отредактируйте ключ /desktop/gnome/session/"
-"required_components/panel, заменив его значение на \"cairo-dock\". Затем "
-"перезапустите сеанс: панель Gnome больше не появится, вместо неё должна "
-"запуститься cairo-dock (если не запуститься, то добавьте её в приложения "
-"автозапуска)."
+"Запустите gconf-editor, отредактируйте ключ "
+"/desktop/gnome/session/required_components/panel, заменив его значение на "
+"\"cairo-dock\". Затем перезапустите сеанс: панель Gnome больше не появится, "
+"вместо неё должна запуститься cairo-dock (если не запуститься, то добавьте "
+"её в приложения автозапуска)."
 
 #: ../data/messages:199 ../data/messages:1471
 msgid ""
@@ -2007,8 +2066,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Вам необходимо включить композитность. Для этого вы можете запустить Compiz "
 "или xcompmgr.\n"
@@ -2016,8 +2075,8 @@ msgstr ""
 "композитность в настройках менеджера окон.\n"
 "Если же вы используете Gnome, то вы можете задействовать Metacity следующим "
 "образом:\n"
-" Откройте gconf-editor, установите ключ '/apps/metacity/general/"
-"compositing_manager' в значение 'true'."
+" Откройте gconf-editor, установите ключ "
+"'/apps/metacity/general/compositing_manager' в значение 'true'."
 
 #: ../data/messages:219 ../data/messages:1491
 msgid ""
@@ -2029,7 +2088,8 @@ msgstr ""
 
 #: ../data/messages:221 ../data/messages:1493
 msgid "My machine is too old to run a composite manager."
-msgstr "У меня слишком старый компьютер, чтобы запускать композитный менеджер."
+msgstr ""
+"У меня слишком старый компьютер, чтобы запускать композитный менеджер."
 
 #: ../data/messages:223 ../data/messages:1495
 msgid ""
@@ -2249,7 +2309,7 @@ msgstr "Сайт сообщества"
 
 #: ../data/messages:285 ../data/messages:1557
 msgid "More applets available online!"
-msgstr ""
+msgstr "Другие апплеты доступны в Интернете!"
 
 #: ../data/messages:287 ../data/messages:1559
 msgid "Cairo-Dock-Plug-ins-Extras"
@@ -2337,31 +2397,31 @@ msgstr "Значок"
 
 #: ../data/messages:319
 msgid "Name of the dock it belongs to:"
-msgstr ""
+msgstr "Имя панели, к которой он принадлежит:"
 
 #: ../data/messages:321
 msgid "Name of the icon as it will appear in its caption in the dock:"
-msgstr ""
+msgstr "Имя значка, как оно будет отображено в подписи на панели:"
 
 #: ../data/messages:323
 msgid "Leave empty to use the default one."
-msgstr ""
+msgstr "Оставьте пустым, чтобы использовать стандартное."
 
 #: ../data/messages:325
 msgid "Image filename:"
-msgstr ""
+msgstr "Имя изображения:"
 
 #: ../data/messages:327
 msgid "Set to 0 to use the default applet size"
-msgstr ""
+msgstr "Установите 0, чтобы использовать стандартный размер апплета."
 
 #: ../data/messages:329
 msgid "Desired icon size for this applet"
-msgstr ""
+msgstr "Определите размер значка для этого апплета"
 
 #: ../data/messages:331
 msgid "Applet's Handbook"
-msgstr ""
+msgstr "Руководство по апплетам"
 
 #: ../data/messages:333
 msgid "Desklet"
@@ -2372,50 +2432,62 @@ msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
 msgstr ""
+"Если заблокировано, то десклет можно легко переместить захватив его левой "
+"кнопкой мыши. И, конечно, вы по-прежнему можете использовать ALT + левый "
+"щелчок."
 
 #: ../data/messages:339
 msgid "Lock position?"
-msgstr ""
+msgstr "Заблокировать позицию?"
 
 #: ../data/messages:341
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
+"В зависимости от  используемого оконного менеджера, можно изменять размер "
+"при помощи ALT и  среднего щелчка мышью или ALT и левого щелчка."
 
 #: ../data/messages:343
 msgid "Desklet dimensions (width x height):"
-msgstr ""
+msgstr "Размер десклета (ширина x высота):"
 
 #: ../data/messages:345
 msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
+"В зависимости от вашего ОМ, вы можете перемещать панель с помощью ALT и "
+"левого щелчка мышью. Отрицательные значения вычисляются относительно "
+"правого/нижнего угла экрана."
 
 #: ../data/messages:347
 msgid "Desklet position (x, y):"
-msgstr ""
+msgstr "Позиция десклета (x, y):"
 
 #: ../data/messages:349
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
 msgstr ""
+"Вы можете легко вращать любой десклет, используя маленькие кнопки на левой и "
+"верхней сторонах десклета."
 
 #: ../data/messages:351
 msgid "Rotation:"
-msgstr ""
+msgstr "Поворот:"
 
 #: ../data/messages:355
 msgid "Is detached from the dock"
-msgstr ""
+msgstr "Открепить от панели?"
 
 #: ../data/messages:357
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=Utility)"
 msgstr ""
+"Для слоя виджетов CompizFusion, установите поведение в Compiz на: "
+"(класс=Cairo-dock и тип=utility)"
 
 #: ../data/messages:359 ../data/messages:425 ../data/messages:463
 #: ../data/messages:597 ../data/messages:659 ../data/messages:1631
@@ -2424,15 +2496,15 @@ msgstr "Видимость:"
 
 #: ../data/messages:365
 msgid "Keep below"
-msgstr ""
+msgstr "На заднем плане"
 
 #: ../data/messages:367
 msgid "Keep on widget layer"
-msgstr ""
+msgstr "На слое виджетов"
 
 #: ../data/messages:371
 msgid "Should be visible on all desktops?"
-msgstr ""
+msgstr "Показывать на всех рабочих столах?"
 
 #: ../data/messages:373 ../data/messages:995
 msgid "Decorations"
@@ -2440,70 +2512,74 @@ msgstr "Оформление"
 
 #: ../data/messages:375
 msgid "Choose 'Custom decorations' to define your own decorations below."
-msgstr ""
+msgstr "Выберите «Собственное оформление», чтобы настроить оформление ниже."
 
 #: ../data/messages:377
 msgid "Choose a decoration theme for this desklet:"
-msgstr ""
+msgstr "Выберите тему оформления для этого десклета:"
 
 #: ../data/messages:379
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
+"Изображение, показываемое позади рисунка, например рамка. Оставьте пустым, "
+"чтобы не использовать."
 
 #: ../data/messages:381
 msgid "Background image:"
-msgstr ""
+msgstr "Изображение фона:"
 
 #: ../data/messages:383
 msgid "Background transparency:"
-msgstr ""
+msgstr "Прозрачность фона:"
 
 #: ../data/messages:385
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr ""
+msgstr "в пикселях. Определяет левую позицию рисунка."
 
 #: ../data/messages:387
 msgid "Left offset:"
-msgstr ""
+msgstr "Смещение влево:"
 
 #: ../data/messages:389
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr ""
+msgstr "в пикселях. Определяет верхнюю позицию рисунка."
 
 #: ../data/messages:391
 msgid "Top offset:"
-msgstr ""
+msgstr "Смещение вверх:"
 
 #: ../data/messages:393
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr ""
+msgstr "в пикселях. Определяет правую позицию рисунка."
 
 #: ../data/messages:395
 msgid "Right offset:"
-msgstr ""
+msgstr "Смещение вправо:"
 
 #: ../data/messages:397
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr ""
+msgstr "в пикселях. Определяет нижнюю позицию рисунка."
 
 #: ../data/messages:399
 msgid "Bottom offset:"
-msgstr ""
+msgstr "Смещение вниз:"
 
 #: ../data/messages:401
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
+"Изображение, отображаемое поверх рисунка, например, отражение. Оставьте "
+"пустым, чтобы не использовать."
 
 #: ../data/messages:403
 msgid "Foreground image:"
-msgstr ""
+msgstr "Изображение переднего плана:"
 
 #: ../data/messages:405
 msgid "Foreground tansparency:"
-msgstr ""
+msgstr "Прозрачность переднего плана:"
 
 #: ../data/messages:407 ../data/messages:1595
 msgid "Behavior"
@@ -2622,7 +2698,6 @@ msgid "Appear on click"
 msgstr "При щелчке"
 
 #: ../data/messages:471
-#, fuzzy
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2632,57 +2707,42 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
-"None: Не показывать запущенные приложения в панели.\n"
-"MacOSX: Совместить приложения с их значками, показывать остальные окна "
-"только если они минимизированы.\n"
-"KDE: Совместить приложения с их значками, показывать все остальные окна и "
-"группировать схожие окна в суб-панель.\n"
-"Gnome: Отделить панель задач от значков запуска и показывать окна только с "
-"текущего рабочего стола."
 
 #: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
 msgstr "Поведение панели задач:"
 
 #: ../data/messages:477
-#, fuzzy
 msgid "Minimalistic"
-msgstr "Свернуть"
+msgstr ""
 
 #: ../data/messages:479
-#, fuzzy
 msgid "Integrated"
-msgstr "Интернет"
+msgstr ""
 
 #: ../data/messages:481
-#, fuzzy
 msgid "Separated"
-msgstr "Разделитель"
+msgstr ""
 
 #: ../data/messages:483 ../data/messages:689
-#, fuzzy
 msgid "Place new icons"
-msgstr "Расстояние между значками:"
+msgstr ""
 
 #: ../data/messages:485 ../data/messages:691
-#, fuzzy
 msgid "At the beginning of the dock"
-msgstr "Выберите местоположение основной панели."
+msgstr ""
 
 #: ../data/messages:487 ../data/messages:693
-#, fuzzy
 msgid "Before the launchers"
-msgstr "Удалить этот значок запуска"
+msgstr ""
 
 #: ../data/messages:489 ../data/messages:695
-#, fuzzy
 msgid "After the launchers"
-msgstr "Изменить этот значок запуска"
+msgstr ""
 
 #: ../data/messages:491 ../data/messages:697
-#, fuzzy
 msgid "At the end of the dock"
-msgstr "Выберите местоположение основной панели."
+msgstr ""
 
 #: ../data/messages:493
 msgid "Icons' animations and effects"
@@ -3086,7 +3146,7 @@ msgstr ""
 
 #: ../data/messages:757
 msgid "Only if your Window Manager supports it."
-msgstr ""
+msgstr "Только если поддерживается оконным менеджером."
 
 #: ../data/messages:759
 msgid ""
@@ -3420,7 +3480,7 @@ msgstr "меньший"
 
 #: ../data/messages:955
 msgid "larger"
-msgstr ""
+msgstr "больше"
 
 #: ../data/messages:957
 msgid "Dialogs"
@@ -3473,7 +3533,8 @@ msgstr "Размер кнопок в облачках напоминаний (ш
 #: ../data/messages:983 ../data/messages:987 ../data/messages:1041
 #: ../data/messages:1045 ../data/messages:1049 ../data/messages:1053
 msgid "If you don't provide any, a default image will be used."
-msgstr "Если ничего не укажете, то будет использовано стандартное изображение."
+msgstr ""
+"Если ничего не укажете, то будет использовано стандартное изображение."
 
 #: ../data/messages:985
 msgid "Name of an image to use for the yes/ok button :"
@@ -3604,16 +3665,16 @@ msgid "Icons size"
 msgstr "Размер значков"
 
 #: ../data/messages:1071
-#, fuzzy
 msgid "Icons' size at rest (width x height) :"
-msgstr "Размер значков в состоянии покоя (ширина х высота):"
+msgstr ""
 
 #: ../data/messages:1073
 msgid "Zoom effect"
 msgstr "Эффект приближения"
 
 #: ../data/messages:1075
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Установите значение 1, если не хотите чтобы иконки увеличивались при "
 "наведении на них."
@@ -3877,8 +3938,8 @@ msgstr "больший"
 
 #: ../data/messages:1193
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Используйте, чтобы ориентировать индикатор относительно расположения панели "
 "(сверху, снизу, справа, слева)."
@@ -4099,7 +4160,8 @@ msgstr ""
 
 #: ../data/messages:1667
 msgid "Leave it empty to use the same view as the main dock."
-msgstr "Оставьте пустым, чтобы использовать тот же вид, что и основная панель."
+msgstr ""
+"Оставьте пустым, чтобы использовать тот же вид, что и основная панель."
 
 #: ../data/messages:1669
 msgid "Choose the view for this dock :/"
@@ -4326,9 +4388,8 @@ msgstr ""
 "хотели, чтобы значок терминала был удалён с панели задач."
 
 #: ../data/messages:1835
-#, fuzzy
 msgid "Prevent this launcher from stealing this application from taskbar ?"
-msgstr "Запретить удалять значок с панели задач для этого приложения?"
+msgstr ""
 
 #: ../data/messages:1837
 msgid ""
@@ -4397,14 +4458,50 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
+#~ msgid "Applet's size at rest (width x height) :"
+#~ msgstr "Размер апплетов в состоянии покоя (ширина х высота):"
 
-#~ msgid "KDE"
-#~ msgstr "KDE"
+#~ msgid "Launcher's size at rest (width x height) :"
+#~ msgstr "Размер значков запуска в состоянии покоя (ширина х высота):"
+
+#~ msgid "Icons order"
+#~ msgstr "Порядок значков"
+
+#~ msgid "Prevent this launcher from stealing appli from taskbar ?"
+#~ msgstr "Запретить удалять значок с панели задач для этого приложения?"
+
+#~ msgid "applets"
+#~ msgstr "апплеты"
+
+#~ msgid "launchers"
+#~ msgstr "значки запуска"
+
+#~ msgid "applications"
+#~ msgstr "приложения"
 
 #~ msgid "Gnome"
 #~ msgstr "Gnome"
+
+#~ msgid "MacOSX"
+#~ msgstr "MacOSX"
+
+#~ msgid "Order of the different types of icons :"
+#~ msgstr "Порядок расположения различных типов значков:"
+
+#~ msgid "Separate applications from others"
+#~ msgstr "Отделять приложения от остальных"
+
+#~ msgid "Separate applets from others"
+#~ msgstr "Отделить апплеты от остальных"
+
+#~ msgid "Separate all"
+#~ msgstr "Отдельно все"
+
+#~ msgid "Configure icons' animations."
+#~ msgstr "Настроить анимацию значков."
+
+#~ msgid "Configure icons' special effects (requires OpenGL)."
+#~ msgstr "Настроить специальные эффекты значков (требуется поддержка OpenGL)."
 
 #~ msgid ""
 #~ "This will separate launchers, application, and applets from each others. "
@@ -4416,65 +4513,47 @@ msgstr ""
 #~ msgid "Separate the different types of icons?"
 #~ msgstr "Отделять различные типы значков?"
 
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Порядок расположения различных типов значков:"
-
-#~ msgid "launchers"
-#~ msgstr "значки запуска"
-
-#~ msgid "applications"
-#~ msgstr "приложения"
-
-#~ msgid "applets"
-#~ msgstr "апплеты"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Размер значков запуска в состоянии покоя (ширина х высота):"
-
 #~ msgid "Application's size at rest (width x height) :"
 #~ msgstr "Размер значков приложений в состоянии покоя (ширина х высота):"
 
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Размер апплетов в состоянии покоя (ширина х высота):"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Настроить анимацию значков."
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "Настроить специальные эффекты значков (требуется поддержка OpenGL)."
+#~ msgid ""
+#~ "If you separate a type of icons, the icons of this type will be placed "
+#~ "together, separated from the others by a separator.\n"
+#~ "If you don't separate the icons, you can place them wherever you want, and "
+#~ "insert separators manually. Applications will then be placed next to their "
+#~ "launcher if they have one, or after the last launcher."
+#~ msgstr ""
+#~ "Если вы отделите какой-то тип значков, то все они будут помещены отдельно от "
+#~ "остальных за разделителем.\n"
+#~ "Если не отделять, то вы сможете поместить их в любом месте панели и вставить "
+#~ "разделитель вручную. Приложения в таком случае, будут располагаться рядом с "
+#~ "их значками запуска, если таковые имеются, либо после последнего значка."
 
 #~ msgid ""
 #~ "Configure icons' animations on appearing/disappearing (require OpenGL "
 #~ "capacity)."
 #~ msgstr ""
-#~ "Настроить анимацию появления/исчезновения значков (требуется наличие "
-#~ "OpenGL)."
-
-#~ msgid "Icons order"
-#~ msgstr "Порядок значков"
+#~ "Настроить анимацию появления/исчезновения значков (требуется наличие OpenGL)."
 
 #~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
+#~ "None     : Don't show opened windows in the dock.\n"
+#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
+#~ "they are minimized.\n"
+#~ "KDE : Mix applications with its launcher, show all others windows and group "
+#~ "windows togather in sub-dock.\n"
+#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
+#~ "that are on the current desktop."
 #~ msgstr ""
-#~ "Если вы отделите какой-то тип значков, то все они будут помещены отдельно "
-#~ "от остальных за разделителем.\n"
-#~ "Если не отделять, то вы сможете поместить их в любом месте панели и "
-#~ "вставить разделитель вручную. Приложения в таком случае, будут "
-#~ "располагаться рядом с их значками запуска, если таковые имеются, либо "
-#~ "после последнего значка."
+#~ "None: Не показывать запущенные приложения в панели.\n"
+#~ "MacOSX: Совместить приложения с их значками, показывать остальные окна "
+#~ "только если они минимизированы.\n"
+#~ "KDE: Совместить приложения с их значками, показывать все остальные окна и "
+#~ "группировать схожие окна в суб-панель.\n"
+#~ "Gnome: Отделить панель задач от значков запуска и показывать окна только с "
+#~ "текущего рабочего стола."
 
-#~ msgid "Separate applications from others"
-#~ msgstr "Отделять приложения от остальных"
-
-#~ msgid "Separate applets from others"
-#~ msgstr "Отделить апплеты от остальных"
-
-#~ msgid "Separate all"
-#~ msgstr "Отдельно все"
+#~ msgid "KDE"
+#~ msgstr "KDE"
 
 #~ msgid "Lock icons"
 #~ msgstr "Заблокировать значки"
@@ -4498,8 +4577,8 @@ msgstr ""
 #~ msgstr "Запустить ещё копию этого апплета"
 
 #~ msgid ""
-#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-"
-#~ "enabled libcairo)."
+#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled "
+#~ "libcairo)."
 #~ msgstr ""
-#~ "Принудительный Glitz бэкенд (аппаратное ускорение для cairo, требуется "
-#~ "glitz-enabled libcairo)."
+#~ "Принудительный Glitz бэкенд (аппаратное ускорение для cairo, требуется glitz-"
+#~ "enabled libcairo)."

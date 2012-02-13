@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-09-20 16:29+0000\n"
+"POT-Creation-Date: 2012-02-13 01:12+0000\n"
+"PO-Revision-Date: 2012-02-13 02:53+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-25 04:34+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:34+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -81,16 +82,16 @@ msgid "Origin"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
-#, fuzzy
 msgid "Action"
-msgstr "Animatie:"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "De instellingen van het hoof-dock zijn beschikbaar in het "
 "hoofdconfiguratievenster."
@@ -100,9 +101,8 @@ msgid "Launcher configuration"
 msgstr "Configuratie van de starters"
 
 #: ../src/cairo-dock-gui-items.c:877
-#, fuzzy
 msgid "Remove this item"
-msgstr "Verwijder dit applet"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:128 ../data/messages:675
 msgid "Behaviour"
@@ -324,7 +324,8 @@ msgid "Effects:"
 msgstr "Effecten:"
 
 #: ../src/cairo-dock-gui-simple.c:795
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klik op het applet om een voorbeeld en omschrijving van het applet te "
 "krijgen."
@@ -406,9 +407,8 @@ msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:261
-#, fuzzy
 msgid "Developers"
-msgstr "Ontwikkeling"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
@@ -423,14 +423,12 @@ msgid "Development"
 msgstr "Ontwikkeling"
 
 #: ../src/cairo-dock-menu.c:280
-#, fuzzy
 msgid "Website"
-msgstr "Websites"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:281
-#, fuzzy
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr "Aangepast icoon instellen voor een toepassing"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
@@ -439,6 +437,9 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Cairo-Dock Team https://launchpad.net/~cairo-dock-team\n"
+"  rob https://launchpad.net/~rvdb"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -594,14 +595,12 @@ msgid ""
 msgstr "Kies tussen vele thema´s op de server en bewaar uw huidige thema."
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Unlock icons position"
-msgstr "Ontgrendel iconen"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Lock icons position"
-msgstr "Positie vergrendelen"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:879
 msgid "This will (un)lock the position of the icons."
@@ -620,7 +619,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Start Cairo-Dock op tijdens het opstarten"
 
 #: ../src/cairo-dock-menu.c:933
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applets van derden die integratie bevatten voor vele toepassingen zoals "
 "Pidgin"
@@ -695,9 +695,8 @@ msgid "Applet's handbook"
 msgstr "Applet's handleiding"
 
 #: ../src/cairo-dock-menu.c:1085
-#, fuzzy
 msgid "Pick up an image"
-msgstr "Een afbeelding gebruiken"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1316
 #, c-format
@@ -886,8 +885,8 @@ msgstr ""
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Het dock forceren om te laden vanuit deze map, in plaats vanuit de map ~/."
-"config/cairo-dock."
+"Het dock forceren om te laden vanuit deze map, in plaats vanuit de map "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:338
 msgid ""
@@ -938,7 +937,8 @@ msgstr "Versie tonen en afsluiten."
 
 #: ../src/cairo-dock.c:362
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr "Het dock vergrendelen zodat gebruikers geen aanpassingen kunnen doen."
+msgstr ""
+"Het dock vergrendelen zodat gebruikers geen aanpassingen kunnen doen."
 
 #: ../src/cairo-dock.c:366
 msgid "Keep the dock above other windows whatever."
@@ -1061,9 +1061,8 @@ msgstr "Linker-dock"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1632
 #: ../src/gldit/cairo-dock-dock-manager.c:1733
-#, fuzzy
 msgid "Pop up the main dock"
-msgstr "Een nieuw hoofd-dock"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1179,13 +1178,11 @@ msgid "Last modification on:"
 msgstr "Laatste verandering op:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"Kon bestand op afstand %s/%s niet ophalen, misschien is de server gesloten.\n"
-"Probeer het later opnieuw of neem contact met ons op, op glx-dock.org."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
@@ -1367,9 +1364,9 @@ msgstr ""
 "Om nieuwe applets te activeren, opent u de instellingen (rechtermuisklik -> "
 "Cairo-Dock -> Configureren), gaat naar \"Extra's\" en vinkt het applet aan "
 "dat u wilt.\n"
-"Als u meer applets wilt installeren, klikt u op de knop \"Meer applets"
-"\" (hierdoor wordt u verder geleid naar onze applets-website) en kunt "
-"applets installeren door de link van een applet naar uw dock te verslepen."
+"Als u meer applets wilt installeren, klikt u op de knop \"Meer applets\" "
+"(hierdoor wordt u verder geleid naar onze applets-website) en kunt applets "
+"installeren door de link van een applet naar uw dock te verslepen."
 
 #: ../data/messages:13 ../data/messages:1285
 msgid "Adding a launcher"
@@ -1624,7 +1621,8 @@ msgstr ""
 #: ../data/messages:1569 ../data/messages:1573 ../data/messages:1579
 #: ../data/messages:1583 ../data/messages:1587 ../data/messages:1591
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Tip: indien deze regel grijs is, dan is deze tip niet voor u bedoeld."
+msgstr ""
+"Tip: indien deze regel grijs is, dan is deze tip niet voor u bedoeld."
 
 #: ../data/messages:77 ../data/messages:1349
 msgid "If you're using Compiz, you can click on this button:"
@@ -1780,7 +1778,7 @@ msgstr ""
 "Door er op te klikken zal er een kalender getoond worden.\n"
 "Door te dubbelklikken op een dag zal er een pop-upvenster met een taak-"
 "editor geopend worden. Hier kunt u taken toevoegen/verwijderen.\n"
-"Wanneer u een taak heeft ingepland of wilt inplannen zal het applet u vooraf "
+"Wanneer u een taak heeft gepland of wilt plannen zal het applet u vooraf "
 "waarschuwen (15 minuten vooraf aan de gebeurtenis, en 1 dag vooraf bij een "
 "verjaardag)."
 
@@ -2024,8 +2022,8 @@ msgid ""
 msgstr ""
 "Sommige applets kunnen meerdere keren geopend zijn, op dezelfde tijd : Klok, "
 "Cairo-Penguin, Weer, ...\n"
-"Klik met rechts op het icoon van het applet -> \"Open dit applet nog een keer"
-"\".\n"
+"Klik met rechts op het icoon van het applet -> \"Open dit applet nog een "
+"keer\".\n"
 "U kunt ze allemaal apart instellen. Hierdoor is het bijvoorbeeld mogelijk, "
 "dat u de tijd van verschillende landen in uw dock heeft, of het weer van "
 "verschillende steden."
@@ -2081,14 +2079,15 @@ msgstr "Het gnome-paneel in zijn geheel verwijderen"
 
 #: ../data/messages:195 ../data/messages:1467
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Open 'Configuratie-editor', ga dan naar /desktop/gnome/session/"
-"required_components, klik met rechts op 'panel' dan 'Sleutel bewerken' en "
-"vervang de waarde door \"cairo-dock\".\n"
+"Open 'Configuratie-editor', ga dan naar "
+"/desktop/gnome/session/required_components, klik met rechts op 'panel' dan "
+"'Sleutel bewerken' en vervang de waarde door \"cairo-dock\".\n"
 "Herstart daarna uw sessie : het gnome-paneel is nu niet opgestart, maar het "
 "dock is nu wel opgestart (indien niet, dan kunt u het toevoegen aan de "
 "'Opstarttoepassingen')."
@@ -2142,8 +2141,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "U moet composite inschakelen. U kunt bijvoorbeeld Compiz of xcompmgr "
 "draaien.\n"
@@ -2151,8 +2150,9 @@ msgstr ""
 "vensterbeheerder’s opties.\n"
 "Als u Gnome gebruikt, kunt u het inschakelen in Metacity op de volgende "
 "manier :\n"
-" Open de Configuratie-editor, bewerk de sleutel '/apps/metacity/general/"
-"compositing_manager' en vink het vakje onder ´waarde´ aan."
+" Open de Configuratie-editor, bewerk de sleutel "
+"'/apps/metacity/general/compositing_manager' en vink het vakje onder "
+"´waarde´ aan."
 
 #: ../data/messages:219 ../data/messages:1491
 msgid ""
@@ -2220,7 +2220,8 @@ msgstr ""
 
 #: ../data/messages:235 ../data/messages:1507
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr "Ik heb geen thema's in de Themabeheerder, behalve het standaardthema."
+msgstr ""
+"Ik heb geen thema's in de Themabeheerder, behalve het standaardthema."
 
 #: ../data/messages:237 ../data/messages:1509
 msgid "Hint : Up to version 2.1.1-2, wget was used."
@@ -2302,8 +2303,8 @@ msgid ""
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
 "In Gnome, is er een optie om die van het dock te negeren. Om iconen in "
-"menu's in te schakelen, opent u 'Configuratie-editor', gaat dan naar "
-"Desktop / Gnome / Interface en stelt \"menus have icons (iconen in menu's "
+"menu's in te schakelen, opent u 'Configuratie-editor', gaat dan naar Desktop "
+"/ Gnome / Interface en stelt \"menus have icons (iconen in menu's "
 "weergeven)\" in op 'True' en vinkt u de optie \"buttons have icons (iconen "
 "op knoppen weergeven)\" aan. "
 
@@ -2332,8 +2333,8 @@ msgstr ""
 "We stellen uw hulp op prijs! Als u een fout ziet of denkt dat er iets "
 "verbeterd kan worden,\\n\n"
 "of hebt gedroomd over het dock, bezoek ons dan op glx-dock.org.\\n\n"
-"Engels sprekende en anderstalige mensen zijn welkom, dus wees niet "
-"verlegen ! ;-)\\n\n"
+"Engels sprekende en anderstalige mensen zijn welkom, dus wees niet verlegen "
+"! ;-)\\n\n"
 "\\n\n"
 "Als u een thema voor het dock heeft gemaakt of een applet en deze wilt "
 "delen, dan zullen wij deze graag toevoegen aan onze server !"
@@ -2380,8 +2381,8 @@ msgstr "Websites"
 #: ../data/messages:277 ../data/messages:1549
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr ""
-"Een probleem ? Een suggestie ? Wilt u met ons spreken ? U bent altijd "
-"welkom !"
+"Een probleem ? Een suggestie ? Wilt u met ons spreken ? U bent altijd welkom "
+"!"
 
 #: ../data/messages:279 ../data/messages:1551
 msgid "Community site"
@@ -2784,7 +2785,6 @@ msgid "Appear on click"
 msgstr "Verschijnen bij aanklikken"
 
 #: ../data/messages:471
-#, fuzzy
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2794,57 +2794,42 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
-"Geen : Geen geopende vensters in het dock tonen.\n"
-"MacOSX : Toepassingen met hun starters mixen, andere vensters alleen tonen "
-"wanneer ze geminimaliseerd zijn.\n"
-"KDE : Toepassingen met hun starters mixen, alle andere vensters en "
-"gegroepeerde vensters tonen in een sub-dock.\n"
-"Gnome : Taakbalk van de starters scheiden en alleen vensters op het huidige "
-"bureaublad tonen."
 
 #: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
 msgstr "Gedrag van de taakbalk :"
 
 #: ../data/messages:477
-#, fuzzy
 msgid "Minimalistic"
-msgstr "Minimaliseren"
+msgstr ""
 
 #: ../data/messages:479
-#, fuzzy
 msgid "Integrated"
-msgstr "Internet"
+msgstr ""
 
 #: ../data/messages:481
-#, fuzzy
 msgid "Separated"
-msgstr "Scheiding"
+msgstr ""
 
 #: ../data/messages:483 ../data/messages:689
-#, fuzzy
 msgid "Place new icons"
-msgstr "Ruimtes tussen iconen :"
+msgstr ""
 
 #: ../data/messages:485 ../data/messages:691
-#, fuzzy
 msgid "At the beginning of the dock"
-msgstr "Stel positie van het hoofd-dock in."
+msgstr ""
 
 #: ../data/messages:487 ../data/messages:693
-#, fuzzy
 msgid "Before the launchers"
-msgstr "Verwijder deze starter"
+msgstr ""
 
 #: ../data/messages:489 ../data/messages:695
-#, fuzzy
 msgid "After the launchers"
-msgstr "Bewerk deze starter"
+msgstr ""
 
 #: ../data/messages:491 ../data/messages:697
-#, fuzzy
 msgid "At the end of the dock"
-msgstr "Is losgekoppeld van het dock ?"
+msgstr ""
 
 #: ../data/messages:493
 msgid "Icons' animations and effects"
@@ -3778,23 +3763,24 @@ msgstr ""
 
 #: ../data/messages:1067
 msgid "Image filename to use as a background for icons :"
-msgstr "Bestandsnaam afbeelding om te gebruiken als achtergrond voor iconen :"
+msgstr ""
+"Bestandsnaam afbeelding om te gebruiken als achtergrond voor iconen :"
 
 #: ../data/messages:1069
 msgid "Icons size"
 msgstr "Icoongrootte"
 
 #: ../data/messages:1071
-#, fuzzy
 msgid "Icons' size at rest (width x height) :"
-msgstr "Icoongrootte in rust (breedte x hoogte) :"
+msgstr ""
 
 #: ../data/messages:1073
 msgid "Zoom effect"
 msgstr "Vergrotingseffect"
 
 #: ../data/messages:1075
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Stel in op 1 als u niet wilt dat de iconen vergroten wanneer u eroverheen "
 "beweegt."
@@ -3868,8 +3854,8 @@ msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr ""
-"De afbeelding van de scheiding laten draaien wanneer het dock boven/links/"
-"rechts is ?"
+"De afbeelding van de scheiding laten draaien wanneer het dock "
+"boven/links/rechts is ?"
 
 #: ../data/messages:1109
 msgid "Colour of flat separators :"
@@ -3963,7 +3949,8 @@ msgstr "Afbeeldingsbestand :"
 
 #: ../data/messages:1155
 msgid "Set transparency to 0 if you don't want to use an indicator."
-msgstr "Stel doorzichtigheid in op 0 wanneer u geen indicator wilt gebruiken."
+msgstr ""
+"Stel doorzichtigheid in op 0 wanneer u geen indicator wilt gebruiken."
 
 #: ../data/messages:1157
 msgid "Colour of the frame :"
@@ -4061,8 +4048,8 @@ msgstr "Groter"
 
 #: ../data/messages:1193
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Gebruik dit om de indicator de oriëntatie van het dock te laten volgen "
 "(boven/onder/rechts/links)."
@@ -4529,9 +4516,8 @@ msgstr ""
 "uit de taakbalk."
 
 #: ../data/messages:1835
-#, fuzzy
 msgid "Prevent this launcher from stealing this application from taskbar ?"
-msgstr "Voorkomen dat deze starter toepassing van taakbalk steelt ?"
+msgstr ""
 
 #: ../data/messages:1837
 msgid ""
@@ -4602,14 +4588,51 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
+#~ msgid "Launcher's size at rest (width x height) :"
+#~ msgstr "Grootte starters in rust (breedte x hoogte) :"
 
-#~ msgid "KDE"
-#~ msgstr "KDE"
+#~ msgid "Applet's size at rest (width x height) :"
+#~ msgstr "Grootte applets in rust (breedte x hoogte) :"
+
+#~ msgid "Icons order"
+#~ msgstr "Volgorde iconen"
+
+#~ msgid "Order of the different types of icons :"
+#~ msgstr "Volgorde van verschillende soorten iconen :"
+
+#~ msgid "Prevent this launcher from stealing appli from taskbar ?"
+#~ msgstr "Voorkomen dat deze starter toepassing van taakbalk steelt ?"
+
+#~ msgid "applets"
+#~ msgstr "Applets"
+
+#~ msgid "launchers"
+#~ msgstr "Starters"
+
+#~ msgid "applications"
+#~ msgstr "Toepassingen"
 
 #~ msgid "Gnome"
 #~ msgstr "Gnome"
+
+#~ msgid "MacOSX"
+#~ msgstr "MacOSX"
+
+#~ msgid "Separate applications from others"
+#~ msgstr "Toepassingen scheiden van anderen"
+
+#~ msgid "Separate applets from others"
+#~ msgstr "Applets scheiden van anderen"
+
+#~ msgid "Separate all"
+#~ msgstr "Allen scheiden"
+
+#~ msgid "Configure icons' animations."
+#~ msgstr "Configureer icoonanimaties."
+
+#~ msgid "Configure icons' special effects (requires OpenGL)."
+#~ msgstr ""
+#~ "Configureer speciale effecten van iconen (OpenGL-ondersteuning vereist)."
 
 #~ msgid ""
 #~ "This will separate launchers, application, and applets from each others. "
@@ -4621,33 +4644,22 @@ msgstr ""
 #~ msgid "Separate the different types of icons?"
 #~ msgstr "Verschillende soorten iconen scheiden ?"
 
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Volgorde van verschillende soorten iconen :"
-
-#~ msgid "launchers"
-#~ msgstr "Starters"
-
-#~ msgid "applications"
-#~ msgstr "Toepassingen"
-
-#~ msgid "applets"
-#~ msgstr "Applets"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Grootte starters in rust (breedte x hoogte) :"
-
 #~ msgid "Application's size at rest (width x height) :"
 #~ msgstr "Grootte toepassingen in rust (breedte x hoogte) :"
 
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Grootte applets in rust (breedte x hoogte) :"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Configureer icoonanimaties."
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
+#~ msgid ""
+#~ "If you separate a type of icons, the icons of this type will be placed "
+#~ "together, separated from the others by a separator.\n"
+#~ "If you don't separate the icons, you can place them wherever you want, and "
+#~ "insert separators manually. Applications will then be placed next to their "
+#~ "launcher if they have one, or after the last launcher."
 #~ msgstr ""
-#~ "Configureer speciale effecten van iconen (OpenGL-ondersteuning vereist)."
+#~ "Wanneer u een verschillende soorten iconen scheidt, dan zullen de iconen van "
+#~ "dezelfde soort samen geplaatst worden, en zullen gescheiden worden van "
+#~ "andere soorten iconen door een afscheiding.\n"
+#~ "Wanneer u de iconen niet scheidt, dan kunt u ze overal plaatsen waar u wilt "
+#~ "en handmatig scheidingen toevoegen. Toepassingen zullen dan geplaatst worden "
+#~ "naast hun starters, indien aanwezig, of na de laatste starter."
 
 #~ msgid ""
 #~ "Configure icons' animations on appearing/disappearing (require OpenGL "
@@ -4656,32 +4668,25 @@ msgstr ""
 #~ "Configureer icoonanimaties bij het verschijnen/verdwijnen (OpenGL-"
 #~ "ondersteuning vereist)."
 
-#~ msgid "Icons order"
-#~ msgstr "Volgorde iconen"
-
 #~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
+#~ "None     : Don't show opened windows in the dock.\n"
+#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
+#~ "they are minimized.\n"
+#~ "KDE : Mix applications with its launcher, show all others windows and group "
+#~ "windows togather in sub-dock.\n"
+#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
+#~ "that are on the current desktop."
 #~ msgstr ""
-#~ "Wanneer u een verschillende soorten iconen scheidt, dan zullen de iconen "
-#~ "van dezelfde soort samen geplaatst worden, en zullen gescheiden worden "
-#~ "van andere soorten iconen door een afscheiding.\n"
-#~ "Wanneer u de iconen niet scheidt, dan kunt u ze overal plaatsen waar u "
-#~ "wilt en handmatig scheidingen toevoegen. Toepassingen zullen dan "
-#~ "geplaatst worden naast hun starters, indien aanwezig, of na de laatste "
-#~ "starter."
+#~ "Geen : Geen geopende vensters in het dock tonen.\n"
+#~ "MacOSX : Toepassingen met hun starters mixen, andere vensters alleen tonen "
+#~ "wanneer ze geminimaliseerd zijn.\n"
+#~ "KDE : Toepassingen met hun starters mixen, alle andere vensters en "
+#~ "gegroepeerde vensters tonen in een sub-dock.\n"
+#~ "Gnome : Taakbalk van de starters scheiden en alleen vensters op het huidige "
+#~ "bureaublad tonen."
 
-#~ msgid "Separate applications from others"
-#~ msgstr "Toepassingen scheiden van anderen"
-
-#~ msgid "Separate applets from others"
-#~ msgstr "Applets scheiden van anderen"
-
-#~ msgid "Separate all"
-#~ msgstr "Allen scheiden"
+#~ msgid "KDE"
+#~ msgstr "KDE"
 
 #~ msgid "Lock icons"
 #~ msgstr "Iconen vergrendelen"
@@ -4703,8 +4708,8 @@ msgstr ""
 #~ "This will prevent any modification of the current theme, and hide all the "
 #~ "unnecessary entries in the menus."
 #~ msgstr ""
-#~ "Hierdoor wordt voorkomen dat er aanpassingen aan het huidige thema "
-#~ "gemaakt kunnen worden, en worden alle overbodige menu-items verborgen."
+#~ "Hierdoor wordt voorkomen dat er aanpassingen aan het huidige thema gemaakt "
+#~ "kunnen worden, en worden alle overbodige menu-items verborgen."
 
 #~ msgid "Modify this separator"
 #~ msgstr "Bewerk deze scheiding"
@@ -4719,8 +4724,8 @@ msgstr ""
 #~ msgstr "Open dit applet nog een keer"
 
 #~ msgid ""
-#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-"
-#~ "enabled libcairo)."
+#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled "
+#~ "libcairo)."
 #~ msgstr ""
 #~ "Gebruik van Glitz forceren (hardware-acceleratie voor cairo, vereist "
 #~ "libcairo geschikt voor glitz)."

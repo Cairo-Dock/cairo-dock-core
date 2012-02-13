@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-09-24 20:47+0000\n"
-"Last-Translator: Péter Trombitás <Unknown>\n"
+"POT-Creation-Date: 2012-02-13 01:12+0000\n"
+"PO-Revision-Date: 2012-02-13 02:58+0000\n"
+"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-25 04:35+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:35+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
+"Language: hu\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -80,16 +81,16 @@ msgid "Origin"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
-#, fuzzy
 msgid "Action"
-msgstr "Animáció:"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "A fő dokk paraméterei elérhetőek a fő beállítóablakban."
 
 #: ../src/cairo-dock-gui-items.c:459
@@ -97,9 +98,8 @@ msgid "Launcher configuration"
 msgstr "Indítóikon beállítások"
 
 #: ../src/cairo-dock-gui-items.c:877
-#, fuzzy
 msgid "Remove this item"
-msgstr "A kisalkalmazás eltávolítása"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:128 ../data/messages:675
 msgid "Behaviour"
@@ -212,11 +212,11 @@ msgstr "Ikonok"
 
 #: ../src/cairo-dock-gui-main.c:1575
 msgid "Indicators are additional markers for your icons."
-msgstr "A jelzők az ikonokon lévő extra jelzések."
+msgstr "Az indikátorok az ikonokon lévő extra jelzések."
 
 #: ../src/cairo-dock-gui-main.c:1576 ../data/messages:1143
 msgid "Indicators"
-msgstr "Jelzők"
+msgstr "Indikátorok"
 
 #: ../src/cairo-dock-gui-main.c:1583
 msgid "Define icon caption and quick-info style."
@@ -321,7 +321,8 @@ msgid "Effects:"
 msgstr "Hatások:"
 
 #: ../src/cairo-dock-gui-simple.c:795
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Kattintson egy kisalkalmazásra az előnézet és a leírás megtekintéséhez."
 
@@ -401,9 +402,8 @@ msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:261
-#, fuzzy
 msgid "Developers"
-msgstr "Fejlesztés"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
@@ -418,14 +418,12 @@ msgid "Development"
 msgstr "Fejlesztés"
 
 #: ../src/cairo-dock-menu.c:280
-#, fuzzy
 msgid "Website"
-msgstr "Weboldalak"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:281
-#, fuzzy
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr "Egyéni ikon beállítása egy alkalmazáshoz"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
@@ -434,6 +432,16 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Cairo-Dock Team https://launchpad.net/~cairo-dock-team\n"
+"  Fabounet https://launchpad.net/~fabounet03\n"
+"  Krasznecz Zoltán https://launchpad.net/~krasznecz-zoltan\n"
+"  Kristóf Kiszel https://launchpad.net/~ulysses\n"
+"  Matthieu Baerts https://launchpad.net/~matttbe\n"
+"  Oszkar Kovacs https://launchpad.net/~kovosz\n"
+"  Péter Trombitás https://launchpad.net/~trombipeti\n"
+"  Szávics Dániel https://launchpad.net/~szavics-dani-deactivatedaccount\n"
+"  Ákos Nagy https://launchpad.net/~nakos60"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -591,14 +599,12 @@ msgstr ""
 "témáját."
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Unlock icons position"
-msgstr "Ikonok feloldása"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Lock icons position"
-msgstr "Elhelyezkedés rögzítése"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:879
 msgid "This will (un)lock the position of the icons."
@@ -617,7 +623,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "A Cairo-Dock indítása induláskor"
 
 #: ../src/cairo-dock-menu.c:933
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "A harmadik féltől származó kisalkalmazások biztosítják számos program, "
 "például a Pidgin integrációját"
@@ -691,9 +698,8 @@ msgid "Applet's handbook"
 msgstr "A kisalkalmazás kézikönyve"
 
 #: ../src/cairo-dock-menu.c:1085
-#, fuzzy
 msgid "Pick up an image"
-msgstr "Kép használata"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1316
 #, c-format
@@ -925,7 +931,8 @@ msgstr ""
 
 #: ../src/cairo-dock.c:356
 msgid "Force to display some output messages with colors."
-msgstr "Néhány kimeneti üzenet színesben való megjelenítésének kényszerítése."
+msgstr ""
+"Néhány kimeneti üzenet színesben való megjelenítésének kényszerítése."
 
 #: ../src/cairo-dock.c:359
 msgid "Print version and quit."
@@ -1056,9 +1063,8 @@ msgstr "Bal oldali dokk"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1632
 #: ../src/gldit/cairo-dock-dock-manager.c:1733
-#, fuzzy
 msgid "Pop up the main dock"
-msgstr "Új fő dokk"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1174,13 +1180,11 @@ msgid "Last modification on:"
 msgstr "Utolsó módosítás ezen:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"A(z) %s/%s távoli fájl nem érhető el, talán a szerver leállt.\n"
-"Próbálkozzon később, vagy lépjen kapcsolatba velünk a glx-dock.org címen."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
@@ -1202,8 +1206,8 @@ msgid ""
 msgstr ""
 "Üdvözli a Cairo-Dock2!\n"
 "Ez a kisalkamazás segít a használat elkezdésében; csak kattintson rá.\n"
-"Ha van akármilyen kérdése, kérése vagy megjegyzése, látogasson el a http://"
-"glx-dock.org oldalra.\n"
+"Ha van akármilyen kérdése, kérése vagy megjegyzése, látogasson el a "
+"http://glx-dock.org oldalra.\n"
 "Reméljük, tetszeni fog a program!\n"
 "  (a dialógusra kattintva becsukhatja azt)"
 
@@ -1454,8 +1458,8 @@ msgstr ""
 "- Alkalmazásikon esetén:\n"
 "Kattintson jobb egérgombbal az ikonra, és válassza az \"Egyéb műveletek -> "
 "Egyéni ikon beállítása\" lehetőséget, és válasszon egy képfájlt. Egyéni "
-"ikonkép törléséhez válassza az \"Egyéb műveletek -> Egyéni ikon eltávolítása"
-"\" lehetőséget.\n"
+"ikonkép törléséhez válassza az \"Egyéb műveletek -> Egyéni ikon "
+"eltávolítása\" lehetőséget.\n"
 "\n"
 "Ha vanak ikontémák telepítve a rendszerére, kiválaszthat egyet közülük az "
 "alapértelmezett helyett a Beállítás ablak Megjelenés paneljában."
@@ -1497,9 +1501,9 @@ msgid ""
 msgstr ""
 "Lehetőség van elválasztók hozzáadására. Ehhez kattintson jobb egérgombbal a "
 "dokkra, majd válassza a \"Hozzáadás -> Elválasztó\" opciót.\n"
-"Ha engedélyezte az ikonok típus szerinti elválasztását (indítóikonok/"
-"alkalmazásikonok/kisalkalmazások), a csoportok közé automatikusan kerül egy-"
-"egy elválasztó.\n"
+"Ha engedélyezte az ikonok típus szerinti elválasztását "
+"(indítóikonok/alkalmazásikonok/kisalkalmazások), a csoportok közé "
+"automatikusan kerül egy-egy elválasztó.\n"
 "\"Panel\" nézetben az elválasztók ikonok közti üres helyként jelennek meg."
 
 #: ../data/messages:43 ../data/messages:1315
@@ -1567,8 +1571,8 @@ msgid ""
 "With your mouse, scroll up/down on one of the icons of the application. Each "
 "time you scroll, the next/previous window will be presented to you."
 msgstr ""
-"Az egér görgőjével görgessen le/föl az alkalmazás ikonján, hogy az előző/"
-"következő ablak jelenjen meg."
+"Az egér görgőjével görgessen le/föl az alkalmazás ikonján, hogy az "
+"előző/következő ablak jelenjen meg."
 
 #: ../data/messages:63 ../data/messages:1335
 msgid "Grouping windows of a given application"
@@ -2070,8 +2074,9 @@ msgstr "A gnome-panel teljes eltávolítása"
 
 #: ../data/messages:195 ../data/messages:1467
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2127,8 +2132,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Be kell kapcsolnia az asztali effekteket. Például futtassa a Compizt vagy az "
 "xcompmgr-t. \n"
@@ -2685,6 +2690,11 @@ msgid ""
 "When the dock pops up on shortcut, it will appear at the position of your "
 "mouse. The rest of the time, it stays invisible, thus acting like a menu."
 msgstr ""
+"A módok a legfeltűnőbbtől a legkevésbé feltűnő fele vannak felsorolva.\n"
+"Ha a dokk rejteve van vagy egy ablak eltakarja, érintse mega képernyő szélét "
+"az egérrel a dokk megjelenítéséhez.\n"
+"Ha a dokk gyorsbillentyűre jelenik csak meg, ott fog megjelenni, ahol az "
+"egér van. Egyébként láthatatlan marad, úgy viselkedve, mint egy menü."
 
 #: ../data/messages:429 ../data/messages:601 ../data/messages:1635
 msgid "Reserve space for the dock"
@@ -2752,7 +2762,6 @@ msgid "Appear on click"
 msgstr "Megjelenés kattintásra"
 
 #: ../data/messages:471
-#, fuzzy
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2762,57 +2771,42 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
-"Nincs: Ne mutassa a megnyitott ablakokat a dokkon.\n"
-"MacOSX: Keverje az alkalmazásokat az indítóikonjaikkal, az egyéb ablakokat "
-"pedig csak akkor mutassa, ha minimalizáltak.\n"
-"KDE: Keverje az alkalmazásokat az indítóikonjaikkal, minden más ablakot "
-"pedig együtt, aldokkon mutasson.\n"
-"Gnome: Különítse el a feladatkezelőt az indítóikonoktól, és csak az aktuális "
-"asztalon lévő ablakokat mutassa."
 
 #: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
 msgstr "A feladatkezelő viselkedése:"
 
 #: ../data/messages:477
-#, fuzzy
 msgid "Minimalistic"
-msgstr "Minimalizálás"
+msgstr ""
 
 #: ../data/messages:479
-#, fuzzy
 msgid "Integrated"
-msgstr "Internet"
+msgstr ""
 
 #: ../data/messages:481
-#, fuzzy
 msgid "Separated"
-msgstr "Elválasztó"
+msgstr ""
 
 #: ../data/messages:483 ../data/messages:689
-#, fuzzy
 msgid "Place new icons"
-msgstr "Ikonok közötti hely:"
+msgstr ""
 
 #: ../data/messages:485 ../data/messages:691
-#, fuzzy
 msgid "At the beginning of the dock"
-msgstr "A fő dokk elhelyezkedések beállítása."
+msgstr ""
 
 #: ../data/messages:487 ../data/messages:693
-#, fuzzy
 msgid "Before the launchers"
-msgstr "Indítóikon eltávolítása"
+msgstr ""
 
 #: ../data/messages:489 ../data/messages:695
-#, fuzzy
 msgid "After the launchers"
-msgstr "Indítóikon módosítása"
+msgstr ""
 
 #: ../data/messages:491 ../data/messages:697
-#, fuzzy
 msgid "At the end of the dock"
-msgstr "Le van választva a dokkról"
+msgstr ""
 
 #: ../data/messages:493
 msgid "Icons' animations and effects"
@@ -3741,16 +3735,16 @@ msgid "Icons size"
 msgstr "Ikonméret"
 
 #: ../data/messages:1071
-#, fuzzy
 msgid "Icons' size at rest (width x height) :"
-msgstr "Inaktív ikonok mérete (szélesség x magasság):"
+msgstr ""
 
 #: ../data/messages:1073
 msgid "Zoom effect"
 msgstr "Nagyítás"
 
 #: ../data/messages:1075
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Állítsa 1-re, ha nem akarja hogy az ikonok kinagyítódjanak, amikor lebegteti "
 "őket."
@@ -3898,7 +3892,7 @@ msgstr ""
 
 #: ../data/messages:1141
 msgid "Colour of the string (red, blue, green, alpha) :"
-msgstr ""
+msgstr "Karakterlánc színe (piros, kék, zöld, alfa):"
 
 #: ../data/messages:1145
 msgid "Indicator of the active window"
@@ -3949,20 +3943,20 @@ msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
 msgstr ""
-"Az  állapotjelzők akkor kerülnek az ikonokra mikor a kapcsolódó alkalmazás "
-"fut. Hagyd üresen ha nem akarsz állapotjelzőket használni."
+"Az indikátorok akkor kerülnek az ikonokra, amikor a hozzájuk tartozó "
+"alklamazás fut. Hagyja üresen, ha nem szeretné használni."
 
 #: ../data/messages:1173
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
 msgstr ""
-"A jelző egy rajz az aktív indítóikonokon, de Ön talán akarhatja az "
-"alkalmazásokon is megjeleníteni azt."
+"Az indikátor az aktív indítóikonokon jelenik meg, de lehetősége van "
+"beállítani azt is, hogy az alkalmazásokon is jelenjen meg."
 
 #: ../data/messages:1175
 msgid "Display an indicator on application icons too ?"
-msgstr "Jelenjen meg mutató az alkalmazásokon is?"
+msgstr "Jelenjen meg indikátor az alkalmazásokon is?"
 
 #: ../data/messages:1177
 msgid ""
@@ -3971,6 +3965,10 @@ msgid ""
 "If the indicator is linked to the icon, the offset will be upwards, "
 "otherwise downwards."
 msgstr ""
+"Az ikon méretétől függően. Ezt a paramétert az indikátor relatív függőleges "
+"helyzetének megadására használhatja.\n"
+"Ha az indikátor az ikonhoz van kapcsolva, az eltolás felfele fog történni, "
+"minden más esetben lefele."
 
 #: ../data/messages:1179
 msgid "Vertical offset :"
@@ -3983,10 +3981,14 @@ msgid ""
 "Otherwise it will be drawn directly on the dock and the offset will be "
 "downwards."
 msgstr ""
+"Ha az indikátor az ikonhoz van kapcsolva, ahhoz hasonlóan föl lesz nagyítva "
+"és az felfele fog történni.\n"
+"Minden más esetben a dokkon fog megjelenni, és az eltolás lefele fog "
+"történni."
 
 #: ../data/messages:1183
 msgid "Link the indicator with its icon?"
-msgstr "Állapotjelző csatolása az ikonhoz"
+msgstr "Hozzákapcsolja ikonjához az indikátort?"
 
 #: ../data/messages:1185
 msgid ""
@@ -3994,13 +3996,13 @@ msgid ""
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
 "have the same size as the icons."
 msgstr ""
-"Az állapotjelzők mérete lehet kisebb vagy nagyobb mint az ikoné; minél "
-"magasabb ez az érték, annál nagyobb lesz. Az 1-es érték azt jelenti, hogy a "
-"jelző mérete  megegyezik az ikonéval."
+"Az indikátorok mérete lehet kisebb vagy nagyobb, mint az ikoné; minél "
+"magasabb ez az érték, annál nagyobb lesz. Az 1-es érték azt jelenti, hogy az "
+"indikátor mérete megegyezik az ikonéval."
 
 #: ../data/messages:1187
 msgid "Indicator size ratio :"
-msgstr "Állapotjelző méretaránya:"
+msgstr "Indikátor méretaránya:"
 
 #: ../data/messages:1191
 msgid "bigger"
@@ -4008,19 +4010,19 @@ msgstr "nagyobb"
 
 #: ../data/messages:1193
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Használja, ha szeretné, hogy az indikátor kövesse a dokk orientációját (fent/"
-"lent/jobb/bal)."
+"Akkor használja, ha szeretné, hogy az indikátor kövesse a dokk orientációját "
+"(fent/lent/jobb/bal)."
 
 #: ../data/messages:1195
 msgid "Rotate the indicator with dock?"
-msgstr "Jelző forgatása a dokkal"
+msgstr "Forgassa az indikátorokat a dokkal együtt?"
 
 #: ../data/messages:1199
 msgid "Indicator of grouped windows"
-msgstr "Csoportosított ablakok mutatója"
+msgstr "Csoportosított ablakok indikátora"
 
 #: ../data/messages:1201
 msgid "How to show that several icons are grouped :"
@@ -4045,7 +4047,7 @@ msgstr ""
 
 #: ../data/messages:1211
 msgid "Zoom the indicator with its icon?"
-msgstr "A jelző az ikonnal együtt legyen nagyítva"
+msgstr "Nagyítsa az indikátort ikonjával együtt?"
 
 #: ../data/messages:1213
 msgid "Labels"
@@ -4075,7 +4077,8 @@ msgstr "Az összes ikonon"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr "Minél nagyobb, annál több címke lesz átlátszó a mutatott ikon mellett."
+msgstr ""
+"Minél nagyobb, annál több címke lesz átlátszó a mutatott ikon mellett."
 
 #: ../data/messages:1227
 msgid "label's visibility threshold :"
@@ -4467,6 +4470,10 @@ msgid ""
 "launcher that launches a script in a terminal, but you don't want it to "
 "steal the Terminal's icon from the Taskbar."
 msgstr ""
+"Ha az van beállítva, hogy az indítóikonok és alkalmazásuk egy ikont használ, "
+"ez a beállítás ezt kikapcsolja (csak ennél az indítóikonnál). Ez akkor jó "
+"például, ha egy indítóikon scriptet indít el a terminálban, és szeretné, "
+"hogy a Terminál ikonja is jelenjen meg a dokkon."
 
 #: ../data/messages:1835
 msgid "Prevent this launcher from stealing this application from taskbar ?"
@@ -4479,6 +4486,10 @@ msgid ""
 "nearly sure that you shouldn't touch it. It defines the class of the "
 "program, which is useful to link the appli with its launcher."
 msgstr ""
+"Csak abban az esetben módosítsa ezt a paramétert, ha sajátkezűleg készítette "
+"az indítóikont. Ha a menüből ejtette rá a dokkra, majdnem biztos, hogy nem "
+"kell hozzányúlnia. A program osztályát definiálja, ami arra jó, hogy az "
+"indítóikon és alkalmazása egy ikont használjanak."
 
 #: ../data/messages:1839
 msgid "Class of the program :"
@@ -4536,24 +4547,20 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
+#~ msgid "Launcher's size at rest (width x height) :"
+#~ msgstr "Inaktív indítóikonok mérete (szélesség x magasság):"
 
-#~ msgid "KDE"
-#~ msgstr "KDE"
+#~ msgid "Applet's size at rest (width x height) :"
+#~ msgstr "Inaktív kisalkalmazások mérete (szélesség x magasság):"
+
+#~ msgid "Icons order"
+#~ msgstr "Ikonsorrend"
 
 #~ msgid "Gnome"
 #~ msgstr "Gnome"
 
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "Elkülöníti az indítóikonokat, az alkalmazásokat, és a kisalkalmazásokat. "
-#~ "Ekkor automatikusan elválasztók kerülnek beszúrásra."
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Különböző típusú ikonok elkülönítése"
+#~ msgid "MacOSX"
+#~ msgstr "MacOSX"
 
 #~ msgid "Order of the different types of icons :"
 #~ msgstr "Különböző típusú ikonok sorrendje:"
@@ -4567,21 +4574,44 @@ msgstr ""
 #~ msgid "applets"
 #~ msgstr "Kisalkalmazások"
 
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Inaktív indítóikonok mérete (szélesség x magasság):"
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "Inaktív alkalmazások mérete (szélesség x magasság):"
-
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Inaktív kisalkalmazások mérete (szélesség x magasság):"
-
 #~ msgid "Configure icons' animations."
 #~ msgstr "Az ikonok animációinak beállítása."
 
 #~ msgid "Configure icons' special effects (requires OpenGL)."
+#~ msgstr "Az ikonok különleges hatésainak beállítása (OpenGL szükséges hozzá)."
+
+#~ msgid ""
+#~ "This will separate launchers, application, and applets from each others. "
+#~ "Separators will be automatically inserted then."
 #~ msgstr ""
-#~ "Az ikonok különleges hatésainak beállítása (OpenGL szükséges hozzá)."
+#~ "Elkülöníti az indítóikonokat, az alkalmazásokat, és a kisalkalmazásokat. "
+#~ "Ekkor automatikusan elválasztók kerülnek beszúrásra."
+
+#~ msgid "Separate the different types of icons?"
+#~ msgstr "Különböző típusú ikonok elkülönítése"
+
+#~ msgid "Application's size at rest (width x height) :"
+#~ msgstr "Inaktív alkalmazások mérete (szélesség x magasság):"
+
+#~ msgid ""
+#~ "None     : Don't show opened windows in the dock.\n"
+#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
+#~ "they are minimized.\n"
+#~ "KDE : Mix applications with its launcher, show all others windows and group "
+#~ "windows togather in sub-dock.\n"
+#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
+#~ "that are on the current desktop."
+#~ msgstr ""
+#~ "Nincs: Ne mutassa a megnyitott ablakokat a dokkon.\n"
+#~ "MacOSX: Keverje az alkalmazásokat az indítóikonjaikkal, az egyéb ablakokat "
+#~ "pedig csak akkor mutassa, ha minimalizáltak.\n"
+#~ "KDE: Keverje az alkalmazásokat az indítóikonjaikkal, minden más ablakot "
+#~ "pedig együtt, aldokkon mutasson.\n"
+#~ "Gnome: Különítse el a feladatkezelőt az indítóikonoktól, és csak az aktuális "
+#~ "asztalon lévő ablakokat mutassa."
+
+#~ msgid "KDE"
+#~ msgstr "KDE"
 
 #~ msgid ""
 #~ "Configure icons' animations on appearing/disappearing (require OpenGL "
@@ -4590,22 +4620,8 @@ msgstr ""
 #~ "Ikonanimációk beállítása megjelenésnél/eltűnésnél (OpenGL támogatás "
 #~ "szükséges)."
 
-#~ msgid "Icons order"
-#~ msgstr "Ikonsorrend"
-
-#~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-#~ msgstr ""
-#~ "Ha csoportosítja az ikonokat típus szerint, az adott típusú ikonok együtt "
-#~ "lesznek elhelyezve, elválasztva a többi ikontól.\n"
-#~ "Ha nem csoportosítja az ikonokat, oda helyezheti őket, ahova akarja, és "
-#~ "elválasztókat is hozzáadhat. Ekkor az alkalmazások ikonjai az "
-#~ "indítóikonjuk mellett lesznek elhelyezve, ha van, vagy az utolsó "
-#~ "indítóikon után."
+#~ msgid "Separate all"
+#~ msgstr "Minden elválasztása"
 
 #~ msgid "Separate applications from others"
 #~ msgstr "Alkalmazások elválasztása egymástól"
@@ -4613,8 +4629,22 @@ msgstr ""
 #~ msgid "Separate applets from others"
 #~ msgstr "Kisalkalmazások elválasztása egymástól"
 
-#~ msgid "Separate all"
-#~ msgstr "Minden elválasztása"
+#~ msgid ""
+#~ "If you separate a type of icons, the icons of this type will be placed "
+#~ "together, separated from the others by a separator.\n"
+#~ "If you don't separate the icons, you can place them wherever you want, and "
+#~ "insert separators manually. Applications will then be placed next to their "
+#~ "launcher if they have one, or after the last launcher."
+#~ msgstr ""
+#~ "Ha csoportosítja az ikonokat típus szerint, az adott típusú ikonok együtt "
+#~ "lesznek elhelyezve, elválasztva a többi ikontól.\n"
+#~ "Ha nem csoportosítja az ikonokat, oda helyezheti őket, ahova akarja, és "
+#~ "elválasztókat is hozzáadhat. Ekkor az alkalmazások ikonjai az indítóikonjuk "
+#~ "mellett lesznek elhelyezve, ha van, vagy az utolsó indítóikon után."
+
+#~ msgid "Prevent this launcher from stealing appli from taskbar ?"
+#~ msgstr ""
+#~ "Megtiltja az indítóikonoknak, hogy egy ikont használjanak az alkalmazásukkal?"
 
 #~ msgid "Lock icons"
 #~ msgstr "Ikonok rögzítése"
@@ -4629,8 +4659,8 @@ msgstr ""
 #~ "This will allow you to add or remove launchers and applets, and configure "
 #~ "the program."
 #~ msgstr ""
-#~ "Ez lehetővé teszi indítók és kisalkalmazások hozzáadását és törlését, és "
-#~ "a program testreszabását."
+#~ "Ez lehetővé teszi indítók és kisalkalmazások hozzáadását és törlését, és a "
+#~ "program testreszabását."
 
 #~ msgid ""
 #~ "This will prevent any modification of the current theme, and hide all the "
@@ -4652,8 +4682,8 @@ msgstr ""
 #~ msgstr "Új példány indítása ebből a kisalkalmazásból"
 
 #~ msgid ""
-#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-"
-#~ "enabled libcairo)."
+#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-enabled "
+#~ "libcairo)."
 #~ msgstr ""
 #~ "Glitz backend használatának erőltetése (hardveres gyorsítás a cariohoz, "
 #~ "olyan libcario szükséges hozzá, amelyben a glitz engedélyezve van."

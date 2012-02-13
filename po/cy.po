@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-09-13 02:49+0000\n"
-"Last-Translator: David Jones <Unknown>\n"
+"POT-Creation-Date: 2012-02-13 01:12+0000\n"
+"PO-Revision-Date: 2012-02-12 03:51+0000\n"
+"Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: Welsh <cy@li.org>\n"
-"Language: cy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-25 04:37+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:37+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
+"Language: cy\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -78,16 +79,16 @@ msgid "Origin"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
-#, fuzzy
 msgid "Action"
-msgstr "Dewisiadau"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:459
@@ -311,7 +312,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:795
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:821 ../data/messages:495
@@ -382,9 +384,8 @@ msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:261
-#, fuzzy
 msgid "Developers"
-msgstr "Datblygu"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
@@ -399,9 +400,8 @@ msgid "Development"
 msgstr "Datblygu"
 
 #: ../src/cairo-dock-menu.c:280
-#, fuzzy
 msgid "Website"
-msgstr "Gwefannau"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:281
 msgid "Beta-testing / Suggestions / Forum animation"
@@ -414,6 +414,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  David Jones https://launchpad.net/~bikerboi87"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -557,14 +559,12 @@ msgid ""
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Unlock icons position"
-msgstr "Datgloi eiconau"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Lock icons position"
-msgstr "Cloi eiconau"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:879
 msgid "This will (un)lock the position of the icons."
@@ -583,7 +583,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:933
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:936 ../src/help/applet-init.c:28
@@ -1764,8 +1765,9 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1467
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1813,8 +1815,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1491
@@ -2354,14 +2356,12 @@ msgid "Minimalistic"
 msgstr ""
 
 #: ../data/messages:479
-#, fuzzy
 msgid "Integrated"
-msgstr "Rhyngrwyd"
+msgstr ""
 
 #: ../data/messages:481
-#, fuzzy
 msgid "Separated"
-msgstr "Gwahanydd"
+msgstr ""
 
 #: ../data/messages:483 ../data/messages:689
 msgid "Place new icons"
@@ -3245,7 +3245,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1075
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1077
@@ -3481,8 +3482,8 @@ msgstr ""
 
 #: ../data/messages:1193
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1195
@@ -3953,14 +3954,14 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
+#~ msgid "Gnome"
+#~ msgstr "Gnome"
+
 #~ msgid "MacOSX"
 #~ msgstr "MacOSX"
 
 #~ msgid "KDE"
 #~ msgstr "KDE"
-
-#~ msgid "Gnome"
-#~ msgstr "Gnome"
 
 #~ msgid "applications"
 #~ msgstr "rhaglenni"

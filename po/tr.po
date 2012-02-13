@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-09-20 09:21+0000\n"
+"POT-Creation-Date: 2012-02-13 01:12+0000\n"
+"PO-Revision-Date: 2012-02-13 02:53+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-25 04:36+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:37+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
+"Language: tr\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -81,16 +82,16 @@ msgid "Origin"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
-#, fuzzy
 msgid "Action"
-msgstr "Animasyon:"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:459
@@ -98,9 +99,8 @@ msgid "Launcher configuration"
 msgstr "Başlatıcı yapılandırması"
 
 #: ../src/cairo-dock-gui-items.c:877
-#, fuzzy
 msgid "Remove this item"
-msgstr "Bu uygulamayı sil"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:128 ../data/messages:675
 msgid "Behaviour"
@@ -322,7 +322,8 @@ msgid "Effects:"
 msgstr "Efektler:"
 
 #: ../src/cairo-dock-gui-simple.c:795
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-gui-simple.c:821 ../data/messages:495
@@ -399,9 +400,8 @@ msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:261
-#, fuzzy
 msgid "Developers"
-msgstr "Gelişim"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
@@ -416,14 +416,12 @@ msgid "Development"
 msgstr "Gelişim"
 
 #: ../src/cairo-dock-menu.c:280
-#, fuzzy
 msgid "Website"
-msgstr "İnternet siteleri"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:281
-#, fuzzy
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr "Bir uygulama için bir özel simge belirlemek"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
@@ -432,6 +430,22 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Angel Spy https://launchpad.net/~dilara.ekinci\n"
+"  Erkin Batu Altunbaş https://launchpad.net/~erkin\n"
+"  Fabounet https://launchpad.net/~fabounet03\n"
+"  Fatih Ekin https://launchpad.net/~f-ekin22\n"
+"  H. Fatih ATASEVER https://launchpad.net/~h-f-atasever\n"
+"  Mustafa Doğan https://launchpad.net/~sahbaz1260\n"
+"  Olcay GÜZEL https://launchpad.net/~olcayguzel-gmail\n"
+"  Serdar Delican https://launchpad.net/~sdelican\n"
+"  Serdar KAHYA https://launchpad.net/~kahyainsaat\n"
+"  Yiğit Ateş https://launchpad.net/~yigitates52\n"
+"  Yunus Kaba https://launchpad.net/~yunuskaba\n"
+"  eraydin https://launchpad.net/~aydin-eraydin\n"
+"  kulkke https://launchpad.net/~kulkke\n"
+"  onur kopan https://launchpad.net/~onurkopan\n"
+"  zeugma https://launchpad.net/~sunder67"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -503,7 +517,7 @@ msgstr "Ana rıhtım"
 
 #: ../src/cairo-dock-menu.c:575
 msgid "Custom launcher"
-msgstr ""
+msgstr "Özel başlatıcı"
 
 #: ../src/cairo-dock-menu.c:576
 msgid ""
@@ -587,14 +601,12 @@ msgid ""
 msgstr "Sunucudan bir şablon seçin ya da geçerli şablonu kayıt edin."
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Unlock icons position"
-msgstr "Simgelerin kilidini aç"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Lock icons position"
-msgstr "Konuma kilitle"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:879
 msgid "This will (un)lock the position of the icons."
@@ -613,7 +625,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock'u başlangıçta başlat"
 
 #: ../src/cairo-dock-menu.c:933
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -652,7 +665,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:996
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr ""
+"Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
 
 #: ../src/cairo-dock-menu.c:998 ../src/cairo-dock-menu.c:1030
 msgid "Move to another dock"
@@ -684,9 +698,8 @@ msgid "Applet's handbook"
 msgstr "Uygulama el kitabı"
 
 #: ../src/cairo-dock-menu.c:1085
-#, fuzzy
 msgid "Pick up an image"
-msgstr "Görüntü kullan"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1316
 #, c-format
@@ -844,11 +857,11 @@ msgstr "Yeni yılın kutlu olsun %d !!!"
 
 #: ../src/cairo-dock.c:320
 msgid "Use Cairo backend."
-msgstr ""
+msgstr "Cario arkaucu kullan."
 
 #: ../src/cairo-dock.c:323
 msgid "Use OpenGL backend."
-msgstr ""
+msgstr "OpenGL arkaucu kullan."
 
 #: ../src/cairo-dock.c:326
 msgid ""
@@ -893,7 +906,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:350
 msgid "Don't load any plug-ins."
-msgstr ""
+msgstr "Herhangi bir eklenti yükleme."
 
 #: ../src/cairo-dock.c:353
 msgid ""
@@ -922,7 +935,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:372
 msgid "Cairo-Dock makes anything, including coffee !"
-msgstr ""
+msgstr "Cairo-Dock her şeyi yapar, kahve de dahil !"
 
 #: ../src/cairo-dock.c:375
 msgid ""
@@ -1012,9 +1025,8 @@ msgstr "ekran sol sutun hizası"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1632
 #: ../src/gldit/cairo-dock-dock-manager.c:1733
-#, fuzzy
 msgid "Pop up the main dock"
-msgstr "Yeni ana rıhtım"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1130,14 +1142,11 @@ msgid "Last modification on:"
 msgstr "Son değiştirme:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"Uzaktaki %s/%s dosyasına ulaşılamıyor. Sunucu devre dışı olabilir.\n"
-"Lütfen daha sonra tekrar deneyin ya da glx-dock.org üzerinden bizimle "
-"iletişime geçin."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
@@ -1160,8 +1169,8 @@ msgstr ""
 "Cario-Dock2'ye hoşgeldiniz !\n"
 "Bu uygulamacık, size rıhtımı kullanmaya başlamanız için yardımcı olmak için "
 "burada; sadece onun üzerine tıklayın.\n"
-"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi http://"
-"glx-dock.org adresinde ziyaret edin.\n"
+"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi "
+"http://glx-dock.org adresinde ziyaret edin.\n"
 "Bu yazılımın hoşunuza gideceğini umarız !\n"
 "  (şimdi bu iletişim kutusunun üzerine, onu kapatmak üzere tıklayabilirsiniz)"
 
@@ -1214,15 +1223,15 @@ msgstr ""
 
 #: ../src/help/applet-notifications.c:254
 msgid "Disable the gnome-panel"
-msgstr ""
+msgstr "Gnome panelini etkisizleştir"
 
 #: ../src/help/applet-notifications.c:256
 msgid "Disable Unity"
-msgstr ""
+msgstr "Unity'yi etkisizleştir"
 
 #: ../src/help/applet-notifications.c:258
 msgid "Online help"
-msgstr ""
+msgstr "Çevrimiçi yardım"
 
 #: ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
@@ -1234,11 +1243,11 @@ msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:119
 msgid "Enter a command"
-msgstr ""
+msgstr "Bir komut girin"
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:120
 msgid "New launcher"
-msgstr ""
+msgstr "Yeni başlatıcı"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:445
 #: ../data/messages:617
@@ -1379,7 +1388,7 @@ msgstr ""
 
 #: ../data/messages:37 ../data/messages:1309
 msgid "Separating icons"
-msgstr ""
+msgstr "Simgeleri ayırma"
 
 #: ../data/messages:39 ../data/messages:1311
 msgid ""
@@ -1820,8 +1829,9 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1467
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1869,8 +1879,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1491
@@ -2405,44 +2415,36 @@ msgid "Behaviour of the Taskbar:"
 msgstr "Görev çubuğu davranışı:"
 
 #: ../data/messages:477
-#, fuzzy
 msgid "Minimalistic"
-msgstr "Asgari"
+msgstr ""
 
 #: ../data/messages:479
-#, fuzzy
 msgid "Integrated"
-msgstr "İnternet"
+msgstr ""
 
 #: ../data/messages:481
-#, fuzzy
 msgid "Separated"
-msgstr "Ayraç"
+msgstr ""
 
 #: ../data/messages:483 ../data/messages:689
-#, fuzzy
 msgid "Place new icons"
-msgstr "Simgeler arası boşluk :"
+msgstr ""
 
 #: ../data/messages:485 ../data/messages:691
-#, fuzzy
 msgid "At the beginning of the dock"
-msgstr "Ana rıhtımın konumunu ayarla."
+msgstr ""
 
 #: ../data/messages:487 ../data/messages:693
-#, fuzzy
 msgid "Before the launchers"
-msgstr "Bu başlatıcıyı kaldır"
+msgstr ""
 
 #: ../data/messages:489 ../data/messages:695
-#, fuzzy
 msgid "After the launchers"
-msgstr "Bu başlatıcıda değişiklik yap"
+msgstr ""
 
 #: ../data/messages:491 ../data/messages:697
-#, fuzzy
 msgid "At the end of the dock"
-msgstr "Ana rıhtımın konumunu ayarla."
+msgstr ""
 
 #: ../data/messages:493
 msgid "Icons' animations and effects"
@@ -3312,7 +3314,8 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:1075
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1077
@@ -3548,8 +3551,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:1193
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1195
@@ -3980,7 +3983,7 @@ msgstr "Programın sınıfı :"
 
 #: ../data/messages:1841
 msgid "Run in a terminal ?"
-msgstr ""
+msgstr "Bir uçbirimde yürütülsün mü?"
 
 #: ../data/messages:1855
 msgid "Separators' appearance is defined in the global configuration."
@@ -4020,24 +4023,11 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
-
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
 #~ msgid "Gnome"
 #~ msgstr "Gnome"
 
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "Bu, uygulamaları, kısayolları ve programcıkları birbirinden ayıracak."
-#~ "Ayraçlar daha sonra otomatik olarak eklenecek."
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Farklı simge türlerini ayrılsın mı?"
+#~ msgid "MacOSX"
+#~ msgstr "MacOSX"
 
 #~ msgid "Order of the different types of icons :"
 #~ msgstr "Farklı simge türlerini sırala :"
@@ -4048,20 +4038,33 @@ msgstr ""
 #~ msgid "applications"
 #~ msgstr "uygulamalar"
 
-#~ msgid "applets"
-#~ msgstr "uygulamacıklar"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Simgelerin animasyonunu yapılandır."
-
-#~ msgid "Icons order"
-#~ msgstr "Simgelerin sıralaması"
+#~ msgid "Separate the different types of icons?"
+#~ msgstr "Farklı simge türlerini ayrılsın mı?"
 
 #~ msgid "Separate applications from others"
 #~ msgstr "Uygulamaları diğerlerinden ayır"
 
 #~ msgid "Separate all"
 #~ msgstr "Tümünü ayır"
+
+#~ msgid "Icons order"
+#~ msgstr "Simgelerin sıralaması"
+
+#~ msgid "KDE"
+#~ msgstr "KDE"
+
+#~ msgid "applets"
+#~ msgstr "uygulamacıklar"
+
+#~ msgid "Configure icons' animations."
+#~ msgstr "Simgelerin animasyonunu yapılandır."
+
+#~ msgid ""
+#~ "This will separate launchers, application, and applets from each others. "
+#~ "Separators will be automatically inserted then."
+#~ msgstr ""
+#~ "Bu, uygulamaları, kısayolları ve programcıkları birbirinden "
+#~ "ayıracak.Ayraçlar daha sonra otomatik olarak eklenecek."
 
 #~ msgid "Lock icons"
 #~ msgstr "simgeleri kilitle"

@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-09-20 09:34+0000\n"
+"POT-Creation-Date: 2012-02-13 01:12+0000\n"
+"PO-Revision-Date: 2012-02-13 02:58+0000\n"
 "Last-Translator: EspenK <espen.kromke@beatradar.no>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
-"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-25 04:35+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:36+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
+"Language: nb\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -81,16 +82,16 @@ msgid "Origin"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
-#, fuzzy
 msgid "Action"
-msgstr "Animasjon:"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Hoved-dokkens innstillinger er tilgjengelige i hovedvinduet til "
 "innstillingene."
@@ -100,9 +101,8 @@ msgid "Launcher configuration"
 msgstr "Konfigurere oppstartere"
 
 #: ../src/cairo-dock-gui-items.c:877
-#, fuzzy
 msgid "Remove this item"
-msgstr "Fjern dette miniprogrammet"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:128 ../data/messages:675
 msgid "Behaviour"
@@ -324,7 +324,8 @@ msgid "Effects:"
 msgstr "Effekter:"
 
 #: ../src/cairo-dock-gui-simple.c:795
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klikk på et av de små programmene for å få en forhåndsvisning og beskrivelse."
 
@@ -402,9 +403,8 @@ msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:261
-#, fuzzy
 msgid "Developers"
-msgstr "Utvikling"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
@@ -433,6 +433,10 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Espen Krømke https://launchpad.net/~djespenk\n"
+"  EspenK https://launchpad.net/~espen-kromke\n"
+"  Fabounet https://launchpad.net/~fabounet03"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -592,14 +596,12 @@ msgstr ""
 "Velg fra de mange draktene på serveren eller lagre din nåværende drakt."
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Unlock icons position"
-msgstr "Lås opp ikoner"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Lock icons position"
-msgstr "Lås posisjon"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:879
 msgid "This will (un)lock the position of the icons."
@@ -618,7 +620,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Kjøre Cairo-Dock ved oppstart"
 
 #: ../src/cairo-dock-menu.c:933
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Tredjeparts-panelprogram tilbyr integrasjon med mange program, eksempelvis "
 "Pidgin"
@@ -693,9 +696,8 @@ msgid "Applet's handbook"
 msgstr "Manual for miniprogram"
 
 #: ../src/cairo-dock-menu.c:1085
-#, fuzzy
 msgid "Pick up an image"
-msgstr "Bruk et bilde."
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1316
 #, c-format
@@ -1035,9 +1037,8 @@ msgstr "Venstre dokk"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1632
 #: ../src/gldit/cairo-dock-dock-manager.c:1733
-#, fuzzy
 msgid "Pop up the main dock"
-msgstr "Et nytt hovedsamlevindu"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1153,13 +1154,11 @@ msgid "Last modification on:"
 msgstr "Sist endret den:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"Kunne ikke åpne den eksterne filen %s/%s. Kanskje serveren har problemer.\n"
-"Vennligst prøv igjen senere eller kontakt oss på glx-dock.org"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
@@ -1844,8 +1843,9 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1467
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1893,8 +1893,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1491
@@ -2062,7 +2062,8 @@ msgstr ""
 
 #: ../data/messages:277 ../data/messages:1549
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
+msgstr ""
+"Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
 
 #: ../data/messages:279 ../data/messages:1551
 msgid "Community site"
@@ -2422,7 +2423,6 @@ msgid "Appear on click"
 msgstr "Vis ved klikk"
 
 #: ../data/messages:471
-#, fuzzy
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2432,57 +2432,42 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
-"Ingen: Åpne vinduer vil ikke bli vist i dokken.\n"
-"MacOSX: Bland applikasjonene med deres oppstartere, vis andre vinduer kun "
-"dersom de er minimert.\n"
-"KDE: Bland applikasjonene med deres oppstartere, alle andre vinduer vises "
-"samlet i undergrupper.\n"
-"Gnome: Separerer oppgavelinjen fra oppstarterne og viser kun vinduer som "
-"befinner seg på aktivt skrivebord."
 
 #: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
 msgstr "Oppførselen til oppgavelinjen:"
 
 #: ../data/messages:477
-#, fuzzy
 msgid "Minimalistic"
-msgstr "Minimer"
+msgstr ""
 
 #: ../data/messages:479
-#, fuzzy
 msgid "Integrated"
-msgstr "Internett"
+msgstr ""
 
 #: ../data/messages:481
-#, fuzzy
 msgid "Separated"
-msgstr "Skillelinje"
+msgstr ""
 
 #: ../data/messages:483 ../data/messages:689
-#, fuzzy
 msgid "Place new icons"
-msgstr "Avstand mellom ikonene:"
+msgstr ""
 
 #: ../data/messages:485 ../data/messages:691
-#, fuzzy
 msgid "At the beginning of the dock"
-msgstr "Bestem hovedsamlevinduets plassering."
+msgstr ""
 
 #: ../data/messages:487 ../data/messages:693
-#, fuzzy
 msgid "Before the launchers"
-msgstr "Fjern denne oppstarteren"
+msgstr ""
 
 #: ../data/messages:489 ../data/messages:695
-#, fuzzy
 msgid "After the launchers"
-msgstr "Endre denne oppstarteren"
+msgstr ""
 
 #: ../data/messages:491 ../data/messages:697
-#, fuzzy
 msgid "At the end of the dock"
-msgstr "Bestem hovedsamlevinduets plassering."
+msgstr ""
 
 #: ../data/messages:493
 msgid "Icons' animations and effects"
@@ -2896,7 +2881,8 @@ msgstr ""
 
 #: ../data/messages:761
 msgid "Highlight applications requiring your attention with a dialog bubble"
-msgstr "Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
+msgstr ""
+"Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
 
 #: ../data/messages:763
 msgid "in seconds"
@@ -3406,16 +3392,16 @@ msgid "Icons size"
 msgstr "Ikonstørrelse"
 
 #: ../data/messages:1071
-#, fuzzy
 msgid "Icons' size at rest (width x height) :"
-msgstr "Ikonets passive størrelse (bredde X høyde):"
+msgstr ""
 
 #: ../data/messages:1073
 msgid "Zoom effect"
 msgstr "Forstørringseffekt"
 
 #: ../data/messages:1075
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Sett til 1 dersom du ikke ønsker at ikonene skal forstørres når musen "
 "beveger seg over dem."
@@ -3545,8 +3531,8 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere seg"
-"\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
+"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere "
+"seg\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
 "gjennomsiktig blir de."
 
 #: ../data/messages:1131
@@ -3681,11 +3667,11 @@ msgstr "større"
 
 #: ../data/messages:1193
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Bruk denne for å la indikatoren følge dokkens orientering (topp/bunn/høyre/"
-"venstre)."
+"Bruk denne for å la indikatoren følge dokkens orientering "
+"(topp/bunn/høyre/venstre)."
 
 #: ../data/messages:1195
 msgid "Rotate the indicator with dock?"
@@ -4170,14 +4156,33 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
+#~ msgid "Gnome"
+#~ msgstr "Gnome"
+
 #~ msgid "MacOSX"
 #~ msgstr "MacOSX"
 
-#~ msgid "KDE"
-#~ msgstr "KDE"
+#~ msgid ""
+#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
+#~ "capacity)."
+#~ msgstr ""
+#~ "Konfigurer ikoners animasjoner ved visning/skjuling (krever OpenGL "
+#~ "kapasitet)."
 
-#~ msgid "Gnome"
-#~ msgstr "Gnome"
+#~ msgid "Configure icons' special effects (requires OpenGL)."
+#~ msgstr "Konfigurer ikoners spesialeffekter (krever OpenGL)."
+
+#~ msgid "Configure icons' animations."
+#~ msgstr "Konfigurer ikoners animasjoner."
+
+#~ msgid "applets"
+#~ msgstr "miniprogrammer"
+
+#~ msgid "launchers"
+#~ msgstr "oppstarter"
+
+#~ msgid "applications"
+#~ msgstr "applikasjoner"
 
 #~ msgid ""
 #~ "This will separate launchers, application, and applets from each others. "
@@ -4192,52 +4197,34 @@ msgstr ""
 #~ msgid "Order of the different types of icons :"
 #~ msgstr "Ordningen av de forskjellige typer ikoner:"
 
-#~ msgid "launchers"
-#~ msgstr "oppstarter"
+#~ msgid "KDE"
+#~ msgstr "KDE"
 
-#~ msgid "applications"
-#~ msgstr "applikasjoner"
-
-#~ msgid "applets"
-#~ msgstr "miniprogrammer"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Oppstarterens passive størrelse (bredde X høyde):"
+#~ msgid ""
+#~ "None     : Don't show opened windows in the dock.\n"
+#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
+#~ "they are minimized.\n"
+#~ "KDE : Mix applications with its launcher, show all others windows and group "
+#~ "windows togather in sub-dock.\n"
+#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
+#~ "that are on the current desktop."
+#~ msgstr ""
+#~ "Ingen: Åpne vinduer vil ikke bli vist i dokken.\n"
+#~ "MacOSX: Bland applikasjonene med deres oppstartere, vis andre vinduer kun "
+#~ "dersom de er minimert.\n"
+#~ "KDE: Bland applikasjonene med deres oppstartere, alle andre vinduer vises "
+#~ "samlet i undergrupper.\n"
+#~ "Gnome: Separerer oppgavelinjen fra oppstarterne og viser kun vinduer som "
+#~ "befinner seg på aktivt skrivebord."
 
 #~ msgid "Application's size at rest (width x height) :"
 #~ msgstr "Applikasjonens passive størrelse (bredde X høyde):"
 
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Miniprogrammets passive størrelse (bredde X høyde):"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Konfigurer ikoners animasjoner."
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "Konfigurer ikoners spesialeffekter (krever OpenGL)."
-
-#~ msgid ""
-#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
-#~ "capacity)."
-#~ msgstr ""
-#~ "Konfigurer ikoners animasjoner ved visning/skjuling (krever OpenGL "
-#~ "kapasitet)."
+#~ msgid "Launcher's size at rest (width x height) :"
+#~ msgstr "Oppstarterens passive størrelse (bredde X høyde):"
 
 #~ msgid "Icons order"
 #~ msgstr "Ikoners rekkefølge"
-
-#~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-#~ msgstr ""
-#~ "Dersom du separerer én ikontype så vil andre, tilsvarende ikon bli "
-#~ "gruppert, skilt fra de andre med et skilletegn.\n"
-#~ "Dersom du ikke grupperer ikonene kan du plassere dem hvor som helst og "
-#~ "sette inn skiller manuelt. Applikasjoner vil deretter plassere seg ved "
-#~ "siden av sin oppstarter dersom de har en, eller etter siste oppstarter."
 
 #~ msgid "Separate applications from others"
 #~ msgstr "Adskill applikasjonene fra resten"
@@ -4247,6 +4234,22 @@ msgstr ""
 
 #~ msgid "Separate all"
 #~ msgstr "Separere alle"
+
+#~ msgid "Applet's size at rest (width x height) :"
+#~ msgstr "Miniprogrammets passive størrelse (bredde X høyde):"
+
+#~ msgid ""
+#~ "If you separate a type of icons, the icons of this type will be placed "
+#~ "together, separated from the others by a separator.\n"
+#~ "If you don't separate the icons, you can place them wherever you want, and "
+#~ "insert separators manually. Applications will then be placed next to their "
+#~ "launcher if they have one, or after the last launcher."
+#~ msgstr ""
+#~ "Dersom du separerer én ikontype så vil andre, tilsvarende ikon bli gruppert, "
+#~ "skilt fra de andre med et skilletegn.\n"
+#~ "Dersom du ikke grupperer ikonene kan du plassere dem hvor som helst og sette "
+#~ "inn skiller manuelt. Applikasjoner vil deretter plassere seg ved siden av "
+#~ "sin oppstarter dersom de har en, eller etter siste oppstarter."
 
 #~ msgid "Lock icons"
 #~ msgstr "Lås ikoner"

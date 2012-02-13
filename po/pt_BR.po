@@ -6,15 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0-alpha\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-09-20 09:27+0000\n"
+"POT-Creation-Date: 2012-02-13 01:12+0000\n"
+"PO-Revision-Date: 2012-02-13 02:52+0000\n"
 "Last-Translator: Eduardo Mucelli Rezende Oliveira <edumucelli@gmail.com>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-25 04:37+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:37+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -80,16 +81,16 @@ msgid "Origin"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
-#, fuzzy
 msgid "Action"
-msgstr "Animação:"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Principais parâmetros da estação de emparelhamento estão disponíveis na "
 "janela de configuração principal."
@@ -99,9 +100,8 @@ msgid "Launcher configuration"
 msgstr "Configuração dos lançadores"
 
 #: ../src/cairo-dock-gui-items.c:877
-#, fuzzy
 msgid "Remove this item"
-msgstr "Remover este mini-aplicativo"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:128 ../data/messages:675
 msgid "Behaviour"
@@ -324,7 +324,8 @@ msgid "Effects:"
 msgstr "Efeitos:"
 
 #: ../src/cairo-dock-gui-simple.c:795
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Clique no mini-aplicativo para ter uma previsão e a descrição do mesmo."
 
@@ -390,21 +391,22 @@ msgstr "Obtenha mais mini-aplicativos!"
 
 #: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
 msgid "Donate"
-msgstr ""
+msgstr "Faça uma doação"
 
 #: ../src/cairo-dock-menu.c:226 ../src/cairo-dock-menu.c:232
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
+"Ajude as pessoas que investem incontáveis horas para trazer o melhor dock já "
+"feito."
 
 #: ../src/cairo-dock-menu.c:260
 msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:261
-#, fuzzy
 msgid "Developers"
-msgstr "Desenvolvimento"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
@@ -419,9 +421,8 @@ msgid "Development"
 msgstr "Desenvolvimento"
 
 #: ../src/cairo-dock-menu.c:280
-#, fuzzy
 msgid "Website"
-msgstr "Websites"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:281
 msgid "Beta-testing / Suggestions / Forum animation"
@@ -434,6 +435,17 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Alexandre Wagner https://launchpad.net/~wagner-ale\n"
+"  Cairo-Dock Team https://launchpad.net/~cairo-dock-team\n"
+"  Eduardo Mucelli Rezende Oliveira https://launchpad.net/~eduardo-mucelli\n"
+"  Eliel Teotonio https://launchpad.net/~eliel-teotonio\n"
+"  Guilherme Augusto Peixoto https://launchpad.net/~guilhermeapeixot\n"
+"  Rafael https://launchpad.net/~qe47ct6n318407t6n\n"
+"  Rafael Nossal https://launchpad.net/~rafaelnossal\n"
+"  Tarcisio Oliveira https://launchpad.net/~tarcisio\n"
+"  Teylo Laundos Aguiar https://launchpad.net/~teylo.aguiar\n"
+"  Wanderson Santiago dos Reis https://launchpad.net/~wasare"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -510,7 +522,8 @@ msgstr "Lançador personalizado"
 #: ../src/cairo-dock-menu.c:576
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
-msgstr "Usualmente você arrasta um lançador do menu e o solta dentro do dock."
+msgstr ""
+"Usualmente você arrasta um lançador do menu e o solta dentro do dock."
 
 #: ../src/cairo-dock-menu.c:593
 msgid "separator"
@@ -589,14 +602,12 @@ msgid ""
 msgstr "Escolha dentre vários temas no servidor e salve seu tema atual."
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Unlock icons position"
-msgstr "Desbloquear ícones"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Lock icons position"
-msgstr "Fixar posição"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:879
 msgid "This will (un)lock the position of the icons."
@@ -615,7 +626,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Executar Cairo-Dock ao iniciar"
 
 #: ../src/cairo-dock-menu.c:933
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Mini-aplicativos de terceiros provêm integração com muitos programas, como "
 "Pidgin"
@@ -688,9 +700,8 @@ msgid "Applet's handbook"
 msgstr "Manual do applet"
 
 #: ../src/cairo-dock-menu.c:1085
-#, fuzzy
 msgid "Pick up an image"
-msgstr "Usar uma imagem"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1316
 #, c-format
@@ -851,11 +862,11 @@ msgstr "Feliz ano novo %d !!!"
 
 #: ../src/cairo-dock.c:320
 msgid "Use Cairo backend."
-msgstr ""
+msgstr "Usar o backend Cairo."
 
 #: ../src/cairo-dock.c:323
 msgid "Use OpenGL backend."
-msgstr ""
+msgstr "Usar o backend OpenGL."
 
 #: ../src/cairo-dock.c:326
 msgid ""
@@ -869,18 +880,21 @@ msgstr ""
 
 #: ../src/cairo-dock.c:332
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr ""
+msgstr "Forçar o dock considerar este ambiente - use com cautela."
 
 #: ../src/cairo-dock.c:335
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
+"Forçar o dock a carregar deste diretório ao invés de ~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:338
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr ""
+"Endereço do servidor contendo temas adicionais. Isto sobrescreverá o "
+"endereço do servidor padrão."
 
 #: ../src/cairo-dock.c:341
 msgid ""
@@ -896,24 +910,25 @@ msgstr ""
 
 #: ../src/cairo-dock.c:347
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
-msgstr ""
+msgstr "Exclui um plug-in de ser ativado (embora ele ainda será carregado)."
 
 #: ../src/cairo-dock.c:350
 msgid "Don't load any plug-ins."
-msgstr ""
+msgstr "Não carregar plug-ins."
 
 #: ../src/cairo-dock.c:353
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
+"Logar verbosidade (debug,message,warning,critical,error); padrão é warning."
 
 #: ../src/cairo-dock.c:356
 msgid "Force to display some output messages with colors."
-msgstr ""
+msgstr "Forçar mostrar algumas mensagens de saída coloridas."
 
 #: ../src/cairo-dock.c:359
 msgid "Print version and quit."
-msgstr ""
+msgstr "Imprimir versão e sair."
 
 #: ../src/cairo-dock.c:362
 msgid "Lock the dock so that any modification is impossible for users."
@@ -1030,9 +1045,8 @@ msgstr "Dock à esquerda"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1632
 #: ../src/gldit/cairo-dock-dock-manager.c:1733
-#, fuzzy
 msgid "Pop up the main dock"
-msgstr "Um novo dock principal"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1148,14 +1162,11 @@ msgid "Last modification on:"
 msgstr "Última modificação em:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"não foi possível obter arquivos remotos %s/%s, talvez o servidor esteja fora "
-"do ar.\n"
-"Tente novamente mais tarde ou contate-nos em glx-dock.org."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
@@ -1223,7 +1234,7 @@ msgstr ""
 
 #: ../src/help/applet-notifications.c:247
 msgid "Open global settings"
-msgstr ""
+msgstr "Abrir configurações globais."
 
 #: ../src/help/applet-notifications.c:252
 msgid "Activate composite"
@@ -1231,31 +1242,31 @@ msgstr ""
 
 #: ../src/help/applet-notifications.c:254
 msgid "Disable the gnome-panel"
-msgstr ""
+msgstr "Desabilitar o gnome-panel"
 
 #: ../src/help/applet-notifications.c:256
 msgid "Disable Unity"
-msgstr ""
+msgstr "Desabilitar Unity"
 
 #: ../src/help/applet-notifications.c:258
 msgid "Online help"
-msgstr ""
+msgstr "Ajuda online"
 
 #: ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "Dicas e Macetes"
 
 #: ../src/help/applet-tips-dialog.c:307
 msgid "Category"
-msgstr ""
+msgstr "Categoria"
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:119
 msgid "Enter a command"
-msgstr ""
+msgstr "Entre com um comando"
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:120
 msgid "New launcher"
-msgstr ""
+msgstr "Novo lançador"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:445
 #: ../data/messages:617
@@ -1284,11 +1295,11 @@ msgstr "Contração"
 
 #: ../data/messages:1 ../data/messages:1273
 msgid "General"
-msgstr ""
+msgstr "Geral"
 
 #: ../data/messages:3 ../data/messages:1275
 msgid "Using the dock"
-msgstr ""
+msgstr "Usando o dock"
 
 #: ../data/messages:5 ../data/messages:1277
 msgid ""
@@ -1316,7 +1327,7 @@ msgstr ""
 
 #: ../data/messages:13 ../data/messages:1285
 msgid "Adding a launcher"
-msgstr ""
+msgstr "Adicionando um lançador"
 
 #: ../data/messages:15 ../data/messages:1287
 msgid ""
@@ -1328,7 +1339,7 @@ msgstr ""
 
 #: ../data/messages:17 ../data/messages:1289
 msgid "Removing a launcher"
-msgstr ""
+msgstr "Removendo um lançador"
 
 #: ../data/messages:19 ../data/messages:1291
 msgid ""
@@ -1338,7 +1349,7 @@ msgstr ""
 
 #: ../data/messages:21 ../data/messages:1293
 msgid "Grouping icons into a sub-dock"
-msgstr ""
+msgstr "Agrupando ícones em um sub-dock"
 
 #: ../data/messages:23 ../data/messages:1295
 msgid ""
@@ -1350,7 +1361,7 @@ msgstr ""
 
 #: ../data/messages:25 ../data/messages:1297
 msgid "Moving icons"
-msgstr ""
+msgstr "Movendo ícones"
 
 #: ../data/messages:27 ../data/messages:1299
 msgid ""
@@ -1381,7 +1392,7 @@ msgstr ""
 
 #: ../data/messages:33 ../data/messages:1305
 msgid "Resizing icons"
-msgstr ""
+msgstr "Redimensionando ícones"
 
 #: ../data/messages:35 ../data/messages:1307
 msgid ""
@@ -1396,7 +1407,7 @@ msgstr ""
 
 #: ../data/messages:37 ../data/messages:1309
 msgid "Separating icons"
-msgstr ""
+msgstr "Separando ícones"
 
 #: ../data/messages:39 ../data/messages:1311
 msgid ""
@@ -1410,7 +1421,7 @@ msgstr ""
 
 #: ../data/messages:43 ../data/messages:1315
 msgid "Using the dock as a taskbar"
-msgstr ""
+msgstr "Usando o dock como uma barra de tarefas"
 
 #: ../data/messages:45 ../data/messages:1317
 msgid ""
@@ -1425,16 +1436,18 @@ msgstr ""
 
 #: ../data/messages:47 ../data/messages:1319
 msgid "Closing a window"
-msgstr ""
+msgstr "Fechando uma janela"
 
 #: ../data/messages:49 ../data/messages:1321
 msgid ""
 "You can close a window by middle-clicking on its icon (or from the menu)."
 msgstr ""
+"Você pode fechar uma janela clicando em seu ícone com o botão do meio (ou "
+"através do menu)."
 
 #: ../data/messages:51 ../data/messages:1323
 msgid "Minimizing / restauring a window"
-msgstr ""
+msgstr "Minimizando/restaurando uma janela"
 
 #: ../data/messages:53 ../data/messages:1325
 msgid ""
@@ -1444,7 +1457,7 @@ msgstr ""
 
 #: ../data/messages:55 ../data/messages:1327
 msgid "Launching an application several times"
-msgstr ""
+msgstr "Lançando uma aplicação várias vezes"
 
 #: ../data/messages:57 ../data/messages:1329
 msgid ""
@@ -1454,7 +1467,7 @@ msgstr ""
 
 #: ../data/messages:59 ../data/messages:1331
 msgid "Switching between the windows of a same application"
-msgstr ""
+msgstr "Alternando entre janelas de uma mesma aplicação"
 
 #: ../data/messages:61 ../data/messages:1333
 msgid ""
@@ -1464,7 +1477,7 @@ msgstr ""
 
 #: ../data/messages:63 ../data/messages:1335
 msgid "Grouping windows of a given application"
-msgstr ""
+msgstr "Agrupando janelas de uma aplicação"
 
 #: ../data/messages:65 ../data/messages:1337
 msgid ""
@@ -1476,7 +1489,7 @@ msgstr ""
 
 #: ../data/messages:67 ../data/messages:1339
 msgid "Setting a custom icon for an application"
-msgstr ""
+msgstr "Definindo um ícone personalizado para uma aplicação."
 
 #: ../data/messages:69 ../data/messages:1341
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
@@ -1837,13 +1850,15 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1467
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Abra o gconf-editor, edite a chave /desktop/gnome/session/"
-"required_components/panel, e substituir seu conteúdo por \"cairo-dock\".\n"
+"Abra o gconf-editor, edite a chave "
+"/desktop/gnome/session/required_components/panel, e substituir seu conteúdo "
+"por \"cairo-dock\".\n"
 "Em seguida, reiniciar a sessão: o gnome-panel não foi iniciado, e a estação "
 "foi iniciado (se não, você pode adicioná-lo aos programas de inicialização)."
 
@@ -1861,7 +1876,8 @@ msgstr "Resolução de problemas"
 
 #: ../data/messages:203 ../data/messages:1475
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr "Se você tem qualquer dúvida, não hesite em perguntá-la no nosso fórum."
+msgstr ""
+"Se você tem qualquer dúvida, não hesite em perguntá-la no nosso fórum."
 
 #: ../data/messages:205 ../data/messages:1477
 msgid "Forum"
@@ -1894,8 +1910,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Você precisa ativar a 'composição'. Por exemplo, você pode rodar Compiz, ou "
 "xcompmgr. \n"
@@ -1903,8 +1919,8 @@ msgstr ""
 "opções do gerenciador de janelas.\n"
 "Se você estiver usando GNOME, você pode habilitá-lo no Metacity da seguinte "
 "maneira:\n"
-" Abra gconf-editor, edite a chave '/apps/metacity/general/"
-"compositing_manager' e a defina para 'true'."
+" Abra gconf-editor, edite a chave "
+"'/apps/metacity/general/compositing_manager' e a defina para 'true'."
 
 #: ../data/messages:219 ../data/messages:1491
 msgid ""
@@ -2175,8 +2191,8 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
-"Se você está no Ubuntu, você também pode adicionar o nosso ppa \"semanal"
-"\" (pode ser instável), clicando neste botão:\n"
+"Se você está no Ubuntu, você também pode adicionar o nosso ppa \"semanal\" "
+"(pode ser instável), clicando neste botão:\n"
 "Depois disso, você pode iniciar seu gerenciador de atualizações, a fim de "
 "instalar a última versão semanal."
 
@@ -2498,7 +2514,6 @@ msgid "Appear on click"
 msgstr "Aparece ao clicar"
 
 #: ../data/messages:471
-#, fuzzy
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2508,57 +2523,42 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
-"Nenhum : Não mostra janelas abertas no dock.\n"
-"MacOSX : Combina aplicações e seus lançadores, mostra outras janelas apenas "
-"se elas estiverem minimizadas.\n"
-"KDE : Combina aplicações e seus lançadores, mostra todas outras janelas e "
-"agrupa janelas no dock.\n"
-"Gnome : Separa a barra de tarefas dos lançadores e mostra apenas janelas que "
-"estão no Área de Trabalho atual."
 
 #: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
 msgstr "Comportamento da barra de Tarefa  :"
 
 #: ../data/messages:477
-#, fuzzy
 msgid "Minimalistic"
-msgstr "Minimizar"
+msgstr ""
 
 #: ../data/messages:479
-#, fuzzy
 msgid "Integrated"
-msgstr "Internet"
+msgstr ""
 
 #: ../data/messages:481
-#, fuzzy
 msgid "Separated"
-msgstr "Separador"
+msgstr ""
 
 #: ../data/messages:483 ../data/messages:689
-#, fuzzy
 msgid "Place new icons"
-msgstr "Espaço entre ícones :"
+msgstr ""
 
 #: ../data/messages:485 ../data/messages:691
-#, fuzzy
 msgid "At the beginning of the dock"
-msgstr "Defina a posição do dock principal."
+msgstr ""
 
 #: ../data/messages:487 ../data/messages:693
-#, fuzzy
 msgid "Before the launchers"
-msgstr "Remover este lançador"
+msgstr ""
 
 #: ../data/messages:489 ../data/messages:695
-#, fuzzy
 msgid "After the launchers"
-msgstr "Modificar este lançador"
+msgstr ""
 
 #: ../data/messages:491 ../data/messages:697
-#, fuzzy
 msgid "At the end of the dock"
-msgstr "Defina a posição do dock principal."
+msgstr ""
 
 #: ../data/messages:493
 msgid "Icons' animations and effects"
@@ -2782,7 +2782,8 @@ msgstr ""
 
 #: ../data/messages:653
 msgid "Automatically hide the dock when a window becomes full screen?"
-msgstr "Esconder automaticamente o dock quando a janela tornar-se tela cheia ?"
+msgstr ""
+"Esconder automaticamente o dock quando a janela tornar-se tela cheia ?"
 
 #: ../data/messages:655
 msgid "Sub-docks' visibility"
@@ -3039,7 +3040,8 @@ msgstr "Número de passos na animação de zoom (crescer/diminuir) :"
 
 #: ../data/messages:807
 msgid "Number of steps in the auto-hide animation (move up/move down):"
-msgstr "Número de passos na animação de auto-esconder (mova para cima/baixo) :"
+msgstr ""
+"Número de passos na animação de auto-esconder (mova para cima/baixo) :"
 
 #: ../data/messages:817
 msgid "Refresh rate"
@@ -3481,16 +3483,16 @@ msgid "Icons size"
 msgstr "Tamanho do ícone"
 
 #: ../data/messages:1071
-#, fuzzy
 msgid "Icons' size at rest (width x height) :"
-msgstr "Tamanho dos ícones em repouso (largura x altura) :"
+msgstr ""
 
 #: ../data/messages:1073
 msgid "Zoom effect"
 msgstr "Efeito de zoom"
 
 #: ../data/messages:1075
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "defina 1 se você não deseja zoom nos ícones, quando passar o mouse sobre "
 "eles."
@@ -3562,8 +3564,8 @@ msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr ""
-"Fazer a imagem do separador girar quando o dock está no topo/esquerda/"
-"direita ?"
+"Fazer a imagem do separador girar quando o dock está no "
+"topo/esquerda/direita ?"
 
 #: ../data/messages:1109
 msgid "Colour of flat separators :"
@@ -3757,11 +3759,11 @@ msgstr "maior"
 
 #: ../data/messages:1193
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Usar isto para fazer o indicador seguir a orientação do dock (cima/baixo/"
-"direita/esquerda)."
+"Usar isto para fazer o indicador seguir a orientação do dock "
+"(cima/baixo/direita/esquerda)."
 
 #: ../data/messages:1195
 msgid "Rotate the indicator with dock?"
@@ -3946,8 +3948,8 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
-"Se você estiver no Debian Estável, você pode adicionar o nosso ppa \"semanal"
-"\" (pode ser instável), clicando neste botão:\n"
+"Se você estiver no Debian Estável, você pode adicionar o nosso ppa "
+"\"semanal\" (pode ser instável), clicando neste botão:\n"
 "Depois disso, você pode remover todos os pacotes 'cairo-dock', atualize o "
 "seu sistema e reinstalar o pacote 'cairo-dock'."
 
@@ -3958,8 +3960,8 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
-"Se você estiver no Debian instável, você pode adicionar o nosso ppa \"semanal"
-"\" (pode ser instável), clicando neste botão:"
+"Se você estiver no Debian instável, você pode adicionar o nosso ppa "
+"\"semanal\" (pode ser instável), clicando neste botão:"
 
 #: ../data/messages:1623
 msgid "starting from 0"
@@ -4207,9 +4209,8 @@ msgstr ""
 "seja roubado da Barra de tarefas."
 
 #: ../data/messages:1835
-#, fuzzy
 msgid "Prevent this launcher from stealing this application from taskbar ?"
-msgstr "Prevenir que este lançador roube aplicativos da Barra de tarefas ?"
+msgstr ""
 
 #: ../data/messages:1837
 msgid ""
@@ -4269,27 +4270,17 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
+#~ msgid "Launcher's size at rest (width x height) :"
+#~ msgstr "Tamanho do lançador em repouso (largura x altura) :"
 
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
-#~ msgid "Gnome"
-#~ msgstr "Gnome"
-
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "Irá separar lançadores, aplicativos e mini-aplicativos uns dos outros. "
-#~ "Separadores serão automaticamente inseridos."
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Separar os diferentes tipos de ícones ?"
+#~ msgid "Icons order"
+#~ msgstr "Ordem dos ícones"
 
 #~ msgid "Order of the different types of icons :"
 #~ msgstr "Ordem dos diferentes tipos de ícones :"
+
+#~ msgid "Prevent this launcher from stealing appli from taskbar ?"
+#~ msgstr "Prevenir que este lançador roube aplicativos da Barra de tarefas ?"
 
 #~ msgid "launchers"
 #~ msgstr "lançadores"
@@ -4297,46 +4288,17 @@ msgstr ""
 #~ msgid "applications"
 #~ msgstr "aplicativos"
 
-#~ msgid "applets"
-#~ msgstr "mini-aplicatiovs"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Tamanho do lançador em repouso (largura x altura) :"
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "Tamanho do aplicativo em repouso (largura x altura) :"
-
 #~ msgid "Applet's size at rest (width x height) :"
 #~ msgstr "Tamanho do mini-aplicativo em repouso (largura x altura) :"
 
-#~ msgid "Configure icons' animations."
-#~ msgstr "Configurar a animação dos ícones."
+#~ msgid "applets"
+#~ msgstr "mini-aplicatiovs"
 
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "Configurar efeitos especiais dos ícones (requer OpenGL)."
+#~ msgid "Gnome"
+#~ msgstr "Gnome"
 
-#~ msgid ""
-#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
-#~ "capacity)."
-#~ msgstr ""
-#~ "Configurar a animação dos ícones ao aparecer/desaparecer (requer OpenGL)"
-
-#~ msgid "Icons order"
-#~ msgstr "Ordem dos ícones"
-
-#~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-#~ msgstr ""
-#~ "Se você separar um tipo de ícone, os ícones deste tipo serão posicionados "
-#~ "juntos, separados dos demais por um separador.\n"
-#~ "Se você não separar os ícones, você pode colocá-los onde quiser, e "
-#~ "inserir separadores manualmente. Aplicativos serão então colocados "
-#~ "próximos de seus lançadores, se eles tiverem um, ou depois do último "
-#~ "lançador."
+#~ msgid "MacOSX"
+#~ msgstr "MacOSX"
 
 #~ msgid "Separate applications from others"
 #~ msgstr "Separe aplicações das outras"
@@ -4346,6 +4308,64 @@ msgstr ""
 
 #~ msgid "Separate all"
 #~ msgstr "Separe todos"
+
+#~ msgid "Configure icons' animations."
+#~ msgstr "Configurar a animação dos ícones."
+
+#~ msgid "Configure icons' special effects (requires OpenGL)."
+#~ msgstr "Configurar efeitos especiais dos ícones (requer OpenGL)."
+
+#~ msgid "Application's size at rest (width x height) :"
+#~ msgstr "Tamanho do aplicativo em repouso (largura x altura) :"
+
+#~ msgid "Separate the different types of icons?"
+#~ msgstr "Separar os diferentes tipos de ícones ?"
+
+#~ msgid ""
+#~ "This will separate launchers, application, and applets from each others. "
+#~ "Separators will be automatically inserted then."
+#~ msgstr ""
+#~ "Irá separar lançadores, aplicativos e mini-aplicativos uns dos outros. "
+#~ "Separadores serão automaticamente inseridos."
+
+#~ msgid ""
+#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
+#~ "capacity)."
+#~ msgstr ""
+#~ "Configurar a animação dos ícones ao aparecer/desaparecer (requer OpenGL)"
+
+#~ msgid ""
+#~ "If you separate a type of icons, the icons of this type will be placed "
+#~ "together, separated from the others by a separator.\n"
+#~ "If you don't separate the icons, you can place them wherever you want, and "
+#~ "insert separators manually. Applications will then be placed next to their "
+#~ "launcher if they have one, or after the last launcher."
+#~ msgstr ""
+#~ "Se você separar um tipo de ícone, os ícones deste tipo serão posicionados "
+#~ "juntos, separados dos demais por um separador.\n"
+#~ "Se você não separar os ícones, você pode colocá-los onde quiser, e inserir "
+#~ "separadores manualmente. Aplicativos serão então colocados próximos de seus "
+#~ "lançadores, se eles tiverem um, ou depois do último lançador."
+
+#~ msgid ""
+#~ "None     : Don't show opened windows in the dock.\n"
+#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
+#~ "they are minimized.\n"
+#~ "KDE : Mix applications with its launcher, show all others windows and group "
+#~ "windows togather in sub-dock.\n"
+#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
+#~ "that are on the current desktop."
+#~ msgstr ""
+#~ "Nenhum : Não mostra janelas abertas no dock.\n"
+#~ "MacOSX : Combina aplicações e seus lançadores, mostra outras janelas apenas "
+#~ "se elas estiverem minimizadas.\n"
+#~ "KDE : Combina aplicações e seus lançadores, mostra todas outras janelas e "
+#~ "agrupa janelas no dock.\n"
+#~ "Gnome : Separa a barra de tarefas dos lançadores e mostra apenas janelas que "
+#~ "estão no Área de Trabalho atual."
+
+#~ msgid "KDE"
+#~ msgstr "KDE"
 
 #~ msgid "Lock icons"
 #~ msgstr "Bloquear ícones"

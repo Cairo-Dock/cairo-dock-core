@@ -8,16 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock_el\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2011-09-20 09:02+0000\n"
+"POT-Creation-Date: 2012-02-13 01:12+0000\n"
+"PO-Revision-Date: 2012-02-13 02:51+0000\n"
 "Last-Translator: Michael Kotsarinis <mk73628@gmail.com>\n"
 "Language-Team: Greek\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-25 04:35+0000\n"
-"X-Generator: Launchpad (build 14012)\n"
+"X-Launchpad-Export-Date: 2012-02-13 04:35+0000\n"
+"X-Generator: Launchpad (build 14781)\n"
 "X-Poedit-Country: France\n"
+"Language: \n"
 "X-Poedit-Language: French\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
@@ -84,16 +85,16 @@ msgid "Origin"
 msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
-#, fuzzy
 msgid "Action"
-msgstr "Εφέ κίνησης:"
+msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Οι παράμετροι του κεντρικού dock είναι διαθέσιμες στο κύριο παράθυρο "
 "διαμόρφωσης."
@@ -103,9 +104,8 @@ msgid "Launcher configuration"
 msgstr "Διαμόρφωση των εκκινητών"
 
 #: ../src/cairo-dock-gui-items.c:877
-#, fuzzy
 msgid "Remove this item"
-msgstr "Αφαίρεση αυτής της μικροεφαρμογής"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:128 ../data/messages:675
 msgid "Behaviour"
@@ -333,7 +333,8 @@ msgid "Effects:"
 msgstr "Εφέ:"
 
 #: ../src/cairo-dock-gui-simple.c:795
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Κάντε κλικ σε μια μικροεφαρμογή για να έχετε προεπισκόπηση και περιγραφή της."
 
@@ -411,9 +412,8 @@ msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:261
-#, fuzzy
 msgid "Developers"
-msgstr "Ανάπτυξη"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
@@ -428,9 +428,8 @@ msgid "Development"
 msgstr "Ανάπτυξη"
 
 #: ../src/cairo-dock-menu.c:280
-#, fuzzy
 msgid "Website"
-msgstr "Ιστοσελίδες"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:281
 msgid "Beta-testing / Suggestions / Forum animation"
@@ -443,6 +442,10 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Fabounet https://launchpad.net/~fabounet03\n"
+"  Gregory https://launchpad.net/~greco\n"
+"  Michael Kotsarinis https://launchpad.net/~mk73628"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -605,14 +608,12 @@ msgstr ""
 "σας."
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Unlock icons position"
-msgstr "Ξεκλείδωμα εικονιδίων"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:875
-#, fuzzy
 msgid "Lock icons position"
-msgstr "Κλείδωμα θέσης"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:879
 msgid "This will (un)lock the position of the icons."
@@ -631,7 +632,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Εκκίνηση του Cairo-Dock κατά την εκκίνηση του συστήματος"
 
 #: ../src/cairo-dock-menu.c:933
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Μικροεφαρμογές από τρίτους παρέχουν ενσωμάτωση πολλών προγραμμάτων, όπως το "
 "Pidgin"
@@ -707,9 +709,8 @@ msgid "Applet's handbook"
 msgstr "Εγχειρίδιο μικροεφαρμογής"
 
 #: ../src/cairo-dock-menu.c:1085
-#, fuzzy
 msgid "Pick up an image"
-msgstr "Χρήση εικόνας"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1316
 #, c-format
@@ -1054,9 +1055,8 @@ msgstr "Αριστερό dock"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1632
 #: ../src/gldit/cairo-dock-dock-manager.c:1733
-#, fuzzy
 msgid "Pop up the main dock"
-msgstr "Νέο κύριο dock"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1172,15 +1172,11 @@ msgid "Last modification on:"
 msgstr "Τελευταία τροποποίηση την:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
-"Αδυναμία προσπέλασης του απομακρυσμένου αρχείου %s/%s. Ίσως ο διακομιστής να "
-"μην αποκρίνεται.\n"
-"Παρακαλούμε προσπαθήστε πάλι αργότερα ή επικοινωνήστε μαζί μας στο glx-dock."
-"org."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:286
 #, c-format
@@ -1531,7 +1527,8 @@ msgstr ""
 
 #: ../data/messages:77 ../data/messages:1349
 msgid "If you're using Compiz, you can click on this button:"
-msgstr "Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
+msgstr ""
+"Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
 
 #: ../data/messages:79 ../data/messages:1351
 msgid "Docks"
@@ -1865,14 +1862,15 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1467
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί /desktop/gnome/session/"
-"required_components/panel και αντικαταστήστε το περιεχόμενό του με «cairo-"
-"dock».\n"
+"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί "
+"/desktop/gnome/session/required_components/panel και αντικαταστήστε το "
+"περιεχόμενό του με «cairo-dock».\n"
 "Μετά επανεκκινήστε τη συνεδρία σας : το gnome-panel δεν έχει εκκινήσει και "
 "το dock έχει εκκινήσει (αν όχι, μπορείτε να το προσθέσετε στα προγράμματα "
 "εκκίνησης)."
@@ -1891,7 +1889,8 @@ msgstr "Αντιμετώπιση Προβλημάτων"
 
 #: ../data/messages:203 ../data/messages:1475
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr "Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
+msgstr ""
+"Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
 
 #: ../data/messages:205 ../data/messages:1477
 msgid "Forum"
@@ -1926,8 +1925,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Πρέπει να ενεργοποιήσετε τη σύνθεση. Παραδείγματος χάριν, μπορείτε να "
 "εκτελέσετε το Compiz ή το xcompmgr.\n"
@@ -1935,8 +1934,8 @@ msgstr ""
 "στις επιλογές του διαχειριστή παραθύρων.\n"
 "Αν χρησιμοποιείτε Gnome, μπορείτε να την ενεργοποιήσετε στο Metacity με αυτό "
 "τον τρόπο:\n"
-" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί '/apps/metacity/general/"
-"compositing_manager' και ορίστε το σε 'true'."
+" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί "
+"'/apps/metacity/general/compositing_manager' και ορίστε το σε 'true'."
 
 #: ../data/messages:219 ../data/messages:1491
 msgid ""
@@ -2090,8 +2089,8 @@ msgid ""
 msgstr ""
 "Στο Gnome, υπάρχει μια επιλογή που υπερισχύει αυτής του dock. Για να "
 "ενεργοποιήσετε εικονίδια στα μενού, ανοίξτε το 'gconf-editor', πηγαίνετε στο "
-"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have icons"
-"\" και \"buttons have icons\". "
+"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have "
+"icons\" και \"buttons have icons\". "
 
 #: ../data/messages:257 ../data/messages:1529
 msgid "If you're on Gnome you can click on this button:"
@@ -2541,7 +2540,6 @@ msgid "Appear on click"
 msgstr "Εμφάνιση με κλικ"
 
 #: ../data/messages:471
-#, fuzzy
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2551,57 +2549,42 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
-"Καμμία : Να μην εμφανίζονται ανοιγμένα παράθυρα στο dock.\n"
-"MacOSX : Ανάμιξη εφαρμογών με τους εκκινητές τους, εμφάνιση άλλων παραθύρων "
-"μόνο αν είναι ελαχιστοποιημένα.\n"
-"KDE : Ανάμιξη εφαρμογών με τους εκκινητές τους, εμφάνιση όλων των άλλων "
-"παραθύρων και ομαδοποίηση παραθύρων σε sub-dock.\n"
-"Gnome : Διαχωρισμός της μπάρας εργασιών από τους εκκινητές και εμφάνιση μόνο "
-"των παραθύρων που βρίσκονται στην τρέχουσα επιφάνεια εργασίας."
 
 #: ../data/messages:473
 msgid "Behaviour of the Taskbar:"
 msgstr "Συμπεριφορά της μπάρας εργασιών:"
 
 #: ../data/messages:477
-#, fuzzy
 msgid "Minimalistic"
-msgstr "Ελαχιστοποίηση"
+msgstr ""
 
 #: ../data/messages:479
-#, fuzzy
 msgid "Integrated"
-msgstr "Διαδίκτυο"
+msgstr ""
 
 #: ../data/messages:481
-#, fuzzy
 msgid "Separated"
-msgstr "Διαχωριστικό"
+msgstr ""
 
 #: ../data/messages:483 ../data/messages:689
-#, fuzzy
 msgid "Place new icons"
-msgstr "Διάστημα μεταξύ των εικονιδίων:"
+msgstr ""
 
 #: ../data/messages:485 ../data/messages:691
-#, fuzzy
 msgid "At the beginning of the dock"
-msgstr "Καθορίστε τη θέση του κύριου dock"
+msgstr ""
 
 #: ../data/messages:487 ../data/messages:693
-#, fuzzy
 msgid "Before the launchers"
-msgstr "Αφαίρεση αυτού του εκκινητή"
+msgstr ""
 
 #: ../data/messages:489 ../data/messages:695
-#, fuzzy
 msgid "After the launchers"
-msgstr "Τροποποίηση αυτού του εκκινητή"
+msgstr ""
 
 #: ../data/messages:491 ../data/messages:697
-#, fuzzy
 msgid "At the end of the dock"
-msgstr "Καθορίστε τη θέση του κύριου dock"
+msgstr ""
 
 #: ../data/messages:493
 msgid "Icons' animations and effects"
@@ -2877,8 +2860,8 @@ msgid ""
 msgstr ""
 "Επιτρέπει στους εκκινητές να ενεργούν ως εφαρμογές όταν το πρόγραμμά τους "
 "εκτελείται και εμφανίζει μια ένδειξη στο εικονίδιό τους για να το "
-"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με Shift"
-"+κλικ."
+"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με "
+"Shift+κλικ."
 
 #: ../data/messages:683
 msgid "Mix launchers and applications"
@@ -2890,7 +2873,8 @@ msgstr "Εμφάνιση μόνο των εφαρμογών της τρέχου�
 
 #: ../data/messages:687
 msgid "Only show icons whose windows are minimised"
-msgstr "Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
+msgstr ""
+"Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
 
 #: ../data/messages:699
 msgid ""
@@ -2935,8 +2919,8 @@ msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
-"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία."
-"\\n\n"
+"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία.\\"
+"n\n"
 "Η OpenGL είναι απαραίτητη για να σχεδιασθεί το εικονίδιο λυγισμένο προς τα "
 "πίσω."
 
@@ -3192,7 +3176,8 @@ msgstr "Μέγιστη διάρκεια λήψης αρχείου:"
 
 #: ../data/messages:855
 msgid "Use this option if you experience problems to connect."
-msgstr "Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
 
 #: ../data/messages:857
 msgid "Force IPv4 ?"
@@ -3200,7 +3185,8 @@ msgstr "Εξαναγκασμός σε IPv4;"
 
 #: ../data/messages:859
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
 
 #: ../data/messages:861
 msgid "Are you behind a proxy ?"
@@ -3463,7 +3449,8 @@ msgstr "Αριστερή μετατόπιση:"
 
 #: ../data/messages:1015
 msgid "in pixels. Use this to adjust the top position of the drawings."
-msgstr "σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
+msgstr ""
+"σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
 
 #: ../data/messages:1017
 msgid "Top offset :"
@@ -3545,16 +3532,16 @@ msgid "Icons size"
 msgstr "Μεγεθος εικονιδίων"
 
 #: ../data/messages:1071
-#, fuzzy
 msgid "Icons' size at rest (width x height) :"
-msgstr "Μέγεθος εικονιδίου σε παύση (πλάτος x ύψος):"
+msgstr ""
 
 #: ../data/messages:1073
 msgid "Zoom effect"
 msgstr "Εφέ εστίασης"
 
 #: ../data/messages:1075
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "ορίστε σε 1 αν δεν θέλετε τα εικονίδια να αλλάζουν μέγεθος όταν περνάτε από "
 "πανω τους."
@@ -3621,7 +3608,8 @@ msgstr "Εάν δεν προσθέσετε διαχωριστές, θα χρησ
 
 #: ../data/messages:1105
 msgid "Filename of an image to use for separators :"
-msgstr "Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
+msgstr ""
+"Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
 
 #: ../data/messages:1107
 msgid ""
@@ -3824,8 +3812,8 @@ msgstr "μεγαλύτερο"
 
 #: ../data/messages:1193
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Χρησιμοποιήστε το για να ακολουθεί ο δείκτης τον προσανατολισμό του dock "
 "(πάνω/κάτω/δεξιά/αριστερά)."
@@ -4285,9 +4273,8 @@ msgstr ""
 "εργασιών."
 
 #: ../data/messages:1835
-#, fuzzy
 msgid "Prevent this launcher from stealing this application from taskbar ?"
-msgstr "Αποτροπή 'αρπαγής' εφαρμογών της γραμμής εργασιών από τον εκκινητή;"
+msgstr ""
 
 #: ../data/messages:1837
 msgid ""
@@ -4348,27 +4335,20 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
+#~ msgid "Order of the different types of icons :"
+#~ msgstr "Διάταξη διαφορετικών ειδών εικονιδίων:"
 
-#~ msgid "KDE"
-#~ msgstr "KDE"
+#~ msgid "Prevent this launcher from stealing appli from taskbar ?"
+#~ msgstr "Αποτροπή 'αρπαγής' εφαρμογών της γραμμής εργασιών από τον εκκινητή;"
 
 #~ msgid "Gnome"
 #~ msgstr "Gnome"
 
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "Αυτό θα διαχωρίσει εκκινητές, εφαρμογές και μικροεφαρμογές μεταξύ τους. "
-#~ "Τότε θα εισαχθούν αυτόματα διαχωρστικά."
+#~ msgid "MacOSX"
+#~ msgstr "MacOSX"
 
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Διαχωρισμός των διαφορετικών τύπων εικονιδίων;"
-
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Διάταξη διαφορετικών ειδών εικονιδίων:"
+#~ msgid "applets"
+#~ msgstr "Μικροεφαρμογές"
 
 #~ msgid "launchers"
 #~ msgstr "Εκκινητές"
@@ -4376,23 +4356,33 @@ msgstr ""
 #~ msgid "applications"
 #~ msgstr "Εφαρμογές"
 
-#~ msgid "applets"
-#~ msgstr "Μικροεφαρμογές"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Μέγεθος εκκινητή σε ηρεμία (πλάτος x ύψος)"
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "Μέγεθος εφαρμογής σε ηρεμία (πλάτος x ύψος)"
-
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Μέγεθος μικροεφαρμογής σε ηρεμία (πλάτος x ύψος)"
-
 #~ msgid "Configure icons' animations."
 #~ msgstr "Διαμόρφωση εικονιδίων και κινούμενων γραφικών."
 
 #~ msgid "Configure icons' special effects (requires OpenGL)."
 #~ msgstr "Διαμόρφωση ειδικών εφφέ εικονιδίων (προϋποθέτει OpenGL)."
+
+#~ msgid "Separate the different types of icons?"
+#~ msgstr "Διαχωρισμός των διαφορετικών τύπων εικονιδίων;"
+
+#~ msgid "KDE"
+#~ msgstr "KDE"
+
+#~ msgid ""
+#~ "This will separate launchers, application, and applets from each others. "
+#~ "Separators will be automatically inserted then."
+#~ msgstr ""
+#~ "Αυτό θα διαχωρίσει εκκινητές, εφαρμογές και μικροεφαρμογές μεταξύ τους. Τότε "
+#~ "θα εισαχθούν αυτόματα διαχωρστικά."
+
+#~ msgid "Application's size at rest (width x height) :"
+#~ msgstr "Μέγεθος εφαρμογής σε ηρεμία (πλάτος x ύψος)"
+
+#~ msgid "Launcher's size at rest (width x height) :"
+#~ msgstr "Μέγεθος εκκινητή σε ηρεμία (πλάτος x ύψος)"
+
+#~ msgid "Applet's size at rest (width x height) :"
+#~ msgstr "Μέγεθος μικροεφαρμογής σε ηρεμία (πλάτος x ύψος)"
 
 #~ msgid ""
 #~ "Configure icons' animations on appearing/disappearing (require OpenGL "
@@ -4404,20 +4394,6 @@ msgstr ""
 #~ msgid "Icons order"
 #~ msgstr "Σειρά εικονιδίων"
 
-#~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-#~ msgstr ""
-#~ "Αν διαχωρίσετε ένα τύπο εικονιδίων, τα εικονίδια αυτού του τύπου θα "
-#~ "τοποθετηθούν μαζί, διαχωρισμένα από τα άλλα με ένα διαχωριστή.\n"
-#~ "Αν δεν διαχωρίσετε τα εικονίδια, μπορείτε να τα τοποθετήσετε όπου "
-#~ "επιθυμείτε και να βάλετε διαχωριστές χειροκίνητα. Οι εφαρμογές τότε θα "
-#~ "τοποθετούνται δίπλα στον εκκινητή τους, αν έχουν, ή μετά τον τελευταίο "
-#~ "εκκινητή."
-
 #~ msgid "Separate applications from others"
 #~ msgstr "Διαχωρισμός εφαρμογών από άλλα"
 
@@ -4426,6 +4402,36 @@ msgstr ""
 
 #~ msgid "Separate all"
 #~ msgstr "Διαχωρισμός όλων"
+
+#~ msgid ""
+#~ "None     : Don't show opened windows in the dock.\n"
+#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
+#~ "they are minimized.\n"
+#~ "KDE : Mix applications with its launcher, show all others windows and group "
+#~ "windows togather in sub-dock.\n"
+#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
+#~ "that are on the current desktop."
+#~ msgstr ""
+#~ "Καμμία : Να μην εμφανίζονται ανοιγμένα παράθυρα στο dock.\n"
+#~ "MacOSX : Ανάμιξη εφαρμογών με τους εκκινητές τους, εμφάνιση άλλων παραθύρων "
+#~ "μόνο αν είναι ελαχιστοποιημένα.\n"
+#~ "KDE : Ανάμιξη εφαρμογών με τους εκκινητές τους, εμφάνιση όλων των άλλων "
+#~ "παραθύρων και ομαδοποίηση παραθύρων σε sub-dock.\n"
+#~ "Gnome : Διαχωρισμός της μπάρας εργασιών από τους εκκινητές και εμφάνιση μόνο "
+#~ "των παραθύρων που βρίσκονται στην τρέχουσα επιφάνεια εργασίας."
+
+#~ msgid ""
+#~ "If you separate a type of icons, the icons of this type will be placed "
+#~ "together, separated from the others by a separator.\n"
+#~ "If you don't separate the icons, you can place them wherever you want, and "
+#~ "insert separators manually. Applications will then be placed next to their "
+#~ "launcher if they have one, or after the last launcher."
+#~ msgstr ""
+#~ "Αν διαχωρίσετε ένα τύπο εικονιδίων, τα εικονίδια αυτού του τύπου θα "
+#~ "τοποθετηθούν μαζί, διαχωρισμένα από τα άλλα με ένα διαχωριστή.\n"
+#~ "Αν δεν διαχωρίσετε τα εικονίδια, μπορείτε να τα τοποθετήσετε όπου επιθυμείτε "
+#~ "και να βάλετε διαχωριστές χειροκίνητα. Οι εφαρμογές τότε θα τοποθετούνται "
+#~ "δίπλα στον εκκινητή τους, αν έχουν, ή μετά τον τελευταίο εκκινητή."
 
 #~ msgid "Lock icons"
 #~ msgstr "Κλείδωμα εικονιδίων"
