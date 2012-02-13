@@ -791,7 +791,6 @@ int main (int argc, char** argv)
 	"- test uniformize icons size selector\n"
 	"- test drop indicator\n"
 	"- add a parameter for sub-dock icon size?\n"
-	"- load views' config before launchers (my_fPanelRatio)\n"
 	"- fix quick-info size/drawing/blurry\n"
 	"- gauge sometimes not loaded on startup\n"
 	"- let the view place the X thumbnail\n"

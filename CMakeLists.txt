@@ -130,7 +130,7 @@ add_subdirectory (po)
 set (CAIRO_DOCK_SHARE_DATA_DIR ${pkgdatadir})
 set (CAIRO_DOCK_SHARE_THEMES_DIR ${pkgdatadir}/themes)
 #set (CAIRO_DOCK_MODULES_DIR ${libdir}/cairo-dock)
-set (CAIRO_DOCK_LOCALE_DIR ${CMAKE_INSTALL_LOCALEDIR})
+set (CAIRO_DOCK_LOCALE_DIR "${prefix}/${CMAKE_INSTALL_LOCALEDIR}")
 set (CAIRO_DOCK_THEMES_DIR "themes")
 set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 
