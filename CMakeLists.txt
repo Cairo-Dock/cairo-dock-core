@@ -67,7 +67,7 @@ set (bindir "${prefix}/${CMAKE_INSTALL_BINDIR}")  # (...)/bin
 ########### dependencies ###############
 
 set (packages_required "gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox libcurl")  # for the .pc
-STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace space by ; => to have more details if one package is missing.
+STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
 set (xextend_required "xtst xcomposite xinerama")  # for the .pc
@@ -119,12 +119,6 @@ endif()
 MESSAGE (STATUS " * GTK version : ${GTK_MAJOR}")
 MESSAGE (STATUS)
 
-########### next steps ###############
-
-add_subdirectory (src)
-add_subdirectory (data)
-add_subdirectory (po)
-
 ########### variables defined at compil time ###############
 
 set (CAIRO_DOCK_SHARE_DATA_DIR ${pkgdatadir})
@@ -138,6 +132,12 @@ set (GLDI_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 set (GLDI_SHARE_DATA_DIR ${pkgdatadir})
 set (GLDI_MODULES_DIR ${libdir}/cairo-dock)
 set (GLDI_BIN_DIR ${bindir})
+
+########### next steps ###############
+
+add_subdirectory (src)
+add_subdirectory (data)
+add_subdirectory (po)
 
 ########### file generation ###############
 
