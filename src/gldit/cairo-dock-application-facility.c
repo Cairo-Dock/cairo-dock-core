@@ -45,6 +45,7 @@
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
+extern CairoContainer *g_pPrimaryContainer;
 
 static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
 {
@@ -661,4 +662,44 @@ void cairo_dock_move_window_to_current_desktop (Icon *pIcon)
 		g_desktopGeometry.iCurrentDesktop,
 		0,
 		0);  // on ne veut pas decaler son viewport par rapport a nous.
+}
+
+
+const CairoDockImageBuffer *cairo_dock_appli_get_image_buffer (Icon *pIcon)
+{
+	static CairoDockImageBuffer image;
+	
+	if (pIcon->pIconBuffer == NULL && g_pMainDock)
+	{
+		// set a size (we could set any size, but set something useful: if the icon is inserted in a dock and is already loaded at the correct size, it won't be loaded again.
+		gboolean bNoContainer = FALSE;
+		if (pIcon->pContainer == NULL)
+		{
+			bNoContainer = TRUE;
+			cairo_dock_set_icon_container (pIcon, g_pPrimaryContainer);
+		}
+		pIcon->fWidth = pIcon->fHeight = 0;  // no request
+		pIcon->iImageWidth = pIcon->iImageHeight = 0;
+		cairo_dock_set_icon_size_in_dock (g_pMainDock, pIcon);  // we don't care the ratio here.
+		// load the icon
+		cairo_dock_load_icon_image (pIcon, g_pPrimaryContainer);
+		if (bNoContainer)
+		{
+			cairo_dock_set_icon_container (pIcon, NULL);
+		}
+	}
+	if (pIcon->pIconBuffer != NULL || pIcon->iIconTexture != 0)
+	{
+		int iWidth, iHeight;
+		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
+		image.pSurface = pIcon->pIconBuffer;  // since we got the texture with the load(), we don't use the image buffer constructor.
+		image.iWidth = iWidth;
+		image.iHeight = iHeight;
+		image.iTexture = pIcon->iIconTexture;
+		return &image;
+	}
+	else
+	{
+		return NULL;
+	}
 }

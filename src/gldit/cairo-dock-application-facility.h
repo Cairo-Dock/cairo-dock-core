@@ -52,5 +52,7 @@ void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumVi
 void cairo_dock_move_window_to_current_desktop (Icon *pIcon);
 
 
+const CairoDockImageBuffer *cairo_dock_appli_get_image_buffer (Icon *pIcon);
+
 G_END_DECLS
 #endif

@@ -80,8 +80,18 @@ static gboolean s_bQuickHide = FALSE;
 static gboolean s_bKeepAbove = FALSE;
 static CairoKeyBinding *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
 
+#define MOUSE_POLLING_DT 150  // mouse polling delay in ms
+
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock);
 
+typedef struct {
+	gboolean bUpToDate;
+	gint x;
+	gint y;
+	gboolean bNoMove;
+	gdouble dx;
+	gdouble dy;
+} CDMousePolling;
 
   /////////////
  // MANAGER //
@@ -1116,39 +1126,43 @@ static gboolean _cairo_dock_unhide_dock_delayed (CairoDock *pDock)
 	pDock->iSidUnhideDelayed = 0;
 	return FALSE;
 }
-static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pMouse)
+static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMousePolling *pMouse)
 {
-	static int iPrevPointerX = -1, iPrevPointerY = -1;
 	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW)
 		return;
 	
 	//\________________ On recupere la position du pointeur.
 	gint x, y;
-	if (! pMouse[0])  // pas encore recupere le pointeur.
+	if (! pMouse->bUpToDate)  // pas encore recupere le pointeur.
 	{
-		pMouse[0] = TRUE;
+		pMouse->bUpToDate = TRUE;
 		gdk_display_get_pointer (gdk_display_get_default(), NULL, &x, &y, NULL);
-		if (x == pMouse[1] && y == pMouse[2])  // le pointeur n'a pas bouge, on quitte.
+		if (x == pMouse->x && y == pMouse->y)  // le pointeur n'a pas bouge, on quitte.
 		{
-			pMouse[3] = TRUE;
+			pMouse->bNoMove = TRUE;
 			return ;
 		}
-		pMouse[3] = FALSE;
-		pMouse[1] = x;
-		pMouse[2] = y;
+		pMouse->bNoMove = FALSE;
+		pMouse->dx = (x - pMouse->x);
+		pMouse->dy = (y - pMouse->y);
+		double d = sqrt (pMouse->dx * pMouse->dx + pMouse->dy * pMouse->dy);
+		pMouse->dx /= d;
+		pMouse->dy /= d;
+		pMouse->x = x;
+		pMouse->y = y;
 	}
 	else  // le pointeur a ete recupere auparavant.
 	{
-		if (pMouse[3])  // position inchangee.
+		if (pMouse->bNoMove)  // position inchangee.
 			return;
-		x = pMouse[1];
-		y = pMouse[2];
+		x = pMouse->x;
+		y = pMouse->y;
 	}
 	
 	if (!pDock->container.bIsHorizontal)
 	{
-		x = pMouse[2];
-		y = pMouse[1];
+		x = pMouse->y;
+		y = pMouse->x;
 	}
 	if (pDock->container.bDirectionUp)
 	{
@@ -1156,7 +1170,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 	}
 	
 	//\________________ On verifie les conditions.
-	int x1, x2;
+	int x1, x2;  // coordinates range on the screen edge.
 	gboolean bShow = FALSE;
 	switch (myDocksParam.iCallbackMethod)
 	{
@@ -1166,6 +1180,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 				break;
 			bShow = TRUE;
 		break;
+		
 		case CAIRO_HIT_DOCK_PLACE:
 			if (y != 0)
 				break;
@@ -1204,11 +1219,28 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 	}
 	
 	//\________________ On montre ou on programme le montrage du dock.
-	//g_print (" dock will be shown (%d)\n", pDock->bIsMainDock);
-	if (myDocksParam.iUnhideDockDelay != 0)  // on programme une apparition.
+	int nx, ny;  // normal vector to the screen edge.
+	double cost;  // cos (teta), where teta = angle between mouse vector and dock's normal
+	double f = 1.;  // delay factor
+	if (pDock->container.bIsHorizontal)
+	{
+		nx = 0;
+		ny = (pDock->container.bDirectionUp ? -1 : 1);
+	}
+	else
+	{
+		ny = 0;
+		nx = (pDock->container.bDirectionUp ? -1 : 1);
+	}
+	cost = nx * pMouse->dx + ny * pMouse->dy;
+	f = 2 + cost;  // so if cost = -1, we arrive straight onto the screen edge, and f = 1, => normal delay. if cost = 0, f = 2 and we have a bigger delay.
+	
+	int iDelay = f * myDocksParam.iUnhideDockDelay;
+	g_print (" dock will be shown in %dms (%.2f, %d)\n", iDelay, f, pDock->bIsMainDock);
+	if (iDelay != 0)  // on programme une apparition.
 	{
 		if (pDock->iSidUnhideDelayed == 0)
-			pDock->iSidUnhideDelayed = g_timeout_add (myDocksParam.iUnhideDockDelay, (GSourceFunc) _cairo_dock_unhide_dock_delayed, (gpointer) pDock);
+			pDock->iSidUnhideDelayed = g_timeout_add (iDelay, (GSourceFunc) _cairo_dock_unhide_dock_delayed, (gpointer) pDock);
 	}
 	else  // on montre le dock tout de suite.
 	{
@@ -1218,10 +1250,10 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, int *pM
 
 static gboolean _cairo_dock_poll_screen_edge (gpointer data)  // thanks to Smidgey for the pop-up patch !
 {
-	static int mouse[4];
-	mouse[0] = FALSE;
+	static CDMousePolling mouse;
 	
-	g_list_foreach (s_pRootDockList, (GFunc) _cairo_dock_unhide_root_dock_on_mouse_hit, mouse);
+	mouse.bUpToDate = FALSE;  // mouse position will be updated by the first hidden dock.
+	g_list_foreach (s_pRootDockList, (GFunc) _cairo_dock_unhide_root_dock_on_mouse_hit, &mouse);
 	
 	return TRUE;
 }
@@ -1230,7 +1262,7 @@ void cairo_dock_start_polling_screen_edge (void)
 	s_iNbPolls ++;
 	cd_debug ("%s (%d)", __func__, s_iNbPolls);
 	if (s_iSidPollScreenEdge == 0)
-		s_iSidPollScreenEdge = g_timeout_add (200, (GSourceFunc) _cairo_dock_poll_screen_edge, NULL);
+		s_iSidPollScreenEdge = g_timeout_add (MOUSE_POLLING_DT, (GSourceFunc) _cairo_dock_poll_screen_edge, NULL);
 }
 
 void cairo_dock_stop_polling_screen_edge (void)
@@ -1528,7 +1560,14 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	//\____________________ Autres parametres.
 	pAccessibility->iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max_authorized_width", &bFlushConfFileNeeded, 0, "Position", NULL);  // obsolete, cache en conf.
 	
-	pAccessibility->iUnhideDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "unhide delay", &bFlushConfFileNeeded, 0, NULL, NULL);
+	double fSensitivity = cairo_dock_get_double_key_value (pKeyFile, "Accessibility", "edge sensitivity", &bFlushConfFileNeeded, -1, NULL, NULL);  // replace "unhide delay"
+	if (fSensitivity < 0)  // old param
+	{
+		int iUnhideDockDelay = g_key_file_get_integer (pKeyFile, "Accessibility", "unhide delay", NULL);
+		fSensitivity = iUnhideDockDelay / 1500.;  // 0 -> 0 = sensitive, 1500 -> 1 = not sensitive
+		g_key_file_set_double (pKeyFile, "Accessibility", "edge sensitivity", fSensitivity);
+	}
+	pAccessibility->iUnhideDockDelay = fSensitivity * 1000;  // so we decreased the old delay by 1.5, since we handle mouse movements better.
 	
 	pAccessibility->bAutoHideOnFullScreen = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto quick hide", &bFlushConfFileNeeded, FALSE, "TaskBar", NULL);
 	//pAccessibility->bAutoHideOnFullScreen = FALSE;
