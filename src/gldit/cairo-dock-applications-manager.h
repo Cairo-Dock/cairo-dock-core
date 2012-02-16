@@ -45,6 +45,7 @@ typedef enum {
 	CAIRO_APPLI_BEFORE_FIRST_LAUNCHER,
 	CAIRO_APPLI_AFTER_LAST_LAUNCHER,
 	CAIRO_APPLI_AFTER_LAST_ICON,
+	CAIRO_APPLI_AFTER_ICON,
 	CAIRO_APPLI_NB_PLACEMENTS
 } CairoTaskbarPlacement;
 
@@ -70,6 +71,7 @@ struct _CairoTaskbarParam {
 	gchar *cGroupException;
 	gchar *cForceDemandsAttention;
 	CairoTaskbarPlacement iIconPlacement;
+	gchar *cRelativeIconName;
 	} ;
 
 // manager

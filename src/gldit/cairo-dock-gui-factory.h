@@ -92,6 +92,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_DESKLET_DECORATION_LIST_WITH_DEFAULT='o',
 	/// list of existing docks.
 	CAIRO_DOCK_WIDGET_DOCK_LIST='d',
+	/// list of icons of a dock.
+	CAIRO_DOCK_WIDGET_ICONS_LIST='N',
 	/// list of installed icon themes.
 	CAIRO_DOCK_WIDGET_ICON_THEME_LIST='w',
 	/// a button to jump to another module inside the config panel.

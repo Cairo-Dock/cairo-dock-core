@@ -229,6 +229,8 @@ const GList *cairo_dock_get_class_menu_items (const gchar *cClass);
 
 const gchar *cairo_dock_get_class_wm_class (const gchar *cClass);
 
+const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cClass);
+
 
 gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMClass);
 

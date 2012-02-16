@@ -690,8 +690,6 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 		icon = ic->data;
 		icon->fWidth = icon->fHeight = icon->iImageWidth = icon->iImageHeight = 0;  // no request
 		cairo_dock_set_icon_size_in_dock (pDock, icon);
-		icon->fWidth *= pDock->container.fRatio;
-		icon->fHeight *= pDock->container.fRatio;
 		pDock->fFlatDockWidth += icon->fWidth + myIconsParam.iIconGap;
 	}
 	pDock->iMaxIconHeight *= pDock->container.fRatio / fPrevRatio;
@@ -722,6 +720,10 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	g_return_if_fail (icon != NULL);
 	if (g_list_find (pDock->icons, icon) != NULL)  // elle est deja dans ce dock.
 		return ;
+	if (icon->pContainer != NULL)
+	{
+		cd_warning ("This icon (%s) is already inside a container !", icon->cName);
+	}
 
 	//\______________ On regarde si on doit inserer un separateur.
 	gboolean bSeparatorNeeded = FALSE;
@@ -755,8 +757,6 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	//\______________ set the icon size, now that it's inside a container.
 	int wi = icon->iImageWidth, hi = icon->iImageHeight;
 	cairo_dock_set_icon_size_in_dock (pDock, icon);
-	icon->fWidth *= pDock->container.fRatio;
-	icon->fHeight *= pDock->container.fRatio;
 	
 	if (wi != icon->iImageWidth || hi != icon->iImageHeight)  // if size has changed, reload the buffers
 		cairo_dock_trigger_load_icon_buffers (icon);
@@ -835,6 +835,10 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 {
 	if (pDock == NULL)
 		return FALSE;
+	if (icon->pContainer == NULL)
+	{
+		cd_warning ("This icon (%s) is already not inside a container !", icon->cName);  // not a big deal, just print that for debug.
+	}
 	
 	//\___________________ On trouve l'icone et ses 2 voisins.
 	GList *prev_ic = NULL, *ic, *next_ic;
@@ -1222,6 +1226,8 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 			icon->iImageHeight = icon->fWidth * fMaxScale;
 		}
 	}
+	icon->fWidth *= pDock->container.fRatio;
+	icon->fHeight *= pDock->container.fRatio;
 }
 
 

@@ -1506,6 +1506,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		pTaskBar->bHideVisibleApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "hide visible", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 		
 		pTaskBar->iIconPlacement = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "place icons", &bFlushConfFileNeeded, CAIRO_APPLI_AFTER_LAST_LAUNCHER, NULL, NULL);  // after the last launcher by default.
+		pTaskBar->cRelativeIconName = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "relative icon", &bFlushConfFileNeeded, NULL, NULL, NULL);
 		
 		// representation
 		pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
@@ -1572,6 +1573,7 @@ static void reset_config (CairoTaskbarParam *pTaskBar)
 	g_free (pTaskBar->cOverwriteException);
 	g_free (pTaskBar->cGroupException);
 	g_free (pTaskBar->cForceDemandsAttention);
+	g_free (pTaskBar->cRelativeIconName);
 }
 
   ////////////
@@ -1603,7 +1605,8 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
 		|| cairo_dock_strings_differ (pPrevTaskBar->cGroupException, pTaskBar->cGroupException)
 		|| cairo_dock_strings_differ (pPrevTaskBar->cOverwriteException, pTaskBar->cOverwriteException)
 		|| pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli
-		|| pPrevTaskBar->iIconPlacement != pTaskBar->iIconPlacement)
+		|| pPrevTaskBar->iIconPlacement != pTaskBar->iIconPlacement
+		|| cairo_dock_strings_differ (pPrevTaskBar->cRelativeIconName, pTaskBar->cRelativeIconName))
 	{
 		_cairo_dock_stop_application_manager ();
 		

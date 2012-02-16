@@ -669,18 +669,28 @@ const CairoDockImageBuffer *cairo_dock_appli_get_image_buffer (Icon *pIcon)
 {
 	static CairoDockImageBuffer image;
 	
+	if (pIcon->pIconBuffer == NULL)
+	{
+		const CairoDockImageBuffer *pImageBuffer = cairo_dock_get_class_image_buffer (pIcon->cClass);
+		if (pImageBuffer && pImageBuffer->pSurface)
+		{
+			memcpy (&image, pImageBuffer, sizeof (CairoDockImageBuffer));
+			return &image;
+		}
+	}
 	if (pIcon->pIconBuffer == NULL && g_pMainDock)
 	{
-		// set a size (we could set any size, but set something useful: if the icon is inserted in a dock and is already loaded at the correct size, it won't be loaded again.
+		// set a size (we could set any size, but let's set something useful: if the icon is inserted in a dock and is already loaded at the correct size, it won't be loaded again).
 		gboolean bNoContainer = FALSE;
-		if (pIcon->pContainer == NULL)
+		if (pIcon->pContainer == NULL)  // not in a container (=> no size) -> set a size before loading it.
 		{
 			bNoContainer = TRUE;
 			cairo_dock_set_icon_container (pIcon, g_pPrimaryContainer);
+			pIcon->fWidth = pIcon->fHeight = 0;  // no request
+			pIcon->iImageWidth = pIcon->iImageHeight = 0;
+			cairo_dock_set_icon_size_in_dock (g_pMainDock, pIcon);
 		}
-		pIcon->fWidth = pIcon->fHeight = 0;  // no request
-		pIcon->iImageWidth = pIcon->iImageHeight = 0;
-		cairo_dock_set_icon_size_in_dock (g_pMainDock, pIcon);  // we don't care the ratio here.
+		
 		// load the icon
 		cairo_dock_load_icon_image (pIcon, g_pPrimaryContainer);
 		if (bNoContainer)

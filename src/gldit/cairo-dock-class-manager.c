@@ -177,11 +177,12 @@ gboolean cairo_dock_add_appli_to_class (Icon *pIcon)
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
 	g_return_val_if_fail (pClassAppli!= NULL, FALSE);
 	
+	///if (pClassAppli->iAge == 0)  // age is > 0, so it means we have never set it yet.
+	if (pClassAppli->pAppliOfClass == NULL)  // the first appli of a class defines the age of the class.
+		pClassAppli->iAge = pIcon->iAge;
+	
 	g_return_val_if_fail (g_list_find (pClassAppli->pAppliOfClass, pIcon) == NULL, TRUE);
 	pClassAppli->pAppliOfClass = g_list_prepend (pClassAppli->pAppliOfClass, pIcon);
-	
-	if (pClassAppli->iAge == 0)  // age is > 0, so it means we have never set it yet.
-		pClassAppli->iAge = pIcon->iAge;
 	
 	return TRUE;
 }
@@ -1112,6 +1113,65 @@ static inline double _get_next_order (GList *ic)
 		fOrder = icon->fOrder + 1;
 	return fOrder;
 }
+static inline double _get_first_appli_order (CairoDock *pDock, GList *first_launcher_ic, GList *last_launcher_ic)
+{
+	double fOrder;
+	switch (myTaskbarParam.iIconPlacement)
+	{
+		case CAIRO_APPLI_BEFORE_FIRST_ICON:
+			fOrder = _get_previous_order (pDock->icons);
+		break;
+		
+		case CAIRO_APPLI_BEFORE_FIRST_LAUNCHER:
+			if (first_launcher_ic != NULL)
+			{
+				g_print (" go just before the first launcher (%s)\n", ((Icon*)first_launcher_ic->data)->cName);
+				fOrder = _get_previous_order (first_launcher_ic);  // 'first_launcher_ic' includes the separators, so we can just take the previous order.
+			}
+			else  // no launcher, go to the beginning of the dock.
+			{
+				fOrder = _get_previous_order (pDock->icons);
+			}
+		break;
+		
+		case CAIRO_APPLI_AFTER_ICON:
+		{
+			Icon *icon;
+			GList *ic = NULL;
+			for (ic = pDock->icons; ic != NULL; ic = ic->next)
+			{
+				icon = ic->data;
+				if ((icon->cDesktopFileName != NULL && strcmp (icon->cDesktopFileName, myTaskbarParam.cRelativeIconName) == 0)
+				|| (icon->pModuleInstance && strcmp (icon->pModuleInstance->cConfFilePath, myTaskbarParam.cRelativeIconName) == 0))
+					break;
+			}
+			
+			if (ic != NULL)  // icon found
+			{
+				fOrder = _get_next_order (ic);
+				break;
+			}  // else don't break, and go to the 'CAIRO_APPLI_AFTER_LAST_LAUNCHER' case, which will be the fallback.
+		}
+		
+		case CAIRO_APPLI_AFTER_LAST_LAUNCHER:
+		default:
+			if (last_launcher_ic != NULL)
+			{
+				g_print (" go just after the last launcher (%s)\n", ((Icon*)last_launcher_ic->data)->cName);
+				fOrder = _get_next_order (last_launcher_ic);  // we have already skipped the separators, so we can just take the next order.
+			}
+			else  // no launcher, go to the beginning of the dock.
+			{
+				fOrder = _get_previous_order (pDock->icons);
+			}
+		break;
+		
+		case CAIRO_APPLI_AFTER_LAST_ICON:
+			fOrder = _get_next_order (g_list_last (pDock->icons));
+		break;
+	}
+	return fOrder;
+}
 static inline int _get_class_age (CairoDockClassAppli *pClassAppli)
 {
 	if (pClassAppli->pAppliOfClass == NULL)
@@ -1298,41 +1358,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 	}
 	else  // no appli yet in the dock -> place it at the taskbar position defined in conf.
 	{
-		switch (myTaskbarParam.iIconPlacement)
-		{
-			case CAIRO_APPLI_BEFORE_FIRST_ICON:
-				pIcon->fOrder = _get_previous_order (pDock->icons);
-			break;
-			
-			case CAIRO_APPLI_BEFORE_FIRST_LAUNCHER:
-				if (first_launcher_ic != NULL)
-				{
-					g_print (" go just before the first launcher (%s)\n", ((Icon*)first_launcher_ic->data)->cName);
-					pIcon->fOrder = _get_previous_order (first_launcher_ic);  // 'first_launcher_ic' includes the separators, so we can just take the previousorder.
-				}
-				else  // no launcher, go to the beginning of the dock.
-				{
-					pIcon->fOrder = _get_previous_order (pDock->icons);
-				}
-			break;
-			
-			case CAIRO_APPLI_AFTER_LAST_LAUNCHER:
-			default:
-				if (last_launcher_ic != NULL)
-				{
-					g_print (" go just after the last launcher (%s)\n", ((Icon*)last_launcher_ic->data)->cName);
-					pIcon->fOrder = _get_next_order (last_launcher_ic);  // we have already skipped the separators, so we can just take the next order.
-				}
-				else  // no launcher, go to the beginning of the dock.
-				{
-					pIcon->fOrder = _get_previous_order (pDock->icons);
-				}
-			break;
-			
-			case CAIRO_APPLI_AFTER_LAST_ICON:
-				pIcon->fOrder = _get_next_order (g_list_last (pDock->icons));
-			break;
-		}
+		pIcon->fOrder = _get_first_appli_order (pDock, first_launcher_ic, last_launcher_ic);
 	}
 }
 
@@ -1435,41 +1461,7 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 		}
 		else  // no appli, use the defined placement.
 		{
-			switch (myTaskbarParam.iIconPlacement)
-			{
-				case CAIRO_APPLI_BEFORE_FIRST_ICON:
-					pIcon->fOrder = _get_previous_order (pDock->icons);
-				break;
-
-				case CAIRO_APPLI_BEFORE_FIRST_LAUNCHER:
-					if (first_launcher_ic != NULL)
-					{
-						g_print (" go just before the first launcher (%s)\n", ((Icon*)first_launcher_ic->data)->cName);
-						pIcon->fOrder = _get_previous_order (first_launcher_ic);  // 'first_launcher_ic' includes the separators, so we can just take the previousorder.
-					}
-					else  // no launcher, go to the beginning of the dock.
-					{
-						pIcon->fOrder = _get_previous_order (pDock->icons);
-					}
-				break;
-
-				case CAIRO_APPLI_AFTER_LAST_LAUNCHER:
-				default:
-					if (last_launcher_ic != NULL)
-					{
-						g_print (" go just after the last launcher (%s)\n", ((Icon*)last_launcher_ic->data)->cName);
-						pIcon->fOrder = _get_next_order (last_launcher_ic);  // we have already skipped the separators, so we can just take the next order.
-					}
-					else  // no launcher, go to the beginning of the dock.
-					{
-						pIcon->fOrder = _get_previous_order (pDock->icons);
-					}
-				break;
-
-				case CAIRO_APPLI_AFTER_LAST_ICON:
-					pIcon->fOrder = _get_next_order (g_list_last (pDock->icons));
-				break;
-			}
+			pIcon->fOrder = _get_first_appli_order (pDock, first_launcher_ic, last_launcher_ic);
 		}
 	}
 }
@@ -1533,6 +1525,46 @@ const gchar *cairo_dock_get_class_wm_class (const gchar *cClass)
 	CairoDockClassAppli *pClassAppli = _get_class_appli_with_attributes (cClass);
 	return pClassAppli->cStartupWMClass;
 }
+
+const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cClass)
+{
+	static CairoDockImageBuffer image;
+	g_return_val_if_fail (cClass != NULL, NULL);
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	Icon *pIcon;
+	GList *ic;
+	for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon) && pIcon->pIconBuffer)  // avoid applets
+		{
+			int iWidth, iHeight;
+			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
+			image.pSurface = pIcon->pIconBuffer;  // since we got the texture with the load(), we don't use the image buffer constructor.
+			image.iWidth = iWidth;
+			image.iHeight = iHeight;
+			image.iTexture = pIcon->iIconTexture;
+			return &image;
+		}
+	}
+	for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
+	{
+		pIcon = ic->data;
+		if (pIcon->pIconBuffer)
+		{
+			int iWidth, iHeight;
+			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
+			image.pSurface = pIcon->pIconBuffer;  // since we got the texture with the load(), we don't use the image buffer constructor.
+			image.iWidth = iWidth;
+			image.iHeight = iHeight;
+			image.iTexture = pIcon->iIconTexture;
+			return &image;
+		}
+	}
+	
+	return NULL;
+}
+
 
 static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or even class
 {
@@ -1899,3 +1931,5 @@ void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
 	if (pIcon->pMimeTypes == NULL)
 		pIcon->pMimeTypes = g_strdupv ((gchar**)pClassAppli->pMimeTypes);	
 }
+
+

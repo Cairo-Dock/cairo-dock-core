@@ -1119,8 +1119,6 @@ void cairo_dock_trigger_set_WM_icons_geometry (CairoDock *pDock)
 void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)  // the request size is already set on the icon.
 {
 	cairo_dock_set_icon_size_in_dock (pDock, pIcon);
-	pIcon->fWidth *= pDock->container.fRatio;
-	pIcon->fHeight *= pDock->container.fRatio;
 	
 	cairo_dock_load_icon_image (pIcon, CAIRO_CONTAINER (pDock));  // handles the applet's context
 	

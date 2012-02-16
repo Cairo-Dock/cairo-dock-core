@@ -67,6 +67,7 @@ extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopGeometry g_desktopGeometry;
+extern CairoDock *g_pMainDock;
 
 typedef struct {
 	GtkWidget *pControlContainer;  // widget contenant le widget de controle et les widgets controles.
@@ -1096,6 +1097,42 @@ static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock,
 	g_free (cUserName);
 }
 static GtkListStore *_cairo_dock_build_dock_list_for_gui (void)
+{
+	GtkListStore *pList = _build_list_for_gui ((CDForeachRendererFunc)cairo_dock_foreach_docks, (GHFunc)_cairo_dock_add_one_dock_item, NULL);
+	GtkTreeIter iter;
+	memset (&iter, 0, sizeof (GtkTreeIter));
+	gtk_list_store_append (GTK_LIST_STORE (pList), &iter);
+	gtk_list_store_set (GTK_LIST_STORE (pList), &iter,
+		CAIRO_DOCK_MODEL_NAME, _("New main dock"),
+		CAIRO_DOCK_MODEL_RESULT, "_New Dock_",  // this name does likely not exist, which will lead to the creation of a new dock.
+		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
+		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
+	return pList;
+}
+
+static void _cairo_dock_add_one_icon_item (const gchar *cName, CairoDock *pDock, GtkListStore *pModele)
+{
+	gchar *cUserName = NULL;
+	if (pDock != NULL)  // peut etre NULL (entree vide)
+	{
+		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_FILE (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))  // on evite les sous-docks d'applet, de classe, et de repertoire.
+			return ;
+		if (pDock->iRefCount == 0)
+			cUserName = cairo_dock_get_readable_name_for_fock (pDock);
+	}
+	
+	GtkTreeIter iter;
+	memset (&iter, 0, sizeof (GtkTreeIter));
+	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
+	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
+		CAIRO_DOCK_MODEL_NAME, cUserName?cUserName:cName,
+		CAIRO_DOCK_MODEL_RESULT, cName,
+		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
+		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
+	g_free (cUserName);
+}
+static GtkListStore *_cairo_dock_build_icons_list_for_gui (void)
 {
 	GtkListStore *pList = _build_list_for_gui ((CDForeachRendererFunc)cairo_dock_foreach_docks, (GHFunc)_cairo_dock_add_one_dock_item, NULL);
 	GtkTreeIter iter;
@@ -2281,7 +2318,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				modele = _cairo_dock_gui_allocate_new_model ();
 				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
 				
-				rend = NULL;
 				_add_combo_from_modele (modele, TRUE, iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY);
 				
 				if (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST)  // add the state icon.
@@ -2438,6 +2474,111 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				g_object_unref (pIconThemeListStore);
 				g_free (cUserPath);
 				g_hash_table_destroy (pHashTable);
+			}
+			break ;
+			
+			case CAIRO_DOCK_WIDGET_ICONS_LIST :
+			{
+				// build the modele and combo
+				modele = _cairo_dock_gui_allocate_new_model ();
+				pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));
+				rend = gtk_cell_renderer_pixbuf_new ();
+				gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
+				gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "pixbuf", CAIRO_DOCK_MODEL_ICON, NULL);
+				rend = gtk_cell_renderer_text_new ();
+				gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
+				gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+				_pack_subwidget (pOneWidget);
+				
+				// get the dock
+				CairoDock *pDock = NULL;
+				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
+					pDock = cairo_dock_search_dock_from_name (pAuthorizedValuesList[0]);
+				if (!pDock)
+					pDock = g_pMainDock;
+				
+				// insert each icon
+				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+				GtkTreeIter iter;
+				Icon *pIcon;
+				gchar *cImagePath, *cID;
+				const gchar *cName;
+				GdkPixbuf *pixbuf;
+				GList *ic;
+				for (ic = pDock->icons; ic != NULL; ic = ic->next)
+				{
+					pIcon = ic->data;
+					if (pIcon->cDesktopFileName != NULL
+					|| pIcon->pModuleInstance != NULL)
+					{
+						pixbuf = NULL;
+						cImagePath = NULL;
+						cName = NULL;
+						
+						// get the ID
+						if (pIcon->cDesktopFileName != NULL)
+							cID = pIcon->cDesktopFileName;
+						else
+							cID = pIcon->pModuleInstance->cConfFilePath;
+						
+						// get the image
+						if (pIcon->cFileName != NULL)
+						{
+							cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName);
+						}
+						if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+						{
+							g_free (cImagePath);
+							if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+							{
+								if (myIconsParam.cSeparatorImage)
+									cImagePath = cairo_dock_search_image_s_path (myIconsParam.cSeparatorImage);
+							}
+							else if (CAIRO_DOCK_IS_APPLET (pIcon))
+							{
+								cImagePath = g_strdup (pIcon->pModuleInstance->pModule->pVisitCard->cIconFilePath);
+							}
+							else
+							{
+								cImagePath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
+								if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
+								{
+									g_free (cImagePath);
+									cImagePath = g_strdup (GLDI_SHARE_DATA_DIR"/icons/"CAIRO_DOCK_DEFAULT_ICON_NAME);
+								}
+							}
+						}
+						g_print (" + %s\n", cImagePath);
+						if (cImagePath != NULL)
+						{
+							pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 24, 24, NULL);
+						}
+						g_print (" -> %p\n", pixbuf);
+						
+						// get the name
+						if (CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))  // separator
+							cName = "---------";
+						else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet
+							cName = pIcon->pModuleInstance->pModule->pVisitCard->cTitle;
+						else  // launcher
+							cName = (pIcon->cInitialName ? pIcon->cInitialName : pIcon->cName);
+						
+						// store the icon
+						memset (&iter, 0, sizeof (GtkTreeIter));
+						gtk_list_store_append (GTK_LIST_STORE (modele), &iter);
+						gtk_list_store_set (GTK_LIST_STORE (modele), &iter,
+							CAIRO_DOCK_MODEL_NAME, cName,
+							CAIRO_DOCK_MODEL_RESULT, cID,
+							CAIRO_DOCK_MODEL_ICON, pixbuf, -1);
+						g_free (cImagePath);
+						//if (pixbuf)
+						//	g_object_unref (pixbuf);
+						
+						if (cValue && strcmp (cValue, cID) == 0)
+							gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
+					}
+				}
+				g_free (cValue);
 			}
 			break ;
 			
