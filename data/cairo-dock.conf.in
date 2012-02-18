@@ -55,6 +55,7 @@ sep_visi =
 hide effect = Move down
 
 #e-[0;1;fast;slow] Callback sensitivity:
+#{The more sensitive, the faster the dock will appear}
 edge sensitivity = 0.15
 
 #Y-[Hit the screen's border;0;0;Hit where the dock is;0;0;Hit the screen's corner;0;0;Hit a zone;1;2] How to call the dock back:
