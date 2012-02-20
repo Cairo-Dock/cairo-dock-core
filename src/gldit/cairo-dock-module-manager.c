@@ -176,14 +176,7 @@ CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath)  // cSoFileP
 	
 	if (cairo_dock_module_is_auto_loaded (pModule))  // c'est un module qui soit ne peut etre activer et/ou desactiver, soit etend un manager; on l'active donc automatiquement.
 	{
-		///s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
-		cairo_dock_activate_module (pModule, &erreur);  // activate the module now, 
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-			erreur = NULL;
-		}
+		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
 	}
 		
 	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, TRUE);
@@ -235,7 +228,7 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList)
 	GError *erreur = NULL;
 	gchar *cModuleName;
 	CairoDockModule *pModule;
-	/**GList *m;
+	GList *m;
 	for (m = s_AutoLoadedModules; m != NULL; m = m->next)
 	{
 		pModule = m->data;
@@ -249,7 +242,7 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList)
 				erreur = NULL;
 			}
 		}
-	}*/
+	}
 	
 	if (cActiveModuleList == NULL)
 		return ;

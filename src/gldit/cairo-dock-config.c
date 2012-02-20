@@ -495,6 +495,7 @@ void cairo_dock_load_current_theme (void)
 	
 	//\___________________ Load all managers data.
 	gldi_load_managers ();
+	cairo_dock_activate_modules_from_list (NULL);  // load auto-loaded modules before loading anything (views, etc)
 	
 	//\___________________ Now load the launchers.
 	cairo_dock_load_launchers_from_dir (g_cCurrentLaunchersPath);
