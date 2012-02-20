@@ -699,7 +699,7 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	g_return_if_fail (icon->Xid != 0 && icon->cClass != NULL);
+	g_return_if_fail (icon->cClass != NULL);
 	
 	// on trouve le .desktop du programme.
 	cd_debug ("%s (%s)\n", __func__, icon->cClass);
@@ -723,8 +723,31 @@ static void _cairo_dock_make_launcher_from_appli (GtkMenuItem *pMenuItem, gpoint
 	// on cree un nouveau lanceur a partir de la classe.
 	if (cDesktopFilePath != NULL)
 	{
-		cd_message ("found desktop file : %s\n", cDesktopFilePath);
-		cairo_dock_add_new_launcher_by_uri (cDesktopFilePath, g_pMainDock, CAIRO_DOCK_LAST_ORDER);  // on l'ajoute dans le main dock.
+		cd_message ("found desktop file : %s", cDesktopFilePath);
+		// place it after the last launcher, since the user will probably want to move this new launcher amongst the already existing ones.
+		double fOrder = CAIRO_DOCK_LAST_ORDER;
+		Icon *pIcon;
+		GList *ic, *last_launcher_ic = NULL;
+		for (ic = g_pMainDock->icons; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
+			|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon))
+			{
+				last_launcher_ic = ic;
+			}
+		}
+		if (last_launcher_ic != NULL)
+		{
+			ic = last_launcher_ic;
+			pIcon = ic->data;
+			Icon *next_icon = (ic->next ? ic->next->data : NULL);
+			if (next_icon != NULL && cairo_dock_get_icon_order (next_icon) == cairo_dock_get_icon_order (pIcon))
+				fOrder = (pIcon->fOrder + next_icon->fOrder) / 2;
+			else
+				fOrder = pIcon->fOrder + 1;
+		}
+		cairo_dock_add_new_launcher_by_uri (cDesktopFilePath, g_pMainDock, fOrder);  // on l'ajoute dans le main dock.
 	}
 	else
 	{
