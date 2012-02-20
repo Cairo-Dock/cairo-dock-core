@@ -693,11 +693,11 @@ static void _cairo_dock_load_icon_theme (void)
 
 static void load (void)
 {
-	_cairo_dock_load_icon_textures ();
-	
 	cairo_dock_create_icon_fbo ();
 	
 	_cairo_dock_load_icon_theme ();
+	
+	_cairo_dock_load_icon_textures ();
 }
 
 

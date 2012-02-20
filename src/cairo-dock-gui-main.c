@@ -975,22 +975,14 @@ static void cairo_dock_free_categories (void)
 	s_path = NULL;
 }
 
-static gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
+static gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, gpointer data)
 {
-	cd_debug ("%s (%ld)\n", __func__, pBlockingLoop);
-	if (pBlockingLoop != NULL)
-	{
-		cd_debug ("dialogue detruit, on sort de la boucle");
-		//if (g_main_loop_is_running (pBlockingLoop))
-		//	g_main_loop_quit (pBlockingLoop);
-	}
 	cairo_dock_free_categories ();
 	if (s_iSidShowGroupDialog != 0)
 	{
 		g_source_remove (s_iSidShowGroupDialog);
 		s_iSidShowGroupDialog = 0;
 	}
-	
 	return FALSE;
 }
 
@@ -1096,15 +1088,9 @@ static void on_click_apply (GtkButton *button, GtkWidget *pWindow)
 
 static void on_click_quit (GtkButton *button, GtkWidget *pWindow)
 {
-	//g_print ("%s ()\n", __func__);
-	GMainLoop *pBlockingLoop = g_object_get_data (G_OBJECT (pWindow), "loop");
-	
-	gboolean bReturn;
-	g_signal_emit_by_name (pWindow, "delete-event", NULL, &bReturn);
-	///on_delete_main_gui (pWindow, NULL, pBlockingLoop);
-	
-	if (pBlockingLoop == NULL)
-		gtk_widget_destroy (pWindow);
+	///gboolean bReturn;
+	///g_signal_emit_by_name (pWindow, "delete-event", NULL, &bReturn);
+	gtk_widget_destroy (pWindow);
 }
 
 static void on_click_ok (GtkButton *button, GtkWidget *pWindow)
@@ -1586,7 +1572,7 @@ static void _add_main_groups_buttons (void)
 }
 
 
-static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolean bMaintenanceMode)
+static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 {
 	//\_____________ On construit la fenetre.
 	if (s_pMainWindow != NULL)
@@ -1977,33 +1963,10 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath, gboolea
 	gtk_widget_hide (s_pGroupFrame);
 	gtk_widget_hide (s_pPreviewImage);
 	
-	if (bMaintenanceMode)
-	{
-		gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("< Maintenance mode >"));
-		GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
-		g_object_set_data (G_OBJECT (s_pMainWindow), "loop", pBlockingLoop);
-		g_signal_connect (s_pMainWindow,
-			"delete-event",
-			G_CALLBACK (on_delete_main_gui),
-			pBlockingLoop);
-		
-		cd_debug ("debut de boucle bloquante ...\n");
-		GDK_THREADS_LEAVE ();
-		g_main_loop_run (pBlockingLoop);
-		GDK_THREADS_ENTER ();
-		cd_debug ("fin de boucle bloquante\n");
-		
-		g_main_loop_unref (pBlockingLoop);
-	}
-	else
-	{
-		//gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("Cairo-Dock configuration"));
-		///cairo_dock_show_one_category (0);
-		g_signal_connect (G_OBJECT (s_pMainWindow),
-			"delete-event",
-			G_CALLBACK (on_delete_main_gui),
-			NULL);
-	}
+	g_signal_connect (G_OBJECT (s_pMainWindow),
+		"delete-event",
+		G_CALLBACK (on_delete_main_gui),
+		NULL);
 	return s_pMainWindow;
 }
 
@@ -2561,7 +2524,7 @@ static void cairo_dock_apply_current_filter (gchar **pKeyWords, gboolean bAllWor
 
 static GtkWidget * show_main_gui (void)
 {
-	GtkWidget *pWindow = cairo_dock_build_main_ihm (g_cConfFile, FALSE);
+	GtkWidget *pWindow = cairo_dock_build_main_ihm (g_cConfFile);
 	return pWindow;
 }
 
@@ -2574,7 +2537,7 @@ static void show_module_gui (const gchar *cModuleName)
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
 	if (pGroupDescription == NULL)
 	{
-		cairo_dock_build_main_ihm (g_cConfFile, FALSE);
+		cairo_dock_build_main_ihm (g_cConfFile);
 		pGroupDescription = cairo_dock_find_module_description (cModuleName);
 		g_return_if_fail (pGroupDescription != NULL);
 	}
@@ -2590,7 +2553,7 @@ static void show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, 
 			gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget))) :
 		-1);
 	
-	cairo_dock_build_main_ihm (g_cConfFile, FALSE);
+	cairo_dock_build_main_ihm (g_cConfFile);
 	cairo_dock_present_module_instance_gui (pModuleInstance);
 	cairo_dock_toggle_category_button (pModuleInstance->pModule->pVisitCard->iCategory);  // on active la categorie du module.
 	
