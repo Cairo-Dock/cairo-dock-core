@@ -469,7 +469,27 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 	///if (! bStillInhibited)  // il n'y a plus personne dans cette classe.
 	///	return ;
 	
-	if (pInhibitorIcon == NULL || pInhibitorIcon->Xid != 0)
+	if (pInhibitorIcon != NULL && pInhibitorIcon->pSubDock != NULL && pInhibitorIcon->pSubDock == cairo_dock_get_class_subdock (cClass))  // the launcher is controlling several appli icons, place them back in the taskbar.
+	{
+		// first destroy the class sub-dock, so that the appli icons won't go inside again.
+		// we empty the sub-dock then destroy it, then re-insert the appli icons
+		GList *icons = pInhibitorIcon->pSubDock->icons;
+		pInhibitorIcon->pSubDock->icons = NULL;  // empty the sub-dock
+		cairo_dock_destroy_class_subdock (cClass);  // destroy the sub-dock without destroying its icons
+		
+		// then re-insert the appli icons.
+		Icon *pAppli;
+		GList *ic;
+		for (ic = icons; ic != NULL; ic = ic->next)
+		{
+			pAppli = ic->data;
+			cairo_dock_set_icon_container (pAppli, NULL);  // manually "detach" it
+			cairo_dock_insert_appli_in_dock (pAppli, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
+		}
+		g_list_free (icons);
+	}
+	
+	if (pInhibitorIcon == NULL || pInhibitorIcon->Xid != 0)  // the launcher is controlling 1 appli icon, or we deinhibate all the inhibitors.
 	{
 		const GList *pList = cairo_dock_list_existing_appli_with_class (cClass);
 		Icon *pIcon;
