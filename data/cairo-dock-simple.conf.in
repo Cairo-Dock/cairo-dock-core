@@ -51,13 +51,13 @@ place icons = 2
 #F[Icons' animations and effects;@pkgdatadir@/icons/icon-movment.png]
 frame_anim=
 
-#_ On mouse hover:
+#_& On mouse hover:
 anim_hover=
 
 #_ On click:
 anim_click=
 
-#l On appearance/disappearance:
+#l&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/disappearance:
 anim_disappear=
 
 
@@ -68,7 +68,6 @@ anim_disappear=
 frame_icons=
 
 #w Choose a theme of icons :
-#{Leave empty to use the current icon theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
 default icon directory = 
 
 #l[Very small;Small;Medium;Big;Very Big] Icons size:

@@ -156,7 +156,10 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_EXPANDER='X',
 	CAIRO_DOCK_NB_GUI_WIDGETS
 	} CairoDockGUIWidgetType;
-	
+
+#define CAIRO_DOCK_WIDGET_CAIRO_ONLY '*'
+#define CAIRO_DOCK_WIDGET_OPENGL_ONLY '&'
+
 /// Model used for combo-box and tree-view. CAIRO_DOCK_MODEL_NAME is the name as displayed in the widget, and CAIRO_DOCK_MODEL_RESULT is the resulting string effectively written in the config file.
 typedef enum {
 	CAIRO_DOCK_MODEL_NAME = 0,  // displayed name

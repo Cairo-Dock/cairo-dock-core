@@ -293,7 +293,6 @@ GtkWidget *cairo_dock_build_generic_gui_window (const gchar *cTitle, int iWidth,
 	
 	gtk_widget_show_all (pMainWindow);
 	
-	int iResult = 0;
 	if (pAction != NULL)
 	{
 		g_object_set_data (G_OBJECT (pMainWindow), "action", pAction);

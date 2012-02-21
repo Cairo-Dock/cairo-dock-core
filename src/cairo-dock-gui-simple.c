@@ -179,7 +179,7 @@ static gchar * _make_simple_conf_file (void)
 	//\_____________ On actualise le fichier de conf simple.
 	// on cree le fichier au besoin, et on l'ouvre.
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
-	///if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // since we remove the opengl effects params, we need to overwrite the file each time. TODO: fix this ...
+	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
 		cairo_dock_copy_file (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
 	}
@@ -300,15 +300,15 @@ static gchar * _make_simple_conf_file (void)
 	
 	if (g_bUseOpenGL)
 		g_key_file_set_string_list (pSimpleKeyFile, "Behavior", "anim_hover", cOnMouseHover, 2);
-	else
+	/**else
 	{
 		g_key_file_remove_comment (pSimpleKeyFile, "Behavior", "anim_hover", NULL);
 		g_key_file_remove_key (pSimpleKeyFile, "Behavior", "anim_hover", NULL);
-	}
+	}*/
 	g_key_file_set_string_list (pSimpleKeyFile, "Behavior", "anim_click", cOnClick, 2);
 	if (g_bUseOpenGL)
 		g_key_file_set_integer (pSimpleKeyFile, "Behavior", "anim_disappear", s_iEffectOnDisappearance);
-	else
+	/**else
 	{
 		g_key_file_remove_comment (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
 		g_key_file_remove_key (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
@@ -324,7 +324,7 @@ static gchar * _make_simple_conf_file (void)
 			g_key_file_set_comment (pSimpleKeyFile, "Behavior", "anim_disappear", cComment, NULL);
 			g_free (cComment);
 		}
-	}
+	}*/
 	
 	// apparence
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIconsParam.cIconTheme);
@@ -516,7 +516,8 @@ static gboolean on_apply_config_simple (gpointer data)
 	gchar **cOnMouseHover = g_key_file_get_string_list (pSimpleKeyFile, "Behavior", "anim_hover", &length, NULL);
 	gchar **cOnClick = g_key_file_get_string_list (pSimpleKeyFile, "Behavior", "anim_click", &length, NULL);
 	int iEffectOnDisappearance = -1;
-	if (g_key_file_has_key (pSimpleKeyFile, "Behavior", "anim_disappear", NULL))
+	///if (g_key_file_has_key (pSimpleKeyFile, "Behavior", "anim_disappear", NULL))
+	if (g_bUseOpenGL)
 		iEffectOnDisappearance = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
 	
 	CairoDockModule *pModule;

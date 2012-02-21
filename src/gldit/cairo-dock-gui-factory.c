@@ -1798,13 +1798,24 @@ const gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementTyp
 		length --;
 	}
 	
-	
 	//\______________ On recupere le type du widget.
 	*iElementType = *cUsefulComment;
 	cUsefulComment ++;
 	if (*cUsefulComment == '-' || *cUsefulComment == '+')
 		cUsefulComment ++;
-
+	if (*cUsefulComment == CAIRO_DOCK_WIDGET_CAIRO_ONLY)
+	{
+		if (g_bUseOpenGL)
+			return NULL;
+		cUsefulComment ++;
+	}	
+	else if (*cUsefulComment == CAIRO_DOCK_WIDGET_OPENGL_ONLY)
+	{
+		if (! g_bUseOpenGL)
+			return NULL;
+		cUsefulComment ++;
+	}
+	
 	//\______________ On recupere le nombre d'elements du widget.
 	*iNbElements = atoi (cUsefulComment);
 	if (*iNbElements == 0)
