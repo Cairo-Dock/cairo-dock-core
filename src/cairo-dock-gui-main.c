@@ -1267,14 +1267,6 @@ static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 	}
 	return pImage;
 }
-static void _add_image_on_button (GtkWidget *pButton, const gchar *cImage, int iSize)
-{
-	if (cImage == NULL)
-		return ;
-	GtkWidget *pImage = _make_image (cImage, iSize);
-	if (pImage != NULL)
-		gtk_button_set_image (GTK_BUTTON (pButton), pImage);  /// unref l'image ?...
-}
 static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, int iSize)
 {
 	if (cImage == NULL)
@@ -2491,7 +2483,7 @@ static void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 	else  // c'est un module, on recupere son fichier de conf en entier.
 	{
 		cConfFilePath = _get_valid_module_conf_file (pModule);
-		
+		pModuleInstance = (pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);
 		bSingleGroup = FALSE;
 	}
 	
