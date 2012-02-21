@@ -1442,6 +1442,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	
 	pAccessibility->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "extended", &bFlushConfFileNeeded, FALSE, "Accessibility", NULL);
 	
+	// hidden bg
+	double hcolor[4] = {.8, .8, .8, .5};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Background", "hidden bg color", &bFlushConfFileNeeded, pBackground->fHiddenBg, 4, hcolor, NULL, NULL);
+	
 	// position
 	pPosition->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);
 	pPosition->iGapY = cairo_dock_get_integer_key_value (pKeyFile, "Position", "y gap", &bFlushConfFileNeeded, 0, NULL, NULL);

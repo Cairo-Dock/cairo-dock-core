@@ -85,6 +85,7 @@ struct _CairoDocksParam {
 	gdouble fStripesColorBright[4];
 	gdouble fStripesColorDark[4];
 	gdouble fStripesAngle;
+	gdouble fHiddenBg[4];
 	// position
 	gint iGapX, iGapY;
 	CairoDockPositionType iScreenBorder;

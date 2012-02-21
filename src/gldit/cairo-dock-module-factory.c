@@ -328,16 +328,32 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 			s_iMaxOrder = MAX (s_iMaxOrder, pMinimalConfig->fOrder);
 		}
 		pMinimalConfig->cDockName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "dock name", NULL, NULL, NULL, NULL);
-		pMinimalConfig->bAlwaysVisible = g_key_file_get_boolean (pKeyFile, "Icon", "always visi", NULL);
-		if (pMinimalConfig->bAlwaysVisible)
+		int iBgColorType;
+		if (g_key_file_has_key (pKeyFile, "Icon", "always_visi", NULL))
+		{
+			iBgColorType = g_key_file_get_integer (pKeyFile, "Icon", "always_visi", NULL);
+		}
+		else  // old param
+		{
+			iBgColorType = (g_key_file_get_boolean (pKeyFile, "Icon", "always visi", NULL) ? 2 : 0);  // keep the existing custom color
+			g_key_file_set_integer (pKeyFile, "Icon", "always_visi", iBgColorType);
+		}
+		pMinimalConfig->bAlwaysVisible = (iBgColorType != 0);
+		pMinimalConfig->pHiddenBgColor = NULL;
+		if (iBgColorType == 2)  // custom bg color
 		{
 			gsize length;
 			pMinimalConfig->pHiddenBgColor = g_key_file_get_double_list (pKeyFile, "Icon", "bg color", &length, NULL);
-			if (length < 4 || pMinimalConfig->pHiddenBgColor[3] == 0.)
+			if (length < 4 || pMinimalConfig->pHiddenBgColor[3] == 0)
 			{
 				g_free (pMinimalConfig->pHiddenBgColor);
 				pMinimalConfig->pHiddenBgColor = NULL;
 			}
+		}
+		else if (iBgColorType == 1)  // default bg color
+		{
+			if (myDocksParam.fHiddenBg[3] != 0)
+				pMinimalConfig->pHiddenBgColor = g_memdup (myDocksParam.fHiddenBg, sizeof (myDocksParam.fHiddenBg));
 		}
 	}
 	

@@ -54,8 +54,8 @@ sep_visi =
 #L-[None;Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
 hide effect = Move down
 
-#e-[0;1;fast;slow] Callback sensitivity:
-#{The more sensitive, the faster the dock will appear}
+#e-[0;1;high;low] Callback sensitivity:
+#{The higher, the faster the dock will appear}
 edge sensitivity = 0.15
 
 #Y-[Hit the screen's border;0;0;Hit where the dock is;0;0;Hit the screen's corner;0;0;Hit a zone;1;2] How to call the dock back:
@@ -241,15 +241,15 @@ frame_cpu =
 #{in Hz. This is to adjust behaviour relative to your CPU power.}
 refresh frequency = 35
 
-#i-[15;60] Animation frequency for the OpenGL backend :
+#i-&[15;60] Animation frequency for the OpenGL backend :
 #{in Hz. This is to adjust behaviour relative to your CPU power.}
 opengl anim freq = 33
 
-#i-[15;50] Animation frequency for the Cairo backend :
+#i-*[15;50] Animation frequency for the Cairo backend :
 #{in Hz. This is to adjust behaviour relative to your CPU power.}
 cairo anim freq = 25
 
-#b- Reflections should be calculated in real-time?
+#b-* Reflections should be calculated in real-time?
 #{The transparency gradation pattern will then be re-calculated in real time. May need more CPU power.}
 dynamic reflection = false
 
@@ -258,10 +258,6 @@ frame_fake =
 #b- Emulate composition with fake transparency?
 #{Only use this if you don't run a composite manager like Compiz, xcompmgr, etc and have a black background around your dock. For aesthetic reasons, the dock will be kept under other windows.}
 fake transparency = false
-
-#b- Make the config panel transparent?
-#{You need to re-open the panel. It is deactivated by default on KDE.}
-config transparency = false
 
 #X-[Connection to the Internet;gtk-network]
 frame_conn =
@@ -339,8 +335,15 @@ number of stripes = 0
 #f+[0;1] Percentage of the bright colour:
 stripes width = 0.5
 
+#F+[Background when hidden;gtk-orientation-portrait]
+frame4 = 
+
+#C+ Default background color when the dock is hidden
+#{Several applets can be visible even when the dock is hidden}
+hidden bg color = .8;.8;.8;.5
+
 #F
-frame3_=
+frame4_=
 
 #b+ Stretch the dock to always fill the screen
 extended = false
@@ -503,7 +506,6 @@ no input image =
 frame_theme=
 
 #w+ Choose an icon theme :
-#{Leave empty to use the current icon theme of your system. You can enter the name of a theme that is installed on your system (like 'Gartoon' or 'Human'), or even a path to a folder containing icons.}
 default icon directory = 
 
 #S+ Image filename to use as a background for icons :
