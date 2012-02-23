@@ -710,7 +710,7 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 	pDock->bAutoHide = FALSE;
 	gtk_widget_hide (pDock->container.pWidget);
 	
-	cairo_dock_update_dock_size (pDock);
+	///cairo_dock_update_dock_size (pDock);
 }
 
 

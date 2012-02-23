@@ -235,6 +235,8 @@ CairoDock *cairo_dock_create_subdock (const gchar *cDockName, const gchar *cRend
 	{
 		cairo_dock_reload_buffers_in_dock (pSubDock, FALSE, FALSE);  // idle reload; FALSE = don't compute their size, since it has been done in cairo_dock_make_sub_dock().
 	}
+	
+	cairo_dock_update_dock_size (pSubDock);  // update at the end, when the labels are loaded (ex.: Parabolic view) TODO: there's probably something wrong here
 	return pSubDock;
 }
 
@@ -249,7 +251,7 @@ void cairo_dock_main_dock_to_sub_dock (CairoDock *pDock, CairoDock *pParentDock,
 		if (pParentDock == NULL)
 			pParentDock = g_pMainDock;
 		cairo_dock_make_sub_dock (pDock, pParentDock, cRendererName);
-		
+		cairo_dock_update_dock_size (pDock);
 		/**if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
 		{
 			cd_debug ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
