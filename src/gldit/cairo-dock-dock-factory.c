@@ -533,6 +533,11 @@ CairoDock *cairo_dock_new_dock (void)
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
 	
+	cairo_dock_register_notification_on_object (pDock,
+		NOTIFICATION_RENDER,
+		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
+		CAIRO_DOCK_RUN_FIRST, NULL);
+	
 	//\__________________ On connecte les evenements a la fenetre.
 	gtk_widget_add_events (pWindow,
 		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
@@ -710,7 +715,7 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 	pDock->bAutoHide = FALSE;
 	gtk_widget_hide (pDock->container.pWidget);
 	
-	///cairo_dock_update_dock_size (pDock);
+	cairo_dock_update_dock_size (pDock);
 }
 
 

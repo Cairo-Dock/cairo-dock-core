@@ -97,28 +97,6 @@ typedef struct {
  // MANAGER //
 /////////////
 
-void cairo_dock_init_dock_manager (void)
-{
-	cd_message ("");
-	if (s_hDocksTable == NULL)
-	{
-		s_hDocksTable = g_hash_table_new_full (g_str_hash,
-			g_str_equal,
-			g_free,
-			NULL);  // donc on peut utiliser g_hash_table_remove plutot que g_hash_table_steal.
-		
-		cairo_dock_register_notification_on_object (&myDocksMgr,
-			NOTIFICATION_RENDER,
-			(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
-			CAIRO_DOCK_RUN_FIRST, NULL);
-		cairo_dock_register_notification_on_object (&myDocksMgr,
-			NOTIFICATION_LEAVE_DOCK,
-			(CairoDockNotificationFunc) cairo_dock_on_leave_dock_notification,
-			CAIRO_DOCK_RUN_FIRST, NULL);
-	}
-	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
-}
-
 
 void cairo_dock_force_docks_above (void)
 {
@@ -235,8 +213,6 @@ CairoDock *cairo_dock_create_subdock (const gchar *cDockName, const gchar *cRend
 	{
 		cairo_dock_reload_buffers_in_dock (pSubDock, FALSE, FALSE);  // idle reload; FALSE = don't compute their size, since it has been done in cairo_dock_make_sub_dock().
 	}
-	
-	cairo_dock_update_dock_size (pSubDock);  // update at the end, when the labels are loaded (ex.: Parabolic view) TODO: there's probably something wrong here
 	return pSubDock;
 }
 
@@ -251,7 +227,7 @@ void cairo_dock_main_dock_to_sub_dock (CairoDock *pDock, CairoDock *pParentDock,
 		if (pParentDock == NULL)
 			pParentDock = g_pMainDock;
 		cairo_dock_make_sub_dock (pDock, pParentDock, cRendererName);
-		cairo_dock_update_dock_size (pDock);
+		
 		/**if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
 		{
 			cd_debug ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
@@ -1846,10 +1822,10 @@ static void init (void)
 		g_free,
 		NULL);  // donc on peut utiliser g_hash_table_remove plutot que g_hash_table_steal.
 	
-	cairo_dock_register_notification_on_object (&myDocksMgr,
+	/**cairo_dock_register_notification_on_object (&myDocksMgr,
 		NOTIFICATION_RENDER,
 		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
+		CAIRO_DOCK_RUN_FIRST, NULL);*/
 	cairo_dock_register_notification_on_object (&myDocksMgr,
 		NOTIFICATION_LEAVE_DOCK,
 		(CairoDockNotificationFunc) cairo_dock_on_leave_dock_notification,
