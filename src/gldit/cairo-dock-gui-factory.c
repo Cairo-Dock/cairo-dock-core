@@ -1110,42 +1110,6 @@ static GtkListStore *_cairo_dock_build_dock_list_for_gui (void)
 	return pList;
 }
 
-static void _cairo_dock_add_one_icon_item (const gchar *cName, CairoDock *pDock, GtkListStore *pModele)
-{
-	gchar *cUserName = NULL;
-	if (pDock != NULL)  // peut etre NULL (entree vide)
-	{
-		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_FILE (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))  // on evite les sous-docks d'applet, de classe, et de repertoire.
-			return ;
-		if (pDock->iRefCount == 0)
-			cUserName = cairo_dock_get_readable_name_for_fock (pDock);
-	}
-	
-	GtkTreeIter iter;
-	memset (&iter, 0, sizeof (GtkTreeIter));
-	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
-	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-		CAIRO_DOCK_MODEL_NAME, cUserName?cUserName:cName,
-		CAIRO_DOCK_MODEL_RESULT, cName,
-		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
-		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
-	g_free (cUserName);
-}
-static GtkListStore *_cairo_dock_build_icons_list_for_gui (void)
-{
-	GtkListStore *pList = _build_list_for_gui ((CDForeachRendererFunc)cairo_dock_foreach_docks, (GHFunc)_cairo_dock_add_one_dock_item, NULL);
-	GtkTreeIter iter;
-	memset (&iter, 0, sizeof (GtkTreeIter));
-	gtk_list_store_append (GTK_LIST_STORE (pList), &iter);
-	gtk_list_store_set (GTK_LIST_STORE (pList), &iter,
-		CAIRO_DOCK_MODEL_NAME, _("New main dock"),
-		CAIRO_DOCK_MODEL_RESULT, "_New Dock_",  // this name does likely not exist, which will lead to the creation of a new dock.
-		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
-		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
-	return pList;
-}
-
 static void _cairo_dock_add_one_icon_theme_item (const gchar *cDisplayedName, const gchar *cFolderName, GtkListStore *pModele)
 {
 	GtkTreeIter iter;
@@ -2582,8 +2546,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							CAIRO_DOCK_MODEL_RESULT, cID,
 							CAIRO_DOCK_MODEL_ICON, pixbuf, -1);
 						g_free (cImagePath);
-						//if (pixbuf)
-						//	g_object_unref (pixbuf);
+						if (pixbuf)
+							g_object_unref (pixbuf);
 						
 						if (cValue && strcmp (cValue, cID) == 0)
 							gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
