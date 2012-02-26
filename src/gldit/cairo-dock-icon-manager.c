@@ -71,6 +71,7 @@ static int s_iNbNonStickyLaunchers = 0;
 static GtkIconTheme *s_pIconTheme = NULL;
 static gboolean s_bUseLocalIcons = FALSE;
 static gboolean s_bUseDefaultTheme = TRUE;
+static guint s_iSidReloadTheme = 0;
 
 static void _cairo_dock_unload_icon_textures (void);
 static void _cairo_dock_unload_icon_theme (void);
@@ -666,11 +667,19 @@ static void _reload_in_desklet (CairoDesklet *pDesklet, gpointer data)
 		cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, FALSE);
 	}
 }
+static gboolean _on_icon_theme_changed_idle (gpointer data)
+{
+	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _reload_in_desklet, NULL);
+	cairo_dock_reload_buffers_in_all_docks (FALSE);
+	s_iSidReloadTheme = 0;
+	return FALSE;
+}
 static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data)
 {
 	cd_message ("theme has changed");
-	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _reload_in_desklet, NULL);
-	cairo_dock_reload_buffers_in_all_docks (FALSE);
+	// Reload the icons in idle, because this signal is triggered directly by 'gtk_icon_theme_set_search_path()'; so we may end reloading an applet in the middle of its work (ex.: Status-Notifier when the watcher terminates)
+	if (s_iSidReloadTheme == 0)
+		s_iSidReloadTheme = g_idle_add (_on_icon_theme_changed_idle, NULL);
 }
 static void _cairo_dock_load_icon_theme (void)
 {
