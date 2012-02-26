@@ -47,10 +47,10 @@
 #include "cairo-dock-gui-main.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 32
-#define CAIRO_DOCK_CATEGORY_ICON_SIZE 32
+#define CAIRO_DOCK_CATEGORY_ICON_SIZE 24
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW 4
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN 3
-#define CAIRO_DOCK_TABLE_MARGIN 12
+#define CAIRO_DOCK_TABLE_MARGIN 6
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 1250
 #define CAIRO_DOCK_CONF_PANEL_WIDTH_MIN 800
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 700
@@ -106,6 +106,7 @@ static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGO
 GSList *s_pCurrentWidgetList;  // liste des widgets du module courant.
 GSList *s_pExtraCurrentWidgetList;  // liste des widgets des eventuels modules lies.
 static GList *s_pGroupDescriptionList = NULL;
+static GtkWidget *s_pPreviewBox = NULL;
 static GtkWidget *s_pPreviewImage = NULL;
 static GtkWidget *s_pOkButton = NULL;
 static GtkWidget *s_pApplyButton = NULL;
@@ -861,9 +862,11 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 				1,
 				1);
 		}
+		else 
+			gtk_widget_show (s_pPreviewBox);
+
 		gtk_image_set_from_pixbuf (GTK_IMAGE (pPreviewImage), pPreviewPixbuf);
 		gdk_pixbuf_unref (pPreviewPixbuf);
-		gtk_widget_show (pPreviewImage);
 	}
 	
 	if (s_pDialog != NULL)
@@ -913,7 +916,7 @@ static void on_leave_group_button (GtkButton *button, gpointer *data)
 
 	int iPreviewWidgetWidth = s_iPreviewWidth;
 	GtkWidget *pPreviewImage = s_pPreviewImage;
-	gtk_widget_hide (pPreviewImage);
+	gtk_widget_hide (s_pPreviewBox);
 	
 	if (! cairo_dock_dialog_unreference (s_pDialog))
 		cairo_dock_dialog_unreference (s_pDialog);
@@ -1282,7 +1285,7 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 		return pWidget;
 	
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel2 = g_strdup_printf ("<span font_desc=\"Sans 12\"><b>%s</b></span>", cLabel);
+	gchar *cLabel2 = g_strdup_printf ("<span size='large' weight='800'>%s</span>", cLabel);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
 	g_free (cLabel2);
 	
@@ -1563,6 +1566,22 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Icons");
 }
 
+static GtkWidget *cairo_dock_build_main_ihm_left_frame (const gchar *cText)
+{
+	// frame
+	GtkWidget *pFrame = gtk_frame_new (NULL);
+	//gtk_container_set_border_width (GTK_CONTAINER (pFrame), CAIRO_DOCK_FRAME_MARGIN);
+	gtk_frame_set_shadow_type (GTK_FRAME (pFrame), GTK_SHADOW_NONE);
+	
+	// label
+	gchar *cLabel = g_strdup_printf ("<span size='x-large' weight='800' color=\"#81728C\">%s</span>", cText);
+	GtkWidget *pLabel = gtk_label_new (NULL);
+	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
+	g_free (cLabel);
+	gtk_frame_set_label_widget (GTK_FRAME (pFrame), pLabel);
+	
+	return pFrame;
+}
 
 static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 {
@@ -1616,25 +1635,89 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	s_pGroupsVBox = _gtk_vbox_new (CAIRO_DOCK_TABLE_MARGIN);
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), s_pGroupsVBox);
+	GtkWidget *pViewport = gtk_viewport_new( NULL, NULL );
+	gtk_viewport_set_shadow_type ( GTK_VIEWPORT (pViewport), GTK_SHADOW_NONE);
+	gtk_container_add (GTK_CONTAINER( pViewport ), s_pGroupsVBox );
+	gtk_container_add (GTK_CONTAINER( pScrolledWindow ), pViewport );
+
 	gtk_box_pack_start (GTK_BOX (pVBox),
 		pScrolledWindow,
 		TRUE,
 		TRUE,
 		0);
 	
+	// Empty box to get some space between window border and filter label
+	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
+		_gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN / 2),
+		FALSE,
+		FALSE,
+		0);
+
+	//\_____________ Filter.
+	GtkWidget *pFilterFrame = cairo_dock_build_main_ihm_left_frame (_("Filter"));
+	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
+		pFilterFrame,
+		FALSE,
+		FALSE,
+		0);
+
+	// text entry
+	GtkWidget *pFilterBox = _gtk_hbox_new (0);
+	gtk_container_add (GTK_CONTAINER (pFilterFrame), pFilterBox);
+
+	s_pFilterEntry = gtk_entry_new ();
+	g_signal_connect (s_pFilterEntry, "activate", G_CALLBACK (on_activate_filter), NULL);
+	gtk_box_pack_start (GTK_BOX (pFilterBox),
+		s_pFilterEntry,
+		TRUE,
+		FALSE,
+		0);
+	//~ gtk_container_set_focus_child (GTK_CONTAINER (s_pMainWindow), pFilterBox); /// set focus to filter box
+	
+	#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
+	gtk_entry_set_icon_activatable (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, TRUE);
+	gtk_entry_set_icon_from_stock (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
+	g_signal_connect (s_pFilterEntry, "icon-press", G_CALLBACK (on_clear_filter), NULL);
+	#endif
+	
+	// Filter options
+	_reset_filter_state ();
+	
+	GtkWidget *pMenuBar = gtk_menu_bar_new ();
+	GtkWidget *pMenuItem = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
+	gtk_menu_item_set_label (GTK_MENU_ITEM (pMenuItem), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenuBar), pMenuItem);
+	gtk_box_pack_start (GTK_BOX (pFilterBox),
+		pMenuBar,
+		FALSE,
+		FALSE,
+		0);
+	GtkWidget *pMenu = gtk_menu_new ();
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pMenu);
+	
+	
+	pMenuItem = gtk_check_menu_item_new_with_label (_("All words"));
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_all_words), NULL);
+	
+	pMenuItem = gtk_check_menu_item_new_with_label (_("Highlighted words"));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_highlight_words), NULL);
+	
+	pMenuItem = gtk_check_menu_item_new_with_label (_("Hide others"));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_hide_others), NULL);
+	
+	pMenuItem = gtk_check_menu_item_new_with_label (_("Search in description"));
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_search_in_tooltip), NULL);
+	
+
 	//\_____________ On construit les boutons de chaque categorie.
-	GtkWidget *pCategoriesFrame = gtk_frame_new (NULL);
-	gtk_container_set_border_width (GTK_CONTAINER (pCategoriesFrame), CAIRO_DOCK_FRAME_MARGIN);
-	gtk_frame_set_shadow_type (GTK_FRAME (pCategoriesFrame), GTK_SHADOW_OUT);
-	
-	GtkWidget *pLabel;
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Categories"));
-	pLabel = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
-	g_free (cLabel);
-	gtk_frame_set_label_widget (GTK_FRAME (pCategoriesFrame), pLabel);
-	
+	GtkWidget *pCategoriesFrame = cairo_dock_build_main_ihm_left_frame (_("Categories"));
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		pCategoriesFrame,
 		TRUE,  /// FALSE
@@ -1663,6 +1746,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	g_signal_connect (G_OBJECT (pCategoryButton), "clicked", G_CALLBACK(on_click_all_button), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton, -1);
 	pCategoryWidget->pCategoryButton = pCategoryButton;
+	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryButton), TRUE);
 	
 	guint i;
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
@@ -1685,8 +1769,8 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 		gtk_container_set_border_width (GTK_CONTAINER (pCategoryWidget->pFrame), CAIRO_DOCK_FRAME_MARGIN);
 		gtk_frame_set_shadow_type (GTK_FRAME (pCategoryWidget->pFrame), GTK_SHADOW_OUT);
 		
-		pLabel = gtk_label_new (NULL);
-		cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\"><b>%s</b></span>", gettext (s_cCategoriesDescription[2*i]));
+		GtkWidget *pLabel = gtk_label_new (NULL);
+		gchar *cLabel = g_strdup_printf ("<span size='large' weight='800'>%s</span>", gettext (s_cCategoriesDescription[2*i]));
 		gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 		g_free (cLabel);
 		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
@@ -1768,89 +1852,9 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	cairo_dock_foreach_module_in_alphabetical_order ((GCompareFunc) _cairo_dock_add_one_module_widget, cActiveModules);
 	g_free (cActiveModules);
 	
-	//\_____________ On ajoute le filtre.
-	// frame
-	GtkWidget *pFilterFrame = gtk_frame_new (NULL);
-	cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><b><u>%s :</u></b></span>", _("Filter"));
-	GtkWidget *pFilterLabelContainer = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
-	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
-	gtk_container_add (GTK_CONTAINER (pFilterLabelContainer), pImage);
-	
-	pLabel = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
-	g_free (cLabel);
-	gtk_container_add (GTK_CONTAINER (pFilterLabelContainer), pLabel);
-	
-	gtk_frame_set_label_widget (GTK_FRAME (pFilterFrame), pFilterLabelContainer);
-	gtk_container_set_border_width (GTK_CONTAINER (pFilterFrame), CAIRO_DOCK_FRAME_MARGIN);
-	gtk_frame_set_shadow_type (GTK_FRAME (pFilterFrame), GTK_SHADOW_OUT);
-	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
-		pFilterFrame,
-		FALSE,
-		FALSE,
-		0);
-
-	GtkWidget *pOptionVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
-	gtk_container_add (GTK_CONTAINER (pFilterFrame), pOptionVBox);
-	
-	// entree de texte
-	GtkWidget *pFilterBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
-	gtk_box_pack_start (GTK_BOX (pOptionVBox),
-		pFilterBox,
-		FALSE,
-		FALSE,
-		0);
-	s_pFilterEntry = gtk_entry_new ();
-	g_signal_connect (s_pFilterEntry, "activate", G_CALLBACK (on_activate_filter), NULL);
-	gtk_box_pack_start (GTK_BOX (pFilterBox),
-		s_pFilterEntry,
-		FALSE,
-		FALSE,
-		0);
-	
-	#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
-	gtk_entry_set_icon_activatable (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, TRUE);
-	gtk_entry_set_icon_from_stock (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
-	g_signal_connect (s_pFilterEntry, "icon-press", G_CALLBACK (on_clear_filter), NULL);
-	#endif
-	
-	// options
-	_reset_filter_state ();
-	
-	GtkWidget *pMenuBar = gtk_menu_bar_new ();
-	GtkWidget *pMenuItem = gtk_menu_item_new_with_label (_("Options"));
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenuBar), pMenuItem);
-	gtk_box_pack_start (GTK_BOX (pOptionVBox),
-		pMenuBar,
-		FALSE,
-		FALSE,
-		0);
-	GtkWidget *pMenu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pMenu);
-	
-	pMenuItem = gtk_check_menu_item_new_with_label (_("All words"));
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
-	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_all_words), NULL);
-	
-	pMenuItem = gtk_check_menu_item_new_with_label (_("Highlighted words"));
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
-	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_highlight_words), NULL);
-	
-	pMenuItem = gtk_check_menu_item_new_with_label (_("Hide others"));
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
-	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_hide_others), NULL);
-	
-	pMenuItem = gtk_check_menu_item_new_with_label (_("Search in description"));
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
-	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_search_in_tooltip), NULL);
-	
 	//\_____________ On ajoute le cadre d'activation du module.
 	s_pGroupFrame = gtk_frame_new ("pouet");
-	gtk_container_set_border_width (GTK_CONTAINER (s_pGroupFrame), CAIRO_DOCK_FRAME_MARGIN);
-	gtk_frame_set_shadow_type (GTK_FRAME (s_pGroupFrame), GTK_SHADOW_OUT);
+	gtk_frame_set_shadow_type (GTK_FRAME (s_pGroupFrame), GTK_SHADOW_NONE);
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		s_pGroupFrame,
 		FALSE,
@@ -1862,15 +1866,15 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	gtk_widget_show_all (s_pActivateButton);
 	
 	//\_____________ On ajoute la zone de prevue.
-	GtkWidget *pInfoVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	s_pPreviewBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
-		pInfoVBox,
+		s_pPreviewBox,
 		FALSE,
 		FALSE,
 		0);
 	
 	s_pPreviewImage = gtk_image_new_from_pixbuf (NULL);
-	gtk_container_add (GTK_CONTAINER (pInfoVBox), s_pPreviewImage);
+	gtk_container_add (GTK_CONTAINER (s_pPreviewBox), s_pPreviewImage);
 	
 	//\_____________ On ajoute les boutons.
 	GtkWidget *pButtonsHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
@@ -1922,7 +1926,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	gchar *cLink = cairo_dock_get_third_party_applets_link ();
 	GtkWidget *pThirdPartyButton = gtk_link_button_new_with_label (cLink, _("More applets"));
 	gtk_widget_set_tooltip_text (pThirdPartyButton, _("Get more applets online !"));
-	pImage = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);
+	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (pThirdPartyButton), pImage);
 	g_free (cLink);
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
@@ -1953,7 +1957,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	gtk_widget_hide (s_pApplyButton);
 	gtk_widget_hide (s_pOkButton);
 	gtk_widget_hide (s_pGroupFrame);
-	gtk_widget_hide (s_pPreviewImage);
+	gtk_widget_hide (s_pPreviewBox);
 	
 	g_signal_connect (G_OBJECT (s_pMainWindow),
 		"delete-event",
@@ -2343,7 +2347,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 	
 	//\_______________ On met a jour la frame du groupe (label + check-button).
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel = g_strdup_printf ("<span font_desc=\"Sans 12\" color=\"#81728C\"><u><b>%s</b></u></span>", pGroupDescription->cTitle);
+	gchar *cLabel = g_strdup_printf ("<span size='x-large' weight='800' color=\"#81728C\">%s</span>", pGroupDescription->cTitle);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
 	gtk_frame_set_label_widget (GTK_FRAME (s_pGroupFrame), pLabel);
