@@ -59,6 +59,11 @@ void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend
 	s_pEnvBackend = pVFSBackend;
 }
 
+gboolean cairo_dock_fm_vfs_backend_is_defined (void)
+{
+	return (s_pEnvBackend != NULL);
+}
+
 
 GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cFullURI)
 {
@@ -511,7 +516,7 @@ gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
 
 static inline CairoDockDesktopEnv _guess_environment (void)
 {
-	const gchar * cEnv = g_getenv ("GNOME_DESKTOP_SESSION_ID");
+	const gchar * cEnv = g_getenv ("GNOME_DESKTOP_SESSION_ID");  // this value is now deprecated, but has been maintained for compatibility, so let's keep using it (Note: a possible alternative would be to check for org.gnome.SessionManager on Dbus)
 	if (cEnv != NULL && *cEnv != '\0')
 		return CAIRO_DOCK_GNOME;
 	
