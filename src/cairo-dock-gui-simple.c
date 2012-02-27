@@ -179,7 +179,8 @@ static gchar * _make_simple_conf_file (void)
 	//\_____________ On actualise le fichier de conf simple.
 	// on cree le fichier au besoin, et on l'ouvre.
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
-	if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+	/// at the moment, always copy the conf file, because when applied, it's modified with the themes keys. this will not occur with the next version ;-)
+	///if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
 		cairo_dock_copy_file (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
 	}
@@ -1028,7 +1029,6 @@ void cairo_dock_register_simple_gui_backend (void)
 	
 	pBackend->show_main_gui 				= show_main_gui;
 	pBackend->show_module_gui 				= show_module_gui;
-	//pBackend->show_module_instance_gui 		= show_module_instance_gui;
 	pBackend->close_gui 					= close_gui;
 	pBackend->update_module_state 			= update_module_state;
 	pBackend->update_module_instance_container = cairo_dock_gui_items_update_module_instance_container;
