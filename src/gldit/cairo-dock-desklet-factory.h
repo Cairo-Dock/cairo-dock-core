@@ -1,4 +1,4 @@
-/*
+/**
 * This file is a part of the Cairo-Dock project
 * Login : <ctaf42@gmail.com>
 * Started on  Sun Jan 27 18:35:38 2008 Cedric GESTES
