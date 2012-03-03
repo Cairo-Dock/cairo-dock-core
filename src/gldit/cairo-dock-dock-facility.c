@@ -1055,12 +1055,16 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 
 static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 {
-	g_print ("%s (%s)\n", __func__, pIcon->cName);
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 	if (pDock != NULL)
 	{
 		if (pIcon->pSubDock != NULL)
 		{
+			if (pDock->container.iWidth == 1 && pDock->container.iHeight == 1)  // if the GTK resize process has not yet ended, the window may be in an awkward state: the size is forced by GTK to 1x1, which causes the FBO to fail (obviously, 1x1 is too small).
+			{
+				pIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content_idle, pIcon);
+				return FALSE;
+			}
 			cairo_dock_draw_subdock_content_on_icon (pIcon, pDock);
 		}
 		else  // l'icone a pu perdre son sous-dock entre-temps (exemple : une classe d'appli contenant 2 icones, dont on enleve l'une des 2.
