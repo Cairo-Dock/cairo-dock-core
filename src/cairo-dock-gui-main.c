@@ -144,6 +144,8 @@ static void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 static CairoDockGroupDescription *cairo_dock_find_module_description (const gchar *cModuleName);
 static void cairo_dock_apply_current_filter (gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther);
 static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, CairoDockGroupDescription *pGroupDescription, gboolean bSingleGroup, CairoDockModuleInstance *pInstance);
+static void cairo_dock_reset_current_widget_list (void);
+static void _trigger_current_filter (void);
 
   ////////////
  // FILTER //
@@ -734,9 +736,125 @@ void cairo_dock_apply_filter_on_group_list (gchar **pKeyWords, gboolean bAllWord
 }
 
 
+  ///////////////////
+ // MODULE DISPLAY //
+/////////////////////
+
+static void _add_module_to_grid (CairoDockCategoryWidgetTable *pCategoryWidget, GtkWidget *pWidget)
+{
+	if (pCategoryWidget->iNbItemsInCurrentRow == s_iNbButtonsByRow)
+	{
+		pCategoryWidget->iNbItemsInCurrentRow = 0;
+		pCategoryWidget->iNbRows ++;
+	}
+	gtk_table_attach_defaults (GTK_TABLE (pCategoryWidget->pTable),
+		pWidget,
+		pCategoryWidget->iNbItemsInCurrentRow,
+		pCategoryWidget->iNbItemsInCurrentRow+1,
+		pCategoryWidget->iNbRows,
+		pCategoryWidget->iNbRows+1);
+	pCategoryWidget->iNbItemsInCurrentRow ++;
+}
+
+static void _remove_module_from_grid (GtkWidget *pWidget, GtkContainer *pContainer)
+{
+	g_object_ref (pWidget);
+	gtk_container_remove (GTK_CONTAINER (pContainer), GTK_WIDGET (pWidget));
+}
+
+static void cairo_dock_prepare_module_list (const gchar* cTitle, gpointer path)
+{
+	// Remove status message.
+	if (s_pStatusBar)
+		gtk_statusbar_pop (GTK_STATUSBAR (s_pStatusBar), 0);
+	
+	// Destroy current group widget.
+	if (s_pCurrentGroupWidget != NULL)
+	{
+		gtk_widget_destroy (s_pCurrentGroupWidget);
+		s_pCurrentGroupWidget = NULL;
+		cairo_dock_reset_current_widget_list ();
+		s_pCurrentGroup = NULL;
+	}
+	
+	// Hide non related buttons and box.
+	gtk_widget_hide (s_pOkButton);
+	gtk_widget_hide (s_pApplyButton);
+	gtk_widget_hide (s_pGroupFrame);
+	
+	// Run filter.
+	_trigger_current_filter ();
+	
+	// Update window title.
+	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), cTitle);
+
+	// Add page to path if needed.
+	if (s_path == NULL || s_path->data != path)
+		s_path = g_slist_prepend (s_path, path);
+}
+
+
   ///////////////
  // CALLBACKS //
 ///////////////
+
+static void on_click_toggle_activated (GtkButton *button, gpointer data)
+{
+	int iCatMin = 1; // Don't change the first group (0).
+	gboolean bEnableHideModules = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+	gboolean bGroupShow[CAIRO_DOCK_NB_CATEGORY+1];
+	CairoDockGroupDescription *pGroupDescription;
+	CairoDockCategoryWidgetTable *pCategoryWidget;
+
+	for (int iCategory = iCatMin; iCategory < CAIRO_DOCK_NB_CATEGORY; iCategory ++)
+	{
+		pCategoryWidget = &s_pCategoryWidgetTables[iCategory];
+
+		// Set visible categories to FALSE
+		bGroupShow[iCategory] = FALSE;
+
+		// Remove all modules widgets from category table.
+		gtk_container_foreach (GTK_CONTAINER (pCategoryWidget->pTable), (GtkCallback) _remove_module_from_grid, GTK_CONTAINER (pCategoryWidget->pTable));
+
+		// Reset category table.
+		pCategoryWidget->iNbRows = 0;
+		pCategoryWidget->iNbItemsInCurrentRow = 0;
+		
+		gtk_widget_destroy(pCategoryWidget->pTable);
+		pCategoryWidget->pTable = gtk_table_new (1, s_iNbButtonsByRow, TRUE);
+		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pFrame), GTK_WIDGET (pCategoryWidget->pTable));
+		gtk_table_set_row_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
+		gtk_table_set_col_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
+	}
+
+	// Put the widgets in the new table.
+	for (GList *gd = g_list_last (s_pGroupDescriptionList); gd != NULL; gd = gd->prev)
+	{
+		pGroupDescription = gd->data;
+		if (pGroupDescription->iCategory >= iCatMin
+			&& pGroupDescription->pGroupHBox != NULL
+			&& (bEnableHideModules == FALSE || gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton)) == TRUE))
+		{
+			bGroupShow[pGroupDescription->iCategory] = TRUE;
+			_add_module_to_grid (&s_pCategoryWidgetTables[pGroupDescription->iCategory], GTK_WIDGET (pGroupDescription->pGroupHBox));
+			g_object_unref (pGroupDescription->pGroupHBox);
+		}
+	}
+
+	// Show everything except empty groups.
+	gtk_widget_show_all (GTK_WIDGET (s_pGroupsVBox));
+	for (int iCategory = iCatMin; iCategory < CAIRO_DOCK_NB_CATEGORY; iCategory ++)
+	{
+		if (bGroupShow[iCategory] == FALSE)
+		{
+			pCategoryWidget = &s_pCategoryWidgetTables[iCategory];
+			gtk_widget_hide (GTK_WIDGET (pCategoryWidget->pFrame));
+		}
+	}
+	
+	//\_______________ Set common settings for modules list.
+	cairo_dock_prepare_module_list (_("Cairo-Dock configuration"), GINT_TO_POINTER (0));
+}
 
 static void on_click_category_button (GtkButton *button, gpointer data)
 {
@@ -1379,24 +1497,12 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 	gtk_container_add (GTK_CONTAINER (pGroupButton), pButtonHBox);
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
 		pGroupButton,
-		FALSE,
-		FALSE,
+		TRUE,
+		TRUE,
 		0);
 
 	//\____________ On place le bouton dans sa table.
-	CairoDockCategoryWidgetTable *pCategoryWidget = &s_pCategoryWidgetTables[iCategory];
-	if (pCategoryWidget->iNbItemsInCurrentRow == s_iNbButtonsByRow)
-	{
-		pCategoryWidget->iNbItemsInCurrentRow = 0;
-		pCategoryWidget->iNbRows ++;
-	}
-	gtk_table_attach_defaults (GTK_TABLE (pCategoryWidget->pTable),
-		pGroupHBox,
-		pCategoryWidget->iNbItemsInCurrentRow,
-		pCategoryWidget->iNbItemsInCurrentRow+1,
-		pCategoryWidget->iNbRows,
-		pCategoryWidget->iNbRows+1);
-	pCategoryWidget->iNbItemsInCurrentRow ++;
+	_add_module_to_grid (&s_pCategoryWidgetTables[iCategory], pGroupHBox);
 	return pGroupDescription;
 }
 
@@ -1715,6 +1821,16 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
 	g_signal_connect (pMenuItem, "toggled", G_CALLBACK (on_toggle_search_in_tooltip), NULL);
 	
+	//\_____________ Add module display choice.
+	GtkWidget *pModuleSelectFrame = cairo_dock_build_main_ihm_left_frame (_("Applets"));
+	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
+		pModuleSelectFrame,
+		FALSE,
+		FALSE,
+		0);
+	GtkWidget *pModuleSelect = gtk_check_button_new_with_label (_("Hide disabled"));
+	gtk_container_add (GTK_CONTAINER (pModuleSelectFrame), pModuleSelect);
+	g_signal_connect (G_OBJECT (pModuleSelect), "clicked", G_CALLBACK(on_click_toggle_activated), NULL);
 
 	//\_____________ On construit les boutons de chaque categorie.
 	GtkWidget *pCategoriesFrame = cairo_dock_build_main_ihm_left_frame (_("Categories"));
@@ -1986,19 +2102,6 @@ static void cairo_dock_hide_all_categories (void)
 
 static void cairo_dock_show_all_categories (void)
 {
-	if (s_pStatusBar)
-		gtk_statusbar_pop (GTK_STATUSBAR (s_pStatusBar), 0);
-	
-	//\_______________ On detruit le widget du groupe courant.
-	if (s_pCurrentGroupWidget != NULL)
-	{
-		gtk_widget_destroy (s_pCurrentGroupWidget);
-		s_pCurrentGroupWidget = NULL;
-		cairo_dock_reset_current_widget_list ();
-		
-		s_pCurrentGroup = NULL;
-	}
-
 	//\_______________ On montre chaque module.
 	CairoDockCategoryWidgetTable *pCategoryWidget;
 	int i;
@@ -2023,33 +2126,12 @@ static void cairo_dock_show_all_categories (void)
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, on_click_all_button, NULL);
 	
-	gtk_widget_hide (s_pOkButton);
-	gtk_widget_hide (s_pApplyButton);
-	gtk_widget_hide (s_pGroupFrame);
-	
-	//\_______________ On actualise le titre de la fenetre.
-	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), _("Cairo-Dock configuration"));
-	if (s_path == NULL || s_path->data != GINT_TO_POINTER (0))
-		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (0));
-
-	//\_______________ On declenche le filtre.
-	_trigger_current_filter ();
+	//\_______________ Set common settings for modules list.
+	cairo_dock_prepare_module_list (_("Cairo-Dock configuration"), GINT_TO_POINTER (0));
 }
 
 static void cairo_dock_show_one_category (int iCategory)
 {
-	if (s_pStatusBar)
-		gtk_statusbar_pop (GTK_STATUSBAR (s_pStatusBar), 0);
-	
-	//\_______________ On detruit le widget du groupe courant.
-	if (s_pCurrentGroupWidget != NULL)
-	{
-		gtk_widget_destroy (s_pCurrentGroupWidget);
-		s_pCurrentGroupWidget = NULL;
-		cairo_dock_reset_current_widget_list ();
-		s_pCurrentGroup = NULL;
-	}
-
 	//\_______________ On montre chaque module de la categorie.
 	CairoDockCategoryWidgetTable *pCategoryWidget;
 	int i;
@@ -2078,17 +2160,8 @@ static void cairo_dock_show_one_category (int iCategory)
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, on_click_all_button, NULL);
 	
-	gtk_widget_hide (s_pOkButton);
-	gtk_widget_hide (s_pApplyButton);
-	gtk_widget_hide (s_pGroupFrame);
-	
-	//\_______________ On actualise le titre de la fenetre.
-	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), gettext (s_cCategoriesDescription[2*iCategory]));
-	if (s_path == NULL || s_path->data != GINT_TO_POINTER (iCategory+1))
-		s_path = g_slist_prepend (s_path, GINT_TO_POINTER (iCategory+1));
-
-	//\_______________ On declenche le filtre.
-	_trigger_current_filter ();
+	//\_______________ Set common settings for modules list.
+	cairo_dock_prepare_module_list (gettext (s_cCategoriesDescription[2*iCategory]), GINT_TO_POINTER (iCategory+1));
 }
 
 static void cairo_dock_toggle_category_button (int iCategory)
