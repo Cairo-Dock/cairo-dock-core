@@ -978,7 +978,7 @@ static void cairo_dock_free_categories (void)
 	s_path = NULL;
 }
 
-static gboolean on_delete_main_gui (GtkWidget *pWidget, GdkEvent *event, gpointer data)
+static gboolean on_delete_main_gui (GtkWidget *pWidget, gpointer data)
 {
 	cairo_dock_free_categories ();
 	if (s_iSidShowGroupDialog != 0)
@@ -1960,7 +1960,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	gtk_widget_hide (s_pPreviewBox);
 	
 	g_signal_connect (G_OBJECT (s_pMainWindow),
-		"delete-event",
+		"destroy",
 		G_CALLBACK (on_delete_main_gui),
 		NULL);
 	return s_pMainWindow;
