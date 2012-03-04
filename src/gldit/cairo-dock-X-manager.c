@@ -62,6 +62,7 @@ static Atom s_aNetActiveWindow;
 static Atom s_aNetCurrentDesktop;
 static Atom s_aNetDesktopViewport;
 static Atom s_aNetDesktopGeometry;
+static Atom s_aNetWorkarea;
 static Atom s_aNetShowingDesktop;
 static Atom s_aRootMapID;
 static Atom s_aNetNbDesktops;
@@ -109,12 +110,12 @@ static void _on_change_desktop_geometry (void)
 		cd_message ("resolution alteree");
 		
 		cairo_dock_reposition_root_docks (FALSE);  // main dock compris. Se charge de Xinerama.
+		
+		cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
+		_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
+		
+		cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_SCREEN_GEOMETRY_ALTERED);
 	}
-	
-	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
-	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
-	
-	cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_SCREEN_GEOMETRY_ALTERED);
 }
 
 static gboolean _cairo_dock_unstack_Xevents (gpointer data)
@@ -131,7 +132,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 	while (XCheckMaskEvent (s_XDisplay, event_mask, &event))
 	{
 		Xid = event.xany.window;
-		//g_print ("  type : %d; atom : %s; window : %d\n", event.type, gdk_x11_get_xatom_name (event.xproperty.atom), Xid);
+		//g_print ("  type : %d; atom : %s; window : %d\n", event.type, XGetAtomName (s_XDisplay, event.xproperty.atom), Xid);
 		//if (event.type == ClientMessage)
 		//cd_message ("\n\n\n >>>>>>>>>>>< event.type : %d\n\n", event.type);
 		if (Xid == root)
@@ -155,7 +156,7 @@ static gboolean _cairo_dock_unstack_Xevents (gpointer data)
 				{
 					_on_change_nb_desktops ();  // -> NOTIFICATION_SCREEN_GEOMETRY_ALTERED
 				}
-				else if (event.xproperty.atom == s_aNetDesktopGeometry)
+				else if (event.xproperty.atom == s_aNetDesktopGeometry || event.xproperty.atom == s_aNetWorkarea)  // check s_aNetWorkarea too, to workaround a bug in Compiz (or X?) : when down-sizing the screen, the _NET_DESKTOP_GEOMETRY atom is not received  (up-sizing is ok though, and changing the viewport makes the atom to be received); but _NET_WORKAREA is correctly sent; since it's only sent when the resolution is changed, or the dock's height (if space is reserved), it's not a big overload to check it too.
 				{
 					_on_change_desktop_geometry ();  // -> NOTIFICATION_SCREEN_GEOMETRY_ALTERED
 				}
@@ -526,6 +527,7 @@ static void init (void)
 	s_aNetCurrentDesktop	= XInternAtom (s_XDisplay, "_NET_CURRENT_DESKTOP", False);
 	s_aNetDesktopViewport	= XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
 	s_aNetDesktopGeometry	= XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
+	s_aNetWorkarea			= XInternAtom (s_XDisplay, "_NET_WORKAREA", False);
 	s_aNetShowingDesktop 	= XInternAtom (s_XDisplay, "_NET_SHOWING_DESKTOP", False);
 	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
 	s_aNetNbDesktops		= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
