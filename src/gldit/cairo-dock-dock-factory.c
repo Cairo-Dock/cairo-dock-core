@@ -506,6 +506,7 @@ static void _setup_menu (CairoContainer *pContainer, Icon *pIcon, GtkWidget *pMe
 	}
 }
 
+
 CairoDock *cairo_dock_new_dock (void)
 {
 	//\__________________ On cree un dock.
@@ -532,6 +533,7 @@ CairoDock *cairo_dock_new_dock (void)
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
+	
 	
 	cairo_dock_register_notification_on_object (pDock,
 		NOTIFICATION_RENDER,
@@ -634,9 +636,10 @@ void cairo_dock_free_dock (CairoDock *pDock)
 	if (pDock->iSidUpdateDockSize != 0)
 		g_source_remove (pDock->iSidUpdateDockSize);
 	
-	g_list_foreach (pDock->icons, (GFunc) cairo_dock_free_icon, NULL);
-	g_list_free (pDock->icons);
-	pDock->icons = NULL;
+	GList *icons = pDock->icons;
+	pDock->icons = NULL;  // remove the icons first, to avoid any use of 'icons' in the 'destroy' callbacks.
+	g_list_foreach (icons, (GFunc) cairo_dock_free_icon, NULL);
+	g_list_free (icons);
 	
 	if (pDock->pShapeBitmap != NULL)
 		gldi_shape_destroy (pDock->pShapeBitmap);
