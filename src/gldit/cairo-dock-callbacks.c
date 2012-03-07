@@ -1256,7 +1256,7 @@ gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, Cair
 
 gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
+	//g_print ("%s (%p, main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
 	// set the new actual size of the container
 	gint iNewWidth, iNewHeight, iNewX, iNewY;
 	if (pDock->container.bIsHorizontal)
@@ -1428,7 +1428,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	no icon => if order undefined: drop on dock; else: drop between 2 icons.*/
 	Icon *pPointedIcon = NULL;
 	double fOrder;
-	if (s_bCouldDrop/**pDock->bCanDrop*/ || g_str_has_suffix (cReceivedData, ".desktop"))  // can drop on the dock (.desktop are always added, not .sh)
+	if (s_bCouldDrop)  // can drop on the dock
 	{
 		cd_debug ("drop between icons");
 		if (myDocksParam.bLockIcons || myDocksParam.bLockAll)  // locked, can't add anything.
@@ -1468,7 +1468,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	{
 		pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 		fOrder = CAIRO_DOCK_LAST_ORDER;
-		if (pPointedIcon == NULL)  // no icon => abort
+		if (pPointedIcon == NULL && ! g_str_has_suffix (cReceivedData, ".desktop"))  // no icon => abort, but .desktop are always added
 		{
 			cd_debug ("drop nowhere");
 			gtk_drag_finish (dc, FALSE, FALSE, time);
