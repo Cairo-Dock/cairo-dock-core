@@ -669,6 +669,7 @@ static void _reload_in_desklet (CairoDesklet *pDesklet, gpointer data)
 }
 static gboolean _on_icon_theme_changed_idle (gpointer data)
 {
+	cd_debug ("");
 	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _reload_in_desklet, NULL);
 	cairo_dock_reload_buffers_in_all_docks (FALSE);
 	s_iSidReloadTheme = 0;
