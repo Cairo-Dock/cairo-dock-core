@@ -969,7 +969,20 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	// since we've just entered the dock, the pointed icon has changed from none to the current one.
 	if (pEvent != NULL)
 	{
-		Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
+		// update the mouse coordinates
+		if (pDock->container.bIsHorizontal)
+		{
+			pDock->container.iMouseX = (int) pEvent->x;
+			pDock->container.iMouseY = (int) pEvent->y;
+		}
+		else
+		{
+			pDock->container.iMouseX = (int) pEvent->y;
+			pDock->container.iMouseY = (int) pEvent->x;
+		}
+		// then compute the icons (especially the pointed one).
+		Icon *icon = cairo_dock_calculate_dock_icons (pDock);  // returns the pointed icon
+		// trigger the change to trigger the animation and sub-dock popup
 		if (icon != NULL)
 		{
 			cairo_dock_on_change_icon (NULL, icon, pDock);  // we were out of the dock, so there is no previous pointed icon.
