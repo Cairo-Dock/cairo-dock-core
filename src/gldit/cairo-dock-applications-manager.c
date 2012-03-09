@@ -588,7 +588,7 @@ static void _on_change_window_desktop (Icon *icon)
 static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 {
 	Window Xid = icon->Xid;
-	int x, y;
+	int x = e->x, y = e->y;
 	int w = e->width, h = e->height;
 	
 	#ifdef HAVE_XEXTEND
@@ -607,16 +607,32 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	#endif
 	
 	// get the correct coordinates (same reason as in cairo_dock_get_xwindow_geometry(), this is a workaround to a bug in X; we didn't need that before Ubuntu 11.10).
+	// actually, the XConfigureEvent has more precise coordinates during a move (updated more often than the ones from XTranslateCoordinates), but it has nil coordinates during a resize (and we have no way to distinguish this case).
 	Window child, root = DefaultRootWindow (s_XDisplay);
 	XTranslateCoordinates (s_XDisplay, Xid, root, 0, 0, &x, &y, &child);
-	//g_print ("%s ((%d;%d) <> (%d;%d), %dx%d)\n", __func__, x, y, e->x, e->y, w, h);
+	//g_print (" :: %s ((%d;%d) <> (%d;%d), %dx%d)\n", __func__, x, y, e->x, e->y, w, h);
 	
-	icon->windowGeometry.width = w;
-	icon->windowGeometry.height = h;
-	icon->windowGeometry.x = x;
-	icon->windowGeometry.y = y;
+	// take into account the window borders (Note: we don't monitor the _NET_FRAME_EXTENTS property, so let's retrieve theme now; maybe we should monitor them...)
+	int left=0, right=0, top=0, bottom=0;
+	gulong iLeftBytes, iBufferNbElements = 0;
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	gulong *pBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, XInternAtom (s_XDisplay, "_NET_FRAME_EXTENTS", False), 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pBuffer);
+	if (iBufferNbElements > 3)
+	{
+		left=pBuffer[0], right=pBuffer[1], top=pBuffer[2], bottom=pBuffer[3];
+	}
+	if (pBuffer)
+		XFree (pBuffer);
+	
+	icon->windowGeometry.width = w + left + right;
+	icon->windowGeometry.height = h + top + bottom;
+	icon->windowGeometry.x = x - left;
+	icon->windowGeometry.y = y - top;
 	icon->iViewPortX = x / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportX;
 	icon->iViewPortY = y / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportY;
+	//g_print (" :: (%d;%d) %dx%d)\n", icon->windowGeometry.x, icon->windowGeometry.y, icon->windowGeometry.width, icon->windowGeometry.height);
 	
 	// on regarde si l'appli est sur le viewport courant.
 	if (x + w <= 0 || x >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || y + h <= 0 || y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // not on this desktop (actually, it may be only a little bit on this desktop ... maybe we should use a % of the width, or a margin ...)

@@ -1239,13 +1239,24 @@ void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLo
 	//g_print (" %d;%d %dx%d\n", x_return, y_return, width_return, height_return);
 	//g_print (" -> %d;%d\n", dest_x_return, dest_y_return);
 	
-	/// TODO: get the borders' width with:
-	/// _NET_FRAME_EXTENTS, left, right, top, bottom, CARDINAL[4]/32
+	// take into account the window borders
+	int left=0, right=0, top=0, bottom=0;
+	gulong iLeftBytes, iBufferNbElements = 0;
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	gulong *pBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, XInternAtom (s_XDisplay, "_NET_FRAME_EXTENTS", False), 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pBuffer);
+	if (iBufferNbElements > 3)
+	{
+		left=pBuffer[0], right=pBuffer[1], top=pBuffer[2], bottom=pBuffer[3];
+	}
+	if (pBuffer)
+		XFree (pBuffer);
 	
-	*iLocalPositionX = dest_x_return;
-	*iLocalPositionY = dest_y_return;
-	*iWidthExtent = width_return;  // unfortunately border_width_return is always 0, so we can't use it here :-/
-	*iHeightExtent = height_return;
+	*iLocalPositionX = dest_x_return - left;
+	*iLocalPositionY = dest_y_return - top;
+	*iWidthExtent = width_return + left + right;  // unfortunately border_width_return is always 0, so we can't use it here :-/
+	*iHeightExtent = height_return + top + bottom;
 }
 
 void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY)
