@@ -679,15 +679,18 @@ GtkWidget *cairo_dock_build_shortkeys_widget (void)
 	// demander
 	rend = gtk_cell_renderer_text_new ();
 	col = gtk_tree_view_column_new_with_attributes (_("Origin"), rend, "text", CD_SHORTKEY_MODEL_NAME, NULL);
+	gtk_tree_view_column_set_expand (col, TRUE);
 	gtk_tree_view_column_set_sort_column_id (col, CD_SHORTKEY_MODEL_NAME);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 	// action description
 	rend = gtk_cell_renderer_text_new ();
 	col = gtk_tree_view_column_new_with_attributes (_("Action"), rend, "text", CD_SHORTKEY_MODEL_DESCRIPTION, NULL);
+	gtk_tree_view_column_set_expand (col, TRUE);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 	// shortkey
 	rend = gtk_cell_renderer_text_new ();
 	col = gtk_tree_view_column_new_with_attributes (_("Shortkey"), rend, "text", CD_SHORTKEY_MODEL_SHORTKEY, NULL);
+	gtk_tree_view_column_set_expand (col, TRUE);
 	gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_shortkey, NULL, NULL);
 	gtk_tree_view_column_set_sort_column_id (col, CD_SHORTKEY_MODEL_SHORTKEY);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);

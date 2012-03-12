@@ -91,10 +91,7 @@ sub-dock view = default
 #[gtk-select-font]
 [Shortkeys]
 
-#F[Keyboard shortcuts currently available;gtk-select-font]
-frame_key=
-
-#_ 
+#< 
 #{Many applets provide shortkeys for their actions. As soon as an applet is enabled, its shortkeys become available.
 #Double-click on a line, and press the shortkey you want to use for the corresponding action.}
 shortkeys=
@@ -103,10 +100,7 @@ shortkeys=
 #[@pkgdatadir@/icons/icon-plug-ins.svg]
 [Add-ons]
 
-#F[Add or remove any applet;@pkgdatadir@/icons/icon-accessories.svg]
-frame_mod=
-
-#_ 
+#< 
 #{Select a line to get a preview and a description of the applet.
 #Click on the left check-box to (de)activate an applet.
 #Once an applet is active, you can configure it by right clicking on its icon.}
@@ -120,5 +114,5 @@ third party=http://forum.glx-dock.org
 #[@pkgdatadir@/icons/icon-controler.svg]
 [Themes]
 
-#_
+#<
 notebook=

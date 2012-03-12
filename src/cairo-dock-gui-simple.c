@@ -756,15 +756,6 @@ static void _make_theme_manager_widget (GtkWidget *pSimpleConfigWindow)
 		pDataGarbage,
 		NULL);  // les widgets seront ajoutes a la liste deja existante. Donc lors de l'ecriture, ils seront ecrit aussi, dans les cles definies dans le fichier de conf (donc de nouveaux groupes seront ajoutés).
 	
-	// l'onglet du groupe a deja son propre ascenseur.
-	int i, n = gtk_notebook_get_n_pages (GTK_NOTEBOOK (pThemeNotebook));
-	for (i = 0; i < n; i ++)
-	{
-		GtkWidget *pScrolledWindow = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pThemeNotebook), i);
-		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-	}
-	
-	g_object_set (pThemeNotebook, "height-request", MIN (CAIRO_DOCK_SIMPLE_PANEL_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 100), NULL);  // sinon le notebook est tout petit :-/
 	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox),
 		pThemeNotebook,
 		TRUE,
@@ -787,17 +778,16 @@ static void _make_modules_widget (GtkWidget *pSimpleConfigWindow)
 	
 	//\_____________ On l'ajoute a la fenetre.
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.
 	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow, FALSE, FALSE, 0);
 	
 	//\______________ On construit le widget de prevue et on le rajoute a la suite.
-	gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
+	gchar *cDefaultMessage = g_strdup_printf ("<b><big>%s</big></b>", _("Click on an applet in order to have a preview and a description for it."));
 	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pSimpleConfigWindow), "garbage");
 	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (pSimpleConfigWindow, pOneWidget, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
-	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pPreviewBox, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pPreviewBox, TRUE, TRUE, 0);
 	g_free (cDefaultMessage);
 }
 static void _make_shortkeys_widget (GtkWidget *pSimpleConfigWindow)
@@ -810,12 +800,8 @@ static void _make_shortkeys_widget (GtkWidget *pSimpleConfigWindow)
 	GtkWidget *pOneWidget = cairo_dock_build_shortkeys_widget ();
 	
 	//\_____________ On l'ajoute a la fenetre.
-	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
+	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pOneWidget, TRUE, TRUE, 0);
 	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.
-	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow, FALSE, FALSE, 0);
 }
 static void _make_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
 {
