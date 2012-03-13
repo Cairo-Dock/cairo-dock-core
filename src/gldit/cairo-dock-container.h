@@ -210,11 +210,21 @@ void cairo_dock_finish_container (CairoContainer *pContainer);
 #define GLDI_KEY(x) GDK_KEY_##x
 #endif
 
+#if (GTK_MAJOR_VERSION < 3)
 #define gldi_container_update_mouse_position(pContainer) \
 	if ((pContainer)->bIsHorizontal) \
 		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseX, &pContainer->iMouseY, NULL); \
 	else \
 		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseY, &pContainer->iMouseX, NULL);
+#else
+#define gldi_container_update_mouse_position(pContainer) \
+	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget)); \
+	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager); \
+	if ((pContainer)->bIsHorizontal) \
+		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseX, &pContainer->iMouseY, NULL); \
+	else \
+		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL);
+#endif
 
 #if (GTK_MAJOR_VERSION < 3)
 #define _gtk_hbox_new(m) gtk_hbox_new (FALSE, m)

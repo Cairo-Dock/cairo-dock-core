@@ -1670,10 +1670,20 @@ static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 {
 	g_return_if_fail (pDock != NULL);
 	int iMouseX, iMouseY;
+	#if (GTK_MAJOR_VERSION < 3)
 	if (pDock->container.bIsHorizontal)
 		gdk_window_get_pointer (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), &iMouseX, &iMouseY, NULL);
 	else
 		gdk_window_get_pointer (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), &iMouseY, &iMouseX, NULL);
+	#else
+	CairoContainer *pContainer = CAIRO_CONTAINER (pDock);
+	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget));
+	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager);
+	if (pDock->container.bIsHorizontal)
+		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &iMouseX, &iMouseY, NULL);
+	else
+		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &iMouseY, &iMouseX, NULL);
+	#endif
 	cd_debug (" %d;%d", iMouseX, iMouseY);
 	
 	///pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;

@@ -155,7 +155,14 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 {
 	Icon *pIcon = pDialog->pIcon;
 	int iMouseX, iMouseY;
+	#if (GTK_MAJOR_VERSION < 3)
 	gdk_window_get_pointer (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDialog)), &iMouseX, &iMouseY, NULL);
+	#else
+	CairoContainer *pContainer = CAIRO_CONTAINER (pDialog);
+	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget));
+	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager);
+	gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &iMouseX, &iMouseY, NULL);
+	#endif
 	
 	if (iMouseX > 0 && iMouseX < pDialog->container.iWidth && iMouseY > 0 && iMouseY < pDialog->container.iHeight && pDialog->pInteractiveWidget != NULL)  // en fait on est dedans (peut arriver si le dialogue a un widget a l'interieur).
 	{

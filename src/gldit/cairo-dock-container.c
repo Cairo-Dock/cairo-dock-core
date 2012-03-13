@@ -388,10 +388,7 @@ gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const 
 gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer)
 {
 	// actualize the coordinates of the pointer, since they are most probably out-dated (because the mouse has left the dock, or because a right-click generates an event with (0;0) coordinates)
-	if (pContainer->bIsHorizontal)
-		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseX, &pContainer->iMouseY, NULL);
-	else
-		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseY, &pContainer->iMouseX, NULL);
+	gldi_container_update_mouse_position (pContainer);
 	return cairo_dock_emit_signal_on_container (pContainer, "leave-notify-event");
 }
 gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer)
