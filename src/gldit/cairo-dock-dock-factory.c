@@ -542,7 +542,8 @@ CairoDock *cairo_dock_new_dock (void)
 	
 	//\__________________ On connecte les evenements a la fenetre.
 	gtk_widget_add_events (pWindow,
-		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK |
+		GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
 		GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
 	
 	g_signal_connect (G_OBJECT (pWindow),
