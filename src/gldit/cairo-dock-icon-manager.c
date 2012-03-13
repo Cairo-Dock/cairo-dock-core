@@ -551,6 +551,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	
 	//\___________________ quick-info
 	memcpy (&pLabels->quickInfoTextDescription, &pLabels->iconTextDescription, sizeof (CairoDockLabelDescription));
+	pLabels->quickInfoTextDescription.iMargin = 1;  // to minimize the surface of the quick-info (0 would be too much).
 	pLabels->quickInfoTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
 	pLabels->quickInfoTextDescription.iSize = 12;
 	pLabels->quickInfoTextDescription.iWeight = PANGO_WEIGHT_HEAVY;
