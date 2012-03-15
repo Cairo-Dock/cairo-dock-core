@@ -770,10 +770,12 @@ CairoDesklet *cairo_dock_new_desklet (void)
 	gldi_object_set_manager (GLDI_OBJECT (pDesklet), GLDI_MANAGER (&myDeskletsMgr));
 	
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-desklet");
-	gtk_widget_add_events( pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_FOCUS_CHANGE_MASK);
-	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 2);  // comme ca.
-	gtk_window_set_default_size(GTK_WINDOW(pWindow), 10, 10);  // idem.
-
+	gtk_widget_add_events( pWindow,
+		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK |
+		GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_FOCUS_CHANGE_MASK |
+		GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
+	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 1);  // comme ca.
+	
 	g_signal_connect (G_OBJECT (pWindow),
 		#if (GTK_MAJOR_VERSION < 3)
 		"expose-event",
