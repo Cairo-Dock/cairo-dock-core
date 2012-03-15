@@ -182,6 +182,7 @@ struct _CairoDataRenderer {
 	gint iSmoothAnimationStep;
 	/// latency due to the smooth movement (0 means the displayed value is the current one, 1 the previous)
 	gdouble fLatency;
+	guint iSidRenderIdle;  // source ID to delay the rendering in OpenGL until the container is fully resized
 };
 
 

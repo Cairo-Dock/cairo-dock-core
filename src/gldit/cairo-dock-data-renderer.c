@@ -231,9 +231,9 @@ static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *p
 		pRenderer->bisRotate = TRUE;
 	}
 	
-	glPushMatrix ();
+	//glPushMatrix ();
 	pRenderer->interface.render_opengl (pRenderer);
-	glPopMatrix ();
+	//glPopMatrix ();
 	
 	//\________________ On dessine les overlays.
 	/**int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
@@ -337,9 +337,9 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 		//cairo_translate (pCairoContext, -pRenderer->iHeight/2, -pRenderer->iWidth/2);
 	}
 	
-	cairo_save (pCairoContext);
+	//cairo_save (pCairoContext);
 	pRenderer->interface.render (pRenderer, pCairoContext);
-	cairo_restore (pCairoContext);
+	//cairo_restore (pCairoContext);
 	
 	//\________________ On dessine les overlays.
 	/**int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
@@ -510,7 +510,22 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 }
 
 
-
+static gboolean _render_delayed (Icon *pIcon)
+{
+	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
+	g_return_val_if_fail (pRenderer != NULL, FALSE);
+	
+	CairoContainer *pContainer = pIcon->pContainer;
+	g_return_val_if_fail (pContainer != NULL, FALSE);
+	
+	if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet resized, retry later
+		return TRUE;
+	
+	_cairo_dock_render_to_texture (pRenderer, pIcon, pContainer);
+	
+	pRenderer->iSidRenderIdle = 0;
+	return FALSE;
+}
 void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext, double *pNewValues)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
@@ -549,7 +564,15 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 		else
 		{
 			pRenderer->fLatency = 0;
-			_cairo_dock_render_to_texture (pRenderer, pIcon, pContainer);
+			if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet resized, delay the rendering (OpenGL only).
+			{
+				if (pRenderer->iSidRenderIdle == 0)
+					pRenderer->iSidRenderIdle = g_idle_add ((GSourceFunc)_render_delayed, pIcon);  // if pIcon is freed, the data-renderer will be freed too, so this signal will vanish.
+			}
+			else
+			{
+				_cairo_dock_render_to_texture (pRenderer, pIcon, pContainer);
+			}
 		}
 	}
 	else
@@ -588,6 +611,9 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 {
 	if (pRenderer == NULL)
 		return ;
+	
+	if (pRenderer->iSidRenderIdle != 0)
+		g_source_remove (pRenderer->iSidRenderIdle);
 	
 	if (pRenderer->interface.unload)
 		pRenderer->interface.unload (pRenderer);
