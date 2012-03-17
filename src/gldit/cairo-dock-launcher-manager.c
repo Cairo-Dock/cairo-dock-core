@@ -103,7 +103,7 @@ static void _load_launcher (Icon *icon)
 	}
 	else if (icon->cFileName)  // icone possedant une image, on affiche celle-ci.
 	{
-		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
+		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName, MAX (iWidth, iHeight));
 		if (cIconPath != NULL && *cIconPath != '\0')
 			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
 				iWidth,
@@ -120,7 +120,7 @@ static void _load_user_separator (Icon *icon)
 	icon->pIconBuffer = NULL;
 	if (icon->cFileName != NULL)
 	{
-		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName);
+		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName, MAX (iWidth, iHeight));
 		if (cIconPath != NULL && *cIconPath != '\0')
 		{
 			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,

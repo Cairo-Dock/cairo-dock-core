@@ -597,7 +597,7 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, d
 	if (*cImageFile == '/')
 		cIconPath = (gchar *)cImageFile;
 	else
-		cIconPath = cairo_dock_search_icon_s_path (cImageFile);
+		cIconPath = cairo_dock_search_icon_s_path (cImageFile, (gint) MAX (fImageWidth, fImageHeight));
 		
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cIconPath,
 		1.,

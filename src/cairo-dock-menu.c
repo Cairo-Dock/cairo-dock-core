@@ -437,7 +437,7 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 	if (CAIRO_DOCK_IS_APPLET (icon))
 	{
 		if (icon->cFileName != NULL)  // if possible, use the actual icon
-			cIconFile = cairo_dock_search_icon_s_path (icon->cFileName);
+			cIconFile = cairo_dock_search_icon_s_path (icon->cFileName, cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR));
 		if (!cIconFile)  // else, use the default applet's icon.
 			cIconFile = g_strdup (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath);
 	}
@@ -448,13 +448,13 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 	}
 	else if (icon->cFileName != NULL)
 	{
-		cIconFile = cairo_dock_search_icon_s_path (icon->cFileName);
+		cIconFile = cairo_dock_search_icon_s_path (icon->cFileName, cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR));
 	}
 	if (cIconFile == NULL && icon->cClass != NULL)
 	{
 		const gchar *cClassIcon = cairo_dock_get_class_icon (icon->cClass);
 		if (cClassIcon)
-			cIconFile = cairo_dock_search_icon_s_path (cClassIcon);
+			cIconFile = cairo_dock_search_icon_s_path (cClassIcon, cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR));
 	}
 	
 	GtkWidget *pItemSubMenu;

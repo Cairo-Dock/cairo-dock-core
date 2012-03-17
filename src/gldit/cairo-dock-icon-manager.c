@@ -55,7 +55,7 @@ CairoIconsManager myIconsMgr;
 CairoDockImageBuffer g_pIconBackgroundBuffer;
 GLuint g_pGradationTexture[2]={0, 0};
 
-// dependancies
+// dependencies
 extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
@@ -242,11 +242,28 @@ void cairo_dock_set_specified_desktop_for_icon (Icon *pIcon, int iSpecificDeskto
  /// ICON THEME ///
 //////////////////
 
-gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
+/*
+ * GTK_ICON_SIZE_MENU:          16
+ * GTK_ICON_SIZE_SMALL_TOOLBAR: 18
+ * GTK_ICON_SIZE_BUTTON:        20
+ * GTK_ICON_SIZE_LARGE_TOOLBAR: 24
+ * GTK_ICON_SIZE_DND:           32
+ * GTK_ICON_SIZE_DIALOG:        48
+ */
+gint cairo_dock_search_icon_size (GtkIconSize iIconSize)
+{
+	gint iWidth, iHeight;
+	if (! gtk_icon_size_lookup (iIconSize, &iWidth, &iHeight))
+		return CAIRO_DOCK_DEFAULT_ICON_SIZE;
+
+	return MAX (iWidth, iHeight);
+}
+
+gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconSize)
 {
 	g_return_val_if_fail (cFileName != NULL, NULL);
 	
-	//\_______________________ cas faciles : l'entree est deja un chemin.
+	//\_______________________ easy cases: we receive a path.
 	if (*cFileName == '~')
 	{
 		return g_strdup_printf ("%s%s", g_getenv ("HOME"), cFileName+1);
@@ -305,7 +322,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 		}
 		pIconInfo = gtk_icon_theme_lookup_icon (s_pIconTheme,
 			sIconPath->str,
-			128,
+			iDesiredIconSize, // GTK_ICON_LOOKUP_FORCE_SIZE if size < 30 ?? -> icons can be different // a lot of themes now use only svg files.
 			GTK_ICON_LOOKUP_FORCE_SVG);
 		if (pIconInfo != NULL)
 		{
@@ -330,7 +347,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName)
 		{
 			*(str+1) = '\0';
 			cd_debug (" on cherche '%s'...\n", sIconPath->str);
-			gchar *cPath = cairo_dock_search_icon_s_path (sIconPath->str);
+			gchar *cPath = cairo_dock_search_icon_s_path (sIconPath->str, iDesiredIconSize);
 			if (cPath != NULL)
 			{
 				bFileFound = TRUE;

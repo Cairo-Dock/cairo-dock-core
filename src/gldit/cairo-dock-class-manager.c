@@ -645,15 +645,15 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 			{
 				if (pInhibitorIcon->pSubDock == NULL || myIndicatorsParam.bUseClassIndic)  // dans le cas d'un lanceur qui aurait deja plusieurs instances de sa classe, et qui les representerait en pile, on ne prend pas son icone.
 				{
-					cd_debug ("%s va fournir genereusement sa surface", pInhibitorIcon->cName);
+					cd_debug ("%s will give its surface", pInhibitorIcon->cName);
 					return cairo_dock_duplicate_inhibitor_surface_for_appli (pInhibitorIcon, iWidth, iHeight);
 				}
 				else if (pInhibitorIcon->cFileName != NULL)
 				{
-					gchar *cIconFilePath = cairo_dock_search_icon_s_path (pInhibitorIcon->cFileName);
+					gchar *cIconFilePath = cairo_dock_search_icon_s_path (pInhibitorIcon->cFileName, MAX (iWidth, iHeight));
 					if (cIconFilePath != NULL)
 					{
-						cd_debug ("on remplace l'icone X par %s", cIconFilePath);
+						cd_debug ("we replace X icon by %s", cIconFilePath);
 						cairo_surface_t *pSurface = cairo_dock_create_surface_from_image_simple (cIconFilePath,
 							iWidth,
 							iHeight);
@@ -670,7 +670,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 	if (pClassAppli != NULL && pClassAppli->cIcon != NULL)
 	{
 		cd_debug ("get the class icon (%s)", pClassAppli->cIcon);
-		gchar *cIconFilePath = cairo_dock_search_icon_s_path (pClassAppli->cIcon);
+		gchar *cIconFilePath = cairo_dock_search_icon_s_path (pClassAppli->cIcon, MAX (iWidth, iHeight));
 		cairo_surface_t *pSurface = cairo_dock_create_surface_from_image_simple (cIconFilePath,
 			iWidth,
 			iHeight);
@@ -684,7 +684,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 	}
 	
 	// if not found or not defined, try to find an icon based on the name class.
-	gchar *cIconFilePath = cairo_dock_search_icon_s_path (cClass);
+	gchar *cIconFilePath = cairo_dock_search_icon_s_path (cClass, MAX (iWidth, iHeight));
 	if (cIconFilePath != NULL)
 	{
 		cd_debug ("on remplace l'icone X par %s", cIconFilePath);

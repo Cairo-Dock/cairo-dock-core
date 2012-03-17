@@ -84,12 +84,13 @@ static void _cairo_dock_load_emblem (Icon *pIcon)
 	{
 		cImage = GTK_STOCK_DELETE;
 	}
-	gchar *cIcon = cairo_dock_search_icon_s_path (cImage);
+	
+	int iWidth, iHeight;
+	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
+	gchar *cIcon = cairo_dock_search_icon_s_path (cImage, MAX (iWidth/2, iHeight/2));
 	/**s_pEmblem = cairo_dock_make_emblem (cIcon, pIcon);
 	cairo_dock_set_emblem_position (s_pEmblem, CAIRO_DOCK_EMBLEM_UPPER_LEFT);*/
 	cairo_dock_free_image_buffer (s_pEmblem);
-	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 	s_pEmblem = cairo_dock_create_image_buffer (cIcon, iWidth/2, iHeight/2, 0);
 	g_free (cIcon);
 }

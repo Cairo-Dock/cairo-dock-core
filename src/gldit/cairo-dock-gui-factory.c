@@ -2474,6 +2474,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				// insert each icon
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+				gint iDesiredIconSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR); // 24 by default
 				GtkTreeIter iter;
 				Icon *pIcon;
 				gchar *cImagePath, *cID;
@@ -2499,7 +2500,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						// get the image
 						if (pIcon->cFileName != NULL)
 						{
-							cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName);
+							cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName, iDesiredIconSize);
 						}
 						if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 						{
@@ -2526,7 +2527,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						g_print (" + %s\n", cImagePath);
 						if (cImagePath != NULL)
 						{
-							pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 24, 24, NULL);
+							pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, iDesiredIconSize, iDesiredIconSize, NULL);
 						}
 						g_print (" -> %p\n", pixbuf);
 						

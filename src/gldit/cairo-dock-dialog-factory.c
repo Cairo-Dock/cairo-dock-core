@@ -516,7 +516,8 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 			{
 				gchar *cButtonPath;
 				if (*cButtonImage != '/')
-					cButtonPath = cairo_dock_search_icon_s_path (cButtonImage);
+					cButtonPath = cairo_dock_search_icon_s_path (cButtonImage,
+						MAX (myDialogsParam.iDialogButtonWidth, myDialogsParam.iDialogButtonHeight));
 				else
 					cButtonPath = (gchar*)cButtonImage;
 				pDialog->pButtons[i].pSurface = cairo_dock_create_surface_from_image_simple (cButtonPath,

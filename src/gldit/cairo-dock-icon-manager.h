@@ -42,6 +42,8 @@ extern CairoIconsParam myIconsParam;
 extern CairoIconsManager myIconsMgr;
 #endif
 
+#define CAIRO_DOCK_DEFAULT_ICON_SIZE 128
+
 // params
 typedef enum {
 	CAIRO_DOCK_NORMAL_SEPARATOR,
@@ -129,11 +131,18 @@ void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock);
 
 void cairo_dock_set_specified_desktop_for_icon (Icon *pIcon, int iSpecificDesktop);
 
+/** Search the icon size of a GtkIconSize.
+ * @param iIconSize a GtkIconSize
+ * @return the maximum between the width and the height of the icon size in pixel (or 128 if there is a problem) 
+ */
+gint cairo_dock_search_icon_size (GtkIconSize iIconSize);
+
 /** Search the path of an icon into the defined icons themes. It also handles the '~' caracter in paths.
  * @param cFileName name of the icon file.
+ * @param iDesiredIconSize desired icon size if we use icons from user icons theme.
  * @return the complete path of the icon, or NULL if not found.
  */
-gchar *cairo_dock_search_icon_s_path (const gchar *cFileName);
+gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconSize);
 
 void gldi_register_icons_manager (void);
 

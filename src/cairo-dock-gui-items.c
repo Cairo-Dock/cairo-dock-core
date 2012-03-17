@@ -295,11 +295,12 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	GdkPixbuf *pixbuf = NULL;
 	gchar *cImagePath = NULL;
 	const gchar *cName;
+	gint iDesiredIconSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_DND); // default is 32
 	
 	// set an image.
 	if (pIcon->cFileName != NULL)
 	{
-		cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName);
+		cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName, iDesiredIconSize);
 	}
 	if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 	{
@@ -326,7 +327,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	
 	if (cImagePath != NULL)
 	{
-		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 32, 32, &erreur);
+		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, iDesiredIconSize, iDesiredIconSize, &erreur);
 		if (erreur != NULL)
 		{
 			cd_warning (erreur->message);

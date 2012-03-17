@@ -47,7 +47,7 @@ static cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFile
 	}
 	else
 	{
-		gchar *cIconPath = cairo_dock_search_icon_s_path (cIconFileName);
+		gchar *cIconPath = cairo_dock_search_icon_s_path (cIconFileName, MAX (iWidth, iHeight));
 		pNewSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
 			iWidth,
 			iHeight);
