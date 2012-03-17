@@ -895,10 +895,10 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenu), pMenuItem);
 		
 		// lock icons position
-		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (myDocksParam.bLockIcons ? _("Unlock icons position") : _("Lock icons position"),
-			CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lock-icons.svg",
-			G_CALLBACK (_cairo_dock_lock_icons),
-			pSubMenu, NULL);
+		pMenuItem = gtk_check_menu_item_new_with_label (_("Lock icons position"));
+		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), myDocksParam.bLockIcons);
+		gtk_menu_shell_append  (GTK_MENU_SHELL (pSubMenu), pMenuItem);
+		g_signal_connect (G_OBJECT (pMenuItem), "toggled", G_CALLBACK (_cairo_dock_lock_icons), NULL);
 		gtk_widget_set_tooltip_text (pMenuItem, _("This will (un)lock the position of the icons."));
 	}
 	
@@ -935,7 +935,8 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 	gchar *cCairoAutoStartDirPath = g_strdup_printf ("%s/.config/autostart", g_getenv ("HOME"));
 	gchar *cCairoAutoStartEntryPath = g_strdup_printf ("%s/cairo-dock.desktop", cCairoAutoStartDirPath);
 	gchar *cCairoAutoStartEntryPath2 = g_strdup_printf ("%s/cairo-dock-cairo.desktop", cCairoAutoStartDirPath);
-	if (! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS) && ! g_file_test (cCairoAutoStartEntryPath2, G_FILE_TEST_EXISTS))
+	gboolean bIsCairoDockSession = g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "cairo-dock") == 0;
+	if (! bIsCairoDockSession && ! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS) && ! g_file_test (cCairoAutoStartEntryPath2, G_FILE_TEST_EXISTS))
 	{
 		cairo_dock_add_in_menu_with_stock_and_data (_("Launch Cairo-Dock on startup"),
 			GTK_STOCK_ADD,
@@ -978,7 +979,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 			pSubMenu,
 			pContainer);
 		// if we're using a Cairo-Dock session and we quit the dock we have... nothing to relaunch it!
-		if (g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "cairo-dock") == 0)
+		if (bIsCairoDockSession)
 		{
 			gtk_widget_set_sensitive (pMenuItem, FALSE); // locked
 			gtk_widget_set_tooltip_text (pMenuItem, _("You're using a Cairo-Dock Session!\nIt's not advised to quit the dock but you can press Shift to unlock this menu entry."));
