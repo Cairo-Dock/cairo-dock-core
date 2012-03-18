@@ -230,5 +230,7 @@ CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget (GtkWidget *pWindo
 #define cairo_dock_gui_get_first_widget(pGroupKeyWidget) (pGroupKeyWidget)->pSubWidgetList->data
 #define cairo_dock_gui_add_widget(pGroupKeyWidget, pOneWidget) (pGroupKeyWidget)->pSubWidgetList = g_slist_append ((pGroupKeyWidget)->pSubWidgetList, pOneWidget)
 
+GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize);
+
 G_END_DECLS
 #endif

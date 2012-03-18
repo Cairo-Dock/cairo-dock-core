@@ -1117,14 +1117,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 	if (! pMouse->bUpToDate)  // pas encore recupere le pointeur.
 	{
 		pMouse->bUpToDate = TRUE;
-		#if (GTK_MAJOR_VERSION < 3)
-		gdk_display_get_pointer (gdk_display_get_default(), NULL, &x, &y, NULL);
-		#else
-		CairoContainer *pContainer = CAIRO_CONTAINER (pDock);
-		GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget));
-		GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager);
-		gdk_device_get_position (pDevice, NULL, &x, &y);
-		#endif
+		gldi_display_get_pointer (&x, &y);
 		if (x == pMouse->x && y == pMouse->y)  // le pointeur n'a pas bouge, on quitte.
 		{
 			pMouse->bNoMove = TRUE;

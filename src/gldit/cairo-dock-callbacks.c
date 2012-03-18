@@ -1669,27 +1669,12 @@ void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint tim
 static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 {
 	g_return_if_fail (pDock != NULL);
-	int iMouseX, iMouseY;
-	#if (GTK_MAJOR_VERSION < 3)
-	if (pDock->container.bIsHorizontal)
-		gdk_window_get_pointer (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), &iMouseX, &iMouseY, NULL);
-	else
-		gdk_window_get_pointer (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), &iMouseY, &iMouseX, NULL);
-	#else
-	CairoContainer *pContainer = CAIRO_CONTAINER (pDock);
-	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget));
-	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager);
-	if (pDock->container.bIsHorizontal)
-		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &iMouseX, &iMouseY, NULL);
-	else
-		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &iMouseY, &iMouseX, NULL);
-	#endif
-	cd_debug (" %d;%d", iMouseX, iMouseY);
+	gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
 	
 	///pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
 	///pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY);
-	pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - (g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - pDock->container.iWidth) * pDock->fAlign - pDock->container.iWidth/2 - pDock->iScreenOffsetX;
-	pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY) - pDock->iScreenOffsetY;
+	pDock->iGapX = pDock->container.iWindowPositionX + pDock->container.iMouseX - (g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - pDock->container.iWidth) * pDock->fAlign - pDock->container.iWidth/2 - pDock->iScreenOffsetX;
+	pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + pDock->container.iMouseY) : pDock->container.iWindowPositionY + pDock->container.iMouseY) - pDock->iScreenOffsetY;
 	cd_debug (" => %d;%d", g_pMainDock->iGapX, g_pMainDock->iGapY);
 	
 	int iNewPositionX, iNewPositionY;

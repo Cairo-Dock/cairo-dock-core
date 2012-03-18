@@ -46,8 +46,8 @@
 #include "cairo-dock-gui-items.h"
 #include "cairo-dock-gui-main.h"
 
-#define CAIRO_DOCK_GROUP_ICON_SIZE 32
-#define CAIRO_DOCK_CATEGORY_ICON_SIZE 24
+#define CAIRO_DOCK_GROUP_ICON_SIZE 28  // 32
+#define CAIRO_DOCK_CATEGORY_ICON_SIZE 28  // 32
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW 4
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN 3
 #define CAIRO_DOCK_TABLE_MARGIN 6
@@ -58,7 +58,7 @@
 #define CAIRO_DOCK_PREVIEW_WIDTH_MIN 100
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_ICON_MARGIN 6
-#define CAIRO_DOCK_TAB_ICON_SIZE 32
+#define CAIRO_DOCK_TAB_ICON_SIZE 24
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
 

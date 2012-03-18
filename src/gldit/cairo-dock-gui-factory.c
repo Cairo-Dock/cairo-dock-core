@@ -49,8 +49,7 @@
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_README_WIDTH_MIN 400
 #define CAIRO_DOCK_README_WIDTH 500
-#define CAIRO_DOCK_APPLET_ICON_SIZE 32
-#define CAIRO_DOCK_TAB_ICON_SIZE 32
+#define CAIRO_DOCK_TAB_ICON_SIZE 24  // 32
 #define CAIRO_DOCK_FRAME_ICON_SIZE 24
 #define DEFAULT_TEXT_COLOR .6  // light grey
 
@@ -322,8 +321,8 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 			iPreviewWidth = requisition.width;
 		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
 		if (requisition.height > 1 && iPreviewHeight > requisition.height)
-			iPreviewHeight = requisition.width;
-		cd_debug ("preview : %dx%d", iPreviewWidth, iPreviewHeight);
+			iPreviewHeight = requisition.height;
+		cd_debug ("preview : %dx%d => %dx%d", requisition.width, requisition.height, iPreviewWidth, iPreviewHeight);
 		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 	}
 	if (pPreviewPixbuf == NULL)
@@ -1596,7 +1595,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 	
 	gtk_widget_set_size_request (pPreviewImage,
 		bHorizontalPackaging ? MIN (iMinSize, CAIRO_DOCK_PREVIEW_WIDTH) : CAIRO_DOCK_PREVIEW_WIDTH,
-		bHorizontalPackaging ? CAIRO_DOCK_PREVIEW_HEIGHT : -1);
+		CAIRO_DOCK_PREVIEW_HEIGHT);
 	
 	// info bar
 	GtkWidget* pDescriptionFrame = NULL;
@@ -3229,30 +3228,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					if (cSmallIcon != NULL)
 					{
 						pLabelContainer = _gtk_hbox_new (CAIRO_DOCK_ICON_MARGIN/2);
-						GtkWidget *pImage = gtk_image_new ();
-						GdkPixbuf *pixbuf;
-						if (*cSmallIcon != '/')
-						{
-							#if (GTK_MAJOR_VERSION < 3)
-							pixbuf = gtk_widget_render_icon (pImage,
-								cSmallIcon ,
-								GTK_ICON_SIZE_MENU,
-								NULL);
-							#else
-							pixbuf = gtk_widget_render_icon_pixbuf (pImage,
-								cSmallIcon ,
-								GTK_ICON_SIZE_MENU);
-							#endif
-						}
-						else
-						{
-							pixbuf = gdk_pixbuf_new_from_file_at_size (cSmallIcon, CAIRO_DOCK_FRAME_ICON_SIZE, CAIRO_DOCK_FRAME_ICON_SIZE, NULL);
-						}
-						if (pixbuf != NULL)
-						{
-							gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
-							gdk_pixbuf_unref (pixbuf);
-						}
+						GtkWidget *pImage = _gtk_image_new_from_file (cSmallIcon, GTK_ICON_SIZE_MENU);
 						gtk_container_add (GTK_CONTAINER (pLabelContainer),
 							pImage);
 						
@@ -3441,30 +3417,7 @@ GtkWidget *cairo_dock_build_key_file_widget (GKeyFile* pKeyFile, const gchar *cG
 			pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
 			gtk_container_add (GTK_CONTAINER (pAlign), pLabelContainer);
 
-			GtkWidget *pImage = gtk_image_new ();
-			GdkPixbuf *pixbuf;
-			if (*cIcon != '/')
-			{
-				#if (GTK_MAJOR_VERSION < 3)
-				pixbuf = gtk_widget_render_icon (pImage,
-					cIcon ,
-					GTK_ICON_SIZE_BUTTON,
-					NULL);
-				#else
-				pixbuf = gtk_widget_render_icon_pixbuf (pImage,
-					cIcon ,
-					GTK_ICON_SIZE_BUTTON);
-				#endif
-			}
-			else
-			{
-				pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, CAIRO_DOCK_TAB_ICON_SIZE, CAIRO_DOCK_TAB_ICON_SIZE, NULL);
-			}
-			if (pixbuf != NULL)
-			{
-				gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
-				gdk_pixbuf_unref (pixbuf);
-			}
+			GtkWidget *pImage = _gtk_image_new_from_file (cIcon, GTK_ICON_SIZE_BUTTON);
 			gtk_container_add (GTK_CONTAINER (pLabelContainer),
 				pImage);
 			gtk_container_add (GTK_CONTAINER (pLabelContainer), pLabel);
@@ -3850,4 +3803,29 @@ CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget (GtkWidget *pWindo
 	g_return_val_if_fail (pWidgetList != NULL, NULL);
 	
 	return cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, cGroupName, cKeyName);
+}
+
+
+GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize)
+{
+	GtkWidget *pImage = NULL;
+	if (*cIcon != '/')  // GTK stock icon
+	{
+		pImage = gtk_image_new_from_stock (cIcon, iSize);
+	}
+	else  // path
+	{
+		pImage = gtk_image_new ();
+		if (iSize == GTK_ICON_SIZE_BUTTON)  /// TODO: find a way to get a correct transposition...
+			iSize = CAIRO_DOCK_TAB_ICON_SIZE;
+		else if (iSize == GTK_ICON_SIZE_MENU)
+			iSize = CAIRO_DOCK_FRAME_ICON_SIZE;
+		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, iSize, iSize, NULL);
+		if (pixbuf != NULL)
+		{
+			gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
+			gdk_pixbuf_unref (pixbuf);
+		}
+	}
+	return pImage;
 }

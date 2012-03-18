@@ -678,14 +678,17 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
 {
 	//g_print ("%s (%d)\n", __func__, pDesklet->container.bInside);
 	int iMouseX, iMouseY;
-	#if (GTK_MAJOR_VERSION < 3)
-	gdk_window_get_pointer (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet)), &iMouseX, &iMouseY, NULL);
-	#else
-	CairoContainer *pContainer = CAIRO_CONTAINER (pDesklet);
-	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget));
-	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager);
-	gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &iMouseX, &iMouseY, NULL);
-	#endif
+	if (pEvent != NULL)
+	{
+		iMouseX = pEvent->x_root;
+		iMouseY = pEvent->y_root;
+	}
+	else
+	{
+		gldi_container_update_mouse_position (CAIRO_CONTAINER (pDesklet));
+		iMouseX = pDesklet->container.iMouseX;
+		iMouseY = pDesklet->container.iMouseY;
+	}
 	if (gtk_bin_get_child (GTK_BIN (pDesklet->container.pWidget)) != NULL && iMouseX > 0 && iMouseX < pDesklet->container.iWidth && iMouseY > 0 && iMouseY < pDesklet->container.iHeight)  // en fait on est dans un widget fils, donc on ne fait rien.
 	{
 		return FALSE;
