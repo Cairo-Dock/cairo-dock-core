@@ -144,6 +144,9 @@ gint cairo_dock_search_icon_size (GtkIconSize iIconSize);
  */
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconSize);
 
+void cairo_dock_add_path_to_icon_theme (const gchar *cPath);
+
+
 void gldi_register_icons_manager (void);
 
 G_END_DECLS

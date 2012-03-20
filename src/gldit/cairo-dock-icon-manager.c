@@ -728,6 +728,18 @@ static void load (void)
 	_cairo_dock_load_icon_textures ();
 }
 
+void cairo_dock_add_path_to_icon_theme (const gchar *cPath)
+{
+	g_signal_handlers_block_matched (s_pIconTheme,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, _on_icon_theme_changed, NULL);
+	gtk_icon_theme_append_search_path (s_pIconTheme,
+		cPath);
+	g_signal_handlers_unblock_matched (s_pIconTheme,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, _on_icon_theme_changed, NULL);  // will do nothing if the callback has not been connected
+}
+
 
   //////////////
  /// RELOAD ///
