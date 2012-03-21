@@ -354,8 +354,10 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		if (! gldi_glx_make_current (pContainer))
+		{
+			pIcon->bDamaged = TRUE;
 			return FALSE;
-		
+		}
 		iWidth = pContainer->iWidth;
 		iHeight = pContainer->iHeight;
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -363,12 +365,18 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 	else if (g_openglConfig.iFboId != 0)
 	{
 		// on attache la texture au FBO.
+		if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet fully resized
+		{
+			pIcon->bDamaged = TRUE;
+			return FALSE;
+		}
 		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 		if (pContainer == NULL)
 			pContainer = g_pPrimaryContainer;
 		if (! gldi_glx_make_current (pContainer))
 		{
 			cd_warning ("couldn't set the opengl context");
+			pIcon->bDamaged = TRUE;
 			return FALSE;
 		}
 		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, g_openglConfig.iFboId);  // on redirige sur notre FBO.
@@ -389,6 +397,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 				GL_TEXTURE_2D,
 				0,
 				0);
+			pIcon->bDamaged = TRUE;
 			return FALSE;
 		}
 		

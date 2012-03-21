@@ -61,6 +61,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-data-renderer.h"  // cairo_dock_refresh_data_renderer
 #include "cairo-dock-callbacks.h"
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
@@ -76,7 +77,7 @@ static CairoDock *s_pDockShowingSubDock = NULL;  // on n'accede pas a son conten
 static CairoDock *s_pSubDockShowing = NULL;  // on n'accede pas a son contenu, seulement l'adresse.
 static CairoFlyingContainer *s_pFlyingContainer = NULL;
 static int s_iFirstClickX=0, s_iFirstClickY=0;  // for double-click.
-	
+
 extern CairoDock *g_pMainDock;  // pour le raise-on-shortcut
 
 extern gboolean g_bUseOpenGL;
@@ -1290,14 +1291,20 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 	}
 	
 	gboolean bSizeUpdated = (iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight);
+	gboolean bIsNowSized = (pDock->container.iWidth == 1 && pDock->container.iHeight == 1 && bSizeUpdated);
 	gboolean bPositionUpdated = (pDock->container.iWindowPositionX != iNewX || pDock->container.iWindowPositionY != iNewY);
 	pDock->container.iWidth = iNewWidth;
 	pDock->container.iHeight = iNewHeight;
 	pDock->container.iWindowPositionX = iNewX;
 	pDock->container.iWindowPositionY = iNewY;
 	
+	if (pDock->container.iWidth == 1 && pDock->container.iHeight == 1)  // the X window has not yet reached its size.
+	{
+		return FALSE;
+	}
+	
 	// if the size has changed, also update everything that depends on it.
-	if (bSizeUpdated && iNewWidth > 1)  // changement de taille
+	if (bSizeUpdated)  // changement de taille
 	{
 		// update mouse relative position inside the window
 		gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
@@ -1345,6 +1352,37 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		cairo_dock_trigger_set_WM_icons_geometry (pDock);  // changement de position ou de taille du dock => on replace les icones.
 		
 		cairo_dock_replace_all_dialogs ();
+		
+		if (bIsNowSized && g_bUseOpenGL)  // in OpenGL, 
+		{
+			Icon *icon;
+			GList *ic;
+			for (ic = pDock->icons; ic != NULL; ic = ic->next)
+			{
+				icon = ic->data;
+				if (icon->bDamaged)
+				{
+					g_print ("#### icon %s is damaged\n", icon->cName);
+					icon->bDamaged = FALSE;
+					if (cairo_dock_get_icon_data_renderer (icon) != NULL)
+					{
+						cairo_dock_refresh_data_renderer (icon, CAIRO_CONTAINER (pDock), NULL);  // no cairo context in OpenGL
+					}
+					else if (icon->iSubdockViewType != 0)
+					{
+						cairo_dock_draw_subdock_content_on_icon (icon, pDock);
+					}
+					else if (CAIRO_DOCK_IS_APPLET (icon))
+					{
+						cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);  // easy but safe way to redraw the icon properly.
+					}
+					else  // if we don't know how thie icon should be drawn, just reload it.
+					{
+						cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
+					}
+				}
+			}
+		}
 	}
 	else if (bPositionUpdated)  // changement de position.
 	{

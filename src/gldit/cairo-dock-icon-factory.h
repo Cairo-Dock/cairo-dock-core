@@ -210,7 +210,8 @@ struct _Icon {
 	
 	gint iThumbnailX, iThumbnailY;  // X icon geometry for apps
 	gint iThumbnailWidth, iThumbnailHeight;
-	gpointer reserved[2];
+	gboolean bDamaged;  // TRUE when the icon couldn't draw its surface, because the Gl context was not yet ready.
+	gpointer reserved[1];
 };
 
 typedef void (*CairoIconContainerLoadFunc) (void);
