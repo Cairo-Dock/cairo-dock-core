@@ -114,7 +114,7 @@ modules=
 
 #W[More applets] Get more applets online !
 #{You can install them by simply drag-and-dropping the link onto your dock.}
-third party=http://forum.glx-dock.org
+third party=http://extras.glx-dock.org/3.0.0
 
 
 #[@pkgdatadir@/icons/icon-controler.svg]
