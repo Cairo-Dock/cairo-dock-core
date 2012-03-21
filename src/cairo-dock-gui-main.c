@@ -1743,10 +1743,10 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	pCategoryButton = _make_toolbutton (_("All"),
 		"icon-all.svg",
 		CAIRO_DOCK_CATEGORY_ICON_SIZE);
-	g_signal_connect (G_OBJECT (pCategoryButton), "clicked", G_CALLBACK(on_click_all_button), NULL);
 	gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton, -1);
 	pCategoryWidget->pCategoryButton = pCategoryButton;
 	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryButton), TRUE);
+	g_signal_connect (G_OBJECT (pCategoryButton), "clicked", G_CALLBACK(on_click_all_button), NULL);
 	
 	guint i;
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
