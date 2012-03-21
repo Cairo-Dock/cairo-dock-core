@@ -75,6 +75,7 @@ static guint s_iSidReloadTheme = 0;
 
 static void _cairo_dock_unload_icon_textures (void);
 static void _cairo_dock_unload_icon_theme (void);
+static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data);
 
 
 void cairo_dock_free_icon (Icon *icon)
@@ -366,6 +367,50 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 	gchar *cIconPath = sIconPath->str;
 	g_string_free (sIconPath, FALSE);
 	return cIconPath;
+}
+
+void cairo_dock_add_path_to_icon_theme (const gchar *cThemePath)
+{
+	g_signal_handlers_block_matched (s_pIconTheme,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, _on_icon_theme_changed, NULL);
+	gtk_icon_theme_append_search_path (s_pIconTheme,
+		cThemePath);  /// TODO: does it check for unicity ?...
+	g_signal_handlers_unblock_matched (s_pIconTheme,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, _on_icon_theme_changed, NULL);  // will do nothing if the callback has not been connected
+}
+
+void cairo_dock_remove_path_from_icon_theme (const gchar *cThemePath)
+{
+	g_signal_handlers_block_matched (s_pIconTheme,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, _on_icon_theme_changed, NULL);
+	
+	gchar **paths = NULL;
+	gint iNbPaths = 0;
+	gtk_icon_theme_get_search_path (s_pIconTheme, &paths, &iNbPaths);
+	int i;
+	for (i = 0; i < iNbPaths; i++)  // on cherche sa position dans le tableau.
+	{
+		if (strcmp (paths[i], cThemePath))
+			break;
+	}
+	if (i < iNbPaths)  // trouve
+	{
+		g_free (paths[i]);
+		for (i = i+1; i < iNbPaths; i++)  // on decale tous les suivants vers l'arriere.
+		{
+			paths[i-1] = paths[i];
+		}
+		paths[i-1] = NULL;
+		gtk_icon_theme_set_search_path (s_pIconTheme, (const gchar **)paths, iNbPaths - 1);
+	}
+	g_strfreev (paths);
+	
+	g_signal_handlers_unblock_matched (s_pIconTheme,
+		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+		0, 0, NULL, _on_icon_theme_changed, NULL);  // will do nothing if the callback has not been connected
 }
 
 
@@ -726,18 +771,6 @@ static void load (void)
 	_cairo_dock_load_icon_theme ();
 	
 	_cairo_dock_load_icon_textures ();
-}
-
-void cairo_dock_add_path_to_icon_theme (const gchar *cPath)
-{
-	g_signal_handlers_block_matched (s_pIconTheme,
-		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
-		0, 0, NULL, _on_icon_theme_changed, NULL);
-	gtk_icon_theme_append_search_path (s_pIconTheme,
-		cPath);
-	g_signal_handlers_unblock_matched (s_pIconTheme,
-		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
-		0, 0, NULL, _on_icon_theme_changed, NULL);  // will do nothing if the callback has not been connected
 }
 
 

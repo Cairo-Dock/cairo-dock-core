@@ -146,6 +146,8 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 
 void cairo_dock_add_path_to_icon_theme (const gchar *cPath);
 
+void cairo_dock_remove_path_from_icon_theme (const gchar *cPath);
+
 
 void gldi_register_icons_manager (void);
 
