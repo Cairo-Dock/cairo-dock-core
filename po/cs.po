@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-02-13 02:56+0000\n"
+"POT-Creation-Date: 2012-03-21 01:21+0000\n"
+"PO-Revision-Date: 2012-03-21 03:01+0000\n"
 "Last-Translator: chaeMil <chaemil72@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
-"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-13 04:34+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-03-22 04:44+0000\n"
+"X-Generator: Launchpad (build 14981)\n"
+"Language: cs\n"
 
 #: ../src/cairo-dock-gui-commons.c:221 ../src/cairo-dock-widget-themes.c:193
 msgid ""
@@ -95,7 +95,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242 ../src/cairo-dock-widget-items.c:235
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:460
@@ -347,7 +348,8 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-gui-simple.c:797 ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Klikněte na applet pro zobrazení jeho náhledu a popisu."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../src/cairo-dock-widget-config.c:387
@@ -385,14 +387,12 @@ msgstr ""
 "nástroj k úpravě aktuálního motivu."
 
 #: ../src/cairo-dock-gui-simple2.c:94 ../src/cairo-dock-gui-simple2.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Uložit aktuální motiv"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:102 ../src/cairo-dock-gui-simple2.c:104
-#, fuzzy
 msgid "Configuration"
-msgstr "Nastavení"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:118 ../src/cairo-dock-gui-simple2.c:120
 #: ../data/messages:533
@@ -668,14 +668,16 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustit Cairo-Dock při startu systému"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applety třetích stran zajišťují integraci s mnoha programy, například s "
 "Pidginem."
 
 #: ../src/cairo-dock-menu.c:965
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
+msgstr ""
+"Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
 
 #: ../src/cairo-dock-menu.c:967
 msgid "About"
@@ -1864,8 +1866,9 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1473
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1913,8 +1916,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1497
@@ -2490,14 +2493,13 @@ msgid "Icons' animations and effects"
 msgstr "Animace a efekty ikon"
 
 #: ../data/messages:495
-#, fuzzy
 msgid "& On mouse hover:"
-msgstr "Při najetí myší:"
+msgstr ""
 
 #: ../data/messages:499
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:505
@@ -2624,7 +2626,8 @@ msgstr "Více obrazovek"
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama to manage "
 "them."
-msgstr "Tuto volbu použijte, pokud máte dva monitory spravované přes Xinerama."
+msgstr ""
+"Tuto volbu použijte, pokud máte dva monitory spravované přes Xinerama."
 
 #: ../data/messages:583
 msgid "Use Xinerama?"
@@ -2643,9 +2646,8 @@ msgid "Accessibility"
 msgstr "Přístupnost"
 
 #: ../data/messages:625
-#, fuzzy
 msgid "The higher, the faster the dock will appear"
-msgstr "Vyberte, na kterém okraji obrazovky má být dok umístěn:"
+msgstr ""
 
 #: ../data/messages:627
 msgid "Callback sensitivity:"
@@ -2656,9 +2658,8 @@ msgid "high"
 msgstr ""
 
 #: ../data/messages:631
-#, fuzzy
 msgid "low"
-msgstr "pomalu"
+msgstr ""
 
 #: ../data/messages:633
 msgid "How to call the dock back:"
@@ -2977,14 +2978,12 @@ msgid "Refresh rate when mouving cursor into the dock :"
 msgstr "Obnovovací frekvence při pohybu myši nad dokem:"
 
 #: ../data/messages:831
-#, fuzzy
 msgid "&[15;60] Animation frequency for the OpenGL backend :"
-msgstr "Frekvence animace při vykreslování pomocí OpenGL:"
+msgstr ""
 
 #: ../data/messages:835
-#, fuzzy
 msgid "*[15;50] Animation frequency for the Cairo backend :"
-msgstr "Frekvence animace při vykreslování pomocí Cairo:"
+msgstr ""
 
 #: ../data/messages:837
 msgid ""
@@ -2995,9 +2994,8 @@ msgstr ""
 "zatížit procesor."
 
 #: ../data/messages:839
-#, fuzzy
 msgid "* Reflections should be calculated in real-time?"
-msgstr "Propočítávat zrcadlení v reálném čase?"
+msgstr ""
 
 #: ../data/messages:841
 msgid "Composition"
@@ -3057,7 +3055,8 @@ msgstr "Vynutit IPv4 ?"
 
 #: ../data/messages:861
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
+msgstr ""
+"Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
 
 #: ../data/messages:863
 msgid "Are you behind a proxy ?"
@@ -3145,7 +3144,8 @@ msgstr "Úhel přechodu:"
 
 #: ../data/messages:913
 msgid "If not nul, it will form stripes."
-msgstr "Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
+msgstr ""
+"Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
 
 #: ../data/messages:915
 msgid "Repeat the gradation this number of times:"
@@ -3156,9 +3156,8 @@ msgid "Percentage of the bright colour:"
 msgstr "Podíl světlejší barvy:"
 
 #: ../data/messages:919
-#, fuzzy
 msgid "Background when hidden"
-msgstr "Obrázek na pozadí :"
+msgstr ""
 
 #: ../data/messages:921
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3419,8 +3418,10 @@ msgid "Zoom effect"
 msgstr "Efekt zvětšení"
 
 #: ../data/messages:1081
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
 
 #: ../data/messages:1083
 msgid "Maximum zoom of the icons :"
@@ -3677,11 +3678,11 @@ msgstr "větší"
 
 #: ../data/messages:1199
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Zvolte, pokud má indikátor následovat orientaci doku (nahoře/dole/vlevo/"
-"vpravo)."
+"Zvolte, pokud má indikátor následovat orientaci doku "
+"(nahoře/dole/vlevo/vpravo)."
 
 #: ../data/messages:1201
 msgid "Rotate the indicator with dock?"
@@ -4177,142 +4178,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "On appearance/disappearance:"
-#~ msgstr "Při objevení/zmizení:"
-
-#~ msgid ""
-#~ "Leave empty to use the current icon theme of your system. You can enter "
-#~ "the name of a theme that is installed on your system (like 'Gartoon' or "
-#~ "'Human'), or even a path to a folder containing icons."
-#~ msgstr ""
-#~ "Nechte prázdné, pokud chcete použít aktuální motiv vašeho systému. Můžete "
-#~ "vložit jméno motivu, které je instalováno na vašem systému (např. "
-#~ "'Gartoon', nebo 'Human'), nebo cestu k adresáři, který ikony obsahuje."
-
-#~ msgid "in ms. 0 means no delay."
-#~ msgstr "v milisekundách. 0 znamená žádnou prodlevu."
-
-#~ msgid "Delay before the dock unhides itself:"
-#~ msgstr "Prodleva, než se dok objeví:"
-
-#~ msgid "You need to re-open the panel. It is deactivated by default on KDE."
-#~ msgstr ""
-#~ "Musíte panel znovu otevřít. Ve výchozím nastavení KDE je deaktivovaný."
-
-#~ msgid "Make the config panel transparent?"
-#~ msgstr "Zprůhlednit panel nastavení?"
-
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
-
-#~ msgid "Gnome"
-#~ msgstr "Gnome"
-
-#~ msgid "applets"
-#~ msgstr "applety"
-
-#~ msgid "applications"
-#~ msgstr "aplikace"
-
-#~ msgid "launchers"
-#~ msgstr "spouštěče"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Nastavení animací ikon"
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Oddělit odlišné typy ikon?"
-
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "Odděluje od sebe spouštěče, aplikace a applety. Oddělovače pak budou "
-#~ "vloženy automaticky."
-
-#~ msgid ""
-#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
-#~ "capacity)."
-#~ msgstr "Nastavit animace ikon při objevení/zmizení (vyžaduje OpenGL)"
-
-#~ msgid "Separate applications from others"
-#~ msgstr "Oddělit alikace od ostatních"
-
-#~ msgid "Separate applets from others"
-#~ msgstr "Oddělit applety od ostatních"
-
-#~ msgid "Separate all"
-#~ msgstr "Oddělit vše"
-
-#~ msgid "Icons order"
-#~ msgstr "Pořadí ikon"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Velikost spouštěčů při při nečinnosti (šířka x výška):"
-
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Velikost appletů při při nečinnosti (šířka x výška):"
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "Velikost aplikací při při nečinnosti (šířka x výška):"
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "Nastavení speciálních efektů ikon (vyžaduje OpenGL)."
-
-#~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-#~ msgstr ""
-#~ "Pokud oddělíte konkrétní typ ikon, budou tyto ikony umisťovány společně, "
-#~ "oddělené od ostatních oddělovačem.\n"
-#~ "Pokud ikony neoddělíte, můžete je umisťovat kamkoliv chcete a oddělovače "
-#~ "můžete vlkádat ručně. Aplikace budou v tomto případě zobrazeny vedle "
-#~ "svého spouštěče, pokud nějaký mají, nebo za posledním spouštěčem."
-
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Pořadí různých typů ikon:"
-
-#~ msgid ""
-#~ "None     : Don't show opened windows in the dock.\n"
-#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
-#~ "they are minimized.\n"
-#~ "KDE : Mix applications with its launcher, show all others windows and "
-#~ "group windows togather in sub-dock.\n"
-#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
-#~ "that are on the current desktop."
-#~ msgstr ""
-#~ "Žádný: Neukazuje otevřená okna v doku.\n"
-#~ "MacOSX: Zobrazuje aplikace a spouštěče najednou, ostatní okna jsou vidět "
-#~ "jen když jsou minimalizována.\n"
-#~ "KDE: Zobrazuje aplikace s jejich spouštěči, ukazuje všechna ostatní okna "
-#~ "a skupiny oken společně v sub-doku.\n"
-#~ "Gnome: Odděluje lištu spuštěných aplikací od spouštěčů a ukazuje jen okna "
-#~ "která jsou na aktuální ploše."
-
-#~ msgid "Lock icons"
-#~ msgstr "Uzamknout ikony"
-
-#~ msgid "Unlock dock"
-#~ msgstr "Odemknout dok"
-
-#~ msgid "Lock dock"
-#~ msgstr "Uzamknout dok"
-
-#~ msgid "Modify this separator"
-#~ msgstr "Upravit tento oddělovač"
-
-#~ msgid "Remove this separator"
-#~ msgstr "Odstranit tento oddělovač"
-
-#~ msgid "Detach this applet"
-#~ msgstr "Odepnout applet"
-
-#~ msgid "Launch another instance of this applet"
-#~ msgstr "Spusti další instanci appletu"

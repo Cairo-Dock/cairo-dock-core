@@ -4,20 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 # ferran <ferro66@ya.com>, 2010.
 # ferran <traductor@ferrranroig.com>, 2010.
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-02-13 02:55+0000\n"
+"POT-Creation-Date: 2012-03-21 01:21+0000\n"
+"PO-Revision-Date: 2012-03-21 02:59+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Catalan <ca@li.org>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-13 04:34+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-03-22 04:44+0000\n"
+"X-Generator: Launchpad (build 14981)\n"
+"Language: ca\n"
 
 #: ../src/cairo-dock-gui-commons.c:221 ../src/cairo-dock-widget-themes.c:193
 msgid ""
@@ -96,7 +96,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242 ../src/cairo-dock-widget-items.c:235
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:460
@@ -343,7 +344,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:797 ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:823 ../src/cairo-dock-widget-config.c:387
@@ -375,14 +377,12 @@ msgid ""
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:94 ../src/cairo-dock-gui-simple2.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Desa tema actual"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:102 ../src/cairo-dock-gui-simple2.c:104
-#, fuzzy
 msgid "Configuration"
-msgstr "Configurar"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:118 ../src/cairo-dock-gui-simple2.c:120
 #: ../data/messages:533
@@ -484,9 +484,8 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  -ERROR- https://launchpad.net/~astromiquel\n"
 "  Albert Milian https://launchpad.net/~mln-gmx\n"
-"  Fabounet https://launchpad.net/~fabounet03\n"
+"  Titotatin https://launchpad.net/~astromiquel\n"
 "  ferran https://launchpad.net/~traductor"
 
 #: ../src/cairo-dock-menu.c:285
@@ -570,7 +569,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:597
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
+msgstr ""
+"Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
 
 #: ../src/cairo-dock-menu.c:609
 msgid ""
@@ -600,8 +600,8 @@ msgstr ""
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
-"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs "
-"segur ?"
+"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs segur "
+"?"
 
 #: ../src/cairo-dock-menu.c:853
 msgid "Configure"
@@ -653,7 +653,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Executa Cairo-Dock a l'inici"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:965
@@ -1843,8 +1844,9 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1473
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1892,8 +1894,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1497
@@ -2462,14 +2464,13 @@ msgid "Icons' animations and effects"
 msgstr "Animacions i efectes de les icones"
 
 #: ../data/messages:495
-#, fuzzy
 msgid "& On mouse hover:"
-msgstr "Al passar per sobre el ratolí:"
+msgstr ""
 
 #: ../data/messages:499
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:505
@@ -2621,9 +2622,8 @@ msgid "Accessibility"
 msgstr "Accessibilitat"
 
 #: ../data/messages:625
-#, fuzzy
 msgid "The higher, the faster the dock will appear"
-msgstr "Trieu quin contorn de superfície del Dock voleu col·locar a:"
+msgstr ""
 
 #: ../data/messages:627
 msgid "Callback sensitivity:"
@@ -2634,9 +2634,8 @@ msgid "high"
 msgstr ""
 
 #: ../data/messages:631
-#, fuzzy
 msgid "low"
-msgstr "lent"
+msgstr ""
 
 #: ../data/messages:633
 msgid "How to call the dock back:"
@@ -3117,9 +3116,8 @@ msgid "Percentage of the bright colour:"
 msgstr ""
 
 #: ../data/messages:919
-#, fuzzy
 msgid "Background when hidden"
-msgstr "Fons"
+msgstr ""
 
 #: ../data/messages:921
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3370,7 +3368,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1081
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1083
@@ -3608,8 +3607,8 @@ msgstr ""
 
 #: ../data/messages:1199
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1201
@@ -4085,72 +4084,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "On appearance/disappearance:"
-#~ msgstr "Al aparèixer/desaparèixer"
-
-#~ msgid ""
-#~ "Leave empty to use the current icon theme of your system. You can enter "
-#~ "the name of a theme that is installed on your system (like 'Gartoon' or "
-#~ "'Human'), or even a path to a folder containing icons."
-#~ msgstr ""
-#~ "Deixeu-ho buit si voleu utilitzar el mateix tema que el del sistema. "
-#~ "Podeu introduir el nom d'un tema instal·lar en el sistema (ex. 'Gartoon' "
-#~ "o 'Human'), o bé la ruta de la carpeta que conté les icones."
-
-#~ msgid "in ms. 0 means no delay."
-#~ msgstr "en ms. 0 significa sense retard."
-
-#~ msgid "Delay before the dock unhides itself:"
-#~ msgstr "Retard abans que el Dock s'amagui automàticament:"
-
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
-
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
-#~ msgid "Gnome"
-#~ msgstr "Gnome"
-
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "Això separarà els llançadors, aplicacions, i subprogrames entre ells. "
-#~ "S'inseriran automàticament a continuació."
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Voleu separar el diferents tipus d'icones?"
-
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Ordre dels diferents tipus d'icones:"
-
-#~ msgid "launchers"
-#~ msgstr "llançadors"
-
-#~ msgid "applications"
-#~ msgstr "aplicacions"
-
-#~ msgid ""
-#~ "None     : Don't show opened windows in the dock.\n"
-#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
-#~ "they are minimized.\n"
-#~ "KDE : Mix applications with its launcher, show all others windows and "
-#~ "group windows togather in sub-dock.\n"
-#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
-#~ "that are on the current desktop."
-#~ msgstr ""
-#~ "Cap: No mostra les aplicacions obertes en el Dock.\n"
-#~ "MacOSX: Mescla les aplicacions obertes amb els seus llançadors, mostra "
-#~ "les altres finestres si estan minimitzades.\n"
-#~ "KDE: Mescla les aplicacions obertes amb els seus llançadors, mostra les "
-#~ "altres finestres en un sub-dock.\n"
-#~ "Gnome: Separa la barra de taques dels llançadors i només mostra finestres "
-#~ "que estan al escriptori actual."
-
-#~ msgid "Unlock dock"
-#~ msgstr "desbloca la barra"
-
-#~ msgid "Lock dock"
-#~ msgstr "bloca la barra"

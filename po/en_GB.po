@@ -3,21 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-03-21 01:40+0100\n"
-"PO-Revision-Date: 2012-02-13 02:52+0000\n"
+"POT-Creation-Date: 2012-03-21 01:21+0000\n"
+"PO-Revision-Date: 2012-03-21 02:52+0000\n"
 "Last-Translator: Philippe Le Toquin <philippe@ppmt.org>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-13 04:37+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-03-22 04:46+0000\n"
+"X-Generator: Launchpad (build 14981)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:221 ../src/cairo-dock-widget-themes.c:193
 msgid ""
@@ -97,8 +96,10 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242 ../src/cairo-dock-widget-items.c:235
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Main dock's parameters are available in the main configuration window."
 
 #: ../src/cairo-dock-gui-items.c:460
 msgid "Launcher configuration"
@@ -349,7 +350,8 @@ msgid "Effects:"
 msgstr "Effects:"
 
 #: ../src/cairo-dock-gui-simple.c:797 ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Click on an applet in order to have a preview and a description for it."
 
@@ -388,14 +390,12 @@ msgstr ""
 "powerful tool to customise your current theme."
 
 #: ../src/cairo-dock-gui-simple2.c:94 ../src/cairo-dock-gui-simple2.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Save current theme"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:102 ../src/cairo-dock-gui-simple2.c:104
-#, fuzzy
 msgid "Configuration"
-msgstr "Configure"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:118 ../src/cairo-dock-gui-simple2.c:120
 #: ../data/messages:533
@@ -504,8 +504,7 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Anthony Harrington https://launchpad.net/~untaintableangel\n"
-"  Gary M https://launchpad.net/~garym\n"
-"  Philippe Le Toquin https://launchpad.net/~ppmt"
+"  Gary M https://launchpad.net/~garym"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -682,7 +681,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Launch Cairo-Dock on startup"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Third-party applets provide integration with many programs, like Pidgin"
 
@@ -2086,13 +2086,15 @@ msgstr "Removing completely the gnome-panel"
 
 #: ../data/messages:195 ../data/messages:1473
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 
@@ -2143,16 +2145,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "You need to turn on compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way:\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 
 #: ../data/messages:219 ../data/messages:1497
 msgid ""
@@ -2220,7 +2222,8 @@ msgstr ""
 
 #: ../data/messages:235 ../data/messages:1513
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr "I don't have any themes in the Theme Manager, except the default one."
+msgstr ""
+"I don't have any themes in the Theme Manager, except the default one."
 
 #: ../data/messages:237 ../data/messages:1515
 msgid "Hint : Up to version 2.1.1-2, wget was used."
@@ -2815,14 +2818,13 @@ msgid "Icons' animations and effects"
 msgstr "Icons' animations and effects"
 
 #: ../data/messages:495
-#, fuzzy
 msgid "& On mouse hover:"
-msgstr "On mouse hover:"
+msgstr ""
 
 #: ../data/messages:499
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:505
@@ -2972,9 +2974,8 @@ msgid "Accessibility"
 msgstr "Accessibility"
 
 #: ../data/messages:625
-#, fuzzy
 msgid "The higher, the faster the dock will appear"
-msgstr "Choose which border of the screen the dock will be placed on:"
+msgstr ""
 
 #: ../data/messages:627
 msgid "Callback sensitivity:"
@@ -2985,9 +2986,8 @@ msgid "high"
 msgstr ""
 
 #: ../data/messages:631
-#, fuzzy
 msgid "low"
-msgstr "slow"
+msgstr ""
 
 #: ../data/messages:633
 msgid "How to call the dock back:"
@@ -3308,14 +3308,12 @@ msgid "Refresh rate when mouving cursor into the dock :"
 msgstr "Refresh frequency when moving cursor onto the dock:"
 
 #: ../data/messages:831
-#, fuzzy
 msgid "&[15;60] Animation frequency for the OpenGL backend :"
-msgstr "Animation frequency for the OpenGL backend:"
+msgstr ""
 
 #: ../data/messages:835
-#, fuzzy
 msgid "*[15;50] Animation frequency for the Cairo backend :"
-msgstr "Animation frequency for the Cairo backend:"
+msgstr ""
 
 #: ../data/messages:837
 msgid ""
@@ -3326,9 +3324,8 @@ msgstr ""
 "May need more CPU power."
 
 #: ../data/messages:839
-#, fuzzy
 msgid "* Reflections should be calculated in real-time?"
-msgstr "Reflections should be calculated in real-time?"
+msgstr ""
 
 #: ../data/messages:841
 msgid "Composition"
@@ -3486,9 +3483,8 @@ msgid "Percentage of the bright colour:"
 msgstr "Percentage of the bright colour:"
 
 #: ../data/messages:919
-#, fuzzy
 msgid "Background when hidden"
-msgstr "Background image:"
+msgstr ""
 
 #: ../data/messages:921
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3749,8 +3745,10 @@ msgid "Zoom effect"
 msgstr "Zoom effect"
 
 #: ../data/messages:1081
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 
 #: ../data/messages:1083
 msgid "Maximum zoom of the icons :"
@@ -4012,11 +4010,11 @@ msgstr "bigger"
 
 #: ../data/messages:1199
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 
 #: ../data/messages:1201
 msgid "Rotate the indicator with dock?"
@@ -4475,7 +4473,8 @@ msgstr ""
 
 #: ../data/messages:1841
 msgid "Prevent this launcher from stealing this application from taskbar ?"
-msgstr "Prevent this launcher from stealing the application from the taskbar?"
+msgstr ""
+"Prevent this launcher from stealing the application from the taskbar?"
 
 #: ../data/messages:1843
 msgid ""
@@ -4542,166 +4541,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "On appearance/disappearance:"
-#~ msgstr "On appearance/disappearance:"
-
-#~ msgid ""
-#~ "Leave empty to use the current icon theme of your system. You can enter "
-#~ "the name of a theme that is installed on your system (like 'Gartoon' or "
-#~ "'Human'), or even a path to a folder containing icons."
-#~ msgstr ""
-#~ "Leave empty to use the current icon theme of your system. You can enter "
-#~ "the name of a theme that is installed on your system (like 'Gartoon' or "
-#~ "'Human'), or even a path to a folder containing icons."
-
-#~ msgid "in ms. 0 means no delay."
-#~ msgstr "in ms. 0 means no delay."
-
-#~ msgid "Delay before the dock unhides itself:"
-#~ msgstr "Delay before the dock unhides itself:"
-
-#~ msgid "You need to re-open the panel. It is deactivated by default on KDE."
-#~ msgstr "You need to re-open the panel. It is deactivated by default on KDE."
-
-#~ msgid "Make the config panel transparent?"
-#~ msgstr "Make the config panel transparent?"
-
-#~ msgid "launchers"
-#~ msgstr "launchers"
-
-#~ msgid "Icons order"
-#~ msgstr "Icons order"
-
-#~ msgid "applets"
-#~ msgstr "applets"
-
-#~ msgid "applications"
-#~ msgstr "applications"
-
-#~ msgid "Gnome"
-#~ msgstr "Gnome"
-
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
-
-#~ msgid "Separate applications from others"
-#~ msgstr "Separate applications from others"
-
-#~ msgid "Separate applets from others"
-#~ msgstr "Separate applets from others"
-
-#~ msgid "Separate all"
-#~ msgstr "Separate all"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Configure icons' animations."
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "Configure icons' special effects (requires OpenGL)."
-
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Separate the different types of icons?"
-
-#~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-#~ msgstr ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-
-#~ msgid ""
-#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
-#~ "capacity)."
-#~ msgstr ""
-#~ "Configure icons' animations on appearing/disappearing (requires OpenGL)."
-
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Order of the different types of icons:"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Launcher's size at rest (width x height):"
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "Application's size at rest (width x height):"
-
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Applet's size at rest (width x height):"
-
-#~ msgid ""
-#~ "None     : Don't show opened windows in the dock.\n"
-#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
-#~ "they are minimized.\n"
-#~ "KDE : Mix applications with its launcher, show all others windows and "
-#~ "group windows togather in sub-dock.\n"
-#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
-#~ "that are on the current desktop."
-#~ msgstr ""
-#~ "None    : Don't show opened windows in the dock.\n"
-#~ "MacOSX  : Mix applications with its launcher, show other windows only if "
-#~ "they are minimised.\n"
-#~ "KDE: Mix applications with their launcher, show all others windows and "
-#~ "group windows together in sub-dock.\n"
-#~ "Gnome   : Separate the taskbar from the launchers and only show windows "
-#~ "that are on the current desktop."
-
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
-#~ msgid "Lock icons"
-#~ msgstr "Lock icons"
-
-#~ msgid "Unlock dock"
-#~ msgstr "Unlock dock"
-
-#~ msgid "Lock dock"
-#~ msgstr "Lock dock"
-
-#~ msgid ""
-#~ "This will allow you to add or remove launchers and applets, and configure "
-#~ "the program."
-#~ msgstr ""
-#~ "This will allow you to add or remove launchers and applets, and configure "
-#~ "the program."
-
-#~ msgid ""
-#~ "This will prevent any modification of the current theme, and hide all the "
-#~ "unnecessary entries in the menus."
-#~ msgstr ""
-#~ "This will prevent any modification of the current theme, and hide all the "
-#~ "unnecessary entries in the menus."
-
-#~ msgid "Modify this separator"
-#~ msgstr "Modify this separator"
-
-#~ msgid "Remove this separator"
-#~ msgstr "Remove this separator"
-
-#~ msgid "Detach this applet"
-#~ msgstr "Detach this applet"
-
-#~ msgid "Launch another instance of this applet"
-#~ msgstr "Launch another instance of this applet"
-
-#~ msgid ""
-#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-"
-#~ "enabled libcairo)."
-#~ msgstr ""
-#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-"
-#~ "enabled libcairo)."
-
-#~ msgid "Unity is already disabled."
-#~ msgstr "Unity is already disabled."

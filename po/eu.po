@@ -4,20 +4,20 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 # EtxOndO <ander.elor@gmail.com>, 2009
 # Ander Elortondo <ander.elor@gmail.com>, 2010.
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-02-13 02:56+0000\n"
+"POT-Creation-Date: 2012-03-21 01:21+0000\n"
+"PO-Revision-Date: 2012-03-21 03:02+0000\n"
 "Last-Translator: Mendi <arrietaarambarri@hotmail.com>\n"
 "Language-Team: librezale.org\n"
-"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-13 04:34+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-03-22 04:43+0000\n"
+"X-Generator: Launchpad (build 14981)\n"
+"Language: eu\n"
 
 #: ../src/cairo-dock-gui-commons.c:221 ../src/cairo-dock-widget-themes.c:193
 msgid ""
@@ -97,7 +97,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242 ../src/cairo-dock-widget-items.c:235
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:460
@@ -349,7 +350,8 @@ msgid "Effects:"
 msgstr "Efektuak:"
 
 #: ../src/cairo-dock-gui-simple.c:797 ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Klik miniaplikazioan bere aurrebista eta deskribapena jasotzeko."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../src/cairo-dock-widget-config.c:387
@@ -391,9 +393,8 @@ msgid "Current items"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:102 ../src/cairo-dock-gui-simple2.c:104
-#, fuzzy
 msgid "Configuration"
-msgstr "Konfiguratu"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:118 ../src/cairo-dock-gui-simple2.c:120
 #: ../data/messages:533
@@ -671,7 +672,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Abiarazi Cairo-Dock abioan"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Hirugarrenen miniaplikazioek hainbat programen integrazioa ahalbidetzen "
 "dute, adibidez pidgin"
@@ -708,7 +710,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1020
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
+msgstr ""
+"Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
 
 #: ../src/cairo-dock-menu.c:1022 ../src/cairo-dock-menu.c:1054
 msgid "Move to another dock"
@@ -1870,8 +1873,9 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1473
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1919,8 +1923,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1497
@@ -2492,14 +2496,13 @@ msgid "Icons' animations and effects"
 msgstr "Ikonoak animazioak eta efektuak"
 
 #: ../data/messages:495
-#, fuzzy
 msgid "& On mouse hover:"
-msgstr "Sagua gainetik pasatzean:"
+msgstr ""
 
 #: ../data/messages:499
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:505
@@ -2646,9 +2649,8 @@ msgid "Accessibility"
 msgstr "Erabilgarritasuna"
 
 #: ../data/messages:625
-#, fuzzy
 msgid "The higher, the faster the dock will appear"
-msgstr "Aukeratu pantailako zein ertzetan kokatu docka"
+msgstr ""
 
 #: ../data/messages:627
 msgid "Callback sensitivity:"
@@ -2659,9 +2661,8 @@ msgid "high"
 msgstr ""
 
 #: ../data/messages:631
-#, fuzzy
 msgid "low"
-msgstr "mantsoa"
+msgstr ""
 
 #: ../data/messages:633
 msgid "How to call the dock back:"
@@ -2980,14 +2981,12 @@ msgid "Refresh rate when mouving cursor into the dock :"
 msgstr "Freskatze maiztasuna kurtsorea dockean mugitzen ari denean:"
 
 #: ../data/messages:831
-#, fuzzy
 msgid "&[15;60] Animation frequency for the OpenGL backend :"
-msgstr "OpenGl motorraren animazio maiztasuna:"
+msgstr ""
 
 #: ../data/messages:835
-#, fuzzy
 msgid "*[15;50] Animation frequency for the Cairo backend :"
-msgstr "Cairo motorraren animazio maiztasuna:"
+msgstr ""
 
 #: ../data/messages:837
 msgid ""
@@ -2998,9 +2997,8 @@ msgstr ""
 "energia gehiago eskatzen du."
 
 #: ../data/messages:839
-#, fuzzy
 msgid "* Reflections should be calculated in real-time?"
-msgstr "Islatzeak denbora errealean kalkulatuko dira ?"
+msgstr ""
 
 #: ../data/messages:841
 msgid "Composition"
@@ -3158,9 +3156,8 @@ msgid "Percentage of the bright colour:"
 msgstr "Kolore distiratsuaren ehunekoa:"
 
 #: ../data/messages:919
-#, fuzzy
 msgid "Background when hidden"
-msgstr "Atzeko planoko irudia"
+msgstr ""
 
 #: ../data/messages:921
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3421,7 +3418,8 @@ msgid "Zoom effect"
 msgstr "Zoom efektua"
 
 #: ../data/messages:1081
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Ezarri 1 balioan ikonoen gainetik pasatzean zoom efekturik ez baduzu nahi."
 
@@ -3432,7 +3430,8 @@ msgstr "Ikonoen zoom maximoa:"
 #: ../data/messages:1085
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
-msgstr "Pixeletan. Tarte honetatik kanpora (Saguan zentratua) ez dago zoomik."
+msgstr ""
+"Pixeletan. Tarte honetatik kanpora (Saguan zentratua) ez dago zoomik."
 
 #: ../data/messages:1087
 msgid "Width of the space in which the zoom will be effective :"
@@ -3677,8 +3676,8 @@ msgstr "handiagoa"
 
 #: ../data/messages:1199
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Erabili adierazleak dockaren kokapenari (Goian/Behean/eskuman/ezkerrean) "
 "jarrai diezaion."
@@ -3752,7 +3751,8 @@ msgstr "Etiketen ikusgaitasun atalasea :"
 
 #: ../data/messages:1235
 msgid "Should the labels always be horizontal, even when dock is vertical?"
-msgstr "Etiketak beti horizontalak izango dira nahiz eta docka bertikala izan?"
+msgstr ""
+"Etiketak beti horizontalak izango dira nahiz eta docka bertikala izan?"
 
 #: ../data/messages:1237
 msgid "Font"
@@ -4164,143 +4164,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "On appearance/disappearance:"
-#~ msgstr "Agertzean/desagertzean:"
-
-#~ msgid ""
-#~ "Leave empty to use the current icon theme of your system. You can enter "
-#~ "the name of a theme that is installed on your system (like 'Gartoon' or "
-#~ "'Human'), or even a path to a folder containing icons."
-#~ msgstr ""
-#~ "Utzi hutsik sistemako uneko ikonoak erabiltzeko. Sistema instalaturik "
-#~ "duzun gai baten izena sar dezakezu ('Gartoon' edo 'Human' adibidez) edo "
-#~ "ikonoak dituen karpetaren bidea idatzi."
-
-#~ msgid "in ms. 0 means no delay."
-#~ msgstr "milisegundotan. 0 tarterik ez."
-
-#~ msgid "Delay before the dock unhides itself:"
-#~ msgstr "Docka bere burua agertarazi aurreko denbora tartea."
-
-#~ msgid "You need to re-open the panel. It is deactivated by default on KDE."
-#~ msgstr "Panel berrabiarazi behar duzu. KDEn desaktibatua dago lehenetsirik."
-
-#~ msgid "Make the config panel transparent?"
-#~ msgstr "Konfigurazio panela gardena egin?"
-
-#~ msgid "Gnome"
-#~ msgstr "Gnome"
-
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
-
-#~ msgid "launchers"
-#~ msgstr "abiarazleak"
-
-#~ msgid "applications"
-#~ msgstr "aplikazioak"
-
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Ikono moten ordena:"
-
-#~ msgid "applets"
-#~ msgstr "miniaplikazioak"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Abiarazleen tamaina atsedenean (Zabalera x altuera):"
-
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "miniaplikazioen tamaina atsedenean (Zabalera x altuera):"
-
-#~ msgid "Icons order"
-#~ msgstr "Ikonoen ordena"
-
-#~ msgid "Separate applications from others"
-#~ msgstr "Banatu aplikazioak besteengandik"
-
-#~ msgid "Separate applets from others"
-#~ msgstr "Banatu miniaplikazioak besteengandik"
-
-#~ msgid "Separate all"
-#~ msgstr "Banatu denak"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Konfiguratu ikonoen animazioak."
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "Konfiguratu ikonoen efektu bereziak (OpenGL gaitasuna behar du)"
-
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "Honek abiarazleak, aplikazioak eta miniaplikazioak banatuko ditu. "
-#~ "Banatzaileak automatikoki txertatuko dira."
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Ikono motaren arabera banatu?"
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "Aplikazioen tamaina atsedenean (Zabalera x altuera):"
-
-#~ msgid ""
-#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
-#~ "capacity)."
-#~ msgstr ""
-#~ "Konfiguratu ikonoen animazioak agertu eta desagertzean (OpenGL gaitasuna "
-#~ "behar da)."
-
-#~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-#~ msgstr ""
-#~ "Ikonoak moten arabera banatzen badituzu, mota honetakoak batera egongo "
-#~ "dira eta besteengandik banatzaileaz banatuak.\n"
-#~ "Ikonoak ez badituzu banatzen, edonon kokatu ditzakezu, eta banatzaileak "
-#~ "eskuz txertatu. Aplikazioak bere abiarazleen jarraian kokatuko dira "
-#~ "egonez gero, edo azken abiarazlearen ondoren."
-
-#~ msgid ""
-#~ "None     : Don't show opened windows in the dock.\n"
-#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
-#~ "they are minimized.\n"
-#~ "KDE : Mix applications with its launcher, show all others windows and "
-#~ "group windows togather in sub-dock.\n"
-#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
-#~ "that are on the current desktop."
-#~ msgstr ""
-#~ "Batere ez: Ez erakutsi irekitako leihoak dockean.\n"
-#~ "MacOSX: Nahastu aplikazioak bere abiarazleekin , erakutsi beste leihoak "
-#~ "bakarrik txikituak badaude.\n"
-#~ "KDE:  Nahastu aplikazioak bere abiarazleekin , erakutsi beste leiho "
-#~ "guztiak eta taldekatu leihoak azpidocketan.\n"
-#~ "Gnome: Bereizi ataza-barra abiarazleengatik eta erakutsi uneko "
-#~ "mahaigaineko leihoak bakarrik."
-
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
-#~ msgid "Lock icons"
-#~ msgstr "blokeatu ikonoak"
-
-#~ msgid "Unlock dock"
-#~ msgstr "desblokeatu dock"
-
-#~ msgid "Lock dock"
-#~ msgstr "blokeatu dock"
-
-#~ msgid "Modify this separator"
-#~ msgstr "Aldatu banatzaile hau"
-
-#~ msgid "Remove this separator"
-#~ msgstr "Ezabatu banatzaile hau"
-
-#~ msgid "Detach this applet"
-#~ msgstr "Kendu miniaplikazio hau"
-
-#~ msgid "Launch another instance of this applet"
-#~ msgstr "Miniaplikazio honen beste instantzia bat abiarazi."

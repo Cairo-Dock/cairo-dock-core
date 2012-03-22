@@ -2,21 +2,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Maks Mokriev <mcree@ukr.net>, 2009.
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: Cairo-Dock II\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-02-13 02:54+0000\n"
+"POT-Creation-Date: 2012-03-21 01:21+0000\n"
+"PO-Revision-Date: 2012-03-21 02:56+0000\n"
 "Last-Translator: Maks Mokriev <mcree@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
-"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-13 04:37+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-03-22 04:46+0000\n"
+"X-Generator: Launchpad (build 14981)\n"
 "X-Poedit-Country: Ukraine\n"
+"Language: uk\n"
 "X-Poedit-Language: Ukrainian\n"
 
 #: ../src/cairo-dock-gui-commons.c:221 ../src/cairo-dock-widget-themes.c:193
@@ -97,7 +97,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242 ../src/cairo-dock-widget-items.c:235
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Параметри головної панелі можна налаштувати в головному вікні налаштувань."
 
@@ -350,7 +351,8 @@ msgid "Effects:"
 msgstr "Ефекти:"
 
 #: ../src/cairo-dock-gui-simple.c:797 ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Натисніть на аплеті, щоб мати його попередній перегляд та опис."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../src/cairo-dock-widget-config.c:387
@@ -388,14 +390,12 @@ msgstr ""
 "потужним інструментом для налаштування поточної теми."
 
 #: ../src/cairo-dock-gui-simple2.c:94 ../src/cairo-dock-gui-simple2.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Зберегти поточну тему"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:102 ../src/cairo-dock-gui-simple2.c:104
-#, fuzzy
 msgid "Configuration"
-msgstr "Налаштувати"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:118 ../src/cairo-dock-gui-simple2.c:120
 #: ../data/messages:533
@@ -677,7 +677,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Запускати Cairo-Dock при старті системи"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Аплети третіх сторін забезпечують інтеграцію з різноманітними програмами, "
 "наприклад Pidgin"
@@ -1252,8 +1253,8 @@ msgid ""
 msgstr ""
 "Ласкаво просимо до Cairo-Dock2 !\n"
 "Цей аплет допоможе в освоєнні панелі.\n"
-"Якщо у вас виникають питання/побажання, завітайте на сайт http://glx-dock."
-"org.\n"
+"Якщо у вас виникають питання/побажання, завітайте на сайт http://glx-"
+"dock.org.\n"
 "Сподіваємося, що вам сподобається ця програма!\n"
 "  (щоб закрити цей діалог клацніть по ньому)"
 
@@ -1519,8 +1520,9 @@ msgid ""
 msgstr ""
 "Ви можете додати розділювач між значками правим клацанням на панелі -> "
 "додати -> розділювач.\n"
-"Також, якщо включена опція розділення значків за типами (запуск/програми/"
-"аплети), розділювач буде з’являтися автоматично між цими групами.\n"
+"Також, якщо включена опція розділення значків за типами "
+"(запуск/програми/аплети), розділювач буде з’являтися автоматично між цими "
+"групами.\n"
 "В \"панельному\" виді розділювачі показуються як розрив між значками."
 
 #: ../data/messages:43 ../data/messages:1321
@@ -1783,8 +1785,8 @@ msgid ""
 msgstr ""
 "Активувати аплет Годинник.\n"
 "При натисканні на нього з’явиться календар.\n"
-"Подвійне клацання знизу викличе список задач. Тут ви можете додавати/"
-"видаляти ваші завдання.\n"
+"Подвійне клацання знизу викличе список задач. Тут ви можете "
+"додавати/видаляти ваші завдання.\n"
 "Коли задача пройшла або запланувалася, аплет попереджатиме вас (за 15 хвилин "
 "до початку міроприємства, а також за 1 день у випадку дня народження)."
 
@@ -2018,8 +2020,8 @@ msgid ""
 "You can even name each of them."
 msgstr ""
 "Активувати аплет \"Перемикання стільниць\".\n"
-"Клацання правої кнопки миші -> \"Додати стільницю\" або \"Видалити стільницю"
-"\".\n"
+"Клацання правої кнопки миші -> \"Додати стільницю\" або \"Видалити "
+"стільницю\".\n"
 "Можна надати ім’я кожній стільниці."
 
 #: ../data/messages:185 ../data/messages:1463
@@ -2051,16 +2053,17 @@ msgstr "Повне видалення gnome-panel"
 
 #: ../data/messages:195 ../data/messages:1473
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Завантажте gconf-editor, відредагуйте ключ /desktop/gnome/session/"
-"required_components/panel, замінивши його значення  на \"cairo-dock\". Потім "
-"перезапустіть сеанс: панель Gnome більше не з’являтиметься, замість неї "
-"повинна запуститися cairo-dock (якщо цього не сталося, то додайте її в "
-"програми автозапуску)."
+"Завантажте gconf-editor, відредагуйте ключ "
+"/desktop/gnome/session/required_components/panel, замінивши його значення  "
+"на \"cairo-dock\". Потім перезапустіть сеанс: панель Gnome більше не "
+"з’являтиметься, замість неї повинна запуститися cairo-dock (якщо цього не "
+"сталося, то додайте її в програми автозапуску)."
 
 #: ../data/messages:199 ../data/messages:1477
 msgid ""
@@ -2113,16 +2116,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Вам потрібно включити композитність. Для цього ви можете запустити Compiz "
 "або xcmpmgr.\n"
 "Якщо ви використовуєте XFCE або KDE, то можете просто задіяти композитність "
 "в налаштуваннях менеджера вікон.\n"
 "Якщо ж ви користуєтеся Gnome, то можете задіяти Metacity таким чином:\n"
-"Відкрийте gconf-editor, встановіть ключ '/apps/metacity/general/"
-"compositing_manager' в значення 'true'."
+"Відкрийте gconf-editor, встановіть ключ "
+"'/apps/metacity/general/compositing_manager' в значення 'true'."
 
 #: ../data/messages:219 ../data/messages:1497
 msgid ""
@@ -2300,8 +2303,8 @@ msgstr ""
 "можна поліпшити,\n"
 "або якщо ви тільки-но отримали свою мрію у вигляді панелі для задач, "
 "завітайте до нас на glx-dock.org.\n"
-"Ми будемо раді вітати англомовних (і не тільки) друзів, так що не "
-"соромтеся! ;-)\n"
+"Ми будемо раді вітати англомовних (і не тільки) друзів, так що не соромтеся! "
+";-)\n"
 "\n"
 "Якщо ви зробили нову тему для нашої панелі або новий аплет, і хочете "
 "поділитися ними, ми будемо раді додати їх на наш сервер!"
@@ -2554,7 +2557,8 @@ msgstr "Оформлення"
 
 #: ../data/messages:375
 msgid "Choose 'Custom decorations' to define your own decorations below."
-msgstr "Виберіть 'Власне оформлення', щоб налаштувати власне оформлення нижче."
+msgstr ""
+"Виберіть 'Власне оформлення', щоб налаштувати власне оформлення нижче."
 
 #: ../data/messages:377
 msgid "Choose a decoration theme for this desklet:"
@@ -2790,14 +2794,13 @@ msgid "Icons' animations and effects"
 msgstr "Ефекти та анімація значків"
 
 #: ../data/messages:495
-#, fuzzy
 msgid "& On mouse hover:"
-msgstr "При наведенні курсора:"
+msgstr ""
 
 #: ../data/messages:499
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:505
@@ -2947,9 +2950,8 @@ msgid "Accessibility"
 msgstr "Спец. можливості"
 
 #: ../data/messages:625
-#, fuzzy
 msgid "The higher, the faster the dock will appear"
-msgstr "З якого боку екрану розташувати панель:"
+msgstr ""
 
 #: ../data/messages:627
 msgid "Callback sensitivity:"
@@ -2960,9 +2962,8 @@ msgid "high"
 msgstr ""
 
 #: ../data/messages:631
-#, fuzzy
 msgid "low"
-msgstr "повільно"
+msgstr ""
 
 #: ../data/messages:633
 msgid "How to call the dock back:"
@@ -3283,14 +3284,12 @@ msgid "Refresh rate when mouving cursor into the dock :"
 msgstr "Частота оновлення при переміщенні курсора по панелі:"
 
 #: ../data/messages:831
-#, fuzzy
 msgid "&[15;60] Animation frequency for the OpenGL backend :"
-msgstr "Частота анімації для бекенда OpenGL:"
+msgstr ""
 
 #: ../data/messages:835
-#, fuzzy
 msgid "*[15;50] Animation frequency for the Cairo backend :"
-msgstr "Частота анімації для бекенда cairo:"
+msgstr ""
 
 #: ../data/messages:837
 msgid ""
@@ -3301,9 +3300,8 @@ msgstr ""
 "знадобитися більше ресурсів процесора."
 
 #: ../data/messages:839
-#, fuzzy
 msgid "* Reflections should be calculated in real-time?"
-msgstr "Обробляти відображення в реальному часі?"
+msgstr ""
 
 #: ../data/messages:841
 msgid "Composition"
@@ -3380,7 +3378,8 @@ msgstr "Порт :"
 #: ../data/messages:869 ../data/messages:873
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
-msgstr "Залиште порожнім, якщо використовуєте авторизований вхід через проксі."
+msgstr ""
+"Залиште порожнім, якщо використовуєте авторизований вхід через проксі."
 
 #: ../data/messages:871
 msgid "User :"
@@ -3460,9 +3459,8 @@ msgid "Percentage of the bright colour:"
 msgstr "ВІдсоток яскравості кольору:"
 
 #: ../data/messages:919
-#, fuzzy
 msgid "Background when hidden"
-msgstr "Зображення тла:"
+msgstr ""
 
 #: ../data/messages:921
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3723,7 +3721,8 @@ msgid "Zoom effect"
 msgstr "Ефект наближення"
 
 #: ../data/messages:1081
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Встановіть значення 1, якщо не бажаєте щоб значки збільшувалися при "
 "наведенні на них."
@@ -3985,8 +3984,8 @@ msgstr "більше"
 
 #: ../data/messages:1199
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Використовуйте, щоб орієнтувати індикатор відносно положення панелі (згори, "
 "знизу, справа, зліва)."
@@ -4129,7 +4128,8 @@ msgstr "Шаблон повинен бути вертикальним?"
 
 #: ../data/messages:1269
 msgid "Quick-info are short information drawn on the icons."
-msgstr "Швидка інформація - це коротка інформація, яка з’являється на значку."
+msgstr ""
+"Швидка інформація - це коротка інформація, яка з’являється на значку."
 
 #: ../data/messages:1271
 msgid "Quick-info"
@@ -4160,8 +4160,8 @@ msgstr ""
 "- Для значків програм:\n"
 "Правою кнопкою миші на значку -> \"встановити власний значок\". Далі вкажіть "
 "зображення, яке б ви хотіли використовувати та застосуйте. Для видалення "
-"власного значка - правим клацанням на значку -> \"видалити власний значок"
-"\".\n"
+"власного значка - правим клацанням на значку -> \"видалити власний "
+"значок\".\n"
 "Якщо ви маєте встановлену тему значків на вашому ПК, ви можете також вибрати "
 "цю тему як типову для панелі у вікні глобальних налаштувань."
 
@@ -4512,151 +4512,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "On appearance/disappearance:"
-#~ msgstr "При появі/приховуванні:"
-
-#~ msgid ""
-#~ "Leave empty to use the current icon theme of your system. You can enter "
-#~ "the name of a theme that is installed on your system (like 'Gartoon' or "
-#~ "'Human'), or even a path to a folder containing icons."
-#~ msgstr ""
-#~ "Залиште пустим, щоб використовувати системну тему значків. Або ви можете "
-#~ "ввести назву будь-якої теми встановленої у вашій системі (наприклад "
-#~ "'Gartoon' або 'Human'), або навіть вказати будь-який каталог зі значками."
-
-#~ msgid "in ms. 0 means no delay."
-#~ msgstr "в мс. 0 означає відсутність затримки."
-
-#~ msgid "Delay before the dock unhides itself:"
-#~ msgstr "Затримка перед розкриттям панелі"
-
-#~ msgid "You need to re-open the panel. It is deactivated by default on KDE."
-#~ msgstr ""
-#~ "Вам потрібно знову відкрити панель. В KDE стандартно вона деактивована."
-
-#~ msgid "Make the config panel transparent?"
-#~ msgstr "Зробити панель налаштувань прозорою?"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Розмір значків запуску в стані спокою (ширина х висота):"
-
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Розмір аплетів в стані спокою (ширина х висота):"
-
-#~ msgid "Icons order"
-#~ msgstr "Порядок значків"
-
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Порядок різних типів значків:"
-
-#~ msgid "launchers"
-#~ msgstr "значки запуску"
-
-#~ msgid "applications"
-#~ msgstr "програми"
-
-#~ msgid "applets"
-#~ msgstr "аплети"
-
-#~ msgid "Gnome"
-#~ msgstr "Gnome"
-
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
-
-#~ msgid "Separate applications from others"
-#~ msgstr "Відокремлювати програми від інших"
-
-#~ msgid "Separate applets from others"
-#~ msgstr "Відокремлювати аплети від інших"
-
-#~ msgid "Separate all"
-#~ msgstr "Відокремлювати все"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Налаштувати анімацію значків."
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "Налаштувати спеціальні ефекти значків (потрібна підтримка OpenGL)."
-
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "Це буде розділяти значки запуску, запущені програми та аплети. Розділення "
-#~ "буде відбуватися автоматично при появі нових елементів."
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Розділяти різні типи значків?"
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "Розмір значків програм в стані спокою (ширина х висота):"
-
-#~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-#~ msgstr ""
-#~ "Якщо ви відокремлюєте різні типи значків, значки одного типу "
-#~ "розміщуватимуться на панелі гуртом, відділені від інших роздільником.\n"
-#~ "Якщо ви не відокремлюєте значки, ви можете розміщувати їх, де захочете, "
-#~ "та вставляти розділювач вручну.  Програми будуть розміщуватися  після "
-#~ "своїх значків запуску або після останнього значка запуску."
-
-#~ msgid ""
-#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
-#~ "capacity)."
-#~ msgstr ""
-#~ "Налаштувати анімацію появи/зникнення значків (вимагається наявність "
-#~ "OpenGL)."
-
-#~ msgid ""
-#~ "None     : Don't show opened windows in the dock.\n"
-#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
-#~ "they are minimized.\n"
-#~ "KDE : Mix applications with its launcher, show all others windows and "
-#~ "group windows togather in sub-dock.\n"
-#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
-#~ "that are on the current desktop."
-#~ msgstr ""
-#~ "Нічого: Не показувати відкриті вікна на панелі.\n"
-#~ "MacOSX : Змішувати програми із значками запуску, показувати інші вікна "
-#~ "тільки якщо вони мінімізовані.\n"
-#~ "KDE : Змішувати програми із значками запуску, показувати всі інші вікна "
-#~ "та групи вікон разом в суб-панелі.\n"
-#~ "Gnome : Відокремити запущені задачі від значків запуску та показувати "
-#~ "тільки вікна, які знаходяться на поточній стільниці."
-
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
-#~ msgid "Lock icons"
-#~ msgstr "Заблокувати значки"
-
-#~ msgid "Unlock dock"
-#~ msgstr "Розблокувати панель"
-
-#~ msgid "Lock dock"
-#~ msgstr "Заблокувати панель"
-
-#~ msgid "Modify this separator"
-#~ msgstr "Змінити цей розділювач"
-
-#~ msgid "Remove this separator"
-#~ msgstr "Видалити розділювач"
-
-#~ msgid "Detach this applet"
-#~ msgstr "Відокремити аплет"
-
-#~ msgid "Launch another instance of this applet"
-#~ msgstr "Запустити іншу копію аплету"
-
-#~ msgid ""
-#~ "Force Glitz backend (hardware acceleration for cairo, needs a glitz-"
-#~ "enabled libcairo)."
-#~ msgstr ""
-#~ "Примусовий Glitz бекенд (апаратне прискорення для cairo, потрібен glitz-"
-#~ "enabled libcairo)."

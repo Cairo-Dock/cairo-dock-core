@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-02-13 02:57+0000\n"
+"POT-Creation-Date: 2012-03-21 01:21+0000\n"
+"PO-Revision-Date: 2012-03-21 03:03+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
-"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-13 04:34+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-03-22 04:43+0000\n"
+"X-Generator: Launchpad (build 14981)\n"
+"Language: ar\n"
 
 #: ../src/cairo-dock-gui-commons.c:221 ../src/cairo-dock-widget-themes.c:193
 msgid ""
@@ -24,19 +24,21 @@ msgid ""
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
+"لقد قمت بعمل تغييرات للسمة الحالية\n"
+"ستفقد التغييرات إن لم تقم بالحفظ قبل إختيار  سمة جديدة . إكمال على أي حال ؟"
 
 #: ../src/cairo-dock-gui-commons.c:247 ../src/cairo-dock-widget-themes.c:220
 msgid "Please wait while importing the theme..."
-msgstr ""
+msgstr "الرجاء الإنتظار ريثما يستورد السمة ..."
 
 #: ../src/cairo-dock-gui-commons.c:369 ../src/cairo-dock-widget-plugins.c:101
 msgid "Configure this applet"
-msgstr "تكوين الاضافة"
+msgstr "خصص هذا البريمج"
 
 #: ../src/cairo-dock-gui-commons.c:406 ../src/cairo-dock-gui-main.c:131
 #: ../src/cairo-dock-gui-main2.c:133 ../src/cairo-dock-widget-plugins.c:139
 msgid "Files"
-msgstr "ملفّات"
+msgstr "الملفات"
 
 #: ../src/cairo-dock-gui-commons.c:411 ../src/cairo-dock-gui-main.c:132
 #: ../src/cairo-dock-gui-main2.c:134 ../src/cairo-dock-widget-plugins.c:144
@@ -66,43 +68,44 @@ msgstr "مرح"
 
 #: ../src/cairo-dock-gui-commons.c:474 ../src/cairo-dock-widget-plugins.c:230
 msgid "plug-in"
-msgstr ""
+msgstr "إضافة"
 
 #: ../src/cairo-dock-gui-commons.c:480 ../src/cairo-dock-widget-plugins.c:236
 msgid "category"
-msgstr "تصنيف"
+msgstr "فئة"
 
 #: ../src/cairo-dock-gui-commons.c:575
 msgid "Press the shortkey"
-msgstr ""
+msgstr "أنقر زر الإختصار"
 
 #: ../src/cairo-dock-gui-commons.c:594
 msgid "Change the shortkey"
-msgstr ""
+msgstr "غيّر زر الإختصار"
 
 #: ../src/cairo-dock-gui-commons.c:681
 msgid "Origin"
-msgstr ""
+msgstr "الأصل"
 
 #: ../src/cairo-dock-gui-commons.c:686
 msgid "Action"
-msgstr ""
+msgstr "إجراء"
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
-msgstr ""
+msgstr "زر الاختصار"
 
 #: ../src/cairo-dock-gui-items.c:242 ../src/cairo-dock-widget-items.c:235
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr ""
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr "معايير الـdock متاحة في نافذة المواصفات الرئيسية."
 
 #: ../src/cairo-dock-gui-items.c:460
 msgid "Launcher configuration"
-msgstr "اعدادات المشغل"
+msgstr "إعدادات المشغل"
 
 #: ../src/cairo-dock-gui-items.c:878 ../src/cairo-dock-widget-items.c:729
 msgid "Remove this item"
-msgstr ""
+msgstr "أزل هذا العنصر"
 
 #: ../src/cairo-dock-gui-main.c:129 ../src/cairo-dock-gui-main2.c:131
 #: ../data/messages:677
@@ -139,6 +142,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
+"هل تريد ان تصبح الـdock خاصتك مرئية دائما ,\n"
+"أم تريدها مخفية ؟\n"
+"تخصيص طريقة الوصول للـdock و الـdock الفرعية الخاصة بك!"
 
 #: ../src/cairo-dock-gui-main.c:1488 ../src/cairo-dock-gui-main2.c:1535
 #: ../src/cairo-dock-menu.c:1714 ../data/messages:353
@@ -156,12 +162,12 @@ msgstr "شريط المهام"
 
 #: ../src/cairo-dock-gui-main.c:1501 ../src/cairo-dock-gui-main2.c:1548
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "تعريف جميع إختصارات لوحة المفاتيح الحالية المتاحة."
 
 #: ../src/cairo-dock-gui-main.c:1502 ../src/cairo-dock-gui-main2.c:1549
 #: ../data/messages:527 ../data/messages:779
 msgid "Shortkeys"
-msgstr ""
+msgstr "أزرار الاختصارات"
 
 #: ../src/cairo-dock-gui-main.c:1508 ../src/cairo-dock-gui-main2.c:1555
 msgid "All of the parameters you will never want to tweak."
@@ -174,7 +180,7 @@ msgstr "تعيين خلفية  لشريطك"
 #: ../src/cairo-dock-gui-main.c:1519 ../src/cairo-dock-gui-main2.c:1566
 #: ../data/messages:877 ../data/messages:1247 ../data/messages:1677
 msgid "Background"
-msgstr "خلفيَّة"
+msgstr "الخلفية"
 
 #: ../src/cairo-dock-gui-main.c:1525 ../src/cairo-dock-gui-main2.c:1572
 msgid "Select a view for each of your docks."
@@ -214,7 +220,7 @@ msgstr ""
 #: ../data/messages:11 ../data/messages:503 ../data/messages:1065
 #: ../data/messages:1289 ../data/messages:1653
 msgid "Icons"
-msgstr "أيقونات"
+msgstr "الأيقونات"
 
 #: ../src/cairo-dock-gui-main.c:1556 ../src/cairo-dock-gui-main2.c:1603
 msgid "Indicators are additional markers for your icons."
@@ -231,7 +237,7 @@ msgstr "رمز تعريف وشرح سريع لمعلومات النمط."
 
 #: ../src/cairo-dock-gui-main.c:1565 ../src/cairo-dock-gui-main2.c:1612
 msgid "Captions"
-msgstr "تعليق"
+msgstr "التعليقات"
 
 #: ../src/cairo-dock-gui-main.c:1657 ../src/cairo-dock-gui-main2.c:1831
 msgid "Filter"
@@ -264,7 +270,7 @@ msgstr "تمكين هذه الوحدة"
 #: ../src/cairo-dock-gui-main.c:1927 ../src/cairo-dock-gui-main2.c:1980
 #: ../data/messages:543
 msgid "More applets"
-msgstr "مزيد من التطبيقات"
+msgstr "المزيد من البريمجات"
 
 #: ../src/cairo-dock-gui-main.c:1928 ../src/cairo-dock-gui-main2.c:1981
 #: ../data/messages:541
@@ -319,17 +325,17 @@ msgstr "ﻻيمكن اسيراد السمة ."
 
 #: ../src/cairo-dock-gui-simple.c:399
 msgid "Importing theme..."
-msgstr ""
+msgstr "إستدعاء السمة..."
 
 #: ../src/cairo-dock-gui-simple.c:406 ../src/cairo-dock-gui-themes.c:156
 #: ../src/cairo-dock-widget-themes.c:382
 msgid "Theme has been saved"
-msgstr ""
+msgstr "تم حفظ السمة"
 
 #: ../src/cairo-dock-gui-simple.c:412 ../src/cairo-dock-gui-themes.c:162
 #: ../src/cairo-dock-widget-themes.c:388
 msgid "Themes have been deleted"
-msgstr ""
+msgstr "تم إزالة السمات"
 
 #: ../src/cairo-dock-gui-simple.c:708 ../src/cairo-dock-widget-config.c:326
 #: ../src/cairo-dock-widget-shortkeys.c:326
@@ -342,7 +348,8 @@ msgid "Effects:"
 msgstr "تأثيرات:"
 
 #: ../src/cairo-dock-gui-simple.c:797 ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "انقر على المصغر للحصول على عرض و وصف له."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../src/cairo-dock-widget-config.c:387
@@ -362,6 +369,10 @@ msgid ""
 ", you can switch to an advanced mode.\n"
 " You can switch from a mode to another at any time."
 msgstr ""
+"هذا وضع التخصيص البسيط لـCairo-Dock .\n"
+"بعدما تتعود عليه و تريد تخصيص السمة الخاصة بك ,\n"
+"يمكنك التغيير إلى الوضع المتقدم.\n"
+"يمكنك التغيير من نمط ﻵخر في أي وقت."
 
 #: ../src/cairo-dock-gui-simple.c:1040 ../src/cairo-dock-gui-simple2.c:645
 msgid "Advanced Mode"
@@ -376,14 +387,12 @@ msgstr ""
 "بفعاليه."
 
 #: ../src/cairo-dock-gui-simple2.c:94 ../src/cairo-dock-gui-simple2.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "حفظ السمه الحاليه"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:102 ../src/cairo-dock-gui-simple2.c:104
-#, fuzzy
 msgid "Configuration"
-msgstr "عدل"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:118 ../src/cairo-dock-gui-simple2.c:120
 #: ../data/messages:533
@@ -392,7 +401,7 @@ msgstr "إضافات"
 
 #: ../src/cairo-dock-gui-themes.c:149 ../src/cairo-dock-widget-themes.c:375
 msgid "Importing theme ..."
-msgstr ""
+msgstr "إستدعاء السمة ..."
 
 #: ../src/cairo-dock-gui-themes.c:182
 msgid "Manage Themes"
@@ -414,19 +423,19 @@ msgstr ""
 
 #: ../src/cairo-dock-help.c:220 ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "نصائح وخدع"
 
 #: ../src/cairo-dock-help.c:380 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
-msgstr ""
+msgstr "الفئة"
 
 #: ../src/cairo-dock-menu.c:123
 msgid "Delete this dock?"
-msgstr ""
+msgstr "حذف هذه الـdock ؟"
 
 #: ../src/cairo-dock-menu.c:177
 msgid "About Cairo-Dock"
-msgstr ""
+msgstr "حول Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:214 ../data/messages:283 ../data/messages:1561
 msgid "Development site"
@@ -442,28 +451,29 @@ msgstr "الحصول على مزيد من التطبيقات!"
 
 #: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
 msgid "Donate"
-msgstr ""
+msgstr "تبرّع"
 
 #: ../src/cairo-dock-menu.c:226 ../src/cairo-dock-menu.c:232
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
+"إدعم الأشخاص الذين يقضون الساعات الطوال ليقدموا لك أفضل dock على الإطلاق ."
 
 #: ../src/cairo-dock-menu.c:260
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "هنا لائحة للمطورين و المساهمين الحاليين"
 
 #: ../src/cairo-dock-menu.c:261
 msgid "Developers"
-msgstr ""
+msgstr "المطوّرون"
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "المطور الرئيسي و قائد المشروع"
 
 #: ../src/cairo-dock-menu.c:263
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "المساهمين / الهاكرز"
 
 #: ../src/cairo-dock-menu.c:265
 msgid "Development"
@@ -471,23 +481,26 @@ msgstr "تطوير"
 
 #: ../src/cairo-dock-menu.c:280
 msgid "Website"
-msgstr ""
+msgstr "موقع الويب"
 
 #: ../src/cairo-dock-menu.c:281
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr ""
+msgstr "إختبارات بيتا / إقتراحات / مؤثرات المنتدى المتحركة"
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
-msgstr ""
+msgstr "المترجمين لهذه اللغة"
 
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Ahmed Mohammed https://launchpad.net/~ahmedqatar\n"
-"  Fabounet https://launchpad.net/~fabounet03\n"
-"  Matthieu Baerts https://launchpad.net/~matttbe"
+"  Mohammed Hamad https://launchpad.net/~star-diamond77\n"
+"  alz3abi https://launchpad.net/~h-alz3abi\n"
+"  mega speed https://launchpad.net/~dr-megaspeed\n"
+"  فيصل شامخ https://launchpad.net/~chamfay-z\n"
+"  منصور اليوسف https://launchpad.net/~mansour2008"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -498,26 +511,28 @@ msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
+"شكرا لجميع الأشخاص الذين ساعدونا في تحسين مشروع Cairo-Dock .\n"
+"شكرا لكل المساهمين الحاليين , السابقين و المستقبليين."
 
 #: ../src/cairo-dock-menu.c:317
 msgid "How to help us?"
-msgstr ""
+msgstr "كيف نساعدك ؟"
 
 #: ../src/cairo-dock-menu.c:318
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr ""
+msgstr "لا تتردد في الإنضمام للمشروع , نحن في حاجة إليكم :)"
 
 #: ../src/cairo-dock-menu.c:319
 msgid "Former contributors"
-msgstr ""
+msgstr "المساهمين السابقين"
 
 #: ../src/cairo-dock-menu.c:320
 msgid "For a complete list, please have a look to BZR logs"
-msgstr ""
+msgstr "للحصول على قائمة كاملة، الرجاء إلقاء نظرة على سجلات BZR"
 
 #: ../src/cairo-dock-menu.c:321
 msgid "Users of our forum"
-msgstr ""
+msgstr "مستخدمي منتدانا"
 
 #: ../src/cairo-dock-menu.c:322
 msgid "Artwork"
@@ -525,7 +540,7 @@ msgstr "الأعمال الفنية"
 
 #: ../src/cairo-dock-menu.c:324
 msgid "Thanks"
-msgstr ""
+msgstr "شكرًا"
 
 #: ../src/cairo-dock-menu.c:401
 msgid "Quit Cairo-Dock?"
@@ -533,7 +548,7 @@ msgstr "إغلاق برنامج كايرو-دوك؟"
 
 #: ../src/cairo-dock-menu.c:431 ../src/cairo-dock-menu.c:573
 msgid "Separator"
-msgstr ""
+msgstr "فاصل"
 
 #: ../src/cairo-dock-menu.c:543
 msgid ""
@@ -548,15 +563,15 @@ msgstr "أضف"
 
 #: ../src/cairo-dock-menu.c:569
 msgid "Sub-dock"
-msgstr ""
+msgstr "dock فرعي"
 
 #: ../src/cairo-dock-menu.c:571
 msgid "Main dock"
-msgstr ""
+msgstr "dock رئيسي"
 
 #: ../src/cairo-dock-menu.c:575
 msgid "Custom launcher"
-msgstr ""
+msgstr "مطلق مخصص"
 
 #: ../src/cairo-dock-menu.c:576
 msgid ""
@@ -617,11 +632,11 @@ msgstr "ضبط الشريط"
 
 #: ../src/cairo-dock-menu.c:868
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr ""
+msgstr "تخصيص النمط الحالي , توضيح و إظهار على الـdock الرئيسي."
 
 #: ../src/cairo-dock-menu.c:870
 msgid "Delete this dock"
-msgstr ""
+msgstr "أزل هذا الـdock"
 
 #: ../src/cairo-dock-menu.c:880
 msgid "Manage themes"
@@ -634,7 +649,7 @@ msgstr "اختر من العديد من السمات في الخادم او حف
 
 #: ../src/cairo-dock-menu.c:898
 msgid "Lock icons position"
-msgstr ""
+msgstr "أغلق نمط الأيقونة"
 
 #: ../src/cairo-dock-menu.c:902
 msgid "This will (un)lock the position of the icons."
@@ -653,7 +668,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "تشغيل شريط كيرو عند بدء التشغيل"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:965
@@ -677,11 +693,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1017 ../src/cairo-dock-menu.c:1038
 msgid "Edit"
-msgstr ""
+msgstr "حرّر"
 
 #: ../src/cairo-dock-menu.c:1019 ../src/cairo-dock-menu.c:1045
 msgid "Remove"
-msgstr ""
+msgstr "أزِل"
 
 #: ../src/cairo-dock-menu.c:1020
 msgid ""
@@ -703,7 +719,7 @@ msgstr "تحويله الى مشغل"
 
 #: ../src/cairo-dock-menu.c:1042
 msgid "Detach"
-msgstr ""
+msgstr "اِفصل"
 
 #: ../src/cairo-dock-menu.c:1042
 msgid "Return to the dock"
@@ -711,7 +727,7 @@ msgstr "عوده الى الشريط"
 
 #: ../src/cairo-dock-menu.c:1049
 msgid "Duplicate"
-msgstr ""
+msgstr "كرّر"
 
 #: ../src/cairo-dock-menu.c:1064
 msgid "Applet's handbook"
@@ -781,7 +797,7 @@ msgstr "إزاله الايقونه المعدله"
 
 #: ../src/cairo-dock-menu.c:1640
 msgid "Set a custom icon"
-msgstr ""
+msgstr "حدد أيقونة مخصصة"
 
 #: ../src/cairo-dock-menu.c:1643
 msgid "Kill"
@@ -810,17 +826,17 @@ msgstr "تصغير"
 #: ../src/cairo-dock-menu.c:1658 ../src/cairo-dock-menu.c:1665
 #: ../src/cairo-dock-menu.c:1673 ../src/help/applet-notifications.c:247
 msgid "middle-click"
-msgstr ""
+msgstr "نقر بزر الفأرة الأوسط"
 
 #: ../src/cairo-dock-menu.c:1665 ../src/cairo-dock-menu.c:1667
 #: ../data/messages:757
 msgid "Lower"
-msgstr ""
+msgstr "أدنى"
 
 #: ../src/cairo-dock-menu.c:1673 ../src/cairo-dock-menu.c:1675
 #: ../data/messages:751
 msgid "Close"
-msgstr ""
+msgstr "أغلِق"
 
 #: ../src/cairo-dock-menu.c:1691
 msgid "Move all to this desktop"
@@ -873,7 +889,7 @@ msgstr ""
 #: ../src/cairo-dock.c:147
 #, c-format
 msgid "Happy new year %d !!!"
-msgstr ""
+msgstr "%d نتمنى لك عاما سعيدا."
 
 #: ../src/cairo-dock.c:320
 msgid "Use Cairo backend."
@@ -926,7 +942,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:350
 msgid "Don't load any plug-ins."
-msgstr ""
+msgstr "لا تحمّل أي إضافات."
 
 #: ../src/cairo-dock.c:353
 msgid ""
@@ -939,7 +955,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:359
 msgid "Print version and quit."
-msgstr ""
+msgstr "اطبع الإصدارة ثم غادر."
 
 #: ../src/cairo-dock.c:362
 msgid "Lock the dock so that any modification is impossible for users."
@@ -1053,15 +1069,15 @@ msgstr ""
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "بواسطة %s"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:255
 msgid "kB"
-msgstr ""
+msgstr "ك.بايت"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:257
 msgid "MB"
-msgstr ""
+msgstr "ميغا بايت"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:266
 msgid "Local"
@@ -1097,7 +1113,7 @@ msgstr "_ايقونه معدله_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1348
 msgid "Rate me"
-msgstr ""
+msgstr "قيّمني"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1447
 #: ../src/gldit/cairo-dock-gui-factory.c:1449
@@ -1160,7 +1176,7 @@ msgstr "هل انت متأكد انك تريد إستبدال السمه %s ؟"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:178
 msgid "Last modification on:"
-msgstr ""
+msgstr "التعديل الأخير في:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:272
 #, c-format
@@ -1226,23 +1242,23 @@ msgstr ""
 
 #: ../src/help/applet-notifications.c:254
 msgid "Disable the gnome-panel"
-msgstr ""
+msgstr "عطل شريط جنوم."
 
 #: ../src/help/applet-notifications.c:256
 msgid "Disable Unity"
-msgstr ""
+msgstr "عطّل يونيتي"
 
 #: ../src/help/applet-notifications.c:258
 msgid "Online help"
-msgstr ""
+msgstr "مساعدة على الإنترنت."
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:119
 msgid "Enter a command"
-msgstr ""
+msgstr "أدخِل أمراً"
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:120
 msgid "New launcher"
-msgstr ""
+msgstr "مُطلق جديد"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:445
 #: ../data/messages:615
@@ -1271,7 +1287,7 @@ msgstr "ثني"
 
 #: ../data/messages:1 ../data/messages:1279
 msgid "General"
-msgstr ""
+msgstr "عامّ"
 
 #: ../data/messages:3 ../data/messages:1281
 msgid "Using the dock"
@@ -1288,7 +1304,7 @@ msgstr ""
 
 #: ../data/messages:7 ../data/messages:1285
 msgid "Adding features"
-msgstr ""
+msgstr "إضافة ميزات."
 
 #: ../data/messages:9 ../data/messages:1287
 msgid ""
@@ -1303,7 +1319,7 @@ msgstr ""
 
 #: ../data/messages:13 ../data/messages:1291
 msgid "Adding a launcher"
-msgstr ""
+msgstr "إضافة مطلق"
 
 #: ../data/messages:15 ../data/messages:1293
 msgid ""
@@ -1315,7 +1331,7 @@ msgstr ""
 
 #: ../data/messages:17 ../data/messages:1295
 msgid "Removing a launcher"
-msgstr ""
+msgstr "حذف مطلق"
 
 #: ../data/messages:19 ../data/messages:1297
 msgid ""
@@ -1337,7 +1353,7 @@ msgstr ""
 
 #: ../data/messages:25 ../data/messages:1303
 msgid "Moving icons"
-msgstr ""
+msgstr "نقل الأيقونات"
 
 #: ../data/messages:27 ../data/messages:1305
 msgid ""
@@ -1350,7 +1366,7 @@ msgstr ""
 
 #: ../data/messages:29 ../data/messages:1307
 msgid "Changing an icon's image"
-msgstr ""
+msgstr "تغيير صورة الأيقونة"
 
 #: ../data/messages:31
 msgid ""
@@ -1368,7 +1384,7 @@ msgstr ""
 
 #: ../data/messages:33 ../data/messages:1311
 msgid "Resizing icons"
-msgstr ""
+msgstr "تغيير حجم الأيقونات"
 
 #: ../data/messages:35 ../data/messages:1313
 msgid ""
@@ -1383,7 +1399,7 @@ msgstr ""
 
 #: ../data/messages:37 ../data/messages:1315
 msgid "Separating icons"
-msgstr ""
+msgstr "الفصل بين الأيقونات"
 
 #: ../data/messages:39 ../data/messages:1317
 msgid ""
@@ -1412,7 +1428,7 @@ msgstr ""
 
 #: ../data/messages:47 ../data/messages:1325
 msgid "Closing a window"
-msgstr ""
+msgstr "إغلاق النافذة"
 
 #: ../data/messages:49 ../data/messages:1327
 msgid ""
@@ -1421,7 +1437,7 @@ msgstr ""
 
 #: ../data/messages:51 ../data/messages:1329
 msgid "Minimizing / restauring a window"
-msgstr ""
+msgstr "تصغير/استعادة النافذة"
 
 #: ../data/messages:53 ../data/messages:1331
 msgid ""
@@ -1431,7 +1447,7 @@ msgstr ""
 
 #: ../data/messages:55 ../data/messages:1333
 msgid "Launching an application several times"
-msgstr ""
+msgstr "تشغيل برنامج في بعض الأوقات"
 
 #: ../data/messages:57 ../data/messages:1335
 msgid ""
@@ -1463,7 +1479,7 @@ msgstr ""
 
 #: ../data/messages:67 ../data/messages:1345
 msgid "Setting a custom icon for an application"
-msgstr ""
+msgstr "تحديد أيقونة خاصة للتطبيق"
 
 #: ../data/messages:69 ../data/messages:1347
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
@@ -1592,7 +1608,7 @@ msgstr ""
 
 #: ../data/messages:119 ../data/messages:1397
 msgid "Useful Features"
-msgstr ""
+msgstr "ميزات مفيدة"
 
 #: ../data/messages:121 ../data/messages:1399
 msgid "Having a calendar with tasks"
@@ -1624,7 +1640,7 @@ msgstr ""
 
 #: ../data/messages:129 ../data/messages:1407
 msgid "Showing all the desktops"
-msgstr ""
+msgstr "أظهر جميع أسطر المكتب"
 
 #: ../data/messages:131 ../data/messages:1409
 msgid ""
@@ -1635,7 +1651,7 @@ msgstr ""
 
 #: ../data/messages:133 ../data/messages:1411
 msgid "Changing the screen resolution"
-msgstr ""
+msgstr "تغيير دقة الشاشة"
 
 #: ../data/messages:135 ../data/messages:1413
 msgid ""
@@ -1645,7 +1661,7 @@ msgstr ""
 
 #: ../data/messages:137 ../data/messages:1415
 msgid "Locking your session"
-msgstr ""
+msgstr "قفل جلستك"
 
 #: ../data/messages:139 ../data/messages:1417
 msgid ""
@@ -1747,7 +1763,7 @@ msgstr ""
 
 #: ../data/messages:169 ../data/messages:1447
 msgid "Accessing disks"
-msgstr ""
+msgstr "الوصول إلى الأقراص"
 
 #: ../data/messages:171 ../data/messages:1449
 msgid ""
@@ -1786,7 +1802,7 @@ msgstr ""
 
 #: ../data/messages:181 ../data/messages:1459
 msgid "Adding / removing a desktop"
-msgstr ""
+msgstr "إضافة/حذف سطح مكتب"
 
 #: ../data/messages:183 ../data/messages:1461
 msgid ""
@@ -1797,7 +1813,7 @@ msgstr ""
 
 #: ../data/messages:185 ../data/messages:1463
 msgid "Controling the sound volume"
-msgstr ""
+msgstr "التحكم في شدّة الصوت"
 
 #: ../data/messages:187 ../data/messages:1465
 msgid ""
@@ -1809,7 +1825,7 @@ msgstr ""
 
 #: ../data/messages:189 ../data/messages:1467
 msgid "Controling the screen brightness"
-msgstr ""
+msgstr "التحكم في إضاءة الشاشة"
 
 #: ../data/messages:191 ../data/messages:1469
 msgid ""
@@ -1820,12 +1836,13 @@ msgstr ""
 
 #: ../data/messages:193 ../data/messages:1471
 msgid "Removing completely the gnome-panel"
-msgstr ""
+msgstr "حذف شريط جنوم نهائياً"
 
 #: ../data/messages:195 ../data/messages:1473
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1838,23 +1855,23 @@ msgstr ""
 
 #: ../data/messages:201 ../data/messages:1479
 msgid "Troubleshooting"
-msgstr ""
+msgstr "تصحيح الاخطاء"
 
 #: ../data/messages:203 ../data/messages:1481
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr ""
+msgstr "إذا كانت لديك أي سؤال، فلا تردد في طرحه على منتدانا."
 
 #: ../data/messages:205 ../data/messages:1483
 msgid "Forum"
-msgstr ""
+msgstr "المنتدى"
 
 #: ../data/messages:207 ../data/messages:1485
 msgid "Our wiki can also help you, it is more complete on some points."
-msgstr ""
+msgstr "الويكي يمكن أن تُساعدك أيضا، فهي متكاملة في بعض النقاط."
 
 #: ../data/messages:209 ../data/messages:1487
 msgid "Wiki"
-msgstr ""
+msgstr "الويكي"
 
 #: ../data/messages:211 ../data/messages:1489
 msgid "I have a black background around my dock."
@@ -1873,8 +1890,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1497
@@ -1941,7 +1958,7 @@ msgid ""
 " If you're under a proxy, you'll have to configure \"curl\" to use it; "
 "search on the web how to do it (basically, you have to set up the "
 "\"http_proxy\" environment variable)."
-msgstr ""
+msgstr "تأكد من اتصالك بالإنترنت."
 
 #: ../data/messages:241 ../data/messages:1519
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
@@ -1988,15 +2005,15 @@ msgstr ""
 
 #: ../data/messages:257 ../data/messages:1535
 msgid "If you're on Gnome you can click on this button:"
-msgstr ""
+msgstr "إذا كنت على جنوم يمكنك ضغط هذا الزّر:"
 
 #: ../data/messages:259 ../data/messages:1537
 msgid "The Project"
-msgstr ""
+msgstr "المشروع"
 
 #: ../data/messages:261 ../data/messages:1539
 msgid "Join the project!"
-msgstr ""
+msgstr "انضم إلى المشروع!"
 
 #: ../data/messages:263 ../data/messages:1541
 msgid ""
@@ -2016,7 +2033,7 @@ msgstr ""
 
 #: ../data/messages:267 ../data/messages:1545
 msgid "Documentation"
-msgstr ""
+msgstr "التوثيق"
 
 #: ../data/messages:269 ../data/messages:1547
 msgid ""
@@ -2038,7 +2055,7 @@ msgstr ""
 
 #: ../data/messages:275 ../data/messages:1553
 msgid "Websites"
-msgstr ""
+msgstr "المواقع"
 
 #: ../data/messages:277 ../data/messages:1555
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
@@ -2050,7 +2067,7 @@ msgstr "موقع المجتمع"
 
 #: ../data/messages:285 ../data/messages:1563
 msgid "More applets available online!"
-msgstr ""
+msgstr "المزيد من البريمجات متوفرة على الشبكة!"
 
 #: ../data/messages:287 ../data/messages:1565
 msgid "Cairo-Dock-Plug-ins-Extras"
@@ -2058,7 +2075,7 @@ msgstr "اضفات اضافية ليكرو دوك"
 
 #: ../data/messages:289 ../data/messages:1567
 msgid "Repositories"
-msgstr ""
+msgstr "المستودعات"
 
 #: ../data/messages:291 ../data/messages:1569
 msgid ""
@@ -2069,11 +2086,11 @@ msgstr ""
 
 #: ../data/messages:293 ../data/messages:1571
 msgid "Debian/Ubuntu"
-msgstr ""
+msgstr "دبيان/أوبنتو"
 
 #: ../data/messages:295 ../data/messages:1573
 msgid "Ubuntu"
-msgstr ""
+msgstr "اُبونتو"
 
 #: ../data/messages:299 ../data/messages:1577
 msgid ""
@@ -2093,7 +2110,7 @@ msgstr ""
 
 #: ../data/messages:305 ../data/messages:1583
 msgid "Debian"
-msgstr ""
+msgstr "دبيان"
 
 #: ../data/messages:309 ../data/messages:1587
 msgid ""
@@ -2114,7 +2131,7 @@ msgstr ""
 #: ../data/messages:315 ../data/messages:317 ../data/messages:1745
 #: ../data/messages:1825 ../data/messages:1857
 msgid "Icon"
-msgstr ""
+msgstr "الأيقونة"
 
 #: ../data/messages:319
 msgid "Name of the dock it belongs to:"
@@ -2130,7 +2147,7 @@ msgstr ""
 
 #: ../data/messages:325
 msgid "Image filename:"
-msgstr ""
+msgstr "اسم  ملف الأيقونة"
 
 #: ../data/messages:327
 msgid "Set to 0 to use the default applet size"
@@ -2156,7 +2173,7 @@ msgstr ""
 
 #: ../data/messages:339
 msgid "Lock position?"
-msgstr ""
+msgstr "قفل الموضع؟"
 
 #: ../data/messages:341
 msgid ""
@@ -2186,7 +2203,7 @@ msgstr ""
 
 #: ../data/messages:351
 msgid "Rotation:"
-msgstr ""
+msgstr "الدوران:"
 
 #: ../data/messages:355
 msgid "Is detached from the dock"
@@ -2213,7 +2230,7 @@ msgstr ""
 
 #: ../data/messages:371
 msgid "Should be visible on all desktops?"
-msgstr ""
+msgstr "هل يجب أن تكون مرئية على جميع أسطح المكتب؟"
 
 #: ../data/messages:373 ../data/messages:1003
 msgid "Decorations"
@@ -2234,11 +2251,11 @@ msgstr ""
 
 #: ../data/messages:381
 msgid "Background image:"
-msgstr ""
+msgstr "صورة الخلفية:"
 
 #: ../data/messages:383
 msgid "Background transparency:"
-msgstr ""
+msgstr "شفافية الخلفية:"
 
 #: ../data/messages:385
 msgid "in pixels. Use this to adjust the left position of drawings."
@@ -2280,11 +2297,11 @@ msgstr ""
 
 #: ../data/messages:403
 msgid "Foreground image:"
-msgstr ""
+msgstr "صورة المقدمة"
 
 #: ../data/messages:405
 msgid "Foreground tansparency:"
-msgstr ""
+msgstr "شفافية المقدمة"
 
 #: ../data/messages:407 ../data/messages:1601
 msgid "Behavior"
@@ -2412,15 +2429,15 @@ msgstr ""
 
 #: ../data/messages:479
 msgid "Integrated"
-msgstr ""
+msgstr "متكاملة"
 
 #: ../data/messages:481
 msgid "Separated"
-msgstr ""
+msgstr "مستقلة"
 
 #: ../data/messages:483 ../data/messages:691
 msgid "Place new icons"
-msgstr ""
+msgstr "وضع أيقونات جديدة"
 
 #: ../data/messages:485 ../data/messages:693
 msgid "At the beginning of the dock"
@@ -2428,11 +2445,11 @@ msgstr ""
 
 #: ../data/messages:487 ../data/messages:695
 msgid "Before the launchers"
-msgstr ""
+msgstr "قبل المشغلات"
 
 #: ../data/messages:489 ../data/messages:697
 msgid "After the launchers"
-msgstr ""
+msgstr "بعد المشغلات"
 
 #: ../data/messages:491 ../data/messages:699
 msgid "At the end of the dock"
@@ -2443,14 +2460,13 @@ msgid "Icons' animations and effects"
 msgstr "تأثيرات الأيقونات وحركاتها"
 
 #: ../data/messages:495
-#, fuzzy
 msgid "& On mouse hover:"
-msgstr "حدث مرور الفأرة:"
+msgstr ""
 
 #: ../data/messages:499
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:505
@@ -2507,7 +2523,7 @@ msgstr ""
 
 #: ../data/messages:535
 msgid "Add or remove any applet"
-msgstr ""
+msgstr "أضف أو احذف أي بريمج"
 
 #: ../data/messages:537
 msgid ""
@@ -2585,9 +2601,8 @@ msgid "Accessibility"
 msgstr "الإتاحة"
 
 #: ../data/messages:625
-#, fuzzy
 msgid "The higher, the faster the dock will appear"
-msgstr "أختر جهه الشاشه التي ترغب بظهور الشريط فيها:"
+msgstr ""
 
 #: ../data/messages:627
 msgid "Callback sensitivity:"
@@ -2598,9 +2613,8 @@ msgid "high"
 msgstr ""
 
 #: ../data/messages:631
-#, fuzzy
 msgid "low"
-msgstr "بطيء"
+msgstr ""
 
 #: ../data/messages:633
 msgid "How to call the dock back:"
@@ -2792,11 +2806,11 @@ msgstr ""
 
 #: ../data/messages:749
 msgid "Nothing"
-msgstr ""
+msgstr "ﻻ شيء"
 
 #: ../data/messages:753
 msgid "Minimize"
-msgstr ""
+msgstr "صغّر"
 
 #: ../data/messages:755
 msgid "Launch new"
@@ -2914,9 +2928,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:839
-#, fuzzy
 msgid "* Reflections should be calculated in real-time?"
-msgstr "حساب الإنعكاسات في الوقت الحقيقي؟"
+msgstr ""
 
 #: ../data/messages:841
 msgid "Composition"
@@ -2935,7 +2948,7 @@ msgstr ""
 
 #: ../data/messages:847
 msgid "Connection to the Internet"
-msgstr ""
+msgstr "اتصال بالإنترنت"
 
 #: ../data/messages:849
 msgid ""
@@ -2989,7 +3002,7 @@ msgstr ""
 
 #: ../data/messages:871
 msgid "User :"
-msgstr ""
+msgstr "المستتخدم:"
 
 #: ../data/messages:875
 msgid "Password :"
@@ -3063,9 +3076,8 @@ msgid "Percentage of the bright colour:"
 msgstr "نسبه اللون الفاتح :"
 
 #: ../data/messages:919
-#, fuzzy
 msgid "Background when hidden"
-msgstr "صورة الخلفية :"
+msgstr ""
 
 #: ../data/messages:921
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3132,7 +3144,7 @@ msgstr "اصغر"
 
 #: ../data/messages:963
 msgid "larger"
-msgstr ""
+msgstr "أعرَض"
 
 #: ../data/messages:965
 msgid "Dialogs"
@@ -3156,7 +3168,7 @@ msgstr "نص"
 
 #: ../data/messages:975 ../data/messages:1239
 msgid "Otherwise the default's system one will be used."
-msgstr ""
+msgstr "غير ذلك، سيتم استخدام افتراضيات النظام"
 
 #: ../data/messages:977
 msgid "Use a custom font for the text?"
@@ -3189,7 +3201,7 @@ msgstr "إن لم توفر صوره ، سيتم إستخدام الصوره ال
 
 #: ../data/messages:993
 msgid "Name of an image to use for the yes/ok button :"
-msgstr ""
+msgstr "اسم الأيقونة لاستعمالها للزر نعم/لا:"
 
 #: ../data/messages:997
 msgid "Name of an image to use for the no/cancel button :"
@@ -3316,7 +3328,8 @@ msgid "Zoom effect"
 msgstr "تأثير التكبير"
 
 #: ../data/messages:1081
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1083
@@ -3360,7 +3373,7 @@ msgstr ""
 
 #: ../data/messages:1103
 msgid "Use an image."
-msgstr ""
+msgstr "استعمل صورة."
 
 #: ../data/messages:1105
 msgid "Flat separator"
@@ -3552,8 +3565,8 @@ msgstr "أكبر"
 
 #: ../data/messages:1199
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1201
@@ -3648,7 +3661,7 @@ msgstr "لون الخلفيه للعلامات :"
 
 #: ../data/messages:1253
 msgid "Margin around the text (in pixels) :"
-msgstr ""
+msgstr "الهامش حول النص (بالبيكسل)"
 
 #: ../data/messages:1255
 msgid "Colour"
@@ -3656,7 +3669,7 @@ msgstr "اللون"
 
 #: ../data/messages:1257
 msgid "It's the first color of the gradation."
-msgstr ""
+msgstr "إنه اللون الأول للتدرّج"
 
 #: ../data/messages:1259
 msgid "Start color :"
@@ -3684,11 +3697,11 @@ msgstr "هل يجب ان يكون النمط عاموديا ؟"
 
 #: ../data/messages:1269
 msgid "Quick-info are short information drawn on the icons."
-msgstr ""
+msgstr "المعلومات القصيرة هي معلومات تعرض على الأيقونات."
 
 #: ../data/messages:1271
 msgid "Quick-info"
-msgstr ""
+msgstr "معلومات قصيرة"
 
 #: ../data/messages:1273
 msgid "Use the same look as the labels?"
@@ -3696,7 +3709,7 @@ msgstr ""
 
 #: ../data/messages:1277
 msgid "Background color:"
-msgstr ""
+msgstr "لون الخلفيّة:"
 
 #: ../data/messages:1309
 msgid ""
@@ -3750,7 +3763,7 @@ msgstr ""
 
 #: ../data/messages:1659
 msgid "Tiny"
-msgstr ""
+msgstr "صغيرة"
 
 #: ../data/messages:1673
 msgid "Leave it empty to use the same view as the main dock."
@@ -3770,7 +3783,7 @@ msgstr "... أو سحب وإفلات حزمه السمه هنا :"
 
 #: ../data/messages:1705
 msgid "Theme loading options"
-msgstr ""
+msgstr "خيارات تحميل السِمة"
 
 #: ../data/messages:1707
 msgid ""
@@ -3843,7 +3856,7 @@ msgstr "احذف من القائمه السمات التي لم تعد بحاج�
 #: ../data/messages:1743 ../data/messages:1773 ../data/messages:1823
 #: ../data/messages:1855
 msgid "Desktop Entry"
-msgstr ""
+msgstr "مُدخل سطح المكتب"
 
 #: ../data/messages:1747 ../data/messages:1817 ../data/messages:1827
 #: ../data/messages:1859
@@ -4023,72 +4036,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "On appearance/disappearance:"
-#~ msgstr "عند الإظهار\\الإخفاء:"
-
-#~ msgid "in ms. 0 means no delay."
-#~ msgstr "0 ملي ثانيه ، تعني إلغاء التأخير."
-
-#~ msgid "Delay before the dock unhides itself:"
-#~ msgstr "المده قبل أن يظهر الشريط ذاتيا :"
-
-#~ msgid "Gnome"
-#~ msgstr "جنوم"
-
-#~ msgid "MacOSX"
-#~ msgstr "ماك"
-
-#~ msgid "applications"
-#~ msgstr "تطبيقات"
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "إعداد الايقونات مع تأثيرات خاصة ( يتطلبOpenGL"
-
-#~ msgid "launchers"
-#~ msgstr "المشغلات"
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "فصل الأنواع المختلفه من الأيقونات؟"
-
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "ترتيب الأنواع المختلفه من الأيقونات:"
-
-#~ msgid "applets"
-#~ msgstr "تطبيقات"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "تعديل حركه الأيقونه."
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "حجم التطبيق في حال عدم الحركه (العرض × الطول) :"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "حجم المشغل في حال عدم الحركه (العرض × الطول) :"
-
-#~ msgid "Separate applications from others"
-#~ msgstr "فصل التطبيقات عن البقيه"
-
-#~ msgid "Icons order"
-#~ msgstr "ترتيب الأيقونات"
-
-#~ msgid "Separate all"
-#~ msgstr "فصل الكل"
-
-#~ msgid "KDE"
-#~ msgstr "وندوز سفن"
-
-#~ msgid "Lock icons"
-#~ msgstr "قفل الايقونات"
-
-#~ msgid "Unlock dock"
-#~ msgstr "إالغاء قفل الشريط"
-
-#~ msgid "Lock dock"
-#~ msgstr "قفل الشريط"
-
-#~ msgid "Modify this separator"
-#~ msgstr "تحرير الفاصل"
-
-#~ msgid "Remove this separator"
-#~ msgstr "إزالة هذا الفاصل"

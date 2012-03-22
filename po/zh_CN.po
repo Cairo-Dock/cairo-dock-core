@@ -2,20 +2,20 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-02-13 02:53+0000\n"
+"POT-Creation-Date: 2012-03-21 01:21+0000\n"
+"PO-Revision-Date: 2012-03-21 02:53+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-13 04:37+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-03-22 04:46+0000\n"
+"X-Generator: Launchpad (build 14981)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:221 ../src/cairo-dock-widget-themes.c:193
 msgid ""
@@ -94,7 +94,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242 ../src/cairo-dock-widget-items.c:235
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "主dock的参数都可以在主配置窗口中配置"
 
 #: ../src/cairo-dock-gui-items.c:460
@@ -350,7 +351,8 @@ msgid "Effects:"
 msgstr "效果："
 
 #: ../src/cairo-dock-gui-simple.c:797 ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "点击一个小程序就可以获取它的预览和介绍。"
 
 #: ../src/cairo-dock-gui-simple.c:823 ../src/cairo-dock-widget-config.c:387
@@ -383,24 +385,15 @@ msgstr "高级模式"
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
-msgstr ""
-"在高级模式下，您可以调整Dock中的每一个参数，它是一个自定义您现在的主题的强大"
-"工具。"
+msgstr "在高级模式下，您可以调整Dock中的每一个参数，它是一个自定义您现在的主题的强大工具。"
 
 #: ../src/cairo-dock-gui-simple2.c:94 ../src/cairo-dock-gui-simple2.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "保存当前主题"
+msgstr ""
 
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2007 Cairo-Dock project
-# This file is distributed under the same license as the Cairo-Dock package.
-# Fabrice Rey <fabounet@users.berlios.de>, 2007.
-#
 #: ../src/cairo-dock-gui-simple2.c:102 ../src/cairo-dock-gui-simple2.c:104
-#, fuzzy
 msgid "Configuration"
-msgstr "配置"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:118 ../src/cairo-dock-gui-simple2.c:120
 #: ../data/messages:533
@@ -507,7 +500,6 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Eleanor Chen https://launchpad.net/~chenyueg\n"
-"  Fabounet https://launchpad.net/~fabounet03\n"
 "  GrayWaLL https://launchpad.net/~graywall\n"
 "  Yann SLADEK https://launchpad.net/~yann-sladek\n"
 "  guofengzone https://launchpad.net/~guofengzone\n"
@@ -570,8 +562,7 @@ msgid ""
 "move to another dock"
 msgstr ""
 "已创建新的 Dock 面板。\n"
-"要立即添加一些启动器或者 applets 小程序，请在它们的图标上右键单击-> 移动其它 "
-"Dock"
+"要立即添加一些启动器或者 applets 小程序，请在它们的图标上右键单击-> 移动其它 Dock"
 
 #: ../src/cairo-dock-menu.c:567
 msgid "Add"
@@ -693,7 +684,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "开机启动 Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr "第三方面板程序可以整合许多程序的功能，如 Pidgin"
 
 #: ../src/cairo-dock-menu.c:965
@@ -1003,8 +995,7 @@ msgstr "Cairo-Dock 能做任何事情，包括煮咖啡！"
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
-msgstr ""
-"让 dock 加载本目录的额外组件（即使为你的 dock 加载非官方组件是危险的）。"
+msgstr "让 dock 加载本目录的额外组件（即使为你的 dock 加载非官方组件是危险的）。"
 
 #: ../src/cairo-dock.c:378
 msgid ""
@@ -1056,8 +1047,7 @@ msgid ""
 "at http://glx-dock.org"
 msgstr ""
 "'%s' 模块可能遇到了一个问题。\n"
-"它已经成功重启，不过要是问题再次出现，请到 http://glx-dock.org 网站告知我们，"
-"谢谢！"
+"它已经成功重启，不过要是问题再次出现，请到 http://glx-dock.org 网站告知我们，谢谢！"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:277
 msgid ""
@@ -1277,8 +1267,7 @@ msgid ""
 msgstr ""
 "您需要启用一个混合管理器来移除停靠栏周围的黑色边框。\n"
 "可以通过开启桌面特效，加载Compiz或者激活Metacity得混合特性来完成。\n"
-"如果您的机器不支持混合，Cairo-Dock可以虚拟。这个选项在'系统'模块里面最下方配"
-"置。"
+"如果您的机器不支持混合，Cairo-Dock可以虚拟。这个选项在'系统'模块里面最下方配置。"
 
 #: ../src/help/applet-notifications.c:247
 msgid "Open global settings"
@@ -1349,8 +1338,7 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
-"在dock里的大多数图标有不同的操作：主要的操作是左击，次要操作是中键点击，额外"
-"操作是右击（菜单）。\n"
+"在dock里的大多数图标有不同的操作：主要的操作是左击，次要操作是中键点击，额外操作是右击（菜单）。\n"
 "某些小程序允许你绑定动作到 shortkey，这将允许你决定中键点击的动作。"
 
 #: ../data/messages:7 ../data/messages:1285
@@ -1367,12 +1355,9 @@ msgid ""
 "the \"More applets\" button (which will lead you to our applets web page) "
 "and then just drag-and-drop the link of an applet into your dock."
 msgstr ""
-"Cairo-Dock 拥有大量的小程序。小程序是存在于dock中的小型应用程序，比如时钟或注"
-"销按钮。\n"
-"要启用新的小程序，打开设置（右击 -> Cairo-Dock -> 设置），转到“附加组件”，勾"
-"选你想要的小程序。\n"
-"多数的小程序安装十分方便，在配置窗口中，点击“更多小程序”按钮（这将将你带到我"
-"们的小程序网页）然后将小程序的链接拖入你的dock。"
+"Cairo-Dock 拥有大量的小程序。小程序是存在于dock中的小型应用程序，比如时钟或注销按钮。\n"
+"要启用新的小程序，打开设置（右击 -> Cairo-Dock -> 设置），转到“附加组件”，勾选你想要的小程序。\n"
+"多数的小程序安装十分方便，在配置窗口中，点击“更多小程序”按钮（这将将你带到我们的小程序网页）然后将小程序的链接拖入你的dock。"
 
 #: ../data/messages:13 ../data/messages:1291
 msgid "Adding a launcher"
@@ -1385,10 +1370,8 @@ msgid ""
 "Alternatively, if an application is already opened, you can right-click on "
 "its icon and select \"make it a launcher\"."
 msgstr ""
-"您可以通过从程序菜单拖入到dock来添加一个启动器。当你拖入时会出现一个动画箭"
-"头。\n"
-"另外，如果应用程序已打开，您可以右键单击它的图标，并选择“使其成为一个启动"
-"器”。"
+"您可以通过从程序菜单拖入到dock来添加一个启动器。当你拖入时会出现一个动画箭头。\n"
+"另外，如果应用程序已打开，您可以右键单击它的图标，并选择“使其成为一个启动器”。"
 
 #: ../data/messages:17 ../data/messages:1295
 msgid "Removing a launcher"
@@ -1398,8 +1381,7 @@ msgstr "移除启动器"
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
-msgstr ""
-"你可以通过把启动器拖出dock来移除它。“删除”标志出现在它上面时，你可以删除它。"
+msgstr "你可以通过把启动器拖出dock来移除它。“删除”标志出现在它上面时，你可以删除它。"
 
 #: ../data/messages:21 ../data/messages:1299
 msgid "Grouping icons into a sub-dock"
@@ -1429,8 +1411,7 @@ msgid ""
 "icon inside."
 msgstr ""
 "在dock内您可以拖动任何图标的到一个新的位置\n"
-"可以移动图标到另一个dock，通过右键点击 - >移动到另一个dock - >选择您想要的"
-"dock。\n"
+"可以移动图标到另一个dock，通过右键点击 - >移动到另一个dock - >选择您想要的dock。\n"
 "如果你选择了“新建主dock”，这将创建包含此图标的主dock。"
 
 #: ../data/messages:29 ../data/messages:1307
@@ -1453,11 +1434,9 @@ msgstr ""
 "对于停靠栏或小程序:\n"
 "打开图标的设置,设置图片的路径。\n"
 "-对于应用的图标：\n"
-"在图标上右击 ->“其它动作“-> ”自定义图标“。选择一张图片。要移除自定义图像，在"
-"图标上右击 ->“其他动作”->“移除自定义图标”。\n"
+"在图标上右击 ->“其它动作“-> ”自定义图标“。选择一张图片。要移除自定义图像，在图标上右击 ->“其他动作”->“移除自定义图标”。\n"
 "\n"
-"如果您的 PC 上已经安装了的一些图标主题，在全局设置窗口中，你可以选择它们以替"
-"代默认的图标主题。"
+"如果您的 PC 上已经安装了的一些图标主题，在全局设置窗口中，你可以选择它们以替代默认的图标主题。"
 
 #: ../data/messages:33 ../data/messages:1311
 msgid "Resizing icons"
@@ -1473,8 +1452,7 @@ msgid ""
 "Also, you can define the size of each applet independently in their own "
 "settings."
 msgstr ""
-"您可以伸展图标和缩放效果强弱。打开设置（右键点击 - >开罗 - Cairo-Dock - >配"
-"置），转到外观（或高级模式中的图标）。\n"
+"您可以伸展图标和缩放效果强弱。打开设置（右键点击 - >开罗 - Cairo-Dock - >配置），转到外观（或高级模式中的图标）。\n"
 "请注意，如果在dock内有太多的图标，他们将被缩小以适合屏幕。\n"
 "此外，您可以独立设置每个小程序的大小。"
 
@@ -1492,8 +1470,7 @@ msgid ""
 "In the \"panel\" view, separators are represented as gap between icons."
 msgstr ""
 "您可以右键点击dock在图标间加入分隔符 - >添加 - >分隔符。\n"
-"此外，如果您启用区分不同类型的图标的选项（启动器/应用程序/小程序），那么分隔"
-"符将被自动添加各组之间。\n"
+"此外，如果您启用区分不同类型的图标的选项（启动器/应用程序/小程序），那么分隔符将被自动添加各组之间。\n"
 "在“面板”视图中，分隔符在图标之间呈现为间隔。"
 
 #: ../data/messages:43 ../data/messages:1321
@@ -1511,10 +1488,8 @@ msgid ""
 "the launcher, etc."
 msgstr ""
 "当一个应用程序运行时，相应的图标将出现在dock上。\n"
-"如果应用程序已经具备了启动器，那么图标将不会出现，而它的启动器将有一个小的指"
-"标。\n"
-"请注意，您可以决定哪些应用程序应该出现在dock上：仅当前的桌面窗口，仅隐藏的窗"
-"口，从启动器中分离，等等。"
+"如果应用程序已经具备了启动器，那么图标将不会出现，而它的启动器将有一个小的指标。\n"
+"请注意，您可以决定哪些应用程序应该出现在dock上：仅当前的桌面窗口，仅隐藏的窗口，从启动器中分离，等等。"
 
 #: ../data/messages:47 ../data/messages:1325
 msgid "Closing a window"
@@ -1930,8 +1905,9 @@ msgstr ""
 
 #: ../data/messages:195 ../data/messages:1473
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1970,9 +1946,7 @@ msgstr "我的dock周围有一圈黑色的背景"
 msgid ""
 "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
 "first, because their drivers are not yet perfect."
-msgstr ""
-"提示：如果您使用ATI或Intel的显卡，您应该首先尝试不使用OpenGL，因为它们的驱动"
-"程序并不完善。"
+msgstr "提示：如果您使用ATI或Intel的显卡，您应该首先尝试不使用OpenGL，因为它们的驱动程序并不完善。"
 
 #: ../data/messages:215 ../data/messages:1493
 msgid ""
@@ -1981,8 +1955,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:219 ../data/messages:1497
@@ -2018,10 +1992,8 @@ msgid ""
 "with «cairo-dock -c»."
 msgstr ""
 "如果您的显卡是GeForce8，您必须安装最新的驱动程序，因为之前的驱动存在问题。\n"
-"如果dock正以非openGL方式运行，您可以尝试减少主dock中的图标数量，或是减小其尺"
-"寸。\n"
-"如果dock正以openGL方式运行，您可以尝试通过 \"cairo-dock -c\" 来启动dock （不"
-"激活openGL）。"
+"如果dock正以非openGL方式运行，您可以尝试减少主dock中的图标数量，或是减小其尺寸。\n"
+"如果dock正以openGL方式运行，您可以尝试通过 \"cairo-dock -c\" 来启动dock （不激活openGL）。"
 
 #: ../data/messages:229 ../data/messages:1507
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
@@ -2039,8 +2011,7 @@ msgid ""
 "cards can do this, as can more and more Intel cards. Most ATI cards do not "
 "support OpenGL2.0."
 msgstr ""
-"您需要有一块驱动程序支持openGL2.0的显卡。大多数Nvidia的显卡可以，越来越多的"
-"Intel的显卡也可以，而大多数ATI的显卡可能不行。"
+"您需要有一块驱动程序支持openGL2.0的显卡。大多数Nvidia的显卡可以，越来越多的Intel的显卡也可以，而大多数ATI的显卡可能不行。"
 
 #: ../data/messages:235 ../data/messages:1513
 msgid "I don't have any themes in the Theme Manager, except the default one."
@@ -2061,8 +2032,7 @@ msgid ""
 msgstr ""
 "请确认您已经建立了网络连接。\n"
 " 如果您的连接很慢，您可以在“系统”模块中增加连接超时值。\n"
-" 如果您使用代理连接，您需要配置 \"curl\" 来使用它；请搜索互联网来查找怎么做"
-"（至少，您需要设置 \"htpp_proxy\"  环境变量）。"
+" 如果您使用代理连接，您需要配置 \"curl\" 来使用它；请搜索互联网来查找怎么做（至少，您需要设置 \"htpp_proxy\"  环境变量）。"
 
 #: ../data/messages:241 ../data/messages:1519
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
@@ -2083,8 +2053,8 @@ msgid ""
 "something like «eth1», «ath0», or «wifi0».."
 msgstr ""
 "您需要告诉它您使用哪个接口来连接网络（默认为 \"eth0\"）。\n"
-"只需编辑它的配置，并键入接口的名字。要查找其名字，请在终端中键入 \"ifconfig"
-"\" ，并忽略 \"loop\" 接口。它可能形如 \"eth1\"、\"ath0\" 或 \"wifi0\"。"
+"只需编辑它的配置，并键入接口的名字。要查找其名字，请在终端中键入 \"ifconfig\" ，并忽略 \"loop\" 接口。它可能形如 "
+"\"eth1\"、\"ath0\" 或 \"wifi0\"。"
 
 #: ../data/messages:247 ../data/messages:1525
 msgid "The dustbin remains empty even when I delete a file."
@@ -2098,8 +2068,8 @@ msgid ""
 "here!!! (do not insert spaces or some invisible caracters)."
 msgstr ""
 "如果您使用KDE，您可能需要告诉它垃圾文件夹的路径。\n"
-"只需编辑这个小程序的配置，并填入垃圾文件夹的路径；它可能是 \"~/.locale/share/"
-"Trash/files\" 。在填写路径时请务必小心！！！（不要插入空格或是不可见字符）。"
+"只需编辑这个小程序的配置，并填入垃圾文件夹的路径；它可能是 \"~/.locale/share/Trash/files\" "
+"。在填写路径时请务必小心！！！（不要插入空格或是不可见字符）。"
 
 #: ../data/messages:251 ../data/messages:1529
 msgid ""
@@ -2459,8 +2429,7 @@ msgid ""
 msgstr ""
 "模式按打扰的程度由高到低排序。\n"
 "当Dock面板隐藏或在当前窗口以下时，将鼠标移动到屏幕的边缘即可唤回程序。\n"
-"当Dock面板以快捷方式弹出，它会出现在您的鼠标停留的位置。其后消失，像菜单一"
-"样。"
+"当Dock面板以快捷方式弹出，它会出现在您的鼠标停留的位置。其后消失，像菜单一样。"
 
 #: ../data/messages:429 ../data/messages:599 ../data/messages:1641
 msgid "Reserve space for the dock"
@@ -2500,9 +2469,7 @@ msgid ""
 "When you press the shortcut, the dock will show itself at the potition of "
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
-msgstr ""
-"按下快捷键时，停靠栏将在您鼠标的位置显现。其余时间保持隐藏状态。形如菜单一"
-"样。"
+msgstr "按下快捷键时，停靠栏将在您鼠标的位置显现。其余时间保持隐藏状态。形如菜单一样。"
 
 #: ../data/messages:457 ../data/messages:649
 msgid "Keyboard shortcut to pop-up the dock:"
@@ -2578,14 +2545,13 @@ msgid "Icons' animations and effects"
 msgstr "图标的动画和特效"
 
 #: ../data/messages:495
-#, fuzzy
 msgid "& On mouse hover:"
-msgstr "在鼠标悬停时："
+msgstr ""
 
 #: ../data/messages:499
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:505
@@ -2666,9 +2632,7 @@ msgid ""
 "itself relative to the right corner if horizontal and the bottom corner if "
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
-msgstr ""
-"取值0时，dock水平位于左角，垂直位于上角；1时，水平位于右角，垂直位于下角；0.5"
-"时，相对屏幕正中定位。"
+msgstr "取值0时，dock水平位于左角，垂直位于上角；1时，水平位于右角，垂直位于下角；0.5时，相对屏幕正中定位。"
 
 #: ../data/messages:563 ../data/messages:1617
 msgid "Relative alignment:"
@@ -2682,9 +2646,7 @@ msgstr "到屏幕边缘的偏移"
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
-msgstr ""
-"距离屏幕边的绝对位置的间隔。以点为单位。你也可以按下ALT或CTRL，以及鼠标左键来"
-"移动dock。"
+msgstr "距离屏幕边的绝对位置的间隔。以点为单位。你也可以按下ALT或CTRL，以及鼠标左键来移动dock。"
 
 #: ../data/messages:573 ../data/messages:1623
 msgid "Lateral offset:"
@@ -2727,9 +2689,8 @@ msgid "Accessibility"
 msgstr "辅助功能"
 
 #: ../data/messages:625
-#, fuzzy
 msgid "The higher, the faster the dock will appear"
-msgstr "选择停靠栏放置在屏幕的哪边："
+msgstr ""
 
 #: ../data/messages:627
 msgid "Callback sensitivity:"
@@ -2740,9 +2701,8 @@ msgid "high"
 msgstr ""
 
 #: ../data/messages:631
-#, fuzzy
 msgid "low"
-msgstr "慢"
+msgstr ""
 
 #: ../data/messages:633
 msgid "How to call the dock back:"
@@ -2780,9 +2740,7 @@ msgstr "附加参数"
 msgid ""
 "This is only usefull if you do not already use auto-hide and if your Window "
 "Manager allows the dock in front of fullscreen windows (which is rare)."
-msgstr ""
-"此选项仅用于你没启用自动隐藏，而且你的窗口管理器把停靠栏置于全屏窗口之前（罕"
-"见）。"
+msgstr "此选项仅用于你没启用自动隐藏，而且你的窗口管理器把停靠栏置于全屏窗口之前（罕见）。"
 
 #: ../data/messages:655
 msgid "Automatically hide the dock when a window becomes full screen?"
@@ -2824,9 +2782,8 @@ msgid ""
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 msgstr ""
-"当它们的程序运行时，启动器表现的如同一个应用程序，而且会在它们的图标上添加指"
-"示器用以标识。您还可以用SHIFT+左键点击正在运行的程序，来启动另一个相同的程"
-"序。"
+"当它们的程序运行时，启动器表现的如同一个应用程序，而且会在它们的图标上添加指示器用以标识。您还可以用SHIFT+左键点击正在运行的程序，来启动另一个相同的"
+"程序。"
 
 #: ../data/messages:685
 msgid "Mix launchers and applications"
@@ -2875,9 +2832,7 @@ msgid ""
 "If not set, the icon provided by X for each application will be used. If "
 "set, the same icon as the corresponding launcher will be used for each "
 "application."
-msgstr ""
-"如果不设置，则会为每个应用程序使用由X提供的图标。如果设置，则为每个应用程序使"
-"用启动器对应的图标"
+msgstr "如果不设置，则会为每个应用程序使用由X提供的图标。如果设置，则为每个应用程序使用启动器对应的图标"
 
 #: ../data/messages:717
 msgid "Overwrite the X icon with the launchers' icon?"
@@ -2988,8 +2943,7 @@ msgstr "对话框期间："
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
-msgstr ""
-"它将提醒您，无论您在做什么，例如当您正以全屏模式欣赏电影或是在另一个桌面。\n"
+msgstr "它将提醒您，无论您在做什么，例如当您正以全屏模式欣赏电影或是在另一个桌面。\n"
 
 #: ../data/messages:775
 msgid "Force the following applications to demand your attention"
@@ -3011,8 +2965,7 @@ msgstr "以动画展现子停靠栏的出现？"
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
-msgstr ""
-"缩小时图标将会折叠在一起，展开时将展开到整个停靠栏。往左边快，往右边慢。"
+msgstr "缩小时图标将会折叠在一起，展开时将展开到整个停靠栏。往左边快，往右边慢。"
 
 #: ../data/messages:793
 msgid "Animation unfolding duration:"
@@ -3053,14 +3006,12 @@ msgid "Refresh rate when mouving cursor into the dock :"
 msgstr "光标移至 dock 时的刷新率："
 
 #: ../data/messages:831
-#, fuzzy
 msgid "&[15;60] Animation frequency for the OpenGL backend :"
-msgstr "启用OpenGL后的动画效果频率："
+msgstr ""
 
 #: ../data/messages:835
-#, fuzzy
 msgid "*[15;50] Animation frequency for the Cairo backend :"
-msgstr "启用Cairo后的动画效果频率："
+msgstr ""
 
 #: ../data/messages:837
 msgid ""
@@ -3069,9 +3020,8 @@ msgid ""
 msgstr "实时计算透明渐变纹理。消耗更多CPU。"
 
 #: ../data/messages:839
-#, fuzzy
 msgid "* Reflections should be calculated in real-time?"
-msgstr "实时计算反应？"
+msgstr ""
 
 # #################################
 # ########### cairo-dock.conf #############
@@ -3086,8 +3036,8 @@ msgid ""
 "etc and have a black background around your dock. For aesthetic reasons, the "
 "dock will be kept under other windows."
 msgstr ""
-"仅当您没有使用诸如Compiz、xcompmgr之类的混合管理器，而且dock周围为黑色背景"
-"时，使用此选项。处于审美的考虑，此时dock将位于其它窗口之下。"
+"仅当您没有使用诸如Compiz、xcompmgr之类的混合管理器，而且dock周围为黑色背景时，使用此选项。处于审美的考虑，此时dock将位于其它窗口之下"
+"。"
 
 #: ../data/messages:845
 msgid "Emulate composition with fake transparency?"
@@ -3102,8 +3052,7 @@ msgid ""
 "Maximum time in seconds that you allow the connection to the server to take. "
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
-msgstr ""
-"连接到服务器的最大秒数。只限制连接阶段，当连接成功后，不受这个选项的限制。"
+msgstr "连接到服务器的最大秒数。只限制连接阶段，当连接成功后，不受这个选项的限制。"
 
 #: ../data/messages:851
 msgid "Connection timeout :"
@@ -3224,9 +3173,8 @@ msgid "Percentage of the bright colour:"
 msgstr "亮色的百分比:"
 
 #: ../data/messages:919
-#, fuzzy
 msgid "Background when hidden"
-msgstr "背景图片："
+msgstr ""
 
 #: ../data/messages:921
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3479,7 +3427,8 @@ msgid "Zoom effect"
 msgstr "放大效果"
 
 #: ../data/messages:1081
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr "如果您不想要图标有鼠标放上去放大得效果，就设置为1。"
 
 #: ../data/messages:1083
@@ -3515,9 +3464,7 @@ msgstr "强制分隔符图片固定大小？"
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
-msgstr ""
-"只有默认视图和三维平面曲线视图支持平面和物理间隔。平间隔对于不同视图会呈现不"
-"同效果。"
+msgstr "只有默认视图和三维平面曲线视图支持平面和物理间隔。平间隔对于不同视图会呈现不同效果。"
 
 #: ../data/messages:1101
 msgid "How to draw the separators?"
@@ -3707,9 +3654,7 @@ msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
 "have the same size as the icons."
-msgstr ""
-"您可以设置指示器比图标大还是小。取值越大，则指示器越大。1意味着指示器与图标等"
-"大"
+msgstr "您可以设置指示器比图标大还是小。取值越大，则指示器越大。1意味着指示器与图标等大"
 
 #: ../data/messages:1193
 msgid "Indicator size ratio :"
@@ -3721,8 +3666,8 @@ msgstr "更大"
 
 #: ../data/messages:1199
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr "使指示器与Dock方向一致（上/下/左/右）"
 
 #: ../data/messages:1201
@@ -3946,9 +3891,7 @@ msgid ""
 "If you tick this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
-msgstr ""
-"如果你勾选此项，你的启动器将被新主题提供的取代。否则，将保留你当前的启动器，"
-"仅替换其图标。"
+msgstr "如果你勾选此项，你的启动器将被新主题提供的取代。否则，将保留你当前的启动器，仅替换其图标。"
 
 #: ../data/messages:1709
 msgid "Use the new theme's launchers?"
@@ -4127,8 +4070,8 @@ msgid ""
 "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard "
 "shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
-"示例： nautilus --no-desktop, gedit 以及其它。您甚至可以键入一个快捷键，例如 "
-"<Alt>F1, <Ctrl>c. <Ctrl>v 以及其它。"
+"示例： nautilus --no-desktop, gedit 以及其它。您甚至可以键入一个快捷键，例如 <Alt>F1, <Ctrl>c. "
+"<Ctrl>v 以及其它。"
 
 #: ../data/messages:1835
 msgid "Command to launch on click :"
@@ -4141,9 +4084,8 @@ msgid ""
 "launcher that launches a script in a terminal, but you don't want it to "
 "steal the Terminal's icon from the Taskbar."
 msgstr ""
-"如果您选择了混合启动器和应用程序，这个选项将仅使得这个启动的该种行为失效。这"
-"对于会在终端中运行一段脚本的启动器很有用，但您不会想让它偷走任务栏里终端的图"
-"标。"
+"如果您选择了混合启动器和应用程序，这个选项将仅使得这个启动的该种行为失效。这对于会在终端中运行一段脚本的启动器很有用，但您不会想让它偷走任务栏里终端的图标"
+"。"
 
 #: ../data/messages:1841
 msgid "Prevent this launcher from stealing this application from taskbar ?"
@@ -4156,8 +4098,7 @@ msgid ""
 "nearly sure that you shouldn't touch it. It defines the class of the "
 "program, which is useful to link the appli with its launcher."
 msgstr ""
-"您改动此参数的唯一原因是您自己手动创建了此启动器。如果您是从菜单上拖出此启动"
-"器的，那么您应该不必对此进行改动。它定义了用于联系应用程序及其启动器的类。"
+"您改动此参数的唯一原因是您自己手动创建了此启动器。如果您是从菜单上拖出此启动器的，那么您应该不必对此进行改动。它定义了用于联系应用程序及其启动器的类。"
 
 #: ../data/messages:1845
 msgid "Class of the program :"
@@ -4204,135 +4145,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "On appearance/disappearance:"
-#~ msgstr "在显示/消失时："
-
-#~ msgid ""
-#~ "Leave empty to use the current icon theme of your system. You can enter "
-#~ "the name of a theme that is installed on your system (like 'Gartoon' or "
-#~ "'Human'), or even a path to a folder containing icons."
-#~ msgstr ""
-#~ "留空则使用当前系统图标主题。您可以输入系统安装的图标主题（比如'Gartoon'或"
-#~ "者'Human'），甚至一个包含图标文件的文件夹路径。"
-
-#~ msgid "in ms. 0 means no delay."
-#~ msgstr "以毫秒计。0 表示不延迟。"
-
-#~ msgid "Delay before the dock unhides itself:"
-#~ msgstr "dock 取消隐藏时的延迟："
-
-#~ msgid "You need to re-open the panel. It is deactivated by default on KDE."
-#~ msgstr "您需要重新打开面板。这是KDE上默认停用的。"
-
-#~ msgid "Make the config panel transparent?"
-#~ msgstr "让控制面板透明？"
-
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "对不同类型的图标排序："
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "静止时启动器图标大小（宽度x高度）："
-
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "静止时小工具大小（宽度x高度）："
-
-#~ msgid "Icons order"
-#~ msgstr "图标排序"
-
-#~ msgid "launchers"
-#~ msgstr "启动器"
-
-#~ msgid "applications"
-#~ msgstr "应用程序"
-
-#~ msgid "MacOSX"
-#~ msgstr "MacOSX"
-
-#~ msgid "Gnome"
-#~ msgstr "Gnome"
-
-#~ msgid "Separate applets from others"
-#~ msgstr "将小程序与其它图标分隔开来"
-
-#~ msgid "Separate all"
-#~ msgstr "分隔所有类型的图标"
-
-#~ msgid "Separate applications from others"
-#~ msgstr "将应用程序与其它图标分隔开来"
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "配置图标动画效果。"
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "配置图标特殊效果（需要OpenGL支持）。"
-
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr "这将分隔启动器、应用程序和小程序。分隔符将被自动插入其中。"
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "是否分隔不同类型的图标？"
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "静止时程序图标大小（宽度x高度）："
-
-#~ msgid ""
-#~ "If you separate a type of icons, the icons of this type will be placed "
-#~ "together, separated from the others by a separator.\n"
-#~ "If you don't separate the icons, you can place them wherever you want, "
-#~ "and insert separators manually. Applications will then be placed next to "
-#~ "their launcher if they have one, or after the last launcher."
-#~ msgstr ""
-#~ "如果您分隔了某种类型的图标，那么这种类型的图标将被放置在一起，并通过分隔符"
-#~ "与其它图标分隔开来。\n"
-#~ "如果您不想分隔图标，您可以将它们放置在您想要的任何地方，并可以手动地插入分"
-#~ "隔符。应用程序将被放置在其启动器的旁边（如果有的话），或者被放置在最后一个"
-#~ "启动器之后。"
-
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
-#~ msgid ""
-#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
-#~ "capacity)."
-#~ msgstr "配置图标显示/消失时的动画(要求 OpenGL 支持)。"
-
-#~ msgid ""
-#~ "None     : Don't show opened windows in the dock.\n"
-#~ "MacOSX   : Mix applications with its launcher, show other windows only if "
-#~ "they are minimized.\n"
-#~ "KDE : Mix applications with its launcher, show all others windows and "
-#~ "group windows togather in sub-dock.\n"
-#~ "Gnome    : Separate the taskbar from the launchers and only show windows "
-#~ "that are on the current desktop."
-#~ msgstr ""
-#~ "无：不在Dock中显示打开的窗口。\n"
-#~ "MacOSX：将程序和启动器混合在一起，其它没有启动器的则只有最小化时显示。\n"
-#~ "KDE：将程序和启动器混合在一起，显示所有其它窗口并在子Dock中以组显示。\n"
-#~ "Gnome：将任务条和启动器分开，只显示在当前桌面打开的窗口。"
-
-#~ msgid "applets"
-#~ msgstr "小程序"
-
-#~ msgid "Lock icons"
-#~ msgstr "锁定图标"
-
-#~ msgid "Unlock dock"
-#~ msgstr "解锁 Dock"
-
-#~ msgid "Lock dock"
-#~ msgstr "锁定 Dock"
-
-#~ msgid "Modify this separator"
-#~ msgstr "编辑此分隔符"
-
-#~ msgid "Remove this separator"
-#~ msgstr "移除此分隔符"
-
-#~ msgid "Detach this applet"
-#~ msgstr "分离此小程序"
-
-#~ msgid "Launch another instance of this applet"
-#~ msgstr "加载此小程序的另一个实例"

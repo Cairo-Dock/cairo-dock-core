@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 #
-#: ../src/cairo-dock-help.c:221
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-02-13 02:54+0000\n"
+"POT-Creation-Date: 2012-03-21 01:21+0000\n"
+"PO-Revision-Date: 2012-03-21 02:58+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-13 04:36+0000\n"
-"X-Generator: Launchpad (build 14781)\n"
+"X-Launchpad-Export-Date: 2012-03-22 04:45+0000\n"
+"X-Generator: Launchpad (build 14981)\n"
+"Language: pl\n"
 
 #: ../src/cairo-dock-gui-commons.c:221 ../src/cairo-dock-widget-themes.c:193
 msgid ""
@@ -89,15 +89,17 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-commons.c:686
 msgid "Action"
-msgstr ""
+msgstr "Działanie"
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242 ../src/cairo-dock-widget-items.c:235
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Najważniejsze opcje docka są dostępne w głównym oknie konfiguracyjnym."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Najważniejsze opcje docka są dostępne w głównym oknie konfiguracyjnym."
 
 #: ../src/cairo-dock-gui-items.c:460
 msgid "Launcher configuration"
@@ -105,7 +107,7 @@ msgstr "Konfiguracja Launchera"
 
 #: ../src/cairo-dock-gui-items.c:878 ../src/cairo-dock-widget-items.c:729
 msgid "Remove this item"
-msgstr ""
+msgstr "Usuń ten element"
 
 #: ../src/cairo-dock-gui-main.c:129 ../src/cairo-dock-gui-main2.c:131
 #: ../data/messages:677
@@ -162,7 +164,7 @@ msgstr "Pasek zadań"
 
 #: ../src/cairo-dock-gui-main.c:1501 ../src/cairo-dock-gui-main2.c:1548
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "Zdefiniuj wszystkie dostępne aktualnie skróty klawiszowe."
 
 #: ../src/cairo-dock-gui-main.c:1502 ../src/cairo-dock-gui-main2.c:1549
 #: ../data/messages:527 ../data/messages:779
@@ -348,7 +350,8 @@ msgid "Effects:"
 msgstr "Efekt:"
 
 #: ../src/cairo-dock-gui-simple.c:797 ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknij na aplet żeby zobaczyć jego podgląd i opis."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../src/cairo-dock-widget-config.c:387
@@ -386,14 +389,12 @@ msgstr ""
 "narzędzie do personalizacji aktualnego motywu."
 
 #: ../src/cairo-dock-gui-simple2.c:94 ../src/cairo-dock-gui-simple2.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Zapisz obecny motyw"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:102 ../src/cairo-dock-gui-simple2.c:104
-#, fuzzy
 msgid "Configuration"
-msgstr "Konfiguracja"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple2.c:118 ../src/cairo-dock-gui-simple2.c:120
 #: ../data/messages:533
@@ -468,19 +469,19 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:260
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "Tutaj jest lista aktualnych deweloperów oraz dostawców"
 
 #: ../src/cairo-dock-menu.c:261
 msgid "Developers"
-msgstr ""
+msgstr "Deweloperzy"
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "Główny programista oraz lider projektu"
 
 #: ../src/cairo-dock-menu.c:263
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "Współpracownicy / Hakerzy"
 
 #: ../src/cairo-dock-menu.c:265
 msgid "Development"
@@ -488,7 +489,7 @@ msgstr "Programowanie"
 
 #: ../src/cairo-dock-menu.c:280
 msgid "Website"
-msgstr ""
+msgstr "Strona internetowa"
 
 #: ../src/cairo-dock-menu.c:281
 msgid "Beta-testing / Suggestions / Forum animation"
@@ -496,7 +497,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
-msgstr ""
+msgstr "Tłumaczene dla tego języka"
 
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
@@ -504,7 +505,6 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Adam Maćkowiak https://launchpad.net/~admc\n"
 "  Andrzej Król https://launchpad.net/~andrzej001\n"
-"  Fabounet https://launchpad.net/~fabounet03\n"
 "  Maciej Małecki https://launchpad.net/~maciej-malecki\n"
 "  NINa https://launchpad.net/~factory\n"
 "  Rafał Rudzik https://launchpad.net/~rrudzik\n"
@@ -520,26 +520,30 @@ msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
+"Podziękowania dla wszystkich ludzi którzy pomagają nam w poprawianiu "
+"projektu Cairo-Dock.\n"
+"Podziękowania dla wszystkich obecnych, poprzednich oraz przyszłych "
+"współpracowników."
 
 #: ../src/cairo-dock-menu.c:317
 msgid "How to help us?"
-msgstr ""
+msgstr "Jak nam pomóc?"
 
 #: ../src/cairo-dock-menu.c:318
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr ""
+msgstr "Nie wahaj się z dołąceniem do projektu, potrzebujemy ciebie ;)"
 
 #: ../src/cairo-dock-menu.c:319
 msgid "Former contributors"
-msgstr ""
+msgstr "Poprzedni współpracownicy"
 
 #: ../src/cairo-dock-menu.c:320
 msgid "For a complete list, please have a look to BZR logs"
-msgstr ""
+msgstr "Po kompletną listę prosimy zajrzeć do logów BZR"
 
 #: ../src/cairo-dock-menu.c:321
 msgid "Users of our forum"
-msgstr ""
+msgstr "Użytkownicy naszego forum"
 
 #: ../src/cairo-dock-menu.c:322
 msgid "Artwork"
@@ -547,7 +551,7 @@ msgstr "Sztuka"
 
 #: ../src/cairo-dock-menu.c:324
 msgid "Thanks"
-msgstr ""
+msgstr "Podziękowania"
 
 #: ../src/cairo-dock-menu.c:401
 msgid "Quit Cairo-Dock?"
@@ -664,7 +668,7 @@ msgstr "Wybieraj z wielu motywów w sieci albo zapisz swój obecny motyw."
 
 #: ../src/cairo-dock-menu.c:898
 msgid "Lock icons position"
-msgstr ""
+msgstr "Zablokuj pozycję ikony"
 
 #: ../src/cairo-dock-menu.c:902
 msgid "This will (un)lock the position of the icons."
@@ -683,7 +687,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Uruchamianie Cairo-Dock przy starcie"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Aplety innych dostawców zapewniają integrację z wieloma programami, na "
 "przykład Pidginem"
@@ -707,14 +712,17 @@ msgid ""
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
+"Używasz Sesji Cairo-Dock!\n"
+"Nie jest zalecane aby zamknąć dok, ale można nacisnąć Shift żeby odblokować "
+"pozycję menu."
 
 #: ../src/cairo-dock-menu.c:1017 ../src/cairo-dock-menu.c:1038
 msgid "Edit"
-msgstr ""
+msgstr "Edycja"
 
 #: ../src/cairo-dock-menu.c:1019 ../src/cairo-dock-menu.c:1045
 msgid "Remove"
-msgstr ""
+msgstr "Usuń"
 
 #: ../src/cairo-dock-menu.c:1020
 msgid ""
@@ -736,7 +744,7 @@ msgstr "Zamień na aktywator"
 
 #: ../src/cairo-dock-menu.c:1042
 msgid "Detach"
-msgstr ""
+msgstr "Odłącz"
 
 #: ../src/cairo-dock-menu.c:1042
 msgid "Return to the dock"
@@ -744,7 +752,7 @@ msgstr "Przywróć do doku"
 
 #: ../src/cairo-dock-menu.c:1049
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplikuj"
 
 #: ../src/cairo-dock-menu.c:1064
 msgid "Applet's handbook"
@@ -1512,8 +1520,9 @@ msgid ""
 msgstr ""
 "Można dodawać odstępy pomiędzy ikonami przez kliknięcie prawym-przyciskiem "
 "na doku -> dodaj -> odstęp.\n"
-"Jeśli włączono opcję oddzielenia ikon różnych typów (aktywator/aplikacje/"
-"aplet), odstęp zostanie dodany automatycznie pomiędzy każdą grupą.\n"
+"Jeśli włączono opcję oddzielenia ikon różnych typów "
+"(aktywator/aplikacje/aplet), odstęp zostanie dodany automatycznie pomiędzy "
+"każdą grupą.\n"
 "W widoku \"panel\" odstępy będą przedstawione jako luka między ikonami."
 
 #: ../data/messages:43 ../data/messages:1321
@@ -2061,8 +2070,9 @@ msgstr "Całkowite usuwanie gnome-panel"
 
 #: ../data/messages:195 ../data/messages:1473
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2119,8 +2129,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Należy włączyć kompozycje. Dla przykładu można użyć Compiz albo xcompmgr.\n"
 "Jeśli w użyciu jest XFCE lub KDE, można uruchomić kompozycje w opcjach "
@@ -2261,8 +2271,8 @@ msgid ""
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
 "W Gnome jest opcja nadpisania doku. W celu włączenia ikon w menu otwórz "
-"'gconf-editor', idź do Desktop / Gnome / Interface i włącz \"menus have icons"
-"\" oraz opcję \"buttons have icons\". "
+"'gconf-editor', idź do Desktop / Gnome / Interface i włącz \"menus have "
+"icons\" oraz opcję \"buttons have icons\". "
 
 #: ../data/messages:257 ../data/messages:1535
 msgid "If you're on Gnome you can click on this button:"
@@ -2767,14 +2777,13 @@ msgid "Icons' animations and effects"
 msgstr "Animacje i efekty ikon"
 
 #: ../data/messages:495
-#, fuzzy
 msgid "& On mouse hover:"
-msgstr "Po najechaniu myszką:"
+msgstr ""
 
 #: ../data/messages:499
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:505
@@ -2918,9 +2927,8 @@ msgid "Accessibility"
 msgstr "Dostępność"
 
 #: ../data/messages:625
-#, fuzzy
 msgid "The higher, the faster the dock will appear"
-msgstr "Wybierz przy który brzegu ekranu dok ma być umieszczony:"
+msgstr ""
 
 #: ../data/messages:627
 msgid "Callback sensitivity:"
@@ -2931,9 +2939,8 @@ msgid "high"
 msgstr ""
 
 #: ../data/messages:631
-#, fuzzy
 msgid "low"
-msgstr "wolno"
+msgstr ""
 
 #: ../data/messages:633
 msgid "How to call the dock back:"
@@ -3242,14 +3249,12 @@ msgid "Refresh rate when mouving cursor into the dock :"
 msgstr "Częstotliwość odświeżania kiedy kursor jest przemieszczany na doku :"
 
 #: ../data/messages:831
-#, fuzzy
 msgid "&[15;60] Animation frequency for the OpenGL backend :"
-msgstr "Częstotliwość animacji dla mechanizmu OpenGL :"
+msgstr ""
 
 #: ../data/messages:835
-#, fuzzy
 msgid "*[15;50] Animation frequency for the Cairo backend :"
-msgstr "Częstotliwość animacji dla mechanizmu Cairo :"
+msgstr ""
 
 #: ../data/messages:837
 msgid ""
@@ -3258,9 +3263,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:839
-#, fuzzy
 msgid "* Reflections should be calculated in real-time?"
-msgstr "Obliczać odbicia w czasie rzeczywistym?"
+msgstr ""
 
 #: ../data/messages:841
 msgid "Composition"
@@ -3410,9 +3414,8 @@ msgid "Percentage of the bright colour:"
 msgstr "Procent jasnego koloru:"
 
 #: ../data/messages:919
-#, fuzzy
 msgid "Background when hidden"
-msgstr "Obraz tła:"
+msgstr ""
 
 #: ../data/messages:921
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3669,7 +3672,8 @@ msgid "Zoom effect"
 msgstr "Efekt Powiększania"
 
 #: ../data/messages:1081
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1083
@@ -3915,9 +3919,10 @@ msgstr "większy"
 
 #: ../data/messages:1199
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
-msgstr "Użyj tego aby wskaźnik śledził orientację doka (góra/dół/prawo/lewo)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
+msgstr ""
+"Użyj tego aby wskaźnik śledził orientację doka (góra/dół/prawo/lewo)."
 
 #: ../data/messages:1201
 msgid "Rotate the indicator with dock?"
@@ -4400,101 +4405,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid ""
-#~ "Leave empty to use the current icon theme of your system. You can enter "
-#~ "the name of a theme that is installed on your system (like 'Gartoon' or "
-#~ "'Human'), or even a path to a folder containing icons."
-#~ msgstr ""
-#~ "Zostaw puste by użyć obecnego tematu systemowego. Możesz podać nazwę "
-#~ "tematu zainstalowanego w systemie (jak \"Gartoon\", \"Human\") lub "
-#~ "ścieżkę do folderu z jego ikonami."
-
-#~ msgid "in ms. 0 means no delay."
-#~ msgstr "w milisekundach. 0 oznacza brak opóźnienia."
-
-#~ msgid "Delay before the dock unhides itself:"
-#~ msgstr "Odstęp przed pokazaniem doku:"
-
-#~ msgid "You need to re-open the panel. It is deactivated by default on KDE."
-#~ msgstr ""
-#~ "Wymagany jest ponowne otwarcie panela. Jest to domyślnie wyłączone w KDE."
-
-#~ msgid "Make the config panel transparent?"
-#~ msgstr "Zrobić panel konfiguracji przezroczystym?"
-
-#~ msgid "Gnome"
-#~ msgstr "GNOME"
-
-#~ msgid "MacOSX"
-#~ msgstr "Mac OS X"
-
-#~ msgid "KDE"
-#~ msgstr "KDE"
-
-#~ msgid "Separate the different types of icons?"
-#~ msgstr "Oddzielać różne typy ikon?"
-
-#~ msgid "Order of the different types of icons :"
-#~ msgstr "Kolejność różnych typów ikon:"
-
-#~ msgid "applets"
-#~ msgstr "aplety"
-
-#~ msgid "applications"
-#~ msgstr "programy"
-
-#~ msgid "launchers"
-#~ msgstr "aktywatory"
-
-#~ msgid ""
-#~ "This will separate launchers, application, and applets from each others. "
-#~ "Separators will be automatically inserted then."
-#~ msgstr ""
-#~ "To spowoduje oddzielenie aktywatorów, programy oraz aplety od siebie. "
-#~ "Odstępy zostaną wtedy automatycznie umieszczone."
-
-#~ msgid ""
-#~ "Configure icons' animations on appearing/disappearing (require OpenGL "
-#~ "capacity)."
-#~ msgstr ""
-#~ "Konfiguruj animacje ikon przy pojawianiu się/znikaniu (wymagany OpenGL)."
-
-#~ msgid "Configure icons' special effects (requires OpenGL)."
-#~ msgstr "Konfiguruj efekty specjalne ikon (wymagany OpenGL)."
-
-#~ msgid "Configure icons' animations."
-#~ msgstr "Konfiguruj animacje ikon."
-
-#~ msgid "Application's size at rest (width x height) :"
-#~ msgstr "Rozmiar aplikacji w spoczynku (szrokość x wysokość) :"
-
-#~ msgid "Launcher's size at rest (width x height) :"
-#~ msgstr "Rozmiar aktywatora w spoczynku (szrokość x wysokość) :"
-
-#~ msgid "Applet's size at rest (width x height) :"
-#~ msgstr "Rozmiar apletu w spoczynku (szrokość x wysokość) :"
-
-#~ msgid "Separate all"
-#~ msgstr "Oddziel wszystko"
-
-#~ msgid "Lock icons"
-#~ msgstr "Zablokuj ikony"
-
-#~ msgid "Unlock dock"
-#~ msgstr "Odblokuj dok"
-
-#~ msgid "Lock dock"
-#~ msgstr "Zablokuj dok"
-
-#~ msgid "Modify this separator"
-#~ msgstr "Zmodyfikuj ten separator"
-
-#~ msgid "Remove this separator"
-#~ msgstr "Usuń ten separator"
-
-#~ msgid "Detach this applet"
-#~ msgstr "Odczep ten aplet"
-
-#~ msgid "Launch another instance of this applet"
-#~ msgstr "Uruchom nową instancję tego apletu"
