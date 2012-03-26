@@ -33,13 +33,13 @@
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-notifications.h"
+#include "cairo-dock-gui-simple.h"
 #include "cairo-dock-gui-backend.h"
 
 extern gchar *g_cCairoDockDataDir;
 extern CairoDock *g_pMainDock;
 
 static CairoDockMainGuiBackend *s_pMainGuiBackend = NULL;
-static CairoDockItemsGuiBackend *s_pItemsGuiBackend = NULL;
 static int s_iCurrentMode = 0;
 
 void cairo_dock_load_user_gui_backend (int iMode)  // 0 = simple
@@ -81,11 +81,6 @@ GtkWidget *cairo_dock_make_switch_gui_button (void)
 	gtk_button_set_image (GTK_BUTTON (pSwitchButton), pImage);
 	g_signal_connect (G_OBJECT (pSwitchButton), "clicked", G_CALLBACK(on_click_switch_mode), NULL);
 	return pSwitchButton;
-}
-
-gboolean cairo_dock_theme_manager_is_integrated (void)
-{
-	return (s_pMainGuiBackend && s_pMainGuiBackend->bCanManageThemes);
 }
 
 
@@ -185,8 +180,9 @@ void cairo_dock_gui_trigger_update_desklet_visibility (CairoDesklet *pDesklet)
 static guint s_iSidReloadItems = 0;
 static gboolean _reload_items (gpointer data)
 {
-	if (s_pItemsGuiBackend && s_pItemsGuiBackend->reload_items)
-		s_pItemsGuiBackend->reload_items ();
+	if (s_pMainGuiBackend && s_pMainGuiBackend->reload_items)
+		s_pMainGuiBackend->reload_items ();
+	
 	s_iSidReloadItems = 0;
 	return FALSE;
 }
@@ -284,12 +280,6 @@ void cairo_dock_register_config_gui_backend (CairoDockMainGuiBackend *pBackend)
 	s_pMainGuiBackend = pBackend;
 }
 
-void cairo_dock_register_items_gui_backend (CairoDockItemsGuiBackend *pBackend)
-{
-	g_free (s_pItemsGuiBackend);
-	s_pItemsGuiBackend = pBackend;
-}
-
 
 GtkWidget *cairo_dock_show_main_gui (void)
 {
@@ -317,12 +307,6 @@ GtkWidget *cairo_dock_show_main_gui (void)
 	return pWindow;
 }
 
-/*void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
-{
-	if (s_pMainGuiBackend && s_pMainGuiBackend->show_module_instance_gui)
-		s_pMainGuiBackend->show_module_instance_gui (pModuleInstance, iShowPage);
-}*/
-
 void cairo_dock_show_module_gui (const gchar *cModuleName)
 {
 	if (s_pMainGuiBackend && s_pMainGuiBackend->show_module_gui)
@@ -337,7 +321,23 @@ void cairo_dock_close_gui (void)
 
 void cairo_dock_show_items_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
 {
-	//g_print ("%s (%x)\n", __func__, pIcon);
-	if (s_pItemsGuiBackend && s_pItemsGuiBackend->show_gui)
-		s_pItemsGuiBackend->show_gui (pIcon, pContainer, pModuleInstance, iShowPage);
+	if (s_pMainGuiBackend && s_pMainGuiBackend->show_gui)
+		s_pMainGuiBackend->show_gui (pIcon, pContainer, pModuleInstance, iShowPage);
+}
+
+void cairo_dock_reload_gui (void)
+{
+	if (s_pMainGuiBackend && s_pMainGuiBackend->reload)
+		s_pMainGuiBackend->reload ();
+}
+
+void cairo_dock_show_themes (void)
+{
+	if (s_pMainGuiBackend && s_pMainGuiBackend->show_themes)
+		s_pMainGuiBackend->show_themes ();
+}
+
+gboolean cairo_dock_can_manage_themes (void)
+{
+	return (s_pMainGuiBackend && s_pMainGuiBackend->show_themes);
 }

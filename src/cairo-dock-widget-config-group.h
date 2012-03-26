@@ -18,22 +18,30 @@
 */
 
 
-#ifndef __CAIRO_DOCK_GUI_COMMONS__
-#define  __CAIRO_DOCK_GUI_COMMONS__
+#ifndef __CAIRO_DOCK_WIDGET_CONFIG_GROUP__
+#define  __CAIRO_DOCK_WIDGET_CONFIG_GROUP__
 
-#include <glib.h>
 #include <gtk/gtk.h>
+#include "cairo-dock-struct.h"
+#include "cairo-dock-widget.h"
 G_BEGIN_DECLS
 
 
-void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+typedef struct _ConfigGroupWidget ConfigGroupWidget;
 
-void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+struct _ConfigGroupWidget {
+	CDWidget widget;
+	gchar *cGroupName;
+	GList *pManagers;
+	GSList *pExtraWidgets;
+};
+#define CONFIG_GROUP_WIDGET(w) ((ConfigGroupWidget*)(w))
 
-void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidgetList);
+#define IS_CONFIG_GROUP_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_CONFIG_GROUP)
 
 
-gchar *cairo_dock_get_third_party_applets_link (void);
+ConfigGroupWidget *cairo_dock_config_group_widget_new (const gchar *cGroupName, GList *pManagers, const gchar *cTitle, const gchar *cIcon);
+
 
 G_END_DECLS
 #endif

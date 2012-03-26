@@ -18,22 +18,35 @@
 */
 
 
-#ifndef __CAIRO_DOCK_GUI_COMMONS__
-#define  __CAIRO_DOCK_GUI_COMMONS__
+#ifndef __CAIRO_DOCK_WIDGET_PLUGINS__
+#define  __CAIRO_DOCK_WIDGET_PLUGINS__
 
-#include <glib.h>
 #include <gtk/gtk.h>
+#include "cairo-dock-struct.h"
+#include "cairo-dock-widget.h"
 G_BEGIN_DECLS
 
 
-void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+typedef struct _PluginsWidget PluginsWidget;
 
-void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+struct _PluginsWidget {
+	CDWidget widget;
+	GtkWidget *pTreeView;
+};
 
-void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidgetList);
+#define PLUGINS_WIDGET(w) ((PluginsWidget*)(w))
+
+#define IS_PLUGINS_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_PLUGINS)
 
 
-gchar *cairo_dock_get_third_party_applets_link (void);
+PluginsWidget *cairo_dock_plugins_widget_new (void);
+
+
+void cairo_dock_widget_plugins_update_module_state (PluginsWidget *pPluginsWidget, const gchar *cModuleName, gboolean bActive);
+
+
+void cairo_dock_widget_plugins_reload (PluginsWidget *pPluginsWidget);
+
 
 G_END_DECLS
 #endif

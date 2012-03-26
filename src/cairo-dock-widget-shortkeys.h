@@ -18,22 +18,39 @@
 */
 
 
-#ifndef __CAIRO_DOCK_GUI_COMMONS__
-#define  __CAIRO_DOCK_GUI_COMMONS__
+#ifndef __CAIRO_DOCK_WIDGET_SHORKEYS__
+#define  __CAIRO_DOCK_WIDGET_SHORKEYS__
 
-#include <glib.h>
 #include <gtk/gtk.h>
+#include "cairo-dock-struct.h"
+#include "cairo-dock-widget.h"
 G_BEGIN_DECLS
 
 
-void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+typedef struct _ShortkeysWidget ShortkeysWidget;
 
-void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+struct _ShortkeysWidget {
+	CDWidget widget;
+	GtkWidget *pShortKeysTreeView;
+	int iIconSize;
+	int iTaskbarType;
+	gchar *cHoverAnim;
+	gchar *cHoverEffect;
+	gchar *cClickAnim;
+	gchar *cClickEffect;
+	int iEffectOnDisappearance;
+};
 
-void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidgetList);
+#define SHORKEYS_WIDGET(w) ((ShortkeysWidget*)(w))
+
+#define IS_SHORKEYS_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_SHORKEYS)
 
 
-gchar *cairo_dock_get_third_party_applets_link (void);
+ShortkeysWidget *cairo_dock_shortkeys_widget_new (void);
+
+
+void cairo_dock_shortkeys_widget_reload (ShortkeysWidget *pShortkeysWidget);
+
 
 G_END_DECLS
 #endif

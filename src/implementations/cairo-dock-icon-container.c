@@ -170,6 +170,7 @@ static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, Cairo
 		}
 		
 		glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
+		g_print (" + %s (%d)\n", icon->cName, icon->iIconTexture);
 		_cairo_dock_apply_current_texture_at_size_with_offset (w*.8, h*.8, -k*w/10, k*h/10);
 		
 		i ++;

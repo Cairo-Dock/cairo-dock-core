@@ -18,22 +18,32 @@
 */
 
 
-#ifndef __CAIRO_DOCK_GUI_COMMONS__
-#define  __CAIRO_DOCK_GUI_COMMONS__
+#ifndef __CAIRO_DOCK_WIDGET_THEMES__
+#define  __CAIRO_DOCK_WIDGET_THEMES__
 
-#include <glib.h>
 #include <gtk/gtk.h>
+#include "cairo-dock-struct.h"
+#include "cairo-dock-widget.h"
 G_BEGIN_DECLS
 
 
-void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+typedef struct _ThemesWidget ThemesWidget;
 
-void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
+struct _ThemesWidget {
+	CDWidget widget;
+	gchar *cInitConfFile;
+	GtkWindow *pMainWindow;
+	GtkWidget *pWaitingDialog;
+	CairoDockTask *pImportTask;
+	guint iSidPulse;
+};
 
-void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidgetList);
+#define THEMES_WIDGET(w) ((ThemesWidget*)(w))
 
+#define IS_THEMES_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_THEMES)
 
-gchar *cairo_dock_get_third_party_applets_link (void);
+ThemesWidget *cairo_dock_themes_widget_new (GtkWindow *pMainWindow);
+
 
 G_END_DECLS
 #endif
