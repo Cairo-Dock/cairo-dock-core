@@ -244,7 +244,7 @@ static GtkWidget *cairo_dock_build_modules_treeview (void)
 
 static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 {
-	GKeyFile* pKeyFile = cairo_dock_open_key_file ("/home/fab/CD2/cairo-dock-core-expe/data/cairo-dock-plugins.conf");
+	GKeyFile* pKeyFile = cairo_dock_open_key_file (CAIRO_DOCK_SHARE_DATA_DIR"/cairo-dock-plugins.conf");  /// TODO: probably don't use a .conf file just for that ...
 	
 	GSList *pWidgetList = NULL;
 	GPtrArray *pDataGarbage = g_ptr_array_new ();

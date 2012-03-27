@@ -239,7 +239,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 		else  // main dock, we display a message
 		{
 			pDataGarbage = g_ptr_array_new ();
-			gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Main dock's parameters are available in the main configuration window."));
+			gchar *cDefaultMessage = g_strdup_printf ("<b><big>%s</big></b>", _("Main dock's parameters are available in the main configuration window."));
 			s_pCurrentLauncherWidget = cairo_dock_gui_make_preview_box (pLauncherWindow,
 				NULL,  // no selection widget
 				FALSE,  // vertical packaging

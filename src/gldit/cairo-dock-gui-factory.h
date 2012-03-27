@@ -142,6 +142,8 @@ typedef enum {
 	
 	/// an empty GtkContainer, in case you need to build custom widgets.
 	CAIRO_DOCK_WIDGET_EMPTY_WIDGET='_',
+	/// an empty GtkContainer, the same but using full available space.
+	CAIRO_DOCK_WIDGET_EMPTY_FULL='<',
 	/// a simple text label.
 	CAIRO_DOCK_WIDGET_TEXT_LABEL='>',
 	/// a simple text label.

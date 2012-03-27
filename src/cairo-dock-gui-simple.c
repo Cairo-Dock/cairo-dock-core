@@ -54,7 +54,7 @@
 #define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1200
 #define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 700
 
-#define CAIRO_DOCK_CATEGORY_ICON_SIZE 24
+#define CAIRO_DOCK_CATEGORY_ICON_SIZE 32  // a little bit larger than the tab icons (28px)
 
 typedef struct {
 	const gchar *cName;

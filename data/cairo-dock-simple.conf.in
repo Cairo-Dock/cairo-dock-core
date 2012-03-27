@@ -91,10 +91,7 @@ sub-dock view = default
 #[gtk-select-font]
 [Shortkeys]
 
-#F[Keyboard shortcuts currently available;gtk-select-font]
-frame_key=
-
-#_ 
+#< 
 #{Many applets provide shortkeys for their actions. As soon as an applet is enabled, its shortkeys become available.
 #Double-click on a line, and press the shortkey you want to use for the corresponding action.}
 shortkeys=
