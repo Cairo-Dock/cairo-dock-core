@@ -60,9 +60,13 @@
 #include "cairo-dock-animations.h"
 ///#include "cairo-dock-emblem.h"
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-global-variables.h"
+#include "cairo-dock-opengl.h"
+
 #include "cairo-dock-dock-facility.h"
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
+extern gboolean g_bUseOpenGL;  // for cairo_dock_make_preview()
 
 /**void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
 {
@@ -84,10 +88,10 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatDockWidth doivent avoir ete mis a jour au prealable.
 {
 	g_return_if_fail (pDock != NULL);
-	g_print ("%s (%p, %d)\n", __func__, pDock, pDock->iRefCount);
+	//g_print ("%s (%p, %d)\n", __func__, pDock, pDock->iRefCount);
 	if (pDock->iSidUpdateDockSize != 0)
 	{
-		g_print (" -> delayed\n");
+		//g_print (" -> delayed\n");
 		return;
 	}
 	int iPrevMaxDockHeight = pDock->iMaxDockHeight;
@@ -180,7 +184,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		n ++;
 	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] || (pDock->container.fRatio < 1 && pDock->iMaxDockWidth < iMaxAuthorizedWidth-5)) && n < 8);
 	pDock->iMaxIconHeight = hmax;
-	g_print (">>> iMaxIconHeight : %d, ratio : %.2f, fFlatDockWidth : %.2f\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio, pDock->fFlatDockWidth);
+	//g_print (">>> iMaxIconHeight : %d, ratio : %.2f, fFlatDockWidth : %.2f\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio, pDock->fFlatDockWidth);
 	
 	//\__________________________ Then take the necessary actions due to the new size.
 	// calculate the position of icons in the new frame.
@@ -513,7 +517,7 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	int H = pDock->iMaxDockHeight;
 	int w = pDock->iMinDockWidth;
 	int h = pDock->iMinDockHeight;
-	g_print ("%s (%dx%d; %dx%d)\n", __func__, w, h, W, H);
+	//g_print ("%s (%dx%d; %dx%d)\n", __func__, w, h, W, H);
 	///int w_ = MIN (myDocksParam.iVisibleZoneWidth, pDock->iMaxDockWidth);
 	///int h_ = MIN (myDocksParam.iVisibleZoneHeight, pDock->iMaxDockHeight);
 	int w_ = 1;
@@ -1079,7 +1083,7 @@ static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
 {
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	g_print ("%s (%s, %d)\n", __func__, pPointingIcon?pPointingIcon->cName:NULL, pPointingIcon?pPointingIcon->iSubdockViewType:0);
+	//g_print ("%s (%s, %d)\n", __func__, pPointingIcon?pPointingIcon->cName:NULL, pPointingIcon?pPointingIcon->iSubdockViewType:0);
 	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || (pPointingIcon->cClass != NULL && ! myIndicatorsParam.bUseClassIndic && (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pPointingIcon)))))
 	{
 		if (pPointingIcon->iSidRedrawSubdockContent != 0)  // s'il y'a deja un redessin de prevu, on le passe a la fin de facon a ce qu'il ne se fasse  pas avant le redessin de l'icone responsable de ce trigger.
@@ -1287,4 +1291,74 @@ void cairo_dock_trigger_load_dock_background (CairoDock *pDock)
 		return;
 	if (pDock->iSidLoadBg == 0)
 		pDock->iSidLoadBg = g_idle_add ((GSourceFunc)_load_background_idle, pDock);
+}
+
+
+void cairo_dock_make_preview (CairoDock *pDock, const gchar *cPreviewPath)
+{
+	if (pDock && pDock->pRenderer)
+	{
+		// place the mouse in the middle of the dock and update the icons position
+		pDock->container.iMouseX = pDock->container.iWidth/2;
+		pDock->container.iMouseY = 1;
+		cairo_dock_calculate_dock_icons (pDock);
+		
+		// dump the context into a cairo-surface
+		cairo_surface_t *pSurface;
+		int w = (pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight);  // iActiveWidth
+		int h = (pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth);  // iActiveHeight
+		GLubyte *glbuffer = NULL;
+		if (g_bUseOpenGL)
+		{
+			if (gldi_glx_begin_draw_container_full (CAIRO_CONTAINER (pDock), FALSE))  // FALSE to keep the color buffer (motion-blur).
+			{
+				glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
+				pDock->pRenderer->render_opengl (pDock);
+			}
+			int s = 4;  // 4 chanels of 1 byte each (rgba).
+			GLubyte *buffer = (GLubyte *) g_malloc (w * h * s);
+			glbuffer = (GLubyte *) g_malloc (w * h * s);
+
+			glReadPixels(0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, (GLvoid *)buffer);
+
+			// make upside down
+			int x, y;
+			for (y=0; y<h; y++) {
+				for (x=0; x<w*s; x++) {
+					glbuffer[y * s * w + x] = buffer[(h - y - 1) * w * s + x];
+				}
+			}
+			
+			int iStride = w * s;  // nbre d'octets entre le debut de 2 lignes.
+			pSurface = cairo_image_surface_create_for_data ((guchar *)glbuffer,
+				CAIRO_FORMAT_ARGB32,
+				w,
+				h,
+				iStride);
+			
+			g_free (buffer);
+		}
+		else
+		{
+			pSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+				w,
+				h);
+			cairo_t *pCairoContext = cairo_create (pSurface);
+			pDock->pRenderer->render (pCairoContext, pDock);
+			cairo_destroy (pCairoContext);
+		}
+		// dump the surface into a PNG
+		if (!pDock->container.bIsHorizontal)
+		{
+			cairo_t *pCairoContext = cairo_create (pSurface);
+			cairo_translate (pCairoContext, w/2, h/2);
+			cairo_rotate (pCairoContext, -G_PI/2);
+			cairo_translate (pCairoContext, -h/2, -w/2);
+			cairo_destroy (pCairoContext);
+		}
+		
+		cairo_surface_write_to_png (pSurface, cPreviewPath);
+		cairo_surface_destroy (pSurface);
+		g_free (glbuffer);
+	}
 }

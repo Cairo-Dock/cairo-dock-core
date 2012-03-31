@@ -40,7 +40,10 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-core.h"
+#include "cairo-dock-dock-facility.h"
+#include "cairo-dock-opengl.h"
 #include "cairo-dock-themes-manager.h"
+#include "cairo-dock-global-variables.h"
 
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
 
@@ -57,6 +60,7 @@ gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
 static gchar *s_cLocalThemeDirPath = NULL;
 static gchar *s_cDistantThemeDirName = NULL;
 
+extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
 
 #define CAIRO_DOCK_LOCAL_EXTRAS_DIR "extras"
@@ -187,33 +191,10 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	g_string_printf (sCommand, "rm -f \"%s/last-modif\"", cNewThemePath);
 	r = system (sCommand->str);
 	
-	/// TODO: check vertical docks, and handle opengl ...
-	if (g_pMainDock && g_pMainDock->pRenderer)
-	{
-		cairo_surface_t *pSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-			g_pMainDock->iActiveWidth,
-			g_pMainDock->iActiveHeight);
-		cairo_t *pCairoContext = cairo_create (pSurface);
-		
-		if (!g_pMainDock->container.bIsHorizontal)
-		{
-			cairo_translate (pCairoContext, g_pMainDock->iMaxDockWidth/2, g_pMainDock->iMaxDockHeight/2);
-			cairo_rotate (pCairoContext, -G_PI/2);
-			
-			if (!g_pMainDock->container.bDirectionUp)
-			{
-				
-			}
-			cairo_translate (pCairoContext, -g_pMainDock->iMaxDockHeight/2, -g_pMainDock->iMaxDockWidth/2);
-		}
-		g_pMainDock->pRenderer->render (pCairoContext, g_pMainDock);
-		
-		gchar *cPreviewPath = g_strdup_printf ("%s/preview", cNewThemePath);
-		cairo_surface_write_to_png (pSurface, cPreviewPath);
-		g_free (cPreviewPath);
-		cairo_destroy (pCairoContext);
-		cairo_surface_destroy (pSurface);
-	}
+	//\___________________ make a preview of the current main dock.
+	gchar *cPreviewPath = g_strdup_printf ("%s/preview", cNewThemePath);
+	cairo_dock_make_preview (g_pMainDock, cPreviewPath);
+	g_free (cPreviewPath);
 	
 	//\___________________ Le theme n'est plus en etat 'modifie'.
 	g_free (cNewThemePath);
