@@ -111,7 +111,7 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 					if ((int)*fImageWidth % w == 0)
 					{
 						iWidthConstraint = *fImageWidth / w * iHeightConstraint;
-						g_print ("frame: %d, %d\n", w, iWidthConstraint);
+						//g_print ("frame: %d, %d\n", w, iWidthConstraint);
 						break;
 					}
 					w ++;

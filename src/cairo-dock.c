@@ -785,17 +785,10 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
-	g_print ("\n\nTODO (3.0):\n"
+	/*g_print ("\n\nTODO (3.0):\n"
 	"** Must-Be-Done **\n"
-	"- test icon reflects in cairo\n"
-	"- test uniformize icons size selector\n"
-	"- test: clock numeric mode: allow to use the same font as labels, except it's bold\n"
-	"- test: default bg color for icons that are always visible\n"
-	"- test: cairo/opengl widgets in the conf (advanced & simple)\n"
 	"- crash: Unity-4 -> DustSand -> Clear -> Humanity -> Unity-4\n"
-	"- gauge sometimes not loaded on startup\n"
 	"- add a parameter for sub-dock icon size?\n"
-	"- Optimize the loading (update_dock_size in idle, avoid reloading applets, etc)\n"
 	"- fix quick-info size/drawing/blurry\n"
 	"- cairo-dock-gui-themes.c:111 -> cairo-dock-gui-manager.c:414\n"
 	"- cairo-dock-applications-manager.c:1663 -> cairo-dock-class-manager.c:66\n"
@@ -827,7 +820,7 @@ int main (int argc, char** argv)
 	"- kde integration ++\n"
 	"- stack: enable iSubdockViewType\n"
 	"- link launchers with class+command\n"
-	"\n");
+	"\n");*/
 	
 	gtk_main ();
 	

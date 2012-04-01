@@ -611,7 +611,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	GLuint iTexture = 0;
 	int w = cairo_image_surface_get_width (pImageSurface);
 	int h = cairo_image_surface_get_height (pImageSurface);
-	g_print ("%s (%dx%d)\n", __func__, w, h);
+	//g_print ("%s (%dx%d)\n", __func__, w, h);
 	
 	cairo_surface_t *pPowerOfwoSurface = pImageSurface;
 	

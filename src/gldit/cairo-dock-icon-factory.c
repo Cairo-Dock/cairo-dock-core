@@ -100,7 +100,7 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 {
 	if (icon->pContainer == NULL)
 	{
-		g_print ("/!\\ Icon %s is not inside a container !!!\n", icon->cName);
+		//g_print ("/!\\ Icon %s is not inside a container !!!\n", icon->cName);
 		return;
 	}
 	CairoDockModuleInstance *pInstance = icon->pModuleInstance;  // this is the only function where we destroy/create the icon's surface, so we must handle the cairo-context here.
@@ -110,7 +110,7 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 		pInstance->pDrawContext = NULL;
 	}
 	
-	g_print ("%s (%s, %dx%d)\n", __func__, icon->cName, (int)icon->fWidth, (int)icon->fHeight);
+	//g_print ("%s (%s, %dx%d)\n", __func__, icon->cName, (int)icon->fWidth, (int)icon->fHeight);
 	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
 	{
 		if (icon->pIconBuffer != NULL)
@@ -264,7 +264,7 @@ void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 {
 	if (pIcon->iSidLoadImage != 0)  // if a load was sheduled, cancel it and do it now (we need to load the applets' buffer before initializing the module).
 	{
-		g_print (" load %s immediately\n", pIcon->cName);
+		//g_print (" load %s immediately\n", pIcon->cName);
 		g_source_remove (pIcon->iSidLoadImage);
 		pIcon->iSidLoadImage = 0;
 	}

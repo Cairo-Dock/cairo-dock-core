@@ -141,8 +141,7 @@ static void _hide_if_any_overlap (CairoDock *pDock, gpointer data)
 	{
 		if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
 		{
-			if (!cairo_dock_is_temporary_hidden (pDock))
-				cairo_dock_activate_temporary_auto_hide (pDock);
+			cairo_dock_activate_temporary_auto_hide (pDock);
 		}
 	}
 }
@@ -760,18 +759,18 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 
 static void _on_change_window_class (Icon *icon, CairoDock *pDock)
 {
-	g_print ("WM_CLASS changed (%p, %s)!\n", icon->pMimeTypes, icon->cCommand);
+	//g_print ("WM_CLASS changed (%p, %s)!\n", icon->pMimeTypes, icon->cCommand);
 	// retrieve the new class
 	gchar *cClass = NULL, *cWmClass = NULL;
 	cClass = cairo_dock_get_xwindow_class (icon->Xid, &cWmClass);
 	if (! cairo_dock_strings_differ (cClass, icon->cClass) || ! cClass)  // cClass can be NULL (libreoffice when closing a window).
 	{
-		g_print ("fausse alerte\n");
+		//g_print ("fausse alerte\n");
 		g_free (cClass);
 		g_free (cWmClass);
 		return;
 	}
-	g_print (" %s -> %s\n", icon->cClass, cClass);
+	//g_print (" %s -> %s\n", icon->cClass, cClass);
 	
 	// remove the icon from the dock, and then from its class
 	CairoDock *pParentDock = NULL;
@@ -1185,7 +1184,7 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 {
 	if (! s_bAppliManagerIsRunning)
 		return ;
-	g_print ("%s (main:%d, ref:%d)\n", __func__, pDock->bIsMainDock, pDock->iRefCount);
+	//g_print ("%s (main:%d, ref:%d)\n", __func__, pDock->bIsMainDock, pDock->iRefCount);
 	
 	/*long *data = g_new0 (long, 1+6*g_list_length (pDock->icons));
 	int i = 0;*/

@@ -337,7 +337,7 @@ void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, 
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	g_print ("%s (%dx%d, %p)\n", __func__, w, h, pContainer);
+	//g_print ("%s (%dx%d, %p)\n", __func__, w, h, pContainer);
 	
 	int x, y;  // relatively to the icon center.
 	int wo, ho;  // overlay size

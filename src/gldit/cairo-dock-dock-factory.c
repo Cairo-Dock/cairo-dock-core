@@ -725,7 +725,7 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc)
 {
-	g_print ("%s (%s)\n", __func__, icon->cName);
+	//g_print ("%s (%s)\n", __func__, icon->cName);
 	g_return_if_fail (icon != NULL);
 	if (g_list_find (pDock->icons, icon) != NULL)  // elle est deja dans ce dock.
 		return ;
@@ -742,7 +742,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		if (pSameTypeIcon == NULL && pDock->icons != NULL)
 		{
 			bSeparatorNeeded = TRUE;
-			g_print ("separateur necessaire\n");
+			//g_print ("separateur necessaire\n");
 		}
 	}
 
@@ -1119,7 +1119,7 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 
 void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize)
 {
-	g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
+	//g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
 	if (bUpdateIconSize && pDock->bGlobalIconSize)
 		pDock->iIconSize = myIconsParam.iIconWidth;
 	
@@ -1185,7 +1185,7 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 			wi = myIconsParam.iIconWidth;
 			hi = myIconsParam.iIconHeight;
 		}
-		g_print (" size: %d => %dx%d\n", pDock->iIconSize, wi, hi);
+		//g_print (" size: %d => %dx%d\n", pDock->iIconSize, wi, hi);
 		double fMaxScale = cairo_dock_get_max_scale (pDock);
 		
 		// set the visible size at rest.

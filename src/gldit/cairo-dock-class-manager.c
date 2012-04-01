@@ -1145,7 +1145,7 @@ static inline double _get_first_appli_order (CairoDock *pDock, GList *first_laun
 		case CAIRO_APPLI_BEFORE_FIRST_LAUNCHER:
 			if (first_launcher_ic != NULL)
 			{
-				g_print (" go just before the first launcher (%s)\n", ((Icon*)first_launcher_ic->data)->cName);
+				//g_print (" go just before the first launcher (%s)\n", ((Icon*)first_launcher_ic->data)->cName);
 				fOrder = _get_previous_order (first_launcher_ic);  // 'first_launcher_ic' includes the separators, so we can just take the previous order.
 			}
 			else  // no launcher, go to the beginning of the dock.
@@ -1177,7 +1177,7 @@ static inline double _get_first_appli_order (CairoDock *pDock, GList *first_laun
 		default:
 			if (last_launcher_ic != NULL)
 			{
-				g_print (" go just after the last launcher (%s)\n", ((Icon*)last_launcher_ic->data)->cName);
+				//g_print (" go just after the last launcher (%s)\n", ((Icon*)last_launcher_ic->data)->cName);
 				fOrder = _get_next_order (last_launcher_ic);  // we have already skipped the separators, so we can just take the next order.
 			}
 			else  // no launcher, go to the beginning of the dock.
@@ -1204,7 +1204,7 @@ static inline int _get_class_age (CairoDockClassAppli *pClassAppli)
 // -> if no, place it amongst the other appli icons, ordered by age (search the last launcher, skip any automatic separator, and then go to the right until our age is greater or there is no more appli).
 void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 {
-	g_print ("%s (%s, %d)\n", __func__, pIcon->cClass, pIcon->iAge);
+	//g_print ("%s (%s, %d)\n", __func__, pIcon->cClass, pIcon->iAge);
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
 	g_return_if_fail (pClassAppli != NULL);
 	
@@ -1229,7 +1229,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 		pSameClassIcon = pInhibitorIcon;
 		same_class_ic = ic;
 		pHostDock = pParentDock;
-		g_print (" found an inhibitor of this class: %s (%d)\n", pSameClassIcon->cName, pSameClassIcon->iAge);
+		//g_print (" found an inhibitor of this class: %s (%d)\n", pSameClassIcon->cName, pSameClassIcon->iAge);
 		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon))  // it's a launcher, we wont't find better -> quit
 			break ;
 	}
@@ -1249,7 +1249,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 				pSameClassIcon = pAppliIcon;
 				same_class_ic = ic;
 				pHostDock = pParentDock;
-				g_print (" found an appli of this class: %s (%d)\n", pSameClassIcon->cName, pSameClassIcon->iAge);
+				//g_print (" found an appli of this class: %s (%d)\n", pSameClassIcon->cName, pSameClassIcon->iAge);
 				break ;
 			}
 		}
@@ -1269,7 +1269,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 		for (ic = same_class_ic->next; ic != NULL; ic = ic->next)
 		{
 			pNextIcon = ic->data;
-			g_print ("  next icon: %s (%d)\n", pNextIcon->cName, pNextIcon->iAge);
+			//g_print ("  next icon: %s (%d)\n", pNextIcon->cName, pNextIcon->iAge);
 			if (!pNextIcon->cClass || strcmp (pNextIcon->cClass, pIcon->cClass) != 0)  // not our class any more, quit.
 				break;
 			
@@ -1283,7 +1283,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 				break;
 			}
 		}
-		g_print (" pNextIcon: %s (%d)\n", pNextIcon?pNextIcon->cName:"none", pNextIcon?pNextIcon->iAge:-1);
+		//g_print (" pNextIcon: %s (%d)\n", pNextIcon?pNextIcon->cName:"none", pNextIcon?pNextIcon->iAge:-1);
 		
 		if (pNextIcon != NULL && cairo_dock_get_icon_order (pNextIcon) == cairo_dock_get_icon_order (pSameClassIcon))  // l'icone suivante est dans le meme groupe que nous, on s'intercalle entre elle et pSameClassIcon.
 			pIcon->fOrder = (pNextIcon->fOrder + pSameClassIcon->fOrder) / 2;
@@ -1322,8 +1322,8 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 			break ;
 		}
 	}
-	g_print (" last launcher: %s\n", pLastLauncher?pLastLauncher->cName:"none");
-	g_print (" first appli: %s\n", pFirstAppli?pFirstAppli->cName:"none");
+	//g_print (" last launcher: %s\n", pLastLauncher?pLastLauncher->cName:"none");
+	//g_print (" first appli: %s\n", pFirstAppli?pFirstAppli->cName:"none");
 	
 	// place amongst the other applis, or after the last launcher.
 	if (first_appli_ic != NULL)  // if an appli exists in the dock, use it as an anchor.
@@ -1343,7 +1343,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 				continue;
 			
 			int iOtherClassAge = _get_class_age (pOtherClassAppli);
-			g_print (" age of class %s: %d\n", icon->cClass, iOtherClassAge);
+			//g_print (" age of class %s: %d\n", icon->cClass, iOtherClassAge);
 			
 			// compare to our class.
 			if (iOtherClassAge < iAge)  // it's older than our class -> skip this whole class, we'll go after.
@@ -1367,12 +1367,12 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 		
 		if (last_appli_ic == NULL)  // we are the oldest class -> go just before the first appli
 		{
-			g_print (" we are the oldest class\n");
+			//g_print (" we are the oldest class\n");
 			pIcon->fOrder = _get_previous_order (first_appli_ic);
 		}
 		else  // go just after the last one
 		{
-			g_print (" go just after %s\n", ((Icon*)last_appli_ic->data)->cName);
+			//g_print (" go just after %s\n", ((Icon*)last_appli_ic->data)->cName);
 			pIcon->fOrder = _get_next_order (last_appli_ic);
 		}
 	}
@@ -1788,7 +1788,7 @@ register from class name (window or old launchers):
 gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName, const gchar *cWmClass)
 {
 	g_return_val_if_fail (cDesktopFile != NULL || cClassName != NULL, NULL);
-	g_print ("%s (%s, %s, %s)\n", __func__, cDesktopFile, cClassName, cWmClass);
+	//g_print ("%s (%s, %s, %s)\n", __func__, cDesktopFile, cClassName, cWmClass);
 	
 	//\__________________ if the class is already registered and filled, quit.
 	gchar *cClass = NULL;
@@ -1798,7 +1798,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	
 	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes && pClassAppli->cDesktopFile)  // we already searched this class, and we did find its .desktop file, so let's end here.
 	{
-		g_print ("class %s already known (%s)\n", cClass?cClass:cDesktopFile, pClassAppli->cDesktopFile);
+		//g_print ("class %s already known (%s)\n", cClass?cClass:cDesktopFile, pClassAppli->cDesktopFile);
 		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // if the cStartupWMClass was not defined in the .desktop file, store it now.
 			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 		return (cClass?cClass:g_strdup (cDesktopFile));

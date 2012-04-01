@@ -2523,12 +2523,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 								}
 							}
 						}
-						g_print (" + %s\n", cImagePath);
+						//g_print (" + %s\n", cImagePath);
 						if (cImagePath != NULL)
 						{
 							pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, iDesiredIconSize, iDesiredIconSize, NULL);
 						}
-						g_print (" -> %p\n", pixbuf);
+						//g_print (" -> %p\n", pixbuf);
 						
 						// get the name
 						if (CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))  // separator

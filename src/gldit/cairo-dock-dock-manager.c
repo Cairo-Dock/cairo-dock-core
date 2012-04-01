@@ -220,7 +220,7 @@ CairoDock *cairo_dock_create_subdock (const gchar *cDockName, const gchar *cRend
 
 void cairo_dock_main_dock_to_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName)
 {
-	g_print ("%s (%s)\n", __func__, cRendererName);
+	//g_print ("%s (%s)\n", __func__, cRendererName);
 	if (pDock->iRefCount == 0)  // il devient un sous-dock.
 	{
 		//\__________________ make it a sub-dock.
@@ -1217,7 +1217,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 	f = 2 + cost;  // so if cost = -1, we arrive straight onto the screen edge, and f = 1, => normal delay. if cost = 0, f = 2 and we have a bigger delay.
 	
 	int iDelay = f * myDocksParam.iUnhideDockDelay;
-	g_print (" dock will be shown in %dms (%.2f, %d)\n", iDelay, f, pDock->bIsMainDock);
+	//g_print (" dock will be shown in %dms (%.2f, %d)\n", iDelay, f, pDock->bIsMainDock);
 	if (iDelay != 0)  // on programme une apparition.
 	{
 		if (pDock->iSidUnhideDelayed == 0)
@@ -1330,7 +1330,7 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 			}
 			else  // bind couldn't be done (no shortkey or couldn't grab it).
 			{
-				g_print ("bind couldn't be done (no shortkey or couldn't grab it).\n");
+				//g_print ("bind couldn't be done (no shortkey or couldn't grab it).\n");
 				pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
 			}
 		}

@@ -659,7 +659,7 @@ static void _init_opengl_context (GtkWidget* pWidget, CairoContainer *pContainer
 	if (! gldi_glx_make_current (pContainer))
 		return;
 	
-	g_print ("INIT OPENGL ctx\n");
+	//g_print ("INIT OPENGL ctx\n");
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth (1.0f);
 	glClearStencil (0);
