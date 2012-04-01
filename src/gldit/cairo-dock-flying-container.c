@@ -431,6 +431,8 @@ void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, C
 void cairo_dock_free_flying_container (CairoFlyingContainer *pFlyingContainer)
 {
 	cd_debug ("%s ()", __func__);
+	if (pFlyingContainer->pIcon != NULL)
+		cairo_dock_set_icon_container (pFlyingContainer->pIcon, NULL);
 	cairo_dock_finish_container (CAIRO_CONTAINER (pFlyingContainer));
 	g_free (pFlyingContainer);
 	cairo_dock_free_image_buffer (s_pEmblem);
