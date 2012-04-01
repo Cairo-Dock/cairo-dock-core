@@ -814,7 +814,7 @@ static void _cairo_dock_limit_string_width (gchar *cLine, PangoLayout *pLayout, 
 {
 	//g_print ("%s (%s)\n", __func__, cLine);
 	// on insere des retours chariot pour tenir dans la largeur donnee.
-	PangoRectangle ink, log;
+	PangoRectangle log;
 	gchar *sp, *last_sp=NULL;
 	double w;
 	int iNbLines = 0;
@@ -835,8 +835,8 @@ static void _cairo_dock_limit_string_width (gchar *cLine, PangoLayout *pLayout, 
 			pango_layout_set_markup (pLayout, str, -1);
 		else
 			pango_layout_set_text (pLayout, str, -1);
-		pango_layout_get_pixel_extents (pLayout, &ink, &log);
-		//g_print ("%s => w:%d/%d, x:%d/%d\n", str, log.width, ink.width, log.x, ink.x);
+		pango_layout_get_pixel_extents (pLayout, NULL, &log);
+		//g_print ("%s => w:%d, x:%d\n", str, log.width, log.x);
 		w = log.width + log.x;
 		
 		if (w > iMaxWidth)  // on deborde.
@@ -875,7 +875,7 @@ static void _cairo_dock_limit_string_width (gchar *cLine, PangoLayout *pLayout, 
 		pango_layout_set_markup (pLayout, str, -1);
 	else
 		pango_layout_set_text (pLayout, str, -1);
-	pango_layout_get_pixel_extents (pLayout, &ink, &log);
+	pango_layout_get_pixel_extents (pLayout, NULL, &log);
 	w = log.width + log.x;
 	if (w > iMaxWidth)  // on deborde.
 	{
@@ -892,7 +892,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	
 	//\_________________ On ecrit le texte dans un calque Pango.
 	PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
-	PangoRectangle ink, log;
+	PangoRectangle log;
 	
 	PangoFontDescription *pDesc = pango_font_description_new ();
 	pango_font_description_set_absolute_size (pDesc, fMaxScale * pLabelDescription->iSize * PANGO_SCALE);
@@ -902,22 +902,18 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	pango_layout_set_font_description (pLayout, pDesc);
 	pango_font_description_free (pDesc);
 	
-	pango_layout_set_text (pLayout, "|", -1);  // donne la hauteur max des lettres.
-	pango_layout_get_pixel_extents (pLayout, &ink, &log);
-	int iMinSize = ink.height;  // hauteur min = au moins la plus grande lettre pour une uniformite des labels.
-	
 	if (pLabelDescription->bUseMarkup)
 		pango_layout_set_markup (pLayout, cText, -1);
 	else
 		pango_layout_set_text (pLayout, cText, -1);
 	
 	//\_________________ On insere des retours chariot si necessaire.
-	pango_layout_get_pixel_extents (pLayout, &ink, &log);
+	pango_layout_get_pixel_extents (pLayout, NULL, &log);
 	
 	if (pLabelDescription->fMaxRelativeWidth != 0)
 	{
 		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		int w = ink.width;
+		int w = log.width;
 		//g_print ("text width : %d / %d\n", w, iMaxLineWidth);
 		if (w > iMaxLineWidth)  // le texte est trop long.
 		{
@@ -938,7 +934,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 				pango_layout_set_markup (pLayout, cCutText, -1);
 			else
 				pango_layout_set_text (pLayout, cCutText, -1);
-			pango_layout_get_pixel_extents (pLayout, &ink, &log);
+			pango_layout_get_pixel_extents (pLayout, &log, &log);
 			g_strfreev (cLines);
 			g_free (cCutText);
 		}
@@ -948,16 +944,16 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	gboolean bDrawBackground = (pLabelDescription->fBackgroundColor != NULL && pLabelDescription->fBackgroundColor[3] > 0);
 	double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/4));  // permet d'avoir un rayon meme si on n'a pas de marge.
 	int iOutlineMargin = 2*pLabelDescription->iMargin + (pLabelDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
-	double fZoomX = ((iMaxWidth != 0 && ink.width + iOutlineMargin > iMaxWidth) ? (double)iMaxWidth / (ink.width + iOutlineMargin) : 1.);
+	double fZoomX = ((iMaxWidth != 0 && log.width + iOutlineMargin > iMaxWidth) ? (double)iMaxWidth / (log.width + iOutlineMargin) : 1.);
 	
-	*iTextWidth = (ink.width + iOutlineMargin) * fZoomX;  // le texte + la marge de chaque cote.
+	*iTextWidth = (log.width + iOutlineMargin) * fZoomX;  // le texte + la marge de chaque cote.
 	if (bDrawBackground)  // quand on trace le cadre, on evite qu'avec des petits textes genre "1" on obtienne un fond tout rond.
 	{
 		*iTextWidth = MAX (*iTextWidth, 2 * fRadius + 10);
 		if (iMaxWidth != 0 && *iTextWidth > iMaxWidth)
 			*iTextWidth = iMaxWidth;
 	}
-	*iTextHeight = MAX (iMinSize, ink.height) + iOutlineMargin + 0; // +1 car certaines polices "debordent".
+	*iTextHeight = log.height + iOutlineMargin;
 	
 	cairo_surface_t* pNewSurface = cairo_dock_create_blank_surface (
 		*iTextWidth,
@@ -976,12 +972,12 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 		cairo_restore(pCairoContext);
 	}
 	
-	//g_print ("%s : ink = %d;%d\n", cText, (int) ink.x, (int) ink.y);
-	int dx = (*iTextWidth - ink.width * fZoomX)/2;  // pour se centrer.
-	int dy = (*iTextHeight - ink.height)/2;  // pour se centrer.
+	//g_print ("%s : log = %d;%d\n", cText, (int) log.x, (int) log.y);
+	int dx = (*iTextWidth - log.width * fZoomX)/2;  // pour se centrer.
+	int dy = (*iTextHeight - log.height)/2;  // pour se centrer.
 	cairo_translate (pCairoContext,
-		-ink.x*fZoomX + dx,
-		-ink.y + dy);  // meme remarque pour le +1.
+		-log.x*fZoomX + dx,
+		-log.y + dy);
 	
 	//\_________________ On dessine les contours du texte.
 	if (pLabelDescription->bOutlined)
@@ -1014,13 +1010,13 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	{
 		if (pLabelDescription->bVerticalPattern)
 			pGradationPattern = cairo_pattern_create_linear (0.,
-				ink.y + 0,  // meme remarque pour le +1.
+				log.y,
 				0.,
-				ink.y + 0 + ink.height);
+				log.y + log.height);
 		else
-			pGradationPattern = cairo_pattern_create_linear (ink.x + 0,
+			pGradationPattern = cairo_pattern_create_linear (log.x,
 				0.,
-				ink.x + 0 + ink.width,
+				log.x + log.width,
 				0.);
 		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
 		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
