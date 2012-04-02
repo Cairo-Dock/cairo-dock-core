@@ -936,13 +936,13 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 				h = icon->fHeight * icon->fScale;
 				if (pDock->container.bIsHorizontal)
 				{
-					cairo_translate (pCairoContext, icon->fDrawX, icon->fDrawY);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, w - 2*r, h);
+					cairo_translate (pCairoContext, icon->fDrawX - myIconsParam.iIconGap / 2, icon->fDrawY);
+					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, w - 2*r + myIconsParam.iIconGap, h);
 				}
 				else
 				{
-					cairo_translate (pCairoContext, icon->fDrawY, icon->fDrawX);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r, w);
+					cairo_translate (pCairoContext, icon->fDrawY - myIconsParam.iIconGap / 2, icon->fDrawX);
+					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r + myIconsParam.iIconGap, w);
 				}
 				cairo_fill (pCairoContext);
 				cairo_restore (pCairoContext);

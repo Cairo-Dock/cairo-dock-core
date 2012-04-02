@@ -580,14 +580,14 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 					glTranslatef (icon->fDrawX + w/2,
 						pDock->container.iHeight - icon->fDrawY - h/2,
 						0.);
-					cairo_dock_draw_rounded_rectangle_opengl (w - 2*r, h, r, 0, pHiddenBgColor);
+					cairo_dock_draw_rounded_rectangle_opengl (w - 2*r + myIconsParam.iIconGap, h, r, 0, pHiddenBgColor);
 				}
 				else
 				{
 					glTranslatef (icon->fDrawY + h/2,
 						pDock->container.iWidth - icon->fDrawX - w/2,
 						0.);
-					cairo_dock_draw_rounded_rectangle_opengl (h - 2*r, w, r, 0, pHiddenBgColor);
+					cairo_dock_draw_rounded_rectangle_opengl (h - 2*r + myIconsParam.iIconGap, w, r, 0, pHiddenBgColor);
 				}
 				glPopMatrix ();
 			}
