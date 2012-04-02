@@ -935,7 +935,8 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 	gchar *cCairoAutoStartDirPath = g_strdup_printf ("%s/.config/autostart", g_getenv ("HOME"));
 	gchar *cCairoAutoStartEntryPath = g_strdup_printf ("%s/cairo-dock.desktop", cCairoAutoStartDirPath);
 	gchar *cCairoAutoStartEntryPath2 = g_strdup_printf ("%s/cairo-dock-cairo.desktop", cCairoAutoStartDirPath);
-	gboolean bIsCairoDockSession = g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "cairo-dock") == 0;
+	const gchar *cDesktopSession = g_getenv ("DESKTOP_SESSION");
+	gboolean bIsCairoDockSession = cDesktopSession && g_str_has_prefix (cDesktopSession, "cairo-dock");
 	if (! bIsCairoDockSession && ! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS) && ! g_file_test (cCairoAutoStartEntryPath2, G_FILE_TEST_EXISTS))
 	{
 		cairo_dock_add_in_menu_with_stock_and_data (_("Launch Cairo-Dock on startup"),
@@ -1092,7 +1093,7 @@ static void _show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPrevie
 	if (pixbuf != NULL)
 	{
 		gtk_image_set_from_pixbuf (pPreviewImage, pixbuf);
-		gdk_pixbuf_unref (pixbuf);
+		g_object_unref (pixbuf);
 		gtk_file_chooser_set_preview_widget_active (pFileChooser, TRUE);
 	}
 	else
