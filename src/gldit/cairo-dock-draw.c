@@ -919,6 +919,7 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	double pHiddenBgColor[4];
 	const double r = 4; // corner radius of the background
 	const double gap = 3;  // gap to the screen
+	double dw = (myIconsParam.iIconGap > 2 ? 2 : 0);  // 1px margin around the icons for a better readability (only if icons won't be stuck togather then).
 	double w, h;
 	do
 	{
@@ -936,13 +937,13 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 				h = icon->fHeight * icon->fScale;
 				if (pDock->container.bIsHorizontal)
 				{
-					cairo_translate (pCairoContext, icon->fDrawX - myIconsParam.iIconGap / 2, icon->fDrawY);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, w - 2*r + myIconsParam.iIconGap, h);
+					cairo_translate (pCairoContext, icon->fDrawX - dw / 2, icon->fDrawY);
+					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, w - 2*r + dw, h);
 				}
 				else
 				{
-					cairo_translate (pCairoContext, icon->fDrawY - myIconsParam.iIconGap / 2, icon->fDrawX);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r + myIconsParam.iIconGap, w);
+					cairo_translate (pCairoContext, icon->fDrawY - dw / 2, icon->fDrawX);
+					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r + dw, w);
 				}
 				cairo_fill (pCairoContext);
 				cairo_restore (pCairoContext);
