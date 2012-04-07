@@ -199,8 +199,8 @@ static void _cairo_dock_set_signal_interception (void)
 	signal (SIGSEGV, _cairo_dock_intercept_signal);  // Segmentation violation
 	signal (SIGFPE, _cairo_dock_intercept_signal);  // Floating-point exception
 	signal (SIGILL, _cairo_dock_intercept_signal);  // Illegal instruction
-	signal (SIGABRT, _cairo_dock_intercept_signal);  // Abort
-	signal (SIGTERM, _cairo_dock_quit);  // Abort
+	signal (SIGABRT, _cairo_dock_intercept_signal);  // Abort // kill -6
+	signal (SIGTERM, _cairo_dock_quit);  // Term // kill -15 (system)
 }
 
 static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
@@ -308,6 +308,11 @@ int main (int argc, char** argv)
 	
 	GError *erreur = NULL;
 	
+	//\___________________ internationalize the app.
+	bindtextdomain (CAIRO_DOCK_GETTEXT_PACKAGE, CAIRO_DOCK_LOCALE_DIR);
+	bind_textdomain_codeset (CAIRO_DOCK_GETTEXT_PACKAGE, "UTF-8");
+	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
+	
 	//\___________________ get app's options.
 	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE, bAskBackend = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
@@ -400,7 +405,7 @@ int main (int argc, char** argv)
 	}
 	
 	if (g_bLocked)
-		g_print ("Cairo-Dock will be locked.\n");
+		cd_warning ("Cairo-Dock will be locked.\n");
 	
 	if (cVerbosity != NULL)
 	{
@@ -423,13 +428,14 @@ int main (int argc, char** argv)
 		else if (strcmp (cEnvironment, "none") == 0)
 			iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 		else
-			cd_warning ("unknown environnment '%s'", cEnvironment);
+			cd_warning ("Unknown environment '%s'", cEnvironment);
 		g_free (cEnvironment);
 	}
 	
 	if (bCappuccino)
 	{
-		g_print ("Cairo-Dock does anything, including coffee !.\n");
+		const gchar *cCappuccino = _("Cairo-Dock makes anything, including coffee !");
+		g_print ("%s\n", cCappuccino);
 		return 0;
 	}
 	
@@ -459,11 +465,6 @@ int main (int argc, char** argv)
 		g_free (s_cDefaulBackend);
 		s_cDefaulBackend = NULL;
 	}
-	
-	//\___________________ internationalize the app.
-	bindtextdomain (CAIRO_DOCK_GETTEXT_PACKAGE, CAIRO_DOCK_LOCALE_DIR);
-	bind_textdomain_codeset (CAIRO_DOCK_GETTEXT_PACKAGE, "UTF-8");
-	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 	
 	//\___________________ delay the startup if specified.
 	if (iDelay > 0)
@@ -707,7 +708,14 @@ int main (int argc, char** argv)
 	cd_message ("loading theme ...");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))  // no theme yet, copy the default theme first.
 	{
-		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes/_default_", g_cCurrentThemePath);
+		const gchar *cDesktopSessionEnv = g_getenv ("DESKTOP_SESSION");
+		const gchar *cThemeName;
+		if (g_strcmp0 (cDesktopSessionEnv, "cairo-dock") == 0
+			|| g_strcmp0 (cDesktopSessionEnv, "cairo-dock-fallback") == 0)
+			cThemeName = "Default-Panel";
+		else
+			cThemeName = "Default-Single";
+		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s/%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes", cThemeName, g_cCurrentThemePath);
 		cd_message (cCommand);
 		int r = system (cCommand);
 		g_free (cCommand);
