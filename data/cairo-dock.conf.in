@@ -712,7 +712,7 @@ text color stop = 1;1;1
 #{If checked, the pattern will go from top to bottom, otherwise from left to right.}
 vertical label pattern = false
 
-#F+[Quick-info;stock_dialog_info]
+#F+[Quick-info;stock_dialog-info]
 #{Quick-info are short information drawn on the icons.}
 frame_qi =
 
