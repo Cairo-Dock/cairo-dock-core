@@ -1,0 +1,12 @@
+<gauge>
+	<name>Sound: Ubuntu Mono Dark</name>
+	<version>3</version>
+	<author>Ubuntu-Mono Designers</author>
+	<indicator type="images">
+		<file>0.svg</file>
+		<file>1.svg</file>
+		<file>2.svg</file>
+		<file>3.svg</file>
+		<file type="undef-value">undef.svg</file>
+	</indicator>
+</gauge>
