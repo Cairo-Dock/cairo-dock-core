@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Cairo-Dock (with Unity Panel)
+Comment=This session logs you into GNOME with Cairo-Dock and Unity-2D panel
+Exec=gnome-session --session=cairo-dock-unity
+TryExec=cairo-dock-session
+Icon=
+Type=Application

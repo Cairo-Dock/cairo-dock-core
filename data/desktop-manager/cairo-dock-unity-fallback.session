@@ -1,0 +1,8 @@
+[GNOME Session]
+Name=Cairo-Dock Session with Unity fallback (Safe Mode)
+RequiredComponents=gnome-settings-daemon;
+RequiredProviders=windowmanager;panel;panel_top;
+DefaultProvider-windowmanager=metacity
+DefaultProvider-panel=cairo-dock
+DefaultProvider-panel_top=unity-2d-panel
+DesktopName=GNOME

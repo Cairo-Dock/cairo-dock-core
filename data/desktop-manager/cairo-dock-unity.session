@@ -1,9 +1,10 @@
 [GNOME Session]
-Name=Cairo-Dock Session
+Name=Cairo-Dock Session with Unity
 RequiredComponents=gnome-settings-daemon;
-RequiredProviders=windowmanager;panel;
+RequiredProviders=windowmanager;panel;panel_top;
 DefaultProvider-windowmanager=compiz
 DefaultProvider-panel=cairo-dock
+DefaultProvider-panel_top=unity-2d-panel
 IsRunnableHelper=/usr/lib/nux/unity_support_test
-FallbackSession=cairo-dock-fallback
+FallbackSession=cairo-dock-unity-fallback
 DesktopName=GNOME
