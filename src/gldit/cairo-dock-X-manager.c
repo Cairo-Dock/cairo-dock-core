@@ -331,7 +331,12 @@ gboolean cairo_dock_wm_can_set_on_widget_layer (void)
 static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // attention : fonction lourde.
 {
 	//g_print ("+++ %s ()\n", __func__);
+	#if (GTK_MAJOR_VERSION < 3)
 	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (cairo_dock_get_root_id ());
+	#else
+	gulong tmp;
+	Window iRootPixmapID = *cairo_dock_get_windows_list (&tmp, TRUE); // we use the first window
+	#endif
 	g_return_val_if_fail (iRootPixmapID != 0, NULL);
 	
 	cairo_surface_t *pDesktopBgSurface = NULL;
