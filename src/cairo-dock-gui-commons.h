@@ -23,8 +23,13 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
-G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-gui-commons.h Common helpers for GUI management.
+*/
+
+
+G_BEGIN_DECLS
 
 void cairo_dock_make_tree_view_for_delete_themes (GtkWidget *pWindow);
 
@@ -51,6 +56,22 @@ void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSLis
 
 void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidgetList);
 
+
+/**
+ * Callback for the button-press-event that popup the given menu.
+ * @param pWidget The widget generating event.
+ * @param pEventButton The trigered event details.
+ * @param pMenu The given menu to popup.
+ * @code
+ * g_signal_connect (
+ * 	G_OBJECT (pButton),
+ * 	"button-press-event",
+ * 	G_CALLBACK (cairo_dock_popup_menu_under_widget),
+ * 	GTK_MENU (pMenu)
+ * 	);
+ * @endcode
+ */
+void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GdkEventButton *pEventButton, GtkMenu *pMenu);
 
 gchar *cairo_dock_get_third_party_applets_link (void);
 
