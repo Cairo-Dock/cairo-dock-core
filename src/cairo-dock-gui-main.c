@@ -1285,7 +1285,7 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 		return pWidget;
 	
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel2 = g_strdup_printf ("<span size='large' weight='800'>%s</span>", cLabel);
+	gchar *cLabel2 = g_strdup_printf ("<b>%s</b>", cLabel);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
 	g_free (cLabel2);
 	
@@ -1574,7 +1574,7 @@ static GtkWidget *cairo_dock_build_main_ihm_left_frame (const gchar *cText)
 	gtk_frame_set_shadow_type (GTK_FRAME (pFrame), GTK_SHADOW_NONE);
 	
 	// label
-	gchar *cLabel = g_strdup_printf ("<span size='x-large' weight='800' color=\"#81728C\">%s</span>", cText);
+	gchar *cLabel = g_strdup_printf ("<span color=\"#81728C\"><big><b>%s</b></big></span>", cText);
 	GtkWidget *pLabel = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
@@ -1662,15 +1662,17 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 		0);
 
 	// text entry
-	GtkWidget *pFilterBox = _gtk_hbox_new (0);
-	gtk_container_add (GTK_CONTAINER (pFilterFrame), pFilterBox);
+	GtkWidget *pFilterBoxMargin = _gtk_hbox_new (0);
+	gtk_container_add (GTK_CONTAINER (pFilterFrame), pFilterBoxMargin);
+	GtkWidget *pFilterBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	gtk_box_pack_start (GTK_BOX (pFilterBoxMargin), pFilterBox, TRUE, TRUE, CAIRO_DOCK_FRAME_MARGIN); // Margin around filter box is applied here
 
 	s_pFilterEntry = gtk_entry_new ();
 	g_signal_connect (s_pFilterEntry, "activate", G_CALLBACK (on_activate_filter), NULL);
 	gtk_box_pack_start (GTK_BOX (pFilterBox),
 		s_pFilterEntry,
 		TRUE,
-		FALSE,
+		TRUE,
 		0);
 	//~ gtk_container_set_focus_child (GTK_CONTAINER (s_pMainWindow), pFilterBox); /// set focus to filter box
 	
@@ -1687,7 +1689,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	GtkWidget *pMenuItem = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
 	gtk_menu_item_set_label (GTK_MENU_ITEM (pMenuItem), NULL);
 	gtk_menu_shell_append (GTK_MENU_SHELL (pMenuBar), pMenuItem);
-	gtk_box_pack_start (GTK_BOX (pFilterBox),
+	gtk_box_pack_end (GTK_BOX (pFilterBox),
 		pMenuBar,
 		FALSE,
 		FALSE,
@@ -1724,6 +1726,9 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 		TRUE,  /// FALSE
 		0);
 	
+	GtkWidget *pCategoriesMargin = _gtk_hbox_new (0);
+	gtk_container_add (GTK_CONTAINER (pCategoriesFrame), pCategoriesMargin);
+
 	s_pToolBar = gtk_toolbar_new ();
 	#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 16)
 	gtk_toolbar_set_orientation (GTK_TOOLBAR (s_pToolBar), GTK_ORIENTATION_VERTICAL);
@@ -1735,7 +1740,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	//gtk_widget_set (s_pToolBar, "height-request", 300, NULL);
 	//g_object_set (s_pToolBar, "expand", TRUE, NULL);
 	///gtk_toolbar_set_icon_size (GTK_TOOLBAR (s_pToolBar), GTK_ICON_SIZE_LARGE_TOOLBAR);  /// GTK_ICON_SIZE_LARGE_TOOLBAR
-	gtk_container_add (GTK_CONTAINER (pCategoriesFrame), s_pToolBar);
+	gtk_box_pack_start (GTK_BOX (pCategoriesMargin), s_pToolBar, TRUE, TRUE, CAIRO_DOCK_FRAME_MARGIN);
 	
 	CairoDockCategoryWidgetTable *pCategoryWidget;
 	GtkToolItem *pCategoryButton;
@@ -1770,7 +1775,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 		gtk_frame_set_shadow_type (GTK_FRAME (pCategoryWidget->pFrame), GTK_SHADOW_OUT);
 		
 		GtkWidget *pLabel = gtk_label_new (NULL);
-		gchar *cLabel = g_strdup_printf ("<span size='large' weight='800'>%s</span>", gettext (s_cCategoriesDescription[2*i]));
+		gchar *cLabel = g_strdup_printf ("<big><b>%s</b></big>", gettext (s_cCategoriesDescription[2*i]));
 		gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 		g_free (cLabel);
 		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
@@ -1862,7 +1867,10 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 		0);
 	s_pActivateButton = gtk_check_button_new_with_label (_("Enable this module"));
 	g_signal_connect (G_OBJECT (s_pActivateButton), "clicked", G_CALLBACK(on_click_activate_current_group), NULL);
-	gtk_container_add (GTK_CONTAINER (s_pGroupFrame), s_pActivateButton);
+
+	GtkWidget *pActivateButtonMargin = _gtk_hbox_new (0);
+	gtk_container_add (GTK_CONTAINER (s_pGroupFrame), pActivateButtonMargin);
+	gtk_box_pack_start (GTK_BOX (pActivateButtonMargin), s_pActivateButton, FALSE, FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_widget_show_all (s_pActivateButton);
 	
 	//\_____________ On ajoute la zone de prevue.
@@ -2347,7 +2355,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 	
 	//\_______________ On met a jour la frame du groupe (label + check-button).
 	GtkWidget *pLabel = gtk_label_new (NULL);
-	gchar *cLabel = g_strdup_printf ("<span size='x-large' weight='800' color=\"#81728C\">%s</span>", pGroupDescription->cTitle);
+	gchar *cLabel = g_strdup_printf ("<span color=\"#81728C\"><big><b>%s</b></big></span>", pGroupDescription->cTitle);
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 	g_free (cLabel);
 	gtk_frame_set_label_widget (GTK_FRAME (s_pGroupFrame), pLabel);
