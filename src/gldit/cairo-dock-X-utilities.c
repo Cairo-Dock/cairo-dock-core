@@ -23,6 +23,10 @@
 #include <stdlib.h>
 #include <signal.h>
 
+#if (GTK_MAJOR_VERSION >= 3)
+#include <cairo/cairo-xlib.h>  // needed for cairo_xlib_surface_create
+#endif
+
 #include <gdk/gdkx.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -464,18 +468,17 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 		iHeight);
 	g_object_unref (G_OBJECT (pGdkDrawable));
 	#else
-	GdkWindow *pWindow = gdk_x11_window_lookup_for_display (gdk_display_get_default (), XPixmapID);
-	if (pWindow)
-	{
-		g_object_ref (G_OBJECT (pWindow));
-	}
-	else
-	{
-		pWindow = gdk_x11_window_foreign_new_for_display (gdk_display_get_default (), XPixmapID);
-	}
-	//\__________________ On recupere le buffer dans un GdkPixbuf.
-	GdkPixbuf *pIconPixbuf = gdk_pixbuf_get_from_window (pWindow, 0, 0, iWidth, iHeight);
-	g_object_unref (G_OBJECT (pWindow));
+	cairo_surface_t *surface = cairo_xlib_surface_create (s_XDisplay,
+		XPixmapID,
+		DefaultVisual(s_XDisplay, 0),
+		iWidth,
+		iHeight);
+	GdkPixbuf *pIconPixbuf = gdk_pixbuf_get_from_surface(surface,
+		0,
+		0,
+		iWidth,
+		iHeight);
+	cairo_surface_destroy(surface);
 	#endif
 	g_return_val_if_fail (pIconPixbuf != NULL, NULL);
 

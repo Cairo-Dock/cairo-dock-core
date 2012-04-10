@@ -327,17 +327,11 @@ gboolean cairo_dock_wm_can_set_on_widget_layer (void)
   //////////////////
  /// DESKTOP BG ///
 //////////////////
-
 static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // attention : fonction lourde.
 {
 	//g_print ("+++ %s ()\n", __func__);
-	#if (GTK_MAJOR_VERSION < 3)
 	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (cairo_dock_get_root_id ());
-	#else
-	gulong tmp;
-	Window iRootPixmapID = *cairo_dock_get_windows_list (&tmp, TRUE); // we use the first window
-	#endif
-	g_return_val_if_fail (iRootPixmapID != 0, NULL);
+	g_return_val_if_fail (iRootPixmapID != 0, NULL);  // Note: depending on the WM, iRootPixmapID might be 0, and a window of type 'Desktop' might be used instead (covering the whole screen). We don't handle this case, as I've never encounterd it yet.
 	
 	cairo_surface_t *pDesktopBgSurface = NULL;
 	GdkPixbuf *pBgPixbuf = cairo_dock_get_pixbuf_from_pixmap (iRootPixmapID, FALSE);  // FALSE <=> on n'y ajoute pas de transparence.
@@ -534,7 +528,7 @@ static void init (void)
 	s_aNetDesktopGeometry	= XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
 	s_aNetWorkarea			= XInternAtom (s_XDisplay, "_NET_WORKAREA", False);
 	s_aNetShowingDesktop 	= XInternAtom (s_XDisplay, "_NET_SHOWING_DESKTOP", False);
-	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
+	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);  // Note: ESETROOT_PMAP_ID might be used instead. We don't handle it as it seems quite rare and somewhat deprecated.
 	s_aNetNbDesktops		= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
 	s_aXKlavierState		= XInternAtom (s_XDisplay, "XKLAVIER_STATE", False);
 	
