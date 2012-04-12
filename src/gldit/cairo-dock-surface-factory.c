@@ -934,7 +934,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 				pango_layout_set_markup (pLayout, cCutText, -1);
 			else
 				pango_layout_set_text (pLayout, cCutText, -1);
-			pango_layout_get_pixel_extents (pLayout, &log, &log);
+			pango_layout_get_pixel_extents (pLayout, NULL, &log);
 			g_strfreev (cLines);
 			g_free (cCutText);
 		}
