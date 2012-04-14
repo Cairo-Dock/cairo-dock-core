@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-03-21 02:54+0000\n"
+"POT-Creation-Date: 2012-04-12 00:33+0000\n"
+"PO-Revision-Date: 2012-03-22 21:20+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-22 04:44+0000\n"
-"X-Generator: Launchpad (build 14981)\n"
+"X-Launchpad-Export-Date: 2012-04-13 05:21+0000\n"
+"X-Generator: Launchpad (build 15070)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -89,7 +90,8 @@ msgid "Shortkey"
 msgstr "Sneltoets"
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "De instellingen van het hoof-dock zijn beschikbaar in het "
 "hoofdconfiguratievenster."
@@ -311,7 +313,8 @@ msgid "Effects:"
 msgstr "Effecten:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klik op het applet om een voorbeeld en omschrijving van het applet te "
 "krijgen."
@@ -424,7 +427,8 @@ msgstr "Vertalers voor deze taal"
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Cairo-Dock Team https://launchpad.net/~cairo-dock-team"
+"  Cairo-Dock Team https://launchpad.net/~cairo-dock-team\n"
+"  rob https://launchpad.net/~rvdb"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -515,7 +519,8 @@ msgstr "scheiding"
 #: ../src/cairo-dock-menu.c:597
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "U wilt het pictogram (%s) uit het dock verwijderen. Weet u het zeker ?"
+msgstr ""
+"U wilt het pictogram (%s) uit het dock verwijderen. Weet u het zeker ?"
 
 #: ../src/cairo-dock-menu.c:609
 msgid ""
@@ -603,7 +608,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Start Cairo-Dock op tijdens het opstarten"
 
 #: ../src/cairo-dock-menu.c:958
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applets van derden die integratie bevatten voor vele toepassingen zoals "
 "Pidgin"
@@ -871,8 +877,8 @@ msgstr ""
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Het dock forceren om te laden vanuit deze map, in plaats vanuit de map ~/."
-"config/cairo-dock."
+"Het dock forceren om te laden vanuit deze map, in plaats vanuit de map "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:343
 msgid ""
@@ -923,7 +929,8 @@ msgstr "Versie tonen en afsluiten."
 
 #: ../src/cairo-dock.c:367
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr "Het dock vergrendelen zodat gebruikers geen aanpassingen kunnen doen."
+msgstr ""
+"Het dock vergrendelen zodat gebruikers geen aanpassingen kunnen doen."
 
 #: ../src/cairo-dock.c:371
 msgid "Keep the dock above other windows whatever."
@@ -1356,9 +1363,9 @@ msgstr ""
 "Om nieuwe applets te activeren, opent u de instellingen (rechtermuisklik -> "
 "Cairo-Dock -> Configureren), gaat naar \"Extra's\" en vinkt het applet aan "
 "dat u wilt.\n"
-"Als u meer applets wilt installeren, klikt u op de knop \"Meer applets"
-"\" (hierdoor wordt u verder geleid naar onze applets-website) en kunt "
-"applets installeren door de link van een applet naar uw dock te verslepen."
+"Als u meer applets wilt installeren, klikt u op de knop \"Meer applets\" "
+"(hierdoor wordt u verder geleid naar onze applets-website) en kunt applets "
+"installeren door de link van een applet naar uw dock te verslepen."
 
 #: ../data/messages:13
 msgid "Adding a launcher"
@@ -1593,7 +1600,8 @@ msgstr "Aangepast pictogram instellen voor een toepassing"
 
 #: ../data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr "Zie \"Pictogramafbeelding wijzigen\" in de categorie \"Pictogrammen\"."
+msgstr ""
+"Zie \"Pictogramafbeelding wijzigen\" in de categorie \"Pictogrammen\"."
 
 #: ../data/messages:71
 msgid "Showing windows preview over the icons"
@@ -1612,7 +1620,8 @@ msgstr ""
 #: ../data/messages:243 ../data/messages:285 ../data/messages:289
 #: ../data/messages:295 ../data/messages:299
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Tip: indien deze regel grijs is, dan is deze tip niet voor u bedoeld."
+msgstr ""
+"Tip: indien deze regel grijs is, dan is deze tip niet voor u bedoeld."
 
 #: ../data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
@@ -2053,14 +2062,15 @@ msgstr "Het gnome-paneel in zijn geheel verwijderen"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Open 'Configuratie-editor', ga dan naar /desktop/gnome/session/"
-"required_components, klik met rechts op 'panel' dan 'Sleutel bewerken' en "
-"vervang de waarde door \"cairo-dock\".\n"
+"Open 'Configuratie-editor', ga dan naar "
+"/desktop/gnome/session/required_components, klik met rechts op 'panel' dan "
+"'Sleutel bewerken' en vervang de waarde door \"cairo-dock\".\n"
 "Herstart daarna uw sessie : het gnome-paneel is nu niet opgestart, maar het "
 "dock is nu wel opgestart (indien niet, dan kunt u het toevoegen aan de "
 "'Opstarttoepassingen')."
@@ -2114,8 +2124,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "U moet composite inschakelen. U kunt bijvoorbeeld Compiz of xcompmgr "
 "draaien.\n"
@@ -2123,8 +2133,9 @@ msgstr ""
 "vensterbeheerder’s opties.\n"
 "Als u Gnome gebruikt, kunt u het inschakelen in Metacity op de volgende "
 "manier :\n"
-" Open de Configuratie-editor, bewerk de sleutel '/apps/metacity/general/"
-"compositing_manager' en vink het vakje onder ´waarde´ aan."
+" Open de Configuratie-editor, bewerk de sleutel "
+"'/apps/metacity/general/compositing_manager' en vink het vakje onder "
+"´waarde´ aan."
 
 #: ../data/messages:207
 msgid ""
@@ -2192,7 +2203,8 @@ msgstr ""
 
 #: ../data/messages:223
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr "Ik heb geen thema's in de Themabeheerder, behalve het standaardthema."
+msgstr ""
+"Ik heb geen thema's in de Themabeheerder, behalve het standaardthema."
 
 #: ../data/messages:225
 msgid "Hint : Up to version 2.1.1-2, wget was used."
@@ -2274,9 +2286,9 @@ msgid ""
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
 "In Gnome, is er een optie om die van het dock te negeren. Om pictogrammen in "
-"menu's in te schakelen, opent u 'Configuratie-editor', gaat dan naar "
-"Desktop / Gnome / Interface en stelt \"menus have icons (pictogrammen in "
-"menu's weergeven)\" in op 'True' en vinkt u de optie \"buttons have icons "
+"menu's in te schakelen, opent u 'Configuratie-editor', gaat dan naar Desktop "
+"/ Gnome / Interface en stelt \"menus have icons (pictogrammen in menu's "
+"weergeven)\" in op 'True' en vinkt u de optie \"buttons have icons "
 "(pictogrammen op knoppen weergeven)\" aan. "
 
 #: ../data/messages:245
@@ -2304,8 +2316,8 @@ msgstr ""
 "We stellen uw hulp op prijs! Als u een fout ziet of denkt dat er iets "
 "verbeterd kan worden,\\n\n"
 "of hebt gedroomd over het dock, bezoek ons dan op glx-dock.org.\\n\n"
-"Engels sprekende en anderstalige mensen zijn welkom, dus wees niet "
-"verlegen ! ;-)\\n\n"
+"Engels sprekende en anderstalige mensen zijn welkom, dus wees niet verlegen "
+"! ;-)\\n\n"
 "\\n\n"
 "Als u een thema voor het dock heeft gemaakt of een applet en deze wilt "
 "delen, dan zullen wij deze graag toevoegen aan onze server !"
@@ -2352,8 +2364,8 @@ msgstr "Websites"
 #: ../data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr ""
-"Een probleem ? Een suggestie ? Wilt u met ons spreken ? U bent altijd "
-"welkom !"
+"Een probleem ? Een suggestie ? Wilt u met ons spreken ? U bent altijd welkom "
+"!"
 
 #: ../data/messages:267
 msgid "Community site"
@@ -2813,13 +2825,15 @@ msgstr "Pictogramanimaties en effecten"
 
 #: ../data/messages:483
 msgid "& On mouse hover:"
-msgstr ""
+msgstr "& Wanneer u met uw muis eroverheen gaat:"
 
 #: ../data/messages:487
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] Bij "
+"verschijnen/verdwijnen:"
 
 #: ../data/messages:493
 msgid "Choose a theme of icons :"
@@ -2981,19 +2995,19 @@ msgstr "Toegankelijkheid"
 
 #: ../data/messages:613
 msgid "The higher, the faster the dock will appear"
-msgstr ""
+msgstr "Hoe hoger hoe sneller het dock zal verschijnen"
 
 #: ../data/messages:615
 msgid "Callback sensitivity:"
-msgstr ""
+msgstr "Terugroepgevoeligheid:"
 
 #: ../data/messages:617
 msgid "high"
-msgstr ""
+msgstr "hoog"
 
 #: ../data/messages:619
 msgid "low"
-msgstr ""
+msgstr "laag"
 
 #: ../data/messages:621
 msgid "How to call the dock back:"
@@ -3098,11 +3112,11 @@ msgstr "Alleen pictogrammen tonen van geminimaliseerde vensters ?"
 
 #: ../data/messages:689
 msgid "After a given icon"
-msgstr ""
+msgstr "Na een bepaald pictogram"
 
 #: ../data/messages:691
 msgid "Place new icons after this one"
-msgstr ""
+msgstr "Nieuwe pictogrammen plaatsen na deze"
 
 #: ../data/messages:693
 msgid ""
@@ -3332,11 +3346,11 @@ msgstr ""
 
 #: ../data/messages:819
 msgid "&[15;60] Animation frequency for the OpenGL backend :"
-msgstr ""
+msgstr "&[15;60] Animatiefrequentie voor OpenGL :"
 
 #: ../data/messages:823
 msgid "*[15;50] Animation frequency for the Cairo backend :"
-msgstr ""
+msgstr "*[15;50] Animatiefrequentie voor Cairo :"
 
 #: ../data/messages:825
 msgid ""
@@ -3348,7 +3362,7 @@ msgstr ""
 
 #: ../data/messages:827
 msgid "* Reflections should be calculated in real-time?"
-msgstr ""
+msgstr "* Reflecties berekenen in real-time?"
 
 #: ../data/messages:829
 msgid "Composition"
@@ -3509,15 +3523,16 @@ msgstr "Percentage van de lichte kleur :"
 
 #: ../data/messages:907
 msgid "Background when hidden"
-msgstr ""
+msgstr "Achtergrond indien verborgen"
 
 #: ../data/messages:909
 msgid "Several applets can be visible even when the dock is hidden"
 msgstr ""
+"Diverse applets kunnen zichtbaar blijven zelfs wanneer het dock verborgen is"
 
 #: ../data/messages:911
 msgid "Default background color when the dock is hidden"
-msgstr ""
+msgstr "Standaardachtergrondkleur wanneer het dock verborgen is"
 
 #: ../data/messages:913 ../data/messages:1363
 msgid "Stretch the dock to always fill the screen"
@@ -3776,7 +3791,8 @@ msgid "Zoom effect"
 msgstr "Vergrotingseffect"
 
 #: ../data/messages:1069
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Stel in op 1 als u niet wilt dat de pictogrammen vergroot worden wanneer u "
 "eroverheen beweegt."
@@ -3850,8 +3866,8 @@ msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr ""
-"De afbeelding van de scheiding laten draaien wanneer het dock boven/links/"
-"rechts is ?"
+"De afbeelding van de scheiding laten draaien wanneer het dock "
+"boven/links/rechts is ?"
 
 #: ../data/messages:1103
 msgid "Colour of flat separators :"
@@ -3945,7 +3961,8 @@ msgstr "Afbeeldingsbestand :"
 
 #: ../data/messages:1149
 msgid "Set transparency to 0 if you don't want to use an indicator."
-msgstr "Stel doorzichtigheid in op 0 wanneer u geen indicator wilt gebruiken."
+msgstr ""
+"Stel doorzichtigheid in op 0 wanneer u geen indicator wilt gebruiken."
 
 #: ../data/messages:1151
 msgid "Colour of the frame :"
@@ -4044,8 +4061,8 @@ msgstr "Groter"
 
 #: ../data/messages:1187
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Gebruik dit om de indicator de oriëntatie van het dock te laten volgen "
 "(boven/onder/rechts/links)."
@@ -4385,202 +4402,3 @@ msgstr ""
 "Gnome-werkomgeving.\n"
 " - Er zijn enkele uitbreidingen voor de DBus-API.\n"
 " - Het is mogelijk om te doneren om het project te ondersteunen!"
-
-#~ msgid "Options"
-#~ msgstr "Opties"
-
-#~ msgid "Having more than one dock"
-#~ msgstr "Meer dan één dock hebben"
-
-#~ msgid "TODO"
-#~ msgstr "TAAK"
-
-#~ msgid "Deleting a dock"
-#~ msgstr "Een dock verwijderen"
-
-#~ msgid "Changing the look of a dock"
-#~ msgstr "Het uiterlijk van een dock wijzigen"
-
-#~ msgid ""
-#~ "For a launcher or an applet:\n"
-#~ "Open the settings of the icon, and set a path to an image.\n"
-#~ "- For an aplication icon:\n"
-#~ "Right-click on the icon -> \"set a custom icon\". Then choose an image "
-#~ "you'd like to use, and apply. To remove the custom image, right-click on "
-#~ "the icon -> \"remove the custom icon\".\n"
-#~ "If you have installed some icons themes on your PC, you can also select "
-#~ "one of them to be used instead of the default icon theme, in the global "
-#~ "config window."
-#~ msgstr ""
-#~ "Voor een starter of een applet:\n"
-#~ "Open de instellingen van het pictogram en stel een pad in naar een "
-#~ "afbeelding.\n"
-#~ "- Voor een toepassingspictogram:\n"
-#~ "Klik met rechts op het pictogram -> \"Aangepast pictogram instellen\". "
-#~ "Selecteer dan de afbeelding die u wilt gebruiken en klik op \"Toepassen"
-#~ "\". Om de aangepaste afbeelding te verwijderen, klikt u met rechts op het "
-#~ "pictogram -> \"Aangepast pictogram verwijderen\".\n"
-#~ "Als u extra pictogramthema's heeft geïnstalleerd op uw PC, dan kunt u ook "
-#~ "één van deze thema's selecteren in het algemene configuratievenster, om "
-#~ "deze te gebruiken in plaats van het standaardpictogramthema."
-
-#~ msgid ""
-#~ "Activate the Shortcuts applet.\n"
-#~ "Then all the folders bookmarks (the ones that appear in Nautilus) will be "
-#~ "listed in a sub-dock.\n"
-#~ "To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
-#~ "To remove a boorkmark, right-click on its icon -> remove"
-#~ msgstr ""
-#~ "Activeer het applet \"Snelkoppelingen\".\n"
-#~ "Dan zullen alle mapbladwijzers (de mapbladwijzers zichtbaar in Nautilus) "
-#~ "getoond worden in een sub-dock.\n"
-#~ "Om een bladwijzer toe te voegen, sleept u simpelweg een map naar het "
-#~ "applet's pictogram.\n"
-#~ "Om een bladwijzer, klikt u met rechts op het pictogram -> Verwijderen"
-
-#~ msgid ""
-#~ "If you're on Debian Stable, you can add our 'weekly' ppa (can be "
-#~ "unstable) by clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Als u de stabiele versie van Debian gebruikt, dan kunt u onze "
-#~ "'wekelijkse' ppa toevoegen (kan onstabiel zijn) door op deze knop te "
-#~ "drukken:\n"
-#~ " Hierna kunt alle 'cairo-dock*' pakketten verwijderen, uw systeem "
-#~ "bijwerken en het 'cairo-dock' pakket herinstalleren."
-
-#~ msgid ""
-#~ "If you're on Debian Unstable, you can add our 'weekly' ppa (can be "
-#~ "unstable) by clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Als u de onstabiele versie van Debian gebruikt, dan kunt u onze "
-#~ "'wekelijkse' ppa toevoegen (kan onstabiel zijn) door op deze knop te "
-#~ "drukken:\n"
-#~ " Hierna kunt alle 'cairo-dock*' pakketten verwijderen, uw systeem "
-#~ "bijwerken en het 'cairo-dock' pakket herinstalleren."
-
-#~ msgid "Name of the container it belongs to:"
-#~ msgstr "Naam van de houder waar het bij hoort :"
-
-#~ msgid "Sub-dock's name :"
-#~ msgstr "Naam sub-dock :"
-
-#~ msgid "How to render the icon :"
-#~ msgstr "Hoe pictogram weer te geven :"
-
-#~ msgid "Use an image"
-#~ msgstr "Een afbeelding gebruiken"
-
-#~ msgid "Draw sub-dock's content as emblems"
-#~ msgstr "Inhoud van sub-dock tekenen als emblemen"
-
-#~ msgid "Draw sub-dock's content as stack"
-#~ msgstr "Inhoud van sub-dock tekenen als stapel"
-
-#~ msgid "Draw sub-dock's content inside a box"
-#~ msgstr "Inhoud sub-dock weergeven in een doos"
-
-#~ msgid "Image's name or path :"
-#~ msgstr "Naam afbeelding of pad :"
-
-#~ msgid "Extra parameters"
-#~ msgstr "Extra opties"
-
-#~ msgid "Name of the view used for the sub-dock :"
-#~ msgstr "Naam van weergave gebruikt voor het sub-dock :"
-
-#~ msgid "If '0' the container will be displayed on every viewport."
-#~ msgstr "Bij '0' zal de houder getoond worden in elke viewport."
-
-#~ msgid "Only show in this specific viewport"
-#~ msgstr "Alleen tonen in deze specifieke viewport"
-
-#~ msgid "Order you want for this launcher among the others:"
-#~ msgstr "Volgorde voor deze starter tussen de andere:"
-
-#~ msgid "Launcher's name :"
-#~ msgstr "Naam starter :"
-
-#~ msgid "URI of the file :"
-#~ msgstr "URI van het bestand :"
-
-#~ msgid "Number of files to list in the sub-dock :"
-#~ msgstr "Aantal bestanden om in het sub-dock te tonen :"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "20"
-#~ msgstr "20"
-
-#~ msgid "30"
-#~ msgstr "30"
-
-#~ msgid "Sort files by :"
-#~ msgstr "Bestanden sorteren op:"
-
-#~ msgid "Name"
-#~ msgstr "Naam"
-
-#~ msgid "Size"
-#~ msgstr "Grootte"
-
-#~ msgid "Date"
-#~ msgstr "Datum"
-
-#~ msgid "If '0' the launcher will be displayed on every viewport."
-#~ msgstr "Bij '0' zal de starter getoond worden in elke viewport."
-
-#~ msgid ""
-#~ "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a "
-#~ "keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
-#~ msgstr ""
-#~ "Bijvoorbeeld : nautilus --no-desktop, gedit, etc. U kunt zelfs een "
-#~ "sneltoets instellen, bijvoorbeeld <Alt>F1, <Ctrl>c, <Ctrl>v, etc"
-
-#~ msgid "Command to launch on click :"
-#~ msgstr "Opdracht om uit te voeren bij het aanklikken :"
-
-#~ msgid ""
-#~ "If you choosed to mix launcher and applis, this option will deactivate "
-#~ "this behaviour for this launcher only. It can be useful for instance for "
-#~ "a launcher that launches a script in a terminal, but you don't want it to "
-#~ "steal the Terminal's icon from the Taskbar."
-#~ msgstr ""
-#~ "Als u ervoor heeft gekozen om starters en toepassingen te mixen, dan kunt "
-#~ "u met deze optie dit gedrag uitschakelen voor deze starter alleen. Dat "
-#~ "kan bijvoorbeeld handig zijn voor een starter dat een script uitvoert in "
-#~ "een terminal, maar waarvan u niet wilt dat het het pictogram van de "
-#~ "terminal steelt uit de taakbalk."
-
-#~ msgid "Prevent this launcher from stealing this application from taskbar ?"
-#~ msgstr "Voorkomen dat deze starter deze toepassing van taakbalk steelt ?"
-
-#~ msgid ""
-#~ "The only reason you may want to modify this parameter is if you made this "
-#~ "launcher by hands. If you dropped it into the dock from the menu, it is "
-#~ "nearly sure that you shouldn't touch it. It defines the class of the "
-#~ "program, which is useful to link the appli with its launcher."
-#~ msgstr ""
-#~ "De enige reden om dit te wijzigen, is als u deze starter zelf heeft "
-#~ "gemaakt. Als u het gesleept hebt naar het dock vanuit het menu, dan is "
-#~ "het bijna zeker dat u hier niet aan hoeft te komen. Het bepaalt de klasse "
-#~ "van de toepassing, wat handig is om de toepassing aan zijn starter te "
-#~ "koppelen."
-
-#~ msgid "Class of the program :"
-#~ msgstr "Klasse van de toepassing :"
-
-#~ msgid "Run in a terminal ?"
-#~ msgstr "Uitvoeren in een terminal ?"
-
-#~ msgid "Separators' appearance is defined in the global configuration."
-#~ msgstr ""
-#~ "Het uiterlijk van een scheiding kunt u bepalen in de algemene "
-#~ "configuratie."

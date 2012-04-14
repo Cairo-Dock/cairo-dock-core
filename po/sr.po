@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-03-21 03:02+0000\n"
+"POT-Creation-Date: 2012-04-12 00:33+0000\n"
+"PO-Revision-Date: 2012-03-22 13:07+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Serbian <sr@li.org>\n"
-"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-22 04:45+0000\n"
-"X-Generator: Launchpad (build 14981)\n"
+"X-Launchpad-Export-Date: 2012-04-13 05:22+0000\n"
+"X-Generator: Launchpad (build 15070)\n"
+"Language: sr\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -89,8 +90,10 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Parametri glavnog doka su dostupni u glavnom konfiguracionom prozoru."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Parametri glavnog doka su dostupni u glavnom konfiguracionom prozoru."
 
 #: ../src/cairo-dock-gui-items.c:460
 msgid "Launcher configuration"
@@ -309,7 +312,8 @@ msgid "Effects:"
 msgstr "Efekti:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Da bi dobili pregled i objašnjenje u vezi apleta, kliknite u njega."
 
 #: ../src/cairo-dock-gui-simple.c:823
@@ -419,6 +423,7 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Fabounet https://launchpad.net/~fabounet03\n"
 "  boki24 https://launchpad.net/~bojansav"
 
 #: ../src/cairo-dock-menu.c:285
@@ -593,8 +598,10 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Startuj Cairo-dok pri pokretanju sistema"
 
 #: ../src/cairo-dock-menu.c:958
-msgid "Third-party applets provide integration with many programs, like Pidgin"
-msgstr "Apleti omogućavaju integraciju sa mnogim programima, na primer Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
+msgstr ""
+"Apleti omogućavaju integraciju sa mnogim programima, na primer Pidgin"
 
 #: ../src/cairo-dock-menu.c:961 ../src/help/applet-init.c:28
 #: ../src/help/applet-notifications.c:257
@@ -1471,7 +1478,8 @@ msgstr ""
 #: ../data/messages:243 ../data/messages:285 ../data/messages:289
 #: ../data/messages:295 ../data/messages:299
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Savet: Ako je ova linija siva, to znači da se savet ne odnosi na vas."
+msgstr ""
+"Savet: Ako je ova linija siva, to znači da se savet ne odnosi na vas."
 
 #: ../data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
@@ -1792,8 +1800,9 @@ msgstr "Kompletno uklanjanje gnome-panela"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1847,8 +1856,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2491,8 +2500,8 @@ msgstr ""
 
 #: ../data/messages:487
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:493
@@ -2978,7 +2987,8 @@ msgstr "Učestalost osvežavanja"
 
 #: ../data/messages:813 ../data/messages:817 ../data/messages:821
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
+msgstr ""
+"u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
 
 #: ../data/messages:815
 msgid "Refresh rate when mouving cursor into the dock :"
@@ -3308,7 +3318,8 @@ msgstr ""
 
 #: ../data/messages:995
 msgid "Choose a default decoration for all desklets :"
-msgstr "Odaberite podrazumevano ulepšavanje za sve programčiće radne površine:"
+msgstr ""
+"Odaberite podrazumevano ulepšavanje za sve programčiće radne površine:"
 
 #: ../data/messages:997
 msgid ""
@@ -3423,7 +3434,8 @@ msgid "Zoom effect"
 msgstr "Efekti zumiranja"
 
 #: ../data/messages:1069
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "postavite na 1 ako ne želite da ikone budu zumirane kada je miš iznad njih."
 
@@ -3547,8 +3559,9 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Ovo je njihova providnost kada je dok neaktivan; oni će se \"materijalizovati"
-"\" postepeno kako dok raste. Što je bliže 0, biće više providan."
+"Ovo je njihova providnost kada je dok neaktivan; oni će se "
+"\"materijalizovati\" postepeno kako dok raste. Što je bliže 0, biće više "
+"providan."
 
 #: ../data/messages:1125
 msgid "Icons' transparency at rest :"
@@ -3560,7 +3573,8 @@ msgstr "Poveži ikonu sa nizom znakova"
 
 #: ../data/messages:1133
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr "Dužina linije niza znakova, u pikselima (0 ne koristiti niz znakova):"
+msgstr ""
+"Dužina linije niza znakova, u pikselima (0 ne koristiti niz znakova):"
 
 #: ../data/messages:1135
 msgid "Colour of the string (red, blue, green, alpha) :"
@@ -3681,8 +3695,8 @@ msgstr "veće"
 
 #: ../data/messages:1187
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Koristi se da indikator prati orijentaciju doka (gore/dole/levo/desno)."
 
@@ -3746,7 +3760,8 @@ msgstr "Na svim ikonama"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr "kada je veći, više natpisa susednih izabranoj ikoni će biti providno."
+msgstr ""
+"kada je veći, više natpisa susednih izabranoj ikoni će biti providno."
 
 #: ../data/messages:1221
 msgid "label's visibility threshold :"
@@ -3985,153 +4000,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "Options"
-#~ msgstr "Opcije"
-
-#~ msgid "TODO"
-#~ msgstr "DORADITI"
-
-#~ msgid "Deleting a dock"
-#~ msgstr "Uklanjam dok"
-
-#~ msgid "Changing the look of a dock"
-#~ msgstr "Menjam izgled doka"
-
-#~ msgid ""
-#~ "If you're on Debian Stable, you can add our 'weekly' ppa (can be "
-#~ "unstable) by clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Ako ste u Debianu (stabilnom), možete dodati naše 'nedeljne' lične arhive "
-#~ "paketa - ppa (mogu biti nestabilne) klikom na ovo dugme:\n"
-#~ " Nakon toga, možete ukloniti sve 'cairo-dock*' pakete, ažurirajte vaš "
-#~ "sistem i ponovo instalirajte 'cairo-dock' paket."
-
-#~ msgid ""
-#~ "If you're on Debian Unstable, you can add our 'weekly' ppa (can be "
-#~ "unstable) by clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Ako ste u Debianu (nestabilnom), možete dodati naše 'nedeljne' lične "
-#~ "arhive paketa - ppa (mogu biti nestabilne) klikom na ovo dugme:\n"
-#~ " Nakon toga, možete ukloniti sve 'cairo-dock*' pakete, ažurirajte vaš "
-#~ "sistem i ponovo instalirajte 'cairo-dock' paket."
-
-#~ msgid "Name of the container it belongs to:"
-#~ msgstr "Naziv kontejnera kom pripada:"
-
-#~ msgid "Sub-dock's name :"
-#~ msgstr "Naziv pod-doka:"
-
-#~ msgid "How to render the icon :"
-#~ msgstr "Kako iscrtati ikonu:"
-
-#~ msgid "Use an image"
-#~ msgstr "Koristi sliku"
-
-#~ msgid "Draw sub-dock's content as emblems"
-#~ msgstr "Isrtaj sadržaj pod-doka kao simbol"
-
-#~ msgid "Draw sub-dock's content as stack"
-#~ msgstr "Iscrtaj sadržaj pod-doka naslagano"
-
-#~ msgid "Draw sub-dock's content inside a box"
-#~ msgstr "Iscrtaj sadržaj pod-doka u okviru"
-
-#~ msgid "Image's name or path :"
-#~ msgstr "Naziv slike ili putanja:"
-
-#~ msgid "Extra parameters"
-#~ msgstr "Dodatni parametri"
-
-#~ msgid "Name of the view used for the sub-dock :"
-#~ msgstr "Naziv prikaza koji se koristi za pod-dok:"
-
-#~ msgid "If '0' the container will be displayed on every viewport."
-#~ msgstr "Ako je '0', kontejner će biti prikazan u svakom viewportu."
-
-#~ msgid "Only show in this specific viewport"
-#~ msgstr "Prikaži samo na određenom viewportu"
-
-#~ msgid "Order you want for this launcher among the others:"
-#~ msgstr "Redosled koji, između ostalih, želite za ovaj pokretač:"
-
-#~ msgid "Launcher's name :"
-#~ msgstr "Naziv pokretača"
-
-#~ msgid "URI of the file :"
-#~ msgstr "URI fajla:"
-
-#~ msgid "Number of files to list in the sub-dock :"
-#~ msgstr "Broj linija za listanje u pod-doku:"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "20"
-#~ msgstr "20"
-
-#~ msgid "30"
-#~ msgstr "30"
-
-#~ msgid "Sort files by :"
-#~ msgstr "Sortiraj fajlove po:"
-
-#~ msgid "Name"
-#~ msgstr "Naziv"
-
-#~ msgid "Size"
-#~ msgstr "Veličina"
-
-#~ msgid "Date"
-#~ msgstr "Datum"
-
-#~ msgid "If '0' the launcher will be displayed on every viewport."
-#~ msgstr "Ako je '0', pokretač će biti prikazan u svakom Viewportu."
-
-#~ msgid ""
-#~ "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a "
-#~ "keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
-#~ msgstr ""
-#~ "Primer: nautilus --no-desktop, gedit, itd. Možete uneti čak i prečice sa "
-#~ "tastature, na primer <Alt>F1, <Ctrl>c, <Ctrl>v, itd"
-
-#~ msgid "Command to launch on click :"
-#~ msgstr "Naredba koju treba pokrenuti na klik:"
-
-#~ msgid ""
-#~ "If you choosed to mix launcher and applis, this option will deactivate "
-#~ "this behaviour for this launcher only. It can be useful for instance for "
-#~ "a launcher that launches a script in a terminal, but you don't want it to "
-#~ "steal the Terminal's icon from the Taskbar."
-#~ msgstr ""
-#~ "Ako ste odabrali izmešane pokretače i programe, ova opcija će ukinuti "
-#~ "ovakvo ponašanje samo za pokretače. Ovo može biti korisno, na primer, za "
-#~ "pokretač koji pokreće skript u terminali, ali ne želite da oduzmete ikonu "
-#~ "terminala sa trake poslova."
-
-#~ msgid "Prevent this launcher from stealing this application from taskbar ?"
-#~ msgstr "Onemogućiti ovaj pokretač da ukrade program sa trake poslova?"
-
-#~ msgid ""
-#~ "The only reason you may want to modify this parameter is if you made this "
-#~ "launcher by hands. If you dropped it into the dock from the menu, it is "
-#~ "nearly sure that you shouldn't touch it. It defines the class of the "
-#~ "program, which is useful to link the appli with its launcher."
-#~ msgstr ""
-#~ "Jedini razlog izmene ovog parametra je ako ste ručno kreirali ovaj "
-#~ "pokretač. Ako ste ga ispustili u dok sa menija, vrlo je verovatno da nisu "
-#~ "potrebne izmene. Ovaj paremetar definiše klasu programa, što je korisno "
-#~ "za linkovanje appli(ja) sa svojim pokretačem."
-
-#~ msgid "Class of the program :"
-#~ msgstr "Klasa programa:"
-
-#~ msgid "Run in a terminal ?"
-#~ msgstr "Pokrenuti u terminalu?"

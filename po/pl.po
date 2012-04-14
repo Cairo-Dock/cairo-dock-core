@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-03-21 02:58+0000\n"
-"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
+"POT-Creation-Date: 2012-04-12 00:33+0000\n"
+"PO-Revision-Date: 2012-04-05 15:27+0000\n"
+"Last-Translator: Andrzej Król <andrzej.krol@poczta.onet.eu>\n"
 "Language-Team: Polish <pl@li.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-22 04:45+0000\n"
-"X-Generator: Launchpad (build 14981)\n"
+"X-Launchpad-Export-Date: 2012-04-13 05:22+0000\n"
+"X-Generator: Launchpad (build 15070)\n"
+"Language: pl\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -70,15 +71,15 @@ msgstr "kategoria"
 
 #: ../src/cairo-dock-gui-commons.c:575
 msgid "Press the shortkey"
-msgstr ""
+msgstr "Naciśnij skrót klawiszowy"
 
 #: ../src/cairo-dock-gui-commons.c:594
 msgid "Change the shortkey"
-msgstr ""
+msgstr "Zmiana skrótu klawiszowego"
 
 #: ../src/cairo-dock-gui-commons.c:681
 msgid "Origin"
-msgstr ""
+msgstr "Pochodzenie"
 
 #: ../src/cairo-dock-gui-commons.c:686
 msgid "Action"
@@ -86,11 +87,13 @@ msgstr "Działanie"
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
-msgstr ""
+msgstr "Skrót klawiszowy"
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Najważniejsze opcje docka są dostępne w głównym oknie konfiguracyjnym."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Najważniejsze opcje docka są dostępne w głównym oknie konfiguracyjnym."
 
 #: ../src/cairo-dock-gui-items.c:460
 msgid "Launcher configuration"
@@ -153,7 +156,7 @@ msgstr "Zdefiniuj wszystkie dostępne aktualnie skróty klawiszowe."
 
 #: ../src/cairo-dock-gui-main.c:1502 ../data/messages:515 ../data/messages:767
 msgid "Shortkeys"
-msgstr ""
+msgstr "Skróty klawiszowe"
 
 #: ../src/cairo-dock-gui-main.c:1508
 msgid "All of the parameters you will never want to tweak."
@@ -309,7 +312,8 @@ msgid "Effects:"
 msgstr "Efekt:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknij na aplet żeby zobaczyć jego podgląd i opis."
 
 #: ../src/cairo-dock-gui-simple.c:823
@@ -409,7 +413,7 @@ msgstr "Strona internetowa"
 
 #: ../src/cairo-dock-menu.c:281
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr ""
+msgstr "Beta-testy / Sugestie / Forum"
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
@@ -421,6 +425,7 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Adam Maćkowiak https://launchpad.net/~admc\n"
 "  Andrzej Król https://launchpad.net/~andrzej001\n"
+"  Fabounet https://launchpad.net/~fabounet03\n"
 "  Maciej Małecki https://launchpad.net/~maciej-malecki\n"
 "  NINa https://launchpad.net/~factory\n"
 "  Rafał Rudzik https://launchpad.net/~rrudzik\n"
@@ -506,7 +511,7 @@ msgstr "Własny skrót"
 #: ../src/cairo-dock-menu.c:576
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
-msgstr ""
+msgstr "Zazwyczaj można przeciągnąć aktywator z menu i upuścić go na doku."
 
 #: ../src/cairo-dock-menu.c:593
 msgid "separator"
@@ -603,7 +608,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Uruchamianie Cairo-Dock przy starcie"
 
 #: ../src/cairo-dock-menu.c:958
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Aplety innych dostawców zapewniają integrację z wieloma programami, na "
 "przykład Pidginem"
@@ -776,7 +782,7 @@ msgstr "środkowy przycisk"
 #: ../src/cairo-dock-menu.c:1666 ../src/cairo-dock-menu.c:1668
 #: ../data/messages:745
 msgid "Lower"
-msgstr ""
+msgstr "Niżej"
 
 #: ../src/cairo-dock-menu.c:1674 ../src/cairo-dock-menu.c:1676
 #: ../data/messages:739
@@ -856,11 +862,11 @@ msgstr ""
 
 #: ../src/cairo-dock.c:334
 msgid "Ask again on startup which backend to use."
-msgstr ""
+msgstr "Zapytaj ponownie przy starcie jakiego użyć mechanizmu."
 
 #: ../src/cairo-dock.c:337
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr ""
+msgstr "Wymuś na doku uwzględnienie tego środowiska -używaj tego z rozwagą."
 
 #: ../src/cairo-dock.c:340
 msgid ""
@@ -895,6 +901,7 @@ msgstr ""
 #: ../src/cairo-dock.c:352
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr ""
+"Wyłącz daną wtyczkę z aktywowania (aczkolwiek nadal jest załadowana)."
 
 #: ../src/cairo-dock.c:355
 msgid "Don't load any plug-ins."
@@ -934,6 +941,8 @@ msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
+"Zapytaj czy dok ma wczytać dodatkowe moduły zawarte w tym katalogu (jednakże "
+"jest to niebezpieczne dla twojego doku żeby wczytywał nieoficjalne moduły)."
 
 #: ../src/cairo-dock.c:383
 msgid ""
@@ -1039,7 +1048,7 @@ msgstr "Lewy dok"
 #: ../src/gldit/cairo-dock-dock-manager.c:1656
 #: ../src/gldit/cairo-dock-dock-manager.c:1757
 msgid "Pop up the main dock"
-msgstr ""
+msgstr "Pojawianie się głównego doku"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1160,6 +1169,8 @@ msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
+"Nie można uzyskać dostępu zdalnego pliku %s. Być może serwer nie działa.\n"
+"Prosimy spróbować później lub skontaktować się z nami na glx-dock.org."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:267
 #, c-format
@@ -1317,6 +1328,11 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
+"Większość ikon na doku posiada kilka funkcji: główna funkcja pod prawym "
+"przyciskiem, druga funkcja pod środkowym przyciskiem, i dodatkową funkcję "
+"pod prawym przyciskiem (w menu).\n"
+"Pewne aplety pozwolą ci powiązać skróty klawiszowe z funkcją, i decyduj "
+"która funkcja powinna być pod środkowym przyciskiem."
 
 #: ../data/messages:7
 msgid "Adding features"
@@ -1370,7 +1386,7 @@ msgstr ""
 
 #: ../data/messages:21
 msgid "Grouping icons into a sub-dock"
-msgstr ""
+msgstr "Zgrupuj ikony w pod-dok"
 
 #: ../data/messages:23
 msgid ""
@@ -1379,6 +1395,10 @@ msgid ""
 "To move an icon into the sub-dock, right-click on an icon -> move to another "
 "dock -> select the sub-dock's name."
 msgstr ""
+"Można zgrupować ikony w \"pod-dok\".\n"
+"Żeby dodać pod-dok, prawo-klik na doku -> dodaj -> pod-dok.\n"
+"Żeby przesunąć ikonę do pod-doku, prawo-klik na ikonie -> Przesuń do innego "
+"doku -> wybierz nazwę pod-doku."
 
 #: ../data/messages:25
 msgid "Moving icons"
@@ -1462,8 +1482,9 @@ msgid ""
 msgstr ""
 "Można dodawać odstępy pomiędzy ikonami przez kliknięcie prawym-przyciskiem "
 "na doku -> dodaj -> odstęp.\n"
-"Jeśli włączono opcję oddzielenia ikon różnych typów (aktywator/aplikacje/"
-"aplet), odstęp zostanie dodany automatycznie pomiędzy każdą grupą.\n"
+"Jeśli włączono opcję oddzielenia ikon różnych typów "
+"(aktywator/aplikacje/aplet), odstęp zostanie dodany automatycznie pomiędzy "
+"każdą grupą.\n"
 "W widoku \"panel\" odstępy będą przedstawione jako luka między ikonami."
 
 #: ../data/messages:43
@@ -1499,7 +1520,7 @@ msgstr ""
 
 #: ../data/messages:51
 msgid "Minimizing / restauring a window"
-msgstr ""
+msgstr "Minimalizowanie / odnowienie okna"
 
 #: ../data/messages:53
 msgid ""
@@ -1556,7 +1577,7 @@ msgstr "Ustawienia niestandardowej ikony dla aplikacji"
 
 #: ../data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr ""
+msgstr "Zobacz \"Zmiana zdjęcia ikon\" w kategorii \"Ikony\"."
 
 #: ../data/messages:71
 msgid "Showing windows preview over the icons"
@@ -1606,7 +1627,7 @@ msgstr ""
 
 #: ../data/messages:85
 msgid "Hiding the dock to use all the screen"
-msgstr ""
+msgstr "Ukrywanie doku do wykorzystania wszystkich ekranów"
 
 #: ../data/messages:87
 msgid ""
@@ -1659,7 +1680,7 @@ msgstr ""
 
 #: ../data/messages:99
 msgid "Placing desklets"
-msgstr ""
+msgstr "Umieszczanie deskletów"
 
 #: ../data/messages:101
 msgid ""
@@ -1747,6 +1768,9 @@ msgid ""
 "Right-click on it -> \"show all the desktop\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Aktywacja bądź apletu Przełącznika lub apletu Pokaż-Pulpit.\n"
+"Prawo-klik na nim -> \"Pokaż wszystkie pulpity\".\n"
+"Można połączyć tą funkcję do środkowego-przycisku."
 
 #: ../data/messages:121
 msgid "Changing the screen resolution"
@@ -1830,7 +1854,7 @@ msgstr ""
 
 #: ../data/messages:141
 msgid "Adding a file or a web page into the dock"
-msgstr ""
+msgstr "Dodanie pliku lub strony www do doku"
 
 #: ../data/messages:143
 msgid ""
@@ -1841,10 +1865,15 @@ msgid ""
 "You can have several Stacks, and you can drop files/links onto a Stack "
 "directly."
 msgstr ""
+"Przeciągnij i upuść plik lub link html na dok (animowana strzałka powinna "
+"się pojawić kiedy można upuścić).\n"
+"Zostanie to dodane do Stosu. Stos jest pod-dokiem, który może zawierać pliki "
+"lub linki do których jest szybki dostęp.\n"
+"Można mieć kilka Stosów i można upuszczać pliki/linki bezpośrednio do Stosu."
 
 #: ../data/messages:145
 msgid "Importing a folder into the dock"
-msgstr ""
+msgstr "Importowanie folderu do doku"
 
 #: ../data/messages:147
 msgid ""
@@ -1852,10 +1881,13 @@ msgid ""
 "appear when you can drop).\n"
 "You can choose to import the folder's files or not."
 msgstr ""
+"Przeciągnij i upuść folder na dok (animowana strzałka powinna się pojawić "
+"kiedy można upuścić).\n"
+"Możesz wybrać importuj folder lub nie."
 
 #: ../data/messages:149
 msgid "Accessing the recent events"
-msgstr ""
+msgstr "Dostęp do ostatnich zdarzeń"
 
 #: ../data/messages:151
 msgid ""
@@ -1891,7 +1923,7 @@ msgstr ""
 
 #: ../data/messages:157
 msgid "Accessing disks"
-msgstr ""
+msgstr "Udostępnianie dysków"
 
 #: ../data/messages:159
 msgid ""
@@ -1908,7 +1940,7 @@ msgstr ""
 
 #: ../data/messages:161
 msgid "Accessing folder bookmarks"
-msgstr ""
+msgstr "Udostępnianie folderu z zakładkami"
 
 #: ../data/messages:163
 msgid ""
@@ -1954,6 +1986,10 @@ msgid ""
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
 "You can even name each of them."
 msgstr ""
+"Aktywacja apletu Przełącznik.\n"
+"Naciśnij prawy przycisk myszy na nim -> \"Dodaj pulpit\" lub \"Usuń ten "
+"pulpit\".\n"
+"Można nawet nadać im nazwę."
 
 #: ../data/messages:173
 msgid "Controling the sound volume"
@@ -1991,8 +2027,9 @@ msgstr "Całkowite usuwanie gnome-panel"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2049,8 +2086,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Należy włączyć kompozycje. Dla przykładu można użyć Compiz albo xcompmgr.\n"
 "Jeśli w użyciu jest XFCE lub KDE, można uruchomić kompozycje w opcjach "
@@ -2140,6 +2177,12 @@ msgid ""
 "search on the web how to do it (basically, you have to set up the "
 "\"http_proxy\" environment variable)."
 msgstr ""
+"Upewnij się że jesteś połączony do sieci.\n"
+"Jeśli połączenie jest bardzo wolne można zwiększyć limit czasu połączenia w "
+"module \"System\".\n"
+"Jeśli używany jest proxy to można skonfigurować \"curl\" do wykorzystania; "
+"Poszukaj w sieci jak to zrobić (w zasadzie trzeba skonfigurować zmienne w "
+"środowisku \"http_proxy\")."
 
 #: ../data/messages:229
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
@@ -2161,10 +2204,15 @@ msgid ""
 "«ifconfig» in a terminal, and ignore the «loop» interface. It's probably "
 "something like «eth1», «ath0», or «wifi0».."
 msgstr ""
+"Trzeba nakazać apletowi który interfejs używasz do połączenia z siecią "
+"(domyślnie jest to «eth0»).\n"
+"Wystarczy edytować jego konfigurację i wpisać nazwę interfejsu. Żeby go "
+"znaleźć wpisz «ifconfig» w terminalu i zignoruj interfejs «pętli». "
+"Prawdopodobnie jest to «eth1», «ath0», albo «wifi0».."
 
 #: ../data/messages:235
 msgid "The dustbin remains empty even when I delete a file."
-msgstr ""
+msgstr "Kosz pozostaje pusty nawet kiedy usuwam plik."
 
 #: ../data/messages:237
 msgid ""
@@ -2191,8 +2239,8 @@ msgid ""
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
 "W Gnome jest opcja nadpisania doku. W celu włączenia ikon w menu otwórz "
-"'gconf-editor', idź do Desktop / Gnome / Interface i włącz \"menus have icons"
-"\" oraz opcję \"buttons have icons\". "
+"'gconf-editor', idź do Desktop / Gnome / Interface i włącz \"menus have "
+"icons\" oraz opcję \"buttons have icons\". "
 
 #: ../data/messages:245
 msgid "If you're on Gnome you can click on this button:"
@@ -2358,11 +2406,11 @@ msgstr "Ikona"
 
 #: ../data/messages:307
 msgid "Name of the dock it belongs to:"
-msgstr ""
+msgstr "Nazwa doku należy do:"
 
 #: ../data/messages:309
 msgid "Name of the icon as it will appear in its caption in the dock:"
-msgstr ""
+msgstr "Nazwa ikony jaka jest pojawi się w podpisie doku:"
 
 #: ../data/messages:311
 msgid "Leave empty to use the default one."
@@ -2386,7 +2434,7 @@ msgstr "Podręcznik apletów"
 
 #: ../data/messages:321
 msgid "Desklet"
-msgstr ""
+msgstr "Desklet"
 
 #: ../data/messages:325
 msgid ""
@@ -2473,6 +2521,7 @@ msgstr "Dekoracje"
 #: ../data/messages:363
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
+"Wybierz 'własne dekoracje' dla określenia własnych dekoracji poniżej."
 
 #: ../data/messages:365
 msgid "Choose a decoration theme for this desklet:"
@@ -2482,6 +2531,8 @@ msgstr "Wybierz motyw dekoracji dla tego deskletu:"
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
+"Obraz będzie wyświetlany po przeciągnięciu poniżej rysunku np. ramki. "
+"Pozostaw puste dla braku obrazu."
 
 #: ../data/messages:369
 msgid "Background image:"
@@ -2493,7 +2544,7 @@ msgstr "Przezroczystość tła:"
 
 #: ../data/messages:373
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr ""
+msgstr "W pikselach. Użyj tego ay dostosować lewą pozycję rysunku."
 
 #: ../data/messages:375
 msgid "Left offset:"
@@ -2501,7 +2552,7 @@ msgstr "Przesunięcie w lewo:"
 
 #: ../data/messages:377
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr ""
+msgstr "W pikselach. Użyj tego ay dostosować górną pozycję rysunku."
 
 #: ../data/messages:379
 msgid "Top offset:"
@@ -2517,7 +2568,7 @@ msgstr "Przesunięcie w prawo:"
 
 #: ../data/messages:385
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr ""
+msgstr "W pikselach. Użyj tego aby dostosować dolną pozycję rysunku."
 
 #: ../data/messages:387
 msgid "Bottom offset:"
@@ -2627,7 +2678,7 @@ msgstr "Skrót wywołujący dok:"
 
 #: ../data/messages:447
 msgid "Visibility of sub-docks"
-msgstr ""
+msgstr "Widzialność pod-doków"
 
 #: ../data/messages:449 ../data/messages:647
 msgid ""
@@ -2653,6 +2704,13 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
+"Żaden : Nie pokazuj otwartych okien w doku.\n"
+"Minimalistyczny : Mix aplikacji z jej aktywatorami, pokazuje inne okna tylko "
+"jeśli są one zminimalizowane (jak w MacOSX).\n"
+"Zintegrowany : Mix aplikacji z jej aktywatorami, pokazuje wszystkie inne "
+"okna i grupuje je razem w pod-dok (domyślny).\n"
+"Rozdzielony : Oddziela pasek zadań od aktywatorów i pokazuje tylko okna "
+"które są na bieżącym pulpicie."
 
 #: ../data/messages:461
 msgid "Behaviour of the Taskbar:"
@@ -2660,15 +2718,15 @@ msgstr "Zachowanie paska zadań:"
 
 #: ../data/messages:465
 msgid "Minimalistic"
-msgstr ""
+msgstr "Minimalistycznie"
 
 #: ../data/messages:467
 msgid "Integrated"
-msgstr ""
+msgstr "Zintegrowany"
 
 #: ../data/messages:469
 msgid "Separated"
-msgstr ""
+msgstr "Oddzielony"
 
 #: ../data/messages:471 ../data/messages:679
 msgid "Place new icons"
@@ -2688,7 +2746,7 @@ msgstr ""
 
 #: ../data/messages:479 ../data/messages:687
 msgid "At the end of the dock"
-msgstr ""
+msgstr "Na końcu doka"
 
 #: ../data/messages:481
 msgid "Icons' animations and effects"
@@ -2696,12 +2754,12 @@ msgstr "Animacje i efekty ikon"
 
 #: ../data/messages:483
 msgid "& On mouse hover:"
-msgstr ""
+msgstr "&  Po najechaniu myszą:"
 
 #: ../data/messages:487
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:493
@@ -2746,7 +2804,7 @@ msgstr "Wybierz domyślny wygląd dla sub-doku :"
 
 #: ../data/messages:517 ../data/messages:769
 msgid "Keyboard shortcuts currently available"
-msgstr ""
+msgstr "Dostępne aktualnie skróty klawiszowe"
 
 #: ../data/messages:519 ../data/messages:771
 msgid ""
@@ -2755,6 +2813,8 @@ msgid ""
 "Double-click on a line, and press the shortkey you want to use for the "
 "corresponding action."
 msgstr ""
+"Wiele apletów dostarcza skróty klawiszowe dla swoich działań. Kiedy aplet "
+"zostanie włączony, jego skrót klawiszowy zostanie udostępniony."
 
 #: ../data/messages:521
 msgid "Add-ons"
@@ -2862,11 +2922,11 @@ msgstr ""
 
 #: ../data/messages:617
 msgid "high"
-msgstr ""
+msgstr "wysoki"
 
 #: ../data/messages:619
 msgid "low"
-msgstr ""
+msgstr "niski"
 
 #: ../data/messages:621
 msgid "How to call the dock back:"
@@ -2905,6 +2965,9 @@ msgid ""
 "This is only usefull if you do not already use auto-hide and if your Window "
 "Manager allows the dock in front of fullscreen windows (which is rare)."
 msgstr ""
+"Jest to użyteczne jeśli jeszcze nie używasz auto-ukrywania, oraz jeśli "
+"Menedżer Okien pozwala na dok z przodu w oknach pełnoekranowych (co jest "
+"rzadkie)."
 
 #: ../data/messages:643
 msgid "Automatically hide the dock when a window becomes full screen?"
@@ -2924,7 +2987,7 @@ msgstr "Opóźnienie przed wyświetleniem sub-doku:"
 
 #: ../data/messages:661
 msgid "Delay before leaving a sub-dock takes effect:"
-msgstr ""
+msgstr "Opóżnienie zanim opuszczenie pod-doka zostanie wykonane:"
 
 #: ../data/messages:663
 msgid "TaskBar"
@@ -2948,6 +3011,9 @@ msgid ""
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 msgstr ""
+"Pozwolenie aktywatorowi na działanie jako aplikacja, kiedy ich programy są "
+"uruchomione oraz wyświetlić wskaźnik na ikonie. Można uruchomić inne "
+"instancje programu z SHIFT+klik."
 
 #: ../data/messages:673
 msgid "Mix launchers and applications"
@@ -3009,6 +3075,8 @@ msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
+"Menedżer kompozycji jest wymagany żeby wyświetlić miniaturę.\n"
+"OpenGL jest wymagany do utworzenia ikony giętkiej wstecz."
 
 #: ../data/messages:713
 msgid "How to draw minimised windows ?"
@@ -3058,7 +3126,7 @@ msgstr "Interakcja"
 
 #: ../data/messages:735
 msgid "Action on middle-click on the related application"
-msgstr ""
+msgstr "Działanie pod środkowym przyciskiem powiązanej aplikacji"
 
 #: ../data/messages:737
 msgid "Nothing"
@@ -3169,6 +3237,7 @@ msgstr "Częstotliwość odświeżania"
 #: ../data/messages:813 ../data/messages:817 ../data/messages:821
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr ""
+"w Hercach (Hz). Dla dostosowania zachowania w stosunku do możliwości CPU."
 
 #: ../data/messages:815
 msgid "Refresh rate when mouving cursor into the dock :"
@@ -3176,21 +3245,23 @@ msgstr "Częstotliwość odświeżania kiedy kursor jest przemieszczany na doku 
 
 #: ../data/messages:819
 msgid "&[15;60] Animation frequency for the OpenGL backend :"
-msgstr ""
+msgstr "&[15;60] Częstotliwość animacji dla mechanizmu OpenGL :"
 
 #: ../data/messages:823
 msgid "*[15;50] Animation frequency for the Cairo backend :"
-msgstr ""
+msgstr "&[15;60] Częstotliwość animacji dla mechanizmu Cairo :"
 
 #: ../data/messages:825
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
 msgstr ""
+"Przezroczystość wzorca gradacji będzie przeliczona w czasie rzeczywistym. "
+"Może wymagać więcej mocy CPU."
 
 #: ../data/messages:827
 msgid "* Reflections should be calculated in real-time?"
-msgstr ""
+msgstr "* Odbicia powinny być przeliczane w czasie rzeczywistym?"
 
 #: ../data/messages:829
 msgid "Composition"
@@ -3220,6 +3291,9 @@ msgid ""
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
+"Maksymalny czas w sekundach na zrealizowanie połączenia z serwerem. To "
+"ogranicza tylko fazę łączenia, kiedy dok nawiąże połączenie ta opcja nie "
+"będzie już do użycia."
 
 #: ../data/messages:839
 msgid "Connection timeout :"
@@ -3294,6 +3368,8 @@ msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
 msgstr ""
+"Każdy format dozwolony; jeśli jest pusty kolor gradacji zostanie użyty jako "
+"tryb awaryjny."
 
 #: ../data/messages:879 ../data/messages:1355
 msgid "Image filename to use as a background :"
@@ -3305,7 +3381,7 @@ msgstr "Przezroczystość obrazu:"
 
 #: ../data/messages:887 ../data/messages:1357
 msgid "Repeat image as a pattern to fill background?"
-msgstr ""
+msgstr "Powtórzyć obraz jako wzorzec do wypełnienia tła?"
 
 #: ../data/messages:889
 msgid "Use a colour gradation."
@@ -3325,7 +3401,7 @@ msgstr "W stopniach, stosunek do pionu"
 
 #: ../data/messages:899
 msgid "Angle of the gradation :"
-msgstr ""
+msgstr "Kąt gradacji :"
 
 #: ../data/messages:901
 msgid "If not nul, it will form stripes."
@@ -3341,15 +3417,15 @@ msgstr "Procent jasnego koloru:"
 
 #: ../data/messages:907
 msgid "Background when hidden"
-msgstr ""
+msgstr "Tło kiedy schowany"
 
 #: ../data/messages:909
 msgid "Several applets can be visible even when the dock is hidden"
-msgstr ""
+msgstr "Poszczególne aplety mogą być widoczne nawet jeśli dok jest schowany"
 
 #: ../data/messages:911
 msgid "Default background color when the dock is hidden"
-msgstr ""
+msgstr "Domyślny kolor tła kiedy dok jest schowany"
 
 #: ../data/messages:913 ../data/messages:1363
 msgid "Stretch the dock to always fill the screen"
@@ -3397,10 +3473,12 @@ msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
 msgstr ""
+"Można określić współczynnik rozmiaru ikon pod-doka, w stosunku do rozmiaru "
+"ikon głównego doka"
 
 #: ../data/messages:947
 msgid "Ratio for the size of the sub-docks' icons :"
-msgstr ""
+msgstr "Współczynnik dla rozmiaru ikon pod-doka:"
 
 #: ../data/messages:949 ../data/messages:1183
 msgid "smaller"
@@ -3473,7 +3551,7 @@ msgstr "Nazwa dla używanego obrazu dla przycisku no/cancel :"
 
 #: ../data/messages:987
 msgid "Size of the icon displayed next to the text :"
-msgstr ""
+msgstr "Rozmiar ikon wyświetlany obok tekstu :"
 
 #: ../data/messages:993
 msgid ""
@@ -3517,7 +3595,7 @@ msgstr "W pikselach. Użyj tego aby dostosować górną pozycję rysunku."
 
 #: ../data/messages:1013
 msgid "Top offset :"
-msgstr ""
+msgstr "Górne przesunięcie :"
 
 #: ../data/messages:1015
 msgid "in pixels. Use this to adjust the right position of the drawings."
@@ -3525,7 +3603,7 @@ msgstr "W pikselach. Użyj tego aby dostosować prawą pozycję rysunku."
 
 #: ../data/messages:1017
 msgid "Right offset :"
-msgstr ""
+msgstr "Prawe przesunięcie :"
 
 #: ../data/messages:1019
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
@@ -3533,7 +3611,7 @@ msgstr "W pikselach. Użyj tego aby dostosować górną pozycję rysunku."
 
 #: ../data/messages:1021
 msgid "Bottom offset :"
-msgstr ""
+msgstr "Dolne przesunięcie"
 
 #: ../data/messages:1023
 msgid ""
@@ -3598,7 +3676,8 @@ msgid "Zoom effect"
 msgstr "Efekt Powiększania"
 
 #: ../data/messages:1069
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1071
@@ -3844,9 +3923,10 @@ msgstr "większy"
 
 #: ../data/messages:1187
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
-msgstr "Użyj tego aby wskaźnik śledził orientację doka (góra/dół/prawo/lewo)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
+msgstr ""
+"Użyj tego aby wskaźnik śledził orientację doka (góra/dół/prawo/lewo)."
 
 #: ../data/messages:1189
 msgid "Rotate the indicator with dock?"
@@ -4142,91 +4222,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "Options"
-#~ msgstr "Opcje"
-
-#~ msgid "Having more than one dock"
-#~ msgstr "Posiadanie więcej niż jednego doku"
-
-#~ msgid "TODO"
-#~ msgstr "Do zrobienia"
-
-#~ msgid "Deleting a dock"
-#~ msgstr "Usuwanie doku"
-
-#~ msgid "Changing the look of a dock"
-#~ msgstr "Zmiana wyglądu doku"
-
-#~ msgid "Name of the container it belongs to:"
-#~ msgstr "Nazwa kontenera należy do:"
-
-#~ msgid "Sub-dock's name :"
-#~ msgstr "Nazwa sub-doku :"
-
-#~ msgid "How to render the icon :"
-#~ msgstr "Jak renderować ikonę :"
-
-#~ msgid "Use an image"
-#~ msgstr "Użyj obrazu"
-
-#~ msgid "Image's name or path :"
-#~ msgstr "Nazwa obrazu lub ścieżka :"
-
-#~ msgid "Extra parameters"
-#~ msgstr "Dodatkowe parametry"
-
-#~ msgid "Name of the view used for the sub-dock :"
-#~ msgstr "Nazwa widoku użyta dla sub-doka :"
-
-#~ msgid "Only show in this specific viewport"
-#~ msgstr "Pokaż tylko w tym specyficznym viewporcie"
-
-#~ msgid "Launcher's name :"
-#~ msgstr "Nazwa aktywatora :"
-
-#~ msgid "URI of the file :"
-#~ msgstr "URl pliku :"
-
-#~ msgid "Number of files to list in the sub-dock :"
-#~ msgstr "Liczba plików do listy w pod-doku :"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "20"
-#~ msgstr "20"
-
-#~ msgid "30"
-#~ msgstr "30"
-
-#~ msgid "Sort files by :"
-#~ msgstr "Uporządkuj pliki według:"
-
-#~ msgid "Name"
-#~ msgstr "nazwy"
-
-#~ msgid "Size"
-#~ msgstr "rozmiaru"
-
-#~ msgid "Date"
-#~ msgstr "daty"
-
-#~ msgid ""
-#~ "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a "
-#~ "keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
-#~ msgstr ""
-#~ "Przykład : nautilus --no-desktop, gedit, itd. Można nawet wprowadzić "
-#~ "skrót klawiszowy jak np. <Alt>F1, <Ctrl>c, <Ctrl>v, itd"
-
-#~ msgid "Class of the program :"
-#~ msgstr "Klasa programu :"
-
-#~ msgid "Run in a terminal ?"
-#~ msgstr "Uruchomić w terminalu ?"
-
-#~ msgid "Separators' appearance is defined in the global configuration."
-#~ msgstr "Wygląd odstępów jest zdefiniowany w konfiguracji globalnej."

@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-03-21 03:02+0000\n"
+"POT-Creation-Date: 2012-04-12 00:33+0000\n"
+"PO-Revision-Date: 2012-03-22 13:48+0000\n"
 "Last-Translator: Mattia Tavernini <maathias@interfree.it>\n"
 "Language-Team: Italian <kde-i18n-it@lists.kde.org>\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-22 04:45+0000\n"
-"X-Generator: Launchpad (build 14981)\n"
+"X-Launchpad-Export-Date: 2012-04-13 05:21+0000\n"
+"X-Generator: Launchpad (build 15070)\n"
+"Language: it\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -89,7 +90,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "I parametri della dock principale si trovano nella finestra di "
 "configurazione principale."
@@ -311,7 +313,8 @@ msgid "Effects:"
 msgstr "Effetti:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Clicca su di un'applet per averne un'anteprima e una sua descrizione"
 
 #: ../src/cairo-dock-gui-simple.c:823
@@ -424,7 +427,8 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Andrea Amoroso https://launchpad.net/~heiko81\n"
-"  Mario Calabrese https://launchpad.net/~mario-calabrese"
+"  Mario Calabrese https://launchpad.net/~mario-calabrese\n"
+"  Mattia Tavernini https://launchpad.net/~maathias"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -602,7 +606,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Lancia Cairo-Dock all'avvio"
 
 #: ../src/cairo-dock-menu.c:958
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Le applet di terze-parti provvedono all'integrazione di molti programmi, "
 "come Pidgin"
@@ -917,7 +922,8 @@ msgstr "Stampa la versione ed esci."
 
 #: ../src/cairo-dock.c:367
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr "Blocca la dock cosicché sia impossibile da modificare per gli utenti."
+msgstr ""
+"Blocca la dock cosicché sia impossibile da modificare per gli utenti."
 
 #: ../src/cairo-dock.c:371
 msgid "Keep the dock above other windows whatever."
@@ -1805,7 +1811,8 @@ msgstr ""
 
 #: ../data/messages:129
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr "Lanciare rapidamente un programma dalla tastiera (sostituisce Alt+F2)"
+msgstr ""
+"Lanciare rapidamente un programma dalla tastiera (sostituisce Alt+F2)"
 
 #: ../data/messages:131
 msgid ""
@@ -1978,8 +1985,8 @@ msgid ""
 msgstr ""
 "Qualche applet può avere molteplici istanze avviate allo stesso momento: "
 "Orologio, Recipiente, Meteo, ...\n"
-"Clic destro sull'icona dell'applet - > \"Lancia un'altra istanza dell'applet"
-"\".\n"
+"Clic destro sull'icona dell'applet - > \"Lancia un'altra istanza "
+"dell'applet\".\n"
 "Puoi configurare ogni istanza in modo indipendente. Questo permette, ad "
 "esempio, di avere l'ora attuale di differenti paesi nella tua dock, oppure "
 "il meteo di diverse città."
@@ -2035,13 +2042,15 @@ msgstr "Rimuovi completamente il pannello di gnome"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Apri gconf-editor, modifica la chiave /desktop/gnome/session/"
-"required_components/panel e rimpiazza il suo contenuto con \"cairo-dock\".\n"
+"Apri gconf-editor, modifica la chiave "
+"/desktop/gnome/session/required_components/panel e rimpiazza il suo "
+"contenuto con \"cairo-dock\".\n"
 "Successivamente fai ripartire la sessione: il pannello gnome non si avvierà, "
 "mentre la dock si (se non accadesse puoi inserirla tra i programmi di avvio)."
 
@@ -2092,16 +2101,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Hai bisogno di avviare il compositing. Ad esempio, puoi avviare Compiz o "
 "xcompmgr. \n"
 "Se usi XFCE o KDE, basta soltanto abilitare il compositing nelle opzioni del "
 "gestore delle finestre.\n"
 "Se usi Gnome, puoi abilitarlo in Metacity a questa maniera:\n"
-" Apri gconf-editor, e modifica la chiave '/apps/metacity/general/"
-"compositing_manager' cambiandola in 'true'."
+" Apri gconf-editor, e modifica la chiave "
+"'/apps/metacity/general/compositing_manager' cambiandola in 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -2377,8 +2386,8 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
-"Se stai utilizzando Ubuntu puoi aggiungere il nostro repository \"weekly"
-"\" (potrebbe essere instabile) cliccando su questo pulsante:\n"
+"Se stai utilizzando Ubuntu puoi aggiungere il nostro repository \"weekly\" "
+"(potrebbe essere instabile) cliccando su questo pulsante:\n"
 " Successivamente puoi lanciare il tuo update-manager per installare l'ultima "
 "versione settimanale."
 
@@ -2464,8 +2473,8 @@ msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
-"In base al Gestore delle Finestre utilizzato puoi ridimensionarla con Alt"
-"+clic centrale o Alt+clic sinistro."
+"In base al Gestore delle Finestre utilizzato puoi ridimensionarla con "
+"Alt+clic centrale o Alt+clic sinistro."
 
 #: ../data/messages:331
 msgid "Desklet dimensions (width x height):"
@@ -2711,7 +2720,8 @@ msgstr "Visibilità delle sub-dock"
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "appariranno quando clicchi o quando indugerai sull'icona, puntandola."
+msgstr ""
+"appariranno quando clicchi o quando indugerai sull'icona, puntandola."
 
 #: ../data/messages:453 ../data/messages:651
 msgid "Appear on mouse over"
@@ -2778,8 +2788,8 @@ msgstr ""
 
 #: ../data/messages:487
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:493
@@ -3071,7 +3081,8 @@ msgstr ""
 
 #: ../data/messages:695
 msgid "Group windows from the same application in a sub-dock ?"
-msgstr "Raggruppa tutte le finestre della stessa applicazione in una sub-dock?"
+msgstr ""
+"Raggruppa tutte le finestre della stessa applicazione in una sub-dock?"
 
 #: ../data/messages:697 ../data/messages:707
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
@@ -3273,7 +3284,8 @@ msgstr "Frequenza di aggiornamento"
 
 #: ../data/messages:813 ../data/messages:817 ../data/messages:821
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "in Hz. Questo è da aggiustare in base alla potenza della propria CPU."
+msgstr ""
+"in Hz. Questo è da aggiustare in base alla potenza della propria CPU."
 
 #: ../data/messages:815
 msgid "Refresh rate when mouving cursor into the dock :"
@@ -3732,7 +3744,8 @@ msgid "Zoom effect"
 msgstr "Effetto zoom"
 
 #: ../data/messages:1069
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr "a 1 se non vuoi che le icone si restringano quando ci passi sopra"
 
 #: ../data/messages:1071
@@ -3995,8 +4008,8 @@ msgstr "più grande"
 
 #: ../data/messages:1187
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Utilizza questo per fare si che l'indicatore segua l'orientamento della dock "
 "(alto/basso/destra/sinistra)."
@@ -4313,199 +4326,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "Options"
-#~ msgstr "Opzioni"
-
-#~ msgid "Having more than one dock"
-#~ msgstr "Avere più di una dock"
-
-#~ msgid "TODO"
-#~ msgstr "DA FARE"
-
-#~ msgid "Deleting a dock"
-#~ msgstr "Cancellare una dock"
-
-#~ msgid "Changing the look of a dock"
-#~ msgstr "Cambiare l'aspetto di una dock"
-
-#~ msgid ""
-#~ "For a launcher or an applet:\n"
-#~ "Open the settings of the icon, and set a path to an image.\n"
-#~ "- For an aplication icon:\n"
-#~ "Right-click on the icon -> \"set a custom icon\". Then choose an image "
-#~ "you'd like to use, and apply. To remove the custom image, right-click on "
-#~ "the icon -> \"remove the custom icon\".\n"
-#~ "If you have installed some icons themes on your PC, you can also select "
-#~ "one of them to be used instead of the default icon theme, in the global "
-#~ "config window."
-#~ msgstr ""
-#~ "Per i lanciatori o le applet:\n"
-#~ "Apri le impostazioni dell'icona, e seleziona il percorso dell'immagine.\n"
-#~ "- Per le icone delle applicazioni:\n"
-#~ "Clic destro sull'icona -> \"Seleziona un'icona personalizzata\". "
-#~ "Successivamente scegli l'immagine che vuoi utilizzare e applica. Per "
-#~ "rimuovere l'immagine personalizzata, clic destro sull'icona -> \"Rimuovi "
-#~ "l'icona personalizzata\".\n"
-#~ "Se hai installato temi delle icone sul tuo PC, puoi scegliere anche uno "
-#~ "di essi da utilizzare al posto del tema icone di default, nel menu di "
-#~ "configurazione globale."
-
-#~ msgid ""
-#~ "Activate the Shortcuts applet.\n"
-#~ "Then all the folders bookmarks (the ones that appear in Nautilus) will be "
-#~ "listed in a sub-dock.\n"
-#~ "To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
-#~ "To remove a boorkmark, right-click on its icon -> remove"
-#~ msgstr ""
-#~ "Attiva l'applet Scorciatoie.\n"
-#~ "Ora tutti i segnalibri (quelli che appaiono in Nautilus) saranno elencati "
-#~ "in una sub-dock.\n"
-#~ "Per aggiungere un segnalibro trascina semplicemente la cartella "
-#~ "nell'icona dell'applet.\n"
-#~ "Per rimuovere un segnalibro, clic destro sulla sua icona -> rimuovi"
-
-#~ msgid ""
-#~ "If you're on Debian Stable, you can add our 'weekly' ppa (can be "
-#~ "unstable) by clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Se utilizzi la versione Stable di Debian, puoi aggiungere il nostro "
-#~ "repository 'weekly' (potrebbe essere instabile) cliccando su questo "
-#~ "pulsante:\n"
-#~ " Successivamente puoi eliminare tutti i pacchetti 'cairo-dock*', "
-#~ "aggiornare il tuo sistema e reinstallare il pacchetto 'cairo-dock'."
-
-#~ msgid ""
-#~ "If you're on Debian Unstable, you can add our 'weekly' ppa (can be "
-#~ "unstable) by clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Se utilizzi la versione Unstable di Debian, puoi aggiungere il nostro "
-#~ "repository 'weekly' (potrebbe essere instabile) cliccando su questo "
-#~ "pulsante:\n"
-#~ " Successivamente puoi eliminare tutti i pacchetti 'cairo-dock*', "
-#~ "aggiornare il tuo sistema e reinstallare il pacchetto 'cairo-dock'."
-
-#~ msgid "Name of the container it belongs to:"
-#~ msgstr "Nome del contenitore al quale appartiene:"
-
-#~ msgid "Sub-dock's name :"
-#~ msgstr "Nome della sub-dock:"
-
-#~ msgid "How to render the icon :"
-#~ msgstr "Rendi l'icona come:"
-
-#~ msgid "Use an image"
-#~ msgstr "Usa un'immagine"
-
-#~ msgid "Draw sub-dock's content as emblems"
-#~ msgstr "Disegna il contenuto della sub-dock come un simbolo"
-
-#~ msgid "Draw sub-dock's content as stack"
-#~ msgstr "Disegna il contenuto della sub-dock come un recipiente"
-
-#~ msgid "Draw sub-dock's content inside a box"
-#~ msgstr "Disegna il contenuto della sub-dock all'interno di una scatola"
-
-#~ msgid "Image's name or path :"
-#~ msgstr "Percorso o nome dell'immagine:"
-
-#~ msgid "Extra parameters"
-#~ msgstr "Altri parametri"
-
-#~ msgid "Name of the view used for the sub-dock :"
-#~ msgstr "Nome della vista utilizzata per la sub-dock:"
-
-#~ msgid "If '0' the container will be displayed on every viewport."
-#~ msgstr "Se '0' il contenitore sarà visualizzato su ciascuna viewport."
-
-#~ msgid "Only show in this specific viewport"
-#~ msgstr "Visualizza solo in questa specifica viewport"
-
-#~ msgid "Order you want for this launcher among the others:"
-#~ msgstr "Ordine di questo lanciatore tra gli altri:"
-
-#~ msgid "Launcher's name :"
-#~ msgstr "Nome del lanciatore:"
-
-#~ msgid "URI of the file :"
-#~ msgstr "URI del file:"
-
-#~ msgid "Number of files to list in the sub-dock :"
-#~ msgstr "Numero di file da elencare nella sub-dock:"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "20"
-#~ msgstr "20"
-
-#~ msgid "30"
-#~ msgstr "30"
-
-#~ msgid "Sort files by :"
-#~ msgstr "Ordina i file per:"
-
-#~ msgid "Name"
-#~ msgstr "Nome"
-
-#~ msgid "Size"
-#~ msgstr "Dimensione"
-
-#~ msgid "Date"
-#~ msgstr "Data"
-
-#~ msgid "If '0' the launcher will be displayed on every viewport."
-#~ msgstr "Se '0' il lanciatore sarà visualizzato su ogni viewport."
-
-#~ msgid ""
-#~ "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a "
-#~ "keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
-#~ msgstr ""
-#~ "Esempio: nautilus --no-desktop, gedit, etc. Puoi anche inserire una "
-#~ "scorciatoia da tastiera, ad esempio <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
-
-#~ msgid "Command to launch on click :"
-#~ msgstr "Comando da eseguire al clic:"
-
-#~ msgid ""
-#~ "If you choosed to mix launcher and applis, this option will deactivate "
-#~ "this behaviour for this launcher only. It can be useful for instance for "
-#~ "a launcher that launches a script in a terminal, but you don't want it to "
-#~ "steal the Terminal's icon from the Taskbar."
-#~ msgstr ""
-#~ "Se hai scelto di mescolare lanciatori e applicazioni, questa opzione "
-#~ "disattiverà questo comportamento solo per questo lanciatore. Per esempio "
-#~ "potrebbe essere utile per un lanciatore che lancia uno script in un "
-#~ "terminale, ma non vuoi che rubi l'icona del Terminale dalla Taskbar."
-
-#~ msgid "Prevent this launcher from stealing this application from taskbar ?"
-#~ msgstr ""
-#~ "Impedisci a questo lanciatore di rubare l'applicazione dalla TaskBar?"
-
-#~ msgid ""
-#~ "The only reason you may want to modify this parameter is if you made this "
-#~ "launcher by hands. If you dropped it into the dock from the menu, it is "
-#~ "nearly sure that you shouldn't touch it. It defines the class of the "
-#~ "program, which is useful to link the appli with its launcher."
-#~ msgstr ""
-#~ "La sola ragione per la quale potresti volere modificare dei parametri è "
-#~ "che tu abbia creato questo lanciatore. Se l'hai trascinato a partire dal "
-#~ "menu, è quasi certo che non serva metterci mano. Definisce la classe del "
-#~ "programma, ciò che risulta utile per legare l'applicazione al suo "
-#~ "lanciatore."
-
-#~ msgid "Class of the program :"
-#~ msgstr "Classe del programma:"
-
-#~ msgid "Run in a terminal ?"
-#~ msgstr "Esegui nel terminale?"
-
-#~ msgid "Separators' appearance is defined in the global configuration."
-#~ msgstr "L'aspetto dei separatori è definito nella configurazione globale."

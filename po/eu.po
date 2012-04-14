@@ -8,15 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2012-04-12 00:33+0000\n"
 "PO-Revision-Date: 2012-03-21 03:02+0000\n"
 "Last-Translator: Mendi <arrietaarambarri@hotmail.com>\n"
 "Language-Team: librezale.org\n"
-"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-22 04:43+0000\n"
-"X-Generator: Launchpad (build 14981)\n"
+"X-Launchpad-Export-Date: 2012-04-13 05:20+0000\n"
+"X-Generator: Launchpad (build 15070)\n"
+"Language: eu\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -90,7 +91,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:460
@@ -310,7 +312,8 @@ msgid "Effects:"
 msgstr "Efektuak:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Klik miniaplikazioan bere aurrebista eta deskribapena jasotzeko."
 
 #: ../src/cairo-dock-gui-simple.c:823
@@ -594,7 +597,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Abiarazi Cairo-Dock abioan"
 
 #: ../src/cairo-dock-menu.c:958
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Hirugarrenen miniaplikazioek hainbat programen integrazioa ahalbidetzen "
 "dute, adibidez pidgin"
@@ -636,7 +640,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1021
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
+msgstr ""
+"Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
 
 #: ../src/cairo-dock-menu.c:1023 ../src/cairo-dock-menu.c:1055
 msgid "Move to another dock"
@@ -1795,8 +1800,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1844,8 +1850,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2420,8 +2426,8 @@ msgstr ""
 
 #: ../data/messages:487
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:493
@@ -3345,7 +3351,8 @@ msgid "Zoom effect"
 msgstr "Zoom efektua"
 
 #: ../data/messages:1069
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Ezarri 1 balioan ikonoen gainetik pasatzean zoom efekturik ez baduzu nahi."
 
@@ -3356,7 +3363,8 @@ msgstr "Ikonoen zoom maximoa:"
 #: ../data/messages:1073
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
-msgstr "Pixeletan. Tarte honetatik kanpora (Saguan zentratua) ez dago zoomik."
+msgstr ""
+"Pixeletan. Tarte honetatik kanpora (Saguan zentratua) ez dago zoomik."
 
 #: ../data/messages:1075
 msgid "Width of the space in which the zoom will be effective :"
@@ -3601,8 +3609,8 @@ msgstr "handiagoa"
 
 #: ../data/messages:1187
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Erabili adierazleak dockaren kokapenari (Goian/Behean/eskuman/ezkerrean) "
 "jarrai diezaion."
@@ -3676,7 +3684,8 @@ msgstr "Etiketen ikusgaitasun atalasea :"
 
 #: ../data/messages:1223
 msgid "Should the labels always be horizontal, even when dock is vertical?"
-msgstr "Etiketak beti horizontalak izango dira nahiz eta docka bertikala izan?"
+msgstr ""
+"Etiketak beti horizontalak izango dira nahiz eta docka bertikala izan?"
 
 #: ../data/messages:1225
 msgid "Font"
@@ -3903,69 +3912,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "Options"
-#~ msgstr "Aukerak"
-
-#~ msgid "Sub-dock's name :"
-#~ msgstr "Azpi-dock izena:"
-
-#~ msgid "How to render the icon :"
-#~ msgstr "Nola errendatu ikonoa:"
-
-#~ msgid "Use an image"
-#~ msgstr "Erabili irudia"
-
-#~ msgid "Draw sub-dock's content as emblems"
-#~ msgstr "Marraztu azpi-dock edukia ikurrak bezala"
-
-#~ msgid "Draw sub-dock's content as stack"
-#~ msgstr "Marraztu azpi-dock edukia stack bezala"
-
-#~ msgid "Draw sub-dock's content inside a box"
-#~ msgstr "Marraztu azpi-dock edukia kutxa baten barruan"
-
-#~ msgid "Image's name or path :"
-#~ msgstr "Irudi izena edo bide-izena:"
-
-#~ msgid "Extra parameters"
-#~ msgstr "Extra parametroak"
-
-#~ msgid "Name of the view used for the sub-dock :"
-#~ msgstr "Azpi-dockarekin erabilitako ikuspegiaren izena:"
-
-#~ msgid "Order you want for this launcher among the others:"
-#~ msgstr "Abiarazle honek besteekiko izan behar duen ordena:"
-
-#~ msgid "Launcher's name :"
-#~ msgstr "Abiarazle izena:"
-
-#~ msgid "URI of the file :"
-#~ msgstr "Fitxategiaren URIa:"
-
-#~ msgid "Number of files to list in the sub-dock :"
-#~ msgstr "Azpi-dockean zerrendatuko diren fitxategien kopurua:"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "20"
-#~ msgstr "20"
-
-#~ msgid "30"
-#~ msgstr "30"
-
-#~ msgid "Sort files by :"
-#~ msgstr "Ordenatu fitxategiak honen arabera :"
-
-#~ msgid "Name"
-#~ msgstr "Izena"
-
-#~ msgid "Size"
-#~ msgstr "Tamaina"
-
-#~ msgid "Date"
-#~ msgstr "Data"

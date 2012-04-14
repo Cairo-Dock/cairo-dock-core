@@ -8,16 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock_el\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-03-21 02:51+0000\n"
+"POT-Creation-Date: 2012-04-12 00:33+0000\n"
+"PO-Revision-Date: 2012-03-22 13:29+0000\n"
 "Last-Translator: Michael Kotsarinis <mk73628@gmail.com>\n"
 "Language-Team: Greek\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-22 04:44+0000\n"
-"X-Generator: Launchpad (build 14981)\n"
+"X-Launchpad-Export-Date: 2012-04-13 05:21+0000\n"
+"X-Generator: Launchpad (build 15070)\n"
 "X-Poedit-Country: France\n"
+"Language: \n"
 "X-Poedit-Language: French\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
@@ -92,7 +93,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Οι παράμετροι του κεντρικού dock είναι διαθέσιμες στο κύριο παράθυρο "
 "διαμόρφωσης."
@@ -320,7 +322,8 @@ msgid "Effects:"
 msgstr "Εφέ:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Κάντε κλικ σε μια μικροεφαρμογή για να έχετε προεπισκόπηση και περιγραφή της."
 
@@ -431,7 +434,8 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Apazoglou Thodoris https://launchpad.net/~apazoglouthodoris\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
-"  Gregory https://launchpad.net/~greco"
+"  Gregory https://launchpad.net/~greco\n"
+"  Michael Kotsarinis https://launchpad.net/~mk73628"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -619,7 +623,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Εκκίνηση του Cairo-Dock κατά την εκκίνηση του συστήματος"
 
 #: ../src/cairo-dock-menu.c:958
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Μικροεφαρμογές από τρίτους παρέχουν ενσωμάτωση πολλών προγραμμάτων, όπως το "
 "Pidgin"
@@ -886,8 +891,8 @@ msgstr ""
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Αναγκάστε την πλατφόρμα να φορτώσει αυτόν τον φάκελο, αντί αυτού ~/.config/"
-"cairo-dock."
+"Αναγκάστε την πλατφόρμα να φορτώσει αυτόν τον φάκελο, αντί αυτού "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:343
 msgid ""
@@ -1550,7 +1555,8 @@ msgstr ""
 
 #: ../data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
-msgstr "Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
+msgstr ""
+"Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
 
 #: ../data/messages:79
 msgid "Docks"
@@ -1867,14 +1873,15 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί /desktop/gnome/session/"
-"required_components/panel και αντικαταστήστε το περιεχόμενό του με «cairo-"
-"dock».\n"
+"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί "
+"/desktop/gnome/session/required_components/panel και αντικαταστήστε το "
+"περιεχόμενό του με «cairo-dock».\n"
 "Μετά επανεκκινήστε τη συνεδρία σας : το gnome-panel δεν έχει εκκινήσει και "
 "το dock έχει εκκινήσει (αν όχι, μπορείτε να το προσθέσετε στα προγράμματα "
 "εκκίνησης)."
@@ -1893,7 +1900,8 @@ msgstr "Αντιμετώπιση Προβλημάτων"
 
 #: ../data/messages:191
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr "Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
+msgstr ""
+"Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
 
 #: ../data/messages:193
 msgid "Forum"
@@ -1928,8 +1936,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Πρέπει να ενεργοποιήσετε τη σύνθεση. Παραδείγματος χάριν, μπορείτε να "
 "εκτελέσετε το Compiz ή το xcompmgr.\n"
@@ -1937,8 +1945,8 @@ msgstr ""
 "στις επιλογές του διαχειριστή παραθύρων.\n"
 "Αν χρησιμοποιείτε Gnome, μπορείτε να την ενεργοποιήσετε στο Metacity με αυτό "
 "τον τρόπο:\n"
-" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί '/apps/metacity/general/"
-"compositing_manager' και ορίστε το σε 'true'."
+" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί "
+"'/apps/metacity/general/compositing_manager' και ορίστε το σε 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -2092,8 +2100,8 @@ msgid ""
 msgstr ""
 "Στο Gnome, υπάρχει μια επιλογή που υπερισχύει αυτής του dock. Για να "
 "ενεργοποιήσετε εικονίδια στα μενού, ανοίξτε το 'gconf-editor', πηγαίνετε στο "
-"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have icons"
-"\" και \"buttons have icons\". "
+"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have "
+"icons\" και \"buttons have icons\". "
 
 #: ../data/messages:245
 msgid "If you're on Gnome you can click on this button:"
@@ -2597,8 +2605,8 @@ msgstr ""
 
 #: ../data/messages:487
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:493
@@ -2864,8 +2872,8 @@ msgid ""
 msgstr ""
 "Επιτρέπει στους εκκινητές να ενεργούν ως εφαρμογές όταν το πρόγραμμά τους "
 "εκτελείται και εμφανίζει μια ένδειξη στο εικονίδιό τους για να το "
-"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με Shift"
-"+κλικ."
+"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με "
+"Shift+κλικ."
 
 #: ../data/messages:673
 msgid "Mix launchers and applications"
@@ -2877,7 +2885,8 @@ msgstr "Εμφάνιση μόνο των εφαρμογών της τρέχου�
 
 #: ../data/messages:677
 msgid "Only show icons whose windows are minimised"
-msgstr "Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
+msgstr ""
+"Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
 
 #: ../data/messages:689
 msgid "After a given icon"
@@ -2930,8 +2939,8 @@ msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
-"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία."
-"\\n\n"
+"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία.\\"
+"n\n"
 "Η OpenGL είναι απαραίτητη για να σχεδιασθεί το εικονίδιο λυγισμένο προς τα "
 "πίσω."
 
@@ -3177,7 +3186,8 @@ msgstr "Μέγιστη διάρκεια λήψης αρχείου:"
 
 #: ../data/messages:845
 msgid "Use this option if you experience problems to connect."
-msgstr "Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
 
 #: ../data/messages:847
 msgid "Force IPv4 ?"
@@ -3185,7 +3195,8 @@ msgstr "Εξαναγκασμός σε IPv4;"
 
 #: ../data/messages:849
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
 
 #: ../data/messages:851
 msgid "Are you behind a proxy ?"
@@ -3460,7 +3471,8 @@ msgstr "Αριστερή μετατόπιση:"
 
 #: ../data/messages:1011
 msgid "in pixels. Use this to adjust the top position of the drawings."
-msgstr "σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
+msgstr ""
+"σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
 
 #: ../data/messages:1013
 msgid "Top offset :"
@@ -3550,7 +3562,8 @@ msgid "Zoom effect"
 msgstr "Εφέ εστίασης"
 
 #: ../data/messages:1069
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "ορίστε σε 1 αν δεν θέλετε τα εικονίδια να αλλάζουν μέγεθος όταν περνάτε από "
 "πανω τους."
@@ -3617,7 +3630,8 @@ msgstr "Εάν δεν προσθέσετε διαχωριστές, θα χρησ
 
 #: ../data/messages:1099
 msgid "Filename of an image to use for separators :"
-msgstr "Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
+msgstr ""
+"Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
 
 #: ../data/messages:1101
 msgid ""
@@ -3820,8 +3834,8 @@ msgstr "μεγαλύτερο"
 
 #: ../data/messages:1187
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Χρησιμοποιήστε το για να ακολουθεί ο δείκτης τον προσανατολισμό του dock "
 "(πάνω/κάτω/δεξιά/αριστερά)."
@@ -4130,157 +4144,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "Options"
-#~ msgstr "Επιλογές"
-
-#~ msgid ""
-#~ "If you're on Debian Stable, you can add our 'weekly' ppa (can be "
-#~ "unstable) by clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Αν είστε στον σταθερό κλάδο του Debian, μπορείτε να προσθέσετε το "
-#~ "'εβδομαδιαίο' μας ppa (μπορεί να είναι ασταθές) κάνοντας κλικ σε αυτό το "
-#~ "κουμπί:\n"
-#~ " Μετά από αυτό, μπορείτε να εκκαθαρίσετε όλα τα πακέτα 'cairo-dock*', να "
-#~ "ανανεώσετε το σύστημά σας και να επανεγκαταστήσετε το πακέτο 'cairo-dock'."
-
-#~ msgid ""
-#~ "If you're on Debian Unstable, you can add our 'weekly' ppa (can be "
-#~ "unstable) by clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Αν είστε στον ασταθή κλάδο του Debian, μπορείτε να προσθέσετε το "
-#~ "'εβδομαδιαίο' μας ppa (μπορεί να είναι ασταθές) κάνοντας κλικ σε αυτό το "
-#~ "κουμπί:\n"
-#~ " Μετά από αυτό, μπορείτε να εκκαθαρίσετε όλα τα πακέτα 'cairo-dock*', να "
-#~ "ανανεώσετε το σύστημά σας και να επανεγκαταστήσετε το πακέτο 'cairo-dock'."
-
-#~ msgid "Name of the container it belongs to:"
-#~ msgstr "Όνομα υποδοχέα στον οποίο ανήκει:"
-
-#~ msgid "Sub-dock's name :"
-#~ msgstr "Όνομα του sub-dock:"
-
-#~ msgid "How to render the icon :"
-#~ msgstr "Πως θα αποδοθεί το εικονίδιο :"
-
-#~ msgid "Use an image"
-#~ msgstr "Χρήση εικόνας"
-
-#~ msgid "Draw sub-dock's content as emblems"
-#~ msgstr "Σχεδίαση των περιεχομένων του subdock ως εμβλήματα"
-
-#~ msgid "Draw sub-dock's content as stack"
-#~ msgstr "Σχεδίαση των περιεχομένων του subdock ως στοίβα"
-
-#~ msgid "Draw sub-dock's content inside a box"
-#~ msgstr "Σχεδίαση των περιεχομένων του subdock μέσα σε κουτί"
-
-#~ msgid "Image's name or path :"
-#~ msgstr "Όνομα ή διαδρομή εικόνας:"
-
-#~ msgid "Extra parameters"
-#~ msgstr "Επιπλέον παράμετροι"
-
-#~ msgid "Name of the view used for the sub-dock :"
-#~ msgstr "Όνομα προβολής που χρησιμοποιείται για το sub-dock:"
-
-#~ msgid "If '0' the container will be displayed on every viewport."
-#~ msgstr "Εάν '0' ο περιέκτης θα εμφανίζεται σε κάθε προβολή"
-
-#~ msgid "Only show in this specific viewport"
-#~ msgstr "Εμφάνιση μόνο σε αυτή τη συγκεκριμένη προβολή"
-
-#~ msgid "Order you want for this launcher among the others:"
-#~ msgstr ""
-#~ "Σειρά κατάταξης που επιθυμείτε γι' αυτόν τον εκκινητή ανάμεσα στους "
-#~ "υπόλοιπους:"
-
-# #################################
-# ########### launcher.conf #############
-# #################################
-#~ msgid "Launcher's name :"
-#~ msgstr "Όνομα εκκινητή:"
-
-#~ msgid "URI of the file :"
-#~ msgstr "URI του αρχείου :"
-
-#~ msgid "Number of files to list in the sub-dock :"
-#~ msgstr "Αριθμός αρχείων που θα απαριθμούνται στο sub-dock :"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "20"
-#~ msgstr "20"
-
-#~ msgid "30"
-#~ msgstr "30"
-
-#~ msgid "Sort files by :"
-#~ msgstr "Ταξινόμηση αρχείων κατά:"
-
-#~ msgid "Name"
-#~ msgstr "Όνομα"
-
-#~ msgid "Size"
-#~ msgstr "Μέγεθος"
-
-#~ msgid "Date"
-#~ msgstr "Ημερομηνία"
-
-#~ msgid "If '0' the launcher will be displayed on every viewport."
-#~ msgstr "Εάν '0' ο εκκινητής θα εμφανίζεται σε κάθε προβολή."
-
-#~ msgid ""
-#~ "Exemple : nautilus --no-desktop, gedit, etc. You can even enter a "
-#~ "keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
-#~ msgstr ""
-#~ "Παράδειγμα: nautilus --no-desktop, gedit κλπ. Μπορείτε να εισάγετε ακόμα "
-#~ "και συντόμευση πληκτρολογίου, παραδείγματος χάριν <Alt>F1, <Ctrl>c, "
-#~ "<Ctrl>v κλπ"
-
-#~ msgid "Command to launch on click :"
-#~ msgstr "Εντολή για εκκίνηση με κλικ:"
-
-#~ msgid ""
-#~ "If you choosed to mix launcher and applis, this option will deactivate "
-#~ "this behaviour for this launcher only. It can be useful for instance for "
-#~ "a launcher that launches a script in a terminal, but you don't want it to "
-#~ "steal the Terminal's icon from the Taskbar."
-#~ msgstr ""
-#~ "Αν επιλέξατε να αναμίξετε εκκινητές και εφαρμογές, αυτή η επιλογή θα "
-#~ "απενεργοποιήσει αυτή τη συμπεριφορά για αυτόν τον εκκινητή μόνο. Μπορεί "
-#~ "να είναι χρήσιμη για παράδειγμα για έναν εκκινητή που εκκινεί ένα script "
-#~ "σε τερματικό αλλά δεν θέλετε να πάρει το εικονίδιο του τερματικού από τη "
-#~ "μπάρα εργασιών."
-
-#~ msgid "Prevent this launcher from stealing this application from taskbar ?"
-#~ msgstr "Αποτροπή 'αρπαγής' εφαρμογών της γραμμής εργασιών από τον εκκινητή;"
-
-#~ msgid ""
-#~ "The only reason you may want to modify this parameter is if you made this "
-#~ "launcher by hands. If you dropped it into the dock from the menu, it is "
-#~ "nearly sure that you shouldn't touch it. It defines the class of the "
-#~ "program, which is useful to link the appli with its launcher."
-#~ msgstr ""
-#~ "Ο μόνος λόγος που ενδέχεται να θέλετε τη μεταβολή αυτής της παραμέτρου, "
-#~ "είναι εάν θέλετε να δημιουργήσετε αυτόν τον εκκινητή χειροκίνητα. Εάν τον "
-#~ "αποθέσετε στο dock από το μενού, είναι σχεδόν βέβαιο ότι δεν πρέπει να "
-#~ "μεταβάλετε αυτή την παράμετρο. Αυτή ορίζει την κλάση του προγράμματος, "
-#~ "που είναι χρήσιμη για τη σύνδεση της εφαρμογής με τον εκκινητή της."
-
-#~ msgid "Class of the program :"
-#~ msgstr "Κλάση του προγράμματος:"
-
-#~ msgid "Run in a terminal ?"
-#~ msgstr "Εκτέλεση σε τερματικό;"
-
-#~ msgid "Separators' appearance is defined in the global configuration."
-#~ msgstr "Η εμφάνιση των διαχωριστικών καθορίζεται στη γενική διαμόρφωση."

@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-03-21 02:54+0000\n"
+"POT-Creation-Date: 2012-04-12 00:33+0000\n"
+"PO-Revision-Date: 2012-03-22 13:39+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-22 04:46+0000\n"
-"X-Generator: Launchpad (build 14981)\n"
+"X-Launchpad-Export-Date: 2012-04-13 05:22+0000\n"
+"X-Generator: Launchpad (build 15070)\n"
+"Language: tr\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
 msgid ""
@@ -89,7 +90,8 @@ msgid "Shortkey"
 msgstr "Kısayol"
 
 #: ../src/cairo-dock-gui-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:460
@@ -309,7 +311,8 @@ msgid "Effects:"
 msgstr "Efektler:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-gui-simple.c:823
@@ -419,6 +422,7 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Angel Spy https://launchpad.net/~dilara.ekinci\n"
 "  Erkin Batu Altunbaş https://launchpad.net/~erkin\n"
+"  Fabounet https://launchpad.net/~fabounet03\n"
 "  Fatih Ekin https://launchpad.net/~f-ekin22\n"
 "  H. Fatih ATASEVER https://launchpad.net/~h-f-atasever\n"
 "  Mustafa Doğan https://launchpad.net/~sahbaz1260\n"
@@ -427,7 +431,6 @@ msgstr ""
 "  Serdar KAHYA https://launchpad.net/~kahyainsaat\n"
 "  Yiğit Ateş https://launchpad.net/~yigitates52\n"
 "  Yunus Kaba https://launchpad.net/~yunuskaba\n"
-"  eraydin https://launchpad.net/~aydin-eraydin\n"
 "  kulkke https://launchpad.net/~kulkke\n"
 "  onur kopan https://launchpad.net/~onurkopan\n"
 "  zeugma https://launchpad.net/~sunder67"
@@ -606,7 +609,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock'u başlangıçta başlat"
 
 #: ../src/cairo-dock-menu.c:958
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -645,7 +649,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1021
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr ""
+"Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
 
 #: ../src/cairo-dock-menu.c:1023 ../src/cairo-dock-menu.c:1055
 msgid "Move to another dock"
@@ -1152,8 +1157,8 @@ msgstr ""
 "Cario-Dock2'ye hoşgeldiniz !\n"
 "Bu uygulamacık, size rıhtımı kullanmaya başlamanız için yardımcı olmak için "
 "burada; sadece onun üzerine tıklayın.\n"
-"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi http://"
-"glx-dock.org adresinde ziyaret edin.\n"
+"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi "
+"http://glx-dock.org adresinde ziyaret edin.\n"
 "Bu yazılımın hoşunuza gideceğini umarız !\n"
 "  (şimdi bu iletişim kutusunun üzerine, onu kapatmak üzere tıklayabilirsiniz)"
 
@@ -1792,8 +1797,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1841,8 +1847,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2416,8 +2422,8 @@ msgstr ""
 
 #: ../data/messages:487
 msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-"disappearance:"
+"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
+"appearance/disappearance:"
 msgstr ""
 
 #: ../data/messages:493
@@ -3293,7 +3299,8 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:1069
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1071
@@ -3529,8 +3536,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:1187
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1189
@@ -3815,51 +3822,3 @@ msgid ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 msgstr ""
-
-#~ msgid "Options"
-#~ msgstr "Tercihler"
-
-#~ msgid "Deleting a dock"
-#~ msgstr "Bir rıhtımı silmek"
-
-#~ msgid "Changing the look of a dock"
-#~ msgstr "Bir rıhtımın görünümünü değiştirmek"
-
-#~ msgid "Use an image"
-#~ msgstr "Görüntü kullan"
-
-#~ msgid "Extra parameters"
-#~ msgstr "Ek parametreler"
-
-#~ msgid "URI of the file :"
-#~ msgstr "Dosyanın URI'si :"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "20"
-#~ msgstr "20"
-
-#~ msgid "30"
-#~ msgstr "30"
-
-#~ msgid "Sort files by :"
-#~ msgstr "Dosyaları sırala :"
-
-#~ msgid "Name"
-#~ msgstr "İsim"
-
-#~ msgid "Size"
-#~ msgstr "Boyut"
-
-#~ msgid "Date"
-#~ msgstr "Tarih"
-
-#~ msgid "Class of the program :"
-#~ msgstr "Programın sınıfı :"
-
-#~ msgid "Run in a terminal ?"
-#~ msgstr "Bir uçbirimde yürütülsün mü?"
