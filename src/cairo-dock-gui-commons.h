@@ -58,20 +58,21 @@ void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidget
 
 
 /**
- * Callback for the button-press-event that popup the given menu.
- * @param pWidget The widget generating event.
- * @param pEventButton The trigered event details.
+ * Popup a menu under the given widget.
+ * Can be used as a callback for the clicked event.
+ * @param pWidget The widget whose position and size will be considered.
+ *   Can be NULL, the menu will pop under the mouse.
  * @param pMenu The given menu to popup.
  * @code
  * g_signal_connect (
  * 	G_OBJECT (pButton),
- * 	"button-press-event",
+ * 	"clicked",
  * 	G_CALLBACK (cairo_dock_popup_menu_under_widget),
  * 	GTK_MENU (pMenu)
  * 	);
  * @endcode
  */
-void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GdkEventButton *pEventButton, GtkMenu *pMenu);
+void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GtkMenu *pMenu);
 
 gchar *cairo_dock_get_third_party_applets_link (void);
 

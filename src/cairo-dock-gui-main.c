@@ -1707,7 +1707,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)
 	// Filter Options Menu
 	GtkWidget *pFilterMenu = gtk_menu_new ();
 	gtk_menu_attach_to_widget (GTK_MENU (pFilterMenu), pFilterOptionButton, (GtkMenuDetachFunc) _destroy_filter_menu); // virtually attach, so it is only destroyed when window is closed.
-	g_signal_connect (G_OBJECT (pFilterOptionButton), "button-press-event", G_CALLBACK (cairo_dock_popup_menu_under_widget), GTK_MENU (pFilterMenu));
+	g_signal_connect (G_OBJECT (pFilterOptionButton), "clicked", G_CALLBACK (cairo_dock_popup_menu_under_widget), GTK_MENU (pFilterMenu));
 	
 	_add_check_item_in_menu (pFilterMenu, _("All words"),             FALSE, G_CALLBACK (on_toggle_all_words));
 	_add_check_item_in_menu (pFilterMenu, _("Highlighted words"),     TRUE,  G_CALLBACK (on_toggle_highlight_words));

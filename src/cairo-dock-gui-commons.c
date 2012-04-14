@@ -838,7 +838,7 @@ void cairo_dock_place_menu_at_position (GtkMenu *menu, gint *x, gint *y, gboolea
 /**
  * Callback for the button-press-event that popup the given menu.
  */
-void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GdkEventButton *pEventButton, GtkMenu *pMenu)
+void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GtkMenu *pMenu)
 {
 	GtkRequisition *pPosition = pWidget == NULL ? NULL : cairo_dock_get_widget_bottom_position (pWidget);
 	
@@ -847,8 +847,8 @@ void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GdkEventButton *pEv
 		NULL,
 		(GtkMenuPositionFunc) cairo_dock_place_menu_at_position,
 		pPosition,
-		pEventButton->button,
-		pEventButton->time);
+		0, // pEventButton->button
+		gtk_get_current_event_time ()); // pEventButton->time
 	
 	if (pPosition != NULL)
 		g_free (pPosition);
