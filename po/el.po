@@ -1208,14 +1208,14 @@ msgstr "Είστε βέβαιος/η ότι θέλετε να διαγράψετ
 
 #: ../src/help/applet-composite.c:65
 msgid ""
-"Welcome in Cairo-Dock2 !\n"
+"Welcome in Cairo-Dock !\n"
 "This applet is here to help you start using the dock; just click on it.\n"
 "If you have any question/request/remark, please pay us a visit at http://glx-"
 "dock.org.\n"
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
-"Καλως ήρθατε στο Cairo-Dock2 !\n"
+"Καλως ήρθατε στο Cairo-Dock !\n"
 "Αυτή η μικροεφαρμογή θα σας βοηθήσει να ξεκινήσετε να χρησιμοποιείται τη "
 "πλατφόρμα; απλά πατήστε πάνω της.\n"
 "Άν έχετε ερωτήσεις/αιτήματα/επισημάνσεις, παρακαλώ επισκεφθείτε μας στο  "

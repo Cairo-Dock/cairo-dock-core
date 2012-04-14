@@ -1178,14 +1178,14 @@ msgstr "Вы уверены, что хотите удалить эти темы?
 
 #: ../src/help/applet-composite.c:65
 msgid ""
-"Welcome in Cairo-Dock2 !\n"
+"Welcome in Cairo-Dock !\n"
 "This applet is here to help you start using the dock; just click on it.\n"
 "If you have any question/request/remark, please pay us a visit at http://glx-"
 "dock.org.\n"
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
-"Добро пожаловать в Cairo-Dock2!\n"
+"Добро пожаловать в Cairo-Dock!\n"
 "Этот апплет поможет в освоении панели.\n"
 "При возникновении вопросов/пожеланий, посетите сайт http://glx-dock.org.\n"
 "Надеемся вам понравится наше приложение!\n"

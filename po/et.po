@@ -1111,7 +1111,7 @@ msgstr "Oled sa kindel et soovid kustutada need teemad?"
 
 #: ../src/help/applet-composite.c:65
 msgid ""
-"Welcome in Cairo-Dock2 !\n"
+"Welcome in Cairo-Dock !\n"
 "This applet is here to help you start using the dock; just click on it.\n"
 "If you have any question/request/remark, please pay us a visit at http://glx-"
 "dock.org.\n"

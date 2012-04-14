@@ -1217,15 +1217,15 @@ msgstr "Êtes-vous certain de vouloir effacer ces thèmes ?"
 
 #: ../src/help/applet-composite.c:65
 msgid ""
-"Welcome in Cairo-Dock2 !\n"
+"Welcome in Cairo-Dock !\n"
 "This applet is here to help you start using the dock; just click on it.\n"
 "If you have any question/request/remark, please pay us a visit at http://glx-"
 "dock.org.\n"
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
-"Bienvenue dans Cairo-Dock2 !\n"
-"Cet applet est là pour vous aider à débuter dans l'utilisation de ce dock; "
+"Bienvenue dans Cairo-Dock !\n"
+"Cette applet est là pour vous aider à débuter dans l'utilisation de ce dock; "
 "il suffit de cliquer dessus.\n"
 "Si vous avez une question / demande / remarque, n'hésitez pas à nous rendre "
 "visite sur http://glx-dock.org.\n"
@@ -1281,11 +1281,11 @@ msgid ""
 "Middle-click to open the configuration window.\n"
 "Right-click to access some troubleshooting actions."
 msgstr ""
-"Cet applet est fait pour vous aider.\n"
+"Cette applet est faite pour vous aider.\n"
 "Cliquez sur son icône pour faire apparaître des conseils utiles sur les "
 "possibilités de Cairo-Dock.\n"
-"Clic-milieu pour ouvrir la fenêtre de configuration.\n"
-"Clic-droit pour accéder à certains actions de dépannage."
+"Clic du milieu pour ouvrir la fenêtre de configuration.\n"
+"Clic-droit pour accéder à certaines actions de dépannage."
 
 #: ../src/help/applet-notifications.c:247
 msgid "Open global settings"
@@ -2017,7 +2017,7 @@ msgstr ""
 
 #: ../data/messages:165
 msgid "Having multiple instances of an applet"
-msgstr "Avoir plusieurs instances d'un applet"
+msgstr "Avoir plusieurs instances d'une applet"
 
 #: ../data/messages:167
 msgid ""
@@ -2354,7 +2354,7 @@ msgstr ""
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
 msgstr ""
-"Si vous souhaitez développer un applet, une documentation complète est "
+"Si vous souhaitez développer une applet, une documentation complète est "
 "disponible ici."
 
 #: ../data/messages:255
