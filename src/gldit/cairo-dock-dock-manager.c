@@ -172,7 +172,7 @@ CairoDock *cairo_dock_create_dock (const gchar *cDockName)
 	{
 		if (cairo_dock_read_root_dock_config (cDockName, pDock))  // si pas de config (sub-dock ou config inexistante), se contente de lui mettre la meme position et renvoit FALSE.
 			//cairo_dock_move_resize_dock (pDock);  /// TODO: try without...
-			g_print ("NO MOVE\n");
+			cd_debug ("NO MOVE");
 	}
 	
 	//\__________________ set a renderer (got from the conf, or the default one).

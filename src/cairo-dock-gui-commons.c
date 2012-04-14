@@ -640,7 +640,7 @@ void cairo_dock_add_shortkey_to_model (CairoKeyBinding *binding, GtkListStore *p
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModel), &iter);
-	g_print (" + %s (%s, %d)\n", binding->keystring, binding->cDemander, binding->bSuccess);
+	cd_debug (" + %s (%s, %d)", binding->keystring, binding->cDemander, binding->bSuccess);
 	gtk_list_store_set (GTK_LIST_STORE (pModel), &iter,
 		CD_SHORTKEY_MODEL_NAME, binding->cDemander,
 		CD_SHORTKEY_MODEL_SHORTKEY, binding->keystring,
