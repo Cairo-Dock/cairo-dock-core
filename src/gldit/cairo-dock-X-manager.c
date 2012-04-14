@@ -105,17 +105,20 @@ static void _on_change_nb_desktops (void)
 
 static void _on_change_desktop_geometry (void)
 {
-	if (cairo_dock_update_screen_geometry ())  // modification de la resolution.
+	// check if the resolution has changed
+	if (cairo_dock_update_screen_geometry ())  // resolution has changed => replace the docks.
 	{
 		cd_message ("resolution alteree");
 		
 		cairo_dock_reposition_root_docks (FALSE);  // main dock compris. Se charge de Xinerama.
-		
-		cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
-		_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
-		
-		cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_SCREEN_GEOMETRY_ALTERED);
 	}
+	
+	// check if the number of viewports has changed.
+	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
+	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
+	
+	// notify everybody
+	cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_SCREEN_GEOMETRY_ALTERED);
 }
 
 static gboolean _cairo_dock_unstack_Xevents (gpointer data)
