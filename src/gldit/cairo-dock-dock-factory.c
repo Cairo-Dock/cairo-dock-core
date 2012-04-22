@@ -443,8 +443,11 @@ static void _on_menu_deactivated (GtkMenuShell *menu, CairoDock *pDock)
 {
 	//g_print ("\n+++ %s ()\n\n", __func__);
 	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
-	pDock->bMenuVisible = FALSE;
-	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+	if (pDock->bMenuVisible)  // don't send the signal if the menu was already deactivated.
+	{
+		pDock->bMenuVisible = FALSE;
+		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+	}
 }
 static void _on_menu_destroyed (GtkWidget *menu, CairoDock *pDock)
 {
