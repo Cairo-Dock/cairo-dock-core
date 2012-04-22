@@ -68,7 +68,7 @@ void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surf
 
 /** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect.
 *@param pIconContext the drawing context; is not altered by the function.
-*@param cImagePath name or path to an icon image.
+*@param cIconName name or path to an icon image.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
 *@return TRUE if everything went smoothly.

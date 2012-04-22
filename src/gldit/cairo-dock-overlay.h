@@ -105,8 +105,6 @@ void cairo_dock_add_overlay_from_surface (Icon *pIcon, cairo_surface_t *pSurface
 /** Add an overlay on an icon from a texture.
  *@param pIcon the icon
  *@param iTexture a texture
- *@param iWidth width of the texture, used to draw the texture if the scale is set to 0
- *@param iHeight height of the surface, used to draw the texture if the scale is set to 0
  *@param iPosition position where to display the overlay
  */
 void cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture, CairoOverlayPosition iPosition);
@@ -141,7 +139,7 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio);
 
 void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoOverlay *pOverlay, CairoOverlayPosition iPosition);
 
-/** Print an overlay onto an icon from an image at a given position. You can't remove/modify the overlay then. The overlay will be displayed until you modify the icon directly (for instance by setting an image).
+/** Print an overlay onto an icon from an image at a given position. You can't remove/modify the overlay then. The overlay will be displayed until you modify the icon directly (for instance by setting a new image).
  *@param pIcon the icon
  *@param pContainer container of the icon
  *@param cImageFile an image (if it's not a path, it is searched amongst the current theme's images)
@@ -150,6 +148,15 @@ void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, 
  */
 gboolean cairo_dock_print_overlay_on_icon_from_image (Icon *pIcon, CairoContainer *pContainer, const gchar *cImageFile, CairoOverlayPosition iPosition);
 
+/** Print an overlay onto an icon from a surface at a given position. You can't remove/modify the overlay then. The overlay will be displayed until you modify the icon directly (for instance by setting a new image).
+ *@param pIcon the icon
+ *@param pContainer container of the icon
+ *@param pSurface a cairo surface
+ *@param iWidth width of the surface
+ *@param iHeight height of the surface
+ *@param iPosition position where to display the overlay
+ *@return TRUE if the overlay has been successfuly printed.
+ */
 void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, CairoContainer *pContainer, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition);
 
 void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, CairoContainer *pContainer, GLuint iTexture, CairoOverlayPosition iPosition);
