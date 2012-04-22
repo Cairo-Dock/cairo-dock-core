@@ -4,5 +4,6 @@ RequiredComponents=gnome-settings-daemon;
 RequiredProviders=windowmanager;panel;
 DefaultProvider-windowmanager=compiz
 DefaultProvider-panel=cairo-dock
+IsRunnableHelper=/usr/lib/nux/unity_support_test
 FallbackSession=cairo-dock-fallback
 DesktopName=GNOME

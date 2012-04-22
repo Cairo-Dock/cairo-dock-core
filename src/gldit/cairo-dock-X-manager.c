@@ -105,17 +105,20 @@ static void _on_change_nb_desktops (void)
 
 static void _on_change_desktop_geometry (void)
 {
-	if (cairo_dock_update_screen_geometry ())  // modification de la resolution.
+	// check if the resolution has changed
+	if (cairo_dock_update_screen_geometry ())  // resolution has changed => replace the docks.
 	{
 		cd_message ("resolution alteree");
 		
 		cairo_dock_reposition_root_docks (FALSE);  // main dock compris. Se charge de Xinerama.
-		
-		cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
-		_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
-		
-		cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_SCREEN_GEOMETRY_ALTERED);
 	}
+	
+	// check if the number of viewports has changed.
+	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
+	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
+	
+	// notify everybody
+	cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_SCREEN_GEOMETRY_ALTERED);
 }
 
 static gboolean _cairo_dock_unstack_Xevents (gpointer data)
@@ -327,12 +330,11 @@ gboolean cairo_dock_wm_can_set_on_widget_layer (void)
   //////////////////
  /// DESKTOP BG ///
 //////////////////
-
 static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // attention : fonction lourde.
 {
 	//g_print ("+++ %s ()\n", __func__);
 	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (cairo_dock_get_root_id ());
-	g_return_val_if_fail (iRootPixmapID != 0, NULL);
+	g_return_val_if_fail (iRootPixmapID != 0, NULL);  // Note: depending on the WM, iRootPixmapID might be 0, and a window of type 'Desktop' might be used instead (covering the whole screen). We don't handle this case, as I've never encounterd it yet.
 	
 	cairo_surface_t *pDesktopBgSurface = NULL;
 	GdkPixbuf *pBgPixbuf = cairo_dock_get_pixbuf_from_pixmap (iRootPixmapID, FALSE);  // FALSE <=> on n'y ajoute pas de transparence.
@@ -529,7 +531,7 @@ static void init (void)
 	s_aNetDesktopGeometry	= XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
 	s_aNetWorkarea			= XInternAtom (s_XDisplay, "_NET_WORKAREA", False);
 	s_aNetShowingDesktop 	= XInternAtom (s_XDisplay, "_NET_SHOWING_DESKTOP", False);
-	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
+	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);  // Note: ESETROOT_PMAP_ID might be used instead. We don't handle it as it seems quite rare and somewhat deprecated.
 	s_aNetNbDesktops		= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
 	s_aXKlavierState		= XInternAtom (s_XDisplay, "XKLAVIER_STATE", False);
 	

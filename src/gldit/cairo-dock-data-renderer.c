@@ -301,9 +301,9 @@ void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iN
 			PangoFontDescription *fd = pango_font_description_from_string ("Monospace 12");
 			pango_layout_set_font_description (pLayout, fd);
 			
-			PangoRectangle ink, log;
+			PangoRectangle log;
 			pango_layout_set_text (pLayout, pRenderer->cFormatBuffer, -1);
-			pango_layout_get_pixel_extents (pLayout, &ink, &log);
+			pango_layout_get_pixel_extents (pLayout, NULL, &log);
 			double fZoom = MIN (pText->fWidth * pRenderer->iWidth / (log.width), pText->fHeight * pRenderer->iHeight / log.height);
 			
 			cairo_move_to (pCairoContext,

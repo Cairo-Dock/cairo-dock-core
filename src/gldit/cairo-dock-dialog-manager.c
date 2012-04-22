@@ -177,7 +177,7 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 				return FALSE;
 			}
 			//else
-			//	g_print ("leave dialog\n");
+			//	//g_print ("leave dialog\n");
 		}
 	}
 	

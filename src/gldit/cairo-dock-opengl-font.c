@@ -73,8 +73,8 @@ GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gch
 	pango_layout_set_text (pLayout, cText, -1);
 	
 	//\_________________ On cree une surface aux dimensions du texte.
-	PangoRectangle ink, log;
-	pango_layout_get_pixel_extents (pLayout, &ink, &log);
+	PangoRectangle log;
+	pango_layout_get_pixel_extents (pLayout, NULL, &log);
 	cairo_surface_t* pNewSurface = cairo_dock_create_blank_surface (
 		log.width,
 		log.height);

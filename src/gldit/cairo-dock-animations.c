@@ -174,9 +174,11 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 	//g_print ("%s (%d)\n", __func__, pDock->bIsHiding);
 	if (! pDock->bIsHiding && ! pDock->container.bInside)  // rien de plus desagreable que le dock qui se cache quand on est dedans.
 	{
+		// set current showing/hiding state
 		pDock->bIsShowing = FALSE;
 		pDock->bIsHiding = TRUE;
 		
+		// empty the input shape (so that the dock doesn't disturb us immediately)
 		if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
 		{
 			//g_print ("+++ input shape hidden on start hiding\n");
@@ -184,33 +186,50 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 			pDock->iInputState = CAIRO_DOCK_INPUT_HIDDEN;
 		}
 		
+		// init the animation
 		if (g_pHidingBackend != NULL && g_pHidingBackend->init)
 			g_pHidingBackend->init (pDock);
 		
+		// and launch it
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 }
 
 void cairo_dock_start_showing (CairoDock *pDock)
 {
-	g_print ("%s (%d)\n", __func__, pDock->bIsShowing);
+	//g_print ("%s (%d)\n", __func__, pDock->bIsShowing);
 	if (! pDock->bIsShowing)  // on lance l'animation.
 	{
+		// set current showing/hiding state
 		pDock->bIsShowing = TRUE;
 		pDock->bIsHiding = FALSE;
 		
+		// reset the alpha for icons that were always visible (if they were still appearing, their alpha may have not reached 1 yet)
+		pDock->fPostHideOffset = 1.;
+		Icon *icon;
+		GList *ic;
+		for (ic = pDock->icons; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			if (icon->bIsDemandingAttention || icon->bAlwaysVisible)
+				icon->fAlpha = 1.;
+		}
+		
+		// reset the input shape (so that we can interact with the dock immediately)
 		if (pDock->pShapeBitmap && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
 		{
-			g_print ("+++ input shape at rest on start showing\n");
+			//g_print ("+++ input shape at rest on start showing\n");
 			cairo_dock_set_input_shape_at_rest (pDock);
 			pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
 			
 			cairo_dock_replace_all_dialogs ();
 		}
 		
+		// init the animation
 		if (g_pHidingBackend != NULL && g_pHidingBackend->init)
 			g_pHidingBackend->init (pDock);
 		
+		// and launch it
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 }

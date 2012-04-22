@@ -183,5 +183,7 @@ void cairo_dock_load_dock_background (CairoDock *pDock);
 void cairo_dock_trigger_load_dock_background (CairoDock *pDock);  // peu utile
 
 
+void cairo_dock_make_preview (CairoDock *pDock, const gchar *cPreviewPath);
+
 G_END_DECLS
 #endif

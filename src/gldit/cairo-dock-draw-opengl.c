@@ -557,6 +557,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	double pHiddenBgColor[4];
 	const double r = 4; // corner radius of the background
 	const double gap = 3;  // gap to the screen
+	double dw = (myIconsParam.iIconGap > 2 ? 2 : 0);  // 1px margin around the icons for a better readability (only if icons won't be stuck togather then).
 	double w, h;
 	_cairo_dock_set_blend_alpha ();
 	do
@@ -580,14 +581,14 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 					glTranslatef (icon->fDrawX + w/2,
 						pDock->container.iHeight - icon->fDrawY - h/2,
 						0.);
-					cairo_dock_draw_rounded_rectangle_opengl (w - 2*r, h, r, 0, pHiddenBgColor);
+					cairo_dock_draw_rounded_rectangle_opengl (w - 2*r + dw, h, r, 0, pHiddenBgColor);
 				}
 				else
 				{
 					glTranslatef (icon->fDrawY + h/2,
 						pDock->container.iWidth - icon->fDrawX - w/2,
 						0.);
-					cairo_dock_draw_rounded_rectangle_opengl (h - 2*r, w, r, 0, pHiddenBgColor);
+					cairo_dock_draw_rounded_rectangle_opengl (h - 2*r + dw, w, r, 0, pHiddenBgColor);
 				}
 				glPopMatrix ();
 			}
@@ -611,7 +612,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	GLuint iTexture = 0;
 	int w = cairo_image_surface_get_width (pImageSurface);
 	int h = cairo_image_surface_get_height (pImageSurface);
-	g_print ("%s (%dx%d)\n", __func__, w, h);
+	//g_print ("%s (%dx%d)\n", __func__, w, h);
 	
 	cairo_surface_t *pPowerOfwoSurface = pImageSurface;
 	

@@ -125,7 +125,7 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 	
 	if ((iLoadModifier & CAIRO_DOCK_ANIMATED_IMAGE) && h != 0)
 	{
-		g_print ("%dx%d\n", (int)w, (int)h);
+		//g_print ("%dx%d\n", (int)w, (int)h);
 		if (w >= 2*h)  // we need at least 2 frames (Note: we assume that frames are wide).
 		{
 			if ((int)w % (int)h == 0)  // w = k*h
@@ -138,7 +138,7 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 				int w_ = h+1, h_ = h;
 				do
 				{
-					g_print (" %d/%d\n", w_, (int)w);
+					//g_print (" %d/%d\n", w_, (int)w);
 					if ((int)w % w_ == 0)
 					{
 						pImage->iNbFrames = w / w_;
@@ -148,7 +148,7 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 				} while (w_ < w / 2);
 			}
 		}
-		g_print ("CAIRO_DOCK_ANIMATED_IMAGE -> %d frames\n", pImage->iNbFrames);
+		//g_print ("CAIRO_DOCK_ANIMATED_IMAGE -> %d frames\n", pImage->iNbFrames);
 	}
 	
 	if (fAlpha < 1 && pImage->pSurface != NULL)

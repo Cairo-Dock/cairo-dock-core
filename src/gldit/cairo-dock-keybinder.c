@@ -307,7 +307,7 @@ cd_keybinder_unbind (CairoKeyBinding *binding)
 {
 	if (binding == NULL)
 		return;
-	g_print ("%s (%s)\n", __func__, binding->keystring);
+	//g_print ("%s (%s)\n", __func__, binding->keystring);
 	
 	// ensure it's a registerd binding
 	GSList *iter = g_slist_find (s_pKeyBindings, binding);

@@ -138,20 +138,20 @@ Hiding the dock to use all the screen=
 #In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this dock, and then select the visibility you want.
 _Hiding the dock to use all the screen=
 
-#X[Having more than one dock]
-Having more than one dock=
-#>TODO
-_Having more than one dock=
-
-#X[Deleting a dock]
-Deleting a dock=
-#>TODO
-_Deleting a dock=
-
-#X[Changing the look of a dock]
-Changing the look of a dock=
-#>TODO
-_Changing the look of a dock=
+##~ #X[Having more than one dock]
+##~ Having more than one dock=
+##~ #>TODO
+##~ _Having more than one dock=
+##~ 
+##~ #X[Deleting a dock]
+##~ Deleting a dock=
+##~ #>TODO
+##~ _Deleting a dock=
+##~ 
+##~ #X[Changing the look of a dock]
+##~ Changing the look of a dock=
+##~ #>TODO
+##~ _Changing the look of a dock=
 
 
 
@@ -384,7 +384,7 @@ dustbin=
 XMenu=
 #> In Gnome, there is an option that override the dock's one. To enable icons in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable the "menus have icons" and the "buttons have icons" options. 
 Menu=
-#G [sh -c "gconftool-2 --type bool --set /desktop/gnome/interface/menus_have_icons true && gconftool-2 --type bool --set /desktop/gnome/interface/buttons_have_icons true";sh -c "ps aux | grep -v grep | grep -c 'gnome-settings-daemon'"]If you're on Gnome you can click on this button:
+#G [sh -c "gconftool-2 --type bool --set /desktop/gnome/interface/menus_have_icons true && gconftool-2 --type bool --set /desktop/gnome/interface/buttons_have_icons true; gsettings set org.gnome.desktop.interface buttons-have-icons true && gsettings set org.gnome.desktop.interface menus-have-icons true";sh -c "ps aux | grep -v grep | grep -c 'gnome-settings-daemon'"]If you're on Gnome you can click on this button:
 #{Tip: If this line is grayed, it's because this tip is not for you.)
 MenuGnome=
 

@@ -124,6 +124,22 @@ static gboolean _cairo_default_container_animation_loop (CairoContainer *pContai
 		return TRUE;
 }
 
+static gboolean _set_opacity (GtkWidget *pWidget,
+#if (GTK_MAJOR_VERSION < 3)
+	GdkEventExpose *pExpose,
+#else
+	cairo_t *ctx,
+#endif
+	CairoContainer *pContainer)
+{
+	if (pContainer->iWidth != 1 ||pContainer->iHeight != 1)
+	{
+		g_signal_handlers_disconnect_by_func (pWidget, _set_opacity, pContainer);  // we'll never need to pass here any more, so simply disconnect ourselves.
+		//g_print ("____OPACITY 1 (%dx%d)\n", pContainer->iWidth, pContainer->iHeight);
+		gtk_window_set_opacity (GTK_WINDOW (pWidget), 1.);
+	}
+	return FALSE ;
+}
 GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow)
 {
 	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -159,6 +175,16 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
 	if (s_bSticky)
 		gtk_window_stick (GTK_WINDOW (pWindow));
+	// set the opacity to 0 to avoid seeing grey rectangles until the window is ready to be painted by us.
+	gtk_window_set_opacity (GTK_WINDOW (pWindow), 0.);
+	g_signal_connect (G_OBJECT (pWindow),
+		#if (GTK_MAJOR_VERSION < 3)
+		"expose-event",
+		#else
+		"draw",
+		#endif
+		G_CALLBACK (_set_opacity),
+		pContainer);  // the callback will be removed once it has done its job.
 	
 	// needed since gtk+-3.0 but it's possible that this resize grip has been backported to gtk+-2.0 (e.g. in Ubuntu Natty...)
 	#if (GTK_MAJOR_VERSION >= 3 || ENABLE_GTK_GRIP == 1)

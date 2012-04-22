@@ -11,7 +11,7 @@ include ("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/GNUInstallDirs.cmake")
 ########### project ###############
 
 project ("cairo-dock")
-set (VERSION "3.0.0.0rc1")
+set (VERSION "3.0.0")
 
 add_definitions (-std=c99 -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration -Wstrict-prototypes) # removed for stable versions: -Wstrict-prototypes #-Wunreachable-code -Wno-unused-parameter -Wall 
 if (NOT ${CMAKE_BUILD_TYPE})
@@ -53,7 +53,7 @@ set (datadir "${prefix}/${CMAKE_INSTALL_DATAROOTDIR}")  # (...)/share
 set (pkgdatadir "${datadir}/${CMAKE_PROJECT_NAME}")  # (...)/cairo-dock
 set (mandir "${prefix}/${CMAKE_INSTALL_MANDIR}")  # (...)/man
 
-set (VERSION_HELP "0.9.99") # needed to parse Help.conf.in
+set (VERSION_HELP "0.9.991") # needed to parse Help.conf.in
 
 if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND "${FORCE_LIB64}" STREQUAL "yes")  # 64bits and force install in lib64
 	set (libdir "${prefix}/lib64")

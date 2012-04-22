@@ -763,7 +763,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	{
 		//g_print ("forced leave event: %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
 	}
-	if (!_mouse_is_really_outside(pDock))
+	if (/**pEvent && */!_mouse_is_really_outside(pDock))  // check that the mouse is really outside (only if the request comes from the Window Manager; this is to work around buggy WM like KWin).
 	{
 		//g_print ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
 		if (pDock->iSidTestMouseOutside == 0 && pEvent)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement.
@@ -795,7 +795,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 					const int delay = 0;  // 250
 					if (delay != 0)  /// maybe try to se if we leaved the dock frankly, or just by a few pixels...
 					{
-						g_print (" delay the leave event by %dms\n", delay);
+						//g_print (" delay the leave event by %dms\n", delay);
 						pDock->iSidLeaveDemand = g_timeout_add (250, (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 						return TRUE;
 					}
@@ -942,7 +942,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 				cairo_dock_stop_icon_animation (pFlyingIcon);
 				// reinsert the icon where it was dropped, not at its original position.
 				Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
-				g_print (" pointed icon: %s\n", icon?icon->cName:"none");
+				//g_print (" pointed icon: %s\n", icon?icon->cName:"none");
 				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 				if (icon != NULL && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon))
 				{
@@ -1166,7 +1166,7 @@ gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton
 						cd_debug ("on relache l'icone volante");
 						if (pDock->container.bInside)
 						{
-							g_print ("  on la remet dans son dock d'origine\n");
+							//g_print ("  on la remet dans son dock d'origine\n");
 							Icon *pFlyingIcon = s_pFlyingContainer->pIcon;
 							cairo_dock_free_flying_container (s_pFlyingContainer);
 							cairo_dock_stop_marking_icon_as_following_mouse (pFlyingIcon);
@@ -1362,7 +1362,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				icon = ic->data;
 				if (icon->bDamaged)
 				{
-					g_print ("#### icon %s is damaged\n", icon->cName);
+					//g_print ("#### icon %s is damaged\n", icon->cName);
 					icon->bDamaged = FALSE;
 					if (cairo_dock_get_icon_data_renderer (icon) != NULL)
 					{
