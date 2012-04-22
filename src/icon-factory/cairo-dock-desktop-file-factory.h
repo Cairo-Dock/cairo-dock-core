@@ -46,7 +46,6 @@ void cairo_dock_remove_html_spaces (gchar *cString);
 *@param cURI URI of a file defining the launcher.
 *@param cDockName name of the dock the separator will be added.
 *@param fOrder order of the icon inside the dock.
-*@param iGroup group of the icon.
 *@param erreur an error filled if something went wrong.
 * @return the name of the new desktop file, in a newly allocated string, or NULL if failed.
 */
@@ -56,7 +55,6 @@ gchar *cairo_dock_add_desktop_file_from_uri (const gchar *cURI, const gchar *cDo
 *@param iLauncherType type of the icon it will represent : launcher, file, container icon, separator.
 *@param cDockName name of the dock the separator will be added.
 *@param fOrder order of the icon inside the dock.
-*@param iGroup group of the icon.
 *@param erreur an error filled if something went wrong.
 * @return the name of the new desktop file, in a newly allocated string, or NULL if failed.
 */

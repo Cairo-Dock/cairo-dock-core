@@ -244,13 +244,13 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 
 /** Make an icon static or not. Static icons are not animated when mouse hovers them.
 *@param icon an icon.
-*@param bStatic static or not.
+*@param _bStatic static or not.
 */
 #define cairo_dock_set_icon_static(icon, _bStatic) (icon)->bStatic = _bStatic
 
 /** Make an icon always visible, even when the dock is hidden.
 *@param icon an icon.
-*@param bAlwaysVisible whether the icon is always visible or not.
+*@param _bAlwaysVisible whether the icon is always visible or not.
 */
 #define cairo_dock_set_icon_always_visible(icon, _bAlwaysVisible) (icon)->bAlwaysVisible = _bAlwaysVisible
 

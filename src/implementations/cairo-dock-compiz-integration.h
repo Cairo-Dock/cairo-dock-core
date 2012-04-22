@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 #define CD_COMPIZ_BUS "org.freedesktop.compiz"
 #define CD_COMPIZ_OBJECT "/org/freedesktop/compiz"
 #define CD_COMPIZ_INTERFACE "org.freedesktop.compiz"
-///#define OLD_WIDGET_LAYER 1  // seems better to rely on the _COMPIZ_WIDGET atom than on a rule.
 
 void cd_init_compiz_backend (void);
 

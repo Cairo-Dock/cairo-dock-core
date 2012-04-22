@@ -77,6 +77,7 @@ typedef struct _CairoDockGuiBackend CairoDockGuiBackend;
 void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend);
 
 /**Retrieve the group-key widget in the current config panel, corresponding to the (group,key) pair in its conf file.
+@param pModuleInstance the applet making the demand.
 @param cGroupName name of the group in the conf file.
 @param cKeyName name of the key in the conf file.
 @return the group-key widget that match the group and key, or NULL if none was found.
@@ -84,6 +85,7 @@ void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend);
 CairoDockGroupKeyWidget *cairo_dock_get_group_key_widget_from_name (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName);
 
 /** A mere wrapper around the previous function, that returns directly the GTK widget corresponding to the (group,key). Note that empty widgets will return NULL, so you can't you can't distinguish between an empty widget and an inexisant widget.
+@param pModuleInstance the applet making the demand.
 @param cGroupName name of the group in the conf file.
 @param cKeyName name of the key in the conf file.
 @return the widget that match the group and key, or NULL if the widget is empty or if none was found.
@@ -93,7 +95,7 @@ GtkWidget *cairo_dock_get_widget_from_name (CairoDockModuleInstance *pModuleInst
 void cairo_dock_reload_current_widget_full (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
 /**Reload the widget of a given module instance if it is currently opened (the current page is displayed). This is useful if the module has modified its conf file and wishes to display the changes.
-@param pInstance an instance of a module.
+@param pModuleInstance an instance of a module.
 */
 #define cairo_dock_reload_current_module_widget(pModuleInstance) cairo_dock_reload_current_widget_full (pModuleInstance, -1)
 #define cairo_dock_reload_current_module_widget_full cairo_dock_reload_current_widget_full
