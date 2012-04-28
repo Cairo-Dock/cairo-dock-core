@@ -178,8 +178,8 @@ struct _CairoDock {
 	
 	/// Whether the dock is in a popped up state or not.
 	gboolean bIsBelow;
-	/// whether the menu is visible (to keep the dock on high position).
-	gboolean bMenuVisible;
+	/// TRUE if the dock has a modal window (menu, dialog, etc), that will block it.
+	gint bHasModalWindow;
 	/// whether the user is dragging something over the dock.
 	gboolean bIsDragging;
 	/// Backup of the auto-hide state before quick-hide.

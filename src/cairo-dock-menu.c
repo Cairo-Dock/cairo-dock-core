@@ -369,7 +369,7 @@ static void _cairo_dock_present_help (GtkMenuItem *pMenuItem, gpointer data)
 static void _cairo_dock_quick_hide (GtkMenuItem *pMenuItem, CairoDock *pDock)
 {
 	//g_print ("%s ()\n", __func__);
-	pDock->bMenuVisible = FALSE;
+	///pDock->bHasModalWindow = FALSE;
 	cairo_dock_quick_hide_all_docks ();
 }
 
