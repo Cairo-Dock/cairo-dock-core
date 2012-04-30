@@ -103,6 +103,7 @@ static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGO
 GSList *s_pCurrentWidgetList;  // liste des widgets du module courant.
 GSList *s_pExtraCurrentWidgetList;  // liste des widgets des eventuels modules lies.
 static GList *s_pGroupDescriptionList = NULL;
+static GtkWidget *s_pPreviewBox = NULL;
 static GtkWidget *s_pPreviewImage = NULL;
 static GtkWidget *s_pOkButton = NULL;
 static GtkWidget *s_pApplyButton = NULL;
@@ -930,9 +931,11 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 				1,
 				1);
 		}
+		else 
+			gtk_widget_show (s_pPreviewBox);
+
 		gtk_image_set_from_pixbuf (GTK_IMAGE (pPreviewImage), pPreviewPixbuf);
 		gdk_pixbuf_unref (pPreviewPixbuf);
-		gtk_widget_show (pPreviewImage);
 	}
 	
 	if (s_pDialog != NULL)
@@ -981,7 +984,7 @@ static void on_leave_group_button (GtkButton *button, gpointer *data)
 
 	int iPreviewWidgetWidth = s_iPreviewWidth;
 	GtkWidget *pPreviewImage = s_pPreviewImage;
-	gtk_widget_hide (pPreviewImage);
+	gtk_widget_hide (s_pPreviewBox);
 	
 	if (! cairo_dock_dialog_unreference (s_pDialog))
 		cairo_dock_dialog_unreference (s_pDialog);
@@ -1644,7 +1647,11 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	s_pGroupsVBox = _gtk_vbox_new (CAIRO_DOCK_TABLE_MARGIN);
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), s_pGroupsVBox);
+	GtkWidget *pViewport = gtk_viewport_new( NULL, NULL );
+	gtk_viewport_set_shadow_type ( GTK_VIEWPORT (pViewport), GTK_SHADOW_NONE);
+	gtk_container_add (GTK_CONTAINER( pViewport ), s_pGroupsVBox );
+	gtk_container_add (GTK_CONTAINER( pScrolledWindow ), pViewport );
+
 	gtk_box_pack_start (GTK_BOX (pVBox),
 		pScrolledWindow,
 		TRUE,
@@ -1652,6 +1659,13 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		0);
 	
 	//\_____________ Filter.
+	// Empty box to get some space between window border and filter label
+	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
+		_gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN / 2),
+		FALSE,
+		FALSE,
+		0);
+	
 	GtkWidget *pFilterFrame = cairo_dock_build_main_ihm_left_frame (_("Filter"));
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		pFilterFrame,
@@ -1820,15 +1834,15 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	gtk_widget_show_all (s_pActivateButton);
 	
 	//\_____________ On ajoute la zone de prevue.
-	GtkWidget *pInfoVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	s_pPreviewBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
-		pInfoVBox,
+		s_pPreviewBox,
 		FALSE,
 		FALSE,
 		0);
 	
 	s_pPreviewImage = gtk_image_new_from_pixbuf (NULL);
-	gtk_container_add (GTK_CONTAINER (pInfoVBox), s_pPreviewImage);
+	gtk_container_add (GTK_CONTAINER (s_pPreviewBox), s_pPreviewImage);
 	
 	//\_____________ On ajoute les boutons.
 	GtkWidget *pButtonsHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
@@ -1910,7 +1924,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	gtk_widget_show_all (s_pMainWindow);
 	cairo_dock_enable_apply_button (s_pMainWindow, FALSE);
 	gtk_widget_hide (s_pGroupFrame);
-	gtk_widget_hide (s_pPreviewImage);
+	gtk_widget_hide (s_pPreviewBox);
 	
 	g_signal_connect (G_OBJECT (s_pMainWindow),
 		"destroy",
