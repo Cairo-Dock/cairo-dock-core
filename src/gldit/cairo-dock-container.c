@@ -426,7 +426,7 @@ gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer)
 
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer *data)
 {
-	*push_in = TRUE;
+	*push_in = FALSE;
 	Icon *pIcon = data[0];
 	CairoContainer *pContainer = data[1];
 	int x0 = pContainer->iWindowPositionX + pIcon->fDrawX;
