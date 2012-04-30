@@ -136,6 +136,8 @@ gboolean cairo_dock_register_module (CairoDockModule *pModule)
 	
 	if (pModule->pVisitCard->cDockVersionOnCompilation == NULL)
 		pModule->pVisitCard->cDockVersionOnCompilation = GLDI_VERSION;
+	if (pModule->cConfFilePath == NULL && pModule->pVisitCard->cConfFileName)
+		pModule->cConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
 	
 	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
 	

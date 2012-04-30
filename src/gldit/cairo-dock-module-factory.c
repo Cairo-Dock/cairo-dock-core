@@ -163,6 +163,8 @@ static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError *
 
 	if (pVisitCard->cModuleName == NULL)
 		pVisitCard->cModuleName = _cairo_dock_extract_default_module_name_from_path (pCairoDockModule->cSoFilePath);
+	if (pVisitCard->cConfFileName)
+		pCairoDockModule->cConfFilePath = g_strdup_printf ("%s/%s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
 }
 
 CairoDockModule *cairo_dock_new_module (const gchar *cSoFilePath, GError **erreur)
@@ -229,8 +231,8 @@ gchar *cairo_dock_check_module_conf_dir (CairoDockModule *pModule)
 		}
 	}
 	
-	if (pModule->cConfFilePath == NULL)
-		pModule->cConfFilePath = g_strdup_printf ("%s/%s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
+	//if (pModule->cConfFilePath == NULL)
+	//	pModule->cConfFilePath = g_strdup_printf ("%s/%s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
 	
 	return cUserDataDirPath;
 }

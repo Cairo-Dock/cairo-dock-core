@@ -2226,7 +2226,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			if (iElementType != CAIRO_DOCK_WIDGET_EMPTY_WIDGET)  // inutile si rien dans dedans.
 			{	// cette boite permet d'empiler les widgets a droite, mais en les rangeant de gauche a droite normalement.
-				bFullSize = (iElementType == CAIRO_DOCK_WIDGET_THEME_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY || iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR);
+				bFullSize = (iElementType == CAIRO_DOCK_WIDGET_THEME_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY/** || iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR*/);
 				pWidgetBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
 				gtk_box_pack_end (GTK_BOX (pKeyBox),
 					pWidgetBox,
