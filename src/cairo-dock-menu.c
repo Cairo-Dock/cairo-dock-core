@@ -470,10 +470,7 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 		GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label (cName);
 		GtkWidget *image = gtk_image_new_from_pixbuf (pixbuf);
 		g_object_unref (pixbuf);
-		#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
-		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
-		#endif
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+		_gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
 		
 		gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem); 
 		
