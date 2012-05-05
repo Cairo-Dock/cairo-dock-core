@@ -136,8 +136,8 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 	if (pDock->container.iMouseX <= x1
 	|| pDock->container.iMouseX >= x2)
 		return TRUE;
-	if (pDock->container.iMouseY <= y1
-	|| pDock->container.iMouseY >= y2)
+	if (pDock->container.iMouseY < y1
+	|| pDock->container.iMouseY > y2)  // Note: Compiz has a bug: when using the "cube rotation" plug-in, it will reserve 2 pixels for itself on the left and right edges of the screen. So the mouse is not inside the dock when it's at x=0 or x=Ws-1 (no 'enter' event is sent; it's as if the x=0 or x=Ws-1 vertical line of pixels is out of the screen).
 		return TRUE;	
 	
 	return FALSE;
