@@ -37,36 +37,15 @@ static char DES_crypt_key[64] =
 }; 
 #endif
 
-#include "cairo-dock-draw.h"
-#include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-image-buffer.h"
-#include "cairo-dock-icon-manager.h"  // cairo_dock_hide_show_launchers_on_other_desktops
-#include "cairo-dock-icon-factory.h"
-#include "cairo-dock-icon-facility.h"
-#include "cairo-dock-applications-manager.h"
-#include "cairo-dock-module-factory.h"
-#include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-themes-manager.h"
-#include "cairo-dock-backends-manager.h"
-#include "cairo-dock-callbacks.h"
-#include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-X-utilities.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-keybinder.h"
-#include "cairo-dock-dock-manager.h"
-#include "cairo-dock-surface-factory.h"
-#include "cairo-dock-class-manager.h"
-#include "cairo-dock-gui-manager.h"
-#include "cairo-dock-desklet-manager.h"
-#include "cairo-dock-container.h"
-#include "cairo-dock-dock-facility.h"
-#include "cairo-dock-file-manager.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-indicator-manager.h"
-#include "cairo-dock-X-manager.h"
-#include "cairo-dock-core.h"
+#include "cairo-dock-icon-manager.h"  // cairo_dock_hide_show_launchers_on_other_desktops
+#include "cairo-dock-applications-manager.h"  // cairo_dock_start_applications_manager
+#include "cairo-dock-module-factory.h"  // cairo_dock_activate_modules_from_list
+#include "cairo-dock-keyfile-utilities.h"  // cairo_dock_update_conf_file
+#include "cairo-dock-dock-manager.h"  // cairo_dock_create_dock
+#include "cairo-dock-file-manager.h"  // cairo_dock_get_file_size
+#include "cairo-dock-launcher-manager.h"  // cairo_dock_load_launchers_from_dir
+#include "cairo-dock-core.h"  // gldi_free_all
 #include "cairo-dock-config.h"
 
 gboolean g_bEasterEggs = FALSE;
@@ -75,8 +54,6 @@ extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cConfFile;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
-//extern CairoDockHidingEffect *g_pHidingBackend;
-//extern CairoDockHidingEffect *g_pKeepingBelowBackend;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 
 static gboolean s_bLoading = FALSE;

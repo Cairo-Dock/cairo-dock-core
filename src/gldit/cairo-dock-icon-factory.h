@@ -206,12 +206,13 @@ struct _Icon {
 	gint iHideLabel;
 	gchar *cWmClass;
 	GList *pOverlays;
-	gdouble *pHiddenBgColor;
+	gdouble *pHiddenBgColor;  // NULL to use the default color
 	
 	gint iThumbnailX, iThumbnailY;  // X icon geometry for apps
 	gint iThumbnailWidth, iThumbnailHeight;
 	gboolean bDamaged;  // TRUE when the icon couldn't draw its surface, because the Gl context was not yet ready.
-	gpointer reserved[1];
+	gboolean bHasHiddenBg;
+	//gpointer reserved[1];
 };
 
 typedef void (*CairoIconContainerLoadFunc) (void);

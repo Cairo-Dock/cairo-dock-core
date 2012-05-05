@@ -350,11 +350,6 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 				pMinimalConfig->pHiddenBgColor = NULL;
 			}
 		}
-		else if (iBgColorType == 1)  // default bg color
-		{
-			if (myDocksParam.fHiddenBg[3] != 0)
-				pMinimalConfig->pHiddenBgColor = g_memdup (myDocksParam.fHiddenBg, sizeof (myDocksParam.fHiddenBg));
-		}
 	}
 	
 	//\____________________ on recupere les parametres de son desklet.
@@ -623,6 +618,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				pIcon->cFileName = pMinimalConfig->cIconFileName;
 				pMinimalConfig->cIconFileName = NULL;  // idem
 				pIcon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
+				pIcon->bHasHiddenBg = pMinimalConfig->bAlwaysVisible;  // if were going to see the applet all the time, let's add a background. if the user doesn't want it, he can always set a transparent bg color.
 				pIcon->pHiddenBgColor = pMinimalConfig->pHiddenBgColor;
 				pMinimalConfig->pHiddenBgColor = NULL;
 			}
