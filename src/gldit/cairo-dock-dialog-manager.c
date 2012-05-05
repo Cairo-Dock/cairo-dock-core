@@ -854,11 +854,9 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 	attr.pUserData = data;
 	attr.pFreeDataFunc = pFreeDataFunc;
 	attr.iTimeLength = (int) fTimeLength;
+	const gchar *cDefaultActionButtons[3] = {"ok", "cancel", NULL};
 	if (pActionFunc != NULL)
-	{
-		const gchar *cButtons[3] = {"ok", "cancel", NULL};
-		attr.cButtonsImage = cButtons;
-	}
+		attr.cButtonsImage = cDefaultActionButtons;
 	
 	CairoDialog *pDialog = cairo_dock_build_dialog (&attr, pIcon, pContainer);
 	return pDialog;
