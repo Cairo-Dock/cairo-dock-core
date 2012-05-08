@@ -100,7 +100,7 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 {
 	if (icon->pContainer == NULL)
 	{
-		//g_print ("/!\\ Icon %s is not inside a container !!!\n", icon->cName);
+		cd_warning ("/!\\ Icon %s is not inside a container !!!", icon->cName);
 		return;
 	}
 	CairoDockModuleInstance *pInstance = icon->pModuleInstance;  // this is the only function where we destroy/create the icon's surface, so we must handle the cairo-context here.
