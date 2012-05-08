@@ -1698,6 +1698,8 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 			while (*str == ' ')  // on enleve les espaces supplementaires.
 				str ++;
 			gchar *exe = g_strstr_len (str, -1, ".exe");  // on cherche a isoler le nom de l'executable, puisque wine l'utilise dans le res_name.
+			if (!exe)
+				exe = g_strstr_len (str, -1, ".EXE");
 			if (exe)
 			{
 				*exe = '\0';  // vire l'extension par la meme occasion.
