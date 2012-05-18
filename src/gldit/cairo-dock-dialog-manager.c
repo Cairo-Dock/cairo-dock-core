@@ -527,7 +527,13 @@ gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
 				CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
 				//g_print ("leave from container %x\n", pContainer);
 				if (pContainer)
+				{
+					if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
+					{
+						CAIRO_DOCK (pContainer)->bHasModalWindow = FALSE;
+					}
 					cairo_dock_emit_leave_signal (pContainer);
+				}
 				
 				if (pIcon->iHideLabel > 0)
 				{
@@ -848,11 +854,9 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 	attr.pUserData = data;
 	attr.pFreeDataFunc = pFreeDataFunc;
 	attr.iTimeLength = (int) fTimeLength;
+	const gchar *cDefaultActionButtons[3] = {"ok", "cancel", NULL};
 	if (pActionFunc != NULL)
-	{
-		const gchar *cButtons[3] = {"ok", "cancel", NULL};
-		attr.cButtonsImage = cButtons;
-	}
+		attr.cButtonsImage = cDefaultActionButtons;
 	
 	CairoDialog *pDialog = cairo_dock_build_dialog (&attr, pIcon, pContainer);
 	return pDialog;
@@ -1147,8 +1151,13 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog)
 			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
 			//g_print ("leave from container %x\n", pContainer);
 			if (pContainer)
+			{
+				if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
+				{
+					CAIRO_DOCK (pContainer)->bHasModalWindow = FALSE;
+				}
 				cairo_dock_emit_leave_signal (pContainer);
-			
+			}
 			if (pIcon->iHideLabel > 0)
 			{
 				pIcon->iHideLabel --;
@@ -1177,6 +1186,10 @@ void cairo_dock_unhide_dialog (CairoDialog *pDialog)
 				if (pIcon->iHideLabel == 0 && pContainer)
 					gtk_widget_queue_draw (pContainer->pWidget);
 				pIcon->iHideLabel ++;
+			}
+			if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
+			{
+				CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
 			}
 		}
 	}

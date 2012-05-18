@@ -136,8 +136,8 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 	if (pDock->container.iMouseX <= x1
 	|| pDock->container.iMouseX >= x2)
 		return TRUE;
-	if (pDock->container.iMouseY <= y1
-	|| pDock->container.iMouseY >= y2)
+	if (pDock->container.iMouseY < y1
+	|| pDock->container.iMouseY > y2)  // Note: Compiz has a bug: when using the "cube rotation" plug-in, it will reserve 2 pixels for itself on the left and right edges of the screen. So the mouse is not inside the dock when it's at x=0 or x=Ws-1 (no 'enter' event is sent; it's as if the x=0 or x=Ws-1 vertical line of pixels is out of the screen).
 		return TRUE;	
 	
 	return FALSE;
@@ -479,8 +479,6 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 	static double fLastTime = 0;
 	if (s_bFrozenDock && pMotion != NULL && pMotion->time != 0)
 		return FALSE;
-	if (pDock->bMenuVisible)
-		return FALSE;
 	Icon *pPointedIcon=NULL, *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	int iLastMouseX = pDock->container.iMouseX;
 	//g_print ("%s (%.2f;%.2f, %d)\n", __func__, pMotion->x, pMotion->y, pDock->iInputState);
@@ -662,8 +660,8 @@ gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock,
 	
 	//g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bMenuVisible);
 	
-	//\_______________ On quitte si le menu est leve, pour rester en position haute.
-	if (pDock->bMenuVisible)
+	//\_______________ If a modal window is raised, we discard the 'leave-event' to stay in the up position.
+	if (pDock->bHasModalWindow)
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 	
 	//\_______________ On gere le drag d'une icone hors du dock.
@@ -745,7 +743,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	
 	//\_______________ On ignore les signaux errones venant d'un WM buggue (Kwin) ou meme de X (changement de bureau).
 	//if (pEvent)
-	//	//g_print ("leave event: %d;%d; %d;%d; %d; %d\n", (int)pEvent->x, (int)pEvent->y, (int)pEvent->x_root, (int)pEvent->y_root, pEvent->mode, pEvent->detail);
+		//g_print ("leave event: %d;%d; %d;%d; %d; %d\n", (int)pEvent->x, (int)pEvent->y, (int)pEvent->x_root, (int)pEvent->y_root, pEvent->mode, pEvent->detail);
 	if (pEvent && (pEvent->x != 0 ||  pEvent->y != 0 || pEvent->x_root != 0 || pEvent->y_root != 0))  // strange leave events occur (detail = GDK_NOTIFY_NONLINEAR, nil coordinates); let's ignore them!
 	{
 		if (pDock->container.bIsHorizontal)
@@ -766,7 +764,7 @@ gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 	if (/**pEvent && */!_mouse_is_really_outside(pDock))  // check that the mouse is really outside (the request might not come from the Window Manager, for instance if we deactivate the menu; this also works around buggy WM like KWin).
 	{
 		//g_print ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
-		if (pDock->iSidTestMouseOutside == 0 && pEvent && ! pDock->bMenuVisible)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement. C'est ausi vrai pour l'affichage d'un menu, mais comme on envoie nous-meme un signal de sortie lorsque le menu disparait, il est inutile de le faire ici.
+		if (pDock->iSidTestMouseOutside == 0 && pEvent && ! pDock->bHasModalWindow)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement. C'est ausi vrai pour l'affichage d'un menu/dialogue interactif, mais comme on envoie nous-meme un signal de sortie lorsque le menu disparait, il est inutile de le faire ici.
 		{
 			//g_print ("start checking mouse\n");
 			pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);

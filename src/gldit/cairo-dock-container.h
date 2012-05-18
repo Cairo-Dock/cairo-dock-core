@@ -356,6 +356,15 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
 #endif
 
 
+#if ((CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1) && (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16))
+	#define _gtk_image_menu_item_set_image(pMenuItem, image) do {\
+		gtk_image_menu_item_set_image (pMenuItem, image);\
+		gtk_image_menu_item_set_always_show_image (pMenuItem, TRUE); } while (0)
+#else
+	#define _gtk_image_menu_item_set_image gtk_image_menu_item_set_image
+#endif
+
+
   /////////////////
  // INPUT SHAPE //
 /////////////////

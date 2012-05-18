@@ -31,7 +31,6 @@
 #ifndef __CD_KEY_BINDER_H__
 #define __CD_KEY_BINDER_H__
 
-#include <glib/gtypes.h>
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
 

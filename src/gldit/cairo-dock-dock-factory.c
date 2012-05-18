@@ -160,7 +160,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 				cairo_dock_pop_down (pDock);
 			
 			//\__________________ On se redimensionne en taille normale.
-			if (! pDock->bAutoHide && pDock->iRefCount == 0 && ! pDock->bMenuVisible)  // fin de shrink sans auto-hide => taille normale.
+			if (! pDock->bAutoHide && pDock->iRefCount == 0/** && ! pDock->bMenuVisible*/)  // fin de shrink sans auto-hide => taille normale.
 			{
 				//g_print ("taille normale (%x; %d)\n", pDock->pShapeBitmap , pDock->iInputState);
 				if (pDock->pShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_AT_REST)
@@ -443,9 +443,9 @@ static void _on_menu_deactivated (GtkMenuShell *menu, CairoDock *pDock)
 {
 	//g_print ("\n+++ %s ()\n\n", __func__);
 	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
-	if (pDock->bMenuVisible)  // don't send the signal if the menu was already deactivated.
+	if (pDock->bHasModalWindow)  // don't send the signal if the menu was already deactivated.
 	{
-		pDock->bMenuVisible = FALSE;
+		pDock->bHasModalWindow = FALSE;
 		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 	}
 }
@@ -480,7 +480,7 @@ static gboolean _on_dock_destroyed (GtkWidget *menu, CairoContainer *pContainer)
 static void _setup_menu (CairoContainer *pContainer, Icon *pIcon, GtkWidget *pMenu)
 {
 	// keep the dock visible
-	CAIRO_DOCK (pContainer)->bMenuVisible = TRUE;
+	CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
 	
 	// connect signals
 	if (g_signal_handler_find (pMenu,

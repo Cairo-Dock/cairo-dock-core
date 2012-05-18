@@ -988,12 +988,12 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 		cWmClass = g_strdup (pClassHint->res_class);
 		
 		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", pClassHint->res_name, pClassHint->res_name, pClassHint->res_class, pClassHint->res_class);
-		if (strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && g_str_has_suffix (pClassHint->res_name, ".exe"))
+		if (strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && (g_str_has_suffix (pClassHint->res_name, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))
 		{
 			cd_debug ("  wine application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
 			cClass = g_ascii_strdown (pClassHint->res_name, -1);
 		}
-		else if (*pClassHint->res_class == '/' && g_str_has_suffix (pClassHint->res_class, ".exe"))  // cas des applications Mono telles que tomboy ...
+		else if (*pClassHint->res_class == '/' && (g_str_has_suffix (pClassHint->res_class, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))  // cas des applications Mono telles que tomboy ...
 		{
 			gchar *str = strrchr (pClassHint->res_class, '/');
 			if (str)
@@ -1019,7 +1019,10 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 		XFree (pClassHint->res_class);
 		XFree (pClassHint);
 	}
-	*cWMClass = cWmClass;
+	if (cWMClass)
+		*cWMClass = cWmClass;
+	else
+		g_free (cWmClass);
 	return cClass;
 }
 

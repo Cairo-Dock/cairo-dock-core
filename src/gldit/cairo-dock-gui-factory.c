@@ -38,6 +38,7 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-X-utilities.h"  // cairo_dock_get_xwindow_class
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-image-buffer.h"
@@ -868,28 +869,29 @@ static void _cairo_dock_key_grab_class (GtkButton *button, gpointer *data)
 	GtkWindow *pParentWindow = data[1];
 
 	cd_debug ("clicked");
-	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE); // locked (plus zoli :) )
-
-	gchar *cProp = cairo_dock_launch_command_sync ("xprop"); // avec "| grep CLASS | cut -d\\\" -f2", ca ne fonctionne pas et Fab n'aime pas les g_spawn_command_line_sync :) --> c'est surtout que c'est g_spawn_command_line_sync qui n'aime pas les grep.
-
-	gchar *str = g_strstr_len (cProp, -1, "WM_CLASS(STRING)"); // str pointant sur WM_
-	gchar *cResult = NULL; // NON CE N'EST PAS MA MOYENNE DE POINT !!!!
-	if (str != NULL)
+	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE);  // lock the widget during the grab (it makes it more comprehensive).
+	
+	// We could use 'xprop' and look for the WM_CLASS field; however, in case of a Wine or Mono application, it wouldn't work so easily.
+	// So we just get the window ID, and pass it to the Class Manager, which has all the logic needed for class matching.
+	gchar *cResult = NULL;
+	gchar *cProp = cairo_dock_launch_command_sync ("xwininfo");  // let the user grab the window, and get the result.
+	const gchar *str = g_strstr_len (cProp, -1, "Window id");  // look for the window ID
+	if (str)
 	{
-		// WM_CLASS(STRING) = "gnome-terminal", "Gnome-terminal" \\ => utiliser le 2eme
-		str = strchr (str, ',');
-		str += 3;
-		gchar *max = strchr (str, '"'); // on pointe le 2e "
-		if (max != NULL)
-			cResult = g_strndup (str, max - str); // on prend ce qui est entre ""
+		// xwininfo: Window id: 0xc00009 "name-of-the-window"
+		str += 9;  // skip "Window id"
+		while (*str == ' ' || *str == ':')  // skip the ':'
+			str ++;
+		Window Xid = strtol (str, NULL, 0);  // XID is an unsigned long; we let the base be 0, so that the function guesses by itself.
+		cResult = cairo_dock_get_xwindow_class (Xid, NULL);  // let the class manager do the dirty job.
 	}
-	if (cResult == NULL)
+	if (cResult == NULL)  // shouldn't happen, so don't bother to present the warning to the user more than that.
 		cd_warning ("couldn't find the class of this window.");
 	
-	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE); // unlocked
-	gtk_entry_set_text (pEntry, cResult); // on ajoute le txt dans le box des accuses
-	g_free (cProp); // Ah, mnt C Propr' !
-	g_free (cResult); // Ou qu'elle est la poulette ???
+	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE);  // unlock the widget
+	gtk_entry_set_text (pEntry, cResult);  // write the result in the entry-box
+	g_free (cProp);
+	g_free (cResult);
 }
 
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)

@@ -537,9 +537,10 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	//\________________ Interactive dialogs are set modal, to be fixed.
 	if ((pDialog->pInteractiveWidget || pDialog->pButtons || pAttribute->iTimeLength == 0) && ! pDialog->bNoInput)
 	{
-		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);
+		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);  // Note: there is a bug in Ubuntu version of GTK: gtkscrolledwindow in dialog breaks his modality (http://www.gtkforums.com/viewtopic.php?f=3&t=55727).
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
 		{
+			CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
 			cairo_dock_emit_enter_signal (pContainer);  // to prevent the dock from hiding. We want to see it until the dialog is visible (a leave event will be emited when it disappears).
 		}
 	}

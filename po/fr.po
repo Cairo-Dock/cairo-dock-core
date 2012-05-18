@@ -3555,12 +3555,12 @@ msgstr "Pourcentage de la couleur claire :"
 
 #: ../data/messages:907
 msgid "Background when hidden"
-msgstr "Arrière plan lorsque que c'est caché"
+msgstr "Arrière plan du dock caché"
 
 #: ../data/messages:909
 msgid "Several applets can be visible even when the dock is hidden"
 msgstr ""
-"Plusieurs applets peuvent être visible même lorsque le dock est caché."
+"Plusieurs applets peuvent être visibles même lorsque le dock est caché."
 
 #: ../data/messages:911
 msgid "Default background color when the dock is hidden"

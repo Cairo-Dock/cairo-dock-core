@@ -426,7 +426,7 @@ gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer)
 
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer *data)
 {
-	*push_in = TRUE;
+	*push_in = FALSE;
 	Icon *pIcon = data[0];
 	CairoContainer *pContainer = data[1];
 	int x0 = pContainer->iWindowPositionX + pIcon->fDrawX;
@@ -505,10 +505,7 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 		{
 			image = gtk_image_new_from_stock (gtkStock, GTK_ICON_SIZE_MENU);
 		}
-#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
-		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
-#endif
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+		_gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
 	}
 	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem);
 	if (pFunction)
@@ -536,10 +533,7 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 		{
 			image = gtk_image_new_from_stock (cImage, GTK_ICON_SIZE_MENU);
 		}
-#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
-		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
-#endif
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+		_gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
 	}
 	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem); 
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);

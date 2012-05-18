@@ -916,7 +916,7 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	double y;
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
-	double pHiddenBgColor[4];
+	double *pHiddenBgColor;
 	const double r = 4; // corner radius of the background
 	const double gap = 3;  // gap to the screen
 	double dw = (myIconsParam.iIconGap > 2 ? 2 : 0);  // 1px margin around the icons for a better readability (only if icons won't be stuck togather then).
@@ -929,10 +929,14 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 			y = icon->fDrawY;
 			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale  - gap: gap);
 			
-			if (icon->pHiddenBgColor)
+			if (icon->bHasHiddenBg)
 			{
+				if (icon->pHiddenBgColor)  // custom bg color
+					pHiddenBgColor = icon->pHiddenBgColor;
+				else  // default bg color
+					pHiddenBgColor = myDocksParam.fHiddenBg;
 				cairo_save (pCairoContext);
-				cairo_set_source_rgba (pCairoContext, icon->pHiddenBgColor[0], icon->pHiddenBgColor[1], icon->pHiddenBgColor[2], icon->pHiddenBgColor[3] * pDock->fPostHideOffset);
+				cairo_set_source_rgba (pCairoContext, pHiddenBgColor[0], pHiddenBgColor[1], pHiddenBgColor[2], pHiddenBgColor[3] * pDock->fPostHideOffset);
 				w = icon->fWidth * icon->fScale;
 				h = icon->fHeight * icon->fScale;
 				if (pDock->container.bIsHorizontal)

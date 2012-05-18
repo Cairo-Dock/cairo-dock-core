@@ -322,7 +322,7 @@ when defining your applet in the \ref CD_APPLET_DEFINE_BEGIN/\ref CD_APPLET_DEFI
  * 
  * \subsection render_container How can I draw anywhere on the dock, not only on my icon ?
  * 
- * Say you want to draw directly on your container, like <i>CairoPenguin</i> or <i>ShowMouse</i> do. This can be achieved easily by registering to the \ref NOTIFICATION_RENDER_DOCK or \ref NOTIFICATION_RENDER_DESKLET notifications. You will then be notified eash time a Dock or a Desklet is drawn. Register AFTER so that you will draw after the view.
+ * Say you want to draw directly on your container, like <i>CairoPenguin</i> or <i>ShowMouse</i> do. This can be achieved easily by registering to the \ref NOTIFICATION_RENDER notification. You will then be notified eash time a Dock or a Desklet is drawn. Register AFTER so that you will draw after the view.
  * 
  * 
  */
