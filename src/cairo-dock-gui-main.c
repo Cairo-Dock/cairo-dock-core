@@ -24,6 +24,9 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
+
+#include <gdk/gdkx.h>
+
 #include "config.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-icon-facility.h"
@@ -123,7 +126,8 @@ static GtkWidget *s_pStatusBar = NULL;
 static GSList *s_path = NULL;
 static int s_iPreviewWidth, s_iNbButtonsByRow;
 static CairoDialog *s_pDialog = NULL;
-static int s_iSidShowGroupDialog = 0;
+static guint s_iSidShowGroupDialog = 0;
+static guint s_iSidCheckGroupButton = 0;
 
 static const gchar *s_cCategoriesDescription[2*(CAIRO_DOCK_NB_CATEGORY+1)] = {
 	N_("Behaviour"), "icon-behavior.svg",
@@ -803,6 +807,10 @@ static void on_click_back_button (GtkButton *button, gpointer data)
 	_show_group_or_category (pPrevPlace);
 }
 
+static void _on_group_dialog_destroyed (gpointer data)
+{
+	s_pDialog = NULL;
+}
 static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription)
 {
 	gchar *cDescription = NULL;
@@ -869,9 +877,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 		gdk_pixbuf_unref (pPreviewPixbuf);
 	}
 	
-	if (s_pDialog != NULL)
-		if (! cairo_dock_dialog_unreference (s_pDialog))
-			cairo_dock_dialog_unreference (s_pDialog);
+	cairo_dock_dialog_unreference (s_pDialog);
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
 	if (pIcon == NULL || pIcon->cParentDockName == NULL || cairo_dock_icon_is_being_removed (pIcon))
 		pIcon = cairo_dock_get_dialogless_icon ();
@@ -882,11 +888,10 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	attr.cText = dgettext (pGroupDescription->cGettextDomain, cDescription != NULL ? cDescription : pGroupDescription->cDescription);
 	attr.cImageFilePath = pGroupDescription->cIcon;
 	attr.bNoInput = TRUE;
+	attr.pFreeDataFunc = _on_group_dialog_destroyed;
 	myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
 	s_pDialog = cairo_dock_build_dialog (&attr, pIcon, CAIRO_CONTAINER (pDock));
 	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
-	
-	cairo_dock_dialog_reference (s_pDialog);
 	
 	gtk_window_set_transient_for (GTK_WINDOW (s_pDialog->container.pWidget), GTK_WINDOW (s_pMainWindow));
 	g_free (cDescription);
@@ -894,33 +899,85 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	s_iSidShowGroupDialog = 0;
 	return FALSE;
 }
-static void on_enter_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
+
+static GtkButton *s_pCurrentButton = NULL;
+static gboolean on_enter_group_button (GtkButton *button, GdkEventCrossing *pEvent, CairoDockGroupDescription *pGroupDescription)
 {
-	//g_print ("%s (%s)\n", __func__, pGroupDescription->cDescription);
+	g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
 	if (g_pPrimaryContainer == NULL)  // inutile en maintenance, le dialogue risque d'apparaitre sur la souris.
-		return ;
+		return FALSE;
 	
+	// if we were about to show a dialog, cancel it to reset the timer.
 	if (s_iSidShowGroupDialog != 0)
 		g_source_remove (s_iSidShowGroupDialog);
 	
+	if (s_iSidCheckGroupButton != 0)
+	{
+		g_source_remove (s_iSidCheckGroupButton);
+		s_iSidCheckGroupButton = 0;
+	}
+	
+	// avoid re-entering the same button (can happen if the input shape of the dialog is set a bit late by X, and the dialog spawns under the cursor, which will make us leave the button and re-enter when the input shape is ready).
+	if (s_pCurrentButton == button)
+		return FALSE;
+	s_pCurrentButton = button;  // we don't actually use the content of the pointer, only the address value.
+	
+	// show the dialog with a delay.
 	s_iSidShowGroupDialog = g_timeout_add (330, (GSourceFunc)_show_group_dialog, (gpointer) pGroupDescription);
+	return FALSE;
 }
-static void on_leave_group_button (GtkButton *button, gpointer *data)
+static gboolean _check_group_button (gpointer data)
 {
-	//g_print ("%s ()\n", __func__);
+	Window Xid = GDK_WINDOW_XID (gtk_widget_get_window (s_pMainWindow));
+	if (Xid != cairo_dock_get_current_active_window ())  // we're not the active window any more, so the 'leave' event was probably due to an Alt+Tab -> the mouse is really out of the button.
+	{
+		gtk_widget_hide (s_pPreviewBox);
+	
+		cairo_dock_dialog_unreference (s_pDialog);
+		
+		s_pCurrentButton = NULL;
+	}
+	s_iSidCheckGroupButton = 0;
+	return FALSE;
+}
+static gboolean on_leave_group_button (GtkButton *button, GdkEventCrossing *pEvent, gpointer data)
+{
+	g_print ("%s (%d, %d)\n", __func__, pEvent->mode, pEvent->detail);
+	// if we were about to show the dialog, cancel.
 	if (s_iSidShowGroupDialog != 0)
 	{
 		g_source_remove (s_iSidShowGroupDialog);
 		s_iSidShowGroupDialog = 0;
 	}
-
-	int iPreviewWidgetWidth = s_iPreviewWidth;
-	GtkWidget *pPreviewImage = s_pPreviewImage;
+	
+	if (s_iSidCheckGroupButton != 0)
+	{
+		g_source_remove (s_iSidCheckGroupButton);
+		s_iSidCheckGroupButton = 0;
+	}
+	
+	// check that we are really outside of the button (this may be false if the dialog is appearing under the mouse and has not yet its input shape (X lag)).
+	if (pEvent->detail != GDK_NOTIFY_ANCESTOR)  // a LeaveNotify event not within the same window (ie, either an Alt+Tab or the dialog that spawned under the cursor)
+	{
+		int x, y;
+		gtk_widget_get_pointer (GTK_WIDGET (button), &x, &y);
+		GtkAllocation allocation;
+		gtk_widget_get_allocation (GTK_WIDGET (button), &allocation);
+		if (x >= 0 && x < allocation.width && y >= 0 && y < allocation.height)  // we are actually still inside the button, ignore the event, we'll get an 'enter' event as soon as the dialog's input shape is ready.
+		{
+			s_iSidCheckGroupButton = g_timeout_add (1000, _check_group_button, NULL);  // check in a moment if we left the button because of the dialog or because of another window (alt+tab).
+			return FALSE;
+		}
+	}
+	
+	// hide the dialog and the preview box.
 	gtk_widget_hide (s_pPreviewBox);
 	
-	if (! cairo_dock_dialog_unreference (s_pDialog))
-		cairo_dock_dialog_unreference (s_pDialog);
-	s_pDialog = NULL;
+	cairo_dock_dialog_unreference (s_pDialog);
+	
+	s_pCurrentButton = NULL;
+	
+	return FALSE;
 }
 
 
@@ -985,6 +1042,12 @@ static gboolean on_delete_main_gui (GtkWidget *pWidget, gpointer data)
 	{
 		g_source_remove (s_iSidShowGroupDialog);
 		s_iSidShowGroupDialog = 0;
+	}
+	cairo_dock_dialog_unreference (s_pDialog);
+	if (s_iSidCheckGroupButton != 0)
+	{
+		g_source_remove (s_iSidCheckGroupButton);
+		s_iSidCheckGroupButton = 0;
 	}
 	return FALSE;
 }
@@ -1364,8 +1427,8 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 		g_signal_connect (G_OBJECT (pGroupButton), "clicked", G_CALLBACK(on_click_group_button), pGroupDescription);
 	else
 		gtk_widget_set_sensitive (pGroupButton, FALSE);
-	g_signal_connect (G_OBJECT (pGroupButton), "enter", G_CALLBACK(on_enter_group_button), pGroupDescription);
-	g_signal_connect (G_OBJECT (pGroupButton), "leave", G_CALLBACK(on_leave_group_button), NULL);
+	g_signal_connect (G_OBJECT (pGroupButton), "enter-notify-event", G_CALLBACK(on_enter_group_button), pGroupDescription);
+	g_signal_connect (G_OBJECT (pGroupButton), "leave-notify-event", G_CALLBACK(on_leave_group_button), NULL);
 
 	GtkWidget *pButtonHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
 	GtkWidget *pImage = _make_image (cIconPath, CAIRO_DOCK_GROUP_ICON_SIZE);
