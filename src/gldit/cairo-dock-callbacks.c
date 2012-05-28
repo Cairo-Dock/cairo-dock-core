@@ -98,7 +98,7 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 			: (pDock->container.iMouseY < 0
 			||
 		pDock->container.iMouseY >= (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight))));*/
-	double x1, x2, y1, y2;
+	int x1, x2, y1, y2;
 	if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 	{
 		x1 = 0;
@@ -106,14 +106,14 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 		if (pDock->container.bDirectionUp)
 		{
 			///y1 = (pDock->fMagnitudeMax != 0 ? 0 : pDock->container.iHeight - pDock->iMinDockHeight);
-			y1 = pDock->container.iHeight - pDock->iActiveHeight;
+			y1 = pDock->container.iHeight - pDock->iActiveHeight + 1;
 			y2 = pDock->container.iHeight;
 		}
 		else
 		{
 			y1 = 0;
 			///y2 = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
-			y2 = pDock->iActiveHeight;
+			y2 = pDock->iActiveHeight - 1;
 		}
 	}
 	else if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
@@ -122,13 +122,13 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 		x2 = (pDock->container.iWidth + pDock->iMinDockWidth) / 2;
 		if (pDock->container.bDirectionUp)
 		{
-			y1 = pDock->container.iHeight - pDock->iMinDockHeight;
+			y1 = pDock->container.iHeight - pDock->iMinDockHeight + 1;
 			y2 = pDock->container.iHeight;
 		}
 		else
 		{
 			y1 = 0;
-			y2 = pDock->iMinDockHeight;
+			y2 = pDock->iMinDockHeight - 1;
 		}		
 	}
 	else  // hidden
