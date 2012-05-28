@@ -47,6 +47,7 @@ static Atom s_aNetWmSkipTaskbar;
 static Atom s_aNetWmWindowType;
 static Atom s_aNetWmWindowTypeNormal;
 static Atom s_aNetWmWindowTypeDialog;
+static Atom s_aNetWmWindowTypeDock;
 static Atom s_aWmHints;
 static Atom s_aNetWmHidden;
 static Atom s_aNetWmFullScreen;
@@ -69,6 +70,7 @@ static void _cairo_dock_initialize_application_factory (void)
 	s_aNetWmWindowType = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
 	s_aNetWmWindowTypeNormal = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
 	s_aNetWmWindowTypeDialog = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DIALOG", False);
+	s_aNetWmWindowTypeDock = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DOCK", False);
 	
 	s_aWmHints = XInternAtom (s_XDisplay, "WM_HINTS", False);
 	
@@ -197,6 +199,10 @@ Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 					break;
 				}
 			}  // skip any other type (dock, menu, etc)
+			else if (pTypeBuffer[i] == s_aNetWmWindowTypeDock)  // workaround for the Unity-panel: if the type 'dock' is present, don't look further (as they add the 'normal' type too, which is non-sense).
+			{
+				break;
+			}
 		}
 		XFree (pTypeBuffer);
 		if (! bKeep)
