@@ -1653,7 +1653,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	
 	cd_debug ("%s (%s, '%s')", __func__, cCommand, cStartupWMClass);
 	gchar *cResult = NULL;
-	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
+	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || g_strcmp0 (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 	{
 		if (cCommand == NULL || *cCommand == '\0')
 			return NULL;
@@ -1661,7 +1661,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 		gchar *str;
 		const gchar *cClass = cDefaultClass;  // pointer to the current class.
 		
-		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0 || strncmp (cClass, "su-to-root", 10) == 0)  // on prend la fin.
+		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 5) == 0 || strncmp (cClass, "su-to-root", 10) == 0)  // on prend la fin.
 		{
 			str = (gchar*)cClass + strlen(cClass) - 1;  // last char.
 			while (*str == ' ')  // par securite on enleve les espaces en fin de ligne.
