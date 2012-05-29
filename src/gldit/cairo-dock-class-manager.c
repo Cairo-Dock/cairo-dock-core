@@ -1911,7 +1911,18 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 			{
 				gchar **pMenuItem = g_new0 (gchar*, 4);
 				pMenuItem[0] = g_key_file_get_locale_string (pKeyFile, cGroup, "Name", NULL, NULL);
-				pMenuItem[1] = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
+				cCommand = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
+				if (cCommand != NULL)  // remove the launching options %x.
+				{
+					gchar *str = strchr (cCommand, '%');  // search the first one.
+					if (str != NULL)
+					{
+						if (str != cCommand && (*(str-1) == '"' || *(str-1) == '\''))  // take care of "" around the option.
+							str --;
+						*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
+					}
+				}
+				pMenuItem[1] = cCommand;
 				pMenuItem[2] = g_key_file_get_string (pKeyFile, cGroup, "Icon", NULL);
 				
 				pClassAppli->pMenuItems = g_list_append (pClassAppli->pMenuItems, pMenuItem);
