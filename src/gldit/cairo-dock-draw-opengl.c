@@ -571,29 +571,32 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 			
 			if (icon->bHasHiddenBg)
 			{
-				glPushMatrix ();
 				if (icon->pHiddenBgColor)  // custom bg color
 					memcpy (pHiddenBgColor, icon->pHiddenBgColor, 4*sizeof (gdouble));
 				else  // default bg color
 					memcpy (pHiddenBgColor, myDocksParam.fHiddenBg, 4*sizeof (gdouble));
 				pHiddenBgColor[3] *= pDock->fPostHideOffset;
-				w = icon->fWidth * icon->fScale;
-				h = icon->fHeight * icon->fScale;
-				if (pDock->container.bIsHorizontal)
+				if (pHiddenBgColor[3] != 0)
 				{
-					glTranslatef (icon->fDrawX + w/2,
-						pDock->container.iHeight - icon->fDrawY - h/2,
-						0.);
-					cairo_dock_draw_rounded_rectangle_opengl (w - 2*r + dw, h, r, 0, pHiddenBgColor);
+					glPushMatrix ();
+					w = icon->fWidth * icon->fScale;
+					h = icon->fHeight * icon->fScale;
+					if (pDock->container.bIsHorizontal)
+					{
+						glTranslatef (icon->fDrawX + w/2,
+							pDock->container.iHeight - icon->fDrawY - h/2,
+							0.);
+						cairo_dock_draw_rounded_rectangle_opengl (w - 2*r + dw, h, r, 0, pHiddenBgColor);
+					}
+					else
+					{
+						glTranslatef (icon->fDrawY + h/2,
+							pDock->container.iWidth - icon->fDrawX - w/2,
+							0.);
+						cairo_dock_draw_rounded_rectangle_opengl (h - 2*r + dw, w, r, 0, pHiddenBgColor);
+					}
+					glPopMatrix ();
 				}
-				else
-				{
-					glTranslatef (icon->fDrawY + h/2,
-						pDock->container.iWidth - icon->fDrawX - w/2,
-						0.);
-					cairo_dock_draw_rounded_rectangle_opengl (h - 2*r + dw, w, r, 0, pHiddenBgColor);
-				}
-				glPopMatrix ();
 			}
 			
 			glPushMatrix ();

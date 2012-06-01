@@ -344,7 +344,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		{
 			gsize length;
 			pMinimalConfig->pHiddenBgColor = g_key_file_get_double_list (pKeyFile, "Icon", "bg color", &length, NULL);
-			if (length < 4 || pMinimalConfig->pHiddenBgColor[3] == 0)
+			if (length < 4)  // invalid rgba color => use the default one.
 			{
 				g_free (pMinimalConfig->pHiddenBgColor);
 				pMinimalConfig->pHiddenBgColor = NULL;
