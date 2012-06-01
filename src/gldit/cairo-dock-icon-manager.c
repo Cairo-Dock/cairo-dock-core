@@ -72,7 +72,6 @@ static GtkIconTheme *s_pIconTheme = NULL;
 static gboolean s_bUseLocalIcons = FALSE;
 static gboolean s_bUseDefaultTheme = TRUE;
 static guint s_iSidReloadTheme = 0;
-static GMutex s_aMutexLookupIcon;
 
 static void _cairo_dock_unload_icon_textures (void);
 static void _cairo_dock_unload_icon_theme (void);
@@ -263,6 +262,8 @@ gint cairo_dock_search_icon_size (GtkIconSize iIconSize)
 
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconSize)
 {
+	static GMutex s_aMutexLookupIcon;
+
 	g_return_val_if_fail (cFileName != NULL, NULL);
 	
 	//\_______________________ easy cases: we receive a path.
