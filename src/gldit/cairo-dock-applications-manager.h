@@ -72,6 +72,7 @@ struct _CairoTaskbarParam {
 	gchar *cForceDemandsAttention;
 	CairoTaskbarPlacement iIconPlacement;
 	gchar *cRelativeIconName;
+	gboolean bSeparateApplis;
 	} ;
 
 // manager

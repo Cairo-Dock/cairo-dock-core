@@ -737,7 +737,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		cd_warning ("This icon (%s) is already inside a container !", icon->cName);
 	}
 
-	//\______________ On regarde si on doit inserer un separateur.
+	//\______________ check if a separator is needed (ie, if the group of the new icon (not its order) is new).
 	gboolean bSeparatorNeeded = FALSE;
 	if (bInsertSeparator && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
@@ -749,7 +749,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		}
 	}
 
-	//\______________ On insere l'icone a sa place dans la liste.
+	//\______________ insert the icon in the list.
 	if (icon->fOrder == CAIRO_DOCK_LAST_ORDER)
 	{
 		Icon *pLastIcon = cairo_dock_get_last_icon_of_order (pDock->icons, icon->iGroup);

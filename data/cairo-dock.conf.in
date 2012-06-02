@@ -124,6 +124,9 @@ place icons = 2
 #N Place new icons after this one
 relative icon =
 
+#b Automatically add a separator
+separate applis = true
+
 #B- Group windows from the same application in a sub-dock ?
 #{This allows you to group all the windows of a given application into a unique sub-dock, and to act on all of the windows at the same time.}
 group by class = true

@@ -1253,7 +1253,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 				break ;
 			}
 		}
-		pIcon->iGroup = CAIRO_DOCK_APPLI;  // no inhibitor, so we'll go in the taskbar group.
+		pIcon->iGroup = (myTaskbarParam.bSeparateApplis ? CAIRO_DOCK_APPLI : CAIRO_DOCK_LAUNCHER);  // no inhibitor, so we'll go in the taskbar group.
 	}
 	else  // an inhibitor is present, we'll go next to it, so we'll be in its group.
 	{
