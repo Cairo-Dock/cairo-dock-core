@@ -1480,11 +1480,6 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	if (s_bCouldDrop)  // can drop on the dock
 	{
 		cd_debug ("drop between icons");
-		if (myDocksParam.bLockIcons || myDocksParam.bLockAll)  // locked, can't add anything.
-		{
-			gtk_drag_finish (dc, FALSE, FALSE, time);
-			return ;
-		}
 		
 		pPointedIcon = NULL;
 		fOrder = 0;
@@ -1492,7 +1487,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 		// try to guess where we dropped.
 		int iDropX = (pDock->container.bIsHorizontal ? x : y);
 		Icon *pNeighboorIcon;
-		Icon *icon;
+		Icon *icon = NULL;
 		GList *ic;
 		for (ic = pDock->icons; ic != NULL; ic = ic->next)
 		{
@@ -1511,6 +1506,12 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 				}
 				break;
 			}
+		}
+		if (myDocksParam.bLockIcons || myDocksParam.bLockAll)  // locked, can't add anything.
+		{
+			cairo_dock_show_temporary_dialog_with_default_icon (_("Sorry but the dock is locked"), icon, CAIRO_CONTAINER (pDock), 5000);
+			gtk_drag_finish (dc, FALSE, FALSE, time);
+			return ;
 		}
 	}
 	else  // drop on an icon or nowhere.
