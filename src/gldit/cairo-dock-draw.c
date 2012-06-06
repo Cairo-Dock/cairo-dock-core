@@ -935,22 +935,25 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 					pHiddenBgColor = icon->pHiddenBgColor;
 				else  // default bg color
 					pHiddenBgColor = myDocksParam.fHiddenBg;
-				cairo_save (pCairoContext);
-				cairo_set_source_rgba (pCairoContext, pHiddenBgColor[0], pHiddenBgColor[1], pHiddenBgColor[2], pHiddenBgColor[3] * pDock->fPostHideOffset);
-				w = icon->fWidth * icon->fScale;
-				h = icon->fHeight * icon->fScale;
-				if (pDock->container.bIsHorizontal)
+				if ( pHiddenBgColor[3] != 0)
 				{
-					cairo_translate (pCairoContext, icon->fDrawX - dw / 2, icon->fDrawY);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, w - 2*r + dw, h);
+					cairo_save (pCairoContext);
+					cairo_set_source_rgba (pCairoContext, pHiddenBgColor[0], pHiddenBgColor[1], pHiddenBgColor[2], pHiddenBgColor[3] * pDock->fPostHideOffset);
+					w = icon->fWidth * icon->fScale;
+					h = icon->fHeight * icon->fScale;
+					if (pDock->container.bIsHorizontal)
+					{
+						cairo_translate (pCairoContext, icon->fDrawX - dw / 2, icon->fDrawY);
+						cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, w - 2*r + dw, h);
+					}
+					else
+					{
+						cairo_translate (pCairoContext, icon->fDrawY - dw / 2, icon->fDrawX);
+						cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r + dw, w);
+					}
+					cairo_fill (pCairoContext);
+					cairo_restore (pCairoContext);
 				}
-				else
-				{
-					cairo_translate (pCairoContext, icon->fDrawY - dw / 2, icon->fDrawX);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r + dw, w);
-				}
-				cairo_fill (pCairoContext);
-				cairo_restore (pCairoContext);
 			}
 			
 			cairo_save (pCairoContext);

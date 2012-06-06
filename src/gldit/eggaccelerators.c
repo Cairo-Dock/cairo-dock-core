@@ -175,6 +175,20 @@ is_hyper (const gchar *string)
 	  (string[6] == '>'));
 }
 
+static inline gboolean
+is_primary (const gchar *string)
+{
+	return ((string[0] == '<') &&
+		(string[1] == 'p' || string[1] == 'P') &&
+		(string[2] == 'r' || string[2] == 'R') &&
+		(string[3] == 'i' || string[3] == 'I') &&
+		(string[4] == 'm' || string[4] == 'M') &&
+		(string[5] == 'a' || string[5] == 'A') &&
+		(string[6] == 'r' || string[6] == 'R') &&
+		(string[7] == 'y' || string[7] == 'Y') &&
+		(string[8] == '>'));
+}
+
 /**
  * Parses a string representing a virtual accelerator. The format
  * looks like "&lt;Control&gt;a" or "&lt;Shift&gt;&lt;Alt&gt;F1" or
@@ -294,6 +308,12 @@ egg_accelerator_parse_virtual (const gchar            *accelerator,
 	      accelerator += 7;
 	      len -= 7;
 	      mods |= EGG_VIRTUAL_SUPER_MASK;
+	    }
+          else if (len >= 9 && is_primary (accelerator))
+	    {
+	      accelerator += 9;
+	      len -= 9;
+	      mods |= EGG_VIRTUAL_CONTROL_MASK;
 	    }
 	  else
 	    {

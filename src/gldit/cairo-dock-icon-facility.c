@@ -570,7 +570,7 @@ void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer_us
 	va_end (args);
 }
 
-void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo)
+void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer_useless, const gchar *cQuickInfo)
 {
 	g_return_if_fail (pIcon != NULL);
 	
@@ -584,12 +584,12 @@ void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const g
 		&myIconsParam.quickInfoTextDescription);
 }
 
-void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...)
+void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer_useless, const gchar *cQuickInfoFormat, ...)
 {
 	va_list args;
 	va_start (args, cQuickInfoFormat);
 	gchar *cFullText = g_strdup_vprintf (cQuickInfoFormat, args);
-	cairo_dock_set_quick_info (pIcon, pContainer, cFullText);
+	cairo_dock_set_quick_info (pIcon, pContainer_useless, cFullText);
 	g_free (cFullText);
 	va_end (args);
 }

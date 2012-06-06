@@ -1653,7 +1653,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	
 	cd_debug ("%s (%s, '%s')", __func__, cCommand, cStartupWMClass);
 	gchar *cResult = NULL;
-	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
+	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || g_strcmp0 (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 	{
 		if (cCommand == NULL || *cCommand == '\0')
 			return NULL;
@@ -1661,7 +1661,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 		gchar *str;
 		const gchar *cClass = cDefaultClass;  // pointer to the current class.
 		
-		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0 || strncmp (cClass, "su-to-root", 10) == 0)  // on prend la fin.
+		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 5) == 0 || strncmp (cClass, "su-to-root", 10) == 0)  // on prend la fin.
 		{
 			str = (gchar*)cClass + strlen(cClass) - 1;  // last char.
 			while (*str == ' ')  // par securite on enleve les espaces en fin de ligne.
@@ -1911,7 +1911,18 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 			{
 				gchar **pMenuItem = g_new0 (gchar*, 4);
 				pMenuItem[0] = g_key_file_get_locale_string (pKeyFile, cGroup, "Name", NULL, NULL);
-				pMenuItem[1] = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
+				cCommand = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
+				if (cCommand != NULL)  // remove the launching options %x.
+				{
+					gchar *str = strchr (cCommand, '%');  // search the first one.
+					if (str != NULL)
+					{
+						if (str != cCommand && (*(str-1) == '"' || *(str-1) == '\''))  // take care of "" around the option.
+							str --;
+						*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
+					}
+				}
+				pMenuItem[1] = cCommand;
 				pMenuItem[2] = g_key_file_get_string (pKeyFile, cGroup, "Icon", NULL);
 				
 				pClassAppli->pMenuItems = g_list_append (pClassAppli->pMenuItems, pMenuItem);

@@ -264,6 +264,12 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 {
 	g_return_val_if_fail (cFileName != NULL, NULL);
 	
+	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
+	static GStaticMutex s_aMutexLookupIcon = G_STATIC_MUTEX_INIT;
+	#else
+	static GMutex s_aMutexLookupIcon;
+	#endif
+	
 	//\_______________________ easy cases: we receive a path.
 	if (*cFileName == '~')
 	{
@@ -321,10 +327,20 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 			if (str != NULL)
 				*str = '\0';
 		}
+		#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
+		g_static_mutex_lock (&s_aMutexLookupIcon);
+		#else
+		g_mutex_lock (&s_aMutexLookupIcon); // it seems gtk_icon_theme_lookup_icon is not thread-safe...
+		#endif
 		pIconInfo = gtk_icon_theme_lookup_icon (s_pIconTheme,
 			sIconPath->str,
 			iDesiredIconSize, // GTK_ICON_LOOKUP_FORCE_SIZE if size < 30 ?? -> icons can be different // a lot of themes now use only svg files.
 			GTK_ICON_LOOKUP_FORCE_SVG);
+		#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
+		g_static_mutex_unlock (&s_aMutexLookupIcon);
+		#else
+		g_mutex_unlock (&s_aMutexLookupIcon);
+		#endif
 		if (pIconInfo != NULL)
 		{
 			g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
@@ -951,6 +967,7 @@ static void init (void)
 		NOTIFICATION_RENDER_ICON,
 		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
+	
 }
 
 
