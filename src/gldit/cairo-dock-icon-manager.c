@@ -399,6 +399,8 @@ void cairo_dock_add_path_to_icon_theme (const gchar *cThemePath)
 
 void cairo_dock_remove_path_from_icon_theme (const gchar *cThemePath)
 {
+	if (! GTK_IS_ICON_THEME (s_pIconTheme))
+		return;
 	g_signal_handlers_block_matched (s_pIconTheme,
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, _on_icon_theme_changed, NULL);
