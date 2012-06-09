@@ -907,6 +907,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}*/
 	
+	gboolean bWasInside = pDock->container.bInside;
 	pDock->container.bInside = TRUE;
 	
 	// animation d'entree.
@@ -965,8 +966,11 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		cairo_dock_start_showing (pDock);  // on a mis a jour la zone d'input avant, sinon la fonction le ferait, ce qui serait inutile.
 	}
 	
+	// start growing up (do it before calculating icons, so that we don't seem to be in an anormal state, where we're inside a dock that doesn't grow).
+	cairo_dock_start_growing (pDock);
+	
 	// since we've just entered the dock, the pointed icon has changed from none to the current one.
-	if (pEvent != NULL)
+	if (pEvent != NULL && ! bWasInside)
 	{
 		// update the mouse coordinates
 		if (pDock->container.bIsHorizontal)
@@ -987,8 +991,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			cairo_dock_on_change_icon (NULL, icon, pDock);  // we were out of the dock, so there is no previous pointed icon.
 		}
 	}
-	// on lance le grossissement.
-	cairo_dock_start_growing (pDock);
 	
 	return TRUE;
 }
