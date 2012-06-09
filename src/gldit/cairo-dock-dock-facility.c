@@ -249,7 +249,7 @@ static void cairo_dock_manage_mouse_position (CairoDock *pDock)
 				}
 				//pDock->container.bInside = TRUE;
 				///if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->container.iWidth != pDock->iMaxDockWidth || pDock->container.iHeight != pDock->iMaxDockHeight) || (!pDock->container.bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->container.bInside ajoute pour le bug du chgt de bureau.
-				if ((pDock->iMagnitudeIndex == 0 && pDock->iRefCount == 0 && ! pDock->bAutoHide) || !pDock->container.bInside)
+				if ((pDock->iMagnitudeIndex == 0 && pDock->iRefCount == 0 && ! pDock->bAutoHide && ! pDock->bIsGrowingUp) || !pDock->container.bInside)  // we are probably a little bit paranoia here, especially with the first case ... anyway, if we missed the 'enter' event for some reason, force it here.
 				{
 					//g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
 					cairo_dock_emit_enter_signal (CAIRO_CONTAINER (pDock));
