@@ -221,8 +221,17 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 	CairoDialog *pDialog)
 {
 	//g_print ("press button on dialog\n");
-	if (pButton->time > pDialog->iButtonPressTime)  // it's not a click on the interactive widget that has been passed to the dialog.
+	if (pButton->button == 1 && pButton->time > pDialog->iButtonPressTime)  // left-click, and not a click on the interactive widget that has been passed to the dialog.
 	{
+		// the interactive widget may have holes (for instance, a gtk-calendar); ignore them, otherwise it's really easy to close the dialog unexpectedly.
+		if (pDialog->pInteractiveWidget)
+		{
+			GtkAllocation allocation;
+			gtk_widget_get_allocation (pDialog->pInteractiveWidget, &allocation);
+			if (pButton->x >= allocation.x && pButton->x <= allocation.x + allocation.width
+			&& pButton->y >= allocation.y && pButton->y <= allocation.y + allocation.height)  // the click is inside the widget.
+				return FALSE;
+		}
 		if (pButton->type == GDK_BUTTON_PRESS)
 		{
 			if (pDialog->pButtons == NULL)  // not a dialog that can be closed by a button => we close it here
