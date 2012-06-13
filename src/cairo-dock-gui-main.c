@@ -28,6 +28,7 @@
 #include <gdk/gdkx.h>
 
 #include "config.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-log.h"
@@ -888,10 +889,12 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	attr.cText = dgettext (pGroupDescription->cGettextDomain, cDescription != NULL ? cDescription : pGroupDescription->cDescription);
 	attr.cImageFilePath = pGroupDescription->cIcon;
 	attr.bNoInput = TRUE;
-	attr.pFreeDataFunc = _on_group_dialog_destroyed;
 	myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
 	s_pDialog = cairo_dock_build_dialog (&attr, pIcon, CAIRO_CONTAINER (pDock));
 	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
+	cairo_dock_register_notification_on_object (s_pDialog,
+		NOTIFICATION_DESTROY, (CairoDockNotificationFunc)_on_group_dialog_destroyed,
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	
 	gtk_window_set_transient_for (GTK_WINDOW (s_pDialog->container.pWidget), GTK_WINDOW (s_pMainWindow));
 	g_free (cDescription);
@@ -932,7 +935,7 @@ static gboolean _check_group_button (gpointer data)
 	if (Xid != cairo_dock_get_current_active_window ())  // we're not the active window any more, so the 'leave' event was probably due to an Alt+Tab -> the mouse is really out of the button.
 	{
 		gtk_widget_hide (s_pPreviewBox);
-	
+		
 		cairo_dock_dialog_unreference (s_pDialog);
 		
 		s_pCurrentButton = NULL;
