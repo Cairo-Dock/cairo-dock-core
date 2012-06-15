@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-04-12 00:33+0000\n"
-"PO-Revision-Date: 2012-04-06 10:31+0000\n"
+"POT-Creation-Date: 2012-04-14 15:42+0000\n"
+"PO-Revision-Date: 2012-04-23 20:15+0000\n"
 "Last-Translator: milboy <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-13 05:22+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-04-24 04:42+0000\n"
+"X-Generator: Launchpad (build 15135)\n"
 "Language: sk\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
@@ -413,7 +413,7 @@ msgstr "Webová stránka"
 
 #: ../src/cairo-dock-menu.c:281
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr ""
+msgstr "Beta testovanie / Návrhy / Fórum"
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
@@ -867,12 +867,16 @@ msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr ""
+"Adresa servera obsahujúca ďalšie témy. Toto prepíše predvolenú adresu "
+"servera."
 
 #: ../src/cairo-dock.c:346
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 msgstr ""
+"Počkať N sekúnd pred spustením, čo je vhodné, ak zistíte nejaké problémy pri "
+"spustení sedenia."
 
 #: ../src/cairo-dock.c:349
 msgid ""
@@ -926,6 +930,8 @@ msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
+"Spýtať sa či majú byť načítatané moduly obsiahnuté v tomto adresári (nie je "
+"bezpečné spúšťať neoficiálne moduly)."
 
 #: ../src/cairo-dock.c:383
 msgid ""
@@ -1170,6 +1176,12 @@ msgid ""
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
+"Víta vás Cairo-Dock!\n"
+"Tento aplet vám pomôže pri spustení panelu jednoduchým kliknutím.\n"
+"Ak máte otázky či otázky/požiadavky/poznámky, prosím podporte nás návštevou "
+"na http://glx-dock.org.\n"
+"Veríme, že si tento program užijete!\n"
+"  (kliknutím na tento dialóg ho ukončíte)"
 
 #: ../src/help/applet-composite.c:160
 msgid "Don't ask me any more"
@@ -1450,13 +1462,15 @@ msgstr ""
 
 #: ../data/messages:55
 msgid "Launching an application several times"
-msgstr ""
+msgstr "Viacnásobné spustenie aplikácie"
 
 #: ../data/messages:57
 msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
 msgstr ""
+"Aplikáciu môžete viacnásobne spustiť podržaním SHIFT + kliknutím na ikonu "
+"(alebo v menu)."
 
 #: ../data/messages:59
 msgid "Switching between the windows of a same application"
@@ -1470,7 +1484,7 @@ msgstr ""
 
 #: ../data/messages:63
 msgid "Grouping windows of a given application"
-msgstr ""
+msgstr "Zoskupenie okien danej aplikácie"
 
 #: ../data/messages:65
 msgid ""
@@ -1497,6 +1511,8 @@ msgid ""
 "You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
+"Je potrebné spustiť Compiz a povoliť rozšírenie \"náhľad okna\" v Compize. "
+"Nainštalujte \"ccsm\", aby ste nastavili Compiz."
 
 #: ../data/messages:75 ../data/messages:185 ../data/messages:205
 #: ../data/messages:243 ../data/messages:285 ../data/messages:289
@@ -1557,7 +1573,7 @@ msgstr ""
 
 #: ../data/messages:95
 msgid "Moving desklets"
-msgstr ""
+msgstr "Premiestnenie deskletov"
 
 #: ../data/messages:97
 msgid ""
@@ -1567,10 +1583,14 @@ msgid ""
 "If you don't want to move it any more, you can lock its position by right-"
 "clicking on it -> \"lock position\". To unlock it, de-select this option."
 msgstr ""
+"Desklety môžete premiestňovať jednoducho myšou.\n"
+"Môžete nimi otáčať malými šípkami navrchu a na ľavej strane.\n"
+"Ak nechcete nimi pohybovať, uzamknite pozíciu pravým kliknutím -> \"lock "
+"position\". Odomknete odkliknutím tohto nastavenia."
 
 #: ../data/messages:99
 msgid "Placing desklets"
-msgstr ""
+msgstr "Umiestnenie deskletov"
 
 #: ../data/messages:101
 msgid ""
@@ -1585,7 +1605,7 @@ msgstr ""
 
 #: ../data/messages:103
 msgid "Changing the desklets decorations"
-msgstr ""
+msgstr "Zmena ozdobenia deskletov"
 
 #: ../data/messages:105
 msgid ""
@@ -1593,14 +1613,16 @@ msgid ""
 "applet, go to Desklet, and select the decoration you want (you can provide "
 "your own one)."
 msgstr ""
+"Desklety môžu byť ozdobené.  Pre zmenu otvorte nastavenie apletu, chodte do "
+"Deskletu a vyberte ozdobu akú chcete (môžete použiť aj vlastnú)"
 
 #: ../data/messages:107
 msgid "Useful Features"
-msgstr ""
+msgstr "Užitočné funkcie"
 
 #: ../data/messages:109
 msgid "Having a calendar with tasks"
-msgstr ""
+msgstr "Kalendár s plánovaním úloh"
 
 #: ../data/messages:111
 msgid ""
@@ -1614,7 +1636,7 @@ msgstr ""
 
 #: ../data/messages:113
 msgid "Having a list of all windows"
-msgstr ""
+msgstr "Zoznam všetkých okien"
 
 #: ../data/messages:115
 msgid ""
@@ -1628,7 +1650,7 @@ msgstr ""
 
 #: ../data/messages:117
 msgid "Showing all the desktops"
-msgstr ""
+msgstr "Zobraziť všetky plochy"
 
 #: ../data/messages:119
 msgid ""
@@ -1639,17 +1661,19 @@ msgstr ""
 
 #: ../data/messages:121
 msgid "Changing the screen resolution"
-msgstr ""
+msgstr "Zmeniť rozlíšenie obrazovky"
 
 #: ../data/messages:123
 msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
 msgstr ""
+"Aktivovať aplet Zobraziť Plochu.\n"
+"Pravé kliknutie -> \"zmeniť rozlíšenie\" -> a vyberte také ktoré chcete."
 
 #: ../data/messages:125
 msgid "Locking your session"
-msgstr ""
+msgstr "Zamknúť vaše sedenie"
 
 #: ../data/messages:127
 msgid ""
@@ -1660,7 +1684,7 @@ msgstr ""
 
 #: ../data/messages:129
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr ""
+msgstr "Rýchle spustenie programu (nahrádza ALT+F2)"
 
 #: ../data/messages:131
 msgid ""
@@ -1673,7 +1697,7 @@ msgstr ""
 
 #: ../data/messages:133
 msgid "Turning Composite OFF during games"
-msgstr ""
+msgstr "Vypnúť kompozitné efekty počas hier"
 
 #: ../data/messages:135
 msgid ""
@@ -1682,10 +1706,13 @@ msgid ""
 "smooth.\n"
 "Clicking again on it will enable the Composite."
 msgstr ""
+"Aktivácia apletu kompozitného správcu.\n"
+"Kliknutím na neho zakáže kompozíciu, čo spôsobí, že hry pôjdu hladšie.\n"
+"Kliknutím na neho opäť umožní kompozíciu."
 
 #: ../data/messages:137
 msgid "Seeing the hourly weather forecast"
-msgstr ""
+msgstr "Pohľad na hodinovú predpoveď počasia"
 
 #: ../data/messages:139
 msgid ""
@@ -1699,7 +1726,7 @@ msgstr ""
 
 #: ../data/messages:141
 msgid "Adding a file or a web page into the dock"
-msgstr ""
+msgstr "Pridanie súboru alebo webstránky do panelu"
 
 #: ../data/messages:143
 msgid ""
@@ -1713,7 +1740,7 @@ msgstr ""
 
 #: ../data/messages:145
 msgid "Importing a folder into the dock"
-msgstr ""
+msgstr "Importovanie priečinka do panela"
 
 #: ../data/messages:147
 msgid ""
@@ -1724,7 +1751,7 @@ msgstr ""
 
 #: ../data/messages:149
 msgid "Accessing the recent events"
-msgstr ""
+msgstr "Prístup k nedávnym udalostiam"
 
 #: ../data/messages:151
 msgid ""
@@ -1738,7 +1765,7 @@ msgstr ""
 
 #: ../data/messages:153
 msgid "Quickly opening a recent file with a launcher"
-msgstr ""
+msgstr "Rýchle otvorenie nedávno použitého súboru spúšťačom"
 
 #: ../data/messages:155
 msgid ""
@@ -1751,7 +1778,7 @@ msgstr ""
 
 #: ../data/messages:157
 msgid "Accessing disks"
-msgstr ""
+msgstr "Prístup k diskom"
 
 #: ../data/messages:159
 msgid ""
@@ -1763,7 +1790,7 @@ msgstr ""
 
 #: ../data/messages:161
 msgid "Accessing folder bookmarks"
-msgstr ""
+msgstr "Prístup k záložkám priečinkov"
 
 #: ../data/messages:163
 msgid ""
@@ -1776,7 +1803,7 @@ msgstr ""
 
 #: ../data/messages:165
 msgid "Having multiple instances of an applet"
-msgstr ""
+msgstr "Viac inštancií apletu"
 
 #: ../data/messages:167
 msgid ""
@@ -1790,7 +1817,7 @@ msgstr ""
 
 #: ../data/messages:169
 msgid "Adding / removing a desktop"
-msgstr ""
+msgstr "Pridanie / odstránenie plochy"
 
 #: ../data/messages:171
 msgid ""
@@ -1798,10 +1825,14 @@ msgid ""
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
 "You can even name each of them."
 msgstr ""
+"Aktivácia apletu prepínač.\n"
+"Kliknutím pravým tlačidlom myši na neho -> \"Pridať plochu\" alebo "
+"\"odstrániť túto plochu\".\n"
+"Každú z nich si môžete pomenovať inak."
 
 #: ../data/messages:173
 msgid "Controling the sound volume"
-msgstr ""
+msgstr "Ovládanie hlasitosti"
 
 #: ../data/messages:175
 msgid ""
@@ -1813,7 +1844,7 @@ msgstr ""
 
 #: ../data/messages:177
 msgid "Controling the screen brightness"
-msgstr ""
+msgstr "Ovládanie jasu obrazovky"
 
 #: ../data/messages:179
 msgid ""
@@ -1824,7 +1855,7 @@ msgstr ""
 
 #: ../data/messages:181
 msgid "Removing completely the gnome-panel"
-msgstr ""
+msgstr "Úplne odstrániť gnome panel"
 
 #: ../data/messages:183
 msgid ""
@@ -1834,12 +1865,19 @@ msgid ""
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
+"Otvorte gconf-editor, upravte kľúč "
+"/desktop/gnome/sesion/required_components/panel, a nahradte jeho obsah s "
+"\"cairo-dock\".\n"
+"Reštartujte sedenie: gnome-panel sa nespustí, a panel bude spustený (ak nie, "
+"pridajte do programov po spustení)."
 
 #: ../data/messages:187
 msgid ""
 "If you are on Gnome, you can click on this button in order to automatically "
 "modify this key:"
 msgstr ""
+"Ak používate Gnome, kliknutím na toto tlačítko automaticky upravíte tento "
+"kľúč:"
 
 #: ../data/messages:189
 msgid "Troubleshooting"
@@ -1896,6 +1934,7 @@ msgid ""
 "If you're on Gnome with Metacity (without Compiz), you can click on this "
 "button:"
 msgstr ""
+"Ak používate Gnome s metacity (bez Compizu), môžete kliknúť na toto tlačítko:"
 
 #: ../data/messages:209
 msgid "My machine is too old to run a composite manager."
@@ -2037,11 +2076,11 @@ msgstr ""
 
 #: ../data/messages:245
 msgid "If you're on Gnome you can click on this button:"
-msgstr ""
+msgstr "Ak používate Gnome môžete kliknúť na toto tlačítko:"
 
 #: ../data/messages:247
 msgid "The Project"
-msgstr ""
+msgstr "Projekt"
 
 #: ../data/messages:249
 msgid "Join the project!"
@@ -2066,7 +2105,7 @@ msgstr ""
 
 #: ../data/messages:255
 msgid "Documentation"
-msgstr ""
+msgstr "Dokumentácia"
 
 #: ../data/messages:257
 msgid ""
@@ -2088,10 +2127,13 @@ msgid ""
 "\n"
 "The Cairo-Dock Team"
 msgstr ""
+"\n"
+"\n"
+"Skupina Cairo-Dock"
 
 #: ../data/messages:263
 msgid "Websites"
-msgstr ""
+msgstr "Webové stránky"
 
 #: ../data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
@@ -2103,7 +2145,7 @@ msgstr "Stránky spoločnosti"
 
 #: ../data/messages:273
 msgid "More applets available online!"
-msgstr ""
+msgstr "Viac apletov je k dispozícii online!"
 
 #: ../data/messages:275
 msgid "Cairo-Dock-Plug-ins-Extras"
@@ -2111,7 +2153,7 @@ msgstr "Extra rozšírenia pre Cairo-Dock"
 
 #: ../data/messages:277
 msgid "Repositories"
-msgstr ""
+msgstr "Repozitáre"
 
 #: ../data/messages:279
 msgid ""
@@ -2122,11 +2164,11 @@ msgstr ""
 
 #: ../data/messages:281
 msgid "Debian/Ubuntu"
-msgstr ""
+msgstr "Debian/Ubuntu"
 
 #: ../data/messages:283
 msgid "Ubuntu"
-msgstr ""
+msgstr "Ubuntu"
 
 #: ../data/messages:287
 msgid ""
@@ -2135,6 +2177,10 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest stable version."
 msgstr ""
+"Ak používate Ubuntu, môžete pridať náš 'stabilný' zdroj softvéru kliknutím "
+"na toto tlačítko:\n"
+" Potom, môžete spustiť Správcu Aktualizácií pre inštaláciu najnovšej "
+"stabilnej verzie."
 
 #: ../data/messages:291
 msgid ""
@@ -2143,10 +2189,14 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
+"Ak používate Ubuntu, môžete pridať náš 'týždenný' zdroj softvéru kliknutím "
+"na toto tlačítko:\n"
+" Potom, môžete spustiť Správcu Aktualizácií pre inštaláciu najnovšej "
+"týždennej verzie."
 
 #: ../data/messages:293
 msgid "Debian"
-msgstr ""
+msgstr "Debian"
 
 #: ../data/messages:297
 msgid ""
@@ -2155,6 +2205,10 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
+"Ak používate Debian stable, môžete pridať náš 'stabilný' zdroj softvéru "
+"kliknutím na toto tlačítko:\n"
+" Potom, môžete môžete vymazať všetky 'cairo-dock *' balíčky, aktualizujte "
+"svoj ​​systém a preinštalujte cairo-dock."
 
 #: ../data/messages:301
 msgid ""
@@ -2163,38 +2217,42 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
+"Ak používate Debian Unstable, môžete pridať náš 'stabilný' zdroj softvéru "
+"kliknutím na toto tlačítko:\n"
+" Potom, môžete môžete vymazať všetky 'cairo-dock *' balíčky, aktualizujte "
+"svoj ​​systém a preinštalujte cairo-dock."
 
 #: ../data/messages:303 ../data/messages:305
 msgid "Icon"
-msgstr ""
+msgstr "Ikona"
 
 #: ../data/messages:307
 msgid "Name of the dock it belongs to:"
-msgstr ""
+msgstr "Názov panela ku ktorému patrí :"
 
 #: ../data/messages:309
 msgid "Name of the icon as it will appear in its caption in the dock:"
-msgstr ""
+msgstr "Názov ikony, ktorá sa objaví na štítku v paneli :"
 
 #: ../data/messages:311
 msgid "Leave empty to use the default one."
-msgstr ""
+msgstr "Ponechať prázdne a použiť predvolené."
 
 #: ../data/messages:313
 msgid "Image filename:"
-msgstr ""
+msgstr "Názov súboru obrázku :"
 
 #: ../data/messages:315
 msgid "Set to 0 to use the default applet size"
-msgstr ""
+msgstr "Nastavte na 0 pre použitie predvolenej veľkosti appletu"
 
 #: ../data/messages:317
 msgid "Desired icon size for this applet"
-msgstr ""
+msgstr "Požadovaná veľkosť ikony pre tento applet"
 
 #: ../data/messages:319
 msgid "Applet's Handbook"
-msgstr ""
+msgstr "Príručka apletov"
 
 #: ../data/messages:321
 msgid "Desklet"
@@ -2205,50 +2263,60 @@ msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
 msgstr ""
+"Ak je je zamknutý, nedá sa deskletom pohybovať ťahaním ľavým tlačítkom myši. "
+"Samozrejme s ním stále môžete pohybovať kombináciou ALT + ľavé tlačítko myši."
 
 #: ../data/messages:327
 msgid "Lock position?"
-msgstr ""
+msgstr "Zamknúť pozíciu ?"
 
 #: ../data/messages:329
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
+"V závislosti na manažérovi vašich okien, môžete zmeniť jeho veľkosť s ALT + "
+"stredné_klik alebo  ALT + ľavé_klik napr."
 
 #: ../data/messages:331
 msgid "Desklet dimensions (width x height):"
-msgstr ""
+msgstr "Rozmery deskletov (šírka x výška) :"
 
 #: ../data/messages:333
 msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
+"V závislosti na vašom správcovi okien, budete môcť pohybovať pomocou ALT + "
+"ľavé tlačidlo.. Záporné hodnoty sú počítané z pravej/dolnej časti obrazovky"
 
 #: ../data/messages:335
 msgid "Desklet position (x, y):"
-msgstr ""
+msgstr "Pozícia deskletu (x ; y) :"
 
 #: ../data/messages:337
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
 msgstr ""
+"Môžete rýchlo otočiť deskletom s myšou, ťahaním malého tlačidla na ľavej a "
+"hornej strane."
 
 #: ../data/messages:339
 msgid "Rotation:"
-msgstr ""
+msgstr "Otočenie:"
 
 #: ../data/messages:343
 msgid "Is detached from the dock"
-msgstr ""
+msgstr "Je oddelený od panelu ?"
 
 #: ../data/messages:345
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=Utility)"
 msgstr ""
+"pre CompizFusion's \"widget layer\", nastaviť správanie Compiz na: "
+"(class=Cairo-dock & type=utility)"
 
 #: ../data/messages:347 ../data/messages:413 ../data/messages:451
 #: ../data/messages:583 ../data/messages:649 ../data/messages:1303
@@ -2257,15 +2325,15 @@ msgstr "Viditeľnosť :"
 
 #: ../data/messages:353
 msgid "Keep below"
-msgstr ""
+msgstr "Ponechať na pozadí"
 
 #: ../data/messages:355
 msgid "Keep on widget layer"
-msgstr ""
+msgstr "Ponechať na vrstve widgetu"
 
 #: ../data/messages:359
 msgid "Should be visible on all desktops?"
-msgstr ""
+msgstr "Má byť viditeľný na všetkých plochách ?"
 
 #: ../data/messages:361 ../data/messages:991
 msgid "Decorations"
@@ -2274,69 +2342,74 @@ msgstr "Dekorácie"
 #: ../data/messages:363
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
+"Vyberte 'vlastné dekorácie' pre možnosť definovať si vlastné ozdoby nižšie."
 
 #: ../data/messages:365
 msgid "Choose a decoration theme for this desklet:"
-msgstr ""
+msgstr "Vyberte ozdobu témy pre tento desklet :"
 
 #: ../data/messages:367
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
+"Je to obrázok, ktorý se zobrazí pod kresbami, ako napríklad rámček. Ak "
+"žiadny nechcete, nechajte nevyplnené."
 
 #: ../data/messages:369
 msgid "Background image:"
-msgstr ""
+msgstr "Obrázok pozadia:"
 
 #: ../data/messages:371
 msgid "Background transparency:"
-msgstr ""
+msgstr "Priehľadnosť pozadia:"
 
 #: ../data/messages:373
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr ""
+msgstr "v pixeloch. Použite pre nastavenie ľavej polohy vykreslenia."
 
 #: ../data/messages:375
 msgid "Left offset:"
-msgstr ""
+msgstr "Odsadenie zľava :"
 
 #: ../data/messages:377
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr ""
+msgstr "v pixeloch. Použite pre nastavenie hornej polohy vykreslenia."
 
 #: ../data/messages:379
 msgid "Top offset:"
-msgstr ""
+msgstr "Odsadenie zhora :"
 
 #: ../data/messages:381
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr ""
+msgstr "v pixeloch. Použite pre nastavenie pravej polohy vykreslenia."
 
 #: ../data/messages:383
 msgid "Right offset:"
-msgstr ""
+msgstr "Odsadenie vpravo :"
 
 #: ../data/messages:385
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr ""
+msgstr "v pixeloch. Použite pre nastavenie dolnej polohy vykreslenia."
 
 #: ../data/messages:387
 msgid "Bottom offset:"
-msgstr ""
+msgstr "Odsadenie zdola"
 
 #: ../data/messages:389
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
+"Je to obrázok, ktorý sa zobrazí nad kresbami, ako napríklad odraz. Ak žiadny "
+"nechcete, nevyplňujte."
 
 #: ../data/messages:391
 msgid "Foreground image:"
-msgstr ""
+msgstr "Obrázok popredia :"
 
 #: ../data/messages:393
 msgid "Foreground tansparency:"
-msgstr ""
+msgstr "Priehľadné popredie :"
 
 #: ../data/messages:395 ../data/messages:1267
 msgid "Behavior"
@@ -2461,35 +2534,35 @@ msgstr "Správanie sa panela úloh"
 
 #: ../data/messages:465
 msgid "Minimalistic"
-msgstr ""
+msgstr "Minimalistické"
 
 #: ../data/messages:467
 msgid "Integrated"
-msgstr ""
+msgstr "Integrované"
 
 #: ../data/messages:469
 msgid "Separated"
-msgstr ""
+msgstr "Oddelené"
 
 #: ../data/messages:471 ../data/messages:679
 msgid "Place new icons"
-msgstr ""
+msgstr "Umiestniť nové ikony"
 
 #: ../data/messages:473 ../data/messages:681
 msgid "At the beginning of the dock"
-msgstr ""
+msgstr "Na začiatku panela"
 
 #: ../data/messages:475 ../data/messages:683
 msgid "Before the launchers"
-msgstr ""
+msgstr "Pred spúšťačmi"
 
 #: ../data/messages:477 ../data/messages:685
 msgid "After the launchers"
-msgstr ""
+msgstr "Po spúšťačoch"
 
 #: ../data/messages:479 ../data/messages:687
 msgid "At the end of the dock"
-msgstr ""
+msgstr "Na konci panela"
 
 #: ../data/messages:481
 msgid "Icons' animations and effects"
@@ -2547,7 +2620,7 @@ msgstr "Vyberte predvolený pohľad na sub-docky :"
 
 #: ../data/messages:517 ../data/messages:769
 msgid "Keyboard shortcuts currently available"
-msgstr ""
+msgstr "Aktuálne dostupné klávesové skratky"
 
 #: ../data/messages:519 ../data/messages:771
 msgid ""
@@ -2563,7 +2636,7 @@ msgstr "Dodatky"
 
 #: ../data/messages:523
 msgid "Add or remove any applet"
-msgstr ""
+msgstr "Pridať alebo odstrániť aplet"
 
 #: ../data/messages:525
 msgid ""
@@ -2662,7 +2735,7 @@ msgstr "Prístupnosť"
 
 #: ../data/messages:613
 msgid "The higher, the faster the dock will appear"
-msgstr ""
+msgstr "Čím vyššie, tým rýchlejšie sa panel objaví"
 
 #: ../data/messages:615
 msgid "Callback sensitivity:"
@@ -2670,11 +2743,11 @@ msgstr ""
 
 #: ../data/messages:617
 msgid "high"
-msgstr ""
+msgstr "vysoká"
 
 #: ../data/messages:619
 msgid "low"
-msgstr ""
+msgstr "nízka"
 
 #: ../data/messages:621
 msgid "How to call the dock back:"
@@ -2881,7 +2954,7 @@ msgstr ""
 
 #: ../data/messages:737
 msgid "Nothing"
-msgstr ""
+msgstr "Nič"
 
 #: ../data/messages:741
 msgid "Minimize"
@@ -2904,7 +2977,7 @@ msgstr ""
 
 #: ../data/messages:751
 msgid "Only if your Window Manager supports it."
-msgstr ""
+msgstr "Iba ak to podporuje váš správca okien."
 
 #: ../data/messages:753
 msgid ""
@@ -3171,15 +3244,15 @@ msgstr "Percento svetlej farby:"
 
 #: ../data/messages:907
 msgid "Background when hidden"
-msgstr ""
+msgstr "Pozadie pri skrytí"
 
 #: ../data/messages:909
 msgid "Several applets can be visible even when the dock is hidden"
-msgstr ""
+msgstr "Niektoré aplety môžu byť viditeľné aj ked je panel skrytý"
 
 #: ../data/messages:911
 msgid "Default background color when the dock is hidden"
-msgstr ""
+msgstr "Predvolené pozadie pri skrytí panela"
 
 #: ../data/messages:913 ../data/messages:1363
 msgid "Stretch the dock to always fill the screen"
@@ -3240,7 +3313,7 @@ msgstr "menší"
 
 #: ../data/messages:951
 msgid "larger"
-msgstr ""
+msgstr "väčšie"
 
 #: ../data/messages:953
 msgid "Dialogs"
@@ -3425,7 +3498,7 @@ msgstr "Veľkosť ikôn"
 
 #: ../data/messages:1065
 msgid "Icons' size at rest (width x height) :"
-msgstr ""
+msgstr "Veľkosť ikon v pokoji (šírka x výška):"
 
 #: ../data/messages:1067
 msgid "Zoom effect"
@@ -3704,7 +3777,7 @@ msgstr "Ako zobraziť, že niektoré ikony sú zoskupené :"
 
 #: ../data/messages:1197
 msgid "Draw an emblem"
-msgstr ""
+msgstr "Nakresliť znak"
 
 #: ../data/messages:1199
 msgid "Draw the sub-dock's icons as a stack"
@@ -3824,19 +3897,19 @@ msgstr "Vzorka by mala byť zvisle?"
 
 #: ../data/messages:1257
 msgid "Quick-info are short information drawn on the icons."
-msgstr ""
+msgstr "Krátke info je krátka informácia vykreslená nad ikonami."
 
 #: ../data/messages:1259
 msgid "Quick-info"
-msgstr ""
+msgstr "Krátke-info"
 
 #: ../data/messages:1261
 msgid "Use the same look as the labels?"
-msgstr ""
+msgstr "Použiť rovnaký vzhľad ako štítky?"
 
 #: ../data/messages:1265
 msgid "Background color:"
-msgstr ""
+msgstr "Farba pozadia:"
 
 #: ../data/messages:1295
 msgid "starting from 0"
@@ -3844,15 +3917,15 @@ msgstr "začať od 0"
 
 #: ../data/messages:1299
 msgid "Visibility of the dock"
-msgstr ""
+msgstr "Viditeľnosť panela"
 
 #: ../data/messages:1323 ../data/messages:1347
 msgid "Same as main dock"
-msgstr ""
+msgstr "Rovnako ako hlavný panel"
 
 #: ../data/messages:1325
 msgid "Tiny"
-msgstr ""
+msgstr "Drobné"
 
 #: ../data/messages:1339
 msgid "Leave it empty to use the same view as the main dock."

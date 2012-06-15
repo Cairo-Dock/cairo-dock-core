@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-04-12 00:33+0000\n"
-"PO-Revision-Date: 2012-04-05 15:27+0000\n"
-"Last-Translator: Andrzej Król <andrzej.krol@poczta.onet.eu>\n"
+"POT-Creation-Date: 2012-04-14 15:42+0000\n"
+"PO-Revision-Date: 2012-04-17 23:22+0000\n"
+"Last-Translator: rasik <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-13 05:22+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-04-19 04:35+0000\n"
+"X-Generator: Launchpad (build 15108)\n"
 "Language: pl\n"
 
 #: ../src/cairo-dock-gui-commons.c:221
@@ -430,7 +430,8 @@ msgstr ""
 "  NINa https://launchpad.net/~factory\n"
 "  Rafał Rudzik https://launchpad.net/~rrudzik\n"
 "  Szymon Sieciński https://launchpad.net/~szymon-siecinski\n"
-"  Wojciech Górnaś https://launchpad.net/~wojciech"
+"  Wojciech Górnaś https://launchpad.net/~wojciech\n"
+"  rasik https://launchpad.net/~rasik01"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -686,7 +687,7 @@ msgstr "Pomoc apletu"
 
 #: ../src/cairo-dock-menu.c:1110
 msgid "Pick up an image"
-msgstr ""
+msgstr "Odbierz obraz"
 
 #: ../src/cairo-dock-menu.c:1341
 #, c-format
@@ -1085,11 +1086,11 @@ msgstr "Zaktualizowano"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:724
 msgid "Pick up a file"
-msgstr ""
+msgstr "Odbierz plik"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:724
 msgid "Pick up a directory"
-msgstr ""
+msgstr "Odbierz folder"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:984
 msgid "_Custom Icons_"
@@ -2579,6 +2580,8 @@ msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
+"Obraz wyświetlany nad rysunkami, np odbicie. Pozostaw puste, gdy nie ma "
+"obrazu."
 
 #: ../data/messages:391
 msgid "Foreground image:"
@@ -2730,7 +2733,7 @@ msgstr "Oddzielony"
 
 #: ../data/messages:471 ../data/messages:679
 msgid "Place new icons"
-msgstr ""
+msgstr "Umieść nowe ikony"
 
 #: ../data/messages:473 ../data/messages:681
 msgid "At the beginning of the dock"
@@ -2738,11 +2741,11 @@ msgstr ""
 
 #: ../data/messages:475 ../data/messages:683
 msgid "Before the launchers"
-msgstr ""
+msgstr "Przed aktywatorami"
 
 #: ../data/messages:477 ../data/messages:685
 msgid "After the launchers"
-msgstr ""
+msgstr "Za aktywatorami"
 
 #: ../data/messages:479 ../data/messages:687
 msgid "At the end of the dock"
@@ -2914,7 +2917,7 @@ msgstr "Dostępność"
 
 #: ../data/messages:613
 msgid "The higher, the faster the dock will appear"
-msgstr ""
+msgstr "Im więcej, tym szybciej dock będzie się pojawiał"
 
 #: ../data/messages:615
 msgid "Callback sensitivity:"
@@ -3033,7 +3036,7 @@ msgstr ""
 
 #: ../data/messages:691
 msgid "Place new icons after this one"
-msgstr ""
+msgstr "Umieść nowe ikony po tej"
 
 #: ../data/messages:693
 msgid ""
