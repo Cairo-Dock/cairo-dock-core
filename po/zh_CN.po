@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-04-12 00:33+0000\n"
-"PO-Revision-Date: 2012-03-22 13:38+0000\n"
-"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
+"POT-Creation-Date: 2012-04-14 15:42+0000\n"
+"PO-Revision-Date: 2012-06-10 09:22+0000\n"
+"Last-Translator: XiaoJSoft <whs_jwc@163.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-13 05:23+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-06-11 04:33+0000\n"
+"X-Generator: Launchpad (build 15376)\n"
 "Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:221
@@ -69,23 +69,23 @@ msgstr "分类"
 
 #: ../src/cairo-dock-gui-commons.c:575
 msgid "Press the shortkey"
-msgstr ""
+msgstr "按下快捷键"
 
 #: ../src/cairo-dock-gui-commons.c:594
 msgid "Change the shortkey"
-msgstr ""
+msgstr "更改快捷键"
 
 #: ../src/cairo-dock-gui-commons.c:681
 msgid "Origin"
-msgstr ""
+msgstr "来源"
 
 #: ../src/cairo-dock-gui-commons.c:686
 msgid "Action"
-msgstr ""
+msgstr "动作"
 
 #: ../src/cairo-dock-gui-commons.c:690
 msgid "Shortkey"
-msgstr ""
+msgstr "快捷键"
 
 #: ../src/cairo-dock-gui-items.c:242
 msgid ""
@@ -98,7 +98,7 @@ msgstr "启动器设置"
 
 #: ../src/cairo-dock-gui-items.c:878
 msgid "Remove this item"
-msgstr ""
+msgstr "移除此项"
 
 #: ../src/cairo-dock-gui-main.c:129 ../data/messages:665
 msgid "Behaviour"
@@ -152,11 +152,11 @@ msgstr "任务条"
 
 #: ../src/cairo-dock-gui-main.c:1501
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "定义所有当前可设置的键盘快捷键。"
 
 #: ../src/cairo-dock-gui-main.c:1502 ../data/messages:515 ../data/messages:767
 msgid "Shortkeys"
-msgstr ""
+msgstr "快捷键"
 
 #: ../src/cairo-dock-gui-main.c:1508
 msgid "All of the parameters you will never want to tweak."
@@ -383,19 +383,19 @@ msgstr "能够满足为得到最好的dock而愿意花费大量时间的人"
 
 #: ../src/cairo-dock-menu.c:260
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "当前开发者与贡献者名单"
 
 #: ../src/cairo-dock-menu.c:261
 msgid "Developers"
-msgstr ""
+msgstr "开发者"
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "主要开发者与项目领导人"
 
 #: ../src/cairo-dock-menu.c:263
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "贡献者/黑客"
 
 #: ../src/cairo-dock-menu.c:265
 msgid "Development"
@@ -403,23 +403,33 @@ msgstr "开发"
 
 #: ../src/cairo-dock-menu.c:280
 msgid "Website"
-msgstr ""
+msgstr "网站"
 
 #: ../src/cairo-dock-menu.c:281
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr ""
+msgstr "Beta 测试/建议/论坛"
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
-msgstr ""
+msgstr "该语言翻译人员"
 
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Cairo-Dock Team https://launchpad.net/~cairo-dock-team\n"
+"  Eleanor Chen https://launchpad.net/~chenyueg\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
 "  GrayWaLL https://launchpad.net/~graywall\n"
+"  Homer Xing https://launchpad.net/~homer-xing\n"
+"  Matthieu Baerts https://launchpad.net/~matttbe\n"
+"  Rossi Liu https://launchpad.net/~liueigi\n"
+"  Saturn https://launchpad.net/~saturntoad\n"
+"  Wang Dianjin https://launchpad.net/~tuhaihe\n"
+"  Wylmer Wang https://launchpad.net/~wantinghard\n"
+"  XiaoJSoft https://launchpad.net/~whs-jwc\n"
 "  Yann SLADEK https://launchpad.net/~yann-sladek\n"
+"  efree https://launchpad.net/~efree\n"
 "  guofengzone https://launchpad.net/~guofengzone\n"
 "  jarryson https://launchpad.net/~jarryson\n"
 "  leng https://launchpad.net/~lengjingxu\n"
@@ -436,26 +446,28 @@ msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
+"感谢所有帮助改进 Cairo-Dock 项目的人们。\n"
+"感谢所有现在、过去和未来的贡献者们。"
 
 #: ../src/cairo-dock-menu.c:317
 msgid "How to help us?"
-msgstr ""
+msgstr "如何帮助我们？"
 
 #: ../src/cairo-dock-menu.c:318
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr ""
+msgstr "加入项目别犹豫，我们需要您 :)"
 
 #: ../src/cairo-dock-menu.c:319
 msgid "Former contributors"
-msgstr ""
+msgstr "先前贡献者"
 
 #: ../src/cairo-dock-menu.c:320
 msgid "For a complete list, please have a look to BZR logs"
-msgstr ""
+msgstr "完整列表，请前往查看 BZR 记录"
 
 #: ../src/cairo-dock-menu.c:321
 msgid "Users of our forum"
-msgstr ""
+msgstr "论坛用户"
 
 #: ../src/cairo-dock-menu.c:322
 msgid "Artwork"
@@ -463,7 +475,7 @@ msgstr "美工"
 
 #: ../src/cairo-dock-menu.c:324
 msgid "Thanks"
-msgstr ""
+msgstr "感谢"
 
 #: ../src/cairo-dock-menu.c:401
 msgid "Quit Cairo-Dock?"
@@ -583,7 +595,7 @@ msgstr "在服务器上的众多主题中选择和保存您喜欢的主题。"
 
 #: ../src/cairo-dock-menu.c:898
 msgid "Lock icons position"
-msgstr ""
+msgstr "锁定图标位置"
 
 #: ../src/cairo-dock-menu.c:902
 msgid "This will (un)lock the position of the icons."
@@ -629,14 +641,16 @@ msgid ""
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
+"您正在使用 Cairo-Dock 会话！\n"
+"退出本程序并不是明智之举，但您可以按下 Shift 解锁该菜单项。"
 
 #: ../src/cairo-dock-menu.c:1018 ../src/cairo-dock-menu.c:1039
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 #: ../src/cairo-dock-menu.c:1020 ../src/cairo-dock-menu.c:1046
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: ../src/cairo-dock-menu.c:1021
 msgid ""
@@ -658,7 +672,7 @@ msgstr "将它作成启动器"
 
 #: ../src/cairo-dock-menu.c:1043
 msgid "Detach"
-msgstr ""
+msgstr "分离"
 
 #: ../src/cairo-dock-menu.c:1043
 msgid "Return to the dock"
@@ -666,7 +680,7 @@ msgstr "回到Dock面板"
 
 #: ../src/cairo-dock-menu.c:1050
 msgid "Duplicate"
-msgstr ""
+msgstr "复制"
 
 #: ../src/cairo-dock-menu.c:1065
 msgid "Applet's handbook"
@@ -674,7 +688,7 @@ msgstr "Applet 小程序使用手册"
 
 #: ../src/cairo-dock-menu.c:1110
 msgid "Pick up an image"
-msgstr ""
+msgstr "选取一张图片"
 
 #: ../src/cairo-dock-menu.c:1341
 #, c-format
@@ -848,7 +862,7 @@ msgstr "使用带有间接渲染的 Opengl 后端。这个选项很少使用。"
 
 #: ../src/cairo-dock.c:334
 msgid "Ask again on startup which backend to use."
-msgstr ""
+msgstr "再次询问启动时使用哪个后端。"
 
 #: ../src/cairo-dock.c:337
 msgid "Force the dock to consider this environnement - use it with care."
@@ -1013,7 +1027,7 @@ msgstr "左边停靠dock"
 #: ../src/gldit/cairo-dock-dock-manager.c:1656
 #: ../src/gldit/cairo-dock-dock-manager.c:1757
 msgid "Pop up the main dock"
-msgstr ""
+msgstr "弹出主 dock"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:243
 #, c-format
@@ -1050,11 +1064,11 @@ msgstr "已更新"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:724
 msgid "Pick up a file"
-msgstr ""
+msgstr "选取文件"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:724
 msgid "Pick up a directory"
-msgstr ""
+msgstr "选取目录"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:984
 msgid "_Custom Icons_"
@@ -1133,6 +1147,8 @@ msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
+"无法访问远程文件 %s。或许服务器当机。\n"
+"请重试或在 glx-dock.org 上联系我们。"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:267
 #, c-format
@@ -1227,7 +1243,7 @@ msgstr "在线帮助"
 
 #: ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "提示与技巧"
 
 #: ../src/help/applet-tips-dialog.c:307
 msgid "Category"
@@ -1446,37 +1462,39 @@ msgstr "你可以通过中键点击图标来关闭窗口—（或从菜单中）
 
 #: ../data/messages:51
 msgid "Minimizing / restauring a window"
-msgstr ""
+msgstr "最小化/恢复窗口"
 
 #: ../data/messages:53
 msgid ""
 "Clicking on its icon will bring the window on top.\n"
 "When the window has the focus, clicking on its icon will minimize the window."
 msgstr ""
+"点击它的图标将使窗口置顶。\n"
+"当窗口拥有焦点时，点击它的图标将最小化窗口。"
 
 #: ../data/messages:55
 msgid "Launching an application several times"
-msgstr ""
+msgstr "多次启动一个应用"
 
 #: ../data/messages:57
 msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
-msgstr ""
+msgstr "您可以通过 SHIFT+点击应用程序图标(或从菜单) 来多次启动一个应用。"
 
 #: ../data/messages:59
 msgid "Switching between the windows of a same application"
-msgstr ""
+msgstr "在相同应用窗口间切换"
 
 #: ../data/messages:61
 msgid ""
 "With your mouse, scroll up/down on one of the icons of the application. Each "
 "time you scroll, the next/previous window will be presented to you."
-msgstr ""
+msgstr "使用您的鼠标，向上/下滚动应用程序的图标。您每次滚动时，将显示下一个/上一个窗口。"
 
 #: ../data/messages:63
 msgid "Grouping windows of a given application"
-msgstr ""
+msgstr "给定应用程序的分组窗口"
 
 #: ../data/messages:65
 msgid ""
@@ -1485,24 +1503,26 @@ msgid ""
 "Clicking on the main icon will display all the windows of the application "
 "side-by-side (if your Window Manager is able to do that)."
 msgstr ""
+"当每个应用程序有多个窗口时，每个窗口的图标将出现在 dock 上；它们将在子 dock 中合成一组。\n"
+"点击主图标将并排显示应用程序的所有窗口(如果您的窗口管理器可以这样做)。"
 
 #: ../data/messages:67
 msgid "Setting a custom icon for an application"
-msgstr ""
+msgstr "设置应用程序的自定义图标"
 
 #: ../data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr ""
+msgstr "在“图标”分类查看“更改图标图像”。"
 
 #: ../data/messages:71
 msgid "Showing windows preview over the icons"
-msgstr ""
+msgstr "鼠标移到图标上时显示窗口预览"
 
 #: ../data/messages:73
 msgid ""
 "You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
-msgstr ""
+msgstr "您需要运行 Compiz，并启用 Compiz 中的“窗口预览”插件。安装“ccsm”可配置 Compiz。"
 
 #: ../data/messages:75 ../data/messages:185 ../data/messages:205
 #: ../data/messages:243 ../data/messages:285 ../data/messages:289
@@ -1516,11 +1536,11 @@ msgstr "如果你正在使用Compiz，你可以点击这个按钮："
 
 #: ../data/messages:79
 msgid "Docks"
-msgstr ""
+msgstr "Dock"
 
 #: ../data/messages:81
 msgid "Positionning the dock on the screen"
-msgstr ""
+msgstr "在屏幕上定位 dock"
 
 #: ../data/messages:83
 msgid ""
@@ -1530,10 +1550,13 @@ msgid ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the position you want."
 msgstr ""
+"该 dock 可以被放置在屏幕的任何位置。\n"
+"考虑到主 dock，需 右击-> Cairo-Dock -> 配置，然后选择您希望的位置。\n"
+"考虑到第 2 个或第 3 个 dock，右击-> Cairo-Dock -> 设置本 dock，并选择您希望的位置。"
 
 #: ../data/messages:85
 msgid "Hiding the dock to use all the screen"
-msgstr ""
+msgstr "隐藏停靠栏以使用整个屏幕"
 
 #: ../data/messages:87
 msgid ""
@@ -1544,10 +1567,13 @@ msgid ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the visibility you want."
 msgstr ""
+"停靠栏可以隐藏自身为应用程序腾出屏幕空间，但是它也可以像面板一样一直保持可见。\n"
+"按如下的方式修改：右键 -> Cairo-Dock -> 配置，然后将你想要的选为可见（visibility）即可。\n"
+"对于第二个或者第三个停靠栏来说，可以点击右键 -> Cairo-Dock -> 设置此停靠栏，然后将你想要的选为可见即可。"
 
 #: ../data/messages:91
 msgid "Placing applets on your desktop"
-msgstr ""
+msgstr "防止插件到您的桌面"
 
 #: ../data/messages:93
 msgid ""
@@ -1586,7 +1612,7 @@ msgstr ""
 
 #: ../data/messages:103
 msgid "Changing the desklets decorations"
-msgstr ""
+msgstr "正在更改桌面装饰"
 
 #: ../data/messages:105
 msgid ""
@@ -1597,7 +1623,7 @@ msgstr ""
 
 #: ../data/messages:107
 msgid "Useful Features"
-msgstr ""
+msgstr "有用的功能"
 
 #: ../data/messages:109
 msgid "Having a calendar with tasks"
@@ -1629,7 +1655,7 @@ msgstr ""
 
 #: ../data/messages:117
 msgid "Showing all the desktops"
-msgstr ""
+msgstr "显示所有桌面"
 
 #: ../data/messages:119
 msgid ""
@@ -1640,7 +1666,7 @@ msgstr ""
 
 #: ../data/messages:121
 msgid "Changing the screen resolution"
-msgstr ""
+msgstr "更改屏幕分辨率"
 
 #: ../data/messages:123
 msgid ""
@@ -1650,7 +1676,7 @@ msgstr ""
 
 #: ../data/messages:125
 msgid "Locking your session"
-msgstr ""
+msgstr "锁定您的会话"
 
 #: ../data/messages:127
 msgid ""
@@ -1674,7 +1700,7 @@ msgstr ""
 
 #: ../data/messages:133
 msgid "Turning Composite OFF during games"
-msgstr ""
+msgstr "在游戏期间关闭组件"
 
 #: ../data/messages:135
 msgid ""
@@ -1686,7 +1712,7 @@ msgstr ""
 
 #: ../data/messages:137
 msgid "Seeing the hourly weather forecast"
-msgstr ""
+msgstr "查看每小时的天气预报"
 
 #: ../data/messages:139
 msgid ""
@@ -1700,7 +1726,7 @@ msgstr ""
 
 #: ../data/messages:141
 msgid "Adding a file or a web page into the dock"
-msgstr ""
+msgstr "添加文件或网页到 dock"
 
 #: ../data/messages:143
 msgid ""
@@ -1714,7 +1740,7 @@ msgstr ""
 
 #: ../data/messages:145
 msgid "Importing a folder into the dock"
-msgstr ""
+msgstr "将文件夹导入到 dock"
 
 #: ../data/messages:147
 msgid ""
@@ -1725,7 +1751,7 @@ msgstr ""
 
 #: ../data/messages:149
 msgid "Accessing the recent events"
-msgstr ""
+msgstr "访问最近事件"
 
 #: ../data/messages:151
 msgid ""
@@ -1739,7 +1765,7 @@ msgstr ""
 
 #: ../data/messages:153
 msgid "Quickly opening a recent file with a launcher"
-msgstr ""
+msgstr "使用启动器快速打开一个最近文件"
 
 #: ../data/messages:155
 msgid ""
@@ -1752,7 +1778,7 @@ msgstr ""
 
 #: ../data/messages:157
 msgid "Accessing disks"
-msgstr ""
+msgstr "访问磁盘"
 
 #: ../data/messages:159
 msgid ""
@@ -1764,7 +1790,7 @@ msgstr ""
 
 #: ../data/messages:161
 msgid "Accessing folder bookmarks"
-msgstr ""
+msgstr "访问文件夹书签"
 
 #: ../data/messages:163
 msgid ""
@@ -1791,7 +1817,7 @@ msgstr ""
 
 #: ../data/messages:169
 msgid "Adding / removing a desktop"
-msgstr ""
+msgstr "添加/移除一个桌面"
 
 #: ../data/messages:171
 msgid ""
@@ -1802,7 +1828,7 @@ msgstr ""
 
 #: ../data/messages:173
 msgid "Controling the sound volume"
-msgstr ""
+msgstr "控制声音音量"
 
 #: ../data/messages:175
 msgid ""
@@ -1814,7 +1840,7 @@ msgstr ""
 
 #: ../data/messages:177
 msgid "Controling the screen brightness"
-msgstr ""
+msgstr "控制屏幕亮度"
 
 #: ../data/messages:179
 msgid ""
@@ -1825,7 +1851,7 @@ msgstr ""
 
 #: ../data/messages:181
 msgid "Removing completely the gnome-panel"
-msgstr ""
+msgstr "完全移除 gnome-panel"
 
 #: ../data/messages:183
 msgid ""
@@ -1840,7 +1866,7 @@ msgstr ""
 msgid ""
 "If you are on Gnome, you can click on this button in order to automatically "
 "modify this key:"
-msgstr ""
+msgstr "如果您在 Gnome 下，您可以点击该按钮以自动更改该按键："
 
 #: ../data/messages:189
 msgid "Troubleshooting"
@@ -2009,11 +2035,11 @@ msgstr ""
 
 #: ../data/messages:245
 msgid "If you're on Gnome you can click on this button:"
-msgstr ""
+msgstr "如果您在 Gnome 下，您可以点击该按钮："
 
 #: ../data/messages:247
 msgid "The Project"
-msgstr ""
+msgstr "项目"
 
 #: ../data/messages:249
 msgid "Join the project!"
@@ -2058,6 +2084,9 @@ msgid ""
 "\n"
 "The Cairo-Dock Team"
 msgstr ""
+"\n"
+"\n"
+"Cairo-Dock 团队"
 
 #: ../data/messages:263
 msgid "Websites"
@@ -2073,7 +2102,7 @@ msgstr "社区站点"
 
 #: ../data/messages:273
 msgid "More applets available online!"
-msgstr ""
+msgstr "在线获取更多插件！"
 
 #: ../data/messages:275
 msgid "Cairo-Dock-Plug-ins-Extras"
@@ -2089,6 +2118,8 @@ msgid ""
 " One for stable releases and another which is updated weekly (unstable "
 "version)"
 msgstr ""
+"我们维护了 Debian、Ubuntu 和其它 Debian 系列发行版本 2 个仓库：\n"
+" 一个是稳定版本，另一个为每周更新仓库(非稳定版本)"
 
 #: ../data/messages:281
 msgid "Debian/Ubuntu"
@@ -2152,19 +2183,19 @@ msgstr ""
 
 #: ../data/messages:313
 msgid "Image filename:"
-msgstr ""
+msgstr "图片文件名："
 
 #: ../data/messages:315
 msgid "Set to 0 to use the default applet size"
-msgstr ""
+msgstr "设为 0 使用默认小程序大小"
 
 #: ../data/messages:317
 msgid "Desired icon size for this applet"
-msgstr ""
+msgstr "希望的该小程序图标大小"
 
 #: ../data/messages:319
 msgid "Applet's Handbook"
-msgstr ""
+msgstr "小程序手册"
 
 #: ../data/messages:321
 msgid "Desklet"
@@ -2178,7 +2209,7 @@ msgstr ""
 
 #: ../data/messages:327
 msgid "Lock position?"
-msgstr ""
+msgstr "锁定位置？"
 
 #: ../data/messages:329
 msgid ""
@@ -2188,7 +2219,7 @@ msgstr ""
 
 #: ../data/messages:331
 msgid "Desklet dimensions (width x height):"
-msgstr ""
+msgstr "小工具维度(宽 x 高 )："
 
 #: ../data/messages:333
 msgid ""
@@ -2198,7 +2229,7 @@ msgstr ""
 
 #: ../data/messages:335
 msgid "Desklet position (x, y):"
-msgstr ""
+msgstr "小工具位置(横坐标，纵坐标)："
 
 #: ../data/messages:337
 msgid ""
@@ -2208,11 +2239,11 @@ msgstr ""
 
 #: ../data/messages:339
 msgid "Rotation:"
-msgstr ""
+msgstr "旋转："
 
 #: ../data/messages:343
 msgid "Is detached from the dock"
-msgstr ""
+msgstr "从 dock 分离？"
 
 #: ../data/messages:345
 msgid ""
@@ -2260,7 +2291,7 @@ msgstr ""
 
 #: ../data/messages:371
 msgid "Background transparency:"
-msgstr ""
+msgstr "背景透明度："
 
 #: ../data/messages:373
 msgid "in pixels. Use this to adjust the left position of drawings."
@@ -2306,7 +2337,7 @@ msgstr ""
 
 #: ../data/messages:393
 msgid "Foreground tansparency:"
-msgstr ""
+msgstr "前景透明度："
 
 #: ../data/messages:395 ../data/messages:1267
 msgid "Behavior"
@@ -2444,7 +2475,7 @@ msgstr ""
 
 #: ../data/messages:471 ../data/messages:679
 msgid "Place new icons"
-msgstr ""
+msgstr "放置新图标"
 
 #: ../data/messages:473 ../data/messages:681
 msgid "At the beginning of the dock"
@@ -2460,7 +2491,7 @@ msgstr ""
 
 #: ../data/messages:479 ../data/messages:687
 msgid "At the end of the dock"
-msgstr ""
+msgstr "在 dock 末尾"
 
 #: ../data/messages:481
 msgid "Icons' animations and effects"
@@ -2468,7 +2499,7 @@ msgstr "图标的动画和特效"
 
 #: ../data/messages:483
 msgid "& On mouse hover:"
-msgstr ""
+msgstr "& 鼠标悬停："
 
 #: ../data/messages:487
 msgid ""
@@ -2518,7 +2549,7 @@ msgstr "选择子停靠栏的默认视图："
 
 #: ../data/messages:517 ../data/messages:769
 msgid "Keyboard shortcuts currently available"
-msgstr ""
+msgstr "当前可用的键盘快捷键"
 
 #: ../data/messages:519 ../data/messages:771
 msgid ""
@@ -2623,19 +2654,19 @@ msgstr "辅助功能"
 
 #: ../data/messages:613
 msgid "The higher, the faster the dock will appear"
-msgstr ""
+msgstr "dock 将显示地越高越快"
 
 #: ../data/messages:615
 msgid "Callback sensitivity:"
-msgstr ""
+msgstr "回调灵敏度："
 
 #: ../data/messages:617
 msgid "high"
-msgstr ""
+msgstr "高"
 
 #: ../data/messages:619
 msgid "low"
-msgstr ""
+msgstr "低"
 
 #: ../data/messages:621
 msgid "How to call the dock back:"
@@ -2831,7 +2862,7 @@ msgstr "中键点击相关应用的动作"
 
 #: ../data/messages:737
 msgid "Nothing"
-msgstr ""
+msgstr "无"
 
 #: ../data/messages:741
 msgid "Minimize"
@@ -3107,7 +3138,7 @@ msgstr "亮色的百分比:"
 
 #: ../data/messages:907
 msgid "Background when hidden"
-msgstr ""
+msgstr "隐藏时背景"
 
 #: ../data/messages:909
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3174,7 +3205,7 @@ msgstr "更小"
 
 #: ../data/messages:951
 msgid "larger"
-msgstr ""
+msgstr "更大"
 
 #: ../data/messages:953
 msgid "Dialogs"

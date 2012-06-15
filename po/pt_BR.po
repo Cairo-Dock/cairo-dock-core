@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0-alpha\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-04-12 00:33+0000\n"
-"PO-Revision-Date: 2012-03-22 13:31+0000\n"
+"POT-Creation-Date: 2012-04-14 15:42+0000\n"
+"PO-Revision-Date: 2012-05-23 20:20+0000\n"
 "Last-Translator: Eduardo Mucelli Rezende Oliveira <edumucelli@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-13 05:23+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-05-24 10:36+0000\n"
+"X-Generator: Launchpad (build 15288)\n"
 "Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:221
@@ -643,6 +643,9 @@ msgid ""
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
+"Você está usando uma sessão Cairo-Dock!\n"
+"Não é aconselhado sair do dock, mas você pode pressionar Shift para "
+"desbloquear este item do menu."
 
 #: ../src/cairo-dock-menu.c:1018 ../src/cairo-dock-menu.c:1039
 msgid "Edit"
@@ -891,12 +894,16 @@ msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 msgstr ""
+"Esperar por N segundos antes de executar; isto é útil se você perceber "
+"problemas quando o dock começa com a sessão."
 
 #: ../src/cairo-dock.c:349
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
 msgstr ""
+"Permite editar a configuração antes de executar o dock e mostra o painel de "
+"configuração na inicialização."
 
 #: ../src/cairo-dock.c:352
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
@@ -923,6 +930,7 @@ msgstr "Imprimir versão e sair."
 #: ../src/cairo-dock.c:367
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr ""
+"Bloquear o dock, assim qualquer modificação é impossível para os usuários."
 
 #: ../src/cairo-dock.c:371
 msgid "Keep the dock above other windows whatever."
@@ -1303,6 +1311,11 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
+"A maioria dos ícones no dock tem várias ações: a primeira é clicando com o "
+"botão esquerdo do mouse, a segunda com o botão do meio e ações adicionais "
+"com o botão da direita (no menu).\n"
+"Alguns mini-aplicativos deixam você atribuir um atalho a uma ação, e decidir "
+"que ação usar com o botão do meio."
 
 #: ../data/messages:7
 msgid "Adding features"
@@ -1458,6 +1471,8 @@ msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
 msgstr ""
+"Você pode executar um aplicativo várias vezes usando SHIFT+clique no ícone "
+"(ou a partir do menu)."
 
 #: ../data/messages:59
 msgid "Switching between the windows of a same application"
@@ -1528,7 +1543,7 @@ msgstr ""
 
 #: ../data/messages:85
 msgid "Hiding the dock to use all the screen"
-msgstr ""
+msgstr "Esconder o dock para usar a tela toda"
 
 #: ../data/messages:87
 msgid ""

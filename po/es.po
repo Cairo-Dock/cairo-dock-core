@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.2\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-04-12 00:33+0000\n"
-"PO-Revision-Date: 2012-03-22 12:53+0000\n"
-"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
+"POT-Creation-Date: 2012-04-14 15:42+0000\n"
+"PO-Revision-Date: 2012-06-12 06:24+0000\n"
+"Last-Translator: Morgus <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-13 05:22+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-06-13 04:35+0000\n"
+"X-Generator: Launchpad (build 15389)\n"
 "Language: \n"
 "X-Poedit-Language: Spanish\n"
 
@@ -30,7 +30,7 @@ msgstr "Espere mientras se importa el tema..."
 
 #: ../src/cairo-dock-gui-commons.c:369
 msgid "Configure this applet"
-msgstr "Configurar esta mini-aplicación"
+msgstr "Configurar esta miniaplicación"
 
 #: ../src/cairo-dock-gui-commons.c:406 ../src/cairo-dock-gui-main.c:131
 msgid "Files"
@@ -187,7 +187,7 @@ msgstr "Diálogos"
 
 #: ../src/cairo-dock-gui-main.c:1541
 msgid "Applets can be displayed on your desktop as widgets."
-msgstr "Las mini-aplicaciones pueden situarse en el escritorio como objetos."
+msgstr "Las miniaplicaciones pueden situarse en el escritorio como objetos."
 
 #: ../src/cairo-dock-gui-main.c:1542 ../data/messages:89 ../data/messages:989
 msgid "Desklets"
@@ -313,7 +313,7 @@ msgstr "Efectos:"
 msgid ""
 "Click on an applet in order to have a preview and a description for it."
 msgstr ""
-"Haga clic sobre una mini-aplicación para tener una vista previa y una "
+"Pulse sobre una miniaplicación para ver una previsualización y una "
 "descripción de ella."
 
 #: ../src/cairo-dock-gui-simple.c:823
@@ -322,7 +322,7 @@ msgstr "Al pasar el cursor por encima:"
 
 #: ../src/cairo-dock-gui-simple.c:825 ../data/messages:485
 msgid "On click:"
-msgstr "Al hacer clic:"
+msgstr "Al pulsar:"
 
 #: ../src/cairo-dock-gui-simple.c:898
 msgid ""
@@ -374,7 +374,7 @@ msgstr "¡Encuentre la última versión de Cairo-Dock aquí!"
 
 #: ../src/cairo-dock-menu.c:219 ../src/cairo-dock-menu.c:953
 msgid "Get more applets!"
-msgstr "¡Obtener más complementos!"
+msgstr "Obtener más miniaplicaciones"
 
 #: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
 msgid "Donate"
@@ -422,18 +422,42 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Adolfo Jayme Barrientos https://launchpad.net/~fitoschido\n"
+"  Alain Jerrel Bustamante-López https://launchpad.net/~zanmato\n"
 "  Albert Milian https://launchpad.net/~mln-gmx\n"
+"  Andrés Casals Jahnsen https://launchpad.net/~mxwig23\n"
+"  Carlos Joel Delgado Pizarro https://launchpad.net/~carlosj2585\n"
 "  Carlos Rosales https://launchpad.net/~chartre\n"
+"  Daniel O. Mondaca S. https://launchpad.net/~dnielm\n"
+"  David Portella https://launchpad.net/~dobled\n"
 "  DiegoJ https://launchpad.net/~diegojromerolopez\n"
+"  FaPrO https://launchpad.net/~fabro-pro\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
+"  Florencia Mincucci https://launchpad.net/~flomincucci\n"
+"  Gonzalo Testa https://launchpad.net/~gonzalogtesta\n"
+"  Harold https://launchpad.net/~sancospi\n"
 "  Joaquín Padilla Rivero https://launchpad.net/~logseman\n"
+"  José A. Fuentes Santiago https://launchpad.net/~joanfusan\n"
+"  José Luis Figueroa https://launchpad.net/~jolfig\n"
+"  Juan Eduardo Riva https://launchpad.net/~juaneduardoriva\n"
+"  Juan Pablo Marzetti https://launchpad.net/~yonpols\n"
+"  Kaede https://launchpad.net/~caramelo--asesino\n"
 "  Martín V. https://launchpad.net/~martinvukovic\n"
 "  Miguel Valdiri Badillo https://launchpad.net/~catastro1\n"
 "  Monkey https://launchpad.net/~monkey-libre\n"
 "  Morgus https://launchpad.net/~morgus\n"
+"  Patricio Gonzalez https://launchpad.net/~pagondel\n"
+"  Ricardo A. Hermosilla Carrillo https://launchpad.net/~rahermosillac\n"
 "  Sergio Meneses https://launchpad.net/~sergiomeneses\n"
+"  Stefano Prenna https://launchpad.net/~stefanoprenna\n"
+"  benjamin https://launchpad.net/~jesuisbenjamin\n"
 "  david cg https://launchpad.net/~dcardelleg\n"
-"  orvalius https://launchpad.net/~orvalius"
+"  hoortiz https://launchpad.net/~hoortiz\n"
+"  hug0 https://launchpad.net/~hug0\n"
+"  orvalius https://launchpad.net/~orvalius\n"
+"  polkillas https://launchpad.net/~paulsanzcalvo\n"
+"  rubioo https://launchpad.net/~rubioo\n"
+"  sebikul https://launchpad.net/~sebikul"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -487,9 +511,9 @@ msgid ""
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
-"El nuevo lanzador ha sido creado.\n"
-"Ahora mueva algunos lanzadores o complementos dentro haciendo clic derecho "
-"en el ícono -> mover a otro lanzador"
+"Se ha creado el nuevo dock.\n"
+"Ahora, mueva algunos lanzadores o miniaplicaciones a él pulsando con el "
+"botón derecho sobre un icono ‣ Mover a otro dock"
 
 #: ../src/cairo-dock-menu.c:567
 msgid "Add"
@@ -542,9 +566,9 @@ msgid ""
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
-"El nuevo lanzador ha sido creado.\n"
-"Puede personalizarlo haciendo clic derecho en él -> cairo-dock -> configurar "
-"este lanzador"
+"Se ha creado el nuevo dock.\n"
+"Puede personalizarlo pulsando con el botón derecho sobre él ‣ Cairo-Dock ‣ "
+"Configurar este dock"
 
 #: ../src/cairo-dock-menu.c:754
 msgid ""
@@ -558,7 +582,7 @@ msgstr ""
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
-"Está apunto de remover la mini-aplicación (%s) de la barra. ¿Está seguro?"
+"Está a punto de quitar esta miniaplicación (%s) del dock. ¿Está seguro?"
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2007 Cairo-Dock project
@@ -572,7 +596,7 @@ msgstr "Configurar"
 
 #: ../src/cairo-dock-menu.c:858
 msgid "Configure behaviour, appearance, and applets."
-msgstr "Configurar el comportamiento, la apariencia y aplicaciones."
+msgstr "Configurar comportamiento, apariencia y miniaplicaciones."
 
 #: ../src/cairo-dock-menu.c:863
 msgid "Configure this dock"
@@ -620,8 +644,8 @@ msgstr "Lanzar Cairo-Dock al inicio"
 msgid ""
 "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
-"Los complementos de terceros proveen integración con otros programas, como "
-"Pidgin"
+"Las miniaplicaciones de terceros proporcionan integración con muchos "
+"programas, como Pidgin"
 
 #: ../src/cairo-dock-menu.c:961 ../src/help/applet-init.c:28
 #: ../src/help/applet-notifications.c:257
@@ -688,7 +712,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1065
 msgid "Applet's handbook"
-msgstr "Guía de la mini-aplicación"
+msgstr "Guía de la miniaplicación"
 
 #: ../src/cairo-dock-menu.c:1110
 msgid "Pick up an image"
@@ -1189,13 +1213,11 @@ msgid ""
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
-"Bienvenido a Cairo-Dock !\n"
-"Esta aplicación esta aquí para ayudarlo a comenzar usando el dock; solo e "
-"click sobre el.\n"
-"Si tiene alguna pregunta/solicitud/observación, por favor visítenos en "
-"http://glx-dock.org.\n"
-"Esperamos disfrute este software!\n"
-"  (ahora se puede hacer click en este cuadro de dialogo para cerrarlo)"
+"¡Bienvenido a Cairo-Dock!\n"
+"Esta miniaplicación le ayudará a usar el dock, solo pulse sobre ella.\n"
+"Si tiene preguntas/pedidos/sugerencias, visítenos en http://glx-dock.org.\n"
+"Esperamos que disfrute este software.\n"
+"  (pulse en este diálogo para cerrarlo)"
 
 #: ../src/help/applet-composite.c:160
 msgid "Don't ask me any more"
@@ -1244,13 +1266,12 @@ msgid ""
 "Middle-click to open the configuration window.\n"
 "Right-click to access some troubleshooting actions."
 msgstr ""
-"Esta aplicación se hace para ayudarlo.\n"
-"Haga click en el icono para que aparezca consejos útiles acerca de las "
-"posibilidades de El Cairo-Dock.\n"
-"Haga click con el botón central del ratón para abrir la ventana de "
-"configuración.\n"
-"Haga click con el botón derecho para acceder a algunas de las acciones de "
-"solución de problemas."
+"Esta miniaplicación tiene como objetivo ayudarle.\n"
+"Pulse en su icono para mostrar consejos útiles sobre las posibilidades de "
+"Cairo-Dock.\n"
+"Pulse con el botón central para abrir la ventana de configuración.\n"
+"Pulse con el botón derecho para acceder a algunas acciones de solución de "
+"problemas."
 
 #: ../src/help/applet-notifications.c:247
 msgid "Open global settings"
@@ -1329,11 +1350,11 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
-"La mayoría de los iconos del dock realizan varias acciones : la acción "
-"primaria con el botón izquierdo del ratón, una acción secundaria con el "
-"botón central y acciones adicionales con el botón derecho (en el menú).\n"
-"Algunos complementos permiten vincular una tecla de acceso rápido a una "
-"acción y decidir qué acción se realiza con el click central."
+"La mayoría de iconos en el dock tienen varias acciones: la acción primaria "
+"se ejecuta al pulsar, la acción secundaria al pulsar con el botón central, y "
+"acciones adicionales al pulsar con el botón derecho.\n"
+"Algunas miniaplicaciones le permiten vincular una tecla de acceso rápido a "
+"una acción y así decidir qué acción realizar al pulsar con el botón central."
 
 #: ../data/messages:7
 msgid "Adding features"
@@ -1349,16 +1370,16 @@ msgid ""
 "the \"More applets\" button (which will lead you to our applets web page) "
 "and then just drag-and-drop the link of an applet into your dock."
 msgstr ""
-"Cairo-Dock tiene muchos complementos. Los complementos son pequeñas "
-"aplicaciones dentro del dock, por ejemplo un reloj o un botón de finalizar "
-"sesión.\n"
-"Para habilitar nuevos complementos, ir a preferencias (click derecho -> "
-"Cairo-Dock -> configurar), ir a \"Componentes adicionales\", y marcar el "
-"complemento que se desea.\n"
-"Más complementos se pueden instalar fácilmente: en la ventana de "
-"configuración, click en el botón de \"Obtener más complementos\" (que nos "
-"redireccionará a nuestra página web de complementos) y luego simplemente "
-"arrastrar el enlace del complemento deseado al dock."
+"Cairo-Dock tiene muchas miniaplicaciones. Las miniaplicaciones son pequeños "
+"complementos que residen en el dock, por ejemplo un reloj o un botón para "
+"cerrar sesión.\n"
+"Para activar miniaplicaciones nuevas, abra la configuración (pulsación "
+"derecha ‣ Cairo-Dock ‣ Configurar), vaya a «Añadidos», y active la "
+"miniaplicación que desee.\n"
+"Puede instalar más miniaplicaciones fácilmente: en la ventana de "
+"configuración, pulse en «Más miniaplicaciones» (que le llevará a nuestro "
+"sitio web de miniaplicaciones) y luego arrastre el enlace de una "
+"miniaplicación y suéltelo en su dock."
 
 #: ../data/messages:13
 msgid "Adding a launcher"
@@ -1374,8 +1395,8 @@ msgstr ""
 "Se puede añadir un lanzador arrastrándolo desde el menú de Aplicaciones y "
 "soltándolo dentro del dock. Una flecha animada aparecerá cuando se pueda "
 "soltar.\n"
-"Alternativamente, si una aplicación ya está abierta, se puede hacer click "
-"derecho en su icono y seleccionar \"Crear un lanzador\"."
+"Alternativamente, si una aplicación ya está abierta, puede pulsar su icono "
+"con el botón derecho y seleccionar «Crear un lanzador»."
 
 #: ../data/messages:17
 msgid "Removing a launcher"
@@ -1441,6 +1462,17 @@ msgid ""
 "of them to be used instead of the default icon theme, in the global config "
 "window."
 msgstr ""
+"Para un lanzador o miniaplicación:\n"
+"Abra la configuración de un icono y establezca la ruta a una imagen.\n"
+"- Para un icono de aplicación:\n"
+"Pulsación derecha sobre el icono ‣ «Otras acciones» ‣ «Establecer un icono "
+"personalizado», y elija una imagen. Para quitar la imagen personalizada, "
+"pulsación derecha sobre el icono ‣ «Otras acciones» ‣ «Quitar el icono "
+"personalizado».\n"
+"\n"
+"Si ha instalado temas de iconos en su equipo, también puede seleccionar uno "
+"de ellos para su uso en lugar del tema predeterminado, en la ventana de "
+"configuración global."
 
 #: ../data/messages:33
 msgid "Resizing icons"
@@ -1456,13 +1488,13 @@ msgid ""
 "Also, you can define the size of each applet independently in their own "
 "settings."
 msgstr ""
-"Se pueden hacer los iconos o el efecto de zoom mayor o menor. Aprir las "
-"opciones (click derecho -> Cairo-Dock -> configuración), e ir a Apariencia "
-"(o Iconos en modo avanzado).\n"
-"Notar que si hay demasiados iconos en el dock, serán emequeñecidos para "
-"caber en la pantalla.\n"
-"También se puede definir el tamaño de cada complemento independientemente en "
-"sus opciones."
+"Puede cambiar el tamaño de los iconos y el efecto de ampliación. Abra la "
+"configuración (pulsación derecha ‣ Cairo-Dock ‣ Configurar), y vaya a "
+"Apariencia (o Iconos en el modo avanzado).\n"
+"Note que si hay demasiados iconos en el dock, éstos se reducirán para caber "
+"en la pantalla.\n"
+"También puede definir el tamaño individual de cada miniaplicación en sus "
+"configuraciones."
 
 #: ../data/messages:37
 msgid "Separating icons"
@@ -1515,8 +1547,8 @@ msgstr "Cerrar ventana"
 msgid ""
 "You can close a window by middle-clicking on its icon (or from the menu)."
 msgstr ""
-"Puedes cerrar una ventana haciendo click medio sobre el icono (o desde el "
-"menú)"
+"Puede cerrar una ventana haciendo una pulsación central sobre su icono (o "
+"desde el menú)."
 
 #: ../data/messages:51
 msgid "Minimizing / restauring a window"
@@ -1636,7 +1668,7 @@ msgstr ""
 
 #: ../data/messages:91
 msgid "Placing applets on your desktop"
-msgstr "Colocando complementos en tu escritorio"
+msgstr "Colocar miniaplicaciones en su escritorio"
 
 #: ../data/messages:93
 msgid ""
@@ -1644,10 +1676,13 @@ msgid ""
 "wherever on your desktop.\n"
 "To detach an applet from the dock, simply drag and drop it outside the dock."
 msgstr ""
+"Las miniaplicaciones pueden posicionarse en «desklets» que son ventanas "
+"pequeñas que pueden ubicarse en cualquier lugar de su escritorio.\n"
+"Para separar una miniaplicación del dock, simplemente arrástrela fuera de él."
 
 #: ../data/messages:95
 msgid "Moving desklets"
-msgstr ""
+msgstr "Moviendo desklets"
 
 #: ../data/messages:97
 msgid ""
@@ -1683,6 +1718,9 @@ msgid ""
 "applet, go to Desklet, and select the decoration you want (you can provide "
 "your own one)."
 msgstr ""
+"Los «desklets» pueden tener decoraciones. Para cambiar eso, abra la "
+"configuración de la miniaplicación, vaya a Desklet, y seleccione la "
+"decoración que desee (puede proporcionar la suya propia)."
 
 #: ../data/messages:107
 msgid "Useful Features"
@@ -1701,6 +1739,12 @@ msgid ""
 "When a task has been or is going to be scheduled, the applet will warn you "
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
+"Active la miniaplicación Reloj.\n"
+"Al pulsar sobre él se abrirá un calendario.\n"
+"Al pulsar dos veces sobre él se abrirá un editor de tareas. Allí puede "
+"añadir o quitar tareas.\n"
+"Cuando una tarea ha sido o será programada, la miniaplicación le avisará "
+"(15min antes del evento, o un día antes en caso de un aniversario)."
 
 #: ../data/messages:113
 msgid "Having a list of all windows"
@@ -1736,6 +1780,9 @@ msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
 msgstr ""
+"Active la miniaplicación Mostrar escritorio.\n"
+"Pulse con el botón derecho en él ‣ «Cambiar resolución» ‣ seleccione la que "
+"desee.t"
 
 #: ../data/messages:125
 msgid "Locking your session"
@@ -2083,15 +2130,16 @@ msgstr ""
 #: ../data/messages:229
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
 msgstr ""
-"El applet «Redrapidez» expone 0 incluso cuando estoy trasvasando algo."
+"La miniaplicación «Velocidad de red» muestra 0 aun cuando estoy descargando "
+"algo"
 
 #: ../data/messages:231
 msgid ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
 msgstr ""
-"Pista: se puede iniciar este aplique varias veces si se desea controlar "
-"varias interfaces."
+"Consejo: puede ejecutar varias instancias de esta miniaplicación si quiere "
+"monitorear varias interfaces."
 
 #: ../data/messages:233
 msgid ""
@@ -2169,7 +2217,7 @@ msgstr ""
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
 msgstr ""
-"Si usted desea desarrollar un applet, una documentación completa está "
+"Si quiere desarrollar una miniaplicación, hay una completa documentación "
 "disponible aquí."
 
 #: ../data/messages:255
@@ -2182,9 +2230,10 @@ msgid ""
 "or to interact with the dock in any kind of way, a full DBus API is "
 "described here."
 msgstr ""
-"Si quieres crear un appelt con Python, Perl o cualquier otro lenguaje,\n"
-"o si quieres interactura con el dock por cualquira manera, un API DBus "
-"complete esta describido ahí."
+"Si quiere desarrollar una miniaplicación con Python, Perl o cualquier otro "
+"lenguaje,\n"
+"o quiere interactuar con el dock de otra manera, aquí está descrita una API "
+"completa de DBus."
 
 #: ../data/messages:259
 msgid "DBus API"
@@ -2214,7 +2263,7 @@ msgstr "Web de la comunidad"
 
 #: ../data/messages:273
 msgid "More applets available online!"
-msgstr ""
+msgstr "Más miniaplicaiones disponibles en línea"
 
 #: ../data/messages:275
 msgid "Cairo-Dock-Plug-ins-Extras"
@@ -2316,15 +2365,15 @@ msgstr "Nombre de archivo de la imágen:"
 
 #: ../data/messages:315
 msgid "Set to 0 to use the default applet size"
-msgstr "Establezca a 0 para usar el tamaño de aplique predeterminado"
+msgstr "Configure a 0 para usar el tamaño predeterminado de miniaplicación"
 
 #: ../data/messages:317
 msgid "Desired icon size for this applet"
-msgstr "Tamaño de icono deseado para este aplique"
+msgstr "Tamaño de icono deseado para esta miniaplicación"
 
 #: ../data/messages:319
 msgid "Applet's Handbook"
-msgstr "Manual del aplique"
+msgstr "Manual de la miniaplicación"
 
 #: ../data/messages:321
 msgid "Desklet"
@@ -2722,7 +2771,7 @@ msgstr "Componentes adicionales"
 
 #: ../data/messages:523
 msgid "Add or remove any applet"
-msgstr "Agrega o remueve cualquier applet"
+msgstr "Añadir o quitar cualquier miniaplicación"
 
 #: ../data/messages:525
 msgid ""
@@ -2730,11 +2779,11 @@ msgid ""
 "Click on the left check-box to (de)activate an applet.\n"
 "Once an applet is active, you can configure it by right clicking on its icon."
 msgstr ""
-"Seleccione una línea para obtener una descripción y una vista previa de la "
-"mini-aplicación.\n"
-"Haga click en la casilla izquierda para (des)activar una miniaplicación.\n"
-"Una vez que la mini-aplicación está activa, puede configurarla haciendo "
-"click derecho en su icono"
+"Seleccione una línea para obtener una previsualización y descripción de la "
+"miniaplicación.\n"
+"Pulse en la casilla a la izquierda para (des)activar una miniaplicación.\n"
+"Una vez que la miniaplicación esté activa, puede configurarla haciendo una "
+"pulsación derecha sobre su icono."
 
 #: ../data/messages:527
 msgid ""
@@ -3346,6 +3395,8 @@ msgstr ""
 #: ../data/messages:909
 msgid "Several applets can be visible even when the dock is hidden"
 msgstr ""
+"Algunas miniaplicaciones pueden permanecer visibles incluso cuando el dock "
+"está oculto"
 
 #: ../data/messages:911
 msgid "Default background color when the dock is hidden"
