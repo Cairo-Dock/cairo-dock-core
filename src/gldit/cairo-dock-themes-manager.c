@@ -69,6 +69,31 @@ extern CairoDock *g_pMainDock;
 #define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
 #define CAIRO_DOCK_LOCAL_IMAGES_DIR "images"
 
+
+static gchar * _replace_slash_by_underscore (gchar *cName)
+{
+	g_return_val_if_fail (cName != NULL, NULL);
+
+	for (int i = 0; cName[i] != '\0'; i++)
+	{
+		if (cName[i] == '/' || cName[i] == '$')
+			cName[i] = '_';
+	}
+
+	return cName;
+}
+
+/** Escapes the special characters '\b', '\f', '\n', '\r', '\t', '\v', '\' and '"' in the string source by inserting a '\' before them and replaces '/' and '$' by '_'
+ * @param cOldName name of a filename
+ * @return a newly-allocated copy of source with certain characters escaped. See above.
+ */
+static gchar * _escape_string_for_filename (const gchar *cOldName)
+{
+	gchar *cNewName = g_strescape (cOldName, NULL);
+
+	return _replace_slash_by_underscore (cNewName);
+}
+
 void cairo_dock_mark_current_theme_as_modified (gboolean bModified)
 {
 	gchar *cModifiedFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_MODIFIED_THEME_FILE);
@@ -104,17 +129,22 @@ gboolean cairo_dock_current_theme_need_save (void)
 gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean bSaveBehavior, gboolean bSaveLaunchers)
 {
 	g_return_val_if_fail (cNewThemeName != NULL, FALSE);
+
+	gchar *cNewThemeNameWithoutSlashes = _replace_slash_by_underscore (g_strdup (cNewThemeName));
 	
-	cairo_dock_extract_package_type_from_name (cNewThemeName);
-	
-	cd_message ("on sauvegarde dans %s", cNewThemeName);
+	cairo_dock_extract_package_type_from_name (cNewThemeNameWithoutSlashes);
+
+	gchar *cNewThemeNameEscaped = g_strescape (cNewThemeNameWithoutSlashes, NULL);
+
+	cd_message ("we save in %s", cNewThemeNameWithoutSlashes);
 	GString *sCommand = g_string_new ("");
 	gboolean bThemeSaved = FALSE;
 	int r;
-	gchar *cNewThemePath = g_strdup_printf ("%s/%s", g_cThemesDirPath, cNewThemeName);
+	gchar *cNewThemePath = g_strdup_printf ("%s/%s", g_cThemesDirPath, cNewThemeNameWithoutSlashes);
+	gchar *cNewThemePathEscaped = g_strdup_printf ("%s/%s", g_cThemesDirPath, cNewThemeNameEscaped);
 	if (g_file_test (cNewThemePath, G_FILE_TEST_EXISTS))  // on ecrase un theme existant.
 	{
-		cd_debug ("  le theme existant sera mis a jour");
+		cd_debug ("  This theme will be updated");
 		gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s?"), cNewThemeName);
 		int answer = cairo_dock_ask_general_question_and_wait (cQuestion);
 		g_free (cQuestion);
@@ -139,18 +169,18 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 			//\___________________ On traite les lanceurs.
 			if (bSaveLaunchers)
 			{
-				g_string_printf (sCommand, "rm -f \"%s/%s\"/*", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
+				g_string_printf (sCommand, "rm -f \"%s/%s\"/*", cNewThemePathEscaped, CAIRO_DOCK_LAUNCHERS_DIR);
 				cd_message ("%s", sCommand->str);
 				r = system (sCommand->str);
 				
-				g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", g_cCurrentLaunchersPath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
+				g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", g_cCurrentLaunchersPath, cNewThemePathEscaped, CAIRO_DOCK_LAUNCHERS_DIR);
 				cd_message ("%s", sCommand->str);
 				r = system (sCommand->str);
 			}
 			
 			//\___________________ On traite tous le reste.
 			/// TODO : traiter les .conf des applets comme celui du dock...
-			g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '%s' ! -name \"%s\" -exec /bin/cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePath);
+			g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '%s' ! -name \"%s\" -exec /bin/cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePathEscaped);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 
@@ -159,11 +189,11 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	}
 	else  // sinon on sauvegarde le repertoire courant tout simplement.
 	{
-		cd_debug ("  creation du nouveau theme (%s)", cNewThemePath);
+		cd_debug ("  creation of the new theme (%s)", cNewThemePath);
 
 		if (g_mkdir (cNewThemePath, 7*8*8+7*8+5) == 0)
 		{
-			g_string_printf (sCommand, "cp -r \"%s\"/* \"%s\"", g_cCurrentThemePath, cNewThemePath);
+			g_string_printf (sCommand, "cp -r \"%s\"/* \"%s\"", g_cCurrentThemePath, cNewThemePathEscaped);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 
@@ -172,7 +202,10 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 		else
 			cd_warning ("couldn't create %s", cNewThemePath);
 	}
-	
+
+	g_free (cNewThemeNameEscaped);
+	g_free (cNewThemeNameWithoutSlashes);
+
 	//\___________________ On conserve la date de derniere modif.
 	time_t epoch = (time_t) time (NULL);
 	struct tm currentTime;
@@ -188,7 +221,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	g_free (cReadmeFile);
 	g_free (cMessage);
 	
-	g_string_printf (sCommand, "rm -f \"%s/last-modif\"", cNewThemePath);
+	g_string_printf (sCommand, "rm -f \"%s/last-modif\"", cNewThemePathEscaped);
 	r = system (sCommand->str);
 	
 	//\___________________ make a preview of the current main dock.
@@ -198,6 +231,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	
 	//\___________________ Le theme n'est plus en etat 'modifie'.
 	g_free (cNewThemePath);
+	g_free (cNewThemePathEscaped);
 	if (bThemeSaved)
 	{
 		cairo_dock_mark_current_theme_as_modified (FALSE);
@@ -211,8 +245,10 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 {
 	g_return_val_if_fail (cThemeName != NULL, FALSE);
+
+	gchar *cNewThemeName = _escape_string_for_filename (cThemeName);
 	
-	cairo_dock_extract_package_type_from_name (cThemeName);
+	cairo_dock_extract_package_type_from_name (cNewThemeName);
 	
 	cd_message ("building theme package ...");
 	int r;
@@ -221,16 +257,18 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 		gchar *cCommand;
 		const gchar *cTerm = g_getenv ("TERM");
 		if (cTerm == NULL || *cTerm == '\0')
-			cCommand = g_strdup_printf ("xterm -e %s \"%s\"", GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", cThemeName);
+			cCommand = g_strdup_printf ("xterm -e %s \"%s\"", GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", cNewThemeName);
 		else
-			cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", cThemeName);
+			cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", cNewThemeName);
 		r = system (cCommand);
 		g_free (cCommand);
+		g_free (cNewThemeName);
 		return TRUE;
 	}
 	else
 	{
 		cd_warning ("the package builder script was not found !");
+		g_free (cNewThemeName);
 		return FALSE;
 	}
 }
@@ -274,14 +312,18 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 		int i, r;
 		for (i = 0; cThemesList[i] != NULL; i ++)
 		{
-			cThemeName = cThemesList[i];
+			cThemeName = _escape_string_for_filename (cThemesList[i]);
 			if (*cThemeName == '\0')
+			{
+				g_free (cThemeName);
 				continue;
+			}
 			cairo_dock_extract_package_type_from_name (cThemeName);
 			
 			bThemeDeleted = TRUE;
 			g_string_printf (sCommand, "rm -rf \"%s/%s\"", g_cThemesDirPath, cThemeName);
-			r = system (sCommand->str);  // g_rmdir n'efface qu'un repertoire vide.
+			r = system (sCommand->str);  // g_rmdir only delete an empty dir...
+			g_free (cThemeName);
 		}
 	}
 	
@@ -310,7 +352,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	
 	if (g_str_has_suffix (cNewThemeName, ".tar.gz") || g_str_has_suffix (cNewThemeName, ".tar.bz2") || g_str_has_suffix (cNewThemeName, ".tgz"))  // c'est un paquet.
 	{
-		cd_debug ("c'est un paquet");
+		cd_debug ("it's a tarball");
 		cNewThemePath = cairo_dock_depackage_theme (cNewThemeName);
 		
 		g_return_val_if_fail (cNewThemePath != NULL, FALSE);
@@ -320,7 +362,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 	}
 	else  // c'est un theme officiel.
 	{
-		cd_debug ("c'est un theme officiel");
+		cd_debug ("it's an official theme");
 		cNewThemePath = cairo_dock_get_package_path (cNewThemeName, s_cLocalThemeDirPath, g_cThemesDirPath, s_cDistantThemeDirName, CAIRO_DOCK_ANY_PACKAGE);
 	}
 	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);

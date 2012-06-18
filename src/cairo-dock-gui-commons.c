@@ -143,6 +143,7 @@ gboolean cairo_dock_save_current_theme (GKeyFile* pKeyFile)
 	{
 		bThemeSaved |= cairo_dock_package_current_theme (cNewThemeName);
 	}
+	g_free (cNewThemeName);
 	
 	return bThemeSaved;
 }
