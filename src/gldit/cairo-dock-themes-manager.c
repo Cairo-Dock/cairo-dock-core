@@ -216,14 +216,14 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 	
 	cd_message ("building theme package ...");
 	int r;
-	if (g_file_test (GLDI_BIN_DIR"/cairo-dock-package-theme", G_FILE_TEST_EXISTS))
+	if (g_file_test (GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", G_FILE_TEST_EXISTS))
 	{
 		gchar *cCommand;
 		const gchar *cTerm = g_getenv ("TERM");
 		if (cTerm == NULL || *cTerm == '\0')
-			cCommand = g_strdup_printf ("xterm -e %s \"%s\"", "cairo-dock-package-theme", cThemeName);
+			cCommand = g_strdup_printf ("xterm -e %s \"%s\"", GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", cThemeName);
 		else
-			cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", "cairo-dock-package-theme", cThemeName);
+			cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", cThemeName);
 		r = system (cCommand);
 		g_free (cCommand);
 		return TRUE;
