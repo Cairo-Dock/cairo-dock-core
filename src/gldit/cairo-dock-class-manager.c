@@ -1770,7 +1770,6 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	return cResult;
 }
 
-
 /*
 register from desktop-file name/path (+class-name):
   if class-name: guess class -> lookup class -> if already registered => quit
@@ -1868,10 +1867,22 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	//\__________________ get the attributes.
 	pClassAppli->cDesktopFile = cDesktopFilePath;
 	
+	pClassAppli->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+	
 	if (cCommand != NULL)  // remove the launching options %x.
 	{
 		gchar *str = strchr (cCommand, '%');  // search the first one.
-		if (str != NULL)
+		
+		if (str && *(str+1) == 'c')  // this one (caption) is the only one that is expected (ex.: kreversi -caption "%c"; if we let '-caption' with nothing after, the appli will melt down); others are either URL or icon that can be empty as per the freedesktop specs, so we can sefely remove them completely from the command line.
+		{
+			*str = '\0';
+			gchar *cmd2 = g_strdup_printf ("%s%s%s", cCommand, pClassAppli->cName, str+2);  // replace %c with the localized name.
+			g_free (cCommand);
+			cCommand = cmd2;
+			str = strchr (cCommand, '%');  // jump to the next one.
+		}
+		
+		if (str != NULL)  // remove everything from the first option to the end.
 		{
 			if (str != cCommand && (*(str-1) == '"' || *(str-1) == '\''))  // take care of "" around the option.
 				str --;
@@ -1882,8 +1893,6 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	
 	if (pClassAppli->cStartupWMClass == NULL)
 		pClassAppli->cStartupWMClass = (cStartupWMClass ? cStartupWMClass : g_strdup (cWmClass));
-	
-	pClassAppli->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
 	
 	pClassAppli->cIcon = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
 	if (pClassAppli->cIcon != NULL && *pClassAppli->cIcon != '/')  // remove any extension.
