@@ -21,17 +21,22 @@
 #define  __CAIRO_DOCK_OVERLAY__
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-object.h"
 G_BEGIN_DECLS
 
 /**
  *@file cairo-dock-overlay.h This class defines Overlays, that are small images superimposed on the icon at a given position.
- * You can either print the overlay directly on the icon's surface/texture, or add it (i nthis case it is drawn separately, and can be removed without modifying the icon's surface/texture, and will remain even if you erase the icon's surface/texture).
- * Only one overlay can be added at a given position.
  * 
  * To add an overlay to an icon, use \ref cairo_dock_add_overlay_from_image or \ref cairo_dock_add_overlay_from_surface.
- * To remove an overlay, use \ref cairo_dock_remove_overlay_at_position.
- * If you need to modify an overlay directly, you can get its image buffer with \ref cairo_dock_get_overlay_buffer_at_position.
- * If you're never going to update nor remove an overlay, you can choose to print it directly onto the icon with \ref cairo_dock_print_overlay_on_icon_from_image or \ref cairo_dock_print_overlay_on_icon_from_surface, which is slightly optimized.
+ * The overlay can then be removed from the icon by simply destroying it with \ref cairo_dock_destroy_overlay
+ * 
+ * A common feature is to have only 1 overlay at a given position. This can be achieved by passing a non-NULL data to the creation functions. This data will identify all of your overlays.
+ * You can then remove an overlay simply from its position with \ref cairo_dock_remove_overlay_at_position, and adding an overlay at a position will automatically remove any previous overlay at this position with the same data.
+ * 
+ * If you're never going to update nor remove an overlay, you can choose to print it directly onto the icon with \ref cairo_dock_print_overlay_on_icon_from_image or \ref cairo_dock_print_overlay_on_icon_from_surface, which is slightly faster.
+ * 
+ * Overlays are drawn at 1/2 of the icon size by default, but this can be set up with \ref cairo_dock_set_overlay_scale.
+ * If you need to modify an overlay directly, you can get its image buffer with \ref cairo_dock_get_overlay_image_buffer.
  */
 
 /// Available position of an overlay on an icon.
@@ -51,47 +56,33 @@ typedef enum {
 
 /// Definition of an Icon Overlay.
 struct _CairoOverlay {
+	/// object
+	GldiObject object;
 	/// image buffer
 	CairoDockImageBuffer image;
 	/// position on the icon
 	CairoOverlayPosition iPosition;
 	/// scale at which to draw the overlay, relatively to the icon (0.5 by default, 1 will cover the whole icon, 0 means to draw at the actual buffer size).
 	gdouble fScale;
+	/// icon it belongs to.
+	Icon *pIcon;
+	/// data used to identify an overlay
+	gpointer data;
 } ;
 
 
   ///////////////////
- // CREATE / FREE //
+ // OVERLAY CLASS //
 ///////////////////
-
-CairoOverlay *cairo_dock_create_overlay_from_image (Icon *pIcon, const gchar *cImageFile);
-
-CairoOverlay *cairo_dock_create_overlay_from_surface (Icon *pIcon, cairo_surface_t *pSurface, int iWidth, int iHeight);
-
-CairoOverlay *cairo_dock_create_overlay_from_texture (Icon *pIcon, GLuint iTexture, int iWidth, int iHeight);
-
-void cairo_dock_free_overlay (CairoOverlay *pOverlay);
-
-#define cairo_dock_set_overlay_scale(pOverlay, fScale) (pOverlay)->fScale = fScale
-
-  //////////////////
- // ADD / REMOVE //
-//////////////////
-
-/** Add an overlay on an icon.
- *@param pIcon the icon
- *@param pOverlay the overlay
- *@param iPosition position where to display the overlay
- */
-void cairo_dock_add_overlay_to_icon (Icon *pIcon, CairoOverlay *pOverlay, CairoOverlayPosition iPosition);
 
 /** Add an overlay on an icon from an image.
  *@param pIcon the icon
  *@param cImageFile an image (if it's not a path, it is searched amongst the current theme's images)
  *@param iPosition position where to display the overlay
- *@return TRUE if the overlay has been successfuly added.
+ *@return the overlay, or NULL if the image couldn't be loaded.
+ *@param data data that will be used to look for the overlay in \ref cairo_dock_remove_overlay_at_position; if NULL, then this function can't be used
  */
-gboolean cairo_dock_add_overlay_from_image (Icon *pIcon, const gchar *cImageFile, CairoOverlayPosition iPosition);
+CairoOverlay *cairo_dock_add_overlay_from_image (Icon *pIcon, const gchar *cImageFile, CairoOverlayPosition iPosition, gpointer data);
 
 /** Add an overlay on an icon from a surface.
  *@param pIcon the icon
@@ -99,45 +90,52 @@ gboolean cairo_dock_add_overlay_from_image (Icon *pIcon, const gchar *cImageFile
  *@param iWidth width of the surface
  *@param iHeight height of the surface
  *@param iPosition position where to display the overlay
+ *@param data data that will be used to look for the overlay in \ref cairo_dock_remove_overlay_at_position; if NULL, then this function can't be used
+ *@return the overlay.
  */
-void cairo_dock_add_overlay_from_surface (Icon *pIcon, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition);
+CairoOverlay *cairo_dock_add_overlay_from_surface (Icon *pIcon, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition, gpointer data);
 
 /** Add an overlay on an icon from a texture.
  *@param pIcon the icon
  *@param iTexture a texture
  *@param iPosition position where to display the overlay
+ *@param data data that will be used to look for the overlay in \ref cairo_dock_remove_overlay_at_position; if NULL, then this function can't be used
+ *@return the overlay.
  */
-void cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture, CairoOverlayPosition iPosition);
+CairoOverlay *cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture, CairoOverlayPosition iPosition, gpointer data);
 
-/** Remove an overlay on an icon, given its position (there is only one overlay at a given position).
+
+#define cairo_dock_set_overlay_scale(pOverlay, fScale) (pOverlay)->fScale = fScale
+
+#define cairo_dock_get_overlay_image_buffer(pOverlay) (&(pOverlay)->image)
+
+/** Destroy an overlay (it is removed from its icon).
+ *@param pOverlay the overlay
+ */
+void cairo_dock_destroy_overlay (CairoOverlay *pOverlay);
+
+/** Remove an overlay from an icon, given its position and data.
  *@param pIcon the icon
- *@param iPosition position of the overlay
+ *@param iPosition the position of the overlay
+ *@param data data that was set on the overlay when created; a NULL pointer is not valid.
  */
-void cairo_dock_remove_overlay_at_position (Icon *pIcon, CairoOverlayPosition iPosition);
+void cairo_dock_remove_overlay_at_position (Icon *pIcon, CairoOverlayPosition iPosition, gpointer data);
 
-/** Get the image buffer of an overlay, given its position (there is only one overlay at a given position).
- *@param pIcon the icon
- *@param iPosition position of the overlay
- *@return the image-buffer of the overlay, or NULL if there is no overlay at this position.
- */
-CairoDockImageBuffer *cairo_dock_get_overlay_buffer_at_position (Icon *pIcon, CairoOverlayPosition iPosition);
 
+  ///////////////////
+ // ICON OVERLAYS //
+///////////////////
 
 void cairo_dock_destroy_icon_overlays (Icon *pIcon);
-
-  //////////
- // DRAW //
-//////////
 
 void cairo_dock_draw_icon_overlays_cairo (Icon *pIcon, double fRatio, cairo_t *pCairoContext);
 
 void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio);
 
+
   ///////////
  // PRINT //
 ///////////
-
-void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoOverlay *pOverlay, CairoOverlayPosition iPosition);
 
 /** Print an overlay onto an icon from an image at a given position. You can't remove/modify the overlay then. The overlay will be displayed until you modify the icon directly (for instance by setting a new image).
  *@param pIcon the icon
