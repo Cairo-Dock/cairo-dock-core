@@ -22,6 +22,7 @@
 #define  __CAIRO_DOCK_LOAD__
 
 #include <glib.h>
+#include <sys/time.h>
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-icon-manager.h"
@@ -46,7 +47,9 @@ struct _CairoDockImageBuffer {
 	gdouble fZoomX;
 	gdouble fZoomY;
 	gint iNbFrames;  // nb frames in the case of an animated image.
-	gint iCurrentFrame;
+	gdouble iCurrentFrame;
+	gdouble fDeltaFrame;  // dt for 1 frame
+	struct timeval time;
 	} ;
 
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);
@@ -107,11 +110,11 @@ void cairo_dock_load_image_buffer_from_texture (CairoDockImageBuffer *pImage, GL
 */
 CairoDockImageBuffer *cairo_dock_create_image_buffer (const gchar *cImageFile, int iWidth, int iHeight, CairoDockLoadImageModifier iLoadModifier);
 
-#define cairo_dock_image_buffer_is_animated(pImage) ((pImage)->iNbFrames > 0)
-#define cairo_dock_image_buffer_next_frame(pImage) do {\
-	(pImage)->iCurrentFrame ++;\
-	if ((pImage)->iCurrentFrame >= (pImage)->iNbFrames)\
-		(pImage)->iCurrentFrame = 0; } while (0)
+#define cairo_dock_image_buffer_is_animated(pImage) ((pImage) && (pImage)->iNbFrames > 0)
+
+void cairo_dock_image_buffer_next_frame (CairoDockImageBuffer *pImage);
+
+#define cairo_dock_image_buffer_set_timelength(pImage, fTimeLength) (pImage)->fDeltaFrame = ((pImage)->iNbFrames != 0 ? (double)fTimeLength / (pImage)->iNbFrames : 1)
 
 /** Reset an ImageBuffer's ressources. It can be used to load another image then.
 *@param pImage an ImageBuffer.

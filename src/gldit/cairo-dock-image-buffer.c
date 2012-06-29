@@ -24,7 +24,6 @@
 #include <gtk/gtk.h>
 
 
-
 #include "cairo-dock-draw.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
@@ -149,6 +148,11 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 			}
 		}
 		//g_print ("CAIRO_DOCK_ANIMATED_IMAGE -> %d frames\n", pImage->iNbFrames);
+		if (pImage->iNbFrames != 0)
+		{
+			pImage->fDeltaFrame = 1. / pImage->iNbFrames;  // default value
+			gettimeofday (&pImage->time, NULL);
+		}
 	}
 	
 	if (fAlpha < 1 && pImage->pSurface != NULL)
@@ -222,21 +226,46 @@ void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage)
 	g_free (pImage);
 }
 
+void cairo_dock_image_buffer_next_frame (CairoDockImageBuffer *pImage)
+{
+	struct timeval cur_time = pImage->time;
+	gettimeofday (&pImage->time, NULL);
+	double fElapsedTime = (pImage->time.tv_sec - cur_time.tv_sec) + (pImage->time.tv_usec - cur_time.tv_usec) * 1e-6;
+	double fElapsedFrame = fElapsedTime / pImage->fDeltaFrame;
+	pImage->iCurrentFrame += fElapsedFrame;
+	while (pImage->iCurrentFrame >= pImage->iNbFrames)
+		(pImage)->iCurrentFrame -= pImage->iNbFrames;
+	//g_print (" + %.2f => %.2f -> %.2f\n", fElapsedTime, fElapsedFrame, pImage->iCurrentFrame);
+}
+
 void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha)
 {
 	if (cairo_dock_image_buffer_is_animated (pImage))
 	{
+		int iFrameWidth = pImage->iWidth / pImage->iNbFrames;
+		
 		cairo_save (pCairoContext);
 		cairo_translate (pCairoContext, x, y);
-		cairo_rectangle (pCairoContext, 0, 0, pImage->iHeight, pImage->iHeight);
+		cairo_rectangle (pCairoContext, 0, 0, iFrameWidth, pImage->iHeight);
 		cairo_clip (pCairoContext);
-		cairo_set_source_surface (pCairoContext, pImage->pSurface, - pImage->iCurrentFrame * pImage->iHeight, 0.);
-		cairo_paint_with_alpha (pCairoContext, fAlpha);
+		
+		int n = (int) pImage->iCurrentFrame;
+		double dn = pImage->iCurrentFrame - n;
+		
+		cairo_set_source_surface (pCairoContext, pImage->pSurface, - n * iFrameWidth, 0.);
+		cairo_paint_with_alpha (pCairoContext, fAlpha * (1 - dn));
+		
+		int n2 = n + 1;
+		if (n2 >= pImage->iNbFrames)
+			n2  = 0;
+		cairo_set_source_surface (pCairoContext, pImage->pSurface, - n2 * iFrameWidth, 0.);
+		cairo_paint_with_alpha (pCairoContext, fAlpha * dn);
+		
 		cairo_restore (pCairoContext);
 	}
 	else
 	{
-		cairo_set_source_surface (pCairoContext, pImage->pSurface, 0., 0.);
+		cairo_set_source_surface (pCairoContext, pImage->pSurface, x, y);
 		cairo_paint_with_alpha (pCairoContext, fAlpha);
 	}
 }
@@ -247,7 +276,23 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 	if (cairo_dock_image_buffer_is_animated (pImage))
 	{
 		int iFrameWidth = pImage->iWidth / pImage->iNbFrames;
-		_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double)pImage->iCurrentFrame / pImage->iNbFrames, 0,
+		
+		int n = (int) pImage->iCurrentFrame;
+		double dn = pImage->iCurrentFrame - n;
+		
+		_cairo_dock_set_blend_alpha ();
+		
+		_cairo_dock_set_alpha (1. - dn);
+		_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double)n / pImage->iNbFrames, 0,
+			1. / pImage->iNbFrames, 1.,
+			iFrameWidth, pImage->iHeight,
+			x, y);
+		
+		int n2 = n + 1;
+		if (n2 >= pImage->iNbFrames)
+			n2  = 0;
+		_cairo_dock_set_alpha (dn);
+		_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double)n2 / pImage->iNbFrames, 0,
 			1. / pImage->iNbFrames, 1.,
 			iFrameWidth, pImage->iHeight,
 			x, y);
