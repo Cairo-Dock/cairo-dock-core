@@ -228,13 +228,17 @@ void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage)
 
 void cairo_dock_image_buffer_next_frame (CairoDockImageBuffer *pImage)
 {
+	if (pImage->iNbFrames == 0)
+		return;
 	struct timeval cur_time = pImage->time;
 	gettimeofday (&pImage->time, NULL);
 	double fElapsedTime = (pImage->time.tv_sec - cur_time.tv_sec) + (pImage->time.tv_usec - cur_time.tv_usec) * 1e-6;
 	double fElapsedFrame = fElapsedTime / pImage->fDeltaFrame;
 	pImage->iCurrentFrame += fElapsedFrame;
-	while (pImage->iCurrentFrame >= pImage->iNbFrames)
-		(pImage)->iCurrentFrame -= pImage->iNbFrames;
+	
+	int n = ((int)pImage->iCurrentFrame);
+	double dn = pImage->iCurrentFrame - n;
+	pImage->iCurrentFrame = (n % pImage->iNbFrames) + dn;
 	//g_print (" + %.2f => %.2f -> %.2f\n", fElapsedTime, fElapsedFrame, pImage->iCurrentFrame);
 }
 
