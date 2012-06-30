@@ -190,8 +190,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 			pLauncherWindow,
 			&pWidgetList,
 			pDataGarbage,
-			cOriginalConfFilePath);
-		g_free (cOriginalConfFilePath);
+			cOriginalConfFilePath);  // don't free 'cOriginalConfFilePath', it is taken by the function. TODO: find a better way...
 		
 		// load custom widgets
 		if (pInstance->pModule->pInterface->load_custom_widget != NULL)
