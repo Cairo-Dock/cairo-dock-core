@@ -105,9 +105,17 @@ CairoOverlay *cairo_dock_add_overlay_from_surface (Icon *pIcon, cairo_surface_t 
 CairoOverlay *cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture, CairoOverlayPosition iPosition, gpointer data);
 
 
+/** Set the scale of an overlay; by default it's 0.5
+ *@param pOverlay the overlay
+ *@param fScale the scale
+ */
 #define cairo_dock_set_overlay_scale(pOverlay, fScale) (pOverlay)->fScale = fScale
 
+/** Get the image buffer of an overlay (only useful if you need to redraw the overlay).
+ *@param pOverlay the overlay
+ */
 #define cairo_dock_get_overlay_image_buffer(pOverlay) (&(pOverlay)->image)
+
 
 /** Destroy an overlay (it is removed from its icon).
  *@param pOverlay the overlay

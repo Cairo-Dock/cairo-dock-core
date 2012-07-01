@@ -56,11 +56,6 @@ static CairoOverlay *cairo_dock_create_overlay_from_image (Icon *pIcon, const gc
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 	cairo_dock_load_image_buffer (&pOverlay->image, cImageFile, iWidth * pOverlay->fScale, iHeight * pOverlay->fScale, 0);
-	if (pOverlay->image.pSurface == NULL)
-	{
-		g_free (pOverlay);
-		return NULL;
-	}
 	return pOverlay;
 }
 
@@ -310,14 +305,15 @@ void cairo_dock_draw_icon_overlays_cairo (Icon *pIcon, double fRatio, cairo_t *p
 			(double) wo / p->image.iWidth,
 			(double) ho / p->image.iHeight);
 		
-		cairo_set_source_surface (pCairoContext,
+		cairo_dock_apply_image_buffer_surface_with_offset (&p->image, pCairoContext, 0., 0., pIcon->fAlpha);
+		/**cairo_set_source_surface (pCairoContext,
 			p->image.pSurface,
 			0,
 			0);
 		if (pIcon->fAlpha == 1)
 			cairo_paint (pCairoContext);
 		else
-			cairo_paint_with_alpha (pCairoContext, pIcon->fAlpha);
+			cairo_paint_with_alpha (pCairoContext, pIcon->fAlpha);*/
 		
 		cairo_restore (pCairoContext);
 	}
@@ -357,10 +353,18 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio)
 			0.);
 		
 		// draw.
-		cairo_dock_draw_texture_with_alpha (p->image.iTexture,
+		/**cairo_dock_draw_texture_with_alpha (p->image.iTexture,
 			wo,
 			ho,
-			pIcon->fAlpha);
+			pIcon->fAlpha);*/
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_over ();
+		_cairo_dock_set_alpha (pIcon->fAlpha);
+		glScalef ((double)wo / p->image.iWidth,
+			(double)ho / p->image.iHeight,
+			1.);
+		cairo_dock_apply_image_buffer_texture (&p->image);
+		_cairo_dock_disable_texture ();
 		glPopMatrix ();
 	}
 }
@@ -377,7 +381,7 @@ static void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pCont
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	//g_print ("%s (%dx%d, %p)\n", __func__, w, h, pContainer);
+	//g_print ("%s (%dx%d, %d, %p)\n", __func__, w, h, iPosition, pContainer);
 	
 	int x, y;  // relatively to the icon center.
 	int wo, ho;  // overlay size
@@ -386,17 +390,24 @@ static void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pCont
 	
 	if (pIcon->iIconTexture != 0 && pOverlay->image.iTexture != 0)  // dessin opengl : on dessine sur la texture de l'icone avec le mecanisme habituel.
 	{
+		/// TODO: handle the case where the drawing is not yet possible (container not yet sized).
 		if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 1))  // 1 = keep current drawing
 			return ;
 		
+		glPushMatrix ();
 		_cairo_dock_enable_texture ();
 		
 		_cairo_dock_set_blend_alpha ();
-		
-		glBindTexture (GL_TEXTURE_2D, pOverlay->image.iTexture);
-		_cairo_dock_apply_current_texture_at_size_with_offset (wo, ho, x, y);
+		///glBindTexture (GL_TEXTURE_2D, pOverlay->image.iTexture);
+		///_cairo_dock_apply_current_texture_at_size_with_offset (wo, ho, x, y);
+		glTranslatef (x, y, 0);
+		glScalef ((double)wo / pOverlay->image.iWidth,
+			(double)ho / pOverlay->image.iHeight,
+			1.);
+		cairo_dock_apply_image_buffer_texture (&pOverlay->image);
 		
 		_cairo_dock_disable_texture ();
+		glPopMatrix ();
 		
 		cairo_dock_end_draw_icon (pIcon, pContainer);
 	}
@@ -413,10 +424,11 @@ static void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pCont
 			(double) wo / pOverlay->image.iWidth,
 			(double) ho / pOverlay->image.iHeight);
 		
-		cairo_set_source_surface (pCairoContext,
+		cairo_dock_apply_image_buffer_surface_with_offset (&pOverlay->image, pCairoContext, 0., 0., 1);
+		/**cairo_set_source_surface (pCairoContext,
 			pOverlay->image.pSurface,
 			0,
-			0);
+			0);*/
 		cairo_paint (pCairoContext);
 		
 		cairo_destroy (pCairoContext);
