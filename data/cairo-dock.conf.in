@@ -240,15 +240,15 @@ move down nb steps = 16
 #X-[Refresh rate;gtk-execute]
 frame_cpu =
 
-#i-[5;40] Refresh rate when mouving cursor into the dock :
+#i-[5;40] Refresh rate when mouving cursor into the dock:
 #{in Hz. This is to adjust behaviour relative to your CPU power.}
 refresh frequency = 35
 
-#i-&[15;60] Animation frequency for the OpenGL backend :
+#i-&[15;60] Animation frequency for the OpenGL backend:
 #{in Hz. This is to adjust behaviour relative to your CPU power.}
 opengl anim freq = 33
 
-#i-*[15;50] Animation frequency for the Cairo backend :
+#i-*[15;50] Animation frequency for the Cairo backend:
 #{in Hz. This is to adjust behaviour relative to your CPU power.}
 cairo anim freq = 25
 

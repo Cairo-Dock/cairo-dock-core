@@ -9,26 +9,26 @@ frame_maininfo=
 #d+ Name of the container it belongs to:
 Container = 
 
-#s Sub-dock's name :
+#s[New sub-dock] Sub-dock's name:
 Name = New sub-dock
 
 #v
 sep_display=
 
-#Y+[Use an image;1;1;Draw sub-dock's content as emblems;0;0;Draw sub-dock's content as stack;0;0;Draw sub-dock's content inside a box;0;0] How to render the icon :
+#Y+[Use an image;1;1;Draw sub-dock's content as emblems;0;0;Draw sub-dock's content as stack;0;0;Draw sub-dock's content inside a box;0;0] How to render the icon:
 render = 3
 
-#S+ Image's name or path :
+#S+ Image's name or path:
 Icon=
 
 
 #X[Extra parameters]
 frame_extra =
 
-#n Name of the view used for the sub-dock :/
+#n Name of the view used for the sub-dock:
 Renderer = 
 
-#i-[0;16] Only show in this specific viewport
+#i-[0;16] Only show in this specific viewport:
 #{If '0' the container will be displayed on every viewport.}
 ShowOnViewport = 0
 

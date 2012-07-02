@@ -300,7 +300,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 		"  Mac Slow (original idea)\n"
 		"\t<span size=\"smaller\">%s</span>\n"
 		"\n\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
-		"\t<a href=\"http://glx-dock.org/userlist_messages.php\">List of our forum's members</a>\n"
+		"\t<a href=\"http://glx-dock.org/userlist_messages.php\">%s</a>\n"
 		"\n\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
 		"  Benoit2600\n"
 		"  Coz\n"
@@ -319,6 +319,7 @@ static void _cairo_dock_about (GtkMenuItem *pMenuItem, CairoContainer *pContaine
 		_("Former contributors"),
 		_("For a complete list, please have a look to BZR logs"),
 		_("Users of our forum"),
+		_("List of our forum's members"),
 		_("Artwork"));
 	_cairo_dock_add_about_page (pNoteBook,
 		_("Thanks"),
