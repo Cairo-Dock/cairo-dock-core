@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2012-07-02 11:42+0000\n"
 "PO-Revision-Date: 2012-03-21 03:01+0000\n"
 "Last-Translator: Michal Mlejnek <chaemil72@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
-"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-15 04:38+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-07-03 05:15+0000\n"
+"X-Generator: Launchpad (build 15531)\n"
+"Language: cs\n"
 
 #: ../src/cairo-dock-gui-commons.c:222
 msgid ""
@@ -88,7 +89,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:459
@@ -308,7 +310,8 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Klikněte na applet pro zobrazení jeho náhledu a popisu."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../data/messages:483
@@ -416,7 +419,11 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  chaeMil https://launchpad.net/~chaemil72"
+"  GdH https://launchpad.net/~georgdh\n"
+"  Horanus https://launchpad.net/~val-hon\n"
+"  Kuvaly [LCT] https://launchpad.net/~kuvaly\n"
+"  Michal Mlejnek https://launchpad.net/~chaemil72\n"
+"  Milhouse https://launchpad.net/~milhouse-mujweb"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -449,9 +456,8 @@ msgid "Users of our forum"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:322
-#, fuzzy
 msgid "List of our forum's members"
-msgstr "Seznam vašich osobních motivů"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
@@ -595,7 +601,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustit Cairo-Dock při startu systému"
 
 #: ../src/cairo-dock-menu.c:956
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applety třetích stran zajišťují integraci s mnoha programy, například s "
 "Pidginem."
@@ -607,7 +614,8 @@ msgstr "Nápověda"
 
 #: ../src/cairo-dock-menu.c:964
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
+msgstr ""
+"Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
 
 #: ../src/cairo-dock-menu.c:966
 msgid "About"
@@ -1797,8 +1805,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1846,8 +1855,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2577,7 +2586,8 @@ msgstr "Více obrazovek"
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama to manage "
 "them."
-msgstr "Tuto volbu použijte, pokud máte dva monitory spravované přes Xinerama."
+msgstr ""
+"Tuto volbu použijte, pokud máte dva monitory spravované přes Xinerama."
 
 #: ../data/messages:583
 msgid "Use Xinerama?"
@@ -2928,9 +2938,8 @@ msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "v Hz. Toto nastavení ovlivňuje zatížení procesoru."
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Refresh rate when mouving cursor into the dock:"
-msgstr "Obnovovací frekvence při pohybu myši nad dokem:"
+msgstr ""
 
 #: ../data/messages:833
 msgid "Animation frequency for the OpenGL backend:"
@@ -3010,7 +3019,8 @@ msgstr "Vynutit IPv4 ?"
 
 #: ../data/messages:863
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
+msgstr ""
+"Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
 
 #: ../data/messages:865
 msgid "Are you behind a proxy ?"
@@ -3098,7 +3108,8 @@ msgstr "Úhel přechodu:"
 
 #: ../data/messages:915
 msgid "If not nul, it will form stripes."
-msgstr "Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
+msgstr ""
+"Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
 
 #: ../data/messages:917
 msgid "Repeat the gradation this number of times:"
@@ -3371,8 +3382,10 @@ msgid "Zoom effect"
 msgstr "Efekt zvětšení"
 
 #: ../data/messages:1083
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
 
 #: ../data/messages:1085
 msgid "Maximum zoom of the icons :"
@@ -3629,11 +3642,11 @@ msgstr "větší"
 
 #: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Zvolte, pokud má indikátor následovat orientaci doku (nahoře/dole/vlevo/"
-"vpravo)."
+"Zvolte, pokud má indikátor následovat orientaci doku "
+"(nahoře/dole/vlevo/vpravo)."
 
 #: ../data/messages:1203
 msgid "Rotate the indicator with dock?"
@@ -3906,49 +3919,40 @@ msgid "Name of the container it belongs to:"
 msgstr ""
 
 #: ../data/messages:1427
-#, fuzzy
 msgid "Sub-dock's name:"
-msgstr "Sub-doky"
+msgstr ""
 
 #: ../data/messages:1429
-#, fuzzy
 msgid "How to render the icon:"
-msgstr "Jak zavolat dok zpět:"
+msgstr ""
 
 #: ../data/messages:1431
-#, fuzzy
 msgid "Use an image"
-msgstr "Použít obrázek"
+msgstr ""
 
 #: ../data/messages:1433
-#, fuzzy
 msgid "Draw sub-dock's content as emblems"
-msgstr "Zobrazit ikony sub-doku jako skladiště (stack)"
+msgstr ""
 
 #: ../data/messages:1435
-#, fuzzy
 msgid "Draw sub-dock's content as stack"
-msgstr "Zobrazit ikony sub-doku jako skladiště (stack)"
+msgstr ""
 
 #: ../data/messages:1437
-#, fuzzy
 msgid "Draw sub-dock's content inside a box"
-msgstr "Zobrazit ikony sub-doku jako skladiště (stack)"
+msgstr ""
 
 #: ../data/messages:1439 ../data/messages:1459
-#, fuzzy
 msgid "Image's name or path:"
-msgstr "Průhlednost obrázku:"
+msgstr ""
 
 #: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
-#, fuzzy
 msgid "Extra parameters"
-msgstr "Další parametry"
+msgstr ""
 
 #: ../data/messages:1443
-#, fuzzy
 msgid "Name of the view used for the sub-dock:"
-msgstr "Vyberte vzhled pro tento dok:"
+msgstr ""
 
 #: ../data/messages:1445
 msgid "If '0' the container will be displayed on every viewport."
@@ -3963,14 +3967,13 @@ msgid "Order you want for this launcher among the others:"
 msgstr ""
 
 #: ../data/messages:1457
-#, fuzzy
 msgid "Launcher's name:"
-msgstr "Spustit nový"
+msgstr ""
 
 #: ../data/messages:1461
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1463
@@ -3998,9 +4001,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1473
-#, fuzzy
 msgid "Class of the program:"
-msgstr "Barva rámečku:"
+msgstr ""
 
 #: ../data/messages:1475
 msgid "Run in a terminal?"

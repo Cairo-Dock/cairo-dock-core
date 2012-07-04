@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2012-07-02 11:42+0000\n"
 "PO-Revision-Date: 2012-04-23 20:15+0000\n"
-"Last-Translator: milboy <Unknown>\n"
+"Last-Translator: Milan Slovák <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
-"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-24 04:42+0000\n"
-"X-Generator: Launchpad (build 15135)\n"
+"X-Launchpad-Export-Date: 2012-07-03 05:17+0000\n"
+"X-Generator: Launchpad (build 15531)\n"
+"Language: sk\n"
 
 #: ../src/cairo-dock-gui-commons.c:222
 msgid ""
@@ -89,8 +90,10 @@ msgid "Shortkey"
 msgstr "Kombinácia kláves"
 
 #: ../src/cairo-dock-gui-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Parametre hlavného panelu sú k dispozícii v hlavnom okne konfigurácie."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Parametre hlavného panelu sú k dispozícii v hlavnom okne konfigurácie."
 
 #: ../src/cairo-dock-gui-items.c:459
 msgid "Launcher configuration"
@@ -309,7 +312,8 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknite na applet, a získate náhľad a jeho popis."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../data/messages:483
@@ -421,7 +425,8 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  DAG Software https://launchpad.net/~dagsoftware\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
-"  milboy https://launchpad.net/~milboys"
+"  Matthieu Baerts https://launchpad.net/~matttbe\n"
+"  Milan Slovák https://launchpad.net/~milboys"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -456,9 +461,8 @@ msgid "Users of our forum"
 msgstr "Používatelia nášho fóra"
 
 #: ../src/cairo-dock-menu.c:322
-#, fuzzy
 msgid "List of our forum's members"
-msgstr "Zoznam vašich osobných tém"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
@@ -601,7 +605,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustiť Cairo-dock pri štarte"
 
 #: ../src/cairo-dock-menu.c:956
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Aplety tretej strany poskytujú integráciu do mnohých programov, ako je Pidgin"
 
@@ -1863,13 +1868,15 @@ msgstr "Úplne odstrániť gnome panel"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Otvorte gconf-editor, upravte kľúč /desktop/gnome/sesion/required_components/"
-"panel, a nahradte jeho obsah s \"cairo-dock\".\n"
+"Otvorte gconf-editor, upravte kľúč "
+"/desktop/gnome/sesion/required_components/panel, a nahradte jeho obsah s "
+"\"cairo-dock\".\n"
 "Reštartujte sedenie: gnome-panel sa nespustí, a panel bude spustený (ak nie, "
 "pridajte do programov po spustení)."
 
@@ -1921,15 +1928,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Musíte zapnúť kompozíciu. Napríklad, môžete spustiť Compiz alebo xcompmgr. \n"
 "Ak používate XFCE alebo KDE, stačí povoliť kompozície v nastavení správcu "
 "okien.\n"
 "Ak používate Gnome, môžete to povoliť v Metacity týmto spôsobom:\n"
-" Otvorte gconf-editor, upravte kľúč '/apps/metacity/general/"
-"compositing_manager' a nastavte na 'true'."
+" Otvorte gconf-editor, upravte kľúč "
+"'/apps/metacity/general/compositing_manager' a nastavte na 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -3084,9 +3091,8 @@ msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "v Hz. Toto je úprava týkajúca sa vášho výkonu CPU."
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Refresh rate when mouving cursor into the dock:"
-msgstr "Obnovovacia frekvencia pri presunutí kurzoru do doku:"
+msgstr ""
 
 #: ../data/messages:833
 msgid "Animation frequency for the OpenGL backend:"
@@ -3527,7 +3533,8 @@ msgid "Zoom effect"
 msgstr "Efekt priblíženia"
 
 #: ../data/messages:1083
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "nastavený na hodnotu 1, ak nechcete zväčšujúce sa ikony, keď  nad nimi "
 "podržíte kurzor."
@@ -3780,8 +3787,8 @@ msgstr "väčší"
 
 #: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1203
@@ -4048,54 +4055,44 @@ msgid "Desktop Entry"
 msgstr "Vstup na plochu"
 
 #: ../data/messages:1425 ../data/messages:1455 ../data/messages:1487
-#, fuzzy
 msgid "Name of the container it belongs to:"
-msgstr "Názov panela ku ktorému patrí :"
+msgstr ""
 
 #: ../data/messages:1427
-#, fuzzy
 msgid "Sub-dock's name:"
-msgstr "Sub-Docky"
+msgstr ""
 
 #: ../data/messages:1429
-#, fuzzy
 msgid "How to render the icon:"
-msgstr "Ako vyvolať panel späť:"
+msgstr ""
 
 #: ../data/messages:1431
-#, fuzzy
 msgid "Use an image"
-msgstr "Použiť obrázok."
+msgstr ""
 
 #: ../data/messages:1433
-#, fuzzy
 msgid "Draw sub-dock's content as emblems"
-msgstr "Vykresliť ikony sub duku ako komín"
+msgstr ""
 
 #: ../data/messages:1435
-#, fuzzy
 msgid "Draw sub-dock's content as stack"
-msgstr "Vykresliť ikony sub duku ako komín"
+msgstr ""
 
 #: ../data/messages:1437
-#, fuzzy
 msgid "Draw sub-dock's content inside a box"
-msgstr "Vykresliť ikony sub duku ako komín"
+msgstr ""
 
 #: ../data/messages:1439 ../data/messages:1459
-#, fuzzy
 msgid "Image's name or path:"
-msgstr "Názov súboru obrázku :"
+msgstr ""
 
 #: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
-#, fuzzy
 msgid "Extra parameters"
-msgstr "Prídavné parametre"
+msgstr ""
 
 #: ../data/messages:1443
-#, fuzzy
 msgid "Name of the view used for the sub-dock:"
-msgstr "Vybrať vzhľad pre tento panel :/"
+msgstr ""
 
 #: ../data/messages:1445
 msgid "If '0' the container will be displayed on every viewport."
@@ -4110,14 +4107,13 @@ msgid "Order you want for this launcher among the others:"
 msgstr ""
 
 #: ../data/messages:1457
-#, fuzzy
 msgid "Launcher's name:"
-msgstr "Spustiť nový"
+msgstr ""
 
 #: ../data/messages:1461
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1463
@@ -4145,9 +4141,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1473
-#, fuzzy
 msgid "Class of the program:"
-msgstr "Farba rámčeku :"
+msgstr ""
 
 #: ../data/messages:1475
 msgid "Run in a terminal?"

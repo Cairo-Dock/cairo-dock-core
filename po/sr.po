@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2012-07-02 11:42+0000\n"
 "PO-Revision-Date: 2012-04-14 18:51+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Serbian <sr@li.org>\n"
-"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-15 04:39+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-07-03 05:17+0000\n"
+"X-Generator: Launchpad (build 15531)\n"
+"Language: sr\n"
 
 #: ../src/cairo-dock-gui-commons.c:222
 msgid ""
@@ -89,8 +90,10 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Parametri glavnog doka su dostupni u glavnom konfiguracionom prozoru."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Parametri glavnog doka su dostupni u glavnom konfiguracionom prozoru."
 
 #: ../src/cairo-dock-gui-items.c:459
 msgid "Launcher configuration"
@@ -309,7 +312,8 @@ msgid "Effects:"
 msgstr "Efekti:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Da bi dobili pregled i objašnjenje u vezi apleta, kliknite u njega."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../data/messages:483
@@ -453,9 +457,8 @@ msgid "Users of our forum"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:322
-#, fuzzy
 msgid "List of our forum's members"
-msgstr "Lista ličnih tema"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
@@ -599,8 +602,10 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Startuj Cairo-dok pri pokretanju sistema"
 
 #: ../src/cairo-dock-menu.c:956
-msgid "Third-party applets provide integration with many programs, like Pidgin"
-msgstr "Apleti omogućavaju integraciju sa mnogim programima, na primer Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
+msgstr ""
+"Apleti omogućavaju integraciju sa mnogim programima, na primer Pidgin"
 
 #: ../src/cairo-dock-menu.c:959 ../src/help/applet-init.c:28
 #: ../src/help/applet-notifications.c:257
@@ -1481,7 +1486,8 @@ msgstr ""
 #: ../data/messages:243 ../data/messages:285 ../data/messages:289
 #: ../data/messages:295 ../data/messages:299
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Savet: Ako je ova linija siva, to znači da se savet ne odnosi na vas."
+msgstr ""
+"Savet: Ako je ova linija siva, to znači da se savet ne odnosi na vas."
 
 #: ../data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
@@ -1802,8 +1808,9 @@ msgstr "Kompletno uklanjanje gnome-panela"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1857,8 +1864,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -3007,12 +3014,12 @@ msgstr "Učestalost osvežavanja"
 
 #: ../data/messages:827 ../data/messages:831 ../data/messages:835
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
+msgstr ""
+"u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Refresh rate when mouving cursor into the dock:"
-msgstr "Učestalost osvežavanja kada se kusor pomera na dok:"
+msgstr ""
 
 #: ../data/messages:833
 msgid "Animation frequency for the OpenGL backend:"
@@ -3338,7 +3345,8 @@ msgstr ""
 
 #: ../data/messages:1009
 msgid "Choose a default decoration for all desklets :"
-msgstr "Odaberite podrazumevano ulepšavanje za sve programčiće radne površine:"
+msgstr ""
+"Odaberite podrazumevano ulepšavanje za sve programčiće radne površine:"
 
 #: ../data/messages:1011
 msgid ""
@@ -3453,7 +3461,8 @@ msgid "Zoom effect"
 msgstr "Efekti zumiranja"
 
 #: ../data/messages:1083
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "postavite na 1 ako ne želite da ikone budu zumirane kada je miš iznad njih."
 
@@ -3577,8 +3586,9 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Ovo je njihova providnost kada je dok neaktivan; oni će se \"materijalizovati"
-"\" postepeno kako dok raste. Što je bliže 0, biće više providan."
+"Ovo je njihova providnost kada je dok neaktivan; oni će se "
+"\"materijalizovati\" postepeno kako dok raste. Što je bliže 0, biće više "
+"providan."
 
 #: ../data/messages:1139
 msgid "Icons' transparency at rest :"
@@ -3590,7 +3600,8 @@ msgstr "Poveži ikonu sa nizom znakova"
 
 #: ../data/messages:1147
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr "Dužina linije niza znakova, u pikselima (0 ne koristiti niz znakova):"
+msgstr ""
+"Dužina linije niza znakova, u pikselima (0 ne koristiti niz znakova):"
 
 #: ../data/messages:1149
 msgid "Colour of the string (red, blue, green, alpha) :"
@@ -3711,8 +3722,8 @@ msgstr "veće"
 
 #: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Koristi se da indikator prati orijentaciju doka (gore/dole/levo/desno)."
 
@@ -3776,7 +3787,8 @@ msgstr "Na svim ikonama"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr "kada je veći, više natpisa susednih izabranoj ikoni će biti providno."
+msgstr ""
+"kada je veći, više natpisa susednih izabranoj ikoni će biti providno."
 
 #: ../data/messages:1235
 msgid "label's visibility threshold :"
@@ -3984,54 +3996,44 @@ msgid "Desktop Entry"
 msgstr "Ulaz na radnu površinu"
 
 #: ../data/messages:1425 ../data/messages:1455 ../data/messages:1487
-#, fuzzy
 msgid "Name of the container it belongs to:"
-msgstr "Ime doka kojem pripada:"
+msgstr ""
 
 #: ../data/messages:1427
-#, fuzzy
 msgid "Sub-dock's name:"
-msgstr "Pod-dok"
+msgstr ""
 
 #: ../data/messages:1429
-#, fuzzy
 msgid "How to render the icon:"
-msgstr "Kako opozvati dok:"
+msgstr ""
 
 #: ../data/messages:1431
-#, fuzzy
 msgid "Use an image"
-msgstr "Koristi sliku."
+msgstr ""
 
 #: ../data/messages:1433
-#, fuzzy
 msgid "Draw sub-dock's content as emblems"
-msgstr "Iscrtaj ikone pod-doka jednu iznad druge"
+msgstr ""
 
 #: ../data/messages:1435
-#, fuzzy
 msgid "Draw sub-dock's content as stack"
-msgstr "Iscrtaj ikone pod-doka jednu iznad druge"
+msgstr ""
 
 #: ../data/messages:1437
-#, fuzzy
 msgid "Draw sub-dock's content inside a box"
-msgstr "Iscrtaj ikone pod-doka jednu iznad druge"
+msgstr ""
 
 #: ../data/messages:1439 ../data/messages:1459
-#, fuzzy
 msgid "Image's name or path:"
-msgstr "Naziv slike:"
+msgstr ""
 
 #: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
-#, fuzzy
 msgid "Extra parameters"
-msgstr "Dodatni parametri"
+msgstr ""
 
 #: ../data/messages:1443
-#, fuzzy
 msgid "Name of the view used for the sub-dock:"
-msgstr "Odaberite izgled za ovaj dok:"
+msgstr ""
 
 #: ../data/messages:1445
 msgid "If '0' the container will be displayed on every viewport."
@@ -4046,14 +4048,13 @@ msgid "Order you want for this launcher among the others:"
 msgstr ""
 
 #: ../data/messages:1457
-#, fuzzy
 msgid "Launcher's name:"
-msgstr "Pokreni novi"
+msgstr ""
 
 #: ../data/messages:1461
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1463
@@ -4081,9 +4082,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1473
-#, fuzzy
 msgid "Class of the program:"
-msgstr "Boja okvira:"
+msgstr ""
 
 #: ../data/messages:1475
 msgid "Run in a terminal?"

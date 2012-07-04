@@ -1,22 +1,21 @@
-# Esperanto translation for cairo-dock-core
-# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
+# Hebrew translation for cairo-dock-core
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the cairo-dock-core package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2012-07-02 11:42+0000\n"
-"PO-Revision-Date: 2012-04-14 18:53+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
-"Language-Team: Esperanto <eo@li.org>\n"
+"PO-Revision-Date: 2012-06-22 04:43+0000\n"
+"Last-Translator: idovmagal <Unknown>\n"
+"Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2012-07-03 05:16+0000\n"
 "X-Generator: Launchpad (build 15531)\n"
-"Language: eo\n"
 
 #: ../src/cairo-dock-gui-commons.c:222
 msgid ""
@@ -24,104 +23,108 @@ msgid ""
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
+"שינית את ערכת הנושא שלך!\n"
+"שינויים שביצעת יאבדו אם לא תשמור אותם, להמשיך?"
 
 #: ../src/cairo-dock-gui-commons.c:248
 msgid "Please wait while importing the theme..."
-msgstr "Bonvole atendu dum importado de etoso..."
+msgstr ""
+"שומר את ערכת הנושא...\r\n"
+"אנא המתן"
 
 #: ../src/cairo-dock-gui-commons.c:370
 msgid "Configure this applet"
-msgstr "Agordi ĉi tiun aplikaĵeton"
+msgstr "הגדר יישומון זה"
 
 #: ../src/cairo-dock-gui-commons.c:407 ../src/cairo-dock-gui-main.c:136
 msgid "Files"
-msgstr "Dosieroj"
+msgstr "קבצים"
 
 #: ../src/cairo-dock-gui-commons.c:412 ../src/cairo-dock-gui-main.c:137
 msgid "Internet"
-msgstr "Interreto"
+msgstr "אינטרנט"
 
 #: ../src/cairo-dock-gui-commons.c:417 ../src/cairo-dock-gui-main.c:138
 msgid "Desktop"
-msgstr "Labortablo"
+msgstr "שולחן העבודה"
 
 #: ../src/cairo-dock-gui-commons.c:422
 msgid "Accessory"
-msgstr "Utilaĵoj"
+msgstr "עזרים"
 
 #: ../src/cairo-dock-gui-commons.c:427 ../src/cairo-dock-gui-main.c:140
 #: ../src/cairo-dock-gui-main.c:1575 ../data/messages:787
 msgid "System"
-msgstr "Sistemo"
+msgstr "מערכת"
 
 #: ../src/cairo-dock-gui-commons.c:432 ../src/cairo-dock-gui-main.c:141
 msgid "Fun"
-msgstr "Amuzo"
+msgstr "שעשוע"
 
 #: ../src/cairo-dock-gui-commons.c:475
 msgid "plug-in"
-msgstr "kromprogramo"
+msgstr "תוסף"
 
 #: ../src/cairo-dock-gui-commons.c:481
 msgid "category"
-msgstr "kategorio"
+msgstr "קטגוריה"
 
 #: ../src/cairo-dock-gui-commons.c:576
 msgid "Press the shortkey"
-msgstr ""
+msgstr "הקש את קיצור הדרך המבוקש"
 
 #: ../src/cairo-dock-gui-commons.c:595
 msgid "Change the shortkey"
-msgstr ""
+msgstr "שנה את קיצור הדרך"
 
 #: ../src/cairo-dock-gui-commons.c:682
 msgid "Origin"
-msgstr ""
+msgstr "מקור"
 
 #: ../src/cairo-dock-gui-commons.c:687
 msgid "Action"
-msgstr ""
+msgstr "פעולה"
 
 #: ../src/cairo-dock-gui-commons.c:691
 msgid "Shortkey"
-msgstr ""
+msgstr "קיצור דרך"
 
 #: ../src/cairo-dock-gui-items.c:241
 msgid ""
 "Main dock's parameters are available in the main configuration window."
-msgstr ""
+msgstr "הגדרות הפאנל הראשי נגישות דרך חלון ההגדרות"
 
 #: ../src/cairo-dock-gui-items.c:459
 msgid "Launcher configuration"
-msgstr "Agordoj pri lanĉilo"
+msgstr "הגדרות משגר"
 
 #: ../src/cairo-dock-gui-items.c:877
 msgid "Remove this item"
-msgstr ""
+msgstr "הסר את פריט זה"
 
 #: ../src/cairo-dock-gui-main.c:134 ../data/messages:677
 msgid "Behaviour"
-msgstr "Konduto"
+msgstr "התנהגות"
 
 #: ../src/cairo-dock-gui-main.c:135 ../data/messages:501 ../data/messages:1331
 msgid "Appearance"
-msgstr "Apero"
+msgstr "מראה"
 
 #: ../src/cairo-dock-gui-main.c:139
 msgid "Accessories"
-msgstr "Utilaĵoj"
+msgstr "עזרים"
 
 #: ../src/cairo-dock-gui-main.c:142 ../src/cairo-dock-gui-main.c:1809
 msgid "All"
-msgstr "Ĉio"
+msgstr "הכל"
 
 #: ../src/cairo-dock-gui-main.c:1546
 msgid "Set the position of the main dock."
-msgstr "Agordi la pozicion de la ĉefa doko"
+msgstr "קבע את מיקומו של הלוח הראשי"
 
 #: ../src/cairo-dock-gui-main.c:1547 ../data/messages:323 ../data/messages:547
 msgid "Position"
-msgstr "Pozicio"
+msgstr "מיקום"
 
 #: ../src/cairo-dock-gui-main.c:1553
 msgid ""
@@ -129,61 +132,64 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
+"האם אתה רוצה שהלוח ייראה תמיד?\n"
+"או שיסתיר את עצמו אוטומטית?\n"
+"הגדר את הגישה ללוחות ולתתי הלוחות!"
 
 #: ../src/cairo-dock-gui-main.c:1554 ../src/cairo-dock-menu.c:1713
 #: ../data/messages:341
 msgid "Visibility"
-msgstr "Videblo"
+msgstr "גילוי"
 
 #: ../src/cairo-dock-gui-main.c:1560
 msgid "Display and interact with currently open windows."
-msgstr ""
+msgstr "תצוגה ותגובה עם חלונות פעילים."
 
 #: ../src/cairo-dock-gui-main.c:1561 ../data/messages:41 ../data/messages:457
 msgid "Taskbar"
-msgstr "Taskopleto"
+msgstr "שורת המשימות"
 
 #: ../src/cairo-dock-gui-main.c:1567
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "הגדר את כל קיצורי המקשים הזמינים"
 
 #: ../src/cairo-dock-gui-main.c:1568 ../data/messages:527 ../data/messages:781
 msgid "Shortkeys"
-msgstr ""
+msgstr "קיצורי מקשים"
 
 #: ../src/cairo-dock-gui-main.c:1574
 msgid "All of the parameters you will never want to tweak."
-msgstr ""
+msgstr "כל ההגדרות שתחלום לשנות אי פעם."
 
 #: ../src/cairo-dock-gui-main.c:1584
 msgid "Set a background for your dock."
-msgstr ""
+msgstr "תן רקע ללוח."
 
 #: ../src/cairo-dock-gui-main.c:1585 ../data/messages:879
 #: ../data/messages:1249 ../data/messages:1357
 msgid "Background"
-msgstr "Fono"
+msgstr "רקע"
 
 #: ../src/cairo-dock-gui-main.c:1591
 msgid "Select a view for each of your docks."
-msgstr ""
+msgstr "בחר תצוגה ללוח"
 
 #: ../src/cairo-dock-gui-main.c:1592 ../data/messages:519 ../data/messages:947
 #: ../data/messages:1351
 msgid "Views"
-msgstr "Vidoj"
+msgstr "תצוגות"
 
 #: ../src/cairo-dock-gui-main.c:1599
 msgid "Configure text bubble appearance."
-msgstr ""
+msgstr "תצוגת חלונות קופצים"
 
 #: ../src/cairo-dock-gui-main.c:1600
 msgid "Dialog boxes"
-msgstr "Dialogkestoj"
+msgstr "תיבות דו־שיח"
 
 #: ../src/cairo-dock-gui-main.c:1607
 msgid "Applets can be displayed on your desktop as widgets."
-msgstr ""
+msgstr "ניתן להציג יישמונים על שולחן העבודה"
 
 #: ../src/cairo-dock-gui-main.c:1608 ../data/messages:89 ../data/messages:1003
 msgid "Desklets"
@@ -194,11 +200,13 @@ msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
 msgstr ""
+"הגדרות סמלים:\n"
+"  גודל, שקיפות, ערכת נושא..."
 
 #: ../src/cairo-dock-gui-main.c:1616 ../data/messages:11 ../data/messages:503
 #: ../data/messages:1067 ../data/messages:1333
 msgid "Icons"
-msgstr "Piktogramoj"
+msgstr "סמלים"
 
 #: ../src/cairo-dock-gui-main.c:1622
 msgid "Indicators are additional markers for your icons."
@@ -214,47 +222,47 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:1631
 msgid "Captions"
-msgstr "Etikedoj"
+msgstr ""
 
 #: ../src/cairo-dock-gui-main.c:1723
 msgid "Filter"
-msgstr "Filtrilo"
+msgstr "מסנן"
 
 #: ../src/cairo-dock-gui-main.c:1765
 msgid "All words"
-msgstr "Ĉiuj vortoj"
+msgstr "כל המילים"
 
 #: ../src/cairo-dock-gui-main.c:1769
 msgid "Highlighted words"
-msgstr "Markitaj vortoj"
+msgstr "מילים מודגשות"
 
 #: ../src/cairo-dock-gui-main.c:1774
 msgid "Hide others"
-msgstr "Kaŝi aliajn"
+msgstr "הסתר אחרים"
 
 #: ../src/cairo-dock-gui-main.c:1779
 msgid "Search in description"
-msgstr "Serĉi en priskribo"
+msgstr "חפש בתאור"
 
 #: ../src/cairo-dock-gui-main.c:1786
 msgid "Categories"
-msgstr "Kategorioj"
+msgstr "קטגוריות"
 
 #: ../src/cairo-dock-gui-main.c:1929
 msgid "Enable this module"
-msgstr "Enŝalti ĉi tiun modulon"
+msgstr "אפשר רכיב זה"
 
 #: ../src/cairo-dock-gui-main.c:1993 ../data/messages:543
 msgid "More applets"
-msgstr "Pliaj aplikaĵetoj"
+msgstr "יישומונים נוספים"
 
 #: ../src/cairo-dock-gui-main.c:1994 ../data/messages:541
 msgid "Get more applets online !"
-msgstr "Obtenu pliajn aplikaĵetojn interrete!"
+msgstr "הורד יישומונים נוספים"
 
 #: ../src/cairo-dock-gui-main.c:2097 ../src/cairo-dock-gui-simple.c:861
 msgid "Cairo-Dock configuration"
-msgstr ""
+msgstr "הגדרות Cairo-Duck"
 
 #: ../src/cairo-dock-gui-main.c:2462
 #, c-format
@@ -262,56 +270,58 @@ msgid ""
 "The '%s' module is not present. You need to install it and all its "
 "dependencies in order to use this module."
 msgstr ""
+"הרכיב '%s' לא מותקן. אתה צריך להתקין אותו ואת כל התלויות שלו כדי שתוכל "
+"להשתמש בו."
 
 #: ../src/cairo-dock-gui-main.c:2468
 #, c-format
 msgid "The '%s' module is not enabled."
-msgstr "La modulo '%s' ne estas enŝaltita."
+msgstr "הרכיב '%s' לא זמין."
 
 #: ../src/cairo-dock-gui-main.c:2469
 msgid "Do you want to enable it now?"
-msgstr "Ĉu vi volas enŝalti ĝin nun?"
+msgstr "לאפשר עכשיו?"
 
 #: ../src/cairo-dock-gui-main.c:2835
 msgid "Simple Mode"
-msgstr "Simpla reĝimo"
+msgstr "מצב פשוט"
 
 #: ../src/cairo-dock-gui-simple.c:379 ../src/cairo-dock-gui-themes.c:114
 msgid "Could not import the theme."
-msgstr "Neeblas importi la etoson."
+msgstr "לא ניתן לייבא ערכת נושא."
 
 #: ../src/cairo-dock-gui-simple.c:399
 msgid "Importing theme..."
-msgstr "Importanta etoson"
+msgstr "מייבא ערכת נושא..."
 
 #: ../src/cairo-dock-gui-simple.c:406 ../src/cairo-dock-gui-themes.c:156
 msgid "Theme has been saved"
-msgstr "Etoso estas konservita"
+msgstr "ערכת הנושא נשמרה."
 
 #: ../src/cairo-dock-gui-simple.c:412 ../src/cairo-dock-gui-themes.c:162
 msgid "Themes have been deleted"
-msgstr "Etosoj estas forigitaj"
+msgstr "ערכת הנושא נמחקה"
 
 #: ../src/cairo-dock-gui-simple.c:708
 msgid "Animation:"
-msgstr "Animacio:"
+msgstr "אנימציה:"
 
 #: ../src/cairo-dock-gui-simple.c:729
 msgid "Effects:"
-msgstr "Efektoj:"
+msgstr "אפקטים:"
 
 #: ../src/cairo-dock-gui-simple.c:797
 msgid ""
 "Click on an applet in order to have a preview and a description for it."
-msgstr ""
+msgstr "לחץ על יישומון כדי לקבל תצוגה מקדימה ותיאור שלו."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../data/messages:483
 msgid "On mouse hover:"
-msgstr ""
+msgstr "בהעברת עכבר:"
 
 #: ../src/cairo-dock-gui-simple.c:825 ../data/messages:485
 msgid "On click:"
-msgstr ""
+msgstr "בזמן לחיצת עכבר:"
 
 #: ../src/cairo-dock-gui-simple.c:898
 msgid ""
@@ -320,10 +330,14 @@ msgid ""
 ", you can switch to an advanced mode.\n"
 " You can switch from a mode to another at any time."
 msgstr ""
+"זה חלון ההגדרות הפשוט של Cairo-Dock.\n"
+" אם אתה רוצה להגדיר את Cairo-Dock מעבר לזה\n"
+"אתה יכול לעבור למצב מתקדם,\n"
+" (אתה יכול לחזור חזרה למצב פשוט מתי שתרצה)"
 
 #: ../src/cairo-dock-gui-simple.c:1040
 msgid "Advanced Mode"
-msgstr "Spertula reĝimo"
+msgstr "מצב מתקדם"
 
 #: ../src/cairo-dock-gui-simple.c:1041
 msgid ""
@@ -333,64 +347,64 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-themes.c:149
 msgid "Importing theme ..."
-msgstr "Importanta etoson..."
+msgstr "מייבא ערכת נושא..."
 
 #: ../src/cairo-dock-gui-themes.c:182
 msgid "Manage Themes"
-msgstr "Mastrumi etosojn"
+msgstr "נהל ערכות נושא"
 
 #: ../src/cairo-dock-menu.c:123
 msgid "Delete this dock?"
-msgstr "Ĉu forigi ĉi tiun dokon?"
+msgstr "למחוק לוח?"
 
 #: ../src/cairo-dock-menu.c:177
 msgid "About Cairo-Dock"
-msgstr "Pri Kajro-Doko"
+msgstr "אודות Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:214 ../data/messages:271
 msgid "Development site"
-msgstr "Retejo por programado"
+msgstr "אתר המפתחים"
 
 #: ../src/cairo-dock-menu.c:215 ../data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
-msgstr "Tovu la lastan version de Kajro-Doko ĉi tie!"
+msgstr "להורדת הגרסה האחרונה לחץ כאן!"
 
 #: ../src/cairo-dock-menu.c:219 ../src/cairo-dock-menu.c:951
 msgid "Get more applets!"
-msgstr "Obtenu pliajn aplikaĵetojn!"
+msgstr "השג יישומונים נוספים!"
 
 #: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
 msgid "Donate"
-msgstr "Donaci"
+msgstr "תרום"
 
 #: ../src/cairo-dock-menu.c:226 ../src/cairo-dock-menu.c:232
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
-msgstr ""
+msgstr "עזור לאנשים שמשקיעים מזמנם להביא לך את הלוח הכי מגניב שיש!"
 
 #: ../src/cairo-dock-menu.c:260
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "רשימת המפתחים והתורמים:"
 
 #: ../src/cairo-dock-menu.c:261
 msgid "Developers"
-msgstr ""
+msgstr "מפתחים"
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "מפתח ראשי ומנהל הפרוייקט"
 
 #: ../src/cairo-dock-menu.c:263
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "תורמים"
 
 #: ../src/cairo-dock-menu.c:265
 msgid "Development"
-msgstr "Programado"
+msgstr "פיתוח"
 
 #: ../src/cairo-dock-menu.c:280
 msgid "Website"
-msgstr ""
+msgstr "אתר"
 
 #: ../src/cairo-dock-menu.c:281
 msgid "Beta-testing / Suggestions / Forum animation"
@@ -398,36 +412,36 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Translators for this language"
-msgstr ""
+msgstr "תרגמו לעברית"
 
 #: ../src/cairo-dock-menu.c:283
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Matthieu Baerts https://launchpad.net/~matttbe\n"
-"  Michael Moroni https://launchpad.net/~airon90"
+"  Ohadcn https://launchpad.net/~ohadcn\n"
+"  idovmagal https://launchpad.net/~idovmagal"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
-msgstr "Subteno"
+msgstr "תמיכה"
 
 #: ../src/cairo-dock-menu.c:315
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
-msgstr ""
+msgstr "תודה לכל אלו שעוזרים, שעזור ושיעזרו לנו לשפר את Cairo-Dock."
 
 #: ../src/cairo-dock-menu.c:317
 msgid "How to help us?"
-msgstr ""
+msgstr "איך לעזור?"
 
 #: ../src/cairo-dock-menu.c:318
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr ""
+msgstr "אל תהסס להצטרף לפרוייקט, אנחנו צריכים אותך :)"
 
 #: ../src/cairo-dock-menu.c:319
 msgid "Former contributors"
-msgstr ""
+msgstr "תורמים מהעבר"
 
 #: ../src/cairo-dock-menu.c:320
 msgid "For a complete list, please have a look to BZR logs"
@@ -435,7 +449,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:321
 msgid "Users of our forum"
-msgstr ""
+msgstr "משתמשי הפורום"
 
 #: ../src/cairo-dock-menu.c:322
 msgid "List of our forum's members"
@@ -443,19 +457,19 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
-msgstr "Artaĵoj"
+msgstr "אומנות"
 
 #: ../src/cairo-dock-menu.c:325
 msgid "Thanks"
-msgstr ""
+msgstr "תודות"
 
 #: ../src/cairo-dock-menu.c:402
 msgid "Quit Cairo-Dock?"
-msgstr "Ĉu fermi Kajro-Dokon?"
+msgstr "לצאת מCairo-Dock?"
 
 #: ../src/cairo-dock-menu.c:432 ../src/cairo-dock-menu.c:571
 msgid "Separator"
-msgstr "Disigilo"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:541
 msgid ""
@@ -466,7 +480,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:565
 msgid "Add"
-msgstr "Aldoni"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:567
 msgid "Sub-dock"
@@ -474,7 +488,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:569
 msgid "Main dock"
-msgstr "Ĉefa doko"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:573
 msgid "Custom launcher"
@@ -487,7 +501,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:591
 msgid "separator"
-msgstr "disigilo"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:595
 #, c-format
@@ -525,15 +539,15 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:851
 msgid "Configure"
-msgstr "Agordi"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:856
 msgid "Configure behaviour, appearance, and applets."
-msgstr "Agordi konduton, aperon kaj aplikaĵetojn."
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:861
 msgid "Configure this dock"
-msgstr "Agordi ĉi tiun dokon"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:866
 msgid "Customize the position, visibility and appearance of this main dock."
@@ -541,11 +555,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:868
 msgid "Delete this dock"
-msgstr "Forigi ĉi tiun dokon"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:878
 msgid "Manage themes"
-msgstr "Mastrumi etosojn"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:883
 msgid ""
@@ -562,7 +576,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:924
 msgid "Quick-Hide"
-msgstr "Rapide kaŝi"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:929
 msgid "This will hide the dock until you hover over it with the mouse."
@@ -570,7 +584,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:940
 msgid "Launch Cairo-Dock on startup"
-msgstr "Lanĉi Kajro-Dokon je startigo"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:956
 msgid ""
@@ -580,7 +594,7 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:959 ../src/help/applet-init.c:28
 #: ../src/help/applet-notifications.c:257
 msgid "Help"
-msgstr "Helpo"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:964
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
@@ -588,11 +602,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:966
 msgid "About"
-msgstr "Pri"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:975
 msgid "Quit"
-msgstr "Eliri"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:984
 msgid ""
@@ -953,7 +967,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:858
 msgid "_custom decoration_"
-msgstr ""
+msgstr "_קישוט מותאם אישית_"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:354
 msgid "Bottom dock"
@@ -1169,11 +1183,11 @@ msgstr ""
 
 #: ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr "Konsiloj"
+msgstr ""
 
 #: ../src/help/applet-tips-dialog.c:307
 msgid "Category"
-msgstr "Kategorio"
+msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:119
 msgid "Enter a command"
@@ -3076,7 +3090,7 @@ msgstr ""
 
 #: ../data/messages:967
 msgid "Dialogs"
-msgstr ""
+msgstr "תיבות דו־שיח"
 
 #: ../data/messages:969
 msgid "Bubble"
@@ -3529,7 +3543,7 @@ msgstr ""
 
 #: ../data/messages:1221
 msgid "Labels"
-msgstr ""
+msgstr "תוויות"
 
 #: ../data/messages:1223
 msgid "Label visibility"

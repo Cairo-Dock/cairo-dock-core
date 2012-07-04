@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2012-07-02 11:42+0000\n"
 "PO-Revision-Date: 2012-04-14 18:53+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-15 04:40+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-07-03 05:17+0000\n"
+"X-Generator: Launchpad (build 15531)\n"
+"Language: tr\n"
 
 #: ../src/cairo-dock-gui-commons.c:222
 msgid ""
@@ -89,7 +90,8 @@ msgid "Shortkey"
 msgstr "Kısayol"
 
 #: ../src/cairo-dock-gui-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:459
@@ -309,7 +311,8 @@ msgid "Effects:"
 msgstr "Efektler:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../data/messages:483
@@ -418,16 +421,19 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Angel Spy https://launchpad.net/~dilara.ekinci\n"
+"  Behic CETIN https://launchpad.net/~behiccetin\n"
 "  Erkin Batu Altunbaş https://launchpad.net/~erkin\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
 "  Fatih Ekin https://launchpad.net/~f-ekin22\n"
 "  H. Fatih ATASEVER https://launchpad.net/~h-f-atasever\n"
+"  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Mustafa Doğan https://launchpad.net/~sahbaz1260\n"
 "  Olcay GÜZEL https://launchpad.net/~olcayguzel-gmail\n"
 "  Serdar Delican https://launchpad.net/~sdelican\n"
 "  Serdar KAHYA https://launchpad.net/~kahyainsaat\n"
 "  Yiğit Ateş https://launchpad.net/~yigitates52\n"
 "  Yunus Kaba https://launchpad.net/~yunuskaba\n"
+"  eraydin https://launchpad.net/~aydin-eraydin\n"
 "  kulkke https://launchpad.net/~kulkke\n"
 "  onur kopan https://launchpad.net/~onurkopan\n"
 "  zeugma https://launchpad.net/~sunder67"
@@ -463,9 +469,8 @@ msgid "Users of our forum"
 msgstr "Forumumuzun kullanıcıları"
 
 #: ../src/cairo-dock-menu.c:322
-#, fuzzy
 msgid "List of our forum's members"
-msgstr "Kişisel temalarınızın listesi"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
@@ -611,7 +616,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock'u başlangıçta başlat"
 
 #: ../src/cairo-dock-menu.c:956
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -650,7 +656,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1019
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr ""
+"Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
 
 #: ../src/cairo-dock-menu.c:1021 ../src/cairo-dock-menu.c:1053
 msgid "Move to another dock"
@@ -1161,8 +1168,8 @@ msgstr ""
 "Cario-Dock2'ye hoşgeldiniz !\n"
 "Bu uygulamacık, size rıhtımı kullanmaya başlamanız için yardımcı olmak için "
 "burada; sadece onun üzerine tıklayın.\n"
-"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi http://"
-"glx-dock.org adresinde ziyaret edin.\n"
+"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi "
+"http://glx-dock.org adresinde ziyaret edin.\n"
 "Bu yazılımın hoşunuza gideceğini umarız !\n"
 "  (şimdi bu iletişim kutusunun üzerine, onu kapatmak üzere tıklayabilirsiniz)"
 
@@ -1801,8 +1808,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1850,8 +1858,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -3321,7 +3329,8 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:1083
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1085
@@ -3557,8 +3566,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1203
@@ -3816,19 +3825,16 @@ msgid "Name of the container it belongs to:"
 msgstr ""
 
 #: ../data/messages:1427
-#, fuzzy
 msgid "Sub-dock's name:"
-msgstr "Alt-rıhtım"
+msgstr ""
 
 #: ../data/messages:1429
-#, fuzzy
 msgid "How to render the icon:"
-msgstr "Rıhtım nasıl geri çağrılacak:"
+msgstr ""
 
 #: ../data/messages:1431
-#, fuzzy
 msgid "Use an image"
-msgstr "Görüntü kullan."
+msgstr ""
 
 #: ../data/messages:1433
 msgid "Draw sub-dock's content as emblems"
@@ -3843,19 +3849,16 @@ msgid "Draw sub-dock's content inside a box"
 msgstr ""
 
 #: ../data/messages:1439 ../data/messages:1459
-#, fuzzy
 msgid "Image's name or path:"
-msgstr "Görüntünün şeffaflığı :"
+msgstr ""
 
 #: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
-#, fuzzy
 msgid "Extra parameters"
-msgstr "Ek parametreler"
+msgstr ""
 
 #: ../data/messages:1443
-#, fuzzy
 msgid "Name of the view used for the sub-dock:"
-msgstr "Alt rıhtımlar için öntanımlı görünümü seçin:"
+msgstr ""
 
 #: ../data/messages:1445
 msgid "If '0' the container will be displayed on every viewport."
@@ -3870,14 +3873,13 @@ msgid "Order you want for this launcher among the others:"
 msgstr ""
 
 #: ../data/messages:1457
-#, fuzzy
 msgid "Launcher's name:"
-msgstr "Yeni aç"
+msgstr ""
 
 #: ../data/messages:1461
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1463
@@ -3905,9 +3907,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1473
-#, fuzzy
 msgid "Class of the program:"
-msgstr "Çerçevenin rengi :"
+msgstr ""
 
 #: ../data/messages:1475
 msgid "Run in a terminal?"

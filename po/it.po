@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-06-03 11:35+0000\n"
-"Last-Translator: Wonderfulheart <Unknown>\n"
+"POT-Creation-Date: 2012-07-02 11:42+0000\n"
+"PO-Revision-Date: 2012-06-15 18:26+0000\n"
+"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@lists.kde.org>\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-06-04 04:35+0000\n"
-"X-Generator: Launchpad (build 15353)\n"
+"X-Launchpad-Export-Date: 2012-07-03 05:16+0000\n"
+"X-Generator: Launchpad (build 15531)\n"
+"Language: it\n"
 
 #: ../src/cairo-dock-gui-commons.c:222
 msgid ""
@@ -89,7 +90,8 @@ msgid "Shortkey"
 msgstr "Tasto scorciatoia"
 
 #: ../src/cairo-dock-gui-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "I parametri della dock principale si trovano nella finestra di "
 "configurazione principale."
@@ -311,7 +313,8 @@ msgid "Effects:"
 msgstr "Effetti:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Clicca su un'applet per avere un'anteprima e una sua descrizione."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../data/messages:483
@@ -429,6 +432,7 @@ msgstr ""
 "  Loscuby https://launchpad.net/~scuby84\n"
 "  Luca Vercelli https://launchpad.net/~luca-vercelli\n"
 "  Mario Calabrese https://launchpad.net/~mario-calabrese\n"
+"  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Mattia Tavernini https://launchpad.net/~maathias\n"
 "  Natale https://launchpad.net/~ngm270189\n"
 "  Stefano Prenna https://launchpad.net/~stefanoprenna\n"
@@ -471,9 +475,8 @@ msgid "Users of our forum"
 msgstr "Utenti del nostro forum"
 
 #: ../src/cairo-dock-menu.c:322
-#, fuzzy
 msgid "List of our forum's members"
-msgstr "Lista dei temi personali"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
@@ -621,7 +624,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Lancia Cairo-Dock all'avvio"
 
 #: ../src/cairo-dock-menu.c:956
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Le applet di terze-parti forniscono un'integrazione a molti programmi, come "
 "Pidgin"
@@ -939,7 +943,8 @@ msgstr "Stampa la versione ed esci."
 
 #: ../src/cairo-dock.c:367
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr "Blocca la dock cosicché sia impossibile da modificare per gli utenti."
+msgstr ""
+"Blocca la dock cosicché sia impossibile da modificare per gli utenti."
 
 #: ../src/cairo-dock.c:371
 msgid "Keep the dock above other windows whatever."
@@ -1833,7 +1838,8 @@ msgstr ""
 
 #: ../data/messages:129
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr "Lanciare rapidamente un programma dalla tastiera (sostituisce Alt+F2)"
+msgstr ""
+"Lanciare rapidamente un programma dalla tastiera (sostituisce Alt+F2)"
 
 #: ../data/messages:131
 msgid ""
@@ -2006,8 +2012,8 @@ msgid ""
 msgstr ""
 "Qualche applet può avere molteplici istanze avviate allo stesso momento: "
 "Orologio, Recipiente, Meteo, ...\n"
-"Clic destro sull'icona dell'applet - > \"Lancia un'altra istanza dell'applet"
-"\".\n"
+"Clic destro sull'icona dell'applet - > \"Lancia un'altra istanza "
+"dell'applet\".\n"
 "Puoi configurare ogni istanza in modo indipendente. Questo permette, ad "
 "esempio, di avere l'ora attuale di differenti paesi nella tua dock, oppure "
 "il meteo di diverse città."
@@ -2063,13 +2069,15 @@ msgstr "Rimuovi completamente il pannello di gnome"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Apri gconf-editor, modifica la chiave /desktop/gnome/session/"
-"required_components/panel e rimpiazza il suo contenuto con \"cairo-dock\".\n"
+"Apri gconf-editor, modifica la chiave "
+"/desktop/gnome/session/required_components/panel e rimpiazza il suo "
+"contenuto con \"cairo-dock\".\n"
 "Successivamente fai ripartire la sessione: il pannello gnome non si avvierà, "
 "mentre la dock si (se non accadesse puoi inserirla tra i programmi di avvio)."
 
@@ -2120,16 +2128,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Hai bisogno di avviare il compositing. Ad esempio, puoi avviare Compiz o "
 "xcompmgr. \n"
 "Se usi XFCE o KDE, basta soltanto abilitare il compositing nelle opzioni del "
 "gestore delle finestre.\n"
 "Se usi Gnome, puoi abilitarlo in Metacity a questa maniera:\n"
-" Apri gconf-editor, e modifica la chiave '/apps/metacity/general/"
-"compositing_manager' cambiandola in 'true'."
+" Apri gconf-editor, e modifica la chiave "
+"'/apps/metacity/general/compositing_manager' cambiandola in 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -2405,8 +2413,8 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
-"Se stai utilizzando Ubuntu puoi aggiungere il nostro repository \"weekly"
-"\" (potrebbe essere instabile) cliccando su questo pulsante:\n"
+"Se stai utilizzando Ubuntu puoi aggiungere il nostro repository \"weekly\" "
+"(potrebbe essere instabile) cliccando su questo pulsante:\n"
 " Successivamente puoi lanciare il tuo update-manager per installare l'ultima "
 "versione settimanale."
 
@@ -2493,8 +2501,8 @@ msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
-"In base al Gestore delle Finestre utilizzato puoi ridimensionarla con Alt"
-"+clic centrale o Alt+clic sinistro."
+"In base al Gestore delle Finestre utilizzato puoi ridimensionarla con "
+"Alt+clic centrale o Alt+clic sinistro."
 
 #: ../data/messages:331
 msgid "Desklet dimensions (width x height):"
@@ -2740,7 +2748,8 @@ msgstr "Visibilità delle sub-dock"
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "appariranno quando clicchi o quando indugerai sull'icona, puntandola."
+msgstr ""
+"appariranno quando clicchi o quando indugerai sull'icona, puntandola."
 
 #: ../data/messages:453 ../data/messages:663
 msgid "Appear on mouse over"
@@ -3130,7 +3139,8 @@ msgstr ""
 
 #: ../data/messages:709
 msgid "Group windows from the same application in a sub-dock ?"
-msgstr "Raggruppa tutte le finestre della stessa applicazione in una sub-dock?"
+msgstr ""
+"Raggruppa tutte le finestre della stessa applicazione in una sub-dock?"
 
 #: ../data/messages:711 ../data/messages:721
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
@@ -3332,22 +3342,20 @@ msgstr "Frequenza di aggiornamento"
 
 #: ../data/messages:827 ../data/messages:831 ../data/messages:835
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "in Hz. Questo è da aggiustare in base alla potenza della propria CPU."
+msgstr ""
+"in Hz. Questo è da aggiustare in base alla potenza della propria CPU."
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Refresh rate when mouving cursor into the dock:"
-msgstr "Aggiorna la frequenza quando il cursore si muove nella dock:"
+msgstr ""
 
 #: ../data/messages:833
-#, fuzzy
 msgid "Animation frequency for the OpenGL backend:"
-msgstr "&[15;60] Frequenza dell'animazione per il backend OpenGL:"
+msgstr ""
 
 #: ../data/messages:837
-#, fuzzy
 msgid "Animation frequency for the Cairo backend:"
-msgstr "*[15;50] Frequenza dell'animazione per il backend Cairo:"
+msgstr ""
 
 #: ../data/messages:839
 msgid ""
@@ -3358,9 +3366,8 @@ msgstr ""
 "reale. Questo può usare molta CPU."
 
 #: ../data/messages:841
-#, fuzzy
 msgid "Reflections should be calculated in real-time?"
-msgstr "* I riflessi dovrebbero essere calcolati in tempo reale?"
+msgstr ""
 
 # #################################
 # ########### cairo-dock.conf #############
@@ -3529,7 +3536,8 @@ msgstr "Oscurato quando nascosto"
 
 #: ../data/messages:923
 msgid "Several applets can be visible even when the dock is hidden"
-msgstr "Diverse applet possono essere visibili anche quando la dock è nascosta"
+msgstr ""
+"Diverse applet possono essere visibili anche quando la dock è nascosta"
 
 #: ../data/messages:925
 msgid "Default background color when the dock is hidden"
@@ -3795,7 +3803,8 @@ msgid "Zoom effect"
 msgstr "Effetto zoom"
 
 #: ../data/messages:1083
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr "a 1 se non vuoi che le icone si restringano quando ci passi sopra"
 
 #: ../data/messages:1085
@@ -4058,8 +4067,8 @@ msgstr "più grande"
 
 #: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Utilizza questo per fare si che l'indicatore segua l'orientamento della dock "
 "(alto/basso/destra/sinistra)."
@@ -4335,54 +4344,44 @@ msgid "Desktop Entry"
 msgstr "Elementi della Scrivania"
 
 #: ../data/messages:1425 ../data/messages:1455 ../data/messages:1487
-#, fuzzy
 msgid "Name of the container it belongs to:"
-msgstr "Nome della dock alla quale appartiene:"
+msgstr ""
 
 #: ../data/messages:1427
-#, fuzzy
 msgid "Sub-dock's name:"
-msgstr "Sub-dock"
+msgstr ""
 
 #: ../data/messages:1429
-#, fuzzy
 msgid "How to render the icon:"
-msgstr "Come richiamare la dock:"
+msgstr ""
 
 #: ../data/messages:1431
-#, fuzzy
 msgid "Use an image"
-msgstr "Utilizza un'immagine."
+msgstr ""
 
 #: ../data/messages:1433
-#, fuzzy
 msgid "Draw sub-dock's content as emblems"
-msgstr "Disegna la sub-dock delle icone come un recipiente"
+msgstr ""
 
 #: ../data/messages:1435
-#, fuzzy
 msgid "Draw sub-dock's content as stack"
-msgstr "Disegna la sub-dock delle icone come un recipiente"
+msgstr ""
 
 #: ../data/messages:1437
-#, fuzzy
 msgid "Draw sub-dock's content inside a box"
-msgstr "Disegna la sub-dock delle icone come un recipiente"
+msgstr ""
 
 #: ../data/messages:1439 ../data/messages:1459
-#, fuzzy
 msgid "Image's name or path:"
-msgstr "Percorso dell'immagine:"
+msgstr ""
 
 #: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
-#, fuzzy
 msgid "Extra parameters"
-msgstr "Parametri addizionali"
+msgstr ""
 
 #: ../data/messages:1443
-#, fuzzy
 msgid "Name of the view used for the sub-dock:"
-msgstr "Scegli la vista per questa dock :/"
+msgstr ""
 
 #: ../data/messages:1445
 msgid "If '0' the container will be displayed on every viewport."
@@ -4397,14 +4396,13 @@ msgid "Order you want for this launcher among the others:"
 msgstr ""
 
 #: ../data/messages:1457
-#, fuzzy
 msgid "Launcher's name:"
-msgstr "Lancia uno nuovo"
+msgstr ""
 
 #: ../data/messages:1461
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1463
@@ -4432,9 +4430,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1473
-#, fuzzy
 msgid "Class of the program:"
-msgstr "Colore della cornice:"
+msgstr ""
 
 #: ../data/messages:1475
 msgid "Run in a terminal?"
@@ -4509,13 +4506,3 @@ msgstr ""
 "nell'ambiente Gnome\n"
 " - Poche aggiunte alle API DBus.\n"
 " - E' possibile fare delle donazioni per sostenere il progetto!"
-
-#~ msgid "& On mouse hover:"
-#~ msgstr "& Al passaggio del mouse:"
-
-#~ msgid ""
-#~ "&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-#~ "disappearance:"
-#~ msgstr ""
-#~ "&[Evapora;Dissolve;Esplode;Rompe;Buco Nero;Casuale] Alla comparsa/"
-#~ "scomparsa:"

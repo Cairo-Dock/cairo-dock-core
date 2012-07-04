@@ -8,15 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2012-07-02 11:42+0000\n"
 "PO-Revision-Date: 2012-04-14 18:52+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Catalan <ca@li.org>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-15 04:38+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-07-03 05:15+0000\n"
+"X-Generator: Launchpad (build 15531)\n"
+"Language: ca\n"
 
 #: ../src/cairo-dock-gui-commons.c:222
 msgid ""
@@ -89,7 +90,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:459
@@ -304,7 +306,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:823 ../data/messages:483
@@ -407,7 +410,9 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Albert Milian https://launchpad.net/~mln-gmx\n"
+"  Cesc Llagostera https://launchpad.net/~cescllp\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
+"  Ferran Roig https://launchpad.net/~ferro9\n"
 "  Titotatin https://launchpad.net/~astromiquel\n"
 "  ferran https://launchpad.net/~traductor"
 
@@ -442,9 +447,8 @@ msgid "Users of our forum"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:322
-#, fuzzy
 msgid "List of our forum's members"
-msgstr "Llista dels temes personals"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
@@ -497,7 +501,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:595
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
+msgstr ""
+"Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
 
 #: ../src/cairo-dock-menu.c:607
 msgid ""
@@ -527,8 +532,8 @@ msgstr ""
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
-"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs "
-"segur ?"
+"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs segur "
+"?"
 
 #: ../src/cairo-dock-menu.c:851
 msgid "Configure"
@@ -580,7 +585,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Executa Cairo-Dock a l'inici"
 
 #: ../src/cairo-dock-menu.c:956
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:959 ../src/help/applet-init.c:28
@@ -1776,8 +1782,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1825,8 +1832,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -3324,7 +3331,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1083
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1085
@@ -3562,8 +3570,8 @@ msgstr ""
 
 #: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1203
@@ -3855,14 +3863,12 @@ msgid "Image's name or path:"
 msgstr ""
 
 #: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
-#, fuzzy
 msgid "Extra parameters"
-msgstr "Paràmetres adicionals"
+msgstr ""
 
 #: ../data/messages:1443
-#, fuzzy
 msgid "Name of the view used for the sub-dock:"
-msgstr "Tria la vista per aquest Dock:/"
+msgstr ""
 
 #: ../data/messages:1445
 msgid "If '0' the container will be displayed on every viewport."
@@ -3882,8 +3888,8 @@ msgstr ""
 
 #: ../data/messages:1461
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1463

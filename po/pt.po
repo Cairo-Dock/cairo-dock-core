@@ -6,15 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0-alpha\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2012-07-02 11:42+0000\n"
 "PO-Revision-Date: 2012-04-14 18:49+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-15 04:39+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-07-03 05:17+0000\n"
+"X-Generator: Launchpad (build 15531)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-commons.c:222
 msgid ""
@@ -88,7 +89,8 @@ msgid "Shortkey"
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-gui-items.c:459
@@ -310,7 +312,8 @@ msgid "Effects:"
 msgstr "Efeitos:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Clique no \"applet\" para uma pré-visualização e uma descrição."
 
 #: ../src/cairo-dock-gui-simple.c:823 ../data/messages:483
@@ -420,10 +423,12 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Almufadado https://launchpad.net/~almufadado\n"
+"  Cairo-Dock Team https://launchpad.net/~cairo-dock-team\n"
 "  Eduardo Mucelli Rezende Oliveira https://launchpad.net/~eduardo-mucelli\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
 "  Pedro Cunha https://launchpad.net/~pedro-01\n"
 "  Sérgio Marques https://launchpad.net/~sergio+marques\n"
+"  Tiago Silva https://launchpad.net/~tiagosilva\n"
 "  ilusi0n https://launchpad.net/~ha-cabrita"
 
 #: ../src/cairo-dock-menu.c:285
@@ -457,9 +462,8 @@ msgid "Users of our forum"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:322
-#, fuzzy
 msgid "List of our forum's members"
-msgstr "Lista de seus temas pessoais"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
@@ -517,7 +521,8 @@ msgstr "separador"
 #: ../src/cairo-dock-menu.c:595
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Você está prestes a remover o ícone (%s) da \"dock\". Tem a certeza ?"
+msgstr ""
+"Você está prestes a remover o ícone (%s) da \"dock\". Tem a certeza ?"
 
 #: ../src/cairo-dock-menu.c:607
 msgid ""
@@ -584,7 +589,8 @@ msgstr "Gerir temas"
 #: ../src/cairo-dock-menu.c:883
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "Escolha entre os vários temas no servidor ou guarde o seu tema atual."
+msgstr ""
+"Escolha entre os vários temas no servidor ou guarde o seu tema atual."
 
 #: ../src/cairo-dock-menu.c:896
 msgid "Lock icons position"
@@ -608,7 +614,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Executar Cairo-Dock ao iniciar"
 
 #: ../src/cairo-dock-menu.c:956
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Os \"applets\" de terceiros disponibilizam a integração com diversos "
 "programas, como por exemplo o Pidgin"
@@ -1813,8 +1820,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1864,8 +1872,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2852,7 +2860,8 @@ msgstr "Transparente"
 
 #: ../data/messages:741
 msgid "Play a short animation of the icon when its window becomes active"
-msgstr "Mostrar uma pequena animação no ícone quando a sua janela fica ativa?"
+msgstr ""
+"Mostrar uma pequena animação no ícone quando a sua janela fica ativa?"
 
 #: ../data/messages:743
 msgid "\"...\" will be added at the end if the name is too long."
@@ -2983,9 +2992,8 @@ msgstr ""
 "em Hz. Deve ajustar o comportamento em relação à frequência do seu CPU."
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Refresh rate when mouving cursor into the dock:"
-msgstr "Taxa de atualização ao mover o cursor para dentro da \"dock\":"
+msgstr ""
 
 #: ../data/messages:833
 msgid "Animation frequency for the OpenGL backend:"
@@ -3427,7 +3435,8 @@ msgid "Zoom effect"
 msgstr "Efeito de ampliação"
 
 #: ../data/messages:1083
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr "defina 1 se não quiser ampliar os ícones ao passar por cima deles."
 
 #: ../data/messages:1085
@@ -3681,11 +3690,11 @@ msgstr "maior"
 
 #: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Use isto para fazer com que o indicador siga a orientação da Doca (cima/"
-"baixo/esq./dta.)."
+"Use isto para fazer com que o indicador siga a orientação da Doca "
+"(cima/baixo/esq./dta.)."
 
 #: ../data/messages:1203
 msgid "Rotate the indicator with dock?"
@@ -3963,49 +3972,40 @@ msgid "Name of the container it belongs to:"
 msgstr ""
 
 #: ../data/messages:1427
-#, fuzzy
 msgid "Sub-dock's name:"
-msgstr "\"Sub-dock\""
+msgstr ""
 
 #: ../data/messages:1429
-#, fuzzy
 msgid "How to render the icon:"
-msgstr "Como invocar a \"dock\":"
+msgstr ""
 
 #: ../data/messages:1431
-#, fuzzy
 msgid "Use an image"
-msgstr "Usar uma imagem."
+msgstr ""
 
 #: ../data/messages:1433
-#, fuzzy
 msgid "Draw sub-dock's content as emblems"
-msgstr "Empilhar os ícones da sub-Doca."
+msgstr ""
 
 #: ../data/messages:1435
-#, fuzzy
 msgid "Draw sub-dock's content as stack"
-msgstr "Empilhar os ícones da sub-Doca."
+msgstr ""
 
 #: ../data/messages:1437
-#, fuzzy
 msgid "Draw sub-dock's content inside a box"
-msgstr "Empilhar os ícones da sub-Doca."
+msgstr ""
 
 #: ../data/messages:1439 ../data/messages:1459
-#, fuzzy
 msgid "Image's name or path:"
-msgstr "Transparência da imagem:"
+msgstr ""
 
 #: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
-#, fuzzy
 msgid "Extra parameters"
-msgstr "Parâmetros adicionais"
+msgstr ""
 
 #: ../data/messages:1443
-#, fuzzy
 msgid "Name of the view used for the sub-dock:"
-msgstr "Nome da imagem a utilizar no botão \"sim/ok\":"
+msgstr ""
 
 #: ../data/messages:1445
 msgid "If '0' the container will be displayed on every viewport."
@@ -4020,14 +4020,13 @@ msgid "Order you want for this launcher among the others:"
 msgstr ""
 
 #: ../data/messages:1457
-#, fuzzy
 msgid "Launcher's name:"
-msgstr "Lançar novo"
+msgstr ""
 
 #: ../data/messages:1461
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1463
@@ -4055,9 +4054,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1473
-#, fuzzy
 msgid "Class of the program:"
-msgstr "Ângulo da gradação :"
+msgstr ""
 
 #: ../data/messages:1475
 msgid "Run in a terminal?"

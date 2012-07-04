@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-04-22 13:19+0000\n"
-"Last-Translator: Péter Trombitás <trombipeti@gmail.com>\n"
+"POT-Creation-Date: 2012-07-02 11:42+0000\n"
+"PO-Revision-Date: 2012-06-17 09:04+0000\n"
+"Last-Translator: Máté Eckl <ecklm@nejanet.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-23 04:42+0000\n"
-"X-Generator: Launchpad (build 15135)\n"
+"X-Launchpad-Export-Date: 2012-07-03 05:16+0000\n"
+"X-Generator: Launchpad (build 15531)\n"
+"Language: hu\n"
 
 #: ../src/cairo-dock-gui-commons.c:222
 msgid ""
@@ -88,7 +89,8 @@ msgid "Shortkey"
 msgstr "Gyorsgomb"
 
 #: ../src/cairo-dock-gui-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "A fő dokk paraméterei elérhetőek a fő beállítóablakban."
 
 #: ../src/cairo-dock-gui-items.c:459
@@ -308,7 +310,8 @@ msgid "Effects:"
 msgstr "Hatások:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Kattintson egy kisalkalmazásra az előnézet és a leírás megtekintéséhez."
 
@@ -424,6 +427,8 @@ msgstr ""
 "  Krasznecz Zoltán https://launchpad.net/~krasznecz-zoltan\n"
 "  Kristóf Kiszel https://launchpad.net/~ulysses\n"
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
+"  Muszela Balázs https://launchpad.net/~bazsi86-deactivatedaccount\n"
+"  Máté Eckl https://launchpad.net/~ecklm\n"
 "  Oszkar Kovacs https://launchpad.net/~kovosz\n"
 "  Péter Trombitás https://launchpad.net/~trombipeti\n"
 "  Szávics Dániel https://launchpad.net/~szavics-dani-deactivatedaccount\n"
@@ -462,9 +467,8 @@ msgid "Users of our forum"
 msgstr "A fórum felhasználói"
 
 #: ../src/cairo-dock-menu.c:322
-#, fuzzy
 msgid "List of our forum's members"
-msgstr "Személyes témák listája"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
@@ -612,7 +616,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "A Cairo-Dock indítása induláskor"
 
 #: ../src/cairo-dock-menu.c:956
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "A harmadik féltől származó kisalkalmazások biztosítják számos program, "
 "például a Pidgin integrációját"
@@ -687,7 +692,7 @@ msgstr "A kisalkalmazás kézikönyve"
 
 #: ../src/cairo-dock-menu.c:1108
 msgid "Pick up an image"
-msgstr ""
+msgstr "Válassz egy képet"
 
 #: ../src/cairo-dock-menu.c:1339
 #, c-format
@@ -919,7 +924,8 @@ msgstr ""
 
 #: ../src/cairo-dock.c:361
 msgid "Force to display some output messages with colors."
-msgstr "Néhány kimeneti üzenet színesben való megjelenítésének kényszerítése."
+msgstr ""
+"Néhány kimeneti üzenet színesben való megjelenítésének kényszerítése."
 
 #: ../src/cairo-dock.c:364
 msgid "Print version and quit."
@@ -1096,7 +1102,7 @@ msgstr "Frissítve"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:725
 msgid "Pick up a file"
-msgstr ""
+msgstr "Válassz egy fájlt"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:725
 msgid "Pick up a directory"
@@ -1201,8 +1207,8 @@ msgid ""
 msgstr ""
 "Üdvözli a Cairo-Dock!\n"
 "Ez a kisalkamazás segít a használat elkezdésében; csak kattintson rá.\n"
-"Ha van akármilyen kérdése, kérése vagy megjegyzése, látogasson el a http://"
-"glx-dock.org oldalra.\n"
+"Ha van akármilyen kérdése, kérése vagy megjegyzése, látogasson el a "
+"http://glx-dock.org oldalra.\n"
 "Reméljük, tetszeni fog a program!\n"
 "  (a dialógusra kattintva becsukhatja azt)"
 
@@ -1453,8 +1459,8 @@ msgstr ""
 "- Alkalmazásikon esetén:\n"
 "Kattintson jobb egérgombbal az ikonra, és válassza az \"Egyéb műveletek -> "
 "Egyéni ikon beállítása\" lehetőséget, és válasszon egy képfájlt. Egyéni "
-"ikonkép törléséhez válassza az \"Egyéb műveletek -> Egyéni ikon eltávolítása"
-"\" lehetőséget.\n"
+"ikonkép törléséhez válassza az \"Egyéb műveletek -> Egyéni ikon "
+"eltávolítása\" lehetőséget.\n"
 "\n"
 "Ha vanak ikontémák telepítve a rendszerére, kiválaszthat egyet közülük az "
 "alapértelmezett helyett a Beállítás ablak Megjelenés paneljában."
@@ -1496,9 +1502,9 @@ msgid ""
 msgstr ""
 "Lehetőség van elválasztók hozzáadására. Ehhez kattintson jobb egérgombbal a "
 "dokkra, majd válassza a \"Hozzáadás -> Elválasztó\" opciót.\n"
-"Ha engedélyezte az ikonok típus szerinti elválasztását (indítóikonok/"
-"alkalmazásikonok/kisalkalmazások), a csoportok közé automatikusan kerül egy-"
-"egy elválasztó.\n"
+"Ha engedélyezte az ikonok típus szerinti elválasztását "
+"(indítóikonok/alkalmazásikonok/kisalkalmazások), a csoportok közé "
+"automatikusan kerül egy-egy elválasztó.\n"
 "\"Panel\" nézetben az elválasztók ikonok közti üres helyként jelennek meg."
 
 #: ../data/messages:43
@@ -1566,8 +1572,8 @@ msgid ""
 "With your mouse, scroll up/down on one of the icons of the application. Each "
 "time you scroll, the next/previous window will be presented to you."
 msgstr ""
-"Az egér görgőjével görgessen le/föl az alkalmazás ikonján, hogy az előző/"
-"következő ablak jelenjen meg."
+"Az egér görgőjével görgessen le/föl az alkalmazás ikonján, hogy az "
+"előző/következő ablak jelenjen meg."
 
 #: ../data/messages:63
 msgid "Grouping windows of a given application"
@@ -2049,8 +2055,9 @@ msgstr "A gnome-panel teljes eltávolítása"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2106,8 +2113,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Be kell kapcsolnia az asztali effekteket. Például futtassa a Compizt vagy az "
 "xcompmgr-t. \n"
@@ -2767,15 +2774,15 @@ msgstr ""
 
 #: ../data/messages:473 ../data/messages:693
 msgid "At the beginning of the dock"
-msgstr ""
+msgstr "A dokk indulásakor"
 
 #: ../data/messages:475 ../data/messages:695
 msgid "Before the launchers"
-msgstr ""
+msgstr "Futtatás előtt"
 
 #: ../data/messages:477 ../data/messages:697
 msgid "After the launchers"
-msgstr ""
+msgstr "Futtatás után"
 
 #: ../data/messages:479 ../data/messages:699
 msgid "At the end of the dock"
@@ -2965,7 +2972,7 @@ msgstr "Hozzáférhetőség"
 
 #: ../data/messages:625
 msgid "The higher, the faster the dock will appear"
-msgstr ""
+msgstr "Minél magasabb, annál gyorsabban jelenik meg a dokk"
 
 #: ../data/messages:627
 msgid "Callback sensitivity:"
@@ -2973,11 +2980,11 @@ msgstr ""
 
 #: ../data/messages:629
 msgid "high"
-msgstr ""
+msgstr "magas"
 
 #: ../data/messages:631
 msgid "low"
-msgstr ""
+msgstr "alacsony"
 
 #: ../data/messages:633
 msgid "How to call the dock back:"
@@ -3303,9 +3310,8 @@ msgstr ""
 "be."
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Refresh rate when mouving cursor into the dock:"
-msgstr "Frissítés sűrűsége, amikor a dokkra mozgatja az egeret :"
+msgstr ""
 
 #: ../data/messages:833
 msgid "Animation frequency for the OpenGL backend:"
@@ -3486,7 +3492,7 @@ msgstr "A világos szín aránya:"
 
 #: ../data/messages:921
 msgid "Background when hidden"
-msgstr ""
+msgstr "Háttér, amikor rejtve van"
 
 #: ../data/messages:923
 msgid "Several applets can be visible even when the dock is hidden"
@@ -3494,7 +3500,7 @@ msgstr ""
 
 #: ../data/messages:925
 msgid "Default background color when the dock is hidden"
-msgstr ""
+msgstr "Alapértelmezett háttérszín, amikor a dokk rejtve van"
 
 #: ../data/messages:927 ../data/messages:1377
 msgid "Stretch the dock to always fill the screen"
@@ -3743,14 +3749,15 @@ msgstr "Ikonméret"
 
 #: ../data/messages:1079
 msgid "Icons' size at rest (width x height) :"
-msgstr ""
+msgstr "Ikonméret nyugalmi állapotban (szélesség x magasság)"
 
 #: ../data/messages:1081
 msgid "Zoom effect"
 msgstr "Nagyítás"
 
 #: ../data/messages:1083
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Állítsa 1-re, ha nem akarja hogy az ikonok kinagyítódjanak, amikor lebegteti "
 "őket."
@@ -4016,8 +4023,8 @@ msgstr "nagyobb"
 
 #: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Akkor használja, ha szeretné, hogy az indikátor kövesse a dokk orientációját "
 "(fent/lent/jobb/bal)."
@@ -4083,7 +4090,8 @@ msgstr "Az összes ikonon"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr "Minél nagyobb, annál több címke lesz átlátszó a mutatott ikon mellett."
+msgstr ""
+"Minél nagyobb, annál több címke lesz átlátszó a mutatott ikon mellett."
 
 #: ../data/messages:1235
 msgid "label's visibility threshold :"
@@ -4291,54 +4299,44 @@ msgid "Desktop Entry"
 msgstr ""
 
 #: ../data/messages:1425 ../data/messages:1455 ../data/messages:1487
-#, fuzzy
 msgid "Name of the container it belongs to:"
-msgstr "A tartalmazó dokk neve:"
+msgstr ""
 
 #: ../data/messages:1427
-#, fuzzy
 msgid "Sub-dock's name:"
-msgstr "Aldokk"
+msgstr ""
 
 #: ../data/messages:1429
-#, fuzzy
 msgid "How to render the icon:"
-msgstr "Dokk előhívása"
+msgstr ""
 
 #: ../data/messages:1431
-#, fuzzy
 msgid "Use an image"
-msgstr "Kép használata."
+msgstr ""
 
 #: ../data/messages:1433
-#, fuzzy
 msgid "Draw sub-dock's content as emblems"
-msgstr "Aldokk ikonjai megjelenítése egy csomagban"
+msgstr ""
 
 #: ../data/messages:1435
-#, fuzzy
 msgid "Draw sub-dock's content as stack"
-msgstr "Aldokk ikonjai megjelenítése egy csomagban"
+msgstr ""
 
 #: ../data/messages:1437
-#, fuzzy
 msgid "Draw sub-dock's content inside a box"
-msgstr "Aldokk ikonjai megjelenítése egy csomagban"
+msgstr ""
 
 #: ../data/messages:1439 ../data/messages:1459
-#, fuzzy
 msgid "Image's name or path:"
-msgstr "Képfájl neve:"
+msgstr ""
 
 #: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
-#, fuzzy
 msgid "Extra parameters"
-msgstr "További paraméterek"
+msgstr ""
 
 #: ../data/messages:1443
-#, fuzzy
 msgid "Name of the view used for the sub-dock:"
-msgstr "Válassza ki a kinézetet ehhez a dokkhoz:/"
+msgstr ""
 
 #: ../data/messages:1445
 msgid "If '0' the container will be displayed on every viewport."
@@ -4353,14 +4351,13 @@ msgid "Order you want for this launcher among the others:"
 msgstr ""
 
 #: ../data/messages:1457
-#, fuzzy
 msgid "Launcher's name:"
-msgstr "Új példány indítása"
+msgstr ""
 
 #: ../data/messages:1461
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1463
@@ -4388,9 +4385,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1473
-#, fuzzy
 msgid "Class of the program:"
-msgstr "Keret színe :"
+msgstr ""
 
 #: ../data/messages:1475
 msgid "Run in a terminal?"

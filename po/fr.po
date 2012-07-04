@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-05-08 02:24+0000\n"
+"POT-Creation-Date: 2012-07-02 11:42+0000\n"
+"PO-Revision-Date: 2012-07-03 09:52+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Cairo-Dock <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-09 04:40+0000\n"
-"X-Generator: Launchpad (build 15213)\n"
+"X-Launchpad-Export-Date: 2012-07-04 04:37+0000\n"
+"X-Generator: Launchpad (build 15544)\n"
 "X-Poedit-Country: France\n"
+"Language: \n"
 "X-Poedit-Language: French\n"
 
 #: ../src/cairo-dock-gui-commons.c:222
@@ -92,7 +93,8 @@ msgid "Shortkey"
 msgstr "Raccourci"
 
 #: ../src/cairo-dock-gui-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Les paramètres du dock principal sont disponibles dans la fenêtre de "
 "configuration principale."
@@ -315,7 +317,8 @@ msgid "Effects:"
 msgstr "Effets :"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Cliquez sur une applet de la liste afin d'obtenir un aperçu et sa "
 "description."
@@ -428,12 +431,15 @@ msgstr "Traduction Française"
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Alexandre Demers https://launchpad.net/~oxalin\n"
+"  Alexandre Pliarchopoulos https://launchpad.net/~al-pliar\n"
 "  Bruno Veilleux https://launchpad.net/~le-gros-rat\n"
 "  Fabounet https://launchpad.net/~fabounet\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
 "  Lentdormi https://launchpad.net/~dahr974\n"
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Nicolas Delvaux https://launchpad.net/~malizor\n"
+"  Philippe Le Toquin https://launchpad.net/~ppmt\n"
 "  Pierre Slamich https://launchpad.net/~pierre-slamich\n"
 "  SQP https://launchpad.net/~sqp\n"
 "  Thibault Févry https://launchpad.net/~thibaultfevry\n"
@@ -475,9 +481,8 @@ msgid "Users of our forum"
 msgstr "Utilisateurs du forum"
 
 #: ../src/cairo-dock-menu.c:322
-#, fuzzy
 msgid "List of our forum's members"
-msgstr "Liste de vos thèmes perso"
+msgstr "Lister les membres de notre forum"
 
 #: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
@@ -628,7 +633,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Lancer Cairo-Dock au démarrage"
 
 #: ../src/cairo-dock-menu.c:956
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Les applets tierce-party fournissent une intégration avec de nombreux "
 "programmes, tel Pidgin"
@@ -896,8 +902,8 @@ msgstr "Forcer le dock à considérer cet environnement - utiliser avec soin."
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Force le dock à charger les paramètres depuis ce dossier au lieu de ~/."
-"config/cairo-dock."
+"Force le dock à charger les paramètres depuis ce dossier au lieu de "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:343
 msgid ""
@@ -1557,8 +1563,8 @@ msgstr ""
 "le dock.\n"
 "Si l'application a déjà un lanceur, l'icône n'apparaîtra pas mais, à la "
 "place, le lanceur aura un petit indicateur.\n"
-"Notez que vous décider quelles applications doivent apparaître dans le "
-"dock : seules les fenêtres du bureau actif, seulement les fenêtres cachées, "
+"Notez que vous décider quelles applications doivent apparaître dans le dock "
+": seules les fenêtres du bureau actif, seulement les fenêtres cachées, "
 "séparées du lanceur, etc."
 
 #: ../data/messages:47
@@ -2093,13 +2099,15 @@ msgstr "Supprimer complètement le gnome-panel"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Ouvrez gconf-editor, éditez la clé /desktop/gnome/session/"
-"required_components/panel,et remplacez son contenu avec \"cairo-dock\".\n"
+"Ouvrez gconf-editor, éditez la clé "
+"/desktop/gnome/session/required_components/panel,et remplacez son contenu "
+"avec \"cairo-dock\".\n"
 "Redémarrez votre session : Le panneau-gnome n'a pas été démmaré, et le dock "
 "à été démarré (Siono, vous pouvez l'ajouter aux programmes de démarrage)."
 
@@ -2117,7 +2125,8 @@ msgstr "Problèmes"
 
 #: ../data/messages:191
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr "Si vous avez des questions, n'hésitez pas à les poser sur notre forum."
+msgstr ""
+"Si vous avez des questions, n'hésitez pas à les poser sur notre forum."
 
 #: ../data/messages:193
 msgid "Forum"
@@ -2151,8 +2160,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Vous devez activer la gestion du composite. Par exemple, vous pouvez lancer "
 "Compiz ou xcompmgr.\n"
@@ -2160,8 +2169,8 @@ msgstr ""
 "options du gestionnaire de fenêtres.\n"
 "Si vous êtes sous Gnome, vous pouvez l'activer dans Metacity de cette "
 "manière :\n"
-" ouvrez gconf-editor, éditer la clé \"/apps/metacity/general/"
-"compositing_manager\" et mettez-la à 'true'."
+" ouvrez gconf-editor, éditer la clé "
+"\"/apps/metacity/general/compositing_manager\" et mettez-la à 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -2251,8 +2260,8 @@ msgstr ""
 "Vérifiez que vous êtes bien connecté à Internet.\n"
 " Si votre connexion est très lente, vous pouvez augmenter le temps maximum "
 "de connexion dans le module \"Système\".\n"
-" Si vous êtes derrière un proxy, vous devrez probablement configurer \"curl"
-"\" pour l'utiliser.\n"
+" Si vous êtes derrière un proxy, vous devrez probablement configurer "
+"\"curl\" pour l'utiliser.\n"
 "  Une petite recherche sur le web ou notre wiki vous aidera (typiquement, "
 "vous devrez ajouter la variable d'environnement \"http_proxy\")"
 
@@ -2346,8 +2355,8 @@ msgstr ""
 "amélioré,\n"
 " ou si vous avez fait un rêve à propos du dock, n'hésitez pas à nous rendre "
 "visite sur glx-dock.org.\n"
-"Les messages en français sont également les bienvenus donc n'hésitez "
-"pas ! ;-)\n"
+"Les messages en français sont également les bienvenus donc n'hésitez pas ! ;-"
+")\n"
 "\n"
 "Si vous avez réalisé un thème pour le dock ou pour une applet et que vous "
 "désirez le partager,\n"
@@ -2635,7 +2644,8 @@ msgstr "Arrière-plan transparent :"
 
 #: ../data/messages:373
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr "en pixels. Utilisez-le pour ajuster la position à gauche des dessins."
+msgstr ""
+"en pixels. Utilisez-le pour ajuster la position à gauche des dessins."
 
 #: ../data/messages:375
 msgid "Left offset:"
@@ -2651,7 +2661,8 @@ msgstr "Décalage en haut :"
 
 #: ../data/messages:381
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr "en pixels. Utilisez-le pour ajuster la position à droite des dessins."
+msgstr ""
+"en pixels. Utilisez-le pour ajuster la position à droite des dessins."
 
 #: ../data/messages:383
 msgid "Right offset:"
@@ -2857,27 +2868,27 @@ msgstr "Animations et effets des icônes"
 
 #: ../data/messages:487
 msgid "On appearance/disappearance:"
-msgstr ""
+msgstr "À l'apparition / disparition :"
 
 #: ../data/messages:489
 msgid "Evaporate"
-msgstr ""
+msgstr "Évaporation"
 
 #: ../data/messages:493
 msgid "Explode"
-msgstr ""
+msgstr "Explosion"
 
 #: ../data/messages:495
 msgid "Break"
-msgstr ""
+msgstr "Arrêt"
 
 #: ../data/messages:497
 msgid "Black Hole"
-msgstr ""
+msgstr "Trou Noir"
 
 #: ../data/messages:499
 msgid "Random"
-msgstr ""
+msgstr "Aléatoire"
 
 #: ../data/messages:505
 msgid "Choose a theme of icons :"
@@ -3170,7 +3181,7 @@ msgstr "Placer les nouvelles icônes après celle-là"
 
 #: ../data/messages:705
 msgid "Automatically add a separator"
-msgstr ""
+msgstr "Ajouter un séparateur automatiquement"
 
 #: ../data/messages:707
 msgid ""
@@ -3371,12 +3382,13 @@ msgstr "Plus nombreux ils sont, plus lent ce sera."
 #: ../data/messages:803
 msgid "Number of steps in the zoom animation (grow/shrink):"
 msgstr ""
-"Nombre d'étapes dans l'animation d'agrandissement (agrandissement/"
-"rétrécissement) :"
+"Nombre d'étapes dans l'animation d'agrandissement "
+"(agrandissement/rétrécissement) :"
 
 #: ../data/messages:815
 msgid "Number of steps in the auto-hide animation (move up/move down):"
-msgstr "Nombre d'étapes dans l'animation de cachage (apparition/disparition) :"
+msgstr ""
+"Nombre d'étapes dans l'animation de cachage (apparition/disparition) :"
 
 #: ../data/messages:825
 msgid "Refresh rate"
@@ -3473,7 +3485,8 @@ msgstr "Forcer l'IPv4 ?"
 
 #: ../data/messages:863
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Utilisez cette option si vous vous connectez à Internet via un proxy."
+msgstr ""
+"Utilisez cette option si vous vous connectez à Internet via un proxy."
 
 #: ../data/messages:865
 msgid "Are you behind a proxy ?"
@@ -3490,7 +3503,8 @@ msgstr "Port :"
 #: ../data/messages:871 ../data/messages:875
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
-msgstr "Laissez vide si vous n'avez pas besoin de vous authentifier au proxy."
+msgstr ""
+"Laissez vide si vous n'avez pas besoin de vous authentifier au proxy."
 
 #: ../data/messages:873
 msgid "User :"
@@ -3840,7 +3854,8 @@ msgid "Zoom effect"
 msgstr "Effet d'agrandissement"
 
 #: ../data/messages:1083
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Mettre la valeur 1 pour que l'icône ne s'agrandisse pas au survol du curseur."
 
@@ -3984,7 +3999,8 @@ msgstr "Relier les icônes avec une ficelle"
 
 #: ../data/messages:1147
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr "Epaisseur de la ficelle, en pixels (0 pour ne pas avoir de ficelle) :"
+msgstr ""
+"Epaisseur de la ficelle, en pixels (0 pour ne pas avoir de ficelle) :"
 
 #: ../data/messages:1149
 msgid "Colour of the string (red, blue, green, alpha) :"
@@ -4107,11 +4123,11 @@ msgstr "Plus grand"
 
 #: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Utilisez-le pour orienter l'indicateur selon la position du dock (haut/bas/"
-"droite/gauche)"
+"Utilisez-le pour orienter l'indicateur selon la position du dock "
+"(haut/bas/droite/gauche)"
 
 #: ../data/messages:1203
 msgid "Rotate the indicator with dock?"
@@ -4383,66 +4399,56 @@ msgid "Desktop Entry"
 msgstr "Description"
 
 #: ../data/messages:1425 ../data/messages:1455 ../data/messages:1487
-#, fuzzy
 msgid "Name of the container it belongs to:"
-msgstr "Nom du dock auquel il appartient :"
+msgstr "Nom du conteneur auquel il appartient :"
 
 #: ../data/messages:1427
-#, fuzzy
 msgid "Sub-dock's name:"
-msgstr "Sous-dock"
+msgstr "Nom du sous-dock :"
 
 #: ../data/messages:1429
-#, fuzzy
 msgid "How to render the icon:"
-msgstr "Comment rappeler le dock :"
+msgstr "Comment dessiner l'icône :"
 
 #: ../data/messages:1431
-#, fuzzy
 msgid "Use an image"
 msgstr "Utiliser une image"
 
 #: ../data/messages:1433
-#, fuzzy
 msgid "Draw sub-dock's content as emblems"
-msgstr "Afficher les icônes du sous-dock comme une pile"
+msgstr "Afficher le contenu du sous-dock avec des emblèmes"
 
 #: ../data/messages:1435
-#, fuzzy
 msgid "Draw sub-dock's content as stack"
-msgstr "Afficher les icônes du sous-dock comme une pile"
+msgstr "Afficher le contenu du sous-dock comme une pile"
 
 #: ../data/messages:1437
-#, fuzzy
 msgid "Draw sub-dock's content inside a box"
-msgstr "Afficher les icônes du sous-dock comme une pile"
+msgstr "Afficher le contenu du sous-dock dans une boîte"
 
 #: ../data/messages:1439 ../data/messages:1459
-#, fuzzy
 msgid "Image's name or path:"
-msgstr "Nom du fichier de l'image :"
+msgstr "Nom ou chemin de l'image :"
 
 #: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
-#, fuzzy
 msgid "Extra parameters"
 msgstr "Paramètres additionnels"
 
 #: ../data/messages:1443
-#, fuzzy
 msgid "Name of the view used for the sub-dock:"
-msgstr "Choisissez la vue pour ce dock :"
+msgstr "Nom de la vue utilisée pour le sous-dock :"
 
 #: ../data/messages:1445
 msgid "If '0' the container will be displayed on every viewport."
-msgstr ""
+msgstr "Si la valeur est '0', le conténaire sera afficher sur chaque bureau."
 
 #: ../data/messages:1447 ../data/messages:1479
 msgid "Only show in this specific viewport:"
-msgstr ""
+msgstr "Uniquement afficher sur ce bureau :"
 
 #: ../data/messages:1449 ../data/messages:1481 ../data/messages:1493
 msgid "Order you want for this launcher among the others:"
-msgstr ""
+msgstr "Place de l'icône par rapport aux autres dans le dock :"
 
 #: ../data/messages:1457
 msgid "Launcher's name:"
@@ -4450,13 +4456,15 @@ msgstr "Nom du lanceur :"
 
 #: ../data/messages:1461
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
+"Exemple: 'nautilus . --no-desktop', 'gedit', etc. Vous pouvez également "
+"utiliser un raccourcis clavier, par exemple: <Alt>F1, <Ctrl>c, <Ctrl>v, etc."
 
 #: ../data/messages:1463
 msgid "Command to launch on click:"
-msgstr ""
+msgstr "Commande à lancer au clic :"
 
 #: ../data/messages:1467
 msgid ""
@@ -4465,10 +4473,15 @@ msgid ""
 "launcher that launches a script in a terminal, but you don't want it to "
 "steal the terminal's icon from the taskbar."
 msgstr ""
+"Si vous choisissez de mélanger lanceurs et applications, cette option permet "
+"de désactiver ce comportement pour ce lanceur. Ceci peut être utile, par "
+"exemple, pour un lanceur qui lance un script dans un terminal, mais vous ne "
+"voulez pas qu'il vole l'icône du terminal dans la barre des tâches."
 
 #: ../data/messages:1469
 msgid "Prevent this launcher from stealing this application from taskbar?"
 msgstr ""
+"Empêcher ce lanceur de voler cette application dans la barre des tâches?"
 
 #: ../data/messages:1471
 msgid ""
@@ -4477,23 +4490,28 @@ msgid ""
 "nearly sure that you shouldn't touch it. It defines the class of the "
 "program, which is useful to link the application with its launcher."
 msgstr ""
+"La seule raison pour laquelle vous voudriez peut-être modifier ce paramètre "
+"est si vous avez créé ce lanceur manuellement. Si vous l'avez glissé et "
+"déposé dans le dock à partir du menu d'application, il est presque sûr que "
+"vous ne devrez pas y toucher. Ceci définit la classe du programme, ce qui "
+"est utile pour lier l'application avec son lanceur."
 
 #: ../data/messages:1473
-#, fuzzy
 msgid "Class of the program:"
-msgstr "Couleur du cadre :"
+msgstr "Classe du programme :"
 
 #: ../data/messages:1475
 msgid "Run in a terminal?"
-msgstr ""
+msgstr "Lancer dans un terminal ?"
 
 #: ../data/messages:1477
 msgid "If '0' the launcher will be displayed on every viewport."
-msgstr ""
+msgstr "Si '0', le lanceur sera afficher sur chaque bureau."
 
 #: ../data/messages:1489
 msgid "Separators' appearance is defined in the global configuration."
 msgstr ""
+"L'apparence des séparateurs est définie dans la configuration globale."
 
 #: ../data/messages:1495
 msgid ""
@@ -4566,13 +4584,3 @@ msgstr ""
 " - De nombreux détails au niveau graphique et manipulation du dock ont été "
 "réglés.\n"
 " - Il est possible de faire des dons pour supporter le projet ! ;-)"
-
-#~ msgid "& On mouse hover:"
-#~ msgstr "& Lorsque la souris est dessus :"
-
-#~ msgid ""
-#~ "&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On appearance/"
-#~ "disappearance:"
-#~ msgstr ""
-#~ "[Evaporate;Fade out;Explode;Break;Black Hole;Random] À l'apparition/"
-#~ "disparition :"
