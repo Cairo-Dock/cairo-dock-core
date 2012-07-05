@@ -24,6 +24,15 @@ fi
 xgettext -L $lang -k_ -k_D -kD_ -kN_ --no-wrap --from-code=UTF-8 --copyright-holder="Cairo-Dock project" --msgid-bugs-address="fabounet@glx-dock.org" -p . $sources -o cairo-dock.pot
 #--omit-header
 
+# remove messages file to not include it into the tarballs
+if test "$1" = "plug-ins"; then
+	rm -f ../*/data/messages
+elif test "$1" = "extras"; then
+	rm -f ../*/messages
+else
+	rm -f ../data/messages
+fi
+
 for lang in `ls *.po`
 do
 	echo -n "${lang} :"
