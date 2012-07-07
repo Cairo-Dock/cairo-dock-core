@@ -144,7 +144,7 @@ struct _CairoDataRenderer {
 	/// interface of the Data Renderer.
 	CairoDataRendererInterface interface;
 	//\_________________ filled at loading time independantly of the renderer type.
-	/// internal data to be drawn by the renderer.it
+	/// internal data to be drawn by the renderer.
 	CairoDataToRenderer data;
 	/// size of the drawing area.
 	gint iWidth, iHeight;  // taille du contexte de dessin.
@@ -171,6 +171,8 @@ struct _CairoDataRenderer {
 	RendererRotateTheme iRotateTheme;
 	/// set to TRUE <=> the theme images are rotated 90° clockwise.
 	gboolean bisRotate;
+	/// whether the data-renderer draws on an overlay rather than directly on the icon.
+	gboolean bUseOverlay;
 	/// an optionnal list of labels to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
 	CairoDataRendererText *pLabels;
 	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
@@ -183,6 +185,7 @@ struct _CairoDataRenderer {
 	/// latency due to the smooth movement (0 means the displayed value is the current one, 1 the previous)
 	gdouble fLatency;
 	guint iSidRenderIdle;  // source ID to delay the rendering in OpenGL until the container is fully resized
+	CairoOverlay *pOverlay;
 };
 
 

@@ -298,7 +298,7 @@ void cairo_dock_draw_icon_overlays_cairo (Icon *pIcon, double fRatio, cairo_t *p
 		// translate to the overlay top-left corner.
 		cairo_translate (pCairoContext,
 			x - wo/2 - 1,  /// -1 to compensate the round errors; TODO: use double
-			- y - ho/2 + 1);
+			- y - ho/2. + 1);
 		
 		// draw.
 		cairo_scale (pCairoContext,

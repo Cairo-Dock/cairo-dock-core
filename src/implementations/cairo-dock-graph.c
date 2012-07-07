@@ -28,6 +28,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-icon-manager.h"  // myIconsParam.quickInfoTextDescription
 #include "cairo-dock-graph.h"
 
 typedef struct _Graph {
@@ -546,15 +547,19 @@ static void unload (Graph *pGraph)
 //////////////////////////////////////////
 void cairo_dock_register_data_renderer_graph (void)
 {
+	// create a new record
 	CairoDockDataRendererRecord *pRecord = g_new0 (CairoDockDataRendererRecord, 1);
-	pRecord->interface.load			= (CairoDataRendererLoadFunc) load;
-	pRecord->interface.render		= (CairoDataRendererRenderFunc) render;
-	pRecord->interface.render_opengl	= (CairoDataRendererRenderOpenGLFunc) NULL;
-	pRecord->interface.reload		= (CairoDataRendererReloadFunc) reload;
-	pRecord->interface.unload		= (CairoDataRendererUnloadFunc) unload;
-	pRecord->iStructSize			= sizeof (Graph);
-	pRecord->cThemeDirName = NULL;
-	pRecord->cDefaultTheme = NULL;
 	
+	// fill the properties we need
+	pRecord->interface.load              = (CairoDataRendererLoadFunc) load;
+	pRecord->interface.render            = (CairoDataRendererRenderFunc) render;
+	pRecord->interface.render_opengl     = (CairoDataRendererRenderOpenGLFunc) NULL;
+	pRecord->interface.reload            = (CairoDataRendererReloadFunc) reload;
+	pRecord->interface.unload            = (CairoDataRendererUnloadFunc) unload;
+	pRecord->iStructSize                 = sizeof (Graph);
+	pRecord->cThemeDirName               = NULL;
+	pRecord->cDefaultTheme               = NULL;
+	
+	// register
 	cairo_dock_register_data_renderer ("graph", pRecord);
 }

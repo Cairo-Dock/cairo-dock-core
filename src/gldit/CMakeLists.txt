@@ -56,7 +56,6 @@ SET(core_lib_SRCS
 	cairo-dock-keyfile-utilities.c 		cairo-dock-keyfile-utilities.h
 	cairo-dock-packages.c 				cairo-dock-packages.h
 	cairo-dock-particle-system.c 		cairo-dock-particle-system.h
-	#cairo-dock-emblem.c 				cairo-dock-emblem.h
 	cairo-dock-overlay.c 				cairo-dock-overlay.h
 	cairo-dock-task.c 					cairo-dock-task.h
 	cairo-dock-config.c 				cairo-dock-config.h 
@@ -164,7 +163,6 @@ install(FILES
 	cairo-dock-task.h
 	cairo-dock-animations.h
 	cairo-dock-gui-factory.h
-	#cairo-dock-emblem.h
 	
 	DESTINATION ${includedir}/cairo-dock/gldit)
 

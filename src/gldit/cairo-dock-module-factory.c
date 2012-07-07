@@ -40,7 +40,6 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dialog-manager.h"  // cairo_dock_show_temporary_dialog_with_icon
 #include "cairo-dock-config.h"
-///#include "cairo-dock-gui-manager.h"  // cairo_dock_trigger_refresh_launcher_gui
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-factory.h"
 
@@ -697,7 +696,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		{
 			cairo_dock_resize_icon_in_dock (pIcon, pNewDock);
 			if (bReloadAppletConf)
-				cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
+				cairo_dock_load_icon_text (pIcon);
 		}
 	}
 	

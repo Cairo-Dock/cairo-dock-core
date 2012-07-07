@@ -95,14 +95,6 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, doubl
 *@param pIcon the icon.
 */
 void cairo_dock_update_icon_texture (Icon *pIcon);
-/** Update the icon's label texture with its current label surface.
-*@param pIcon the icon.
-*/
-void cairo_dock_update_label_texture (Icon *pIcon);
-/** Update the icon's quick-info texture with its current quick-info surface.
-*@param pIcon the icon.
-*/
-void cairo_dock_update_quick_info_texture (Icon *pIcon);
 
 void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer, gboolean bStateChanged);
 

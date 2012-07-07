@@ -38,6 +38,7 @@
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-config.h"
+#include "cairo-dock-icon-manager.h"  // cairo_dock_free_icon
 #include "cairo-dock-module-factory.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-module-manager.h"

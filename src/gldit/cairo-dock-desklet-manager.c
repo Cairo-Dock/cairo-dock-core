@@ -208,11 +208,12 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 	
 	if (pDesklet->backGroundImageBuffer.pSurface != NULL)
 	{
-		cairo_set_source_surface (pCairoContext,
+		/**cairo_set_source_surface (pCairoContext,
 			pDesklet->backGroundImageBuffer.pSurface,
 			0.,
 			0.);
-			cairo_paint (pCairoContext);
+		cairo_paint (pCairoContext);*/
+		cairo_dock_apply_image_buffer_surface (&pDesklet->backGroundImageBuffer, pCairoContext);
 	}
 	
 	cairo_save (pCairoContext);
@@ -220,8 +221,8 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 	{
 		cairo_translate (pCairoContext, pDesklet->iLeftSurfaceOffset, pDesklet->iTopSurfaceOffset);
 		cairo_scale (pCairoContext,
-			1. - 1.*(pDesklet->iLeftSurfaceOffset + pDesklet->iRightSurfaceOffset) / pDesklet->container.iWidth,
-			1. - 1.*(pDesklet->iTopSurfaceOffset + pDesklet->iBottomSurfaceOffset) / pDesklet->container.iHeight);
+			1. - (double)(pDesklet->iLeftSurfaceOffset + pDesklet->iRightSurfaceOffset) / pDesklet->container.iWidth,
+			1. - (double)(pDesklet->iTopSurfaceOffset + pDesklet->iBottomSurfaceOffset) / pDesklet->container.iHeight);
 	}
 	
 	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->render != NULL)  // un moteur de rendu specifique a ete fourni.
@@ -232,11 +233,12 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 	
 	if (pDesklet->foreGroundImageBuffer.pSurface != NULL)
 	{
-		cairo_set_source_surface (pCairoContext,
+		/**cairo_set_source_surface (pCairoContext,
 			pDesklet->foreGroundImageBuffer.pSurface,
 			0.,
 			0.);
-			cairo_paint (pCairoContext);
+		cairo_paint (pCairoContext);*/
+		cairo_dock_apply_image_buffer_surface (&pDesklet->foreGroundImageBuffer, pCairoContext);
 	}
 	
 	if (! pDesklet->rotating)  // si on est en train de tourner, les boutons suivent le mouvement, sinon ils sont dans les coins.
@@ -248,19 +250,25 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 	{
 		if (s_pRotateButtonBuffer.pSurface != NULL)
 		{
-			cairo_set_source_surface (pCairoContext, s_pRotateButtonBuffer.pSurface, 0., 0.);
-			cairo_paint_with_alpha (pCairoContext, pDesklet->fButtonsAlpha);
+			/**cairo_set_source_surface (pCairoContext, s_pRotateButtonBuffer.pSurface, 0., 0.);
+			cairo_paint_with_alpha (pCairoContext, pDesklet->fButtonsAlpha);*/
+			cairo_dock_apply_image_buffer_surface_with_offset (&s_pRotateButtonBuffer, pCairoContext,
+				0., 0., pDesklet->fButtonsAlpha);
 		}
 		if (s_pRetachButtonBuffer.pSurface != NULL && g_pMainDock)
 		{
-			cairo_set_source_surface (pCairoContext, s_pRetachButtonBuffer.pSurface, pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize, 0.);
-			cairo_paint_with_alpha (pCairoContext, pDesklet->fButtonsAlpha);
+			/**cairo_set_source_surface (pCairoContext, s_pRetachButtonBuffer.pSurface, pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize, 0.);
+			cairo_paint_with_alpha (pCairoContext, pDesklet->fButtonsAlpha);*/
+			cairo_dock_apply_image_buffer_surface_with_offset (&s_pRetachButtonBuffer,pCairoContext,
+				pDesklet->container.iWidth - s_pRetachButtonBuffer.iWidth, 0., pDesklet->fButtonsAlpha);
 		}
 	}
 	if ((pDesklet->container.bInside || pDesklet->bNoInput || pDesklet->fButtonsAlpha) && s_pNoInputButtonBuffer.pSurface != NULL && pDesklet->bAllowNoClickable)
 	{
-		cairo_set_source_surface (pCairoContext, s_pNoInputButtonBuffer.pSurface, pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize, pDesklet->container.iHeight - myDeskletsParam.iDeskletButtonSize);
-		cairo_paint_with_alpha (pCairoContext, _no_input_button_alpha (pDesklet));
+		/**cairo_set_source_surface (pCairoContext, s_pNoInputButtonBuffer.pSurface, pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize, pDesklet->container.iHeight - myDeskletsParam.iDeskletButtonSize);
+		cairo_paint_with_alpha (pCairoContext, _no_input_button_alpha (pDesklet));*/
+		cairo_dock_apply_image_buffer_surface_with_offset (&s_pNoInputButtonBuffer, pCairoContext,
+			pDesklet->container.iWidth - s_pNoInputButtonBuffer.iWidth, pDesklet->container.iHeight - s_pNoInputButtonBuffer.iHeight, _no_input_button_alpha (pDesklet));
 	}
 	cairo_restore (pCairoContext);
 }
@@ -306,33 +314,36 @@ static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
 	
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_pbuffer ();
+	_cairo_dock_set_alpha (1.);
 	
-	if (pDesklet->backGroundImageBuffer.iTexture != 0/** && pDesklet->fBackGroundAlpha != 0*/)
+	if (pDesklet->backGroundImageBuffer.iTexture != 0)
 	{
-		_cairo_dock_apply_texture_at_size_with_alpha (pDesklet->backGroundImageBuffer.iTexture, pDesklet->container.iWidth, pDesklet->container.iHeight, 1./**pDesklet->fBackGroundAlpha*/);
+		cairo_dock_apply_image_buffer_texture (&pDesklet->backGroundImageBuffer);
+		///_cairo_dock_apply_texture_at_size_with_alpha (pDesklet->backGroundImageBuffer.iTexture, pDesklet->container.iWidth, pDesklet->container.iHeight, 1./**pDesklet->fBackGroundAlpha*/);
 	}
 	
 	glPushMatrix ();
 	if (pDesklet->iLeftSurfaceOffset != 0 || pDesklet->iTopSurfaceOffset != 0 || pDesklet->iRightSurfaceOffset != 0 || pDesklet->iBottomSurfaceOffset != 0)
 	{
 		glTranslatef ((pDesklet->iLeftSurfaceOffset - pDesklet->iRightSurfaceOffset)/2, (pDesklet->iBottomSurfaceOffset - pDesklet->iTopSurfaceOffset)/2, 0.);
-		glScalef (1. - 1.*(pDesklet->iLeftSurfaceOffset + pDesklet->iRightSurfaceOffset) / pDesklet->container.iWidth,
-			1. - 1.*(pDesklet->iTopSurfaceOffset + pDesklet->iBottomSurfaceOffset) / pDesklet->container.iHeight,
+		glScalef (1. - (double)(pDesklet->iLeftSurfaceOffset + pDesklet->iRightSurfaceOffset) / pDesklet->container.iWidth,
+			1. - (double)(pDesklet->iTopSurfaceOffset + pDesklet->iBottomSurfaceOffset) / pDesklet->container.iHeight,
 			1.);
 	}
 	
 	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->render_opengl != NULL)  // un moteur de rendu specifique a ete fourni.
 	{
-		_cairo_dock_set_alpha (1.);
+		//_cairo_dock_set_alpha (1.);
 		pDesklet->pRenderer->render_opengl (pDesklet);
 	}
 	glPopMatrix ();
 	
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_pbuffer ();
-	if (pDesklet->foreGroundImageBuffer.iTexture != 0/** && pDesklet->fForeGroundAlpha != 0*/)
+	if (pDesklet->foreGroundImageBuffer.iTexture != 0)
 	{
-		_cairo_dock_apply_texture_at_size_with_alpha (pDesklet->foreGroundImageBuffer.iTexture, pDesklet->container.iWidth, pDesklet->container.iHeight, 1./**pDesklet->fForeGroundAlpha*/);
+		cairo_dock_apply_image_buffer_texture (&pDesklet->foreGroundImageBuffer);
+		///_cairo_dock_apply_texture_at_size_with_alpha (pDesklet->foreGroundImageBuffer.iTexture, pDesklet->container.iWidth, pDesklet->container.iHeight, 1./**pDesklet->fForeGroundAlpha*/);
 	}
 	
 	//if (pDesklet->container.bInside && cairo_dock_desklet_is_free (pDesklet))
@@ -351,25 +362,31 @@ static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
 		_cairo_dock_set_alpha (sqrt(pDesklet->fButtonsAlpha));
 		if (s_pRotateButtonBuffer.iTexture != 0)
 		{
-			glPushMatrix ();
+			/**glPushMatrix ();
 			glTranslatef (-pDesklet->container.iWidth/2 + myDeskletsParam.iDeskletButtonSize/2,
 				pDesklet->container.iHeight/2 - myDeskletsParam.iDeskletButtonSize/2,
 				0.);
 			_cairo_dock_apply_texture_at_size (s_pRotateButtonBuffer.iTexture, myDeskletsParam.iDeskletButtonSize, myDeskletsParam.iDeskletButtonSize);
-			glPopMatrix ();
+			glPopMatrix ();*/
+			cairo_dock_apply_image_buffer_texture_with_offset (&s_pRotateButtonBuffer,
+				-pDesklet->container.iWidth/2 + s_pRotateButtonBuffer.iWidth/2,
+				pDesklet->container.iHeight/2 - s_pRotateButtonBuffer.iHeight/2);
 		}
 		if (s_pRetachButtonBuffer.iTexture != 0 && g_pMainDock)
 		{
-			glPushMatrix ();
+			/**glPushMatrix ();
 			glTranslatef (pDesklet->container.iWidth/2 - myDeskletsParam.iDeskletButtonSize/2,
 				pDesklet->container.iHeight/2 - myDeskletsParam.iDeskletButtonSize/2,
 				0.);
 			_cairo_dock_apply_texture_at_size (s_pRetachButtonBuffer.iTexture, myDeskletsParam.iDeskletButtonSize, myDeskletsParam.iDeskletButtonSize);
-			glPopMatrix ();
+			glPopMatrix ();*/
+			cairo_dock_apply_image_buffer_texture_with_offset (&s_pRetachButtonBuffer,
+				pDesklet->container.iWidth/2 - s_pRetachButtonBuffer.iWidth/2,
+				pDesklet->container.iHeight/2 - s_pRetachButtonBuffer.iHeight/2);
 		}
 		if (s_pDepthRotateButtonBuffer.iTexture != 0)
 		{
-			glPushMatrix ();
+			/**glPushMatrix ();
 			glTranslatef (0.,
 				pDesklet->container.iHeight/2 - myDeskletsParam.iDeskletButtonSize/2,
 				0.);
@@ -382,6 +399,16 @@ static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
 				pDesklet->container.iWidth/2 - myDeskletsParam.iDeskletButtonSize/2,
 				0.);
 			_cairo_dock_apply_texture_at_size (s_pDepthRotateButtonBuffer.iTexture, myDeskletsParam.iDeskletButtonSize, myDeskletsParam.iDeskletButtonSize);
+			glPopMatrix ();*/
+			cairo_dock_apply_image_buffer_texture_with_offset (&s_pDepthRotateButtonBuffer,
+				0.,
+				pDesklet->container.iHeight/2 - s_pDepthRotateButtonBuffer.iHeight/2);
+			
+			glPushMatrix ();
+			glRotatef (90., 0., 0., 1.);
+			cairo_dock_apply_image_buffer_texture_with_offset (&s_pDepthRotateButtonBuffer,
+				0.,
+				pDesklet->container.iWidth/2 - s_pDepthRotateButtonBuffer.iHeight/2);
 			glPopMatrix ();
 		}
 	}
@@ -389,12 +416,15 @@ static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
 	{
 		_cairo_dock_set_blend_alpha ();
 		_cairo_dock_set_alpha (_no_input_button_alpha(pDesklet));
-		glPushMatrix ();
+		/**glPushMatrix ();
 		glTranslatef (pDesklet->container.iWidth/2 - myDeskletsParam.iDeskletButtonSize/2,
 			- pDesklet->container.iHeight/2 + myDeskletsParam.iDeskletButtonSize/2,
 			0.);
 		_cairo_dock_apply_texture_at_size (s_pNoInputButtonBuffer.iTexture, myDeskletsParam.iDeskletButtonSize, myDeskletsParam.iDeskletButtonSize);
-		glPopMatrix ();
+		glPopMatrix ();*/
+		cairo_dock_apply_image_buffer_texture_with_offset (&s_pNoInputButtonBuffer,
+			pDesklet->container.iWidth/2 - s_pNoInputButtonBuffer.iWidth/2,
+			- pDesklet->container.iHeight/2 + s_pNoInputButtonBuffer.iHeight/2);
 	}
 	
 	_cairo_dock_disable_texture ();
@@ -663,8 +693,8 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 	if (pDesklet->iLeftSurfaceOffset != 0 || pDesklet->iTopSurfaceOffset != 0 || pDesklet->iRightSurfaceOffset != 0 || pDesklet->iBottomSurfaceOffset != 0)
 	{
 		glTranslatef ((pDesklet->iLeftSurfaceOffset - pDesklet->iRightSurfaceOffset)/2, (pDesklet->iBottomSurfaceOffset - pDesklet->iTopSurfaceOffset)/2, 0.);
-		glScalef (1. - 1.*(pDesklet->iLeftSurfaceOffset + pDesklet->iRightSurfaceOffset) / pDesklet->container.iWidth,
-			1. - 1.*(pDesklet->iTopSurfaceOffset + pDesklet->iBottomSurfaceOffset) / pDesklet->container.iHeight,
+		glScalef (1. - (double)(pDesklet->iLeftSurfaceOffset + pDesklet->iRightSurfaceOffset) / pDesklet->container.iWidth,
+			1. - (double)(pDesklet->iTopSurfaceOffset + pDesklet->iBottomSurfaceOffset) / pDesklet->container.iHeight,
 			1.);
 	}
 	

@@ -18,23 +18,26 @@
 */
 
 
-#ifndef __CAIRO_DOCK_LOAD__
-#define  __CAIRO_DOCK_LOAD__
+#ifndef __CAIRO_DOCK_IMAGE_BUFFER__
+#define  __CAIRO_DOCK_IMAGE_BUFFER__
 
 #include <glib.h>
 #include <sys/time.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-icon-manager.h"
-#include "cairo-dock-surface-factory.h"
+///#include "cairo-dock-icon-manager.h"
+#include "cairo-dock-surface-factory.h"  // CairoDockLoadImageModifier
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-image-buffer.h This class defines a simple image loader interface.
-* It also handles the main image buffers of the dock.
-* Use \ref cairo_dock_create_image_buffer to create an image buffer from a file, or \ref cairo_dock_load_image_buffer to load an image into an existing immage buffer.
+*@file cairo-dock-image-buffer.h This class defines a generic image API that works for both Cairo and OpenGL.
+* It allows to easily load and display images, without having to care the rendering mode.
+* It supports animated images (an animated image is made of several frames, ordered side by side from left to right).
+* 
+* Use \ref cairo_dock_create_image_buffer to create an image buffer from a file, or \ref cairo_dock_load_image_buffer to load an image into an existing image buffer.
 * Use \ref cairo_dock_free_image_buffer to destroy it or \ref cairo_dock_unload_image_buffer to unload and reset it to 0.
-* If you just want to load an image into a mere cairo_surface, use the functions of the surface-factory.
+* 
+* Use \ref cairo_dock_apply_image_buffer_surface or \ref cairo_dock_apply_image_buffer_texture to display the image.
 */
 
 
@@ -47,9 +50,9 @@ struct _CairoDockImageBuffer {
 	gdouble fZoomX;
 	gdouble fZoomY;
 	gint iNbFrames;  // nb frames in the case of an animated image.
-	gdouble iCurrentFrame;
-	gdouble fDeltaFrame;  // dt for 1 frame
-	struct timeval time;
+	gdouble iCurrentFrame; // current frame, the decimal part indicates we are between 2 frames.
+	gdouble fDeltaFrame;  // duration of 1 frame
+	struct timeval time;  // time the current frame has been set
 	} ;
 
 void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);

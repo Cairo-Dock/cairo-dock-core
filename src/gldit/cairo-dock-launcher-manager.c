@@ -388,7 +388,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		icon->cName = g_strdup (" ");
 	
 	if (cairo_dock_strings_differ (cName, icon->cName))
-		cairo_dock_load_icon_text (icon, &myIconsParam.iconTextDescription);
+		cairo_dock_load_icon_text (icon);
 	
 	// set sub-dock renderer
 	if (icon->pSubDock != NULL)  // son rendu a pu changer.

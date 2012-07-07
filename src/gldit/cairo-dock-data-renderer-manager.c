@@ -97,6 +97,7 @@ CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 	
 	CairoDataRenderer *pRenderer = g_malloc0 (pRecord->iStructSize);
 	memcpy (&pRenderer->interface, &pRecord->interface, sizeof (CairoDataRendererInterface));
+	pRenderer->bUseOverlay = pRecord->bUseOverlay;
 	return pRenderer;
 }
 

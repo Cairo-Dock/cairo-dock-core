@@ -983,16 +983,20 @@ static void unload (Gauge *pGauge)
 //////////////////////////////////////////
 void cairo_dock_register_data_renderer_gauge (void)
 {
+	// create a new record
 	CairoDockDataRendererRecord *pRecord = g_new0 (CairoDockDataRendererRecord, 1);
-	pRecord->interface.load			= (CairoDataRendererLoadFunc) load;
-	pRecord->interface.render		= (CairoDataRendererRenderFunc) render;
-	pRecord->interface.render_opengl	= (CairoDataRendererRenderOpenGLFunc) render_opengl;
-	pRecord->interface.reload		= (CairoDataRendererReloadFunc) reload;
-	pRecord->interface.unload		= (CairoDataRendererUnloadFunc) unload;
-	pRecord->iStructSize			= sizeof (Gauge);
-	pRecord->cThemeDirName 			= "gauges";
-	pRecord->cDistantThemeDirName 	= "gauges3";
-	pRecord->cDefaultTheme 			= "Turbo-night-fuel";
 	
+	// fill the properties we need
+	pRecord->interface.load          = (CairoDataRendererLoadFunc) load;
+	pRecord->interface.render        = (CairoDataRendererRenderFunc) render;
+	pRecord->interface.render_opengl = (CairoDataRendererRenderOpenGLFunc) render_opengl;
+	pRecord->interface.reload        = (CairoDataRendererReloadFunc) reload;
+	pRecord->interface.unload        = (CairoDataRendererUnloadFunc) unload;
+	pRecord->iStructSize             = sizeof (Gauge);
+	pRecord->cThemeDirName           = "gauges";
+	pRecord->cDistantThemeDirName    = "gauges3";
+	pRecord->cDefaultTheme           = "Turbo-night-fuel";
+	
+	// register
 	cairo_dock_register_data_renderer ("gauge", pRecord);
 }

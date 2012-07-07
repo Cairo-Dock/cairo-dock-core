@@ -203,8 +203,8 @@ void cairo_dock_fill_gl_path (const CairoDockGLPath *pPath, GLuint iTexture)
 {
 	//\__________________ On active l'antialiasing.
 	glPolygonMode (GL_FRONT, GL_FILL);
-	glEnable (GL_POLYGON_SMOOTH);  // marche po :-(
-	glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	//glEnable (GL_POLYGON_SMOOTH);  // makes horrible white lines where the triangles overlaps :-/
+	//glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	glEnable (GL_BLEND);  // On active le blend pour l'antialiasing.
 	
 	//\__________________ On mappe la texture dans le cadre.
@@ -250,7 +250,7 @@ void cairo_dock_fill_gl_path (const CairoDockGLPath *pPath, GLuint iTexture)
 		glPopMatrix ();
 		glMatrixMode (GL_MODELVIEW);
 	}
-	glDisable (GL_POLYGON_SMOOTH);
+	//glDisable (GL_POLYGON_SMOOTH);
 	glDisable (GL_BLEND);
 }
 
@@ -268,12 +268,16 @@ const CairoDockGLPath *cairo_dock_generate_rectangle_path (double fFrameWidth, d
 	double r = fRadius;
 	
 	int ddeg = (fRadius < 5 ? 6 : 3);
-	int iNbPoins1Round = 90/15;
+	int iNbPoins1Round = 90/10;
 	if (pPath == NULL)
-		pPath = cairo_dock_new_gl_path ((iNbPoins1Round+1)*4+1, w+r, h, fTotalWidth, fTotalHeight);  // on commence au coin haut droit pour avoir une bonne triangulation du polygone, et en raisonnant par rapport au centre du rectangle.
+	{
+		pPath = cairo_dock_new_gl_path ((iNbPoins1Round+1)*4+1, w+r, h, fTotalWidth, fTotalHeight);  // on commence au centre droit pour avoir une bonne triangulation du polygone, et en raisonnant par rapport au centre du rectangle.
+		///pPath = cairo_dock_new_gl_path ((iNbPoins1Round+1)*4+1, 0, 0, fTotalWidth, fTotalHeight);  // on commence au centre pour avoir une bonne triangulation
+	}
 	else
 	{
 		cairo_dock_gl_path_move_to (pPath, w+r, h);
+		///cairo_dock_gl_path_move_to (pPath, 0, 0);
 		cairo_dock_gl_path_set_extent (pPath, fTotalWidth, fTotalHeight);
 	}
 	//cairo_dock_gl_path_move_to (pPath, 0., h+r);

@@ -34,6 +34,7 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_syncl
 #include "cairo-dock-X-utilities.h"  // cairo_dock_property_is_present_on_root
+#include "cairo-dock-icon-manager.h"  // cairo_dock_free_icon
 #define _MANAGER_DEF_
 #include "cairo-dock-file-manager.h"
 

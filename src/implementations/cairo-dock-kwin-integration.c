@@ -29,6 +29,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-icon-manager.h"  // myIconsParam.fAmplitude
 #include "cairo-dock-kwin-integration.h"
 
 static DBusGProxy *s_pKwinAccelProxy = NULL;

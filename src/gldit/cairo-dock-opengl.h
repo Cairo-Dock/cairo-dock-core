@@ -107,6 +107,9 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 */
 void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
 
+gboolean cairo_dock_begin_draw_image_buffer (CairoDockImageBuffer *pImage, CairoContainer *pContainer, gint iRenderingMode);
+
+void cairo_dock_end_draw_image_buffer (CairoDockImageBuffer *pImage, CairoContainer *pContainer);
 
   /////////////
  // CONTEXT //

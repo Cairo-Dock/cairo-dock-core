@@ -152,7 +152,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 		pDesklet->iDesiredWidth = 0;
 		pDesklet->iDesiredHeight = 0;
 		
-		cairo_dock_load_desklet_decorations (pDesklet);
+		cairo_dock_load_desklet_decorations (pDesklet);  // reload the decorations at the new desklet size.
 		
 		if (pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
 		{

@@ -821,8 +821,8 @@ static void _calculate_icons (const gchar *cDockName, CairoDock *pDock, gpointer
 
 static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, CairoIconsParam *pLabels)
 {
-	cairo_dock_load_icon_text (pIcon, &pLabels->iconTextDescription);
-	cairo_dock_load_icon_quickinfo (pIcon, &pLabels->quickInfoTextDescription);
+	cairo_dock_load_icon_text (pIcon);
+	cairo_dock_load_icon_quickinfo (pIcon);
 }
 static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {

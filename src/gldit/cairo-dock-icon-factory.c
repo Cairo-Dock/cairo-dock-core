@@ -78,16 +78,16 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 		g_strfreev (icon->pMimeTypes);
 	
 	cairo_surface_destroy (icon->pIconBuffer);
-	///cairo_surface_destroy (icon->pReflectionBuffer);
-	cairo_surface_destroy (icon->pTextBuffer);
-	cairo_surface_destroy (icon->pQuickInfoBuffer);
+	/**cairo_surface_destroy (icon->pTextBuffer);
+	cairo_surface_destroy (icon->pQuickInfoBuffer);*/
 	
 	if (icon->iIconTexture != 0)
 		_cairo_dock_delete_texture (icon->iIconTexture);
-	if (icon->iLabelTexture != 0)
+	/**if (icon->iLabelTexture != 0)
 		_cairo_dock_delete_texture (icon->iLabelTexture);
 	if (icon->iQuickInfoTexture != 0)
-		_cairo_dock_delete_texture (icon->iQuickInfoTexture);
+		_cairo_dock_delete_texture (icon->iQuickInfoTexture);*/
+	cairo_dock_unload_image_buffer (&icon->label);
 	cairo_dock_destroy_icon_overlays (icon);
 }
 
@@ -201,16 +201,18 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	}
 }
 
-void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDescription)
+void cairo_dock_load_icon_text (Icon *icon)
 {
-	cairo_surface_destroy (icon->pTextBuffer);
+	/**cairo_surface_destroy (icon->pTextBuffer);
 	icon->pTextBuffer = NULL;
 	if (icon->iLabelTexture != 0)
 	{
 		_cairo_dock_delete_texture (icon->iLabelTexture);
 		icon->iLabelTexture = 0;
-	}
-	if (icon->cName == NULL || (pTextDescription->iSize == 0))
+	}*/
+	cairo_dock_unload_image_buffer (&icon->label);
+	
+	if (icon->cName == NULL || (myIconsParam.iconTextDescription.iSize == 0))
 		return ;
 
 	gchar *cTruncatedName = NULL;
@@ -219,7 +221,7 @@ void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDesc
 		cTruncatedName = cairo_dock_cut_string (icon->cName, myTaskbarParam.iAppliMaxNameLength);
 	}
 	
-	double fTextXOffset, fTextYOffset;
+	/**double fTextXOffset, fTextYOffset;
 	cairo_surface_t* pNewSurface = cairo_dock_create_surface_from_text ((cTruncatedName != NULL ? cTruncatedName : icon->cName),
 		pTextDescription,
 		&icon->iTextWidth, &icon->iTextHeight);
@@ -231,12 +233,18 @@ void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDesc
 	if (g_bUseOpenGL && icon->pTextBuffer != NULL)
 	{
 		icon->iLabelTexture = cairo_dock_create_texture_from_surface (icon->pTextBuffer);
-	}
+	}*/
+	int iWidth, iHeight;
+	cairo_surface_t *pSurface = cairo_dock_create_surface_from_text ((cTruncatedName != NULL ? cTruncatedName : icon->cName),
+		&myIconsParam.iconTextDescription,
+		&iWidth,
+		&iHeight);
+	cairo_dock_load_image_buffer_from_surface (&icon->label, pSurface, iWidth, iHeight);
 }
 
-void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTextDescription)
+void cairo_dock_load_icon_quickinfo (Icon *icon)
 {
-	cairo_surface_destroy (icon->pQuickInfoBuffer);
+	/**cairo_surface_destroy (icon->pQuickInfoBuffer);
 	icon->pQuickInfoBuffer = NULL;
 	if (icon->iQuickInfoTexture != 0)
 	{
@@ -256,6 +264,27 @@ void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTex
 	if (g_bUseOpenGL && icon->pQuickInfoBuffer != NULL)
 	{
 		icon->iQuickInfoTexture = cairo_dock_create_texture_from_surface (icon->pQuickInfoBuffer);
+	}*/
+	if (icon->cQuickInfo == NULL)  // no more quick-info -> remove any previous one
+	{
+		cairo_dock_remove_overlay_at_position (icon, CAIRO_OVERLAY_BOTTOM, (gpointer)"quick-info");
+	}
+	else  // add an overlay at the bottom with the text surface; any previous "quick-info" overlay will be removed.
+	{
+		int iWidth, iHeight;
+		cairo_dock_get_icon_extent (icon, &iWidth, &iHeight);
+		double fMaxScale = cairo_dock_get_icon_max_scale (icon);
+		if (iHeight / (myIconsParam.quickInfoTextDescription.iSize * fMaxScale) > 5)  // if the icon is very height (the text occupies less than 20% of the icon)
+			fMaxScale = MIN ((double)iHeight / (myIconsParam.quickInfoTextDescription.iSize * 5), MAX (1., 16./myIconsParam.quickInfoTextDescription.iSize) * fMaxScale);  // let's make it use 20% of the icon's height, limited to 16px
+		int w, h;
+		cairo_surface_t *pSurface = cairo_dock_create_surface_from_text_full (icon->cQuickInfo,
+			&myIconsParam.quickInfoTextDescription,
+			fMaxScale,
+			iWidth,  // limit the text to the width of the icon
+			&w, &h);
+		CairoOverlay *pOverlay = cairo_dock_add_overlay_from_surface (icon, pSurface, w, h, CAIRO_OVERLAY_BOTTOM, (gpointer)"quick-info");  // the constant string "quick-info" is used as a unique identifier for all quick-infos; the surface is taken by the overlay.
+		if (pOverlay)
+			cairo_dock_set_overlay_scale (pOverlay, 0);
 	}
 }
 
@@ -271,9 +300,9 @@ void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 	
 	cairo_dock_load_icon_image (pIcon, pContainer);
 
-	cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
+	cairo_dock_load_icon_text (pIcon);
 
-	cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription);
+	cairo_dock_load_icon_quickinfo (pIcon);
 }
 
 static gboolean _load_icon_buffer_idle (Icon *pIcon)
@@ -286,7 +315,7 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 	{
 		cairo_dock_load_icon_image (pIcon, pContainer);
 		
-		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription);
+		cairo_dock_load_icon_quickinfo (pIcon);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
 		//g_print ("icon-factory: do 1 main loop iteration\n");
@@ -299,8 +328,8 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon)
 	if (pIcon->iSidLoadImage == 0)
 	{
 		//g_print ("trigger load for %s (%x)\n", pIcon->cName, pContainer);
-		if (!pIcon->pTextBuffer)
-			cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);  // la vue peut avoir besoin de connaitre la taille du texte.
+		if (!pIcon->label.pSurface)
+			cairo_dock_load_icon_text (pIcon);  // la vue peut avoir besoin de connaitre la taille du texte.
 		pIcon->iSidLoadImage = g_idle_add ((GSourceFunc)_load_icon_buffer_idle, pIcon);
 	}
 }

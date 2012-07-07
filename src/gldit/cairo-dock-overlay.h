@@ -109,7 +109,7 @@ CairoOverlay *cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture,
  *@param pOverlay the overlay
  *@param fScale the scale
  */
-#define cairo_dock_set_overlay_scale(pOverlay, fScale) (pOverlay)->fScale = fScale
+#define cairo_dock_set_overlay_scale(pOverlay, _fScale) (pOverlay)->fScale = _fScale
 
 /** Get the image buffer of an overlay (only useful if you need to redraw the overlay).
  *@param pOverlay the overlay

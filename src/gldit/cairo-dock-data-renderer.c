@@ -37,8 +37,10 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-packages.h"
+#include "cairo-dock-overlay.h"
 #include "cairo-dock-gauge.h"
 #include "cairo-dock-graph.h"
+#include "cairo-dock-progressbar.h"
 #include "cairo-dock-data-renderer.h"
 
 extern gboolean g_bUseOpenGL;
@@ -220,8 +222,16 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 
 static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer)
 {
-	if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 0))
-		return ;
+	if (pRenderer->bUseOverlay)
+	{
+		if (! cairo_dock_begin_draw_image_buffer (&pRenderer->pOverlay->image, pContainer, 0))
+			return ;
+	}
+	else
+	{
+		if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 0))
+			return ;
+	}
 	
 	//\________________ On dessine.
 	glPushMatrix ();
@@ -244,7 +254,14 @@ static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *p
 	}*/
 	glPopMatrix ();
 	
-	cairo_dock_end_draw_icon (pIcon, pContainer);
+	if (pRenderer->bUseOverlay)
+	{
+		cairo_dock_end_draw_image_buffer (&pRenderer->pOverlay->image, pContainer);
+	}
+	else
+	{
+		cairo_dock_end_draw_icon (pIcon, pContainer);
+	}
 }
 
 void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iNumValue, cairo_t *pCairoContext)
@@ -321,6 +338,14 @@ void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iN
 
 static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext)
 {
+	cairo_t *ctx = NULL;
+	if (pRenderer->bUseOverlay && pRenderer->pOverlay != NULL && pRenderer->pOverlay->image.pSurface != NULL)
+	{
+		ctx = cairo_create (pRenderer->pOverlay->image.pSurface);
+		cairo_dock_erase_cairo_context (ctx);
+		pCairoContext = ctx;
+	}
+	
 	//\________________ On efface tout.
 	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
@@ -356,7 +381,15 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 	}*/
 	
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
-		cairo_dock_update_icon_texture (pIcon);
+	{
+		if (pRenderer->bUseOverlay)
+			pRenderer->pOverlay->image.iTexture = cairo_dock_create_texture_from_surface (pRenderer->pOverlay->image.pSurface);
+		else
+			cairo_dock_update_icon_texture (pIcon);
+	}
+	
+	if (ctx != NULL)
+		cairo_destroy (ctx);
 }
 
 static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
@@ -382,7 +415,7 @@ static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUse
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer, gboolean bLoadTextures)
+static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer, gboolean bLoadTextures, Icon *pIcon)
 {
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	//\___________________ On charge les emblemes si l'implementation les a valides.
@@ -474,6 +507,15 @@ static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer,
 		//g_print ("+++++++pText->fWidth * pRenderer->iWidth : %.2f\n", pText->fWidth * pRenderer->iWidth);
 		pRenderer->bCanRenderValueAsText = (pText->fWidth * pRenderer->iWidth >= CD_MIN_TEXT_WITH);
 	}
+	
+	//\___________________ Build an overlay if the renderer will use some.
+	if (pRenderer->bUseOverlay)
+	{
+		g_print ("+ overlay %dx%d\n", pRenderer->iWidth, pRenderer->iHeight);
+		cairo_surface_t *pSurface = cairo_dock_create_blank_surface (pRenderer->iWidth, pRenderer->iHeight);
+		pRenderer->pOverlay = cairo_dock_add_overlay_from_surface (pIcon, pSurface, pRenderer->iWidth, pRenderer->iHeight, CAIRO_OVERLAY_BOTTOM, (gpointer)"data-renderer");  // this string is constant; any previous overlay will be removed.
+		cairo_dock_set_overlay_scale (pRenderer->pOverlay, 0);  // keep the original size of the image
+	}
 }
 
 void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute)
@@ -506,7 +548,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 	pRenderer->interface.load (pRenderer, pContainer, pAttribute);
 	
 	//\___________________ On charge les overlays si l'implementation les a valides.
-	_cairo_dock_finish_load_data_renderer (pRenderer, bLoadTextures);
+	_cairo_dock_finish_load_data_renderer (pRenderer, bLoadTextures, pIcon);
 }
 
 
@@ -655,6 +697,8 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 	
 	g_free (pRenderer->pValuesText);
 	
+	cairo_dock_destroy_overlay (pRenderer->pOverlay);
+	
 	g_free (pRenderer);
 }
 
@@ -688,7 +732,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCont
 		pOldRenderer->interface.reload (pOldRenderer);
 		
 		gboolean bLoadTextures = (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pOldRenderer->interface.render_opengl);
-		_cairo_dock_finish_load_data_renderer (pOldRenderer, bLoadTextures);
+		_cairo_dock_finish_load_data_renderer (pOldRenderer, bLoadTextures, pIcon);
 	}
 	else  // on recree le data-renderer avec les nouveaux attributs.
 	{
@@ -787,4 +831,5 @@ void cairo_dock_register_built_in_data_renderers (void)  /// merge with init.
 {
 	cairo_dock_register_data_renderer_graph ();
 	cairo_dock_register_data_renderer_gauge ();
+	cairo_dock_register_data_renderer_progressbar ();
 }
