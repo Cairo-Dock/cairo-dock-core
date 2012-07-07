@@ -87,6 +87,7 @@
 #include <gldit/cairo-dock-applet-canvas.h>
 // classes presque independantes de CD.
 #include <gldit/cairo-dock-packages.h>
+#include <implementations/cairo-dock-progressbar.h>
 #include <implementations/cairo-dock-graph.h>
 #include <implementations/cairo-dock-gauge.h>
 #include <gldit/cairo-dock-notifications.h>
