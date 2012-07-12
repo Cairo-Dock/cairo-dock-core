@@ -126,6 +126,14 @@ static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, con
 			g_path_get_basename (cFilePath) :
 			g_strdup (cFilePath) :
 		g_path_get_basename (cTemplateFile));
+
+	if (! g_str_has_suffix (cBaseName, ".desktop")) // if we have a script (.sh file) => add '.desktop'
+	{
+		gchar *cTmpBaseName = g_strdup_printf ("%s.desktop", cBaseName);
+		g_free (cBaseName);
+		cBaseName = cTmpBaseName;
+	}
+
 	gchar *cNewDesktopFileName = _cairo_dock_generate_desktop_filename (cBaseName, g_cCurrentLaunchersPath);
 	g_free (cBaseName);
 	
