@@ -2411,15 +2411,28 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_DOCK_LIST :  // liste des docks existant.
 			{
 				GtkListStore *pDocksListStore = _cairo_dock_build_dock_list_for_gui ();
-				
+				GtkTreeIter iter;
+
+				// Do not add itself if it's a container
+				GError *error;
+				int iIconType = g_key_file_get_integer (pKeyFile, cGroupName, "Icon Type", &error);
+				if (error != NULL) // it's certainly not a container
+					g_error_free (error);
+				else if (iIconType == CAIRO_DOCK_ICON_TYPE_CONTAINER) // it's a container
+				{
+					gchar *cContainerName = g_key_file_get_string (pKeyFile, cGroupName, "Name", NULL);
+					if (cContainerName && _cairo_dock_find_iter_from_name (pDocksListStore, cContainerName, &iter))
+						gtk_list_store_remove (pDocksListStore, &iter);
+					g_free (cContainerName);
+				}
+
 				pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (pDocksListStore));
 				rend = gtk_cell_renderer_text_new ();
 				gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
 				gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 				
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
-				GtkTreeIter iter;
-				gboolean bIterFound = False;
+				gboolean bIterFound = FALSE;
 				if (cValue == NULL || *cValue == '\0')  // dock not specified => it's the main dock
 					bIterFound = _cairo_dock_find_iter_from_name (pDocksListStore, CAIRO_DOCK_MAIN_DOCK_NAME, &iter);
 				else

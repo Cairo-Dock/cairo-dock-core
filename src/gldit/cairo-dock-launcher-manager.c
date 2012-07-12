@@ -49,6 +49,12 @@ extern gchar *g_cCurrentLaunchersPath;
 
 static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
 {
+	if (icon->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER && g_strcmp0 (icon->cName, icon->cParentDockName) == 0) // a container in itself...
+	{
+		cd_warning ("It seems we have a sub-dock in itself! => its parent dock is now the main dock");
+		cairo_dock_write_container_name_in_conf_file (icon, CAIRO_DOCK_MAIN_DOCK_NAME); // => to the main dock...
+	}
+
 	//\____________ On cree son container si necessaire.
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)
