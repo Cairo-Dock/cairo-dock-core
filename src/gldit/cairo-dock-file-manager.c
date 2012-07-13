@@ -125,7 +125,15 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 		//s_pEnvBackend->launch_uri (cURI);
 		GError *erreur = NULL;
 		gchar *cThreadURI = g_strdup (cURI);
+		#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
 		GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_fm_launch_uri_threaded, (gpointer) cThreadURI, FALSE, &erreur);
+		#else
+		// The name can be useful for discriminating threads in a debugger.
+		// Some systems restrict the length of name to 16 bytes. 
+		gchar *cThreadName = g_strndup (cURI, 15);
+		GThread* pThread = g_thread_try_new (cThreadName, (GThreadFunc) _cairo_dock_fm_launch_uri_threaded, (gpointer) cThreadURI, &erreur);
+		g_free (cThreadName);
+		#endif
 		if (erreur != NULL)
 		{
 			cd_warning (erreur->message);

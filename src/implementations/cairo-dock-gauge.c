@@ -180,7 +180,7 @@ static void __load_needle (GaugeIndicator *pGaugeIndicator, int iWidth, int iHei
 	rsvg_handle_render_cairo (pSvgHandle, pDrawingContext);
 	
 	cairo_destroy (pDrawingContext);
-	rsvg_handle_free (pSvgHandle);
+	g_object_unref (pSvgHandle);
 	
 	// load it into an image buffer.
 	cairo_dock_load_image_buffer_from_surface (&pGaugeImage->image, pNeedleSurface, iWidth, iHeight);

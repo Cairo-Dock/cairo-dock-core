@@ -76,8 +76,10 @@ void gldi_init (GldiRenderingMethod iRendering)
 	_gldi_register_core_managers ();
 	
 	// init lib
+	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
+	#endif
 	
 	//\___________________ On initialise les numeros de version.
 	cairo_dock_get_version_from_string (GLDI_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);

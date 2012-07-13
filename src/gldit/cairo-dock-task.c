@@ -101,7 +101,11 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 		if (g_atomic_int_compare_and_exchange (&pTask->iThreadIsRunning, 0, 1))  // il etait egal a 0, on lui met 1 et on lance le thread.
 		{
 			GError *erreur = NULL;
+			#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
 			GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, pTask, FALSE, &erreur);
+			#else
+			GThread* pThread = g_thread_try_new ("Cairo-Dock Task", (GThreadFunc) _cairo_dock_threaded_calculation, pTask, &erreur);
+			#endif
 			if (erreur != NULL)  // on n'a pas pu lancer le thread.
 			{
 				cd_warning (erreur->message);

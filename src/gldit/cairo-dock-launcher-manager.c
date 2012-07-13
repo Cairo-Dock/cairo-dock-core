@@ -510,9 +510,17 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 	
 	if (cCommandFull == NULL)
 		cCommandFull = g_strdup (cCommand);
-	
+
 	GError *erreur = NULL;
+	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
 	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, FALSE, &erreur);
+	#else
+	// The name can be useful for discriminating threads in a debugger.
+	// Some systems restrict the length of name to 16 bytes. 
+	gchar *cThreadName = g_strndup (cCommand, 15);
+	GThread* pThread = g_thread_try_new (cThreadName, (GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, &erreur);
+	g_free (cThreadName);
+	#endif
 	if (erreur != NULL)
 	{
 		cd_warning ("couldn't launch this command (%s : %s)", cCommandFull, erreur->message);

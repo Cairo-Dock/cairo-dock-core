@@ -875,7 +875,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 			gtk_widget_show (s_pPreviewBox);
 
 		gtk_image_set_from_pixbuf (GTK_IMAGE (pPreviewImage), pPreviewPixbuf);
-		gdk_pixbuf_unref (pPreviewPixbuf);
+		g_object_unref (pPreviewPixbuf);
 	}
 	
 	cairo_dock_dialog_unreference (s_pDialog);
@@ -906,7 +906,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 static GtkButton *s_pCurrentButton = NULL;
 static gboolean on_enter_group_button (GtkButton *button, GdkEventCrossing *pEvent, CairoDockGroupDescription *pGroupDescription)
 {
-	g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
+	cd_debug ("%s (%s)", __func__, pGroupDescription->cGroupName);
 	if (g_pPrimaryContainer == NULL)  // inutile en maintenance, le dialogue risque d'apparaitre sur la souris.
 		return FALSE;
 	
@@ -945,7 +945,7 @@ static gboolean _check_group_button (gpointer data)
 }
 static gboolean on_leave_group_button (GtkButton *button, GdkEventCrossing *pEvent, gpointer data)
 {
-	g_print ("%s (%d, %d)\n", __func__, pEvent->mode, pEvent->detail);
+	cd_debug ("%s (%d, %d)", __func__, pEvent->mode, pEvent->detail);
 	// if we were about to show the dialog, cancel.
 	if (s_iSidShowGroupDialog != 0)
 	{
@@ -963,7 +963,13 @@ static gboolean on_leave_group_button (GtkButton *button, GdkEventCrossing *pEve
 	if (pEvent->detail != GDK_NOTIFY_ANCESTOR)  // a LeaveNotify event not within the same window (ie, either an Alt+Tab or the dialog that spawned under the cursor)
 	{
 		int x, y;
+		#if GTK_CHECK_VERSION (3, 4, 0)
+		GdkDevice *pDevice = gdk_device_manager_get_client_pointer (
+			gdk_display_get_device_manager (gtk_widget_get_display (GTK_WIDGET (button))));
+		gdk_window_get_device_position (gtk_widget_get_window (GTK_WIDGET (button)), pDevice, &x, &y, NULL);
+		#else
 		gtk_widget_get_pointer (GTK_WIDGET (button), &x, &y);
+		#endif
 		GtkAllocation allocation;
 		gtk_widget_get_allocation (GTK_WIDGET (button), &allocation);
 		if (x >= 0 && x < allocation.width && y >= 0 && y < allocation.height)  // we are actually still inside the button, ignore the event, we'll get an 'enter' event as soon as the dialog's input shape is ready.
@@ -1331,7 +1337,7 @@ static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 		if (pixbuf != NULL)
 		{
 			pImage = gtk_image_new_from_pixbuf (pixbuf);
-			gdk_pixbuf_unref (pixbuf);
+			g_object_unref (pixbuf);
 		}
 	}
 	return pImage;
@@ -2380,7 +2386,7 @@ static GtkWidget *cairo_dock_present_group_widget (const gchar *cConfFilePath, C
 				if (pixbuf != NULL)
 				{
 					gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
-					gdk_pixbuf_unref (pixbuf);
+					g_object_unref (pixbuf);
 				}
 				gtk_container_add (GTK_CONTAINER (pLabelContainer),
 					pImage);

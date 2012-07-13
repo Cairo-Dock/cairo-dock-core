@@ -852,8 +852,10 @@ int main (int argc, char** argv)
 	signal (SIGABRT, NULL);
 	signal (SIGTERM, NULL);
 	gldi_free_all ();
-	
+
+	#if (LIBRSVG_MAJOR_VERSION == 2 && LIBRSVG_MINOR_VERSION < 36)
 	rsvg_term ();
+	#endif
 	xmlCleanupParser ();
 	g_string_free (s_pLaunchCommand, TRUE);
 	

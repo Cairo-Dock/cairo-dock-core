@@ -335,7 +335,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 			1);
 	}
 	gtk_image_set_from_pixbuf (pPreviewImage, pPreviewPixbuf);
-	gdk_pixbuf_unref (pPreviewPixbuf);
+	g_object_unref (pPreviewPixbuf);
 }
 
 static void _on_got_readme (const gchar *cDescription, GtkWidget *pDescriptionLabel)
@@ -709,7 +709,7 @@ static void _cairo_dock_show_image_preview (GtkFileChooser *pFileChooser, GtkIma
 	if (pixbuf != NULL)
 	{
 		gtk_image_set_from_pixbuf (pPreviewImage, pixbuf);
-		gdk_pixbuf_unref (pixbuf);
+		g_object_unref (pixbuf);
 		gtk_file_chooser_set_preview_widget_active (pFileChooser, TRUE);
 	}
 	else
@@ -803,7 +803,21 @@ static void _cairo_dock_set_original_value (GtkButton *button, CairoDockGroupKey
 	else if (GTK_IS_COLOR_BUTTON (pOneWidget))
 	{
 		double *fValuesList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, &erreur);
-		
+
+		#if GTK_CHECK_VERSION (3, 4, 0)
+		if (length > 2)
+		{
+			GdkRGBA color;
+			color.red = fValuesList[0];
+			color.green = fValuesList[1];
+			color.blue = fValuesList[2];
+			if (length > 3)
+				color.alpha = fValuesList[3];
+			else
+				color.alpha = 1.;
+			gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (pOneWidget), &color);
+		}
+		#else
 		if (length > 2)
 		{
 			GdkColor gdkColor;
@@ -815,6 +829,7 @@ static void _cairo_dock_set_original_value (GtkButton *button, CairoDockGroupKey
 			if (length > 3 && gtk_color_button_get_use_alpha (GTK_COLOR_BUTTON (pOneWidget)))
 				gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pOneWidget), fValuesList[3] * 65535);
 		}
+		#endif
 		g_free (fValuesList);
 	}
 	g_key_file_free (pKeyFile);
@@ -1523,7 +1538,7 @@ static void _set_default_text (GtkWidget *pEntry, gchar *cDefaultValue)
 	color.blue = DEFAULT_TEXT_COLOR * 65535;
 	gtk_widget_modify_text (pEntry, GTK_STATE_NORMAL, &color);
 	#else
-	static GdkRGBA color;
+	GdkRGBA color;
 	color.red = DEFAULT_TEXT_COLOR;
 	color.green = DEFAULT_TEXT_COLOR;
 	color.blue = DEFAULT_TEXT_COLOR;
@@ -1901,7 +1916,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	int iValue, iMinValue, iMaxValue, *iValueList;
 	double fValue, fMinValue, fMaxValue, *fValueList;
 	gchar *cValue, **cValueList, *cSmallIcon=NULL;
+	#if GTK_CHECK_VERSION (3, 4, 0)
+	GdkRGBA gdkColor;
+	#else
 	GdkColor gdkColor;
+	#endif
 	GtkListStore *modele;
 	gboolean bAddBackButton;
 	GtkWidget *pPreviewBox;
@@ -2258,6 +2277,19 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				iNbElements = (iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB ? 3 : 4);
 				length = 0;
 				fValueList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
+				#if GTK_CHECK_VERSION (3, 4, 0)
+				if (length > 2)
+				{
+					gdkColor.red = fValueList[0];
+					gdkColor.green = fValueList[1];
+					gdkColor.blue = fValueList[2];
+					if (length > 3 && iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA)
+						gdkColor.alpha = fValueList[3];
+					else
+						gdkColor.alpha = 1.;
+				}
+				pOneWidget = gtk_color_button_new_with_rgba (&gdkColor);
+				#else
 				if (length > 2)
 				{
 					gdkColor.red = fValueList[0] * 65535;
@@ -2275,6 +2307,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				}
 				else
 					gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (pOneWidget), FALSE);
+				#endif
 				_pack_subwidget (pOneWidget);
 				bAddBackButton = TRUE,
 				g_free (fValueList);
@@ -3156,7 +3189,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						color.blue = DEFAULT_TEXT_COLOR * 65535;
 						gtk_widget_modify_text (pOneWidget, GTK_STATE_NORMAL, &color);
 						#else
-						static GdkRGBA color;
+						GdkRGBA color;
 						color.red = DEFAULT_TEXT_COLOR;
 						color.green = DEFAULT_TEXT_COLOR;
 						color.blue = DEFAULT_TEXT_COLOR;
@@ -3212,7 +3245,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				{
 					pPreviewImage = gtk_image_new_from_pixbuf (NULL);
 					gtk_image_set_from_pixbuf (GTK_IMAGE (pPreviewImage), pPreviewPixbuf);
-					gdk_pixbuf_unref (pPreviewPixbuf);
+					g_object_unref (pPreviewPixbuf);
 					_pack_in_widget_box (pPreviewImage);
 				}
 			break ;
@@ -3554,10 +3587,20 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 	}
 	else if (GTK_IS_COLOR_BUTTON (pOneWidget))
 	{
-		GdkColor gdkColor;
-		gtk_color_button_get_color (GTK_COLOR_BUTTON (pOneWidget), &gdkColor);
 		double col[4];
 		int iNbColors;
+
+		#if GTK_CHECK_VERSION (3, 4, 0)
+		GdkRGBA gdkColor;
+		gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (pOneWidget), &gdkColor);
+		iNbColors = 4;
+		col[0] = gdkColor.red;
+		col[1] = gdkColor.green;
+		col[2] = gdkColor.blue;
+		col[3] = gdkColor.alpha;
+		#else
+		GdkColor gdkColor;
+		gtk_color_button_get_color (GTK_COLOR_BUTTON (pOneWidget), &gdkColor);
 		col[0] = (double) gdkColor.red / 65535.;
 		col[1] = (double) gdkColor.green / 65535.;
 		col[2] = (double) gdkColor.blue / 65535.;
@@ -3570,6 +3613,8 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 		{
 			iNbColors = 3;
 		}
+		#endif
+
 		g_key_file_set_double_list (pKeyFile, cGroupName, cKeyName, col, iNbColors);
 	}
 	else if (GTK_IS_ENTRY (pOneWidget))
@@ -3839,7 +3884,7 @@ GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize)
 		if (pixbuf != NULL)
 		{
 			gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
-			gdk_pixbuf_unref (pixbuf);
+			g_object_unref (pixbuf);
 		}
 	}
 	return pImage;
