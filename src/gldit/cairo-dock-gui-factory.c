@@ -2447,7 +2447,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				GtkTreeIter iter;
 
 				// Do not add itself if it's a container
-				GError *error;
+				GError *error = NULL;
 				int iIconType = g_key_file_get_integer (pKeyFile, cGroupName, "Icon Type", &error);
 				if (error != NULL) // it's certainly not a container
 					g_error_free (error);
