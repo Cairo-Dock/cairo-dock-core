@@ -23,8 +23,6 @@
 
 #include <gtk/gtk.h>
 
-
-
 #include "gldi-config.h"  // GLDI_SHARE_DATA_DIR
 #include "cairo-dock-draw.h"
 #include "cairo-dock-surface-factory.h"
@@ -33,7 +31,6 @@
 #include "cairo-dock-dock-manager.h"  // cairo_dock_redraw_root_docks
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-container.h"
-///#include "cairo-dock-emblem.h"
 #include "cairo-dock-applications-manager.h"  // cairo_dock_foreach_applis
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-icon-manager.h"
