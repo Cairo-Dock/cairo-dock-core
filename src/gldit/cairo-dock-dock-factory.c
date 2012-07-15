@@ -61,6 +61,7 @@
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl.h"
+#include "cairo-dock-data-renderer.h"
 #include "cairo-dock-dock-factory.h"
 
 extern gchar *g_cCurrentLaunchersPath;
@@ -1113,6 +1114,8 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 				icon->pModuleInstance->pDock = pReceivingDock;
 				cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
 			}
+			else if (cairo_dock_get_icon_data_renderer (icon) != NULL)
+				cairo_dock_reload_data_renderer_on_icon (icon, CAIRO_CONTAINER (pReceivingDock));
 		}
 	}
 
@@ -1146,6 +1149,9 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 				cairo_dock_set_icon_size_in_dock (pDock, icon);
 			}
 			cairo_dock_trigger_load_icon_buffers (icon);
+			
+			if (bUpdateIconSize && cairo_dock_get_icon_data_renderer (icon) != NULL)
+				cairo_dock_reload_data_renderer_on_icon (icon, CAIRO_CONTAINER (pDock));
 		}
 		
 		if (bRecursive && icon->pSubDock != NULL)  // we handle the sub-dock for applets too, so that they don't need to care.

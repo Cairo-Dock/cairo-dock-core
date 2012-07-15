@@ -58,9 +58,9 @@
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-animations.h"
-///#include "cairo-dock-emblem.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-global-variables.h"
+#include "cairo-dock-data-renderer.h"
 #include "cairo-dock-opengl.h"
 
 #include "cairo-dock-dock-facility.h"
@@ -1129,6 +1129,9 @@ void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)  // the requ
 	cairo_dock_set_icon_size_in_dock (pDock, pIcon);
 	
 	cairo_dock_load_icon_image (pIcon, CAIRO_CONTAINER (pDock));  // handles the applet's context
+	
+	if (cairo_dock_get_icon_data_renderer (pIcon) != NULL)
+		cairo_dock_reload_data_renderer_on_icon (pIcon, CAIRO_CONTAINER (pDock));
 	
 	cairo_dock_trigger_update_dock_size (pDock);
 	gtk_widget_queue_draw (pDock->container.pWidget);
