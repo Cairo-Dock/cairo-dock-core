@@ -670,7 +670,7 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 	//\___________________ On met a jour le dessin de l'icone.
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
 	{
-		if (pRenderer->iLatencyTime > 0)
+		if (pRenderer->iLatencyTime > 0 && pRenderer->bHasValue)
 		{
 			int iDeltaT = cairo_dock_get_slow_animation_delta_t (pContainer);
 			int iNbIterations = MAX (1, pRenderer->iLatencyTime / iDeltaT);
@@ -719,6 +719,7 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 	}
 	
 	cairo_dock_redraw_icon (pIcon, pContainer);
+	pRenderer->bHasValue = TRUE;
 }
 
 

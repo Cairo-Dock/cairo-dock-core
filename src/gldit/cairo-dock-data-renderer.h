@@ -190,6 +190,7 @@ struct _CairoDataRenderer {
 	gdouble fLatency;
 	guint iSidRenderIdle;  // source ID to delay the rendering in OpenGL until the container is fully resized
 	CairoOverlay *pOverlay;
+	gboolean bHasValue;  // TRUE as soon as a value has been set in the history
 };
 
 
@@ -331,7 +332,7 @@ __extension__ ({\
 *@param pRenderer a data renderer
 *@param i the number of the value
 *@return a double in [0,1]*/
-#define cairo_data_renderer_get_normalized_current_value_with_latency(pRenderer, i) (pRenderer->fLatency == 0 ? cairo_data_renderer_get_normalized_current_value (pRenderer, i) : cairo_data_renderer_get_normalized_current_value (pRenderer, i) * (1 - pRenderer->fLatency) + cairo_data_renderer_get_normalized_previous_value (pRenderer, i) * pRenderer->fLatency);
+#define cairo_data_renderer_get_normalized_current_value_with_latency(pRenderer, i) (pRenderer->fLatency == 0 || cairo_data_renderer_get_current_value (pRenderer, i) < CAIRO_DATA_RENDERER_UNDEF_VALUE+1 ? cairo_data_renderer_get_normalized_current_value (pRenderer, i) : cairo_data_renderer_get_normalized_current_value (pRenderer, i) * (1 - pRenderer->fLatency) + (cairo_data_renderer_get_previous_value (pRenderer, i) < CAIRO_DATA_RENDERER_UNDEF_VALUE+1 ? 0 : cairo_data_renderer_get_normalized_previous_value (pRenderer, i)) * pRenderer->fLatency)  // if current value is UNDEF, the result is UNDEF, and if previous value is UNDEF, set it to 0.
 
 ///
 /// Data Format
