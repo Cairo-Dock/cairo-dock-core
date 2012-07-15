@@ -521,8 +521,20 @@ CairoDesklet *cairo_dock_create_desklet (Icon *pIcon, CairoDeskletAttribute *pAt
 
 void cairo_dock_destroy_desklet (CairoDesklet *pDesklet)
 {
+	if (pDesklet == NULL)
+		return;
 	cairo_dock_free_desklet (pDesklet);
 	s_pDeskletList = g_list_remove (s_pDeskletList, pDesklet);
+	Icon *pIcon = pDesklet->pIcon;
+	if (pIcon != NULL)
+	{
+		if (pIcon->pContainer == CAIRO_CONTAINER (pDesklet))
+			cairo_dock_set_icon_container (pIcon, NULL);
+		else
+		{
+			cd_warning ("This icon (%s) is already detached from its desklet !", pIcon->cName);  // not a big deal, just print that for debug.
+		}
+	}
 }
 
 
