@@ -58,8 +58,8 @@ void cairo_dock_load_launchers_from_dir (const gchar *cDirectory);
 */
 void cairo_dock_reload_launcher (Icon *icon);
 
-
-gchar *cairo_dock_launch_command_sync (const gchar *cCommand);
+gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr);
+#define cairo_dock_launch_command_sync(cCommand) cairo_dock_launch_command_sync_with_stderr (cCommand, TRUE)
 
 gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...) G_GNUC_PRINTF (1, 3);
 gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory);

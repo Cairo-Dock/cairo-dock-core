@@ -432,7 +432,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 
 
 
-gchar *cairo_dock_launch_command_sync (const gchar *cCommand)
+gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr)
 {
 	gchar *standard_output=NULL, *standard_error=NULL;
 	gint exit_status=0;
@@ -449,7 +449,7 @@ gchar *cairo_dock_launch_command_sync (const gchar *cCommand)
 		g_free (standard_error);
 		return NULL;
 	}
-	if (standard_error != NULL && *standard_error != '\0')
+	if (bPrintStdErr && standard_error != NULL && *standard_error != '\0')
 	{
 		cd_warning (standard_error);
 	}
