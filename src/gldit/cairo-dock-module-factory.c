@@ -41,6 +41,7 @@
 #include "cairo-dock-dialog-manager.h"  // cairo_dock_show_temporary_dialog_with_icon
 #include "cairo-dock-config.h"
 #include "cairo-dock-module-manager.h"
+#include "cairo-dock-data-renderer.h"
 #include "cairo-dock-module-factory.h"
 
 // dependancies
@@ -576,7 +577,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	pInstance->pDock = NULL;
 	CairoDesklet *pCurrentDesklet = pInstance->pDesklet;
 	pInstance->pDesklet = NULL;
-	gchar *cOldDockName = NULL;
 	gchar *cCurrentSubDockName = NULL;
 	
 	CairoContainer *pNewContainer = NULL;
@@ -597,6 +597,8 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			//\______________ On met a jour les champs 'nom' et 'image' de l'icone.
 			if (pIcon != NULL)
 			{
+				if (pCurrentDock && ! pIcon->pContainer)  // icon already detached (by drag and drop)
+					pCurrentDock = NULL;
 				cCurrentSubDockName = g_strdup (pIcon->cName);
 				
 				// on gere le changement de nom de son sous-dock.
@@ -635,12 +637,16 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				pNewContainer = CAIRO_CONTAINER (pNewDock);
 			}
 			
-			// on la detache de son dock si son container a change.
-			if (pCurrentDock != NULL && (pMinimalConfig->bIsDetached || pNewDock != pCurrentDock))
+			// detach the icon from its container if it has changed
+			if (pCurrentDock != NULL && (pMinimalConfig->bIsDetached || pNewDock != pCurrentDock))  // was in a dock, now is in another dock or in a desklet
 			{
 				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
-				cOldDockName = g_strdup (pIcon->cParentDockName);
 				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock);
+			}
+			else if (pCurrentDesklet != NULL && ! pMinimalConfig->bIsDetached)  // was in a desklet, now is in a dock
+			{
+				cairo_dock_destroy_desklet (pCurrentDesklet);
+				pCurrentDesklet = NULL;
 			}
 			
 			// on recupere son desklet (cree au besoin).
@@ -727,7 +733,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	{
 		if (pCurrentDock->iRefCount == 0 && pCurrentDock->icons == NULL && !pCurrentDock->bIsMainDock)  // dock principal vide.
 		{
-			///cairo_dock_destroy_dock (pCurrentDock, cOldDockName);
 			pCurrentDock = NULL;  // se fera detruire automatiquement.
 		}
 		else
@@ -741,8 +746,10 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		cairo_dock_destroy_dock (pIcon->pSubDock, cCurrentSubDockName);
 		pIcon->pSubDock = NULL;
 	}
-	g_free (cOldDockName);
 	g_free (cCurrentSubDockName);
+	
+	if (! bReloadAppletConf && cairo_dock_get_icon_data_renderer (pIcon) != NULL)  // reload the data-renderer at the new size
+		cairo_dock_reload_data_renderer_on_icon (pIcon, pNewContainer);
 }
 
 
