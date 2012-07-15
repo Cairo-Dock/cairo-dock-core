@@ -164,21 +164,24 @@ static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 	{
 		x = 0.;  // the bar is left-aligned.
 		y = iHeight - (i + 1) * pProgressBar->iBarThickness;  // first value at bottom.
-		v = cairo_data_renderer_get_normalized_current_value (pRenderer, i);
+		v = cairo_data_renderer_get_normalized_current_value_with_latency (pRenderer, i);
 		
-		cairo_save (pCairoContext);
-		cairo_translate (pCairoContext, x, y);
-		cairo_set_source_surface (pCairoContext, pProgressBar->pBarSurface, 0, 0);
-		
-		cairo_set_line_width (pCairoContext, pProgressBar->iBarThickness);
-		cairo_set_line_cap (pCairoContext, CAIRO_LINE_CAP_ROUND);
-		
-		cairo_move_to (pCairoContext, r, r);
-		cairo_rel_line_to (pCairoContext, iWidth * v, 0);
-		
-		cairo_stroke (pCairoContext);
-		
-		cairo_restore (pCairoContext);
+		if (v >= 0 && v <= 1)  // any negative value is an "undef" value
+		{
+			cairo_save (pCairoContext);
+			cairo_translate (pCairoContext, x, y);
+			cairo_set_source_surface (pCairoContext, pProgressBar->pBarSurface, 0, 0);
+			
+			cairo_set_line_width (pCairoContext, pProgressBar->iBarThickness);
+			cairo_set_line_cap (pCairoContext, CAIRO_LINE_CAP_ROUND);
+			
+			cairo_move_to (pCairoContext, r, r);
+			cairo_rel_line_to (pCairoContext, (iWidth -2*r) * v, 0);
+			
+			cairo_stroke (pCairoContext);
+			
+			cairo_restore (pCairoContext);
+		}
 	}
 }
 
@@ -199,45 +202,49 @@ static void render_opengl (ProgressBar *pProgressBar)
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
 	
-	double x, y, v;
+	double x, y, v, w, r = pProgressBar->iBarThickness/2.;
 	double dx = .5;  // required to not have sharp edges on the left rounded corners... although maybe it should be adressed by the Overlay...
 	int i;
 	for (i = 0; i < iNbValues; i ++)
 	{
-		v = cairo_data_renderer_get_normalized_current_value (pRenderer, i);
-		x = - iWidth * (1. - v) / 2 + dx;  // center of the bar; the bar is left-aligned.
+		v = cairo_data_renderer_get_normalized_current_value_with_latency (pRenderer, i);
+		w = iWidth - pProgressBar->iBarThickness;
+		x = - iWidth / 2. + w * v/2 + r + dx;  // center of the bar; the bar is left-aligned.
 		y = i * pProgressBar->iBarThickness;  // first value at bottom.
 		
-		// make a rounded rectangle path.
-		const CairoDockGLPath *pFramePath = cairo_dock_generate_rectangle_path (iWidth*v - pProgressBar->iBarThickness, pProgressBar->iBarThickness, pProgressBar->iBarThickness/2., TRUE);
-	
-		// bind the texture to the path
-		// we don't use the automatic coods generation because we want to bind the texture to the interval [0; v].
-		glColor4f (1., 1., 1., 1.);
-		_cairo_dock_set_blend_source ();  // doesn't really matter here.
-		_cairo_dock_enable_texture ();
-		glBindTexture (GL_TEXTURE_2D, pProgressBar->iBarTexture);
-		
-		GLfloat *pCoords = g_new0 (GLfloat, (pFramePath->iNbPoints+1) * _CD_PATH_DIM);
-		int i;
-		for (i = 0; i < pFramePath->iCurrentPt; i ++)
+		if (v >= 0 && v <= 1)  // any negative value is an "undef" value
 		{
-			pCoords[_CD_PATH_DIM*i] = (.5 + _cd_gl_path_get_nth_vertex_x (pFramePath, i) / (iWidth*v)) * v;  // [0;v]
-			pCoords[_CD_PATH_DIM*i+1] = .5 + _cd_gl_path_get_nth_vertex_y (pFramePath, i) / (pProgressBar->iBarThickness);
+			// make a rounded rectangle path.
+			const CairoDockGLPath *pFramePath = cairo_dock_generate_rectangle_path (w * v, 2*r, r, TRUE);
+		
+			// bind the texture to the path
+			// we don't use the automatic coods generation because we want to bind the texture to the interval [0; v].
+			glColor4f (1., 1., 1., 1.);
+			_cairo_dock_set_blend_source ();  // doesn't really matter here.
+			_cairo_dock_enable_texture ();
+			glBindTexture (GL_TEXTURE_2D, pProgressBar->iBarTexture);
+			
+			GLfloat *pCoords = g_new0 (GLfloat, (pFramePath->iNbPoints+1) * _CD_PATH_DIM);
+			int i;
+			for (i = 0; i < pFramePath->iCurrentPt; i ++)
+			{
+				pCoords[_CD_PATH_DIM*i] = (.5 + _cd_gl_path_get_nth_vertex_x (pFramePath, i) / (w*v+2*r)) * v;  // [0;v]
+				pCoords[_CD_PATH_DIM*i+1] = .5 + _cd_gl_path_get_nth_vertex_y (pFramePath, i) / (pProgressBar->iBarThickness);
+			}
+			glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+			glTexCoordPointer (_CD_PATH_DIM, GL_FLOAT, 0, pCoords);
+			
+			// draw the path.
+			glPushMatrix ();
+			glTranslatef (x,
+				y,
+				0.);
+			cairo_dock_fill_gl_path (pFramePath, 0);  // 0 <=> no texture, since we bound it ourselves.
+			
+			g_free (pCoords);
+			_cairo_dock_disable_texture ();
+			glPopMatrix ();
 		}
-		glEnableClientState (GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer (_CD_PATH_DIM, GL_FLOAT, 0, pCoords);
-		
-		// draw the path.
-		glPushMatrix ();
-		glTranslatef (x,
-			y,
-			0.);
-		cairo_dock_fill_gl_path (pFramePath, 0);  // 0 <=> no texture, since we bound it ourselves.
-		
-		g_free (pCoords);
-		_cairo_dock_disable_texture ();
-		glPopMatrix ();
 	}
 }
 
@@ -247,17 +254,22 @@ static void render_opengl (ProgressBar *pProgressBar)
 
 static void reload (ProgressBar *pProgressBar)
 {
-	//g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 	g_return_if_fail (pProgressBar != NULL);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pProgressBar);
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
+	g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 	
 	// reload the bar surface
 	if (pProgressBar->pBarSurface)
 	{
 		cairo_surface_destroy (pProgressBar->pBarSurface);
 		pProgressBar->pBarSurface = NULL;
+	}
+	if (pProgressBar->iBarTexture != 0)
+	{
+		_cairo_dock_delete_texture (pProgressBar->iBarTexture);
+		pProgressBar->iBarTexture = 0;
 	}
 	_make_bar_surface (pProgressBar);
 	
