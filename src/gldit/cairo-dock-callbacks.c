@@ -1362,7 +1362,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				icon = ic->data;
 				if (icon->bDamaged)
 				{
-					//g_print ("#### icon %s is damaged\n", icon->cName);
+					g_print ("#### icon %s is damaged\n", icon->cName);
 					icon->bDamaged = FALSE;
 					if (cairo_dock_get_icon_data_renderer (icon) != NULL)
 					{
@@ -1375,11 +1375,11 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 					else if (CAIRO_DOCK_IS_APPLET (icon))
 					{
 						cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);  // easy but safe way to redraw the icon properly.
-					}  // else do nothing, there is no need to redraw.
-					/**else  // if we don't know how the icon should be drawn, just reload it.
+					}
+					else  // if we don't know how the icon should be drawn, just reload it.
 					{
 						cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
-					}*/
+					}
 				}
 			}
 		}
