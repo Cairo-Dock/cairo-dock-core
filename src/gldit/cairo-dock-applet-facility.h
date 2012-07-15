@@ -284,6 +284,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Get the complete path of a Gauge theme in the conf file.
 *@param cGroupName name of the group (in the conf file).
 *@param cKeyName name of the key (in the conf file).
+*@return Path to the theme, in a newly allocated string.
 */
 #define CD_CONFIG_GET_GAUGE_THEME(cGroupName, cKeyName) \
 	__extension__ ({\
@@ -684,10 +685,9 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 */
 #define CD_APPLET_ADD_DATA_RENDERER_ON_MY_ICON(pAttr) cairo_dock_add_new_data_renderer_on_icon (myIcon, myContainer, pAttr)
 
-/** Reload the Data Renderer of the applet's icon. Pass NULL as the attributes to simply reload the current data renderer without changing any of its parameters. Previous values are kept.
-*@param pAttr the attributes of the Data Renderer, or NULL to simply reload the Data Renderer as it it.
+/** Reload the Data Renderer of the applet's icon, without changing any of its parameters. Previous values are kept.
 */
-#define CD_APPLET_RELOAD_MY_DATA_RENDERER(pAttr) cairo_dock_reload_data_renderer_on_icon (myIcon, myContainer, pAttr)
+#define CD_APPLET_RELOAD_MY_DATA_RENDERER(...) cairo_dock_reload_data_renderer_on_icon (myIcon, myContainer)
 
 /** Add new values to the Data Renderer of the applet's icon. Values are a table of 'double', having the same size as defined when the data renderer was created (1 by default). It also triggers the redraw of the icon.
 *@param pValues the values, a table of double of the correct size.
@@ -697,11 +697,6 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 /** Completely remove the Data Renderer of the applet's icon, including the values associated with.
 */
 #define CD_APPLET_REMOVE_MY_DATA_RENDERER cairo_dock_remove_data_renderer_on_icon (myIcon)
-
-/** Refresh the Data Renderer of the applet's icon, to redraw it when the applet's size has changed.
-*/
-#define CD_APPLET_REFRESH_MY_DATA_RENDERER cairo_dock_refresh_data_renderer (myIcon, myContainer, myDrawContext)
-
 
 /** Set the history size of the Data Renderer of the applet's icon to the maximum size, that is to say 1 value per pixel.
 */

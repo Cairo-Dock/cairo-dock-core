@@ -29,10 +29,14 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-data-renderer.h This class defines the Data Renderer structure and API.
-* A CairoDataRenderer is a generic way to render onto an icon a set of N values defined by : {yk = f(t)}, k=0..N. For instance you could represent the (cpu, mem, swap) evolution over the time.
-* You bind a Data Renderer with /ref cairo_dock_add_new_data_renderer_on_icon. You can specify some configuration parameters for the Data Renderer with a set of attributes, that derive from a CairoDataRendererAttribute.
-* You feed the Data Renderer with /ref cairo_dock_render_new_data_on_icon, providing it the correct number of values.
-* If you want to change any parameter of a Data Renderer, use /ref cairo_dock_reload_data_renderer_on_icon, which keeps the history.
+* A Data Renderer is a generic way to display a set of values on an icon.
+* For instance you could represent the (cpu, memory, temperature) evolution over the time.
+* 
+* You bind a Data Renderer with /ref cairo_dock_add_new_data_renderer_on_icon.
+* You can specify some attributes of the Data Renderer, especially the model that will be used; currently, 3 models are available: "gauge", "graph" and "progressbar".
+*
+* You then feed the Data Renderer with /ref cairo_dock_render_new_data_on_icon, providing it the correct number of values.
+*
 * To remove the Data Renderer from an icon, use /ref cairo_dock_remove_data_renderer_on_icon.
 */
 
@@ -199,7 +203,7 @@ CairoDockGLFont *cairo_dock_get_default_data_renderer_font (void);
 void cairo_dock_unload_default_data_renderer_font (void);
 
 
-/**Add a Data Renderer on an icon (usually the icon of an applet). A Data Renderer is a view that will be used to display a set of values on the icon.
+/**Add a Data Renderer on an icon. If the icon already has a Data Renderer, it is replaced by the new one, keeping the history alive.
 *@param pIcon the icon
 *@param pContainer the icon's container
 *@param pAttribute attributes defining the Renderer*/
@@ -216,11 +220,10 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 *@param pIcon the icon*/
 void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon);
 
-/**Reload the Data Renderer of an icon. If no attributes are provided, it simply reload it with its current attributes. History is kept.
+/**Reload the Data Renderer of an icon, keeping the history and the attributes. This is intended to be used when the icon size changes.
 *@param pIcon the icon
-*@param pContainer the icon's container
-*@param pAttribute new attributes defining the Renderer, or NULL to keep the current ones*/
-void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute);
+*@param pContainer the icon's container*/
+void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer);
 
 
 /** Resize the history of a DataRenderer of an icon, that is to say change the number of previous values that are remembered by the DataRenderer.
@@ -230,9 +233,8 @@ void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize);
 
 /** Redraw the DataRenderer of an icon, with the current values.
 *@param pIcon the icon
-*@param pContainer the icon's container
-*@param pCairoContext a drawing context on the icon*/
-void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext);
+*@param pContainer the icon's container*/
+void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer);
 
 
 void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iNumValue, cairo_t *pCairoContext);
