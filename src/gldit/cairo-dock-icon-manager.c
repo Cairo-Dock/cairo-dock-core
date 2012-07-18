@@ -716,17 +716,20 @@ static void _cairo_dock_load_icons_background_surface (const gchar *cImagePath)
 {
 	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
 	
-	int iSize = myIconsParam.iIconWidth;
-	if (iSize == 0)
-		iSize = 48;
+	int iSizeWidth = myIconsParam.iIconWidth, iSizeHeight = myIconsParam.iIconHeight;
+	if (iSizeWidth == 0)
+		iSizeWidth = 48;
+	if (iSizeHeight == 0)
+		iSizeHeight = 48;
 	
 	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
-	iSize *= fMaxScale;
+	iSizeWidth *= fMaxScale;
+	iSizeHeight *= fMaxScale;
 	
 	cairo_dock_load_image_buffer (&g_pIconBackgroundBuffer,
 		cImagePath,
-		iSize,
-		iSize,
+		iSizeWidth,
+		iSizeHeight,
 		CAIRO_DOCK_FILL_SPACE);
 }
 

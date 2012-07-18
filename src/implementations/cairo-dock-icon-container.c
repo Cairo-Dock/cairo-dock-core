@@ -182,10 +182,15 @@ static void _cairo_dock_load_box_surface (void)
 	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
 	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
 	
-	int iSize = myIconsParam.iIconWidth;  // base size, the image is then scaled up/down.
-	if (iSize == 0)
-		iSize = 48;
-	iSize *= cairo_dock_get_max_scale (g_pMainDock);
+	// base size, the image is then scaled up/down but we can load the image with the transformation
+	int iSizeWidth = myIconsParam.iIconWidth, iSizeHeight = myIconsParam.iIconHeight;
+	if (iSizeWidth == 0)
+		iSizeWidth = 48;
+	if (iSizeHeight == 0)
+		iSizeHeight = 48;
+	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
+	iSizeWidth *= fMaxScale;
+	iSizeHeight *= fMaxScale;
 	
 	gchar *cUserPath = cairo_dock_generate_file_path ("box-front");
 	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
@@ -195,8 +200,8 @@ static void _cairo_dock_load_box_surface (void)
 	}
 	cairo_dock_load_image_buffer (&g_pBoxAboveBuffer,
 		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/icons/box-front.png",
-		iSize,
-		iSize,
+		iSizeWidth,
+		iSizeHeight,
 		CAIRO_DOCK_FILL_SPACE);
 	
 	cUserPath = cairo_dock_generate_file_path ("box-back");
@@ -207,8 +212,8 @@ static void _cairo_dock_load_box_surface (void)
 	}
 	cairo_dock_load_image_buffer (&g_pBoxBelowBuffer,
 		cUserPath ? cUserPath : GLDI_SHARE_DATA_DIR"/icons/box-back.png",
-		iSize,
-		iSize,
+		iSizeWidth,
+		iSizeHeight,
 		CAIRO_DOCK_FILL_SPACE);
 }
 

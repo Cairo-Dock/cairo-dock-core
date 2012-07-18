@@ -1185,7 +1185,7 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 	else
 	{
 		int wi, hi;
-		if (pDock->iIconSize != 0)
+		if (! pDock->bGlobalIconSize && pDock->iIconSize != 0)
 		{
 			wi = hi = pDock->iIconSize;
 		}
