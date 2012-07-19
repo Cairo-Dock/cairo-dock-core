@@ -522,7 +522,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 	
 	return TRUE;
 }
-static void load (Gauge *pGauge, CairoContainer *pContainer, CairoGaugeAttribute *pAttribute)
+static void load (Gauge *pGauge, Icon *pIcon, CairoGaugeAttribute *pAttribute)
 {
 	// on charge le theme defini en attribut.
 	gboolean bThemeLoaded = _load_theme (pGauge, pAttribute->cThemePath);

@@ -94,7 +94,7 @@ struct _CairoDataRendererAttribute {
 };
 
 typedef CairoDataRenderer * (*CairoDataRendererNewFunc) (void);
-typedef void (*CairoDataRendererLoadFunc) (CairoDataRenderer *pDataRenderer, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute);
+typedef void (*CairoDataRendererLoadFunc) (CairoDataRenderer *pDataRenderer, Icon *pIcon, CairoDataRendererAttribute *pAttribute);
 typedef void (*CairoDataRendererRenderFunc) (CairoDataRenderer *pDataRenderer, cairo_t *pCairoContext);
 typedef void (*CairoDataRendererRenderOpenGLFunc) (CairoDataRenderer *pDataRenderer);
 typedef void (*CairoDataRendererReloadFunc) (CairoDataRenderer *pDataRenderer);

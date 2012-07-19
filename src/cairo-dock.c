@@ -794,7 +794,6 @@ int main (int argc, char** argv)
 	
 	// add "add an applet" in the menu
 	// when an icon in a sub-dock demands attention, also animate the icon in the main dock.
-	// progress-bar as an overlay
 	// search in Recent-Events' dialog (seems like libzeitgeist is buggy)
 	// taskbar: separator as an option -> test
 	// taskbar, minimized windows only: when restored, an appli icon gets the "?" for a second before disappearing
@@ -806,6 +805,7 @@ int main (int argc, char** argv)
 	// image buffer: draw the surface from the center, like the texture.
 	// Icons: use an image buffer + a request size.
 	// add a function cairo_dock_render_one_icon_in_desklet_opengl().
+	// gauge with images: improve transition
 	
 	/*g_print ("\n\nTODO (3.0):\n"
 	"** Must-Be-Done **\n"

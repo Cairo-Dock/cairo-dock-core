@@ -440,7 +440,7 @@ static void _set_overlay_zones (Graph *pGraph)
 	}
 }
 
-static void load (Graph *pGraph, CairoContainer *pContainer, CairoGraphAttribute *pAttribute)
+static void load (Graph *pGraph, Icon *pIcon, CairoGraphAttribute *pAttribute)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	

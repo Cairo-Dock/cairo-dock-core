@@ -31,6 +31,8 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-container.h"  // cairo_dock_get_max_scale
+#include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_max_scale
 #include "cairo-dock-progressbar.h"
 
 // color gradation: N colors, 1/N each -> clamped image
@@ -48,6 +50,7 @@ typedef struct {
 	gdouble fColorGradation[6];  // 2 rvb colors
 } ProgressBar;
 
+#define CD_MIN_BAR_THICKNESS 4
 
 extern gboolean g_bUseOpenGL;
 
@@ -114,7 +117,7 @@ static void _make_bar_surface (ProgressBar *pProgressBar)
 	pProgressBar->iBarTexture = cairo_dock_create_texture_from_surface (pProgressBar->pBarSurface);
 }
 
-static void load (ProgressBar *pProgressBar, CairoContainer *pContainer, CairoProgressBarAttribute *pAttribute)
+static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttribute *pAttribute)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pProgressBar);
 	
@@ -128,8 +131,9 @@ static void load (ProgressBar *pProgressBar, CairoContainer *pContainer, CairoPr
 	// define the bar thickness
 	int iBarThickness;
 	iBarThickness = (pAttribute->fBarThickness <= 1 ? pAttribute->fBarThickness * iHeight : pAttribute->fBarThickness);  // relative or absolute thickness.
-	if (iBarThickness < 8)
-		iBarThickness = 8;
+	if (iBarThickness < CD_MIN_BAR_THICKNESS)
+		iBarThickness = CD_MIN_BAR_THICKNESS;
+	iBarThickness *= cairo_dock_get_icon_max_scale (pIcon);
 	pProgressBar->iBarThickness = iBarThickness;
 	
 	// load the bar image

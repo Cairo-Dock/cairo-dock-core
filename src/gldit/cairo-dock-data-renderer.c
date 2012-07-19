@@ -608,7 +608,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 			CAIRO_DOCK_RUN_AFTER, NULL);  // pour l'affichage fluide.
 	}
 	
-	pRenderer->interface.load (pRenderer, pContainer, pAttribute);
+	pRenderer->interface.load (pRenderer, pIcon, pAttribute);
 	
 	//\___________________ On charge les overlays si l'implementation les a valides.
 	_cairo_dock_finish_load_data_renderer (pRenderer, bLoadTextures, pIcon);
