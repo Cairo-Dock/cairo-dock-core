@@ -1770,6 +1770,46 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	return cResult;
 }
 
+static void _add_action_menus (GKeyFile *pKeyFile, CairoDockClassAppli *pClassAppli, const gchar *cMenuListKey, const gchar *cMenuGroup, gboolean bActionFirstInGroupKey)
+{
+	gsize length = 0;
+	gchar **pMenuList = g_key_file_get_string_list (pKeyFile, "Desktop Entry", cMenuListKey, &length, NULL);  
+	if (pMenuList != NULL)
+	{
+		gchar *cGroup;
+		int i;
+		for (i = 0; pMenuList[i] != NULL; i++)
+		{
+			cGroup = g_strdup_printf ("%s %s",
+				bActionFirstInGroupKey ? pMenuList[i] : cMenuGroup,   // [NewWindow Shortcut Group]
+				bActionFirstInGroupKey ? cMenuGroup : pMenuList [i]); // [Desktop Action NewWindow]
+
+			if (g_key_file_has_group (pKeyFile, cGroup))
+			{
+				gchar **pMenuItem = g_new0 (gchar*, 4);
+				pMenuItem[0] = g_key_file_get_locale_string (pKeyFile, cGroup, "Name", NULL, NULL);
+				gchar *cCommand = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
+				if (cCommand != NULL)  // remove the launching options %x.
+				{
+					gchar *str = strchr (cCommand, '%');  // search the first one.
+					if (str != NULL)
+					{
+						if (str != cCommand && (*(str-1) == '"' || *(str-1) == '\''))  // take care of "" around the option.
+							str --;
+						*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
+					}
+				}
+				pMenuItem[1] = cCommand;
+				pMenuItem[2] = g_key_file_get_string (pKeyFile, cGroup, "Icon", NULL);
+				
+				pClassAppli->pMenuItems = g_list_append (pClassAppli->pMenuItems, pMenuItem);
+			}
+			g_free (cGroup);
+		}
+		g_strfreev (pMenuList);
+	}
+}
+
 /*
 register from desktop-file name/path (+class-name):
   if class-name: guess class -> lookup class -> if already registered => quit
@@ -1908,38 +1948,9 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	pClassAppli->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
 	
 	// get the Unity menus.
-	gchar **pMenuList = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "X-Ayatana-Desktop-Shortcuts", &length, NULL);  // oh crap, with a name like that you can be sure it will change 25 times before they decide a definite name :-/
-	if (pMenuList != NULL)
-	{
-		gchar *cGroup;
-		int i;
-		for (i = 0; pMenuList[i] != NULL; i++)
-		{
-			cGroup = g_strdup_printf ("%s Shortcut Group", pMenuList[i]);
-			if (g_key_file_has_group (pKeyFile, cGroup))
-			{
-				gchar **pMenuItem = g_new0 (gchar*, 4);
-				pMenuItem[0] = g_key_file_get_locale_string (pKeyFile, cGroup, "Name", NULL, NULL);
-				cCommand = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
-				if (cCommand != NULL)  // remove the launching options %x.
-				{
-					gchar *str = strchr (cCommand, '%');  // search the first one.
-					if (str != NULL)
-					{
-						if (str != cCommand && (*(str-1) == '"' || *(str-1) == '\''))  // take care of "" around the option.
-							str --;
-						*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
-					}
-				}
-				pMenuItem[1] = cCommand;
-				pMenuItem[2] = g_key_file_get_string (pKeyFile, cGroup, "Icon", NULL);
-				
-				pClassAppli->pMenuItems = g_list_append (pClassAppli->pMenuItems, pMenuItem);
-			}
-			g_free (cGroup);
-		}
-		g_strfreev (pMenuList);
-	}
+	_add_action_menus (pKeyFile, pClassAppli, "X-Ayatana-Desktop-Shortcuts", "Shortcut Group", TRUE); // oh crap, with a name like that you can be sure it will change 25 times before they decide a definite name :-/
+	_add_action_menus (pKeyFile, pClassAppli, "Actions", "Desktop Action", FALSE); // yes, it's true ^^ => Ubuntu Quantal
+	
 	
 	g_key_file_free (pKeyFile);
 	cd_debug (" -> class '%s'", cClass);
