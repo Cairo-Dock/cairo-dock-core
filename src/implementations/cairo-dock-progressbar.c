@@ -31,6 +31,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-container.h"  // cairo_dock_get_max_scale
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_max_scale
 #include "cairo-dock-progressbar.h"
@@ -48,9 +49,11 @@ typedef struct {
 	gint iBarThickness;
 	gchar *cImageGradation;
 	gdouble fColorGradation[6];  // 2 rvb colors
+	gboolean bCustomColors;
+	gdouble fScale;
 } ProgressBar;
 
-#define CD_MIN_BAR_THICKNESS 4
+#define CD_MIN_BAR_THICKNESS 2
 
 extern gboolean g_bUseOpenGL;
 
@@ -115,6 +118,11 @@ static void _make_bar_surface (ProgressBar *pProgressBar)
 		cairo_destroy (ctx);
 	}
 	pProgressBar->iBarTexture = cairo_dock_create_texture_from_surface (pProgressBar->pBarSurface);
+	
+	if (myIndicatorsParam.bBarHasOutline)
+	{
+		
+	}
 }
 
 static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttribute *pAttribute)
@@ -129,22 +137,30 @@ static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttrib
 	pRenderer->iRank = iNbValues;
 	
 	// define the bar thickness
-	int iBarThickness;
-	iBarThickness = (pAttribute->fBarThickness <= 1 ? pAttribute->fBarThickness * iHeight : pAttribute->fBarThickness);  // relative or absolute thickness.
-	if (iBarThickness < CD_MIN_BAR_THICKNESS)
-		iBarThickness = CD_MIN_BAR_THICKNESS;
-	iBarThickness *= cairo_dock_get_icon_max_scale (pIcon);
-	pProgressBar->iBarThickness = iBarThickness;
+	pProgressBar->fScale = cairo_dock_get_icon_max_scale (pIcon);
+	double fBarThickness;
+	fBarThickness = MAX (myIndicatorsParam.iBarThickness, CD_MIN_BAR_THICKNESS);
+	fBarThickness *= pProgressBar->fScale;  // the given size is therefore reached when the icon is at rest.
+	pProgressBar->iBarThickness = ceil (fBarThickness);
 	
 	// load the bar image
 	pProgressBar->cImageGradation = g_strdup (pAttribute->cImageGradation);
-	gdouble default_colors[6] = {1., 0., 0., 0., 1., 0.};  // red - green
-	gdouble *colors = (pAttribute->fColorGradation ? pAttribute->fColorGradation : default_colors);
-	memcpy (pProgressBar->fColorGradation, colors, 6*sizeof (gdouble));
+	if (pAttribute->fColorGradation)
+	{
+		pProgressBar->bCustomColors = TRUE;
+		memcpy (pProgressBar->fColorGradation, pAttribute->fColorGradation, 6*sizeof (gdouble));
+	}
+	else
+	{
+		memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 3*sizeof (gdouble));
+		memcpy (&pProgressBar->fColorGradation[3], myIndicatorsParam.fBarColorStop, 3*sizeof (gdouble));
+	}
+	
 	_make_bar_surface (pProgressBar);
 	
 	// set the size for the overlay.
-	pRenderer->iHeight = pRenderer->iRank * pProgressBar->iBarThickness;
+	pRenderer->iHeight = pRenderer->iRank * pProgressBar->iBarThickness + 1;
+	pRenderer->iOverlayPosition = (pAttribute->bUseCustomPosition ? pAttribute->iCustomPosition : CAIRO_OVERLAY_BOTTOM);
 }
 
   ///////////////////////////////////////
@@ -174,13 +190,27 @@ static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 		{
 			cairo_save (pCairoContext);
 			cairo_translate (pCairoContext, x, y);
-			cairo_set_source_surface (pCairoContext, pProgressBar->pBarSurface, 0, 0);
-			
-			cairo_set_line_width (pCairoContext, pProgressBar->iBarThickness);
 			cairo_set_line_cap (pCairoContext, CAIRO_LINE_CAP_ROUND);
+			r = .5*pProgressBar->iBarThickness;
 			
-			cairo_move_to (pCairoContext, r, r);
-			cairo_rel_line_to (pCairoContext, (iWidth -2*r) * v, 0);
+			// outline
+			if (myIndicatorsParam.bBarHasOutline)
+			{
+				cairo_set_source_rgb (pCairoContext, myIndicatorsParam.fBarColorOutline[0], myIndicatorsParam.fBarColorOutline[1], myIndicatorsParam.fBarColorOutline[3]);
+				cairo_set_line_width (pCairoContext, pProgressBar->iBarThickness);
+				
+				cairo_move_to (pCairoContext, r, r);
+				cairo_rel_line_to (pCairoContext, (iWidth -2*r) * v, 0);
+				
+				cairo_stroke (pCairoContext);
+			}
+			
+			// bar
+			cairo_set_source_surface (pCairoContext, pProgressBar->pBarSurface, 0, 0);
+			cairo_set_line_width (pCairoContext, pProgressBar->iBarThickness-2);
+			
+			cairo_move_to (pCairoContext, r+1, r);
+			cairo_rel_line_to (pCairoContext, (iWidth -2*r-2) * v, 0);
 			
 			cairo_stroke (pCairoContext);
 			
@@ -220,7 +250,7 @@ static void render_opengl (ProgressBar *pProgressBar)
 		{
 			// make a rounded rectangle path.
 			const CairoDockGLPath *pFramePath = cairo_dock_generate_rectangle_path (w * v, 2*r, r, TRUE);
-		
+			
 			// bind the texture to the path
 			// we don't use the automatic coods generation because we want to bind the texture to the interval [0; v].
 			glColor4f (1., 1., 1., 1.);
@@ -245,8 +275,19 @@ static void render_opengl (ProgressBar *pProgressBar)
 				0.);
 			cairo_dock_fill_gl_path (pFramePath, 0);  // 0 <=> no texture, since we bound it ourselves.
 			
-			g_free (pCoords);
 			_cairo_dock_disable_texture ();
+			glDisableClientState (GL_TEXTURE_COORD_ARRAY);
+			
+			// outline
+			if (myIndicatorsParam.bBarHasOutline)
+			{
+				glColor4f (myIndicatorsParam.fBarColorOutline[0], myIndicatorsParam.fBarColorOutline[1], myIndicatorsParam.fBarColorOutline[3], 1.);
+				_cairo_dock_set_blend_alpha ();
+				glLineWidth (1.5);
+				cairo_dock_stroke_gl_path (pFramePath, FALSE);
+			}
+			
+			g_free (pCoords);
 			glPopMatrix ();
 		}
 	}
@@ -264,6 +305,17 @@ static void reload (ProgressBar *pProgressBar)
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
 	g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 	
+	// since we take our parameters from the config, reset them
+	double fBarThickness;
+	fBarThickness = MAX (myIndicatorsParam.iBarThickness, CD_MIN_BAR_THICKNESS);
+	fBarThickness *= pProgressBar->fScale;  // the given size is therefore reached when the icon is at rest.
+	pProgressBar->iBarThickness = ceil (fBarThickness);
+	if (!pProgressBar->bCustomColors)
+	{
+		memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 3*sizeof (gdouble));
+		memcpy (&pProgressBar->fColorGradation[3], myIndicatorsParam.fBarColorStop, 3*sizeof (gdouble));
+	}
+	
 	// reload the bar surface
 	if (pProgressBar->pBarSurface)
 	{
@@ -278,7 +330,7 @@ static void reload (ProgressBar *pProgressBar)
 	_make_bar_surface (pProgressBar);
 	
 	// set the size for the overlay.
-	pRenderer->iHeight = pRenderer->iRank * pProgressBar->iBarThickness;
+	pRenderer->iHeight = pRenderer->iRank * pProgressBar->iBarThickness + 1;
 }
 
   ////////////////////////////////////////

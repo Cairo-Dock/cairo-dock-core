@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-progressbar.h This class defines the ProgressBar, which derives from the DataRenderer.
-* All you need to know is the attributes that define a Gauge, the API to use is the common API for DataRenderer, defined in cairo-dock-data-renderer.h.
+* All you need to know is the attributes that define a ProgressBar, the API to use is the common API for DataRenderer, defined in cairo-dock-data-renderer.h.
 */
 
 
@@ -39,10 +39,14 @@ struct _CairoProgressBarAttribute {
 	CairoDataRendererAttribute rendererAttribute;
 	/// image or NULL
 	gchar *cImageGradation;
-	/// color gradation of the bar or NULL
+	/// color gradation of the bar (an array of 6 doubles, representing 2 RGB values) or NULL
 	gdouble *fColorGradation;  // 2*3
-	// bar thickness or 0
-	gdouble fBarThickness;  // in [0,1] for relative thickness, or > 1
+	/// TRUE to define a custom position (by default it is placed at the middle bottom)
+	gboolean bUseCustomPosition;
+	/// custom position
+	CairoOverlayPosition iCustomPosition;
+	/// invert colors
+	gboolean bInverted;
 };
 
 

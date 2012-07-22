@@ -35,6 +35,7 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-icon-manager.h"
 #include "cairo-dock-notifications.h"
+#include "cairo-dock-data-renderer.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.bShowAppli
 #define _MANAGER_DEF_
 #include "cairo-dock-indicator-manager.h"
@@ -450,6 +451,17 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 		}
 		pIndicators->bZoomClassIndicator = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "zoom class", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	}
+	
+	//\__________________ Progress bar.
+	double start_color[4] = {1., 0., 0.};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_start", &bFlushConfFileNeeded, pIndicators->fBarColorStart, 3, start_color, NULL, NULL);
+	double stop_color[4] = {0., 1., 0.};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_stop", &bFlushConfFileNeeded, pIndicators->fBarColorStop, 3, stop_color, NULL, NULL);
+	pIndicators->bBarHasOutline = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "bar_outline", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	double outline_color[4] = {0., 0., 0.};
+	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_outline", &bFlushConfFileNeeded, pIndicators->fBarColorOutline, 3, outline_color, NULL, NULL);
+	pIndicators->iBarThickness = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "bar_thickness", &bFlushConfFileNeeded, 4, NULL, NULL);
+	
 	return bFlushConfFileNeeded;
 }
 
@@ -564,6 +576,13 @@ static void _set_indicator (Icon *pIcon, CairoContainer *pContainer, gpointer da
 {
 	pIcon->bHasIndicator = GPOINTER_TO_INT (data);
 }
+static void _reload_progress_bar (Icon *pIcon, CairoContainer *pContainer, gpointer data)
+{
+	if (cairo_dock_get_icon_data_renderer (pIcon) != NULL)
+	{
+		cairo_dock_reload_data_renderer_on_icon (pIcon, pContainer);
+	}
+}
 static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam *pIndicators)
 {
 	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
@@ -613,6 +632,21 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	if (pPrevIndicators->bDrawIndicatorOnAppli != pIndicators->bDrawIndicatorOnAppli)
 	{
 		cairo_dock_foreach_applis ((CairoDockForeachIconFunc) _set_indicator, FALSE, GINT_TO_POINTER (pIndicators->bDrawIndicatorOnAppli));
+	}
+	
+	if (pPrevIndicators->fBarColorStart[0] != pIndicators->fBarColorStart[0]
+	|| pPrevIndicators->fBarColorStart[1] != pIndicators->fBarColorStart[1]
+	|| pPrevIndicators->fBarColorStart[2] != pIndicators->fBarColorStart[2]
+	|| pPrevIndicators->fBarColorStop[0] != pIndicators->fBarColorStop[0]
+	|| pPrevIndicators->fBarColorStop[1] != pIndicators->fBarColorStop[1]
+	|| pPrevIndicators->fBarColorStop[2] != pIndicators->fBarColorStop[2]
+	|| pPrevIndicators->iBarThickness != pIndicators->iBarThickness
+	|| pPrevIndicators->bBarHasOutline != pIndicators->bBarHasOutline
+	|| pPrevIndicators->fBarColorOutline[0] != pIndicators->fBarColorOutline[0]
+	|| pPrevIndicators->fBarColorOutline[1] != pIndicators->fBarColorOutline[1]
+	|| pPrevIndicators->fBarColorOutline[2] != pIndicators->fBarColorOutline[2])
+	{
+		cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_progress_bar, NULL);
 	}
 	
 	cairo_dock_redraw_root_docks (FALSE);  // tous les docks (main dock et les autres qui peuvent contenir des applets avec un indicateur).

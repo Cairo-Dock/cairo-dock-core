@@ -539,7 +539,7 @@ static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer,
 	{
 		//g_print ("+ overlay %dx%d\n", pRenderer->iWidth, pRenderer->iHeight);
 		cairo_surface_t *pSurface = cairo_dock_create_blank_surface (pRenderer->iWidth, pRenderer->iHeight);
-		pRenderer->pOverlay = cairo_dock_add_overlay_from_surface (pIcon, pSurface, pRenderer->iWidth, pRenderer->iHeight, CAIRO_OVERLAY_BOTTOM, (gpointer)"data-renderer");  // this string is constant; any previous overlay will be removed.
+		pRenderer->pOverlay = cairo_dock_add_overlay_from_surface (pIcon, pSurface, pRenderer->iWidth, pRenderer->iHeight, pRenderer->iOverlayPosition, (gpointer)"data-renderer");  // this string is constant; any previous overlay will be removed.
 		cairo_dock_set_overlay_scale (pRenderer->pOverlay, 0);  // keep the original size of the image
 	}
 }

@@ -25,6 +25,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-packages.h"
+#include "cairo-dock-overlay.h"
 G_BEGIN_DECLS
 
 /**
@@ -177,6 +178,8 @@ struct _CairoDataRenderer {
 	gboolean bisRotate;
 	/// whether the data-renderer draws on an overlay rather than directly on the icon.
 	gboolean bUseOverlay;
+	/// position of the overlay, in the case the renderer uses one.
+	CairoOverlayPosition iOverlayPosition;
 	/// an optionnal list of labels to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
 	CairoDataRendererText *pLabels;
 	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
