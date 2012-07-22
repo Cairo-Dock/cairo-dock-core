@@ -326,7 +326,7 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio)
 	
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	double fMaxScale = (pIcon->fHeight != 0 ? (pIcon->pContainer && pIcon->pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
+	double fMaxScale = cairo_dock_get_icon_max_scale (pIcon);
 	
 	GList* ov;
 	CairoOverlay *p;
