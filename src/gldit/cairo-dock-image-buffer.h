@@ -25,7 +25,6 @@
 #include <sys/time.h>
 
 #include "cairo-dock-struct.h"
-///#include "cairo-dock-icon-manager.h"
 #include "cairo-dock-surface-factory.h"  // CairoDockLoadImageModifier
 G_BEGIN_DECLS
 
@@ -129,12 +128,31 @@ void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
 void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
 
 
+/** Draw an ImageBuffer with an offset on a Cairo context.
+*@param pImage an ImageBuffer.
+*@param pCairoContext the current cairo context.
+*@param x horizontal offset.
+*@param y vertical offset.
+*@param fAlpha transparency (in [0;1])
+*/
 void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha);
 
+/** Draw an ImageBuffer on a cairo context.
+*@param pImage an ImageBuffer.
+*@param pCairoContext the current cairo context.
+*/
 #define cairo_dock_apply_image_buffer_surface(pImage, pCairoContext) cairo_dock_apply_image_buffer_surface_with_offset (pImage, pCairoContext, 0., 0., 1.)
 
+/** Draw an ImageBuffer with an offset on the current OpenGL context.
+*@param pImage an ImageBuffer.
+*@param x horizontal offset.
+*@param y vertical offset.
+*/
 void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pImage, double x, double y);
 
+/** Draw an ImageBuffer on the current OpenGL context.
+*@param pImage an ImageBuffer.
+*/
 #define cairo_dock_apply_image_buffer_texture(pImage) cairo_dock_apply_image_buffer_texture_with_offset (pImage, 0., 0.)
 
 G_END_DECLS

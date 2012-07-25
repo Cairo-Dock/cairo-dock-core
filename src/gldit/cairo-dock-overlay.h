@@ -108,7 +108,7 @@ CairoOverlay *cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture,
 
 /** Set the scale of an overlay; by default it's 0.5
  *@param pOverlay the overlay
- *@param fScale the scale
+ *@param _fScale the scale
  */
 #define cairo_dock_set_overlay_scale(pOverlay, _fScale) (pOverlay)->fScale = _fScale
 

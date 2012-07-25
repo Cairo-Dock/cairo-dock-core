@@ -398,7 +398,7 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 			y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
 		cairo_set_source_surface (pCairoContext,
 			pDialog->pTextBuffer,
-			x - pDialog->iCurrentTextOffset,
+			x,
 			y);
 		_paint_inside_dialog(pCairoContext, fAlpha);
 	}

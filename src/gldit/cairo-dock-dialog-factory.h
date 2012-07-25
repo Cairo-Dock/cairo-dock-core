@@ -135,7 +135,6 @@ struct _CairoDialog {
 	gint iMessageWidth, iMessageHeight;// dimensions du message en comptant la marge du texte + vgap en bas si necessaire.
 	gint iButtonsWidth, iButtonsHeight;// dimensions des boutons + vgap en haut.
 	gint iInteractiveWidth, iInteractiveHeight;// dimensions du widget interactif.
-	gint iDistanceToDock_deprecated;
 	GtkWidget *pLeftPaddingBox, *pRightPaddingBox, *pWidgetLayout;// la structure interne du widget.
 	GtkWidget *pMessageWidget;// le widget de remplissage ou l'on dessine le message.
 	GtkWidget *pButtonsWidget;// le widget de remplissage ou l'on dessine les boutons.
@@ -167,9 +166,8 @@ struct _CairoDialog {
 	
 	gint iSidTimer;// le timer pour la destruction automatique du dialog.
 	gint iNbFrames, iCurrentFrame;// pour l'animation de the icon.
-	gint iCurrentTextOffset;// offset for text scrolling.
 	gint iSidAnimateIcon;
-	gboolean bUseMarkup;
+	gboolean bUseMarkup;// whether markup is used to draw the text (as defined in the attributes on init)
 	gboolean bNoInput;// whether the dialog is transparent to mouse input.
 	gboolean bAllowMinimize;// TRUE to allow the dialog to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
 	GldiShape* pShapeBitmap;
