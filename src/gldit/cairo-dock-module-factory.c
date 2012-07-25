@@ -884,8 +884,12 @@ void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pMod
 		dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain,
 		pModuleInstance->pModule->pVisitCard->cDescription));
 	
-	myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
-	cairo_dock_show_temporary_dialog_with_icon (cDescription, pModuleInstance->pIcon, pModuleInstance->pContainer, 0, pModuleInstance->pModule->pVisitCard->cIconFilePath);
+	CairoDialogAttribute attr;
+	memset (&attr, 0, sizeof (CairoDialogAttribute));
+	attr.cText = cDescription;
+	attr.cImageFilePath = pModuleInstance->pModule->pVisitCard->cIconFilePath;
+	attr.bUseMarkup = TRUE;
+	cairo_dock_build_dialog (&attr, pModuleInstance->pIcon, pModuleInstance->pContainer);
+	
 	g_free (cDescription);
-	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
 }

@@ -765,9 +765,13 @@ int main (int argc, char** argv)
 			if (cChangeLogMessage != NULL)
 			{
 				Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
-				myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
-				cairo_dock_show_temporary_dialog_with_default_icon (gettext (cChangeLogMessage), pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
-				myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
+				
+				CairoDialogAttribute attr;
+				memset (&attr, 0, sizeof (CairoDialogAttribute));
+				attr.cText = gettext (cChangeLogMessage);
+				attr.cImageFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
+				attr.bUseMarkup = TRUE;
+				cairo_dock_build_dialog (&attr, pFirstIcon, CAIRO_CONTAINER (g_pMainDock));
 				g_free (cChangeLogMessage);
 			}
 			g_key_file_free (pKeyFile);
@@ -798,8 +802,6 @@ int main (int argc, char** argv)
 	// taskbar: separator as an option -> test
 	// taskbar, minimized windows only: when restored, an appli icon gets the "?" for a second before disappearing
 	// Twitter: when a new entry apears in the timeline, have to click on the applet to stop the animation (doesn't stop from the menu).
-	// Dialogs: pUserData & pFreeDataFunc are most probably useless, replace with notifications
-	// Dialogs: add 'bUseMarkup' to the dialog attributes, to avoid changing 'myDialogsParam.dialogTextDescription.bUseMarkup'
 	// icon disappearance: sometimes the animation is not triggered
 	// warning :  (/home/fab/CD2/cairo-dock-core/src/gldit/cairo-dock-dock-factory.c:cairo_dock_insert_icon_in_dock_full:737) This icon ((null)) is already inside a container !
 	// image buffer: draw the surface from the center, like the texture.

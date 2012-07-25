@@ -332,28 +332,8 @@ static void _cairo_dock_draw_inside_dialog_opengl (CairoDialog *pDialog, double 
 			y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
 		
 		glBindTexture (GL_TEXTURE_2D, pDialog->iTextTexture);
-		if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
-		{
-			double w = MIN (pDialog->iMaxTextWidth, pDialog->iTextWidth - pDialog->iCurrentTextOffset);  // taille de la portion de texte a gauche.
-			_cairo_dock_apply_current_texture_portion_at_size_with_offset (1.*pDialog->iCurrentTextOffset/pDialog->iTextWidth, 0.,
-				1.*(pDialog->iTextWidth - pDialog->iCurrentTextOffset) / pDialog->iTextWidth, 1.,
-				w, pDialog->iTextHeight,
-				x + w/2, pDialog->container.iHeight - y - pDialog->iTextHeight/2);
-			
-			if (pDialog->iTextWidth - pDialog->iCurrentTextOffset < pDialog->iMaxTextWidth)
-			{
-				w = pDialog->iMaxTextWidth - (pDialog->iTextWidth - pDialog->iCurrentTextOffset);  // taille de la portion de texte a droite.
-				_cairo_dock_apply_current_texture_portion_at_size_with_offset (0., 0.,
-					w / pDialog->iTextWidth, 1.,
-					w, pDialog->iTextHeight,
-					x + pDialog->iMaxTextWidth - w/2, pDialog->container.iHeight - y - pDialog->iTextHeight/2);
-			}
-		}
-		else
-		{
-			_cairo_dock_apply_current_texture_at_size_with_offset (pDialog->iTextWidth, pDialog->iTextHeight,
-				x + pDialog->iTextWidth/2, pDialog->container.iHeight - y - pDialog->iTextHeight/2);
-		}
+		_cairo_dock_apply_current_texture_at_size_with_offset (pDialog->iTextWidth, pDialog->iTextHeight,
+			x + pDialog->iTextWidth/2, pDialog->container.iHeight - y - pDialog->iTextHeight/2);
 	}
 	
 	if (pDialog->pButtons != NULL)
@@ -416,31 +396,11 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 		y = (pDialog->container.bDirectionUp ? pDialog->iTopMargin : pDialog->container.iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
 		if (pDialog->iTextHeight < pDialog->iMessageHeight)  // on centre le texte.
 			y += (pDialog->iMessageHeight - pDialog->iTextHeight) / 2;
-		if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
-		{
-			cairo_save (pCairoContext);
-			cairo_rectangle (pCairoContext,
-				x,
-				y,
-				pDialog->iMaxTextWidth,
-				pDialog->iTextHeight);
-			cairo_clip (pCairoContext);
-		}
 		cairo_set_source_surface (pCairoContext,
 			pDialog->pTextBuffer,
 			x - pDialog->iCurrentTextOffset,
 			y);
 		_paint_inside_dialog(pCairoContext, fAlpha);
-		
-		if (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth)
-		{
-			cairo_set_source_surface (pCairoContext,
-				pDialog->pTextBuffer,
-				x - pDialog->iCurrentTextOffset + pDialog->iTextWidth + 10,
-				y);
-			_paint_inside_dialog (pCairoContext, fAlpha);
-			cairo_restore (pCairoContext);
-		}
 	}
 	
 	if (pDialog->pButtons != NULL)
@@ -617,7 +577,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 			return NULL;
 		}
 	}
-	cd_debug ("%s (%s, %s, %x, %x, %x (%x;%x))", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pTextDescription, pIcon, pContainer);
+	cd_debug ("%s (%s, %s, %x, %x, (%x;%x))", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pIcon, pContainer);
 	
 	//\________________ On cree un nouveau dialogue.
 	CairoDialog *pDialog = cairo_dock_new_dialog (pAttribute, pIcon, pContainer);
