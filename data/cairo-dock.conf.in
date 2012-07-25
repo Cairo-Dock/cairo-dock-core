@@ -672,10 +672,10 @@ bar_color_start = 1;0;0
 bar_color_stop = 0;1;0
 
 #B+ Draw outline
-bar_outline = false
+bar_outline = true
 
 #C+ Outline color
-bar_color_outline = 0;0;0
+bar_color_outline = 1;1;1
 
 #i-[2;10] Bar thickness
 bar_thickness = 4
