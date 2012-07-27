@@ -27,13 +27,14 @@
 #include "cairo-dock-draw.h"  // cairo_dock_erase_cairo_context
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-module-factory.h"  // cairo_dock_reload_module_instance
+#include "cairo-dock-module-factory.h"  // CairoDockModuleInstance
 #include "cairo-dock-log.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iAppliMaxNameLength
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"  // cairo_dock_synchronize_one_sub_dock_orientation
 #include "cairo-dock-backends-manager.h"  // cairo_dock_get_icon_container_renderer
 #include "cairo-dock-icon-facility.h"
+#include "cairo-dock-data-renderer.h"
 #include "cairo-dock-overlay.h"
 #include "cairo-dock-icon-factory.h"
 
@@ -78,16 +79,10 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 		g_strfreev (icon->pMimeTypes);
 	
 	cairo_surface_destroy (icon->pIconBuffer);
-	///cairo_surface_destroy (icon->pReflectionBuffer);
-	cairo_surface_destroy (icon->pTextBuffer);
-	cairo_surface_destroy (icon->pQuickInfoBuffer);
 	
 	if (icon->iIconTexture != 0)
 		_cairo_dock_delete_texture (icon->iIconTexture);
-	if (icon->iLabelTexture != 0)
-		_cairo_dock_delete_texture (icon->iLabelTexture);
-	if (icon->iQuickInfoTexture != 0)
-		_cairo_dock_delete_texture (icon->iQuickInfoTexture);
+	cairo_dock_unload_image_buffer (&icon->label);
 	cairo_dock_destroy_icon_overlays (icon);
 }
 
@@ -100,7 +95,7 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 {
 	if (icon->pContainer == NULL)
 	{
-		//g_print ("/!\\ Icon %s is not inside a container !!!\n", icon->cName);
+		cd_warning ("/!\\ Icon %s is not inside a container !!!", icon->cName);
 		return;
 	}
 	CairoDockModuleInstance *pInstance = icon->pModuleInstance;  // this is the only function where we destroy/create the icon's surface, so we must handle the cairo-context here.
@@ -130,12 +125,6 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	//\______________ on reset les buffers (on garde la surface/texture actuelle pour les emblemes).
 	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
 	GLuint iPrevTexture = icon->iIconTexture;
-	
-	/**if (icon->pReflectionBuffer != NULL)
-	{
-		cairo_surface_destroy (icon->pReflectionBuffer);
-		icon->pReflectionBuffer = NULL;
-	}*/
 	
 	//\______________ on charge la surface/texture.
 	if (icon->iface.load_image)
@@ -172,12 +161,6 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 		cairo_destroy (pCairoIconBGContext);
 	}
 	
-	//\______________ le reflet en mode cairo.
-	/**if (! g_bUseOpenGL && myIconsParam.fAlbedo > 0 && icon->pIconBuffer != NULL && ! (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->cFileName == NULL))
-	{
-		cairo_dock_add_reflection_to_icon (icon, pContainer);
-	}*/
-	
 	//\______________ on charge la texture si elle ne l'a pas ete.
 	if (g_bUseOpenGL && (icon->iIconTexture == iPrevTexture || icon->iIconTexture == 0))
 	{
@@ -201,16 +184,11 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 	}
 }
 
-void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDescription)
+void cairo_dock_load_icon_text (Icon *icon)
 {
-	cairo_surface_destroy (icon->pTextBuffer);
-	icon->pTextBuffer = NULL;
-	if (icon->iLabelTexture != 0)
-	{
-		_cairo_dock_delete_texture (icon->iLabelTexture);
-		icon->iLabelTexture = 0;
-	}
-	if (icon->cName == NULL || (pTextDescription->iSize == 0))
+	cairo_dock_unload_image_buffer (&icon->label);
+	
+	if (icon->cName == NULL || (myIconsParam.iconTextDescription.iSize == 0))
 		return ;
 
 	gchar *cTruncatedName = NULL;
@@ -219,43 +197,36 @@ void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDesc
 		cTruncatedName = cairo_dock_cut_string (icon->cName, myTaskbarParam.iAppliMaxNameLength);
 	}
 	
-	double fTextXOffset, fTextYOffset;
-	cairo_surface_t* pNewSurface = cairo_dock_create_surface_from_text ((cTruncatedName != NULL ? cTruncatedName : icon->cName),
-		pTextDescription,
-		&icon->iTextWidth, &icon->iTextHeight);
-	g_free (cTruncatedName);
-	//g_print (" -> %s : (%.2f;%.2f) %dx%d\n", icon->cName, icon->fTextXOffset, icon->fTextYOffset, icon->iTextWidth, icon->iTextHeight);
-
-	icon->pTextBuffer = pNewSurface;
-	
-	if (g_bUseOpenGL && icon->pTextBuffer != NULL)
-	{
-		icon->iLabelTexture = cairo_dock_create_texture_from_surface (icon->pTextBuffer);
-	}
+	int iWidth, iHeight;
+	cairo_surface_t *pSurface = cairo_dock_create_surface_from_text ((cTruncatedName != NULL ? cTruncatedName : icon->cName),
+		&myIconsParam.iconTextDescription,
+		&iWidth,
+		&iHeight);
+	cairo_dock_load_image_buffer_from_surface (&icon->label, pSurface, iWidth, iHeight);
 }
 
-void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTextDescription)
+void cairo_dock_load_icon_quickinfo (Icon *icon)
 {
-	cairo_surface_destroy (icon->pQuickInfoBuffer);
-	icon->pQuickInfoBuffer = NULL;
-	if (icon->iQuickInfoTexture != 0)
+	if (icon->cQuickInfo == NULL)  // no more quick-info -> remove any previous one
 	{
-		_cairo_dock_delete_texture (icon->iQuickInfoTexture);
-		icon->iQuickInfoTexture = 0;
+		cairo_dock_remove_overlay_at_position (icon, CAIRO_OVERLAY_BOTTOM, (gpointer)"quick-info");
 	}
-	if (icon->cQuickInfo == NULL)
-		return ;
-
-	double fMaxScale = cairo_dock_get_icon_max_scale (icon);
-	icon->pQuickInfoBuffer = cairo_dock_create_surface_from_text_full (icon->cQuickInfo,
-		pTextDescription,
-		fMaxScale,
-		icon->fWidth * fMaxScale,
-		&icon->iQuickInfoWidth, &icon->iQuickInfoHeight);
-	
-	if (g_bUseOpenGL && icon->pQuickInfoBuffer != NULL)
+	else  // add an overlay at the bottom with the text surface; any previous "quick-info" overlay will be removed.
 	{
-		icon->iQuickInfoTexture = cairo_dock_create_texture_from_surface (icon->pQuickInfoBuffer);
+		int iWidth, iHeight;
+		cairo_dock_get_icon_extent (icon, &iWidth, &iHeight);
+		double fMaxScale = cairo_dock_get_icon_max_scale (icon);
+		if (iHeight / (myIconsParam.quickInfoTextDescription.iSize * fMaxScale) > 5)  // if the icon is very height (the text occupies less than 20% of the icon)
+			fMaxScale = MIN ((double)iHeight / (myIconsParam.quickInfoTextDescription.iSize * 5), MAX (1., 16./myIconsParam.quickInfoTextDescription.iSize) * fMaxScale);  // let's make it use 20% of the icon's height, limited to 16px
+		int w, h;
+		cairo_surface_t *pSurface = cairo_dock_create_surface_from_text_full (icon->cQuickInfo,
+			&myIconsParam.quickInfoTextDescription,
+			fMaxScale,
+			iWidth,  // limit the text to the width of the icon
+			&w, &h);
+		CairoOverlay *pOverlay = cairo_dock_add_overlay_from_surface (icon, pSurface, w, h, CAIRO_OVERLAY_BOTTOM, (gpointer)"quick-info");  // the constant string "quick-info" is used as a unique identifier for all quick-infos; the surface is taken by the overlay.
+		if (pOverlay)
+			cairo_dock_set_overlay_scale (pOverlay, 0);
 	}
 }
 
@@ -271,9 +242,9 @@ void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 	
 	cairo_dock_load_icon_image (pIcon, pContainer);
 
-	cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
+	cairo_dock_load_icon_text (pIcon);
 
-	cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription);
+	cairo_dock_load_icon_quickinfo (pIcon);
 }
 
 static gboolean _load_icon_buffer_idle (Icon *pIcon)
@@ -286,7 +257,10 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 	{
 		cairo_dock_load_icon_image (pIcon, pContainer);
 		
-		cairo_dock_load_icon_quickinfo (pIcon, &myIconsParam.quickInfoTextDescription);
+		if (cairo_dock_get_icon_data_renderer (pIcon) != NULL)
+			cairo_dock_refresh_data_renderer (pIcon, pContainer);
+		
+		cairo_dock_load_icon_quickinfo (pIcon);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
 		//g_print ("icon-factory: do 1 main loop iteration\n");
@@ -299,8 +273,8 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon)
 	if (pIcon->iSidLoadImage == 0)
 	{
 		//g_print ("trigger load for %s (%x)\n", pIcon->cName, pContainer);
-		if (!pIcon->pTextBuffer)
-			cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);  // la vue peut avoir besoin de connaitre la taille du texte.
+		if (!pIcon->label.pSurface)
+			cairo_dock_load_icon_text (pIcon);  // la vue peut avoir besoin de connaitre la taille du texte.
 		pIcon->iSidLoadImage = g_idle_add ((GSourceFunc)_load_icon_buffer_idle, pIcon);
 	}
 }
@@ -308,44 +282,8 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon)
 
 void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer)
 {
-	/**if (pContainer)
-	{
-		icon->fWidth /= pContainer->fRatio;
-		icon->fHeight /= pContainer->fRatio;
-	}*/
 	cairo_dock_load_icon_image (icon, pContainer);
-	/**if (pContainer)
-	{
-		icon->fWidth *= pContainer->fRatio;
-		icon->fHeight *= pContainer->fRatio;
-	}*/
 }
-
-/**void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
-{
-	if (g_bUseOpenGL)
-		return ;
-	g_return_if_fail (pIcon != NULL && pContainer!= NULL);
-	
-	if (pIcon->pReflectionBuffer != NULL)
-	{
-		cairo_surface_destroy (pIcon->pReflectionBuffer);
-		pIcon->pReflectionBuffer = NULL;
-	}
-	if (! pContainer->bUseReflect)
-		return;
-	
-	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
-	pIcon->pReflectionBuffer = cairo_dock_create_reflection_surface (pIcon->pIconBuffer,
-		iWidth,
-		iHeight,
-		myIconsParam.fReflectHeightRatio * iHeight,
-		///myIconsParam.fReflectSize * cairo_dock_get_max_scale (pContainer),
-		myIconsParam.fAlbedo,
-		pContainer->bIsHorizontal,
-		pContainer->bDirectionUp);
-}*/
 
 
   ///////////////////////
@@ -432,8 +370,6 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		//\______________ On finit le dessin.
 		if (g_bUseOpenGL)
 			cairo_dock_update_icon_texture (pIcon);
-		/**else
-			cairo_dock_add_reflection_to_icon (pIcon, CAIRO_CONTAINER (pDock));*/
 		cairo_destroy (pCairoContext);
 	}
 }

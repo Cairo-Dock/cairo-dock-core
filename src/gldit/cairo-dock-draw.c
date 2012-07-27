@@ -555,7 +555,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
-	if (bUseText && icon->pTextBuffer != NULL && icon->iHideLabel == 0
+	if (bUseText && icon->label.pSurface != NULL && icon->iHideLabel == 0
 	&& (icon->bPointed || (icon->fScale > 1.01 && ! myIconsParam.bLabelForPointedIconOnly)))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		cairo_save (pCairoContext);
@@ -572,61 +572,73 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			///fMagnitude *= (fMagnitude * myIconsParam.fLabelAlphaThreshold + 1) / (myIconsParam.fLabelAlphaThreshold + 1);
 		}
 		
-		//int iLabelSize = icon->iTextHeight;
+		//int iLabelSize = icon->label.iHeight;
 		int iLabelSize = myIconsParam.iLabelSize;
-		//g_print ("%d / %d\n", icon->iTextHeight, myIconsParam.iLabelSize),
+		//g_print ("%d / %d\n", icon->label.iHeight, myIconsParam.iLabelSize),
 		cairo_identity_matrix (pCairoContext);  // on positionne les etiquettes sur un pixels entier, sinon ca floute.
 		if (bIsHorizontal)
 			cairo_translate (pCairoContext, floor (icon->fDrawX + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1)), floor (icon->fDrawY));
 		else
 			cairo_translate (pCairoContext, floor (icon->fDrawY), floor (icon->fDrawX + icon->fGlideOffset * icon->fWidth * icon->fScale * (icon->fGlideOffset < 0 ? fGlideScale : 1)));
 		
-		double fOffsetX = (icon->fWidth * icon->fScale - icon->iTextWidth) / 2;
+		double fOffsetX = (icon->fWidth * icon->fScale - icon->label.iWidth) / 2;
 		if (fOffsetX < - icon->fDrawX)  // l'etiquette deborde a gauche.
 			fOffsetX = - icon->fDrawX;
-		else if (icon->fDrawX + fOffsetX + icon->iTextWidth > iWidth)  // l'etiquette deborde a droite.
-			fOffsetX = iWidth - icon->iTextWidth - icon->fDrawX;
+		else if (icon->fDrawX + fOffsetX + icon->label.iWidth > iWidth)  // l'etiquette deborde a droite.
+			fOffsetX = iWidth - icon->label.iWidth - icon->fDrawX;
 		
 		if (icon->fOrientation != 0 && ! myIconsParam.bTextAlwaysHorizontal)
 			cairo_rotate (pCairoContext, icon->fOrientation);
 		
 		if (bIsHorizontal)
 		{
-			cairo_set_source_surface (pCairoContext,
+			/**cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				floor (fOffsetX),
-				floor (bDirectionUp ? -iLabelSize : icon->fHeight * icon->fScale));
+				floor (bDirectionUp ? -iLabelSize : icon->fHeight * icon->fScale));*/
+			cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
+				floor (fOffsetX), floor (bDirectionUp ? -iLabelSize : icon->fHeight * icon->fScale), fMagnitude);
 		}
 		else if (myIconsParam.bTextAlwaysHorizontal)  // horizontal label on a vertical dock -> draw them next to the icon, vertically centered (like the Parabolic view)
 		{
-			const int pad = 3;
-			cairo_set_source_surface (pCairoContext,
-				icon->pTextBuffer,
-				bDirectionUp ? 
-					floor (0 - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->iTextWidth):
-					floor (0 + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad),
-				floor (0 + icon->fWidth * icon->fScale/2 - icon->iTextHeight/2));
-			if (icon->pSubDock && gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))
+			if (icon->pSubDock && gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))  // in vertical mode 
 			{
 				fMagnitude /= 3;
 			}
+			const int pad = 3;
+			/*cairo_set_source_surface (pCairoContext,
+				icon->pTextBuffer,
+				bDirectionUp ? 
+					floor (0 - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth):
+					floor (0 + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad),
+				floor (0 + icon->fWidth * icon->fScale/2 - icon->label.iHeight/2));*/
+			cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
+				bDirectionUp ? 
+					floor (0 - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth):
+					floor (0 + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad),
+				floor (0 + icon->fWidth * icon->fScale/2 - icon->label.iHeight/2),
+				fMagnitude);
 		}
 		else
 		{
 			cairo_rotate (pCairoContext, bDirectionUp ? - G_PI/2 : G_PI/2);
-			cairo_set_source_surface (pCairoContext,
+			/**cairo_set_source_surface (pCairoContext,
 				icon->pTextBuffer,
 				floor (bDirectionUp ? fOffsetX - icon->fWidth * icon->fScale : fOffsetX),
-				-floor (bDirectionUp ? iLabelSize : icon->fHeight * icon->fScale + iLabelSize));
+				-floor (bDirectionUp ? iLabelSize : icon->fHeight * icon->fScale + iLabelSize));*/
+			cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
+				floor (bDirectionUp ? fOffsetX - icon->fWidth * icon->fScale : fOffsetX),
+				-floor (bDirectionUp ? iLabelSize : icon->fHeight * icon->fScale + iLabelSize),
+				fMagnitude);
 		}
 		
-		if (fMagnitude > .1)
-			cairo_paint_with_alpha (pCairoContext, fMagnitude);
+		/**if (fMagnitude > .1)
+			cairo_paint_with_alpha (pCairoContext, fMagnitude);*/
 		cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	}
 	
 	//\_____________________ On dessine les infos additionnelles.
-	if (icon->pQuickInfoBuffer != NULL)
+	/**if (icon->pQuickInfoBuffer != NULL)
 	{
 		double fMaxScale = cairo_dock_get_icon_max_scale (icon);
 		cairo_translate (pCairoContext,
@@ -645,8 +657,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			cairo_paint (pCairoContext);
 		else
 			cairo_paint_with_alpha (pCairoContext, icon->fAlpha);
-	}
-	
+	}*/
 	cairo_dock_draw_icon_overlays_cairo (icon, fRatio, pCairoContext);
 }
 
@@ -678,24 +689,26 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, CairoContainer *pContain
 		}
 	}
 	
-	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
-	if (bUseText && icon->pTextBuffer != NULL)
+	//\_____________________ On dessine les etiquettes.
+	if (bUseText && icon->label.pSurface != NULL)
 	{
 		cairo_save (pCairoContext);
-		double fOffsetX = (icon->fWidthFactor * icon->fWidth * icon->fScale - icon->iTextWidth) / 2;
+		double fOffsetX = (icon->fWidthFactor * icon->fWidth * icon->fScale - icon->label.iWidth) / 2;
 		if (fOffsetX < - icon->fDrawX)
 			fOffsetX = - icon->fDrawX;
-		else if (icon->fDrawX + fOffsetX + icon->iTextWidth > pContainer->iWidth)
-			fOffsetX = pContainer->iWidth - icon->iTextWidth - icon->fDrawX;
+		else if (icon->fDrawX + fOffsetX + icon->label.iWidth > pContainer->iWidth)
+			fOffsetX = pContainer->iWidth - icon->label.iWidth - icon->fDrawX;
 		if (icon->fOrientation != 0)
 		{
 			cairo_rotate (pCairoContext, icon->fOrientation);
 		}
-		cairo_set_source_surface (pCairoContext,
+		/**cairo_set_source_surface (pCairoContext,
 			icon->pTextBuffer,
 			fOffsetX,
 			-myIconsParam.iLabelSize);
-		cairo_paint (pCairoContext);
+		cairo_paint (pCairoContext);*/
+		cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
+			fOffsetX, -myIconsParam.iLabelSize, 1.);
 		cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	}
 	
@@ -703,7 +716,7 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, CairoContainer *pContain
 	///	_cairo_dock_draw_appli_indicator (icon, pCairoContext, TRUE, 1., TRUE);
 	
 	//\_____________________ On dessine les infos additionnelles.
-	if (icon->pQuickInfoBuffer != NULL)
+	/**if (icon->pQuickInfoBuffer != NULL)
 	{
 		cairo_translate (pCairoContext,
 			(- icon->iQuickInfoWidth + icon->fWidth) / 2 * icon->fScale,
@@ -718,7 +731,8 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, CairoContainer *pContain
 			0,
 			0);
 		cairo_paint (pCairoContext);
-	}
+	}*/
+	cairo_dock_draw_icon_overlays_cairo (icon, pContainer->fRatio, pCairoContext);
 }
 
 
@@ -916,7 +930,7 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	double y;
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
-	double pHiddenBgColor[4];
+	double *pHiddenBgColor;
 	const double r = 4; // corner radius of the background
 	const double gap = 3;  // gap to the screen
 	double dw = (myIconsParam.iIconGap > 2 ? 2 : 0);  // 1px margin around the icons for a better readability (only if icons won't be stuck togather then).
@@ -929,24 +943,31 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 			y = icon->fDrawY;
 			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale  - gap: gap);
 			
-			if (icon->pHiddenBgColor)
+			if (icon->bHasHiddenBg)
 			{
-				cairo_save (pCairoContext);
-				cairo_set_source_rgba (pCairoContext, icon->pHiddenBgColor[0], icon->pHiddenBgColor[1], icon->pHiddenBgColor[2], icon->pHiddenBgColor[3] * pDock->fPostHideOffset);
-				w = icon->fWidth * icon->fScale;
-				h = icon->fHeight * icon->fScale;
-				if (pDock->container.bIsHorizontal)
+				if (icon->pHiddenBgColor)  // custom bg color
+					pHiddenBgColor = icon->pHiddenBgColor;
+				else  // default bg color
+					pHiddenBgColor = myDocksParam.fHiddenBg;
+				if ( pHiddenBgColor[3] != 0)
 				{
-					cairo_translate (pCairoContext, icon->fDrawX - dw / 2, icon->fDrawY);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, w - 2*r + dw, h);
+					cairo_save (pCairoContext);
+					cairo_set_source_rgba (pCairoContext, pHiddenBgColor[0], pHiddenBgColor[1], pHiddenBgColor[2], pHiddenBgColor[3] * pDock->fPostHideOffset);
+					w = icon->fWidth * icon->fScale;
+					h = icon->fHeight * icon->fScale;
+					if (pDock->container.bIsHorizontal)
+					{
+						cairo_translate (pCairoContext, icon->fDrawX - dw / 2, icon->fDrawY);
+						cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, w - 2*r + dw, h);
+					}
+					else
+					{
+						cairo_translate (pCairoContext, icon->fDrawY - dw / 2, icon->fDrawX);
+						cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r + dw, w);
+					}
+					cairo_fill (pCairoContext);
+					cairo_restore (pCairoContext);
 				}
-				else
-				{
-					cairo_translate (pCairoContext, icon->fDrawY - dw / 2, icon->fDrawX);
-					cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r + dw, w);
-				}
-				cairo_fill (pCairoContext);
-				cairo_restore (pCairoContext);
 			}
 			
 			cairo_save (pCairoContext);

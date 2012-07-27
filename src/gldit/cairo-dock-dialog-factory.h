@@ -83,10 +83,8 @@ struct _CairoDialogAttribute {
 	gint iNbFrames;  // 0 <=> 1.
 	/// text of the message, or NULL.
 	const gchar *cText;
-	/// maximum authorized width of the message; it will scroll if it is too large. Set 0 to not limit it.
-	gint iMaxTextWidth;  // 0 => pas de limite.
-	/// A text rendering description of the message, or NULL to use the default one.
-	CairoDockLabelDescription *pTextDescription;  // NULL => &myDialogs.dialogTextDescription
+	/// whether to use Pango markups or not (markups are html-like marks, like <b>...</b>; using markups force you to escape some characters like "&" -> "&amp;")
+	gboolean bUseMarkup;
 	
 	/// a widget to interact with the user, or NULL.
 	GtkWidget *pInteractiveWidget;
@@ -169,9 +167,9 @@ struct _CairoDialog {
 	
 	gint iSidTimer;// le timer pour la destruction automatique du dialog.
 	gint iNbFrames, iCurrentFrame;// pour l'animation de the icon.
-	gint iMaxTextWidth;// pour le defilement du texte.
 	gint iCurrentTextOffset;// offset for text scrolling.
-	gint iSidAnimateIcon, iSidAnimateText;// timers these 2 animations.
+	gint iSidAnimateIcon;
+	gboolean bUseMarkup;
 	gboolean bNoInput;// whether the dialog is transparent to mouse input.
 	gboolean bAllowMinimize;// TRUE to allow the dialog to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
 	GldiShape* pShapeBitmap;

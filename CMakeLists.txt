@@ -11,7 +11,7 @@ include ("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/GNUInstallDirs.cmake")
 ########### project ###############
 
 project ("cairo-dock")
-set (VERSION "3.0.0")
+set (VERSION "3.0.99.alpha2")
 
 add_definitions (-std=c99 -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration -Wstrict-prototypes) # removed for stable versions: -Wstrict-prototypes #-Wunreachable-code -Wno-unused-parameter -Wall 
 if (NOT ${CMAKE_BUILD_TYPE})
@@ -22,6 +22,11 @@ add_definitions (-DCAIRO_DOCK_DEFAULT_ICON_NAME="default-icon.svg")
 add_definitions (-DCAIRO_DOCK_ICON="cairo-dock.svg")
 add_definitions (-DCAIRO_DOCK_LOGO="cairo-dock-logo.png")
 add_definitions (-DCAIRO_DOCK_DATA_DIR="cairo-dock")
+if (NOT "${force-icon-in-menus}" STREQUAL "no")  # we believe that not showing icons in the menus by default is a terrible idea; unfortunately, it's not easily undoable for an end-user; so until this is fixed by a big player (Gnome, Ubuntu or other), we'll force the display, unless "-Dforce-icon-in-menus=yes" is provided in the cmake command.
+	add_definitions (-DCAIRO_DOCK_FORCE_ICON_IN_MENUS=1)
+else()
+	add_definitions (-DCAIRO_DOCK_FORCE_ICON_IN_MENUS=0)
+endif()
 add_custom_target (uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 ############ sources tarball ############
@@ -156,9 +161,6 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CUR
 
 ########### install files ###############
 
-install (FILES cairo-dock-package-theme
-	DESTINATION ${bindir}
-	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
 
 ###########     misc      ###############

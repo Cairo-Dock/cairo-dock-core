@@ -58,9 +58,9 @@
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-animations.h"
-///#include "cairo-dock-emblem.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-global-variables.h"
+#include "cairo-dock-data-renderer.h"
 #include "cairo-dock-opengl.h"
 
 #include "cairo-dock-dock-facility.h"
@@ -249,7 +249,7 @@ static void cairo_dock_manage_mouse_position (CairoDock *pDock)
 				}
 				//pDock->container.bInside = TRUE;
 				///if ((pDock->bAtBottom && pDock->iRefCount == 0 && ! pDock->bAutoHide) || (pDock->container.iWidth != pDock->iMaxDockWidth || pDock->container.iHeight != pDock->iMaxDockHeight) || (!pDock->container.bInside))  // on le fait pas avec l'auto-hide, car un signal d'entree est deja emis a cause des mouvements/redimensionnements de la fenetre, et en rajouter un ici fout le boxon.  // !pDock->container.bInside ajoute pour le bug du chgt de bureau.
-				if ((pDock->iMagnitudeIndex == 0 && pDock->iRefCount == 0 && ! pDock->bAutoHide) || !pDock->container.bInside)
+				if ((pDock->iMagnitudeIndex == 0 && pDock->iRefCount == 0 && ! pDock->bAutoHide && ! pDock->bIsGrowingUp) || !pDock->container.bInside)  // we are probably a little bit paranoia here, especially with the first case ... anyway, if we missed the 'enter' event for some reason, force it here.
 				{
 					//g_print ("  on emule une re-rentree (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
 					cairo_dock_emit_enter_signal (CAIRO_CONTAINER (pDock));
@@ -1129,6 +1129,9 @@ void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)  // the requ
 	cairo_dock_set_icon_size_in_dock (pDock, pIcon);
 	
 	cairo_dock_load_icon_image (pIcon, CAIRO_CONTAINER (pDock));  // handles the applet's context
+	
+	if (cairo_dock_get_icon_data_renderer (pIcon) != NULL)
+		cairo_dock_reload_data_renderer_on_icon (pIcon, CAIRO_CONTAINER (pDock));
 	
 	cairo_dock_trigger_update_dock_size (pDock);
 	gtk_widget_queue_draw (pDock->container.pWidget);

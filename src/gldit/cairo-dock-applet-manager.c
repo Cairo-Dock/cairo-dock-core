@@ -33,6 +33,7 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-factory.h"
+#include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-applet-manager.h"
 
 

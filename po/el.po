@@ -8,20 +8,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock_el\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-04-12 00:33+0000\n"
-"PO-Revision-Date: 2012-03-22 13:29+0000\n"
+"PO-Revision-Date: 2012-04-14 18:54+0000\n"
 "Last-Translator: Michael Kotsarinis <mk73628@gmail.com>\n"
 "Language-Team: Greek\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-13 05:21+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-07-03 05:16+0000\n"
+"X-Generator: Launchpad (build 15531)\n"
 "X-Poedit-Country: France\n"
-"Language: \n"
 "X-Poedit-Language: French\n"
 
-#: ../src/cairo-dock-gui-commons.c:221
+#: ../src/cairo-dock-gui-commons.c:222
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -31,110 +30,109 @@ msgstr ""
 "Θα τις χάσετε εάν δεν τις αποθηκεύσετε πριν επιλέξετε ένα νέο θέμα. Συνέχεια "
 "οπωσδήποτε;"
 
-#: ../src/cairo-dock-gui-commons.c:247
+#: ../src/cairo-dock-gui-commons.c:248
 msgid "Please wait while importing the theme..."
 msgstr "Παρακαλώ περιμένετε κατά την εισαγωγή του θέματος..."
 
-#: ../src/cairo-dock-gui-commons.c:369
+#: ../src/cairo-dock-gui-commons.c:370
 msgid "Configure this applet"
 msgstr "Προσαρμογή αυτής της μικροεφαρμογής"
 
-#: ../src/cairo-dock-gui-commons.c:406 ../src/cairo-dock-gui-main.c:131
+#: ../src/cairo-dock-gui-commons.c:407 ../src/cairo-dock-gui-main.c:136
 msgid "Files"
 msgstr "Αρχεία"
 
-#: ../src/cairo-dock-gui-commons.c:411 ../src/cairo-dock-gui-main.c:132
+#: ../src/cairo-dock-gui-commons.c:412 ../src/cairo-dock-gui-main.c:137
 msgid "Internet"
 msgstr "Διαδίκτυο"
 
-#: ../src/cairo-dock-gui-commons.c:416 ../src/cairo-dock-gui-main.c:133
+#: ../src/cairo-dock-gui-commons.c:417 ../src/cairo-dock-gui-main.c:138
 msgid "Desktop"
 msgstr "Επιφάνεια εργασίας"
 
-#: ../src/cairo-dock-gui-commons.c:421
+#: ../src/cairo-dock-gui-commons.c:422
 msgid "Accessory"
 msgstr "Αξεσουάρ"
 
-#: ../src/cairo-dock-gui-commons.c:426 ../src/cairo-dock-gui-main.c:135
-#: ../src/cairo-dock-gui-main.c:1509 ../data/messages:773
+#: ../src/cairo-dock-gui-commons.c:427 ../src/cairo-dock-gui-main.c:140
+#: ../src/cairo-dock-gui-main.c:1581 ../data/messages:787
 msgid "System"
 msgstr "Σύστημα"
 
-#: ../src/cairo-dock-gui-commons.c:431 ../src/cairo-dock-gui-main.c:136
+#: ../src/cairo-dock-gui-commons.c:432 ../src/cairo-dock-gui-main.c:141
 msgid "Fun"
 msgstr "Διασκέδαση"
 
-#: ../src/cairo-dock-gui-commons.c:474
+#: ../src/cairo-dock-gui-commons.c:475
 msgid "plug-in"
 msgstr "πρόσθετο"
 
-#: ../src/cairo-dock-gui-commons.c:480
+#: ../src/cairo-dock-gui-commons.c:481
 msgid "category"
 msgstr "Κατηγορία"
 
-#: ../src/cairo-dock-gui-commons.c:575
+#: ../src/cairo-dock-gui-commons.c:576
 msgid "Press the shortkey"
 msgstr ""
 
-#: ../src/cairo-dock-gui-commons.c:594
+#: ../src/cairo-dock-gui-commons.c:595
 msgid "Change the shortkey"
 msgstr "Αλλάξτε το σύντομο πλήκτρο"
 
-#: ../src/cairo-dock-gui-commons.c:681
+#: ../src/cairo-dock-gui-commons.c:682
 msgid "Origin"
 msgstr ""
 
-#: ../src/cairo-dock-gui-commons.c:686
+#: ../src/cairo-dock-gui-commons.c:687
 msgid "Action"
 msgstr ""
 
-#: ../src/cairo-dock-gui-commons.c:690
+#: ../src/cairo-dock-gui-commons.c:691
 msgid "Shortkey"
 msgstr ""
 
-#: ../src/cairo-dock-gui-items.c:242
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+#: ../src/cairo-dock-gui-items.c:241
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Οι παράμετροι του κεντρικού dock είναι διαθέσιμες στο κύριο παράθυρο "
 "διαμόρφωσης."
 
-#: ../src/cairo-dock-gui-items.c:460
+#: ../src/cairo-dock-gui-items.c:459
 msgid "Launcher configuration"
 msgstr "Διαμόρφωση των εκκινητών"
 
-#: ../src/cairo-dock-gui-items.c:878
+#: ../src/cairo-dock-gui-items.c:877
 msgid "Remove this item"
 msgstr ""
 
-#: ../src/cairo-dock-gui-main.c:129 ../data/messages:665
+#: ../src/cairo-dock-gui-main.c:134 ../data/messages:677
 msgid "Behaviour"
 msgstr "Συμπεριφορά"
 
-#: ../src/cairo-dock-gui-main.c:130 ../data/messages:489 ../data/messages:1317
+#: ../src/cairo-dock-gui-main.c:135 ../data/messages:501 ../data/messages:1331
 msgid "Appearance"
 msgstr "Εμφάνιση"
 
-#: ../src/cairo-dock-gui-main.c:134
+#: ../src/cairo-dock-gui-main.c:139
 msgid "Accessories"
 msgstr "Βοηθήματα"
 
-#: ../src/cairo-dock-gui-main.c:137 ../src/cairo-dock-gui-main.c:1743
+#: ../src/cairo-dock-gui-main.c:142 ../src/cairo-dock-gui-main.c:1815
 msgid "All"
 msgstr "Όλα"
 
-#: ../src/cairo-dock-gui-main.c:1480
+#: ../src/cairo-dock-gui-main.c:1552
 msgid "Set the position of the main dock."
 msgstr "Καθορίστε τη θέση του κύριου dock"
 
 # #################################
 # ########### cairo-dock.conf #############
 # #################################
-#: ../src/cairo-dock-gui-main.c:1481 ../data/messages:323 ../data/messages:535
+#: ../src/cairo-dock-gui-main.c:1553 ../data/messages:323 ../data/messages:547
 msgid "Position"
 msgstr "Θέση"
 
-#: ../src/cairo-dock-gui-main.c:1487
+#: ../src/cairo-dock-gui-main.c:1559
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -145,67 +143,67 @@ msgstr ""
 "Διαμορφώστε τον τρόπο που επιθυμείτε να έχετε πρόσβαση στα dock και sub-"
 "docks σας!"
 
-#: ../src/cairo-dock-gui-main.c:1488 ../src/cairo-dock-menu.c:1715
+#: ../src/cairo-dock-gui-main.c:1560 ../src/cairo-dock-menu.c:1713
 #: ../data/messages:341
 msgid "Visibility"
 msgstr "Ορατότητα"
 
-#: ../src/cairo-dock-gui-main.c:1494
+#: ../src/cairo-dock-gui-main.c:1566
 msgid "Display and interact with currently open windows."
 msgstr "Εμφάνιση και αλληλεπίδραση με τα παράθυρα που είναι τώρα ανοιχτά."
 
-#: ../src/cairo-dock-gui-main.c:1495 ../data/messages:41 ../data/messages:457
+#: ../src/cairo-dock-gui-main.c:1567 ../data/messages:41 ../data/messages:457
 msgid "Taskbar"
 msgstr "Γραμμή εργασιών"
 
-#: ../src/cairo-dock-gui-main.c:1501
+#: ../src/cairo-dock-gui-main.c:1573
 msgid "Define all the keyboard shortcuts currently available."
 msgstr "Προσδιορίστε όλες τις διαθέσιμες συντομέυσεις πλήκτρων ."
 
-#: ../src/cairo-dock-gui-main.c:1502 ../data/messages:515 ../data/messages:767
+#: ../src/cairo-dock-gui-main.c:1574 ../data/messages:527 ../data/messages:781
 msgid "Shortkeys"
 msgstr "Σύντομα πλήκτρα"
 
-#: ../src/cairo-dock-gui-main.c:1508
+#: ../src/cairo-dock-gui-main.c:1580
 msgid "All of the parameters you will never want to tweak."
 msgstr "Όλες οι παράμετροι που δεν θέλετε να πειράξετε ποτέ."
 
-#: ../src/cairo-dock-gui-main.c:1518
+#: ../src/cairo-dock-gui-main.c:1590
 msgid "Set a background for your dock."
 msgstr "Ορίστε ένα παρασκήνιο για το δικό σας dock."
 
-#: ../src/cairo-dock-gui-main.c:1519 ../data/messages:865
-#: ../data/messages:1235 ../data/messages:1343
+#: ../src/cairo-dock-gui-main.c:1591 ../data/messages:879
+#: ../data/messages:1249 ../data/messages:1357
 msgid "Background"
 msgstr "Παρασκήνιο"
 
-#: ../src/cairo-dock-gui-main.c:1525
+#: ../src/cairo-dock-gui-main.c:1597
 msgid "Select a view for each of your docks."
 msgstr "Επιλέξτε μια προβολή για κάθε ένα από τα dock σας."
 
-#: ../src/cairo-dock-gui-main.c:1526 ../data/messages:507 ../data/messages:933
-#: ../data/messages:1337
+#: ../src/cairo-dock-gui-main.c:1598 ../data/messages:519 ../data/messages:947
+#: ../data/messages:1351
 msgid "Views"
 msgstr "Εμφάνιση"
 
-#: ../src/cairo-dock-gui-main.c:1533
+#: ../src/cairo-dock-gui-main.c:1605
 msgid "Configure text bubble appearance."
 msgstr "Ρύθμιση της εμφανίσης των φυσαλίδων διαλόγου."
 
-#: ../src/cairo-dock-gui-main.c:1534
+#: ../src/cairo-dock-gui-main.c:1606
 msgid "Dialog boxes"
 msgstr "Διάλογοι"
 
-#: ../src/cairo-dock-gui-main.c:1541
+#: ../src/cairo-dock-gui-main.c:1613
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr ""
 "Τα εφαρμογίδια μπορούν να οριστούν για την επιφάνεια εργασίας ως widgets."
 
-#: ../src/cairo-dock-gui-main.c:1542 ../data/messages:89 ../data/messages:989
+#: ../src/cairo-dock-gui-main.c:1614 ../data/messages:89 ../data/messages:1003
 msgid "Desklets"
 msgstr "Desklets"
 
-#: ../src/cairo-dock-gui-main.c:1549
+#: ../src/cairo-dock-gui-main.c:1621
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -213,69 +211,69 @@ msgstr ""
 "Όλα σχετικά με τα εικονίδια:\n"
 " μέγεθος, αντανάκλαση, θέμα εικονιδίου,..."
 
-#: ../src/cairo-dock-gui-main.c:1550 ../data/messages:11 ../data/messages:491
-#: ../data/messages:1053 ../data/messages:1319
+#: ../src/cairo-dock-gui-main.c:1622 ../data/messages:11 ../data/messages:503
+#: ../data/messages:1067 ../data/messages:1333
 msgid "Icons"
 msgstr "Εικονίδια"
 
-#: ../src/cairo-dock-gui-main.c:1556
+#: ../src/cairo-dock-gui-main.c:1628
 msgid "Indicators are additional markers for your icons."
 msgstr "Οι δείκτες είναι πρόσθετες ενδείξεις για τα εικονίδιά σας."
 
-#: ../src/cairo-dock-gui-main.c:1557 ../data/messages:1137
+#: ../src/cairo-dock-gui-main.c:1629 ../data/messages:1151
 msgid "Indicators"
 msgstr "Δείκτες"
 
-#: ../src/cairo-dock-gui-main.c:1564
+#: ../src/cairo-dock-gui-main.c:1636
 msgid "Define icon caption and quick-info style."
 msgstr ""
 "Καθορίστε το στυλ των ετικετών των εικονιδίων και τις γρήγορες πληροφορίες."
 
-#: ../src/cairo-dock-gui-main.c:1565
+#: ../src/cairo-dock-gui-main.c:1637
 msgid "Captions"
 msgstr "Ετικέτες"
 
-#: ../src/cairo-dock-gui-main.c:1657
+#: ../src/cairo-dock-gui-main.c:1729
 msgid "Filter"
 msgstr "Φίλτρο"
 
-#: ../src/cairo-dock-gui-main.c:1699
+#: ../src/cairo-dock-gui-main.c:1771
 msgid "All words"
 msgstr "Όλες οι λέξεις"
 
-#: ../src/cairo-dock-gui-main.c:1703
+#: ../src/cairo-dock-gui-main.c:1775
 msgid "Highlighted words"
 msgstr "Επισημασμένες λέξεις"
 
-#: ../src/cairo-dock-gui-main.c:1708
+#: ../src/cairo-dock-gui-main.c:1780
 msgid "Hide others"
 msgstr "Απόκρυψη άλλων"
 
-#: ../src/cairo-dock-gui-main.c:1713
+#: ../src/cairo-dock-gui-main.c:1785
 msgid "Search in description"
 msgstr "Αναζήτηση στην περιγραφή"
 
-#: ../src/cairo-dock-gui-main.c:1720
+#: ../src/cairo-dock-gui-main.c:1792
 msgid "Categories"
 msgstr "Κατηγορίες"
 
-#: ../src/cairo-dock-gui-main.c:1863
+#: ../src/cairo-dock-gui-main.c:1935
 msgid "Enable this module"
 msgstr "Ενεργοποίηση αυτού του αρθρώματος"
 
-#: ../src/cairo-dock-gui-main.c:1927 ../data/messages:531
+#: ../src/cairo-dock-gui-main.c:1999 ../data/messages:543
 msgid "More applets"
 msgstr "Περισσότερες μικροεφαρμογές"
 
-#: ../src/cairo-dock-gui-main.c:1928 ../data/messages:529
+#: ../src/cairo-dock-gui-main.c:2000 ../data/messages:541
 msgid "Get more applets online !"
 msgstr "Λήψη περισσότερων μικροεφαρμογών στο διαδίκτυο!"
 
-#: ../src/cairo-dock-gui-main.c:2031 ../src/cairo-dock-gui-simple.c:861
+#: ../src/cairo-dock-gui-main.c:2103 ../src/cairo-dock-gui-simple.c:861
 msgid "Cairo-Dock configuration"
 msgstr "Ρύθμιση του Cairo-Dock"
 
-#: ../src/cairo-dock-gui-main.c:2396
+#: ../src/cairo-dock-gui-main.c:2468
 #, c-format
 msgid ""
 "The '%s' module is not present. You need to install it and all its "
@@ -284,16 +282,16 @@ msgstr ""
 "Το άρθρωμα '%s' δεν εμφανίζεται. Πρέπει να το εγκαταστήσετε μαζί με όλες τις "
 "εξαρτήσεις του για να χρησιμοποιήσετε τις λειτουργίες του."
 
-#: ../src/cairo-dock-gui-main.c:2402
+#: ../src/cairo-dock-gui-main.c:2474
 #, c-format
 msgid "The '%s' module is not enabled."
 msgstr "Το άρθρωμα '%s' δεν είναι ενεργοποιημένο."
 
-#: ../src/cairo-dock-gui-main.c:2403
+#: ../src/cairo-dock-gui-main.c:2475
 msgid "Do you want to enable it now?"
 msgstr "Θέλετε να το ενεργοποιήσετε τώρα;"
 
-#: ../src/cairo-dock-gui-main.c:2769
+#: ../src/cairo-dock-gui-main.c:2841
 msgid "Simple Mode"
 msgstr "Απλή λειτουργία"
 
@@ -322,12 +320,11 @@ msgid "Effects:"
 msgstr "Εφέ:"
 
 #: ../src/cairo-dock-gui-simple.c:797
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Κάντε κλικ σε μια μικροεφαρμογή για να έχετε προεπισκόπηση και περιγραφή της."
 
-#: ../src/cairo-dock-gui-simple.c:823
+#: ../src/cairo-dock-gui-simple.c:823 ../data/messages:483
 msgid "On mouse hover:"
 msgstr "Όταν ο δείκτης του ποντικιού περάσει από επάνω:"
 
@@ -383,7 +380,7 @@ msgstr "Ιστότοπος ανάπτυξης"
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Βρείτε την τελευταία έκδοση του Cairo-Dock εδώ !."
 
-#: ../src/cairo-dock-menu.c:219 ../src/cairo-dock-menu.c:953
+#: ../src/cairo-dock-menu.c:219 ../src/cairo-dock-menu.c:951
 msgid "Get more applets!"
 msgstr "Λήψη περισσότερων μικροεφαρμογών!"
 
@@ -433,9 +430,13 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Apazoglou Thodoris https://launchpad.net/~apazoglouthodoris\n"
+"  Champas Antonis (dexter_ax) https://launchpad.net/~dexter-ax\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
+"  George Kontis https://launchpad.net/~giormatsis\n"
+"  Giannis Katsampirhs https://launchpad.net/~juankats\n"
 "  Gregory https://launchpad.net/~greco\n"
-"  Michael Kotsarinis https://launchpad.net/~mk73628"
+"  Michael Kotsarinis https://launchpad.net/~mk73628\n"
+"  Yannis Kaskamanidis https://launchpad.net/~ttnfy17"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Support"
@@ -473,22 +474,26 @@ msgid "Users of our forum"
 msgstr "Χρήστες για το φόρουμ μας"
 
 #: ../src/cairo-dock-menu.c:322
+msgid "List of our forum's members"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:323
 msgid "Artwork"
 msgstr "Τέχνη"
 
-#: ../src/cairo-dock-menu.c:324
+#: ../src/cairo-dock-menu.c:325
 msgid "Thanks"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:401
+#: ../src/cairo-dock-menu.c:402
 msgid "Quit Cairo-Dock?"
 msgstr "Έξοδος από το Cairo-Dock;"
 
-#: ../src/cairo-dock-menu.c:431 ../src/cairo-dock-menu.c:573
+#: ../src/cairo-dock-menu.c:432 ../src/cairo-dock-menu.c:571
 msgid "Separator"
 msgstr "Διαχωριστικό"
 
-#: ../src/cairo-dock-menu.c:543
+#: ../src/cairo-dock-menu.c:541
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -498,39 +503,39 @@ msgstr ""
 "Τώρα μετακινήστε μερικούς εκκινητές σε αυτό με δεξί κλικ στο εικονίδιο -> "
 "μετακίνηση σε άλλο dock"
 
-#: ../src/cairo-dock-menu.c:567
+#: ../src/cairo-dock-menu.c:565
 msgid "Add"
 msgstr "Προσθήκη"
 
-#: ../src/cairo-dock-menu.c:569
+#: ../src/cairo-dock-menu.c:567
 msgid "Sub-dock"
 msgstr "Υπο-dock"
 
-#: ../src/cairo-dock-menu.c:571
+#: ../src/cairo-dock-menu.c:569
 msgid "Main dock"
 msgstr "Κύριο dock"
 
-#: ../src/cairo-dock-menu.c:575
+#: ../src/cairo-dock-menu.c:573
 msgid "Custom launcher"
 msgstr "Προσαρμοσμένος εκκινητής"
 
-#: ../src/cairo-dock-menu.c:576
+#: ../src/cairo-dock-menu.c:574
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
 "Συνήθως θα σύρετε έναν εκκινητή από το μενού και θα τον αφήνετε στη μπάρα."
 
-#: ../src/cairo-dock-menu.c:593
+#: ../src/cairo-dock-menu.c:591
 msgid "separator"
 msgstr "διαχωριστικό"
 
-#: ../src/cairo-dock-menu.c:597
+#: ../src/cairo-dock-menu.c:595
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr ""
 "Πρόκειται να αφαιρέσετε αυτό το εικονίδιο (%s) από το dock. Είστε βέβαιος;"
 
-#: ../src/cairo-dock-menu.c:609
+#: ../src/cairo-dock-menu.c:607
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -540,11 +545,11 @@ msgstr ""
 "τη συσκευασία;\n"
 " (σε αντίθετη περίπτωση θα καταστραφούν)"
 
-#: ../src/cairo-dock-menu.c:633
+#: ../src/cairo-dock-menu.c:631
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Λυπούμαστε, αυτό το εικονίδιο δεν έχει αρχείο ρυθμίσεων."
 
-#: ../src/cairo-dock-menu.c:673
+#: ../src/cairo-dock-menu.c:671
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -554,7 +559,7 @@ msgstr ""
 "Μπορείτε να το προσαρμόσετε με δεξί κλικ σε αυτό -> cairo-dock -> προσαρμογή "
 "αυτού του dock."
 
-#: ../src/cairo-dock-menu.c:754
+#: ../src/cairo-dock-menu.c:752
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -562,93 +567,92 @@ msgstr ""
 "Λυπούμαστε, δε βρέθηκε το αντίστοιχο αρχείο περιγραφής\n"
 "Δοκιμάστε να σύρετε τον εκκινητή από το μενού εφαρμογών."
 
-#: ../src/cairo-dock-menu.c:795
+#: ../src/cairo-dock-menu.c:793
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
 "Πρόκειται να αφαιρέσετε αυτή τη μικροεφαρμογή (%s) από το dock. Είστε "
 "βέβαιος;"
 
-#: ../src/cairo-dock-menu.c:853
+#: ../src/cairo-dock-menu.c:851
 msgid "Configure"
 msgstr "Προσαρμογή"
 
-#: ../src/cairo-dock-menu.c:858
+#: ../src/cairo-dock-menu.c:856
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Διαμόρφωση συμπεριφοράς, εμφάνισης και μικροεφαρμογών."
 
-#: ../src/cairo-dock-menu.c:863
+#: ../src/cairo-dock-menu.c:861
 msgid "Configure this dock"
 msgstr "Ρύθμιση αυτού του dock"
 
-#: ../src/cairo-dock-menu.c:868
+#: ../src/cairo-dock-menu.c:866
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr ""
 "Προσαρμόστε την θέση, την ορατότητα και την εμφάνιση αυτού του κεντρικού "
 "dock."
 
-#: ../src/cairo-dock-menu.c:870
+#: ../src/cairo-dock-menu.c:868
 msgid "Delete this dock"
 msgstr "Διαγραφή αυτού του dock"
 
-#: ../src/cairo-dock-menu.c:880
+#: ../src/cairo-dock-menu.c:878
 msgid "Manage themes"
 msgstr "Διαχείριση θεμάτων"
 
-#: ../src/cairo-dock-menu.c:885
+#: ../src/cairo-dock-menu.c:883
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 "Επιλέξτε μεταξύ πολλών θεμάτων στο διακομιστή ή αποθηκεύστε το τρέχον θέμα "
 "σας."
 
-#: ../src/cairo-dock-menu.c:898
+#: ../src/cairo-dock-menu.c:896
 msgid "Lock icons position"
 msgstr "Κλείδωσε τη θέση των εικονιδίων"
 
-#: ../src/cairo-dock-menu.c:902
+#: ../src/cairo-dock-menu.c:900
 msgid "This will (un)lock the position of the icons."
 msgstr "Αυτό πρόκειται να (ξε)κλειδώσει την θέση των εικονιδίων."
 
-#: ../src/cairo-dock-menu.c:926
+#: ../src/cairo-dock-menu.c:924
 msgid "Quick-Hide"
 msgstr "Άμεση απόκρυψη"
 
-#: ../src/cairo-dock-menu.c:931
+#: ../src/cairo-dock-menu.c:929
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Θα αποκρύψει το dock έως ότου μετακινήσετε το ποντίκι μέσα του."
 
-#: ../src/cairo-dock-menu.c:942
+#: ../src/cairo-dock-menu.c:940
 msgid "Launch Cairo-Dock on startup"
 msgstr "Εκκίνηση του Cairo-Dock κατά την εκκίνηση του συστήματος"
 
-#: ../src/cairo-dock-menu.c:958
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+#: ../src/cairo-dock-menu.c:956
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Μικροεφαρμογές από τρίτους παρέχουν ενσωμάτωση πολλών προγραμμάτων, όπως το "
 "Pidgin"
 
-#: ../src/cairo-dock-menu.c:961 ../src/help/applet-init.c:28
+#: ../src/cairo-dock-menu.c:959 ../src/help/applet-init.c:28
 #: ../src/help/applet-notifications.c:257
 msgid "Help"
 msgstr "Βοήθεια"
 
-#: ../src/cairo-dock-menu.c:966
+#: ../src/cairo-dock-menu.c:964
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr ""
 "Δεν υπάρχουν προβλήματα, υπάρχουν μόνο λύσεις (και πολλές χρήσιμες "
 "υποδείξεις!)"
 
-#: ../src/cairo-dock-menu.c:968
+#: ../src/cairo-dock-menu.c:966
 msgid "About"
 msgstr "Περί"
 
-#: ../src/cairo-dock-menu.c:977
+#: ../src/cairo-dock-menu.c:975
 msgid "Quit"
 msgstr "Τερματισμός"
 
-#: ../src/cairo-dock-menu.c:986
+#: ../src/cairo-dock-menu.c:984
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
@@ -658,193 +662,193 @@ msgstr ""
 "Δεν προτίνεται να κλείσετε την πλατφόρμα αλλά μπορείτε να πατήσετε Shift για "
 "να ξεκλειδώσετε αυτή την εγγραφή."
 
-#: ../src/cairo-dock-menu.c:1018 ../src/cairo-dock-menu.c:1039
+#: ../src/cairo-dock-menu.c:1016 ../src/cairo-dock-menu.c:1037
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: ../src/cairo-dock-menu.c:1020 ../src/cairo-dock-menu.c:1046
+#: ../src/cairo-dock-menu.c:1018 ../src/cairo-dock-menu.c:1044
 msgid "Remove"
 msgstr "Αφαίρεση"
 
-#: ../src/cairo-dock-menu.c:1021
+#: ../src/cairo-dock-menu.c:1019
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 "Μπορείτε να απομακρύνετε έναν εκκινητή μεταφέροντάς τον με το ποντίκι έξω "
 "από το dock."
 
-#: ../src/cairo-dock-menu.c:1023 ../src/cairo-dock-menu.c:1055
+#: ../src/cairo-dock-menu.c:1021 ../src/cairo-dock-menu.c:1053
 msgid "Move to another dock"
 msgstr "Μετακίνηση σε άλλο dock"
 
-#: ../src/cairo-dock-menu.c:1025 ../src/cairo-dock-menu.c:1057
-#: ../src/gldit/cairo-dock-gui-factory.c:1105
+#: ../src/cairo-dock-menu.c:1023 ../src/cairo-dock-menu.c:1055
+#: ../src/gldit/cairo-dock-gui-factory.c:1122
 msgid "New main dock"
 msgstr "Νέο κύριο dock"
 
-#: ../src/cairo-dock-menu.c:1034
+#: ../src/cairo-dock-menu.c:1032
 msgid "Make it a launcher"
 msgstr "Να γίνει εκκινητής"
 
-#: ../src/cairo-dock-menu.c:1043
+#: ../src/cairo-dock-menu.c:1041
 msgid "Detach"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1043
+#: ../src/cairo-dock-menu.c:1041
 msgid "Return to the dock"
 msgstr "Επιστροφή στο dock"
 
-#: ../src/cairo-dock-menu.c:1050
+#: ../src/cairo-dock-menu.c:1048
 msgid "Duplicate"
 msgstr "Διπλασιασμός"
 
-#: ../src/cairo-dock-menu.c:1065
+#: ../src/cairo-dock-menu.c:1063
 msgid "Applet's handbook"
 msgstr "Εγχειρίδιο μικροεφαρμογής"
 
-#: ../src/cairo-dock-menu.c:1110
+#: ../src/cairo-dock-menu.c:1108
 msgid "Pick up an image"
 msgstr "Διαλέξτε μια εικόνα"
 
-#: ../src/cairo-dock-menu.c:1341
+#: ../src/cairo-dock-menu.c:1339
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Μετακίνηση όλων στην επιφάνεια εργασίας %d - όψη %d"
 
-#: ../src/cairo-dock-menu.c:1341
+#: ../src/cairo-dock-menu.c:1339
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Μετάβαση στην επιφάνεια εργασίας %d - όψη %d"
 
-#: ../src/cairo-dock-menu.c:1343
+#: ../src/cairo-dock-menu.c:1341
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Μετακίνηση όλων στην επιφάνεια εργασίας %d"
 
-#: ../src/cairo-dock-menu.c:1343
+#: ../src/cairo-dock-menu.c:1341
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Μετάβαση στην επιφάνεια εργασίας %d"
 
-#: ../src/cairo-dock-menu.c:1345
+#: ../src/cairo-dock-menu.c:1343
 #, c-format
 msgid "Move all to face %d"
 msgstr "Μετακίνηση όλων στην όψη %d"
 
-#: ../src/cairo-dock-menu.c:1345
+#: ../src/cairo-dock-menu.c:1343
 #, c-format
 msgid "Move to face %d"
 msgstr "Μετάβαση στην όψη %d"
 
-#: ../src/cairo-dock-menu.c:1591 ../src/cairo-dock-menu.c:1690
+#: ../src/cairo-dock-menu.c:1589 ../src/cairo-dock-menu.c:1688
 msgid "Other actions"
 msgstr "Άλλες ενέργειες"
 
-#: ../src/cairo-dock-menu.c:1593
+#: ../src/cairo-dock-menu.c:1591
 msgid "Move to this desktop"
 msgstr "Μετάβαση σε αυτή την επιφάνεια εργασίας"
 
-#: ../src/cairo-dock-menu.c:1608
+#: ../src/cairo-dock-menu.c:1606
 msgid "Not Fullscreen"
 msgstr "Μη πλήρης οθόνη"
 
-#: ../src/cairo-dock-menu.c:1608
+#: ../src/cairo-dock-menu.c:1606
 msgid "Fullscreen"
 msgstr "Πλήρης οθόνη"
 
-#: ../src/cairo-dock-menu.c:1612
+#: ../src/cairo-dock-menu.c:1610
 msgid "Don't keep above"
 msgstr "Μη διατήρηση στο προσκήνιο"
 
-#: ../src/cairo-dock-menu.c:1612 ../data/messages:351
+#: ../src/cairo-dock-menu.c:1610 ../data/messages:351
 msgid "Keep above"
 msgstr "Διατήρηση στο προσκήνιο"
 
-#: ../src/cairo-dock-menu.c:1637
+#: ../src/cairo-dock-menu.c:1635
 msgid "Remove custom icon"
 msgstr "Αφαίρεση προσαρμοσμένου εικονιδίου"
 
-#: ../src/cairo-dock-menu.c:1641
+#: ../src/cairo-dock-menu.c:1639
 msgid "Set a custom icon"
 msgstr "Ορισμός προσαρμοσμένου εικονιδίου"
 
-#: ../src/cairo-dock-menu.c:1644
+#: ../src/cairo-dock-menu.c:1642
 msgid "Kill"
 msgstr "Βίαιος τερματισμός"
 
-#: ../src/cairo-dock-menu.c:1648 ../src/cairo-dock-menu.c:1696
+#: ../src/cairo-dock-menu.c:1646 ../src/cairo-dock-menu.c:1694
 msgid "Launch a new (Shift+clic)"
 msgstr "Εκκίνηση νέου (Shift+κλικ)"
 
-#: ../src/cairo-dock-menu.c:1652
+#: ../src/cairo-dock-menu.c:1650
 msgid "Show"
 msgstr "Εμφάνιση"
 
-#: ../src/cairo-dock-menu.c:1654
+#: ../src/cairo-dock-menu.c:1652
 msgid "Unmaximise"
 msgstr "Απομεγιστοποίηση"
 
-#: ../src/cairo-dock-menu.c:1654
+#: ../src/cairo-dock-menu.c:1652
 msgid "Maximise"
 msgstr "Μεγιστοποίηση"
 
-#: ../src/cairo-dock-menu.c:1659 ../src/cairo-dock-menu.c:1661
+#: ../src/cairo-dock-menu.c:1657 ../src/cairo-dock-menu.c:1659
 msgid "Minimise"
 msgstr "Ελαχιστοποίηση"
 
-#: ../src/cairo-dock-menu.c:1659 ../src/cairo-dock-menu.c:1666
-#: ../src/cairo-dock-menu.c:1674 ../src/help/applet-notifications.c:247
+#: ../src/cairo-dock-menu.c:1657 ../src/cairo-dock-menu.c:1664
+#: ../src/cairo-dock-menu.c:1672 ../src/help/applet-notifications.c:247
 msgid "middle-click"
 msgstr "μεσαίο-κλικ"
 
-#: ../src/cairo-dock-menu.c:1666 ../src/cairo-dock-menu.c:1668
-#: ../data/messages:745
+#: ../src/cairo-dock-menu.c:1664 ../src/cairo-dock-menu.c:1666
+#: ../data/messages:759
 msgid "Lower"
 msgstr "Χαμηλότερα"
 
-#: ../src/cairo-dock-menu.c:1674 ../src/cairo-dock-menu.c:1676
-#: ../data/messages:739
+#: ../src/cairo-dock-menu.c:1672 ../src/cairo-dock-menu.c:1674
+#: ../data/messages:753
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: ../src/cairo-dock-menu.c:1692
+#: ../src/cairo-dock-menu.c:1690
 msgid "Move all to this desktop"
 msgstr "Μετακίνηση όλων σε αυτή την επιφάνεια εργασίας"
 
-#: ../src/cairo-dock-menu.c:1698
+#: ../src/cairo-dock-menu.c:1696
 msgid "Show all"
 msgstr "Εμφάνιση όλων"
 
-#: ../src/cairo-dock-menu.c:1700
+#: ../src/cairo-dock-menu.c:1698
 msgid "Minimise all"
 msgstr "Ελαχιστοποίηση όλων"
 
-#: ../src/cairo-dock-menu.c:1702
+#: ../src/cairo-dock-menu.c:1700
 msgid "Close all"
 msgstr "Κλείσιμο όλων"
 
-#: ../src/cairo-dock-menu.c:1723 ../data/messages:349
+#: ../src/cairo-dock-menu.c:1721 ../data/messages:349
 msgid "Normal"
 msgstr "Κανονικά"
 
-#: ../src/cairo-dock-menu.c:1729 ../data/messages:415 ../data/messages:585
-#: ../data/messages:1305
+#: ../src/cairo-dock-menu.c:1727 ../data/messages:415 ../data/messages:597
+#: ../data/messages:1319
 msgid "Always on top"
 msgstr "Πάντα επάνω"
 
-#: ../src/cairo-dock-menu.c:1736
+#: ../src/cairo-dock-menu.c:1734
 msgid "Always below"
 msgstr "Πάντα κάτω"
 
-#: ../src/cairo-dock-menu.c:1753 ../data/messages:357
+#: ../src/cairo-dock-menu.c:1751 ../data/messages:357
 msgid "Reserve space"
 msgstr "Δέσμευση χώρου"
 
-#: ../src/cairo-dock-menu.c:1760
+#: ../src/cairo-dock-menu.c:1758
 msgid "On all desktops"
 msgstr "Σε όλες τις επιφάνειες εργασίας"
 
-#: ../src/cairo-dock-menu.c:1766
+#: ../src/cairo-dock-menu.c:1764
 msgid "Lock position"
 msgstr "Κλείδωμα θέσης"
 
@@ -858,43 +862,43 @@ msgstr ""
 "διαμόρφωση.\\n\n"
 "Βρίσκεται στο άρθρωμα 'Μπάρα εργασιών'."
 
-#: ../src/cairo-dock.c:147
+#: ../src/cairo-dock.c:146
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr "Ευτυχισμένο το νέο έτος %d !!!"
 
-#: ../src/cairo-dock.c:325
+#: ../src/cairo-dock.c:324
 msgid "Use Cairo backend."
 msgstr ""
 
-#: ../src/cairo-dock.c:328
+#: ../src/cairo-dock.c:327
 msgid "Use OpenGL backend."
 msgstr ""
 
-#: ../src/cairo-dock.c:331
+#: ../src/cairo-dock.c:330
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 msgstr ""
 
-#: ../src/cairo-dock.c:334
+#: ../src/cairo-dock.c:333
 msgid "Ask again on startup which backend to use."
 msgstr ""
 
-#: ../src/cairo-dock.c:337
+#: ../src/cairo-dock.c:336
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr ""
 "Αναγκάστε την πλατφόρμα να εξετάσει αυτο το περιβάλλον - χρησιμοποιείστε το "
 "προσεκτικά."
 
-#: ../src/cairo-dock.c:340
+#: ../src/cairo-dock.c:339
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Αναγκάστε την πλατφόρμα να φορτώσει αυτόν τον φάκελο, αντί αυτού "
-"~/.config/cairo-dock."
+"Αναγκάστε την πλατφόρμα να φορτώσει αυτόν τον φάκελο, αντί αυτού ~/.config/"
+"cairo-dock."
 
-#: ../src/cairo-dock.c:343
+#: ../src/cairo-dock.c:342
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
@@ -902,7 +906,7 @@ msgstr ""
 "Διέυθυνση του εξυπηρετητή που περιλαμβάνει επιπρόσθετα θέματα. Αυτό θα "
 "επικρατήσει αντί της προηγούμενης διέυθυνσης."
 
-#: ../src/cairo-dock.c:346
+#: ../src/cairo-dock.c:345
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
@@ -910,7 +914,7 @@ msgstr ""
 "Περιμένετε για Ν δευτερόλεπτα πριν ξεκινήσετε; αυτο είναι χρήσιμο αν "
 "παρατηρήσεται κάποια προβλήματα όταν η πλατφόρμα ξεκινά με τη συνεδρία."
 
-#: ../src/cairo-dock.c:349
+#: ../src/cairo-dock.c:348
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
@@ -918,54 +922,54 @@ msgstr ""
 "Επιτρέψτε να επεργαστεί τις ρυθμίσεις προτού η πλατφόρμα ξεκινήσει και "
 "δείξει τις ρυθμίσεις στο ξεκίνημα."
 
-#: ../src/cairo-dock.c:352
+#: ../src/cairo-dock.c:351
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr ""
 "Αποκλείστε ένα plug-in που δόθηκε απο το να ξεκινήσει (παρόλα αυτά θα "
 "συνεχίσει να φορτώνεται)."
 
-#: ../src/cairo-dock.c:355
+#: ../src/cairo-dock.c:354
 msgid "Don't load any plug-ins."
 msgstr "Μή φορτώσεις κανένα plug-in."
 
-#: ../src/cairo-dock.c:358
+#: ../src/cairo-dock.c:357
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
 
-#: ../src/cairo-dock.c:361
+#: ../src/cairo-dock.c:360
 msgid "Force to display some output messages with colors."
 msgstr "Αναγκάστε να δείξει κάποια μηνύματα με χρώματα."
 
-#: ../src/cairo-dock.c:364
+#: ../src/cairo-dock.c:363
 msgid "Print version and quit."
 msgstr "Εκτύπωσε την έκδοση και κλείσε."
 
-#: ../src/cairo-dock.c:367
+#: ../src/cairo-dock.c:366
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr ""
 "Κλείδωσε τη πλατφόρμα ετσι ώστε καμία τροποποίηση να μην είναι δυνατή απο "
 "τους χρήστες."
 
-#: ../src/cairo-dock.c:371
+#: ../src/cairo-dock.c:370
 msgid "Keep the dock above other windows whatever."
 msgstr "Κράτησε την πλατφόρμα πάνω απο άλλα παράθυρα όπως και νά'χει."
 
-#: ../src/cairo-dock.c:374
+#: ../src/cairo-dock.c:373
 msgid "Don't make the dock appear on all desktops."
 msgstr "Μή κάνεις ορατή τη πλατφόρμα σε όλες τις οθόνες εργασίας."
 
-#: ../src/cairo-dock.c:377 ../src/cairo-dock.c:437
+#: ../src/cairo-dock.c:376 ../src/cairo-dock.c:436
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr "Το Cairo-Dock κάνει τα πάντα, ακόμα και καφέ !"
 
-#: ../src/cairo-dock.c:380
+#: ../src/cairo-dock.c:379
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
 
-#: ../src/cairo-dock.c:383
+#: ../src/cairo-dock.c:382
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
@@ -973,7 +977,7 @@ msgstr ""
 "Μόνο για λόγους αποσφαλμάτωσης. Ο χειριστής κωλυμάτων δεν θα ξεκινήσει να "
 "ψάχνει για σφάλματα."
 
-#: ../src/cairo-dock.c:386
+#: ../src/cairo-dock.c:385
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
@@ -981,11 +985,11 @@ msgstr ""
 "Μόνο για λόγους αποσφαλμάτωσης. Μερικά κρυμμένα και ασταθεί επιλογές θα "
 "ενεργοποιηθούν."
 
-#: ../src/cairo-dock.c:503
+#: ../src/cairo-dock.c:502
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Χρήση του OpenGL στο Cairo-Dock;"
 
-#: ../src/cairo-dock.c:511
+#: ../src/cairo-dock.c:510
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -1009,15 +1013,15 @@ msgstr ""
 "  ή με την επιλογή -o για να επιβάλλετε το OpenGL και -c για να επιβάλλετε "
 "το cairo.)"
 
-#: ../src/cairo-dock.c:522
+#: ../src/cairo-dock.c:521
 msgid "Remember this choice"
 msgstr "Απομνημόνευση αυτής της επιλογής"
 
-#: ../src/cairo-dock.c:690
+#: ../src/cairo-dock.c:689
 msgid "< Maintenance mode >"
 msgstr "< Λειτουργία συντήρησης >"
 
-#: ../src/cairo-dock.c:783
+#: ../src/cairo-dock.c:782
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1039,7 +1043,7 @@ msgstr ""
 " Μπορείτε να αλλάξετε αυτή την επιλογή, ανοίγοντας τις ρυθμίσεις αυτού του "
 "αρθρώματος. Θέλετε να το κάνετε τώρα;"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:292
+#: ../src/gldit/cairo-dock-applet-facility.h:293
 msgid ""
 "The gauge theme could not be found; a default gauge will be used instead.\n"
 "You can change this by opening the configuration of this module. Do you want "
@@ -1049,7 +1053,11 @@ msgstr ""
 "Μπορείτε να αλλάξετε αυτό με άνοιγμα της διαμόρφωσης αυτού του αρθρώματος. "
 "Θέλετε να το κάνετε τώρα;"
 
-#: ../src/gldit/cairo-dock-desklet-manager.c:858
+#: ../src/gldit/cairo-dock-callbacks.c:1514
+msgid "Sorry but the dock is locked"
+msgstr ""
+
+#: ../src/gldit/cairo-dock-desklet-manager.c:900
 msgid "_custom decoration_"
 msgstr "_προσαρμοσμένη διακόσμηση_"
 
@@ -1074,61 +1082,61 @@ msgstr "Αριστερό dock"
 msgid "Pop up the main dock"
 msgstr "Εμφάνισε τη βασική πλατφόρμα"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:243
+#: ../src/gldit/cairo-dock-gui-factory.c:244
 #, c-format
 msgid "by %s"
 msgstr "από %s"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:255
+#: ../src/gldit/cairo-dock-gui-factory.c:256
 msgid "kB"
 msgstr "kB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:257
+#: ../src/gldit/cairo-dock-gui-factory.c:258
 msgid "MB"
 msgstr "MB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:266
+#: ../src/gldit/cairo-dock-gui-factory.c:267
 msgid "Local"
 msgstr "Τοπικό"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:267
+#: ../src/gldit/cairo-dock-gui-factory.c:268
 msgid "User"
 msgstr "Χρήστης"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:268
+#: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "Net"
 msgstr "Δίκτυο"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:269
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "New"
 msgstr "Νέο"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:270
+#: ../src/gldit/cairo-dock-gui-factory.c:271
 msgid "Updated"
 msgstr "Ενημερωμένο"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:724
+#: ../src/gldit/cairo-dock-gui-factory.c:725
 msgid "Pick up a file"
 msgstr "Διάλεξε αρχείο"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:724
+#: ../src/gldit/cairo-dock-gui-factory.c:725
 msgid "Pick up a directory"
 msgstr "Διάλεξε φάκελο"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:984
+#: ../src/gldit/cairo-dock-gui-factory.c:1001
 msgid "_Custom Icons_"
 msgstr "_Προσαρμοσμένα εικονίδια_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1348
+#: ../src/gldit/cairo-dock-gui-factory.c:1365
 msgid "Rate me"
 msgstr "Βαθμολογήστε με"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1447
-#: ../src/gldit/cairo-dock-gui-factory.c:1449
+#: ../src/gldit/cairo-dock-gui-factory.c:1464
+#: ../src/gldit/cairo-dock-gui-factory.c:1466
 msgid "You must try the theme before you can rate it."
 msgstr "Πρέπει να δοκιμάσετε το θέμα πριν το αξιολογήσετε"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1472
+#: ../src/gldit/cairo-dock-gui-factory.c:1489
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1139,7 +1147,7 @@ msgstr ""
 "Βεβαιωθείτε ότι το έχετε εγκαταστήσει με την ίδια έκδοση όπως το dock για να "
 "απολαύσετε αυτές τις λειτουργίες."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1481
+#: ../src/gldit/cairo-dock-gui-factory.c:1498
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1148,29 +1156,29 @@ msgstr ""
 "Το πρόσθετο '%s' δεν είναι ενεργό.\n"
 "Να ενεργοποιηθεί τώρα;"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2339
-#: ../src/gldit/cairo-dock-gui-factory.c:3028
+#: ../src/gldit/cairo-dock-gui-factory.c:2374
+#: ../src/gldit/cairo-dock-gui-factory.c:3076
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Λίστα θεμάτων σε '%s' ..."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2962
+#: ../src/gldit/cairo-dock-gui-factory.c:3010
 msgid "Theme"
 msgstr "Θέμα"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2975
+#: ../src/gldit/cairo-dock-gui-factory.c:3023
 msgid "Rating"
 msgstr "Αξιολόγηση"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2981
+#: ../src/gldit/cairo-dock-gui-factory.c:3029
 msgid "Sobriety"
 msgstr "Νηφαλιότητα"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3054
+#: ../src/gldit/cairo-dock-gui-factory.c:3102
 msgid "link"
 msgstr "σύνδεσμος"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3107
+#: ../src/gldit/cairo-dock-gui-factory.c:3155
 msgid "Grab"
 msgstr "αρπαγή"
 
@@ -1178,16 +1186,16 @@ msgstr "αρπαγή"
 msgid "Default"
 msgstr "προεπιλεγμένο"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:118
+#: ../src/gldit/cairo-dock-themes-manager.c:148
 #, c-format
 msgid "Are you sure you want to overwrite theme %s?"
 msgstr "Είστε βέβαιος/η ότι θέλετε να αντικαταστήσετε αυτό το θέμα %s;"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:182
+#: ../src/gldit/cairo-dock-themes-manager.c:215
 msgid "Last modification on:"
 msgstr "Τελευταία τροποποίηση την:"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:253
+#: ../src/gldit/cairo-dock-themes-manager.c:291
 #, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
@@ -1197,12 +1205,12 @@ msgstr ""
 "λειτουργεί.\n"
 "Παρακαλώ προσπαθήστε αργότερα ή επικοινωνήστε με το glx-dock.org."
 
-#: ../src/gldit/cairo-dock-themes-manager.c:267
+#: ../src/gldit/cairo-dock-themes-manager.c:305
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "Είστε βέβαιος/η ότι θέλετε να διαγράψετε αυτό το θέμα %s;"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:269
+#: ../src/gldit/cairo-dock-themes-manager.c:307
 msgid "Are you sure you want to delete these themes?"
 msgstr "Είστε βέβαιος/η ότι θέλετε να διαγράψετε αυτά τα θέματα ;"
 
@@ -1311,27 +1319,27 @@ msgid "New launcher"
 msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:433
-#: ../data/messages:603
+#: ../data/messages:615
 msgid "Move down"
 msgstr "Μετακίνηση κάτω"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:604 ../data/messages:435
-#: ../data/messages:605
+#: ../data/messages:491 ../data/messages:617
 msgid "Fade out"
 msgstr "Βαθμιαίο σβήσιμο"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:612 ../data/messages:437
-#: ../data/messages:607
+#: ../data/messages:619
 msgid "Semi transparent"
 msgstr "Ημιδιαφανές"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:621 ../data/messages:439
-#: ../data/messages:609
+#: ../data/messages:621
 msgid "Zoom out"
 msgstr "Σμίκρυνση"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:629 ../data/messages:441
-#: ../data/messages:611
+#: ../data/messages:623
 msgid "Folding"
 msgstr "Αναδίπλωση"
 
@@ -1555,8 +1563,7 @@ msgstr ""
 
 #: ../data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
-msgstr ""
-"Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
+msgstr "Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
 
 #: ../data/messages:79
 msgid "Docks"
@@ -1873,15 +1880,14 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί "
-"/desktop/gnome/session/required_components/panel και αντικαταστήστε το "
-"περιεχόμενό του με «cairo-dock».\n"
+"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί /desktop/gnome/session/"
+"required_components/panel και αντικαταστήστε το περιεχόμενό του με «cairo-"
+"dock».\n"
 "Μετά επανεκκινήστε τη συνεδρία σας : το gnome-panel δεν έχει εκκινήσει και "
 "το dock έχει εκκινήσει (αν όχι, μπορείτε να το προσθέσετε στα προγράμματα "
 "εκκίνησης)."
@@ -1900,8 +1906,7 @@ msgstr "Αντιμετώπιση Προβλημάτων"
 
 #: ../data/messages:191
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr ""
-"Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
+msgstr "Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
 
 #: ../data/messages:193
 msgid "Forum"
@@ -1936,8 +1941,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 "Πρέπει να ενεργοποιήσετε τη σύνθεση. Παραδείγματος χάριν, μπορείτε να "
 "εκτελέσετε το Compiz ή το xcompmgr.\n"
@@ -1945,8 +1950,8 @@ msgstr ""
 "στις επιλογές του διαχειριστή παραθύρων.\n"
 "Αν χρησιμοποιείτε Gnome, μπορείτε να την ενεργοποιήσετε στο Metacity με αυτό "
 "τον τρόπο:\n"
-" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί "
-"'/apps/metacity/general/compositing_manager' και ορίστε το σε 'true'."
+" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί '/apps/metacity/general/"
+"compositing_manager' και ορίστε το σε 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -2100,8 +2105,8 @@ msgid ""
 msgstr ""
 "Στο Gnome, υπάρχει μια επιλογή που υπερισχύει αυτής του dock. Για να "
 "ενεργοποιήσετε εικονίδια στα μενού, ανοίξτε το 'gconf-editor', πηγαίνετε στο "
-"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have "
-"icons\" και \"buttons have icons\". "
+"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have icons"
+"\" και \"buttons have icons\". "
 
 #: ../data/messages:245
 msgid "If you're on Gnome you can click on this button:"
@@ -2259,7 +2264,8 @@ msgstr ""
 " Μετά από αυτό, μπορείτε να εκκαθαρίσετε όλα τα πακέτα 'cairo-dock*' να "
 "ενημερώσετε το σύστημά σας και να επανεγκαταστήσετε το πακέτο 'cairo-dock'."
 
-#: ../data/messages:303 ../data/messages:305
+#: ../data/messages:303 ../data/messages:305 ../data/messages:1423
+#: ../data/messages:1453 ../data/messages:1485
 msgid "Icon"
 msgstr ""
 
@@ -2346,7 +2352,7 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:347 ../data/messages:413 ../data/messages:451
-#: ../data/messages:583 ../data/messages:649 ../data/messages:1303
+#: ../data/messages:595 ../data/messages:661 ../data/messages:1317
 msgid "Visibility:"
 msgstr "Ορατότητα :"
 
@@ -2362,7 +2368,7 @@ msgstr ""
 msgid "Should be visible on all desktops?"
 msgstr ""
 
-#: ../data/messages:361 ../data/messages:991
+#: ../data/messages:361 ../data/messages:1005
 msgid "Decorations"
 msgstr "Διάκοσμος"
 
@@ -2433,42 +2439,42 @@ msgstr ""
 msgid "Foreground tansparency:"
 msgstr ""
 
-#: ../data/messages:395 ../data/messages:1267
+#: ../data/messages:395 ../data/messages:1281
 msgid "Behavior"
 msgstr "Συμπεριφορά"
 
-#: ../data/messages:397 ../data/messages:537 ../data/messages:1269
+#: ../data/messages:397 ../data/messages:549 ../data/messages:1283
 msgid "Position on the screen"
 msgstr "Θέση στην οθόνη"
 
-#: ../data/messages:399 ../data/messages:539 ../data/messages:1271
+#: ../data/messages:399 ../data/messages:551 ../data/messages:1285
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr ""
 "Επιλέξτε το όριο της οθόνης σε σχέση με το οποίο θα τοποθετηθεί το dock:"
 
-#: ../data/messages:401 ../data/messages:541 ../data/messages:1273
+#: ../data/messages:401 ../data/messages:553 ../data/messages:1287
 msgid "bottom"
 msgstr "κάτω"
 
-#: ../data/messages:403 ../data/messages:543 ../data/messages:1275
+#: ../data/messages:403 ../data/messages:555 ../data/messages:1289
 msgid "top"
 msgstr "πάνω"
 
-#: ../data/messages:405 ../data/messages:545 ../data/messages:555
-#: ../data/messages:1277
+#: ../data/messages:405 ../data/messages:557 ../data/messages:567
+#: ../data/messages:1291
 msgid "right"
 msgstr "δεξιά"
 
-#: ../data/messages:407 ../data/messages:547 ../data/messages:553
-#: ../data/messages:1279
+#: ../data/messages:407 ../data/messages:559 ../data/messages:565
+#: ../data/messages:1293
 msgid "left"
 msgstr "αριστερά"
 
-#: ../data/messages:409 ../data/messages:579
+#: ../data/messages:409 ../data/messages:591
 msgid "Visibility of the main dock"
 msgstr "Ορατότητα του κύριου dock"
 
-#: ../data/messages:411 ../data/messages:581 ../data/messages:1301
+#: ../data/messages:411 ../data/messages:593 ../data/messages:1315
 msgid ""
 "Modes are sorted from the most intrusive to the less intrusive.\n"
 "When the dock is hidden or below a window, place the mouse on the screen's "
@@ -2482,39 +2488,39 @@ msgstr ""
 "Όταν το dock εμφανίζεται σε συντόμευση, θα εμφανιστεί στη θέση του ποντικιού "
 "σας. Τον υπόλοιπο καιρό μένει αόρατο, δρώντας έτσι ως μενού."
 
-#: ../data/messages:417 ../data/messages:587 ../data/messages:1307
+#: ../data/messages:417 ../data/messages:599 ../data/messages:1321
 msgid "Reserve space for the dock"
 msgstr "Δέσμευση χώρου για το dock"
 
-#: ../data/messages:419 ../data/messages:589 ../data/messages:1309
+#: ../data/messages:419 ../data/messages:601 ../data/messages:1323
 msgid "Keep the dock below"
 msgstr "Να μένει το dock από κάτω"
 
-#: ../data/messages:421 ../data/messages:591 ../data/messages:1311
+#: ../data/messages:421 ../data/messages:603 ../data/messages:1325
 msgid "Hide the dock when it overlaps the current window"
 msgstr "Απόκρυψη του dock όταν καλύπτει το τρέχον παράθυρο"
 
-#: ../data/messages:423 ../data/messages:593 ../data/messages:1313
+#: ../data/messages:423 ../data/messages:605 ../data/messages:1327
 msgid "Hide the dock whenever it overlaps any window"
 msgstr "Απόκρυψη του dock όταν καλύπτει οποιοδήποτε παράθυρο"
 
-#: ../data/messages:425 ../data/messages:595 ../data/messages:1315
+#: ../data/messages:425 ../data/messages:607 ../data/messages:1329
 msgid "Keep the dock hidden"
 msgstr "Να μείνει κρυμμένο το dock"
 
-#: ../data/messages:427 ../data/messages:597
+#: ../data/messages:427 ../data/messages:609
 msgid "Pop-up on shortcut"
 msgstr "Αναδυόμενο στη συντόμευση"
 
-#: ../data/messages:429 ../data/messages:599
+#: ../data/messages:429 ../data/messages:611
 msgid "Effect used to hide the dock:"
 msgstr "Εφέ απόκρυψης του dock:"
 
-#: ../data/messages:431 ../data/messages:463 ../data/messages:601
+#: ../data/messages:431 ../data/messages:463 ../data/messages:613
 msgid "None"
 msgstr "Καμμία"
 
-#: ../data/messages:443 ../data/messages:635
+#: ../data/messages:443 ../data/messages:647
 msgid ""
 "When you press the shortcut, the dock will show itself at the potition of "
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
@@ -2524,7 +2530,7 @@ msgstr ""
 "το ποντίκι σας. Στο υπόλοιπο του χρόνου θα παραμένει αόρατο ενεργώντας έτσι "
 "ως ένα μενού."
 
-#: ../data/messages:445 ../data/messages:637
+#: ../data/messages:445 ../data/messages:649
 msgid "Keyboard shortcut to pop-up the dock:"
 msgstr "Συντόμευση πληκτρολογίου για εμφάνιση του dock:"
 
@@ -2532,7 +2538,7 @@ msgstr "Συντόμευση πληκτρολογίου για εμφάνιση 
 msgid "Visibility of sub-docks"
 msgstr "Ορατότητα των sub-dock"
 
-#: ../data/messages:449 ../data/messages:647
+#: ../data/messages:449 ../data/messages:659
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
@@ -2540,11 +2546,11 @@ msgstr ""
 "θα εμφανιστούν είτε όταν κάνετε κλικ ή όταν σταματήσετε το δείκτη του "
 "ποντικιού πάνω από το εικονίδιο."
 
-#: ../data/messages:453 ../data/messages:651
+#: ../data/messages:453 ../data/messages:663
 msgid "Appear on mouse over"
 msgstr "Εμφάνιση όταν περάσει ο δείκτης του ποντικιού από πάνω"
 
-#: ../data/messages:455 ../data/messages:653
+#: ../data/messages:455 ../data/messages:665
 msgid "Appear on click"
 msgstr "Εμφάνιση με κλικ"
 
@@ -2575,23 +2581,23 @@ msgstr ""
 msgid "Separated"
 msgstr ""
 
-#: ../data/messages:471 ../data/messages:679
+#: ../data/messages:471 ../data/messages:691
 msgid "Place new icons"
 msgstr ""
 
-#: ../data/messages:473 ../data/messages:681
+#: ../data/messages:473 ../data/messages:693
 msgid "At the beginning of the dock"
 msgstr ""
 
-#: ../data/messages:475 ../data/messages:683
+#: ../data/messages:475 ../data/messages:695
 msgid "Before the launchers"
 msgstr ""
 
-#: ../data/messages:477 ../data/messages:685
+#: ../data/messages:477 ../data/messages:697
 msgid "After the launchers"
 msgstr ""
 
-#: ../data/messages:479 ../data/messages:687
+#: ../data/messages:479 ../data/messages:699
 msgid "At the end of the dock"
 msgstr ""
 
@@ -2599,61 +2605,75 @@ msgstr ""
 msgid "Icons' animations and effects"
 msgstr "Κίνηση και εφέ εικονιδίων"
 
-#: ../data/messages:483
-msgid "& On mouse hover:"
+#: ../data/messages:487
+msgid "On appearance/disappearance:"
 msgstr ""
 
-#: ../data/messages:487
-msgid ""
-"&[Evaporate;Fade out;Explode;Break;Black Hole;Random] On "
-"appearance/disappearance:"
+#: ../data/messages:489
+msgid "Evaporate"
 msgstr ""
 
 #: ../data/messages:493
+msgid "Explode"
+msgstr ""
+
+#: ../data/messages:495
+msgid "Break"
+msgstr ""
+
+#: ../data/messages:497
+msgid "Black Hole"
+msgstr ""
+
+#: ../data/messages:499
+msgid "Random"
+msgstr ""
+
+#: ../data/messages:505
 msgid "Choose a theme of icons :"
 msgstr "Διαλέξτε θεματική εικονιδίων :"
 
-#: ../data/messages:495 ../data/messages:1321
+#: ../data/messages:507 ../data/messages:1335
 msgid "Icons size:"
 msgstr "Μέγεθος εικονιδίων :"
 
-#: ../data/messages:497 ../data/messages:1327
+#: ../data/messages:509 ../data/messages:1341
 msgid "Very small"
 msgstr "Πολύ μικρό"
 
-#: ../data/messages:499 ../data/messages:1329
+#: ../data/messages:511 ../data/messages:1343
 msgid "Small"
 msgstr "Μικρό"
 
-#: ../data/messages:501 ../data/messages:1331
+#: ../data/messages:513 ../data/messages:1345
 msgid "Medium"
 msgstr "Μεσαίο"
 
-#: ../data/messages:503 ../data/messages:1333
+#: ../data/messages:515 ../data/messages:1347
 msgid "Big"
 msgstr "Μεγάλο"
 
-#: ../data/messages:505 ../data/messages:1335
+#: ../data/messages:517 ../data/messages:1349
 msgid "Very Big"
 msgstr "Πολύ Μεγάλο"
 
-#: ../data/messages:509 ../data/messages:937
+#: ../data/messages:521 ../data/messages:951
 msgid "Choose the default view for main docks :"
 msgstr "Επιλέξτε προκαθορισμένη εμφάνιση για τα βασικά docks:"
 
-#: ../data/messages:511 ../data/messages:941
+#: ../data/messages:523 ../data/messages:955
 msgid "You can overwrite this parameter for each sub-dock."
 msgstr "Μπορείτε να αντικαταστήσετε αυτή την παράμετρο για κάθε sub-dock."
 
-#: ../data/messages:513 ../data/messages:943
+#: ../data/messages:525 ../data/messages:957
 msgid "Choose the default view for sub-docks :"
 msgstr "Επιλέξτε προκαθορισμένη εμφάνιση για τα sub-docks."
 
-#: ../data/messages:517 ../data/messages:769
+#: ../data/messages:529 ../data/messages:783
 msgid "Keyboard shortcuts currently available"
 msgstr ""
 
-#: ../data/messages:519 ../data/messages:771
+#: ../data/messages:531 ../data/messages:785
 msgid ""
 "Many applets provide shortkeys for their actions. As soon as an applet is "
 "enabled, its shortkeys become available.\n"
@@ -2661,15 +2681,15 @@ msgid ""
 "corresponding action."
 msgstr ""
 
-#: ../data/messages:521
+#: ../data/messages:533
 msgid "Add-ons"
 msgstr "Πρόσθετα"
 
-#: ../data/messages:523
+#: ../data/messages:535
 msgid "Add or remove any applet"
 msgstr "Προσθήκη ή αφαίρεση οποιασδήποτε μικροεφαρμογής"
 
-#: ../data/messages:525
+#: ../data/messages:537
 msgid ""
 "Select a line to get a preview and a description of the applet.\n"
 "Click on the left check-box to (de)activate an applet.\n"
@@ -2682,7 +2702,7 @@ msgstr ""
 "Όταν μια μικροεφαρμογή είναι ενεργή, μπορείτε να τη διαμορφώσετε με δεξί "
 "κλικ στο εικονίδιό της."
 
-#: ../data/messages:527
+#: ../data/messages:539
 msgid ""
 "You can install them by simply drag-and-dropping the link onto your dock."
 msgstr ""
@@ -2692,11 +2712,11 @@ msgstr ""
 # #################################
 # ########### themes.conf #############
 # #################################
-#: ../data/messages:533 ../data/messages:1365
+#: ../data/messages:545 ../data/messages:1379
 msgid "Themes"
 msgstr "Θέματα"
 
-#: ../data/messages:549 ../data/messages:1281
+#: ../data/messages:561 ../data/messages:1295
 msgid ""
 "When set to 0 the dock will position itself relative to the left corner if "
 "horizontal and the top corner if vertical. When set to 1 it will position "
@@ -2709,15 +2729,15 @@ msgstr ""
 "άκρη εάν είναι οριζόντιο και στην κάτω άκρη εάν είναι κάθετο. Στο 0,5, σε "
 "σχέση με τη μέση της άκρης της οθόνης."
 
-#: ../data/messages:551 ../data/messages:1283
+#: ../data/messages:563 ../data/messages:1297
 msgid "Relative alignment:"
 msgstr "Σχετική ευθυγράμμιση:"
 
-#: ../data/messages:557 ../data/messages:1285
+#: ../data/messages:569 ../data/messages:1299
 msgid "Offset from the screen's edge"
 msgstr "Απόσταση από την άκρη της οθόνης"
 
-#: ../data/messages:559 ../data/messages:1287
+#: ../data/messages:571 ../data/messages:1301
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
@@ -2726,11 +2746,11 @@ msgstr ""
 "επίσης να μετακινήσετε το dock κρατώντας πατημένο το ALT ή το CONTROL και το "
 "αριστερό πλήκτρο του ποντικιού."
 
-#: ../data/messages:561 ../data/messages:1289
+#: ../data/messages:573 ../data/messages:1303
 msgid "Lateral offset:"
 msgstr "Πλάγια μετατόπιση:"
 
-#: ../data/messages:563 ../data/messages:1291
+#: ../data/messages:575 ../data/messages:1305
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
@@ -2738,15 +2758,15 @@ msgstr ""
 "σε pixels. Μπορείτε επίσης να μετακινήσετε το dock κρατώντας πατημένο το ALT "
 "ή το CONTROL και το αριστερό πλήκτρο του ποντικιού."
 
-#: ../data/messages:565 ../data/messages:1293
+#: ../data/messages:577 ../data/messages:1307
 msgid "Distance to the screen edge:"
 msgstr "Απόσταση από την άκρη της οθόνης:"
 
-#: ../data/messages:567
+#: ../data/messages:579
 msgid "Multiple screens"
 msgstr "Πολλαπλές οθόνες"
 
-#: ../data/messages:569
+#: ../data/messages:581
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama to manage "
 "them."
@@ -2754,71 +2774,71 @@ msgstr ""
 "Αυτή η επιλογή γίνεται αν έχετε διπλές οθόνες και χρησιμοποιείτε το Xinerama "
 "για να τις διαχειρίζεστε."
 
-#: ../data/messages:571
+#: ../data/messages:583
 msgid "Use Xinerama?"
 msgstr "Χρήση Xinerama;"
 
-#: ../data/messages:573
+#: ../data/messages:585
 msgid "0 is the first screen."
 msgstr "Η πρώτη οθόνη ονομάζεται 0."
 
-#: ../data/messages:575 ../data/messages:1297
+#: ../data/messages:587 ../data/messages:1311
 msgid "Number of the screen where the dock should be located:"
 msgstr "Αριθμός οθόνης όπου θα τοποθετηθεί η μπάρα:"
 
-#: ../data/messages:577
+#: ../data/messages:589
 msgid "Accessibility"
 msgstr "Προσβασιμότητα"
 
-#: ../data/messages:613
+#: ../data/messages:625
 msgid "The higher, the faster the dock will appear"
 msgstr ""
 
-#: ../data/messages:615
+#: ../data/messages:627
 msgid "Callback sensitivity:"
 msgstr ""
 
-#: ../data/messages:617
+#: ../data/messages:629
 msgid "high"
 msgstr ""
 
-#: ../data/messages:619
+#: ../data/messages:631
 msgid "low"
 msgstr ""
 
-#: ../data/messages:621
+#: ../data/messages:633
 msgid "How to call the dock back:"
 msgstr "Πως να ανακαλέσετε το dock:"
 
-#: ../data/messages:623
+#: ../data/messages:635
 msgid "Hit the screen's border"
 msgstr "Επαφή στο άκρο της οθόνης"
 
-#: ../data/messages:625
+#: ../data/messages:637
 msgid "Hit where the dock is"
 msgstr "Επαφή στη θέση του dock"
 
-#: ../data/messages:627
+#: ../data/messages:639
 msgid "Hit the screen's corner"
 msgstr "Επαφή με τη γωνία της οθόνης"
 
-#: ../data/messages:629
+#: ../data/messages:641
 msgid "Hit a zone"
 msgstr "Επαφή με μια ζώνη"
 
-#: ../data/messages:631
+#: ../data/messages:643
 msgid "Size of the zone :"
 msgstr "Μεγεθος ζώνης :"
 
-#: ../data/messages:633
+#: ../data/messages:645
 msgid "Image to display on the zone :"
 msgstr "Εικόνα που θα εμφανίζεται στη ζώνη :"
 
-#: ../data/messages:639
+#: ../data/messages:651
 msgid "Additional parameters"
 msgstr "Επιπρόσθετες παράμετροι"
 
-#: ../data/messages:641
+#: ../data/messages:653
 msgid ""
 "This is only usefull if you do not already use auto-hide and if your Window "
 "Manager allows the dock in front of fullscreen windows (which is rare)."
@@ -2827,32 +2847,32 @@ msgstr ""
 "αποκρυψη και εάν η WM αφήνει το dock μπροστά από τα παράθυρα σε προβολή "
 "πλήρους οθόνης (το οποίο είναι σπάνιο)."
 
-#: ../data/messages:643
+#: ../data/messages:655
 msgid "Automatically hide the dock when a window becomes full screen?"
 msgstr ""
 "Αυτόματη απόκρυψη του dock όταν ένα παράθυρο καλύπτει την πλήρη οθόνη ;"
 
-#: ../data/messages:645
+#: ../data/messages:657
 msgid "Sub-docks' visibility"
 msgstr "Ορατότητα των sub-dock"
 
-#: ../data/messages:655 ../data/messages:659
+#: ../data/messages:667 ../data/messages:671
 msgid "in ms."
 msgstr "σε ms."
 
-#: ../data/messages:657
+#: ../data/messages:669
 msgid "Delay before displaying a sub-dock:"
 msgstr "Καθυστέρηση πριν από την εμφάνιση ενός sub-dock:"
 
-#: ../data/messages:661
+#: ../data/messages:673
 msgid "Delay before leaving a sub-dock takes effect:"
 msgstr "Καθυστέρηση πριν το αποτέλεσμα της φυγής από ένα sub-dock:"
 
-#: ../data/messages:663
+#: ../data/messages:675
 msgid "TaskBar"
 msgstr "Γραμμή εργασιών"
 
-#: ../data/messages:667
+#: ../data/messages:679
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
@@ -2860,11 +2880,11 @@ msgstr ""
 "Το Cairo-Dock θα λειτουργεί τότε ως η μπάρα εργασιών σας. Συνίσταται να "
 "αφαιρέσετε τυχόν άλλες μπάρες εργασιών."
 
-#: ../data/messages:669
+#: ../data/messages:681
 msgid "Show currently opened applications in the dock?"
 msgstr "Να εμφανίζονται οι τρέχουσες ανοιχτές εφαρμογές στο dock;"
 
-#: ../data/messages:671
+#: ../data/messages:683
 msgid ""
 "Allows launchers to act as applications when their programs are running and "
 "displays a marker on icons to indicate this. You can launch other occurences "
@@ -2872,31 +2892,34 @@ msgid ""
 msgstr ""
 "Επιτρέπει στους εκκινητές να ενεργούν ως εφαρμογές όταν το πρόγραμμά τους "
 "εκτελείται και εμφανίζει μια ένδειξη στο εικονίδιό τους για να το "
-"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με "
-"Shift+κλικ."
+"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με Shift"
+"+κλικ."
 
-#: ../data/messages:673
+#: ../data/messages:685
 msgid "Mix launchers and applications"
 msgstr "Μείξη εκκινητών και εφαρμογών;"
 
-#: ../data/messages:675
+#: ../data/messages:687
 msgid "Only show applications on current desktop"
 msgstr "Εμφάνιση μόνο των εφαρμογών της τρέχουσας επιφάνειας εργασίας;"
 
-#: ../data/messages:677
-msgid "Only show icons whose windows are minimised"
-msgstr ""
-"Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
-
 #: ../data/messages:689
+msgid "Only show icons whose windows are minimised"
+msgstr "Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
+
+#: ../data/messages:701
 msgid "After a given icon"
 msgstr ""
 
-#: ../data/messages:691
+#: ../data/messages:703
 msgid "Place new icons after this one"
 msgstr ""
 
-#: ../data/messages:693
+#: ../data/messages:705
+msgid "Automatically add a separator"
+msgstr ""
+
+#: ../data/messages:707
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
@@ -2904,23 +2927,23 @@ msgstr ""
 "Αυτό σας επιτρέπει να ομαδοποιήσετε όλα τα παράθυρα μια δεδομένης εφαρμογής "
 "σε ένα μοναδικό sub-dock και να δράσετε σε όλα ταυτόχρονα."
 
-#: ../data/messages:695
+#: ../data/messages:709
 msgid "Group windows from the same application in a sub-dock ?"
 msgstr "Να ομαδοποιηθούν τα παράθυρα της ίδιας εφαρμογής σε ένα sub-dock;"
 
-#: ../data/messages:697 ../data/messages:707
+#: ../data/messages:711 ../data/messages:721
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
 msgstr "Εισάγετε την κλάση των εφαρμογών, διαχωρισμένες με ερωτηματικό ';'"
 
-#: ../data/messages:699 ../data/messages:709
+#: ../data/messages:713 ../data/messages:723
 msgid "\t\tExcept the following classes:"
 msgstr "\t\tΕξαίρεση των ακόλουθων κλάσεων:"
 
-#: ../data/messages:701
+#: ../data/messages:715
 msgid "Representation"
 msgstr "Απεικόνιση"
 
-#: ../data/messages:703
+#: ../data/messages:717
 msgid ""
 "If not set, the icon provided by X for each application will be used. If "
 "set, the same icon as the corresponding launcher will be used for each "
@@ -2930,90 +2953,90 @@ msgstr ""
 "κάθε εφαρμογή. Εάν οριστεί το ίδιο εικονίδιο όπως ο αντίστοιχος εκκινητής θα "
 "χρησιμοποιηθεί για κάθε εφαρμογή."
 
-#: ../data/messages:705
+#: ../data/messages:719
 msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Αντικαστάσταση Χ εικονιδίων με εκκινητή;"
 
-#: ../data/messages:711
+#: ../data/messages:725
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
-"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία.\\"
-"n\n"
+"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία."
+"\\n\n"
 "Η OpenGL είναι απαραίτητη για να σχεδιασθεί το εικονίδιο λυγισμένο προς τα "
 "πίσω."
 
-#: ../data/messages:713
+#: ../data/messages:727
 msgid "How to draw minimised windows ?"
 msgstr "Πως θα σχεδιασθούν τα ελαχιστοποιημένα παράθυρα;"
 
-#: ../data/messages:715
+#: ../data/messages:729
 msgid "Make the icon transparent"
 msgstr "Να γίνει διαφανές το εικονίδιο"
 
-#: ../data/messages:717
+#: ../data/messages:731
 msgid "Show a window's thumbnail"
 msgstr "Εμφάνιση της μικρογραφίας ενός παραθύρου"
 
-#: ../data/messages:719
+#: ../data/messages:733
 msgid "Draw it bent backwards"
 msgstr "Να σχεδιαστεί λυγισμένο προς τα πίσω"
 
-#: ../data/messages:721
+#: ../data/messages:735
 msgid "Transparency of icons whose window is minimised:"
 msgstr "Διαφάνεια εικονιδίων των οποίων το παράθυρο είναι ελαχιστοποιημένο"
 
-#: ../data/messages:723 ../data/messages:885 ../data/messages:1005
-#: ../data/messages:1031 ../data/messages:1129
+#: ../data/messages:737 ../data/messages:899 ../data/messages:1019
+#: ../data/messages:1045 ../data/messages:1143
 msgid "Opaque"
 msgstr "Αδιαφανές"
 
-#: ../data/messages:725 ../data/messages:883 ../data/messages:1003
-#: ../data/messages:1029 ../data/messages:1127
+#: ../data/messages:739 ../data/messages:897 ../data/messages:1017
+#: ../data/messages:1043 ../data/messages:1141
 msgid "Transparent"
 msgstr "Διαφανές"
 
-#: ../data/messages:727
+#: ../data/messages:741
 msgid "Play a short animation of the icon when its window becomes active"
 msgstr ""
 "Εκτέλεση ενός σύντομου κινούμενου σχεδίου του εικονιδίου όταν το παράθυρό "
 "του γίνεται ενεργό;"
 
-#: ../data/messages:729
+#: ../data/messages:743
 msgid "\"...\" will be added at the end if the name is too long."
 msgstr "\"...\" θα προστεθεί στο τέλος εάν το όνομα είναι πολύ μεγάλο."
 
-#: ../data/messages:731
+#: ../data/messages:745
 msgid "Maximum number of caracters in application name:"
 msgstr "Μέγιστος αριθμός χαρακτήρων στα ονόματα των εφαρμογών:"
 
-#: ../data/messages:733
+#: ../data/messages:747
 msgid "Interaction"
 msgstr "Αλληλεπίδραση"
 
-#: ../data/messages:735
+#: ../data/messages:749
 msgid "Action on middle-click on the related application"
 msgstr "Ενέργεια με μεσαίο-κλικ στη σχετική εφαρμογή"
 
-#: ../data/messages:737
+#: ../data/messages:751
 msgid "Nothing"
 msgstr "Τίποτα"
 
-#: ../data/messages:741
+#: ../data/messages:755
 msgid "Minimize"
 msgstr "Ελαχιστοποίηση"
 
-#: ../data/messages:743
+#: ../data/messages:757
 msgid "Launch new"
 msgstr "Εκκίνηση νέου"
 
-#: ../data/messages:747
+#: ../data/messages:761
 msgid "This is the default behaviour of most taskbars."
 msgstr ""
 "Είναι η προεπιλεγμένη συμπεριφορά για τις περισσότερες γραμμές εργασιών."
 
-#: ../data/messages:749
+#: ../data/messages:763
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
@@ -3021,29 +3044,29 @@ msgstr ""
 "Ελαχιστοποίηση του παραθύρου όταν γίνεται κλικ στο εικονίδιό του, αν ήταν "
 "ήδη το ενεργό παράθυρο;"
 
-#: ../data/messages:751
+#: ../data/messages:765
 msgid "Only if your Window Manager supports it."
 msgstr ""
 
-#: ../data/messages:753
+#: ../data/messages:767
 msgid ""
 "Present windows preview on click when several windows are grouped togather"
 msgstr ""
 
-#: ../data/messages:755
+#: ../data/messages:769
 msgid "Highlight applications requiring your attention with a dialog bubble"
 msgstr ""
 "Επισήμανση εφαρμογών που απαιτούν την προσοχή σας με συννεφάκι διαλόγου"
 
-#: ../data/messages:757
+#: ../data/messages:771
 msgid "in seconds"
 msgstr "σε δευτερόλεπτα"
 
-#: ../data/messages:759
+#: ../data/messages:773
 msgid "Duration of the dialog:"
 msgstr "Διάρκεια του παραθύρου διαλόγου:"
 
-#: ../data/messages:761
+#: ../data/messages:775
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
@@ -3051,25 +3074,25 @@ msgstr ""
 "Θα σας ειδοποιήσει ακόμα και αν, για παράδειγμα, παρακολουθείτε μια ταινία "
 "σε πλήρη οθόνη ή είστε σε άλλη επιφάνεια εργασίας.\\n\n"
 
-#: ../data/messages:763
+#: ../data/messages:777
 msgid "Force the following applications to demand your attention"
 msgstr "Υποχρέωση των ακόλουθων εφαρμογών να ζητούν την προσοχή σας"
 
-#: ../data/messages:765
+#: ../data/messages:779
 msgid "Highlight applications demanding your attention with an animation"
 msgstr ""
 "Σηματοδότηση των εφαρμογών που απαιτούν την προσοχή σας με ένα κινούμενο "
 "σχέδιο;"
 
-#: ../data/messages:775
+#: ../data/messages:789
 msgid "Animations speed"
 msgstr "Ταχύτητα εφέ κίνησης"
 
-#: ../data/messages:777
+#: ../data/messages:791
 msgid "Animate sub-docks when they appear"
 msgstr "Κίνηση των sub-docks όταν αυτά εμφανίζονται;"
 
-#: ../data/messages:779
+#: ../data/messages:793
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
@@ -3078,53 +3101,53 @@ msgstr ""
 "γεμίσουν όλο το dock. Όσο μικρότερη αυτή η τιμή, τόσο γρηγορότερα θα γίνει "
 "αυτό."
 
-#: ../data/messages:781
+#: ../data/messages:795
 msgid "Animation unfolding duration:"
 msgstr "Διάρκεια εφέ κίνησης ξεδιπλώματος:"
 
-#: ../data/messages:783 ../data/messages:791 ../data/messages:795
-#: ../data/messages:803 ../data/messages:807
+#: ../data/messages:797 ../data/messages:805 ../data/messages:809
+#: ../data/messages:817 ../data/messages:821
 msgid "fast"
 msgstr "γρήγορη"
 
-#: ../data/messages:785 ../data/messages:793 ../data/messages:797
-#: ../data/messages:805 ../data/messages:809
+#: ../data/messages:799 ../data/messages:807 ../data/messages:811
+#: ../data/messages:819 ../data/messages:823
 msgid "slow"
 msgstr "αργή"
 
-#: ../data/messages:787 ../data/messages:799
+#: ../data/messages:801 ../data/messages:813
 msgid "The more there are, the slower it will be"
 msgstr "Όσο μεγαλύτερη είναι η τιμή, τόσο μεγαλύτερη θα είναι η επιβράδυνση"
 
-#: ../data/messages:789
+#: ../data/messages:803
 msgid "Number of steps in the zoom animation (grow/shrink):"
 msgstr "Αριθμός βημάτων στην κίνηση της εστίασης (μεγέθυνση/σμίκρυνση):"
 
-#: ../data/messages:801
+#: ../data/messages:815
 msgid "Number of steps in the auto-hide animation (move up/move down):"
 msgstr "Αριθμός βημάτων στην κίνηση αυτο-απόκρυψης (μετακίνηση πάνω/κάτω):"
 
-#: ../data/messages:811
+#: ../data/messages:825
 msgid "Refresh rate"
 msgstr "Ρυθμός ανανέωσης"
 
-#: ../data/messages:813 ../data/messages:817 ../data/messages:821
+#: ../data/messages:827 ../data/messages:831 ../data/messages:835
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "σε Hz. Η διευθέτησή του εξαρτάται από την ισχύ του επεξεργαστή σας."
 
-#: ../data/messages:815
-msgid "Refresh rate when mouving cursor into the dock :"
-msgstr "Ρυθμός ανανέωσης κατά την κίνηση του δείκτη στο dock:"
-
-#: ../data/messages:819
-msgid "&[15;60] Animation frequency for the OpenGL backend :"
+#: ../data/messages:829
+msgid "Refresh rate when mouving cursor into the dock:"
 msgstr ""
 
-#: ../data/messages:823
-msgid "*[15;50] Animation frequency for the Cairo backend :"
+#: ../data/messages:833
+msgid "Animation frequency for the OpenGL backend:"
 msgstr ""
 
-#: ../data/messages:825
+#: ../data/messages:837
+msgid "Animation frequency for the Cairo backend:"
+msgstr ""
+
+#: ../data/messages:839
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
@@ -3132,15 +3155,15 @@ msgstr ""
 "Το πρότυπο της διαβάθμισης της διαφάνειας θα επανεκτιμάται σε πραγματικό "
 "χρόνο. Πιθανόν να απαιτεί περισσότερη επεξεργαστική ισχύ."
 
-#: ../data/messages:827
-msgid "* Reflections should be calculated in real-time?"
+#: ../data/messages:841
+msgid "Reflections should be calculated in real-time?"
 msgstr ""
 
-#: ../data/messages:829
+#: ../data/messages:843
 msgid "Composition"
 msgstr "Σύνθεση"
 
-#: ../data/messages:831
+#: ../data/messages:845
 msgid ""
 "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
 "etc and have a black background around your dock. For aesthetic reasons, the "
@@ -3150,15 +3173,15 @@ msgstr ""
 "Compiz, xcompmgr, κλπ και έχετε ένα μαύρο παρασκήνιο γύρω από το dock σας. "
 "Για λόγους αισθητικής, το dock θα μένει κάτω από τα άλλα παράθυρα."
 
-#: ../data/messages:833
+#: ../data/messages:847
 msgid "Emulate composition with fake transparency?"
 msgstr "Εξομοίωση σύνθεσης με ψεύτικη διαφάνεια;"
 
-#: ../data/messages:835
+#: ../data/messages:849
 msgid "Connection to the Internet"
 msgstr "Σύνδεση στο διαδίκτυο"
 
-#: ../data/messages:837
+#: ../data/messages:851
 msgid ""
 "Maximum time in seconds that you allow the connection to the server to take. "
 "This only limits the connection phase,  once the dock has connected this "
@@ -3168,11 +3191,11 @@ msgstr ""
 "περιορίζεται μόνο στη φάση της σύνδεσης, από τη στιγμή που η σύνδεση "
 "επιτευχθεί δεν έχει περαιτέρω χρησιμότητα."
 
-#: ../data/messages:839
+#: ../data/messages:853
 msgid "Connection timeout :"
 msgstr "Υπέρβαση χρονικού ορίου σύνδεσης :"
 
-#: ../data/messages:841
+#: ../data/messages:855
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
@@ -3180,67 +3203,65 @@ msgstr ""
 "Μέγιστος χρόνος σε δευτερόλεπτα που επιτρέπετε να διαρκέσει η όλη "
 "διαδικασία. Μερικά θέματα μπορεί να είναι αρκετά MB."
 
-#: ../data/messages:843
+#: ../data/messages:857
 msgid "Maximum time to download a file:"
 msgstr "Μέγιστη διάρκεια λήψης αρχείου:"
 
-#: ../data/messages:845
+#: ../data/messages:859
 msgid "Use this option if you experience problems to connect."
-msgstr ""
-"Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
+msgstr "Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
 
-#: ../data/messages:847
+#: ../data/messages:861
 msgid "Force IPv4 ?"
 msgstr "Εξαναγκασμός σε IPv4;"
 
-#: ../data/messages:849
+#: ../data/messages:863
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr ""
-"Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
+msgstr "Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
 
-#: ../data/messages:851
+#: ../data/messages:865
 msgid "Are you behind a proxy ?"
 msgstr "Συνδέεστε μέσω proxy;"
 
-#: ../data/messages:853
+#: ../data/messages:867
 msgid "Proxy name :"
 msgstr "Όνομα διακομιστή proxy :"
 
-#: ../data/messages:855
+#: ../data/messages:869
 msgid "Port :"
 msgstr "Θύρα :"
 
-#: ../data/messages:857 ../data/messages:861
+#: ../data/messages:871 ../data/messages:875
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr "Αφήστε το κενό αν δεν συνδέεστε στον proxy με όνομα/κωδικό."
 
-#: ../data/messages:859
+#: ../data/messages:873
 msgid "User :"
 msgstr "Χρήστης :"
 
-#: ../data/messages:863
+#: ../data/messages:877
 msgid "Password :"
 msgstr "Κωδικός :"
 
-#: ../data/messages:867 ../data/messages:1345
+#: ../data/messages:881 ../data/messages:1359
 msgid "Fill the background with:"
 msgstr "Γέμισμα του παρασκηνίου με:"
 
-#: ../data/messages:869 ../data/messages:875 ../data/messages:1143
-#: ../data/messages:1349
+#: ../data/messages:883 ../data/messages:889 ../data/messages:1157
+#: ../data/messages:1363
 msgid "Image"
 msgstr "Εικόνα"
 
-#: ../data/messages:871 ../data/messages:891 ../data/messages:1351
+#: ../data/messages:885 ../data/messages:905 ../data/messages:1365
 msgid "Colour gradation"
 msgstr "Βαθμίδωση χρώματος"
 
-#: ../data/messages:873
+#: ../data/messages:887
 msgid "Use a background image."
 msgstr "Χρήση εικόνας παρασκηνίου."
 
-#: ../data/messages:877 ../data/messages:1353
+#: ../data/messages:891 ../data/messages:1367
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
@@ -3248,105 +3269,105 @@ msgstr ""
 "Επιτρέπονται όλοι οι τύποι. Αν αφεθεί κενό, θα χρησιμοποιηθεί εφεδρικά η "
 "βαθμίδωση χρώματος."
 
-#: ../data/messages:879 ../data/messages:1355
+#: ../data/messages:893 ../data/messages:1369
 msgid "Image filename to use as a background :"
 msgstr "Όνομα αρχείου εικόνας που θα χρησιμοποιηθεί ως παρασκήνιο:"
 
-#: ../data/messages:881
+#: ../data/messages:895
 msgid "Image's transparency :"
 msgstr "Διαφάνεια εικόνας:"
 
-#: ../data/messages:887 ../data/messages:1357
+#: ../data/messages:901 ../data/messages:1371
 msgid "Repeat image as a pattern to fill background?"
 msgstr "Επανάληψη της εικόνας ως προτύπου για την πλήρωση του παρασκηνίου;"
 
-#: ../data/messages:889
+#: ../data/messages:903
 msgid "Use a colour gradation."
 msgstr "Χρήση βαθμίδωσης χρώματος"
 
-#: ../data/messages:893 ../data/messages:1359
+#: ../data/messages:907 ../data/messages:1373
 msgid "Bright colour:"
 msgstr "Φωτεινό χρώμα:"
 
-#: ../data/messages:895 ../data/messages:1361
+#: ../data/messages:909 ../data/messages:1375
 msgid "Dark colour:"
 msgstr "Σκοτεινό χρώμα:"
 
-#: ../data/messages:897
+#: ../data/messages:911
 msgid "In degrees, in relation to the vertical"
 msgstr "Σε μοίρες σε σχέση με την κάθετο"
 
-#: ../data/messages:899
+#: ../data/messages:913
 msgid "Angle of the gradation :"
 msgstr "Γωνία βαθμίδωσης :"
 
-#: ../data/messages:901
+#: ../data/messages:915
 msgid "If not nul, it will form stripes."
 msgstr "Αν δεν ορισθεί σε nul, θα σχηματίσει λωρίδες."
 
-#: ../data/messages:903
+#: ../data/messages:917
 msgid "Repeat the gradation this number of times:"
 msgstr "Επανάληψη της βαθμίδωσης τόσες φορές:"
 
-#: ../data/messages:905
+#: ../data/messages:919
 msgid "Percentage of the bright colour:"
 msgstr "Ποσοστό του φωτεινού χρώματος:"
 
-#: ../data/messages:907
+#: ../data/messages:921
 msgid "Background when hidden"
 msgstr ""
 
-#: ../data/messages:909
+#: ../data/messages:923
 msgid "Several applets can be visible even when the dock is hidden"
 msgstr ""
 
-#: ../data/messages:911
+#: ../data/messages:925
 msgid "Default background color when the dock is hidden"
 msgstr ""
 
-#: ../data/messages:913 ../data/messages:1363
+#: ../data/messages:927 ../data/messages:1377
 msgid "Stretch the dock to always fill the screen"
 msgstr "Επέκταση του dock ώστε πάντα να γεμίζει την οθόνη ;"
 
-#: ../data/messages:915
+#: ../data/messages:929
 msgid "External Frame"
 msgstr "Εξωτερικό Πλαίσιο"
 
-#: ../data/messages:917 ../data/messages:921 ../data/messages:927
-#: ../data/messages:975 ../data/messages:1077
+#: ../data/messages:931 ../data/messages:935 ../data/messages:941
+#: ../data/messages:989 ../data/messages:1091
 msgid "in pixels."
 msgstr "σε pixels."
 
-#: ../data/messages:919
+#: ../data/messages:933
 msgid "Corner radius :"
 msgstr "Ακτίνα γωνίας:"
 
-#: ../data/messages:923
+#: ../data/messages:937
 msgid "Linewidth of the external line :"
 msgstr "Πλάτος της εξωτερικής γραμμής:"
 
-#: ../data/messages:925
+#: ../data/messages:939
 msgid "Colour of the external line:"
 msgstr "Χρώμα εξωτερικής γραμμής:"
 
-#: ../data/messages:929
+#: ../data/messages:943
 msgid "Margin between the frame and the icons or their reflects :"
 msgstr ""
 "Περιθώριο μεταξύ του πλαισίου και των εικονιδίων ή οι αντανακλάσεις τους:"
 
-#: ../data/messages:931
+#: ../data/messages:945
 msgid "Are the bottom left and right corners rounded?"
 msgstr "Οι γωνίες κάτω αριστερά και δεξιά είναι καμπυλωμένες;"
 
-#: ../data/messages:935
+#: ../data/messages:949
 msgid "Main Dock"
 msgstr "Κύριο Dock"
 
-#: ../data/messages:939
+#: ../data/messages:953
 msgid "Sub-Docks"
 msgstr "Sub-Docks"
 
-#: ../data/messages:945
+#: ../data/messages:959
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
@@ -3354,84 +3375,84 @@ msgstr ""
 "Μπορείτε να ορίσετε ένα ποσοστό για το μέγεθος των εικονιδίων των sub-docks, "
 "σε σχέση με το μέγεθος των εικονιδίων των κύριων docks."
 
-#: ../data/messages:947
+#: ../data/messages:961
 msgid "Ratio for the size of the sub-docks' icons :"
 msgstr "Ποσοστό για το μέγεθος των εικονιδίων των sub-docks:"
 
-#: ../data/messages:949 ../data/messages:1183
+#: ../data/messages:963 ../data/messages:1197
 msgid "smaller"
 msgstr "μικρότερο"
 
-#: ../data/messages:951
+#: ../data/messages:965
 msgid "larger"
 msgstr ""
 
-#: ../data/messages:953
+#: ../data/messages:967
 msgid "Dialogs"
 msgstr "Διάλογοι"
 
-#: ../data/messages:955
+#: ../data/messages:969
 msgid "Bubble"
 msgstr "Φυσαλίδα"
 
-#: ../data/messages:957
+#: ../data/messages:971
 msgid "Background colour of the bubble:"
 msgstr "Χρώμα παρασκηνίου της φυσαλίδας:"
 
-#: ../data/messages:959
+#: ../data/messages:973
 msgid "Shape of the bubble:"
 msgstr "Σχήμα της φυσαλίδας:"
 
-#: ../data/messages:961
+#: ../data/messages:975
 msgid "Text"
 msgstr "Κείμενο"
 
-#: ../data/messages:963 ../data/messages:1227
+#: ../data/messages:977 ../data/messages:1241
 msgid "Otherwise the default's system one will be used."
 msgstr "Αλλιώς θα χρησιμοποιηθεί η προεπιλογή του συστήματος."
 
-#: ../data/messages:965
+#: ../data/messages:979
 msgid "Use a custom font for the text?"
 msgstr "Χρήση προσαρμοσμένης γραμματοσειράς για το κείμενο;"
 
-#: ../data/messages:967
+#: ../data/messages:981
 msgid "Text font:"
 msgstr "Γραμματοσειρά κειμένου:"
 
-#: ../data/messages:969 ../data/messages:1233
+#: ../data/messages:983 ../data/messages:1247
 msgid "Draw the outline of the text?"
 msgstr "Σχεδίαση περιγράμματος κειμένου;"
 
-#: ../data/messages:971 ../data/messages:1263
+#: ../data/messages:985 ../data/messages:1277
 msgid "Text color:"
 msgstr "Χρώμα κειμένου:"
 
-#: ../data/messages:973 ../data/messages:1033
+#: ../data/messages:987 ../data/messages:1047
 msgid "Buttons"
 msgstr "Πλήκτρα"
 
-#: ../data/messages:977
+#: ../data/messages:991
 msgid "Size of buttons in the info-bubbles (width x height) :"
 msgstr "Μέγεθος πλήκτρων στις φυσαλίδες πληροφοριών (πλάτος x ύψος):"
 
-#: ../data/messages:979 ../data/messages:983 ../data/messages:1037
-#: ../data/messages:1041 ../data/messages:1045 ../data/messages:1049
+#: ../data/messages:993 ../data/messages:997 ../data/messages:1051
+#: ../data/messages:1055 ../data/messages:1059 ../data/messages:1063
 msgid "If you don't provide any, a default image will be used."
 msgstr "Εάν δεν ορίσετε μια εικόνα, θα χρησιμοποιηθεί η προκαθορισμένη."
 
-#: ../data/messages:981
+#: ../data/messages:995
 msgid "Name of an image to use for the yes/ok button :"
 msgstr "Όνομα της εικόνας που θα χρησιμοποιηθεί για το πλήκτρο ναι/εντάξει:"
 
-#: ../data/messages:985
+#: ../data/messages:999
 msgid "Name of an image to use for the no/cancel button :"
 msgstr "Όνομα της εικόνας που θα χρησιμοποιηθεί για το πλήκτρο όχι/άκυρο:"
 
-#: ../data/messages:987
+#: ../data/messages:1001
 msgid "Size of the icon displayed next to the text :"
 msgstr "Μέγεθος του εικονιδίου που θα εμφανίζεται μετά από το κείμενο:"
 
-#: ../data/messages:993
+#: ../data/messages:1007
 msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
@@ -3440,11 +3461,11 @@ msgstr ""
 "Επιλέξτε 'Προσαρμοσμένος διάκοσμος' για να ορίσετε το δικό σας διάκοσμο "
 "παρακάτω"
 
-#: ../data/messages:995
+#: ../data/messages:1009
 msgid "Choose a default decoration for all desklets :"
 msgstr "Επιλέξτε τον προεπιλεγμένο διάκοσμο για όλα τα desklet :"
 
-#: ../data/messages:997
+#: ../data/messages:1011
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
@@ -3452,51 +3473,50 @@ msgstr ""
 "Είναι μια εικόνα που θα εμφανιστεί κάτω από τα σχέδια, όπως για πράδειγμα "
 "ένα πλαίσιο. Αφήστε κενό για να μη χρησιμοποιηθεί τίποτα."
 
-#: ../data/messages:999
+#: ../data/messages:1013
 msgid "Background image :"
 msgstr "Εικόνα παρασκηνίου :"
 
-#: ../data/messages:1001
+#: ../data/messages:1015
 msgid "Background transparency :"
 msgstr "Διαφάνεια παρασκηνίου :"
 
-#: ../data/messages:1007
+#: ../data/messages:1021
 msgid "in pixels. Use this to adjust the left position of the drawings."
 msgstr ""
 "σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την αριστερή θέση των σχεδίων."
 
-#: ../data/messages:1009
+#: ../data/messages:1023
 msgid "Left offset :"
 msgstr "Αριστερή μετατόπιση:"
 
-#: ../data/messages:1011
+#: ../data/messages:1025
 msgid "in pixels. Use this to adjust the top position of the drawings."
-msgstr ""
-"σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
+msgstr "σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
 
-#: ../data/messages:1013
+#: ../data/messages:1027
 msgid "Top offset :"
 msgstr "Άνω απόσταση:"
 
-#: ../data/messages:1015
+#: ../data/messages:1029
 msgid "in pixels. Use this to adjust the right position of the drawings."
 msgstr ""
 "σε pixel. χρησιμοποιήστε το για να ρυθμίσετε τη δεξιά θέση των σχεδίων."
 
-#: ../data/messages:1017
+#: ../data/messages:1031
 msgid "Right offset :"
 msgstr "Δεξιά απόσταση:"
 
-#: ../data/messages:1019
+#: ../data/messages:1033
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
 msgstr ""
 "σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε των κάτω θέση των σχεδίων."
 
-#: ../data/messages:1021
+#: ../data/messages:1035
 msgid "Bottom offset :"
 msgstr "Κάτω απόσταση :"
 
-#: ../data/messages:1023
+#: ../data/messages:1037
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
@@ -3504,40 +3524,40 @@ msgstr ""
 "Είναι μια εικόνα που θα προβάλλεται πάνω από τα σχέδια, σαν αντανάκλαση για "
 "παράδειγμα. Αφήστε κενό για να μη χρησιμοποιηθεί καμμία."
 
-#: ../data/messages:1025
+#: ../data/messages:1039
 msgid "Foreground image :"
 msgstr "Εικόνα προσκηνίου:"
 
-#: ../data/messages:1027
+#: ../data/messages:1041
 msgid "Foreground tansparency :"
 msgstr "Διαφάνεια προσκηνίου :"
 
-#: ../data/messages:1035
+#: ../data/messages:1049
 msgid "Buttons size :"
 msgstr "Μέγεθος κουμπιών :"
 
-#: ../data/messages:1039 ../data/messages:1051
+#: ../data/messages:1053 ../data/messages:1065
 msgid "Name of an image to use for the 'rotate' button :"
 msgstr "Όνομα εικόνας που θα χρησιμοποιηθεί για το κουμπί \"περιστροφή\" :"
 
-#: ../data/messages:1043
+#: ../data/messages:1057
 msgid "Name of an image to use for the 'reattach' button :"
 msgstr "Όνομα εικόνας που θα χρησιμοποιηθεί για το κουμπί \"επανασύνδεση\" :"
 
-#: ../data/messages:1047
+#: ../data/messages:1061
 msgid "Name of an image to use for the 'depth rotate' button :"
 msgstr ""
 "Όνομα εικόνας που θα χρησιμοποιηθεί για το κουμπί \"περιστροφή βάθους\" :"
 
-#: ../data/messages:1055
+#: ../data/messages:1069
 msgid "Icons' themes"
 msgstr "Θέματα εικόνων"
 
-#: ../data/messages:1057
+#: ../data/messages:1071
 msgid "Choose an icon theme :"
 msgstr "Διαλέξτε θεματική εικονιδίων :"
 
-#: ../data/messages:1059
+#: ../data/messages:1073
 msgid ""
 "Any format allowed; leave this field empty if you don't want to use an image "
 "as background."
@@ -3545,61 +3565,60 @@ msgstr ""
 "Επιτρέπονται όλες οι μορφές εικόνων. Αφήστε κενό αυτό το πεδίο, εάν δεν "
 "θέλετε να εμφανίζεται μια εικόνα ως παρασκήνιο."
 
-#: ../data/messages:1061
+#: ../data/messages:1075
 msgid "Image filename to use as a background for icons :"
 msgstr "Όνομα εικόνας που θα χρησιμοποιηθεί ως παρασκήνιο για τα εικονίδια :"
 
-#: ../data/messages:1063
+#: ../data/messages:1077
 msgid "Icons size"
 msgstr "Μεγεθος εικονιδίων"
 
-#: ../data/messages:1065
+#: ../data/messages:1079
 msgid "Icons' size at rest (width x height) :"
 msgstr ""
 
-#: ../data/messages:1067
+#: ../data/messages:1081
 msgid "Zoom effect"
 msgstr "Εφέ εστίασης"
 
-#: ../data/messages:1069
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+#: ../data/messages:1083
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "ορίστε σε 1 αν δεν θέλετε τα εικονίδια να αλλάζουν μέγεθος όταν περνάτε από "
 "πανω τους."
 
-#: ../data/messages:1071
+#: ../data/messages:1085
 msgid "Maximum zoom of the icons :"
 msgstr "Μέγιστη αλλαγή μεγέθους των εικονιδίων :"
 
-#: ../data/messages:1073
+#: ../data/messages:1087
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 msgstr ""
 "σε pixel. Έξω από αυτό το χώρο (με κέντρο το ποντίκι) δεν γίνεται αλλαγή "
 "μεγέθους."
 
-#: ../data/messages:1075
+#: ../data/messages:1089
 msgid "Width of the space in which the zoom will be effective :"
 msgstr "Πλάτος χώρου όπου θα είναι ενεργή η αλλαγή μεγέθους :"
 
-#: ../data/messages:1079
+#: ../data/messages:1093
 msgid "Space between icons :"
 msgstr "Διάστημα μεταξύ των εικονιδίων:"
 
-#: ../data/messages:1081
+#: ../data/messages:1095
 msgid "Separators"
 msgstr "Διαχωριστές"
 
-#: ../data/messages:1083
+#: ../data/messages:1097
 msgid "Icon size at rest (width x height) :"
 msgstr "Μέγεθος εικονιδίου σε παύση (πλάτος x ύψος):"
 
-#: ../data/messages:1085
+#: ../data/messages:1099
 msgid "Force separator's image size to stay constant?"
 msgstr "Εξαναγκασμός της εικόνας του διαχωριστή να διατηρείται σταθερή;"
 
-#: ../data/messages:1087
+#: ../data/messages:1101
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
@@ -3608,32 +3627,31 @@ msgstr ""
 "επίπεδους και φυσικού διαχωριστές. Οι επίπεδοι διαχωριστές αποδίδονται "
 "διαφορετικά ανάλογα με την προβολή."
 
-#: ../data/messages:1089
+#: ../data/messages:1103
 msgid "How to draw the separators?"
 msgstr "Πως θα σχεδιασθούν οι διαχωριστές;"
 
-#: ../data/messages:1091
+#: ../data/messages:1105
 msgid "Use an image."
 msgstr "Χρήση εικόνας."
 
-#: ../data/messages:1093
+#: ../data/messages:1107
 msgid "Flat separator"
 msgstr "Επίπεδος διαχωριστής"
 
-#: ../data/messages:1095
+#: ../data/messages:1109
 msgid "Physical separator"
 msgstr "Φυσικός διαχωριστής"
 
-#: ../data/messages:1097
+#: ../data/messages:1111
 msgid "If you don't provide one, blanks will be used."
 msgstr "Εάν δεν προσθέσετε διαχωριστές, θα χρησιμοποιηθούν κενά."
 
-#: ../data/messages:1099
+#: ../data/messages:1113
 msgid "Filename of an image to use for separators :"
-msgstr ""
-"Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
+msgstr "Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
 
-#: ../data/messages:1101
+#: ../data/messages:1115
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
@@ -3641,15 +3659,15 @@ msgstr ""
 "Να περιστρέφεται η εικόνα του διαχωριστή όταν το dock βρίσκεται επάνω/στ' "
 "αριστερά/στα δεξιά;"
 
-#: ../data/messages:1103
+#: ../data/messages:1117
 msgid "Colour of flat separators :"
 msgstr "Χρώμα επίπεδων διαχωριστών :"
 
-#: ../data/messages:1105
+#: ../data/messages:1119
 msgid "Reflections"
 msgstr "Ανακλάσεις"
 
-#: ../data/messages:1107
+#: ../data/messages:1121
 msgid ""
 "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 "
 "reflections are not used."
@@ -3657,19 +3675,19 @@ msgstr ""
 "Πρόκειται για το λόγο του ανακλώμενου φωτός του εικονιδίου. Στην τιμή 1 τα "
 "εικονίδια ανακλούν το μέγιστο, στο 0 οι ανακλάσεις δεν χρησιμοποιούνται."
 
-#: ../data/messages:1109
+#: ../data/messages:1123
 msgid "Reflective power of the plane :"
 msgstr "Ανάκλαση ισχύος του επιπέδου:"
 
-#: ../data/messages:1111
+#: ../data/messages:1125
 msgid "light"
 msgstr "ελαφρύ"
 
-#: ../data/messages:1113
+#: ../data/messages:1127
 msgid "strong"
 msgstr "ισχυρό"
 
-#: ../data/messages:1115
+#: ../data/messages:1129
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
@@ -3677,19 +3695,19 @@ msgstr ""
 "Σε ποσοστό επί του ύψους του εικονιδίου. Αυτή η παράμετρος επηρεάζει το "
 "συνολικό ύψος του dock."
 
-#: ../data/messages:1117
+#: ../data/messages:1131
 msgid "Height of the reflection:"
 msgstr "Ύψος αντανάκλασης :"
 
-#: ../data/messages:1119
+#: ../data/messages:1133
 msgid "small"
 msgstr "μικρό"
 
-#: ../data/messages:1121
+#: ../data/messages:1135
 msgid "tall"
 msgstr "ψηλό"
 
-#: ../data/messages:1123
+#: ../data/messages:1137
 msgid ""
 "It is their transparency when the dock is at rest; they will \"materialize\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
@@ -3699,69 +3717,69 @@ msgstr ""
 "προοδευτικά καθώς μεγαλώνει το dock. Όσο πιο κοντά σοτ 0 η τιμή τόσο πιο "
 "διάφανα θα είναι."
 
-#: ../data/messages:1125
+#: ../data/messages:1139
 msgid "Icons' transparency at rest :"
 msgstr "Διαφάνεια εικονιδίου σε παύση:"
 
-#: ../data/messages:1131
+#: ../data/messages:1145
 msgid "Link the icons with a string"
 msgstr "Σύνδεση των εικονιδίων με ένα νήμα"
 
-#: ../data/messages:1133
+#: ../data/messages:1147
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
 msgstr "Πλάτος γραμμής νήματος, σε pixels (0 για μη χρήση νήματος):"
 
-#: ../data/messages:1135
+#: ../data/messages:1149
 msgid "Colour of the string (red, blue, green, alpha) :"
 msgstr "Χρώμα του αλφαριθμητικού (κόκκινο, μπλε, πράσινο, άλφα) :"
 
-#: ../data/messages:1139
+#: ../data/messages:1153
 msgid "Indicator of the active window"
 msgstr "Δείκτης του ενεργού παραθύρου"
 
-#: ../data/messages:1141
+#: ../data/messages:1155
 msgid "Type of indicator:"
 msgstr "Τύπος δείκτη:"
 
-#: ../data/messages:1145
+#: ../data/messages:1159
 msgid "Frame"
 msgstr "Πλαίσιο"
 
-#: ../data/messages:1147 ../data/messages:1165 ../data/messages:1203
+#: ../data/messages:1161 ../data/messages:1179 ../data/messages:1217
 msgid "Image file:"
 msgstr "Αρχείο εικόνας:"
 
-#: ../data/messages:1149
+#: ../data/messages:1163
 msgid "Set transparency to 0 if you don't want to use an indicator."
 msgstr ""
 "Καθορίστε τη διαφάνει στο 0 εάν δεν επιθυμείτε να χρησιμοποιήσετε έναν "
 "δείκτη."
 
-#: ../data/messages:1151
+#: ../data/messages:1165
 msgid "Colour of the frame :"
 msgstr "Χρώμα πλαισίου :"
 
-#: ../data/messages:1153
+#: ../data/messages:1167
 msgid "Set 0 to fill the frame."
 msgstr "Καθορίστε τιμή 0 για την πλήρωση του πλαισίου."
 
-#: ../data/messages:1155
+#: ../data/messages:1169
 msgid "Linewidth of the frame around the active window :"
 msgstr "Πλάτος της γραμμής του πλαισίου γύρω από το ενεργό παράθυρο:"
 
-#: ../data/messages:1157
+#: ../data/messages:1171
 msgid "Corner radius of the frame around the active window :"
 msgstr "Ακτίνα γωνίας του πλαισίου γύρω από το ενεργό παράθυρο:"
 
-#: ../data/messages:1159 ../data/messages:1191
+#: ../data/messages:1173 ../data/messages:1205
 msgid "Draw indicator above the icon?"
 msgstr "Σχεδιασμός δείκτη επάνω από το εικονίδιο;"
 
-#: ../data/messages:1161
+#: ../data/messages:1175
 msgid "Indicator of active launcher"
 msgstr "Δείκτης ενεργού εκκινητή"
 
-#: ../data/messages:1163
+#: ../data/messages:1177
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
@@ -3770,7 +3788,7 @@ msgstr ""
 "ότι εκτελούνται ήδη. Αφήστε το κενό για να χρησιμοποιηθεί το προκαθορισμένο "
 "πρότυπο."
 
-#: ../data/messages:1167
+#: ../data/messages:1181
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
@@ -3778,11 +3796,11 @@ msgstr ""
 "Ο δείκτης σχεδιάζεται στους ενεργούς εκκινητές αλλά μπορεί να επιθυμείτε να "
 "τον εμφανίσετε και στις εφαρμογές."
 
-#: ../data/messages:1169
+#: ../data/messages:1183
 msgid "Display an indicator on application icons too ?"
 msgstr "Εμφάνιση δείκτη και στις εφαρμογές;"
 
-#: ../data/messages:1171
+#: ../data/messages:1185
 msgid ""
 "Relatively to the icons' size. You can use this parameter to adjust the "
 "indicator's vertical position.\n"
@@ -3794,11 +3812,11 @@ msgstr ""
 "Αν ο δείκτης είναι συνδεδεμένος στο εικονίδιο, η διαφορά θα είναι προς τα "
 "πάνω, αλλιώς προς τα κάτω."
 
-#: ../data/messages:1173
+#: ../data/messages:1187
 msgid "Vertical offset :"
 msgstr "Έναρξη καθέτου:"
 
-#: ../data/messages:1175
+#: ../data/messages:1189
 msgid ""
 "If the indicator is linked to the icon, it will then be zoomed like the icon "
 "and the offset will be upwards.\n"
@@ -3810,11 +3828,11 @@ msgstr ""
 "Αλλιώς θα σχεδιασθεί απευθείας στο dock και η μετατόπιση θα είναι προς τα "
 "κάτω."
 
-#: ../data/messages:1177
+#: ../data/messages:1191
 msgid "Link the indicator with its icon?"
 msgstr "Σύνδεση του δείκτη με το εικονίδιό του;"
 
-#: ../data/messages:1179
+#: ../data/messages:1193
 msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
@@ -3824,43 +3842,43 @@ msgstr ""
 "εικονίδια. Όσο μεγαλύτερη είναι η τιμή, τόσο μεγαλύτερος θα είναι ο δείκτης. "
 "Το 1 σημαίνει ότι ο δείκτης θα έχει το ίδιο μέγεθος όπως τα εικονίδια."
 
-#: ../data/messages:1181
+#: ../data/messages:1195
 msgid "Indicator size ratio :"
 msgstr "Ποσοστό μεγέθους του δείκτη:"
 
-#: ../data/messages:1185
+#: ../data/messages:1199
 msgid "bigger"
 msgstr "μεγαλύτερο"
 
-#: ../data/messages:1187
+#: ../data/messages:1201
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 "Χρησιμοποιήστε το για να ακολουθεί ο δείκτης τον προσανατολισμό του dock "
 "(πάνω/κάτω/δεξιά/αριστερά)."
 
-#: ../data/messages:1189
+#: ../data/messages:1203
 msgid "Rotate the indicator with dock?"
 msgstr "Περιστροφή του δείκτη με το dock;"
 
-#: ../data/messages:1193
+#: ../data/messages:1207
 msgid "Indicator of grouped windows"
 msgstr "Δείκτης ομαδοποιημένων παραθύρων"
 
-#: ../data/messages:1195
+#: ../data/messages:1209
 msgid "How to show that several icons are grouped :"
 msgstr "Πως θα φαίνεται ότι πολλά εικονίδια είναι ομαδοποιημένα :"
 
-#: ../data/messages:1197
+#: ../data/messages:1211
 msgid "Draw an emblem"
 msgstr "Σχεδιασμός εμβλήματος"
 
-#: ../data/messages:1199
+#: ../data/messages:1213
 msgid "Draw the sub-dock's icons as a stack"
 msgstr "Σχεδίαση των εικοινδίων του υπο-dock σαν στοίβα"
 
-#: ../data/messages:1201
+#: ../data/messages:1215
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
@@ -3868,35 +3886,35 @@ msgstr ""
 "Έχει νόημα μόνο αν επιλέξετε να ομαδοποιήσετε εφαρμογές της ίδιας κλάσης "
 "μαζί. Αφήστε το κενό για να χρησιμοποιηθεί η προεπιλογή."
 
-#: ../data/messages:1205
+#: ../data/messages:1219
 msgid "Zoom the indicator with its icon?"
 msgstr "Αλλαγή μεγέθους του δείκτη με το εικονίδιό του;"
 
-#: ../data/messages:1207
+#: ../data/messages:1221
 msgid "Labels"
 msgstr "Ετικέτες"
 
-#: ../data/messages:1209
+#: ../data/messages:1223
 msgid "Label visibility"
 msgstr "Ορατότητα ετικετών"
 
-#: ../data/messages:1211
+#: ../data/messages:1225
 msgid "Show labels:"
 msgstr "Εμφάνιση ετικετών:"
 
-#: ../data/messages:1213
+#: ../data/messages:1227
 msgid "No"
 msgstr "Όχι"
 
-#: ../data/messages:1215
+#: ../data/messages:1229
 msgid "On pointed icon"
 msgstr "Στο εικονίδιο που δείχνει το ποντίκι"
 
-#: ../data/messages:1217
+#: ../data/messages:1231
 msgid "On all icons"
 msgstr "Σε όλα τα εικονίδια"
 
-#: ../data/messages:1219
+#: ../data/messages:1233
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
@@ -3904,28 +3922,28 @@ msgstr ""
 "Όσο μεγαλύτερη, τόσο περισσότερο οι ετικέτες δίπλα από το καταδεικνυόμενο "
 "εικονίδιο θα είναι διάφανες."
 
-#: ../data/messages:1221
+#: ../data/messages:1235
 msgid "label's visibility threshold :"
 msgstr "Κατώφλι ορατότητας της ετικέτας:"
 
-#: ../data/messages:1223
+#: ../data/messages:1237
 msgid "Should the labels always be horizontal, even when dock is vertical?"
 msgstr ""
 "Οι ετικέτες να είναι πάντα οριζόντιες, ακόμη και όταν το dock είναι κάθετο;"
 
-#: ../data/messages:1225
+#: ../data/messages:1239
 msgid "Font"
 msgstr "Γραμματοσειρά"
 
-#: ../data/messages:1229
+#: ../data/messages:1243
 msgid "Use a custom font for labels?"
 msgstr "Χρήση προσαρμοσμένης γραμματοσειράς για τις ετικέτες;"
 
-#: ../data/messages:1231
+#: ../data/messages:1245
 msgid "Font used for labels :"
 msgstr "Χρησιμοποιούμενη γραμματοσειρά για τις ετικέτες :"
 
-#: ../data/messages:1237
+#: ../data/messages:1251
 msgid ""
 "If you set it to fully transparent, there will be no background for the "
 "text, but the margin around the text will still be in effect."
@@ -3933,27 +3951,27 @@ msgstr ""
 "Αν το θέσετε σε πλήρως διάφανο, δεν θα υπάρχει φόντο για το κείμενο αλλά το "
 "περιθώριο γύρω από το κείμενο θα είναι ακόμα ενεργό."
 
-#: ../data/messages:1239
+#: ../data/messages:1253
 msgid "Colour of the label's background :"
 msgstr "Χρώμα του παρασκηνίου της ετικέτας :"
 
-#: ../data/messages:1241
+#: ../data/messages:1255
 msgid "Margin around the text (in pixels) :"
 msgstr "Περιθώριο γύρω από το κείμενο (σε pixel) :"
 
-#: ../data/messages:1243
+#: ../data/messages:1257
 msgid "Colour"
 msgstr "Χρώμα"
 
-#: ../data/messages:1245
+#: ../data/messages:1259
 msgid "It's the first color of the gradation."
 msgstr "Το πρώτο χρώμα της διαβάθμισης."
 
-#: ../data/messages:1247
+#: ../data/messages:1261
 msgid "Start color :"
 msgstr "Χρώμα έναρξης:"
 
-#: ../data/messages:1249
+#: ../data/messages:1263
 msgid ""
 "It's the second color of the gradation. Set it to the same value as the "
 "first if you don't want to have any gradation."
@@ -3961,11 +3979,11 @@ msgstr ""
 "Το δεύτερο χρώμα της διαβάθμισης. Ορίστε την ίδια τιμή με το χρώμα έναρξης "
 "εάν απλά δεν θέλετε να έχετε διαβάθμιση."
 
-#: ../data/messages:1251
+#: ../data/messages:1265
 msgid "Stop color :"
 msgstr "Χρώμα τέλους:"
 
-#: ../data/messages:1253
+#: ../data/messages:1267
 msgid ""
 "If checked, the pattern will go from top to bottom, otherwise from left to "
 "right."
@@ -3973,66 +3991,66 @@ msgstr ""
 "Εάν επιλεγεί, το πρότυπο θα μετακινηθεί από πάνω προς τα κάτω, διαφορετικά "
 "από τα αριστερά προς τα δεξιά."
 
-#: ../data/messages:1255
+#: ../data/messages:1269
 msgid "Pattern should be vertical?"
 msgstr "Το πρότυπο να είναι κάθετο;"
 
-#: ../data/messages:1257
+#: ../data/messages:1271
 msgid "Quick-info are short information drawn on the icons."
 msgstr ""
 "Οι ταχυ-πληροφορίες είναι σύντομες πληροφορίες που εμφανίζονται στα "
 "εικονίδια."
 
-#: ../data/messages:1259
+#: ../data/messages:1273
 msgid "Quick-info"
 msgstr "Ταχυ-πληροφορίες"
 
-#: ../data/messages:1261
+#: ../data/messages:1275
 msgid "Use the same look as the labels?"
 msgstr "Χρήση της ίδιας εμφάνισης με τις ετικέτες;"
 
-#: ../data/messages:1265
+#: ../data/messages:1279
 msgid "Background color:"
 msgstr "Χρώμα παρασκηνίου:"
 
-#: ../data/messages:1295
+#: ../data/messages:1309
 msgid "starting from 0"
 msgstr "Εκκίνηση από το 0"
 
-#: ../data/messages:1299
+#: ../data/messages:1313
 msgid "Visibility of the dock"
 msgstr "Ορατότητα του dock"
 
-#: ../data/messages:1323 ../data/messages:1347
+#: ../data/messages:1337 ../data/messages:1361
 msgid "Same as main dock"
 msgstr "Ίδια με το κύριο dock"
 
-#: ../data/messages:1325
+#: ../data/messages:1339
 msgid "Tiny"
 msgstr ""
 
-#: ../data/messages:1339
+#: ../data/messages:1353
 msgid "Leave it empty to use the same view as the main dock."
 msgstr ""
 "Αφήστε το κενό για να χρησιμοποιήσετε την ίδια προβολή όπως το κύριο dock."
 
-#: ../data/messages:1341
+#: ../data/messages:1355
 msgid "Choose the view for this dock :/"
 msgstr "Επιλέξτε την προβολή για αυτό το dock :/"
 
-#: ../data/messages:1367
+#: ../data/messages:1381
 msgid "You can even paste an internet URL."
 msgstr "Μπορείτε ακόμα να επικολλήσετε ένα URL του διαδικτύου."
 
-#: ../data/messages:1369
+#: ../data/messages:1383
 msgid "...or drag and drop a theme package here :"
 msgstr "…ή να σύρετε και να αφήσετε ένα πακέτο θέματος εδώ :"
 
-#: ../data/messages:1371
+#: ../data/messages:1385
 msgid "Theme loading options"
 msgstr "Επιλογές φόρτωσης θέματος"
 
-#: ../data/messages:1373
+#: ../data/messages:1387
 msgid ""
 "If you tick this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -4042,11 +4060,11 @@ msgstr ""
 "αντικατασταθούν από αυτούς που παρέχει το νέο θέμα. Διαφορετικά οι τρέχοντες "
 "εκκινητές θα παραμείνουν και θα αντικατασταθούν μόνον τα εικονίδια."
 
-#: ../data/messages:1375
+#: ../data/messages:1389
 msgid "Use the new theme's launchers?"
 msgstr "Χρήση των εκκινητών του νέου θέματος;"
 
-#: ../data/messages:1377
+#: ../data/messages:1391
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
@@ -4055,35 +4073,35 @@ msgstr ""
 "αφορούν την αυτόματη απόκρυψη, τη χρήση της γραμμής εργασιών, κλπ., δηλαδή "
 "τη θέση του dock."
 
-#: ../data/messages:1379
+#: ../data/messages:1393
 msgid "Use the new theme's behaviour?"
 msgstr "Χρήση της συμπεριφοράς του νέου θέματος;"
 
-#: ../data/messages:1381
+#: ../data/messages:1395
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: ../data/messages:1383
+#: ../data/messages:1397
 msgid "Save current theme"
 msgstr "Αποθήκευση τρέχοντος θέματος"
 
-#: ../data/messages:1385
+#: ../data/messages:1399
 msgid "You will then be able to re-open it at any time."
 msgstr "Θα είστε σε θέση να το ξανανοίξετε οποτεδήποτε."
 
-#: ../data/messages:1387
+#: ../data/messages:1401
 msgid "Save as:"
 msgstr "Αποθήκευση ως:"
 
-#: ../data/messages:1389
+#: ../data/messages:1403
 msgid "Save current behaviour also?"
 msgstr "Αποθήκευση και της τρέχουσας συμπεριφοράς;"
 
-#: ../data/messages:1391
+#: ../data/messages:1405
 msgid "Save current launchers also?"
 msgstr "Αποθήκευση και των τρεχόντων εκκινητών;"
 
-#: ../data/messages:1393
+#: ../data/messages:1407
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
@@ -4091,27 +4109,130 @@ msgstr ""
 "Το dock θα δημιουργήσει ένα πλήρες tarball του τρέχοντος θέματός σας, "
 "επιτρέποντάς σας να το ανταλλάξετε εύκολα με άλλους."
 
-#: ../data/messages:1395
+#: ../data/messages:1409
 msgid "Build a package of the theme?"
 msgstr "Να δημιουργηθεί πακέτο από το θέμα;"
 
-#: ../data/messages:1397
+#: ../data/messages:1411
 msgid "Delete"
 msgstr "Διαγραφή"
 
-#: ../data/messages:1399
+#: ../data/messages:1413
 msgid "List of your personal themes"
 msgstr "Κατάλογος προσωπικών θεμάτων"
 
-#: ../data/messages:1401
+#: ../data/messages:1415
 msgid "Delete from the list themes that you don't need anymore :"
 msgstr "Διαγραφή από τη λίστα των θεμάτων που δεν χρειάζεστε πλέον :"
 
-#: ../data/messages:1403 ../data/messages:1405
+#: ../data/messages:1417 ../data/messages:1419 ../data/messages:1421
+#: ../data/messages:1451 ../data/messages:1483
 msgid "Desktop Entry"
 msgstr "Καταχώρηση επιφάνειας εργασίας"
 
-#: ../data/messages:1407
+#: ../data/messages:1425 ../data/messages:1455 ../data/messages:1487
+msgid "Name of the container it belongs to:"
+msgstr ""
+
+#: ../data/messages:1427
+msgid "Sub-dock's name:"
+msgstr ""
+
+#: ../data/messages:1429
+msgid "How to render the icon:"
+msgstr ""
+
+#: ../data/messages:1431
+msgid "Use an image"
+msgstr ""
+
+#: ../data/messages:1433
+msgid "Draw sub-dock's content as emblems"
+msgstr ""
+
+#: ../data/messages:1435
+msgid "Draw sub-dock's content as stack"
+msgstr ""
+
+#: ../data/messages:1437
+msgid "Draw sub-dock's content inside a box"
+msgstr ""
+
+#: ../data/messages:1439 ../data/messages:1459
+msgid "Image's name or path:"
+msgstr ""
+
+#: ../data/messages:1441 ../data/messages:1465 ../data/messages:1491
+msgid "Extra parameters"
+msgstr ""
+
+#: ../data/messages:1443
+msgid "Name of the view used for the sub-dock:"
+msgstr ""
+
+#: ../data/messages:1445
+msgid "If '0' the container will be displayed on every viewport."
+msgstr ""
+
+#: ../data/messages:1447 ../data/messages:1479
+msgid "Only show in this specific viewport:"
+msgstr ""
+
+#: ../data/messages:1449 ../data/messages:1481 ../data/messages:1493
+msgid "Order you want for this launcher among the others:"
+msgstr ""
+
+#: ../data/messages:1457
+msgid "Launcher's name:"
+msgstr ""
+
+#: ../data/messages:1461
+msgid ""
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+msgstr ""
+
+#: ../data/messages:1463
+msgid "Command to launch on click:"
+msgstr ""
+
+#: ../data/messages:1467
+msgid ""
+"If you chose to mix launcher and applications, this option will deactivate "
+"this behaviour for this launcher only. It can be useful for instance for a "
+"launcher that launches a script in a terminal, but you don't want it to "
+"steal the terminal's icon from the taskbar."
+msgstr ""
+
+#: ../data/messages:1469
+msgid "Prevent this launcher from stealing this application from taskbar?"
+msgstr ""
+
+#: ../data/messages:1471
+msgid ""
+"The only reason you may want to modify this parameter is if you made this "
+"launcher by hands. If you dropped it into the dock from the menu, it is "
+"nearly sure that you shouldn't touch it. It defines the class of the "
+"program, which is useful to link the application with its launcher."
+msgstr ""
+
+#: ../data/messages:1473
+msgid "Class of the program:"
+msgstr ""
+
+#: ../data/messages:1475
+msgid "Run in a terminal?"
+msgstr ""
+
+#: ../data/messages:1477
+msgid "If '0' the launcher will be displayed on every viewport."
+msgstr ""
+
+#: ../data/messages:1489
+msgid "Separators' appearance is defined in the global configuration."
+msgstr ""
+
+#: ../data/messages:1495
 msgid ""
 "<b><span color='red'>GLX-Dock 2.4.0</span></b>\n"
 " - The <b>Power-Manager applet</b> has been rewritten to work on any "
@@ -4123,7 +4244,7 @@ msgid ""
 " - The dock can now be used as a shell in a Compiz-standalone environment."
 msgstr ""
 
-#: ../data/messages:1409
+#: ../data/messages:1497
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4143,4 +4264,12 @@ msgid ""
 "desktop\n"
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
+msgstr ""
+
+#: ../data/messages:1499
+msgid ""
+"<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
+" - The <b>Music Player</b> applet has been enhanced.\n"
+" - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
+" - Various bug fixes."
 msgstr ""

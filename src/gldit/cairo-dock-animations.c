@@ -34,6 +34,7 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-overlay.h"
 #include "cairo-dock-animations.h"
 
 extern gboolean g_bUseOpenGL;
@@ -262,7 +263,6 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoContainer *pContainer,
 	
 	if (cAnimation == NULL || iNbRounds == 0 || pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)
 		return ;
-	///cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_notify_on_object (pIcon, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_start_icon_animation (pIcon, pDock);
 }
@@ -536,4 +536,61 @@ void cairo_dock_remove_transition_on_icon (Icon *pIcon)
 		pTransition->pFreeUserDataFunc (pTransition->pUserData);
 	g_free (pTransition);
 	cairo_dock_set_transition (pIcon, NULL);
+}
+
+
+static gboolean _update_busy_animation (CairoOverlay *pOverlay, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
+{
+	CairoDockImageBuffer *pImage = cairo_dock_get_overlay_image_buffer (pOverlay);
+	if (! cairo_dock_image_buffer_is_animated (pImage))
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	//g_print ("%s ()\n", __func__);
+	
+	cairo_dock_image_buffer_next_frame (pImage);
+	
+	cairo_dock_redraw_icon (pIcon, pContainer);
+	
+	*bContinueAnimation = TRUE;
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+static gboolean _remove_busy_animation (Icon *pIcon, CairoOverlay *pOverlay)
+{
+	//g_print ("%s ()\n", __func__);
+	cairo_dock_remove_notification_func_on_object (pIcon,
+		NOTIFICATION_UPDATE_ICON_SLOW,
+		(CairoDockNotificationFunc) _update_busy_animation,
+		pOverlay);
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+static const gchar *busy_id = "busy-animation";  // unique ID for all the busy-animation overlays.
+void cairo_dock_start_busy_animation (Icon *pIcon)
+{
+	CairoContainer *pContainer = pIcon->pContainer;
+	g_return_if_fail (pContainer != NULL);
+	
+	CairoOverlay *pOverlay = cairo_dock_add_overlay_from_image (pIcon, NULL, CAIRO_OVERLAY_MIDDLE, (gpointer)busy_id);  // remove any previous busy-animation overlay
+	CairoDockImageBuffer *pImage = cairo_dock_get_overlay_image_buffer (pOverlay);
+	
+	int iWidth, iHeight;
+	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
+	cairo_dock_load_image_buffer_full (pImage, "/usr/share/cairo-dock/plug-ins/Cairo-Penguin/themes/Classic/faller.png", iWidth * pOverlay->fScale, iHeight * pOverlay->fScale, CAIRO_DOCK_ANIMATED_IMAGE, 1.);
+	
+	
+	cairo_dock_register_notification_on_object (pIcon,
+		NOTIFICATION_UPDATE_ICON_SLOW,
+		(CairoDockNotificationFunc) _update_busy_animation,
+		CAIRO_DOCK_RUN_AFTER, pOverlay);
+	
+	cairo_dock_register_notification_on_object (pOverlay,
+		NOTIFICATION_DESTROY,
+		(CairoDockNotificationFunc) _remove_busy_animation,
+		CAIRO_DOCK_RUN_AFTER, pIcon);  // the overlay is tied to the icon, so pIcon stays alive longer than pOverlay
+	
+	cairo_dock_launch_animation (pContainer);
+}
+
+void cairo_dock_stop_busy_animation (Icon *pIcon)
+{
+	cairo_dock_remove_overlay_at_position (pIcon, CAIRO_OVERLAY_MIDDLE, (gpointer)busy_id);
 }

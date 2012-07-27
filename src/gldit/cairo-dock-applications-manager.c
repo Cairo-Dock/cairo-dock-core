@@ -1464,6 +1464,10 @@ static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
 	icon->iface.action_on_drag_hover = _show_appli_for_drop;
 	icon->iface.on_delete = _delete_appli;
 	icon->bHasIndicator = myIndicatorsParam.bDrawIndicatorOnAppli;
+	if (myTaskbarParam.bSeparateApplis)
+		icon->iGroup = CAIRO_DOCK_APPLI;
+	else
+		icon->iGroup = CAIRO_DOCK_LAUNCHER;
 	
 	//\____________ On remplit ses buffers.
 	if (myTaskbarParam.bShowAppli)
@@ -1522,6 +1526,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		
 		pTaskBar->iIconPlacement = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "place icons", &bFlushConfFileNeeded, CAIRO_APPLI_AFTER_LAST_LAUNCHER, NULL, NULL);  // after the last launcher by default.
 		pTaskBar->cRelativeIconName = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "relative icon", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		pTaskBar->bSeparateApplis = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "separate applis", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 		
 		// representation
 		pTaskBar->bOverWriteXIcons = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "overwrite xicon", &bFlushConfFileNeeded, TRUE, NULL, NULL);
@@ -1621,6 +1626,7 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
 		|| cairo_dock_strings_differ (pPrevTaskBar->cOverwriteException, pTaskBar->cOverwriteException)
 		|| pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli
 		|| pPrevTaskBar->iIconPlacement != pTaskBar->iIconPlacement
+		|| pPrevTaskBar->bSeparateApplis != pTaskBar->bSeparateApplis
 		|| cairo_dock_strings_differ (pPrevTaskBar->cRelativeIconName, pTaskBar->cRelativeIconName))
 	{
 		_cairo_dock_stop_application_manager ();

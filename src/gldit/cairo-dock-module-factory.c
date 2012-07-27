@@ -40,8 +40,8 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dialog-manager.h"  // cairo_dock_show_temporary_dialog_with_icon
 #include "cairo-dock-config.h"
-///#include "cairo-dock-gui-manager.h"  // cairo_dock_trigger_refresh_launcher_gui
 #include "cairo-dock-module-manager.h"
+#include "cairo-dock-data-renderer.h"
 #include "cairo-dock-module-factory.h"
 
 // dependancies
@@ -346,16 +346,11 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		{
 			gsize length;
 			pMinimalConfig->pHiddenBgColor = g_key_file_get_double_list (pKeyFile, "Icon", "bg color", &length, NULL);
-			if (length < 4 || pMinimalConfig->pHiddenBgColor[3] == 0)
+			if (length < 4)  // invalid rgba color => use the default one.
 			{
 				g_free (pMinimalConfig->pHiddenBgColor);
 				pMinimalConfig->pHiddenBgColor = NULL;
 			}
-		}
-		else if (iBgColorType == 1)  // default bg color
-		{
-			if (myDocksParam.fHiddenBg[3] != 0)
-				pMinimalConfig->pHiddenBgColor = g_memdup (myDocksParam.fHiddenBg, sizeof (myDocksParam.fHiddenBg));
 		}
 	}
 	
@@ -584,7 +579,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	pInstance->pDock = NULL;
 	CairoDesklet *pCurrentDesklet = pInstance->pDesklet;
 	pInstance->pDesklet = NULL;
-	gchar *cOldDockName = NULL;
 	gchar *cCurrentSubDockName = NULL;
 	
 	CairoContainer *pNewContainer = NULL;
@@ -605,6 +599,8 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			//\______________ On met a jour les champs 'nom' et 'image' de l'icone.
 			if (pIcon != NULL)
 			{
+				if (pCurrentDock && ! pIcon->pContainer)  // icon already detached (by drag and drop)
+					pCurrentDock = NULL;
 				cCurrentSubDockName = g_strdup (pIcon->cName);
 				
 				// on gere le changement de nom de son sous-dock.
@@ -625,6 +621,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				pIcon->cFileName = pMinimalConfig->cIconFileName;
 				pMinimalConfig->cIconFileName = NULL;  // idem
 				pIcon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
+				pIcon->bHasHiddenBg = pMinimalConfig->bAlwaysVisible;  // if were going to see the applet all the time, let's add a background. if the user doesn't want it, he can always set a transparent bg color.
 				pIcon->pHiddenBgColor = pMinimalConfig->pHiddenBgColor;
 				pMinimalConfig->pHiddenBgColor = NULL;
 			}
@@ -642,12 +639,16 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 				pNewContainer = CAIRO_CONTAINER (pNewDock);
 			}
 			
-			// on la detache de son dock si son container a change.
-			if (pCurrentDock != NULL && (pMinimalConfig->bIsDetached || pNewDock != pCurrentDock))
+			// detach the icon from its container if it has changed
+			if (pCurrentDock != NULL && (pMinimalConfig->bIsDetached || pNewDock != pCurrentDock))  // was in a dock, now is in another dock or in a desklet
 			{
 				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
-				cOldDockName = g_strdup (pIcon->cParentDockName);
 				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock);
+			}
+			else if (pCurrentDesklet != NULL && ! pMinimalConfig->bIsDetached)  // was in a desklet, now is in a dock
+			{
+				cairo_dock_destroy_desklet (pCurrentDesklet);
+				pCurrentDesklet = NULL;
 			}
 			
 			// on recupere son desklet (cree au besoin).
@@ -703,7 +704,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		{
 			cairo_dock_resize_icon_in_dock (pIcon, pNewDock);
 			if (bReloadAppletConf)
-				cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
+				cairo_dock_load_icon_text (pIcon);
 		}
 	}
 	
@@ -734,7 +735,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	{
 		if (pCurrentDock->iRefCount == 0 && pCurrentDock->icons == NULL && !pCurrentDock->bIsMainDock)  // dock principal vide.
 		{
-			///cairo_dock_destroy_dock (pCurrentDock, cOldDockName);
 			pCurrentDock = NULL;  // se fera detruire automatiquement.
 		}
 		else
@@ -748,8 +748,10 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 		cairo_dock_destroy_dock (pIcon->pSubDock, cCurrentSubDockName);
 		pIcon->pSubDock = NULL;
 	}
-	g_free (cOldDockName);
 	g_free (cCurrentSubDockName);
+	
+	if (! bReloadAppletConf && cairo_dock_get_icon_data_renderer (pIcon) != NULL)  // reload the data-renderer at the new size
+		cairo_dock_reload_data_renderer_on_icon (pIcon, pNewContainer);
 }
 
 
@@ -884,8 +886,12 @@ void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pMod
 		dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain,
 		pModuleInstance->pModule->pVisitCard->cDescription));
 	
-	myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
-	cairo_dock_show_temporary_dialog_with_icon (cDescription, pModuleInstance->pIcon, pModuleInstance->pContainer, 0, pModuleInstance->pModule->pVisitCard->cIconFilePath);
+	CairoDialogAttribute attr;
+	memset (&attr, 0, sizeof (CairoDialogAttribute));
+	attr.cText = cDescription;
+	attr.cImageFilePath = pModuleInstance->pModule->pVisitCard->cIconFilePath;
+	attr.bUseMarkup = TRUE;
+	cairo_dock_build_dialog (&attr, pModuleInstance->pIcon, pModuleInstance->pContainer);
+	
 	g_free (cDescription);
-	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
 }

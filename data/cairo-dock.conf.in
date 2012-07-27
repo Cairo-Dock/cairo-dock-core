@@ -124,6 +124,9 @@ place icons = 2
 #N Place new icons after this one
 relative icon =
 
+#b Automatically add a separator
+separate applis = true
+
 #B- Group windows from the same application in a sub-dock ?
 #{This allows you to group all the windows of a given application into a unique sub-dock, and to act on all of the windows at the same time.}
 group by class = true
@@ -225,15 +228,15 @@ move down nb steps = 16
 #X-[Refresh rate;gtk-execute]
 frame_cpu =
 
-#i-[5;40] Refresh rate when mouving cursor into the dock :
+#i-[5;40] Refresh rate when mouving cursor into the dock:
 #{in Hz. This is to adjust behaviour relative to your CPU power.}
 refresh frequency = 35
 
-#i-&[15;60] Animation frequency for the OpenGL backend :
+#i-&[15;60] Animation frequency for the OpenGL backend:
 #{in Hz. This is to adjust behaviour relative to your CPU power.}
 opengl anim freq = 33
 
-#i-*[15;50] Animation frequency for the Cairo backend :
+#i-*[15;50] Animation frequency for the Cairo backend:
 #{in Hz. This is to adjust behaviour relative to your CPU power.}
 cairo anim freq = 25
 
@@ -570,7 +573,7 @@ string color = 0.0; 0.0; 0.8; 0.4
 
 [Indicators]
 
-#F+[Indicator of the active window]
+#X+[Indicator of the active window]
 frame_window =
 
 #Y+[Image;1;1;Frame;2;3] Type of indicator:
@@ -597,7 +600,7 @@ sep_active =
 active frame position = true
 
 
-#F+[Indicator of active launcher]
+#X+[Indicator of active launcher]
 frame_launch =
 
 #S+ Image file:
@@ -633,7 +636,7 @@ rotate indicator = true
 indicator above = true
 
 
-#F+[Indicator of grouped windows]
+#X+[Indicator of grouped windows]
 frame_class =
 
 #Y[Draw an emblem;1;2;Draw the sub-dock's icons as a stack;0;0] How to show that several icons are grouped :
@@ -645,6 +648,25 @@ class indicator =
 
 #b+ Zoom the indicator with its icon?
 zoom class = false
+
+
+#X+[Progress bars]
+frame_bar =
+
+#C+ Start color
+bar_color_start = 1;0;0
+
+#C+ End color
+bar_color_stop = 0;1;0
+
+#B+ Draw outline
+bar_outline = false
+
+#C+ Outline color
+bar_color_outline = 0;0;0
+
+#i-[2;10] Bar thickness
+bar_thickness = 4
 
 
 [Labels]

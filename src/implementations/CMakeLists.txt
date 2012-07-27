@@ -1,12 +1,13 @@
 
 SET(impl_SRCS
-	cairo-dock-gauge.c 				cairo-dock-gauge.h
-	cairo-dock-graph.c 				cairo-dock-graph.h
-	cairo-dock-hiding-effect.c	 	cairo-dock-hiding-effect.h
-	cairo-dock-icon-container.c 	cairo-dock-icon-container.h
-	cairo-dock-default-view.c 		cairo-dock-default-view.h
-	cairo-dock-compiz-integration.c	cairo-dock-compiz-integration.h
-	cairo-dock-kwin-integration.c	cairo-dock-kwin-integration.h
+	cairo-dock-gauge.c               cairo-dock-gauge.h
+	cairo-dock-graph.c               cairo-dock-graph.h
+	cairo-dock-progressbar.c         cairo-dock-progressbar.h
+	cairo-dock-hiding-effect.c       cairo-dock-hiding-effect.h
+	cairo-dock-icon-container.c      cairo-dock-icon-container.h
+	cairo-dock-default-view.c        cairo-dock-default-view.h
+	cairo-dock-compiz-integration.c  cairo-dock-compiz-integration.h
+	cairo-dock-kwin-integration.c    cairo-dock-kwin-integration.h
 )
 
 add_library(implementations STATIC ${impl_SRCS})
@@ -27,5 +28,7 @@ include_directories(
 ########### install files ###############
 
 install (FILES
-	cairo-dock-gauge.h	 	 	 cairo-dock-graph.h
-	DESTINATION ${includedir}/cairo-dock/implementations)
+	cairo-dock-gauge.h
+	cairo-dock-graph.h
+	cairo-dock-progressbar.h
+	DESTINATION ${includedir}/cairo-dock/implementations)  # thoses are needed to expose the attributes of the data-renderers to the plug-ins.

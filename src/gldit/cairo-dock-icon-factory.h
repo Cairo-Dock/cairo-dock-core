@@ -23,6 +23,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-image-buffer.h"
 #include "cairo-dock-object.h"
 
 G_BEGIN_DECLS
@@ -164,13 +165,13 @@ struct _Icon {
 	GLuint iIconTexture;
 	cairo_surface_t* pReflectionBuffer_deprecated;
 	
-	gint iTextWidth, iTextHeight;
-	cairo_surface_t* pTextBuffer;
-	GLuint iLabelTexture;
+	gint iTextWidth_deprecated, iTextHeight_deprecated;
+	cairo_surface_t* pTextBuffer_deprecated;
+	GLuint iLabelTexture_deprecated;
 	
-	gint iQuickInfoWidth, iQuickInfoHeight;
-	cairo_surface_t* pQuickInfoBuffer;
-	GLuint iQuickInfoTexture;
+	gint iQuickInfoWidth_deprecated, iQuickInfoHeight_deprecated;
+	cairo_surface_t* pQuickInfoBuffer_deprecated;
+	GLuint iQuickInfoTexture_deprecated;
 	
 	//\____________ Parametres de dessin, definis par la vue/les animations.
 	gdouble fXMin, fXMax;  // Abscisse extremale gauche/droite que the icon atteindra (variable avec la vague).
@@ -206,12 +207,16 @@ struct _Icon {
 	gint iHideLabel;
 	gchar *cWmClass;
 	GList *pOverlays;
-	gdouble *pHiddenBgColor;
+	gdouble *pHiddenBgColor;  // NULL to use the default color
 	
 	gint iThumbnailX, iThumbnailY;  // X icon geometry for apps
 	gint iThumbnailWidth, iThumbnailHeight;
 	gboolean bDamaged;  // TRUE when the icon couldn't draw its surface, because the Gl context was not yet ready.
-	gpointer reserved[1];
+	gboolean bHasHiddenBg;
+	
+	CairoDockImageBuffer label;
+	
+	gpointer reserved[4];
 };
 
 typedef void (*CairoIconContainerLoadFunc) (void);
@@ -299,15 +304,13 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer);
 
 /**Fill the label buffer (surface & texture) of a given icon, according to a text description.
 *@param icon the icon.
-*@param pTextDescription desctiption of the text rendering.
 */
-void cairo_dock_load_icon_text (Icon *icon, CairoDockLabelDescription *pTextDescription);
+void cairo_dock_load_icon_text (Icon *icon);
 
 /**Fill the quick-info buffer (surface & texture) of a given icon, according to a text description.
 *@param icon the icon.
-*@param pTextDescription desctiption of the text rendering.
 */
-void cairo_dock_load_icon_quickinfo (Icon *icon, CairoDockLabelDescription *pTextDescription);
+void cairo_dock_load_icon_quickinfo (Icon *icon);
 
 /** Fill all the buffers (surfaces & textures) of a given icon, according to its type. Set its size accordingly, and fills the reflection buffer for cairo. Label and quick-info are loaded with the current global text description.
 *@param pIcon the icon.

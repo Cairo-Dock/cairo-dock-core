@@ -16,7 +16,6 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /*****************************************************************************************************
 **
 ** Program:
@@ -761,9 +760,13 @@ int main (int argc, char** argv)
 			if (cChangeLogMessage != NULL)
 			{
 				Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
-				myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
-				cairo_dock_show_temporary_dialog_with_default_icon (gettext (cChangeLogMessage), pFirstIcon, CAIRO_CONTAINER (g_pMainDock), 0);
-				myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
+				
+				CairoDialogAttribute attr;
+				memset (&attr, 0, sizeof (CairoDialogAttribute));
+				attr.cText = gettext (cChangeLogMessage);
+				attr.cImageFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
+				attr.bUseMarkup = TRUE;
+				cairo_dock_build_dialog (&attr, pFirstIcon, CAIRO_CONTAINER (g_pMainDock));
 				g_free (cChangeLogMessage);
 			}
 			g_key_file_free (pKeyFile);
@@ -787,6 +790,19 @@ int main (int argc, char** argv)
 	
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
+	
+	// add "add an applet" in the menu
+	// when an icon in a sub-dock demands attention, also animate the icon in the main dock.
+	// search in Recent-Events' dialog (seems like libzeitgeist is buggy)
+	// taskbar: separator as an option -> test
+	// taskbar, minimized windows only: when restored, an appli icon gets the "?" for a second before disappearing
+	// Twitter: when a new entry apears in the timeline, have to click on the applet to stop the animation (doesn't stop from the menu).
+	// icon disappearance: sometimes the animation is not triggered
+	// warning :  (/home/fab/CD2/cairo-dock-core/src/gldit/cairo-dock-dock-factory.c:cairo_dock_insert_icon_in_dock_full:737) This icon ((null)) is already inside a container !
+	// image buffer: draw the surface from the center, like the texture.
+	// Icons: use an image buffer + a request size.
+	// add a function cairo_dock_render_one_icon_in_desklet_opengl().
+	// gauge with images: improve transition
 	
 	/*g_print ("\n\nTODO (3.0):\n"
 	"** Must-Be-Done **\n"
@@ -839,8 +855,10 @@ int main (int argc, char** argv)
 	signal (SIGABRT, NULL);
 	signal (SIGTERM, NULL);
 	gldi_free_all ();
-	
+
+	#if (LIBRSVG_MAJOR_VERSION == 2 && LIBRSVG_MINOR_VERSION < 36)
 	rsvg_term ();
+	#endif
 	xmlCleanupParser ();
 	g_string_free (s_pLaunchCommand, TRUE);
 	

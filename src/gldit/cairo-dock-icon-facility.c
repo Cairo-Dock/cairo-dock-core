@@ -557,7 +557,7 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContain
 	
 	g_free (cUniqueName);
 	
-	cairo_dock_load_icon_text (pIcon, &myIconsParam.iconTextDescription);
+	cairo_dock_load_icon_text (pIcon);
 }
 
 void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer_useless, const gchar *cIconNameFormat, ...)
@@ -570,26 +570,25 @@ void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer_us
 	va_end (args);
 }
 
-void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo)
+void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer_useless, const gchar *cQuickInfo)
 {
 	g_return_if_fail (pIcon != NULL);
 	
-	if (pIcon->cQuickInfo != cQuickInfo)
+	if (pIcon->cQuickInfo != cQuickInfo)  // be paranoid, in case one passes pIcon->cQuickInfo to the function
 	{
 		g_free (pIcon->cQuickInfo);
 		pIcon->cQuickInfo = g_strdup (cQuickInfo);
 	}
 	
-	cairo_dock_load_icon_quickinfo (pIcon,
-		&myIconsParam.quickInfoTextDescription);
+	cairo_dock_load_icon_quickinfo (pIcon);
 }
 
-void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...)
+void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer_useless, const gchar *cQuickInfoFormat, ...)
 {
 	va_list args;
 	va_start (args, cQuickInfoFormat);
 	gchar *cFullText = g_strdup_vprintf (cQuickInfoFormat, args);
-	cairo_dock_set_quick_info (pIcon, pContainer, cFullText);
+	cairo_dock_set_quick_info (pIcon, pContainer_useless, cFullText);
 	g_free (cFullText);
 	va_end (args);
 }

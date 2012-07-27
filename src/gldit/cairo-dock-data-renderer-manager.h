@@ -45,6 +45,8 @@ struct _CairoDockDataRendererRecord {
 	const gchar *cThemeDirName;
 	const gchar *cDistantThemeDirName;
 	const gchar *cDefaultTheme;
+	/// whether the data-renderer draws on an overlay rather than directly on the icon.
+	gboolean bUseOverlay;
 	};
 
 // params

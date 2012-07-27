@@ -407,7 +407,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	}
 	
 	//\_____________________ On dessine les infos additionnelles.
-	if (icon->iQuickInfoTexture != 0)
+	/**if (icon->iQuickInfoTexture != 0)
 	{
 		double fMaxScale = cairo_dock_get_icon_max_scale (icon);
 		
@@ -421,13 +421,12 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			icon->fAlpha);
 		
 		glPopMatrix ();
-	}
-	
+	}*/
 	cairo_dock_draw_icon_overlays_opengl (icon, fRatio);
 	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
 	glPopMatrix ();  // retour au debut de la fonction.
-	if (bUseText && icon->pTextBuffer != NULL && icon->iHideLabel == 0
+	if (bUseText && icon->label.iTexture != 0 && icon->iHideLabel == 0
 	&& (icon->bPointed || (icon->fScale > 1.01 && ! myIconsParam.bLabelForPointedIconOnly)))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		glPushMatrix ();
@@ -445,27 +444,27 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			///fMagnitude *= (fMagnitude * myIconsParam.fLabelAlphaThreshold + 1) / (myIconsParam.fLabelAlphaThreshold + 1);
 		}
 		
-		double dx = .5 * (icon->iTextWidth & 1);  // on decale la texture pour la coller sur la grille des coordonnees entieres.
-		double dy = .5 * (icon->iTextHeight & 1);
+		double dx = .5 * (icon->label.iWidth & 1);  // on decale la texture pour la coller sur la grille des coordonnees entieres.
+		double dy = .5 * (icon->label.iHeight & 1);
 		
 		if (pDock->container.bIsHorizontal || !myIconsParam.bTextAlwaysHorizontal)
 		{
-			if (fX + icon->iTextWidth/2 > pDock->container.iWidth)  // l'etiquette deborde a droite.
-				fX = pDock->container.iWidth - icon->iTextWidth/2;
-			if (fX - icon->iTextWidth/2 < 0)  // l'etiquette deborde a gauche.
-				fX = icon->iTextWidth/2;
+			if (fX + icon->label.iWidth/2 > pDock->container.iWidth)  // l'etiquette deborde a droite.
+				fX = pDock->container.iWidth - icon->label.iWidth/2;
+			if (fX - icon->label.iWidth/2 < 0)  // l'etiquette deborde a gauche.
+				fX = icon->label.iWidth/2;
 			
 			if (pDock->container.bIsHorizontal)
 				glTranslatef (floor (fX) + dx,
 					pDock->container.bDirectionUp ? 
-						floor (fY + myIconsParam.iLabelSize - icon->iTextHeight / 2) - dy:
-						floor (fY - icon->fHeight * icon->fScale - myIconsParam.iLabelSize + icon->iTextHeight / 2) + dy,
+						floor (fY + myIconsParam.iLabelSize - icon->label.iHeight / 2) - dy:
+						floor (fY - icon->fHeight * icon->fScale - myIconsParam.iLabelSize + icon->label.iHeight / 2) + dy,
 					0.);
 			else
 			{
 				glTranslatef (pDock->container.bDirectionUp ? 
-						floor (fY - myIconsParam.iLabelSize + icon->iTextHeight / 2) - dy:
-						floor (fY + icon->fHeight * icon->fScale + myIconsParam.iLabelSize - icon->iTextHeight / 2) + dy,
+						floor (fY - myIconsParam.iLabelSize + icon->label.iHeight / 2) - dy:
+						floor (fY + icon->fHeight * icon->fScale + myIconsParam.iLabelSize - icon->label.iHeight / 2) + dy,
 					floor (fX) + dx,
 					0.);
 				glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
@@ -481,8 +480,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		{
 			const int pad = 3;
 			glTranslatef (pDock->container.bDirectionUp ? 
-					floor (fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->iTextWidth/2) + dx :
-					floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad + icon->iTextWidth/2) + dx,
+					floor (fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth/2) + dx :
+					floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad + icon->label.iWidth/2) + dx,
 				floor (fX) + dy,
 				0.);
 			if (icon->pSubDock && gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))
@@ -493,10 +492,12 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_alpha ();
-		_cairo_dock_apply_texture_at_size_with_alpha (icon->iLabelTexture,
-			icon->iTextWidth,
-			icon->iTextHeight,
-			fMagnitude);
+		/**_cairo_dock_apply_texture_at_size_with_alpha (icon->label.iTexture,
+			icon->label.iWidth,
+			icon->label.iHeight,
+			fMagnitude);*/
+		_cairo_dock_set_alpha (fMagnitude);
+		cairo_dock_apply_image_buffer_texture (&icon->label);
 		_cairo_dock_disable_texture ();
 		
 		glPopMatrix ();
@@ -569,28 +570,34 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 			y = icon->fDrawY;
 			icon->fDrawY = (pDock->container.bDirectionUp ? pDock->container.iHeight - icon->fHeight * icon->fScale - gap : gap);
 			
-			if (icon->pHiddenBgColor)
+			if (icon->bHasHiddenBg)
 			{
-				glPushMatrix ();
-				memcpy (pHiddenBgColor, icon->pHiddenBgColor, 4*sizeof (gdouble));
+				if (icon->pHiddenBgColor)  // custom bg color
+					memcpy (pHiddenBgColor, icon->pHiddenBgColor, 4*sizeof (gdouble));
+				else  // default bg color
+					memcpy (pHiddenBgColor, myDocksParam.fHiddenBg, 4*sizeof (gdouble));
 				pHiddenBgColor[3] *= pDock->fPostHideOffset;
-				w = icon->fWidth * icon->fScale;
-				h = icon->fHeight * icon->fScale;
-				if (pDock->container.bIsHorizontal)
+				if (pHiddenBgColor[3] != 0)
 				{
-					glTranslatef (icon->fDrawX + w/2,
-						pDock->container.iHeight - icon->fDrawY - h/2,
-						0.);
-					cairo_dock_draw_rounded_rectangle_opengl (w - 2*r + dw, h, r, 0, pHiddenBgColor);
+					glPushMatrix ();
+					w = icon->fWidth * icon->fScale;
+					h = icon->fHeight * icon->fScale;
+					if (pDock->container.bIsHorizontal)
+					{
+						glTranslatef (icon->fDrawX + w/2,
+							pDock->container.iHeight - icon->fDrawY - h/2,
+							0.);
+						cairo_dock_draw_rounded_rectangle_opengl (w - 2*r + dw, h, r, 0, pHiddenBgColor);
+					}
+					else
+					{
+						glTranslatef (icon->fDrawY + h/2,
+							pDock->container.iWidth - icon->fDrawX - w/2,
+							0.);
+						cairo_dock_draw_rounded_rectangle_opengl (h - 2*r + dw, w, r, 0, pHiddenBgColor);
+					}
+					glPopMatrix ();
 				}
-				else
-				{
-					glTranslatef (icon->fDrawY + h/2,
-						pDock->container.iWidth - icon->fDrawX - w/2,
-						0.);
-					cairo_dock_draw_rounded_rectangle_opengl (h - 2*r + dw, w, r, 0, pHiddenBgColor);
-				}
-				glPopMatrix ();
 			}
 			
 			glPushMatrix ();
@@ -812,82 +819,6 @@ void cairo_dock_update_icon_texture (Icon *pIcon)
 	}
 }
 
-void cairo_dock_update_label_texture (Icon *pIcon)
-{
-	if (pIcon->iLabelTexture != 0)
-	{
-		_cairo_dock_delete_texture (pIcon->iLabelTexture);
-		pIcon->iLabelTexture = 0;
-	}
-	if (pIcon != NULL && pIcon->pTextBuffer != NULL)
-	{
-		_cairo_dock_enable_texture ();
-		_cairo_dock_set_blend_source ();
-		glColor4f (1., 1., 1., 1.);
-		
-		glGenTextures (1, &pIcon->iLabelTexture);
-		int w = cairo_image_surface_get_width (pIcon->pTextBuffer);
-		int h = cairo_image_surface_get_height (pIcon->pTextBuffer);
-		glBindTexture (GL_TEXTURE_2D, pIcon->iLabelTexture);
-		
-		glTexParameteri (GL_TEXTURE_2D,
-			GL_TEXTURE_MIN_FILTER,
-			g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
-		if (g_bEasterEggs)
-			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		
-		glTexImage2D (GL_TEXTURE_2D,
-			0,
-			4,  // GL_ALPHA / GL_BGRA
-			w,
-			h,
-			0,
-			GL_BGRA,  // GL_ALPHA / GL_BGRA
-			GL_UNSIGNED_BYTE,
-			cairo_image_surface_get_data (pIcon->pTextBuffer));
-		glDisable (GL_TEXTURE_2D);
-	}
-}
-
-void cairo_dock_update_quick_info_texture (Icon *pIcon)
-{
-	if (pIcon->iQuickInfoTexture != 0)
-	{
-		_cairo_dock_delete_texture (pIcon->iQuickInfoTexture);
-		pIcon->iQuickInfoTexture = 0;
-	}
-	if (pIcon != NULL && pIcon->pQuickInfoBuffer != NULL)
-	{
-		_cairo_dock_enable_texture ();
-		_cairo_dock_set_blend_source ();
-		glColor4f (1., 1., 1., 1.);
-		
-		glGenTextures (1, &pIcon->iQuickInfoTexture);
-		int w = cairo_image_surface_get_width (pIcon->pQuickInfoBuffer);
-		int h = cairo_image_surface_get_height (pIcon->pQuickInfoBuffer);
-		glBindTexture (GL_TEXTURE_2D, pIcon->iQuickInfoTexture);
-		
-		glTexParameteri (GL_TEXTURE_2D,
-			GL_TEXTURE_MIN_FILTER,
-			g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
-		if (g_bEasterEggs)
-			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		
-		glTexImage2D (GL_TEXTURE_2D,
-			0,
-			4,  // GL_ALPHA / GL_BGRA
-			w,
-			h,
-			0,
-			GL_BGRA,  // GL_ALPHA / GL_BGRA
-			GL_UNSIGNED_BYTE,
-			cairo_image_surface_get_data (pIcon->pQuickInfoBuffer));
-		glDisable (GL_TEXTURE_2D);
-	}
-}
-
 
 
 void cairo_dock_draw_texture_with_alpha (GLuint iTexture, int iWidth, int iHeight, double fAlpha)
@@ -1013,70 +944,6 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 		_draw_icon_bent_backwards (pIcon, pContainer, pIcon->iIconTexture, 1.);
 		cairo_dock_end_draw_icon (pIcon, pContainer);
 	}
-}
-
-
-// A utiliser un jour.
-
-typedef struct _CairoAnimatedImage {
-	cairo_surface_t *pSurface;
-	GLuint iTexture;
-	gint iFrameWidth, iFrameHeight;
-	gint iNbFrames;
-	gint iCurrentFrame;
-	} CairoAnimatedImage;
-
-void cairo_dock_load_animated_image (const gchar *cImageFile, int iNbFrames, int iFrameWidth, int iFrameHeight, cairo_t *pSourceContext, CairoAnimatedImage *pAnimatedImage)
-{
-	pAnimatedImage->iNbFrames = iNbFrames;
-	pAnimatedImage->iCurrentFrame = 0;
-	
-	pAnimatedImage->iFrameWidth = iFrameWidth * iNbFrames;
-	pAnimatedImage->iFrameHeight = iFrameHeight;
-	pAnimatedImage->pSurface = cairo_dock_create_surface_from_image_simple (cImageFile,
-			pAnimatedImage->iFrameWidth,
-			pAnimatedImage->iFrameHeight);
-	
-	if (g_bUseOpenGL && pAnimatedImage->pSurface != NULL)
-	{
-		pAnimatedImage->iTexture = cairo_dock_create_texture_from_surface (pAnimatedImage->pSurface);
-	}
-}
-
-CairoAnimatedImage *cairo_dock_create_animated_image (const gchar *cImageFile, int iNbFrames, int iFrameWidth, int iFrameHeight, cairo_t *pSourceContext)
-{
-	CairoAnimatedImage *pAnimatedImage = g_new0 (CairoAnimatedImage, 1);
-	
-	cairo_dock_load_animated_image (cImageFile, iNbFrames, iFrameWidth, iFrameHeight, pSourceContext, pAnimatedImage);
-	
-	return pAnimatedImage;
-}
-
-#define cairo_dock_update_animated_image_state(pAnimatedImage) do {\
-	(pAnimatedImage)->iCurrentFrame ++;\
-	if ((pAnimatedImage)->iCurrentFrame == (pAnimatedImage)->iNbFrames)\
-		(pAnimatedImage)->iCurrentFrame = 0; } while (0)
-
-void cairo_dock_update_animated_image_cairo (CairoAnimatedImage *pAnimatedImage, cairo_t *pCairoContext)
-{
-	cairo_dock_update_animated_image_state (pAnimatedImage);
-	cairo_save (pCairoContext);
-	cairo_rectangle (pCairoContext, 0., 0., pAnimatedImage->iFrameWidth, pAnimatedImage->iFrameHeight);
-	cairo_clip (pCairoContext);
-	cairo_set_source_surface (pCairoContext,
-		pAnimatedImage->pSurface,
-		- pAnimatedImage->iFrameWidth * pAnimatedImage->iCurrentFrame,
-		0.);
-	cairo_restore (pCairoContext);
-}
-
-void cairo_dock_update_animated_image_opengl (CairoAnimatedImage *pAnimatedImage)
-{
-	cairo_dock_update_animated_image_state (pAnimatedImage);
-	_cairo_dock_apply_current_texture_portion_at_size_with_offset (1.*pAnimatedImage->iCurrentFrame/pAnimatedImage->iNbFrames, 0.,
-		1. / pAnimatedImage->iNbFrames, 1.,
-		pAnimatedImage->iFrameWidth, pAnimatedImage->iFrameHeight,
-		0., 0.);
 }
 
 

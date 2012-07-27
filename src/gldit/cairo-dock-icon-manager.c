@@ -264,6 +264,12 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 {
 	g_return_val_if_fail (cFileName != NULL, NULL);
 	
+	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
+	static GStaticMutex s_aMutexLookupIcon = G_STATIC_MUTEX_INIT;
+	#else
+	static GMutex s_aMutexLookupIcon;
+	#endif
+	
 	//\_______________________ easy cases: we receive a path.
 	if (*cFileName == '~')
 	{
@@ -321,10 +327,20 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 			if (str != NULL)
 				*str = '\0';
 		}
+		#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
+		g_static_mutex_lock (&s_aMutexLookupIcon);
+		#else
+		g_mutex_lock (&s_aMutexLookupIcon); // it seems gtk_icon_theme_lookup_icon is not thread-safe...
+		#endif
 		pIconInfo = gtk_icon_theme_lookup_icon (s_pIconTheme,
 			sIconPath->str,
 			iDesiredIconSize, // GTK_ICON_LOOKUP_FORCE_SIZE if size < 30 ?? -> icons can be different // a lot of themes now use only svg files.
 			GTK_ICON_LOOKUP_FORCE_SVG);
+		#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
+		g_static_mutex_unlock (&s_aMutexLookupIcon);
+		#else
+		g_mutex_unlock (&s_aMutexLookupIcon);
+		#endif
 		if (pIconInfo != NULL)
 		{
 			g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
@@ -383,6 +399,8 @@ void cairo_dock_add_path_to_icon_theme (const gchar *cThemePath)
 
 void cairo_dock_remove_path_from_icon_theme (const gchar *cThemePath)
 {
+	if (! GTK_IS_ICON_THEME (s_pIconTheme))
+		return;
 	g_signal_handlers_block_matched (s_pIconTheme,
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, _on_icon_theme_changed, NULL);
@@ -698,17 +716,20 @@ static void _cairo_dock_load_icons_background_surface (const gchar *cImagePath)
 {
 	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
 	
-	int iSize = myIconsParam.iIconWidth;
-	if (iSize == 0)
-		iSize = 48;
+	int iSizeWidth = myIconsParam.iIconWidth, iSizeHeight = myIconsParam.iIconHeight;
+	if (iSizeWidth == 0)
+		iSizeWidth = 48;
+	if (iSizeHeight == 0)
+		iSizeHeight = 48;
 	
 	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
-	iSize *= fMaxScale;
+	iSizeWidth *= fMaxScale;
+	iSizeHeight *= fMaxScale;
 	
 	cairo_dock_load_image_buffer (&g_pIconBackgroundBuffer,
 		cImagePath,
-		iSize,
-		iSize,
+		iSizeWidth,
+		iSizeHeight,
 		CAIRO_DOCK_FILL_SPACE);
 }
 
@@ -803,8 +824,8 @@ static void _calculate_icons (const gchar *cDockName, CairoDock *pDock, gpointer
 
 static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, CairoIconsParam *pLabels)
 {
-	cairo_dock_load_icon_text (pIcon, &pLabels->iconTextDescription);
-	cairo_dock_load_icon_quickinfo (pIcon, &pLabels->quickInfoTextDescription);
+	cairo_dock_load_icon_text (pIcon);
+	cairo_dock_load_icon_quickinfo (pIcon);
 }
 static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
 {
@@ -951,6 +972,7 @@ static void init (void)
 		NOTIFICATION_RENDER_ICON,
 		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
+	
 }
 
 

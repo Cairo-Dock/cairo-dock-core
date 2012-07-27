@@ -44,6 +44,7 @@ Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, 
 	
 	icon->fOrder = pMinimalConfig->fOrder;
 	icon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
+	icon->bHasHiddenBg = pMinimalConfig->bAlwaysVisible;  // if were going to see the applet all the time, let's add a background. if the user doesn't want it, he can always set a transparent bg color.
 	icon->pHiddenBgColor = pMinimalConfig->pHiddenBgColor;
 	pMinimalConfig->pHiddenBgColor = NULL;
 	

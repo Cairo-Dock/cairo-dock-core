@@ -98,7 +98,7 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 			: (pDock->container.iMouseY < 0
 			||
 		pDock->container.iMouseY >= (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight))));*/
-	double x1, x2, y1, y2;
+	int x1, x2, y1, y2;
 	if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 	{
 		x1 = 0;
@@ -106,14 +106,14 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 		if (pDock->container.bDirectionUp)
 		{
 			///y1 = (pDock->fMagnitudeMax != 0 ? 0 : pDock->container.iHeight - pDock->iMinDockHeight);
-			y1 = pDock->container.iHeight - pDock->iActiveHeight;
+			y1 = pDock->container.iHeight - pDock->iActiveHeight + 1;
 			y2 = pDock->container.iHeight;
 		}
 		else
 		{
 			y1 = 0;
 			///y2 = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
-			y2 = pDock->iActiveHeight;
+			y2 = pDock->iActiveHeight - 1;
 		}
 	}
 	else if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
@@ -122,13 +122,13 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 		x2 = (pDock->container.iWidth + pDock->iMinDockWidth) / 2;
 		if (pDock->container.bDirectionUp)
 		{
-			y1 = pDock->container.iHeight - pDock->iMinDockHeight;
+			y1 = pDock->container.iHeight - pDock->iMinDockHeight + 1;
 			y2 = pDock->container.iHeight;
 		}
 		else
 		{
 			y1 = 0;
-			y2 = pDock->iMinDockHeight;
+			y2 = pDock->iMinDockHeight - 1;
 		}		
 	}
 	else  // hidden
@@ -136,8 +136,8 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 	if (pDock->container.iMouseX <= x1
 	|| pDock->container.iMouseX >= x2)
 		return TRUE;
-	if (pDock->container.iMouseY <= y1
-	|| pDock->container.iMouseY >= y2)
+	if (pDock->container.iMouseY < y1
+	|| pDock->container.iMouseY > y2)  // Note: Compiz has a bug: when using the "cube rotation" plug-in, it will reserve 2 pixels for itself on the left and right edges of the screen. So the mouse is not inside the dock when it's at x=0 or x=Ws-1 (no 'enter' event is sent; it's as if the x=0 or x=Ws-1 vertical line of pixels is out of the screen).
 		return TRUE;	
 	
 	return FALSE;
@@ -907,6 +907,7 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		return FALSE;
 	}*/
 	
+	gboolean bWasInside = pDock->container.bInside;
 	pDock->container.bInside = TRUE;
 	
 	// animation d'entree.
@@ -965,8 +966,11 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 		cairo_dock_start_showing (pDock);  // on a mis a jour la zone d'input avant, sinon la fonction le ferait, ce qui serait inutile.
 	}
 	
+	// start growing up (do it before calculating icons, so that we don't seem to be in an anormal state, where we're inside a dock that doesn't grow).
+	cairo_dock_start_growing (pDock);
+	
 	// since we've just entered the dock, the pointed icon has changed from none to the current one.
-	if (pEvent != NULL)
+	if (pEvent != NULL && ! bWasInside)
 	{
 		// update the mouse coordinates
 		if (pDock->container.bIsHorizontal)
@@ -987,8 +991,6 @@ gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEven
 			cairo_dock_on_change_icon (NULL, icon, pDock);  // we were out of the dock, so there is no previous pointed icon.
 		}
 	}
-	// on lance le grossissement.
-	cairo_dock_start_growing (pDock);
 	
 	return TRUE;
 }
@@ -1360,11 +1362,11 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				icon = ic->data;
 				if (icon->bDamaged)
 				{
-					//g_print ("#### icon %s is damaged\n", icon->cName);
+					g_print ("#### icon %s is damaged\n", icon->cName);
 					icon->bDamaged = FALSE;
 					if (cairo_dock_get_icon_data_renderer (icon) != NULL)
 					{
-						cairo_dock_refresh_data_renderer (icon, CAIRO_CONTAINER (pDock), NULL);  // no cairo context in OpenGL
+						cairo_dock_refresh_data_renderer (icon, CAIRO_CONTAINER (pDock));
 					}
 					else if (icon->iSubdockViewType != 0)
 					{
@@ -1374,7 +1376,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 					{
 						cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);  // easy but safe way to redraw the icon properly.
 					}
-					else  // if we don't know how thie icon should be drawn, just reload it.
+					else  // if we don't know how the icon should be drawn, just reload it.
 					{
 						cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
 					}
@@ -1480,11 +1482,6 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 	if (s_bCouldDrop)  // can drop on the dock
 	{
 		cd_debug ("drop between icons");
-		if (myDocksParam.bLockIcons || myDocksParam.bLockAll)  // locked, can't add anything.
-		{
-			gtk_drag_finish (dc, FALSE, FALSE, time);
-			return ;
-		}
 		
 		pPointedIcon = NULL;
 		fOrder = 0;
@@ -1492,7 +1489,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 		// try to guess where we dropped.
 		int iDropX = (pDock->container.bIsHorizontal ? x : y);
 		Icon *pNeighboorIcon;
-		Icon *icon;
+		Icon *icon = NULL;
 		GList *ic;
 		for (ic = pDock->icons; ic != NULL; ic = ic->next)
 		{
@@ -1511,6 +1508,12 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 				}
 				break;
 			}
+		}
+		if (myDocksParam.bLockIcons || myDocksParam.bLockAll)  // locked, can't add anything.
+		{
+			cairo_dock_show_temporary_dialog_with_default_icon (_("Sorry but the dock is locked"), icon, CAIRO_CONTAINER (pDock), 5000);
+			gtk_drag_finish (dc, FALSE, FALSE, time);
+			return ;
 		}
 	}
 	else  // drop on an icon or nowhere.

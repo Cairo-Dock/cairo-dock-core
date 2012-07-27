@@ -49,6 +49,12 @@ extern gchar *g_cCurrentLaunchersPath;
 
 static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
 {
+	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && g_strcmp0 (icon->cName, icon->cParentDockName) == 0)  // it shouldn't happen, but if ever it does, be sure to forbid an icon pointing on itself.
+	{
+		cd_warning ("It seems we have a sub-dock in itself! => its parent dock is now the main dock");
+		cairo_dock_update_icon_s_container_name (icon, CAIRO_DOCK_MAIN_DOCK_NAME); // => to the main dock...
+	}
+
 	//\____________ On cree son container si necessaire.
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)
@@ -388,7 +394,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 		icon->cName = g_strdup (" ");
 	
 	if (cairo_dock_strings_differ (cName, icon->cName))
-		cairo_dock_load_icon_text (icon, &myIconsParam.iconTextDescription);
+		cairo_dock_load_icon_text (icon);
 	
 	// set sub-dock renderer
 	if (icon->pSubDock != NULL)  // son rendu a pu changer.
@@ -426,7 +432,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 
 
 
-gchar *cairo_dock_launch_command_sync (const gchar *cCommand)
+gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr)
 {
 	gchar *standard_output=NULL, *standard_error=NULL;
 	gint exit_status=0;
@@ -443,7 +449,7 @@ gchar *cairo_dock_launch_command_sync (const gchar *cCommand)
 		g_free (standard_error);
 		return NULL;
 	}
-	if (standard_error != NULL && *standard_error != '\0')
+	if (bPrintStdErr && standard_error != NULL && *standard_error != '\0')
 	{
 		cd_warning (standard_error);
 	}
@@ -504,9 +510,17 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 	
 	if (cCommandFull == NULL)
 		cCommandFull = g_strdup (cCommand);
-	
+
 	GError *erreur = NULL;
+	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
 	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, FALSE, &erreur);
+	#else
+	// The name can be useful for discriminating threads in a debugger.
+	// Some systems restrict the length of name to 16 bytes. 
+	gchar *cThreadName = g_strndup (cCommand, 15);
+	GThread* pThread = g_thread_try_new (cThreadName, (GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, &erreur);
+	g_free (cThreadName);
+	#endif
 	if (erreur != NULL)
 	{
 		cd_warning ("couldn't launch this command (%s : %s)", cCommandFull, erreur->message);

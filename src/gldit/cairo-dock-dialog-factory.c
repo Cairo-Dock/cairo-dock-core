@@ -54,7 +54,7 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
 
-#define _drawn_text_width(pDialog) (pDialog->iMaxTextWidth != 0 && pDialog->iTextWidth > pDialog->iMaxTextWidth ? pDialog->iMaxTextWidth : pDialog->iTextWidth)
+#define _drawn_text_width(pDialog) (pDialog)->iTextWidth
 
 static void _cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 {
@@ -359,15 +359,18 @@ static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 	return pDialog;
 }
 
-static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cText, CairoDockLabelDescription *pTextDescription, int *iTextWidth, int *iTextHeight)
+static cairo_surface_t *_cairo_dock_create_dialog_text_surface (const gchar *cText, gboolean bUseMarkup, int *iTextWidth, int *iTextHeight)
 {
 	if (cText == NULL)
 		return NULL;
 	
-	return cairo_dock_create_surface_from_text (cText,
-		(pTextDescription ? pTextDescription : &myDialogsParam.dialogTextDescription),
+	myDialogsParam.dialogTextDescription.bUseMarkup = bUseMarkup;  // slight optimization, rather than duplicating the TextDescription each time.
+	cairo_surface_t *pSurface = cairo_dock_create_surface_from_text (cText,
+		&myDialogsParam.dialogTextDescription,
 		iTextWidth,
 		iTextHeight);
+	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;  // by default
+	return pSurface;
 }
 
 static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cImageFilePath, int iNbFrames, Icon *pIcon, CairoContainer *pContainer, int iDesiredSize, int *iIconSize)
@@ -416,16 +419,6 @@ static gboolean _cairo_dock_animate_dialog_icon (CairoDialog *pDialog)
 	cairo_dock_damage_icon_dialog (pDialog);
 	return TRUE;
 }
-static gboolean _cairo_dock_animate_dialog_text (CairoDialog *pDialog)
-{
-	if (pDialog->iTextWidth <= pDialog->iMaxTextWidth)
-		return FALSE;
-	pDialog->iCurrentTextOffset += 3;
-	if (pDialog->iCurrentTextOffset >= pDialog->iTextWidth)
-		pDialog->iCurrentTextOffset -= pDialog->iTextWidth;
-	cairo_dock_damage_text_dialog (pDialog);
-	return TRUE;
-}
 static gboolean on_button_press_widget (GtkWidget *widget,
 	GdkEventButton *pButton,
 	CairoDialog *pDialog)
@@ -451,16 +444,12 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	//\________________ On cree la surface du message.
 	if (pAttribute->cText != NULL)
 	{
-		pDialog->iMaxTextWidth = pAttribute->iMaxTextWidth;
 		pDialog->pTextBuffer = _cairo_dock_create_dialog_text_surface (pAttribute->cText,
-			pAttribute->pTextDescription,
+			pAttribute->bUseMarkup,
 			&pDialog->iTextWidth, &pDialog->iTextHeight);
 		///pDialog->iTextTexture = cairo_dock_create_texture_from_surface (pDialog->pTextBuffer);
-		if (pDialog->iMaxTextWidth > 0 && pDialog->pTextBuffer != NULL && pDialog->iTextWidth > pDialog->iMaxTextWidth)
-		{
-			pDialog->iSidAnimateText = g_timeout_add (200, (GSourceFunc) _cairo_dock_animate_dialog_text, (gpointer) pDialog);  // multiple du timeout de l'icone animee.
-		}
 	}
+	pDialog->bUseMarkup = pAttribute->bUseMarkup;  // remember this attribute, in case another text is set (with cairo_dock_set_dialog_message).
 
 	//\________________ On cree la surface de l'icone a afficher sur le cote.
 	if (pAttribute->cImageFilePath != NULL)
@@ -660,10 +649,6 @@ void cairo_dock_free_dialog (CairoDialog *pDialog)
 	if (pDialog->iSidAnimateIcon > 0)
 	{
 		g_source_remove (pDialog->iSidAnimateIcon);
-	}
-	if (pDialog->iSidAnimateText > 0)
-	{
-		g_source_remove (pDialog->iSidAnimateText);
 	}
 	
 	cd_debug ("");
@@ -907,11 +892,6 @@ void cairo_dock_set_new_dialog_text_surface (CairoDialog *pDialog, cairo_surface
 	{
 		cairo_dock_damage_text_dialog (pDialog);
 	}
-
-	if (pDialog->iMaxTextWidth > 0 && pDialog->iSidAnimateText == 0 && pDialog->pTextBuffer != NULL && pDialog->iTextWidth > pDialog->iMaxTextWidth)
-	{
-		pDialog->iSidAnimateText = g_timeout_add (200, (GSourceFunc) _cairo_dock_animate_dialog_text, (gpointer) pDialog);  // multiple du timeout de l'icone animee.
-	}
 }
 
 void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize)
@@ -945,7 +925,7 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage)
 {
 	int iNewTextWidth=0, iNewTextHeight=0;
-	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, NULL, &iNewTextWidth, &iNewTextHeight);
+	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, FALSE, &iNewTextWidth, &iNewTextHeight);
 	
 	cairo_dock_set_new_dialog_text_surface (pDialog, pNewTextSurface, iNewTextWidth, iNewTextHeight);
 }

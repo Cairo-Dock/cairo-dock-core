@@ -487,6 +487,142 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	}
 }
 
+gboolean cairo_dock_begin_draw_image_buffer (CairoDockImageBuffer *pImage, CairoContainer *pContainer, gint iRenderingMode)
+{
+	//g_print ("%s (%s, %d)\n", __func__, pIcon->cName, iRenderingMode);
+	int iWidth, iHeight;
+	/// TODO: test without FBO and dock when iRenderingMode == 2
+	if (CAIRO_DOCK_IS_DESKLET (pContainer))
+	{
+		if (! gldi_glx_make_current (pContainer))
+		{
+			return FALSE;
+		}
+		iWidth = pContainer->iWidth;
+		iHeight = pContainer->iHeight;
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+	else if (g_openglConfig.iFboId != 0)
+	{
+		// on attache la texture au FBO.
+		if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet fully resized
+		{
+			return FALSE;
+		}
+		iWidth = pImage->iWidth, iHeight = pImage->iHeight;
+		if (pContainer == NULL)
+			pContainer = g_pPrimaryContainer;
+		if (! gldi_glx_make_current (pContainer))
+		{
+			cd_warning ("couldn't set the opengl context");
+			return FALSE;
+		}
+		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, g_openglConfig.iFboId);  // on redirige sur notre FBO.
+		g_openglConfig.bRedirected = (iRenderingMode == 2);
+		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+			GL_COLOR_ATTACHMENT0_EXT,
+			GL_TEXTURE_2D,
+			g_openglConfig.bRedirected ? g_openglConfig.iRedirectedTexture : pImage->iTexture,
+			0);  // attach the texture to FBO color attachment point.
+		
+		GLenum status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
+		if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
+		{
+			cd_warning ("FBO not ready (tex:%d)", pImage->iTexture);
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+				GL_COLOR_ATTACHMENT0_EXT,
+				GL_TEXTURE_2D,
+				0,
+				0);
+			return FALSE;
+		}
+		
+		if (iRenderingMode != 1)
+			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+	else
+		return FALSE;
+	
+	if (pContainer->bPerspectiveView)
+	{
+		cairo_dock_set_ortho_view (pContainer);
+		g_openglConfig.bSetPerspective = TRUE;
+	}
+	else
+	{
+		cairo_dock_set_ortho_view (pContainer);  // au demarrage, le contexte n'a pas encore de vue.
+		glLoadIdentity ();
+		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+	}
+	
+	glColor4f(1., 1., 1., 1.);
+	
+	glScalef (1., -1., 1.);
+	
+	return TRUE;
+}
+
+void cairo_dock_end_draw_image_buffer (CairoDockImageBuffer *pImage, CairoContainer *pContainer)
+{
+	g_return_if_fail (pImage->iTexture != 0);
+	
+	if (CAIRO_DOCK_IS_DESKLET (pContainer))
+	{
+		// copie dans notre texture
+		glEnable (GL_TEXTURE_2D);
+		glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
+		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glEnable(GL_BLEND);
+		glBlendFunc (GL_ZERO, GL_ONE);
+		glColor4f(1., 1., 1., 1.);
+		
+		int iWidth, iHeight;  // taille de la texture
+		iWidth = pImage->iWidth, iHeight = pImage->iHeight;
+		int x = (pContainer->iWidth - iWidth)/2;
+		int y = (pContainer->iHeight - iHeight)/2;
+		glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, x, y, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
+		
+		glDisable (GL_TEXTURE_2D);
+		glDisable (GL_BLEND);
+	}
+	else if (g_openglConfig.iFboId != 0)
+	{
+		if (g_openglConfig.bRedirected)  // copie dans notre texture
+		{
+			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+				GL_COLOR_ATTACHMENT0_EXT,
+				GL_TEXTURE_2D,
+				pImage->iTexture,
+				0);  // maintenant on dessine dans la texture de l'icone.
+			_cairo_dock_enable_texture ();
+			_cairo_dock_set_blend_source ();
+			
+			int iWidth, iHeight;  // taille de la texture
+			iWidth = pImage->iWidth, iHeight = pImage->iHeight;
+			
+			glLoadIdentity ();
+			glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+			_cairo_dock_apply_texture_at_size_with_alpha (g_openglConfig.iRedirectedTexture, iWidth, iHeight, 1.);
+			
+			_cairo_dock_disable_texture ();
+			g_openglConfig.bRedirected = FALSE;
+		}
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
+		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
+			GL_COLOR_ATTACHMENT0_EXT,
+			GL_TEXTURE_2D,
+			0,
+			0);  // on detache la texture (precaution).
+		//glGenerateMipmapEXT(GL_TEXTURE_2D);  // si on utilise les mipmaps, il faut les generer explicitement avec les FBO.
+	}
+	
+	if (pContainer && g_openglConfig.bSetPerspective)
+	{
+		cairo_dock_set_perspective_view (pContainer);
+		g_openglConfig.bSetPerspective = FALSE;
+	}
+}
 
 
 static inline void _cairo_dock_set_perspective_view (int iWidth, int iHeight)

@@ -3,6 +3,7 @@
 
 # scripts
 install (FILES
+	cairo-dock-package-theme.sh
 	help_scripts.sh
 	initial-setup.sh
 	DESTINATION ${pkgdatadir}/scripts

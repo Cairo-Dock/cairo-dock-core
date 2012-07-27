@@ -29,6 +29,7 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-surface-factory.h"
 
 extern CairoContainer *g_pPrimaryContainer;
@@ -102,7 +103,7 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 			{
 				iWidthConstraint = *fImageWidth / *fImageHeight * iHeightConstraint;
 			}
-			else if (*fImageWidth > 2 * *fImageHeight)  // if we're pretty sure this image is an animated one, try to be smart, to handle the case of non-square frames.
+			else if (*fImageWidth > 2 * *fImageHeight)  // if we're confident this image is an animated one, try to be smart, to handle the case of non-square frames.
 			{
 				// assume we have wide frames => w > h
 				int w = *fImageHeight + 1, h = *fImageHeight;

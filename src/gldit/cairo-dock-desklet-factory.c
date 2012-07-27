@@ -152,7 +152,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 		pDesklet->iDesiredWidth = 0;
 		pDesklet->iDesiredHeight = 0;
 		
-		cairo_dock_load_desklet_decorations (pDesklet);
+		cairo_dock_load_desklet_decorations (pDesklet);  // reload the decorations at the new desklet size.
 		
 		if (pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
 		{
@@ -170,7 +170,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 				{
 					pIcon->iImageWidth = pIcon->fWidth;
 					pIcon->iImageHeight = pIcon->fHeight;
-					if (pIcon->iImageWidth > 0)
+					if (pIcon->iImageWidth > 0)  // the view displays the main icon -> load it.
 						cairo_dock_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));  // pas de trigger, car on veut pouvoir associer un contexte a l'icone principale tout de suite.
 				}
 				
@@ -838,7 +838,7 @@ void cairo_dock_free_desklet (CairoDesklet *pDesklet)
 {
 	if (pDesklet == NULL)
 		return;
-
+	
 	if (pDesklet->iSidWriteSize != 0)
 		g_source_remove (pDesklet->iSidWriteSize);
 	if (pDesklet->iSidWritePosition != 0)

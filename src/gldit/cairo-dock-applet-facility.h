@@ -284,6 +284,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Get the complete path of a Gauge theme in the conf file.
 *@param cGroupName name of the group (in the conf file).
 *@param cKeyName name of the key (in the conf file).
+*@return Path to the theme, in a newly allocated string.
 */
 #define CD_CONFIG_GET_GAUGE_THEME(cGroupName, cKeyName) \
 	__extension__ ({\
@@ -662,33 +663,21 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 /** Add an overlay from an image on the applet's icon.
  *@param cImageFile an image (if it's not a path, it is searched amongst the current theme's images)
  *@param iPosition position where to display the overlay
- *@return TRUE if the overlay has been successfuly added.
+ *@return the overlay, or NULL if the image couldn't be loaded.
  */
-#define CD_APPLET_ADD_OVERLAY_ON_MY_ICON(cImageFile, iPosition) cairo_dock_add_overlay_from_image (myIcon, cImageFile, iPosition)
+#define CD_APPLET_ADD_OVERLAY_ON_MY_ICON(cImageFile, iPosition) cairo_dock_add_overlay_from_image (myIcon, cImageFile, iPosition, myApplet)
 
 /** Print an overlay from an image on the applet's icon (it can't be removed without erasing the icon).
  *@param cImageFile an image (if it's not a path, it is searched amongst the current theme's images)
  *@param iPosition position where to display the overlay
- *@return TRUE if the overlay has been successfuly added.
+ *@return TRUE if the overlay has been successfuly printed.
  */
 #define CD_APPLET_PRINT_OVERLAY_ON_MY_ICON(cImageFile, iPosition) cairo_dock_print_overlay_on_icon_from_image (myIcon, myContainer, cImageFile, iPosition)
 
-/** Remove an overlay the applet's icon, given its position (there is only one overlay at a given position).
+/** Remove an overlay from the applet's icon. The overlay is destroyed.
  *@param iPosition position of the overlay
  */
-#define CD_APPLET_REMOVE_OVERLAY_ON_MY_ICON(iPosition) cairo_dock_remove_overlay_at_position (myIcon, iPosition)
-
-
-/** Make an emblem from an image. If the image is given by its sole name, it is looked up inside the root theme folder. Free it with cairo_dock_free_emblem.
-*@param cImageFile name of an image file.
-*@return a newly allocated CairoEmblem.
-*/
-#define CD_APPLET_MAKE_EMBLEM(cImageFile) cairo_dock_make_emblem (cImageFile, myIcon)
-
-/** Draw an emblem on the applet's icon. The emblem is drawn directly on the icon, and is erased if the icon is redrawn.
-*@param pEmblem an emblem.
-*/
-#define CD_APPLET_DRAW_EMBLEM_ON_MY_ICON(pEmblem) cairo_dock_draw_emblem_on_icon (pEmblem, myIcon, myContainer)
+#define CD_APPLET_REMOVE_OVERLAY_ON_MY_ICON(iPosition) cairo_dock_remove_overlay_at_position (myIcon, iPosition, myApplet)
 
 
 /** Add a Data Renderer the applet's icon.
@@ -696,10 +685,9 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 */
 #define CD_APPLET_ADD_DATA_RENDERER_ON_MY_ICON(pAttr) cairo_dock_add_new_data_renderer_on_icon (myIcon, myContainer, pAttr)
 
-/** Reload the Data Renderer of the applet's icon. Pass NULL as the attributes to simply reload the current data renderer without changing any of its parameters. Previous values are kept.
-*@param pAttr the attributes of the Data Renderer, or NULL to simply reload the Data Renderer as it it.
+/** Reload the Data Renderer of the applet's icon, without changing any of its parameters. Previous values are kept.
 */
-#define CD_APPLET_RELOAD_MY_DATA_RENDERER(pAttr) cairo_dock_reload_data_renderer_on_icon (myIcon, myContainer, pAttr)
+#define CD_APPLET_RELOAD_MY_DATA_RENDERER(...) cairo_dock_reload_data_renderer_on_icon (myIcon, myContainer)
 
 /** Add new values to the Data Renderer of the applet's icon. Values are a table of 'double', having the same size as defined when the data renderer was created (1 by default). It also triggers the redraw of the icon.
 *@param pValues the values, a table of double of the correct size.
@@ -709,11 +697,6 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 /** Completely remove the Data Renderer of the applet's icon, including the values associated with.
 */
 #define CD_APPLET_REMOVE_MY_DATA_RENDERER cairo_dock_remove_data_renderer_on_icon (myIcon)
-
-/** Refresh the Data Renderer of the applet's icon, to redraw it when the applet's size has changed.
-*/
-#define CD_APPLET_REFRESH_MY_DATA_RENDERER cairo_dock_refresh_data_renderer (myIcon, myContainer, myDrawContext)
-
 
 /** Set the history size of the Data Renderer of the applet's icon to the maximum size, that is to say 1 value per pixel.
 */

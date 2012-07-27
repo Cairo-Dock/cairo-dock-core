@@ -1253,7 +1253,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 				break ;
 			}
 		}
-		pIcon->iGroup = CAIRO_DOCK_APPLI;  // no inhibitor, so we'll go in the taskbar group.
+		pIcon->iGroup = (myTaskbarParam.bSeparateApplis ? CAIRO_DOCK_APPLI : CAIRO_DOCK_LAUNCHER);  // no inhibitor, so we'll go in the taskbar group.
 	}
 	else  // an inhibitor is present, we'll go next to it, so we'll be in its group.
 	{
@@ -1653,7 +1653,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	
 	cd_debug ("%s (%s, '%s')", __func__, cCommand, cStartupWMClass);
 	gchar *cResult = NULL;
-	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
+	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || g_strcmp0 (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 	{
 		if (cCommand == NULL || *cCommand == '\0')
 			return NULL;
@@ -1661,7 +1661,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 		gchar *str;
 		const gchar *cClass = cDefaultClass;  // pointer to the current class.
 		
-		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 4) == 0 || strncmp (cClass, "su-to-root", 10) == 0)  // on prend la fin.
+		if (strncmp (cClass, "gksu", 4) == 0 || strncmp (cClass, "kdesu", 5) == 0 || strncmp (cClass, "su-to-root", 10) == 0)  // on prend la fin.
 		{
 			str = (gchar*)cClass + strlen(cClass) - 1;  // last char.
 			while (*str == ' ')  // par securite on enleve les espaces en fin de ligne.
@@ -1698,6 +1698,8 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 			while (*str == ' ')  // on enleve les espaces supplementaires.
 				str ++;
 			gchar *exe = g_strstr_len (str, -1, ".exe");  // on cherche a isoler le nom de l'executable, puisque wine l'utilise dans le res_name.
+			if (!exe)
+				exe = g_strstr_len (str, -1, ".EXE");
 			if (exe)
 			{
 				*exe = '\0';  // vire l'extension par la meme occasion.
@@ -1768,6 +1770,45 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	return cResult;
 }
 
+static void _add_action_menus (GKeyFile *pKeyFile, CairoDockClassAppli *pClassAppli, const gchar *cMenuListKey, const gchar *cMenuGroup, gboolean bActionFirstInGroupKey)
+{
+	gsize length = 0;
+	gchar **pMenuList = g_key_file_get_string_list (pKeyFile, "Desktop Entry", cMenuListKey, &length, NULL);  
+	if (pMenuList != NULL)
+	{
+		gchar *cGroup;
+		int i;
+		for (i = 0; pMenuList[i] != NULL; i++)
+		{
+			cGroup = g_strdup_printf ("%s %s",
+				bActionFirstInGroupKey ? pMenuList[i] : cMenuGroup,   // [NewWindow Shortcut Group]
+				bActionFirstInGroupKey ? cMenuGroup : pMenuList [i]); // [Desktop Action NewWindow]
+
+			if (g_key_file_has_group (pKeyFile, cGroup))
+			{
+				gchar **pMenuItem = g_new0 (gchar*, 4);
+				pMenuItem[0] = g_key_file_get_locale_string (pKeyFile, cGroup, "Name", NULL, NULL);
+				gchar *cCommand = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
+				if (cCommand != NULL)  // remove the launching options %x.
+				{
+					gchar *str = strchr (cCommand, '%');  // search the first one.
+					if (str != NULL)
+					{
+						if (str != cCommand && (*(str-1) == '"' || *(str-1) == '\''))  // take care of "" around the option.
+							str --;
+						*str = '\0';  // il peut rester un espace en fin de chaine, ce n'est pas grave.
+					}
+				}
+				pMenuItem[1] = cCommand;
+				pMenuItem[2] = g_key_file_get_string (pKeyFile, cGroup, "Icon", NULL);
+				
+				pClassAppli->pMenuItems = g_list_append (pClassAppli->pMenuItems, pMenuItem);
+			}
+			g_free (cGroup);
+		}
+		g_strfreev (pMenuList);
+	}
+}
 
 /*
 register from desktop-file name/path (+class-name):
@@ -1866,10 +1907,22 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	//\__________________ get the attributes.
 	pClassAppli->cDesktopFile = cDesktopFilePath;
 	
+	pClassAppli->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+	
 	if (cCommand != NULL)  // remove the launching options %x.
 	{
 		gchar *str = strchr (cCommand, '%');  // search the first one.
-		if (str != NULL)
+		
+		if (str && *(str+1) == 'c')  // this one (caption) is the only one that is expected (ex.: kreversi -caption "%c"; if we let '-caption' with nothing after, the appli will melt down); others are either URL or icon that can be empty as per the freedesktop specs, so we can sefely remove them completely from the command line.
+		{
+			*str = '\0';
+			gchar *cmd2 = g_strdup_printf ("%s%s%s", cCommand, pClassAppli->cName, str+2);  // replace %c with the localized name.
+			g_free (cCommand);
+			cCommand = cmd2;
+			str = strchr (cCommand, '%');  // jump to the next one.
+		}
+		
+		if (str != NULL)  // remove everything from the first option to the end.
 		{
 			if (str != cCommand && (*(str-1) == '"' || *(str-1) == '\''))  // take care of "" around the option.
 				str --;
@@ -1880,8 +1933,6 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	
 	if (pClassAppli->cStartupWMClass == NULL)
 		pClassAppli->cStartupWMClass = (cStartupWMClass ? cStartupWMClass : g_strdup (cWmClass));
-	
-	pClassAppli->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
 	
 	pClassAppli->cIcon = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
 	if (pClassAppli->cIcon != NULL && *pClassAppli->cIcon != '/')  // remove any extension.
@@ -1897,27 +1948,9 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	pClassAppli->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
 	
 	// get the Unity menus.
-	gchar **pMenuList = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "X-Ayatana-Desktop-Shortcuts", &length, NULL);  // oh crap, with a name like that you can be sure it will change 25 times before they decide a definite name :-/
-	if (pMenuList != NULL)
-	{
-		gchar *cGroup;
-		int i;
-		for (i = 0; pMenuList[i] != NULL; i++)
-		{
-			cGroup = g_strdup_printf ("%s Shortcut Group", pMenuList[i]);
-			if (g_key_file_has_group (pKeyFile, cGroup))
-			{
-				gchar **pMenuItem = g_new0 (gchar*, 4);
-				pMenuItem[0] = g_key_file_get_locale_string (pKeyFile, cGroup, "Name", NULL, NULL);
-				pMenuItem[1] = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
-				pMenuItem[2] = g_key_file_get_string (pKeyFile, cGroup, "Icon", NULL);
-				
-				pClassAppli->pMenuItems = g_list_append (pClassAppli->pMenuItems, pMenuItem);
-			}
-			g_free (cGroup);
-		}
-		g_strfreev (pMenuList);
-	}
+	_add_action_menus (pKeyFile, pClassAppli, "X-Ayatana-Desktop-Shortcuts", "Shortcut Group", TRUE); // oh crap, with a name like that you can be sure it will change 25 times before they decide a definite name :-/
+	_add_action_menus (pKeyFile, pClassAppli, "Actions", "Desktop Action", FALSE); // yes, it's true ^^ => Ubuntu Quantal
+	
 	
 	g_key_file_free (pKeyFile);
 	cd_debug (" -> class '%s'", cClass);

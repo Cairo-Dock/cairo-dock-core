@@ -20,7 +20,7 @@ static gchar *_parse_key_comment (gchar *cKeyComment, char *iElementType, guint 
 		return NULL;
 	
 	gchar *cUsefulComment = cKeyComment;
-	while (*cUsefulComment == '#' || *cUsefulComment == ' ' || *cUsefulComment == '\n')  // on saute les # et les espaces.
+	while (*cUsefulComment == '#' || *cUsefulComment == ' ' || *cUsefulComment == '\n')  // on saute les # et les espaces
 		cUsefulComment ++;
 	
 	int length = strlen (cUsefulComment);
@@ -35,6 +35,8 @@ static gchar *_parse_key_comment (gchar *cKeyComment, char *iElementType, guint 
 	*iElementType = *cUsefulComment;
 	cUsefulComment ++;
 	if (*cUsefulComment == '-' || *cUsefulComment == '+')
+		cUsefulComment ++;
+	if (*cUsefulComment == '*' || *cUsefulComment == '&')
 		cUsefulComment ++;
 
 	//\______________ On recupere le nombre d'elements du widget.

@@ -180,7 +180,7 @@ static void __load_needle (GaugeIndicator *pGaugeIndicator, int iWidth, int iHei
 	rsvg_handle_render_cairo (pSvgHandle, pDrawingContext);
 	
 	cairo_destroy (pDrawingContext);
-	rsvg_handle_free (pSvgHandle);
+	g_object_unref (pSvgHandle);
 	
 	// load it into an image buffer.
 	cairo_dock_load_image_buffer_from_surface (&pGaugeImage->image, pNeedleSurface, iWidth, iHeight);
@@ -522,7 +522,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 	
 	return TRUE;
 }
-static void load (Gauge *pGauge, CairoContainer *pContainer, CairoGaugeAttribute *pAttribute)
+static void load (Gauge *pGauge, Icon *pIcon, CairoGaugeAttribute *pAttribute)
 {
 	// on charge le theme defini en attribut.
 	gboolean bThemeLoaded = _load_theme (pGauge, pAttribute->cThemePath);
@@ -983,16 +983,20 @@ static void unload (Gauge *pGauge)
 //////////////////////////////////////////
 void cairo_dock_register_data_renderer_gauge (void)
 {
+	// create a new record
 	CairoDockDataRendererRecord *pRecord = g_new0 (CairoDockDataRendererRecord, 1);
-	pRecord->interface.load			= (CairoDataRendererLoadFunc) load;
-	pRecord->interface.render		= (CairoDataRendererRenderFunc) render;
-	pRecord->interface.render_opengl	= (CairoDataRendererRenderOpenGLFunc) render_opengl;
-	pRecord->interface.reload		= (CairoDataRendererReloadFunc) reload;
-	pRecord->interface.unload		= (CairoDataRendererUnloadFunc) unload;
-	pRecord->iStructSize			= sizeof (Gauge);
-	pRecord->cThemeDirName 			= "gauges";
-	pRecord->cDistantThemeDirName 	= "gauges3";
-	pRecord->cDefaultTheme 			= "Turbo-night-fuel";
 	
+	// fill the properties we need
+	pRecord->interface.load          = (CairoDataRendererLoadFunc) load;
+	pRecord->interface.render        = (CairoDataRendererRenderFunc) render;
+	pRecord->interface.render_opengl = (CairoDataRendererRenderOpenGLFunc) render_opengl;
+	pRecord->interface.reload        = (CairoDataRendererReloadFunc) reload;
+	pRecord->interface.unload        = (CairoDataRendererUnloadFunc) unload;
+	pRecord->iStructSize             = sizeof (Gauge);
+	pRecord->cThemeDirName           = "gauges";
+	pRecord->cDistantThemeDirName    = "gauges3";
+	pRecord->cDefaultTheme           = "Turbo-night-fuel";
+	
+	// register
 	cairo_dock_register_data_renderer ("gauge", pRecord);
 }

@@ -39,6 +39,7 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-X-utilities.h"  // cairo_dock_get_xwindow_class
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-image-buffer.h"
@@ -338,7 +339,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 		gtk_frame_set_shadow_type (GTK_FRAME (pPreviewImageFrame), GTK_SHADOW_ETCHED_IN);
 
 	gtk_image_set_from_pixbuf (pPreviewImage, pPreviewPixbuf);
-	gdk_pixbuf_unref (pPreviewPixbuf);
+	g_object_unref (pPreviewPixbuf);
 }
 
 static void _on_got_readme (const gchar *cDescription, GtkWidget *pDescriptionLabel)
@@ -733,7 +734,7 @@ static void _cairo_dock_show_image_preview (GtkFileChooser *pFileChooser, GtkIma
 	if (pixbuf != NULL)
 	{
 		gtk_image_set_from_pixbuf (pPreviewImage, pixbuf);
-		gdk_pixbuf_unref (pixbuf);
+		g_object_unref (pixbuf);
 		gtk_file_chooser_set_preview_widget_active (pFileChooser, TRUE);
 	}
 	else
@@ -827,7 +828,21 @@ static void _cairo_dock_set_original_value (GtkButton *button, CairoDockGroupKey
 	else if (GTK_IS_COLOR_BUTTON (pOneWidget))
 	{
 		double *fValuesList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, &erreur);
-		
+
+		#if GTK_CHECK_VERSION (3, 4, 0)
+		if (length > 2)
+		{
+			GdkRGBA color;
+			color.red = fValuesList[0];
+			color.green = fValuesList[1];
+			color.blue = fValuesList[2];
+			if (length > 3)
+				color.alpha = fValuesList[3];
+			else
+				color.alpha = 1.;
+			gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (pOneWidget), &color);
+		}
+		#else
 		if (length > 2)
 		{
 			GdkColor gdkColor;
@@ -839,6 +854,7 @@ static void _cairo_dock_set_original_value (GtkButton *button, CairoDockGroupKey
 			if (length > 3 && gtk_color_button_get_use_alpha (GTK_COLOR_BUTTON (pOneWidget)))
 				gtk_color_button_set_alpha (GTK_COLOR_BUTTON (pOneWidget), fValuesList[3] * 65535);
 		}
+		#endif
 		g_free (fValuesList);
 	}
 	g_key_file_free (pKeyFile);
@@ -893,28 +909,29 @@ static void _cairo_dock_key_grab_class (GtkButton *button, gpointer *data)
 	GtkWindow *pParentWindow = data[1];
 
 	cd_debug ("clicked");
-	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE); // locked (plus zoli :) )
-
-	gchar *cProp = cairo_dock_launch_command_sync ("xprop"); // avec "| grep CLASS | cut -d\\\" -f2", ca ne fonctionne pas et Fab n'aime pas les g_spawn_command_line_sync :) --> c'est surtout que c'est g_spawn_command_line_sync qui n'aime pas les grep.
-
-	gchar *str = g_strstr_len (cProp, -1, "WM_CLASS(STRING)"); // str pointant sur WM_
-	gchar *cResult = NULL; // NON CE N'EST PAS MA MOYENNE DE POINT !!!!
-	if (str != NULL)
+	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE);  // lock the widget during the grab (it makes it more comprehensive).
+	
+	// We could use 'xprop' and look for the WM_CLASS field; however, in case of a Wine or Mono application, it wouldn't work so easily.
+	// So we just get the window ID, and pass it to the Class Manager, which has all the logic needed for class matching.
+	gchar *cResult = NULL;
+	gchar *cProp = cairo_dock_launch_command_sync ("xwininfo");  // let the user grab the window, and get the result.
+	const gchar *str = g_strstr_len (cProp, -1, "Window id");  // look for the window ID
+	if (str)
 	{
-		// WM_CLASS(STRING) = "gnome-terminal", "Gnome-terminal" \\ => utiliser le 2eme
-		str = strchr (str, ',');
-		str += 3;
-		gchar *max = strchr (str, '"'); // on pointe le 2e "
-		if (max != NULL)
-			cResult = g_strndup (str, max - str); // on prend ce qui est entre ""
+		// xwininfo: Window id: 0xc00009 "name-of-the-window"
+		str += 9;  // skip "Window id"
+		while (*str == ' ' || *str == ':')  // skip the ':'
+			str ++;
+		Window Xid = strtol (str, NULL, 0);  // XID is an unsigned long; we let the base be 0, so that the function guesses by itself.
+		cResult = cairo_dock_get_xwindow_class (Xid, NULL);  // let the class manager do the dirty job.
 	}
-	if (cResult == NULL)
+	if (cResult == NULL)  // shouldn't happen, so don't bother to present the warning to the user more than that.
 		cd_warning ("couldn't find the class of this window.");
 	
-	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE); // unlocked
-	gtk_entry_set_text (pEntry, cResult); // on ajoute le txt dans le box des accuses
-	g_free (cProp); // Ah, mnt C Propr' !
-	g_free (cResult); // Ou qu'elle est la poulette ???
+	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE);  // unlock the widget
+	gtk_entry_set_text (pEntry, cResult);  // write the result in the entry-box
+	g_free (cProp);
+	g_free (cResult);
 }
 
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)
@@ -1546,7 +1563,7 @@ static void _set_default_text (GtkWidget *pEntry, gchar *cDefaultValue)
 	color.blue = DEFAULT_TEXT_COLOR * 65535;
 	gtk_widget_modify_text (pEntry, GTK_STATE_NORMAL, &color);
 	#else
-	static GdkRGBA color;
+	GdkRGBA color;
 	color.red = DEFAULT_TEXT_COLOR;
 	color.green = DEFAULT_TEXT_COLOR;
 	color.blue = DEFAULT_TEXT_COLOR;
@@ -2079,7 +2096,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	int iValue, iMinValue, iMaxValue, *iValueList;
 	double fValue, fMinValue, fMaxValue, *fValueList;
 	gchar *cValue, **cValueList, *cSmallIcon=NULL;
+	#if GTK_CHECK_VERSION (3, 4, 0)
+	GdkRGBA gdkColor;
+	#else
 	GdkColor gdkColor;
+	#endif
 	GtkListStore *modele;
 	gboolean bAddBackButton;
 	GtkWidget *pPreviewBox;
@@ -2432,6 +2453,19 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				iNbElements = (iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB ? 3 : 4);
 				length = 0;
 				fValueList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
+				#if GTK_CHECK_VERSION (3, 4, 0)
+				if (length > 2)
+				{
+					gdkColor.red = fValueList[0];
+					gdkColor.green = fValueList[1];
+					gdkColor.blue = fValueList[2];
+					if (length > 3 && iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA)
+						gdkColor.alpha = fValueList[3];
+					else
+						gdkColor.alpha = 1.;
+				}
+				pOneWidget = gtk_color_button_new_with_rgba (&gdkColor);
+				#else
 				if (length > 2)
 				{
 					gdkColor.red = fValueList[0] * 65535;
@@ -2449,6 +2483,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				}
 				else
 					gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (pOneWidget), FALSE);
+				#endif
 				_pack_subwidget (pOneWidget);
 				bAddBackButton = TRUE,
 				g_free (fValueList);
@@ -2585,15 +2620,28 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_DOCK_LIST :  // liste des docks existant.
 			{
 				GtkListStore *pDocksListStore = _cairo_dock_build_dock_list_for_gui ();
-				
+				GtkTreeIter iter;
+
+				// Do not add itself if it's a container
+				GError *error = NULL;
+				int iIconType = g_key_file_get_integer (pKeyFile, cGroupName, "Icon Type", &error);
+				if (error != NULL) // it's certainly not a container
+					g_error_free (error);
+				else if (iIconType == CAIRO_DOCK_ICON_TYPE_CONTAINER) // it's a container
+				{
+					gchar *cContainerName = g_key_file_get_string (pKeyFile, cGroupName, "Name", NULL);
+					if (cContainerName && _cairo_dock_find_iter_from_name (pDocksListStore, cContainerName, &iter))
+						gtk_list_store_remove (pDocksListStore, &iter);
+					g_free (cContainerName);
+				}
+
 				pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (pDocksListStore));
 				rend = gtk_cell_renderer_text_new ();
 				gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
 				gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 				
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
-				GtkTreeIter iter;
-				gboolean bIterFound = False;
+				gboolean bIterFound = FALSE;
 				if (cValue == NULL || *cValue == '\0')  // dock not specified => it's the main dock
 					bIterFound = _cairo_dock_find_iter_from_name (pDocksListStore, CAIRO_DOCK_MAIN_DOCK_NAME, &iter);
 				else
@@ -3316,7 +3364,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						color.blue = DEFAULT_TEXT_COLOR * 65535;
 						gtk_widget_modify_text (pOneWidget, GTK_STATE_NORMAL, &color);
 						#else
-						static GdkRGBA color;
+						GdkRGBA color;
 						color.red = DEFAULT_TEXT_COLOR;
 						color.green = DEFAULT_TEXT_COLOR;
 						color.blue = DEFAULT_TEXT_COLOR;
@@ -3344,6 +3392,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
 				gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
 			}
+			break ;
+			
+			case CAIRO_DOCK_WIDGET_HANDBOOK :
+				/// TODO: if possible, build the handbook widget here rather than outside of the swith-case ...
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_FRAME :  // frame.
@@ -3683,10 +3735,20 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 	}
 	else if (GTK_IS_COLOR_BUTTON (pOneWidget))
 	{
-		GdkColor gdkColor;
-		gtk_color_button_get_color (GTK_COLOR_BUTTON (pOneWidget), &gdkColor);
 		double col[4];
 		int iNbColors;
+
+		#if GTK_CHECK_VERSION (3, 4, 0)
+		GdkRGBA gdkColor;
+		gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (pOneWidget), &gdkColor);
+		iNbColors = 4;
+		col[0] = gdkColor.red;
+		col[1] = gdkColor.green;
+		col[2] = gdkColor.blue;
+		col[3] = gdkColor.alpha;
+		#else
+		GdkColor gdkColor;
+		gtk_color_button_get_color (GTK_COLOR_BUTTON (pOneWidget), &gdkColor);
 		col[0] = (double) gdkColor.red / 65535.;
 		col[1] = (double) gdkColor.green / 65535.;
 		col[2] = (double) gdkColor.blue / 65535.;
@@ -3699,6 +3761,8 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 		{
 			iNbColors = 3;
 		}
+		#endif
+
 		g_key_file_set_double_list (pKeyFile, cGroupName, cKeyName, col, iNbColors);
 	}
 	else if (GTK_IS_ENTRY (pOneWidget))
@@ -3968,7 +4032,7 @@ GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize)
 		if (pixbuf != NULL)
 		{
 			gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
-			gdk_pixbuf_unref (pixbuf);
+			g_object_unref (pixbuf);
 		}
 	}
 	return pImage;
