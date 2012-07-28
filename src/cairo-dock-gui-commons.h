@@ -23,27 +23,13 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+
+/**
+*@file cairo-dock-gui-commons.h Common helpers for GUI management.
+*/
+
+
 G_BEGIN_DECLS
-
-
-void cairo_dock_make_tree_view_for_delete_themes (GtkWidget *pWindow);
-
-
-gboolean cairo_dock_save_current_theme (GKeyFile* pKeyFile);
-
-
-gboolean cairo_dock_delete_user_themes (GKeyFile* pKeyFile);
-
-
-gboolean cairo_dock_load_theme (GKeyFile* pKeyFile, GFunc pCallback, GtkWidget *pMainWindow);
-
-
-gboolean cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, GtkListStore *pModele);
-GtkWidget *cairo_dock_build_modules_treeview (void);
-
-void cairo_dock_add_shortkey_to_model (CairoKeyBinding *binding, GtkListStore *pModel);
-GtkWidget *cairo_dock_build_shortkeys_widget (void);
-
 
 void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetList);
 
@@ -51,6 +37,23 @@ void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSLis
 
 void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidgetList);
 
+
+/**
+ * Popup a menu under the given widget.
+ * Can be used as a callback for the clicked event.
+ * @param pWidget The widget whose position and size will be considered.
+ *   Can be NULL, the menu will pop under the mouse.
+ * @param pMenu The given menu to popup.
+ * @code
+ * g_signal_connect (
+ * 	G_OBJECT (pButton),
+ * 	"clicked",
+ * 	G_CALLBACK (cairo_dock_popup_menu_under_widget),
+ * 	GTK_MENU (pMenu)
+ * 	);
+ * @endcode
+ */
+void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GtkMenu *pMenu);
 
 gchar *cairo_dock_get_third_party_applets_link (void);
 

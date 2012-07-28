@@ -1,7 +1,7 @@
 #@VERSION@
 
 #[gtk-open]
-[Themes]
+[Load theme]
 
 #R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes3.0] /
 chosen theme = 
@@ -23,9 +23,6 @@ use theme behaviour = true
 
 #[gtk-save]
 [Save]
-
-#F[Save current theme]
-frame1=
 
 #H[;../@CAIRO_DOCK_THEMES_DIR@] Save as:
 #{You will then be able to re-open it at any time.}
@@ -51,8 +48,5 @@ package = false
 #[gtk-delete]
 [Delete]
 
-#F[List of your personal themes]
-frame1=
-
-#_ Delete from the list themes that you don't need anymore :
+#< Delete from the list themes that you don't need anymore :
 deleted themes = 

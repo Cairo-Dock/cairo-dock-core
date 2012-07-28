@@ -233,7 +233,7 @@ Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	cClass = cairo_dock_get_xwindow_class (Xid, &cWmClass);
 	if (cClass == NULL)
 	{
-		cd_warning ("this window doesn't belong to any class, skip it.");
+		cd_warning ("this window (%s, %ld)doesn't belong to any class, skip it.", cName, Xid);
 		return NULL;
 	}
 	

@@ -195,18 +195,6 @@ force demands attention =
 animation on demands attention = rotate
 
 
-#[gtk-select-font]
-[Shortkeys]
-
-#F[Keyboard shortcuts currently available;gtk-select-font]
-frame_key=
-
-#_ 
-#{Many applets provide shortkeys for their actions. As soon as an applet is enabled, its shortkeys become available.
-#Double-click on a line, and press the shortkey you want to use for the corresponding action.}
-shortkeys=
-
-
 [System]
 
 #X-[Animations speed;@pkgdatadir@/icons/icon-movment.png]
@@ -521,6 +509,10 @@ frame_size =
 #j+[10;128] Icons' size at rest (width x height) :
 launcher size = 40;40
 
+#i+[0;50] Space between icons :
+#{in pixels.}
+icon gap = 0
+
 #F+[Zoom effect;@pkgdatadir@/icons/icon-wave.png]
 frame_shape =
 #f+[1;5] Maximum zoom of the icons :
@@ -531,11 +523,7 @@ zoom max = 1.75
 #{in pixels. Outside of this space (centered on the mouse), there is no zoom.}
 sinusoid width = 150
 
-#i+[0;50] Space between icons :
-#{in pixels.}
-icon gap = 0
-
-#X+[Separators]
+#F+[Separators]
 frame_sep =
 
 #j+[4;128] Icon size at rest (width x height) :
@@ -746,4 +734,3 @@ qi text color = 1;1;1
 
 #C+ Background color:
 qi bg color = 0;0;0;0.667
-

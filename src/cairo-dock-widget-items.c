@@ -41,8 +41,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
-#include "cairo-dock-gui-backend.h"
-#include "cairo-dock-gui-items.h"
+#include "cairo-dock-widget-items.h"
 
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1200
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 700
@@ -55,16 +54,10 @@ extern gchar *g_cCurrentThemePath;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDock *g_pMainDock;
 
-static GtkWidget *s_pLauncherWindow = NULL;  // partage avec le backend 'simple'.
-static GtkWidget *s_pCurrentLauncherWidget = NULL;
-static GtkWidget *s_pLauncherTreeView = NULL;
-static GtkWidget *s_pLauncherPane = NULL;
-static gchar *cPrevPath = NULL;
-
 static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTreeIter *pParentIter);
-static void reload_items (void);
-static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);
-static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer data);
+static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, ItemsWidget *pItemsWidget);
+static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, ItemsWidget *pItemsWidget);
+static void _items_widget_apply (CDWidget *pCdWidget);
 
 typedef enum {
 	CD_MODEL_NAME = 0,  // displayed name
@@ -107,35 +100,35 @@ static gboolean _search_item_in_model (GtkWidget *pTreeView, gpointer pItem, CDM
 	return GPOINTER_TO_INT (data[3]);
 }
 
-static void _delete_current_launcher_widget (GtkWidget *pLauncherWindow)
+static void _delete_current_launcher_widget (ItemsWidget *pItemsWidget)
 {
-	g_return_if_fail (pLauncherWindow != NULL);
+	g_return_if_fail (pItemsWidget != NULL);
 	
-	if (s_pCurrentLauncherWidget != NULL)
+	if (pItemsWidget->pCurrentLauncherWidget != NULL)
 	{
-		gtk_widget_destroy (s_pCurrentLauncherWidget);
-		s_pCurrentLauncherWidget = NULL;
+		gtk_widget_destroy (pItemsWidget->pCurrentLauncherWidget);
+		pItemsWidget->pCurrentLauncherWidget = NULL;
 	}
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (pLauncherWindow), "widget-list");
+	GSList *pWidgetList = pItemsWidget->widget.pWidgetList;
 	if (pWidgetList != NULL)
 	{
 		cairo_dock_free_generated_widget_list (pWidgetList);
-		g_object_set_data (G_OBJECT (pLauncherWindow), "widget-list", NULL);
+		pItemsWidget->widget.pWidgetList = NULL;
 	}
-	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pLauncherWindow), "garbage");
+	GPtrArray *pDataGarbage = pItemsWidget->widget.pDataGarbage;
 	if (pDataGarbage != NULL)
 	{
-		cd_debug ("free garbage...");
 		g_ptr_array_free (pDataGarbage, TRUE);
-		g_object_set_data (G_OBJECT (pLauncherWindow), "garbage", NULL);
+		pItemsWidget->widget.pDataGarbage = NULL;
 	}
-	
-	g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", NULL);
-	g_object_set_data (G_OBJECT (pLauncherWindow), "current-container", NULL);
-	g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", NULL);
+	g_free (pItemsWidget->cPrevPath);
+	pItemsWidget->cPrevPath = NULL;
+	pItemsWidget->pCurrentIcon = NULL;
+	pItemsWidget->pCurrentContainer = NULL;
+	pItemsWidget->pCurrentModuleInstance = NULL;
 }
 
-static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, GtkWidget *pLauncherWindow)
+static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, ItemsWidget *pItemsWidget)
 {
 	cd_debug ("%s (path_currently_selected:%d, %s)", __func__, path_currently_selected, gtk_tree_path_to_string(path));
 	if (path_currently_selected)
@@ -145,17 +138,17 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 	if (! gtk_tree_model_get_iter (model, &iter, path))
 		return FALSE;
 	gchar *cPath = gtk_tree_path_to_string (path);
-	if (cPath && cPrevPath && strcmp (cPrevPath, cPath) == 0)
+	if (cPath && pItemsWidget->cPrevPath && strcmp (pItemsWidget->cPrevPath, cPath) == 0)
 	{
 		g_free (cPath);
 		return TRUE;
 	}
-	g_free (cPrevPath);
-	cPrevPath = cPath;
+	g_free (pItemsWidget->cPrevPath);
+	pItemsWidget->cPrevPath = cPath;
 	
 	cd_debug ("load widgets");
 	// delete previous widgets
-	_delete_current_launcher_widget (pLauncherWindow);  // remove all gobject data
+	_delete_current_launcher_widget (pItemsWidget);  // reset all data
 	
 	// get new current item
 	gchar *cName = NULL;
@@ -169,7 +162,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 		CD_MODEL_MODULE, &pInstance, -1);
 	if (CAIRO_DOCK_IS_APPLET (pIcon))
 		pInstance = pIcon->pModuleInstance;
-	gtk_window_set_title (GTK_WINDOW (pLauncherWindow), cName);
+	///gtk_window_set_title (GTK_WINDOW (pLauncherWindow), cName);
 	g_free (cName);
 	
 	GSList *pWidgetList = NULL;
@@ -185,25 +178,26 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 		// build applet's widgets.
 		pDataGarbage = g_ptr_array_new ();
 		gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pInstance->pModule->pVisitCard->cShareDataDir, pInstance->pModule->pVisitCard->cConfFileName);
-		s_pCurrentLauncherWidget = cairo_dock_build_key_file_widget (pKeyFile,
+		pItemsWidget->pCurrentLauncherWidget = cairo_dock_build_key_file_widget (pKeyFile,
 			pInstance->pModule->pVisitCard->cGettextDomain,
-			pLauncherWindow,
+			pItemsWidget->widget.pWidget,
 			&pWidgetList,
 			pDataGarbage,
-			cOriginalConfFilePath);  // don't free 'cOriginalConfFilePath', it is taken by the function. TODO: find a better way...
+			cOriginalConfFilePath);
+		g_free (cOriginalConfFilePath);
 		
 		// load custom widgets
 		if (pInstance->pModule->pInterface->load_custom_widget != NULL)
 		{
-			g_object_set_data (G_OBJECT (pLauncherWindow), "widget-list", pWidgetList);
-			g_object_set_data (G_OBJECT (pLauncherWindow), "garbage", pDataGarbage);
-			pInstance->pModule->pInterface->load_custom_widget (pInstance, pKeyFile);
+			pItemsWidget->widget.pWidgetList = pWidgetList;  // must set that here so that the call to load_custom_widget() can find the loaded widgets
+			pItemsWidget->widget.pDataGarbage = pDataGarbage;
+			pInstance->pModule->pInterface->load_custom_widget (pInstance, pKeyFile);  /// TODO: we need to pass 'pWidgetList' to the function...
 		}
 		
 		if (pIcon != NULL)
-			g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", pIcon);
+			pItemsWidget->pCurrentIcon = pIcon;
 		else
-			g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", pInstance);
+			pItemsWidget->pCurrentModuleInstance = pInstance;
 		
 		g_key_file_free (pKeyFile);
 	}
@@ -224,22 +218,22 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 			}
 			
 			pDataGarbage = g_ptr_array_new ();
-			s_pCurrentLauncherWidget = cairo_dock_build_conf_file_widget (cConfFilePath,
+			pItemsWidget->pCurrentLauncherWidget = cairo_dock_build_conf_file_widget (cConfFilePath,
 				NULL,
-				pLauncherWindow,
+				pItemsWidget->widget.pWidget,
 				&pWidgetList,
 				pDataGarbage,
 				NULL);
 			
-			g_object_set_data (G_OBJECT (pLauncherWindow), "current-container", pDock);
+			pItemsWidget->pCurrentContainer = CAIRO_CONTAINER (pDock);
 			
 			g_free (cConfFilePath);
 		}
 		else  // main dock, we display a message
 		{
 			pDataGarbage = g_ptr_array_new ();
-			gchar *cDefaultMessage = g_strdup_printf ("<b><big>%s</big></b>", _("Main dock's parameters are available in the main configuration window."));
-			s_pCurrentLauncherWidget = cairo_dock_gui_make_preview_box (pLauncherWindow,
+			gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Main dock's parameters are available in the main configuration window."));
+			pItemsWidget->pCurrentLauncherWidget = cairo_dock_gui_make_preview_box (pItemsWidget->widget.pWidget,
 				NULL,  // no selection widget
 				FALSE,  // vertical packaging
 				0,  // no info bar
@@ -256,27 +250,27 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 		
 		// build launcher's widgets
 		pDataGarbage = g_ptr_array_new ();
-		s_pCurrentLauncherWidget = cairo_dock_build_conf_file_widget (cConfFilePath,
+		pItemsWidget->pCurrentLauncherWidget = cairo_dock_build_conf_file_widget (cConfFilePath,
 			NULL,
-			pLauncherWindow,
+			pItemsWidget->widget.pWidget,
 			&pWidgetList,
 			pDataGarbage,
 			NULL);
 		
-		g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", pIcon);
+		pItemsWidget->pCurrentIcon = pIcon;
 		
 		g_free (cConfFilePath);
 	}
 	
 	// set widgets in the main window.
-	if (s_pCurrentLauncherWidget != NULL)
+	if (pItemsWidget->pCurrentLauncherWidget != NULL)
 	{
-		gtk_paned_pack2 (GTK_PANED (s_pLauncherPane), s_pCurrentLauncherWidget, TRUE, FALSE);
+		gtk_paned_pack2 (GTK_PANED (pItemsWidget->widget.pWidget), pItemsWidget->pCurrentLauncherWidget, TRUE, FALSE);
 		
-		g_object_set_data (G_OBJECT (pLauncherWindow), "widget-list", pWidgetList);
-		g_object_set_data (G_OBJECT (pLauncherWindow), "garbage", pDataGarbage);
+		pItemsWidget->widget.pWidgetList = pWidgetList;
+		pItemsWidget->widget.pDataGarbage = pDataGarbage;
 		
-		gtk_widget_show_all (s_pCurrentLauncherWidget);
+		gtk_widget_show_all (pItemsWidget->pCurrentLauncherWidget);
 	}
 	return TRUE;
 }
@@ -294,12 +288,11 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	GdkPixbuf *pixbuf = NULL;
 	gchar *cImagePath = NULL;
 	const gchar *cName;
-	gint iDesiredIconSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_DND); // default is 32
 	
 	// set an image.
 	if (pIcon->cFileName != NULL)
 	{
-		cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName, iDesiredIconSize);
+		cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName, 24);
 	}
 	if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 	{
@@ -326,7 +319,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	
 	if (cImagePath != NULL)
 	{
-		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, iDesiredIconSize, iDesiredIconSize, &erreur);
+		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 32, 32, &erreur);
 		if (erreur != NULL)
 		{
 			cd_warning (erreur->message);
@@ -435,35 +428,31 @@ static gboolean _add_one_module_to_model (const gchar *cModuleName, CairoDockMod
 	return FALSE; // FALSE => keep going
 }
 
-static void _select_item (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, GtkWidget *pLauncherWindow)
+static void _select_item (ItemsWidget *pItemsWidget, Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance)
 {
-	g_free (cPrevPath);
-	cPrevPath = NULL;
+	g_free (pItemsWidget->cPrevPath);
+	pItemsWidget->cPrevPath = NULL;
 	GtkTreeIter iter;
-	if (_search_item_in_model (s_pLauncherTreeView, pIcon ? (gpointer)pIcon : pContainer ? (gpointer)pContainer : (gpointer)pModuleInstance, pIcon ? CD_MODEL_ICON : pContainer ? CD_MODEL_CONTAINER : CD_MODEL_MODULE, &iter))
+	if (_search_item_in_model (pItemsWidget->pTreeView, pIcon ? (gpointer)pIcon : pContainer ? (gpointer)pContainer : (gpointer)pModuleInstance, pIcon ? CD_MODEL_ICON : pContainer ? CD_MODEL_CONTAINER : CD_MODEL_MODULE, &iter))
 	{
-		GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (s_pLauncherTreeView));
+		GtkTreeModel * model = gtk_tree_view_get_model (GTK_TREE_VIEW (pItemsWidget->pTreeView));
 		GtkTreePath *path =  gtk_tree_model_get_path (model, &iter);
-		gtk_tree_view_expand_to_path (GTK_TREE_VIEW (s_pLauncherTreeView), path);
+		gtk_tree_view_expand_to_path (GTK_TREE_VIEW (pItemsWidget->pTreeView), path);
 		gtk_tree_path_free (path);
 		
-		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
+		GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pItemsWidget->pTreeView));
 		gtk_tree_selection_unselect_all (pSelection);
 		gtk_tree_selection_select_iter (pSelection, &iter);
 	}
 	else
 	{
 		cd_warning ("item not found");
-		_delete_current_launcher_widget (pLauncherWindow);
-		
-		gtk_window_set_title (GTK_WINDOW (pLauncherWindow), _("Launcher configuration"));
-		g_object_set_data (G_OBJECT (pLauncherWindow), "current-icon", NULL);
-		g_object_set_data (G_OBJECT (pLauncherWindow), "current-container", NULL);
-		g_object_set_data (G_OBJECT (pLauncherWindow), "current-module", NULL);
+		_delete_current_launcher_widget (pItemsWidget);
+		///gtk_window_set_title (GTK_WINDOW (pItemsWidget), _("Launcher configuration"));
 	}
 }
 
-static GtkTreeModel *_build_tree_model (void)
+static GtkTreeModel *_build_tree_model (ItemsWidget *pItemsWidget)
 {
 	GtkTreeStore *model = gtk_tree_store_new (CD_MODEL_NB_COLUMNS,
 		G_TYPE_STRING,  // displayed name
@@ -484,8 +473,8 @@ static GtkTreeModel *_build_tree_model (void)
 			/// add it ...
 		}
 	}
-	g_signal_connect (G_OBJECT (model), "row-inserted", G_CALLBACK (on_row_inserted), NULL);
-	g_signal_connect (G_OBJECT (model), "row-deleted", G_CALLBACK (on_row_deleted), NULL);
+	g_signal_connect (G_OBJECT (model), "row-inserted", G_CALLBACK (on_row_inserted), pItemsWidget);
+	g_signal_connect (G_OBJECT (model), "row-deleted", G_CALLBACK (on_row_deleted), pItemsWidget);
 	return GTK_TREE_MODEL (model);
 }
 
@@ -498,7 +487,7 @@ static GtkTreeIter lastInsertedIter;
 static gboolean s_bHasPendingInsertion = FALSE;
 static struct timeval lastTime = {0, 0};
 
-static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
+static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, ItemsWidget *pItemsWidget)
 {
 	// we only receive this event from an intern drag'n'drop
 	// when we receive this event, the row is still empty, so we can't perform any task here.
@@ -507,9 +496,9 @@ static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter
 	gettimeofday (&lastTime, NULL);
 	s_bHasPendingInsertion = TRUE;
 }
-static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer data)
+static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, ItemsWidget *pItemsWidget)
 {
-	// g_print ("- row\n");
+	g_print ("- row\n");
 	// when drag'n'droping a row, the "row-deleted" signal is emitted after the "row-inserted"
 	// however the row pointed by 'path' is already invalid, but the previously inserted iter is now filled, and we remembered it, so we can use it now.
 	if (s_bHasPendingInsertion)
@@ -528,7 +517,7 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer dat
 				CD_MODEL_ICON, &pIcon,
 				CD_MODEL_CONTAINER, &pContainer,
 				CD_MODEL_MODULE, &pInstance, -1);
-			// g_print ("+ row %s\n", cName);
+			g_print ("+ row %s\n", cName);
 			
 			if (pIcon)  // launcher/separator/sub-dock-icon or applet
 			{
@@ -557,7 +546,7 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer dat
 						CD_MODEL_NAME, &cParentName,
 						CD_MODEL_ICON, &pParentIcon,
 						CD_MODEL_CONTAINER, &pParentContainer, -1);
-					// g_print (" parent: %s, %p, %p\n", cParentName, pParentIcon, pParentContainer);
+					g_print (" parent: %s, %p, %p\n", cParentName, pParentIcon, pParentContainer);
 					
 					if (pParentContainer == NULL && pParentIcon != NULL)  // dropped on an icon, if it's a sub-dock icon, insert into the sub-dock, else do as if we dropped next to the icon.
 					{
@@ -571,7 +560,7 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer dat
 							// we'll search the parent instead.
 							lastInsertedIter = parent_iter;
 							gtk_tree_model_iter_parent (model, &parent_iter, &lastInsertedIter);
-							// g_print (" search parent %s\n", pParentIcon->cParentDockName);
+							g_print (" search parent %s\n", pParentIcon->cParentDockName);
 						}
 					}
 					if (CAIRO_DOCK_IS_DOCK (pParentContainer))  // not nul and dock-type.
@@ -579,14 +568,14 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer dat
 						// if it has changed, update the conf file and the icon.
 						if (pParentContainer != pContainer)
 						{
-							// g_print (" parent has changed\n");
+							g_print (" parent has changed\n");
 							const gchar *cNewParentDockName = cairo_dock_search_dock_name (CAIRO_DOCK (pParentContainer));
 							if (cNewParentDockName != NULL)
 							{
 								cairo_dock_write_container_name_in_conf_file (pIcon, cNewParentDockName);
 							}
 							
-							// g_print (" reload the icon...\n");
+							g_print (" reload the icon...\n");
 							if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
 								|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
 								|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
@@ -605,20 +594,20 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer dat
 						GtkTreeIter it;
 						Icon *pLeftIcon = NULL;
 						gchar *last_iter_s = gtk_tree_model_get_string_from_iter (model, &lastInsertedIter);
-						// g_print ("search for '%s'\n", last_iter_s);
+						g_print ("search for '%s'\n", last_iter_s);
 						
 						///gtk_tree_model_get_iter_first (model, &iter);
 						if (gtk_tree_model_iter_children (model, &it, &parent_iter))  // point on the first iter.
 						{
-							// g_print (" got first iter\n");
+							g_print (" got first iter\n");
 							// iterate on the rows until we reach our row.
 							do
 							{
 								gchar *iter_s = gtk_tree_model_get_string_from_iter (model, &it);
-								// g_print (" test iter %s / %s\n", iter_s, last_iter_s);
+								g_print (" test iter %s / %s\n", iter_s, last_iter_s);
 								if (strcmp (last_iter_s, iter_s) == 0)  // it's our row
 								{
-									//g_print (" reached our row, break\n");
+									g_print (" reached our row, break\n");
 									break;
 								}
 								else  // not yet our row, let's remember the left icon.
@@ -627,30 +616,30 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer dat
 									gtk_tree_model_get (model, &it,
 										CD_MODEL_NAME, &name,
 										CD_MODEL_ICON, &pLeftIcon, -1);
-									// g_print ("  (%s)\n", name);
+									g_print ("  (%s)\n", name);
 								}
 							}
 							while (gtk_tree_model_iter_next (model, &it));
 						}
 						
 						// move the icon (will update the conf file and trigger the signal to reload the GUI).
-						// g_print (" move the icon...\n");
+						g_print (" move the icon...\n");
 						cairo_dock_move_icon_after_icon (CAIRO_DOCK (pParentContainer), pIcon, pLeftIcon);
 					}
 					else  // the row may have been dropped on a launcher or a desklet, in which case we must reload the model because this has no meaning.
 					{
-						reload_items ();
+						cairo_dock_items_widget_reload (pItemsWidget);
 					}
 					
 				}  // else this row has no parent, so it was either a main dock or a desklet, and we have nothing to do.
 				else
 				{
-					reload_items ();
+					cairo_dock_items_widget_reload (pItemsWidget);
 				}
 			}
 			else  // no icon (for instance a plug-in like Remote-control)
 			{
-				reload_items ();
+				cairo_dock_items_widget_reload (pItemsWidget);
 			}
 		}
 		
@@ -658,7 +647,7 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, gpointer dat
 	}
 }
 
-static void _cairo_dock_remove_item (GtkMenuItem *pMenuItem, GtkWidget *pTreeView)
+static void _on_select_remove_item (GtkMenuItem *pMenuItem, GtkWidget *pTreeView)
 {
 	// get the selected line
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pTreeView));
@@ -719,38 +708,112 @@ static void _cairo_dock_remove_item (GtkMenuItem *pMenuItem, GtkWidget *pTreeVie
 }
 
 
-static void _free_launcher_gui (void)
+static void _items_widget_reset (CDWidget *pCdWidget)
 {
-	s_pLauncherWindow = NULL;
-	s_pCurrentLauncherWidget = NULL;
-	s_pLauncherPane = NULL;
-	s_pLauncherTreeView = NULL;
+	ItemsWidget *pItemsWidget = ITEMS_WIDGET (pCdWidget);
+	g_free (pItemsWidget->cPrevPath);  // internal widgets will be destroyed with the parent.
 }
-static gboolean on_delete_launcher_gui (GtkWidget *pWidget, GdkEvent *event, gpointer data)
+
+
+static gboolean on_button_press_event (GtkWidget *pTreeView,
+	GdkEventButton *pButton,
+	gpointer data)
 {
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWidget), "widget-list");
-	cairo_dock_free_generated_widget_list (pWidgetList);
-	
-	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pWidget), "garbage");
-	/// nettoyer.
-	
-	_free_launcher_gui ();
-	
+	if (pButton->button == 3)  // clic droit.
+	{
+		GtkWidget *pMenu = gtk_menu_new ();
+			
+		GtkWidget *pMenuItem;
+		
+		/// TODO: check that we can actually remove it (ex.: not the main dock), and maybe display the item's name...
+		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Remove this item"), GTK_STOCK_REMOVE, G_CALLBACK (_on_select_remove_item), pMenu, pTreeView);
+		
+		gtk_widget_show_all (pMenu);
+		
+		gtk_menu_popup (GTK_MENU (pMenu),
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			pButton->button,
+			gtk_get_current_event_time ());
+	}
 	return FALSE;
 }
 
-static void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
+ItemsWidget *cairo_dock_items_widget_new (void)
 {
-	//g_print ("%s ()\n", __func__);
+	ItemsWidget *pItemsWidget = g_new0 (ItemsWidget, 1);
+	pItemsWidget->widget.iType = WIDGET_ITEMS;
 	
-	Icon *pIcon = g_object_get_data (G_OBJECT (pWindow), "current-icon");
-	CairoContainer *pContainer = g_object_get_data (G_OBJECT (pWindow), "current-container");
-	CairoDockModuleInstance *pModuleInstance = g_object_get_data (G_OBJECT (pWindow), "current-module");
+	GtkWidget *pLauncherPane;
+	#if (GTK_MAJOR_VERSION < 3)
+	pLauncherPane = gtk_hpaned_new ();
+	#else
+	pLauncherPane = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
+	#endif
+	pItemsWidget->widget.pWidget = pLauncherPane;
+	pItemsWidget->widget.apply = _items_widget_apply;
+	pItemsWidget->widget.reset = _items_widget_reset;
+	
+	//\_____________ On construit l'arbre des launceurs.
+	GtkTreeModel *model = _build_tree_model (pItemsWidget);
+	
+	//\_____________ On construit le tree-view avec.
+	pItemsWidget->pTreeView = gtk_tree_view_new_with_model (model);
+	g_object_unref (model);
+	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pItemsWidget->pTreeView), FALSE);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (pItemsWidget->pTreeView), TRUE);
+	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (pItemsWidget->pTreeView), TRUE);  // enables drag and drop of rows -> row-inserted and row-deleted signals
+	g_signal_connect (G_OBJECT (pItemsWidget->pTreeView),
+		"button-release-event",  // on release, so that the clicked line is already selected
+		G_CALLBACK (on_button_press_event),
+		NULL);
+	
+	// line selection
+	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pItemsWidget->pTreeView));
+	gtk_tree_selection_set_mode (pSelection, GTK_SELECTION_SINGLE);
+	gtk_tree_selection_set_select_function (pSelection,
+		(GtkTreeSelectionFunc) _on_select_one_item_in_tree,
+		pItemsWidget,
+		NULL);
+	
+	GtkCellRenderer *rend;
+	// column icon
+	rend = gtk_cell_renderer_pixbuf_new ();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pItemsWidget->pTreeView), -1, NULL, rend, "pixbuf", 1, NULL);
+	// column name
+	rend = gtk_cell_renderer_text_new ();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pItemsWidget->pTreeView), -1, NULL, rend, "text", 0, NULL);
+	
+	GtkWidget *pLauncherWindow = gtk_scrolled_window_new (NULL, NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pLauncherWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pLauncherWindow), pItemsWidget->pTreeView);
+	gtk_paned_pack1 (GTK_PANED (pLauncherPane), pLauncherWindow, TRUE, FALSE);
+	
+	//\_____________ On essaie de definir une taille correcte.
+	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
+	if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] < CAIRO_DOCK_LAUNCHER_PANEL_WIDTH)  // ecran trop petit, on va essayer de reserver au moins R pixels pour le panneau de droite (avec un minimum de L pixels pour celui de gauche).
+		gtk_paned_set_position (GTK_PANED (pLauncherPane), MAX (CAIRO_DOCK_LEFT_PANE_MIN_WIDTH, w - CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH));
+	else  // we set a default width rather than letting GTK guess the best, because the right panel is more important than the left one.
+		gtk_paned_set_position (GTK_PANED (pLauncherPane), CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH);
+	g_object_set_data (G_OBJECT (pLauncherPane), "frame-width", GINT_TO_POINTER (250));
+	
+	return pItemsWidget;
+}
+
+
+static void _items_widget_apply (CDWidget *pCdWidget)
+{
+	ItemsWidget *pItemsWidget = ITEMS_WIDGET (pCdWidget);
+	Icon *pIcon = pItemsWidget->pCurrentIcon;
+	CairoContainer *pContainer = pItemsWidget->pCurrentContainer;
+	CairoDockModuleInstance *pModuleInstance = pItemsWidget->pCurrentModuleInstance;
 	
 	if (CAIRO_DOCK_IS_APPLET (pIcon))
 		pModuleInstance = pIcon->pModuleInstance;
 	
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
+	GSList *pWidgetList = pItemsWidget->widget.pWidgetList;
 	
 	if (pModuleInstance)
 	{
@@ -848,273 +911,114 @@ static void on_click_launcher_apply (GtkButton *button, GtkWidget *pWindow)
 		// reload widgets.
 		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et declenche le rechargement de l'IHM.
 	}
-	reload_items ();
-}
-
-static void on_click_launcher_quit (GtkButton *button, GtkWidget *pWindow)
-{
-	//g_print ("%s ()\n", __func__);
-	on_delete_launcher_gui (pWindow, NULL, NULL);
-	gtk_widget_destroy (pWindow);
+	cairo_dock_items_widget_reload (pItemsWidget);  // we reload in case the items place has changed (icon's container, dock orientation, etc).
 }
 
 
-  /////////////////
- // GUI BACKEND //
-/////////////////
+  //////////////////
+ /// WIDGET API ///
+//////////////////
 
-static gboolean on_button_press_event (GtkWidget *pWidget,
-	GdkEventButton *pButton,
-	gpointer data)
+void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iNotebookPage)
 {
-	if (pButton->button == 3)  // clic droit.
-	{
-		GtkWidget *pMenu = gtk_menu_new ();
-			
-		GtkWidget *pMenuItem;
-		
-		/// TODO: check that we can actually remove it (ex.: not the main dock), and maybe display the item's name...
-		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Remove this item"), GTK_STOCK_REMOVE, G_CALLBACK (_cairo_dock_remove_item), pMenu, pWidget);
-		
-		gtk_widget_show_all (pMenu);
-		
-		gtk_menu_popup (GTK_MENU (pMenu),
-			NULL,
-			NULL,
-			NULL,
-			NULL,
-			pButton->button,
-			gtk_get_current_event_time ());
-	}
-	return FALSE;
-}
-static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
-{
-	//g_print ("%s (%x)\n", __func__, pIcon);
-	//\_____________ On recharge la fenetre si elle existe deja.
-	if (s_pLauncherWindow != NULL)
-	{
-		_delete_current_launcher_widget (s_pLauncherWindow);
-		
-		_select_item (pIcon, pContainer, pModuleInstance, s_pLauncherWindow);
-		
-		gtk_window_present (GTK_WINDOW (s_pLauncherWindow));
-		return s_pLauncherWindow;
-	}
+	_delete_current_launcher_widget (pItemsWidget);  // pItemsWidget->pCurrentLauncherWidget <- 0
 	
-	//\_____________ On construit la fenetre.
-	s_pLauncherWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_icon_from_file (GTK_WINDOW (s_pLauncherWindow), CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
-
-	GtkWidget *pMainVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
-	gtk_container_add (GTK_CONTAINER (s_pLauncherWindow), pMainVBox);
+	_select_item (pItemsWidget, pIcon, pContainer, pModuleInstance);  // set pItemsWidget->pCurrentLauncherWidget
 	
-	#if (GTK_MAJOR_VERSION < 3)
-	s_pLauncherPane = gtk_hpaned_new ();
-	#else
-	s_pLauncherPane = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-	#endif
+	if (pItemsWidget->pCurrentLauncherWidget && GTK_IS_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget) && iNotebookPage != -1)
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget), iNotebookPage);
 	
-	gtk_box_pack_start (GTK_BOX (pMainVBox),
-		s_pLauncherPane,
-		TRUE,
-		TRUE,
-		0);
-	
-	//\_____________ On construit l'arbre des launceurs.
-	GtkTreeModel *model = _build_tree_model();
-	
-	//\_____________ On construit le tree-view avec.
-	s_pLauncherTreeView = gtk_tree_view_new_with_model (model);
-	g_object_unref (model);
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (s_pLauncherTreeView), FALSE);
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (s_pLauncherTreeView), TRUE);
-	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (s_pLauncherTreeView), TRUE);  // enables drag and drop of rows -> row-inserted and row-deleted signals
-	g_signal_connect (G_OBJECT (s_pLauncherTreeView),
-		"button-release-event",  // on release, so that the clicked line is already selected
-		G_CALLBACK (on_button_press_event),
-		NULL);
-	
-	// line selection
-	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
-	gtk_tree_selection_set_mode (pSelection, GTK_SELECTION_SINGLE);
-	gtk_tree_selection_set_select_function (pSelection,
-		(GtkTreeSelectionFunc) _on_select_one_item_in_tree,
-		s_pLauncherWindow,
-		NULL);
-	
-	GtkCellRenderer *rend;
-	// column icon
-	rend = gtk_cell_renderer_pixbuf_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (s_pLauncherTreeView), -1, NULL, rend, "pixbuf", 1, NULL);
-	// column name
-	rend = gtk_cell_renderer_text_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (s_pLauncherTreeView), -1, NULL, rend, "text", 0, NULL);
-	
-	GtkWidget *pLauncherWindow = gtk_scrolled_window_new (NULL, NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pLauncherWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pLauncherWindow), s_pLauncherTreeView);
-	gtk_paned_pack1 (GTK_PANED (s_pLauncherPane), pLauncherWindow, TRUE, FALSE);
-	
-	//\_____________ We add boutons.
-	GtkWidget *pButtonsHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN*2);
-	gtk_box_pack_end (GTK_BOX (pMainVBox),
-		pButtonsHBox,
-		FALSE,
-		FALSE,
-		0);
-	
-	GtkWidget *pQuitButton = gtk_button_new_from_stock (GTK_STOCK_QUIT);
-	g_signal_connect (G_OBJECT (pQuitButton), "clicked", G_CALLBACK(on_click_launcher_quit), s_pLauncherWindow);
-	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
-		pQuitButton,
-		FALSE,
-		FALSE,
-		0);
-	
-	GtkWidget *pApplyButton = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-	g_signal_connect (G_OBJECT (pApplyButton), "clicked", G_CALLBACK(on_click_launcher_apply), s_pLauncherWindow);
-	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
-		pApplyButton,
-		FALSE,
-		FALSE,
-		0);
-	
-	//\_____________ On ajoute la barre d'etat.
-	GtkWidget *pStatusBar = gtk_statusbar_new ();
-	gtk_box_pack_start (GTK_BOX (pButtonsHBox),  // pMainVBox
-		pStatusBar,
-		TRUE,
-		TRUE,
-		0);
-	g_object_set_data (G_OBJECT (s_pLauncherWindow), "status-bar", pStatusBar);
-	g_object_set_data (G_OBJECT (s_pLauncherWindow), "frame-width", GINT_TO_POINTER (250));
-	
-	//\_____________ On essaie de definir une taille correcte.
-	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-	gtk_window_resize (GTK_WINDOW (s_pLauncherWindow),
-		w,
-		MIN (CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
-	
-	if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] < CAIRO_DOCK_LAUNCHER_PANEL_WIDTH)  // ecran trop petit, on va essayer de reserver au moins R pixels pour le panneau de droite (avec un minimum de L pixels pour celui de gauche).
-		gtk_paned_set_position (GTK_PANED (s_pLauncherPane), MAX (CAIRO_DOCK_LEFT_PANE_MIN_WIDTH, w - CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH));
-	else  // we set a default width rather than letting GTK guess the best, because the right panel is more important than the left one.
-		gtk_paned_set_position (GTK_PANED (s_pLauncherPane), CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH);
-	
-	gtk_widget_show_all (s_pLauncherWindow);
-	
-	g_signal_connect (G_OBJECT (s_pLauncherWindow),
-		"delete-event",
-		G_CALLBACK (on_delete_launcher_gui),
-		NULL);
-	
-	//\_____________ On selectionne l'entree courante.
-	_select_item (pIcon, pContainer, pModuleInstance, s_pLauncherWindow);
-	
-	return s_pLauncherWindow;
+	gtk_widget_show_all (pItemsWidget->pCurrentLauncherWidget);
 }
 
-static void reload_items (void)
+
+void cairo_dock_items_widget_reload (ItemsWidget *pItemsWidget)
 {
-	if (s_pLauncherWindow == NULL)
-		return ;
-	
-	cd_debug ("%s ()", __func__);
+	g_print ("%s ()\n", __func__);
+	// remember the current item and page
 	int iNotebookPage;
-	if (s_pCurrentLauncherWidget && GTK_IS_NOTEBOOK (s_pCurrentLauncherWidget))
-		iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentLauncherWidget));
+	if (pItemsWidget->pCurrentLauncherWidget && GTK_IS_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget))
+		iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget));
 	else
 		iNotebookPage = -1;
 	
 	// reload the tree-view
-	GtkTreeModel *model = _build_tree_model();
+	GtkTreeModel *model = _build_tree_model (pItemsWidget);
 	
-	gtk_tree_view_set_model (GTK_TREE_VIEW (s_pLauncherTreeView), GTK_TREE_MODEL (model));
+	gtk_tree_view_set_model (GTK_TREE_VIEW (pItemsWidget->pTreeView), GTK_TREE_MODEL (model));
 	g_object_unref (model);
 	
 	// reload the current icon/container's widgets by reselecting the current line.
-	Icon *pCurrentIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
-	CairoContainer *pCurrentContainer = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-container");
-	CairoDockModuleInstance *pCurrentModuleInstance = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-module");
+	Icon *pCurrentIcon = pItemsWidget->pCurrentIcon;
+	CairoContainer *pCurrentContainer = pItemsWidget->pCurrentContainer;
+	CairoDockModuleInstance *pCurrentModuleInstance = pItemsWidget->pCurrentModuleInstance;
 	
-	_delete_current_launcher_widget (s_pLauncherWindow);  // s_pCurrentLauncherWidget <- 0
+	_delete_current_launcher_widget (pItemsWidget);  // pItemsWidget->pCurrentLauncherWidget <- 0
 	
-	_select_item (pCurrentIcon, pCurrentContainer, pCurrentModuleInstance, s_pLauncherWindow);  // set s_pCurrentLauncherWidget
+	_select_item (pItemsWidget, pCurrentIcon, pCurrentContainer, pCurrentModuleInstance);  // set pItemsWidget->pCurrentLauncherWidget
 	
-	if (s_pCurrentLauncherWidget && GTK_IS_NOTEBOOK (s_pCurrentLauncherWidget) && iNotebookPage != -1)
-		gtk_notebook_set_current_page (GTK_NOTEBOOK (s_pCurrentLauncherWidget), iNotebookPage);
+	if (pItemsWidget->pCurrentLauncherWidget && GTK_IS_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget) && iNotebookPage != -1)
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget), iNotebookPage);
 	
-	gtk_widget_show_all (s_pLauncherWindow);
+	gtk_widget_show_all (pItemsWidget->widget.pWidget);
 }
 
-void cairo_dock_register_default_items_gui_backend (void)
+void cairo_dock_items_widget_update_desklet_params (ItemsWidget *pItemsWidget, CairoDesklet *pDesklet)
 {
-	CairoDockItemsGuiBackend *pBackend = g_new0 (CairoDockItemsGuiBackend, 1);
-	
-	pBackend->show_gui 			= show_gui;
-	pBackend->reload_items 		= reload_items;
-	
-	cairo_dock_register_items_gui_backend (pBackend);
-}
-
-
-  ////////////////////
- // ACTIONS ON GUI //
-////////////////////
-
-CairoDockGroupKeyWidget *cairo_dock_gui_items_get_widget_from_name (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
-{
-	g_return_val_if_fail (s_pLauncherWindow != NULL, NULL);
-	cd_debug ("%s (%s, %s)", __func__, cGroupName, cKeyName);
-	return cairo_dock_gui_find_group_key_widget (s_pLauncherWindow, cGroupName, cKeyName);
-}
-
-void cairo_dock_gui_items_update_desklet_params (CairoDesklet *pDesklet)
-{
-	if (s_pLauncherWindow == NULL || pDesklet == NULL || pDesklet->pIcon == NULL)
+	g_return_if_fail (pItemsWidget != NULL);
+	// check that it's about the current item
+	if (pDesklet == NULL || pDesklet->pIcon == NULL)
 		return;
 	
-	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
+	Icon *pIcon = pItemsWidget->pCurrentIcon;
 	if (pIcon != pDesklet->pIcon)
 		return;
 	
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pLauncherWindow), "widget-list");
+	// update the corresponding widgets
+	GSList *pWidgetList = pItemsWidget->widget.pWidgetList;
 	cairo_dock_update_desklet_widgets (pDesklet, pWidgetList);
 }
 
-void cairo_dock_update_desklet_visibility_params (CairoDesklet *pDesklet)
+void cairo_dock_items_widget_update_desklet_visibility_params (ItemsWidget *pItemsWidget, CairoDesklet *pDesklet)
 {
-	if (s_pLauncherWindow == NULL || pDesklet == NULL || pDesklet->pIcon == NULL)
+	g_return_if_fail (pItemsWidget != NULL);
+	// check that it's about the current item
+	if (pDesklet == NULL || pDesklet->pIcon == NULL)
 		return;
 	
-	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
+	Icon *pIcon = pItemsWidget->pCurrentIcon;
 	if (pIcon != pDesklet->pIcon)
 		return;
 	
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pLauncherWindow), "widget-list");
+	// update the corresponding widgets
+	GSList *pWidgetList = pItemsWidget->widget.pWidgetList;
 	cairo_dock_update_desklet_visibility_widgets (pDesklet, pWidgetList);
 }
 
-void cairo_dock_gui_items_update_module_instance_container (CairoDockModuleInstance *pInstance, gboolean bDetached)
+void cairo_dock_items_widget_update_module_instance_container (ItemsWidget *pItemsWidget, CairoDockModuleInstance *pInstance, gboolean bDetached)
 {
-	if (s_pLauncherWindow == NULL || pInstance == NULL)
+	g_return_if_fail (pItemsWidget != NULL);
+	// check that it's about the current item
+	if (pInstance == NULL)
 		return;
 	
-	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
+	Icon *pIcon = pItemsWidget->pCurrentIcon;
 	if (pIcon != pInstance->pIcon)  // pour un module qui se detache, il suffit de chercher parmi les applets.
 		return;
 	
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (s_pLauncherWindow), "widget-list");
+	// update the corresponding widgets
+	GSList *pWidgetList = pItemsWidget->widget.pWidgetList;
 	cairo_dock_update_is_detached_widget (bDetached, pWidgetList);
 }
 
-void cairo_dock_gui_items_reload_current_widget (CairoDockModuleInstance *pInstance, int iShowPage)
+void cairo_dock_items_widget_reload_current_widget (ItemsWidget *pItemsWidget, CairoDockModuleInstance *pInstance, int iShowPage)
 {
-	g_return_if_fail (s_pLauncherWindow != NULL && s_pLauncherTreeView != NULL);
+	g_return_if_fail (pItemsWidget != NULL && pItemsWidget->pTreeView != NULL);
 	cd_debug ("%s ()", __func__);
 	
-	Icon *pIcon = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-icon");
-	CairoDockModuleInstance *pModuleInstance = g_object_get_data (G_OBJECT (s_pLauncherWindow), "current-module");
+	// check that it's about the current item
+	Icon *pIcon = pItemsWidget->pCurrentIcon;
+	CairoDockModuleInstance *pModuleInstance = pItemsWidget->pCurrentModuleInstance;
 	if (pInstance)
 	{
 		if (pIcon)
@@ -1129,46 +1033,32 @@ void cairo_dock_gui_items_reload_current_widget (CairoDockModuleInstance *pInsta
 		}
 	}
 	
-	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (s_pLauncherTreeView));
+	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pItemsWidget->pTreeView));
 	GtkTreeModel *pModel = NULL;
 	GList *paths = gtk_tree_selection_get_selected_rows (pSelection, &pModel);
 	g_return_if_fail (paths != NULL && pModel != NULL);
 	GtkTreePath *path = paths->data;
 	
 	int iNotebookPage;
-	if ((GTK_IS_NOTEBOOK (s_pCurrentLauncherWidget)))
+	if ((GTK_IS_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget)))
 	{
 		if (iShowPage == -1)
-			iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentLauncherWidget));
+			iNotebookPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget));
 		else
 			iNotebookPage = iShowPage;
 	}
 	else
 		iNotebookPage = -1;
 	
-	g_free (cPrevPath);
-	cPrevPath = NULL;
-	_on_select_one_item_in_tree (pSelection, pModel, path, FALSE, s_pLauncherWindow);  // on appelle la callback nous-memes, car la ligne est deja selectionnee, donc le parametre 'path_currently_selected' sera a TRUE. de plus on veut pouvoir mettre la page du notebook.
+	g_free (pItemsWidget->cPrevPath);
+	pItemsWidget->cPrevPath = NULL;
+	_on_select_one_item_in_tree (pSelection, pModel, path, FALSE, pItemsWidget);  // on appelle la callback nous-memes, car la ligne est deja selectionnee, donc le parametre 'path_currently_selected' sera a TRUE. de plus on veut pouvoir mettre la page du notebook.
 	
 	if (iNotebookPage != -1)
 	{
-		gtk_notebook_set_current_page (GTK_NOTEBOOK (s_pCurrentLauncherWidget), iNotebookPage);
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget), iNotebookPage);
 	}
 	
 	g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
 	g_list_free (paths);
-}
-
-void cairo_dock_gui_items_set_status_message_on_gui (const gchar *cMessage)
-{
-	GtkWidget *pStatusBar = NULL;
-	if (s_pLauncherWindow != NULL)
-	{
-		pStatusBar = g_object_get_data (G_OBJECT (s_pLauncherWindow), "status-bar");
-	}
-	if (pStatusBar == NULL)
-		return ;
-	cd_debug ("%s (%s)", __func__, cMessage);
-	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
-	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
 }

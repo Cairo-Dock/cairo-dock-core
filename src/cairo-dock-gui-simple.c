@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 
 #include "config.h"
+#include "gldi-config.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
@@ -37,842 +38,184 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
-#include "cairo-dock-themes-manager.h"
-#include "cairo-dock-applications-manager.h"
-#include "cairo-dock-backends-manager.h"
-#include "cairo-dock-keybinder.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-backend.h"
-#include "cairo-dock-gui-commons.h"
-#include "cairo-dock-gui-items.h"  // cairo_dock_gui_items_get_widget_from_name et cairo_dock_gui_items_update_desklet_params
+#include "cairo-dock-widget-items.h"
+#include "cairo-dock-widget-themes.h"
+#include "cairo-dock-widget-config.h"
+#include "cairo-dock-widget-plugins.h"
+#include "cairo-dock-widget.h"
 #include "cairo-dock-gui-simple.h"
 
 #define CAIRO_DOCK_PREVIEW_WIDTH 200
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
-#define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1024
+#define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1200
 #define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 700
-#define CAIRO_DOCK_SIMPLE_CONF_FILE "cairo-dock-simple.conf"
-#define CAIRO_DOCK_SHORTKEY_PAGE 2
-#define CAIRO_DOCK_ADDONS_PAGE 3
-#define CAIRO_DOCK_THEMES_PAGE 4
+
+#define CAIRO_DOCK_CATEGORY_ICON_SIZE 32  // a little bit larger than the tab icons (28px)
+
+typedef struct {
+	const gchar *cName;
+	const gchar *cIcon;
+	const gchar *cTooltip;
+	CDWidget* (*build_widget) (void);
+	GtkToolItem *pCategoryButton;
+	GtkWidget *pMainWindow;
+	CDWidget *pCdWidget;
+} CDCategory;
+
+typedef enum {
+	CD_CATEGORY_ITEMS=0,
+	CD_CATEGORY_CONFIG,
+	CD_CATEGORY_THEMES,
+	CD_CATEGORY_PLUGINS,
+	CD_NB_CATEGORIES
+} CDCategoryEnum;
 
 static GtkWidget *s_pSimpleConfigWindow = NULL;
-static const  gchar *s_cCurrentModuleName = NULL;
-static int s_iIconSize;
-static int s_iTaskbarType;
-static gchar *s_cHoverAnim = NULL;
-static gchar *s_cHoverEffect = NULL;
-static gchar *s_cClickAnim = NULL;
-static gchar *s_cClickEffect = NULL;
-static int s_iEffectOnDisappearance = -1;
-static gboolean s_bShowThemePage = FALSE;
+static CDCategoryEnum s_iCurrentCategory = 0;
 
-extern gchar *g_cConfFile;
-extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCairoDockDataDir;
-extern gboolean g_bUseOpenGL;
+extern CairoDock *g_pMainDock;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
-#define cd_reload(module_name) do {\
-	pManager = gldi_get_manager (module_name);\
-	if (pManager != NULL)\
-		gldi_reload_manager_from_keyfile (pManager, pKeyFile);\
-	} while (0)
+static CDWidget *_build_items_widget (void);
+static CDWidget *_build_config_widget (void);
+static CDWidget *_build_themes_widget (void);
+static CDWidget *_build_plugins_widget (void);
 
-static gchar *_get_animation_name (int i)
-{
-	switch (i)
-	{
-		case 0:
-			return g_strdup ("bounce");
-		case 1:
-			return g_strdup ("rotate");
-		case 2:
-			return g_strdup ("blink");
-		case 3:
-			return g_strdup ("pulse");
-		case 4:
-			return g_strdup ("wobbly");
-		case 5:
-			return g_strdup ("wave");
-		case 6:
-			return g_strdup ("spot");
-		default:
-		return g_strdup ("");
-	}
-}
-static const gchar *_get_animation_number (const gchar *s)
-{
-	if (!s)
-		return "";
-	if (strcmp (s, "bounce") == 0)
-		return "0";
-	
-	if (strcmp (s, "rotate") == 0)
-		return "1";
-	
-	if (strcmp (s, "blink") == 0)
-		return "2";
-	
-	if (strcmp (s, "pulse") == 0)
-		return "3";
-	
-	if (strcmp (s, "wobbly") == 0)
-		return "4";
-	
-	if (strcmp (s, "wave") == 0)
-		return "5";
-	
-	if (strcmp (s, "spot") == 0)
-		return "6";
-	return "";
-}
-static gchar *_get_effect_name (int i)
-{
-	switch (i)
-	{
-		case 0:
-			return g_strdup ("fire");
-		case 1:
-			return g_strdup ("stars");
-		case 2:
-			return g_strdup ("rain");
-		case 3:
-			return g_strdup ("snow");
-		case 4:
-			return g_strdup ("storm");
-		case 5:
-			return g_strdup ("firework");
-		default:
-		return g_strdup ("");
-	}
-}
-static const gchar *_get_effect_number (const gchar *s)
-{
-	if (!s)
-		return "";
-	if (strcmp (s, "fire") == 0)
-		return "0";
-	
-	if (strcmp (s, "stars") == 0)
-		return "1";
-	
-	if (strcmp (s, "rain") == 0)
-		return "2";
-	
-	if (strcmp (s, "snow") == 0)
-		return "3";
-	
-	if (strcmp (s, "storm") == 0)
-		return "4";
-	
-	if (strcmp (s, "firework") == 0)
-		return "5";
-	return "";
-}
+static void cairo_dock_enable_apply_button (GtkWidget *pMainWindow, gboolean bEnable);
+static void cairo_dock_select_category (GtkWidget *pMainWindow, CDCategoryEnum iCategory);
 
-static gchar * _make_simple_conf_file (void)
-{
-	//\_____________ On actualise le fichier de conf simple.
-	// on cree le fichier au besoin, et on l'ouvre.
-	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
-	/// at the moment, always copy the conf file, because when applied, it's modified with the themes keys. this will not occur with the next version ;-)
-	///if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+static CDCategory s_pCategories[CD_NB_CATEGORIES] = {
 	{
-		cairo_dock_copy_file (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE, cConfFilePath);
-	}
-	
-	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
-	
-	if (cairo_dock_conf_file_needs_update (pSimpleKeyFile, CAIRO_DOCK_VERSION))
-	{
-		cairo_dock_upgrade_conf_file (cConfFilePath, pSimpleKeyFile, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_SIMPLE_CONF_FILE);
-		
-		g_key_file_free (pSimpleKeyFile);
-		pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-		g_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
-	}
-	
-	// comportement
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "screen border", myDocksParam.iScreenBorder);
-	
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "visibility", myDocksParam.iVisibility);
-	
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "show_on_click", (myDocksParam.bShowSubDockOnClick ? 1 : 0));
-	
-	g_key_file_set_string (pSimpleKeyFile, "Behavior", "hide effect", myDocksParam.cHideEffect);
-	
-	int iTaskbarType;
-	if (! myTaskbarParam.bShowAppli)
-		iTaskbarType = 0;
-	else if (myTaskbarParam.bHideVisibleApplis)
-		iTaskbarType = 1;
-	else if (myTaskbarParam.bGroupAppliByClass)
-		iTaskbarType = 2;
-	else
-		iTaskbarType = 3;
-	s_iTaskbarType = iTaskbarType;
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "taskbar", iTaskbarType);
-
-	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "place icons", myTaskbarParam.iIconPlacement);
-	
-	// animations
-	CairoDockModule *pModule;
-	CairoDockModuleInstance *pModuleInstance;
-	int iAnimOnMouseHover = -1;
-	int iAnimOnClick = -1;
-	int iEffectOnMouseHover = -1;
-	int iEffectOnClick = -1;
-	int iEffectOnDisappearance = 4;
-	gsize length;
-	pModule = cairo_dock_find_module_from_name ("Animated icons");
-	if (pModule != NULL && pModule->pInstancesList != NULL)
-	{
-		pModuleInstance = pModule->pInstancesList->data;
-		GKeyFile *pKeyFile = cairo_dock_open_key_file (pModuleInstance->cConfFilePath);
-		if (pKeyFile)
-		{
-			int *pAnimations = g_key_file_get_integer_list (pKeyFile, "Global", "hover effects", &length, NULL);
-			if (pAnimations != NULL)
-			{
-				iAnimOnMouseHover = pAnimations[0];
-				g_free (pAnimations);
-			}
-			pAnimations = g_key_file_get_integer_list (pKeyFile, "Global", "click launchers", &length, NULL);
-			if (pAnimations != NULL)
-			{
-				iAnimOnClick = pAnimations[0];
-				g_free (pAnimations);
-			}
-			g_key_file_free (pKeyFile);
-		}
-	}
-	
-	pModule = cairo_dock_find_module_from_name ("icon effects");
-	if (pModule != NULL && pModule->pInstancesList != NULL)
-	{
-		pModuleInstance = pModule->pInstancesList->data;
-		GKeyFile *pKeyFile = cairo_dock_open_key_file (pModuleInstance->cConfFilePath);
-		if (pKeyFile)
-		{
-			int *pAnimations = g_key_file_get_integer_list (pKeyFile, "Global", "effects", &length, NULL);
-			if (pAnimations != NULL)
-			{
-				iEffectOnMouseHover = pAnimations[0];
-				g_free (pAnimations);
-			}
-			pAnimations = g_key_file_get_integer_list (pKeyFile, "Global", "click launchers", &length, NULL);
-			if (pAnimations != NULL)
-			{
-				iEffectOnClick = pAnimations[0];
-				g_free (pAnimations);
-			}
-			g_key_file_free (pKeyFile);
-		}
-	}
-	
-	s_iEffectOnDisappearance = -1;
-	pModule = cairo_dock_find_module_from_name ("illusion");
-	if (pModule != NULL && pModule->pInstancesList != NULL)
-	{
-		pModuleInstance = pModule->pInstancesList->data;
-		GKeyFile *pKeyFile = cairo_dock_open_key_file (pModuleInstance->cConfFilePath);
-		if (pKeyFile)
-		{
-			s_iEffectOnDisappearance = g_key_file_get_integer (pKeyFile, "Global", "disappearance", NULL);
-			g_key_file_free (pKeyFile);
-		}
-	}
-	
-	g_free (s_cHoverAnim);
-	s_cHoverAnim = _get_animation_name (iAnimOnMouseHover);
-	g_free (s_cHoverEffect);
-	s_cHoverEffect = _get_effect_name (iEffectOnMouseHover);
-	g_free (s_cClickAnim);
-	s_cClickAnim = _get_animation_name (iAnimOnClick);
-	g_free (s_cClickEffect);
-	s_cClickEffect = _get_effect_name (iEffectOnClick);
-	const gchar *cOnMouseHover[2] = {s_cHoverAnim, s_cHoverEffect};
-	const gchar *cOnClick[2] = {s_cClickAnim, s_cClickEffect};
-	
-	if (g_bUseOpenGL)
-		g_key_file_set_string_list (pSimpleKeyFile, "Behavior", "anim_hover", cOnMouseHover, 2);
-	/**else
-	{
-		g_key_file_remove_comment (pSimpleKeyFile, "Behavior", "anim_hover", NULL);
-		g_key_file_remove_key (pSimpleKeyFile, "Behavior", "anim_hover", NULL);
-	}*/
-	g_key_file_set_string_list (pSimpleKeyFile, "Behavior", "anim_click", cOnClick, 2);
-	if (g_bUseOpenGL)
-		g_key_file_set_integer (pSimpleKeyFile, "Behavior", "anim_disappear", s_iEffectOnDisappearance);
-	/**else
-	{
-		g_key_file_remove_comment (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
-		g_key_file_remove_key (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
-	}
-	if (g_bUseOpenGL)
-	{
-		gchar *cComment = g_key_file_get_comment (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
-		if (cComment != NULL)
-		{
-			gchar *str = cComment;
-			cComment = g_strdup_printf ("l[%s;%s;%s;%s;%s;%s]%s", "Evaporate", "Fade out", "Explode", "Break", "Black Hole", "Random", cComment+1);
-			g_free (str);
-			g_key_file_set_comment (pSimpleKeyFile, "Behavior", "anim_disappear", cComment, NULL);
-			g_free (cComment);
-		}
-	}*/
-	
-	// apparence
-	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIconsParam.cIconTheme);
-	
-	int iIconSize = cairo_dock_convert_icon_size_to_enum (myIconsParam.iIconWidth);
-	iIconSize --;  // skip the "default" enum
-	
-	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "icon size", iIconSize);
-	s_iIconSize = iIconSize;
-	
-	g_key_file_set_string (pSimpleKeyFile, "Appearance", "main dock view", myBackendsParam.cMainDockDefaultRendererName);
-	
-	g_key_file_set_string (pSimpleKeyFile, "Appearance", "sub-dock view", myBackendsParam.cSubDockDefaultRendererName);
-	
-	// applets
-	gchar *cLink = cairo_dock_get_third_party_applets_link ();
-	g_key_file_set_string (pSimpleKeyFile, "Add-ons", "third party", cLink);
-	g_free (cLink);
-	
-	cairo_dock_write_keys_to_file (pSimpleKeyFile, cConfFilePath);
-	
-	g_key_file_free (pSimpleKeyFile);
-	return cConfFilePath;
-}
-
-
-static void _load_theme (gboolean bSuccess, GtkWidget *pWaitingDialog)
-{
-	cd_debug ("%s ()", __func__);
-	if (s_pSimpleConfigWindow == NULL)  // si l'utilisateur a ferme la fenetre entre-temps, on considere qu'il a abandonne.
-	{
-		cd_debug ("user has given up");
-		return ;
-	}
-	if (bSuccess)
-	{
-		cd_debug ("loading new current theme...");
-		cairo_dock_load_current_theme ();
-		
-		cairo_dock_set_status_message (s_pSimpleConfigWindow, "");
-		
-		cd_debug ("now reload window");
-		gchar *cConfFilePath = _make_simple_conf_file ();
-		g_free (cConfFilePath);
-		s_bShowThemePage = TRUE;
-		cairo_dock_reload_generic_gui (s_pSimpleConfigWindow);
-	}
-	else
-	{
-		cd_debug ("Could not import the theme.");
-		cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Could not import the theme."));
-	}
-	gtk_widget_destroy (pWaitingDialog);
-}
-static gboolean on_apply_theme_simple (GtkWidget *pThemeNotebook, gpointer data)
-{
-	//\_______________ On ouvre le fichier de conf.
-	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
-	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_val_if_fail (pSimpleKeyFile != NULL, TRUE);
-	
-	//\_______________ On recupere l'onglet courant.
-	int iNumPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (pThemeNotebook));
-	pThemeNotebook = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pThemeNotebook), iNumPage);
-	
-	//\_______________ On effectue les actions correspondantes.
-	gboolean bReloadWindow = FALSE;
-	switch (iNumPage)
-	{
-		case 0:  // load a theme
-			cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Importing theme..."));
-			bReloadWindow = cairo_dock_load_theme (pSimpleKeyFile, (GFunc) _load_theme, s_pSimpleConfigWindow);  // bReloadWindow reste a FALSE, on ne rechargera la fenetre que lorsque le theme aura ete importe.
-		break;
-		
-		case 1:  // save current theme
-			bReloadWindow = cairo_dock_save_current_theme (pSimpleKeyFile);
-			if (bReloadWindow)
-				cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Theme has been saved"));
-		break;
-		
-		case 2:  // delete some themes
-			bReloadWindow = cairo_dock_delete_user_themes (pSimpleKeyFile);
-			if (bReloadWindow)
-				cairo_dock_set_status_message (s_pSimpleConfigWindow, _("Themes have been deleted"));
-		break;
-	}
-	
-	//\_______________ On nettoie le fichier de conf si on recharge la fenetre.
-	if(bReloadWindow)
-	{
-		g_key_file_remove_group (pSimpleKeyFile, "Save", NULL);
-		g_key_file_remove_group (pSimpleKeyFile, "Delete", NULL);
-		cairo_dock_write_keys_to_file (pSimpleKeyFile, cConfFilePath);
-		s_bShowThemePage = TRUE;
-	}
-	g_key_file_free (pSimpleKeyFile);
-	g_free (cConfFilePath);
-	
-	return !bReloadWindow;
-}
-
-static gboolean on_apply_config_simple (gpointer data)
-{
-	//\___________________ On recupere l'onglet courant.
-	GtkWidget * pMainVBox= gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
-	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
-	GtkWidget *pGroupWidget = children->data;
-	g_list_free (children);
-	int iNumPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (pGroupWidget));
-	if (iNumPage == CAIRO_DOCK_THEMES_PAGE)
-	{
-		CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (s_pSimpleConfigWindow, "Themes", "notebook");
-		g_return_val_if_fail (myWidget != NULL && myWidget->pSubWidgetList != NULL, TRUE);
-		return on_apply_theme_simple (myWidget->pSubWidgetList->data, data);
-	}
-	else if (iNumPage == CAIRO_DOCK_SHORTKEY_PAGE || iNumPage == CAIRO_DOCK_ADDONS_PAGE)
-	{
-		return TRUE;
-	}
-	
-	//\_____________ On actualise le fichier de conf principal.
-	// on ouvre les 2 fichiers (l'un en lecture, l'autre en ecriture).
-	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
-	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_free (cConfFilePath);
-	g_return_val_if_fail (pSimpleKeyFile != NULL, TRUE);
-	GKeyFile* pKeyFile = cairo_dock_open_key_file (g_cConfFile);
-	g_return_val_if_fail (pKeyFile != NULL, TRUE);
-	
-	// comportement
-	CairoDockPositionType iScreenBorder = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "screen border", NULL);
-	g_key_file_set_integer (pKeyFile, "Position", "screen border", iScreenBorder);
-	
-	int iVisibility = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "visibility", NULL);
-	g_key_file_set_integer (pKeyFile, "Accessibility", "visibility", iVisibility);
-	
-	gchar *cHideEffect = g_key_file_get_string (pSimpleKeyFile, "Behavior", "hide effect", NULL);
-	g_key_file_set_string (pKeyFile, "Accessibility", "hide effect", cHideEffect);
-	g_free (cHideEffect);
-	
-	int iShowOnClick = (g_key_file_get_integer (pSimpleKeyFile, "Behavior", "show_on_click", NULL) == 1);
-	g_key_file_set_integer (pKeyFile, "Accessibility", "show_on_click", iShowOnClick);
-	
-	int iTaskbarType = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "taskbar", NULL);
-	if (iTaskbarType != s_iTaskbarType)
-	{
-		gboolean bShowAppli = TRUE, bHideVisible, bCurrentDesktopOnly, bMixLauncherAppli, bGroupAppliByClass;
-		switch (iTaskbarType)
-		{
-			case 0:
-				bShowAppli = FALSE;
-			break;
-			case 1:
-				bMixLauncherAppli = TRUE;
-				bHideVisible = TRUE;
-				bGroupAppliByClass = FALSE;
-				bCurrentDesktopOnly = FALSE;
-			break;
-			case 2:
-				bMixLauncherAppli = TRUE;
-				bGroupAppliByClass = TRUE;
-				bHideVisible = FALSE;
-				bCurrentDesktopOnly = FALSE;
-			break;
-			case 3:
-			default:
-				bCurrentDesktopOnly = TRUE;
-				bMixLauncherAppli = FALSE;
-				bGroupAppliByClass = FALSE;
-				bHideVisible = FALSE;
-			break;
-		}
-		g_key_file_set_boolean (pKeyFile, "TaskBar", "show applications", bShowAppli);
-		if (bShowAppli)  // sinon on inutile de modifier les autres parametres.
-		{
-			g_key_file_set_boolean (pKeyFile, "TaskBar", "hide visible", bHideVisible);
-			g_key_file_set_boolean (pKeyFile, "TaskBar", "current desktop only", bCurrentDesktopOnly);
-			g_key_file_set_boolean (pKeyFile, "TaskBar", "mix launcher appli", bMixLauncherAppli);
-			g_key_file_set_boolean (pKeyFile, "TaskBar", "group by class", bGroupAppliByClass);
-		}
-		s_iTaskbarType = iTaskbarType;
-	}
-
-	int iPlaceIcons = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "place icons", NULL);
-	g_key_file_set_integer (pKeyFile, "TaskBar", "place icons", iPlaceIcons);
-	
-	// animations
-	gsize length;
-	gchar **cOnMouseHover = g_key_file_get_string_list (pSimpleKeyFile, "Behavior", "anim_hover", &length, NULL);
-	gchar **cOnClick = g_key_file_get_string_list (pSimpleKeyFile, "Behavior", "anim_click", &length, NULL);
-	int iEffectOnDisappearance = -1;
-	///if (g_key_file_has_key (pSimpleKeyFile, "Behavior", "anim_disappear", NULL))
-	if (g_bUseOpenGL)
-		iEffectOnDisappearance = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
-	
-	CairoDockModule *pModule;
-	CairoDockModuleInstance *pModuleInstanceAnim = NULL;
-	CairoDockModuleInstance *pModuleInstanceEffect = NULL;
-	CairoDockModuleInstance *pModuleInstanceIllusion = NULL;
-	
-	if (cOnMouseHover && cOnMouseHover[0])
-	{
-		if (strcmp (cOnMouseHover[0], s_cHoverAnim) != 0)
-		{
-			pModule = cairo_dock_find_module_from_name ("Animated icons");
-			if (pModule != NULL && pModule->pInstancesList != NULL)
-			{
-				pModuleInstanceAnim = pModule->pInstancesList->data;
-				cairo_dock_update_conf_file (pModuleInstanceAnim->cConfFilePath,
-					G_TYPE_STRING, "Global", "hover effects", _get_animation_number (cOnMouseHover[0]),
-					G_TYPE_INVALID);
-			}
-			g_free (s_cHoverAnim);
-			s_cHoverAnim = g_strdup (cOnMouseHover[0]);
-		}
-		if (cOnMouseHover[1] && strcmp (cOnMouseHover[1], s_cHoverEffect) != 0)
-		{
-			pModule = cairo_dock_find_module_from_name ("icon effects");
-			if (pModule != NULL && pModule->pInstancesList != NULL)
-			{
-				pModuleInstanceEffect = pModule->pInstancesList->data;
-				cairo_dock_update_conf_file (pModuleInstanceEffect->cConfFilePath,
-					G_TYPE_STRING, "Global", "effects", _get_effect_number (cOnMouseHover[1]),
-					G_TYPE_INVALID);
-			}
-			g_free (s_cHoverEffect);
-			s_cHoverEffect = g_strdup (cOnMouseHover[1]);
-		}
-	}
-	if (cOnClick && cOnClick[0])
-	{
-		if (strcmp (cOnClick[0], s_cClickAnim) != 0)
-		{
-			pModule = cairo_dock_find_module_from_name ("Animated icons");
-			if (pModule != NULL && pModule->pInstancesList != NULL)
-			{
-				pModuleInstanceAnim = pModule->pInstancesList->data;
-				const gchar *cAnimation = _get_animation_number (cOnClick[0]);
-				cairo_dock_update_conf_file (pModuleInstanceAnim->cConfFilePath,
-					G_TYPE_STRING, "Global", "click launchers", cAnimation,
-					G_TYPE_STRING, "Global", "click applis", cAnimation,
-					G_TYPE_STRING, "Global", "click applets", cAnimation,
-					G_TYPE_INVALID);
-			}
-			g_free (s_cClickAnim);
-			s_cClickAnim = g_strdup (cOnClick[0]);
-		}
-		if (cOnClick[1] && strcmp (cOnClick[1], s_cClickEffect) != 0)
-		{
-			pModule = cairo_dock_find_module_from_name ("icon effects");
-			if (pModule != NULL && pModule->pInstancesList != NULL)
-			{
-				pModuleInstanceEffect = pModule->pInstancesList->data;
-				const gchar *cAnimation = _get_effect_number (cOnClick[1]);
-				cairo_dock_update_conf_file (pModuleInstanceEffect->cConfFilePath,
-					G_TYPE_STRING, "Global", "click launchers", cAnimation,
-					G_TYPE_STRING, "Global", "click applis", cAnimation,
-					G_TYPE_STRING, "Global", "click applets", cAnimation,
-					G_TYPE_INVALID);
-			}
-			g_free (s_cClickEffect);
-			s_cClickEffect = g_strdup (cOnClick[1]);
-		}
-	}
-	if (iEffectOnDisappearance != s_iEffectOnDisappearance)
-	{
-		pModule = cairo_dock_find_module_from_name ("illusion");
-		if (pModule != NULL && pModule->pInstancesList != NULL)
-		{
-			pModuleInstanceIllusion = pModule->pInstancesList->data;
-			cairo_dock_update_conf_file (pModuleInstanceIllusion->cConfFilePath,
-				G_TYPE_INT, "Global", "disappearance", iEffectOnDisappearance,
-				G_TYPE_INT, "Global", "appearance", iEffectOnDisappearance,
-				G_TYPE_INVALID);
-		}
-		s_iEffectOnDisappearance = iEffectOnDisappearance;
-	}
-	
-	g_strfreev (cOnMouseHover);
-	g_strfreev (cOnClick);
-	
-	// apparence
-	gchar *cIconTheme = g_key_file_get_string (pSimpleKeyFile, "Appearance", "default icon directory", NULL);
-	g_key_file_set_string (pKeyFile, "Icons", "default icon directory", cIconTheme);
-	g_free (cIconTheme);
-	
-	int iIconSize = g_key_file_get_integer (pSimpleKeyFile, "Appearance", "icon size", NULL);
-	if (iIconSize != s_iIconSize)
-	{
-		int iLauncherSize, iIconGap;
-		double fMaxScale, fReflectSize;
-		iLauncherSize = cairo_dock_convert_icon_size_to_pixels (iIconSize+1, &fMaxScale, &fReflectSize, &iIconGap);  // +1 to skip the "default" enum
-		
-		gint tab[2] = {iLauncherSize, iLauncherSize};
-		g_key_file_set_integer_list (pKeyFile, "Icons", "launcher size", tab, 2);
-		tab[0] = myIconsParam.iSeparatorWidth;
-		g_key_file_set_integer_list (pKeyFile, "Icons", "separator size", tab, 2);
-		g_key_file_set_double (pKeyFile, "Icons", "zoom max", fMaxScale);
-		g_key_file_set_double (pKeyFile, "Icons", "field depth", fReflectSize);
-		g_key_file_set_integer (pKeyFile, "Icons", "icon gap", iIconGap);
-		
-		s_iIconSize = iIconSize;
-	}
-	
-	gchar *cMainDockDefaultRendererName = g_key_file_get_string (pSimpleKeyFile, "Appearance", "main dock view", NULL);
-	g_key_file_set_string (pKeyFile, "Views", "main dock view", cMainDockDefaultRendererName);
-	g_free (cMainDockDefaultRendererName);
-	
-	gchar *cSubDockDefaultRendererName = g_key_file_get_string (pSimpleKeyFile, "Appearance", "sub-dock view", NULL);
-	g_key_file_set_string (pKeyFile, "Views", "sub-dock view", cSubDockDefaultRendererName);
-	g_free (cSubDockDefaultRendererName);
-	
-	// on ecrit tout.
-	cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
-	
-	//\_____________ On recharge les modules concernes.
-	GldiManager *pManager;
-	cd_reload ("Docks");
-	cd_reload ("Taskbar");
-	cd_reload ("Icons");
-	cd_reload ("Backends");
-	/**CairoDockInternalModule *pInternalModule;
-	cd_reload ("Position");
-	cd_reload ("Accessibility");
-	cd_reload ("TaskBar");
-	cd_reload ("Icons");
-	cd_reload ("Views");*/
-	if (pModuleInstanceAnim != NULL)
-	{
-		cairo_dock_reload_module_instance (pModuleInstanceAnim, TRUE);
-	}
-	if (pModuleInstanceEffect != NULL)
-	{
-		cairo_dock_reload_module_instance (pModuleInstanceEffect, TRUE);
-	}
-	if (pModuleInstanceIllusion != NULL)
-	{
-		cairo_dock_reload_module_instance (pModuleInstanceIllusion, TRUE);
-	}
-	
-	return TRUE;
-}
-
-static void on_destroy_config_simple (gpointer data)
-{
-	s_pSimpleConfigWindow = NULL;
-}
-
-static void _cairo_dock_add_one_animation_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
-{
-	GtkTreeIter iter;
-	memset (&iter, 0, sizeof (GtkTreeIter));
-	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
-	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
-		CAIRO_DOCK_MODEL_NAME, (pRecord && pRecord->cDisplayedName != NULL && *pRecord->cDisplayedName != '\0' ? pRecord->cDisplayedName : cName),
-		CAIRO_DOCK_MODEL_RESULT, cName, -1);
-}
-static void _add_one_animation_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
-{
-	if (!pRecord->bIsEffect)
-		_cairo_dock_add_one_animation_item (cName, pRecord, pModele);
-}
-static void _add_one_effect_item (const gchar *cName, CairoDockAnimationRecord *pRecord, GtkListStore *pModele)
-{
-	if (pRecord->bIsEffect)
-		_cairo_dock_add_one_animation_item (cName, pRecord, pModele);
-}
-static void _make_double_anim_widget (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, const gchar *cLabel)
-{
-	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, cGroupName, cKeyName);
-	if (myWidget == NULL)  // peut arriver vu que en mode cairo on n'a pas "anim_hover"
-		return;
-	
-	gsize length = 0;
-	gchar **cValues = g_key_file_get_string_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
-
-	GtkWidget *box = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
-	gtk_box_pack_end (GTK_BOX (myWidget->pKeyBox), box, FALSE, FALSE, 0);
-	
-	GtkWidget *pLabel = gtk_label_new (_("Animation:"));
-	gtk_box_pack_start (GTK_BOX (box), pLabel, FALSE, FALSE, 0);
-	
-	GtkWidget *pOneWidget = cairo_dock_gui_make_combo (FALSE);
-	GtkTreeModel *modele = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
-	_cairo_dock_add_one_animation_item ("", NULL, GTK_LIST_STORE (modele));
-	cairo_dock_foreach_animation ((GHFunc) _add_one_animation_item, modele);
-	gtk_box_pack_start (GTK_BOX (box), pOneWidget, FALSE, FALSE, 0);
-	cairo_dock_gui_select_in_combo (pOneWidget, cValues[0]);
-	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);
-	
-	if (g_bUseOpenGL)
-	{
-		#if (GTK_MAJOR_VERSION < 3)
-		pLabel = gtk_vseparator_new ();
-		#else
-		pLabel = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-		#endif
-		gtk_widget_set_size_request (pLabel, 20, 1);
-		gtk_box_pack_start (GTK_BOX (box), pLabel, FALSE, FALSE, 0);
-		
-		pLabel = gtk_label_new (_("Effects:"));
-		gtk_box_pack_start (GTK_BOX (box), pLabel, FALSE, FALSE, 0);
-		
-		pOneWidget = cairo_dock_gui_make_combo (FALSE);
-		modele = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
-		_cairo_dock_add_one_animation_item ("", NULL, GTK_LIST_STORE (modele));
-		cairo_dock_foreach_animation ((GHFunc) _add_one_effect_item, modele);
-		gtk_box_pack_start (GTK_BOX (box), pOneWidget, FALSE, FALSE, 0);
-		cairo_dock_gui_select_in_combo (pOneWidget, cValues[1]);
-		myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);
-	}
-	g_strfreev (cValues);
-}
-static void _make_theme_manager_widget (GtkWidget *pSimpleConfigWindow)
-{
-	//\_____________ On recupere notre emplacement perso dans la fenetre.
-	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, "Themes", "notebook");
-	g_return_if_fail (myWidget != NULL);
-	
-	//\_____________ On construit le widget a partir du fichier de conf du theme-manager.
-	const gchar *cConfFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/themes.conf";
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (pSimpleConfigWindow), "widget-list");
-	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pSimpleConfigWindow), "garbage");
-	GtkWidget *pThemeNotebook = cairo_dock_build_conf_file_widget (cConfFilePath,
+		N_("Current items"),
+		"icon-all.svg",
+		N_("Current items"),
+		_build_items_widget,
 		NULL,
-		pSimpleConfigWindow,
-		&pWidgetList,
-		pDataGarbage,
-		NULL);  // les widgets seront ajoutes a la liste deja existante. Donc lors de l'ecriture, ils seront ecrit aussi, dans les cles definies dans le fichier de conf (donc de nouveaux groupes seront ajoutés).
+		NULL,
+		NULL
+	},{
+		N_("Configuration"),
+		"gtk-preferences",
+		N_("Configuration"),
+		_build_config_widget,
+		NULL,
+		NULL,
+		NULL
+	},{
+		N_("Themes"),
+		"icon-appearance.svg",
+		N_("Themes"),
+		_build_themes_widget,
+		NULL,
+		NULL,
+		NULL
+	},{
+		N_("Add-ons"),
+		"icon-plug-ins.svg",
+		N_("Add-ons"),
+		_build_plugins_widget,
+		NULL,
+		NULL,
+		NULL
+	},
+};
+
+
+static inline CDCategory *_get_category (CDCategoryEnum iCategory)
+{
+	return &s_pCategories[iCategory];
+}
+
+static inline void _set_current_category (CDCategoryEnum iCategory)
+{
+	s_iCurrentCategory = iCategory;
+}
+
+static inline CDCategory *_get_current_category (void)
+{
+	return _get_category (s_iCurrentCategory);
+}
+
+static CDWidget *_build_items_widget (void)
+{
+	CDWidget *pCdWidget = CD_WIDGET (cairo_dock_items_widget_new ());
 	
-	// l'onglet du groupe a deja son propre ascenseur.
-	int i, n = gtk_notebook_get_n_pages (GTK_NOTEBOOK (pThemeNotebook));
-	for (i = 0; i < n; i ++)
-	{
-		GtkWidget *pScrolledWindow = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pThemeNotebook), i);
-		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-	}
+	return pCdWidget;
+}
+
+static CDWidget *_build_config_widget (void)
+{
+	CDWidget *pCdWidget = CD_WIDGET (cairo_dock_config_widget_new ());
 	
-	g_object_set (pThemeNotebook, "height-request", MIN (CAIRO_DOCK_SIMPLE_PANEL_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 100), NULL);  // sinon le notebook est tout petit :-/
-	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox),
-		pThemeNotebook,
-		TRUE,
-		TRUE,
+	return pCdWidget;
+}
+
+static CDWidget *_build_themes_widget (void)
+{
+	CDWidget *pCdWidget = CD_WIDGET (cairo_dock_themes_widget_new (GTK_WINDOW (s_pSimpleConfigWindow)));
+	
+	return pCdWidget;
+}
+
+static CDWidget *_build_plugins_widget (void)
+{
+	CDWidget *pCdWidget = CD_WIDGET (cairo_dock_plugins_widget_new ());
+	
+	return pCdWidget;
+}
+
+static void on_click_quit (GtkButton *button, GtkWidget *pMainWindow)
+{
+	gtk_widget_destroy (pMainWindow);
+}
+static void on_click_apply (GtkButton *button, GtkWidget *pMainWindow)
+{
+	CDCategory *pCategory = _get_current_category ();
+	g_print ("%s (%s, %p -> %p)\n", __func__, pCategory->cName, pCategory, pCategory->pCdWidget);
+	CDWidget *pCdWidget = pCategory->pCdWidget;
+	if (pCdWidget)
+		cairo_dock_widget_apply (pCdWidget);
+}
+GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth, int iHeight)
+{
+	//\_____________ make a new window.
+	GtkWidget *pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_icon_from_file (GTK_WINDOW (pMainWindow), GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
+	if (cTitle != NULL)
+		gtk_window_set_title (GTK_WINDOW (pMainWindow), cTitle);
+	
+	GtkWidget *pMainVBox = _gtk_vbox_new (0*CAIRO_DOCK_FRAME_MARGIN);  // all elements will be packed in a VBox
+	gtk_container_add (GTK_CONTAINER (pMainWindow), pMainVBox);
+	
+	//\_____________ add apply/quit buttons.
+	GtkWidget *pButtonsHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN*2);
+	gtk_box_pack_end (GTK_BOX (pMainVBox),
+		pButtonsHBox,
+		FALSE,
+		FALSE,
 		0);
-	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pThemeNotebook);  // on le met dans la liste, non pas pour recuperer sa valeur (d'ailleurs un notebook n'a pas encore de valeur), mais pour pouvoir y acceder facilement plus tard.
-	g_object_set_data (G_OBJECT (pSimpleConfigWindow), "widget-list", pWidgetList);  // on remet la liste, car on prepend les elements dedans, donc son pointeur a change.
 	
-	//\_____________ On charge les widgets perso de ce fichier.
-	cairo_dock_make_tree_view_for_delete_themes (pSimpleConfigWindow);
-}
-static void _make_modules_widget (GtkWidget *pSimpleConfigWindow)
-{
-	//\_____________ On recupere notre emplacement perso dans la fenetre.
-	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, "Add-ons", "modules");
-	g_return_if_fail (myWidget != NULL);
+	GtkWidget *pQuitButton = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+	g_signal_connect (G_OBJECT (pQuitButton), "clicked", G_CALLBACK(on_click_quit), pMainWindow);
+	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
+		pQuitButton,
+		FALSE,
+		FALSE,
+		0);
 	
-	//\_____________ On construit le tree-view.
-	GtkWidget *pOneWidget = cairo_dock_build_modules_treeview ();
-	
-	//\_____________ On l'ajoute a la fenetre.
-	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
-	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.
-	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow, FALSE, FALSE, 0);
-	
-	//\______________ On construit le widget de prevue et on le rajoute a la suite.
-	gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
-	GPtrArray *pDataGarbage = g_object_get_data (G_OBJECT (pSimpleConfigWindow), "garbage");
-	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (pSimpleConfigWindow, pOneWidget, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
-	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pPreviewBox, FALSE, FALSE, 0);
-	g_free (cDefaultMessage);
-}
-static void _make_shortkeys_widget (GtkWidget *pSimpleConfigWindow)
-{
-	//\_____________ On recupere notre emplacement perso dans la fenetre.
-	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget (pSimpleConfigWindow, "Shortkeys", "shortkeys");
-	g_return_if_fail (myWidget != NULL);
-	
-	//\_____________ On construit le tree-view.
-	GtkWidget *pOneWidget = cairo_dock_build_shortkeys_widget ();
-	
-	//\_____________ On l'ajoute a la fenetre.
-	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 175), NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
-	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);  // on le met dans la liste, non pas pour recuperer sa valeur, mais pour pouvoir y acceder facilement plus tard.
-	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow, FALSE, FALSE, 0);
-}
-static void _make_widgets (GtkWidget *pSimpleConfigWindow, GKeyFile *pKeyFile)
-{
-	//\_____________ On ajoute le widget des animations au survol.
-	_make_double_anim_widget (pSimpleConfigWindow, pKeyFile, "Behavior", "anim_hover", _("On mouse hover:"));
-	//\_____________ On ajoute le widget des animations au clic.
-	_make_double_anim_widget (pSimpleConfigWindow, pKeyFile, "Behavior", "anim_click", _("On click:"));
-	//\_____________ On ajoute le widget du theme-manager.
-	_make_theme_manager_widget (pSimpleConfigWindow);
-	//\_____________ On ajoute le widget des modules.
-	_make_modules_widget (pSimpleConfigWindow);
-	//\_____________ On ajoute le widget des shortkeys.
-	_make_shortkeys_widget (pSimpleConfigWindow);
-	//\_____________ On montre la page des themes si necessaire.
-	if (s_bShowThemePage)
-	{
-		GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pSimpleConfigWindow));
-		GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
-		g_return_if_fail (children != NULL);
-		GtkWidget *pNoteBook = children->data;
-		g_list_free (children);
-		gtk_widget_show_all (pNoteBook);
-		gtk_notebook_set_current_page (GTK_NOTEBOOK (pNoteBook), CAIRO_DOCK_THEMES_PAGE);  // due to historical reasons, GtkNotebook refuses to switch to a page unless the child widget is visible. 
-		s_bShowThemePage = FALSE;
-	}
-}
-
-
-static GtkWidget * show_main_gui (void)
-{
-	if (s_pSimpleConfigWindow != NULL)
-	{
-		gtk_window_present (GTK_WINDOW (s_pSimpleConfigWindow));
-		return s_pSimpleConfigWindow;
-	}
-	
-	//\_____________ On construit le fichier de conf simple a partir du .conf normal.
-	gchar *cConfFilePath = _make_simple_conf_file ();
-	
-	//\_____________ On construit la fenetre.
-	s_pSimpleConfigWindow = cairo_dock_build_generic_gui_full (cConfFilePath,
-		NULL,
-		_("Cairo-Dock configuration"),
-		CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT,
-		(CairoDockApplyConfigFunc) on_apply_config_simple,
-		NULL,
-		(GFreeFunc) on_destroy_config_simple,
-		_make_widgets,
-		NULL);
-	
-	//\_____________ On ajoute un bouton "mode avance".
-	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
-	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
-	g_return_val_if_fail (children != NULL, s_pSimpleConfigWindow);
-	GList *w = g_list_last (children);
-	GtkWidget *pButtonsHBox = w->data;
-	g_list_free (children);
+	GtkWidget *pApplyButton = gtk_button_new_from_stock (GTK_STOCK_APPLY);
+	g_signal_connect (G_OBJECT (pApplyButton), "clicked", G_CALLBACK(on_click_apply), pMainWindow);
+	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
+		pApplyButton,
+		FALSE,
+		FALSE,
+		0);
+	g_object_set_data (G_OBJECT (pMainWindow), "apply-button", pApplyButton);
 	
 	GtkWidget *pSwitchButton = cairo_dock_make_switch_gui_button ();
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
@@ -880,146 +223,418 @@ static GtkWidget * show_main_gui (void)
 		FALSE,
 		FALSE,
 		0);
-	gtk_box_reorder_child (GTK_BOX (pButtonsHBox), pSwitchButton, 1);
-	gtk_widget_show_all (pSwitchButton);
 	
-	//\_____________ Petit message la 1ere fois.
-	gchar *cModeFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, ".config-mode");
-	if (! g_file_test (cModeFile, G_FILE_TEST_EXISTS))
-	{
-		g_file_set_contents (cModeFile,
-			"0",
-			-1,
-			NULL);
-		Icon *pIcon = cairo_dock_get_current_active_icon ();
-		if (pIcon == NULL || pIcon->cParentDockName == NULL || cairo_dock_icon_is_being_removed (pIcon))
-			pIcon = cairo_dock_get_dialogless_icon ();
-		CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
-		cairo_dock_show_temporary_dialog_with_default_icon (_("This is the simple configuration panel of Cairo-Dock.\n After you get familiar with it, and if you want to customise your theme\n, you can switch to an advanced mode.\n You can switch from a mode to another at any time."), pIcon, CAIRO_CONTAINER (pDock), 15000);
-	}
-	g_free (cModeFile);
+	//\_____________ add a status-bar.
+	GtkWidget *pStatusBar = gtk_statusbar_new ();
+	#if (GTK_MAJOR_VERSION < 3)
+	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (pStatusBar), FALSE);  // removed in GTK3 (gtk_window_set_has_resize_grip)
+	#endif
+	gtk_box_pack_start (GTK_BOX (pButtonsHBox),  // pMainVBox
+		pStatusBar,
+		FALSE,
+		FALSE,
+		0);
+	g_object_set_data (G_OBJECT (pMainWindow), "status-bar", pStatusBar);
 	
-	return s_pSimpleConfigWindow;
+	//\_____________ resize the window (placement is done later).
+	gtk_window_resize (GTK_WINDOW (pMainWindow),
+		MIN (iWidth, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
+		MIN (iHeight, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
+	
+	gtk_widget_show_all (pMainWindow);
+	
+	return pMainWindow;
 }
 
 
-static void show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
+static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 {
-	cairo_dock_show_items_gui (pModuleInstance->pIcon, NULL, pModuleInstance, iShowPage);
+	g_return_val_if_fail (cImage != NULL, NULL);
+	GtkWidget *pImage = NULL;
+	if (strncmp (cImage, "gtk-", 4) == 0)
+	{
+		if (iSize >= 48)
+			iSize = GTK_ICON_SIZE_DIALOG;
+		else if (iSize >= 32)
+			iSize = GTK_ICON_SIZE_LARGE_TOOLBAR;
+		else
+			iSize = GTK_ICON_SIZE_BUTTON;
+		pImage = gtk_image_new_from_stock (cImage, iSize);
+	}
+	else
+	{
+		gchar *cIconPath = NULL;
+		if (*cImage != '/')
+		{
+			cIconPath = g_strconcat (g_cCairoDockDataDir, "/config-panel/", cImage, NULL);
+			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cIconPath);
+				cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/icons/", cImage, NULL);
+			}
+		}
+		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIconPath ? cIconPath : cImage, iSize, iSize, NULL);
+		g_free (cIconPath);
+		if (pixbuf != NULL)
+		{
+			pImage = gtk_image_new_from_pixbuf (pixbuf);
+			gdk_pixbuf_unref (pixbuf);
+		}
+	}
+	return pImage;
+}
+static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, int iSize, GtkRadioToolButton *group)
+{
+	GtkToolItem *pWidget = (group ? gtk_radio_tool_button_new_from_widget (group) : gtk_radio_tool_button_new (NULL));
+	gtk_tool_item_set_homogeneous (pWidget, TRUE);
+	gtk_tool_item_set_expand (pWidget, TRUE);
+	
+	GtkWidget *hbox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	
+	GtkWidget *pImage = _make_image (cImage, iSize);
+	///gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (pWidget), pImage);
+	GtkWidget *pAlign = gtk_alignment_new (0.5, 0.5, 0., 1.);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_FRAME_MARGIN, 0);
+	gtk_container_add (GTK_CONTAINER (pAlign), pImage);
+	gtk_box_pack_start (GTK_BOX (hbox),
+		pAlign,
+		FALSE,
+		FALSE,
+		0);
+	
+	GtkWidget *pLabel = gtk_label_new (cLabel);
+	pAlign = gtk_alignment_new (0.5, 0.5, 0., 1.);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_FRAME_MARGIN, 0);
+	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
+	gtk_box_pack_start (GTK_BOX (hbox),
+		pAlign,
+		FALSE,
+		FALSE,
+		0);
+	
+	gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (pWidget), hbox);
+	
+	return pWidget;
+}
+
+static void _build_category_widget (CDCategory *pCategory)
+{
+	g_print ("%s (%s)\n", __func__, pCategory->cName);
+	pCategory->pCdWidget = pCategory->build_widget ();
+	gtk_widget_show_all (pCategory->pCdWidget->pWidget);
+	g_print (" %p -> %p\n", pCategory, pCategory->pCdWidget);
+	
+	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pCategory->pMainWindow));
+	gtk_box_pack_start (GTK_BOX (pMainVBox), pCategory->pCdWidget->pWidget, TRUE, TRUE, 0);
+	gtk_box_reorder_child (GTK_BOX (pMainVBox), pCategory->pCdWidget->pWidget, 2);
+}
+
+static void _on_select_category (GtkButton *button, CDCategory *pCategory)
+{
+	if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (button)))  // build/show the widget
+	{
+		g_print ("activate %s\n", pCategory->cName);
+		if (pCategory->pCdWidget == NULL)
+		{
+			_build_category_widget (pCategory);
+		}
+		gtk_widget_show (pCategory->pCdWidget->pWidget);
+		cairo_dock_enable_apply_button (pCategory->pMainWindow, cairo_dock_widget_can_apply (pCategory->pCdWidget));
+		_set_current_category (((int)pCategory-(int)s_pCategories)/sizeof(CDCategory));
+	}
+	else  // hide the widget
+	{
+		g_print ("deactivate %s\n", pCategory->cName);
+		if (pCategory->pCdWidget)  // already built -> hide it
+			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+		cairo_dock_enable_apply_button (pCategory->pMainWindow, FALSE);
+	}
+}
+
+static void _on_window_destroyed (GtkWidget *pMainWindow, gpointer data)
+{
+	CDCategory *pCategory;
+	int i;
+	for (i = 0; i < CD_NB_CATEGORIES; i ++)
+	{
+		pCategory = _get_category (i);
+		pCategory->pCategoryButton = NULL;
+		pCategory->pMainWindow = NULL;
+		cairo_dock_widget_free (pCategory->pCdWidget);
+		pCategory->pCdWidget = NULL;
+	}
+	s_pSimpleConfigWindow = NULL;
+}
+
+GtkWidget *cairo_dock_build_simple_gui_window (void)
+{
+	if (s_pSimpleConfigWindow != NULL)
+	{
+		gtk_window_present (GTK_WINDOW (s_pSimpleConfigWindow));
+		return s_pSimpleConfigWindow;
+	}
+	
+	//\_____________ build a new config window
+	GtkWidget *pMainWindow = cairo_dock_build_generic_gui_window2 (_("Cairo-Dock configuration"),
+		CAIRO_DOCK_SIMPLE_PANEL_WIDTH, CAIRO_DOCK_SIMPLE_PANEL_HEIGHT);
+	s_pSimpleConfigWindow = pMainWindow;
+	g_signal_connect (G_OBJECT (pMainWindow), "destroy", G_CALLBACK(_on_window_destroyed), NULL);
+	
+	//\_____________ add categories
+	GtkWidget *pToolBar = gtk_toolbar_new ();
+	//g_object_set (G_OBJECT (pToolBar), "fill", TRUE, NULL);
+	//g_object_set (G_OBJECT (pToolBar), "homogeneous", TRUE, NULL);
+	gtk_toolbar_set_style (GTK_TOOLBAR (pToolBar), GTK_TOOLBAR_BOTH_HORIZ);
+	gtk_toolbar_set_show_arrow (GTK_TOOLBAR (pToolBar), FALSE);
+	
+	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pMainWindow));
+	gtk_box_pack_start (GTK_BOX (pMainVBox),
+		pToolBar,
+		FALSE,
+		FALSE,
+		0);
+	g_object_set_data (G_OBJECT (pMainWindow), "tool-bar", pToolBar);
+	
+	GtkRadioToolButton *group = NULL;
+	CDCategory *pCategory;
+	int i;
+	for (i = 0; i < CD_NB_CATEGORIES; i ++)
+	{
+		pCategory = _get_category (i);
+		pCategory->pCategoryButton = _make_toolbutton (pCategory->cName,
+			pCategory->cIcon,
+			CAIRO_DOCK_CATEGORY_ICON_SIZE,
+			group);
+		if (!group)
+			group = GTK_RADIO_TOOL_BUTTON (pCategory->pCategoryButton);
+		g_signal_connect (G_OBJECT (pCategory->pCategoryButton), "toggled", G_CALLBACK(_on_select_category), pCategory);
+		pCategory->pMainWindow = pMainWindow;
+		gtk_toolbar_insert (GTK_TOOLBAR (pToolBar), pCategory->pCategoryButton, -1);
+	}
+	
+	gtk_widget_show_all (pToolBar);
+	return pMainWindow;
+}
+
+
+static void cairo_dock_enable_apply_button (GtkWidget *pMainWindow, gboolean bEnable)
+{
+	GtkWidget *pApplyButton = g_object_get_data (G_OBJECT (pMainWindow), "apply-button");
+	if (bEnable)
+		gtk_widget_show (pApplyButton);
+	else
+		gtk_widget_hide (pApplyButton);
+}
+
+
+static void cairo_dock_select_category (GtkWidget *pMainWindow, CDCategoryEnum iCategory)
+{
+	CDCategory *pCategory = _get_category (iCategory);
+	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategory->pCategoryButton), TRUE);  // will first emit a signal to the currently selected button, which will hide the current widget, and then to the new button, which will show the widget.
+}
+
+
+  ///////////////
+ /// BACKEND ///
+///////////////
+
+static GtkWidget *show_main_gui (void)
+{
+	if (s_pSimpleConfigWindow == NULL)
+		cairo_dock_build_simple_gui_window ();
+	
+	cairo_dock_select_category (s_pSimpleConfigWindow, CD_CATEGORY_CONFIG);
+	return s_pSimpleConfigWindow;
 }
 
 static void show_module_gui (const gchar *cModuleName)
 {
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-	g_return_if_fail (pModule != NULL);
+	if (s_pSimpleConfigWindow == NULL)
+		cairo_dock_build_simple_gui_window ();
 	
-	CairoDockModuleInstance *pModuleInstance = (pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);
-	if (pModuleInstance == NULL)  // on n'affiche pas la config d'un module non actif, car il faudrait alors gerer une autre fenetre juste pour eux. Donc seul le mode avance peut le faire.
-		return;
+	cairo_dock_select_category (s_pSimpleConfigWindow, CD_CATEGORY_ITEMS);
+	/// TODO: find a way to present a module that is not activated...
 	
-	cairo_dock_show_items_gui (pModuleInstance->pIcon, NULL, pModuleInstance, -1);
 }
-
 
 static void close_gui (void)
 {
-	if (s_pSimpleConfigWindow == NULL)
-		return;
-	
-	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (s_pSimpleConfigWindow));
-	GList *children = gtk_container_get_children (GTK_CONTAINER (pMainVBox));
-	GList *w = g_list_last (children);
-	GtkWidget *pButtonsHBox = w->data;
-	g_list_free (children);
-	
-	children = gtk_container_get_children (GTK_CONTAINER (pButtonsHBox));
-	w = g_list_last (children);
-	GtkWidget *pQuitButton = w->data;
-	g_list_free (children);
-	
-	gboolean bReturn;
-	g_signal_emit_by_name (pQuitButton, "clicked", NULL, &bReturn);
+	if (s_pSimpleConfigWindow != NULL)
+		gtk_widget_destroy (s_pSimpleConfigWindow);
 }
 
-
-static gboolean _update_module_checkbox (GtkTreeModel *pModel, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
-{
-	gchar *cWantedModuleName = data[0];
-	gchar *cModuleName = NULL;
-	gtk_tree_model_get (pModel, iter,
-		CAIRO_DOCK_MODEL_RESULT, &cModuleName, -1);
-	if (cModuleName && strcmp (cModuleName, cWantedModuleName) == 0)
-	{
-		gtk_list_store_set (GTK_LIST_STORE (pModel), iter, CAIRO_DOCK_MODEL_ACTIVE, data[1], -1);
-		g_free (cModuleName);
-		return TRUE;
-	}
-	g_free (cModuleName);
-	return FALSE;
-}
 static void update_module_state (const gchar *cModuleName, gboolean bActive)
 {
 	if (s_pSimpleConfigWindow == NULL)
 		return;
-	g_return_if_fail (cModuleName != NULL);
-	
-	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget (s_pSimpleConfigWindow, "Add-ons", "modules");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
-	GtkWidget *pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
-	
-	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
-	gpointer data[2] = {(gpointer)cModuleName, GINT_TO_POINTER (bActive)};
-	gtk_tree_model_foreach (GTK_TREE_MODEL (pModel), (GtkTreeModelForeachFunc) _update_module_checkbox, data);
+	CDCategory *pCategory = _get_category (CD_CATEGORY_PLUGINS);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_widget_plugins_update_module_state (PLUGINS_WIDGET (pCategory->pCdWidget), cModuleName, bActive);
+	}
 }
-
 
 static void update_modules_list (void)
 {
 	if (s_pSimpleConfigWindow == NULL)
 		return;
-	
-	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget (s_pSimpleConfigWindow, "Add-ons", "modules");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
-	
-	GtkWidget *pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
-	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
-	g_return_if_fail (pModel != NULL);
-	gtk_list_store_clear (GTK_LIST_STORE (pModel));
-	
-	cairo_dock_foreach_module ((GHRFunc) cairo_dock_add_module_to_modele, pModel);
+	CDCategory *pCategory = _get_category (CD_CATEGORY_PLUGINS);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_widget_plugins_reload (PLUGINS_WIDGET (pCategory->pCdWidget));
+	}
 }
-
 
 static void update_shortkeys (void)
 {
 	if (s_pSimpleConfigWindow == NULL)
 		return;
-	
-	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget (s_pSimpleConfigWindow, "Shortkeys", "shortkeys");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
-	
-	GtkWidget *pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
-	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
-	g_return_if_fail (pModel != NULL);
-	gtk_list_store_clear (GTK_LIST_STORE (pModel));
-	cd_keybinder_foreach ((GFunc) cairo_dock_add_shortkey_to_model, pModel);
+	CDCategory *pCategory = _get_category (CD_CATEGORY_CONFIG);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_widget_config_update_shortkeys (CONFIG_WIDGET (pCategory->pCdWidget));
+	}
 }
 
+static void update_desklet_params (CairoDesklet *pDesklet)
+{
+	if (s_pSimpleConfigWindow == NULL || pDesklet == NULL || pDesklet->pIcon == NULL)
+		return;
+	
+	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_items_widget_update_desklet_params (ITEMS_WIDGET (pCategory->pCdWidget), pDesklet);
+	}
+}
+
+static void update_desklet_visibility_params (CairoDesklet *pDesklet)
+{
+	if (s_pSimpleConfigWindow == NULL || pDesklet == NULL || pDesklet->pIcon == NULL)
+		return;
+	
+	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_items_widget_update_desklet_visibility_params (ITEMS_WIDGET (pCategory->pCdWidget), pDesklet);
+	}
+}
+
+static void update_module_instance_container (CairoDockModuleInstance *pInstance, gboolean bDetached)
+{
+	if (s_pSimpleConfigWindow == NULL || pInstance == NULL)
+		return;
+	
+	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_items_widget_update_module_instance_container (ITEMS_WIDGET (pCategory->pCdWidget), pInstance, bDetached);
+	}
+}
+
+static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
+{
+	if (s_pSimpleConfigWindow == NULL)
+		cairo_dock_build_simple_gui_window ();
+	
+	cairo_dock_select_category (s_pSimpleConfigWindow, CD_CATEGORY_ITEMS);
+	
+	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
+	if (pCategory->pCdWidget == NULL)  // build the widget immediately, because we want to select the given item
+	{
+		_build_category_widget (pCategory);
+	}
+	
+	cairo_dock_items_widget_select_item (ITEMS_WIDGET (pCategory->pCdWidget), pIcon, pContainer, pModuleInstance, iShowPage);
+}
+
+static void reload_items (void)
+{
+	if (s_pSimpleConfigWindow == NULL)
+		return;
+	
+	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
+	g_print ("%s (%p)\n", __func__, pCategory->pCdWidget);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_items_widget_reload (ITEMS_WIDGET (pCategory->pCdWidget));
+		if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
+			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+	}
+}
+
+static void reload (void)
+{
+	if (s_pSimpleConfigWindow == NULL)
+		return;
+	CDCategory *pCategory;
+	
+	pCategory = _get_category (CD_CATEGORY_ITEMS);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_items_widget_reload (ITEMS_WIDGET (pCategory->pCdWidget));
+		if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
+			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+	}
+	
+	pCategory = _get_category (CD_CATEGORY_CONFIG);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_config_widget_reload (CONFIG_WIDGET (pCategory->pCdWidget));
+		if (s_iCurrentCategory != CD_CATEGORY_CONFIG)
+			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+	}
+	
+	pCategory = _get_category (CD_CATEGORY_PLUGINS);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_widget_plugins_reload (PLUGINS_WIDGET (pCategory->pCdWidget));
+		if (s_iCurrentCategory != CD_CATEGORY_PLUGINS)
+			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+	}
+}
+
+////////////////////
+/// CORE BACKEND ///
+////////////////////
 
 static void set_status_message_on_gui (const gchar *cMessage)
 {
-	GtkWidget *pStatusBar = NULL;
-	if (s_pSimpleConfigWindow != NULL)
-	{
-		pStatusBar = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "status-bar");
-	}
-	if (pStatusBar == NULL)
-	{
-		cairo_dock_gui_items_set_status_message_on_gui (cMessage);
+	if (s_pSimpleConfigWindow == NULL)
 		return;
-	}
+	GtkWidget *pStatusBar = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "status-bar");
 	gtk_statusbar_pop (GTK_STATUSBAR (pStatusBar), 0);  // clear any previous message, underflow is allowed.
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
+}
+
+static void reload_current_widget (CairoDockModuleInstance *pInstance, int iShowPage)
+{
+	g_return_if_fail (s_pSimpleConfigWindow != NULL);
+	
+	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
+	if (pCategory->pCdWidget != NULL)  // category is built
+	{
+		cairo_dock_items_widget_reload_current_widget (ITEMS_WIDGET (pCategory->pCdWidget), pInstance, iShowPage);
+		if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
+			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+	}
+}
+
+static void show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
+{
+	show_gui (pModuleInstance->pIcon, NULL, pModuleInstance, iShowPage);
+}
+
+static CairoDockGroupKeyWidget *get_widget_from_name (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
+{
+	g_return_val_if_fail (s_pSimpleConfigWindow != NULL, NULL);
+	cd_debug ("%s (%s, %s)", __func__, cGroupName, cKeyName);
+	CDCategory *pCategory = _get_current_category ();
+	CDWidget *pCdWidget = pCategory->pCdWidget;
+	if (pCdWidget)  /// check that the widget represents the given instance...
+		return cairo_dock_gui_find_group_key_widget_in_list (pCdWidget->pWidgetList, cGroupName, cKeyName);
+	else
+		return NULL;
 }
 
 
@@ -1027,27 +642,30 @@ void cairo_dock_register_simple_gui_backend (void)
 {
 	CairoDockMainGuiBackend *pBackend = g_new0 (CairoDockMainGuiBackend, 1);
 	
-	pBackend->show_main_gui 				= show_main_gui;
-	pBackend->show_module_gui 				= show_module_gui;
-	pBackend->close_gui 					= close_gui;
-	pBackend->update_module_state 			= update_module_state;
-	pBackend->update_module_instance_container = cairo_dock_gui_items_update_module_instance_container;
-	pBackend->update_desklet_params 		= cairo_dock_gui_items_update_desklet_params;
-	pBackend->update_desklet_visibility_params = cairo_dock_update_desklet_visibility_params;
-	pBackend->update_modules_list 			= update_modules_list;
-	pBackend->update_shortkeys 				= update_shortkeys;
-	pBackend->bCanManageThemes 				= TRUE;
-	pBackend->cDisplayedName 				= _("Advanced Mode");
-	pBackend->cTooltip 						= _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme.");
+	pBackend->show_main_gui 					= show_main_gui;
+	pBackend->show_module_gui 					= show_module_gui;
+	pBackend->close_gui 						= close_gui;
+	pBackend->update_module_state 				= update_module_state;
+	pBackend->update_module_instance_container 	= update_module_instance_container;
+	pBackend->update_desklet_params 			= update_desklet_params;
+	pBackend->update_desklet_visibility_params 	= update_desklet_visibility_params;
+	pBackend->update_modules_list 				= update_modules_list;
+	pBackend->update_shortkeys 					= update_shortkeys;
+	pBackend->show_gui 							= show_gui;
+	pBackend->reload_items 						= reload_items;
+	pBackend->reload 							= reload;
+	pBackend->cDisplayedName 					= _("Advanced Mode");  // name of the other backend.
+	pBackend->cTooltip 							= _("The advanced mode lets you tweak every single parameter of the dock. It is a powerful tool to customise your current theme.");
 	
 	cairo_dock_register_config_gui_backend (pBackend);
 	
 	CairoDockGuiBackend *pConfigBackend = g_new0 (CairoDockGuiBackend, 1);
 	
-	pConfigBackend->set_status_message_on_gui = set_status_message_on_gui;
-	pConfigBackend->reload_current_widget 	= cairo_dock_gui_items_reload_current_widget;
+	pConfigBackend->set_status_message_on_gui 	= set_status_message_on_gui;
+	pConfigBackend->reload_current_widget 		= reload_current_widget;
 	pConfigBackend->show_module_instance_gui 		= show_module_instance_gui;
-	pConfigBackend->get_widget_from_name 	= cairo_dock_gui_items_get_widget_from_name;
+	pConfigBackend->get_widget_from_name 		= get_widget_from_name;
 	
 	cairo_dock_register_gui_backend (pConfigBackend);
 }
+

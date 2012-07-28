@@ -29,8 +29,6 @@ struct _CairoDockMainGuiBackend {
 	GtkWidget * (*show_main_gui) (void);
 	// Show the config panel of a given module (internal or external), reload it if it was already opened.
 	void (*show_module_gui) (const gchar *cModuleName);
-	// Show the config panel of a given module instance, reload it if it was already opened. iShowPage is the page that should be displayed in case the module has several pages, -1 means to keep the current page.
-	//void (*show_module_instance_gui) (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 	// close the config panels.
 	void (*close_gui) (void);
 	// update the GUI to mark a module as '(in)active'.
@@ -40,20 +38,18 @@ struct _CairoDockMainGuiBackend {
 	void (*update_desklet_visibility_params) (CairoDesklet *pDesklet);
 	void (*update_modules_list) (void);
 	void (*update_shortkeys) (void);
-	gboolean bCanManageThemes;
-	const gchar *cDisplayedName;
-	const gchar *cTooltip;
-	} ;
-typedef struct _CairoDockMainGuiBackend CairoDockMainGuiBackend;
-
-// Definition of the icons GUI interface.
-struct _CairoDockItemsGuiBackend {
 	// Show the config panel on a given icon/container, build or reload it if necessary.
 	GtkWidget * (*show_gui) (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage);
 	// reload the gui and its content, for the case a launcher has changed (image, order, new container, etc).
 	void (*reload_items) (void);
+	// reload everything, in case the current theme has changed
+	void (*reload) (void);
+	// show the themes, in case it should be presented in the menu.
+	void (*show_themes) (void);
+	const gchar *cDisplayedName;
+	const gchar *cTooltip;
 	} ;
-typedef struct _CairoDockItemsGuiBackend CairoDockItemsGuiBackend;
+typedef struct _CairoDockMainGuiBackend CairoDockMainGuiBackend;
 
 
 void cairo_dock_load_user_gui_backend (int iMode);
@@ -81,12 +77,8 @@ void cairo_dock_gui_trigger_reload_shortkeys (void);
 
 void cairo_dock_register_config_gui_backend (CairoDockMainGuiBackend *pBackend);
 
-void cairo_dock_register_items_gui_backend (CairoDockItemsGuiBackend *pBackend);
-
 
 GtkWidget *cairo_dock_show_main_gui (void);
-
-//void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
 void cairo_dock_show_module_gui (const gchar *cModuleName);
 
@@ -94,6 +86,11 @@ void cairo_dock_close_gui (void);
 
 void cairo_dock_show_items_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
+void cairo_dock_reload_gui (void);
+
+void cairo_dock_show_themes (void);
+
+gboolean cairo_dock_can_manage_themes (void);
 
 G_END_DECLS
 #endif

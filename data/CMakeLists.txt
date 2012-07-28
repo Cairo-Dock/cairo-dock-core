@@ -35,6 +35,7 @@ install (FILES
 	# appli
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-simple.conf
 	${CMAKE_CURRENT_BINARY_DIR}/themes.conf
+	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-plugins.conf  # will probably be removed
 	${CMAKE_CURRENT_BINARY_DIR}/Help.conf
 	DESTINATION ${pkgdatadir})
 

@@ -80,7 +80,6 @@
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command
 
 #include "cairo-dock-gui-manager.h"
-#include "cairo-dock-gui-items.h"
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
 #include "help/cairo-dock-help.h"
@@ -111,6 +110,7 @@ extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 
 extern CairoDockModuleInstance *g_pCurrentModule;
+extern GtkWidget *cairo_dock_build_simple_gui_window (void);
 
 gboolean g_bForceCairo = FALSE;
 gboolean g_bLocked;
@@ -260,10 +260,6 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 }
 
 
-static void _on_shortkey (const gchar *cShortkey, gpointer data)
-{
-	g_print ("pouet\n");
-}
 int main (int argc, char** argv)
 {
 	//\___________________ build the command line used to respawn, and check if we have been launched from another life.
@@ -589,7 +585,6 @@ int main (int argc, char** argv)
 	
 	//\___________________ define GUI backend.
 	cairo_dock_load_user_gui_backend (s_iGuiMode);
-	cairo_dock_register_default_items_gui_backend ();
 	
 	//\___________________ register to the useful notifications.
 	cairo_dock_register_notification_on_object (&myContainersMgr,
@@ -812,21 +807,18 @@ int main (int argc, char** argv)
 	/*g_print ("\n\nTODO (3.0):\n"
 	"** Must-Be-Done **\n"
 	"- crash: Unity-4 -> DustSand -> Clear -> Humanity -> Unity-4\n"
-	"- add a parameter for sub-dock icon size?\n"
-	"- fix quick-info size/drawing/blurry\n"
 	"- cairo-dock-gui-themes.c:111 -> cairo-dock-gui-manager.c:414\n"
 	"- cairo-dock-applications-manager.c:1663 -> cairo-dock-class-manager.c:66\n"
 	"- indicators on different icon sizes\n"
 	"- slide view view: separator & scrollbar in vertical mode, last line out of the dock in horizontal mode\n"
 	"- cairo_dock_get_pixbuf_from_pixmap: assertion `pIconPixbuf != NULL' failed\n"
 	"- drop/hover indicators on different icon sizes\n"
-	"- Sys-monitor: ... and 0.0 on quick-info\n"
-	"- MP: empty icon on startup (audacious)\n"
 	"- cairo_dock_get_max_scale & fMagnitudeMax must die\n"
 	"- check Notification Area, there might be a bug (bitecoin, litecoin, skype)\n"
 	"- make some tests with the Dbus API and sub-docks / tmp launcher\n"
 	"- PM: crash when no battery is plugged ?\n"
 	"** That-Would-Be-Nice **\n"
+	"- add a parameter for sub-dock icon size?\n"
 	"- redirection texture: make it per-container, or use the container gl buffer instead\n"
 	"- Slide view: allow to use the same borders as default (radius, color, width)\n"
 	"- Dialogs: allow to use the same borders as default (radius, color)\n"

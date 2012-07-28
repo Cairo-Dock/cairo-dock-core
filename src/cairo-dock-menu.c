@@ -44,7 +44,6 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-themes-manager.h"
-#include "cairo-dock-gui-themes.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
@@ -131,7 +130,7 @@ static void _cairo_dock_delete_dock (GtkMenuItem *pMenuItem, CairoDock *pDock)
 }
 static void _cairo_dock_initiate_theme_management (GtkMenuItem *pMenuItem, gpointer data)
 {
-	cairo_dock_manage_themes ();
+	cairo_dock_show_themes ();
 }
 
 static void _cairo_dock_add_about_page (GtkWidget *pNoteBook, const gchar *cPageLabel, const gchar *cAboutText)
@@ -873,7 +872,7 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		}
 		
 		// themes
-		if (! cairo_dock_theme_manager_is_integrated ())
+		if (cairo_dock_can_manage_themes ())
 		{
 			pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Manage themes"),
 				CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-appearance.svg",
