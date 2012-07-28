@@ -56,33 +56,6 @@ static int s_iMaxOrder = 0;
  /// MODULE LOADER ///
 /////////////////////
 
-static gchar *_cairo_dock_extract_default_module_name_from_path (gchar *cSoFilePath)
-{
-	gchar *ptr = g_strrstr (cSoFilePath, "/");
-	if (ptr == NULL)
-		ptr = cSoFilePath;
-	else
-		ptr ++;
-	if (strncmp (ptr, "lib", 3) == 0)
-		ptr += 3;
-
-	if (strncmp (ptr, "cd-", 3) == 0)
-		ptr += 3;
-	else if (strncmp (ptr, "cd_", 3) == 0)
-		ptr += 3;
-
-	gchar *cModuleName = g_strdup (ptr);
-
-	ptr = g_strrstr (cModuleName, ".so");
-	if (ptr != NULL)
-		*ptr = '\0';
-
-	//ptr = cModuleName;
-	//while ((ptr = g_strrstr (ptr, "-")) != NULL)
-	//	*ptr = '_';
-
-	return cModuleName;
-}
 
 static void _cairo_dock_close_module (CairoDockModule *module)
 {
@@ -101,7 +74,7 @@ static void _cairo_dock_close_module (CairoDockModule *module)
 	module->cConfFilePath = NULL;
 }
 
-static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **erreur)
+static gboolean _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError **erreur)
 {
 	//\__________________ On ouvre le .so.
 	/**GModule *module = g_module_open (pCairoDockModule->cSoFilePath, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
@@ -115,7 +88,7 @@ static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError *
 	if (! pCairoDockModule->handle)
 	{
 		g_set_error (erreur, 1, 1, "while opening module '%s' : (%s)", pCairoDockModule->cSoFilePath, dlerror ());
-		return ;
+		return FALSE;
 	}
 	//\__________________ On identifie le module.
 	gboolean bSymbolFound;
@@ -132,14 +105,13 @@ static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError *
 		{
 			_cairo_dock_close_module (pCairoDockModule);
 			cd_debug ("module '%s' has not been loaded", pCairoDockModule->cSoFilePath);  // peut arriver a xxx-integration ou icon-effect par exemple.
-			return ;
+			return FALSE;
 		}
 	}
 	else
 	{
-		pCairoDockModule->pVisitCard = NULL;
 		g_set_error (erreur, 1, 1, "this module ('%s') does not have the common entry point 'pre_init', it may be broken or icompatible with cairo-dock", pCairoDockModule->cSoFilePath);
-		return ;
+		return FALSE;
 	}
 	
 	//\__________________ On verifie sa compatibilite.
@@ -148,21 +120,16 @@ static void _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GError *
 		(pVisitCard->iMajorVersionNeeded > g_iMajorVersion || (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded > g_iMinorVersion) || (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded == g_iMinorVersion && pVisitCard->iMicroVersionNeeded > g_iMicroVersion)))
 	{
 		g_set_error (erreur, 1, 1, "this module ('%s') needs at least Cairo-Dock v%d.%d.%d, but Cairo-Dock is in v%d.%d.%d (%s)\n  It will be ignored", pCairoDockModule->cSoFilePath, pVisitCard->iMajorVersionNeeded, pVisitCard->iMinorVersionNeeded, pVisitCard->iMicroVersionNeeded, g_iMajorVersion, g_iMinorVersion, g_iMicroVersion, GLDI_VERSION);
-		cairo_dock_free_visit_card (pCairoDockModule->pVisitCard);
-		pCairoDockModule->pVisitCard = NULL;
-		return ;
+		return FALSE;
 	}
 	if (! g_bEasterEggs &&
 		pVisitCard->cDockVersionOnCompilation != NULL && strcmp (pVisitCard->cDockVersionOnCompilation, GLDI_VERSION) != 0)  // separation des versions en easter egg.
 	{
 		g_set_error (erreur, 1, 1, "this module ('%s') was compiled with Cairo-Dock v%s, but Cairo-Dock is in v%s\n  It will be ignored", pCairoDockModule->cSoFilePath, pVisitCard->cDockVersionOnCompilation, GLDI_VERSION);
-		cairo_dock_free_visit_card (pCairoDockModule->pVisitCard);
-		pCairoDockModule->pVisitCard = NULL;
-		return ;
+		return FALSE;
 	}
-
-	if (pVisitCard->cModuleName == NULL)
-		pVisitCard->cModuleName = _cairo_dock_extract_default_module_name_from_path (pCairoDockModule->cSoFilePath);
+	
+	return TRUE;  // if we passed all the stages, the module is ready to be registered.
 }
 
 CairoDockModule *cairo_dock_new_module (const gchar *cSoFilePath, GError **erreur)
@@ -173,17 +140,14 @@ CairoDockModule *cairo_dock_new_module (const gchar *cSoFilePath, GError **erreu
 	{
 		pCairoDockModule->cSoFilePath = g_strdup (cSoFilePath);
 		GError *tmp_erreur = NULL;
-		_cairo_dock_open_module (pCairoDockModule, &tmp_erreur);
-		if (tmp_erreur != NULL)
+		gboolean bOpened = _cairo_dock_open_module (pCairoDockModule, &tmp_erreur);
+		if (! bOpened)
 		{
-			g_propagate_error (erreur, tmp_erreur);
-			g_free (pCairoDockModule->cSoFilePath);
-			g_free (pCairoDockModule);
-			return NULL;
-		}
-		if (pCairoDockModule->pVisitCard == NULL)
-		{
-			g_free (pCairoDockModule);
+			if (tmp_erreur != NULL)
+			{
+				g_propagate_error (erreur, tmp_erreur);
+			}
+			cairo_dock_free_module (pCairoDockModule);
 			return NULL;
 		}
 	}
@@ -194,10 +158,11 @@ void cairo_dock_free_module (CairoDockModule *module)
 {
 	if (module == NULL)
 		return ;
-	cd_debug ("%s (%s)", __func__, module->pVisitCard->cModuleName);
-
-	cairo_dock_deactivate_module (module);
-
+	if (module->pVisitCard)
+	{
+		cd_debug ("%s (%s)", __func__, module->pVisitCard->cModuleName);
+		cairo_dock_deactivate_module (module);
+	}
 	_cairo_dock_close_module (module);
 
 	g_free (module->cSoFilePath);
@@ -228,9 +193,6 @@ gchar *cairo_dock_check_module_conf_dir (CairoDockModule *pModule)
 			return NULL;
 		}
 	}
-	
-	if (pModule->cConfFilePath == NULL)
-		pModule->cConfFilePath = g_strdup_printf ("%s/%s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
 	
 	return cUserDataDirPath;
 }

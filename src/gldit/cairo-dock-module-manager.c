@@ -135,8 +135,8 @@ gboolean cairo_dock_register_module (CairoDockModule *pModule)
 		return FALSE;
 	}
 	
-	if (pModule->pVisitCard->cDockVersionOnCompilation == NULL)
-		pModule->pVisitCard->cDockVersionOnCompilation = GLDI_VERSION;
+	if (pModule->cConfFilePath == NULL && pModule->pVisitCard->cConfFileName)
+		pModule->cConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
 	
 	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
 	
@@ -169,18 +169,11 @@ CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath)  // cSoFileP
 		g_error_free (erreur);
 		return NULL;
 	}
-	if (pModule == NULL)
+	if (pModule == NULL)  // module not loaded
 		return NULL;
-	g_return_val_if_fail (pModule->pVisitCard != NULL, NULL);
 	
-	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
+	cairo_dock_register_module (pModule);
 	
-	if (cairo_dock_module_is_auto_loaded (pModule))  // c'est un module qui soit ne peut etre activer et/ou desactiver, soit etend un manager; on l'active donc automatiquement.
-	{
-		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
-	}
-		
-	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, TRUE);
 	return pModule;
 }
 
