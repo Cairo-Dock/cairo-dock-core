@@ -1,8 +1,9 @@
+#@VERSION@
 
-#[/usr/share/cairo-dock/icons/icon-plug-ins.svg]
+#[@pkgdatadir@/icons/icon-plug-ins.svg]
 [Add-ons]
 
-#F[Add or remove any applet;/usr/share/cairo-dock/icons/icon-accessories.svg]
+#F[Add or remove any applet;@pkgdatadir@/icons/icon-accessories.svg]
 frame_mod=
 
 #_ 
@@ -13,4 +14,4 @@ modules=
 
 #W[More applets] Get more applets online !
 #{You can install them by simply drag-and-dropping the link onto your dock.}
-third party=http://forum.glx-dock.org
+third party=http://extras.glx-dock.org/3.0.0

@@ -10,6 +10,19 @@ if ("${enable-desktop-manager}" STREQUAL "yes")
 endif()
 
 
+########### file generation ###############
+
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock-plugins.conf.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-plugins.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock-simple.conf.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-simple.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/main-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/main-dock.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/launcher.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/launcher.desktop)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/container.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/container.desktop)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/separator.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/separator.desktop)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/themes.conf.in ${CMAKE_CURRENT_BINARY_DIR}/themes.conf)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Help.conf.in ${CMAKE_CURRENT_BINARY_DIR}/Help.conf)
+
+
 ########### install files ###############
 
 # misc

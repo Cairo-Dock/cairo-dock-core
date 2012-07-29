@@ -34,7 +34,7 @@ add_custom_target (uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/
 set (CPACK_SOURCE_GENERATOR "TGZ")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
 set (CPACK_SOURCE_IGNORE_FILES 
-	"/build/;/.bzr/;bzrignore$;/config.h$;/gldi-config.h$;/doc/;/misc/;~$;${CPACK_SOURCE_IGNORE_FILES}")
+	"/build/;/.bzr/;bzrignore$;/config.h$;/gldi-config.h$;/doc/;/misc/;~$;/TODO$;${CPACK_SOURCE_IGNORE_FILES}")
 include (CPack)
 
 add_custom_target( dist
@@ -148,14 +148,6 @@ add_subdirectory (po)
 
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-config.h)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/cairo-dock.conf)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/cairo-dock-simple.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/cairo-dock-simple.conf)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/main-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/main-dock.conf)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/launcher.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/data/launcher.desktop)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/container.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/data/container.desktop)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/separator.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/data/separator.desktop)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/themes.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/themes.conf)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/data/Help.conf.in ${CMAKE_CURRENT_BINARY_DIR}/data/Help.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.pc.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY)
 
