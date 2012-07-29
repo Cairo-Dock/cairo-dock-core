@@ -791,52 +791,7 @@ int main (int argc, char** argv)
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
 	
-	// add "add an applet" in the menu
-	// when an icon in a sub-dock demands attention, also animate the icon in the main dock.
-	// search in Recent-Events' dialog (seems like libzeitgeist is buggy)
-	// taskbar: separator as an option -> test
-	// taskbar, minimized windows only: when restored, an appli icon gets the "?" for a second before disappearing
-	// Twitter: when a new entry apears in the timeline, have to click on the applet to stop the animation (doesn't stop from the menu).
-	// icon disappearance: sometimes the animation is not triggered
-	// warning :  (/home/fab/CD2/cairo-dock-core/src/gldit/cairo-dock-dock-factory.c:cairo_dock_insert_icon_in_dock_full:737) This icon ((null)) is already inside a container !
-	// image buffer: draw the surface from the center, like the texture.
-	// Icons: use an image buffer + a request size.
-	// add a function cairo_dock_render_one_icon_in_desklet_opengl().
-	// gauge with images: improve transition
-	
-	/*g_print ("\n\nTODO (3.0):\n"
-	"** Must-Be-Done **\n"
-	"- crash: Unity-4 -> DustSand -> Clear -> Humanity -> Unity-4\n"
-	"- cairo-dock-gui-themes.c:111 -> cairo-dock-gui-manager.c:414\n"
-	"- cairo-dock-applications-manager.c:1663 -> cairo-dock-class-manager.c:66\n"
-	"- indicators on different icon sizes\n"
-	"- slide view view: separator & scrollbar in vertical mode, last line out of the dock in horizontal mode\n"
-	"- cairo_dock_get_pixbuf_from_pixmap: assertion `pIconPixbuf != NULL' failed\n"
-	"- drop/hover indicators on different icon sizes\n"
-	"- cairo_dock_get_max_scale & fMagnitudeMax must die\n"
-	"- check Notification Area, there might be a bug (bitecoin, litecoin, skype)\n"
-	"- make some tests with the Dbus API and sub-docks / tmp launcher\n"
-	"- PM: crash when no battery is plugged ?\n"
-	"** That-Would-Be-Nice **\n"
-	"- add a parameter for sub-dock icon size?\n"
-	"- redirection texture: make it per-container, or use the container gl buffer instead\n"
-	"- Slide view: allow to use the same borders as default (radius, color, width)\n"
-	"- Dialogs: allow to use the same borders as default (radius, color)\n"
-	"- let the view place the X thumbnail\n"
-	"- get rid of CAIRO_DOCK_IS_DOCK\n"
-	"- Icon bg: add ratio\n"
-	"- Default theme more consistent\n"
-	"- Recent Events: handle recent apps\n"
-	"- Firefox launcher: handle recent URLs\n"
-	"- check for config panel (g_object_unref assertion)\n"
-	"- review Help hints\n"
-	"- find Kwin/XFCE versions of gnome-control-center and KWin config tool for Composite-manager\n"
-	"- draw a preview of the dock in opengl\n"
-	"- display Help GUI in simple mode\n"
-	"- kde integration ++\n"
-	"- stack: enable iSubdockViewType\n"
-	"- link launchers with class+command\n"
-	"\n");*/
+	// TODO list in the 'TODO' file ;)
 	
 	gtk_main ();
 	

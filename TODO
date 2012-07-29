@@ -1,0 +1,73 @@
+====================================================
+                    NEW RELEASE
+====================================================
+
+For each new version:
+	* Bump dock's version (CMakeLists.txt - Core & Plug-ins)
+	* Check the link to third-party applets' website:
+		- data/cairo-dock-plugins.conf.in
+		- src/cairo-dock-gui-commons.c:139:#define DISTANT_DIR "3.0.0"
+		- ../cairo-dock-plug-ins/Dbus/src/applet-dbus.c:55:#define DISTANT_DIR "3.1.0"
+	* Check the link to theme dir on the server:
+		- data/themes.conf.in:6:#R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes3.0]
+		- src/cairo-dock.c:98:#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.0"
+	* Remove useless g_print
+	* Check the ChangeLog file
+
+
+====================================================
+                 BEFORE THE RELEASE
+====================================================
+
+3.0:
+  ** Must-Be-Done **
+	- crash: Unity-4 -> DustSand -> Clear -> Humanity -> Unity-4
+	- cairo-dock-gui-themes.c:111 -> cairo-dock-gui-manager.c:414
+	- cairo-dock-applications-manager.c:1663 -> cairo-dock-class-manager.c:66
+	- indicators on different icon sizes
+	- slide view view: separator & scrollbar in vertical mode, last line out of the dock in horizontal mode
+	- cairo_dock_get_pixbuf_from_pixmap: assertion `pIconPixbuf != NULL' failed
+	- drop/hover indicators on different icon sizes
+	- cairo_dock_get_max_scale & fMagnitudeMax must die
+	- check Notification Area, there might be a bug (bitecoin, litecoin, skype)
+	- make some tests with the Dbus API and sub-docks / tmp launcher
+	- PM: crash when no battery is plugged ?
+  ** That-Would-Be-Nice **
+	- add a parameter for sub-dock icon size?
+	- redirection texture: make it per-container, or use the container gl buffer instead
+	- Slide view: allow to use the same borders as default (radius, color, width)
+	- Dialogs: allow to use the same borders as default (radius, color)
+	- let the view place the X thumbnail
+	- get rid of CAIRO_DOCK_IS_DOCK
+	- Icon bg: add ratio
+	- Default theme more consistent
+	- Recent Events: handle recent apps
+	- Firefox launcher: handle recent URLs
+	- check for config panel (g_object_unref assertion)
+	- review Help hints
+	- find Kwin/XFCE versions of gnome-control-center and KWin config tool for Composite-manager
+	- draw a preview of the dock in opengl
+	- display Help GUI in simple mode
+	- kde integration ++
+	- stack: enable iSubdockViewType
+	- link launchers with class+command
+
+3.1:
+	- Memory leak in data-renderer
+	- add "add an applet" in the menu
+	- when an icon in a sub-dock demands attention, also animate the icon in the main dock.
+	- search in Recent-Events' dialog (seems like libzeitgeist is buggy)
+	- taskbar: separator as an option -> test
+	- taskbar, minimized windows only: when restored, an appli icon gets the "?" for a second before disappearing
+	- Twitter: when a new entry apears in the timeline, have to click on the applet to stop the animation (doesn't stop from the menu).
+	- icon disappearance: sometimes the animation is not triggered
+	- warning :  (/home/fab/CD2/cairo-dock-core/src/gldit/cairo-dock-dock-factory.c:cairo_dock_insert_icon_in_dock_full:737) This icon ((null)) is already inside a container !
+	- image buffer: draw the surface from the center, like the texture.
+	- Icons: use an image buffer + a request size.
+	- add a function cairo_dock_render_one_icon_in_desklet_opengl().
+	- gauge with images: improve transition
+
+all:
+	- Remove GCC warnings
+	- (try to only use temporally g_print functions ;) )
+	- Complete the ChangeLog file
