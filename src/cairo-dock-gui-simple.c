@@ -278,7 +278,7 @@ static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 		if (pixbuf != NULL)
 		{
 			pImage = gtk_image_new_from_pixbuf (pixbuf);
-			gdk_pixbuf_unref (pixbuf);
+			g_object_unref (pixbuf);
 		}
 	}
 	return pImage;
@@ -340,7 +340,7 @@ static void _on_select_category (GtkButton *button, CDCategory *pCategory)
 		}
 		gtk_widget_show (pCategory->pCdWidget->pWidget);
 		cairo_dock_enable_apply_button (pCategory->pMainWindow, cairo_dock_widget_can_apply (pCategory->pCdWidget));
-		_set_current_category (((int)pCategory-(int)s_pCategories)/sizeof(CDCategory));
+		_set_current_category ((GPOINTER_TO_INT (pCategory) - GPOINTER_TO_INT (s_pCategories))/sizeof(CDCategory));
 	}
 	else  // hide the widget
 	{

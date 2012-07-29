@@ -1872,7 +1872,7 @@ GtkWidget *cairo_dock_widget_handbook_new (CairoDockModule *pModule)
 			// Image Widget.
 			GtkWidget *pModuleImage = gtk_image_new_from_pixbuf (NULL);
 			gtk_image_set_from_pixbuf (GTK_IMAGE (pModuleImage), pPreviewPixbuf);
-			gdk_pixbuf_unref (pPreviewPixbuf);
+			g_object_unref (pPreviewPixbuf);
 			
 			// Add a frame around the image.
 			GtkWidget *pImageFrame = cairo_dock_widget_image_frame_new (pModuleImage);
