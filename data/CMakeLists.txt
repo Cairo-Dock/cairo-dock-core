@@ -13,7 +13,6 @@ endif()
 ########### file generation ###############
 
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.conf)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock-plugins.conf.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-plugins.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock-simple.conf.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-simple.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/main-dock.conf.in ${CMAKE_CURRENT_BINARY_DIR}/main-dock.conf)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/launcher.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/launcher.desktop)
@@ -48,7 +47,6 @@ install (FILES
 	# appli
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-simple.conf
 	${CMAKE_CURRENT_BINARY_DIR}/themes.conf
-	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-plugins.conf  # will probably be removed
 	${CMAKE_CURRENT_BINARY_DIR}/Help.conf
 	DESTINATION ${pkgdatadir})
 

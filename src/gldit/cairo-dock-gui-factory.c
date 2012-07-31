@@ -1805,7 +1805,7 @@ GtkWidget *cairo_dock_widget_handbook_new (CairoDockModule *pModule)
 	GtkWidget *pFrame = gtk_frame_new (NULL);
 	gtk_container_set_border_width (GTK_CONTAINER (pFrame), CAIRO_DOCK_GUI_MARGIN);
 	gchar *cLabel = g_strdup_printf ("<big><b>%s </b></big>v%s",
-		pModule->pVisitCard->cModuleName,
+		pModule->pVisitCard->cTitle,
 		pModule->pVisitCard->cModuleVersion);
 	GtkWidget *pLabel = gtk_label_new (cLabel);
 	g_free (cLabel);

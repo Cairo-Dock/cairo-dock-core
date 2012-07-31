@@ -60,9 +60,9 @@ gboolean cairo_dock_theme_manager_is_integrated (void);
 
 
 
-void cairo_dock_gui_trigger_update_desklet_params (CairoDesklet *pDesklet);
+void cairo_dock_gui_update_desklet_params (CairoDesklet *pDesklet);
 
-void cairo_dock_gui_trigger_update_desklet_visibility (CairoDesklet *pDesklet);
+void cairo_dock_gui_update_desklet_visibility (CairoDesklet *pDesklet);
 
 void cairo_dock_gui_trigger_reload_items (void);
 

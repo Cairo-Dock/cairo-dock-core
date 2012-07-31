@@ -27,6 +27,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"  // cairo_dock_show_module_instance_gui
 #include "cairo-dock-gui-backend.h"  // cairo_dock_show_module_gui
+#include "cairo-dock-gui-commons.h"  // cairo_dock_get_third_party_applets_link
 #include "cairo-dock-widget-plugins.h"
 
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
@@ -244,7 +245,7 @@ static GtkWidget *cairo_dock_build_modules_treeview (void)
 
 static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 {
-	GKeyFile* pKeyFile = cairo_dock_open_key_file (CAIRO_DOCK_SHARE_DATA_DIR"/cairo-dock-plugins.conf");  /// TODO: probably don't use a .conf file just for that ...
+	/**GKeyFile* pKeyFile = cairo_dock_open_key_file (CAIRO_DOCK_SHARE_DATA_DIR"/cairo-dock-plugins.conf");  /// TODO: probably don't use a .conf file just for that ...
 	
 	GSList *pWidgetList = NULL;
 	GPtrArray *pDataGarbage = g_ptr_array_new ();
@@ -285,7 +286,41 @@ static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow2, FALSE, FALSE, 0);
 	g_free (cDefaultMessage);
 	
-	g_key_file_free (pKeyFile);
+	g_key_file_free (pKeyFile);*/
+	
+	//\_____________ On construit le tree-view.
+	pPluginsWidget->pTreeView = cairo_dock_build_modules_treeview ();
+	
+	//\_____________ On l'ajoute a la fenetre.
+	GtkWidget *pKeyBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 210), NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pPluginsWidget->pTreeView);
+	gtk_box_pack_start (GTK_BOX (pKeyBox), pScrolledWindow, TRUE, TRUE, 0);
+	
+	//\______________ On construit le widget de prevue et on le rajoute a la suite.
+	GPtrArray *pDataGarbage = g_ptr_array_new ();
+	gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
+	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (pKeyBox, pPluginsWidget->pTreeView, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
+	GtkWidget *pScrolledWindow2 = gtk_scrolled_window_new (NULL, NULL);
+	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 210), NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow2), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow2), pPreviewBox);
+	gtk_box_pack_start (GTK_BOX (pKeyBox), pScrolledWindow2, FALSE, FALSE, 0);
+	g_free (cDefaultMessage);
+	
+	GtkWidget *pVBox = _gtk_vbox_new (CAIRO_DOCK_GUI_MARGIN);
+	gtk_box_pack_start (GTK_BOX (pVBox), pKeyBox, TRUE, TRUE, 0);
+	
+	//\______________ Add a link to the third-party applet (Note: it's somewhere around here that we could add a third-party addons selector).
+	gchar *cLink = cairo_dock_get_third_party_applets_link ();
+	GtkWidget *pLink = gtk_link_button_new_with_label (cLink, _("Get more applets!"));
+	g_free (cLink);
+	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
+	
+	pPluginsWidget->widget.pWidget = pVBox;
+	pPluginsWidget->widget.pDataGarbage = pDataGarbage;
 }
 
 PluginsWidget *cairo_dock_plugins_widget_new (void)

@@ -68,9 +68,9 @@ typedef struct {
 
 typedef enum {
 	CD_CATEGORY_ITEMS=0,
+	CD_CATEGORY_PLUGINS,
 	CD_CATEGORY_CONFIG,
 	CD_CATEGORY_THEMES,
-	CD_CATEGORY_PLUGINS,
 	CD_NB_CATEGORIES
 } CDCategoryEnum;
 
@@ -99,6 +99,14 @@ static CDCategory s_pCategories[CD_NB_CATEGORIES] = {
 		NULL,
 		NULL
 	},{
+		N_("Add-ons"),
+		"icon-plug-ins.svg",
+		N_("Add-ons"),
+		_build_plugins_widget,
+		NULL,
+		NULL,
+		NULL
+	},{
 		N_("Configuration"),
 		"gtk-preferences",
 		N_("Configuration"),
@@ -114,15 +122,7 @@ static CDCategory s_pCategories[CD_NB_CATEGORIES] = {
 		NULL,
 		NULL,
 		NULL
-	},{
-		N_("Add-ons"),
-		"icon-plug-ins.svg",
-		N_("Add-ons"),
-		_build_plugins_widget,
-		NULL,
-		NULL,
-		NULL
-	},
+	}
 };
 
 

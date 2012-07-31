@@ -1465,7 +1465,7 @@ static void _cairo_dock_move_class_to_current_desktop (GtkMenuItem *pMenuItem, g
 static inline void _cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibility iVisibility)
 {
 	cairo_dock_set_desklet_accessibility (pDesklet, iVisibility, TRUE);  // TRUE <=> save state in conf.
-	cairo_dock_gui_trigger_update_desklet_visibility (pDesklet);
+	cairo_dock_gui_update_desklet_visibility (pDesklet);
 }
 static void _cairo_dock_keep_below (GtkCheckMenuItem *pMenuItem, gpointer *data)
 {
@@ -1507,7 +1507,7 @@ static void _cairo_dock_set_on_all_desktop (GtkCheckMenuItem *pMenuItem, gpointe
 	CairoDesklet *pDesklet = data[1];
 	gboolean bSticky = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
 	cairo_dock_set_desklet_sticky (pDesklet, bSticky);
-	cairo_dock_gui_trigger_update_desklet_visibility (pDesklet);
+	cairo_dock_gui_update_desklet_visibility (pDesklet);
 }
 
 static void _cairo_dock_lock_position (GtkMenuItem *pMenuItem, gpointer *data)
@@ -1515,7 +1515,7 @@ static void _cairo_dock_lock_position (GtkMenuItem *pMenuItem, gpointer *data)
 	CairoDesklet *pDesklet = data[1];
 	gboolean bLocked = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (pMenuItem));
 	cairo_dock_lock_desklet_position (pDesklet, bLocked);
-	cairo_dock_gui_trigger_update_desklet_visibility (pDesklet);
+	cairo_dock_gui_update_desklet_visibility (pDesklet);
 }
 
 

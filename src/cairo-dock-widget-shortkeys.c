@@ -32,7 +32,6 @@
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
 
-
 typedef enum {
 	CD_SHORTKEY_MODEL_NAME = 0,  // demander
 	CD_SHORTKEY_MODEL_DESCRIPTION,  // description

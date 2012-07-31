@@ -462,7 +462,7 @@ void cairo_dock_trigger_refresh_gui (void)
 gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDesklet *pDesklet)
 {
 	//g_print ("desklet %s configured\n", pDesklet->pIcon?pDesklet->pIcon->cName:"unknown");
-	cairo_dock_gui_trigger_update_desklet_params (pDesklet);
+	cairo_dock_gui_update_desklet_params (pDesklet);
 	
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
