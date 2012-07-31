@@ -118,11 +118,6 @@ static void _make_bar_surface (ProgressBar *pProgressBar)
 		cairo_destroy (ctx);
 	}
 	pProgressBar->iBarTexture = cairo_dock_create_texture_from_surface (pProgressBar->pBarSurface);
-	
-	if (myIndicatorsParam.bBarHasOutline)
-	{
-		
-	}
 }
 
 static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttribute *pAttribute)
@@ -196,7 +191,7 @@ static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 			// outline
 			if (myIndicatorsParam.bBarHasOutline)
 			{
-				cairo_set_source_rgb (pCairoContext, myIndicatorsParam.fBarColorOutline[0], myIndicatorsParam.fBarColorOutline[1], myIndicatorsParam.fBarColorOutline[3]);
+				cairo_set_source_rgb (pCairoContext, myIndicatorsParam.fBarColorOutline[0], myIndicatorsParam.fBarColorOutline[1], myIndicatorsParam.fBarColorOutline[2]);
 				cairo_set_line_width (pCairoContext, pProgressBar->iBarThickness);
 				
 				cairo_move_to (pCairoContext, r, r);
@@ -281,7 +276,7 @@ static void render_opengl (ProgressBar *pProgressBar)
 			// outline
 			if (myIndicatorsParam.bBarHasOutline)
 			{
-				glColor4f (myIndicatorsParam.fBarColorOutline[0], myIndicatorsParam.fBarColorOutline[1], myIndicatorsParam.fBarColorOutline[3], 1.);
+				glColor4f (myIndicatorsParam.fBarColorOutline[0], myIndicatorsParam.fBarColorOutline[1], myIndicatorsParam.fBarColorOutline[2], 1.);
 				_cairo_dock_set_blend_alpha ();
 				glLineWidth (1.5);
 				cairo_dock_stroke_gl_path (pFramePath, FALSE);

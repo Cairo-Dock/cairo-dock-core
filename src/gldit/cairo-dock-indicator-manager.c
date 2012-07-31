@@ -453,12 +453,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 	}
 	
 	//\__________________ Progress bar.
-	double start_color[4] = {1., 0., 0.};  // red
+	double start_color[4] = {.73, .73, .73};  // grey
 	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_start", &bFlushConfFileNeeded, pIndicators->fBarColorStart, 3, start_color, NULL, NULL);
-	double stop_color[4] = {0., 1., 0.};  // green
+	double stop_color[4] = {.87, .87, .87};  // grey (lighter)
 	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_stop", &bFlushConfFileNeeded, pIndicators->fBarColorStop, 3, stop_color, NULL, NULL);
 	pIndicators->bBarHasOutline = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "bar_outline", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	double outline_color[4] = {1., 1., 1.};  // white
+	double outline_color[4] = {.95, .95, .95};  // ~white
 	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_outline", &bFlushConfFileNeeded, pIndicators->fBarColorOutline, 3, outline_color, NULL, NULL);
 	pIndicators->iBarThickness = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "bar_thickness", &bFlushConfFileNeeded, 4, NULL, NULL);
 	
