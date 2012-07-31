@@ -60,10 +60,10 @@ struct _CairoIndicatorsParam {
 	gboolean bZoomClassIndicator;
 	gboolean bUseClassIndic;
 	// progress bars
-	gdouble fBarColorStart[3];
-	gdouble fBarColorStop[3];
+	gdouble fBarColorStart[4];
+	gdouble fBarColorStop[4];
 	gboolean bBarHasOutline;
-	gdouble fBarColorOutline[3];
+	gdouble fBarColorOutline[4];
 	gint iBarThickness;
 	};
 

@@ -39,8 +39,8 @@ struct _CairoProgressBarAttribute {
 	CairoDataRendererAttribute rendererAttribute;
 	/// image or NULL
 	gchar *cImageGradation;
-	/// color gradation of the bar (an array of 6 doubles, representing 2 RGB values) or NULL
-	gdouble *fColorGradation;  // 2*3
+	/// color gradation of the bar (an array of 8 doubles, representing 2 RGBA values) or NULL
+	gdouble *fColorGradation;  // 2*4
 	/// TRUE to define a custom position (by default it is placed at the middle bottom)
 	gboolean bUseCustomPosition;
 	/// custom position

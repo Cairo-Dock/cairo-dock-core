@@ -453,13 +453,13 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 	}
 	
 	//\__________________ Progress bar.
-	double start_color[4] = {.73, .73, .73};  // grey
-	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_start", &bFlushConfFileNeeded, pIndicators->fBarColorStart, 3, start_color, NULL, NULL);
-	double stop_color[4] = {.87, .87, .87};  // grey (lighter)
-	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_stop", &bFlushConfFileNeeded, pIndicators->fBarColorStop, 3, stop_color, NULL, NULL);
+	double start_color[4] = {.73, .73, .73, .85};  // grey
+	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_start", &bFlushConfFileNeeded, pIndicators->fBarColorStart, 4, start_color, NULL, NULL);
+	double stop_color[4] = {.87, .87, .87, .85};  // grey (lighter)
+	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_stop", &bFlushConfFileNeeded, pIndicators->fBarColorStop, 4, stop_color, NULL, NULL);
 	pIndicators->bBarHasOutline = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "bar_outline", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	double outline_color[4] = {.95, .95, .95};  // ~white
-	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_outline", &bFlushConfFileNeeded, pIndicators->fBarColorOutline, 3, outline_color, NULL, NULL);
+	double outline_color[4] = {.95, .95, .95, .80};  // ~white
+	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_outline", &bFlushConfFileNeeded, pIndicators->fBarColorOutline, 4, outline_color, NULL, NULL);
 	pIndicators->iBarThickness = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "bar_thickness", &bFlushConfFileNeeded, 4, NULL, NULL);
 	
 	return bFlushConfFileNeeded;
@@ -637,14 +637,17 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	if (pPrevIndicators->fBarColorStart[0] != pIndicators->fBarColorStart[0]
 	|| pPrevIndicators->fBarColorStart[1] != pIndicators->fBarColorStart[1]
 	|| pPrevIndicators->fBarColorStart[2] != pIndicators->fBarColorStart[2]
+	|| pPrevIndicators->fBarColorStart[3] != pIndicators->fBarColorStart[3]
 	|| pPrevIndicators->fBarColorStop[0] != pIndicators->fBarColorStop[0]
 	|| pPrevIndicators->fBarColorStop[1] != pIndicators->fBarColorStop[1]
 	|| pPrevIndicators->fBarColorStop[2] != pIndicators->fBarColorStop[2]
+	|| pPrevIndicators->fBarColorStop[3] != pIndicators->fBarColorStop[3]
 	|| pPrevIndicators->iBarThickness != pIndicators->iBarThickness
 	|| pPrevIndicators->bBarHasOutline != pIndicators->bBarHasOutline
 	|| pPrevIndicators->fBarColorOutline[0] != pIndicators->fBarColorOutline[0]
 	|| pPrevIndicators->fBarColorOutline[1] != pIndicators->fBarColorOutline[1]
-	|| pPrevIndicators->fBarColorOutline[2] != pIndicators->fBarColorOutline[2])
+	|| pPrevIndicators->fBarColorOutline[2] != pIndicators->fBarColorOutline[2]
+	|| pPrevIndicators->fBarColorOutline[3] != pIndicators->fBarColorOutline[3])
 	{
 		cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_progress_bar, NULL);
 	}

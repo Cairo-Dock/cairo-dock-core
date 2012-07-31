@@ -654,16 +654,16 @@ zoom class = false
 frame_bar =
 
 #C+ Start color
-bar_color_start = 0.73;0.73;0.73
+bar_color_start = 0.73;0.73;0.73;.85
 
 #C+ End color
-bar_color_stop = 0.87;0.87;0.87
+bar_color_stop = 0.87;0.87;0.87;.85
 
 #B+ Draw outline
 bar_outline = true
 
 #C+ Outline color
-bar_color_outline = 0.95;0.95;0.95
+bar_color_outline = 0.95;0.95;0.95;.80
 
 #i-[2;10] Bar thickness
 bar_thickness = 4

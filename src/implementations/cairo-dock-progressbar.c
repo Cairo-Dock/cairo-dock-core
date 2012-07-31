@@ -48,7 +48,7 @@ typedef struct {
 	GLuint iBarTexture;
 	gint iBarThickness;
 	gchar *cImageGradation;
-	gdouble fColorGradation[6];  // 2 rvb colors
+	gdouble fColorGradation[8];  // 2 rgba colors
 	gboolean bCustomColors;
 	gdouble fScale;
 } ProgressBar;
@@ -96,10 +96,10 @@ static void _make_bar_surface (ProgressBar *pProgressBar)
 		{
 			cairo_pattern_add_color_stop_rgba (pGradationPattern,
 				(double)i / (iNbColors-1),
-				fColorGradation[3*i+0],
-				fColorGradation[3*i+1],
-				fColorGradation[3*i+2],
-				1.);
+				fColorGradation[4*i+0],
+				fColorGradation[4*i+1],
+				fColorGradation[4*i+2],
+				fColorGradation[4*i+3]);
 		}
 		cairo_set_source (ctx, pGradationPattern);
 		
@@ -143,12 +143,12 @@ static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttrib
 	if (pAttribute->fColorGradation)
 	{
 		pProgressBar->bCustomColors = TRUE;
-		memcpy (pProgressBar->fColorGradation, pAttribute->fColorGradation, 6*sizeof (gdouble));
+		memcpy (pProgressBar->fColorGradation, pAttribute->fColorGradation, 8*sizeof (gdouble));
 	}
 	else
 	{
-		memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 3*sizeof (gdouble));
-		memcpy (&pProgressBar->fColorGradation[3], myIndicatorsParam.fBarColorStop, 3*sizeof (gdouble));
+		memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
+		memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
 	}
 	
 	_make_bar_surface (pProgressBar);
@@ -191,7 +191,11 @@ static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 			// outline
 			if (myIndicatorsParam.bBarHasOutline)
 			{
-				cairo_set_source_rgb (pCairoContext, myIndicatorsParam.fBarColorOutline[0], myIndicatorsParam.fBarColorOutline[1], myIndicatorsParam.fBarColorOutline[2]);
+				cairo_set_source_rgba (pCairoContext,
+					myIndicatorsParam.fBarColorOutline[0],
+					myIndicatorsParam.fBarColorOutline[1],
+					myIndicatorsParam.fBarColorOutline[2],
+					myIndicatorsParam.fBarColorOutline[3]);
 				cairo_set_line_width (pCairoContext, pProgressBar->iBarThickness);
 				
 				cairo_move_to (pCairoContext, r, r);
@@ -276,7 +280,10 @@ static void render_opengl (ProgressBar *pProgressBar)
 			// outline
 			if (myIndicatorsParam.bBarHasOutline)
 			{
-				glColor4f (myIndicatorsParam.fBarColorOutline[0], myIndicatorsParam.fBarColorOutline[1], myIndicatorsParam.fBarColorOutline[2], 1.);
+				glColor4f (myIndicatorsParam.fBarColorOutline[0],
+					myIndicatorsParam.fBarColorOutline[1],
+					myIndicatorsParam.fBarColorOutline[2],
+					myIndicatorsParam.fBarColorOutline[3]);
 				_cairo_dock_set_blend_alpha ();
 				glLineWidth (1.5);
 				cairo_dock_stroke_gl_path (pFramePath, FALSE);
@@ -307,8 +314,8 @@ static void reload (ProgressBar *pProgressBar)
 	pProgressBar->iBarThickness = ceil (fBarThickness);
 	if (!pProgressBar->bCustomColors)
 	{
-		memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 3*sizeof (gdouble));
-		memcpy (&pProgressBar->fColorGradation[3], myIndicatorsParam.fBarColorStop, 3*sizeof (gdouble));
+		memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
+		memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
 	}
 	
 	// reload the bar surface
