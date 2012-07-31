@@ -2454,17 +2454,22 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				length = 0;
 				fValueList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
 				#if GTK_CHECK_VERSION (3, 4, 0)
+				gboolean bUseAlpha = FALSE;
 				if (length > 2)
 				{
 					gdkColor.red = fValueList[0];
 					gdkColor.green = fValueList[1];
 					gdkColor.blue = fValueList[2];
 					if (length > 3 && iElementType == CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA)
+					{
+						bUseAlpha = TRUE;
 						gdkColor.alpha = fValueList[3];
+					}
 					else
 						gdkColor.alpha = 1.;
 				}
 				pOneWidget = gtk_color_button_new_with_rgba (&gdkColor);
+				gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (pOneWidget), bUseAlpha);
 				#else
 				if (length > 2)
 				{
