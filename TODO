@@ -64,6 +64,9 @@ For each new version:
 	- Icons: use an image buffer + a request size.
 	- add a function cairo_dock_render_one_icon_in_desklet_opengl().
 	- gauge with images: improve transition
+	- GUI: current items: don't allow the "delete" menu on the main dock
+	- GUI: themes: merge "delete" with "load" or "save"
+	- GUI: previews size gets smaller and smaller
 
 all:
 	- Remove GCC warnings

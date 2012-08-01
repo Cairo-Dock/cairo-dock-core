@@ -283,7 +283,7 @@ static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 	}
 	return pImage;
 }
-static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, int iSize, GtkRadioToolButton *group)
+/**static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, int iSize, GtkRadioToolButton *group)
 {
 	GtkToolItem *pWidget = (group ? gtk_radio_tool_button_new_from_widget (group) : gtk_radio_tool_button_new (NULL));
 	gtk_tool_item_set_homogeneous (pWidget, TRUE);
@@ -315,6 +315,33 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 	gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (pWidget), hbox);
 	
 	return pWidget;
+}*/
+static GtkWidget *_make_notebook_label (const gchar *cLabel, const gchar *cImage, int iSize)
+{
+	GtkWidget *hbox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	
+	GtkWidget *pImage = _make_image (cImage, iSize);
+	GtkWidget *pAlign = gtk_alignment_new (0.5, 0.5, 0., 1.);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_FRAME_MARGIN, 0);
+	gtk_container_add (GTK_CONTAINER (pAlign), pImage);
+	gtk_box_pack_start (GTK_BOX (hbox),
+		pAlign,
+		FALSE,
+		FALSE,
+		0);
+	
+	GtkWidget *pLabel = gtk_label_new (cLabel);
+	pAlign = gtk_alignment_new (0.5, 0.5, 0., 1.);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_FRAME_MARGIN, 0);
+	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
+	gtk_box_pack_start (GTK_BOX (hbox),
+		pAlign,
+		FALSE,
+		FALSE,
+		0);	
+	
+	gtk_widget_show_all (hbox);
+	return hbox;
 }
 
 static void _build_category_widget (CDCategory *pCategory)
@@ -324,12 +351,12 @@ static void _build_category_widget (CDCategory *pCategory)
 	gtk_widget_show_all (pCategory->pCdWidget->pWidget);
 	g_print (" %p -> %p\n", pCategory, pCategory->pCdWidget);
 	
-	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pCategory->pMainWindow));
+	/**GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pCategory->pMainWindow));
 	gtk_box_pack_start (GTK_BOX (pMainVBox), pCategory->pCdWidget->pWidget, TRUE, TRUE, 0);
-	gtk_box_reorder_child (GTK_BOX (pMainVBox), pCategory->pCdWidget->pWidget, 2);
+	gtk_box_reorder_child (GTK_BOX (pMainVBox), pCategory->pCdWidget->pWidget, 2);*/
 }
 
-static void _on_select_category (GtkButton *button, CDCategory *pCategory)
+/**static void _on_select_category (GtkButton *button, CDCategory *pCategory)
 {
 	if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (button)))  // build/show the widget
 	{
@@ -349,6 +376,22 @@ static void _on_select_category (GtkButton *button, CDCategory *pCategory)
 			gtk_widget_hide (pCategory->pCdWidget->pWidget);
 		cairo_dock_enable_apply_button (pCategory->pMainWindow, FALSE);
 	}
+}*/
+static void _on_switch_page (GtkNotebook *pNoteBook, GtkWidget *page, guint page_num, gpointer user_data)
+{
+	CDCategory *pCategory = _get_category (page_num);
+	g_return_if_fail (pCategory != NULL);
+	g_print ("activate %s\n", pCategory->cName);
+	if (pCategory->pCdWidget == NULL)
+	{
+		_build_category_widget (pCategory);
+		gtk_box_pack_start (page, pCategory->pCdWidget->pWidget, TRUE,	TRUE,	0);
+		gtk_widget_show (pCategory->pCdWidget->pWidget);
+	}
+	
+	cairo_dock_enable_apply_button (pCategory->pMainWindow, cairo_dock_widget_can_apply (pCategory->pCdWidget));
+	
+	_set_current_category (page_num);
 }
 
 static void _on_window_destroyed (GtkWidget *pMainWindow, gpointer data)
@@ -366,6 +409,7 @@ static void _on_window_destroyed (GtkWidget *pMainWindow, gpointer data)
 	s_pSimpleConfigWindow = NULL;
 }
 
+
 GtkWidget *cairo_dock_build_simple_gui_window (void)
 {
 	if (s_pSimpleConfigWindow != NULL)
@@ -381,9 +425,7 @@ GtkWidget *cairo_dock_build_simple_gui_window (void)
 	g_signal_connect (G_OBJECT (pMainWindow), "destroy", G_CALLBACK(_on_window_destroyed), NULL);
 	
 	//\_____________ add categories
-	GtkWidget *pToolBar = gtk_toolbar_new ();
-	//g_object_set (G_OBJECT (pToolBar), "fill", TRUE, NULL);
-	//g_object_set (G_OBJECT (pToolBar), "homogeneous", TRUE, NULL);
+	/**GtkWidget *pToolBar = gtk_toolbar_new ();
 	gtk_toolbar_set_style (GTK_TOOLBAR (pToolBar), GTK_TOOLBAR_BOTH_HORIZ);
 	gtk_toolbar_set_show_arrow (GTK_TOOLBAR (pToolBar), FALSE);
 	
@@ -412,7 +454,40 @@ GtkWidget *cairo_dock_build_simple_gui_window (void)
 		gtk_toolbar_insert (GTK_TOOLBAR (pToolBar), pCategory->pCategoryButton, -1);
 	}
 	
-	gtk_widget_show_all (pToolBar);
+	gtk_widget_show_all (pToolBar);*/
+	
+	GtkWidget *pNoteBook = gtk_notebook_new ();
+	gtk_notebook_set_scrollable (GTK_NOTEBOOK (pNoteBook), TRUE);
+	gtk_notebook_popup_enable (GTK_NOTEBOOK (pNoteBook));
+	
+	GtkWidget *pMainVBox = gtk_bin_get_child (GTK_BIN (pMainWindow));
+	gtk_box_pack_start (GTK_BOX (pMainVBox),
+		pNoteBook,
+		TRUE,
+		TRUE,
+		0);
+	g_object_set_data (G_OBJECT (pMainWindow), "notebook", pNoteBook);
+	
+	CDCategory *pCategory;
+	int i;
+	for (i = 0; i < CD_NB_CATEGORIES; i ++)
+	{
+		pCategory = _get_category (i);
+		
+		GtkWidget *hbox = _make_notebook_label (pCategory->cName,
+			pCategory->cIcon,
+			CAIRO_DOCK_CATEGORY_ICON_SIZE);
+		GtkWidget *vbox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
+		gtk_notebook_append_page (pNoteBook,
+			vbox,
+			hbox);
+		pCategory->pMainWindow = pMainWindow;
+	}
+	gtk_widget_show_all (pNoteBook);
+	
+	g_signal_connect (pNoteBook, "switch-page", G_CALLBACK (_on_switch_page), NULL);
+	g_object_set (pNoteBook, "tab-expand", TRUE, "tab-fill", TRUE, NULL);
+	
 	return pMainWindow;
 }
 
@@ -430,7 +505,9 @@ static void cairo_dock_enable_apply_button (GtkWidget *pMainWindow, gboolean bEn
 static void cairo_dock_select_category (GtkWidget *pMainWindow, CDCategoryEnum iCategory)
 {
 	CDCategory *pCategory = _get_category (iCategory);
-	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategory->pCategoryButton), TRUE);  // will first emit a signal to the currently selected button, which will hide the current widget, and then to the new button, which will show the widget.
+	///gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategory->pCategoryButton), TRUE);  // will first emit a signal to the currently selected button, which will hide the current widget, and then to the new button, which will show the widget.
+	GtkNotebook *pNoteBook = g_object_get_data (pMainWindow, "notebook");
+	gtk_notebook_set_current_page (pNoteBook, iCategory);  // will first emit a 'switch-page' signal, which will bulid the widget if necessary.
 }
 
 
