@@ -51,8 +51,8 @@
 
 #define CAIRO_DOCK_PREVIEW_WIDTH 200
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
-#define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1200
-#define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 700
+#define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1200 // matttbe: 800
+#define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 700 // matttbe: 500
 
 #define CAIRO_DOCK_CATEGORY_ICON_SIZE 32  // a little bit larger than the tab icons (28px)
 
@@ -385,7 +385,7 @@ static void _on_switch_page (GtkNotebook *pNoteBook, GtkWidget *page, guint page
 	if (pCategory->pCdWidget == NULL)
 	{
 		_build_category_widget (pCategory);
-		gtk_box_pack_start (page, pCategory->pCdWidget->pWidget, TRUE,	TRUE,	0);
+		gtk_box_pack_start (GTK_BOX (page), pCategory->pCdWidget->pWidget, TRUE, TRUE, 0);
 		gtk_widget_show (pCategory->pCdWidget->pWidget);
 	}
 	
@@ -478,7 +478,7 @@ GtkWidget *cairo_dock_build_simple_gui_window (void)
 			pCategory->cIcon,
 			CAIRO_DOCK_CATEGORY_ICON_SIZE);
 		GtkWidget *vbox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
-		gtk_notebook_append_page (pNoteBook,
+		gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook),
 			vbox,
 			hbox);
 		pCategory->pMainWindow = pMainWindow;
@@ -506,7 +506,7 @@ static void cairo_dock_select_category (GtkWidget *pMainWindow, CDCategoryEnum i
 {
 	CDCategory *pCategory = _get_category (iCategory);
 	///gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategory->pCategoryButton), TRUE);  // will first emit a signal to the currently selected button, which will hide the current widget, and then to the new button, which will show the widget.
-	GtkNotebook *pNoteBook = g_object_get_data (pMainWindow, "notebook");
+	GtkNotebook *pNoteBook = g_object_get_data (G_OBJECT (pMainWindow), "notebook");
 	gtk_notebook_set_current_page (pNoteBook, iCategory);  // will first emit a 'switch-page' signal, which will bulid the widget if necessary.
 }
 

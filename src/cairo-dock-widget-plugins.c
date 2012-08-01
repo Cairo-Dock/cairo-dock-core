@@ -30,7 +30,7 @@
 #include "cairo-dock-gui-commons.h"  // cairo_dock_get_third_party_applets_link
 #include "cairo-dock-widget-plugins.h"
 
-#define CAIRO_DOCK_PREVIEW_HEIGHT 250
+#define CAIRO_DOCK_PREVIEW_HEIGHT 250 // matttbe: 200
 
 extern gchar *g_cConfFile;
 extern CairoDockDesktopGeometry g_desktopGeometry;
@@ -228,13 +228,13 @@ static GtkWidget *cairo_dock_build_modules_treeview (void)
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "pixbuf", CAIRO_DOCK_MODEL_ICON, NULL);
 	// nom
 	rend = gtk_cell_renderer_text_new ();
-	col = gtk_tree_view_column_new_with_attributes (_("plug-in"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
+	col = gtk_tree_view_column_new_with_attributes (_("Plug-in"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
 	gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_module_name, NULL, NULL);
 	gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_NAME);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);
 	// categorie
 	rend = gtk_cell_renderer_text_new ();
-	col = gtk_tree_view_column_new_with_attributes (_("category"), rend, "text", CAIRO_DOCK_MODEL_STATE, NULL);
+	col = gtk_tree_view_column_new_with_attributes (_("Category"), rend, "text", CAIRO_DOCK_MODEL_STATE, NULL);
 	gtk_tree_view_column_set_cell_data_func (col, rend, (GtkTreeCellDataFunc)_cairo_dock_render_category, NULL, NULL);
 	gtk_tree_view_column_set_sort_column_id (col, CAIRO_DOCK_MODEL_STATE);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (pOneWidget), col);

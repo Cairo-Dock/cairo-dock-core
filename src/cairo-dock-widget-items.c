@@ -43,11 +43,11 @@
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-widget-items.h"
 
-#define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1200
-#define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 700
+#define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1200 // matttbe: 800
+#define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 700 // matttbe: 500
 #define CAIRO_DOCK_LEFT_PANE_MIN_WIDTH 100
-#define CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH 340
-#define CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH 800
+#define CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH 340 // matttbe: 200
+#define CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH 800 // matttbe: 500
 
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
