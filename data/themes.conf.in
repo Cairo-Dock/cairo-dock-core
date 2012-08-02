@@ -3,7 +3,7 @@
 #[gtk-open]
 [Load theme]
 
-#R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes3.0] /
+#<
 chosen theme = 
 
 #S ...or drag and drop a theme package here :
@@ -43,10 +43,3 @@ sep=
 #b Build a package of the theme?
 #{The dock will build a complete tarball of your current theme, allowing you to easily exchange it with other people.}
 package = false
-
-
-#[gtk-delete]
-[Delete]
-
-#< Delete from the list themes that you don't need anymore :
-deleted themes = 

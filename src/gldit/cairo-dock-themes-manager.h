@@ -67,6 +67,7 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList);
 gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers);
 
 /** Asynchronously import a theme, which can be : a local theme, a user theme, a distant theme, or even the path to a packaged theme. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the result of the import as the first argument of the callback (the second being the data you passed to this function).
+ * Note that only downloading or unpacking the theme is done asynchronously, actually copying the files in the current theme folder is not (because it couldn't be cancelled without first making a backup).
  * @param cThemeName name of the theme to import.
  * @param bLoadBehavior whether to import the behavior parameters too.
  * @param bLoadLaunchers whether to import the launchers too.

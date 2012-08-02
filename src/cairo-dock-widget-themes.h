@@ -35,6 +35,8 @@ struct _ThemesWidget {
 	GtkWindow *pMainWindow;
 	GtkWidget *pWaitingDialog;
 	CairoDockTask *pImportTask;
+	CairoDockTask *pListTask;
+	GtkWidget *pTreeView;
 	guint iSidPulse;
 };
 

@@ -80,8 +80,6 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_THEME_LIST='h',
 	/// same but with a combo-entry to let the user enter any text.
 	CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY='H',
-	/// list of dock themes, sortable by name, rating, and sobriety.
-	CAIRO_DOCK_WIDGET_THEME_SELECTOR='R',
 	/// list of available animations.
 	CAIRO_DOCK_WIDGET_ANIMATION_LIST='a',
 	/// list of available dialog decorators.
@@ -210,6 +208,8 @@ void cairo_dock_free_generated_widget_list (GSList *pWidgetList);
   ///////////////
  // utilities //
 ///////////////
+
+void cairo_dock_fill_model_with_themes (GtkListStore *pModel, GHashTable *pThemeTable, const gchar *cHint);
 
 void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, const gchar *cActiveElement);  // utile pour les applets.
 
