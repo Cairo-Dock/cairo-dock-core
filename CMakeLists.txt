@@ -58,7 +58,7 @@ set (datadir "${prefix}/${CMAKE_INSTALL_DATAROOTDIR}")  # (...)/share
 set (pkgdatadir "${datadir}/${CMAKE_PROJECT_NAME}")  # (...)/cairo-dock
 set (mandir "${prefix}/${CMAKE_INSTALL_MANDIR}")  # (...)/man
 
-set (VERSION_HELP "0.9.991") # needed to parse Help.conf.in
+set (VERSION_HELP "0.9.992") # needed to parse Help.conf.in
 
 if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND "${FORCE_LIB64}" STREQUAL "yes")  # 64bits and force install in lib64
 	set (libdir "${prefix}/lib64")
