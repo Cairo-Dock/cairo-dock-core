@@ -125,22 +125,6 @@ static gboolean _cairo_dock_save_current_theme (GKeyFile* pKeyFile)
 }
 
 
-static gboolean _cairo_dock_delete_user_themes (GKeyFile* pKeyFile)
-{
-	const gchar *cGroupName = "Delete";
-	//\___________________ On recupere les themes selectionnes.
-	gsize length = 0;
-	gchar ** cThemesList = g_key_file_get_string_list (pKeyFile, cGroupName, "deleted themes", &length, NULL);
-	
-	g_return_val_if_fail (cThemesList != NULL && cThemesList[0] != NULL && *cThemesList[0] != '\0', FALSE);
-	
-	//\___________________ On efface les themes.
-	gboolean bThemeDeleted = cairo_dock_delete_themes (cThemesList);
-	
-	return bThemeDeleted;
-}
-
-
 static void on_cancel_dl (GtkButton *button, ThemesWidget *pThemesWidget)
 {
 	cairo_dock_discard_task (pThemesWidget->pImportTask);
@@ -162,7 +146,7 @@ static void on_waiting_dialog_destroyed (GtkWidget *pWidget, ThemesWidget *pThem
 static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pThemesWidget)
 {
 	GtkWindow *pMainWindow = pThemesWidget->pMainWindow;
-	const gchar *cGroupName = "Themes";
+	const gchar *cGroupName = "Load theme";
 	//\___________________ On recupere le theme selectionne.
 	gchar *cNewThemeName = g_key_file_get_string (pKeyFile, cGroupName, "chosen theme", NULL);
 	if (cNewThemeName != NULL && *cNewThemeName == '\0')
@@ -309,7 +293,7 @@ static void _make_tree_view_for_delete_themes (GSList *pWidgetList, GPtrArray *p
 	
 	//\______________ On recupere les themes utilisateurs.
 	GHashTable *pThemeTable = cairo_dock_list_packages (NULL, g_cThemesDirPath, NULL, NULL);
-
+	
 	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_model_with_themes, pModel);
 	g_hash_table_destroy (pThemeTable);
 	
@@ -468,7 +452,36 @@ static void _got_themes_list (GHashTable *pThemeTable, ThemesWidget *pThemesWidg
 	cairo_dock_fill_model_with_themes (pModel, pThemeTable, NULL);
 }
 
-static gboolean _on_click_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer data)
+static void _on_delete_theme (GtkMenuItem *pMenuItem, ThemesWidget *pThemesWidget)
+{
+	// get the selected theme
+	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pThemesWidget->pTreeView));
+	GtkTreeModel *pModel;
+	GtkTreeIter iter;
+	if (! gtk_tree_selection_get_selected (pSelection, &pModel, &iter))
+		return ;
+	gchar *cThemeName = NULL;
+	gtk_tree_model_get (pModel, &iter,
+		CAIRO_DOCK_MODEL_RESULT, &cThemeName, -1);
+	cairo_dock_extract_package_type_from_name (cThemeName);
+	
+	// delete it
+	gchar *cThemesList[2] = {cThemeName, NULL};
+	gboolean bSuccess = cairo_dock_delete_themes (cThemesList);
+	
+	// reload the themes list
+	if (bSuccess)
+	{
+		cairo_dock_set_status_message (NULL, _("The theme has been deleted"));
+		
+		/// reload the modele ...
+		
+		
+		
+	}
+	g_free (cThemeName);
+}
+static gboolean _on_click_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, ThemesWidget *pThemesWidget)
 {
 	if ((pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)  // right click
 	|| (pButton->button == 1 && pButton->type == GDK_2BUTTON_PRESS))  // double click
@@ -479,35 +492,33 @@ static gboolean _on_click_tree_view (GtkTreeView *pTreeView, GdkEventButton* pBu
 		if (! gtk_tree_selection_get_selected (pSelection, &pModel, &iter))
 			return FALSE;
 		
-		gchar *cThemeName = NULL;
-		gtk_tree_model_get (pModel, &iter,
-			CAIRO_DOCK_MODEL_NAME, &cThemeName, -1);
-		/**CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-		if (pModule == NULL)
-			return FALSE;
-		
-		if (pModule->pInstancesList == NULL)  // on ne gere pas la config d'un module non actif, donc inutile de presenter le menu dans ce cas-la.
-			return FALSE;
-		
-		if (pButton->button == 3)
+		if (pButton->button == 3)  // show the menu if needed (ie, if the theme can be deleted).
 		{
-			GtkWidget *pMenu = gtk_menu_new ();
-			
-			cairo_dock_add_in_menu_with_stock_and_data (_("Configure this applet"), GTK_STOCK_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_config_module), pMenu, pModule);
-			
-			gtk_widget_show_all (pMenu);
-			gtk_menu_popup (GTK_MENU (pMenu),
-				NULL,
-				NULL,
-				NULL,
-				NULL,
-				1,
-				gtk_get_current_event_time ());
+			gchar *cThemeName = NULL;
+			gtk_tree_model_get (pModel, &iter,
+				CAIRO_DOCK_MODEL_RESULT, &cThemeName, -1);
+			CairoDockPackageType iType = cairo_dock_extract_package_type_from_name (cThemeName);  // the type is encoded inside the result; one could also see if the theme folder is present on the disk.
+			g_free (cThemeName);
+			if (iType == CAIRO_DOCK_USER_PACKAGE || iType == CAIRO_DOCK_UPDATED_PACKAGE)
+			{
+				GtkWidget *pMenu = gtk_menu_new ();
+				
+				cairo_dock_add_in_menu_with_stock_and_data (_("Delete this theme"), GTK_STOCK_DELETE, G_CALLBACK (_on_delete_theme), pMenu, pThemesWidget);
+				
+				gtk_widget_show_all (pMenu);
+				gtk_menu_popup (GTK_MENU (pMenu),
+					NULL,
+					NULL,
+					NULL,
+					NULL,
+					1,
+					gtk_get_current_event_time ());
+			}
 		}
-		else
+		else  // load the theme
 		{
-			_cairo_dock_initiate_config_module (NULL, pModule);
-		}*/
+			
+		}
 	}
 	return FALSE;
 }
@@ -560,8 +571,8 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
 	// menu
-	g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_tree_view), NULL);
-	g_signal_connect (G_OBJECT (pOneWidget), "button-press-event", G_CALLBACK (_on_click_tree_view), NULL);
+	g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_tree_view), pThemesWidget);
+	g_signal_connect (G_OBJECT (pOneWidget), "button-press-event", G_CALLBACK (_on_click_tree_view), pThemesWidget);
 	
 	//\______________ add a preview widget next to the treeview
 	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (NULL, pOneWidget, FALSE, 2, NULL, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
@@ -660,12 +671,6 @@ static void _themes_widget_apply (CDWidget *pCdWidget)
 			bReloadWindow = _cairo_dock_save_current_theme (pKeyFile);
 			if (bReloadWindow)
 				cairo_dock_set_status_message (NULL, _("Theme has been saved"));
-		break;
-		
-		case 2:  // delete some themes
-			bReloadWindow = _cairo_dock_delete_user_themes (pKeyFile);
-			if (bReloadWindow)
-				cairo_dock_set_status_message (NULL, _("Themes have been deleted"));
 		break;
 	}
 	g_key_file_free (pKeyFile);

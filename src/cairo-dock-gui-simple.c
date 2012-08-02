@@ -617,10 +617,10 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 	cairo_dock_select_category (s_pSimpleConfigWindow, CD_CATEGORY_ITEMS);
 	
 	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
-	if (pCategory->pCdWidget == NULL)  // build the widget immediately, because we want to select the given item
+	/*if (pCategory->pCdWidget == NULL)  // build the widget immediately, because we want to select the given item
 	{
 		_build_category_widget (pCategory);
-	}
+	}*/
 	
 	cairo_dock_items_widget_select_item (ITEMS_WIDGET (pCategory->pCdWidget), pIcon, pContainer, pModuleInstance, iShowPage);
 }
@@ -650,24 +650,25 @@ static void reload (void)
 	if (pCategory->pCdWidget != NULL)  // category is built
 	{
 		cairo_dock_items_widget_reload (ITEMS_WIDGET (pCategory->pCdWidget));
-		if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
-			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+		
+		///if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
+		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);
 	}
 	
 	pCategory = _get_category (CD_CATEGORY_CONFIG);
 	if (pCategory->pCdWidget != NULL)  // category is built
 	{
 		cairo_dock_config_widget_reload (CONFIG_WIDGET (pCategory->pCdWidget));
-		if (s_iCurrentCategory != CD_CATEGORY_CONFIG)
-			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+		///if (s_iCurrentCategory != CD_CATEGORY_CONFIG)
+		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);
 	}
 	
 	pCategory = _get_category (CD_CATEGORY_PLUGINS);
 	if (pCategory->pCdWidget != NULL)  // category is built
 	{
 		cairo_dock_widget_plugins_reload (PLUGINS_WIDGET (pCategory->pCdWidget));
-		if (s_iCurrentCategory != CD_CATEGORY_PLUGINS)
-			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+		///if (s_iCurrentCategory != CD_CATEGORY_PLUGINS)
+		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);
 	}
 }
 

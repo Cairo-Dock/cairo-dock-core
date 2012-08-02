@@ -3682,22 +3682,6 @@ void cairo_dock_fill_model_with_themes (GtkListStore *pModel, GHashTable *pTheme
 	data[0] = pModel;
 	data[1] = cHint;
 	g_hash_table_foreach (pThemeTable, (GHFunc)_fill_model_with_one_theme, data);
-	/**if (cHint != NULL)
-	{
-		GtkTreeIter iter;
-		if ( ! gtk_tree_model_iter_children (modele, &iter, NULL))
-			return;
-		
-		gboolean bContinue, bVisible;
-		do
-		{
-			gtk_tree_model_get (modele, &iter, CAIRO_DOCK_MODEL_ACTIVE, &bVisible, -1);
-			if (!bVisible)
-				bContinue = gtk_list_store_remove (GTK_LIST_STORE (modele), &iter);
-			else
-				bContinue = gtk_tree_model_iter_next (modele, &iter);
-		} while (bContinue);
-	}*/
 }
 
 
