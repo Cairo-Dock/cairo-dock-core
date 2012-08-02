@@ -519,6 +519,7 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 	// Some systems restrict the length of name to 16 bytes. 
 	gchar *cThreadName = g_strndup (cCommand, 15);
 	GThread* pThread = g_thread_try_new (cThreadName, (GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, &erreur);
+	g_thread_unref (pThread);
 	g_free (cThreadName);
 	#endif
 	if (erreur != NULL)

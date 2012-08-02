@@ -203,6 +203,7 @@ void cairo_dock_load_icon_text (Icon *icon)
 		&iWidth,
 		&iHeight);
 	cairo_dock_load_image_buffer_from_surface (&icon->label, pSurface, iWidth, iHeight);
+	g_free (cTruncatedName);
 }
 
 void cairo_dock_load_icon_quickinfo (Icon *icon)

@@ -105,6 +105,7 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 			GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, pTask, FALSE, &erreur);
 			#else
 			GThread* pThread = g_thread_try_new ("Cairo-Dock Task", (GThreadFunc) _cairo_dock_threaded_calculation, pTask, &erreur);
+			g_thread_unref (pThread);
 			#endif
 			if (erreur != NULL)  // on n'a pas pu lancer le thread.
 			{
