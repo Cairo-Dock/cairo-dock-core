@@ -49,6 +49,8 @@
 #define CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH 340 // matttbe: 200
 #define CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH 800 // matttbe: 500
 
+#define CAIRO_DOCK_ITEM_ICON_SIZE 32
+
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
 extern CairoDockDesktopGeometry g_desktopGeometry;
@@ -292,7 +294,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	// set an image.
 	if (pIcon->cFileName != NULL)
 	{
-		cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName, 24);
+		cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName, CAIRO_DOCK_ITEM_ICON_SIZE);
 	}
 	if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 	{
@@ -319,7 +321,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	
 	if (cImagePath != NULL)
 	{
-		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 32, 32, &erreur);
+		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, CAIRO_DOCK_ITEM_ICON_SIZE, CAIRO_DOCK_ITEM_ICON_SIZE, &erreur);
 		if (erreur != NULL)
 		{
 			cd_warning (erreur->message);
@@ -330,7 +332,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	
 	// set a name
 	if (CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))  // separator
-		cName = "---------";
+		cName = "–––––––––––––––";
 	else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet
 		cName = pIcon->pModuleInstance->pModule->pVisitCard->cTitle;
 	else  // launcher
@@ -404,7 +406,7 @@ static inline void _add_one_module (const gchar *cModuleName, CairoDockModuleIns
 	GdkPixbuf *pixbuf = NULL;
 	gchar *cImagePath = g_strdup (pModuleInstance->pModule->pVisitCard->cIconFilePath);
 	if (cImagePath != NULL)
-		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, 32, 32, NULL);
+		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, CAIRO_DOCK_ITEM_ICON_SIZE, CAIRO_DOCK_ITEM_ICON_SIZE, NULL);
 	gtk_tree_store_set (model, &iter,
 		CD_MODEL_NAME, cModuleName,
 		CD_MODEL_PIXBUF, pixbuf,
@@ -607,6 +609,7 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, ItemsWidget 
 								g_print (" test iter %s / %s\n", iter_s, last_iter_s);
 								if (strcmp (last_iter_s, iter_s) == 0)  // it's our row
 								{
+									g_free (iter_s);
 									g_print (" reached our row, break\n");
 									break;
 								}
@@ -618,9 +621,11 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, ItemsWidget 
 										CD_MODEL_ICON, &pLeftIcon, -1);
 									g_print ("  (%s)\n", name);
 								}
+								g_free (iter_s);
 							}
 							while (gtk_tree_model_iter_next (model, &it));
 						}
+						g_free (last_iter_s);
 						
 						// move the icon (will update the conf file and trigger the signal to reload the GUI).
 						g_print (" move the icon...\n");
