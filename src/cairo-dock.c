@@ -400,7 +400,7 @@ int main (int argc, char** argv)
 	}
 	
 	if (g_bLocked)
-		cd_warning ("Cairo-Dock will be locked.\n");
+		cd_warning ("Cairo-Dock will be locked.");
 	
 	if (cVerbosity != NULL)
 	{
@@ -674,7 +674,7 @@ int main (int argc, char** argv)
 	{
 		if (cExcludeModule != NULL)
 		{
-			cd_warning ("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org\n", cExcludeModule);
+			cd_warning (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org\n"), cExcludeModule);
 			gchar *cCommand = g_strdup_printf ("sed -i \"/modules/ s/%s//g\" \"%s\"", cExcludeModule, g_cConfFile);
 			int r = system (cCommand);
 			g_free (cCommand);
@@ -683,7 +683,7 @@ int main (int argc, char** argv)
 		GtkWidget *pWindow = cairo_dock_show_main_gui ();
 		gtk_window_set_title (GTK_WINDOW (pWindow), _("< Maintenance mode >"));
 		if (cExcludeModule != NULL)
-			cairo_dock_set_status_message_printf (pWindow, "Something went wrong with the applet '%s'...", cExcludeModule);
+			cairo_dock_set_status_message_printf (pWindow, "%s '%s'...", _("Something went wrong with this applet:"), cExcludeModule);
 		gtk_window_set_modal (GTK_WINDOW (pWindow), TRUE);
 		GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
 		g_signal_connect (G_OBJECT (pWindow),
@@ -728,7 +728,7 @@ int main (int argc, char** argv)
 	if (!bSafeMode && cairo_dock_get_nb_modules () <= 1)  // 1 en comptant l'aide
 	{
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
-		cairo_dock_ask_question_and_wait (("No plug-in were found.\nPlug-ins provide most of the functionnalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
+		cairo_dock_ask_question_and_wait (_("No plug-in were found.\nPlug-ins provide most of the functionalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
 		return 0;
 	}
 	
@@ -780,7 +780,7 @@ int main (int argc, char** argv)
 		if (s_iNbCrashes < 2)
 			cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restored successfully, but if it happens again, please report it at http://glx-dock.org"), cExcludeModule);
 		else
-			cMessage = g_strdup_printf ("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org", cExcludeModule);
+			cMessage = g_strdup_printf (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org"), cExcludeModule);
 		
 		CairoDockModule *pModule = cairo_dock_find_module_from_name (cExcludeModule);
 		Icon *icon = cairo_dock_get_dialogless_icon ();
