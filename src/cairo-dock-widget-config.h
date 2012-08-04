@@ -53,8 +53,5 @@ ConfigWidget *cairo_dock_config_widget_new (void);
 void cairo_dock_widget_config_update_shortkeys (ConfigWidget *pConfigWidget);
 
 
-void cairo_dock_config_widget_reload (ConfigWidget *pConfigWidget);
-
-
 G_END_DECLS
 #endif

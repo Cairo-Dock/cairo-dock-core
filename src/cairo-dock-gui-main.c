@@ -2459,7 +2459,7 @@ static void update_shortkeys (void)
 	|| strcmp (s_pCurrentGroup->cGroupName, "Shortkeys") != 0)  // the Shortkeys widget is not currently displayed => nothing to do.
 		return ;
 	
-	cairo_dock_shortkeys_widget_reload (SHORKEYS_WIDGET (s_pCurrentGroupWidget2));
+	cairo_dock_widget_reload (s_pCurrentGroupWidget2);  // the GTK widget is kept
 }
 
 static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
@@ -2499,7 +2499,7 @@ static void reload_items (void)
 	
 	if (IS_ITEMS_WIDGET (s_pCurrentGroupWidget2))  // currently displayed widget is the "items" one.
 	{
-		cairo_dock_items_widget_reload (ITEMS_WIDGET (s_pCurrentGroupWidget2));
+		cairo_dock_widget_reload (s_pCurrentGroupWidget2);  // the GTK widget is kept
 	}
 }
 

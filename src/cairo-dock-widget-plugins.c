@@ -36,6 +36,8 @@ extern gchar *g_cConfFile;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoContainer *g_pPrimaryContainer;
 
+static void _widget_plugins_reload (CDWidget *pCdWidget);
+
 static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
 	GtkTreeIter iter;
@@ -329,6 +331,7 @@ PluginsWidget *cairo_dock_plugins_widget_new (void)
 	pPluginsWidget->widget.iType = WIDGET_PLUGINS;
 	pPluginsWidget->widget.apply = NULL;  // no apply button
 	pPluginsWidget->widget.reset = NULL;  // nothing special to clean
+	pPluginsWidget->widget.reload = _widget_plugins_reload;
 	
 	_build_plugins_widget (pPluginsWidget);
 	
@@ -359,8 +362,10 @@ void cairo_dock_widget_plugins_update_module_state (PluginsWidget *pPluginsWidge
 }
 
 
-void cairo_dock_widget_plugins_reload (PluginsWidget *pPluginsWidget)
+static void _widget_plugins_reload (CDWidget *pCdWidget)
 {
+	PluginsWidget *pPluginsWidget = PLUGINS_WIDGET (pCdWidget);
+	
 	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pPluginsWidget->pTreeView));
 	g_return_if_fail (pModel != NULL);
 	gtk_list_store_clear (GTK_LIST_STORE (pModel));

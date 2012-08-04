@@ -45,8 +45,5 @@ PluginsWidget *cairo_dock_plugins_widget_new (void);
 void cairo_dock_widget_plugins_update_module_state (PluginsWidget *pPluginsWidget, const gchar *cModuleName, gboolean bActive);
 
 
-void cairo_dock_widget_plugins_reload (PluginsWidget *pPluginsWidget);
-
-
 G_END_DECLS
 #endif

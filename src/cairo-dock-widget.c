@@ -36,6 +36,14 @@ gboolean cairo_dock_widget_can_apply (CDWidget *pCdWidget)
 }
 
 
+void cairo_dock_widget_reload (CDWidget *pCdWidget)
+{
+	g_print ("%s (type %d)\n", __func__, pCdWidget->iType);
+	if (pCdWidget && pCdWidget->reload)
+		pCdWidget->reload (pCdWidget);
+}
+
+
 void cairo_dock_widget_free (CDWidget *pCdWidget)  // doesn't destroy the GTK widget, as it is destroyed with the main window
 {
 	if (!pCdWidget)

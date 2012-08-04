@@ -44,8 +44,9 @@ struct _CDWidget {
 	GtkWidget *pWidget;
 	void (*apply) (CDWidget *pWidget);
 	void (*reset) (CDWidget *pWidget);
-	gboolean (*represents_module_instance) (CairoDockModuleInstance *pInstance);
-	CairoDockGroupKeyWidget* (*get_widget_from_name) (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName);
+	void (*reload) (CDWidget *pWidget);  // reload, possibly destroying the GTK widget.
+	//gboolean (*represents_module_instance) (CairoDockModuleInstance *pInstance);
+	//CairoDockGroupKeyWidget* (*get_widget_from_name) (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName);
 	GSList *pWidgetList;
 	GPtrArray *pDataGarbage;
 };
@@ -57,6 +58,9 @@ void cairo_dock_widget_apply (CDWidget *pCdWidget);
 
 
 gboolean cairo_dock_widget_can_apply (CDWidget *pCdWidget);
+
+
+void cairo_dock_widget_reload (CDWidget *pCdWidget);
 
 
 void cairo_dock_widget_free (CDWidget *pCdWidget);

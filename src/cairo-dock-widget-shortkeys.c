@@ -31,6 +31,7 @@
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 extern CairoDockDesktopGeometry g_desktopGeometry;
 
+static void _shortkeys_widget_reload (CDWidget *pCdWidget);
 
 typedef enum {
 	CD_SHORTKEY_MODEL_NAME = 0,  // demander
@@ -246,6 +247,7 @@ ShortkeysWidget *cairo_dock_shortkeys_widget_new (void)
 {
 	ShortkeysWidget *pShortkeysWidget = g_new0 (ShortkeysWidget, 1);
 	pShortkeysWidget->widget.iType = WIDGET_SHORTKEYS;
+	pShortkeysWidget->widget.reload = _shortkeys_widget_reload;
 	
 	pShortkeysWidget->pShortKeysTreeView = cairo_dock_build_shortkeys_widget ();
 	
@@ -260,8 +262,9 @@ ShortkeysWidget *cairo_dock_shortkeys_widget_new (void)
 }
 
 
-void cairo_dock_shortkeys_widget_reload (ShortkeysWidget *pShortkeysWidget)
+static void _shortkeys_widget_reload (CDWidget *pCdWidget)
 {
+	ShortkeysWidget *pShortkeysWidget = SHORKEYS_WIDGET (pCdWidget);
 	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pShortkeysWidget->pShortKeysTreeView));
 	g_return_if_fail (pModel != NULL);
 	gtk_list_store_clear (GTK_LIST_STORE (pModel));

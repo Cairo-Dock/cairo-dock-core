@@ -49,8 +49,5 @@ struct _ShortkeysWidget {
 ShortkeysWidget *cairo_dock_shortkeys_widget_new (void);
 
 
-void cairo_dock_shortkeys_widget_reload (ShortkeysWidget *pShortkeysWidget);
-
-
 G_END_DECLS
 #endif

@@ -50,7 +50,8 @@ extern gchar *g_cThemesDirPath;
 
 static void _themes_widget_apply (CDWidget *pCdWidget);
 static void _themes_widget_reset (CDWidget *pCdWidget);
-static void _themes_widget_reload (ThemesWidget *pThemesWidget);
+static void _themes_widget_reload (CDWidget *pThemesWidget);
+static void _fill_treeview_with_themes (ThemesWidget *pThemesWidget);
 
 
 static gchar *cairo_dock_build_temporary_themes_conf_file (void)
@@ -73,7 +74,6 @@ static gchar *cairo_dock_build_temporary_themes_conf_file (void)
 	return cTmpConfFile;
 }
 
-
 static void _load_theme (gboolean bSuccess, ThemesWidget *pThemesWidget)
 {
 	g_print ("%s ()\n", __func__);
@@ -83,7 +83,7 @@ static void _load_theme (gboolean bSuccess, ThemesWidget *pThemesWidget)
 		
 		cairo_dock_set_status_message (NULL, "");
 		
-		_themes_widget_reload (pThemesWidget);
+		_fill_treeview_with_themes (pThemesWidget);
 		cairo_dock_reload_gui ();
 	}
 	else
@@ -244,63 +244,6 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 }
 
 
-/*static void _cairo_dock_fill_model_with_themes (const gchar *cThemeName, CairoDockPackage *pTheme, GtkListStore *pModel)
-{
-	GtkTreeIter iter;
-	memset (&iter, 0, sizeof (GtkTreeIter));
-	gtk_list_store_append (GTK_LIST_STORE (pModel), &iter);
-	
-	gtk_list_store_set (GTK_LIST_STORE (pModel), &iter,
-		CAIRO_DOCK_MODEL_NAME, pTheme->cDisplayedName,
-		CAIRO_DOCK_MODEL_RESULT, cThemeName, -1);
-}
-static void _cairo_dock_activate_one_element (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
-{
-	GtkTreeIter iter;
-	if (! gtk_tree_model_get_iter_from_string (model, &iter, path))
-		return ;
-	gboolean bState;
-	gtk_tree_model_get (model, &iter, CAIRO_DOCK_MODEL_ACTIVE, &bState, -1);
-
-	gtk_list_store_set (GTK_LIST_STORE (model), &iter, CAIRO_DOCK_MODEL_ACTIVE, !bState, -1);
-}
-static void _make_tree_view_for_delete_themes (GSList *pWidgetList, GPtrArray *pDataGarbage, GKeyFile* pKeyFile)
-{
-	const gchar *cGroupName = "Delete";
-	//\______________ On recupere le widget de la cle.
-	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, cGroupName, "deleted themes");
-	g_return_if_fail (myWidget != NULL);
-	
-	//\______________ On construit le treeview des themes.
-	GtkWidget *pOneWidget = cairo_dock_gui_make_tree_view (FALSE);
-	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), FALSE);
-	
-	GtkCellRenderer *rend = gtk_cell_renderer_toggle_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "active", CAIRO_DOCK_MODEL_ACTIVE, NULL);
-	g_signal_connect (G_OBJECT (rend), "toggled", (GCallback) _cairo_dock_activate_one_element, pModel);
-
-	rend = gtk_cell_renderer_text_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
-	
-	GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pOneWidget));
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
-	
-	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", 200, NULL);  // environ 10 lignes.
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
-	
-	//\______________ On recupere les themes utilisateurs.
-	GHashTable *pThemeTable = cairo_dock_list_packages (NULL, g_cThemesDirPath, NULL, NULL);
-	
-	g_hash_table_foreach (pThemeTable, (GHFunc)_cairo_dock_fill_model_with_themes, pModel);
-	g_hash_table_destroy (pThemeTable);
-	
-	//\______________ On insere le widget.
-	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);
-	gtk_box_pack_end (GTK_BOX (myWidget->pKeyBox), pScrolledWindow, FALSE, FALSE, 0);
-}*/
 #define CD_MAX_RATING 5
 static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, int iColumnIndex)
 {
@@ -448,7 +391,7 @@ static void _got_themes_list (GHashTable *pThemeTable, ThemesWidget *pThemesWidg
 	GtkListStore *pModel = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (pThemesWidget->pTreeView)));
 	g_return_if_fail (pModel != NULL);
 	
-	gtk_list_store_clear (GTK_LIST_STORE (pModel));
+	gtk_list_store_clear (GTK_LIST_STORE (pModel));  // the 2nd time we pass here, the table is full of all themes, so we have to clear it to avoid double local and user themes.
 	cairo_dock_fill_model_with_themes (pModel, pThemeTable, NULL);
 }
 
@@ -474,10 +417,7 @@ static void _on_delete_theme (GtkMenuItem *pMenuItem, ThemesWidget *pThemesWidge
 	{
 		cairo_dock_set_status_message (NULL, _("The theme has been deleted"));
 		
-		/// reload the modele ...
-		
-		
-		
+		_fill_treeview_with_themes (pThemesWidget);
 	}
 	g_free (cThemeName);
 }
@@ -522,6 +462,22 @@ static gboolean _on_click_tree_view (GtkTreeView *pTreeView, GdkEventButton* pBu
 	}
 	return FALSE;
 }
+
+static void _fill_treeview_with_themes (ThemesWidget *pThemesWidget)
+{
+	const gchar *cShareThemesDir = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_THEMES_DIR;
+	const gchar *cUserThemesDir = g_cThemesDirPath;
+	const gchar *cDistantThemesDir = CAIRO_DOCK_DISTANT_THEMES_DIR;
+	
+	// list local packages first
+	GHashTable *pThemeTable = cairo_dock_list_packages (cShareThemesDir, cUserThemesDir, NULL, NULL);
+	_got_themes_list (pThemeTable, pThemesWidget);
+	
+	// and list distant packages asynchronously.
+	cairo_dock_set_status_message_printf (GTK_WIDGET (pThemesWidget->pMainWindow), _("Listing themes in '%s' ..."), cDistantThemesDir);
+	pThemesWidget->pListTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_list, pThemesWidget, pThemeTable);  // the table will be freed along with the task.
+}
+
 static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *pDataGarbage, GKeyFile* pKeyFile)
 {
 	//\______________ get the group/key widget
@@ -581,17 +537,7 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 	gtk_box_pack_start (GTK_BOX (pWidgetBox), pPreviewBox, TRUE, TRUE, 0);
 	
 	//\______________ get the local, shared and distant themes.
-	const gchar *cShareThemesDir = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_THEMES_DIR;
-	const gchar *cUserThemesDir = g_cThemesDirPath;
-	const gchar *cDistantThemesDir = CAIRO_DOCK_DISTANT_THEMES_DIR;
-	
-	// list local packages first
-	GHashTable *pThemeTable = cairo_dock_list_packages (cShareThemesDir, cUserThemesDir, NULL, NULL);
-	_got_themes_list (pThemeTable, pThemesWidget);
-	
-	// and list distant packages asynchronously.
-	cairo_dock_set_status_message_printf (GTK_WIDGET (pMainWindow), _("Listing themes in '%s' ..."), cDistantThemesDir);
-	pThemesWidget->pListTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_list, pThemesWidget, pThemeTable);  // the table will be freed along with the task.
+	_fill_treeview_with_themes (pThemesWidget);
 	
 	//\______________ insert the widget.
 	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);
@@ -620,7 +566,6 @@ static void _build_themes_widget (ThemesWidget *pThemesWidget)
 	pThemesWidget->widget.pDataGarbage = pDataGarbage;
 	
 	// complete the widget
-	///_make_tree_view_for_delete_themes (pWidgetList, pDataGarbage, pKeyFile);
 	_make_tree_view_for_themes (pThemesWidget, pDataGarbage, pKeyFile);
 	
 	g_key_file_free (pKeyFile);
@@ -632,6 +577,7 @@ ThemesWidget *cairo_dock_themes_widget_new (GtkWindow *pMainWindow)
 	pThemesWidget->widget.iType = WIDGET_THEMES;
 	pThemesWidget->widget.apply = _themes_widget_apply;
 	pThemesWidget->widget.reset = _themes_widget_reset;
+	pThemesWidget->widget.reload = _themes_widget_reload;
 	pThemesWidget->pMainWindow = pMainWindow;
 	
 	// build the widget from a .conf file
@@ -677,7 +623,10 @@ static void _themes_widget_apply (CDWidget *pCdWidget)
 	
 	if (bReloadWindow)
 	{
-		_themes_widget_reload (pThemesWidget);
+		_fill_treeview_with_themes (pThemesWidget);
+		
+		/// TODO: also reload the combo's model ... and for that we should build it ourselves ...
+		
 	}
 }
 
@@ -701,9 +650,11 @@ static void _themes_widget_reset (CDWidget *pCdWidget)
 }
 
 
-static void _themes_widget_reload (ThemesWidget *pThemesWidget)
+static void _themes_widget_reload (CDWidget *pCdWidget)
 {
-	cairo_dock_widget_destroy_widget (CD_WIDGET (pThemesWidget));
+	ThemesWidget *pThemesWidget = THEMES_WIDGET (pCdWidget);
+	
+	cairo_dock_widget_destroy_widget (pCdWidget);
 	
 	_build_themes_widget (pThemesWidget);
 }

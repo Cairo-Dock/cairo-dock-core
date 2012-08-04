@@ -43,6 +43,7 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static void _config_widget_apply (CDWidget *pCdWidget);
 static void _config_widget_reset (CDWidget *pCdWidget);
+static void _config_widget_reload (CDWidget *pCdWidget);
 
 #define cd_reload(module_name) do {\
 	pManager = gldi_get_manager (module_name);\
@@ -404,6 +405,7 @@ ConfigWidget *cairo_dock_config_widget_new (void)
 	pConfigWidget->widget.iType = WIDGET_CONFIG;
 	pConfigWidget->widget.apply = _config_widget_apply;
 	pConfigWidget->widget.reset = _config_widget_reset;
+	pConfigWidget->widget.reload = _config_widget_reload;
 	
 	_build_config_widget (pConfigWidget);
 	
@@ -661,12 +663,13 @@ static void _config_widget_reset (CDWidget *pCdWidget)
 void cairo_dock_widget_config_update_shortkeys (ConfigWidget *pConfigWidget)
 {
 	if (pConfigWidget->pShortKeysWidget)
-		cairo_dock_shortkeys_widget_reload (pConfigWidget->pShortKeysWidget);
+		cairo_dock_widget_reload (CD_WIDGET (pConfigWidget->pShortKeysWidget));
 }
 
 
-void cairo_dock_config_widget_reload (ConfigWidget *pConfigWidget)
+static void _config_widget_reload (CDWidget *pCdWidget)
 {
+	ConfigWidget *pConfigWidget = CONFIG_WIDGET (pCdWidget);
 	cairo_dock_widget_destroy_widget (CD_WIDGET (pConfigWidget));
 	
 	_build_config_widget (pConfigWidget);

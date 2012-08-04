@@ -49,9 +49,6 @@ ItemsWidget *cairo_dock_items_widget_new (void);
 void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iNotebookPage);
 
 
-void cairo_dock_items_widget_reload (ItemsWidget *pItemsWidget);
-
-
 void cairo_dock_items_widget_update_desklet_params (ItemsWidget *pItemsWidget, CairoDesklet *pDesklet);
 
 

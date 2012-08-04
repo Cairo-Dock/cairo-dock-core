@@ -468,6 +468,7 @@ GtkWidget *cairo_dock_build_simple_gui_window (void)
 		0);
 	g_object_set_data (G_OBJECT (pMainWindow), "notebook", pNoteBook);
 	
+	GtkSizeGroup *pSizeGroup = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);  // make all tabs the same size (actually I'd like them to expand and fill the whole window...)
 	CDCategory *pCategory;
 	int i;
 	for (i = 0; i < CD_NB_CATEGORIES; i ++)
@@ -477,6 +478,7 @@ GtkWidget *cairo_dock_build_simple_gui_window (void)
 		GtkWidget *hbox = _make_notebook_label (pCategory->cName,
 			pCategory->cIcon,
 			CAIRO_DOCK_CATEGORY_ICON_SIZE);
+		gtk_size_group_add_widget (pSizeGroup, hbox);
 		GtkWidget *vbox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
 		gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook),
 			vbox,
@@ -507,7 +509,7 @@ static void cairo_dock_select_category (GtkWidget *pMainWindow, CDCategoryEnum i
 	CDCategory *pCategory = _get_category (iCategory);
 	///gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategory->pCategoryButton), TRUE);  // will first emit a signal to the currently selected button, which will hide the current widget, and then to the new button, which will show the widget.
 	GtkNotebook *pNoteBook = g_object_get_data (G_OBJECT (pMainWindow), "notebook");
-	gtk_notebook_set_current_page (pNoteBook, iCategory);  // will first emit a 'switch-page' signal, which will bulid the widget if necessary.
+	gtk_notebook_set_current_page (pNoteBook, iCategory);  // will first emit a 'switch-page' signal, which will build the widget if necessary.
 }
 
 
@@ -519,6 +521,8 @@ static GtkWidget *show_main_gui (void)
 {
 	if (s_pSimpleConfigWindow == NULL)
 		cairo_dock_build_simple_gui_window ();
+	else
+		gtk_window_present (GTK_WINDOW (s_pSimpleConfigWindow));
 	
 	cairo_dock_select_category (s_pSimpleConfigWindow, CD_CATEGORY_CONFIG);
 	return s_pSimpleConfigWindow;
@@ -528,6 +532,8 @@ static void show_module_gui (const gchar *cModuleName)
 {
 	if (s_pSimpleConfigWindow == NULL)
 		cairo_dock_build_simple_gui_window ();
+	else
+		gtk_window_present (GTK_WINDOW (s_pSimpleConfigWindow));
 	
 	cairo_dock_select_category (s_pSimpleConfigWindow, CD_CATEGORY_ITEMS);
 	/// TODO: find a way to present a module that is not activated...
@@ -558,7 +564,8 @@ static void update_modules_list (void)
 	CDCategory *pCategory = _get_category (CD_CATEGORY_PLUGINS);
 	if (pCategory->pCdWidget != NULL)  // category is built
 	{
-		cairo_dock_widget_plugins_reload (PLUGINS_WIDGET (pCategory->pCdWidget));
+		cairo_dock_widget_reload (pCategory->pCdWidget);
+		///cairo_dock_widget_plugins_reload (PLUGINS_WIDGET (pCategory->pCdWidget));
 	}
 }
 
@@ -613,8 +620,10 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 {
 	if (s_pSimpleConfigWindow == NULL)
 		cairo_dock_build_simple_gui_window ();
+	else
+		gtk_window_present (GTK_WINDOW (s_pSimpleConfigWindow));
 	
-	cairo_dock_select_category (s_pSimpleConfigWindow, CD_CATEGORY_ITEMS);
+	cairo_dock_select_category (s_pSimpleConfigWindow, CD_CATEGORY_ITEMS);  // will build it
 	
 	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
 	/*if (pCategory->pCdWidget == NULL)  // build the widget immediately, because we want to select the given item
@@ -634,9 +643,32 @@ static void reload_items (void)
 	g_print ("%s (%p)\n", __func__, pCategory->pCdWidget);
 	if (pCategory->pCdWidget != NULL)  // category is built
 	{
-		cairo_dock_items_widget_reload (ITEMS_WIDGET (pCategory->pCdWidget));
-		if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
-			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+		cairo_dock_widget_reload (pCategory->pCdWidget);
+		///cairo_dock_items_widget_reload (ITEMS_WIDGET (pCategory->pCdWidget));
+		///if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
+		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);
+	}
+}
+
+static void _reload_category_widget (CDCategoryEnum iCategory)
+{
+	CDCategory *pCategory = _get_category (iCategory);
+	g_return_if_fail (pCategory != NULL);
+	if (pCategory->pCdWidget != NULL)  // the category is built, reload it
+	{
+		GtkWidget *pPrevWidget = pCategory->pCdWidget->pWidget;
+		cairo_dock_widget_reload (pCategory->pCdWidget);
+		g_print ("%s (%p -> %p)\n", __func__, pPrevWidget, pCategory->pCdWidget->pWidget);
+		
+		if (pPrevWidget != pCategory->pCdWidget->pWidget)  // the widget has been rebuilt, let's re-pack it in its container
+		{
+			GtkWidget *pNoteBook = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "notebook");
+			GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pNoteBook), iCategory);
+			gtk_box_pack_start (GTK_BOX (page), pCategory->pCdWidget->pWidget, TRUE, TRUE, 0);
+			gtk_widget_show (pCategory->pCdWidget->pWidget);
+		}
+		///if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
+		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);
 	}
 }
 
@@ -646,10 +678,21 @@ static void reload (void)
 		return;
 	CDCategory *pCategory;
 	
-	pCategory = _get_category (CD_CATEGORY_ITEMS);
+	_reload_category_widget (CD_CATEGORY_ITEMS);
+	
+	_reload_category_widget (CD_CATEGORY_CONFIG);
+	
+	_reload_category_widget (CD_CATEGORY_PLUGINS);
+	
+	/**pCategory = _get_category (CD_CATEGORY_ITEMS);
 	if (pCategory->pCdWidget != NULL)  // category is built
 	{
 		cairo_dock_items_widget_reload (ITEMS_WIDGET (pCategory->pCdWidget));
+		
+		GtkWidget *pNoteBook = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "notebook");
+		GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pNoteBook), CD_CATEGORY_ITEMS);
+		gtk_box_pack_start (GTK_BOX (page), pCategory->pCdWidget->pWidget, TRUE, TRUE, 0);
+		gtk_widget_show (pCategory->pCdWidget->pWidget);
 		
 		///if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
 		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);
@@ -659,6 +702,12 @@ static void reload (void)
 	if (pCategory->pCdWidget != NULL)  // category is built
 	{
 		cairo_dock_config_widget_reload (CONFIG_WIDGET (pCategory->pCdWidget));
+		
+		GtkWidget *pNoteBook = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "notebook");
+		GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pNoteBook), CD_CATEGORY_CONFIG);
+		gtk_box_pack_start (GTK_BOX (page), pCategory->pCdWidget->pWidget, TRUE, TRUE, 0);
+		gtk_widget_show (pCategory->pCdWidget->pWidget);
+		
 		///if (s_iCurrentCategory != CD_CATEGORY_CONFIG)
 		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);
 	}
@@ -669,7 +718,7 @@ static void reload (void)
 		cairo_dock_widget_plugins_reload (PLUGINS_WIDGET (pCategory->pCdWidget));
 		///if (s_iCurrentCategory != CD_CATEGORY_PLUGINS)
 		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);
-	}
+	}*/
 }
 
 ////////////////////
@@ -693,8 +742,8 @@ static void reload_current_widget (CairoDockModuleInstance *pInstance, int iShow
 	if (pCategory->pCdWidget != NULL)  // category is built
 	{
 		cairo_dock_items_widget_reload_current_widget (ITEMS_WIDGET (pCategory->pCdWidget), pInstance, iShowPage);
-		if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
-			gtk_widget_hide (pCategory->pCdWidget->pWidget);
+		///if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
+		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);
 	}
 }
 

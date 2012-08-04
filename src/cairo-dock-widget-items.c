@@ -60,6 +60,7 @@ static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTr
 static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, ItemsWidget *pItemsWidget);
 static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, ItemsWidget *pItemsWidget);
 static void _items_widget_apply (CDWidget *pCdWidget);
+static void _items_widget_reload (CDWidget *pCdWidget);
 
 typedef enum {
 	CD_MODEL_NAME = 0,  // displayed name
@@ -633,18 +634,18 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, ItemsWidget 
 					}
 					else  // the row may have been dropped on a launcher or a desklet, in which case we must reload the model because this has no meaning.
 					{
-						cairo_dock_items_widget_reload (pItemsWidget);
+						_items_widget_reload (CD_WIDGET (pItemsWidget));
 					}
 					
 				}  // else this row has no parent, so it was either a main dock or a desklet, and we have nothing to do.
 				else
 				{
-					cairo_dock_items_widget_reload (pItemsWidget);
+					_items_widget_reload (CD_WIDGET (pItemsWidget));
 				}
 			}
 			else  // no icon (for instance a plug-in like Remote-control)
 			{
-				cairo_dock_items_widget_reload (pItemsWidget);
+				_items_widget_reload (CD_WIDGET (pItemsWidget));
 			}
 		}
 		
@@ -760,6 +761,7 @@ ItemsWidget *cairo_dock_items_widget_new (void)
 	pItemsWidget->widget.pWidget = pLauncherPane;
 	pItemsWidget->widget.apply = _items_widget_apply;
 	pItemsWidget->widget.reset = _items_widget_reset;
+	pItemsWidget->widget.reload = _items_widget_reload;
 	
 	//\_____________ On construit l'arbre des launceurs.
 	GtkTreeModel *model = _build_tree_model (pItemsWidget);
@@ -916,7 +918,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		// reload widgets.
 		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et declenche le rechargement de l'IHM.
 	}
-	cairo_dock_items_widget_reload (pItemsWidget);  // we reload in case the items place has changed (icon's container, dock orientation, etc).
+	_items_widget_reload (CD_WIDGET (pItemsWidget));  // we reload in case the items place has changed (icon's container, dock orientation, etc).
 }
 
 
@@ -937,8 +939,9 @@ void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon
 }
 
 
-void cairo_dock_items_widget_reload (ItemsWidget *pItemsWidget)
+static void _items_widget_reload (CDWidget *pCdWidget)
 {
+	ItemsWidget *pItemsWidget = ITEMS_WIDGET (pCdWidget);
 	g_print ("%s ()\n", __func__);
 	// remember the current item and page
 	int iNotebookPage;
