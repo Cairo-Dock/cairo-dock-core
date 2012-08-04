@@ -370,7 +370,7 @@ static void _build_config_widget (ConfigWidget *pConfigWidget)
 	{
 		pConfigWidget->widget.pWidget = cairo_dock_build_key_file_widget (pKeyFile,
 			NULL,  // gettext domain
-			NULL,  // main window
+			GTK_WIDGET (pConfigWidget->pMainWindow),  // main window
 			&pWidgetList,
 			pDataGarbage,
 			NULL);
@@ -399,13 +399,14 @@ static void _build_config_widget (ConfigWidget *pConfigWidget)
 	g_key_file_free (pKeyFile);
 }
 
-ConfigWidget *cairo_dock_config_widget_new (void)
+ConfigWidget *cairo_dock_config_widget_new (GtkWindow *pMainWindow)
 {
 	ConfigWidget *pConfigWidget = g_new0 (ConfigWidget, 1);
 	pConfigWidget->widget.iType = WIDGET_CONFIG;
 	pConfigWidget->widget.apply = _config_widget_apply;
 	pConfigWidget->widget.reset = _config_widget_reset;
 	pConfigWidget->widget.reload = _config_widget_reload;
+	pConfigWidget->pMainWindow = pMainWindow;
 	
 	_build_config_widget (pConfigWidget);
 	

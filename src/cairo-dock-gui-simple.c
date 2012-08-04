@@ -150,7 +150,7 @@ static CDWidget *_build_items_widget (void)
 
 static CDWidget *_build_config_widget (void)
 {
-	CDWidget *pCdWidget = CD_WIDGET (cairo_dock_config_widget_new ());
+	CDWidget *pCdWidget = CD_WIDGET (cairo_dock_config_widget_new (GTK_WINDOW (s_pSimpleConfigWindow)));
 	
 	return pCdWidget;
 }
@@ -665,7 +665,7 @@ static void _reload_category_widget (CDCategoryEnum iCategory)
 			GtkWidget *pNoteBook = g_object_get_data (G_OBJECT (s_pSimpleConfigWindow), "notebook");
 			GtkWidget *page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (pNoteBook), iCategory);
 			gtk_box_pack_start (GTK_BOX (page), pCategory->pCdWidget->pWidget, TRUE, TRUE, 0);
-			gtk_widget_show (pCategory->pCdWidget->pWidget);
+			gtk_widget_show_all (pCategory->pCdWidget->pWidget);
 		}
 		///if (s_iCurrentCategory != CD_CATEGORY_ITEMS)
 		///	gtk_widget_hide (pCategory->pCdWidget->pWidget);

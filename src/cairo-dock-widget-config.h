@@ -40,6 +40,7 @@ struct _ConfigWidget {
 	gchar *cClickAnim;
 	gchar *cClickEffect;
 	int iEffectOnDisappearance;
+	GtkWindow *pMainWindow;
 };
 
 #define CONFIG_WIDGET(w) ((ConfigWidget*)(w))
@@ -47,7 +48,7 @@ struct _ConfigWidget {
 #define IS_CONFIG_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_CONFIG)
 
 
-ConfigWidget *cairo_dock_config_widget_new (void);
+ConfigWidget *cairo_dock_config_widget_new (GtkWindow *pMainWindow);
 
 
 void cairo_dock_widget_config_update_shortkeys (ConfigWidget *pConfigWidget);

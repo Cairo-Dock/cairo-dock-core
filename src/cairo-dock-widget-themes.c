@@ -531,7 +531,8 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 	g_signal_connect (G_OBJECT (pOneWidget), "button-press-event", G_CALLBACK (_on_click_tree_view), pThemesWidget);
 	
 	//\______________ add a preview widget next to the treeview
-	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (NULL, pOneWidget, FALSE, 2, NULL, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
+	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (GTK_WIDGET (pThemesWidget->pMainWindow), pOneWidget, FALSE, 2, NULL, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);
+	// vertical packaging.
 	GtkWidget *pWidgetBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pWidgetBox), pScrolledWindow, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (pWidgetBox), pPreviewBox, TRUE, TRUE, 0);
