@@ -482,7 +482,6 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 {
 	//\______________ get the group/key widget
 	GSList *pWidgetList = pThemesWidget->widget.pWidgetList;
-	GtkWindow *pMainWindow = pThemesWidget->pMainWindow;
 	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Load theme", "chosen theme");
 	g_return_if_fail (myWidget != NULL);
 	
@@ -532,12 +531,11 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 	
 	//\______________ add a preview widget next to the treeview
 	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (GTK_WIDGET (pThemesWidget->pMainWindow), pOneWidget, FALSE, 2, NULL, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);
-	// vertical packaging.
 	GtkWidget *pWidgetBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pWidgetBox), pScrolledWindow, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (pWidgetBox), pPreviewBox, TRUE, TRUE, 0);
 	
-	//\______________ get the local, shared and distant themes.
+	//\______________ get the user, shared and distant themes.
 	_fill_treeview_with_themes (pThemesWidget);
 	
 	//\______________ insert the widget.
@@ -545,6 +543,54 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pWidgetBox, FALSE, FALSE, 0);
 }
 
+static gboolean _ignore_server_themes (const gchar *cThemeName, CairoDockPackage *pTheme, gpointer data)
+{
+	gchar *cVersionFile = g_strdup_printf ("%s/last-modif", pTheme->cPackagePath);
+	gboolean bRemove = g_file_test (cVersionFile, G_FILE_TEST_EXISTS);
+	g_free (cVersionFile);
+	return bRemove;
+}
+static void _make_combo_for_user_themes (ThemesWidget *pThemesWidget, GPtrArray *pDataGarbage, GKeyFile* pKeyFile)
+{
+	//\______________ get the group/key widget
+	GSList *pWidgetList = pThemesWidget->widget.pWidgetList;
+	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Save", "theme name");
+	g_return_if_fail (myWidget != NULL);
+	
+	//\______________ build the combo-box.
+	GtkWidget *pOneWidget = cairo_dock_gui_make_combo (TRUE);
+	
+	//\______________ get the user themes.
+	const gchar *cUserThemesDir = g_cThemesDirPath;
+	GHashTable *pThemeTable = cairo_dock_list_packages (NULL, cUserThemesDir, NULL, NULL);
+	g_hash_table_foreach_remove (pThemeTable, (GHRFunc)_ignore_server_themes, NULL);  // ignore themes coming from the server
+	GtkTreeModel *pModel = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
+	cairo_dock_fill_model_with_themes (GTK_LIST_STORE (pModel), pThemeTable, NULL);	
+	
+	//\______________ insert the widget.
+	GtkWidget *pHBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pLabel = gtk_label_new (_("Save as:"));
+	
+	//\______________ add a preview widget under to the combo
+	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (GTK_WIDGET (pThemesWidget->pMainWindow), pOneWidget, FALSE, 1, NULL, NULL, pDataGarbage);
+	GtkWidget *pWidgetBox = _gtk_vbox_new (CAIRO_DOCK_GUI_MARGIN);
+	
+	/*gtk_box_pack_start (GTK_BOX (pHBox), pLabel, FALSE, FALSE, 0);
+	gtk_box_pack_end (GTK_BOX (pHBox), pOneWidget, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (pWidgetBox), pHBox, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (pWidgetBox), pPreviewBox, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pWidgetBox, FALSE, FALSE, 0);*/
+	
+	GtkWidget *pAlign = gtk_alignment_new (0, 0, 1, 0);
+	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
+	gtk_box_pack_start (GTK_BOX (pHBox), pAlign, FALSE, FALSE, 0);
+	gtk_box_pack_end (GTK_BOX (pHBox), pWidgetBox, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (pWidgetBox), pOneWidget, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (pWidgetBox), pPreviewBox, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pHBox, TRUE, TRUE, 0);
+	
+	myWidget->pSubWidgetList = g_slist_append (myWidget->pSubWidgetList, pOneWidget);
+}
 static void _build_themes_widget (ThemesWidget *pThemesWidget)
 {
 	GtkWindow *pMainWindow = pThemesWidget->pMainWindow;
@@ -568,6 +614,7 @@ static void _build_themes_widget (ThemesWidget *pThemesWidget)
 	
 	// complete the widget
 	_make_tree_view_for_themes (pThemesWidget, pDataGarbage, pKeyFile);
+	_make_combo_for_user_themes (pThemesWidget, pDataGarbage, pKeyFile);
 	
 	g_key_file_free (pKeyFile);
 }

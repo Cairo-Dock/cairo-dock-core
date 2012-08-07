@@ -206,12 +206,9 @@ void cairo_dock_register_config_gui_backend (CairoDockMainGuiBackend *pBackend)
 	s_pMainGuiBackend = pBackend;
 }
 
-
-GtkWidget *cairo_dock_show_main_gui (void)
+static void _display_window (GtkWidget *pWindow)
 {
-	GtkWidget *pWindow = NULL;
-	if (s_pMainGuiBackend && s_pMainGuiBackend->show_main_gui)
-		pWindow = s_pMainGuiBackend->show_main_gui ();
+	// place it on the current desktop, and avoid overlapping the main dock
 	if (pWindow && g_pMainDock != NULL)  // evitons d'empieter sur le main dock.
 	{
 		if (g_pMainDock->container.bIsHorizontal)
@@ -230,13 +227,29 @@ GtkWidget *cairo_dock_show_main_gui (void)
 		}
 	}
 	
+	// take focus
+	gtk_window_present (GTK_WINDOW (pWindow));
+}
+
+GtkWidget * cairo_dock_show_main_gui (void)
+{
+	// create the window
+	GtkWidget *pWindow = NULL;
+	if (s_pMainGuiBackend && s_pMainGuiBackend->show_main_gui)
+		pWindow = s_pMainGuiBackend->show_main_gui ();
+	
+	_display_window (pWindow);
+	
 	return pWindow;
 }
 
 void cairo_dock_show_module_gui (const gchar *cModuleName)
 {
+	GtkWidget *pWindow = NULL;
 	if (s_pMainGuiBackend && s_pMainGuiBackend->show_module_gui)
-		s_pMainGuiBackend->show_module_gui (cModuleName);
+		pWindow = s_pMainGuiBackend->show_module_gui (cModuleName);
+		
+	_display_window (pWindow);
 }
 
 void cairo_dock_close_gui (void)
@@ -247,8 +260,11 @@ void cairo_dock_close_gui (void)
 
 void cairo_dock_show_items_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
 {
+	GtkWidget *pWindow = NULL;
 	if (s_pMainGuiBackend && s_pMainGuiBackend->show_gui)
-		s_pMainGuiBackend->show_gui (pIcon, pContainer, pModuleInstance, iShowPage);
+		pWindow = s_pMainGuiBackend->show_gui (pIcon, pContainer, pModuleInstance, iShowPage);
+		
+	_display_window (pWindow);
 }
 
 void cairo_dock_reload_gui (void)
@@ -259,8 +275,11 @@ void cairo_dock_reload_gui (void)
 
 void cairo_dock_show_themes (void)
 {
+	GtkWidget *pWindow = NULL;
 	if (s_pMainGuiBackend && s_pMainGuiBackend->show_themes)
-		s_pMainGuiBackend->show_themes ();
+		pWindow = s_pMainGuiBackend->show_themes ();
+		
+	_display_window (pWindow);
 }
 
 gboolean cairo_dock_can_manage_themes (void)

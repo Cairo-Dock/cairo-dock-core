@@ -24,7 +24,7 @@ use theme behaviour = true
 #[gtk-save]
 [Save]
 
-#H[;../@CAIRO_DOCK_THEMES_DIR@] Save as:
+#< Save as:
 #{You will then be able to re-open it at any time.}
 theme name = 
 

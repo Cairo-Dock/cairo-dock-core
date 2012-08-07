@@ -2324,15 +2324,17 @@ static GtkWidget * show_main_gui (void)
  // BACKEND //
 /////////////
 
-static void show_module_gui (const gchar *cModuleName)
+static GtkWidget *show_module_gui (const gchar *cModuleName)
 {
 	cairo_dock_build_main_ihm (g_cConfFile);
 	
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
-	g_return_if_fail (pGroupDescription != NULL);
+	g_return_val_if_fail (pGroupDescription != NULL, s_pMainWindow);
 	
 	cairo_dock_show_group (pGroupDescription);
 	cairo_dock_toggle_category_button (pGroupDescription->iCategory);
+	
+	return s_pMainWindow;
 }
 
 static void close_gui (void)

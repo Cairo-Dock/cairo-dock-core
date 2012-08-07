@@ -28,7 +28,7 @@ struct _CairoDockMainGuiBackend {
 	// Show the main config panel, build it if necessary.
 	GtkWidget * (*show_main_gui) (void);
 	// Show the config panel of a given module (internal or external), reload it if it was already opened.
-	void (*show_module_gui) (const gchar *cModuleName);
+	GtkWidget * (*show_module_gui) (const gchar *cModuleName);
 	// close the config panels.
 	void (*close_gui) (void);
 	// update the GUI to mark a module as '(in)active'.
@@ -45,7 +45,7 @@ struct _CairoDockMainGuiBackend {
 	// reload everything, in case the current theme has changed
 	void (*reload) (void);
 	// show the themes, in case it should be presented in the menu.
-	void (*show_themes) (void);
+	GtkWidget * (*show_themes) (void);
 	const gchar *cDisplayedName;
 	const gchar *cTooltip;
 	} ;
@@ -78,7 +78,7 @@ void cairo_dock_gui_trigger_reload_shortkeys (void);
 void cairo_dock_register_config_gui_backend (CairoDockMainGuiBackend *pBackend);
 
 
-GtkWidget *cairo_dock_show_main_gui (void);
+GtkWidget * cairo_dock_show_main_gui (void);
 
 void cairo_dock_show_module_gui (const gchar *cModuleName);
 
