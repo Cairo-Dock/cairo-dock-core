@@ -36,11 +36,6 @@
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_max_scale
 #include "cairo-dock-progressbar.h"
 
-// color gradation: N colors, 1/N each -> clamped image
-// image path + stretched/clamp or repeat
-// vertical/horizontal
-// alignment in [0,1] <=> [bottom,top] or [left,right]
-// bar height
 
 typedef struct {
 	CairoDataRenderer dataRenderer;
@@ -51,6 +46,7 @@ typedef struct {
 	gdouble fColorGradation[8];  // 2 rgba colors
 	gboolean bCustomColors;
 	gdouble fScale;
+	gboolean bInverted;
 } ProgressBar;
 
 #define CD_MIN_BAR_THICKNESS 2
@@ -137,6 +133,7 @@ static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttrib
 	fBarThickness = MAX (myIndicatorsParam.iBarThickness, CD_MIN_BAR_THICKNESS);
 	fBarThickness *= pProgressBar->fScale;  // the given size is therefore reached when the icon is at rest.
 	pProgressBar->iBarThickness = ceil (fBarThickness);
+	pProgressBar->bInverted = pAttribute->bInverted;
 	
 	// load the bar image
 	pProgressBar->cImageGradation = g_strdup (pAttribute->cImageGradation);
@@ -147,8 +144,16 @@ static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttrib
 	}
 	else
 	{
-		memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
-		memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
+		if (!pAttribute->bInverted)
+		{
+			memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
+			memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
+		}
+		else
+		{
+			memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
+			memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
+		}
 	}
 	
 	_make_bar_surface (pProgressBar);
@@ -314,8 +319,16 @@ static void reload (ProgressBar *pProgressBar)
 	pProgressBar->iBarThickness = ceil (fBarThickness);
 	if (!pProgressBar->bCustomColors)
 	{
-		memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
-		memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
+		if (!pProgressBar->bInverted)
+		{
+			memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
+			memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
+		}
+		else
+		{
+			memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
+			memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
+		}
 	}
 	
 	// reload the bar surface

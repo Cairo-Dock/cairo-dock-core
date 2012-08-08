@@ -45,7 +45,7 @@ struct _CairoProgressBarAttribute {
 	gboolean bUseCustomPosition;
 	/// custom position
 	CairoOverlayPosition iCustomPosition;
-	/// invert colors
+	/// invert default colors
 	gboolean bInverted;
 };
 
