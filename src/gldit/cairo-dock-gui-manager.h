@@ -37,8 +37,8 @@ G_BEGIN_DECLS
 // manager
 /// Definition of the callback called when the user apply the config panel.
 typedef gboolean (* CairoDockApplyConfigFunc) (gpointer data);
-typedef void (* CairoDockLoadCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile);
-typedef void (* CairoDockSaveCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile);
+typedef void (* CairoDockLoadCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile, GSList *pWidgetList);
+typedef void (* CairoDockSaveCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile, GSList *pWidgetList);
 
 struct _CairoGuiManager {
 	GldiManager mgr;
@@ -76,21 +76,6 @@ typedef struct _CairoDockGuiBackend CairoDockGuiBackend;
 
 void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend);
 
-/**Retrieve the group-key widget in the current config panel, corresponding to the (group,key) pair in its conf file.
-@param pModuleInstance the applet making the demand.
-@param cGroupName name of the group in the conf file.
-@param cKeyName name of the key in the conf file.
-@return the group-key widget that match the group and key, or NULL if none was found.
-*/
-CairoDockGroupKeyWidget *cairo_dock_get_group_key_widget_from_name (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName);
-
-/** A mere wrapper around the previous function, that returns directly the GTK widget corresponding to the (group,key). Note that empty widgets will return NULL, so you can't you can't distinguish between an empty widget and an inexisant widget.
-@param pModuleInstance the applet making the demand.
-@param cGroupName name of the group in the conf file.
-@param cKeyName name of the key in the conf file.
-@return the widget that match the group and key, or NULL if the widget is empty or if none was found.
-*/
-GtkWidget *cairo_dock_get_widget_from_name (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName);
 
 void cairo_dock_reload_current_widget_full (CairoDockModuleInstance *pModuleInstance, int iShowPage);
 
@@ -113,39 +98,6 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage);
 @param ... arguments of the format.
 */
 void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...) G_GNUC_PRINTF (2, 3);
-
-
-
-/** Build a generic GUI window, that contains 2 buttons apply and quit, and a statusbar.
-@param cTitle title to set to the window.
-@param iWidth width of the window.
-@param iHeight height of the window.
-@param pAction callback to be called when the apply button is pressed, or NULL.
-@param pUserData data passed to the previous callback, or NULL.
-@param pFreeUserData callback called when the window is destroyed, to free the previous data, or NULL.
-@return the new window.
-*/
-GtkWidget *cairo_dock_build_generic_gui_window (const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);
-
-GtkWidget *cairo_dock_build_generic_gui_full (const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, CairoDockLoadCustomWidgetFunc load_custom_widgets, CairoDockSaveCustomWidgetFunc save_custom_widgets);
-
-/** Load a conf file into a generic window, that contains 2 buttons apply and quit, and a statusbar. If no callback is provided, the window is blocking, until the user press one of the button; in this case, TRUE is returned if ok was pressed.
-@param cConfFilePath conf file to load into the window.
-@param cGettextDomain translation domain.
-@param cTitle title to set to the window.
-@param iWidth width of the window.
-@param iHeight height of the window.
-@param pAction callback to be called when the apply button is pressed, or NULL.
-@param pUserData data passed to the previous callback, or NULL.
-@param pFreeUserData callback called when the window is destroyed, to free the previous data, or NULL.
-@return the new window.
-*/
-#define cairo_dock_build_generic_gui(cConfFilePath, cGettextDomain, cTitle, iWidth, iHeight, pAction, pUserData, pFreeUserData) cairo_dock_build_generic_gui_full (cConfFilePath, cGettextDomain, cTitle, iWidth, iHeight, pAction, pUserData, pFreeUserData, NULL, NULL)
-
-/** Reload a generic window built upon a conf file, by parsing again the conf file.
-@param pWindow the window.
-*/
-void cairo_dock_reload_generic_gui (GtkWidget *pWindow);
 
 
 G_END_DECLS

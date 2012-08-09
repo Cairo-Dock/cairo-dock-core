@@ -70,6 +70,9 @@ extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDock *g_pMainDock;
 
+static gchar *_cairo_dock_gui_get_active_row_in_combo (GtkWidget *pOneWidget);
+
+
 typedef struct {
 	GtkWidget *pControlContainer;  // widget contenant le widget de controle et les widgets controles.
 	int iFirstSensitiveWidget;
@@ -1227,14 +1230,6 @@ static void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pT
 	}
 }
 
-static gboolean _ignore_server_themes (const gchar *cThemeName, CairoDockPackage *pTheme, gpointer data)
-{
-	gchar *cVersionFile = g_strdup_printf ("%s/last-modif", pTheme->cPackagePath);
-	gboolean bRemove = g_file_test (cVersionFile, G_FILE_TEST_EXISTS);
-	g_free (cVersionFile);
-	return bRemove;
-}
-
 static void _got_themes_combo_list (GHashTable *pThemeTable, gpointer *data)
 {
 	if (pThemeTable == NULL)
@@ -2076,9 +2071,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 		else if (iElementType != CAIRO_DOCK_WIDGET_FRAME && iElementType != CAIRO_DOCK_WIDGET_EXPANDER && iElementType != CAIRO_DOCK_WIDGET_SEPARATOR)
 		{
 			//\______________ On cree la boite de la cle.
-			if (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST || iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY || iElementType == CAIRO_DOCK_WIDGET_VIEW_LIST)
+			if (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST || iElementType == CAIRO_DOCK_WIDGET_VIEW_LIST)
 			{
-				bFullSize = TRUE;
 				pAdditionalItemsVBox = _gtk_vbox_new (0);
 				gtk_box_pack_start (pFrameVBox != NULL ? GTK_BOX (pFrameVBox) :  GTK_BOX (pGroupBox),
 					pAdditionalItemsVBox,
@@ -2159,12 +2153,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			if (iElementType != CAIRO_DOCK_WIDGET_EMPTY_WIDGET)  // inutile si rien dans dedans.
 			{	// cette boite permet d'empiler les widgets a droite, mais en les rangeant de gauche a droite normalement.
-				bFullSize = (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY/** || iElementType == CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR*/);
 				pWidgetBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
 				gtk_box_pack_end (GTK_BOX (pKeyBox),
 					pWidgetBox,
-					bFullSize,
-					bFullSize,
+					FALSE,
+					FALSE,
 					0);
 			}
 		}
@@ -2415,12 +2408,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_THEME_LIST :  // liste les themes dans combo, avec prevue et readme.
-			case CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY :  // idem mais avec une combo-entry.
 				//\______________ On construit le widget de visualisation de themes.
 				modele = _cairo_dock_gui_allocate_new_model ();
 				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
 				
-				_add_combo_from_modele (modele, TRUE, iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY, iElementType == CAIRO_DOCK_WIDGET_THEME_LIST);
+				_add_combo_from_modele (modele, TRUE, FALSE, TRUE);
 				
 				if (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST)  // add the state icon.
 				{
@@ -2457,8 +2449,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					data[3] = g_strdup (cHint);  // idem
 					
 					GHashTable *pThemeTable = cairo_dock_list_packages (cShareThemesDir, cUserThemesDir, NULL, NULL);
-					if (iElementType == CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY)  // on ne veut pas des themes locaux provenant du serveur.
-						g_hash_table_foreach_remove (pThemeTable, (GHRFunc)_ignore_server_themes, NULL);
 					_got_themes_combo_list (pThemeTable, (gpointer*)data);
 					
 					// list distant packages asynchronously.
@@ -3539,7 +3529,7 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 		for (pList = pSubWidgetList; pList != NULL; pList = pList->next)
 		{
 			pOneWidget = pList->data;
-			cValue = cairo_dock_gui_get_active_row_in_combo (pOneWidget);
+			cValue = _cairo_dock_gui_get_active_row_in_combo (pOneWidget);
 			tValues[i] = (cValue ? cValue : g_strdup(""));
 			i ++;
 		}
@@ -3823,7 +3813,7 @@ gchar **cairo_dock_gui_get_active_rows_in_tree_view (GtkWidget *pOneWidget, gboo
 	return tStringValues;
 }
 
-gchar *cairo_dock_gui_get_active_row_in_combo (GtkWidget *pOneWidget)
+static gchar *_cairo_dock_gui_get_active_row_in_combo (GtkWidget *pOneWidget)
 {
 	gchar *cValue = NULL;
 	GtkTreeIter iter;
@@ -3866,14 +3856,6 @@ CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *p
 	if (pElement == NULL)
 		return NULL;
 	return pElement->data;
-}
-
-CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget (GtkWidget *pWindow, const gchar *cGroupName, const gchar *cKeyName)
-{
-	GSList *pWidgetList = g_object_get_data (G_OBJECT (pWindow), "widget-list");
-	g_return_val_if_fail (pWidgetList != NULL, NULL);
-	
-	return cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, cGroupName, cKeyName);
 }
 
 

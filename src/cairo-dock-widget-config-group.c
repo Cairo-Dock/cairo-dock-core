@@ -82,7 +82,7 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 			
 			cairo_dock_update_keyfile_from_widget_list (pExtraKeyFile, pExtraWidgetList);
 			if (pModule->pInterface->save_custom_widget != NULL)
-				pModule->pInterface->save_custom_widget (pExtraInstance, pKeyFile);  /// TODO: pass the widget list...
+				pModule->pInterface->save_custom_widget (pExtraInstance, pKeyFile, pExtraWidgetList);
 			cairo_dock_write_keys_to_file (pExtraKeyFile, pExtraInstance->cConfFilePath);
 			g_key_file_free (pExtraKeyFile);
 			
@@ -170,7 +170,7 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (const gchar *cGroupName, 
 			pConfigGroupWidget->pExtraWidgets = g_slist_append (pConfigGroupWidget->pExtraWidgets, pExtraWidgetList);  // append, so that we can parse the list in the same order again.
 			
 			if (pModule->pInterface->load_custom_widget != NULL)
-				pModule->pInterface->load_custom_widget (pExtraInstance, pExtraKeyFile);  /// TODO: this will not work, we need to pass the widget list as parameter -> maybe it's time to promote CDWidget in the core ...
+				pModule->pInterface->load_custom_widget (pExtraInstance, pExtraKeyFile, pExtraWidgetList);
 			
 			g_free (cOriginalConfFilePath);
 			g_key_file_free (pExtraKeyFile);

@@ -381,9 +381,6 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_RELOAD_CONFIG_PANEL_WITH_PAGE(iNumPage) cairo_dock_reload_current_module_widget_full (myApplet, iNumPage)
 
-#define CD_APPLET_GET_CONFIG_PANEL_WIDGET(cGroupName, cKeyName) cairo_dock_get_widget_from_name (myApplet, cGroupName, cKeyName)
-
-#define CD_APPLET_GET_CONFIG_PANEL_GROUP_KEY_WIDGET(cGroupName, cKeyName) cairo_dock_get_group_key_widget_from_name (myApplet, cGroupName, cKeyName)
 
   /////////////////////////
  // AVAILABLE VARIABLES //

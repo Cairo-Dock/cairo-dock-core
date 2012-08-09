@@ -119,8 +119,8 @@ struct _CairoDockModuleInterface {
 	gboolean	(* read_conf_file)		(CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
 	void		(* reset_config)		(CairoDockModuleInstance *pInstance);
 	void		(* reset_data)			(CairoDockModuleInstance *pInstance);
-	void		(* load_custom_widget)	(CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
-	void		(* save_custom_widget)	(CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile);
+	void		(* load_custom_widget)	(CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile, GSList *pWidgetList);
+	void		(* save_custom_widget)	(CairoDockModuleInstance *pInstance, GKeyFile *pKeyFile, GSList *pWidgetList);
 };
 
 /// Definition of an instance of a module. A module can be instanciated several times.

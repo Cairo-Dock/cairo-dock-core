@@ -78,8 +78,6 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_VIEW_LIST='n',
 	/// list of themes in a combo, with preview and readme.
 	CAIRO_DOCK_WIDGET_THEME_LIST='h',
-	/// same but with a combo-entry to let the user enter any text.
-	CAIRO_DOCK_WIDGET_THEME_LIST_ENTRY='H',
 	/// list of available animations.
 	CAIRO_DOCK_WIDGET_ANIMATION_LIST='a',
 	/// list of available dialog decorators.
@@ -221,15 +219,11 @@ void cairo_dock_gui_select_in_combo (GtkWidget *pOneWidget, const gchar *cValue)
 
 gchar **cairo_dock_gui_get_active_rows_in_tree_view (GtkWidget *pOneWidget, gboolean bSelectedRows, gsize *iNbElements);
 
-gchar *cairo_dock_gui_get_active_row_in_combo (GtkWidget *pOneWidget);
-
 
 CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
 
-CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget (GtkWidget *pWindow, const gchar *cGroupName, const gchar *cKeyName);
-
 #define cairo_dock_gui_get_widgets(pGroupKeyWidget) (pGroupKeyWidget)->pSubWidgetList
-#define cairo_dock_gui_get_first_widget(pGroupKeyWidget) (pGroupKeyWidget)->pSubWidgetList->data
+#define cairo_dock_gui_get_first_widget(pGroupKeyWidget) ((pGroupKeyWidget)->pSubWidgetList ? (pGroupKeyWidget)->pSubWidgetList->data : NULL)
 #define cairo_dock_gui_add_widget(pGroupKeyWidget, pOneWidget) (pGroupKeyWidget)->pSubWidgetList = g_slist_append ((pGroupKeyWidget)->pSubWidgetList, pOneWidget)
 
 GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize);

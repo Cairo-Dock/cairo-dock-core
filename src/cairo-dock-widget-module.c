@@ -86,7 +86,7 @@ static void _module_widget_apply (CDWidget *pCdWidget)
 
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pCdWidget->pWidgetList);
 	if (pModule->pInterface->save_custom_widget != NULL)
-		pModule->pInterface->save_custom_widget (pModuleWidget->pModuleInstance, pKeyFile);  // the instance can be NULL
+		pModule->pInterface->save_custom_widget (pModuleWidget->pModuleInstance, pKeyFile, pCdWidget->pWidgetList);  // the instance can be NULL
 	cairo_dock_write_keys_to_file (pKeyFile, pModuleWidget->cConfFilePath);
 	g_key_file_free (pKeyFile);
 	
@@ -124,7 +124,7 @@ static void _build_module_widget (ModuleWidget *pModuleWidget)
 	
 	if (pModuleWidget->pModule->pInterface->load_custom_widget != NULL)
 	{
-		pModuleWidget->pModule->pInterface->load_custom_widget (pModuleWidget->pModuleInstance, pKeyFile);  /// TODO: we need to pass 'pWidgetList' to the function...
+		pModuleWidget->pModule->pInterface->load_custom_widget (pModuleWidget->pModuleInstance, pKeyFile, pWidgetList);
 	}
 	
 	g_key_file_free (pKeyFile);

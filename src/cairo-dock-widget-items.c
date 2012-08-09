@@ -188,13 +188,13 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 			pDataGarbage,
 			cOriginalConfFilePath);
 		g_free (cOriginalConfFilePath);
+		pItemsWidget->widget.pWidgetList = pWidgetList;
+		pItemsWidget->widget.pDataGarbage = pDataGarbage;
 		
 		// load custom widgets
 		if (pInstance->pModule->pInterface->load_custom_widget != NULL)
 		{
-			pItemsWidget->widget.pWidgetList = pWidgetList;  // must set that here so that the call to load_custom_widget() can find the loaded widgets
-			pItemsWidget->widget.pDataGarbage = pDataGarbage;
-			pInstance->pModule->pInterface->load_custom_widget (pInstance, pKeyFile);  /// TODO: we need to pass 'pWidgetList' to the function...
+			pInstance->pModule->pInterface->load_custom_widget (pInstance, pKeyFile, pWidgetList);  /// TODO: we need to pass 'pWidgetList' to the function...
 		}
 		
 		if (pIcon != NULL)
@@ -850,7 +850,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		}
 		
 		if (pModuleInstance->pModule->pInterface->save_custom_widget != NULL)
-			pModuleInstance->pModule->pInterface->save_custom_widget (pModuleInstance, pKeyFile);
+			pModuleInstance->pModule->pInterface->save_custom_widget (pModuleInstance, pKeyFile, pWidgetList);
 		
 		// write everything in the conf file.
 		cairo_dock_write_keys_to_file (pKeyFile, pModuleInstance->cConfFilePath);
