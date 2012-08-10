@@ -61,6 +61,7 @@ struct _CairoDataToRenderer {
 	gdouble **pTabValues;
 	gdouble *pMinMaxValues;
 	gint iCurrentIndex;
+	gboolean bHasValue;  // TRUE as soon as a value has been set in the history
 };
 
 #define CAIRO_DOCK_DATA_FORMAT_MAX_LEN 20
@@ -193,7 +194,6 @@ struct _CairoDataRenderer {
 	gdouble fLatency;
 	guint iSidRenderIdle;  // source ID to delay the rendering in OpenGL until the container is fully resized
 	CairoOverlay *pOverlay;
-	gboolean bHasValue;  // TRUE as soon as a value has been set in the history
 };
 
 
