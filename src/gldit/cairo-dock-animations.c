@@ -401,7 +401,9 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 	}
 	
-	if (pIcon->fInsertRemoveFactor == 0 || ! pIcon->bBeingRemovedByCairo)
+	if (pIcon->fInsertRemoveFactor == 0)
+		pIcon->bBeingRemovedByCairo = FALSE;
+	if (! pIcon->bBeingRemovedByCairo)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
 	cairo_dock_update_removing_inserting_icon_size_default (pIcon);
