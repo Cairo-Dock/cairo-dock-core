@@ -61,6 +61,7 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <dbus/dbus-glib.h> // dbus_g_thread_init
 
 
 #include "config.h"
@@ -300,6 +301,7 @@ int main (int argc, char** argv)
 		g_set_print_handler(PrintMuteFunc);
 	
 	gtk_init (&argc, &argv);
+	dbus_g_thread_init ();
 	
 	GError *erreur = NULL;
 	
