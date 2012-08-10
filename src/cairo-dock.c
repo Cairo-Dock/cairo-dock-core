@@ -48,21 +48,12 @@
 /// http://www.siteduzero.com/tutoriel-3-307309-le-systeme-de-micro-paiement-flattr.html
 /// http://www.cyber-junk.de/wp-content/cache/supercache/cyber-junk.de/entwickelt/flattr-button-im-eigenbau-mittels-curl-und-mini-api/index.html
 
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
 #include <signal.h> 
-#include <unistd.h>
 
 #define __USE_POSIX
 #include <time.h>
 
-#include <glib.h>
 #include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <dbus/dbus-glib.h> // dbus_g_thread_init
-
 
 #include "config.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_first_icon
@@ -77,14 +68,14 @@
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keybinder.h"
-#include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-opengl.h"
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command
+#include "cairo-dock-core.h"
 
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
 #include "help/cairo-dock-help.h"
-#include "cairo-dock-core.h"
 
 //#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
 #define CAIRO_DOCK_THEME_SERVER "http://download.tuxfamily.org/glxdock/themes"
@@ -301,7 +292,6 @@ int main (int argc, char** argv)
 		g_set_print_handler(PrintMuteFunc);
 	
 	gtk_init (&argc, &argv);
-	dbus_g_thread_init ();
 	
 	GError *erreur = NULL;
 	
