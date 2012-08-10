@@ -360,6 +360,8 @@ static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *p
 {
 	if (pRenderer->bUseOverlay)
 	{
+		if (! pRenderer->bHasValue)  // if no value has been set yet, it's better to not draw anything, since the icon already has an image (we draw on an overlay).
+			return;
 		if (! cairo_dock_begin_draw_image_buffer (&pRenderer->pOverlay->image, pContainer, 0))
 		{
 			pIcon->bDamaged = TRUE;  // damage the icon so that it (and therefore its dada-renderer) will be redrawn.
