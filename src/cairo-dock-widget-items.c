@@ -194,7 +194,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 		// load custom widgets
 		if (pInstance->pModule->pInterface->load_custom_widget != NULL)
 		{
-			pInstance->pModule->pInterface->load_custom_widget (pInstance, pKeyFile, pWidgetList);  /// TODO: we need to pass 'pWidgetList' to the function...
+			pInstance->pModule->pInterface->load_custom_widget (pInstance, pKeyFile, pWidgetList);
 		}
 		
 		if (pIcon != NULL)

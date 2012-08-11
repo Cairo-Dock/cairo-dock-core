@@ -163,15 +163,6 @@ struct _Icon {
 	gint iImageWidth, iImageHeight;  // taille de la surface/texture telle qu'elle a ete creee.
 	cairo_surface_t* pIconBuffer;
 	GLuint iIconTexture;
-	cairo_surface_t* pReflectionBuffer_deprecated;
-	
-	gint iTextWidth_deprecated, iTextHeight_deprecated;
-	cairo_surface_t* pTextBuffer_deprecated;
-	GLuint iLabelTexture_deprecated;
-	
-	gint iQuickInfoWidth_deprecated, iQuickInfoHeight_deprecated;
-	cairo_surface_t* pQuickInfoBuffer_deprecated;
-	GLuint iQuickInfoTexture_deprecated;
 	
 	//\____________ Parametres de dessin, definis par la vue/les animations.
 	gdouble fXMin, fXMax;  // Abscisse extremale gauche/droite que the icon atteindra (variable avec la vague).

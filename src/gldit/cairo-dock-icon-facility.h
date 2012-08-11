@@ -47,6 +47,8 @@ G_BEGIN_DECLS
 
 #define cairo_dock_set_icon_container(_pIcon, _pContainer) (_pIcon)->pContainer = CAIRO_CONTAINER (_pContainer)
 
+#define cairo_dock_get_icon_container(_pIcon) (_pIcon)->pContainer
+
 #define cairo_dock_get_icon_max_scale(pIcon) (pIcon->fHeight != 0 && pIcon->pContainer ? (pIcon->pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / (pIcon->fHeight/pIcon->pContainer->fRatio) : 1.)
 
 

@@ -165,7 +165,6 @@ struct _CairoDock {
 	gdouble fFoldingFactor;
 	gint iAvoidingMouseIconType;// type d'icone devant eviter la souris, -1 si aucun.
 	gdouble fAvoidingMouseMargin;// marge d'evitement de la souris, en fraction de la largeur d'an icon (entre 0 et 0.5)
-	GList *pFirstDrawnElement_deprecated;// pointeur sur le 1er element de la liste des icones a etre dessine, en partant de la gauche.
 	gdouble fDecorationsOffsetX;// decalage des decorations pour les faire suivre la souris.
 	// counter for the fade out effect.
 	gint iFadeCounter;
