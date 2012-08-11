@@ -194,7 +194,7 @@ static void _cairo_dock_set_signal_interception (void)
 	signal (SIGTERM, _cairo_dock_quit);  // Term // kill -15 (system)
 }
 
-static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
+static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GMainLoop *pBlockingLoop)
 {
 	cd_debug ("%s ()", __func__);
 	if (pBlockingLoop != NULL && g_main_loop_is_running (pBlockingLoop))
@@ -679,7 +679,7 @@ int main (int argc, char** argv)
 		gtk_window_set_modal (GTK_WINDOW (pWindow), TRUE);
 		GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
 		g_signal_connect (G_OBJECT (pWindow),
-			"delete-event",
+			"destroy",
 			G_CALLBACK (on_delete_maintenance_gui),
 			pBlockingLoop);
 		
