@@ -187,7 +187,7 @@ static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTr
 			&pWidgetList,
 			pDataGarbage,
 			cOriginalConfFilePath);
-		g_free (cOriginalConfFilePath);
+		///g_free (cOriginalConfFilePath);
 		pItemsWidget->widget.pWidgetList = pWidgetList;
 		pItemsWidget->widget.pDataGarbage = pDataGarbage;
 		

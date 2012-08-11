@@ -52,9 +52,10 @@ static void _themes_widget_apply (CDWidget *pCdWidget);
 static void _themes_widget_reset (CDWidget *pCdWidget);
 static void _themes_widget_reload (CDWidget *pThemesWidget);
 static void _fill_treeview_with_themes (ThemesWidget *pThemesWidget);
+static void _fill_combo_with_user_themes (ThemesWidget *pThemesWidget);
 
 
-static gchar *cairo_dock_build_temporary_themes_conf_file (void)
+static gchar *_cairo_dock_build_temporary_themes_conf_file (void)
 {
 	//\___________________ On cree un fichier de conf temporaire.
 	const gchar *cTmpDir = g_get_tmp_dir ();
@@ -94,7 +95,7 @@ static void _load_theme (gboolean bSuccess, ThemesWidget *pThemesWidget)
 	pThemesWidget->pImportTask = NULL;
 }
 
-static gboolean _cairo_dock_save_current_theme (GKeyFile* pKeyFile)
+static gchar * _cairo_dock_save_current_theme (GKeyFile* pKeyFile)
 {
 	const gchar *cGroupName = "Save";
 	//\______________ On recupere le nom du theme.
@@ -105,7 +106,6 @@ static gboolean _cairo_dock_save_current_theme (GKeyFile* pKeyFile)
 		cNewThemeName = NULL;
 	}
 	cd_message ("cNewThemeName : %s", cNewThemeName);
-	
 	g_return_val_if_fail (cNewThemeName != NULL, FALSE);
 	
 	//\___________________ On sauve le theme courant sous ce nom.
@@ -121,7 +121,15 @@ static gboolean _cairo_dock_save_current_theme (GKeyFile* pKeyFile)
 		bThemeSaved |= cairo_dock_package_current_theme (cNewThemeName);
 	}
 	
-	return bThemeSaved;
+	if (bThemeSaved)
+	{
+		return cNewThemeName;
+	}
+	else
+	{
+		g_free (cNewThemeName);
+		return NULL;
+	}
 }
 
 
@@ -418,6 +426,8 @@ static void _on_delete_theme (GtkMenuItem *pMenuItem, ThemesWidget *pThemesWidge
 		cairo_dock_set_status_message (NULL, _("The theme has been deleted"));
 		
 		_fill_treeview_with_themes (pThemesWidget);
+		
+		_fill_combo_with_user_themes (pThemesWidget);
 	}
 	g_free (cThemeName);
 }
@@ -550,6 +560,16 @@ static gboolean _ignore_server_themes (const gchar *cThemeName, CairoDockPackage
 	g_free (cVersionFile);
 	return bRemove;
 }
+static void _fill_combo_with_user_themes (ThemesWidget *pThemesWidget)
+{
+	const gchar *cUserThemesDir = g_cThemesDirPath;
+	GHashTable *pThemeTable = cairo_dock_list_packages (NULL, cUserThemesDir, NULL, NULL);
+	g_hash_table_foreach_remove (pThemeTable, (GHRFunc)_ignore_server_themes, NULL);  // ignore themes coming from the server
+	GtkTreeModel *pModel = gtk_combo_box_get_model (GTK_COMBO_BOX (pThemesWidget->pCombo));
+	gtk_list_store_clear (GTK_LIST_STORE (pModel));  // for the reload
+	cairo_dock_fill_model_with_themes (GTK_LIST_STORE (pModel), pThemeTable, NULL);
+	g_hash_table_destroy (pThemeTable);
+}
 static void _make_combo_for_user_themes (ThemesWidget *pThemesWidget, GPtrArray *pDataGarbage, GKeyFile* pKeyFile)
 {
 	//\______________ get the group/key widget
@@ -559,13 +579,10 @@ static void _make_combo_for_user_themes (ThemesWidget *pThemesWidget, GPtrArray 
 	
 	//\______________ build the combo-box.
 	GtkWidget *pOneWidget = cairo_dock_gui_make_combo (TRUE);
+	pThemesWidget->pCombo = pOneWidget;
 	
 	//\______________ get the user themes.
-	const gchar *cUserThemesDir = g_cThemesDirPath;
-	GHashTable *pThemeTable = cairo_dock_list_packages (NULL, cUserThemesDir, NULL, NULL);
-	g_hash_table_foreach_remove (pThemeTable, (GHRFunc)_ignore_server_themes, NULL);  // ignore themes coming from the server
-	GtkTreeModel *pModel = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
-	cairo_dock_fill_model_with_themes (GTK_LIST_STORE (pModel), pThemeTable, NULL);	
+	_fill_combo_with_user_themes (pThemesWidget);
 	
 	//\______________ insert the widget.
 	GtkWidget *pHBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
@@ -574,12 +591,6 @@ static void _make_combo_for_user_themes (ThemesWidget *pThemesWidget, GPtrArray 
 	//\______________ add a preview widget under to the combo
 	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (GTK_WIDGET (pThemesWidget->pMainWindow), pOneWidget, FALSE, 1, NULL, NULL, pDataGarbage);
 	GtkWidget *pWidgetBox = _gtk_vbox_new (CAIRO_DOCK_GUI_MARGIN);
-	
-	/*gtk_box_pack_start (GTK_BOX (pHBox), pLabel, FALSE, FALSE, 0);
-	gtk_box_pack_end (GTK_BOX (pHBox), pOneWidget, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (pWidgetBox), pHBox, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (pWidgetBox), pPreviewBox, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pWidgetBox, FALSE, FALSE, 0);*/
 	
 	GtkWidget *pAlign = gtk_alignment_new (0, 0, 1, 0);
 	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
@@ -629,7 +640,7 @@ ThemesWidget *cairo_dock_themes_widget_new (GtkWindow *pMainWindow)
 	pThemesWidget->pMainWindow = pMainWindow;
 	
 	// build the widget from a .conf file
-	pThemesWidget->cInitConfFile = cairo_dock_build_temporary_themes_conf_file ();  // sera supprime a la destruction de la fenetre.
+	pThemesWidget->cInitConfFile = _cairo_dock_build_temporary_themes_conf_file ();  // sera supprime a la destruction de la fenetre.
 	
 	_build_themes_widget (pThemesWidget);
 	
@@ -653,29 +664,29 @@ static void _themes_widget_apply (CDWidget *pCdWidget)
 	
 	//\_______________ take the actions relatively to the current page.
 	int iNumPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (pThemesWidget->widget.pWidget));
-	gboolean bReloadWindow = FALSE;
+	gchar *cNewThemeName = NULL;
 	switch (iNumPage)
 	{
 		case 0:  // load a theme
 			cairo_dock_set_status_message (NULL, _("Importing theme ..."));
-			_cairo_dock_load_theme (pKeyFile, pThemesWidget);  // bReloadWindow reste a FALSE, on ne rechargera la fenetre que lorsque le theme aura ete importe.
+			_cairo_dock_load_theme (pKeyFile, pThemesWidget);  // we don't reload the window in this case, we'll do it once the theme has been imported successfully
 		break;
 		
 		case 1:  // save current theme
-			bReloadWindow = _cairo_dock_save_current_theme (pKeyFile);
-			if (bReloadWindow)
+			cNewThemeName = _cairo_dock_save_current_theme (pKeyFile);
+			if (cNewThemeName != NULL)
+			{
 				cairo_dock_set_status_message (NULL, _("Theme has been saved"));
+				
+				_fill_treeview_with_themes (pThemesWidget);
+				
+				_fill_combo_with_user_themes (pThemesWidget);
+				
+				cairo_dock_gui_select_in_combo_full (pThemesWidget->pCombo, cNewThemeName, TRUE);
+			}
 		break;
 	}
 	g_key_file_free (pKeyFile);
-	
-	if (bReloadWindow)
-	{
-		_fill_treeview_with_themes (pThemesWidget);
-		
-		/// TODO: also reload the combo's model ... and for that we should build it ourselves ...
-		
-	}
 }
 
 

@@ -118,7 +118,7 @@ static void _build_module_widget (ModuleWidget *pModuleWidget)
 		&pWidgetList,
 		pDataGarbage,
 		cOriginalConfFilePath);
-	g_free (cOriginalConfFilePath);
+	///g_free (cOriginalConfFilePath);
 	pModuleWidget->widget.pWidgetList = pWidgetList;
 	pModuleWidget->widget.pDataGarbage = pDataGarbage;
 	

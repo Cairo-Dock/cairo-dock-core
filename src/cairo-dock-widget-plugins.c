@@ -200,7 +200,7 @@ static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockM
 	return FALSE;
 }
 
-static GtkWidget *cairo_dock_build_modules_treeview (void)
+static GtkWidget *_cairo_dock_build_modules_treeview (void)
 {
 	//\______________ On construit le treeview des modules.
 	GtkWidget *pOneWidget = cairo_dock_gui_make_tree_view (FALSE);
@@ -247,51 +247,8 @@ static GtkWidget *cairo_dock_build_modules_treeview (void)
 
 static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 {
-	/**GKeyFile* pKeyFile = cairo_dock_open_key_file (CAIRO_DOCK_SHARE_DATA_DIR"/cairo-dock-plugins.conf");  /// TODO: probably don't use a .conf file just for that ...
-	
-	GSList *pWidgetList = NULL;
-	GPtrArray *pDataGarbage = g_ptr_array_new ();
-	if (pKeyFile != NULL)
-	{
-		pPluginsWidget->widget.pWidget = cairo_dock_build_group_widget (pKeyFile,
-			"Add-ons",
-			NULL,  // gettext domain
-			NULL,  // main window
-			&pWidgetList,
-			pDataGarbage,
-			NULL);
-	}
-	pPluginsWidget->widget.pWidgetList = pWidgetList;
-	pPluginsWidget->widget.pDataGarbage = pDataGarbage;
-	
-	// complete the widget
-	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Add-ons", "modules");
-	g_return_if_fail (myWidget != NULL);
-	
 	//\_____________ On construit le tree-view.
-	pPluginsWidget->pTreeView = cairo_dock_build_modules_treeview ();
-	
-	//\_____________ On l'ajoute a la fenetre.
-	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 210), NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pPluginsWidget->pTreeView);
-	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow, FALSE, FALSE, 0);
-	
-	//\______________ On construit le widget de prevue et on le rajoute a la suite.
-	gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
-	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (pPluginsWidget->widget.pWidget, pPluginsWidget->pTreeView, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
-	GtkWidget *pScrolledWindow2 = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 210), NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow2), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow2), pPreviewBox);
-	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pScrolledWindow2, FALSE, FALSE, 0);
-	g_free (cDefaultMessage);
-	
-	g_key_file_free (pKeyFile);*/
-	
-	//\_____________ On construit le tree-view.
-	pPluginsWidget->pTreeView = cairo_dock_build_modules_treeview ();
+	pPluginsWidget->pTreeView = _cairo_dock_build_modules_treeview ();
 	
 	//\_____________ On l'ajoute a la fenetre.
 	GtkWidget *pKeyBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);

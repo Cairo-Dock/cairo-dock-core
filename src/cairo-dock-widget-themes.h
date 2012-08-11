@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_WIDGET_THEMES__
 #define  __CAIRO_DOCK_WIDGET_THEMES__
 
@@ -30,14 +29,15 @@ G_BEGIN_DECLS
 typedef struct _ThemesWidget ThemesWidget;
 
 struct _ThemesWidget {
-	CDWidget widget;
-	gchar *cInitConfFile;
-	GtkWindow *pMainWindow;
-	GtkWidget *pWaitingDialog;
-	CairoDockTask *pImportTask;
-	CairoDockTask *pListTask;
-	GtkWidget *pTreeView;
-	guint iSidPulse;
+	CDWidget widget;  // base class
+	gchar *cInitConfFile;  // conf file used to build the widget
+	GtkWindow *pMainWindow;  // main window, needed to make the waiting dialog modal
+	CairoDockTask *pImportTask;  // task to import a theme from the server
+	CairoDockTask *pListTask;  // task to list the themes on the server
+	GtkWidget *pTreeView;  // tree view for the complete themes list
+	GtkWidget *pCombo;  // combo for the user themes
+	GtkWidget *pWaitingDialog;  // modal dialog to show a progress bar during importation
+	guint iSidPulse;  // timer to make the progress bar move
 };
 
 #define THEMES_WIDGET(w) ((ThemesWidget*)(w))

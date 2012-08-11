@@ -575,7 +575,7 @@ static void _cairo_dock_select_one_item_in_combo (GtkComboBox *widget, gpointer 
 {
 	GtkTreeModel *model = gtk_combo_box_get_model (widget);
 	g_return_if_fail (model != NULL);
-
+	
 	GtkTreeIter iter;
 	if (!gtk_combo_box_get_active_iter (widget, &iter))
 		return ;
@@ -796,7 +796,7 @@ static void _cairo_dock_set_original_value (GtkButton *button, CairoDockGroupKey
 	gchar *cKeyName = pGroupKeyWidget->cKeyName;
 	GSList *pSubWidgetList = pGroupKeyWidget->pSubWidgetList;
 	gchar *cOriginalConfFilePath = pGroupKeyWidget->cOriginalConfFilePath;
-	//g_print ("%s (%s, %s, %s)\n", __func__, cGroupName, cKeyName, cOriginalConfFilePath);
+	g_print ("%s (%s, %s, %s)\n", __func__, cGroupName, cKeyName, cOriginalConfFilePath);
 	
 	GSList *pList;
 	gsize i = 0;
@@ -1199,7 +1199,6 @@ static gboolean _test_one_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeI
 }
 static gboolean _cairo_dock_find_iter_from_name_full (GtkListStore *pModele, const gchar *cName, GtkTreeIter *iter, gboolean bIsTheme)
 {
-	//g_print ("%s (%s)\n", __func__, cName);
 	if (cName == NULL)
 		return FALSE;
 	gboolean bFound = FALSE;
@@ -1224,8 +1223,8 @@ static void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pT
 	if (_cairo_dock_find_iter_from_name_full (GTK_LIST_STORE (modele), cActiveTheme, &iter, TRUE))
 	{
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
-		gboolean bReturn;
-		g_signal_emit_by_name (pCombo, "changed", NULL, &bReturn);
+		///gboolean bReturn;
+		///g_signal_emit_by_name (pCombo, "changed", NULL, &bReturn);
 		//cd_debug ("%s found \n", cActiveTheme);
 	}
 }
@@ -3734,13 +3733,15 @@ GtkWidget *cairo_dock_gui_make_combo (gboolean bWithEntry)
 	return pOneWidget;
 }
 
-void cairo_dock_gui_select_in_combo (GtkWidget *pOneWidget, const gchar *cValue)
+void cairo_dock_gui_select_in_combo_full (GtkWidget *pOneWidget, const gchar *cValue, gboolean bIsTheme)
 {
 	GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
 	g_return_if_fail (model != NULL);
 	GtkTreeIter iter;
-	if (_cairo_dock_find_iter_from_name (GTK_LIST_STORE (model), cValue, &iter))
+	if (_cairo_dock_find_iter_from_name_full (GTK_LIST_STORE (model), cValue, &iter, bIsTheme))
+	{
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
+	}
 }
 
 static gboolean _get_active_elements (GtkTreeModel * model, GtkTreePath * path, GtkTreeIter * iter, GSList **pStringList)

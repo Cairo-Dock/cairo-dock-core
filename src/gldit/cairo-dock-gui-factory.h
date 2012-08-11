@@ -215,7 +215,8 @@ GtkWidget *cairo_dock_gui_make_tree_view (gboolean bGetActiveOnly);
 
 GtkWidget *cairo_dock_gui_make_combo (gboolean bWithEntry);
 
-void cairo_dock_gui_select_in_combo (GtkWidget *pOneWidget, const gchar *cValue);
+void cairo_dock_gui_select_in_combo_full (GtkWidget *pOneWidget, const gchar *cValue, gboolean bIsTheme);
+#define cairo_dock_gui_select_in_combo(pOneWidget, cValue) cairo_dock_gui_select_in_combo_full (pOneWidget, cValue, FALSE)
 
 gchar **cairo_dock_gui_get_active_rows_in_tree_view (GtkWidget *pOneWidget, gboolean bSelectedRows, gsize *iNbElements);
 

@@ -122,7 +122,7 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (const gchar *cGroupName, 
 		NULL,  // main window
 		&pWidgetList,
 		pDataGarbage,
-		CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_CONF_FILE);
+		g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_CONF_FILE));
 	pConfigGroupWidget->widget.pWidgetList = pWidgetList;
 	pConfigGroupWidget->widget.pDataGarbage = pDataGarbage;
 	
@@ -172,7 +172,7 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (const gchar *cGroupName, 
 			if (pModule->pInterface->load_custom_widget != NULL)
 				pModule->pInterface->load_custom_widget (pExtraInstance, pExtraKeyFile, pExtraWidgetList);
 			
-			g_free (cOriginalConfFilePath);
+			///g_free (cOriginalConfFilePath);
 			g_key_file_free (pExtraKeyFile);
 		}
 	}

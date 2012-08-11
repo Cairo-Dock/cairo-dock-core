@@ -441,24 +441,6 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 }
 
 
-
-static guint s_iSidRefreshGUI = 0;
-static gboolean _refresh_gui (gpointer data)
-{
-	//if (s_pLauncherGuiBackend && s_pLauncherGuiBackend->refresh_gui)
-	//	s_pLauncherGuiBackend->refresh_gui ();
-	
-	s_iSidRefreshGUI = 0;
-	return FALSE;
-}
-void cairo_dock_trigger_refresh_gui (void)
-{
-	if (s_iSidRefreshGUI != 0)
-		return;
-	
-	s_iSidRefreshGUI = g_idle_add ((GSourceFunc) _refresh_gui, NULL);
-}
-
 gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDesklet *pDesklet)
 {
 	//g_print ("desklet %s configured\n", pDesklet->pIcon?pDesklet->pIcon->cName:"unknown");
