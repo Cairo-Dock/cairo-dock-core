@@ -117,7 +117,7 @@ static void _cairo_dock_delete_dock (GtkMenuItem *pMenuItem, CairoDock *pDock)
 {
 	g_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
 	
-	Icon *pIcon = cairo_dock_get_dialogless_icon_full (pDock);
+	Icon *pIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	
 	int answer = cairo_dock_ask_question_and_wait (_("Delete this dock?"), pIcon, CAIRO_CONTAINER (pDock));
 	if (answer != GTK_RESPONSE_YES)
@@ -394,7 +394,7 @@ static void _cairo_dock_quit (GtkMenuItem *pMenuItem, CairoContainer *pContainer
 	//cairo_dock_on_delete (pDock->container.pWidget, NULL, pDock);
 	Icon *pIcon = NULL;
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
-		pIcon = cairo_dock_get_dialogless_icon (CAIRO_DOCK (pContainer));
+		pIcon = cairo_dock_get_pointed_icon (CAIRO_DOCK (pContainer)->icons);
 	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
 		pIcon = CAIRO_DESKLET (pContainer)->pIcon;
 	
