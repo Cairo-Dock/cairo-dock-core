@@ -1,5 +1,5 @@
-Basics :
---------
+Basics:
+-------
 
 To compile the core or the plug-ins, just copy-paste these lines into a terminal (assuming you are in the main directory of the core/plug-ins) :
 
@@ -11,8 +11,8 @@ sudo make install
 
 
 
-Notes :
--------
+Notes:
+------
 
 Install the dock first, and then compile the plug-ins. For more details, have a look at this webpage: http://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en
 
@@ -36,9 +36,66 @@ You can also force another prefix for this librairy directory with "LIB_SUFFIX" 
 Plug-ins are compiled all at once, but you can skip some of them. Unstable plug-ins are skipped by default, unless you add "-Denable-xxx=yes", where xxx is the name of the plug-in.
 See the "Applets.stable" file in the "plug-ins" folder for an exhaustive list of stable applets (that are effectively integrated into the official package).
 
+
+
+Notes to packagers/maintainers:
+-------------------------------
+
+You can use these CMake flags to install some files in other directories:
+  CMAKE_INSTALL_BINDIR      (default: 'bin')
+  CMAKE_INSTALL_LIBDIR      (default: 'lib' or 'lib64' on Debian 64bit distributions or forks)
+  CMAKE_INSTALL_INCLUDEDIR  (default: 'include')
+  CMAKE_INSTALL_DATAROOTDIR (default: 'share')
+  CMAKE_INSTALL_DATADIR     (default: DATAROOTDIR)
+  CMAKE_INSTALL_LOCALEDIR   (default: DATAROOTDIR'/locale')
+  CMAKE_INSTALL_MANDIR      (default: DATAROOTDIR'/man')
+
+Note that cairo-dock-plug-ins project needs the same version as the core.
+We advice to create a few packages:
+ * cairo-dock: a meta-package to install cairo-dock-core, cairo-dock-plug-ins, cairo-dock-plug-ins-integration and cairo-dock-plug-ins-dbus-interface-python
+ * cairo-dock-core: with the binary (usr/bin)
+ * cairo-dock-data: with common files (usr/share)
+ * libgldiX: with the .so file (lib/libgldiX.so.*)
+ * libgldi-dev: files needed to compile the plug-ins (usr/include, usr/lib/pkgconfig, usr/lib/libgldiX.so)
+ * cairo-dock-plug-ins: with binaries files (usr/lib/cairo-dock/libcd-*.so)
+ * cairo-dock-plug-ins-data: with common files (usr/share/locale, usr/share/cairo-dock, usr/lib/cairo-dock/*(!.so))
+ * cairo-dock-plug-ins-integration: these files do NOT require any dependences, these plugins are automatically enabled if you're using gnome/kde/xfce. Note that it will try to use gvfs by default. (usr/lib/cairo-dock/libcd_*.so)
+ * cairo-dock-plug-ins-dbus-interface-mono: with files of the mono interface (needed to launch 'third-party' applets made in Mono) (usr/lib/cli/cairo-dock-plug-ins/CDApplet*.dll)
+ * cairo-dock-plug-ins-dbus-interface-python: with files of the Python interface (needed to launch 'third-party' applets made in Python) (usr/lib/python*/dist-packages/*.py)
+ * cairo-dock-plug-ins-dbus-interface-ruby: with files of the Ruby interface (needed to launch 'third-party' applets made in Ruby) (usr/lib/ruby*)
+ * cairo-dock-plug-ins-dbus-interface-vala: with files of the Vala interface (needed to launch 'third-party' applets made in Vala) (usr/lib/libCDApplet.so,usr/lib/pkgconfig/CDApplet.pc, usr/share/vala*)
+
+About the Python interface, this CMake flag is needed to install files in another directory: -DROOT_PREFIX=/PATH/TO/YOUR/DIR
+About the Cairo-Dock session, it uses gnome-session (>= 3.0) and this CMake flag is needed (for cairo-dock-core): -Denable-desktop-manager=yes
+
+We are maintaining Ubuntu packages: https://launchpad.net/~cairo-dock-team/+archive/ppa/+packages
+Feel free to have a look at the debian directory to have a few examples.
+
+And don't hesitate to report any bugs and ideas and to propose patches ;)
+
+
+If you like this project:
+-------------------------
+
+There are various ways to help us ;)
+ http://glx-dock.org/ww_page.php?p=How%20to%20help%20us&lang=en
+
+
+
+Notes to developers:
+--------------------
+
+This project is mostly coded in C but applets can be coded in various languages (Python, Ruby, Vala, Mono, Bash, etc.)
+
+Please have a look at this webpage for more details: http://glx-dock.org/ww_page.php?p=Documentation&lang=en
+
 To build the Cairo-Dock documentation, use the generate-doc.sh script in the 'doc' directory of the core.
 
+
+
+
 Thanks for using Cairo-Dock, hope you will enjoy it ! ^_^
+
 
 Website:        http://glx-dock.org/
 Project:        https://launchpad.net/cairo-dock
@@ -50,3 +107,6 @@ API DBus:       http://dbus.glx-dock.org/
 Applets extras: http://extras.glx-dock.org/
 Identi.ca:      http://identi.ca/cairodock
 Twitter:        http://twitter.com/cairodock
+Google +:       https://plus.google.com/106693551620606700380/
+Flattr:         https://flattr.com/thing/370779/Support-Cairo-Dock-development
+Paypal & How to help us: http://glx-dock.org/ww_page.php?p=How%20to%20help%20us&lang=en
