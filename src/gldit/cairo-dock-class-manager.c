@@ -1388,7 +1388,10 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 	g_return_if_fail (pClassAppli != NULL);
 	
 	// place the icon amongst the other appli icons of this class, or after the last appli if none.
-	pIcon->iGroup = CAIRO_DOCK_APPLI;
+	if (myTaskbarParam.bSeparateApplis)
+		pIcon->iGroup = CAIRO_DOCK_APPLI;
+	else
+		pIcon->iGroup = CAIRO_DOCK_LAUNCHER;
 	Icon *pSameClassIcon = NULL;
 	Icon *icon;
 	GList *ic, *last_ic = NULL, *first_appli_ic = NULL;
