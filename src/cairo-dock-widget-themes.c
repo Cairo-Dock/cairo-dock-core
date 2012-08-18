@@ -41,11 +41,6 @@
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-widget-themes.h"
 
-// Nom du repertoire des themes de dock.
-#define CAIRO_DOCK_THEMES_DIR "themes"  /// TODO: define that somewhere
-// Nom du repertoire des themes de dock sur le serveur
-#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.0"  /// TODO: define that somewhere
-
 extern gchar *g_cThemesDirPath;
 
 static void _themes_widget_apply (CDWidget *pCdWidget);

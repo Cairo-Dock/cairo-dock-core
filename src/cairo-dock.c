@@ -84,10 +84,6 @@
 #define CAIRO_DOCK_CURRENT_THEME_NAME "current_theme"
 // Nom du repertoire des themes extras.
 #define CAIRO_DOCK_EXTRAS_DIR "extras"
-// Nom du repertoire des themes de dock.
-#define CAIRO_DOCK_THEMES_DIR "themes"
-// Nom du repertoire des themes de dock sur le serveur
-#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.0"
 
 extern gchar *g_cCairoDockDataDir;
 extern gchar *g_cCurrentThemePath;

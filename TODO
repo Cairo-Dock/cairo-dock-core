@@ -5,12 +5,10 @@
 For each new version:
 	* Bump dock's version (CMakeLists.txt - Core & Plug-ins)
 	* Check the link to third-party applets' website:
-		- data/cairo-dock-plugins.conf.in
-		- src/cairo-dock-gui-commons.c:139:#define DISTANT_DIR "3.0.0"
+		- src/cairo-dock-gui-commons.c:139:#define DISTANT_DIR "3.1.0"
 		- ../cairo-dock-plug-ins/Dbus/src/applet-dbus.c:55:#define DISTANT_DIR "3.1.0"
 	* Check the link to theme dir on the server:
-		- data/themes.conf.in:6:#R[@pkgdatadir@/themes;../@CAIRO_DOCK_THEMES_DIR@;themes3.0]
-		- src/cairo-dock.c:98:#define CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.0"
+		- CMakeList.txt:134: set (CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.1")
 	* Remove useless g_print
 	* Check the ChangeLog file
 
@@ -53,7 +51,7 @@ For each new version:
 	- link launchers with class+command
 
 3.1:
-	- Memory leak in data-renderer
+	- an appli icon loaded before being inserted in a dock !
 	- add "add an applet" in the menu
 	- when an icon in a sub-dock demands attention, also animate the icon in the main dock.
 	- search in Recent-Events' dialog (seems like libzeitgeist is buggy)
@@ -65,8 +63,6 @@ For each new version:
 	- add a function cairo_dock_render_one_icon_in_desklet_opengl().
 	- gauge with images: improve transition
 	- GUI: current items: don't allow the "delete" menu on the main dock
-	- GUI: themes: merge "delete" with "load" or "save"
-	- GUI: previews size gets smaller and smaller
 
 all:
 	- Remove GCC warnings
