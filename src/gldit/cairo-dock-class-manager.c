@@ -1773,7 +1773,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	return cResult;
 }
 
-static void _add_action_menus (GKeyFile *pKeyFile, CairoDockClassAppli *pClassAppli, const gchar *cMenuListKey, const gchar *cMenuGroup, gboolean bActionFirstInGroupKey)
+static void _add_action_menus (GKeyFile *pKeyFile, CairoDockClassAppli *pClassAppli, const gchar *cGettextDomain, const gchar *cMenuListKey, const gchar *cMenuGroup, gboolean bActionFirstInGroupKey)
 {
 	gsize length = 0;
 	gchar **pMenuList = g_key_file_get_string_list (pKeyFile, "Desktop Entry", cMenuListKey, &length, NULL);  
@@ -1790,7 +1790,10 @@ static void _add_action_menus (GKeyFile *pKeyFile, CairoDockClassAppli *pClassAp
 			if (g_key_file_has_group (pKeyFile, cGroup))
 			{
 				gchar **pMenuItem = g_new0 (gchar*, 4);
-				pMenuItem[0] = g_key_file_get_locale_string (pKeyFile, cGroup, "Name", NULL, NULL);
+				// for a few apps, the translations are directly available in the .desktop file (e.g. firefox)
+				gchar *cName = g_key_file_get_locale_string (pKeyFile, cGroup, "Name", NULL, NULL);
+				pMenuItem[0] = g_strdup (dgettext (cGettextDomain, cName)); // but most of the time, it's available in the .mo file
+				g_free (cName);
 				gchar *cCommand = g_key_file_get_string (pKeyFile, cGroup, "Exec", NULL);
 				if (cCommand != NULL)  // remove the launching options %x.
 				{
@@ -1949,11 +1952,19 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	pClassAppli->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
 	
 	pClassAppli->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
-	
-	// get the Unity menus.
-	_add_action_menus (pKeyFile, pClassAppli, "X-Ayatana-Desktop-Shortcuts", "Shortcut Group", TRUE); // oh crap, with a name like that you can be sure it will change 25 times before they decide a definite name :-/
-	_add_action_menus (pKeyFile, pClassAppli, "Actions", "Desktop Action", FALSE); // yes, it's true ^^ => Ubuntu Quantal
-	
+
+	//\__________________ Gettext domain
+	// The translations of the quicklist menus are generally available in a .mo file
+	gchar *cGettextDomain = g_key_file_get_string (pKeyFile, "Desktop Entry", "X-Ubuntu-Gettext-Domain", NULL);
+	if (cGettextDomain == NULL)
+		cGettextDomain = g_key_file_get_string (pKeyFile, "Desktop Entry", "X-GNOME-Gettext-Domain", NULL); // Yes, they like doing that :P
+		// a few time ago, it seems that it was 'X-Gettext-Domain'
+
+	//______________ Quicklist menus.
+	_add_action_menus (pKeyFile, pClassAppli, cGettextDomain, "X-Ayatana-Desktop-Shortcuts", "Shortcut Group", TRUE); // oh crap, with a name like that you can be sure it will change 25 times before they decide a definite name :-/
+	_add_action_menus (pKeyFile, pClassAppli, cGettextDomain, "Actions", "Desktop Action", FALSE); // yes, it's true ^^ => Ubuntu Quantal
+
+	g_free (cGettextDomain);
 	
 	g_key_file_free (pKeyFile);
 	cd_debug (" -> class '%s'", cClass);
