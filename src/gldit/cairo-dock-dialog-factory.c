@@ -745,7 +745,10 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			if (cairo_dock_is_hidden (pDock))
 			{
 				*iX = pContainer->iWindowPositionX +
-					(pIcon ? (pIcon->fXAtRest + pIcon->fWidth/2) / pDock->fFlatDockWidth * pDock->iMaxDockWidth : 0);
+					pDock->iMaxDockWidth/2
+					- pDock->fFlatDockWidth/2
+					+ pIcon->fXAtRest + pIcon->fWidth/2;
+					///(pIcon ? (pIcon->fXAtRest + pIcon->fWidth/2) / pDock->fFlatDockWidth * pDock->iMaxDockWidth : 0);
 			}
 			else
 			{
