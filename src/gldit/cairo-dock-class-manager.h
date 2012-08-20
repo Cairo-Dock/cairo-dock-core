@@ -208,8 +208,6 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext);
 Icon *cairo_dock_get_inhibitor (Icon *pIcon, gboolean bOnlyInDock);
 
 
-///void cairo_dock_reorder_classes (void);
-
 void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock);
 
 void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock);

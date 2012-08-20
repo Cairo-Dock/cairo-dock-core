@@ -1619,7 +1619,11 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 				g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s", cFileName);
 				if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
 				{
-					bFound = FALSE;
+					g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s", g_getenv ("HOME"), cFileName);
+					if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+					{
+						bFound = FALSE;
+					}
 				}
 			}
 		}
