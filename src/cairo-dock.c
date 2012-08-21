@@ -48,7 +48,8 @@
 /// http://www.siteduzero.com/tutoriel-3-307309-le-systeme-de-micro-paiement-flattr.html
 /// http://www.cyber-junk.de/wp-content/cache/supercache/cyber-junk.de/entwickelt/flattr-button-im-eigenbau-mittels-curl-und-mini-api/index.html
 
-#include <signal.h> 
+#include <unistd.h> // sleep, execl
+#include <signal.h>
 
 #define __USE_POSIX
 #include <time.h>
