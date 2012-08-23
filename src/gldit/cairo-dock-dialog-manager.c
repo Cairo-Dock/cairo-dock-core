@@ -982,6 +982,7 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 			cairo_dock_pop_up (CAIRO_DOCK (pContainer));
 		}*/
 		cd_debug ("debut de boucle bloquante ...\n");
+		// gdk_threads_enter has been deprecated since version 3.6 and should not be used in newly-written code. All GDK and GTK+ calls should be made from the main thread
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();

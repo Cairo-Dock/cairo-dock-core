@@ -23,13 +23,8 @@
 #include <math.h>
 
 #include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include <gdk/gdkx.h>
 
-#include <cairo.h>
 #include <pango/pango.h>
-#include <librsvg/rsvg.h>
-#include <librsvg/rsvg-cairo.h>
 
 
 #include <X11/extensions/Xrender.h>
