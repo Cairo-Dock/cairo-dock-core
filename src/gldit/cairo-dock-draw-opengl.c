@@ -29,10 +29,6 @@
 
 #include <cairo.h>
 #include <pango/pango.h>
-#include <librsvg/rsvg.h>
-#if !LIBRSVG_CHECK_VERSION (2, 36, 2)
-#include <librsvg/rsvg-cairo.h>
-#endif
 
 
 #include <X11/extensions/Xrender.h>

@@ -25,10 +25,12 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <cairo.h>
-#include <librsvg/rsvg.h>
-#if !LIBRSVG_CHECK_VERSION (2, 36, 2)
+#include <librsvg/rsvg.h>  // we include the rsvg stuff here, because it's such a mess that it's better to not duplicate that.
+#include <librsvg/librsvg-features.h>  // LIBRSVG_CHECK_VERSION - need to include glib before, because it uses G_BEGIN_DECL without including glib first !
+#if !LIBRSVG_CHECK_VERSION (2, 36, 2)  // rsvg-cairo.h is now included in rsvg.h
 #include <librsvg/rsvg-cairo.h>
 #endif
+
 #include <glib/gi18n.h>
 //#include <X11/extensions/Xdamage.h>
 

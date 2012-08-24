@@ -19,8 +19,6 @@
 
 #include <string.h>
 #include <math.h>
-#include <librsvg/rsvg.h>
-#include <librsvg/rsvg-cairo.h>
 #include <pango/pango.h>
 
 #include "cairo-dock-log.h"

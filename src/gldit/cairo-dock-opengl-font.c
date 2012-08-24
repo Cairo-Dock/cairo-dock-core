@@ -30,9 +30,6 @@
 #include <pango/pangox.h>
 #include <cairo.h>
 #include <pango/pango.h>
-#include <librsvg/rsvg.h>
-#include <librsvg/rsvg-cairo.h>
-
 
 #include <X11/extensions/Xrender.h>
 #include <GL/glx.h>
