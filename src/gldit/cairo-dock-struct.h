@@ -25,9 +25,23 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <cairo.h>
-#include <librsvg/rsvg.h>  // we include the rsvg stuff here, because it's such a mess that it's better to not duplicate that.
-#include <librsvg/librsvg-features.h>  // LIBRSVG_CHECK_VERSION - need to include glib before, because it uses G_BEGIN_DECL without including glib first !
-#if !LIBRSVG_CHECK_VERSION (2, 36, 2)  // rsvg-cairo.h is now included in rsvg.h
+
+/*
+ * We include rsvg stuff here, because it's such a mess that it's better to not
+ *  duplicate that.
+ * We need to include glib.h before because it uses G_BEGIN_DECL without
+ * including glib first! (bug fixed with the version 2.36.2)
+ * Note: with this 2.36.2 version, rsvg-cairo.h and librsvg-features.h are
+ *  included in rsvg.h and including these header files directly are now
+ *  deprecated. But we need 'librsvg-features.h' to use LIBRSVG_CHECK_VERSION
+ *  macro in order to know if we can include (or not) librsvg-cairo.h...
+ *   Yeah, a bit strange :)
+ */
+#include <librsvg/rsvg.h>
+#ifndef LIBRSVG_CHECK_VERSION
+#include <librsvg/librsvg-features.h>
+#endif
+#if !LIBRSVG_CHECK_VERSION (2, 36, 2)
 #include <librsvg/rsvg-cairo.h>
 #endif
 
