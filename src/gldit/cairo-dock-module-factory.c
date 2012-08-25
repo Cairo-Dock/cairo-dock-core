@@ -103,8 +103,8 @@ static gboolean _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GErr
 		gboolean bModuleLoaded = function_pre_init (pCairoDockModule->pVisitCard, pCairoDockModule->pInterface);
 		if (! bModuleLoaded)
 		{
-			_cairo_dock_close_module (pCairoDockModule);
 			cd_debug ("module '%s' has not been loaded", pCairoDockModule->cSoFilePath);  // peut arriver a xxx-integration ou icon-effect par exemple.
+			_cairo_dock_close_module (pCairoDockModule);
 			return FALSE;
 		}
 	}
