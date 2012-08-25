@@ -185,8 +185,8 @@ static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 		x = 0.;  // the bar is left-aligned.
 		y = iHeight - (i + 1) * pProgressBar->iBarThickness;  // first value at bottom.
 		v = cairo_data_renderer_get_normalized_current_value_with_latency (pRenderer, i);
-		
-		if (v >= 0 && v <= 1)  // any negative value is an "undef" value
+
+		if (v > 0 && v <= 1)  // any negative value is an "undef" value
 		{
 			cairo_save (pCairoContext);
 			cairo_translate (pCairoContext, x, y);
@@ -250,7 +250,7 @@ static void render_opengl (ProgressBar *pProgressBar)
 		x = - iWidth / 2. + w * v/2 + r + dx;  // center of the bar; the bar is left-aligned.
 		y = i * pProgressBar->iBarThickness;  // first value at bottom.
 		
-		if (v >= 0 && v <= 1)  // any negative value is an "undef" value
+		if (v > 0 && v <= 1)  // any negative value is an "undef" value
 		{
 			// make a rounded rectangle path.
 			const CairoDockGLPath *pFramePath = cairo_dock_generate_rectangle_path (w * v, 2*r, r, TRUE);
