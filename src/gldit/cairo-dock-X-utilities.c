@@ -593,7 +593,7 @@ gboolean cairo_dock_support_X_extension (void)
 	if (! XRRQueryExtension (s_XDisplay, &event_base, &error_base))
 	{
 		cd_warning ("Xrandr extension not available.");
-		s_bUseXComposite = FALSE;
+		s_bUseXrandr = FALSE;
 	}
 	else
 	{
@@ -630,6 +630,11 @@ gboolean cairo_dock_xtest_is_available (void)
 gboolean cairo_dock_xinerama_is_available (void)
 {
 	return s_bUseXinerama;
+}
+
+gboolean cairo_dock_xrandr_is_available (void)
+{
+	return s_bUseXrandr;
 }
 
 

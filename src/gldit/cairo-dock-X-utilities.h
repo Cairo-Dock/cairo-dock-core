@@ -65,6 +65,7 @@ gboolean cairo_dock_support_X_extension (void);
 gboolean cairo_dock_xcomposite_is_available (void);
 gboolean cairo_dock_xtest_is_available (void);
 gboolean cairo_dock_xinerama_is_available (void);
+gboolean cairo_dock_xrandr_is_available (void);
 
 
 void cairo_dock_get_screen_offsets (int iNumScreen, int *iScreenOffsetX, int *iScreenOffsetY);
