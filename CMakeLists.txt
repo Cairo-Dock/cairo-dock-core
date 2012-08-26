@@ -71,7 +71,7 @@ set (bindir "${prefix}/${CMAKE_INSTALL_BINDIR}")  # (...)/bin
 
 ########### dependencies ###############
 
-set (packages_required "gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox libcurl")  # for the .pc
+set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox libcurl")  # for the .pc and to have details
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
@@ -105,9 +105,18 @@ if (${HAVE_LIBCRYPT})
 	set (LIBCRYPT_LIBS "-lcrypt")
 endif()
 
-check_include_files ("math.h" HAVE_MATH_H)
 check_symbol_exists (LC_MESSAGES "locale.h" HAVE_LC_MESSAGES)
-CHECK_LIBRARY_EXISTS (m sin "" HAVE_LIBM)
+check_include_files ("math.h" HAVE_MATH_H)
+check_library_exists (m sin "" HAVE_LIBM)
+if (NOT ${HAVE_LIBM} OR NOT {HAVE_MATH_H})
+	message(FATAL_ERROR "Cairo-Dock requires math.h")
+endif()
+
+check_include_files ("dlfcn.h" HAVE_DLFCN_H)
+check_library_exists (dl dlopen "" HAVE_LIBDL)
+if (NOT ${HAVE_LIBDL} OR NOT ${HAVE_DLFCN_H})
+	message(FATAL_ERROR "Cairo-Dock requires dlfcn.h")
+endif()
 
 MESSAGE (STATUS)
 MESSAGE (STATUS "Cairo-Dock will be compiled with the following options :")

@@ -179,8 +179,6 @@ CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath)  // cSoFileP
 
 void cairo_dock_load_modules_in_directory (const gchar *cModuleDirPath, GError **erreur)
 {
-	if (!g_module_supported ())
-		return;
 	if (cModuleDirPath == NULL)
 		cModuleDirPath = GLDI_MODULES_DIR;
 	cd_message ("%s (%s)", __func__, cModuleDirPath);

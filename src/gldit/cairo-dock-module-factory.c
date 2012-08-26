@@ -839,9 +839,10 @@ void cairo_dock_reload_module (CairoDockModule *pModule, gboolean bReloadAppletC
 
 void cairo_dock_popup_module_instance_description (CairoDockModuleInstance *pModuleInstance)
 {
-	gchar *cDescription = g_strdup_printf ("%s (v%s) by %s\n%s",
-		pModuleInstance->pModule->pVisitCard->cModuleName,
+	gchar *cDescription = g_strdup_printf ("%s (v%s) %s %s\n%s",
+		pModuleInstance->pModule->pVisitCard->cModuleName, // let the original name
 		pModuleInstance->pModule->pVisitCard->cModuleVersion,
+		_("by"),
 		pModuleInstance->pModule->pVisitCard->cAuthor,
 		dgettext (pModuleInstance->pModule->pVisitCard->cGettextDomain,
 		pModuleInstance->pModule->pVisitCard->cDescription));
