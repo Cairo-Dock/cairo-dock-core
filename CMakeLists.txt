@@ -108,7 +108,7 @@ endif()
 check_symbol_exists (LC_MESSAGES "locale.h" HAVE_LC_MESSAGES)
 check_include_files ("math.h" HAVE_MATH_H)
 check_library_exists (m sin "" HAVE_LIBM)
-if (NOT ${HAVE_LIBM} OR NOT {HAVE_MATH_H})
+if (NOT ${HAVE_LIBM} OR NOT ${HAVE_MATH_H})
 	message(FATAL_ERROR "Cairo-Dock requires math.h")
 endif()
 
