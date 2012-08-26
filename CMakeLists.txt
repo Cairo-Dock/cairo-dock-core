@@ -75,9 +75,10 @@ set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
-set (xextend_required "xtst xcomposite xinerama")  # for the .pc
+set (xextend_required "xtst xcomposite xinerama xrandr")  # for the .pc
 STRING (REGEX REPLACE " " ";" xextend_required_semicolon ${xextend_required})
 pkg_check_modules ("XEXTEND" "${xextend_required_semicolon}")
+
 if (${XEXTEND_FOUND})
 	set (HAVE_XEXTEND 1)
 else()

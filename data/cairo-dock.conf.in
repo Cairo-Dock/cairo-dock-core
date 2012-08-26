@@ -28,8 +28,8 @@ y gap = 0
 #F-[Multiple screens]
 frame_xin =
 
-#B- Use Xinerama?
-#{This option is to use if you have a dual-screen and use Xinerama to manage them.}
+#B- Place the dock on one screen
+#{This option is to use if you have a dual-screen and use Xinerama/Xrandr to manage them.}
 xinerama = true
 
 #i-[0;12] Number of the screen where the dock should be located:
