@@ -171,6 +171,8 @@ struct _CairoContainer {
 
 void cairo_dock_set_containers_non_sticky (void);
 
+void cairo_dock_disable_containers_opacity (void);
+
 GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow);
 
 /** Initialize a Container : create a GTK window with transparency and OpenGL support. To be called when you create a new container.

@@ -1,3 +1,4 @@
+
 /*
 * This file is a part of the Cairo-Dock project
 *
@@ -298,7 +299,7 @@ int main (int argc, char** argv)
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 	
 	//\___________________ get app's options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE, bAskBackend = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE, bAskBackend = FALSE, bMetacityWorkaround = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	int iDelay = 0;
 	GOptionEntry pOptionsTable[] =
@@ -337,6 +338,9 @@ int main (int argc, char** argv)
 		{"safe-mode", 'f', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bSafeMode,
 			_("Don't load any plug-ins."), NULL},
+		{"metacity-workaround", 'W', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bMetacityWorkaround,
+			_("Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-docks)"), NULL},
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cVerbosity,
 			_("Log verbosity (debug,message,warning,critical,error); default is warning."), NULL},
@@ -466,6 +470,9 @@ int main (int argc, char** argv)
 	
 	if (bNoSticky)
 		cairo_dock_set_containers_non_sticky ();
+	
+	if (bMetacityWorkaround)
+		cairo_dock_disable_containers_opacity ();
 	
 	if (iDesktopEnv != CAIRO_DOCK_UNKNOWN_ENV)
 		cairo_dock_fm_force_desktop_env (iDesktopEnv);

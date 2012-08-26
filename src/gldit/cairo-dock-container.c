@@ -57,6 +57,7 @@ extern CairoDockDesktopGeometry g_desktopGeometry;  // _place_menu_on_icon
 
 // private
 static gboolean s_bSticky = TRUE;
+static gboolean s_bInitialOpacity0 = TRUE;  // set initial window opacity to 0, to avoid grey rectangles.
 
 
 void cairo_dock_set_containers_non_sticky (void)
@@ -67,6 +68,16 @@ void cairo_dock_set_containers_non_sticky (void)
 		return;
 	}
 	s_bSticky = FALSE;
+}
+
+void cairo_dock_disable_containers_opacity (void)
+{
+	if (g_pPrimaryContainer != NULL)
+	{
+		cd_warning ("this function has to be called before any container is created.");
+		return;
+	}
+	s_bInitialOpacity0 = FALSE;
 }
 
 
@@ -176,15 +187,18 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	if (s_bSticky)
 		gtk_window_stick (GTK_WINDOW (pWindow));
 	// set the opacity to 0 to avoid seeing grey rectangles until the window is ready to be painted by us.
-	gtk_window_set_opacity (GTK_WINDOW (pWindow), 0.);
-	g_signal_connect (G_OBJECT (pWindow),
-		#if (GTK_MAJOR_VERSION < 3)
-		"expose-event",
-		#else
-		"draw",
-		#endif
-		G_CALLBACK (_set_opacity),
-		pContainer);  // the callback will be removed once it has done its job.
+	if (s_bInitialOpacity0)
+	{
+		gtk_window_set_opacity (GTK_WINDOW (pWindow), 0.);
+		g_signal_connect (G_OBJECT (pWindow),
+			#if (GTK_MAJOR_VERSION < 3)
+			"expose-event",
+			#else
+			"draw",
+			#endif
+			G_CALLBACK (_set_opacity),
+			pContainer);  // the callback will be removed once it has done its job.
+	}
 	
 	// needed since gtk+-3.0 but it's possible that this resize grip has been backported to gtk+-2.0 (e.g. in Ubuntu Natty...)
 	#if (GTK_MAJOR_VERSION >= 3 || ENABLE_GTK_GRIP == 1)
