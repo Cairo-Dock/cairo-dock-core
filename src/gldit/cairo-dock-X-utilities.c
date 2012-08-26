@@ -52,6 +52,7 @@ static gboolean s_bUseXComposite = TRUE;
 static gboolean s_bUseXTest = TRUE;
 static gboolean s_bUseXinerama = TRUE;
 static gboolean s_bUseXrandr = TRUE;
+static gboolean s_bUseXrandr3 = TRUE;
 //extern int g_iDamageEvent;
 
 static Display *s_XDisplay = NULL;
@@ -563,7 +564,7 @@ gboolean cairo_dock_support_X_extension (void)
 		XCompositeQueryVersion (s_XDisplay, &major, &minor);
 		if (! (major > 0 || minor >= 2))  // 0.2 is required to have XCompositeNameWindowPixmap().
 		{
-			cd_warning ("XComposite extension too old.");
+			cd_warning ("XComposite extension is too old (%d.%d)", major, minor);
 			s_bUseXComposite = FALSE;
 		}
 	}
@@ -599,10 +600,15 @@ gboolean cairo_dock_support_X_extension (void)
 	{
 		major = 0, minor = 0;
 		XRRQueryVersion (s_XDisplay, &major, &minor);
-		if (major < 1 || (major == 1 && minor < 3))  // 1.3 is required to have XRRGetCrtcInfo
+		if (major < 1 || (major == 1 && minor < 1))  // 1.1 is required to have XRRSetScreenConfigAndRate
 		{
-			cd_warning ("Xrandr extension is too old");
+			cd_warning ("Xrandr extension is too old (%d.%d) to use XRRSetScreenConfigAndRate", major, minor);
 			s_bUseXrandr = FALSE;
+		}
+		else if (major == 1 && minor < 3)  // 1.3 is required to have XRRGetCrtcInfo
+		{
+			cd_warning ("Xrandr extension is too old (%d.%d) to use XRRGetCrtcInfo", major, minor);
+			s_bUseXrandr3 = FALSE;
 		}
 	}
 	
@@ -637,11 +643,16 @@ gboolean cairo_dock_xrandr_is_available (void)
 	return s_bUseXrandr;
 }
 
+gboolean cairo_dock_xrandr_1_3_is_available (void)
+{
+	return s_bUseXrandr && s_bUseXrandr3;
+}
+
 
 void cairo_dock_get_screen_offsets (int iNumScreen, int *iScreenOffsetX, int *iScreenOffsetY)
 {
 #ifdef HAVE_XEXTEND
-	if (s_bUseXrandr)  // we place Xrandr first to get more tests :) (and also because it will deprecate Xinerama).
+	if (cairo_dock_xrandr_1_3_is_available ())  // we place Xrandr first to get more tests :) (and also because it will deprecate Xinerama).
 	{
 		cd_debug ("Using Xrandr to determine the screen's position and size ...");
 		XRRScreenResources *res = XRRGetScreenResources (s_XDisplay, DefaultRootWindow (s_XDisplay));  // Xrandr >= 1.3
