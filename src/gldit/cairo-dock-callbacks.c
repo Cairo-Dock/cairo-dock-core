@@ -1509,7 +1509,7 @@ void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, g
 				break;
 			}
 		}
-		if (myDocksParam.bLockIcons || myDocksParam.bLockAll)  // locked, can't add anything.
+		if (myDocksParam.bLockAll)  // locked, can't add anything.
 		{
 			cairo_dock_show_temporary_dialog_with_default_icon (_("Sorry but the dock is locked"), icon, CAIRO_CONTAINER (pDock), 5000);
 			gtk_drag_finish (dc, FALSE, FALSE, time);
