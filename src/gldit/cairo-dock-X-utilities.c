@@ -664,30 +664,43 @@ void cairo_dock_get_screen_offsets (int iNumScreen, int *iScreenOffsetX, int *iS
 				cd_warning ("the number of screen where to place the dock is too big, we'll choose the last one.");
 				iNumScreen = res->ncrtc - 1;
 			}
-			XRRCrtcInfo *info = XRRGetCrtcInfo (s_XDisplay, res, res->crtcs[iNumScreen]);
-			g_return_if_fail (info != NULL);
-			*iScreenOffsetX = info->x;
-			*iScreenOffsetY = info->y;
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = info->width;
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = info->height;
-			
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-			cd_message (" * screen %d => (%d;%d) %dx%d", iNumScreen, *iScreenOffsetX, *iScreenOffsetY, g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-			
-			XRRFreeCrtcInfo (info);
+			for (int i = 0; i < res->ncrtc; i++)
+			{
+				int j = (iNumScreen + i) % res->ncrtc;
+				XRRCrtcInfo *info = XRRGetCrtcInfo (s_XDisplay, res, res->crtcs[j]);
+				if (info == NULL)
+				{
+					cd_warning ("This screen (%d) has no info. Let's try the next one.", j);
+					continue;
+				}
+
+				if (info->width == 0 || info->height == 0)
+				{
+					cd_warning ("This screen (%d) has a null dimensions. Let's try the next one.", j);
+					XRRFreeCrtcInfo (info);
+					continue;
+				}
+				
+				*iScreenOffsetX = info->x;
+				*iScreenOffsetY = info->y;
+				g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = info->width;
+				g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = info->height;
+				
+				g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+				g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
+				cd_message (" * screen %d => (%d;%d) %dx%d", j, *iScreenOffsetX, *iScreenOffsetY, g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+				
+				XRRFreeCrtcInfo (info);
+				XRRFreeScreenResources (res);
+				return;
+			}
+			XRRFreeScreenResources (res);
 		}
 		else
-		{
 			cd_warning ("No screen found from Xrandr, is it really active ?");
-			*iScreenOffsetX = *iScreenOffsetY = 0;
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		}
 	}
-	else if (s_bUseXinerama && XineramaIsActive (s_XDisplay))
+
+	if (cairo_dock_xinerama_is_available () && XineramaIsActive (s_XDisplay))
 	{
 		cd_debug ("Using Xinerama to determine the screen's position and size ...");
 		int iNbScreens = 0;
@@ -709,21 +722,19 @@ void cairo_dock_get_screen_offsets (int iNumScreen, int *iScreenOffsetX, int *iS
 			cd_message (" * screen %d => (%d;%d) %dx%d\n", iNumScreen, *iScreenOffsetX, *iScreenOffsetY, g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 			
 			XFree (pScreens);
+			return;
 		}
 		else
-		{
 			cd_warning ("No screen found from Xinerama, is it really active ?");
-			*iScreenOffsetX = *iScreenOffsetY = 0;
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		}
 	}
-	else
-	{
-		cd_warning ("Xrandr and Xinerama are not available, can't determine the screen's position/size");
-	}
+
+	cd_warning ("Xrandr and Xinerama are not available, can't determine the screen's position/size");
+
+	*iScreenOffsetX = *iScreenOffsetY = 0;
+	g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+	g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
 #else
 	cd_warning ("The dock was not compiled with the support of Xinerama/Xrandr.");
 #endif
