@@ -96,6 +96,7 @@ struct _Icon {
 	CairoDockIconGroup iGroup;
 	/// interface
 	IconInterface iface;
+	CairoContainer *pContainer;  // container where the icon is currently.
 	
 	//\____________ properties.
 	// generic.
@@ -121,14 +122,9 @@ struct _Icon {
 	/// a flag that allows the icon to be always visible, even with the dock is hidden.
 	gboolean bAlwaysVisible;
 	gboolean bIsDemandingAttention;
-	
-	CairoDataRenderer *pDataRenderer;
-	CairoDockTransition *pTransition;
-	
-	CairoDockAnimationState iAnimationState;
-	/// Whether the icon is currently pointed or not.
-	gboolean bPointed;
-	gdouble fInsertRemoveFactor;
+	gboolean bHasHiddenBg;
+	gdouble *pHiddenBgColor;  // NULL to use the default color
+	gboolean bIgnoreQuicklist;  // TRUE to not display the Ubuntu's quicklist of the class
 	
 	// Launcher.
 	gchar *cDesktopFileName;  // nom (et non pas chemin) du fichier .desktop
@@ -136,6 +132,8 @@ struct _Icon {
 	gchar *cWorkingDirectory;
 	gchar *cBaseURI;
 	gint iVolumeID;
+	gchar **pMimeTypes;
+	gchar *cWmClass;
 	
 	// Appli.
 	Window Xid;
@@ -163,8 +161,12 @@ struct _Icon {
 	gint iImageWidth, iImageHeight;  // taille de la surface/texture telle qu'elle a ete creee.
 	cairo_surface_t* pIconBuffer;
 	GLuint iIconTexture;
+	CairoDockImageBuffer label; // the label above the icon
+	GList *pOverlays;  // a list of CairoOverlay
+	CairoDataRenderer *pDataRenderer;
+	CairoDockTransition *pTransition;
 	
-	//\____________ Parametres de dessin, definis par la vue/les animations.
+	//\____________ Drawing parameters.
 	gdouble fXMin, fXMax;  // Abscisse extremale gauche/droite que the icon atteindra (variable avec la vague).
 	gdouble fXAtRest;  // Abscisse de the icon au repos.
 	gdouble fPhase;  // Phase de the icon (entre -pi et piconi).
@@ -184,28 +186,21 @@ struct _Icon {
 	gint iGlideDirection;  // direction dans laquelle glisse the icon.
 	gdouble fGlideScale;  // echelle d'adaptation au glissement.
 	
-	gboolean bBeingRemovedByCairo;  // devrait etre dans pDataSlot...
+	CairoDockAnimationState iAnimationState;
+	/// Whether the icon is currently pointed or not.
+	gboolean bPointed;
+	gdouble fInsertRemoveFactor;
+	gboolean bDamaged;  // TRUE when the icon couldn't draw its surface, because the Gl context was not yet ready.
 	
+	//\____________ Other dynamic parameters.
+	gboolean bBeingRemovedByCairo;  // devrait etre dans pDataSlot...
 	guint iSidRedrawSubdockContent;
 	guint iSidLoadImage;
 	guint iSidDoubleClickDelay;
-	/// container where the icon is currently.
-	CairoContainer *pContainer;
 	gint iNbDoubleClickListeners;
-	
-	gchar **pMimeTypes;
-	
 	gint iHideLabel;
-	gchar *cWmClass;
-	GList *pOverlays;
-	gdouble *pHiddenBgColor;  // NULL to use the default color
-	
 	gint iThumbnailX, iThumbnailY;  // X icon geometry for apps
 	gint iThumbnailWidth, iThumbnailHeight;
-	gboolean bDamaged;  // TRUE when the icon couldn't draw its surface, because the Gl context was not yet ready.
-	gboolean bHasHiddenBg;
-	
-	CairoDockImageBuffer label;
 	
 	gpointer reserved[4];
 };

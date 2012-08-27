@@ -63,6 +63,7 @@ For each new version:
 	- add a function cairo_dock_render_one_icon_in_desklet_opengl().
 	- gauge with images: improve transition
 	- GUI: current items: don't allow the "delete" menu on the main dock
+	- old systray seems broken once again :-/
 
 all:
 	- Remove GCC warnings

@@ -51,6 +51,8 @@ G_BEGIN_DECLS
 
 #define cairo_dock_get_icon_max_scale(pIcon) (pIcon->fHeight != 0 && pIcon->pContainer ? (pIcon->pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / (pIcon->fHeight/pIcon->pContainer->fRatio) : 1.)
 
+#define cairo_dock_set_icon_ignore_quicklist(_pIcon) (_pIcon)->bIgnoreQuicklist = TRUE
+
 
 /** Get the type of an icon according to its content (launcher, appli, applet). This can be different from its group.
 *@param icon the icon.

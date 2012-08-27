@@ -804,7 +804,7 @@ msgstr "clic du milieu"
 #: ../src/cairo-dock-menu.c:1664 ../src/cairo-dock-menu.c:1666
 #: ../data/messages:759
 msgid "Lower"
-msgstr "Restaurer"
+msgstr "Descendre"
 
 #: ../src/cairo-dock-menu.c:1672 ../src/cairo-dock-menu.c:1674
 #: ../data/messages:753
