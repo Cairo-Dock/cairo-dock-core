@@ -819,6 +819,17 @@ static void _cairo_dock_set_sensitive_quit_menu (GtkWidget *pMenuItem, GdkEventK
 		gtk_widget_set_sensitive (pQuitEntry, FALSE); // locked)
 }
 
+static void _cairo_dock_launch_new (GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	if (icon->cCommand != NULL)
+	{
+		///cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+	}
+}
+
 
   /////////////////////////////////////////
  /// BUILD CONTAINER MENU NOTIFICATION ///
@@ -1007,10 +1018,13 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		}
 		else
 		{
+			if (CAIRO_DOCK_IS_APPLI (icon) && icon->cCommand != NULL)
+				_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, pItemSubMenu);
+
 			if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
-				|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
-				|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
-			&& icon->cDesktopFileName != NULL)  // user icon
+				 || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
+				 || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+				&& icon->cDesktopFileName != NULL)  // user icon
 			{
 				_add_entry_in_menu (_("Edit"), GTK_STOCK_EDIT, _cairo_dock_modify_launcher, pItemSubMenu);
 				
@@ -1229,17 +1243,6 @@ static void _cairo_dock_show_appli (GtkMenuItem *pMenuItem, gpointer *data)
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		cairo_dock_show_xwindow (icon->Xid);
-	}
-}
-
-static void _cairo_dock_launch_new (GtkMenuItem *pMenuItem, gpointer *data)
-{
-	Icon *icon = data[0];
-	CairoDock *pDock = data[1];
-	if (icon->cCommand != NULL)
-	{
-		///cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
-		cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 	}
 }
 
@@ -1582,9 +1585,43 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		}
 		bAddSeparator = TRUE;
 		
-		//\_________________________ On rajoute les actions supplementaires sur les icones d'applis.
 		Icon *pAppli = cairo_dock_get_icon_with_Xid (icon->Xid);  // un inhibiteur ne contient pas les donnees, mais seulement la reference a l'appli, donc on recupere celle-ci pour avoir son etat.
+
+		//\_________________________ Window Management
+		GtkWidget *pSubMenuWindowManagement = cairo_dock_create_sub_menu (_("Window management"), menu, NULL);
+		if (pAppli
+			&& (pAppli->bIsHidden
+			 || pAppli->Xid != cairo_dock_get_current_active_window ()
+			 || !cairo_dock_appli_is_on_current_desktop (pAppli)))
+			_add_entry_in_menu (_("Show"), GTK_STOCK_FIND, _cairo_dock_show_appli, pSubMenuWindowManagement);
 		
+		_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximise") : _("Maximise"), icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg", _cairo_dock_maximize_appli, pSubMenuWindowManagement);
+		
+		if (! icon->bIsHidden)
+		{
+			if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
+				cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
+			else
+				cLabel = g_strdup (_("Minimise"));
+			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_appli, pSubMenuWindowManagement);
+			g_free (cLabel);
+			
+			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
+				cLabel = g_strdup_printf ("%s (%s)", _("Below windows"), _("middle-click"));
+			else
+				cLabel = g_strdup (_("Below windows"));
+			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, pSubMenuWindowManagement);
+			g_free (cLabel);
+		}
+		
+		if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
+			cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
+		else
+			cLabel = g_strdup (_("Close"));
+		_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_appli, pSubMenuWindowManagement);
+		g_free (cLabel);
+
+		//\_________________________ Other actions
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
 		
 		pMenuItem = _add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
@@ -1639,40 +1676,6 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		}
 		
 		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
-		
-		//\_________________________ On rajoute les actions courantes sur les icones d'applis.
-		if (icon->cCommand != NULL)
-			_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
-		
-		if (pAppli
-		&& (pAppli->bIsHidden || pAppli->Xid != cairo_dock_get_current_active_window () || !cairo_dock_appli_is_on_current_desktop (pAppli)))
-			_add_entry_in_menu (_("Show"), GTK_STOCK_FIND, _cairo_dock_show_appli, menu);
-		
-		_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximise") : _("Maximise"), icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg", _cairo_dock_maximize_appli, menu);
-		
-		if (! icon->bIsHidden)
-		{
-			if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
-				cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
-			else
-				cLabel = g_strdup (_("Minimise"));
-			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_appli, menu);
-			g_free (cLabel);
-			
-			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
-				cLabel = g_strdup_printf ("%s (%s)", _("Lower"), _("middle-click"));
-			else
-				cLabel = g_strdup (_("Lower"));
-			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, menu);
-			g_free (cLabel);
-		}
-		
-		if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
-			cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
-		else
-			cLabel = g_strdup (_("Close"));
-		_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_appli, menu);
-		g_free (cLabel);
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{
@@ -1682,21 +1685,22 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
 		}
 		bAddSeparator = TRUE;
+
+		//\_________________________ Window Management
+		GtkWidget *pSubMenuWindowManagement = cairo_dock_create_sub_menu (_("Windows management"), menu, NULL);
 		
-		//\_________________________ On rajoute les actions supplementaires sur la classe.
+		_add_entry_in_menu (_("Show all"), GTK_STOCK_FIND, _cairo_dock_show_class, pSubMenuWindowManagement);
+
+		_add_entry_in_menu (_("Minimise all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_class, pSubMenuWindowManagement);
+		
+		_add_entry_in_menu (_("Close all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_class, pSubMenuWindowManagement);
+
+		//\_________________________ Other actions
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
 		
 		_add_entry_in_menu (_("Move all to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_class_to_current_desktop, pSubMenuOtherActions);
 		
 		_add_desktops_entry (pSubMenuOtherActions, TRUE, data);
-		
-		_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, menu);
-		
-		_add_entry_in_menu (_("Show all"), GTK_STOCK_FIND, _cairo_dock_show_class, menu);
-
-		_add_entry_in_menu (_("Minimise all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_class, menu);
-		
-		_add_entry_in_menu (_("Close all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_class, menu);
 	}
 	
 	//\_________________________ On rajoute les actions de positionnement d'un desklet.
