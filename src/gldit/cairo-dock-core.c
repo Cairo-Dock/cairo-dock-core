@@ -77,7 +77,7 @@ void gldi_init (GldiRenderingMethod iRendering)
 	_gldi_register_core_managers ();
 	
 	// init lib
-	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
+	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)  // from 2.32, the thread system is automatically enabled
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	#endif

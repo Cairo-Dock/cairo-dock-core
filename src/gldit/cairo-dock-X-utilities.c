@@ -52,7 +52,7 @@ static gboolean s_bUseXComposite = TRUE;
 static gboolean s_bUseXTest = TRUE;
 static gboolean s_bUseXinerama = TRUE;
 static gboolean s_bUseXrandr = TRUE;
-static gboolean s_bUseXrandr3 = TRUE;
+static gint s_iXrandrMajor = 0,  s_iXrandrMinor = 0;
 //extern int g_iDamageEvent;
 
 static Display *s_XDisplay = NULL;
@@ -598,17 +598,11 @@ gboolean cairo_dock_support_X_extension (void)
 	}
 	else
 	{
-		major = 0, minor = 0;
-		XRRQueryVersion (s_XDisplay, &major, &minor);
-		if (major < 1 || (major == 1 && minor < 1))  // 1.1 is required to have XRRSetScreenConfigAndRate
+		XRRQueryVersion (s_XDisplay, &s_iXrandrMajor, &s_iXrandrMinor);
+		if (! cairo_dock_check_xrandr (1, 3))  // 1.3 is required to have XRRGetCrtcInfo
 		{
-			cd_warning ("Xrandr extension is too old (%d.%d) to use XRRSetScreenConfigAndRate", major, minor);
+			cd_warning ("Xrandr extension is too old (%d.%d) to use XRRGetCrtcInfo", s_iXrandrMajor, s_iXrandrMinor);
 			s_bUseXrandr = FALSE;
-		}
-		else if (major == 1 && minor < 3)  // 1.3 is required to have XRRGetCrtcInfo
-		{
-			cd_warning ("Xrandr extension is too old (%d.%d) to use XRRGetCrtcInfo", major, minor);
-			s_bUseXrandr3 = FALSE;
 		}
 	}
 	
@@ -638,21 +632,16 @@ gboolean cairo_dock_xinerama_is_available (void)
 	return s_bUseXinerama;
 }
 
-gboolean cairo_dock_xrandr_is_available (void)
+gboolean cairo_dock_check_xrandr (int major, int minor)
 {
-	return s_bUseXrandr;
-}
-
-gboolean cairo_dock_xrandr_1_3_is_available (void)
-{
-	return s_bUseXrandr && s_bUseXrandr3;
+	return (s_iXrandrMajor > major || (s_iXrandrMajor == major && s_iXrandrMinor >= minor));  // if XRandr is not available, the version will stay at 0.0 and therefore the function will always return FALSE.
 }
 
 
 void cairo_dock_get_screen_offsets (int iNumScreen, int *iScreenOffsetX, int *iScreenOffsetY)
 {
 #ifdef HAVE_XEXTEND
-	if (cairo_dock_xrandr_1_3_is_available ())  // we place Xrandr first to get more tests :) (and also because it will deprecate Xinerama).
+	if (s_bUseXrandr)  // we place Xrandr first to get more tests :) (and also because it will deprecate Xinerama).
 	{
 		cd_debug ("Using Xrandr to determine the screen's position and size ...");
 		XRRScreenResources *res = XRRGetScreenResources (s_XDisplay, DefaultRootWindow (s_XDisplay));  // Xrandr >= 1.3
