@@ -48,9 +48,7 @@
 extern gchar *g_cCurrentThemePath;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern gboolean g_bEasterEggs;
-
-static int s_iMaxOrder = 0;
-
+extern CairoDock *g_pMainDock;
 
   /////////////////////
  /// MODULE LOADER ///
@@ -277,19 +275,37 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 		}
 		
 		pMinimalConfig->cIconFileName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "icon", NULL, NULL, NULL, NULL);
+		pMinimalConfig->cDockName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "dock name", NULL, NULL, NULL, NULL);
 		pMinimalConfig->fOrder = cairo_dock_get_double_key_value (pKeyFile, "Icon", "order", NULL, CAIRO_DOCK_LAST_ORDER, NULL, NULL);
-		if (pMinimalConfig->fOrder == CAIRO_DOCK_LAST_ORDER)
+		if (pMinimalConfig->fOrder == CAIRO_DOCK_LAST_ORDER)  // no order is defined (1st activation) => place it after the last launcher/applet
 		{
-			pMinimalConfig->fOrder = ++ s_iMaxOrder;
+			GList *ic, *next_ic;
+			Icon *icon, *icon1 = NULL, *icon2 = NULL;
+			if (g_pMainDock != NULL)  // the dock is not defined too => it goes into the main dock.
+			{
+				for (ic = g_pMainDock->icons; ic != NULL; ic = ic->next)
+				{
+					icon = ic->data;
+					if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
+					{
+						icon1 = icon;
+						next_ic = ic->next;
+						icon2 = (next_ic?next_ic->data:NULL);
+					}
+				}
+			}
+			if (icon1 != NULL)
+			{
+				pMinimalConfig->fOrder = (icon2 && icon2->iGroup == CAIRO_DOCK_LAUNCHER ? (icon1->fOrder + icon2->fOrder) / 2 : icon1->fOrder + 1);
+			}
+			else
+			{
+				pMinimalConfig->fOrder = 0;
+			}
 			g_key_file_set_double (pKeyFile, "Icon", "order", pMinimalConfig->fOrder);
 			cd_debug ("set order to %.1f\n", pMinimalConfig->fOrder);
 			cairo_dock_write_keys_to_file (pKeyFile, cInstanceConfFilePath);
 		}
-		else
-		{
-			s_iMaxOrder = MAX (s_iMaxOrder, pMinimalConfig->fOrder);
-		}
-		pMinimalConfig->cDockName = cairo_dock_get_string_key_value (pKeyFile, "Icon", "dock name", NULL, NULL, NULL, NULL);
 		int iBgColorType;
 		if (g_key_file_has_key (pKeyFile, "Icon", "always_visi", NULL))
 		{
