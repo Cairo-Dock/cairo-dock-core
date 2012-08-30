@@ -1586,6 +1586,17 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		bAddSeparator = TRUE;
 		
 		Icon *pAppli = cairo_dock_get_icon_with_Xid (icon->Xid);  // un inhibiteur ne contient pas les donnees, mais seulement la reference a l'appli, donc on recupere celle-ci pour avoir son etat.
+		
+		if (pAppli)
+		{
+			icon->bIsMaximized = pAppli->bIsMaximized;
+			icon->bIsFullScreen = pAppli->bIsFullScreen;
+		}
+		else
+		{
+			icon->bIsMaximized = cairo_dock_xwindow_is_maximized (icon->Xid);
+			icon->bIsFullScreen = cairo_dock_xwindow_is_fullscreen (icon->Xid);
+		}
 
 		//\_________________________ Window Management
 		GtkWidget *pSubMenuWindowManagement = cairo_dock_create_sub_menu (_("Window management"), menu, NULL);
@@ -1607,9 +1618,9 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			g_free (cLabel);
 			
 			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
-				cLabel = g_strdup_printf ("%s (%s)", _("Below windows"), _("middle-click"));
+				cLabel = g_strdup_printf ("%s (%s)", _("Below other windows"), _("middle-click"));
 			else
-				cLabel = g_strdup (_("Below windows"));
+				cLabel = g_strdup (_("Below other windows"));
 			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, pSubMenuWindowManagement);
 			g_free (cLabel);
 		}
@@ -1627,17 +1638,6 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		pMenuItem = _add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
 		if (pAppli && cairo_dock_appli_is_on_current_desktop (pAppli))
 			gtk_widget_set_sensitive (pMenuItem, FALSE);
-		
-		if (pAppli)
-		{
-			icon->bIsMaximized = pAppli->bIsMaximized;
-			icon->bIsFullScreen = pAppli->bIsFullScreen;
-		}
-		else
-		{
-			icon->bIsMaximized = cairo_dock_xwindow_is_maximized (icon->Xid);
-			icon->bIsFullScreen = cairo_dock_xwindow_is_fullscreen (icon->Xid);
-		}
 		
 		_add_entry_in_menu (icon->bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), icon->bIsFullScreen ? GTK_STOCK_LEAVE_FULLSCREEN : GTK_STOCK_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions);
 		
