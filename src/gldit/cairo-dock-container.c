@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
+#include <math.h>
 #include <cairo.h>
 
 #include <GL/gl.h> 
@@ -281,7 +282,6 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
 		return ;
 	_redraw_container_area (pContainer, &rect);
 }
-
 
 
 static gboolean _cairo_dock_search_icon_in_desklet (CairoDesklet *pDesklet, Icon *icon)
