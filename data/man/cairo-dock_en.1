@@ -57,18 +57,18 @@ Force Cairo backend. Use this option if you have issue with the OpenGL mode.
 .B \-o, \-\-opengl
 Force OpenGL backend. Cairo\-Dock with OpenGL/Hardware acceleration.
 .TP
-.B \-O, \-\-indirect-opengl
+.B \-O, \-\-indirect\-opengl
 Use OpenGL backend with indirect rendering. There are very few case where this option should be used.
 .TP
-.B \-i, \-\-indirect
-Deprecated \- see -O.
+.B \-A, \-\-ask\-backend
+Ask again on startup which backend to use.
 .TP
 .B \-l, \-\-log [option]
 Log verbosity (options : debug, message, warning, critical, error \- default is 'warning').
 .br
 For example : cairo\-dock \-l debug
 .TP
-.B \-A, \-\-colors
+.B \-F, \-\-colors
 Force to display some output messages with colors even if these messages are not displayed into a tty.
 .TP
 .B \-w, \-\-wait
@@ -90,6 +90,9 @@ Force the dock to load the configuration in this directory  (default is ~/.confi
 .B \-m, \-\-maintenance
 Allow to edit the config before the dock is started and show the config panel
 on startup.
+.TP
+.B \-x, \-\-exclude
+Exclude a given plug-in from activating (it is still loaded though).
 .TP
 .B \-f, \-\-safe\-mode
 Don't load any plug\-ins and show the theme manager on startup.

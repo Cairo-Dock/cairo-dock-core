@@ -344,7 +344,7 @@ int main (int argc, char** argv)
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cVerbosity,
 			_("Log verbosity (debug,message,warning,critical,error); default is warning."), NULL},
-		{"colors", 'A', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+		{"colors", 'F', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bForceColors,
 			_("Force to display some output messages with colors."), NULL},
 		{"version", 'v', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
