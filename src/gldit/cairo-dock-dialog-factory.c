@@ -428,6 +428,12 @@ static gboolean on_button_press_widget (GtkWidget *widget,
 	pDialog->iButtonPressTime = pButton->time;
 	return FALSE;
 }
+static void _force_above (GtkWidget *pWidget, CairoDialog *pDialog)
+{
+	gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
+	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDialog));
+	cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
+}
 CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer)
 {
 	//\________________ On cree un nouveau dialogue.
@@ -436,9 +442,10 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	pDialog->container.bIsHorizontal = TRUE;
 	if (pAttribute->bForceAbove)
 	{
-		gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
-		Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDialog));
-		cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
+		g_signal_connect (G_OBJECT (pDialog->container.pWidget),
+			"realize",
+			G_CALLBACK (_force_above),
+			pDialog);  // gtk_widget_get_window() returns NULL until the window is realized.
 	}
 	
 	//\________________ On cree la surface du message.
