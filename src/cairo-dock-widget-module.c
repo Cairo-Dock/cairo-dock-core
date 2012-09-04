@@ -135,7 +135,7 @@ ModuleWidget *cairo_dock_module_widget_new (CairoDockModule *pModule, CairoDockM
 	g_return_val_if_fail (pModule != NULL, NULL);
 	
 	CairoDockModuleInstance *pModuleInstance = (pInstance ? pInstance : pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);  // can be NULL if the module is not yet activated.
-	gchar *cConfFilePath = _get_valid_module_conf_file (pModule);
+	gchar *cConfFilePath = (pInstance ? pInstance->cConfFilePath : _get_valid_module_conf_file (pModule));
 	
 	ModuleWidget *pModuleWidget = g_new0 (ModuleWidget, 1);
 	pModuleWidget->widget.iType = WIDGET_MODULE;

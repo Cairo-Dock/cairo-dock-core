@@ -53,7 +53,7 @@
 #include "cairo-dock-widget-module.h"
 #include "cairo-dock-widget-shortkeys.h"
 #include "cairo-dock-widget.h"
-#include "cairo-dock-gui-main.h"
+#include "cairo-dock-gui-advanced.h"
 
 #define CAIRO_DOCK_GROUP_ICON_SIZE 28  // 32  // size of the icon in the buttons
 #define CAIRO_DOCK_CATEGORY_ICON_SIZE 28  // 32  // size of the category icons in the left vertical toolbar.
@@ -109,7 +109,7 @@ GSList *s_pExtraCurrentWidgetList;  // liste des widgets des eventuels modules l
 static GList *s_pGroupDescriptionList = NULL;
 static GtkWidget *s_pPreviewBox = NULL;
 static GtkWidget *s_pPreviewImage = NULL;
-static GtkWidget *s_pOkButton = NULL;
+///static GtkWidget *s_pOkButton = NULL;
 static GtkWidget *s_pApplyButton = NULL;
 static GtkWidget *s_pBackButton = NULL;
 static GtkWidget *s_pMainWindow = NULL;
@@ -1093,7 +1093,7 @@ static void cairo_dock_free_categories (void)
 	
 	s_pPreviewImage = NULL;
 	
-	s_pOkButton = NULL;
+	///s_pOkButton = NULL;
 	s_pApplyButton = NULL;
 	
 	s_pMainWindow = NULL;
@@ -1178,13 +1178,13 @@ static void on_click_quit (GtkButton *button, GtkWidget *pWindow)
 	gtk_widget_destroy (pWindow);
 }
 
-static void on_click_ok (GtkButton *button, GtkWidget *pWindow)
+/**static void on_click_ok (GtkButton *button, GtkWidget *pWindow)
 {
 	//g_print ("%s ()\n", __func__);
 	
 	on_click_apply (button, pWindow);
 	on_click_quit (button, pWindow);
-}
+}*/
 
 static void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescription *pGroupDescription)
 {
@@ -1939,13 +1939,13 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		FALSE,
 		0);
 	
-	s_pOkButton = gtk_button_new_from_stock (GTK_STOCK_OK);
+	/**s_pOkButton = gtk_button_new_from_stock (GTK_STOCK_OK);
 	g_signal_connect (G_OBJECT (s_pOkButton), "clicked", G_CALLBACK(on_click_ok), s_pMainWindow);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		s_pOkButton,
 		FALSE,
 		FALSE,
-		0);
+		0);*/
 	
 	s_pApplyButton = gtk_button_new_from_stock (GTK_STOCK_APPLY);
 	g_signal_connect (G_OBJECT (s_pApplyButton), "clicked", G_CALLBACK(on_click_apply), NULL);
@@ -2208,12 +2208,12 @@ static void cairo_dock_enable_apply_button (GtkWidget *pMainWindow, gboolean bEn
 	if (bEnable)
 	{
 		gtk_widget_show (s_pApplyButton);
-		gtk_widget_show (s_pOkButton);
+		///gtk_widget_show (s_pOkButton);
 	}
 	else
 	{
 		gtk_widget_hide (s_pApplyButton);
-		gtk_widget_hide (s_pOkButton);
+		///gtk_widget_hide (s_pOkButton);
 	}
 }
 static void _present_group_widget (CairoDockGroupDescription *pGroupDescription, CairoDockModuleInstance *pModuleInstance)
@@ -2606,7 +2606,7 @@ static CairoDockGroupKeyWidget *get_widget_from_name (CairoDockModuleInstance *p
 }
 
 
-void cairo_dock_register_main_gui_backend (void)
+void cairo_dock_register_advanced_gui_backend (void)
 {
 	CairoDockMainGuiBackend *pBackend = g_new0 (CairoDockMainGuiBackend, 1);
 	

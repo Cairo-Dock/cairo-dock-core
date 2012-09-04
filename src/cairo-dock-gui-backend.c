@@ -25,7 +25,7 @@
 #include <glib/gi18n.h>
 
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-gui-main.h"
+#include "cairo-dock-gui-advanced.h"
 #include "cairo-dock-gui-simple.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-desklet-manager.h"
@@ -46,7 +46,7 @@ void cairo_dock_load_user_gui_backend (int iMode)  // 0 = simple
 {
 	if (iMode == 1)
 	{
-		cairo_dock_register_main_gui_backend ();
+		cairo_dock_register_advanced_gui_backend ();
 	}
 	else
 	{

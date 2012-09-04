@@ -17,13 +17,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CAIRO_DOCK_GUI_MAIN__
-#define  __CAIRO_DOCK_GUI_MAIN__
+#ifndef __CAIRO_DOCK_GUI_ADVANCED__
+#define  __CAIRO_DOCK_GUI_ADVANCED__
 
 G_BEGIN_DECLS
 
 
-void cairo_dock_register_main_gui_backend (void);
+void cairo_dock_register_advanced_gui_backend (void);
 
 
 G_END_DECLS
