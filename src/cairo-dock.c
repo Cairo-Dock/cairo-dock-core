@@ -721,11 +721,11 @@ int main (int argc, char** argv)
 		myDocksParam.bLockAll = TRUE;
 	}
 	
-	if (!bSafeMode && cairo_dock_get_nb_modules () <= 10000)  // 1 en comptant l'aide
+	if (!bSafeMode && cairo_dock_get_nb_modules () <= 1)  // 1 en comptant l'aide
 	{
 		Icon *pIcon = cairo_dock_get_dialogless_icon ();
 		///cairo_dock_ask_question_and_wait (_("No plug-in were found.\nPlug-ins provide most of the functionalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
-		cairo_dock_show_temporary_dialog_with_icon (_("No plug-in were found.\nPlug-ins provide most of the functionalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+		cairo_dock_show_temporary_dialog_with_icon (_("No plug-in were found.\nPlug-ins provide most of the functionalities (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nThere is almost no meaning in running the dock without them and it's probably due to a problem with the installation of these plug-ins.\nBut if you really want to use the dock without these plug-ins, you can launch the dock with the '-f' option to no longer have this message.\n"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
 	}
 	
 	//\___________________ display the changelog in case of a new version.
