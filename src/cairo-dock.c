@@ -670,7 +670,7 @@ int main (int argc, char** argv)
 	{
 		if (cExcludeModule != NULL)
 		{
-			cd_warning (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org\n"), cExcludeModule);
+			cd_warning (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org"), cExcludeModule);
 			gchar *cCommand = g_strdup_printf ("sed -i \"/modules/ s/%s//g\" \"%s\"", cExcludeModule, g_cConfFile);
 			int r = system (cCommand);
 			g_free (cCommand);
