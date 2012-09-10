@@ -1699,7 +1699,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 	}
 	
 	//\_________________________ class actions.
-	if (icon && icon->cClass != NULL)
+	if (icon && icon->cClass != NULL && ! icon->bIgnoreQuicklist)
 	{
 		const GList *pClassMenuItems = cairo_dock_get_class_menu_items (icon->cClass);
 		if (pClassMenuItems != NULL)
@@ -1860,7 +1860,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 		else
 			cLabel = g_strdup (_("Close"));
 		_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_appli, pSubMenuWindowManagement);
-		g_free (cLabel);*/
+		g_free (cLabel);
 		#endif
 		
 		//\_________________________ Other actions
