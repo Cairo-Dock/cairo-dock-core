@@ -1542,7 +1542,6 @@ static gboolean _on_press_menu_item (GtkWidget* pWidget, GdkEventButton *pEvent,
 		gtk_widget_get_allocation (pButton, &alloc);
 		gtk_widget_translate_coordinates (pButton, pWidget,
 			0, 0, &xb, &yb);
-		//g_print ("  %d;%d\n", xb, yb);
 		if (x >= xb && x < (xb + alloc.width)
 		&& y >= yb && y < (yb + alloc.height))
 		{
@@ -1568,24 +1567,8 @@ static gboolean _draw_menu_item (GtkWidget* pWidget, cairo_t *cr, gpointer data)
 {
     gtk_container_propagate_draw (GTK_CONTAINER (pWidget),
 		gtk_bin_get_child (GTK_BIN (pWidget)),
-		cr);  // skip the drawing of the menu-item, just propagate to its child
+		cr);  // skip the drawing of the menu-item, just propagate to its child; there is no need to make anything else, the child hbox will draw its child as usual.
   return FALSE;
-}
-static gboolean _draw_hbox (GtkWidget* widget, cairo_t *cr, gpointer data)
-{
-	GList *children = gtk_container_get_children (GTK_CONTAINER (widget));
-	GtkWidget* pButton;
-	GList *c;
-	for (c = children->next; c != NULL; c = c->next)
-	{
-		pButton = c->data;
-		
-		gtk_container_propagate_draw(
-			GTK_CONTAINER(pButton),
-			gtk_bin_get_child(GTK_BIN(pButton)),
-			cr);  // again, nothing to do except propagating the event to its children
-	}
-	return FALSE;
 }
 gboolean _on_motion_notify_menu_item (GtkWidget* pWidget,
 	GdkEventMotion* pEvent,
@@ -1620,6 +1603,8 @@ gboolean _on_motion_notify_menu_item (GtkWidget* pWidget,
 				GTK_STATE_NORMAL);
 		}
 	}
+	GtkWidget *pLabel = children->data;  // force the label to be in a normal state
+	gtk_widget_set_state (pLabel, GTK_STATE_NORMAL);
 	g_list_free (children);
 	gtk_widget_queue_draw (pWidget);  // and redraw everything
 }
@@ -1639,6 +1624,17 @@ static gboolean _on_leave_menu_item (GtkWidget* pWidget,
 			gtk_bin_get_child (GTK_BIN(pButton)),
 			GTK_STATE_NORMAL);
 	}
+	g_list_free (children);
+	gtk_widget_queue_draw (pWidget);
+}
+static gboolean _on_enter_menu_item (GtkWidget* pWidget,
+	GdkEventCrossing* pEvent,
+	gpointer data)
+{
+	GtkWidget *hbox = gtk_bin_get_child (GTK_BIN (pWidget));
+	GList *children = gtk_container_get_children (GTK_CONTAINER (hbox));
+	GtkWidget* pLabel = children->data;  // force the label to be in a normal state
+	gtk_widget_set_state (pLabel, GTK_STATE_NORMAL);
 	g_list_free (children);
 	gtk_widget_queue_draw (pWidget);
 }
@@ -1738,13 +1734,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			icon->bIsMaximized = pAppli->bIsMaximized;
 			icon->bIsFullScreen = pAppli->bIsFullScreen;
 		}
-		/*else
-		{
-			icon->bIsHidden = pAppli->bIsHidden;
-			icon->bIsMaximized = cairo_dock_xwindow_is_maximized (icon->Xid);
-			icon->bIsFullScreen = cairo_dock_xwindow_is_fullscreen (icon->Xid);
-		}*/
-
+		
 		//\_________________________ Window Management
 		#if (GTK_MAJOR_VERSION >= 3)
 		pMenuItem = gtk_menu_item_new ();
@@ -1755,13 +1745,17 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			NULL);  // the press event on the menu will close it, which is fine for us.
 		g_signal_connect (G_OBJECT (pMenuItem), "motion-notify-event",
 			G_CALLBACK(_on_motion_notify_menu_item),
-			NULL);  // 
+			NULL);  // we need to manually higlight the currently pointed button
 		g_signal_connect (G_OBJECT (pMenuItem),
 			"leave-notify-event",
 			G_CALLBACK (_on_leave_menu_item),
-			NULL);
+			NULL);  // to turn off the highlighted button when we leave the menu-item (if we leave it quickly, a motion event won't be generated)
+		g_signal_connect (G_OBJECT (pMenuItem),
+			"enter-notify-event",
+			G_CALLBACK (_on_enter_menu_item),
+			NULL);  // to force the label to not highlight (it gets highlighted, even if we overwrite the motion_notify_event callback)
 		GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (pMenuItem);
-		widget_class->draw = _draw_menu_item;  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; it generates a pesty warning
+		widget_class->draw = _draw_menu_item;  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves (Note that this generates a pesty warning).
 		
 		GtkCssProvider *css = gtk_css_provider_new ();  // make the buttons as small as possible, or they will be too large for a menu-item.
 		gtk_css_provider_load_from_data (css,
@@ -1769,12 +1763,11 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			"-GtkButton-default-border : 0px;\n" \
 			"-GtkButton-default-outside-border : 0px;\n" \
 			"-GtkButton-inner-border: 0px;\n" \
+			"-GtkWidget-border-style: none;\n" \
+			"-GtkWidget-border-width: 0px;\n" \
 			"}", -1, NULL);
 		
 		GtkWidget *hbox = _gtk_hbox_new (0);
-		g_signal_connect (hbox, "draw",
-			G_CALLBACK(_draw_hbox),
-			pMenuItem);
 		gtk_container_add (GTK_CONTAINER (pMenuItem), hbox);
 		
 		GtkWidget *pLabel = gtk_label_new (_("Window actions"));
