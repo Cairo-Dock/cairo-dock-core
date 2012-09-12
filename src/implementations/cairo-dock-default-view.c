@@ -38,7 +38,6 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-notifications.h"
-//#include "cairo-dock-load.h"
 #include "texture-blur.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-default-view.h"
@@ -59,7 +58,14 @@ static gboolean cd_default_view_free_data (gpointer pUserData, CairoDock *pDock)
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
+/**
+max size
+active size
+min size
 
+align => x0 = (W - w) * a
+
+*/
 static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
 	cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth);
@@ -68,16 +74,18 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 
 	double fRadius = MIN (myDocksParam.iDockRadius, (pDock->iDecorationsHeight + myDocksParam.iDockLineWidth) / 2 - 1);
 	double fExtraWidth = myDocksParam.iDockLineWidth + 2 * (fRadius + myDocksParam.iFrameMargin);
-	pDock->iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->fFlatDockWidth, 1., fExtraWidth));
+	int iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->fFlatDockWidth, 1., fExtraWidth));
 	pDock->iOffsetForExtend = 0;
+	pDock->iMaxDockWidth = iMaxDockWidth;
 	
-	if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
+	///if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
+	if (pDock->iRefCount == 0)
 	{
 		if (pDock->iMaxDockWidth < cairo_dock_get_max_authorized_dock_width (pDock))  // alors on etend.
 		{
 			if (pDock->fAlign != .5)
 			{
-				pDock->iOffsetForExtend = (cairo_dock_get_max_authorized_dock_width (pDock) - pDock->iMaxDockWidth) / 2 - 0*fExtraWidth/2;
+				pDock->iOffsetForExtend = (cairo_dock_get_max_authorized_dock_width (pDock) - pDock->iMaxDockWidth) / 2;
 				cd_debug ("iOffsetForExtend : %d; iMaxDockWidth : %d; fExtraWidth : %d\n", pDock->iOffsetForExtend, pDock->iMaxDockWidth, (int) fExtraWidth);
 			}
 			fExtraWidth += (cairo_dock_get_max_authorized_dock_width (pDock) - pDock->iMaxDockWidth);
@@ -107,6 +115,8 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	pDock->inputArea.width = pDock->fFlatDockWidth;
 	pDock->inputArea.height = pDock->iMinDockHeight;*/
 	
+	
+	
 	pDock->iMinLeftMargin = fExtraWidth/2;
 	pDock->iMinRightMargin = fExtraWidth/2;
 	Icon *pFirstIcon = cairo_dock_get_first_icon (pDock->icons);
@@ -117,15 +127,16 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		pDock->iMaxRightMargin = pDock->iMaxDockWidth - (pLastIcon->fXMin + pLastIcon->fWidth);
 	//g_print(" marges min: %d | %d\n marges max: %d | %d\n", pDock->iMinLeftMargin, pDock->iMinRightMargin, pDock->iMaxLeftMargin, pDock->iMaxRightMargin);
 	
-	if (pDock->fAlign != .5 & cairo_dock_is_extended_dock (pDock))
-		pDock->iMinDockWidth = pDock->iMaxDockWidth;
-	else
+	///if (pDock->fAlign != .5/** && cairo_dock_is_extended_dock (pDock)*/)
+	///	pDock->iMinDockWidth = pDock->iMaxDockWidth;
+	///else
 		pDock->iMinDockWidth = MAX (1, pDock->fFlatDockWidth);  // fFlatDockWidth peut etre meme negatif avec un dock vide.
 	
 	if (g_bUseOpenGL && s_iFlatSeparatorTexture == 0 && myIconsParam.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
 		s_iFlatSeparatorTexture = cairo_dock_create_texture_from_raw_data (blurTex, 32, 32);
 	
-	pDock->iActiveWidth = pDock->iMaxDockWidth;
+	///pDock->iActiveWidth = pDock->iMaxDockWidth;
+	pDock->iActiveWidth = iMaxDockWidth;
 	pDock->iActiveHeight = pDock->iMaxDockHeight;
 	if (! pDock->container.bIsHorizontal && myIconsParam.bTextAlwaysHorizontal)
 		pDock->iMaxDockHeight += 8*myIconsParam.iLabelSize;  // vertical dock, add some padding to draw the labels.	
@@ -243,6 +254,7 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 			fDockOffsetX = fExtraWidth / 2;
 		if (fDockOffsetX + fDockWidth + fExtraWidth / 2 > pDock->container.iWidth)
 			fDockWidth = pDock->container.iWidth - fDockOffsetX - fExtraWidth / 2;
+		fDockOffsetX += (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2);
 	}
 	if (pDock->container.bDirectionUp)
 	{
@@ -559,6 +571,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 			fDockOffsetX = fLineWidth / 2;
 		if (fDockOffsetX + fDockWidth + (2*fRadius + fLineWidth) > pDock->container.iWidth)
 			fDockWidth = pDock->container.iWidth - fDockOffsetX - (2*fRadius + fLineWidth);
+		fDockOffsetX += (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2);
 	}
 	
 	fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;

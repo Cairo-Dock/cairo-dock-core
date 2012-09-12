@@ -17,22 +17,15 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_DEFAULT_VIEW__
 #define  __CAIRO_DOCK_DEFAULT_VIEW__
-
-#include <glib.h>
-
-#include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-default-view.h This class implements the Dock rendering interface and provides the "default" view.
 */
 
-
 void cairo_dock_register_default_renderer (void);
-
 
 G_END_DECLS
 #endif
