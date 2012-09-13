@@ -558,6 +558,9 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContain
 	g_free (cUniqueName);
 	
 	cairo_dock_load_icon_text (pIcon);
+	
+	if (pIcon->pContainer && pIcon->pContainer->bInside)  // for a dock, in this case the label will be visible.
+		cairo_dock_redraw_container (pIcon->pContainer);  // this is not really optimized, ideally the view should provide a way to redraw the label area only...
 }
 
 void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer_useless, const gchar *cIconNameFormat, ...)

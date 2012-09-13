@@ -463,18 +463,22 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
 ///////////////////
 static GldiShape *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
 {
-	int W = pDock->iMaxDockWidth;
+ 	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
 	if (W == 0 || H == 0)  // very unlikely to happen, but anyway avoid this case.
 	{
 		return NULL;
 	}
 	
+	double offset = (W - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - w) / 2;
+	g_print ("offset: %.1f (%d<%d<%d)\n", offset, w, pDock->iActiveWidth, W);
+	
 	GldiShape *pShapeBitmap;
 	if (pDock->container.bIsHorizontal)
 	{
 		pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDock),
-			(W - w) / 2,  // centre en x.
+			///(W - w) * pDock->fAlign,
+			offset,
 			pDock->container.bDirectionUp ? H - h : 0,
 			w,
 			h);
@@ -483,7 +487,8 @@ static GldiShape *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h
 	{
 		pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDock),
 			pDock->container.bDirectionUp ? H - h : 0,
-			(W - w) / 2,  // centre en x.
+			///(W - w) * pDock->fAlign,
+			offset,
 			h,
 			w);
 	}
@@ -810,7 +815,6 @@ double cairo_dock_get_current_dock_width_linear (CairoDock *pDock)
 	return fWidth;
 }
 
-
 void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 {
 	CairoDockMousePositionType iMousePositionType;
@@ -824,7 +828,9 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 	//g_print ("%s (%dx%d, %dx%d, %f)\n", __func__, iMouseX, iMouseY, iWidth, iHeight, pDock->fFoldingFactor);
 
 	//\_______________ On regarde si le curseur est dans le dock ou pas, et on joue sur la taille des icones en consequence.
-	int x_abs = pDock->container.iMouseX + (pDock->fFlatDockWidth - iWidth) / 2;  // abscisse par rapport a la gauche du dock minimal plat.
+	double offset = (iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2;
+	int x_abs = pDock->container.iMouseX - offset;
+	///int x_abs = pDock->container.iMouseX + (pDock->fFlatDockWidth - iWidth) * pDock->fAlign;  // abscisse par rapport a la gauche du dock minimal plat.
 	gboolean bMouseInsideDock = (x_abs >= 0 && x_abs <= pDock->fFlatDockWidth && iMouseX > 0 && iMouseX < iWidth);
 	//g_print ("bMouseInsideDock : %d (%d;%d/%.2f)\n", bMouseInsideDock, pDock->container.bInside, x_abs, pDock->fFlatDockWidth);
 
@@ -952,7 +958,8 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pDoc
 {
 	CairoDock *pSubDock = pPointedIcon->pSubDock;
 	///int iX = pPointedIcon->fXAtRest - (pDock->fFlatDockWidth - pDock->iMaxDockWidth) / 2 + pPointedIcon->fWidth / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2);
-	int iX = pPointedIcon->fDrawX + pPointedIcon->fWidth * pPointedIcon->fScale / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2);
+	//int iX = pPointedIcon->fDrawX + pPointedIcon->fWidth * pPointedIcon->fScale / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2);
+	int iX = pPointedIcon->fDrawX + pPointedIcon->fWidth * pPointedIcon->fScale / 2;
 	if (pSubDock->container.bIsHorizontal == pDock->container.bIsHorizontal)
 	{
 		pSubDock->fAlign = 0.5;

@@ -101,8 +101,10 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 	int x1, x2, y1, y2;
 	if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 	{
-		x1 = 0;
-		x2 = pDock->container.iWidth;
+		///x1 = 0;
+		///x2 = pDock->container.iWidth;
+		x1 = (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign;
+		x2 = x1 + pDock->iActiveWidth;
 		if (pDock->container.bDirectionUp)
 		{
 			///y1 = (pDock->fMagnitudeMax != 0 ? 0 : pDock->container.iHeight - pDock->iMinDockHeight);
@@ -118,8 +120,8 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 	}
 	else if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
 	{
-		x1 = (pDock->container.iWidth - pDock->iMinDockWidth) / 2;
-		x2 = (pDock->container.iWidth + pDock->iMinDockWidth) / 2;
+		x1 = (pDock->container.iWidth - pDock->iMinDockWidth) * pDock->fAlign;
+		x2 = x1 + pDock->iMinDockWidth;
 		if (pDock->container.bDirectionUp)
 		{
 			y1 = pDock->container.iHeight - pDock->iMinDockHeight + 1;

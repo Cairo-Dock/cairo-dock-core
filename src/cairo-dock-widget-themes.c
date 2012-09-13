@@ -229,9 +229,9 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 		gtk_widget_show_all (pWaitingDialog);
 		
 		cd_debug ("start importation...");
-		pThemesWidget->pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)_load_theme, pThemesWidget);  // we don't need to set this task as "cd-task" on the widget, because the progressbar prevents any action from the user, so the widget can't be destroyed before the task.
+		pThemesWidget->pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)_load_theme, pThemesWidget);  // if 'pThemesWidget' is destroyed, the 'reset' callback will be called and will cancel the task.
 	}
-	else  // if the theme is already local and uptodate, there is really no need to show a progressbar, because ony the download/unpacking is done asynchonously (and the copy of the files is fast enough).
+	else  // if the theme is already local and uptodate, there is really no need to show a progressbar, because only the download/unpacking is done asynchonously (and the copy of the files is fast enough).
 	{
 		bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
 		

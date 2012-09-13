@@ -1165,8 +1165,13 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 		case CAIRO_HIT_DOCK_PLACE:
 			if (y != 0)
 				break;
-			x1 = pDock->container.iWindowPositionX + MIN (15, pDock->container.iWidth/3);  // on evite les coins, car c'est en fait le but de cette option (les coins peuvent etre utilises par le WM pour declencher des actions).
-			x2 = pDock->container.iWindowPositionX + pDock->container.iWidth - MIN (15, pDock->container.iWidth/3);
+
+			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign;
+			x2 = x1 + pDock->iActiveWidth;
+			if (x1 < 15)  // avoid corners, since this is actually the purpose of this option (corners can be used by the WM to trigger actions).
+				x1 = 15;
+			if (x2 > g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - 15)
+				x2 = g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - 15;
 			if (x < x1 || x > x2)
 				break;
 			bShow = TRUE;
@@ -1181,14 +1186,13 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 		case CAIRO_HIT_ZONE:
 			if (y > myDocksParam.iZoneHeight)
 				break;
-			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - myDocksParam.iZoneWidth)/2;  // on evite les coins, car c'est en fait le but de cette option (les coins peuvent etre utilises par le WM pour declencher des actions).
+			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - myDocksParam.iZoneWidth) * pDock->fAlign;
 			x2 = x1 + myDocksParam.iZoneWidth;
 			if (x < x1 || x > x2)
 				break;
 			bShow = TRUE;
 		break;
 	}
-	
 	if (! bShow)
 	{
 		if (pDock->iSidUnhideDelayed != 0)
