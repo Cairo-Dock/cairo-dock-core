@@ -1563,7 +1563,7 @@ static gboolean _on_press_menu_item (GtkWidget* pWidget, GdkEventButton *pEvent,
 	gtk_widget_queue_draw (pWidget);
 	return TRUE;
 }
-static gboolean _draw_menu_item (GtkWidget* pWidget, cairo_t *cr, gpointer data)
+static gboolean _draw_menu_item (GtkWidget* pWidget, cairo_t *cr)
 {
     gtk_container_propagate_draw (GTK_CONTAINER (pWidget),
 		gtk_bin_get_child (GTK_BIN (pWidget)),
@@ -1607,6 +1607,7 @@ gboolean _on_motion_notify_menu_item (GtkWidget* pWidget,
 	gtk_widget_set_state (pLabel, GTK_STATE_NORMAL);
 	g_list_free (children);
 	gtk_widget_queue_draw (pWidget);  // and redraw everything
+	return FALSE;
 }
 static gboolean _on_leave_menu_item (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
@@ -1626,6 +1627,7 @@ static gboolean _on_leave_menu_item (GtkWidget* pWidget,
 	}
 	g_list_free (children);
 	gtk_widget_queue_draw (pWidget);
+	return FALSE;
 }
 static gboolean _on_enter_menu_item (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
@@ -1637,6 +1639,7 @@ static gboolean _on_enter_menu_item (GtkWidget* pWidget,
 	gtk_widget_set_state (pLabel, GTK_STATE_NORMAL);
 	g_list_free (children);
 	gtk_widget_queue_draw (pWidget);
+	return FALSE;
 }
 static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *cTooltip, GCallback pFunction, GtkWidget *hbox, GtkCssProvider *css, gpointer data)
 {
@@ -1755,7 +1758,7 @@ gboolean cairo_dock_notification_build_icon_menu (gpointer *pUserData, Icon *ico
 			G_CALLBACK (_on_enter_menu_item),
 			NULL);  // to force the label to not highlight (it gets highlighted, even if we overwrite the motion_notify_event callback)
 		GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (pMenuItem);
-		widget_class->draw = _draw_menu_item;  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves (Note that this generates a pesty warning).
+		widget_class->draw = _draw_menu_item;  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves.
 		
 		GtkCssProvider *css = gtk_css_provider_new ();  // make the buttons as small as possible, or they will be too large for a menu-item.
 		gtk_css_provider_load_from_data (css,

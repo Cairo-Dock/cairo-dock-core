@@ -753,7 +753,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 		gchar *cUserDataDirPath = cairo_dock_check_module_conf_dir (module);
 		if (cUserDataDirPath == NULL)
 		{
-			g_set_error (erreur, 1, 1, "No instance of module %s could be created", __func__, module->pVisitCard->cModuleName);
+			g_set_error (erreur, 1, 1, "No instance of module %s could be created", module->pVisitCard->cModuleName);
 			return;
 		}
 		

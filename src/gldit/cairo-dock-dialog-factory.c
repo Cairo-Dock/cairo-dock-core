@@ -849,7 +849,7 @@ void cairo_dock_set_dialog_widget_text_color (GtkWidget *pWidget)
 	color.red = myDialogsParam.dialogTextDescription.fColorStart[0];
 	color.green = myDialogsParam.dialogTextDescription.fColorStart[1];
 	color.blue = myDialogsParam.dialogTextDescription.fColorStart[2];
-	color.alpha = myDialogsParam.dialogTextDescription.fColorStart[3];
+	color.alpha = 1.;
 	gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, &color);
 	#endif
 }

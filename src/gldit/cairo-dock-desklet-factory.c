@@ -1299,4 +1299,5 @@ gboolean cairo_dock_detach_icon_from_desklet (Icon *icon, CairoDesklet *pDesklet
 	
 	// calculate icons
 	cairo_dock_update_desklet_icons (pDesklet);
+	return TRUE;
 }

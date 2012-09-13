@@ -583,7 +583,7 @@ void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance)
 	pInstance->iSlotID = 0;
 }
 
-static gboolean _write_modules (gpointer data)
+static void _write_modules (gpointer data)
 {
 	gchar *cModuleNames = cairo_dock_list_active_modules ();
 	

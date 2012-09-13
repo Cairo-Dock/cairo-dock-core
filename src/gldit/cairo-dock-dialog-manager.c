@@ -660,7 +660,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 				iXleft = pDialogOnOurWay->container.iWindowPositionX;
 				iXright = pDialogOnOurWay->container.iWindowPositionX + pDialogOnOurWay->container.iWidth;
 				if ( ((iTopY < iY && iBottomY > iY) || (iTopY >= iY && iTopY < iY + iHeight))
-					&& ((iXleft < iZoneXLeft && iXright > iZoneXLeft) || iXleft >= iZoneXLeft && iXleft < iZoneXRight) )  // intersection of the 2 rectangles.
+					&& ((iXleft < iZoneXLeft && iXright > iZoneXLeft) || (iXleft >= iZoneXLeft && iXleft < iZoneXRight)) )  // intersection of the 2 rectangles.
 				{
 					cd_debug ("  dialogue genant:  %d - %d, %d - %d", iTopY, iBottomY, iXleft, iXright);
 					if (pDialogOnOurWay->iAimedX < pDialog->iAimedX)  // this dialog is on our left.

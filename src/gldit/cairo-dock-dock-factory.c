@@ -477,6 +477,7 @@ static gboolean _on_dock_destroyed (GtkWidget *menu, CairoContainer *pContainer)
 		NULL,
 		_on_menu_destroyed,
 		pContainer);
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 static void _setup_menu (CairoContainer *pContainer, Icon *pIcon, GtkWidget *pMenu)
 {

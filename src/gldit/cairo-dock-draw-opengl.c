@@ -282,10 +282,12 @@ static inline void _compute_icon_coordinate (Icon *icon, CairoContainer *pContai
 		}
 		fGlideScale = (1 + fDockMagnitude * myIconsParam.fAmplitude * sin (fPhase)) / icon->fScale;  // c'est un peu hacky ... il faudrait passer l'icone precedente en parametre ...
 		if (! pContainer->bDirectionUp)
+		{
 			if (pContainer->bIsHorizontal)
 				fY = (1-fGlideScale)*icon->fHeight*icon->fScale;
 			else
 				fX = (1-fGlideScale)*icon->fHeight*icon->fScale;
+		}
 	}
 	else
 		fGlideScale = 1;

@@ -120,7 +120,7 @@ void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
 		return;
 	}
 	
-	g_return_if_fail (icon->fWidth > 0 & icon->iImageWidth > 0);  // the renderer of the container must have set the size beforehand, when the icon has been inserted into the container.
+	g_return_if_fail (icon->fWidth > 0 && icon->iImageWidth > 0);  // the renderer of the container must have set the size beforehand, when the icon has been inserted into the container.
 	
 	//\______________ on reset les buffers (on garde la surface/texture actuelle pour les emblemes).
 	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
