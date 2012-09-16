@@ -471,7 +471,6 @@ static GldiShape *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h
 	}
 	
 	double offset = (W - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - w) / 2;
-	g_print ("offset: %.1f (%d<%d<%d)\n", offset, w, pDock->iActiveWidth, W);
 	
 	GldiShape *pShapeBitmap;
 	if (pDock->container.bIsHorizontal)
@@ -793,9 +792,11 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, int x_a
 Icon *cairo_dock_apply_wave_effect_linear (CairoDock *pDock)
 {
 	//\_______________ On calcule la position du curseur dans le referentiel du dock a plat.
-	int dx = pDock->container.iMouseX - (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2) - pDock->container.iWidth / 2;  // ecart par rapport au milieu du dock a plat.
-	int x_abs = dx + pDock->fFlatDockWidth / 2;  // ecart par rapport a la gauche du dock minimal  plat.
+	//int dx = pDock->container.iMouseX - (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2) - pDock->container.iWidth / 2;  // ecart par rapport au milieu du dock a plat.
+	//int x_abs = dx + pDock->fFlatDockWidth / 2;  // ecart par rapport a la gauche du dock minimal  plat.
 	//g_print ("%s (flat:%d, w:%d, x:%d)\n", __func__, (int)pDock->fFlatDockWidth, pDock->container.iWidth, pDock->container.iMouseX);
+	double offset = (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2;
+	int x_abs = pDock->container.iMouseX - offset;
 	//\_______________ On calcule l'ensemble des parametres des icones.
 	double fMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);  // * pDock->fMagnitudeMax
 	Icon *pPointedIcon = cairo_dock_calculate_wave_with_position_linear (pDock->icons, x_abs, fMagnitude, pDock->fFlatDockWidth, pDock->container.iWidth, pDock->container.iHeight, pDock->fAlign, pDock->fFoldingFactor, pDock->container.bDirectionUp);  // iMaxDockWidth

@@ -552,7 +552,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 	//\___________________ if a previous renderer exists, keep its data alive.
 	CairoDataToRenderer *pData = NULL;
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	g_print ("%s (%s, %p)\n", __func__, pIcon->cName, pRenderer);
+	//g_print ("%s (%s, %p)\n", __func__, pIcon->cName, pRenderer);
 	if (pRenderer != NULL)
 	{
 		//\_____________ save the current data.

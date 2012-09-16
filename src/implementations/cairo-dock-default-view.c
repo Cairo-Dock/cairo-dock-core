@@ -58,14 +58,7 @@ static gboolean cd_default_view_free_data (gpointer pUserData, CairoDock *pDock)
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-/**
-max size
-active size
-min size
 
-align => x0 = (W - w) * a
-
-*/
 static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
 	cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth);
