@@ -208,7 +208,6 @@ main (int argc, char** argv)
 					case CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGB : 
 					case CAIRO_DOCK_WIDGET_COLOR_SELECTOR_RGBA :
 					
-					case CAIRO_DOCK_WIDGET_STRING_ENTRY :
 					case CAIRO_DOCK_WIDGET_CLASS_SELECTOR :
 					case CAIRO_DOCK_WIDGET_PASSWORD_ENTRY :
 					case CAIRO_DOCK_WIDGET_FILE_SELECTOR :
@@ -253,7 +252,8 @@ main (int argc, char** argv)
 							}
 						}
 					break;
-					
+
+					case CAIRO_DOCK_WIDGET_STRING_ENTRY :
 					case CAIRO_DOCK_WIDGET_LINK :
 					case CAIRO_DOCK_WIDGET_LIST :
 					case CAIRO_DOCK_WIDGET_NUMBERED_LIST :

@@ -45,6 +45,7 @@ done
 export CAIRO_DOCK_EXTRACT_MESSAGE=${CORE_DIR}/po/misc/cairo-dock-extract-message
 export CAIRO_DOCK_GEN_TRANSLATION=${CORE_DIR}/po/misc/generate-translation.sh
 export CAIRO_DOCK_ADD_DESCRIPTION=${CORE_DIR}/po/misc/add-descriptions.sh
+export CAIRO_DOCK_ADD_README=${CORE_DIR}/po/misc/add-readme.sh
 
 gcc $CAIRO_DOCK_EXTRACT_MESSAGE.c -o $CAIRO_DOCK_EXTRACT_MESSAGE `pkg-config --libs --cflags glib-2.0 gldi`
 
@@ -86,6 +87,12 @@ if test $UPDATE_PLUGINS -gt 0; then
 					do
 						$CAIRO_DOCK_EXTRACT_MESSAGE "$c"
 					done;
+					for c in data/readme-*-view; do
+						if test -f "$c"; then
+							echo >> data/messages
+							bash $CAIRO_DOCK_ADD_README $c
+						fi
+					done
 				fi
 			fi
 			cd ..

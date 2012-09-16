@@ -2,7 +2,7 @@
 # Thanks to Jiro Kawada for his help !
 
 if test "$1" = "plug-ins"; then
-	sources="../*/src/*.[ch] ../*/data/messages"  # plug-ins
+	sources="../*/src/*.[ch] ../*/*.[ch] ../*/data/messages"  # plug-ins
 	lang=C
 elif test "$1" = "extras"; then
 	sources=""
