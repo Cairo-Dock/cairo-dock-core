@@ -738,7 +738,7 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 		if (iState == PropertyNewValue && (pWMHints->flags & (IconPixmapHint | IconMaskHint | IconWindowHint)))
 		{
 			//g_print ("%s change son icone\n", icon->cName);
-			if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskbarParam.bOverWriteXIcons)
+			if (pDock && (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskbarParam.bOverWriteXIcons))
 			{
 				cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
 				if (pDock->iRefCount != 0)
