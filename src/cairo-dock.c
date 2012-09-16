@@ -676,6 +676,8 @@ int main (int argc, char** argv)
 			g_free (cCommand);
 		}
 		
+		cairo_dock_load_user_gui_backend (1);  // force the advanced GUI, it can display the config before the theme is loaded.
+		
 		GtkWidget *pWindow = cairo_dock_show_main_gui ();
 		gtk_window_set_title (GTK_WINDOW (pWindow), _("< Maintenance mode >"));
 		if (cExcludeModule != NULL)
@@ -692,6 +694,7 @@ int main (int argc, char** argv)
 		cd_warning ("end of the maintenance mode.");
 		
 		g_main_loop_unref (pBlockingLoop);
+		cairo_dock_load_user_gui_backend (s_iGuiMode);  // go back to the user GUI.
 	}
 	
 	//\___________________ load the current theme.
