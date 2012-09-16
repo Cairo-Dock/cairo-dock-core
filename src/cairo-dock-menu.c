@@ -910,24 +910,6 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		gtk_widget_set_tooltip_text (pMenuItem, _("This will (un)lock the position of the icons."));
 	}
 	
-	// global lock
-	if (! g_bLocked)
-	{
-		/**pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (myDocksParam.bLockAll ? _("Unlock everything") : _("Lock everything"),
-			CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lock-icons.svg",
-			G_CALLBACK (_cairo_dock_lock_all),
-			pSubMenu,
-			NULL);
-		if (myDocksParam.bLockAll)
-		{
-			gtk_widget_set_tooltip_text (pMenuItem, _("This will allow you to add or remove launchers and applets, and configure the program."));
-		}
-		else
-		{
-			gtk_widget_set_tooltip_text (pMenuItem, _("This will prevent any modification of the current theme, and hide all the unnecessary entries in the menus."));
-		}*/
-	}
-	
 	// quick-hide
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bAutoHide)
 	{
@@ -939,40 +921,44 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		gtk_widget_set_tooltip_text (pMenuItem, _("This will hide the dock until you hover over it with the mouse."));
 	}
 	
-	// auto-start
-	gchar *cCairoAutoStartDirPath = g_strdup_printf ("%s/.config/autostart", g_getenv ("HOME"));
-	gchar *cCairoAutoStartEntryPath = g_strdup_printf ("%s/cairo-dock.desktop", cCairoAutoStartDirPath);
-	gchar *cCairoAutoStartEntryPath2 = g_strdup_printf ("%s/cairo-dock-cairo.desktop", cCairoAutoStartDirPath);
 	const gchar *cDesktopSession = g_getenv ("DESKTOP_SESSION");
 	gboolean bIsCairoDockSession = cDesktopSession && g_str_has_prefix (cDesktopSession, "cairo-dock");
-	if (! bIsCairoDockSession && ! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS) && ! g_file_test (cCairoAutoStartEntryPath2, G_FILE_TEST_EXISTS))
+	if (! g_bLocked)
 	{
-		cairo_dock_add_in_menu_with_stock_and_data (_("Launch Cairo-Dock on startup"),
+		// auto-start
+		gchar *cCairoAutoStartDirPath = g_strdup_printf ("%s/.config/autostart", g_getenv ("HOME"));
+		gchar *cCairoAutoStartEntryPath = g_strdup_printf ("%s/cairo-dock.desktop", cCairoAutoStartDirPath);
+		gchar *cCairoAutoStartEntryPath2 = g_strdup_printf ("%s/cairo-dock-cairo.desktop", cCairoAutoStartDirPath);
+		if (! bIsCairoDockSession && ! g_file_test (cCairoAutoStartEntryPath, G_FILE_TEST_EXISTS) && ! g_file_test (cCairoAutoStartEntryPath2, G_FILE_TEST_EXISTS))
+		{
+			cairo_dock_add_in_menu_with_stock_and_data (_("Launch Cairo-Dock on startup"),
+				GTK_STOCK_ADD,
+				G_CALLBACK (_cairo_dock_add_autostart),
+				pSubMenu,
+				NULL);
+		}
+		g_free (cCairoAutoStartEntryPath);
+		g_free (cCairoAutoStartEntryPath2);
+		g_free (cCairoAutoStartDirPath);
+		
+		// third-party applets (are here to give them more visibility).
+		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Get more applets!"),
 			GTK_STOCK_ADD,
-			G_CALLBACK (_cairo_dock_add_autostart),
+			G_CALLBACK (_cairo_dock_show_third_party_applets),
 			pSubMenu,
 			NULL);
+		gtk_widget_set_tooltip_text (pMenuItem, _("Third-party applets provide integration with many programs, like Pidgin"));
+		
+		// Help (we don't present the help if locked, because it would open the configuration window).
+		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Help"),
+			GTK_STOCK_HELP,
+			G_CALLBACK (_cairo_dock_present_help),
+			pSubMenu,
+			NULL);
+		gtk_widget_set_tooltip_text (pMenuItem, _("There are no problems, only solutions (and a lot of useful hints!)"));
 	}
-	g_free (cCairoAutoStartEntryPath);
-	g_free (cCairoAutoStartEntryPath2);
-	g_free (cCairoAutoStartDirPath);
 	
-	// third-party applets (are here to give them more visibility).
-	pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Get more applets!"),
-		GTK_STOCK_ADD,
-		G_CALLBACK (_cairo_dock_show_third_party_applets),
-		pSubMenu,
-		NULL);
-	gtk_widget_set_tooltip_text (pMenuItem, _("Third-party applets provide integration with many programs, like Pidgin"));
-	
-	// Help and About
-	pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Help"),
-		GTK_STOCK_HELP,
-		G_CALLBACK (_cairo_dock_present_help),
-		pSubMenu,
-		NULL);
-	gtk_widget_set_tooltip_text (pMenuItem, _("There are no problems, only solutions (and a lot of useful hints!)"));
-	
+	// About
 	cairo_dock_add_in_menu_with_stock_and_data (_("About"),
 		GTK_STOCK_ABOUT,
 		G_CALLBACK (_cairo_dock_about),
@@ -1014,13 +1000,24 @@ gboolean cairo_dock_notification_build_container_menu (gpointer *pUserData, Icon
 		
 		if (cairo_dock_is_locked ())
 		{
-			gtk_widget_set_sensitive (pItemSubMenu, FALSE);
+			gboolean bSensitive = FALSE;
+			if (CAIRO_DOCK_IS_APPLI (icon) && icon->cCommand != NULL)
+			{
+				_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, pItemSubMenu);
+				bSensitive = TRUE;
+			}
+			if (CAIRO_DOCK_IS_APPLET (pIcon))
+			{
+				cairo_dock_add_in_menu_with_stock_and_data (_("Applet's handbook"), GTK_STOCK_ABOUT, G_CALLBACK (cairo_dock_pop_up_about_applet), pItemSubMenu, pIcon->pModuleInstance);
+				bSensitive = TRUE;
+			}
+			gtk_widget_set_sensitive (pItemSubMenu, bSensitive);
 		}
 		else
 		{
 			if (CAIRO_DOCK_IS_APPLI (icon) && icon->cCommand != NULL)
 				_add_entry_in_menu (_("Launch a new (Shift+clic)"), GTK_STOCK_ADD, _cairo_dock_launch_new, pItemSubMenu);
-
+			
 			if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
 				 || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
 				 || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
