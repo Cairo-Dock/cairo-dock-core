@@ -2582,7 +2582,21 @@ static void reload_current_widget (CairoDockModuleInstance *pModuleInstance, int
 		iShowPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget2->pWidget));
 	
 	// re-build the widget
-	_present_group_widget (pGroupDescription, pModuleInstance);
+	///_present_group_widget (pGroupDescription, pModuleInstance);
+	if (IS_MODULE_WIDGET (s_pCurrentGroupWidget2))
+	{
+		cairo_dock_module_widget_reload_current_widget (MODULE_WIDGET (s_pCurrentGroupWidget2), pModuleInstance, iShowPage);
+		gtk_box_pack_start (GTK_BOX (s_pGroupsVBox),
+			s_pCurrentGroupWidget2->pWidget,
+			TRUE,
+			TRUE,
+			CAIRO_DOCK_FRAME_MARGIN);
+		gtk_widget_show_all (s_pCurrentGroupWidget2->pWidget);
+	}
+	else if (IS_ITEMS_WIDGET (s_pCurrentGroupWidget2))
+		cairo_dock_items_widget_reload_current_widget (ITEMS_WIDGET (s_pCurrentGroupWidget2), pModuleInstance, iShowPage);
+	else
+		return;
 	
 	// set the current page.
 	if (s_pCurrentGroupWidget2 && iNotebookPage != -1)
