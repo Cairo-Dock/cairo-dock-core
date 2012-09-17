@@ -1304,7 +1304,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon)))  // separator (user or auto).
 		{
 			// pLastLauncher = icon;
-			// last_launcher_ic = ic;
+			last_launcher_ic = ic;
 			if (pFirstLauncher == NULL)
 			{
 				pFirstLauncher = icon;
