@@ -91,7 +91,7 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 //////////////
 
 
-void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer)
+void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED CairoContainer *pContainer)
 {
 	if (icon->pContainer == NULL)
 	{

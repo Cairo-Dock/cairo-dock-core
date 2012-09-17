@@ -60,7 +60,7 @@ extern gboolean g_bUseOpenGL;
 static void _make_bar_surface (ProgressBar *pProgressBar)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pProgressBar);
-	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
+	int iWidth = pRenderer->iWidth;
 	
 	if (pProgressBar->cImageGradation != NULL)  // an image is provided
 	{
@@ -173,7 +173,6 @@ static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 	g_return_if_fail (pCairoContext != NULL && cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pProgressBar);
-	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
 	
@@ -236,9 +235,8 @@ static void render_opengl (ProgressBar *pProgressBar)
 	g_return_if_fail (pProgressBar != NULL);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pProgressBar);
-	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
-	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
+	int iWidth = pRenderer->iWidth;
 	
 	double x, y, v, w, r = pProgressBar->iBarThickness/2.;
 	double dx = .5;  // required to not have sharp edges on the left rounded corners... although maybe it should be adressed by the Overlay...

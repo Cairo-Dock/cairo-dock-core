@@ -128,7 +128,7 @@ static gchar * _cairo_dock_save_current_theme (GKeyFile* pKeyFile)
 }
 
 
-static void on_cancel_dl (GtkButton *button, ThemesWidget *pThemesWidget)
+static void on_cancel_dl (G_GNUC_UNUSED GtkButton *button, ThemesWidget *pThemesWidget)
 {
 	cairo_dock_discard_task (pThemesWidget->pImportTask);
 	pThemesWidget->pImportTask = NULL;
@@ -140,7 +140,7 @@ static gboolean _pulse_bar (GtkWidget *pBar)
 	gtk_progress_bar_pulse (GTK_PROGRESS_BAR (pBar));
 	return TRUE;
 }
-static void on_waiting_dialog_destroyed (GtkWidget *pWidget, ThemesWidget *pThemesWidget)
+static void on_waiting_dialog_destroyed (G_GNUC_UNUSED GtkWidget *pWidget, ThemesWidget *pThemesWidget)
 {
 	pThemesWidget->pWaitingDialog = NULL;
 	g_source_remove (pThemesWidget->iSidPulse);
@@ -274,11 +274,11 @@ static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, G
 		g_free (cRateMe);
 	}
 }
-static void _cairo_dock_render_sobriety (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+static void _cairo_dock_render_sobriety (G_GNUC_UNUSED GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, G_GNUC_UNUSED gpointer data)
 {
 	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER2);
 }
-static void _cairo_dock_render_rating (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+static void _cairo_dock_render_rating (G_GNUC_UNUSED GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, G_GNUC_UNUSED gpointer data)
 {
 	/// ignorer les themes "default" qui sont en lecture seule...
 	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER);
@@ -308,7 +308,7 @@ static GtkListStore *_make_rate_list_store (void)
 	return note_list;
 }
 
-static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gchar * new_text, GtkTreeModel * model)
+static void _change_rating (G_GNUC_UNUSED GtkCellRendererText * cell, gchar * path_string, gchar * new_text, GtkTreeModel * model)
 {
 	//g_print ("%s (%s : %s)\n", __func__, path_string, new_text);
 	g_return_if_fail (new_text != NULL && *new_text != '\0');
@@ -398,7 +398,7 @@ static void _got_themes_list (GHashTable *pThemeTable, ThemesWidget *pThemesWidg
 	cairo_dock_fill_model_with_themes (pModel, pThemeTable, NULL);
 }
 
-static void _on_delete_theme (GtkMenuItem *pMenuItem, ThemesWidget *pThemesWidget)
+static void _on_delete_theme (G_GNUC_UNUSED GtkMenuItem *pMenuItem, ThemesWidget *pThemesWidget)
 {
 	// get the selected theme
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pThemesWidget->pTreeView));
@@ -483,7 +483,7 @@ static void _fill_treeview_with_themes (ThemesWidget *pThemesWidget)
 	pThemesWidget->pListTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_list, pThemesWidget, pThemeTable);  // the table will be freed along with the task.
 }
 
-static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *pDataGarbage, GKeyFile* pKeyFile)
+static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *pDataGarbage, G_GNUC_UNUSED GKeyFile* pKeyFile)
 {
 	//\______________ get the group/key widget
 	GSList *pWidgetList = pThemesWidget->widget.pWidgetList;
@@ -548,7 +548,7 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 	gtk_box_pack_start (GTK_BOX (myWidget->pKeyBox), pWidgetBox, FALSE, FALSE, 0);
 }
 
-static gboolean _ignore_server_themes (const gchar *cThemeName, CairoDockPackage *pTheme, gpointer data)
+static gboolean _ignore_server_themes (G_GNUC_UNUSED const gchar *cThemeName, CairoDockPackage *pTheme, G_GNUC_UNUSED gpointer data)
 {
 	gchar *cVersionFile = g_strdup_printf ("%s/last-modif", pTheme->cPackagePath);
 	gboolean bRemove = g_file_test (cVersionFile, G_FILE_TEST_EXISTS);
@@ -565,7 +565,7 @@ static void _fill_combo_with_user_themes (ThemesWidget *pThemesWidget)
 	cairo_dock_fill_model_with_themes (GTK_LIST_STORE (pModel), pThemeTable, NULL);
 	g_hash_table_destroy (pThemeTable);
 }
-static void _make_combo_for_user_themes (ThemesWidget *pThemesWidget, GPtrArray *pDataGarbage, GKeyFile* pKeyFile)
+static void _make_combo_for_user_themes (ThemesWidget *pThemesWidget, GPtrArray *pDataGarbage, G_GNUC_UNUSED GKeyFile* pKeyFile)
 {
 	//\______________ get the group/key widget
 	GSList *pWidgetList = pThemesWidget->widget.pWidgetList;
@@ -646,8 +646,6 @@ ThemesWidget *cairo_dock_themes_widget_new (GtkWindow *pMainWindow)
 static void _themes_widget_apply (CDWidget *pCdWidget)
 {
 	ThemesWidget *pThemesWidget = THEMES_WIDGET (pCdWidget);
-	GError *erreur = NULL;
-	int r;  // resultat de system().
 	
 	//\_______________ open and update the conf file.
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (pThemesWidget->cInitConfFile);

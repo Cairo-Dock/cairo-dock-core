@@ -526,16 +526,16 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
 		return;
 	}
 #ifdef HAVE_LIBCRYPT
-	guchar *input = g_strdup(cEncryptedString);
+	guchar *input = (guchar *)g_strdup (cEncryptedString);
 	guchar *shifted_input = input;
 	guchar **output = (guchar **)cDecryptedString;
 	
 	guchar *current_output = NULL;
 	
-	*output = g_malloc( (strlen(input)+1)/3+1 );
+	*output = g_malloc( (strlen((char *)input)+1)/3+1 );
 	current_output = *output;
 
-  guchar *last_char_in_input = input + strlen(input);
+  guchar *last_char_in_input = input + strlen((char *)input);
 //  g_print( "Password (before decrypt): %s\n", input );
 
   for( ; shifted_input < last_char_in_input; shifted_input += 16+8, current_output += 8 )
@@ -543,13 +543,12 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
     guint block[8];
     guchar txt[64];
     gint i = 0, j = 0;
-    guchar current_letter = 0;
     
     memset( txt, 0, 64 );
 
     shifted_input[16+8-1] = 0; // cut the string
 
-    sscanf( shifted_input, "%X-%X-%X-%X-%X-%X-%X-%X",
+    sscanf( (char *)shifted_input, "%X-%X-%X-%X-%X-%X-%X-%X",
     &block[0], &block[1], &block[2], &block[3], &block[4], &block[5], &block[6], &block[7] );
 
     // process the eight first characters of "input"
@@ -558,7 +557,7 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
         txt[i*8+j] = block[i] >> j & 1;
     
     setkey( DES_crypt_key );
-    encrypt( txt, 1 );  // decrypt
+    encrypt( (gchar *)txt, 1 );  // decrypt
 
     for ( i = 0; i < 8; i++ )
     {
@@ -593,15 +592,14 @@ void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncrypt
 #ifdef HAVE_LIBCRYPT
 	const guchar *input = (guchar *)cDecryptedString;
 	guchar **output = (guchar **)cEncryptedString;
-	guint input_length = 0;
 	
 	guchar *current_output = NULL;
 	// for each block of 8 characters, we need 24 bytes.
-	guint nbBlocks = strlen(input)/8+1;
+	guint nbBlocks = strlen((char *)input)/8+1;
 	*output = g_malloc( nbBlocks*24+1 );
 	current_output = *output;
 
-  const guchar *last_char_in_input = input + strlen(input);
+  const guchar *last_char_in_input = input + strlen((char *)input);
 
 //  g_print( "Password (before encrypt): %s\n", input );
 
@@ -614,12 +612,12 @@ void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncrypt
     memset( txt, 0, 64 );
     
     // process the eight first characters of "input"
-    for( i = 0; i < strlen(input) && i < 8 ; i++ )
+    for( i = 0; i < strlen((char *)input) && i < 8 ; i++ )
       for ( j = 0; j < 8; j++ )
         txt[i*8+j] = input[i] >> j & 1;
     
     setkey( DES_crypt_key );
-    encrypt( txt, 0 );  // encrypt
+    encrypt( (char *)txt, 0 );  // encrypt
 
     for ( i = 0; i < 8; i++ )
     {
@@ -628,7 +626,7 @@ void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncrypt
       {
         current_letter |= txt[i*8+j] << j;
       }
-      snprintf( current_output + i*3, 4, "%02X-", current_letter );
+      snprintf( (char *)current_output + i*3, 4, "%02X-", current_letter );
     }
   }
 

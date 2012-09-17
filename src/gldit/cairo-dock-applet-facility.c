@@ -108,7 +108,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 }
 
 
-void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surface_t *pSurface, Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surface_t *pSurface, Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
 {
 	cairo_dock_set_icon_surface (pIconContext, pSurface, pIcon);
 	
@@ -305,7 +305,6 @@ void cairo_dock_play_sound (const gchar *cSoundPath)
 		return;
 	}
 	
-	GError *erreur = NULL;
 	gchar *cSoundCommand = NULL;
 	if (g_file_test ("/usr/bin/paplay", G_FILE_TEST_EXISTS))
 		cSoundCommand = g_strdup_printf("paplay --client-name=cairo-dock \"%s\"", cSoundPath);
@@ -401,13 +400,13 @@ void cairo_dock_play_sound (const gchar *cSoundPath)
 	g_strfreev (cLineList);
 }*/
 
-void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, CairoDockModuleInstance *pModuleInstance)
+void cairo_dock_pop_up_about_applet (G_GNUC_UNUSED GtkMenuItem *menu_item, CairoDockModuleInstance *pModuleInstance)
 {
 	cairo_dock_popup_module_instance_description (pModuleInstance);
 }
 
 
-void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pInteractiveWidget, CairoDockModuleInstance *pModuleInstance, CairoDialog *pDialog)
+void cairo_dock_open_module_config_on_demand (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, CairoDockModuleInstance *pModuleInstance, G_GNUC_UNUSED CairoDialog *pDialog)
 {
 	if (iClickedButton == 0 || iClickedButton == -1)  // bouton OK ou touche Entree.
 	{
@@ -540,7 +539,6 @@ gboolean cairo_dock_detach_icon_from_applet (CairoDockModuleInstance *pInstance,
 		return FALSE;
 	
 	gboolean bRemoved = FALSE;
-	GList *pIconsList = (pInstance->pDock ? (pIcon->pSubDock ? pIcon->pSubDock->icons : NULL) : pInstance->pDesklet->icons);
 	if (pInstance->pDock)
 	{
 		if (pIcon->pSubDock != NULL)

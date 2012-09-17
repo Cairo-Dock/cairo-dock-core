@@ -92,11 +92,11 @@ static void _on_key_grab_cb (GtkWidget *pInputDialog, GdkEventKey *event, GtkTre
 		gtk_widget_destroy (pInputDialog);
 	}
 }
-static void on_cancel_shortkey (GtkButton *button, GtkWidget *pInputDialog)
+static void on_cancel_shortkey (G_GNUC_UNUSED GtkButton *button, GtkWidget *pInputDialog)
 {
 	gtk_widget_destroy (pInputDialog);
 }
-static void _cairo_dock_initiate_change_shortkey (GtkMenuItem *pMenuItem, GtkTreeView *pTreeView)
+static void _cairo_dock_initiate_change_shortkey (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkTreeView *pTreeView)
 {
 	// ensure a line is selected
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (pTreeView);
@@ -128,9 +128,8 @@ static void _cairo_dock_initiate_change_shortkey (GtkMenuItem *pMenuItem, GtkTre
 
 	gtk_widget_show_all (pInputDialog);
 }
-static gboolean _on_click_shortkey_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer data)
+static gboolean _on_click_shortkey_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, G_GNUC_UNUSED gpointer data)
 {
-	GtkWidget *pMainWindow = NULL;
 	if ((pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)  // right click
 	|| (pButton->button == 1 && pButton->type == GDK_2BUTTON_PRESS))  // double click
 	{
@@ -156,7 +155,7 @@ static gboolean _on_click_shortkey_tree_view (GtkTreeView *pTreeView, GdkEventBu
 	}
 	return FALSE;
 }
-static void _cairo_dock_render_shortkey (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+static void _cairo_dock_render_shortkey (G_GNUC_UNUSED GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, G_GNUC_UNUSED gpointer data)
 {
 	gboolean bActive = FALSE;
 	gchar *cShortkey = NULL;

@@ -199,7 +199,7 @@ void cairo_dock_module_widget_update_module_instance_container (ModuleWidget *pM
 }
 
 
-void cairo_dock_module_widget_reload_current_widget (ModuleWidget *pModuleWidget, CairoDockModuleInstance *pInstance, int iShowPage)
+void cairo_dock_module_widget_reload_current_widget (ModuleWidget *pModuleWidget)
 {
 	cairo_dock_widget_destroy_widget (CD_WIDGET (pModuleWidget));
 	pModuleWidget->widget.pWidget = NULL;

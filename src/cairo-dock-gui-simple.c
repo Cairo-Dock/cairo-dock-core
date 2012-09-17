@@ -169,11 +169,11 @@ static CDWidget *_build_plugins_widget (void)
 	return pCdWidget;
 }
 
-static void on_click_quit (GtkButton *button, GtkWidget *pMainWindow)
+static void on_click_quit (G_GNUC_UNUSED GtkButton *button, GtkWidget *pMainWindow)
 {
 	gtk_widget_destroy (pMainWindow);
 }
-static void on_click_apply (GtkButton *button, GtkWidget *pMainWindow)
+static void on_click_apply (G_GNUC_UNUSED GtkButton *button, G_GNUC_UNUSED GtkWidget *pMainWindow)
 {
 	CDCategory *pCategory = _get_current_category ();
 	CDWidget *pCdWidget = pCategory->pCdWidget;
@@ -316,7 +316,7 @@ static void _build_category_widget (CDCategory *pCategory)
 	gtk_widget_show_all (pCategory->pCdWidget->pWidget);
 }
 
-static void _on_switch_page (GtkNotebook *pNoteBook, GtkWidget *page, guint page_num, gpointer user_data)
+static void _on_switch_page (G_GNUC_UNUSED GtkNotebook *pNoteBook, GtkWidget *page, guint page_num, G_GNUC_UNUSED gpointer user_data)
 {
 	CDCategory *pCategory = _get_category (page_num);
 	g_return_if_fail (pCategory != NULL);
@@ -332,7 +332,7 @@ static void _on_switch_page (GtkNotebook *pNoteBook, GtkWidget *page, guint page
 	_set_current_category (page_num);
 }
 
-static void _on_window_destroyed (GtkWidget *pMainWindow, gpointer data)
+static void _on_window_destroyed (G_GNUC_UNUSED GtkWidget *pMainWindow, G_GNUC_UNUSED gpointer data)
 {
 	CDCategory *pCategory;
 	int i;
@@ -411,7 +411,6 @@ static void cairo_dock_enable_apply_button (GtkWidget *pMainWindow, gboolean bEn
 
 static void cairo_dock_select_category (GtkWidget *pMainWindow, CDCategoryEnum iCategory)
 {
-	CDCategory *pCategory = _get_category (iCategory);
 	GtkNotebook *pNoteBook = g_object_get_data (G_OBJECT (pMainWindow), "notebook");
 	gtk_notebook_set_current_page (pNoteBook, iCategory);  // will first emit a 'switch-page' signal, which will build the widget if necessary.
 }
@@ -429,7 +428,7 @@ static GtkWidget *show_main_gui (void)
 	return s_pSimpleConfigWindow;
 }
 
-static GtkWidget *show_module_gui (const gchar *cModuleName)
+static GtkWidget *show_module_gui (G_GNUC_UNUSED const gchar *cModuleName)
 {
 	cairo_dock_build_simple_gui_window ();
 	
@@ -563,7 +562,6 @@ static void reload (void)
 {
 	if (s_pSimpleConfigWindow == NULL)
 		return;
-	CDCategory *pCategory;
 	
 	_reload_category_widget (CD_CATEGORY_ITEMS);
 	
@@ -601,7 +599,7 @@ static void show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, 
 	show_gui (pModuleInstance->pIcon, NULL, pModuleInstance, iShowPage);
 }
 
-static CairoDockGroupKeyWidget *get_widget_from_name (CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
+static CairoDockGroupKeyWidget *get_widget_from_name (G_GNUC_UNUSED CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
 {
 	g_return_val_if_fail (s_pSimpleConfigWindow != NULL, NULL);
 	cd_debug ("%s (%s, %s)", __func__, cGroupName, cKeyName);

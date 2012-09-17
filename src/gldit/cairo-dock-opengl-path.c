@@ -262,7 +262,6 @@ const CairoDockGLPath *cairo_dock_generate_rectangle_path (double fFrameWidth, d
 	double h = fFrameHeight / 2;
 	double r = fRadius;
 	
-	int ddeg = (fRadius < 5 ? 6 : 3);
 	int iNbPoins1Round = 90/10;
 	if (pPath == NULL)
 	{
@@ -428,8 +427,6 @@ const CairoDockGLPath *cairo_dock_generate_string_path_opengl (CairoDock *pDock,
 		cairo_dock_gl_path_set_extent (pPath, pDock->container.iHeight, pDock->container.iWidth);
 	
 	// on parcourt les icones.
-	double t;
-	int i, n=0;
 	do
 	{
 		// l'icone courante, la suivante, et celle d'apres.
@@ -466,7 +463,7 @@ const CairoDockGLPath *cairo_dock_generate_string_path_opengl (CairoDock *pDock,
 		if (next_ic == pFirstDrawnElement && ! bIsLoop)
 			break ;
 	}
-	while (ic != pFirstDrawnElement && n < 100*NB_VERTEX_PER_ICON_PAIR);
+	while (ic != pFirstDrawnElement);
 	
 	return pPath;
 }

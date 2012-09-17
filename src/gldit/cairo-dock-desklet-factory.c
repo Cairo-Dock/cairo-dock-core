@@ -68,11 +68,11 @@ static void on_drag_data_received_desklet (GtkWidget *pWidget, GdkDragContext *d
  /// SIGNALS ///
 ///////////////
 
-static gboolean on_expose_desklet(GtkWidget *pWidget,
+static gboolean on_expose_desklet(G_GNUC_UNUSED GtkWidget *pWidget,
 #if (GTK_MAJOR_VERSION < 3)
-	GdkEventExpose *pExpose,
+	G_GNUC_UNUSED GdkEventExpose *pExpose,
 #else
-	cairo_t *ctx,
+	G_GNUC_UNUSED cairo_t *ctx,
 #endif
 	CairoDesklet *pDesklet)
 {
@@ -264,7 +264,7 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 	pDesklet->iSidWritePosition = 0;
 	return FALSE;
 }
-static gboolean on_configure_desklet (GtkWidget* pWidget,
+static gboolean on_configure_desklet (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDesklet *pDesklet)
 {
@@ -334,7 +334,7 @@ static gboolean on_configure_desklet (GtkWidget* pWidget,
 	return FALSE;
 }
 
-static gboolean on_scroll_desklet (GtkWidget* pWidget,
+static gboolean on_scroll_desklet (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventScroll* pScroll,
 	CairoDesklet *pDesklet)
 {
@@ -348,11 +348,10 @@ static gboolean on_scroll_desklet (GtkWidget* pWidget,
 }
 
 static gboolean on_unmap_desklet (GtkWidget* pWidget,
-	GdkEvent *pEvent,
+	G_GNUC_UNUSED GdkEvent *pEvent,
 	CairoDesklet *pDesklet)
 {
 	cd_debug ("unmap desklet (bAllowMinimize:%d)\n", pDesklet->bAllowMinimize);
-	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 	if (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)  // on the widget layer, let pass the unmap event..
 	//if (cairo_dock_window_is_utility (Xid))  // sur la couche des widgets, on ne fait rien.
 		return FALSE;
@@ -378,7 +377,7 @@ static gboolean on_unmap_desklet (GtkWidget* pWidget,
 	return TRUE;  // stops other handlers from being invoked for the event.
 }
 
-static gboolean on_button_press_desklet(GtkWidget *pWidget,
+static gboolean on_button_press_desklet(G_GNUC_UNUSED GtkWidget *pWidget,
 	GdkEventButton *pButton,
 	CairoDesklet *pDesklet)
 {
@@ -542,7 +541,7 @@ static gboolean on_button_press_desklet(GtkWidget *pWidget,
 	return FALSE;
 }
 
-static void on_drag_data_received_desklet (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, CairoDesklet *pDesklet)
+static void on_drag_data_received_desklet (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, G_GNUC_UNUSED guint info, G_GNUC_UNUSED guint t, CairoDesklet *pDesklet)
 {
 	//g_print ("%s (%dx%d)\n", __func__, x, y);
 	
@@ -647,8 +646,8 @@ static gboolean on_motion_notify_desklet (GtkWidget *pWidget,
 }
 
 
-static gboolean on_focus_in_out_desklet(GtkWidget *widget,
-	GdkEventFocus *event,
+static gboolean on_focus_in_out_desklet(G_GNUC_UNUSED GtkWidget *widget,
+	G_GNUC_UNUSED GdkEventFocus *event,
 	CairoDesklet *pDesklet)
 {
 	gtk_widget_queue_draw(pDesklet->container.pWidget);
@@ -656,7 +655,7 @@ static gboolean on_focus_in_out_desklet(GtkWidget *widget,
 }
 
 static gboolean on_enter_desklet (GtkWidget* pWidget,
-	GdkEventCrossing* pEvent,
+	G_GNUC_UNUSED GdkEventCrossing* pEvent,
 	CairoDesklet *pDesklet)
 {
 	//g_print ("%s (%d)\n", __func__, pDesklet->container.bInside);

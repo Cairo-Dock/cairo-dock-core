@@ -289,7 +289,7 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 }
 
 
-void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
+void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bIsHorizontal, G_GNUC_UNUSED double fRatio, gboolean bDirectionUp)
 {
 	if (bIsHorizontal)
 	{
@@ -329,7 +329,6 @@ void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, g
 
 void cairo_dock_draw_icon_reflect_cairo (Icon *icon, CairoContainer *pContainer, cairo_t *pCairoContext)
 {
-	double fRatio = pContainer->fRatio;
 	if (pContainer->bUseReflect && icon->pIconBuffer != NULL)
 	{
 		cairo_save (pCairoContext);
@@ -468,7 +467,7 @@ void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	cairo_dock_draw_icon_reflect_cairo (icon, CAIRO_CONTAINER (pDock), pCairoContext);
 }
 
-gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *icon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)
+gboolean cairo_dock_render_icon_notification (G_GNUC_UNUSED gpointer pUserData, Icon *icon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)
 {
 	if (*bHasBeenRendered)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;

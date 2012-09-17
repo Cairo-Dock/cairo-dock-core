@@ -47,7 +47,7 @@ extern gboolean g_bUseOpenGL;
 static GLuint s_iFlatSeparatorTexture = 0;
 
 
-static gboolean cd_default_view_free_data (gpointer pUserData, CairoDock *pDock)  // si la vue 'default' etait dans un plug-in on n'aurait pas besoin de faire ca (on pourrait detruire nos donnees lors du stop_module), si elle etait dans la lib-core on pourrait le faire lors du unload_texture, mais elle est dans le main.
+static gboolean cd_default_view_free_data (G_GNUC_UNUSED gpointer pUserData, CairoDock *pDock)  // si la vue 'default' etait dans un plug-in on n'aurait pas besoin de faire ca (on pourrait detruire nos donnees lors du stop_module), si elle etait dans la lib-core on pourrait le faire lors du unload_texture, mais elle est dans le main.
 {
 	if (pDock->bIsMainDock && s_iFlatSeparatorTexture != 0)
 	{
@@ -136,7 +136,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 }
 
 
-static void _draw_flat_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)
+static void _draw_flat_separator (Icon *icon, G_GNUC_UNUSED CairoDock *pDock, cairo_t *pCairoContext, G_GNUC_UNUSED double fDockMagnitude)
 {
 	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
@@ -164,9 +164,9 @@ static void _draw_flat_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoC
 	cairo_pattern_destroy (pPattern);
 }
 
-static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude)
+static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, G_GNUC_UNUSED double fDockMagnitude)
 {
-	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
+	double fSizeX = icon->fWidth * icon->fScale;
 	cairo_set_line_width (pCairoContext, myDocksParam.iDockLineWidth);
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
 	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1.0);
@@ -314,7 +314,6 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 	//g_print ("%s ((%d;%d) x (%d;%d) / (%dx%d))\n", __func__, pArea->x, pArea->y, pArea->width, pArea->height, pDock->container.iWidth, pDock->container.iHeight);
 	double fLineWidth = myDocksParam.iDockLineWidth;
 	double fMargin = myDocksParam.iFrameMargin;
-	int iWidth = pDock->container.iWidth;
 	int iHeight = pDock->container.iHeight;
 
 	//\____________________ On dessine les decorations du fond sur la portion de fenetre.
@@ -397,7 +396,6 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 	{
 		double fXMin = (pDock->container.bIsHorizontal ? pArea->x : pArea->y), fXMax = (pDock->container.bIsHorizontal ? pArea->x + pArea->width : pArea->y + pArea->height);
 		double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-		double fRatio = pDock->container.fRatio;
 		double fXLeft, fXRight;
 		
 		//g_print ("redraw [%d -> %d]\n", (int) fXMin, (int) fXMax);
@@ -435,7 +433,7 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 
 
 
-static void _draw_flat_separator_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude)
+static void _draw_flat_separator_opengl (Icon *icon, CairoDock *pDock, G_GNUC_UNUSED double fDockMagnitude)
 {
 	if (s_iFlatSeparatorTexture == 0)
 		return;
@@ -461,9 +459,9 @@ static void _draw_flat_separator_opengl (Icon *icon, CairoDock *pDock, double fD
 	_cairo_dock_disable_texture ();
 }
 
-static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude)
+static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, G_GNUC_UNUSED double fDockMagnitude)
 {
-	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
+	double fSizeX = icon->fWidth * icon->fScale;
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_ONE, GL_ZERO);
 	glColor4f (0., 0., 0., 0.);

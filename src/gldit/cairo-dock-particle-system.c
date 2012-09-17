@@ -180,11 +180,11 @@ CairoParticleSystem *cairo_dock_create_particle_system (int iNbParticles, GLuint
 	pParticleSystem->pColors = malloc(iNbParticles * 4 * 4 * sizeof(GLfloat)*2);
 	
 	GLfloat *coords = pParticleSystem->pCoords;  // on prerempli les coordonnees de la texture.
-	CairoParticle *p;
+	// CairoParticle *p;
 	int i;
 	for (i = 0; i < 2*iNbParticles; i ++)
 	{
-		p = &pParticleSystem->pParticles[i];
+		// p = &pParticleSystem->pParticles[i];
 		memcpy (coords, s_pCornerCoords, sizeof (s_pCornerCoords));
 		coords += 8;
 	}

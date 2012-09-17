@@ -77,7 +77,7 @@ static inline const gchar *_cairo_dock_get_launcher_template_conf_file_path (Cai
 	return cTemplateFile;
 }
 
-static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, const gchar *cOrigin, const gchar *cDockName, double fOrder, GError **erreur)
+static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, const gchar *cOrigin, const gchar *cDockName, double fOrder, G_GNUC_UNUSED GError **erreur)
 {
 	//\__________________ open the template.
 	const gchar *cTemplateFile = _cairo_dock_get_launcher_template_conf_file_path (iLauncherType);

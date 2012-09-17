@@ -79,20 +79,20 @@ static inline gboolean _check_extension (const char *extName, const gchar *cExte
 }
 static gboolean _check_gl_extension (const char *extName)
 {
-	const gchar *glExtensions = glGetString (GL_EXTENSIONS);
+	const gchar *glExtensions = (gchar *) glGetString (GL_EXTENSIONS);
 	return _check_extension (extName, glExtensions);
 }
 static gboolean _check_client_glx_extension (const char *extName)
 {
 	Display *display = gdk_x11_get_default_xdisplay ();
-	int screen = 0;
+	//int screen = 0;
 	//const gchar *glxExtensions = glXQueryExtensionsString (display, screen);
 	const gchar *glxExtensions = glXGetClientString (display, GLX_EXTENSIONS);
 	return _check_extension (extName, glxExtensions);
 }
 
 
-static void _post_initialize_opengl_backend (GtkWidget *pWidget, CairoContainer *pContainer)  // initialisation necessitant un contexte opengl.
+static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, CairoContainer *pContainer)  // initialisation necessitant un contexte opengl.
 {
 	g_return_if_fail (!s_bInitialized);
 	
@@ -171,7 +171,6 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL)  // taken 
 	
 	//\_________________ On cherche un visual qui reponde a tous les criteres.
 	GLXFBConfig *pFBConfigs;
-	XRenderPictFormat *pPictFormat = NULL;
 	int doubleBufferAttributes[] = {
 		GLX_DRAWABLE_TYPE, 		GLX_WINDOW_BIT,
 		GLX_RENDER_TYPE, 		GLX_RGBA_BIT,
@@ -302,8 +301,8 @@ gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL)  // taken 
 	g_openglConfig.bTextureFromPixmapAvailable = _check_client_glx_extension ("GLX_EXT_texture_from_pixmap");
 	if (g_openglConfig.bTextureFromPixmapAvailable)
 	{
-		g_openglConfig.bindTexImage = (gpointer)glXGetProcAddress ("glXBindTexImageEXT");
-		g_openglConfig.releaseTexImage = (gpointer)glXGetProcAddress ("glXReleaseTexImageEXT");
+		g_openglConfig.bindTexImage = (gpointer)glXGetProcAddress ((GLubyte *) "glXBindTexImageEXT");
+		g_openglConfig.releaseTexImage = (gpointer)glXGetProcAddress ((GLubyte *) "glXReleaseTexImageEXT");
 		g_openglConfig.bTextureFromPixmapAvailable = (g_openglConfig.bindTexImage && g_openglConfig.releaseTexImage);
 	}
 	
@@ -656,7 +655,7 @@ void cairo_dock_set_perspective_view (CairoContainer *pContainer)
 	pContainer->bPerspectiveView = TRUE;
 }
 
-void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
@@ -694,7 +693,7 @@ void cairo_dock_set_ortho_view (CairoContainer *pContainer)
 	pContainer->bPerspectiveView = FALSE;
 }
 
-void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
@@ -787,7 +786,7 @@ void gldi_glx_end_draw_container (CairoContainer *pContainer)
 	glXSwapBuffers (dpy, Xid);
 }
 
-static void _init_opengl_context (GtkWidget* pWidget, CairoContainer *pContainer)
+static void _init_opengl_context (G_GNUC_UNUSED GtkWidget* pWidget, CairoContainer *pContainer)
 {
 	if (! g_bUseOpenGL)
 		return ;

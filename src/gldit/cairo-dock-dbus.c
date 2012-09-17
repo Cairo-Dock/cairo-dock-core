@@ -90,7 +90,7 @@ gboolean cairo_dock_register_service_name (const gchar *cServiceName)
 	if (pProxy == NULL)
 		return FALSE;
 	GError *erreur = NULL;
-	int request_ret;
+	guint request_ret;
 	org_freedesktop_DBus_request_name (pProxy, cServiceName, 0, &request_ret, &erreur);
 	if (erreur != NULL)
 	{
@@ -107,7 +107,7 @@ gboolean cairo_dock_dbus_is_enabled (void)
 	return (cairo_dock_get_session_connection () != NULL && cairo_dock_get_system_connection () != NULL);
 }
 
-static void on_name_owner_changed (DBusGProxy *pProxy, const gchar *cName, const gchar *cPrevOwner, const gchar *cNewOwner, gpointer data)
+static void on_name_owner_changed (G_GNUC_UNUSED DBusGProxy *pProxy, const gchar *cName, G_GNUC_UNUSED const gchar *cPrevOwner, const gchar *cNewOwner, G_GNUC_UNUSED gpointer data)
 {
 	//g_print ("%s (%s)\n", __func__, cName);
 	gboolean bOwned = (cNewOwner != NULL && *cNewOwner != '\0');
@@ -254,28 +254,31 @@ static void _on_detect_application (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 		G_TYPE_INVALID);
 	
 	gboolean bPresent = FALSE;
-	cd_message ("detection du service %s ...", cName);
-	int i;
-	int n = strlen(cName);
-	if (cName[n-1] == '*')
+	cd_message ("detection du service %s (%d)...", cName, bSuccess);
+	if (bSuccess && name_list)
 	{
-		for (i = 0; name_list[i] != NULL; i ++)
+		int i;
+		int n = strlen(cName);
+		if (cName[n-1] == '*')
 		{
-			if (strncmp (name_list[i], cName, n) == 0)
+			for (i = 0; name_list[i] != NULL; i ++)
 			{
-				bPresent = TRUE;
-				break;
+				if (strncmp (name_list[i], cName, n) == 0)
+				{
+					bPresent = TRUE;
+					break;
+				}
 			}
 		}
-	}
-	else
-	{
-		for (i = 0; name_list[i] != NULL; i ++)
+		else
 		{
-			if (strcmp (name_list[i], cName) == 0)
+			for (i = 0; name_list[i] != NULL; i ++)
 			{
-				bPresent = TRUE;
-				break;
+				if (strcmp (name_list[i], cName) == 0)
+				{
+					bPresent = TRUE;
+					break;
+				}
 			}
 		}
 	}

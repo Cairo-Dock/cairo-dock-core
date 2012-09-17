@@ -141,7 +141,7 @@ static gchar *_build_tip_text (CDTipsData *pTips)
 	const gchar *cHint1 = NULL;  // points on the comment.
 	gchar **pAuthorizedValuesList1 = NULL;
 	gchar *cKeyComment1 =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName1, NULL);
-	const gchar *cText1 = cairo_dock_parse_key_comment (cKeyComment1, &iElementType, &iNbElements, &pAuthorizedValuesList1, &bAligned, &cHint1);  // points on the comment.
+	cairo_dock_parse_key_comment (cKeyComment1, &iElementType, &iNbElements, &pAuthorizedValuesList1, &bAligned, &cHint1);  // points on the comment.
 	
 	const gchar *cHint2 = NULL;
 	gchar **pAuthorizedValuesList2 = NULL;
@@ -169,7 +169,7 @@ static void _update_tip_text (CDTipsData *pTips, CairoDialog *pDialog)
 	
 	g_free (cText);
 }
-static void _tips_dialog_action (int iClickedButton, GtkWidget *pInteractiveWidget, CDTipsData *pTips, CairoDialog *pDialog)
+static void _tips_dialog_action (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, CDTipsData *pTips, CairoDialog *pDialog)
 {
 	cd_debug ("%s (%d)", __func__, iClickedButton);
 	if (iClickedButton == 2 || iClickedButton == -1)  // click on "next", or Enter.

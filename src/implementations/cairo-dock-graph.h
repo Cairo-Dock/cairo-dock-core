@@ -58,8 +58,6 @@ struct _CairoGraphAttribute {
 	gdouble *fLowColor;
 	/// color of the background.
 	gdouble fBackGroundColor[4];
-	// radius of the corners of the background.
-	gint iRadius;  // deprecated
 	/// TRUE to draw all the values on the same graph.
 	gboolean bMixGraphs;
 };

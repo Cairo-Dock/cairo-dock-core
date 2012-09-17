@@ -134,7 +134,7 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 			else if (w > 2 * h)  // if we're pretty sure this image is an animated one, try to be smart, to handle the case of non-square frames.
 			{
 				// assume we have wide frames => w > h
-				int w_ = h+1, h_ = h;
+				int w_ = h+1;
 				do
 				{
 					//g_print (" %d/%d\n", w_, (int)w);

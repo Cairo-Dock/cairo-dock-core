@@ -94,7 +94,7 @@ typedef struct {
 		G_TYPE_DOUBLE,   /* CAIRO_DOCK_MODEL_SIZE*/\
 		G_TYPE_STRING)   /* CAIRO_DOCK_MODEL_AUTHOR*/
 
-static void _cairo_dock_activate_one_element (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
+static void _cairo_dock_activate_one_element (G_GNUC_UNUSED GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
 	GtkTreeIter iter;
 	if (! gtk_tree_model_get_iter_from_string (model, &iter, path))
@@ -105,7 +105,7 @@ static void _cairo_dock_activate_one_element (GtkCellRendererToggle * cell_rende
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter, CAIRO_DOCK_MODEL_ACTIVE, !bState, -1);
 }
 
-static gboolean _cairo_dock_increase_order (GtkTreeModel * model, GtkTreePath * path, GtkTreeIter * iter, int *pOrder)
+static gboolean _cairo_dock_increase_order (GtkTreeModel * model, G_GNUC_UNUSED GtkTreePath * path, GtkTreeIter * iter, int *pOrder)
 {
 	int iMyOrder;
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_ORDER, &iMyOrder, -1);
@@ -118,7 +118,7 @@ static gboolean _cairo_dock_increase_order (GtkTreeModel * model, GtkTreePath * 
 	return FALSE;
 }
 
-static gboolean _cairo_dock_decrease_order (GtkTreeModel * model, GtkTreePath * path, GtkTreeIter * iter, int *pOrder)
+static gboolean _cairo_dock_decrease_order (GtkTreeModel * model, G_GNUC_UNUSED GtkTreePath * path, GtkTreeIter * iter, int *pOrder)
 {
 	int iMyOrder;
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_ORDER, &iMyOrder, -1);
@@ -131,7 +131,7 @@ static gboolean _cairo_dock_decrease_order (GtkTreeModel * model, GtkTreePath * 
 	return FALSE;
 }
 
-static gboolean _cairo_dock_decrease_order_if_greater (GtkTreeModel * model, GtkTreePath * path, GtkTreeIter * iter, int *pOrder)
+static gboolean _cairo_dock_decrease_order_if_greater (GtkTreeModel * model, G_GNUC_UNUSED GtkTreePath * path, GtkTreeIter * iter, int *pOrder)
 {
 	int iMyOrder;
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_ORDER, &iMyOrder, -1);
@@ -144,7 +144,7 @@ static gboolean _cairo_dock_decrease_order_if_greater (GtkTreeModel * model, Gtk
 	return FALSE;
 }
 
-static void _cairo_dock_go_up (GtkButton *button, GtkTreeView *pTreeView)
+static void _cairo_dock_go_up (G_GNUC_UNUSED GtkButton *button, GtkTreeView *pTreeView)
 {
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (pTreeView);
 
@@ -164,7 +164,7 @@ static void _cairo_dock_go_up (GtkButton *button, GtkTreeView *pTreeView)
 	gtk_list_store_set (GTK_LIST_STORE (pModel), &iter, CAIRO_DOCK_MODEL_ORDER, iOrder, -1);
 }
 
-static void _cairo_dock_go_down (GtkButton *button, GtkTreeView *pTreeView)
+static void _cairo_dock_go_down (G_GNUC_UNUSED GtkButton *button, GtkTreeView *pTreeView)
 {
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (pTreeView);
 
@@ -184,7 +184,7 @@ static void _cairo_dock_go_down (GtkButton *button, GtkTreeView *pTreeView)
 	gtk_list_store_set (GTK_LIST_STORE (pModel), &iter, CAIRO_DOCK_MODEL_ORDER, iOrder, -1);
 }
 
-static void _cairo_dock_add (GtkButton *button, gpointer *data)
+static void _cairo_dock_add (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	GtkTreeView *pTreeView = data[0];
 	GtkWidget *pEntry = data[1];
@@ -204,7 +204,7 @@ static void _cairo_dock_add (GtkButton *button, gpointer *data)
 	gtk_tree_selection_select_iter (pSelection, &iter);
 }
 
-static void _cairo_dock_remove (GtkButton *button, gpointer *data)
+static void _cairo_dock_remove (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	GtkTreeView *pTreeView = data[0];
 	GtkWidget *pEntry = data[1];
@@ -296,7 +296,7 @@ static GdkPixbuf* _cairo_dock_gui_get_package_state_icon (gint iState)
 	return pixbuf;
 }
 
-static gboolean on_delete_async_widget (GtkWidget *pWidget, GdkEvent *event, gpointer data)
+static gboolean on_delete_async_widget (GtkWidget *pWidget, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("%s ()", __func__);
 	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pWidget), "cd-task");
@@ -518,7 +518,6 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			g_object_set_data (G_OBJECT (pPreviewImage), "cd-task", NULL);
 		}
 		
-		gboolean bDistant = FALSE;
 		if (strncmp (cPreviewFilePath, "http://", 7) == 0)  // fichier distant.
 		{
 			cd_debug ("fichier preview distant (%s)", cPreviewFilePath);
@@ -583,7 +582,7 @@ static void _cairo_dock_select_one_item_in_combo (GtkComboBox *widget, gpointer 
 	_cairo_dock_selection_changed (model, iter, data);
 }
 
-static gboolean _cairo_dock_select_one_item_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, gpointer *data)
+static gboolean _cairo_dock_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, gpointer *data)
 {
 	if (path_currently_selected)
 		return TRUE;
@@ -745,7 +744,7 @@ static void _cairo_dock_show_image_preview (GtkFileChooser *pFileChooser, GtkIma
 	else
 		gtk_file_chooser_set_preview_widget_active (pFileChooser, FALSE);
 }
-static void _cairo_dock_pick_a_file (GtkButton *button, gpointer *data)
+static void _cairo_dock_pick_a_file (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	GtkEntry *pEntry = data[0];
 	gint iFileType = GPOINTER_TO_INT (data[1]);
@@ -783,14 +782,14 @@ static void _cairo_dock_pick_a_file (GtkButton *button, gpointer *data)
 }
 
 //Sound Callback
-static void _cairo_dock_play_a_sound (GtkButton *button, gpointer *data)
+static void _cairo_dock_play_a_sound (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	GtkWidget *pEntry = data[0];
 	const gchar *cSoundPath = gtk_entry_get_text (GTK_ENTRY (pEntry));
 	cairo_dock_play_sound (cSoundPath);
 }
 
-static void _cairo_dock_set_original_value (GtkButton *button, CairoDockGroupKeyWidget *pGroupKeyWidget)
+static void _cairo_dock_set_original_value (G_GNUC_UNUSED GtkButton *button, CairoDockGroupKeyWidget *pGroupKeyWidget)
 {
 	gchar *cGroupName = pGroupKeyWidget->cGroupName;
 	gchar *cKeyName = pGroupKeyWidget->cKeyName;
@@ -897,7 +896,7 @@ static void _cairo_dock_key_grab_cb (GtkWidget *wizard_window, GdkEventKey *even
 	}
 }
 
-static void _cairo_dock_key_grab_clicked (GtkButton *button, gpointer *data)
+static void _cairo_dock_key_grab_clicked (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	GtkEntry *pEntry = data[0];
 	GtkWindow *pParentWindow = data[1];
@@ -908,10 +907,10 @@ static void _cairo_dock_key_grab_clicked (GtkButton *button, gpointer *data)
 	g_signal_connect (G_OBJECT(pParentWindow), "key-press-event", G_CALLBACK(_cairo_dock_key_grab_cb), pEntry);
 }
 
-static void _cairo_dock_key_grab_class (GtkButton *button, gpointer *data)
+static void _cairo_dock_key_grab_class (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	GtkEntry *pEntry = data[0];
-	GtkWindow *pParentWindow = data[1];
+	// GtkWindow *pParentWindow = data[1];
 
 	cd_debug ("clicked");
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE);  // lock the widget during the grab (it makes it more comprehensive).
@@ -994,8 +993,6 @@ static void _list_icon_theme_in_dir (const gchar *cDirPath, GHashTable *pHashTab
 	}
 	
 	const gchar *cFileName;
-	gchar *cContent;
-	gsize length;
 	GString *sIndexFile = g_string_new ("");
 	while ((cFileName = g_dir_read_name (dir)) != NULL)
 	{
@@ -1175,7 +1172,7 @@ static GtkListStore *_cairo_dock_build_icon_theme_list_for_gui (GHashTable *pHas
 	return pIconThemeListStore;
 }
 
-static gboolean _test_one_name (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
+static gboolean _test_one_name (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
 	gchar *cName = NULL, *cResult = NULL;
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_RESULT, &cResult, -1);
@@ -1401,10 +1398,10 @@ static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gch
 	g_free (cRatingDir);
 }*/
 
-static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
+static void _cairo_dock_configure_module (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
-	GtkTreeView *pCombo = data[0];
-	GtkWindow *pDialog = data[1];
+	// GtkTreeView *pCombo = data[0];
+	// GtkWindow *pDialog = data[1];
 	gchar *cModuleName = data[2];
 	
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
@@ -1441,10 +1438,10 @@ static void _cairo_dock_configure_module (GtkButton *button, gpointer *data)
 	g_free (cMessage);
 }
 
-static void _cairo_dock_widget_launch_command (GtkButton *button, gpointer *data)
+static void _cairo_dock_widget_launch_command (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
-	GtkTreeView *pCombo = data[0];
-	GtkWindow *pDialog = data[1];
+	// GtkTreeView *pCombo = data[0];
+	// GtkWindow *pDialog = data[1];
 	gchar *cCommandToLaunch = data[2];
 	
 	gchar *cResult = cairo_dock_launch_command_sync (cCommandToLaunch);
@@ -1477,7 +1474,7 @@ static void _set_default_text (GtkWidget *pEntry, gchar *cDefaultValue)
 	gtk_widget_override_color (pEntry, GTK_STATE_FLAG_NORMAL, &color);
 	#endif
 }
-static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue)
+static void _on_text_changed (GtkWidget *pEntry, G_GNUC_UNUSED gchar *cDefaultValue)
 {
 	// if the text has changed, it means the user has modified it (because we block this callback when we set the default value) -> mark the value as 'valid' and reset the color to the normal style.
 	g_object_set_data (G_OBJECT (pEntry), "ignore-value", GINT_TO_POINTER (FALSE));
@@ -1485,10 +1482,10 @@ static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue)
 	#if (GTK_MAJOR_VERSION < 3)
 	gtk_widget_modify_fg (pEntry, GTK_STATE_NORMAL, NULL);  // NULL = undo the effect of previous calls to of gtk_widget_modify_fg().
 	#else
-	gtk_widget_override_color (pEntry, GTK_STATE_NORMAL, NULL);
+	gtk_widget_override_color (pEntry, GTK_STATE_FLAG_NORMAL, NULL);
 	#endif
 }
-static gboolean on_text_focus_in (GtkWidget *pEntry, GdkEventFocus *event, gchar *cDefaultValue)  // user takes the focus
+static gboolean on_text_focus_in (GtkWidget *pEntry, G_GNUC_UNUSED GdkEventFocus *event, gchar *cDefaultValue)  // user takes the focus
 {
 	if (g_object_get_data (G_OBJECT (pEntry), "ignore-value") != NULL)  // the current value is the default text => erase it
 	{
@@ -1498,7 +1495,7 @@ static gboolean on_text_focus_in (GtkWidget *pEntry, GdkEventFocus *event, gchar
 	}
 	return FALSE;
 }
-static gboolean on_text_focus_out (GtkWidget *pEntry, GdkEventFocus *event, gchar *cDefaultValue)  // user leaves the entry
+static gboolean on_text_focus_out (GtkWidget *pEntry, G_GNUC_UNUSED GdkEventFocus *event, gchar *cDefaultValue)  // user leaves the entry
 {
 	const gchar *cText = gtk_entry_get_text (GTK_ENTRY (pEntry));
 	if (! cText || *cText == '\0')
@@ -1960,13 +1957,10 @@ const gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementTyp
 GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)
 {
 	g_return_val_if_fail (pKeyFile != NULL && cGroupName != NULL, NULL);
-	gchar iIdentifier = 0;
-	gchar *cHighLightedSentence;
 	//GPtrArray *pDataGarbage = g_ptr_array_new ();
 	//GPtrArray *pModelGarbage = g_ptr_array_new ();
 	
 	gconstpointer *data;
-	int iNbBuffers = 0;
 	gsize length = 0;
 	gchar **pKeyList;
 	
@@ -1977,15 +1971,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkWidget *pEntry;
 	GtkWidget *pTable;
 	GtkWidget *pButtonAdd, *pButtonRemove;
-	GtkWidget *pButtonDown, *pButtonUp, *pButtonConfig;
+	GtkWidget *pButtonDown, *pButtonUp;
 	GtkWidget *pButtonFileChooser, *pButtonPlay;
 	GtkWidget *pFrame, *pFrameVBox;
 	GtkWidget *pScrolledWindow;
-	GtkWidget *pColorButton;
-	GtkWidget *pFontButton;
-	GtkWidget *pDescriptionLabel;
-	GtkWidget *pPreviewImage;
-	GtkWidget *pButtonConfigRenderer;
 	GtkWidget *pToggleButton=NULL;
 	GtkCellRenderer *rend;
 	GtkTreeIter iter;
@@ -1993,10 +1982,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	GtkWidget *pBackButton;
 	GList *pControlWidgets = NULL;
 	int iFirstSensitiveWidget = 0, iNbControlledWidgets = 0, iNbSensitiveWidgets = 0;
-	gchar *cKeyName, *cKeyComment, *cAuthorizedValuesChain, **pAuthorizedValuesList;
+	gchar *cKeyName, *cKeyComment, **pAuthorizedValuesList;
 	const gchar *cUsefulComment, *cTipString;
 	CairoDockGroupKeyWidget *pGroupKeyWidget;
-	int i, j;
+	int j;
 	guint k, iNbElements;
 	char iElementType;
 	gboolean bValue, *bValueList;
@@ -2941,7 +2930,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				if (iElementType == CAIRO_DOCK_WIDGET_TREE_VIEW_SORT_AND_MODIFY)
 				{
+					#if GTK_CHECK_VERSION (3, 4, 0)
+					pTable = gtk_grid_new ();
+					#else
 					pTable = gtk_table_new (2, 2, FALSE);
+					#endif
 					_pack_in_widget_box (pTable);
 						
 					_allocate_new_buffer;
@@ -2951,31 +2944,43 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						"clicked",
 						G_CALLBACK (_cairo_dock_add),
 						data);
+					pButtonRemove = gtk_button_new_from_stock (GTK_STOCK_REMOVE);
+					g_signal_connect (G_OBJECT (pButtonRemove),
+						"clicked",
+						G_CALLBACK (_cairo_dock_remove),
+						data);
+					pEntry = gtk_entry_new ();
+					
+					#if GTK_CHECK_VERSION (3, 4, 0)
+					gtk_grid_attach (GTK_GRID (pTable),
+						pButtonAdd,
+						0, 0, 1, 1);
+					gtk_grid_attach_next_to (GTK_GRID (pTable),
+						pButtonRemove,
+						pButtonAdd, GTK_POS_BOTTOM, 1, 1);
+					gtk_grid_attach_next_to (GTK_GRID (pTable),
+						pEntry,
+						pButtonAdd, GTK_POS_RIGHT, 1, 2);
+					#else
 					gtk_table_attach (GTK_TABLE (pTable),
 						pButtonAdd,
 						0, 1,
 						0, 1,
 						GTK_SHRINK, GTK_SHRINK,
 						0, 0);
-					pButtonRemove = gtk_button_new_from_stock (GTK_STOCK_REMOVE);
-					g_signal_connect (G_OBJECT (pButtonRemove),
-						"clicked",
-						G_CALLBACK (_cairo_dock_remove),
-						data);
 					gtk_table_attach (GTK_TABLE (pTable),
 						pButtonRemove,
 						0, 1,
 						1, 2,
 						GTK_SHRINK, GTK_SHRINK,
 						0, 0);
-					pEntry = gtk_entry_new ();
 					gtk_table_attach (GTK_TABLE (pTable),
 						pEntry,
 						1, 2,
 						0, 2,
 						GTK_SHRINK, GTK_SHRINK,
 						0, 0);
-					
+					#endif
 					data[0] = pOneWidget;
 					data[1] = pEntry;
 				}
@@ -3179,7 +3184,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						color.green = DEFAULT_TEXT_COLOR;
 						color.blue = DEFAULT_TEXT_COLOR;
 						color.alpha = 1.;
-						gtk_widget_override_color (pOneWidget, GTK_STATE_NORMAL, &color);
+						gtk_widget_override_color (pOneWidget, GTK_STATE_FLAG_NORMAL, &color);
 						#endif
 					}
 					g_signal_connect (pOneWidget, "changed", G_CALLBACK (_on_text_changed), cDefaultText);
@@ -3228,6 +3233,20 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					gchar *cFrameTitle = g_strdup_printf ("<b>%s</b>", dgettext (cGettextDomain, cValue));
 					pLabel= gtk_label_new (NULL);
 					gtk_label_set_markup (GTK_LABEL (pLabel), cFrameTitle);
+
+					g_print ("======= %s\n", dgettext (cGettextDomain, cValue));
+					GtkStyleContext *context;
+					GdkRGBA color;
+					context = gtk_widget_get_style_context (pLabel);
+					// GtkCssProvider *css = gtk_css_provider_get_default ();
+					// gtk_style_context_add_provider (context, GTK_STYLE_PROVIDER (), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+					// gtk_style_context_invalidate (context);
+					gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+					g_print ("======= %f, %f, %f, %f\n", color.red, color.green, color.blue, color.alpha);
+					/*gdk_rgba_parse (&color, "#3C3C3C");
+					gtk_widget_override_color (pLabel, GTK_STATE_FLAG_NORMAL, &color);*/
+					g_print ("=======\n");
+
 					g_free (cFrameTitle);
 					
 					pLabelContainer = NULL;
@@ -3523,7 +3542,6 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 	else if (GTK_IS_COMBO_BOX (pOneWidget))
 	{
 		gchar **tValues = g_new0 (gchar*, iNbElements+1);
-		GtkTreeIter iter;
 		gchar *cValue;
 		for (pList = pSubWidgetList; pList != NULL; pList = pList->next)
 		{
@@ -3612,7 +3630,7 @@ void cairo_dock_update_keyfile_from_widget_list (GKeyFile *pKeyFile, GSList *pWi
 
 
 
-static void _cairo_dock_free_group_key_widget (CairoDockGroupKeyWidget *pGroupKeyWidget, gpointer user_data)
+static void _cairo_dock_free_group_key_widget (CairoDockGroupKeyWidget *pGroupKeyWidget, G_GNUC_UNUSED gpointer user_data)
 {
         cd_debug ("");
         g_free (pGroupKeyWidget->cKeyName);
@@ -3744,7 +3762,7 @@ void cairo_dock_gui_select_in_combo_full (GtkWidget *pOneWidget, const gchar *cV
 	}
 }
 
-static gboolean _get_active_elements (GtkTreeModel * model, GtkTreePath * path, GtkTreeIter * iter, GSList **pStringList)
+static gboolean _get_active_elements (GtkTreeModel * model, G_GNUC_UNUSED GtkTreePath * path, GtkTreeIter * iter, GSList **pStringList)
 {
 	//g_print ("%s ()\n", __func__);
 	gboolean bActive;

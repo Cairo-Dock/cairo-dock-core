@@ -203,7 +203,7 @@ void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock)
 	g_list_foreach (s_pFloatingIconsList, (GFunc)_cairo_dock_hide_show_launchers_on_other_desktops, pDock);
 }
 
-static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
+static gboolean _on_change_current_desktop_viewport_notification (G_GNUC_UNUSED gpointer data)
 {
         CairoDock *pDock = g_pMainDock;
         cairo_dock_hide_show_launchers_on_other_desktops(pDock);
@@ -288,7 +288,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
 	gboolean bHasSuffix=FALSE, bFileFound=FALSE, bHasVersion=FALSE;
 	GtkIconInfo* pIconInfo = NULL;
-	int i, j;
+	int j;
 	gchar *str = strrchr (cFileName, '.');
 	bHasSuffix = (str != NULL && g_ascii_isalpha (*(str+1)));  // exemple : "firefox.svg", but not "firefox-3.0"
 	bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)) && str-1 != cFileName);  // doit finir par x.y, x et y ayant autant de chiffres que l'on veut.
@@ -733,7 +733,7 @@ static void _cairo_dock_load_icons_background_surface (const gchar *cImagePath)
 		CAIRO_DOCK_FILL_SPACE);
 }
 
-static void _load_renderer (const gchar *cRenderername, CairoIconContainerRenderer *pRenderer, gpointer data)
+static void _load_renderer (G_GNUC_UNUSED const gchar *cRenderername, CairoIconContainerRenderer *pRenderer, G_GNUC_UNUSED gpointer data)
 {
 	if (pRenderer && pRenderer->load)
 		pRenderer->load ();
@@ -744,14 +744,14 @@ static void _cairo_dock_load_icon_textures (void)
 	
 	cairo_dock_foreach_icon_container_renderer ((GHFunc)_load_renderer, NULL);
 }
-static void _reload_in_desklet (CairoDesklet *pDesklet, gpointer data)
+static void _reload_in_desklet (CairoDesklet *pDesklet, G_GNUC_UNUSED gpointer data)
 {
 	if (CAIRO_DOCK_IS_APPLET (pDesklet->pIcon))
 	{
 		cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, FALSE);
 	}
 }
-static gboolean _on_icon_theme_changed_idle (gpointer data)
+static gboolean _on_icon_theme_changed_idle (G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("");
 	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _reload_in_desklet, NULL);
@@ -759,7 +759,7 @@ static gboolean _on_icon_theme_changed_idle (gpointer data)
 	s_iSidReloadTheme = 0;
 	return FALSE;
 }
-static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data)
+static void _on_icon_theme_changed (G_GNUC_UNUSED GtkIconTheme *pIconTheme, G_GNUC_UNUSED gpointer data)
 {
 	cd_message ("theme has changed");
 	// Reload the icons in idle, because this signal is triggered directly by 'gtk_icon_theme_set_search_path()'; so we may end reloading an applet in the middle of its work (ex.: Status-Notifier when the watcher terminates)
@@ -799,11 +799,11 @@ static void load (void)
  /// RELOAD ///
 //////////////
 
-static void _remove_separators (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _remove_separators (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_remove_automatic_separators (pDock);
 }
-static void _insert_separators (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _insert_separators (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	Icon *icon;
 	GList *ic;
@@ -817,17 +817,17 @@ static void _insert_separators (const gchar *cDockName, CairoDock *pDock, gpoint
 	}
 	cairo_dock_insert_automatic_separators_in_dock (pDock);
 }
-static void _calculate_icons (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _calculate_icons (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_calculate_dock_icons (pDock);
 }
 
-static void _reload_one_label (Icon *pIcon, CairoContainer *pContainer, CairoIconsParam *pLabels)
+static void _reload_one_label (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, G_GNUC_UNUSED CairoIconsParam *pLabels)
 {
 	cairo_dock_load_icon_text (pIcon);
 	cairo_dock_load_icon_quickinfo (pIcon);
 }
-static void _cairo_dock_resize_one_dock (gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_resize_one_dock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_update_dock_size (pDock);
 }
@@ -914,7 +914,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
  /// UNLOAD ///
 //////////////
 
-static void _unload_renderer (const gchar *cRenderername, CairoIconContainerRenderer *pRenderer, gpointer data)
+static void _unload_renderer (G_GNUC_UNUSED const gchar *cRenderername, CairoIconContainerRenderer *pRenderer, G_GNUC_UNUSED gpointer data)
 {
 	if (pRenderer && pRenderer->unload)
 		pRenderer->unload ();

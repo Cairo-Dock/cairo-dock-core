@@ -313,10 +313,10 @@ void cairo_dock_get_gl_text_extent (const gchar *cText, CairoDockGLFont *pFont, 
 
 void cairo_dock_draw_gl_text (const guchar *cText, CairoDockGLFont *pFont)
 {
-	int n = strlen (cText);
+	int n = strlen ((char *) cText);
 	if (pFont->iListBase != 0)
 	{
-		if (pFont->iCharBase == 0 && strchr (cText, '\n') == NULL)  // version optimisee ou on a charge tous les caracteres.
+		if (pFont->iCharBase == 0 && strchr ((char *) cText, '\n') == NULL)  // version optimisee ou on a charge tous les caracteres.
 		{
 			glDisable (GL_TEXTURE_2D);
 			glListBase (pFont->iListBase);
@@ -379,9 +379,8 @@ void cairo_dock_draw_gl_text_in_area (const guchar *cText, CairoDockGLFont *pFon
 	}
 	else
 	{
-		int n = strlen (cText);
 		int w, h;
-		cairo_dock_get_gl_text_extent (cText, pFont, &w, &h);
+		cairo_dock_get_gl_text_extent ((char *) cText, pFont, &w, &h);
 		
 		double zx, zy;
 		if (fabs ((double)iWidth/w) < fabs ((double)iHeight/h))  // on autorise les dimensions negatives pour pouvoir retourner le texte.

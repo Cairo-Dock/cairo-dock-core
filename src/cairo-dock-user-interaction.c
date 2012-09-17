@@ -199,7 +199,7 @@ static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 	}
 	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 }
-gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer, guint iButtonState)
+gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, CairoContainer *pContainer, guint iButtonState)
 {
 	if (icon == NULL || ! CAIRO_DOCK_IS_DOCK (pContainer))
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -266,7 +266,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Cai
 }
 
 
-gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer)
+gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, CairoContainer *pContainer)
 {
 	if (icon == NULL || ! CAIRO_DOCK_IS_DOCK (pContainer))
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -320,7 +320,7 @@ gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *ic
 }
 
 
-gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer, int iDirection)
+gboolean cairo_dock_notification_scroll_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, G_GNUC_UNUSED CairoContainer *pContainer, int iDirection)
 {
 	if (CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // on emule un alt+tab sur la liste des applis du sous-dock.
 	{
@@ -336,7 +336,7 @@ gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, Ca
 }
 
 
-gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)
+gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)
 {
 	cd_debug ("take the drop");
 	if (! CAIRO_DOCK_IS_DOCK (pContainer))
@@ -441,7 +441,7 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 }
 
 
-gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDesklet *pDesklet)
+gboolean cairo_dock_notification_configure_desklet (G_GNUC_UNUSED gpointer pUserData, CairoDesklet *pDesklet)
 {
 	//g_print ("desklet %s configured\n", pDesklet->pIcon?pDesklet->pIcon->cName:"unknown");
 	cairo_dock_gui_update_desklet_params (pDesklet);
@@ -449,7 +449,7 @@ gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDes
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+gboolean cairo_dock_notification_icon_moved (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, G_GNUC_UNUSED CairoDock *pDock)
 {
 	//g_print ("icon %s moved\n", pIcon?pIcon->cName:"unknown");
 	
@@ -462,7 +462,7 @@ gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, Ca
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+gboolean cairo_dock_notification_icon_inserted (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, G_GNUC_UNUSED CairoDock *pDock)
 {
 	//g_print ("icon %s inserted (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
 	//if (pIcon->fInsertRemoveFactor == 0)
@@ -477,7 +477,7 @@ gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon,
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+gboolean cairo_dock_notification_icon_removed (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, G_GNUC_UNUSED CairoDock *pDock)
 {
 	//g_print ("icon %s removed (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
 	//if (pIcon->fInsertRemoveFactor == 0)
@@ -492,9 +492,9 @@ gboolean cairo_dock_notification_icon_removed (gpointer pUserData, Icon *pIcon, 
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_desklet_destroyed (gpointer pUserData, CairoDesklet *pDesklet)
+gboolean cairo_dock_notification_desklet_destroyed (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED CairoDesklet *pDesklet)
 {
-	Icon *pIcon = pDesklet->pIcon;
+	//Icon *pIcon = pDesklet->pIcon;
 	//g_print ("desklet %s removed\n", pIcon?pIcon->cName:"unknown");
 	
 	cairo_dock_gui_trigger_reload_items ();
@@ -502,7 +502,7 @@ gboolean cairo_dock_notification_desklet_destroyed (gpointer pUserData, CairoDes
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *pDock)
+gboolean cairo_dock_notification_dock_destroyed (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED CairoDock *pDock)
 {
 	//g_print ("dock destroyed\n");
 	cairo_dock_gui_trigger_reload_items ();
@@ -510,7 +510,7 @@ gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gchar *cModuleName, gboolean bActivated)
+gboolean cairo_dock_notification_module_activated (G_GNUC_UNUSED gpointer pUserData, const gchar *cModuleName, G_GNUC_UNUSED gboolean bActivated)
 {
 	//g_print ("module %s (de)activated (%d)\n", cModuleName, bActivated);
 	cairo_dock_gui_trigger_update_module_state (cModuleName);
@@ -520,7 +520,7 @@ gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gch
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gchar *cModuleName, gboolean bRegistered)
+gboolean cairo_dock_notification_module_registered (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED const gchar *cModuleName, G_GNUC_UNUSED gboolean bRegistered)
 {
 	//g_print ("module %s (un)registered (%d)\n", cModuleName, bRegistered);
 	cairo_dock_gui_trigger_update_modules_list ();
@@ -528,7 +528,7 @@ gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gc
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockModuleInstance *pInstance, gboolean bIsDetached)
+gboolean cairo_dock_notification_module_detached (G_GNUC_UNUSED gpointer pUserData, CairoDockModuleInstance *pInstance, gboolean bIsDetached)
 {
 	//g_print ("module %s (de)tached (%d)\n", pInstance->pModule->pVisitCard->cModuleName, bIsDetached);
 	cairo_dock_gui_trigger_update_module_container (pInstance, bIsDetached);
@@ -538,7 +538,7 @@ gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockM
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_notification_shortkey_added_or_removed (gpointer pUserData, CairoKeyBinding *pKeyBinding)
+gboolean cairo_dock_notification_shortkey_added_or_removed (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED CairoKeyBinding *pKeyBinding)
 {
 	cairo_dock_gui_trigger_reload_shortkeys ();
 	

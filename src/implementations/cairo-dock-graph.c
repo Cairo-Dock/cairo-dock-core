@@ -40,7 +40,6 @@ typedef struct _Graph {
 	gdouble fBackGroundColor[4];
 	cairo_surface_t *pBackgroundSurface;
 	GLuint iBackgroundTexture;
-	gint iRadius; // deprecated
 	gint iMargin;
 	gboolean bMixGraphs;
 	} Graph;
@@ -206,13 +205,12 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 		cairo_dock_render_overlays_to_context (pRenderer, i, pCairoContext);
 	}
 }
-
+/* not used
 static void render_opengl (Graph *pGraph)
 {
 	g_return_if_fail (pGraph != NULL);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
-	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
 	
 	if (pGraph->iBackgroundTexture != 0)
 	{
@@ -225,7 +223,7 @@ static void render_opengl (Graph *pGraph)
 	
 	/// to be continued ...
 }
-
+*/
 
 static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidth, double fHeight, int iMargin, gdouble *pBackGroundColor, CairoDockTypeGraph iType, int iNbDrawings)
 {
@@ -373,7 +371,6 @@ static void _set_overlay_zones (Graph *pGraph)
 	int iLabelHeight = MIN (16, fOneGraphHeight/2.);
 	int h = fOneGraphHeight/8;  // ecart du texte au-dessus de l'axe Ox.
 	CairoDataRendererTextParam *pValuesText;
-	CairoDataRendererEmblem *pEmblem;
 	CairoDataRendererText *pLabel;
 	for (i = 0; i < iNbValues; i ++)
 	{
@@ -440,7 +437,7 @@ static void _set_overlay_zones (Graph *pGraph)
 	}
 }
 
-static void load (Graph *pGraph, Icon *pIcon, CairoGraphAttribute *pAttribute)
+static void load (Graph *pGraph, G_GNUC_UNUSED Icon *pIcon, CairoGraphAttribute *pAttribute)
 {
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	

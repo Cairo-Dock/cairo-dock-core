@@ -538,7 +538,7 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 }
 
 
-void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer_useless)  // fonction proposee par Necropotame.
+void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer_useless)  // fonction proposee par Necropotame.
 {
 	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
 	gchar *cUniqueName = NULL;
@@ -563,7 +563,7 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContain
 		cairo_dock_redraw_container (pIcon->pContainer);  // this is not really optimized, ideally the view should provide a way to redraw the label area only...
 }
 
-void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer_useless, const gchar *cIconNameFormat, ...)
+void cairo_dock_set_icon_name_printf (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer_useless, const gchar *cIconNameFormat, ...)
 {
 	va_list args;
 	va_start (args, cIconNameFormat);
@@ -573,7 +573,7 @@ void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer_us
 	va_end (args);
 }
 
-void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer_useless, const gchar *cQuickInfo)
+void cairo_dock_set_quick_info (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer_useless, const gchar *cQuickInfo)
 {
 	g_return_if_fail (pIcon != NULL);
 	

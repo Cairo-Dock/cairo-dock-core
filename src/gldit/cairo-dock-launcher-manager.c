@@ -47,7 +47,7 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
 
-static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
+static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
 {
 	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && g_strcmp0 (icon->cName, icon->cParentDockName) == 0)  // it shouldn't happen, but if ever it does, be sure to forbid an icon pointing on itself.
 	{
@@ -94,8 +94,6 @@ static CairoDock *_cairo_dock_handle_container (Icon *icon, const gchar *cRender
 		if (icon->iSubdockViewType != 0)
 			cairo_dock_trigger_redraw_subdock_content_on_icon (icon);
 	}
-	
-	return pParentDock;
 }
 
 static void _load_launcher (Icon *icon)
@@ -197,8 +195,8 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	}
 	icon->iface.on_delete = _delete_launcher;
 	
-	//\____________ On gere son dock et sous-dock.
-	CairoDock *pParentDock = _cairo_dock_handle_container (icon, cRendererName);
+	//\____________ We manage its dock and sub-dock.
+	_cairo_dock_handle_container (icon, cRendererName);
 	g_free (cRendererName);
 	
 	//\____________ On remplit ses buffers.
@@ -218,7 +216,6 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *cCommand, gchar *cQuickInfo, double fOrder)
 {
 	//\____________ On cree l'icone.
-	gchar *cRendererName = NULL;
 	Icon *pIcon = cairo_dock_new_icon ();
 	pIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_OTHER;
 	pIcon->iGroup = CAIRO_DOCK_LAUNCHER;
@@ -442,7 +439,7 @@ gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboole
 		&standard_error,
 		&exit_status,
 		&erreur);
-	if (erreur != NULL)
+	if (erreur != NULL || !r)
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);

@@ -313,8 +313,6 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 
 	if (bReserve)
 	{
-		int iWindowPositionX = pDock->container.iWindowPositionX, iWindowPositionY = pDock->container.iWindowPositionY;
-		
 		int w = pDock->iMinDockWidth;
 		int h = pDock->iMinDockHeight;
 		int x, y;  // position qu'aurait la fenetre du dock s'il avait la taille minimale.
@@ -823,7 +821,7 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 	///int iHeight = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
 	int iHeight = pDock->iActiveHeight;
 	///int iExtraHeight = (pDock->bAtBottom ? 0 : myIconsParam.iLabelSize);
-	int iExtraHeight = 0;  /// il faudrait voir si on a un sous-dock ou un dialogue au dessus :-/
+	// int iExtraHeight = 0;  /// il faudrait voir si on a un sous-dock ou un dialogue au dessus :-/
 	int iMouseX = pDock->container.iMouseX;
 	int iMouseY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->container.iMouseY : pDock->container.iMouseY);
 	//g_print ("%s (%dx%d, %dx%d, %f)\n", __func__, iMouseX, iMouseY, iWidth, iHeight, pDock->fFoldingFactor);
@@ -1150,7 +1148,6 @@ void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)  // the requ
 static cairo_surface_t *_cairo_dock_make_stripes_background (int iWidth, int iHeight, double *fStripesColorBright, double *fStripesColorDark, int iNbStripes, double fStripesWidth, double fStripesAngle)
 {
 	cairo_pattern_t *pStripesPattern;
-	double fWidth = iWidth;
 	if (fabs (fStripesAngle) != 90)
 		pStripesPattern = cairo_pattern_create_linear (0.0f,
 			0.0f,

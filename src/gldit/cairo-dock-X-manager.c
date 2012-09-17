@@ -121,7 +121,7 @@ static void _on_change_desktop_geometry (void)
 	cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_SCREEN_GEOMETRY_ALTERED);
 }
 
-static gboolean _cairo_dock_unstack_Xevents (gpointer data)
+static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 {
 	static XEvent event;
 	
@@ -235,7 +235,7 @@ void cairo_dock_get_current_desktop_and_viewport (int *iCurrentDesktop, int *iCu
  /// WINDOW MANAGER BACKEND ///
 //////////////////////////////
 
-static gboolean _set_desklets_on_widget_layer (CairoDesklet *pDesklet, gpointer data)
+static gboolean _set_desklets_on_widget_layer (CairoDesklet *pDesklet, G_GNUC_UNUSED gpointer data)
 {
 	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 	if (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)

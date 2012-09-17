@@ -76,7 +76,7 @@ typedef enum {
  // MODEL //
 ///////////
 
-static gboolean _search_item_in_line (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
+static gboolean _search_item_in_line (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
 	gpointer pItem = NULL;
 	gtk_tree_model_get (model, iter,
@@ -131,7 +131,7 @@ static void _delete_current_launcher_widget (ItemsWidget *pItemsWidget)
 	pItemsWidget->pCurrentModuleInstance = NULL;
 }
 
-static gboolean _on_select_one_item_in_tree (GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, ItemsWidget *pItemsWidget)
+static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, ItemsWidget *pItemsWidget)
 {
 	cd_debug ("%s (path_currently_selected:%d, %s)", __func__, path_currently_selected, gtk_tree_path_to_string(path));
 	if (path_currently_selected)
@@ -490,7 +490,7 @@ static GtkTreeIter lastInsertedIter;
 static gboolean s_bHasPendingInsertion = FALSE;
 static struct timeval lastTime = {0, 0};
 
-static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, ItemsWidget *pItemsWidget)
+static void on_row_inserted (G_GNUC_UNUSED GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, GtkTreeIter *iter, G_GNUC_UNUSED ItemsWidget *pItemsWidget)
 {
 	// we only receive this event from an intern drag'n'drop
 	// when we receive this event, the row is still empty, so we can't perform any task here.
@@ -499,7 +499,7 @@ static void on_row_inserted (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter
 	gettimeofday (&lastTime, NULL);
 	s_bHasPendingInsertion = TRUE;
 }
-static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, ItemsWidget *pItemsWidget)
+static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, ItemsWidget *pItemsWidget)
 {
 	g_print ("- row\n");
 	// when drag'n'droping a row, the "row-deleted" signal is emitted after the "row-inserted"
@@ -593,7 +593,6 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, ItemsWidget 
 						}
 						
 						// find the new order of the row in the tree
-						double fOrder = 0;
 						GtkTreeIter it;
 						Icon *pLeftIcon = NULL;
 						gchar *last_iter_s = gtk_tree_model_get_string_from_iter (model, &lastInsertedIter);
@@ -653,7 +652,7 @@ static void on_row_deleted (GtkTreeModel *model, GtkTreePath *path, ItemsWidget 
 	}
 }
 
-static void _on_select_remove_item (GtkMenuItem *pMenuItem, GtkWidget *pTreeView)
+static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWidget *pTreeView)
 {
 	// get the selected line
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pTreeView));
@@ -723,16 +722,14 @@ static void _items_widget_reset (CDWidget *pCdWidget)
 
 static gboolean on_button_press_event (GtkWidget *pTreeView,
 	GdkEventButton *pButton,
-	gpointer data)
+	G_GNUC_UNUSED gpointer data)
 {
 	if (pButton->button == 3)  // clic droit.
 	{
 		GtkWidget *pMenu = gtk_menu_new ();
-			
-		GtkWidget *pMenuItem;
 		
 		/// TODO: check that we can actually remove it (ex.: not the main dock), and maybe display the item's name...
-		pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("Remove this item"), GTK_STOCK_REMOVE, G_CALLBACK (_on_select_remove_item), pMenu, pTreeView);
+		cairo_dock_add_in_menu_with_stock_and_data (_("Remove this item"), GTK_STOCK_REMOVE, G_CALLBACK (_on_select_remove_item), pMenu, pTreeView);
 		
 		gtk_widget_show_all (pMenu);
 		

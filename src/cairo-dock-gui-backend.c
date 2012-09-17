@@ -55,7 +55,7 @@ void cairo_dock_load_user_gui_backend (int iMode)  // 0 = simple
 	s_iCurrentMode = iMode;
 }
 
-static void on_click_switch_mode (GtkButton *button, gpointer data)
+static void on_click_switch_mode (G_GNUC_UNUSED GtkButton *button, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_close_gui ();
 	
@@ -104,7 +104,7 @@ void cairo_dock_gui_update_desklet_visibility (CairoDesklet *pDesklet)
 
 
 static guint s_iSidReloadItems = 0;
-static gboolean _reload_items (gpointer data)
+static gboolean _reload_items (G_GNUC_UNUSED gpointer data)
 {
 	if (s_pMainGuiBackend && s_pMainGuiBackend->reload_items)
 		s_pMainGuiBackend->reload_items ();
@@ -151,7 +151,7 @@ void cairo_dock_gui_trigger_update_module_state (const gchar *cModuleName)
 
 
 static guint s_iSidReloadModulesList = 0;
-static gboolean _update_modules_list (gpointer data)
+static gboolean _update_modules_list (G_GNUC_UNUSED gpointer data)
 {
 	if (s_pMainGuiBackend && s_pMainGuiBackend->update_module_state)
 		s_pMainGuiBackend->update_modules_list ();
@@ -172,7 +172,7 @@ void cairo_dock_gui_trigger_update_modules_list (void)
 
 
 static guint s_iSidReloadShortkeys = 0;
-static gboolean _update_shortkeys (gpointer data)
+static gboolean _update_shortkeys (G_GNUC_UNUSED gpointer data)
 {
 	if (s_pMainGuiBackend && s_pMainGuiBackend->update_shortkeys)
 		s_pMainGuiBackend->update_shortkeys ();

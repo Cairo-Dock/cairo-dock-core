@@ -205,7 +205,7 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 			h = pText->fHeight * pRenderer->iHeight;
 			dw = w & 1;
 			dh = h & 1;
-			cairo_dock_draw_gl_text_at_position_in_area (pRenderer->cFormatBuffer,
+			cairo_dock_draw_gl_text_at_position_in_area ((guchar *) pRenderer->cFormatBuffer,
 				pFont,
 				floor (pText->fX * iWidth) + .5*dw,
 				floor (pText->fY * iHeight) + .5*dh,
@@ -418,7 +418,7 @@ static inline void _refresh (CairoDataRenderer *pRenderer, Icon *pIcon, CairoCon
 	}
 }
 
-static gboolean cairo_dock_update_icon_data_renderer_notification (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
+static gboolean cairo_dock_update_icon_data_renderer_notification (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	if (pRenderer == NULL)
@@ -703,7 +703,6 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer
 	//\___________________ On met a jour l'info rapide si le renderer n'a pu ecrire les valeurs.
 	if (! pRenderer->bCanRenderValueAsText && pRenderer->bWriteValues)  // on prend en charge l'ecriture des valeurs.
 	{
-		double fValue;
 		gchar *cBuffer = g_new0 (gchar, pData->iNbValues * (CAIRO_DOCK_DATA_FORMAT_MAX_LEN+1));
 		char *str = cBuffer;
 		for (i = 0; i < pData->iNbValues; i ++)

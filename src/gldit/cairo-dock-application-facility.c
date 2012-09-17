@@ -517,7 +517,7 @@ void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock
 		cairo_dock_set_xicon_geometry (icon->Xid, iY, iX, iHeight, iWidth);
 }
 
-void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon *icon, CairoDock *pMainDock)
+void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Window *Xid, Icon *icon, CairoDock *pMainDock)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && icon->cParentDockName == NULL)
 	{
@@ -556,7 +556,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 			else  // on va se placer a la fin de la barre des taches.
 			{
 				Icon *pIcon, *pLastLauncher = NULL;
-				GList *ic, *last_launcher_ic = NULL;
+				GList *ic;
 				for (ic = pMainDock->icons; ic != NULL; ic = ic->next)
 				{
 					pIcon = ic->data;
@@ -566,7 +566,6 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 					|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)))  // separator (user or auto).
 					{
 						pLastLauncher = pIcon;
-						last_launcher_ic = ic;
 					}
 				}
 						

@@ -58,21 +58,21 @@ typedef struct _AppletData AppletData;
 #define CD_APPLET_DEFINE_PROTO \
 gboolean CD_APPLET_DEFINE_FUNC (CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pInterface)
 #define CD_APPLET_INIT_PROTO(pApplet) \
-void CD_APPLET_INIT_FUNC (CairoDockModuleInstance *pApplet, GKeyFile *pKeyFile)
+void CD_APPLET_INIT_FUNC (CairoDockModuleInstance *pApplet, G_GNUC_UNUSED GKeyFile *pKeyFile)
 #define CD_APPLET_STOP_PROTO \
 void CD_APPLET_STOP_FUNC (CairoDockModuleInstance *myApplet)
 #define CD_APPLET_RELOAD_PROTO \
-gboolean CD_APPLET_RELOAD_FUNC (CairoDockModuleInstance *myApplet, CairoContainer *pOldContainer, GKeyFile *pKeyFile)
+gboolean CD_APPLET_RELOAD_FUNC (CairoDockModuleInstance *myApplet, CairoContainer *pOldContainer, G_GNUC_UNUSED GKeyFile *pKeyFile)
 
 #define CD_APPLET_READ_CONFIG_PROTO \
-gboolean CD_APPLET_READ_CONFIG_FUNC (CairoDockModuleInstance *myApplet, GKeyFile *pKeyFile)
+gboolean CD_APPLET_READ_CONFIG_FUNC (CairoDockModuleInstance *myApplet, G_GNUC_UNUSED GKeyFile *pKeyFile)
 #define CD_APPLET_RESET_CONFIG_PROTO \
 void CD_APPLET_RESET_CONFIG_FUNC (CairoDockModuleInstance *myApplet)
 #define CD_APPLET_RESET_DATA_PROTO \
 void CD_APPLET_RESET_DATA_FUNC (CairoDockModuleInstance *myApplet)
 
 #define CD_APPLET_ON_CLICK_PROTO \
-gboolean CD_APPLET_ON_CLICK_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer, guint iButtonState)
+gboolean CD_APPLET_ON_CLICK_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer, G_GNUC_UNUSED guint iButtonState)
 #define CD_APPLET_ON_BUILD_MENU_PROTO \
 gboolean CD_APPLET_ON_BUILD_MENU_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer, GtkWidget *pAppletMenu)
 #define CD_APPLET_ON_MIDDLE_CLICK_PROTO \
@@ -300,7 +300,7 @@ CD_APPLET_ON_BUILD_MENU_PROTO \
 	g_pCurrentModule = myApplet;\
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{ \
-		GtkWidget *pMenuItem, *image; \
+		GtkWidget *pMenuItem; \
 		if (pClickedIcon == myIcon || (pClickedContainer == CAIRO_CONTAINER (myDesklet) && pClickedIcon == NULL)) {\
 			pMenuItem = gtk_separator_menu_item_new (); \
 			gtk_menu_shell_append(GTK_MENU_SHELL (pAppletMenu), pMenuItem); }

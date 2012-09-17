@@ -36,6 +36,8 @@ static void _set_metacity_composite (gboolean bActive)
 		r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
 	else
 		r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false");
+	if (r < 0)
+		cd_warning ("Not able to launch this command: gconftool-2");
 }
 
 static void _set_xfwm_composite (gboolean bActive)
@@ -45,6 +47,8 @@ static void _set_xfwm_composite (gboolean bActive)
 		r = system ("xfconf-query -c xfwm4 -p '/general/use_compositing' -t 'bool' -s 'true'");
 	else
 		r = system ("xfconf-query -c xfwm4 -p '/general/use_compositing' -t 'bool' -s 'false'");
+	if (r < 0)
+		cd_warning ("Not able to launch this command: gconftool-2");
 }
 
 static void _set_kwin_composite (gboolean bActive)
@@ -54,6 +58,8 @@ static void _set_kwin_composite (gboolean bActive)
 		r = system ("[ \"$(qdbus org.kde.kwin /KWin compositingActive)\" == \"false\" ] && qdbus org.kde.kwin /KWin toggleCompositing");  // not active, so activating
 	else
 		r = system ("[ \"$(qdbus org.kde.kwin /KWin compositingActive)\" == \"true\" ] && qdbus org.kde.kwin /KWin toggleCompositing");  // active, so deactivating
+	if (r < 0)
+		cd_warning ("Not able to launch this command: gconftool-2");
 }
 
   ///////////////////////
@@ -82,7 +88,7 @@ static inline void _cancel_wm_composite (void)
 {
 	s_activate_composite (FALSE);
 }
-static void _accept_wm_composite (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog)
+static void _accept_wm_composite (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, gpointer data, G_GNUC_UNUSED CairoDialog *pDialog)
 {
 	cd_debug ("%s (%d)", __func__, iClickedButton);
 	if (iClickedButton == 1 || iClickedButton == -2)  // clic explicite sur "cancel", ou Echap ou auto-delete.
@@ -113,7 +119,7 @@ static void _toggle_remember_choice (GtkCheckButton *pButton, GtkWidget *pDialog
 	g_object_set_data (G_OBJECT (pDialog), "remember", GINT_TO_POINTER (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pButton))));
 }
 
-static void _on_free_info_dialog (gpointer data)
+static void _on_free_info_dialog (G_GNUC_UNUSED gpointer data)
 {
 	if (myData.bFirstLaunch)
 	{
@@ -155,7 +161,6 @@ void cd_help_enable_composite (void)
 	// if the WM can handle the composite, ask the user if he wants to enable it.
 	if (s_activate_composite != NULL)  // the WM can activate the composite.
 	{
-		Icon *pIcon = cairo_dock_get_dialogless_icon ();
 		GtkWidget *pAskBox = _gtk_hbox_new (3);
 		GtkWidget *label = gtk_label_new (D_("Don't ask me any more"));
 		cairo_dock_set_dialog_widget_text_color (label);
@@ -202,7 +207,7 @@ void cd_help_enable_composite (void)
 	g_free (cPsef);
 }
 
-static gboolean cd_help_check_composite (gpointer data)
+static gboolean cd_help_check_composite (G_GNUC_UNUSED gpointer data)
 {
 	GdkScreen *pScreen = gdk_screen_get_default ();
 	if (! gdk_screen_is_composited (pScreen))  // no composite yet.
@@ -238,7 +243,7 @@ static gboolean cd_help_check_composite (gpointer data)
 	return FALSE;
 }
 
-gboolean cd_help_get_params (gpointer data)
+gboolean cd_help_get_params (G_GNUC_UNUSED gpointer data)
 {
 	// read our file.
 	gchar *cConfFilePath = g_strdup_printf ("%s/.help", g_cCairoDockDataDir);

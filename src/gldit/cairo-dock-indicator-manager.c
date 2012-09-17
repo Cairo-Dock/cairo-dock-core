@@ -74,7 +74,6 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, CairoDock *pDoc
 {
 	gboolean bIsHorizontal = pDock->container.bIsHorizontal;
 	gboolean bDirectionUp = pDock->container.bDirectionUp;
-	double fRatio = pDock->container.fRatio;
 	if (! myIndicatorsParam.bRotateWithDock)
 		bDirectionUp = bIsHorizontal = TRUE;
 	
@@ -108,7 +107,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, CairoDock *pDoc
 	cairo_dock_draw_texture_with_alpha (s_indicatorBuffer.iTexture, 1., 1., 1.);
 	glPopMatrix ();
 }
-static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDock *pDock, double fRatio)
+static void _cairo_dock_draw_active_window_indicator_opengl (Icon *icon, CairoDock *pDock, G_GNUC_UNUSED double fRatio)
 {
 	if (s_activeIndicatorBuffer.iTexture == 0)
 		return ;
@@ -152,7 +151,6 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cair
 {
 	gboolean bIsHorizontal = pDock->container.bIsHorizontal;
 	gboolean bDirectionUp = pDock->container.bDirectionUp;
-	double fRatio = pDock->container.fRatio;
 	if (! myIndicatorsParam.bRotateWithDock)
 		bDirectionUp = bIsHorizontal = TRUE;
 	
@@ -262,7 +260,7 @@ static inline gboolean _active_indicator_is_visible (Icon *icon)
 	return bIsActive;
 }
 
-static gboolean cairo_dock_pre_render_indicator_notification (gpointer pUserData, Icon *icon, CairoDock *pDock, cairo_t *pCairoContext)
+static gboolean cairo_dock_pre_render_indicator_notification (G_GNUC_UNUSED gpointer pUserData, Icon *icon, CairoDock *pDock, cairo_t *pCairoContext)
 {
 	gboolean bIsActive = (myIndicatorsParam.bActiveIndicatorAbove ? FALSE : _active_indicator_is_visible (icon));
 	
@@ -293,7 +291,7 @@ static gboolean cairo_dock_pre_render_indicator_notification (gpointer pUserData
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-static gboolean cairo_dock_render_indicator_notification (gpointer pUserData, Icon *icon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)
+static gboolean cairo_dock_render_indicator_notification (G_GNUC_UNUSED gpointer pUserData, Icon *icon, CairoDock *pDock, G_GNUC_UNUSED gboolean *bHasBeenRendered, cairo_t *pCairoContext)
 {
 	gboolean bIsActive = (myIndicatorsParam.bActiveIndicatorAbove ? _active_indicator_is_visible (icon) : FALSE);
 	
@@ -543,7 +541,7 @@ static inline void _load_active_window_indicator (const gchar *cImagePath, doubl
 			iHeight);
 	}
 }
-static inline void _load_class_indicator (const gchar *cIndicatorImagePath, double fMaxScale)
+static inline void _load_class_indicator (const gchar *cIndicatorImagePath)
 {
 	cairo_dock_unload_image_buffer (&s_classIndicatorBuffer);
 	
@@ -564,7 +562,7 @@ static void load (void)
 	
 	_load_active_window_indicator (myIndicatorsParam.cActiveIndicatorImagePath, fMaxScale, myIndicatorsParam.iActiveCornerRadius, myIndicatorsParam.iActiveLineWidth, myIndicatorsParam.fActiveColor);
 	
-	_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? myIndicatorsParam.cClassIndicatorImagePath : NULL, fMaxScale);
+	_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? myIndicatorsParam.cClassIndicatorImagePath : NULL);
 }
 
 
@@ -572,11 +570,11 @@ static void load (void)
  /// RELOAD ///
 //////////////
 
-static void _set_indicator (Icon *pIcon, CairoContainer *pContainer, gpointer data)
+static void _set_indicator (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, gpointer data)
 {
 	pIcon->bHasIndicator = GPOINTER_TO_INT (data);
 }
-static void _reload_progress_bar (Icon *pIcon, CairoContainer *pContainer, gpointer data)
+static void _reload_progress_bar (Icon *pIcon, CairoContainer *pContainer, G_GNUC_UNUSED gpointer data)
 {
 	if (cairo_dock_get_icon_data_renderer (pIcon) != NULL)
 	{
@@ -609,7 +607,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	if (cairo_dock_strings_differ (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath) ||
 		pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
 	{
-		_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL, fMaxScale);
+		_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL);
 		
 		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic && g_pMainDock)  // on recharge les icones pointant sur une classe (qui sont dans le main dock).
 		{

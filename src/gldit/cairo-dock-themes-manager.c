@@ -168,10 +168,14 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 				g_string_printf (sCommand, "rm -f \"%s/%s\"/*", cNewThemePathEscaped, CAIRO_DOCK_LAUNCHERS_DIR);
 				cd_message ("%s", sCommand->str);
 				r = system (sCommand->str);
+				if (r < 0)
+					cd_warning ("Not able to launch this command: %s", sCommand->str);
 				
 				g_string_printf (sCommand, "cp \"%s\"/* \"%s/%s\"", g_cCurrentLaunchersPath, cNewThemePathEscaped, CAIRO_DOCK_LAUNCHERS_DIR);
 				cd_message ("%s", sCommand->str);
 				r = system (sCommand->str);
+				if (r < 0)
+					cd_warning ("Not able to launch this command: %s", sCommand->str);
 			}
 			
 			//\___________________ On traite tous le reste.
@@ -179,6 +183,8 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 			g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '%s' ! -name \"%s\" -exec /bin/cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePathEscaped);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
+			if (r < 0)
+				cd_warning ("Not able to launch this command: %s", sCommand->str);
 
 			bThemeSaved = TRUE;
 		}
@@ -192,6 +198,8 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 			g_string_printf (sCommand, "cp -r \"%s\"/* \"%s\"", g_cCurrentThemePath, cNewThemePathEscaped);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
+			if (r < 0)
+				cd_warning ("Not able to launch this command: %s", sCommand->str);
 
 			bThemeSaved = TRUE;
 		}
@@ -257,6 +265,8 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 		else
 			cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", cNewThemeName);
 		r = system (cCommand);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", cCommand);
 		g_free (cCommand);
 		g_free (cNewThemeName);
 		return TRUE;
@@ -319,6 +329,8 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 			bThemeDeleted = TRUE;
 			g_string_printf (sCommand, "rm -rf \"%s/%s\"", g_cThemesDirPath, cThemeName);
 			r = system (sCommand->str);  // g_rmdir only delete an empty dir...
+			if (r < 0)
+				cd_warning ("Not able to launch this command: %s", sCommand->str);
 			g_free (cThemeName);
 		}
 	}
@@ -327,7 +339,7 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 	return bThemeDeleted;
 }
 
-static gboolean _find_module_from_user_data_dir (gchar *cModuleName, CairoDockModule *pModule, const gchar *cUserDataDirName)
+static gboolean _find_module_from_user_data_dir (G_GNUC_UNUSED gchar *cModuleName, CairoDockModule *pModule, const gchar *cUserDataDirName)
 {
 	if (pModule->pVisitCard->cUserDataDir && strcmp (cUserDataDirName, pModule->pVisitCard->cUserDataDir) == 0)
 		return TRUE;
@@ -373,6 +385,8 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 		g_string_printf (sCommand, "cp \"%s\"/*.conf \"%s\"", cNewThemePath, g_cCurrentThemePath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 	}
 	else
 	{
@@ -406,16 +420,24 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 		g_string_printf (sCommand, "rm -f \"%s\"/*", g_cCurrentIconsPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 		g_string_printf (sCommand, "rm -f \"%s\"/.*", g_cCurrentIconsPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 		
 		g_string_printf (sCommand, "rm -f \"%s\"/*", g_cCurrentImagesPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 		g_string_printf (sCommand, "rm -f \"%s\"/.*", g_cCurrentImagesPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 	}
 	gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // c'est un ancien theme, on deplace les icones vers le repertoire 'icons'.
@@ -427,11 +449,15 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 		g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentIconsPath);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 		
 		g_string_printf (sCommand, "cp \"%s\"/* \"%s\"", cNewLocalIconsPath, g_cCurrentIconsPath);
 	}
 	cd_debug ("%s", sCommand->str);
 	r = system (sCommand->str);
+	if (r < 0)
+		cd_warning ("Not able to launch this command: %s", sCommand->str);
 	g_free (cNewLocalIconsPath);
 	
 	//\___________________ On charge les extras.
@@ -441,6 +467,8 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 		g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s\"", cNewThemePath, CAIRO_DOCK_LOCAL_EXTRAS_DIR, g_cExtrasDirPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 	}
 	
 	//\___________________ On charge les lanceurs si necessaire, en effacant ceux existants.
@@ -448,6 +476,8 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 	{
 		gchar *command = g_strdup_printf ("mkdir -p \"%s\"", g_cCurrentLaunchersPath);
 		r = system (command);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", command);
 		g_free (command);
 	}
 	if (g_pMainDock == NULL || bLoadLaunchers)
@@ -455,22 +485,30 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 		g_string_printf (sCommand, "rm -f \"%s\"/*.desktop", g_cCurrentLaunchersPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 
 		g_string_printf (sCommand, "cp \"%s/%s\"/*.desktop \"%s\"", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentLaunchersPath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 	}
 	
 	//\___________________ On remplace tous les autres fichiers par les nouveaux.
 	g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' -type f -exec rm -f '{}' \\;", g_cCurrentThemePath);  // efface tous les fichiers du theme mais sans toucher aux lanceurs et aux plug-ins.
 	cd_debug ("%s", sCommand->str);
 	r = system (sCommand->str);
+	if (r < 0)
+		cd_warning ("Not able to launch this command: %s", sCommand->str);
 
 	if (g_pMainDock == NULL || bLoadBehavior)
 	{
 		g_string_printf (sCommand, "find \"%s\"/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et le .conf, dans le repertoire du theme courant. Ecrase les fichiers de memes noms.
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 	}
 	else
 	{
@@ -478,6 +516,8 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 		g_string_printf (sCommand, "find \"%s\" -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} \"%s\" \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);
 		cd_debug ("%s", sCommand->str);
 		r = system (sCommand->str);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", sCommand->str);
 		
 		// on parcours les .conf des plug-ins, on les met a jour, et on fusionne avec le theme courant.
 		gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_PLUG_INS_DIR);  // repertoire des plug-ins du nouveau theme.
@@ -499,6 +539,8 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 				
 				g_string_printf (sCommand, "mkdir -p \"%s\"", cUserDataDirPath);
 				r = system (sCommand->str);
+				if (r < 0)
+					cd_warning ("Not able to launch this command: %s", sCommand->str);
 			}
 			
 			// on recupere le nom et le chemin du .conf du plug-in dans le nouveau theme.
@@ -541,10 +583,14 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 	
 	g_string_printf (sCommand, "rm -f \"%s/last-modif\"", g_cCurrentThemePath);
 	r = system (sCommand->str);
+	if (r < 0)
+		cd_warning ("Not able to launch this command: %s", sCommand->str);
 	
 	// precaution probablement inutile.
-	g_string_printf (sCommand, "chmod -R 777 \"%s\"", g_cCurrentThemePath);
+	g_string_printf (sCommand, "chmod -R 664 \"%s\"", g_cCurrentThemePath);
 	r = system (sCommand->str);
+	if (r < 0)
+		cd_warning ("Not able to launch this command: %s", sCommand->str);
 	
 	g_string_free (sCommand, TRUE);
 	return TRUE;

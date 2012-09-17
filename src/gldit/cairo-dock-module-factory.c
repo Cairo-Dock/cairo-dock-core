@@ -89,7 +89,6 @@ static gboolean _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GErr
 		return FALSE;
 	}
 	//\__________________ On identifie le module.
-	gboolean bSymbolFound;
 	CairoDockModulePreInit function_pre_init = NULL;
 	function_pre_init = dlsym (pCairoDockModule->handle, "pre_init");
 	/**bSymbolFound = g_module_symbol (module, "pre_init", (gpointer) &function_pre_init);
@@ -238,7 +237,6 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	if (pInstance->cConfFilePath == NULL)  // aucun fichier de conf (xxx-integration par exemple).
 		return NULL;
 	gchar *cInstanceConfFilePath = pInstance->cConfFilePath;
-	CairoDockModule *pModule = pInstance->pModule;
 	
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
 	if (pKeyFile == NULL)  // fichier illisible.
@@ -548,7 +546,6 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	CairoDockModule *module = pInstance->pModule;
 	cd_message ("%s (%s, %d)", __func__, module->pVisitCard->cModuleName, bReloadAppletConf);
 	
-	GError *erreur = NULL;
 	CairoContainer *pCurrentContainer = pInstance->pContainer;
 	pInstance->pContainer = NULL;
 	CairoDock *pCurrentDock = pInstance->pDock;

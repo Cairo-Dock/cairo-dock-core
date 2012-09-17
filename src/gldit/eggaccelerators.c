@@ -679,15 +679,8 @@ int *egg_keystring_to_keysyms (const gchar *accelerator, int *iNbKeys)
 	gint *pKeySyms = g_new0 (int, iNbKeyMax);
 	const gchar *cKeyName;
 	
-	guint keyval;
-	GdkModifierType mods;
 	gint len;
-	gboolean bad_keyval;
 	
-	bad_keyval = FALSE;
-	
-	keyval = 0;
-	mods = 0;
 	len = strlen (accelerator);
 	while (len)
 		{

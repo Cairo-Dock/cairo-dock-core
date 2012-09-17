@@ -586,7 +586,7 @@ void cairo_dock_detach_Xid_from_inhibitors (Window Xid, const gchar *cClass)
 	}
 }
 
-static void _cairo_dock_remove_all_applis_from_class (gchar *cClass, CairoDockClassAppli *pClassAppli, gpointer data)
+static void _cairo_dock_remove_all_applis_from_class (G_GNUC_UNUSED gchar *cClass, CairoDockClassAppli *pClassAppli, G_GNUC_UNUSED gpointer data)
 {
 	g_list_free (pClassAppli->pAppliOfClass);
 	pClassAppli->pAppliOfClass = NULL;
@@ -939,7 +939,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 }
 
 
-static void _cairo_dock_reset_overwrite_exceptions (gchar *cClass, CairoDockClassAppli *pClassAppli, gpointer data)
+static void _cairo_dock_reset_overwrite_exceptions (G_GNUC_UNUSED gchar *cClass, CairoDockClassAppli *pClassAppli, G_GNUC_UNUSED gpointer data)
 {
 	pClassAppli->bUseXIcon = FALSE;
 }
@@ -959,14 +959,14 @@ void cairo_dock_set_overwrite_exceptions (const gchar *cExceptions)
 	int i;
 	for (i = 0; cClassList[i] != NULL; i ++)
 	{
-		CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClassList[i]);
+		pClassAppli = cairo_dock_get_class (cClassList[i]);
 		pClassAppli->bUseXIcon = TRUE;
 	}
 	
 	g_strfreev (cClassList);
 }
 
-static void _cairo_dock_reset_group_exceptions (gchar *cClass, CairoDockClassAppli *pClassAppli, gpointer data)
+static void _cairo_dock_reset_group_exceptions (G_GNUC_UNUSED gchar *cClass, CairoDockClassAppli *pClassAppli, G_GNUC_UNUSED gpointer data)
 {
 	pClassAppli->bExpand = FALSE;
 }
@@ -986,7 +986,7 @@ void cairo_dock_set_group_exceptions (const gchar *cExceptions)
 	int i;
 	for (i = 0; cClassList[i] != NULL; i ++)
 	{
-		CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClassList[i]);
+		pClassAppli = cairo_dock_get_class (cClassList[i]);
 		pClassAppli->bExpand = TRUE;
 	}
 	
@@ -1090,7 +1090,7 @@ Icon *cairo_dock_get_inhibitor (Icon *pIcon, gboolean bOnlyInDock)
 	return NULL;
 }
 
-
+/* Not used
 static gboolean _appli_is_older (Icon *pIcon1, Icon *pIcon2, CairoDockClassAppli *pClassAppli)  // TRUE if icon1 older than icon2
 {
 	Icon *pAppliIcon;
@@ -1105,7 +1105,7 @@ static gboolean _appli_is_older (Icon *pIcon1, Icon *pIcon2, CairoDockClassAppli
 	}
 	return FALSE;
 }
-
+*/
 static inline double _get_previous_order (GList *ic)
 {
 	if (ic == NULL)
@@ -1213,7 +1213,6 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 	GList *same_class_ic = NULL;
 
 	// First look for an inhibitor of this class, preferably a launcher.
-	CairoDock *pHostDock = pDock;
 	CairoDock *pParentDock;
 	Icon *pInhibitorIcon;
 	GList *ic;
@@ -1228,7 +1227,6 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 		///	pInhibitorIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, NULL);
 		pSameClassIcon = pInhibitorIcon;
 		same_class_ic = ic;
-		pHostDock = pParentDock;
 		//g_print (" found an inhibitor of this class: %s (%d)\n", pSameClassIcon->cName, pSameClassIcon->iAge);
 		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon))  // it's a launcher, we wont't find better -> quit
 			break ;
@@ -1248,7 +1246,6 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 			{
 				pSameClassIcon = pAppliIcon;
 				same_class_ic = ic;
-				pHostDock = pParentDock;
 				//g_print (" found an appli of this class: %s (%d)\n", pSameClassIcon->cName, pSameClassIcon->iAge);
 				break ;
 			}
@@ -1296,7 +1293,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 	// if no icon of our class is present in the dock, place it amongst the other appli icons, after the first appli or after the launchers, and ordered by age.
 	// search the last launcher and the first appli.
 	Icon *icon;
-	Icon *pFirstAppli = NULL, *pLastLauncher = NULL, *pFirstLauncher = NULL;
+	Icon *pFirstLauncher = NULL;
 	GList *first_appli_ic = NULL, *last_launcher_ic = NULL, *first_launcher_ic = NULL;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
@@ -1306,8 +1303,8 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 		|| (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && /**icon->cClass != NULL &&*/ icon->pModuleInstance->pModule->pVisitCard->bActAsLauncher)  // applet acting like a launcher
 		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon)))  // separator (user or auto).
 		{
-			pLastLauncher = icon;
-			last_launcher_ic = ic;
+			// pLastLauncher = icon;
+			// last_launcher_ic = ic;
 			if (pFirstLauncher == NULL)
 			{
 				pFirstLauncher = icon;
@@ -1317,7 +1314,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 		else if ((CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon))
 		&& ! cairo_dock_class_is_inhibited (icon->cClass))  // an appli not placed next to its inhibitor.
 		{
-			pFirstAppli = icon;
+			// pFirstAppli = icon;
 			first_appli_ic = ic;
 			break ;
 		}
@@ -1392,7 +1389,6 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 		pIcon->iGroup = CAIRO_DOCK_APPLI;
 	else
 		pIcon->iGroup = CAIRO_DOCK_LAUNCHER;
-	Icon *pSameClassIcon = NULL;
 	Icon *icon;
 	GList *ic, *last_ic = NULL, *first_appli_ic = NULL;
 	GList *last_launcher_ic = NULL, *first_launcher_ic = NULL;

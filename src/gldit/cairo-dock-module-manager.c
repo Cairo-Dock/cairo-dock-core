@@ -266,7 +266,7 @@ void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList)
 	}
 }
 
-static void _cairo_dock_deactivate_one_module (gchar *cModuleName, CairoDockModule *pModule, gpointer data)
+static void _cairo_dock_deactivate_one_module (G_GNUC_UNUSED gchar *cModuleName, CairoDockModule *pModule, G_GNUC_UNUSED gpointer data)
 {
 	if (! cairo_dock_module_is_auto_loaded (pModule))
 		cairo_dock_deactivate_module (pModule);
@@ -382,21 +382,19 @@ void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 {
 	cd_message ("%s (%s)", __func__, pInstance->cConfFilePath);
 	g_return_if_fail (pInstance->pModule->pInstancesList != NULL);
-	//\_________________ Si c'est la derniere instance, on desactive le module.
+	//\_________________ If it's the last instance, we disable the module
 	if (pInstance->pModule->pInstancesList->next == NULL)
 	{
 		cairo_dock_deactivate_module_and_unload (pInstance->pModule->pVisitCard->cModuleName);
 		return ;
 	}
 	
-	//\_________________ On efface le fichier de conf de cette instance.
-	cd_debug ("on efface %s", pInstance->cConfFilePath);
+	//\_________________ we remove the .conf file for this instance.
+	cd_debug ("We remove %s", pInstance->cConfFilePath);
 	g_remove (pInstance->cConfFilePath);
 	
-	//\_________________ On supprime cette instance (on le fait maintenant, pour que son fichier de conf n'existe plus lors du 'stop'.
-	gchar *cConfFilePath = pInstance->cConfFilePath;
-	pInstance->cConfFilePath = NULL;
-	CairoDockModule *pModule = pInstance->pModule;
+	//\_________________ We also remove the cConfFilePath (=> this conf file no longer exist during the stop during the stop)
+	g_free (pInstance->cConfFilePath);
 	cairo_dock_deactivate_module_instance_and_unload (pInstance);  // pInstance n'est plus.
 }
 
@@ -517,8 +515,8 @@ void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pIn
 	int iDeskletPositionX = iCenterX - iDeskletWidth/2;
 	int iDeskletPositionY = iCenterY - iDeskletHeight/2;
 	
-	int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-	int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	// int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
+	// int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 	
 	//\__________________ update the conf file of the applet.
 	g_key_file_set_double (pKeyFile, "Desklet", "x position", iDeskletPositionX);
@@ -583,7 +581,7 @@ void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance)
 	pInstance->iSlotID = 0;
 }
 
-static void _write_modules (gpointer data)
+static void _write_modules (G_GNUC_UNUSED gpointer data)
 {
 	gchar *cModuleNames = cairo_dock_list_active_modules ();
 	

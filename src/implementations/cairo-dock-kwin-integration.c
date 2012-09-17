@@ -121,11 +121,12 @@ static gboolean show_widget_layer (void)
 			bSuccess = FALSE;
 		}
 	}
-	return FALSE;
+	return bSuccess;
 }
 
 #define x_icon_geometry(icon, pDock) (pDock->container.iWindowPositionX + icon->fXAtRest + (pDock->container.iWidth - pDock->fFlatDockWidth) / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2))
 #define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIconsParam.fAmplitude * pDock->fMagnitudeMax)
+/* Not used
 static void _set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
 	cd_debug ("%s (%s)", __func__, icon?icon->cName:"none");
@@ -136,11 +137,11 @@ static void _set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pD
 		data[1+0] = 5;  // 5 elements for the current preview: X id, x, y, w, h
 		data[1+1] = icon->Xid;
 		
-		int iX, iY, iWidth, iHeight;
+		int iX, iY;
 		iX = x_icon_geometry (icon, pDock);
 		iY = y_icon_geometry (icon, pDock);  // il faudrait un fYAtRest ...
-		iWidth = icon->fWidth;
-		iHeight = icon->fHeight * (1. + 2*myIconsParam.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
+		// iWidth = icon->fWidth;
+		// iHeight = icon->fHeight * (1. + 2*myIconsParam.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 		
 		if (pDock->container.bIsHorizontal)
 		{
@@ -165,6 +166,8 @@ static void _set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pD
 	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDock));
 	XChangeProperty (cairo_dock_get_Xdisplay(), Xid, atom, atom, 32, PropModeReplace, (const unsigned char*)data, 1+6);
 }
+*/
+/* Not used
 static gboolean _on_enter_icon (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bStartAnimation)
 {
 	if (CAIRO_DOCK_IS_APPLI (pIcon))
@@ -177,7 +180,7 @@ static gboolean _on_enter_icon (gpointer pUserData, Icon *pIcon, CairoDock *pDoc
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
-
+*/
 static void _register_kwin_backend (void)
 {
 	CairoDockWMBackend *p = g_new0 (CairoDockWMBackend, 1);
@@ -204,7 +207,7 @@ static void _unregister_kwin_backend (void)
 		(CairoDockNotificationFunc) _on_enter_icon, NULL);*/
 }
 
-static void _on_kwin_owner_changed (const gchar *cName, gboolean bOwned, gpointer data)
+static void _on_kwin_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("Kwin is on the bus (%d)", bOwned);
 	
@@ -232,7 +235,7 @@ static void _on_kwin_owner_changed (const gchar *cName, gboolean bOwned, gpointe
 		_unregister_kwin_backend ();
 	}
 }
-static void _on_detect_kwin (gboolean bPresent, gpointer data)
+static void _on_detect_kwin (gboolean bPresent, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("Kwin is present: %d", bPresent);
 	if (bPresent)
@@ -245,7 +248,7 @@ static void _on_detect_kwin (gboolean bPresent, gpointer data)
 }
 void cd_init_kwin_backend (void)
 {
-	DBusGProxyCall *call = cairo_dock_dbus_detect_application_async (CD_KWIN_BUS,
+	cairo_dock_dbus_detect_application_async (CD_KWIN_BUS,
 		(CairoDockOnAppliPresentOnDbus) _on_detect_kwin,
 		NULL);
 }

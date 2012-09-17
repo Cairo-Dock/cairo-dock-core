@@ -120,7 +120,7 @@ static void _cairo_dock_hide_show_windows_on_other_desktops (Window *Xid, Icon *
 	}
 }
 
-static void _show_if_no_overlapping_window (CairoDock *pDock, gpointer data)
+static void _show_if_no_overlapping_window (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
 		return ;
@@ -133,7 +133,7 @@ static void _show_if_no_overlapping_window (CairoDock *pDock, gpointer data)
 	}
 }
 
-static void _hide_if_any_overlap (CairoDock *pDock, gpointer data)
+static void _hide_if_any_overlap (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
 		return ;
@@ -146,7 +146,7 @@ static void _hide_if_any_overlap (CairoDock *pDock, gpointer data)
 	}
 }
 
-static void _hide_if_any_overlap_or_show (CairoDock *pDock, gpointer data)
+static void _hide_if_any_overlap_or_show (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
 		return ;
@@ -202,7 +202,7 @@ static void _hide_if_overlap_or_show_if_no_overlapping_window (CairoDock *pDock,
 	}
 }
 
-static void _unhide_all_docks (CairoDock *pDock, Icon *icon)
+static void _unhide_all_docks (CairoDock *pDock, G_GNUC_UNUSED Icon *icon)
 {
 	if (cairo_dock_is_temporary_hidden (pDock))
 		cairo_dock_deactivate_temporary_auto_hide (pDock);
@@ -335,7 +335,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 	XFree (pXWindowsList);
 }
 
-static gboolean _on_change_active_window_notification (gpointer data, Window *Xid)
+static gboolean _on_change_active_window_notification (G_GNUC_UNUSED gpointer data, Window *Xid)
 {
 	Window XActiveWindow = *Xid;
 	if (s_iCurrentActiveWindow != XActiveWindow)  // la fenetre courante a change.
@@ -404,7 +404,7 @@ static gboolean _on_change_active_window_notification (gpointer data, Window *Xi
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
+static gboolean _on_change_current_desktop_viewport_notification (G_GNUC_UNUSED gpointer data)
 {
 	CairoDock *pDock = g_pMainDock;
 	
@@ -427,7 +427,7 @@ static gboolean _on_change_current_desktop_viewport_notification (gpointer data)
 static void _on_change_window_state (Icon *icon)
 {
 	Window Xid = icon->Xid;
-	gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention, bPrevHidden = icon->bIsHidden;
+	gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
 	if (! cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention))
 	{
 		//g_print ("Special case : this appli (%s, %ld) should be ignored from now !\n", icon->cName, Xid);
@@ -675,7 +675,7 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_SIZE_POSITION_CHANGED, icon);
 }
 
-static gboolean _on_window_configured_notification (gpointer data, Window Xid, XConfigureEvent *e)
+static gboolean _on_window_configured_notification (G_GNUC_UNUSED gpointer data, Window Xid, XConfigureEvent *e)
 {
 	if (e != NULL)  // a window
 	{
@@ -689,7 +689,7 @@ static gboolean _on_window_configured_notification (gpointer data, Window Xid, X
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-static void _on_change_window_name (Icon *icon, CairoDock *pDock, gboolean bSearchWmName)
+static void _on_change_window_name (Icon *icon, G_GNUC_UNUSED CairoDock *pDock, gboolean bSearchWmName)
 {
 	gchar *cName = cairo_dock_get_xwindow_name (icon->Xid, bSearchWmName);
 	if (cName != NULL)
@@ -757,7 +757,7 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 	}
 }
 
-static void _on_change_window_class (Icon *icon, CairoDock *pDock)
+static void _on_change_window_class (Icon *icon, G_GNUC_UNUSED CairoDock *pDock)
 {
 	//g_print ("WM_CLASS changed (%p, %s)!\n", icon->pMimeTypes, icon->cCommand);
 	// retrieve the new class
@@ -802,7 +802,7 @@ static void _on_change_window_class (Icon *icon, CairoDock *pDock)
 	cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_ICON_CHANGED, icon);
 }
 
-static gboolean _on_property_changed_notification (gpointer data, Window Xid, Atom aProperty, int iState)
+static gboolean _on_property_changed_notification (G_GNUC_UNUSED gpointer data, Window Xid, Atom aProperty, int iState)
 {
 	Icon *icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
 	if (! CAIRO_DOCK_IS_APPLI (icon))  // appli blacklistee
@@ -960,7 +960,7 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	s_bAppliManagerIsRunning = TRUE;
 }
 
-static gboolean _cairo_dock_remove_one_appli (Window *pXid, Icon *pIcon, gpointer data)
+static gboolean _cairo_dock_remove_one_appli (G_GNUC_UNUSED Window *pXid, Icon *pIcon, G_GNUC_UNUSED gpointer data)
 {
 	if (pIcon == NULL)
 		return TRUE;
@@ -1062,10 +1062,10 @@ void cairo_dock_reset_applications_manager (void)
  // Applis manager : access //
 /////////////////////////////
 
-static gboolean _cairo_dock_window_is_covering_dock (Window *Xid, Icon *icon, gpointer *data)
+static gboolean _cairo_dock_window_is_covering_dock (G_GNUC_UNUSED Window *Xid, Icon *icon, gpointer *data)
 {
-	gboolean bMaximizedWindow = GPOINTER_TO_INT (data[0]);
-	gboolean bFullScreenWindow = GPOINTER_TO_INT (data[1]);
+	// gboolean bMaximizedWindow = GPOINTER_TO_INT (data[0]);
+	// gboolean bFullScreenWindow = GPOINTER_TO_INT (data[1]);
 	CairoDock *pDock = data[2];
 	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && ! icon->bIsHidden && ! cairo_dock_icon_is_being_removed (icon) && icon->iLastCheckTime != -1)
 	{
@@ -1088,7 +1088,7 @@ Icon *cairo_dock_search_window_covering_dock (CairoDock *pDock, gboolean bMaximi
 	return g_hash_table_find (s_hXWindowTable, (GHRFunc) _cairo_dock_window_is_covering_dock, data);
 }
 
-static gboolean _cairo_dock_window_is_overlapping_dock (Window *Xid, Icon *icon, CairoDock *pDock)
+static gboolean _cairo_dock_window_is_overlapping_dock (G_GNUC_UNUSED Window *Xid, Icon *icon, CairoDock *pDock)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (icon) && ! icon->bIsHidden && ! cairo_dock_icon_is_being_removed (icon) && icon->iLastCheckTime != -1)
 	{
@@ -1135,7 +1135,7 @@ Icon *cairo_dock_get_icon_with_Xid (Window Xid)
 }
 
 
-static void _cairo_dock_for_one_appli (Window *Xid, Icon *icon, gpointer *data)
+static void _cairo_dock_for_one_appli (G_GNUC_UNUSED Window *Xid, Icon *icon, gpointer *data)
 {
 	if (! CAIRO_DOCK_IS_APPLI (icon) || cairo_dock_icon_is_being_removed (icon))
 		return ;
@@ -1440,7 +1440,7 @@ static gboolean _delete_appli (Icon *pIcon)
 	return FALSE;
 }
 
-static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock)
+static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, G_GNUC_UNUSED CairoDock *pDock)
 {
 	//\__________________ On cree l'icone.
 	Window XParentWindow = 0;
@@ -1600,11 +1600,12 @@ static void reset_config (CairoTaskbarParam *pTaskBar)
  /// LOAD ///
 ////////////
 
+/*
 static void load (void)
 {
 	
 }
-
+*/
 
   //////////////
  /// RELOAD ///
@@ -1614,7 +1615,6 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
 {
 	CairoDock *pDock = g_pMainDock;
 	
-	gboolean bUpdateSize = FALSE;
 	if (pPrevTaskBar->bGroupAppliByClass != pTaskBar->bGroupAppliByClass
 		|| pPrevTaskBar->bHideVisibleApplis != pTaskBar->bHideVisibleApplis
 		|| pPrevTaskBar->bAppliOnCurrentDesktopOnly != pTaskBar->bAppliOnCurrentDesktopOnly
@@ -1649,7 +1649,7 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
  /// UNLOAD ///
 //////////////
 
-static gboolean _remove_appli (Window *pXid, Icon *pIcon, gpointer data)
+static gboolean _remove_appli (G_GNUC_UNUSED Window *pXid, Icon *pIcon, G_GNUC_UNUSED gpointer data)
 {
 	if (pIcon == NULL)
 		return TRUE;

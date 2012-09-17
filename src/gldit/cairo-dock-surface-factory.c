@@ -104,7 +104,7 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 			else if (*fImageWidth > 2 * *fImageHeight)  // if we're confident this image is an animated one, try to be smart, to handle the case of non-square frames.
 			{
 				// assume we have wide frames => w > h
-				int w = *fImageHeight + 1, h = *fImageHeight;
+				int w = *fImageHeight + 1;
 				do
 				{
 					if ((int)*fImageWidth % w == 0)
@@ -612,7 +612,7 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, d
 	return pSurface;
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, double fImageWidth, double fImageHeight, double fAlpha)
+cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, G_GNUC_UNUSED double fImageWidth, G_GNUC_UNUSED double fImageHeight, double fAlpha)
 {
 	cairo_surface_t *pNewSurface = NULL;
 
@@ -917,7 +917,6 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 		if (w > iMaxLineWidth)  // le texte est trop long.
 		{
 			// on decoupe le texte en lignes et on limite chaque ligne trop longue.
-			gchar *sp, *last_sp=NULL;
 			gchar **cLines = g_strsplit (cText, "\n", -1);
 			gchar *cLine;
 			int i;

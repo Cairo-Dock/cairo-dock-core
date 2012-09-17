@@ -547,7 +547,6 @@ static void reset_config (CairoBackendsParam *pBackendsParam)
 static void reload (CairoBackendsParam *pPrevBackendsParam, CairoBackendsParam *pBackendsParam)
 {
 	CairoBackendsParam *pPrevViews = pPrevBackendsParam;
-	CairoBackendsParam *pPrevSystem = pPrevBackendsParam;
 	
 	// views
 	if (cairo_dock_strings_differ (pPrevViews->cMainDockDefaultRendererName, pBackendsParam->cMainDockDefaultRendererName))

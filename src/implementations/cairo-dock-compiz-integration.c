@@ -32,7 +32,6 @@ static DBusGProxy *s_pScaleProxy = NULL;
 static DBusGProxy *s_pExposeProxy = NULL;
 static DBusGProxy *s_pWidgetLayerProxy = NULL;
 static Atom s_aCompizWidget = 0;
-static Atom s_aNetWmWindowType = 0;
 
 static gboolean present_windows (void)
 {
@@ -67,7 +66,6 @@ static gboolean present_class (const gchar *cClass)
 	gboolean bAllHidden = TRUE;
 	Icon *pOneIcon;
 	const GList *ic;
-	int i = 0;
 	for (ic = pIcons; ic != NULL; ic = ic->next)
 	{
 		pOneIcon = ic->data;
@@ -147,7 +145,7 @@ static gboolean show_widget_layer (void)
 	return bSuccess;
 }
 
-static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
+static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("%s ()", __func__);
 	// get the active plug-ins.
@@ -208,7 +206,7 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	}
 	g_strfreev (plugins);
 }
-static gboolean _check_widget_plugin (gpointer data)
+static gboolean _check_widget_plugin (G_GNUC_UNUSED gpointer data)
 {
 	// first get the active plug-ins.
 	DBusGProxy *pActivePluginsProxy = cairo_dock_create_new_session_proxy (
@@ -304,7 +302,7 @@ gboolean cd_is_the_new_compiz (void)
 	return s_bNewCompiz;
 }
 
-static void _on_compiz_owner_changed (const gchar *cName, gboolean bOwned, gpointer data)
+static void _on_compiz_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("Compiz is on the bus (%d)", bOwned);
 	
@@ -349,7 +347,7 @@ static void _on_compiz_owner_changed (const gchar *cName, gboolean bOwned, gpoin
 		_unregister_compiz_backend ();
 	}
 }
-static void _on_detect_compiz (gboolean bPresent, gpointer data)
+static void _on_detect_compiz (gboolean bPresent, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("Compiz is present: %d", bPresent);
 	if (bPresent)
@@ -362,7 +360,7 @@ static void _on_detect_compiz (gboolean bPresent, gpointer data)
 }
 void cd_init_compiz_backend (void)
 {
-	DBusGProxyCall *call = cairo_dock_dbus_detect_application_async (CD_COMPIZ_BUS,
+	cairo_dock_dbus_detect_application_async (CD_COMPIZ_BUS,
 		(CairoDockOnAppliPresentOnDbus) _on_detect_compiz,
 		NULL);
 }

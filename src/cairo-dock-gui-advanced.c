@@ -115,7 +115,6 @@ static GtkWidget *s_pBackButton = NULL;
 static GtkWidget *s_pMainWindow = NULL;
 static GtkWidget *s_pGroupsVBox = NULL;
 static CairoDockGroupDescription *s_pCurrentGroup = NULL;
-static GtkWidget *s_pCurrentGroupWidget = NULL;
 static GtkWidget *s_pToolBar = NULL;
 static GtkWidget *s_pGroupFrame = NULL;
 static GtkWidget *s_pFilterEntry = NULL;
@@ -141,7 +140,7 @@ static const gchar *s_cCategoriesDescription[2*(CAIRO_DOCK_NB_CATEGORY+1)] = {
 	N_("Fun"), "icon-fun.svg",
 	N_("All"), "icon-all.svg" };
 
-static void cairo_dock_enable_apply_button (GtkWidget *pMainWindow, gboolean bEnable);
+static void cairo_dock_enable_apply_button (gboolean bEnable);
 static void _present_group_widget (CairoDockGroupDescription *pGroupDescription, CairoDockModuleInstance *pModuleInstance);
 static void cairo_dock_hide_all_categories (void);
 static void cairo_dock_show_all_categories (void);
@@ -150,7 +149,6 @@ static void cairo_dock_toggle_category_button (int iCategory);
 static void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription);
 static CairoDockGroupDescription *cairo_dock_find_module_description (const gchar *cModuleName);
 static void cairo_dock_apply_current_filter (const gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther);
-static void cairo_dock_reset_current_widget_list (void);
 static void _trigger_current_filter (void);
 static void _destroy_current_widget (gboolean bDestroyGtkWidget);
 
@@ -191,7 +189,7 @@ static gchar *cairo_dock_highlight_key_word (const gchar *cSentence, const gchar
 	return cModifiedString;
 }
 
-static gboolean _cairo_dock_search_words_in_frame_title (const gchar **pKeyWords, GtkWidget *pCurrentFrame, gboolean bAllWords, gboolean bHighLightText, gboolean bHideOther)
+static gboolean _cairo_dock_search_words_in_frame_title (const gchar **pKeyWords, GtkWidget *pCurrentFrame, gboolean bAllWords, gboolean bHighLightText, G_GNUC_UNUSED gboolean bHideOther)
 {
 	//\______________ On recupere son titre.
 	GtkWidget *pFrameLabel = NULL;
@@ -566,9 +564,9 @@ static void cairo_dock_apply_filter_on_group_list (const gchar **pKeyWords, gboo
 	const gchar *cKeyWord, *str = NULL;
 	gchar *cModifiedText = NULL;
 	const gchar *cTitle, *cToolTip = NULL;
-	gboolean bFound, bFrameVisible = FALSE;
+	gboolean bFound;
 	gboolean bCategoryVisible[CAIRO_DOCK_NB_CATEGORY];
-	GtkWidget *pGroupBox, *pLabel, *pCategoryFrame, *pCurrentCategoryFrame = NULL;
+	GtkWidget *pGroupBox, *pLabel;
 	GKeyFile *pKeyFile, *pMainKeyFile = cairo_dock_open_key_file (g_cConfFile);
 	
 	// reset groups and frames
@@ -600,7 +598,6 @@ static void cairo_dock_apply_filter_on_group_list (const gchar **pKeyWords, gboo
 		pGroupDescription = gd->data;
 		pGroupBox = pGroupDescription->pGroupHBox;
 		pLabel = pGroupDescription->pLabel;
-		pCategoryFrame = gtk_widget_get_parent (pGroupBox);
 		cGettextDomain = pGroupDescription->cGettextDomain;
 		bFound = FALSE;
 		
@@ -750,12 +747,20 @@ static void _add_module_to_grid (CairoDockCategoryWidgetTable *pCategoryWidget, 
 		pCategoryWidget->iNbItemsInCurrentRow = 0;
 		pCategoryWidget->iNbRows ++;
 	}
+	#if GTK_CHECK_VERSION (3, 4, 0)
+	gtk_grid_attach (GTK_GRID (pCategoryWidget->pTable),
+		pWidget,
+		pCategoryWidget->iNbItemsInCurrentRow+1,
+		pCategoryWidget->iNbRows+1,
+		1, 1);
+	#else
 	gtk_table_attach_defaults (GTK_TABLE (pCategoryWidget->pTable),
 		pWidget,
 		pCategoryWidget->iNbItemsInCurrentRow,
 		pCategoryWidget->iNbItemsInCurrentRow+1,
 		pCategoryWidget->iNbRows,
 		pCategoryWidget->iNbRows+1);
+	#endif
 	pCategoryWidget->iNbItemsInCurrentRow ++;
 }
 
@@ -776,7 +781,7 @@ static inline void _add_group_to_path_history (gpointer pGroupDescription)
  // CALLBACKS //
 ///////////////
 
-static void on_click_toggle_activated (GtkButton *button, gpointer data)
+static void on_click_toggle_activated (GtkButton *button, G_GNUC_UNUSED gpointer data)
 {
 	gboolean bEnableHideModules = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 	gboolean bGroupShow[CAIRO_DOCK_NB_CATEGORY+1];
@@ -798,10 +803,18 @@ static void on_click_toggle_activated (GtkButton *button, gpointer data)
 		pCategoryWidget->iNbItemsInCurrentRow = 0;
 		
 		gtk_widget_destroy(pCategoryWidget->pTable);
+		#if GTK_CHECK_VERSION (3, 4, 0)
+		pCategoryWidget->pTable = gtk_grid_new ();
+		gtk_grid_set_row_spacing (GTK_GRID (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
+		gtk_grid_set_row_homogeneous (GTK_GRID (pCategoryWidget->pTable), TRUE);
+		gtk_grid_set_column_spacing (GTK_GRID (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
+		gtk_grid_set_column_homogeneous (GTK_GRID (pCategoryWidget->pTable), TRUE);
+		#else
 		pCategoryWidget->pTable = gtk_table_new (1, s_iNbButtonsByRow, TRUE);
-		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pFrame), GTK_WIDGET (pCategoryWidget->pTable));
 		gtk_table_set_row_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
 		gtk_table_set_col_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
+		#endif
+		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pFrame), pCategoryWidget->pTable);
 	}
 
 	// Put the widgets in the new table.
@@ -832,20 +845,20 @@ static void on_click_toggle_activated (GtkButton *button, gpointer data)
 	_trigger_current_filter ();
 }
 
-static void on_click_category_button (GtkButton *button, gpointer data)
+static void on_click_category_button (G_GNUC_UNUSED GtkButton *button, gpointer data)
 {
 	int iCategory = GPOINTER_TO_INT (data);
 	//g_print ("%s (%d)\n", __func__, iCategory);
 	cairo_dock_show_one_category (iCategory);
 }
 
-static void on_click_all_button (GtkButton *button, gpointer data)
+static void on_click_all_button (G_GNUC_UNUSED GtkButton *button, G_GNUC_UNUSED gpointer data)
 {
 	//g_print ("%s ()\n", __func__);
 	cairo_dock_show_all_categories ();
 }
 
-static void on_click_group_button (GtkButton *button, CairoDockGroupDescription *pGroupDescription)
+static void on_click_group_button (G_GNUC_UNUSED GtkButton *button, CairoDockGroupDescription *pGroupDescription)
 {
 	//g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
 	cairo_dock_show_group (pGroupDescription);
@@ -892,13 +905,13 @@ static gpointer _get_previous_widget (void)
 	
 	return s_path->data;
 }
-static void on_click_back_button (GtkButton *button, gpointer data)
+static void on_click_back_button (G_GNUC_UNUSED GtkButton *button, G_GNUC_UNUSED gpointer data)
 {
 	gpointer pPrevPlace = _get_previous_widget ();
 	_show_group_or_category (pPrevPlace);
 }
 
-static void _on_group_dialog_destroyed (gpointer data)
+static void _on_group_dialog_destroyed (G_GNUC_UNUSED gpointer data)
 {
 	s_pDialog = NULL;
 }
@@ -971,7 +984,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 }
 
 static GtkButton *s_pCurrentButton = NULL;
-static gboolean on_enter_group_button (GtkButton *button, GdkEventCrossing *pEvent, CairoDockGroupDescription *pGroupDescription)
+static gboolean on_enter_group_button (GtkButton *button, G_GNUC_UNUSED GdkEventCrossing *pEvent, CairoDockGroupDescription *pGroupDescription)
 {
 	cd_debug ("%s (%s)", __func__, pGroupDescription->cGroupName);
 	if (g_pPrimaryContainer == NULL)  // inutile en maintenance, le dialogue risque d'apparaitre sur la souris.
@@ -996,7 +1009,7 @@ static gboolean on_enter_group_button (GtkButton *button, GdkEventCrossing *pEve
 	s_iSidShowGroupDialog = g_timeout_add (330, (GSourceFunc)_show_group_dialog, (gpointer) pGroupDescription);
 	return FALSE;
 }
-static gboolean _check_group_button (gpointer data)
+static gboolean _check_group_button (G_GNUC_UNUSED gpointer data)
 {
 	Window Xid = GDK_WINDOW_XID (gtk_widget_get_window (s_pMainWindow));
 	if (Xid != cairo_dock_get_current_active_window ())  // we're not the active window any more, so the 'leave' event was probably due to an Alt+Tab -> the mouse is really out of the button.
@@ -1010,7 +1023,7 @@ static gboolean _check_group_button (gpointer data)
 	s_iSidCheckGroupButton = 0;
 	return FALSE;
 }
-static gboolean on_leave_group_button (GtkButton *button, GdkEventCrossing *pEvent, gpointer data)
+static gboolean on_leave_group_button (GtkButton *button, GdkEventCrossing *pEvent, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("%s (%d, %d)", __func__, pEvent->mode, pEvent->detail);
 	// if we were about to show the dialog, cancel.
@@ -1106,7 +1119,7 @@ static void cairo_dock_free_categories (void)
 	s_path = NULL;
 }
 
-static gboolean on_delete_main_gui (GtkWidget *pWidget, gpointer data)
+static gboolean on_delete_main_gui (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_free_categories ();
 	if (s_iSidShowGroupDialog != 0)
@@ -1139,41 +1152,41 @@ static CDWidget *_build_module_widget (CairoDockGroupDescription *pGroupDescript
 	return CD_WIDGET (pModuleWidget);
 }
 
-static CDWidget *_build_config_group_widget (CairoDockGroupDescription *pGroupDescription, CairoDockModuleInstance *unused)
+static CDWidget *_build_config_group_widget (CairoDockGroupDescription *pGroupDescription, G_GNUC_UNUSED CairoDockModuleInstance *unused)
 {
 	ConfigGroupWidget *pConfigGroupWidget = cairo_dock_config_group_widget_new (pGroupDescription->cGroupName, pGroupDescription->pManagers, pGroupDescription->cTitle, pGroupDescription->cIcon);
 	
 	return CD_WIDGET (pConfigGroupWidget);
 }
 
-static CDWidget *_build_themes_widget (CairoDockGroupDescription *pGroupDescription, CairoDockModuleInstance *unused)
+static CDWidget *_build_themes_widget (G_GNUC_UNUSED CairoDockGroupDescription *pGroupDescription, G_GNUC_UNUSED CairoDockModuleInstance *unused)
 {
 	ThemesWidget *pThemesWidget = cairo_dock_themes_widget_new (GTK_WINDOW (s_pMainWindow));
 	
 	return CD_WIDGET (pThemesWidget);
 }
 
-static CDWidget *_build_items_widget (CairoDockGroupDescription *pGroupDescription, CairoDockModuleInstance *unused)
+static CDWidget *_build_items_widget (G_GNUC_UNUSED CairoDockGroupDescription *pGroupDescription, G_GNUC_UNUSED CairoDockModuleInstance *unused)
 {
 	ItemsWidget *pItemsWidget = cairo_dock_items_widget_new ();
 	
 	return CD_WIDGET (pItemsWidget);
 }
 
-static CDWidget *_build_shortkeys_widget (CairoDockGroupDescription *pGroupDescription, CairoDockModuleInstance *unused)
+static CDWidget *_build_shortkeys_widget (G_GNUC_UNUSED CairoDockGroupDescription *pGroupDescription, G_GNUC_UNUSED CairoDockModuleInstance *unused)
 {
 	ShortkeysWidget *pShortkeysWidget = cairo_dock_shortkeys_widget_new ();
 	
 	return CD_WIDGET (pShortkeysWidget);
 }
 
-static void on_click_apply (GtkButton *button, GtkWidget *pWindow)
+static void on_click_apply (G_GNUC_UNUSED GtkButton *button, G_GNUC_UNUSED GtkWidget *pWindow)
 {
 	//g_print ("%s ()\n", __func__);
 	cairo_dock_widget_apply (s_pCurrentGroupWidget2);
 }
 
-static void on_click_quit (GtkButton *button, GtkWidget *pWindow)
+static void on_click_quit (G_GNUC_UNUSED GtkButton *button, GtkWidget *pWindow)
 {
 	gtk_widget_destroy (pWindow);
 }
@@ -1207,7 +1220,7 @@ static void on_click_activate_given_group (GtkToggleButton *button, CairoDockGro
 	}
 }
 
-static void on_click_activate_current_group (GtkToggleButton *button, gpointer *data)
+static void on_click_activate_current_group (GtkToggleButton *button, G_GNUC_UNUSED gpointer *data)
 {
 	CairoDockGroupDescription *pGroupDescription = s_pCurrentGroup;
 	on_click_activate_given_group (button, pGroupDescription);
@@ -1240,7 +1253,7 @@ static inline void _reset_filter_state (void)
 	bHideOther = TRUE;
 }
 
-static void on_activate_filter (GtkEntry *pEntry, gpointer data)
+static void on_activate_filter (GtkEntry *pEntry, G_GNUC_UNUSED gpointer data)
 {
 	const gchar *cFilterText = gtk_entry_get_text (pEntry);
 	if (cFilterText == NULL || *cFilterText == '\0')
@@ -1255,7 +1268,7 @@ static void on_activate_filter (GtkEntry *pEntry, gpointer data)
 		pKeyWords[0] = (gchar *) cFilterText;
 	}
 	gchar *str;
-	int i,j;
+	int i;
 	for (i = 0; pKeyWords[i] != NULL; i ++)
 	{
 		for (str = pKeyWords[i]; *str != '\0'; str ++)
@@ -1276,32 +1289,32 @@ static void _trigger_current_filter (void)
 	gboolean bReturn;
 	g_signal_emit_by_name (s_pFilterEntry, "activate", NULL, &bReturn);
 }
-static void on_toggle_all_words (GtkCheckMenuItem *pMenuItem, gpointer data)
+static void on_toggle_all_words (GtkCheckMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
 {
 	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
 	bAllWords = gtk_check_menu_item_get_active (pMenuItem);
 	_trigger_current_filter ();
 }
-static void on_toggle_search_in_tooltip (GtkCheckMenuItem *pMenuItem, gpointer data)
+static void on_toggle_search_in_tooltip (GtkCheckMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
 {
 	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
 	bSearchInToolTip = gtk_check_menu_item_get_active (pMenuItem);
 	_trigger_current_filter ();
 }
-static void on_toggle_highlight_words (GtkCheckMenuItem *pMenuItem, gpointer data)
+static void on_toggle_highlight_words (GtkCheckMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
 {
 	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
 	bHighLightText = gtk_check_menu_item_get_active (pMenuItem);
 	_trigger_current_filter ();
 }
-static void on_toggle_hide_others (GtkCheckMenuItem *pMenuItem, gpointer data)
+static void on_toggle_hide_others (GtkCheckMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
 {
 	//g_print ("%s (%d)\n", __func__, gtk_toggle_button_get_active (pButton));
 	bHideOther = gtk_check_menu_item_get_active (pMenuItem);
 	_trigger_current_filter ();
 }
 #if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
-static void on_clear_filter (GtkEntry *pEntry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer data)
+static void on_clear_filter (GtkEntry *pEntry, G_GNUC_UNUSED GtkEntryIconPosition icon_pos, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
 {
 	gtk_entry_set_text (pEntry, "");
 	cairo_dock_apply_current_filter (NULL, FALSE, FALSE, FALSE, FALSE);
@@ -1661,7 +1674,7 @@ static inline void _add_check_item_in_menu (GtkWidget *pMenu, const gchar *cLabe
 		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), TRUE);
 }
 
-static void _destroy_filter_menu (GtkWidget *pAttachWidget, GtkMenu *pMenu)
+static void _destroy_filter_menu (G_GNUC_UNUSED GtkWidget *pAttachWidget, GtkMenu *pMenu)
 {
 	gtk_widget_destroy (GTK_WIDGET (pMenu));
 }
@@ -1855,11 +1868,19 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		g_free (cLabel);
 		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
 		
+		#if GTK_CHECK_VERSION (3, 4, 0)
+		pCategoryWidget->pTable = gtk_grid_new ();
+		gtk_grid_set_row_spacing (GTK_GRID (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
+		gtk_grid_set_row_homogeneous (GTK_GRID (pCategoryWidget->pTable), TRUE);
+		///gtk_grid_set_column_spacing (GTK_GRID (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
+		gtk_grid_set_column_homogeneous (GTK_GRID (pCategoryWidget->pTable), TRUE);
+		#else
 		pCategoryWidget->pTable = gtk_table_new (1,
 			s_iNbButtonsByRow,
 			TRUE);
 		gtk_table_set_row_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
 		///gtk_table_set_col_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
+		#endif
 		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pFrame),
 			pCategoryWidget->pTable);
 		gtk_box_pack_start (GTK_BOX (s_pGroupsVBox),
@@ -1993,7 +2014,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	
 	
 	gtk_widget_show_all (s_pMainWindow);
-	cairo_dock_enable_apply_button (s_pMainWindow, FALSE);
+	cairo_dock_enable_apply_button (FALSE);
 	gtk_widget_hide (s_pGroupFrame);
 	gtk_widget_hide (s_pPreviewBox);
 	
@@ -2052,7 +2073,7 @@ static void cairo_dock_show_all_categories (void)
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, on_click_all_button, NULL);
 	
-	cairo_dock_enable_apply_button (s_pMainWindow, FALSE);
+	cairo_dock_enable_apply_button (FALSE);
 	gtk_widget_hide (s_pGroupFrame);
 	
 	//\_______________ enable 'hide inactive applets' filter.
@@ -2109,7 +2130,7 @@ static void cairo_dock_show_one_category (int iCategory)
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
 		0, 0, NULL, on_click_all_button, NULL);
 	
-	cairo_dock_enable_apply_button (s_pMainWindow, FALSE);
+	cairo_dock_enable_apply_button (FALSE);
 	gtk_widget_hide (s_pGroupFrame);
 	
 	//\_______________ enable 'hide inactive applets' filter.
@@ -2148,7 +2169,7 @@ static void cairo_dock_toggle_category_button (int iCategory)
 		0, 0, NULL, on_click_all_button, NULL);
 }
 
-
+/* Not used
 static void _reload_current_module_widget (CairoDockModuleInstance *pModuleInstance, int iShowPage)
 {
 	// ensure the module is currently displayed.
@@ -2176,7 +2197,7 @@ static void _reload_current_module_widget (CairoDockModuleInstance *pModuleInsta
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (s_pCurrentGroupWidget2->pWidget), iNotebookPage);
 	}
 }
-
+*/
 static inline gboolean _module_is_opened (CairoDockModuleInstance *pInstance)
 {
 	if (s_pMainWindow == NULL || s_pCurrentGroup == NULL || s_pCurrentGroup->cGroupName == NULL || pInstance == NULL)
@@ -2203,7 +2224,7 @@ static inline gboolean _module_is_opened (CairoDockModuleInstance *pInstance)
 	return FALSE;
 }
 
-static void cairo_dock_enable_apply_button (GtkWidget *pMainWindow, gboolean bEnable)
+static void cairo_dock_enable_apply_button (gboolean bEnable)
 {
 	if (bEnable)
 	{
@@ -2238,7 +2259,7 @@ static void _present_group_widget (CairoDockGroupDescription *pGroupDescription,
 		CAIRO_DOCK_FRAME_MARGIN);
 	gtk_widget_show_all (s_pCurrentGroupWidget2->pWidget);
 	
-	cairo_dock_enable_apply_button (s_pMainWindow, cairo_dock_widget_can_apply (s_pCurrentGroupWidget2));
+	cairo_dock_enable_apply_button (cairo_dock_widget_can_apply (s_pCurrentGroupWidget2));
 	
 	gtk_window_set_title (GTK_WINDOW (s_pMainWindow), pGroupDescription->cTitle);
 	
@@ -2273,6 +2294,7 @@ static void _present_group_widget (CairoDockGroupDescription *pGroupDescription,
 	_trigger_current_filter ();
 }
 
+/* Not used
 static void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pModuleInstance)
 {
 	g_return_if_fail (pModuleInstance != NULL);
@@ -2284,6 +2306,7 @@ static void cairo_dock_present_module_instance_gui (CairoDockModuleInstance *pMo
 	_present_group_widget (pGroupDescription, pModuleInstance);
 	cairo_dock_toggle_category_button (pGroupDescription->iCategory);
 }
+*/
 
 static void cairo_dock_show_group (CairoDockGroupDescription *pGroupDescription)
 {
@@ -2585,7 +2608,7 @@ static void reload_current_widget (CairoDockModuleInstance *pModuleInstance, int
 	///_present_group_widget (pGroupDescription, pModuleInstance);
 	if (IS_MODULE_WIDGET (s_pCurrentGroupWidget2))
 	{
-		cairo_dock_module_widget_reload_current_widget (MODULE_WIDGET (s_pCurrentGroupWidget2), pModuleInstance, iShowPage);
+		cairo_dock_module_widget_reload_current_widget (MODULE_WIDGET (s_pCurrentGroupWidget2));
 		gtk_box_pack_start (GTK_BOX (s_pGroupsVBox),
 			s_pCurrentGroupWidget2->pWidget,
 			TRUE,

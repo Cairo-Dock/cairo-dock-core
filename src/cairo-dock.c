@@ -141,12 +141,12 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 	}
 	return FALSE;
 }
-static gboolean _cairo_dock_first_launch_setup (gpointer data)
+static gboolean _cairo_dock_first_launch_setup (G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_launch_command (CAIRO_DOCK_SHARE_DATA_DIR"/scripts/initial-setup.sh");
 	return FALSE;
 }
-static void _cairo_dock_quit (int signal)
+static void _cairo_dock_quit (G_GNUC_UNUSED int signal)
 {
 	gtk_main_quit ();
 }
@@ -155,6 +155,8 @@ static void _cairo_dock_intercept_signal (int signal)
 	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on glx-dock.org to help improving the dock!", signal);
 	g_print ("info on the system :\n");
 	int r = system ("uname -a");
+	if (r < 0)
+		cd_warning ("Not able to launch this command: uname");
 	
 	// if a module is responsible, expose it to public shame.
 	if (g_pCurrentModule != NULL)
@@ -192,7 +194,7 @@ static void _cairo_dock_set_signal_interception (void)
 	signal (SIGTERM, _cairo_dock_quit);  // Term // kill -15 (system)
 }
 
-static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GMainLoop *pBlockingLoop)
+static gboolean on_delete_maintenance_gui (G_GNUC_UNUSED GtkWidget *pWidget, GMainLoop *pBlockingLoop)
 {
 	cd_debug ("%s ()", __func__);
 	if (pBlockingLoop != NULL && g_main_loop_is_running (pBlockingLoop))
@@ -202,7 +204,7 @@ static gboolean on_delete_maintenance_gui (GtkWidget *pWidget, GMainLoop *pBlock
 	return FALSE;  // TRUE <=> ne pas detruire la fenetre.
 }
 
-static void PrintMuteFunc(const gchar *string) {}
+static void PrintMuteFunc (G_GNUC_UNUSED const gchar *string) {}
 
 static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 {
@@ -254,7 +256,6 @@ int main (int argc, char** argv)
 {
 	//\___________________ build the command line used to respawn, and check if we have been launched from another life.
 	s_pLaunchCommand = g_string_new (argv[0]);
-	gchar *cDisableApplet = NULL;
 	int i;
 	for (i = 1; i < argc; i ++)
 	{
@@ -299,7 +300,7 @@ int main (int argc, char** argv)
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 	
 	//\___________________ get app's options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bNormalHint = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceIndirectRendering = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE, bAskBackend = FALSE, bMetacityWorkaround = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE, bAskBackend = FALSE, bMetacityWorkaround = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	int iDelay = 0;
 	GOptionEntry pOptionsTable[] =
@@ -673,6 +674,8 @@ int main (int argc, char** argv)
 			cd_warning (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org"), cExcludeModule);
 			gchar *cCommand = g_strdup_printf ("sed -i \"/modules/ s/%s//g\" \"%s\"", cExcludeModule, g_cConfFile);
 			int r = system (cCommand);
+			if (r < 0)
+				cd_warning ("Not able to launch this command: %s", cCommand);
 			g_free (cCommand);
 		}
 		
@@ -711,6 +714,8 @@ int main (int argc, char** argv)
 		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s/%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes", cThemeName, g_cCurrentThemePath);
 		cd_message (cCommand);
 		int r = system (cCommand);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", cCommand);
 		g_free (cCommand);
 		
 		cairo_dock_mark_current_theme_as_modified (FALSE);  // on ne proposera pas de sauvegarder ce theme.

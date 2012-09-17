@@ -38,7 +38,7 @@ extern CairoContainer *g_pPrimaryContainer;
 
 static void _widget_plugins_reload (CDWidget *pCdWidget);
 
-static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
+static void _cairo_dock_activate_one_module (G_GNUC_UNUSED GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
 	GtkTreeIter iter;
 	if (! gtk_tree_model_get_iter_from_string (model, &iter, path))
@@ -68,7 +68,7 @@ static void _cairo_dock_activate_one_module (GtkCellRendererToggle * cell_render
 	
 	g_free (cModuleName);
 }
-static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, CairoDockModule *pModule)
+static void _cairo_dock_initiate_config_module (G_GNUC_UNUSED GtkMenuItem *pMenuItem, CairoDockModule *pModule)
 {
 	CairoDockModuleInstance *pModuleInstance = (pModule->pInstancesList ? pModule->pInstancesList->data : NULL);
 	if (pModuleInstance)
@@ -76,7 +76,7 @@ static void _cairo_dock_initiate_config_module (GtkMenuItem *pMenuItem, CairoDoc
 	else
 		cairo_dock_show_module_gui (pModule->pVisitCard->cModuleName);
 }
-static gboolean _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer data)
+static gboolean _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, G_GNUC_UNUSED gpointer data)
 {
 	if ((pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)  // right click
 	|| (pButton->button == 1 && pButton->type == GDK_2BUTTON_PRESS))  // double click
@@ -120,7 +120,7 @@ static gboolean _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButt
 	return FALSE;
 }
 
-static void _cairo_dock_render_module_name (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+static void _cairo_dock_render_module_name (G_GNUC_UNUSED GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, G_GNUC_UNUSED gpointer data)
 {
 	gboolean bActive = FALSE;
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_ACTIVE, &bActive, -1);
@@ -131,7 +131,7 @@ static void _cairo_dock_render_module_name (GtkTreeViewColumn *tree_column, GtkC
 		g_object_set (cell, "weight", 400, "weight-set", FALSE, NULL);
 }
 
-static void _cairo_dock_render_category (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
+static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, G_GNUC_UNUSED gpointer data)
 {
 	const gchar *cCategory=NULL;
 	gint iCategory = 0;
@@ -296,7 +296,7 @@ PluginsWidget *cairo_dock_plugins_widget_new (void)
 }
 
 
-static gboolean _update_module_checkbox (GtkTreeModel *pModel, GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
+static gboolean _update_module_checkbox (GtkTreeModel *pModel, G_GNUC_UNUSED GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
 	gchar *cWantedModuleName = data[0];
 	gchar *cModuleName = NULL;

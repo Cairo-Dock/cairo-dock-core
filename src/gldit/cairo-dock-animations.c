@@ -42,7 +42,7 @@ extern CairoDockGLConfig g_openglConfig;
 extern CairoDockHidingEffect *g_pHidingBackend;
 extern CairoDockHidingEffect *g_pKeepingBelowBackend;
 
-static gboolean _update_fade_out_dock (gpointer pUserData, CairoDock *pDock, gboolean *bContinueAnimation)
+static gboolean _update_fade_out_dock (G_GNUC_UNUSED gpointer pUserData, CairoDock *pDock, gboolean *bContinueAnimation)
 {
 	pDock->iFadeCounter += (pDock->bFadeInOut ? 1 : -1);  // fade out, puis fade in.
 	
@@ -382,7 +382,7 @@ void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon)
 }
 
 
-gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)
+gboolean cairo_dock_update_inserting_removing_icon_notification (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)
 {
 	if (pIcon->iGlideDirection != 0)
 	{
@@ -417,7 +417,7 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserD
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+gboolean cairo_dock_on_insert_remove_icon_notification (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, G_GNUC_UNUSED CairoDock *pDock)
 {
 	if (pIcon->iAnimationState == CAIRO_DOCK_STATE_REMOVE_INSERT)  // already in insert/remove state
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -431,7 +431,7 @@ gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon)
+gboolean cairo_dock_stop_inserting_removing_icon_notification (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon)
 {
 	pIcon->fGlideOffset = 0;
 	pIcon->iGlideDirection = 0;
@@ -445,7 +445,7 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserDat
 
 #define cairo_dock_set_transition(pIcon, transition) (pIcon)->pTransition = transition
 
-static gboolean _cairo_dock_transition_step (gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
+static gboolean _cairo_dock_transition_step (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
 {
 	CairoDockTransition *pTransition = cairo_dock_get_transition (pIcon);
 	if (pTransition == NULL)

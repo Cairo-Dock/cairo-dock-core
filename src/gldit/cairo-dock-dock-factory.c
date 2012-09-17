@@ -117,7 +117,6 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %f, %f)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->fDecorationsOffsetX);
 	//\_________________ On fait decroitre la magnitude du dock.
-	int iPrevMagnitudeIndex = pDock->iMagnitudeIndex;
 	pDock->iMagnitudeIndex -= myBackendsParam.iShrinkDownInterval;
 	if (pDock->iMagnitudeIndex < 0)
 		pDock->iMagnitudeIndex = 0;
@@ -440,7 +439,7 @@ static gboolean _cairo_dock_dock_animation_loop (CairoContainer *pContainer)
 }
 
 static gboolean _on_dock_destroyed (GtkWidget *menu, CairoContainer *pContainer);
-static void _on_menu_deactivated (GtkMenuShell *menu, CairoDock *pDock)
+static void _on_menu_deactivated (G_GNUC_UNUSED GtkMenuShell *menu, CairoDock *pDock)
 {
 	//g_print ("\n+++ %s ()\n\n", __func__);
 	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
@@ -479,7 +478,7 @@ static gboolean _on_dock_destroyed (GtkWidget *menu, CairoContainer *pContainer)
 		pContainer);
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
-static void _setup_menu (CairoContainer *pContainer, Icon *pIcon, GtkWidget *pMenu)
+static void _setup_menu (CairoContainer *pContainer, G_GNUC_UNUSED Icon *pIcon, GtkWidget *pMenu)
 {
 	// keep the dock visible
 	CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
@@ -1078,7 +1077,6 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 	pDock->icons = NULL;
 	Icon *icon;
 	GList *ic;
-	gchar *cDesktopFilePath;
 	for (ic = pIconsList; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;

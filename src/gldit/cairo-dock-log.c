@@ -66,6 +66,10 @@ const char *_cd_log_level_to_string (const GLogLevelFlags loglevel)
       return "\033[1;33minfo    : \033[0m ";
     case G_LOG_LEVEL_DEBUG:
       return "\033[1;35mdebug   : \033[0m ";
+    case G_LOG_FLAG_RECURSION:
+    case G_LOG_FLAG_FATAL:
+    case G_LOG_LEVEL_MASK:
+      return "\033[1;31mFATAL   : \033[0m ";
     }
   }
   else
@@ -84,6 +88,10 @@ const char *_cd_log_level_to_string (const GLogLevelFlags loglevel)
       return "info    : ";
     case G_LOG_LEVEL_DEBUG:
       return "debug   : ";
+    case G_LOG_FLAG_RECURSION:
+    case G_LOG_FLAG_FATAL:
+    case G_LOG_LEVEL_MASK:
+      return "FATAL   : ";
     }
   }
   return "";
@@ -110,10 +118,10 @@ void cd_log_location(const GLogLevelFlags loglevel,
   va_end(args);
 }
 
-static void cairo_dock_log_handler(const gchar *log_domain,
+static void cairo_dock_log_handler(G_GNUC_UNUSED const gchar *log_domain,
                                    GLogLevelFlags log_level,
                                    const gchar *message,
-                                   gpointer user_data)
+                                   G_GNUC_UNUSED gpointer user_data)
 {
   if (log_level > s_gLogLevel)
     return;

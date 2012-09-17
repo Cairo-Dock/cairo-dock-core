@@ -47,7 +47,7 @@ extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 extern gboolean g_bUseOpenGL;
 
 
-static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext)
+static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en embleme.
 	int wi, hi;
@@ -76,7 +76,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, CairoContai
 	}
 }
 
-static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, CairoContainer *pContainer, int w, int h)
+static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, int w, int h)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en embleme.
 	int i;
@@ -95,7 +95,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, Cair
 	}
 }
 
-static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext)
+static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en pile.
 	int wi, hi;
@@ -140,7 +140,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, CairoContain
 	}
 }
 
-static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, CairoContainer *pContainer, int w, int h)
+static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, int w, int h)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en pile.
 	int i,k=0;

@@ -81,7 +81,7 @@ static void _cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 	pDialog->container.iHeight = pDialog->iComputedHeight;
 }
 
-static gboolean on_expose_dialog (GtkWidget *pWidget,
+static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget,
 #if (GTK_MAJOR_VERSION < 3)
 	GdkEventExpose *pExpose,
 #else
@@ -90,9 +90,9 @@ static gboolean on_expose_dialog (GtkWidget *pWidget,
 	CairoDialog *pDialog)
 {
 	//g_print ("%s (%dx%d ; %d;%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight, pExpose->area.x, pExpose->area.y);
-	int x, y;
+	/* int x, y;
 	// OpenGL renderers are not ready for dialogs.
-	/*if (g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
+	if (g_bUseOpenGL && (pDialog->pDecorator == NULL || pDialog->pDecorator->render_opengl != NULL) && (pDialog->pRenderer == NULL || pDialog->pRenderer->render_opengl != NULL))
 	{
 		if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pDialog)))
 			return FALSE;
@@ -175,7 +175,7 @@ static void _cairo_dock_set_dialog_input_shape (CairoDialog *pDialog)
 	gldi_container_set_input_shape (CAIRO_CONTAINER (pDialog), pDialog->pShapeBitmap);
 }
 
-static gboolean on_configure_dialog (GtkWidget* pWidget,
+static gboolean on_configure_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
@@ -245,7 +245,7 @@ static gboolean on_configure_dialog (GtkWidget* pWidget,
 }
 
 static gboolean on_unmap_dialog (GtkWidget* pWidget,
-	GdkEvent *pEvent,
+	G_GNUC_UNUSED GdkEvent *pEvent,
 	CairoDialog *pDialog)
 {
 	//g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, GTK_WIDGET_VISIBLE (pWidget));
@@ -419,7 +419,7 @@ static gboolean _cairo_dock_animate_dialog_icon (CairoDialog *pDialog)
 	cairo_dock_damage_icon_dialog (pDialog);
 	return TRUE;
 }
-static gboolean on_button_press_widget (GtkWidget *widget,
+static gboolean on_button_press_widget (G_GNUC_UNUSED GtkWidget *widget,
 	GdkEventButton *pButton,
 	CairoDialog *pDialog)
 {
@@ -428,7 +428,7 @@ static gboolean on_button_press_widget (GtkWidget *widget,
 	pDialog->iButtonPressTime = pButton->time;
 	return FALSE;
 }
-static void _force_above (GtkWidget *pWidget, CairoDialog *pDialog)
+static void _force_above (G_GNUC_UNUSED GtkWidget *pWidget, CairoDialog *pDialog)
 {
 	gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
 	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDialog));
@@ -766,7 +766,6 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 	}
 	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
-		CairoDesklet *pDesklet = CAIRO_DESKLET (pContainer);
 		*bDirectionUp = (pContainer->iWindowPositionY > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
 		///*bIsHorizontal = (pContainer->iWindowPositionX > 50 && pContainer->iWindowPositionX + pContainer->iHeight < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - 50);
 		*bIsHorizontal = TRUE;

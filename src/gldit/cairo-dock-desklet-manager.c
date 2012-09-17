@@ -431,7 +431,7 @@ static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
 	glPopMatrix ();
 }
 
-static gboolean _cairo_dock_render_desklet_notification (gpointer pUserData, CairoDesklet *pDesklet, cairo_t *pCairoContext)
+static gboolean _cairo_dock_render_desklet_notification (G_GNUC_UNUSED gpointer pUserData, CairoDesklet *pDesklet, cairo_t *pCairoContext)
 {
 	if (pCairoContext != NULL)
 		_render_desklet_cairo (pDesklet, pCairoContext);
@@ -440,14 +440,14 @@ static gboolean _cairo_dock_render_desklet_notification (gpointer pUserData, Cai
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-static gboolean _cairo_dock_enter_leave_desklet_notification (gpointer data, CairoDesklet *pDesklet, gboolean *bStartAnimation)
+static gboolean _cairo_dock_enter_leave_desklet_notification (G_GNUC_UNUSED gpointer data, CairoDesklet *pDesklet, gboolean *bStartAnimation)
 {
 	pDesklet->bButtonsApparition = TRUE;
 	*bStartAnimation = TRUE;
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-static gboolean _cairo_dock_update_desklet_notification (gpointer data, CairoDesklet *pDesklet, gboolean *bContinueAnimation)
+static gboolean _cairo_dock_update_desklet_notification (G_GNUC_UNUSED gpointer data, CairoDesklet *pDesklet, gboolean *bContinueAnimation)
 {
 	if (!pDesklet->bButtonsApparition && !pDesklet->bGrowingUp)
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -558,7 +558,6 @@ static gboolean _cairo_dock_foreach_icons_in_desklet (CairoDesklet *pDesklet, gp
 	gpointer pUserData = data[1];
 	if (pDesklet->pIcon != NULL)
 		pFunction (pDesklet->pIcon, CAIRO_CONTAINER (pDesklet), pUserData);
-	Icon *pIcon;
 	GList *ic;
 	for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
 	{

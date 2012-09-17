@@ -182,7 +182,7 @@ GtkRequisition *cairo_dock_get_widget_bottom_position (GtkWidget *pWidget)
  * Convenient GtkMenuPositionFunc callback function to position menu.
  * use with @see cairo_dock_get_widget_bottom_position
  */
-void cairo_dock_place_menu_at_position (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, GtkRequisition *pPosition)
+void cairo_dock_place_menu_at_position (G_GNUC_UNUSED GtkMenu *menu, gint *x, gint *y, gboolean *push_in, GtkRequisition *pPosition)
 {
 	*push_in = TRUE;
 	if (pPosition != NULL)

@@ -113,6 +113,8 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	{
 		gchar *cCommand = g_strdup_printf ("rm -rf \"%s\"", cTempBackup);
 		int r = system (cCommand);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", cCommand);
 		g_free (cCommand);
 	}
 	
@@ -254,7 +256,6 @@ gchar *cairo_dock_download_archive (const gchar *cURL, const gchar *cExtractTo)
 
 static void _dl_file (gpointer *pSharedMemory)
 {
-	gchar *cPath;
 	if (pSharedMemory[1] != NULL)  // download to the given location
 	{
 		if (cairo_dock_download_file (pSharedMemory[0], pSharedMemory[1]))
@@ -347,7 +348,8 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 	
 	if (r != CURLE_OK)
 	{
-		cd_warning ("an error occured while downloading '%s' : %s", cURL, curl_easy_strerror (r));
+		g_set_error (erreur, 1, 1, "an error occured while downloading '%s' : %s", cURL, curl_easy_strerror (r));
+		cd_warning ("%s", (*erreur)->message);
 		g_string_free (buffer, TRUE);
 		buffer = NULL;
 	}
@@ -438,7 +440,7 @@ static inline int _get_rating (const gchar *cPackagesDir, const gchar *cPackageN
 	g_free (cRatingFile);
 	return iRating;	
 }
-GHashTable *cairo_dock_list_local_packages (const gchar *cPackagesDir, GHashTable *hProvidedTable, gboolean bUpdatePackageValidity, GError **erreur)
+GHashTable *cairo_dock_list_local_packages (const gchar *cPackagesDir, GHashTable *hProvidedTable, G_GNUC_UNUSED gboolean bUpdatePackageValidity, GError **erreur)
 {
 	cd_debug ("%s (%s)", __func__, cPackagesDir);
 	GError *tmp_erreur = NULL;
@@ -454,7 +456,6 @@ GHashTable *cairo_dock_list_local_packages (const gchar *cPackagesDir, GHashTabl
 	CairoDockPackageType iType = (strncmp (cPackagesDir, "/usr", 4) == 0 ?
 		CAIRO_DOCK_LOCAL_PACKAGE :
 		CAIRO_DOCK_USER_PACKAGE);
-	GString *sRatingFile = g_string_new (cPackagesDir);
 	gchar *cPackagePath;
 	CairoDockPackage *pPackage;
 	const gchar *cPackageName;

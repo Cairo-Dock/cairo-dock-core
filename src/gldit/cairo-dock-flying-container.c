@@ -124,7 +124,7 @@ static void _cairo_dock_load_explosion_image (int iWidth)
 }
 
 
-static gboolean _cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
+static gboolean _cairo_dock_update_flying_container_notification (G_GNUC_UNUSED gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
 {
 	if (pFlyingContainer->container.iAnimationStep > 0)
 	{
@@ -141,7 +141,7 @@ static gboolean _cairo_dock_update_flying_container_notification (gpointer pUser
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
-static gboolean _cairo_dock_render_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext)
+static gboolean _cairo_dock_render_flying_container_notification (G_GNUC_UNUSED gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext)
 {
 	// it seems this function is called 2 times
 	Icon *pIcon = pFlyingContainer->pIcon;
@@ -249,11 +249,11 @@ static gboolean _cairo_dock_render_flying_container_notification (gpointer pUser
 }
 
 
-static gboolean on_expose_flying_icon (GtkWidget *pWidget,
+static gboolean on_expose_flying_icon (G_GNUC_UNUSED GtkWidget *pWidget,
 #if (GTK_MAJOR_VERSION < 3)
-	GdkEventExpose *pExpose,
+	G_GNUC_UNUSED GdkEventExpose *pExpose,
 #else
-	cairo_t *ctx,
+	G_GNUC_UNUSED cairo_t *ctx,
 #endif
 	CairoFlyingContainer *pFlyingContainer)
 {
@@ -290,8 +290,6 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 		
 		if (g_bUseOpenGL)
 		{
-			GLsizei w = pEvent->width;
-			GLsizei h = pEvent->height;
 			if (! gldi_glx_make_current (CAIRO_CONTAINER (pFlyingContainer)))
 				return FALSE;
 			
@@ -405,7 +403,8 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 	
 	struct timeval tv;
 	int r = gettimeofday (&tv, NULL);
-	pFlyingContainer->fCreationTime = tv.tv_sec + tv.tv_usec * 1e-6;
+	if (r == 0)
+		pFlyingContainer->fCreationTime = tv.tv_sec + tv.tv_usec * 1e-6;
 	
 	return pFlyingContainer;
 }

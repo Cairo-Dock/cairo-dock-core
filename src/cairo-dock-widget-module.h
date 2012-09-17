@@ -52,7 +52,7 @@ void cairo_dock_module_widget_update_desklet_visibility_params (ModuleWidget *pM
 void cairo_dock_module_widget_update_module_instance_container (ModuleWidget *pModuleWidget, CairoDockModuleInstance *pInstance, gboolean bDetached);
 
 
-void cairo_dock_module_widget_reload_current_widget (ModuleWidget *pModuleWidget, CairoDockModuleInstance *pInstance, int iShowPage);
+void cairo_dock_module_widget_reload_current_widget (ModuleWidget *pModuleWidget);
 
 
 G_END_DECLS

@@ -86,7 +86,7 @@ static Atom s_aWmName;
 static Atom s_aUtf8String;
 static Atom s_aString;
 
-static int _cairo_dock_xerror_handler (Display * pDisplay, XErrorEvent *pXError)
+static int _cairo_dock_xerror_handler (G_GNUC_UNUSED Display * pDisplay, XErrorEvent *pXError)
 {
 	cd_debug ("Error (%d, %d, %d) during an X request on %d", pXError->error_code, pXError->request_code, pXError->minor_code, pXError->resourceid);
 	return 0;
@@ -292,7 +292,6 @@ void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
 	XGetWindowProperty (s_XDisplay, root, s_aNetDesktopGeometry, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pVirtualScreenSizeBuffer);
 	if (iBufferNbElements > 0)
 	{
-		Screen *scr = XDefaultScreenOfDisplay (s_XDisplay);
 		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 		*iNbViewportX = pVirtualScreenSizeBuffer[0] / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 		*iNbViewportY = pVirtualScreenSizeBuffer[1] / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
@@ -402,7 +401,6 @@ Pixmap cairo_dock_get_window_background_pixmap (Window Xid)
 	g_return_val_if_fail (Xid > 0, None);
 	//cd_debug ("%s (%d)", __func__, Xid);
 	
-	Pixmap iPixmapID;
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements;
@@ -1020,7 +1018,7 @@ gchar *cairo_dock_get_xwindow_name (Window Xid, gboolean bSearchWmName)
 	gchar *cName = NULL;
 	if (iBufferNbElements > 0)
 	{
-		cName = g_strdup (pNameBuffer);
+		cName = g_strdup ((gchar *)pNameBuffer);
 		XFree (pNameBuffer);
 	}
 	return cName;

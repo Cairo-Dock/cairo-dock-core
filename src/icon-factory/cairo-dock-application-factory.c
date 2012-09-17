@@ -127,12 +127,9 @@ Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	if (s_XDisplay == NULL)
 		_cairo_dock_initialize_application_factory ();
 	
-	guchar *pNameBuffer = NULL;
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements;
-	cairo_surface_t *pNewSurface = NULL;
-	double fWidth, fHeight;
 
 	//\__________________ On regarde si on doit l'afficher ou la sauter.
 	gboolean bSkip = FALSE, bIsHidden = FALSE, bIsFullScreen = FALSE, bIsMaximized = FALSE, bDemandsAttention = FALSE;

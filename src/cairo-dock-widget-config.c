@@ -195,7 +195,6 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	int iAnimOnClick = -1;
 	int iEffectOnMouseHover = -1;
 	int iEffectOnClick = -1;
-	int iEffectOnDisappearance = 4;
 	gsize length;
 	pModule = cairo_dock_find_module_from_name ("Animated icons");
 	if (pModule != NULL && pModule->pInstancesList != NULL)
@@ -311,7 +310,7 @@ static void _add_one_effect_item (const gchar *cName, CairoDockAnimationRecord *
 	if (pRecord->bIsEffect)
 		_cairo_dock_add_one_animation_item (cName, pRecord, pModele);
 }
-static void _make_double_anim_widget (GSList *pWidgetList, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, const gchar *cLabel)
+static void _make_double_anim_widget (GSList *pWidgetList, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName)
 {
 	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, cGroupName, cKeyName);
 	if (myWidget == NULL)  // peut arriver vu que en mode cairo on n'a pas "anim_hover"
@@ -384,8 +383,8 @@ static void _build_config_widget (ConfigWidget *pConfigWidget)
 	pConfigWidget->widget.pDataGarbage = pDataGarbage;
 	
 	//\_____________ complete with the animations widgets.
-	_make_double_anim_widget (pWidgetList, pKeyFile, "Behavior", "anim_hover", _("On mouse hover:"));
-	_make_double_anim_widget (pWidgetList, pKeyFile, "Behavior", "anim_click", _("On click:"));
+	_make_double_anim_widget (pWidgetList, pKeyFile, "Behavior", "anim_hover");
+	_make_double_anim_widget (pWidgetList, pKeyFile, "Behavior", "anim_click");
 	
 	//\_____________ complete with the shortkeys widget.
 	CairoDockGroupKeyWidget *pShortkeysWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Shortkeys", "shortkeys");

@@ -82,9 +82,9 @@ void cairo_dock_disable_containers_opacity (void)
 }
 
 
-static gboolean _prevent_delete (GtkWidget *pWidget, GdkEvent *event, gpointer data)
+static gboolean _prevent_delete (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
 {
-	cd_debug ("pas de alt+f4");
+	cd_debug ("No alt+f4");
 	return TRUE;  // on empeche les ALT+F4 malheureux.
 }
 
@@ -138,9 +138,9 @@ static gboolean _cairo_default_container_animation_loop (CairoContainer *pContai
 
 static gboolean _set_opacity (GtkWidget *pWidget,
 #if (GTK_MAJOR_VERSION < 3)
-	GdkEventExpose *pExpose,
+	G_GNUC_UNUSED GdkEventExpose *pExpose,
 #else
-	cairo_t *ctx,
+	G_GNUC_UNUSED cairo_t *ctx,
 #endif
 	CairoContainer *pContainer)
 {
@@ -320,9 +320,9 @@ CairoContainer *cairo_dock_search_container_from_icon (Icon *icon)
 
 void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data)
 {
-	/*GtkTargetEntry pTargetEntry[6] = {0};
-	pTargetEntry[0].target = (gchar*)"text/*";
-	pTargetEntry[0].flags = (GtkTargetFlags) 0;
+	// /*GtkTargetEntry pTargetEntry[6] = {0};
+	// pTargetEntry[0].target = (gchar*)"text/*";
+	/* pTargetEntry[0].flags = (GtkTargetFlags) 0;
 	pTargetEntry[0].info = 0;
 	pTargetEntry[1].target = (gchar*)"text/uri-list";
 	pTargetEntry[2].target = (gchar*)"text/plain";

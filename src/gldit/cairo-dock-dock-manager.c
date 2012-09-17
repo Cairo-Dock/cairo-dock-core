@@ -110,7 +110,7 @@ void cairo_dock_force_docks_above (void)
 
 
 // UNLOAD //
-static gboolean _cairo_dock_free_one_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static gboolean _cairo_dock_free_one_dock (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_free_dock (pDock);
 	return TRUE;
@@ -224,7 +224,7 @@ void cairo_dock_main_dock_to_sub_dock (CairoDock *pDock, CairoDock *pParentDock,
 	if (pDock->iRefCount == 0)  // il devient un sous-dock.
 	{
 		//\__________________ make it a sub-dock.
-		CairoDockPositionType iScreenBorder = ((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp);
+		// CairoDockPositionType iScreenBorder = ((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp);
 		
 		if (pParentDock == NULL)
 			pParentDock = g_pMainDock;
@@ -378,7 +378,7 @@ CairoDock *cairo_dock_search_dock_from_name (const gchar *cDockName)
 	return g_hash_table_lookup (s_hDocksTable, cDockName);
 }
 
-static gboolean _cairo_dock_search_icon_from_subdock (gchar *cDockName, CairoDock *pDock, gpointer *data)
+static gboolean _cairo_dock_search_icon_from_subdock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, gpointer *data)
 {
 	if (pDock == data[0])
 		return FALSE;
@@ -477,7 +477,7 @@ void cairo_dock_foreach_root_docks (GFunc pFunction, gpointer data)
 	g_list_foreach (s_pRootDockList, pFunction, data);
 }
 
-static void _cairo_dock_foreach_icons_in_dock (gchar *cDockName, CairoDock *pDock, gpointer *data)
+static void _cairo_dock_foreach_icons_in_dock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, gpointer *data)
 {
 	CairoDockForeachIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];
@@ -494,7 +494,7 @@ void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpoi
 }
 
 
-static gboolean _cairo_dock_hide_dock_if_parent (gchar *cDockName, CairoDock *pDock, CairoDock *pChildDock)
+static gboolean _cairo_dock_hide_dock_if_parent (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, CairoDock *pChildDock)
 {
 	if (pDock == pChildDock)
 		return FALSE;
@@ -565,7 +565,7 @@ void cairo_dock_reload_buffers_in_all_docks (gboolean bUpdateIconSize)
 }
 
 
-static void _cairo_dock_draw_one_subdock_icon (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_draw_one_subdock_icon (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	Icon *icon;
 	GList *ic;
@@ -608,7 +608,7 @@ void cairo_dock_reset_all_views (void)
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_reset_one_dock_view, NULL);
 }*/
 
-static void _cairo_dock_set_one_dock_view_to_default (gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_set_one_dock_view_to_default (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	//g_print ("%s (%s)\n", __func__, cDockName);
 	int iDockType = GPOINTER_TO_INT (data);
@@ -963,8 +963,6 @@ void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bR
 
 void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScreenBorder)
 {
-	CairoDockTypeHorizontality bWasHorizontal = pDock->container.bIsHorizontal;
-	gboolean bWasDirectionUp = pDock->container.bDirectionUp;
 	switch (iScreenBorder)
 	{
 		case CAIRO_DOCK_BOTTOM :
@@ -983,6 +981,9 @@ void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iS
 			pDock->container.bIsHorizontal = CAIRO_DOCK_VERTICAL;
 			pDock->container.bDirectionUp = FALSE;
 		break;
+		case CAIRO_DOCK_INSIDE_SCREEN :
+		case CAIRO_DOCK_NB_POSITIONS :
+		break;
 	}
 	cairo_dock_synchronize_sub_docks_orientation (pDock, FALSE);  // synchronize l'orientation et l'offset Xinerama des sous-docks ainsi que les reflets cairo.
 }
@@ -992,7 +993,7 @@ void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iS
  // VISIBILITY //
 ////////////////
 
-static void _cairo_dock_quick_hide_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_quick_hide_one_root_dock (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	if (pDock->iRefCount == 0)
 	{
@@ -1010,7 +1011,7 @@ void cairo_dock_quick_hide_all_docks (void)
 	}
 }
 
-static void _cairo_dock_stop_quick_hide_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
+static void _cairo_dock_stop_quick_hide_one_root_dock (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	if (pDock->iRefCount == 0 && ! pDock->bTemporaryHidden && pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE)
 	{
@@ -1233,7 +1234,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 	}
 }
 
-static gboolean _cairo_dock_poll_screen_edge (gpointer data)  // thanks to Smidgey for the pop-up patch !
+static gboolean _cairo_dock_poll_screen_edge (G_GNUC_UNUSED gpointer data)  // thanks to Smidgey for the pop-up patch !
 {
 	static CDMousePolling mouse;
 	
@@ -1365,7 +1366,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	CairoDocksParam *pBackground = pDocksParam;
 	CairoDocksParam *pPosition = pDocksParam;
 	CairoDocksParam *pAccessibility = pDocksParam;
-	CairoDocksParam *pViews = pDocksParam;
 	CairoDocksParam *pSystem = pDocksParam;
 	
 	// cadre.
@@ -1452,7 +1452,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	
 	//\____________________ Visibilite
 	int iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "visibility", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour pouvoir intercepter le cas ou la cle n'existe pas.
-	gboolean bRaiseOnShortcut = FALSE;
 	
 	gchar *cShortkey = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "raise shortcut", &bFlushConfFileNeeded, NULL, "Position", NULL);
 	
@@ -1591,15 +1590,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 static void reset_config (CairoDocksParam *pDocksParam)
 {
 	CairoDocksParam *pBackground = pDocksParam;
-	CairoDocksParam *pPosition = pDocksParam;
 	CairoDocksParam *pAccessibility = pDocksParam;
-	CairoDocksParam *pViews = pDocksParam;
-	CairoDocksParam *pSystem = pDocksParam;
 	
 	// background
 	g_free (pBackground->cBackgroundImageFile);
-	
-	// position
 	
 	// accessibility
 	g_free (pAccessibility->cRaiseDockShortcut);
@@ -1680,12 +1674,12 @@ static void load (void)
  /// RELOAD ///
 //////////////
 
-static void _reload_bg (CairoDock *pDock, gpointer data)
+static void _reload_bg (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	pDock->backgroundBuffer.iWidth ++;  // force the reload
 	cairo_dock_trigger_load_dock_background (pDock);
 }
-static void _init_hiding (CairoDock *pDock, gpointer data)
+static void _init_hiding (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	if (pDock->bIsShowing || pDock->bIsHiding)
 	{
@@ -1697,13 +1691,13 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	CairoDocksParam *pBackground = pDocksParam;
 	CairoDocksParam *pPosition = pDocksParam;
 	CairoDocksParam *pAccessibility = pDocksParam;
-	CairoDocksParam *pViews = pDocksParam;
-	CairoDocksParam *pSystem = pDocksParam;
-	CairoDocksParam *pPrevBackground = pPrevDocksParam;
+	// CairoDocksParam *pViews = pDocksParam;
+	// CairoDocksParam *pSystem = pDocksParam;
+	// CairoDocksParam *pPrevBackground = pPrevDocksParam;
 	CairoDocksParam *pPrevPosition = pPrevDocksParam;
 	CairoDocksParam *pPrevAccessibility = pPrevDocksParam;
-	CairoDocksParam *pPrevViews = pPrevDocksParam;
-	CairoDocksParam *pPrevSystem = pPrevDocksParam;
+	// CairoDocksParam *pPrevViews = pPrevDocksParam;
+	// CairoDocksParam *pPrevSystem = pPrevDocksParam;
 	CairoDock *pDock = g_pMainDock;
 	
 	// background

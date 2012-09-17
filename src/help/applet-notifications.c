@@ -49,12 +49,12 @@ CD_APPLET_ON_MIDDLE_CLICK_END
 
 
 //\___________ Define here the entries you want to add to the menu when the user right-clicks on your icon or on its subdock or your desklet. The icon and the container that were clicked are available through the macros CD_APPLET_CLICKED_ICON and CD_APPLET_CLICKED_CONTAINER. CD_APPLET_CLICKED_ICON may be NULL if the user clicked in the container but out of icons. The menu where you can add your entries is available throught the macro CD_APPLET_MY_MENU; you can add sub-menu to it if you want.
-static void _cd_show_config (GtkMenuItem *menu_item, gpointer data)
+static void _cd_show_config (G_GNUC_UNUSED GtkMenuItem *menu_item, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_show_main_gui ();
 }
 
-static void _cd_show_help_gui (GtkMenuItem *menu_item, gpointer data)
+static void _cd_show_help_gui (G_GNUC_UNUSED GtkMenuItem *menu_item, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_show_module_gui ("Help");
 }
@@ -64,21 +64,29 @@ static void _launch_url (const gchar *cURL)
 	if  (! cairo_dock_fm_launch_uri (cURL))
 	{
 		gchar *cCommand = g_strdup_printf ("\
-which xdg-open > /dev/null && xdg-open %s || \
-which firefox > /dev/null && firefox %s || \
-which konqueror > /dev/null && konqueror %s || \
-which iceweasel > /dev/null && konqueror %s || \
-which opera > /dev/null && opera %s ",
+which xdg-open > /dev/null && xdg-open \"%s\" & || \
+which firefox > /dev/null && firefox \"%s\" & || \
+which konqueror > /dev/null && konqueror \"%s\" & || \
+which iceweasel > /dev/null && iceweasel \"%s\" & || \
+which chromium-browser > /dev/null && chromium-browser \"%s\" & || \
+which midori > /dev/null && midori \"%s\" & || \
+which epiphany > /dev/null && epiphany \"%s\" & || \
+which opera > /dev/null && opera \"%s\" &",
 			cURL,
 			cURL,
 			cURL,
 			cURL,
-			cURL);  // pas super beau mais efficace ^_^
+			cURL,
+			cURL,
+			cURL,
+			cURL);  // not very nice but it works ^_^
 		int r = system (cCommand);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", cCommand);
 		g_free (cCommand);
 	}
 }
-static void _cd_show_help_online (GtkMenuItem *menu_item, gpointer data)
+static void _cd_show_help_online (G_GNUC_UNUSED GtkMenuItem *menu_item, G_GNUC_UNUSED gpointer data)
 {
 	_launch_url (CAIRO_DOCK_WIKI_URL);
 }
@@ -98,12 +106,14 @@ static gboolean _is_gnome_panel_running (void) // only for Gnome2
 	return bResult;
 }
 
-static void _cd_remove_gnome_panel (GtkMenuItem *menu_item, gpointer data)
+static void _cd_remove_gnome_panel (G_GNUC_UNUSED GtkMenuItem *menu_item, G_GNUC_UNUSED gpointer data)
 {
 	int r = system ("gconftool-2 -s '/desktop/gnome/session/required_components/panel' --type string \"\"");
+	if (r < 0)
+		cd_warning ("Not able to launch this command: gconftool-2");
 }
 
-static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer data)
+static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("%s ()", __func__);
 	// get the active plug-ins.
@@ -167,6 +177,8 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 			NULL,
 			cPluginsList);
 		int r = system ("killall unity-panel-service"); // to have the main gtk menu back.
+		if (r < 0)
+			cd_warning ("Not able to launch this command: killall");
 		g_free (cPluginsList);
 	}
 	else  // should not happen since we detect Unity before proposing this action.
@@ -176,7 +188,7 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	g_strfreev (plugins);
 }
 
-static void _cd_remove_unity (GtkMenuItem *menu_item, gpointer data)
+static void _cd_remove_unity (G_GNUC_UNUSED GtkMenuItem *menu_item, G_GNUC_UNUSED gpointer data)
 {
 	// first get the active plug-ins.
 	DBusGProxy *pActivePluginsProxy = cairo_dock_create_new_session_proxy (

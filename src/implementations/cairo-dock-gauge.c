@@ -106,21 +106,21 @@ extern gboolean g_bUseOpenGL;
  /////////////// LOAD GAUGE /////////////////
 ////////////////////////////////////////////
 
-static double _str2double (gchar *s)
+static double _str2double (xmlChar *s)
 {
-	gchar *str = strchr (s, ',');
+	gchar *str = strchr ((char *) s, ',');
 	if (str)
 		*str = '.';
-	return g_ascii_strtod (s, NULL);
+	return g_ascii_strtod ((char *) s, NULL);
 }
 
-static void _load_gauge_image (GaugeImage *pGaugeImage, const gchar *cThemePath, const gchar *cImageName, int iWidth, int iHeight)
+static void _load_gauge_image (GaugeImage *pGaugeImage, const gchar *cThemePath, const xmlChar *cImageName, int iWidth, int iHeight)
 {
-	pGaugeImage->cImagePath = g_strdup_printf ("%s/%s", cThemePath, cImageName);
+	pGaugeImage->cImagePath = g_strdup_printf ("%s/%s", cThemePath, (gchar *) cImageName);
 	cairo_dock_load_image_buffer (&pGaugeImage->image, pGaugeImage->cImagePath, iWidth, iHeight, 0);
 }
 
-static GaugeImage *_new_gauge_image (const gchar *cThemePath, const gchar *cImageName, int iWidth, int iHeight)
+static GaugeImage *_new_gauge_image (const gchar *cThemePath, const xmlChar *cImageName, int iWidth, int iHeight)
 {
 	GaugeImage *pGaugeImage = g_new0 (GaugeImage, 1);
 	_load_gauge_image (pGaugeImage, cThemePath, cImageName, iWidth, iHeight);
@@ -235,7 +235,6 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 	gchar *cNeedleImage;
 	GaugeType iType;  // type of the current indicator.
 	gboolean next;
-	GaugeImage *pGaugeImage;
 	GaugeIndicator *pGaugeIndicator = NULL;
 	xmlNodePtr pGaugeNode;
 	double ratio_xy = 1.;
@@ -243,16 +242,16 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 	int i;
 	for (pGaugeNode = pGaugeMainNode->children, i = 0; pGaugeNode != NULL; pGaugeNode = pGaugeNode->next, i ++)
 	{
-		if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "rank") == 0)
+		if (xmlStrcmp (pGaugeNode->name, BAD_CAST "rank") == 0)
 		{
 			cNodeContent = xmlNodeGetContent (pGaugeNode);
-			pRenderer->iRank = atoi (cNodeContent);
+			pRenderer->iRank = atoi ((char *) cNodeContent);
 			xmlFree (cNodeContent);
 		}
-		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "version") == 0)
+		else if (xmlStrcmp (pGaugeNode->name, BAD_CAST "version") == 0)
 		{
 			cNodeContent = xmlNodeGetContent (pGaugeNode);
-			int iVersion = atoi (cNodeContent);
+			int iVersion = atoi ((char *) cNodeContent);
 			if (iVersion >= 2)
 			{
 				ratio_text = 1.;
@@ -260,19 +259,19 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 			}
 			xmlFree (cNodeContent);
 		}
-		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "file") == 0)
+		else if (xmlStrcmp (pGaugeNode->name, BAD_CAST "file") == 0)
 		{
 			cNodeContent = xmlNodeGetContent (pGaugeNode);
-			cAttribute = xmlGetProp (pGaugeNode, "type");
+			cAttribute = xmlGetProp (pGaugeNode, BAD_CAST "type");
 			if (!cAttribute)
-				cAttribute = xmlGetProp (pGaugeNode, "key");
+				cAttribute = xmlGetProp (pGaugeNode, BAD_CAST "key");
 			if (cAttribute != NULL)
 			{
-				if (xmlStrcmp (cAttribute, "background") == 0)
+				if (xmlStrcmp (cAttribute, BAD_CAST "background") == 0)
 				{
 					pGauge->pImageBackground = _new_gauge_image (cThemePath, cNodeContent, iWidth, iHeight);
 				}
-				else if (xmlStrcmp (cAttribute, "foreground") == 0)
+				else if (xmlStrcmp (cAttribute, BAD_CAST "foreground") == 0)
 				{
 					pGauge->pImageForeground = _new_gauge_image (cThemePath, cNodeContent, iWidth, iHeight);
 				}
@@ -280,12 +279,12 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 			}
 			xmlFree (cNodeContent);
 		}
-		else if(xmlStrcmp (pGaugeNode->name, (const xmlChar *) "multi_display") == 0)
+		else if(xmlStrcmp (pGaugeNode->name, BAD_CAST "multi_display") == 0)
 		{
 			cNodeContent = xmlNodeGetContent (pGaugeNode);
-			pGauge->iMultiDisplay = atoi (cNodeContent);
+			pGauge->iMultiDisplay = atoi ((char *) cNodeContent);
 		}
-		else if (xmlStrcmp (pGaugeNode->name, (const xmlChar *) "indicator") == 0)
+		else if (xmlStrcmp (pGaugeNode->name, BAD_CAST "indicator") == 0)
 		{
 			// count the number of indicators.
 			if (pRenderer->iRank == 0)  // first indicator.
@@ -294,21 +293,21 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 				xmlNodePtr node;
 				for (node = pGaugeNode->next; node != NULL; node = node->next)
 				{
-					if (xmlStrcmp (node->name, (const xmlChar *) "indicator") == 0)
+					if (xmlStrcmp (node->name, BAD_CAST "indicator") == 0)
 						pRenderer->iRank ++;
 				}
 			}
 			
 			// get the type if the indicator.
 			iType = CD_GAUGE_TYPE_UNKNOWN;  // until we know the indicator type, it can be any one.
-			cAttribute = xmlGetProp (pGaugeNode, "type");
+			cAttribute = xmlGetProp (pGaugeNode, BAD_CAST "type");
 			if (cAttribute != NULL)
 			{
-				if (strcmp (cAttribute, "needle") == 0)
+				if (strcmp ((char *) cAttribute, "needle") == 0)
 				{
 					iType = CD_GAUGE_TYPE_NEEDLE;
 				}
-				else if (strcmp (cAttribute, "images") == 0)
+				else if (strcmp ((char *) cAttribute, "images") == 0)
 				{
 					iType = CD_GAUGE_TYPE_IMAGES;
 				}
@@ -329,36 +328,36 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 			xmlNodePtr pIndicatorNode;
 			for (pIndicatorNode = pGaugeNode->children; pIndicatorNode != NULL; pIndicatorNode = pIndicatorNode->next)
 			{
-				if (xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "text") == 0)  // xml noise.
+				if (xmlStrcmp (pIndicatorNode->name, BAD_CAST "text") == 0)  // xml noise.
 					continue;
 				cNodeContent = xmlNodeGetContent (pIndicatorNode);
 				
 				next = FALSE;
 				if (iType != CD_GAUGE_TYPE_IMAGES)  // needle or unknown
 				{
-					if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "posX") == 0)
+					if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "posX") == 0)
 						pGaugeIndicator->posX = _str2double (cNodeContent) * ratio_xy;
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "posY") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "posY") == 0)
 						pGaugeIndicator->posY = _str2double (cNodeContent) * ratio_xy;
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "direction") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "direction") == 0)
 						pGaugeIndicator->direction = _str2double (cNodeContent);
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "posStart") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "posStart") == 0)
 						pGaugeIndicator->posStart = _str2double (cNodeContent);
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "posStop") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "posStop") == 0)
 						pGaugeIndicator->posStop = _str2double (cNodeContent);
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "nb images") == 0)
-						pGaugeIndicator->iNbImages = atoi (cNodeContent);
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "offset_x") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "nb images") == 0)
+						pGaugeIndicator->iNbImages = atoi ((char *) cNodeContent);
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "offset_x") == 0)
 					{
-						pGaugeIndicator->iNeedleOffsetX = atoi (cNodeContent);
+						pGaugeIndicator->iNeedleOffsetX = atoi ((char *) cNodeContent);
 					}
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "width") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "width") == 0)
 					{
-						pGaugeIndicator->iNeedleRealWidth = atoi (cNodeContent);
+						pGaugeIndicator->iNeedleRealWidth = atoi ((char *) cNodeContent);
 					}
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "height") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "height") == 0)
 					{
-						pGaugeIndicator->iNeedleRealHeight = atoi (cNodeContent);
+						pGaugeIndicator->iNeedleRealHeight = atoi ((char *) cNodeContent);
 						pGaugeIndicator->iNeedleOffsetY = .5 * pGaugeIndicator->iNeedleRealHeight;
 					}
 					else
@@ -366,22 +365,22 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 				}
 				if (iType != CD_GAUGE_TYPE_NEEDLE)  // image or unknown
 				{
-					if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "effect") == 0)
+					if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "effect") == 0)
 					{
-						pGaugeIndicator->iEffect = atoi (cNodeContent);
+						pGaugeIndicator->iEffect = atoi ((char *) cNodeContent);
 					}
 					else
 						next = TRUE;
 				}
 				if (next)  // other parameters
 				{
-					if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "file") == 0)
+					if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "file") == 0)
 					{
 						// if the type is still unknown, try to get it here (version <= 2)
 						if (iType == CD_GAUGE_TYPE_UNKNOWN)
 						{
-							cAttribute = xmlGetProp (pIndicatorNode, "key");
-							if (cAttribute && strcmp (cAttribute, "needle") == 0)
+							cAttribute = xmlGetProp (pIndicatorNode, BAD_CAST "key");
+							if (cAttribute && strcmp ((char *) cAttribute, "needle") == 0)
 								iType = CD_GAUGE_TYPE_NEEDLE;
 							else
 								iType = CD_GAUGE_TYPE_IMAGES;
@@ -390,13 +389,13 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 						// get/load the image(s).
 						if (iType == CD_GAUGE_TYPE_NEEDLE)
 						{
-							cNeedleImage = cNodeContent;  // just remember the image name, we'll load it in the end.
+							cNeedleImage = (gchar *) cNodeContent;  // just remember the image name, we'll load it in the end.
 							cNodeContent = NULL;
 						}
 						else  // load the images.
 						{
-							cAttribute = xmlGetProp (pIndicatorNode, "type");
-							if (cAttribute && strcmp (cAttribute, "undef-value") == 0)
+							cAttribute = xmlGetProp (pIndicatorNode, BAD_CAST "type");
+							if (cAttribute && strcmp ((char *) cAttribute, "undef-value") == 0)
 							{
 								pGaugeIndicator->pImageUndef = _new_gauge_image (cThemePath, cNodeContent, iWidth, iHeight);
 							}
@@ -409,10 +408,10 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 									xmlNodePtr node;
 									for (node = pIndicatorNode->next; node != NULL; node = node->next)
 									{
-										if (xmlStrcmp (node->name, (const xmlChar *) "file") == 0)
+										if (xmlStrcmp (node->name, BAD_CAST "file") == 0)
 										{
-											cTypeAttr = xmlGetProp (node, "type");
-											if (!cTypeAttr || strcmp (cTypeAttr, "undef-value") != 0)
+											cTypeAttr = xmlGetProp (node, BAD_CAST "type");
+											if (!cTypeAttr || strcmp ((char *) cTypeAttr, "undef-value") != 0)
 												pGaugeIndicator->iNbImages ++;
 											xmlFree (cTypeAttr);
 										}
@@ -433,72 +432,72 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 							xmlFree (cAttribute);
 						}
 					}
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "text_zone") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "text_zone") == 0)
 					{
 						pGaugeIndicator->textZone.pColor[3] = 1.;
 						xmlNodePtr pTextSubNode;
 						for (pTextSubNode = pIndicatorNode->children; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
 						{
 							cTextNodeContent = xmlNodeGetContent (pTextSubNode);
-							if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_center") == 0)
+							if(xmlStrcmp (pTextSubNode->name, BAD_CAST "x_center") == 0)
 								pGaugeIndicator->textZone.fX = _str2double (cTextNodeContent)/ratio_text;
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_center") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "y_center") == 0)
 								pGaugeIndicator->textZone.fY = _str2double (cTextNodeContent)/ratio_text;
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "width") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "width") == 0)
 								pGaugeIndicator->textZone.fWidth = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "height") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "height") == 0)
 								pGaugeIndicator->textZone.fHeight = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "red") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "red") == 0)
 								pGaugeIndicator->textZone.pColor[0] = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "green") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "green") == 0)
 								pGaugeIndicator->textZone.pColor[1] = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "blue") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "blue") == 0)
 								pGaugeIndicator->textZone.pColor[2] = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "alpha") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "alpha") == 0)
 								pGaugeIndicator->textZone.pColor[3] = _str2double (cTextNodeContent);
 						}
 					}
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "label_zone") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "label_zone") == 0)
 					{
 						xmlNodePtr pTextSubNode;
 						pGaugeIndicator->labelZone.pColor[3] = 1.;
 						for (pTextSubNode = pIndicatorNode->children; pTextSubNode != NULL; pTextSubNode = pTextSubNode->next)
 						{
 							cTextNodeContent = xmlNodeGetContent (pTextSubNode);
-							if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "x_center") == 0)
+							if(xmlStrcmp (pTextSubNode->name, BAD_CAST "x_center") == 0)
 								pGaugeIndicator->labelZone.fX = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "y_center") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "y_center") == 0)
 								pGaugeIndicator->labelZone.fY = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "width") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "width") == 0)
 								pGaugeIndicator->labelZone.fWidth = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "height") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "height") == 0)
 								pGaugeIndicator->labelZone.fHeight = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "red") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "red") == 0)
 								pGaugeIndicator->labelZone.pColor[0] = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "green") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "green") == 0)
 								pGaugeIndicator->labelZone.pColor[1] = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "blue") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "blue") == 0)
 								pGaugeIndicator->labelZone.pColor[2] = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pTextSubNode->name, (const xmlChar *) "alpha") == 0)
+							else if(xmlStrcmp (pTextSubNode->name, BAD_CAST "alpha") == 0)
 								pGaugeIndicator->labelZone.pColor[3] = _str2double (cTextNodeContent);
 						}
 					}
-					else if(xmlStrcmp (pIndicatorNode->name, (const xmlChar *) "logo_zone") == 0)
+					else if(xmlStrcmp (pIndicatorNode->name, BAD_CAST "logo_zone") == 0)
 					{
 						pGaugeIndicator->emblem.fAlpha = 1.;
 						xmlNodePtr pLogoSubNode;
 						for (pLogoSubNode = pIndicatorNode->children; pLogoSubNode != NULL; pLogoSubNode = pLogoSubNode->next)
 						{
 							cTextNodeContent = xmlNodeGetContent (pLogoSubNode);
-							if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "x_center") == 0)
+							if(xmlStrcmp (pLogoSubNode->name, BAD_CAST "x_center") == 0)
 								pGaugeIndicator->emblem.fX = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "y_center") == 0)
+							else if(xmlStrcmp (pLogoSubNode->name, BAD_CAST "y_center") == 0)
 								pGaugeIndicator->emblem.fY = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "width") == 0)
+							else if(xmlStrcmp (pLogoSubNode->name, BAD_CAST "width") == 0)
 								pGaugeIndicator->emblem.fWidth = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "height") == 0)
+							else if(xmlStrcmp (pLogoSubNode->name, BAD_CAST "height") == 0)
 								pGaugeIndicator->emblem.fHeight = _str2double (cTextNodeContent);
-							else if(xmlStrcmp (pLogoSubNode->name, (const xmlChar *) "alpha") == 0)
+							else if(xmlStrcmp (pLogoSubNode->name, BAD_CAST "alpha") == 0)
 								pGaugeIndicator->emblem.fAlpha = _str2double (cTextNodeContent);
 						}
 					}
@@ -522,7 +521,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 	
 	return TRUE;
 }
-static void load (Gauge *pGauge, Icon *pIcon, CairoGaugeAttribute *pAttribute)
+static void load (Gauge *pGauge, G_GNUC_UNUSED Icon *pIcon, CairoGaugeAttribute *pAttribute)
 {
 	// on charge le theme defini en attribut.
 	gboolean bThemeLoaded = _load_theme (pGauge, pAttribute->cThemePath);
@@ -633,7 +632,6 @@ static void cairo_dock_draw_one_gauge (cairo_t *pCairoContext, Gauge *pGauge, in
 	
 	//\________________ On represente l'indicateur de chaque valeur.
 	GList *pIndicatorElement;
-	GList *pValueList;
 	double fValue;
 	GaugeIndicator *pIndicator;
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
@@ -799,7 +797,6 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 	
 	//\________________ On represente l'indicateur de chaque valeur.
 	GList *pIndicatorElement;
-	GList *pValueList;
 	double fValue;
 	GaugeIndicator *pIndicator;
 	int i;
@@ -861,7 +858,7 @@ static void render_opengl (Gauge *pGauge)
 					glTranslatef (iWidth * (i * ratio - 0.5 + ratio / 2), 0., 0.);
 					glScalef (ratio, 1., 1.);
 					break;
-	
+
 				case CD_GAUGE_MULTI_DISPLAY_SCATTERED :
 					if (i == 0)  /// tester avec 1/2, 1/2
 					{
@@ -885,6 +882,9 @@ static void render_opengl (Gauge *pGauge)
 					}
 					else  // 5 valeurs faut pas pousser non plus.
 						bDisplay = FALSE;
+
+				case CD_GAUGE_NB_MULTI_DISPLAY :
+					break;
 			}
 		}
 		
@@ -908,8 +908,8 @@ static void reload (Gauge *pGauge)
 	//g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 	g_return_if_fail (pGauge != NULL);
 	
-	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
-	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
+	int iWidth, iHeight;
+	cairo_data_renderer_get_size (CAIRO_DATA_RENDERER (pGauge), &iWidth, &iHeight);
 	
 	if (pGauge->pImageBackground)
 		_reload_gauge_image (pGauge->pImageBackground, iWidth, iHeight);
@@ -919,7 +919,7 @@ static void reload (Gauge *pGauge)
 	
 	GaugeIndicator *pGaugeIndicator;
 	int i;
-	GList *pElement, *pElement2;
+	GList *pElement;
 	for (pElement = pGauge->pIndicatorList; pElement != NULL; pElement = pElement->next)
 	{
 		pGaugeIndicator = pElement->data;

@@ -140,8 +140,8 @@ static void cairo_dock_unload_dialog_buttons (void)
 }
 
 
-static gboolean on_enter_dialog (GtkWidget* pWidget,
-	GdkEventCrossing* pEvent,
+static gboolean on_enter_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
+	G_GNUC_UNUSED GdkEventCrossing* pEvent,
 	CairoDialog *pDialog)
 {
 	//cd_debug ("inside");
@@ -149,7 +149,7 @@ static gboolean on_enter_dialog (GtkWidget* pWidget,
 	return FALSE;
 }
 
-static gboolean on_leave_dialog (GtkWidget* pWidget,
+static gboolean on_leave_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
 	CairoDialog *pDialog)
 {
@@ -170,14 +170,15 @@ static gboolean on_leave_dialog (GtkWidget* pWidget,
 	{
 		if (pIcon != NULL)
 		{
-			CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
+			return FALSE;
+			/*CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
 			///if (!pContainer || !pContainer->bInside)  // peut arriver dans le cas d'un dock cache possedant un dialogue. Initialement les 2 se chevauchent, il faut considerer qu'on est hors du dialogue afin de pouvoir le replacer.
 			{
 				//g_print ("en fait on est dedans\n");
 				return FALSE;
 			}
 			//else
-			//	//g_print ("leave dialog\n");
+			//	//g_print ("leave dialog\n");*/
 		}
 	}
 	
@@ -216,7 +217,7 @@ static int _cairo_dock_find_clicked_button_in_dialog (GdkEventButton* pButton, C
 	return -1;
 }
 
-static gboolean on_button_press_dialog (GtkWidget* pWidget,
+static gboolean on_button_press_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventButton* pButton,
 	CairoDialog *pDialog)
 {
@@ -281,7 +282,7 @@ static gboolean on_button_press_dialog (GtkWidget* pWidget,
 
 #define KEY(x) GDK_KEY_##x
 
-static gboolean on_key_press_dialog (GtkWidget *pWidget,
+static gboolean on_key_press_dialog (G_GNUC_UNUSED GtkWidget *pWidget,
 	GdkEventKey *pKey,
 	CairoDialog *pDialog)
 {
@@ -431,7 +432,7 @@ static void _cairo_dock_draw_inside_dialog (cairo_t *pCairoContext, CairoDialog 
 		pDialog->pRenderer->render (pCairoContext, pDialog, fAlpha);
 }
 
-static gboolean _cairo_dock_render_dialog_notification (gpointer data, CairoDialog *pDialog, cairo_t *pCairoContext)
+static gboolean _cairo_dock_render_dialog_notification (G_GNUC_UNUSED gpointer data, CairoDialog *pDialog, cairo_t *pCairoContext)
 {
 	if (pCairoContext == NULL)
 	{
@@ -703,7 +704,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	if (pDialog->container.bInside && ! (pDialog->pInteractiveWidget || pDialog->action_on_answer))  // in the case of a modal dialog, the dialog takes the dock's events, including the "enter-event" one. So we are inside the dialog as soon as we enter the dock, and consequently, the dialog is not replaced when the dock unhides itself.
 		return;
 	
-	GdkGravity iGravity;
+	// GdkGravity iGravity;
 	if (pContainer != NULL/* && pDialog->pIcon != NULL*/)
 	{
 		cairo_dock_set_dialog_orientation (pDialog, pContainer);
@@ -723,7 +724,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 			pDialog->iComputedPositionY = (pDialog->container.bDirectionUp ? MAX (0, pDialog->iAimedY - pDialog->iComputedHeight) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.
 		}
 		
-		if (pDialog->bRight)
+		/*if (pDialog->bRight)
 		{
 			if (pDialog->container.bDirectionUp)
 				iGravity = GDK_GRAVITY_SOUTH_WEST;
@@ -736,7 +737,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 				iGravity = GDK_GRAVITY_SOUTH_EAST;
 			else
 				iGravity = GDK_GRAVITY_NORTH_EAST;
-		}
+		}*/
 	}
 	else  // dialogue lie a aucun container => au milieu de l'ecran courant.
 	{
@@ -744,7 +745,7 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 		pDialog->iComputedPositionX = (g_pMainDock ? g_pMainDock->iScreenOffsetX : 0) + (g_desktopGeometry.iScreenWidth [CAIRO_DOCK_HORIZONTAL] - pDialog->container.iWidth) / 2;
 		pDialog->iComputedPositionY = (g_pMainDock ? g_pMainDock->iScreenOffsetY : 0) + (g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] - pDialog->container.iHeight) / 2;
 		
-		iGravity = GDK_GRAVITY_CENTER;
+		// iGravity = GDK_GRAVITY_CENTER;
 	}
 	
 	pDialog->bPositionForced = FALSE;
@@ -790,7 +791,7 @@ void cairo_dock_refresh_all_dialogs (gboolean bReplace)
 	}
 }
 
-static gboolean _replace_all_dialogs (gpointer data)
+static gboolean _replace_all_dialogs (G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_replace_all_dialogs ();
 	s_iSidReplaceDialogs = 0;
@@ -927,7 +928,7 @@ CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon,
 
 
 
-static void _cairo_dock_get_answer_from_dialog (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer *data, CairoDialog *pDialog)
+static void _cairo_dock_get_answer_from_dialog (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, gpointer *data, CairoDialog *pDialog)
 {
 	cd_message ("%s (%d)", __func__, iClickedButton);
 	int *iAnswerBuffer = data[0];
@@ -940,7 +941,7 @@ static void _cairo_dock_get_answer_from_dialog (int iClickedButton, GtkWidget *p
 	if (g_main_loop_is_running (pBlockingLoop))
 		g_main_loop_quit (pBlockingLoop);
 }
-static gboolean _cairo_dock_dialog_destroyed (GtkWidget *pWidget, GdkEvent *event, GMainLoop *pBlockingLoop)
+static gboolean _cairo_dock_dialog_destroyed (GtkWidget *pWidget, G_GNUC_UNUSED GdkEvent *event, GMainLoop *pBlockingLoop)
 {
 	cd_debug ("dialogue detruit, on sort de la boucle\n");
 	gtk_window_set_modal (GTK_WINDOW (pWidget), FALSE);  /// utile ?...
@@ -948,7 +949,7 @@ static gboolean _cairo_dock_dialog_destroyed (GtkWidget *pWidget, GdkEvent *even
 		g_main_loop_quit (pBlockingLoop);
 	return FALSE;
 }
-int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, GtkWidget *pInteractiveWidget)
+int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, G_GNUC_UNUSED double fTimeLength, const gchar *cIconPath, GtkWidget *pInteractiveWidget)
 {
 	int iClickedButton = -3;
 	GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);

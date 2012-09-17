@@ -71,7 +71,7 @@ static CairoOverlay *cairo_dock_create_overlay_from_surface (Icon *pIcon, cairo_
 	return pOverlay;
 }
 
-static CairoOverlay *cairo_dock_create_overlay_from_texture (Icon *pIcon, GLuint iTexture, int iWidth, int iHeight)
+static CairoOverlay *cairo_dock_create_overlay_from_texture (GLuint iTexture, int iWidth, int iHeight)
 {
 	CairoOverlay *pOverlay = _new_overlay ();
 	pOverlay->fScale = CD_DEFAULT_SCALE;
@@ -150,7 +150,7 @@ CairoOverlay *cairo_dock_add_overlay_from_surface (Icon *pIcon, cairo_surface_t 
 
 CairoOverlay *cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture, CairoOverlayPosition iPosition, gpointer data)
 {
-	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_texture (pIcon, iTexture, 0, 0);
+	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_texture (iTexture, 0, 0);
 	
 	cairo_dock_add_overlay_to_icon (pIcon, pOverlay, iPosition, data);
 	
@@ -459,7 +459,7 @@ void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, CairoContainer 
 
 void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, CairoContainer *pContainer, GLuint iTexture, CairoOverlayPosition iPosition)
 {
-	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_texture (pIcon, iTexture, 0, 0);
+	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_texture (iTexture, 0, 0);
 	
 	cairo_dock_print_overlay_on_icon (pIcon, pContainer, pOverlay, iPosition);
 	

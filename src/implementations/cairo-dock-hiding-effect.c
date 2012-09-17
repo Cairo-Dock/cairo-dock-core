@@ -48,7 +48,7 @@ static void _init_opengl (CairoDock *pDock)
 		cairo_dock_create_redirect_texture_for_dock (pDock);
 }
 
-static void _pre_render_opengl (CairoDock *pDock, double fOffset)
+static void _pre_render_opengl (CairoDock *pDock, G_GNUC_UNUSED double fOffset)
 {
 	if (pDock->iFboId == 0)
 		return ;
@@ -530,7 +530,7 @@ static void _post_render_folding_opengl (CairoDock *pDock, double fOffset)
 	
 	GLfloat coords[NB_POINTS2*1*8];
 	GLfloat vertices[NB_POINTS2*1*12];
-	int i, j, n=0;
+	int i, n=0;
 	double x, x_, t = fOffset;
 	t = t* (t);
 	for (i = 0; i < NB_POINTS2; i ++)
