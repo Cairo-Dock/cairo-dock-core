@@ -1751,7 +1751,7 @@ void cairo_dock_raise_from_shortcut (G_GNUC_UNUSED const char *cKeyShortcut, G_G
 		_cairo_dock_show_dock_at_mouse (g_pMainDock);
 	}
 	// if (g_pMainDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)  // could happen if we set the shortkey outside of the Visibility module.
-		g_pMainDock->iVisibility = CAIRO_DOCK_VISI_SHORTKEY; // @fabounet: it was: "g_pMainDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY"
+		g_pMainDock->iVisibility = CAIRO_DOCK_VISI_SHORTKEY;
 	s_bHideAfterShortcut = FALSE;
 }
 

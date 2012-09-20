@@ -432,6 +432,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glPushMatrix ();
 		glLoadIdentity ();
 		
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_alpha ();
+		
 		double fMagnitude;
 		if (myIconsParam.bLabelForPointedIconOnly ||pDock->fMagnitudeMax == 0.)
 		{
@@ -475,29 +478,62 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 				glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
 				glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
 			}
+			
+			_cairo_dock_set_alpha (fMagnitude);
+			cairo_dock_apply_image_buffer_texture (&icon->label);
 		}
 		else  // horizontal label on a vertical dock -> draw them next to the icon, vertically centered (like the Parabolic view)
 		{
-			const int pad = 3;
-			glTranslatef (pDock->container.bDirectionUp ? 
-					floor (fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth/2) + dx :
-					floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad + icon->label.iWidth/2) + dx,
-				floor (fX) + dy,
-				0.);
 			if (icon->pSubDock && gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))
 			{
 				fMagnitude /= 3;
 			}
+			
+			const int pad = 3;
+			
+			double u0 = 0., u1 = 1.;
+			if ((myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + icon->fHeight * icon->fScale + pad + icon->label.iWidth > pDock->container.iHeight)  // label too large, end with a gradation.
+			{
+				u1 = (double) (pDock->container.iHeight - ((myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + icon->fHeight * icon->fScale + pad)) / icon->label.iWidth;
+				dx = .5 * (((int)round (icon->label.iWidth * (u1 - u0))) & 1);
+			}
+			glTranslatef (pDock->container.bDirectionUp ? 
+					floor (fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - u1 * icon->label.iWidth/2) + dx :
+					floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad + u1 * icon->label.iWidth/2) + dx,
+				floor (fX) + dy,
+				0.);
+			glBindTexture (GL_TEXTURE_2D, icon->label.iTexture);
+			
+			double w = round (icon->label.iWidth * (u1 - u0)), h = icon->label.iHeight;
+			if (u1 < .99)  // draw with an alpha gradation on the last part.
+			{
+				glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+				glBegin(GL_QUAD_STRIP);
+				
+				double a = .75; // 3/4 plain, 1/4 gradation
+				a = (double) (floor ((-.5+a)*w)) / w + .5;
+				glColor4f (1., 1., 1., fMagnitude);
+				glTexCoord2f(u0, 0); glVertex3f(-.5*w,  .5*h, 0.);  // top left
+				glTexCoord2f(u0, 1); glVertex3f(-.5*w, -.5*h, 0.);  // bottom left
+				
+				glTexCoord2f(u1*a, 0); glVertex3f(  ((-.5+a)*w),  .5*h, 0.);  // top middle
+				glTexCoord2f(u1*a, 1); glVertex3f(  ((-.5+a)*w),  -.5*h, 0.);  // bottom middle
+				
+				glColor4f (1., 1., 1., 0.);
+				
+				glTexCoord2f(u1, 0); glVertex3f( .5*w,  .5*h, 0.);  // top right
+				glTexCoord2f(u1, 1); glVertex3f( .5*w, -.5*h, 0.);  // bottom right
+				
+				glEnd();
+			}
+			else
+			{
+				_cairo_dock_set_alpha (fMagnitude);
+				_cairo_dock_apply_current_texture_at_size (w, h);
+			}
 		}
-		
-		_cairo_dock_enable_texture ();
-		_cairo_dock_set_blend_alpha ();
-		/**_cairo_dock_apply_texture_at_size_with_alpha (icon->label.iTexture,
-			icon->label.iWidth,
-			icon->label.iHeight,
-			fMagnitude);*/
-		_cairo_dock_set_alpha (fMagnitude);
-		cairo_dock_apply_image_buffer_texture (&icon->label);
+		/*_cairo_dock_set_alpha (fMagnitude);
+		cairo_dock_apply_image_buffer_texture (&icon->label);*/
 		_cairo_dock_disable_texture ();
 		
 		glPopMatrix ();

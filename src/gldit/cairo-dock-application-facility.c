@@ -509,12 +509,13 @@ void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock
 	iY = y_icon_geometry (icon, pDock);  // il faudrait un fYAtRest ...
 	//g_print (" -> %d;%d (%.2f)\n", iX - pDock->container.iWindowPositionX, iY - pDock->container.iWindowPositionY, icon->fXAtRest);
 	iWidth = icon->fWidth;
-	iHeight = icon->fHeight * (1. + 2*myIconsParam.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
+	int dh = (icon->iImageHeight - icon->fHeight);
+	iHeight = icon->fHeight + 2 * dh;  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 	
 	if (pDock->container.bIsHorizontal)
-		cairo_dock_set_xicon_geometry (icon->Xid, iX, iY, iWidth, iHeight);
+		cairo_dock_set_xicon_geometry (icon->Xid, iX, iY - dh, iWidth, iHeight);
 	else
-		cairo_dock_set_xicon_geometry (icon->Xid, iY, iX, iHeight, iWidth);
+		cairo_dock_set_xicon_geometry (icon->Xid, iY - dh, iX, iHeight, iWidth);
 }
 
 void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Window *Xid, Icon *icon, CairoDock *pMainDock)

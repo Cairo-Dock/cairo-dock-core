@@ -611,12 +611,53 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 					floor (0 - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth):
 					floor (0 + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad),
 				floor (0 + icon->fWidth * icon->fScale/2 - icon->label.iHeight/2));*/
-			cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
-				bDirectionUp ? 
-					floor (0 - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth):
-					floor (0 + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad),
-				floor (0 + icon->fWidth * icon->fScale/2 - icon->label.iHeight/2),
-				fMagnitude);
+			int iOffsetX = floor (bDirectionUp ? 
+				- (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth:
+				icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad);
+			int iOffsetY = floor (0 + icon->fWidth * icon->fScale/2 - icon->label.iHeight/2);
+			if ((myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + icon->fHeight * icon->fScale + pad + icon->label.iWidth < pDock->container.iHeight)
+			{
+				cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
+					iOffsetX,
+					iOffsetY,
+					fMagnitude);
+			}
+			else
+			{
+				cairo_translate (pCairoContext, 
+					iOffsetX,
+					iOffsetY);
+				cairo_set_source_surface (pCairoContext,
+					icon->label.pSurface,
+					0,
+					0);
+				
+				cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0,
+					0.,
+					pDock->container.iHeight - ((myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + icon->fHeight * icon->fScale + pad),
+					0.);
+				cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
+				cairo_pattern_add_color_stop_rgba (pGradationPattern,
+					0.,
+					0.,
+					0.,
+					0.,
+					fMagnitude);
+				cairo_pattern_add_color_stop_rgba (pGradationPattern,
+					0.75,
+					0.,
+					0.,
+					0.,
+					fMagnitude);
+				cairo_pattern_add_color_stop_rgba (pGradationPattern,
+					1.,
+					0.,
+					0.,
+					0.,
+					0.);
+				cairo_mask (pCairoContext, pGradationPattern);
+				cairo_pattern_destroy (pGradationPattern);
+			}
 		}
 		else
 		{

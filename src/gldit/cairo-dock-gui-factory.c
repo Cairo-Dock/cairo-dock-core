@@ -3233,20 +3233,6 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					gchar *cFrameTitle = g_strdup_printf ("<b>%s</b>", dgettext (cGettextDomain, cValue));
 					pLabel= gtk_label_new (NULL);
 					gtk_label_set_markup (GTK_LABEL (pLabel), cFrameTitle);
-
-					g_print ("======= %s\n", dgettext (cGettextDomain, cValue));
-					GtkStyleContext *context;
-					GdkRGBA color;
-					context = gtk_widget_get_style_context (pLabel);
-					// GtkCssProvider *css = gtk_css_provider_get_default ();
-					// gtk_style_context_add_provider (context, GTK_STYLE_PROVIDER (), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-					// gtk_style_context_invalidate (context);
-					gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
-					g_print ("======= %f, %f, %f, %f\n", color.red, color.green, color.blue, color.alpha);
-					/*gdk_rgba_parse (&color, "#3C3C3C");
-					gtk_widget_override_color (pLabel, GTK_STATE_FLAG_NORMAL, &color);*/
-					g_print ("=======\n");
-
 					g_free (cFrameTitle);
 					
 					pLabelContainer = NULL;
