@@ -612,21 +612,21 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, d
 	return pSurface;
 }
 
-cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, G_GNUC_UNUSED double fImageWidth, G_GNUC_UNUSED double fImageHeight, double fAlpha)
+cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, double fImageWidth, double fImageHeight, double fAlpha)
 {
 	cairo_surface_t *pNewSurface = NULL;
 
 	if (cImageFile != NULL)
 	{
 		gchar *cImagePath = cairo_dock_search_image_s_path (cImageFile);
-		double fImageWidth, fImageHeight;
+		double w, h;
 		cairo_surface_t *pPatternSurface = cairo_dock_create_surface_from_image (cImagePath,
 			1.,
 			0,  // pas de contrainte sur
 			0,  // la taille du motif initialement.
 			CAIRO_DOCK_FILL_SPACE,
-			&fImageWidth,
-			&fImageHeight,
+			&w,
+			&h,
 			NULL, NULL);
 		g_free (cImagePath);
 		if (pPatternSurface == NULL)
