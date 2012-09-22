@@ -401,18 +401,16 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 	int iIndicType = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active indic type", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour pouvoir intercepter le cas ou la cle n'existe pas.
 	
 	cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "active indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
-	if (iIndicType == -1)  // nouvelle cle.
+	if (iIndicType == -1 || (iIndicType == 0 && cIndicatorImageName == NULL))
+		// new key || if we want to have an image but we don't give any image
 	{
 		iIndicType = (cIndicatorImageName != NULL ? 0 : 1);
 		g_key_file_set_integer (pKeyFile, "Indicators", "active indic type", iIndicType);
 	}
-	else
+	else if (iIndicType == 1) // not an image
 	{
-		if (iIndicType != 0)  // pas d'image.
-		{
-			g_free (cIndicatorImageName);
-			cIndicatorImageName = NULL;
-		}
+		g_free (cIndicatorImageName);
+		cIndicatorImageName = NULL;
 	}
 	
 	if (cIndicatorImageName != NULL)
