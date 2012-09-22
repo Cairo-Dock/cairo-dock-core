@@ -406,24 +406,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glMatrixMode (GL_MODELVIEW);
 	}
 	
-	//\_____________________ On dessine les infos additionnelles.
-	/**if (icon->iQuickInfoTexture != 0)
-	{
-		double fMaxScale = cairo_dock_get_icon_max_scale (icon);
-		
-		glPushMatrix ();
-		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
-		glTranslatef (0., (- icon->fHeight + icon->iQuickInfoHeight / fMaxScale * fRatio) * icon->fScale/2, 0.);
-		
-		cairo_dock_draw_texture_with_alpha (icon->iQuickInfoTexture,
-			icon->iQuickInfoWidth / fMaxScale * fRatio * icon->fScale,
-			icon->iQuickInfoHeight / fMaxScale * fRatio * icon->fScale,
-			icon->fAlpha);
-		
-		glPopMatrix ();
-	}*/
-	cairo_dock_draw_icon_overlays_opengl (icon, fRatio);
-	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
 	glPopMatrix ();  // retour au debut de la fonction.
 	if (bUseText && icon->label.iTexture != 0 && icon->iHideLabel == 0
@@ -490,46 +472,58 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			}
 			
 			const int pad = 3;
+			int iXStick = (pDock->container.bDirectionUp ? 
+				floor (fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad) :  // right border
+				floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad));  // left border
+			int  iMaxWidth = (pDock->container.bDirectionUp ?
+				iXStick :
+				pDock->container.iHeight - iXStick);
 			
-			double u0 = 0., u1 = 1.;
-			if ((myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + icon->fHeight * icon->fScale + pad + icon->label.iWidth > pDock->container.iHeight)  // label too large, end with a gradation.
+			int w;
+			if (icon->label.iWidth > iMaxWidth)
 			{
-				u1 = (double) (pDock->container.iHeight - ((myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + icon->fHeight * icon->fScale + pad)) / icon->label.iWidth;
-				dx = .5 * (((int)round (icon->label.iWidth * (u1 - u0))) & 1);
+				w = iMaxWidth;
+				dx = .5 * (w & 1);
 			}
-			glTranslatef (pDock->container.bDirectionUp ? 
-					floor (fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - u1 * icon->label.iWidth/2) + dx :
-					floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad + u1 * icon->label.iWidth/2) + dx,
+			else
+			{
+				w = icon->label.iWidth;
+			}
+			glTranslatef ((pDock->container.bDirectionUp ? 
+					floor (iXStick - w/2) + dx :
+					floor (iXStick + w/2) + dx),
 				floor (fX) + dy,
 				0.);
-			glBindTexture (GL_TEXTURE_2D, icon->label.iTexture);
 			
-			double w = round (icon->label.iWidth * (u1 - u0)), h = icon->label.iHeight;
-			if (u1 < .99)  // draw with an alpha gradation on the last part.
+			if (icon->label.iWidth > iMaxWidth)  // draw with an alpha gradation on the last part.
 			{
-				glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+				cairo_dock_apply_image_buffer_texture_with_limit (&icon->label, fMagnitude, iMaxWidth);
+				/*glBindTexture (GL_TEXTURE_2D, icon->label.iTexture);
+				
+				double h = icon->label.iHeight;
+				double u0 = 0., u1 = (double) iMaxWidth / icon->label.iWidth;
 				glBegin(GL_QUAD_STRIP);
 				
 				double a = .75; // 3/4 plain, 1/4 gradation
 				a = (double) (floor ((-.5+a)*w)) / w + .5;
 				glColor4f (1., 1., 1., fMagnitude);
-				glTexCoord2f(u0, 0); glVertex3f(-.5*w,  .5*h, 0.);  // top left
-				glTexCoord2f(u0, 1); glVertex3f(-.5*w, -.5*h, 0.);  // bottom left
+				glTexCoord2f(u0, 0); glVertex3f (-.5*w,  .5*h, 0.);  // top left
+				glTexCoord2f(u0, 1); glVertex3f (-.5*w, -.5*h, 0.);  // bottom left
 				
-				glTexCoord2f(u1*a, 0); glVertex3f(  ((-.5+a)*w),  .5*h, 0.);  // top middle
-				glTexCoord2f(u1*a, 1); glVertex3f(  ((-.5+a)*w),  -.5*h, 0.);  // bottom middle
+				glTexCoord2f(u1*a, 0); glVertex3f ((-.5+a)*w,  .5*h, 0.);  // top middle
+				glTexCoord2f(u1*a, 1); glVertex3f ((-.5+a)*w, -.5*h, 0.);  // bottom middle
 				
 				glColor4f (1., 1., 1., 0.);
 				
-				glTexCoord2f(u1, 0); glVertex3f( .5*w,  .5*h, 0.);  // top right
-				glTexCoord2f(u1, 1); glVertex3f( .5*w, -.5*h, 0.);  // bottom right
+				glTexCoord2f(u1, 0); glVertex3f (.5*w,  .5*h, 0.);  // top right
+				glTexCoord2f(u1, 1); glVertex3f (.5*w, -.5*h, 0.);  // bottom right
 				
-				glEnd();
+				glEnd();*/
 			}
 			else
 			{
 				_cairo_dock_set_alpha (fMagnitude);
-				_cairo_dock_apply_current_texture_at_size (w, h);
+				cairo_dock_apply_image_buffer_texture_with_offset (&icon->label, 0, 0);
 			}
 		}
 		/*_cairo_dock_set_alpha (fMagnitude);
@@ -538,6 +532,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		glPopMatrix ();
 	}
+	
+	//\_____________________ Draw the overlays on top of that.
+	cairo_dock_draw_icon_overlays_opengl (icon, fRatio);
 }
 
 

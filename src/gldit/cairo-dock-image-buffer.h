@@ -155,5 +155,10 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 */
 #define cairo_dock_apply_image_buffer_texture(pImage) cairo_dock_apply_image_buffer_texture_with_offset (pImage, 0., 0.)
 
+void cairo_dock_apply_image_buffer_surface_with_offset_and_limit (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha, int iMaxWidth);
+
+void cairo_dock_apply_image_buffer_texture_with_limit (CairoDockImageBuffer *pImage, double fAlpha, int iMaxWidth);
+
+
 G_END_DECLS
 #endif

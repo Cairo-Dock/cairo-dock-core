@@ -306,3 +306,64 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 		_cairo_dock_apply_current_texture_at_size_with_offset (pImage->iWidth, pImage->iHeight, x, y);
 	}
 }
+
+
+void cairo_dock_apply_image_buffer_surface_with_offset_and_limit (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha, int iMaxWidth)
+{
+	cairo_set_source_surface (pCairoContext,
+		pImage->pSurface,
+		x,
+		y);
+	
+	const double a = .75;  // 3/4 plain, 1/4 gradation
+	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (x,
+		0.,
+		x + iMaxWidth,
+		0.);
+	cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
+	cairo_pattern_add_color_stop_rgba (pGradationPattern,
+		0.,
+		0.,
+		0.,
+		0.,
+		fAlpha);
+	cairo_pattern_add_color_stop_rgba (pGradationPattern,
+		a,
+		0.,
+		0.,
+		0.,
+		fAlpha);
+	cairo_pattern_add_color_stop_rgba (pGradationPattern,
+		1.,
+		0.,
+		0.,
+		0.,
+		0.);
+	cairo_mask (pCairoContext, pGradationPattern);
+	cairo_pattern_destroy (pGradationPattern);
+}
+
+void cairo_dock_apply_image_buffer_texture_with_limit (CairoDockImageBuffer *pImage, double fAlpha, int iMaxWidth)
+{
+	glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
+	
+	int w = iMaxWidth, h = pImage->iHeight;
+	double u0 = 0., u1 = (double) w / pImage->iWidth;
+	glBegin(GL_QUAD_STRIP);
+	
+	double a = .75;  // 3/4 plain, 1/4 gradation
+	a = (double) (floor ((-.5+a)*w)) / w + .5;
+	glColor4f (1., 1., 1., fAlpha);
+	glTexCoord2f(u0, 0); glVertex3f (-.5*w,  .5*h, 0.);  // top left
+	glTexCoord2f(u0, 1); glVertex3f (-.5*w, -.5*h, 0.);  // bottom left
+	
+	glTexCoord2f(u1*a, 0); glVertex3f ((-.5+a)*w,  .5*h, 0.);  // top middle
+	glTexCoord2f(u1*a, 1); glVertex3f ((-.5+a)*w, -.5*h, 0.);  // bottom middle
+	
+	glColor4f (1., 1., 1., 0.);
+	
+	glTexCoord2f(u1, 0); glVertex3f (.5*w,  .5*h, 0.);  // top right
+	glTexCoord2f(u1, 1); glVertex3f (.5*w, -.5*h, 0.);  // bottom right
+	
+	glEnd();
+}

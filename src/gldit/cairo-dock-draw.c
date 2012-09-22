@@ -591,10 +591,6 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		
 		if (bIsHorizontal)
 		{
-			/**cairo_set_source_surface (pCairoContext,
-				icon->pTextBuffer,
-				floor (fOffsetX),
-				floor (bDirectionUp ? -iLabelSize : icon->fHeight * icon->fScale));*/
 			cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
 				floor (fOffsetX), floor (bDirectionUp ? -iLabelSize : icon->fHeight * icon->fScale), fMagnitude);
 		}
@@ -605,17 +601,15 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 				fMagnitude /= 3;
 			}
 			const int pad = 3;
-			/*cairo_set_source_surface (pCairoContext,
-				icon->pTextBuffer,
-				bDirectionUp ? 
-					floor (0 - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth):
-					floor (0 + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad),
-				floor (0 + icon->fWidth * icon->fScale/2 - icon->label.iHeight/2));*/
+			double fY = icon->fDrawY;
+			int  iMaxWidth = (pDock->container.bDirectionUp ?
+				fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad :
+				pDock->container.iHeight - (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad));
 			int iOffsetX = floor (bDirectionUp ? 
-				- (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth:
+				MAX (- iMaxWidth, - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth):
 				icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad);
-			int iOffsetY = floor (0 + icon->fWidth * icon->fScale/2 - icon->label.iHeight/2);
-			if ((myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + icon->fHeight * icon->fScale + pad + icon->label.iWidth < pDock->container.iHeight)
+			int iOffsetY = floor (icon->fWidth * icon->fScale/2 - icon->label.iHeight/2);
+			if (icon->label.iWidth < iMaxWidth)
 			{
 				cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
 					iOffsetX,
@@ -624,17 +618,15 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			}
 			else
 			{
-				cairo_translate (pCairoContext, 
+				cairo_dock_apply_image_buffer_surface_with_offset_and_limit (&icon->label, pCairoContext, iOffsetX, iOffsetY, fMagnitude, iMaxWidth);
+				/*cairo_set_source_surface (pCairoContext,
+					icon->label.pSurface,
 					iOffsetX,
 					iOffsetY);
-				cairo_set_source_surface (pCairoContext,
-					icon->label.pSurface,
-					0,
-					0);
 				
-				cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0,
+				cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (iOffsetX,
 					0.,
-					pDock->container.iHeight - ((myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + icon->fHeight * icon->fScale + pad),
+					iOffsetX + iMaxWidth,
 					0.);
 				cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
 				cairo_pattern_add_color_stop_rgba (pGradationPattern,
@@ -656,48 +648,22 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 					0.,
 					0.);
 				cairo_mask (pCairoContext, pGradationPattern);
-				cairo_pattern_destroy (pGradationPattern);
+				cairo_pattern_destroy (pGradationPattern);*/
 			}
 		}
 		else
 		{
 			cairo_rotate (pCairoContext, bDirectionUp ? - G_PI/2 : G_PI/2);
-			/**cairo_set_source_surface (pCairoContext,
-				icon->pTextBuffer,
-				floor (bDirectionUp ? fOffsetX - icon->fWidth * icon->fScale : fOffsetX),
-				-floor (bDirectionUp ? iLabelSize : icon->fHeight * icon->fScale + iLabelSize));*/
 			cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
 				floor (bDirectionUp ? fOffsetX - icon->fWidth * icon->fScale : fOffsetX),
 				-floor (bDirectionUp ? iLabelSize : icon->fHeight * icon->fScale + iLabelSize),
 				fMagnitude);
 		}
 		
-		/**if (fMagnitude > .1)
-			cairo_paint_with_alpha (pCairoContext, fMagnitude);*/
 		cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	}
 	
-	//\_____________________ On dessine les infos additionnelles.
-	/**if (icon->pQuickInfoBuffer != NULL)
-	{
-		double fMaxScale = cairo_dock_get_icon_max_scale (icon);
-		cairo_translate (pCairoContext,
-			(- icon->iQuickInfoWidth / fMaxScale * fRatio + icon->fWidthFactor * icon->fWidth) / 2 * icon->fScale,
-			(icon->fHeight - icon->iQuickInfoHeight / fMaxScale * fRatio) * icon->fScale);
-		
-		cairo_scale (pCairoContext,
-			fRatio * icon->fScale / fMaxScale,
-			fRatio * icon->fScale / fMaxScale);
-		
-		cairo_set_source_surface (pCairoContext,
-			icon->pQuickInfoBuffer,
-			0,
-			0);
-		if (icon->fAlpha == 1)
-			cairo_paint (pCairoContext);
-		else
-			cairo_paint_with_alpha (pCairoContext, icon->fAlpha);
-	}*/
+	//\_____________________ Draw the overlays on top of that.
 	cairo_dock_draw_icon_overlays_cairo (icon, fRatio, pCairoContext);
 }
 
