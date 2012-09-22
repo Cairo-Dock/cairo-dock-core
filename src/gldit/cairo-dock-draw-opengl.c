@@ -406,6 +406,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glMatrixMode (GL_MODELVIEW);
 	}
 	
+	//\_____________________ Draw the overlays on top of that.
+	cairo_dock_draw_icon_overlays_opengl (icon, fRatio);
+	
 	//\_____________________ On dessine les etiquettes, avec un alpha proportionnel au facteur d'echelle de leur icone.
 	glPopMatrix ();  // retour au debut de la fonction.
 	if (bUseText && icon->label.iTexture != 0 && icon->iHideLabel == 0
@@ -532,9 +535,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		
 		glPopMatrix ();
 	}
-	
-	//\_____________________ Draw the overlays on top of that.
-	cairo_dock_draw_icon_overlays_opengl (icon, fRatio);
 }
 
 
