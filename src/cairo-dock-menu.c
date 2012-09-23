@@ -1770,8 +1770,11 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			"-GtkButton-default-border : 0px;\n" \
 			"-GtkButton-default-outside-border : 0px;\n" \
 			"-GtkButton-inner-border: 0px;\n" \
-			"-GtkWidget-border-style: none;\n" \
-			"-GtkWidget-border-width: 0px;\n" \
+			"border-image-width: 0px;\n" \
+			"border-style: none;\n" \
+			"border-width: 0px;\n" \
+			"border-radius: 0px;\n" \
+			"box-shadow: none;\n" \
 			"}", -1, NULL);
 		
 		GtkWidget *hbox = _gtk_hbox_new (0);
