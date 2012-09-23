@@ -1156,9 +1156,9 @@ gboolean cairo_dock_on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventB
 						///if (prev_icon != NULL && prev_icon->iGroup != s_pIconClicked->iGroup)  // the previous icon is in a different group -> we'll be at the beginning of our group.
 						///	prev_icon = NULL;  // => move to the beginning of the group/dock
 						cairo_dock_move_icon_after_icon (pDock, s_pIconClicked, prev_icon);
-
-						pDock->pRenderer->calculate_icons (pDock);
-
+						
+						cairo_dock_calculate_dock_icons (pDock);
+						
 						if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked))
 						{
 							cairo_dock_request_icon_animation (s_pIconClicked, CAIRO_CONTAINER (pDock), "bounce", 2);

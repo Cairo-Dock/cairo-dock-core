@@ -65,22 +65,6 @@
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;  // for cairo_dock_make_preview()
 
-/**void cairo_dock_reload_reflects_in_dock (CairoDock *pDock)
-{
-	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (CAIRO_CONTAINER (pDock));
-	Icon *icon;
-	GList *ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (icon->pReflectionBuffer != NULL)
-		{
-			cairo_dock_add_reflection_to_icon (icon, CAIRO_CONTAINER (pDock));
-		}
-	}
-	cairo_destroy (pCairoContext);
-}*/
-
 
 void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatDockWidth doivent avoir ete mis a jour au prealable.
 {
@@ -191,6 +175,8 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	if (iPrevMaxDockHeight == pDock->iMaxDockHeight && iPrevMaxDockWidth == pDock->iMaxDockWidth)  // if the size has changed, shapes will be updated by the "configure" callback, so we don't need to do it here; if not, we do it in case the icons define a new shape (ex.: separators in Panel view) or in case the screen edge has changed.
 	{
 		cairo_dock_update_input_shape (pDock);  // done after the icons' position is known.
+		if (pDock->container.bInside)  // if the mouse is inside, set the new input shape immediately.
+			cairo_dock_set_input_shape_active (pDock);
 	}
 	
 	if (iPrevMaxDockHeight == pDock->iMaxDockHeight && iPrevMaxDockWidth == pDock->iMaxDockWidth)  // same remark as for the input shape.
@@ -1219,7 +1205,8 @@ static cairo_surface_t *_cairo_dock_make_stripes_background (int iWidth, int iHe
 }
 static void _cairo_dock_load_default_background (CairoDockImageBuffer *pImage, int iWidth, int iHeight)
 {
-	//g_print ("%s (%s, %d)\n", __func__, myDocksParam.cBackgroundImageFile, myDocksParam.bBackgroundImageRepeat);
+	g_print ("%s (%s, %d, %dx%d)\n", __func__, myDocksParam.cBackgroundImageFile, myDocksParam.bBackgroundImageRepeat, iWidth,
+				iHeight);
 	if (myDocksParam.cBackgroundImageFile != NULL)
 	{
 		if (myDocksParam.bBackgroundImageRepeat)

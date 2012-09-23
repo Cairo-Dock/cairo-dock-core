@@ -1777,7 +1777,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		GtkWidget *hbox = _gtk_hbox_new (0);
 		gtk_container_add (GTK_CONTAINER (pMenuItem), hbox);
 		
-		GtkWidget *pLabel = gtk_label_new (_("Window actions"));
+		GtkWidget *pLabel = gtk_label_new (_("Window"));
 		gtk_box_pack_start (GTK_BOX (hbox), pLabel, FALSE, FALSE, 0);
 		
 		if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close

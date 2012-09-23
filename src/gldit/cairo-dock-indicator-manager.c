@@ -348,6 +348,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 	{
 		pIndicators->cIndicatorImagePath = cairo_dock_search_image_s_path (cIndicatorImageName);
 		g_free (cIndicatorImageName);
+		cIndicatorImageName = NULL;
 	}
 	else
 		pIndicators->cIndicatorImagePath = g_strdup (GLDI_SHARE_DATA_DIR"/icons/default-indicator.png");
@@ -400,28 +401,21 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 	//\__________________ On recupere l'indicateur de fenetre active.
 	int iIndicType = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active indic type", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour pouvoir intercepter le cas ou la cle n'existe pas.
 	
-	cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "active indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
-	if (iIndicType == -1 || (iIndicType == 0 && cIndicatorImageName == NULL))
-		// new key || if we want to have an image but we don't give any image
+	if (iIndicType == 0 || iIndicType == -1)  // image or new key => get the image
 	{
-		iIndicType = (cIndicatorImageName != NULL ? 0 : 1);
-		g_key_file_set_integer (pKeyFile, "Indicators", "active indic type", iIndicType);
-	}
-	else if (iIndicType == 1) // not an image
-	{
+		cIndicatorImageName = cairo_dock_get_string_key_value (pKeyFile, "Indicators", "active indicator", &bFlushConfFileNeeded, NULL, NULL, NULL);
+		if (cIndicatorImageName != NULL)  // ensure the image exists
+			pIndicators->cActiveIndicatorImagePath = cairo_dock_search_image_s_path (cIndicatorImageName);
+		if (iIndicType == -1)  // new key
+		{
+			iIndicType = (pIndicators->cActiveIndicatorImagePath != NULL ? 0 : 1);  // if a valid image was defined before, use this option.
+			g_key_file_set_integer (pKeyFile, "Indicators", "active indic type", iIndicType);
+		}
 		g_free (cIndicatorImageName);
 		cIndicatorImageName = NULL;
 	}
 	
-	if (cIndicatorImageName != NULL)
-	{
-		pIndicators->cActiveIndicatorImagePath = cairo_dock_search_image_s_path (cIndicatorImageName);
-		g_free (cIndicatorImageName);
-	}
-	else
-		pIndicators->cActiveIndicatorImagePath = NULL;
-	
-	if (iIndicType == 1)  // cadre
+	if (pIndicators->cActiveIndicatorImagePath == NULL)  // 'frame' option, or no image defined, or nonexistent image => load the frame
 	{
 		double couleur_active[4] = {0., 0.4, 0.8, 0.5};
 		cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, pIndicators->fActiveColor, 4, couleur_active, "Icons", NULL);
@@ -440,6 +434,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 		{
 			pIndicators->cClassIndicatorImagePath = cairo_dock_search_image_s_path (cIndicatorImageName);
 			g_free (cIndicatorImageName);
+			cIndicatorImageName = NULL;
 		}
 		else
 		{
