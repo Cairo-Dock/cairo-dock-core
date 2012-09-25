@@ -25,7 +25,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-manager.h"
 
-extern CairoDock *g_pPrimaryContainer;
+extern CairoContainer *g_pPrimaryContainer;
 
 static GList *s_pManagers = NULL;
 
