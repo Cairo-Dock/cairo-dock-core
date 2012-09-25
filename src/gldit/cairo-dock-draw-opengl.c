@@ -612,6 +612,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 				pHiddenBgColor[3] *= pDock->fPostHideOffset;
 				if (pHiddenBgColor[3] != 0)
 				{
+					_cairo_dock_set_blend_alpha ();
 					glPushMatrix ();
 					w = icon->fWidth * icon->fScale;
 					h = icon->fHeight * icon->fScale;
