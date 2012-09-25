@@ -29,6 +29,7 @@
 
 #include "gldi-config.h"
 #include "cairo-dock-notifications.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
@@ -620,8 +621,10 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			}
 			else if (pCurrentDesklet != NULL && ! pMinimalConfig->bIsDetached)  // was in a desklet, now is in a dock
 			{
-				cairo_dock_destroy_desklet (pCurrentDesklet);
-				pCurrentDesklet = NULL;
+				///cairo_dock_destroy_desklet (pCurrentDesklet);
+				///pCurrentDesklet = NULL;
+				pCurrentDesklet->pIcon = NULL;
+				cairo_dock_set_icon_container (pIcon, NULL);
 			}
 			
 			// on recupere son desklet (cree au besoin).
