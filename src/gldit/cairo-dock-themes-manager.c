@@ -587,7 +587,7 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 		cd_warning ("Not able to launch this command: %s", sCommand->str);
 	
 	// precaution probablement inutile.
-	g_string_printf (sCommand, "chmod -R 664 \"%s\"", g_cCurrentThemePath);
+	g_string_printf (sCommand, "chmod -R 775 \"%s\"", g_cCurrentThemePath);
 	r = system (sCommand->str);
 	if (r < 0)
 		cd_warning ("Not able to launch this command: %s", sCommand->str);
