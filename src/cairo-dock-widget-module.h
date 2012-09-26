@@ -34,13 +34,14 @@ struct _ModuleWidget {
 	CairoDockModule *pModule;
 	CairoDockModuleInstance *pModuleInstance;
 	gchar *cConfFilePath;
+	GtkWidget *pMainWindow;
 };
 #define MODULE_WIDGET(w) ((ModuleWidget*)(w))
 
 #define IS_MODULE_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_MODULE)
 
 
-ModuleWidget *cairo_dock_module_widget_new (CairoDockModule *pModule, CairoDockModuleInstance *pInstance);
+ModuleWidget *cairo_dock_module_widget_new (CairoDockModule *pModule, CairoDockModuleInstance *pInstance, GtkWidget *pMainWindow);
 
 
 void cairo_dock_module_widget_update_desklet_params (ModuleWidget *pModuleWidget, CairoDesklet *pDesklet);

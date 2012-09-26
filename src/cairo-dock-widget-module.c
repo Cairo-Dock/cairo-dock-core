@@ -114,7 +114,7 @@ static void _build_module_widget (ModuleWidget *pModuleWidget)
 	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModuleWidget->pModule->pVisitCard->cShareDataDir, pModuleWidget->pModule->pVisitCard->cConfFileName);
 	pModuleWidget->widget.pWidget = cairo_dock_build_key_file_widget (pKeyFile,
 		pModuleWidget->pModule->pVisitCard->cGettextDomain,
-		NULL,  // main window
+		pModuleWidget->pMainWindow,
 		&pWidgetList,
 		pDataGarbage,
 		cOriginalConfFilePath);
@@ -130,12 +130,12 @@ static void _build_module_widget (ModuleWidget *pModuleWidget)
 	g_key_file_free (pKeyFile);
 }
 
-ModuleWidget *cairo_dock_module_widget_new (CairoDockModule *pModule, CairoDockModuleInstance *pInstance)
+ModuleWidget *cairo_dock_module_widget_new (CairoDockModule *pModule, CairoDockModuleInstance *pInstance, GtkWidget *pMainWindow)
 {
 	g_return_val_if_fail (pModule != NULL, NULL);
 	
 	CairoDockModuleInstance *pModuleInstance = (pInstance ? pInstance : pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);  // can be NULL if the module is not yet activated.
-	gchar *cConfFilePath = (pInstance ? pInstance->cConfFilePath : _get_valid_module_conf_file (pModule));
+	gchar *cConfFilePath = (pInstance ? g_strdup (pInstance->cConfFilePath) : _get_valid_module_conf_file (pModule));
 	
 	ModuleWidget *pModuleWidget = g_new0 (ModuleWidget, 1);
 	pModuleWidget->widget.iType = WIDGET_MODULE;
@@ -144,6 +144,7 @@ ModuleWidget *cairo_dock_module_widget_new (CairoDockModule *pModule, CairoDockM
 	pModuleWidget->cConfFilePath = cConfFilePath;
 	pModuleWidget->pModule = pModule;
 	pModuleWidget->pModuleInstance = pModuleInstance;
+	pModuleWidget->pMainWindow = pMainWindow;
 	
 	// build its widget based on its config file.
 	_build_module_widget (pModuleWidget);
