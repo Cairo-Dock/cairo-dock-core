@@ -1178,7 +1178,7 @@ static inline double _get_first_appli_order (CairoDock *pDock, GList *first_laun
 			if (last_launcher_ic != NULL)
 			{
 				//g_print (" go just after the last launcher (%s)\n", ((Icon*)last_launcher_ic->data)->cName);
-				fOrder = _get_next_order (last_launcher_ic);  // we have already skipped the separators, so we can just take the next order.
+				fOrder = _get_next_order (last_launcher_ic);
 			}
 			else  // no launcher, go to the beginning of the dock.
 			{
@@ -1300,8 +1300,8 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 		icon = ic->data;
 		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)  // launcher, even without class
 		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon)  // container icon (likely to contain some launchers)
-		|| (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && /**icon->cClass != NULL &&*/ icon->pModuleInstance->pModule->pVisitCard->bActAsLauncher)  // applet acting like a launcher
-		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon)))  // separator (user or auto).
+		|| (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && icon->pModuleInstance->pModule->pVisitCard->bActAsLauncher)  // applet acting like a launcher
+		/**|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon)*/)  // separator (user or auto).
 		{
 			// pLastLauncher = icon;
 			last_launcher_ic = ic;
