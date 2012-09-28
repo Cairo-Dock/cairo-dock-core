@@ -1147,7 +1147,7 @@ static CDWidget *_build_module_widget (CairoDockGroupDescription *pGroupDescript
 	CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 	
 	// build its widget
-	ModuleWidget *pModuleWidget = cairo_dock_module_widget_new (pModule, pInstance);
+	ModuleWidget *pModuleWidget = cairo_dock_module_widget_new (pModule, pInstance, s_pMainWindow);
 	
 	return CD_WIDGET (pModuleWidget);
 }
