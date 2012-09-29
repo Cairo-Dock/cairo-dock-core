@@ -1645,8 +1645,25 @@ static gboolean _on_enter_menu_item (GtkWidget* pWidget,
 	gtk_widget_queue_draw (pWidget);
 	return FALSE;
 }
-static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *cTooltip, GCallback pFunction, GtkWidget *hbox, GtkCssProvider *css, gpointer data)
+static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *cTooltip, GCallback pFunction, GtkWidget *hbox, gpointer data)
 {
+	static GtkCssProvider *css = NULL;
+	if (css == NULL)
+	{
+		css = gtk_css_provider_new ();  // make the buttons as small as possible, or they will be too large for a menu-item.
+		gtk_css_provider_load_from_data (css,
+			".button {\n" \
+			"-GtkButton-default-border : 0px;\n" \
+			"-GtkButton-default-outside-border : 0px;\n" \
+			"-GtkButton-inner-border: 0px;\n" \
+			"border-image-width: 0px;\n" \
+			"border-style: none;\n" \
+			"border-width: 0px;\n" \
+			"border-radius: 0px;\n" \
+			"box-shadow: none;\n" \
+			"}", -1, NULL);
+	}
+	
 	GtkWidget *pButton = gtk_button_new ();
 	g_object_set (pButton, "width-request", 28, NULL);  // make the button easier to click, because a menu-item is quite small
 	GtkStyleContext *ctx = gtk_widget_get_style_context (pButton);
@@ -1672,6 +1689,32 @@ static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *c
 	g_signal_connect (G_OBJECT (pButton), "clicked", G_CALLBACK(pFunction), data);
 	gtk_box_pack_end (GTK_BOX (hbox), pButton, FALSE, FALSE, 0);
 	return pButton;
+}
+static GtkWidget *_add_menu_item_with_buttons (GtkWidget *menu)
+{
+	GtkWidget *pMenuItem = gtk_menu_item_new ();
+	gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
+	
+	g_signal_connect (G_OBJECT (pMenuItem), "button-press-event",
+		G_CALLBACK(_on_press_menu_item),
+		NULL);  // the press event on the menu will close it, which is fine for us.
+	g_signal_connect (G_OBJECT (pMenuItem), "motion-notify-event",
+		G_CALLBACK(_on_motion_notify_menu_item),
+		NULL);  // we need to manually higlight the currently pointed button
+	g_signal_connect (G_OBJECT (pMenuItem),
+		"leave-notify-event",
+		G_CALLBACK (_on_leave_menu_item),
+		NULL);  // to turn off the highlighted button when we leave the menu-item (if we leave it quickly, a motion event won't be generated)
+	g_signal_connect (G_OBJECT (pMenuItem),
+		"enter-notify-event",
+		G_CALLBACK (_on_enter_menu_item),
+		NULL);  // to force the label to not highlight (it gets highlighted, even if we overwrite the motion_notify_event callback)
+	GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (pMenuItem);
+	widget_class->draw = _draw_menu_item;  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves.
+	
+	GtkWidget *hbox = _gtk_hbox_new (0);
+	gtk_container_add (GTK_CONTAINER (pMenuItem), hbox);
+	return hbox;
 }
 #endif
 gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu)
@@ -1744,41 +1787,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		
 		//\_________________________ Window Management
 		#if (GTK_MAJOR_VERSION >= 3)
-		pMenuItem = gtk_menu_item_new ();
-		gtk_menu_shell_append  (GTK_MENU_SHELL (menu), pMenuItem);
-		
-		g_signal_connect (G_OBJECT (pMenuItem), "button-press-event",
-			G_CALLBACK(_on_press_menu_item),
-			NULL);  // the press event on the menu will close it, which is fine for us.
-		g_signal_connect (G_OBJECT (pMenuItem), "motion-notify-event",
-			G_CALLBACK(_on_motion_notify_menu_item),
-			NULL);  // we need to manually higlight the currently pointed button
-		g_signal_connect (G_OBJECT (pMenuItem),
-			"leave-notify-event",
-			G_CALLBACK (_on_leave_menu_item),
-			NULL);  // to turn off the highlighted button when we leave the menu-item (if we leave it quickly, a motion event won't be generated)
-		g_signal_connect (G_OBJECT (pMenuItem),
-			"enter-notify-event",
-			G_CALLBACK (_on_enter_menu_item),
-			NULL);  // to force the label to not highlight (it gets highlighted, even if we overwrite the motion_notify_event callback)
-		GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (pMenuItem);
-		widget_class->draw = _draw_menu_item;  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves.
-		
-		GtkCssProvider *css = gtk_css_provider_new ();  // make the buttons as small as possible, or they will be too large for a menu-item.
-		gtk_css_provider_load_from_data (css,
-			".button {\n" \
-			"-GtkButton-default-border : 0px;\n" \
-			"-GtkButton-default-outside-border : 0px;\n" \
-			"-GtkButton-inner-border: 0px;\n" \
-			"border-image-width: 0px;\n" \
-			"border-style: none;\n" \
-			"border-width: 0px;\n" \
-			"border-radius: 0px;\n" \
-			"box-shadow: none;\n" \
-			"}", -1, NULL);
-		
-		GtkWidget *hbox = _gtk_hbox_new (0);
-		gtk_container_add (GTK_CONTAINER (pMenuItem), hbox);
+		GtkWidget *hbox = _add_menu_item_with_buttons (menu);
 		
 		GtkWidget *pLabel = gtk_label_new (_("Window"));
 		gtk_box_pack_start (GTK_BOX (hbox), pLabel, FALSE, FALSE, 0);
@@ -1790,7 +1799,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg",
 			cLabel,
 			G_CALLBACK(_cairo_dock_close_appli),
-			hbox, css, data);
+			hbox, data);
 		g_free (cLabel);
 		
 		if (! icon->bIsHidden)
@@ -1802,7 +1811,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg",
 				cLabel,
 				G_CALLBACK(_cairo_dock_minimize_appli),
-				hbox, css, data);
+				hbox, data);
 			g_free (cLabel);
 			
 			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
@@ -1812,14 +1821,14 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg",
 				cLabel,
 				G_CALLBACK(_cairo_dock_lower_appli),
-				hbox, css, data);
+				hbox, data);
 			g_free (cLabel);
 		}
 		
 		_add_new_button_to_hbox (icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg",
 			icon->bIsMaximized ? _("Unmaximise") : _("Maximise"),
 			G_CALLBACK(_cairo_dock_maximize_appli),
-			hbox, css, data);
+			hbox, data);
 		
 		if (pAppli
 			&& (pAppli->bIsHidden
@@ -1829,10 +1838,10 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			_add_new_button_to_hbox (GTK_STOCK_FIND,
 				_("Show"),
 				G_CALLBACK(_cairo_dock_show_appli),
-				hbox, css, data);
+				hbox, data);
 		}
 		#else  // GTK2 - sorry guys, you get the old code :-)
-		GtkWidget *pSubMenuWindowManagement = cairo_dock_create_sub_menu (_("Window actions"), menu, NULL);
+		GtkWidget *pSubMenuWindowManagement = cairo_dock_create_sub_menu (_("Window"), menu, NULL);
 		if (pAppli
 			&& (pAppli->bIsHidden
 			 || pAppli->Xid != cairo_dock_get_current_active_window ()
@@ -1921,6 +1930,37 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		bAddSeparator = TRUE;
 
 		//\_________________________ Window Management
+		#if (GTK_MAJOR_VERSION >= 3)
+		GtkWidget *hbox = _add_menu_item_with_buttons (menu);
+		
+		GtkWidget *pLabel = gtk_label_new (_("Windows"));
+		gtk_box_pack_start (GTK_BOX (hbox), pLabel, FALSE, FALSE, 0);
+		
+		if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
+			cLabel = g_strdup_printf ("%s (%s)", _("Close all"), _("middle-click"));
+		else
+			cLabel = g_strdup (_("Close all"));
+		_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg",
+			cLabel,
+			G_CALLBACK(_cairo_dock_close_class),
+			hbox, data);
+		g_free (cLabel);
+		
+		if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
+			cLabel = g_strdup_printf ("%s (%s)", _("Minimise all"), _("middle-click"));
+		else
+			cLabel = g_strdup (_("Minimise all"));
+		_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg",
+			cLabel,
+			G_CALLBACK(_cairo_dock_minimize_class),
+			hbox, data);
+		g_free (cLabel);
+		
+		_add_new_button_to_hbox (GTK_STOCK_FIND,
+			_("Show all"),
+			G_CALLBACK(_cairo_dock_show_class),
+			hbox, data);
+		#else
 		GtkWidget *pSubMenuWindowManagement = cairo_dock_create_sub_menu (_("Windows management"), menu, NULL);
 		
 		_add_entry_in_menu (_("Show all"), GTK_STOCK_FIND, _cairo_dock_show_class, pSubMenuWindowManagement);
@@ -1928,7 +1968,8 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		_add_entry_in_menu (_("Minimise all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_class, pSubMenuWindowManagement);
 		
 		_add_entry_in_menu (_("Close all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_class, pSubMenuWindowManagement);
-
+		#endif
+		
 		//\_________________________ Other actions
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
 		
