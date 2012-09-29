@@ -169,7 +169,7 @@ msgstr "Étiquettes"
 
 #: ../src/cairo-dock-gui-advanced.c:1625
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "Essayez de nouveaux thèmes et sauvegardez votre thème."
 
 # #################################
 # ########### themes.conf #############
@@ -181,13 +181,12 @@ msgstr "Thèmes"
 
 #: ../src/cairo-dock-gui-advanced.c:1632
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "Eléments courants dans vos docks"
 
 #: ../src/cairo-dock-gui-advanced.c:1633 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Enregistrez le thème actuel"
+msgstr "Eléments courants"
 
 #: ../src/cairo-dock-gui-advanced.c:1753
 msgid "Filter"
@@ -211,7 +210,7 @@ msgstr "Chercher dans la description"
 
 #: ../src/cairo-dock-gui-advanced.c:1801
 msgid "Hide disabled"
-msgstr ""
+msgstr "Cacher les inactifs"
 
 #: ../src/cairo-dock-gui-advanced.c:1810
 msgid "Categories"
@@ -242,9 +241,8 @@ msgid "Add-ons"
 msgstr "Greffons"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
-#, fuzzy
 msgid "Configuration"
-msgstr "Configurer"
+msgstr "Configuration"
 
 #: ../src/cairo-dock-gui-simple.c:631
 msgid "Advanced Mode"
@@ -644,7 +642,7 @@ msgstr "Déplacer sur la face %d"
 
 #: ../src/cairo-dock-menu.c:1783
 msgid "Window"
-msgstr ""
+msgstr "Fenêtre"
 
 #: ../src/cairo-dock-menu.c:1787 ../src/cairo-dock-menu.c:1789
 #: ../src/cairo-dock-menu.c:1862 ../src/cairo-dock-menu.c:1864
@@ -667,7 +665,7 @@ msgstr "Minimiser"
 #: ../src/cairo-dock-menu.c:1809 ../src/cairo-dock-menu.c:1811
 #: ../src/cairo-dock-menu.c:1854 ../src/cairo-dock-menu.c:1856
 msgid "Below other windows"
-msgstr ""
+msgstr "Sous les autres fenêtres"
 
 #: ../src/cairo-dock-menu.c:1820 ../src/cairo-dock-menu.c:1842
 msgid "Unmaximise"
@@ -683,7 +681,7 @@ msgstr "Afficher"
 
 #: ../src/cairo-dock-menu.c:1835
 msgid "Window actions"
-msgstr ""
+msgstr "Fenêtre"
 
 #: ../src/cairo-dock-menu.c:1870 ../src/cairo-dock-menu.c:1933
 msgid "Other actions"
@@ -722,8 +720,8 @@ msgid "Kill"
 msgstr "Tuer"
 
 #: ../src/cairo-dock-menu.c:1924
-msgid "Windows management"
-msgstr ""
+msgid "Windows"
+msgstr "Fenêtres"
 
 #: ../src/cairo-dock-menu.c:1926
 msgid "Show all"
@@ -806,7 +804,6 @@ msgid "Accessory"
 msgstr "Accessoire"
 
 #: ../src/cairo-dock-widget-plugins.c:233
-#, fuzzy
 msgid "Plug-in"
 msgstr "Plug-in"
 
@@ -868,14 +865,12 @@ msgid "You must try the theme before you can rate it."
 msgstr "Vous devez essayer le thème avant de pouvoir le noter."
 
 #: ../src/cairo-dock-widget-themes.c:421
-#, fuzzy
 msgid "The theme has been deleted"
-msgstr "Les thèmes ont été supprimés"
+msgstr "Le thème a été supprimé"
 
 #: ../src/cairo-dock-widget-themes.c:451
-#, fuzzy
 msgid "Delete this theme"
-msgstr "Supprimer ce dock"
+msgstr "Effacer ce thème"
 
 #: ../src/cairo-dock-widget-themes.c:482
 #: ../src/gldit/cairo-dock-gui-factory.c:2445
@@ -980,7 +975,7 @@ msgstr "Ne charger aucune applet."
 msgid ""
 "Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
 "docks)"
-msgstr ""
+msgstr "Contourner les bugs du gestionnaire de fenêrtes Metacity (dialogues ou sous-docks invisibles)"
 
 #: ../src/cairo-dock.c:347
 msgid ""
@@ -1073,15 +1068,14 @@ msgid "Remember this choice"
 msgstr "Mémoriser ce choix"
 
 #: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
-#, fuzzy, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
-"Le module '%s' semble avoir rencontré un problème.\n"
-"Il a été redémarré avec succès mais si ceci se reproduit à nouveau,\n"
+"Le module '%s' a été désactivé car il semble avoir provoqué une erreur.\n"
+"Vous pouvez le réactiver, mais si ceci se reproduit à nouveau,"
 " merci de nous rapporter ce problème sur notre forum : http://glx-dock.org."
 
 #: ../src/cairo-dock.c:685
@@ -1090,7 +1084,7 @@ msgstr "< Mode Maintenance >"
 
 #: ../src/cairo-dock.c:687
 msgid "Something went wrong with this applet:"
-msgstr ""
+msgstr "Quelque chose s'est mal passé avec cette applet:"
 
 #: ../src/cairo-dock.c:736
 msgid ""
@@ -1242,12 +1236,12 @@ msgstr "Saisir"
 
 #: ../src/gldit/cairo-dock-module-factory.c:861
 msgid "by"
-msgstr ""
+msgstr "par"
 
 #: ../src/gldit/cairo-dock-struct.h:441 ../data/messages:1439
 #: ../data/messages:1447
 msgid "Default"
-msgstr "défaut"
+msgstr "Défaut"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:148
 #, c-format
@@ -3038,18 +3032,16 @@ msgid "Multiple screens"
 msgstr "Écrans multiples"
 
 #: ../data/messages:563
-#, fuzzy
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama/Xrandr to "
 "manage them."
 msgstr ""
 "Cette option est à utiliser si vous avez un double-écran et que vous "
-"utilisez Xinerama pour les gérer."
+"utilisez Xinerama/Xrandr pour les gérer."
 
 #: ../data/messages:565
-#, fuzzy
 msgid "Place the dock on one screen"
-msgstr "Position du dock à l'écran"
+msgstr "Placer le dock sur un écran"
 
 #: ../data/messages:567
 msgid "0 is the first screen."
@@ -4171,29 +4163,27 @@ msgstr "Agrandir l'indicateur avec son icône ?"
 
 #: ../data/messages:1197
 msgid "Progress bars"
-msgstr ""
+msgstr "Barres de progrès"
 
 #: ../data/messages:1199
-#, fuzzy
 msgid "Start color"
-msgstr "Couleur de départ :"
+msgstr "Couleur de début"
 
 #: ../data/messages:1201
-#, fuzzy
 msgid "End color"
-msgstr "Couleur de l'arrière-plan:"
+msgstr "Couleur de fin"
 
 #: ../data/messages:1203
 msgid "Draw outline"
-msgstr ""
+msgstr "Dessiner le contour"
 
 #: ../data/messages:1205
 msgid "Outline color"
-msgstr ""
+msgstr "Couleur du contour"
 
 #: ../data/messages:1207
 msgid "Bar thickness"
-msgstr ""
+msgstr "Epaisseur de la barre"
 
 #: ../data/messages:1209
 msgid "Labels"
@@ -4341,9 +4331,8 @@ msgid "Choose the view for this dock :/"
 msgstr "Choisissez la vue pour ce dock :"
 
 #: ../data/messages:1367
-#, fuzzy
 msgid "Load theme"
-msgstr "Gestion des thèmes"
+msgstr "Charger un thème"
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
@@ -4426,9 +4415,8 @@ msgid "Sub-dock's name:"
 msgstr "Nom du sous-dock :"
 
 #: ../data/messages:1407
-#, fuzzy
 msgid "New sub-dock"
-msgstr "Sous-dock"
+msgstr "Nouveau sous-dock"
 
 #: ../data/messages:1409
 msgid "How to render the icon:"
