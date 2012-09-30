@@ -74,7 +74,7 @@ msgstr ""
 " vagy épp ellenkezőleg, elrejtené?\n"
 "Állítsa be tetszése szerint a dokkok és aldokkok elérési módját."
 
-#: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-menu.c:1950
+#: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-menu.c:1991
 #: ../data/messages:339
 msgid "Visibility"
 msgstr "Láthatóság"
@@ -625,127 +625,130 @@ msgstr "Összes mozgatása a(z) %d. felületre"
 msgid "Move to face %d"
 msgstr "Mozgatás a(z) %d. felületre"
 
-#: ../src/cairo-dock-menu.c:1783
+#: ../src/cairo-dock-menu.c:1792 ../src/cairo-dock-menu.c:1844
 msgid "Window"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1787 ../src/cairo-dock-menu.c:1789
-#: ../src/cairo-dock-menu.c:1862 ../src/cairo-dock-menu.c:1864
+#: ../src/cairo-dock-menu.c:1796 ../src/cairo-dock-menu.c:1798
+#: ../src/cairo-dock-menu.c:1871 ../src/cairo-dock-menu.c:1873
 #: ../data/messages:735
 msgid "Close"
 msgstr "Bezárás"
 
-#: ../src/cairo-dock-menu.c:1787 ../src/cairo-dock-menu.c:1799
-#: ../src/cairo-dock-menu.c:1809 ../src/cairo-dock-menu.c:1847
-#: ../src/cairo-dock-menu.c:1854 ../src/cairo-dock-menu.c:1862
+#: ../src/cairo-dock-menu.c:1796 ../src/cairo-dock-menu.c:1808
+#: ../src/cairo-dock-menu.c:1818 ../src/cairo-dock-menu.c:1856
+#: ../src/cairo-dock-menu.c:1863 ../src/cairo-dock-menu.c:1871
+#: ../src/cairo-dock-menu.c:1940 ../src/cairo-dock-menu.c:1950
 #: ../src/help/applet-notifications.c:259
 msgid "middle-click"
 msgstr "középső egérgomb"
 
-#: ../src/cairo-dock-menu.c:1799 ../src/cairo-dock-menu.c:1801
-#: ../src/cairo-dock-menu.c:1847 ../src/cairo-dock-menu.c:1849
+#: ../src/cairo-dock-menu.c:1808 ../src/cairo-dock-menu.c:1810
+#: ../src/cairo-dock-menu.c:1856 ../src/cairo-dock-menu.c:1858
 msgid "Minimise"
 msgstr "Minimalizálás"
 
-#: ../src/cairo-dock-menu.c:1809 ../src/cairo-dock-menu.c:1811
-#: ../src/cairo-dock-menu.c:1854 ../src/cairo-dock-menu.c:1856
+#: ../src/cairo-dock-menu.c:1818 ../src/cairo-dock-menu.c:1820
+#: ../src/cairo-dock-menu.c:1863 ../src/cairo-dock-menu.c:1865
 msgid "Below other windows"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1820 ../src/cairo-dock-menu.c:1842
+#: ../src/cairo-dock-menu.c:1829 ../src/cairo-dock-menu.c:1851
 msgid "Unmaximise"
 msgstr "Visszaállítás"
 
-#: ../src/cairo-dock-menu.c:1820 ../src/cairo-dock-menu.c:1842
+#: ../src/cairo-dock-menu.c:1829 ../src/cairo-dock-menu.c:1851
 msgid "Maximise"
 msgstr "Maximalizálás"
 
-#: ../src/cairo-dock-menu.c:1830 ../src/cairo-dock-menu.c:1840
+#: ../src/cairo-dock-menu.c:1839 ../src/cairo-dock-menu.c:1849
 msgid "Show"
 msgstr "Megjelenítés"
 
-#: ../src/cairo-dock-menu.c:1835
-msgid "Window actions"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1870 ../src/cairo-dock-menu.c:1933
+#: ../src/cairo-dock-menu.c:1879 ../src/cairo-dock-menu.c:1974
 msgid "Other actions"
 msgstr "Egyéb műveletek"
 
-#: ../src/cairo-dock-menu.c:1872
+#: ../src/cairo-dock-menu.c:1881
 msgid "Move to this desktop"
 msgstr "Mozgatás erre az asztalra"
 
-#: ../src/cairo-dock-menu.c:1876
+#: ../src/cairo-dock-menu.c:1885
 msgid "Not Fullscreen"
 msgstr "Nem teljes képernyő"
 
-#: ../src/cairo-dock-menu.c:1876
+#: ../src/cairo-dock-menu.c:1885
 msgid "Fullscreen"
 msgstr "Teljes képernyő"
 
-#: ../src/cairo-dock-menu.c:1880
+#: ../src/cairo-dock-menu.c:1889
 msgid "Don't keep above"
 msgstr "Ne tartsa felül"
 
-#: ../src/cairo-dock-menu.c:1880 ../data/messages:349
+#: ../src/cairo-dock-menu.c:1889 ../data/messages:349
 msgid "Keep above"
 msgstr "Felül tartás"
 
-#: ../src/cairo-dock-menu.c:1905
+#: ../src/cairo-dock-menu.c:1914
 msgid "Remove custom icon"
 msgstr "Egyéni ikon eltávolítása"
 
-#: ../src/cairo-dock-menu.c:1909
+#: ../src/cairo-dock-menu.c:1918
 msgid "Set a custom icon"
 msgstr "Egyéni ikon beállítása"
 
-#: ../src/cairo-dock-menu.c:1912
+#: ../src/cairo-dock-menu.c:1921
 msgid "Kill"
 msgstr "Kilövés"
 
-#: ../src/cairo-dock-menu.c:1924
-msgid "Windows management"
+#: ../src/cairo-dock-menu.c:1936
+msgid "Windows"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1926
-msgid "Show all"
-msgstr "Összes megjelenítése"
-
-#: ../src/cairo-dock-menu.c:1928
-msgid "Minimise all"
-msgstr "Összes minimalizálása"
-
-#: ../src/cairo-dock-menu.c:1930
+#: ../src/cairo-dock-menu.c:1940 ../src/cairo-dock-menu.c:1942
+#: ../src/cairo-dock-menu.c:1970
 msgid "Close all"
 msgstr "Összes bezárása"
 
-#: ../src/cairo-dock-menu.c:1935
+#: ../src/cairo-dock-menu.c:1950 ../src/cairo-dock-menu.c:1952
+#: ../src/cairo-dock-menu.c:1968
+msgid "Minimise all"
+msgstr "Összes minimalizálása"
+
+#: ../src/cairo-dock-menu.c:1960 ../src/cairo-dock-menu.c:1966
+msgid "Show all"
+msgstr "Összes megjelenítése"
+
+#: ../src/cairo-dock-menu.c:1964
+msgid "Windows management"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1976
 msgid "Move all to this desktop"
 msgstr "Összes mozgatása erre az asztalra"
 
-#: ../src/cairo-dock-menu.c:1958 ../data/messages:347
+#: ../src/cairo-dock-menu.c:1999 ../data/messages:347
 msgid "Normal"
 msgstr "Normál"
 
-#: ../src/cairo-dock-menu.c:1964 ../data/messages:413 ../data/messages:579
+#: ../src/cairo-dock-menu.c:2005 ../data/messages:413 ../data/messages:579
 #: ../data/messages:1307
 msgid "Always on top"
 msgstr "Mindig felül"
 
-#: ../src/cairo-dock-menu.c:1971
+#: ../src/cairo-dock-menu.c:2012
 msgid "Always below"
 msgstr "Mindig a háttérben"
 
-#: ../src/cairo-dock-menu.c:1988 ../data/messages:355
+#: ../src/cairo-dock-menu.c:2029 ../data/messages:355
 msgid "Reserve space"
 msgstr "Hely lefoglalása"
 
-#: ../src/cairo-dock-menu.c:1995
+#: ../src/cairo-dock-menu.c:2036
 msgid "On all desktops"
 msgstr "Az összes asztalra"
 
-#: ../src/cairo-dock-menu.c:2001
+#: ../src/cairo-dock-menu.c:2042
 msgid "Lock position"
 msgstr "Elhelyezkedés rögzítése"
 
