@@ -622,9 +622,9 @@ cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile
 		double w, h;
 		cairo_surface_t *pPatternSurface = cairo_dock_create_surface_from_image (cImagePath,
 			1.,
-			0,  // pas de contrainte sur
-			0,  // la taille du motif initialement.
-			CAIRO_DOCK_FILL_SPACE,
+			0  // no constraint on the width of the pattern => the pattern will repeat on the width
+			fImageHeight,  // however, we want to see all the height of the pattern with no repetition => constraint on the height
+			CAIRO_DOCK_FILL_SPACE | CAIRO_DOCK_KEEP_RATIO,
 			&w,
 			&h,
 			NULL, NULL);
