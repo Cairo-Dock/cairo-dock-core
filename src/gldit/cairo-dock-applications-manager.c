@@ -439,21 +439,24 @@ static void _on_change_window_state (Icon *icon)
 		return ;
 	}
 	
-	// demande d'attention.
-	// seems like this demand should be ignored, or we'll get tons of demands under Kwin. Let's just watch the UrgencyHint in the WMHints.
-	/**if (bDemandsAttention && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))  // elle peut demander l'attention plusieurs fois de suite.
+	// demand attention.
+	// _NET_WM_STATE_DEMANDS_ATTENTION indicates that some action in or with the window happened. For example, it may be set by the Window Manager if the window requested activation but the Window Manager refused it, or the application may set it if it finished some work. This state may be set by both the Client and the Window Manager. It should be unset by the Window Manager when it decides the window got the required attention (usually, that it got activated)."
+	if (bDemandsAttention)
 	{
 		cd_debug ("%s demande votre attention %s !", icon->cName, icon->bIsDemandingAttention?"encore une fois":"");
-		cairo_dock_appli_demands_attention (icon);
+		if (! icon->bIsDemandingAttention && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))  // some WM tend to abuse this state, so we only acknowledge it if it's not already set.
+		{
+			cairo_dock_appli_demands_attention (icon);
+		}
 	}
-	else if (! bDemandsAttention)
+	else
 	{
 		if (icon->bIsDemandingAttention)
 		{
 			cd_debug ("%s se tait", icon->cName);
 			cairo_dock_appli_stops_demanding_attention (icon);
 		}
-	}*/
+	}
 	
 	gboolean bHiddenChanged 	= (bIsHidden != icon->bIsHidden);
 	gboolean bMaximizedChanged 	= (bIsMaximized != icon->bIsMaximized);
