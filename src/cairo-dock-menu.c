@@ -1659,13 +1659,12 @@ static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *c
 			"border-image-width: 0px;\n" \
 			"border-style: none;\n" \
 			"border-width: 0px;\n" \
-			"border-radius: 0px;\n" \
 			"box-shadow: none;\n" \
 			"}", -1, NULL);
 	}
 	
 	GtkWidget *pButton = gtk_button_new ();
-	g_object_set (pButton, "width-request", 28, NULL);  // make the button easier to click, because a menu-item is quite small
+	g_object_set (pButton, "width-request", 24, NULL);  // make the button easier to click, because a menu-item is quite small
 	GtkStyleContext *ctx = gtk_widget_get_style_context (pButton);
 	gtk_style_context_add_provider (ctx, GTK_STYLE_PROVIDER (css), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	gtk_style_context_add_class (ctx, GTK_STYLE_CLASS_MENU);
@@ -1804,6 +1803,11 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		
 		if (! icon->bIsHidden)
 		{
+			_add_new_button_to_hbox (icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg",
+				icon->bIsMaximized ? _("Unmaximise") : _("Maximise"),
+				G_CALLBACK(_cairo_dock_maximize_appli),
+				hbox, data);
+			
 			if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
 				cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
 			else
@@ -1813,22 +1817,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 				G_CALLBACK(_cairo_dock_minimize_appli),
 				hbox, data);
 			g_free (cLabel);
-			
-			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
-				cLabel = g_strdup_printf ("%s (%s)", _("Below other windows"), _("middle-click"));
-			else
-				cLabel = g_strdup (_("Below other windows"));
-			_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg",
-				cLabel,
-				G_CALLBACK(_cairo_dock_lower_appli),
-				hbox, data);
-			g_free (cLabel);
 		}
-		
-		_add_new_button_to_hbox (icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg",
-			icon->bIsMaximized ? _("Unmaximise") : _("Maximise"),
-			G_CALLBACK(_cairo_dock_maximize_appli),
-			hbox, data);
 		
 		if (pAppli
 			&& (pAppli->bIsHidden
@@ -1877,6 +1866,18 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		
 		//\_________________________ Other actions
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
+
+		#if (GTK_MAJOR_VERSION >= 3) // Not add a button for this icon... the icon looks like the 'minimise' action...
+		if (! icon->bIsHidden)
+		{
+			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
+				cLabel = g_strdup_printf ("%s (%s)", _("Below other windows"), _("middle-click"));
+			else
+				cLabel = g_strdup (_("Below other windows"));
+			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, pSubMenuOtherActions);
+			g_free (cLabel);
+		}
+		#endif
 		
 		pMenuItem = _add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
 		if (pAppli && cairo_dock_appli_is_on_current_desktop (pAppli))
