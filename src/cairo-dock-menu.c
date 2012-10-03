@@ -1664,7 +1664,7 @@ static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *c
 	}
 	
 	GtkWidget *pButton = gtk_button_new ();
-	g_object_set (pButton, "width-request", 24, NULL);  // make the button easier to click, because a menu-item is quite small
+	g_object_set (pButton, "width-request", 28, NULL);  // enlarge the button compared to its natural size, to make it easier to click, because a menu-item is quite small (it won't affect the menu width, except for apps with really small displayed name like "geany").
 	GtkStyleContext *ctx = gtk_widget_get_style_context (pButton);
 	gtk_style_context_add_provider (ctx, GTK_STYLE_PROVIDER (css), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	gtk_style_context_add_class (ctx, GTK_STYLE_CLASS_MENU);
@@ -1847,13 +1847,6 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 				cLabel = g_strdup (_("Minimise"));
 			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_appli, pSubMenuWindowManagement);
 			g_free (cLabel);
-			
-			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
-				cLabel = g_strdup_printf ("%s (%s)", _("Below other windows"), _("middle-click"));
-			else
-				cLabel = g_strdup (_("Below other windows"));
-			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, pSubMenuWindowManagement);
-			g_free (cLabel);
 		}
 		
 		if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
@@ -1867,8 +1860,13 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		//\_________________________ Other actions
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
 
-		#if (GTK_MAJOR_VERSION >= 3) // Not add a button for this icon... the icon looks like the 'minimise' action...
-		if (! icon->bIsHidden)
+		pMenuItem = _add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
+		if (pAppli && cairo_dock_appli_is_on_current_desktop (pAppli))
+			gtk_widget_set_sensitive (pMenuItem, FALSE);
+		
+		_add_entry_in_menu (icon->bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), icon->bIsFullScreen ? GTK_STOCK_LEAVE_FULLSCREEN : GTK_STOCK_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions);
+		
+		if (! icon->bIsHidden)  // this could be a button in the menu, if we find an icon that doesn't look too much like the "minimise" one
 		{
 			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
 				cLabel = g_strdup_printf ("%s (%s)", _("Below other windows"), _("middle-click"));
@@ -1877,13 +1875,6 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, pSubMenuOtherActions);
 			g_free (cLabel);
 		}
-		#endif
-		
-		pMenuItem = _add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
-		if (pAppli && cairo_dock_appli_is_on_current_desktop (pAppli))
-			gtk_widget_set_sensitive (pMenuItem, FALSE);
-		
-		_add_entry_in_menu (icon->bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), icon->bIsFullScreen ? GTK_STOCK_LEAVE_FULLSCREEN : GTK_STOCK_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions);
 		
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		cairo_dock_xwindow_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);
