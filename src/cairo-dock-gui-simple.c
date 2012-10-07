@@ -143,7 +143,7 @@ static inline CDCategory *_get_current_category (void)
 
 static CDWidget *_build_items_widget (void)
 {
-	CDWidget *pCdWidget = CD_WIDGET (cairo_dock_items_widget_new ());
+	CDWidget *pCdWidget = CD_WIDGET (cairo_dock_items_widget_new (GTK_WINDOW (s_pSimpleConfigWindow)));
 	
 	return pCdWidget;
 }

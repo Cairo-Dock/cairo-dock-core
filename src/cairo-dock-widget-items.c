@@ -133,7 +133,7 @@ static void _delete_current_launcher_widget (ItemsWidget *pItemsWidget)
 
 static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * selection, GtkTreeModel * model, GtkTreePath * path, gboolean path_currently_selected, ItemsWidget *pItemsWidget)
 {
-	cd_debug ("%s (path_currently_selected:%d, %s)", __func__, path_currently_selected, gtk_tree_path_to_string(path));
+	// cd_debug ("%s (path_currently_selected:%d, %s)", __func__, path_currently_selected, gtk_tree_path_to_string(path));
 	if (path_currently_selected)
 		return TRUE;
 	
@@ -183,7 +183,7 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 		gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pInstance->pModule->pVisitCard->cShareDataDir, pInstance->pModule->pVisitCard->cConfFileName);
 		pItemsWidget->pCurrentLauncherWidget = cairo_dock_build_key_file_widget (pKeyFile,
 			pInstance->pModule->pVisitCard->cGettextDomain,
-			pItemsWidget->widget.pWidget,
+			GTK_WIDGET (pItemsWidget->pMainWindow),
 			&pWidgetList,
 			pDataGarbage,
 			cOriginalConfFilePath);
@@ -223,7 +223,7 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 			pDataGarbage = g_ptr_array_new ();
 			pItemsWidget->pCurrentLauncherWidget = cairo_dock_build_conf_file_widget (cConfFilePath,
 				NULL,
-				pItemsWidget->widget.pWidget,
+				GTK_WIDGET (pItemsWidget->pMainWindow),
 				&pWidgetList,
 				pDataGarbage,
 				NULL);
@@ -255,7 +255,7 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 		pDataGarbage = g_ptr_array_new ();
 		pItemsWidget->pCurrentLauncherWidget = cairo_dock_build_conf_file_widget (cConfFilePath,
 			NULL,
-			pItemsWidget->widget.pWidget,
+			GTK_WIDGET (pItemsWidget->pMainWindow),
 			&pWidgetList,
 			pDataGarbage,
 			NULL);
@@ -732,7 +732,7 @@ static gboolean on_button_press_event (GtkWidget *pTreeView,
 	return FALSE;
 }
 
-ItemsWidget *cairo_dock_items_widget_new (void)
+ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow)
 {
 	ItemsWidget *pItemsWidget = g_new0 (ItemsWidget, 1);
 	pItemsWidget->widget.iType = WIDGET_ITEMS;
@@ -747,6 +747,7 @@ ItemsWidget *cairo_dock_items_widget_new (void)
 	pItemsWidget->widget.apply = _items_widget_apply;
 	pItemsWidget->widget.reset = _items_widget_reset;
 	pItemsWidget->widget.reload = _items_widget_reload;
+	pItemsWidget->pMainWindow = pMainWindow;
 	
 	//\_____________ On construit l'arbre des launceurs.
 	GtkTreeModel *model = _build_tree_model (pItemsWidget);

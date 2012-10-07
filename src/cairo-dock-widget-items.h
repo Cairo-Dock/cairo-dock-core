@@ -36,6 +36,7 @@ struct _ItemsWidget {
 	CairoContainer *pCurrentContainer;
 	CairoDockModuleInstance *pCurrentModuleInstance;
 	gchar *cPrevPath;
+	GtkWindow *pMainWindow;  // main window, needed to build other widgets (e.g. to create a file selector and attach it to the main window)
 };
 
 #define ITEMS_WIDGET(w) ((ItemsWidget*)(w))
@@ -43,7 +44,7 @@ struct _ItemsWidget {
 #define IS_ITEMS_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_ITEMS)
 
 
-ItemsWidget *cairo_dock_items_widget_new (void);
+ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow);
 
 
 void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iNotebookPage);

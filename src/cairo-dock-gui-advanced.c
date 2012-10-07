@@ -1162,7 +1162,7 @@ static CDWidget *_build_themes_widget (G_GNUC_UNUSED CairoDockGroupDescription *
 
 static CDWidget *_build_items_widget (G_GNUC_UNUSED CairoDockGroupDescription *pGroupDescription, G_GNUC_UNUSED CairoDockModuleInstance *unused)
 {
-	ItemsWidget *pItemsWidget = cairo_dock_items_widget_new ();
+	ItemsWidget *pItemsWidget = cairo_dock_items_widget_new (GTK_WINDOW (s_pMainWindow));
 	
 	return CD_WIDGET (pItemsWidget);
 }

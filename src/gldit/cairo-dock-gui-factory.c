@@ -3149,7 +3149,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						data[1] = GINT_TO_POINTER (2);
 					else
 						data[1] = GINT_TO_POINTER (0);
-					data[2] = pMainWindow;
+					data[2] = GTK_WINDOW (pMainWindow);
 					pButtonFileChooser = gtk_button_new_from_stock (GTK_STOCK_OPEN);
 					g_signal_connect (G_OBJECT (pButtonFileChooser),
 						"clicked",
