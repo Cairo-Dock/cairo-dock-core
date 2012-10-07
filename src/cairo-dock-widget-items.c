@@ -501,7 +501,6 @@ static void on_row_inserted (G_GNUC_UNUSED GtkTreeModel *model, G_GNUC_UNUSED Gt
 }
 static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, ItemsWidget *pItemsWidget)
 {
-	g_print ("- row\n");
 	// when drag'n'droping a row, the "row-deleted" signal is emitted after the "row-inserted"
 	// however the row pointed by 'path' is already invalid, but the previously inserted iter is now filled, and we remembered it, so we can use it now.
 	if (s_bHasPendingInsertion)
@@ -520,7 +519,6 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 				CD_MODEL_ICON, &pIcon,
 				CD_MODEL_CONTAINER, &pContainer,
 				CD_MODEL_MODULE, &pInstance, -1);
-			g_print ("+ row %s\n", cName);
 			
 			if (pIcon)  // launcher/separator/sub-dock-icon or applet
 			{
@@ -549,7 +547,6 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 						CD_MODEL_NAME, &cParentName,
 						CD_MODEL_ICON, &pParentIcon,
 						CD_MODEL_CONTAINER, &pParentContainer, -1);
-					g_print (" parent: %s, %p, %p\n", cParentName, pParentIcon, pParentContainer);
 					
 					if (pParentContainer == NULL && pParentIcon != NULL)  // dropped on an icon, if it's a sub-dock icon, insert into the sub-dock, else do as if we dropped next to the icon.
 					{
@@ -563,7 +560,6 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 							// we'll search the parent instead.
 							lastInsertedIter = parent_iter;
 							gtk_tree_model_iter_parent (model, &parent_iter, &lastInsertedIter);
-							g_print (" search parent %s\n", pParentIcon->cParentDockName);
 						}
 					}
 					if (CAIRO_DOCK_IS_DOCK (pParentContainer))  // not nul and dock-type.
@@ -571,14 +567,12 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 						// if it has changed, update the conf file and the icon.
 						if (pParentContainer != pContainer)
 						{
-							g_print (" parent has changed\n");
 							const gchar *cNewParentDockName = cairo_dock_search_dock_name (CAIRO_DOCK (pParentContainer));
 							if (cNewParentDockName != NULL)
 							{
 								cairo_dock_write_container_name_in_conf_file (pIcon, cNewParentDockName);
 							}
 							
-							g_print (" reload the icon...\n");
 							if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
 								|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
 								|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
@@ -596,21 +590,17 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 						GtkTreeIter it;
 						Icon *pLeftIcon = NULL;
 						gchar *last_iter_s = gtk_tree_model_get_string_from_iter (model, &lastInsertedIter);
-						g_print ("search for '%s'\n", last_iter_s);
 						
 						///gtk_tree_model_get_iter_first (model, &iter);
 						if (gtk_tree_model_iter_children (model, &it, &parent_iter))  // point on the first iter.
 						{
-							g_print (" got first iter\n");
 							// iterate on the rows until we reach our row.
 							do
 							{
 								gchar *iter_s = gtk_tree_model_get_string_from_iter (model, &it);
-								g_print (" test iter %s / %s\n", iter_s, last_iter_s);
 								if (strcmp (last_iter_s, iter_s) == 0)  // it's our row
 								{
 									g_free (iter_s);
-									g_print (" reached our row, break\n");
 									break;
 								}
 								else  // not yet our row, let's remember the left icon.
@@ -619,7 +609,6 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 									gtk_tree_model_get (model, &it,
 										CD_MODEL_NAME, &name,
 										CD_MODEL_ICON, &pLeftIcon, -1);
-									g_print ("  (%s)\n", name);
 								}
 								g_free (iter_s);
 							}
@@ -628,7 +617,6 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 						g_free (last_iter_s);
 						
 						// move the icon (will update the conf file and trigger the signal to reload the GUI).
-						g_print (" move the icon...\n");
 						cairo_dock_move_icon_after_icon (CAIRO_DOCK (pParentContainer), pIcon, pLeftIcon);
 					}
 					else  // the row may have been dropped on a launcher or a desklet, in which case we must reload the model because this has no meaning.
@@ -939,7 +927,6 @@ void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon
 static void _items_widget_reload (CDWidget *pCdWidget)
 {
 	ItemsWidget *pItemsWidget = ITEMS_WIDGET (pCdWidget);
-	g_print ("%s ()\n", __func__);
 	// remember the current item and page
 	int iNotebookPage;
 	if (pItemsWidget->pCurrentLauncherWidget && GTK_IS_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget))

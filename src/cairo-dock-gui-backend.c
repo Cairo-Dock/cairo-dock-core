@@ -88,7 +88,6 @@ GtkWidget *cairo_dock_make_switch_gui_button (void)
 void cairo_dock_gui_update_desklet_params (CairoDesklet *pDesklet)
 {
 	g_return_if_fail (pDesklet != NULL);
-	g_print ("%s ()\n", __func__);
 	if (s_pMainGuiBackend && s_pMainGuiBackend->update_desklet_params)
 		s_pMainGuiBackend->update_desklet_params (pDesklet);
 }
@@ -97,7 +96,6 @@ void cairo_dock_gui_update_desklet_params (CairoDesklet *pDesklet)
 void cairo_dock_gui_update_desklet_visibility (CairoDesklet *pDesklet)
 {
 	g_return_if_fail (pDesklet != NULL);
-	g_print ("%s ()\n", __func__);
 	if (s_pMainGuiBackend && s_pMainGuiBackend->update_desklet_visibility_params)
 		s_pMainGuiBackend->update_desklet_visibility_params (pDesklet);
 }

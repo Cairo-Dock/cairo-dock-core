@@ -72,7 +72,6 @@ static gchar *_cairo_dock_build_temporary_themes_conf_file (void)
 
 static void _load_theme (gboolean bSuccess, ThemesWidget *pThemesWidget)
 {
-	g_print ("%s ()\n", __func__);
 	if (bSuccess)
 	{
 		cairo_dock_load_current_theme ();

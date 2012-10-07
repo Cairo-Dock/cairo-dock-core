@@ -1367,7 +1367,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				icon = ic->data;
 				if (icon->bDamaged)
 				{
-					g_print ("#### icon %s is damaged\n", icon->cName);
+					cd_debug ("This icon %s is damaged", icon->cName);
 					icon->bDamaged = FALSE;
 					if (cairo_dock_get_icon_data_renderer (icon) != NULL)
 					{

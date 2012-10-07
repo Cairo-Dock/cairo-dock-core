@@ -632,7 +632,7 @@ static gboolean _render_delayed (Icon *pIcon)
 	g_return_val_if_fail (pRenderer != NULL, FALSE);
 	
 	CairoContainer *pContainer = pIcon->pContainer;
-	g_print ("%s (%s, %dx%d)\n", __func__, pIcon->cName, pContainer->iWidth, pContainer->iHeight);
+	cd_debug ("Render delayed: (%s, %dx%d)", pIcon->cName, pContainer->iWidth, pContainer->iHeight);
 	if (pContainer)
 	{
 		if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet resized, retry later
@@ -797,7 +797,7 @@ void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
 
 void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer)
 {
-	g_print ("%s (%s)\n", __func__, pIcon->cName);
+	cd_debug ("%s (%s)", __func__, pIcon->cName);
 	//\_____________ update the renderer size.
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	g_return_if_fail (pRenderer != NULL && pRenderer->interface.reload != NULL);

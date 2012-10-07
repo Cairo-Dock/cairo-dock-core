@@ -795,7 +795,7 @@ static void _cairo_dock_set_original_value (G_GNUC_UNUSED GtkButton *button, Cai
 	gchar *cKeyName = pGroupKeyWidget->cKeyName;
 	GSList *pSubWidgetList = pGroupKeyWidget->pSubWidgetList;
 	gchar *cOriginalConfFilePath = pGroupKeyWidget->cOriginalConfFilePath;
-	g_print ("%s (%s, %s, %s)\n", __func__, cGroupName, cKeyName, cOriginalConfFilePath);
+	cd_debug ("%s (%s, %s, %s)", __func__, cGroupName, cKeyName, cOriginalConfFilePath);
 	
 	GSList *pList;
 	gsize i = 0;

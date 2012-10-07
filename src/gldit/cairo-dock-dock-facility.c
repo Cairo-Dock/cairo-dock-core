@@ -1205,7 +1205,7 @@ static cairo_surface_t *_cairo_dock_make_stripes_background (int iWidth, int iHe
 }
 static void _cairo_dock_load_default_background (CairoDockImageBuffer *pImage, int iWidth, int iHeight)
 {
-	g_print ("%s (%s, %d, %dx%d)\n", __func__, myDocksParam.cBackgroundImageFile, myDocksParam.bBackgroundImageRepeat, iWidth,
+	cd_debug ("%s (%s, %d, %dx%d)", __func__, myDocksParam.cBackgroundImageFile, myDocksParam.bBackgroundImageRepeat, iWidth,
 				iHeight);
 	if (myDocksParam.cBackgroundImageFile != NULL)
 	{

@@ -692,7 +692,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 	}
 	
 	//\_______________________ On recharge l'instance.
-	if (bCanReload && module->pInterface->reloadModule != NULL)
+	if (bCanReload && module && module->pInterface && module->pInterface->reloadModule != NULL)
 		module->pInterface->reloadModule (pInstance, pCurrentContainer, pKeyFile);
 	
 	if (pNewDock != NULL && pNewDock->iRefCount != 0)  // on redessine l'icone pointant sur le sous-dock contenant l'applet, au cas ou son image aurait change.

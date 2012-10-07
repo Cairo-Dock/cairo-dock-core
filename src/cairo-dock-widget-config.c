@@ -416,7 +416,6 @@ ConfigWidget *cairo_dock_config_widget_new (GtkWindow *pMainWindow)
 static void _config_widget_apply (CDWidget *pCdWidget)
 {
 	ConfigWidget *pConfigWidget = CONFIG_WIDGET (pCdWidget);
-	g_print ("%s ()\n", __func__);
 	int iNumPage = gtk_notebook_get_current_page (GTK_NOTEBOOK (pConfigWidget->widget.pWidget));
 	if (iNumPage == CAIRO_DOCK_SHORTKEY_PAGE)
 	{

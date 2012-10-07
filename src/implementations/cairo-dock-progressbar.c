@@ -308,7 +308,7 @@ static void reload (ProgressBar *pProgressBar)
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pProgressBar);
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
-	g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
+	cd_debug ("%s (%dx%d)", __func__, iWidth, iHeight);
 	
 	// since we take our parameters from the config, reset them
 	double fBarThickness;

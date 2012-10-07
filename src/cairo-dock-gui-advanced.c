@@ -177,12 +177,11 @@ static gchar *cairo_dock_highlight_key_word (const gchar *cSentence, const gchar
 	gchar *str = _search_in_buffer (cKeyWord);
 	if (str != NULL)
 	{
-		g_print ("* trouve %s dans '%s'\n", cKeyWord, sBuffer->str);
+		cd_debug ("Found %s in '%s'", cKeyWord, sBuffer->str);
 		gchar *cBuffer = g_strdup (cSentence);
 		str = cBuffer + (str - sBuffer->str);
 		*str = '\0';
 		cModifiedString = g_strdup_printf ("%s<span color=\"red\">%s%s%s</span>%s", cBuffer, (bBold?"<b>":""), cKeyWord, (bBold?"</b>":""), str + strlen (cKeyWord));
-		g_print (" -> %s\n", cModifiedString);
 		g_free (cBuffer);
 	}
 	
@@ -557,7 +556,6 @@ static gboolean _search_in_key_file (const gchar **pKeyWords, GKeyFile *pKeyFile
 
 static void cairo_dock_apply_filter_on_group_list (const gchar **pKeyWords, gboolean bAllWords, gboolean bSearchInToolTip, gboolean bHighLightText, gboolean bHideOther, GList *pGroupDescriptionList)
 {
-	g_print ("%s ()\n", __func__);
 	if (sBuffer == NULL)
 		sBuffer = g_string_new ("");
 	CairoDockGroupDescription *pGroupDescription;
@@ -662,7 +660,6 @@ static void cairo_dock_apply_filter_on_group_list (const gchar **pKeyWords, gboo
 			if (pKeyWords[i] == NULL)  // not found in the title, hightlight in blue.
 			{
 				cModifiedText = g_strdup_printf ("<span color=\"%s\">%s</span>",  bHideOther?"grey":"blue", cTitle);
-				g_print ("cModifiedText : %s\n", cModifiedText);
 				gtk_label_set_markup (GTK_LABEL (pLabel), cModifiedText);
 				g_free (cModifiedText);
 				cModifiedText = NULL;
@@ -675,7 +672,6 @@ static void cairo_dock_apply_filter_on_group_list (const gchar **pKeyWords, gboo
 			CairoDockModule *pModule = cairo_dock_find_module_from_name (pGroupDescription->cGroupName);
 			if (pModule != NULL)  // module, search in its default config file
 			{
-				g_print ("look in %s (%s)...\n", pModule->cConfFilePath, pModule->pVisitCard->cModuleName);
 				pKeyFile = cairo_dock_open_key_file (pModule->cConfFilePath);  // search in default conf file
 				bFound = _search_in_key_file (pKeyWords, pKeyFile, NULL, cGettextDomain, bAllWords, bSearchInToolTip);
 				g_key_file_free (pKeyFile);
@@ -695,7 +691,6 @@ static void cairo_dock_apply_filter_on_group_list (const gchar **pKeyWords, gboo
 						pModule = cairo_dock_find_module_from_name (cModuleName);
 						if (!pModule)
 							continue;
-						g_print ("look in extension %s (%s)...\n", pModule->cConfFilePath, pModule->pVisitCard->cModuleName);
 						pKeyFile = cairo_dock_open_key_file (pModule->cConfFilePath);
 						bFound |= _search_in_key_file (pKeyWords, pKeyFile, NULL, cGettextDomain, bAllWords, bSearchInToolTip);
 						g_key_file_free (pKeyFile);
@@ -706,7 +701,6 @@ static void cairo_dock_apply_filter_on_group_list (const gchar **pKeyWords, gboo
 			if (bHighLightText && bFound)  // on passe le label du groupe en bleu.
 			{
 				cModifiedText = g_strdup_printf ("<span color=\"%s\">%s</span>", bHideOther?"grey":"blue", cTitle);
-				g_print ("cModifiedText : %s\n", cModifiedText);
 				gtk_label_set_markup (GTK_LABEL (pLabel), dgettext (cGettextDomain, cModifiedText));
 				g_free (cModifiedText);
 				cModifiedText = NULL;

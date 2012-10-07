@@ -531,7 +531,6 @@ static void reload_items (void)
 		return;
 	
 	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
-	g_print ("%s (%p)\n", __func__, pCategory->pCdWidget);
 	if (pCategory->pCdWidget != NULL)  // category is built
 	{
 		cairo_dock_widget_reload (pCategory->pCdWidget);
@@ -546,7 +545,7 @@ static void _reload_category_widget (CDCategoryEnum iCategory)
 	{
 		GtkWidget *pPrevWidget = pCategory->pCdWidget->pWidget;
 		cairo_dock_widget_reload (pCategory->pCdWidget);
-		g_print ("%s (%p -> %p)\n", __func__, pPrevWidget, pCategory->pCdWidget->pWidget);
+		cd_debug ("%s (%p -> %p)", __func__, pPrevWidget, pCategory->pCdWidget->pWidget);
 		
 		if (pPrevWidget != pCategory->pCdWidget->pWidget)  // the widget has been rebuilt, let's re-pack it in its container
 		{
