@@ -1888,7 +1888,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		
 		_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
 		
-		if (CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
+		if (!myDocksParam.bLockAll && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
 		{
 			if (myTaskbarParam.bOverWriteXIcons)
 			{

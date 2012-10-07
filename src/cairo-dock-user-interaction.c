@@ -404,8 +404,8 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 	gchar *ext = strrchr (cFilePath, '.');
 	if (!ext)
 		return;
-	cd_debug ("%s (%s)", __func__, cFilePath, icon->cFileName);
-	if ((strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0) && !myDocksParam.bLockAll && ! myDocksParam.bLockIcons)
+	cd_debug ("%s (%s - %s)", __func__, cFilePath, icon->cFileName);
+	if ((strcmp (ext, ".png") == 0 || strcmp (ext, ".svg") == 0) && !myDocksParam.bLockAll) // && ! myDocksParam.bLockIcons) // or if we have to hide the option...
 	{
 		if (!myTaskbarParam.bOverWriteXIcons)
 		{
