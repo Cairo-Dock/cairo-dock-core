@@ -61,11 +61,8 @@
 #define Adjustment GtkAdjustment
 #endif
 
-extern CairoContainer *g_pPrimaryContainer;
 extern gchar *g_cExtrasDirPath;
-extern gchar *g_cThemesDirPath;
 extern gchar *g_cConfFile;
-extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDock *g_pMainDock;
@@ -747,28 +744,48 @@ static void _cairo_dock_show_image_preview (GtkFileChooser *pFileChooser, GtkIma
 static void _cairo_dock_pick_a_file (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	GtkEntry *pEntry = data[0];
-	gint iFileType = GPOINTER_TO_INT (data[1]);
+	gint iFileType = GPOINTER_TO_INT (data[1]); // 0: file ; 1: dirs ; 2: images
 	GtkWindow *pParentWindow = data[2];
 
 	GtkWidget* pFileChooserDialog = gtk_file_chooser_dialog_new (
-		(iFileType == 0 ? _("Pick up a file") : _("Pick up a directory")),
+		(iFileType == 0 ? _("Pick up a file") : iFileType == 1 ? _("Pick up a directory") : _("Pick up an image")),
 		pParentWindow,
-		(iFileType == 0 ? GTK_FILE_CHOOSER_ACTION_OPEN : GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER),
+		(iFileType == 1 ? GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER : GTK_FILE_CHOOSER_ACTION_OPEN),
 		GTK_STOCK_OK,
 		GTK_RESPONSE_OK,
 		GTK_STOCK_CANCEL,
 		GTK_RESPONSE_CANCEL,
 		NULL);
 	const gchar *cFilePath = gtk_entry_get_text (pEntry);
-	gchar *cDirectoryPath = (cFilePath == NULL || *cFilePath != '/' ? g_strdup (g_cCurrentThemePath) : g_path_get_dirname (cFilePath));
+	gchar *cDirectoryPath = (cFilePath == NULL || *cFilePath != '/' ?
+		g_strdup (iFileType == 2 ? "/usr/share/icons" : g_getenv ("HOME")) :
+		g_path_get_dirname (cFilePath));
 	//g_print (">>> on se place sur '%s'\n", cDirectoryPath);
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), cDirectoryPath);  // set the current folder to the current value in conf.
 	g_free (cDirectoryPath);
 	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), FALSE);
-
+	
+	// a preview
 	GtkWidget *pPreviewImage = gtk_image_new ();
 	gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (pFileChooserDialog), pPreviewImage);
 	g_signal_connect (GTK_FILE_CHOOSER (pFileChooserDialog), "update-preview", G_CALLBACK (_cairo_dock_show_image_preview), pPreviewImage);
+
+	// a filter
+	GtkFileFilter *pFilter;
+	if (iFileType == 0)
+	{
+		pFilter = gtk_file_filter_new ();
+		gtk_file_filter_set_name (pFilter, _("All"));
+		gtk_file_filter_add_pattern (pFilter, "*");
+		gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (pFileChooserDialog), pFilter);
+	}
+	if (iFileType == 0 || iFileType == 2) // images
+	{
+		pFilter = gtk_file_filter_new ();
+		gtk_file_filter_set_name (pFilter, _("Image"));
+		gtk_file_filter_add_pixbuf_formats (pFilter);
+		gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (pFileChooserDialog), pFilter);
+	}
 
 	gtk_widget_show (pFileChooserDialog);
 	int answer = gtk_dialog_run (GTK_DIALOG (pFileChooserDialog));
@@ -3102,6 +3119,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_SOUND_SELECTOR :  // string avec un selecteur de fichier a cote du GtkEntry et un boutton play.
 			case CAIRO_DOCK_WIDGET_SHORTKEY_SELECTOR :  // string avec un selecteur de touche clavier (Merci Ctaf !)
 			case CAIRO_DOCK_WIDGET_CLASS_SELECTOR :  // string avec un selecteur de class (Merci Matttbe !)
+			case CAIRO_DOCK_WIDGET_IMAGE_SELECTOR :  // string with a file selector (results are filtered to only display images)
 				// on construit l'entree de texte.
 				cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
 				pOneWidget = gtk_entry_new ();
@@ -3118,11 +3136,19 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				_pack_subwidget (pOneWidget);
 				
 				// on ajoute des boutons qui la rempliront.
-				if (iElementType == CAIRO_DOCK_WIDGET_FILE_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_FOLDER_SELECTOR || iElementType == CAIRO_DOCK_WIDGET_SOUND_SELECTOR)  // on ajoute un selecteur de fichier.
+				if (iElementType == CAIRO_DOCK_WIDGET_FILE_SELECTOR ||
+					iElementType == CAIRO_DOCK_WIDGET_FOLDER_SELECTOR ||
+					iElementType == CAIRO_DOCK_WIDGET_SOUND_SELECTOR ||
+					iElementType == CAIRO_DOCK_WIDGET_IMAGE_SELECTOR)  // we add a file selector
 				{
 					_allocate_new_buffer;
 					data[0] = pEntry;
-					data[1] = GINT_TO_POINTER (iElementType != CAIRO_DOCK_WIDGET_SOUND_SELECTOR ? (iElementType == CAIRO_DOCK_WIDGET_FILE_SELECTOR ? 0 : 1) : 0);
+					if (iElementType == CAIRO_DOCK_WIDGET_FOLDER_SELECTOR)
+						data[1] = GINT_TO_POINTER (1);
+					else if (iElementType == CAIRO_DOCK_WIDGET_IMAGE_SELECTOR)
+						data[1] = GINT_TO_POINTER (2);
+					else
+						data[1] = GINT_TO_POINTER (0);
 					data[2] = pMainWindow;
 					pButtonFileChooser = gtk_button_new_from_stock (GTK_STOCK_OPEN);
 					g_signal_connect (G_OBJECT (pButtonFileChooser),

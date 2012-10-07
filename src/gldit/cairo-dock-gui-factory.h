@@ -106,6 +106,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_STRING_ENTRY='s',
 	/// a text entry with a file selector.
 	CAIRO_DOCK_WIDGET_FILE_SELECTOR='S',
+	/// a text entry with a file selector, files are filtered to only display images.
+	CAIRO_DOCK_WIDGET_IMAGE_SELECTOR='g',
 	/// a text entry with a folder selector.
 	CAIRO_DOCK_WIDGET_FOLDER_SELECTOR='D',
 	/// a text entry with a file selector and a 'play' button, for sound files.
