@@ -406,7 +406,7 @@ static void _cairo_dock_quit (G_GNUC_UNUSED GtkMenuItem *pMenuItem, CairoContain
 		pIcon = CAIRO_DESKLET (pContainer)->pIcon;
 	
 	int answer = cairo_dock_ask_question_and_wait (_("Quit Cairo-Dock?"), pIcon, pContainer);
-	cd_debug ("quit : %d (yes:%d)\n", answer, GTK_RESPONSE_YES);
+	cd_debug ("quit : %d (yes:%d)", answer, GTK_RESPONSE_YES);
 	if (answer == GTK_RESPONSE_YES)
 		gtk_main_quit ();
 }
@@ -706,7 +706,7 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 	g_return_if_fail (icon->cClass != NULL);
 	
 	// on trouve le .desktop du programme.
-	cd_debug ("%s (%s)\n", __func__, icon->cClass);
+	cd_debug ("%s (%s)", __func__, icon->cClass);
 	gchar *cDesktopFilePath = g_strdup (cairo_dock_get_class_desktop_file (icon->cClass));
 	if (cDesktopFilePath == NULL)
 	{
@@ -766,7 +766,7 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 
 static void _cairo_dock_initiate_config_module (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
 {
-	cd_debug ("%s ()\n", __func__);
+	cd_debug ("%s ()", __func__);
 	Icon *icon = data[0];
 	CairoContainer *pContainer= data[1];
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))

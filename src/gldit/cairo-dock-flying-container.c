@@ -382,7 +382,7 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - iHeight/2;
 	}
 	gtk_window_present (GTK_WINDOW (pWindow));
-	/*cd_debug ("%s (%d;%d %dx%d)\n", __func__ pFlyingContainer->container.iWindowPositionX,
+	/*cd_debug ("%s (%d;%d %dx%d)", __func__ pFlyingContainer->container.iWindowPositionX,
 		pFlyingContainer->container.iWindowPositionY,
 		pFlyingContainer->container.iWidth,
 		pFlyingContainer->container.iHeight);*/

@@ -764,7 +764,7 @@ Icon * cairo_dock_calculate_wave_with_position_linear (GList *pIconList, int x_a
 		{
 			icon = ic->data;
 			//if (ic == pIconList)
-			//	cd_debug ("fX : %.2f - %.2f\n", icon->fX, offset);
+			//	cd_debug ("fX : %.2f - %.2f", icon->fX, offset);
 			icon->fX -= offset;
 		}
 	}

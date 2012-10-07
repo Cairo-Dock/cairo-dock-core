@@ -363,7 +363,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 		if (str != sIconPath->str)
 		{
 			*(str+1) = '\0';
-			cd_debug (" on cherche '%s'...\n", sIconPath->str);
+			cd_debug (" on cherche '%s'...", sIconPath->str);
 			gchar *cPath = cairo_dock_search_icon_s_path (sIconPath->str, iDesiredIconSize);
 			if (cPath != NULL)
 			{

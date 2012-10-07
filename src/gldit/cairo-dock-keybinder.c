@@ -317,7 +317,7 @@ cd_keybinder_unbind (CairoKeyBinding *binding)
 		do_ungrab_key (binding);
 	
 	// remove it from the list and destroy it
-	cd_debug (" --- remove key binding '%s'\n", binding->keystring);
+	cd_debug (" --- remove key binding '%s'", binding->keystring);
 	s_pKeyBindings = g_slist_delete_link (s_pKeyBindings, iter);
 	
 	cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_REMOVED, binding);
@@ -438,7 +438,7 @@ static void init (void)
 	{
 		CairoKeyBinding *binding = (CairoKeyBinding *) iter->data;
 		
-		cd_debug (" --- remove key binding '%s'\n", binding->keystring);
+		cd_debug (" --- remove key binding '%s'", binding->keystring);
 		if (binding->bSuccess)
 		{
 			do_ungrab_key (binding);

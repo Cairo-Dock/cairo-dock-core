@@ -95,7 +95,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	
 	//\_______________ on decompresse l'archive.
 	gchar *cCommand = g_strdup_printf ("tar xf%c \"%s\" -C \"%s\"", (g_str_has_suffix (cArchivePath, "bz2") ? 'j' : 'z'), cArchivePath, cExtractTo);
-	cd_debug ("tar : %s\n", cCommand);
+	cd_debug ("tar : %s", cCommand);
 	int r = system (cCommand);
 	
 	//\_______________ on verifie le resultat, en remettant l'original en cas d'echec.

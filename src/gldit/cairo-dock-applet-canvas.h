@@ -220,7 +220,7 @@ CD_APPLET_STOP_PROTO \
 CD_APPLET_RELOAD_PROTO \
 { \
 	g_pCurrentModule = myApplet;\
-	cd_message ("%s (%s)\n", __func__, myApplet->cConfFilePath);
+	cd_message ("%s (%s)", __func__, myApplet->cConfFilePath);
 
 /** Fin de la fonction de rechargement de l'applet.
 */

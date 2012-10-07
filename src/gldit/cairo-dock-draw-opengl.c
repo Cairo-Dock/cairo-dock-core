@@ -720,7 +720,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 
 GLuint cairo_dock_create_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight)
 {
-	/*cd_debug ("%dx%d\n", iWidth, iHeight);
+	/*cd_debug ("%dx%d", iWidth, iHeight);
 	int i;
 	guint pixel, alpha, red, green, blue;
 	float fAlphaFactor;

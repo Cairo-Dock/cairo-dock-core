@@ -811,7 +811,7 @@ CairoDialog *cairo_dock_show_dialog_full (const gchar *cText, Icon *pIcon, Cairo
 {
 	if (pIcon != NULL && cairo_dock_icon_is_being_removed (pIcon))  // icone en cours de suppression.
 	{
-		cd_debug ("dialog skipped for %s (%.2f)\n", pIcon->cName, pIcon->fInsertRemoveFactor);
+		cd_debug ("dialog skipped for %s (%.2f)", pIcon->cName, pIcon->fInsertRemoveFactor);
 		return NULL;
 	}
 	
@@ -987,7 +987,7 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		GDK_THREADS_LEAVE ();
 		g_main_loop_run (pBlockingLoop);
 		GDK_THREADS_ENTER ();
-		cd_debug ("fin de boucle bloquante -> %d\n", iClickedButton);
+		cd_debug ("fin de boucle bloquante -> %d", iClickedButton);
 		/*if (myDocksParam.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_pop_down (CAIRO_DOCK (pContainer));*/
 		if (CAIRO_DOCK_IS_DOCK (pContainer))

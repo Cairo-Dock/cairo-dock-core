@@ -844,7 +844,7 @@ gboolean cairo_dock_on_enter_notification (G_GNUC_UNUSED gpointer pData, CairoDo
 				t = tv.tv_sec + tv.tv_usec * 1e-6;
 			if (t - s_pFlyingContainer->fCreationTime > 1)  // on empeche le cas ou enlever l'icone fait augmenter le ratio du dock, et donc sa hauteur, et nous fait rentrer dedans des qu'on sort l'icone.
 			{
-				cd_debug ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
+				cd_debug ("on remet l'icone volante dans un dock (dock d'origine : %s)", pFlyingIcon->cParentDockName);
 				cairo_dock_free_flying_container (s_pFlyingContainer);
 				cairo_dock_stop_icon_animation (pFlyingIcon);
 				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
@@ -1456,7 +1456,7 @@ void cairo_dock_on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDrag
 	{
 		s_bWaitForData = FALSE;
 		gdk_drag_status (dc, GDK_ACTION_COPY, time);
-		cd_debug ("drag info : <%s>\n", cReceivedData);
+		cd_debug ("drag info : <%s>", cReceivedData);
 		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;
 		if (g_str_has_suffix (cReceivedData, ".desktop")/** || g_str_has_suffix (cReceivedData, ".sh")*/)
 			pDock->fAvoidingMouseMargin = .5;  // on ne sera jamais dessus.
@@ -1613,7 +1613,7 @@ gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint
 		/*GdkAtom gdkAtom = gdk_drag_get_selection (dc);
 		Atom xAtom = gdk_x11_atom_to_xatom (gdkAtom);
 		Window Xid = GDK_WINDOW_XID (dc->source_window);
-		cd_debug (" <%s>\n", cairo_dock_get_property_name_on_xwindow (Xid, xAtom));*/
+		cd_debug (" <%s>", cairo_dock_get_property_name_on_xwindow (Xid, xAtom));*/
 		
 		gboolean bStartAnimation = FALSE;
 		cairo_dock_notify_on_object (pDock, NOTIFICATION_START_DRAG_DATA, pDock, &bStartAnimation);

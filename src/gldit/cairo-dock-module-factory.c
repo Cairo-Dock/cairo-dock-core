@@ -302,7 +302,7 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 				pMinimalConfig->fOrder = 0;
 			}
 			g_key_file_set_double (pKeyFile, "Icon", "order", pMinimalConfig->fOrder);
-			cd_debug ("set order to %.1f\n", pMinimalConfig->fOrder);
+			cd_debug ("set order to %.1f", pMinimalConfig->fOrder);
 			cairo_dock_write_keys_to_file (pKeyFile, cInstanceConfFilePath);
 		}
 		int iBgColorType;

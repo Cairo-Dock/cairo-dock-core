@@ -192,7 +192,7 @@ gboolean cairo_dock_update_screen_geometry (void)
 	int i;
 	for (i = 0; i < iBufferNbElements/4; i ++)
 	{
-		cd_message ("work area : (%d;%d) %dx%d\n", pXWorkArea[4*i], pXWorkArea[4*i+1], pXWorkArea[4*i+2], pXWorkArea[4*i+3]);
+		cd_message ("work area : (%d;%d) %dx%d", pXWorkArea[4*i], pXWorkArea[4*i+1], pXWorkArea[4*i+2], pXWorkArea[4*i+3]);
 	}
 	XFree (pXWorkArea);*/
 }
@@ -334,7 +334,7 @@ void cairo_dock_show_hide_desktop (gboolean bShow)
 	xClientMessage.xclient.data.l[3] = 2;
 	xClientMessage.xclient.data.l[4] = 0;
 	
-	cd_debug ("%s (%d)\n", __func__, bShow);
+	cd_debug ("%s (%d)", __func__, bShow);
 	XSendEvent (s_XDisplay,
 		root,
 		False,
@@ -706,7 +706,7 @@ void cairo_dock_get_screen_offsets (int iNumScreen, int *iScreenOffsetX, int *iS
 			
 			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
 			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-			cd_message (" * screen %d => (%d;%d) %dx%d\n", iNumScreen, *iScreenOffsetX, *iScreenOffsetY, g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+			cd_message (" * screen %d => (%d;%d) %dx%d", iNumScreen, *iScreenOffsetX, *iScreenOffsetY, g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 			
 			XFree (pScreens);
 			return;

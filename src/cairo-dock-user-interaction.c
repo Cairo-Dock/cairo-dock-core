@@ -375,7 +375,7 @@ gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, co
 					cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
 				}
 				gchar *cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cPath ? cPath : cReceivedData);
-				cd_message ("will open the file with the command '%s'...\n", cCommand);
+				cd_message ("will open the file with the command '%s'...", cCommand);
 				g_spawn_command_line_async (cCommand, NULL);
 				g_free (cPath);
 				g_free (cCommand);

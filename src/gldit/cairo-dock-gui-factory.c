@@ -974,7 +974,7 @@ static void _cairo_dock_toggle_control_button (GtkCheckButton *pButton, gpointer
 	for (c = c->next, i = 0; c != NULL && i < iNbWidgets; c = c->next, i ++)
 	{
 		w = c->data;
-		cd_debug (" %d/%d -> %d\n", i, iNbWidgets, bActive);
+		cd_debug (" %d/%d -> %d", i, iNbWidgets, bActive);
 		gtk_widget_set_sensitive (w, bActive);
 	}
 	
@@ -1222,7 +1222,7 @@ static void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pT
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pCombo), &iter);
 		///gboolean bReturn;
 		///g_signal_emit_by_name (pCombo, "changed", NULL, &bReturn);
-		//cd_debug ("%s found \n", cActiveTheme);
+		//cd_debug ("%s found ", cActiveTheme);
 	}
 }
 
@@ -1446,7 +1446,7 @@ static void _cairo_dock_widget_launch_command (G_GNUC_UNUSED GtkButton *button, 
 	
 	gchar *cResult = cairo_dock_launch_command_sync (cCommandToLaunch);
 	if (cResult != NULL)
-		cd_debug ("%s: %s => %s\n", __func__, cCommandToLaunch, cResult);
+		cd_debug ("%s: %s => %s", __func__, cCommandToLaunch, cResult);
 	g_free (cResult);
 }
 
@@ -3020,7 +3020,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							{
 								if (strcmp (cValue, pAuthorizedValuesList[k]) == 0)
 								{
-									cd_debug (" correspondance %s <-> %d\n", cValue, k);
+									cd_debug (" correspondance %s <-> %d", cValue, k);
 									g_free (cValueList[l]);
 									cValueList[l] = g_strdup_printf ("%d", k);
 									cValue = cValueList[l];
@@ -3290,7 +3290,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						CDControlWidget *cw = pControlWidgets->data;
 						if (cw->pControlContainer == pGroupBox)
 						{
-							cd_debug ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)\n", cw->iNbControlledWidgets, cw->iFirstSensitiveWidget, cw->iNbSensitiveWidgets);
+							cd_debug ("ctrl (iNbControlledWidgets:%d, iFirstSensitiveWidget:%d, iNbSensitiveWidgets:%d)", cw->iNbControlledWidgets, cw->iFirstSensitiveWidget, cw->iNbSensitiveWidgets);
 							cw->iNbControlledWidgets --;
 							if (cw->iFirstSensitiveWidget > 0)
 								cw->iFirstSensitiveWidget --;

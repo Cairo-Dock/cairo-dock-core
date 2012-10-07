@@ -232,7 +232,7 @@ CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, i
 	size_t size = iconv (cd,
 		&cPool, &inbytesleft,
 		&outbuf, &outbytesleft);
-	cd_debug ("%d bytes left, %d bytes written => '%s'\n", inbytesleft, outbytesleft, outbuf0);
+	cd_debug ("%d bytes left, %d bytes written => '%s'", inbytesleft, outbytesleft, outbuf0);
 	g_free (inbuf0);
 	cPool = outbuf0;
 	iconv_close (cd);*/
