@@ -1130,12 +1130,18 @@ static void _cairo_dock_set_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuI
 		GTK_STOCK_CANCEL,
 		GTK_RESPONSE_CANCEL,
 		NULL);
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), "~/.config/cairo-dock/current_theme/icons");  // we could also use 'xdg-user-dir PICTURES' or /usr/share/icons or ~/.icons, but actually we have no idea where the user will want to pick the image, so let's not try to be smart.
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), "/usr/share/icons");  // we could also use 'xdg-user-dir PICTURES' or /usr/share/icons or ~/.icons, but actually we have no idea where the user will want to pick the image, so let's not try to be smart.
 	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), FALSE);
 	
 	GtkWidget *pPreviewImage = gtk_image_new ();
 	gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (pFileChooserDialog), pPreviewImage);
 	g_signal_connect (GTK_FILE_CHOOSER (pFileChooserDialog), "update-preview", G_CALLBACK (_show_image_preview), pPreviewImage);
+
+	// a filter
+	GtkFileFilter *pFilter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (pFilter, _("Image"));
+	gtk_file_filter_add_pixbuf_formats (pFilter);
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (pFileChooserDialog), pFilter);
 	
 	gtk_widget_show (pFileChooserDialog);
 	int answer = gtk_dialog_run (GTK_DIALOG (pFileChooserDialog));
