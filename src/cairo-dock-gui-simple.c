@@ -381,7 +381,7 @@ GtkWidget *cairo_dock_build_simple_gui_window (void)
 	{
 		pCategory = _get_category (i);
 		
-		GtkWidget *hbox = _make_notebook_label (pCategory->cName,
+		GtkWidget *hbox = _make_notebook_label (gettext (pCategory->cName),
 			pCategory->cIcon,
 			CAIRO_DOCK_CATEGORY_ICON_SIZE);
 		gtk_size_group_add_widget (pSizeGroup, hbox);
