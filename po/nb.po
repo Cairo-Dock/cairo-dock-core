@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-04-14 18:51+0000\n"
+"POT-Creation-Date: 2012-09-30 14:51+0000\n"
+"PO-Revision-Date: 2012-09-30 17:37+0000\n"
 "Last-Translator: EspenK <espen.kromke@beatradar.no>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
-"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 05:17+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-10-01 04:42+0000\n"
+"X-Generator: Launchpad (build 16049)\n"
+"Language: nb\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -235,9 +236,8 @@ msgid "Add-ons"
 msgstr "Tillegg"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
-#, fuzzy
 msgid "Configuration"
-msgstr "Konfigurer"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:631
 msgid "Advanced Mode"
@@ -504,7 +504,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Kjøre Cairo-Dock ved oppstart"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Tredjeparts-panelprogram tilbyr integrasjon med mange program, eksempelvis "
 "Pidgin"
@@ -761,7 +762,8 @@ msgid "Effects:"
 msgstr "Effekter:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Hoved-dokkens innstillinger er tilgjengelige i hovedvinduet til "
 "innstillingene."
@@ -779,16 +781,16 @@ msgid "Accessory"
 msgstr "Tilbehør"
 
 #: ../src/cairo-dock-widget-plugins.c:233
-#, fuzzy
 msgid "Plug-in"
-msgstr "programtillegg"
+msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klikk på et av de små programmene for å få en forhåndsvisning og beskrivelse."
 
@@ -839,9 +841,8 @@ msgid "You must try the theme before you can rate it."
 msgstr "Du må prøve ut drakten før du kan vurdere den."
 
 #: ../src/cairo-dock-widget-themes.c:421
-#, fuzzy
 msgid "The theme has been deleted"
-msgstr "Tema er slettet"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:451
 msgid "Delete this theme"
@@ -1018,16 +1019,13 @@ msgid "Remember this choice"
 msgstr "Husk dette valget"
 
 #: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
-"Modulen '%s' kan ha feilet.\n"
-"Den har blitt gjenopprettet, men hvis feilen skjer igjen vennligst rapporter "
-"det på http://glx-dock.org"
 
 #: ../src/cairo-dock.c:685
 msgid "< Maintenance mode >"
@@ -1866,8 +1864,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1915,8 +1914,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2084,7 +2083,8 @@ msgstr ""
 
 #: ../data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
+msgstr ""
+"Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
 
 #: ../data/messages:267
 msgid "Community site"
@@ -2621,18 +2621,14 @@ msgid "Multiple screens"
 msgstr "Flere skjermer"
 
 #: ../data/messages:563
-#, fuzzy
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama/Xrandr to "
 "manage them."
 msgstr ""
-"Dette valget brukes dersom du har mer enn én skjerm og bruker Xinerama for å "
-"håndtere dem."
 
 #: ../data/messages:565
-#, fuzzy
 msgid "Place the dock on one screen"
-msgstr "Gjør ikonet gjennomsiktig"
+msgstr ""
 
 #: ../data/messages:567
 msgid "0 is the first screen."
@@ -2908,7 +2904,8 @@ msgstr ""
 
 #: ../data/messages:751
 msgid "Highlight applications requiring your attention with a dialog bubble"
-msgstr "Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
+msgstr ""
+"Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
 
 #: ../data/messages:753
 msgid "in seconds"
@@ -3432,7 +3429,8 @@ msgid "Zoom effect"
 msgstr "Forstørringseffekt"
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Sett til 1 dersom du ikke ønsker at ikonene skal forstørres når musen "
 "beveger seg over dem."
@@ -3558,8 +3556,8 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere seg"
-"\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
+"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere "
+"seg\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
 "gjennomsiktig blir de."
 
 #: ../data/messages:1115
@@ -3694,11 +3692,11 @@ msgstr "større"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Bruk denne for å la indikatoren følge dokkens orientering (topp/bunn/høyre/"
-"venstre)."
+"Bruk denne for å la indikatoren følge dokkens orientering "
+"(topp/bunn/høyre/venstre)."
 
 #: ../data/messages:1179
 msgid "Rotate the indicator with dock?"
@@ -3737,14 +3735,12 @@ msgid "Progress bars"
 msgstr ""
 
 #: ../data/messages:1199
-#, fuzzy
 msgid "Start color"
-msgstr "Første farge"
+msgstr ""
 
 #: ../data/messages:1201
-#, fuzzy
 msgid "End color"
-msgstr "Bakgrunnsfarge:"
+msgstr ""
 
 #: ../data/messages:1203
 msgid "Draw outline"
@@ -3902,9 +3898,8 @@ msgid "Choose the view for this dock :/"
 msgstr ""
 
 #: ../data/messages:1367
-#, fuzzy
 msgid "Load theme"
-msgstr "Behandle drakter."
+msgstr ""
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
@@ -3985,9 +3980,8 @@ msgid "Sub-dock's name:"
 msgstr ""
 
 #: ../data/messages:1407
-#, fuzzy
 msgid "New sub-dock"
-msgstr "Under-dokk"
+msgstr ""
 
 #: ../data/messages:1409
 msgid "How to render the icon:"
@@ -4039,8 +4033,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445
@@ -4116,74 +4110,3 @@ msgid ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "The module '%s' has been deactivated because it may have caused some "
-#~ "problems.\n"
-#~ "You can reactivate it, if it happens again thanks to report it at http://"
-#~ "glx-dock.org\n"
-#~ msgstr ""
-#~ "Modulen '%s' kan ha feilet.\n"
-#~ "Den har blitt gjenopprettet, men hvis feilen skjer igjen vennligst "
-#~ "rapporter det på http://glx-dock.org"
-
-#~ msgid "category"
-#~ msgstr "kategori"
-
-#~ msgid "Launcher configuration"
-#~ msgstr "Konfigurere oppstartere"
-
-#~ msgid ""
-#~ "The '%s' module is not present. You need to install it and all its "
-#~ "dependencies in order to use this module."
-#~ msgstr ""
-#~ "Modulen '%s' ble ikke funnet. Du må installere modulen og alle dens "
-#~ "avhengigheter for å kunne bruke den."
-
-#~ msgid "The '%s' module is not enabled."
-#~ msgstr "Modulen %s er ikke aktivert"
-
-#~ msgid "Do you want to enable it now?"
-#~ msgstr "Ønsker du å aktivere den nå?"
-
-#~ msgid "Importing theme..."
-#~ msgstr "Importerer tema..."
-
-#~ msgid ""
-#~ "This is the simple configuration panel of Cairo-Dock.\n"
-#~ " After you get familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-#~ msgstr ""
-#~ "Dette er det enkle konfigurasjonspanelet for Cairo-Dock.\n"
-#~ " Etter du blir vant med det, og hvis du ønsker å tilpasse drakten din,\n"
-#~ "kan du bytte til den avanserte modus.\n"
-#~ " Du kan bytte fra en modus til en annen når som helst."
-
-#~ msgid "Manage Themes"
-#~ msgstr "Behandle drakter"
-
-#~ msgid "Add or remove any applet"
-#~ msgstr "Legg til eller fjern miniprogram"
-
-#~ msgid ""
-#~ "Select a line to get a preview and a description of the applet.\n"
-#~ "Click on the left check-box to (de)activate an applet.\n"
-#~ "Once an applet is active, you can configure it by right clicking on its "
-#~ "icon."
-#~ msgstr ""
-#~ "Velg en linje for å se forhåndsvisning og en beskrivelse av "
-#~ "applikasjonen.\n"
-#~ "Klikk på den venstre avkryssingsboksen for å (de)aktivere en "
-#~ "applikasjon.\n"
-#~ "Når en applikasjon er aktiv kan du konfigurere den ved å høyreklikke dens "
-#~ "ikon."
-
-#~ msgid ""
-#~ "You can install them by simply drag-and-dropping the link onto your dock."
-#~ msgstr ""
-#~ "Du installerer dem ganske enkelt ved å dra-og-slippe lenken på din dokk."
-
-#~ msgid "Use Xinerama?"
-#~ msgstr "Bruke Xinerama?"

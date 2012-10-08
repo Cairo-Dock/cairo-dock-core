@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-03-21 03:01+0000\n"
+"POT-Creation-Date: 2012-09-30 14:51+0000\n"
+"PO-Revision-Date: 2012-09-30 17:34+0000\n"
 "Last-Translator: Michal Mlejnek <chaemil72@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
-"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 05:15+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-10-01 04:40+0000\n"
+"X-Generator: Launchpad (build 16049)\n"
+"Language: cs\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -179,9 +180,8 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1633 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Uložit aktuální motiv"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1753
 msgid "Filter"
@@ -236,9 +236,8 @@ msgid "Add-ons"
 msgstr "Doplňky"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
-#, fuzzy
 msgid "Configuration"
-msgstr "Nastavení"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:631
 msgid "Advanced Mode"
@@ -500,7 +499,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustit Cairo-Dock při startu systému"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applety třetích stran zajišťují integraci s mnoha programy, například s "
 "Pidginem."
@@ -512,7 +512,8 @@ msgstr "Nápověda"
 
 #: ../src/cairo-dock-menu.c:965
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
+msgstr ""
+"Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
 
 #: ../src/cairo-dock-menu.c:969
 msgid "About"
@@ -754,7 +755,8 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:732
@@ -770,16 +772,16 @@ msgid "Accessory"
 msgstr "Příslušenství"
 
 #: ../src/cairo-dock-widget-plugins.c:233
-#, fuzzy
 msgid "Plug-in"
-msgstr "zásuvný modul"
+msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Klikněte na applet pro zobrazení jeho náhledu a popisu."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -1005,16 +1007,13 @@ msgid "Remember this choice"
 msgstr "Zapamatovat si tuto volbu"
 
 #: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
-"Modul '%s' může mít problémy.\n"
-"Modul byl obnoven úspěšně, ale pokud se situace bude opakovat, nahlašte to "
-"prosím na http://glx-dock.org"
 
 #: ../src/cairo-dock.c:685
 msgid "< Maintenance mode >"
@@ -1849,8 +1848,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1898,8 +1898,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2599,16 +2599,14 @@ msgid "Multiple screens"
 msgstr "Více obrazovek"
 
 #: ../data/messages:563
-#, fuzzy
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama/Xrandr to "
 "manage them."
-msgstr "Tuto volbu použijte, pokud máte dva monitory spravované přes Xinerama."
+msgstr ""
 
 #: ../data/messages:565
-#, fuzzy
 msgid "Place the dock on one screen"
-msgstr "Zprůhlednit ikonu"
+msgstr ""
 
 #: ../data/messages:567
 msgid "0 is the first screen."
@@ -3040,7 +3038,8 @@ msgstr "Vynutit IPv4 ?"
 
 #: ../data/messages:839
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
+msgstr ""
+"Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
 
 #: ../data/messages:841
 msgid "Are you behind a proxy ?"
@@ -3128,7 +3127,8 @@ msgstr "Úhel přechodu:"
 
 #: ../data/messages:891
 msgid "If not nul, it will form stripes."
-msgstr "Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
+msgstr ""
+"Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
 
 #: ../data/messages:893
 msgid "Repeat the gradation this number of times:"
@@ -3405,8 +3405,10 @@ msgid "Zoom effect"
 msgstr "Efekt zvětšení"
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
 
 #: ../data/messages:1065
 msgid "Maximum zoom of the icons :"
@@ -3659,11 +3661,11 @@ msgstr "větší"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Zvolte, pokud má indikátor následovat orientaci doku (nahoře/dole/vlevo/"
-"vpravo)."
+"Zvolte, pokud má indikátor následovat orientaci doku "
+"(nahoře/dole/vlevo/vpravo)."
 
 #: ../data/messages:1179
 msgid "Rotate the indicator with dock?"
@@ -3702,14 +3704,12 @@ msgid "Progress bars"
 msgstr ""
 
 #: ../data/messages:1199
-#, fuzzy
 msgid "Start color"
-msgstr "První barva:"
+msgstr ""
 
 #: ../data/messages:1201
-#, fuzzy
 msgid "End color"
-msgstr "Barva textu:"
+msgstr ""
 
 #: ../data/messages:1203
 msgid "Draw outline"
@@ -3866,9 +3866,8 @@ msgid "Choose the view for this dock :/"
 msgstr "Vyberte vzhled pro tento dok:"
 
 #: ../data/messages:1367
-#, fuzzy
 msgid "Load theme"
-msgstr "Správa motivů"
+msgstr ""
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
@@ -3951,9 +3950,8 @@ msgid "Sub-dock's name:"
 msgstr ""
 
 #: ../data/messages:1407
-#, fuzzy
 msgid "New sub-dock"
-msgstr "Nový hlavní dok"
+msgstr ""
 
 #: ../data/messages:1409
 msgid "How to render the icon:"
@@ -4005,8 +4003,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445
@@ -4082,73 +4080,3 @@ msgid ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "The module '%s' has been deactivated because it may have caused some "
-#~ "problems.\n"
-#~ "You can reactivate it, if it happens again thanks to report it at http://"
-#~ "glx-dock.org\n"
-#~ msgstr ""
-#~ "Modul '%s' může mít problémy.\n"
-#~ "Modul byl obnoven úspěšně, ale pokud se situace bude opakovat, nahlašte "
-#~ "to prosím na http://glx-dock.org"
-
-#~ msgid "category"
-#~ msgstr "kategorie"
-
-#~ msgid "Launcher configuration"
-#~ msgstr "Nastavení spouštěče"
-
-#~ msgid ""
-#~ "The '%s' module is not present. You need to install it and all its "
-#~ "dependencies in order to use this module."
-#~ msgstr ""
-#~ "Modul '%s' není dostupný. Musíte ho nejprve nainstalovat se všemi jeho "
-#~ "závislostmi."
-
-#~ msgid "The '%s' module is not enabled."
-#~ msgstr "Modul %s není aktivní."
-
-#~ msgid "Do you want to enable it now?"
-#~ msgstr "Přejete si ho nyní aktivovat?"
-
-#~ msgid ""
-#~ "This is the simple configuration panel of Cairo-Dock.\n"
-#~ " After you get familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-#~ msgstr ""
-#~ "Toto je jednoduchý panel nastavení Cairo-Dock.\n"
-#~ " Až se s ním seznámíte a budete si chtít nastavit další detaily,\n"
-#~ "přepněte do pokročilého režimu.\n"
-#~ " Mezi těmito režimy můžete přepínat kdykoli."
-
-#~ msgid "Manage Themes"
-#~ msgstr "Správa motivů"
-
-#~ msgid ""
-#~ "Select a line to get a preview and a description of the applet.\n"
-#~ "Click on the left check-box to (de)activate an applet.\n"
-#~ "Once an applet is active, you can configure it by right clicking on its "
-#~ "icon."
-#~ msgstr ""
-#~ "Vyberte řádek pro zobrazení náhledu a popisu appletu.\n"
-#~ "Klikněte na zaškrtávátko vlevo, pro aktivaci/deaktivaci appletu.\n"
-#~ "Aktivní applet můžete nastavit po kliknutí pravým tlačítkem na jeho ikonu."
-
-#~ msgid ""
-#~ "You can install them by simply drag-and-dropping the link onto your dock."
-#~ msgstr "Lze ho přidat jednoduchým přetažením odkazu na panel."
-
-#~ msgid "Use Xinerama?"
-#~ msgstr "Použít Xinerama?"
-
-#~ msgid "Delete"
-#~ msgstr "Odstranit"
-
-#~ msgid "List of your personal themes"
-#~ msgstr "Seznam vašich osobních motivů"
-
-#~ msgid "Delete from the list themes that you don't need anymore :"
-#~ msgstr "Odstraňte ze seznamu motivů ty, které již nebudete chtít:"

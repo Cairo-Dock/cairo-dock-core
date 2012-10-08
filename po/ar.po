@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-04-14 18:49+0000\n"
+"POT-Creation-Date: 2012-09-30 14:51+0000\n"
+"PO-Revision-Date: 2012-09-30 17:37+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
-"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 05:15+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-10-01 04:40+0000\n"
+"X-Generator: Launchpad (build 16049)\n"
+"Language: ar\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -179,9 +180,8 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1633 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "حفظ السمه الحاليه"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1753
 msgid "Filter"
@@ -236,9 +236,8 @@ msgid "Add-ons"
 msgstr "إضافات"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
-#, fuzzy
 msgid "Configuration"
-msgstr "عدل"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:631
 msgid "Advanced Mode"
@@ -498,7 +497,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "تشغيل شريط كيرو عند بدء التشغيل"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:960 ../src/help/applet-init.c:28
@@ -748,7 +748,8 @@ msgid "Effects:"
 msgstr "تأثيرات:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "معايير الـdock متاحة في نافذة المواصفات الرئيسية."
 
 #: ../src/cairo-dock-widget-items.c:732
@@ -764,16 +765,16 @@ msgid "Accessory"
 msgstr "ملحقات"
 
 #: ../src/cairo-dock-widget-plugins.c:233
-#, fuzzy
 msgid "Plug-in"
-msgstr "إضافة"
+msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
 msgstr "الفئة"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "انقر على المصغر للحصول على عرض و وصف له."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -822,14 +823,12 @@ msgid "You must try the theme before you can rate it."
 msgstr "يتوجب عليك تجربة السمة قبل تقيمها"
 
 #: ../src/cairo-dock-widget-themes.c:421
-#, fuzzy
 msgid "The theme has been deleted"
-msgstr "تم إزالة السمات"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:451
-#, fuzzy
 msgid "Delete this theme"
-msgstr "أزل هذا الـdock"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:482
 #: ../src/gldit/cairo-dock-gui-factory.c:2445
@@ -1821,8 +1820,9 @@ msgstr "حذف شريط جنوم نهائياً"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1870,8 +1870,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2562,9 +2562,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:565
-#, fuzzy
 msgid "Place the dock on one screen"
-msgstr "جعل الايقون شفاف ؟"
+msgstr ""
 
 #: ../data/messages:567
 msgid "0 is the first screen."
@@ -3318,7 +3317,8 @@ msgid "Zoom effect"
 msgstr "تأثير التكبير"
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1065
@@ -3550,8 +3550,8 @@ msgstr "أكبر"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1179
@@ -3589,14 +3589,12 @@ msgid "Progress bars"
 msgstr ""
 
 #: ../data/messages:1199
-#, fuzzy
 msgid "Start color"
-msgstr "لون البداية :"
+msgstr ""
 
 #: ../data/messages:1201
-#, fuzzy
 msgid "End color"
-msgstr "لون الخلفيّة:"
+msgstr ""
 
 #: ../data/messages:1203
 msgid "Draw outline"
@@ -3747,9 +3745,8 @@ msgid "Choose the view for this dock :/"
 msgstr ""
 
 #: ../data/messages:1367
-#, fuzzy
 msgid "Load theme"
-msgstr "إدارة الثيمات"
+msgstr ""
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
@@ -3824,9 +3821,8 @@ msgid "Sub-dock's name:"
 msgstr ""
 
 #: ../data/messages:1407
-#, fuzzy
 msgid "New sub-dock"
-msgstr "dock فرعي"
+msgstr ""
 
 #: ../data/messages:1409
 msgid "How to render the icon:"
@@ -3878,8 +3874,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445
@@ -3955,51 +3951,3 @@ msgid ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
-
-#~ msgid "category"
-#~ msgstr "فئة"
-
-#~ msgid "Launcher configuration"
-#~ msgstr "إعدادات المشغل"
-
-#~ msgid ""
-#~ "The '%s' module is not present. You need to install it and all its "
-#~ "dependencies in order to use this module."
-#~ msgstr ""
-#~ "'%s' الوحدة غير موجودة . تحتاج إلى تثبيتها وجميع تابعاتها من أجل استخدام "
-#~ "هذه الوحدة"
-
-#~ msgid "The '%s' module is not enabled."
-#~ msgstr "'%s' الوحدةغير مفعلة."
-
-#~ msgid "Do you want to enable it now?"
-#~ msgstr "هل تريد تفعيلها الان؟"
-
-#~ msgid "Importing theme..."
-#~ msgstr "إستدعاء السمة..."
-
-#~ msgid ""
-#~ "This is the simple configuration panel of Cairo-Dock.\n"
-#~ " After you get familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-#~ msgstr ""
-#~ "هذا وضع التخصيص البسيط لـCairo-Dock .\n"
-#~ "بعدما تتعود عليه و تريد تخصيص السمة الخاصة بك ,\n"
-#~ "يمكنك التغيير إلى الوضع المتقدم.\n"
-#~ "يمكنك التغيير من نمط ﻵخر في أي وقت."
-
-#~ msgid "Manage Themes"
-#~ msgstr "إدارة السمات"
-
-#~ msgid "Add or remove any applet"
-#~ msgstr "أضف أو احذف أي بريمج"
-
-#~ msgid "Delete"
-#~ msgstr "حذف"
-
-#~ msgid "List of your personal themes"
-#~ msgstr "قائمه السمات الخاصه بك"
-
-#~ msgid "Delete from the list themes that you don't need anymore :"
-#~ msgstr "احذف من القائمه السمات التي لم تعد بحاجه لها :"

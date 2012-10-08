@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-06-17 09:04+0000\n"
+"POT-Creation-Date: 2012-09-30 14:51+0000\n"
+"PO-Revision-Date: 2012-09-30 17:37+0000\n"
 "Last-Translator: Máté Eckl <ecklm@nejanet.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 05:16+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-10-01 04:41+0000\n"
+"X-Generator: Launchpad (build 16049)\n"
+"Language: hu\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -179,9 +180,8 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1633 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Jelenlegi téma mentése"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1753
 msgid "Filter"
@@ -236,9 +236,8 @@ msgid "Add-ons"
 msgstr "Bővítmények"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
-#, fuzzy
 msgid "Configuration"
-msgstr "Beállítás"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:631
 msgid "Advanced Mode"
@@ -514,7 +513,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "A Cairo-Dock indítása induláskor"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "A harmadik féltől származó kisalkalmazások biztosítják számos program, "
 "például a Pidgin integrációját"
@@ -771,7 +771,8 @@ msgid "Effects:"
 msgstr "Hatások:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "A fő dokk paraméterei elérhetőek a fő beállítóablakban."
 
 #: ../src/cairo-dock-widget-items.c:732
@@ -787,16 +788,16 @@ msgid "Accessory"
 msgstr "Kiegészítő"
 
 #: ../src/cairo-dock-widget-plugins.c:233
-#, fuzzy
 msgid "Plug-in"
-msgstr "Bővítmény"
+msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
 msgstr "Kategória"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Kattintson egy kisalkalmazásra az előnézet és a leírás megtekintéséhez."
 
@@ -846,14 +847,12 @@ msgid "You must try the theme before you can rate it."
 msgstr "Ki kell próbálnia a témát, mielőtt értékelhetné."
 
 #: ../src/cairo-dock-widget-themes.c:421
-#, fuzzy
 msgid "The theme has been deleted"
-msgstr "A téma törölve"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:451
-#, fuzzy
 msgid "Delete this theme"
-msgstr "E dokk törlése"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:482
 #: ../src/gldit/cairo-dock-gui-factory.c:2445
@@ -969,7 +968,8 @@ msgstr ""
 
 #: ../src/cairo-dock.c:350
 msgid "Force to display some output messages with colors."
-msgstr "Néhány kimeneti üzenet színesben való megjelenítésének kényszerítése."
+msgstr ""
+"Néhány kimeneti üzenet színesben való megjelenítésének kényszerítése."
 
 #: ../src/cairo-dock.c:353
 msgid "Print version and quit."
@@ -1048,16 +1048,13 @@ msgid "Remember this choice"
 msgstr "Választás megjegyzése"
 
 #: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
-"A(z) „%s” modulban hiba léphetett fel.\n"
-"A modul sikeresen újraindult. Amennyiben a hiba újból felmerül, kérjük "
-"jelentse a http://glx-dock.org oldalon."
 
 #: ../src/cairo-dock.c:685
 msgid "< Maintenance mode >"
@@ -1257,8 +1254,8 @@ msgid ""
 msgstr ""
 "Üdvözli a Cairo-Dock!\n"
 "Ez a kisalkamazás segít a használat elkezdésében; csak kattintson rá.\n"
-"Ha van akármilyen kérdése, kérése vagy megjegyzése, látogasson el a http://"
-"glx-dock.org oldalra.\n"
+"Ha van akármilyen kérdése, kérése vagy megjegyzése, látogasson el a "
+"http://glx-dock.org oldalra.\n"
 "Reméljük, tetszeni fog a program!\n"
 "  (a dialógusra kattintva becsukhatja azt)"
 
@@ -1505,8 +1502,8 @@ msgstr ""
 "- Alkalmazásikon esetén:\n"
 "Kattintson jobb egérgombbal az ikonra, és válassza az \"Egyéb műveletek -> "
 "Egyéni ikon beállítása\" lehetőséget, és válasszon egy képfájlt. Egyéni "
-"ikonkép törléséhez válassza az \"Egyéb műveletek -> Egyéni ikon eltávolítása"
-"\" lehetőséget.\n"
+"ikonkép törléséhez válassza az \"Egyéb műveletek -> Egyéni ikon "
+"eltávolítása\" lehetőséget.\n"
 "\n"
 "Ha vanak ikontémák telepítve a rendszerére, kiválaszthat egyet közülük az "
 "alapértelmezett helyett a Beállítás ablak Megjelenés paneljában."
@@ -1548,9 +1545,9 @@ msgid ""
 msgstr ""
 "Lehetőség van elválasztók hozzáadására. Ehhez kattintson jobb egérgombbal a "
 "dokkra, majd válassza a \"Hozzáadás -> Elválasztó\" opciót.\n"
-"Ha engedélyezte az ikonok típus szerinti elválasztását (indítóikonok/"
-"alkalmazásikonok/kisalkalmazások), a csoportok közé automatikusan kerül egy-"
-"egy elválasztó.\n"
+"Ha engedélyezte az ikonok típus szerinti elválasztását "
+"(indítóikonok/alkalmazásikonok/kisalkalmazások), a csoportok közé "
+"automatikusan kerül egy-egy elválasztó.\n"
 "\"Panel\" nézetben az elválasztók ikonok közti üres helyként jelennek meg."
 
 #: ../data/messages:43
@@ -1618,8 +1615,8 @@ msgid ""
 "With your mouse, scroll up/down on one of the icons of the application. Each "
 "time you scroll, the next/previous window will be presented to you."
 msgstr ""
-"Az egér görgőjével görgessen le/föl az alkalmazás ikonján, hogy az előző/"
-"következő ablak jelenjen meg."
+"Az egér görgőjével görgessen le/föl az alkalmazás ikonján, hogy az "
+"előző/következő ablak jelenjen meg."
 
 #: ../data/messages:63
 msgid "Grouping windows of a given application"
@@ -2101,8 +2098,9 @@ msgstr "A gnome-panel teljes eltávolítása"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2158,8 +2156,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Be kell kapcsolnia az asztali effekteket. Például futtassa a Compizt vagy az "
 "xcompmgr-t. \n"
@@ -2963,18 +2961,14 @@ msgid "Multiple screens"
 msgstr "Több képernyő"
 
 #: ../data/messages:563
-#, fuzzy
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama/Xrandr to "
 "manage them."
 msgstr ""
-"Ezt az opciót akkor használja, ha két monitort használ, és Xinerama-val "
-"kezeli azokat."
 
 #: ../data/messages:565
-#, fuzzy
 msgid "Place the dock on one screen"
-msgstr "Dokk elhelyezése a képernyőn"
+msgstr ""
 
 #: ../data/messages:567
 msgid "0 is the first screen."
@@ -3782,7 +3776,8 @@ msgid "Zoom effect"
 msgstr "Nagyítás"
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Állítsa 1-re, ha nem akarja hogy az ikonok kinagyítódjanak, amikor lebegteti "
 "őket."
@@ -4044,8 +4039,8 @@ msgstr "nagyobb"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Akkor használja, ha szeretné, hogy az indikátor kövesse a dokk orientációját "
 "(fent/lent/jobb/bal)."
@@ -4088,14 +4083,12 @@ msgid "Progress bars"
 msgstr ""
 
 #: ../data/messages:1199
-#, fuzzy
 msgid "Start color"
-msgstr "Kezdő szín:"
+msgstr ""
 
 #: ../data/messages:1201
-#, fuzzy
 msgid "End color"
-msgstr "Háttérszín:"
+msgstr ""
 
 #: ../data/messages:1203
 msgid "Draw outline"
@@ -4137,7 +4130,8 @@ msgstr "Az összes ikonon"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr "Minél nagyobb, annál több címke lesz átlátszó a mutatott ikon mellett."
+msgstr ""
+"Minél nagyobb, annál több címke lesz átlátszó a mutatott ikon mellett."
 
 #: ../data/messages:1223
 msgid "label's visibility threshold :"
@@ -4253,9 +4247,8 @@ msgid "Choose the view for this dock :/"
 msgstr "Válassza ki a kinézetet ehhez a dokkhoz:/"
 
 #: ../data/messages:1367
-#, fuzzy
 msgid "Load theme"
-msgstr "Témakezelő"
+msgstr ""
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
@@ -4338,9 +4331,8 @@ msgid "Sub-dock's name:"
 msgstr ""
 
 #: ../data/messages:1407
-#, fuzzy
 msgid "New sub-dock"
-msgstr "Aldokk"
+msgstr ""
 
 #: ../data/messages:1409
 msgid "How to render the icon:"
@@ -4392,8 +4384,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445
@@ -4469,106 +4461,3 @@ msgid ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "The module '%s' has been deactivated because it may have caused some "
-#~ "problems.\n"
-#~ "You can reactivate it, if it happens again thanks to report it at http://"
-#~ "glx-dock.org\n"
-#~ msgstr ""
-#~ "A(z) „%s” modulban hiba léphetett fel.\n"
-#~ "A modul sikeresen újraindult. Amennyiben a hiba újból felmerül, kérjük "
-#~ "jelentse a http://glx-dock.org oldalon."
-
-#~ msgid "category"
-#~ msgstr "Kategória"
-
-#~ msgid "Launcher configuration"
-#~ msgstr "Indítóikon beállítások"
-
-#~ msgid ""
-#~ "The '%s' module is not present. You need to install it and all its "
-#~ "dependencies in order to use this module."
-#~ msgstr ""
-#~ "A(z) „%s” modul nem érhető el. Telepítenie kell azt, vagy a függőségeit a "
-#~ "modul használatához."
-
-#~ msgid "The '%s' module is not enabled."
-#~ msgstr "A(z) „%s” modul nincs engedélyezve."
-
-#~ msgid "Do you want to enable it now?"
-#~ msgstr "Szeretné engedélyezni most?"
-
-#~ msgid "Importing theme..."
-#~ msgstr "Téma importálása..."
-
-#~ msgid ""
-#~ "This is the simple configuration panel of Cairo-Dock.\n"
-#~ " After you get familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-#~ msgstr ""
-#~ "Ez a Cairo-Dock egyszerű beállítópanele.\n"
-#~ " Ha megbarátkozott vele, és testre szeretné szabni a témáját,\n"
-#~ "  átválthat a speciális módra.\n"
-#~ " Bármikor átválthat az egyikről a másikra."
-
-#~ msgid "Manage Themes"
-#~ msgstr "Témakezelő"
-
-#~ msgid "Applet's Handbook"
-#~ msgstr "A kisalkalmazás kézikönyve"
-
-#~ msgid "Add or remove any applet"
-#~ msgstr "Bármilyen kisalkalmazás hozzáadása/eltávolítása"
-
-#~ msgid ""
-#~ "Select a line to get a preview and a description of the applet.\n"
-#~ "Click on the left check-box to (de)activate an applet.\n"
-#~ "Once an applet is active, you can configure it by right clicking on its "
-#~ "icon."
-#~ msgstr ""
-#~ "Válasszon egy sort a kisalkalmazás előnézetének és leírásának "
-#~ "megtekintéséhez.\n"
-#~ "Kattintsona bal oldali jelölőnégyzetre a kisalkalmazás (de)"
-#~ "aktiválásához.\n"
-#~ "Mihelyt a kisalkalmazás aktív, jobb egérgombbal kattinvta az ikonján "
-#~ "elérheti a beállításait."
-
-#~ msgid ""
-#~ "You can install them by simply drag-and-dropping the link onto your dock."
-#~ msgstr "Telepítéshez csak húzza és ejtse a linket a dokkra."
-
-#~ msgid "Use Xinerama?"
-#~ msgstr "Használ Xineramát?"
-
-#~ msgid "Delete"
-#~ msgstr "Törlés"
-
-#~ msgid "List of your personal themes"
-#~ msgstr "Személyes témák listája"
-
-#~ msgid "Delete from the list themes that you don't need anymore :"
-#~ msgstr "Törölje ki a fölöslegessé vált témákat a listából :"
-
-#~ msgid ""
-#~ "<b><span color='red'>GLX-Dock 2.4.0</span></b>\n"
-#~ " - The <b>Power-Manager applet</b> has been rewritten to work on any "
-#~ "plateform.\n"
-#~ " - A <b>new Help applet</b> has been added to help our beloved users :-)\n"
-#~ " - <b>Integration in the XFCE desktop</b> has been improved\n"
-#~ " - Several <b>new DBus methods</b> lets you interact on the dock more "
-#~ "easily.\n"
-#~ " - The dock can now be used as a shell in a Compiz-standalone environment."
-#~ msgstr ""
-#~ "<b><span color='red'>GLX-Dock 2.4.0</span></b>\n"
-#~ " - Az <b>Energiakezelő kisalkalmazás</b> újra lett írva, így már minden "
-#~ "platformon működik.\n"
-#~ " - Létrehoztunk egy <b>új Súgó kisalkalmazást</b>, szeretett "
-#~ "felhasználóink segítésére :-)\n"
-#~ " - A Cairo-Dock most még jobban <b>integrálódik az XFCE asztali "
-#~ "környezetbe.\n"
-#~ " - Számos <b>új DBus metódus</b> még könnyebbé teszi a dokkal való "
-#~ "interakciót.\n"
-#~ " - A dokk már héjként is használható egy önálló Compiz környezetben."

@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-06-15 18:28+0000\n"
+"POT-Creation-Date: 2012-09-30 14:51+0000\n"
+"PO-Revision-Date: 2012-09-30 17:29+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Belarusian <be@li.org>\n"
-"Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 05:15+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-10-01 04:40+0000\n"
+"X-Generator: Launchpad (build 16049)\n"
+"Language: be\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -235,9 +236,8 @@ msgid "Add-ons"
 msgstr "Дапаўненні"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
-#, fuzzy
 msgid "Configuration"
-msgstr "Настройка"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:631
 msgid "Advanced Mode"
@@ -461,7 +461,8 @@ msgstr "Наладзіць гэтую панэль"
 
 #: ../src/cairo-dock-menu.c:883
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Наладзьце месцазнаходжанне, бачнасць і знешні выгляд асноўнай панэлі."
+msgstr ""
+"Наладзьце месцазнаходжанне, бачнасць і знешні выгляд асноўнай панэлі."
 
 #: ../src/cairo-dock-menu.c:885
 msgid "Delete this dock"
@@ -497,7 +498,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Запускаць Cairo-Dock пры старце сістэмы"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Апплеты трэціх бакоў забяспечваюць інтэграцыю з рознымі праграмамі, "
 "напрыклад Pidgin"
@@ -751,7 +753,8 @@ msgid "Effects:"
 msgstr "Эфекты:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:732
@@ -767,16 +770,16 @@ msgid "Accessory"
 msgstr "Аксесуар"
 
 #: ../src/cairo-dock-widget-plugins.c:233
-#, fuzzy
 msgid "Plug-in"
-msgstr "плагін"
+msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Пстрыкніце па аплеце, каб убачыць яго апісанне і прыкладны выгляд."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -1006,16 +1009,13 @@ msgid "Remember this choice"
 msgstr "Запомніць мой выбар"
 
 #: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
-"У модулі '%s' ўзнікла якая-та праблема.\n"
-"Перазагрузка прайшла паспяхова, але калі гэта зноў паўторыцца, то будзем "
-"ўдзячныя за справаздачу пра памылку на http://glx-dock.org"
 
 #: ../src/cairo-dock.c:685
 msgid "< Maintenance mode >"
@@ -1848,8 +1848,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1897,8 +1898,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2603,18 +2604,14 @@ msgid "Multiple screens"
 msgstr "Множныя экраны"
 
 #: ../data/messages:563
-#, fuzzy
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama/Xrandr to "
 "manage them."
 msgstr ""
-"Гэтая опцыя выкарыстоўваецца калі вы валодаеце двума маніторамі і "
-"выкарыстаеце Xinerama для кіравання."
 
 #: ../data/messages:565
-#, fuzzy
 msgid "Place the dock on one screen"
-msgstr "Зрабіць абразок празрыстым"
+msgstr ""
 
 #: ../data/messages:567
 msgid "0 is the first screen."
@@ -3413,7 +3410,8 @@ msgid "Zoom effect"
 msgstr "Эфект набліжэння"
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Усталюйце значэнне 1, калі не жадаеце каб абразкі павялічваліся пры "
 "навядзенні на іх."
@@ -3537,9 +3535,9 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Наколькі будуць празрыстыя значкі ў стане спакою; Яны будуць \"матэрыялізацца"
-"\" па меры з'яўлення панэлі. Чым бліжэй значэнне да 0, тым празрыстай яны "
-"будуць."
+"Наколькі будуць празрыстыя значкі ў стане спакою; Яны будуць "
+"\"матэрыялізацца\" па меры з'яўлення панэлі. Чым бліжэй значэнне да 0, тым "
+"празрыстай яны будуць."
 
 #: ../data/messages:1115
 msgid "Icons' transparency at rest :"
@@ -3673,8 +3671,8 @@ msgstr "большы"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Выкарыстоўвайце, каб арыентаваць індыкатар адносна размяшчэння панэлі "
 "(зверху, знізу, справа, злева)."
@@ -3716,14 +3714,12 @@ msgid "Progress bars"
 msgstr ""
 
 #: ../data/messages:1199
-#, fuzzy
 msgid "Start color"
-msgstr "Пачатковы колер:"
+msgstr ""
 
 #: ../data/messages:1201
-#, fuzzy
 msgid "End color"
-msgstr "Колер тэксту:"
+msgstr ""
 
 #: ../data/messages:1203
 msgid "Draw outline"
@@ -3882,9 +3878,8 @@ msgid "Choose the view for this dock :/"
 msgstr ""
 
 #: ../data/messages:1367
-#, fuzzy
 msgid "Load theme"
-msgstr "Кіраванне тэмамі"
+msgstr ""
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
@@ -3965,9 +3960,8 @@ msgid "Sub-dock's name:"
 msgstr ""
 
 #: ../data/messages:1407
-#, fuzzy
 msgid "New sub-dock"
-msgstr "Новая асноўная панэль"
+msgstr ""
 
 #: ../data/messages:1409
 msgid "How to render the icon:"
@@ -4019,8 +4013,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445
@@ -4096,65 +4090,3 @@ msgid ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "The module '%s' has been deactivated because it may have caused some "
-#~ "problems.\n"
-#~ "You can reactivate it, if it happens again thanks to report it at http://"
-#~ "glx-dock.org\n"
-#~ msgstr ""
-#~ "У модулі '%s' ўзнікла якая-та праблема.\n"
-#~ "Перазагрузка прайшла паспяхова, але калі гэта зноў паўторыцца, то будзем "
-#~ "ўдзячныя за справаздачу пра памылку на http://glx-dock.org"
-
-#~ msgid "category"
-#~ msgstr "катэгорыя"
-
-#~ msgid "Launcher configuration"
-#~ msgstr "Канфігурацыя значкоў запуску"
-
-#~ msgid ""
-#~ "The '%s' module is not present. You need to install it and all its "
-#~ "dependencies in order to use this module."
-#~ msgstr ""
-#~ "Модуль '%s' не усталяваны. Вам варта ўсталяваць яго або яго залежнасці, "
-#~ "каб у поўнай меры яго выкарыстоўваць."
-
-#~ msgid "The '%s' module is not enabled."
-#~ msgstr "Модуль '%s' не актываваны."
-
-#~ msgid "Do you want to enable it now?"
-#~ msgstr "Актывiраваць яго зараз?"
-
-#~ msgid ""
-#~ "This is the simple configuration panel of Cairo-Dock.\n"
-#~ " After you get familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-#~ msgstr ""
-#~ "Гэта даступны рэжым панэлі настроек Cairo-Dock.\n"
-#~ " Пасля знаёмства з ім і каб змяніць тэму,\n"
-#~ "вам варта пераключыцца ў пашыраны рэжым.\n"
-#~ "У любы момант вы можаце змяніць рэжым панэлі настроек."
-
-#~ msgid "Manage Themes"
-#~ msgstr "Кіраванне тэмамі"
-
-#~ msgid ""
-#~ "Select a line to get a preview and a description of the applet.\n"
-#~ "Click on the left check-box to (de)activate an applet.\n"
-#~ "Once an applet is active, you can configure it by right clicking on its "
-#~ "icon."
-#~ msgstr ""
-#~ "Вылучыце радок з аплетаў, каб атрымаць яго апісанне і прыкладны выгляд.\n"
-#~ "Пастаўце галачку, каб (дэ) актываваць яго.\n"
-#~ "Пасля актывавання аплетаў вы зможаце наладзіць яго націснуўшы правай "
-#~ "кнопкай на яго значкі ў панэлі."
-
-#~ msgid ""
-#~ "You can install them by simply drag-and-dropping the link onto your dock."
-#~ msgstr "Для ўсталёўкі вы можаце проста перацягнуць спасылку на панэль."
-
-#~ msgid "Use Xinerama?"
-#~ msgstr "Выкарыстоўваць Xinerama?"

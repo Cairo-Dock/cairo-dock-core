@@ -1,48 +1,46 @@
-# Catalan translation for cairo-dock-core
-# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# Lithuanian translation for cairo-dock-core
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
 # This file is distributed under the same license as the cairo-dock-core package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-# ferran <ferro66@ya.com>, 2010.
-# ferran <traductor@ferrranroig.com>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
-"Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-09-30 14:51+0000\n"
-"PO-Revision-Date: 2012-09-30 17:33+0000\n"
-"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
-"Language-Team: Catalan <ca@li.org>\n"
+"PO-Revision-Date: 2012-09-27 08:21+0000\n"
+"Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
+"Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-01 04:40+0000\n"
+"X-Launchpad-Export-Date: 2012-10-01 04:41+0000\n"
 "X-Generator: Launchpad (build 16049)\n"
-"Language: ca\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
-msgstr "Comportament"
+msgstr "Elgsena"
 
 #: ../src/cairo-dock-gui-advanced.c:134 ../data/messages:499
 #: ../data/messages:1319
 msgid "Appearance"
-msgstr "Aparença"
+msgstr "Išvaizda"
 
 #: ../src/cairo-dock-gui-advanced.c:135 ../src/cairo-dock-widget-plugins.c:142
 msgid "Files"
-msgstr "Fitxers"
+msgstr "Failai"
 
 #: ../src/cairo-dock-gui-advanced.c:136 ../src/cairo-dock-widget-plugins.c:147
 msgid "Internet"
-msgstr "Internet"
+msgstr "Internetas"
 
 #: ../src/cairo-dock-gui-advanced.c:137 ../src/cairo-dock-widget-plugins.c:152
 msgid "Desktop"
-msgstr "Escriptori"
+msgstr "Darbo aplinka"
 
 #: ../src/cairo-dock-gui-advanced.c:138
 msgid "Accessories"
-msgstr "Accessoris"
+msgstr "Reikmenys"
 
 #: ../src/cairo-dock-gui-advanced.c:139 ../src/cairo-dock-gui-advanced.c:1559
 #: ../src/cairo-dock-widget-plugins.c:162 ../data/messages:763
@@ -51,20 +49,20 @@ msgstr "Sistema"
 
 #: ../src/cairo-dock-gui-advanced.c:140 ../src/cairo-dock-widget-plugins.c:167
 msgid "Fun"
-msgstr "Ventilador"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:141 ../src/cairo-dock-gui-advanced.c:1836
 msgid "All"
-msgstr "Tot"
+msgstr "Viskas"
 
 #: ../src/cairo-dock-gui-advanced.c:1527
 msgid "Set the position of the main dock."
-msgstr "Estableix la posició de la barra principal."
+msgstr "Nustatykite pagrindinio skydelio vietą"
 
 #: ../src/cairo-dock-gui-advanced.c:1528 ../data/messages:321
 #: ../data/messages:529
 msgid "Position"
-msgstr "Posició"
+msgstr "Padėtis"
 
 #: ../src/cairo-dock-gui-advanced.c:1535
 msgid ""
@@ -76,16 +74,16 @@ msgstr ""
 #: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-menu.c:1991
 #: ../data/messages:339
 msgid "Visibility"
-msgstr "Visibilitat"
+msgstr "Matomumas"
 
 #: ../src/cairo-dock-gui-advanced.c:1543
 msgid "Display and interact with currently open windows."
-msgstr "Mostra i interacciona amb les finestres obertes actualment."
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1544 ../data/messages:41
 #: ../data/messages:455
 msgid "Taskbar"
-msgstr "Barra de tasques"
+msgstr "Programų juosta"
 
 #: ../src/cairo-dock-gui-advanced.c:1551
 msgid "Define all the keyboard shortcuts currently available."
@@ -93,7 +91,7 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1552 ../data/messages:525
 msgid "Shortkeys"
-msgstr "Tecla Curta"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558
 msgid "All of the parameters you will never want to tweak."
@@ -101,29 +99,29 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1569
 msgid "Set a background for your dock."
-msgstr "Estableix un fons al teu acoblador"
+msgstr "Nustatykite jūsų skydelio foną."
 
 #: ../src/cairo-dock-gui-advanced.c:1570 ../data/messages:855
 #: ../data/messages:1237 ../data/messages:1345
 msgid "Background"
-msgstr "Fons"
+msgstr "Fonas"
 
 #: ../src/cairo-dock-gui-advanced.c:1577
 msgid "Select a view for each of your docks."
-msgstr "Trieü una vista per cada un del Docks"
+msgstr "Pasirinkite visų jūsų skydelių išvaizdą."
 
 #: ../src/cairo-dock-gui-advanced.c:1578 ../data/messages:517
 #: ../data/messages:923 ../data/messages:1339
 msgid "Views"
-msgstr "Vista"
+msgstr "Vaizdavimas"
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Configure text bubble appearance."
-msgstr "Configurar l'aspecte de les notificacions"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1586
 msgid "Dialog boxes"
-msgstr "Diàlegs"
+msgstr "Dialogų langai"
 
 #: ../src/cairo-dock-gui-advanced.c:1593
 msgid "Applets can be displayed on your desktop as widgets."
@@ -139,13 +137,11 @@ msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
 msgstr ""
-"Tot sobre els Icons\n"
-" Mesure, reflexos, temas d'ico"
 
 #: ../src/cairo-dock-gui-advanced.c:1602 ../data/messages:11
 #: ../data/messages:501 ../data/messages:1043 ../data/messages:1321
 msgid "Icons"
-msgstr "Icones"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1609
 msgid "Indicators are additional markers for your icons."
@@ -153,7 +149,7 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1610 ../data/messages:1127
 msgid "Indicators"
-msgstr "Indicadors"
+msgstr "Indikatoriai"
 
 #: ../src/cairo-dock-gui-advanced.c:1617
 msgid "Define icon caption and quick-info style."
@@ -161,7 +157,7 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1618
 msgid "Captions"
-msgstr "Etiquetes"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1625
 msgid "Try new themes and save your theme."
@@ -170,7 +166,7 @@ msgstr ""
 #: ../src/cairo-dock-gui-advanced.c:1626 ../src/cairo-dock-gui-simple.c:118
 #: ../src/cairo-dock-gui-simple.c:120
 msgid "Themes"
-msgstr "Temes"
+msgstr "Temos"
 
 #: ../src/cairo-dock-gui-advanced.c:1632
 msgid "Current items in your dock(s)."
@@ -183,39 +179,39 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1753
 msgid "Filter"
-msgstr "Filtrar"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1794
 msgid "All words"
-msgstr "Totes les paraules"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1795
 msgid "Highlighted words"
-msgstr "Realçar les paraules"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1796
 msgid "Hide others"
-msgstr "Amaga altres"
+msgstr "Slėpti kitus"
 
 #: ../src/cairo-dock-gui-advanced.c:1797
 msgid "Search in description"
-msgstr "Cerca a la descripció"
+msgstr "Ieškoti aprašymuose"
 
 #: ../src/cairo-dock-gui-advanced.c:1801
 msgid "Hide disabled"
-msgstr ""
+msgstr "Slėpti išjungtus"
 
 #: ../src/cairo-dock-gui-advanced.c:1810
 msgid "Categories"
-msgstr "Categories"
+msgstr "Kategorijos"
 
 #: ../src/cairo-dock-gui-advanced.c:1920
 msgid "Enable this module"
-msgstr "Activa aquest mòdul"
+msgstr "Įjungti šį modulį"
 
 #: ../src/cairo-dock-gui-advanced.c:1987
 msgid "More applets"
-msgstr "Mes Applets"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1988
 msgid "Get more applets online !"
@@ -223,15 +219,15 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:2083 ../src/cairo-dock-gui-simple.c:359
 msgid "Cairo-Dock configuration"
-msgstr "Configuració de Cairo-Dock"
+msgstr "Cairo-Dock skydelių konfigūravimas"
 
 #: ../src/cairo-dock-gui-advanced.c:2662
 msgid "Simple Mode"
-msgstr ""
+msgstr "Paprastas konfigūravimas"
 
 #: ../src/cairo-dock-gui-simple.c:102 ../src/cairo-dock-gui-simple.c:104
 msgid "Add-ons"
-msgstr "Complements"
+msgstr "Įtaisai ir papildiniai"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
 msgid "Configuration"
@@ -249,11 +245,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:124
 msgid "Delete this dock?"
-msgstr ""
+msgstr "Pašalinti šį skydelį?"
 
 #: ../src/cairo-dock-menu.c:181
 msgid "About Cairo-Dock"
-msgstr ""
+msgstr "Apie Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:218 ../data/messages:271
 msgid "Development site"
@@ -261,16 +257,16 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:219 ../data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
-msgstr "Troba aquí la darrera versió de Cairo-Dock !."
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:952
 #: ../src/cairo-dock-widget-plugins.c:277
 msgid "Get more applets!"
-msgstr ""
+msgstr "Gauti daugau papildinių!"
 
 #: ../src/cairo-dock-menu.c:227 ../src/cairo-dock-menu.c:233
 msgid "Donate"
-msgstr ""
+msgstr "Paaukoti"
 
 #: ../src/cairo-dock-menu.c:230 ../src/cairo-dock-menu.c:236
 msgid ""
@@ -283,7 +279,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:265
 msgid "Developers"
-msgstr ""
+msgstr "Kūrėjai"
 
 #: ../src/cairo-dock-menu.c:266
 msgid "Main developer and project leader"
@@ -295,11 +291,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:269
 msgid "Development"
-msgstr "Desenvolupament"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:284
 msgid "Website"
-msgstr ""
+msgstr "Tinklalapis"
 
 #: ../src/cairo-dock-menu.c:285
 msgid "Beta-testing / Suggestions / Forum animation"
@@ -307,23 +303,19 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:286
 msgid "Translators for this language"
-msgstr ""
+msgstr "Išvertė į lietuvių kalbą"
 
 #: ../src/cairo-dock-menu.c:287
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Albert Milian https://launchpad.net/~mln-gmx\n"
-"  Cesc Llagostera https://launchpad.net/~cescllp\n"
-"  Fabounet https://launchpad.net/~fabounet03\n"
-"  Ferran Roig https://launchpad.net/~ferro9\n"
-"  Javier Antonio Nisa Avila https://launchpad.net/~javiernisa\n"
-"  Titotatin https://launchpad.net/~astromiquel\n"
-"  ferran https://launchpad.net/~traductor"
+"  Mantas Kriaučiūnas https://launchpad.net/~mantas\n"
+"  Paulius Šukys https://launchpad.net/~shookees\n"
+"  Regimantas Baublys https://launchpad.net/~regtech0"
 
 #: ../src/cairo-dock-menu.c:289
 msgid "Support"
-msgstr "Assistència"
+msgstr "Pagalba"
 
 #: ../src/cairo-dock-menu.c:319
 msgid ""
@@ -361,15 +353,15 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:329
 msgid "Thanks"
-msgstr ""
+msgstr "Dėkojame"
 
 #: ../src/cairo-dock-menu.c:408
 msgid "Quit Cairo-Dock?"
-msgstr "Tancar Cairo-Dock ?"
+msgstr "Išjungti Cairo-Dock skydelius?"
 
 #: ../src/cairo-dock-menu.c:438 ../src/cairo-dock-menu.c:577
 msgid "Separator"
-msgstr ""
+msgstr "Skirtukas"
 
 #: ../src/cairo-dock-menu.c:547
 msgid ""
@@ -380,7 +372,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:571
 msgid "Add"
-msgstr ""
+msgstr "Pridėti"
 
 #: ../src/cairo-dock-menu.c:573
 msgid "Sub-dock"
@@ -388,7 +380,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:575
 msgid "Main dock"
-msgstr ""
+msgstr "Atskiras skydelis"
 
 #: ../src/cairo-dock-menu.c:579
 msgid "Custom launcher"
@@ -401,13 +393,12 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:597
 msgid "separator"
-msgstr ""
+msgstr "skirtukas"
 
 #: ../src/cairo-dock-menu.c:601
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr ""
-"Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
 
 #: ../src/cairo-dock-menu.c:613
 msgid ""
@@ -436,21 +427,19 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:799
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr ""
-"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs segur "
-"?"
+msgstr "Ar tikrai norite pašalinti šį įtaisą (%s) iš skydelio?"
 
 #: ../src/cairo-dock-menu.c:868
 msgid "Configure"
-msgstr "Configurar"
+msgstr "Skydelio nustatymai"
 
 #: ../src/cairo-dock-menu.c:873
 msgid "Configure behaviour, appearance, and applets."
-msgstr "Configurar el comportament, aparença i miniaplicacions."
+msgstr "Konfigūruoti išvaizdą, elgseną bei įtaisus."
 
 #: ../src/cairo-dock-menu.c:878
 msgid "Configure this dock"
-msgstr "Configurar aquesta barra"
+msgstr "Konfigūruoti šį skydelį"
 
 #: ../src/cairo-dock-menu.c:883
 msgid "Customize the position, visibility and appearance of this main dock."
@@ -458,11 +447,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:885
 msgid "Delete this dock"
-msgstr ""
+msgstr "Pašalinti šį skydelį"
 
 #: ../src/cairo-dock-menu.c:895
 msgid "Manage themes"
-msgstr "Gestiona temes"
+msgstr "Keisti temas"
 
 #: ../src/cairo-dock-menu.c:900
 msgid ""
@@ -475,19 +464,19 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:917
 msgid "This will (un)lock the position of the icons."
-msgstr "Això (des)blocarà la posició de les icones."
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:923
 msgid "Quick-Hide"
-msgstr "Oculta automàticament"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:928
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "Amagarà la barra fins que hi entris amb el ratolí."
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:941
 msgid "Launch Cairo-Dock on startup"
-msgstr "Executa Cairo-Dock a l'inici"
+msgstr "Įjungti Cairo-Dock paleidžiant sistemą"
 
 #: ../src/cairo-dock-menu.c:957
 msgid ""
@@ -497,7 +486,7 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:960 ../src/help/applet-init.c:28
 #: ../src/help/applet-notifications.c:269
 msgid "Help"
-msgstr "Ajuda"
+msgstr "Pagalba"
 
 #: ../src/cairo-dock-menu.c:965
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
@@ -505,11 +494,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:969
 msgid "About"
-msgstr "Quant a"
+msgstr "Apie"
 
 #: ../src/cairo-dock-menu.c:978
 msgid "Quit"
-msgstr "Surt"
+msgstr "Išjungti Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:987
 msgid ""
@@ -517,6 +506,9 @@ msgid ""
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
+"Jūs naudojatės Cairo-Dock grafine aplinka!\n"
+"Nerekomenduojame išjungti skydelius dabar, bet jūs galite atrakinti šį meniu "
+"punktą paspausdami Shift (Lyg2)."
 
 #: ../src/cairo-dock-menu.c:1013 ../src/cairo-dock-menu.c:1026
 msgid "Launch a new (Shift+clic)"
@@ -524,15 +516,15 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1018 ../src/cairo-dock-menu.c:1080
 msgid "Applet's handbook"
-msgstr "Manual de la miniaplicació"
+msgstr "Įtaiso aprašymas"
 
 #: ../src/cairo-dock-menu.c:1033 ../src/cairo-dock-menu.c:1054
 msgid "Edit"
-msgstr ""
+msgstr "Keisti nustatymus"
 
 #: ../src/cairo-dock-menu.c:1035 ../src/cairo-dock-menu.c:1061
 msgid "Remove"
-msgstr ""
+msgstr "Pašalinti"
 
 #: ../src/cairo-dock-menu.c:1036
 msgid ""
@@ -541,32 +533,32 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1038 ../src/cairo-dock-menu.c:1070
 msgid "Move to another dock"
-msgstr ""
+msgstr "Perkelti į kitą skydelį"
 
 #: ../src/cairo-dock-menu.c:1040 ../src/cairo-dock-menu.c:1072
 #: ../src/gldit/cairo-dock-gui-factory.c:1149
 msgid "New main dock"
-msgstr ""
+msgstr "Naujas atskiras skydelis"
 
 #: ../src/cairo-dock-menu.c:1049
 msgid "Make it a launcher"
-msgstr ""
+msgstr "Įdėti leistuką į skydelį"
 
 #: ../src/cairo-dock-menu.c:1058
 msgid "Detach"
-msgstr ""
+msgstr "Atkabinti"
 
 #: ../src/cairo-dock-menu.c:1058
 msgid "Return to the dock"
-msgstr ""
+msgstr "Sugrąžinti į skydelį"
 
 #: ../src/cairo-dock-menu.c:1065
 msgid "Duplicate"
-msgstr ""
+msgstr "Sukurti kopiją"
 
 #: ../src/cairo-dock-menu.c:1125
 msgid "Pick up an image"
-msgstr ""
+msgstr "Pasirinkite paveikslėlį"
 
 #: ../src/cairo-dock-menu.c:1345
 #, c-format
@@ -581,12 +573,12 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1347
 #, c-format
 msgid "Move all to desktop %d"
-msgstr "Mou-ho tot a l'escriptori %d"
+msgstr "Perkelti visus į darbalaukį %d"
 
 #: ../src/cairo-dock-menu.c:1347
 #, c-format
 msgid "Move to desktop %d"
-msgstr ""
+msgstr "Perkelti į darbalaukį %d"
 
 #: ../src/cairo-dock-menu.c:1349
 #, c-format
@@ -606,7 +598,7 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1871 ../src/cairo-dock-menu.c:1873
 #: ../data/messages:735
 msgid "Close"
-msgstr ""
+msgstr "Užverti"
 
 #: ../src/cairo-dock-menu.c:1796 ../src/cairo-dock-menu.c:1808
 #: ../src/cairo-dock-menu.c:1818 ../src/cairo-dock-menu.c:1856
@@ -614,17 +606,17 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1940 ../src/cairo-dock-menu.c:1950
 #: ../src/help/applet-notifications.c:259
 msgid "middle-click"
-msgstr ""
+msgstr "vidurinis klavišas"
 
 #: ../src/cairo-dock-menu.c:1808 ../src/cairo-dock-menu.c:1810
 #: ../src/cairo-dock-menu.c:1856 ../src/cairo-dock-menu.c:1858
 msgid "Minimise"
-msgstr ""
+msgstr "Sumažinti"
 
 #: ../src/cairo-dock-menu.c:1818 ../src/cairo-dock-menu.c:1820
 #: ../src/cairo-dock-menu.c:1863 ../src/cairo-dock-menu.c:1865
 msgid "Below other windows"
-msgstr ""
+msgstr "Po kitais langais"
 
 #: ../src/cairo-dock-menu.c:1829 ../src/cairo-dock-menu.c:1851
 msgid "Unmaximise"
@@ -632,19 +624,19 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1829 ../src/cairo-dock-menu.c:1851
 msgid "Maximise"
-msgstr ""
+msgstr "Išdidinti"
 
 #: ../src/cairo-dock-menu.c:1839 ../src/cairo-dock-menu.c:1849
 msgid "Show"
-msgstr ""
+msgstr "Parodyti"
 
 #: ../src/cairo-dock-menu.c:1879 ../src/cairo-dock-menu.c:1974
 msgid "Other actions"
-msgstr ""
+msgstr "Kiti veiksmai"
 
 #: ../src/cairo-dock-menu.c:1881
 msgid "Move to this desktop"
-msgstr ""
+msgstr "Perkelti į šį darbalaukį"
 
 #: ../src/cairo-dock-menu.c:1885
 msgid "Not Fullscreen"
@@ -652,7 +644,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1885
 msgid "Fullscreen"
-msgstr ""
+msgstr "Išdidinti visame ekrane"
 
 #: ../src/cairo-dock-menu.c:1889
 msgid "Don't keep above"
@@ -672,7 +664,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1921
 msgid "Kill"
-msgstr ""
+msgstr "Nutraukti darbą"
 
 #: ../src/cairo-dock-menu.c:1936
 msgid "Windows"
@@ -681,16 +673,16 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1940 ../src/cairo-dock-menu.c:1942
 #: ../src/cairo-dock-menu.c:1970
 msgid "Close all"
-msgstr ""
+msgstr "Užverti visus"
 
 #: ../src/cairo-dock-menu.c:1950 ../src/cairo-dock-menu.c:1952
 #: ../src/cairo-dock-menu.c:1968
 msgid "Minimise all"
-msgstr ""
+msgstr "Sumažinti visus"
 
 #: ../src/cairo-dock-menu.c:1960 ../src/cairo-dock-menu.c:1966
 msgid "Show all"
-msgstr ""
+msgstr "Rodyti visus"
 
 #: ../src/cairo-dock-menu.c:1964
 msgid "Windows management"
@@ -698,7 +690,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1976
 msgid "Move all to this desktop"
-msgstr ""
+msgstr "Perkelti visus į šį darbalaukį"
 
 #: ../src/cairo-dock-menu.c:1999 ../data/messages:347
 msgid "Normal"
@@ -707,7 +699,7 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:2005 ../data/messages:413 ../data/messages:579
 #: ../data/messages:1307
 msgid "Always on top"
-msgstr ""
+msgstr "Visada viršuje"
 
 #: ../src/cairo-dock-menu.c:2012
 msgid "Always below"
@@ -719,7 +711,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:2036
 msgid "On all desktops"
-msgstr ""
+msgstr "Visuose darbalaukiuose"
 
 #: ../src/cairo-dock-menu.c:2042
 msgid "Lock position"
@@ -734,11 +726,11 @@ msgstr ""
 
 #: ../src/cairo-dock-widget-config.c:325
 msgid "Animation:"
-msgstr "Animació:"
+msgstr "Animacija:"
 
 #: ../src/cairo-dock-widget-config.c:346
 msgid "Effects:"
-msgstr "Efectes:"
+msgstr "Efektai:"
 
 #: ../src/cairo-dock-widget-items.c:238
 msgid ""
@@ -747,11 +739,11 @@ msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:732
 msgid "Remove this item"
-msgstr "Esborrar l'item"
+msgstr "Pašalinti šį elementą"
 
 #: ../src/cairo-dock-widget-plugins.c:104
 msgid "Configure this applet"
-msgstr "Configurar aquesta mini-aplicació"
+msgstr "Keisti šio įtaiso nustatymus"
 
 #: ../src/cairo-dock-widget-plugins.c:157
 msgid "Accessory"
@@ -759,11 +751,11 @@ msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:233
 msgid "Plug-in"
-msgstr ""
+msgstr "Įtaisas"
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
-msgstr ""
+msgstr "Kategorija"
 
 #: ../src/cairo-dock-widget-plugins.c:263
 msgid ""
@@ -772,11 +764,11 @@ msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
 msgid "Press the shortkey"
-msgstr "Pulsar Tecla Curta"
+msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:140
 msgid "Change the shortkey"
-msgstr "Cambiar tecla curta"
+msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:227
 msgid "Origin"
@@ -784,15 +776,15 @@ msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:232
 msgid "Action"
-msgstr "Acciò"
+msgstr "Veiksmas"
 
 #: ../src/cairo-dock-widget-shortkeys.c:236
 msgid "Shortkey"
-msgstr "Tecla Curta"
+msgstr "Klav. kombinacija"
 
 #: ../src/cairo-dock-widget-themes.c:86
 msgid "Could not import the theme."
-msgstr "No s'hi pot importar el tema."
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:186
 msgid ""
@@ -800,12 +792,10 @@ msgid ""
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
-"Heu fet canvis en el tema actual.\n"
-"Si no els deseu els perdreu al triar un tema nou. Voleu continuar tot i això?"
 
 #: ../src/cairo-dock-widget-themes.c:213
 msgid "Please wait while importing the theme..."
-msgstr "Esperi mentre s'importa el tema..."
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:272
 msgid "Rate me"
@@ -813,15 +803,15 @@ msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:372 ../src/cairo-dock-widget-themes.c:374
 msgid "You must try the theme before you can rate it."
-msgstr "Per poder valorar el tema, l'has d'haver provat."
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:421
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "Tema buvo ištrinta"
 
 #: ../src/cairo-dock-widget-themes.c:451
 msgid "Delete this theme"
-msgstr ""
+msgstr "Ištrinti šią temą"
 
 #: ../src/cairo-dock-widget-themes.c:482
 #: ../src/gldit/cairo-dock-gui-factory.c:2445
@@ -831,32 +821,32 @@ msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:505
 msgid "Theme"
-msgstr "tema"
+msgstr "Tema"
 
 #: ../src/cairo-dock-widget-themes.c:518
 msgid "Rating"
-msgstr "valoració"
+msgstr "Įvertinimas"
 
 #: ../src/cairo-dock-widget-themes.c:524
 msgid "Sobriety"
-msgstr "sobrietat"
+msgstr "Saikingumas"
 
 #: ../src/cairo-dock-widget-themes.c:584
 msgid "Save as:"
-msgstr "Anomena i desa:"
+msgstr "Įrašyti kaip:"
 
 #: ../src/cairo-dock-widget-themes.c:664
 msgid "Importing theme ..."
-msgstr ""
+msgstr "Importuojama tema..."
 
 #: ../src/cairo-dock-widget-themes.c:672
 msgid "Theme has been saved"
-msgstr "El tema s'ha salvat"
+msgstr "Tema įrašyta"
 
 #: ../src/cairo-dock.c:136
 #, c-format
 msgid "Happy new year %d !!!"
-msgstr ""
+msgstr "Laimingų Naujųjų metų (%d) !!!"
 
 #: ../src/cairo-dock.c:311
 msgid "Use Cairo backend."
@@ -966,7 +956,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:495
 msgid "Use OpenGL in Cairo-Dock"
-msgstr "Utilitzar OpenGL a Cairo-Dock ?"
+msgstr "Naudoti OpenGL Cairo-Dock skydeliams"
 
 #: ../src/cairo-dock.c:503
 msgid ""
@@ -979,19 +969,20 @@ msgid ""
 " (To not show this dialog, launch the dock from the Application menu,\n"
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
-"OpenGL et permet utilitzar l'acceleració per maquinari, reduïnt al mínim "
-"l'ús de la CPU.\n"
-"També permet utilitzar bonics efectes visuals semblants als de Compiz.\n"
-"Tanmateix, algunes targes i/o els seus controladors no el suporten "
-"completament, cosa que pot prevenir una execució correcta de a barra.\n"
-"Vols activar OpenGL?\n"
-" (Per no mostrar aquest quadre de diàleg, executa la barra des del menú "
-"d'Aplicacions.\n"
-"  o amb la opció -o per forçar l'ús d'OpenGL i -c per forçar l'ús de cairo.)"
+"OpenGL technologija leidžia programai naudoti aparatinį vaizdo spartinimą ir "
+"ženkliai sumažina procesoriaus apkrovimą.\n"
+"Taip pat tai leidžia naudoti šaunius vaizdo efektus.\n"
+"Kita vertus, kai kurios vaizdo plokštės ir/arba vaizdo valdyklės nepilnai "
+"palaiko OpenGL, todėl skydeliai gali veikti nekorektiškai.\n"
+"Ar jūs norite aktyvuoti OpenGL technologiją?\n"
+" (Jei nenorite matyti šio perspėjimo - paleiskite Cairo-Dock iš Programų "
+"meniu,\n"
+"  arba naudokit -o parametrą OpenGL įjungimui ar -c parametrą OpenGL "
+"išjungimui.)"
 
 #: ../src/cairo-dock.c:514
 msgid "Remember this choice"
-msgstr ""
+msgstr "Atsiminti dabartinį pasirinkimą"
 
 #: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
 #, c-format
@@ -1004,7 +995,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:685
 msgid "< Maintenance mode >"
-msgstr "< Mode de manteniment >"
+msgstr ""
 
 #: ../src/cairo-dock.c:687
 msgid "Something went wrong with this applet:"
@@ -1029,9 +1020,6 @@ msgid ""
 "It has been restored successfully, but if it happens again, please report it "
 "at http://glx-dock.org"
 msgstr ""
-"Potser el mòdul '%s' ha trobat algun problema.\n"
-"Ha esta restaurat amb èxit, però si torna a passar, informeu-nos-en al web "
-"http://glx-dock.org"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:277
 msgid ""
@@ -1039,9 +1027,6 @@ msgid ""
 " You can change this by opening the configuration of this module. Do you "
 "want to do it now?"
 msgstr ""
-"no s'ha pogut trobar el tema; en el seu lloc s'utilitzarà el tema per "
-"defecte.\n"
-" Pots canviar això obrint la configuració d'aquest mòdul; vols fer-ho ara?"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:293
 msgid ""
@@ -1052,27 +1037,27 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-callbacks.c:1519
 msgid "Sorry but the dock is locked"
-msgstr ""
+msgstr "Atsiprašome, bet skydelis yra užrakintas"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:899
 msgid "_custom decoration_"
-msgstr "_decoració personalitzada_"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-dock-manager.c:354
 msgid "Bottom dock"
-msgstr "Dock inferior"
+msgstr "Apatinis skydelis"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:356
 msgid "Top dock"
-msgstr "Dock superior"
+msgstr "Viršutinis skydelis"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:361
 msgid "Right dock"
-msgstr "Dock dret"
+msgstr "Dešinysis skydelis"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:363
 msgid "Left dock"
-msgstr "Dock esquerra"
+msgstr "Kairysis skydelis"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1654
 #: ../src/gldit/cairo-dock-dock-manager.c:1755
@@ -1098,7 +1083,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:272
 msgid "User"
-msgstr ""
+msgstr "Naudotojas"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:273
 msgid "Net"
@@ -1106,23 +1091,23 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:274
 msgid "New"
-msgstr ""
+msgstr "Naujas"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:275
 msgid "Updated"
-msgstr ""
+msgstr "Atnaujintas"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:754
 msgid "Pick up a file"
-msgstr ""
+msgstr "Pasirinkite failą"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:754
 msgid "Pick up a directory"
-msgstr ""
+msgstr "Pasirinkite aplanką"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1028
 msgid "_Custom Icons_"
-msgstr "_Icones Personalitzades_"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1417
 #, c-format
@@ -1131,9 +1116,6 @@ msgid ""
 "Be sure to install it with the same version as the dock to enjoy these "
 "features."
 msgstr ""
-"No s'ha pogut trobar el mòdul '%s'.\n"
-"Assegura't que l'instal·les a la mateixa versió que la barra per disposar "
-"d'aquestes característiques."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1426
 #, c-format
@@ -1141,8 +1123,6 @@ msgid ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 msgstr ""
-"El connector '%s' està desactivat.‎\n"
-"Voleu activar-lo?"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3092
 msgid "link"
@@ -1150,7 +1130,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3145
 msgid "Grab"
-msgstr "agafa"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-module-factory.c:861
 msgid "by"
@@ -1223,13 +1203,6 @@ msgid ""
 "option is in the 'System' module of the configuration, at the bottom of the "
 "page."
 msgstr ""
-"Per eliminar el rectangle negre al voltant del Dock, cal que activeu un "
-"gestor de composició.\n"
-"Per exemple, podeu fer-ho activant els Efectes d'escriptori, executant el "
-"Compiz, o bé activant la composició en el Metacity.\n"
-"Si el vostre ordinador no ofereix composició, Cairo-Dock pot emular-ho. "
-"Aquesta opció està en el mòdul de configuració del 'Sistema', al peu de la "
-"pàgina."
 
 #: ../src/help/applet-init.c:31
 msgid ""
@@ -1250,7 +1223,7 @@ msgstr ""
 
 #: ../src/help/applet-notifications.c:266
 msgid "Disable the gnome-panel"
-msgstr ""
+msgstr "Išjungti gnome-panel skydelį"
 
 #: ../src/help/applet-notifications.c:268
 msgid "Disable Unity"
@@ -1258,44 +1231,44 @@ msgstr ""
 
 #: ../src/help/applet-notifications.c:270
 msgid "Online help"
-msgstr ""
+msgstr "Pagalba internete"
 
 #: ../src/help/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "Patarimai ir gudrybės"
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:119
 msgid "Enter a command"
-msgstr ""
+msgstr "Įrašykite komandą"
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:120
 msgid "New launcher"
-msgstr ""
+msgstr "Naujas leistukas"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:431
 #: ../data/messages:597
 msgid "Move down"
-msgstr "Mou avall"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:604 ../data/messages:433
 #: ../data/messages:489 ../data/messages:599
 msgid "Fade out"
-msgstr "Fosa"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:612 ../data/messages:435
 #: ../data/messages:601
 msgid "Semi transparent"
-msgstr "Semitransparent"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:621 ../data/messages:437
 #: ../data/messages:603
 msgid "Zoom out"
-msgstr "Allunya"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:629 ../data/messages:439
 #: ../data/messages:605
 msgid "Folding"
-msgstr "Plegable"
+msgstr ""
 
 #: ../data/messages:1
 msgid "General"
@@ -1303,7 +1276,7 @@ msgstr ""
 
 #: ../data/messages:3
 msgid "Using the dock"
-msgstr ""
+msgstr "Skydelio naudojimas"
 
 #: ../data/messages:5
 msgid ""
@@ -1343,7 +1316,7 @@ msgstr ""
 
 #: ../data/messages:17
 msgid "Removing a launcher"
-msgstr ""
+msgstr "Leistuko pašalinimas"
 
 #: ../data/messages:19
 msgid ""
@@ -1425,7 +1398,7 @@ msgstr ""
 
 #: ../data/messages:43
 msgid "Using the dock as a taskbar"
-msgstr ""
+msgstr "Skydelio naudojimas veikiančių programų valdymui"
 
 #: ../data/messages:45
 msgid ""
@@ -1519,7 +1492,7 @@ msgstr ""
 
 #: ../data/messages:79
 msgid "Docks"
-msgstr ""
+msgstr "Skydeliai"
 
 #: ../data/messages:81
 msgid "Positionning the dock on the screen"
@@ -1717,7 +1690,7 @@ msgstr ""
 
 #: ../data/messages:145
 msgid "Importing a folder into the dock"
-msgstr ""
+msgstr "Aplanko importavimas į skydelį"
 
 #: ../data/messages:147
 msgid ""
@@ -2025,7 +1998,7 @@ msgstr ""
 
 #: ../data/messages:255
 msgid "Documentation"
-msgstr ""
+msgstr "Dokumentacija"
 
 #: ../data/messages:257
 msgid ""
@@ -2044,10 +2017,13 @@ msgid ""
 "\n"
 "The Cairo-Dock Team"
 msgstr ""
+"\n"
+"\n"
+"Cairo-Dock kūrėjų komanda"
 
 #: ../data/messages:263
 msgid "Websites"
-msgstr ""
+msgstr "Internetinės svetainės"
 
 #: ../data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
@@ -2055,7 +2031,7 @@ msgstr ""
 
 #: ../data/messages:267
 msgid "Community site"
-msgstr ""
+msgstr "Bendruomenės puslapis"
 
 #: ../data/messages:273
 msgid "More applets available online!"
@@ -2067,7 +2043,7 @@ msgstr ""
 
 #: ../data/messages:277
 msgid "Repositories"
-msgstr ""
+msgstr "Saugyklos"
 
 #: ../data/messages:279
 msgid ""
@@ -2139,7 +2115,7 @@ msgstr ""
 
 #: ../data/messages:313
 msgid "Image filename:"
-msgstr ""
+msgstr "Paveikslėlio failo pavadinimas:"
 
 #: ../data/messages:315
 msgid "Set to 0 to use the default applet size"
@@ -2195,7 +2171,7 @@ msgstr ""
 
 #: ../data/messages:341
 msgid "Is detached from the dock"
-msgstr ""
+msgstr "Atkabintas nuo skydelio"
 
 #: ../data/messages:343
 msgid ""
@@ -2206,7 +2182,7 @@ msgstr ""
 #: ../data/messages:345 ../data/messages:411 ../data/messages:449
 #: ../data/messages:577 ../data/messages:643 ../data/messages:1305
 msgid "Visibility:"
-msgstr "Visibilitat:"
+msgstr "Matomumas:"
 
 #: ../data/messages:351
 msgid "Keep below"
@@ -2218,7 +2194,7 @@ msgstr ""
 
 #: ../data/messages:357
 msgid "Should be visible on all desktops?"
-msgstr ""
+msgstr "Rodyti visuose darbalaukiuose?"
 
 #: ../data/messages:359 ../data/messages:981
 msgid "Decorations"
@@ -2239,11 +2215,11 @@ msgstr ""
 
 #: ../data/messages:367
 msgid "Background image:"
-msgstr ""
+msgstr "Fono paveikslas:"
 
 #: ../data/messages:369
 msgid "Background transparency:"
-msgstr ""
+msgstr "Fono permatomumas:"
 
 #: ../data/messages:371
 msgid "in pixels. Use this to adjust the left position of drawings."
@@ -2293,37 +2269,37 @@ msgstr ""
 
 #: ../data/messages:393 ../data/messages:1269
 msgid "Behavior"
-msgstr "Comportament"
+msgstr "Elgsena"
 
 #: ../data/messages:395 ../data/messages:531 ../data/messages:1271
 msgid "Position on the screen"
-msgstr "Posició a la pantalla"
+msgstr "Padėtis ekrane"
 
 #: ../data/messages:397 ../data/messages:533 ../data/messages:1273
 msgid "Choose which border of the screen the dock will be placed on:"
-msgstr "Trieu quin contorn de superfície del Dock voleu col·locar a:"
+msgstr ""
 
 #: ../data/messages:399 ../data/messages:535 ../data/messages:1275
 msgid "bottom"
-msgstr "baix"
+msgstr "apačioje"
 
 #: ../data/messages:401 ../data/messages:537 ../data/messages:1277
 msgid "top"
-msgstr "dalt"
+msgstr "viršuje"
 
 #: ../data/messages:403 ../data/messages:539 ../data/messages:549
 #: ../data/messages:1279
 msgid "right"
-msgstr "dreta"
+msgstr "dešinėje"
 
 #: ../data/messages:405 ../data/messages:541 ../data/messages:547
 #: ../data/messages:1281
 msgid "left"
-msgstr "esquerra"
+msgstr "kairėje"
 
 #: ../data/messages:407 ../data/messages:573
 msgid "Visibility of the main dock"
-msgstr "Visibilitat del Dock principal"
+msgstr "Pagrindinio skydelio rodymas"
 
 #: ../data/messages:409 ../data/messages:575 ../data/messages:1303
 msgid ""
@@ -2336,35 +2312,35 @@ msgstr ""
 
 #: ../data/messages:415 ../data/messages:581 ../data/messages:1309
 msgid "Reserve space for the dock"
-msgstr ""
+msgstr "Rezervuoti vietą skydeliui ekrane"
 
 #: ../data/messages:417 ../data/messages:583 ../data/messages:1311
 msgid "Keep the dock below"
-msgstr ""
+msgstr "Rodyti skydelį žemiau kitų langų"
 
 #: ../data/messages:419 ../data/messages:585 ../data/messages:1313
 msgid "Hide the dock when it overlaps the current window"
-msgstr "Amaga el Dock quan tingui la finestra activa per sobre"
+msgstr "Slėpti skydelį jei jis persidengia su aktyviu langu"
 
 #: ../data/messages:421 ../data/messages:587 ../data/messages:1315
 msgid "Hide the dock whenever it overlaps any window"
-msgstr ""
+msgstr "Slėpti skydelį jei jis persidengia su bet kuriuo langu"
 
 #: ../data/messages:423 ../data/messages:589 ../data/messages:1317
 msgid "Keep the dock hidden"
-msgstr ""
+msgstr "Paslėptas skydelis (rodomas užvedus pelės kursorių)"
 
 #: ../data/messages:425 ../data/messages:591
 msgid "Pop-up on shortcut"
-msgstr "Emergents sobre les dreceres"
+msgstr ""
 
 #: ../data/messages:427 ../data/messages:593
 msgid "Effect used to hide the dock:"
-msgstr "Efecte per amagar el Dock:"
+msgstr "Vaizdo efektas, rodomas paslepiant skydelį"
 
 #: ../data/messages:429 ../data/messages:461 ../data/messages:595
 msgid "None"
-msgstr "Cap"
+msgstr ""
 
 #: ../data/messages:441 ../data/messages:629
 msgid ""
@@ -2375,25 +2351,25 @@ msgstr ""
 
 #: ../data/messages:443 ../data/messages:631
 msgid "Keyboard shortcut to pop-up the dock:"
-msgstr "Drecera de teclat per emergir el Dock:"
+msgstr "Skydelio parodymui skirta klavišų kombinacija"
 
 #: ../data/messages:445
 msgid "Visibility of sub-docks"
-msgstr "Visibilitat dels sub-docks"
+msgstr ""
 
 #: ../data/messages:447 ../data/messages:641
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "apareixeran quan feu clic o quan us atureu sobre una icona."
+msgstr ""
 
 #: ../data/messages:451 ../data/messages:645
 msgid "Appear on mouse over"
-msgstr "Apareix al passar el ratolí per sobre"
+msgstr ""
 
 #: ../data/messages:453 ../data/messages:647
 msgid "Appear on click"
-msgstr "Apareix al clicar"
+msgstr "Parodomi paspaudus"
 
 #: ../data/messages:457
 msgid ""
@@ -2408,7 +2384,7 @@ msgstr ""
 
 #: ../data/messages:459
 msgid "Behaviour of the Taskbar:"
-msgstr "Comportament del la barra de tasques:"
+msgstr "Programų juostos elgsena:"
 
 #: ../data/messages:463
 msgid "Minimalistic"
@@ -2428,31 +2404,31 @@ msgstr ""
 
 #: ../data/messages:471 ../data/messages:675
 msgid "At the beginning of the dock"
-msgstr ""
+msgstr "Skydelio pradžioje"
 
 #: ../data/messages:473 ../data/messages:677
 msgid "Before the launchers"
-msgstr ""
+msgstr "Prieš įdėtus leistukus"
 
 #: ../data/messages:475 ../data/messages:679
 msgid "After the launchers"
-msgstr ""
+msgstr "Po įdėtų leistukų"
 
 #: ../data/messages:477 ../data/messages:681
 msgid "At the end of the dock"
-msgstr ""
+msgstr "Skydelio gale"
 
 #: ../data/messages:479
 msgid "Icons' animations and effects"
-msgstr "Animacions i efectes de les icones"
+msgstr ""
 
 #: ../data/messages:481
 msgid "On mouse hover:"
-msgstr "Al passar per sobre el ratolí:"
+msgstr ""
 
 #: ../data/messages:483
 msgid "On click:"
-msgstr "Al clicar:"
+msgstr "Paspaudus:"
 
 #: ../data/messages:485
 msgid "On appearance/disappearance:"
@@ -2476,47 +2452,47 @@ msgstr ""
 
 #: ../data/messages:497
 msgid "Random"
-msgstr ""
+msgstr "Atsitiktinis"
 
 #: ../data/messages:503
 msgid "Choose a theme of icons :"
-msgstr "Trieu un tema d'icones:"
+msgstr ""
 
 #: ../data/messages:505 ../data/messages:1323
 msgid "Icons size:"
-msgstr "Mida de les icones:"
+msgstr ""
 
 #: ../data/messages:507 ../data/messages:1329
 msgid "Very small"
-msgstr "Molt petites"
+msgstr "Labai mažos"
 
 #: ../data/messages:509 ../data/messages:1331
 msgid "Small"
-msgstr "Petites"
+msgstr "Mažos"
 
 #: ../data/messages:511 ../data/messages:1333
 msgid "Medium"
-msgstr "Mitjanes"
+msgstr "Vidutinės"
 
 #: ../data/messages:513 ../data/messages:1335
 msgid "Big"
-msgstr "Grans"
+msgstr "Didelės"
 
 #: ../data/messages:515 ../data/messages:1337
 msgid "Very Big"
-msgstr "Molt grans"
+msgstr "Labai didelės"
 
 #: ../data/messages:519 ../data/messages:927
 msgid "Choose the default view for main docks :"
-msgstr "Trieu la vista per defecte del Dock principal :"
+msgstr "Pasirinkite įprastą pagrindinių skydelių išvaizdą:"
 
 #: ../data/messages:521 ../data/messages:931
 msgid "You can overwrite this parameter for each sub-dock."
-msgstr "Podeu sobreescriure aquesst paràmetre per a cada sub-dock."
+msgstr ""
 
 #: ../data/messages:523 ../data/messages:933
 msgid "Choose the default view for sub-docks :"
-msgstr "Trieu la vista per defecte dels sub-docks :"
+msgstr ""
 
 #: ../data/messages:527
 msgid ""
@@ -2534,48 +2510,38 @@ msgid ""
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
 msgstr ""
-"Si s'estableix en 0 el Dock s'ubicarà en relació a la cantonada esquerra si "
-"és horitzontal, o a la cantonada superior si és vertical. Si s'estableix en "
-"1 s'ubicarà en relació a la cantonada dreta si és horitzontal, o a la "
-"cantonada inferior si és vertical. Si s'estableix en 0.5 s'ubicarà en "
-"relació al centre dels marges de la pantalla."
 
 #: ../data/messages:545 ../data/messages:1285
 msgid "Relative alignment:"
-msgstr "Alineació relativa:"
+msgstr ""
 
 #: ../data/messages:551 ../data/messages:1287
 msgid "Offset from the screen's edge"
-msgstr "Desplaçament des de la vora de la pantalla"
+msgstr ""
 
 #: ../data/messages:553 ../data/messages:1289
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 msgstr ""
-"Espai entre la posició absoluta al marge de la pantalla, en píxels. Podeu "
-"també moure el Dock amb el botó esquerra del ratolí mentre manteniu premudes "
-"les tecles ALT i CTRL."
 
 #: ../data/messages:555 ../data/messages:1291
 msgid "Lateral offset:"
-msgstr "Desplaçament lateral:"
+msgstr ""
 
 #: ../data/messages:557 ../data/messages:1293
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
 msgstr ""
-"en píxels. Podeu també moure el Dock amb el botó esquerra del ratolí mentre "
-"manteniu premudes les tecles ALT i CTRL."
 
 #: ../data/messages:559 ../data/messages:1295
 msgid "Distance to the screen edge:"
-msgstr "Distància dels marges de la superfície:"
+msgstr ""
 
 #: ../data/messages:561
 msgid "Multiple screens"
-msgstr "Pantalla múltiple"
+msgstr ""
 
 #: ../data/messages:563
 msgid ""
@@ -2589,15 +2555,15 @@ msgstr ""
 
 #: ../data/messages:567
 msgid "0 is the first screen."
-msgstr "0 si és la primera pantalla."
+msgstr ""
 
 #: ../data/messages:569 ../data/messages:1299
 msgid "Number of the screen where the dock should be located:"
-msgstr "Número de la pantalla on voleu situar el Dock:"
+msgstr ""
 
 #: ../data/messages:571
 msgid "Accessibility"
-msgstr "Accessibilitat"
+msgstr "Pritaikymas neįgaliesiems"
 
 #: ../data/messages:607
 msgid "The higher, the faster the dock will appear"
@@ -2645,52 +2611,49 @@ msgstr ""
 
 #: ../data/messages:633
 msgid "Additional parameters"
-msgstr "Paràmetres adicionals"
+msgstr "Papildomi parametrai"
 
 #: ../data/messages:635
 msgid ""
 "This is only usefull if you do not already use auto-hide and if your Window "
 "Manager allows the dock in front of fullscreen windows (which is rare)."
 msgstr ""
-"Això només us caldrà si no utilitzeu l'Auto-amaga i si el gestor de "
-"finestres permet al Dock estar davant de les finestres a pantalla complerta "
-"(cosa molt estranya)."
 
 #: ../data/messages:637
 msgid "Automatically hide the dock when a window becomes full screen?"
-msgstr "Voleu amagar automàticament el Dock quan es maximitzi una finestra?"
+msgstr ""
+"Paslėpti skydelį automatiškai, kai paleidžiama visą ekraną naudojanti "
+"programa?"
 
 #: ../data/messages:639
 msgid "Sub-docks' visibility"
-msgstr "Visibilitat dels sub-docs"
+msgstr ""
 
 #: ../data/messages:649 ../data/messages:653
 msgid "in ms."
-msgstr "en ms."
+msgstr ""
 
 #: ../data/messages:651
 msgid "Delay before displaying a sub-dock:"
-msgstr "Retard abans de mostrar un sub-dock:"
+msgstr ""
 
 #: ../data/messages:655
 msgid "Delay before leaving a sub-dock takes effect:"
-msgstr "Retard després de sortir d'un sub-dock:"
+msgstr ""
 
 #: ../data/messages:657
 msgid "TaskBar"
-msgstr "Barra de tasques"
+msgstr "Programų juosta"
 
 #: ../data/messages:661
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
 msgstr ""
-"Cairo-Dock farà la tasca de la barra d'eines. Per tant, recomanem eliminar "
-"qualsevol altra barra de tasques."
 
 #: ../data/messages:663
 msgid "Show currently opened applications in the dock?"
-msgstr "Voleu mostrar en el Dock les aplicacions obertes?"
+msgstr "Rodyti dabar atvertas programas skydelyje?"
 
 #: ../data/messages:665
 msgid ""
@@ -2698,21 +2661,18 @@ msgid ""
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 msgstr ""
-"Quan el programa del llançador estigui actiu mostra un indicador en la "
-"icona. Si voleu tenir actius dos o més programes iguals podeu fer-ho clicant "
-"la icona mentre manteniu premuda la tecla Majúscules (shift)."
 
 #: ../data/messages:667
 msgid "Mix launchers and applications"
-msgstr "Mescla llançadors i aplicacions"
+msgstr ""
 
 #: ../data/messages:669
 msgid "Only show applications on current desktop"
-msgstr "Mostra només les aplicacions del escriptori actual"
+msgstr ""
 
 #: ../data/messages:671
 msgid "Only show icons whose windows are minimised"
-msgstr "Mostra només les icones de finestres minimitzades"
+msgstr ""
 
 #: ../data/messages:683
 msgid "After a given icon"
@@ -2731,26 +2691,22 @@ msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
 msgstr ""
-"Això us permet agrupar totes les finestres d'una aplicació en un sol sub-"
-"dock, i actuar en totes les finestres al mateix temps."
 
 #: ../data/messages:691
 msgid "Group windows from the same application in a sub-dock ?"
 msgstr ""
-"Voleu agrupar en un sol sub-dock les finestres d'una mateixa aplicació?"
 
 #: ../data/messages:693 ../data/messages:703
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
 msgstr ""
-"Introduïu la classe de les aplicacions, separada per un punt i coma ';'"
 
 #: ../data/messages:695 ../data/messages:705
 msgid "\t\tExcept the following classes:"
-msgstr "\t\tExcepte les classes següents:"
+msgstr ""
 
 #: ../data/messages:697
 msgid "Representation"
-msgstr "Representació"
+msgstr ""
 
 #: ../data/messages:699
 msgid ""
@@ -2758,67 +2714,62 @@ msgid ""
 "set, the same icon as the corresponding launcher will be used for each "
 "application."
 msgstr ""
-"Si no es defineix, s'usarà les icones proporcionades per X per a cada "
-"aplicació. Si es defineix, s'usarà per a cada llançador la mateixa icona de "
-"l'aplicació."
 
 #: ../data/messages:701
 msgid "Overwrite the X icon with the launchers' icon?"
-msgstr "Voleu sobreescriure la icona X per les icones dels llançadors?"
+msgstr ""
 
 #: ../data/messages:707
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
-"Cal un gestor de composició per mostrar les miniatures.\n"
-"Cal l'OpenGL per dibuixar la inclinació cap a enrere de les icones."
 
 #: ../data/messages:709
 msgid "How to draw minimised windows ?"
-msgstr "Com s'han de dibuixar les finestres minimitzades?"
+msgstr ""
 
 #: ../data/messages:711
 msgid "Make the icon transparent"
-msgstr "Fes les icones transparents"
+msgstr ""
 
 #: ../data/messages:713
 msgid "Show a window's thumbnail"
-msgstr "Mostra una miniatura de la finestra"
+msgstr ""
 
 #: ../data/messages:715
 msgid "Draw it bent backwards"
-msgstr "Dibuixa-la inclinada endarrere"
+msgstr ""
 
 #: ../data/messages:717
 msgid "Transparency of icons whose window is minimised:"
-msgstr "Transparència de les icones de finestres minimitzades:"
+msgstr ""
 
 #: ../data/messages:719 ../data/messages:875 ../data/messages:995
 #: ../data/messages:1021 ../data/messages:1119
 msgid "Opaque"
-msgstr "Opac"
+msgstr ""
 
 #: ../data/messages:721 ../data/messages:873 ../data/messages:993
 #: ../data/messages:1019 ../data/messages:1117
 msgid "Transparent"
-msgstr "Transparent"
+msgstr ""
 
 #: ../data/messages:723
 msgid "Play a short animation of the icon when its window becomes active"
-msgstr "Anima les icones quan s'activin les finestres."
+msgstr ""
 
 #: ../data/messages:725
 msgid "\"...\" will be added at the end if the name is too long."
-msgstr "S'afegirà \"...\" al final del nom és massa llarg."
+msgstr ""
 
 #: ../data/messages:727
 msgid "Maximum number of caracters in application name:"
-msgstr "Número màxim de caràcters per els noms de les aplicacions:"
+msgstr ""
 
 #: ../data/messages:729
 msgid "Interaction"
-msgstr "Interacció"
+msgstr ""
 
 #: ../data/messages:731
 msgid "Action on middle-click on the related application"
@@ -2842,15 +2793,13 @@ msgstr ""
 
 #: ../data/messages:743
 msgid "This is the default behaviour of most taskbars."
-msgstr "Comportament per defecte de la majoria de barra de tasques."
+msgstr ""
 
 #: ../data/messages:745
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
 msgstr ""
-"Voleu minimitza la finestra quan es cliqui la icona, si és la finestra "
-"activa?"
 
 #: ../data/messages:747
 msgid "Only if your Window Manager supports it."
@@ -2863,15 +2812,15 @@ msgstr ""
 
 #: ../data/messages:751
 msgid "Highlight applications requiring your attention with a dialog bubble"
-msgstr "Ressalta les aplicacions que reclamin atenció mitjançant un diàleg."
+msgstr ""
 
 #: ../data/messages:753
 msgid "in seconds"
-msgstr "en segons"
+msgstr ""
 
 #: ../data/messages:755
 msgid "Duration of the dialog:"
-msgstr "Durada dels diàlegs:"
+msgstr ""
 
 #: ../data/messages:757
 msgid ""
@@ -2908,16 +2857,16 @@ msgstr ""
 #: ../data/messages:773 ../data/messages:781 ../data/messages:785
 #: ../data/messages:793 ../data/messages:797
 msgid "fast"
-msgstr "ràpid"
+msgstr ""
 
 #: ../data/messages:775 ../data/messages:783 ../data/messages:787
 #: ../data/messages:795 ../data/messages:799
 msgid "slow"
-msgstr "lent"
+msgstr ""
 
 #: ../data/messages:777 ../data/messages:789
 msgid "The more there are, the slower it will be"
-msgstr "Com major sigui, més lent anirà"
+msgstr ""
 
 #: ../data/messages:779
 msgid "Number of steps in the zoom animation (grow/shrink):"
@@ -2929,7 +2878,7 @@ msgstr ""
 
 #: ../data/messages:801
 msgid "Refresh rate"
-msgstr ""
+msgstr "Atnaujinimo dažnis"
 
 #: ../data/messages:803 ../data/messages:807 ../data/messages:811
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
@@ -3028,11 +2977,11 @@ msgstr ""
 
 #: ../data/messages:849
 msgid "User :"
-msgstr ""
+msgstr "Naudotojas:"
 
 #: ../data/messages:853
 msgid "Password :"
-msgstr ""
+msgstr "Slaptažodis:"
 
 #: ../data/messages:857 ../data/messages:1347
 msgid "Fill the background with:"
@@ -3041,7 +2990,7 @@ msgstr ""
 #: ../data/messages:859 ../data/messages:865 ../data/messages:1133
 #: ../data/messages:1351
 msgid "Image"
-msgstr ""
+msgstr "Paveikslas"
 
 #: ../data/messages:861 ../data/messages:881 ../data/messages:1353
 msgid "Colour gradation"
@@ -3049,7 +2998,7 @@ msgstr ""
 
 #: ../data/messages:863
 msgid "Use a background image."
-msgstr ""
+msgstr "Naudoti fono paveikslą."
 
 #: ../data/messages:867 ../data/messages:1355
 msgid ""
@@ -3107,15 +3056,15 @@ msgstr ""
 
 #: ../data/messages:899
 msgid "Several applets can be visible even when the dock is hidden"
-msgstr ""
+msgstr "Kai kurie įtaisai gali būti matomi net kai skydelis paslėptas"
 
 #: ../data/messages:901
 msgid "Default background color when the dock is hidden"
-msgstr ""
+msgstr "Įprasta fono spalva kai skydelis yra paslėptas"
 
 #: ../data/messages:903 ../data/messages:1365
 msgid "Stretch the dock to always fill the screen"
-msgstr "Eixampla sempre el Dock fins abastar la pantalla"
+msgstr ""
 
 #: ../data/messages:905
 msgid "External Frame"
@@ -3148,7 +3097,7 @@ msgstr ""
 
 #: ../data/messages:925
 msgid "Main Dock"
-msgstr ""
+msgstr "Pagrindinis skydelis"
 
 #: ../data/messages:929
 msgid "Sub-Docks"
@@ -3174,7 +3123,7 @@ msgstr ""
 
 #: ../data/messages:943
 msgid "Dialogs"
-msgstr "Diàlegs"
+msgstr ""
 
 #: ../data/messages:945
 msgid "Bubble"
@@ -3545,8 +3494,6 @@ msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
 msgstr ""
-"Es dibuixa un indicador en els llançadors actius, però potser també voleu "
-"mostrar-lo a les aplicacions"
 
 #: ../data/messages:1159
 msgid "Display an indicator on application icons too ?"
@@ -3599,7 +3546,7 @@ msgstr ""
 
 #: ../data/messages:1179
 msgid "Rotate the indicator with dock?"
-msgstr ""
+msgstr "Pasukti indikatorių kartu su skydeliu?"
 
 #: ../data/messages:1183
 msgid "Indicator of grouped windows"
@@ -3765,11 +3712,11 @@ msgstr ""
 
 #: ../data/messages:1297
 msgid "starting from 0"
-msgstr "començant de 0"
+msgstr ""
 
 #: ../data/messages:1301
 msgid "Visibility of the dock"
-msgstr ""
+msgstr "Skydelio rodymas"
 
 #: ../data/messages:1325 ../data/messages:1349
 msgid "Same as main dock"
@@ -3781,11 +3728,11 @@ msgstr ""
 
 #: ../data/messages:1341
 msgid "Leave it empty to use the same view as the main dock."
-msgstr "Deixeu-ho buit per usar la mateixa vista que el Dock principal."
+msgstr ""
 
 #: ../data/messages:1343
 msgid "Choose the view for this dock :/"
-msgstr "Tria la vista per aquest Dock:/"
+msgstr "Pasirinkite šio skydelio išvaizdą :"
 
 #: ../data/messages:1367
 msgid "Load theme"
@@ -3793,11 +3740,11 @@ msgstr ""
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
-msgstr "També podeu enganxar una URL d'Internet."
+msgstr ""
 
 #: ../data/messages:1371
 msgid "...or drag and drop a theme package here :"
-msgstr "...o bé arrossegar cap aquí un paquet de tema:"
+msgstr ""
 
 #: ../data/messages:1373
 msgid "Theme loading options"
@@ -3809,42 +3756,36 @@ msgid ""
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
 msgstr ""
-"Si marqueu aquesta casella, s'eliminaran els llançadors i es substituiran "
-"per els previstos en el tema nou. En cas contrari els llançadors actuals es "
-"mantindran i només es reemplaçaran les icones."
 
 #: ../data/messages:1377
 msgid "Use the new theme's launchers?"
-msgstr "Voleu utilitzar el nou tema dels llançadors?"
+msgstr ""
 
 #: ../data/messages:1379
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
 msgstr ""
-"En cas contrari es conservarà el comportament actual. Això defineix la "
-"posició del Dock, configuració del comporament com l'auto-amagat, us o no de "
-"la barra de tasques, etc."
 
 #: ../data/messages:1381
 msgid "Use the new theme's behaviour?"
-msgstr "Voleu utilitzar el nou tema de comportament?"
+msgstr ""
 
 #: ../data/messages:1383
 msgid "Save"
-msgstr "Desa"
+msgstr ""
 
 #: ../data/messages:1385
 msgid "You will then be able to re-open it at any time."
-msgstr "El podreu tornar a obrir quan vulgueu."
+msgstr ""
 
 #: ../data/messages:1387
 msgid "Save current behaviour also?"
-msgstr "Voleu desar també el comportament actual?"
+msgstr ""
 
 #: ../data/messages:1389
 msgid "Save current launchers also?"
-msgstr "Voleu desar també els llançadors actuals?"
+msgstr ""
 
 #: ../data/messages:1391
 msgid ""
@@ -3854,7 +3795,7 @@ msgstr ""
 
 #: ../data/messages:1393
 msgid "Build a package of the theme?"
-msgstr "Voleu fer un paquet del tema?"
+msgstr ""
 
 #: ../data/messages:1395 ../data/messages:1397 ../data/messages:1399
 #: ../data/messages:1431 ../data/messages:1467

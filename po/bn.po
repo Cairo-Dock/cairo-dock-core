@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-04-14 18:51+0000\n"
+"POT-Creation-Date: 2012-09-30 14:51+0000\n"
+"PO-Revision-Date: 2012-09-30 17:26+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Bengali <bn@li.org>\n"
-"Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 05:15+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-10-01 04:40+0000\n"
+"X-Generator: Launchpad (build 16049)\n"
+"Language: bn\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -230,9 +231,8 @@ msgid "Add-ons"
 msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
-#, fuzzy
 msgid "Configuration"
-msgstr "কনফিগার"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:631
 msgid "Advanced Mode"
@@ -373,8 +373,8 @@ msgid ""
 "move to another dock"
 msgstr ""
 "নতুন ডকটি তৈরী করা হয়েছে।\n"
-"এখন, '-> অন্য ডকে সরিয়ে নিন' আইকনে ক্লিক করে কিছু লঞ্চার বা এ্যাপ্লেট এর ভেতর "
-"সরিয়ে আনুন"
+"এখন, '-> অন্য ডকে সরিয়ে নিন' আইকনে ক্লিক করে কিছু লঞ্চার বা এ্যাপ্লেট এর "
+"ভেতর সরিয়ে আনুন"
 
 #: ../src/cairo-dock-menu.c:571
 msgid "Add"
@@ -436,7 +436,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:799
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr "আপনি কিন্তু এই এ্যাপ্লেট (%s) ডকটি থেকে সরিয়ে ফেলছেন। আপনি কি নিশ্চিত?"
+msgstr ""
+"আপনি কিন্তু এই এ্যাপ্লেট (%s) ডকটি থেকে সরিয়ে ফেলছেন। আপনি কি নিশ্চিত?"
 
 #: ../src/cairo-dock-menu.c:868
 msgid "Configure"
@@ -465,7 +466,8 @@ msgstr "থীম ব্যবস্থাপনা করুন"
 #: ../src/cairo-dock-menu.c:900
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "আপনার বর্তমান থীমটি সংরক্ষণ করুন কিংবা সার্ভারের অনেক থীম হতে বাছাই করুন"
+msgstr ""
+"আপনার বর্তমান থীমটি সংরক্ষণ করুন কিংবা সার্ভারের অনেক থীম হতে বাছাই করুন"
 
 #: ../src/cairo-dock-menu.c:913
 msgid "Lock icons position"
@@ -488,8 +490,10 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "স্টার্টআপে কায়রো-ডক লঞ্চ কর"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
-msgstr "তৃতীর-পক্ষের এ্যাপ্লেট পিজিনের পত প্রোগ্রামের সাথে ইন্টিগ্রেশন সরবরাহ করে"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
+msgstr ""
+"তৃতীর-পক্ষের এ্যাপ্লেট পিজিনের পত প্রোগ্রামের সাথে ইন্টিগ্রেশন সরবরাহ করে"
 
 #: ../src/cairo-dock-menu.c:960 ../src/help/applet-init.c:28
 #: ../src/help/applet-notifications.c:269
@@ -738,7 +742,8 @@ msgid "Effects:"
 msgstr "ইফেক্ট সমূহঃ"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:732
@@ -754,16 +759,16 @@ msgid "Accessory"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:233
-#, fuzzy
 msgid "Plug-in"
-msgstr "প্লাগ-ইন"
+msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -797,8 +802,8 @@ msgid ""
 "anyway?"
 msgstr ""
 "আপনি বর্তমান থীমে কিছু পরিবর্তন করেছেন।\n"
-"আপনি সেগুলি হারিয়ে ফেলবেন যদি নতুন থীম বাছাই করার পূর্বে সংরক্ষণ না করেন। তবুও "
-"এগোবেন?"
+"আপনি সেগুলি হারিয়ে ফেলবেন যদি নতুন থীম বাছাই করার পূর্বে সংরক্ষণ না করেন। "
+"তবুও এগোবেন?"
 
 #: ../src/cairo-dock-widget-themes.c:213
 msgid "Please wait while importing the theme..."
@@ -813,9 +818,8 @@ msgid "You must try the theme before you can rate it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:421
-#, fuzzy
 msgid "The theme has been deleted"
-msgstr "থীম সমূহ অপসারণ করা হয়েছে"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:451
 msgid "Delete this theme"
@@ -1805,8 +1809,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1854,8 +1859,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -3301,7 +3306,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1065
@@ -3533,8 +3539,8 @@ msgstr ""
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1179
@@ -3728,9 +3734,8 @@ msgid "Choose the view for this dock :/"
 msgstr ""
 
 #: ../data/messages:1367
-#, fuzzy
 msgid "Load theme"
-msgstr "থীম ব্যবস্থাপনা করুন"
+msgstr ""
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
@@ -3805,9 +3810,8 @@ msgid "Sub-dock's name:"
 msgstr ""
 
 #: ../data/messages:1407
-#, fuzzy
 msgid "New sub-dock"
-msgstr "নতুন মূল ডক"
+msgstr ""
 
 #: ../data/messages:1409
 msgid "How to render the icon:"
@@ -3859,8 +3863,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445
@@ -3936,40 +3940,3 @@ msgid ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
-
-#~ msgid "category"
-#~ msgstr "ক্যাটেগরী"
-
-#~ msgid "Launcher configuration"
-#~ msgstr "লঞ্চার কনফিগারেশন"
-
-#~ msgid ""
-#~ "The '%s' module is not present. You need to install it and all its "
-#~ "dependencies in order to use this module."
-#~ msgstr ""
-#~ "'%s' মডিউলটি উপস্থিত নয়। এই মডিউলটি ব্যবহার করতে হলে আপনাকে এটি এবং এর সকল "
-#~ "ডিপেন্ডাইস সমূহ ইন্সটল করতে হবে।"
-
-#~ msgid "The '%s' module is not enabled."
-#~ msgstr "'%s' মডিউলটি কার্যকর নয়।"
-
-#~ msgid "Do you want to enable it now?"
-#~ msgstr "আপনি কি এখন এটি কার্যকর করতে চান?"
-
-#~ msgid "Importing theme..."
-#~ msgstr "থীম ইম্পোর্ট করা হচ্ছে..."
-
-#~ msgid ""
-#~ "This is the simple configuration panel of Cairo-Dock.\n"
-#~ " After you get familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-#~ msgstr ""
-#~ "এটি কায়রো-ডক এর সহজ কনফিগারেশন প্যানেল।\n"
-#~ " আপনি যখন এর সাথে পরিচিত হয়ে যাবেন, এবং আপনি যদি আপনার থীম কাস্টমাইজ করতে "
-#~ "চান\n"
-#~ ", আপনি এডভ্যান্সড মোডে স্যুইচ করতে পারেন।\n"
-#~ " আপনি একটি মোড থেকে অন্য মোডে যেকোন মুহুর্তে স্যুইচ করতে পারেন।"
-
-#~ msgid "Manage Themes"
-#~ msgstr "থীম ব্যবস্থাপনা করুন"

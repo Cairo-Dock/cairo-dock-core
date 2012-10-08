@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-09-30 16:40+0200\n"
-"PO-Revision-Date: 2012-07-02 20:45+0000\n"
+"POT-Creation-Date: 2012-09-30 14:51+0000\n"
+"PO-Revision-Date: 2012-09-30 17:37+0000\n"
 "Last-Translator: taiebot65 <taiebot65@yahoo.fr>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 05:18+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-10-01 04:43+0000\n"
+"X-Generator: Launchpad (build 16049)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -91,11 +91,11 @@ msgstr "Taskbar"
 
 #: ../src/cairo-dock-gui-advanced.c:1551
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "Define all the keyboard shortcuts currently available."
 
 #: ../src/cairo-dock-gui-advanced.c:1552 ../data/messages:525
 msgid "Shortkeys"
-msgstr ""
+msgstr "Shortkeys"
 
 #: ../src/cairo-dock-gui-advanced.c:1558
 msgid "All of the parameters you will never want to tweak."
@@ -180,9 +180,8 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1633 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Save current theme"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1753
 msgid "Filter"
@@ -234,12 +233,11 @@ msgstr "Simple Mode"
 
 #: ../src/cairo-dock-gui-simple.c:102 ../src/cairo-dock-gui-simple.c:104
 msgid "Add-ons"
-msgstr ""
+msgstr "Add-ons"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
-#, fuzzy
 msgid "Configuration"
-msgstr "Configure"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:631
 msgid "Advanced Mode"
@@ -286,19 +284,19 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:264
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "Here is a list of the current developers and contributors"
 
 #: ../src/cairo-dock-menu.c:265
 msgid "Developers"
-msgstr ""
+msgstr "Developers"
 
 #: ../src/cairo-dock-menu.c:266
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "Main developer and project leader"
 
 #: ../src/cairo-dock-menu.c:267
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "Contributors / Hackers"
 
 #: ../src/cairo-dock-menu.c:269
 msgid "Development"
@@ -314,7 +312,7 @@ msgstr "Beta-testing / Suggestions / Forum animation"
 
 #: ../src/cairo-dock-menu.c:286
 msgid "Translators for this language"
-msgstr ""
+msgstr "Translators for this language"
 
 #: ../src/cairo-dock-menu.c:287
 msgid "translator-credits"
@@ -363,7 +361,7 @@ msgstr "Users of our forum"
 
 #: ../src/cairo-dock-menu.c:326
 msgid "List of our forum's members"
-msgstr ""
+msgstr "List of our forum's members"
 
 #: ../src/cairo-dock-menu.c:327
 msgid "Artwork"
@@ -443,7 +441,7 @@ msgid ""
 "dock."
 msgstr ""
 "The new dock has been created.\n"
-"You can customize it by right-clicking on it -> cairo-dock -> configure this "
+"You can customise it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 
 #: ../src/cairo-dock-menu.c:758
@@ -510,7 +508,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Launch Cairo-Dock on startup"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Third-party applets provide integration with many programs, like Pidgin"
 
@@ -590,7 +589,7 @@ msgstr "Duplicate"
 
 #: ../src/cairo-dock-menu.c:1125
 msgid "Pick up an image"
-msgstr ""
+msgstr "Pick up an image"
 
 #: ../src/cairo-dock-menu.c:1345
 #, c-format
@@ -768,12 +767,14 @@ msgid "Effects:"
 msgstr "Effects:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Main dock's parameters are available in the main configuration window."
 
 #: ../src/cairo-dock-widget-items.c:732
 msgid "Remove this item"
-msgstr ""
+msgstr "Remove this item"
 
 #: ../src/cairo-dock-widget-plugins.c:104
 msgid "Configure this applet"
@@ -784,38 +785,38 @@ msgid "Accessory"
 msgstr "Accessory"
 
 #: ../src/cairo-dock-widget-plugins.c:233
-#, fuzzy
 msgid "Plug-in"
-msgstr "plug-in"
+msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
 msgstr "Category"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Click on an applet in order to have a preview and a description for it."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
 msgid "Press the shortkey"
-msgstr ""
+msgstr "Press the shortkey"
 
 #: ../src/cairo-dock-widget-shortkeys.c:140
 msgid "Change the shortkey"
-msgstr ""
+msgstr "Change the shortkey"
 
 #: ../src/cairo-dock-widget-shortkeys.c:227
 msgid "Origin"
-msgstr ""
+msgstr "Origin"
 
 #: ../src/cairo-dock-widget-shortkeys.c:232
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #: ../src/cairo-dock-widget-shortkeys.c:236
 msgid "Shortkey"
-msgstr ""
+msgstr "Shortkey"
 
 #: ../src/cairo-dock-widget-themes.c:86
 msgid "Could not import the theme."
@@ -844,14 +845,12 @@ msgid "You must try the theme before you can rate it."
 msgstr "You must try the theme before you can rate it."
 
 #: ../src/cairo-dock-widget-themes.c:421
-#, fuzzy
 msgid "The theme has been deleted"
-msgstr "Themes have been deleted"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:451
-#, fuzzy
 msgid "Delete this theme"
-msgstr "Delete this dock"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:482
 #: ../src/gldit/cairo-dock-gui-factory.c:2445
@@ -964,7 +963,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:350
 msgid "Force to display some output messages with colors."
-msgstr "Force to display some output messages with colors."
+msgstr "Force to display some output messages with colours."
 
 #: ../src/cairo-dock.c:353
 msgid "Print version and quit."
@@ -1039,16 +1038,13 @@ msgid "Remember this choice"
 msgstr "Remember this choice"
 
 #: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
-"The module '%s' may have encountered a problem.\n"
-"It has been restored successfully, but if it happens again, please report it "
-"at http://glx-dock.org"
 
 #: ../src/cairo-dock.c:685
 msgid "< Maintenance mode >"
@@ -1584,7 +1580,7 @@ msgid ""
 "When the window has the focus, clicking on its icon will minimize the window."
 msgstr ""
 "Clicking on its icon will bring the window on top.\n"
-"When the window has the focus, clicking on its icon will minimize the window."
+"When the window has the focus, clicking on its icon will minimise the window."
 
 #: ../data/messages:55
 msgid "Launching an application several times"
@@ -2081,13 +2077,15 @@ msgstr "Removing completely the gnome-panel"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 
@@ -2138,16 +2136,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "You need to turn on compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way:\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -2215,7 +2213,8 @@ msgstr ""
 
 #: ../data/messages:223
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr "I don't have any themes in the Theme Manager, except the default one."
+msgstr ""
+"I don't have any themes in the Theme Manager, except the default one."
 
 #: ../data/messages:225
 msgid "Hint : Up to version 2.1.1-2, wget was used."
@@ -2765,9 +2764,9 @@ msgid ""
 msgstr ""
 "None : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
-"they are minimized (like in MacOSX).\n"
+"they are minimised (like in MacOSX).\n"
 "Integrated : Mix applications with its launcher, show all others windows and "
-"group windows togather in sub-dock (default).\n"
+"group windows together in sub-dock (default).\n"
 "Separated : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 
@@ -2946,18 +2945,14 @@ msgid "Multiple screens"
 msgstr "Multiple screens"
 
 #: ../data/messages:563
-#, fuzzy
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama/Xrandr to "
 "manage them."
 msgstr ""
-"This option can be uses if you have a dual-screen and use Xinerama to manage "
-"them."
 
 #: ../data/messages:565
-#, fuzzy
 msgid "Place the dock on one screen"
-msgstr "Positionning the dock on the screen"
+msgstr ""
 
 #: ../data/messages:567
 msgid "0 is the first screen."
@@ -3498,7 +3493,7 @@ msgstr "Several applets can be visible even when the dock is hidden"
 
 #: ../data/messages:901
 msgid "Default background color when the dock is hidden"
-msgstr "Default background color when the dock is hidden"
+msgstr "Default background colour when the dock is hidden"
 
 #: ../data/messages:903 ../data/messages:1365
 msgid "Stretch the dock to always fill the screen"
@@ -3599,7 +3594,7 @@ msgstr "Draw the outline of the text?"
 
 #: ../data/messages:961 ../data/messages:1265
 msgid "Text color:"
-msgstr "Text color:"
+msgstr "Text colour:"
 
 #: ../data/messages:963 ../data/messages:1023
 msgid "Buttons"
@@ -3631,7 +3626,7 @@ msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
 msgstr ""
-"This can be customized for each desklet separately.\n"
+"This can be customised for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
 
 #: ../data/messages:985
@@ -3755,8 +3750,10 @@ msgid "Zoom effect"
 msgstr "Zoom effect"
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 
 #: ../data/messages:1065
 msgid "Maximum zoom of the icons :"
@@ -3896,7 +3893,7 @@ msgstr "Linewidth of the string, in pixels (0 to not use string):"
 
 #: ../data/messages:1125
 msgid "Colour of the string (red, blue, green, alpha) :"
-msgstr "Color of the string (red, blue, green, alpha):"
+msgstr "Colour of the string (red, blue, green, alpha) :"
 
 #: ../data/messages:1129
 msgid "Indicator of the active window"
@@ -4014,11 +4011,11 @@ msgstr "bigger"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 
 #: ../data/messages:1179
 msgid "Rotate the indicator with dock?"
@@ -4057,14 +4054,12 @@ msgid "Progress bars"
 msgstr ""
 
 #: ../data/messages:1199
-#, fuzzy
 msgid "Start color"
-msgstr "Start color:"
+msgstr ""
 
 #: ../data/messages:1201
-#, fuzzy
 msgid "End color"
-msgstr "Background color:"
+msgstr ""
 
 #: ../data/messages:1203
 msgid "Draw outline"
@@ -4140,7 +4135,7 @@ msgstr ""
 
 #: ../data/messages:1241
 msgid "Colour of the label's background :"
-msgstr "Color of the label's background:"
+msgstr "Colour of the label's background:"
 
 #: ../data/messages:1243
 msgid "Margin around the text (in pixels) :"
@@ -4152,23 +4147,23 @@ msgstr "Colour"
 
 #: ../data/messages:1247
 msgid "It's the first color of the gradation."
-msgstr "It's the first color of the gradation."
+msgstr "It's the first colour of the gradation."
 
 #: ../data/messages:1249
 msgid "Start color :"
-msgstr "Start color:"
+msgstr "Start colour:"
 
 #: ../data/messages:1251
 msgid ""
 "It's the second color of the gradation. Set it to the same value as the "
 "first if you don't want to have any gradation."
 msgstr ""
-"It's the second color of the gradation. Set it to the same value as the "
-"first if you don't want to have any gradation."
+"It's the second colour of the gradation. Set it to the same value as the "
+"first, if you don't want to have any gradation."
 
 #: ../data/messages:1253
 msgid "Stop color :"
-msgstr "Stop color:"
+msgstr "Stop colour:"
 
 #: ../data/messages:1255
 msgid ""
@@ -4196,7 +4191,7 @@ msgstr "Use the same look as the labels?"
 
 #: ../data/messages:1267
 msgid "Background color:"
-msgstr "Background color:"
+msgstr "Background colour:"
 
 #: ../data/messages:1297
 msgid "starting from 0"
@@ -4223,9 +4218,8 @@ msgid "Choose the view for this dock :/"
 msgstr "Choose the view for this dock:/"
 
 #: ../data/messages:1367
-#, fuzzy
 msgid "Load theme"
-msgstr "Manage themes"
+msgstr ""
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
@@ -4307,9 +4301,8 @@ msgid "Sub-dock's name:"
 msgstr "Sub-dock's name:"
 
 #: ../data/messages:1407
-#, fuzzy
 msgid "New sub-dock"
-msgstr "Sub-dock"
+msgstr ""
 
 #: ../data/messages:1409
 msgid "How to render the icon:"
@@ -4361,11 +4354,11 @@ msgstr "Launcher's name:"
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 
 #: ../data/messages:1445
 msgid "Command to launch on click:"
@@ -4466,106 +4459,3 @@ msgid ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "The module '%s' has been deactivated because it may have caused some "
-#~ "problems.\n"
-#~ "You can reactivate it, if it happens again thanks to report it at http://"
-#~ "glx-dock.org\n"
-#~ msgstr ""
-#~ "The module '%s' may have encountered a problem.\n"
-#~ "It has been restored successfully, but if it happens again, please report "
-#~ "it at http://glx-dock.org"
-
-#~ msgid "category"
-#~ msgstr "category"
-
-#~ msgid "Launcher configuration"
-#~ msgstr "Launcher configuration"
-
-#~ msgid ""
-#~ "The '%s' module is not present. You need to install it and all its "
-#~ "dependencies in order to use this module."
-#~ msgstr ""
-#~ "The '%s' module is not present. You need to install it and all its "
-#~ "dependencies in order to use this module."
-
-#~ msgid "The '%s' module is not enabled."
-#~ msgstr "The '%s' module is not enabled."
-
-#~ msgid "Do you want to enable it now?"
-#~ msgstr "Do you want to enable it now?"
-
-#~ msgid "Importing theme..."
-#~ msgstr "Importing theme..."
-
-#~ msgid ""
-#~ "This is the simple configuration panel of Cairo-Dock.\n"
-#~ " After you get familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-#~ msgstr ""
-#~ "This is the simple configuration panel of Cairo-Dock.\n"
-#~ " After you get familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-
-#~ msgid "Manage Themes"
-#~ msgstr "Manage Themes"
-
-#~ msgid "Applet's Handbook"
-#~ msgstr "Applet's Handbook"
-
-#~ msgid "Keyboard shortcuts currently available"
-#~ msgstr "Keyboard shortcuts currently available"
-
-#~ msgid "Add or remove any applet"
-#~ msgstr "Add or remove any applet"
-
-#~ msgid ""
-#~ "Select a line to get a preview and a description of the applet.\n"
-#~ "Click on the left check-box to (de)activate an applet.\n"
-#~ "Once an applet is active, you can configure it by right clicking on its "
-#~ "icon."
-#~ msgstr ""
-#~ "Select a line to get a preview and a description of the applet.\n"
-#~ "Click on the left check-box to (de)activate an applet.\n"
-#~ "Once an applet is active, you can configure it by right clicking on its "
-#~ "icon."
-
-#~ msgid ""
-#~ "You can install them by simply drag-and-dropping the link onto your dock."
-#~ msgstr ""
-#~ "You can install them by simply drag-and-dropping the link onto your dock."
-
-#~ msgid "Use Xinerama?"
-#~ msgstr "Use Xinerama?"
-
-#~ msgid "Delete"
-#~ msgstr "Delete"
-
-#~ msgid "List of your personal themes"
-#~ msgstr "List of your personal themes"
-
-#~ msgid "Delete from the list themes that you don't need anymore :"
-#~ msgstr "Delete from the list themes that you don't need anymore:"
-
-#~ msgid ""
-#~ "<b><span color='red'>GLX-Dock 2.4.0</span></b>\n"
-#~ " - The <b>Power-Manager applet</b> has been rewritten to work on any "
-#~ "plateform.\n"
-#~ " - A <b>new Help applet</b> has been added to help our beloved users :-)\n"
-#~ " - <b>Integration in the XFCE desktop</b> has been improved\n"
-#~ " - Several <b>new DBus methods</b> lets you interact on the dock more "
-#~ "easily.\n"
-#~ " - The dock can now be used as a shell in a Compiz-standalone environment."
-#~ msgstr ""
-#~ "<b><span color='red'>GLX-Dock 2.4.0</span></b>\n"
-#~ " - The <b>Power-Manager applet</b> has been rewritten to work on any "
-#~ "platform.\n"
-#~ " - A <b>new Help applet</b> has been added to help our beloved users :-)\n"
-#~ " - <b>Integration in the XFCE desktop</b> has been improved\n"
-#~ " - Several <b>new DBus methods</b> lets you interact with the dock more "
-#~ "easily.\n"
-#~ " - The dock can now be used as a shell in a Compiz-standalone environment."

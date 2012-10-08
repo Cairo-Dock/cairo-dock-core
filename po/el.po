@@ -8,16 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock_el\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-04-14 18:54+0000\n"
+"POT-Creation-Date: 2012-09-30 14:51+0000\n"
+"PO-Revision-Date: 2012-09-30 17:37+0000\n"
 "Last-Translator: Michael Kotsarinis <mk73628@gmail.com>\n"
 "Language-Team: Greek\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 05:16+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-10-01 04:41+0000\n"
+"X-Generator: Launchpad (build 16049)\n"
 "X-Poedit-Country: France\n"
+"Language: \n"
 "X-Poedit-Language: French\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
@@ -191,9 +192,8 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1633 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
-#, fuzzy
 msgid "Current items"
-msgstr "Αποθήκευση τρέχοντος θέματος"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1753
 msgid "Filter"
@@ -248,9 +248,8 @@ msgid "Add-ons"
 msgstr "Πρόσθετα"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
-#, fuzzy
 msgid "Configuration"
-msgstr "Προσαρμογή"
+msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:631
 msgid "Advanced Mode"
@@ -529,7 +528,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Εκκίνηση του Cairo-Dock κατά την εκκίνηση του συστήματος"
 
 #: ../src/cairo-dock-menu.c:957
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Μικροεφαρμογές από τρίτους παρέχουν ενσωμάτωση πολλών προγραμμάτων, όπως το "
 "Pidgin"
@@ -791,7 +791,8 @@ msgid "Effects:"
 msgstr "Εφέ:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Οι παράμετροι του κεντρικού dock είναι διαθέσιμες στο κύριο παράθυρο "
 "διαμόρφωσης."
@@ -809,16 +810,16 @@ msgid "Accessory"
 msgstr "Αξεσουάρ"
 
 #: ../src/cairo-dock-widget-plugins.c:233
-#, fuzzy
 msgid "Plug-in"
-msgstr "πρόσθετο"
+msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
 msgstr "Κατηγορία"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Κάντε κλικ σε μια μικροεφαρμογή για να έχετε προεπισκόπηση και περιγραφή της."
 
@@ -869,14 +870,12 @@ msgid "You must try the theme before you can rate it."
 msgstr "Πρέπει να δοκιμάσετε το θέμα πριν το αξιολογήσετε"
 
 #: ../src/cairo-dock-widget-themes.c:421
-#, fuzzy
 msgid "The theme has been deleted"
-msgstr "Τα θέματα διαγράφηκαν"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:451
-#, fuzzy
 msgid "Delete this theme"
-msgstr "Διαγραφή αυτού του dock"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:482
 #: ../src/gldit/cairo-dock-gui-factory.c:2445
@@ -941,8 +940,8 @@ msgstr ""
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Αναγκάστε την πλατφόρμα να φορτώσει αυτόν τον φάκελο, αντί αυτού ~/.config/"
-"cairo-dock."
+"Αναγκάστε την πλατφόρμα να φορτώσει αυτόν τον φάκελο, αντί αυτού "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:329
 msgid ""
@@ -1070,16 +1069,13 @@ msgid "Remember this choice"
 msgstr "Απομνημόνευση αυτής της επιλογής"
 
 #: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
-"Το άρθρωμα '%s' μπορεί να έχει πρόβλημα.\n"
-"Αποκαταστάθηκε επιτυχώς αλλά αν ξανασυμβεί παρακαλούμε να το αναφέρετε στο "
-"http://glx-dock.org"
 
 #: ../src/cairo-dock.c:685
 msgid "< Maintenance mode >"
@@ -1617,7 +1613,8 @@ msgstr ""
 
 #: ../data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
-msgstr "Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
+msgstr ""
+"Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
 
 #: ../data/messages:79
 msgid "Docks"
@@ -1934,14 +1931,15 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί /desktop/gnome/session/"
-"required_components/panel και αντικαταστήστε το περιεχόμενό του με «cairo-"
-"dock».\n"
+"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί "
+"/desktop/gnome/session/required_components/panel και αντικαταστήστε το "
+"περιεχόμενό του με «cairo-dock».\n"
 "Μετά επανεκκινήστε τη συνεδρία σας : το gnome-panel δεν έχει εκκινήσει και "
 "το dock έχει εκκινήσει (αν όχι, μπορείτε να το προσθέσετε στα προγράμματα "
 "εκκίνησης)."
@@ -1960,7 +1958,8 @@ msgstr "Αντιμετώπιση Προβλημάτων"
 
 #: ../data/messages:191
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr "Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
+msgstr ""
+"Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
 
 #: ../data/messages:193
 msgid "Forum"
@@ -1995,8 +1994,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Πρέπει να ενεργοποιήσετε τη σύνθεση. Παραδείγματος χάριν, μπορείτε να "
 "εκτελέσετε το Compiz ή το xcompmgr.\n"
@@ -2004,8 +2003,8 @@ msgstr ""
 "στις επιλογές του διαχειριστή παραθύρων.\n"
 "Αν χρησιμοποιείτε Gnome, μπορείτε να την ενεργοποιήσετε στο Metacity με αυτό "
 "τον τρόπο:\n"
-" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί '/apps/metacity/general/"
-"compositing_manager' και ορίστε το σε 'true'."
+" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί "
+"'/apps/metacity/general/compositing_manager' και ορίστε το σε 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -2159,8 +2158,8 @@ msgid ""
 msgstr ""
 "Στο Gnome, υπάρχει μια επιλογή που υπερισχύει αυτής του dock. Για να "
 "ενεργοποιήσετε εικονίδια στα μενού, ανοίξτε το 'gconf-editor', πηγαίνετε στο "
-"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have icons"
-"\" και \"buttons have icons\". "
+"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have "
+"icons\" και \"buttons have icons\". "
 
 #: ../data/messages:245
 msgid "If you're on Gnome you can click on this button:"
@@ -2786,18 +2785,14 @@ msgid "Multiple screens"
 msgstr "Πολλαπλές οθόνες"
 
 #: ../data/messages:563
-#, fuzzy
 msgid ""
 "This option is to use if you have a dual-screen and use Xinerama/Xrandr to "
 "manage them."
 msgstr ""
-"Αυτή η επιλογή γίνεται αν έχετε διπλές οθόνες και χρησιμοποιείτε το Xinerama "
-"για να τις διαχειρίζεστε."
 
 #: ../data/messages:565
-#, fuzzy
 msgid "Place the dock on one screen"
-msgstr "Να γίνει διαφανές το εικονίδιο"
+msgstr ""
 
 #: ../data/messages:567
 msgid "0 is the first screen."
@@ -2913,8 +2908,8 @@ msgid ""
 msgstr ""
 "Επιτρέπει στους εκκινητές να ενεργούν ως εφαρμογές όταν το πρόγραμμά τους "
 "εκτελείται και εμφανίζει μια ένδειξη στο εικονίδιό τους για να το "
-"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με Shift"
-"+κλικ."
+"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με "
+"Shift+κλικ."
 
 #: ../data/messages:667
 msgid "Mix launchers and applications"
@@ -2926,7 +2921,8 @@ msgstr "Εμφάνιση μόνο των εφαρμογών της τρέχου�
 
 #: ../data/messages:671
 msgid "Only show icons whose windows are minimised"
-msgstr "Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
+msgstr ""
+"Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
 
 #: ../data/messages:683
 msgid "After a given icon"
@@ -2983,8 +2979,8 @@ msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
-"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία."
-"\\n\n"
+"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία.\\"
+"n\n"
 "Η OpenGL είναι απαραίτητη για να σχεδιασθεί το εικονίδιο λυγισμένο προς τα "
 "πίσω."
 
@@ -3234,7 +3230,8 @@ msgstr "Μέγιστη διάρκεια λήψης αρχείου:"
 
 #: ../data/messages:835
 msgid "Use this option if you experience problems to connect."
-msgstr "Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
 
 #: ../data/messages:837
 msgid "Force IPv4 ?"
@@ -3242,7 +3239,8 @@ msgstr "Εξαναγκασμός σε IPv4;"
 
 #: ../data/messages:839
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
 
 #: ../data/messages:841
 msgid "Are you behind a proxy ?"
@@ -3517,7 +3515,8 @@ msgstr "Αριστερή μετατόπιση:"
 
 #: ../data/messages:1001
 msgid "in pixels. Use this to adjust the top position of the drawings."
-msgstr "σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
+msgstr ""
+"σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
 
 #: ../data/messages:1003
 msgid "Top offset :"
@@ -3611,7 +3610,8 @@ msgid "Zoom effect"
 msgstr "Εφέ εστίασης"
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "ορίστε σε 1 αν δεν θέλετε τα εικονίδια να αλλάζουν μέγεθος όταν περνάτε από "
 "πανω τους."
@@ -3674,7 +3674,8 @@ msgstr "Εάν δεν προσθέσετε διαχωριστές, θα χρησ
 
 #: ../data/messages:1089
 msgid "Filename of an image to use for separators :"
-msgstr "Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
+msgstr ""
+"Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
 
 #: ../data/messages:1091
 msgid ""
@@ -3877,8 +3878,8 @@ msgstr "μεγαλύτερο"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Χρησιμοποιήστε το για να ακολουθεί ο δείκτης τον προσανατολισμό του dock "
 "(πάνω/κάτω/δεξιά/αριστερά)."
@@ -3920,14 +3921,12 @@ msgid "Progress bars"
 msgstr ""
 
 #: ../data/messages:1199
-#, fuzzy
 msgid "Start color"
-msgstr "Χρώμα έναρξης:"
+msgstr ""
 
 #: ../data/messages:1201
-#, fuzzy
 msgid "End color"
-msgstr "Χρώμα παρασκηνίου:"
+msgstr ""
 
 #: ../data/messages:1203
 msgid "Draw outline"
@@ -4090,9 +4089,8 @@ msgid "Choose the view for this dock :/"
 msgstr "Επιλέξτε την προβολή για αυτό το dock :/"
 
 #: ../data/messages:1367
-#, fuzzy
 msgid "Load theme"
-msgstr "Διαχείριση θεμάτων"
+msgstr ""
 
 #: ../data/messages:1369
 msgid "You can even paste an internet URL."
@@ -4175,9 +4173,8 @@ msgid "Sub-dock's name:"
 msgstr ""
 
 #: ../data/messages:1407
-#, fuzzy
 msgid "New sub-dock"
-msgstr "Υπο-dock"
+msgstr ""
 
 #: ../data/messages:1409
 msgid "How to render the icon:"
@@ -4229,8 +4226,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445
@@ -4306,84 +4303,3 @@ msgid ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "The module '%s' has been deactivated because it may have caused some "
-#~ "problems.\n"
-#~ "You can reactivate it, if it happens again thanks to report it at http://"
-#~ "glx-dock.org\n"
-#~ msgstr ""
-#~ "Το άρθρωμα '%s' μπορεί να έχει πρόβλημα.\n"
-#~ "Αποκαταστάθηκε επιτυχώς αλλά αν ξανασυμβεί παρακαλούμε να το αναφέρετε "
-#~ "στο http://glx-dock.org"
-
-#~ msgid "category"
-#~ msgstr "Κατηγορία"
-
-#~ msgid "Launcher configuration"
-#~ msgstr "Διαμόρφωση των εκκινητών"
-
-#~ msgid ""
-#~ "The '%s' module is not present. You need to install it and all its "
-#~ "dependencies in order to use this module."
-#~ msgstr ""
-#~ "Το άρθρωμα '%s' δεν εμφανίζεται. Πρέπει να το εγκαταστήσετε μαζί με όλες "
-#~ "τις εξαρτήσεις του για να χρησιμοποιήσετε τις λειτουργίες του."
-
-#~ msgid "The '%s' module is not enabled."
-#~ msgstr "Το άρθρωμα '%s' δεν είναι ενεργοποιημένο."
-
-#~ msgid "Do you want to enable it now?"
-#~ msgstr "Θέλετε να το ενεργοποιήσετε τώρα;"
-
-#~ msgid "Importing theme..."
-#~ msgstr "Εισαγωγή θέματος…"
-
-#~ msgid ""
-#~ "This is the simple configuration panel of Cairo-Dock.\n"
-#~ " After you get familiar with it, and if you want to customise your theme\n"
-#~ ", you can switch to an advanced mode.\n"
-#~ " You can switch from a mode to another at any time."
-#~ msgstr ""
-#~ "Αυτή είναι η περιοχή απλής διαμόρφωσης του Cairo-Dock.\n"
-#~ " Αφού εξοικειωθείτε με αυτή και να θέλετε να προσαρμόσετε το θέμα σας,\n"
-#~ "μπορείτε να αλλάξετε στην κατάσταση προχωρημένης διαμόρφωσης.\n"
-#~ " Μπορείτε να κάνετε εναλλαγή των δύο καταστάσεων οποιαδήποτε στιγμή."
-
-#~ msgid "Manage Themes"
-#~ msgstr "Διαχείριση θεμάτων"
-
-#~ msgid "Add or remove any applet"
-#~ msgstr "Προσθήκη ή αφαίρεση οποιασδήποτε μικροεφαρμογής"
-
-#~ msgid ""
-#~ "Select a line to get a preview and a description of the applet.\n"
-#~ "Click on the left check-box to (de)activate an applet.\n"
-#~ "Once an applet is active, you can configure it by right clicking on its "
-#~ "icon."
-#~ msgstr ""
-#~ "Επιλέξτε μια γραμμή για να έχετε μια προεπισκόπηση και μια περιγραφή της "
-#~ "μικροεφαρμογής.\n"
-#~ "Κάντε κλικ στο τετραγωνίδιο αριστερά για να (απ)ενεργοποιήσετε μια "
-#~ "μικροεφαρμογή.\n"
-#~ "Όταν μια μικροεφαρμογή είναι ενεργή, μπορείτε να τη διαμορφώσετε με δεξί "
-#~ "κλικ στο εικονίδιό της."
-
-#~ msgid ""
-#~ "You can install them by simply drag-and-dropping the link onto your dock."
-#~ msgstr ""
-#~ "Μπορούν να εγκατασταθούν απλά με μετακίνηση και άφεση του δεσμού στο dock "
-#~ "σας."
-
-#~ msgid "Use Xinerama?"
-#~ msgstr "Χρήση Xinerama;"
-
-#~ msgid "Delete"
-#~ msgstr "Διαγραφή"
-
-#~ msgid "List of your personal themes"
-#~ msgstr "Κατάλογος προσωπικών θεμάτων"
-
-#~ msgid "Delete from the list themes that you don't need anymore :"
-#~ msgstr "Διαγραφή από τη λίστα των θεμάτων που δεν χρειάζεστε πλέον :"
