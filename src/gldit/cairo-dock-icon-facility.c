@@ -146,7 +146,7 @@ GList *cairo_dock_sort_icons_by_name (GList *pIconList)
 	double fCurrentOrder = 0.;
 	Icon *icon;
 	GList *ic;
-	for (ic = pIconList; ic != NULL; ic = ic->next)
+	for (ic = pSortedIconList; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
 		if (icon->iGroup != iCurrentGroup)
