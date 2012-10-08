@@ -490,7 +490,9 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 				&cDescription,
 				&length,
 				NULL);
-			gtk_label_set_markup (pDescriptionLabel, cDescription);
+			if (length > 0 && cDescription[length-1] == '\n') // if there is a new line at the end
+				cDescription[length-1]='\0';
+			gtk_label_set_markup (pDescriptionLabel, dgettext ("cairo-dock-plugins", cDescription)); // TODO: use dgettext with the right domain
 			g_free (cDescription);
 		}
 		else if (strcmp (cDescriptionFilePath, "none") != 0)  // texte de la description.
