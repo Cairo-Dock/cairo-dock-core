@@ -55,6 +55,11 @@ void cairo_dock_load_user_gui_backend (int iMode)  // 0 = simple
 	s_iCurrentMode = iMode;
 }
 
+int cairo_dock_gui_backend_get_mode ()
+{
+	return s_iCurrentMode;
+}
+
 static void on_click_switch_mode (G_GNUC_UNUSED GtkButton *button, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_close_gui ();

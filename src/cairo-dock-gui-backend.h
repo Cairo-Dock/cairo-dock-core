@@ -54,6 +54,8 @@ typedef struct _CairoDockMainGuiBackend CairoDockMainGuiBackend;
 
 void cairo_dock_load_user_gui_backend (int iMode);
 
+int cairo_dock_gui_backend_get_mode ();
+
 GtkWidget *cairo_dock_make_switch_gui_button (void);
 
 gboolean cairo_dock_theme_manager_is_integrated (void);

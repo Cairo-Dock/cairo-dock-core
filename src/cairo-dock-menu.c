@@ -370,7 +370,12 @@ static void _cairo_dock_show_third_party_applets (G_GNUC_UNUSED GtkMenuItem *pMe
 
 static void _cairo_dock_present_help (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
 {
+	int iMode = cairo_dock_gui_backend_get_mode ();
+	if (iMode == 0)
+		cairo_dock_load_user_gui_backend (1); // load the advanced mode (it seems it's currently not possible to open the Help with the Simple mode)
 	cairo_dock_show_module_gui ("Help");
+	if (iMode == 0)
+		cairo_dock_load_user_gui_backend (0);
 }
 
 static void _cairo_dock_quick_hide (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED CairoDock *pDock)
