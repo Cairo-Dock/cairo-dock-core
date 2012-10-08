@@ -488,7 +488,7 @@ int main (int argc, char** argv)
 	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath, (gchar*)CAIRO_DOCK_SHARE_THEMES_DIR, (gchar*)CAIRO_DOCK_DISTANT_THEMES_DIR, cThemeServerAdress ? cThemeServerAdress : g_strdup (CAIRO_DOCK_THEME_SERVER));
 	
 	//\___________________ Check that OpenGL is safely usable, if not ask the user what to do.
-	if (g_bUseOpenGL && ! bForceOpenGL && ! bToggleIndirectRendering && ! cairo_dock_opengl_is_safe ())  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
+	if (bAskBackend || (g_bUseOpenGL && ! bForceOpenGL && ! bToggleIndirectRendering && ! cairo_dock_opengl_is_safe ()))  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
 	{
 		if (s_cDefaulBackend == NULL)  // pas de backend par defaut defini.
 		{
