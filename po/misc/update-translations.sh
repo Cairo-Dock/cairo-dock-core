@@ -61,6 +61,10 @@ if test $UPDATE_CORE -gt 0; then
 		do # les .conf peuvent être dans un dossier build et il ne reste plus que des .conf.in.
 			$CAIRO_DOCK_EXTRACT_MESSAGE $c
 		done;
+		if test -f data/readme-default-view; then
+			echo >> data/messages
+			bash $CAIRO_DOCK_ADD_README data/readme-default-view
+		fi
 		$CAIRO_DOCK_EXTRACT_MESSAGE data/ChangeLog.txt
 	fi
 
