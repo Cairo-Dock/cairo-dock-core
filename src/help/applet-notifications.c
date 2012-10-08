@@ -56,7 +56,7 @@ static void _cd_show_config (G_GNUC_UNUSED GtkMenuItem *menu_item, G_GNUC_UNUSED
 
 static void _cd_show_help_gui (G_GNUC_UNUSED GtkMenuItem *menu_item, G_GNUC_UNUSED gpointer data)
 {
-	cairo_dock_show_module_gui ("Help");
+	cairo_dock_show_items_gui (myIcon, myContainer, myApplet, -1);
 }
 
 static void _launch_url (const gchar *cURL)
