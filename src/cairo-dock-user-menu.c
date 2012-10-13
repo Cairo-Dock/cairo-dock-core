@@ -946,7 +946,7 @@ static void _cairo_dock_set_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuI
 			}  // apres la boucle, i = nbre d'elements, j = l'element qui a ete enleve.
 			if (j != -1)  // un element a ete enleve.
 			{
-				cd_warning ("The class '%s' was explicitely set up to use the X icon, we'll change this behavior automatically.", icon->cClass);
+				cd_warning ("The class '%s' was explicitly set up to use the X icon, we'll change this behavior automatically.", icon->cClass);
 				if (j < i - 1)  // ce n'est pas le dernier
 				{
 					pExceptions[j] = pExceptions[i-1];
