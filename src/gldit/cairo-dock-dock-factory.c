@@ -771,7 +771,8 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	int wi = icon->iImageWidth, hi = icon->iImageHeight;
 	cairo_dock_set_icon_size_in_dock (pDock, icon);
 	
-	if (wi != icon->iImageWidth || hi != icon->iImageHeight)  // if size has changed, reload the buffers
+	if (wi != icon->iImageWidth || hi != icon->iImageHeight  // if size has changed, reload the buffers
+	|| (! icon->pIconBuffer && ! icon->iIconTexture))  // might happen, for instance if the icon is a launcher pinned on a desktop and was detached before being loaded.
 		cairo_dock_trigger_load_icon_buffers (icon);
 	
 	pDock->fFlatDockWidth += myIconsParam.iIconGap + icon->fWidth;
