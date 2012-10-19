@@ -399,7 +399,7 @@ static gboolean _add_one_desklet_to_model (CairoDesklet *pDesklet, GtkTreeStore 
 	return FALSE; // FALSE => keep going
 }
 
-static inline void _add_one_module (const gchar *cModuleName, CairoDockModuleInstance *pModuleInstance, GtkTreeStore *model)
+static inline void _add_one_module (G_GNUC_UNUSED const gchar *cModuleName, CairoDockModuleInstance *pModuleInstance, GtkTreeStore *model)
 {
 	GtkTreeIter iter;
 	gtk_tree_store_append (model, &iter, NULL);
@@ -409,7 +409,7 @@ static inline void _add_one_module (const gchar *cModuleName, CairoDockModuleIns
 	if (cImagePath != NULL)
 		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, CAIRO_DOCK_ITEM_ICON_SIZE, CAIRO_DOCK_ITEM_ICON_SIZE, NULL);
 	gtk_tree_store_set (model, &iter,
-		CD_MODEL_NAME, cModuleName,
+		CD_MODEL_NAME, pModuleInstance->pModule->pVisitCard->cTitle,
 		CD_MODEL_PIXBUF, pixbuf,
 		CD_MODEL_MODULE, pModuleInstance,
 		-1);
@@ -466,7 +466,7 @@ static GtkTreeModel *_build_tree_model (ItemsWidget *pItemsWidget)
 	cairo_dock_foreach_docks ((GHFunc) _add_one_root_dock_to_model, model);  // on n'utilise pas cairo_dock_foreach_root_docks(), de facon a avoir le nom du dock.
 	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _add_one_desklet_to_model, model);
 	cairo_dock_foreach_module ((GHRFunc)_add_one_module_to_model, model);
-	CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
+	/*CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
 	if (pModule != NULL)
 	{
 		if (pModule->pInstancesList == NULL)  // Help is not active, so is not already in the icons list.
@@ -475,7 +475,7 @@ static GtkTreeModel *_build_tree_model (ItemsWidget *pItemsWidget)
 			///_add_one_module ("Help", pModuleInstance, model);
 			/// add it ...
 		}
-	}
+	}*/
 	g_signal_connect (G_OBJECT (model), "row-inserted", G_CALLBACK (on_row_inserted), pItemsWidget);
 	g_signal_connect (G_OBJECT (model), "row-deleted", G_CALLBACK (on_row_deleted), pItemsWidget);
 	return GTK_TREE_MODEL (model);
