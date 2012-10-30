@@ -316,8 +316,14 @@ static void _build_category_widget (CDCategory *pCategory)
 	gtk_widget_show_all (pCategory->pCdWidget->pWidget);
 }
 
+#if GTK_CHECK_VERSION (2, 22, 0)
 static void _on_switch_page (G_GNUC_UNUSED GtkNotebook *pNoteBook, GtkWidget *page, guint page_num, G_GNUC_UNUSED gpointer user_data)
 {
+#else
+static void _on_switch_page (GtkNotebook *pNoteBook, G_GNUC_UNUSED GtkNotebookPage *old_page, guint page_num, G_GNUC_UNUSED gpointer user_data)
+{
+	GtkWidget *page = gtk_notebook_get_nth_page (pNoteBook, page_num);
+#endif
 	CDCategory *pCategory = _get_category (page_num);
 	g_return_if_fail (pCategory != NULL);
 	if (pCategory->pCdWidget == NULL)
