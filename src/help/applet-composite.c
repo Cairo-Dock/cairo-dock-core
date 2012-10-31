@@ -168,7 +168,7 @@ void cd_help_enable_composite (void)
 		gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
 		gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
 		g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), pAskBox);
-		int iClickedButton = cairo_dock_show_dialog_and_wait (D_("To remove the black rectangle around the dock, you need to activate a composite manager.\nDo you want to activate it now?"), myIcon, myContainer, 0., NULL, pAskBox);
+		int iClickedButton = cairo_dock_show_dialog_and_wait (D_("To remove the black rectangle around the dock, you need to activate a composite manager.\nDo you want to activate it now?"), myIcon, myContainer, NULL, pAskBox);
 
 		gboolean bRememberChoice = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pCheckBox));
 		gtk_widget_destroy (pAskBox);  // le widget survit a un dialogue bloquant.
@@ -219,24 +219,21 @@ static gboolean cd_help_check_composite (G_GNUC_UNUSED gpointer data)
 		
 		cd_help_enable_composite ();
 	}
-	else  // composite is active => everything is ok on startup => no need to test it in the future.
+	else  // composite is active, but we don't remember this parameter, since it could change if another session is used one day.
 	{
-		myData.bTestComposite = FALSE;
 		if (myData.bFirstLaunch)
 		{
 			cd_help_show_welcome_message ();
 		}
 	}
 	
-	// remember to not test it any more.
+	// remember if we don't need to check the composite any more.
 	if (! myData.bTestComposite)
 	{
 		gchar *cConfFilePath = g_strdup_printf ("%s/.help", g_cCairoDockDataDir);
 		cairo_dock_update_conf_file (cConfFilePath,
 			G_TYPE_BOOLEAN, "Launch", "test composite", myData.bTestComposite,
-			G_TYPE_INT, "Last Tip", "group", myData.iLastTipGroup,
-			G_TYPE_INT, "Last Tip", "key", myData.iLastTipKey,
-			G_TYPE_INVALID);  // write the tip too, in case it creates the file.
+			G_TYPE_INVALID);
 		g_free (cConfFilePath);
 	}
 	myData.iSidTestComposite = 0;
@@ -247,7 +244,7 @@ gboolean cd_help_get_params (G_GNUC_UNUSED gpointer data)
 {
 	// read our file.
 	gchar *cConfFilePath = g_strdup_printf ("%s/.help", g_cCairoDockDataDir);
-	if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // file already exists, get the last read tip.
+	if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // file already exists, get the latest state.
 	{
 		GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
 		if (pKeyFile != NULL)
@@ -263,6 +260,13 @@ gboolean cd_help_get_params (G_GNUC_UNUSED gpointer data)
 	{
 		myData.bFirstLaunch = TRUE;
 		myData.bTestComposite = TRUE;
+		
+		// create the file with all the entries
+		cairo_dock_update_conf_file (cConfFilePath,
+			G_TYPE_BOOLEAN, "Launch", "test composite", myData.bTestComposite,
+			G_TYPE_INT, "Last Tip", "group", myData.iLastTipGroup,
+			G_TYPE_INT, "Last Tip", "key", myData.iLastTipKey,
+			G_TYPE_INVALID);
 	}
 	
 	// test the composite for a few seconds (the Composite Manager may not be active yet).
