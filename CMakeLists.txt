@@ -62,8 +62,10 @@ set (VERSION_HELP "0.9.993") # needed to parse Help.conf.in
 
 if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND "${FORCE_LIB64}" STREQUAL "yes")  # 64bits and force install in lib64
 	set (libdir "${prefix}/lib64")
+elseif (NOT "${LIB_SUFFIX}" STREQUAL "")
+	set (libdir "${prefix}/lib${LIB_SUFFIX}")  # (...)/libXX ## some distro use ${LIB_SUFFIX}
 else()
-	set (libdir "${prefix}/${CMAKE_INSTALL_LIBDIR}${LIB_SUFFIX}")  # (...)/lib
+	set (libdir "${prefix}/${CMAKE_INSTALL_LIBDIR}")  # (...)/lib or (...)/lib64 or custom ## GNU Install dir
 endif()
 
 set (includedir "${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")  # (...)/include
@@ -119,21 +121,6 @@ if (NOT ${HAVE_LIBDL} OR NOT ${HAVE_DLFCN_H})
 	message(FATAL_ERROR "Cairo-Dock requires dlfcn.h")
 endif()
 
-MESSAGE (STATUS)
-MESSAGE (STATUS "Cairo-Dock will be compiled with the following options :")
-if (${XEXTEND_FOUND})
-	MESSAGE (STATUS " * Use X Extensions : yes")
-else()
-	MESSAGE (STATUS " * Use X Extensions : no")
-endif()
-if (${HAVE_LIBCRYPT})
-	MESSAGE (STATUS " * crypt passwords : yes")
-else()
-	MESSAGE (STATUS " * crypt passwords : no")
-endif()
-MESSAGE (STATUS " * GTK version : ${GTK_MAJOR}")
-MESSAGE (STATUS)
-
 ########### variables defined at compil time ###############
 
 set (CAIRO_DOCK_SHARE_DATA_DIR ${pkgdatadir})
@@ -166,9 +153,22 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CUR
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
 
-###########     misc      ###############
-#set (CPACK_SOURCE_GENERATOR "TGZ")
-#set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
-#set (CPACK_SOURCE_IGNORE_FILES "/build/;/.bzr/;/.deps/;Makefile$;Makefile.in;.gmo$;/.libs/;.lo$;.la$;POTFILES;stamp-it;aclocal.m4;config.guess$;/config.h$;/config.h.in$;/config.log$;/config.status$;/config.sub$;/configure$;/depcomp$;/install-sh$;/libtool$;/ltmain.sh$;/missing$;/stamp-h1$;/compile;/CMakeFiles/;/_CPack_Packages/;/autom4te.cache/;/install_manifest.txt$;.tar.gz$;/CMakeCache.txt$;/cairo-dock$;/scripts/;/doc/;/data/themes.conf$;/data/cairo-dock.conf$;/data/main-dock.conf$;/data/cairo-dock-simple.conf$;/cairo-dock.pc$;.cmake$;~$;${CPACK_SOURCE_IGNORE_FILES}")
-#include (CPack)  # a inclure apres les set.
-#add_custom_target( dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)  # pour pouvoir l'appeler avec "make dist"
+################# Summary #################
+
+MESSAGE (STATUS)
+MESSAGE (STATUS "Cairo-Dock ${VERSION} will be compiled with the following options:")
+if (${XEXTEND_FOUND})
+	MESSAGE (STATUS " * Use X Extensions: Yes")
+else()
+	MESSAGE (STATUS " * Use X Extensions: No")
+endif()
+if (${HAVE_LIBCRYPT})
+	MESSAGE (STATUS " * Crypt passwords : Yes")
+else()
+	MESSAGE (STATUS " * Crypt passwords : No")
+endif()
+MESSAGE (STATUS " * GTK version     : ${GTK_MAJOR} (${GTK_VERSION})")
+MESSAGE (STATUS " * Installation in : ${prefix}")
+MESSAGE (STATUS " * Lib directory   : ${libdir}")
+MESSAGE (STATUS " * Themes directory: ${CAIRO_DOCK_DISTANT_THEMES_DIR}")
+MESSAGE (STATUS)
