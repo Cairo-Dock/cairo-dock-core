@@ -153,7 +153,6 @@ static CairoDock * _cairo_dock_detach_launcher(Icon *pIcon)
 	
 	pIcon->cParentDockName = cParentDockName; // put it back !
 
-	///cairo_dock_update_dock_size (pParentDock);
 	return pParentDock;
 }
 static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, CairoDock *pMainDock)
@@ -387,14 +386,20 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 
 void cairo_dock_add_path_to_icon_theme (const gchar *cThemePath)
 {
-	g_signal_handlers_block_matched (s_pIconTheme,
-		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
-		0, 0, NULL, _on_icon_theme_changed, NULL);
+	if (s_bUseDefaultTheme)
+	{
+		g_signal_handlers_block_matched (s_pIconTheme,
+			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+			0, 0, NULL, _on_icon_theme_changed, NULL);
+	}
 	gtk_icon_theme_append_search_path (s_pIconTheme,
 		cThemePath);  /// TODO: does it check for unicity ?...
-	g_signal_handlers_unblock_matched (s_pIconTheme,
-		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
-		0, 0, NULL, _on_icon_theme_changed, NULL);  // will do nothing if the callback has not been connected
+	if (s_bUseDefaultTheme)
+	{
+		g_signal_handlers_unblock_matched (s_pIconTheme,
+			(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
+			0, 0, NULL, _on_icon_theme_changed, NULL);  // will do nothing if the callback has not been connected
+	}
 }
 
 void cairo_dock_remove_path_from_icon_theme (const gchar *cThemePath)
@@ -768,6 +773,7 @@ static void _on_icon_theme_changed (G_GNUC_UNUSED GtkIconTheme *pIconTheme, G_GN
 }
 static void _cairo_dock_load_icon_theme (void)
 {
+	g_return_if_fail (s_pIconTheme == NULL);
 	if (myIconsParam.cIconTheme == NULL  // no icon theme defined => use the default one.
 	|| strcmp (myIconsParam.cIconTheme, "_Custom Icons_") == 0)  // use custom icons and default theme as fallback
 	{
