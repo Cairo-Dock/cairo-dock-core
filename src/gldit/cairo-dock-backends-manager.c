@@ -284,7 +284,7 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 void cairo_dock_set_default_renderer (CairoDock *pDock)
 {
 	g_return_if_fail (pDock != NULL);
-	cairo_dock_set_renderer (pDock, (pDock->cRendererName != NULL ? pDock->cRendererName : NULL));  // NULL => laissera le champ cRendererName nul plutot que de mettre le nom de la vue par defaut.
+	cairo_dock_set_renderer (pDock, pDock->cRendererName);  // NULL => laissera le champ cRendererName nul plutot que de mettre le nom de la vue par defaut.
 }
 
 

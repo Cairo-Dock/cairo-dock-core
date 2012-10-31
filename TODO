@@ -52,6 +52,7 @@ For each new version:
 
 3.1:
 	- an appli icon loaded before being inserted in a dock !
+	- GMnu: recent items after an update
 	- add "add an applet" in the menu
 	- when an icon in a sub-dock demands attention, also animate the icon in the main dock.
 	- search in Recent-Events' dialog (seems like libzeitgeist is buggy)

@@ -1287,136 +1287,6 @@ static void _got_themes_combo_list (GHashTable *pThemeTable, gpointer *data)
 }
 
 
-/**#define CD_MAX_RATING 5
-static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, GtkTreeIter *iter, int iColumnIndex)
-{
-	gint iRating = 0;
-	gtk_tree_model_get (model, iter, iColumnIndex, &iRating, -1);
-	if (iRating > CD_MAX_RATING)
-		iRating = CD_MAX_RATING;
-	if (iRating > 0)
-	{
-		GString *s = g_string_sized_new (CD_MAX_RATING*4+1);
-		int i;
-		for (i= 0; i < iRating; i ++)
-			g_string_append (s, "★");
-		for (;i < CD_MAX_RATING; i ++)
-			g_string_append (s, "☆");
-		g_object_set (cell, "text", s->str, NULL);  // markup
-		g_string_free (s, TRUE);
-	}
-	else
-	{
-		gchar *cRateMe = NULL;
-		if (iColumnIndex == CAIRO_DOCK_MODEL_ORDER)  // note, peut etre changee (la sobriete ne peut pas).
-			cRateMe = g_strconcat ("<small><i>", _("Rate me"), "</i></small>", NULL);
-		g_object_set (cell, "markup", cRateMe ? cRateMe : "   -", NULL);  // pour la sobriete d'un theme utilisateur, plutot que d'avoir une case vide, on met un tiret dedans.
-		g_free (cRateMe);
-	}
-}
-static void _cairo_dock_render_sobriety (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
-{
-	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER2);
-}
-static void _cairo_dock_render_rating (GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, gpointer data)
-{
-	/// ignorer les themes "default"...
-	_render_rating (cell, model, iter, CAIRO_DOCK_MODEL_ORDER);
-}
-
-static GtkListStore *_make_rate_list_store (void)
-{
-	GString *s = g_string_sized_new (CD_MAX_RATING*4+1);
-	GtkListStore *note_list = gtk_list_store_new (2, G_TYPE_INT, G_TYPE_STRING);
-	GtkTreeIter iter;
-	int i, j;
-	for (i = 1; i <= 5; i ++)
-	{
-		g_string_assign (s, "");
-		for (j= 0; j < i; j ++)
-			g_string_append (s, "★");
-		for (;j < CD_MAX_RATING; j ++)
-			g_string_append (s, "☆");
-		
-		memset (&iter, 0, sizeof (GtkTreeIter));
-		gtk_list_store_append (GTK_LIST_STORE (note_list), &iter);
-		gtk_list_store_set (GTK_LIST_STORE (note_list), &iter,
-			0, i,
-			1, s->str, -1);
-	}
-	g_string_free (s, TRUE);
-	return note_list;
-}
-static void _change_rating (GtkCellRendererText * cell, gchar * path_string, gchar * new_text, GtkTreeModel * model)
-{
-	//g_print ("%s (%s : %s)\n", __func__, path_string, new_text);
-	g_return_if_fail (new_text != NULL && *new_text != '\0');
-	
-	GtkTreeIter it;
-	if (! gtk_tree_model_get_iter_from_string (model, &it, path_string))
-		return ;
-	
-	int iRating = 0;
-	gchar *str = new_text;
-	do
-	{
-		if (strncmp (str, "★", strlen ("★")) == 0)
-		{
-			str += strlen ("★");
-			iRating ++;
-		}
-		else
-			break ;
-	} while (1);
-	//g_print ("iRating : %d\n", iRating);
-	
-	gchar *cThemeName = NULL;
-	gint iState;
-	gtk_tree_model_get (model, &it,
-		CAIRO_DOCK_MODEL_RESULT, &cThemeName,
-		CAIRO_DOCK_MODEL_STATE, &iState, -1);
-	g_return_if_fail (cThemeName != NULL);
-	cairo_dock_extract_package_type_from_name (cThemeName);
-	//g_print ("theme : %s / %s\n", cThemeName, cDisplayedName);
-	
-	gchar *cRatingDir = g_strdup_printf ("%s/.rating", g_cThemesDirPath);  // il y'a un probleme ici, on ne connait pas le repertoire utilisateur des themes. donc ce code ne marche que pour les themes du dock (et n'est utilise que pour ca)
-	gchar *cRatingFile = g_strdup_printf ("%s/%s", cRatingDir, cThemeName);
-	//g_print ("on ecrit dans %s\n", cRatingFile);
-	if (iState == CAIRO_DOCK_USER_PACKAGE || iState == CAIRO_DOCK_LOCAL_PACKAGE || g_file_test (cRatingFile, G_FILE_TEST_EXISTS))  // ca n'est pas un theme distant, ou l'utilisateur a deja vote auparavant pour ce theme.
-	{
-		if (!g_file_test (cRatingDir, G_FILE_TEST_IS_DIR))
-		{
-			if (g_mkdir (cRatingDir, 7*8*8+7*8+5) != 0)
-			{
-				cd_warning ("couldn't create directory %s", cRatingDir);
-				return ;
-			}
-		}
-		gchar *cContent = g_strdup_printf ("%d", iRating);
-		g_file_set_contents (cRatingFile,
-			cContent,
-			-1,
-			NULL);
-		g_free (cContent);
-		
-		gtk_list_store_set (GTK_LIST_STORE (model), &it, CAIRO_DOCK_MODEL_ORDER, iRating, -1);
-	}
-	else
-	{
-		Icon *pIcon = cairo_dock_get_current_active_icon ();
-		CairoDock *pDock = NULL;
-		if (pIcon != NULL)
-			pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
-		if (pDock != NULL)
-			cairo_dock_show_temporary_dialog_with_icon (_("You must try the theme before you can rate it."), pIcon, CAIRO_CONTAINER (pDock), 3000, "same icon");
-		else
-			cairo_dock_show_general_message (_("You must try the theme before you can rate it."), 3000);
-	}
-	g_free (cThemeName);
-	g_free (cRatingFile);
-	g_free (cRatingDir);
-}*/
-
 static void _cairo_dock_configure_module (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	// GtkTreeView *pCombo = data[0];
@@ -1443,8 +1313,10 @@ static void _cairo_dock_configure_module (G_GNUC_UNUSED GtkButton *button, gpoin
 	else if (pModule != NULL && pModule->pInstancesList == NULL)
 	{
 		cMessage = g_strdup_printf (_("The '%s' plug-in is not active.\nActivate it now?"), cModuleName);
-		int iAnswer = cairo_dock_ask_question_and_wait (cMessage, pIcon, CAIRO_CONTAINER (pDock));
-		if (iAnswer == GTK_RESPONSE_YES)
+		int iClickedButton = cairo_dock_show_dialog_and_wait (cMessage,
+			pIcon, CAIRO_CONTAINER (pDock),
+			GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
+		if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 		{
 			cairo_dock_activate_module (pModule, NULL);
 			///cairo_dock_show_module_gui (cModuleName);

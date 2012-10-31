@@ -146,9 +146,12 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	{
 		cd_debug ("  This theme will be updated");
 		gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s?"), cNewThemeName);
-		int answer = cairo_dock_ask_general_question_and_wait (cQuestion);
+		Icon *pIcon = cairo_dock_get_dialogless_icon ();
+		int iClickedButton = cairo_dock_show_dialog_and_wait (cQuestion,
+			pIcon, CAIRO_CONTAINER (g_pMainDock),
+			GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 		g_free (cQuestion);
-		if (answer == GTK_RESPONSE_YES)
+		if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 		{
 			//\___________________ On traite le fichier de conf global et ceux des docks principaux.
 			gchar *cNewConfFilePath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_CONF_FILE);
@@ -311,8 +314,11 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 		g_string_printf (sCommand, _("Are you sure you want to delete theme %s?"), cThemesList[0]);
 	else
 		g_string_printf (sCommand, _("Are you sure you want to delete these themes?"));
-	int answer = cairo_dock_ask_general_question_and_wait (sCommand->str);
-	if (answer == GTK_RESPONSE_YES)
+	Icon *pIcon = cairo_dock_get_dialogless_icon ();
+	int iClickedButton = cairo_dock_show_dialog_and_wait (sCommand->str,
+		pIcon, CAIRO_CONTAINER (g_pMainDock),
+		GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
+	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 	{
 		gchar *cThemeName;
 		int i, r;

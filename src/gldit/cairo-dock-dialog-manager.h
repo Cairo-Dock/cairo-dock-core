@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 * But in most of case, you can just use one of the following convenient functions, that will do the job for you.
 * - to show a message, you can use \ref cairo_dock_show_temporary_dialog_with_icon
 * - to ask the user a choice, a value or a text, you can use \ref cairo_dock_show_dialog_with_question, \ref cairo_dock_show_dialog_with_value or \ref cairo_dock_show_dialog_with_entry.
-* - if you need to block while waiting for the user, use the xxx_and_wait version of these functions.
 * - if you want to pop up only 1 dialog at once on a given icon, use \ref cairo_dock_remove_dialog_if_any before you pop up your dialog.
 */
 
@@ -126,7 +125,7 @@ CairoDialog *cairo_dock_build_dialog (CairoDialogAttribute *pAttribute, Icon *pI
 *@param pContainer the container of the icon.
 *@param fTimeLength the duration of the dialog (in ms), or 0 for an unlimited dialog.
 *@param cIconPath path to an icon to display in the margin.
-*@param pInteractiveWidget a GTK widget; It is destroyed with the dialog. Use 'gtk_widget_reparent()' before if you want to keep it alive, or use #cairo_dock_show_dialog_and_wait.
+*@param pInteractiveWidget a GTK widget; It is destroyed with the dialog. Use 'cairo_dock_steal_interactive_widget_from_dialog()' before if you want to keep it alive.
 *@param pActionFunc the callback called when the user makes its choice. NULL means there will be no buttons.
 *@param data data passed as a parameter of the callback.
 *@param pFreeDataFunc function used to free the data when the dialog is destroyed, or NULL if unnecessary.
@@ -216,7 +215,6 @@ CairoDialog *cairo_dock_show_dialog_with_entry (const gchar *cText, Icon *pIcon,
 CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, double fValue, double fMaxValue, CairoDockActionOnAnswerFunc pActionFunc, gpointer data, GFreeFunc pFreeDataFunc);
 
 
-
 /** Pop up a dialog with GTK widget and 2 buttons ok/cancel, and block until the user makes its choice.
 *@param cText the message to display.
 *@param pIcon the icon that will hold the dialog.
@@ -226,34 +224,7 @@ CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon,
 *@param pInteractiveWidget an interactive widget.
 *@return the number of the button that was clicked : 0 or -1 for OK, 1 or -2 for CANCEL, -3 if the dialog has been destroyed before. The dialog is destroyed after the user choosed, but the interactive widget is not destroyed, which allows to retrieve the changes made by the user. Destroy it with 'gtk_widget_destroy' when you're done with it.
 */
-int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, double fTimeLength, const gchar *cIconPath, GtkWidget *pInteractiveWidget);
-
-/** Pop up a dialog with a text entry, and 2 buttons ok/cancel, and block until the user makes its choice.
-*@param cMessage the message to display.
-*@param pIcon the icon that will hold the dialog.
-*@param pContainer the container of the icon.
-*@param cInitialAnswer the initial value of the entry (can be NULL).
-*@return the text entered by the user, or NULL if he cancelled or if the dialog has been destroyed before.
-*/
-gchar *cairo_dock_show_demand_and_wait (const gchar *cMessage, Icon *pIcon, CairoContainer *pContainer, const gchar *cInitialAnswer);
-
-/** Pop up a dialog with an horizontal scale between 0 and fMaxValue, and 2 buttons ok/cancel, and block until the user makes its choice.
-*@param cMessage the message to display.
-*@param pIcon the icon that will hold the dialog.
-*@param pContainer the container of the icon.
-*@param fInitialValue the initial value of the scale.
-*@param fMaxValue the maximum value of the scale.
-*@return the value choosed by the user, or -1 if he cancelled or if the dialog has been destroyed before.
-*/
-double cairo_dock_show_value_and_wait (const gchar *cMessage, Icon *pIcon, CairoContainer *pContainer, double fInitialValue, double fMaxValue);
-
-/** Pop up a dialog with a question and 2 buttons yes/no, and block until the user makes its choice.
-*@param cQuestion the question to ask.
-*@param pIcon the icon that will hold the dialog.
-*@param pContainer the container of the icon.
-*@return GTK_RESPONSE_YES ou GTK_RESPONSE_NO according to the user's choice, or GTK_RESPONSE_NONE if the dialog has been destroyed before.
-*/
-int cairo_dock_ask_question_and_wait (const gchar *cQuestion, Icon *pIcon, CairoContainer *pContainer);
+int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoContainer *pContainer, const gchar *cIconPath, GtkWidget *pInteractiveWidget);
 
 
 /** Test if an icon has at least one dialog.
@@ -276,12 +247,6 @@ Icon *cairo_dock_get_dialogless_icon_full (CairoDock *pDock);
 *@return the newly created dialog, visible and with a reference of 1.
 */
 CairoDialog * cairo_dock_show_general_message (const gchar *cMessage, double fTimeLength);
-
-/** Pop up a dialog, pointing on "the best icon possible", and wait. This allows to display a general message.
-*@param cQuestion the message.
-*@return GTK_RESPONSE_YES ou GTK_RESPONSE_NO according to the user's choice, or GTK_RESPONSE_NONE if the dialog has been destroyed before.
-*/
-int cairo_dock_ask_general_question_and_wait (const gchar *cQuestion);
 
 
 /** Hide a dialog.

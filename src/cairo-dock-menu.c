@@ -115,20 +115,26 @@ static void _cairo_dock_configure_root_dock (G_GNUC_UNUSED GtkMenuItem *pMenuIte
 	
 	cairo_dock_show_items_gui (NULL, CAIRO_CONTAINER (pDock), NULL, 0);
 }
+static void _on_answer_delete_dock (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, CairoDock *pDock, G_GNUC_UNUSED CairoDialog *pDialog)
+{
+	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
+	{
+		cairo_dock_remove_icons_from_dock (pDock, NULL, NULL);
+		
+		const gchar *cDockName = cairo_dock_search_dock_name (pDock);
+		cairo_dock_destroy_dock (pDock, cDockName);
+	}
+}
 static void _cairo_dock_delete_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, CairoDock *pDock)
 {
 	g_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
 	
 	Icon *pIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	
-	int answer = cairo_dock_ask_question_and_wait (_("Delete this dock?"), pIcon, CAIRO_CONTAINER (pDock));
-	if (answer != GTK_RESPONSE_YES)
-		return ;
-	
-	cairo_dock_remove_icons_from_dock (pDock, NULL, NULL);
-	
-	const gchar *cDockName = cairo_dock_search_dock_name (pDock);
-	cairo_dock_destroy_dock (pDock, cDockName);
+	cairo_dock_show_dialog_with_question (_("Delete this dock?"),
+		pIcon, CAIRO_CONTAINER (pDock),
+		CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
+		(CairoDockActionOnAnswerFunc)_on_answer_delete_dock, pDock, (GFreeFunc)NULL);
 }
 static void _cairo_dock_initiate_theme_management (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
 {
@@ -401,19 +407,25 @@ static void _cairo_dock_add_autostart (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_G
 	g_free (cCairoAutoStartDirPath);
 }
 
+static void _on_answer_quit (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, G_GNUC_UNUSED gpointer data, G_GNUC_UNUSED CairoDialog *pDialog)
+{
+	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
+	{
+		gtk_main_quit ();
+	}
+}
 static void _cairo_dock_quit (G_GNUC_UNUSED GtkMenuItem *pMenuItem, CairoContainer *pContainer)
 {
-	//cairo_dock_on_delete (pDock->container.pWidget, NULL, pDock);
 	Icon *pIcon = NULL;
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 		pIcon = cairo_dock_get_pointed_icon (CAIRO_DOCK (pContainer)->icons);
 	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
 		pIcon = CAIRO_DESKLET (pContainer)->pIcon;
 	
-	int answer = cairo_dock_ask_question_and_wait (_("Quit Cairo-Dock?"), pIcon, pContainer);
-	cd_debug ("quit : %d (yes:%d)", answer, GTK_RESPONSE_YES);
-	if (answer == GTK_RESPONSE_YES)
-		gtk_main_quit ();
+	cairo_dock_show_dialog_with_question (_("Quit Cairo-Dock?"),
+		pIcon, pContainer,
+		CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
+		(CairoDockActionOnAnswerFunc) _on_answer_quit, NULL, (GFreeFunc)NULL);
 }
 
 
@@ -590,6 +602,35 @@ static void _add_add_entry (GtkWidget *pMenu, gpointer *data)
  /////////// LAUNCHER ACTIONS //////////////
 ///////////////////////////////////////////
 
+static void _on_answer_remove_icon (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, Icon *icon, G_GNUC_UNUSED CairoDialog *pDialog)
+{
+	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
+	{
+		if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon)
+		&& icon->pSubDock != NULL)  // remove the sub-dock's content from the theme or dispatch it in the main dock.
+		{
+			gboolean bDestroyIcons = TRUE;
+			if (icon->pSubDock->icons != NULL)  // on propose de repartir les icones de son sous-dock dans le dock principal.
+			{
+				int iClickedButton = cairo_dock_show_dialog_and_wait (_("Do you want to re-dispatch the icons contained inside this container into the dock?\n(otherwise they will be destroyed)"),
+					icon, CAIRO_CONTAINER (icon->pContainer),
+					CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
+				if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
+					bDestroyIcons = FALSE;
+			}
+			if (!bDestroyIcons)
+			{
+				CairoDock *pDock = CAIRO_DOCK (icon->pContainer);
+				const gchar *cDockName = cairo_dock_search_dock_name (pDock);
+				cairo_dock_remove_icons_from_dock (icon->pSubDock, pDock, cDockName);
+			}
+			cairo_dock_destroy_dock (icon->pSubDock, (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL ? icon->cClass : icon->cName));
+			icon->pSubDock = NULL;
+		}
+		
+		cairo_dock_trigger_icon_removal_from_dock (icon);
+	}
+}
 static void _cairo_dock_remove_launcher (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
@@ -604,32 +645,11 @@ static void _cairo_dock_remove_launcher (G_GNUC_UNUSED GtkMenuItem *pMenuItem, g
 			cName = "no name";
 	}
 	gchar *question = g_strdup_printf (_("You're about to remove this icon (%s) from the dock. Are you sure?"), cName);
-	int answer = cairo_dock_ask_question_and_wait (question, icon, CAIRO_CONTAINER (pDock));
+	cairo_dock_show_dialog_with_question (question,
+			icon, CAIRO_CONTAINER (pDock),
+			"same icon",
+			(CairoDockActionOnAnswerFunc) _on_answer_remove_icon, icon, (GFreeFunc)NULL);
 	g_free (question);
-	if (answer != GTK_RESPONSE_YES)
-		return ;
-	
-	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon)
-	&& icon->pSubDock != NULL)  // remove the sub-dock's content from the theme or dispatch it in the main dock.
-	{
-		gboolean bDestroyIcons = TRUE;
-		if (icon->pSubDock->icons != NULL)  // on propose de repartir les icones de son sous-dock dans le dock principal.
-		{
-			int answer = cairo_dock_ask_question_and_wait (_("Do you want to re-dispatch the icons contained inside this container into the dock?\n(otherwise they will be destroyed)"), icon, CAIRO_CONTAINER (pDock));
-			g_return_if_fail (answer != GTK_RESPONSE_NONE);
-			if (answer == GTK_RESPONSE_YES)
-				bDestroyIcons = FALSE;
-		}
-		if (!bDestroyIcons)
-		{
-			const gchar *cDockName = cairo_dock_search_dock_name (pDock);
-			cairo_dock_remove_icons_from_dock (icon->pSubDock, pDock, cDockName);
-		}
-		cairo_dock_destroy_dock (icon->pSubDock, (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL ? icon->cClass : icon->cName));
-		icon->pSubDock = NULL;
-	}
-	
-	cairo_dock_trigger_icon_removal_from_dock (icon);
 }
 
 static void _cairo_dock_modify_launcher (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
@@ -793,6 +813,13 @@ static void _cairo_dock_detach_module (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpo
 	cairo_dock_detach_module_instance (icon->pModuleInstance);
 }
 
+static void _on_answer_remove_module_instance (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, Icon *icon, G_GNUC_UNUSED CairoDialog *pDialog)
+{
+	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
+	{
+		cairo_dock_remove_module_instance (icon->pModuleInstance);
+	}
+}
 static void _cairo_dock_remove_module_instance (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
@@ -802,13 +829,11 @@ static void _cairo_dock_remove_module_instance (G_GNUC_UNUSED GtkMenuItem *pMenu
 	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
 	gchar *question = g_strdup_printf (_("You're about to remove this applet (%s) from the dock. Are you sure?"), icon->pModuleInstance->pModule->pVisitCard->cTitle);
-	int answer = cairo_dock_ask_question_and_wait (question, icon, CAIRO_CONTAINER (pContainer));
-	if (answer == GTK_RESPONSE_YES)
-	{
-		///if (icon->pModuleInstance->pModule->pInstancesList->next == NULL)  // plus d'instance du module apres ca.
-		///	cairo_dock_deactivate_module_in_gui (icon->pModuleInstance->pModule->pVisitCard->cModuleName);
-		cairo_dock_remove_module_instance (icon->pModuleInstance);
-	}
+	cairo_dock_show_dialog_with_question (question,
+		icon, CAIRO_CONTAINER (pContainer),
+		"same icon",
+		(CairoDockActionOnAnswerFunc) _on_answer_remove_module_instance, icon, (GFreeFunc)NULL);
+	g_free (question);
 }
 
 static void _cairo_dock_add_module_instance (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
@@ -846,6 +871,129 @@ static void _cairo_dock_launch_new (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoint
   /////////////////////////////////////////
  /// BUILD CONTAINER MENU NOTIFICATION ///
 /////////////////////////////////////////
+
+static void _show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPreviewImage)
+{
+	gchar *cFileName = gtk_file_chooser_get_preview_filename (pFileChooser);
+	if (cFileName == NULL)
+		return ;
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cFileName, 64, 64, NULL);
+	g_free (cFileName);
+	if (pixbuf != NULL)
+	{
+		gtk_image_set_from_pixbuf (pPreviewImage, pixbuf);
+		g_object_unref (pixbuf);
+		gtk_file_chooser_set_preview_widget_active (pFileChooser, TRUE);
+	}
+	else
+		gtk_file_chooser_set_preview_widget_active (pFileChooser, FALSE);
+}
+static void _cairo_dock_set_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	if (! CAIRO_DOCK_IS_APPLI (icon))
+		return;
+	
+	GtkWidget* pFileChooserDialog = gtk_file_chooser_dialog_new (
+		_("Pick up an image"),
+		GTK_WINDOW (pDock->container.pWidget),
+		GTK_FILE_CHOOSER_ACTION_OPEN,
+		GTK_STOCK_OK,
+		GTK_RESPONSE_OK,
+		GTK_STOCK_CANCEL,
+		GTK_RESPONSE_CANCEL,
+		NULL);
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), "/usr/share/icons");  // we could also use 'xdg-user-dir PICTURES' or /usr/share/icons or ~/.icons, but actually we have no idea where the user will want to pick the image, so let's not try to be smart.
+	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), FALSE);
+	
+	GtkWidget *pPreviewImage = gtk_image_new ();
+	gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (pFileChooserDialog), pPreviewImage);
+	g_signal_connect (GTK_FILE_CHOOSER (pFileChooserDialog), "update-preview", G_CALLBACK (_show_image_preview), pPreviewImage);
+
+	// a filter
+	GtkFileFilter *pFilter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (pFilter, _("Image"));
+	gtk_file_filter_add_pixbuf_formats (pFilter);
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (pFileChooserDialog), pFilter);
+	
+	gtk_widget_show (pFileChooserDialog);
+	int answer = gtk_dialog_run (GTK_DIALOG (pFileChooserDialog));
+	if (answer == GTK_RESPONSE_OK)
+	{
+		if (myTaskbarParam.cOverwriteException != NULL && icon->cClass != NULL)  // si cette classe etait definie pour ne pas ecraser l'icone X, on le change, sinon l'action utilisateur n'aura aucun impact, ce sera troublant.
+		{
+			gchar **pExceptions = g_strsplit (myTaskbarParam.cOverwriteException, ";", -1);
+			
+			int i, j = -1;
+			for (i = 0; pExceptions[i] != NULL; i ++)
+			{
+				if (j == -1 && strcmp (pExceptions[i], icon->cClass) == 0)
+				{
+					g_free (pExceptions[i]);
+					pExceptions[i] = NULL;
+					j = i;
+				}
+			}  // apres la boucle, i = nbre d'elements, j = l'element qui a ete enleve.
+			if (j != -1)  // un element a ete enleve.
+			{
+				cd_warning ("The class '%s' was explicitely set up to use the X icon, we'll change this behavior automatically.", icon->cClass);
+				if (j < i - 1)  // ce n'est pas le dernier
+				{
+					pExceptions[j] = pExceptions[i-1];
+					pExceptions[i-1] = NULL;
+				}
+				
+				myTaskbarParam.cOverwriteException = g_strjoinv (";", pExceptions);
+				cairo_dock_set_overwrite_exceptions (myTaskbarParam.cOverwriteException);
+				
+				GKeyFile *pKeyFile = cairo_dock_open_key_file (g_cConfFile);
+				if (pKeyFile != NULL)
+				{
+					g_key_file_set_string (pKeyFile, "TaskBar", "overwrite exception", myTaskbarParam.cOverwriteException);
+					cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
+					
+					g_key_file_free (pKeyFile);
+				}
+			}
+			g_strfreev (pExceptions);
+		}
+		
+		gchar *cFilePath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (pFileChooserDialog));
+		cairo_dock_set_custom_icon_on_appli (cFilePath, icon, CAIRO_CONTAINER (pDock));
+		g_free (cFilePath);
+	}
+	gtk_widget_destroy (pFileChooserDialog);
+}
+static void _cairo_dock_remove_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	CairoDock *pDock = data[1];
+	if (! CAIRO_DOCK_IS_APPLI (icon))
+		return;
+	
+	const gchar *cClassIcon = cairo_dock_get_class_icon (icon->cClass);
+	if (cClassIcon == NULL)
+		cClassIcon = icon->cClass;
+	
+	gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, cClassIcon);
+	if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+	{
+		g_free (cCustomIcon);
+		cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, cClassIcon);
+		if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+		{
+			g_free (cCustomIcon);
+			cCustomIcon = NULL;
+		}
+	}
+	if (cCustomIcon != NULL)
+	{
+		g_remove (cCustomIcon);
+		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
+		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
+	}
+}
 
 gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *pUserData, Icon *icon, CairoContainer *pContainer, GtkWidget *menu, G_GNUC_UNUSED gboolean *bDiscardMenu)
 {
@@ -1052,6 +1200,34 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 				if (! cairo_dock_class_is_inhibited (pIcon->cClass))  // if the class doesn't already have an inhibator somewhere.
 				{
 					_add_entry_in_menu (_("Make it a launcher"), GTK_STOCK_CONVERT, _cairo_dock_make_launcher_from_appli, pItemSubMenu);
+					
+					if (!myDocksParam.bLockAll && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
+					{
+						if (myTaskbarParam.bOverWriteXIcons)
+						{
+							const gchar *cClassIcon = cairo_dock_get_class_icon (icon->cClass);
+							if (cClassIcon == NULL)
+								cClassIcon = icon->cClass;
+							
+							gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, cClassIcon);
+							if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+							{
+								g_free (cCustomIcon);
+								cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, cClassIcon);
+								if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
+								{
+									g_free (cCustomIcon);
+									cCustomIcon = NULL;
+								}
+							}
+							if (cCustomIcon != NULL)
+							{
+								_add_entry_in_menu (_("Remove custom icon"), GTK_STOCK_REMOVE, _cairo_dock_remove_custom_appli_icon, pItemSubMenu);
+							}
+						}
+						
+						_add_entry_in_menu (_("Set a custom icon"), GTK_STOCK_SELECT_COLOR, _cairo_dock_set_custom_appli_icon, pItemSubMenu);
+					}
 				}
 			}
 			else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet (icon or desklet) (the sub-icons have been filtered before and won't have this menu).
@@ -1102,128 +1278,6 @@ static void _cairo_dock_close_appli (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoin
 	// CairoDock *pDock = data[1];
 	if (CAIRO_DOCK_IS_APPLI (icon))
 		cairo_dock_close_xwindow (icon->Xid);
-}
-static void _show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPreviewImage)
-{
-	gchar *cFileName = gtk_file_chooser_get_preview_filename (pFileChooser);
-	if (cFileName == NULL)
-		return ;
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cFileName, 64, 64, NULL);
-	g_free (cFileName);
-	if (pixbuf != NULL)
-	{
-		gtk_image_set_from_pixbuf (pPreviewImage, pixbuf);
-		g_object_unref (pixbuf);
-		gtk_file_chooser_set_preview_widget_active (pFileChooser, TRUE);
-	}
-	else
-		gtk_file_chooser_set_preview_widget_active (pFileChooser, FALSE);
-}
-static void _cairo_dock_set_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
-{
-	Icon *icon = data[0];
-	CairoDock *pDock = data[1];
-	if (! CAIRO_DOCK_IS_APPLI (icon))
-		return;
-	
-	GtkWidget* pFileChooserDialog = gtk_file_chooser_dialog_new (
-		_("Pick up an image"),
-		GTK_WINDOW (pDock->container.pWidget),
-		GTK_FILE_CHOOSER_ACTION_OPEN,
-		GTK_STOCK_OK,
-		GTK_RESPONSE_OK,
-		GTK_STOCK_CANCEL,
-		GTK_RESPONSE_CANCEL,
-		NULL);
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), "/usr/share/icons");  // we could also use 'xdg-user-dir PICTURES' or /usr/share/icons or ~/.icons, but actually we have no idea where the user will want to pick the image, so let's not try to be smart.
-	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), FALSE);
-	
-	GtkWidget *pPreviewImage = gtk_image_new ();
-	gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (pFileChooserDialog), pPreviewImage);
-	g_signal_connect (GTK_FILE_CHOOSER (pFileChooserDialog), "update-preview", G_CALLBACK (_show_image_preview), pPreviewImage);
-
-	// a filter
-	GtkFileFilter *pFilter = gtk_file_filter_new ();
-	gtk_file_filter_set_name (pFilter, _("Image"));
-	gtk_file_filter_add_pixbuf_formats (pFilter);
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (pFileChooserDialog), pFilter);
-	
-	gtk_widget_show (pFileChooserDialog);
-	int answer = gtk_dialog_run (GTK_DIALOG (pFileChooserDialog));
-	if (answer == GTK_RESPONSE_OK)
-	{
-		if (myTaskbarParam.cOverwriteException != NULL && icon->cClass != NULL)  // si cette classe etait definie pour ne pas ecraser l'icone X, on le change, sinon l'action utilisateur n'aura aucun impact, ce sera troublant.
-		{
-			gchar **pExceptions = g_strsplit (myTaskbarParam.cOverwriteException, ";", -1);
-			
-			int i, j = -1;
-			for (i = 0; pExceptions[i] != NULL; i ++)
-			{
-				if (j == -1 && strcmp (pExceptions[i], icon->cClass) == 0)
-				{
-					g_free (pExceptions[i]);
-					pExceptions[i] = NULL;
-					j = i;
-				}
-			}  // apres la boucle, i = nbre d'elements, j = l'element qui a ete enleve.
-			if (j != -1)  // un element a ete enleve.
-			{
-				cd_warning ("The class '%s' was explicitely set up to use the X icon, we'll change this behavior automatically.", icon->cClass);
-				if (j < i - 1)  // ce n'est pas le dernier
-				{
-					pExceptions[j] = pExceptions[i-1];
-					pExceptions[i-1] = NULL;
-				}
-				
-				myTaskbarParam.cOverwriteException = g_strjoinv (";", pExceptions);
-				cairo_dock_set_overwrite_exceptions (myTaskbarParam.cOverwriteException);
-				
-				GKeyFile *pKeyFile = cairo_dock_open_key_file (g_cConfFile);
-				if (pKeyFile != NULL)
-				{
-					g_key_file_set_string (pKeyFile, "TaskBar", "overwrite exception", myTaskbarParam.cOverwriteException);
-					cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
-					
-					g_key_file_free (pKeyFile);
-				}
-			}
-			g_strfreev (pExceptions);
-		}
-		
-		gchar *cFilePath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (pFileChooserDialog));
-		cairo_dock_set_custom_icon_on_appli (cFilePath, icon, CAIRO_CONTAINER (pDock));
-		g_free (cFilePath);
-	}
-	gtk_widget_destroy (pFileChooserDialog);
-}
-static void _cairo_dock_remove_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
-{
-	Icon *icon = data[0];
-	CairoDock *pDock = data[1];
-	if (! CAIRO_DOCK_IS_APPLI (icon))
-		return;
-	
-	const gchar *cClassIcon = cairo_dock_get_class_icon (icon->cClass);
-	if (cClassIcon == NULL)
-		cClassIcon = icon->cClass;
-	
-	gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, cClassIcon);
-	if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
-	{
-		g_free (cCustomIcon);
-		cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, cClassIcon);
-		if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
-		{
-			g_free (cCustomIcon);
-			cCustomIcon = NULL;
-		}
-	}
-	if (cCustomIcon != NULL)
-	{
-		g_remove (cCustomIcon);
-		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
-		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
-	}
 }
 static void _cairo_dock_kill_appli (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
 {
@@ -1892,34 +1946,6 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		_add_entry_in_menu (bIsAbove ? _("Don't keep above") : _("Keep above"), bIsAbove ? GTK_STOCK_GOTO_BOTTOM : GTK_STOCK_GOTO_TOP, _cairo_dock_change_window_above, pSubMenuOtherActions);
 		
 		_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
-		
-		if (!myDocksParam.bLockAll && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
-		{
-			if (myTaskbarParam.bOverWriteXIcons)
-			{
-				const gchar *cClassIcon = cairo_dock_get_class_icon (icon->cClass);
-				if (cClassIcon == NULL)
-					cClassIcon = icon->cClass;
-				
-				gchar *cCustomIcon = g_strdup_printf ("%s/%s.png", g_cCurrentIconsPath, cClassIcon);
-				if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
-				{
-					g_free (cCustomIcon);
-					cCustomIcon = g_strdup_printf ("%s/%s.svg", g_cCurrentIconsPath, cClassIcon);
-					if (!g_file_test (cCustomIcon, G_FILE_TEST_EXISTS))
-					{
-						g_free (cCustomIcon);
-						cCustomIcon = NULL;
-					}
-				}
-				if (cCustomIcon != NULL)
-				{
-					_add_entry_in_menu (_("Remove custom icon"), GTK_STOCK_REMOVE, _cairo_dock_remove_custom_appli_icon, pSubMenuOtherActions);
-				}
-			}
-			
-			_add_entry_in_menu (_("Set a custom icon"), GTK_STOCK_SELECT_COLOR, _cairo_dock_set_custom_appli_icon, pSubMenuOtherActions);
-		}
 		
 		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
 	}

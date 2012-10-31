@@ -180,6 +180,11 @@ struct _CairoDialog {
 	gpointer reserved[2];
 };
 
+#define CAIRO_DIALOG_FIRST_BUTTON 0
+#define CAIRO_DIALOG_ENTER_KEY -1
+#define CAIRO_DIALOG_ESCAPE_KEY -2
+
+
 #define CAIRO_DIALOG_MIN_SIZE 20
 #define CAIRO_DIALOG_TEXT_MARGIN 3
 #define CAIRO_DIALOG_MIN_ENTRY_WIDTH 150

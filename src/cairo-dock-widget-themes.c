@@ -29,7 +29,7 @@
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-packages.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-dialog-manager.h"  // cairo_dock_ask_general_question_and_wait
+#include "cairo-dock-dialog-manager.h"  // cairo_dock_show_dialog_and_wait
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-task.h"
@@ -42,6 +42,7 @@
 #include "cairo-dock-widget-themes.h"
 
 extern gchar *g_cThemesDirPath;
+extern CairoDock *g_pMainDock;
 
 static void _themes_widget_apply (CDWidget *pCdWidget);
 static void _themes_widget_reset (CDWidget *pCdWidget);
@@ -182,8 +183,11 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 	gboolean bNeedSave = cairo_dock_current_theme_need_save ();
 	if (bNeedSave)
 	{
-		int iAnswer = cairo_dock_ask_general_question_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"));
-		if (iAnswer != GTK_RESPONSE_YES)
+		Icon *pIcon = cairo_dock_get_dialogless_icon ();
+		int iClickedButton = cairo_dock_show_dialog_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"),
+			pIcon, CAIRO_CONTAINER (g_pMainDock),
+			CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
+		if (iClickedButton != 0 && iClickedButton != -1)  // cancel button or Escape.
 		{
 			return FALSE;
 		}
