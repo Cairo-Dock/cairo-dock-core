@@ -221,7 +221,7 @@ static gboolean on_button_press_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventButton* pButton,
 	CairoDialog *pDialog)
 {
-	g_print ("press button on dialog (%d > %d)\n", pButton->time, pDialog->iButtonPressTime);
+	// g_print ("press button on dialog (%d > %d)\n", pButton->time, pDialog->iButtonPressTime);
 	if (pButton->button == 1 && pButton->time > pDialog->iButtonPressTime)  // left-click, and not a click on the interactive widget that has been passed to the dialog.
 	{
 		// the interactive widget may have holes (for instance, a gtk-calendar); ignore them, otherwise it's really easy to close the dialog unexpectedly.
@@ -675,7 +675,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 			}
 		}
 	}
-	g_print (" -> [%d ; %d], %d, %d\n", iLimitXLeft, iLimitXRight, iWidth, iMinYLimit);
+	// g_print (" -> [%d ; %d], %d, %d\n", iLimitXLeft, iLimitXRight, iWidth, iMinYLimit);
 	if (iLimitXRight - iLimitXLeft >= MIN (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iWidth) || !bDialogOnOurWay)  // there is enough room to place the dialog.
 	{
 		if (pDialog->bRight)
@@ -686,7 +686,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 			pDialog->iComputedPositionY = 0;
 		else if (!pDialog->container.bDirectionUp && pDialog->iComputedPositionY + iHeight > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
 			pDialog->iComputedPositionY = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - iHeight;
-		g_print ("  --> %dn", pDialog->iComputedPositionX);
+		// g_print ("  --> %d\n", pDialog->iComputedPositionX);
 	}
 	else  // not enough room, try again above the closest dialog that was disturbing.
 	{
@@ -932,7 +932,7 @@ static void _cairo_dock_get_answer_from_dialog (int iClickedButton, G_GNUC_UNUSE
 {
 	cd_message ("%s (%d)", __func__, iClickedButton);
 	int *iAnswerBuffer = data[0];
-	GMainLoop *pBlockingLoop = data[1];
+	// GMainLoop *pBlockingLoop = data[1];
 	
 	cairo_dock_steal_interactive_widget_from_dialog (pDialog);  // le dialogue disparaitra apres cette fonction, mais le widget interactif doit rester.
 	
@@ -948,7 +948,7 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 {
 	int iClickedButton = -3;
 	GMainLoop *pBlockingLoop = g_main_loop_new (NULL, FALSE);
-	gpointer data[2] = {&iClickedButton, pBlockingLoop};  // inutile d'allouer 'data' puisqu'on va bloquer.
+	gpointer data[2] = {&iClickedButton, pBlockingLoop};  // it's useless to allocate 'data' because this function will wait for an answer
 
 	CairoDialog *pDialog = cairo_dock_show_dialog_full (cText,
 		pIcon,
@@ -977,9 +977,9 @@ int cairo_dock_show_dialog_and_wait (const gchar *cText, Icon *pIcon, CairoConta
 		{
 			cairo_dock_pop_up (CAIRO_DOCK (pContainer));
 		}*/
-		cd_debug ("debut de boucle bloquante ...\n");
+		cd_debug ("Start the blocking loop...");
 		g_main_loop_run (pBlockingLoop);
-		cd_debug ("fin de boucle bloquante -> %d", iClickedButton);
+		cd_debug ("End of the blocking loop -> %d", iClickedButton);
 		/*if (myDocksParam.bPopUp && CAIRO_DOCK_IS_DOCK (pContainer))
 			cairo_dock_pop_down (CAIRO_DOCK (pContainer));*/
 		/**if (CAIRO_DOCK_IS_DOCK (pContainer))
