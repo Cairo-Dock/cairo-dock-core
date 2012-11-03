@@ -6,16 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-09-30 14:51+0000\n"
 "PO-Revision-Date: 2012-09-30 17:28+0000\n"
 "Last-Translator: XiaoJSoft <whs_jwc@163.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2012-10-01 04:43+0000\n"
 "X-Generator: Launchpad (build 16049)\n"
-"Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -42,7 +41,7 @@ msgstr "桌面设置"
 msgid "Accessories"
 msgstr "配件"
 
-#: ../src/cairo-dock-gui-advanced.c:139 ../src/cairo-dock-gui-advanced.c:1559
+#: ../src/cairo-dock-gui-advanced.c:139 ../src/cairo-dock-gui-advanced.c:1553
 #: ../src/cairo-dock-widget-plugins.c:162 ../data/messages:763
 msgid "System"
 msgstr "系统设置"
@@ -51,23 +50,24 @@ msgstr "系统设置"
 msgid "Fun"
 msgstr "娱乐"
 
-#: ../src/cairo-dock-gui-advanced.c:141 ../src/cairo-dock-gui-advanced.c:1836
+#: ../src/cairo-dock-gui-advanced.c:141 ../src/cairo-dock-gui-advanced.c:1830
+#: ../src/gldit/cairo-dock-gui-factory.c:780
 msgid "All"
 msgstr "所有的"
 
-#: ../src/cairo-dock-gui-advanced.c:1527
+#: ../src/cairo-dock-gui-advanced.c:1521
 msgid "Set the position of the main dock."
 msgstr "设置主Dock面板的位置"
 
 # #################################
 # ########### cairo-dock.conf #############
 # #################################
-#: ../src/cairo-dock-gui-advanced.c:1528 ../data/messages:321
+#: ../src/cairo-dock-gui-advanced.c:1522 ../data/messages:321
 #: ../data/messages:529
 msgid "Position"
 msgstr "位置"
 
-#: ../src/cairo-dock-gui-advanced.c:1535
+#: ../src/cairo-dock-gui-advanced.c:1529
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -77,68 +77,68 @@ msgstr ""
 "还是不可见呢？\n"
 "配置您访问您的Dock和子Dock的方式！"
 
-#: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-menu.c:1991
+#: ../src/cairo-dock-gui-advanced.c:1530 ../src/cairo-dock-menu.c:2020
 #: ../data/messages:339
 msgid "Visibility"
 msgstr "可见性"
 
-#: ../src/cairo-dock-gui-advanced.c:1543
+#: ../src/cairo-dock-gui-advanced.c:1537
 msgid "Display and interact with currently open windows."
 msgstr "显示和操作当前打开的窗口"
 
-#: ../src/cairo-dock-gui-advanced.c:1544 ../data/messages:41
+#: ../src/cairo-dock-gui-advanced.c:1538 ../data/messages:41
 #: ../data/messages:455
 msgid "Taskbar"
 msgstr "任务条"
 
-#: ../src/cairo-dock-gui-advanced.c:1551
+#: ../src/cairo-dock-gui-advanced.c:1545
 msgid "Define all the keyboard shortcuts currently available."
 msgstr "定义所有当前可设置的键盘快捷键。"
 
-#: ../src/cairo-dock-gui-advanced.c:1552 ../data/messages:525
+#: ../src/cairo-dock-gui-advanced.c:1546 ../data/messages:525
 msgid "Shortkeys"
 msgstr "快捷键"
 
-#: ../src/cairo-dock-gui-advanced.c:1558
+#: ../src/cairo-dock-gui-advanced.c:1552
 msgid "All of the parameters you will never want to tweak."
 msgstr "所有你永远不想调整的参数"
 
-#: ../src/cairo-dock-gui-advanced.c:1569
+#: ../src/cairo-dock-gui-advanced.c:1563
 msgid "Set a background for your dock."
 msgstr "设置Dock面板的背景"
 
-#: ../src/cairo-dock-gui-advanced.c:1570 ../data/messages:855
+#: ../src/cairo-dock-gui-advanced.c:1564 ../data/messages:855
 #: ../data/messages:1237 ../data/messages:1345
 msgid "Background"
 msgstr "背景"
 
-#: ../src/cairo-dock-gui-advanced.c:1577
+#: ../src/cairo-dock-gui-advanced.c:1571
 msgid "Select a view for each of your docks."
 msgstr "为每个停靠栏选择一个样式"
 
-#: ../src/cairo-dock-gui-advanced.c:1578 ../data/messages:517
+#: ../src/cairo-dock-gui-advanced.c:1572 ../data/messages:517
 #: ../data/messages:923 ../data/messages:1339
 msgid "Views"
 msgstr "样式"
 
-#: ../src/cairo-dock-gui-advanced.c:1585
+#: ../src/cairo-dock-gui-advanced.c:1579
 msgid "Configure text bubble appearance."
 msgstr "配置弹出文本气泡外观"
 
-#: ../src/cairo-dock-gui-advanced.c:1586
+#: ../src/cairo-dock-gui-advanced.c:1580
 msgid "Dialog boxes"
 msgstr "对话框"
 
-#: ../src/cairo-dock-gui-advanced.c:1593
+#: ../src/cairo-dock-gui-advanced.c:1587
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "这些小程序可以当作桌面饰件。"
 
-#: ../src/cairo-dock-gui-advanced.c:1594 ../data/messages:89
+#: ../src/cairo-dock-gui-advanced.c:1588 ../data/messages:89
 #: ../data/messages:979
 msgid "Desklets"
 msgstr "桌面小工具"
 
-#: ../src/cairo-dock-gui-advanced.c:1601
+#: ../src/cairo-dock-gui-advanced.c:1595
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -146,93 +146,93 @@ msgstr ""
 "对于全部图标：\n"
 " 大小，倒影，主题等..."
 
-#: ../src/cairo-dock-gui-advanced.c:1602 ../data/messages:11
+#: ../src/cairo-dock-gui-advanced.c:1596 ../data/messages:11
 #: ../data/messages:501 ../data/messages:1043 ../data/messages:1321
 msgid "Icons"
 msgstr "图标"
 
-#: ../src/cairo-dock-gui-advanced.c:1609
+#: ../src/cairo-dock-gui-advanced.c:1603
 msgid "Indicators are additional markers for your icons."
 msgstr "指示器是图标上额外的效果"
 
-#: ../src/cairo-dock-gui-advanced.c:1610 ../data/messages:1127
+#: ../src/cairo-dock-gui-advanced.c:1604 ../data/messages:1127
 msgid "Indicators"
 msgstr "指示器"
 
-#: ../src/cairo-dock-gui-advanced.c:1617
+#: ../src/cairo-dock-gui-advanced.c:1611
 msgid "Define icon caption and quick-info style."
 msgstr "定义图标标签和提示信息的外观。"
 
-#: ../src/cairo-dock-gui-advanced.c:1618
+#: ../src/cairo-dock-gui-advanced.c:1612
 msgid "Captions"
 msgstr "标签"
 
-#: ../src/cairo-dock-gui-advanced.c:1625
+#: ../src/cairo-dock-gui-advanced.c:1619
 msgid "Try new themes and save your theme."
 msgstr ""
 
 # #################################
 # ########### themes.conf #############
 # #################################
-#: ../src/cairo-dock-gui-advanced.c:1626 ../src/cairo-dock-gui-simple.c:118
+#: ../src/cairo-dock-gui-advanced.c:1620 ../src/cairo-dock-gui-simple.c:118
 #: ../src/cairo-dock-gui-simple.c:120
 msgid "Themes"
 msgstr "主题"
 
-#: ../src/cairo-dock-gui-advanced.c:1632
+#: ../src/cairo-dock-gui-advanced.c:1626
 msgid "Current items in your dock(s)."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1633 ../src/cairo-dock-gui-simple.c:94
+#: ../src/cairo-dock-gui-advanced.c:1627 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
 msgid "Current items"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1753
+#: ../src/cairo-dock-gui-advanced.c:1747
 msgid "Filter"
 msgstr "筛选器"
 
-#: ../src/cairo-dock-gui-advanced.c:1794
+#: ../src/cairo-dock-gui-advanced.c:1788
 msgid "All words"
 msgstr "所有词语"
 
-#: ../src/cairo-dock-gui-advanced.c:1795
+#: ../src/cairo-dock-gui-advanced.c:1789
 msgid "Highlighted words"
 msgstr "高亮文本"
 
-#: ../src/cairo-dock-gui-advanced.c:1796
+#: ../src/cairo-dock-gui-advanced.c:1790
 msgid "Hide others"
 msgstr "隐藏其他"
 
-#: ../src/cairo-dock-gui-advanced.c:1797
+#: ../src/cairo-dock-gui-advanced.c:1791
 msgid "Search in description"
 msgstr "在描述中搜索"
 
-#: ../src/cairo-dock-gui-advanced.c:1801
+#: ../src/cairo-dock-gui-advanced.c:1795
 msgid "Hide disabled"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1810
+#: ../src/cairo-dock-gui-advanced.c:1804
 msgid "Categories"
 msgstr "分类"
 
-#: ../src/cairo-dock-gui-advanced.c:1920
+#: ../src/cairo-dock-gui-advanced.c:1914
 msgid "Enable this module"
 msgstr "激活此模块"
 
-#: ../src/cairo-dock-gui-advanced.c:1987
+#: ../src/cairo-dock-gui-advanced.c:1981
 msgid "More applets"
 msgstr "更多小程序"
 
-#: ../src/cairo-dock-gui-advanced.c:1988
+#: ../src/cairo-dock-gui-advanced.c:1982
 msgid "Get more applets online !"
 msgstr "在线获取更多小程序"
 
-#: ../src/cairo-dock-gui-advanced.c:2083 ../src/cairo-dock-gui-simple.c:359
+#: ../src/cairo-dock-gui-advanced.c:2077 ../src/cairo-dock-gui-simple.c:365
 msgid "Cairo-Dock configuration"
 msgstr "配置Cairo-Dock"
 
-#: ../src/cairo-dock-gui-advanced.c:2662
+#: ../src/cairo-dock-gui-advanced.c:2656
 msgid "Simple Mode"
 msgstr "简易模式"
 
@@ -244,79 +244,81 @@ msgstr "附加组件"
 msgid "Configuration"
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:631
+#: ../src/cairo-dock-gui-simple.c:636
 msgid "Advanced Mode"
 msgstr "高级模式"
 
-#: ../src/cairo-dock-gui-simple.c:632
+#: ../src/cairo-dock-gui-simple.c:637
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
-msgstr "在高级模式下，您可以调整Dock中的每一个参数，它是一个自定义您现在的主题的强大工具。"
+msgstr ""
+"在高级模式下，您可以调整Dock中的每一个参数，它是一个自定义您现在的主题的强大"
+"工具。"
 
-#: ../src/cairo-dock-menu.c:124
+#: ../src/cairo-dock-menu.c:134
 msgid "Delete this dock?"
 msgstr "删除本dock么?"
 
-#: ../src/cairo-dock-menu.c:181
+#: ../src/cairo-dock-menu.c:187
 msgid "About Cairo-Dock"
 msgstr "关于Cairo-Dock"
 
-#: ../src/cairo-dock-menu.c:218 ../data/messages:271
+#: ../src/cairo-dock-menu.c:224 ../data/messages:271
 msgid "Development site"
 msgstr "开发站点"
 
-#: ../src/cairo-dock-menu.c:219 ../data/messages:269
+#: ../src/cairo-dock-menu.c:225 ../data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "获取最新版的 Cairo-Dock！"
 
-#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:952
+#: ../src/cairo-dock-menu.c:229 ../src/cairo-dock-menu.c:1105
 #: ../src/cairo-dock-widget-plugins.c:277
 msgid "Get more applets!"
 msgstr "获取更多插件！"
 
-#: ../src/cairo-dock-menu.c:227 ../src/cairo-dock-menu.c:233
+#: ../src/cairo-dock-menu.c:233 ../src/cairo-dock-menu.c:239
 msgid "Donate"
 msgstr "捐助"
 
-#: ../src/cairo-dock-menu.c:230 ../src/cairo-dock-menu.c:236
+#: ../src/cairo-dock-menu.c:236 ../src/cairo-dock-menu.c:242
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr "能够满足为得到最好的dock而愿意花费大量时间的人"
 
-#: ../src/cairo-dock-menu.c:264
+#: ../src/cairo-dock-menu.c:270
 msgid "Here is a list of the current developers and contributors"
 msgstr "当前开发者与贡献者名单"
 
-#: ../src/cairo-dock-menu.c:265
+#: ../src/cairo-dock-menu.c:271
 msgid "Developers"
 msgstr "开发者"
 
-#: ../src/cairo-dock-menu.c:266
+#: ../src/cairo-dock-menu.c:272
 msgid "Main developer and project leader"
 msgstr "主要开发者与项目领导人"
 
-#: ../src/cairo-dock-menu.c:267
+#: ../src/cairo-dock-menu.c:273
 msgid "Contributors / Hackers"
 msgstr "贡献者/黑客"
 
-#: ../src/cairo-dock-menu.c:269
+#: ../src/cairo-dock-menu.c:275
 msgid "Development"
 msgstr "开发"
 
-#: ../src/cairo-dock-menu.c:284
+#: ../src/cairo-dock-menu.c:290
 msgid "Website"
 msgstr "网站"
 
-#: ../src/cairo-dock-menu.c:285
+#: ../src/cairo-dock-menu.c:291
 msgid "Beta-testing / Suggestions / Forum animation"
 msgstr "Beta 测试/建议/论坛"
 
-#: ../src/cairo-dock-menu.c:286
+#: ../src/cairo-dock-menu.c:292
 msgid "Translators for this language"
 msgstr "该语言翻译人员"
 
-#: ../src/cairo-dock-menu.c:287
+#: ../src/cairo-dock-menu.c:293
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -341,11 +343,11 @@ msgstr ""
 "  zhanshime https://launchpad.net/~zhanshime\n"
 "  安 https://launchpad.net/~tooktang"
 
-#: ../src/cairo-dock-menu.c:289
+#: ../src/cairo-dock-menu.c:295
 msgid "Support"
 msgstr "支持"
 
-#: ../src/cairo-dock-menu.c:319
+#: ../src/cairo-dock-menu.c:325
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
@@ -353,86 +355,78 @@ msgstr ""
 "感谢所有帮助改进 Cairo-Dock 项目的人们。\n"
 "感谢所有现在、过去和未来的贡献者们。"
 
-#: ../src/cairo-dock-menu.c:321
+#: ../src/cairo-dock-menu.c:327
 msgid "How to help us?"
 msgstr "如何帮助我们？"
 
-#: ../src/cairo-dock-menu.c:322
+#: ../src/cairo-dock-menu.c:328
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr "加入项目别犹豫，我们需要您 :)"
 
-#: ../src/cairo-dock-menu.c:323
+#: ../src/cairo-dock-menu.c:329
 msgid "Former contributors"
 msgstr "先前贡献者"
 
-#: ../src/cairo-dock-menu.c:324
+#: ../src/cairo-dock-menu.c:330
 msgid "For a complete list, please have a look to BZR logs"
 msgstr "完整列表，请前往查看 BZR 记录"
 
-#: ../src/cairo-dock-menu.c:325
+#: ../src/cairo-dock-menu.c:331
 msgid "Users of our forum"
 msgstr "论坛用户"
 
-#: ../src/cairo-dock-menu.c:326
+#: ../src/cairo-dock-menu.c:332
 msgid "List of our forum's members"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:327
+#: ../src/cairo-dock-menu.c:333
 msgid "Artwork"
 msgstr "美工"
 
-#: ../src/cairo-dock-menu.c:329
+#: ../src/cairo-dock-menu.c:335
 msgid "Thanks"
 msgstr "感谢"
 
-#: ../src/cairo-dock-menu.c:408
+#: ../src/cairo-dock-menu.c:425
 msgid "Quit Cairo-Dock?"
 msgstr "退出Cairo-Dock？"
 
-#: ../src/cairo-dock-menu.c:438 ../src/cairo-dock-menu.c:577
+#: ../src/cairo-dock-menu.c:455 ../src/cairo-dock-menu.c:594
 msgid "Separator"
 msgstr "分隔符"
 
-#: ../src/cairo-dock-menu.c:547
+#: ../src/cairo-dock-menu.c:564
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
 "已创建新的 Dock 面板。\n"
-"要立即添加一些启动器或者 applets 小程序，请在它们的图标上右键单击-> 移动其它 Dock"
+"要立即添加一些启动器或者 applets 小程序，请在它们的图标上右键单击-> 移动其它 "
+"Dock"
 
-#: ../src/cairo-dock-menu.c:571
+#: ../src/cairo-dock-menu.c:588
 msgid "Add"
 msgstr "添加"
 
-#: ../src/cairo-dock-menu.c:573
+#: ../src/cairo-dock-menu.c:590
 msgid "Sub-dock"
 msgstr "子Dock"
 
-#: ../src/cairo-dock-menu.c:575
+#: ../src/cairo-dock-menu.c:592
 msgid "Main dock"
 msgstr "主dock"
 
-#: ../src/cairo-dock-menu.c:579
+#: ../src/cairo-dock-menu.c:596
 msgid "Custom launcher"
 msgstr "自定义启动器"
 
-#: ../src/cairo-dock-menu.c:580
+#: ../src/cairo-dock-menu.c:597
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr "通常你可以从菜单拖拽一个启动器到 Dock 上。"
 
-#: ../src/cairo-dock-menu.c:597
-msgid "separator"
-msgstr "分隔符"
-
-#: ../src/cairo-dock-menu.c:601
-#, c-format
-msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "您要从Dock上移除图标 (%s)么？"
-
-#: ../src/cairo-dock-menu.c:613
+#: ../src/cairo-dock-menu.c:615
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -441,11 +435,20 @@ msgstr ""
 "你真要重新将这个图标传送到 Dock 上么?\n"
 "(否则它们将被移除)"
 
-#: ../src/cairo-dock-menu.c:637
+#: ../src/cairo-dock-menu.c:643
+msgid "separator"
+msgstr "分隔符"
+
+#: ../src/cairo-dock-menu.c:647
+#, c-format
+msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
+msgstr "您要从Dock上移除图标 (%s)么？"
+
+#: ../src/cairo-dock-menu.c:662
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "抱歉，此图标没有配置文件。"
 
-#: ../src/cairo-dock-menu.c:677
+#: ../src/cairo-dock-menu.c:702
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -454,7 +457,7 @@ msgstr ""
 "已创建新的Dock面板。\n"
 "要对它进行配置，请右键单击它 -> 选择“cairo-dock” -> 选择“配置此面板”。"
 
-#: ../src/cairo-dock-menu.c:758
+#: ../src/cairo-dock-menu.c:783
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -462,88 +465,97 @@ msgstr ""
 "抱歉，无法找到相应的描述文件。\n"
 "请尝试从菜单栏里面拖放启动器到停靠栏。"
 
-#: ../src/cairo-dock-menu.c:799
+#: ../src/cairo-dock-menu.c:831
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "您确定要从 Dock 面板上移除 Applet 小程序(%s)么？"
+
+#: ../src/cairo-dock-menu.c:899 ../src/gldit/cairo-dock-gui-factory.c:753
+msgid "Pick up an image"
+msgstr "选取一张图片"
+
+#: ../src/cairo-dock-menu.c:916 ../src/gldit/cairo-dock-gui-factory.c:787
+#: ../data/messages:859 ../data/messages:865 ../data/messages:1133
+#: ../data/messages:1351
+msgid "Image"
+msgstr "图片"
 
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2007 Cairo-Dock project
 # This file is distributed under the same license as the Cairo-Dock package.
 # Fabrice Rey <fabounet@users.berlios.de>, 2007.
 #
-#: ../src/cairo-dock-menu.c:868
+#: ../src/cairo-dock-menu.c:1021
 msgid "Configure"
 msgstr "配置"
 
-#: ../src/cairo-dock-menu.c:873
+#: ../src/cairo-dock-menu.c:1026
 msgid "Configure behaviour, appearance, and applets."
 msgstr "配置行为、外观、和 applets 小程序"
 
-#: ../src/cairo-dock-menu.c:878
+#: ../src/cairo-dock-menu.c:1031
 msgid "Configure this dock"
 msgstr "设置此Dock"
 
-#: ../src/cairo-dock-menu.c:883
+#: ../src/cairo-dock-menu.c:1036
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "设置主停靠栏的位置、透明度和外观。"
 
-#: ../src/cairo-dock-menu.c:885
+#: ../src/cairo-dock-menu.c:1038
 msgid "Delete this dock"
 msgstr "删除本dock"
 
-#: ../src/cairo-dock-menu.c:895
+#: ../src/cairo-dock-menu.c:1048
 msgid "Manage themes"
 msgstr "管理主题"
 
-#: ../src/cairo-dock-menu.c:900
+#: ../src/cairo-dock-menu.c:1053
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr "在服务器上的众多主题中选择和保存您喜欢的主题。"
 
-#: ../src/cairo-dock-menu.c:913
+#: ../src/cairo-dock-menu.c:1066
 msgid "Lock icons position"
 msgstr "锁定图标位置"
 
-#: ../src/cairo-dock-menu.c:917
+#: ../src/cairo-dock-menu.c:1070
 msgid "This will (un)lock the position of the icons."
 msgstr "这个将会(解除)锁定图标的位置."
 
-#: ../src/cairo-dock-menu.c:923
+#: ../src/cairo-dock-menu.c:1076
 msgid "Quick-Hide"
 msgstr "快速隐藏"
 
-#: ../src/cairo-dock-menu.c:928
+#: ../src/cairo-dock-menu.c:1081
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "隐藏 Dock 直至鼠标从其划过。"
 
-#: ../src/cairo-dock-menu.c:941
+#: ../src/cairo-dock-menu.c:1094
 msgid "Launch Cairo-Dock on startup"
 msgstr "开机启动 Cairo-Dock"
 
-#: ../src/cairo-dock-menu.c:957
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+#: ../src/cairo-dock-menu.c:1110
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr "第三方面板程序可以整合许多程序的功能，如 Pidgin"
 
-#: ../src/cairo-dock-menu.c:960 ../src/help/applet-init.c:28
+#: ../src/cairo-dock-menu.c:1113 ../src/help/applet-init.c:28
 #: ../src/help/applet-notifications.c:269
 msgid "Help"
 msgstr "帮助"
 
-#: ../src/cairo-dock-menu.c:965
+#: ../src/cairo-dock-menu.c:1118
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr "有问题?这里有解决方案（以及很多有用的提示！）。"
 
-#: ../src/cairo-dock-menu.c:969
+#: ../src/cairo-dock-menu.c:1122
 msgid "About"
 msgstr "关于"
 
-#: ../src/cairo-dock-menu.c:978
+#: ../src/cairo-dock-menu.c:1131
 msgid "Quit"
 msgstr "退出"
 
-#: ../src/cairo-dock-menu.c:987
+#: ../src/cairo-dock-menu.c:1140
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
@@ -552,210 +564,204 @@ msgstr ""
 "您正在使用 Cairo-Dock 会话！\n"
 "退出本程序并不是明智之举，但您可以按下 Shift 解锁该菜单项。"
 
-#: ../src/cairo-dock-menu.c:1013 ../src/cairo-dock-menu.c:1026
+#: ../src/cairo-dock-menu.c:1166 ../src/cairo-dock-menu.c:1179
 msgid "Launch a new (Shift+clic)"
 msgstr "启动一个新的（Shift+左键）"
 
-#: ../src/cairo-dock-menu.c:1018 ../src/cairo-dock-menu.c:1080
+#: ../src/cairo-dock-menu.c:1171 ../src/cairo-dock-menu.c:1261
 msgid "Applet's handbook"
 msgstr "Applet 小程序使用手册"
 
-#: ../src/cairo-dock-menu.c:1033 ../src/cairo-dock-menu.c:1054
+#: ../src/cairo-dock-menu.c:1186 ../src/cairo-dock-menu.c:1235
 msgid "Edit"
 msgstr "编辑"
 
-#: ../src/cairo-dock-menu.c:1035 ../src/cairo-dock-menu.c:1061
+#: ../src/cairo-dock-menu.c:1188 ../src/cairo-dock-menu.c:1242
 msgid "Remove"
 msgstr "移除"
 
-#: ../src/cairo-dock-menu.c:1036
+#: ../src/cairo-dock-menu.c:1189
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr "用鼠标将启动器拖离 Dock 面板即可将其移除。"
 
-#: ../src/cairo-dock-menu.c:1038 ../src/cairo-dock-menu.c:1070
+#: ../src/cairo-dock-menu.c:1191 ../src/cairo-dock-menu.c:1251
 msgid "Move to another dock"
 msgstr "移至另一Dock面板"
 
-#: ../src/cairo-dock-menu.c:1040 ../src/cairo-dock-menu.c:1072
-#: ../src/gldit/cairo-dock-gui-factory.c:1149
+#: ../src/cairo-dock-menu.c:1193 ../src/cairo-dock-menu.c:1253
+#: ../src/gldit/cairo-dock-gui-factory.c:1168
 msgid "New main dock"
 msgstr "新建主 Dock面板"
 
-#: ../src/cairo-dock-menu.c:1049
+#: ../src/cairo-dock-menu.c:1202
 msgid "Make it a launcher"
 msgstr "将它作成启动器"
 
-#: ../src/cairo-dock-menu.c:1058
+#: ../src/cairo-dock-menu.c:1225
+msgid "Remove custom icon"
+msgstr "移除自定义图标"
+
+#: ../src/cairo-dock-menu.c:1229
+msgid "Set a custom icon"
+msgstr "设置自定义图标"
+
+#: ../src/cairo-dock-menu.c:1239
 msgid "Detach"
 msgstr "分离"
 
-#: ../src/cairo-dock-menu.c:1058
+#: ../src/cairo-dock-menu.c:1239
 msgid "Return to the dock"
 msgstr "回到Dock面板"
 
-#: ../src/cairo-dock-menu.c:1065
+#: ../src/cairo-dock-menu.c:1246
 msgid "Duplicate"
 msgstr "复制"
 
-#: ../src/cairo-dock-menu.c:1125
-msgid "Pick up an image"
-msgstr "选取一张图片"
-
-#: ../src/cairo-dock-menu.c:1345
+#: ../src/cairo-dock-menu.c:1410
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "全部移至桌面 %d - 面板 %d"
 
-#: ../src/cairo-dock-menu.c:1345
+#: ../src/cairo-dock-menu.c:1410
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "移至桌面 %d - 面板 %d"
 
-#: ../src/cairo-dock-menu.c:1347
+#: ../src/cairo-dock-menu.c:1412
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "全部移至桌面 %d"
 
-#: ../src/cairo-dock-menu.c:1347
+#: ../src/cairo-dock-menu.c:1412
 #, c-format
 msgid "Move to desktop %d"
 msgstr "移至桌面 %d"
 
-#: ../src/cairo-dock-menu.c:1349
+#: ../src/cairo-dock-menu.c:1414
 #, c-format
 msgid "Move all to face %d"
 msgstr "全部移至面板 %d"
 
-#: ../src/cairo-dock-menu.c:1349
+#: ../src/cairo-dock-menu.c:1414
 #, c-format
 msgid "Move to face %d"
 msgstr "移至面板 %d"
 
-#: ../src/cairo-dock-menu.c:1792 ../src/cairo-dock-menu.c:1844
+#: ../src/cairo-dock-menu.c:1856 ../src/cairo-dock-menu.c:1898
 msgid "Window"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1796 ../src/cairo-dock-menu.c:1798
-#: ../src/cairo-dock-menu.c:1871 ../src/cairo-dock-menu.c:1873
+#: ../src/cairo-dock-menu.c:1860 ../src/cairo-dock-menu.c:1862
+#: ../src/cairo-dock-menu.c:1918 ../src/cairo-dock-menu.c:1920
 #: ../data/messages:735
 msgid "Close"
 msgstr "关闭"
 
-#: ../src/cairo-dock-menu.c:1796 ../src/cairo-dock-menu.c:1808
-#: ../src/cairo-dock-menu.c:1818 ../src/cairo-dock-menu.c:1856
-#: ../src/cairo-dock-menu.c:1863 ../src/cairo-dock-menu.c:1871
-#: ../src/cairo-dock-menu.c:1940 ../src/cairo-dock-menu.c:1950
-#: ../src/help/applet-notifications.c:259
+#: ../src/cairo-dock-menu.c:1860 ../src/cairo-dock-menu.c:1877
+#: ../src/cairo-dock-menu.c:1910 ../src/cairo-dock-menu.c:1918
+#: ../src/cairo-dock-menu.c:1937 ../src/cairo-dock-menu.c:1969
+#: ../src/cairo-dock-menu.c:1979 ../src/help/applet-notifications.c:259
 msgid "middle-click"
 msgstr "中键点击"
 
-#: ../src/cairo-dock-menu.c:1808 ../src/cairo-dock-menu.c:1810
-#: ../src/cairo-dock-menu.c:1856 ../src/cairo-dock-menu.c:1858
-msgid "Minimise"
-msgstr "最小化"
-
-#: ../src/cairo-dock-menu.c:1818 ../src/cairo-dock-menu.c:1820
-#: ../src/cairo-dock-menu.c:1863 ../src/cairo-dock-menu.c:1865
-msgid "Below other windows"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1829 ../src/cairo-dock-menu.c:1851
+#: ../src/cairo-dock-menu.c:1872 ../src/cairo-dock-menu.c:1905
 msgid "Unmaximise"
 msgstr "恢复"
 
-#: ../src/cairo-dock-menu.c:1829 ../src/cairo-dock-menu.c:1851
+#: ../src/cairo-dock-menu.c:1872 ../src/cairo-dock-menu.c:1905
 msgid "Maximise"
 msgstr "最大化"
 
-#: ../src/cairo-dock-menu.c:1839 ../src/cairo-dock-menu.c:1849
+#: ../src/cairo-dock-menu.c:1877 ../src/cairo-dock-menu.c:1879
+#: ../src/cairo-dock-menu.c:1910 ../src/cairo-dock-menu.c:1912
+msgid "Minimise"
+msgstr "最小化"
+
+#: ../src/cairo-dock-menu.c:1893 ../src/cairo-dock-menu.c:1903
 msgid "Show"
 msgstr "显示"
 
-#: ../src/cairo-dock-menu.c:1879 ../src/cairo-dock-menu.c:1974
+#: ../src/cairo-dock-menu.c:1926 ../src/cairo-dock-menu.c:2003
 msgid "Other actions"
 msgstr "其它行为"
 
-#: ../src/cairo-dock-menu.c:1881
+#: ../src/cairo-dock-menu.c:1928
 msgid "Move to this desktop"
 msgstr "移至此桌面"
 
-#: ../src/cairo-dock-menu.c:1885
+#: ../src/cairo-dock-menu.c:1932
 msgid "Not Fullscreen"
 msgstr "非全屏"
 
-#: ../src/cairo-dock-menu.c:1885
+#: ../src/cairo-dock-menu.c:1932
 msgid "Fullscreen"
 msgstr "全屏"
 
-#: ../src/cairo-dock-menu.c:1889
+#: ../src/cairo-dock-menu.c:1937 ../src/cairo-dock-menu.c:1939
+msgid "Below other windows"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1946
 msgid "Don't keep above"
 msgstr "不要保持在最前面"
 
-#: ../src/cairo-dock-menu.c:1889 ../data/messages:349
+#: ../src/cairo-dock-menu.c:1946 ../data/messages:349
 msgid "Keep above"
 msgstr "保持在最前面"
 
-#: ../src/cairo-dock-menu.c:1914
-msgid "Remove custom icon"
-msgstr "移除自定义图标"
-
-#: ../src/cairo-dock-menu.c:1918
-msgid "Set a custom icon"
-msgstr "设置自定义图标"
-
-#: ../src/cairo-dock-menu.c:1921
+#: ../src/cairo-dock-menu.c:1950
 msgid "Kill"
 msgstr "结束"
 
-#: ../src/cairo-dock-menu.c:1936
+#: ../src/cairo-dock-menu.c:1965
 msgid "Windows"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1940 ../src/cairo-dock-menu.c:1942
-#: ../src/cairo-dock-menu.c:1970
+#: ../src/cairo-dock-menu.c:1969 ../src/cairo-dock-menu.c:1971
+#: ../src/cairo-dock-menu.c:1999
 msgid "Close all"
 msgstr "全部关闭"
 
-#: ../src/cairo-dock-menu.c:1950 ../src/cairo-dock-menu.c:1952
-#: ../src/cairo-dock-menu.c:1968
+#: ../src/cairo-dock-menu.c:1979 ../src/cairo-dock-menu.c:1981
+#: ../src/cairo-dock-menu.c:1997
 msgid "Minimise all"
 msgstr "最小化全部"
 
-#: ../src/cairo-dock-menu.c:1960 ../src/cairo-dock-menu.c:1966
+#: ../src/cairo-dock-menu.c:1989 ../src/cairo-dock-menu.c:1995
 msgid "Show all"
 msgstr "显示全部"
 
-#: ../src/cairo-dock-menu.c:1964
+#: ../src/cairo-dock-menu.c:1993
 msgid "Windows management"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1976
+#: ../src/cairo-dock-menu.c:2005
 msgid "Move all to this desktop"
 msgstr "全部移至此桌面"
 
-#: ../src/cairo-dock-menu.c:1999 ../data/messages:347
+#: ../src/cairo-dock-menu.c:2028 ../data/messages:347
 msgid "Normal"
 msgstr "普通"
 
-#: ../src/cairo-dock-menu.c:2005 ../data/messages:413 ../data/messages:579
+#: ../src/cairo-dock-menu.c:2034 ../data/messages:413 ../data/messages:579
 #: ../data/messages:1307
 msgid "Always on top"
 msgstr "总在最前面"
 
-#: ../src/cairo-dock-menu.c:2012
+#: ../src/cairo-dock-menu.c:2041
 msgid "Always below"
 msgstr "总在下面"
 
-#: ../src/cairo-dock-menu.c:2029 ../data/messages:355
+#: ../src/cairo-dock-menu.c:2058 ../data/messages:355
 msgid "Reserve space"
 msgstr "保留空间"
 
-#: ../src/cairo-dock-menu.c:2036
+#: ../src/cairo-dock-menu.c:2065
 msgid "On all desktops"
 msgstr "在全部桌面上"
 
-#: ../src/cairo-dock-menu.c:2042
+#: ../src/cairo-dock-menu.c:2071
 msgid "Lock position"
 msgstr "锁定位置"
 
@@ -777,11 +783,10 @@ msgid "Effects:"
 msgstr "效果："
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr "主dock的参数都可以在主配置窗口中配置"
 
-#: ../src/cairo-dock-widget-items.c:732
+#: ../src/cairo-dock-widget-items.c:720
 msgid "Remove this item"
 msgstr "移除此项"
 
@@ -802,8 +807,7 @@ msgid "Category"
 msgstr "分类"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "点击一个小程序就可以获取它的预览和介绍。"
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -830,7 +834,7 @@ msgstr "快捷键"
 msgid "Could not import the theme."
 msgstr "无法导入此主题。"
 
-#: ../src/cairo-dock-widget-themes.c:186
+#: ../src/cairo-dock-widget-themes.c:187
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -839,172 +843,173 @@ msgstr ""
 "当前主题已经被改动。\n"
 "在选择新主题前不进行保存的话，所有改动将丢失。您要继续吗？"
 
-#: ../src/cairo-dock-widget-themes.c:213
+#: ../src/cairo-dock-widget-themes.c:216
 msgid "Please wait while importing the theme..."
 msgstr "请等待主题载入"
 
-#: ../src/cairo-dock-widget-themes.c:272
+#: ../src/cairo-dock-widget-themes.c:275
 msgid "Rate me"
 msgstr "给我打分！"
 
-#: ../src/cairo-dock-widget-themes.c:372 ../src/cairo-dock-widget-themes.c:374
+#: ../src/cairo-dock-widget-themes.c:375 ../src/cairo-dock-widget-themes.c:377
 msgid "You must try the theme before you can rate it."
 msgstr "使用过这个主题才能给它评分。"
 
-#: ../src/cairo-dock-widget-themes.c:421
+#: ../src/cairo-dock-widget-themes.c:424
 msgid "The theme has been deleted"
 msgstr ""
 
-#: ../src/cairo-dock-widget-themes.c:451
+#: ../src/cairo-dock-widget-themes.c:454
 msgid "Delete this theme"
 msgstr ""
 
-#: ../src/cairo-dock-widget-themes.c:482
-#: ../src/gldit/cairo-dock-gui-factory.c:2445
+#: ../src/cairo-dock-widget-themes.c:485
+#: ../src/gldit/cairo-dock-gui-factory.c:2336
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "列出 '%s' 中的主题"
 
-#: ../src/cairo-dock-widget-themes.c:505
+#: ../src/cairo-dock-widget-themes.c:508
 msgid "Theme"
 msgstr "主题"
 
-#: ../src/cairo-dock-widget-themes.c:518
+#: ../src/cairo-dock-widget-themes.c:521
 msgid "Rating"
 msgstr "评分"
 
-#: ../src/cairo-dock-widget-themes.c:524
+#: ../src/cairo-dock-widget-themes.c:527
 msgid "Sobriety"
 msgstr "清醒"
 
-#: ../src/cairo-dock-widget-themes.c:584
+#: ../src/cairo-dock-widget-themes.c:587
 msgid "Save as:"
 msgstr "另存为："
 
-#: ../src/cairo-dock-widget-themes.c:664
+#: ../src/cairo-dock-widget-themes.c:667
 msgid "Importing theme ..."
 msgstr "正在导入主题..."
 
-#: ../src/cairo-dock-widget-themes.c:672
+#: ../src/cairo-dock-widget-themes.c:675
 msgid "Theme has been saved"
 msgstr "主题已保存"
 
-#: ../src/cairo-dock.c:136
+#: ../src/cairo-dock.c:137
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr "新年快乐%d !!!"
 
-#: ../src/cairo-dock.c:311
+#: ../src/cairo-dock.c:321
 msgid "Use Cairo backend."
 msgstr "使用 Cairo 后端"
 
-#: ../src/cairo-dock.c:314
+#: ../src/cairo-dock.c:324
 msgid "Use OpenGL backend."
 msgstr "使用 Opengl 后端"
 
-#: ../src/cairo-dock.c:317
+#: ../src/cairo-dock.c:327
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 msgstr "使用带有间接渲染的 Opengl 后端。这个选项很少使用。"
 
-#: ../src/cairo-dock.c:320
+#: ../src/cairo-dock.c:330
 msgid "Ask again on startup which backend to use."
 msgstr "再次询问启动时使用哪个后端。"
 
-#: ../src/cairo-dock.c:323
+#: ../src/cairo-dock.c:333
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr "强制本 Dock 考虑这个环境 - 请小心使用。"
 
-#: ../src/cairo-dock.c:326
+#: ../src/cairo-dock.c:336
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr "强制本dock从以下目录加载，而不是~/.config/cairo-dock。"
 
-#: ../src/cairo-dock.c:329
+#: ../src/cairo-dock.c:339
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr "加入包含额外主题的服务器地址。这将覆盖默认的服务器地址"
 
-#: ../src/cairo-dock.c:332
+#: ../src/cairo-dock.c:342
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 msgstr "延迟 N 秒启动；当 dock 自启动遇到问题时将有所帮助"
 
-#: ../src/cairo-dock.c:335
+#: ../src/cairo-dock.c:345
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
 msgstr "在 dock 启动前允许编辑本配置,启动时显示配置面板"
 
-#: ../src/cairo-dock.c:338
+#: ../src/cairo-dock.c:348
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr "从激活的插件中排除（即使它已经加载）"
 
-#: ../src/cairo-dock.c:341
+#: ../src/cairo-dock.c:351
 msgid "Don't load any plug-ins."
 msgstr "不加载任何插件"
 
-#: ../src/cairo-dock.c:344
+#: ../src/cairo-dock.c:354
 msgid ""
 "Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
 "docks)"
 msgstr ""
 
-#: ../src/cairo-dock.c:347
+#: ../src/cairo-dock.c:357
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr "日志信息(debug,message,warning,critical,error); 默认是 warning."
 
-#: ../src/cairo-dock.c:350
+#: ../src/cairo-dock.c:360
 msgid "Force to display some output messages with colors."
 msgstr "强制显示某些输出信息彩色化"
 
-#: ../src/cairo-dock.c:353
+#: ../src/cairo-dock.c:363
 msgid "Print version and quit."
 msgstr "打印版本并退出"
 
-#: ../src/cairo-dock.c:356
+#: ../src/cairo-dock.c:366
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr "锁定dock，使其不能被用户修改"
 
-#: ../src/cairo-dock.c:360
+#: ../src/cairo-dock.c:370
 msgid "Keep the dock above other windows whatever."
 msgstr "保持本dock在其它窗口之上"
 
-#: ../src/cairo-dock.c:363
+#: ../src/cairo-dock.c:373
 msgid "Don't make the dock appear on all desktops."
 msgstr "不让本 dock 出现在所有桌面中"
 
-#: ../src/cairo-dock.c:366 ../src/cairo-dock.c:426
+#: ../src/cairo-dock.c:376 ../src/cairo-dock.c:436
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr "Cairo-Dock 能做任何事情，包括煮咖啡！"
 
-#: ../src/cairo-dock.c:369
+#: ../src/cairo-dock.c:379
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
-msgstr "让 dock 加载本目录的额外组件（即使为你的 dock 加载非官方组件是危险的）。"
+msgstr ""
+"让 dock 加载本目录的额外组件（即使为你的 dock 加载非官方组件是危险的）。"
 
-#: ../src/cairo-dock.c:372
+#: ../src/cairo-dock.c:382
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
 msgstr "仅用于调试目的。崩溃管理器将不会追踪这些错误。"
 
-#: ../src/cairo-dock.c:375
+#: ../src/cairo-dock.c:385
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
 msgstr "仅用于调试目的。一些隐藏或不稳定项目将会被激活。"
 
-#: ../src/cairo-dock.c:495
+#: ../src/cairo-dock.c:505
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "在 Cairo-Dock 中使用 OpenGL"
 
-#: ../src/cairo-dock.c:503
+#: ../src/cairo-dock.c:513
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -1022,11 +1027,11 @@ msgstr ""
 "（若不想再显示此对话框，请从应用程序菜单启动Cairo-Dock，或者加上参数运行。\n"
 "  -o参数强制使用OpenGL，-c参数强制使用cairo。）"
 
-#: ../src/cairo-dock.c:514
+#: ../src/cairo-dock.c:524
 msgid "Remember this choice"
 msgstr "记住此选择"
 
-#: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
+#: ../src/cairo-dock.c:683 ../src/cairo-dock.c:796
 #, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
@@ -1035,15 +1040,15 @@ msgid ""
 "dock.org"
 msgstr ""
 
-#: ../src/cairo-dock.c:685
+#: ../src/cairo-dock.c:694
 msgid "< Maintenance mode >"
 msgstr "<维护模式>"
 
-#: ../src/cairo-dock.c:687
+#: ../src/cairo-dock.c:696
 msgid "Something went wrong with this applet:"
 msgstr ""
 
-#: ../src/cairo-dock.c:736
+#: ../src/cairo-dock.c:745
 msgid ""
 "No plug-in were found.\n"
 "Plug-ins provide most of the functionalities (animations, applets, views, "
@@ -1055,7 +1060,7 @@ msgid ""
 "launch the dock with the '-f' option to no longer have this message.\n"
 msgstr ""
 
-#: ../src/cairo-dock.c:785
+#: ../src/cairo-dock.c:794
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1063,7 +1068,8 @@ msgid ""
 "at http://glx-dock.org"
 msgstr ""
 "'%s' 模块可能遇到了一个问题。\n"
-"它已经成功重启，不过要是问题再次出现，请到 http://glx-dock.org 网站告知我们，谢谢！"
+"它已经成功重启，不过要是问题再次出现，请到 http://glx-dock.org 网站告知我们，"
+"谢谢！"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:277
 msgid ""
@@ -1112,52 +1118,52 @@ msgstr "左边停靠dock"
 msgid "Pop up the main dock"
 msgstr "弹出主 dock"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:248
+#: ../src/gldit/cairo-dock-gui-factory.c:245
 #, c-format
 msgid "by %s"
 msgstr "创建者： %s"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:260
+#: ../src/gldit/cairo-dock-gui-factory.c:257
 msgid "kB"
 msgstr "KB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:262
+#: ../src/gldit/cairo-dock-gui-factory.c:259
 msgid "MB"
 msgstr "MB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:271
+#: ../src/gldit/cairo-dock-gui-factory.c:268
 msgid "Local"
 msgstr "本地"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:272
+#: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "User"
 msgstr "用户"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:273
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "Net"
 msgstr "网络"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:274
+#: ../src/gldit/cairo-dock-gui-factory.c:271
 msgid "New"
 msgstr "新建"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:275
+#: ../src/gldit/cairo-dock-gui-factory.c:272
 msgid "Updated"
 msgstr "已更新"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:754
+#: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Pick up a file"
 msgstr "选取文件"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:754
+#: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Pick up a directory"
 msgstr "选取目录"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1028
+#: ../src/gldit/cairo-dock-gui-factory.c:1047
 msgid "_Custom Icons_"
 msgstr "_自定义图标_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1417
+#: ../src/gldit/cairo-dock-gui-factory.c:1306
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1167,7 +1173,7 @@ msgstr ""
 "'%s' 模块没有找到。\n"
 "请确认安装的是和Cairo-Dock同一版本的模块。"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1426
+#: ../src/gldit/cairo-dock-gui-factory.c:1315
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1176,11 +1182,11 @@ msgstr ""
 "'%s' 插件未启用。\n"
 "立即启用？"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3092
+#: ../src/gldit/cairo-dock-gui-factory.c:2983
 msgid "link"
 msgstr "链接"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3145
+#: ../src/gldit/cairo-dock-gui-factory.c:3045
 msgid "Grab"
 msgstr "捕捉"
 
@@ -1198,11 +1204,11 @@ msgstr "默认"
 msgid "Are you sure you want to overwrite theme %s?"
 msgstr "您确定要覆盖主题 %s 么？"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:219
+#: ../src/gldit/cairo-dock-themes-manager.c:222
 msgid "Last modification on:"
 msgstr "最后修改时间"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:297
+#: ../src/gldit/cairo-dock-themes-manager.c:300
 #, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
@@ -1211,12 +1217,12 @@ msgstr ""
 "无法访问远程文件 %s。或许服务器当机。\n"
 "请重试或在 glx-dock.org 上联系我们。"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:311
+#: ../src/gldit/cairo-dock-themes-manager.c:314
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "您确定要删除主题%s么 ?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:313
+#: ../src/gldit/cairo-dock-themes-manager.c:316
 msgid "Are you sure you want to delete these themes?"
 msgstr "您确定要删除这些主题么？"
 
@@ -1267,7 +1273,8 @@ msgid ""
 msgstr ""
 "您需要启用一个混合管理器来移除停靠栏周围的黑色边框。\n"
 "可以通过开启桌面特效，加载Compiz或者激活Metacity得混合特性来完成。\n"
-"如果您的机器不支持混合，Cairo-Dock可以虚拟。这个选项在'系统'模块里面最下方配置。"
+"如果您的机器不支持混合，Cairo-Dock可以虚拟。这个选项在'系统'模块里面最下方配"
+"置。"
 
 #: ../src/help/applet-init.c:31
 msgid ""
@@ -1355,7 +1362,8 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
-"在dock里的大多数图标有不同的操作：主要的操作是左击，次要操作是中键点击，额外操作是右击（菜单）。\n"
+"在dock里的大多数图标有不同的操作：主要的操作是左击，次要操作是中键点击，额外"
+"操作是右击（菜单）。\n"
 "某些小程序允许你绑定动作到 shortkey，这将允许你决定中键点击的动作。"
 
 #: ../data/messages:7
@@ -1372,9 +1380,12 @@ msgid ""
 "the \"More applets\" button (which will lead you to our applets web page) "
 "and then just drag-and-drop the link of an applet into your dock."
 msgstr ""
-"Cairo-Dock 拥有大量的小程序。小程序是存在于dock中的小型应用程序，比如时钟或注销按钮。\n"
-"要启用新的小程序，打开设置（右击 -> Cairo-Dock -> 设置），转到“附加组件”，勾选你想要的小程序。\n"
-"多数的小程序安装十分方便，在配置窗口中，点击“更多小程序”按钮（这将将你带到我们的小程序网页）然后将小程序的链接拖入你的dock。"
+"Cairo-Dock 拥有大量的小程序。小程序是存在于dock中的小型应用程序，比如时钟或注"
+"销按钮。\n"
+"要启用新的小程序，打开设置（右击 -> Cairo-Dock -> 设置），转到“附加组件”，勾"
+"选你想要的小程序。\n"
+"多数的小程序安装十分方便，在配置窗口中，点击“更多小程序”按钮（这将将你带到我"
+"们的小程序网页）然后将小程序的链接拖入你的dock。"
 
 #: ../data/messages:13
 msgid "Adding a launcher"
@@ -1387,8 +1398,10 @@ msgid ""
 "Alternatively, if an application is already opened, you can right-click on "
 "its icon and select \"make it a launcher\"."
 msgstr ""
-"您可以通过从程序菜单拖入到dock来添加一个启动器。当你拖入时会出现一个动画箭头。\n"
-"另外，如果应用程序已打开，您可以右键单击它的图标，并选择“使其成为一个启动器”。"
+"您可以通过从程序菜单拖入到dock来添加一个启动器。当你拖入时会出现一个动画箭"
+"头。\n"
+"另外，如果应用程序已打开，您可以右键单击它的图标，并选择“使其成为一个启动"
+"器”。"
 
 #: ../data/messages:17
 msgid "Removing a launcher"
@@ -1398,7 +1411,8 @@ msgstr "移除启动器"
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
-msgstr "你可以通过把启动器拖出dock来移除它。“删除”标志出现在它上面时，你可以删除它。"
+msgstr ""
+"你可以通过把启动器拖出dock来移除它。“删除”标志出现在它上面时，你可以删除它。"
 
 #: ../data/messages:21
 msgid "Grouping icons into a sub-dock"
@@ -1428,7 +1442,8 @@ msgid ""
 "icon inside."
 msgstr ""
 "在dock内您可以拖动任何图标的到一个新的位置\n"
-"可以移动图标到另一个dock，通过右键点击 - >移动到另一个dock - >选择您想要的dock。\n"
+"可以移动图标到另一个dock，通过右键点击 - >移动到另一个dock - >选择您想要的"
+"dock。\n"
 "如果你选择了“新建主dock”，这将创建包含此图标的主dock。"
 
 #: ../data/messages:29
@@ -1451,9 +1466,11 @@ msgstr ""
 "对于停靠栏或小程序:\n"
 "打开图标的设置,设置图片的路径。\n"
 "-对于应用的图标：\n"
-"在图标上右击 ->“其它动作“-> ”自定义图标“。选择一张图片。要移除自定义图像，在图标上右击 ->“其他动作”->“移除自定义图标”。\n"
+"在图标上右击 ->“其它动作“-> ”自定义图标“。选择一张图片。要移除自定义图像，在"
+"图标上右击 ->“其他动作”->“移除自定义图标”。\n"
 "\n"
-"如果您的 PC 上已经安装了的一些图标主题，在全局设置窗口中，你可以选择它们以替代默认的图标主题。"
+"如果您的 PC 上已经安装了的一些图标主题，在全局设置窗口中，你可以选择它们以替"
+"代默认的图标主题。"
 
 #: ../data/messages:33
 msgid "Resizing icons"
@@ -1469,7 +1486,8 @@ msgid ""
 "Also, you can define the size of each applet independently in their own "
 "settings."
 msgstr ""
-"您可以伸展图标和缩放效果强弱。打开设置（右键点击 - >开罗 - Cairo-Dock - >配置），转到外观（或高级模式中的图标）。\n"
+"您可以伸展图标和缩放效果强弱。打开设置（右键点击 - >开罗 - Cairo-Dock - >配"
+"置），转到外观（或高级模式中的图标）。\n"
 "请注意，如果在dock内有太多的图标，他们将被缩小以适合屏幕。\n"
 "此外，您可以独立设置每个小程序的大小。"
 
@@ -1487,7 +1505,8 @@ msgid ""
 "In the \"panel\" view, separators are represented as gap between icons."
 msgstr ""
 "您可以右键点击dock在图标间加入分隔符 - >添加 - >分隔符。\n"
-"此外，如果您启用区分不同类型的图标的选项（启动器/应用程序/小程序），那么分隔符将被自动添加各组之间。\n"
+"此外，如果您启用区分不同类型的图标的选项（启动器/应用程序/小程序），那么分隔"
+"符将被自动添加各组之间。\n"
 "在“面板”视图中，分隔符在图标之间呈现为间隔。"
 
 #: ../data/messages:43
@@ -1505,8 +1524,10 @@ msgid ""
 "the launcher, etc."
 msgstr ""
 "当一个应用程序运行时，相应的图标将出现在dock上。\n"
-"如果应用程序已经具备了启动器，那么图标将不会出现，而它的启动器将有一个小的指标。\n"
-"请注意，您可以决定哪些应用程序应该出现在dock上：仅当前的桌面窗口，仅隐藏的窗口，从启动器中分离，等等。"
+"如果应用程序已经具备了启动器，那么图标将不会出现，而它的启动器将有一个小的指"
+"标。\n"
+"请注意，您可以决定哪些应用程序应该出现在dock上：仅当前的桌面窗口，仅隐藏的窗"
+"口，从启动器中分离，等等。"
 
 #: ../data/messages:47
 msgid "Closing a window"
@@ -1547,7 +1568,9 @@ msgstr "在相同应用窗口间切换"
 msgid ""
 "With your mouse, scroll up/down on one of the icons of the application. Each "
 "time you scroll, the next/previous window will be presented to you."
-msgstr "使用您的鼠标，向上/下滚动应用程序的图标。您每次滚动时，将显示下一个/上一个窗口。"
+msgstr ""
+"使用您的鼠标，向上/下滚动应用程序的图标。您每次滚动时，将显示下一个/上一个窗"
+"口。"
 
 #: ../data/messages:63
 msgid "Grouping windows of a given application"
@@ -1560,7 +1583,8 @@ msgid ""
 "Clicking on the main icon will display all the windows of the application "
 "side-by-side (if your Window Manager is able to do that)."
 msgstr ""
-"当每个应用程序有多个窗口时，每个窗口的图标将出现在 dock 上；它们将在子 dock 中合成一组。\n"
+"当每个应用程序有多个窗口时，每个窗口的图标将出现在 dock 上；它们将在子 dock "
+"中合成一组。\n"
 "点击主图标将并排显示应用程序的所有窗口(如果您的窗口管理器可以这样做)。"
 
 #: ../data/messages:67
@@ -1579,7 +1603,9 @@ msgstr "鼠标移到图标上时显示窗口预览"
 msgid ""
 "You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
-msgstr "您需要运行 Compiz，并启用 Compiz 中的“窗口预览”插件。安装“ccsm”可配置 Compiz。"
+msgstr ""
+"您需要运行 Compiz，并启用 Compiz 中的“窗口预览”插件。安装“ccsm”可配置 "
+"Compiz。"
 
 #: ../data/messages:75 ../data/messages:185 ../data/messages:205
 #: ../data/messages:243 ../data/messages:285 ../data/messages:289
@@ -1609,7 +1635,8 @@ msgid ""
 msgstr ""
 "该 dock 可以被放置在屏幕的任何位置。\n"
 "考虑到主 dock，需 右击-> Cairo-Dock -> 配置，然后选择您希望的位置。\n"
-"考虑到第 2 个或第 3 个 dock，右击-> Cairo-Dock -> 设置本 dock，并选择您希望的位置。"
+"考虑到第 2 个或第 3 个 dock，右击-> Cairo-Dock -> 设置本 dock，并选择您希望的"
+"位置。"
 
 #: ../data/messages:85
 msgid "Hiding the dock to use all the screen"
@@ -1624,9 +1651,12 @@ msgid ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the visibility you want."
 msgstr ""
-"停靠栏可以隐藏自身为应用程序腾出屏幕空间，但是它也可以像面板一样一直保持可见。\n"
-"按如下的方式修改：右键 -> Cairo-Dock -> 配置，然后将你想要的选为可见（visibility）即可。\n"
-"对于第二个或者第三个停靠栏来说，可以点击右键 -> Cairo-Dock -> 设置此停靠栏，然后将你想要的选为可见即可。"
+"停靠栏可以隐藏自身为应用程序腾出屏幕空间，但是它也可以像面板一样一直保持可"
+"见。\n"
+"按如下的方式修改：右键 -> Cairo-Dock -> 配置，然后将你想要的选为可见"
+"（visibility）即可。\n"
+"对于第二个或者第三个停靠栏来说，可以点击右键 -> Cairo-Dock -> 设置此停靠栏，"
+"然后将你想要的选为可见即可。"
 
 #: ../data/messages:91
 msgid "Placing applets on your desktop"
@@ -1929,16 +1959,15 @@ msgstr "完全移除 gnome-panel"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"打开“gconf-"
-"editor”，编辑键值“/desktop/gnome/session/required_components/panel”并用“cairo-"
-"dock”替换其中的内容。\n"
-"然后注销并重新登录：此时gnome-panel不会启动，而dock会启动（如果不想这么做，你可以把它放入“启动应用程序”中）"
+"打开“gconf-editor”，编辑键值“/desktop/gnome/session/required_components/"
+"panel”并用“cairo-dock”替换其中的内容。\n"
+"然后注销并重新登录：此时gnome-panel不会启动，而dock会启动（如果不想这么做，你"
+"可以把它放入“启动应用程序”中）"
 
 #: ../data/messages:187
 msgid ""
@@ -1974,7 +2003,9 @@ msgstr "我的dock周围有一圈黑色的背景"
 msgid ""
 "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
 "first, because their drivers are not yet perfect."
-msgstr "提示：如果您使用ATI或Intel的显卡，您应该首先尝试不使用OpenGL，因为它们的驱动程序并不完善。"
+msgstr ""
+"提示：如果您使用ATI或Intel的显卡，您应该首先尝试不使用OpenGL，因为它们的驱动"
+"程序并不完善。"
 
 #: ../data/messages:203
 msgid ""
@@ -1983,13 +2014,14 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 "你需要开启混合特效。比如，你可以运行Compiz或者xcompmgr。\n"
 "如果你使用XFCE或者KDE，你只需在窗口管理器选项中启动混合特效。\n"
 "如果你使用Gnome，你可以用这种方式启动Metacity的混合功能：\n"
-" 打开“gconf-editor”，编辑键值“/apps/metacity/general/compositing_manager”将值设为“true”。"
+" 打开“gconf-editor”，编辑键值“/apps/metacity/general/compositing_manager”将值"
+"设为“true”。"
 
 #: ../data/messages:207
 msgid ""
@@ -2024,8 +2056,10 @@ msgid ""
 "with «cairo-dock -c»."
 msgstr ""
 "如果您的显卡是GeForce8，您必须安装最新的驱动程序，因为之前的驱动存在问题。\n"
-"如果dock正以非openGL方式运行，您可以尝试减少主dock中的图标数量，或是减小其尺寸。\n"
-"如果dock正以openGL方式运行，您可以尝试通过 \"cairo-dock -c\" 来启动dock （不激活openGL）。"
+"如果dock正以非openGL方式运行，您可以尝试减少主dock中的图标数量，或是减小其尺"
+"寸。\n"
+"如果dock正以openGL方式运行，您可以尝试通过 \"cairo-dock -c\" 来启动dock （不"
+"激活openGL）。"
 
 #: ../data/messages:217
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
@@ -2035,7 +2069,9 @@ msgstr "我没有那些漂亮的效果，比如火焰，旋转正方体等等"
 msgid ""
 "Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
 "might get a lot of visual artifacts."
-msgstr "提示：你可以强制开启OpenGL通过“cairo-dock -o”，但你可能不太会得到很多视觉特效。"
+msgstr ""
+"提示：你可以强制开启OpenGL通过“cairo-dock -o”，但你可能不太会得到很多视觉特"
+"效。"
 
 #: ../data/messages:221
 msgid ""
@@ -2043,7 +2079,8 @@ msgid ""
 "cards can do this, as can more and more Intel cards. Most ATI cards do not "
 "support OpenGL2.0."
 msgstr ""
-"您需要有一块驱动程序支持openGL2.0的显卡。大多数Nvidia的显卡可以，越来越多的Intel的显卡也可以，而大多数ATI的显卡可能不行。"
+"您需要有一块驱动程序支持openGL2.0的显卡。大多数Nvidia的显卡可以，越来越多的"
+"Intel的显卡也可以，而大多数ATI的显卡可能不行。"
 
 #: ../data/messages:223
 msgid "I don't have any themes in the Theme Manager, except the default one."
@@ -2064,7 +2101,8 @@ msgid ""
 msgstr ""
 "请确认您已经建立了网络连接。\n"
 " 如果您的连接很慢，您可以在“系统”模块中增加连接超时值。\n"
-" 如果您使用代理连接，您需要配置 \"curl\" 来使用它；请搜索互联网来查找怎么做（至少，您需要设置 \"htpp_proxy\"  环境变量）。"
+" 如果您使用代理连接，您需要配置 \"curl\" 来使用它；请搜索互联网来查找怎么做"
+"（至少，您需要设置 \"htpp_proxy\"  环境变量）。"
 
 #: ../data/messages:229
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
@@ -2085,8 +2123,8 @@ msgid ""
 "something like «eth1», «ath0», or «wifi0».."
 msgstr ""
 "您需要告诉它您使用哪个接口来连接网络（默认为 \"eth0\"）。\n"
-"只需编辑它的配置，并键入接口的名字。要查找其名字，请在终端中键入 \"ifconfig\" ，并忽略 \"loop\" 接口。它可能形如 "
-"\"eth1\"、\"ath0\" 或 \"wifi0\"。"
+"只需编辑它的配置，并键入接口的名字。要查找其名字，请在终端中键入 \"ifconfig"
+"\" ，并忽略 \"loop\" 接口。它可能形如 \"eth1\"、\"ath0\" 或 \"wifi0\"。"
 
 #: ../data/messages:235
 msgid "The dustbin remains empty even when I delete a file."
@@ -2100,8 +2138,8 @@ msgid ""
 "here!!! (do not insert spaces or some invisible caracters)."
 msgstr ""
 "如果您使用KDE，您可能需要告诉它垃圾文件夹的路径。\n"
-"只需编辑这个小程序的配置，并填入垃圾文件夹的路径；它可能是 \"~/.locale/share/Trash/files\" "
-"。在填写路径时请务必小心！！！（不要插入空格或是不可见字符）。"
+"只需编辑这个小程序的配置，并填入垃圾文件夹的路径；它可能是 \"~/.locale/share/"
+"Trash/files\" 。在填写路径时请务必小心！！！（不要插入空格或是不可见字符）。"
 
 #: ../data/messages:239
 msgid ""
@@ -2288,7 +2326,9 @@ msgstr "桌面小工具"
 msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
-msgstr "一旦锁定，桌面小工具无法通过简单地用左键拖放来移动。当然，您可以用ALT+左键来移动。"
+msgstr ""
+"一旦锁定，桌面小工具无法通过简单地用左键拖放来移动。当然，您可以用ALT+左键来"
+"移动。"
 
 #: ../data/messages:325
 msgid "Lock position?"
@@ -2298,7 +2338,9 @@ msgstr "锁定位置？"
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
-msgstr "您可以用诸如ALT+鼠标中键或ALT+左键点击来更改其大小，此功能依赖于您的窗口管理器。"
+msgstr ""
+"您可以用诸如ALT+鼠标中键或ALT+左键点击来更改其大小，此功能依赖于您的窗口管理"
+"器。"
 
 #: ../data/messages:329
 msgid "Desklet dimensions (width x height):"
@@ -2466,7 +2508,8 @@ msgid ""
 msgstr ""
 "模式按打扰的程度由高到低排序。\n"
 "当Dock面板隐藏或在当前窗口以下时，将鼠标移动到屏幕的边缘即可唤回程序。\n"
-"当Dock面板以快捷方式弹出，它会出现在您的鼠标停留的位置。其后消失，像菜单一样。"
+"当Dock面板以快捷方式弹出，它会出现在您的鼠标停留的位置。其后消失，像菜单一"
+"样。"
 
 #: ../data/messages:415 ../data/messages:581 ../data/messages:1309
 msgid "Reserve space for the dock"
@@ -2505,7 +2548,9 @@ msgid ""
 "When you press the shortcut, the dock will show itself at the potition of "
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
-msgstr "按下快捷键时，停靠栏将在您鼠标的位置显现。其余时间保持隐藏状态。形如菜单一样。"
+msgstr ""
+"按下快捷键时，停靠栏将在您鼠标的位置显现。其余时间保持隐藏状态。形如菜单一"
+"样。"
 
 #: ../data/messages:443 ../data/messages:631
 msgid "Keyboard shortcut to pop-up the dock:"
@@ -2667,7 +2712,9 @@ msgid ""
 "itself relative to the right corner if horizontal and the bottom corner if "
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
-msgstr "取值0时，dock水平位于左角，垂直位于上角；1时，水平位于右角，垂直位于下角；0.5时，相对屏幕正中定位。"
+msgstr ""
+"取值0时，dock水平位于左角，垂直位于上角；1时，水平位于右角，垂直位于下角；0.5"
+"时，相对屏幕正中定位。"
 
 #: ../data/messages:545 ../data/messages:1285
 msgid "Relative alignment:"
@@ -2681,7 +2728,9 @@ msgstr "到屏幕边缘的偏移"
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
-msgstr "距离屏幕边的绝对位置的间隔。以点为单位。你也可以按下ALT或CTRL，以及鼠标左键来移动dock。"
+msgstr ""
+"距离屏幕边的绝对位置的间隔。以点为单位。你也可以按下ALT或CTRL，以及鼠标左键来"
+"移动dock。"
 
 #: ../data/messages:555 ../data/messages:1291
 msgid "Lateral offset:"
@@ -2775,7 +2824,9 @@ msgstr "附加参数"
 msgid ""
 "This is only usefull if you do not already use auto-hide and if your Window "
 "Manager allows the dock in front of fullscreen windows (which is rare)."
-msgstr "此选项仅用于你没启用自动隐藏，而且你的窗口管理器把停靠栏置于全屏窗口之前（罕见）。"
+msgstr ""
+"此选项仅用于你没启用自动隐藏，而且你的窗口管理器把停靠栏置于全屏窗口之前（罕"
+"见）。"
 
 #: ../data/messages:637
 msgid "Automatically hide the dock when a window becomes full screen?"
@@ -2817,8 +2868,9 @@ msgid ""
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 msgstr ""
-"当它们的程序运行时，启动器表现的如同一个应用程序，而且会在它们的图标上添加指示器用以标识。您还可以用SHIFT+左键点击正在运行的程序，来启动另一个相同的"
-"程序。"
+"当它们的程序运行时，启动器表现的如同一个应用程序，而且会在它们的图标上添加指"
+"示器用以标识。您还可以用SHIFT+左键点击正在运行的程序，来启动另一个相同的程"
+"序。"
 
 #: ../data/messages:667
 msgid "Mix launchers and applications"
@@ -2871,7 +2923,9 @@ msgid ""
 "If not set, the icon provided by X for each application will be used. If "
 "set, the same icon as the corresponding launcher will be used for each "
 "application."
-msgstr "如果不设置，则会为每个应用程序使用由X提供的图标。如果设置，则为每个应用程序使用启动器对应的图标"
+msgstr ""
+"如果不设置，则会为每个应用程序使用由X提供的图标。如果设置，则为每个应用程序使"
+"用启动器对应的图标"
 
 #: ../data/messages:701
 msgid "Overwrite the X icon with the launchers' icon?"
@@ -2986,7 +3040,8 @@ msgstr "对话框期间："
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
-msgstr "它将提醒您，无论您在做什么，例如当您正以全屏模式欣赏电影或是在另一个桌面。\n"
+msgstr ""
+"它将提醒您，无论您在做什么，例如当您正以全屏模式欣赏电影或是在另一个桌面。\n"
 
 #: ../data/messages:759
 msgid "Force the following applications to demand your attention"
@@ -3008,7 +3063,8 @@ msgstr "以动画展现子停靠栏的出现？"
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
-msgstr "缩小时图标将会折叠在一起，展开时将展开到整个停靠栏。往左边快，往右边慢。"
+msgstr ""
+"缩小时图标将会折叠在一起，展开时将展开到整个停靠栏。往左边快，往右边慢。"
 
 #: ../data/messages:771
 msgid "Animation unfolding duration:"
@@ -3079,8 +3135,8 @@ msgid ""
 "etc and have a black background around your dock. For aesthetic reasons, the "
 "dock will be kept under other windows."
 msgstr ""
-"仅当您没有使用诸如Compiz、xcompmgr之类的混合管理器，而且dock周围为黑色背景时，使用此选项。处于审美的考虑，此时dock将位于其它窗口之下"
-"。"
+"仅当您没有使用诸如Compiz、xcompmgr之类的混合管理器，而且dock周围为黑色背景"
+"时，使用此选项。处于审美的考虑，此时dock将位于其它窗口之下。"
 
 #: ../data/messages:823
 msgid "Emulate composition with fake transparency?"
@@ -3095,7 +3151,8 @@ msgid ""
 "Maximum time in seconds that you allow the connection to the server to take. "
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
-msgstr "连接到服务器的最大秒数。只限制连接阶段，当连接成功后，不受这个选项的限制。"
+msgstr ""
+"连接到服务器的最大秒数。只限制连接阶段，当连接成功后，不受这个选项的限制。"
 
 #: ../data/messages:829
 msgid "Connection timeout :"
@@ -3151,11 +3208,6 @@ msgstr "密码："
 #: ../data/messages:857 ../data/messages:1347
 msgid "Fill the background with:"
 msgstr "桌面背景："
-
-#: ../data/messages:859 ../data/messages:865 ../data/messages:1133
-#: ../data/messages:1351
-msgid "Image"
-msgstr "图片"
 
 #: ../data/messages:861 ../data/messages:881 ../data/messages:1353
 msgid "Colour gradation"
@@ -3474,8 +3526,7 @@ msgid "Zoom effect"
 msgstr "放大效果"
 
 #: ../data/messages:1063
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr "如果您不想要图标有鼠标放上去放大得效果，就设置为1。"
 
 #: ../data/messages:1065
@@ -3507,7 +3558,9 @@ msgstr "强制分隔符图片固定大小？"
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
-msgstr "只有默认视图和三维平面曲线视图支持平面和物理间隔。平间隔对于不同视图会呈现不同效果。"
+msgstr ""
+"只有默认视图和三维平面曲线视图支持平面和物理间隔。平间隔对于不同视图会呈现不"
+"同效果。"
 
 #: ../data/messages:1079
 msgid "How to draw the separators?"
@@ -3697,7 +3750,9 @@ msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
 "have the same size as the icons."
-msgstr "您可以设置指示器比图标大还是小。取值越大，则指示器越大。1意味着指示器与图标等大"
+msgstr ""
+"您可以设置指示器比图标大还是小。取值越大，则指示器越大。1意味着指示器与图标等"
+"大"
 
 #: ../data/messages:1171
 msgid "Indicator size ratio :"
@@ -3709,8 +3764,8 @@ msgstr "更大"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr "使指示器与Dock方向一致（上/下/左/右）"
 
 #: ../data/messages:1179
@@ -3924,7 +3979,9 @@ msgid ""
 "If you tick this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
-msgstr "如果你勾选此项，你的启动器将被新主题提供的取代。否则，将保留你当前的启动器，仅替换其图标。"
+msgstr ""
+"如果你勾选此项，你的启动器将被新主题提供的取代。否则，将保留你当前的启动器，"
+"仅替换其图标。"
 
 #: ../data/messages:1377
 msgid "Use the new theme's launchers?"
@@ -4033,8 +4090,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445
@@ -4077,7 +4134,13 @@ msgstr ""
 msgid "Separators' appearance is defined in the global configuration."
 msgstr ""
 
-#: ../data/messages:1479
+#: ../data/messages:1480
+msgid ""
+"<b>The basic 2D view of Cairo-Dock</b>\n"
+"Perfect if you want to make the dock look like a panel."
+msgstr ""
+
+#: ../data/messages:1481
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4099,7 +4162,7 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#: ../data/messages:1481
+#: ../data/messages:1483
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
 " - Better integration in of Unity: support of the <b>Launcher API</b> and "

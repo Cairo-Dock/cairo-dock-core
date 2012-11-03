@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2012-09-30 14:51+0000\n"
 "PO-Revision-Date: 2012-09-30 17:36+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Serbian <sr@li.org>\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2012-10-01 04:42+0000\n"
 "X-Generator: Launchpad (build 16049)\n"
-"Language: sr\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -43,7 +42,7 @@ msgstr "Radna površina"
 msgid "Accessories"
 msgstr "Dodaci"
 
-#: ../src/cairo-dock-gui-advanced.c:139 ../src/cairo-dock-gui-advanced.c:1559
+#: ../src/cairo-dock-gui-advanced.c:139 ../src/cairo-dock-gui-advanced.c:1553
 #: ../src/cairo-dock-widget-plugins.c:162 ../data/messages:763
 msgid "System"
 msgstr "Sistem"
@@ -52,20 +51,21 @@ msgstr "Sistem"
 msgid "Fun"
 msgstr "Zabava"
 
-#: ../src/cairo-dock-gui-advanced.c:141 ../src/cairo-dock-gui-advanced.c:1836
+#: ../src/cairo-dock-gui-advanced.c:141 ../src/cairo-dock-gui-advanced.c:1830
+#: ../src/gldit/cairo-dock-gui-factory.c:780
 msgid "All"
 msgstr "Svi"
 
-#: ../src/cairo-dock-gui-advanced.c:1527
+#: ../src/cairo-dock-gui-advanced.c:1521
 msgid "Set the position of the main dock."
 msgstr "Podesite poziciju glavnog doka."
 
-#: ../src/cairo-dock-gui-advanced.c:1528 ../data/messages:321
+#: ../src/cairo-dock-gui-advanced.c:1522 ../data/messages:321
 #: ../data/messages:529
 msgid "Position"
 msgstr "Pozicija"
 
-#: ../src/cairo-dock-gui-advanced.c:1535
+#: ../src/cairo-dock-gui-advanced.c:1529
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -75,68 +75,68 @@ msgstr ""
 " ili neupadljiv?\n"
 "Podesite način pristupanja dokovima i pod-dokovima!"
 
-#: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-menu.c:1991
+#: ../src/cairo-dock-gui-advanced.c:1530 ../src/cairo-dock-menu.c:2020
 #: ../data/messages:339
 msgid "Visibility"
 msgstr "Vidljivost"
 
-#: ../src/cairo-dock-gui-advanced.c:1543
+#: ../src/cairo-dock-gui-advanced.c:1537
 msgid "Display and interact with currently open windows."
 msgstr "Prikaži i vrši interakciju sa trenutno otvorenim prozorima."
 
-#: ../src/cairo-dock-gui-advanced.c:1544 ../data/messages:41
+#: ../src/cairo-dock-gui-advanced.c:1538 ../data/messages:41
 #: ../data/messages:455
 msgid "Taskbar"
 msgstr "Traka zadataka"
 
-#: ../src/cairo-dock-gui-advanced.c:1551
+#: ../src/cairo-dock-gui-advanced.c:1545
 msgid "Define all the keyboard shortcuts currently available."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1552 ../data/messages:525
+#: ../src/cairo-dock-gui-advanced.c:1546 ../data/messages:525
 msgid "Shortkeys"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1558
+#: ../src/cairo-dock-gui-advanced.c:1552
 msgid "All of the parameters you will never want to tweak."
 msgstr "Svi parametri koje nikada nećete želeti da podešavata."
 
-#: ../src/cairo-dock-gui-advanced.c:1569
+#: ../src/cairo-dock-gui-advanced.c:1563
 msgid "Set a background for your dock."
 msgstr "Podesite pozadinu vašeg doka."
 
-#: ../src/cairo-dock-gui-advanced.c:1570 ../data/messages:855
+#: ../src/cairo-dock-gui-advanced.c:1564 ../data/messages:855
 #: ../data/messages:1237 ../data/messages:1345
 msgid "Background"
 msgstr "Pozadina"
 
-#: ../src/cairo-dock-gui-advanced.c:1577
+#: ../src/cairo-dock-gui-advanced.c:1571
 msgid "Select a view for each of your docks."
 msgstr "Odaberite prikaz za svaki vaš dok."
 
-#: ../src/cairo-dock-gui-advanced.c:1578 ../data/messages:517
+#: ../src/cairo-dock-gui-advanced.c:1572 ../data/messages:517
 #: ../data/messages:923 ../data/messages:1339
 msgid "Views"
 msgstr "Prikazi"
 
-#: ../src/cairo-dock-gui-advanced.c:1585
+#: ../src/cairo-dock-gui-advanced.c:1579
 msgid "Configure text bubble appearance."
 msgstr "Podesite pojavljivanje teksta u balonu."
 
-#: ../src/cairo-dock-gui-advanced.c:1586
+#: ../src/cairo-dock-gui-advanced.c:1580
 msgid "Dialog boxes"
 msgstr "Dijalozi"
 
-#: ../src/cairo-dock-gui-advanced.c:1593
+#: ../src/cairo-dock-gui-advanced.c:1587
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "Apleti mogu biti prikazan na radnoj površini kao widgeti."
 
-#: ../src/cairo-dock-gui-advanced.c:1594 ../data/messages:89
+#: ../src/cairo-dock-gui-advanced.c:1588 ../data/messages:89
 #: ../data/messages:979
 msgid "Desklets"
 msgstr "Desklets"
 
-#: ../src/cairo-dock-gui-advanced.c:1601
+#: ../src/cairo-dock-gui-advanced.c:1595
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -144,90 +144,90 @@ msgstr ""
 "Sve o ikonama:\n"
 " veličina, refleksija, teme ikona, ..."
 
-#: ../src/cairo-dock-gui-advanced.c:1602 ../data/messages:11
+#: ../src/cairo-dock-gui-advanced.c:1596 ../data/messages:11
 #: ../data/messages:501 ../data/messages:1043 ../data/messages:1321
 msgid "Icons"
 msgstr "Ikone"
 
-#: ../src/cairo-dock-gui-advanced.c:1609
+#: ../src/cairo-dock-gui-advanced.c:1603
 msgid "Indicators are additional markers for your icons."
 msgstr "Indikatori su dodatni označivači za vaše ikone."
 
-#: ../src/cairo-dock-gui-advanced.c:1610 ../data/messages:1127
+#: ../src/cairo-dock-gui-advanced.c:1604 ../data/messages:1127
 msgid "Indicators"
 msgstr "Indikatori"
 
-#: ../src/cairo-dock-gui-advanced.c:1617
+#: ../src/cairo-dock-gui-advanced.c:1611
 msgid "Define icon caption and quick-info style."
 msgstr "Odredite natpis ikone i stil za brzi-info"
 
-#: ../src/cairo-dock-gui-advanced.c:1618
+#: ../src/cairo-dock-gui-advanced.c:1612
 msgid "Captions"
 msgstr "Natpis"
 
-#: ../src/cairo-dock-gui-advanced.c:1625
+#: ../src/cairo-dock-gui-advanced.c:1619
 msgid "Try new themes and save your theme."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1626 ../src/cairo-dock-gui-simple.c:118
+#: ../src/cairo-dock-gui-advanced.c:1620 ../src/cairo-dock-gui-simple.c:118
 #: ../src/cairo-dock-gui-simple.c:120
 msgid "Themes"
 msgstr "Teme"
 
-#: ../src/cairo-dock-gui-advanced.c:1632
+#: ../src/cairo-dock-gui-advanced.c:1626
 msgid "Current items in your dock(s)."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1633 ../src/cairo-dock-gui-simple.c:94
+#: ../src/cairo-dock-gui-advanced.c:1627 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
 msgid "Current items"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1753
+#: ../src/cairo-dock-gui-advanced.c:1747
 msgid "Filter"
 msgstr "Filter"
 
-#: ../src/cairo-dock-gui-advanced.c:1794
+#: ../src/cairo-dock-gui-advanced.c:1788
 msgid "All words"
 msgstr "Sve reči"
 
-#: ../src/cairo-dock-gui-advanced.c:1795
+#: ../src/cairo-dock-gui-advanced.c:1789
 msgid "Highlighted words"
 msgstr "Naglašene reči"
 
-#: ../src/cairo-dock-gui-advanced.c:1796
+#: ../src/cairo-dock-gui-advanced.c:1790
 msgid "Hide others"
 msgstr "Sakrij ostale"
 
-#: ../src/cairo-dock-gui-advanced.c:1797
+#: ../src/cairo-dock-gui-advanced.c:1791
 msgid "Search in description"
 msgstr "Pretraži u opisu"
 
-#: ../src/cairo-dock-gui-advanced.c:1801
+#: ../src/cairo-dock-gui-advanced.c:1795
 msgid "Hide disabled"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1810
+#: ../src/cairo-dock-gui-advanced.c:1804
 msgid "Categories"
 msgstr "Kategorije"
 
-#: ../src/cairo-dock-gui-advanced.c:1920
+#: ../src/cairo-dock-gui-advanced.c:1914
 msgid "Enable this module"
 msgstr "Omogući ovaj modul"
 
-#: ../src/cairo-dock-gui-advanced.c:1987
+#: ../src/cairo-dock-gui-advanced.c:1981
 msgid "More applets"
 msgstr "Još apleta"
 
-#: ../src/cairo-dock-gui-advanced.c:1988
+#: ../src/cairo-dock-gui-advanced.c:1982
 msgid "Get more applets online !"
 msgstr "Pribaviti još apleta preko mreže!"
 
-#: ../src/cairo-dock-gui-advanced.c:2083 ../src/cairo-dock-gui-simple.c:359
+#: ../src/cairo-dock-gui-advanced.c:2077 ../src/cairo-dock-gui-simple.c:365
 msgid "Cairo-Dock configuration"
 msgstr "Cairo-Dok konfiguracija"
 
-#: ../src/cairo-dock-gui-advanced.c:2662
+#: ../src/cairo-dock-gui-advanced.c:2656
 msgid "Simple Mode"
 msgstr "Jednostavni mod"
 
@@ -239,11 +239,11 @@ msgstr "Dodaci"
 msgid "Configuration"
 msgstr ""
 
-#: ../src/cairo-dock-gui-simple.c:631
+#: ../src/cairo-dock-gui-simple.c:636
 msgid "Advanced Mode"
 msgstr "Napredni mod"
 
-#: ../src/cairo-dock-gui-simple.c:632
+#: ../src/cairo-dock-gui-simple.c:637
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
@@ -251,128 +251,128 @@ msgstr ""
 "Napredni mod omogućava podešavanje svih parametara doka. To je moćni alat za "
 "prilagođavanje trenutne teme."
 
-#: ../src/cairo-dock-menu.c:124
+#: ../src/cairo-dock-menu.c:134
 msgid "Delete this dock?"
 msgstr "Ukoniti dok?"
 
-#: ../src/cairo-dock-menu.c:181
+#: ../src/cairo-dock-menu.c:187
 msgid "About Cairo-Dock"
 msgstr "O Kairo doku"
 
-#: ../src/cairo-dock-menu.c:218 ../data/messages:271
+#: ../src/cairo-dock-menu.c:224 ../data/messages:271
 msgid "Development site"
 msgstr "Razvojni sajt"
 
-#: ../src/cairo-dock-menu.c:219 ../data/messages:269
+#: ../src/cairo-dock-menu.c:225 ../data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Ovde pronađi najnoviju Cairo-dok verziju!"
 
-#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:952
+#: ../src/cairo-dock-menu.c:229 ../src/cairo-dock-menu.c:1105
 #: ../src/cairo-dock-widget-plugins.c:277
 msgid "Get more applets!"
 msgstr "Nabavite još apleta!"
 
-#: ../src/cairo-dock-menu.c:227 ../src/cairo-dock-menu.c:233
+#: ../src/cairo-dock-menu.c:233 ../src/cairo-dock-menu.c:239
 msgid "Donate"
 msgstr "Doniraj"
 
-#: ../src/cairo-dock-menu.c:230 ../src/cairo-dock-menu.c:236
+#: ../src/cairo-dock-menu.c:236 ../src/cairo-dock-menu.c:242
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 "Podrži ljude koji su potrošili nebrojeno mnogo sati da bi ti dobio najbloji "
 "dok do sada."
 
-#: ../src/cairo-dock-menu.c:264
+#: ../src/cairo-dock-menu.c:270
 msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:265
+#: ../src/cairo-dock-menu.c:271
 msgid "Developers"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:266
+#: ../src/cairo-dock-menu.c:272
 msgid "Main developer and project leader"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:267
+#: ../src/cairo-dock-menu.c:273
 msgid "Contributors / Hackers"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:269
+#: ../src/cairo-dock-menu.c:275
 msgid "Development"
 msgstr "Razvoj"
 
-#: ../src/cairo-dock-menu.c:284
+#: ../src/cairo-dock-menu.c:290
 msgid "Website"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:285
+#: ../src/cairo-dock-menu.c:291
 msgid "Beta-testing / Suggestions / Forum animation"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:286
+#: ../src/cairo-dock-menu.c:292
 msgid "Translators for this language"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:287
+#: ../src/cairo-dock-menu.c:293
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
 "  boki24 https://launchpad.net/~bojansav"
 
-#: ../src/cairo-dock-menu.c:289
+#: ../src/cairo-dock-menu.c:295
 msgid "Support"
 msgstr "Podrška"
 
-#: ../src/cairo-dock-menu.c:319
+#: ../src/cairo-dock-menu.c:325
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:321
+#: ../src/cairo-dock-menu.c:327
 msgid "How to help us?"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:322
+#: ../src/cairo-dock-menu.c:328
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:323
+#: ../src/cairo-dock-menu.c:329
 msgid "Former contributors"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:324
+#: ../src/cairo-dock-menu.c:330
 msgid "For a complete list, please have a look to BZR logs"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:325
+#: ../src/cairo-dock-menu.c:331
 msgid "Users of our forum"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:326
+#: ../src/cairo-dock-menu.c:332
 msgid "List of our forum's members"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:327
+#: ../src/cairo-dock-menu.c:333
 msgid "Artwork"
 msgstr "Galerija"
 
-#: ../src/cairo-dock-menu.c:329
+#: ../src/cairo-dock-menu.c:335
 msgid "Thanks"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:408
+#: ../src/cairo-dock-menu.c:425
 msgid "Quit Cairo-Dock?"
 msgstr "Napuštate Cairo-dok?"
 
-#: ../src/cairo-dock-menu.c:438 ../src/cairo-dock-menu.c:577
+#: ../src/cairo-dock-menu.c:455 ../src/cairo-dock-menu.c:594
 msgid "Separator"
 msgstr "Odvajač"
 
-#: ../src/cairo-dock-menu.c:547
+#: ../src/cairo-dock-menu.c:564
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -382,37 +382,28 @@ msgstr ""
 "Sada premestite neke pokretačeili aplete koristeći desni klikom na ikonu -> "
 "premeštaj na sledeći dok"
 
-#: ../src/cairo-dock-menu.c:571
+#: ../src/cairo-dock-menu.c:588
 msgid "Add"
 msgstr "Dodaj"
 
-#: ../src/cairo-dock-menu.c:573
+#: ../src/cairo-dock-menu.c:590
 msgid "Sub-dock"
 msgstr "Pod-dok"
 
-#: ../src/cairo-dock-menu.c:575
+#: ../src/cairo-dock-menu.c:592
 msgid "Main dock"
 msgstr "Glavni dok"
 
-#: ../src/cairo-dock-menu.c:579
+#: ../src/cairo-dock-menu.c:596
 msgid "Custom launcher"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:580
+#: ../src/cairo-dock-menu.c:597
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr "Obično je potrebno prevući pokretač sa menija i pustiti ga na dok."
 
-#: ../src/cairo-dock-menu.c:597
-msgid "separator"
-msgstr "odvajač"
-
-#: ../src/cairo-dock-menu.c:601
-#, c-format
-msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Uklanjate ikonu (%s) sa doka. Stvarno?"
-
-#: ../src/cairo-dock-menu.c:613
+#: ../src/cairo-dock-menu.c:615
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -421,11 +412,20 @@ msgstr ""
 "Želite da preraspodelite ikone koje se nalaze u spremištu u dok?\n"
 "(u suprotnom, biće uništene)"
 
-#: ../src/cairo-dock-menu.c:637
+#: ../src/cairo-dock-menu.c:643
+msgid "separator"
+msgstr "odvajač"
+
+#: ../src/cairo-dock-menu.c:647
+#, c-format
+msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
+msgstr "Uklanjate ikonu (%s) sa doka. Stvarno?"
+
+#: ../src/cairo-dock-menu.c:662
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Izvinite, ova ikona nema konfiguracioni fajl"
 
-#: ../src/cairo-dock-menu.c:677
+#: ../src/cairo-dock-menu.c:702
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -434,7 +434,7 @@ msgstr ""
 "Novi dok je kreiran.\n"
 "Možete ga prilagoditi desnim klikom na  -> cairo-dock -> podesi ovaj dok."
 
-#: ../src/cairo-dock-menu.c:758
+#: ../src/cairo-dock-menu.c:783
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -442,295 +442,297 @@ msgstr ""
 "Izvinite, ne mogu da pronađem odgovarajući opisni fajl.\n"
 "Možda da prevučete i pustite pokretač sa programskog menija."
 
-#: ../src/cairo-dock-menu.c:799
+#: ../src/cairo-dock-menu.c:831
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Uklanjate aplet (%s) sa doka. Stvarno?"
 
-#: ../src/cairo-dock-menu.c:868
+#: ../src/cairo-dock-menu.c:899 ../src/gldit/cairo-dock-gui-factory.c:753
+msgid "Pick up an image"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:916 ../src/gldit/cairo-dock-gui-factory.c:787
+#: ../data/messages:859 ../data/messages:865 ../data/messages:1133
+#: ../data/messages:1351
+msgid "Image"
+msgstr "Slika"
+
+#: ../src/cairo-dock-menu.c:1021
 msgid "Configure"
 msgstr "Podesi"
 
-#: ../src/cairo-dock-menu.c:873
+#: ../src/cairo-dock-menu.c:1026
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Podesi ponašanje, izgled i aplete."
 
-#: ../src/cairo-dock-menu.c:878
+#: ../src/cairo-dock-menu.c:1031
 msgid "Configure this dock"
 msgstr "Podesite ovaj dok"
 
-#: ../src/cairo-dock-menu.c:883
+#: ../src/cairo-dock-menu.c:1036
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Podesite poziciju, vidljivost i izgled ovog glavnog doka."
 
-#: ../src/cairo-dock-menu.c:885
+#: ../src/cairo-dock-menu.c:1038
 msgid "Delete this dock"
 msgstr "Ukloni ovaj dok"
 
-#: ../src/cairo-dock-menu.c:895
+#: ../src/cairo-dock-menu.c:1048
 msgid "Manage themes"
 msgstr "Uredi teme"
 
-#: ../src/cairo-dock-menu.c:900
+#: ../src/cairo-dock-menu.c:1053
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 "Odaberi temu među mnogim temama na serveru ili snimi svoju trenutnu temu."
 
-#: ../src/cairo-dock-menu.c:913
+#: ../src/cairo-dock-menu.c:1066
 msgid "Lock icons position"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:917
+#: ../src/cairo-dock-menu.c:1070
 msgid "This will (un)lock the position of the icons."
 msgstr "Ovo će otključati pozicije ikona"
 
-#: ../src/cairo-dock-menu.c:923
+#: ../src/cairo-dock-menu.c:1076
 msgid "Quick-Hide"
 msgstr "Brzo sakrivanje"
 
-#: ../src/cairo-dock-menu.c:928
+#: ../src/cairo-dock-menu.c:1081
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Ovo će sakriti dok dok ne pređete mišem preko njega."
 
-#: ../src/cairo-dock-menu.c:941
+#: ../src/cairo-dock-menu.c:1094
 msgid "Launch Cairo-Dock on startup"
 msgstr "Startuj Cairo-dok pri pokretanju sistema"
 
-#: ../src/cairo-dock-menu.c:957
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
-msgstr ""
-"Apleti omogućavaju integraciju sa mnogim programima, na primer Pidgin"
+#: ../src/cairo-dock-menu.c:1110
+msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgstr "Apleti omogućavaju integraciju sa mnogim programima, na primer Pidgin"
 
-#: ../src/cairo-dock-menu.c:960 ../src/help/applet-init.c:28
+#: ../src/cairo-dock-menu.c:1113 ../src/help/applet-init.c:28
 #: ../src/help/applet-notifications.c:269
 msgid "Help"
 msgstr "Pomoć"
 
-#: ../src/cairo-dock-menu.c:965
+#: ../src/cairo-dock-menu.c:1118
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr "Nema problema, samo rešenja (i mnogo korisnih saveta!)"
 
-#: ../src/cairo-dock-menu.c:969
+#: ../src/cairo-dock-menu.c:1122
 msgid "About"
 msgstr "О"
 
-#: ../src/cairo-dock-menu.c:978
+#: ../src/cairo-dock-menu.c:1131
 msgid "Quit"
 msgstr "Izađi"
 
-#: ../src/cairo-dock-menu.c:987
+#: ../src/cairo-dock-menu.c:1140
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1013 ../src/cairo-dock-menu.c:1026
+#: ../src/cairo-dock-menu.c:1166 ../src/cairo-dock-menu.c:1179
 msgid "Launch a new (Shift+clic)"
 msgstr "Pokreni novi (Shift + klik)"
 
-#: ../src/cairo-dock-menu.c:1018 ../src/cairo-dock-menu.c:1080
+#: ../src/cairo-dock-menu.c:1171 ../src/cairo-dock-menu.c:1261
 msgid "Applet's handbook"
 msgstr "Priručnik apleta"
 
-#: ../src/cairo-dock-menu.c:1033 ../src/cairo-dock-menu.c:1054
+#: ../src/cairo-dock-menu.c:1186 ../src/cairo-dock-menu.c:1235
 msgid "Edit"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1035 ../src/cairo-dock-menu.c:1061
+#: ../src/cairo-dock-menu.c:1188 ../src/cairo-dock-menu.c:1242
 msgid "Remove"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1036
+#: ../src/cairo-dock-menu.c:1189
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr "Možete mišem ukloniti pokretač prevlačenjem van doka ."
 
-#: ../src/cairo-dock-menu.c:1038 ../src/cairo-dock-menu.c:1070
+#: ../src/cairo-dock-menu.c:1191 ../src/cairo-dock-menu.c:1251
 msgid "Move to another dock"
 msgstr "Premesti na sledeći dok"
 
-#: ../src/cairo-dock-menu.c:1040 ../src/cairo-dock-menu.c:1072
-#: ../src/gldit/cairo-dock-gui-factory.c:1149
+#: ../src/cairo-dock-menu.c:1193 ../src/cairo-dock-menu.c:1253
+#: ../src/gldit/cairo-dock-gui-factory.c:1168
 msgid "New main dock"
 msgstr "Novi glavni dok"
 
-#: ../src/cairo-dock-menu.c:1049
+#: ../src/cairo-dock-menu.c:1202
 msgid "Make it a launcher"
 msgstr "Učini od njega pokretač"
 
-#: ../src/cairo-dock-menu.c:1058
+#: ../src/cairo-dock-menu.c:1225
+msgid "Remove custom icon"
+msgstr "Ukloni ikone korisnika"
+
+#: ../src/cairo-dock-menu.c:1229
+msgid "Set a custom icon"
+msgstr "Postavite proizvoljnu ikonu"
+
+#: ../src/cairo-dock-menu.c:1239
 msgid "Detach"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1058
+#: ../src/cairo-dock-menu.c:1239
 msgid "Return to the dock"
 msgstr "Vrati na dok"
 
-#: ../src/cairo-dock-menu.c:1065
+#: ../src/cairo-dock-menu.c:1246
 msgid "Duplicate"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1125
-msgid "Pick up an image"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1345
+#: ../src/cairo-dock-menu.c:1410
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Premestite sve na radnu površinu %d - strana %d"
 
-#: ../src/cairo-dock-menu.c:1345
+#: ../src/cairo-dock-menu.c:1410
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Premesti radnu površinu %d - strana %d"
 
-#: ../src/cairo-dock-menu.c:1347
+#: ../src/cairo-dock-menu.c:1412
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Premestite sve na radnu površinu %d"
 
-#: ../src/cairo-dock-menu.c:1347
+#: ../src/cairo-dock-menu.c:1412
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Premestite na radnu površinu %d"
 
-#: ../src/cairo-dock-menu.c:1349
+#: ../src/cairo-dock-menu.c:1414
 #, c-format
 msgid "Move all to face %d"
 msgstr "Premestite sve na stranu %d"
 
-#: ../src/cairo-dock-menu.c:1349
+#: ../src/cairo-dock-menu.c:1414
 #, c-format
 msgid "Move to face %d"
 msgstr "Premestite na stranu %d"
 
-#: ../src/cairo-dock-menu.c:1792 ../src/cairo-dock-menu.c:1844
+#: ../src/cairo-dock-menu.c:1856 ../src/cairo-dock-menu.c:1898
 msgid "Window"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1796 ../src/cairo-dock-menu.c:1798
-#: ../src/cairo-dock-menu.c:1871 ../src/cairo-dock-menu.c:1873
+#: ../src/cairo-dock-menu.c:1860 ../src/cairo-dock-menu.c:1862
+#: ../src/cairo-dock-menu.c:1918 ../src/cairo-dock-menu.c:1920
 #: ../data/messages:735
 msgid "Close"
 msgstr "Zatvori"
 
-#: ../src/cairo-dock-menu.c:1796 ../src/cairo-dock-menu.c:1808
-#: ../src/cairo-dock-menu.c:1818 ../src/cairo-dock-menu.c:1856
-#: ../src/cairo-dock-menu.c:1863 ../src/cairo-dock-menu.c:1871
-#: ../src/cairo-dock-menu.c:1940 ../src/cairo-dock-menu.c:1950
-#: ../src/help/applet-notifications.c:259
+#: ../src/cairo-dock-menu.c:1860 ../src/cairo-dock-menu.c:1877
+#: ../src/cairo-dock-menu.c:1910 ../src/cairo-dock-menu.c:1918
+#: ../src/cairo-dock-menu.c:1937 ../src/cairo-dock-menu.c:1969
+#: ../src/cairo-dock-menu.c:1979 ../src/help/applet-notifications.c:259
 msgid "middle-click"
 msgstr "srednji klik"
 
-#: ../src/cairo-dock-menu.c:1808 ../src/cairo-dock-menu.c:1810
-#: ../src/cairo-dock-menu.c:1856 ../src/cairo-dock-menu.c:1858
-msgid "Minimise"
-msgstr "Umanji"
-
-#: ../src/cairo-dock-menu.c:1818 ../src/cairo-dock-menu.c:1820
-#: ../src/cairo-dock-menu.c:1863 ../src/cairo-dock-menu.c:1865
-msgid "Below other windows"
-msgstr ""
-
-#: ../src/cairo-dock-menu.c:1829 ../src/cairo-dock-menu.c:1851
+#: ../src/cairo-dock-menu.c:1872 ../src/cairo-dock-menu.c:1905
 msgid "Unmaximise"
 msgstr "Poništi maksimalno uvećanje"
 
-#: ../src/cairo-dock-menu.c:1829 ../src/cairo-dock-menu.c:1851
+#: ../src/cairo-dock-menu.c:1872 ../src/cairo-dock-menu.c:1905
 msgid "Maximise"
 msgstr "Maksimalno uvećaj"
 
-#: ../src/cairo-dock-menu.c:1839 ../src/cairo-dock-menu.c:1849
+#: ../src/cairo-dock-menu.c:1877 ../src/cairo-dock-menu.c:1879
+#: ../src/cairo-dock-menu.c:1910 ../src/cairo-dock-menu.c:1912
+msgid "Minimise"
+msgstr "Umanji"
+
+#: ../src/cairo-dock-menu.c:1893 ../src/cairo-dock-menu.c:1903
 msgid "Show"
 msgstr "Prikaži"
 
-#: ../src/cairo-dock-menu.c:1879 ../src/cairo-dock-menu.c:1974
+#: ../src/cairo-dock-menu.c:1926 ../src/cairo-dock-menu.c:2003
 msgid "Other actions"
 msgstr "Ostale akcije"
 
-#: ../src/cairo-dock-menu.c:1881
+#: ../src/cairo-dock-menu.c:1928
 msgid "Move to this desktop"
 msgstr "Premesti na radnu površinu"
 
-#: ../src/cairo-dock-menu.c:1885
+#: ../src/cairo-dock-menu.c:1932
 msgid "Not Fullscreen"
 msgstr "Nije preko celog ekrana"
 
-#: ../src/cairo-dock-menu.c:1885
+#: ../src/cairo-dock-menu.c:1932
 msgid "Fullscreen"
 msgstr "Ceo ekran"
 
-#: ../src/cairo-dock-menu.c:1889
+#: ../src/cairo-dock-menu.c:1937 ../src/cairo-dock-menu.c:1939
+msgid "Below other windows"
+msgstr ""
+
+#: ../src/cairo-dock-menu.c:1946
 msgid "Don't keep above"
 msgstr "Ne zadržavaj iznad"
 
-#: ../src/cairo-dock-menu.c:1889 ../data/messages:349
+#: ../src/cairo-dock-menu.c:1946 ../data/messages:349
 msgid "Keep above"
 msgstr "Zadržavaj iznad"
 
-#: ../src/cairo-dock-menu.c:1914
-msgid "Remove custom icon"
-msgstr "Ukloni ikone korisnika"
-
-#: ../src/cairo-dock-menu.c:1918
-msgid "Set a custom icon"
-msgstr "Postavite proizvoljnu ikonu"
-
-#: ../src/cairo-dock-menu.c:1921
+#: ../src/cairo-dock-menu.c:1950
 msgid "Kill"
 msgstr "Ubij"
 
-#: ../src/cairo-dock-menu.c:1936
+#: ../src/cairo-dock-menu.c:1965
 msgid "Windows"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1940 ../src/cairo-dock-menu.c:1942
-#: ../src/cairo-dock-menu.c:1970
+#: ../src/cairo-dock-menu.c:1969 ../src/cairo-dock-menu.c:1971
+#: ../src/cairo-dock-menu.c:1999
 msgid "Close all"
 msgstr "Zatvori sve"
 
-#: ../src/cairo-dock-menu.c:1950 ../src/cairo-dock-menu.c:1952
-#: ../src/cairo-dock-menu.c:1968
+#: ../src/cairo-dock-menu.c:1979 ../src/cairo-dock-menu.c:1981
+#: ../src/cairo-dock-menu.c:1997
 msgid "Minimise all"
 msgstr "Umanji sve"
 
-#: ../src/cairo-dock-menu.c:1960 ../src/cairo-dock-menu.c:1966
+#: ../src/cairo-dock-menu.c:1989 ../src/cairo-dock-menu.c:1995
 msgid "Show all"
 msgstr "Prikaži sve"
 
-#: ../src/cairo-dock-menu.c:1964
+#: ../src/cairo-dock-menu.c:1993
 msgid "Windows management"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1976
+#: ../src/cairo-dock-menu.c:2005
 msgid "Move all to this desktop"
 msgstr "Premesti sve na ovu radnu površinu"
 
-#: ../src/cairo-dock-menu.c:1999 ../data/messages:347
+#: ../src/cairo-dock-menu.c:2028 ../data/messages:347
 msgid "Normal"
 msgstr "Uobičajeno"
 
-#: ../src/cairo-dock-menu.c:2005 ../data/messages:413 ../data/messages:579
+#: ../src/cairo-dock-menu.c:2034 ../data/messages:413 ../data/messages:579
 #: ../data/messages:1307
 msgid "Always on top"
 msgstr "Uvek na vrhu"
 
-#: ../src/cairo-dock-menu.c:2012
+#: ../src/cairo-dock-menu.c:2041
 msgid "Always below"
 msgstr "Uvek ispod"
 
-#: ../src/cairo-dock-menu.c:2029 ../data/messages:355
+#: ../src/cairo-dock-menu.c:2058 ../data/messages:355
 msgid "Reserve space"
 msgstr "Obezbedi prostor"
 
-#: ../src/cairo-dock-menu.c:2036
+#: ../src/cairo-dock-menu.c:2065
 msgid "On all desktops"
 msgstr "Na svim radnim površinama"
 
-#: ../src/cairo-dock-menu.c:2042
+#: ../src/cairo-dock-menu.c:2071
 msgid "Lock position"
 msgstr "Zaključaj poziciju"
 
@@ -752,12 +754,10 @@ msgid "Effects:"
 msgstr "Efekti:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid ""
-"Main dock's parameters are available in the main configuration window."
-msgstr ""
-"Parametri glavnog doka su dostupni u glavnom konfiguracionom prozoru."
+msgid "Main dock's parameters are available in the main configuration window."
+msgstr "Parametri glavnog doka su dostupni u glavnom konfiguracionom prozoru."
 
-#: ../src/cairo-dock-widget-items.c:732
+#: ../src/cairo-dock-widget-items.c:720
 msgid "Remove this item"
 msgstr ""
 
@@ -778,8 +778,7 @@ msgid "Category"
 msgstr "Kategorija"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Da bi dobili pregled i objašnjenje u vezi apleta, kliknite u njega."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -806,7 +805,7 @@ msgstr ""
 msgid "Could not import the theme."
 msgstr "Nije moguće uvesti temu"
 
-#: ../src/cairo-dock-widget-themes.c:186
+#: ../src/cairo-dock-widget-themes.c:187
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -816,156 +815,156 @@ msgstr ""
 "Izgubićete sve izmene ako ih ne snimite pre izbora nove teme. Želite da "
 "nastavite?"
 
-#: ../src/cairo-dock-widget-themes.c:213
+#: ../src/cairo-dock-widget-themes.c:216
 msgid "Please wait while importing the theme..."
 msgstr "Sa;ekajte da uveyem temu ..."
 
-#: ../src/cairo-dock-widget-themes.c:272
+#: ../src/cairo-dock-widget-themes.c:275
 msgid "Rate me"
 msgstr "Oceni me"
 
-#: ../src/cairo-dock-widget-themes.c:372 ../src/cairo-dock-widget-themes.c:374
+#: ../src/cairo-dock-widget-themes.c:375 ../src/cairo-dock-widget-themes.c:377
 msgid "You must try the theme before you can rate it."
 msgstr "Morate prvo isprobati temu pre nego što je ocenite."
 
-#: ../src/cairo-dock-widget-themes.c:421
+#: ../src/cairo-dock-widget-themes.c:424
 msgid "The theme has been deleted"
 msgstr ""
 
-#: ../src/cairo-dock-widget-themes.c:451
+#: ../src/cairo-dock-widget-themes.c:454
 msgid "Delete this theme"
 msgstr ""
 
-#: ../src/cairo-dock-widget-themes.c:482
-#: ../src/gldit/cairo-dock-gui-factory.c:2445
+#: ../src/cairo-dock-widget-themes.c:485
+#: ../src/gldit/cairo-dock-gui-factory.c:2336
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Lista tema u '%s' ..."
 
-#: ../src/cairo-dock-widget-themes.c:505
+#: ../src/cairo-dock-widget-themes.c:508
 msgid "Theme"
 msgstr "Tema"
 
-#: ../src/cairo-dock-widget-themes.c:518
+#: ../src/cairo-dock-widget-themes.c:521
 msgid "Rating"
 msgstr "Ocena"
 
-#: ../src/cairo-dock-widget-themes.c:524
+#: ../src/cairo-dock-widget-themes.c:527
 msgid "Sobriety"
 msgstr "Uravnoteženost"
 
-#: ../src/cairo-dock-widget-themes.c:584
+#: ../src/cairo-dock-widget-themes.c:587
 msgid "Save as:"
 msgstr "Snimi kao:"
 
-#: ../src/cairo-dock-widget-themes.c:664
+#: ../src/cairo-dock-widget-themes.c:667
 msgid "Importing theme ..."
 msgstr "Uvozim temu ..."
 
-#: ../src/cairo-dock-widget-themes.c:672
+#: ../src/cairo-dock-widget-themes.c:675
 msgid "Theme has been saved"
 msgstr "Tema je snimljena"
 
-#: ../src/cairo-dock.c:136
+#: ../src/cairo-dock.c:137
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr "Srećna nova %d godina!!!"
 
-#: ../src/cairo-dock.c:311
+#: ../src/cairo-dock.c:321
 msgid "Use Cairo backend."
 msgstr ""
 
-#: ../src/cairo-dock.c:314
+#: ../src/cairo-dock.c:324
 msgid "Use OpenGL backend."
 msgstr ""
 
-#: ../src/cairo-dock.c:317
+#: ../src/cairo-dock.c:327
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 msgstr ""
 
-#: ../src/cairo-dock.c:320
+#: ../src/cairo-dock.c:330
 msgid "Ask again on startup which backend to use."
 msgstr ""
 
-#: ../src/cairo-dock.c:323
+#: ../src/cairo-dock.c:333
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr ""
 
-#: ../src/cairo-dock.c:326
+#: ../src/cairo-dock.c:336
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
 
-#: ../src/cairo-dock.c:329
+#: ../src/cairo-dock.c:339
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr ""
 
-#: ../src/cairo-dock.c:332
+#: ../src/cairo-dock.c:342
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 msgstr ""
 
-#: ../src/cairo-dock.c:335
+#: ../src/cairo-dock.c:345
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
 msgstr ""
 
-#: ../src/cairo-dock.c:338
+#: ../src/cairo-dock.c:348
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr ""
 
-#: ../src/cairo-dock.c:341
+#: ../src/cairo-dock.c:351
 msgid "Don't load any plug-ins."
 msgstr ""
 
-#: ../src/cairo-dock.c:344
+#: ../src/cairo-dock.c:354
 msgid ""
 "Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
 "docks)"
 msgstr ""
 
-#: ../src/cairo-dock.c:347
+#: ../src/cairo-dock.c:357
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
 
-#: ../src/cairo-dock.c:350
+#: ../src/cairo-dock.c:360
 msgid "Force to display some output messages with colors."
 msgstr ""
 
-#: ../src/cairo-dock.c:353
+#: ../src/cairo-dock.c:363
 msgid "Print version and quit."
 msgstr ""
 
-#: ../src/cairo-dock.c:356
+#: ../src/cairo-dock.c:366
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr ""
 
-#: ../src/cairo-dock.c:360
+#: ../src/cairo-dock.c:370
 msgid "Keep the dock above other windows whatever."
 msgstr "Uvek drži dok ispred ostalih prozora."
 
-#: ../src/cairo-dock.c:363
+#: ../src/cairo-dock.c:373
 msgid "Don't make the dock appear on all desktops."
 msgstr ""
 
-#: ../src/cairo-dock.c:366 ../src/cairo-dock.c:426
+#: ../src/cairo-dock.c:376 ../src/cairo-dock.c:436
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr "Kairo dok radi sve, čak kuva i kafu!"
 
-#: ../src/cairo-dock.c:369
+#: ../src/cairo-dock.c:379
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
 
-#: ../src/cairo-dock.c:372
+#: ../src/cairo-dock.c:382
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
@@ -973,7 +972,7 @@ msgstr ""
 "Samo za potrebe debagovanja, menadžer krahiranja neće niti startovan da bi "
 "pronašao bagove."
 
-#: ../src/cairo-dock.c:375
+#: ../src/cairo-dock.c:385
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
@@ -981,11 +980,11 @@ msgstr ""
 "Samo za potrebe debagovanja, neke skrivene i još uvek nestabilne opcije će "
 "biti aktivirane."
 
-#: ../src/cairo-dock.c:495
+#: ../src/cairo-dock.c:505
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Koristi OpenGL u Cairo-doku"
 
-#: ../src/cairo-dock.c:503
+#: ../src/cairo-dock.c:513
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -1005,11 +1004,11 @@ msgstr ""
 " (Da se ovaj dijalog ne pojavi, startujte dok preko Programskog menija,\n"
 "  ili uz opciju -o za OpenGL i -c za Cairo.)"
 
-#: ../src/cairo-dock.c:514
+#: ../src/cairo-dock.c:524
 msgid "Remember this choice"
 msgstr "Zapamti ovaj izbor"
 
-#: ../src/cairo-dock.c:674 ../src/cairo-dock.c:787
+#: ../src/cairo-dock.c:683 ../src/cairo-dock.c:796
 #, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
@@ -1018,15 +1017,15 @@ msgid ""
 "dock.org"
 msgstr ""
 
-#: ../src/cairo-dock.c:685
+#: ../src/cairo-dock.c:694
 msgid "< Maintenance mode >"
 msgstr "< Mod održavanja >"
 
-#: ../src/cairo-dock.c:687
+#: ../src/cairo-dock.c:696
 msgid "Something went wrong with this applet:"
 msgstr ""
 
-#: ../src/cairo-dock.c:736
+#: ../src/cairo-dock.c:745
 msgid ""
 "No plug-in were found.\n"
 "Plug-ins provide most of the functionalities (animations, applets, views, "
@@ -1038,7 +1037,7 @@ msgid ""
 "launch the dock with the '-f' option to no longer have this message.\n"
 msgstr ""
 
-#: ../src/cairo-dock.c:785
+#: ../src/cairo-dock.c:794
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1095,52 +1094,52 @@ msgstr "Levi dok"
 msgid "Pop up the main dock"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:248
+#: ../src/gldit/cairo-dock-gui-factory.c:245
 #, c-format
 msgid "by %s"
 msgstr "sa  %s"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:260
+#: ../src/gldit/cairo-dock-gui-factory.c:257
 msgid "kB"
 msgstr "kb"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:262
+#: ../src/gldit/cairo-dock-gui-factory.c:259
 msgid "MB"
 msgstr "MB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:271
+#: ../src/gldit/cairo-dock-gui-factory.c:268
 msgid "Local"
 msgstr "Lokalni"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:272
+#: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "User"
 msgstr "Korisnik"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:273
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "Net"
 msgstr "Mreža"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:274
+#: ../src/gldit/cairo-dock-gui-factory.c:271
 msgid "New"
 msgstr "Novi"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:275
+#: ../src/gldit/cairo-dock-gui-factory.c:272
 msgid "Updated"
 msgstr "Ažuriran"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:754
+#: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Pick up a file"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:754
+#: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Pick up a directory"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1028
+#: ../src/gldit/cairo-dock-gui-factory.c:1047
 msgid "_Custom Icons_"
 msgstr "_Prilagođene ikone_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1417
+#: ../src/gldit/cairo-dock-gui-factory.c:1306
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1151,7 +1150,7 @@ msgstr ""
 "Postarajte se da ga instalirate sa istom verzijom doka da bi koristili "
 "njegove mogućnosti."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1426
+#: ../src/gldit/cairo-dock-gui-factory.c:1315
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1160,11 +1159,11 @@ msgstr ""
 "Dodatak '%s'  nije aktivan.\n"
 "Da ga aktiviram sada?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3092
+#: ../src/gldit/cairo-dock-gui-factory.c:2983
 msgid "link"
 msgstr "veza"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3145
+#: ../src/gldit/cairo-dock-gui-factory.c:3045
 msgid "Grab"
 msgstr "Uhvati"
 
@@ -1182,23 +1181,23 @@ msgstr "Podrazumevano"
 msgid "Are you sure you want to overwrite theme %s?"
 msgstr "Da li želite da prebrišete temu %s?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:219
+#: ../src/gldit/cairo-dock-themes-manager.c:222
 msgid "Last modification on:"
 msgstr "Poslednja izmena:"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:297
+#: ../src/gldit/cairo-dock-themes-manager.c:300
 #, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
 
-#: ../src/gldit/cairo-dock-themes-manager.c:311
+#: ../src/gldit/cairo-dock-themes-manager.c:314
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "Da li ste sigurni da želite obrisati temu %s?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:313
+#: ../src/gldit/cairo-dock-themes-manager.c:316
 msgid "Are you sure you want to delete these themes?"
 msgstr "Da li ste sigurni da želite obrisati ove teme?"
 
@@ -1529,8 +1528,7 @@ msgstr ""
 #: ../data/messages:243 ../data/messages:285 ../data/messages:289
 #: ../data/messages:295 ../data/messages:299
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr ""
-"Savet: Ako je ova linija siva, to znači da se savet ne odnosi na vas."
+msgstr "Savet: Ako je ova linija siva, to znači da se savet ne odnosi na vas."
 
 #: ../data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
@@ -1851,9 +1849,8 @@ msgstr "Kompletno uklanjanje gnome-panela"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1907,8 +1904,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -3030,8 +3027,7 @@ msgstr "Učestalost osvežavanja"
 
 #: ../data/messages:803 ../data/messages:807 ../data/messages:811
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr ""
-"u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
+msgstr "u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
 
 #: ../data/messages:805
 msgid "Refresh rate when mouving cursor into the dock:"
@@ -3147,11 +3143,6 @@ msgstr "Lozinka:"
 #: ../data/messages:857 ../data/messages:1347
 msgid "Fill the background with:"
 msgstr "Popuni pozadinu sa:"
-
-#: ../data/messages:859 ../data/messages:865 ../data/messages:1133
-#: ../data/messages:1351
-msgid "Image"
-msgstr "Slika"
 
 #: ../data/messages:861 ../data/messages:881 ../data/messages:1353
 msgid "Colour gradation"
@@ -3361,8 +3352,7 @@ msgstr ""
 
 #: ../data/messages:985
 msgid "Choose a default decoration for all desklets :"
-msgstr ""
-"Odaberite podrazumevano ulepšavanje za sve programčiće radne površine:"
+msgstr "Odaberite podrazumevano ulepšavanje za sve programčiće radne površine:"
 
 #: ../data/messages:987
 msgid ""
@@ -3481,8 +3471,7 @@ msgid "Zoom effect"
 msgstr "Efekti zumiranja"
 
 #: ../data/messages:1063
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "postavite na 1 ako ne želite da ikone budu zumirane kada je miš iznad njih."
 
@@ -3602,9 +3591,8 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Ovo je njihova providnost kada je dok neaktivan; oni će se "
-"\"materijalizovati\" postepeno kako dok raste. Što je bliže 0, biće više "
-"providan."
+"Ovo je njihova providnost kada je dok neaktivan; oni će se \"materijalizovati"
+"\" postepeno kako dok raste. Što je bliže 0, biće više providan."
 
 #: ../data/messages:1115
 msgid "Icons' transparency at rest :"
@@ -3616,8 +3604,7 @@ msgstr "Poveži ikonu sa nizom znakova"
 
 #: ../data/messages:1123
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr ""
-"Dužina linije niza znakova, u pikselima (0 ne koristiti niz znakova):"
+msgstr "Dužina linije niza znakova, u pikselima (0 ne koristiti niz znakova):"
 
 #: ../data/messages:1125
 msgid "Colour of the string (red, blue, green, alpha) :"
@@ -3738,8 +3725,8 @@ msgstr "veće"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 "Koristi se da indikator prati orijentaciju doka (gore/dole/levo/desno)."
 
@@ -3827,8 +3814,7 @@ msgstr "Na svim ikonama"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr ""
-"kada je veći, više natpisa susednih izabranoj ikoni će biti providno."
+msgstr "kada je veći, više natpisa susednih izabranoj ikoni će biti providno."
 
 #: ../data/messages:1223
 msgid "label's visibility threshold :"
@@ -4081,8 +4067,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445
@@ -4125,7 +4111,13 @@ msgstr ""
 msgid "Separators' appearance is defined in the global configuration."
 msgstr ""
 
-#: ../data/messages:1479
+#: ../data/messages:1480
+msgid ""
+"<b>The basic 2D view of Cairo-Dock</b>\n"
+"Perfect if you want to make the dock look like a panel."
+msgstr ""
+
+#: ../data/messages:1481
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4147,7 +4139,7 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#: ../data/messages:1481
+#: ../data/messages:1483
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
 " - Better integration in of Unity: support of the <b>Launcher API</b> and "
