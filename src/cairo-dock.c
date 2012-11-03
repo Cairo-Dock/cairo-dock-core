@@ -291,7 +291,15 @@ int main (int argc, char** argv)
 	if (getenv("TERM") == NULL)  /// why not isatty(stdout) ?...
 		g_set_print_handler(PrintMuteFunc);
 	
+	
+	// init lib
+	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)  // from 2.32, the thread system is automatically enabled
+	if (!g_thread_supported ())
+		g_thread_init (NULL);
+	#endif
+	
 	dbus_g_thread_init ();
+	
 	gtk_init (&argc, &argv);
 	
 	GError *erreur = NULL;
@@ -558,7 +566,6 @@ int main (int argc, char** argv)
 	//\___________________ load plug-ins (must be done after everything is initialized).
 	if (! bSafeMode)
 	{
-		GError *erreur = NULL;
 		cairo_dock_load_modules_in_directory (NULL, &erreur);  // load gldi-based plug-ins
 		if (erreur != NULL)
 		{
