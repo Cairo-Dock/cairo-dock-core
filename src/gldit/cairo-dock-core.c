@@ -18,7 +18,6 @@
 */
 
 #include <stdlib.h>
-#include <dbus/dbus-glib.h>  // dbus_g_thread_init
 
 #include "gldi-config.h"
 #include "cairo-dock-icon-manager.h"
@@ -81,7 +80,6 @@ void gldi_init (GldiRenderingMethod iRendering)
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	#endif
-	dbus_g_thread_init ();
 	
 	//\___________________ On initialise les numeros de version.
 	cairo_dock_get_version_from_string (GLDI_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);

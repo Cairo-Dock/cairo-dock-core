@@ -56,6 +56,7 @@
 #include <time.h>
 
 #include <glib/gstdio.h>
+#include <dbus/dbus-glib.h>  // dbus_g_thread_init
 
 #include "config.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_first_icon
@@ -290,6 +291,7 @@ int main (int argc, char** argv)
 	if (getenv("TERM") == NULL)  /// why not isatty(stdout) ?...
 		g_set_print_handler(PrintMuteFunc);
 	
+	dbus_g_thread_init ();
 	gtk_init (&argc, &argv);
 	
 	GError *erreur = NULL;
