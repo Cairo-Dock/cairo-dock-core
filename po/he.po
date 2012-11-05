@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-09-30 17:36+0000\n"
+"POT-Creation-Date: 2012-11-03 02:12+0000\n"
+"PO-Revision-Date: 2012-11-03 04:46+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
-"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-01 04:41+0000\n"
-"X-Generator: Launchpad (build 16049)\n"
+"X-Launchpad-Export-Date: 2012-11-04 04:39+0000\n"
+"X-Generator: Launchpad (build 16218)\n"
+"Language: he\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -167,12 +168,12 @@ msgstr "כותרות"
 
 #: ../src/cairo-dock-gui-advanced.c:1619
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "נסה ערכת נושא חדשה ושמור את הקודמת"
 
 #: ../src/cairo-dock-gui-advanced.c:1620 ../src/cairo-dock-gui-simple.c:118
 #: ../src/cairo-dock-gui-simple.c:120
 msgid "Themes"
-msgstr ""
+msgstr "ערכות נושא"
 
 #: ../src/cairo-dock-gui-advanced.c:1626
 msgid "Current items in your dock(s)."
@@ -233,11 +234,11 @@ msgstr "מצב פשוט"
 
 #: ../src/cairo-dock-gui-simple.c:102 ../src/cairo-dock-gui-simple.c:104
 msgid "Add-ons"
-msgstr ""
+msgstr "תוספים"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
 msgid "Configuration"
-msgstr ""
+msgstr "הגדרות"
 
 #: ../src/cairo-dock-gui-simple.c:636
 msgid "Advanced Mode"
@@ -449,7 +450,7 @@ msgstr "בחר תמונה"
 #: ../data/messages:859 ../data/messages:865 ../data/messages:1133
 #: ../data/messages:1351
 msgid "Image"
-msgstr ""
+msgstr "תמונה"
 
 #: ../src/cairo-dock-menu.c:1021
 msgid "Configure"
@@ -501,7 +502,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "הפעל את cairo-dock עם הכניסה למערכת"
 
 #: ../src/cairo-dock-menu.c:1110
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr "יישומונים חיצוניים מספקים תמיכה עם תוכנות נוספות, כמו pidgin"
 
 #: ../src/cairo-dock-menu.c:1113 ../src/help/applet-init.c:28
@@ -616,7 +618,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1856 ../src/cairo-dock-menu.c:1898
 msgid "Window"
-msgstr ""
+msgstr "חלון"
 
 #: ../src/cairo-dock-menu.c:1860 ../src/cairo-dock-menu.c:1862
 #: ../src/cairo-dock-menu.c:1918 ../src/cairo-dock-menu.c:1920
@@ -666,7 +668,7 @@ msgstr "מסך מלא"
 
 #: ../src/cairo-dock-menu.c:1937 ../src/cairo-dock-menu.c:1939
 msgid "Below other windows"
-msgstr ""
+msgstr "מתחת לחלונות האחרים"
 
 #: ../src/cairo-dock-menu.c:1946
 msgid "Don't keep above"
@@ -682,7 +684,7 @@ msgstr "חסל"
 
 #: ../src/cairo-dock-menu.c:1965
 msgid "Windows"
-msgstr ""
+msgstr "חלונות"
 
 #: ../src/cairo-dock-menu.c:1969 ../src/cairo-dock-menu.c:1971
 #: ../src/cairo-dock-menu.c:1999
@@ -700,7 +702,7 @@ msgstr "הצג הכל"
 
 #: ../src/cairo-dock-menu.c:1993
 msgid "Windows management"
-msgstr ""
+msgstr "ניהול חלונות"
 
 #: ../src/cairo-dock-menu.c:2005
 msgid "Move all to this desktop"
@@ -747,7 +749,8 @@ msgid "Effects:"
 msgstr "אפקטים:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "הגדרות הפאנל הראשי נגישות דרך חלון ההגדרות"
 
 #: ../src/cairo-dock-widget-items.c:720
@@ -764,14 +767,15 @@ msgstr "עזרים"
 
 #: ../src/cairo-dock-widget-plugins.c:233
 msgid "Plug-in"
-msgstr ""
+msgstr "תוסף"
 
 #: ../src/cairo-dock-widget-plugins.c:239 ../src/help/applet-tips-dialog.c:307
 msgid "Category"
 msgstr "קטגוריה"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "לחץ על יישומון כדי לקבל תצוגה מקדימה ותיאור שלו."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -823,7 +827,7 @@ msgstr "אתה חייב לנסות את ערכת הנושא לפני שתוכל 
 
 #: ../src/cairo-dock-widget-themes.c:424
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "ערכת הנושא נמחקה"
 
 #: ../src/cairo-dock-widget-themes.c:454
 msgid "Delete this theme"
@@ -849,7 +853,7 @@ msgstr "התפכחות"
 
 #: ../src/cairo-dock-widget-themes.c:587
 msgid "Save as:"
-msgstr ""
+msgstr "שמירה בשם:"
 
 #: ../src/cairo-dock-widget-themes.c:667
 msgid "Importing theme ..."
@@ -1165,7 +1169,7 @@ msgstr "תפוס"
 
 #: ../src/gldit/cairo-dock-module-factory.c:861
 msgid "by"
-msgstr ""
+msgstr "על ידי"
 
 #: ../src/gldit/cairo-dock-struct.h:441 ../data/messages:1439
 #: ../data/messages:1447
@@ -1248,8 +1252,8 @@ msgstr ""
 "בכדי לבטל את הריבוע השחור מסביב ללוח עליך להפעיל מנהל שזירה.\n"
 "הפעלת אפקטים של שולחן העבודה, הרצת compiz או הפעלת אפשרות השזירה של "
 "metacity.\n"
-"אם אין לך מנהל שזירה,cairo-dock יכול לדמות אותו. אפשרות זו נמצאת תחת \"מערכת"
-"\" בהגדרות של cairo-dock."
+"אם אין לך מנהל שזירה,cairo-dock יכול לדמות אותו. אפשרות זו נמצאת תחת "
+"\"מערכת\" בהגדרות של cairo-dock."
 
 #: ../src/help/applet-init.c:31
 msgid ""
@@ -1863,8 +1867,9 @@ msgstr "מחיקת הלוח של גנום"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1912,8 +1917,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -2035,7 +2040,7 @@ msgstr ""
 
 #: ../data/messages:249
 msgid "Join the project!"
-msgstr ""
+msgstr "הצטרף לפרוייקט!"
 
 #: ../data/messages:251
 msgid ""
@@ -2055,7 +2060,7 @@ msgstr ""
 
 #: ../data/messages:255
 msgid "Documentation"
-msgstr ""
+msgstr "תיעוד"
 
 #: ../data/messages:257
 msgid ""
@@ -2074,10 +2079,13 @@ msgid ""
 "\n"
 "The Cairo-Dock Team"
 msgstr ""
+"\n"
+"\n"
+"צוות Cairo Dock"
 
 #: ../data/messages:263
 msgid "Websites"
-msgstr ""
+msgstr "אתרי אינטרנט"
 
 #: ../data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
@@ -2085,7 +2093,7 @@ msgstr ""
 
 #: ../data/messages:267
 msgid "Community site"
-msgstr ""
+msgstr "אתר הקהילה"
 
 #: ../data/messages:273
 msgid "More applets available online!"
@@ -2097,7 +2105,7 @@ msgstr ""
 
 #: ../data/messages:277
 msgid "Repositories"
-msgstr ""
+msgstr "מאגרים"
 
 #: ../data/messages:279
 msgid ""
@@ -2108,11 +2116,11 @@ msgstr ""
 
 #: ../data/messages:281
 msgid "Debian/Ubuntu"
-msgstr ""
+msgstr "Debian/Ubuntu"
 
 #: ../data/messages:283
 msgid "Ubuntu"
-msgstr ""
+msgstr "אובונטו"
 
 #: ../data/messages:287
 msgid ""
@@ -2132,7 +2140,7 @@ msgstr ""
 
 #: ../data/messages:293
 msgid "Debian"
-msgstr ""
+msgstr "דביאן"
 
 #: ../data/messages:297
 msgid ""
@@ -2153,15 +2161,15 @@ msgstr ""
 #: ../data/messages:303 ../data/messages:305 ../data/messages:1401
 #: ../data/messages:1433 ../data/messages:1469
 msgid "Icon"
-msgstr ""
+msgstr "סמל"
 
 #: ../data/messages:307
 msgid "Name of the dock it belongs to:"
-msgstr ""
+msgstr "שייך ללוח:"
 
 #: ../data/messages:309
 msgid "Name of the icon as it will appear in its caption in the dock:"
-msgstr ""
+msgstr "שם הסמל כפי שיופיע אחרי התיאור שלו בלוח:"
 
 #: ../data/messages:311
 msgid "Leave empty to use the default one."
@@ -2173,59 +2181,66 @@ msgstr ""
 
 #: ../data/messages:315
 msgid "Set to 0 to use the default applet size"
-msgstr ""
+msgstr "(0=ברירת מחדל)"
 
 #: ../data/messages:317
 msgid "Desired icon size for this applet"
-msgstr ""
+msgstr "גודל הסמל:"
 
 #: ../data/messages:319
 msgid "Desklet"
-msgstr ""
+msgstr "חלונית"
 
 #: ../data/messages:323
 msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
 msgstr ""
+"נעילת חלונית מונעת גרירה שלה עם לחיצה שמאלית, כדי להזיז חלונית נעולה יש "
+"ללחוץ ALT ולגרור אותה."
 
 #: ../data/messages:325
 msgid "Lock position?"
-msgstr ""
+msgstr "לנעול מיקומים?"
 
 #: ../data/messages:327
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
+"ניתן לשנות את גודל החלונית ע\"י לחיצה על ALT ועל הלחצן השמאלי או האמצעי של "
+"העכבר, תלוי במנהל החלונות שלך."
 
 #: ../data/messages:329
 msgid "Desklet dimensions (width x height):"
-msgstr ""
+msgstr "גודל החלונית"
 
 #: ../data/messages:331
 msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
+"תוכל להזיז את החלונית עם ALT+לחצן ימני של העכבר,\r\n"
+"ניתן לקבוע מספר שלילי כדי למקם את החלונית מימין/מלמטה."
 
 #: ../data/messages:333
 msgid "Desklet position (x, y):"
-msgstr ""
+msgstr "מיקום החלונית:"
 
 #: ../data/messages:335
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
 msgstr ""
+"ניתן לסובב את החלונית בקלות ע\"י גרירה של הכפתורים הקטנים מצד שמאל או מלמעלה."
 
 #: ../data/messages:337
 msgid "Rotation:"
-msgstr ""
+msgstr "סיבוב:"
 
 #: ../data/messages:341
 msgid "Is detached from the dock"
-msgstr ""
+msgstr "האם מנותק מהלוח?"
 
 #: ../data/messages:343
 msgid ""
@@ -2236,31 +2251,31 @@ msgstr ""
 #: ../data/messages:345 ../data/messages:411 ../data/messages:449
 #: ../data/messages:577 ../data/messages:643 ../data/messages:1305
 msgid "Visibility:"
-msgstr ""
+msgstr "גילוי:"
 
 #: ../data/messages:351
 msgid "Keep below"
-msgstr ""
+msgstr "תמיד תחתון"
 
 #: ../data/messages:353
 msgid "Keep on widget layer"
-msgstr ""
+msgstr "השאר באזור הוידג'טים"
 
 #: ../data/messages:357
 msgid "Should be visible on all desktops?"
-msgstr ""
+msgstr "להראות בכל שולחנות העבודה?"
 
 #: ../data/messages:359 ../data/messages:981
 msgid "Decorations"
-msgstr ""
+msgstr "עיצובים"
 
 #: ../data/messages:361
 msgid "Choose 'Custom decorations' to define your own decorations below."
-msgstr ""
+msgstr "בחר \"עיצובים מותאמים אישית\" בכדי להגדיר עיצובים חדשים."
 
 #: ../data/messages:363
 msgid "Choose a decoration theme for this desklet:"
-msgstr ""
+msgstr "ערכת עיצוב לחלונית זו:"
 
 #: ../data/messages:365
 msgid ""
@@ -2269,61 +2284,63 @@ msgstr ""
 
 #: ../data/messages:367
 msgid "Background image:"
-msgstr ""
+msgstr "תמונת רקע:"
 
 #: ../data/messages:369
 msgid "Background transparency:"
-msgstr ""
+msgstr "שקיפות רקע:"
 
 #: ../data/messages:371
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr ""
+msgstr "מיקום משמאל (בפיקסלים)."
 
 #: ../data/messages:373
 msgid "Left offset:"
-msgstr ""
+msgstr "מיקום משמאל:"
 
 #: ../data/messages:375
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr ""
+msgstr "מיקום מלמעלה (בפיקסלים)."
 
 #: ../data/messages:377
 msgid "Top offset:"
-msgstr ""
+msgstr "מיקום מלמעלה:"
 
 #: ../data/messages:379
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr ""
+msgstr "מיקום מימין (בפיקסלים)"
 
 #: ../data/messages:381
 msgid "Right offset:"
-msgstr ""
+msgstr "מיקום מימין:"
 
 #: ../data/messages:383
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr ""
+msgstr "מיקום מלמטה (בפיקסלים)."
 
 #: ../data/messages:385
 msgid "Bottom offset:"
-msgstr ""
+msgstr "מיקום מלמטה:"
 
 #: ../data/messages:387
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
+"תמונה שתופיע מעל הציור,\r\n"
+"השאר ריק כדי לבטל."
 
 #: ../data/messages:389
 msgid "Foreground image:"
-msgstr ""
+msgstr "תמונת חזית:"
 
 #: ../data/messages:391
 msgid "Foreground tansparency:"
-msgstr ""
+msgstr "שקיפות חזית:"
 
 #: ../data/messages:393 ../data/messages:1269
 msgid "Behavior"
-msgstr ""
+msgstr "התנהגות"
 
 #: ../data/messages:395 ../data/messages:531 ../data/messages:1271
 msgid "Position on the screen"
@@ -2335,21 +2352,21 @@ msgstr ""
 
 #: ../data/messages:399 ../data/messages:535 ../data/messages:1275
 msgid "bottom"
-msgstr ""
+msgstr "תחתון"
 
 #: ../data/messages:401 ../data/messages:537 ../data/messages:1277
 msgid "top"
-msgstr ""
+msgstr "עליון"
 
 #: ../data/messages:403 ../data/messages:539 ../data/messages:549
 #: ../data/messages:1279
 msgid "right"
-msgstr ""
+msgstr "ימין"
 
 #: ../data/messages:405 ../data/messages:541 ../data/messages:547
 #: ../data/messages:1281
 msgid "left"
-msgstr ""
+msgstr "שמאל"
 
 #: ../data/messages:407 ../data/messages:573
 msgid "Visibility of the main dock"
@@ -2394,7 +2411,7 @@ msgstr ""
 
 #: ../data/messages:429 ../data/messages:461 ../data/messages:595
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 #: ../data/messages:441 ../data/messages:629
 msgid ""
@@ -2450,7 +2467,7 @@ msgstr ""
 
 #: ../data/messages:467
 msgid "Separated"
-msgstr ""
+msgstr "מופרד"
 
 #: ../data/messages:469 ../data/messages:673
 msgid "Place new icons"
@@ -2498,15 +2515,15 @@ msgstr ""
 
 #: ../data/messages:493
 msgid "Break"
-msgstr ""
+msgstr "הפסקה"
 
 #: ../data/messages:495
 msgid "Black Hole"
-msgstr ""
+msgstr "חור שחור"
 
 #: ../data/messages:497
 msgid "Random"
-msgstr ""
+msgstr "אקראי"
 
 #: ../data/messages:503
 msgid "Choose a theme of icons :"
@@ -2522,19 +2539,19 @@ msgstr ""
 
 #: ../data/messages:509 ../data/messages:1331
 msgid "Small"
-msgstr ""
+msgstr "קטן"
 
 #: ../data/messages:511 ../data/messages:1333
 msgid "Medium"
-msgstr ""
+msgstr "בינוני"
 
 #: ../data/messages:513 ../data/messages:1335
 msgid "Big"
-msgstr ""
+msgstr "גדול"
 
 #: ../data/messages:515 ../data/messages:1337
 msgid "Very Big"
-msgstr ""
+msgstr "גדול מאוד"
 
 #: ../data/messages:519 ../data/messages:927
 msgid "Choose the default view for main docks :"
@@ -2617,7 +2634,7 @@ msgstr ""
 
 #: ../data/messages:571
 msgid "Accessibility"
-msgstr ""
+msgstr "נגישות"
 
 #: ../data/messages:607
 msgid "The higher, the faster the dock will appear"
@@ -2629,11 +2646,11 @@ msgstr ""
 
 #: ../data/messages:611
 msgid "high"
-msgstr ""
+msgstr "גבוה"
 
 #: ../data/messages:613
 msgid "low"
-msgstr ""
+msgstr "נמוך"
 
 #: ../data/messages:615
 msgid "How to call the dock back:"
@@ -2800,12 +2817,12 @@ msgstr ""
 #: ../data/messages:719 ../data/messages:875 ../data/messages:995
 #: ../data/messages:1021 ../data/messages:1119
 msgid "Opaque"
-msgstr ""
+msgstr "אטום"
 
 #: ../data/messages:721 ../data/messages:873 ../data/messages:993
 #: ../data/messages:1019 ../data/messages:1117
 msgid "Transparent"
-msgstr ""
+msgstr "שקוף"
 
 #: ../data/messages:723
 msgid "Play a short animation of the icon when its window becomes active"
@@ -2829,11 +2846,11 @@ msgstr ""
 
 #: ../data/messages:733
 msgid "Nothing"
-msgstr ""
+msgstr "שום דבר"
 
 #: ../data/messages:737
 msgid "Minimize"
-msgstr ""
+msgstr "מזער"
 
 #: ../data/messages:739
 msgid "Launch new"
@@ -2909,12 +2926,12 @@ msgstr ""
 #: ../data/messages:773 ../data/messages:781 ../data/messages:785
 #: ../data/messages:793 ../data/messages:797
 msgid "fast"
-msgstr ""
+msgstr "מהר"
 
 #: ../data/messages:775 ../data/messages:783 ../data/messages:787
 #: ../data/messages:795 ../data/messages:799
 msgid "slow"
-msgstr ""
+msgstr "איטי"
 
 #: ../data/messages:777 ../data/messages:789
 msgid "The more there are, the slower it will be"
@@ -2930,7 +2947,7 @@ msgstr ""
 
 #: ../data/messages:801
 msgid "Refresh rate"
-msgstr ""
+msgstr "קצב רענון"
 
 #: ../data/messages:803 ../data/messages:807 ../data/messages:811
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
@@ -3020,7 +3037,7 @@ msgstr ""
 
 #: ../data/messages:845
 msgid "Port :"
-msgstr ""
+msgstr "פותחה :"
 
 #: ../data/messages:847 ../data/messages:851
 msgid ""
@@ -3029,11 +3046,11 @@ msgstr ""
 
 #: ../data/messages:849
 msgid "User :"
-msgstr ""
+msgstr "שם משתמש:"
 
 #: ../data/messages:853
 msgid "Password :"
-msgstr ""
+msgstr "סיסמה:"
 
 #: ../data/messages:857 ../data/messages:1347
 msgid "Fill the background with:"
@@ -3354,7 +3371,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1065
@@ -3586,8 +3604,8 @@ msgstr ""
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1179
@@ -3910,8 +3928,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445

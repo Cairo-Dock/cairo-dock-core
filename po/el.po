@@ -8,16 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock_el\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2012-11-03 02:12+0000\n"
 "PO-Revision-Date: 2012-09-30 17:37+0000\n"
 "Last-Translator: Michael Kotsarinis <mk73628@gmail.com>\n"
 "Language-Team: Greek\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-01 04:41+0000\n"
-"X-Generator: Launchpad (build 16049)\n"
+"X-Launchpad-Export-Date: 2012-11-04 04:39+0000\n"
+"X-Generator: Launchpad (build 16218)\n"
 "X-Poedit-Country: France\n"
+"Language: \n"
 "X-Poedit-Language: French\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
@@ -538,7 +539,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Εκκίνηση του Cairo-Dock κατά την εκκίνηση του συστήματος"
 
 #: ../src/cairo-dock-menu.c:1110
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Μικροεφαρμογές από τρίτους παρέχουν ενσωμάτωση πολλών προγραμμάτων, όπως το "
 "Pidgin"
@@ -794,7 +796,8 @@ msgid "Effects:"
 msgstr "Εφέ:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Οι παράμετροι του κεντρικού dock είναι διαθέσιμες στο κύριο παράθυρο "
 "διαμόρφωσης."
@@ -820,7 +823,8 @@ msgid "Category"
 msgstr "Κατηγορία"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Κάντε κλικ σε μια μικροεφαρμογή για να έχετε προεπισκόπηση και περιγραφή της."
 
@@ -941,8 +945,8 @@ msgstr ""
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Αναγκάστε την πλατφόρμα να φορτώσει αυτόν τον φάκελο, αντί αυτού ~/.config/"
-"cairo-dock."
+"Αναγκάστε την πλατφόρμα να φορτώσει αυτόν τον φάκελο, αντί αυτού "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:339
 msgid ""
@@ -1614,7 +1618,8 @@ msgstr ""
 
 #: ../data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
-msgstr "Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
+msgstr ""
+"Αν χρησιμοποιείτε το Compiz μπορείτε να κάνετε κλικ σε αυτό το κουμπί:"
 
 #: ../data/messages:79
 msgid "Docks"
@@ -1931,14 +1936,15 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί /desktop/gnome/session/"
-"required_components/panel και αντικαταστήστε το περιεχόμενό του με «cairo-"
-"dock».\n"
+"Ανοίξτε τον gconf-editor, επεξεργασθείτε το κλειδί "
+"/desktop/gnome/session/required_components/panel και αντικαταστήστε το "
+"περιεχόμενό του με «cairo-dock».\n"
 "Μετά επανεκκινήστε τη συνεδρία σας : το gnome-panel δεν έχει εκκινήσει και "
 "το dock έχει εκκινήσει (αν όχι, μπορείτε να το προσθέσετε στα προγράμματα "
 "εκκίνησης)."
@@ -1957,7 +1963,8 @@ msgstr "Αντιμετώπιση Προβλημάτων"
 
 #: ../data/messages:191
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr "Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
+msgstr ""
+"Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
 
 #: ../data/messages:193
 msgid "Forum"
@@ -1992,8 +1999,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Πρέπει να ενεργοποιήσετε τη σύνθεση. Παραδείγματος χάριν, μπορείτε να "
 "εκτελέσετε το Compiz ή το xcompmgr.\n"
@@ -2001,8 +2008,8 @@ msgstr ""
 "στις επιλογές του διαχειριστή παραθύρων.\n"
 "Αν χρησιμοποιείτε Gnome, μπορείτε να την ενεργοποιήσετε στο Metacity με αυτό "
 "τον τρόπο:\n"
-" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί '/apps/metacity/general/"
-"compositing_manager' και ορίστε το σε 'true'."
+" Ανοίξτε το gconf-editor, επεξεργασθείτε το κλειδί "
+"'/apps/metacity/general/compositing_manager' και ορίστε το σε 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -2156,8 +2163,8 @@ msgid ""
 msgstr ""
 "Στο Gnome, υπάρχει μια επιλογή που υπερισχύει αυτής του dock. Για να "
 "ενεργοποιήσετε εικονίδια στα μενού, ανοίξτε το 'gconf-editor', πηγαίνετε στο "
-"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have icons"
-"\" και \"buttons have icons\". "
+"Desktop / Gnome / Interface και ενεργοποιήστε τις επιλογές \"menus have "
+"icons\" και \"buttons have icons\". "
 
 #: ../data/messages:245
 msgid "If you're on Gnome you can click on this button:"
@@ -2906,8 +2913,8 @@ msgid ""
 msgstr ""
 "Επιτρέπει στους εκκινητές να ενεργούν ως εφαρμογές όταν το πρόγραμμά τους "
 "εκτελείται και εμφανίζει μια ένδειξη στο εικονίδιό τους για να το "
-"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με Shift"
-"+κλικ."
+"καταδείξει. Μπορείτε να εκκινήσετε άλλα συμβάντα του προγράμματος με "
+"Shift+κλικ."
 
 #: ../data/messages:667
 msgid "Mix launchers and applications"
@@ -2919,7 +2926,8 @@ msgstr "Εμφάνιση μόνο των εφαρμογών της τρέχου�
 
 #: ../data/messages:671
 msgid "Only show icons whose windows are minimised"
-msgstr "Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
+msgstr ""
+"Εμφάνιση μόνο των εικονιδίων των οποίων τα παράθυρα έχουν σμικρυνθεί;"
 
 #: ../data/messages:683
 msgid "After a given icon"
@@ -2976,8 +2984,8 @@ msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
-"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία."
-"\\n\n"
+"Απαιτείται σύνθετος διαχειριστής παραθύρων για να εμφανισθεί η μικρογραφία.\\"
+"n\n"
 "Η OpenGL είναι απαραίτητη για να σχεδιασθεί το εικονίδιο λυγισμένο προς τα "
 "πίσω."
 
@@ -3227,7 +3235,8 @@ msgstr "Μέγιστη διάρκεια λήψης αρχείου:"
 
 #: ../data/messages:835
 msgid "Use this option if you experience problems to connect."
-msgstr "Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή αν αντιμετωπίσετε προβλήματα σύνδεσης."
 
 #: ../data/messages:837
 msgid "Force IPv4 ?"
@@ -3235,7 +3244,8 @@ msgstr "Εξαναγκασμός σε IPv4;"
 
 #: ../data/messages:839
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
+msgstr ""
+"Χρησιμοποιήστε αυτή την επιλογή αν συνδέεστε στο διαδίκτυο μέσω proxy."
 
 #: ../data/messages:841
 msgid "Are you behind a proxy ?"
@@ -3505,7 +3515,8 @@ msgstr "Αριστερή μετατόπιση:"
 
 #: ../data/messages:1001
 msgid "in pixels. Use this to adjust the top position of the drawings."
-msgstr "σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
+msgstr ""
+"σε pixel. Χρησιμοποιήστε το για να ρυθμίσετε την άνω θέση των σχεδίων."
 
 #: ../data/messages:1003
 msgid "Top offset :"
@@ -3599,7 +3610,8 @@ msgid "Zoom effect"
 msgstr "Εφέ εστίασης"
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "ορίστε σε 1 αν δεν θέλετε τα εικονίδια να αλλάζουν μέγεθος όταν περνάτε από "
 "πανω τους."
@@ -3662,7 +3674,8 @@ msgstr "Εάν δεν προσθέσετε διαχωριστές, θα χρησ
 
 #: ../data/messages:1089
 msgid "Filename of an image to use for separators :"
-msgstr "Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
+msgstr ""
+"Όνομα αρχείου της εικόνας που θα χρησιμοποιηθεί για τους διαχωριστές:"
 
 #: ../data/messages:1091
 msgid ""
@@ -3865,8 +3878,8 @@ msgstr "μεγαλύτερο"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Χρησιμοποιήστε το για να ακολουθεί ο δείκτης τον προσανατολισμό του dock "
 "(πάνω/κάτω/δεξιά/αριστερά)."
@@ -4213,8 +4226,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445

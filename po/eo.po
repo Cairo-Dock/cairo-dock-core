@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-09-30 17:31+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2012-11-03 02:12+0000\n"
+"PO-Revision-Date: 2012-10-22 18:13+0000\n"
+"Last-Translator: Eliovir <Unknown>\n"
 "Language-Team: Esperanto <eo@li.org>\n"
-"Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-01 04:41+0000\n"
-"X-Generator: Launchpad (build 16049)\n"
+"X-Launchpad-Export-Date: 2012-11-04 04:38+0000\n"
+"X-Generator: Launchpad (build 16218)\n"
+"Language: eo\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
 msgid "Behaviour"
@@ -150,7 +151,7 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1604 ../data/messages:1127
 msgid "Indicators"
-msgstr ""
+msgstr "Indikiloj"
 
 #: ../src/cairo-dock-gui-advanced.c:1611
 msgid "Define icon caption and quick-info style."
@@ -167,7 +168,7 @@ msgstr ""
 #: ../src/cairo-dock-gui-advanced.c:1620 ../src/cairo-dock-gui-simple.c:118
 #: ../src/cairo-dock-gui-simple.c:120
 msgid "Themes"
-msgstr ""
+msgstr "Etosoj"
 
 #: ../src/cairo-dock-gui-advanced.c:1626
 msgid "Current items in your dock(s)."
@@ -228,11 +229,11 @@ msgstr "Simpla reĝimo"
 
 #: ../src/cairo-dock-gui-simple.c:102 ../src/cairo-dock-gui-simple.c:104
 msgid "Add-ons"
-msgstr ""
+msgstr "Aldonaĵoj"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
 msgid "Configuration"
-msgstr ""
+msgstr "Agordoj"
 
 #: ../src/cairo-dock-gui-simple.c:636
 msgid "Advanced Mode"
@@ -280,11 +281,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:271
 msgid "Developers"
-msgstr ""
+msgstr "Programistoj"
 
 #: ../src/cairo-dock-menu.c:272
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "Ĉefprogramisto kaj projektĉefo"
 
 #: ../src/cairo-dock-menu.c:273
 msgid "Contributors / Hackers"
@@ -296,7 +297,7 @@ msgstr "Programado"
 
 #: ../src/cairo-dock-menu.c:290
 msgid "Website"
-msgstr ""
+msgstr "Retejo"
 
 #: ../src/cairo-dock-menu.c:291
 msgid "Beta-testing / Suggestions / Forum animation"
@@ -304,12 +305,13 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:292
 msgid "Translators for this language"
-msgstr ""
+msgstr "Tradukantoj por tiu lingvo"
 
 #: ../src/cairo-dock-menu.c:293
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Eliovir https://launchpad.net/~eliovir\n"
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Michael Moroni https://launchpad.net/~airon90"
 
@@ -325,15 +327,15 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:327
 msgid "How to help us?"
-msgstr ""
+msgstr "Kiel helpi nin?"
 
 #: ../src/cairo-dock-menu.c:328
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr ""
+msgstr "Ne hezitu aliĝi al la projekto, ni bezonas vin ;)"
 
 #: ../src/cairo-dock-menu.c:329
 msgid "Former contributors"
-msgstr ""
+msgstr "Antaŭaj kontribuantoj"
 
 #: ../src/cairo-dock-menu.c:330
 msgid "For a complete list, please have a look to BZR logs"
@@ -353,7 +355,7 @@ msgstr "Artaĵoj"
 
 #: ../src/cairo-dock-menu.c:335
 msgid "Thanks"
-msgstr ""
+msgstr "Dankoj"
 
 #: ../src/cairo-dock-menu.c:425
 msgid "Quit Cairo-Dock?"
@@ -489,7 +491,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Lanĉi Kajro-Dokon je startigo"
 
 #: ../src/cairo-dock-menu.c:1110
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1113 ../src/help/applet-init.c:28
@@ -733,7 +736,8 @@ msgid "Effects:"
 msgstr "Efektoj:"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:720
@@ -757,7 +761,8 @@ msgid "Category"
 msgstr "Kategorio"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -1793,8 +1798,9 @@ msgstr ""
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1842,8 +1848,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../data/messages:207
@@ -3284,7 +3290,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:1065
@@ -3516,8 +3523,8 @@ msgstr ""
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:1179
@@ -3840,8 +3847,8 @@ msgstr ""
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1445

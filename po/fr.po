@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-10-03 10:58+0000\n"
+"POT-Creation-Date: 2012-11-03 02:12+0000\n"
+"PO-Revision-Date: 2012-11-03 04:46+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Cairo-Dock <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-04 05:08+0000\n"
-"X-Generator: Launchpad (build 16061)\n"
+"X-Launchpad-Export-Date: 2012-11-04 04:39+0000\n"
+"X-Generator: Launchpad (build 16218)\n"
 "X-Poedit-Country: France\n"
+"Language: \n"
 "X-Poedit-Language: French\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:659
@@ -537,7 +538,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Lancer Cairo-Dock au démarrage"
 
 #: ../src/cairo-dock-menu.c:1110
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Les applets tierce-party fournissent une intégration avec de nombreux "
 "programmes, tel Pidgin"
@@ -794,7 +796,8 @@ msgid "Effects:"
 msgstr "Effets :"
 
 #: ../src/cairo-dock-widget-items.c:238
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Les paramètres du dock principal sont disponibles dans la fenêtre de "
 "configuration principale."
@@ -820,7 +823,8 @@ msgid "Category"
 msgstr "Catégorie"
 
 #: ../src/cairo-dock-widget-plugins.c:263
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Cliquez sur une applet de la liste afin d'obtenir un aperçu et sa "
 "description."
@@ -943,8 +947,8 @@ msgstr "Forcer le dock à considérer cet environnement - utiliser avec soin."
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Force le dock à charger les paramètres depuis ce dossier au lieu de ~/."
-"config/cairo-dock."
+"Force le dock à charger les paramètres depuis ce dossier au lieu de "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:339
 msgid ""
@@ -1624,8 +1628,8 @@ msgstr ""
 "le dock.\n"
 "Si l'application a déjà un lanceur, l'icône n'apparaîtra pas mais, à la "
 "place, le lanceur aura un petit indicateur.\n"
-"Notez que vous décider quelles applications doivent apparaître dans le "
-"dock : seules les fenêtres du bureau actif, seulement les fenêtres cachées, "
+"Notez que vous décider quelles applications doivent apparaître dans le dock "
+": seules les fenêtres du bureau actif, seulement les fenêtres cachées, "
 "séparées du lanceur, etc."
 
 #: ../data/messages:47
@@ -2160,13 +2164,15 @@ msgstr "Supprimer complètement le gnome-panel"
 
 #: ../data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Ouvrez gconf-editor, éditez la clé /desktop/gnome/session/"
-"required_components/panel,et remplacez son contenu avec \"cairo-dock\".\n"
+"Ouvrez gconf-editor, éditez la clé "
+"/desktop/gnome/session/required_components/panel,et remplacez son contenu "
+"avec \"cairo-dock\".\n"
 "Redémarrez votre session : Le panneau-gnome n'a pas été démmaré, et le dock "
 "à été démarré (Siono, vous pouvez l'ajouter aux programmes de démarrage)."
 
@@ -2184,7 +2190,8 @@ msgstr "Problèmes"
 
 #: ../data/messages:191
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr "Si vous avez des questions, n'hésitez pas à les poser sur notre forum."
+msgstr ""
+"Si vous avez des questions, n'hésitez pas à les poser sur notre forum."
 
 #: ../data/messages:193
 msgid "Forum"
@@ -2218,8 +2225,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Vous devez activer la gestion du composite. Par exemple, vous pouvez lancer "
 "Compiz ou xcompmgr.\n"
@@ -2227,8 +2234,8 @@ msgstr ""
 "options du gestionnaire de fenêtres.\n"
 "Si vous êtes sous Gnome, vous pouvez l'activer dans Metacity de cette "
 "manière :\n"
-" ouvrez gconf-editor, éditer la clé \"/apps/metacity/general/"
-"compositing_manager\" et mettez-la à 'true'."
+" ouvrez gconf-editor, éditer la clé "
+"\"/apps/metacity/general/compositing_manager\" et mettez-la à 'true'."
 
 #: ../data/messages:207
 msgid ""
@@ -2318,8 +2325,8 @@ msgstr ""
 "Vérifiez que vous êtes bien connecté à Internet.\n"
 " Si votre connexion est très lente, vous pouvez augmenter le temps maximum "
 "de connexion dans le module \"Système\".\n"
-" Si vous êtes derrière un proxy, vous devrez probablement configurer \"curl"
-"\" pour l'utiliser.\n"
+" Si vous êtes derrière un proxy, vous devrez probablement configurer "
+"\"curl\" pour l'utiliser.\n"
 "  Une petite recherche sur le web ou notre wiki vous aidera (typiquement, "
 "vous devrez ajouter la variable d'environnement \"http_proxy\")"
 
@@ -2413,8 +2420,8 @@ msgstr ""
 "amélioré,\n"
 " ou si vous avez fait un rêve à propos du dock, n'hésitez pas à nous rendre "
 "visite sur glx-dock.org.\n"
-"Les messages en français sont également les bienvenus donc n'hésitez "
-"pas ! ;-)\n"
+"Les messages en français sont également les bienvenus donc n'hésitez pas ! ;-"
+")\n"
 "\n"
 "Si vous avez réalisé un thème pour le dock ou pour une applet et que vous "
 "désirez le partager,\n"
@@ -2698,7 +2705,8 @@ msgstr "Arrière-plan transparent :"
 
 #: ../data/messages:371
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr "en pixels. Utilisez-le pour ajuster la position à gauche des dessins."
+msgstr ""
+"en pixels. Utilisez-le pour ajuster la position à gauche des dessins."
 
 #: ../data/messages:373
 msgid "Left offset:"
@@ -2714,7 +2722,8 @@ msgstr "Décalage en haut :"
 
 #: ../data/messages:379
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr "en pixels. Utilisez-le pour ajuster la position à droite des dessins."
+msgstr ""
+"en pixels. Utilisez-le pour ajuster la position à droite des dessins."
 
 #: ../data/messages:381
 msgid "Right offset:"
@@ -3408,12 +3417,13 @@ msgstr "Plus nombreux ils sont, plus lent ce sera."
 #: ../data/messages:779
 msgid "Number of steps in the zoom animation (grow/shrink):"
 msgstr ""
-"Nombre d'étapes dans l'animation d'agrandissement (agrandissement/"
-"rétrécissement) :"
+"Nombre d'étapes dans l'animation d'agrandissement "
+"(agrandissement/rétrécissement) :"
 
 #: ../data/messages:791
 msgid "Number of steps in the auto-hide animation (move up/move down):"
-msgstr "Nombre d'étapes dans l'animation de cachage (apparition/disparition) :"
+msgstr ""
+"Nombre d'étapes dans l'animation de cachage (apparition/disparition) :"
 
 #: ../data/messages:801
 msgid "Refresh rate"
@@ -3510,7 +3520,8 @@ msgstr "Forcer l'IPv4 ?"
 
 #: ../data/messages:839
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Utilisez cette option si vous vous connectez à Internet via un proxy."
+msgstr ""
+"Utilisez cette option si vous vous connectez à Internet via un proxy."
 
 #: ../data/messages:841
 msgid "Are you behind a proxy ?"
@@ -3527,7 +3538,8 @@ msgstr "Port :"
 #: ../data/messages:847 ../data/messages:851
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
-msgstr "Laissez vide si vous n'avez pas besoin de vous authentifier au proxy."
+msgstr ""
+"Laissez vide si vous n'avez pas besoin de vous authentifier au proxy."
 
 #: ../data/messages:849
 msgid "User :"
@@ -3876,7 +3888,8 @@ msgid "Zoom effect"
 msgstr "Effet d'agrandissement"
 
 #: ../data/messages:1063
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Mettre la valeur 1 pour que l'icône ne s'agrandisse pas au survol du curseur."
 
@@ -4016,7 +4029,8 @@ msgstr "Relier les icônes avec une ficelle"
 
 #: ../data/messages:1123
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr "Epaisseur de la ficelle, en pixels (0 pour ne pas avoir de ficelle) :"
+msgstr ""
+"Epaisseur de la ficelle, en pixels (0 pour ne pas avoir de ficelle) :"
 
 #: ../data/messages:1125
 msgid "Colour of the string (red, blue, green, alpha) :"
@@ -4139,11 +4153,11 @@ msgstr "Plus grand"
 
 #: ../data/messages:1177
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Utilisez-le pour orienter l'indicateur selon la position du dock (haut/bas/"
-"droite/gauche)"
+"Utilisez-le pour orienter l'indicateur selon la position du dock "
+"(haut/bas/droite/gauche)"
 
 #: ../data/messages:1179
 msgid "Rotate the indicator with dock?"
@@ -4484,8 +4498,8 @@ msgstr "Nom du lanceur :"
 
 #: ../data/messages:1443
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Exemple: 'nautilus . --no-desktop', 'gedit', etc. Vous pouvez également "
 "utiliser un raccourcis clavier, par exemple: <Alt>F1, <Ctrl>c, <Ctrl>v, etc."
@@ -4538,7 +4552,8 @@ msgstr "Si '0', le lanceur sera afficher sur chaque bureau."
 
 #: ../data/messages:1473
 msgid "Separators' appearance is defined in the global configuration."
-msgstr "L'apparence des séparateurs est définie dans la configuration globale."
+msgstr ""
+"L'apparence des séparateurs est définie dans la configuration globale."
 
 #: ../data/messages:1480
 msgid ""
@@ -4618,5 +4633,5 @@ msgstr ""
 "lanceurs.\n"
 " - L'ajout de l'applet <b>Menu d'Impression</b> (une applet 'indicateur') "
 "pour gérer la file d'attente des impressions.\n"
-" - Et comme d'habitude ... de nombreux bugs fixés et améliorations "
-"diverses :-)"
+" - Et comme d'habitude ... de nombreux bugs fixés et améliorations diverses "
+":-)"
