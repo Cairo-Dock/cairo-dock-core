@@ -57,5 +57,15 @@ void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GtkMenu *pMenu);
 
 gchar *cairo_dock_get_third_party_applets_link (void);
 
+/**
+ * Look for an icon for GUI
+ * @param cGroupName The name of the module
+ * @param cIcon The name of an icon, or its path, or a GTK icon
+ * @param cShareDataDir The directory of the module (where we can find an 'icon' file)
+ * @param iSize The best size for the new icon
+ * @param bFastLoad To not check if the file exists or not
+ */
+gchar *cairo_dock_get_icon_for_gui (const gchar *cGroupName, const gchar *cIcon, const gchar *cShareDataDir, gint iSize, gboolean bFastLoad);
+
 G_END_DECLS
 #endif

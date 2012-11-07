@@ -1382,7 +1382,7 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 	return pWidget;
 }
 
-static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cGettextDomain, const gchar *cTitle)
+static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cGettextDomain, const gchar *cTitle, const gchar *cShareDataDir)
 {
 	//\____________ On garde une trace de ses caracteristiques.
 	CairoDockGroupDescription *pGroupDescription = g_new0 (CairoDockGroupDescription, 1);
@@ -1390,33 +1390,7 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 	pGroupDescription->cDescription = g_strdup (cDescription);
 	pGroupDescription->iCategory = iCategory;
 	pGroupDescription->cPreviewFilePath = g_strdup (cPreviewFilePath);
-	gchar *cIconPath = NULL;
-	if (cIcon)
-	{
-		if (*cIcon == '/')  // on ecrase les chemins des icons d'applets.
-		{
-			cIconPath = g_strdup_printf ("%s/config-panel/%s.png", g_cCairoDockDataDir, cGroupName);
-			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
-			{
-				g_free (cIconPath);
-				cIconPath = g_strdup (cIcon);
-			}
-		}
-		else if (strncmp (cIcon, "gtk-", 4) == 0)
-		{
-			cIconPath = g_strdup (cIcon);
-		}
-		else  // categorie ou module interne.
-		{
-			cIconPath = g_strconcat (g_cCairoDockDataDir, "/config-panel/", cIcon, NULL);
-			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
-			{
-				g_free (cIconPath);
-				cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/icons/", cIcon, NULL);
-			}
-		}
-	}
-	pGroupDescription->cIcon = cIconPath;
+	pGroupDescription->cIcon = cairo_dock_get_icon_for_gui (cGroupName, cIcon, cShareDataDir, CAIRO_DOCK_GROUP_ICON_SIZE, FALSE);
 	pGroupDescription->cGettextDomain = cGettextDomain;
 	pGroupDescription->cTitle = cTitle;
 	
@@ -1447,7 +1421,7 @@ static inline CairoDockGroupDescription *_add_group_button (const gchar *cGroupN
 	g_signal_connect (G_OBJECT (pGroupButton), "leave-notify-event", G_CALLBACK(on_leave_group_button), NULL);
 
 	GtkWidget *pButtonHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
-	GtkWidget *pImage = _make_image (cIconPath, CAIRO_DOCK_GROUP_ICON_SIZE);
+	GtkWidget *pImage = _make_image (pGroupDescription->cIcon, CAIRO_DOCK_GROUP_ICON_SIZE);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox), pImage, FALSE, FALSE, 0);
 	pGroupDescription->pLabel = gtk_label_new (pGroupDescription->cTitle);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox),
@@ -1496,7 +1470,8 @@ static gboolean _cairo_dock_add_one_module_widget (CairoDockModule *pModule, con
 		iActive,
 		pModule->pVisitCard->cConfFileName != NULL,
 		pModule->pVisitCard->cGettextDomain,
-		pModule->pVisitCard->cTitle);
+		pModule->pVisitCard->cTitle,
+		pModule->pVisitCard->cShareDataDir);
 	//g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
 	pGroupDescription->build_widget = _build_module_widget;
 	return TRUE;  // continue.
@@ -1511,7 +1486,8 @@ _add_group_button (cGroupName,\
 		-1,  /* <=> non desactivable*/\
 		TRUE,  /* <=> configurable*/\
 		NULL,  /* domaine de traduction : celui du dock.*/\
-		cTitle)
+		cTitle,\
+		NULL)
 static void _add_main_groups_buttons (void)
 {
 	CairoDockGroupDescription *pGroupDescription;
