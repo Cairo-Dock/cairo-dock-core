@@ -187,6 +187,8 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "taskbar", iTaskbarType);
 
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "place icons", myTaskbarParam.iIconPlacement);
+
+	g_key_file_set_string (pSimpleKeyFile, "Behavior", "relative icon", myTaskbarParam.cRelativeIconName);
 	
 	// animations
 	CairoDockModule *pModule;
@@ -493,6 +495,10 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 
 	int iPlaceIcons = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "place icons", NULL);
 	g_key_file_set_integer (pKeyFile, "TaskBar", "place icons", iPlaceIcons);
+
+	gchar *cRelativeIconName = g_key_file_get_string (pSimpleKeyFile, "Behavior", "relative icon", NULL);
+	g_key_file_set_string (pKeyFile, "TaskBar", "relative icon", cRelativeIconName);
+	g_free (cRelativeIconName);
 	
 	// animations
 	gsize length;
