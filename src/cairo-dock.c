@@ -293,12 +293,13 @@ int main (int argc, char** argv)
 	
 	
 	// init lib
-	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)  // from 2.32, the thread system is automatically enabled
+	g_type_init (); // should initialise threads too on new versions of GLIB (>= 2.24)
+	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 24)
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	#endif
-	
-	dbus_g_thread_init ();
+
+	dbus_g_thread_init (); // it's a wrapper: it will use dbus_threads_init_default ();
 	
 	gtk_init (&argc, &argv);
 	
