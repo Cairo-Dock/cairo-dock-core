@@ -16,15 +16,12 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#define __USE_XOPEN_EXTENDED
-#include <unistd.h>  // usleep 
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-task.h"
-extern int usleep (__useconds_t __useconds);
 
 
 #define cairo_dock_schedule_next_iteration(pTask) do {\
@@ -99,14 +96,12 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 	}
 	
 	// if the thread is not yet over, come back in 1ms.
-	g_print ("THREAD NOT FINISHED YET\n");
-	usleep (1);  // we don't want to block the main loop until the thread is over; so just sleep 1ms to give it a chance to terminate. so it's a kind of 'sched_yield()' wihout blocking the main loop.
+	g_usleep (1);  // we don't want to block the main loop until the thread is over; so just sleep 1ms to give it a chance to terminate. so it's a kind of 'sched_yield()' wihout blocking the main loop.
 	return TRUE;
 }
 static gpointer _cairo_dock_threaded_calculation (CairoDockTask *pTask)
 {
 	//\_______________________ get the data
-	g_print ("BEGIN of thread\n");
 	cairo_dock_set_elapsed_time (pTask);
 	pTask->get_data (pTask->pSharedMemory);
 	
@@ -114,9 +109,8 @@ static gpointer _cairo_dock_threaded_calculation (CairoDockTask *pTask)
 	pTask->bNeedsUpdate = TRUE;  // this is only accessed by the update fonction, which is triggered just after, so no need to protect this variable.
 	
 	//\_______________________ call the update function from the main loop
-	g_print ("END of thread (%d)\n", pTask->iSidTimerUpdate);
 	if (pTask->iSidTimerUpdate == 0)
-		pTask->iSidTimerUpdate = g_idle_add ((GSourceFunc) _cairo_dock_check_for_update, pTask);
+		pTask->iSidTimerUpdate = g_idle_add ((GSourceFunc) _cairo_dock_check_for_update, pTask);  // note that 'iSidTimerUpdate' can actually be set after the 'update' is called. that's why the 'update' have to wait for 'iThreadIsRunning == 0' to finish its job.
 	
 	// and signal that the thread is done.
 	g_atomic_int_set (&pTask->iThreadIsRunning, 0);
@@ -132,7 +126,7 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 	}
 	else
 	{
-		if (g_atomic_int_compare_and_exchange (&pTask->iThreadIsRunning, 0, 1))  // if the thread is not running, set to 1 and launch it.
+		if (pTask->iSidTimerUpdate == 0 && g_atomic_int_compare_and_exchange (&pTask->iThreadIsRunning, 0, 1))  // if the task is not running (neither the thread nor the update), set to 1 and launch it. if one of them is running or pending, we don't launch it. so if the task is periodic, it will skip this iteration.
 		{
 			GError *erreur = NULL;
 			#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
@@ -148,9 +142,6 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 				g_atomic_int_set (&pTask->iThreadIsRunning, 0);
 			}
 		}
-		
-		///if (pTask->iSidTimerUpdate == 0)
-		///	pTask->iSidTimerUpdate = g_timeout_add (MAX (100, MIN (0.10 * pTask->iPeriod, 333)), (GSourceFunc) _cairo_dock_check_for_update, pTask);
 	}
 }
 
@@ -205,30 +196,34 @@ void cairo_dock_stop_task (CairoDockTask *pTask)
 	
 	_cairo_dock_pause_task (pTask);
 	
-	cd_message ("***waiting for thread's end...(%d)", g_atomic_int_get (&pTask->iThreadIsRunning));
+	cd_message ("***waiting for thread's end...");
 	while (g_atomic_int_get (&pTask->iThreadIsRunning))
 		g_usleep (10);
-		///gtk_main_iteration ();
 	cd_message ("***ended.");
 }
 
 
-static gboolean _free_discarded_task (CairoDockTask *pTask)
+/*static gboolean _free_discarded_task (CairoDockTask *pTask)
 {
 	//g_print ("%s ()\n", __func__);
 	cairo_dock_free_task (pTask);
 	return FALSE;
-}
+}*/
 void cairo_dock_discard_task (CairoDockTask *pTask)
 {
 	if (pTask == NULL)
 		return ;
 	
 	cairo_dock_cancel_next_iteration (pTask);
+	// mark the task as 'discarded'
 	g_atomic_int_set (&pTask->bDiscard, 1);
 	
-	if (pTask->iSidTimerUpdate == 0)
-		pTask->iSidTimerUpdate = g_idle_add ((GSourceFunc) _free_discarded_task, pTask);
+	// if the task is running, there is nothing to do:
+	//   if we're inside the thread, it will trigger the 'update' anyway, which will destroy the task.
+	//   if we're in the 'update' user callback, the task will be destroyed in the 2nd stage of the function (the user callback is called in the 1st stage).
+	if (! cairo_dock_task_is_running (pTask))  // else, we can free the task immediately.
+		_free_task (pTask);
+	//pTask->iSidTimerUpdate = g_idle_add ((GSourceFunc) _free_discarded_task, pTask);
 }
 
 void cairo_dock_free_task (CairoDockTask *pTask)
@@ -247,7 +242,7 @@ gboolean cairo_dock_task_is_active (CairoDockTask *pTask)
 
 gboolean cairo_dock_task_is_running (CairoDockTask *pTask)
 {
-	return (pTask != NULL && pTask->iSidTimerUpdate != 0);
+	return (pTask != NULL && (pTask->iSidTimerUpdate != 0 || g_atomic_int_get (&pTask->iThreadIsRunning)));  // if either the thread is running, or there is a pending update.
 }
 
 static void _cairo_dock_restart_timer_with_frequency (CairoDockTask *pTask, int iNewPeriod)
