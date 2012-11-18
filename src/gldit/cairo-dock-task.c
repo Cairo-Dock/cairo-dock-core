@@ -16,13 +16,15 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#define __USE_XOPEN_EXTENDED
+#include <unistd.h>  // usleep 
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-task.h"
+extern int usleep (__useconds_t __useconds);
 
 
 #define cairo_dock_schedule_next_iteration(pTask) do {\
@@ -57,22 +59,23 @@ static gboolean _cairo_dock_timer (CairoDockTask *pTask)
 	cairo_dock_launch_task (pTask);
 	return TRUE;
 }
-static gpointer _cairo_dock_threaded_calculation (CairoDockTask *pTask)
-{
-	//\_______________________ On obtient nos donnees.
-	cairo_dock_set_elapsed_time (pTask);
-	pTask->get_data (pTask->pSharedMemory);
-	
-	//\_______________________ On indique qu'on a fini.
-	g_atomic_int_set (&pTask->iThreadIsRunning, 0);
-	return NULL;
-}
 static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 {
-	int iThreadIsRunning = g_atomic_int_get (&pTask->iThreadIsRunning);
-	if (! iThreadIsRunning)  // le thread a fini.
+	// process the data (we don't need to wait that the thread is over, so do it now, it will let more time for the thread to finish, and therfore often save a 'usleep').
+	if (pTask->bNeedsUpdate)  // data are ready to be processed -> perform the update
 	{
-		if (pTask->bDiscard)  // la tache s'est faite abandonnee.
+		if (! pTask->bDiscard)  // of course if the task has been discarded before, don't do anything.
+		{
+			pTask->bContinue = pTask->update (pTask->pSharedMemory);
+		}
+		pTask->bNeedsUpdate = FALSE;  // now update is done, we won't do it any more until the next iteration, even is we loop on this function.
+	}
+	
+	// finish the iteration, and possibly schedule the next one (the thread must be finished for this part).
+	int iThreadIsRunning = g_atomic_int_get (&pTask->iThreadIsRunning);
+	if (! iThreadIsRunning)  // if the thread is over
+	{
+		if (pTask->bDiscard)  // if the task has been discarded, it's the end of the journey for it.
 		{
 			//g_print ("free discared task...\n");
 			_free_task (pTask);
@@ -80,13 +83,44 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 			return FALSE;
 		}
 		
-		// On met a jour avec ces nouvelles donnees et on lance/arrete le timer.
+		// schedule the next iteration if necessary.
+		//cairo_dock_perform_task_update (pTask);
+		if (! pTask->bContinue)
+		{
+			cairo_dock_cancel_next_iteration (pTask);
+		}
+		else
+		{
+			pTask->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;
+			cairo_dock_schedule_next_iteration (pTask);
+		}
 		pTask->iSidTimerUpdate = 0;
-		cairo_dock_perform_task_update (pTask);
-		
-		return FALSE;
+		return FALSE;  // the update is now finished, quit.
 	}
+	
+	// if the thread is not yet over, come back in 1ms.
+	g_print ("THREAD NOT FINISHED YET\n");
+	usleep (1);  // we don't want to block the main loop until the thread is over; so just sleep 1ms to give it a chance to terminate. so it's a kind of 'sched_yield()' wihout blocking the main loop.
 	return TRUE;
+}
+static gpointer _cairo_dock_threaded_calculation (CairoDockTask *pTask)
+{
+	//\_______________________ get the data
+	g_print ("BEGIN of thread\n");
+	cairo_dock_set_elapsed_time (pTask);
+	pTask->get_data (pTask->pSharedMemory);
+	
+	// and signal that data are ready to be processed.
+	pTask->bNeedsUpdate = TRUE;  // this is only accessed by the update fonction, which is triggered just after, so no need to protect this variable.
+	
+	//\_______________________ call the update function from the main loop
+	g_print ("END of thread (%d)\n", pTask->iSidTimerUpdate);
+	if (pTask->iSidTimerUpdate == 0)
+		pTask->iSidTimerUpdate = g_idle_add ((GSourceFunc) _cairo_dock_check_for_update, pTask);
+	
+	// and signal that the thread is done.
+	g_atomic_int_set (&pTask->iThreadIsRunning, 0);
+	return NULL;
 }
 void cairo_dock_launch_task (CairoDockTask *pTask)
 {
@@ -98,7 +132,7 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 	}
 	else
 	{
-		if (g_atomic_int_compare_and_exchange (&pTask->iThreadIsRunning, 0, 1))  // il etait egal a 0, on lui met 1 et on lance le thread.
+		if (g_atomic_int_compare_and_exchange (&pTask->iThreadIsRunning, 0, 1))  // if the thread is not running, set to 1 and launch it.
 		{
 			GError *erreur = NULL;
 			#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
@@ -115,8 +149,8 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 			}
 		}
 		
-		if (pTask->iSidTimerUpdate == 0)
-			pTask->iSidTimerUpdate = g_timeout_add (MAX (100, MIN (0.10 * pTask->iPeriod, 333)), (GSourceFunc) _cairo_dock_check_for_update, pTask);
+		///if (pTask->iSidTimerUpdate == 0)
+		///	pTask->iSidTimerUpdate = g_timeout_add (MAX (100, MIN (0.10 * pTask->iPeriod, 333)), (GSourceFunc) _cairo_dock_check_for_update, pTask);
 	}
 }
 

@@ -79,6 +79,8 @@ struct _CairoDockTask {
 	GFreeFunc free_data;
 	/// TRUE when the task has been discarded.
 	gboolean bDiscard;
+	gboolean bNeedsUpdate;  // TRUE when new data are waiting to be processed.
+	gboolean bContinue;  // result of the 'update' function (TRUE -> continue, FALSE -> stop, if the task is periodic).
 } ;
 
 
