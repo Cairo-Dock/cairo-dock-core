@@ -230,9 +230,23 @@ void cairo_dock_free_task (CairoDockTask *pTask)
 {
 	if (pTask == NULL)
 		return ;
-	cairo_dock_stop_task (pTask);
 	
-	_free_task (pTask);
+	cairo_dock_cancel_next_iteration (pTask);
+	// mark the task as 'discarded'
+	g_atomic_int_set (&pTask->bDiscard, 1);
+	
+	// wait for the thread to finish
+	if (! cairo_dock_task_is_running (pTask))
+	{
+		_free_task (pTask);
+	}
+	else
+	{
+		while (g_atomic_int_get (&pTask->iThreadIsRunning))
+			g_usleep (10);
+	}
+	///cairo_dock_stop_task (pTask);
+	///_free_task (pTask);
 }
 
 gboolean cairo_dock_task_is_active (CairoDockTask *pTask)
