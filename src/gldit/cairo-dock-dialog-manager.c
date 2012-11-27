@@ -260,11 +260,13 @@ static gboolean on_button_press_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 				cd_debug ("clic on button %d", iButton);
 				if (iButton >= 0 && iButton < pDialog->iNbButtons && pDialog->pButtons[iButton].iOffset != 0)
 				{
-					cd_debug (" -> action !");
 					pDialog->pButtons[iButton].iOffset = 0;
+					cairo_dock_dialog_reference (pDialog);  // take a reference on the dialog, in case it would be unref'd in the action callback (for instance, when removing an applet from the dock).
 					pDialog->action_on_answer (iButton, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
+					if (pDialog->iRefCount > 1)  // if the dialog was not unref'd in the callback, take back the reference we previously set.
+						cairo_dock_dialog_unreference (pDialog);
 					gtk_widget_queue_draw (pDialog->container.pWidget);  // au cas ou le unref ci-dessous ne le detruirait pas.
-					cairo_dock_dialog_unreference (pDialog);
+					cairo_dock_dialog_unreference (pDialog);  // and then destroy the dialog (it might not be destroyed if the ation callback took a ref on it).
 				}
 				else
 				{
@@ -485,9 +487,9 @@ gboolean cairo_dock_dialog_reference (CairoDialog *pDialog)
 
 gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
 {
-	//g_print ("%s (%d)\n", __func__, pDialog->iRefCount);
 	if (pDialog != NULL && pDialog->iRefCount > 0)
 	{
+		cd_debug ("%s (%d)", __func__, pDialog->iRefCount);
 		pDialog->iRefCount --;
 		if (pDialog->iRefCount == 0)  // devient nul.
 		{
@@ -495,7 +497,7 @@ gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
 			if (pIcon != NULL)
 			{
 				CairoContainer *pContainer = cairo_dock_search_container_from_icon (pIcon);
-				//g_print ("leave from container %x\n", pContainer);
+				//g_print ("leave from container %x\n", pIcon->pContainer);
 				if (pContainer)
 				{
 					if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
@@ -1118,6 +1120,32 @@ void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog)
 		cairo_dock_unhide_dialog (pDialog);
 }
 
+static gboolean on_icon_removed (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, CairoDock *pDock)
+{
+	// if an icon is detached from the dock, and is destroyed (for instance, when removing an applet), the icon is detached and then freed;
+	// its dialogs are then destroyed, but since the icon is already detached, the dialog can't unset the 'bHasModalWindow' flag on its previous container.
+	// therefore we do it here (plus it's logical to do that whenever an icon is detached. Note: we could handle the case of the icon being rattached to a container while having a modal dialog, to set the 'bHasModalWindow' flag, but I can't imagine a way it would happen).
+	if (pIcon && pDock)
+	{
+		if (pDock->bHasModalWindow)  // check that the icon that is being detached was not carrying a modal dialog.
+		{
+			GSList *d;
+			CairoDialog *pDialog;
+			for (d = s_pDialogList; d != NULL; d = d->next)
+			{
+				pDialog = d->data;
+				if (pDialog->pIcon == pIcon && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
+				{
+					pDock->bHasModalWindow = FALSE;
+					break;  // there can only be 1 modal window at a time.
+				}
+			}
+		}
+	}
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
 
   //////////////////
  /// GET CONFIG ///
@@ -1237,6 +1265,10 @@ static void init (void)
 	cairo_dock_register_notification_on_object (&myDialogsMgr,
 		NOTIFICATION_RENDER,
 		(CairoDockNotificationFunc) _cairo_dock_render_dialog_notification,
+		CAIRO_DOCK_RUN_AFTER, NULL);
+	cairo_dock_register_notification_on_object (&myDocksMgr,
+		NOTIFICATION_REMOVE_ICON,
+		(CairoDockNotificationFunc) on_icon_removed,
 		CAIRO_DOCK_RUN_AFTER, NULL);
 }
 
