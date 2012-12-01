@@ -31,6 +31,7 @@
 #include "cairo-dock-widget-plugins.h"
 
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250 // matttbe: 200
+#define CAIRO_DOCK_PLUGINS_ICON_SIZE 32
 
 extern gchar *g_cConfFile;
 extern CairoDockDesktopGeometry g_desktopGeometry;
@@ -183,7 +184,14 @@ static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockM
 	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule))
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cIconFilePath, 32, 32, NULL);
+		gchar *cIcon = cairo_dock_get_icon_for_gui (pModule->pVisitCard->cModuleName,
+			pModule->pVisitCard->cIconFilePath,
+			pModule->pVisitCard->cShareDataDir,
+			CAIRO_DOCK_PLUGINS_ICON_SIZE,
+			TRUE);
+		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, CAIRO_DOCK_PLUGINS_ICON_SIZE, CAIRO_DOCK_PLUGINS_ICON_SIZE, NULL);
+		g_free (cIcon);
+
 		GtkTreeIter iter;
 		memset (&iter, 0, sizeof (GtkTreeIter));
 		gtk_list_store_append (GTK_LIST_STORE (pModel), &iter);

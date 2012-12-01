@@ -46,10 +46,12 @@
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-gui-commons.h"
+#include "cairo-dock-icon-manager.h" // cairo_dock_search_icon_s_path
 
 #define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
+extern gchar *g_cCairoDockDataDir;
 
 
 void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetList)
@@ -212,3 +214,57 @@ void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GtkMenu *pMenu)
 		g_free (pPosition);
 }
 
+/**
+ * Look for an icon for GUI
+ */
+gchar * cairo_dock_get_icon_for_gui (const gchar *cGroupName, const gchar *cIcon, const gchar *cShareDataDir, gint iSize, gboolean bFastLoad)
+{
+	gchar *cIconPath = NULL;
+
+	if (cIcon)
+	{
+		if (*cIcon == '/')  // on ecrase les chemins des icons d'applets.
+		{
+			if (bFastLoad)
+				return g_strdup (cIcon);
+
+			cIconPath = g_strdup_printf ("%s/config-panel/%s.png", g_cCairoDockDataDir, cGroupName);
+			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+			{
+				g_free (cIconPath);
+				cIconPath = g_strdup (cIcon);
+			}
+		}
+		else if (strncmp (cIcon, "gtk-", 4) == 0)
+		{
+			cIconPath = g_strdup (cIcon);
+		}
+		else  // categorie ou module interne.
+		{
+			if (! bFastLoad)
+			{
+				cIconPath = g_strconcat (g_cCairoDockDataDir, "/config-panel/", cIcon, NULL);
+				if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
+				{
+					g_free (cIconPath);
+					cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/icons/", cIcon, NULL);
+					if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS)) // if we just have the name of an application
+					{
+						g_free (cIconPath);
+						cIconPath = NULL;
+					}
+				}
+			}
+			if (cIconPath == NULL)
+			{
+				cIconPath = cairo_dock_search_icon_s_path (cIcon, iSize);
+				if (cIconPath == NULL && cShareDataDir) // maybe we don't have any icon with this name
+					cIconPath = cShareDataDir ? g_strdup_printf ("%s/icon", cShareDataDir) : g_strdup (cIcon);
+			}
+		}
+	}
+	else if (cShareDataDir)
+		cIconPath = g_strdup_printf ("%s/icon", cShareDataDir);
+
+	return cIconPath;
+}
