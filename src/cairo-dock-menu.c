@@ -850,9 +850,11 @@ static void _cairo_dock_add_module_instance (G_GNUC_UNUSED GtkMenuItem *pMenuIte
 static void _cairo_dock_set_sensitive_quit_menu (G_GNUC_UNUSED GtkWidget *pMenuItem, GdkEventKey *pKey, GtkWidget *pQuitEntry)
 {
 	// pMenuItem not used because we want to only modify one entry
-	if (pKey->type == GDK_KEY_PRESS && (pKey->state & GDK_SHIFT_MASK) == 0) // pressed
+	if (pKey->type == GDK_KEY_PRESS &&
+		(pKey->keyval == GDK_KEY_Shift_L || 
+		pKey->keyval == GDK_KEY_Shift_R)) // pressed
 		gtk_widget_set_sensitive (pQuitEntry, TRUE); // unlocked
-	else if (pKey->type == GDK_KEY_RELEASE && (pKey->state & GDK_SHIFT_MASK) == 1) // released
+	else if (pKey->state & GDK_SHIFT_MASK) // released
 		gtk_widget_set_sensitive (pQuitEntry, FALSE); // locked)
 }
 
