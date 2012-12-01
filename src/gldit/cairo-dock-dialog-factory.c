@@ -934,7 +934,7 @@ void cairo_dock_set_new_dialog_icon_surface (CairoDialog *pDialog, cairo_surface
 void cairo_dock_set_dialog_message (CairoDialog *pDialog, const gchar *cMessage)
 {
 	int iNewTextWidth=0, iNewTextHeight=0;
-	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, FALSE, &iNewTextWidth, &iNewTextHeight);
+	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, pDialog->bUseMarkup, &iNewTextWidth, &iNewTextHeight);
 	
 	cairo_dock_set_new_dialog_text_surface (pDialog, pNewTextSurface, iNewTextWidth, iNewTextHeight);
 }
