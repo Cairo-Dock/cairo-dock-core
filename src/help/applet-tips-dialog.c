@@ -163,9 +163,7 @@ static void _update_tip_text (CDTipsData *pTips, CairoDialog *pDialog)
 {
 	gchar *cText = _build_tip_text (pTips);
 	
-	myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
 	cairo_dock_set_dialog_message (pDialog, cText);
-	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
 	
 	g_free (cText);
 }
@@ -322,10 +320,9 @@ void cairo_dock_show_tips (void)
 	attr.pFreeDataFunc = (GFreeFunc)_on_free_tips_dialog;
 	const gchar *cButtons[] = {"cancel", GTK_STOCK_GO_FORWARD"-rtl", GTK_STOCK_GO_FORWARD"-ltr", NULL};
 	attr.cButtonsImage = cButtons;
+	attr.bUseMarkup = TRUE;
 	
-	myDialogsParam.dialogTextDescription.bUseMarkup = TRUE;
 	CairoDialog *pTipsDialog = cairo_dock_build_dialog (&attr, myIcon, myContainer);
-	myDialogsParam.dialogTextDescription.bUseMarkup = FALSE;
 	
 	data_combo[1] = pTipsDialog;
 	
