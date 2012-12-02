@@ -27,7 +27,8 @@
 #include <cairo.h>
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
-#include <gdk/gdkx.h> // GDK_Shift_[LR] for GTK2
+#include <gdk/gdkx.h>
+#include <gdk/gdkkeysyms.h> // GDK_Shift_[LR] for GTK2
 
 #include "config.h"
 #include "cairo-dock-config.h"
