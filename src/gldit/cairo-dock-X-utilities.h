@@ -93,6 +93,7 @@ void cairo_dock_lower_xwindow (Window Xid);
 void cairo_dock_maximize_xwindow (Window Xid, gboolean bMaximize);
 void cairo_dock_set_xwindow_fullscreen (Window Xid, gboolean bFullScreen);
 void cairo_dock_set_xwindow_above (Window Xid, gboolean bAbove);
+void cairo_dock_set_xwindow_sticky (Window Xid, gboolean bSticky);
 void cairo_dock_move_xwindow_to_nth_desktop (Window Xid, int iDesktopNumber, int iDesktopViewportX, int iDesktopViewportY);
 void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumber, int iPositionX, int iPositionY);
 
@@ -110,6 +111,7 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass);
 gboolean cairo_dock_xwindow_is_maximized (Window Xid);
 gboolean cairo_dock_xwindow_is_fullscreen (Window Xid);
 gboolean cairo_dock_xwindow_skip_taskbar (Window Xid);
+gboolean cairo_dock_xwindow_is_sticky (Window Xid);
 void cairo_dock_xwindow_is_above_or_below (Window Xid, gboolean *bIsAbove, gboolean *bIsBelow);
 gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention);
 gboolean cairo_dock_window_is_utility (int Xid);

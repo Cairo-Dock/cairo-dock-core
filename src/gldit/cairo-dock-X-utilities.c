@@ -74,6 +74,7 @@ static Atom s_aNetActiveWindow;
 static Atom s_aNetWmState;
 static Atom s_aNetWmBelow;
 static Atom s_aNetWmAbove;
+static Atom s_aNetWmSticky;
 static Atom s_aNetWmHidden;
 static Atom s_aNetWmFullScreen;
 static Atom s_aNetWmSkipTaskbar;
@@ -120,6 +121,7 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	s_aNetWmFullScreen		= XInternAtom (s_XDisplay, "_NET_WM_STATE_FULLSCREEN", False);
 	s_aNetWmAbove			= XInternAtom (s_XDisplay, "_NET_WM_STATE_ABOVE", False);
 	s_aNetWmBelow			= XInternAtom (s_XDisplay, "_NET_WM_STATE_BELOW", False);
+	s_aNetWmSticky			= XInternAtom (s_XDisplay, "_NET_WM_STATE_STICKY", False);
 	s_aNetWmHidden			= XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
 	s_aNetWmSkipTaskbar 		= XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_TASKBAR", False);
 	s_aNetWmMaximizedHoriz		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
@@ -931,6 +933,11 @@ void cairo_dock_set_xwindow_above (Window Xid, gboolean bAbove)
 	_cairo_dock_change_window_state (Xid, bAbove, s_aNetWmAbove, 0);
 }
 
+void cairo_dock_set_xwindow_sticky (Window Xid, gboolean bSticky)
+{
+	_cairo_dock_change_window_state (Xid, bSticky, s_aNetWmSticky, 0);
+}
+
 
 void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumber, int iPositionX, int iPositionY)  // dans le referentiel du viewport courant.
 {
@@ -1153,10 +1160,17 @@ gboolean cairo_dock_xwindow_is_fullscreen (Window Xid)
 {
 	return _cairo_dock_window_is_in_state (Xid, s_aNetWmFullScreen);
 }
+
 gboolean cairo_dock_xwindow_skip_taskbar (Window Xid)
 {
 	return _cairo_dock_window_is_in_state (Xid, s_aNetWmSkipTaskbar);
 }
+
+gboolean cairo_dock_xwindow_is_sticky (Window Xid)
+{
+	return _cairo_dock_window_is_in_state (Xid, s_aNetWmSticky);
+}
+
 void cairo_dock_xwindow_is_above_or_below (Window Xid, gboolean *bIsAbove, gboolean *bIsBelow)
 {
 	g_return_if_fail (Xid > 0);
@@ -1248,6 +1262,7 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 	XFree (pXStateBuffer);
 	return bValid;
 }  // Note: for stickyness, dont use _NET_WM_STATE_STICKY; prefer "cairo_dock_get_xwindow_desktop (Xid) == -1"
+   //  but it doesn't work with compiz and its viewport...
 
 
 static inline gboolean _cairo_dock_window_has_type (int Xid, Atom iType)
