@@ -1377,6 +1377,17 @@ static void _cairo_dock_change_window_above (G_GNUC_UNUSED GtkMenuItem *pMenuIte
 	}
 }
 
+static void _cairo_dock_change_window_sticky (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
+{
+	Icon *icon = data[0];
+	// CairoDock *pDock = data[1];
+	if (CAIRO_DOCK_IS_APPLI (icon))
+	{
+		gboolean bIsSticky = cairo_dock_xwindow_is_sticky (icon->Xid);
+		cairo_dock_set_xwindow_sticky (icon->Xid, ! bIsSticky);
+	}
+}
+
 static void _cairo_dock_move_class_to_desktop (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *user_data)
 {
 	gpointer *data = user_data[0];
@@ -1407,6 +1418,10 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer *data
 	
 	if (g_desktopGeometry.iNbDesktops > 1 || g_desktopGeometry.iNbViewportX > 1 || g_desktopGeometry.iNbViewportY > 1)
 	{
+		// add separator
+		pMenuItem = gtk_separator_menu_item_new ();
+		gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+
 		int i, j, k, iDesktopCode;
 		const gchar *cLabel;
 		if (g_desktopGeometry.iNbDesktops > 1 && (g_desktopGeometry.iNbViewportX > 1 || g_desktopGeometry.iNbViewportY > 1))
@@ -1928,12 +1943,15 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		//\_________________________ Other actions
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
 
+		// Move
 		pMenuItem = _add_entry_in_menu (_("Move to this desktop"), GTK_STOCK_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
 		if (pAppli && cairo_dock_appli_is_on_current_desktop (pAppli))
 			gtk_widget_set_sensitive (pMenuItem, FALSE);
-		
+
+		// Fullscreen
 		_add_entry_in_menu (icon->bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), icon->bIsFullScreen ? GTK_STOCK_LEAVE_FULLSCREEN : GTK_STOCK_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions);
-		
+
+		// Below
 		if (! icon->bIsHidden)  // this could be a button in the menu, if we find an icon that doesn't look too much like the "minimise" one
 		{
 			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
@@ -1943,13 +1961,22 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, pSubMenuOtherActions);
 			g_free (cLabel);
 		}
-		
+
+		// Above
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		cairo_dock_xwindow_is_above_or_below (icon->Xid, &bIsAbove, &bIsBelow);
 		_add_entry_in_menu (bIsAbove ? _("Don't keep above") : _("Keep above"), bIsAbove ? GTK_STOCK_GOTO_BOTTOM : GTK_STOCK_GOTO_TOP, _cairo_dock_change_window_above, pSubMenuOtherActions);
-		
+
+		// Sticky
+		gboolean bIsSticky = cairo_dock_xwindow_is_sticky (icon->Xid);
+		_add_entry_in_menu (bIsSticky ? _("Visible only on this desktop") : _("Visible on all desktops"), GTK_STOCK_JUMP_TO, _cairo_dock_change_window_sticky, pSubMenuOtherActions);
+
 		_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
 		
+		// add separator
+		pMenuItem = gtk_separator_menu_item_new ();
+		gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenuOtherActions), pMenuItem);
+
 		_add_entry_in_menu (_("Kill"), GTK_STOCK_CANCEL, _cairo_dock_kill_appli, pSubMenuOtherActions);
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
