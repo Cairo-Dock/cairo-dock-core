@@ -90,14 +90,19 @@ set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
-set (xextend_required "xtst xcomposite xinerama xrandr")  # for the .pc
-STRING (REGEX REPLACE " " ";" xextend_required_semicolon ${xextend_required})
-pkg_check_modules ("XEXTEND" "${xextend_required_semicolon}")
+set (with_xentend FALSE)
+enable_if_not_defined (enable-x11-ext-support) # enabled by default
+if (enable-x11-ext-support)
+	set (xextend_required "xtst xcomposite xinerama xrandr")  # for the .pc
+	STRING (REGEX REPLACE " " ";" xextend_required_semicolon ${xextend_required})
+	pkg_check_modules ("XEXTEND" "${xextend_required_semicolon}")
 
-if (${XEXTEND_FOUND})
-	set (HAVE_XEXTEND 1)
-else()
-	set (xextend_required)
+	if (XEXTEND_FOUND)
+		set (HAVE_XEXTEND 1)
+		set (with_xentend ON)
+	else()
+		set (xextend_required)
+	endif()
 endif()
 
 if (NOT force-gtk2)  # by default, we use GTK+3 except if we force the use of GTK+2
@@ -117,20 +122,20 @@ add_definitions (-DGTK_DISABLE_DEPRECATED="1")
 
 # We use crypt(3) which may be in libc, or in libcrypt (eg FreeBSD)
 check_library_exists (crypt encrypt "" HAVE_LIBCRYPT)
-if (${HAVE_LIBCRYPT})
+if (HAVE_LIBCRYPT)
 	set (LIBCRYPT_LIBS "-lcrypt")
 endif()
 
 check_symbol_exists (LC_MESSAGES "locale.h" HAVE_LC_MESSAGES)
 check_include_files ("math.h" HAVE_MATH_H)
 check_library_exists (m sin "" HAVE_LIBM)
-if (NOT ${HAVE_LIBM} OR NOT ${HAVE_MATH_H})
+if (NOT HAVE_LIBM OR NOT HAVE_MATH_H)
 	message(FATAL_ERROR "Cairo-Dock requires math.h")
 endif()
 
 check_include_files ("dlfcn.h" HAVE_DLFCN_H)
 check_library_exists (dl dlopen "" HAVE_LIBDL)
-if (NOT ${HAVE_LIBDL} OR NOT ${HAVE_DLFCN_H})
+if (NOT HAVE_LIBDL OR NOT HAVE_DLFCN_H)
 	message(FATAL_ERROR "Cairo-Dock requires dlfcn.h")
 endif()
 
@@ -170,12 +175,12 @@ install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc DESTINATION ${libdir}/p
 
 MESSAGE (STATUS)
 MESSAGE (STATUS "Cairo-Dock ${VERSION} will be compiled with the following options:")
-if (${XEXTEND_FOUND})
+if (XEXTEND_FOUND)
 	MESSAGE (STATUS " * Use X Extensions: Yes")
 else()
 	MESSAGE (STATUS " * Use X Extensions: No")
 endif()
-if (${HAVE_LIBCRYPT})
+if (HAVE_LIBCRYPT)
 	MESSAGE (STATUS " * Crypt passwords : Yes")
 else()
 	MESSAGE (STATUS " * Crypt passwords : No")
@@ -183,5 +188,6 @@ endif()
 MESSAGE (STATUS " * GTK version     : ${GTK_MAJOR} (${GTK_VERSION})")
 MESSAGE (STATUS " * Installation in : ${prefix}")
 MESSAGE (STATUS " * Lib directory   : ${libdir}")
+MESSAGE (STATUS " * With X11 ext.   : ${with_xentend} (${xextend_required})")
 MESSAGE (STATUS " * Themes directory: ${CAIRO_DOCK_DISTANT_THEMES_DIR}")
 MESSAGE (STATUS)
