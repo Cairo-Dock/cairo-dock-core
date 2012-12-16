@@ -5,7 +5,7 @@ add_subdirectory(man)
 add_subdirectory(icons)
 add_subdirectory(images)
 add_subdirectory(scripts)
-if ("${enable-desktop-manager}" STREQUAL "yes")
+if (enable-desktop-manager)
 	add_subdirectory(desktop-manager)
 endif()
 

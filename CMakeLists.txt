@@ -22,12 +22,25 @@ add_definitions (-DCAIRO_DOCK_DEFAULT_ICON_NAME="default-icon.svg")
 add_definitions (-DCAIRO_DOCK_ICON="cairo-dock.svg")
 add_definitions (-DCAIRO_DOCK_LOGO="cairo-dock-logo.png")
 add_definitions (-DCAIRO_DOCK_DATA_DIR="cairo-dock")
-if (NOT "${force-icon-in-menus}" STREQUAL "no")  # we believe that not showing icons in the menus by default is a terrible idea; unfortunately, it's not easily undoable for an end-user; so until this is fixed by a big player (Gnome, Ubuntu or other), we'll force the display, unless "-Dforce-icon-in-menus=yes" is provided in the cmake command.
+add_custom_target (uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+
+
+###########     Misc     ###############
+macro (enable_if_not_defined MODULE1)
+	if (NOT DEFINED MODULE1) # true if not defined
+		set (${MODULE1} TRUE)
+	endif ()
+endmacro (enable_if_not_defined)
+
+
+##########     Config    ###############
+
+enable_if_not_defined (force-icon-in-menus)
+if (force-icon-in-menus)  # we believe that not showing icons in the menus by default is a terrible idea; unfortunately, it's not easily undoable for an end-user; so until this is fixed by a big player (Gnome, Ubuntu or other), we'll force the display, unless "-Dforce-icon-in-menus=yes" is provided in the cmake command.
 	add_definitions (-DCAIRO_DOCK_FORCE_ICON_IN_MENUS=1)
 else()
 	add_definitions (-DCAIRO_DOCK_FORCE_ICON_IN_MENUS=0)
 endif()
-add_custom_target (uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 ############ sources tarball ############
 
@@ -60,7 +73,7 @@ set (mandir "${prefix}/${CMAKE_INSTALL_MANDIR}")  # (...)/man
 
 set (VERSION_HELP "0.9.993") # needed to parse Help.conf.in
 
-if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND "${FORCE_LIB64}" STREQUAL "yes")  # 64bits and force install in lib64
+if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND (force-lib64 OR "${FORCE_LIB64}" STREQUAL "yes"))  # 64bits and force install in lib64
 	set (libdir "${prefix}/lib64")
 elseif (NOT "${LIB_SUFFIX}" STREQUAL "")
 	set (libdir "${prefix}/lib${LIB_SUFFIX}")  # (...)/libXX ## some distro use ${LIB_SUFFIX}
@@ -87,12 +100,12 @@ else()
 	set (xextend_required)
 endif()
 
-if (NOT "${force-gtk2}" STREQUAL "yes")  # by default, we use GTK+3 except if we force the use of GTK+2
+if (force-gtk2)  # by default, we use GTK+3 except if we force the use of GTK+2
 	set (gtk_required "gtk+-3.0")  # for the .pc
 	pkg_check_modules ("GTK" "${gtk_required}")  # the check is not set as 'required' because we can use GTK+2 if GTK+3 isn't available
 endif()
 
-if (NOT "${GTK_FOUND}")
+if (NOT GTK_FOUND)
 	set (gtk_required "gtk+-2.0")  # for the .pc
 	pkg_check_modules ("GTK" REQUIRED "${gtk_required}")  # the check is requiered this time because we need GTK anyway.
 endif()

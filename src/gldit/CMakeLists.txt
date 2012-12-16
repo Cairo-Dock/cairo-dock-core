@@ -167,6 +167,6 @@ install(FILES
 	
 	DESTINATION ${includedir}/cairo-dock/gldit)
 
-if (NOT "${enable_gtk_grip}" STREQUAL "")  # actually it's more "disable-gtk-grip" ...
+if (disable-gtk-grip)
 	add_definitions (-DENABLE_GTK_GRIP=1)
 endif()
