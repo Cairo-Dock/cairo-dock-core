@@ -100,7 +100,7 @@ else()
 	set (xextend_required)
 endif()
 
-if (force-gtk2)  # by default, we use GTK+3 except if we force the use of GTK+2
+if (NOT force-gtk2)  # by default, we use GTK+3 except if we force the use of GTK+2
 	set (gtk_required "gtk+-3.0")  # for the .pc
 	pkg_check_modules ("GTK" "${gtk_required}")  # the check is not set as 'required' because we can use GTK+2 if GTK+3 isn't available
 endif()
