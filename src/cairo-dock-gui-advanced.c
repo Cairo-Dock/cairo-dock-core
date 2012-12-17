@@ -2487,6 +2487,12 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 	return s_pMainWindow;
 }
 
+static GtkWidget *show_addons (void)
+{
+	cairo_dock_build_main_ihm (g_cConfFile);
+	return s_pMainWindow;
+}
+
 static void reload_items (void)
 {
 	if (s_pMainWindow == NULL)
@@ -2627,6 +2633,7 @@ void cairo_dock_register_advanced_gui_backend (void)
 	pBackend->update_modules_list 				= update_modules_list;
 	pBackend->update_shortkeys 					= update_shortkeys;
 	pBackend->show_gui 							= show_gui;
+	pBackend->show_addons 							= show_addons;
 	pBackend->reload_items 						= reload_items;
 	pBackend->reload 							= reload;
 	pBackend->cDisplayedName 					= _("Simple Mode");

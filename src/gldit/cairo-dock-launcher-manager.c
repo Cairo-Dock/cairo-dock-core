@@ -37,14 +37,11 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_mark_current_theme_as_modified
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
-//#include "cairo-dock-animations.h"  // cairo_dock_launch_animation
 #include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
 #include "cairo-dock-X-utilities.h"  // cairo_dock_show_xwindow
 #include "cairo-dock-launcher-manager.h"
 
-extern CairoDock *g_pMainDock;
-extern gchar *g_cConfFile;
 extern gchar *g_cCurrentLaunchersPath;
 
 static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
@@ -98,47 +95,50 @@ static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName
 
 static void _load_launcher (Icon *icon)
 {
-	int iWidth = icon->iImageWidth;
-	int iHeight = icon->iImageHeight;
+	int iWidth = cairo_dock_icon_get_allocated_width (icon);
+	int iHeight = cairo_dock_icon_get_allocated_height (icon);
+	cairo_surface_t *pSurface = NULL;
 	
 	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 	{
-		icon->pIconBuffer = cairo_dock_create_blank_surface (iWidth, iHeight);
+		pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
 	}
 	else if (icon->cFileName)  // icone possedant une image, on affiche celle-ci.
 	{
 		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName, MAX (iWidth, iHeight));
 		if (cIconPath != NULL && *cIconPath != '\0')
-			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+			pSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
 				iWidth,
 				iHeight);
 		g_free (cIconPath);
 	}
+	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
 }
 
 static void _load_user_separator (Icon *icon)
 {
-	int iWidth = icon->iImageWidth;
-	int iHeight = icon->iImageHeight;
+	int iWidth = cairo_dock_icon_get_allocated_width (icon);
+	int iHeight = cairo_dock_icon_get_allocated_height (icon);
+	cairo_surface_t *pSurface = NULL;
 	
-	icon->pIconBuffer = NULL;
 	if (icon->cFileName != NULL)
 	{
 		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName, MAX (iWidth, iHeight));
 		if (cIconPath != NULL && *cIconPath != '\0')
 		{
-			icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
+			pSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
 				iWidth,
 				iHeight);
 		}
 		g_free (cIconPath);
 	}
-	if (icon->pIconBuffer == NULL)
+	if (pSurface == NULL)
 	{
-		icon->pIconBuffer = cairo_dock_create_separator_surface (
+		pSurface = cairo_dock_create_separator_surface (
 			iWidth,
 			iHeight);
 	}
+	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
 }
 
 static gboolean _delete_launcher (Icon *icon)
@@ -383,7 +383,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	}
 	else
 	{
-		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pNewDock));
+		cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pNewDock));
 	}
 	
 	// reload label

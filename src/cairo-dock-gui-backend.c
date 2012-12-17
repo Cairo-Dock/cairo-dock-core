@@ -285,6 +285,15 @@ void cairo_dock_show_themes (void)
 	_display_window (pWindow);
 }
 
+void cairo_dock_show_addons (void)
+{
+	GtkWidget *pWindow = NULL;
+	if (s_pMainGuiBackend && s_pMainGuiBackend->show_addons)
+		pWindow = s_pMainGuiBackend->show_addons ();
+		
+	_display_window (pWindow);
+}
+
 gboolean cairo_dock_can_manage_themes (void)
 {
 	return (s_pMainGuiBackend && s_pMainGuiBackend->show_themes);

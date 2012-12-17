@@ -729,14 +729,14 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 		Icon *pIcon;
 		
 		pIcon = pDesklet->pIcon;
-		if (pIcon != NULL && pIcon->iIconTexture != 0)
+		if (pIcon != NULL && pIcon->image.iTexture != 0)
 		{
 			w = pIcon->fWidth/2;
 			h = pIcon->fHeight/2;
 			x = pIcon->fDrawX + w;
 			y = pDesklet->container.iHeight - pIcon->fDrawY - h;
 			
-			glLoadName(pIcon->iIconTexture);
+			glLoadName(pIcon->image.iTexture);
 			
 			glBegin(GL_QUADS);
 			glVertex3f(x-w, y+h, 0.);
@@ -750,7 +750,7 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 		for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
 		{
 			pIcon = ic->data;
-			if (pIcon->iIconTexture == 0)
+			if (pIcon->image.iTexture == 0)
 				continue;
 			
 			w = pIcon->fWidth/2;
@@ -758,7 +758,7 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 			x = pIcon->fDrawX + w;
 			y = pDesklet->container.iHeight - pIcon->fDrawY - h;
 			
-			glLoadName(pIcon->iIconTexture);
+			glLoadName(pIcon->image.iTexture);
 			
 			glBegin(GL_QUADS);
 			glVertex3f(x-w, y+h, 0.);
@@ -793,9 +793,9 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 		else
 		{
 			pIcon = pDesklet->pIcon;
-			if (pIcon != NULL && pIcon->iIconTexture != 0)
+			if (pIcon != NULL && pIcon->image.iTexture != 0)
 			{
-				if (pIcon->iIconTexture == id)
+				if (pIcon->image.iTexture == id)
 				{
 					pFoundIcon = pIcon;
 				}
@@ -807,7 +807,7 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 				for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
 				{
 					pIcon = ic->data;
-					if (pIcon->iIconTexture == id)
+					if (pIcon->image.iTexture == id)
 					{
 						pFoundIcon = pIcon;
 						break ;

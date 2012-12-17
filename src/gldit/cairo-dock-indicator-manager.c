@@ -82,7 +82,7 @@ static void _cairo_dock_draw_appli_indicator_opengl (Icon *icon, CairoDock *pDoc
 	double h = s_indicatorBuffer.iHeight;
 	///double fMaxScale = cairo_dock_get_max_scale (pDock);
 	///double z = (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
-	double z = icon->fWidth / w * (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale : 1.);
+	double z = icon->fWidth / w * (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale : 1.) * myIndicatorsParam.fIndicatorRatio;
 	double fY = _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, pDock->container.bUseReflect);
 	fY += - icon->fHeight * icon->fScale/2 + h*z/2;  // a 0, le bas de l'indicateur correspond au bas de l'icone.
 	
@@ -129,20 +129,20 @@ static void _cairo_dock_draw_class_indicator_opengl (Icon *icon, gboolean bIsHor
 	glPushMatrix ();
 	if (myIndicatorsParam.bZoomClassIndicator)
 		fRatio *= icon->fScale;
-	double w = s_classIndicatorBuffer.iWidth;
-	double h = s_classIndicatorBuffer.iHeight;
+	double w = icon->fWidth/3 * fRatio;
+	double h = icon->fHeight/3 * fRatio;
 	
 	if (! bIsHorizontal)
 		glRotatef (90., 0., 0., 1.);
 	if (! bDirectionUp)
 		glScalef (1., -1., 1.);
-	glTranslatef (icon->fWidth * icon->fScale/2 - w * fRatio/2,
-		icon->fHeight * icon->fScale/2 - h * fRatio/2,
+	glTranslatef (icon->fWidth * icon->fScale/2 - w/2,  // top-right corner, 1/3 of the icon
+		icon->fHeight * icon->fScale/2 - h/2,
 		0.);
 	
 	cairo_dock_draw_texture_with_alpha (s_classIndicatorBuffer.iTexture,
-		w * fRatio,
-		h * fRatio,
+		w,
+		h,
 		1.);
 	glPopMatrix ();
 }
@@ -159,7 +159,7 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cair
 	double h = s_indicatorBuffer.iHeight;
 	///double fMaxScale = cairo_dock_get_max_scale (pDock);
 	///double z = (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale / fMaxScale : 1.) * fRatio;  // on divise par fMaxScale car l'indicateur est charge a la taille max des icones.
-	double z = icon->fWidth / w * (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale : 1.);
+	double z = icon->fWidth / w * (myIndicatorsParam.bIndicatorOnIcon ? icon->fScale : 1.) * myIndicatorsParam.fIndicatorRatio;
 	double fY = - _compute_delta_y (icon, myIndicatorsParam.fIndicatorDeltaY, myIndicatorsParam.bIndicatorOnIcon, pDock->container.bUseReflect);  // a 0, le bas de l'indicateur correspond au bas de l'icone.
 	
 	//\__________________ On place l'indicateur.
@@ -167,7 +167,7 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cair
 	if (bIsHorizontal)
 	{
 		cairo_translate (pCairoContext,
-			icon->fWidth * icon->fWidthFactor * icon->fScale / 2 - w * z/2,
+			icon->fWidth * icon->fScale / 2 - w * z/2,
 			(bDirectionUp ?
 				icon->fHeight * icon->fHeightFactor * icon->fScale - h * z + fY :
 				- fY));
@@ -181,7 +181,7 @@ static void _cairo_dock_draw_appli_indicator (Icon *icon, CairoDock *pDock, cair
 			(bDirectionUp ?
 				icon->fHeight * icon->fHeightFactor * icon->fScale - h * z + fY :
 				- fY),
-			icon->fWidth * icon->fWidthFactor * icon->fScale / 2 - (w * z/2));
+			icon->fWidth * icon->fScale / 2 - (w * z/2));
 		cairo_scale (pCairoContext,
 			z,
 			z);
@@ -203,31 +203,33 @@ static void _cairo_dock_draw_active_window_indicator (cairo_t *pCairoContext, Ic
 static void _cairo_dock_draw_class_indicator (cairo_t *pCairoContext, Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp)
 {
 	cairo_save (pCairoContext);
+	if (myIndicatorsParam.bZoomClassIndicator)
+		fRatio *= icon->fScale;
 	double w = s_classIndicatorBuffer.iWidth;
 	double h = s_classIndicatorBuffer.iHeight;
-	if (bIsHorizontal)
+	if (bIsHorizontal)  // draw it in the top-right corner, at 1/3 of the icon.
 	{
 		if (bDirectionUp)
 			cairo_translate (pCairoContext,
-				(icon->fWidth - w * fRatio) * icon->fScale,
+				icon->fWidth * (icon->fScale - fRatio/3),
 				0.);
 		else
 			cairo_translate (pCairoContext,
-				(icon->fWidth - w * fRatio) * icon->fScale,
-				(icon->fHeight - h * fRatio) * icon->fScale);
+				icon->fWidth * (icon->fScale - fRatio/3),
+				icon->fHeight * (icon->fScale - fRatio/3));
 	}
 	else
 	{
 		if (bDirectionUp)
 			cairo_translate (pCairoContext,
 				0.,
-				(icon->fWidth - w * fRatio) * icon->fScale);
+				icon->fWidth * (icon->fScale - fRatio/3));
 		else
 			cairo_translate (pCairoContext,
-				(icon->fHeight - h * fRatio) * icon->fScale,
-				(icon->fWidth - w * fRatio) * icon->fScale);
+				icon->fHeight * (icon->fScale - fRatio/3),
+				icon->fWidth * (icon->fScale - fRatio/3));
 	}
-	cairo_scale (pCairoContext, fRatio * icon->fScale, fRatio * icon->fScale);
+	cairo_scale (pCairoContext, icon->fWidth/3 * fRatio / w, icon->fHeight/3 * fRatio / h);
 	cairo_dock_draw_surface (pCairoContext, s_classIndicatorBuffer.pSurface, w, h, bDirectionUp, bIsHorizontal, 1.);
 	cairo_restore (pCairoContext);
 }
@@ -538,18 +540,18 @@ static inline void _load_class_indicator (const gchar *cIndicatorImagePath)
 {
 	cairo_dock_unload_image_buffer (&s_classIndicatorBuffer);
 	
-	double fLauncherWidth = myIconsParam.iIconWidth;
-	double fLauncherHeight = myIconsParam.iIconHeight;
+	int iLauncherWidth = myIconsParam.iIconWidth;
+	int iLauncherHeight = myIconsParam.iIconHeight;
 	
 	cairo_dock_load_image_buffer (&s_classIndicatorBuffer,
 		cIndicatorImagePath,
-		fLauncherWidth/3,
-		fLauncherHeight/3,
+		iLauncherWidth/3,  // will be drawn at 1/3 of the icon, with no zoom.
+		iLauncherHeight/3,
 		CAIRO_DOCK_KEEP_RATIO);
 }
 static void load (void)
 {
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
+	double fMaxScale = 1 + myIconsParam.fAmplitude;
 	
 	_load_task_indicator (myTaskbarParam.bShowAppli && (myTaskbarParam.bMixLauncherAppli || myIndicatorsParam.bDrawIndicatorOnAppli) ? myIndicatorsParam.cIndicatorImagePath : NULL, fMaxScale, myIndicatorsParam.fIndicatorRatio);
 	
@@ -574,9 +576,18 @@ static void _reload_progress_bar (Icon *pIcon, CairoContainer *pContainer, G_GNU
 		cairo_dock_reload_data_renderer_on_icon (pIcon, pContainer);
 	}
 }
+static void _reload_multi_appli (Icon *icon, CairoContainer *pContainer, G_GNUC_UNUSED gpointer data)
+{
+	if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
+	{
+		cairo_dock_load_icon_image (icon, pContainer);
+		if (!myIndicatorsParam.bUseClassIndic)
+			cairo_dock_draw_subdock_content_on_icon (icon, CAIRO_DOCK (pContainer));
+	}
+}
 static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam *pIndicators)
 {
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
+	double fMaxScale = 1 + myIconsParam.fAmplitude;
 	
 	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath) ||
 		pPrevIndicators->bIndicatorOnIcon != pIndicators->bIndicatorOnIcon ||
@@ -602,21 +613,9 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	{
 		_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL);
 		
-		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic && g_pMainDock)  // on recharge les icones pointant sur une classe (qui sont dans le main dock).
+		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)  // on recharge les icones pointant sur une classe (qui sont dans le main dock).
 		{
-			/// il faudrait le faire pour les lanceurs de tous les docks ...
-			Icon *icon;
-			GList *ic;
-			for (ic = g_pMainDock->icons; ic != NULL; ic = ic->next)
-			{
-				icon = ic->data;
-				if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
-				{
-					cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (g_pMainDock));
-					if (!pIndicators->bUseClassIndic)
-						cairo_dock_draw_subdock_content_on_icon (icon, g_pMainDock);
-				}
-			}
+			cairo_dock_foreach_icons_in_docks ((CairoDockForeachIconFunc)_reload_multi_appli, NULL);
 		}
 	}
 	

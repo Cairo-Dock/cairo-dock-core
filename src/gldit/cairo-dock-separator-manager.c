@@ -60,12 +60,13 @@ cairo_surface_t *cairo_dock_create_separator_surface (int iWidth, int iHeight)
 
 static void _load_separator (Icon *icon)
 {
-	int iWidth = icon->iImageWidth;
-	int iHeight = icon->iImageHeight;
+	int iWidth = cairo_dock_icon_get_allocated_width (icon);
+	int iHeight = cairo_dock_icon_get_allocated_height (icon);
 	
-	icon->pIconBuffer = cairo_dock_create_separator_surface (
+	cairo_surface_t *pSurface = cairo_dock_create_separator_surface (
 		iWidth,
 		iHeight);
+	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
 }
 
 Icon *cairo_dock_create_separator_icon (int iSeparatorType)

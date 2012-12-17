@@ -166,12 +166,9 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 				
 				// on recharge l'icone principale.
 				Icon* pIcon = pDesklet->pIcon;
-				if (pIcon)
+				if (pIcon)  // if the view doesn't display the main icon, it will set the allocated size to 0 so that the icon won't be loaded.
 				{
-					pIcon->iImageWidth = pIcon->fWidth;
-					pIcon->iImageHeight = pIcon->fHeight;
-					if (pIcon->iImageWidth > 0)  // the view displays the main icon -> load it.
-						cairo_dock_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));  // pas de trigger, car on veut pouvoir associer un contexte a l'icone principale tout de suite.
+					cairo_dock_load_icon_buffers (pIcon, CAIRO_CONTAINER (pDesklet));  // pas de trigger, car on veut pouvoir associer un contexte a l'icone principale tout de suite.
 				}
 				
 				// on recharge chaque icone.
@@ -179,10 +176,8 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 				for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
 				{
 					pIcon = ic->data;
-					if ((int)pIcon->fWidth != pIcon->iImageWidth || (int)pIcon->fHeight != pIcon->iImageHeight)
+					if (cairo_dock_icon_get_allocated_width (pIcon) != pIcon->image.iWidth || cairo_dock_icon_get_allocated_height (pIcon) != pIcon->image.iHeight)
 					{
-						pIcon->iImageWidth = pIcon->fWidth;
-						pIcon->iImageHeight = pIcon->fHeight;
 						cairo_dock_trigger_load_icon_buffers (pIcon);
 					}
 				}
@@ -1254,10 +1249,8 @@ void cairo_dock_update_desklet_icons (CairoDesklet *pDesklet)
 	for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if ((int)pIcon->fWidth != pIcon->iImageWidth || (int)pIcon->fHeight != pIcon->iImageHeight)
+		if (cairo_dock_icon_get_allocated_width (pIcon) != pIcon->image.iWidth || cairo_dock_icon_get_allocated_height (pIcon) != pIcon->image.iHeight)
 		{
-			pIcon->iImageWidth = pIcon->fWidth;
-			pIcon->iImageHeight = pIcon->fHeight;
 			cairo_dock_trigger_load_icon_buffers (pIcon);
 		}
 	}

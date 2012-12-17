@@ -173,16 +173,12 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	
-	if (pIcon->iIconTexture != 0 && pEmblem->iTexture != 0)  // dessin opengl : on dessine sur la texture de l'icone avec le mecanisme habituel.
+	if (pIcon->image.iTexture != 0 && pEmblem->iTexture != 0)  // dessin opengl : on dessine sur la texture de l'icone avec le mecanisme habituel.
 	{
 		if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 1))
 			return ;
 		
 		_cairo_dock_enable_texture ();
-		
-		///_cairo_dock_set_blend_source ();
-		
-		///_cairo_dock_apply_texture_at_size (pIcon->iIconTexture, w, h);
 		
 		_cairo_dock_set_blend_alpha ();
 		
@@ -192,9 +188,9 @@ void cairo_dock_draw_emblem_on_icon (CairoEmblem *pEmblem, Icon *pIcon, CairoCon
 		
 		cairo_dock_end_draw_icon (pIcon, pContainer);
 	}
-	else if (pIcon->pIconBuffer != NULL && pEmblem->pSurface != NULL)
+	else if (pIcon->image.pSurface != NULL && pEmblem->pSurface != NULL)
 	{
-		cairo_t *pCairoContext = cairo_create (pIcon->pIconBuffer);
+		cairo_t *pCairoContext = cairo_create (pIcon->image.pSurface);
 		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 		
 		_cairo_dock_apply_emblem_surface (pEmblem, w, h, pCairoContext);

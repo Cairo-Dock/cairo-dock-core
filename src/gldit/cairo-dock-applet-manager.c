@@ -25,6 +25,7 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_icon_get_allocated_width
 #include "cairo-dock-module-manager.h"  // cairo_dock_write_active_modules
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-surface-factory.h"
@@ -60,18 +61,19 @@ static cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFile
 
 static void _load_applet (Icon *icon)
 {
-	int iWidth = icon->iImageWidth;
-	int iHeight = icon->iImageHeight;
+	int iWidth = cairo_dock_icon_get_allocated_width (icon);
+	int iHeight = cairo_dock_icon_get_allocated_height (icon);
 	//g_print ("%s : %dx%d\n", icon->cName, iWidth, iHeight);
-	icon->pIconBuffer = cairo_dock_create_applet_surface (icon->cFileName,
+	cairo_surface_t *pSurface = cairo_dock_create_applet_surface (icon->cFileName,
 		iWidth,
 		iHeight);
-	if (icon->pIconBuffer == NULL && icon->pModuleInstance != NULL)  // une image inexistante a ete definie en conf => on met l'icone par defaut. Si aucune image n'est definie, alors c'est a l'applet de faire qqch (dessiner qqch, mettre une image par defaut, etc).
+	if (pSurface == NULL && icon->pModuleInstance != NULL)  // une image inexistante a ete definie en conf => on met l'icone par defaut. Si aucune image n'est definie, alors c'est a l'applet de faire qqch (dessiner qqch, mettre une image par defaut, etc).
 	{
-		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath,
+		pSurface = cairo_dock_create_surface_from_image_simple (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath,
 			iWidth,
 			iHeight);
 	}  // on ne recharge pas myDrawContext ici, mais plutot dans cairo_dock_load_icon_image(), puisqu'elle gere aussi la destruction de la surface.
+	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
 }
 
 static gboolean _delete_applet (Icon *icon)

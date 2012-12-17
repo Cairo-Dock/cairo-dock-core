@@ -701,7 +701,8 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		icon->fWidth = icon->fHeight = icon->iImageWidth = icon->iImageHeight = 0;  // no request
+		cairo_dock_icon_set_requested_size (icon, 0, 0);  // no request
+		icon->fWidth = icon->fHeight = 0;  /// useful ?...
 		cairo_dock_set_icon_size_in_dock (pDock, icon);
 		pDock->fFlatDockWidth += icon->fWidth + myIconsParam.iIconGap;
 	}
@@ -768,11 +769,11 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	cairo_dock_set_icon_container (icon, pDock);
 	
 	//\______________ set the icon size, now that it's inside a container.
-	int wi = icon->iImageWidth, hi = icon->iImageHeight;
+	int wi = icon->image.iWidth, hi = icon->image.iHeight;
 	cairo_dock_set_icon_size_in_dock (pDock, icon);
 	
-	if (wi != icon->iImageWidth || hi != icon->iImageHeight  // if size has changed, reload the buffers
-	|| (! icon->pIconBuffer && ! icon->iIconTexture))  // might happen, for instance if the icon is a launcher pinned on a desktop and was detached before being loaded.
+	if (wi != cairo_dock_icon_get_allocated_width (icon) || hi != cairo_dock_icon_get_allocated_height (icon)  // if size has changed, reload the buffers
+	|| (! icon->image.pSurface && ! icon->image.iTexture))  // might happen, for instance if the icon is a launcher pinned on a desktop and was detached before being loaded.
 		cairo_dock_trigger_load_icon_buffers (icon);
 	
 	pDock->fFlatDockWidth += myIconsParam.iIconGap + icon->fWidth;
@@ -874,9 +875,6 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 		return FALSE;
 	
 	cd_message ("%s (%s)", __func__, icon->cName);
-	g_free (icon->cParentDockName);
-	icon->cParentDockName = NULL;
-	cairo_dock_set_icon_container (icon, NULL);
 	
 	//\___________________ On stoppe ses animations.
 	cairo_dock_stop_icon_animation (icon);
@@ -955,6 +953,11 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 	//\___________________ Notify everybody.
 	icon->fInsertRemoveFactor = 0.;
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, icon, pDock);
+	
+	//\___________________ unset the container, now that it's completely detached from it.
+	g_free (icon->cParentDockName);
+	icon->cParentDockName = NULL;
+	cairo_dock_set_icon_container (icon, NULL);
 	
 	return TRUE;
 }
@@ -1144,8 +1147,7 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 		{
 			if (bUpdateIconSize)
 			{
-				icon->fWidth = icon->fHeight = 0;  // no request
-				icon->iImageWidth = icon->iImageHeight = 0;
+				cairo_dock_icon_set_requested_size (icon, 0, 0);
 				cairo_dock_set_icon_size_in_dock (pDock, icon);
 			}
 			cairo_dock_trigger_load_icon_buffers (icon);
@@ -1167,7 +1169,7 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 	{
 		cairo_dock_update_dock_size (pDock);
 		cairo_dock_calculate_dock_icons (pDock);
-
+		
 		cairo_dock_move_resize_dock (pDock);
 		if (pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)  // la position/taille a change, il faut refaire la reservation.
 			cairo_dock_reserve_space_for_dock (pDock, TRUE);
@@ -1178,13 +1180,13 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 
 void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 {
-	if (pDock->pRenderer && pDock->pRenderer->set_icon_size)
+	if (pDock->pRenderer && pDock->pRenderer->set_icon_size)  // the view wants to decide the icons size.
 	{
 		pDock->pRenderer->set_icon_size (icon, pDock);
 	}
-	else
+	else  // generic method: icon extent = base size * max zoom
 	{
-		int wi, hi;
+		int wi, hi; // base size (user-defined icon size at rest)
 		if (! pDock->bGlobalIconSize && pDock->iIconSize != 0)
 		{
 			wi = hi = pDock->iIconSize;
@@ -1195,30 +1197,33 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 			hi = myIconsParam.iIconHeight;
 		}
 		//g_print (" size: %d => %dx%d\n", pDock->iIconSize, wi, hi);
-		double fMaxScale = cairo_dock_get_max_scale (pDock);
+		double fMaxScale = 1 + myIconsParam.fAmplitude;
 		
 		// set the visible size at rest.
-		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // for applets, consider (fWidth,fHeight) as a requested size, if not 0.
+		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // for applets, consider the requested size, if not 0.
 		{
+			icon->fWidth = wi;
+			icon->fHeight = hi;
+			
+			int wr = cairo_dock_icon_get_requested_width (icon);
+			int hr = cairo_dock_icon_get_requested_height (icon);
 			//g_print ("%s (%s, %.1fx%.1f\n", __func__, icon->pModuleInstance->pModule->pVisitCard->cModuleName, icon->fWidth, icon->fHeight);
-			if (icon->iImageWidth != 0)
+			if (wr != 0)
 			{
 				if (pDock->container.bIsHorizontal)
-					icon->fWidth = icon->iImageWidth / fMaxScale;
+					icon->fWidth = wr / fMaxScale;
 				else
-					icon->fHeight = icon->iImageWidth / fMaxScale;
+					icon->fHeight = wr / fMaxScale;
 			}
-			if (icon->iImageHeight != 0)
+			if (hr != 0)
 			{
 				if (pDock->container.bIsHorizontal)
-					icon->fHeight = icon->iImageHeight / fMaxScale;
+					icon->fHeight = hr / fMaxScale;
 				else
-					icon->fWidth = icon->iImageHeight / fMaxScale;
+					icon->fWidth = hr / fMaxScale;
+				if (icon->fHeight > hi)  // limit the icon height to the default height.
+					icon->fHeight = hi;
 			}
-			if (icon->fWidth == 0)
-				icon->fWidth = wi;
-			if (icon->fHeight == 0 || icon->fHeight > hi)
-				icon->fHeight = hi;
 		}
 		else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // separators have their own size.
 		{
@@ -1235,13 +1240,11 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 		if (pDock->container.bIsHorizontal
 		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator))
 		{
-			icon->iImageWidth = icon->fWidth * fMaxScale;
-			icon->iImageHeight = icon->fHeight * fMaxScale;
+			cairo_dock_icon_set_allocated_size (icon, icon->fWidth * fMaxScale, icon->fHeight * fMaxScale);
 		}
 		else
 		{
-			icon->iImageWidth = icon->fHeight * fMaxScale;
-			icon->iImageHeight = icon->fWidth * fMaxScale;
+			cairo_dock_icon_set_allocated_size (icon, icon->fHeight * fMaxScale, icon->fWidth * fMaxScale);
 		}
 	}
 	icon->fWidth *= pDock->container.fRatio;

@@ -618,7 +618,7 @@ cairo_surface_t *cairo_dock_duplicate_inhibitor_surface_for_appli (Icon *pInhibi
 	int w, h;
 	cairo_dock_get_icon_extent (pInhibitorIcon, &w, &h);
 	
-	return cairo_dock_duplicate_surface (pInhibitorIcon->pIconBuffer,
+	return cairo_dock_duplicate_surface (pInhibitorIcon->image.pSurface,
 		w,
 		h,
 		iWidth,
@@ -1555,28 +1555,18 @@ const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cCla
 	for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon) && pIcon->pIconBuffer)  // avoid applets
+		if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon) && pIcon->image.pSurface)  // avoid applets
 		{
-			int iWidth, iHeight;
-			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
-			image.pSurface = pIcon->pIconBuffer;  // since we got the texture with the load(), we don't use the image buffer constructor.
-			image.iWidth = iWidth;
-			image.iHeight = iHeight;
-			image.iTexture = pIcon->iIconTexture;
+			memcpy (&image, &pIcon->image, sizeof (CairoDockImageBuffer));
 			return &image;
 		}
 	}
 	for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->pIconBuffer)
+		if (pIcon->image.pSurface)
 		{
-			int iWidth, iHeight;
-			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
-			image.pSurface = pIcon->pIconBuffer;  // since we got the texture with the load(), we don't use the image buffer constructor.
-			image.iWidth = iWidth;
-			image.iHeight = iHeight;
-			image.iTexture = pIcon->iIconTexture;
+			memcpy (&image, &pIcon->image, sizeof (CairoDockImageBuffer));
 			return &image;
 		}
 	}

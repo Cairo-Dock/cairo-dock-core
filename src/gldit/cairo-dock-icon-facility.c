@@ -358,8 +358,8 @@ Icon *cairo_dock_get_icon_with_module (GList *pIconList, CairoDockModule *pModul
 
 void cairo_dock_get_icon_extent (Icon *pIcon, int *iWidth, int *iHeight)
 {
-	*iWidth = pIcon->iImageWidth;
-	*iHeight = pIcon->iImageHeight;
+	*iWidth = pIcon->image.iWidth;
+	*iHeight = pIcon->image.iHeight;
 }
 
 void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY)
@@ -684,14 +684,14 @@ GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon)
 	int w = 24, h = w;
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (icon, &iWidth, &iHeight);
-	if (iWidth > 0 && iHeight > 0 && icon->pIconBuffer != NULL)
+	if (iWidth > 0 && iHeight > 0 && icon->image.pSurface != NULL)
 	{
 		cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
 			w,
 			h);
 		cairo_t *pCairoContext = cairo_create (surface);
 		cairo_scale (pCairoContext, (double)w/iWidth, (double)h/iHeight);
-		cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0., 0.);
+		cairo_set_source_surface (pCairoContext, icon->image.pSurface, 0., 0.);
 		cairo_paint (pCairoContext);
 		cairo_destroy (pCairoContext);
 		guchar *d, *data = cairo_image_surface_get_data (surface);

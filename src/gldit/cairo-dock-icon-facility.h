@@ -49,9 +49,25 @@ G_BEGIN_DECLS
 
 #define cairo_dock_get_icon_container(_pIcon) (_pIcon)->pContainer
 
-#define cairo_dock_get_icon_max_scale(pIcon) (pIcon->fHeight != 0 && pIcon->pContainer ? (pIcon->pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / (pIcon->fHeight/pIcon->pContainer->fRatio) : 1.)
+#define cairo_dock_get_icon_max_scale(pIcon) (pIcon->fHeight != 0 && pIcon->pContainer ? (pIcon->pContainer->bIsHorizontal ? pIcon->iAllocatedHeight : pIcon->iAllocatedWidth) / (pIcon->fHeight/pIcon->pContainer->fRatio) : 1.)
 
 #define cairo_dock_set_icon_ignore_quicklist(_pIcon) (_pIcon)->bIgnoreQuicklist = TRUE
+
+#define cairo_dock_icon_set_requested_size(icon, w, h) do { \
+	(icon)->iRequestedWidth = w; \
+	(icon)->iRequestedHeight = h; } while(0)
+
+#define cairo_dock_icon_get_requested_width(icon) (icon)->iRequestedWidth
+
+#define cairo_dock_icon_get_requested_height(icon) (icon)->iRequestedHeight
+
+#define cairo_dock_icon_set_allocated_size(icon, w, h) do { \
+	(icon)->iAllocatedWidth = w; \
+	(icon)->iAllocatedHeight = h; } while(0)
+
+#define cairo_dock_icon_get_allocated_width(icon) (icon)->iAllocatedWidth
+
+#define cairo_dock_icon_get_allocated_height(icon) (icon)->iAllocatedHeight
 
 
 /** Get the type of an icon according to its content (launcher, appli, applet). This can be different from its group.
@@ -297,8 +313,8 @@ void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer, 
 #define cairo_dock_listen_for_double_click(pIcon) (pIcon)->iNbDoubleClickListeners ++
 
 #define cairo_dock_stop_listening_for_double_click(pIcon) do {\
-	if (pIcon->iNbDoubleClickListeners > 0)\
-		pIcon->iNbDoubleClickListeners --; } while (0)
+	if ((pIcon)->iNbDoubleClickListeners > 0)\
+		(pIcon)->iNbDoubleClickListeners --; } while (0)
 
 
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);

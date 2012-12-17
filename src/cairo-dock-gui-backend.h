@@ -46,6 +46,8 @@ struct _CairoDockMainGuiBackend {
 	void (*reload) (void);
 	// show the themes, in case it should be presented in the menu.
 	GtkWidget * (*show_themes) (void);
+	// show the applets.
+	GtkWidget * (*show_addons) (void);
 	const gchar *cDisplayedName;
 	const gchar *cTooltip;
 	} ;
@@ -91,6 +93,8 @@ void cairo_dock_show_items_gui (Icon *pIcon, CairoContainer *pContainer, CairoDo
 void cairo_dock_reload_gui (void);
 
 void cairo_dock_show_themes (void);
+
+void cairo_dock_show_addons (void);
 
 gboolean cairo_dock_can_manage_themes (void);
 

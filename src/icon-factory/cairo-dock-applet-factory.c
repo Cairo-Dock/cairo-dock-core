@@ -23,6 +23,7 @@
 #include <cairo.h>
 
 #include "cairo-dock-icon-factory.h"
+#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-factory.h"
@@ -50,8 +51,9 @@ Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, 
 	
 	if (! pMinimalConfig->bIsDetached)
 	{
-		icon->fWidth = pMinimalConfig->iDesiredIconWidth;  // requested size
-		icon->fHeight = pMinimalConfig->iDesiredIconHeight;
+		cairo_dock_icon_set_requested_size (icon, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
+		///icon->fWidth = pMinimalConfig->iDesiredIconWidth;  // requested size
+		///icon->fHeight = pMinimalConfig->iDesiredIconHeight;
 		icon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 	}
 	else  // l'applet creera la surface elle-meme, car on ne sait ni la taille qu'elle voudra lui donner, ni meme si elle l'utilisera !

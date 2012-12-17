@@ -66,7 +66,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		{
 			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskbarParam.iDialogDuration); // mieux vaut montrer pas d'icone dans le dialogue que de montrer une icone qui n'a pas de rapport avec l'appli demandant l'attention.
 			g_return_if_fail (pDialog != NULL);
-			cairo_dock_set_new_dialog_icon_surface (pDialog, pHiddenIcon->pIconBuffer, pDialog->iIconSize);
+			cairo_dock_set_new_dialog_icon_surface (pDialog, pHiddenIcon->image.pSurface, pDialog->iIconSize);
 		}
 		if (pDialog && bForceDemand)
 		{
@@ -277,31 +277,34 @@ gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
 
 static void _load_class_icon (Icon *icon)
 {
-	int iWidth = icon->iImageWidth;
-	int iHeight = icon->iImageHeight;
+	int iWidth = icon->iRequestedWidth;
+	int iHeight = icon->iRequestedHeight;
+	cairo_surface_t *pSurface = NULL;
 	if (icon->pSubDock != NULL && !myIndicatorsParam.bUseClassIndic)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 	{
-		icon->pIconBuffer = cairo_dock_create_blank_surface (iWidth, iHeight);
+		pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
 	}
 	else
 	{
 		//g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
-		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass,
+		pSurface = cairo_dock_create_surface_from_class (icon->cClass,
 			iWidth,
 			iHeight);
-		if (icon->pIconBuffer == NULL)  // aucun inhibiteur ou aucune image correspondant a cette classe, on cherche a copier une des icones d'appli de cette classe.
+		if (pSurface == NULL)  // aucun inhibiteur ou aucune image correspondant a cette classe, on cherche a copier une des icones d'appli de cette classe.
 		{
 			const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
 			if (pApplis != NULL)
 			{
 				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
 				//g_print ("  load from %s (%dx%d)\n", pOneIcon->cName, iWidth, iHeight);
-				icon->pIconBuffer = cairo_dock_duplicate_inhibitor_surface_for_appli (pOneIcon,
+				pSurface = cairo_dock_duplicate_inhibitor_surface_for_appli (pOneIcon,
 					iWidth,
 					iHeight);
 			}
 		}
 	}
+	
+	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
 }
 static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, CairoDock *pClassDock)
 {
@@ -509,7 +512,7 @@ void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock
 	iY = y_icon_geometry (icon, pDock);  // il faudrait un fYAtRest ...
 	//g_print (" -> %d;%d (%.2f)\n", iX - pDock->container.iWindowPositionX, iY - pDock->container.iWindowPositionY, icon->fXAtRest);
 	iWidth = icon->fWidth;
-	int dh = (icon->iImageHeight - icon->fHeight);
+	int dh = (icon->image.iWidth - icon->fHeight);
 	iHeight = icon->fHeight + 2 * dh;  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 	
 	if (pDock->container.bIsHorizontal)
@@ -669,43 +672,43 @@ const CairoDockImageBuffer *cairo_dock_appli_get_image_buffer (Icon *pIcon)
 {
 	static CairoDockImageBuffer image;
 	
-	if (pIcon->pIconBuffer == NULL)
+	// if the given icon is not loaded
+	if (pIcon->image.pSurface == NULL)
 	{
+		// try to get the image from the class
 		const CairoDockImageBuffer *pImageBuffer = cairo_dock_get_class_image_buffer (pIcon->cClass);
 		if (pImageBuffer && pImageBuffer->pSurface)
 		{
-			memcpy (&image, pImageBuffer, sizeof (CairoDockImageBuffer));
-			return &image;
-		}
-	}
-	if (pIcon->pIconBuffer == NULL && g_pMainDock)
-	{
-		// set a size (we could set any size, but let's set something useful: if the icon is inserted in a dock and is already loaded at the correct size, it won't be loaded again).
-		gboolean bNoContainer = FALSE;
-		if (pIcon->pContainer == NULL)  // not in a container (=> no size) -> set a size before loading it.
-		{
-			bNoContainer = TRUE;
-			cairo_dock_set_icon_container (pIcon, g_pPrimaryContainer);
-			pIcon->fWidth = pIcon->fHeight = 0;  // no request
-			pIcon->iImageWidth = pIcon->iImageHeight = 0;
-			cairo_dock_set_icon_size_in_dock (g_pMainDock, pIcon);
+			return pImageBuffer;
 		}
 		
-		// load the icon
-		cairo_dock_load_icon_image (pIcon, g_pPrimaryContainer);
-		if (bNoContainer)
+		// try to load the icon.
+		if (g_pMainDock)
 		{
-			cairo_dock_set_icon_container (pIcon, NULL);
+			// set a size (we could set any size, but let's set something useful: if the icon is inserted in a dock and is already loaded at the correct size, it won't be loaded again).
+			gboolean bNoContainer = FALSE;
+			if (pIcon->pContainer == NULL)  // not in a container (=> no size) -> set a size before loading it.
+			{
+				bNoContainer = TRUE;
+				cairo_dock_set_icon_container (pIcon, g_pPrimaryContainer);
+				pIcon->fWidth = pIcon->fHeight = 0;  /// useful ?...
+				pIcon->iRequestedWidth = pIcon->iRequestedHeight = 0;  // no request
+				cairo_dock_set_icon_size_in_dock (g_pMainDock, pIcon);
+			}
+
+			// load the icon
+			cairo_dock_load_icon_image (pIcon, g_pPrimaryContainer);
+			if (bNoContainer)
+			{
+				cairo_dock_set_icon_container (pIcon, NULL);
+			}
 		}
 	}
-	if (pIcon->pIconBuffer != NULL || pIcon->iIconTexture != 0)
+	
+	// if the given icon is loaded, use its image.
+	if (pIcon->image.pSurface != NULL || pIcon->image.iTexture != 0)
 	{
-		int iWidth, iHeight;
-		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
-		image.pSurface = pIcon->pIconBuffer;  // since we got the texture with the load(), we don't use the image buffer constructor.
-		image.iWidth = iWidth;
-		image.iHeight = iHeight;
-		image.iTexture = pIcon->iIconTexture;
+		memcpy (&image, &pIcon->image, sizeof (CairoDockImageBuffer));
 		return &image;
 	}
 	else

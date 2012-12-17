@@ -253,14 +253,6 @@ GKeyFile *cairo_dock_pre_read_module_instance_config (CairoDockModuleInstance *p
 	{
 		gboolean bUnused;
 		cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUnused, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);  // for a dock, if 0, will just get the default size; for a desklet, unused.
-		/**if (pMinimalConfig->iDesiredIconWidth == 0)
-			pMinimalConfig->iDesiredIconWidth = myIconsParam.iIconWidth;
-		if (pMinimalConfig->iDesiredIconWidth == 0)
-			pMinimalConfig->iDesiredIconWidth = 48;
-		if (pMinimalConfig->iDesiredIconHeight == 0)
-			pMinimalConfig->iDesiredIconHeight = myIconsParam.iIconHeight;
-		if (pMinimalConfig->iDesiredIconHeight == 0)
-			pMinimalConfig->iDesiredIconHeight = 48;*/
 		
 		pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
 		if (pMinimalConfig->cLabel == NULL && !pInstance->pModule->pVisitCard->bAllowEmptyTitle)
@@ -664,10 +656,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			g_key_file_free (pKeyFile);
 			pKeyFile = NULL;
 		}
-		pIcon->fWidth = pMinimalConfig->iDesiredIconWidth;  // requested size
-		pIcon->fHeight = pMinimalConfig->iDesiredIconHeight;
-		pIcon->iImageWidth = 0;
-		pIcon->iImageHeight = 0;
+		cairo_dock_icon_set_requested_size (pIcon, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
 		
 		// on insere l'icone dans le dock ou on met a jour celui-ci.
 		if (pNewDock != pCurrentDock)  // insert in its new dock.

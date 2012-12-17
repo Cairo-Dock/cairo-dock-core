@@ -152,12 +152,12 @@ static gboolean _cairo_dock_render_flying_container_notification (G_GNUC_UNUSED 
 			cairo_save (pCairoContext);
 			
 			cairo_translate (pCairoContext, pIcon->fDrawX, pIcon->fDrawY);
-			if (pIcon->pIconBuffer != NULL)  // we can't use cairo_dock_render_one_icon() here since it's not a dock, and anyway we don't need it.
+			if (pIcon->image.pSurface != NULL)  // we can't use cairo_dock_render_one_icon() here since it's not a dock, and anyway we don't need it.
 			{
 				cairo_save (pCairoContext);
 				
 				cairo_dock_set_icon_scale_on_context (pCairoContext, pIcon, pFlyingContainer->container.bIsHorizontal, pFlyingContainer->container.fRatio, pFlyingContainer->container.bDirectionUp);
-				cairo_set_source_surface (pCairoContext, pIcon->pIconBuffer, 0.0, 0.0);
+				cairo_set_source_surface (pCairoContext, pIcon->image.pSurface, 0.0, 0.0);
 				cairo_paint (pCairoContext);
 				
 				cairo_restore (pCairoContext);

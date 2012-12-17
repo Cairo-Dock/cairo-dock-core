@@ -542,7 +542,7 @@ static void _on_change_window_state (Icon *icon)
 				cd_message ("new backing pixmap (bis) : %d", icon->iBackingPixmap);
 			}
 			// on redessine avec ou sans la miniature, suivant le nouvel etat.
-			cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pParentDock));
+			cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pParentDock));
 			if (pParentDock)
 			{
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
@@ -714,7 +714,7 @@ static void _on_change_window_icon (Icon *icon, CairoDock *pDock)
 {
 	if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskbarParam.bOverWriteXIcons)
 	{
-		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
+		cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
 		if (pDock->iRefCount != 0)
 			cairo_dock_trigger_redraw_subdock_content (pDock);
 		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
@@ -743,7 +743,7 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 			//g_print ("%s change son icone\n", icon->cName);
 			if (pDock && (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskbarParam.bOverWriteXIcons))
 			{
-				cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
+				cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
 				if (pDock->iRefCount != 0)
 					cairo_dock_trigger_redraw_subdock_content (pDock);
 				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
@@ -800,7 +800,7 @@ static void _on_change_window_class (Icon *icon, G_GNUC_UNUSED CairoDock *pDock)
 	icon->pMimeTypes = g_strdupv ((gchar**)cairo_dock_get_class_mimetypes (icon->cClass));
 	g_free (icon->cCommand);
 	icon->cCommand = g_strdup (cairo_dock_get_class_command (icon->cClass));
-	cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pParentDock));
+	cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pParentDock));
 	// notify everybody
 	cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_ICON_CHANGED, icon);
 }
@@ -1360,12 +1360,12 @@ static void _load_appli (Icon *icon)
 	}
 	
 	//\__________________ then draw the icon
-	int iWidth = icon->iImageWidth;
-	int iHeight = icon->iImageHeight;
-	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
-	GLuint iPrevTexture = icon->iIconTexture;
-	icon->pIconBuffer = NULL;
-	icon->iIconTexture = 0;
+	int iWidth = cairo_dock_icon_get_allocated_width (icon);
+	int iHeight = cairo_dock_icon_get_allocated_height (icon);
+	cairo_surface_t *pPrevSurface = icon->image.pSurface;
+	GLuint iPrevTexture = icon->image.iTexture;
+	icon->image.pSurface = NULL;
+	icon->image.iTexture = 0;
 	
 	// use the thumbnail in the case of a minimized window.
 	if (myTaskbarParam.iMinimizedWindowRenderType == 1 && icon->bIsHidden && icon->iBackingPixmap != 0)
@@ -1373,56 +1373,58 @@ static void _load_appli (Icon *icon)
 		// create the thumbnail (window preview).
 		if (g_bUseOpenGL)
 		{
-			///icon->iIconTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);  // doesn't work any more since Compiz 0.9 :-(
+			GLuint iTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);  // doesn't work any more since Compiz 0.9 :-(
+			if (iTexture)
+				cairo_dock_load_image_buffer_from_texture (&icon->image, iTexture, iWidth, iHeight);
 		}
-		if (icon->iIconTexture == 0)
+		if (icon->image.iTexture == 0)
 		{
-			icon->pIconBuffer = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap,
+			cairo_surface_t *pThumbnailSurface = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap,
 				iWidth,
 				iHeight);
-			if (g_bUseOpenGL)
-				icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
+			cairo_dock_load_image_buffer_from_surface (&icon->image, pThumbnailSurface, iWidth, iHeight);
 		}
 		// draw the previous image as an emblem.
-		if (icon->iIconTexture != 0 && iPrevTexture != 0)
+		if (icon->image.iTexture != 0 && iPrevTexture != 0)
 		{
 			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			cairo_dock_print_overlay_on_icon_from_texture (icon, CAIRO_CONTAINER (pParentDock), iPrevTexture, CAIRO_OVERLAY_LOWER_LEFT);
-			/**CairoEmblem *e = cairo_dock_make_emblem_from_texture (iPrevTexture,icon);
-			cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
-			cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
-			g_free (e);  // on n'utilise pas cairo_dock_free_emblem pour ne pas detruire la texture avec.*/
 		}
-		else if (icon->pIconBuffer != NULL && pPrevSurface != NULL)
+		else if (icon->image.pSurface != NULL && pPrevSurface != NULL)
 		{
 			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			cairo_dock_print_overlay_on_icon_from_surface (icon, CAIRO_CONTAINER (pParentDock), pPrevSurface, 0, 0, CAIRO_OVERLAY_LOWER_LEFT);
-			/**CairoEmblem *e = cairo_dock_make_emblem_from_surface (pPrevSurface, 0, 0, icon);
-			cairo_dock_set_emblem_position (e, CAIRO_DOCK_EMBLEM_LOWER_LEFT);
-			cairo_dock_draw_emblem_on_icon (e, icon, CAIRO_CONTAINER (pParentDock));
-			g_free (e);  // meme remarque.*/
 		}
 	}
-	// or use the class icon
-	if (icon->iIconTexture == 0 && icon->pIconBuffer == NULL && myTaskbarParam.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
-		icon->pIconBuffer = cairo_dock_create_surface_from_class (icon->cClass, iWidth, iHeight);
-	// or use the X icon
-	if (icon->iIconTexture == 0 && icon->pIconBuffer == NULL)
-		icon->pIconBuffer = cairo_dock_create_surface_from_xwindow (icon->Xid, iWidth, iHeight);
-	// or use a default image
-	if (icon->iIconTexture == 0 && icon->pIconBuffer == NULL)  // certaines applis comme xterm ne definissent pas d'icone, on en met une par defaut.
+	
+	// in other cases (or if the preview couldn't be used)
+	if (icon->image.iTexture == 0 && icon->image.pSurface == NULL)
 	{
-		cd_debug ("%s (%ld) doesn't define any icon, we set the default one.", icon->cName, icon->Xid);
-		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
-		if (cIconPath == NULL)  // image non trouvee.
+		cairo_surface_t *pSurface = NULL;
+		// or use the class icon
+		if (myTaskbarParam.bOverWriteXIcons && ! cairo_dock_class_is_using_xicon (icon->cClass))
+			pSurface = cairo_dock_create_surface_from_class (icon->cClass, iWidth, iHeight);
+		// or use the X icon
+		if (pSurface == NULL)
+			pSurface = cairo_dock_create_surface_from_xwindow (icon->Xid, iWidth, iHeight);
+		// or use a default image
+		if (pSurface == NULL)  // some applis like xterm don't define any icon, set the default one.
 		{
-			cIconPath = g_strdup (GLDI_SHARE_DATA_DIR"/icons/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+			cd_debug ("%s (%ld) doesn't define any icon, we set the default one.", icon->cName, icon->Xid);
+			gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+			if (cIconPath == NULL)  // image non trouvee.
+			{
+				cIconPath = g_strdup (GLDI_SHARE_DATA_DIR"/icons/"CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME);
+			}
+			pSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
+				iWidth,
+				iHeight);
+			g_free (cIconPath);
 		}
-		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
-			iWidth,
-			iHeight);
-		g_free (cIconPath);
+		if (pSurface != NULL)
+			cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
 	}
+	
 	// bent the icon in the case of a minimized window and if defined in the config.
 	if (icon->bIsHidden && myTaskbarParam.iMinimizedWindowRenderType == 2)
 	{

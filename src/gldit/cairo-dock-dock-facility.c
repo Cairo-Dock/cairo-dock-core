@@ -1113,7 +1113,7 @@ void cairo_dock_trigger_set_WM_icons_geometry (CairoDock *pDock)
 	}
 }
 
-void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)  // the request size is already set on the icon.
+void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)  // resize the icon according to the requested size previously set on the icon.
 {
 	cairo_dock_set_icon_size_in_dock (pDock, pIcon);
 	

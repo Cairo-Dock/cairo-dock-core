@@ -47,7 +47,6 @@ typedef enum {
 	CAIRO_DOCK_ICON_TYPE_LAUNCHER = 0,
 	CAIRO_DOCK_ICON_TYPE_CONTAINER,
 	CAIRO_DOCK_ICON_TYPE_SEPARATOR,
-	CAIRO_DOCK_ICON_TYPE_FILE,
 	CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER,
 	CAIRO_DOCK_ICON_TYPE_APPLI,
 	CAIRO_DOCK_ICON_TYPE_APPLET,
@@ -157,10 +156,10 @@ struct _Icon {
 	CairoDockModuleInstance *pAppletOwner;
 	
 	//\____________ Buffers.
-	gdouble fWidth, fHeight;  // taille dans le container.
-	gint iImageWidth, iImageHeight;  // taille de la surface/texture telle qu'elle a ete creee.
-	cairo_surface_t* pIconBuffer;
-	GLuint iIconTexture;
+	gdouble fWidth, fHeight;  // size at rest in the container (including ratio and orientation).
+	gint iRequestedWidth, iRequestedHeight;  // buffer image size that can be requested (surface/texture size)
+	gint iAllocatedWidth, iAllocatedHeight;  // buffer image size actually allocated (surface/texture size)
+	CairoDockImageBuffer image; // the image of the icon
 	CairoDockImageBuffer label; // the label above the icon
 	GList *pOverlays;  // a list of CairoOverlay
 	CairoDataRenderer *pDataRenderer;
@@ -220,7 +219,6 @@ struct _CairoIconContainerRenderer {
 
 
 #define CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_LAUNCHER)
-#define CAIRO_DOCK_ICON_TYPE_IS_FILE(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_FILE)
 #define CAIRO_DOCK_ICON_TYPE_IS_CONTAINER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER)
 #define CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_SEPARATOR)
 #define CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER)
@@ -287,6 +285,7 @@ void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer)
 *@param pContainer its container.
 */
 void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer);
+#define cairo_dock_reload_icon_image cairo_dock_load_icon_image
 
 /**Fill the label buffer (surface & texture) of a given icon, according to a text description.
 *@param icon the icon.
@@ -305,8 +304,6 @@ void cairo_dock_load_icon_quickinfo (Icon *icon);
 void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer);
 
 void cairo_dock_trigger_load_icon_buffers (Icon *pIcon);
-
-void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer);
 
 
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock);

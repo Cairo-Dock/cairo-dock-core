@@ -303,9 +303,9 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 		cairo_dock_erase_cairo_context (ctx);
 		pCairoContext = ctx;
 	}
-	else if (pCairoContext == NULL && pIcon->pIconBuffer)
+	else if (pCairoContext == NULL && pIcon->image.pSurface)
 	{
-		ctx = cairo_create (pIcon->pIconBuffer);
+		ctx = cairo_create (pIcon->image.pSurface);
 		pCairoContext = ctx;
 	}
 	g_return_if_fail (pCairoContext != NULL);

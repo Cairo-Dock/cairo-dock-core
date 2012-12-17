@@ -383,13 +383,13 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
 			GL_COLOR_ATTACHMENT0_EXT,
 			GL_TEXTURE_2D,
-			g_openglConfig.bRedirected ? g_openglConfig.iRedirectedTexture : pIcon->iIconTexture,
+			g_openglConfig.bRedirected ? g_openglConfig.iRedirectedTexture : pIcon->image.iTexture,
 			0);  // attach the texture to FBO color attachment point.
 		
 		GLenum status = glCheckFramebufferStatusEXT (GL_FRAMEBUFFER_EXT);
 		if (status != GL_FRAMEBUFFER_COMPLETE_EXT)
 		{
-			cd_warning ("FBO not ready for %s (tex:%d)", pIcon->cName, pIcon->iIconTexture);
+			cd_warning ("FBO not ready for %s (tex:%d)", pIcon->cName, pIcon->image.iTexture);
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);  // switch back to window-system-provided framebuffer
 			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
 				GL_COLOR_ATTACHMENT0_EXT,
@@ -427,13 +427,13 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 
 void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 {
-	g_return_if_fail (pIcon->iIconTexture != 0);
+	g_return_if_fail (pIcon->image.iTexture != 0);
 	
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		// copie dans notre texture
 		glEnable (GL_TEXTURE_2D);
-		glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
+		glBindTexture (GL_TEXTURE_2D, pIcon->image.iTexture);
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glEnable(GL_BLEND);
 		glBlendFunc (GL_ZERO, GL_ONE);
@@ -455,7 +455,7 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
 				GL_COLOR_ATTACHMENT0_EXT,
 				GL_TEXTURE_2D,
-				pIcon->iIconTexture,
+				pIcon->image.iTexture,
 				0);  // maintenant on dessine dans la texture de l'icone.
 			_cairo_dock_enable_texture ();
 			_cairo_dock_set_blend_source ();

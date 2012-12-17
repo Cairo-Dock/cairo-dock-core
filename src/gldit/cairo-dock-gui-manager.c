@@ -43,10 +43,6 @@
 #define _MANAGER_DEF_
 #include "cairo-dock-gui-manager.h"
 
-extern CairoDock *g_pMainDock;
-extern gchar *g_cCairoDockDataDir;
-extern CairoDockDesktopGeometry g_desktopGeometry;
-
 static CairoDockGuiBackend *s_pGuiBackend = NULL;
 
   /////////////////

@@ -101,7 +101,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	//\_______________ on verifie le resultat, en remettant l'original en cas d'echec.
 	if (r != 0 || !g_file_test (cResultPath, G_FILE_TEST_EXISTS))
 	{
-		cd_warning ("an error occured while executing '%s'", cCommand);
+		cd_warning ("Invalid archive file (%s)", cCommand);
 		if (cTempBackup != NULL)
 		{
 			g_rename (cTempBackup, cResultPath);
@@ -114,7 +114,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 		gchar *cCommand = g_strdup_printf ("rm -rf \"%s\"", cTempBackup);
 		int r = system (cCommand);
 		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", cCommand);
+			cd_warning ("Couldn't remove temporary folder (%s)", cCommand);
 		g_free (cCommand);
 	}
 	
@@ -177,7 +177,7 @@ gboolean cairo_dock_download_file (const gchar *cURL, const gchar *cLocalPath)
 	gboolean bOk;
 	if (r != CURLE_OK)  // an error occured
 	{
-		cd_warning ("an error occured while downloading '%s'", cURL);
+		cd_warning ("Couldn't download file '%s' (%s)", cURL, curl_easy_strerror (r));
 		g_remove (cLocalPath);
 		bOk = FALSE;
 	}
@@ -191,7 +191,7 @@ gboolean cairo_dock_download_file (const gchar *cURL, const gchar *cLocalPath)
 		}
 		else
 		{
-			cd_warning ("empty file from '%s'", cURL);
+			cd_warning ("Empty file from '%s'", cURL);
 			g_remove (cLocalPath);
 			bOk = FALSE;
 		}
@@ -208,7 +208,7 @@ gchar *cairo_dock_download_file_in_tmp (const gchar *cURL)
 	fds = mkstemp (cTmpFilePath);
 	if (fds == -1)
 	{
-		cd_warning ("couldn't create temporary file '%s'", cTmpFilePath);
+		cd_warning ("Couldn't create temporary file '%s' - check permissions in /tmp", cTmpFilePath);
 		g_free (cTmpFilePath);
 		return NULL;
 	}
@@ -271,9 +271,6 @@ static void _dl_file (gpointer *pSharedMemory)
 }
 static gboolean _finish_dl (gpointer *pSharedMemory)
 {
-	if (pSharedMemory[4] == NULL)
-		cd_warning ("couldn't get distant file %s", pSharedMemory[0]);
-	
 	GFunc pCallback = pSharedMemory[2];
 	pCallback (pSharedMemory[4], pSharedMemory[3]);
 	return FALSE;
@@ -348,8 +345,7 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 	
 	if (r != CURLE_OK)
 	{
-		g_set_error (erreur, 1, 1, "an error occured while downloading '%s' : %s", cURL, curl_easy_strerror (r));
-		cd_warning ("%s", (*erreur)->message);
+		g_set_error (erreur, 1, 1, "Couldn't download file '%s' (%s)", cURL, curl_easy_strerror (r));
 		g_string_free (buffer, TRUE);
 		buffer = NULL;
 	}
@@ -382,9 +378,6 @@ static void _dl_file_content (gpointer *pSharedMemory)
 }
 static gboolean _finish_dl_content (gpointer *pSharedMemory)
 {
-	if (pSharedMemory[3] == NULL)
-		cd_warning ("request on '%s' failed", pSharedMemory[0]);
-	
 	GFunc pCallback = pSharedMemory[1];
 	pCallback (pSharedMemory[3], pSharedMemory[2]);
 	return TRUE;

@@ -62,8 +62,6 @@ extern gboolean g_bUseOpenGL;
 extern gchar *g_cCurrentIconsPath;
 
 extern CairoDockDesktopGeometry g_desktopGeometry;
-extern gchar *g_cCurrentLaunchersPath;
-extern CairoDock *g_pMainDock;
 
 // private
 static GList *s_pFloatingIconsList = NULL;
@@ -204,8 +202,8 @@ void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock)
 
 static gboolean _on_change_current_desktop_viewport_notification (G_GNUC_UNUSED gpointer data)
 {
-        CairoDock *pDock = g_pMainDock;
-        cairo_dock_hide_show_launchers_on_other_desktops(pDock);
+	CairoDock *pDock = g_pMainDock;
+	cairo_dock_hide_show_launchers_on_other_desktops(pDock);
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 
@@ -379,6 +377,7 @@ void cairo_dock_add_path_to_icon_theme (const gchar *cThemePath)
 	}
 	gtk_icon_theme_append_search_path (s_pIconTheme,
 		cThemePath);  /// TODO: does it check for unicity ?...
+	gtk_icon_theme_rescan_if_needed (s_pIconTheme);
 	if (s_bUseDefaultTheme)
 	{
 		g_signal_handlers_unblock_matched (s_pIconTheme,
@@ -706,15 +705,8 @@ static void _cairo_dock_load_icons_background_surface (const gchar *cImagePath)
 {
 	cairo_dock_unload_image_buffer (&g_pIconBackgroundBuffer);
 	
-	int iSizeWidth = myIconsParam.iIconWidth, iSizeHeight = myIconsParam.iIconHeight;
-	if (iSizeWidth == 0)
-		iSizeWidth = 48;
-	if (iSizeHeight == 0)
-		iSizeHeight = 48;
-	
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
-	iSizeWidth *= fMaxScale;
-	iSizeHeight *= fMaxScale;
+	int iSizeWidth = myIconsParam.iIconWidth * (1 + myIconsParam.fAmplitude);
+	int iSizeHeight = myIconsParam.iIconHeight * (1 + myIconsParam.fAmplitude);
 	
 	cairo_dock_load_image_buffer (&g_pIconBackgroundBuffer,
 		cImagePath,

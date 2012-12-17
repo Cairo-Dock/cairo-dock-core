@@ -24,7 +24,6 @@
 #include <gtk/gtk.h>
 
 
-
 #include "gldi-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
@@ -38,11 +37,6 @@ CairoDockImageBuffer g_pBoxAboveBuffer;
 CairoDockImageBuffer g_pBoxBelowBuffer;
 
 extern CairoDock *g_pMainDock;
-extern CairoDockDesktopGeometry g_desktopGeometry;
-
-extern gchar *g_cCurrentThemePath;
-
-extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
 extern gboolean g_bUseOpenGL;
 
@@ -57,17 +51,17 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, G_GNUC_UNUS
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->pIconBuffer == NULL)
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->image.pSurface == NULL)
 			continue;
 		
 		cairo_dock_get_icon_extent (icon, &wi, &hi);
-		// we could use cairo_dock_print_overlay_on_icon_from_surface (pIcon, pContainer, icon->pIconBuffer, wi, hi, i), but it's slightly optimized to draw it ourselves.
+		// we could use cairo_dock_print_overlay_on_icon_from_surface (pIcon, pContainer, icon->image.pSurface, wi, hi, i), but it's slightly optimized to draw it ourselves.
 		
 		cairo_save (pCairoContext);
 		cairo_translate (pCairoContext, (i&1) * w/2, (i/2) * h/2);
 		
 		cairo_scale (pCairoContext, .5 * w / wi, .5 * h / hi);
-		cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0, 0);
+		cairo_set_source_surface (pCairoContext, icon->image.pSurface, 0, 0);
 		cairo_paint (pCairoContext);
 		
 		cairo_restore (pCairoContext);
@@ -85,10 +79,10 @@ static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, G_GN
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->iIconTexture == 0)
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->image.iTexture == 0)
 			continue;
 		
-		glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
+		glBindTexture (GL_TEXTURE_2D, icon->image.iTexture);
 		_cairo_dock_apply_current_texture_at_size_with_offset (w/2, h/2, ((i&1)-.5)*w/2, (.5-(i/2))*h/2);
 		
 		i ++;
@@ -105,7 +99,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, G_GNUC_UNUSE
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || !icon->pIconBuffer)
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || !icon->image.pSurface)
 			continue;
 		
 		switch (i)
@@ -131,7 +125,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, G_GNUC_UNUSE
 		cairo_translate (pCairoContext, k * w / 10, k * h / 10);
 		
 		cairo_scale (pCairoContext, .8 * w / wi, .8 * h / hi);
-		cairo_set_source_surface (pCairoContext, icon->pIconBuffer, 0, 0);
+		cairo_set_source_surface (pCairoContext, icon->image.pSurface, 0, 0);
 		cairo_paint (pCairoContext);
 		
 		cairo_restore (pCairoContext);
@@ -149,7 +143,7 @@ static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, G_GNU
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 3; ic = ic->next)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->iIconTexture == 0)
+		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->image.iTexture == 0)
 			continue;
 		
 		switch (i)
@@ -169,7 +163,7 @@ static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, G_GNU
 			default : break;
 		}
 		
-		glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
+		glBindTexture (GL_TEXTURE_2D, icon->image.iTexture);
 		_cairo_dock_apply_current_texture_at_size_with_offset (w*.8, h*.8, -k*w/10, k*h/10);
 		
 		i ++;
@@ -182,15 +176,9 @@ static void _cairo_dock_load_box_surface (void)
 	cairo_dock_unload_image_buffer (&g_pBoxAboveBuffer);
 	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
 	
-	// base size, the image is then scaled up/down but we can load the image with the transformation
-	int iSizeWidth = myIconsParam.iIconWidth, iSizeHeight = myIconsParam.iIconHeight;
-	if (iSizeWidth == 0)
-		iSizeWidth = 48;
-	if (iSizeHeight == 0)
-		iSizeHeight = 48;
-	double fMaxScale = cairo_dock_get_max_scale (g_pMainDock);
-	iSizeWidth *= fMaxScale;
-	iSizeHeight *= fMaxScale;
+	// load the image at a reasonnable size, it will then be scaled up/down when drawn.
+	int iSizeWidth = myIconsParam.iIconWidth * (1 + myIconsParam.fAmplitude);
+	int iSizeHeight = myIconsParam.iIconHeight * (1 + myIconsParam.fAmplitude);
 	
 	gchar *cUserPath = cairo_dock_generate_file_path ("box-front");
 	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
@@ -289,7 +277,7 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoContainer
 		cairo_translate (pCairoContext, dx, dy);
 		cairo_scale (pCairoContext, .8 * w / wi, .8 * h / hi);
 		cairo_set_source_surface (pCairoContext,
-			icon->pIconBuffer,
+			icon->image.pSurface,
 			0,
 			0);
 		cairo_paint (pCairoContext);
@@ -351,7 +339,7 @@ static void _cairo_dock_draw_subdock_content_as_box_opengl (Icon *pIcon, CairoCo
 			i --;
 			continue;
 		}
-		glBindTexture (GL_TEXTURE_2D, icon->iIconTexture);
+		glBindTexture (GL_TEXTURE_2D, icon->image.iTexture);
 		_cairo_dock_apply_current_texture_at_size_with_offset (.8*w, .8*h, 0., .1*(1-i)*h);
 	}
 	glMatrixMode(GL_TEXTURE);

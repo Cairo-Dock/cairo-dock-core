@@ -382,13 +382,13 @@ static cairo_surface_t *_cairo_dock_create_dialog_icon_surface (const gchar *cIm
 	cairo_surface_t *pIconBuffer = NULL;
 	if (strcmp (cImageFilePath, "same icon") == 0)
 	{
-		if (pIcon && pIcon->pIconBuffer)
+		if (pIcon && pIcon->image.pSurface)
 		{
 			if (pContainer == NULL)
 				pContainer = cairo_dock_search_container_from_icon (pIcon);
 			int iWidth, iHeight;
 			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
-			pIconBuffer = cairo_dock_duplicate_surface (pIcon->pIconBuffer,
+			pIconBuffer = cairo_dock_duplicate_surface (pIcon->image.pSurface,
 				iWidth, iHeight,
 				iDesiredSize, iDesiredSize);
 		}
@@ -533,7 +533,7 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	//\________________ Interactive dialogs are set modal, to be fixed.
 	if ((pDialog->pInteractiveWidget || pDialog->pButtons || pAttribute->iTimeLength == 0) && ! pDialog->bNoInput)
 	{
-		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);  // Note: there is a bug in Ubuntu version of GTK: gtkscrolledwindow in dialog breaks his modality (http://www.gtkforums.com/viewtopic.php?f=3&t=55727).
+		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);  // Note: there is a bug in Ubuntu version of GTK: gtkscrolledwindow in dialog breaks his modality (http://www.gtkforums.com/viewtopic.php?f=3&t=55727, LP: https://bugs.launchpad.net/ubuntu/+source/overlay-scrollbar/+bug/903302).
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
 		{
 			CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;

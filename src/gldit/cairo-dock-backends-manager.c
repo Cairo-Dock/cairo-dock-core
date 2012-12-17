@@ -319,8 +319,8 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 		for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
 		{
 			pIcon = ic->data;
-			pIcon->iImageWidth = pIcon->fWidth;
-			pIcon->iImageHeight = pIcon->fHeight;
+			pIcon->iRequestedWidth = pIcon->fWidth;
+			pIcon->iRequestedHeight = pIcon->fHeight;
 			cairo_dock_trigger_load_icon_buffers (pIcon);
 		}
 		

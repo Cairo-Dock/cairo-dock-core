@@ -59,7 +59,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 	
 	//\________________ On met le background de l'icone si necessaire
 	if (pIcon != NULL &&
-		pIcon->pIconBuffer != NULL &&
+		pIcon->image.pSurface != NULL &&
 		g_pIconBackgroundBuffer.pSurface != NULL &&
 		(! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)))
 	{
@@ -108,15 +108,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 }
 
 
-void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surface_t *pSurface, Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
-{
-	cairo_dock_set_icon_surface (pIconContext, pSurface, pIcon);
-	
-	///cairo_dock_add_reflection_to_icon (pIcon, pContainer);
-}
-
-
-gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer)
+gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
 {
 	// load the image in a surface.
 	int iWidth, iHeight;
@@ -130,7 +122,7 @@ gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIcon
 		return FALSE;
 	
 	// set the new image on the icon
-	cairo_dock_set_icon_surface_with_reflect (pIconContext, pImageSurface, pIcon, pContainer);
+	cairo_dock_set_icon_surface (pIconContext, pImageSurface, pIcon);
 	
 	cairo_surface_destroy (pImageSurface);
 	
@@ -148,73 +140,6 @@ void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gch
 		cairo_dock_set_image_on_icon (pIconContext, cDefaultImagePath, pIcon, pContainer);
 }
 
-void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon)
-{
-	g_return_if_fail (cairo_status (pIconContext) == CAIRO_STATUS_SUCCESS);
-	
-	//\________________ On efface l'ancienne image.
-	cairo_dock_erase_cairo_context (pIconContext);
-	
-	//\________________ On applique la nouvelle image.
-	if (pSurface != NULL)
-	{
-		cairo_set_source_surface (
-			pIconContext,
-			pSurface,
-			0.,
-			0.);
-		cairo_paint (pIconContext);
-	}
-	
-	//\________________ On dessine la barre.
-	cairo_dock_draw_bar_on_icon (pIconContext, fValue, pIcon);
-	
-	if (g_bUseOpenGL)
-		cairo_dock_update_icon_texture (pIcon);
-}
-
-void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon)
-{
-	int iWidth = pIcon->iImageWidth;
-	int iHeight = pIcon->iImageHeight;
-	double fMaxScale = (pIcon->fHeight != 0 ? (pIcon->pContainer && pIcon->pContainer->bIsHorizontal ? pIcon->iImageHeight : pIcon->iImageWidth) / pIcon->fHeight : 1.);
-	double lw = 2 * fMaxScale;  // line demi-width
-	
-	cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
-		0.,
-		iWidth,
-		0.);  // de gauche a droite.
-	g_return_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS);
-	
-	cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
-	cairo_pattern_add_color_stop_rgba (pGradationPattern,
-		(fValue >= 0 ? 0. : 1.),
-		1.,
-		0.,
-		0.,
-		1.);
-	cairo_pattern_add_color_stop_rgba (pGradationPattern,
-		(fValue >= 0 ? 1. : 0.),
-		0.,
-		1.,
-		0.,
-		1.);
-	
-	cairo_save (pIconContext);
-	cairo_set_operator (pIconContext, CAIRO_OPERATOR_OVER);
-	
-	cairo_set_line_width (pIconContext, 2 * lw);
-	cairo_set_line_cap (pIconContext, CAIRO_LINE_CAP_ROUND);
-	
-	cairo_move_to (pIconContext, lw, iHeight - lw);
-	cairo_rel_line_to (pIconContext, (iWidth - 2*lw) * fabs (fValue), 0);
-	
-	cairo_set_source (pIconContext, pGradationPattern);
-	cairo_stroke (pIconContext);
-	
-	cairo_pattern_destroy (pGradationPattern);
-	cairo_restore (pIconContext);
-}
 
 void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds)
 {
@@ -607,10 +532,7 @@ void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
 	
 	if (pInstance->pDock)
 	{
-		pIcon->iImageWidth = w;  // request the buffer size, this is the one we care to draw stuff on the icon.
-		pIcon->iImageHeight = h;
-		pIcon->fWidth = 0;
-		pIcon->fHeight = 0;
+		cairo_dock_icon_set_requested_size (pIcon, w, h);
 		cairo_dock_resize_icon_in_dock (pIcon, pInstance->pDock);
 	}
 	else  // in desklet mode, just resize the desklet, it will trigger the reload of the applet when the 'configure' event is received.

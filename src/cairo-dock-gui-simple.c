@@ -531,6 +531,15 @@ static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockMo
 	return s_pSimpleConfigWindow;
 }
 
+static GtkWidget *show_addons (void)
+{
+	cairo_dock_build_simple_gui_window ();
+	
+	cairo_dock_select_category (s_pSimpleConfigWindow, CD_CATEGORY_PLUGINS);  // will build the GTK widget
+	
+	return s_pSimpleConfigWindow;
+}
+
 static void reload_items (void)
 {
 	if (s_pSimpleConfigWindow == NULL)
@@ -631,6 +640,7 @@ void cairo_dock_register_simple_gui_backend (void)
 	pBackend->update_modules_list 				= update_modules_list;
 	pBackend->update_shortkeys 					= update_shortkeys;
 	pBackend->show_gui 							= show_gui;
+	pBackend->show_addons 							= show_addons;
 	pBackend->reload_items 						= reload_items;
 	pBackend->reload 							= reload;
 	pBackend->cDisplayedName 					= _("Advanced Mode");  // name of the other backend.

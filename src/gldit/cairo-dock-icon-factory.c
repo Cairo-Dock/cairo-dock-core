@@ -38,10 +38,8 @@
 #include "cairo-dock-overlay.h"
 #include "cairo-dock-icon-factory.h"
 
-CairoDockImageBuffer g_pIconBackgroundBuffer;
+extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
-extern CairoDock *g_pMainDock;
-extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 
 const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est juste pour realiser la transition entre le chiffre en conf, et un nom (limitation du panneau de conf). On garde le numero pour savoir rapidement sur laquelle on set.
@@ -78,11 +76,10 @@ void cairo_dock_free_icon_buffers (Icon *icon)
 	if (icon->pMimeTypes)
 		g_strfreev (icon->pMimeTypes);
 	
-	cairo_surface_destroy (icon->pIconBuffer);
+	cairo_dock_unload_image_buffer (&icon->image);
 	
-	if (icon->iIconTexture != 0)
-		_cairo_dock_delete_texture (icon->iIconTexture);
 	cairo_dock_unload_image_buffer (&icon->label);
+	
 	cairo_dock_destroy_icon_overlays (icon);
 }
 
@@ -95,7 +92,7 @@ void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED CairoContainer *pCont
 {
 	if (icon->pContainer == NULL)
 	{
-		cd_warning ("/!\\ Icon %s is not inside a container !!!", icon->cName);
+		cd_warning ("/!\\ Icon %s is not inside a container !!!", icon->cName);  // it's ok if this happens, but it should be rare, and I'd like to know when, so be noisy.
 		return;
 	}
 	CairoDockModuleInstance *pInstance = icon->pModuleInstance;  // this is the only function where we destroy/create the icon's surface, so we must handle the cairo-context here.
@@ -106,76 +103,84 @@ void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED CairoContainer *pCont
 	}
 	
 	//g_print ("%s (%s, %dx%d)\n", __func__, icon->cName, (int)icon->fWidth, (int)icon->fHeight);
-	if (icon->fWidth < 0 || icon->fHeight < 0)  // on ne veut pas de surface.
+	// the renderer of the container must have set the size beforehand, when the icon has been inserted into the container.
+	if (cairo_dock_icon_get_allocated_width (icon) <= 0 || cairo_dock_icon_get_allocated_height (icon) <= 0)  // we don't want a surface/texture.
 	{
-		if (icon->pIconBuffer != NULL)
-			cairo_surface_destroy (icon->pIconBuffer);
-		icon->pIconBuffer = NULL;
-		if (icon->iIconTexture != 0)
-			_cairo_dock_delete_texture (icon->iIconTexture);
-		icon->iIconTexture = 0;
-		/**if (icon->pReflectionBuffer != NULL)
-			cairo_surface_destroy (icon->pReflectionBuffer);
-		icon->pReflectionBuffer = NULL;*/
+		cairo_dock_unload_image_buffer (&icon->image);
 		return;
 	}
+	g_return_if_fail (icon->fWidth > 0); // should never happen; if it does, it's an error, so be noisy.
 	
-	g_return_if_fail (icon->fWidth > 0 && icon->iImageWidth > 0);  // the renderer of the container must have set the size beforehand, when the icon has been inserted into the container.
+	//\______________ keep the current buffer on the icon so that the 'load' can use it (for instance, applis may draw emblems).
+	cairo_surface_t *pPrevSurface = icon->image.pSurface;
+	GLuint iPrevTexture = icon->image.iTexture;
 	
-	//\______________ on reset les buffers (on garde la surface/texture actuelle pour les emblemes).
-	cairo_surface_t *pPrevSurface = icon->pIconBuffer;
-	GLuint iPrevTexture = icon->iIconTexture;
-	
-	//\______________ on charge la surface/texture.
+	//\______________ load the image buffer (surface + texture).
 	if (icon->iface.load_image)
 		icon->iface.load_image (icon);
 	
-	//\______________ Si rien charge, on met une image par defaut.
-	if ((icon->pIconBuffer == pPrevSurface || icon->pIconBuffer == NULL) &&
-		(icon->iIconTexture == iPrevTexture || icon->iIconTexture == 0))
+	//\______________ if nothing has changed or no image was loaded, set a default image.
+	if ((icon->image.pSurface == pPrevSurface || icon->image.pSurface == NULL)
+	&& (icon->image.iTexture == iPrevTexture || icon->image.iTexture == 0))
 	{
 		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
 		if (cIconPath == NULL)  // fichier non trouve.
 		{
 			cIconPath = g_strdup (GLDI_SHARE_DATA_DIR"/icons/"CAIRO_DOCK_DEFAULT_ICON_NAME);
 		}
-		icon->pIconBuffer = cairo_dock_create_surface_from_image_simple (cIconPath,
-			icon->iImageWidth,
-			icon->iImageHeight);
+		int w = cairo_dock_icon_get_allocated_width (icon);
+		int h = cairo_dock_icon_get_allocated_height (icon);
+		cairo_surface_t *pSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
+			w,
+			h);
+		cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, w, h);
 		g_free (cIconPath);
 	}
 	
-	//\_____________ On met le background de l'icone si necessaire
-	if (icon->pIconBuffer != NULL && g_pIconBackgroundBuffer.pSurface != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+	//\_____________ set the background if needed.
+	if (g_pIconBackgroundBuffer.pSurface != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
-		cairo_t *pCairoIconBGContext = cairo_create (icon->pIconBuffer);
-		cairo_scale(pCairoIconBGContext,
-			icon->iImageWidth / g_pIconBackgroundBuffer.iWidth,
-			icon->iImageHeight / g_pIconBackgroundBuffer.iHeight);
-		cairo_set_source_surface (pCairoIconBGContext,
-			g_pIconBackgroundBuffer.pSurface,
-			0.,
-			0.);
-		cairo_set_operator (pCairoIconBGContext, CAIRO_OPERATOR_DEST_OVER);
-		cairo_paint (pCairoIconBGContext);
-		cairo_destroy (pCairoIconBGContext);
+		if (icon->image.iTexture != 0 && g_pIconBackgroundBuffer.iTexture != 0)
+		{
+			cairo_dock_begin_draw_icon (icon, icon->pContainer, 2);  // 2 => draw on another texture
+			
+			_cairo_dock_enable_texture ();
+			_cairo_dock_set_alpha (1.);
+			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture,
+				icon->image.iWidth,
+				icon->image.iHeight);
+			
+			_cairo_dock_apply_texture_at_size (icon->image.iTexture,
+				icon->image.iWidth,
+				icon->image.iHeight);
+			
+			cairo_dock_end_draw_icon (icon, icon->pContainer);
+		}
+		else if (icon->image.pSurface != NULL)
+		{
+			cairo_t *pCairoIconBGContext = cairo_create (icon->image.pSurface);
+			cairo_scale(pCairoIconBGContext,
+				(double)icon->image.iWidth / g_pIconBackgroundBuffer.iWidth,
+				(double)icon->image.iHeight / g_pIconBackgroundBuffer.iHeight);
+			cairo_set_source_surface (pCairoIconBGContext,
+				g_pIconBackgroundBuffer.pSurface,
+				0.,
+				0.);
+			cairo_set_operator (pCairoIconBGContext, CAIRO_OPERATOR_DEST_OVER);
+			cairo_paint (pCairoIconBGContext);
+			cairo_destroy (pCairoIconBGContext);
+		}
 	}
 	
-	//\______________ on charge la texture si elle ne l'a pas ete.
-	if (g_bUseOpenGL && (icon->iIconTexture == iPrevTexture || icon->iIconTexture == 0))
-	{
-		icon->iIconTexture = cairo_dock_create_texture_from_surface (icon->pIconBuffer);
-	}
-	
-	//\______________ on libere maintenant les anciennes ressources.
+	//\______________ free the previous buffers.
 	if (pPrevSurface != NULL)
 		cairo_surface_destroy (pPrevSurface);
 	if (iPrevTexture != 0)
 		_cairo_dock_delete_texture (iPrevTexture);
 	
-	if (pInstance && icon->pIconBuffer != NULL)
+	if (pInstance && icon->image.pSurface != NULL)
 	{
-		pInstance->pDrawContext = cairo_create (icon->pIconBuffer);
+		pInstance->pDrawContext = cairo_create (icon->image.pSurface);
 		if (!pInstance->pDrawContext || cairo_status (pInstance->pDrawContext) != CAIRO_STATUS_SUCCESS)
 		{
 			cd_warning ("couldn't initialize drawing context, applet won't be able to draw itself !");
@@ -241,16 +246,20 @@ void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 		pIcon->iSidLoadImage = 0;
 	}
 	
-	cairo_dock_load_icon_image (pIcon, pContainer);
+	if (cairo_dock_icon_get_allocated_width (pIcon) > 0)
+	{
+		cairo_dock_load_icon_image (pIcon, pContainer);
 
-	cairo_dock_load_icon_text (pIcon);
+		cairo_dock_load_icon_text (pIcon);
 
-	cairo_dock_load_icon_quickinfo (pIcon);
+		cairo_dock_load_icon_quickinfo (pIcon);
+	}
+	
 }
 
 static gboolean _load_icon_buffer_idle (Icon *pIcon)
 {
-	//g_print ("%s (%s; %dx%d; %.2fx%.2f; %x)\n", __func__, pIcon->cName, pIcon->iImageWidth, pIcon->iImageHeight, pIcon->fWidth, pIcon->fHeight, pIcon->pContainer);
+	//g_print ("%s (%s; %dx%d; %.2fx%.2f; %x)\n", __func__, pIcon->cName, pIcon->iAllocatedWidth, pIcon->iAllocatedHeight, pIcon->fWidth, pIcon->fHeight, pIcon->pContainer);
 	pIcon->iSidLoadImage = 0;
 	
 	CairoContainer *pContainer = pIcon->pContainer;
@@ -281,11 +290,6 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon)
 }
 
 
-void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer)
-{
-	cairo_dock_load_icon_image (icon, pContainer);
-}
-
 
   ///////////////////////
  /// CONTAINER ICONS ///
@@ -293,7 +297,7 @@ void cairo_dock_reload_icon_image (Icon *icon, CairoContainer *pContainer)
 
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 {
-	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->pIconBuffer != NULL || pIcon->iIconTexture != 0));
+	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->image.pSurface != NULL || pIcon->image.iTexture != 0));
 	
 	CairoIconContainerRenderer *pRenderer = cairo_dock_get_icon_container_renderer (pIcon->cClass != NULL ? "Stack" : s_cRendererNames[pIcon->iSubdockViewType]);
 	if (pRenderer == NULL)
@@ -304,33 +308,20 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	
 	cairo_t *pCairoContext = NULL;
-	if (pIcon->iIconTexture != 0 && pRenderer->render_opengl)  // dessin opengl
+	if (pIcon->image.iTexture != 0 && pRenderer->render_opengl)  // dessin opengl
 	{
 		//\______________ On efface le dessin existant.
-		if (! cairo_dock_begin_draw_icon (pIcon, CAIRO_CONTAINER (pDock), 0))
+		if (! cairo_dock_begin_draw_icon (pIcon, CAIRO_CONTAINER (pDock), 0))  // 0 <=> erase the current texture.
 			return ;
 		
-		_cairo_dock_set_blend_source ();
-		if (g_pIconBackgroundBuffer.iTexture != 0)  // on ecrase le dessin existant avec l'image de fond des icones.
+		_cairo_dock_set_blend_alpha ();
+		_cairo_dock_set_alpha (1.);
+		_cairo_dock_enable_texture ();
+		
+		if (g_pIconBackgroundBuffer.iTexture != 0)
 		{
-			_cairo_dock_enable_texture ();
-			_cairo_dock_set_alpha (1.);
 			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture, w, h);
 		}
-		else  // sinon on efface juste ce qu'il y'avait.
-		{
-			glPolygonMode (GL_FRONT, GL_FILL);
-			_cairo_dock_set_alpha (0.);
-			glBegin(GL_QUADS);
-			glVertex3f(-.5*w,  .5*h, 0.);
-			glVertex3f( .5*w,  .5*h, 0.);
-			glVertex3f( .5*w, -.5*h, 0.);
-			glVertex3f(-.5*w, -.5*h, 0.);
-			glEnd();
-			_cairo_dock_enable_texture ();
-			_cairo_dock_set_alpha (1.);
-		}
-		_cairo_dock_set_blend_alpha ();
 		
 		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
 		pRenderer->render_opengl (pIcon, CAIRO_CONTAINER (pDock), w, h);
@@ -339,10 +330,10 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		_cairo_dock_disable_texture ();
 		cairo_dock_end_draw_icon (pIcon, CAIRO_CONTAINER (pDock));
 	}
-	else if (pIcon->pIconBuffer != NULL && pRenderer->render != NULL)  // dessin cairo
+	else if (pIcon->image.pSurface != NULL && pRenderer->render != NULL)  // dessin cairo
 	{
 		//\______________ On efface le dessin existant.
-		pCairoContext = cairo_create (pIcon->pIconBuffer);
+		pCairoContext = cairo_create (pIcon->image.pSurface);
 		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 		
 		if (g_pIconBackgroundBuffer.pSurface != NULL)  // on ecrase le dessin existant avec l'image de fond des icones.

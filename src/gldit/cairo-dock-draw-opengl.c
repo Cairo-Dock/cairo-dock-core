@@ -184,7 +184,7 @@ void cairo_dock_draw_icon_reflect_opengl (Icon *pIcon, CairoDock *pDock)
 		}
 		
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, pIcon->iIconTexture);
+		glBindTexture(GL_TEXTURE_2D, pIcon->image.iTexture);
 		glEnable(GL_BLEND);
 		_cairo_dock_set_blend_alpha ();
 		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -255,7 +255,7 @@ void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
 	else
 		_cairo_dock_set_blend_alpha ();
 	
-	_cairo_dock_apply_texture_at_size_with_alpha (pIcon->iIconTexture, fSizeX, fSizeY, pIcon->fAlpha);
+	_cairo_dock_apply_texture_at_size_with_alpha (pIcon->image.iTexture, fSizeX, fSizeY, pIcon->fAlpha);
 	
 	//\_____________________ On dessine son reflet.
 	cairo_dock_draw_icon_reflect_opengl (pIcon, pDock);
@@ -321,7 +321,7 @@ void cairo_dock_translate_on_icon_opengl (Icon *icon, CairoContainer *pContainer
 
 void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDockMagnitude, gboolean bUseText)
 {
-	if (icon->iIconTexture == 0)
+	if (icon->image.iTexture == 0)
 		return ;
 	double fRatio = pDock->container.fRatio;
 	
@@ -812,17 +812,17 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, doubl
 
 void cairo_dock_update_icon_texture (Icon *pIcon)
 {
-	if (pIcon != NULL && pIcon->pIconBuffer != NULL)
+	if (pIcon != NULL && pIcon->image.pSurface != NULL)
 	{
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_source ();
 		glColor4f (1., 1., 1., 1.);
 		
-		if (pIcon->iIconTexture == 0)
-			glGenTextures (1, &pIcon->iIconTexture);
-		int w = cairo_image_surface_get_width (pIcon->pIconBuffer);
-		int h = cairo_image_surface_get_height (pIcon->pIconBuffer);
-		glBindTexture (GL_TEXTURE_2D, pIcon->iIconTexture);
+		if (pIcon->image.iTexture == 0)
+			glGenTextures (1, &pIcon->image.iTexture);
+		int w = cairo_image_surface_get_width (pIcon->image.pSurface);
+		int h = cairo_image_surface_get_height (pIcon->image.pSurface);
+		glBindTexture (GL_TEXTURE_2D, pIcon->image.iTexture);
 		
 		glTexParameteri (GL_TEXTURE_2D,
 			GL_TEXTURE_MIN_FILTER,
@@ -838,7 +838,7 @@ void cairo_dock_update_icon_texture (Icon *pIcon)
 				h,
 				GL_BGRA,
 				GL_UNSIGNED_BYTE,
-				cairo_image_surface_get_data (pIcon->pIconBuffer));
+				cairo_image_surface_get_data (pIcon->image.pSurface));
 		else
 			glTexImage2D (GL_TEXTURE_2D,
 				0,
@@ -848,7 +848,7 @@ void cairo_dock_update_icon_texture (Icon *pIcon)
 				0,
 				GL_BGRA,  // GL_ALPHA / GL_BGRA
 				GL_UNSIGNED_BYTE,
-				cairo_image_surface_get_data (pIcon->pIconBuffer));
+				cairo_image_surface_get_data (pIcon->image.pSurface));
 		glDisable (GL_TEXTURE_2D);
 	}
 }
@@ -862,7 +862,7 @@ void cairo_dock_draw_texture_with_alpha (GLuint iTexture, int iWidth, int iHeigh
 		//~ _cairo_dock_set_blend_over ();
 	//~ else
 		///_cairo_dock_set_blend_alpha ();
-		_cairo_dock_set_blend_over ();
+	_cairo_dock_set_blend_over ();  // gives the best result, at least with fAlpha=1
 	
 	_cairo_dock_apply_texture_at_size_with_alpha (iTexture, iWidth, iHeight, fAlpha);
 	
@@ -879,7 +879,7 @@ void cairo_dock_apply_icon_texture_at_current_size (Icon *pIcon, CairoContainer 
 	double fSizeX, fSizeY;
 	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
 	
-	_cairo_dock_apply_texture_at_size (pIcon->iIconTexture, fSizeX, fSizeY);
+	_cairo_dock_apply_texture_at_size (pIcon->image.iTexture, fSizeX, fSizeY);
 }
 
 void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
@@ -887,7 +887,7 @@ void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
 	double fSizeX, fSizeY;
 	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
 	
-	cairo_dock_draw_texture_with_alpha (pIcon->iIconTexture,
+	cairo_dock_draw_texture_with_alpha (pIcon->image.iTexture,
 		fSizeX,
 		fSizeY,
 		pIcon->fAlpha);
@@ -948,8 +948,8 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 		GLuint iOriginalTexture;
 		if (pIcon->bIsHidden)
 		{
-			iOriginalTexture = pIcon->iIconTexture;
-			pIcon->iIconTexture = cairo_dock_create_texture_from_surface (pIcon->pIconBuffer);
+			iOriginalTexture = pIcon->image.iTexture;
+			pIcon->image.iTexture = cairo_dock_create_texture_from_surface (pIcon->image.pSurface);
 			/// Using FBOs copies the texture data (pixels) within VRAM only:
 			/// - setup & bind FBO
 			/// - setup destination texture (using glTexImage() w/ pixels = 0)
@@ -959,7 +959,7 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 		}
 		else
 		{
-			iOriginalTexture = cairo_dock_create_texture_from_surface (pIcon->pIconBuffer);
+			iOriginalTexture = cairo_dock_create_texture_from_surface (pIcon->image.pSurface);
 		}
 		
 		cairo_dock_set_transition_on_icon (pIcon, pContainer,
@@ -975,7 +975,7 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 	{
 		if (!cairo_dock_begin_draw_icon (pIcon, pContainer, 2))
 			return ;
-		_draw_icon_bent_backwards (pIcon, pContainer, pIcon->iIconTexture, 1.);
+		_draw_icon_bent_backwards (pIcon, pContainer, pIcon->image.iTexture, 1.);
 		cairo_dock_end_draw_icon (pIcon, pContainer);
 	}
 }
@@ -988,8 +988,8 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 // Bind redirected window to texture:
 GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 {
-	///if (!g_bEasterEggs)
-	///	return 0;  /// ca ne marche pas. :-(
+	if (!g_bEasterEggs)
+		return 0;  /// ca ne marche pas. :-(
 	
 	if (!iBackingPixmap || ! g_openglConfig.bTextureFromPixmapAvailable)
 		return 0;

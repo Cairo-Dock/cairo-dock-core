@@ -454,14 +454,13 @@ static void _cairo_dock_make_icon_glide (Icon *pPointedIcon, Icon *pMovingicon, 
 		}
 		else
 		{
-			double fMaxScale = (icon->fHeight != 0 ? (pDock->container.bIsHorizontal ? icon->iImageHeight : icon->iImageWidth) / icon->fHeight : 1.);
 			//g_print ("deplacement de %s vers la gauche (%.2f / %d)\n", icon->cName, icon->fDrawX + icon->fWidth * fMaxScale + myIconsParam.iIconGap, pDock->container.iMouseX);
-			if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * fMaxScale + myIconsParam.iIconGap >= pDock->container.iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
+			if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->image.iWidth + myIconsParam.iIconGap >= pDock->container.iMouseX && icon->fGlideOffset == 0)  // icone entre l'icone deplacee et le curseur.
 			{
 				//g_print ("  %s glisse vers la droite\n", icon->cName);
 				icon->iGlideDirection = 1;
 			}
-			else if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->fWidth * fMaxScale + myIconsParam.iIconGap <= pDock->container.iMouseX && icon->fGlideOffset != 0)
+			else if (icon->fXAtRest < pMovingicon->fXAtRest && icon->fDrawX + icon->image.iWidth + myIconsParam.iIconGap <= pDock->container.iMouseX && icon->fGlideOffset != 0)
 			{
 				//g_print ("  %s glisse vers la gauche\n", icon->cName);
 				icon->iGlideDirection = -1;
@@ -659,7 +658,7 @@ gboolean cairo_dock_on_leave_dock_notification (G_GNUC_UNUSED gpointer data, Cai
 		s_pSubDockShowing = NULL;
 	}
 	
-	//g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bMenuVisible);
+	g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bHasModalWindow);
 	
 	//\_______________ If a modal window is raised, we discard the 'leave-event' to stay in the up position.
 	if (pDock->bHasModalWindow)
@@ -727,7 +726,7 @@ gboolean cairo_dock_on_leave_dock_notification (G_GNUC_UNUSED gpointer data, Cai
 		//g_print ("'%s' se replie\n", pIcon?pIcon->cName:"none");
 		cairo_dock_notify_on_object (pIcon, NOTIFICATION_UNFOLD_SUBDOCK, pIcon);
 	}
-	//g_print ("start shrinking\n");
+	g_print ("start shrinking\n");
 	cairo_dock_start_shrinking (pDock);  // on commence a faire diminuer la taille des icones.
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
@@ -735,7 +734,7 @@ gboolean cairo_dock_on_leave_dock_notification (G_GNUC_UNUSED gpointer data, Cai
 
 gboolean cairo_dock_on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & GDK_MOD1_MASK) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -764,13 +763,13 @@ gboolean cairo_dock_on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventC
 	}
 	if (/**pEvent && */!_mouse_is_really_outside(pDock))  // check that the mouse is really outside (the request might not come from the Window Manager, for instance if we deactivate the menu; this also works around buggy WM like KWin).
 	{
-		//g_print ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
+		g_print ("not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
 		if (pDock->iSidTestMouseOutside == 0 && pEvent && ! pDock->bHasModalWindow)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement. C'est ausi vrai pour l'affichage d'un menu/dialogue interactif, mais comme on envoie nous-meme un signal de sortie lorsque le menu disparait, il est inutile de le faire ici.
 		{
 			//g_print ("start checking mouse\n");
 			pDock->iSidTestMouseOutside = g_timeout_add (500, (GSourceFunc)_check_mouse_outside, pDock);
 		}
-		//g_print ("mouse: %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
+		g_print ("mouse: %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
 		return FALSE;
 	}
 	
@@ -785,7 +784,7 @@ gboolean cairo_dock_on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventC
 				Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 				if (pPointedIcon != NULL && pPointedIcon->pSubDock != NULL && gldi_container_is_visible (CAIRO_CONTAINER (pPointedIcon->pSubDock)))
 				{
-					//g_print ("  on retarde la sortie du dock de %dms\n", MAX (myDocksParam.iLeaveSubDockDelay, 330));
+					g_print ("  on retarde la sortie du dock de %dms\n", MAX (myDocksParam.iLeaveSubDockDelay, 330));
 					pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 250), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 					return TRUE;
 				}
@@ -794,7 +793,7 @@ gboolean cairo_dock_on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventC
 					const int delay = 0;  // 250
 					if (delay != 0)  /// maybe try to se if we leaved the dock frankly, or just by a few pixels...
 					{
-						//g_print (" delay the leave event by %dms\n", delay);
+						g_print (" delay the leave event by %dms\n", delay);
 						pDock->iSidLeaveDemand = g_timeout_add (250, (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 						return TRUE;
 					}
@@ -802,14 +801,14 @@ gboolean cairo_dock_on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventC
 			}
 			else/** if (myDocksParam.iLeaveSubDockDelay != 0)*/  // cas d'un sous-dock : on retarde le cachage.
 			{
-				//g_print ("  on retarde la sortie du sous-dock de %dms\n", myDocksParam.iLeaveSubDockDelay);
+				g_print ("  on retarde la sortie du sous-dock de %dms\n", myDocksParam.iLeaveSubDockDelay);
 				pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 50), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 				return TRUE;
 			}
 		}
 		else  // deja une sortie en attente.
 		{
-			//g_print ("une sortie est deja programmee\n");
+			g_print ("une sortie est deja programmee\n");
 			return TRUE;
 		}
 	}  // sinon c'est nous qui avons explicitement demande cette sortie, donc on continue.

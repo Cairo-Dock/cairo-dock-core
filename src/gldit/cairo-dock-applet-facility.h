@@ -49,23 +49,6 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 */
 #define cairo_dock_set_icon_surface(pIconContext, pSurface, pIcon) cairo_dock_set_icon_surface_full (pIconContext, pSurface, 1, 1, pIcon)
 
-/** Draw a bar at the bottom of an Icon, with a gradation from red to green and a given length.
-*@param pIconContext the drawing context; is not altered by the function.
-*@param fValue the value representing a percentage, in [-1,1]. if negative, the gradation is inverted, and the absolute value is used.
-*@param pIcon the icon.
-*/
-void cairo_dock_draw_bar_on_icon (cairo_t *pIconContext, double fValue, Icon *pIcon);
-
-void cairo_dock_set_icon_surface_with_bar (cairo_t *pIconContext, cairo_surface_t *pSurface, double fValue, Icon *pIcon);
-
-/** Apply a surface on the context of an icon, clearing it beforehand, and adding the reflect.
-*@param pIconContext the drawing context; is not altered by the function.
-*@param pSurface the surface to apply.
-*@param pIcon the icon.
-*@param pContainer the container of the icon.
-*/
-void cairo_dock_set_icon_surface_with_reflect (cairo_t *pIconContext, cairo_surface_t *pSurface, Icon *pIcon, CairoContainer *pContainer);
-
 /** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect.
 *@param pIconContext the drawing context; is not altered by the function.
 *@param cIconName name or path to an icon image.
@@ -475,7 +458,7 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 *@return the newly allocated surface.
 */
 #define CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET(cImagePath) \
-	cairo_dock_create_surface_from_image_simple (cImagePath, myIcon->iImageWidth, myIcon->iImageHeight)
+	cairo_dock_create_surface_from_image_simple (cImagePath, myIcon->image.iWidth, myIcon->image.iHeight)
 
 /** Load a user image into a surface, at the same size as the applet's icon, or a default image taken in the installed folder of the applet if the first one is NULL. If the user image is given by its sole name, it is searched inside the current theme root folder.
 *@param cUserImageName name or path of an user image.
@@ -497,31 +480,7 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 *@param pSurface the surface to draw on your icon.
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON(pSurface) do { \
-	cairo_dock_set_icon_surface_with_reflect (myDrawContext, pSurface, myIcon, myContainer); \
-	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
-
-/** Apply a surface on the applet's icon, with a zoom factor and centered, and redraw it.
-*@param pSurface the surface to draw on your icon.
-*@param fScale zoom factor (at 1 the surface will fill all the icon).
-*/
-#define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ZOOM(pSurface, fScale) do { \
-	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, fScale, 1., myIcon); \
-	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
-
-/** Apply a surface on the applet's icon with a transparency factor, and redraw it.
-*@param pSurface the surface to draw on your icon.
-*@param fAlpha transparency (in [0,1]).
-*/
-#define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_ALPHA(pSurface, fAlpha) do { \
-	cairo_dock_set_icon_surface_full (myDrawContext, pSurface, 1., fAlpha, myIcon); \
-	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
-
-/** Apply a surface on the applet's icon with add a bar at the bottom, and redraw it. The bar is drawn at the bottom of the icon with a gradation from red to green and a given length.
-*@param pSurface the surface to draw on your icon.
-*@param fValue the value representing a percentage, in [-1,1]. If negative, the gradation is inverted, and the absolute value is used.
-*/
-#define CD_APPLET_SET_SURFACE_ON_MY_ICON_WITH_BAR(pSurface, fValue) do { \
-	cairo_dock_set_icon_surface_with_bar (myDrawContext, pSurface, fValue, myIcon); \
+	cairo_dock_set_icon_surface (myDrawContext, pSurface, myIcon); \
 	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
 
 /** Apply an image on the applet's icon. The image is resized at the same size as the icon. Does not trigger the icon refresh.
@@ -751,8 +710,8 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 #define CD_APPLET_SET_DESKLET_RENDERER_WITH_DATA(cRendererName, pConfig) do { \
 	cairo_dock_set_desklet_renderer_by_name (myDesklet, cRendererName, (CairoDeskletRendererConfigPtr) pConfig); \
 	if (myDrawContext) cairo_destroy (myDrawContext);\
-	if (myIcon->pIconBuffer != NULL)\
-		myDrawContext = cairo_create (myIcon->pIconBuffer);\
+	if (myIcon->image.pSurface != NULL)\
+		myDrawContext = cairo_create (myIcon->image.pSurface);\
 	else myDrawContext = NULL; } while (0)
 
 /** Set a renderer to the applet's desklet and create myDrawContext. Call it at the beginning of init and also reload, to take into account the desklet's resizing.
@@ -793,8 +752,8 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 */
 #define CD_APPLET_LOAD_MY_ICONS_LIST(pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig) do {\
 	cairo_dock_insert_icons_in_applet (myApplet, pIconList, cDockRendererName, cDeskletRendererName, pDeskletRendererConfig);\
-	if (myDesklet && myIcon->pIconBuffer != NULL && myDrawContext == NULL)\
-		myDrawContext = cairo_create (myIcon->pIconBuffer); } while (0)
+	if (myDesklet && myIcon->image.pSurface != NULL && myDrawContext == NULL)\
+		myDrawContext = cairo_create (myIcon->image.pSurface); } while (0)
 
 /** Add an icon into an applet. The view previously set by CD_APPLET_LOAD_MY_ICONS_LIST will be used. The icon will be loaded automatically in an idle process.
 *@param pIcon an icon.
