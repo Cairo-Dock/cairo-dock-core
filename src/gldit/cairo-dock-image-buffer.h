@@ -101,7 +101,7 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 */
 void cairo_dock_load_image_buffer_from_surface (CairoDockImageBuffer *pImage, cairo_surface_t *pSurface, int iWidth, int iHeight);
 
-void cairo_dock_load_image_buffer_from_texture (CairoDockImageBuffer *pImage, GLuint iTexture);
+void cairo_dock_load_image_buffer_from_texture (CairoDockImageBuffer *pImage, GLuint iTexture, int iWidth, int iHeight);
 
 /** Create and load an image into an ImageBuffer. If the image is given by its sole name, it is taken in the root folder of the current theme.
 *@param cImageFile name of a file
@@ -128,7 +128,7 @@ void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);
 void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
 
 
-/** Draw an ImageBuffer with an offset on a Cairo context.
+/** Draw an ImageBuffer with an offset on a Cairo context, at the size it was loaded.
 *@param pImage an ImageBuffer.
 *@param pCairoContext the current cairo context.
 *@param x horizontal offset.
@@ -143,7 +143,7 @@ void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pI
 */
 #define cairo_dock_apply_image_buffer_surface(pImage, pCairoContext) cairo_dock_apply_image_buffer_surface_with_offset (pImage, pCairoContext, 0., 0., 1.)
 
-/** Draw an ImageBuffer with an offset on the current OpenGL context.
+/** Draw an ImageBuffer with an offset on the current OpenGL context, at the size it was loaded.
 *@param pImage an ImageBuffer.
 *@param x horizontal offset.
 *@param y vertical offset.
@@ -154,6 +154,27 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 *@param pImage an ImageBuffer.
 */
 #define cairo_dock_apply_image_buffer_texture(pImage) cairo_dock_apply_image_buffer_texture_with_offset (pImage, 0., 0.)
+
+/** Draw an ImageBuffer with an offset on a Cairo context, at a given size.
+*@param pImage an ImageBuffer.
+*@param pCairoContext the current cairo context.
+*@param w requested width
+*@param h requested height
+*@param x horizontal offset.
+*@param y vertical offset.
+*@param fAlpha transparency (in [0;1])
+*/
+void cairo_dock_apply_image_buffer_surface_at_size (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, int w, int h, double x, double y, double fAlpha);
+
+/** Draw an ImageBuffer on the current OpenGL context at a given size.
+*@param pImage an ImageBuffer.
+*@param w requested width
+*@param h requested height
+*@param x horizontal offset.
+*@param y vertical offset.
+*/
+void cairo_dock_apply_image_buffer_texture_at_size (CairoDockImageBuffer *pImage, int w, int h, double x, double y);
+
 
 void cairo_dock_apply_image_buffer_surface_with_offset_and_limit (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha, int iMaxWidth);
 

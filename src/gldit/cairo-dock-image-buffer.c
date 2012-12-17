@@ -187,11 +187,11 @@ void cairo_dock_load_image_buffer_from_surface (CairoDockImageBuffer *pImage, ca
 		pImage->iTexture = cairo_dock_create_texture_from_surface (pImage->pSurface);
 }
 
-void cairo_dock_load_image_buffer_from_texture (CairoDockImageBuffer *pImage, GLuint iTexture)
+void cairo_dock_load_image_buffer_from_texture (CairoDockImageBuffer *pImage, GLuint iTexture, int iWidth, int iHeight)
 {
 	pImage->iTexture = iTexture;
-	pImage->iWidth = 1.;
-	pImage->iHeight = 1.;
+	pImage->iWidth = iWidth;
+	pImage->iHeight = iHeight;
 	pImage->fZoomX = 1.;
 	pImage->fZoomY = 1.;
 }
@@ -304,6 +304,79 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 	else
 	{
 		_cairo_dock_apply_current_texture_at_size_with_offset (pImage->iWidth, pImage->iHeight, x, y);
+	}
+}
+
+void cairo_dock_apply_image_buffer_surface_at_size (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, int w, int h, double x, double y, double fAlpha)
+{
+	if (cairo_dock_image_buffer_is_animated (pImage))
+	{
+		int iFrameWidth = pImage->iWidth / pImage->iNbFrames;
+		
+		cairo_save (pCairoContext);
+		cairo_translate (pCairoContext, x, y);
+		
+		cairo_scale (pCairoContext, (double) w/pImage->iWidth, (double) h/pImage->iHeight);
+		
+		cairo_rectangle (pCairoContext, 0, 0, iFrameWidth, pImage->iHeight);
+		cairo_clip (pCairoContext);
+		
+		int n = (int) pImage->iCurrentFrame;
+		double dn = pImage->iCurrentFrame - n;
+		
+		cairo_set_source_surface (pCairoContext, pImage->pSurface, - n * iFrameWidth, 0.);
+		cairo_paint_with_alpha (pCairoContext, fAlpha * (1 - dn));
+		
+		int n2 = n + 1;
+		if (n2 >= pImage->iNbFrames)
+			n2  = 0;
+		cairo_set_source_surface (pCairoContext, pImage->pSurface, - n2 * iFrameWidth, 0.);
+		cairo_paint_with_alpha (pCairoContext, fAlpha * dn);
+		
+		cairo_restore (pCairoContext);
+	}
+	else
+	{
+		cairo_save (pCairoContext);
+		cairo_translate (pCairoContext, x, y);
+		
+		cairo_scale (pCairoContext, (double) w/pImage->iWidth, (double) h/pImage->iHeight);
+		
+		cairo_set_source_surface (pCairoContext, pImage->pSurface, 0, 0);
+		cairo_paint_with_alpha (pCairoContext, fAlpha);
+		
+		cairo_restore (pCairoContext);
+	}
+}
+
+void cairo_dock_apply_image_buffer_texture_at_size (CairoDockImageBuffer *pImage, int w, int h, double x, double y)
+{
+	glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
+	if (cairo_dock_image_buffer_is_animated (pImage))
+	{
+		int n = (int) pImage->iCurrentFrame;
+		double dn = pImage->iCurrentFrame - n;
+		
+		_cairo_dock_set_blend_alpha ();
+		
+		_cairo_dock_set_alpha (1. - dn);
+		_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double)n / pImage->iNbFrames, 0,
+			1. / pImage->iNbFrames, 1.,
+			w, h,
+			x, y);
+		
+		int n2 = n + 1;
+		if (n2 >= pImage->iNbFrames)
+			n2  = 0;
+		_cairo_dock_set_alpha (dn);
+		_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double)n2 / pImage->iNbFrames, 0,
+			1. / pImage->iNbFrames, 1.,
+			w, h,
+			x, y);
+	}
+	else
+	{
+		_cairo_dock_apply_current_texture_at_size_with_offset (w, h, x, y);
 	}
 }
 
