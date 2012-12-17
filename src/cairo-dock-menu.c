@@ -584,6 +584,11 @@ static void cairo_dock_add_separator (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoi
 	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR);
 }
 
+static void cairo_dock_add_applet (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer *data)
+{
+	cairo_dock_show_addons ();
+}
+
 static void _add_add_entry (GtkWidget *pMenu, gpointer *data)
 {
 	GtkWidget *pSubMenuAdd = cairo_dock_create_sub_menu (_("Add"), pMenu, GTK_STOCK_ADD);
@@ -596,6 +601,8 @@ static void _add_add_entry (GtkWidget *pMenu, gpointer *data)
 	
 	GtkWidget *pMenuItem = _add_entry_in_menu (_("Custom launcher"), GTK_STOCK_ADD, cairo_dock_add_launcher, pSubMenuAdd);
 	gtk_widget_set_tooltip_text (pMenuItem, _("Usually you would drag a launcher from the menu and drop it on the dock."));
+	
+	_add_entry_in_menu (_("Applet"), GTK_STOCK_ADD, cairo_dock_add_applet, pSubMenuAdd);
 }
 
 
@@ -1750,7 +1757,7 @@ static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *c
 	g_object_set (pButton, "width-request", 28, NULL);  // enlarge the button compared to its natural size, to make it easier to click, because a menu-item is quite small (it won't affect the menu width, except for apps with really small displayed name like "geany").
 	GtkStyleContext *ctx = gtk_widget_get_style_context (pButton);
 	gtk_style_context_add_provider (ctx, GTK_STYLE_PROVIDER (css), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-	gtk_style_context_add_class (ctx, GTK_STYLE_CLASS_MENU);
+	gtk_style_context_add_class (ctx, GTK_STYLE_CLASS_MENUITEM);
 	
 	if (gtkStock)
 	{
