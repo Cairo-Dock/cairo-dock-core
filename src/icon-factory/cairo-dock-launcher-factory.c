@@ -134,8 +134,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 		*cSubDockRendererName = NULL;
 	
 	int iSpecificDesktop = g_key_file_get_integer (pKeyFile, "Desktop Entry", "ShowOnViewport", NULL);
-	if (iSpecificDesktop != 0)
-		cairo_dock_set_specified_desktop_for_icon (icon, iSpecificDesktop);
+	cairo_dock_set_specified_desktop_for_icon (icon, iSpecificDesktop);
 	
 	//\__________________ get common data as defined by the user.
 	g_free (icon->cFileName);

@@ -458,20 +458,13 @@ void cairo_dock_load_current_theme (void)
 	//\___________________ Now load the launchers.
 	cairo_dock_load_launchers_from_dir (g_cCurrentLaunchersPath);
 	
-	cairo_dock_hide_show_launchers_on_other_desktops (pMainDock);
+	cairo_dock_hide_show_launchers_on_other_desktops ();
 	
 	//\___________________ Load the applets.
 	cairo_dock_activate_modules_from_list (myModulesParam.cActiveModuleList);
 	
 	//\___________________ Start the applications manager (will load the icons if the option is enabled).
 	cairo_dock_start_applications_manager (pMainDock);
-	
-	//\___________________ Draw everything.
-	///cairo_dock_draw_subdock_icons ();  // maintenant que les sous-docks sont tous definis.
-	
-	//cairo_dock_update_all_docks_size ();
-	///cairo_dock_set_all_views_to_default (0);  // met a jour la taille de tous les docks, maintenant qu'ils sont tous remplis.
-	///cairo_dock_redraw_root_docks (FALSE);  // FALSE <=> main dock inclus.
 	
 	//\___________________ On charge les decorations des desklets.
 	/**if (myDeskletsParam.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.

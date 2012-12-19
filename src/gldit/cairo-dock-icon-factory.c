@@ -48,7 +48,6 @@ const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est j
 inline Icon *cairo_dock_new_icon (void)
 {
 	Icon *_icon = g_new0 (Icon, 1);
-	///cairo_dock_install_notifications_on_object (_icon, NB_NOTIFICATIONS_ICON);
 	_icon->object.ref = 1;
 	gldi_object_set_manager (GLDI_OBJECT (_icon), GLDI_MANAGER (&myIconsMgr));
 	return _icon;

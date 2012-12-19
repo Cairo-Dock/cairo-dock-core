@@ -38,7 +38,6 @@
 #include "cairo-dock-data-renderer.h"  // cairo_dock_remove_data_renderer_on_icon
 #include "cairo-dock-file-manager.h"  // cairo_dock_fm_remove_monitor_full
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
-#include "cairo-dock-application-facility.h"  // cairo_dock_reserve_one_icon_geometry_for_window_manager
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-icon-facility.h"  // cairo_dock_foreach_icons_of_type
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
@@ -124,86 +123,86 @@ void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUse
  /// ICONS PER DESKTOP ///
 /////////////////////////
 
-static CairoDock *_cairo_dock_insert_floating_icon_in_dock (Icon *icon, CairoDock *pMainDock)
-{
-	cd_message ("%s (%s)", __func__, icon->cName);
-	g_return_val_if_fail (pMainDock != NULL, NULL);
-	
-	//\_________________ On determine dans quel dock l'inserer.
-	CairoDock *pParentDock = pMainDock;
-	g_return_val_if_fail (pParentDock != NULL, NULL);
-	
-	//\_________________ On l'insere dans son dock parent (sans animation, puisqu'on n'anime pas non plus son enlevement).
-	cairo_dock_insert_icon_in_dock (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON);
-	cd_message (" insertion de %s complete (%.2f %.2fx%.2f) dans %s", icon->cName, icon->fInsertRemoveFactor, icon->fWidth, icon->fHeight, icon->cParentDockName);
-	
-	return pParentDock;
-}
-static CairoDock * _cairo_dock_detach_launcher(Icon *pIcon)
-{
-	cd_debug ("%s (%s, parent dock=%s)", __func__, pIcon->cName, pIcon->cParentDockName);
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
-	if (pParentDock == NULL)
-		return NULL;
+#define _is_invisible_on_this_desktop(icon, index) (icon->iSpecificDesktop != 0  /*specific desktop is defined*/ \
+	&& icon->iSpecificDesktop != index  /*specific desktop is not the current one*/ \
+	&& icon->iSpecificDesktop <= g_desktopGeometry.iNbDesktops * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY)  /*specific desktop is reachable*/
 
-	gchar *cParentDockName = g_strdup(pIcon->cParentDockName);
-	cairo_dock_detach_icon_from_dock (pIcon, pParentDock); // this will set cParentDockName to NULL
+static void _cairo_dock_detach_launcher (Icon *pIcon)
+{
+	gchar *cParentDockName = g_strdup (pIcon->cParentDockName);
+	cairo_dock_detach_icon_from_dock (pIcon, CAIRO_DOCK (pIcon->pContainer));  // this will set cParentDockName to NULL
 	
-	pIcon->cParentDockName = cParentDockName; // put it back !
-
-	return pParentDock;
+	pIcon->cParentDockName = cParentDockName;  // put it back !
 }
-static void _cairo_dock_hide_show_launchers_on_other_desktops (Icon *icon, CairoDock *pMainDock)
+static void _hide_launcher_on_other_desktops (Icon *icon, int index)
+{
+	cd_debug ("%s (%s, iNumViewport=%d)", __func__, icon->cName, icon->iSpecificDesktop);
+	if (_is_invisible_on_this_desktop (icon, index))
+	{
+		if (! g_list_find (s_pFloatingIconsList, icon))  // paranoia
+		{
+			cd_debug ("launcher %s is not present on this desktop", icon->cName);
+			_cairo_dock_detach_launcher (icon);
+			s_pFloatingIconsList = g_list_prepend (s_pFloatingIconsList, icon);
+		}
+	}
+}
+static void _hide_icon_on_other_desktops (Icon *icon, G_GNUC_UNUSED CairoContainer *pContainer, gpointer data)
 {
 	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
 	{
-		cd_debug ("%s (%s, iNumViewport=%d)", __func__, icon->cName, icon->iSpecificDesktop);
-		CairoDock *pParentDock = NULL;
-		// a specific desktop/viewport has been selected for this icon
-
-		int iCurrentDesktop = 0, iCurrentViewportX = 0, iCurrentViewportY = 0;
-		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
-		int index = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY + 1;  // +1 car on commence a compter a partir de 1.
+		int index = GPOINTER_TO_INT (data);
+		_hide_launcher_on_other_desktops (icon, index);
+	}
+}
+static void _show_launcher_on_this_desktop (Icon *icon, int index)
+{
+	if (! _is_invisible_on_this_desktop (icon, index))
+	{
+		cd_debug (" => est visible sur ce viewport (iSpecificDesktop = %d).",icon->iSpecificDesktop);
+		s_pFloatingIconsList = g_list_remove (s_pFloatingIconsList, icon);
 		
-		if (icon->iSpecificDesktop == 0 || icon->iSpecificDesktop == index || icon->iSpecificDesktop > g_desktopGeometry.iNbDesktops * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY)
-		{
-			cd_debug (" => est visible sur ce viewport (iSpecificDesktop = %d).",icon->iSpecificDesktop);
-			// check that it is in the detached list
-			if( g_list_find(s_pFloatingIconsList, icon) != NULL )
-			{
-				pParentDock = _cairo_dock_insert_floating_icon_in_dock (icon, pMainDock);
-				s_pFloatingIconsList = g_list_remove(s_pFloatingIconsList, icon);
-			}
-		}
-		else
-		{
-			cd_debug (" Viewport actuel = %d => n'est pas sur le viewport actuel.", iCurrentViewportX + g_desktopGeometry.iNbViewportX*iCurrentViewportY);
-			if( g_list_find(s_pFloatingIconsList, icon) == NULL ) // only if not yet detached
-			{
-				cd_debug( "Detach launcher %s", icon->cName);
-				pParentDock = _cairo_dock_detach_launcher(icon);
-				s_pFloatingIconsList = g_list_prepend(s_pFloatingIconsList, icon);
-			}
-		}
+		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 		if (pParentDock != NULL)
-			gtk_widget_queue_draw (pParentDock->container.pWidget);
+		{
+			cairo_dock_insert_icon_in_dock (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON);
+		}
+		else  // the dock doesn't exist any more -> free the icon
+		{
+			icon->iSpecificDesktop = 0;  // pour ne pas qu'elle soit enlevee de la liste en parallele.
+			cairo_dock_free_icon (icon);
+		}
 	}
 }
 
-void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock)
+void cairo_dock_hide_show_launchers_on_other_desktops (void )
 {
 	if (s_iNbNonStickyLaunchers <= 0)
 		return ;
-	// first we detach what shouldn't be shown on this viewport
-	g_list_foreach (pDock->icons, (GFunc)_cairo_dock_hide_show_launchers_on_other_desktops, pDock);
-	// then we reattach what was eventually missing
-	g_list_foreach (s_pFloatingIconsList, (GFunc)_cairo_dock_hide_show_launchers_on_other_desktops, pDock);
+	
+	// calculate the index of the current desktop
+	int iCurrentDesktop = 0, iCurrentViewportX = 0, iCurrentViewportY = 0;
+	cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+	int index = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY + 1;  // +1 car on commence a compter a partir de 1.
+	
+	// first detach what shouldn't be shown on this desktop
+	cairo_dock_foreach_icons_in_docks ((CairoDockForeachIconFunc)_hide_icon_on_other_desktops, GINT_TO_POINTER (index));
+	
+	// then reattach what was eventually missing
+	Icon *icon;
+	GList *ic = s_pFloatingIconsList, *next_ic;
+	while (ic != NULL)
+	{
+		next_ic = ic->next;  // get the next element now, because '_show_launcher_on_this_desktop' might remove 'ic' from the list.
+		icon = ic->data;
+		_show_launcher_on_this_desktop (icon, index);
+		ic = next_ic;
+	}
 }
 
 static gboolean _on_change_current_desktop_viewport_notification (G_GNUC_UNUSED gpointer data)
 {
-	CairoDock *pDock = g_pMainDock;
-	cairo_dock_hide_show_launchers_on_other_desktops(pDock);
+	cairo_dock_hide_show_launchers_on_other_desktops ();
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 }
 

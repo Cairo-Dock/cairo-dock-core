@@ -178,7 +178,7 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 {
 	//g_print ("%s (%s)\n", __func__, cDesktopFileName);
 	
-	//\____________ On cree l'icone.
+	//\____________ Create the icon from the .desktop file..
 	gchar *cRendererName = NULL;
 	Icon *icon = cairo_dock_new_launcher_icon (cDesktopFileName, &cRendererName);
 	if (icon == NULL)  // couldn't load the icon (unreadable desktop file, unvalid or does not correspond to any installed program)
@@ -195,14 +195,11 @@ Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
 	}
 	icon->iface.on_delete = _delete_launcher;
 	
-	//\____________ We manage its dock and sub-dock.
+	//\____________ Handle its dock and sub-dock (create them if necesary).
 	_cairo_dock_handle_container (icon, cRendererName);
 	g_free (cRendererName);
 	
-	//\____________ On remplit ses buffers.
-	///cairo_dock_trigger_load_icon_buffers (icon);
-	
-	//\____________ On gere son role d'inhibiteur.
+	//\____________ Make it an inhibator for its class.
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
 	if (icon->cClass != NULL)
 	{

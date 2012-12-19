@@ -127,7 +127,7 @@ void cairo_dock_free_icon (Icon *icon);
 void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 
-void cairo_dock_hide_show_launchers_on_other_desktops (CairoDock *pDock);
+void cairo_dock_hide_show_launchers_on_other_desktops (void);
 
 void cairo_dock_set_specified_desktop_for_icon (Icon *pIcon, int iSpecificDesktop);
 

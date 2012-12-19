@@ -86,7 +86,7 @@ static Atom s_aNetWmIcon;
 static Atom s_aWmHints;
 
 static void cairo_dock_blacklist_appli (Window Xid);
-static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, CairoDock *pDock);
+static Icon * cairo_dock_create_icon_from_xwindow (Window Xid);
 
 
   //////////////////////////
@@ -302,7 +302,7 @@ static void _on_update_applis_list (CairoDock *pDock)
 		if (! bAppliAlreadyRegistered)
 		{
 			cd_message (" cette fenetre (%ld) de la pile n'est pas dans la liste", Xid);
-			icon = cairo_dock_create_icon_from_xwindow (Xid, pDock);
+			icon = cairo_dock_create_icon_from_xwindow (Xid);
 			if (icon != NULL)
 			{
 				icon->iLastCheckTime = s_iTime;
@@ -406,13 +406,11 @@ static gboolean _on_change_active_window_notification (G_GNUC_UNUSED gpointer da
 
 static gboolean _on_change_current_desktop_viewport_notification (G_GNUC_UNUSED gpointer data)
 {
-	CairoDock *pDock = g_pMainDock;
-	
 	cd_debug ("*** applis du bureau seulement...");
 	// applis du bureau courant seulement.
 	if (myTaskbarParam.bAppliOnCurrentDesktopOnly && myTaskbarParam.bShowAppli)
 	{
-		g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_hide_show_windows_on_other_desktops, pDock);
+		g_hash_table_foreach (s_hXWindowTable, (GHFunc) _cairo_dock_hide_show_windows_on_other_desktops, g_pMainDock);
 	}
 	
 	// visibilite
@@ -938,7 +936,7 @@ void cairo_dock_start_applications_manager (CairoDock *pDock)
 	for (i = 0; i < iNbWindows; i ++)
 	{
 		Xid = pXWindowsList[i];
-		pIcon = cairo_dock_create_icon_from_xwindow (Xid, pDock);
+		pIcon = cairo_dock_create_icon_from_xwindow (Xid);
 		
 		if (pIcon != NULL)  // authorised window.
 		{
@@ -1020,7 +1018,6 @@ static void _cairo_dock_stop_application_manager (void)
 	cairo_dock_remove_all_applis_from_class_table ();  // enleve aussi les indicateurs.
 	
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _cairo_dock_remove_one_appli, NULL);  // libere toutes les icones d'appli.
-	///cairo_dock_update_dock_size (g_pMainDock);
 	
 	cairo_dock_foreach_root_docks ((GFunc)_unhide_all_docks, NULL);
 }
@@ -1445,7 +1442,7 @@ static gboolean _delete_appli (Icon *pIcon)
 	return FALSE;
 }
 
-static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, G_GNUC_UNUSED CairoDock *pDock)
+static Icon * cairo_dock_create_icon_from_xwindow (Window Xid)
 {
 	//\__________________ On cree l'icone.
 	Window XParentWindow = 0;
@@ -1486,11 +1483,6 @@ static Icon * cairo_dock_create_icon_from_xwindow (Window Xid, G_GNUC_UNUSED Cai
 			cd_debug ("backing pixmap : %d ; iDamageHandle : %d", icon->iBackingPixmap, icon->iDamageHandle);*/
 		}
 		#endif
-		
-		/**if (pDock)
-		{
-			cairo_dock_trigger_load_icon_buffers (icon);
-		}*/
 	}
 	
 	//\____________ On enregistre l'appli et on commence a la surveiller.
