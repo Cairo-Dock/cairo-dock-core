@@ -1161,8 +1161,8 @@ static inline double _get_first_appli_order (CairoDock *pDock, GList *first_laun
 			for (ic = pDock->icons; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
-				if ((icon->cDesktopFileName != NULL && strcmp (icon->cDesktopFileName, myTaskbarParam.cRelativeIconName) == 0)
-				|| (icon->pModuleInstance && strcmp (icon->pModuleInstance->cConfFilePath, myTaskbarParam.cRelativeIconName) == 0))
+				if ((icon->cDesktopFileName != NULL && g_strcmp0 (icon->cDesktopFileName, myTaskbarParam.cRelativeIconName) == 0)
+				|| (icon->pModuleInstance && g_strcmp0 (icon->pModuleInstance->cConfFilePath, myTaskbarParam.cRelativeIconName) == 0))
 					break;
 			}
 			
