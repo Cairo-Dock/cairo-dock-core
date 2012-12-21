@@ -2462,6 +2462,18 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			case CAIRO_DOCK_WIDGET_ICONS_LIST :
 			{
+				if (g_pMainDock == NULL) // maintenance mode... no dock, no icons
+				{
+					cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+
+					pOneWidget = gtk_entry_new ();
+					gtk_entry_set_text (GTK_ENTRY (pOneWidget), cValue); // if there is a problem, we can edit it.
+					_pack_subwidget (pOneWidget);
+
+					g_free (cValue);
+					break;
+				}
+
 				// build the modele and combo
 				modele = _cairo_dock_gui_allocate_new_model ();
 				pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));
