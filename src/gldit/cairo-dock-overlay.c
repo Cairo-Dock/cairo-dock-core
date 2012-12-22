@@ -264,8 +264,8 @@ static void _get_overlay_position_and_size (CairoOverlay *pOverlay, int w, int h
 {
 	if (pOverlay->fScale > 0)
 	{
-		*wo = w * z * pOverlay->fScale;  // = pIcon->fWidth * pIcon->fScale
-		*ho = h * z * pOverlay->fScale;
+		*wo = round (w * z * pOverlay->fScale);  // = pIcon->fWidth * pIcon->fScale
+		*ho = round (h * z * pOverlay->fScale);
 	}
 	else
 	{
