@@ -345,11 +345,15 @@ void cairo_dock_destroy_icon_fbo (void)
 }
 
 
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode)
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, gint iRenderingMode)
 {
 	//g_print ("%s (%s, %d)\n", __func__, pIcon->cName, iRenderingMode);
-	int iWidth, iHeight;
-	/// TODO: test without FBO and dock when iRenderingMode == 2
+	gboolean r = cairo_dock_begin_draw_image_buffer (&pIcon->image, pIcon->pContainer, iRenderingMode);
+	
+	pIcon->bDamaged = !r;
+	
+	return r;
+	/**int iWidth, iHeight;
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		if (! gldi_glx_make_current (pContainer))
@@ -422,13 +426,13 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gi
 	
 	glScalef (1., -1., 1.);
 	
-	return TRUE;
+	return TRUE;*/
 }
 
-void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_end_draw_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
 {
-	g_return_if_fail (pIcon->image.iTexture != 0);
-	
+	cairo_dock_end_draw_image_buffer (&pIcon->image, pIcon->pContainer);
+	/**g_return_if_fail (pIcon->image.iTexture != 0);
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		// copie dans notre texture
@@ -465,6 +469,8 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 			
 			glLoadIdentity ();
 			glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+			glScalef (1., -1., 1.);
+			
 			_cairo_dock_apply_texture_at_size_with_alpha (g_openglConfig.iRedirectedTexture, iWidth, iHeight, 1.);
 			
 			_cairo_dock_disable_texture ();
@@ -483,12 +489,11 @@ void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer)
 	{
 		cairo_dock_set_perspective_view (pContainer);
 		g_openglConfig.bSetPerspective = FALSE;
-	}
+	}*/
 }
 
 gboolean cairo_dock_begin_draw_image_buffer (CairoDockImageBuffer *pImage, CairoContainer *pContainer, gint iRenderingMode)
 {
-	//g_print ("%s (%s, %d)\n", __func__, pIcon->cName, iRenderingMode);
 	int iWidth, iHeight;
 	/// TODO: test without FBO and dock when iRenderingMode == 2
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
@@ -551,30 +556,41 @@ gboolean cairo_dock_begin_draw_image_buffer (CairoDockImageBuffer *pImage, Cairo
 	else
 	{
 		cairo_dock_set_ortho_view (pContainer);  // au demarrage, le contexte n'a pas encore de vue.
-		glLoadIdentity ();
-		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+		///glLoadIdentity ();
+		///glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
 	}
 	
-	glColor4f(1., 1., 1., 1.);
+	glLoadIdentity ();
 	
-	glScalef (1., -1., 1.);
+	if (g_openglConfig.bRedirected)  // adapt to the size of the redirected texture
+	{
+		int w = myIconsParam.iIconWidth * (1 + myIconsParam.fAmplitude);
+		int h = myIconsParam.iIconHeight * (1 + myIconsParam.fAmplitude);
+		glScalef ((double)w/iWidth, (double)h/iHeight, 1.);  // no need to revert the y-axis, since we'll apply the redirected texture on the image's texture, which will invert it.
+		glTranslatef (iWidth/2, iHeight/2, - iHeight/2);  // translate to the middle of the drawing space.
+	}
+	else
+	{
+		glScalef (1., -1., 1.);  // revert y-axis since texture are drawn reversed
+		glTranslatef (iWidth/2, -iHeight/2, - iHeight/2);  // translate to the middle of the drawing space.
+	}
+	
+	glColor4f (1., 1., 1., 1.);
 	
 	return TRUE;
 }
 
 void cairo_dock_end_draw_image_buffer (CairoDockImageBuffer *pImage, CairoContainer *pContainer)
 {
-	g_return_if_fail (pImage->iTexture != 0);
+	g_return_if_fail (pContainer != NULL && pImage->iTexture != 0);
 	
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		// copie dans notre texture
-		glEnable (GL_TEXTURE_2D);
+		_cairo_dock_enable_texture ();
+		_cairo_dock_set_blend_source ();
+		_cairo_dock_set_alpha (1.);
 		glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
-		glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glEnable(GL_BLEND);
-		glBlendFunc (GL_ZERO, GL_ONE);
-		glColor4f(1., 1., 1., 1.);
 		
 		int iWidth, iHeight;  // taille de la texture
 		iWidth = pImage->iWidth, iHeight = pImage->iHeight;

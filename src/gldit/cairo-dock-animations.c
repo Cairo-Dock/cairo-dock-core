@@ -343,7 +343,6 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
 			pIcon->fInsertRemoveFactor = 1.0;
 		else
 			pIcon->fInsertRemoveFactor = 0.05;
-		///cairo_dock_notify_on_object (&myDocksMgr, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
 		cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
 		cairo_dock_start_icon_animation (pIcon, pDock);
 	}

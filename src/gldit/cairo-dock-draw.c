@@ -43,7 +43,6 @@
 #include "cairo-dock-overlay.h"
 #include "cairo-dock-draw.h"
 
-extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;

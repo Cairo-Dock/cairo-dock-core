@@ -815,7 +815,7 @@ void cairo_dock_update_icon_texture (Icon *pIcon)
 	{
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_source ();
-		glColor4f (1., 1., 1., 1.);
+		_cairo_dock_set_alpha (1.);  // full white
 		
 		if (pIcon->image.iTexture == 0)
 			glGenTextures (1, &pIcon->image.iTexture);
