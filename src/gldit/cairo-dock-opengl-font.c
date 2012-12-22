@@ -45,14 +45,8 @@
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 3
 
-extern GLuint g_pGradationTexture[2];
-
 extern CairoContainer *g_pPrimaryContainer;
 
-extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
-extern CairoDockImageBuffer g_pVisibleZoneBuffer;
-
-extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
 
 

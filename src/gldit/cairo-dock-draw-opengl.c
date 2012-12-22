@@ -58,7 +58,6 @@ extern GLuint g_pGradationTexture[2];
 
 extern CairoContainer *g_pPrimaryContainer;
 
-extern CairoDockImageBuffer g_pIconBackgroundImageBuffer;
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
 extern gboolean g_bUseOpenGL;
@@ -251,7 +250,7 @@ void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
 	
 	_cairo_dock_enable_texture ();
 	if (pIcon->fAlpha == 1)
-		_cairo_dock_set_blend_over ();
+		_cairo_dock_set_blend_pbuffer ();
 	else
 		_cairo_dock_set_blend_alpha ();
 	

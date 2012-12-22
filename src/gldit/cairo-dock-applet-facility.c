@@ -64,19 +64,9 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 		(! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)))
 	{
 		//cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
-		cairo_save (pIconContext);
 		int iWidth, iHeight;
 		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
-		cairo_scale(pIconContext,
-			iWidth / g_pIconBackgroundBuffer.iWidth,
-			iHeight / g_pIconBackgroundBuffer.iHeight);
-		cairo_set_source_surface (pIconContext,
-			g_pIconBackgroundBuffer.pSurface,
-			0.,
-			0.);
-		cairo_set_operator (pIconContext, CAIRO_OPERATOR_DEST_OVER);
-		cairo_paint (pIconContext);
-		cairo_restore (pIconContext);
+		cairo_dock_apply_image_buffer_surface_at_size (&g_pIconBackgroundBuffer, pIconContext, iWidth, iHeight, 0, 0, 1);
 	}
 	
 	//\________________ On applique la nouvelle image.

@@ -144,11 +144,13 @@ void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED CairoContainer *pCont
 			cairo_dock_begin_draw_icon (icon, icon->pContainer, 2);  // 2 => draw on another texture
 			
 			_cairo_dock_enable_texture ();
+			_cairo_dock_set_blend_source ();
 			_cairo_dock_set_alpha (1.);
 			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture,
 				icon->image.iWidth,
 				icon->image.iHeight);
 			
+			_cairo_dock_set_blend_alpha ();
 			_cairo_dock_apply_texture_at_size (icon->image.iTexture,
 				icon->image.iWidth,
 				icon->image.iHeight);
