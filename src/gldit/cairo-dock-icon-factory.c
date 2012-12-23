@@ -141,21 +141,13 @@ void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED CairoContainer *pCont
 	{
 		if (icon->image.iTexture != 0 && g_pIconBackgroundBuffer.iTexture != 0)
 		{
-			/// TODO: use a DEST_OVER factor instead, with GL_ONE_MINUS_DST_ALPHA...
-			cairo_dock_begin_draw_icon (icon, icon->pContainer, 2);  // 2 => draw on another texture
-			
+			cairo_dock_begin_draw_icon (icon, icon->pContainer, 1);  // 1 => don't clear current image
 			_cairo_dock_enable_texture ();
-			_cairo_dock_set_blend_source ();
+			glBlendFunc (GL_ONE_MINUS_DST_ALPHA, GL_ONE);  // dest_over = src * (1 - dst.a) + dst
 			_cairo_dock_set_alpha (1.);
 			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture,
 				icon->image.iWidth,
 				icon->image.iHeight);
-			
-			_cairo_dock_set_blend_alpha ();
-			_cairo_dock_apply_texture_at_size (icon->image.iTexture,
-				icon->image.iWidth,
-				icon->image.iHeight);
-			
 			cairo_dock_end_draw_icon (icon, icon->pContainer);
 		}
 		else if (icon->image.pSurface != NULL)
@@ -165,15 +157,6 @@ void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED CairoContainer *pCont
 			cairo_dock_apply_image_buffer_surface_at_size (&g_pIconBackgroundBuffer, pCairoIconBGContext,
 				icon->image.iWidth, icon->image.iHeight,
 				0, 0, 1);
-			/**cairo_scale(pCairoIconBGContext,
-				(double)icon->image.iWidth / g_pIconBackgroundBuffer.iWidth,
-				(double)icon->image.iHeight / g_pIconBackgroundBuffer.iHeight);
-			cairo_set_source_surface (pCairoIconBGContext,
-				g_pIconBackgroundBuffer.pSurface,
-				0.,
-				0.);
-			cairo_set_operator (pCairoIconBGContext, CAIRO_OPERATOR_DEST_OVER);
-			cairo_paint (pCairoIconBGContext);*/
 			cairo_destroy (pCairoIconBGContext);
 		}
 	}
@@ -348,23 +331,12 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 			cairo_dock_apply_image_buffer_surface_at_size (&g_pIconBackgroundBuffer, pCairoContext,
 				w, h,
 				0, 0, 1);
-			/**cairo_save (pCairoContext);
-			cairo_scale(pCairoContext,
-				(double) w / g_pIconBackgroundBuffer.iWidth,
-				(double) h / g_pIconBackgroundBuffer.iHeight);
-			cairo_set_source_surface (pCairoContext,
-				g_pIconBackgroundBuffer.pSurface,
-				0.,
-				0.);
-			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-			cairo_paint (pCairoContext);
-			cairo_restore (pCairoContext);*/
+			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 		}
 		else  // sinon on efface juste ce qu'il y'avait.
 		{
 			cairo_dock_erase_cairo_context (pCairoContext);
 		}
-		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 		
 		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
 		pRenderer->render (pIcon, CAIRO_CONTAINER (pDock), w, h, pCairoContext);
