@@ -1737,27 +1737,14 @@ static gboolean _on_enter_menu_item (GtkWidget* pWidget,
 }
 static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *cTooltip, GCallback pFunction, GtkWidget *hbox, gpointer data)
 {
-	static GtkCssProvider *css = NULL;
-	if (css == NULL)
-	{
-		css = gtk_css_provider_new ();  // make the buttons as small as possible, or they will be too large for a menu-item.
-		gtk_css_provider_load_from_data (css,
-			".button {\n" \
-			"-GtkButton-default-border : 0px;\n" \
-			"-GtkButton-default-outside-border : 0px;\n" \
-			"-GtkButton-inner-border: 0px;\n" \
-			"border-image-width: 0px;\n" \
-			"border-style: none;\n" \
-			"border-width: 0px;\n" \
-			"box-shadow: none;\n" \
-			"}", -1, NULL);
-	}
-	
 	GtkWidget *pButton = gtk_button_new ();
-	g_object_set (pButton, "width-request", 28, NULL);  // enlarge the button compared to its natural size, to make it easier to click, because a menu-item is quite small (it won't affect the menu width, except for apps with really small displayed name like "geany").
-	GtkStyleContext *ctx = gtk_widget_get_style_context (pButton);
-	gtk_style_context_add_provider (ctx, GTK_STYLE_PROVIDER (css), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-	gtk_style_context_add_class (ctx, GTK_STYLE_CLASS_MENUITEM);
+	/*
+		GtkStyleContext *ctx = gtk_widget_get_style_context (pButton);
+	// or we can just remove the style of a button but it's still a button :)
+		gtk_style_context_remove_class (ctx, GTK_STYLE_CLASS_BUTTON);
+	 // a style like a menuitem but it's a button...
+		gtk_style_context_add_class (ctx, GTK_STYLE_CLASS_MENUITEM);
+	*/
 	
 	if (gtkStock)
 	{
