@@ -64,9 +64,9 @@ static CairoOverlay *cairo_dock_create_overlay_from_surface (Icon *pIcon, cairo_
 	CairoOverlay *pOverlay = _new_overlay ();
 	pOverlay->fScale = CD_DEFAULT_SCALE;
 	
-	int w, h;
-	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	cairo_dock_load_image_buffer_from_surface (&pOverlay->image, pSurface, iWidth > 0 ? iWidth : w, iHeight > 0 ? iHeight : h);
+	cairo_dock_load_image_buffer_from_surface (&pOverlay->image, pSurface,
+		iWidth > 0 ? iWidth : cairo_dock_icon_get_allocated_width (pIcon),
+		iHeight > 0 ? iHeight : cairo_dock_icon_get_allocated_height (pIcon));  // we don't need the icon to be actually loaded to add an overlay on it.
 	
 	return pOverlay;
 }

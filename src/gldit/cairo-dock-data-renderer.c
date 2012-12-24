@@ -599,7 +599,9 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 	//\___________________ load it.
 	_cairo_dock_init_data_renderer (pRenderer, pAttribute);
 	
-	cairo_dock_get_icon_extent (pIcon, &pRenderer->iWidth, &pRenderer->iHeight);
+	pRenderer->iWidth = cairo_dock_icon_get_allocated_width (pIcon);  // we don't need the icon to be loaded already, its allocated size is enough
+	pRenderer->iHeight = cairo_dock_icon_get_allocated_height (pIcon);
+	///cairo_dock_get_icon_extent (pIcon, &pRenderer->iWidth, &pRenderer->iHeight);
 	
 	gboolean bLoadTextures = FALSE;
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
