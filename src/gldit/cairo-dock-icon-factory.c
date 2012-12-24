@@ -86,6 +86,21 @@ void cairo_dock_free_icon_buffers (Icon *icon)
  /// LOADER ///
 //////////////
 
+gboolean cairo_dock_apply_icon_background_opengl (Icon *icon)
+{
+	if (cairo_dock_begin_draw_icon (icon, icon->pContainer, 1))  // 1 => don't clear current image
+	{
+		_cairo_dock_enable_texture ();
+		glBlendFunc (GL_ONE_MINUS_DST_ALPHA, GL_ONE);  // dest_over = src * (1 - dst.a) + dst
+		_cairo_dock_set_alpha (1.);
+		_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture,
+			icon->image.iWidth,
+			icon->image.iHeight);
+		cairo_dock_end_draw_icon (icon, icon->pContainer);
+		return TRUE;
+	}
+	return FALSE;
+}
 
 void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED CairoContainer *pContainer)
 {
@@ -137,18 +152,16 @@ void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED CairoContainer *pCont
 	}
 	
 	//\_____________ set the background if needed.
+	icon->bNeedApplyBackground = FALSE;
 	if (g_pIconBackgroundBuffer.pSurface != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
 		if (icon->image.iTexture != 0 && g_pIconBackgroundBuffer.iTexture != 0)
 		{
-			cairo_dock_begin_draw_icon (icon, icon->pContainer, 1);  // 1 => don't clear current image
-			_cairo_dock_enable_texture ();
-			glBlendFunc (GL_ONE_MINUS_DST_ALPHA, GL_ONE);  // dest_over = src * (1 - dst.a) + dst
-			_cairo_dock_set_alpha (1.);
-			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture,
-				icon->image.iWidth,
-				icon->image.iHeight);
-			cairo_dock_end_draw_icon (icon, icon->pContainer);
+			if (! cairo_dock_apply_icon_background_opengl (icon))  // couldn't draw on the texture
+			{
+				icon->bDamaged = FALSE;  // it's not a big deal, since we can draw under the existing image easily; so we don't need to damage the icon (it's expensive especially if it's an applet).
+				icon->bNeedApplyBackground = TRUE;  // just postpone it until drawing is possible.
+			}
 		}
 		else if (icon->image.pSurface != NULL)
 		{
@@ -228,22 +241,24 @@ void cairo_dock_load_icon_quickinfo (Icon *icon)
 
 void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
 {
+	gboolean bLoadText = TRUE;
 	if (pIcon->iSidLoadImage != 0)  // if a load was sheduled, cancel it and do it now (we need to load the applets' buffer before initializing the module).
 	{
 		//g_print (" load %s immediately\n", pIcon->cName);
 		g_source_remove (pIcon->iSidLoadImage);
 		pIcon->iSidLoadImage = 0;
+		bLoadText = FALSE;  // has been done in cairo_dock_trigger_load_icon_buffers(), the only function to schedule the image loading.
 	}
 	
 	if (cairo_dock_icon_get_allocated_width (pIcon) > 0)
 	{
 		cairo_dock_load_icon_image (pIcon, pContainer);
 
-		cairo_dock_load_icon_text (pIcon);
+		if (bLoadText)
+			cairo_dock_load_icon_text (pIcon);
 
 		cairo_dock_load_icon_quickinfo (pIcon);
 	}
-	
 }
 
 static gboolean _load_icon_buffer_idle (Icon *pIcon)
@@ -259,7 +274,7 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 		if (cairo_dock_get_icon_data_renderer (pIcon) != NULL)
 			cairo_dock_refresh_data_renderer (pIcon, pContainer);
 		
-		cairo_dock_load_icon_quickinfo (pIcon);
+		cairo_dock_load_icon_text (pIcon);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
 		//g_print ("icon-factory: do 1 main loop iteration\n");
@@ -271,9 +286,8 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon)
 {
 	if (pIcon->iSidLoadImage == 0)
 	{
-		//g_print ("trigger load for %s (%x)\n", pIcon->cName, pContainer);
-		if (!pIcon->label.pSurface)
-			cairo_dock_load_icon_text (pIcon);  // la vue peut avoir besoin de connaitre la taille du texte.
+		//g_print ("trigger load for %s\n", pIcon->cName);
+		cairo_dock_load_icon_text (pIcon);  // la vue peut avoir besoin de connaitre la taille du texte.
 		pIcon->iSidLoadImage = g_idle_add ((GSourceFunc)_load_icon_buffer_idle, pIcon);
 	}
 }

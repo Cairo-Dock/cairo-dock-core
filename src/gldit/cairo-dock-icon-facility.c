@@ -579,6 +579,8 @@ void cairo_dock_set_quick_info (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pCont
 	
 	if (pIcon->cQuickInfo != cQuickInfo)  // be paranoid, in case one passes pIcon->cQuickInfo to the function
 	{
+		if (g_strcmp0 (cQuickInfo, pIcon->cQuickInfo) == 0)  // if the text is the same, no need to reload it.
+			return;
 		g_free (pIcon->cQuickInfo);
 		pIcon->cQuickInfo = g_strdup (cQuickInfo);
 	}

@@ -201,7 +201,8 @@ struct _Icon {
 	gint iThumbnailX, iThumbnailY;  // X icon geometry for apps
 	gint iThumbnailWidth, iThumbnailHeight;
 	
-	gpointer reserved[4];
+	gboolean bNeedApplyBackground;
+	gpointer reserved[3];
 };
 
 typedef void (*CairoIconContainerLoadFunc) (void);
@@ -279,6 +280,8 @@ void cairo_dock_free_icon_buffers (Icon *icon);
 */
 void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer);
 
+
+gboolean cairo_dock_apply_icon_background_opengl (Icon *icon);
 
 /**Fill the image buffer (surface & texture) of a given icon, according to its type. Set its size if necessary, and fills the reflection buffer for cairo.
 *@param icon the icon.

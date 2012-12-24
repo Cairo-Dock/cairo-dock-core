@@ -1366,7 +1366,7 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 				icon = ic->data;
 				if (icon->bDamaged)
 				{
-					cd_debug ("This icon %s is damaged", icon->cName);
+					g_print ("This icon %s is damaged\n", icon->cName);
 					icon->bDamaged = FALSE;
 					if (cairo_dock_get_icon_data_renderer (icon) != NULL)
 					{
@@ -1384,6 +1384,11 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 					{
 						cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
 					}
+				}
+				else if (icon->bNeedApplyBackground)
+				{
+					icon->bNeedApplyBackground = FALSE;  // set to FALSE, if it doesn't work here, it will probably never do.
+					cairo_dock_apply_icon_background_opengl (icon);
 				}
 			}
 		}
