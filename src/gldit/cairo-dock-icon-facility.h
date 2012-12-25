@@ -323,5 +323,23 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
 GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon);
 
 
+cairo_t *cairo_dock_begin_draw_icon_cairo (Icon *pIcon, gint iRenderingMode, cairo_t *pCairoContext);
+
+void cairo_dock_end_draw_icon_cairo (Icon *pIcon);
+
+/** Initiate an OpenGL drawing session on an icon's texture.
+*@param pIcon the icon on which to draw.
+*@param pContainer its container, or NULL if the icon is not yet inside a container.
+*@param iRenderingMode rendering mode. 0:normal, 1:don't clear the current texture, so that the drawing will be superimposed on it, 2:keep the current icon texture unchanged for all the drawing (the drawing is made on another texture).
+*@return TRUE if you can proceed to the drawing, FALSE if an error occured.
+*/
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode);
+/** Finish an OpenGL drawing session on an icon.
+*@param pIcon the icon on which to draw.
+*@param pContainer its container, or NULL if the icon is not yet inside a container.
+*@return TRUE if you can proceed to the drawing, FALSE if an error occured.
+*/
+void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
+
 G_END_DECLS
 #endif

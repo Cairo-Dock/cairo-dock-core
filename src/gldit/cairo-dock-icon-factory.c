@@ -321,10 +321,10 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		_cairo_dock_set_alpha (1.);
 		_cairo_dock_enable_texture ();
 		
-		if (g_pIconBackgroundBuffer.iTexture != 0)
+		/**if (g_pIconBackgroundBuffer.iTexture != 0)
 		{
 			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture, w, h);
-		}
+		}*/
 		
 		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
 		pRenderer->render_opengl (pIcon, CAIRO_CONTAINER (pDock), w, h);

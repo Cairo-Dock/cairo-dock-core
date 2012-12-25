@@ -36,12 +36,16 @@
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-draw.h"
 #include "cairo-dock-gui-manager.h"  // cairo_dock_trigger_refresh_launcher_gui
 #include "cairo-dock-animations.h"  // CairoDockHidingEffect
 #include "cairo-dock-icon-facility.h"
 
 extern gchar *g_cCurrentLaunchersPath;
 extern CairoDockHidingEffect *g_pHidingBackend;
+
+extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
 
 CairoDockIconGroup cairo_dock_get_icon_type (Icon *icon)
@@ -682,62 +686,58 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l
 GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon)
 {
 	g_return_val_if_fail (icon != NULL, NULL);
-	GdkPixbuf *pixbuf = NULL;
-	int w = 24, h = w;
-	int iWidth, iHeight;
-	cairo_dock_get_icon_extent (icon, &iWidth, &iHeight);
-	if (iWidth > 0 && iHeight > 0 && icon->image.pSurface != NULL)
+	
+	return cairo_dock_image_buffer_to_pixbuf (&icon->image, 24, 24);
+}
+
+cairo_t *cairo_dock_begin_draw_icon_cairo (Icon *pIcon, gint iRenderingMode, cairo_t *pCairoContext)
+{
+	cairo_t *ctx = cairo_dock_begin_draw_image_buffer_cairo (&pIcon->image, iRenderingMode, pCairoContext);
+	
+	if (ctx && iRenderingMode != 1)
 	{
-		cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
-			w,
-			h);
-		cairo_t *pCairoContext = cairo_create (surface);
-		cairo_scale (pCairoContext, (double)w/iWidth, (double)h/iHeight);
-		cairo_set_source_surface (pCairoContext, icon->image.pSurface, 0., 0.);
-		cairo_paint (pCairoContext);
-		cairo_destroy (pCairoContext);
-		guchar *d, *data = cairo_image_surface_get_data (surface);
-		int r = cairo_image_surface_get_stride (surface);
-		
-		// on la convertit en un pixbuf.
-		pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
-			TRUE,
-			8,
-			w,
-			h);
-		guchar *p, *pixels = gdk_pixbuf_get_pixels (pixbuf);
-		int iNbChannels = gdk_pixbuf_get_n_channels (pixbuf);
-		int iRowstride = gdk_pixbuf_get_rowstride (pixbuf);
-		
-		int x, y;
-		int red, green, blue;
-		float fAlphaFactor;
-		for (y = 0; y < h; y ++)
+		if (g_pIconBackgroundBuffer.pSurface != NULL
+		&& ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 		{
-			for (x = 0; x < w; x ++)
-			{
-				p = pixels + y * iRowstride + x * iNbChannels;
-				d = data + y * r + x * 4;
-				
-				fAlphaFactor = (float) d[3] / 255;
-				if (fAlphaFactor != 0)
-				{
-					red = d[0] / fAlphaFactor;
-					green = d[1] / fAlphaFactor;
-					blue = d[2] / fAlphaFactor;
-				}
-				else
-				{
-					red = blue = green = 0;
-				}
-				p[0] = blue;
-				p[1] = green;
-				p[2] = red;
-				p[3] = d[3];
-			}
+			int iWidth, iHeight;
+			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
+			cairo_dock_apply_image_buffer_surface_at_size (&g_pIconBackgroundBuffer, ctx, iWidth, iHeight, 0, 0, 1);
 		}
-		
-		cairo_surface_destroy (surface);
 	}
-	return pixbuf;
+	
+	return ctx;
+}
+
+void cairo_dock_end_draw_icon_cairo (Icon *pIcon)
+{
+	cairo_dock_end_draw_image_buffer_cairo (&pIcon->image);
+}
+
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, gint iRenderingMode)
+{
+	gboolean r = cairo_dock_begin_draw_image_buffer_opengl (&pIcon->image, pIcon->pContainer, iRenderingMode);
+	
+	if (r && iRenderingMode != 1)
+	{
+		if (g_pIconBackgroundBuffer.iTexture != 0
+		&& ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+		{
+			int iWidth, iHeight;
+			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
+			_cairo_dock_enable_texture ();
+			_cairo_dock_set_blend_pbuffer ();
+			_cairo_dock_set_alpha (1.);
+			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture, iWidth, iHeight);
+			_cairo_dock_disable_texture ();
+		}
+	}
+	
+	pIcon->bDamaged = !r;
+	
+	return r;
+}
+
+void cairo_dock_end_draw_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
+{
+	cairo_dock_end_draw_image_buffer_opengl (&pIcon->image, pIcon->pContainer);
 }

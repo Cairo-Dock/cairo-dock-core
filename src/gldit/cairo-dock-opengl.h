@@ -52,11 +52,7 @@ struct _CairoDockGLConfig {
 	gboolean bFboAvailable;
 	gboolean bNonPowerOfTwoAvailable;
 	gboolean bTextureFromPixmapAvailable;
-	GLuint iFboId;
-	GLuint iRedirectedTexture;
-	gint iRedirectWidth, iRedirectHeight;
-	gboolean bRedirected;
-	gboolean bSetPerspective;
+	// texture from pixmap
 	void (*bindTexImage) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
 	void (*releaseTexImage) (Display *display, GLXDrawable drawable, int buffer);
 	} ;
@@ -82,34 +78,6 @@ void cairo_dock_force_indirect_rendering (void);
 	g_bUseOpenGL = FALSE;\
 	g_openglConfig.context = 0; } while (0)
 
-
-  ///////////////////////
- // RENDER TO TEXTURE //
-///////////////////////
-/** Create an FBO to render the icons inside a dock.
-*/
-void cairo_dock_create_icon_fbo (void);
-/** Destroy the icons FBO.
-*/
-void cairo_dock_destroy_icon_fbo (void);
-
-/** Initiate an OpenGL drawing session on an icon's texture.
-*@param pIcon the icon on which to draw.
-*@param pContainer its container, or NULL if the icon is not yet inside a container.
-*@param iRenderingMode rendering mode. 0:normal, 1:don't clear the current texture, so that the drawing will be superimposed on it, 2:keep the current icon texture unchanged for all the drawing (the drawing is made on another texture).
-*@return TRUE if you can proceed to the drawing, FALSE if an error occured.
-*/
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode);
-/** Finish an OpenGL drawing session on an icon.
-*@param pIcon the icon on which to draw.
-*@param pContainer its container, or NULL if the icon is not yet inside a container.
-*@return TRUE if you can proceed to the drawing, FALSE if an error occured.
-*/
-void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
-
-gboolean cairo_dock_begin_draw_image_buffer (CairoDockImageBuffer *pImage, CairoContainer *pContainer, gint iRenderingMode);
-
-void cairo_dock_end_draw_image_buffer (CairoDockImageBuffer *pImage, CairoContainer *pContainer);
 
   /////////////
  // CONTEXT //

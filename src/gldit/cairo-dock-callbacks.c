@@ -1357,13 +1357,18 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 		
 		cairo_dock_replace_all_dialogs ();
 		
-		if (bIsNowSized && g_bUseOpenGL)  // in OpenGL, 
+		if (bIsNowSized && g_bUseOpenGL)  // in OpenGL, the context is linked to the window; now that the window has a correct size, the context is ready -> draw things that couldn't be drawn until now.
 		{
 			Icon *icon;
 			GList *ic;
 			for (ic = pDock->icons; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
+				if (icon->bNeedApplyBackground)  // if both are TRUE, we need to do both (for instance, the data-renderer might not redraw the icon (progressbar)). draw the bg first so that we don't draw it twice.
+				{
+					icon->bNeedApplyBackground = FALSE;  // set to FALSE, if it doesn't work here, it will probably never do.
+					cairo_dock_apply_icon_background_opengl (icon);
+				}
 				if (icon->bDamaged)
 				{
 					g_print ("This icon %s is damaged\n", icon->cName);
@@ -1384,11 +1389,6 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 					{
 						cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
 					}
-				}
-				else if (icon->bNeedApplyBackground)
-				{
-					icon->bNeedApplyBackground = FALSE;  // set to FALSE, if it doesn't work here, it will probably never do.
-					cairo_dock_apply_icon_background_opengl (icon);
 				}
 			}
 		}

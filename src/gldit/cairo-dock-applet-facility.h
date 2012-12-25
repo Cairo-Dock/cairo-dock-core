@@ -604,12 +604,27 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 */
 #define CD_APPLET_START_DRAWING_MY_ICON cairo_dock_begin_draw_icon (myIcon, myContainer, 0)
 
+/** Initiate a Cairo drawing session on the applet's icon.
+*/
+#define CD_APPLET_START_DRAWING_MY_ICON_CAIRO cairo_dock_begin_draw_icon_cairo (myIcon, 0, myDrawContext)
+
 /** Initiate an OpenGL drawing session on the applet's icon, or quit the function if failed.
 *@param ... value to return in case of failure.
 */
 #define CD_APPLET_START_DRAWING_MY_ICON_OR_RETURN(...) \
 	if (! cairo_dock_begin_draw_icon (myIcon, myContainer, 0)) \
 		return __VA_ARGS__
+
+/** Initiate a Cairo drawing session on the applet's icon, or quit the function if failed.
+*@param ... value to return in case of failure.
+*/
+#define CD_APPLET_START_DRAWING_MY_ICON_OR_RETURN_CAIRO(...) \
+	if (! cairo_dock_begin_draw_icon (myIcon, myContainer, 0)) \
+		return __VA_ARGS__
+
+/** Terminate an OpenGL drawing session on the applet's icon. Does not trigger the icon's redraw.
+*/
+#define CD_APPLET_FINISH_DRAWING_MY_ICON_CAIRO cairo_dock_end_draw_icon_cairo (myIcon, myDrawContext)
 
 /** Terminate an OpenGL drawing session on the applet's icon. Does not trigger the icon's redraw.
 */

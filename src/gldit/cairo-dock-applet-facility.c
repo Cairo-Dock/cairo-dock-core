@@ -67,6 +67,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 		int iWidth, iHeight;
 		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 		cairo_dock_apply_image_buffer_surface_at_size (&g_pIconBackgroundBuffer, pIconContext, iWidth, iHeight, 0, 0, 1);
+		pIcon->bNeedApplyBackground = FALSE;
 	}
 	
 	//\________________ On applique la nouvelle image.

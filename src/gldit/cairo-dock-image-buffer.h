@@ -181,5 +181,29 @@ void cairo_dock_apply_image_buffer_surface_with_offset_and_limit (CairoDockImage
 void cairo_dock_apply_image_buffer_texture_with_limit (CairoDockImageBuffer *pImage, double fAlpha, int iMaxWidth);
 
 
+  ///////////////////////
+ // RENDER TO TEXTURE //
+///////////////////////
+
+/** Create an FBO to render the icons inside a dock.
+*/
+void cairo_dock_create_icon_fbo (void);
+/** Destroy the icons FBO.
+*/
+void cairo_dock_destroy_icon_fbo (void);
+
+cairo_t *cairo_dock_begin_draw_image_buffer_cairo (CairoDockImageBuffer *pImage, gint iRenderingMode, cairo_t *pCairoContext);
+
+void cairo_dock_end_draw_image_buffer_cairo (CairoDockImageBuffer *pImage);
+
+gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, CairoContainer *pContainer, gint iRenderingMode);
+
+void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, CairoContainer *pContainer);
+
+void cairo_dock_image_buffer_update_texture (CairoDockImageBuffer *pImage);
+
+
+GdkPixbuf *cairo_dock_image_buffer_to_pixbuf (CairoDockImageBuffer *pImage, int iWidth, int iHeight);
+
 G_END_DECLS
 #endif

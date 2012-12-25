@@ -253,9 +253,9 @@ void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
 		_cairo_dock_set_blend_pbuffer ();
 	else
 		_cairo_dock_set_blend_alpha ();
-	
 	_cairo_dock_apply_texture_at_size_with_alpha (pIcon->image.iTexture, fSizeX, fSizeY, pIcon->fAlpha);
-	
+	//if (g_strcmp0 (pIcon->cName, "Calculatrice") == 0)
+		//g_print ("%s: %.2f\n", pIcon->cName, pIcon->fAlpha);
 	//\_____________________ On dessine son reflet.
 	cairo_dock_draw_icon_reflect_opengl (pIcon, pDock);
 	
@@ -644,7 +644,6 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 }
 
 
-
 GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 {
 	if (! g_bUseOpenGL || pImageSurface == NULL)
@@ -680,7 +679,7 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 	
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_source ();
-	glColor4f (1., 1., 1., 1.);
+	_cairo_dock_set_alpha (1.);  // full white
 	glGenTextures (1, &iTexture);
 	//g_print ("+ texture %d generee (%p, %dx%d)\n", iTexture, cairo_image_surface_get_data (pImageSurface), w, h);
 	glBindTexture (GL_TEXTURE_2D, iTexture);
