@@ -274,7 +274,7 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 		if (cairo_dock_get_icon_data_renderer (pIcon) != NULL)
 			cairo_dock_refresh_data_renderer (pIcon, pContainer);
 		
-		cairo_dock_load_icon_text (pIcon);
+		cairo_dock_load_icon_quickinfo (pIcon);
 		
 		cairo_dock_redraw_icon (pIcon, pContainer);
 		//g_print ("icon-factory: do 1 main loop iteration\n");
