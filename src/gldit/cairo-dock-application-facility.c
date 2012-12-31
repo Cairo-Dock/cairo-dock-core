@@ -275,8 +275,7 @@ gboolean cairo_dock_window_overlaps_dock (GtkAllocation *pWindowGeometry, gboole
 
 gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
 {
-	GtkAllocation *pWindowGeometry = &pIcon->windowGeometry;
-	cairo_dock_window_overlaps_dock (pWindowGeometry, pIcon->bIsHidden, pDock);
+	return cairo_dock_window_overlaps_dock (&pIcon->windowGeometry, pIcon->bIsHidden, pDock);
 }
 
 
@@ -657,8 +656,7 @@ gboolean cairo_dock_window_is_on_current_desktop (GtkAllocation *pWindowGeometry
 
 gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
 {
-	GtkAllocation *pWindowGeometry = &pIcon->windowGeometry;
-	cairo_dock_window_is_on_current_desktop (pWindowGeometry, pIcon->iNumDesktop);
+	return cairo_dock_window_is_on_current_desktop (&pIcon->windowGeometry, pIcon->iNumDesktop);
 }
 
 void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
