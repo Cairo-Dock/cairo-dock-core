@@ -215,8 +215,8 @@ static void _hide_show_if_on_our_way (CairoDock *pDock, Icon *icon)
 
 	// maybe we have a window without icon in the dock...
 	GtkAllocation *pWindowGeometry;
-	if (s_iCurrentActiveWindow != 0
-		&& (icon == NULL || s_iCurrentActiveWindow != icon->Xid))
+	if (icon != NULL && s_iCurrentActiveWindow != icon->Xid
+		&& s_iCurrentActiveWindow != 0)
 	{
 		pWindowGeometry = g_new (GtkAllocation, 1);
 		cairo_dock_get_xwindow_geometry (s_iCurrentActiveWindow,
@@ -708,7 +708,12 @@ static gboolean _on_window_configured_notification (G_GNUC_UNUSED gpointer data,
 
 		// if it's a window without icon and the active window, check if it's not above the dock
 		if (! CAIRO_DOCK_IS_APPLI (icon) && Xid == s_iCurrentActiveWindow)
-			cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, NULL);
+		{
+			Window iPropWindow;
+			XGetTransientForHint (s_XDisplay, Xid, &iPropWindow);
+			Icon *pParentIcon = g_hash_table_lookup (s_hXWindowTable, &iPropWindow);
+			cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, pParentIcon);
+		}
 
 		if (! CAIRO_DOCK_IS_APPLI (icon) || cairo_dock_icon_is_being_removed (icon))
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
