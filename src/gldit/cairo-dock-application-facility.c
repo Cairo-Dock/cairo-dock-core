@@ -281,8 +281,8 @@ gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
 
 static void _load_class_icon (Icon *icon)
 {
-	int iWidth = icon->iRequestedWidth;
-	int iHeight = icon->iRequestedHeight;
+	int iWidth = icon->iAllocatedWidth;
+	int iHeight = icon->iAllocatedWidth;
 	cairo_surface_t *pSurface = NULL;
 	if (icon->pSubDock != NULL && !myIndicatorsParam.bUseClassIndic)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 	{
@@ -290,7 +290,7 @@ static void _load_class_icon (Icon *icon)
 	}
 	else
 	{
-		//g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
+		cd_debug ("%s (%dx%d)", __func__, iWidth, iHeight);
 		pSurface = cairo_dock_create_surface_from_class (icon->cClass,
 			iWidth,
 			iHeight);
@@ -300,7 +300,7 @@ static void _load_class_icon (Icon *icon)
 			if (pApplis != NULL)
 			{
 				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
-				//g_print ("  load from %s (%dx%d)\n", pOneIcon->cName, iWidth, iHeight);
+				cd_debug ("  load from %s (%dx%d)", pOneIcon->cName, iWidth, iHeight);
 				pSurface = cairo_dock_duplicate_inhibitor_surface_for_appli (pOneIcon,
 					iWidth,
 					iHeight);
