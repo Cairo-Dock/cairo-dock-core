@@ -212,7 +212,29 @@ static void _hide_show_if_on_our_way (CairoDock *pDock, Icon *icon)
 {
 	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && ! myDocksParam.bAutoHideOnFullScreen)
 		return ;
-	if (_cairo_dock_appli_is_on_our_way (icon, pDock))  // la nouvelle fenetre active nous gene.
+
+	// maybe we have a window without icon in the dock...
+	GtkAllocation *pWindowGeometry;
+	if (s_iCurrentActiveWindow != 0
+		&& (icon == NULL || s_iCurrentActiveWindow != icon->Xid))
+	{
+		pWindowGeometry = g_new (GtkAllocation, 1);
+		cairo_dock_get_xwindow_geometry (s_iCurrentActiveWindow,
+			&pWindowGeometry->x, &pWindowGeometry->y,
+			&pWindowGeometry->width, &pWindowGeometry->height);
+	}
+	else
+		pWindowGeometry = NULL;
+
+	/* hide the dock if the active window or its parent if this window doesn't
+	 * have any dedicated icon in the dock -> If my window's text editor is
+	 * maximised and then I open a 'Search' box, the dock should not appear
+	 * above the maximised window
+	 */
+	if (_cairo_dock_appli_is_on_our_way (icon, pDock) // the new active window is above the dock
+		|| (pWindowGeometry // it's maybe a window without icon. Its parent is not above the dock but maybe this window is above.
+			&& cairo_dock_window_is_on_current_desktop (pWindowGeometry, cairo_dock_get_xwindow_desktop (s_iCurrentActiveWindow))
+			&& cairo_dock_window_overlaps_dock (pWindowGeometry, FALSE, pDock))) // or its parent
 	{
 		if (!cairo_dock_is_temporary_hidden (pDock))
 			cairo_dock_activate_temporary_auto_hide (pDock);
@@ -222,6 +244,8 @@ static void _hide_show_if_on_our_way (CairoDock *pDock, Icon *icon)
 		if (cairo_dock_is_temporary_hidden (pDock))
 			cairo_dock_deactivate_temporary_auto_hide (pDock);
 	}
+
+	g_free (pWindowGeometry);
 }
 
 void cairo_dock_hide_show_if_current_window_is_on_our_way (CairoDock *pDock)
@@ -681,6 +705,11 @@ static gboolean _on_window_configured_notification (G_GNUC_UNUSED gpointer data,
 	if (e != NULL)  // a window
 	{
 		Icon *icon = g_hash_table_lookup (s_hXWindowTable, &Xid);
+
+		// if it's a window without icon and the active window, check if it's not above the dock
+		if (! CAIRO_DOCK_IS_APPLI (icon) && Xid == s_iCurrentActiveWindow)
+			cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, NULL);
+
 		if (! CAIRO_DOCK_IS_APPLI (icon) || cairo_dock_icon_is_being_removed (icon))
 			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
 		_on_change_window_size_position (icon, e);

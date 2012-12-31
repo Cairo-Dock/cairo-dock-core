@@ -34,6 +34,7 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);
 
 
 gboolean cairo_dock_appli_covers_dock (Icon *pIcon, CairoDock *pDock);
+gboolean cairo_dock_window_overlaps_dock (GtkAllocation *pWindowGeometry, gboolean bIsHidden, CairoDock *pDock);
 gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock);
 
 
@@ -46,6 +47,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon 
 
 
 gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
+gboolean cairo_dock_window_is_on_current_desktop (GtkAllocation *pWindowGeometry, int iWindowDesktopNumber);
 gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon);
 
 void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);

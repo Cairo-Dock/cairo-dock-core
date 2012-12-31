@@ -241,9 +241,8 @@ gboolean cairo_dock_appli_covers_dock (Icon *pIcon, CairoDock *pDock)
 	return FALSE;
 }
 
-gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
+gboolean cairo_dock_window_overlaps_dock (GtkAllocation *pWindowGeometry, gboolean bIsHidden, CairoDock *pDock)
 {
-	GtkAllocation *pWindowGeometry = &pIcon->windowGeometry;
 	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
 	{
 		int iDockX, iDockY, iDockWidth, iDockHeight;
@@ -262,7 +261,7 @@ gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
 			iDockY = pDock->container.iWindowPositionX + (pDock->container.iWidth - iDockHeight)/2;
 		}
 		
-		if (! pIcon->bIsHidden && pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX && pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY)
+		if (! bIsHidden && pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX && pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY)
 		{
 			return TRUE;
 		}
@@ -272,6 +271,12 @@ gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
 		cd_warning (" unknown window geometry");
 	}
 	return FALSE;
+}
+
+gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
+{
+	GtkAllocation *pWindowGeometry = &pIcon->windowGeometry;
+	cairo_dock_window_overlaps_dock (pWindowGeometry, pIcon->bIsHidden, pDock);
 }
 
 
@@ -635,20 +640,25 @@ gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumV
 		y < (iNumViewportY + 1) * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 }
 
-gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
+gboolean cairo_dock_window_is_on_current_desktop (GtkAllocation *pWindowGeometry, int iWindowDesktopNumber)
 {
-	int iWindowDesktopNumber, iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;  // coordonnees du coin haut gauche dans le referentiel du viewport actuel.
-	iWindowDesktopNumber = pIcon->iNumDesktop;
-	iGlobalPositionX = pIcon->windowGeometry.x;
-	iGlobalPositionY = pIcon->windowGeometry.y;
-	iWidthExtent = pIcon->windowGeometry.width;
-	iHeightExtent = pIcon->windowGeometry.height;
+	int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;  // coordonnees du coin haut gauche dans le referentiel du viewport actuel.
+	iGlobalPositionX = pWindowGeometry->x;
+	iGlobalPositionY = pWindowGeometry->y;
+	iWidthExtent = pWindowGeometry->width;
+	iHeightExtent = pWindowGeometry->height;
 	
 	return ( (iWindowDesktopNumber == g_desktopGeometry.iCurrentDesktop || iWindowDesktopNumber == -1) &&
 		iGlobalPositionX + iWidthExtent > 0 &&
 		iGlobalPositionX < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
 		iGlobalPositionY + iHeightExtent > 0 &&
 		iGlobalPositionY < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
+}
+
+gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
+{
+	GtkAllocation *pWindowGeometry = &pIcon->windowGeometry;
+	cairo_dock_window_is_on_current_desktop (pWindowGeometry, pIcon->iNumDesktop);
 }
 
 void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
