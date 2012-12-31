@@ -1364,14 +1364,15 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 			for (ic = pDock->icons; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
+				gboolean bDamaged = icon->bDamaged;  // if bNeedApplyBackground is also TRUE, applying the background will remove the 'damage' flag.
 				if (icon->bNeedApplyBackground)  // if both are TRUE, we need to do both (for instance, the data-renderer might not redraw the icon (progressbar)). draw the bg first so that we don't draw it twice.
 				{
 					icon->bNeedApplyBackground = FALSE;  // set to FALSE, if it doesn't work here, it will probably never do.
 					cairo_dock_apply_icon_background_opengl (icon);
 				}
-				if (icon->bDamaged)
+				if (bDamaged)
 				{
-					g_print ("This icon %s is damaged\n", icon->cName);
+					//g_print ("This icon %s is damaged\n", icon->cName);
 					icon->bDamaged = FALSE;
 					if (cairo_dock_get_icon_data_renderer (icon) != NULL)
 					{
