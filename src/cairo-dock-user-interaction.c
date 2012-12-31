@@ -69,18 +69,19 @@ static void _cairo_dock_hide_show_in_class_subdock (Icon *icon)
 {
 	if (icon->pSubDock == NULL || icon->pSubDock->icons == NULL)
 		return;
+	// if the appli has the focus, we hide all the windows, else we show them all
 	Icon *pIcon;
 	GList *ic;
 	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid != 0 && ! pIcon->bIsHidden)  // par defaut on cache tout.
+		if (pIcon->Xid != 0 && pIcon->Xid == cairo_dock_get_current_active_window ())
 		{
 			break;
 		}
 	}
 	
-	if (ic != NULL)  // au moins une fenetre est visible, on cache tout.
+	if (ic != NULL)  // one of the windows of the appli has the focus -> hide.
 	{
 		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 		{
