@@ -239,11 +239,8 @@ static void _hide_show_if_on_our_way (CairoDock *pDock, Icon *icon)
 		if (!cairo_dock_is_temporary_hidden (pDock))
 			cairo_dock_activate_temporary_auto_hide (pDock);
 	}
-	else if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
-	{
-		if (cairo_dock_is_temporary_hidden (pDock))
-			cairo_dock_deactivate_temporary_auto_hide (pDock);
-	}
+	else if (cairo_dock_is_temporary_hidden (pDock))
+		cairo_dock_deactivate_temporary_auto_hide (pDock);
 
 	g_free (pWindowGeometry);
 }
