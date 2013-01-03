@@ -613,22 +613,24 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 */
 #define CD_APPLET_START_DRAWING_MY_ICON_OR_RETURN(...) \
 	if (! cairo_dock_begin_draw_icon (myIcon, myContainer, 0)) \
-		return __VA_ARGS__
+		CD_APPLET_LEAVE (__VA_ARGS__)
 
 /** Initiate a Cairo drawing session on the applet's icon, or quit the function if failed.
 *@param ... value to return in case of failure.
 */
 #define CD_APPLET_START_DRAWING_MY_ICON_OR_RETURN_CAIRO(...) \
-	if (! cairo_dock_begin_draw_icon (myIcon, myContainer, 0)) \
-		return __VA_ARGS__
+	if (! cairo_dock_begin_draw_icon_cairo (myIcon, 0, myDrawContext)) \
+		CD_APPLET_LEAVE (__VA_ARGS__)
 
 /** Terminate an OpenGL drawing session on the applet's icon. Does not trigger the icon's redraw.
 */
-#define CD_APPLET_FINISH_DRAWING_MY_ICON_CAIRO cairo_dock_end_draw_icon_cairo (myIcon, myDrawContext)
+#define CD_APPLET_FINISH_DRAWING_MY_ICON cairo_dock_end_draw_icon (myIcon, myContainer); \
+	CD_APPLET_REDRAW_MY_ICON;
 
 /** Terminate an OpenGL drawing session on the applet's icon. Does not trigger the icon's redraw.
 */
-#define CD_APPLET_FINISH_DRAWING_MY_ICON cairo_dock_end_draw_icon (myIcon, myContainer)
+#define CD_APPLET_FINISH_DRAWING_MY_ICON_CAIRO cairo_dock_end_draw_icon_cairo (myIcon); \
+	CD_APPLET_REDRAW_MY_ICON;
 
 
 /** Add an overlay from an image on the applet's icon.

@@ -702,6 +702,7 @@ cairo_t *cairo_dock_begin_draw_icon_cairo (Icon *pIcon, gint iRenderingMode, cai
 			int iWidth, iHeight;
 			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
 			cairo_dock_apply_image_buffer_surface_at_size (&g_pIconBackgroundBuffer, ctx, iWidth, iHeight, 0, 0, 1);
+			pIcon->bNeedApplyBackground = FALSE;
 		}
 	}
 	
@@ -729,6 +730,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *
 			_cairo_dock_set_alpha (1.);
 			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture, iWidth, iHeight);
 			_cairo_dock_disable_texture ();
+			pIcon->bNeedApplyBackground = FALSE;
 		}
 	}
 	
