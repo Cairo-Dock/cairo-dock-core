@@ -31,7 +31,6 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-emblem.h"
 
-extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 extern gboolean g_bUseOpenGL;
 
 static double f = .5;

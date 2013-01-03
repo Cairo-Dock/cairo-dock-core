@@ -297,24 +297,20 @@ void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iN
 static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext)
 {
 	cairo_t *ctx = NULL;
-	if (pRenderer->bUseOverlay && pRenderer->pOverlay != NULL && pRenderer->pOverlay->image.pSurface != NULL)
+	if (pRenderer->bUseOverlay && pRenderer->pOverlay != NULL)
 	{
-		ctx = cairo_create (pRenderer->pOverlay->image.pSurface);
-		cairo_dock_erase_cairo_context (ctx);
+		CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
+		if (! pData->bHasValue)  // if no value has been set yet, it's better to not draw anything, since the icon already has an image (we draw on an overlay).
+			return;
+		ctx = cairo_dock_begin_draw_image_buffer_cairo (&pRenderer->pOverlay->image, 0, NULL);
 		pCairoContext = ctx;
 	}
 	else if (pCairoContext == NULL && pIcon->image.pSurface)
 	{
-		ctx = cairo_create (pIcon->image.pSurface);
+		ctx = cairo_dock_begin_draw_icon_cairo (pIcon, 0, NULL);
 		pCairoContext = ctx;
 	}
 	g_return_if_fail (pCairoContext != NULL);
-	
-	//\________________ On efface tout.
-	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 0.0);
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-	cairo_paint (pCairoContext);
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 	
 	//\________________ On dessine.
 	cairo_save (pCairoContext);

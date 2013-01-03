@@ -251,7 +251,6 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_request_icon_animation (Icon *pIcon, CairoContainer *pContainer, const gchar *cAnimation, int iNbRounds)
 {
-	//g_print ("%s (%s, state:%d)\n", __func__, pIcon->cName, pIcon->iAnimationState);
 	CairoDock *pDock;
 	if (! CAIRO_DOCK_IS_DOCK (pContainer))  // at the moment, only docks can animate their icons
 		return;
@@ -421,6 +420,9 @@ gboolean cairo_dock_on_insert_remove_icon_notification (G_GNUC_UNUSED gpointer p
 	if (pIcon->iAnimationState == CAIRO_DOCK_STATE_REMOVE_INSERT)  // already in insert/remove state
 		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 	
+	if (pIcon->fInsertRemoveFactor == 0)  // animation not needed.
+		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	
 	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
 	
 	///if (fabs (pIcon->fInsertRemoveFactor) < .1)  // useless or not needed animation.
@@ -479,8 +481,6 @@ static gboolean _cairo_dock_transition_step (G_GNUC_UNUSED gpointer pUserData, I
 	else if (pTransition->render != NULL)
 	{
 		bContinue = pTransition->render (pIcon, pTransition->pUserData);
-		/**if (pContainer->bUseReflect)
-			cairo_dock_add_reflection_to_icon (pIcon, pContainer);*/
 	}
 	
 	cairo_dock_redraw_icon (pIcon, pContainer);

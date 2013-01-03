@@ -310,7 +310,6 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	
-	cairo_t *pCairoContext = NULL;
 	if (pIcon->image.iTexture != 0 && pRenderer->render_opengl)  // dessin opengl
 	{
 		//\______________ On efface le dessin existant.
@@ -336,7 +335,9 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	else if (pIcon->image.pSurface != NULL && pRenderer->render != NULL)  // dessin cairo
 	{
 		//\______________ On efface le dessin existant.
-		pCairoContext = cairo_create (pIcon->image.pSurface);
+		cairo_t *pCairoContext = cairo_dock_begin_draw_icon_cairo (pIcon, 0, NULL);  // 0 <=> erase
+		g_return_if_fail (pCairoContext != NULL);
+		/**pCairoContext = cairo_create (pIcon->image.pSurface);
 		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 		
 		if (g_pIconBackgroundBuffer.pSurface != NULL)  // on ecrase le dessin existant avec l'image de fond des icones.
@@ -350,14 +351,15 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		else  // sinon on efface juste ce qu'il y'avait.
 		{
 			cairo_dock_erase_cairo_context (pCairoContext);
-		}
+		}*/
 		
 		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
 		pRenderer->render (pIcon, CAIRO_CONTAINER (pDock), w, h, pCairoContext);
 		
 		//\______________ On finit le dessin.
-		if (g_bUseOpenGL)
-			cairo_dock_update_icon_texture (pIcon);
+		///if (g_bUseOpenGL)
+		///	cairo_dock_update_icon_texture (pIcon);
+		cairo_dock_end_draw_icon_cairo (pIcon);
 		cairo_destroy (pCairoContext);
 	}
 }
