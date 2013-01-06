@@ -883,6 +883,31 @@ gboolean cairo_dock_desklet_manager_is_ready (void)
 	return bReady;
 }
 
+static gboolean _cairo_dock_replace_desklets (G_GNUC_UNUSED gpointer data)
+{
+	// when the screen size changes, X will send a 'configure' event to each windows (because size and position might have changed), which will be interpreted by the desklet as a user displacement.
+	// we must therefore replace the desklets at their correct position in the new desktop space.
+	CairoDesklet *pDesklet;
+	CairoDockMinimalAppletConfig *pMinimalConfig;
+	GList *dl;
+	for (dl = s_pDeskletList; dl != NULL; dl = dl->next)
+	{
+		pDesklet = dl->data;
+		//g_print ("%s : %d;%d\n", pDesklet->pIcon->pModuleInstance->pModule->pVisitCard->cModuleName, pDesklet->container.iWindowPositionX, pDesklet->container.iWindowPositionY);
+		
+		// get the position (and other parameters) as defined by the user.
+		pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
+		GKeyFile *pKeyFile = cairo_dock_pre_read_module_instance_config (pDesklet->pIcon->pModuleInstance, pMinimalConfig);
+		g_key_file_free (pKeyFile);
+		//g_print ("  %d;%d\n", pMinimalConfig->deskletAttribute.iDeskletPositionX, pMinimalConfig->deskletAttribute.iDeskletPositionY);
+		
+		// apply the settings to the desklet.
+		cairo_dock_configure_desklet (pDesklet, &pMinimalConfig->deskletAttribute);
+		cairo_dock_free_minimal_config (pMinimalConfig);
+	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+
   //////////////////
  /// GET CONFIG ///
 //////////////////
@@ -988,6 +1013,10 @@ static void init (void)
 		NOTIFICATION_RENDER,
 		(CairoDockNotificationFunc) _cairo_dock_render_desklet_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
+	cairo_dock_register_notification_on_object (&myDesktopMgr,
+		NOTIFICATION_SCREEN_GEOMETRY_ALTERED,
+		(CairoDockNotificationFunc) _cairo_dock_replace_desklets,
+		CAIRO_DOCK_RUN_AFTER, NULL);
 	s_iStartupTime = time (NULL);  // on startup, the WM can take a long time before it has positionned all the desklets. To avoid irrelevant configure events, we set a delay.
 }
 
