@@ -463,7 +463,7 @@ static void _on_change_window_state (Icon *icon)
 	// _NET_WM_STATE_DEMANDS_ATTENTION indicates that some action in or with the window happened. For example, it may be set by the Window Manager if the window requested activation but the Window Manager refused it, or the application may set it if it finished some work. This state may be set by both the Client and the Window Manager. It should be unset by the Window Manager when it decides the window got the required attention (usually, that it got activated)."
 	if (bDemandsAttention)
 	{
-		cd_debug ("%s demande votre attention %s !", icon->cName, icon->bIsDemandingAttention?"encore une fois":"");
+		g_print ("%s demande votre attention %s !\n", icon->cName, icon->bIsDemandingAttention?"encore une fois":"");
 		if (! icon->bIsDemandingAttention && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))  // some WM tend to abuse this state, so we only acknowledge it if it's not already set.
 		{
 			cairo_dock_appli_demands_attention (icon);
@@ -473,7 +473,7 @@ static void _on_change_window_state (Icon *icon)
 	{
 		if (icon->bIsDemandingAttention)
 		{
-			cd_debug ("%s se tait", icon->cName);
+			g_print ("%s se tait\n", icon->cName);
 			cairo_dock_appli_stops_demanding_attention (icon);
 		}
 	}
@@ -1400,13 +1400,13 @@ static void _load_appli (Icon *icon)
 	if (myTaskbarParam.iMinimizedWindowRenderType == 1 && icon->bIsHidden && icon->iBackingPixmap != 0)
 	{
 		// create the thumbnail (window preview).
-		if (g_bUseOpenGL)
+		if (g_bUseOpenGL)  // in OpenGL, we should be able to use the texture-from-pixmap mechanism
 		{
 			GLuint iTexture = cairo_dock_texture_from_pixmap (icon->Xid, icon->iBackingPixmap);  // doesn't work any more since Compiz 0.9 :-(
 			if (iTexture)
 				cairo_dock_load_image_buffer_from_texture (&icon->image, iTexture, iWidth, iHeight);
 		}
-		if (icon->image.iTexture == 0)
+		if (icon->image.iTexture == 0)  // if not opengl or didn't work, get the content of the pixmap from the X server.
 		{
 			cairo_surface_t *pThumbnailSurface = cairo_dock_create_surface_from_xpixmap (icon->iBackingPixmap,
 				iWidth,
@@ -1511,6 +1511,8 @@ static Icon * cairo_dock_create_icon_from_xwindow (Window Xid)
 		{
 			//Display *display = gdk_x11_get_default_xdisplay ();
 			icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
+			if (icon->iBackingPixmap != 0)
+				XCompositeRedirectWindow (s_XDisplay, Xid, 0);  // redirect the window content to the backing pixmap (the WM may or may not already do this).
 			/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
 			cd_debug ("backing pixmap : %d ; iDamageHandle : %d", icon->iBackingPixmap, icon->iDamageHandle);*/
 		}

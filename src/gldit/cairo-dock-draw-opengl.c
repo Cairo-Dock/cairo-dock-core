@@ -987,7 +987,7 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 {
 	if (!g_bEasterEggs)
-		return 0;  /// ca ne marche pas. :-(
+		return 0;  /// works for some windows (gnome-terminal) but not for all ... still need to figure why.
 	
 	if (!iBackingPixmap || ! g_openglConfig.bTextureFromPixmapAvailable)
 		return 0;

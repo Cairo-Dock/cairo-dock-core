@@ -70,3 +70,20 @@ all:
 	- Remove GCC warnings
 	- (try to only use temporally g_print functions ;) )
 	- Complete the ChangeLog file
+
+	static int r=0;
+	if (!r)
+	{
+		Screen *scr = XDefaultScreenOfDisplay (s_XDisplay);
+		Visual *visual = DefaultVisualOfScreen (scr);
+		cairo_surface_t * s = cairo_xlib_surface_create (s_XDisplay,
+                                                         cairo_dock_get_root_id(),
+                                                         visual,
+                                                         g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		if (s)
+		{
+			cairo_surface_write_to_png (s, "/tmp/screenshot.png");
+			cairo_surface_destroy (s);
+		}
+		r=1;
+	}
