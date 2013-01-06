@@ -148,7 +148,7 @@ CairoOverlay *cairo_dock_add_overlay_from_surface (Icon *pIcon, cairo_surface_t 
 
 CairoOverlay *cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture, CairoOverlayPosition iPosition, gpointer data)
 {
-	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_texture (iTexture, 0, 0);
+	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_texture (iTexture, 1, 1);  // we don't need the exact size of the texture as long as the scale is not 0, since then we'll simply draw the texture at the size of the icon * scale
 	
 	cairo_dock_add_overlay_to_icon (pIcon, pOverlay, iPosition, data);
 	
@@ -466,7 +466,7 @@ static void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pCont
 		glPushMatrix ();
 		_cairo_dock_enable_texture ();
 		
-		_cairo_dock_set_blend_alpha ();
+		_cairo_dock_set_blend_pbuffer ();
 		///glBindTexture (GL_TEXTURE_2D, pOverlay->image.iTexture);
 		///_cairo_dock_apply_current_texture_at_size_with_offset (wo, ho, x, y);
 		glTranslatef (x, y, 0);
@@ -524,7 +524,7 @@ void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, CairoContainer 
 
 void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, CairoContainer *pContainer, GLuint iTexture, CairoOverlayPosition iPosition)
 {
-	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_texture (iTexture, 0, 0);
+	CairoOverlay *pOverlay = cairo_dock_create_overlay_from_texture (iTexture, 1, 1);  // we don't need the exact size of the texture as long as the scale is not 0, since then we'll simply draw the texture at the size of the icon * scale
 	
 	cairo_dock_print_overlay_on_icon (pIcon, pContainer, pOverlay, iPosition);
 	
