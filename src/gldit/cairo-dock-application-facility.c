@@ -52,8 +52,8 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 	cd_debug ("%s (%s, force:%d)", __func__, icon->cName, bForceDemand);
 	if (CAIRO_DOCK_IS_APPLET (icon))  // on considere qu'une applet prenant le controle d'une icone d'appli dispose de bien meilleurs moyens pour interagir avec l'appli que la barre des taches.
 		return ;
-	if (! pHiddenIcon)
-		icon->bIsDemandingAttention = TRUE;
+	///if (! pHiddenIcon)
+		icon->bDemandsAttention = TRUE;
 	//\____________________ On montre le dialogue.
 	if (myTaskbarParam.bDemandsAttentionWithDialog)
 	{
@@ -97,7 +97,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			if (pParentDock)
 				cairo_dock_show_subdock (pPointedIcon, pParentDock);
 		}*/
-		cairo_dock_request_icon_animation (icon, CAIRO_CONTAINER (pDock), myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
+		cairo_dock_request_icon_attention (icon, pDock, myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
 	}
 	
@@ -106,13 +106,13 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
 {
-	cd_debug ("%s (%s / %s , %d)", __func__, icon->cName, icon->cLastAttentionDemand, icon->bIsDemandingAttention);
+	cd_debug ("%s (%s / %s , %d)", __func__, icon->cName, icon->cLastAttentionDemand, icon->bDemandsAttention);
 	if (icon->Xid == cairo_dock_get_current_active_window ())  // apparemment ce cas existe, et conduit a ne pas pouvoir stopper l'animation de demande d'attention facilement.
 	{
 		cd_message ("cette fenetre a deja le focus, elle ne peut demander l'attention en plus.");
 		return ;
 	}
-	if (icon->bIsDemandingAttention  // already demanding attention
+	if (icon->bDemandsAttention  // already demanding attention
 	&& icon->cLastAttentionDemand && icon->cName && strcmp (icon->cLastAttentionDemand, icon->cName) == 0)  // and message has not changed between the 2 demands.
 	{
 		return ;
@@ -124,7 +124,7 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)  // appli inhibee ou non affichee.
 	{
-		icon->bIsDemandingAttention = TRUE;  // on met a TRUE meme si ce n'est pas reellement elle qui va prendre la demande.
+		icon->bDemandsAttention = TRUE;  // on met a TRUE meme si ce n'est pas reellement elle qui va prendre la demande.
 		Icon *pInhibitorIcon = cairo_dock_get_inhibitor (icon, TRUE);  // on cherche son inhibiteur dans un dock.
 		if (pInhibitorIcon != NULL)  // appli inhibee.
 		{
@@ -151,10 +151,10 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 		cairo_dock_remove_dialog_if_any (icon);
 	if (myTaskbarParam.cAnimationOnDemandsAttention)
 	{
-		cairo_dock_stop_icon_animation (icon);  // arrete l'animation precedemment lancee par la demande.
+		cairo_dock_stop_icon_attention (icon, pDock);  // arrete l'animation precedemment lancee par la demande.
 		gtk_widget_queue_draw (pDock->container.pWidget);  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
 	}
-	icon->bIsDemandingAttention = FALSE;
+	icon->bDemandsAttention = FALSE;
 	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow && ! pDock->container.bInside)
 		cairo_dock_pop_down (pDock);
 	
@@ -163,10 +163,11 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 }
 void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 {
+	g_print ("%s (%s)\n", __func__, icon->cName);
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)
 	{
-		icon->bIsDemandingAttention = FALSE;  // idem que plus haut.
+		icon->bDemandsAttention = FALSE;  // idem que plus haut.
 		Icon *pInhibitorIcon = cairo_dock_get_inhibitor (icon, TRUE);
 		if (pInhibitorIcon != NULL)
 		{

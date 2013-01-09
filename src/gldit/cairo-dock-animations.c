@@ -268,10 +268,14 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoContainer *pContainer,
 
 void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
 {
+	// stop any current animation
 	cairo_dock_stop_icon_animation (pIcon);
+	
+	// set the 'attention animation' flag
 	pIcon->bIsDemandingAttention = TRUE;
 	
-	if (iNbRounds <= 0)
+	// start the animation
+	if (iNbRounds <= 0)  // <= 0 means infinite
 		iNbRounds = 1e6;
 	if (cAnimation == NULL || *cAnimation == '\0' || strcmp (cAnimation, "default") == 0)
 	{
@@ -284,7 +288,7 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 	cairo_dock_request_icon_animation (pIcon, CAIRO_CONTAINER (pDock), cAnimation, iNbRounds);
 	cairo_dock_mark_icon_as_clicked (pIcon);  // pour eviter qu'un simple survol ne stoppe l'animation.
 	
-	// on reporte la demande d'attention recursivement vers le bas.
+	// if the icon is in a sub-dock, also animate the main icon.
 	if (pDock->iRefCount > 0)
 	{
 		CairoDock *pParentDock = NULL;
@@ -300,6 +304,9 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 
 void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 {
+	if (! pIcon->bIsDemandingAttention)
+		return;
+	g_print ("%s (%s)\n", __func__, pIcon->cName);
 	cairo_dock_stop_icon_animation (pIcon);
 	//cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));  // a faire avant, lorsque l'icone est encore en mode demande d'attention.
 	pIcon->bIsDemandingAttention = FALSE;

@@ -405,7 +405,8 @@ void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, Cair
 		
 		if (bStartAnimation)
 		{
-			pPointedIcon->iAnimationState = CAIRO_DOCK_STATE_MOUSE_HOVERED;
+			///pPointedIcon->iAnimationState = CAIRO_DOCK_STATE_MOUSE_HOVERED;
+			cairo_dock_mark_icon_as_hovered_by_mouse (pPointedIcon);  // mark the animation as 'hover' if it's not already in another state (clicked, etc).
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 		}
 	}
@@ -544,7 +545,8 @@ gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget,
 		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && (fabs (pMotion->x - s_iClickX) > CD_CLICK_ZONE || fabs (pMotion->y - s_iClickY) > CD_CLICK_ZONE) && ! pDock->bPreventDraggingIcons)
 		{
 			s_bIconDragged = TRUE;
-			s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
+			///s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
+			cairo_dock_mark_icon_as_following_mouse (s_pIconClicked);
 			//pDock->fAvoidingMouseMargin = .5;
 			pDock->iAvoidingMouseIconType = s_pIconClicked->iGroup;  // on pourrait le faire lors du clic aussi.
 			s_pIconClicked->fScale = cairo_dock_get_icon_max_scale (s_pIconClicked);
@@ -1027,6 +1029,7 @@ static gboolean _double_click_delay_over (Icon *icon)
 	CairoDock *pDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pDock)
 	{
+		cairo_dock_stop_icon_attention (icon, pDock);  // we consider that clicking on the icon is an acknowledge of the demand of attention.
 		pDock->container.iMouseX = s_iFirstClickX;
 		pDock->container.iMouseY = s_iFirstClickY;
 		cairo_dock_notify_on_object (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
@@ -1035,7 +1038,7 @@ static gboolean _double_click_delay_over (Icon *icon)
 		
 		cairo_dock_start_icon_animation (icon, pDock);
 	}
-	icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
+	///icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
 	icon->iSidDoubleClickDelay = 0;
 	return FALSE;
 }
@@ -1110,12 +1113,14 @@ gboolean cairo_dock_on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventB
 							}
 							else
 							{
+								cairo_dock_stop_icon_attention (icon, pDock);  // we consider that clicking on the icon is an acknowledge of the demand of attention.
+								
 								cairo_dock_notify_on_object (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, pButton->state);
 								if (pDock->bIsMainDock && pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY)
 									s_bHideAfterShortcut = TRUE;
 								
 								cairo_dock_start_icon_animation (icon, pDock);
-								icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
+								///icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
 							}
 						}
 					}

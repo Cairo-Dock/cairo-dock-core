@@ -404,6 +404,7 @@ static gboolean _cairo_dock_dock_animation_loop (CairoContainer *pContainer)
 			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
 			if (icon->bIsDemandingAttention)
 			{
+				g_print (" stop attention animation for %s\n", icon->cName);
 				icon->bIsDemandingAttention = FALSE;
 				bNoMoreDemandingAttention = TRUE;
 			}

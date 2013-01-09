@@ -202,7 +202,8 @@ struct _Icon {
 	gint iThumbnailWidth, iThumbnailHeight;
 	
 	gboolean bNeedApplyBackground;
-	gpointer reserved[3];
+	gboolean bDemandsAttention;
+	gpointer reserved[2];
 };
 
 typedef void (*CairoIconContainerLoadFunc) (void);
