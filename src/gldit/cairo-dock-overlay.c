@@ -207,60 +207,7 @@ void cairo_dock_destroy_icon_overlays (Icon *pIcon)
 }
 
 
-/**static void _get_overlay_position_and_size (CairoOverlay *pOverlay, int w, int h, int *x, int *y, int *wo, int *ho)  // from the center of the icon.
-{
-	if (pOverlay->fScale > 0)
-	{
-		*wo = w * pOverlay->fScale;
-		*ho = h * pOverlay->fScale;
-	}
-	else
-	{
-		*wo = pOverlay->image.iWidth;
-		*ho = pOverlay->image.iHeight;
-	}
-	switch (pOverlay->iPosition)
-	{
-		case CAIRO_OVERLAY_LOWER_LEFT:
-		default:
-			*x = (-w  + *wo) / 2;
-			*y = (-h + *ho) / 2;
-		break;
-		case CAIRO_OVERLAY_LOWER_RIGHT:
-			*x = (w  - *wo) / 2;
-			*y = (-h + *ho) / 2;
-		break;
-		case CAIRO_OVERLAY_BOTTOM:
-			*x = 0;
-			*y = (-h + *ho) / 2;
-		break;
-		case CAIRO_OVERLAY_UPPER_LEFT:
-			*x = (-w  + *wo) / 2;
-			*y = (h - *ho) / 2;
-		break;
-		case CAIRO_OVERLAY_UPPER_RIGHT:
-			*x = (w  - *wo) / 2;
-			*y = (h - *ho) / 2;
-		break;
-		case CAIRO_OVERLAY_TOP:
-			*x = 0;
-			*y = (h - *ho) / 2;
-		break;
-		case CAIRO_OVERLAY_RIGHT:
-			*x = (w  - *wo) / 2;
-			*y = 0;
-		break;
-		case CAIRO_OVERLAY_LEFT:
-			*x = (-w  + *wo) / 2;
-			*y = 0;
-		break;
-		case CAIRO_OVERLAY_MIDDLE:
-			*x = 0.;
-			*y = 0.;
-		break;
-	}
-}*/
-static void _get_overlay_position_and_size (CairoOverlay *pOverlay, int w, int h, double z, int *x, int *y, int *wo, int *ho)  // from the center of the icon.
+static void _get_overlay_position_and_size (CairoOverlay *pOverlay, int w, int h, double z, double *x, double *y, int *wo, int *ho)  // from the center of the icon.
 {
 	if (pOverlay->fScale > 0)
 	{
@@ -326,45 +273,31 @@ void cairo_dock_draw_icon_overlays_cairo (Icon *pIcon, double fRatio, cairo_t *p
 	GList* ov;
 	CairoOverlay *p;
 	int wo, ho;  // actual size at which the overlay will rendered.
-	int x, y;  // position of the overlay relatively to the icon center.
-	double dx, dy;  // offset to place the surface on the integer grid to avoid blur.
+	double x, y;  // position of the overlay relatively to the icon center.
 	for (ov = pIcon->pOverlays; ov != NULL; ov = ov->next)
 	{
 		p = ov->data;
 		if (! p->image.pSurface)
 			continue;
-		/**_get_overlay_position_and_size (p, w, h, &x, &y, &wo, &ho);
-		cairo_save (pCairoContext);
-		
-		// translate to the middle of the icon.
-		cairo_translate (pCairoContext,
-			pIcon->fWidth / 2 * pIcon->fScale,
-			pIcon->fHeight / 2 * pIcon->fScale);
-		
-		// scale like the icon
-		cairo_scale (pCairoContext,
-			fRatio * pIcon->fScale / fMaxScale,
-			fRatio * pIcon->fScale / fMaxScale);
-		
-		// translate to the overlay top-left corner.
-		cairo_translate (pCairoContext,
-			x - wo/2 - 1,  /// -1 to compensate the round errors; TODO: use double
-			- y - ho/2. + 1);
-		
-		// draw.
-		cairo_scale (pCairoContext,
-			(double) wo / p->image.iWidth,
-			(double) ho / p->image.iHeight);*/
 		
 		_get_overlay_position_and_size (p, w, h, z, &x, &y, &wo, &ho);
-		dx = (wo & 1) * .5;
-		dy = (ho & 1) * .5;
+		x += (pIcon->fWidth * pIcon->fScale - wo) / 2.;
+		y = - y + (pIcon->fHeight * pIcon->fScale - ho) / 2.;
+		if (pIcon->fScale == 1)  // place the overlay on the grid to avoid scale blur (only when the icon is at rest, otherwise it makes the movement jerky).
+		{
+			if (wo & 1)
+				x = floor (x) + .5;
+			else
+				x = round (x);
+			if (ho & 1)
+				y = floor (y) + .5;
+			else
+				y = round (y);
+		}
 		cairo_save (pCairoContext);
 		
 		// translate to the top-left corner of the overlay.
-		cairo_translate (pCairoContext,
-			floor (pIcon->fWidth / 2 * pIcon->fScale + x - wo/2) + dx,
-			floor (pIcon->fHeight / 2 * pIcon->fScale - y - ho/2) + dy);
+		cairo_translate (pCairoContext, x, y);
 		
 		// draw.
 		cairo_scale (pCairoContext,
@@ -393,42 +326,30 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio)
 	GList* ov;
 	CairoOverlay *p;
 	int wo, ho;  // actual size at which the overlay will rendered.
-	int x, y;  // position of the overlay relatively to the icon center.
-	double dx, dy;  // offset to place the surface on the integer grid to avoid blur.
+	double x, y;  // position of the overlay relatively to the icon center.
 	for (ov = pIcon->pOverlays; ov != NULL; ov = ov->next)
 	{
 		p = ov->data;
 		if (! p->image.iTexture)
 			continue;
 		glPushMatrix ();
-		/**_get_overlay_position_and_size (p, w, h, &x, &y, &wo, &ho);
 		
-		// scale/rotate like the icon
-		glRotatef (-pIcon->fOrientation/G_PI*180., 0., 0., 1.);
-		
-		glScalef (fRatio * pIcon->fScale / fMaxScale,
-			fRatio * pIcon->fScale / fMaxScale,
-			1.);
-		
-		// translate to the overlay center.
-		glTranslatef (x,
-			y,
-			0.);
-		
-		// draw.
-		glScalef ((double)wo / p->image.iWidth,
-			(double)ho / p->image.iHeight,
-			1.);
-		cairo_dock_apply_image_buffer_texture (&p->image);*/
 		_get_overlay_position_and_size (p, w, h, z, &x, &y, &wo, &ho);
-		dx = (wo & 1) * .5;
-		dy = (ho & 1) * .5;
+		if (pIcon->fScale == 1)  // place the overlay on the grid to avoid scale blur (only when the icon is at rest, otherwise it makes the movement jerky).
+		{
+			if (wo & 1)
+				x = floor (x) + .5;
+			else
+				x = round (x);
+			if (ho & 1)
+				y = floor (y) + .5;
+			else
+				y = round (y);
+		}
 		
 		// translate to the overlay center.
 		glRotatef (-pIcon->fOrientation/G_PI*180., 0., 0., 1.);
-		glTranslatef (x + dx,
-			y + dy,
-			0.);
+		glTranslatef (x, y, 0.);
 		
 		// draw.
 		_cairo_dock_apply_texture_at_size (p->image.iTexture, wo, ho);
@@ -452,7 +373,7 @@ static void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoContainer *pCont
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
 	//g_print ("%s (%dx%d, %d, %p)\n", __func__, w, h, iPosition, pContainer);
 	
-	int x, y;  // relatively to the icon center.
+	double x, y;  // relatively to the icon center.
 	int wo, ho;  // overlay size
 	pOverlay->iPosition = iPosition;
 	_get_overlay_position_and_size (pOverlay, w, h, 1, &x, &y, &wo, &ho);
