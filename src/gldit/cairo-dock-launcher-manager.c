@@ -40,9 +40,11 @@
 #include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
 #include "cairo-dock-X-utilities.h"  // cairo_dock_show_xwindow
+#include "cairo-dock-file-manager.h"  // g_iDesktopEnv
 #include "cairo-dock-launcher-manager.h"
 
 extern gchar *g_cCurrentLaunchersPath;
+extern CairoDockDesktopEnv g_iDesktopEnv;
 
 static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
 {
@@ -524,4 +526,24 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 		return FALSE;
 	}
 	return TRUE;
+}
+
+gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand)
+{
+	gchar *cFullCommand;
+	const gchar *cTerm = g_getenv ("COLORTERM");
+	if (cTerm != NULL && strlen (cTerm) > 1)  // Filter COLORTERM=1 ou COLORTERM=y because we need the name of the terminal
+		cFullCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
+	else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
+		cFullCommand = g_strdup_printf ("gnome-terminal -e \"%s\"", cCommand);
+	else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
+		cFullCommand = g_strdup_printf ("xfce4-terminal -e \"%s\"", cCommand);
+	else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
+		cFullCommand = g_strdup_printf ("konsole -e \"%s\"", cCommand);
+	else if ((cTerm = g_getenv ("TERM")) != NULL)
+		cFullCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
+	else
+		cFullCommand = g_strdup_printf ("xterm -e \"%s\"", cCommand);
+
+	return cFullCommand;
 }

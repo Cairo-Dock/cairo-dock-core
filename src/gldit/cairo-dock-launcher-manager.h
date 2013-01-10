@@ -64,6 +64,7 @@ gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboole
 gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...) G_GNUC_PRINTF (1, 3);
 gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory);
 #define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL)
+gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);
 
 G_END_DECLS
 #endif

@@ -27,12 +27,11 @@
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-file-manager.h"  // g_iDesktopEnv
 #include "cairo-dock-desktop-file-factory.h"  // cairo_dock_update_launcher_key_file
+#include "cairo-dock-launcher-manager.h" // cairo_dock_get_command_with_right_terminal
 #include "cairo-dock-launcher-factory.h"
 
 extern gchar *g_cCurrentLaunchersPath;
-extern CairoDockDesktopEnv g_iDesktopEnv;
 
 /*
 insert new desktop file -> make a new user desktop file, set the path and set all other params to NULL
@@ -245,19 +244,7 @@ CairoDockIconTrueType cairo_dock_load_icon_info_from_desktop_file (const gchar *
 		if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
 		{
 			gchar *cOldCommand = icon->cCommand;
-			const gchar *cTerm = g_getenv ("COLORTERM");
-			if (cTerm != NULL && strlen (cTerm) > 1)  // on filtre les cas COLORTERM=1 ou COLORTERM=y. ce qu'on veut c'est le nom d'un terminal.
-				icon->cCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cOldCommand);
-			else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-				icon->cCommand = g_strdup_printf ("gnome-terminal -e \"%s\"", cOldCommand);
-			else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
-				icon->cCommand = g_strdup_printf ("xfce4-terminal -e \"%s\"", cOldCommand);
-			else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
-				icon->cCommand = g_strdup_printf ("konsole -e \"%s\"", cOldCommand);
-			else if (g_getenv ("TERM") != NULL)
-				icon->cCommand = g_strdup_printf ("%s -e \"%s\"", g_getenv ("TERM"), cOldCommand);
-			else
-				icon->cCommand = g_strdup_printf ("xterm -e \"%s\"", cOldCommand);
+			icon->cCommand = cairo_dock_get_command_with_right_terminal (cOldCommand);
 			g_free (cOldCommand);
 		}
 		
