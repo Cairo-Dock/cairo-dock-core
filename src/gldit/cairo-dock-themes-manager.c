@@ -31,6 +31,7 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
+#include "cairo-dock-launcher-manager.h" // cairo_dock_get_command_with_right_terminal
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-backends-manager.h"
@@ -258,28 +259,33 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 	cairo_dock_extract_package_type_from_name (cNewThemeName);
 	
 	cd_message ("building theme package ...");
-	int r;
-	if (g_file_test (GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", G_FILE_TEST_EXISTS))
+	const gchar *cPackageBuilderPath = GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh";
+	gboolean bScriptFound = g_file_test (cPackageBuilderPath, G_FILE_TEST_EXISTS);
+	if (bScriptFound)
 	{
-		gchar *cCommand;
-		const gchar *cTerm = g_getenv ("TERM");
-		if (cTerm == NULL || *cTerm == '\0')
-			cCommand = g_strdup_printf ("xterm -e %s \"%s\"", GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", cNewThemeName);
-		else
-			cCommand = g_strdup_printf ("$TERM -e '%s \"%s\"'", GLDI_SHARE_DATA_DIR"/scripts/cairo-dock-package-theme.sh", cNewThemeName);
-		r = system (cCommand);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", cCommand);
+		int r;
+		gchar *cCommand = g_strdup_printf ("%s '%s'",
+			cPackageBuilderPath, cNewThemeName);
+		gchar *cFullCommand = cairo_dock_get_command_with_right_terminal (cCommand);
+		r = system (cFullCommand); // we need to wait...
+		if (r != 0)
+		{
+			cd_warning ("Not able to launch this command: %s, retry without external terminal", cFullCommand);
+			r = system (cCommand); // relaunch it without the terminal and wait
+			if (r != 0)
+				cd_warning ("Not able to launch this command: %s", cCommand);
+		}
 		g_free (cCommand);
-		g_free (cNewThemeName);
-		return TRUE;
+		g_free (cFullCommand);
+		cairo_dock_show_general_message (
+			_("Your theme should be now available in your 'Home' directory."),
+			8000);
 	}
 	else
-	{
 		cd_warning ("the package builder script was not found !");
-		g_free (cNewThemeName);
-		return FALSE;
-	}
+
+	g_free (cNewThemeName);
+	return bScriptFound;
 }
 gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 {
