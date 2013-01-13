@@ -820,7 +820,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 	}
 	
 	if (icon->pSubDock != NULL)
-		cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, TRUE);
+		cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
 	
 	//\______________ Notify everybody.
 	cairo_dock_notify_on_object (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);

@@ -84,6 +84,8 @@ static CairoKeyBinding *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
 
 static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoDock *pDock);
 
+static void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bUpdateDockSize);
+
 typedef struct {
 	gboolean bUpToDate;
 	gint x;
@@ -925,7 +927,7 @@ static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoD
 		cairo_dock_move_resize_dock (pDock);
 		gtk_widget_show (pDock->container.pWidget);
 		gtk_widget_queue_draw (pDock->container.pWidget);
-		cairo_dock_synchronize_sub_docks_orientation (pDock, FALSE);
+		cairo_dock_synchronize_sub_docks_orientation (pDock, TRUE);
 	}
 }
 void cairo_dock_reposition_root_docks (gboolean bExceptMainDock)
@@ -933,23 +935,26 @@ void cairo_dock_reposition_root_docks (gboolean bExceptMainDock)
 	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_reposition_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
 }
 
-void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, CairoDock *pDock, gboolean bReloadBuffersIfNecessary)
+void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, CairoDock *pDock, gboolean bUpdateDockSize)
 {
 	if (pSubDock->container.bDirectionUp != pDock->container.bDirectionUp || pSubDock->container.bIsHorizontal != pDock->container.bIsHorizontal)
 	{
 		pSubDock->container.bDirectionUp = pDock->container.bDirectionUp;
 		pSubDock->container.bIsHorizontal = pDock->container.bIsHorizontal;
-		/**if (bReloadBuffersIfNecessary)
-			cairo_dock_reload_reflects_in_dock (pSubDock);*/
-		cairo_dock_update_dock_size (pSubDock);
 		
-		cairo_dock_synchronize_sub_docks_orientation (pSubDock, bReloadBuffersIfNecessary);
+		cairo_dock_update_dock_size (pSubDock);
+	}
+	else if (bUpdateDockSize)
+	{
+		cairo_dock_update_dock_size (pSubDock);
 	}
 	pSubDock->iScreenOffsetX = pDock->iScreenOffsetX;
 	pSubDock->iScreenOffsetY = pDock->iScreenOffsetY;
+	
+	cairo_dock_synchronize_sub_docks_orientation (pSubDock, bUpdateDockSize);
 }
 
-void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bReloadBuffersIfNecessary)
+static void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bUpdateDockSize)
 {
 	GList* ic;
 	Icon *icon;
@@ -957,7 +962,7 @@ void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bR
 	{
 		icon = ic->data;
 		if (icon->pSubDock != NULL)
-			cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, bReloadBuffersIfNecessary);
+			cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, bUpdateDockSize);
 	}
 }
 
