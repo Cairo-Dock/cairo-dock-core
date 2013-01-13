@@ -643,6 +643,7 @@ gboolean cairo_dock_on_leave_dock_notification2 (G_GNUC_UNUSED gpointer data, Ca
 }
 gboolean cairo_dock_on_leave_dock_notification (G_GNUC_UNUSED gpointer data, CairoDock *pDock, G_GNUC_UNUSED gboolean *bStartAnimation)
 {
+	g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bHasModalWindow);
 	//\_______________ Arrive ici, on est sorti du dock.
 	pDock->container.bInside = FALSE;
 	pDock->iAvoidingMouseIconType = -1;

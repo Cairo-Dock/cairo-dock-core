@@ -206,7 +206,8 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
 	#endif
 	
-	gldi_object_set_manager (GLDI_OBJECT (pContainer), GLDI_MANAGER (&myContainersMgr));  // the implementation of the container will set its manager on top of this one.
+	if (GLDI_OBJECT (pContainer)->mgr == NULL)
+		gldi_object_set_manager (GLDI_OBJECT (pContainer), GLDI_MANAGER (&myContainersMgr));  // the implementation of the container will set its manager on top of this one.
 	
 	if (g_pPrimaryContainer == NULL)
 	{
@@ -214,6 +215,7 @@ GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean 
 	}
 	return pWindow;
 }
+
 
 void cairo_dock_finish_container (CairoContainer *pContainer)
 {

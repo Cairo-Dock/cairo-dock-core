@@ -754,17 +754,15 @@ static gboolean _cairo_desklet_animation_loop (CairoContainer *pContainer)
 CairoDesklet *cairo_dock_new_desklet (void)
 {
 	cd_message ("%s ()", __func__);
-	CairoDesklet *pDesklet = g_new0(CairoDesklet, 1);
-	pDesklet->container.iType = CAIRO_DOCK_TYPE_DESKLET;
+	CairoDesklet *pDesklet = gldi_container_new (CairoDesklet, &myDeskletsMgr, CAIRO_DOCK_TYPE_DESKLET);
+	GtkWidget *pWindow = pDesklet->container.pWidget;
+	
 	pDesklet->container.bIsHorizontal = TRUE;
 	pDesklet->container.bDirectionUp = TRUE;
 	pDesklet->container.fRatio = 1;
 	pDesklet->container.fRatio = 1;
 	
 	pDesklet->container.iface.animation_loop = _cairo_desklet_animation_loop;
-	
-	GtkWidget* pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDesklet));
-	gldi_object_set_manager (GLDI_OBJECT (pDesklet), GLDI_MANAGER (&myDeskletsMgr));
 	
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-desklet");
 	gtk_widget_add_events( pWindow,

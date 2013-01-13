@@ -125,6 +125,8 @@ struct _CairoDockModuleInterface {
 
 /// Definition of an instance of a module. A module can be instanciated several times.
 struct _CairoDockModuleInstance {
+	/// object
+	GldiObject object;
 	/// the module this instance represents.
 	CairoDockModule *pModule;
 	/// conf file of the instance.
@@ -155,6 +157,8 @@ typedef gboolean (* CairoDockModulePreInit) (CairoDockVisitCard *pVisitCard, Cai
 
 /// Definition of an external module.
 struct _CairoDockModule {
+	/// object
+	GldiObject object;
 	/// path to the .so file.
 	gchar *cSoFilePath;
 	/// internal structure of the .so file, once it has been opened.

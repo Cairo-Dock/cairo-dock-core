@@ -514,15 +514,13 @@ static void _setup_menu (CairoContainer *pContainer, G_GNUC_UNUSED Icon *pIcon, 
 
 CairoDock *cairo_dock_new_dock (void)
 {
-	//\__________________ On cree un dock.
-	CairoDock *pDock = g_new0 (CairoDock, 1);
-	pDock->container.iType = CAIRO_DOCK_TYPE_DOCK;
+	//\__________________ create a dock.
+	CairoDock * pDock = gldi_container_new (CairoDock, &myDocksMgr, CAIRO_DOCK_TYPE_DOCK);
+	GtkWidget *pWindow = pDock->container.pWidget;
 	
-	pDock->iRefCount = 0;  // c'est un dock racine par defaut.
+	//\__________________ initialize its parameters (it's a root dock by default)
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fFlatDockWidth = - myIconsParam.iIconGap;
-	///pDock->container.iMouseX = -1; // utile ?
-	///pDock->container.iMouseY = -1;
 	pDock->fMagnitudeMax = 1.;
 	pDock->fPostHideOffset = 1.;
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
@@ -530,10 +528,7 @@ CairoDock *cairo_dock_new_dock (void)
 	pDock->container.iface.animation_loop = _cairo_dock_dock_animation_loop;
 	pDock->container.iface.setup_menu = _setup_menu;
 	
-	//\__________________ On cree la fenetre GTK.
-	GtkWidget *pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pDock));
-	///cairo_dock_install_notifications_on_object (pDock, NB_NOTIFICATIONS_DOCKS);
-	gldi_object_set_manager (GLDI_OBJECT (pDock), GLDI_MANAGER (&myDocksMgr));
+	//\__________________ set up its window
 	gtk_container_set_border_width (GTK_CONTAINER (pWindow), 0);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
@@ -545,7 +540,7 @@ CairoDock *cairo_dock_new_dock (void)
 		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
 		CAIRO_DOCK_RUN_FIRST, NULL);
 	
-	//\__________________ On connecte les evenements a la fenetre.
+	//\__________________ connect to events.
 	gtk_widget_add_events (pWindow,
 		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK |
 		GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |

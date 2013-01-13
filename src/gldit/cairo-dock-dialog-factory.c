@@ -333,20 +333,16 @@ static gboolean _cairo_dialog_animation_loop (CairoContainer *pContainer)
 
 static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 {
-	//\________________ On cree un dialogue qu'on insere immediatement dans la liste.
-	CairoDialog *pDialog = g_new0 (CairoDialog, 1);
-	pDialog->container.iType = CAIRO_DOCK_TYPE_DIALOG;
+	//\________________ create a dialogue.
+	CairoDialog *pDialog = gldi_container_new_full (CairoDialog, &myDialogsMgr, CAIRO_DOCK_TYPE_DIALOG, FALSE);  // FALSE <=> no opengl
+	GtkWidget *pWindow = pDialog->container.pWidget;
+	
+	//\__________________ initialize its parameters
 	pDialog->iRefCount = 1;
 	pDialog->container.fRatio = 1.;
-
-	//\________________ On construit la fenetre du dialogue.
-	//GtkWidget* pWindow = gtk_window_new (bInteractiveWindow ? GTK_WINDOW_TOPLEVEL : GTK_WINDOW_POPUP);  // les popups ne prennent pas le focus. En fait, ils ne sont meme pas controles par le WM.
-	GtkWidget* pWindow = cairo_dock_init_container_no_opengl (CAIRO_CONTAINER (pDialog));
-	///cairo_dock_install_notifications_on_object (pDialog, NB_NOTIFICATIONS_DIALOG);
-	gldi_object_set_manager (GLDI_OBJECT (pDialog), GLDI_MANAGER (&myDialogsMgr));
-	
 	pDialog->container.iface.animation_loop = _cairo_dialog_animation_loop;
 	
+	//\________________ set up the window.
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock-dialog");
 	if (! bInteractive)
 		gtk_window_set_type_hint (GTK_WINDOW (pDialog->container.pWidget), GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);  // pour ne pas prendre le focus.
@@ -436,7 +432,7 @@ static void _force_above (G_GNUC_UNUSED GtkWidget *pWidget, CairoDialog *pDialog
 }
 CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIcon, CairoContainer *pContainer)
 {
-	//\________________ On cree un nouveau dialogue.
+	//\________________ create an empty dialog.
 	CairoDialog *pDialog = _cairo_dock_create_empty_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
 	pDialog->pIcon = pIcon;
 	pDialog->container.bIsHorizontal = TRUE;

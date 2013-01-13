@@ -139,6 +139,7 @@ struct _Icon {
 	gboolean bIsHidden;
 	gboolean bIsFullScreen;
 	gboolean bIsMaximized;
+	gboolean bDemandsAttention;
 	gboolean bHasIndicator;
 	GtkAllocation windowGeometry;
 	gint iNumDesktop;
@@ -190,9 +191,9 @@ struct _Icon {
 	gboolean bPointed;
 	gdouble fInsertRemoveFactor;
 	gboolean bDamaged;  // TRUE when the icon couldn't draw its surface, because the Gl context was not yet ready.
+	gboolean bNeedApplyBackground;
 	
 	//\____________ Other dynamic parameters.
-	gboolean bBeingRemovedByCairo;  // devrait etre dans pDataSlot...
 	guint iSidRedrawSubdockContent;
 	guint iSidLoadImage;
 	guint iSidDoubleClickDelay;
@@ -200,10 +201,9 @@ struct _Icon {
 	gint iHideLabel;
 	gint iThumbnailX, iThumbnailY;  // X icon geometry for apps
 	gint iThumbnailWidth, iThumbnailHeight;
+	gboolean bBeingRemovedByCairo;  // devrait etre dans pDataSlot...
 	
-	gboolean bNeedApplyBackground;
-	gboolean bDemandsAttention;
-	gpointer reserved[2];
+	gpointer reserved[4];
 };
 
 typedef void (*CairoIconContainerLoadFunc) (void);

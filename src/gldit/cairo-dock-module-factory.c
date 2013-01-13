@@ -132,7 +132,7 @@ static gboolean _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GErr
 
 CairoDockModule *cairo_dock_new_module (const gchar *cSoFilePath, GError **erreur)
 {
-	CairoDockModule *pCairoDockModule = g_new0 (CairoDockModule, 1);
+	CairoDockModule *pCairoDockModule = gldi_object_new (CairoDockModule, &myModulesMgr);
 	
 	if (cSoFilePath != NULL)
 	{
@@ -161,6 +161,8 @@ void cairo_dock_free_module (CairoDockModule *module)
 		cd_debug ("%s (%s)", __func__, module->pVisitCard->cModuleName);
 		cairo_dock_deactivate_module (module);
 	}
+	
+	cairo_dock_notify_on_object (module, NOTIFICATION_DESTROY, module);
 	_cairo_dock_close_module (module);
 
 	g_free (module->cSoFilePath);
@@ -401,6 +403,9 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	
 	//\____________________ On cree une instance du module.
 	CairoDockModuleInstance *pInstance = g_malloc0 (sizeof (CairoDockModuleInstance) + pModule->pVisitCard->iSizeOfConfig + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
+	GLDI_OBJECT(pInstance)->ref = 1;
+	gldi_object_set_manager (GLDI_OBJECT (pInstance), GLDI_MANAGER (&myModulesMgr));
+	
 	pInstance->pModule = pModule;
 	pInstance->cConfFilePath = cConfFilePath;
 	if (pModule->pVisitCard->iSizeOfConfig > 0)
@@ -485,6 +490,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 */
 static void _cairo_dock_free_module_instance (CairoDockModuleInstance *pInstance)
 {
+	cairo_dock_notify_on_object (pInstance, NOTIFICATION_DESTROY, pInstance);
 	g_free (pInstance->cConfFilePath);
 	/*g_free (pInstance->pConfig);
 	g_free (pInstance->pData);*/
@@ -528,7 +534,7 @@ void cairo_dock_deinstanciate_module (CairoDockModuleInstance *pInstance)  // st
 	
 	pInstance->pModule->pInstancesList = g_list_remove (pInstance->pModule->pInstancesList, pInstance);
 	if (pInstance->pModule->pInstancesList == NULL)
-		cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_ACTIVATED, pInstance->pModule->pVisitCard->cModuleName, FALSE);
+		cairo_dock_notify_on_object (pInstance->pModule, NOTIFICATION_MODULE_ACTIVATED, pInstance->pModule->pVisitCard->cModuleName, FALSE);
 	
 	_cairo_dock_free_module_instance (pInstance);
 }
@@ -816,7 +822,7 @@ void cairo_dock_activate_module (CairoDockModule *module, GError **erreur)
 		cairo_dock_instanciate_module (module, NULL);
 	}
 	
-	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, TRUE);
+	cairo_dock_notify_on_object (module, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, TRUE);
 }
 
 void cairo_dock_deactivate_module (CairoDockModule *module)  // stop all instances of a module
@@ -827,7 +833,7 @@ void cairo_dock_deactivate_module (CairoDockModule *module)  // stop all instanc
 	g_list_foreach (module->pInstancesList, (GFunc) _cairo_dock_free_module_instance, NULL);
 	g_list_free (module->pInstancesList);
 	module->pInstancesList = NULL;
-	cairo_dock_notify_on_object (&myModulesMgr, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, FALSE);
+	cairo_dock_notify_on_object (module, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, FALSE);
 }
 
 void cairo_dock_reload_module (CairoDockModule *pModule, gboolean bReloadAppletConf)

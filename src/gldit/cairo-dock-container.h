@@ -169,6 +169,15 @@ struct _CairoContainer {
  // WINDOW //
 ///////////
 
+#define gldi_container_new_full(Type, mgr, type, bOpenGLWindow) \
+__extension__ ({ \
+	Type *obj = gldi_object_new (Type, mgr); \
+	CAIRO_CONTAINER(obj)->iType = type; \
+	cairo_dock_init_container_full (CAIRO_CONTAINER (obj), bOpenGLWindow); \
+	obj; })
+
+#define gldi_container_new(Type, iType, mgr) gldi_container_new_full (Type, iType, mgr, TRUE)
+
 void cairo_dock_set_containers_non_sticky (void);
 
 void cairo_dock_disable_containers_opacity (void);

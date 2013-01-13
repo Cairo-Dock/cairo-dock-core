@@ -331,10 +331,9 @@ static gboolean _cairo_flying_container_animation_loop (CairoContainer *pContain
 CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock)
 {
 	g_return_val_if_fail (pFlyingIcon != NULL, NULL);
-	CairoFlyingContainer * pFlyingContainer = g_new0 (CairoFlyingContainer, 1);
-	pFlyingContainer->container.iType = CAIRO_DOCK_TYPE_FLYING_CONTAINER;
-	GtkWidget* pWindow = cairo_dock_init_container (CAIRO_CONTAINER (pFlyingContainer));
-	gldi_object_set_manager (GLDI_OBJECT (pFlyingContainer), GLDI_MANAGER (&myFlyingsMgr));
+	CairoFlyingContainer * pFlyingContainer = gldi_container_new (CairoFlyingContainer, &myFlyingsMgr, CAIRO_DOCK_TYPE_FLYING_CONTAINER);
+	GtkWidget *pWindow = pFlyingContainer->container.pWidget;
+	
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
 	

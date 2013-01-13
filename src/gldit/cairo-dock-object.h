@@ -44,6 +44,13 @@ typedef enum {
 
 #define GLDI_OBJECT(p) ((GldiObject*)(p))
 
+#define gldi_object_new(Type, mgr) \
+__extension__ ({ \
+	Type *obj = g_new0 (Type, 1); \
+	GLDI_OBJECT(obj)->ref = 1; \
+	gldi_object_set_manager (GLDI_OBJECT (obj), GLDI_MANAGER (mgr)); \
+	obj; })
+
 void gldi_object_set_manager (GldiObject *pObject, GldiManager *pMgr);
 
 G_END_DECLS
