@@ -393,8 +393,9 @@ void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 	cd_debug ("We remove %s", pInstance->cConfFilePath);
 	g_remove (pInstance->cConfFilePath);
 	
-	//\_________________ We also remove the cConfFilePath (=> this conf file no longer exist during the stop during the stop)
+	//\_________________ We also remove the cConfFilePath (=> this conf file no longer exist during the 'stop' callback)
 	g_free (pInstance->cConfFilePath);
+	pInstance->cConfFilePath = NULL;
 	cairo_dock_deactivate_module_instance_and_unload (pInstance);  // pInstance n'est plus.
 }
 
