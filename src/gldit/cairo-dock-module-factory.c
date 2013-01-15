@@ -829,10 +829,11 @@ void cairo_dock_deactivate_module (CairoDockModule *module)  // stop all instanc
 {
 	g_return_if_fail (module != NULL);
 	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
-	g_list_foreach (module->pInstancesList, (GFunc) _cairo_dock_stop_module_instance, NULL);
-	g_list_foreach (module->pInstancesList, (GFunc) _cairo_dock_free_module_instance, NULL);
-	g_list_free (module->pInstancesList);
-	module->pInstancesList = NULL;
+	GList *pInstances = module->pInstancesList;
+	module->pInstancesList = NULL;  // set to NULL already so that notifications don't get fooled.
+	g_list_foreach (pInstances, (GFunc) _cairo_dock_stop_module_instance, NULL);
+	g_list_foreach (pInstances, (GFunc) _cairo_dock_free_module_instance, NULL);
+	g_list_free (pInstances);
 	cairo_dock_notify_on_object (module, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, FALSE);
 }
 

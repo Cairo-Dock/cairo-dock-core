@@ -26,6 +26,8 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-notifications.h"
+#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-widget-module.h"
 
@@ -130,13 +132,50 @@ static void _build_module_widget (ModuleWidget *pModuleWidget)
 	g_key_file_free (pKeyFile);
 }
 
+static void _reload_widget_and_insert (ModuleWidget *pModuleWidget)
+{
+	GtkWidget *pParentBox = gtk_widget_get_parent (pModuleWidget->widget.pWidget);
+	cairo_dock_module_widget_reload_current_widget (pModuleWidget);
+	gtk_box_pack_start (GTK_BOX (pParentBox),
+		pModuleWidget->widget.pWidget,
+		TRUE,
+		TRUE,
+		CAIRO_DOCK_FRAME_MARGIN);
+	gtk_widget_show_all (pModuleWidget->widget.pWidget);
+}
+static gboolean _on_instance_destroyed (ModuleWidget *pModuleWidget, G_GNUC_UNUSED CairoDockModuleInstance *pInstance)
+{
+	// the instance we were linked to is done, we need to forget it and reload the config file with either another instance, or the default conf file.
+	if (pModuleWidget->pModule->pInstancesList != NULL)
+		pModuleWidget->pModuleInstance = pModuleWidget->pModule->pInstancesList->data;
+	else
+		pModuleWidget->pModuleInstance = NULL;
+	
+	g_free (pModuleWidget->cConfFilePath);
+	pModuleWidget->cConfFilePath = (pModuleWidget->pModuleInstance ? g_strdup (pModuleWidget->pModuleInstance->cConfFilePath) : _get_valid_module_conf_file (pModuleWidget->pModule));
+	
+	_reload_widget_and_insert (pModuleWidget);
+	
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+static gboolean _on_module_activated (ModuleWidget *pModuleWidget, G_GNUC_UNUSED const gchar *cModuleName, gboolean bActive)
+{
+	if (bActive && pModuleWidget->pModuleInstance == NULL)  // we're not linked to any instance yet, and a new one appears -> link to it.
+	{
+		pModuleWidget->pModuleInstance = pModuleWidget->pModule->pInstancesList->data;
+		g_free (pModuleWidget->cConfFilePath);
+		pModuleWidget->cConfFilePath = g_strdup (pModuleWidget->pModuleInstance->cConfFilePath);
+		
+		_reload_widget_and_insert (pModuleWidget);
+	}
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
 ModuleWidget *cairo_dock_module_widget_new (CairoDockModule *pModule, CairoDockModuleInstance *pInstance, GtkWidget *pMainWindow)
 {
 	g_return_val_if_fail (pModule != NULL, NULL);
 	
 	CairoDockModuleInstance *pModuleInstance = (pInstance ? pInstance : pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);  // can be NULL if the module is not yet activated.
 	gchar *cConfFilePath = (pInstance ? g_strdup (pInstance->cConfFilePath) : _get_valid_module_conf_file (pModule));
-	
 	
 	ModuleWidget *pModuleWidget = g_new0 (ModuleWidget, 1);
 	pModuleWidget->widget.iType = WIDGET_MODULE;
@@ -146,6 +185,17 @@ ModuleWidget *cairo_dock_module_widget_new (CairoDockModule *pModule, CairoDockM
 	pModuleWidget->pModule = pModule;
 	pModuleWidget->pModuleInstance = pModuleInstance;
 	pModuleWidget->pMainWindow = pMainWindow;
+	if (pModuleInstance)
+	{
+		cairo_dock_register_notification_on_object (pModuleInstance,
+			NOTIFICATION_DESTROY,
+			(CairoDockNotificationFunc) _on_instance_destroyed,
+			CAIRO_DOCK_RUN_AFTER, pModuleWidget);
+	}
+	cairo_dock_register_notification_on_object (pModule,
+		NOTIFICATION_MODULE_ACTIVATED,
+		(CairoDockNotificationFunc) _on_module_activated,
+		CAIRO_DOCK_RUN_AFTER, pModuleWidget);
 	
 	// build its widget based on its config file.
 	_build_module_widget (pModuleWidget);
