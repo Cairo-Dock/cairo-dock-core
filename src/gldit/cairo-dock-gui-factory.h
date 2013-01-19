@@ -92,6 +92,8 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_ICONS_LIST='N',
 	/// list of installed icon themes.
 	CAIRO_DOCK_WIDGET_ICON_THEME_LIST='w',
+	/// list of screens
+	CAIRO_DOCK_WIDGET_SCREENS_LIST='r',
 	/// a button to jump to another module inside the config panel.
 	CAIRO_DOCK_WIDGET_JUMP_TO_MODULE='m',
 	/// same but only if the module exists.

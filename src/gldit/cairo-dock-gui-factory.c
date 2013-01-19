@@ -43,6 +43,7 @@
 #include "cairo-dock-task.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-X-manager.h"
+#include "cairo-dock-notifications.h"
 #include "cairo-dock-launcher-manager.h" // cairo_dock_launch_command_sync
 #include "cairo-dock-gui-factory.h"
 
@@ -63,7 +64,6 @@
 
 extern gchar *g_cExtrasDirPath;
 extern gboolean g_bUseOpenGL;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDock *g_pMainDock;
 
 static gchar *_cairo_dock_gui_get_active_row_in_combo (GtkWidget *pOneWidget);
@@ -1054,6 +1054,58 @@ static GHashTable *_cairo_dock_build_icon_themes_list (const gchar **cDirs)
 	return pHashTable;
 }
 
+static GHashTable *_cairo_dock_build_screens_list (void)
+{
+	GHashTable *pHashTable = g_hash_table_new_full (g_str_hash,
+		g_str_equal,
+		g_free,
+		g_free);
+	g_hash_table_insert (pHashTable, g_strdup (_("All screens")), g_strdup ("-1"));
+	
+	if (g_desktopGeometry.iNbScreens > 1)
+	{
+		int xmax=0, ymax=0;
+		int i;
+		for (i = 0; i < g_desktopGeometry.iNbScreens; i ++)
+		{
+			int x = cairo_dock_get_screen_position_x (i), y = cairo_dock_get_screen_position_y (i);
+			if (x > xmax) xmax = x;
+			if (y > ymax) ymax = y;
+		}
+		const gchar *xpos, *ypos;
+		int x, y;
+		for (i = 0; i < g_desktopGeometry.iNbScreens; i ++)
+		{
+			xpos = ypos = NULL;
+			x = cairo_dock_get_screen_position_x (i), y = cairo_dock_get_screen_position_y (i);
+			
+			if (xmax > 0)  // at least 2 screens horizontally
+			{
+				if (x == 0)
+					xpos = _("left");
+				else if (x == xmax)
+					xpos = _("right");
+				else
+					xpos = _("middle");
+				
+			}
+			if (ymax > 0)  // at least 2 screens vertically
+			{
+				if (y == 0)
+					ypos = _("top");
+				else if (y == ymax)
+					ypos = _("bottom");
+				else
+					ypos = _("middle");
+				
+			}
+			gchar *cLabel = g_strdup_printf ("%s %d (%s%s%s)", _("Screen"), i, 	xpos?xpos:"", xpos&&ypos?" - ":"", ypos?ypos:"");
+			g_hash_table_insert (pHashTable, cLabel, g_strdup_printf ("%d", i));
+		}
+	}
+	return pHashTable;
+}
+
 typedef void (*CDForeachRendererFunc) (GHFunc pFunction, GtkListStore *pListStore);
 
 static inline GtkListStore *_build_list_for_gui (CDForeachRendererFunc pFunction, GHFunc pHFunction, const gchar *cEmptyItem)
@@ -1188,6 +1240,43 @@ static GtkListStore *_cairo_dock_build_icon_theme_list_for_gui (GHashTable *pHas
 	GtkListStore *pIconThemeListStore = _build_list_for_gui (NULL, (GHFunc)_cairo_dock_add_one_icon_theme_item, "");
 	g_hash_table_foreach (pHashTable, (GHFunc)_cairo_dock_add_one_icon_theme_item, pIconThemeListStore);
 	return pIconThemeListStore;
+}
+
+static void _cairo_dock_add_one_screen_item (const gchar *cDisplayedName, const gchar *cId, GtkListStore *pModele)
+{
+	GtkTreeIter iter;
+	memset (&iter, 0, sizeof (GtkTreeIter));
+	gtk_list_store_append (GTK_LIST_STORE (pModele), &iter);
+	//g_print ("+ %s (%s)\n", cName, cDisplayedName);
+	gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
+		CAIRO_DOCK_MODEL_NAME, cDisplayedName,
+		CAIRO_DOCK_MODEL_RESULT, cId,
+		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, "none",
+		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
+}
+static GtkListStore *_cairo_dock_build_screens_list_for_gui (GHashTable *pHashTable)
+{
+	GtkListStore *pListStore = _build_list_for_gui (NULL, NULL, NULL);
+	g_hash_table_foreach (pHashTable, (GHFunc)_cairo_dock_add_one_screen_item, pListStore);
+	return pListStore;
+}
+
+static gboolean _on_screen_modified (GtkListStore *pListStore)
+{
+	GHashTable *pHashTable = _cairo_dock_build_screens_list ();
+	
+	gtk_list_store_clear (GTK_LIST_STORE (pListStore));
+	g_hash_table_foreach (pHashTable, (GHFunc)_cairo_dock_add_one_screen_item, pListStore);
+	
+	g_hash_table_destroy (pHashTable);
+	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+}
+static void _on_list_destroyed (G_GNUC_UNUSED gpointer data)
+{
+	cairo_dock_remove_notification_func_on_object (&myDesktopMgr,
+		NOTIFICATION_SCREEN_GEOMETRY_ALTERED,
+		(CairoDockNotificationFunc) _on_screen_modified,
+		CAIRO_DOCK_RUN_AFTER);
 }
 
 static gboolean _test_one_name (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
@@ -1432,7 +1521,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 
 	// min size
 	int iFrameWidth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width"));
-	int iMinSize = (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iFrameWidth) /2.5;
+	int iMinSize = (gldi_get_desktop_width() - iFrameWidth) /2.5;
 	#if (GTK_MAJOR_VERSION < 3)
 		int iLabelWidth = bHorizontalPackaging ? MIN (iMinSize * 1.5, CAIRO_DOCK_README_WIDTH_MIN) : CAIRO_DOCK_README_WIDTH;
 		gtk_widget_set_size_request (pDescriptionLabel, iLabelWidth, -1);
@@ -2578,6 +2667,25 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			break ;
 			
+			case CAIRO_DOCK_WIDGET_SCREENS_LIST :
+			{
+				GHashTable *pHashTable = _cairo_dock_build_screens_list ();
+				
+				GtkListStore *pScreensListStore = _cairo_dock_build_screens_list_for_gui (pHashTable);
+				
+				_add_combo_from_modele (pScreensListStore, FALSE, FALSE, FALSE);
+				
+				g_object_unref (pScreensListStore);
+				g_hash_table_destroy (pHashTable);
+				
+				cairo_dock_register_notification_on_object (&myDesktopMgr,
+					NOTIFICATION_SCREEN_GEOMETRY_ALTERED,
+					(CairoDockNotificationFunc) _on_screen_modified,
+					CAIRO_DOCK_RUN_AFTER, pScreensListStore);
+				g_signal_connect (pScreensListStore, "destroy", G_CALLBACK (_on_list_destroyed), NULL);
+			}
+			break ;
+			
 			case CAIRO_DOCK_WIDGET_JUMP_TO_MODULE :  // bouton raccourci vers un autre module
 			case CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS :  // idem mais seulement affiche si le module existe.
 				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
@@ -3114,7 +3222,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_TEXT_LABEL :  // juste le label de texte.
 			{
 				int iFrameWidth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width"));
-				gtk_widget_set_size_request (pLabel, MIN (800, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - iFrameWidth), -1);
+				gtk_widget_set_size_request (pLabel, MIN (800, gldi_get_desktop_width() - iFrameWidth), -1);
 				gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
 				gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
 			}
