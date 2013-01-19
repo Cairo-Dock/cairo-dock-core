@@ -66,9 +66,9 @@ CairoDock *g_pMainDock = NULL;  // pointeur sur le dock principal.
 CairoDockHidingEffect *g_pHidingBackend = NULL;
 CairoDockHidingEffect *g_pKeepingBelowBackend = NULL;
 
+// dependancies
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
 
 // private
@@ -771,14 +771,7 @@ static gboolean cairo_dock_read_root_dock_config (const gchar *cDockName, CairoD
 	
 	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Behavior", "alignment", &bFlushConfFileNeeded, 0.5, "Position", NULL);
 	
-	if (myDocksParam.bUseXinerama)
-	{
-		int iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "num screen", &bFlushConfFileNeeded, 0, "Position", NULL);
-		pDock->iNumScreen = iNumScreen;
-		cairo_dock_get_screen_offsets (iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
-	}
-	else
-		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
+	pDock->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "num_screen", &bFlushConfFileNeeded, GLDI_DEFAULT_SCREEN, "Position", NULL);
 	
 	//\______________ Visibility.
 	CairoDockVisibility iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "visibility", &bFlushConfFileNeeded, FALSE, "Position", NULL);
@@ -867,7 +860,7 @@ void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName)
 			(g_pMainDock->container.bDirectionUp ? 3 : 2)),
 		G_TYPE_INT, "Behavior", "visibility",
 		g_pMainDock->iVisibility,
-		G_TYPE_INT, "Behavior", "num screen",
+		G_TYPE_INT, "Behavior", "num_screen",
 		g_pMainDock->iNumScreen,
 		G_TYPE_INVALID);
 	g_free (cConfFilePath);
@@ -916,13 +909,7 @@ static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoD
 	{
 		if (!pDock->bIsMainDock)
 			cairo_dock_read_root_dock_config (cDockName, pDock);  // relit toute la conf.
-		else
-		{
-			if (myDocksParam.bUseXinerama)
-				cairo_dock_get_screen_offsets (pDock->iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
-			else
-				pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
-		}
+		
 		cairo_dock_update_dock_size (pDock);  // la taille max du dock depend de la taille de l'ecran, donc on recalcule son ratio.
 		cairo_dock_move_resize_dock (pDock);
 		gtk_widget_show (pDock->container.pWidget);
@@ -948,8 +935,7 @@ void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, Cairo
 	{
 		cairo_dock_update_dock_size (pSubDock);
 	}
-	pSubDock->iScreenOffsetX = pDock->iScreenOffsetX;
-	pSubDock->iScreenOffsetY = pDock->iScreenOffsetY;
+	pSubDock->iNumScreen = pDock->iNumScreen;
 	
 	cairo_dock_synchronize_sub_docks_orientation (pSubDock, bUpdateDockSize);
 }
@@ -990,7 +976,7 @@ void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iS
 		case CAIRO_DOCK_NB_POSITIONS :
 		break;
 	}
-	cairo_dock_synchronize_sub_docks_orientation (pDock, FALSE);  // synchronize l'orientation et l'offset Xinerama des sous-docks ainsi que les reflets cairo.
+	cairo_dock_synchronize_sub_docks_orientation (pDock, FALSE);  // synchronize l'orientation et l'offset Xinerama des sous-docks.
 }
 
 
@@ -1118,6 +1104,11 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW)
 		return;
 	
+	int iScreenWidth = gldi_dock_get_screen_width (pDock);
+	int iScreenHeight = gldi_dock_get_screen_height (pDock);
+	int iScreenX = gldi_dock_get_screen_offset_x (pDock);
+	int iScreenY = gldi_dock_get_screen_offset_y (pDock);
+	
 	//\________________ On recupere la position du pointeur.
 	gint x, y;
 	if (! pMouse->bUpToDate)  // pas encore recupere le pointeur.
@@ -1151,33 +1142,37 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 		x = pMouse->y;
 		y = pMouse->x;
 	}
+	y -= iScreenY;  // relative to the border of the dock's screen.
 	if (pDock->container.bDirectionUp)
 	{
-		y = g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - 1 - y;
+		y = iScreenHeight - 1 - y;
+		
 	}
 	
 	//\________________ On verifie les conditions.
-	int x1, x2;  // coordinates range on the screen edge.
+	int x1, x2;  // coordinates range on the X screen edge.
 	gboolean bShow = FALSE;
+	int Ws = (pDock->container.bIsHorizontal ? gldi_get_desktop_width() : gldi_get_desktop_height());
 	switch (myDocksParam.iCallbackMethod)
 	{
 		case CAIRO_HIT_SCREEN_BORDER:
 		default:
 			if (y != 0)
 				break;
+			if (x < iScreenX || x > iScreenX + iScreenWidth - 1)  // only check the border of the dock's screen.
+				break ;
 			bShow = TRUE;
 		break;
-		
 		case CAIRO_HIT_DOCK_PLACE:
+			
 			if (y != 0)
 				break;
-
 			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign;
 			x2 = x1 + pDock->iActiveWidth;
-			if (x1 < 15)  // avoid corners, since this is actually the purpose of this option (corners can be used by the WM to trigger actions).
-				x1 = 15;
-			if (x2 > g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - 15)
-				x2 = g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - 15;
+			if (x1 < 8)  // avoid corners, since this is actually the purpose of this option (corners can be used by the WM to trigger actions).
+				x1 = 8;
+			if (x2 > Ws - 8)
+				x2 = Ws - 8;
 			if (x < x1 || x > x2)
 				break;
 			bShow = TRUE;
@@ -1185,7 +1180,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 		case CAIRO_HIT_SCREEN_CORNER:
 			if (y != 0)
 				break;
-			if (x > 0 && x < g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - 1)
+			if (x > 0 && x < Ws - 1)  // avoid the corners of the X screen (since we can't actually hit the corner of a screen that would be inside the X screen).
 				break ;
 			bShow = TRUE;
 		break;
@@ -1446,14 +1441,15 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 
 	pPosition->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 	
-	pPosition->bUseXinerama = cairo_dock_get_boolean_key_value (pKeyFile, "Position", "xinerama", &bFlushConfFileNeeded, 0, NULL, NULL);
-	if (pPosition->bUseXinerama && ! cairo_dock_xinerama_is_available ())
+	pPosition->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num_screen", &bFlushConfFileNeeded, GLDI_DEFAULT_SCREEN, NULL, NULL);  // Note: if this screen doesn't exist at this time, we keep this number anyway, in case it is plugged later. Until then, it will point on the X screen.
+	if (g_key_file_has_key (pKeyFile, "Position", "xinerama", NULL))  // "xinerama" and "num screen" old keys
 	{
-		cd_warning ("Sorry but either your X server does not have the Xinerama extension, or your version of Cairo-Dock was not built with the support of Xinerama.\n You can't place the dock on a particular screen");
-		pPosition->bUseXinerama = FALSE;
+		if (g_key_file_get_boolean (pKeyFile," Position", "xinerama", NULL))  // xinerama was used -> set num-screen back
+		{
+			pPosition->iNumScreen = g_key_file_get_integer (pKeyFile, "Position", "num_screen", NULL);
+			g_key_file_set_integer (pKeyFile, "Position", "num_screen", pPosition->iNumScreen);
+		}
 	}
-	if (pPosition->bUseXinerama)
-		pPosition->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num screen", &bFlushConfFileNeeded, 0, NULL, NULL);
 	
 	//\____________________ Visibilite
 	int iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "visibility", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour pouvoir intercepter le cas ou la cle n'existe pas.
@@ -1637,11 +1633,7 @@ static void load (void)
 		g_pMainDock->iGapX = myDocksParam.iGapX;
 		g_pMainDock->iGapY = myDocksParam.iGapY;
 		g_pMainDock->fAlign = myDocksParam.fAlign;
-		if (myDocksParam.bUseXinerama)
-		{
-			g_pMainDock->iNumScreen = myDocksParam.iNumScreen;
-			cairo_dock_get_screen_offsets (myDocksParam.iNumScreen, &g_pMainDock->iScreenOffsetX, &g_pMainDock->iScreenOffsetY);
-		}
+		g_pMainDock->iNumScreen = myDocksParam.iNumScreen;
 		g_pMainDock->bExtendedMode = myDocksParam.bExtendedMode;
 		
 		cairo_dock_set_dock_orientation (g_pMainDock, myDocksParam.iScreenBorder);
@@ -1709,24 +1701,9 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	cairo_dock_foreach_root_docks ((GFunc)_reload_bg, NULL);
 	
 	// position
-	if (pPosition->bUseXinerama)
-	{
-		pDock->iNumScreen = pPosition->iNumScreen;
-		cairo_dock_get_screen_offsets (pPosition->iNumScreen, &pDock->iScreenOffsetX, &pDock->iScreenOffsetY);
-	}
-	else  // on n'utilise pas Xinerama.
-	{
-		pDock->iNumScreen = pDock->iScreenOffsetX = pDock->iScreenOffsetY = 0;
-		if (pPrevPosition->bUseXinerama)  // mais on l'utilisait avant, il faut donc recuperer les dimensions de l'ecran.
-		{
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		}
-	}
+	pDock->iNumScreen = pPosition->iNumScreen;
 	
-	if (pPosition->bUseXinerama != pPrevPosition->bUseXinerama)
+	if (pPosition->iNumScreen != pPrevPosition->iNumScreen)
 	{
 		cairo_dock_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock, puisque c'est fait apres.
 	}

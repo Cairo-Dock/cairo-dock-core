@@ -133,30 +133,33 @@ struct _CairoDock {
 	gint iRefCount;
 	
 	//\_______________ Config parameters.
+	// position
 	gint iGapX;  // ecart de la fenetre par rapport au bord de l'ecran.
 	gint iGapY;  // decalage de la fenetre par rapport au point d'alignement sur le bord de l'ecran.
 	gdouble fAlign;  // alignment, between 0 and 1, on the screen's edge.
 	/// visibility.
 	CairoDockVisibility iVisibility;
-	/// Horizontal offset of the screen where the dock lives, according to Xinerama.
-	gint iScreenOffsetX;
-	/// Vertical offset of the screen where the dock lives, according to Xinerama.
-	gint iScreenOffsetY;
-	/// number of the screen the dock is placed on (Xinerama).
+	/// number of the screen the dock is placed on (-1 <=> all screen, >0 <=> num screen).
 	gint iNumScreen;
-	
-	/// maximum height of the icons.
-	gdouble iMaxIconHeight;
-	/// width of the dock, only taking into account an alignment of the icons.
-	gdouble fFlatDockWidth;
-	
-	gint iMaxLabelWidth;
-	gint iMinLeftMargin;
-	gint iMinRightMargin;
-	gint iMaxLeftMargin;
-	gint iMaxRightMargin;
-	gint iLeftMargin;
-	gint iRightMargin;
+	// icons
+	/// icon size, as specified in the config of the dock
+	gint iIconSize;
+	/// whether the dock should use the global icons size parameters.
+	gboolean bGlobalIconSize;
+	// background
+	/// whether the dock should use the global background parameters.
+	gboolean bGlobalBg;
+	/// path to an image, or NULL
+	gchar *cBgImagePath;
+	/// whether to repeat the image as a pattern, or to stretch it to fill the dock.
+	gboolean bBgImageRepeat;
+	/// first color of the gradation
+	gdouble fBgColorBright[4];
+	/// second color of the gradation
+	gdouble fBgColorDark[4];
+	/// Background image buffer of the dock.
+	CairoDockImageBuffer backgroundBuffer;
+	gboolean bExtendedMode;
 	
 	//\_______________ current state of the dock.
 	gboolean bAutoHide;  // auto-hide activated.
@@ -199,6 +202,19 @@ struct _CairoDock {
 	gboolean bPreventDraggingIcons;
 	gboolean bWMIconsNeedUpdate;
 	
+	/// maximum height of the icons.
+	gdouble iMaxIconHeight;
+	/// width of the dock, only taking into account an alignment of the icons.
+	gdouble fFlatDockWidth;
+	gint iOffsetForExtend;
+	gint iMaxLabelWidth;
+	gint iMinLeftMargin;
+	gint iMinRightMargin;
+	gint iMaxLeftMargin;
+	gint iMaxRightMargin;
+	gint iLeftMargin;
+	gint iRightMargin;
+	
 	//\_______________ Source ID of events running on the dock.
 	/// Source ID for window resizing.
 	guint iSidMoveResize;
@@ -216,6 +232,8 @@ struct _CairoDock {
 	guint iSidDestroyEmptyDock;
 	/// Source ID for shrinking down the dock after a mouse event.
 	guint iSidTestMouseOutside;
+	/// Source ID for updating the dock's size and icons layout.
+	guint iSidUpdateDockSize;
 	
 	//\_______________ Renderer and fields set by it.
 	// nom de la vue, utile pour (re)charger les fonctions de rendu posterieurement a la creation du dock.
@@ -257,31 +275,9 @@ struct _CairoDock {
 	/// input shape of the window when the dock is active (NULL to cover all dock).
 	GldiShape* pActiveShapeBitmap;
 	
+	//\_______________ OpenGL.
 	GLuint iRedirectedTexture;
 	GLuint iFboId;
-	
-	//\_______________ background.
-	/// whether the dock should use the global background parameters.
-	gboolean bGlobalBg;
-	/// path to an image, or NULL
-	gchar *cBgImagePath;
-	/// whether to repeat the image as a pattern, or to stretch it to fill the dock.
-	gboolean bBgImageRepeat;
-	/// first color of the gradation
-	gdouble fBgColorBright[4];
-	/// second color of the gradation
-	gdouble fBgColorDark[4];
-	/// Background image buffer of the dock.
-	CairoDockImageBuffer backgroundBuffer;
-	gboolean bExtendedMode;
-	gint iOffsetForExtend;
-	
-	/// icon size, as specified in the config of the dock
-	gint iIconSize;
-	/// Source ID for updating the dock's size and icons layout.
-	guint iSidUpdateDockSize;
-	/// whether the dock should use the global icons size parameters.
-	gboolean bGlobalIconSize;
 	
 	gpointer reserved[4];
 };

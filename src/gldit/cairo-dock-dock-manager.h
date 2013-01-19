@@ -90,7 +90,6 @@ struct _CairoDocksParam {
 	gint iGapX, iGapY;
 	CairoDockPositionType iScreenBorder;
 	gdouble fAlign;
-	gboolean bUseXinerama;
 	gint iNumScreen;
 	// Root dock visibility
 	CairoDockVisibility iVisibility;

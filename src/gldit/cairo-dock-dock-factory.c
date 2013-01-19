@@ -516,24 +516,23 @@ CairoDock *cairo_dock_new_dock (void)
 {
 	//\__________________ create a dock.
 	CairoDock * pDock = gldi_container_new (CairoDock, &myDocksMgr, CAIRO_DOCK_TYPE_DOCK);
-	GtkWidget *pWindow = pDock->container.pWidget;
 	
 	//\__________________ initialize its parameters (it's a root dock by default)
+	pDock->container.iface.animation_loop = _cairo_dock_dock_animation_loop;
+	pDock->container.iface.setup_menu = _setup_menu;
+	
 	pDock->iAvoidingMouseIconType = -1;
 	pDock->fFlatDockWidth = - myIconsParam.iIconGap;
 	pDock->fMagnitudeMax = 1.;
 	pDock->fPostHideOffset = 1.;
 	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
 	
-	pDock->container.iface.animation_loop = _cairo_dock_dock_animation_loop;
-	pDock->container.iface.setup_menu = _setup_menu;
-	
 	//\__________________ set up its window
+	GtkWidget *pWindow = pDock->container.pWidget;
 	gtk_container_set_border_width (GTK_CONTAINER (pWindow), 0);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
 	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
-	
 	
 	cairo_dock_register_notification_on_object (pDock,
 		NOTIFICATION_RENDER,
@@ -680,8 +679,7 @@ void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const g
 	//\__________________ set the orientation relatively to the parent dock
 	pDock->container.bIsHorizontal = pParentDock->container.bIsHorizontal;
 	pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
-	pDock->iScreenOffsetX = pParentDock->iScreenOffsetX;
-	pDock->iScreenOffsetY = pParentDock->iScreenOffsetY;
+	pDock->iNumScreen = pParentDock->iNumScreen;
 	
 	//\__________________ set a renderer
 	cairo_dock_set_renderer (pDock, cRendererName);
@@ -966,12 +964,7 @@ void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboole
 		cairo_dock_detach_icon_from_dock_full (icon, pDock, bCheckUnusedSeparator);  // on le fait maintenant, pour que l'icone ait son type correct, et ne soit pas confondue avec un separateur
 	
 	//\___________________ On supprime l'icone du theme courant.
-	if (icon->iface.on_delete)
-	{
-		gboolean r = icon->iface.on_delete (icon);
-		if (r)
-			cairo_dock_mark_current_theme_as_modified (TRUE);
-	}
+	cairo_dock_delete_icon_from_current_theme (icon);
 }
 
 
@@ -1088,8 +1081,7 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 
 		if (pReceivingDock == NULL || cReceivingDockName == NULL)  // alors on les jete.
 		{
-			if (icon->iface.on_delete)
-				icon->iface.on_delete (icon);  // efface le .desktop / ecrit les modules actifs.
+			cairo_dock_delete_icon_from_current_theme (icon);
 			
 			if (CAIRO_DOCK_IS_APPLET (icon))
 			{

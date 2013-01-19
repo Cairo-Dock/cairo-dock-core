@@ -16,6 +16,9 @@ screen border = 0
 #{When set to 0 the dock will position itself relative to the left corner if horizontal and the top corner if vertical. When set to 1 it will position itself relative to the right corner if horizontal and the bottom corner if vertical. When set to 0.5, it will position itself relative to the middle of the screen's edge.}
 alignment = .5
 
+#r- Multi-screens
+num_screen = -1
+
 #F-[Offset from the screen's edge;gtk-leave-fullscreen]
 frame2 =
 
@@ -25,13 +28,6 @@ x gap = 0
 #i-[-20;2000] Distance to the screen edge:
 #{in pixels. You can also move the dock by holding the ALT or CTRL key and the left mouse button.}
 y gap = 0
-
-#v
-sep_other =
-
-#i[0;12] Number of the screen where the dock should be located:
-#{starting from 0}
-num screen = 0
 
 #F-[Visibility of the dock;@pkgdatadir@/icons/icon-visibility.svg]
 frame_visi =
