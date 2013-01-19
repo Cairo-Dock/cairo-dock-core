@@ -338,8 +338,8 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, CairoContai
 	g_free (text);
 	
 	gtk_window_resize (GTK_WINDOW (pDialog),
-		MIN (CAIRO_DOCK_ABOUT_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
-		MIN (CAIRO_DOCK_ABOUT_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
+		MIN (CAIRO_DOCK_ABOUT_WIDTH, gldi_get_desktop_width()),
+		MIN (CAIRO_DOCK_ABOUT_HEIGHT, gldi_get_desktop_height() - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 
 	gtk_widget_show_all (pDialog);
 
@@ -704,6 +704,7 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	{
 		cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
 	}
+	cairo_dock_mark_current_theme_as_modified (TRUE);
 	
 	CairoDock *pNewDock = cairo_dock_search_dock_from_name (cValidDockName);
 	if (pNewDock && pNewDock->iRefCount == 0 && pNewDock->icons && pNewDock->icons->next == NULL)  // le dock vient d'etre cree avec cette icone.

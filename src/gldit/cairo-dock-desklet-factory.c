@@ -57,7 +57,6 @@
 #include "cairo-dock-desklet-factory.h"
 
 extern gboolean g_bUseOpenGL;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static void _cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve);
 static void on_drag_data_received_desklet (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, CairoDesklet *pDesklet);
@@ -206,8 +205,8 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 {
 	if (pDesklet->pIcon != NULL && pDesklet->pIcon->pModuleInstance != NULL)
 	{
-		int iRelativePositionX = (pDesklet->container.iWindowPositionX + pDesklet->container.iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? pDesklet->container.iWindowPositionX : pDesklet->container.iWindowPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-		int iRelativePositionY = (pDesklet->container.iWindowPositionY + pDesklet->container.iHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? pDesklet->container.iWindowPositionY : pDesklet->container.iWindowPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		int iRelativePositionX = (pDesklet->container.iWindowPositionX + pDesklet->container.iWidth/2 <= gldi_get_desktop_width()/2 ? pDesklet->container.iWindowPositionX : pDesklet->container.iWindowPositionX - gldi_get_desktop_width());
+		int iRelativePositionY = (pDesklet->container.iWindowPositionY + pDesklet->container.iHeight/2 <= gldi_get_desktop_height()/2 ? pDesklet->container.iWindowPositionY : pDesklet->container.iWindowPositionY - gldi_get_desktop_height());
 		
 		int iNumDesktop = -1;
 		if (! cairo_dock_desklet_is_sticky (pDesklet))
@@ -218,12 +217,12 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;
 			cairo_dock_get_xwindow_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);
 			if (iGlobalPositionX < 0)
-				iGlobalPositionX += g_desktopGeometry.iNbViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+				iGlobalPositionX += g_desktopGeometry.iNbViewportX * gldi_get_desktop_width();
 			if (iGlobalPositionY < 0)
-				iGlobalPositionY += g_desktopGeometry.iNbViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+				iGlobalPositionY += g_desktopGeometry.iNbViewportY * gldi_get_desktop_height();
 			
-			int iViewportX = iGlobalPositionX / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-			int iViewportY = iGlobalPositionY / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+			int iViewportX = iGlobalPositionX / gldi_get_desktop_width();
+			int iViewportY = iGlobalPositionY / gldi_get_desktop_height();
 			
 			int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
 			cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
@@ -302,13 +301,13 @@ static gboolean on_configure_desklet (G_GNUC_UNUSED GtkWidget* pWidget,
 	int x = pEvent->x, y = pEvent->y;
 	//g_print ("new desklet position : (%d;%d)", x, y);
 	while (x < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
-		x += g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	while (x >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
-		x -= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		x += gldi_get_desktop_width();
+	while (x >= gldi_get_desktop_width())
+		x -= gldi_get_desktop_width();
 	while (y < 0)
-		y += g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	while (y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
-		y -= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		y += gldi_get_desktop_height();
+	while (y >= gldi_get_desktop_height())
+		y -= gldi_get_desktop_height();
 	//g_print (" => (%d;%d)\n", x, y);
 	if (pDesklet->container.iWindowPositionX != x || pDesklet->container.iWindowPositionY != y)
 	{
@@ -753,23 +752,22 @@ static gboolean _cairo_desklet_animation_loop (CairoContainer *pContainer)
 
 CairoDesklet *cairo_dock_new_desklet (void)
 {
-	cd_message ("%s ()", __func__);
+	// Create a desklet
 	CairoDesklet *pDesklet = gldi_container_new (CairoDesklet, &myDeskletsMgr, CAIRO_DOCK_TYPE_DESKLET);
-	GtkWidget *pWindow = pDesklet->container.pWidget;
 	
 	pDesklet->container.bIsHorizontal = TRUE;
 	pDesklet->container.bDirectionUp = TRUE;
 	pDesklet->container.fRatio = 1;
-	pDesklet->container.fRatio = 1;
-	
 	pDesklet->container.iface.animation_loop = _cairo_desklet_animation_loop;
 	
+	// set up its window
+	GtkWidget *pWindow = pDesklet->container.pWidget;
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-desklet");
 	gtk_widget_add_events( pWindow,
 		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK |
 		GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_FOCUS_CHANGE_MASK |
 		GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
-	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 1);  // comme ca.
+	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 1);
 	
 	g_signal_connect (G_OBJECT (pWindow),
 		#if (GTK_MAJOR_VERSION < 3)
@@ -882,10 +880,10 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 		gtk_window_set_resizable (GTK_WINDOW(pDesklet->container.pWidget), FALSE);
 	}
 	
-	int iAbsolutePositionX = (pAttribute->iDeskletPositionX < 0 ? g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + pAttribute->iDeskletPositionX : pAttribute->iDeskletPositionX);
-	iAbsolutePositionX = MAX (0, MIN (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - pAttribute->iDeskletWidth, iAbsolutePositionX));
-	int iAbsolutePositionY = (pAttribute->iDeskletPositionY < 0 ? g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + pAttribute->iDeskletPositionY : pAttribute->iDeskletPositionY);
-	iAbsolutePositionY = MAX (0, MIN (g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - pAttribute->iDeskletHeight, iAbsolutePositionY));
+	int iAbsolutePositionX = (pAttribute->iDeskletPositionX < 0 ? gldi_get_desktop_width() + pAttribute->iDeskletPositionX : pAttribute->iDeskletPositionX);
+	iAbsolutePositionX = MAX (0, MIN (gldi_get_desktop_width() - pAttribute->iDeskletWidth, iAbsolutePositionX));
+	int iAbsolutePositionY = (pAttribute->iDeskletPositionY < 0 ? gldi_get_desktop_height() + pAttribute->iDeskletPositionY : pAttribute->iDeskletPositionY);
+	iAbsolutePositionY = MAX (0, MIN (gldi_get_desktop_height() - pAttribute->iDeskletHeight, iAbsolutePositionY));
 	
 	if (pAttribute->bOnAllDesktops)
 		gdk_window_move (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet)),
@@ -918,8 +916,8 @@ void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute
 			iNumViewportX -= iCurrentViewportX;
 			iNumViewportY -= iCurrentViewportY;
 			
-			cd_debug ("on le place en %d + %d", iNumViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iAbsolutePositionX);
-			cairo_dock_move_xwindow_to_absolute_position (Xid, iNumDesktop, iNumViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + iAbsolutePositionX, iNumViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + iAbsolutePositionY);
+			cd_debug ("on le place en %d + %d", iNumViewportX * gldi_get_desktop_width(), iAbsolutePositionX);
+			cairo_dock_move_xwindow_to_absolute_position (Xid, iNumDesktop, iNumViewportX * gldi_get_desktop_width() + iAbsolutePositionX, iNumViewportY * gldi_get_desktop_height() + iAbsolutePositionY);
 		}
 	}
 	pDesklet->bPositionLocked = pAttribute->bPositionLocked;
@@ -1115,9 +1113,9 @@ static void _cairo_dock_reserve_space_for_desklet (CairoDesklet *pDesklet, gbool
 	{
 		int iTopOffset, iBottomOffset, iRightOffset, iLeftOffset;
 		iTopOffset = iY;
-		iBottomOffset = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - 1 - (iY + iHeight);
+		iBottomOffset = gldi_get_desktop_height() - 1 - (iY + iHeight);
 		iLeftOffset = iX;
-		iRightOffset = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - 1 - (iX + iWidth);
+		iRightOffset = gldi_get_desktop_width() - 1 - (iX + iWidth);
 		
 		if (iBottomOffset < MIN (iLeftOffset, iRightOffset))  // en bas.
 		{

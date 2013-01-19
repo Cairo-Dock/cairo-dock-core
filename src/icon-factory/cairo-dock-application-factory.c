@@ -255,8 +255,8 @@ Icon *cairo_dock_new_appli_icon (Window Xid, Window *XParentWindow)
 	int iLocalPositionX, iLocalPositionY, iWidthExtent, iHeightExtent;
 	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
 	
-	icon->iViewPortX = iLocalPositionX / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportX;
-	icon->iViewPortY = iLocalPositionY / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportY;
+	icon->iViewPortX = iLocalPositionX / g_desktopGeometry.Xscreen.width + g_desktopGeometry.iCurrentViewportX;
+	icon->iViewPortY = iLocalPositionY / g_desktopGeometry.Xscreen.height + g_desktopGeometry.iCurrentViewportY;
 	
 	icon->windowGeometry.x = iLocalPositionX;
 	icon->windowGeometry.y = iLocalPositionY;

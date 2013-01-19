@@ -120,6 +120,9 @@ typedef enum {
 */
 void cairo_dock_free_icon (Icon *icon);
 
+void cairo_dock_delete_icon_from_current_theme (Icon *icon);
+
+
 /** Execute an action on all icons.
 *@param pFunction the action.
 *@param pUserData data passed to the callback.

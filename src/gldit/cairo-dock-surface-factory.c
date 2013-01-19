@@ -32,7 +32,6 @@
 
 extern CairoContainer *g_pPrimaryContainer;
 extern gboolean g_bUseOpenGL;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static cairo_t *s_pSourceContext = NULL;
 
@@ -911,7 +910,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	
 	if (pLabelDescription->fMaxRelativeWidth != 0)
 	{
-		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * gldi_get_desktop_width() / g_desktopGeometry.iNbScreens;  // use the mean screen width since the text might be placed anywhere on the X screen.
 		int w = log.width;
 		//g_print ("text width : %d / %d\n", w, iMaxLineWidth);
 		if (w > iMaxLineWidth)  // le texte est trop long.

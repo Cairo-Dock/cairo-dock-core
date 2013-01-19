@@ -58,7 +58,6 @@ CairoDialogsManager myDialogsMgr;
 
 // dependancies
 extern CairoDock *g_pMainDock;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
 
 // private
@@ -641,7 +640,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 	iHeight = pDialog->iComputedHeight;
 	iY = pDialog->iComputedPositionY;
 	iZoneXLeft = MAX (pDialog->iAimedX - iWidth, 0);
-	iZoneXRight = MIN (pDialog->iAimedX + iWidth, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
+	iZoneXRight = MIN (pDialog->iAimedX + iWidth, gldi_get_desktop_width());
 	CairoDialog *pDialogOnOurWay;
 	int iLimitXLeft = iZoneXLeft;
 	int iLimitXRight = iZoneXRight;  // left and right limits due to other dialogs
@@ -678,7 +677,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 		}
 	}
 	// g_print (" -> [%d ; %d], %d, %d\n", iLimitXLeft, iLimitXRight, iWidth, iMinYLimit);
-	if (iLimitXRight - iLimitXLeft >= MIN (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iWidth) || !bDialogOnOurWay)  // there is enough room to place the dialog.
+	if (iLimitXRight - iLimitXLeft >= MIN (gldi_get_desktop_width(), iWidth) || !bDialogOnOurWay)  // there is enough room to place the dialog.
 	{
 		if (pDialog->bRight)
 			pDialog->iComputedPositionX = MAX (0, MIN (pDialog->iAimedX - pDialog->fAlign * iWidth, iLimitXRight - iWidth));
@@ -686,8 +685,8 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 			pDialog->iComputedPositionX = MAX (pDialog->iAimedX - (1. - pDialog->fAlign) * iWidth, iLimitXLeft);
 		if (pDialog->container.bDirectionUp && pDialog->iComputedPositionY < 0)
 			pDialog->iComputedPositionY = 0;
-		else if (!pDialog->container.bDirectionUp && pDialog->iComputedPositionY + iHeight > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
-			pDialog->iComputedPositionY = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - iHeight;
+		else if (!pDialog->container.bDirectionUp && pDialog->iComputedPositionY + iHeight > gldi_get_desktop_height())
+			pDialog->iComputedPositionY = gldi_get_desktop_height() - iHeight;
 		// g_print ("  --> %d\n", pDialog->iComputedPositionX);
 	}
 	else  // not enough room, try again above the closest dialog that was disturbing.
@@ -745,8 +744,8 @@ static void cairo_dock_place_dialog (CairoDialog *pDialog, CairoContainer *pCont
 	else  // dialogue lie a aucun container => au milieu de l'ecran courant.
 	{
 		pDialog->container.bDirectionUp = TRUE;
-		pDialog->iComputedPositionX = (g_pMainDock ? g_pMainDock->iScreenOffsetX : 0) + (g_desktopGeometry.iScreenWidth [CAIRO_DOCK_HORIZONTAL] - pDialog->container.iWidth) / 2;
-		pDialog->iComputedPositionY = (g_pMainDock ? g_pMainDock->iScreenOffsetY : 0) + (g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] - pDialog->container.iHeight) / 2;
+		pDialog->iComputedPositionX = (gldi_get_desktop_width() - pDialog->container.iWidth) / 2;  // we don't know if the container is set on a given screen or not, so take the X screen.
+		pDialog->iComputedPositionY = (gldi_get_desktop_height() - pDialog->container.iHeight) / 2;
 		
 		// iGravity = GDK_GRAVITY_CENTER;
 	}
@@ -1180,7 +1179,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 		pDialogs->dialogTextDescription.iSize *= 1.33;  // c'est pas beau, mais ca evite de casser tous les themes.
 	pDialogs->dialogTextDescription.iWeight = pango_font_description_get_weight (fd);
 	pDialogs->dialogTextDescription.iStyle = pango_font_description_get_style (fd);
-	pDialogs->dialogTextDescription.fMaxRelativeWidth = .5;  // on limite a la moitie de l'ecran.
+	pDialogs->dialogTextDescription.fMaxRelativeWidth = .5;  // limit to half of the screen (the dialog is not placed on a given screen, it can overlap 2 screens, so it's half of the mean screen width)
 	
 	if (g_key_file_has_key (pKeyFile, "Dialogs", "message size", NULL))  // anciens parametres.
 	{

@@ -46,11 +46,10 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-X-manager.h"
-#include "cairo-dock-X-utilities.h"
+#include "cairo-dock-X-utilities.h"  // cairo_dock_set_xwindow_type_hint
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dialog-factory.h"
 
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
 
@@ -64,7 +63,7 @@ static void _cairo_dock_compute_dialog_sizes (CairoDialog *pDialog)
 	if (pDialog->pButtons != NULL)
 	{
 		pDialog->iButtonsWidth = pDialog->iNbButtons * myDialogsParam.iDialogButtonWidth + (pDialog->iNbButtons - 1) * CAIRO_DIALOG_BUTTON_GAP + 2 * CAIRO_DIALOG_TEXT_MARGIN;  // marge + bouton1 + ecart + bouton2 + marge.
-		pDialog->iButtonsHeight = CAIRO_DIALOG_VGAP + myDialogsParam.iDialogButtonHeight;  // il y'a toujours quelque chose au-dessus (texte et/out widget)
+		pDialog->iButtonsHeight = CAIRO_DIALOG_VGAP + myDialogsParam.iDialogButtonHeight;  // il y'a toujours quelque chose au-dessus (texte et/ou widget)
 	}
 	
 	pDialog->iBubbleWidth = MAX (pDialog->iInteractiveWidth, MAX (pDialog->iButtonsWidth, MAX (pDialog->iMessageWidth, pDialog->iMinFrameWidth)));
@@ -333,16 +332,17 @@ static gboolean _cairo_dialog_animation_loop (CairoContainer *pContainer)
 
 static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 {
-	//\________________ create a dialogue.
+	//\________________ create a dialog.
 	CairoDialog *pDialog = gldi_container_new_full (CairoDialog, &myDialogsMgr, CAIRO_DOCK_TYPE_DIALOG, FALSE);  // FALSE <=> no opengl
-	GtkWidget *pWindow = pDialog->container.pWidget;
 	
 	//\__________________ initialize its parameters
-	pDialog->iRefCount = 1;
 	pDialog->container.fRatio = 1.;
+	pDialog->container.bIsHorizontal = TRUE;
 	pDialog->container.iface.animation_loop = _cairo_dialog_animation_loop;
+	pDialog->iRefCount = 1;
 	
 	//\________________ set up the window.
+	GtkWidget *pWindow = pDialog->container.pWidget;
 	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock-dialog");
 	if (! bInteractive)
 		gtk_window_set_type_hint (GTK_WINDOW (pDialog->container.pWidget), GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);  // pour ne pas prendre le focus.
@@ -350,7 +350,6 @@ static CairoDialog *_cairo_dock_create_empty_dialog (gboolean bInteractive)
 	gtk_widget_add_events (pWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 	gtk_window_resize (GTK_WINDOW (pWindow), CAIRO_DIALOG_MIN_SIZE, CAIRO_DIALOG_MIN_SIZE);
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
-	///gtk_widget_show_all (pWindow);
 	
 	return pDialog;
 }
@@ -435,7 +434,6 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 	//\________________ create an empty dialog.
 	CairoDialog *pDialog = _cairo_dock_create_empty_dialog (pAttribute->pInteractiveWidget || pAttribute->pActionFunc);
 	pDialog->pIcon = pIcon;
-	pDialog->container.bIsHorizontal = TRUE;
 	if (pAttribute->bForceAbove)
 	{
 		g_signal_connect (G_OBJECT (pDialog->container.pWidget),
@@ -738,7 +736,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 			}
 			else
 			{
-				*bRight = (pContainer->iWindowPositionY > g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+				*bRight = (pContainer->iWindowPositionY > gldi_get_desktop_width() / 2);  // we don't know if the container is set on a given screen or not, so take the X screen.
 				*bDirectionUp = (pIcon ? pIcon->fXAtRest > pDock->fFlatDockWidth / 2 : TRUE);
 				*iY = (pContainer->bDirectionUp ?
 					pContainer->iWindowPositionY + dy :
@@ -762,19 +760,19 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, CairoContaine
 	}
 	else if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
-		*bDirectionUp = (pContainer->iWindowPositionY > g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] / 2);
-		///*bIsHorizontal = (pContainer->iWindowPositionX > 50 && pContainer->iWindowPositionX + pContainer->iHeight < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] - 50);
+		*bDirectionUp = (pContainer->iWindowPositionY > gldi_get_desktop_height() / 2);
+		///*bIsHorizontal = (pContainer->iWindowPositionX > 50 && pContainer->iWindowPositionX + pContainer->iHeight < gldi_get_desktop_width() - 50);
 		*bIsHorizontal = TRUE;
 		
 		if (*bIsHorizontal)
 		{
-			*bRight = (pContainer->iWindowPositionX + pContainer->iWidth/2 < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+			*bRight = (pContainer->iWindowPositionX + pContainer->iWidth/2 < gldi_get_desktop_width() / 2);
 			*iX = pContainer->iWindowPositionX + pContainer->iWidth * (*bRight ? .7 : .3);
 			*iY = (*bDirectionUp ? pContainer->iWindowPositionY : pContainer->iWindowPositionY + pContainer->iHeight);
 		}
 		else
 		{
-			*bRight = (pContainer->iWindowPositionX < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] / 2);
+			*bRight = (pContainer->iWindowPositionX < gldi_get_desktop_width() / 2);
 			*iY = pContainer->iWindowPositionX + pContainer->iWidth * (*bRight ? 1 : 0);
 			*iX =pContainer->iWindowPositionY + pContainer->iHeight / 2;
 		}

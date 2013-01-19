@@ -237,8 +237,8 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 	
 	//\_____________ resize the window (placement is done later).
 	gtk_window_resize (GTK_WINDOW (pMainWindow),
-		MIN (iWidth, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
-		MIN (iHeight, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
+		MIN (iWidth, gldi_get_desktop_width()),
+		MIN (iHeight, gldi_get_desktop_height() - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	gtk_widget_show_all (pMainWindow);
 	

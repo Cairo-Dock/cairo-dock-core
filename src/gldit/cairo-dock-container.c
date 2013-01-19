@@ -39,7 +39,7 @@
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
-#include "cairo-dock-X-manager.h"  // g_desktopGeometry
+#include "cairo-dock-X-manager.h"  // gldi_get_desktop_width
 #define _MANAGER_DEF_
 #include "cairo-dock-container.h"
 
@@ -48,13 +48,11 @@ CairoContainersParam myContainersParam;
 CairoContainersManager myContainersMgr;
 CairoContainer *g_pPrimaryContainer = NULL;
 CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
-gboolean g_bUseGlitz = FALSE;
 
 // dependancies
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
-extern CairoDockDesktopGeometry g_desktopGeometry;  // _place_menu_on_icon
 
 // private
 static gboolean s_bSticky = TRUE;
@@ -458,19 +456,20 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	w = requisition.width;
 	h = requisition.height;
 	
+	int Hs = (pContainer->bIsHorizontal ? gldi_get_desktop_height() : gldi_get_desktop_width());
 	//g_print ("%d;%d %dx%d\n", x0, y0, w, h);
 	if (pContainer->bIsHorizontal)
 	{
 		*x = x0;
-		if (y0 > g_desktopGeometry.iXScreenHeight[pContainer->bIsHorizontal]/2)  // pContainer->bDirectionUp
+		if (y0 > Hs/2)  // pContainer->bDirectionUp
 			*y = y0 - h;
 		else
 			*y = y0 + pIcon->fHeight * pIcon->fScale;
 	}
 	else
 	{
-		*y = MIN (x0, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - h);
-		if (y0 > g_desktopGeometry.iXScreenHeight[pContainer->bIsHorizontal]/2)  // pContainer->bDirectionUp
+		*y = MIN (x0, gldi_get_desktop_height() - h);
+		if (y0 > Hs/2)  // pContainer->bDirectionUp
 			*x = y0 - w;
 		else
 			*x = y0 + pIcon->fHeight * pIcon->fScale;

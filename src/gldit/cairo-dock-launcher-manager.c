@@ -35,7 +35,6 @@
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.bMixLauncherAppli
 #include "cairo-dock-class-manager.h"  // cairo_dock_inhibite_class
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-themes-manager.h"  // cairo_dock_mark_current_theme_as_modified
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
@@ -423,7 +422,6 @@ void cairo_dock_reload_launcher (Icon *icon)
 	g_free (cClass);
 	g_free (cDesktopFileName);
 	g_free (cName);
-	cairo_dock_mark_current_theme_as_modified (TRUE);
 }
 
 

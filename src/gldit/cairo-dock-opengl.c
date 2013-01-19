@@ -42,7 +42,6 @@ gboolean g_bUseOpenGL = FALSE;
 
 // dependancies
 extern CairoContainer *g_pPrimaryContainer;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bEasterEggs;
 
@@ -405,8 +404,8 @@ void gldi_glx_apply_desktop_background (CairoContainer *pContainer)
 	glBindTexture (GL_TEXTURE_2D, g_pFakeTransparencyDesktopBg->iTexture);
 	
 	double x, y, w, h, W, H;
-	W = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	H = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	W = gldi_get_desktop_width();
+	H = gldi_get_desktop_height();
 	if (pContainer->bIsHorizontal)
 	{
 		w = pContainer->iWidth;

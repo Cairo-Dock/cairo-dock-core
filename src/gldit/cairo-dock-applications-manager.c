@@ -66,7 +66,6 @@ CairoTaskbarManager myTaskbarMgr;
 
 // dependancies
 extern CairoDock *g_pMainDock;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
 //extern int g_iDamageEvent;
 
@@ -652,12 +651,12 @@ static void _on_change_window_size_position (Icon *icon, XConfigureEvent *e)
 	icon->windowGeometry.height = h + top + bottom;
 	icon->windowGeometry.x = x - left;
 	icon->windowGeometry.y = y - top;
-	icon->iViewPortX = x / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportX;
-	icon->iViewPortY = y / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] + g_desktopGeometry.iCurrentViewportY;
+	icon->iViewPortX = x / gldi_get_desktop_width() + g_desktopGeometry.iCurrentViewportX;
+	icon->iViewPortY = y / gldi_get_desktop_height() + g_desktopGeometry.iCurrentViewportY;
 	//g_print (" :: (%d;%d) %dx%d)\n", icon->windowGeometry.x, icon->windowGeometry.y, icon->windowGeometry.width, icon->windowGeometry.height);
 	
 	// on regarde si l'appli est sur le viewport courant.
-	if (x + w <= 0 || x >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || y + h <= 0 || y >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // not on this desktop (actually, it may be only a little bit on this desktop ... maybe we should use a % of the width, or a margin ...)
+	if (x + w <= 0 || x >= gldi_get_desktop_width() || y + h <= 0 || y >= gldi_get_desktop_height())  // not on this desktop (actually, it may be only a little bit on this desktop ... maybe we should use a % of the width, or a margin ...)
 	{
 		// applis du bureau courant seulement.
 		if (myTaskbarParam.bAppliOnCurrentDesktopOnly)

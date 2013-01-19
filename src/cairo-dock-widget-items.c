@@ -33,6 +33,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-applications-manager.h"
@@ -584,6 +585,7 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 							{
 								cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
 							}
+							cairo_dock_mark_current_theme_as_modified (TRUE);
 						}
 						
 						// find the new order of the row in the tree
@@ -785,8 +787,8 @@ ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow)
 	gtk_paned_pack1 (GTK_PANED (pLauncherPane), pLauncherWindow, TRUE, FALSE);
 	
 	//\_____________ On essaie de definir une taille correcte.
-	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-	if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] < CAIRO_DOCK_LAUNCHER_PANEL_WIDTH)  // ecran trop petit, on va essayer de reserver au moins R pixels pour le panneau de droite (avec un minimum de L pixels pour celui de gauche).
+	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, gldi_get_desktop_width());
+	if (gldi_get_desktop_width() < CAIRO_DOCK_LAUNCHER_PANEL_WIDTH)  // ecran trop petit, on va essayer de reserver au moins R pixels pour le panneau de droite (avec un minimum de L pixels pour celui de gauche).
 		gtk_paned_set_position (GTK_PANED (pLauncherPane), MAX (CAIRO_DOCK_LEFT_PANE_MIN_WIDTH, w - CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH));
 	else  // we set a default width rather than letting GTK guess the best, because the right panel is more important than the left one.
 		gtk_paned_set_position (GTK_PANED (pLauncherPane), CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH);
@@ -904,6 +906,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		// reload widgets.
 		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et declenche le rechargement de l'IHM.
 	}
+	cairo_dock_mark_current_theme_as_modified (TRUE);
 	_items_widget_reload (CD_WIDGET (pItemsWidget));  // we reload in case the items place has changed (icon's container, dock orientation, etc).
 }
 

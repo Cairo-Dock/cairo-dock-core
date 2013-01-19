@@ -36,7 +36,8 @@ G_BEGIN_DECLS
 * @param pDock le dock.
 * @return la taille max.
 */
-#define cairo_dock_get_max_authorized_dock_width(pDock) (myDocksParam.iMaxAuthorizedWidth == 0 ? g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] : MIN (myDocksParam.iMaxAuthorizedWidth, g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal]))
+///#define cairo_dock_get_max_authorized_dock_width(pDock) (myDocksParam.iMaxAuthorizedWidth == 0 ? g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] : MIN (myDocksParam.iMaxAuthorizedWidth, g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal]))
+#define cairo_dock_get_max_authorized_dock_width gldi_dock_get_screen_width
 
 /* Dis si un dock est etendu ou pas.
 * @param pDock le dock.
@@ -48,11 +49,11 @@ G_BEGIN_DECLS
 
 #define cairo_dock_get_icon_size(pDock) ((pDock)->iIconSize != 0 ? (pDock)->iIconSize : myIconsParam.iIconWidth)
 
-/*
-* Recharge les reflets (cairo) d'un dock. Utile si le dock a changé de position.
-* @param pDock un dock.
-*/
-///void cairo_dock_reload_reflects_in_dock (CairoDock *pDock);
+#define gldi_dock_get_screen_offset_x(pDock) (pDock->container.bIsHorizontal ? cairo_dock_get_screen_position_x (pDock->iNumScreen) : cairo_dock_get_screen_position_y (pDock->iNumScreen))
+#define gldi_dock_get_screen_offset_y(pDock) (pDock->container.bIsHorizontal ? cairo_dock_get_screen_position_y (pDock->iNumScreen) : cairo_dock_get_screen_position_x (pDock->iNumScreen))
+#define gldi_dock_get_screen_width(pDock) (pDock->container.bIsHorizontal ? cairo_dock_get_screen_width (pDock->iNumScreen) : cairo_dock_get_screen_height (pDock->iNumScreen))
+#define gldi_dock_get_screen_height(pDock) (pDock->container.bIsHorizontal ? cairo_dock_get_screen_height (pDock->iNumScreen) : cairo_dock_get_screen_width (pDock->iNumScreen))
+#define cairo_dock_dock_get_creen(pDock) (cairo_dock_get_nth_screen (pDock->iNumScreen))
 
 
 /** Compute the maximum size of a dock, and resize it if necessary.

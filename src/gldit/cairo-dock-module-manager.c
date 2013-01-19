@@ -34,7 +34,7 @@
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
-#include "cairo-dock-X-manager.h"  // g_desktopGeometry
+#include "cairo-dock-X-manager.h"  // gldi_get_desktop_width
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-config.h"
@@ -51,7 +51,6 @@ CairoDockModuleInstance *g_pCurrentModule = NULL;  // only used to trace a possi
 
 // dependancies
 extern gchar *g_cConfFile;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 
 // private
 static GHashTable *s_hModuleTable = NULL;
@@ -436,12 +435,12 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 		{
 			int iX2, iX = pFirstInstance->pContainer->iWindowPositionX;
 			int iWidth = pFirstInstance->pContainer->iWidth;
-			if (iX + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2)  // desklet on the left, we place the new one on its right.
+			if (iX + iWidth/2 <= gldi_get_desktop_width()/2)  // desklet on the left, we place the new one on its right.
 				iX2 = iX + iWidth;
 			else  // desklet on the right, we place the new one on its left.
 				iX2 = iX - iWidth;
 			
-			int iRelativePositionX = (iX2 + iWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iX2 : iX2 - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
+			int iRelativePositionX = (iX2 + iWidth/2 <= gldi_get_desktop_width()/2 ? iX2 : iX2 - gldi_get_desktop_width());
 			cairo_dock_update_conf_file (cConfFilePath,
 				G_TYPE_INT, "Desklet", "x position", iRelativePositionX,
 				G_TYPE_BOOLEAN, "Desklet", "locked", FALSE,  // we'll probably want to move it
@@ -515,9 +514,6 @@ void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pIn
 	
 	int iDeskletPositionX = iCenterX - iDeskletWidth/2;
 	int iDeskletPositionY = iCenterY - iDeskletHeight/2;
-	
-	// int iRelativePositionX = (iDeskletPositionX + iDeskletWidth/2 <= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionX : iDeskletPositionX - g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]);
-	// int iRelativePositionY = (iDeskletPositionY + iDeskletHeight/2 <= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]/2 ? iDeskletPositionY : iDeskletPositionY - g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
 	
 	//\__________________ update the conf file of the applet.
 	g_key_file_set_double (pKeyFile, "Desklet", "x position", iDeskletPositionX);

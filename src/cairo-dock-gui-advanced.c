@@ -1668,16 +1668,16 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	GtkWidget *pMainHBox = _gtk_hbox_new (0);
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
 	
-	if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH)
+	if (gldi_get_desktop_width() > CAIRO_DOCK_CONF_PANEL_WIDTH)
 	{
 		s_iPreviewWidth = CAIRO_DOCK_PREVIEW_WIDTH;
 		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW;
 	}
-	else if (g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] > CAIRO_DOCK_CONF_PANEL_WIDTH_MIN)
+	else if (gldi_get_desktop_width() > CAIRO_DOCK_CONF_PANEL_WIDTH_MIN)
 	{
 		double a = 1.*(CAIRO_DOCK_PREVIEW_WIDTH - CAIRO_DOCK_PREVIEW_WIDTH_MIN) / (CAIRO_DOCK_CONF_PANEL_WIDTH - CAIRO_DOCK_CONF_PANEL_WIDTH_MIN);
 		double b = CAIRO_DOCK_PREVIEW_WIDTH_MIN - CAIRO_DOCK_CONF_PANEL_WIDTH_MIN * a;
-		s_iPreviewWidth = a * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] + b;
+		s_iPreviewWidth = a * gldi_get_desktop_width() + b;
 		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW - 1;
 	}
 	else
@@ -1981,8 +1981,8 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	g_object_set_data (G_OBJECT (s_pMainWindow), "frame-width", GINT_TO_POINTER (200));
 	
 	gtk_window_resize (GTK_WINDOW (s_pMainWindow),
-		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL]),
-		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
+		MIN (CAIRO_DOCK_CONF_PANEL_WIDTH, gldi_get_desktop_width()),
+		MIN (CAIRO_DOCK_CONF_PANEL_HEIGHT, gldi_get_desktop_height() - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	
 	gtk_widget_show_all (s_pMainWindow);

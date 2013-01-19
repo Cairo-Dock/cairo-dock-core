@@ -64,7 +64,6 @@
 #include "cairo-dock-data-renderer.h"  // cairo_dock_refresh_data_renderer
 #include "cairo-dock-callbacks.h"
 
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockHidingEffect *g_pHidingBackend;
 extern CairoDockHidingEffect *g_pKeepingBelowBackend;
 extern CairoDockGLConfig g_openglConfig;
@@ -1725,10 +1724,12 @@ static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 	g_return_if_fail (pDock != NULL);
 	gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
 	
+	int W = gldi_dock_get_screen_width (pDock), H = gldi_dock_get_screen_height (pDock);
+	int iScreenOffsetX = gldi_dock_get_screen_offset_x (pDock), iScreenOffsetY = gldi_dock_get_screen_offset_y (pDock);
 	///pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
 	///pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY);
-	pDock->iGapX = pDock->container.iWindowPositionX + pDock->container.iMouseX - (g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - pDock->container.iWidth) * pDock->fAlign - pDock->container.iWidth/2 - pDock->iScreenOffsetX;
-	pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + pDock->container.iMouseY) : pDock->container.iWindowPositionY + pDock->container.iMouseY) - pDock->iScreenOffsetY;
+	pDock->iGapX = pDock->container.iWindowPositionX + pDock->container.iMouseX - (W - pDock->container.iWidth) * pDock->fAlign - pDock->container.iWidth/2 - iScreenOffsetX;
+	pDock->iGapY = (pDock->container.bDirectionUp ? H - (pDock->container.iWindowPositionY + pDock->container.iMouseY) : pDock->container.iWindowPositionY + pDock->container.iMouseY) - iScreenOffsetY;
 	cd_debug (" => %d;%d", g_pMainDock->iGapX, g_pMainDock->iGapY);
 	
 	int iNewPositionX, iNewPositionY;
@@ -1738,13 +1739,13 @@ static void _cairo_dock_show_dock_at_mouse (CairoDock *pDock)
 	cd_debug (" ==> %d;%d", iNewPositionX, iNewPositionY);
 	if (iNewPositionX < 0)
 		iNewPositionX = 0;
-	else if (iNewPositionX + pDock->container.iWidth > g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal])
-		iNewPositionX = g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] - pDock->container.iWidth;
+	else if (iNewPositionX + pDock->container.iWidth > W)
+		iNewPositionX = W - pDock->container.iWidth;
 	
 	if (iNewPositionY < 0)
 		iNewPositionY = 0;
-	else if (iNewPositionY + pDock->container.iHeight > g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal])
-		iNewPositionY = g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - pDock->container.iHeight;
+	else if (iNewPositionY + pDock->container.iHeight > H)
+		iNewPositionY = H - pDock->container.iHeight;
 	
 	gtk_window_move (GTK_WINDOW (pDock->container.pWidget),
 		(pDock->container.bIsHorizontal ? iNewPositionX : iNewPositionY),

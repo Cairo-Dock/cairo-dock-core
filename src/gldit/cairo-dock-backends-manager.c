@@ -262,7 +262,6 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 	
 	pDock->fMagnitudeMax = 1.;
 	pDock->container.bUseReflect = pDock->pRenderer->bUseReflect;
-	gtk_widget_set_double_buffered (pDock->container.pWidget, ! (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL));
 	
 	int iAnimationDeltaT = pDock->container.iAnimationDeltaT;
 	pDock->container.iAnimationDeltaT = (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL ? myContainersParam.iGLAnimationDeltaT : myContainersParam.iCairoAnimationDeltaT);
@@ -299,7 +298,7 @@ void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRender
 	}
 	
 	pDesklet->pRenderer = pRenderer;
-	gtk_widget_set_double_buffered (pDesklet->container.pWidget, ! (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL));
+	gtk_widget_set_double_buffered (pDesklet->container.pWidget, ! (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL));  // some renderers don't have an opengl version yet.
 	pDesklet->container.iAnimationDeltaT = (g_bUseOpenGL && pRenderer != NULL && pRenderer->render_opengl != NULL ? myContainersParam.iGLAnimationDeltaT : myContainersParam.iCairoAnimationDeltaT);
 	//g_print ("desklet: %d\n", pDesklet->container.iAnimationDeltaT);
 	

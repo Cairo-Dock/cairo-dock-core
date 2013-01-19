@@ -36,7 +36,6 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
-#include "cairo-dock-X-manager.h"  // g_desktopGeometry
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dialog-manager.h"  // cairo_dock_show_temporary_dialog_with_icon

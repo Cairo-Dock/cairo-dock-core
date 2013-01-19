@@ -43,7 +43,6 @@
 #include "cairo-dock-application-facility.h"
 
 extern CairoDock *g_pMainDock;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
 extern CairoContainer *g_pPrimaryContainer;
 
@@ -543,7 +542,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Wind
 				x = x_icon_geometry (pClassmate, pClassmateDock);
 				if (cairo_dock_is_hidden (pMainDock))
 				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+					y = (pClassmateDock->container.bDirectionUp ? 0 : gldi_get_desktop_height());
 				}
 				else
 				{
@@ -555,7 +554,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Wind
 				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
 				if (cairo_dock_is_hidden (pClassmateDock))
 				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+					y = (pClassmateDock->container.bDirectionUp ? 0 : gldi_get_desktop_height());
 				}
 				else
 				{
@@ -583,7 +582,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Wind
 					x = x_icon_geometry (pLastLauncher, pMainDock) + pLastLauncher->fWidth/2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+						y = (pMainDock->container.bDirectionUp ? 0 : gldi_get_desktop_height());
 					}
 					else
 					{
@@ -595,7 +594,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Wind
 					x = pMainDock->container.iWindowPositionX + 0 + (pMainDock->container.iWidth - pMainDock->fFlatDockWidth) / 2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+						y = (pMainDock->container.bDirectionUp ? 0 : gldi_get_desktop_height());
 					}
 					else
 					{
@@ -623,21 +622,21 @@ gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumV
 {
 	// On calcule les coordonnees en repere absolu.
 	int x = pIcon->windowGeometry.x;  // par rapport au viewport courant.
-	x += g_desktopGeometry.iCurrentViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];  // repere absolu
+	x += g_desktopGeometry.iCurrentViewportX * gldi_get_desktop_width();  // repere absolu
 	if (x < 0)
-		x += g_desktopGeometry.iNbViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		x += g_desktopGeometry.iNbViewportX * gldi_get_desktop_width();
 	int y = pIcon->windowGeometry.y;
-	y += g_desktopGeometry.iCurrentViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	y += g_desktopGeometry.iCurrentViewportY * gldi_get_desktop_height();
 	if (y < 0)
-		y += g_desktopGeometry.iNbViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		y += g_desktopGeometry.iNbViewportY * gldi_get_desktop_height();
 	int w = pIcon->windowGeometry.width, h = pIcon->windowGeometry.height;
 	
 	// test d'intersection avec le viewport donne.
 	return ((pIcon->iNumDesktop == -1 || pIcon->iNumDesktop == iNumDesktop) &&
-		x + w > iNumViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
-		x < (iNumViewportX + 1) * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
-		y + h > iNumViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] &&
-		y < (iNumViewportY + 1) * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		x + w > iNumViewportX * gldi_get_desktop_width() &&
+		x < (iNumViewportX + 1) * gldi_get_desktop_width() &&
+		y + h > iNumViewportY * gldi_get_desktop_height() &&
+		y < (iNumViewportY + 1) * gldi_get_desktop_height());
 }
 
 gboolean cairo_dock_window_is_on_current_desktop (GtkAllocation *pWindowGeometry, int iWindowDesktopNumber)
@@ -650,9 +649,9 @@ gboolean cairo_dock_window_is_on_current_desktop (GtkAllocation *pWindowGeometry
 	
 	return ( (iWindowDesktopNumber == g_desktopGeometry.iCurrentDesktop || iWindowDesktopNumber == -1) &&
 		iGlobalPositionX + iWidthExtent > 0 &&
-		iGlobalPositionX < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
+		iGlobalPositionX < gldi_get_desktop_width() &&
 		iGlobalPositionY + iHeightExtent > 0 &&
-		iGlobalPositionY < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
+		iGlobalPositionY < gldi_get_desktop_height() );  // -1 <=> 0xFFFFFFFF en unsigned.
 }
 
 gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
@@ -664,8 +663,8 @@ void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumVi
 {
 	cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid,
 		iNumDesktop,
-		(iNumViewportX - g_desktopGeometry.iCurrentViewportX) * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-		(iNumViewportY - g_desktopGeometry.iCurrentViewportY) * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+		(iNumViewportX - g_desktopGeometry.iCurrentViewportX) * gldi_get_desktop_width(),
+		(iNumViewportY - g_desktopGeometry.iCurrentViewportY) * gldi_get_desktop_height());
 }
 
 void cairo_dock_move_window_to_current_desktop (Icon *pIcon)

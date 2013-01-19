@@ -93,7 +93,7 @@ pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 set (with_xentend FALSE)
 enable_if_not_defined (enable-x11-ext-support) # enabled by default
 if (enable-x11-ext-support)
-	set (xextend_required "xtst xcomposite xinerama xrandr")  # for the .pc
+	set (xextend_required "xtst xcomposite xrandr")  # for the .pc
 	STRING (REGEX REPLACE " " ";" xextend_required_semicolon ${xextend_required})
 	pkg_check_modules ("XEXTEND" "${xextend_required_semicolon}")
 
