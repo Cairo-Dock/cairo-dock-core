@@ -32,7 +32,7 @@
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
 #include <X11/extensions/XTest.h>
-#include <X11/extensions/Xinerama.h>
+#include <X11/extensions/Xinerama.h>  // Note: Xinerama will be dropped from Xorg eventually. When it happens, we'll have no choice but drop it too.
 #include <X11/extensions/Xrandr.h>
 ///#include <X11/extensions/shape.h>
 #endif
@@ -46,7 +46,6 @@
 #include <cairo/cairo-xlib.h>  // needed for cairo_xlib_surface_create
 #endif
 
-extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static gboolean s_bUseXComposite = TRUE;
 static gboolean s_bUseXTest = TRUE;
@@ -86,6 +85,9 @@ static Atom s_aNetWmName;
 static Atom s_aWmName;
 static Atom s_aUtf8String;
 static Atom s_aString;
+
+static GtkAllocation *_get_screens_geometry (int *pNbScreens);
+
 
 static int _cairo_dock_xerror_handler (G_GNUC_UNUSED Display * pDisplay, XErrorEvent *pXError)
 {
@@ -134,15 +136,11 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	s_aString 				= XInternAtom (s_XDisplay, "STRING", False);
 	
 	Screen *XScreen = XDefaultScreenOfDisplay (s_XDisplay);
-	g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] = WidthOfScreen (XScreen);
-	g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] = HeightOfScreen (XScreen);
-	g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
 	
-	g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = WidthOfScreen (XScreen);
-	g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = HeightOfScreen (XScreen);
-	g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
+	g_desktopGeometry.Xscreen.width = WidthOfScreen (XScreen); // x and y are nul.
+	g_desktopGeometry.Xscreen.height = HeightOfScreen (XScreen);
+	
+	g_desktopGeometry.pScreens = _get_screens_geometry (&g_desktopGeometry.iNbScreens);
 	
 	return s_XDisplay;
 }
@@ -158,8 +156,120 @@ guint cairo_dock_get_root_id (void)
 }
 
 
+static GtkAllocation *_get_screens_geometry (int *pNbScreens)
+{
+	GtkAllocation *pScreens = NULL;
+	GtkAllocation *pScreen;
+	int iNbScreens = 0;
+	/*Test unitaire*/
+	iNbScreens = 2;
+	pScreens = g_new0 (GtkAllocation, iNbScreens);
+	pScreens[0].x = 0;
+	pScreens[0].y = 0;
+	pScreens[0].width = 1000;
+	pScreens[0].height = 1050;
+	pScreens[1].x = 1000;
+	pScreens[1].y = 0;
+	pScreens[1].width = 680;
+	pScreens[1].height = 1050;
+	*pNbScreens = iNbScreens;
+	return pScreens;
+	
+	#ifdef HAVE_XEXTEND
+	if (s_bUseXrandr)  // we place Xrandr first to get more tests :) (and also because it will deprecate Xinerama).
+	{
+		cd_debug ("Using Xrandr to determine the screen's position and size ...");
+		XRRScreenResources *res = XRRGetScreenResources (s_XDisplay, DefaultRootWindow (s_XDisplay));  // Xrandr >= 1.3
+		if (res != NULL)
+		{
+			int n = res->ncrtc;
+			cd_debug (" number of screen(s): %d", n);
+			pScreens = g_new0 (GtkAllocation, n);
+			int i;
+			for (i = 0; i < n; i++)
+			{
+				XRRCrtcInfo *info = XRRGetCrtcInfo (s_XDisplay, res, res->crtcs[i]);
+				if (info == NULL)
+				{
+					cd_warning ("This screen (%d) has no info, skip it.", i);
+					continue;
+				}
+				
+				if (info->width == 0 || info->height == 0)
+				{
+					cd_warning ("This screen (%d) has a null dimensions, skip it.", i);
+					XRRFreeCrtcInfo (info);
+					continue;  // if that happens, does it screw the number of screens ?...
+				}
+				
+				pScreen = &pScreens[i];
+				pScreen->x = info->x;
+				pScreen->y = info->y;
+				pScreen->width = info->width;
+				pScreen->height = info->height;
+				cd_message (" * screen %d(%d) => (%d;%d) %dx%d", iNbScreens, i, pScreen->x, pScreen->y, pScreen->width, pScreen->height);
+				
+				XRRFreeCrtcInfo (info);
+				iNbScreens ++;
+			}
+			XRRFreeScreenResources (res);
+		}
+		else
+			cd_warning ("No screen found from Xrandr, is it really active ?");
+	}
+
+	if (iNbScreens == 0 && cairo_dock_xinerama_is_available () && XineramaIsActive (s_XDisplay))
+	{
+		cd_debug ("Using Xinerama to determine the screen's position and size ...");
+		int n;
+		XineramaScreenInfo *scr = XineramaQueryScreens (s_XDisplay, &n);
+		if (scr != NULL)
+		{
+			cd_debug (" number of screen(s): %d", n);
+			pScreens = g_new0 (GtkAllocation, n);
+			int i;
+			for (i = 0; i < n; i++)
+			{
+				pScreen = &pScreens[i];
+				pScreen->x = scr[i].x_org;
+				pScreen->y = scr[i].y_org;
+				pScreen->width = scr[i].width;
+				pScreen->height = scr[i].height;
+				cd_message (" * screen %d(%d) => (%d;%d) %dx%d", iNbScreens, i, pScreen->x, pScreen->y, pScreen->width, pScreen->height);
+				
+				XFree (scr);
+				iNbScreens ++;
+			}
+		}
+		else
+			cd_warning ("No screen found from Xinerama, is it really active ?");
+	}
+#endif
+	
+	if (iNbScreens == 0)
+	{
+		#ifdef HAVE_XEXTEND
+		cd_warning ("Xrandr and Xinerama are not available, assume there is only 1 screen.");
+		#else
+		cd_warning ("The dock was not compiled with the support of Xinerama/Xrandr, assume there is only 1 screen.");
+		#endif
+		
+		iNbScreens = 1;
+		pScreens = g_new0 (GtkAllocation, iNbScreens);
+		pScreen = &pScreens[0];
+		pScreen->x = 0;
+		pScreen->y = 0;
+		pScreen->width = gldi_get_desktop_width();
+		pScreen->height = gldi_get_desktop_height();
+	}
+	
+	*pNbScreens = iNbScreens;
+	return pScreens;
+}
+
 gboolean cairo_dock_update_screen_geometry (void)
 {
+	// get the geometry of the root window (the virtual X screen) from the server.
 	Window root = DefaultRootWindow (s_XDisplay);
 	Window root_return;
 	int x_return=1, y_return=1;
@@ -169,24 +279,40 @@ gboolean cairo_dock_update_screen_geometry (void)
 		&x_return, &y_return,
 		&width_return, &height_return,
 		&border_width_return, &depth_return);
-	cd_debug (">>>>>   screen resolution: %dx%d -> %dx%d", g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL], width_return, height_return);
-	if ((int)width_return != g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || (int)height_return != g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])  // on n'utilise pas WidthOfScreen() et HeightOfScreen() car leurs valeurs ne sont pas mises a jour immediatement apres les changements de resolution.
+	cd_debug (">>>>>   screen resolution: %dx%d -> %dx%d", gldi_get_desktop_width(), gldi_get_desktop_height(), width_return, height_return);
+	gboolean bNewSize = FALSE;
+	if ((int)width_return != gldi_get_desktop_width() || (int)height_return != gldi_get_desktop_height())  // on n'utilise pas WidthOfScreen() et HeightOfScreen() car leurs valeurs ne sont pas mises a jour immediatement apres les changements de resolution.
 	{
-		g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] = width_return;
-		g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] = height_return;
-		g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-		g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		
-		g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-		g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-		g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];  // si on utilise Xinerama, on mettra les valeurs correctes plus tard.
-		
-		cd_debug ("new screen size : %dx%d", g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		return TRUE;
+		g_desktopGeometry.Xscreen.width = width_return;
+		g_desktopGeometry.Xscreen.height = height_return;
+		cd_debug ("new screen size : %dx%d", gldi_get_desktop_width(), gldi_get_desktop_height());
+		bNewSize = TRUE;
 	}
-	else
-		return FALSE;
+	
+	// get the size and position of each screen (they could have changed even though the X screen has not changed, for instance if you swap 2 screens).
+	GtkAllocation *pScreens = g_desktopGeometry.pScreens;
+	int iNbScreens = g_desktopGeometry.iNbScreens;
+	g_desktopGeometry.pScreens = _get_screens_geometry (&g_desktopGeometry.iNbScreens);
+	
+	if (! bNewSize)  // if the X screen has not changed, check if real screens have changed.
+	{
+		bNewSize = (iNbScreens != g_desktopGeometry.iNbScreens);
+		if (! bNewSize)
+		{
+			int i;
+			for (i = 0; i < MIN (iNbScreens, g_desktopGeometry.iNbScreens); i ++)
+			{
+				if (memcmp (&pScreens[i], &g_desktopGeometry.pScreens[i], sizeof (GtkAllocation)) != 0)
+				{
+					bNewSize = TRUE;
+					break;
+				}
+			}
+		}
+	}
+	
+	g_free (pScreens);
+	return bNewSize;
 	/*Atom aNetWorkArea = XInternAtom (s_XDisplay, "_NET_WORKAREA", False);
 	iBufferNbElements = 0;
 	gulong *pXWorkArea = NULL;
@@ -294,9 +420,9 @@ void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
 	XGetWindowProperty (s_XDisplay, root, s_aNetDesktopGeometry, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pVirtualScreenSizeBuffer);
 	if (iBufferNbElements > 0)
 	{
-		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-		*iNbViewportX = pVirtualScreenSizeBuffer[0] / g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-		*iNbViewportY = pVirtualScreenSizeBuffer[1] / g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], gldi_get_desktop_width(), gldi_get_desktop_height());
+		*iNbViewportX = pVirtualScreenSizeBuffer[0] / gldi_get_desktop_width();
+		*iNbViewportY = pVirtualScreenSizeBuffer[1] / gldi_get_desktop_height();
 		XFree (pVirtualScreenSizeBuffer);
 	}
 }
@@ -370,7 +496,7 @@ static void cairo_dock_move_current_viewport_to (int iDesktopViewportX, int iDes
 }
 void cairo_dock_set_current_viewport (int iViewportNumberX, int iViewportNumberY)
 {
-	cairo_dock_move_current_viewport_to (iViewportNumberX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL], iViewportNumberY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+	cairo_dock_move_current_viewport_to (iViewportNumberX * gldi_get_desktop_width(), iViewportNumberY * gldi_get_desktop_height());
 }
 void cairo_dock_set_current_desktop (int iDesktopNumber)
 {
@@ -509,8 +635,8 @@ void cairo_dock_set_nb_viewports (int iNbViewportX, int iNbViewportY)
 	xClientMessage.xclient.window = root;
 	xClientMessage.xclient.message_type = s_aNetDesktopGeometry;
 	xClientMessage.xclient.format = 32;
-	xClientMessage.xclient.data.l[0] = iNbViewportX * g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	xClientMessage.xclient.data.l[1] = iNbViewportY * g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	xClientMessage.xclient.data.l[0] = iNbViewportX * gldi_get_desktop_width();
+	xClientMessage.xclient.data.l[1] = iNbViewportY * gldi_get_desktop_height();
 	xClientMessage.xclient.data.l[2] = 0;
 	xClientMessage.xclient.data.l[3] = 2;
 	xClientMessage.xclient.data.l[4] = 0;
@@ -638,101 +764,6 @@ gboolean cairo_dock_check_xrandr (int major, int minor)
 }
 
 
-void cairo_dock_get_screen_offsets (int iNumScreen, int *iScreenOffsetX, int *iScreenOffsetY)
-{
-#ifdef HAVE_XEXTEND
-	if (s_bUseXrandr)  // we place Xrandr first to get more tests :) (and also because it will deprecate Xinerama).
-	{
-		cd_debug ("Using Xrandr to determine the screen's position and size ...");
-		XRRScreenResources *res = XRRGetScreenResources (s_XDisplay, DefaultRootWindow (s_XDisplay));  // Xrandr >= 1.3
-		if (res != NULL)
-		{
-			cd_debug (" number of screen(s): %d", res->ncrtc);
-			if (iNumScreen >= res->ncrtc)
-			{
-				cd_warning ("the number of screen where to place the dock is too big, we'll choose the last one.");
-				iNumScreen = res->ncrtc - 1;
-			}
-			for (int i = 0; i < res->ncrtc; i++)
-			{
-				int j = (iNumScreen + i) % res->ncrtc;
-				XRRCrtcInfo *info = XRRGetCrtcInfo (s_XDisplay, res, res->crtcs[j]);
-				if (info == NULL)
-				{
-					cd_warning ("This screen (%d) has no info. Let's try the next one.", j);
-					continue;
-				}
-
-				if (info->width == 0 || info->height == 0)
-				{
-					cd_warning ("This screen (%d) has a null dimensions. Let's try the next one.", j);
-					XRRFreeCrtcInfo (info);
-					continue;
-				}
-				
-				*iScreenOffsetX = info->x;
-				*iScreenOffsetY = info->y;
-				g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = info->width;
-				g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = info->height;
-				
-				g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-				g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-				cd_message (" * screen %d => (%d;%d) %dx%d", j, *iScreenOffsetX, *iScreenOffsetY, g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-				
-				XRRFreeCrtcInfo (info);
-				XRRFreeScreenResources (res);
-				return;
-			}
-			XRRFreeScreenResources (res);
-		}
-		else
-			cd_warning ("No screen found from Xrandr, is it really active ?");
-	}
-
-	if (cairo_dock_xinerama_is_available () && XineramaIsActive (s_XDisplay))
-	{
-		cd_debug ("Using Xinerama to determine the screen's position and size ...");
-		int iNbScreens = 0;
-		XineramaScreenInfo *pScreens = XineramaQueryScreens (s_XDisplay, &iNbScreens);
-		if (pScreens != NULL)
-		{
-			if (iNumScreen >= iNbScreens)
-			{
-				cd_warning ("the number of screen where to place the dock is too big, we'll choose the last one.");
-				iNumScreen = iNbScreens - 1;
-			}
-			*iScreenOffsetX = pScreens[iNumScreen].x_org;
-			*iScreenOffsetY = pScreens[iNumScreen].y_org;
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].width;
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = pScreens[iNumScreen].height;
-			
-			g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-			g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-			cd_message (" * screen %d => (%d;%d) %dx%d", iNumScreen, *iScreenOffsetX, *iScreenOffsetY, g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL], g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL]);
-			
-			XFree (pScreens);
-			return;
-		}
-		else
-			cd_warning ("No screen found from Xinerama, is it really active ?");
-	}
-
-	cd_warning ("Xrandr and Xinerama are not available, can't determine the screen's position/size");
-
-	*iScreenOffsetX = *iScreenOffsetY = 0;
-	g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL] = g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	g_desktopGeometry.iScreenWidth[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	g_desktopGeometry.iScreenHeight[CAIRO_DOCK_VERTICAL] = g_desktopGeometry.iScreenWidth[CAIRO_DOCK_HORIZONTAL];
-#else
-	cd_warning ("The dock was not compiled with the support of Xinerama/Xrandr.");
-#endif
-}
-
-
-
-
-
 
 void cairo_dock_set_xwindow_timestamp (Window Xid, gulong iTimeStamp)
 {
@@ -749,7 +780,7 @@ void cairo_dock_set_strut_partial (int Xid, int left, int right, int top, int bo
 {
 	g_return_if_fail (Xid > 0);
 
-	cd_debug ("%s (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d", __func__, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
+	g_print ("%s (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", __func__, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 	gulong iGeometryStrut[12] = {left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x};
 
 	XChangeProperty (s_XDisplay,
@@ -1356,32 +1387,18 @@ void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelative
 	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
 	
 	while (iLocalPositionX < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
-		iLocalPositionX += g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	while (iLocalPositionX >= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL])
-		iLocalPositionX -= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
+		iLocalPositionX += gldi_get_desktop_width();
+	while (iLocalPositionX >= gldi_get_desktop_width())
+		iLocalPositionX -= gldi_get_desktop_width();
 	while (iLocalPositionY < 0)
-		iLocalPositionY += g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
-	while (iLocalPositionY >= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
-		iLocalPositionY -= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+		iLocalPositionY += gldi_get_desktop_height();
+	while (iLocalPositionY >= gldi_get_desktop_height())
+		iLocalPositionY -= gldi_get_desktop_height();
 	
 	*iRelativePositionX = iLocalPositionX;
 	*iRelativePositionY = iLocalPositionY;
 	//cd_debug ("position relative : (%d;%d) taille : %dx%d", *iRelativePositionX, *iRelativePositionY, iWidthExtent, iHeightExtent);
 }
-
-/**gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid)
-{
-	int iWindowDesktopNumber, iLocalPositionX, iLocalPositionY, iWidthExtent, iHeightExtent;  // coordonnees du coin haut gauche dans le referentiel du viewport actuel.
-	iWindowDesktopNumber = cairo_dock_get_xwindow_desktop (Xid);
-	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
-
-	//cd_debug (" -> %d/%d ; (%d ; %d)", iWindowDesktopNumber, iDesktopNumber, iGlobalPositionX, iGlobalPositionY);
-	return ( (iWindowDesktopNumber == g_desktopGeometry.iCurrentDesktop || iWindowDesktopNumber == -1) &&
-		iLocalPositionX + iWidthExtent > 0 &&
-		iLocalPositionX < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] &&
-		iLocalPositionY + iHeightExtent > 0 &&
-		iLocalPositionY < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL] );  // -1 <=> 0xFFFFFFFF en unsigned.
-}*/
 
 
 Window *cairo_dock_get_windows_list (gulong *iNbWindows, gboolean bStackOrder)

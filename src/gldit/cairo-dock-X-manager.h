@@ -35,6 +35,7 @@ typedef struct _CairoDockDesktopManager CairoDockDesktopManager;
 
 #ifndef _MANAGER_DEF_
 extern CairoDockDesktopManager myDesktopMgr;
+extern CairoDockDesktopGeometry g_desktopGeometry;
 #endif
 
 // no param
@@ -65,8 +66,9 @@ typedef enum {
 
 // data
 struct _CairoDockDesktopGeometry {
-	int iScreenWidth[2], iScreenHeight[2];  // dimension de l'ecran sur lequel est place le dock.
-	int iXScreenWidth[2], iXScreenHeight[2];  // dimension de l'ecran logique compose eventuellement de plusieurs moniteurs.
+	int iNbScreens;
+	GtkAllocation *pScreens;  // liste of all screen devices.
+	GtkAllocation Xscreen;  // logical screen, possibly made of several screen devices.
 	int iNbDesktops;
 	int iNbViewportX, iNbViewportY;
 	int iCurrentDesktop;
@@ -139,6 +141,15 @@ gboolean cairo_dock_wm_can_set_on_widget_layer (void);
 *@param iCurrentViewportY will be filled with the current vertical viewport number
 */
 void cairo_dock_get_current_desktop_and_viewport (int *iCurrentDesktop, int *iCurrentViewportX, int *iCurrentViewportY);
+
+#define GLDI_DEFAULT_SCREEN -1
+#define cairo_dock_get_screen_position_x(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? g_desktopGeometry.pScreens[i].x : 0)
+#define cairo_dock_get_screen_position_y(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? g_desktopGeometry.pScreens[i].y : 0)
+#define cairo_dock_get_screen_width(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? g_desktopGeometry.pScreens[i].width : g_desktopGeometry.Xscreen.width)
+#define cairo_dock_get_screen_height(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? g_desktopGeometry.pScreens[i].height : g_desktopGeometry.Xscreen.height)
+#define cairo_dock_get_nth_screen(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? &g_desktopGeometry.pScreens[i] : &g_desktopGeometry.Xscreen)
+#define gldi_get_desktop_width() g_desktopGeometry.Xscreen.width
+#define gldi_get_desktop_height() g_desktopGeometry.Xscreen.height
 
 // Desktop background
 CairoDockDesktopBackground *cairo_dock_get_desktop_background (gboolean bWithTextureToo);

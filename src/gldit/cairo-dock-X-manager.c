@@ -80,8 +80,8 @@ static inline void _cairo_dock_retrieve_current_desktop_and_viewport (void)
 {
 	g_desktopGeometry.iCurrentDesktop = cairo_dock_get_current_desktop ();
 	cairo_dock_get_current_viewport (&g_desktopGeometry.iCurrentViewportX, &g_desktopGeometry.iCurrentViewportY);
-	g_desktopGeometry.iCurrentViewportX /= g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL];
-	g_desktopGeometry.iCurrentViewportY /= g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL];
+	g_desktopGeometry.iCurrentViewportX /= gldi_get_desktop_width();
+	g_desktopGeometry.iCurrentViewportY /= gldi_get_desktop_height();
 }
 
 static gboolean _on_change_current_desktop_viewport (void)
@@ -346,8 +346,8 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 			cd_debug ("c'est une couleur unie (%.2f, %.2f, %.2f)", (double) pixels[0] / 255, (double) pixels[1] / 255, (double) pixels[2] / 255);
 			
 			pDesktopBgSurface = cairo_dock_create_blank_surface (
-				g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-				g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+				gldi_get_desktop_width(),
+				gldi_get_desktop_height());
 			
 			cairo_t *pCairoContext = cairo_create (pDesktopBgSurface);
 			cairo_set_source_rgb (pCairoContext,
@@ -370,12 +370,12 @@ static cairo_surface_t *_cairo_dock_create_surface_from_desktop_bg (void)  // at
 				&fHeight,
 				NULL, NULL);
 			
-			if (fWidth < g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL] || fHeight < g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL])
+			if (fWidth < gldi_get_desktop_width() || fHeight < gldi_get_desktop_height())
 			{
 				cd_debug ("c'est un degrade ou un motif (%dx%d)", (int) fWidth, (int) fHeight);
 				pDesktopBgSurface = cairo_dock_create_blank_surface (
-					g_desktopGeometry.iXScreenWidth[CAIRO_DOCK_HORIZONTAL],
-					g_desktopGeometry.iXScreenHeight[CAIRO_DOCK_HORIZONTAL]);
+					gldi_get_desktop_width(),
+					gldi_get_desktop_height());
 				cairo_t *pCairoContext = cairo_create (pDesktopBgSurface);
 				
 				cairo_pattern_t *pPattern = cairo_pattern_create_for_surface (pBgSurface);
