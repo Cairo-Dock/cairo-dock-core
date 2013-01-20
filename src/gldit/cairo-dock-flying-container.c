@@ -19,9 +19,6 @@
 
 #include <stdlib.h>
 #include <sys/time.h>
-#include <cairo.h>
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
 
 #include "gldi-config.h"
 #include "cairo-dock-draw.h"
@@ -34,16 +31,10 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-surface-factory.h"
-#include "cairo-dock-callbacks.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-gui-manager.h"
-#include "cairo-dock-X-manager.h"
-///#include "cairo-dock-emblem.h"
-#include "cairo-dock-overlay.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-flying-container.h"
 
@@ -57,7 +48,6 @@
 |_|____|
 
 */
-#define EXPLOSION_NB_FRAMES 10
 
 CairoFlyingManager myFlyingsMgr;
 
@@ -65,9 +55,6 @@ extern CairoContainer *g_pPrimaryContainer;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 
-/**static cairo_surface_t *s_pExplosionSurface = NULL;
-static GLuint s_iExplosionTexture = 0;
-static double s_fExplosionWidth, s_fExplosionHeight;*/
 static CairoDockImageBuffer *s_pExplosion = NULL;
 static CairoDockImageBuffer *s_pEmblem = NULL;
 
@@ -94,56 +81,29 @@ static void _cairo_dock_load_explosion_image (int iWidth)
 {
 	cairo_dock_free_image_buffer (s_pExplosion);
 	gchar *cExplosionFile = cairo_dock_search_image_s_path ("explosion.png");
-	s_pExplosion = cairo_dock_create_image_buffer (cExplosionFile?cExplosionFile:GLDI_SHARE_DATA_DIR"/explosion/explosion.png", iWidth, iWidth, CAIRO_DOCK_FILL_SPACE & CAIRO_DOCK_ANIMATED_IMAGE);
+	s_pExplosion = cairo_dock_create_image_buffer (cExplosionFile?cExplosionFile:GLDI_SHARE_DATA_DIR"/explosion/explosion.png", iWidth, iWidth, CAIRO_DOCK_FILL_SPACE | CAIRO_DOCK_ANIMATED_IMAGE);
+	cairo_dock_image_buffer_set_timelength (s_pExplosion, .4);
 	g_free (cExplosionFile);
-	/**if (s_pExplosionSurface == NULL)
-	{
-		gchar *cExplosionFile = cairo_dock_search_image_s_path ("explosion.png");
-		s_pExplosion = cairo_dock_create_image_buffer (cExplosionFile?cExplosionFile:GLDI_SHARE_DATA_DIR"/explosion/explosion.png", iWidth, iWidth, CAIRO_DOCK_FILL_SPACE & CAIRO_DOCK_ANIMATED_IMAGE);
-		g_free (cExplosionFile);
-		gchar *cExplosionFile = g_strdup_printf ("%s/%s", g_cCurrentThemePath, "explosion.png");
-		if (g_file_test (cExplosionFile, G_FILE_TEST_EXISTS))
-		{
-			s_pExplosionSurface = cairo_dock_create_surface_for_icon (cExplosionFile,
-				iWidth * EXPLOSION_NB_FRAMES,
-				iWidth);
-		}
-		else
-		{
-			s_pExplosionSurface = cairo_dock_create_surface_for_icon (GLDI_SHARE_DATA_DIR"/explosion/explosion.png",
-				iWidth * EXPLOSION_NB_FRAMES,
-				iWidth);
-		}
-		g_free (cExplosionFile);
-		s_fExplosionWidth = iWidth;
-		s_fExplosionHeight = iWidth;
-	}
-	if (s_pExplosionSurface != NULL && g_bUseOpenGL && s_iExplosionTexture == 0)
-	{
-		s_iExplosionTexture = cairo_dock_create_texture_from_surface (s_pExplosionSurface);
-		cairo_surface_destroy (s_pExplosionSurface);
-		s_pExplosionSurface = NULL;
-	}*/
 }
 
 
 static gboolean _cairo_dock_update_flying_container_notification (G_GNUC_UNUSED gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
 {
-	cairo_dock_image_buffer_next_frame (s_pExplosion);
-	if (s_pExplosion->iCurrentFrame == 0)
+	if (! cairo_dock_image_buffer_is_animated (s_pExplosion))	
 	{
-		*bContinueAnimation = FALSE;
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+		*bContinueAnimation = FALSE;  // cancel any other update
+		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;  // and intercept the notification
 	}
-	/**if (pFlyingContainer->container.iAnimationStep > 0)
+	double cur_frame = s_pExplosion->iCurrentFrame;
+	if (cur_frame == 0)  // be sure to start from the first frame, since it took some time from the image loading to the first redraw.
+		cairo_dock_image_buffer_rewind (s_pExplosion);
+	cairo_dock_image_buffer_next_frame (s_pExplosion);
+	
+	if (s_pExplosion->iCurrentFrame < cur_frame || s_pExplosion->iCurrentFrame >= s_pExplosion->iNbFrames)  // last frame reached -> stop here
 	{
-		pFlyingContainer->container.iAnimationStep --;
-		if (pFlyingContainer->container.iAnimationStep == 0)
-		{
-			*bContinueAnimation = FALSE;
-			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
-		}
-	}*/
+		*bContinueAnimation = FALSE;  // cancel any other update
+		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;  // and intercept the notification
+	}
 	gtk_widget_queue_draw (pFlyingContainer->container.pWidget);
 	
 	*bContinueAnimation = TRUE;
@@ -152,7 +112,6 @@ static gboolean _cairo_dock_update_flying_container_notification (G_GNUC_UNUSED 
 
 static gboolean _cairo_dock_render_flying_container_notification (G_GNUC_UNUSED gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext)
 {
-	// it seems this function is called 2 times
 	Icon *pIcon = pFlyingContainer->pIcon;
 	if (pCairoContext != NULL)
 	{
@@ -179,28 +138,12 @@ static gboolean _cairo_dock_render_flying_container_notification (G_GNUC_UNUSED 
 				cairo_dock_apply_image_buffer_surface (s_pEmblem, pCairoContext);
 			}
 		}
-		else /**if (pFlyingContainer->container.iAnimationStep > 0)*/
+		else
 		{
 			cairo_dock_apply_image_buffer_surface_with_offset (s_pExplosion, pCairoContext,
-				(pFlyingContainer->container.iWidth - s_pExplosion->iWidth) / 2,
+				(pFlyingContainer->container.iWidth - s_pExplosion->iWidth / s_pExplosion->iNbFrames) / 2,
 				(pFlyingContainer->container.iHeight - s_pExplosion->iHeight) / 2,
 				1.);
-			/**int x = 0;
-			int y = (pFlyingContainer->container.iHeight - pFlyingContainer->container.iWidth) / 2;
-			int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->container.iAnimationStep;
-			
-			cairo_rectangle (pCairoContext,
-				x,
-				y,
-				s_fExplosionWidth,
-				s_fExplosionHeight);
-			cairo_clip (pCairoContext);
-			
-			cairo_set_source_surface (pCairoContext,
-				s_pExplosionSurface,
-				x - (iCurrentFrame * s_fExplosionWidth),
-				y);
-			cairo_paint (pCairoContext);*/
 		}
 	}
 	else
@@ -227,34 +170,17 @@ static gboolean _cairo_dock_render_flying_container_notification (G_GNUC_UNUSED 
 			if (s_pEmblem && s_pEmblem->iTexture != 0)
 			{
 				cairo_dock_apply_image_buffer_texture_with_offset (s_pEmblem, s_pEmblem->iWidth/2, pFlyingContainer->container.iHeight - s_pEmblem->iHeight/2);
-				///glBindTexture (GL_TEXTURE_2D, s_pEmblem->iTexture);
-				///_cairo_dock_apply_current_texture_at_size_with_offset (s_pEmblem->iWidth, s_pEmblem->iHeight, s_pEmblem->iWidth/3, pFlyingContainer->container.iHeight - s_pEmblem->iHeight/3);
 			}
 			
 			_cairo_dock_disable_texture ();
 		}
-		else /**if (pFlyingContainer->container.iAnimationStep > 0)*/
+		else
 		{
 			_cairo_dock_enable_texture ();
 			cairo_dock_apply_image_buffer_texture_with_offset (s_pExplosion,
 				pFlyingContainer->container.iWidth/2,
 				pFlyingContainer->container.iHeight/2);
 			_cairo_dock_disable_texture ();
-			/**int iCurrentFrame = EXPLOSION_NB_FRAMES - pFlyingContainer->container.iAnimationStep;
-			
-			glTranslatef (pFlyingContainer->container.iWidth/2,
-				pFlyingContainer->container.iHeight/2,
-				-3.);
-			glBindTexture (GL_TEXTURE_2D, s_iExplosionTexture);
-			_cairo_dock_enable_texture ();
-			_cairo_dock_set_blend_source ();
-			_cairo_dock_set_alpha (1.);
-			_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double) iCurrentFrame / EXPLOSION_NB_FRAMES, 1.,
-				1. / EXPLOSION_NB_FRAMES, 1.,
-				s_fExplosionWidth, s_fExplosionHeight,
-				0., 0.);
-			
-			_cairo_dock_disable_texture ();*/
 		}
 	}
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -440,7 +366,7 @@ void cairo_dock_free_flying_container (CairoFlyingContainer *pFlyingContainer)
 	// detach the icon
 	if (pFlyingContainer->pIcon != NULL)
 		cairo_dock_set_icon_container (pFlyingContainer->pIcon, NULL);
-	/// free the container
+	// free the container
 	cairo_dock_finish_container (CAIRO_CONTAINER (pFlyingContainer));
 	g_free (pFlyingContainer);
 	cairo_dock_free_image_buffer (s_pEmblem);
@@ -471,7 +397,6 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 	}
 	
 	// start the explosion animation
-	///pFlyingContainer->container.iAnimationStep = EXPLOSION_NB_FRAMES+1;
 	cairo_dock_launch_animation (CAIRO_CONTAINER (pFlyingContainer));
 }
 
@@ -482,11 +407,6 @@ void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContain
 
 static void unload (void)
 {
-	/**if (s_iExplosionTexture != 0)
-	{
-		_cairo_dock_delete_texture (s_iExplosionTexture);
-		s_iExplosionTexture = 0;
-	}*/
 	if (s_pExplosion != NULL)
 	{
 		cairo_dock_free_image_buffer (s_pExplosion);

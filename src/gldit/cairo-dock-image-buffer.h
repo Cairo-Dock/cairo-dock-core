@@ -118,6 +118,8 @@ void cairo_dock_image_buffer_next_frame (CairoDockImageBuffer *pImage);
 
 #define cairo_dock_image_buffer_set_timelength(pImage, fTimeLength) (pImage)->fDeltaFrame = ((pImage)->iNbFrames != 0 ? (double)fTimeLength / (pImage)->iNbFrames : 1)
 
+#define cairo_dock_image_buffer_rewind(pImage) gettimeofday (&pImage->time, NULL)
+
 /** Reset an ImageBuffer's ressources. It can be used to load another image then.
 *@param pImage an ImageBuffer.
 */

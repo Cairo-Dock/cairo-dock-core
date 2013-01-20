@@ -290,9 +290,10 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 		int n = (int) pImage->iCurrentFrame;
 		double dn = pImage->iCurrentFrame - n;
 		
-		_cairo_dock_set_blend_alpha ();
+		_cairo_dock_set_blend_over ();
 		
 		_cairo_dock_set_alpha (1. - dn);
+		g_print ("frame %d (%.2f)\n", n, 1-dn);
 		_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double)n / pImage->iNbFrames, 0,
 			1. / pImage->iNbFrames, 1.,
 			iFrameWidth, pImage->iHeight,
@@ -302,6 +303,7 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 		if (n2 >= pImage->iNbFrames)
 			n2  = 0;
 		_cairo_dock_set_alpha (dn);
+		g_print ("frame %d (%.2f)\n", n2, dn);
 		_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double)n2 / pImage->iNbFrames, 0,
 			1. / pImage->iNbFrames, 1.,
 			iFrameWidth, pImage->iHeight,
