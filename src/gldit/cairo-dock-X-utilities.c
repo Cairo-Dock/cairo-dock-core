@@ -161,7 +161,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 	GtkAllocation *pScreens = NULL;
 	GtkAllocation *pScreen;
 	int iNbScreens = 0;
-	/*Test unitaire*/
+	/*Test unitaire
 	iNbScreens = 2;
 	pScreens = g_new0 (GtkAllocation, iNbScreens);
 	pScreens[0].x = 0;
@@ -173,7 +173,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 	pScreens[1].width = 680;
 	pScreens[1].height = 1050;
 	*pNbScreens = iNbScreens;
-	return pScreens;
+	return pScreens;*/
 	
 	#ifdef HAVE_XEXTEND
 	if (s_bUseXrandr)  // we place Xrandr first to get more tests :) (and also because it will deprecate Xinerama).
