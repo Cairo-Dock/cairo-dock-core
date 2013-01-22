@@ -30,7 +30,7 @@
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
+#include "cairo-dock-themes-manager.h"  // cairo_dock_add_conf_file
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
@@ -323,8 +323,7 @@ void cairo_dock_activate_module_and_load (const gchar *cModuleName)
 		pInstance = pElement->data;
 		if (pInstance->pDock)
 		{
-			cairo_dock_trigger_update_dock_size (pInstance->pDock);
-			///gtk_widget_queue_draw (pInstance->pDock->container.pWidget);
+			///cairo_dock_trigger_update_dock_size (pInstance->pDock);
 		}
 	}
 	
@@ -390,7 +389,7 @@ void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance)
 	
 	//\_________________ we remove the .conf file for this instance.
 	cd_debug ("We remove %s", pInstance->cConfFilePath);
-	g_remove (pInstance->cConfFilePath);
+	cairo_dock_delete_conf_file (pInstance->cConfFilePath);
 	
 	//\_________________ We also remove the cConfFilePath (=> this conf file no longer exist during the 'stop' callback)
 	g_free (pInstance->cConfFilePath);
@@ -426,10 +425,7 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 		GList *last = g_list_last (pModule->pInstancesList);
 		pFirstInstance = last->data;  // instances are prepended.
 		
-		cairo_dock_copy_file (pFirstInstance->cConfFilePath, cConfFilePath);
-		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pFirstInstance->cConfFilePath, cConfFilePath);
-		int r = system (cCommand);
-		g_free (cCommand);*/
+		cairo_dock_add_conf_file (pFirstInstance->cConfFilePath, cConfFilePath);
 		
 		if (pFirstInstance->pDesklet)  // prevent desklets from overlapping.
 		{
@@ -450,10 +446,7 @@ gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule)
 	}
 	else  // no instance yet, just copy the default conf file.
 	{
-		cairo_dock_copy_file (pModule->cConfFilePath, cConfFilePath);
-		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s\"", pModule->cConfFilePath, cConfFilePath);
-		int r = system (cCommand);
-		g_free (cCommand);*/
+		cairo_dock_add_conf_file (pModule->cConfFilePath, cConfFilePath);
 	}
 	
 	g_free (cUserDataDirPath);

@@ -34,7 +34,7 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-indicator-manager.h"
-#include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-draw.h"

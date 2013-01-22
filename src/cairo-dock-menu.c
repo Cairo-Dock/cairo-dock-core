@@ -704,7 +704,6 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	{
 		cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
 	}
-	cairo_dock_mark_current_theme_as_modified (TRUE);
 	
 	CairoDock *pNewDock = cairo_dock_search_dock_from_name (cValidDockName);
 	if (pNewDock && pNewDock->iRefCount == 0 && pNewDock->icons && pNewDock->icons->next == NULL)  // le dock vient d'etre cree avec cette icone.
@@ -962,7 +961,7 @@ static void _cairo_dock_set_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuI
 				if (pKeyFile != NULL)
 				{
 					g_key_file_set_string (pKeyFile, "TaskBar", "overwrite exception", myTaskbarParam.cOverwriteException);
-					cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
+					cairo_dock_write_keys_to_conf_file (pKeyFile, g_cConfFile);
 					
 					g_key_file_free (pKeyFile);
 				}

@@ -29,8 +29,23 @@ G_BEGIN_DECLS
 * It also provides methods to manage the themes, like exporting the current theme, importing new themes, deleting themes, etc.
 */
 
-void cairo_dock_mark_current_theme_as_modified (gboolean bModified);
+//void cairo_dock_mark_current_theme_as_modified (gboolean bModified);  // needed here because of cairo_dock_update_conf_file()
 gboolean cairo_dock_current_theme_need_save (void);
+
+void cairo_dock_delete_conf_file (const gchar *cConfFilePath);
+
+gboolean cairo_dock_add_conf_file (const gchar *cConfFilePath, const gchar *cOriginalConfFilePath);
+
+/** Update a conf file with a list of values of the form : {type, name of the groupe, name of the key, value}. Must end with G_TYPE_INVALID.
+*@param cConfFilePath path to the conf file.
+*@param iFirstDataType type of the first value.
+*/
+void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...);
+
+/** Write a key file on the disk.
+*/
+void cairo_dock_write_keys_to_conf_file (GKeyFile *pKeyFile, const gchar *cConfFilePath);
+
 
 /** Export the current theme to a given name. Exported themes can be imported directly from the Theme Manager.
  * @param cNewThemeName name to export the theme to.

@@ -25,6 +25,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-keybinder.h"
+#include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-widget-shortkeys.h"
 

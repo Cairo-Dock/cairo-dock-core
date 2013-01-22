@@ -32,7 +32,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-widget-config.h"
 
-#define CAIRO_DOCK_SIMPLE_CONF_FILE "cairo-dock-simple.conf"
+#define CAIRO_DOCK_SIMPLE_CONF_FILE "cairo-dock-simple.conf"  // this file is not part of the theme, it's just a convenient way to display this big widget.
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_SHORTKEY_PAGE 2
 
@@ -626,7 +626,7 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	g_free (cSubDockDefaultRendererName);
 	
 	// on ecrit tout.
-	cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
+	cairo_dock_write_keys_to_conf_file (pKeyFile, g_cConfFile);
 	
 	//\_____________ On recharge les modules concernes.
 	GldiManager *pManager;

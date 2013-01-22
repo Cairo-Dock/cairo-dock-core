@@ -25,6 +25,7 @@
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
+#include "cairo-dock-themes-manager.h"  // cairo_dock_write_keys_to_conf_file
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-gui-manager.h"
@@ -89,7 +90,7 @@ static void _module_widget_apply (CDWidget *pCdWidget)
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pCdWidget->pWidgetList);
 	if (pModule->pInterface->save_custom_widget != NULL)
 		pModule->pInterface->save_custom_widget (pModuleWidget->pModuleInstance, pKeyFile, pCdWidget->pWidgetList);  // the instance can be NULL
-	cairo_dock_write_keys_to_file (pKeyFile, pModuleWidget->cConfFilePath);
+	cairo_dock_write_keys_to_conf_file (pKeyFile, pModuleWidget->cConfFilePath);
 	g_key_file_free (pKeyFile);
 	
 	// reload the module instance

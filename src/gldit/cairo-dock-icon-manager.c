@@ -33,7 +33,6 @@
 #include "cairo-dock-draw.h"  // cairo_dock_render_icon_notification
 #include "cairo-dock-draw-opengl.h"  // cairo_dock_destroy_icon_fbo
 #include "cairo-dock-container.h"
-#include "cairo-dock-themes-manager.h"  // cairo_dock_mark_current_theme_as_modified
 #include "cairo-dock-dock-manager.h"  // cairo_dock_foreach_icons_in_docks
 #include "cairo-dock-dialog-manager.h"  // cairo_dock_remove_dialog_if_any
 #include "cairo-dock-data-renderer.h"  // cairo_dock_remove_data_renderer_on_icon
@@ -60,7 +59,6 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 extern gchar *g_cCurrentIconsPath;
-
 
 // private
 static GList *s_pFloatingIconsList = NULL;
@@ -117,9 +115,7 @@ void cairo_dock_delete_icon_from_current_theme (Icon *icon)
 {
 	if (icon->iface.on_delete)
 	{
-		gboolean r = icon->iface.on_delete (icon);
-		if (r)
-			cairo_dock_mark_current_theme_as_modified (TRUE);
+		icon->iface.on_delete (icon);
 	}
 }
 

@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 */
 GKeyFile *cairo_dock_open_key_file (const gchar *cConfFilePath);
 
-/** Write a conf file on the disk.
+/** Write a key file on the disk.
 */
 void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePath);
 
@@ -81,11 +81,13 @@ void cairo_dock_remove_group_key_from_conf_file (GKeyFile *pKeyFile, const gchar
 gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cNewGroupName);
 
 
+void cairo_dock_update_keyfile_va_args (const gchar *cConfFilePath, GType iFirstDataType, va_list args);
+
 /** Update a conf file with a list of values of the form : {type, name of the groupe, name of the key, value}. Must end with G_TYPE_INVALID.
 *@param cConfFilePath path to the conf file.
 *@param iFirstDataType type of the first value.
 */
-void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...);
+void cairo_dock_update_keyfile (const gchar *cConfFilePath, GType iFirstDataType, ...);
 
 G_END_DECLS
 #endif

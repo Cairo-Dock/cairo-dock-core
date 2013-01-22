@@ -36,18 +36,17 @@
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-gui-manager.h"
+//#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-core.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-opengl.h"
-#include "cairo-dock-themes-manager.h"
+//#include "cairo-dock-opengl.h"
 #include "cairo-dock-global-variables.h"
+#include "cairo-dock-themes-manager.h"
 
-#define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
-
+// public data
 gchar *g_cCairoDockDataDir = NULL;  // le repertoire racine contenant tout.
 gchar *g_cCurrentThemePath = NULL;  // le chemin vers le repertoire du theme courant.
 gchar *g_cExtrasDirPath = NULL;  // le chemin vers le repertoire des extra.
@@ -58,17 +57,20 @@ gchar *g_cCurrentImagesPath = NULL;  // le chemin vers le repertoire des images 
 gchar *g_cCurrentPlugInsPath = NULL;  // le chemin vers le repertoire des plug-ins du theme courant.
 gchar *g_cConfFile = NULL;  // le chemin du fichier de conf.
 
+// private
 static gchar *s_cLocalThemeDirPath = NULL;
 static gchar *s_cDistantThemeDirName = NULL;
 
-extern gboolean g_bUseOpenGL;
-extern CairoDock *g_pMainDock;
-
+#define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
 #define CAIRO_DOCK_LOCAL_EXTRAS_DIR "extras"
 #define CAIRO_DOCK_LAUNCHERS_DIR "launchers"
 #define CAIRO_DOCK_PLUG_INS_DIR "plug-ins"
 #define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
 #define CAIRO_DOCK_LOCAL_IMAGES_DIR "images"
+
+// dependancies
+//extern gboolean g_bUseOpenGL;
+extern CairoDock *g_pMainDock;
 
 
 static gchar * _replace_slash_by_underscore (gchar *cName)
@@ -95,16 +97,23 @@ static gchar * _escape_string_for_filename (const gchar *cOldName)
 	return _replace_slash_by_underscore (cNewName);
 }
 
-void cairo_dock_mark_current_theme_as_modified (gboolean bModified)
+static void cairo_dock_mark_current_theme_as_modified (gboolean bModified)
 {
-	gchar *cModifiedFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_MODIFIED_THEME_FILE);
-
-	g_file_set_contents (cModifiedFile,
-		(bModified ? "1" : "0"),
-		-1,
-		NULL);
-
-	g_free (cModifiedFile);
+	static int state = -1;
+	
+	if (state == -1)
+		state = cairo_dock_current_theme_need_save ();
+	
+	if (state != bModified)
+	{
+		state = bModified;
+		gchar *cModifiedFile = g_strdup_printf ("%s/%s", g_cCairoDockDataDir, CAIRO_DOCK_MODIFIED_THEME_FILE);
+		g_file_set_contents (cModifiedFile,
+			(bModified ? "1" : "0"),
+			-1,
+			NULL);
+		g_free (cModifiedFile);
+	}
 }
 
 gboolean cairo_dock_current_theme_need_save (void)
@@ -124,6 +133,37 @@ gboolean cairo_dock_current_theme_need_save (void)
 		bNeedSave = FALSE;
 	g_free (cContent);
 	return bNeedSave;
+}
+
+void cairo_dock_delete_conf_file (const gchar *cConfFilePath)
+{
+	g_remove (cConfFilePath);
+	cairo_dock_mark_current_theme_as_modified (TRUE);
+}
+
+gboolean cairo_dock_add_conf_file (const gchar *cConfFilePath, const gchar *cOriginalConfFilePath)
+{
+	gboolean r = cairo_dock_copy_file (cOriginalConfFilePath, cConfFilePath);
+	if (r)
+		cairo_dock_mark_current_theme_as_modified (TRUE);
+	return r;
+}
+
+void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...)
+{
+	va_list args;
+	va_start (args, iFirstDataType);
+	cairo_dock_update_keyfile_va_args (cConfFilePath, iFirstDataType, args);
+	va_end (args);
+	
+	cairo_dock_mark_current_theme_as_modified (TRUE);
+}
+
+void cairo_dock_write_keys_to_conf_file (GKeyFile *pKeyFile, const gchar *cConfFilePath)
+{
+	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+	
+	cairo_dock_mark_current_theme_as_modified (TRUE);
 }
 
 
@@ -278,7 +318,7 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 		g_free (cCommand);
 		g_free (cFullCommand);
 		cairo_dock_show_general_message (
-			_("Your theme should be now available in your 'Home' directory."),
+			_("Your theme should now be available in your 'Home' directory."),
 			8000);
 	}
 	else
@@ -603,6 +643,8 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 	r = system (sCommand->str);
 	if (r < 0)
 		cd_warning ("Not able to launch this command: %s", sCommand->str);
+	
+	cairo_dock_mark_current_theme_as_modified (FALSE);
 	
 	g_string_free (sCommand, TRUE);
 	return TRUE;

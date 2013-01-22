@@ -67,7 +67,7 @@ static void on_click_switch_mode (G_GNUC_UNUSED GtkButton *button, G_GNUC_UNUSED
 	int iNewMode = (s_iCurrentMode == 1 ? 0 : 1);
 	
 	gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
-	cairo_dock_update_conf_file (cConfFilePath,
+	cairo_dock_update_keyfile (cConfFilePath,
 		G_TYPE_INT, "Gui", "mode", iNewMode,
 		G_TYPE_INVALID);
 	g_free (cConfFilePath);

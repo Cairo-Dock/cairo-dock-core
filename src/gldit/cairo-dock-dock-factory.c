@@ -1047,8 +1047,6 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 	Icon *pNewIcon = NULL;
 	if (cNewDesktopFileName != NULL)
 	{
-		cairo_dock_mark_current_theme_as_modified (TRUE);
-
 		pNewIcon = cairo_dock_create_icon_from_desktop_file (cNewDesktopFileName);
 		g_free (cNewDesktopFileName);
 

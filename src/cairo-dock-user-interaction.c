@@ -38,6 +38,7 @@
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
@@ -431,10 +432,6 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 		cairo_dock_copy_file (cPath?cPath:cFilePath, cDestPath);
 		g_free (cDestPath);
 		g_free (cPath);
-		/**gchar *cCommand = g_strdup_printf ("cp \"%s\" \"%s/%s%s\"", cPath?cPath:cFilePath, g_cCurrentIconsPath, icon->cClass, ext);
-		cd_debug (" -> '%s'", cCommand);
-		int r = system (cCommand);
-		g_free (cCommand);*/
 		
 		cairo_dock_reload_icon_image (icon, pContainer);
 		cairo_dock_redraw_icon (icon, pContainer);

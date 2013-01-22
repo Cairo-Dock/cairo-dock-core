@@ -585,7 +585,6 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 							{
 								cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
 							}
-							cairo_dock_mark_current_theme_as_modified (TRUE);
 						}
 						
 						// find the new order of the row in the tree
@@ -841,7 +840,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 			pModuleInstance->pModule->pInterface->save_custom_widget (pModuleInstance, pKeyFile, pWidgetList);
 		
 		// write everything in the conf file.
-		cairo_dock_write_keys_to_file (pKeyFile, pModuleInstance->cConfFilePath);
+		cairo_dock_write_keys_to_conf_file (pKeyFile, pModuleInstance->cConfFilePath);
 		g_key_file_free (pKeyFile);
 		
 		// reload module.
@@ -865,7 +864,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 			cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
 			
 			// write everything in the conf file.
-			cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+			cairo_dock_write_keys_to_conf_file (pKeyFile, cConfFilePath);
 			g_key_file_free (pKeyFile);
 			g_free (cConfFilePath);
 			
@@ -899,14 +898,13 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		}
 		
 		// write everything in the conf file.
-		cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
+		cairo_dock_write_keys_to_conf_file (pKeyFile, cConfFilePath);
 		g_key_file_free (pKeyFile);
 		g_free (cConfFilePath);
 		
 		// reload widgets.
 		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et declenche le rechargement de l'IHM.
 	}
-	cairo_dock_mark_current_theme_as_modified (TRUE);
 	_items_widget_reload (CD_WIDGET (pItemsWidget));  // we reload in case the items place has changed (icon's container, dock orientation, etc).
 }
 

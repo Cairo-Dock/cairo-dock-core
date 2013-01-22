@@ -21,6 +21,7 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-module-manager.h"
+#include "cairo-dock-themes-manager.h"  // cairo_dock_write_keys_to_conf_file
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
@@ -40,7 +41,7 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 	g_return_if_fail (pKeyFile != NULL);
 
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pCdWidget->pWidgetList);
-	cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
+	cairo_dock_write_keys_to_conf_file (pKeyFile, g_cConfFile);
 	g_key_file_free (pKeyFile);
 	
 	// reload the associated managers.
@@ -83,7 +84,7 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 			cairo_dock_update_keyfile_from_widget_list (pExtraKeyFile, pExtraWidgetList);
 			if (pModule->pInterface->save_custom_widget != NULL)
 				pModule->pInterface->save_custom_widget (pExtraInstance, pKeyFile, pExtraWidgetList);
-			cairo_dock_write_keys_to_file (pExtraKeyFile, pExtraInstance->cConfFilePath);
+			cairo_dock_write_keys_to_conf_file (pExtraKeyFile, pExtraInstance->cConfFilePath);
 			g_key_file_free (pExtraKeyFile);
 			
 			// reload it

@@ -25,6 +25,7 @@
 
 #include "gldi-config.h"
 #include "cairo-dock-icon-factory.h"
+#include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
@@ -139,7 +140,7 @@ static gchar *_add_new_desktop_file (CairoDockDesktopFileType iLauncherType, con
 	
 	//\__________________ write the keys.
 	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
-	cairo_dock_write_keys_to_file (pKeyFile, cNewDesktopFilePath);
+	cairo_dock_write_keys_to_conf_file (pKeyFile, cNewDesktopFilePath);
 	g_free (cNewDesktopFilePath);
 	
 	g_free (cFilePath);

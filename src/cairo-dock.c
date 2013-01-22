@@ -729,8 +729,6 @@ int main (int argc, char** argv)
 		if (r < 0)
 			cd_warning ("Not able to launch this command: %s", cCommand);
 		g_free (cCommand);
-		
-		cairo_dock_mark_current_theme_as_modified (FALSE);  // on ne proposera pas de sauvegarder ce theme.
 	}
 	cairo_dock_load_current_theme ();
 	

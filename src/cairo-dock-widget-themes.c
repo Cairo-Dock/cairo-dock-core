@@ -191,7 +191,6 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 		{
 			return FALSE;
 		}
-		cairo_dock_mark_current_theme_as_modified (FALSE);
 	}
 	
 	//\___________________ On charge le nouveau theme choisi.

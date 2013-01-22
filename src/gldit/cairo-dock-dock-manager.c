@@ -45,7 +45,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
+#include "cairo-dock-themes-manager.h"  // cairo_dock_add_conf_file
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-draw.h"
@@ -232,12 +232,6 @@ void cairo_dock_main_dock_to_sub_dock (CairoDock *pDock, CairoDock *pParentDock,
 			pParentDock = g_pMainDock;
 		cairo_dock_make_sub_dock (pDock, pParentDock, cRendererName);
 		cairo_dock_update_dock_size (pDock);
-		
-		/**if (iScreenBorder != (((! pDock->container.bIsHorizontal) << 1) | (! pDock->container.bDirectionUp)))
-		{
-			cd_debug ("changement de position -> %d/%d", pDock->container.bIsHorizontal, pDock->container.bDirectionUp);
-			cairo_dock_reload_reflects_in_dock (pDock);
-		}*/
 		
 		//\__________________ remove from main-dock land
 		const gchar *cDockName = cairo_dock_search_dock_name (pDock);
@@ -647,7 +641,7 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 		gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 		{
-			cairo_dock_copy_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+			cairo_dock_add_conf_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 		}
 		
 		cairo_dock_update_conf_file (cConfFilePath,
@@ -840,7 +834,7 @@ void cairo_dock_remove_root_dock_config (const gchar *cDockName)
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 	if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 	{
-		g_remove (cConfFilePath);
+		cairo_dock_delete_conf_file (cConfFilePath);
 	}
 	g_free (cConfFilePath);
 }
@@ -850,7 +844,7 @@ void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName)
 	// on cree le fichier de conf a partir du template.
 	cd_debug ("%s (%s)", __func__, cDockName);
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-	cairo_dock_copy_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+	cairo_dock_add_conf_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 	
 	// on placera le nouveau dock a l'oppose du main dock, meme ecran et meme visibilite.
 	cairo_dock_update_conf_file (cConfFilePath,

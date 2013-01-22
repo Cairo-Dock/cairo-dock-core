@@ -385,16 +385,12 @@ gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *
 	return TRUE;
 }
 
-
-void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...)  // type, groupe, cle, valeur, etc. finir par G_TYPE_INVALID.
+void cairo_dock_update_keyfile_va_args (const gchar *cConfFilePath, GType iFirstDataType, va_list args)
 {
 	cd_message ("%s (%s)", __func__, cConfFilePath);
 	
 	GKeyFile *pKeyFile = g_key_file_new ();  // if the key-file doesn't exist, it will be created.
 	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
-	
-	va_list args;
-	va_start (args, iFirstDataType);
 	
 	GType iType = iFirstDataType;
 	gboolean bValue;
@@ -434,7 +430,13 @@ void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataTy
 
 	cairo_dock_write_keys_to_file (pKeyFile, cConfFilePath);
 	g_key_file_free (pKeyFile);
+}
 
+void cairo_dock_update_keyfile (const gchar *cConfFilePath, GType iFirstDataType, ...)  // type, groupe, cle, valeur, etc. finir par G_TYPE_INVALID.
+{
+	va_list args;
+	va_start (args, iFirstDataType);
+	cairo_dock_update_keyfile_va_args (cConfFilePath, iFirstDataType, args);
 	va_end (args);
 }
 

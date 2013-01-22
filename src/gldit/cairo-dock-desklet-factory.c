@@ -28,9 +28,9 @@
 #include <string.h>
 #include <math.h>
 
-#include <GL/gl.h> 
-#include <GL/glu.h> 
-#include <GL/glx.h> 
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glx.h>
 
 #include <gdk/gdkx.h>
 #include "cairo-dock-draw.h"
@@ -40,7 +40,7 @@
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-keyfile-utilities.h"
+#include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-log.h"

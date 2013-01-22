@@ -41,7 +41,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-icon-manager.h"  // cairo_dock_hide_show_launchers_on_other_desktops
 #include "cairo-dock-applications-manager.h"  // cairo_dock_start_applications_manager
 #include "cairo-dock-module-factory.h"  // cairo_dock_activate_modules_from_list
-#include "cairo-dock-keyfile-utilities.h"  // cairo_dock_update_conf_file
+#include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-dock-manager.h"  // cairo_dock_create_dock
 #include "cairo-dock-file-manager.h"  // cairo_dock_get_file_size
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_load_launchers_from_dir

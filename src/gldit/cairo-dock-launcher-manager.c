@@ -38,6 +38,7 @@
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
+#include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-X-utilities.h"  // cairo_dock_show_xwindow
 #include "cairo-dock-file-manager.h"  // g_iDesktopEnv
 #include "cairo-dock-launcher-manager.h"
@@ -148,7 +149,7 @@ static gboolean _delete_launcher (Icon *icon)
 	if (icon->cDesktopFileName != NULL && icon->cDesktopFileName[0] != '/')
 	{
 		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-		g_remove (cDesktopFilePath);
+		cairo_dock_delete_conf_file (cDesktopFilePath);
 		g_free (cDesktopFilePath);
 		r = TRUE;
 	}
@@ -251,7 +252,7 @@ void cairo_dock_load_launchers_from_dir (const gchar *cDirectory)
 			{
 				cd_warning ("Unable to load a valid icon from '%s/%s'; the file is either unreadable, unvalid or does not correspond to any installed program, and will be deleted", g_cCurrentLaunchersPath, cFileName);
 				gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cFileName);
-				g_remove (cDesktopFilePath);
+				cairo_dock_delete_conf_file (cDesktopFilePath);
 				g_free (cDesktopFilePath);
 				continue;
 			}
