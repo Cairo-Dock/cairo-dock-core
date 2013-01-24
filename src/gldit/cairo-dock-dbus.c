@@ -547,11 +547,11 @@ void cairo_dock_dbus_get_properties (DBusGProxy *pDbusProxy, const gchar *cComma
 
 
 
-void cairo_dock_dbus_get_property_in_value (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, GValue *pProperty)
+void cairo_dock_dbus_get_property_in_value_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, GValue *pProperty, gint iTimeOut)
 {
 	GError *erreur=NULL;
 	
-	dbus_g_proxy_call(pDbusProxy, "Get", &erreur,
+	dbus_g_proxy_call_with_timeout (pDbusProxy, "Get", iTimeOut, &erreur,
 		G_TYPE_STRING, cInterface,
 		G_TYPE_STRING, cProperty,
 		G_TYPE_INVALID,
@@ -565,60 +565,60 @@ void cairo_dock_dbus_get_property_in_value (DBusGProxy *pDbusProxy, const gchar 
 	}
 }
 
-gboolean cairo_dock_dbus_get_property_as_boolean (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+gboolean cairo_dock_dbus_get_property_as_boolean_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
-	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_get_property_in_value_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 	if (G_VALUE_HOLDS_BOOLEAN (&v))
 		return g_value_get_boolean (&v);
 	else
 		return FALSE;
 }
 
-gint cairo_dock_dbus_get_property_as_int (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+gint cairo_dock_dbus_get_property_as_int_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
-	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_get_property_in_value_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 	if (G_VALUE_HOLDS_INT (&v))
 		return g_value_get_int (&v);
 	else
 		return 0;
 }
 
-guint cairo_dock_dbus_get_property_as_uint (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+guint cairo_dock_dbus_get_property_as_uint_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
-	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_get_property_in_value_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 	if (G_VALUE_HOLDS_UINT (&v))
 		return g_value_get_uint (&v);
 	else
 		return 0;
 }
 
-guchar cairo_dock_dbus_get_property_as_uchar (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+guchar cairo_dock_dbus_get_property_as_uchar_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
-	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_get_property_in_value_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 	if (G_VALUE_HOLDS_UCHAR (&v))
 		return g_value_get_uchar (&v);
 	else
 		return 0;
 }
 
-gdouble cairo_dock_dbus_get_property_as_double (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+gdouble cairo_dock_dbus_get_property_as_double_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
-	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_get_property_in_value_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 	if (G_VALUE_HOLDS_DOUBLE (&v))
 		return g_value_get_double (&v);
 	else
 		return 0.;
 }
 
-gchar *cairo_dock_dbus_get_property_as_string (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+gchar *cairo_dock_dbus_get_property_as_string_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
-	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_get_property_in_value_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 	if (G_VALUE_HOLDS_STRING (&v))
 	{
 		gchar *s = (gchar*)g_value_get_string (&v);  // on recupere directement le contenu de la GValue. Comme on ne libere pas la GValue, la chaine est a liberer soi-meme quand on en n'a plus besoin.
@@ -628,10 +628,10 @@ gchar *cairo_dock_dbus_get_property_as_string (DBusGProxy *pDbusProxy, const gch
 		return NULL;
 }
 
-gchar *cairo_dock_dbus_get_property_as_object_path (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+gchar *cairo_dock_dbus_get_property_as_object_path_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
-	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_get_property_in_value_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 	if (G_VALUE_HOLDS (&v, DBUS_TYPE_G_OBJECT_PATH))
 	{
 		gchar *s = (gchar*)g_value_get_string (&v);  // meme remarque.
@@ -641,10 +641,10 @@ gchar *cairo_dock_dbus_get_property_as_object_path (DBusGProxy *pDbusProxy, cons
 		return NULL;
 }
 
-gpointer cairo_dock_dbus_get_property_as_boxed (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+gpointer cairo_dock_dbus_get_property_as_boxed_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
-	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_get_property_in_value_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 	if (G_VALUE_HOLDS_BOXED (&v))
 	{
 		gpointer p = g_value_get_boxed (&v);  // meme remarque.
@@ -654,10 +654,10 @@ gpointer cairo_dock_dbus_get_property_as_boxed (DBusGProxy *pDbusProxy, const gc
 		return NULL;
 }
 
-gchar **cairo_dock_dbus_get_property_as_string_list (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty)
+gchar **cairo_dock_dbus_get_property_as_string_list_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
-	cairo_dock_dbus_get_property_in_value (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_get_property_in_value_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 	if (G_VALUE_HOLDS_BOXED(&v))
 	{
 		gchar **s = (gchar**)g_value_get_boxed (&v);  // meme remarque.
@@ -667,12 +667,12 @@ gchar **cairo_dock_dbus_get_property_as_string_list (DBusGProxy *pDbusProxy, con
 		return NULL;
 }
 
-GHashTable *cairo_dock_dbus_get_all_properties (DBusGProxy *pDbusProxy, const gchar *cInterface)
+GHashTable *cairo_dock_dbus_get_all_properties_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, gint iTimeOut)
 {
 	GError *erreur=NULL;
 	GHashTable *hProperties = NULL;
 	
-	dbus_g_proxy_call(pDbusProxy, "GetAll", &erreur,
+	dbus_g_proxy_call_with_timeout (pDbusProxy, "GetAll", iTimeOut, &erreur,
 		G_TYPE_STRING, cInterface,
 		G_TYPE_INVALID,
 		(dbus_g_type_get_map("GHashTable", G_TYPE_STRING, G_TYPE_VALUE)), &hProperties,
@@ -691,11 +691,11 @@ GHashTable *cairo_dock_dbus_get_all_properties (DBusGProxy *pDbusProxy, const gc
 }
 
 
-void cairo_dock_dbus_set_property (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, GValue *pProperty)
+void cairo_dock_dbus_set_property_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, GValue *pProperty, gint iTimeOut)
 {
 	GError *erreur=NULL;
 	
-	dbus_g_proxy_call(pDbusProxy, "Set", &erreur,
+	dbus_g_proxy_call_with_timeout (pDbusProxy, "Set", iTimeOut, &erreur,
 		G_TYPE_STRING, cInterface,
 		G_TYPE_STRING, cProperty,
 		G_TYPE_VALUE, pProperty,
@@ -709,11 +709,11 @@ void cairo_dock_dbus_set_property (DBusGProxy *pDbusProxy, const gchar *cInterfa
 	}
 }
 
-void cairo_dock_dbus_set_boolean_property (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gboolean bValue)
+void cairo_dock_dbus_set_boolean_property_with_timeout (DBusGProxy *pDbusProxy, const gchar *cInterface, const gchar *cProperty, gboolean bValue, gint iTimeOut)
 {
 	GValue v = G_VALUE_INIT;
 	g_value_init (&v, G_TYPE_BOOLEAN);
 	g_value_set_boolean (&v, bValue);
-	cairo_dock_dbus_set_property (pDbusProxy, cInterface, cProperty, &v);
+	cairo_dock_dbus_set_property_with_timeout (pDbusProxy, cInterface, cProperty, &v, iTimeOut);
 }
 
