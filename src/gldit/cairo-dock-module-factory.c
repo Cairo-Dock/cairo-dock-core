@@ -661,7 +661,7 @@ void cairo_dock_reload_module_instance (CairoDockModuleInstance *pInstance, gboo
 			g_key_file_free (pKeyFile);
 			pKeyFile = NULL;
 		}
-		cairo_dock_icon_set_requested_size (pIcon, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
+		cairo_dock_icon_set_requested_display_size (pIcon, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
 		
 		// on insere l'icone dans le dock ou on met a jour celui-ci.
 		if (pNewDock != pCurrentDock)  // insert in its new dock.

@@ -159,6 +159,7 @@ struct _Icon {
 	//\____________ Buffers.
 	gdouble fWidth, fHeight;  // size at rest in the container (including ratio and orientation).
 	gint iRequestedWidth, iRequestedHeight;  // buffer image size that can be requested (surface/texture size)
+	gint iRequestedDisplayWidth, iRequestedDisplayHeight;  // icon size that can be requested (as displayed in the dock)
 	gint iAllocatedWidth, iAllocatedHeight;  // buffer image size actually allocated (surface/texture size)
 	CairoDockImageBuffer image; // the image of the icon
 	CairoDockImageBuffer label; // the label above the icon

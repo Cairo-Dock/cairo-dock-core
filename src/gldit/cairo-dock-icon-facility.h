@@ -55,11 +55,23 @@ G_BEGIN_DECLS
 
 #define cairo_dock_icon_set_requested_size(icon, w, h) do { \
 	(icon)->iRequestedWidth = w; \
-	(icon)->iRequestedHeight = h; } while(0)
+	(icon)->iRequestedHeight = h; \
+	(icon)->iRequestedDisplayWidth = 0; \
+	(icon)->iRequestedDisplayHeight = 0; } while(0)
+
+#define cairo_dock_icon_set_requested_display_size(icon, w, h) do { \
+	(icon)->iRequestedDisplayWidth = w; \
+	(icon)->iRequestedDisplayHeight = h; \
+	(icon)->iRequestedWidth = 0; \
+	(icon)->iRequestedHeight = 0; } while(0)
 
 #define cairo_dock_icon_get_requested_width(icon) (icon)->iRequestedWidth
 
 #define cairo_dock_icon_get_requested_height(icon) (icon)->iRequestedHeight
+
+#define cairo_dock_icon_get_requested_display_width(icon) (icon)->iRequestedDisplayWidth
+
+#define cairo_dock_icon_get_requested_display_height(icon) (icon)->iRequestedDisplayHeight
 
 #define cairo_dock_icon_set_allocated_size(icon, w, h) do { \
 	(icon)->iAllocatedWidth = w; \
