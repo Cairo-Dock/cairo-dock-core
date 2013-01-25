@@ -417,7 +417,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glLoadIdentity ();
 		
 		_cairo_dock_enable_texture ();
-		_cairo_dock_set_blend_pbuffer ();
+		_cairo_dock_set_blend_alpha ();
 		
 		double fMagnitude;
 		if (myIconsParam.bLabelForPointedIconOnly ||pDock->fMagnitudeMax == 0.)
