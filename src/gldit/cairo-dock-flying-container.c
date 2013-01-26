@@ -82,7 +82,7 @@ static void _cairo_dock_load_explosion_image (int iWidth)
 	cairo_dock_free_image_buffer (s_pExplosion);
 	gchar *cExplosionFile = cairo_dock_search_image_s_path ("explosion.png");
 	s_pExplosion = cairo_dock_create_image_buffer (cExplosionFile?cExplosionFile:GLDI_SHARE_DATA_DIR"/explosion/explosion.png", iWidth, iWidth, CAIRO_DOCK_FILL_SPACE | CAIRO_DOCK_ANIMATED_IMAGE);
-	cairo_dock_image_buffer_set_timelength (s_pExplosion, 8.4);
+	cairo_dock_image_buffer_set_timelength (s_pExplosion, .4);
 	g_free (cExplosionFile);
 }
 
