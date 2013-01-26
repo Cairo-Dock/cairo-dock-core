@@ -366,8 +366,8 @@ static gboolean _on_change_active_window_notification (G_GNUC_UNUSED gpointer da
 		CairoDock *pParentDock = NULL;
 		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
-			///if (icon->bIsDemandingAttention)  // on force ici, car il semble qu'on ne recoive pas toujours le retour a la normale.
-			///	cairo_dock_appli_stops_demanding_attention (icon);
+			if (icon->bIsDemandingAttention)  // force the stop demanding attention, as it can happen (for some reason) that the attention state doesn't change when the appli takes the focus.
+				cairo_dock_appli_stops_demanding_attention (icon);
 			
 			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock == NULL)  // elle est soit inhibee, soit pas dans un dock.
