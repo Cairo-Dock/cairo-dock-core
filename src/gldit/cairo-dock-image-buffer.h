@@ -116,6 +116,8 @@ CairoDockImageBuffer *cairo_dock_create_image_buffer (const gchar *cImageFile, i
 
 void cairo_dock_image_buffer_next_frame (CairoDockImageBuffer *pImage);
 
+gboolean cairo_dock_image_buffer_next_frame_no_loop (CairoDockImageBuffer *pImage);
+
 #define cairo_dock_image_buffer_set_timelength(pImage, fTimeLength) (pImage)->fDeltaFrame = ((pImage)->iNbFrames != 0 ? (double)fTimeLength / (pImage)->iNbFrames : 1)
 
 #define cairo_dock_image_buffer_rewind(pImage) gettimeofday (&pImage->time, NULL)

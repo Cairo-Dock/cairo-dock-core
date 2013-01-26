@@ -82,7 +82,7 @@ static void _cairo_dock_load_explosion_image (int iWidth)
 	cairo_dock_free_image_buffer (s_pExplosion);
 	gchar *cExplosionFile = cairo_dock_search_image_s_path ("explosion.png");
 	s_pExplosion = cairo_dock_create_image_buffer (cExplosionFile?cExplosionFile:GLDI_SHARE_DATA_DIR"/explosion/explosion.png", iWidth, iWidth, CAIRO_DOCK_FILL_SPACE | CAIRO_DOCK_ANIMATED_IMAGE);
-	cairo_dock_image_buffer_set_timelength (s_pExplosion, .4);
+	cairo_dock_image_buffer_set_timelength (s_pExplosion, 8.4);
 	g_free (cExplosionFile);
 }
 
@@ -94,12 +94,8 @@ static gboolean _cairo_dock_update_flying_container_notification (G_GNUC_UNUSED 
 		*bContinueAnimation = FALSE;  // cancel any other update
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;  // and intercept the notification
 	}
-	double cur_frame = s_pExplosion->iCurrentFrame;
-	if (cur_frame == 0)  // be sure to start from the first frame, since it took some time from the image loading to the first redraw.
-		cairo_dock_image_buffer_rewind (s_pExplosion);
-	cairo_dock_image_buffer_next_frame (s_pExplosion);
-	
-	if (s_pExplosion->iCurrentFrame < cur_frame || s_pExplosion->iCurrentFrame >= s_pExplosion->iNbFrames)  // last frame reached -> stop here
+	gboolean bLastFrame = cairo_dock_image_buffer_next_frame_no_loop (s_pExplosion);
+	if (bLastFrame)  // last frame reached -> stop here
 	{
 		*bContinueAnimation = FALSE;  // cancel any other update
 		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;  // and intercept the notification

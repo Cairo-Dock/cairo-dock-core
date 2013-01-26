@@ -242,10 +242,27 @@ void cairo_dock_image_buffer_next_frame (CairoDockImageBuffer *pImage)
 	double fElapsedFrame = fElapsedTime / pImage->fDeltaFrame;
 	pImage->iCurrentFrame += fElapsedFrame;
 	
-	int n = ((int)pImage->iCurrentFrame);
-	double dn = pImage->iCurrentFrame - n;
-	pImage->iCurrentFrame = (n % pImage->iNbFrames) + dn;
+	if (pImage->iCurrentFrame > pImage->iNbFrames - 1)
+		pImage->iCurrentFrame -= (pImage->iNbFrames - 1);
 	//g_print (" + %.2f => %.2f -> %.2f\n", fElapsedTime, fElapsedFrame, pImage->iCurrentFrame);
+}
+
+gboolean cairo_dock_image_buffer_next_frame_no_loop (CairoDockImageBuffer *pImage)
+{
+	if (pImage->iNbFrames == 0)
+		return FALSE;
+	double cur_frame = pImage->iCurrentFrame;
+	if (cur_frame == 0)  // be sure to start from the first frame, since the image might have been loaded some time ago.
+		cairo_dock_image_buffer_rewind (pImage);
+	
+	cairo_dock_image_buffer_next_frame (pImage);
+	
+	if (pImage->iCurrentFrame < cur_frame || pImage->iCurrentFrame >= pImage->iNbFrames)  // last frame reached -> stay on the last frame
+	{
+		pImage->iCurrentFrame = pImage->iNbFrames;
+		return TRUE;
+	}
+	return FALSE;
 }
 
 void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha)
@@ -290,7 +307,7 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 		int n = (int) pImage->iCurrentFrame;
 		double dn = pImage->iCurrentFrame - n;
 		
-		_cairo_dock_set_blend_over ();
+		_cairo_dock_set_blend_alpha ();
 		
 		_cairo_dock_set_alpha (1. - dn);
 		_cairo_dock_apply_current_texture_portion_at_size_with_offset ((double)n / pImage->iNbFrames, 0,

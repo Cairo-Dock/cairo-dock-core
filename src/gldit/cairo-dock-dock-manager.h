@@ -137,8 +137,6 @@ typedef enum {
 	} CairoDocksNotifications;
 
 
-void cairo_dock_init_dock_manager (void);
-
 void cairo_dock_force_docks_above (void);
 
 
