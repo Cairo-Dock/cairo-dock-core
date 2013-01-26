@@ -466,7 +466,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 				}
 				
 				_cairo_dock_set_alpha (fMagnitude);
-				g_print ("fMagnitude: %f\n", fMagnitude);
 				cairo_dock_apply_image_buffer_texture (&icon->label);
 			}
 			else  // horizontal label on a vertical dock -> draw them next to the icon, vertically centered (like the Parabolic view)
