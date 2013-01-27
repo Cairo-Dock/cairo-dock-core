@@ -305,9 +305,9 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 		ctx = cairo_dock_begin_draw_image_buffer_cairo (&pRenderer->pOverlay->image, 0, NULL);
 		pCairoContext = ctx;
 	}
-	else if (pCairoContext == NULL && pIcon->image.pSurface)
+	else
 	{
-		ctx = cairo_dock_begin_draw_icon_cairo (pIcon, 0, NULL);
+		ctx = cairo_dock_begin_draw_icon_cairo (pIcon, 0, pCairoContext);
 		pCairoContext = ctx;
 	}
 	g_return_if_fail (pCairoContext != NULL);
@@ -335,11 +335,6 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 	}*/
 	cairo_restore (pCairoContext);
 	
-	/**if (pContainer->bUseReflect)
-	{
-		cairo_dock_add_reflection_to_icon (pIcon, pContainer);
-	}*/
-	
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
 	{
 		if (pRenderer->bUseOverlay)
@@ -348,7 +343,7 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 			cairo_dock_update_icon_texture (pIcon);
 	}
 	
-	if (ctx != NULL)
+	if (ctx != pCairoContext)
 		cairo_destroy (ctx);
 }
 
