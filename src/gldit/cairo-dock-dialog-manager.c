@@ -502,8 +502,8 @@ gboolean cairo_dock_dialog_unreference (CairoDialog *pDialog)
 					if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
 					{
 						CAIRO_DOCK (pContainer)->bHasModalWindow = FALSE;
+						cairo_dock_emit_leave_signal (pContainer);
 					}
-					cairo_dock_emit_leave_signal (pContainer);
 				}
 				
 				if (pIcon->iHideLabel > 0)
@@ -1069,8 +1069,8 @@ void cairo_dock_hide_dialog (CairoDialog *pDialog)
 				if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
 				{
 					CAIRO_DOCK (pContainer)->bHasModalWindow = FALSE;
+					cairo_dock_emit_leave_signal (pContainer);
 				}
-				cairo_dock_emit_leave_signal (pContainer);
 			}
 			if (pIcon->iHideLabel > 0)
 			{
@@ -1121,8 +1121,8 @@ void cairo_dock_toggle_dialog_visibility (CairoDialog *pDialog)
 
 static gboolean on_icon_removed (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, CairoDock *pDock)
 {
-	// if an icon is detached from the dock, and is destroyed (for instance, when removing an applet), the icon is detached and then freed;
-	// its dialogs are then destroyed, but since the icon is already detached, the dialog can't unset the 'bHasModalWindow' flag on its previous container.
+	// if an icon is detached from the dock, and is destroyed (for instance, when removing an icon), the icon is detached and then freed;
+	// its dialogs (for instance the confirmation dialog) are then destroyed, but since the icon is already detached, the dialog can't unset the 'bHasModalWindow' flag on its previous container.
 	// therefore we do it here (plus it's logical to do that whenever an icon is detached. Note: we could handle the case of the icon being rattached to a container while having a modal dialog, to set the 'bHasModalWindow' flag, but I can't imagine a way it would happen).
 	if (pIcon && pDock)
 	{
@@ -1136,6 +1136,7 @@ static gboolean on_icon_removed (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, 
 				if (pDialog->pIcon == pIcon && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
 				{
 					pDock->bHasModalWindow = FALSE;
+					cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
 					break;  // there can only be 1 modal window at a time.
 				}
 			}
