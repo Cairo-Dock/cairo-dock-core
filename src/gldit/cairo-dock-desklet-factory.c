@@ -624,7 +624,7 @@ static gboolean on_motion_notify_desklet (GtkWidget *pWidget,
 				pPointedIcon->bPointed = FALSE;
 				
 				//g_print ("kedal\n");
-				cairo_dock_notify_on_object (pDesklet, NOTIFICATION_ENTER_ICON, pPointedIcon, pDesklet, &bStartAnimation);
+				//cairo_dock_notify_on_object (pDesklet, NOTIFICATION_ENTER_ICON, pPointedIcon, pDesklet, &bStartAnimation);
 			}
 		}
 		if (bStartAnimation)
@@ -667,12 +667,12 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
 	GdkEventCrossing* pEvent,
 	CairoDesklet *pDesklet)
 {
-	//g_print ("%s (%d)\n", __func__, pDesklet->container.bInside);
+	//g_print ("%s (%d, %p, %d;%d)\n", __func__, pDesklet->container.bInside, pEvent, iMouseX, iMouseY);
 	int iMouseX, iMouseY;
 	if (pEvent != NULL)
 	{
-		iMouseX = pEvent->x_root;
-		iMouseY = pEvent->y_root;
+		iMouseX = pEvent->x;
+		iMouseY = pEvent->y;
 	}
 	else
 	{
@@ -684,8 +684,11 @@ static gboolean on_leave_desklet (GtkWidget* pWidget,
 	{
 		return FALSE;
 	}
-
+	
 	pDesklet->container.bInside = FALSE;
+	Icon *pPointedIcon = cairo_dock_get_pointed_icon (pDesklet->icons);
+	if (pPointedIcon != NULL)
+		pPointedIcon->bPointed = FALSE;
 	gtk_widget_queue_draw (pWidget);  // redessin des boutons.
 	
 	gboolean bStartAnimation = FALSE;
