@@ -507,7 +507,7 @@ cairo_t *cairo_dock_begin_draw_image_buffer_cairo (CairoDockImageBuffer *pImage,
 	{
 		ctx = cairo_create (pImage->pSurface);
 	}
-	else if (iRenderingMode != 1)
+	if (iRenderingMode != 1)
 	{
 		cairo_dock_erase_cairo_context (ctx);
 	}
