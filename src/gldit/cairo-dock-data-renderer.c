@@ -335,13 +335,17 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 	}*/
 	cairo_restore (pCairoContext);
 	
-	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
+	if (pRenderer->bUseOverlay && pRenderer->pOverlay != NULL)
+		cairo_dock_end_draw_image_buffer_cairo (&pRenderer->pOverlay->image);
+	else
+		cairo_dock_end_draw_image_buffer_cairo (&pIcon->image);
+	/**if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer))
 	{
 		if (pRenderer->bUseOverlay)
 			pRenderer->pOverlay->image.iTexture = cairo_dock_create_texture_from_surface (pRenderer->pOverlay->image.pSurface);
 		else
 			cairo_dock_update_icon_texture (pIcon);
-	}
+	}*/
 	
 	if (ctx != pCairoContext)
 		cairo_destroy (ctx);
