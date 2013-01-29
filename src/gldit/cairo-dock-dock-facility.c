@@ -175,8 +175,12 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 	if (iPrevMaxDockHeight == pDock->iMaxDockHeight && iPrevMaxDockWidth == pDock->iMaxDockWidth)  // if the size has changed, shapes will be updated by the "configure" callback, so we don't need to do it here; if not, we do it in case the icons define a new shape (ex.: separators in Panel view) or in case the screen edge has changed.
 	{
 		cairo_dock_update_input_shape (pDock);  // done after the icons' position is known.
-		if (pDock->container.bInside)  // if the mouse is inside, set the new input shape immediately.
-			cairo_dock_set_input_shape_active (pDock);
+		switch (pDock->iInputState)  // update the input zone
+		{
+			case CAIRO_DOCK_INPUT_ACTIVE: cairo_dock_set_input_shape_active (pDock);;
+			case CAIRO_DOCK_INPUT_AT_REST: cairo_dock_set_input_shape_at_rest (pDock);
+			default: break;  // if hidden, nothing to do.
+		}
 	}
 	
 	if (iPrevMaxDockHeight == pDock->iMaxDockHeight && iPrevMaxDockWidth == pDock->iMaxDockWidth)  // same remark as for the input shape.
@@ -303,7 +307,7 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 		int h = pDock->iMinDockHeight;
 		int x, y;  // position qu'aurait la fenetre du dock s'il avait la taille minimale.
 		cairo_dock_get_window_position_at_balance (pDock, w, h, &x, &y);
-		g_print ("%dx%d; %d;%d\n", w, h, x, y);
+		//g_print ("%dx%d; %d;%d\n", w, h, x, y);
 		
 		if (pDock->container.bDirectionUp)
 		{
