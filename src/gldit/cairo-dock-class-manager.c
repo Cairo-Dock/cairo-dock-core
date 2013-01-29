@@ -1196,6 +1196,7 @@ static inline int _get_class_age (CairoDockClassAppli *pClassAppli)
 {
 	if (pClassAppli->pAppliOfClass == NULL)
 		return 0;
+	g_print ("%s: %d\n", pClassAppli->cName, pClassAppli->iAge);
 	return pClassAppli->iAge;
 }
 // Set the order of an appli when they are mixed amongst launchers and no class sub-dock exists (because either they are not grouped by class, or just it's the first appli of this class in the dock)
@@ -1440,7 +1441,7 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 			for (ic = first_appli_ic; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
-				if (! CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
+				if (! CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) && ! CAIRO_DOCK_IS_MULTI_APPLI (icon))
 					break;
 				
 				// get the age of this class (= age of the oldest icon of this class)
