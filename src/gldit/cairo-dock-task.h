@@ -55,12 +55,11 @@ typedef gboolean (* CairoDockUpdateSyncFunc ) (gpointer pSharedMemory);
 
 /// Definition of a periodic and asynchronous Task.
 struct _CairoDockTask {
-	/// ID of the timer of the Task.
+	/// ID of the timer of the Task (if periodic)
 	gint iSidTimer;
-	/// ID of the timer to check the end of the thread.
+	/// ID of the timer to perform the update.
 	gint iSidTimerUpdate;
-	/// Atomic value, set to 1 when the thread is running.
-	gint iThreadIsRunning;
+	gboolean bIsRunning;  // TRUE is the thread is running or about to run or if the update is pending
 	/// function carrying out the heavy job.
 	CairoDockGetDataAsyncFunc get_data;
 	/// function carrying out the update of the dock. Returns TRUE to continue, FALSE to stop.
@@ -81,6 +80,10 @@ struct _CairoDockTask {
 	gboolean bDiscard;
 	gboolean bNeedsUpdate;  // TRUE when new data are waiting to be processed.
 	gboolean bContinue;  // result of the 'update' function (TRUE -> continue, FALSE -> stop, if the task is periodic).
+	GThread *pThread;  // the thread that execute the asynchronous 'get_data' callback
+	GCond *pCond;  // condition to awake the thread (if periodic).
+	gboolean bRunThread;  // condition value: whether to run the thread or exit.
+	GMutex *pMutex;  // mutex associated with the condition.
 } ;
 
 
