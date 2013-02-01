@@ -1060,7 +1060,7 @@ static GHashTable *_cairo_dock_build_screens_list (void)
 		g_str_equal,
 		g_free,
 		g_free);
-	g_hash_table_insert (pHashTable, g_strdup (_("All screens")), g_strdup ("-1"));
+	g_hash_table_insert (pHashTable, g_strdup (_("Use all screens")), g_strdup ("-1"));
 	
 	if (g_desktopGeometry.iNbScreens > 1)
 	{
@@ -1102,6 +1102,10 @@ static GHashTable *_cairo_dock_build_screens_list (void)
 			gchar *cLabel = g_strdup_printf ("%s %d (%s%s%s)", _("Screen"), i, 	xpos?xpos:"", xpos&&ypos?" - ":"", ypos?ypos:"");
 			g_hash_table_insert (pHashTable, cLabel, g_strdup_printf ("%d", i));
 		}
+	}
+	else  // if we have only 1 screen, and the screen-number is set to 0 (default value), let's insert a row for it; it's just to not have a blank widget with no line of the combo being selected, since anyway the widget will be unsensitive.
+	{
+		g_hash_table_insert (pHashTable, g_strdup (_("Use all screens")), g_strdup ("0"));
 	}
 	return pHashTable;
 }
@@ -1261,12 +1265,15 @@ static GtkListStore *_cairo_dock_build_screens_list_for_gui (GHashTable *pHashTa
 	return pListStore;
 }
 
-static gboolean _on_screen_modified (GtkListStore *pListStore)
+static gboolean _on_screen_modified (GtkWidget *pCombo)
 {
+	GtkListStore *pListStore = GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (pCombo)));
 	GHashTable *pHashTable = _cairo_dock_build_screens_list ();
 	
 	gtk_list_store_clear (GTK_LIST_STORE (pListStore));
 	g_hash_table_foreach (pHashTable, (GHFunc)_cairo_dock_add_one_screen_item, pListStore);
+	
+	gtk_widget_set_sensitive (pCombo, g_desktopGeometry.iNbScreens > 1);
 	
 	g_hash_table_destroy (pHashTable);
 	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
@@ -2682,7 +2689,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					NOTIFICATION_SCREEN_GEOMETRY_ALTERED,
 					(CairoDockNotificationFunc) _on_screen_modified,
 					CAIRO_DOCK_RUN_AFTER, pScreensListStore);
-				g_signal_connect (pScreensListStore, "destroy", G_CALLBACK (_on_list_destroyed), NULL);
+				g_signal_connect (pOneWidget, "destroy", G_CALLBACK (_on_list_destroyed), NULL);
+				
+				if (g_desktopGeometry.iNbScreens <= 1)
+					gtk_widget_set_sensitive (pOneWidget, FALSE);
 			}
 			break ;
 			
