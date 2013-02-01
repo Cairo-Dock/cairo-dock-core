@@ -1196,7 +1196,6 @@ static inline int _get_class_age (CairoDockClassAppli *pClassAppli)
 {
 	if (pClassAppli->pAppliOfClass == NULL)
 		return 0;
-	g_print ("%s: %d\n", pClassAppli->cName, pClassAppli->iAge);
 	return pClassAppli->iAge;
 }
 // Set the order of an appli when they are mixed amongst launchers and no class sub-dock exists (because either they are not grouped by class, or just it's the first appli of this class in the dock)

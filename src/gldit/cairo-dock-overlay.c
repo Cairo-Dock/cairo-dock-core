@@ -325,7 +325,7 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio)
 	
 	GList* ov;
 	CairoOverlay *p;
-	int wo, ho;  // actual size at which the overlay will rendered.
+	int wo, ho;  // actual size at which the overlay will be rendered.
 	double x, y;  // position of the overlay relatively to the icon center.
 	for (ov = pIcon->pOverlays; ov != NULL; ov = ov->next)
 	{

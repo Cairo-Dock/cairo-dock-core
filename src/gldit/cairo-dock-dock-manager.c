@@ -1706,10 +1706,16 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
 		cairo_dock_set_dock_orientation (pDock, pPosition->iScreenBorder);
-		_cairo_dock_draw_one_subdock_icon (NULL, g_pMainDock, NULL);  // container-icons may be drawn differently according to the orientation (ex.: box).
+		cairo_dock_reload_buffers_in_all_docks (TRUE);  // icons may have a different width and height, so changing the orientation will affect them.  also, container-icons may be drawn differently according to the orientation (ex.: box).
+		///_cairo_dock_draw_one_subdock_icon (NULL, g_pMainDock, NULL);  // container-icons may be drawn differently according to the orientation (ex.: box).
 	}
 	pDock->bExtendedMode = pBackground->bExtendedMode;
-	cairo_dock_update_dock_size (pDock);  // si l'ecran ou l'orientation a change, la taille max a change aussi.
+	
+	if (pPosition->iNumScreen != pPrevPosition->iNumScreen
+	|| pPosition->iScreenBorder != pPrevPosition->iScreenBorder)  // if the orientation or the screen has changed, the available size may have changed too
+	{
+		cairo_dock_update_dock_size (pDock);
+	}
 	
 	pDock->iGapX = pPosition->iGapX;
 	pDock->iGapY = pPosition->iGapY;
