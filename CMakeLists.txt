@@ -84,13 +84,16 @@ endif()
 set (includedir "${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")  # (...)/include
 set (bindir "${prefix}/${CMAKE_INSTALL_BINDIR}")  # (...)/bin
 
+set (pluginsdir "${libdir}/cairo-dock")
+set (pluginsdatadir "${pkgdatadir}/plug-ins")
+
 ########### dependencies ###############
 
 set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox libcurl")  # for the .pc and to have details
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
-set (with_xentend FALSE)
+set (with_xentend no)
 enable_if_not_defined (enable-x11-ext-support) # enabled by default
 if (enable-x11-ext-support)
 	set (xextend_required "xtst xcomposite xrandr")  # for the .pc
@@ -99,7 +102,7 @@ if (enable-x11-ext-support)
 
 	if (XEXTEND_FOUND)
 		set (HAVE_XEXTEND 1)
-		set (with_xentend ON)
+		set (with_xentend yes)
 	else()
 		set (xextend_required)
 	endif()
@@ -151,7 +154,7 @@ set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 
 set (GLDI_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 set (GLDI_SHARE_DATA_DIR ${pkgdatadir})
-set (GLDI_MODULES_DIR ${libdir}/cairo-dock)
+set (GLDI_MODULES_DIR ${pluginsdir})
 set (GLDI_BIN_DIR ${bindir})
 
 ########### next steps ###############
@@ -159,6 +162,17 @@ set (GLDI_BIN_DIR ${bindir})
 add_subdirectory (src)
 add_subdirectory (data)
 add_subdirectory (po)
+
+############# HELP #################
+# this is actually a plug-in for cairo-dock, not for gldi
+# it uses some functions of cairo-dock (they are binded dynamically), that's why it can't go with other plug-ins
+set (GETTEXT_HELP ${GETTEXT_PACKAGE})
+set (VERSION_HELP "0.9.993")
+set (PACKAGE_HELP "cd-Help")
+set (helpdatadir "${pluginsdatadir}/Help")
+set (dock_version "${VERSION}")
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Help/data/Help.conf.in ${CMAKE_CURRENT_BINARY_DIR}/Help/data/Help.conf)
+add_subdirectory (Help)
 
 ########### file generation ###############
 

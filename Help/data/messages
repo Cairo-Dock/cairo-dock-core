@@ -1,0 +1,100 @@
+_("Icon")
+
+_("Icon")
+
+_("Name of the dock it belongs to:")
+
+_("Name of the icon as it will appear in its caption in the dock:")
+
+_("Leave empty to use the default one.")
+
+_("Image filename:")
+
+_("Set to 0 to use the default applet size")
+
+_("Desired icon size for this applet")
+
+_("Applet's Handbook")
+
+_("Desklet")
+
+_("Position")
+
+_("If locked, the desklet cannot be moved by simply dragging it with the left mouse button. It can still be moved with ALT + left-click.")
+
+_("Lock position?")
+
+_("Depending on your WindowManager, you may be able to resize this with ALT + middle-click or ALT + left-click.")
+
+_("Desklet dimensions (width x height):")
+
+_("Depending on your WindowManager, you may be able to move this with ALT + left-click.. Negative values are counted from the right/bottom of the screen")
+
+_("Desklet position (x, y):")
+
+_("You can quickly rotate the desklet with the mouse, by dragging the little buttons on its left and top sides.")
+
+_("Rotation:")
+
+_("Visibility")
+
+_("Is detached from the dock")
+
+_("Visibility:")
+
+_("Normal")
+
+_("Keep above")
+
+_("Keep below")
+
+_("Keep on widget layer")
+
+_("Reserve space")
+
+_("Should be visible on all desktops?")
+
+_("Decorations")
+
+_("Choose 'Custom decorations' to define your own decorations below.")
+
+_("Choose a decoration theme for this desklet:")
+
+_("Image to be displayed below drawings, e.g. a frame. Leave empty for no image.")
+
+_("Background image:")
+
+_("Background transparency:")
+
+_("in pixels. Use this to adjust the left position of drawings.")
+
+_("Left offset:")
+
+_("in pixels. Use this to adjust the top position of drawings.")
+
+_("Top offset:")
+
+_("in pixels. Use this to adjust the right position of drawings.")
+
+_("Right offset:")
+
+_("in pixels. Use this to adjust the bottom position of drawings.")
+
+_("Bottom offset:")
+
+_("Image to be displayed above the drawings, e.g. a reflection. Leave empty for no image.")
+
+_("Foreground image:")
+
+_("Foreground tansparency:")
+
+_("Configuration")
+
+_("This is a tooltip for this parameter.")
+
+_("This is a boolean parameter. Y/N ?")
+
+_("This integer can go from 0 to 10 :")
+
+_("Enter some text here :")
+

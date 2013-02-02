@@ -78,7 +78,6 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
-#include "help/cairo-dock-help.h"
 
 //#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
 #define CAIRO_DOCK_THEME_SERVER "http://download.tuxfamily.org/glxdock/themes"
@@ -590,7 +589,6 @@ int main (int argc, char** argv)
 			cUserDefinedModuleDir = NULL;
 		}
 	}
-	cairo_dock_register_help_module ();  // this applet is made for Cairo-Dock, not gldi; therefore, it's not installed as a separate library, so we manually register it.
 	
 	//\___________________ define GUI backend.
 	cairo_dock_load_user_gui_backend (s_iGuiMode);

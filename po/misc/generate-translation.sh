@@ -17,7 +17,7 @@ elif test "$1" = "extras"; then
 	done;
 	lang=Python
 else
-	sources="../src/*.[ch] ../src/*/*.[ch] ../data/messages"  # core
+	sources="../src/*.[ch] ../src/*/*.[ch] Help/src/*.[ch] ../data/messages"  # core
 	lang=C
 fi
 

@@ -19,7 +19,6 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/launcher.desktop.in ${CMAKE_CURRENT_
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/container.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/container.desktop)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/separator.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/separator.desktop)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/themes.conf.in ${CMAKE_CURRENT_BINARY_DIR}/themes.conf)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Help.conf.in ${CMAKE_CURRENT_BINARY_DIR}/Help.conf)
 
 
 ########### install files ###############
@@ -47,7 +46,6 @@ install (FILES
 	# appli
 	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-simple.conf
 	${CMAKE_CURRENT_BINARY_DIR}/themes.conf
-	${CMAKE_CURRENT_BINARY_DIR}/Help.conf
 	DESTINATION ${pkgdatadir})
 
 # appli desktop file

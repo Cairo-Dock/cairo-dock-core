@@ -82,7 +82,7 @@ static gboolean _cairo_dock_open_module (CairoDockModule *pCairoDockModule, GErr
 		return ;
 	}
 	pCairoDockModule->pModule = module;*/
-	pCairoDockModule->handle = dlopen (pCairoDockModule->cSoFilePath, RTLD_LAZY | RTLD_LOCAL | RTLD_DEEPBIND);
+	pCairoDockModule->handle = dlopen (pCairoDockModule->cSoFilePath, RTLD_LAZY | RTLD_LOCAL);
 	if (! pCairoDockModule->handle)
 	{
 		g_set_error (erreur, 1, 1, "while opening module '%s' : (%s)", pCairoDockModule->cSoFilePath, dlerror ());
