@@ -117,7 +117,11 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 		
 		if (! pTask->pCond)  // one-shot thread => the thread is over
 		{
+			#ifndef GLIB_VERSION_2_32
+			g_thread_join (pTask->pThread); // unref the thread
+			#else
 			g_thread_unref (pTask->pThread);
+			#endif
 			pTask->pThread = NULL;
 		}
 		
