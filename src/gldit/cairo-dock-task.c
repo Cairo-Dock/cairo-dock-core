@@ -104,7 +104,11 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 			else
 			{
 				g_mutex_unlock (pTask->pMutex);
+				#ifndef GLIB_VERSION_2_32
+				g_thread_join (pTask->pThread); // unref the thread
+				#else
 				g_thread_unref (pTask->pThread);
+				#endif
 			}
 			pTask->pThread = NULL;
 			_free_task (pTask);
@@ -182,7 +186,7 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 			pTask->bIsRunning = TRUE;
 			GError *erreur = NULL;
 			#ifndef GLIB_VERSION_2_32
-			pTask->pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, pTask, FALSE, &erreur);
+			pTask->pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, pTask, TRUE, &erreur);
 			#else
 			pTask->pThread = g_thread_try_new ("Cairo-Dock Task", (GThreadFunc) _cairo_dock_threaded_calculation, pTask, &erreur);
 			#endif
