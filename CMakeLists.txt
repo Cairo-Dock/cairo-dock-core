@@ -71,8 +71,6 @@ set (datadir "${prefix}/${CMAKE_INSTALL_DATAROOTDIR}")  # (...)/share
 set (pkgdatadir "${datadir}/${CMAKE_PROJECT_NAME}")  # (...)/cairo-dock
 set (mandir "${prefix}/${CMAKE_INSTALL_MANDIR}")  # (...)/man
 
-set (VERSION_HELP "0.9.993") # needed to parse Help.conf.in
-
 if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND (force-lib64 OR "${FORCE_LIB64}" STREQUAL "yes"))  # 64bits and force install in lib64
 	set (libdir "${prefix}/lib64")
 elseif (NOT "${LIB_SUFFIX}" STREQUAL "")
@@ -167,7 +165,7 @@ add_subdirectory (po)
 # this is actually a plug-in for cairo-dock, not for gldi
 # it uses some functions of cairo-dock (they are binded dynamically), that's why it can't go with other plug-ins
 set (GETTEXT_HELP ${GETTEXT_PACKAGE})
-set (VERSION_HELP "0.9.993")
+set (VERSION_HELP "0.9.994")
 set (PACKAGE_HELP "cd-Help")
 set (helpdatadir "${pluginsdatadir}/Help")
 set (dock_version "${VERSION}")

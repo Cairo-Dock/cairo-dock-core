@@ -1,6 +1,6 @@
 #@VERSION_HELP@
 
-#[@pkgdatadir@/icons/icon-help.svg]
+#[@helpdatadir@/icon.svg]
 [General]
 
 #X[Using the dock]

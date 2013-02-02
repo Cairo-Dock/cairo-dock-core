@@ -42,7 +42,6 @@ install (FILES
 	icon-frame.png
 	icon-fun.svg
 	icon-gradation.png
-	icon-help.svg
 	icon-hidden-dock.svg
 	icon-icons.svg
 	icon-indicators.svg
