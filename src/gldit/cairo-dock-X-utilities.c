@@ -197,7 +197,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 				
 				if (info->width == 0 || info->height == 0)
 				{
-					cd_warning ("This screen (%d) has a null dimensions, skip it.", i);
+					cd_message ("This screen (%d) has a null dimensions, skip it.", i);
 					XRRFreeCrtcInfo (info);
 					continue;  // if that happens, does it screw the number of screens ?...
 				}

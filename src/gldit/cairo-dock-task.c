@@ -30,6 +30,18 @@
  * update-idle -> update -> while try-lock -> unlock, periodic ? timer to launch again : unref thread, thread = NULL
  */
 
+#ifndef GLIB_VERSION_2_32
+#define G_MUTEX_INIT(a)  a = g_mutex_new ()
+#define G_COND_INIT(a)   a = g_cond_new ()
+#define G_MUTEX_CLEAR(a) g_mutex_free (a)
+#define G_COND_CLEAR(a)  g_cond_free (a)
+#else
+#define G_MUTEX_INIT(a)  a = g_new (GMutex, 1); g_mutex_init (a)
+#define G_COND_INIT(a)   a = g_new (GCond, 1);  g_cond_init (a)
+#define G_MUTEX_CLEAR(a) g_mutex_clear (a); g_free (a)
+#define G_COND_CLEAR(a)  g_cond_clear (a);  g_free (a)
+#endif
+
 #define cairo_dock_schedule_next_iteration(pTask) do {\
 	if (pTask->iSidTimer == 0 && pTask->iPeriod)\
 		pTask->iSidTimer = g_timeout_add_seconds (pTask->iPeriod, (GSourceFunc) _cairo_dock_timer, pTask); } while (0)
@@ -55,8 +67,9 @@
 	if (pTask->free_data)\
 		pTask->free_data (pTask->pSharedMemory);\
 	g_timer_destroy (pTask->pClock);\
-	g_mutex_clear (pTask->pMutex);\
-	if (pTask->pCond) g_cond_clear (pTask->pCond);\
+	G_MUTEX_CLEAR (pTask->pMutex);\
+	if (pTask->pCond) {\
+		G_COND_CLEAR (pTask->pCond); }\
 	g_free (pTask); } while (0)
 
 static gboolean _cairo_dock_timer (CairoDockTask *pTask)
@@ -168,7 +181,7 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 		{
 			pTask->bIsRunning = TRUE;
 			GError *erreur = NULL;
-			#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
+			#ifndef GLIB_VERSION_2_32
 			pTask->pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, pTask, FALSE, &erreur);
 			#else
 			pTask->pThread = g_thread_try_new ("Cairo-Dock Task", (GThreadFunc) _cairo_dock_threaded_calculation, pTask, &erreur);
@@ -217,12 +230,10 @@ CairoDockTask *cairo_dock_new_task_full (int iPeriod, CairoDockGetDataAsyncFunc 
 	pTask->free_data = free_data;
 	pTask->pSharedMemory = pSharedMemory;
 	pTask->pClock = g_timer_new ();
-	pTask->pMutex = g_new0 (GMutex, 1);
-	g_mutex_init (pTask->pMutex);
+	G_MUTEX_INIT (pTask->pMutex);
 	if (iPeriod != 0)
 	{
-		pTask->pCond = g_new0 (GCond, 1);
-		g_cond_init (pTask->pCond);
+		G_COND_INIT (pTask->pCond);
 	}
 	return pTask;
 }
