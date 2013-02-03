@@ -1174,8 +1174,9 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 	{
 		int wi, hi;  // icon size (icon size displayed at rest, as defined in the config)
 		int wa, ha;  // allocated size (surface/texture).
+		gboolean bIsHorizontal = (pDock->container.bIsHorizontal || (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator));
 		
-		// get the icon size as defined in the config
+		// get the displayed icon size as defined in the config
 		if (! pDock->bGlobalIconSize && pDock->iIconSize != 0)
 		{
 			wi = hi = pDock->iIconSize;
@@ -1192,41 +1193,47 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 			hi = MIN (myIconsParam.iSeparatorHeight, hi);
 		}
 		
+		// take into account the requested displayed size if any
+		int wir = cairo_dock_icon_get_requested_display_width (icon);
+		if (wir != 0)
+			wi = wir;
+		int hir = cairo_dock_icon_get_requested_display_height (icon);
+		if (hir != 0)
+			hi = MIN (hir, hi);  // limit the icon height to the default height.
+		
 		// get the requested size if any
 		wa = cairo_dock_icon_get_requested_width (icon);
-		if (wa == 0)
-		{
-			int wir = cairo_dock_icon_get_requested_display_width (icon);
-			if (wir != 0)
-				wi = wir;
-		}
-		
 		ha = cairo_dock_icon_get_requested_height (icon);
-		if (ha == 0)
-		{
-			int hir = cairo_dock_icon_get_requested_display_height (icon);
-			if (hir != 0)
-				hi = MIN (hir, hi);  // limit the icon height to the default height.
-		}
 		
 		// compute the missing size (allocated or displayed).
 		double fMaxScale = 1 + myIconsParam.fAmplitude;
 		if (wa == 0)
 		{
-			wa = wi * fMaxScale;
+			wa = (bIsHorizontal ? wi : hi) * fMaxScale;
 		}
 		else
 		{
-			wi = wa / fMaxScale;
+			if (bIsHorizontal)
+				wi = wa / fMaxScale;
+			else
+				hi = wa / fMaxScale;
 		}
 		if (ha == 0)
 		{
-			ha = hi * fMaxScale;
+			ha = (bIsHorizontal ? hi : wi) * fMaxScale;
 		}
 		else
 		{
-			hi = ha / fMaxScale;
+			if (bIsHorizontal)
+				hi = ha / fMaxScale;
+			else
+				wi = ha / fMaxScale;
 		}
+		
+		// set both allocated and displayed size 
+		cairo_dock_icon_set_allocated_size (icon, wa, ha);
+		icon->fWidth = wi;
+		icon->fHeight = hi;
 		
 		/**double fMaxScale = 1 + myIconsParam.fAmplitude;
 		
@@ -1283,7 +1290,7 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 		}*/
 		
 		// set both allocated and displayed size 
-		if (pDock->container.bIsHorizontal
+		/*if (pDock->container.bIsHorizontal
 		|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator))
 		{
 			cairo_dock_icon_set_allocated_size (icon, wa, ha);
@@ -1293,7 +1300,7 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon)
 			cairo_dock_icon_set_allocated_size (icon, ha, wa);
 		}
 		icon->fWidth = wi;
-		icon->fHeight = hi;
+		icon->fHeight = hi;*/
 	}
 	// take into account the current ratio
 	icon->fWidth *= pDock->container.fRatio;
