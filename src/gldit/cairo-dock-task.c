@@ -35,11 +35,13 @@
 #define G_COND_INIT(a)   a = g_cond_new ()
 #define G_MUTEX_CLEAR(a) g_mutex_free (a)
 #define G_COND_CLEAR(a)  g_cond_free (a)
+#define G_THREAD_UNREF(t) g_free (t)
 #else
 #define G_MUTEX_INIT(a)  a = g_new (GMutex, 1); g_mutex_init (a)
 #define G_COND_INIT(a)   a = g_new (GCond, 1);  g_cond_init (a)
 #define G_MUTEX_CLEAR(a) g_mutex_clear (a); g_free (a)
 #define G_COND_CLEAR(a)  g_cond_clear (a);  g_free (a)
+#define G_THREAD_UNREF(t) if (t) g_thread_unref (t)
 #endif
 
 #define cairo_dock_schedule_next_iteration(pTask) do {\
@@ -70,6 +72,7 @@
 	G_MUTEX_CLEAR (pTask->pMutex);\
 	if (pTask->pCond) {\
 		G_COND_CLEAR (pTask->pCond); }\
+	G_THREAD_UNREF (pTask->pThread);\
 	g_free (pTask); } while (0)
 
 static gboolean _cairo_dock_timer (CairoDockTask *pTask)
@@ -104,11 +107,7 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 			else
 			{
 				g_mutex_unlock (pTask->pMutex);
-				#ifndef GLIB_VERSION_2_32
-				g_thread_join (pTask->pThread); // unref the thread
-				#else
-				g_thread_unref (pTask->pThread);
-				#endif
+				G_THREAD_UNREF (pTask->pThread);
 			}
 			pTask->pThread = NULL;
 			_free_task (pTask);
@@ -117,11 +116,7 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 		
 		if (! pTask->pCond)  // one-shot thread => the thread is over
 		{
-			#ifndef GLIB_VERSION_2_32
-			g_thread_join (pTask->pThread); // unref the thread
-			#else
-			g_thread_unref (pTask->pThread);
-			#endif
+			G_THREAD_UNREF (pTask->pThread);
 			pTask->pThread = NULL;
 		}
 		
@@ -190,7 +185,7 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 			pTask->bIsRunning = TRUE;
 			GError *erreur = NULL;
 			#ifndef GLIB_VERSION_2_32
-			pTask->pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, pTask, TRUE, &erreur);
+			pTask->pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, pTask, TRUE, &erreur);  // TRUE <=> joinable
 			#else
 			pTask->pThread = g_thread_try_new ("Cairo-Dock Task", (GThreadFunc) _cairo_dock_threaded_calculation, pTask, &erreur);
 			#endif
@@ -202,13 +197,16 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 			}
 		}
 		else  // thread already exists; it's either running or sleeping or finished with a pending update
-		if (pTask->pCond && pTask->iSidTimerUpdate == 0 && g_mutex_trylock (pTask->pMutex))  // if the thread is running or the update is pending, we don't launch it. so if the task is periodic, it will skip this iteration.
+		if (pTask->pCond && g_mutex_trylock (pTask->pMutex))  // it's a periodic thread, and it's not currently running...
 		{
-			pTask->bRunThread = TRUE;
-			pTask->bIsRunning = TRUE;
-			g_cond_signal (pTask->pCond);
+			if (pTask->iSidTimerUpdate == 0)  // ...and it doesn't have a pending update -> awake it and run it again.
+			{
+				pTask->bRunThread = TRUE;
+				pTask->bIsRunning = TRUE;
+				g_cond_signal (pTask->pCond);
+			}
 			g_mutex_unlock (pTask->pMutex);
-		}
+		}  // else it's a one-shot thread or it's currently running or has a pending update -> don't launch it. so if the task is periodic, it will skip this iteration.
 	}
 }
 
@@ -258,13 +256,15 @@ void cairo_dock_stop_task (CairoDockTask *pTask)
 	{
 		if (pTask->pThread)
 		{
-			g_atomic_int_set (&pTask->bDiscard, 1);  // set the discard flag to help the 'get_data' callback knows that it should continue.
+			g_atomic_int_set (&pTask->bDiscard, 1);  // set the discard flag to help the 'get_data' callback knows that it should stop.
 			if (pTask->pCond)  // the thread might be sleeping, awake it.
 			{
-				g_mutex_lock (pTask->pMutex);
-				pTask->bRunThread = TRUE;
-				g_cond_signal (pTask->pCond);
-				g_mutex_unlock (pTask->pMutex);
+				if (g_mutex_trylock (pTask->pMutex))
+				{
+					pTask->bRunThread = TRUE;
+					g_cond_signal (pTask->pCond);
+					g_mutex_unlock (pTask->pMutex);
+				}
 			}
 			g_thread_join (pTask->pThread);  // unref the thread
 			pTask->pThread = NULL;
@@ -295,16 +295,15 @@ void cairo_dock_discard_task (CairoDockTask *pTask)
 	//   if we're inside the 'update' user callback, the task will be destroyed in the 2nd stage of the function (the user callback is called in the 1st stage).
 	if (! cairo_dock_task_is_running (pTask))  // we can free the task immediately.
 	{
-		_free_task (pTask);
-	}
-	else if (pTask->pThread && pTask->iSidTimerUpdate == 0)  // if the 'update' is pending or running, let it finish
-	{
-		if (pTask->pCond && g_mutex_trylock (pTask->pMutex))  // the thread might be sleeping, awake it
+		if (pTask->pThread && pTask->pCond && g_mutex_trylock (pTask->pMutex))  // the thread is sleeping, awake it and let it exit before we can free everything
 		{
 			pTask->bRunThread = TRUE;
 			g_cond_signal (pTask->pCond);
 			g_mutex_unlock (pTask->pMutex);
-		}  // then let the thread finish and call the 'update'
+			g_thread_join (pTask->pThread);  // unref the thread
+			pTask->pThread = NULL;
+		}
+		_free_task (pTask);
 	}
 }
 
