@@ -5,6 +5,9 @@
 /* Defined if we can use X Extensions. */
 #cmakedefine HAVE_XEXTEND @HAVE_XEXTEND@
 
+/* Defined if we can use Xinerala. */
+#cmakedefine HAVE_XINERAMA @HAVE_XINERAMA@
+
 /* Defined if we can crypt passwords. */
 #cmakedefine HAVE_LIBCRYPT @HAVE_LIBCRYPT@
 

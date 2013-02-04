@@ -32,7 +32,9 @@
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
 #include <X11/extensions/XTest.h>
-#include <X11/extensions/Xinerama.h>  // Note: Xinerama will be dropped from Xorg eventually. When it happens, we'll have no choice but drop it too.
+#ifdef HAVE_XINERAMA
+#include <X11/extensions/Xinerama.h>  // Note: Xinerama is deprecated by XRandr >= 1.3
+#endif
 #include <X11/extensions/Xrandr.h>
 ///#include <X11/extensions/shape.h>
 #endif
@@ -161,7 +163,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 	GtkAllocation *pScreens = NULL;
 	GtkAllocation *pScreen;
 	int iNbScreens = 0;
-	/*Test unitaire
+	/*Test unitaire*/
 	iNbScreens = 2;
 	pScreens = g_new0 (GtkAllocation, iNbScreens);
 	pScreens[0].x = 0;
@@ -173,7 +175,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 	pScreens[1].width = 680;
 	pScreens[1].height = 1050;
 	*pNbScreens = iNbScreens;
-	return pScreens;*/
+	return pScreens;
 	
 	#ifdef HAVE_XEXTEND
 	if (s_bUseXrandr)  // we place Xrandr first to get more tests :) (and also because it will deprecate Xinerama).
@@ -217,7 +219,8 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 		else
 			cd_warning ("No screen found from Xrandr, is it really active ?");
 	}
-
+	
+	#ifdef HAVE_XINERAMA
 	if (iNbScreens == 0 && cairo_dock_xinerama_is_available () && XineramaIsActive (s_XDisplay))
 	{
 		cd_debug ("Using Xinerama to determine the screen's position and size ...");
@@ -244,6 +247,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 		else
 			cd_warning ("No screen found from Xinerama, is it really active ?");
 	}
+	#endif
 #endif
 	
 	if (iNbScreens == 0)
@@ -262,6 +266,20 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 		pScreen->width = gldi_get_desktop_width();
 		pScreen->height = gldi_get_desktop_height();
 	}
+	
+	/*Window root = DefaultRootWindow (s_XDisplay);
+	Atom aNetWorkArea = XInternAtom (s_XDisplay, "_NET_WORKAREA", False);
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements = 0;
+	gulong *pXWorkArea = NULL;
+	XGetWindowProperty (s_XDisplay, root, aNetWorkArea, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pXWorkArea);
+	int i;
+	for (i = 0; i < iBufferNbElements/4; i ++)
+	{
+		g_print ("work area : (%d;%d) %dx%d\n", pXWorkArea[4*i], pXWorkArea[4*i+1], pXWorkArea[4*i+2], pXWorkArea[4*i+3]);
+	}
+	XFree (pXWorkArea);*/
 	
 	*pNbScreens = iNbScreens;
 	return pScreens;
@@ -313,16 +331,6 @@ gboolean cairo_dock_update_screen_geometry (void)
 	
 	g_free (pScreens);
 	return bNewSize;
-	/*Atom aNetWorkArea = XInternAtom (s_XDisplay, "_NET_WORKAREA", False);
-	iBufferNbElements = 0;
-	gulong *pXWorkArea = NULL;
-	XGetWindowProperty (s_XDisplay, root, aNetWorkArea, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pXWorkArea);
-	int i;
-	for (i = 0; i < iBufferNbElements/4; i ++)
-	{
-		cd_message ("work area : (%d;%d) %dx%d", pXWorkArea[4*i], pXWorkArea[4*i+1], pXWorkArea[4*i+2], pXWorkArea[4*i+3]);
-	}
-	XFree (pXWorkArea);*/
 }
 
 
@@ -710,11 +718,15 @@ gboolean cairo_dock_support_X_extension (void)
 	}
 	
 	// check for Xinerama
+	#ifdef HAVE_XINERAMA
 	if (! XineramaQueryExtension (s_XDisplay, &event_base, &error_base))
 	{
 		cd_warning ("Xinerama extension not supported");
 		s_bUseXinerama = FALSE;
 	}
+	#else
+	s_bUseXinerama = FALSE;
+	#endif
 	
 	// check for Xrandr >= 1.3
 	if (! XRRQueryExtension (s_XDisplay, &event_base, &error_base))
@@ -779,8 +791,7 @@ void cairo_dock_set_xwindow_timestamp (Window Xid, gulong iTimeStamp)
 void cairo_dock_set_strut_partial (int Xid, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x)
 {
 	g_return_if_fail (Xid > 0);
-
-	g_print ("%s (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", __func__, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
+	//g_print ("%s (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", __func__, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 	gulong iGeometryStrut[12] = {left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x};
 
 	XChangeProperty (s_XDisplay,

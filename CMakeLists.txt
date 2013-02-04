@@ -97,10 +97,15 @@ if (enable-x11-ext-support)
 	set (xextend_required "xtst xcomposite xrandr")  # for the .pc
 	STRING (REGEX REPLACE " " ";" xextend_required_semicolon ${xextend_required})
 	pkg_check_modules ("XEXTEND" "${xextend_required_semicolon}")
-
+	
 	if (XEXTEND_FOUND)
 		set (HAVE_XEXTEND 1)
 		set (with_xentend yes)
+		
+		pkg_check_modules ("XINERAMA" "xinerama")  # check for Xinerama separately, since is now replaced by Xrandr >= 1.3
+		if (XINERAMA_FOUND)
+			set (HAVE_XINERAMA 1)
+		endif()
 	else()
 		set (xextend_required)
 	endif()
