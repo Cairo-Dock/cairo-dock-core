@@ -27,17 +27,13 @@ SET(cairo_dock_SRCS
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
-	${XEXTEND_INCLUDE_DIRS}
-	${CMAKE_SOURCE_DIR}/src
 	${CMAKE_SOURCE_DIR}/src/gldit
-	${CMAKE_SOURCE_DIR}/src/icon-factory
-	${CMAKE_SOURCE_DIR}/src/implementations)
+	${CMAKE_SOURCE_DIR}/src/icon-factory)
 
 # Make sure the linker can find the libraries.
 link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${GTK_LIBRARY_DIRS}
-	${XEXTEND_LIBRARY_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit)
 
 # Add executable that is built from the source files.
@@ -48,11 +44,8 @@ add_executable (${PROJECT_NAME}
 target_link_libraries (${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
 	${GTK_LIBRARIES}
-	${XEXTEND_LIBRARIES}
-	${LIBCRYPT_LIBS}
 	gldi
-	icon-factory
-	implementations)
+	icon-factory)
 
 # install the program once it is built.
 install(
