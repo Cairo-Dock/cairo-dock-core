@@ -32,6 +32,9 @@
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-widget-module.h"
 
+static gboolean _on_instance_destroyed (ModuleWidget *pModuleWidget, G_GNUC_UNUSED CairoDockModuleInstance *pInstance);
+static gboolean _on_module_activated (ModuleWidget *pModuleWidget, G_GNUC_UNUSED const gchar *cModuleName, gboolean bActive);
+
 static gchar *_get_valid_module_conf_file (CairoDockModule *pModule)
 {
 	if (pModule->pInstancesList != NULL)  // module is already instanciated, take the first instance's conf-file.
@@ -103,6 +106,19 @@ static void _module_widget_apply (CDWidget *pCdWidget)
 static void _module_widget_reset (CDWidget *pCdWidget)
 {
 	ModuleWidget *pModuleWidget = MODULE_WIDGET (pCdWidget);
+	
+	if (pModuleWidget->pModuleInstance)
+	{
+		cairo_dock_remove_notification_func_on_object (pModuleWidget->pModuleInstance,
+			NOTIFICATION_DESTROY,
+			(CairoDockNotificationFunc) _on_instance_destroyed,
+			pModuleWidget);
+	}
+	cairo_dock_remove_notification_func_on_object (pModuleWidget->pModule,
+		NOTIFICATION_MODULE_ACTIVATED,
+		(CairoDockNotificationFunc) _on_module_activated,
+		pModuleWidget);
+	
 	g_free (pModuleWidget->cConfFilePath);
 	memset (pCdWidget+1, 0, sizeof (ModuleWidget) - sizeof (CDWidget));  // reset all our parameters.
 }
