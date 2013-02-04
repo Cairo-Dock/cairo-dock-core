@@ -71,6 +71,7 @@ include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
 	${XEXTEND_INCLUDE_DIRS}
+	${XINERAMA_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/implementations)
@@ -80,6 +81,7 @@ link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${GTK_LIBRARY_DIRS}
 	${XEXTEND_LIBRARY_DIRS}
+	${XINERAMA_LIBRARY_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/implementations)
@@ -102,6 +104,7 @@ target_link_libraries("gldi"
 	${PACKAGE_LIBRARIES}
 	${GTK_LIBRARIES}
 	${XEXTEND_LIBRARIES}
+	${XINERAMA_LIBRARIES}
 	${LIBCRYPT_LIBS}
 	icon-factory
 	implementations

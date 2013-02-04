@@ -163,7 +163,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 	GtkAllocation *pScreens = NULL;
 	GtkAllocation *pScreen;
 	int iNbScreens = 0;
-	/*Test unitaire
+	/*Unit Tests
 	iNbScreens = 2;
 	pScreens = g_new0 (GtkAllocation, iNbScreens);
 	pScreens[0].x = 0;
