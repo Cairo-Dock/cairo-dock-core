@@ -1061,11 +1061,6 @@ static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 	{
 		if (pIcon->pSubDock != NULL)
 		{
-			if (pDock->container.iWidth == 1 && pDock->container.iHeight == 1)  // if the GTK resize process has not yet ended, the window may be in an awkward state: the size is forced by GTK to 1x1, which causes the FBO to fail (obviously, 1x1 is too small).
-			{
-				pIcon->iSidRedrawSubdockContent = g_idle_add ((GSourceFunc) _redraw_subdock_content_idle, pIcon);
-				return FALSE;
-			}
 			cairo_dock_draw_subdock_content_on_icon (pIcon, pDock);
 		}
 		else  // l'icone a pu perdre son sous-dock entre-temps (exemple : une classe d'appli contenant 2 icones, dont on enleve l'une des 2.
@@ -1073,6 +1068,8 @@ static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 			cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
 		}
 		cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
+		if (pDock->iRefCount != 0 && ! pIcon->bDamaged)  // now that the icon image is correct, redraw the pointing icon if needed
+			cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
 	pIcon->iSidRedrawSubdockContent = 0;
 	return FALSE;

@@ -90,8 +90,6 @@ static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName
 			cairo_dock_main_dock_to_sub_dock (pChildDock, pParentDock, cRendererName);
 		}
 		icon->pSubDock = pChildDock;
-		if (icon->iSubdockViewType != 0)
-			cairo_dock_trigger_redraw_subdock_content_on_icon (icon);
 	}
 }
 
@@ -104,6 +102,7 @@ static void _load_launcher (Icon *icon)
 	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 	{
 		pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
+		cairo_dock_trigger_redraw_subdock_content_on_icon (icon);  // now that the icon has a surface/texture, we can draw the sub-dock content on it.
 	}
 	else if (icon->cFileName)  // icone possedant une image, on affiche celle-ci.
 	{

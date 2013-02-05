@@ -300,6 +300,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 {
 	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->image.pSurface != NULL || pIcon->image.iTexture != 0));
 	
+	g_print ("%s (%s)\n", __func__, pIcon->cName);
 	CairoIconContainerRenderer *pRenderer = cairo_dock_get_icon_container_renderer (pIcon->cClass != NULL ? "Stack" : s_cRendererNames[pIcon->iSubdockViewType]);
 	if (pRenderer == NULL)
 		return;
@@ -318,11 +319,6 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		_cairo_dock_set_alpha (1.);
 		_cairo_dock_enable_texture ();
 		
-		/**if (g_pIconBackgroundBuffer.iTexture != 0)
-		{
-			_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture, w, h);
-		}*/
-		
 		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
 		pRenderer->render_opengl (pIcon, CAIRO_CONTAINER (pDock), w, h);
 		
@@ -335,29 +331,13 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		//\______________ On efface le dessin existant.
 		cairo_t *pCairoContext = cairo_dock_begin_draw_icon_cairo (pIcon, 0, NULL);  // 0 <=> erase
 		g_return_if_fail (pCairoContext != NULL);
-		/**pCairoContext = cairo_create (pIcon->image.pSurface);
-		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
-		
-		if (g_pIconBackgroundBuffer.pSurface != NULL)  // on ecrase le dessin existant avec l'image de fond des icones.
-		{
-			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-			cairo_dock_apply_image_buffer_surface_at_size (&g_pIconBackgroundBuffer, pCairoContext,
-				w, h,
-				0, 0, 1);
-			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-		}
-		else  // sinon on efface juste ce qu'il y'avait.
-		{
-			cairo_dock_erase_cairo_context (pCairoContext);
-		}*/
 		
 		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
 		pRenderer->render (pIcon, CAIRO_CONTAINER (pDock), w, h, pCairoContext);
 		
 		//\______________ On finit le dessin.
-		///if (g_bUseOpenGL)
-		///	cairo_dock_update_icon_texture (pIcon);
 		cairo_dock_end_draw_icon_cairo (pIcon);
 		cairo_destroy (pCairoContext);
 	}
+	g_print (" drawing OK\n");
 }

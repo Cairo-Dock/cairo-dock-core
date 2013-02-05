@@ -1395,6 +1395,8 @@ gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent,
 					{
 						cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
 					}
+					if (pDock->iRefCount != 0)  // now that the icon image is correct, redraw the pointing icon if needed
+						cairo_dock_trigger_redraw_subdock_content (pDock);
 				}
 			}
 		}
