@@ -17,7 +17,7 @@ elif test "$1" = "extras"; then
 	done;
 	lang=Python
 else
-	sources="../src/*.[ch] ../src/*/*.[ch] Help/src/*.[ch] ../data/messages"  # core
+	sources="../src/*.[ch] ../src/*/*.[ch] ../Help/src/*.[ch] ../Help/data/messages ../data/messages"  # core
 	lang=C
 fi
 
@@ -30,7 +30,7 @@ if test "$1" = "plug-ins"; then
 elif test "$1" = "extras"; then
 	rm -f ../*/messages
 else
-	rm -f ../data/messages
+	rm -f ../data/messages ../Help/data/messages
 fi
 
 for lang in `ls *.po`
