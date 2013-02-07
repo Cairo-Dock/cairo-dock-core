@@ -1440,7 +1440,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	{
 		if (g_key_file_get_boolean (pKeyFile," Position", "xinerama", NULL))  // xinerama was used -> set num-screen back
 		{
-			pPosition->iNumScreen = g_key_file_get_integer (pKeyFile, "Position", "num_screen", NULL);
+			pPosition->iNumScreen = g_key_file_get_integer (pKeyFile, "Position", "num screen", NULL); // "num screen" was the old key
 			g_key_file_set_integer (pKeyFile, "Position", "num_screen", pPosition->iNumScreen);
 		}
 	}

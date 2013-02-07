@@ -142,7 +142,7 @@ gboolean cairo_dock_wm_can_set_on_widget_layer (void);
 */
 void cairo_dock_get_current_desktop_and_viewport (int *iCurrentDesktop, int *iCurrentViewportX, int *iCurrentViewportY);
 
-#define GLDI_DEFAULT_SCREEN -1
+#define GLDI_DEFAULT_SCREEN 0 // it's the first screen. -1 = all screens
 #define cairo_dock_get_screen_position_x(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? g_desktopGeometry.pScreens[i].x : 0)
 #define cairo_dock_get_screen_position_y(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? g_desktopGeometry.pScreens[i].y : 0)
 #define cairo_dock_get_screen_width(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? g_desktopGeometry.pScreens[i].width : g_desktopGeometry.Xscreen.width)

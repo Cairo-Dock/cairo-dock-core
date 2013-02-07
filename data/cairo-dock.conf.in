@@ -16,7 +16,7 @@ screen border = 0
 alignment = .5
 
 #r- Multi-screens
-num_screen = -1
+num_screen = 0
 
 #F-[Offset from the screen's edge;gtk-leave-fullscreen]
 frame_scr =
