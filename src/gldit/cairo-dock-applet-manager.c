@@ -63,12 +63,12 @@ static void _load_applet (Icon *icon)
 {
 	int iWidth = cairo_dock_icon_get_allocated_width (icon);
 	int iHeight = cairo_dock_icon_get_allocated_height (icon);
-	//g_print ("%s : %dx%d\n", icon->cName, iWidth, iHeight);
 	cairo_surface_t *pSurface = cairo_dock_create_applet_surface (icon->cFileName,
 		iWidth,
 		iHeight);
 	if (pSurface == NULL && icon->pModuleInstance != NULL)  // une image inexistante a ete definie en conf => on met l'icone par defaut. Si aucune image n'est definie, alors c'est a l'applet de faire qqch (dessiner qqch, mettre une image par defaut, etc).
 	{
+		g_print ("SET default image: %s\n", icon->pModuleInstance->pModule->pVisitCard->cIconFilePath);
 		pSurface = cairo_dock_create_surface_from_image_simple (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath,
 			iWidth,
 			iHeight);

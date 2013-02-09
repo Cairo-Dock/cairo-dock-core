@@ -328,6 +328,13 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 			sIconPath->str,
 			iDesiredIconSize, // GTK_ICON_LOOKUP_FORCE_SIZE if size < 30 ?? -> icons can be different // a lot of themes now use only svg files.
 			GTK_ICON_LOOKUP_FORCE_SVG);
+		if (pIconInfo == NULL && ! s_bUseLocalIcons && ! bHasVersion)  // if we were not using the default theme and didn't find any icon, let's try with the default theme (for instance gvfs will give us names from the default theme, and they might not exist in our current theme); if it has a version, we'll retry without it.
+		{
+			pIconInfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),  // the default theme is mapped in shared memory so it's available at any time.
+				sIconPath->str,
+				iDesiredIconSize,
+				GTK_ICON_LOOKUP_FORCE_SVG);
+		}
 		if (pIconInfo != NULL)
 		{
 			g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
