@@ -72,6 +72,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-opengl.h"
+#include "cairo-dock-packages.h"
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command
 #include "cairo-dock-core.h"
 
@@ -112,8 +113,21 @@ static gchar *s_cDefaulBackend = NULL;
 static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 static gint s_iLastYear = 0;
 static gint s_iNbCrashes = 0;
+static gboolean s_bPingServer = TRUE;
 
 
+static void _on_got_server_answer (const gchar *data, G_GNUC_UNUSED gpointer user_data)
+{
+	if (data != NULL)
+	{
+		s_bPingServer = TRUE;  // after we got the answer, we can write in the global file to not try any more.
+		gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+		cairo_dock_update_conf_file (cConfFilePath,
+			G_TYPE_BOOLEAN, "Launch", "ping server", s_bPingServer,
+			G_TYPE_INVALID);
+		g_free (cConfFilePath);
+	}
+}
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
 	s_bSucessfulLaunch = TRUE;
@@ -139,6 +153,13 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 		g_free (cMessageFull);
 		g_free (cMessage);
 	}
+	
+	if (! s_bPingServer && g_str_has_suffix (g_cCairoDockDataDir, CAIRO_DOCK_DATA_DIR))  // the server (which hosts themes, third-party applets and packages) has never been accessed yet, ping it once
+	{
+		s_bPingServer = TRUE;
+		cairo_dock_get_url_data_async (CAIRO_DOCK_THEME_SERVER"/ping.txt", (GFunc)_on_got_server_answer, NULL);
+	}
+	
 	return FALSE;
 }
 static gboolean _cairo_dock_first_launch_setup (G_GNUC_UNUSED gpointer data)
@@ -223,6 +244,7 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 		
 		s_iGuiMode = g_key_file_get_integer (pKeyFile, "Gui", "mode", NULL);  // 0 by default
 		s_iLastYear = g_key_file_get_integer (pKeyFile, "Launch", "last year", NULL);  // 0 by default
+		s_bPingServer = g_key_file_get_boolean (pKeyFile, "Launch", "ping server", NULL);  // FALSE by default
 	}
 	else  // first launch or old version, the file doesn't exist yet.
 	{
