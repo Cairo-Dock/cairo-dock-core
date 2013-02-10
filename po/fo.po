@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2013-02-06 14:31+0000\n"
 "PO-Revision-Date: 2012-09-30 17:33+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Faroese <fo@li.org>\n"
-"Language: fo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-04 04:39+0000\n"
-"X-Generator: Launchpad (build 16218)\n"
+"X-Launchpad-Export-Date: 2013-02-07 04:39+0000\n"
+"X-Generator: Launchpad (build 16477)\n"
+"Language: fo\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:263
 msgid "Behaviour"
@@ -473,7 +474,8 @@ msgstr "Umsit temur"
 #: ../src/cairo-dock-menu.c:1063
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "Víl ímillum mangar temur á ambætaranum, ella goym títt núverandi tema."
+msgstr ""
+"Víl ímillum mangar temur á ambætaranum, ella goym títt núverandi tema."
 
 #: ../src/cairo-dock-menu.c:1076
 msgid "Lock icons position"
@@ -497,7 +499,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Koyr Cairo-Dock við byrjan"
 
 #: ../src/cairo-dock-menu.c:1120
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1123 ../Help/src/applet-init.c:28
@@ -671,14 +674,12 @@ msgid "Keep above"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible only on this desktop"
-msgstr "Flyt til hetta skriviborðið"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible on all desktops"
-msgstr "Á øllum skriviborðum"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1974
 msgid "Kill"
@@ -751,7 +752,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:721
@@ -775,7 +777,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1120,9 +1123,8 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
-#, fuzzy
 msgid "Use all screens"
-msgstr "Fleiri skíggjar"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1150,9 +1152,8 @@ msgid "bottom"
 msgstr "niðast"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
-#, fuzzy
 msgid "Screen"
-msgstr "Fullskíggja"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1329,9 +1330,8 @@ msgid "General"
 msgstr ""
 
 #: ../Help/data/messages:3
-#, fuzzy
 msgid "Using the dock"
-msgstr "Vend aftur til dokkina"
+msgstr ""
 
 #: ../Help/data/messages:5
 msgid ""
@@ -1547,14 +1547,12 @@ msgid "If you're using Compiz, you can click on this button:"
 msgstr "Um tú nýtur Compiz, kannst tú klikkja á hendan knappin:"
 
 #: ../Help/data/messages:79
-#, fuzzy
 msgid "Docks"
-msgstr "Undirdokkir"
+msgstr ""
 
 #: ../Help/data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Stað á skýggjanum"
+msgstr ""
 
 #: ../Help/data/messages:83
 msgid ""
@@ -1662,9 +1660,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:117
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "Á øllum skriviborðum"
+msgstr ""
 
 #: ../Help/data/messages:119
 msgid ""
@@ -1786,9 +1783,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:157
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Tilhoyr"
+msgstr ""
 
 #: ../Help/data/messages:159
 msgid ""
@@ -1865,18 +1861,18 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
 
 #: ../Help/data/messages:187
-#, fuzzy
 msgid ""
 "If you are on Gnome, you can click on this button in order to automatically "
 "modify this key:"
-msgstr "Um tú nýtur Compiz, kannst tú klikkja á hendan knappin:"
+msgstr ""
 
 #: ../Help/data/messages:189
 msgid "Troubleshooting"
@@ -1915,16 +1911,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
-#, fuzzy
 msgid ""
 "If you're on Gnome with Metacity (without Compiz), you can click on this "
 "button:"
-msgstr "Um tú nýtur Compiz, kannst tú klikkja á hendan knappin:"
+msgstr ""
 
 #: ../Help/data/messages:209
 msgid "My machine is too old to run a composite manager."
@@ -2030,9 +2025,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:245
-#, fuzzy
 msgid "If you're on Gnome you can click on this button:"
-msgstr "Um tú nýtur Compiz, kannst tú klikkja á hendan knappin:"
+msgstr ""
 
 #: ../Help/data/messages:247
 msgid "The Project"
@@ -2089,9 +2083,8 @@ msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr "Trupulleikar? Uppskot? Vil hava eitt orð við okkum? So kom hagar!"
 
 #: ../Help/data/messages:267
-#, fuzzy
 msgid "Community site"
-msgstr "Menningarsíða"
+msgstr ""
 
 #: ../Help/data/messages:273
 msgid "More applets available online!"
@@ -2102,9 +2095,8 @@ msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr ""
 
 #: ../Help/data/messages:277
-#, fuzzy
 msgid "Repositories"
-msgstr "Tilhoyr"
+msgstr ""
 
 #: ../Help/data/messages:279
 msgid ""
@@ -2175,9 +2167,8 @@ msgid "Leave empty to use the default one."
 msgstr ""
 
 #: ../Help/data/messages:313
-#, fuzzy
 msgid "Image filename:"
-msgstr "Ímyndafíla:"
+msgstr ""
 
 #: ../Help/data/messages:315
 msgid "Set to 0 to use the default applet size"
@@ -2188,9 +2179,8 @@ msgid "Desired icon size for this applet"
 msgstr ""
 
 #: ../Help/data/messages:319
-#, fuzzy
 msgid "Desklet"
-msgstr "Skriviborð"
+msgstr ""
 
 #: ../Help/data/messages:323
 msgid ""
@@ -2199,9 +2189,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:325
-#, fuzzy
 msgid "Lock position?"
-msgstr "Stað"
+msgstr ""
 
 #: ../Help/data/messages:327
 msgid ""
@@ -2230,14 +2219,12 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:337
-#, fuzzy
 msgid "Rotation:"
-msgstr "Skjalfesting"
+msgstr ""
 
 #: ../Help/data/messages:341
-#, fuzzy
 msgid "Is detached from the dock"
-msgstr "Vend aftur til dokkina"
+msgstr ""
 
 #: ../Help/data/messages:343
 msgid ""
@@ -2259,9 +2246,8 @@ msgid "Keep on widget layer"
 msgstr ""
 
 #: ../Help/data/messages:357
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "Á øllum skriviborðum"
+msgstr ""
 
 #: ../Help/data/messages:359 ../data/messages:585
 msgid "Decorations"
@@ -2272,9 +2258,8 @@ msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
 
 #: ../Help/data/messages:363
-#, fuzzy
 msgid "Choose a decoration theme for this desklet:"
-msgstr "Vel eitt ímyndstema"
+msgstr ""
 
 #: ../Help/data/messages:365
 msgid ""
@@ -2282,14 +2267,12 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:367
-#, fuzzy
 msgid "Background image:"
-msgstr "Nýt eina bakgrundsmynd"
+msgstr ""
 
 #: ../Help/data/messages:369
-#, fuzzy
 msgid "Background transparency:"
-msgstr "Gjøgnumskygni á myndini :"
+msgstr ""
 
 #: ../Help/data/messages:371
 msgid "in pixels. Use this to adjust the left position of drawings."
@@ -2330,14 +2313,12 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:389
-#, fuzzy
 msgid "Foreground image:"
-msgstr "Nýt eina bakgrundsmynd"
+msgstr ""
 
 #: ../Help/data/messages:391
-#, fuzzy
 msgid "Foreground tansparency:"
-msgstr "Gjøgnumskygni á myndini :"
+msgstr ""
 
 #: ../data/messages:1 ../data/messages:873
 msgid "Behavior"
@@ -2578,9 +2559,8 @@ msgid "Relative alignment:"
 msgstr ""
 
 #: ../data/messages:163 ../data/messages:891
-#, fuzzy
 msgid "Multi-screens"
-msgstr "Fleiri skíggjar"
+msgstr ""
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -3341,7 +3321,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:669
@@ -3573,8 +3554,8 @@ msgstr "størri"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3895,8 +3876,8 @@ msgstr ""
 
 #: ../data/messages:1045
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1047
@@ -3989,12 +3970,3 @@ msgid ""
 " - Lots of bug-fixes\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid "0 is the first screen."
-#~ msgstr "0 er fyrsti skíggjin"
-
-#~ msgid "Number of the screen where the dock should be located:"
-#~ msgstr "Tal á skíggjum, hvar dokkin skal vera til staðar:"
-
-#~ msgid "starting from 0"
-#~ msgstr "byrjandi úr 0"

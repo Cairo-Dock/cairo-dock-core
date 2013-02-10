@@ -1,4 +1,4 @@
-# Romanian translation for cairo-dock-core
+# Bulgarian translation for cairo-dock-core
 # Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
 # This file is distributed under the same license as the cairo-dock-core package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
@@ -6,65 +6,64 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
-"Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-02-06 14:31+0000\n"
-"PO-Revision-Date: 2012-09-30 17:36+0000\n"
-"Last-Translator: dahas <bogdan.daja@dahas.ro>\n"
-"Language-Team: Romanian <ro@li.org>\n"
+"PO-Revision-Date: 2013-02-04 18:53+0000\n"
+"Last-Translator: Васил Кашилски <Unknown>\n"
+"Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-07 04:40+0000\n"
+"X-Launchpad-Export-Date: 2013-02-07 04:39+0000\n"
 "X-Generator: Launchpad (build 16477)\n"
-"Language: ro\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:263
 msgid "Behaviour"
-msgstr "Comportament"
+msgstr "Поведение"
 
 #: ../src/cairo-dock-gui-advanced.c:134 ../data/messages:111
 #: ../data/messages:921
 msgid "Appearance"
-msgstr "Aspect"
+msgstr "Външен вид"
 
 #: ../src/cairo-dock-gui-advanced.c:135 ../src/cairo-dock-widget-plugins.c:143
 msgid "Files"
-msgstr "Fișiere"
+msgstr "Файлове"
 
 #: ../src/cairo-dock-gui-advanced.c:136 ../src/cairo-dock-widget-plugins.c:148
 msgid "Internet"
-msgstr "Internet"
+msgstr "Интернет"
 
 #: ../src/cairo-dock-gui-advanced.c:137 ../src/cairo-dock-widget-plugins.c:153
 msgid "Desktop"
-msgstr "Desktop"
+msgstr "Работен плот"
 
 #: ../src/cairo-dock-gui-advanced.c:138
 msgid "Accessories"
-msgstr "Accesorii"
+msgstr "Помощни програми"
 
 #: ../src/cairo-dock-gui-advanced.c:139 ../src/cairo-dock-gui-advanced.c:1531
 #: ../src/cairo-dock-widget-plugins.c:163 ../data/messages:367
 msgid "System"
-msgstr "Sistem"
+msgstr "Система"
 
 #: ../src/cairo-dock-gui-advanced.c:140 ../src/cairo-dock-widget-plugins.c:168
 msgid "Fun"
-msgstr "Distractiv"
+msgstr "Забавление"
 
 #: ../src/cairo-dock-gui-advanced.c:141 ../src/cairo-dock-gui-advanced.c:1808
 #: ../src/gldit/cairo-dock-gui-factory.c:779
 msgid "All"
-msgstr "Toate"
+msgstr "Всички"
 
 #: ../src/cairo-dock-gui-advanced.c:1499
 msgid "Set the position of the main dock."
-msgstr "Setati pozitia doc-ului principal"
+msgstr "Задаване позицията на основния док"
 
 #: ../src/cairo-dock-gui-advanced.c:1500 ../Help/data/messages:321
 #: ../data/messages:141
 msgid "Position"
-msgstr "Poziție"
+msgstr "Позиция"
 
 #: ../src/cairo-dock-gui-advanced.c:1507
 msgid ""
@@ -72,53 +71,53 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
-"Doresti ca doc-ul sa fie tot timpul vizibil.\n"
-" sau din contra neobstrutiv?\n"
-"Configurati modul in care doresti sa accesezi doc-ul si sub doc-ul!"
+"Желаете ли вашият док да е винаги видим,\n"
+" или обратното - ненатрапващ се?\n"
+"Настройте начина за достъп до своите докове и под-докове!"
 
 #: ../src/cairo-dock-gui-advanced.c:1508 ../src/cairo-dock-menu.c:2044
 #: ../Help/data/messages:339
 msgid "Visibility"
-msgstr "Vizibilitate"
+msgstr "Видимост"
 
 #: ../src/cairo-dock-gui-advanced.c:1515
 msgid "Display and interact with currently open windows."
-msgstr "Afiseaza si interactioneaza cu fereastrestrele deschise."
+msgstr "Показване и взаимодействие с текущо отворените прозорци."
 
 #: ../src/cairo-dock-gui-advanced.c:1516 ../Help/data/messages:41
 #: ../data/messages:63
 msgid "Taskbar"
-msgstr "Bară de activități"
+msgstr "Списък с прозорци"
 
 #: ../src/cairo-dock-gui-advanced.c:1523
 msgid "Define all the keyboard shortcuts currently available."
-msgstr "Defineste toate scurtaturile de taste disponibile curent"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1524 ../data/messages:137
 msgid "Shortkeys"
-msgstr ""
+msgstr "Бързи клавиши"
 
 #: ../src/cairo-dock-gui-advanced.c:1530
 msgid "All of the parameters you will never want to tweak."
-msgstr ""
+msgstr "Всички параметри, които никога няма да поискате да променяте."
 
 #: ../src/cairo-dock-gui-advanced.c:1541
 msgid "Set a background for your dock."
-msgstr "Setare fundal doc"
+msgstr "Задайте фон за вашият док."
 
 #: ../src/cairo-dock-gui-advanced.c:1542 ../data/messages:459
 #: ../data/messages:841 ../data/messages:947
 msgid "Background"
-msgstr "Fundal"
+msgstr "Фон"
 
 #: ../src/cairo-dock-gui-advanced.c:1549
 msgid "Select a view for each of your docks."
-msgstr "Selectare vizualizare pentru fiecare din docuri."
+msgstr "Изберете изглед за панелите си"
 
 #: ../src/cairo-dock-gui-advanced.c:1550 ../data/messages:129
 #: ../data/messages:527 ../data/messages:941
 msgid "Views"
-msgstr "Vizualizări"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1557
 msgid "Configure text bubble appearance."
@@ -126,11 +125,11 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558
 msgid "Dialog boxes"
-msgstr "Căsuţe de dialog"
+msgstr "Диалогови прозорци"
 
 #: ../src/cairo-dock-gui-advanced.c:1565
 msgid "Applets can be displayed on your desktop as widgets."
-msgstr ""
+msgstr "Аплетите могат да бъдат показани на работния ви плот като джаджи"
 
 #: ../src/cairo-dock-gui-advanced.c:1566 ../Help/data/messages:89
 #: ../data/messages:583
@@ -142,38 +141,38 @@ msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
 msgstr ""
-"Totul despre pictograme:\n"
-" mărime, reflexii, teme pictograme,..."
+"Всичко за иконите\n"
+" размер, отблясък, тема с икони"
 
 #: ../src/cairo-dock-gui-advanced.c:1574 ../Help/data/messages:11
 #: ../data/messages:113 ../data/messages:647 ../data/messages:923
 msgid "Icons"
-msgstr "Pictograme"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1581
 msgid "Indicators are additional markers for your icons."
-msgstr ""
+msgstr "Индикаторите добавят допълнителна информация за иконите"
 
 #: ../src/cairo-dock-gui-advanced.c:1582 ../data/messages:731
 msgid "Indicators"
-msgstr "Indicatori"
+msgstr "Индикатори"
 
 #: ../src/cairo-dock-gui-advanced.c:1589
 msgid "Define icon caption and quick-info style."
-msgstr ""
+msgstr "Определяне вида на надписите на иконите и инфо съобщенията"
 
 #: ../src/cairo-dock-gui-advanced.c:1590
 msgid "Captions"
-msgstr ""
+msgstr "Надписи"
 
 #: ../src/cairo-dock-gui-advanced.c:1597
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "Изпробвайте нови теми и запазете вашата тема"
 
 #: ../src/cairo-dock-gui-advanced.c:1598 ../src/cairo-dock-gui-simple.c:118
 #: ../src/cairo-dock-gui-simple.c:120
 msgid "Themes"
-msgstr "Teme"
+msgstr "Теми"
 
 #: ../src/cairo-dock-gui-advanced.c:1604
 msgid "Current items in your dock(s)."
@@ -186,55 +185,55 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1725
 msgid "Filter"
-msgstr "Filtru"
+msgstr "Филтър"
 
 #: ../src/cairo-dock-gui-advanced.c:1766
 msgid "All words"
-msgstr "Toate cuvintele"
+msgstr "По всички думи"
 
 #: ../src/cairo-dock-gui-advanced.c:1767
 msgid "Highlighted words"
-msgstr "Cuvintele subliniate"
+msgstr "По осветените думи"
 
 #: ../src/cairo-dock-gui-advanced.c:1768
 msgid "Hide others"
-msgstr ""
+msgstr "Скриване на останалите"
 
 #: ../src/cairo-dock-gui-advanced.c:1769
 msgid "Search in description"
-msgstr "Caută în descriere"
+msgstr "Търсене по описание"
 
 #: ../src/cairo-dock-gui-advanced.c:1773
 msgid "Hide disabled"
-msgstr ""
+msgstr "Скриване на неактивните"
 
 #: ../src/cairo-dock-gui-advanced.c:1782
 msgid "Categories"
-msgstr "Categorii."
+msgstr "Категории"
 
 #: ../src/cairo-dock-gui-advanced.c:1892
 msgid "Enable this module"
-msgstr "Activează acest modul"
+msgstr "Включване на този модул"
 
 #: ../src/cairo-dock-gui-advanced.c:1959
 msgid "More applets"
-msgstr "Mai multe mini-aplicații"
+msgstr "Още аплети"
 
 #: ../src/cairo-dock-gui-advanced.c:1960
 msgid "Get more applets online !"
-msgstr ""
+msgstr "Добавете аплети от мрежата"
 
 #: ../src/cairo-dock-gui-advanced.c:2055 ../src/cairo-dock-gui-simple.c:365
 msgid "Cairo-Dock configuration"
-msgstr "Configurare Cairo-Dock"
+msgstr "Настройки на Cairo-Dock"
 
 #: ../src/cairo-dock-gui-advanced.c:2641
 msgid "Simple Mode"
-msgstr "Mod Simplu"
+msgstr "Опростен режим"
 
 #: ../src/cairo-dock-gui-simple.c:102 ../src/cairo-dock-gui-simple.c:104
 msgid "Add-ons"
-msgstr "Module"
+msgstr "Добавки"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
 msgid "Configuration"
@@ -242,63 +241,67 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-simple.c:646
 msgid "Advanced Mode"
-msgstr "Mod avansat"
+msgstr "Разширен режим"
 
 #: ../src/cairo-dock-gui-simple.c:647
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
+"Разширеният режим ви позволява да настройвате всеки параметър на панела. "
+"Мощен инструмент за персонализиране на темата ви."
 
 #: ../src/cairo-dock-menu.c:135
 msgid "Delete this dock?"
-msgstr ""
+msgstr "Премахване на този панел"
 
 #: ../src/cairo-dock-menu.c:188
 msgid "About Cairo-Dock"
-msgstr "Despre Cairo-Dock"
+msgstr "Относно Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:225 ../Help/data/messages:271
 msgid "Development site"
-msgstr ""
+msgstr "Сайт на разработчиците"
 
 #: ../src/cairo-dock-menu.c:226 ../Help/data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
-msgstr "Găsești ultima versiune la Cairo-Dock aici !"
+msgstr "Намерете последната версия тук !"
 
 #: ../src/cairo-dock-menu.c:230 ../src/cairo-dock-menu.c:1115
 #: ../src/cairo-dock-widget-plugins.c:285
 msgid "Get more applets!"
-msgstr ""
+msgstr "Вземете още аплети!"
 
 #: ../src/cairo-dock-menu.c:234 ../src/cairo-dock-menu.c:240
 msgid "Donate"
-msgstr ""
+msgstr "Дарете"
 
 #: ../src/cairo-dock-menu.c:237 ../src/cairo-dock-menu.c:243
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
+"Подкрепете разработчиците които отделят безброй часове от свободното си "
+"време за да ви дадат най-добрия панел."
 
 #: ../src/cairo-dock-menu.c:271
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "Списък с текущите разработчици и сътрудници"
 
 #: ../src/cairo-dock-menu.c:272
 msgid "Developers"
-msgstr ""
+msgstr "Разработчици"
 
 #: ../src/cairo-dock-menu.c:273
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "Главен разработчик и лидер на екипа"
 
 #: ../src/cairo-dock-menu.c:274
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "Сътрудници / помагачи"
 
 #: ../src/cairo-dock-menu.c:276
 msgid "Development"
-msgstr "Dezvoltare"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:291
 msgid "Website"
@@ -306,68 +309,71 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:292
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr ""
+msgstr "Бета тестване / Предложения / Анимации"
 
 #: ../src/cairo-dock-menu.c:293
 msgid "Translators for this language"
-msgstr ""
+msgstr "Преводачи на текущия език"
 
 #: ../src/cairo-dock-menu.c:294
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  bert https://launchpad.net/~crinbert\n"
-"  dahas https://launchpad.net/~bogdan-daja"
+"  Svetoslav Stefanov https://launchpad.net/~svetlisashkov\n"
+"  Васил Кашилски https://launchpad.net/~batvase"
 
 #: ../src/cairo-dock-menu.c:296
 msgid "Support"
-msgstr "Asistență"
+msgstr "Поддръжка"
 
 #: ../src/cairo-dock-menu.c:326
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
+"Благодарности на всички които ни помагат с подобряването на Cairo-Dock.\n"
+"Благодарности на всички настоящи, бивши и бъдещи сътрудници."
 
 #: ../src/cairo-dock-menu.c:328
 msgid "How to help us?"
-msgstr ""
+msgstr "Как можете да помогнете?"
 
 #: ../src/cairo-dock-menu.c:329
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr ""
+"Не се колебайте да се присъедините към проекта, имаме нужда от вас ;)"
 
 #: ../src/cairo-dock-menu.c:330
 msgid "Former contributors"
-msgstr ""
+msgstr "Бивши сътрудници"
 
 #: ../src/cairo-dock-menu.c:331
 msgid "For a complete list, please have a look to BZR logs"
-msgstr ""
+msgstr "За пълен списък, моля прегледайте Bazaar логовете"
 
 #: ../src/cairo-dock-menu.c:332
 msgid "Users of our forum"
-msgstr ""
+msgstr "Потребители на нашия форум"
 
 #: ../src/cairo-dock-menu.c:333
 msgid "List of our forum's members"
-msgstr ""
+msgstr "Списък с членовете на форума"
 
 #: ../src/cairo-dock-menu.c:334
 msgid "Artwork"
-msgstr "Grafică"
+msgstr "Художествено оформление"
 
 #: ../src/cairo-dock-menu.c:336
 msgid "Thanks"
-msgstr ""
+msgstr "Благодарности"
 
 #: ../src/cairo-dock-menu.c:426
 msgid "Quit Cairo-Dock?"
-msgstr ""
+msgstr "Изход от Cairo-Dock?"
 
 #: ../src/cairo-dock-menu.c:456 ../src/cairo-dock-menu.c:600
 msgid "Separator"
-msgstr "Separator"
+msgstr "Разделител"
 
 #: ../src/cairo-dock-menu.c:565
 msgid ""
@@ -375,27 +381,30 @@ msgid ""
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
+"Новият панел е създаден.\n"
+"Сега преместете някои стартери или аплети в него с десен клик на иконата -> "
+"премести в друг панел"
 
 #: ../src/cairo-dock-menu.c:594
 msgid "Add"
-msgstr "Adaugă"
+msgstr "Добавяне"
 
 #: ../src/cairo-dock-menu.c:596
 msgid "Sub-dock"
-msgstr ""
+msgstr "Под панел"
 
 #: ../src/cairo-dock-menu.c:598
 msgid "Main dock"
-msgstr "Doc principal"
+msgstr "Основен панел"
 
 #: ../src/cairo-dock-menu.c:602
 msgid "Custom launcher"
-msgstr ""
+msgstr "Личен стартер"
 
 #: ../src/cairo-dock-menu.c:603
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
-msgstr ""
+msgstr "Можете да завлачите стартер от менюто и да го поставите в панела."
 
 #: ../src/cairo-dock-menu.c:605
 msgid "Applet"
@@ -407,19 +416,21 @@ msgid ""
 "the dock?\n"
 "(otherwise they will be destroyed)"
 msgstr ""
+"Желаете ли да препратите иконите от този контейнер към панела?\n"
+"(иначе ще бъдат зитрити)"
 
 #: ../src/cairo-dock-menu.c:651
 msgid "separator"
-msgstr "separator"
+msgstr "разделител"
 
 #: ../src/cairo-dock-menu.c:655
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr ""
+msgstr "Ще премахнете тази икона (%s) от панела. Сигурен ли сте?"
 
 #: ../src/cairo-dock-menu.c:670
 msgid "Sorry, this icon doesn't have a configuration file."
-msgstr ""
+msgstr "За съжаление тази икона няма конфигурационен файл."
 
 #: ../src/cairo-dock-menu.c:710
 msgid ""
@@ -427,98 +438,106 @@ msgid ""
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
+"Новият панел е създаден.\n"
+"Можете да го персонализирате с десен клик -> cairo-dock -> настройване на "
+"панела."
 
 #: ../src/cairo-dock-menu.c:791
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
 msgstr ""
+"За съжаление не е намерен съответният файл с описание.\n"
+"Опитайте с влачене и пускане на стартер от Програмното меню"
 
 #: ../src/cairo-dock-menu.c:839
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr ""
+msgstr "Ще премахнете този аплет (%s) от панела. Сигурен ли сте?"
 
 #: ../src/cairo-dock-menu.c:909 ../src/gldit/cairo-dock-gui-factory.c:752
 msgid "Pick up an image"
-msgstr ""
+msgstr "Изберете изображение"
 
 #: ../src/cairo-dock-menu.c:926 ../src/gldit/cairo-dock-gui-factory.c:786
 #: ../data/messages:463 ../data/messages:469 ../data/messages:737
 #: ../data/messages:953
 msgid "Image"
-msgstr "Imagine"
+msgstr "Изображение"
 
 #: ../src/cairo-dock-menu.c:1031
 msgid "Configure"
-msgstr "Configurare"
+msgstr "Настройки"
 
 #: ../src/cairo-dock-menu.c:1036
 msgid "Configure behaviour, appearance, and applets."
-msgstr "Configurare comportament, aspect, şi applet-uri."
+msgstr "Настройки на поведението, външния вид и аплетите"
 
 #: ../src/cairo-dock-menu.c:1041
 msgid "Configure this dock"
-msgstr "Configurare doc"
+msgstr "Настройки на този панел"
 
 #: ../src/cairo-dock-menu.c:1046
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Personalizare poziție, vizibilitate și aspect a docului principal"
+msgstr ""
+"Настройте местоположението, видимостта и външния вид на основния панел."
 
 #: ../src/cairo-dock-menu.c:1048
 msgid "Delete this dock"
-msgstr ""
+msgstr "Премахване на този панел"
 
 #: ../src/cairo-dock-menu.c:1058
 msgid "Manage themes"
-msgstr ""
+msgstr "Управление на темите"
 
 #: ../src/cairo-dock-menu.c:1063
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr ""
+msgstr "Изберете от многото теми на сървъра или запазете текущата си тема."
 
 #: ../src/cairo-dock-menu.c:1076
 msgid "Lock icons position"
-msgstr ""
+msgstr "Блокиране позицията на иконите"
 
 #: ../src/cairo-dock-menu.c:1080
 msgid "This will (un)lock the position of the icons."
-msgstr "Aceasta va (de)bloca poziția pictogramelor."
+msgstr "Така ще се (раз)блокира позицията на иконите"
 
 #: ../src/cairo-dock-menu.c:1086
 msgid "Quick-Hide"
-msgstr "Ascundere rapidă"
+msgstr "Бързо скриване"
 
 #: ../src/cairo-dock-menu.c:1091
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr ""
+msgstr "Така ще се скрие панала докато не преминете с курсора отгоре."
 
 #: ../src/cairo-dock-menu.c:1104
 msgid "Launch Cairo-Dock on startup"
-msgstr "Lansare Cairo-Dock la pornire"
+msgstr "Стартиране на Cairo-Dock  с компютъра"
 
 #: ../src/cairo-dock-menu.c:1120
 msgid ""
 "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
+"Аплети от трети страни предоставят интеграция с много програми, като Pidgin"
 
 #: ../src/cairo-dock-menu.c:1123 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:269
 msgid "Help"
-msgstr "Ajutor"
+msgstr "Помощ"
 
 #: ../src/cairo-dock-menu.c:1128
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "Nu există probleme, numai soluţii (şi o mulţime de sfaturi utile!)"
+msgstr ""
+"Не съществуват проблеми, само решения (и множество полезни хитринки!)"
 
 #: ../src/cairo-dock-menu.c:1132
 msgid "About"
-msgstr "Despre"
+msgstr "За приложението"
 
 #: ../src/cairo-dock-menu.c:1141
 msgid "Quit"
-msgstr "Ieșire"
+msgstr "Изход"
 
 #: ../src/cairo-dock-menu.c:1150
 msgid ""
@@ -533,49 +552,49 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1181 ../src/cairo-dock-menu.c:1271
 msgid "Applet's handbook"
-msgstr "Manualul mini-aplicației"
+msgstr "Ръководство на аплета"
 
 #: ../src/cairo-dock-menu.c:1196 ../src/cairo-dock-menu.c:1245
 msgid "Edit"
-msgstr ""
+msgstr "Редактиране"
 
 #: ../src/cairo-dock-menu.c:1198 ../src/cairo-dock-menu.c:1252
 msgid "Remove"
-msgstr ""
+msgstr "Премахни"
 
 #: ../src/cairo-dock-menu.c:1199
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr ""
+msgstr "Може да премахнете стартер завлачвайки го извън панела с мишката."
 
 #: ../src/cairo-dock-menu.c:1201 ../src/cairo-dock-menu.c:1261
 msgid "Move to another dock"
-msgstr "Mută pe alt doc"
+msgstr "Премести на друг панел"
 
 #: ../src/cairo-dock-menu.c:1203 ../src/cairo-dock-menu.c:1263
 #: ../src/gldit/cairo-dock-gui-factory.c:1223
 msgid "New main dock"
-msgstr "Un nou doc principal"
+msgstr "Нов основен панел"
 
 #: ../src/cairo-dock-menu.c:1212
 msgid "Make it a launcher"
-msgstr ""
+msgstr "Направи го стартер"
 
 #: ../src/cairo-dock-menu.c:1235
 msgid "Remove custom icon"
-msgstr "Elimină pictogramă personalizată"
+msgstr "Премахване на потребителска икона"
 
 #: ../src/cairo-dock-menu.c:1239
 msgid "Set a custom icon"
-msgstr "Setare pictogramă personalizată"
+msgstr "Добаване на потребителска икона"
 
 #: ../src/cairo-dock-menu.c:1249
 msgid "Detach"
-msgstr ""
+msgstr "Разкачване"
 
 #: ../src/cairo-dock-menu.c:1249
 msgid "Return to the dock"
-msgstr "Revenire la doc"
+msgstr "Връщане към панела"
 
 #: ../src/cairo-dock-menu.c:1256
 msgid "Duplicate"
@@ -619,7 +638,7 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1930 ../src/cairo-dock-menu.c:1932
 #: ../data/messages:339
 msgid "Close"
-msgstr "Închide"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1872 ../src/cairo-dock-menu.c:1889
 #: ../src/cairo-dock-menu.c:1922 ../src/cairo-dock-menu.c:1930
@@ -634,20 +653,20 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1884 ../src/cairo-dock-menu.c:1917
 msgid "Maximise"
-msgstr "Maximizare"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1889 ../src/cairo-dock-menu.c:1891
 #: ../src/cairo-dock-menu.c:1922 ../src/cairo-dock-menu.c:1924
 msgid "Minimise"
-msgstr "Minimizează"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1905 ../src/cairo-dock-menu.c:1915
 msgid "Show"
-msgstr "Afișează"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1938 ../src/cairo-dock-menu.c:2027
 msgid "Other actions"
-msgstr "Alte acțiuni"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1941
 msgid "Move to this desktop"
@@ -655,11 +674,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1946
 msgid "Not Fullscreen"
-msgstr "Nu ecran complet"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1946
 msgid "Fullscreen"
-msgstr "Ecran complet"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1952 ../src/cairo-dock-menu.c:1954
 msgid "Below other windows"
@@ -667,11 +686,11 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1962
 msgid "Don't keep above"
-msgstr "Nu menține deasupra"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1962 ../Help/data/messages:349
 msgid "Keep above"
-msgstr "Menține deasupra"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1966
 msgid "Visible only on this desktop"
@@ -683,7 +702,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1974
 msgid "Kill"
-msgstr "Termină"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1989
 msgid "Windows"
@@ -692,16 +711,16 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1993 ../src/cairo-dock-menu.c:1995
 #: ../src/cairo-dock-menu.c:2023
 msgid "Close all"
-msgstr "Închide toate"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:2003 ../src/cairo-dock-menu.c:2005
 #: ../src/cairo-dock-menu.c:2021
 msgid "Minimise all"
-msgstr "Minimizează toate"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:2013 ../src/cairo-dock-menu.c:2019
 msgid "Show all"
-msgstr "Arată tot"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:2017
 msgid "Windows management"
@@ -713,28 +732,28 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:2052 ../Help/data/messages:347
 msgid "Normal"
-msgstr "Normal"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:2058 ../data/messages:21 ../data/messages:183
 #: ../data/messages:909
 msgid "Always on top"
-msgstr "Întotdeauna în față"
+msgstr "Винаги отгоре"
 
 #: ../src/cairo-dock-menu.c:2065
 msgid "Always below"
-msgstr "Întotdeauna dedesupt"
+msgstr "Винаги отдолу"
 
 #: ../src/cairo-dock-menu.c:2082 ../Help/data/messages:355
 msgid "Reserve space"
-msgstr "Rezervă spațiu"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:2089
 msgid "On all desktops"
-msgstr "Pe toate spațiile de lucru"
+msgstr "На всички работни плотове"
 
 #: ../src/cairo-dock-menu.c:2095
 msgid "Lock position"
-msgstr "Blochează poziția"
+msgstr "Заключване на позицията"
 
 #: ../src/cairo-dock-user-interaction.c:418
 msgid ""
@@ -745,67 +764,65 @@ msgstr ""
 
 #: ../src/cairo-dock-widget-config.c:327
 msgid "Animation:"
-msgstr "Animație"
+msgstr "Анимация:"
 
 #: ../src/cairo-dock-widget-config.c:348
 msgid "Effects:"
-msgstr "Efecte"
+msgstr "Ефекти:"
 
 #: ../src/cairo-dock-widget-items.c:239
 msgid ""
 "Main dock's parameters are available in the main configuration window."
-msgstr ""
-"Parametri principali ai doc-ului sunt disponibili in fereasta principala de "
-"configurare."
+msgstr "Параметрите на панела са достъпни в главния конфигурационен прозорец"
 
 #: ../src/cairo-dock-widget-items.c:721
 msgid "Remove this item"
-msgstr "Elimină acest element"
+msgstr "Премахване на елемента"
 
 #: ../src/cairo-dock-widget-plugins.c:105
 msgid "Configure this applet"
-msgstr "Configurare mini-aplicație"
+msgstr "Настройване на този аплет"
 
 #: ../src/cairo-dock-widget-plugins.c:158
 msgid "Accessory"
-msgstr "Accesoriu"
+msgstr "Помощни програми"
 
 #: ../src/cairo-dock-widget-plugins.c:241
 msgid "Plug-in"
-msgstr ""
+msgstr "Приставка"
 
 #: ../src/cairo-dock-widget-plugins.c:247 ../Help/src/applet-tips-dialog.c:305
 msgid "Category"
-msgstr ""
+msgstr "Категория"
 
 #: ../src/cairo-dock-widget-plugins.c:271
 msgid ""
 "Click on an applet in order to have a preview and a description for it."
-msgstr ""
+msgstr "Натиснете върху аплета за преглед и описание."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
 msgid "Press the shortkey"
-msgstr "Apasati scurtatura"
+msgstr "Натиснете бърз клавиш"
 
 #: ../src/cairo-dock-widget-shortkeys.c:141
 msgid "Change the shortkey"
-msgstr "Schimbati scurtatura"
+msgstr "Променете бързия клавиш"
 
 #: ../src/cairo-dock-widget-shortkeys.c:228
 msgid "Origin"
-msgstr "Origine"
+msgstr "Произход"
 
 #: ../src/cairo-dock-widget-shortkeys.c:233
 msgid "Action"
-msgstr "Actiune"
+msgstr "Операция"
 
 #: ../src/cairo-dock-widget-shortkeys.c:237
 msgid "Shortkey"
-msgstr "Scurtatura"
+msgstr "Бърз клавиш"
 
 #: ../src/cairo-dock-widget-themes.c:86
 msgid "Could not import the theme."
-msgstr "Nu pot importa tema."
+msgstr "Темата не може да се внесе."
 
 #: ../src/cairo-dock-widget-themes.c:187
 msgid ""
@@ -813,64 +830,64 @@ msgid ""
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
-"Ai facut modificari in tema curenta.\n"
-"Vei pierde aceste modificare daca nu salvezi inainte de a selecta o noua "
-"tema. Continui in aceasta situatie?"
+"Вие направихте някои промени на текущата тема.\n"
+"Ако не ги запазите преди да изберете нова тема, ще ги загубите. Ще "
+"продължите ли въпреки това?"
 
 #: ../src/cairo-dock-widget-themes.c:215
 msgid "Please wait while importing the theme..."
-msgstr ""
+msgstr "Моля изчакайте докато се внася темата..."
 
 #: ../src/cairo-dock-widget-themes.c:274
 msgid "Rate me"
-msgstr ""
+msgstr "Оцени ме"
 
 #: ../src/cairo-dock-widget-themes.c:374 ../src/cairo-dock-widget-themes.c:376
 msgid "You must try the theme before you can rate it."
-msgstr ""
+msgstr "Трябва да изпробвате темата преди да я оцените."
 
 #: ../src/cairo-dock-widget-themes.c:423
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "Темата е изтрита"
 
 #: ../src/cairo-dock-widget-themes.c:453
 msgid "Delete this theme"
-msgstr ""
+msgstr "Изтрий тази тема"
 
 #: ../src/cairo-dock-widget-themes.c:484
 #: ../src/gldit/cairo-dock-gui-factory.c:2431
 #, c-format
 msgid "Listing themes in '%s' ..."
-msgstr ""
+msgstr "Показване на темите в '%s\""
 
 #: ../src/cairo-dock-widget-themes.c:507
 msgid "Theme"
-msgstr "Temă"
+msgstr "Тема"
 
 #: ../src/cairo-dock-widget-themes.c:520
 msgid "Rating"
-msgstr ""
+msgstr "Оценка"
 
 #: ../src/cairo-dock-widget-themes.c:526
 msgid "Sobriety"
-msgstr "Sobrietate"
+msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:586
 msgid "Save as:"
-msgstr "Salvează ca:"
+msgstr "Запиши като:"
 
 #: ../src/cairo-dock-widget-themes.c:666
 msgid "Importing theme ..."
-msgstr ""
+msgstr "Внасяне на тема ..."
 
 #: ../src/cairo-dock-widget-themes.c:674
 msgid "Theme has been saved"
-msgstr "Tema salvată"
+msgstr "Темата е запазена"
 
 #: ../src/cairo-dock.c:136
 #, c-format
 msgid "Happy new year %d !!!"
-msgstr "La mulți ani %d !!!"
+msgstr "Честита Нова Година %d !!!"
 
 #: ../src/cairo-dock.c:323
 msgid "Use Cairo backend."
@@ -980,7 +997,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:507
 msgid "Use OpenGL in Cairo-Dock"
-msgstr "Utilizare OpenGL în Cairo-Dock"
+msgstr ""
 
 #: ../src/cairo-dock.c:515
 msgid ""
@@ -1059,19 +1076,19 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-dock-manager.c:350
 msgid "Bottom dock"
-msgstr ""
+msgstr "Долен док"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:352
 msgid "Top dock"
-msgstr ""
+msgstr "Горен док"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:357
 msgid "Right dock"
-msgstr ""
+msgstr "Десен док"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:359
 msgid "Left dock"
-msgstr ""
+msgstr "Ляв док"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1645
 #: ../src/gldit/cairo-dock-dock-manager.c:1737
@@ -1081,35 +1098,35 @@ msgstr ""
 #: ../src/gldit/cairo-dock-gui-factory.c:244
 #, c-format
 msgid "by %s"
-msgstr "de %s"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:256
 msgid "kB"
-msgstr "kB"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:258
 msgid "MB"
-msgstr "MB"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:267
 msgid "Local"
-msgstr "Local"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:268
 msgid "User"
-msgstr "Utilizator"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "Net"
-msgstr "Reţea"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "New"
-msgstr "Nou"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:271
 msgid "Updated"
-msgstr "Actualizate"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:752
 msgid "Pick up a file"
@@ -1121,7 +1138,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1046
 msgid "_Custom Icons_"
-msgstr "_Pictograme personalizate_"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
@@ -1131,12 +1148,12 @@ msgstr ""
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
 msgid "left"
-msgstr "stânga"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1087 ../data/messages:11
 #: ../data/messages:151 ../data/messages:161 ../data/messages:883
 msgid "right"
-msgstr "dreapta"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
@@ -1146,12 +1163,12 @@ msgstr ""
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
 msgid "top"
-msgstr "sus"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1097 ../data/messages:7
 #: ../data/messages:147 ../data/messages:879
 msgid "bottom"
-msgstr "jos"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
 msgid "Screen"
@@ -1174,7 +1191,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3112
 msgid "link"
-msgstr "legătură"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3174
 msgid "Grab"
@@ -1187,16 +1204,16 @@ msgstr ""
 #: ../src/gldit/cairo-dock-struct.h:441 ../data/messages:1041
 #: ../data/messages:1049
 msgid "Default"
-msgstr "Implicit"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:189
 #, c-format
 msgid "Are you sure you want to overwrite theme %s?"
-msgstr "Sigur suprascrii tema %s?"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:263
 msgid "Last modification on:"
-msgstr "Ultima modificare:"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:321
 msgid "Your theme should now be available in your 'Home' directory."
@@ -1212,11 +1229,11 @@ msgstr ""
 #: ../src/gldit/cairo-dock-themes-manager.c:360
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
-msgstr "Sigur vrei să ștergi tema %s?"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:362
 msgid "Are you sure you want to delete these themes?"
-msgstr "Sigur vrei să ștergi temele?"
+msgstr ""
 
 #: ../src/icon-factory/cairo-dock-desktop-file-factory.c:120
 msgid "Enter a command"
@@ -1229,12 +1246,12 @@ msgstr ""
 #: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:39
 #: ../data/messages:201
 msgid "Move down"
-msgstr "Mută în jos"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:604 ../data/messages:41
 #: ../data/messages:101 ../data/messages:203
 msgid "Fade out"
-msgstr "Estompare"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:612 ../data/messages:43
 #: ../data/messages:205
@@ -1244,12 +1261,12 @@ msgstr ""
 #: ../src/implementations/cairo-dock-hiding-effect.c:621 ../data/messages:45
 #: ../data/messages:207
 msgid "Zoom out"
-msgstr "Micşoraţi"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:629 ../data/messages:47
 #: ../data/messages:209
 msgid "Folding"
-msgstr "Pliere"
+msgstr ""
 
 #: ../Help/src/applet-composite.c:71
 msgid ""
@@ -1263,7 +1280,7 @@ msgstr ""
 
 #: ../Help/src/applet-composite.c:165
 msgid "Don't ask me any more"
-msgstr "Nu mă mai întreba"
+msgstr ""
 
 #: ../Help/src/applet-composite.c:171
 msgid ""
@@ -1277,8 +1294,6 @@ msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
 msgstr ""
-"Păstrezi aceste setări?\n"
-"În 15 secunde, revenire la setările anterioare."
 
 #: ../Help/src/applet-composite.c:198
 msgid ""
@@ -1875,11 +1890,11 @@ msgstr ""
 
 #: ../Help/data/messages:189
 msgid "Troubleshooting"
-msgstr "Depanare"
+msgstr ""
 
 #: ../Help/data/messages:191
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr "Dacă ai vreo întrebare, nu ezita să întrebi pe forumul nostru."
+msgstr ""
 
 #: ../Help/data/messages:193
 msgid "Forum"
@@ -1964,7 +1979,7 @@ msgstr ""
 
 #: ../Help/data/messages:223
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr "Nu ai altă tema în Manegerul de Teme, exceptând pe cea implicită."
+msgstr ""
 
 #: ../Help/data/messages:225
 msgid "Hint : Up to version 2.1.1-2, wget was used."
@@ -2001,7 +2016,7 @@ msgstr ""
 
 #: ../Help/data/messages:235
 msgid "The dustbin remains empty even when I delete a file."
-msgstr "Coșul de gunoi rămâne gol chiar dacă sterg un fișier."
+msgstr ""
 
 #: ../Help/data/messages:237
 msgid ""
@@ -2053,7 +2068,7 @@ msgstr ""
 
 #: ../Help/data/messages:255
 msgid "Documentation"
-msgstr "Documentație"
+msgstr ""
 
 #: ../Help/data/messages:257
 msgid ""
@@ -2072,9 +2087,6 @@ msgid ""
 "\n"
 "The Cairo-Dock Team"
 msgstr ""
-"\n"
-"\n"
-"Echipa Cairo-Dock"
 
 #: ../Help/data/messages:263
 msgid "Websites"
@@ -2098,7 +2110,7 @@ msgstr ""
 
 #: ../Help/data/messages:277
 msgid "Repositories"
-msgstr "Surse software"
+msgstr ""
 
 #: ../Help/data/messages:279
 msgid ""
@@ -2109,11 +2121,11 @@ msgstr ""
 
 #: ../Help/data/messages:281
 msgid "Debian/Ubuntu"
-msgstr "Debian/Ubuntu"
+msgstr ""
 
 #: ../Help/data/messages:283
 msgid "Ubuntu"
-msgstr "Ubuntu"
+msgstr ""
 
 #: ../Help/data/messages:287
 msgid ""
@@ -2133,7 +2145,7 @@ msgstr ""
 
 #: ../Help/data/messages:293
 msgid "Debian"
-msgstr "Debian"
+msgstr ""
 
 #: ../Help/data/messages:297
 msgid ""
@@ -2237,7 +2249,7 @@ msgstr ""
 #: ../Help/data/messages:345 ../data/messages:19 ../data/messages:57
 #: ../data/messages:181 ../data/messages:247 ../data/messages:907
 msgid "Visibility:"
-msgstr "Vizibilitate:"
+msgstr ""
 
 #: ../Help/data/messages:351
 msgid "Keep below"
@@ -2324,11 +2336,11 @@ msgstr ""
 
 #: ../data/messages:1 ../data/messages:873
 msgid "Behavior"
-msgstr "Comportament"
+msgstr ""
 
 #: ../data/messages:3 ../data/messages:143 ../data/messages:875
 msgid "Position on the screen"
-msgstr "Poziția pe ecran"
+msgstr ""
 
 #: ../data/messages:5 ../data/messages:145 ../data/messages:877
 msgid "Choose which border of the screen the dock will be placed on:"
@@ -2336,7 +2348,7 @@ msgstr ""
 
 #: ../data/messages:15 ../data/messages:177
 msgid "Visibility of the main dock"
-msgstr "Vizibilitate doc principal"
+msgstr ""
 
 #: ../data/messages:17 ../data/messages:179 ../data/messages:905
 msgid ""
@@ -2349,7 +2361,7 @@ msgstr ""
 
 #: ../data/messages:23 ../data/messages:185 ../data/messages:911
 msgid "Reserve space for the dock"
-msgstr "Rezervare spaţiu pentru doc"
+msgstr ""
 
 #: ../data/messages:25 ../data/messages:187 ../data/messages:913
 msgid "Keep the dock below"
@@ -2365,7 +2377,7 @@ msgstr ""
 
 #: ../data/messages:31 ../data/messages:193 ../data/messages:919
 msgid "Keep the dock hidden"
-msgstr "Păstrați doc ascuns"
+msgstr ""
 
 #: ../data/messages:33 ../data/messages:195
 msgid "Pop-up on shortcut"
@@ -2373,11 +2385,11 @@ msgstr ""
 
 #: ../data/messages:35 ../data/messages:197
 msgid "Effect used to hide the dock:"
-msgstr "Efect utilizat pentru ascundere doc:"
+msgstr ""
 
 #: ../data/messages:37 ../data/messages:69 ../data/messages:199
 msgid "None"
-msgstr "Niciunul"
+msgstr ""
 
 #: ../data/messages:49 ../data/messages:233
 msgid ""
@@ -2465,15 +2477,15 @@ msgstr ""
 
 #: ../data/messages:91
 msgid "Icons' animations and effects"
-msgstr "Animații și efecte pictograme"
+msgstr ""
 
 #: ../data/messages:93
 msgid "On mouse hover:"
-msgstr ""
+msgstr "При преминаване с курсора"
 
 #: ../data/messages:95
 msgid "On click:"
-msgstr ""
+msgstr "При натискане"
 
 #: ../data/messages:97
 msgid "On appearance/disappearance:"
@@ -2501,35 +2513,35 @@ msgstr ""
 
 #: ../data/messages:115
 msgid "Choose a theme of icons :"
-msgstr "Alege o tema pentru pictogramă"
+msgstr ""
 
 #: ../data/messages:117 ../data/messages:925
 msgid "Icons size:"
-msgstr "Mărime pictogramă"
+msgstr ""
 
 #: ../data/messages:119 ../data/messages:931
 msgid "Very small"
-msgstr "Foarte mic"
+msgstr ""
 
 #: ../data/messages:121 ../data/messages:933
 msgid "Small"
-msgstr "Mic"
+msgstr ""
 
 #: ../data/messages:123 ../data/messages:935
 msgid "Medium"
-msgstr "Mediu"
+msgstr ""
 
 #: ../data/messages:125 ../data/messages:937
 msgid "Big"
-msgstr "Mare"
+msgstr ""
 
 #: ../data/messages:127 ../data/messages:939
 msgid "Very Big"
-msgstr "Foarte mare"
+msgstr ""
 
 #: ../data/messages:131 ../data/messages:531
 msgid "Choose the default view for main docks :"
-msgstr "Alege vizionare implicită pentru doc principal :"
+msgstr ""
 
 #: ../data/messages:133 ../data/messages:535
 msgid "You can overwrite this parameter for each sub-dock."
@@ -2558,7 +2570,7 @@ msgstr ""
 
 #: ../data/messages:157 ../data/messages:889
 msgid "Relative alignment:"
-msgstr "Aliniere relativă:"
+msgstr ""
 
 #: ../data/messages:163 ../data/messages:891
 msgid "Multi-screens"
@@ -2586,11 +2598,11 @@ msgstr ""
 
 #: ../data/messages:173 ../data/messages:901
 msgid "Distance to the screen edge:"
-msgstr "Distanța față de marginea ecranului:"
+msgstr ""
 
 #: ../data/messages:175
 msgid "Accessibility"
-msgstr "Accesibilitate"
+msgstr ""
 
 #: ../data/messages:211
 msgid "The higher, the faster the dock will appear"
@@ -2630,15 +2642,15 @@ msgstr ""
 
 #: ../data/messages:229
 msgid "Size of the zone :"
-msgstr "Mărimea zonei :"
+msgstr ""
 
 #: ../data/messages:231
 msgid "Image to display on the zone :"
-msgstr "Afișează imaginea în zona :"
+msgstr ""
 
 #: ../data/messages:237
 msgid "Additional parameters"
-msgstr "Parametrii adiționali"
+msgstr ""
 
 #: ../data/messages:239
 msgid ""
@@ -2656,7 +2668,7 @@ msgstr ""
 
 #: ../data/messages:253 ../data/messages:257
 msgid "in ms."
-msgstr "în milisecunde"
+msgstr ""
 
 #: ../data/messages:255
 msgid "Delay before displaying a sub-dock:"
@@ -2668,7 +2680,7 @@ msgstr ""
 
 #: ../data/messages:261
 msgid "TaskBar"
-msgstr "Bară de aplicații"
+msgstr ""
 
 #: ../data/messages:265
 msgid ""
@@ -2697,7 +2709,7 @@ msgstr ""
 
 #: ../data/messages:275
 msgid "Only show icons whose windows are minimised"
-msgstr "Arată pictogramele ferestrelor minimizate"
+msgstr ""
 
 #: ../data/messages:291
 msgid "Automatically add a separator"
@@ -2719,11 +2731,11 @@ msgstr ""
 
 #: ../data/messages:299 ../data/messages:309
 msgid "\t\tExcept the following classes:"
-msgstr "\t\tExceptând următoarele clase:"
+msgstr ""
 
 #: ../data/messages:301
 msgid "Representation"
-msgstr "Reprezentare"
+msgstr ""
 
 #: ../data/messages:303
 msgid ""
@@ -2748,7 +2760,7 @@ msgstr ""
 
 #: ../data/messages:315
 msgid "Make the icon transparent"
-msgstr "Faceți pictograma transparentă"
+msgstr ""
 
 #: ../data/messages:317
 msgid "Show a window's thumbnail"
@@ -2765,12 +2777,12 @@ msgstr ""
 #: ../data/messages:323 ../data/messages:479 ../data/messages:599
 #: ../data/messages:625 ../data/messages:723
 msgid "Opaque"
-msgstr "Opac"
+msgstr ""
 
 #: ../data/messages:325 ../data/messages:477 ../data/messages:597
 #: ../data/messages:623 ../data/messages:721
 msgid "Transparent"
-msgstr "Transparent"
+msgstr ""
 
 #: ../data/messages:327
 msgid "Play a short animation of the icon when its window becomes active"
@@ -2778,7 +2790,7 @@ msgstr ""
 
 #: ../data/messages:329
 msgid "\"...\" will be added at the end if the name is too long."
-msgstr "\"...\" adăugat la sfârșitul numelui dacă este prea lung."
+msgstr ""
 
 #: ../data/messages:331
 msgid "Maximum number of caracters in application name:"
@@ -2794,11 +2806,11 @@ msgstr ""
 
 #: ../data/messages:337
 msgid "Nothing"
-msgstr "Nimic"
+msgstr ""
 
 #: ../data/messages:341
 msgid "Minimize"
-msgstr "Minimizați"
+msgstr ""
 
 #: ../data/messages:343
 msgid "Launch new"
@@ -2833,11 +2845,11 @@ msgstr ""
 
 #: ../data/messages:357
 msgid "in seconds"
-msgstr "în secunde"
+msgstr ""
 
 #: ../data/messages:359
 msgid "Duration of the dialog:"
-msgstr "Durata dialogului:"
+msgstr ""
 
 #: ../data/messages:361
 msgid ""
@@ -2855,7 +2867,7 @@ msgstr ""
 
 #: ../data/messages:369
 msgid "Animations speed"
-msgstr "Viteză animații"
+msgstr ""
 
 #: ../data/messages:371
 msgid "Animate sub-docks when they appear"
@@ -2874,12 +2886,12 @@ msgstr ""
 #: ../data/messages:377 ../data/messages:385 ../data/messages:389
 #: ../data/messages:397 ../data/messages:401
 msgid "fast"
-msgstr "rapid"
+msgstr ""
 
 #: ../data/messages:379 ../data/messages:387 ../data/messages:391
 #: ../data/messages:399 ../data/messages:403
 msgid "slow"
-msgstr "încet"
+msgstr ""
 
 #: ../data/messages:381 ../data/messages:393
 msgid "The more there are, the slower it will be"
@@ -2895,7 +2907,7 @@ msgstr ""
 
 #: ../data/messages:405
 msgid "Refresh rate"
-msgstr "Rată actualizare"
+msgstr ""
 
 #: ../data/messages:407 ../data/messages:411 ../data/messages:415
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
@@ -2925,7 +2937,7 @@ msgstr ""
 
 #: ../data/messages:423
 msgid "Composition"
-msgstr "Compoziție"
+msgstr ""
 
 #: ../data/messages:425
 msgid ""
@@ -2940,7 +2952,7 @@ msgstr ""
 
 #: ../data/messages:429
 msgid "Connection to the Internet"
-msgstr "Conectare la Internet"
+msgstr ""
 
 #: ../data/messages:431
 msgid ""
@@ -2969,7 +2981,7 @@ msgstr ""
 
 #: ../data/messages:441
 msgid "Force IPv4 ?"
-msgstr "Forțez IPv4 ?"
+msgstr ""
 
 #: ../data/messages:443
 msgid "Use this option if you connect to the Internet through a proxy."
@@ -2985,7 +2997,7 @@ msgstr ""
 
 #: ../data/messages:449
 msgid "Port :"
-msgstr "Port:"
+msgstr ""
 
 #: ../data/messages:451 ../data/messages:455
 msgid ""
@@ -2994,15 +3006,15 @@ msgstr ""
 
 #: ../data/messages:453
 msgid "User :"
-msgstr "Utilizator:"
+msgstr ""
 
 #: ../data/messages:457
 msgid "Password :"
-msgstr "Parolă:"
+msgstr ""
 
 #: ../data/messages:461 ../data/messages:949
 msgid "Fill the background with:"
-msgstr "Umple fundalul cu:"
+msgstr ""
 
 #: ../data/messages:465 ../data/messages:485 ../data/messages:955
 msgid "Colour gradation"
@@ -3010,7 +3022,7 @@ msgstr ""
 
 #: ../data/messages:467
 msgid "Use a background image."
-msgstr "Folosește o imagine de fundal"
+msgstr ""
 
 #: ../data/messages:471 ../data/messages:957
 msgid ""
@@ -3024,7 +3036,7 @@ msgstr ""
 
 #: ../data/messages:475
 msgid "Image's transparency :"
-msgstr "Transparență imagine"
+msgstr ""
 
 #: ../data/messages:481 ../data/messages:961
 msgid "Repeat image as a pattern to fill background?"
@@ -3085,7 +3097,7 @@ msgstr ""
 #: ../data/messages:511 ../data/messages:515 ../data/messages:521
 #: ../data/messages:569 ../data/messages:661
 msgid "in pixels."
-msgstr "în pixeli"
+msgstr ""
 
 #: ../data/messages:513
 msgid "Corner radius :"
@@ -3105,11 +3117,11 @@ msgstr ""
 
 #: ../data/messages:525
 msgid "Are the bottom left and right corners rounded?"
-msgstr "Sunt colțurile inferioare din stânga și dreapta rotunde?"
+msgstr ""
 
 #: ../data/messages:529
 msgid "Main Dock"
-msgstr "Doc Principal"
+msgstr ""
 
 #: ../data/messages:533
 msgid "Sub-Docks"
@@ -3127,7 +3139,7 @@ msgstr ""
 
 #: ../data/messages:543 ../data/messages:777
 msgid "smaller"
-msgstr "micuț"
+msgstr ""
 
 #: ../data/messages:545
 msgid "larger"
@@ -3135,7 +3147,7 @@ msgstr ""
 
 #: ../data/messages:547
 msgid "Dialogs"
-msgstr "Dialoguri"
+msgstr ""
 
 #: ../data/messages:549
 msgid "Bubble"
@@ -3151,7 +3163,7 @@ msgstr ""
 
 #: ../data/messages:555
 msgid "Text"
-msgstr "Text"
+msgstr ""
 
 #: ../data/messages:557 ../data/messages:833
 msgid "Otherwise the default's system one will be used."
@@ -3159,11 +3171,11 @@ msgstr ""
 
 #: ../data/messages:559
 msgid "Use a custom font for the text?"
-msgstr "Un anume font pentru text?"
+msgstr ""
 
 #: ../data/messages:561
 msgid "Text font:"
-msgstr "Fontul textului:"
+msgstr ""
 
 #: ../data/messages:563 ../data/messages:839
 msgid "Draw the outline of the text?"
@@ -3171,11 +3183,11 @@ msgstr ""
 
 #: ../data/messages:565 ../data/messages:869
 msgid "Text color:"
-msgstr "Culoare text:"
+msgstr ""
 
 #: ../data/messages:567 ../data/messages:627
 msgid "Buttons"
-msgstr "Butoane"
+msgstr ""
 
 #: ../data/messages:571
 msgid "Size of buttons in the info-bubbles (width x height) :"
@@ -3216,11 +3228,11 @@ msgstr ""
 
 #: ../data/messages:593
 msgid "Background image :"
-msgstr "Imagine fundal"
+msgstr ""
 
 #: ../data/messages:595
 msgid "Background transparency :"
-msgstr "Transparență fundal"
+msgstr ""
 
 #: ../data/messages:601
 msgid "in pixels. Use this to adjust the left position of the drawings."
@@ -3270,7 +3282,7 @@ msgstr ""
 
 #: ../data/messages:629
 msgid "Buttons size :"
-msgstr "Mărime butoane"
+msgstr ""
 
 #: ../data/messages:633 ../data/messages:645
 msgid "Name of an image to use for the 'rotate' button :"
@@ -3286,11 +3298,11 @@ msgstr ""
 
 #: ../data/messages:649
 msgid "Icons' themes"
-msgstr "Teme pictograme"
+msgstr ""
 
 #: ../data/messages:651
 msgid "Choose an icon theme :"
-msgstr "Alege temă pictogramă"
+msgstr ""
 
 #: ../data/messages:653
 msgid ""
@@ -3304,7 +3316,7 @@ msgstr ""
 
 #: ../data/messages:657
 msgid "Icons size"
-msgstr "Mărime pictogramă"
+msgstr ""
 
 #: ../data/messages:659
 msgid "Icons' size at rest (width x height) :"
@@ -3312,11 +3324,11 @@ msgstr ""
 
 #: ../data/messages:663
 msgid "Space between icons :"
-msgstr "Spațiu între pictograme"
+msgstr ""
 
 #: ../data/messages:665
 msgid "Zoom effect"
-msgstr "Efect lupă"
+msgstr ""
 
 #: ../data/messages:667
 msgid ""
@@ -3338,11 +3350,11 @@ msgstr ""
 
 #: ../data/messages:675
 msgid "Separators"
-msgstr "Separatori"
+msgstr ""
 
 #: ../data/messages:677
 msgid "Icon size at rest (width x height) :"
-msgstr "Dimensiune pictogramă la repaus (lățime x înălțime):"
+msgstr ""
 
 #: ../data/messages:679
 msgid "Force separator's image size to stay constant?"
@@ -3356,15 +3368,15 @@ msgstr ""
 
 #: ../data/messages:683
 msgid "How to draw the separators?"
-msgstr "Cum desenez separatoare?"
+msgstr ""
 
 #: ../data/messages:685
 msgid "Use an image."
-msgstr "Folosește o imagine."
+msgstr ""
 
 #: ../data/messages:687
 msgid "Flat separator"
-msgstr "Separator plat"
+msgstr ""
 
 #: ../data/messages:689
 msgid "Physical separator"
@@ -3386,11 +3398,11 @@ msgstr ""
 
 #: ../data/messages:697
 msgid "Colour of flat separators :"
-msgstr "Culoare separatori plați :"
+msgstr ""
 
 #: ../data/messages:699
 msgid "Reflections"
-msgstr "Reflexii"
+msgstr ""
 
 #: ../data/messages:701
 msgid ""
@@ -3404,11 +3416,11 @@ msgstr ""
 
 #: ../data/messages:705
 msgid "light"
-msgstr "lumină"
+msgstr ""
 
 #: ../data/messages:707
 msgid "strong"
-msgstr "puternic"
+msgstr ""
 
 #: ../data/messages:709
 msgid ""
@@ -3422,11 +3434,11 @@ msgstr ""
 
 #: ../data/messages:713
 msgid "small"
-msgstr "mic"
+msgstr ""
 
 #: ../data/messages:715
 msgid "tall"
-msgstr "înalt"
+msgstr ""
 
 #: ../data/messages:717
 msgid ""
@@ -3465,7 +3477,7 @@ msgstr ""
 
 #: ../data/messages:741 ../data/messages:759 ../data/messages:797
 msgid "Image file:"
-msgstr "Fișier-imagine:"
+msgstr ""
 
 #: ../data/messages:743
 msgid "Set transparency to 0 if you don't want to use an indicator."
@@ -3548,7 +3560,7 @@ msgstr ""
 
 #: ../data/messages:779
 msgid "bigger"
-msgstr "mai mare"
+msgstr ""
 
 #: ../data/messages:781
 msgid ""
@@ -3612,19 +3624,19 @@ msgstr ""
 
 #: ../data/messages:813
 msgid "Labels"
-msgstr "Etichete"
+msgstr ""
 
 #: ../data/messages:815
 msgid "Label visibility"
-msgstr "Vizibilitate etichete"
+msgstr ""
 
 #: ../data/messages:817
 msgid "Show labels:"
-msgstr "Arată etichete"
+msgstr ""
 
 #: ../data/messages:819
 msgid "No"
-msgstr "Nu"
+msgstr ""
 
 #: ../data/messages:821
 msgid "On pointed icon"
@@ -3632,7 +3644,7 @@ msgstr ""
 
 #: ../data/messages:823
 msgid "On all icons"
-msgstr "La toate pictogramele"
+msgstr ""
 
 #: ../data/messages:825
 msgid ""
@@ -3650,15 +3662,15 @@ msgstr ""
 
 #: ../data/messages:831
 msgid "Font"
-msgstr "Font"
+msgstr ""
 
 #: ../data/messages:835
 msgid "Use a custom font for labels?"
-msgstr "Folosești un font anume pentru etichete?"
+msgstr ""
 
 #: ../data/messages:837
 msgid "Font used for labels :"
-msgstr "Font folosit pentru etichete :"
+msgstr ""
 
 #: ../data/messages:843
 msgid ""
@@ -3668,7 +3680,7 @@ msgstr ""
 
 #: ../data/messages:845
 msgid "Colour of the label's background :"
-msgstr "Culoarea de fundal a etichetei :"
+msgstr ""
 
 #: ../data/messages:847
 msgid "Margin around the text (in pixels) :"
@@ -3676,7 +3688,7 @@ msgstr ""
 
 #: ../data/messages:849
 msgid "Colour"
-msgstr "Culoare"
+msgstr ""
 
 #: ../data/messages:851
 msgid "It's the first color of the gradation."
@@ -3712,7 +3724,7 @@ msgstr ""
 
 #: ../data/messages:865
 msgid "Quick-info"
-msgstr "Info-rapid"
+msgstr ""
 
 #: ../data/messages:867
 msgid "Use the same look as the labels?"
@@ -3720,7 +3732,7 @@ msgstr ""
 
 #: ../data/messages:871
 msgid "Background color:"
-msgstr "Culoare fundal:"
+msgstr ""
 
 #: ../data/messages:903
 msgid "Visibility of the dock"
@@ -3728,7 +3740,7 @@ msgstr ""
 
 #: ../data/messages:927 ../data/messages:951
 msgid "Same as main dock"
-msgstr "La fel ca și docul prinipal"
+msgstr ""
 
 #: ../data/messages:929
 msgid "Tiny"
@@ -3781,7 +3793,7 @@ msgstr ""
 
 #: ../data/messages:985
 msgid "Save"
-msgstr "Salvați"
+msgstr ""
 
 #: ../data/messages:987
 msgid "You will then be able to re-open it at any time."

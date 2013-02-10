@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2013-02-06 14:31+0000\n"
 "PO-Revision-Date: 2012-09-30 17:29+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Belarusian <be@li.org>\n"
-"Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-04 04:38+0000\n"
-"X-Generator: Launchpad (build 16218)\n"
+"X-Launchpad-Export-Date: 2013-02-07 04:38+0000\n"
+"X-Generator: Launchpad (build 16477)\n"
+"Language: be\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:263
 msgid "Behaviour"
@@ -475,7 +476,8 @@ msgstr "Наладзіць гэтую панэль"
 
 #: ../src/cairo-dock-menu.c:1046
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Наладзьце месцазнаходжанне, бачнасць і знешні выгляд асноўнай панэлі."
+msgstr ""
+"Наладзьце месцазнаходжанне, бачнасць і знешні выгляд асноўнай панэлі."
 
 #: ../src/cairo-dock-menu.c:1048
 msgid "Delete this dock"
@@ -511,7 +513,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Запускаць Cairo-Dock пры старце сістэмы"
 
 #: ../src/cairo-dock-menu.c:1120
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Апплеты трэціх бакоў забяспечваюць інтэграцыю з рознымі праграмамі, "
 "напрыклад Pidgin"
@@ -687,14 +690,12 @@ msgid "Keep above"
 msgstr "Трымаць вышэй"
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible only on this desktop"
-msgstr "Перамясціць ўсё на гэты рабочы стол"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible on all desktops"
-msgstr "На ўсіх працоўных сталах"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1974
 msgid "Kill"
@@ -769,7 +770,8 @@ msgid "Effects:"
 msgstr "Эфекты:"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:721
@@ -793,7 +795,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Пстрыкніце па аплеце, каб убачыць яго апісанне і прыкладны выгляд."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1156,9 +1159,8 @@ msgstr "_Наладзіць тэму_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
-#, fuzzy
 msgid "Use all screens"
-msgstr "Множныя экраны"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1186,9 +1188,8 @@ msgid "bottom"
 msgstr "знізу"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
-#, fuzzy
 msgid "Screen"
-msgstr "Поўнаэкранны"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1372,9 +1373,8 @@ msgid "General"
 msgstr ""
 
 #: ../Help/data/messages:3
-#, fuzzy
 msgid "Using the dock"
-msgstr "Вярнуць на панэль"
+msgstr ""
 
 #: ../Help/data/messages:5
 msgid ""
@@ -1401,9 +1401,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:13
-#, fuzzy
 msgid "Adding a launcher"
-msgstr "Зрабіць значком запуску"
+msgstr ""
 
 #: ../Help/data/messages:15
 msgid ""
@@ -1414,21 +1413,18 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:17
-#, fuzzy
 msgid "Removing a launcher"
-msgstr "Зрабіць значком запуску"
+msgstr ""
 
 #: ../Help/data/messages:19
-#, fuzzy
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
-msgstr "Вы можаце выдаліць любы значок проста перацягнуў яго за межы панэлі."
+msgstr ""
 
 #: ../Help/data/messages:21
-#, fuzzy
 msgid "Grouping icons into a sub-dock"
-msgstr "Згрупаваць вокны адной праграмы ў суб-панэль?"
+msgstr ""
 
 #: ../Help/data/messages:23
 msgid ""
@@ -1485,9 +1481,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:37
-#, fuzzy
 msgid "Separating icons"
-msgstr "Падзельнікі"
+msgstr ""
 
 #: ../Help/data/messages:39
 msgid ""
@@ -1534,9 +1529,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:55
-#, fuzzy
 msgid "Launching an application several times"
-msgstr "Аб'яднаць значкі запуску з іх праграмамі?"
+msgstr ""
 
 #: ../Help/data/messages:57
 msgid ""
@@ -1555,9 +1549,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:63
-#, fuzzy
 msgid "Grouping windows of a given application"
-msgstr "Згрупаваць вокны адной праграмы ў суб-панэль?"
+msgstr ""
 
 #: ../Help/data/messages:65
 msgid ""
@@ -1568,9 +1561,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:67
-#, fuzzy
 msgid "Setting a custom icon for an application"
-msgstr "Аб'яднаць значкі запуску з іх праграмамі?"
+msgstr ""
 
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
@@ -1598,14 +1590,12 @@ msgid "If you're using Compiz, you can click on this button:"
 msgstr ""
 
 #: ../Help/data/messages:79
-#, fuzzy
 msgid "Docks"
-msgstr "Суб-панэлі"
+msgstr ""
 
 #: ../Help/data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Месцазнаходжанне на экране"
+msgstr ""
 
 #: ../Help/data/messages:83
 msgid ""
@@ -1617,9 +1607,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:85
-#, fuzzy
 msgid "Hiding the dock to use all the screen"
-msgstr "Расцягваць панэль на ўсю шырыню экрана?"
+msgstr ""
 
 #: ../Help/data/messages:87
 msgid ""
@@ -1632,9 +1621,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:91
-#, fuzzy
 msgid "Placing applets on your desktop"
-msgstr "Паказваць праграмы толькі цяперашнага рабочага стала?"
+msgstr ""
 
 #: ../Help/data/messages:93
 msgid ""
@@ -1644,9 +1632,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:95
-#, fuzzy
 msgid "Moving desklets"
-msgstr "Дэсклеты"
+msgstr ""
 
 #: ../Help/data/messages:97
 msgid ""
@@ -1716,9 +1703,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:117
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "На ўсіх працоўных сталах"
+msgstr ""
 
 #: ../Help/data/messages:119
 msgid ""
@@ -1738,9 +1724,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:125
-#, fuzzy
 msgid "Locking your session"
-msgstr "Замацаваць месцазнаходжанне"
+msgstr ""
 
 #: ../Help/data/messages:127
 msgid ""
@@ -1841,9 +1826,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:157
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Аксэсуары"
+msgstr ""
 
 #: ../Help/data/messages:159
 msgid ""
@@ -1920,8 +1904,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1953,9 +1938,8 @@ msgid "Wiki"
 msgstr ""
 
 #: ../Help/data/messages:199
-#, fuzzy
 msgid "I have a black background around my dock."
-msgstr "Выберыце задні фон для Вашай панэлі."
+msgstr ""
 
 #: ../Help/data/messages:201
 msgid ""
@@ -1970,8 +1954,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2146,18 +2130,16 @@ msgid "Community site"
 msgstr "Сайт супольнасці"
 
 #: ../Help/data/messages:273
-#, fuzzy
 msgid "More applets available online!"
-msgstr "Атрымаць больш апплетов!"
+msgstr ""
 
 #: ../Help/data/messages:275
 msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr "Дадатковыя плагіны для Cairo-Dock"
 
 #: ../Help/data/messages:277
-#, fuzzy
 msgid "Repositories"
-msgstr "Аксэсуары"
+msgstr ""
 
 #: ../Help/data/messages:279
 msgid ""
@@ -2216,9 +2198,8 @@ msgid "Icon"
 msgstr ""
 
 #: ../Help/data/messages:307
-#, fuzzy
 msgid "Name of the dock it belongs to:"
-msgstr "Трымаць ззаду"
+msgstr ""
 
 #: ../Help/data/messages:309
 msgid "Name of the icon as it will appear in its caption in the dock:"
@@ -2229,9 +2210,8 @@ msgid "Leave empty to use the default one."
 msgstr ""
 
 #: ../Help/data/messages:313
-#, fuzzy
 msgid "Image filename:"
-msgstr "Малюнак:"
+msgstr ""
 
 #: ../Help/data/messages:315
 msgid "Set to 0 to use the default applet size"
@@ -2242,9 +2222,8 @@ msgid "Desired icon size for this applet"
 msgstr ""
 
 #: ../Help/data/messages:319
-#, fuzzy
 msgid "Desklet"
-msgstr "Дэсклеты"
+msgstr ""
 
 #: ../Help/data/messages:323
 msgid ""
@@ -2253,9 +2232,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:325
-#, fuzzy
 msgid "Lock position?"
-msgstr "Замацаваць месцазнаходжанне"
+msgstr ""
 
 #: ../Help/data/messages:327
 msgid ""
@@ -2264,9 +2242,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:329
-#, fuzzy
 msgid "Desklet dimensions (width x height):"
-msgstr "Памер значкоў у стане спакою (шырыня х вышыня):"
+msgstr ""
 
 #: ../Help/data/messages:331
 msgid ""
@@ -2285,14 +2262,12 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:337
-#, fuzzy
 msgid "Rotation:"
-msgstr "Анімацыя:"
+msgstr ""
 
 #: ../Help/data/messages:341
-#, fuzzy
 msgid "Is detached from the dock"
-msgstr "Зарэзерваваць месца пад панэль"
+msgstr ""
 
 #: ../Help/data/messages:343
 msgid ""
@@ -2306,111 +2281,87 @@ msgid "Visibility:"
 msgstr "Бачнасць:"
 
 #: ../Help/data/messages:351
-#, fuzzy
 msgid "Keep below"
-msgstr "Трымаць вышэй"
+msgstr ""
 
 #: ../Help/data/messages:353
 msgid "Keep on widget layer"
 msgstr ""
 
 #: ../Help/data/messages:357
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "На ўсіх працоўных сталах"
+msgstr ""
 
 #: ../Help/data/messages:359 ../data/messages:585
 msgid "Decorations"
 msgstr "Афармленне"
 
 #: ../Help/data/messages:361
-#, fuzzy
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
-"Вы можаце наладзіць асобна для кожнага десклета асобна.\n"
-"Выберыце 'Змяніць афармленне', каб наладзіць яго самастойна."
 
 #: ../Help/data/messages:363
-#, fuzzy
 msgid "Choose a decoration theme for this desklet:"
-msgstr "Выберыце афармленне для ўсіх десклетов:"
+msgstr ""
 
 #: ../Help/data/messages:365
-#, fuzzy
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
-"Выява паказвае ззаду малюнка, напрыклад рамка. Пакіньце пустым, каб не "
-"выкарыстоўваць."
 
 #: ../Help/data/messages:367
-#, fuzzy
 msgid "Background image:"
-msgstr "Фонавае выява:"
+msgstr ""
 
 #: ../Help/data/messages:369
-#, fuzzy
 msgid "Background transparency:"
-msgstr "Фонавая празрыстасць:"
+msgstr ""
 
 #: ../Help/data/messages:371
-#, fuzzy
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr "у піксэлях. Вызначае левую пазіцыю малюнка."
+msgstr ""
 
 #: ../Help/data/messages:373
-#, fuzzy
 msgid "Left offset:"
-msgstr "Левае зрушэнне:"
+msgstr ""
 
 #: ../Help/data/messages:375
-#, fuzzy
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr "у піксэлях. Вызначае верхнюю пазіцыю малюнка."
+msgstr ""
 
 #: ../Help/data/messages:377
-#, fuzzy
 msgid "Top offset:"
-msgstr "Верхняе зрушэнне:"
+msgstr ""
 
 #: ../Help/data/messages:379
-#, fuzzy
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr "у піксэлях. Вызначае правую пазіцыю малюнка."
+msgstr ""
 
 #: ../Help/data/messages:381
-#, fuzzy
 msgid "Right offset:"
-msgstr "Правае зрушэнне:"
+msgstr ""
 
 #: ../Help/data/messages:383
-#, fuzzy
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr "у піксэлях. Вызначае ніжнюю пазіцыю малюнка."
+msgstr ""
 
 #: ../Help/data/messages:385
-#, fuzzy
 msgid "Bottom offset:"
-msgstr "Ніжняе зрушэнне:"
+msgstr ""
 
 #: ../Help/data/messages:387
-#, fuzzy
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
-"Выява паказваная над малюнкам, напрыклад адлюстраванне. Пакіньце пустым, каб "
-"не выкарыстоўваць."
 
 #: ../Help/data/messages:389
-#, fuzzy
 msgid "Foreground image:"
-msgstr "Выява пярэдняга плана:"
+msgstr ""
 
 #: ../Help/data/messages:391
-#, fuzzy
 msgid "Foreground tansparency:"
-msgstr "Празрыстасць пярэдняга плана:"
+msgstr ""
 
 #: ../data/messages:1 ../data/messages:873
 msgid "Behavior"
@@ -2666,9 +2617,8 @@ msgid "Relative alignment:"
 msgstr "Выраўноўваць адносна:"
 
 #: ../data/messages:163 ../data/messages:891
-#, fuzzy
 msgid "Multi-screens"
-msgstr "Множныя экраны"
+msgstr ""
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -3475,7 +3425,8 @@ msgid "Zoom effect"
 msgstr "Эфект набліжэння"
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Усталюйце значэнне 1, калі не жадаеце каб абразкі павялічваліся пры "
 "навядзенні на іх."
@@ -3599,9 +3550,9 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Наколькі будуць празрыстыя значкі ў стане спакою; Яны будуць \"матэрыялізацца"
-"\" па меры з'яўлення панэлі. Чым бліжэй значэнне да 0, тым празрыстай яны "
-"будуць."
+"Наколькі будуць празрыстыя значкі ў стане спакою; Яны будуць "
+"\"матэрыялізацца\" па меры з'яўлення панэлі. Чым бліжэй значэнне да 0, тым "
+"празрыстай яны будуць."
 
 #: ../data/messages:719
 msgid "Icons' transparency at rest :"
@@ -3735,8 +3686,8 @@ msgstr "большы"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Выкарыстоўвайце, каб арыентаваць індыкатар адносна размяшчэння панэлі "
 "(зверху, знізу, справа, злева)."
@@ -4073,8 +4024,8 @@ msgstr ""
 
 #: ../data/messages:1045
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1047
@@ -4167,12 +4118,3 @@ msgid ""
 " - Lots of bug-fixes\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid "0 is the first screen."
-#~ msgstr "0 гэта першы экран."
-
-#~ msgid "Number of the screen where the dock should be located:"
-#~ msgstr "Нумары экранаў на якіх адлюстроўваць панэль:"
-
-#~ msgid "starting from 0"
-#~ msgstr "пачынаючы з 0"

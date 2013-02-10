@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-09-30 17:29+0000\n"
-"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
+"POT-Creation-Date: 2013-02-06 14:31+0000\n"
+"PO-Revision-Date: 2012-12-10 22:30+0000\n"
+"Last-Translator: kerem korur <keremkorur@sabanciuniv.edu>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-04 04:40+0000\n"
-"X-Generator: Launchpad (build 16218)\n"
+"X-Launchpad-Export-Date: 2013-02-07 04:41+0000\n"
+"X-Generator: Launchpad (build 16477)\n"
+"Language: tr\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:263
 msgid "Behaviour"
@@ -49,7 +50,7 @@ msgstr "Sistem"
 
 #: ../src/cairo-dock-gui-advanced.c:140 ../src/cairo-dock-widget-plugins.c:168
 msgid "Fun"
-msgstr "Hayran"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:141 ../src/cairo-dock-gui-advanced.c:1808
 #: ../src/gldit/cairo-dock-gui-factory.c:779
@@ -91,7 +92,7 @@ msgstr "Görev Çubuğu"
 
 #: ../src/cairo-dock-gui-advanced.c:1523
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "Uygun olan klavye kısayollarını ayarlayın"
 
 #: ../src/cairo-dock-gui-advanced.c:1524 ../data/messages:137
 msgid "Shortkeys"
@@ -108,7 +109,7 @@ msgstr "Rıhtımınız için bir artalan ayarlayın."
 #: ../src/cairo-dock-gui-advanced.c:1542 ../data/messages:459
 #: ../data/messages:841 ../data/messages:947
 msgid "Background"
-msgstr "Artalan"
+msgstr "Arkaplan"
 
 #: ../src/cairo-dock-gui-advanced.c:1549
 msgid "Select a view for each of your docks."
@@ -167,7 +168,7 @@ msgstr "Etiketler"
 
 #: ../src/cairo-dock-gui-advanced.c:1597
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "Yeni ve kaydettiğiniz temaları uygulayın"
 
 #: ../src/cairo-dock-gui-advanced.c:1598 ../src/cairo-dock-gui-simple.c:118
 #: ../src/cairo-dock-gui-simple.c:120
@@ -176,7 +177,7 @@ msgstr "Temalar"
 
 #: ../src/cairo-dock-gui-advanced.c:1604
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "Liman(lar)ınızdaki mallar"
 
 #: ../src/cairo-dock-gui-advanced.c:1605 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
@@ -185,7 +186,7 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1725
 msgid "Filter"
-msgstr "Filtrele"
+msgstr "Filtre"
 
 #: ../src/cairo-dock-gui-advanced.c:1766
 msgid "All words"
@@ -205,7 +206,7 @@ msgstr "Tanımda ara"
 
 #: ../src/cairo-dock-gui-advanced.c:1773
 msgid "Hide disabled"
-msgstr ""
+msgstr "devre dışı bırakmayı gizle"
 
 #: ../src/cairo-dock-gui-advanced.c:1782
 msgid "Categories"
@@ -237,7 +238,7 @@ msgstr "Eklentiler"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
 msgid "Configuration"
-msgstr ""
+msgstr "Yapılandırma"
 
 #: ../src/cairo-dock-gui-simple.c:646
 msgid "Advanced Mode"
@@ -253,7 +254,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:135
 msgid "Delete this dock?"
-msgstr ""
+msgstr "Rıhtımı sil?"
 
 #: ../src/cairo-dock-menu.c:188
 msgid "About Cairo-Dock"
@@ -274,12 +275,13 @@ msgstr "Daha fazla uygulamacık al!"
 
 #: ../src/cairo-dock-menu.c:234 ../src/cairo-dock-menu.c:240
 msgid "Donate"
-msgstr ""
+msgstr "Bağışta Bulunun"
 
 #: ../src/cairo-dock-menu.c:237 ../src/cairo-dock-menu.c:243
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
+"Size en iyi limanı yapmak için saatlerce çalışan insanları destekleyin"
 
 #: ../src/cairo-dock-menu.c:271
 msgid "Here is a list of the current developers and contributors"
@@ -291,11 +293,11 @@ msgstr "Geliştiriciler"
 
 #: ../src/cairo-dock-menu.c:273
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "Ana geliştirici ve proje lideri"
 
 #: ../src/cairo-dock-menu.c:274
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "Katkıda bulunanlar"
 
 #: ../src/cairo-dock-menu.c:276
 msgid "Development"
@@ -311,7 +313,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:293
 msgid "Translators for this language"
-msgstr ""
+msgstr "Bu dil için çalışan çevirmenler"
 
 #: ../src/cairo-dock-menu.c:294
 msgid "translator-credits"
@@ -331,6 +333,7 @@ msgstr ""
 "  Yiğit Ateş https://launchpad.net/~yigitates52\n"
 "  Yunus Kaba https://launchpad.net/~yunuskaba\n"
 "  eraydin https://launchpad.net/~aydin-eraydin\n"
+"  kerem korur https://launchpad.net/~keremkorur\n"
 "  kulkke https://launchpad.net/~kulkke\n"
 "  onur kopan https://launchpad.net/~onurkopan\n"
 "  zeugma https://launchpad.net/~sunder67"
@@ -344,22 +347,24 @@ msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
+"Cairo-Dock'u geliştirmemize yardımcı olan tüm insanlara teşekkürler.\n"
+"Geçmişte, şuanda ve gelecekte katkıda bulunanlara teşekkürler."
 
 #: ../src/cairo-dock-menu.c:328
 msgid "How to help us?"
-msgstr ""
+msgstr "Nasıl yardım edebilirsiniz?"
 
 #: ../src/cairo-dock-menu.c:329
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr ""
+msgstr "Projeye katılmaktan çekinmeyin, size ihtiyacımız var ;)"
 
 #: ../src/cairo-dock-menu.c:330
 msgid "Former contributors"
-msgstr "Resmi katkıcılar"
+msgstr "Geçmişte katkıda bulunanlar"
 
 #: ../src/cairo-dock-menu.c:331
 msgid "For a complete list, please have a look to BZR logs"
-msgstr ""
+msgstr "Bütün liste için lütfen BZR günlüklerine göz atın"
 
 #: ../src/cairo-dock-menu.c:332
 msgid "Users of our forum"
@@ -367,7 +372,7 @@ msgstr "Forumumuzun kullanıcıları"
 
 #: ../src/cairo-dock-menu.c:333
 msgid "List of our forum's members"
-msgstr ""
+msgstr "Forumdaki üyelerin listesi"
 
 #: ../src/cairo-dock-menu.c:334
 msgid "Artwork"
@@ -469,7 +474,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:909 ../src/gldit/cairo-dock-gui-factory.c:752
 msgid "Pick up an image"
-msgstr ""
+msgstr "Bir resim seçin"
 
 #: ../src/cairo-dock-menu.c:926 ../src/gldit/cairo-dock-gui-factory.c:786
 #: ../data/messages:463 ../data/messages:469 ../data/messages:737
@@ -527,7 +532,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock'u başlangıçta başlat"
 
 #: ../src/cairo-dock-menu.c:1120
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -565,16 +571,17 @@ msgstr "Uygulama el kitabı"
 
 #: ../src/cairo-dock-menu.c:1196 ../src/cairo-dock-menu.c:1245
 msgid "Edit"
-msgstr ""
+msgstr "Düzenle"
 
 #: ../src/cairo-dock-menu.c:1198 ../src/cairo-dock-menu.c:1252
 msgid "Remove"
-msgstr ""
+msgstr "Kaldır"
 
 #: ../src/cairo-dock-menu.c:1199
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr ""
+"Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
 
 #: ../src/cairo-dock-menu.c:1201 ../src/cairo-dock-menu.c:1261
 msgid "Move to another dock"
@@ -599,7 +606,7 @@ msgstr "Seçmeli bir simge ayarla"
 
 #: ../src/cairo-dock-menu.c:1249
 msgid "Detach"
-msgstr ""
+msgstr "Ayır"
 
 #: ../src/cairo-dock-menu.c:1249
 msgid "Return to the dock"
@@ -607,12 +614,12 @@ msgstr "Rıhtıma dön"
 
 #: ../src/cairo-dock-menu.c:1256
 msgid "Duplicate"
-msgstr ""
+msgstr "EşKopya"
 
 #: ../src/cairo-dock-menu.c:1435
 #, c-format
 msgid "Move all to desktop %d - face %d"
-msgstr ""
+msgstr "Hepsini masaüstüne taşı %d bak %d"
 
 #: ../src/cairo-dock-menu.c:1435
 #, c-format
@@ -702,14 +709,12 @@ msgid "Keep above"
 msgstr "Üstte tut"
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible only on this desktop"
-msgstr "Tümünü bu masaüstüne taşı"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible on all desktops"
-msgstr "Tüm masaüstlerinde"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1974
 msgid "Kill"
@@ -717,7 +722,7 @@ msgstr "Öldür"
 
 #: ../src/cairo-dock-menu.c:1989
 msgid "Windows"
-msgstr ""
+msgstr "Pencereler"
 
 #: ../src/cairo-dock-menu.c:1993 ../src/cairo-dock-menu.c:1995
 #: ../src/cairo-dock-menu.c:2023
@@ -735,7 +740,7 @@ msgstr "Hepsini göster"
 
 #: ../src/cairo-dock-menu.c:2017
 msgid "Windows management"
-msgstr ""
+msgstr "Pencere yönetimi"
 
 #: ../src/cairo-dock-menu.c:2029
 msgid "Move all to this desktop"
@@ -782,8 +787,10 @@ msgid "Effects:"
 msgstr "Efektler:"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
+"Ana rıhtımın parametreleri ana yapılandırma penceresi içinde mevcuttur."
 
 #: ../src/cairo-dock-widget-items.c:721
 msgid "Remove this item"
@@ -799,14 +806,15 @@ msgstr "Donatı"
 
 #: ../src/cairo-dock-widget-plugins.c:241
 msgid "Plug-in"
-msgstr ""
+msgstr "Eklenti"
 
 #: ../src/cairo-dock-widget-plugins.c:247 ../Help/src/applet-tips-dialog.c:305
 msgid "Category"
-msgstr ""
+msgstr "Kategori"
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -819,11 +827,11 @@ msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:228
 msgid "Origin"
-msgstr ""
+msgstr "Kökeni"
 
 #: ../src/cairo-dock-widget-shortkeys.c:233
 msgid "Action"
-msgstr ""
+msgstr "Eylem"
 
 #: ../src/cairo-dock-widget-shortkeys.c:237
 msgid "Shortkey"
@@ -857,11 +865,11 @@ msgstr "Temayı oylamadan önce denemelisin."
 
 #: ../src/cairo-dock-widget-themes.c:423
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "Tema silindi"
 
 #: ../src/cairo-dock-widget-themes.c:453
 msgid "Delete this theme"
-msgstr ""
+msgstr "Temayı sil"
 
 #: ../src/cairo-dock-widget-themes.c:484
 #: ../src/gldit/cairo-dock-gui-factory.c:2431
@@ -911,37 +919,46 @@ msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 msgstr ""
+"Dolaylı hale getirirken OpenGL arkaucunu kullanın.Bu seçeneğin kullanılması "
+"gereken yerde birkaç sorun var."
 
 #: ../src/cairo-dock.c:332
 msgid "Ask again on startup which backend to use."
-msgstr ""
+msgstr "Hangi arkaucun kullanılması gerektiğini başlangıçta yeniden arayın."
 
 #: ../src/cairo-dock.c:335
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr ""
+msgstr "Rıhtımı bu bu ortamı düşünmesi için zorla - ilgi göster."
 
 #: ../src/cairo-dock.c:338
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
+"Bunun yerine emirlere uyuması için rıhtımı zorla ~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:341
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr ""
+"Server adresleri ek temalar içeriyor. Bu mevcut server adreslerinin üstüne "
+"yazılacaktır."
 
 #: ../src/cairo-dock.c:344
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 msgstr ""
+"Başlamak için N saniye bekleyiniz; Rıhtım sezona başladıgında "
+"karşılaşacağınız sorunlara karşı faydalı olacaktır."
 
 #: ../src/cairo-dock.c:347
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
 msgstr ""
+"Rıhtım başlamadan önce başlat paneli üzerindeki yapılandırma ayarlarını "
+"düzenleyin."
 
 #: ../src/cairo-dock.c:350
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
@@ -956,6 +973,8 @@ msgid ""
 "Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
 "docks)"
 msgstr ""
+"Metacity Window-Manager içindeki geçici çözümler (görünür sohpetler ve "
+"yardımcı rıhtımlar)"
 
 #: ../src/cairo-dock.c:359
 msgid ""
@@ -964,23 +983,23 @@ msgstr ""
 
 #: ../src/cairo-dock.c:362
 msgid "Force to display some output messages with colors."
-msgstr ""
+msgstr "Bazı üretim mesajlarını renkli görmek için hareket ettir."
 
 #: ../src/cairo-dock.c:365
 msgid "Print version and quit."
-msgstr ""
+msgstr "Sürümü yazdır ve çık."
 
 #: ../src/cairo-dock.c:368
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr ""
+msgstr "Kullanıcıların değişiklik yapmamaları için rıhtımı kapat."
 
 #: ../src/cairo-dock.c:372
 msgid "Keep the dock above other windows whatever."
-msgstr ""
+msgstr "Rıhtımı diğer pencelerin üzerinde tut"
 
 #: ../src/cairo-dock.c:375
 msgid "Don't make the dock appear on all desktops."
-msgstr ""
+msgstr "Rıhtımı bütün masaüstlerine görünür hale getirme"
 
 #: ../src/cairo-dock.c:378 ../src/cairo-dock.c:438
 msgid "Cairo-Dock makes anything, including coffee !"
@@ -991,18 +1010,24 @@ msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
+"İlave modul yükleyebilmek için bu rehbere göz at (gerçi rıhtımına teyid "
+"edilmemiş modul yüklemek tehlikeli olabilir )."
 
 #: ../src/cairo-dock.c:384
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
 msgstr ""
+"Sadece düzeltme amaçlıdır. Kaza yöneticisi hatalar bulunana kadar "
+"açılmayacaktır."
 
 #: ../src/cairo-dock.c:387
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
 msgstr ""
+"Sadece düzeltme amaçlıdır. Bazı gizli ve hala istikrarsız olan seçenekler "
+"aktifleştirilecektir."
 
 #: ../src/cairo-dock.c:507
 msgid "Use OpenGL in Cairo-Dock"
@@ -1020,7 +1045,11 @@ msgid ""
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
 "OpenGL, ekran kartınızın donanım hızlandırmasını kullanarak işlemci yükünü "
-"hafifletir."
+"hafifletir.\n"
+"Bu aynı zamanda Compiz'dekine benzer güzel görsel efektlere olanak verir.\n"
+"Ancak rıhtımın düzgün olarak işlemesini engelleyebilen bazı kartlar veya "
+"onların kullanıcıları bunu tam olarak desteklemez.\n"
+"OpenGl i aktifleştirmek istiyor musunuz?"
 
 #: ../src/cairo-dock.c:526
 msgid "Remember this choice"
@@ -1034,6 +1063,9 @@ msgid ""
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
+"'%s' modülü bazı sorunlara yol açması yüzünden devre dışı bırakılmıştır.\n"
+"Tekrar aktif hale getirdiğinizde problem yaşarsanız lütfen buraya bildiriniz "
+"http://glx-dock.org"
 
 #: ../src/cairo-dock.c:695
 msgid "< Maintenance mode >"
@@ -1041,7 +1073,7 @@ msgstr "<Bakım modu>"
 
 #: ../src/cairo-dock.c:697
 msgid "Something went wrong with this applet:"
-msgstr ""
+msgstr "Uygulamayla ilgili yanlış giden bişey var."
 
 #: ../src/cairo-dock.c:744
 msgid ""
@@ -1054,6 +1086,14 @@ msgid ""
 "But if you really want to use the dock without these plug-ins, you can "
 "launch the dock with the '-f' option to no longer have this message.\n"
 msgstr ""
+"Hiçbir eklenti bulunamadı.\n"
+"Eklentiler birçok işlev sağlar. (animasyonlar, uygulamalar, görüntüleme, "
+"vb.)\n"
+"Daha fazla bilgi için bakın http://glx-dock.org \n"
+"Bunkar olmadan rıhtım işletmek anlamsızdır.  Büyük ihtimalle eklentilerin "
+"yüklemesi bazı sorunlara neden olabilir.\n"
+"Ama rıhtımı gerçekten eklentisiz kullanmak istiyorsanız, bu mesajı daha "
+"fazla almamak için  rıhtımı '-f' seçeneğiyle başlatın.\n"
 
 #: ../src/cairo-dock.c:793
 #, c-format
@@ -1062,6 +1102,9 @@ msgid ""
 "It has been restored successfully, but if it happens again, please report it "
 "at http://glx-dock.org"
 msgstr ""
+"Modül '%s' bir sorunla karşılaşmış olabilir.\n"
+"Sorun giderildi. Fakat yeniden karşılaşırsanız lütfen bildirin http://glx-"
+"dock.org"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:260
 msgid ""
@@ -1083,7 +1126,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-callbacks.c:1531
 msgid "Sorry but the dock is locked"
-msgstr ""
+msgstr "Üzgünüz ama bu rıhtım kapalı"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:924
 msgid "_custom decoration_"
@@ -1108,12 +1151,12 @@ msgstr "ekran sol sutun hizası"
 #: ../src/gldit/cairo-dock-dock-manager.c:1645
 #: ../src/gldit/cairo-dock-dock-manager.c:1737
 msgid "Pop up the main dock"
-msgstr ""
+msgstr "Ana rıhtımı göster"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:244
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "%s tarafından"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:256
 msgid "kB"
@@ -1157,9 +1200,8 @@ msgstr "_Özel simgeler_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
-#, fuzzy
 msgid "Use all screens"
-msgstr "Çoklu ekranlar"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1187,9 +1229,8 @@ msgid "bottom"
 msgstr "alt"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
-#, fuzzy
 msgid "Screen"
-msgstr "Ekranı kapla"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1221,7 +1262,7 @@ msgstr "yakala"
 
 #: ../src/gldit/cairo-dock-module-factory.c:856
 msgid "by"
-msgstr ""
+msgstr "yoluyla"
 
 #: ../src/gldit/cairo-dock-struct.h:441 ../data/messages:1041
 #: ../data/messages:1049
@@ -1247,6 +1288,8 @@ msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
+"%s dosyasına erişim sağlanamadı. Sunucu çökmüş olabilir.\n"
+"Lütfen daha sonra deneyin ya da glx-dock.org ile iletişime geçin."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:360
 #, c-format
@@ -1302,8 +1345,8 @@ msgstr ""
 "Cario-Dock2'ye hoşgeldiniz !\n"
 "Bu uygulamacık, size rıhtımı kullanmaya başlamanız için yardımcı olmak için "
 "burada; sadece onun üzerine tıklayın.\n"
-"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi http://"
-"glx-dock.org adresinde ziyaret edin.\n"
+"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi "
+"http://glx-dock.org adresinde ziyaret edin.\n"
 "Bu yazılımın hoşunuza gideceğini umarız !\n"
 "  (şimdi bu iletişim kutusunun üzerine, onu kapatmak üzere tıklayabilirsiniz)"
 
@@ -1317,6 +1360,9 @@ msgid ""
 "composite manager.\n"
 "Do you want to activate it now?"
 msgstr ""
+"Rıhtımın etrafındaki siyah dikdortgeni kaldırmak için kompozit yöneticisini "
+"aktive etmelisiniz.\n"
+"Şimdi aktif etmek ister misiniz?"
 
 #: ../Help/src/applet-composite.c:182
 msgid ""
@@ -1336,6 +1382,12 @@ msgid ""
 "option is in the 'System' module of the configuration, at the bottom of the "
 "page."
 msgstr ""
+"Rıhtımın etrafındaki siyah dikdortgeni kaldırmak için kompozit yöneticisini "
+"aktive etmelisiniz.\n"
+"Bunu Compiz'i kullanarak, masaüstü efektlerini ya da Metacity içerisinde "
+"birleştirmeyi aktive ederek yapabilirsiniz.\n"
+"Bilgisayarınız buna izin vermiyorsa Cairo-Dock dan bunu yapabilirsiniz. Bu "
+"seçenek sayfanın altındaki sistam yapılandırma modulu içerisindedir."
 
 #: ../Help/src/applet-init.c:31
 msgid ""
@@ -1345,14 +1397,19 @@ msgid ""
 "Middle-click to open the configuration window.\n"
 "Right-click to access some troubleshooting actions."
 msgstr ""
+"Bu uygulama size yardım etmesi için yapıldı.\n"
+"Cairo-Dock ta yapabileceklerinizle ilgili beliren yararlı başlıklar için "
+"ikona tıklayın.\n"
+"Yapılandırma penceresini açmak için orta tuşa tıklayın.\n"
+"Bazı sorunlara gidermek için yapılacakları öğrenmek için sağ tıklayın."
 
 #: ../Help/src/applet-notifications.c:259
 msgid "Open global settings"
-msgstr ""
+msgstr "global ayarları aç"
 
 #: ../Help/src/applet-notifications.c:264
 msgid "Activate composite"
-msgstr ""
+msgstr "Birleştirmeyi aktif et"
 
 #: ../Help/src/applet-notifications.c:266
 msgid "Disable the gnome-panel"
@@ -1419,16 +1476,14 @@ msgid "Removing a launcher"
 msgstr "Bir başlatıcıyı kaldırma"
 
 #: ../Help/data/messages:19
-#, fuzzy
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
-msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr ""
 
 #: ../Help/data/messages:21
-#, fuzzy
 msgid "Grouping icons into a sub-dock"
-msgstr "Aynı uygulamalar alt dock içerisinde gösterilsin mi ?"
+msgstr ""
 
 #: ../Help/data/messages:23
 msgid ""
@@ -1499,9 +1554,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:43
-#, fuzzy
 msgid "Using the dock as a taskbar"
-msgstr "Rıhtımı kullanmak"
+msgstr ""
 
 #: ../Help/data/messages:45
 msgid ""
@@ -1534,9 +1588,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:55
-#, fuzzy
 msgid "Launching an application several times"
-msgstr "Başlatıcı ve uygulamaları karıştır"
+msgstr ""
 
 #: ../Help/data/messages:57
 msgid ""
@@ -1555,9 +1608,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:63
-#, fuzzy
 msgid "Grouping windows of a given application"
-msgstr "Aynı uygulamalar alt dock içerisinde gösterilsin mi ?"
+msgstr ""
 
 #: ../Help/data/messages:65
 msgid ""
@@ -1593,18 +1645,16 @@ msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
 msgstr ""
 
 #: ../Help/data/messages:77
-#, fuzzy
 msgid "If you're using Compiz, you can click on this button:"
-msgstr "Eğer Gnome üzerindeyseniz bu düğmeye tıklayabilirsiniz:"
+msgstr ""
 
 #: ../Help/data/messages:79
 msgid "Docks"
 msgstr "Rıhtımlar"
 
 #: ../Help/data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Ekrandaki pozisyonu"
+msgstr ""
 
 #: ../Help/data/messages:83
 msgid ""
@@ -1630,9 +1680,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:91
-#, fuzzy
 msgid "Placing applets on your desktop"
-msgstr "Sadece geçerli masaüstündeki uygulamaları göster"
+msgstr ""
 
 #: ../Help/data/messages:93
 msgid ""
@@ -1642,9 +1691,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:95
-#, fuzzy
 msgid "Moving desklets"
-msgstr "Masaüstü programcıkları"
+msgstr ""
 
 #: ../Help/data/messages:97
 msgid ""
@@ -1671,9 +1719,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:103
-#, fuzzy
 msgid "Changing the desklets decorations"
-msgstr "Ekran çözünürlüğünü değiştirmek"
+msgstr ""
 
 #: ../Help/data/messages:105
 msgid ""
@@ -1715,9 +1762,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:117
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "Tüm masaüstlerinde"
+msgstr ""
 
 #: ../Help/data/messages:119
 msgid ""
@@ -1737,9 +1783,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:125
-#, fuzzy
 msgid "Locking your session"
-msgstr "Konuma kilitle"
+msgstr ""
 
 #: ../Help/data/messages:127
 msgid ""
@@ -1840,9 +1885,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:157
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Donatılar"
+msgstr ""
 
 #: ../Help/data/messages:159
 msgid ""
@@ -1903,9 +1947,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:177
-#, fuzzy
 msgid "Controling the screen brightness"
-msgstr "Ekran çözünürlüğünü değiştirmek"
+msgstr ""
 
 #: ../Help/data/messages:179
 msgid ""
@@ -1915,24 +1958,23 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:181
-#, fuzzy
 msgid "Removing completely the gnome-panel"
-msgstr "Gnome panelini etkisizleştir"
+msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
 
 #: ../Help/data/messages:187
-#, fuzzy
 msgid ""
 "If you are on Gnome, you can click on this button in order to automatically "
 "modify this key:"
-msgstr "Eğer Gnome üzerindeyseniz bu düğmeye tıklayabilirsiniz:"
+msgstr ""
 
 #: ../Help/data/messages:189
 msgid "Troubleshooting"
@@ -1955,9 +1997,8 @@ msgid "Wiki"
 msgstr "Wiki"
 
 #: ../Help/data/messages:199
-#, fuzzy
 msgid "I have a black background around my dock."
-msgstr "Rıhtımınız için bir artalan ayarlayın."
+msgstr ""
 
 #: ../Help/data/messages:201
 msgid ""
@@ -1972,16 +2013,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
-#, fuzzy
 msgid ""
 "If you're on Gnome with Metacity (without Compiz), you can click on this "
 "button:"
-msgstr "Eğer Gnome üzerindeyseniz bu düğmeye tıklayabilirsiniz:"
+msgstr ""
 
 #: ../Help/data/messages:209
 msgid "My machine is too old to run a composite manager."
@@ -2151,18 +2191,16 @@ msgid "Community site"
 msgstr "Topluluk sitesi"
 
 #: ../Help/data/messages:273
-#, fuzzy
 msgid "More applets available online!"
-msgstr "Daha fazla uygulamacığı çevrimiçi alın !"
+msgstr ""
 
 #: ../Help/data/messages:275
 msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr "Cairo-Dock İlave Eklentileri"
 
 #: ../Help/data/messages:277
-#, fuzzy
 msgid "Repositories"
-msgstr "Donatılar"
+msgstr ""
 
 #: ../Help/data/messages:279
 msgid ""
@@ -2221,9 +2259,8 @@ msgid "Icon"
 msgstr "Simge"
 
 #: ../Help/data/messages:307
-#, fuzzy
 msgid "Name of the dock it belongs to:"
-msgstr "Rıhtımı aşağıda tut"
+msgstr ""
 
 #: ../Help/data/messages:309
 msgid "Name of the icon as it will appear in its caption in the dock:"
@@ -2234,14 +2271,12 @@ msgid "Leave empty to use the default one."
 msgstr "Varsayılanı kullanmak için boş bırakınız."
 
 #: ../Help/data/messages:313
-#, fuzzy
 msgid "Image filename:"
-msgstr "Görüntü dosyası:"
+msgstr ""
 
 #: ../Help/data/messages:315
-#, fuzzy
 msgid "Set to 0 to use the default applet size"
-msgstr "Varsayılanı kullanmak için boş bırakınız."
+msgstr ""
 
 #: ../Help/data/messages:317
 msgid "Desired icon size for this applet"
@@ -2258,9 +2293,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:325
-#, fuzzy
 msgid "Lock position?"
-msgstr "Konuma kilitle"
+msgstr ""
 
 #: ../Help/data/messages:327
 msgid ""
@@ -2289,14 +2323,12 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:337
-#, fuzzy
 msgid "Rotation:"
-msgstr "Animasyon:"
+msgstr ""
 
 #: ../Help/data/messages:341
-#, fuzzy
 msgid "Is detached from the dock"
-msgstr "Dok için alanı ayır"
+msgstr ""
 
 #: ../Help/data/messages:343
 msgid ""
@@ -2310,18 +2342,16 @@ msgid "Visibility:"
 msgstr "Görünürlük:"
 
 #: ../Help/data/messages:351
-#, fuzzy
 msgid "Keep below"
-msgstr "Üstte tut"
+msgstr ""
 
 #: ../Help/data/messages:353
 msgid "Keep on widget layer"
 msgstr ""
 
 #: ../Help/data/messages:357
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "Tüm masaüstlerinde"
+msgstr ""
 
 #: ../Help/data/messages:359 ../data/messages:585
 msgid "Decorations"
@@ -2332,9 +2362,8 @@ msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
 
 #: ../Help/data/messages:363
-#, fuzzy
 msgid "Choose a decoration theme for this desklet:"
-msgstr "Temanın simgelerini seçin :"
+msgstr ""
 
 #: ../Help/data/messages:365
 msgid ""
@@ -2342,9 +2371,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:367
-#, fuzzy
 msgid "Background image:"
-msgstr "Arkaplan görüntüsü :"
+msgstr ""
 
 #: ../Help/data/messages:369
 msgid "Background transparency:"
@@ -2371,18 +2399,16 @@ msgid "in pixels. Use this to adjust the right position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:381
-#, fuzzy
 msgid "Right offset:"
-msgstr "ekran sağ sutun hizası"
+msgstr ""
 
 #: ../Help/data/messages:383
 msgid "in pixels. Use this to adjust the bottom position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:385
-#, fuzzy
 msgid "Bottom offset:"
-msgstr "ekran alt hizası"
+msgstr ""
 
 #: ../Help/data/messages:387
 msgid ""
@@ -2391,14 +2417,12 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:389
-#, fuzzy
 msgid "Foreground image:"
-msgstr "Önplan görüntüsü :"
+msgstr ""
 
 #: ../Help/data/messages:391
-#, fuzzy
 msgid "Foreground tansparency:"
-msgstr "Önplan şeffaflığı :"
+msgstr ""
 
 #: ../data/messages:1 ../data/messages:873
 msgid "Behavior"
@@ -2639,9 +2663,8 @@ msgid "Relative alignment:"
 msgstr "Göreli hizalama:"
 
 #: ../data/messages:163 ../data/messages:891
-#, fuzzy
 msgid "Multi-screens"
-msgstr "Çoklu ekranlar"
+msgstr ""
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -3402,7 +3425,8 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:669
@@ -3634,8 +3658,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3954,8 +3978,8 @@ msgstr ""
 
 #: ../data/messages:1045
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1047
@@ -4048,12 +4072,3 @@ msgid ""
 " - Lots of bug-fixes\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid "0 is the first screen."
-#~ msgstr "0 ilk ekrandır."
-
-#~ msgid "Number of the screen where the dock should be located:"
-#~ msgstr "Rıhtımın bulunması gereken ekran sayısı:"
-
-#~ msgid "starting from 0"
-#~ msgstr "0'dan başlıyor"

@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2013-02-06 14:31+0000\n"
 "PO-Revision-Date: 2012-09-30 17:37+0000\n"
 "Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
 "Language-Team: Galician <gl@li.org>\n"
-"Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-04 04:39+0000\n"
-"X-Generator: Launchpad (build 16218)\n"
+"X-Launchpad-Export-Date: 2013-02-07 04:39+0000\n"
+"X-Generator: Launchpad (build 16477)\n"
+"Language: gl\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:263
 msgid "Behaviour"
@@ -512,7 +513,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Iniciar Cairo-Dock ao arrancar"
 
 #: ../src/cairo-dock-menu.c:1120
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Os miniaplicativos de terceiros proven integración con outros programas, "
 "como Pidgin"
@@ -688,14 +690,12 @@ msgid "Keep above"
 msgstr "Manter por riba"
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible only on this desktop"
-msgstr "Mover todo a este escritorio"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible on all desktops"
-msgstr "En todos os escritorios"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1974
 msgid "Kill"
@@ -771,7 +771,8 @@ msgid "Effects:"
 msgstr "Efectos:"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Os parámetros da doca principal atópanse na xanela de configuración "
 "principal."
@@ -797,7 +798,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Prema sobre un miniaplicativo para ter unha vista previa e unha descrición "
 "del."
@@ -1152,9 +1154,8 @@ msgstr "_iconas personalizadas_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
-#, fuzzy
 msgid "Use all screens"
-msgstr "Múltiplas pantallas"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1168,9 +1169,8 @@ msgstr "dereita"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
-#, fuzzy
 msgid "middle"
-msgstr "premer no botón central"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
@@ -1183,9 +1183,8 @@ msgid "bottom"
 msgstr "inferior"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
-#, fuzzy
 msgid "Screen"
-msgstr "Pantalla completa."
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1359,9 +1358,8 @@ msgid "General"
 msgstr ""
 
 #: ../Help/data/messages:3
-#, fuzzy
 msgid "Using the dock"
-msgstr "Doca dereita"
+msgstr ""
 
 #: ../Help/data/messages:5
 msgid ""
@@ -1388,9 +1386,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:13
-#, fuzzy
 msgid "Adding a launcher"
-msgstr "Crear un iniciador"
+msgstr ""
 
 #: ../Help/data/messages:15
 msgid ""
@@ -1401,16 +1398,14 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:17
-#, fuzzy
 msgid "Removing a launcher"
-msgstr "Crear un iniciador"
+msgstr ""
 
 #: ../Help/data/messages:19
-#, fuzzy
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
-msgstr "Pode retirar un iniciador arrastrándoo fora da doca co punteiro."
+msgstr ""
 
 #: ../Help/data/messages:21
 msgid "Grouping icons into a sub-dock"
@@ -1471,9 +1466,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:37
-#, fuzzy
 msgid "Separating icons"
-msgstr "Separador"
+msgstr ""
 
 #: ../Help/data/messages:39
 msgid ""
@@ -1585,9 +1579,8 @@ msgid "Docks"
 msgstr ""
 
 #: ../Help/data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Posición na pantalla"
+msgstr ""
 
 #: ../Help/data/messages:83
 msgid ""
@@ -1599,9 +1592,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:85
-#, fuzzy
 msgid "Hiding the dock to use all the screen"
-msgstr "Estirar a doca para que encha sempre a pantalla?"
+msgstr ""
 
 #: ../Help/data/messages:87
 msgid ""
@@ -1625,9 +1617,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:95
-#, fuzzy
 msgid "Moving desklets"
-msgstr "Trebellos"
+msgstr ""
 
 #: ../Help/data/messages:97
 msgid ""
@@ -1697,9 +1688,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:117
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "En todos os escritorios"
+msgstr ""
 
 #: ../Help/data/messages:119
 msgid ""
@@ -1719,9 +1709,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:125
-#, fuzzy
 msgid "Locking your session"
-msgstr "Bloquear a posición"
+msgstr ""
 
 #: ../Help/data/messages:127
 msgid ""
@@ -1822,9 +1811,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:157
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Accesorios"
+msgstr ""
 
 #: ../Help/data/messages:159
 msgid ""
@@ -1901,8 +1889,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1934,9 +1923,8 @@ msgid "Wiki"
 msgstr ""
 
 #: ../Help/data/messages:199
-#, fuzzy
 msgid "I have a black background around my dock."
-msgstr "Definir un fondo para a barra."
+msgstr ""
 
 #: ../Help/data/messages:201
 msgid ""
@@ -1951,8 +1939,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2127,18 +2115,16 @@ msgid "Community site"
 msgstr "Web da comunidade"
 
 #: ../Help/data/messages:273
-#, fuzzy
 msgid "More applets available online!"
-msgstr "Obter mais miniaplicativos en liña!"
+msgstr ""
 
 #: ../Help/data/messages:275
 msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr ""
 
 #: ../Help/data/messages:277
-#, fuzzy
 msgid "Repositories"
-msgstr "Accesorios"
+msgstr ""
 
 #: ../Help/data/messages:279
 msgid ""
@@ -2197,9 +2183,8 @@ msgid "Icon"
 msgstr ""
 
 #: ../Help/data/messages:307
-#, fuzzy
 msgid "Name of the dock it belongs to:"
-msgstr "Manter a doca por baixo"
+msgstr ""
 
 #: ../Help/data/messages:309
 msgid "Name of the icon as it will appear in its caption in the dock:"
@@ -2222,9 +2207,8 @@ msgid "Desired icon size for this applet"
 msgstr ""
 
 #: ../Help/data/messages:319
-#, fuzzy
 msgid "Desklet"
-msgstr "Trebellos"
+msgstr ""
 
 #: ../Help/data/messages:323
 msgid ""
@@ -2233,9 +2217,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:325
-#, fuzzy
 msgid "Lock position?"
-msgstr "Bloquear a posición"
+msgstr ""
 
 #: ../Help/data/messages:327
 msgid ""
@@ -2264,14 +2247,12 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:337
-#, fuzzy
 msgid "Rotation:"
-msgstr "Animación:"
+msgstr ""
 
 #: ../Help/data/messages:341
-#, fuzzy
 msgid "Is detached from the dock"
-msgstr "Reservar espazo para a doca"
+msgstr ""
 
 #: ../Help/data/messages:343
 msgid ""
@@ -2285,18 +2266,16 @@ msgid "Visibility:"
 msgstr "Visibilidade:"
 
 #: ../Help/data/messages:351
-#, fuzzy
 msgid "Keep below"
-msgstr "Manter por riba"
+msgstr ""
 
 #: ../Help/data/messages:353
 msgid "Keep on widget layer"
 msgstr ""
 
 #: ../Help/data/messages:357
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "En todos os escritorios"
+msgstr ""
 
 #: ../Help/data/messages:359 ../data/messages:585
 msgid "Decorations"
@@ -2307,9 +2286,8 @@ msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
 
 #: ../Help/data/messages:363
-#, fuzzy
 msgid "Choose a decoration theme for this desklet:"
-msgstr "Escoller un tema de iconas:"
+msgstr ""
 
 #: ../Help/data/messages:365
 msgid ""
@@ -2317,9 +2295,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:367
-#, fuzzy
 msgid "Background image:"
-msgstr "Fondo"
+msgstr ""
 
 #: ../Help/data/messages:369
 msgid "Background transparency:"
@@ -2330,36 +2307,32 @@ msgid "in pixels. Use this to adjust the left position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:373
-#, fuzzy
 msgid "Left offset:"
-msgstr "Desprazamento lateral:"
+msgstr ""
 
 #: ../Help/data/messages:375
 msgid "in pixels. Use this to adjust the top position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:377
-#, fuzzy
 msgid "Top offset:"
-msgstr "Desprazamento lateral:"
+msgstr ""
 
 #: ../Help/data/messages:379
 msgid "in pixels. Use this to adjust the right position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:381
-#, fuzzy
 msgid "Right offset:"
-msgstr "Desprazamento lateral:"
+msgstr ""
 
 #: ../Help/data/messages:383
 msgid "in pixels. Use this to adjust the bottom position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:385
-#, fuzzy
 msgid "Bottom offset:"
-msgstr "Doak inferior"
+msgstr ""
 
 #: ../Help/data/messages:387
 msgid ""
@@ -2459,7 +2432,8 @@ msgstr "Visibilidade das docas secundarias"
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "aparecerán cando prema ou cando o punteiro permaneza enriba da icona."
+msgstr ""
+"aparecerán cando prema ou cando o punteiro permaneza enriba da icona."
 
 #: ../data/messages:59 ../data/messages:249
 msgid "Appear on mouse over"
@@ -2626,9 +2600,8 @@ msgid "Relative alignment:"
 msgstr "Aliñamento relativo :"
 
 #: ../data/messages:163 ../data/messages:891
-#, fuzzy
 msgid "Multi-screens"
-msgstr "Múltiplas pantallas"
+msgstr ""
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -3396,7 +3369,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:669
@@ -3628,8 +3602,8 @@ msgstr ""
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3948,8 +3922,8 @@ msgstr ""
 
 #: ../data/messages:1045
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1047
@@ -4042,9 +4016,3 @@ msgid ""
 " - Lots of bug-fixes\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid "0 is the first screen."
-#~ msgstr "0 é o primeiro monitor"
-
-#~ msgid "Number of the screen where the dock should be located:"
-#~ msgstr "Número da pantalla onde se debe posicionar a doca:"

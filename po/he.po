@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-11-03 04:46+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2013-02-06 14:31+0000\n"
+"PO-Revision-Date: 2012-12-29 14:11+0000\n"
+"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
-"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-04 04:39+0000\n"
-"X-Generator: Launchpad (build 16218)\n"
+"X-Launchpad-Export-Date: 2013-02-07 04:39+0000\n"
+"X-Generator: Launchpad (build 16477)\n"
+"Language: he\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:263
 msgid "Behaviour"
@@ -54,11 +55,11 @@ msgstr "שעשוע"
 #: ../src/cairo-dock-gui-advanced.c:141 ../src/cairo-dock-gui-advanced.c:1808
 #: ../src/gldit/cairo-dock-gui-factory.c:779
 msgid "All"
-msgstr "הכל"
+msgstr "הכול"
 
 #: ../src/cairo-dock-gui-advanced.c:1499
 msgid "Set the position of the main dock."
-msgstr "קבע את מיקומו של הלוח הראשי"
+msgstr "הגדרת מיקום הלוח הראשי."
 
 #: ../src/cairo-dock-gui-advanced.c:1500 ../Help/data/messages:321
 #: ../data/messages:141
@@ -71,14 +72,14 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
-"האם אתה רוצה שהלוח ייראה תמיד?\n"
+"האם ברצונך שהלוח יופיע תמיד?\n"
 "או שיסתיר את עצמו אוטומטית?\n"
-"הגדר את הגישה ללוחות ולתתי הלוחות!"
+"ניתן להגדער את הגישה ללוחות ולתתי הלוחות!"
 
 #: ../src/cairo-dock-gui-advanced.c:1508 ../src/cairo-dock-menu.c:2044
 #: ../Help/data/messages:339
 msgid "Visibility"
-msgstr "גילוי"
+msgstr "מצב הצגה"
 
 #: ../src/cairo-dock-gui-advanced.c:1515
 msgid "Display and interact with currently open windows."
@@ -91,7 +92,7 @@ msgstr "שורת המשימות"
 
 #: ../src/cairo-dock-gui-advanced.c:1523
 msgid "Define all the keyboard shortcuts currently available."
-msgstr "הגדר את כל קיצורי המקשים הזמינים"
+msgstr "הגדרת כל קיצורי המקשים הזמינים"
 
 #: ../src/cairo-dock-gui-advanced.c:1524 ../data/messages:137
 msgid "Shortkeys"
@@ -99,11 +100,11 @@ msgstr "קיצורי מקשים"
 
 #: ../src/cairo-dock-gui-advanced.c:1530
 msgid "All of the parameters you will never want to tweak."
-msgstr "כל ההגדרות שתחלום לשנות אי פעם."
+msgstr "כל ההגדרות לרבות כאלו שאפילו אי אפשר לדמיין."
 
 #: ../src/cairo-dock-gui-advanced.c:1541
 msgid "Set a background for your dock."
-msgstr "תן רקע ללוח."
+msgstr "הגדרת רקע ללוח."
 
 #: ../src/cairo-dock-gui-advanced.c:1542 ../data/messages:459
 #: ../data/messages:841 ../data/messages:947
@@ -112,7 +113,7 @@ msgstr "רקע"
 
 #: ../src/cairo-dock-gui-advanced.c:1549
 msgid "Select a view for each of your docks."
-msgstr "בחר תצוגה ללוח"
+msgstr "ניתן לבחור בתצוגה עבור כל אחד מהלוחות שלך."
 
 #: ../src/cairo-dock-gui-advanced.c:1550 ../data/messages:129
 #: ../data/messages:527 ../data/messages:941
@@ -121,7 +122,7 @@ msgstr "תצוגות"
 
 #: ../src/cairo-dock-gui-advanced.c:1557
 msgid "Configure text bubble appearance."
-msgstr "תצוגת חלונות קופצים"
+msgstr "הגדרת הופעת תיאורי טקסט קופצים."
 
 #: ../src/cairo-dock-gui-advanced.c:1558
 msgid "Dialog boxes"
@@ -129,7 +130,7 @@ msgstr "תיבות דו־שיח"
 
 #: ../src/cairo-dock-gui-advanced.c:1565
 msgid "Applets can be displayed on your desktop as widgets."
-msgstr "ניתן להציג יישמונים על שולחן העבודה"
+msgstr "ניתן להציג יישמונים על שולחן העבודה."
 
 #: ../src/cairo-dock-gui-advanced.c:1566 ../Help/data/messages:89
 #: ../data/messages:583
@@ -142,7 +143,7 @@ msgid ""
 " size, reflection, icon theme,..."
 msgstr ""
 "הגדרות סמלים:\n"
-"  גודל, שקיפות, ערכת נושא..."
+" גודל, שקיפות, ערכת נושא..."
 
 #: ../src/cairo-dock-gui-advanced.c:1574 ../Help/data/messages:11
 #: ../data/messages:113 ../data/messages:647 ../data/messages:923
@@ -151,7 +152,7 @@ msgstr "סמלים"
 
 #: ../src/cairo-dock-gui-advanced.c:1581
 msgid "Indicators are additional markers for your icons."
-msgstr "סמנים הם סימנים נוספים על הסמלים"
+msgstr "מחוונים הם סימנים נוספים לסמלים שלך."
 
 #: ../src/cairo-dock-gui-advanced.c:1582 ../data/messages:731
 msgid "Indicators"
@@ -319,6 +320,7 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Ohadcn https://launchpad.net/~ohadcn\n"
+"  Yaron https://launchpad.net/~sh-yaron\n"
 "  idovmagal https://launchpad.net/~idovmagal"
 
 #: ../src/cairo-dock-menu.c:296
@@ -505,7 +507,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "הפעל את cairo-dock עם הכניסה למערכת"
 
 #: ../src/cairo-dock-menu.c:1120
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr "יישומונים חיצוניים מספקים תמיכה עם תוכנות נוספות, כמו pidgin"
 
 #: ../src/cairo-dock-menu.c:1123 ../Help/src/applet-init.c:28
@@ -681,14 +684,12 @@ msgid "Keep above"
 msgstr "תמיד עליון"
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible only on this desktop"
-msgstr "העבר לכל שולחנות העבודה"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible on all desktops"
-msgstr "להראות בכל שולחנות העבודה?"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1974
 msgid "Kill"
@@ -761,7 +762,8 @@ msgid "Effects:"
 msgstr "אפקטים:"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "הגדרות הפאנל הראשי נגישות דרך חלון ההגדרות"
 
 #: ../src/cairo-dock-widget-items.c:721
@@ -785,7 +787,8 @@ msgid "Category"
 msgstr "קטגוריה"
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "לחץ על יישומון כדי לקבל תצוגה מקדימה ותיאור שלו."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1151,9 +1154,8 @@ msgstr "_Custom Icons_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
-#, fuzzy
 msgid "Use all screens"
-msgstr "מסך מלא"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1167,9 +1169,8 @@ msgstr "ימין"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
-#, fuzzy
 msgid "middle"
-msgstr "לחצן אמצעי"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
@@ -1182,9 +1183,8 @@ msgid "bottom"
 msgstr "תחתון"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
-#, fuzzy
 msgid "Screen"
-msgstr "מסך מלא"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1336,8 +1336,8 @@ msgstr ""
 "בכדי לבטל את הריבוע השחור מסביב ללוח עליך להפעיל מנהל שזירה.\n"
 "הפעלת אפקטים של שולחן העבודה, הרצת compiz או הפעלת אפשרות השזירה של "
 "metacity.\n"
-"אם אין לך מנהל שזירה,cairo-dock יכול לדמות אותו. אפשרות זו נמצאת תחת \"מערכת"
-"\" בהגדרות של cairo-dock."
+"אם אין לך מנהל שזירה,cairo-dock יכול לדמות אותו. אפשרות זו נמצאת תחת "
+"\"מערכת\" בהגדרות של cairo-dock."
 
 #: ../Help/src/applet-init.c:31
 msgid ""
@@ -1425,11 +1425,10 @@ msgid "Removing a launcher"
 msgstr "מחיקת משגר"
 
 #: ../Help/data/messages:19
-#, fuzzy
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
-msgstr "אתה יכול להסיר משגר ע\"י גרירתו עם העכבר אל מחוץ ללוח"
+msgstr ""
 
 #: ../Help/data/messages:21
 msgid "Grouping icons into a sub-dock"
@@ -1544,13 +1543,10 @@ msgid "Launching an application several times"
 msgstr "הפעלת מופעים נוספים של היישום"
 
 #: ../Help/data/messages:57
-#, fuzzy
 msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
 msgstr ""
-"ניתן לסגור חלון ע\"י לחצה על הסמל המתאים בלוח עם הכפתור האמצעי של העכבר (או "
-"מהתפריט)"
 
 #: ../Help/data/messages:59
 msgid "Switching between the windows of a same application"
@@ -1579,9 +1575,8 @@ msgid "Setting a custom icon for an application"
 msgstr "בחירת סמל ליישום"
 
 #: ../Help/data/messages:69
-#, fuzzy
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr "החלפת תמונה"
+msgstr ""
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
@@ -1631,7 +1626,6 @@ msgid "Hiding the dock to use all the screen"
 msgstr "הסתרת הלוח בכדי לאפשר שימוש בכל המסך"
 
 #: ../Help/data/messages:87
-#, fuzzy
 msgid ""
 "The dock can hide itself to let all the screen for applications. But it can "
 "also be always visible like a panel.\n"
@@ -1640,11 +1634,6 @@ msgid ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the visibility you want."
 msgstr ""
-"הלוח יכול להופיע בכל מקום על המסך\n"
-"כדי למקם את הלוח הראשי, יש ללחוץ עליו עם הלחצן האמצעי של העכבר ->cairo dock -"
-">הגדרות ולבחור את המיקום המועדף עליך\n"
-"כדי למקם את הלוחות האחרים, יש ללחוץ על הלוח המבוקש עם הלחצן האמצעי של העכבר -"
-">cairo dock ->הגדר לוח זה ולבחור את המיקום המבוקש"
 
 #: ../Help/data/messages:91
 msgid "Placing applets on your desktop"
@@ -1930,8 +1919,9 @@ msgstr "מחיקת הלוח של גנום"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1979,16 +1969,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
-#, fuzzy
 msgid ""
 "If you're on Gnome with Metacity (without Compiz), you can click on this "
 "button:"
-msgstr "כפתור פעיל רק אם קומפיז עובד"
+msgstr ""
 
 #: ../Help/data/messages:209
 msgid "My machine is too old to run a composite manager."
@@ -2094,14 +2083,12 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:245
-#, fuzzy
 msgid "If you're on Gnome you can click on this button:"
-msgstr "כפתור פעיל רק אם קומפיז עובד"
+msgstr ""
 
 #: ../Help/data/messages:247
-#, fuzzy
 msgid "The Project"
-msgstr "הצטרף לפרוייקט!"
+msgstr ""
 
 #: ../Help/data/messages:249
 msgid "Join the project!"
@@ -2161,9 +2148,8 @@ msgid "Community site"
 msgstr "אתר הקהילה"
 
 #: ../Help/data/messages:273
-#, fuzzy
 msgid "More applets available online!"
-msgstr "הורד יישומונים נוספים"
+msgstr ""
 
 #: ../Help/data/messages:275
 msgid "Cairo-Dock-Plug-ins-Extras"
@@ -2238,9 +2224,8 @@ msgid "Name of the icon as it will appear in its caption in the dock:"
 msgstr "שם הסמל כפי שיופיע אחרי התיאור שלו בלוח:"
 
 #: ../Help/data/messages:311
-#, fuzzy
 msgid "Leave empty to use the default one."
-msgstr "(0=ברירת מחדל)"
+msgstr ""
 
 #: ../Help/data/messages:313
 msgid "Image filename:"
@@ -2329,7 +2314,6 @@ msgid "Keep on widget layer"
 msgstr "השאר באזור הוידג'טים"
 
 #: ../Help/data/messages:357
-#, fuzzy
 msgid "Should be visible on all desktops?"
 msgstr "להראות בכל שולחנות העבודה?"
 
@@ -2346,12 +2330,9 @@ msgid "Choose a decoration theme for this desklet:"
 msgstr "ערכת עיצוב לחלונית זו:"
 
 #: ../Help/data/messages:365
-#, fuzzy
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
-"תמונה שתופיע מעל הציור,\r\n"
-"השאר ריק כדי לבטל."
 
 #: ../Help/data/messages:367
 msgid "Background image:"
@@ -2648,9 +2629,8 @@ msgid "Relative alignment:"
 msgstr ""
 
 #: ../data/messages:163 ../data/messages:891
-#, fuzzy
 msgid "Multi-screens"
-msgstr "מסך מלא"
+msgstr ""
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -3407,7 +3387,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:669
@@ -3639,8 +3620,8 @@ msgstr ""
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3959,8 +3940,8 @@ msgstr ""
 
 #: ../data/messages:1045
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1047

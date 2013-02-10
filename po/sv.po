@@ -8,16 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.2\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2013-02-06 14:31+0000\n"
 "PO-Revision-Date: 2012-09-30 17:33+0000\n"
 "Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
 "Language-Team: Swedish\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-04 04:40+0000\n"
-"X-Generator: Launchpad (build 16218)\n"
+"X-Launchpad-Export-Date: 2013-02-07 04:40+0000\n"
+"X-Generator: Launchpad (build 16477)\n"
 "X-Poedit-Country: SWEDEN\n"
+"Language: \n"
 "X-Poedit-Language: Swedish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -434,7 +435,8 @@ msgstr "avgränsare"
 #: ../src/cairo-dock-menu.c:655
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Du håller på att ta bort den här ikonen (%s) från docken. Är du säker?"
+msgstr ""
+"Du håller på att ta bort den här ikonen (%s) från docken. Är du säker?"
 
 #: ../src/cairo-dock-menu.c:670
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -484,7 +486,8 @@ msgstr "Konfigurera den här docken"
 
 #: ../src/cairo-dock-menu.c:1046
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Anpassa positionen, synligheten och utseendet av den här huvuddocken."
+msgstr ""
+"Anpassa positionen, synligheten och utseendet av den här huvuddocken."
 
 #: ../src/cairo-dock-menu.c:1048
 msgid "Delete this dock"
@@ -513,14 +516,16 @@ msgstr "Dölj"
 
 #: ../src/cairo-dock-menu.c:1091
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "Det här kommer att dölja docken tills du fokuserar över den med musen."
+msgstr ""
+"Det här kommer att dölja docken tills du fokuserar över den med musen."
 
 #: ../src/cairo-dock-menu.c:1104
 msgid "Launch Cairo-Dock on startup"
 msgstr "Starta Cairo-Dock vid uppstart"
 
 #: ../src/cairo-dock-menu.c:1120
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1123 ../Help/src/applet-init.c:28
@@ -695,14 +700,12 @@ msgid "Keep above"
 msgstr "Placera överst"
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible only on this desktop"
-msgstr "Flytta allt till detta skrivbord"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible on all desktops"
-msgstr "På alla skrivbord"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1974
 msgid "Kill"
@@ -775,7 +778,8 @@ msgid "Effects:"
 msgstr "Effekter"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:721
@@ -799,7 +803,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1153,9 +1158,8 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
-#, fuzzy
 msgid "Use all screens"
-msgstr "Flera skärmar"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1183,9 +1187,8 @@ msgid "bottom"
 msgstr "nederkant"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
-#, fuzzy
 msgid "Screen"
-msgstr "Helskärm"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1360,9 +1363,8 @@ msgid "General"
 msgstr ""
 
 #: ../Help/data/messages:3
-#, fuzzy
 msgid "Using the dock"
-msgstr "Konfigurera den här docken"
+msgstr ""
 
 #: ../Help/data/messages:5
 msgid ""
@@ -1405,12 +1407,10 @@ msgid "Removing a launcher"
 msgstr ""
 
 #: ../Help/data/messages:19
-#, fuzzy
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
 msgstr ""
-"Du kan ta bort en programstartare genom att dra ut den från docken med musen."
 
 #: ../Help/data/messages:21
 msgid "Grouping icons into a sub-dock"
@@ -1471,9 +1471,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:37
-#, fuzzy
 msgid "Separating icons"
-msgstr "Avgränsare"
+msgstr ""
 
 #: ../Help/data/messages:39
 msgid ""
@@ -1520,9 +1519,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:55
-#, fuzzy
 msgid "Launching an application several times"
-msgstr "Blanda startare och program?"
+msgstr ""
 
 #: ../Help/data/messages:57
 msgid ""
@@ -1553,9 +1551,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:67
-#, fuzzy
 msgid "Setting a custom icon for an application"
-msgstr "Blanda startare och program?"
+msgstr ""
 
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
@@ -1583,14 +1580,12 @@ msgid "If you're using Compiz, you can click on this button:"
 msgstr ""
 
 #: ../Help/data/messages:79
-#, fuzzy
 msgid "Docks"
-msgstr "Sub-dockor"
+msgstr ""
 
 #: ../Help/data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "Placering på skärmen"
+msgstr ""
 
 #: ../Help/data/messages:83
 msgid ""
@@ -1602,9 +1597,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:85
-#, fuzzy
 msgid "Hiding the dock to use all the screen"
-msgstr "Dölj docken när den överlappar det aktuella fönstret"
+msgstr ""
 
 #: ../Help/data/messages:87
 msgid ""
@@ -1617,9 +1611,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:91
-#, fuzzy
 msgid "Placing applets on your desktop"
-msgstr "Visa bara program för aktivt skrivbord?"
+msgstr ""
 
 #: ../Help/data/messages:93
 msgid ""
@@ -1700,9 +1693,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:117
-#, fuzzy
 msgid "Showing all the desktops"
-msgstr "På alla skrivbord"
+msgstr ""
 
 #: ../Help/data/messages:119
 msgid ""
@@ -1722,9 +1714,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:125
-#, fuzzy
 msgid "Locking your session"
-msgstr "Lås position"
+msgstr ""
 
 #: ../Help/data/messages:127
 msgid ""
@@ -1825,9 +1816,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:157
-#, fuzzy
 msgid "Accessing disks"
-msgstr "Tillbehör"
+msgstr ""
 
 #: ../Help/data/messages:159
 msgid ""
@@ -1904,8 +1894,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1937,9 +1928,8 @@ msgid "Wiki"
 msgstr ""
 
 #: ../Help/data/messages:199
-#, fuzzy
 msgid "I have a black background around my dock."
-msgstr "Skapa fond till din dock."
+msgstr ""
 
 #: ../Help/data/messages:201
 msgid ""
@@ -1954,8 +1944,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2130,18 +2120,16 @@ msgid "Community site"
 msgstr "Webbplats för gemenskap"
 
 #: ../Help/data/messages:273
-#, fuzzy
 msgid "More applets available online!"
-msgstr "Hitta fler appar online!"
+msgstr ""
 
 #: ../Help/data/messages:275
 msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr "Extra Cairo-Dock-instick"
 
 #: ../Help/data/messages:277
-#, fuzzy
 msgid "Repositories"
-msgstr "Tillbehör"
+msgstr ""
 
 #: ../Help/data/messages:279
 msgid ""
@@ -2200,9 +2188,8 @@ msgid "Icon"
 msgstr ""
 
 #: ../Help/data/messages:307
-#, fuzzy
 msgid "Name of the dock it belongs to:"
-msgstr "Behåll docken under"
+msgstr ""
 
 #: ../Help/data/messages:309
 msgid "Name of the icon as it will appear in its caption in the dock:"
@@ -2225,9 +2212,8 @@ msgid "Desired icon size for this applet"
 msgstr ""
 
 #: ../Help/data/messages:319
-#, fuzzy
 msgid "Desklet"
-msgstr "Skrivbord"
+msgstr ""
 
 #: ../Help/data/messages:323
 msgid ""
@@ -2236,9 +2222,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:325
-#, fuzzy
 msgid "Lock position?"
-msgstr "Lås position"
+msgstr ""
 
 #: ../Help/data/messages:327
 msgid ""
@@ -2247,9 +2232,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:329
-#, fuzzy
 msgid "Desklet dimensions (width x height):"
-msgstr "Ikonstorlek i vila (bredd x höjd):"
+msgstr ""
 
 #: ../Help/data/messages:331
 msgid ""
@@ -2268,14 +2252,12 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:337
-#, fuzzy
 msgid "Rotation:"
-msgstr "Animering:"
+msgstr ""
 
 #: ../Help/data/messages:341
-#, fuzzy
 msgid "Is detached from the dock"
-msgstr "Reservera utrymme för docken"
+msgstr ""
 
 #: ../Help/data/messages:343
 msgid ""
@@ -2289,18 +2271,16 @@ msgid "Visibility:"
 msgstr "Synlighet:"
 
 #: ../Help/data/messages:351
-#, fuzzy
 msgid "Keep below"
-msgstr "Placera överst"
+msgstr ""
 
 #: ../Help/data/messages:353
 msgid "Keep on widget layer"
 msgstr ""
 
 #: ../Help/data/messages:357
-#, fuzzy
 msgid "Should be visible on all desktops?"
-msgstr "På alla skrivbord"
+msgstr ""
 
 #: ../Help/data/messages:359 ../data/messages:585
 msgid "Decorations"
@@ -2320,23 +2300,20 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:367
-#, fuzzy
 msgid "Background image:"
-msgstr "Bakgrund"
+msgstr ""
 
 #: ../Help/data/messages:369
-#, fuzzy
 msgid "Background transparency:"
-msgstr "Genomskinlighet för bilden:"
+msgstr ""
 
 #: ../Help/data/messages:371
 msgid "in pixels. Use this to adjust the left position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:373
-#, fuzzy
 msgid "Left offset:"
-msgstr "Vertikal justering:"
+msgstr ""
 
 #: ../Help/data/messages:375
 msgid "in pixels. Use this to adjust the top position of drawings."
@@ -2351,9 +2328,8 @@ msgid "in pixels. Use this to adjust the right position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:381
-#, fuzzy
 msgid "Right offset:"
-msgstr "Vertikal justering:"
+msgstr ""
 
 #: ../Help/data/messages:383
 msgid "in pixels. Use this to adjust the bottom position of drawings."
@@ -2374,9 +2350,8 @@ msgid "Foreground image:"
 msgstr ""
 
 #: ../Help/data/messages:391
-#, fuzzy
 msgid "Foreground tansparency:"
-msgstr "Genomskinlighet för bilden:"
+msgstr ""
 
 #: ../data/messages:1 ../data/messages:873
 msgid "Behavior"
@@ -2624,9 +2599,8 @@ msgid "Relative alignment:"
 msgstr "Relativ justering:"
 
 #: ../data/messages:163 ../data/messages:891
-#, fuzzy
 msgid "Multi-screens"
-msgstr "Flera skärmar"
+msgstr ""
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -3395,7 +3369,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:669
@@ -3632,8 +3607,8 @@ msgstr ""
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3959,8 +3934,8 @@ msgstr ""
 
 #: ../data/messages:1045
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1047

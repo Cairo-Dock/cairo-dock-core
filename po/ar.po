@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2013-02-06 14:31+0000\n"
 "PO-Revision-Date: 2012-09-30 17:37+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
-"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-04 04:38+0000\n"
-"X-Generator: Launchpad (build 16218)\n"
+"X-Launchpad-Export-Date: 2013-02-07 04:38+0000\n"
+"X-Generator: Launchpad (build 16477)\n"
+"Language: ar\n"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../data/messages:263
 msgid "Behaviour"
@@ -511,7 +512,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "تشغيل شريط كيرو عند بدء التشغيل"
 
 #: ../src/cairo-dock-menu.c:1120
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1123 ../Help/src/applet-init.c:28
@@ -685,14 +687,12 @@ msgid "Keep above"
 msgstr "أبقها في الأعلى"
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible only on this desktop"
-msgstr "نقل الكل لسطح المكتب هذا"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1966
-#, fuzzy
 msgid "Visible on all desktops"
-msgstr "هل يجب أن تكون مرئية على جميع أسطح المكتب؟"
+msgstr ""
 
 #: ../src/cairo-dock-menu.c:1974
 msgid "Kill"
@@ -765,7 +765,8 @@ msgid "Effects:"
 msgstr "تأثيرات:"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "معايير الـdock متاحة في نافذة المواصفات الرئيسية."
 
 #: ../src/cairo-dock-widget-items.c:721
@@ -789,7 +790,8 @@ msgid "Category"
 msgstr "الفئة"
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "انقر على المصغر للحصول على عرض و وصف له."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1137,9 +1139,8 @@ msgstr "_ايقونه معدله_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
-#, fuzzy
 msgid "Use all screens"
-msgstr "شاشات متعددة"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1153,9 +1154,8 @@ msgstr "يمين"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
-#, fuzzy
 msgid "middle"
-msgstr "نقر بزر الفأرة الأوسط"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
@@ -1168,9 +1168,8 @@ msgid "bottom"
 msgstr "أسفل"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
-#, fuzzy
 msgid "Screen"
-msgstr "ملء الشاشة"
+msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1346,9 +1345,8 @@ msgid "General"
 msgstr "عامّ"
 
 #: ../Help/data/messages:3
-#, fuzzy
 msgid "Using the dock"
-msgstr "عوده الى الشريط"
+msgstr ""
 
 #: ../Help/data/messages:5
 msgid ""
@@ -1391,16 +1389,14 @@ msgid "Removing a launcher"
 msgstr "حذف مطلق"
 
 #: ../Help/data/messages:19
-#, fuzzy
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
-msgstr "بإمكانك ازاله احد المشغلات بسحبه خارج الشريط بالمؤشر."
+msgstr ""
 
 #: ../Help/data/messages:21
-#, fuzzy
 msgid "Grouping icons into a sub-dock"
-msgstr "جمع النوافذ من نفس التطبيق في شريط فرعي ؟"
+msgstr ""
 
 #: ../Help/data/messages:23
 msgid ""
@@ -1525,9 +1521,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:63
-#, fuzzy
 msgid "Grouping windows of a given application"
-msgstr "جمع النوافذ من نفس التطبيق في شريط فرعي ؟"
+msgstr ""
 
 #: ../Help/data/messages:65
 msgid ""
@@ -1542,9 +1537,8 @@ msgid "Setting a custom icon for an application"
 msgstr "تحديد أيقونة خاصة للتطبيق"
 
 #: ../Help/data/messages:69
-#, fuzzy
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr "تغيير صورة الأيقونة"
+msgstr ""
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
@@ -1564,19 +1558,16 @@ msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
 msgstr ""
 
 #: ../Help/data/messages:77
-#, fuzzy
 msgid "If you're using Compiz, you can click on this button:"
-msgstr "إذا كنت على جنوم يمكنك ضغط هذا الزّر:"
+msgstr ""
 
 #: ../Help/data/messages:79
-#, fuzzy
 msgid "Docks"
-msgstr "الأشرطه الفرعيه"
+msgstr ""
 
 #: ../Help/data/messages:81
-#, fuzzy
 msgid "Positionning the dock on the screen"
-msgstr "الموقع على الشاشه"
+msgstr ""
 
 #: ../Help/data/messages:83
 msgid ""
@@ -1588,9 +1579,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:85
-#, fuzzy
 msgid "Hiding the dock to use all the screen"
-msgstr "تمديد الشريط ليشغل كامل الشاشة دائما"
+msgstr ""
 
 #: ../Help/data/messages:87
 msgid ""
@@ -1603,9 +1593,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:91
-#, fuzzy
 msgid "Placing applets on your desktop"
-msgstr "فقط اظهار التطبيقات المتواجده على سطح المكتب الحالي"
+msgstr ""
 
 #: ../Help/data/messages:93
 msgid ""
@@ -1643,9 +1632,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:103
-#, fuzzy
 msgid "Changing the desklets decorations"
-msgstr "تغيير دقة الشاشة"
+msgstr ""
 
 #: ../Help/data/messages:105
 msgid ""
@@ -1822,9 +1810,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:161
-#, fuzzy
 msgid "Accessing folder bookmarks"
-msgstr "الوصول إلى الأقراص"
+msgstr ""
 
 #: ../Help/data/messages:163
 msgid ""
@@ -1889,18 +1876,18 @@ msgstr "حذف شريط جنوم نهائياً"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
 
 #: ../Help/data/messages:187
-#, fuzzy
 msgid ""
 "If you are on Gnome, you can click on this button in order to automatically "
 "modify this key:"
-msgstr "إذا كنت على جنوم يمكنك ضغط هذا الزّر:"
+msgstr ""
 
 #: ../Help/data/messages:189
 msgid "Troubleshooting"
@@ -1923,9 +1910,8 @@ msgid "Wiki"
 msgstr "الويكي"
 
 #: ../Help/data/messages:199
-#, fuzzy
 msgid "I have a black background around my dock."
-msgstr "تعيين خلفية  لشريطك"
+msgstr ""
 
 #: ../Help/data/messages:201
 msgid ""
@@ -1940,16 +1926,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
-#, fuzzy
 msgid ""
 "If you're on Gnome with Metacity (without Compiz), you can click on this "
 "button:"
-msgstr "إذا كنت على جنوم يمكنك ضغط هذا الزّر:"
+msgstr ""
 
 #: ../Help/data/messages:209
 msgid "My machine is too old to run a composite manager."
@@ -2209,9 +2194,8 @@ msgid "Desired icon size for this applet"
 msgstr ""
 
 #: ../Help/data/messages:319
-#, fuzzy
 msgid "Desklet"
-msgstr "سطح المكتب"
+msgstr ""
 
 #: ../Help/data/messages:323
 msgid ""
@@ -2230,9 +2214,8 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:329
-#, fuzzy
 msgid "Desklet dimensions (width x height):"
-msgstr "حجم الأيقونه في حال عدم الحركه (العرض × الطول) :"
+msgstr ""
 
 #: ../Help/data/messages:331
 msgid ""
@@ -2255,9 +2238,8 @@ msgid "Rotation:"
 msgstr "الدوران:"
 
 #: ../Help/data/messages:341
-#, fuzzy
 msgid "Is detached from the dock"
-msgstr "عوده الى الشريط"
+msgstr ""
 
 #: ../Help/data/messages:343
 msgid ""
@@ -2271,16 +2253,14 @@ msgid "Visibility:"
 msgstr "مدى الرؤية:"
 
 #: ../Help/data/messages:351
-#, fuzzy
 msgid "Keep below"
-msgstr "أبقها في الأعلى"
+msgstr ""
 
 #: ../Help/data/messages:353
 msgid "Keep on widget layer"
 msgstr ""
 
 #: ../Help/data/messages:357
-#, fuzzy
 msgid "Should be visible on all desktops?"
 msgstr "هل يجب أن تكون مرئية على جميع أسطح المكتب؟"
 
@@ -2293,9 +2273,8 @@ msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
 
 #: ../Help/data/messages:363
-#, fuzzy
 msgid "Choose a decoration theme for this desklet:"
-msgstr "اختر سمات الايقونات"
+msgstr ""
 
 #: ../Help/data/messages:365
 msgid ""
@@ -2315,36 +2294,32 @@ msgid "in pixels. Use this to adjust the left position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:373
-#, fuzzy
 msgid "Left offset:"
-msgstr "موازنة خارجية :"
+msgstr ""
 
 #: ../Help/data/messages:375
 msgid "in pixels. Use this to adjust the top position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:377
-#, fuzzy
 msgid "Top offset:"
-msgstr "موازنة خارجية :"
+msgstr ""
 
 #: ../Help/data/messages:379
 msgid "in pixels. Use this to adjust the right position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:381
-#, fuzzy
 msgid "Right offset:"
-msgstr "موازنة خارجية :"
+msgstr ""
 
 #: ../Help/data/messages:383
 msgid "in pixels. Use this to adjust the bottom position of drawings."
 msgstr ""
 
 #: ../Help/data/messages:385
-#, fuzzy
 msgid "Bottom offset:"
-msgstr "موازنة خارجية :"
+msgstr ""
 
 #: ../Help/data/messages:387
 msgid ""
@@ -2599,9 +2574,8 @@ msgid "Relative alignment:"
 msgstr "المحاذاه النسبيه :"
 
 #: ../data/messages:163 ../data/messages:891
-#, fuzzy
 msgid "Multi-screens"
-msgstr "شاشات متعددة"
+msgstr ""
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -3358,7 +3332,8 @@ msgid "Zoom effect"
 msgstr "تأثير التكبير"
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:669
@@ -3590,8 +3565,8 @@ msgstr "أكبر"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3910,8 +3885,8 @@ msgstr ""
 
 #: ../data/messages:1045
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1047
@@ -4004,12 +3979,3 @@ msgid ""
 " - Lots of bug-fixes\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid "0 is the first screen."
-#~ msgstr "0 هي الشاشه الأولى."
-
-#~ msgid "Number of the screen where the dock should be located:"
-#~ msgstr "رقم الشاشه التي تريد إظهار الشريط فيها :"
-
-#~ msgid "starting from 0"
-#~ msgstr "البدأ من الصفر"
