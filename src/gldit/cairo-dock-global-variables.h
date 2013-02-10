@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 /// Pointeur sur le dock principal.
 extern CairoDock *g_pMainDock;
+extern CairoContainer *g_pPrimaryContainer;
 /// Chemin du fichier de conf de l'appli.
 extern gchar *g_cConfFile;
 /// Le chemin vers le repertoire racine.
@@ -33,8 +34,6 @@ extern gchar *g_cCairoDockDataDir;
 /// version
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 
-/// indicateur de tache
-extern CairoDockImageBuffer g_pIndicatorBuffer;
 /// boite
 extern CairoDockImageBuffer g_pBoxAboveBuffer;
 extern CairoDockImageBuffer g_pBoxBelowBuffer;
