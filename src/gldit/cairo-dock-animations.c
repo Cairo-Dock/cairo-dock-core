@@ -478,19 +478,17 @@ static gboolean _cairo_dock_transition_step (G_GNUC_UNUSED gpointer pUserData, I
 				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
 			bContinue = pTransition->render_opengl (pIcon, pTransition->pUserData);
 			cairo_dock_end_draw_icon (pIcon, pContainer);
+			cairo_dock_redraw_icon (pIcon, pContainer);
 		}
 		else if (pTransition->render != NULL)
 		{
 			bContinue = pTransition->render (pIcon, pTransition->pUserData);
-			cairo_dock_update_icon_texture (pIcon);
 		}
 	}
 	else if (pTransition->render != NULL)
 	{
 		bContinue = pTransition->render (pIcon, pTransition->pUserData);
 	}
-	
-	cairo_dock_redraw_icon (pIcon, pContainer);
 	
 	if (pTransition->iDuration != 0 && pTransition->iElapsedTime >= pTransition->iDuration)
 		bContinue = FALSE;

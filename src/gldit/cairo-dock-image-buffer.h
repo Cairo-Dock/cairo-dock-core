@@ -139,7 +139,7 @@ void cairo_dock_free_image_buffer (CairoDockImageBuffer *pImage);
 *@param y vertical offset.
 *@param fAlpha transparency (in [0;1])
 */
-void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha);
+void cairo_dock_apply_image_buffer_surface_with_offset (const CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha);
 
 /** Draw an ImageBuffer on a cairo context.
 *@param pImage an ImageBuffer.
@@ -152,7 +152,7 @@ void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pI
 *@param x horizontal offset.
 *@param y vertical offset.
 */
-void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pImage, double x, double y);
+void cairo_dock_apply_image_buffer_texture_with_offset (const CairoDockImageBuffer *pImage, double x, double y);
 
 /** Draw an ImageBuffer on the current OpenGL context.
 *@param pImage an ImageBuffer.
@@ -168,7 +168,7 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 *@param y vertical offset.
 *@param fAlpha transparency (in [0;1])
 */
-void cairo_dock_apply_image_buffer_surface_at_size (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, int w, int h, double x, double y, double fAlpha);
+void cairo_dock_apply_image_buffer_surface_at_size (const CairoDockImageBuffer *pImage, cairo_t *pCairoContext, int w, int h, double x, double y, double fAlpha);
 
 /** Draw an ImageBuffer on the current OpenGL context at a given size.
 *@param pImage an ImageBuffer.
@@ -177,12 +177,12 @@ void cairo_dock_apply_image_buffer_surface_at_size (CairoDockImageBuffer *pImage
 *@param x horizontal offset.
 *@param y vertical offset.
 */
-void cairo_dock_apply_image_buffer_texture_at_size (CairoDockImageBuffer *pImage, int w, int h, double x, double y);
+void cairo_dock_apply_image_buffer_texture_at_size (const CairoDockImageBuffer *pImage, int w, int h, double x, double y);
 
 
-void cairo_dock_apply_image_buffer_surface_with_offset_and_limit (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha, int iMaxWidth);
+void cairo_dock_apply_image_buffer_surface_with_offset_and_limit (const CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha, int iMaxWidth);
 
-void cairo_dock_apply_image_buffer_texture_with_limit (CairoDockImageBuffer *pImage, double fAlpha, int iMaxWidth);
+void cairo_dock_apply_image_buffer_texture_with_limit (const CairoDockImageBuffer *pImage, double fAlpha, int iMaxWidth);
 
 
   ///////////////////////

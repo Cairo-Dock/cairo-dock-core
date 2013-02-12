@@ -265,7 +265,7 @@ gboolean cairo_dock_image_buffer_next_frame_no_loop (CairoDockImageBuffer *pImag
 	return FALSE;
 }
 
-void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha)
+void cairo_dock_apply_image_buffer_surface_with_offset (const CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha)
 {
 	if (cairo_dock_image_buffer_is_animated (pImage))
 	{
@@ -297,7 +297,7 @@ void cairo_dock_apply_image_buffer_surface_with_offset (CairoDockImageBuffer *pI
 	}
 }
 
-void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pImage, double x, double y)
+void cairo_dock_apply_image_buffer_texture_with_offset (const CairoDockImageBuffer *pImage, double x, double y)
 {
 	glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
 	if (cairo_dock_image_buffer_is_animated (pImage))
@@ -330,7 +330,7 @@ void cairo_dock_apply_image_buffer_texture_with_offset (CairoDockImageBuffer *pI
 	}
 }
 
-void cairo_dock_apply_image_buffer_surface_at_size (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, int w, int h, double x, double y, double fAlpha)
+void cairo_dock_apply_image_buffer_surface_at_size (const CairoDockImageBuffer *pImage, cairo_t *pCairoContext, int w, int h, double x, double y, double fAlpha)
 {
 	if (cairo_dock_image_buffer_is_animated (pImage))
 	{
@@ -372,7 +372,7 @@ void cairo_dock_apply_image_buffer_surface_at_size (CairoDockImageBuffer *pImage
 	}
 }
 
-void cairo_dock_apply_image_buffer_texture_at_size (CairoDockImageBuffer *pImage, int w, int h, double x, double y)
+void cairo_dock_apply_image_buffer_texture_at_size (const CairoDockImageBuffer *pImage, int w, int h, double x, double y)
 {
 	glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
 	if (cairo_dock_image_buffer_is_animated (pImage))
@@ -404,7 +404,7 @@ void cairo_dock_apply_image_buffer_texture_at_size (CairoDockImageBuffer *pImage
 }
 
 
-void cairo_dock_apply_image_buffer_surface_with_offset_and_limit (CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha, int iMaxWidth)
+void cairo_dock_apply_image_buffer_surface_with_offset_and_limit (const CairoDockImageBuffer *pImage, cairo_t *pCairoContext, double x, double y, double fAlpha, int iMaxWidth)
 {
 	cairo_set_source_surface (pCairoContext,
 		pImage->pSurface,
@@ -439,7 +439,7 @@ void cairo_dock_apply_image_buffer_surface_with_offset_and_limit (CairoDockImage
 	cairo_pattern_destroy (pGradationPattern);
 }
 
-void cairo_dock_apply_image_buffer_texture_with_limit (CairoDockImageBuffer *pImage, double fAlpha, int iMaxWidth)
+void cairo_dock_apply_image_buffer_texture_with_limit (const CairoDockImageBuffer *pImage, double fAlpha, int iMaxWidth)
 {
 	glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
 	

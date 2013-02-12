@@ -34,15 +34,11 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-animations.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-launcher-factory.h"
-#include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-file-manager.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-keybinder.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
@@ -73,7 +69,6 @@ extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gchar *g_cConfFile;
 extern CairoContainer *g_pPrimaryContainer;
 extern CairoDock *g_pMainDock;
-extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCairoDockDataDir;
 extern gboolean g_bEasterEggs;
 
@@ -104,8 +99,6 @@ struct _CairoDockGroupDescription {
 	} ;
 
 static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY+1];
-GSList *s_pCurrentWidgetList;  // liste des widgets du module courant.
-GSList *s_pExtraCurrentWidgetList;  // liste des widgets des eventuels modules lies.
 static GList *s_pGroupDescriptionList = NULL;
 static GtkWidget *s_pPreviewBox = NULL;
 static GtkWidget *s_pPreviewImage = NULL;
