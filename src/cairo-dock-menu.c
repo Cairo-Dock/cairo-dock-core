@@ -626,12 +626,14 @@ static void _on_answer_remove_icon (int iClickedButton, G_GNUC_UNUSED GtkWidget 
 				if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 					bDestroyIcons = FALSE;
 			}
+			CairoDock *pDock = NULL;
+			const gchar *cDockName = NULL;
 			if (!bDestroyIcons)
 			{
-				CairoDock *pDock = CAIRO_DOCK (icon->pContainer);
-				const gchar *cDockName = cairo_dock_search_dock_name (pDock);
-				cairo_dock_remove_icons_from_dock (icon->pSubDock, pDock, cDockName);
+				pDock = CAIRO_DOCK (icon->pContainer);
+				cDockName = cairo_dock_search_dock_name (pDock);
 			}
+			cairo_dock_remove_icons_from_dock (icon->pSubDock, pDock, cDockName);
 			cairo_dock_destroy_dock (icon->pSubDock, (CAIRO_DOCK_IS_APPLI (icon) && icon->cClass != NULL ? icon->cClass : icon->cName));
 			icon->pSubDock = NULL;
 		}
