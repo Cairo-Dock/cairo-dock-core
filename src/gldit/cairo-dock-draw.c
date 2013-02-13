@@ -559,7 +559,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		cairo_save (pCairoContext);
 		
 		double fMagnitude;
-		if (myIconsParam.bLabelForPointedIconOnly || pDock->fMagnitudeMax == 0.)
+		if (myIconsParam.bLabelForPointedIconOnly || pDock->fMagnitudeMax == 0. || myIconsParam.fAmplitude == 0.)
 		{
 			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / myIconsParam.fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
 		}

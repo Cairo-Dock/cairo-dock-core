@@ -420,7 +420,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		_cairo_dock_set_blend_alpha ();  // not good with a transparent background :-/
 		
 		double fMagnitude;
-		if (myIconsParam.bLabelForPointedIconOnly ||pDock->fMagnitudeMax == 0.)
+		if (myIconsParam.bLabelForPointedIconOnly || pDock->fMagnitudeMax == 0. || myIconsParam.fAmplitude == 0.)
 		{
 			fMagnitude = fDockMagnitude;  // (icon->fScale - 1) / myIconsParam.fAmplitude / sin (icon->fPhase);  // sin (phi ) != 0 puisque fScale > 1.
 		}
