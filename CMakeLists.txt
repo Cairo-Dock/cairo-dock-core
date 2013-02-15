@@ -84,6 +84,9 @@ set (bindir "${prefix}/${CMAKE_INSTALL_BINDIR}")  # (...)/bin
 
 set (pluginsdir "${libdir}/cairo-dock")
 set (pluginsdatadir "${pkgdatadir}/plug-ins")
+if (NOT DEFINED install-pc-path)
+	set (install-pc-path "${libdir}/pkgconfig")  # it can be different (for example ${CMAKE_INSTALL_PREFIX}/libdata/pkgconfig on BSD)
+endif ()
 
 ########### dependencies ###############
 
@@ -186,7 +189,7 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CUR
 
 ########### install files ###############
 
-install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc DESTINATION ${libdir}/pkgconfig)
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc DESTINATION ${install-pc-path})
 
 ################# Summary #################
 
