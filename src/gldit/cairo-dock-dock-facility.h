@@ -53,7 +53,7 @@ G_BEGIN_DECLS
 #define gldi_dock_get_screen_offset_y(pDock) (pDock->container.bIsHorizontal ? cairo_dock_get_screen_position_y (pDock->iNumScreen) : cairo_dock_get_screen_position_x (pDock->iNumScreen))
 #define gldi_dock_get_screen_width(pDock) (pDock->container.bIsHorizontal ? cairo_dock_get_screen_width (pDock->iNumScreen) : cairo_dock_get_screen_height (pDock->iNumScreen))
 #define gldi_dock_get_screen_height(pDock) (pDock->container.bIsHorizontal ? cairo_dock_get_screen_height (pDock->iNumScreen) : cairo_dock_get_screen_width (pDock->iNumScreen))
-#define cairo_dock_dock_get_creen(pDock) (cairo_dock_get_nth_screen (pDock->iNumScreen))
+#define cairo_dock_dock_get_screen(pDock) (cairo_dock_get_nth_screen (pDock->iNumScreen))
 
 
 /** Compute the maximum size of a dock, and resize it if necessary.
