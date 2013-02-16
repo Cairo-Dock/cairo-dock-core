@@ -34,7 +34,7 @@ gboolean cairo_dock_current_theme_need_save (void);
 
 void cairo_dock_delete_conf_file (const gchar *cConfFilePath);
 
-gboolean cairo_dock_add_conf_file (const gchar *cConfFilePath, const gchar *cOriginalConfFilePath);
+gboolean cairo_dock_add_conf_file (const gchar *cOriginalConfFilePath, const gchar *cConfFilePath);
 
 /** Update a conf file with a list of values of the form : {type, name of the groupe, name of the key, value}. Must end with G_TYPE_INVALID.
 *@param cConfFilePath path to the conf file.

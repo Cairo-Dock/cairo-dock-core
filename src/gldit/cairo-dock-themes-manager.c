@@ -141,7 +141,7 @@ void cairo_dock_delete_conf_file (const gchar *cConfFilePath)
 	cairo_dock_mark_current_theme_as_modified (TRUE);
 }
 
-gboolean cairo_dock_add_conf_file (const gchar *cConfFilePath, const gchar *cOriginalConfFilePath)
+gboolean cairo_dock_add_conf_file (const gchar *cOriginalConfFilePath, const gchar *cConfFilePath)
 {
 	gboolean r = cairo_dock_copy_file (cOriginalConfFilePath, cConfFilePath);
 	if (r)
