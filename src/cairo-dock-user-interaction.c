@@ -102,10 +102,29 @@ static void _cairo_dock_hide_show_in_class_subdock (Icon *icon)
 			if (pIcon->Xid != 0)
 				pZOrderList = g_list_insert_sorted (pZOrderList, pIcon, (GCompareFunc) _compare_zorder);
 		}
+		
+		int iNumDesktop, iViewPortX, iViewPortY;
+		cairo_dock_get_current_desktop_and_viewport (&iNumDesktop, &iViewPortX, &iViewPortY);
+		
 		for (ic = pZOrderList; ic != NULL; ic = ic->next)
 		{
 			pIcon = ic->data;
-			cairo_dock_show_xwindow (pIcon->Xid);
+			if (cairo_dock_appli_is_on_desktop (pIcon, iNumDesktop, iViewPortX, iViewPortY))
+				break;
+		}
+		if (pZOrderList && ic == NULL)  // no window on the current desktop -> take the first desktop
+		{
+			pIcon = pZOrderList->data;
+			iNumDesktop = pIcon->iNumDesktop;
+			iViewPortX = pIcon->iViewPortX;
+			iViewPortY = pIcon->iViewPortY;
+		}
+		
+		for (ic = pZOrderList; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (cairo_dock_appli_is_on_desktop (pIcon, iNumDesktop, iViewPortX, iViewPortY))
+				cairo_dock_show_xwindow (pIcon->Xid);
 		}
 		g_list_free (pZOrderList);
 	}
