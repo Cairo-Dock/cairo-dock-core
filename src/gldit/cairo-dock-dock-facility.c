@@ -295,6 +295,10 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
  /// WINDOW SIZE AND POSITION ///
 ////////////////////////////////
 
+#define CANT_RESERVE_SPACE_WARNING "It's only possible to reserve space from the edge of the screen and not on the middle of two screens."
+
+#define _has_multiple_screens_and_on_one_screen(iNumScreen) (g_desktopGeometry.iNbScreens > 1 && iNumScreen > -1)
+
 void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 {
 	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDock));
@@ -305,42 +309,68 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 	{
 		int w = pDock->iMinDockWidth;
 		int h = pDock->iMinDockHeight;
-		int x, y;  // position qu'aurait la fenetre du dock s'il avait la taille minimale.
+		int x, y;  // position that should have dock's window if it has a minimum size.
 		cairo_dock_get_window_position_at_balance (pDock, w, h, &x, &y);
-		//g_print ("%dx%d; %d;%d\n", w, h, x, y);
-		
+
 		if (pDock->container.bDirectionUp)
 		{
 			if (pDock->container.bIsHorizontal)
 			{
-				bottom = h + pDock->iGapY;
-				bottom_start_x = x;
-				bottom_end_x = x + w;
+				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
+					&& cairo_dock_get_screen_position_y (pDock->iNumScreen) // offset
+						+ cairo_dock_get_screen_height (pDock->iNumScreen)  // height of the current screen
+						< gldi_get_desktop_height ()) // total height
+					cd_warning (CANT_RESERVE_SPACE_WARNING);
+				else
+				{
+					bottom = h + pDock->iGapY;
+					bottom_start_x = x;
+					bottom_end_x = x + w;
+				}
 			}
 			else
 			{
-				right = h + pDock->iGapY;
-				right_start_y = x;
-				right_end_y = x + w;
+				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
+					&& cairo_dock_get_screen_position_x (pDock->iNumScreen) // offset
+						+ cairo_dock_get_screen_width (pDock->iNumScreen)  // height of the current screen
+						< gldi_get_desktop_width ()) // total height
+					cd_warning (CANT_RESERVE_SPACE_WARNING);
+				else
+				{
+					right = h + pDock->iGapY;
+					right_start_y = x;
+					right_end_y = x + w;
+				}
 			}
 		}
 		else
 		{
 			if (pDock->container.bIsHorizontal)
 			{
-				top = h + pDock->iGapY;
-				top_start_x = x;
-				top_end_x = x + w;
+				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
+					&& cairo_dock_get_screen_position_y (pDock->iNumScreen) > 0)
+					cd_warning (CANT_RESERVE_SPACE_WARNING);
+				else
+				{
+					top = h + pDock->iGapY;
+					top_start_x = x;
+					top_end_x = x + w;
+				}
 			}
 			else
 			{
-				left = h + pDock->iGapY;
-				left_start_y = x;
-				left_end_y = x + w;
+				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
+					&& cairo_dock_get_screen_position_x (pDock->iNumScreen) > 0)
+					cd_warning (CANT_RESERVE_SPACE_WARNING);
+				else
+				{
+					left = h + pDock->iGapY;
+					left_start_y = x;
+					left_end_y = x + w;
+				}
 			}
 		}
 	}
-	
 	cairo_dock_set_strut_partial (Xid, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 }
 
