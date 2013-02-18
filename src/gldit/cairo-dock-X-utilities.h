@@ -43,6 +43,10 @@ gboolean cairo_dock_update_screen_geometry (void);
 
 gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName);
 
+gchar **cairo_dock_get_desktops_names (void);
+
+void cairo_dock_set_desktops_names (gchar **cNames);
+
 
 int cairo_dock_get_current_desktop (void);
 void cairo_dock_get_current_viewport (int *iCurrentViewPortX, int *iCurrentViewPortY);

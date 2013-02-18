@@ -17,13 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <math.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-
-#include <gdk/gdkx.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -36,10 +29,8 @@
 #include <X11/extensions/Xinerama.h>  // Note: Xinerama is deprecated by XRandr >= 1.3
 #endif
 #include <X11/extensions/Xrandr.h>
-///#include <X11/extensions/shape.h>
 #endif
 
-#include "cairo-dock-container.h"  // CAIRO_DOCK_HORIZONTAL
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-X-utilities.h"
@@ -67,6 +58,7 @@ static Atom s_aNetCurrentDesktop;
 static Atom s_aNetDesktopViewport;
 static Atom s_aNetDesktopGeometry;
 static Atom s_aNetNbDesktops;
+static Atom s_aNetDesktopNames;
 static Atom s_aRootMapID;
 // Atoms pour les fenetres
 static Atom s_aNetClientList;  // z-order
@@ -116,7 +108,8 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	s_aNetDesktopViewport		= XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
 	s_aNetDesktopGeometry		= XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
 	s_aNetNbDesktops			= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
-	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
+	s_aNetDesktopNames			= XInternAtom (s_XDisplay, "_NET_DESKTOP_NAMES", False);
+	s_aRootMapID				= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
 	
 	s_aNetClientListStacking	= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
 	s_aNetClientList			= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST", False);
@@ -351,6 +344,66 @@ gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName)
 	return (i != iNbProperties);
 }
 
+gchar **cairo_dock_get_desktops_names (void)
+{
+	gchar **cNames = NULL;
+	Window root = DefaultRootWindow (s_XDisplay);
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements = 0;
+	gchar *names = NULL;
+	XGetWindowProperty (s_XDisplay, root, s_aNetDesktopNames, 0, G_MAXULONG, False, s_aUtf8String, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&names);
+	
+	if (iBufferNbElements > 0)
+	{
+		gchar *str = names;
+		int n = 0;
+		while (str < names + iBufferNbElements)
+		{
+			str = strchr (str, '\0');
+			str ++;
+			n ++;
+		}
+		
+		cNames = g_new0 (gchar*, n+1);  // NULL-terminated
+		int i = 0;
+		str = names;
+		while (str < names + iBufferNbElements)
+		{
+			cNames[i] = g_strdup (str);
+			str = strchr (str, '\0');
+			str ++;
+			i ++;
+		}
+	}
+	return cNames;
+}
+
+void cairo_dock_set_desktops_names (gchar **cNames)
+{
+	if (cNames == NULL)
+		return;
+	
+	int i, n = 0;
+	for (i = 0; cNames[i] != NULL; i ++)
+		n += strlen (cNames[i]) + 1;  // strlen doesn't count the terminating null byte
+	
+	gchar *names = g_new0 (gchar, n);  // we can't use g_strjoinv as the separator is '\0'
+	gchar *str = names;
+	for (i = 0; cNames[i] != NULL; i ++)
+	{
+		strcpy (str, cNames[i]);
+		str += strlen (cNames[i]) + 1;
+	}
+	
+	Window root = DefaultRootWindow (s_XDisplay);
+	XChangeProperty (s_XDisplay,
+			root,
+			s_aNetDesktopNames,
+			s_aUtf8String, 8, PropModeReplace,
+			(guchar *)names, n);
+	g_free (names);
+}
 
 int cairo_dock_get_current_desktop (void)
 {

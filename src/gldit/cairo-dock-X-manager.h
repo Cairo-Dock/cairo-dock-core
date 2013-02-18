@@ -61,6 +61,8 @@ typedef enum {
 	NOTIFICATION_WINDOW_ACTIVATED,
 	/// notification called when a window's property has changed. data : {Window, Atom, int}
 	NOTIFICATION_WINDOW_PROPERTY_CHANGED,
+	/// notification called when the names of the desktops have changed
+	NOTIFICATION_DESKTOP_NAMES_CHANGED,
 	NB_NOTIFICATIONS_DESKTOP
 	} CairoDesktopNotifications;
 

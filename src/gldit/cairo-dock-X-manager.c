@@ -67,6 +67,7 @@ static Atom s_aNetWorkarea;
 static Atom s_aNetShowingDesktop;
 static Atom s_aRootMapID;
 static Atom s_aNetNbDesktops;
+static Atom s_aNetDesktopNames;
 static Atom s_aXKlavierState;
 static CairoDockDesktopBackground *s_pDesktopBg = NULL;  // une fois alloue, le pointeur restera le meme tout le temps.
 static CairoDockWMBackend *s_pWMBackend = NULL;
@@ -177,6 +178,10 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 				else if (event.xproperty.atom == s_aXKlavierState)
 				{
 					cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_KBD_STATE_CHANGED, NULL);
+				}
+				else if (event.xproperty.atom == s_aNetDesktopNames)
+				{
+					cairo_dock_notify_on_object (&myDesktopMgr, NOTIFICATION_DESKTOP_NAMES_CHANGED);
 				}
 			}  // fin de PropertyNotify sur root.
 		}
@@ -534,6 +539,7 @@ static void init (void)
 	s_aNetShowingDesktop 	= XInternAtom (s_XDisplay, "_NET_SHOWING_DESKTOP", False);
 	s_aRootMapID			= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);  // Note: ESETROOT_PMAP_ID might be used instead. We don't handle it as it seems quite rare and somewhat deprecated.
 	s_aNetNbDesktops		= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
+	s_aNetDesktopNames			= XInternAtom (s_XDisplay, "_NET_DESKTOP_NAMES", False);
 	s_aXKlavierState		= XInternAtom (s_XDisplay, "XKLAVIER_STATE", False);
 	
 	//\__________________ On recupere le bureau courant.
