@@ -46,4 +46,4 @@ Order=1
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/libreoffice-writer.desktop;kword.desktop;koffice.desktop;abiword.desktop;openoffice.org-writer.desktop
+Origin=/usr/share/applications/libreoffice-writer.desktop;kword.desktop;koffice.desktop;abiword.desktop;openoffice.org-writer.desktop;words.desktop

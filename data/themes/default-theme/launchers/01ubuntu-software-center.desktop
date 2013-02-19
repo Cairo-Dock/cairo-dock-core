@@ -46,4 +46,4 @@ Order=1
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/ubuntu-software-center.desktop;synaptic.desktop;adept.desktop;yast.desktop;yum.desktop
+Origin=/usr/share/applications/ubuntu-software-center.desktop;synaptic.desktop;adept.desktop;yast.desktop;apper.desktop

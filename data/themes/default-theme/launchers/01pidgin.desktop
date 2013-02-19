@@ -46,4 +46,4 @@ Order=7.25
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/pidgin.desktop;empathy.desktop;kopete.desktop
+Origin=/usr/share/applications/pidgin.desktop;empathy.desktop;kopete.desktop;ktp-contactlist.desktop

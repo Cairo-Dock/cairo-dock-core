@@ -1,4 +1,4 @@
-#3.0.0.0rc1
+#2.4.0~0beta0
 
 #[gtk-about]
 [Desktop Entry]
@@ -12,13 +12,13 @@ Container=_MainDock_
 #v
 sep_display=
 
-#s[Default] Launcher's name :
+#s Launcher's name :
 Name=
 
-#S+[Default] Image's name or path :
+#S+ Image's name or path :
 Icon=
 
-#s[Default] Command to launch on click :
+#s Command to launch on click :
 #{Exemple : nautilus --no-desktop, gedit, etc. You can even enter a keyboard shortcut, for exemple <Alt>F1, <Ctrl>c,  <Ctrl>v, etc}
 Exec=
 
@@ -26,11 +26,11 @@ Exec=
 #X[Extra parameters]
 frame_extra=
 
-#b Prevent this launcher from stealing this application from taskbar ?
+#b Prevent this launcher from stealing appli from taskbar ?
 #{If you choosed to mix launcher and applis, this option will deactivate this behaviour for this launcher only. It can be useful for instance for a launcher that launches a script in a terminal, but you don't want it to steal the Terminal's icon from the Taskbar.} 
 prevent inhibate=false
 
-#K[Default] Class of the program :
+#K Class of the program :
 #{The only reason you may want to modify this parameter is if you made this launcher by hands. If you dropped it into the dock from the menu, it is nearly sure that you shouldn't touch it. It defines the class of the program, which is useful to link the appli with its launcher.}
 StartupWMClass=
 
@@ -42,8 +42,8 @@ Terminal=false
 ShowOnViewport=0
 
 #f[0;100] Order you want for this launcher among the others:
-Order=4.5
+Order=7.25
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/empathy.desktop;pidgin.desktop;kopete.desktop;emesene.desktop;gajim.desktop;psi.desktop
+Origin=/usr/share/applications/pidgin.desktop;empathy.desktop;kopete.desktop;ktp-contactlist.desktop

@@ -43,5 +43,5 @@ Order=5
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/libreoffice-writer.desktop;koffice.desktop;abiword.desktop;openoffice.org-writer.desktop
+Origin=/usr/share/applications/libreoffice-writer.desktop;koffice.desktop;abiword.desktop;openoffice.org-writer.desktop;words.desktop
 group=0
