@@ -37,6 +37,8 @@
 
 #if (GTK_MAJOR_VERSION >= 3)
 #include <cairo/cairo-xlib.h>  // needed for cairo_xlib_surface_create
+#else
+#include <gdk/gdkx.h>
 #endif
 
 
