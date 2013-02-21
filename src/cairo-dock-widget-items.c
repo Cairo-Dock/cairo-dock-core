@@ -420,13 +420,17 @@ static inline void _add_one_module (G_GNUC_UNUSED const gchar *cModuleName, Cair
 }
 static gboolean _add_one_module_to_model (const gchar *cModuleName, CairoDockModule *pModule, GtkTreeStore *model)
 {
-	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule) && pModule->pInstancesList != NULL)
+	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule))
 	{
-		CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
-		if (pModuleInstance->pIcon == NULL || (pModuleInstance->pDock && !pModuleInstance->pIcon->cParentDockName))
+		GList *pItem;
+		for (pItem = pModule->pInstancesList; pItem != NULL; pItem = pItem->next)
 		{
-			// on ajoute une ligne pour l'applet.
-			_add_one_module (cModuleName, pModuleInstance, model);
+			CairoDockModuleInstance *pModuleInstance = pItem->data;
+			if (pModuleInstance->pIcon == NULL || (pModuleInstance->pDock && !pModuleInstance->pIcon->cParentDockName))
+			{
+				// on ajoute une ligne pour l'applet.
+				_add_one_module (cModuleName, pModuleInstance, model);
+			}
 		}
 	}
 	return FALSE; // FALSE => keep going
