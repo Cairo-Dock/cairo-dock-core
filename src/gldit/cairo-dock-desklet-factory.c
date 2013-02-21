@@ -332,12 +332,13 @@ static gboolean on_scroll_desklet (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventScroll* pScroll,
 	CairoDesklet *pDesklet)
 {
-	//g_print ("scroll\n");
-	if (! (pScroll->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)))
+	//g_print ("scroll %d\n", pScroll->direction);
+	if (pScroll->direction != GDK_SCROLL_UP && pScroll->direction != GDK_SCROLL_DOWN)  // on degage les scrolls horizontaux.
 	{
-		Icon *icon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);  // can be NULL
-		cairo_dock_notify_on_object (pDesklet, NOTIFICATION_SCROLL_ICON, icon, pDesklet, pScroll->direction);
+		return FALSE;
 	}
+	Icon *icon = cairo_dock_find_clicked_icon_in_desklet (pDesklet);  // can be NULL
+	cairo_dock_notify_on_object (pDesklet, NOTIFICATION_SCROLL_ICON, icon, pDesklet, pScroll->direction);
 	return FALSE;
 }
 
