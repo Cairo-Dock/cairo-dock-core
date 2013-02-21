@@ -219,7 +219,6 @@ CairoDialog *cairo_dock_show_dialog_with_value (const gchar *cText, Icon *pIcon,
 *@param cText the message to display.
 *@param pIcon the icon that will hold the dialog.
 *@param pContainer the container of the icon.
-*@param fTimeLength time length of the dialog, or 0 for an unlimited dialog.
 *@param cIconPath path to an icon to display in the margin.
 *@param pInteractiveWidget an interactive widget.
 *@return the number of the button that was clicked : 0 or -1 for OK, 1 or -2 for CANCEL, -3 if the dialog has been destroyed before. The dialog is destroyed after the user choosed, but the interactive widget is not destroyed, which allows to retrieve the changes made by the user. Destroy it with 'gtk_widget_destroy' when you're done with it.

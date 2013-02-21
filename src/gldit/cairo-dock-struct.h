@@ -308,7 +308,7 @@
 when defining your applet in the \ref CD_APPLET_DEFINE_BEGIN/\ref CD_APPLET_DEFINE_END section, add to the interface the 2 functions pInterface->load_custom_widget and pInterface->save_custom_widget.
  * They will be respectively called when the config panel of your applet is raised, and when it is validated.
  * 
- * If you want to modify the content of an existing widget, you can grab it with \ref cairo_dock_get_widget_from_name.
+ * If you want to modify the content of an existing widget, you can grab it with \ref cairo_dock_gui_find_group_key_widget_in_list.
  * To add your custom widgets, insert in the conf file an empty widget (with the prefix '_'), then grab it and pack some GtkWidget inside.
  * If you want to dynamically alter the config panel (like having a "new" button that would make appear new widgets on click), you can add in the conf file the new widgets, and then call \ref cairo_dock_reload_current_module_widget to reload the config panel.
  * See the AlsaMixer or Weather applets for an easy example, and Clock or Mail for a more advanced example.

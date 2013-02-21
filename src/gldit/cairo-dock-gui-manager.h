@@ -26,12 +26,11 @@
 #include "cairo-dock-manager.h"
 G_BEGIN_DECLS
 
-/** @file cairo-dock-gui-manager.h This class provides useful functions to build config panels from keyfiles.
+/** @file cairo-dock-gui-manager.h This class provides functions to act on configuration windows.
 * 
-* GUIs are built from a .conf file; .conf files are normal group/key files, but with some special indications in the comments. Each key will be represented by a pre-defined widget, that is defined by the first caracter of its comment. The comment also contains a description of the key, and an optionnal tooltip. See cairo-dock-gui-factory.h for the list of pre-defined widgets and a short explanation on how to use them inside a conf file. The file 'cairo-dock.conf' can be an useful example.
+* It also defines the interface that a GUI backend should implement.
 * 
-* The class defines the interface that a backend to the main GUI of Cairo-Dock should implement.
-* It also provides a useful function to easily build a window from a conf file : \ref cairo_dock_build_generic_gui
+* Note: GUIs are built from a .conf file; .conf files are normal group/key files, but with some special indications in the comments. Each key will be represented by a pre-defined widget, that is defined by the first caracter of its comment. The comment also contains a description of the key, and an optionnal tooltip. See cairo-dock-gui-factory.h for the list of pre-defined widgets and a short explanation on how to use them inside a conf file. The file 'cairo-dock.conf' can be an useful example.
 */
 
 // manager

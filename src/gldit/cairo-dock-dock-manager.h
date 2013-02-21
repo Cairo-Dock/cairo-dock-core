@@ -234,14 +234,12 @@ void cairo_dock_hide_parent_dock (CairoDock *pDock);
 gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
 
 /** (Re)load all buffers of all icons in all docks.
+@param bUpdateIconSize TRUE to recalculate the icons and docks size.
 */
 void cairo_dock_reload_buffers_in_all_docks (gboolean bUpdateIconSize);
 
 void cairo_dock_draw_subdock_icons (void);
 
-///void cairo_dock_update_all_docks_size (void);
-
-///void cairo_dock_reset_all_views (void);
 void cairo_dock_set_all_views_to_default (int iDockType);
 
 

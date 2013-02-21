@@ -224,7 +224,13 @@ void cairo_dock_gui_select_in_combo_full (GtkWidget *pOneWidget, const gchar *cV
 
 gchar **cairo_dock_gui_get_active_rows_in_tree_view (GtkWidget *pOneWidget, gboolean bSelectedRows, gsize *iNbElements);
 
-
+/** Get a widget from a list of widgets representing a configuration window.
+The widgets represent a pair (group,key) as defined in the config file.
+@param pWidgetList list of widgets built from the config file
+@param cGroupName name of the group the widget belongs to
+@param cKeyName name of the key the widget represents
+@return the widget asociated with the (group,key) , or NULL if none is found
+*/
 CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
 
 #define cairo_dock_gui_get_widgets(pGroupKeyWidget) (pGroupKeyWidget)->pSubWidgetList

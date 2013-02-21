@@ -17,15 +17,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_OPENGL_PATH__
 #define  __CAIRO_DOCK_OPENGL_PATH__
-
-#include <glib.h>
-
-#include <GL/glu.h>
-
-#include "cairo-dock-struct.h"
 
 G_BEGIN_DECLS
 

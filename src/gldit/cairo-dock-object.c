@@ -22,6 +22,10 @@
 #include "cairo-dock-manager.h"
 #include "cairo-dock-object.h"
 
+/* new_dialog -> new_object (mgr, attr) -> mgr->top_parent->init(attr) -> mgr->parent->init(attr) -> mgr->init(attr) --> notif
+ * unref_object -> ref-- -> notif -> mgr->destroy -> mgr->parent->destroy -> mgr->top_parent->destroy --> free
+ * */
+
 void gldi_object_set_manager (GldiObject *pObject, GldiManager *pMgr)
 {
 	pObject->mgr = pMgr;

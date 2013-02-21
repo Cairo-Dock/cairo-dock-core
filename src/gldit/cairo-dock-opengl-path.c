@@ -17,19 +17,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
-
-#include <glib/gstdio.h>
-
-#include <pango/pango.h>
-
-
-#include <X11/extensions/Xrender.h>
-#include <GL/glx.h>
-#include <GL/glxext.h>
+#include <GL/gl.h>
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_generate_string_path_opengl

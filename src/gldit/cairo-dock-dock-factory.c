@@ -18,50 +18,28 @@
 */
 
 #include <math.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>
 
-#include <cairo.h>
-
-#include <X11/extensions/Xrender.h>
-#include <X11/extensions/shape.h>
-#include <GL/gl.h> 
-#include <GL/glu.h> 
-#include <GL/glx.h> 
-
-#include "cairo-dock-draw.h"
-#include "cairo-dock-applications-manager.h"
-#include "cairo-dock-image-buffer.h"
+#include "cairo-dock-applications-manager.h"  // myTaskbarParam.bHideVisibleApplis
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-callbacks.h"
-#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-separator-manager.h"
-#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-separator-manager.h"  // cairo_dock_insert_automatic_separator_in_dock
+#include "cairo-dock-launcher-manager.h"  // cairo_dock_create_icon_from_desktop_file
 #include "cairo-dock-backends-manager.h"  // myBackendsParam.fSubDockSizeRatio
-#include "cairo-dock-X-utilities.h"
+#include "cairo-dock-X-utilities.h"  // cairo_dock_set_xicon_geometry
 #include "cairo-dock-log.h"
 #include "cairo-dock-application-facility.h"  // cairo_dock_detach_appli
 #include "cairo-dock-dialog-manager.h"  // cairo_dock_replace_all_dialogs
-#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-notifications.h"
-#include "cairo-dock-class-manager.h"
+#include "cairo-dock-class-manager.h"   // cairo_dock_get_class_subdock
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-themes-manager.h"
-#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-opengl.h"
-#include "cairo-dock-data-renderer.h"
+#include "cairo-dock-draw-opengl.h"  // for the redirected texture
+#include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
+
 #include "cairo-dock-dock-factory.h"
 
 extern gchar *g_cCurrentLaunchersPath;

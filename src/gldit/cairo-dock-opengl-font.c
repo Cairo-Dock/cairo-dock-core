@@ -18,27 +18,17 @@
 */
 
 #include <math.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <iconv.h>
-
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include <gdk/gdkx.h>
-
+#include <gdk/gdkx.h>  // struct Display *
 #include <pango/pangox.h>
-#include <cairo.h>
 #include <pango/pango.h>
+#include <cairo.h>
+#include <GL/gl.h>
 
-#include <X11/extensions/Xrender.h>
-#include <GL/glx.h>
-#include <GL/glxext.h>
-
-#include "cairo-dock-surface-factory.h"
-#include "cairo-dock-draw.h"
+#include "cairo-dock-surface-factory.h"  // cairo_dock_create_blank_surface
+#include "cairo-dock-draw.h"  // cairo_dock_create_drawing_context_generic
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"
+
 #include "cairo-dock-opengl-font.h"
 
 #include "texture-gradation.h"

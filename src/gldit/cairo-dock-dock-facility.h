@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 * @param pDock le dock.
 * @return la taille max.
 */
-///#define cairo_dock_get_max_authorized_dock_width(pDock) (myDocksParam.iMaxAuthorizedWidth == 0 ? g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] : MIN (myDocksParam.iMaxAuthorizedWidth, g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal]))
 #define cairo_dock_get_max_authorized_dock_width gldi_dock_get_screen_width
 
 /* Dis si un dock est etendu ou pas.

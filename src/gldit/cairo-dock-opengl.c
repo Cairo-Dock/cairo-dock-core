@@ -17,23 +17,18 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
 #include <math.h>
-#include <stdlib.h>
-
-#include <X11/extensions/Xrender.h>
+#include <GL/gl.h>
+#include <GL/glu.h>  // gluLookAt
 #include <GL/glx.h>
-#include <GL/glxext.h>
-#include <GL/glu.h>
 #include <gdk/gdkx.h>
+#include <X11/extensions/Xrender.h>  // XRenderFindVisualFormat
 
 #include "cairo-dock-log.h"
-#include "cairo-dock-icon-facility.h"
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-desklet-factory.h"  // cairo_dock_begin_draw_icon
-#include "cairo-dock-image-buffer.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_extent
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-X-manager.h"  // desktop dimensions
+
 #include "cairo-dock-opengl.h"
 
 // public (manager, config, data)

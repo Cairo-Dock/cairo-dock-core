@@ -18,47 +18,23 @@
 */
 
 #include <math.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>
+#include <gdk/gdkx.h>  // GDK_WINDOW_XID
 
-#include <cairo.h>
-#include <pango/pango.h>
-
-#include <X11/extensions/Xrender.h>
-#include <X11/extensions/shape.h>
-#include <GL/gl.h> 
-#include <GL/glu.h> 
-#include <GL/glx.h> 
-
-#include "cairo-dock-draw.h"
-#include "cairo-dock-applications-manager.h"
-#include "cairo-dock-image-buffer.h"
-#include "cairo-dock-config.h"
-#include "cairo-dock-module-factory.h"
-#include "cairo-dock-callbacks.h"
-#include "cairo-dock-icon-factory.h"
+#include "cairo-dock-applications-manager.h"  // cairo_dock_set_icons_geometry_for_window_manager
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-separator-factory.h"
-#include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-backends-manager.h"  // myBackendsParam.fSubDockSizeRatio
-#include "cairo-dock-X-utilities.h"
+#include "cairo-dock-X-utilities.h" // cairo_dock_set_strut_partial
 #include "cairo-dock-log.h"
-#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-dialog-manager.h"  // cairo_dock_replace_all_dialogs
 #include "cairo-dock-notifications.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
-#include "cairo-dock-class-manager.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-X-manager.h"
-#include "cairo-dock-global-variables.h"
-#include "cairo-dock-data-renderer.h"
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-X-manager.h"  // cairo_dock_get_screen_*
+#include "cairo-dock-global-variables.h"  // g_openglConfig
+#include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
+#include "cairo-dock-opengl.h"  // gldi_glx_begin_draw_container_full
 
 #include "cairo-dock-dock-facility.h"
 

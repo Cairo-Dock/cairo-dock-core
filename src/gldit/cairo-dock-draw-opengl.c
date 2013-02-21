@@ -18,36 +18,19 @@
 */
 
 #include <math.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <iconv.h>
+#include <GL/gl.h>
+#include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay
 
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include <gdk/gdkx.h>
-
-#include <cairo.h>
-#include <pango/pango.h>
-
-
-#include <X11/extensions/Xrender.h>
-#include <GL/glx.h>
-#include <GL/glxext.h>
-
-#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-draw.h"
-#include "cairo-dock-notifications.h"
-#include "cairo-dock-backends-manager.h"
+#include "cairo-dock-notifications.h"  // for NOTIFICATION_RENDER_ICON
 #include "cairo-dock-log.h"
-#include "cairo-dock-container.h"
-#include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-facility.h"  // cairo_dock_get_first_drawn_element_linear
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.fVisibleAppliAlpha
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-overlay.h"
 #include "cairo-dock-opengl-path.h"
+
 #include "cairo-dock-draw-opengl.h"
 
 #include "texture-gradation.h"
@@ -785,7 +768,6 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, doubl
 	else
 		cImagePath = cairo_dock_search_image_s_path (cImageFile);
 	
-	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (g_pPrimaryContainer);
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_image (cImagePath,
 		1.,
 		0., 0.,
@@ -794,7 +776,6 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, doubl
 		&fHeight,
 		NULL, NULL);
 	//cd_debug ("texture genere (%x, %.2fx%.2f)", pSurface, fWidth, fHeight);
-	cairo_destroy (pCairoContext);
 	
 	if (fImageWidth != NULL)
 		*fImageWidth = fWidth;

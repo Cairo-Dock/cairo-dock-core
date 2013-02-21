@@ -43,6 +43,8 @@ gboolean cairo_dock_add_conf_file (const gchar *cOriginalConfFilePath, const gch
 void cairo_dock_update_conf_file (const gchar *cConfFilePath, GType iFirstDataType, ...);
 
 /** Write a key file on the disk.
+*@param pKeyFile the key-file
+*@param cConfFilePath its path on the disk
 */
 void cairo_dock_write_keys_to_conf_file (GKeyFile *pKeyFile, const gchar *cConfFilePath);
 
