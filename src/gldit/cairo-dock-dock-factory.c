@@ -732,6 +732,10 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		cd_warning ("This icon (%s) is already inside a container !", icon->cName);
 	}
 
+	// maybe the icon was detached before and then cParentDockName is NULL
+	if (icon->cParentDockName == NULL)
+		icon->cParentDockName = g_strdup (cairo_dock_search_dock_name (pDock));
+
 	//\______________ check if a separator is needed (ie, if the group of the new icon (not its order) is new).
 	gboolean bSeparatorNeeded = FALSE;
 	if (bInsertSeparator && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
