@@ -15,5 +15,4 @@ install(FILES
 	02separator.desktop
 	03separator.desktop
 	04separator.desktop
-	05separator.desktop
 	DESTINATION ${pkgdatadir}/themes/Default-Panel/launchers)
