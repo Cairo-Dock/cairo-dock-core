@@ -3,7 +3,7 @@ X-Upstream-Author: Fabrice Rey <fabounet@glx-dock.org>.
 
 Files: 	*/*
 Copyright: 2007-2013 Fabrice Rey <fabounet@glx-dock.org>
-Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
+License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -20,17 +20,17 @@ Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
 
 Files: 	src/gldit/cairo-dock-dbus.*
 Copyright: Adrien Pilleboue <adrien.pilleboue@gmail.com>
-Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
+License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
 
 Files: 	src/gldit/cairo-dock-desklet.*,
 	src/gldit/cairo-dock-keybinder.*,
 	src/gldit/cairo-dock-log.*
 Copyright: Copyright (C) 2008 Cedric GESTES
-Licence: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete licence)
+License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
 
 Files: 	src/gldit/egg*
 Copyright: Copyright (C) 2002  Red Hat, Inc.; Copyright 1998, 2001 Tim Janik
-Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
+License: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete license)
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -47,17 +47,17 @@ Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
 
 Files: 	src/gldit/texture-gradation.h
 Copyright: Copyright (C) 2007  Gimp dev.
-Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
+License: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete license)
 
 Files: data/*.svg, data/*.png
 Copyright: Humanity devs (some of them modified by Matthieu Baerts)
-Licence: GPL 3+
+License: GPL 3+
 
 Files: data/default-theme/ data/man/
 Copyright: Matthieu Baerts (matttbe) <matttbe@gmail.com>
-Licence: LGPL
+License: LGPL
 
 Files:  debian/*
 Copyright: Copyright (C) Julien Lavergne <julien.lavergne@gmail.com>
-Licence: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete licence)
+License: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete license)
 Updated by Matthieu Baerts for new releases.
