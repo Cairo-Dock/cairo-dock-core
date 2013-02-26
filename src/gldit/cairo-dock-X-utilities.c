@@ -182,29 +182,30 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 			int n = res->ncrtc;
 			cd_debug (" number of screen(s): %d", n);
 			pScreens = g_new0 (GtkAllocation, n);
-			int i;
+			int i, iSkippedScreens = 0;
 			for (i = 0; i < n; i++)
 			{
 				XRRCrtcInfo *info = XRRGetCrtcInfo (s_XDisplay, res, res->crtcs[i]);
-				if (info == NULL)
+				if (info == NULL || info->width == 0 || info->height == 0)
 				{
-					cd_warning ("This screen (%d) has no info, skip it.", i);
+					if (info == NULL)
+						cd_warning ("This screen (%d) has no info, skip it.", i);
+					else
+					{
+						cd_message ("This screen (%d) has a null dimensions, skip it.", i); // it's "normal"
+						XRRFreeCrtcInfo (info);
+					}
+					iSkippedScreens++; // we have to skip this screen and reduce pScreens
+					pScreens = g_renew (GtkAllocation, pScreens, n - iSkippedScreens);
 					continue;
 				}
 				
-				if (info->width == 0 || info->height == 0)
-				{
-					cd_message ("This screen (%d) has a null dimensions, skip it.", i);
-					XRRFreeCrtcInfo (info);
-					continue;  // if that happens, does it screw the number of screens ?...
-				}
-				
-				pScreen = &pScreens[i];
+				pScreen = &pScreens[i-iSkippedScreens];
 				pScreen->x = info->x;
 				pScreen->y = info->y;
 				pScreen->width = info->width;
 				pScreen->height = info->height;
-				cd_message (" * screen %d(%d) => (%d;%d) %dx%d", iNbScreens, i, pScreen->x, pScreen->y, pScreen->width, pScreen->height);
+				cd_message (" * screen %d(%d-%d) => (%d;%d) %dx%d", iNbScreens, i, iSkippedScreens, pScreen->x, pScreen->y, pScreen->width, pScreen->height);
 				
 				XRRFreeCrtcInfo (info);
 				iNbScreens ++;
