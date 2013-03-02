@@ -182,30 +182,29 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 			int n = res->ncrtc;
 			cd_debug (" number of screen(s): %d", n);
 			pScreens = g_new0 (GtkAllocation, n);
-			int i, iSkippedScreens = 0;
+			int i;
 			for (i = 0; i < n; i++)
 			{
 				XRRCrtcInfo *info = XRRGetCrtcInfo (s_XDisplay, res, res->crtcs[i]);
-				if (info == NULL || info->width == 0 || info->height == 0)
+				if (info == NULL)
 				{
-					if (info == NULL)
-						cd_warning ("This screen (%d) has no info, skip it.", i);
-					else
-					{
-						cd_message ("This screen (%d) has a null dimensions, skip it.", i); // it's "normal"
-						XRRFreeCrtcInfo (info);
-					}
-					iSkippedScreens++; // we have to skip this screen and reduce pScreens
-					pScreens = g_renew (GtkAllocation, pScreens, n - iSkippedScreens);
+					cd_warning ("This screen (%d) has no info, skip it.", i);
 					continue;
 				}
 				
-				pScreen = &pScreens[i-iSkippedScreens];
+				if (info->width == 0 || info->height == 0)
+				{
+					cd_debug ("This screen (%d) has a null dimensions, skip it.", i);  // seems normal behaviour of xrandr, so no warning
+					XRRFreeCrtcInfo (info);
+					continue;
+				}
+				
+				pScreen = &pScreens[iNbScreens];
 				pScreen->x = info->x;
 				pScreen->y = info->y;
 				pScreen->width = info->width;
 				pScreen->height = info->height;
-				cd_message (" * screen %d(%d-%d) => (%d;%d) %dx%d", iNbScreens, i, iSkippedScreens, pScreen->x, pScreen->y, pScreen->width, pScreen->height);
+				cd_message (" * screen %d(%d) => (%d;%d) %dx%d", iNbScreens, i, pScreen->x, pScreen->y, pScreen->width, pScreen->height);
 				
 				XRRFreeCrtcInfo (info);
 				iNbScreens ++;
@@ -243,8 +242,8 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 		else
 			cd_warning ("No screen found from Xinerama, is it really active ?");
 	}
-	#endif
-#endif
+	#endif  // HAVE_XINERAMA
+	#endif  // HAVE_XEXTEND
 	
 	if (iNbScreens == 0)
 	{
