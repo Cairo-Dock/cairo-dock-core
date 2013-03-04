@@ -120,7 +120,7 @@ void cairo_dock_start_applications_manager (CairoDock *pDock);
 
 
 // Applis manager : access
-#define _cairo_dock_appli_is_on_our_way(icon, pDock) (icon != NULL && cairo_dock_appli_is_on_current_desktop (icon) &&  ((myDocksParam.bAutoHideOnFullScreen && icon->bIsFullScreen) || (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && cairo_dock_appli_overlaps_dock (icon, pDock))))
+#define _cairo_dock_appli_is_on_our_way(icon, pDock) (icon != NULL && cairo_dock_appli_is_on_current_desktop (icon) &&  pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && cairo_dock_appli_overlaps_dock (icon, pDock))
 
 void cairo_dock_hide_show_if_current_window_is_on_our_way (CairoDock *pDock);
 void cairo_dock_hide_if_any_window_overlap_or_show (CairoDock *pDock);

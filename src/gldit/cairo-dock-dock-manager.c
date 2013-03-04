@@ -1310,7 +1310,7 @@ void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisi
 				pDock->bAutoHide = FALSE;
 				cairo_dock_start_showing (pDock);
 			}
-			if (bAutoHideOnOverlap || myDocksParam.bAutoHideOnFullScreen)
+			if (bAutoHideOnOverlap)
 			{
 				pDock->bTemporaryHidden = pDock->bAutoHide;  // astuce pour utiliser la fonction ci-dessous.
 				cairo_dock_hide_show_if_current_window_is_on_our_way (pDock);
@@ -1541,8 +1541,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	}
 	
 	//\____________________ Autres parametres.
-	pAccessibility->iMaxAuthorizedWidth = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "max_authorized_width", &bFlushConfFileNeeded, 0, "Position", NULL);  // obsolete, cache en conf.
-	
 	double fSensitivity = cairo_dock_get_double_key_value (pKeyFile, "Accessibility", "edge sensitivity", &bFlushConfFileNeeded, -1, NULL, NULL);  // replace "unhide delay"
 	if (fSensitivity < 0)  // old param
 	{
@@ -1551,9 +1549,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 		g_key_file_set_double (pKeyFile, "Accessibility", "edge sensitivity", fSensitivity);
 	}
 	pAccessibility->iUnhideDockDelay = fSensitivity * 1000;  // so we decreased the old delay by 1.5, since we handle mouse movements better.
-	
-	pAccessibility->bAutoHideOnFullScreen = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "auto quick hide", &bFlushConfFileNeeded, FALSE, "TaskBar", NULL);
-	//pAccessibility->bAutoHideOnFullScreen = FALSE;
 	
 	//\____________________ sous-docks.
 	pAccessibility->iLeaveSubDockDelay = cairo_dock_get_integer_key_value (pKeyFile, "Accessibility", "leaving delay", &bFlushConfFileNeeded, 330, "System", NULL);

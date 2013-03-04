@@ -106,8 +106,6 @@ struct _CairoDocksParam {
 	gint iLeaveSubDockDelay;
 	gboolean bAnimateSubDock;
 	// others
-	gboolean bAutoHideOnFullScreen;
-	gint iMaxAuthorizedWidth;
 	gboolean bExtendedMode;
 	gboolean bLockIcons;
 	gboolean bLockAll;

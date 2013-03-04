@@ -68,10 +68,6 @@ frame_extra =
 
 max_authorized_width = 0
 
-#b- Automatically hide the dock when a window becomes full screen?
-#{This is only usefull if you do not already use auto-hide and if your Window Manager allows the dock in front of fullscreen windows (which is rare).}
-auto quick hide = false
-
 #F-[Sub-docks' visibility;@pkgdatadir@/icons/icon-subdock.png]
 frame_sub =
 

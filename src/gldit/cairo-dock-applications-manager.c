@@ -210,7 +210,7 @@ static void _unhide_all_docks (CairoDock *pDock, G_GNUC_UNUSED Icon *icon)
 
 static void _hide_show_if_on_our_way (CairoDock *pDock, Icon *icon)
 {
-	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && ! myDocksParam.bAutoHideOnFullScreen)
+	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
 		return ;
 
 	// maybe we have a window without icon in the dock...
