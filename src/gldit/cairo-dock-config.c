@@ -26,10 +26,13 @@
 #include <stdlib.h>
 
 #include "gldi-config.h"
-#ifdef HAVE_LIBCRYPT
-/* libC crypt */
-#include <crypt.h>
 
+#ifdef HAVE_LIBCRYPT
+#ifdef __FreeBSD__
+#include <unistd.h>  // on BSD, there is no crypt.h
+#else
+#include <crypt.h>
+#endif
 static char DES_crypt_key[64] =
 {
     1,0,0,1,1,1,0,0, 1,0,1,1,1,0,1,1, 1,1,0,1,0,1,0,1, 1,1,0,0,0,0,0,1,

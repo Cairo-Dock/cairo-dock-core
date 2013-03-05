@@ -144,9 +144,18 @@ endif()
 
 check_include_files ("dlfcn.h" HAVE_DLFCN_H)
 check_library_exists (dl dlopen "" HAVE_LIBDL)
-if (NOT HAVE_LIBDL OR NOT HAVE_DLFCN_H)
+if (HAVE_LIBDL)  # dlopen might be in libc directly as in FreeBSD
+	set (LIBDL_LIBRARIES "dl")
+endif()
+if (NOT HAVE_DLFCN_H)
 	message(FATAL_ERROR "Cairo-Dock requires dlfcn.h")
 endif()
+
+check_library_exists (intl libintl_gettext "" HAVE_LIBINTL)
+if (HAVE_LIBINTL)  # on BSD, we have to link to libintl to be able to use gettext.
+	set (LIBINTL_LIBRARIES "intl")
+endif()
+
 
 ########### variables defined at compil time ###############
 
