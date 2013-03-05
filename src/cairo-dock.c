@@ -778,9 +778,22 @@ int main (int argc, char** argv)
 		
 		if (strcmp (CAIRO_DOCK_VERSION, "3.2.0") == 0 && g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "cairo-dock") == 0)  // from 3.2, Indicator-generic replaces all the indicator applets, and is very helpful if we are on a cairo-dock session.
 		{
-			gchar *cCommand = g_strdup_printf ("if test -n \"`grep DISTRIB_ID=Ubuntu /etc/lsb-release`\" -a -z \"`grep ^modules.*Indicator-Generic %s`\"; then sed -i \"s/^modules *=\\(.*\\)/modules=\\1;Indicator-Generic/g\" %s; fi", g_cConfFile, g_cConfFile);
-			int r = system (cCommand);
-			g_free (cCommand);
+			const gchar *cModuleName = "Indicator-Generic";
+			CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
+			if (pModule && pModule->pInstancesList == NULL) // it exists but it's not activated
+			{
+				gchar *cCommand = g_strdup_printf ("cp -r \"%s/%s\" \"%s/plug-ins/\"", // copy .conf file (mostly to place the new applet on the right place: at least on the second dock)
+					CAIRO_DOCK_SHARE_DATA_DIR"/themes/Default-Panel/plug-ins",
+					cModuleName,
+					g_cCurrentThemePath);
+
+				int r = system (cCommand);
+				if (r < 0)
+					cd_warning ("Not able to launch this command: %s", cCommand);
+				g_free (cCommand);
+
+				cairo_dock_activate_module_and_load (cModuleName); // launch it right now
+			}
 		}
 	}
 	
