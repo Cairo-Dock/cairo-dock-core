@@ -775,6 +775,13 @@ int main (int argc, char** argv)
 			G_TYPE_STRING, "Launch", "last version", CAIRO_DOCK_VERSION,
 			G_TYPE_INVALID);
 		g_free (cConfFilePath);
+		
+		if (strcmp (CAIRO_DOCK_VERSION, "3.2.0") == 0 && g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "cairo-dock") == 0)  // from 3.2, Indicator-generic replaces all the indicator applets, and is very helpful if we are on a cairo-dock session.
+		{
+			gchar *cCommand = g_strdup_printf ("if test -n \"`grep DISTRIB_ID=Ubuntu /etc/lsb-release`\" -a -z \"`grep ^modules.*Indicator-Generic %s`\"; then sed -i \"s/^modules *=\\(.*\\)/modules=\\1;Indicator-Generic/g\" %s; fi", g_cConfFile, g_cConfFile);
+			int r = system (cCommand);
+			g_free (cCommand);
+		}
 	}
 	
 	//g_print ("bFirstLaunch: %d; bNewVersion: %d\n", bFirstLaunch, bNewVersion);
