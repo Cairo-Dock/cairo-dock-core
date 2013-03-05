@@ -277,6 +277,19 @@ void cairo_dock_stop_task (CairoDockTask *pTask)
 		}
 		pTask->bIsRunning = FALSE;  // since we didn't go through the 'update'
 	}
+	else
+	{
+		if (pTask->pThread && pTask->pCond && g_mutex_trylock (pTask->pMutex))  // the thread is sleeping, awake it and let it exit.
+		{
+			g_atomic_int_set (&pTask->bDiscard, 1);
+			pTask->bRunThread = TRUE;
+			g_cond_signal (pTask->pCond);
+			g_mutex_unlock (pTask->pMutex);
+			g_thread_join (pTask->pThread);  // unref the thread
+			pTask->pThread = NULL;
+			g_atomic_int_set (&pTask->bDiscard, 0);
+		}
+	}
 }
 
 
