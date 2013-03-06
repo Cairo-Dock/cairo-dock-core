@@ -782,15 +782,24 @@ int main (int argc, char** argv)
 			CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
 			if (pModule && pModule->pInstancesList == NULL) // it exists but it's not activated
 			{
-				gchar *cCommand = g_strdup_printf ("cp -r \"%s/%s\" \"%s/plug-ins/\"", // copy .conf file (mostly to place the new applet on the right place: at least on the second dock)
-					CAIRO_DOCK_SHARE_DATA_DIR"/themes/Default-Panel/plug-ins",
-					cModuleName,
-					g_cCurrentThemePath);
+				/* copy the .conf file mostly to place the new icons on the
+				 * right place (at least on the second dock) but only if we are
+				 * using a second dock
+				 */
+				gchar *cSecondDockFile = g_strdup_printf ("%s/_MainDock_-2.conf", g_cCurrentThemePath);
+				if (g_file_test (cSecondDockFile, G_FILE_TEST_EXISTS))
+				{
+					gchar *cCommand = g_strdup_printf ("cp -r \"%s/%s\" \"%s/plug-ins/\"",
+						CAIRO_DOCK_SHARE_DATA_DIR"/themes/Default-Panel/plug-ins",
+						cModuleName,
+						g_cCurrentThemePath);
 
-				int r = system (cCommand);
-				if (r < 0)
-					cd_warning ("Not able to launch this command: %s", cCommand);
-				g_free (cCommand);
+					int r = system (cCommand);
+					if (r < 0)
+						cd_warning ("Not able to launch this command: %s", cCommand);
+					g_free (cCommand);
+				}
+				g_free (cSecondDockFile);
 
 				cairo_dock_activate_module_and_load (cModuleName); // launch it right now
 			}
