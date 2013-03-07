@@ -477,10 +477,12 @@ static void _cairo_dock_foreach_icons_in_dock (G_GNUC_UNUSED gchar *cDockName, C
 {
 	CairoDockForeachIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];
-	GList *ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	GList *ic = pDock->icons, *next_ic;
+	while (ic != NULL)
 	{
+		next_ic = ic->next;  // the function bolew may remove the current icon
 		pFunction ((Icon*)ic->data, CAIRO_CONTAINER (pDock), pUserData);
+		ic = next_ic;
 	}
 }
 void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData)
