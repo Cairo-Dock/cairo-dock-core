@@ -1037,7 +1037,6 @@ static gboolean _double_click_delay_over (Icon *icon)
 		
 		cairo_dock_start_icon_animation (icon, pDock);
 	}
-	///icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
 	icon->iSidDoubleClickDelay = 0;
 	return FALSE;
 }
@@ -1119,7 +1118,6 @@ gboolean cairo_dock_on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventB
 									s_bHideAfterShortcut = TRUE;
 								
 								cairo_dock_start_icon_animation (icon, pDock);
-								///icon->bIsDemandingAttention = FALSE;  // on considere que si l'utilisateur clique sur l'icone, c'est qu'il a pris acte de la notification.
 							}
 						}
 					}

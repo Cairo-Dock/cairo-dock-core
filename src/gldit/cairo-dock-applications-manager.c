@@ -366,8 +366,8 @@ static gboolean _on_change_active_window_notification (G_GNUC_UNUSED gpointer da
 		CairoDock *pParentDock = NULL;
 		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
-			if (icon->bIsDemandingAttention)  // force the stop demanding attention, as it can happen (for some reason) that the attention state doesn't change when the appli takes the focus.
-				cairo_dock_appli_stops_demanding_attention (icon);
+			if (icon->iDemandsAttention != 0)  // force the stop demanding attention, as it can happen (for some reason) that the attention state doesn't change when the appli takes the focus.
+				cairo_dock_appli_stops_demanding_attention (icon, CAIRO_APPLI_DEMANDS_ATTENTION | CAIRO_APPLI_URGENCY_HINT);
 			
 			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock == NULL)  // elle est soit inhibee, soit pas dans un dock.
@@ -462,18 +462,18 @@ static void _on_change_window_state (Icon *icon)
 	// _NET_WM_STATE_DEMANDS_ATTENTION indicates that some action in or with the window happened. For example, it may be set by the Window Manager if the window requested activation but the Window Manager refused it, or the application may set it if it finished some work. This state may be set by both the Client and the Window Manager. It should be unset by the Window Manager when it decides the window got the required attention (usually, that it got activated)."
 	if (bDemandsAttention)
 	{
-		g_print ("%s demande votre attention %s !\n", icon->cName, icon->bIsDemandingAttention?"encore une fois":"");
-		if (! icon->bIsDemandingAttention && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))  // some WM tend to abuse this state, so we only acknowledge it if it's not already set.
+		cd_debug ("%s demande votre attention %s !", icon->cName, icon->iDemandsAttention?"encore une fois":"");
+		if (! (icon->iDemandsAttention & CAIRO_APPLI_DEMANDS_ATTENTION) && (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention))  // some WM tend to abuse this state, so we only acknowledge it if it's not already set.
 		{
-			cairo_dock_appli_demands_attention (icon);
+			cairo_dock_appli_demands_attention (icon, CAIRO_APPLI_DEMANDS_ATTENTION);
 		}
 	}
 	else
 	{
-		if (icon->bIsDemandingAttention)
+		if (icon->iDemandsAttention & CAIRO_APPLI_DEMANDS_ATTENTION)
 		{
-			g_print ("%s se tait\n", icon->cName);
-			cairo_dock_appli_stops_demanding_attention (icon);
+			cd_debug ("%s se tait", icon->cName);
+			cairo_dock_appli_stops_demanding_attention (icon, CAIRO_APPLI_DEMANDS_ATTENTION);
 		}
 	}
 	
@@ -743,12 +743,15 @@ static void _on_change_window_icon (Icon *icon, CairoDock *pDock)
 {
 	if (cairo_dock_class_is_using_xicon (icon->cClass) || ! myTaskbarParam.bOverWriteXIcons)
 	{
-		cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
-		if (pDock->iRefCount != 0)
-			cairo_dock_trigger_redraw_subdock_content (pDock);
-		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
-		// notify everybody
-		cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_ICON_CHANGED, icon);
+		if (cairo_dock_get_icon_container (icon) != NULL)  // if the icon is not in a container (for instance inhibited), it's no use trying to load its image. It's not even useful to mark it as 'damaged', since anyway it will be loaded when inserted inside a container.
+		{
+			cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
+			if (pDock->iRefCount != 0)
+				cairo_dock_trigger_redraw_subdock_content (pDock);
+			cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
+			// notify everybody
+			cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_ICON_CHANGED, icon);
+		}
 	}
 }
 
@@ -760,11 +763,11 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 		if (pWMHints->flags & XUrgencyHint)
 		{
 			if (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention)
-				cairo_dock_appli_demands_attention (icon);
+				cairo_dock_appli_demands_attention (icon, CAIRO_APPLI_URGENCY_HINT);
 		}
-		else if (icon->bIsDemandingAttention)
+		else if (icon->iDemandsAttention & CAIRO_APPLI_URGENCY_HINT)
 		{
-			cairo_dock_appli_stops_demanding_attention (icon);
+			cairo_dock_appli_stops_demanding_attention (icon, CAIRO_APPLI_URGENCY_HINT);
 		}
 		
 		if (iState == PropertyNewValue && (pWMHints->flags & (IconPixmapHint | IconMaskHint | IconWindowHint)))
@@ -784,8 +787,8 @@ static void _on_change_window_hints (Icon *icon, CairoDock *pDock, int iState)
 	}
 	else  // no hints set on this window.
 	{
-		if (icon->bIsDemandingAttention)
-			cairo_dock_appli_stops_demanding_attention (icon);
+		if (icon->iDemandsAttention & CAIRO_APPLI_URGENCY_HINT)
+			cairo_dock_appli_stops_demanding_attention (icon, CAIRO_APPLI_URGENCY_HINT);
 	}
 }
 
@@ -1485,7 +1488,7 @@ static Icon * cairo_dock_create_icon_from_xwindow (Window Xid)
 		if (pParentIcon != NULL)
 		{
 			cd_debug ("%s requiert votre attention indirectement !", pParentIcon->cName);
-			cairo_dock_appli_demands_attention (pParentIcon);
+			cairo_dock_appli_demands_attention (pParentIcon, CAIRO_APPLI_DEMANDS_ATTENTION);
 		}
 		else
 			cd_debug ("ce dialogue est bien bruyant ! (%d)", XParentWindow);

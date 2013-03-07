@@ -27,8 +27,13 @@
 G_BEGIN_DECLS
 
 
-void cairo_dock_appli_demands_attention (Icon *icon);
-void cairo_dock_appli_stops_demanding_attention (Icon *icon);
+typedef enum {
+	CAIRO_APPLI_DEMANDS_ATTENTION = 1<<0,
+	CAIRO_APPLI_URGENCY_HINT = 1 << 2
+} CairoAppliAttentionFlag;
+
+void cairo_dock_appli_demands_attention (Icon *icon, CairoAppliAttentionFlag flag);
+void cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoAppliAttentionFlag flag);
 
 void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);
 
