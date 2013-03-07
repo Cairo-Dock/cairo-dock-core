@@ -139,7 +139,7 @@ struct _Icon {
 	gboolean bIsHidden;
 	gboolean bIsFullScreen;
 	gboolean bIsMaximized;
-	gboolean bDemandsAttention;
+	guint iDemandsAttention;  // a mask of CairoAppliAttentionFlag
 	gboolean bHasIndicator;
 	GtkAllocation windowGeometry;
 	gint iNumDesktop;
