@@ -375,11 +375,6 @@ static void _build_config_widget (ConfigWidget *pConfigWidget)
 			&pWidgetList,
 			pDataGarbage,
 			NULL);
-		if (cairo_dock_current_theme_need_save ())
-		{
-			gtk_widget_show_all (pConfigWidget->widget.pWidget);  // due to historical reasons, GtkNotebook refuses to switch to a page unless the child widget is visible.
-			gtk_notebook_set_current_page (GTK_NOTEBOOK (pConfigWidget->widget.pWidget), 1);  // "Save"
-		}
 	}
 	pConfigWidget->widget.pWidgetList = pWidgetList;
 	pConfigWidget->widget.pDataGarbage = pDataGarbage;
