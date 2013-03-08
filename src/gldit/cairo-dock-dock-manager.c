@@ -1717,6 +1717,11 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	pDock->iGapX = pPosition->iGapX;
 	pDock->iGapY = pPosition->iGapY;
 	pDock->fAlign = pPosition->fAlign;
+	if (pPosition->fAlign != pPrevPosition->fAlign)
+	{
+		cairo_dock_update_dock_size (pDock);
+		cairo_dock_move_resize_dock (pDock);
+	}
 	cairo_dock_calculate_dock_icons (pDock);
 	cairo_dock_move_resize_dock (pDock);
 	if (bWasHorizontal != pDock->container.bIsHorizontal)
