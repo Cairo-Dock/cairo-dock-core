@@ -60,13 +60,13 @@ struct _CairoDockGLFont {
 	gdouble iCharHeight;
 };
 
-/** Load a font into bitmaps. You can load any characters of font with this function. The drawback is that each character is a bitmap, that is to say you can't zoom them.
+/* Load a font into bitmaps. You can load any characters of font with this function. The drawback is that each character is a bitmap, that is to say you can't zoom them.
 *@param cFontDescription a description of the font, for instance "Monospace Bold 12"
 *@param first first character to load.
 *@param count number of characters to load.
 *@return a newly allocated opengl font.
 */
-CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int first, int count);
+//CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int first, int count);
 
 /** Load a font into textures. You can then render your text like a normal texture (zoom, etc). The drawback is that only a mono font can be used with this function.
 *@param cFontDescription a description of the font, for instance "Monospace Bold 12"

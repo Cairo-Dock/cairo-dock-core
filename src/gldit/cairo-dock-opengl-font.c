@@ -82,7 +82,7 @@ GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gch
 // taken from gdkgl
 // pango_x_ functions are deprecated, but as long as they work, we shouldn't care too much.
 // use XLoadQueryFont() if needed...
-static PangoFont *
+/*static PangoFont *
 gldi_font_use_pango_font_common (PangoFontMap               *font_map,
                                    const PangoFontDescription *font_desc,
                                    int                         first,
@@ -177,7 +177,7 @@ CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int
 	
 	pango_font_description_free (fd);
 	return pFont;
-}
+}*/
 
 CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, int first, int count)
 {

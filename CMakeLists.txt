@@ -90,7 +90,7 @@ endif ()
 
 ########### dependencies ###############
 
-set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu pangox libcurl")  # for the .pc and to have details
+set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu libcurl")  # for the .pc and to have details
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
@@ -164,7 +164,7 @@ set (CAIRO_DOCK_SHARE_THEMES_DIR ${pkgdatadir}/themes)
 #set (CAIRO_DOCK_MODULES_DIR ${libdir}/cairo-dock)
 set (CAIRO_DOCK_LOCALE_DIR "${prefix}/${CMAKE_INSTALL_LOCALEDIR}")
 set (CAIRO_DOCK_THEMES_DIR "themes")  # folder name where themes are saved locally, relatively to the root folder of Cairo-Dock.
-set (CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.1")  # folder name where themes are on the server, relatively to the root folder of the server files.
+set (CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.2")  # folder name where themes are on the server, relatively to the root folder of the server files.
 set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 
 set (GLDI_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
