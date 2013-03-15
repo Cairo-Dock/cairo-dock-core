@@ -339,8 +339,8 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 		NULL,
 		0,
 		GDK_ACTION_COPY | GDK_ACTION_MOVE);  // le 'GDK_ACTION_MOVE' c'est pour KDE.
-	gtk_drag_dest_add_text_targets (pWidget);
 	gtk_drag_dest_add_uri_targets (pWidget);
+	gtk_drag_dest_add_text_targets (pWidget);
 	
 	g_signal_connect (G_OBJECT (pWidget),
 		"drag_data_received",
