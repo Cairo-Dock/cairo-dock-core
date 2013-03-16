@@ -171,6 +171,12 @@ static void _cairo_dock_quit (G_GNUC_UNUSED int signal)
 {
 	gtk_main_quit ();
 }
+/* Crash at startup:
+ *  - First 2 crashes: retry with a delay of 2 sec (maybe due to a problem at startup)
+ *  - 3th crash: remove the applet and restart the dock
+ *  - 4th crash: show the maintenance mode
+ *  - 5th crash: quit
+ */
 static void _cairo_dock_intercept_signal (int signal)
 {
 	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on glx-dock.org to help improving the dock!", signal);
@@ -196,7 +202,7 @@ static void _cairo_dock_intercept_signal (int signal)
 	{
 		if (s_iNbCrashes < 2)  // the first 2 crashes, restart with a delay (in case we were launched too early on startup).
 			g_string_append (s_pLaunchCommand, " -w 2");  // 2s delay.
-		else if (g_pCurrentModule == NULL)  // several crashes, and no culprit => start in maintenance mode.
+		else if (g_pCurrentModule == NULL || s_iNbCrashes == 3)  // crash and no culprit or 4th crash => start in maintenance mode.
 			g_string_append (s_pLaunchCommand, " -m");
 		g_string_append_printf (s_pLaunchCommand, " -q %d", s_iNbCrashes + 1);  // increment the first-crash counter.
 	}  // else a random crash, respawn quietly.
@@ -302,7 +308,10 @@ int main (int argc, char** argv)
 			g_string_append_printf (s_pLaunchCommand, " %s", argv[i]);
 		}
 	}
-	if (s_iNbCrashes > 3)
+	/* Crash: 5th crash: an applet has already been removed and the maintenance
+	 * mode has already been displayed => stop
+	 */
+	if (s_iNbCrashes > 4)
 	{
 		g_print ("Sorry, Cairo-Dock has encoutered some problems, and will quit.\n");
 		return 1;
@@ -697,20 +706,25 @@ int main (int argc, char** argv)
 	//\___________________ handle crashes.
 	if (! bTesting)
 		_cairo_dock_set_signal_interception ();
+
+	//\___________________ Disable modules that have crashed
+	if (cExcludeModule != NULL && (s_iNbCrashes > 2 || bMaintenance)) // 3th crash or 4th (with -m)
+	{
+		gchar *cCommand = g_strdup_printf ("sed -i \"/modules/ s/%s//g\" \"%s\"",
+			cExcludeModule, g_cConfFile);
+		int r = system (cCommand);
+		if (r < 0)
+			cd_warning ("Not able to launch this command: %s", cCommand);
+		else
+			cd_warning (_("The module '%s' has been deactivated because it may "
+			"have caused some problems.\nYou can reactivate it, if it happens "
+			"again thanks to report it at http://glx-dock.org"), cExcludeModule);
+		g_free (cCommand);
+	}
 	
 	//\___________________ maintenance mode -> show the main config panel.
 	if (bMaintenance)
 	{
-		if (cExcludeModule != NULL)
-		{
-			cd_warning (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org"), cExcludeModule);
-			gchar *cCommand = g_strdup_printf ("sed -i \"/modules/ s/%s//g\" \"%s\"", cExcludeModule, g_cConfFile);
-			int r = system (cCommand);
-			if (r < 0)
-				cd_warning ("Not able to launch this command: %s", cCommand);
-			g_free (cCommand);
-		}
-		
 		cairo_dock_load_user_gui_backend (1);  // force the advanced GUI, it can display the config before the theme is loaded.
 		
 		GtkWidget *pWindow = cairo_dock_show_main_gui ();
@@ -837,12 +851,12 @@ int main (int argc, char** argv)
 		// In case something has changed in Compiz/Gtk/others, we also run the script on a new version of the dock.
 		g_timeout_add_seconds (4, _cairo_dock_first_launch_setup, NULL);
 	}
-	else if (cExcludeModule != NULL && ! bMaintenance)
+	else if (cExcludeModule != NULL && ! bMaintenance && s_iNbCrashes > 1)
 	{
 		gchar *cMessage;
-		if (s_iNbCrashes < 2)
+		if (s_iNbCrashes == 2) // <=> second crash: display a dialogue
 			cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restored successfully, but if it happens again, please report it at http://glx-dock.org"), cExcludeModule);
-		else
+		else // since the 3th crash: the applet has been disabled
 			cMessage = g_strdup_printf (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org"), cExcludeModule);
 		
 		CairoDockModule *pModule = cairo_dock_find_module_from_name (cExcludeModule);
