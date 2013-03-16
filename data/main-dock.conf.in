@@ -19,16 +19,6 @@ alignment = .5
 #r- Multi-screens
 num_screen = 0
 
-#F-[Offset from the screen's edge;gtk-leave-fullscreen]
-frame2 =
-
-#i-[-1024;1024] Lateral offset:
-#{Gap from the absolute position on the screen's edge, in pixels. You can also move the dock by holding the ALT or CTRL key and the left mouse button.}
-x gap = 0
-#i-[-20;2000] Distance to the screen edge:
-#{in pixels. You can also move the dock by holding the ALT or CTRL key and the left mouse button.}
-y gap = 0
-
 #F-[Visibility of the dock;@pkgdatadir@/icons/icon-visibility.svg]
 frame_visi =
 
@@ -37,6 +27,16 @@ frame_visi =
 #When the dock is hidden or below a window, place the mouse on the screen's border to call it back.
 #When the dock pops up on shortcut, it will appear at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 visibility = 4
+
+#X-[Offset from the screen's edge;gtk-leave-fullscreen]
+frame2 =
+
+#i-[-1024;1024] Lateral offset:
+#{Gap from the absolute position on the screen's edge, in pixels. You can also move the dock by holding the ALT or CTRL key and the left mouse button.}
+x gap = 0
+#i-[-20;2000] Distance to the screen edge:
+#{in pixels. You can also move the dock by holding the ALT or CTRL key and the left mouse button.}
+y gap = 0
 
 
 #[@pkgdatadir@/icons/icon-appearance.svg]

@@ -382,7 +382,7 @@ static gboolean _cairo_dock_dock_animation_loop (CairoContainer *pContainer)
 			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
 			if (icon->bIsDemandingAttention)
 			{
-				icon->bIsDemandingAttention = FALSE;
+				icon->bIsDemandingAttention = FALSE;  // the attention animation has finished by itself after the time it was planned for.
 				bNoMoreDemandingAttention = TRUE;
 			}
 		}
