@@ -1,19 +1,20 @@
 #
-# Саша Петровић <salepetronije@gmail.com>, 2012.
+# Саша Петровић <salepetronije@gmail.com>, 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-02-06 21:45+0000\n"
+"POT-Creation-Date: 2013-03-04 15:51+0000\n"
+"PO-Revision-Date: 2013-03-06 22:27+0000\n"
 "Last-Translator: Саша Петровић <salepetronije@gmail.com>\n"
-"Language-Team: српски <xfce-i18n@xfce.org>\n"
-"Language: \n"
+"Language-Team: српски <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-07 04:40+0000\n"
-"X-Generator: Launchpad (build 16477)\n"
+"X-Launchpad-Export-Date: 2013-03-07 04:33+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:126 ../data/messages:263
 msgid "Behaviour"
@@ -208,11 +209,11 @@ msgstr "Скривање онемогућено"
 
 #: ../src/cairo-dock-gui-advanced.c:1775
 msgid "Categories"
-msgstr "Категорије"
+msgstr "Врсте"
 
 #: ../src/cairo-dock-gui-advanced.c:1885
 msgid "Enable this module"
-msgstr "Омогући овај модул"
+msgstr "Омогући ову јединицу"
 
 #: ../src/cairo-dock-gui-advanced.c:1952
 msgid "More applets"
@@ -372,7 +373,7 @@ msgstr "Напуштате Каиро-док?"
 
 #: ../src/cairo-dock-menu.c:456 ../src/cairo-dock-menu.c:600
 msgid "Separator"
-msgstr "Одвајач"
+msgstr "одвајач"
 
 #: ../src/cairo-dock-menu.c:565
 msgid ""
@@ -386,7 +387,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:594
 msgid "Add"
-msgstr "додај"
+msgstr "Додај"
 
 #: ../src/cairo-dock-menu.c:596
 msgid "Sub-dock"
@@ -403,11 +404,12 @@ msgstr "прилагођени покретач"
 #: ../src/cairo-dock-menu.c:603
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
-msgstr "Обично је потребно превући покретач са изборника и пустити га на док."
+msgstr ""
+"Обично је потребно превући покретач са изборника и пустити га на док."
 
 #: ../src/cairo-dock-menu.c:605
 msgid "Applet"
-msgstr "Програмче"
+msgstr "програмче"
 
 #: ../src/cairo-dock-menu.c:623
 msgid ""
@@ -512,10 +514,11 @@ msgstr "Ово ће сакрити док док не пређете мишем 
 
 #: ../src/cairo-dock-menu.c:1106
 msgid "Launch Cairo-Dock on startup"
-msgstr "Отвори Каиро-док при покретању система"
+msgstr "Покрени Каиро-док при покретању система"
 
 #: ../src/cairo-dock-menu.c:1122
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Програмчићи треће стране омогућавају сарађивање са многим програмима, на "
 "пример Пиџином"
@@ -575,7 +578,7 @@ msgstr "Премести на следећи док"
 #: ../src/cairo-dock-menu.c:1205 ../src/cairo-dock-menu.c:1265
 #: ../src/gldit/cairo-dock-gui-factory.c:1223
 msgid "New main dock"
-msgstr "Нови главни док"
+msgstr "нови главни док"
 
 #: ../src/cairo-dock-menu.c:1214
 msgid "Make it a launcher"
@@ -738,7 +741,7 @@ msgstr "Уобичајено"
 #: ../src/cairo-dock-menu.c:2060 ../data/messages:21 ../data/messages:183
 #: ../data/messages:909
 msgid "Always on top"
-msgstr "Увек на врху"
+msgstr "увек на врху"
 
 #: ../src/cairo-dock-menu.c:2067
 msgid "Always below"
@@ -771,11 +774,12 @@ msgstr "Анимација:"
 
 #: ../src/cairo-dock-widget-config.c:348
 msgid "Effects:"
-msgstr "Ефекти:"
+msgstr "Утисци:"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Одрднице главног дока су доступне у главном прозору поставки."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr "Одреднице главног дока су доступне у главном прозору поставки."
 
 #: ../src/cairo-dock-widget-items.c:725
 msgid "Remove this item"
@@ -798,8 +802,10 @@ msgid "Category"
 msgstr "Категорија"
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
-msgstr "Да би добили преглед и објашњење у вези програмчета, кликните у њега."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
+msgstr ""
+"Да би добили преглед и објашњење у вези програмчета, кликните у њега."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
 msgid "Press the shortkey"
@@ -996,8 +1002,8 @@ msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
-"Тражи од дока да учита додатне модуле садржане у овој фасцикли (иако није "
-"безбедно за ваше док да учитава незваничне модуле)."
+"Тражи од дока да учита додатне јединице садржане у овој фасцикли (иако није "
+"безбедно за ваш док да учитава незваничне јединице)."
 
 #: ../src/cairo-dock.c:406
 msgid ""
@@ -1032,7 +1038,7 @@ msgid ""
 msgstr ""
 "ОпенГЛ омогућава коришћење хардверског убрзање, смањујући оптерећење "
 "процесора на најмање.\n"
-"Такође омогућава привлачне видне ефекте сличне оним у Компизу.\n"
+"Такође омогућава привлачне видне утиске сличне оним у Компизу.\n"
 "Међутим, поједине картице и/или управљачки програми то у потпуности не "
 "подржавају, што може спречити исправан рад дока.\n"
 "Да ли желите да активирате ОпенГЛ?\n"
@@ -1100,7 +1106,7 @@ msgid ""
 "want to do it now?"
 msgstr ""
 "Није могуће пронаћи тему; уместо ње користиће се подразумевана тема.\n"
-" Ово можете променити отварањем датотека за подешавање овог модула. Да ли "
+" Ово можете променити отварањем датотека за подешавање ове јединице. Да ли "
 "желите то да урадите сада?"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:276
@@ -1110,7 +1116,7 @@ msgid ""
 "to do it now?"
 msgstr ""
 "Нисам пронашао мерило теме; задато мерило ће бити коришћено уместо тога.\n"
-"Можете ово променити отварајући поставке овог модула. Да ли желите то "
+"Можете ово променити отварајући поставке ове јединице. Да ли желите то "
 "урадити одмах?"
 
 #: ../src/gldit/cairo-dock-callbacks.c:1530
@@ -1123,7 +1129,7 @@ msgstr "_прилагођени украси_"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:350
 msgid "Bottom dock"
-msgstr "Доњи док"
+msgstr "доњи док"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:352
 msgid "Top dock"
@@ -1256,7 +1262,7 @@ msgstr "од"
 #: ../src/gldit/cairo-dock-struct.h:441 ../data/messages:1043
 #: ../data/messages:1051
 msgid "Default"
-msgstr "Подразумевано"
+msgstr "подразумевано"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:189
 #, c-format
@@ -1300,27 +1306,27 @@ msgstr "Нови покретач"
 #: ../src/implementations/cairo-dock-hiding-effect.c:596 ../data/messages:39
 #: ../data/messages:201
 msgid "Move down"
-msgstr "Помери доле"
+msgstr "помери доле"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:604 ../data/messages:41
 #: ../data/messages:101 ../data/messages:203
 msgid "Fade out"
-msgstr "Утапање"
+msgstr "утапање"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:612 ../data/messages:43
 #: ../data/messages:205
 msgid "Semi transparent"
-msgstr "Полупровидно"
+msgstr "полупровидно"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:621 ../data/messages:45
 #: ../data/messages:207
 msgid "Zoom out"
-msgstr "Умањивање"
+msgstr "смањивање"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:629 ../data/messages:47
 #: ../data/messages:209
 msgid "Folding"
-msgstr "Склапање"
+msgstr "склапање"
 
 #: ../Help/src/applet-composite.c:71
 msgid ""
@@ -1498,10 +1504,10 @@ msgid ""
 "To move an icon into the sub-dock, right-click on an icon -> move to another "
 "dock -> select the sub-dock's name."
 msgstr ""
-"Можете груписати иконе у „под-док“.\n"
-"Да би додали под-док, десни клик на док -> додај -> под-док.\n"
-"Да би померили иконицу на под-док, десни клик на иконицу, -> помери на други "
-"док -> одабери име под-дока."
+"Можете удружити иконе у „под-док“.\n"
+"Да би додали под-док, десни клик на док -> Додај -> под-док.\n"
+"Да би померили иконицу на под-док, десни клик на иконицу, -> Премести на "
+"следећи док -> одабери име под-дока."
 
 #: ../Help/data/messages:25
 msgid "Moving icons"
@@ -1583,7 +1589,7 @@ msgid ""
 "between each group.\n"
 "In the \"panel\" view, separators are represented as gap between icons."
 msgstr ""
-"Можете додати одвајаче између икона десним кликом на док -> додај -> "
+"Можете додати одвајаче између икона десним кликом на док -> Додај -> "
 "одвајач.\n"
 "Такође, ако омогућите могућност да одвајате иконе различитих врста "
 "(покретачи/програми/програмчићи) одвајач ће бити додат самостално између "
@@ -1697,7 +1703,8 @@ msgstr ""
 #: ../Help/data/messages:285 ../Help/data/messages:289
 #: ../Help/data/messages:295 ../Help/data/messages:299
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Савет: Ако је ова линија сива, то значи да се савет не односи на вас.)"
+msgstr ""
+"Савет: Ако је ова линија сива, то значи да се савет не односи на вас.)"
 
 #: ../Help/data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
@@ -1829,8 +1836,8 @@ msgid ""
 msgstr ""
 "Покрените програмче сат.\n"
 "клик на њега ће покренути календар.\n"
-"На дупли клик на дан ће искочити уредник задатака. Овде можете додати/"
-"уклонити задатке.\n"
+"На дупли клик на дан ће искочити уредник задатака. Овде можете "
+"додати/уклонити задатке.\n"
 "Кад је задатак заказан, програмче ће вас упозорити (15mn пре догађаја, и "
 "такође 1 дан пре у случају годишњице)."
 
@@ -2065,8 +2072,8 @@ msgid ""
 "example, to have the current time for different countries in your dock or "
 "the weather in different cities."
 msgstr ""
-"Неки програмчићи могу имати неколико примерака у погон истовремено: Сат,"
-"Стог, Време, ...\n"
+"Неки програмчићи могу имати неколико примерака у погон истовремено: "
+"Сат,Стог, Време, ...\n"
 "Десни клик на икону програмчета -> „покрени још један примерак“.\n"
 "Можете подесити сваки примерак засебно. То вам дозвољава, на пример, да "
 "имате тренутно време у различитим земљама у вашем доку, или прогнозу за "
@@ -2083,7 +2090,7 @@ msgid ""
 "You can even name each of them."
 msgstr ""
 "Покрените програмче Измењивач.\n"
-"Десни клик на њега, ->„додај нови радни простор“ или „уклони овај радни "
+"Десни клик на њега, ->„Додај радни простор“ или „Уклони овај радни "
 "простор“.\n"
 "Можете и дати име сваком од њих."
 
@@ -2123,13 +2130,15 @@ msgstr "Комплетно уклањање Гном-плоче"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Отворите gconf-editor, уредите кључ /desktop/gnome/session/"
-"required_components/panel и замените његов садржај са „cairo-dock“.\n"
+"Отворите gconf-editor, уредите кључ "
+"/desktop/gnome/session/required_components/panel и замените његов садржај са "
+"„cairo-dock“.\n"
 "Онда поново покрените сесију : Гном панел није покренут, а док је покренут "
 "(уколико није, можете га додати у почетне програме)."
 
@@ -2156,7 +2165,8 @@ msgstr "Форум"
 
 #: ../Help/data/messages:195
 msgid "Our wiki can also help you, it is more complete on some points."
-msgstr "Наша Вики страница може такође помоћи, у неким деловима је потпунија."
+msgstr ""
+"Наша Вики страница може такође помоћи, у неким деловима је потпунија."
 
 #: ../Help/data/messages:197
 msgid "Wiki"
@@ -2181,16 +2191,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Требате покренути слагање приказа. На пример, можете користити Компиз или "
 "Икскомпмгр.\n"
 "Ако користите ИксФЦЕ или КДЕ, можете омогућити слагање приказа у "
 "подешавањима Управника прозора.\n"
 "Ако користите Гном, можете га омогућити у Метаситију на овај начин:\n"
-"Отворите gconf-editor, уредите кључ „/apps/metacity/general/"
-"compositing_manager“ и поставите га на „true“."
+"Отворите gconf-editor, уредите кључ "
+"„/apps/metacity/general/compositing_manager“ и поставите га на „true“."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2236,7 +2246,7 @@ msgstr ""
 
 #: ../Help/data/messages:217
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
-msgstr "Немам оне дивне ефекте као што су ватра, ротирање коцке, итд."
+msgstr "Немам оне дивне утиске као што су ватра, ротирање коцке, итд."
 
 #: ../Help/data/messages:219
 msgid ""
@@ -2275,14 +2285,15 @@ msgid ""
 msgstr ""
 "Будите повезани на мрежу.\n"
 " Ако вам је веза веома спора, можете повећати време успостављања везе у "
-"модулу \"Систем\".\n"
+"јединици \"Систем\".\n"
 " Ако вам је веза преко посредника (proxy), треба да подесите „curl“ да га "
 "користи; потражите на вебу како се то ради (у суштини, треба да поставите "
-"промењљиву окружења „http proxy“)."
+"промељиву окружења „http proxy“)."
 
 #: ../Help/data/messages:229
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
-msgstr "програмче «брзина нета» показује 0 чак и када преузимам неки датотека"
+msgstr ""
+"програмче «брзина нета» показује 0 чак и када преузимам неки датотека"
 
 #: ../Help/data/messages:231
 msgid ""
@@ -2300,7 +2311,7 @@ msgid ""
 "«ifconfig» in a terminal, and ignore the «loop» interface. It's probably "
 "something like «eth1», «ath0», or «wifi0».."
 msgstr ""
-"Морате саопштити програмчету које сучеље користите за мрежу (подразумевано "
+"Морате саопштити програмчету који уређај користите за мрежу (подразумевано "
 "је то  «eth0»).\n"
 "Измените поставку и унесите назив сучеља. Да бисте то пронашли, у терминалу "
 "откуцајте «ifconfig» и занемарите «loop» сучеље. Вероватно је нешто као "
@@ -2362,8 +2373,8 @@ msgstr ""
 "Ми ценимо вашу помоћ. Ако видите грешку, или мислите да да нешто може бити "
 "побољшано,\n"
 "или ако само сањате и доку, посетите нас на glx-dock.org.\n"
-"Енглески (и други!) говорници су добродошли, зато немојте бити "
-"стидиви ! ;-)\n"
+"Енглески (и други!) говорници су добродошли, зато немојте бити стидиви ! ;-"
+")\n"
 "\n"
 "Ако направите тему за док или неки од програмчића, и желите да је поделите, "
 "бићемо срећни да је поставимо на нашег даваоца услуга !"
@@ -2841,7 +2852,7 @@ msgstr "постави задату икону за њом"
 
 #: ../data/messages:91
 msgid "Icons' animations and effects"
-msgstr "Анимације и ефекти икона"
+msgstr "Оживљавање и утисци икона"
 
 #: ../data/messages:93
 msgid "On mouse hover:"
@@ -2989,11 +3000,11 @@ msgstr "Осетљивост одзива:"
 
 #: ../data/messages:215
 msgid "high"
-msgstr "висока"
+msgstr "гласно"
 
 #: ../data/messages:217
 msgid "low"
-msgstr "ниска"
+msgstr "тихо"
 
 #: ../data/messages:219
 msgid "How to call the dock back:"
@@ -3300,7 +3311,8 @@ msgstr "Број корака при анимацији приближавања
 
 #: ../data/messages:395
 msgid "Number of steps in the auto-hide animation (move up/move down):"
-msgstr "Број корака при анимацији самоскривања (померање горе/померање доле):"
+msgstr ""
+"Број корака при анимацији самоскривања (померање горе/померање доле):"
 
 #: ../data/messages:405
 msgid "Refresh rate"
@@ -3439,7 +3451,7 @@ msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
 msgstr ""
-"Дозвољен је било који формат; ако је празно, прелаз боја ће се користити."
+"Дозвољен је било који облик; ако је празно, прелаз боја ће се користити."
 
 #: ../data/messages:473 ../data/messages:959
 msgid "Image filename to use as a background :"
@@ -3728,7 +3740,7 @@ msgid ""
 "Any format allowed; leave this field empty if you don't want to use an image "
 "as background."
 msgstr ""
-"Дозвољен је било који формат; оставите непопуњено ако не желите слику за "
+"Дозвољен је било који облик; оставите непопуњено ако не желите слику за "
 "позадину."
 
 #: ../data/messages:655
@@ -3749,10 +3761,11 @@ msgstr "Растојање између икона :"
 
 #: ../data/messages:665
 msgid "Zoom effect"
-msgstr "Ефекти увећавања"
+msgstr "Утисци увећавања"
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "поставите на 1 ако не желите да иконе буду увећаване када је миш изнад њих."
 
@@ -3851,7 +3864,8 @@ msgstr "снажан"
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
-msgstr "У процентима од величине иконе. Одредница утиче на укупну висину дока."
+msgstr ""
+"У процентима од величине иконе. Одредница утиче на укупну висину дока."
 
 #: ../data/messages:711
 msgid "Height of the reflection:"
@@ -3884,7 +3898,8 @@ msgstr "Повежи икону са низом знакова"
 
 #: ../data/messages:727
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr "Дужина линије низа знакова, у пикселима (0 не користити низ знакова) :"
+msgstr ""
+"Дужина линије низа знакова, у пикселима (0 не користити низ знакова) :"
 
 #: ../data/messages:729
 msgid "Colour of the string (red, blue, green, alpha) :"
@@ -4005,8 +4020,8 @@ msgstr "веће"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr "Користи се да указивач прати усмерење дока (горе/доле/лево/десно)."
 
 #: ../data/messages:783
@@ -4093,7 +4108,8 @@ msgstr "На свим иконама"
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
-msgstr "када је већи, више суседних натписа изабраној икони ће бити провидно."
+msgstr ""
+"када је већи, више суседних натписа изабраној икони ће бити провидно."
 
 #: ../data/messages:827
 msgid "label's visibility threshold :"
@@ -4101,7 +4117,8 @@ msgstr "Задршка видљивости натписа :"
 
 #: ../data/messages:829
 msgid "Should the labels always be horizontal, even when dock is vertical?"
-msgstr "Да ли натпис увек треба да буде водораван, чак и када је док усправан?"
+msgstr ""
+"Да ли натпис увек треба да буде водораван, чак и када је док усправан?"
 
 #: ../data/messages:831
 msgid "Font"
@@ -4341,8 +4358,8 @@ msgstr "Име покретача:"
 
 #: ../data/messages:1047
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Пример: nautilus --no-desktop, gedit, итд. Можете чак унети пречицу, нпр. "
 "<Alt>F1, <Ctrl>c,  <Ctrl>v, итд"
@@ -4464,7 +4481,6 @@ msgstr ""
 " - И, као и увек, ... многа разна побољшања и поправак буба :-)"
 
 #: ../data/messages:1089
-#, fuzzy
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"
@@ -4478,9 +4494,12 @@ msgid ""
 " - If you like the project, please donate :-)"
 msgstr ""
 "<b>Ново издање: <span color='red'>ГЛИкс-Док 3.2</span>!</b>\n"
-"- Више екранска подршка је сада побољшана\n"
-" - Ново програмче : Слика екрана\n"
-" - Нови прикључак: Звучни-утисци\n"
-" - Додана подршка за промену корисника ГДМ-у\n"
-" - Много исправака грешака\n"
-" - Ако Вам се пројекат допада, молим, приложите :-)"
+" - Подршка за више екрана је побољшана\n"
+" - Ново програмче : Снимак екрана\n"
+" - Нови прикључак: Звучни утисци\n"
+" - Додата подршка за Гномову шкољку \n"
+" - Додата подршка за промену корисника преко ГДМ\n"
+" - Додата подршка за управљање сесијом (Федора, Арч,...)\n"
+" - Додата подршка за све указиваче Јединства\n"
+" - Безбројне исправке буба и побољшања\n"
+" - Ако Вам се свиђа пројекат, молимо, приложите:-)"

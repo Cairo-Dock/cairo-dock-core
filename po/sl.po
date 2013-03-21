@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2013-03-04 15:51+0000\n"
 "PO-Revision-Date: 2012-09-30 17:28+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
-"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-07 04:40+0000\n"
-"X-Generator: Launchpad (build 16477)\n"
+"X-Launchpad-Export-Date: 2013-03-05 04:38+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
+"Language: sl\n"
 
 #: ../src/cairo-dock-gui-advanced.c:126 ../data/messages:263
 msgid "Behaviour"
@@ -448,7 +449,8 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:841
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr "Ali ste prepričani, da želite odstraniti ta vtičnik (%s) iz sidrišča?"
+msgstr ""
+"Ali ste prepričani, da želite odstraniti ta vtičnik (%s) iz sidrišča?"
 
 #: ../src/cairo-dock-menu.c:911 ../src/gldit/cairo-dock-gui-factory.c:752
 msgid "Pick up an image"
@@ -510,7 +512,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Zaženi Cairo-Dock ob zagonu"
 
 #: ../src/cairo-dock-menu.c:1122
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Vtičniki tretjih oseb zagotavljajo še več programov, kot integracijo z "
 "aplikacijo Pidgin"
@@ -767,7 +770,8 @@ msgid "Effects:"
 msgstr "Efekti:"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Parametri osnovnega sidrišča so na voljo v osnovnem nastavitvenem oknu."
 
@@ -792,7 +796,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknite na vtičnik za predogled in opis."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1900,8 +1905,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1949,8 +1955,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2445,7 +2451,8 @@ msgstr "Vidnost podsirdišč"
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "prikazali se bodo ob kliku nanje oziroma ko bo šel kazalec čez le-te."
+msgstr ""
+"prikazali se bodo ob kliku nanje oziroma ko bo šel kazalec čez le-te."
 
 #: ../data/messages:59 ../data/messages:249
 msgid "Appear on mouse over"
@@ -3060,7 +3067,8 @@ msgstr "Veljavnost IPv4?"
 
 #: ../data/messages:443
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Uporabite to možnost, če ste na splet povezani preko proxy strežnika."
+msgstr ""
+"Uporabite to možnost, če ste na splet povezani preko proxy strežnika."
 
 #: ../data/messages:445
 msgid "Are you behind a proxy ?"
@@ -3321,7 +3329,8 @@ msgstr "Prosojnost ozadja :"
 
 #: ../data/messages:601
 msgid "in pixels. Use this to adjust the left position of the drawings."
-msgstr "v slikovnih pikah. Uporabite to za prilagoditev levega položaja risb."
+msgstr ""
+"v slikovnih pikah. Uporabite to za prilagoditev levega položaja risb."
 
 #: ../data/messages:603
 msgid "Left offset :"
@@ -3338,7 +3347,8 @@ msgstr "Odmik vrha :"
 
 #: ../data/messages:609
 msgid "in pixels. Use this to adjust the right position of the drawings."
-msgstr "v slikovnih pikah. Uporabite to za prilagoditev desnega položaja risb."
+msgstr ""
+"v slikovnih pikah. Uporabite to za prilagoditev desnega položaja risb."
 
 #: ../data/messages:611
 msgid "Right offset :"
@@ -3422,8 +3432,10 @@ msgid "Zoom effect"
 msgstr "Efekt približevanja"
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "nastavite na 1, če ne želite približevanja ikon ob lebdenju nad njimi"
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"nastavite na 1, če ne želite približevanja ikon ob lebdenju nad njimi"
 
 #: ../data/messages:669
 msgid "Maximum zoom of the icons :"
@@ -3674,8 +3686,8 @@ msgstr "večji"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr "Pokažite kazalniku usmerjenost sidrišča (na vrhu/spodaj/desno/levo)."
 
 #: ../data/messages:783
@@ -4002,8 +4014,8 @@ msgstr ""
 
 #: ../data/messages:1047
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1049

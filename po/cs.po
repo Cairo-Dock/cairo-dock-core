@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-12-31 00:06+0000\n"
-"Last-Translator: GdH <georgdh@gmail.com>\n"
+"POT-Creation-Date: 2013-03-04 15:51+0000\n"
+"PO-Revision-Date: 2013-03-17 21:10+0000\n"
+"Last-Translator: MiSi <kettis@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
-"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-07 04:39+0000\n"
-"X-Generator: Launchpad (build 16477)\n"
+"X-Launchpad-Export-Date: 2013-03-18 04:34+0000\n"
+"X-Generator: Launchpad (build 16532)\n"
+"Language: cs\n"
 
 #: ../src/cairo-dock-gui-advanced.c:126 ../data/messages:263
 msgid "Behaviour"
@@ -410,7 +411,7 @@ msgstr "Obvykle uchopíte spouštěč z menu a přesunete ho do doku."
 
 #: ../src/cairo-dock-menu.c:605
 msgid "Applet"
-msgstr ""
+msgstr "Aplet"
 
 #: ../src/cairo-dock-menu.c:623
 msgid ""
@@ -517,7 +518,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustit Cairo-Dock při startu systému"
 
 #: ../src/cairo-dock-menu.c:1122
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applety třetích stran zajišťují integraci s mnoha programy, například s "
 "Pidginem."
@@ -529,7 +531,8 @@ msgstr "Nápověda"
 
 #: ../src/cairo-dock-menu.c:1130
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
+msgstr ""
+"Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
 
 #: ../src/cairo-dock-menu.c:1134
 msgid "About"
@@ -697,11 +700,11 @@ msgstr "Držet navrchu"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Viditelné pouze na této ploše"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Viditelné na všech plochách"
 
 #: ../src/cairo-dock-menu.c:1976
 msgid "Kill"
@@ -776,7 +779,8 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "Základní parametry panelu jsou dostupné v hlavním konfiguračním okně"
 
 #: ../src/cairo-dock-widget-items.c:725
@@ -800,7 +804,8 @@ msgid "Category"
 msgstr "Kategorie"
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Klikněte na applet pro zobrazení jeho náhledu a popisu."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -998,7 +1003,8 @@ msgstr ""
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
-msgstr "Pouze pro ladící účly. Crash manager se pro zachycení chyby nespustí."
+msgstr ""
+"Pouze pro ladící účly. Crash manager se pro zachycení chyby nespustí."
 
 #: ../src/cairo-dock.c:409
 msgid ""
@@ -1183,7 +1189,7 @@ msgstr "_Vlastní ikony_"
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
 msgid "Use all screens"
-msgstr ""
+msgstr "Použít všechny obrazovky"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1198,7 +1204,7 @@ msgstr "vpravo"
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "middle"
-msgstr ""
+msgstr "uprostřed"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
@@ -1212,7 +1218,7 @@ msgstr "dole"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
 msgid "Screen"
-msgstr ""
+msgstr "Obrazovka"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1262,7 +1268,7 @@ msgstr "Poslední úprava v:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:321
 msgid "Your theme should now be available in your 'Home' directory."
-msgstr ""
+msgstr "Vaše téma je dostupné ve Vaší domácí složce."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:346
 #, c-format
@@ -1559,6 +1565,13 @@ msgid ""
 "between each group.\n"
 "In the \"panel\" view, separators are represented as gap between icons."
 msgstr ""
+"Mezi ikony můžete přidat oddělovač pravým klikem na  dok -> přidat -> "
+"oddělovač.\n"
+"Také když povolíte volbu odělovat ikony rozdílného typu "
+"(spouštěče/alikace/aplety), a oddělovač bude vložen automaticky mezi každou "
+"skupinu.\n"
+"V panelovém pohledu jsou oddělovače zobrazovány jako přerušovaná čára mezi "
+"ikonami."
 
 #: ../Help/data/messages:43
 msgid "Using the dock as a taskbar"
@@ -1739,7 +1752,7 @@ msgstr ""
 
 #: ../Help/data/messages:99
 msgid "Placing desklets"
-msgstr ""
+msgstr "Umístění dekletů"
 
 #: ../Help/data/messages:101
 msgid ""
@@ -1754,7 +1767,7 @@ msgstr ""
 
 #: ../Help/data/messages:103
 msgid "Changing the desklets decorations"
-msgstr ""
+msgstr "Změna dekorací Deskletů"
 
 #: ../Help/data/messages:105
 msgid ""
@@ -1765,7 +1778,7 @@ msgstr ""
 
 #: ../Help/data/messages:107
 msgid "Useful Features"
-msgstr ""
+msgstr "Užitečné doplňky"
 
 #: ../Help/data/messages:109
 msgid "Having a calendar with tasks"
@@ -1815,6 +1828,8 @@ msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
 msgstr ""
+"Activace Apletu Zobrazení pracovní plochy.\n"
+"Pravý klik na ikoně -> \"nastavení rozlišení\" -> zvolit podle potřeby."
 
 #: ../Help/data/messages:125
 msgid "Locking your session"
@@ -1873,7 +1888,7 @@ msgstr ""
 
 #: ../Help/data/messages:141
 msgid "Adding a file or a web page into the dock"
-msgstr ""
+msgstr "Přidání souboru nebo Web stránky do docku"
 
 #: ../Help/data/messages:143
 msgid ""
@@ -2013,13 +2028,14 @@ msgstr "Kompletní odebrání gnome-panelu"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Spusťte gconf-editor, upravte: klíč /desktop/gnome/session/"
-"required_components/panel, nahraďte: \"cairo-dock\".\n"
+"Spusťte gconf-editor, upravte: klíč "
+"/desktop/gnome/session/required_components/panel, nahraďte: \"cairo-dock\".\n"
 "Potom restartujet svoje sezení : gnome-panel by se neměl spustit, měl by se "
 "spustit dock (pokud ne, můžete ho přidat do programů spouštěných při startu)."
 
@@ -2068,8 +2084,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2082,7 +2098,8 @@ msgstr ""
 
 #: ../Help/data/messages:209
 msgid "My machine is too old to run a composite manager."
-msgstr "Můj počítač je příliš starý na to, aby na něm běžel composite manager."
+msgstr ""
+"Můj počítač je příliš starý na to, aby na něm běžel composite manager."
 
 #: ../Help/data/messages:211
 msgid ""
@@ -2551,11 +2568,11 @@ msgstr ""
 
 #: ../Help/data/messages:389
 msgid "Foreground image:"
-msgstr ""
+msgstr "Obrázek na popředí :"
 
 #: ../Help/data/messages:391
 msgid "Foreground tansparency:"
-msgstr ""
+msgstr "Průhlednost popředí :"
 
 #: ../data/messages:1 ../data/messages:873
 msgid "Behavior"
@@ -2731,7 +2748,7 @@ msgstr "Explodovat"
 
 #: ../data/messages:105
 msgid "Break"
-msgstr ""
+msgstr "Přerušení"
 
 #: ../data/messages:107
 msgid "Black Hole"
@@ -2739,7 +2756,7 @@ msgstr ""
 
 #: ../data/messages:109
 msgid "Random"
-msgstr ""
+msgstr "Náhodně"
 
 #: ../data/messages:115
 msgid "Choose a theme of icons :"
@@ -2960,7 +2977,7 @@ msgstr "Zobrazit pouze ikony, jejichž okna jsou minimalizovaná"
 
 #: ../data/messages:291
 msgid "Automatically add a separator"
-msgstr ""
+msgstr "Automaticky přidat oddělovač"
 
 #: ../data/messages:293
 msgid ""
@@ -3071,7 +3088,7 @@ msgstr "Spustit nový"
 
 #: ../data/messages:345
 msgid "Lower"
-msgstr ""
+msgstr "Nižší"
 
 #: ../data/messages:347
 msgid "This is the default behaviour of most taskbars."
@@ -3085,7 +3102,7 @@ msgstr "Minimalizovat okno po kliknutí na jeho ikonu, pokud je okno aktivní?"
 
 #: ../data/messages:351
 msgid "Only if your Window Manager supports it."
-msgstr ""
+msgstr "Pouze pokud je podporováno Vaším Window manažerem"
 
 #: ../data/messages:353
 msgid ""
@@ -3252,7 +3269,8 @@ msgstr "Vynutit IPv4 ?"
 
 #: ../data/messages:443
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
+msgstr ""
+"Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
 
 #: ../data/messages:445
 msgid "Are you behind a proxy ?"
@@ -3335,7 +3353,8 @@ msgstr "Úhel přechodu:"
 
 #: ../data/messages:495
 msgid "If not nul, it will form stripes."
-msgstr "Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
+msgstr ""
+"Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
 
 #: ../data/messages:497
 msgid "Repeat the gradation this number of times:"
@@ -3612,8 +3631,10 @@ msgid "Zoom effect"
 msgstr "Efekt zvětšení"
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
 
 #: ../data/messages:669
 msgid "Maximum zoom of the icons :"
@@ -3866,11 +3887,11 @@ msgstr "větší"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Zvolte, pokud má indikátor následovat orientaci doku (nahoře/dole/vlevo/"
-"vpravo)."
+"Zvolte, pokud má indikátor následovat orientaci doku "
+"(nahoře/dole/vlevo/vpravo)."
 
 #: ../data/messages:783
 msgid "Rotate the indicator with dock?"
@@ -4204,15 +4225,15 @@ msgstr "Jméno spouštěče:"
 
 #: ../data/messages:1047
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Například: nautilus --no-desktop, gedit, apod. Dokonce můžete použít "
 "klávesové zkratky, např. <Alt>F1, <Ctrl>c,  <Ctrl>v, apod."
 
 #: ../data/messages:1049
 msgid "Command to launch on click:"
-msgstr ""
+msgstr "příkaz spuštěný klikem"
 
 #: ../data/messages:1055
 msgid ""
@@ -4240,7 +4261,7 @@ msgstr ""
 
 #: ../data/messages:1063
 msgid "Run in a terminal?"
-msgstr ""
+msgstr "Spustit v terminálu?"
 
 #: ../data/messages:1065
 msgid "If '0' the launcher will be displayed on every viewport."

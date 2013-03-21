@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-12-29 14:11+0000\n"
+"POT-Creation-Date: 2013-03-04 15:51+0000\n"
+"PO-Revision-Date: 2013-03-05 00:01+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
-"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-07 04:39+0000\n"
-"X-Generator: Launchpad (build 16477)\n"
+"X-Launchpad-Export-Date: 2013-03-06 05:13+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
+"Language: he\n"
 
 #: ../src/cairo-dock-gui-advanced.c:126 ../data/messages:263
 msgid "Behaviour"
@@ -176,12 +177,12 @@ msgstr "ערכות נושא"
 
 #: ../src/cairo-dock-gui-advanced.c:1597
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "פריטים נוכחיים בלוח/ות:"
 
 #: ../src/cairo-dock-gui-advanced.c:1598 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
 msgid "Current items"
-msgstr ""
+msgstr "פריטים נוכחיים"
 
 #: ../src/cairo-dock-gui-advanced.c:1718
 msgid "Filter"
@@ -205,7 +206,7 @@ msgstr "חפש בתאור"
 
 #: ../src/cairo-dock-gui-advanced.c:1766
 msgid "Hide disabled"
-msgstr ""
+msgstr "הסתר פריטים שלא מאופשרים"
 
 #: ../src/cairo-dock-gui-advanced.c:1775
 msgid "Categories"
@@ -402,7 +403,7 @@ msgstr "ניתן לגרור סמלים מהתפריט ולשחרר אותם על
 
 #: ../src/cairo-dock-menu.c:605
 msgid "Applet"
-msgstr ""
+msgstr "יישומון"
 
 #: ../src/cairo-dock-menu.c:623
 msgid ""
@@ -506,7 +507,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "הפעל את cairo-dock עם הכניסה למערכת"
 
 #: ../src/cairo-dock-menu.c:1122
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr "יישומונים חיצוניים מספקים תמיכה עם תוכנות נוספות, כמו pidgin"
 
 #: ../src/cairo-dock-menu.c:1125 ../Help/src/applet-init.c:28
@@ -607,7 +609,7 @@ msgstr "העבר הכל לשולחן עבודה %d"
 #: ../src/cairo-dock-menu.c:1439
 #, c-format
 msgid "Move to desktop %d"
-msgstr ""
+msgstr "עבור לשולחן העבודה ה%d"
 
 #: ../src/cairo-dock-menu.c:1441
 #, c-format
@@ -683,11 +685,11 @@ msgstr "תמיד עליון"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "הצג רק בשולחן עבודה זה"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "הצג בכל שולחנות העבודה"
 
 #: ../src/cairo-dock-menu.c:1976
 msgid "Kill"
@@ -760,7 +762,8 @@ msgid "Effects:"
 msgstr "אפקטים:"
 
 #: ../src/cairo-dock-widget-items.c:239
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "הגדרות הפאנל הראשי נגישות דרך חלון ההגדרות"
 
 #: ../src/cairo-dock-widget-items.c:725
@@ -784,7 +787,8 @@ msgid "Category"
 msgstr "קטגוריה"
 
 #: ../src/cairo-dock-widget-plugins.c:271
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "לחץ על יישומון כדי לקבל תצוגה מקדימה ותיאור שלו."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -840,7 +844,7 @@ msgstr "ערכת הנושא נמחקה"
 
 #: ../src/cairo-dock-widget-themes.c:453
 msgid "Delete this theme"
-msgstr ""
+msgstr "מחק ערכת נושא זו"
 
 #: ../src/cairo-dock-widget-themes.c:484
 #: ../src/gldit/cairo-dock-gui-factory.c:2431
@@ -1151,7 +1155,7 @@ msgstr "_Custom Icons_"
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
 msgid "Use all screens"
-msgstr ""
+msgstr "השתמש בכל המסכים"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1166,7 +1170,7 @@ msgstr "ימין"
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "middle"
-msgstr ""
+msgstr "מרכז"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
@@ -1180,7 +1184,7 @@ msgstr "תחתון"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
 msgid "Screen"
-msgstr ""
+msgstr "מסך"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1230,7 +1234,7 @@ msgstr "שינוי אחרון:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:321
 msgid "Your theme should now be available in your 'Home' directory."
-msgstr ""
+msgstr "ערכת הנושא הזו נמצאת בתיקיית הבית שלך."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:346
 #, c-format
@@ -1332,8 +1336,8 @@ msgstr ""
 "בכדי לבטל את הריבוע השחור מסביב ללוח עליך להפעיל מנהל שזירה.\n"
 "הפעלת אפקטים של שולחן העבודה, הרצת compiz או הפעלת אפשרות השזירה של "
 "metacity.\n"
-"אם אין לך מנהל שזירה,cairo-dock יכול לדמות אותו. אפשרות זו נמצאת תחת \"מערכת"
-"\" בהגדרות של cairo-dock."
+"אם אין לך מנהל שזירה,cairo-dock יכול לדמות אותו. אפשרות זו נמצאת תחת "
+"\"מערכת\" בהגדרות של cairo-dock."
 
 #: ../Help/src/applet-init.c:31
 msgid ""
@@ -1388,6 +1392,11 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
+"רוב הסמלים בלוח יודעים לעשות כמה דברים:\n"
+"פעולה ראשית בלחיצת עכבר שמאלית, פעולה משנית בלחיצה אמצעית, ופעולות נוספות "
+"בתפריט לחיצה ימנית.\n"
+"חלק מהיישומונים מאפשרים לך לבחור קיצורי מקלדת לפעולות, ולבחור מה לעשות "
+"בלחיצה אמצעית."
 
 #: ../Help/data/messages:7
 msgid "Adding features"
@@ -1403,6 +1412,12 @@ msgid ""
 "the \"More applets\" button (which will lead you to our applets web page) "
 "and then just drag-and-drop the link of an applet into your dock."
 msgstr ""
+"לcairo-dock יש הרבה יישומונים. יישומונים הם יישומים קטנים ש\"חיים\" בתוך "
+"הלוח, כמו שעון או לחצן יציאה.\n"
+"כדי להפעיל יישומונים חדשים, יש להיכנס להגדרות תוספים (לחיצה ימנית -> cairo-"
+"dock->הגדר ->תוספים) ולסמן את היישומון הרצוי.\n"
+"לחיצה על \"השג יישומונים נוספים\" תפתח עמוד אינטרנט, עם עוד יישומונים - "
+"שאפשר לגרור ללוח ולהוסיף אותם!"
 
 #: ../Help/data/messages:13
 msgid "Adding a launcher"
@@ -1425,6 +1440,8 @@ msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
 msgstr ""
+"כדי למחוק יישומון, יש לגרור אותו אל מחוץ ללוח, וללחוץ על לחצן המחיקה (עם "
+"האיקס האדום)."
 
 #: ../Help/data/messages:21
 msgid "Grouping icons into a sub-dock"
@@ -1915,8 +1932,9 @@ msgstr "מחיקת הלוח של גנום"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1964,8 +1982,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3380,7 +3398,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:667
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:669
@@ -3612,8 +3631,8 @@ msgstr ""
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3932,8 +3951,8 @@ msgstr ""
 
 #: ../data/messages:1047
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1049
