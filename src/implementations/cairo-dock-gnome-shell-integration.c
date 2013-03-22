@@ -20,6 +20,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-class-manager.h"
+#include "cairo-dock-applications-manager.h"  // myTaskbarParam.bShowAppli
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-gnome-shell-integration.h"
 
@@ -114,10 +115,11 @@ static void _on_gs_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOw
 			CD_GS_OBJECT,
 			CD_GS_INTERFACE);
 		
-		dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
-			G_TYPE_STRING, "Main.overview._dash.actor.hide();",
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);  // hide the dash, since it's no use with the dock ("Main.panel.actor.hide()" to hide the top panel)
+		if (myTaskbarParam.bShowAppli)
+			dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
+				G_TYPE_STRING, "Main.overview._dash.actor.hide();",
+				G_TYPE_INVALID,
+				G_TYPE_INVALID);  // hide the dash, since it's completely redundant with the dock ("Main.panel.actor.hide()" to hide the top panel)
 		
 		_register_gs_backend ();
 	}
