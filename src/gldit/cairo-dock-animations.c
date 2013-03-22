@@ -306,7 +306,7 @@ void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 {
 	if (! pIcon->bIsDemandingAttention)
 		return;
-	g_print ("%s (%s)\n", __func__, pIcon->cName);
+	cd_debug ("%s (%s)", __func__, pIcon->cName);
 	cairo_dock_stop_icon_animation (pIcon);
 	//cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));  // a faire avant, lorsque l'icone est encore en mode demande d'attention.
 	pIcon->bIsDemandingAttention = FALSE;

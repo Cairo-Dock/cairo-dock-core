@@ -272,6 +272,9 @@ static gboolean _cairo_dock_remove_old_applis (Window *Xid, Icon *icon, gpointer
 			// notify everybody
 			cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_DESTROYED, icon);
 			
+			if (icon->iDemandsAttention != 0)  // force the stop demanding attention, in case the icon was in a sub-dock (the main icon is also animating).
+				cairo_dock_appli_stops_demanding_attention (icon, CAIRO_APPLI_DEMANDS_ATTENTION | CAIRO_APPLI_URGENCY_HINT);
+			
 			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 			if (pParentDock != NULL)
 			{
