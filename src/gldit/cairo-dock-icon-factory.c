@@ -300,7 +300,6 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 {
 	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->image.pSurface != NULL || pIcon->image.iTexture != 0));
 	
-	g_print ("%s (%s)\n", __func__, pIcon->cName);
 	CairoIconContainerRenderer *pRenderer = cairo_dock_get_icon_container_renderer (pIcon->cClass != NULL ? "Stack" : s_cRendererNames[pIcon->iSubdockViewType]);
 	if (pRenderer == NULL)
 		return;
@@ -339,5 +338,4 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		cairo_dock_end_draw_icon_cairo (pIcon);
 		cairo_destroy (pCairoContext);
 	}
-	g_print (" drawing OK\n");
 }

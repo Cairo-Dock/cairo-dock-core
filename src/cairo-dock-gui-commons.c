@@ -138,7 +138,7 @@ void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidget
 }
 
 
-#define DISTANT_DIR "3.1.0"
+#define DISTANT_DIR "3.2.0"
 gchar *cairo_dock_get_third_party_applets_link (void)
 {
 	return g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/"DISTANT_DIR);
