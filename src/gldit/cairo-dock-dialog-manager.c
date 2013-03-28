@@ -870,8 +870,6 @@ CairoDialog *cairo_dock_show_temporary_dialog_with_default_icon (const gchar *cT
 	memset (&attr, 0, sizeof (CairoDialogAttribute));
 	attr.cText = cText;
 	attr.cImageFilePath = cIconPath;
-	attr.iNbFrames = 12;
-	attr.iIconSize = 32;
 	attr.iTimeLength = (int) fTimeLength;
 	CairoDialog *pDialog = cairo_dock_build_dialog (&attr, pIcon, pContainer);
 	
