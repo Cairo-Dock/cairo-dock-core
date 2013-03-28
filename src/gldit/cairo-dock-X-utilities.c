@@ -235,9 +235,9 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 				pScreen->height = scr[i].height;
 				cd_message (" * screen %d(%d) => (%d;%d) %dx%d", iNbScreens, i, pScreen->x, pScreen->y, pScreen->width, pScreen->height);
 				
-				XFree (scr);
 				iNbScreens ++;
 			}
+			XFree (scr);
 		}
 		else
 			cd_warning ("No screen found from Xinerama, is it really active ?");
