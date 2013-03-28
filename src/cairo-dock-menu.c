@@ -574,7 +574,7 @@ static void cairo_dock_add_main_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GN
 	
 	cairo_dock_gui_trigger_reload_items ();  // pas de signal "new_dock"
 	
-	g_timeout_add_seconds (1, (GSourceFunc)_show_new_dock_msg, g_strdup (cDockName));  // delai, car sa fenetre n'est pas encore bien placee (0,0).
+	g_timeout_add_seconds (1, (GSourceFunc)_show_new_dock_msg, cDockName);  // delai, car sa fenetre n'est pas encore bien placee (0,0).
 }
 
 static void cairo_dock_add_separator (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
@@ -745,7 +745,7 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 	gchar *cDesktopFilePath = g_strdup (cairo_dock_get_class_desktop_file (icon->cClass));
 	if (cDesktopFilePath == NULL)
 	{
-		gchar *cCommand = g_strdup_printf ("locate /%s.desktop --limit=1 -i", icon->cClass);
+		gchar *cCommand = g_strdup_printf ("locate /usr/*/%s.desktop --limit=1 -i", icon->cClass);
 		gchar *cResult = cairo_dock_launch_command_sync (cCommand);
 		if (cResult != NULL && *cResult != '\0')
 		{
