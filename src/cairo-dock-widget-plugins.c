@@ -141,7 +141,7 @@ static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 	{
 		case CAIRO_DOCK_CATEGORY_APPLET_FILES:
 			cCategory = _("Files");
-			g_object_set (cell, "foreground", "#004EA1", NULL);  // bleu
+			g_object_set (cell, "foreground", "#004EA1", NULL);  // blue
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_INTERNET:
@@ -151,22 +151,27 @@ static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_DESKTOP:
 			cCategory = _("Desktop");
-			g_object_set (cell, "foreground", "#116E08", NULL);  // vert
+			g_object_set (cell, "foreground", "#116E08", NULL);  // green
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY:
 			cCategory = _("Accessory");
-			g_object_set (cell, "foreground", "#900009", NULL);  // rouge
+			g_object_set (cell, "foreground", "#900009", NULL);  // red
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_SYSTEM:
 			cCategory = _("System");
-			g_object_set (cell, "foreground", "#A58B0D", NULL);  // jaune
+			g_object_set (cell, "foreground", "#A58B0D", NULL);  // yellow
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_FUN:
 			cCategory = _("Fun");
 			g_object_set (cell, "foreground", "#FF55FF", NULL);  // rose
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
+		case CAIRO_DOCK_CATEGORY_BEHAVIOR: // help applet
+			cCategory = _("Behaviour");
+			g_object_set (cell, "foreground", "#000066", NULL);  // dark blue
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		default:
@@ -181,7 +186,8 @@ static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 
 static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, GtkListStore *pModel)
 {
-	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule))
+	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME
+		&& ! cairo_dock_module_is_auto_loaded (pModule))
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 		gchar *cIcon = cairo_dock_get_icon_for_gui (pModule->pVisitCard->cModuleName,
