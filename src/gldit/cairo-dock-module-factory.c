@@ -403,7 +403,7 @@ CairoDockModuleInstance *cairo_dock_instanciate_module (CairoDockModule *pModule
 	//\____________________ On cree une instance du module.
 	CairoDockModuleInstance *pInstance = g_malloc0 (sizeof (CairoDockModuleInstance) + pModule->pVisitCard->iSizeOfConfig + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
 	GLDI_OBJECT(pInstance)->ref = 1;
-	gldi_object_set_manager (GLDI_OBJECT (pInstance), GLDI_MANAGER (&myModulesMgr));
+	gldi_object_set_manager (GLDI_OBJECT (pInstance), GLDI_MANAGER (&myModuleInstancesMgr));
 	
 	pInstance->pModule = pModule;
 	pInstance->cConfFilePath = cConfFilePath;

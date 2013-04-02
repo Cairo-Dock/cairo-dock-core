@@ -40,15 +40,22 @@ G_BEGIN_DECLS
 
 typedef struct _CairoModulesParam CairoModulesParam;
 typedef struct _CairoModulesManager CairoModulesManager;
+typedef struct _CairoModuleInstancesParam CairoModuleInstancesParam;
+typedef struct _CairoModuleInstancesManager CairoModuleInstancesManager;
 
 #ifndef _MANAGER_DEF_
 extern CairoModulesParam myModulesParam;
 extern CairoModulesManager myModulesMgr;
+extern CairoModuleInstancesParam myModuleInstancesParam;
+extern CairoModuleInstancesManager myModuleInstancesMgr;
 #endif
 
 // params
 struct _CairoModulesParam {
 	gchar **cActiveModuleList;
+	};
+struct _CairoModuleInstancesParam {
+	gint unused;
 	};
 
 // manager
@@ -63,13 +70,21 @@ struct _CairoModulesManager {
 	void 			(*write_active_modules_cb) 		(void);
 };
 
+struct _CairoModuleInstancesManager {
+	GldiManager mgr;
+};
+
 // signals
 typedef enum {
 	NOTIFICATION_MODULE_REGISTERED = NB_NOTIFICATIONS_OBJECT,
 	NOTIFICATION_MODULE_ACTIVATED,
-	NOTIFICATION_MODULE_INSTANCE_DETACHED,
 	NB_NOTIFICATIONS_MODULES
 	} CairoModulesNotifications;
+
+typedef enum {
+	NOTIFICATION_MODULE_INSTANCE_DETACHED = NB_NOTIFICATIONS_OBJECT,
+	NB_NOTIFICATIONS_MODULE_INSTANCES
+	} CairoModuleInstancesNotifications;
 
 
   /////////////

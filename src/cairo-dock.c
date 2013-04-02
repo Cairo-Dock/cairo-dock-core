@@ -670,7 +670,7 @@ int main (int argc, char** argv)
 		NOTIFICATION_MODULE_REGISTERED,
 		(CairoDockNotificationFunc) cairo_dock_notification_module_registered,
 		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myModulesMgr,
+	cairo_dock_register_notification_on_object (&myModuleInstancesMgr,
 		NOTIFICATION_MODULE_INSTANCE_DETACHED,
 		(CairoDockNotificationFunc) cairo_dock_notification_module_detached,
 		CAIRO_DOCK_RUN_AFTER, NULL);

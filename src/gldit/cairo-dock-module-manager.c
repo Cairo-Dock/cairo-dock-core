@@ -47,6 +47,8 @@
 // public (manager, config, data)
 CairoModulesParam myModulesParam;
 CairoModulesManager myModulesMgr;
+CairoModuleInstancesParam myModuleInstancesParam;
+CairoModuleInstancesManager myModuleInstancesMgr;
 
 CairoDockModuleInstance *g_pCurrentModule = NULL;  // only used to trace a possible crash in one of the modules.
 
@@ -317,17 +319,6 @@ void cairo_dock_activate_module_and_load (const gchar *cModuleName)
 		cairo_dock_reload_module (pModule, FALSE);
 	}
 	
-	GList *pElement;
-	CairoDockModuleInstance *pInstance;
-	for (pElement = pModule->pInstancesList; pElement != NULL; pElement = pElement->next)
-	{
-		pInstance = pElement->data;
-		if (pInstance->pDock)
-		{
-			///cairo_dock_trigger_update_dock_size (pInstance->pDock);
-		}
-	}
-	
 	cairo_dock_write_active_modules ();
 }
 
@@ -463,13 +454,19 @@ void cairo_dock_add_module_instance (CairoDockModule *pModule)
 		return ;
 	}
 	
+	if (! pModule->pVisitCard->bMultiInstance)
+	{
+		cd_warning ("This module can't be instanciated more than once");
+		return ;
+	}
+	
 	gchar *cInstanceFilePath = cairo_dock_add_module_conf_file (pModule);
 	
 	CairoDockModuleInstance *pNewInstance = cairo_dock_instanciate_module (pModule, cInstanceFilePath);  // prend le 'cInstanceFilePath'.
 	
 	if (pNewInstance != NULL && pNewInstance->pDock)
 	{
-		cairo_dock_update_dock_size (pNewInstance->pDock);
+		//cairo_dock_update_dock_size (pNewInstance->pDock);
 	}
 }
 
@@ -658,4 +655,19 @@ void gldi_register_modules_manager (void)
 	cairo_dock_install_notifications_on_object (&myModulesMgr, NB_NOTIFICATIONS_MODULES);
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myModulesMgr));
+	
+	// Manager
+	memset (&myModuleInstancesMgr, 0, sizeof (CairoModuleInstancesManager));
+	myModuleInstancesMgr.mgr.cModuleName 	= "ModuleInstances";
+	// Config
+	memset (&myModuleInstancesParam, 0, sizeof (CairoModuleInstancesParam));
+	myModuleInstancesMgr.mgr.pConfig = (GldiManagerConfigPtr)&myModuleInstancesParam;
+	myModuleInstancesMgr.mgr.iSizeOfConfig = sizeof (CairoModuleInstancesParam);
+	// data
+	myModuleInstancesMgr.mgr.pData = (GldiManagerDataPtr)NULL;
+	myModuleInstancesMgr.mgr.iSizeOfData = 0;
+	// signals
+	cairo_dock_install_notifications_on_object (&myModuleInstancesMgr, NB_NOTIFICATIONS_MODULES);
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myModuleInstancesMgr));
 }
