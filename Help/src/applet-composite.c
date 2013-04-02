@@ -33,9 +33,9 @@ static void _set_metacity_composite (gboolean bActive)
 {
 	int r;
 	if (bActive)
-		r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true");
+		r = system ("if test -n \"`dconf read /org/gnome/metacity/compositing-manager`\"; then dconf write /org/gnome/metacity/compositing-manager true; metacity --replace& else gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true; fi");  // metacity's new feature : now uses Dconf and crashes after activating the composite
 	else
-		r = system ("gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false");
+		r = system ("if test -n \"`dconf read /org/gnome/metacity/compositing-manager`\"; then dconf write /org/gnome/metacity/compositing-manager false; metacity --replace& else gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false; fi");
 	if (r < 0)
 		cd_warning ("Not able to launch this command: gconftool-2");
 }
@@ -269,10 +269,10 @@ gboolean cd_help_get_params (G_GNUC_UNUSED gpointer data)
 			G_TYPE_INVALID);
 	}
 	
-	// test the composite for a few seconds (the Composite Manager may not be active yet).
-	if (myData.bTestComposite && ! myContainersParam.bUseFakeTransparency)
+	// test the composite in a few seconds (the Composite Manager may not be active yet).
+	if (myData.bTestComposite/** && ! myContainersParam.bUseFakeTransparency*/)
 	{
-		myData.iSidTestComposite = g_timeout_add_seconds (1, cd_help_check_composite, NULL);
+		myData.iSidTestComposite = g_timeout_add_seconds (2, cd_help_check_composite, NULL);
 	}
 	else if (myData.bFirstLaunch)
 	{

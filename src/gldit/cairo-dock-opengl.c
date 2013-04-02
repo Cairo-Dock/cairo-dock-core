@@ -385,7 +385,7 @@ void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, G_GNUC_UNUSED CairoContain
 
 void gldi_glx_apply_desktop_background (CairoContainer *pContainer)
 {
-	if (! myContainersParam.bUseFakeTransparency || ! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
+	if (/**! myContainersParam.bUseFakeTransparency || */! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
 	
 	glPushMatrix ();

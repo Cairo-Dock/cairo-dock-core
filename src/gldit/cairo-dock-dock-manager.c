@@ -145,8 +145,8 @@ static inline CairoDock *_create_dock (const gchar *cDockName)
 	
 	if (s_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), s_bKeepAbove);
-	if (myContainersParam.bUseFakeTransparency)
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+	///if (myContainersParam.bUseFakeTransparency)
+	///	gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
 	
 	return pDock;
 }

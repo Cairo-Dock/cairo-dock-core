@@ -50,7 +50,7 @@ extern CairoContainersManager myContainersMgr;
 
 // params
 struct _CairoContainersParam{
-	gboolean bUseFakeTransparency;
+	//gboolean bUseFakeTransparency;
 	gint iGLAnimationDeltaT;
 	gint iCairoAnimationDeltaT;
 	};

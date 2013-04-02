@@ -53,6 +53,7 @@ CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
+extern CairoDock *g_pMainDock;
 
 // private
 static gboolean s_bSticky = TRUE;
@@ -630,6 +631,49 @@ GldiShape *gldi_container_create_input_shape (CairoContainer *pContainer, int x,
 }
 
 
+
+  ////////////
+ /// INIT ///
+////////////
+
+static void _set_below (CairoDock *pDock, gpointer data)
+{
+	cairo_dock_set_dock_visibility (pDock, GPOINTER_TO_INT (data));
+}
+static void _on_composited_changed (GdkScreen *pScreen, G_GNUC_UNUSED gpointer data)
+{
+	static CairoDockVisibility s_iPrevVisibility = CAIRO_DOCK_NB_VISI;
+	if (!gdk_screen_is_composited (pScreen) || (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable))
+	{
+		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
+		s_iPrevVisibility = g_pMainDock->iVisibility;
+		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (CAIRO_DOCK_VISI_KEEP_BELOW));  // set the visibility to 'keep below'; that's the best compromise between accessibility and visual annoyance.
+	}
+	else
+	{
+		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
+		g_pFakeTransparencyDesktopBg = NULL;
+		if (s_iPrevVisibility < CAIRO_DOCK_NB_VISI)
+			cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (s_iPrevVisibility));  // restore the previous visibility.
+	}
+}
+static gboolean _check_composite_delayed (G_GNUC_UNUSED gpointer data)
+{
+	GdkScreen *pScreen = gdk_screen_get_default ();
+	if (!gdk_screen_is_composited (pScreen) || (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable))  // no composite available -> load the desktop background
+	{
+		cd_message ("Composite is not available");
+		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);  // we don't modify the visibility on startup; if it's the first launch, the user has to notice the problem. and if it's not, just respect his configuration.
+	}
+	g_signal_connect (pScreen, "composited-changed", G_CALLBACK (_on_composited_changed), NULL);
+	return FALSE;
+}
+static void init (void)
+{
+	g_timeout_add_seconds (4, _check_composite_delayed, NULL);  // we don't want to be annoyed by the activation of the composite on startup
+}
+
+
   //////////////////
  /// GET CONFIG ///
 //////////////////
@@ -637,9 +681,9 @@ GldiShape *gldi_container_create_input_shape (CairoContainer *pContainer, int x,
 static gboolean get_config (GKeyFile *pKeyFile, CairoContainersParam *pContainersParam)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
-	pContainersParam->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	/**pContainersParam->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 	if (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable)
-		pContainersParam->bUseFakeTransparency = TRUE;
+		pContainersParam->bUseFakeTransparency = TRUE;*/
 	
 	int iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "opengl anim freq", &bFlushConfFileNeeded, 33, NULL, NULL);
 	pContainersParam->iGLAnimationDeltaT = 1000. / iRefreshFrequency;
@@ -655,26 +699,26 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoContainersParam *pContainer
  /// LOAD ///
 ////////////
 
-static void load (void)
+/**static void load (void)
 {
 	if (myContainersParam.bUseFakeTransparency)
 	{
 		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
 	}
-}
+}*/
 
 
   //////////////
  /// RELOAD ///
 //////////////
 
-static void _set_below (CairoDock *pDock, gpointer data)
+/*static void _set_below (CairoDock *pDock, gpointer data)
 {
 	gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), GPOINTER_TO_INT (data));
 }
 static void reload (CairoContainersParam *pPrevContainers, CairoContainersParam *pContainers)
 {
-		//\_______________ Fake Transparency.
+	//\_______________ Fake Transparency.
 	if (pContainers->bUseFakeTransparency && ! pPrevContainers->bUseFakeTransparency)
 	{
 		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (TRUE));
@@ -686,7 +730,7 @@ static void reload (CairoContainersParam *pPrevContainers, CairoContainersParam 
 		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
 		g_pFakeTransparencyDesktopBg = NULL;
 	}
-}
+}*/
 
 
   //////////////
@@ -708,10 +752,10 @@ void gldi_register_containers_manager (void)
 	// Manager
 	memset (&myContainersMgr, 0, sizeof (CairoContainersManager));
 	myContainersMgr.mgr.cModuleName 	= "Containers";
-	myContainersMgr.mgr.init 		= NULL;
-	myContainersMgr.mgr.load 		= load;
+	myContainersMgr.mgr.init 		= init;
+	myContainersMgr.mgr.load 		= NULL;
 	myContainersMgr.mgr.unload 		= unload;
-	myContainersMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
+	myContainersMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
 	myContainersMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
 	myContainersMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
 	// Config

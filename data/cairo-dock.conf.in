@@ -232,12 +232,6 @@ cairo anim freq = 25
 #{The transparency gradation pattern will then be re-calculated in real time. May need more CPU power.}
 dynamic reflection = false
 
-#X-[Composition;gtk-clear]
-frame_fake =
-#b- Emulate composition with fake transparency?
-#{Only use this if you don't run a composite manager like Compiz, xcompmgr, etc and have a black background around your dock. For aesthetic reasons, the dock will be kept under other windows.}
-fake transparency = false
-
 #X-[Connection to the Internet;gtk-network]
 frame_conn =
 
