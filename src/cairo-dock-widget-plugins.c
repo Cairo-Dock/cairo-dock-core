@@ -139,16 +139,6 @@ static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_STATE, &iCategory, -1);
 	switch (iCategory)
 	{
-		case CAIRO_DOCK_CATEGORY_BEHAVIOR: // only for the 'Help' applet
-			cCategory = _("Behaviour");
-			g_object_set (cell, "foreground", "#000066", NULL);  // dark blue
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
-		case CAIRO_DOCK_CATEGORY_THEME:
-			cCategory = _("Appearance");
-			g_object_set (cell, "foreground", "#33CC00", NULL);  // light green
-			g_object_set (cell, "foreground-set", TRUE, NULL);
-		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_FILES:
 			cCategory = _("Files");
 			g_object_set (cell, "foreground", "#004EA1", NULL);  // blue
@@ -156,7 +146,7 @@ static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_INTERNET:
 			cCategory = _("Internet");
-			g_object_set (cell, "foreground", "#FF6600", NULL);  // orange
+			g_object_set (cell, "foreground", "#FF5555", NULL);  // orange
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
 		case CAIRO_DOCK_CATEGORY_APPLET_DESKTOP:
@@ -179,6 +169,11 @@ static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 			g_object_set (cell, "foreground", "#FF55FF", NULL);  // purple
 			g_object_set (cell, "foreground-set", TRUE, NULL);
 		break;
+		case CAIRO_DOCK_CATEGORY_BEHAVIOR: // help applet
+			cCategory = _("Behaviour");
+			g_object_set (cell, "foreground", "#000066", NULL);  // dark blue
+			g_object_set (cell, "foreground-set", TRUE, NULL);
+		break;
 		default:
 			cd_warning ("incorrect category (%d)", iCategory);
 		break;
@@ -191,7 +186,8 @@ static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 
 static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, GtkListStore *pModel)
 {
-	if (! cairo_dock_module_is_auto_loaded (pModule)) // only display module that can be enabled/disabled
+	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME  // don't display the animations plug-ins
+		&& ! cairo_dock_module_is_auto_loaded (pModule))  // don't display modules that can't be disabled
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 		gchar *cIcon = cairo_dock_get_icon_for_gui (pModule->pVisitCard->cModuleName,
@@ -232,6 +228,7 @@ static GtkWidget *_cairo_dock_build_modules_treeview (void)
 	
 	//\______________ On remplit le modele avec les modules de la categorie.
 	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pModel), CAIRO_DOCK_MODEL_STATE, GTK_SORT_ASCENDING);
 	cairo_dock_foreach_module ((GHRFunc) _cairo_dock_add_module_to_modele, pModel);
 	
 	//\______________ On definit l'affichage du modele dans le tree-view.
