@@ -18,7 +18,7 @@ alignment = .5
 #r- Multi-screens
 num_screen = 0
 
-#F-[Offset from the screen's edge;gtk-leave-fullscreen]
+#X-[Offset from the screen's edge;gtk-leave-fullscreen]
 frame_scr =
 
 #I-[-1000;1000] Lateral offset:

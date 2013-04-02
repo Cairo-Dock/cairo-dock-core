@@ -31,6 +31,8 @@ extern CairoContainer *g_pPrimaryContainer;
 extern gchar *g_cConfFile;
 /// Le chemin vers le repertoire racine.
 extern gchar *g_cCairoDockDataDir;
+extern gchar *g_cCurrentThemePath;
+extern gchar *g_cCurrentLaunchersPath;
 /// version
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 

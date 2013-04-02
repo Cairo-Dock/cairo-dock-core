@@ -32,10 +32,10 @@
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-animations.h"
 #include "cairo-dock-X-manager.h"  // cairo_dock_get_screen_*
-#include "cairo-dock-global-variables.h"  // g_openglConfig
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
 #include "cairo-dock-opengl.h"  // gldi_glx_begin_draw_container_full
 
+extern CairoDockGLConfig g_openglConfig;
 #include "cairo-dock-dock-facility.h"
 
 extern gboolean g_bUseOpenGL;  // for cairo_dock_make_preview()

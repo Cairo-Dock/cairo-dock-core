@@ -36,14 +36,11 @@
 #include "cairo-dock-module-factory.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dialog-manager.h"
-//#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-core.h"
 #include "cairo-dock-dock-facility.h"
-//#include "cairo-dock-opengl.h"
-#include "cairo-dock-global-variables.h"
 #include "cairo-dock-themes-manager.h"
 
 // public data
