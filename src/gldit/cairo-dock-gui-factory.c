@@ -1110,16 +1110,27 @@ static GHashTable *_cairo_dock_build_screens_list (void)
 	return pHashTable;
 }
 
-typedef void (*CDForeachRendererFunc) (GHFunc pFunction, GtkListStore *pListStore);
+typedef void (*CDForeachRendererFunc) (GHFunc pFunction, gpointer pListStore);
 
-static inline GtkListStore *_build_list_for_gui (CDForeachRendererFunc pFunction, GHFunc pHFunction, const gchar *cEmptyItem)
+#define _build_list_for_gui(pFunction, pHFunction, cEmptyItem) _build_list_for_gui_full (pFunction, pHFunction, cEmptyItem, FALSE, NULL)
+
+static inline GtkListStore *_build_list_for_gui_full (CDForeachRendererFunc pFunction, GHFunc pHFunction, const gchar *cEmptyItem, gboolean bAddData, gpointer data)
 {
 	GtkListStore *pListStore = _cairo_dock_gui_allocate_new_model ();
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pListStore), CAIRO_DOCK_MODEL_NAME, GTK_SORT_ASCENDING);
 	if (cEmptyItem)
 		pHFunction ((gchar*)cEmptyItem, NULL, pListStore);
+
 	if (pFunction)
-		pFunction (pHFunction, pListStore);
+	{
+		if (bAddData)
+		{
+			gpointer pFullData[2] = {pListStore, data};
+			pFunction (pHFunction, pFullData);
+		}
+		else
+			pFunction (pHFunction, pListStore);
+	}
 	return pListStore;
 }
 
@@ -1191,14 +1202,56 @@ static GtkListStore *_cairo_dock_build_dialog_decorator_list_for_gui (void)
 	return _build_list_for_gui ((CDForeachRendererFunc)cairo_dock_foreach_dialog_decorator, (GHFunc)_cairo_dock_add_one_dialog_decorator_item, NULL);
 }
 
-static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock, GtkListStore *pModele)
+
+static gboolean _test_one_name (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
 {
+	gchar *cName = NULL, *cResult = NULL;
+	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_RESULT, &cResult, -1);
+	if (cResult == NULL)
+		gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_NAME, &cName, -1);
+	else if (data[3])
+		cairo_dock_extract_package_type_from_name (cResult);
+	if ((cResult && strcmp (data[0], cResult) == 0) || (cName && strcmp (data[0], cName) == 0))
+	{
+		GtkTreeIter *iter_to_fill = data[1];
+		memcpy (iter_to_fill, iter, sizeof (GtkTreeIter));
+		gboolean *bFound = data[2];
+		*bFound = TRUE;
+		g_free (cName);
+		g_free (cResult);
+		return TRUE;
+	}
+	g_free (cName);
+	g_free (cResult);
+	return FALSE;
+}
+
+static gboolean _cairo_dock_find_iter_from_name_full (GtkListStore *pModele, const gchar *cName, GtkTreeIter *iter, gboolean bIsTheme)
+{
+	if (cName == NULL)
+		return FALSE;
+	gboolean bFound = FALSE;
+	gconstpointer data[4] = {cName, iter, &bFound, GINT_TO_POINTER (bIsTheme)};
+	gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _test_one_name, data);
+	return bFound;
+}
+#define _cairo_dock_find_iter_from_name(pModele, cName, iter) _cairo_dock_find_iter_from_name_full (pModele, cName, iter, FALSE)
+
+static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock, gpointer *data)
+{
+	GtkListStore *pModele = data[0];
+	CairoDock *pSubDock = data[1];
+	
 	gchar *cUserName = NULL;
 	if (pDock != NULL)  // peut etre NULL (entree vide)
 	{
+		if (pSubDock == pDock) // the icon itself
+			return;
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 		if (pPointingIcon && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon)) // only main docks and subdocks
-			return ;
+			return;
+		if (pSubDock != NULL && cairo_dock_is_dock_contains_subdock (pSubDock, pDock)) // to avoid: 1->2->1
+			return;
 		if (pDock->iRefCount == 0)
 			cUserName = cairo_dock_get_readable_name_for_fock (pDock);
 	}
@@ -1213,9 +1266,12 @@ static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock,
 		CAIRO_DOCK_MODEL_IMAGE, "none", -1);
 	g_free (cUserName);
 }
-static GtkListStore *_cairo_dock_build_dock_list_for_gui (void)
+static GtkListStore *_cairo_dock_build_dock_list_for_gui (const gchar *cContainerName)
 {
-	GtkListStore *pList = _build_list_for_gui ((CDForeachRendererFunc)cairo_dock_foreach_docks, (GHFunc)_cairo_dock_add_one_dock_item, NULL);
+	CairoDock *pSubDock = cairo_dock_search_dock_from_name (cContainerName); // can be null
+
+	GtkListStore *pList = _build_list_for_gui_full ((CDForeachRendererFunc)cairo_dock_foreach_docks, (GHFunc)_cairo_dock_add_one_dock_item, NULL, TRUE, pSubDock);
+
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pList), &iter);
@@ -1285,40 +1341,6 @@ static void _on_list_destroyed (G_GNUC_UNUSED gpointer data)
 		(CairoDockNotificationFunc) _on_screen_modified,
 		CAIRO_DOCK_RUN_AFTER);
 }
-
-static gboolean _test_one_name (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
-{
-	gchar *cName = NULL, *cResult = NULL;
-	gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_RESULT, &cResult, -1);
-	if (cResult == NULL)
-		gtk_tree_model_get (model, iter, CAIRO_DOCK_MODEL_NAME, &cName, -1);
-	else if (data[3])
-		cairo_dock_extract_package_type_from_name (cResult);
-	if ((cResult && strcmp (data[0], cResult) == 0) || (cName && strcmp (data[0], cName) == 0))
-	{
-		GtkTreeIter *iter_to_fill = data[1];
-		memcpy (iter_to_fill, iter, sizeof (GtkTreeIter));
-		gboolean *bFound = data[2];
-		*bFound = TRUE;
-		g_free (cName);
-		g_free (cResult);
-		return TRUE;
-	}
-	g_free (cName);
-	g_free (cResult);
-	return FALSE;
-}
-static gboolean _cairo_dock_find_iter_from_name_full (GtkListStore *pModele, const gchar *cName, GtkTreeIter *iter, gboolean bIsTheme)
-{
-	if (cName == NULL)
-		return FALSE;
-	gboolean bFound = FALSE;
-	gconstpointer data[4] = {cName, iter, &bFound, GINT_TO_POINTER (bIsTheme)};
-	gtk_tree_model_foreach (GTK_TREE_MODEL (pModele), (GtkTreeModelForeachFunc) _test_one_name, data);
-	return bFound;
-}
-#define _cairo_dock_find_iter_from_name(pModele, cName, iter) _cairo_dock_find_iter_from_name_full (pModele, cName, iter, FALSE)
-
 
 static void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pThemeTable, gchar *cActiveTheme, gchar *cHint)
 {
@@ -2500,8 +2522,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			case CAIRO_DOCK_WIDGET_DOCK_LIST :  // liste des docks existant.
 			{
-				GtkListStore *pDocksListStore = _cairo_dock_build_dock_list_for_gui ();
 				GtkTreeIter iter;
+				gchar *cContainerName = NULL;
 
 				// Do not add itself if it's a container
 				GError *error = NULL;
@@ -2509,12 +2531,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				if (error != NULL) // it's certainly not a container
 					g_error_free (error);
 				else if (iIconType == CAIRO_DOCK_ICON_TYPE_CONTAINER) // it's a container
-				{
-					gchar *cContainerName = g_key_file_get_string (pKeyFile, cGroupName, "Name", NULL);
-					if (cContainerName && _cairo_dock_find_iter_from_name (pDocksListStore, cContainerName, &iter))
-						gtk_list_store_remove (pDocksListStore, &iter);
-					g_free (cContainerName);
-				}
+					cContainerName = g_key_file_get_string (pKeyFile, cGroupName, "Name", NULL);
+
+				GtkListStore *pDocksListStore = _cairo_dock_build_dock_list_for_gui (cContainerName);
+				g_free (cContainerName);
 
 				pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (pDocksListStore));
 				rend = gtk_cell_renderer_text_new ();
