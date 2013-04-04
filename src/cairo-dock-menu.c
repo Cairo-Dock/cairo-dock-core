@@ -715,20 +715,24 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 
 static void _add_one_dock_to_menu (const gchar *cName, CairoDock *pDock, GtkWidget *pMenu)
 {
-	// on ne prend que les sous-docks utilisateur.
+	// we get all icons of the user
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	if (pPointingIcon && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
+	if (pPointingIcon && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon)) // only docks and subdocks (not from launchers/apps)
 		return;
-	// on elimine le dock courant.
+
+	// we remove the current dock.
 	Icon *pIcon = g_object_get_data (G_OBJECT (pMenu), "icon-item");
 	if (strcmp (pIcon->cParentDockName, cName) == 0)
 		return;
-	// on elimine le sous-dock.
-	if (pIcon->pSubDock != NULL && pIcon->pSubDock == pDock)
+
+	// we remove itself (if it's a subdock).
+	if (pIcon->pSubDock != NULL && (pIcon->pSubDock == pDock
+		|| cairo_dock_is_dock_contains_subdock (pIcon->pSubDock, pDock)))
 		return;
-	// On definit un nom plus parlant.
+
+	// get a readable name
 	gchar *cUserName = cairo_dock_get_readable_name_for_fock (pDock);
-	// on rajoute une entree pour le dock.
+	// add the new entry in the menu
 	GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (cUserName ? cUserName : cName, NULL, G_CALLBACK (_cairo_dock_move_launcher_to_dock), pMenu, (gpointer)cName);
 	g_object_set_data (G_OBJECT (pMenuItem), "icon-item", pIcon);
 	g_free (cUserName);
