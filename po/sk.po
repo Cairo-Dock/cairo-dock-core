@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2013-03-04 15:51+0000\n"
-"PO-Revision-Date: 2012-09-30 17:27+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"PO-Revision-Date: 2013-03-27 12:13+0000\n"
+"Last-Translator: Milan Slovák <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-05 04:38+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-03-28 04:39+0000\n"
+"X-Generator: Launchpad (build 16546)\n"
 "Language: sk\n"
 
 #: ../src/cairo-dock-gui-advanced.c:126 ../data/messages:263
@@ -168,7 +168,7 @@ msgstr "Popisy"
 
 #: ../src/cairo-dock-gui-advanced.c:1590
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "Vyskúšať nové vzhľady a uložiť ten svoj."
 
 #: ../src/cairo-dock-gui-advanced.c:1591 ../src/cairo-dock-gui-simple.c:118
 #: ../src/cairo-dock-gui-simple.c:120
@@ -177,12 +177,12 @@ msgstr "Témy vzhľadu"
 
 #: ../src/cairo-dock-gui-advanced.c:1597
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "Aktuálne položky vo vašom paneli(och)."
 
 #: ../src/cairo-dock-gui-advanced.c:1598 ../src/cairo-dock-gui-simple.c:94
 #: ../src/cairo-dock-gui-simple.c:96
 msgid "Current items"
-msgstr ""
+msgstr "Aktuálne položky"
 
 #: ../src/cairo-dock-gui-advanced.c:1718
 msgid "Filter"
@@ -206,7 +206,7 @@ msgstr "Vyhľadať v opise"
 
 #: ../src/cairo-dock-gui-advanced.c:1766
 msgid "Hide disabled"
-msgstr ""
+msgstr "Skryť zakázané"
 
 #: ../src/cairo-dock-gui-advanced.c:1775
 msgid "Categories"
@@ -238,7 +238,7 @@ msgstr "Dodatky"
 
 #: ../src/cairo-dock-gui-simple.c:110 ../src/cairo-dock-gui-simple.c:112
 msgid "Configuration"
-msgstr ""
+msgstr "Nastavenia"
 
 #: ../src/cairo-dock-gui-simple.c:646
 msgid "Advanced Mode"
@@ -359,7 +359,7 @@ msgstr "Používatelia nášho fóra"
 
 #: ../src/cairo-dock-menu.c:333
 msgid "List of our forum's members"
-msgstr ""
+msgstr "Zoznam členov fóra"
 
 #: ../src/cairo-dock-menu.c:334
 msgid "Artwork"
@@ -393,7 +393,7 @@ msgstr "Pridať"
 
 #: ../src/cairo-dock-menu.c:596
 msgid "Sub-dock"
-msgstr ""
+msgstr "Pod-panel"
 
 #: ../src/cairo-dock-menu.c:598
 msgid "Main dock"
@@ -410,7 +410,7 @@ msgstr "Obvykle môžete pretiahnuť spúšťač zo zoznamu a umiestniť ho v do
 
 #: ../src/cairo-dock-menu.c:605
 msgid "Applet"
-msgstr ""
+msgstr "Applet"
 
 #: ../src/cairo-dock-menu.c:623
 msgid ""
@@ -635,7 +635,7 @@ msgstr "Premiestniť na plochu %d"
 
 #: ../src/cairo-dock-menu.c:1870 ../src/cairo-dock-menu.c:1912
 msgid "Window"
-msgstr ""
+msgstr "Okno"
 
 #: ../src/cairo-dock-menu.c:1874 ../src/cairo-dock-menu.c:1876
 #: ../src/cairo-dock-menu.c:1932 ../src/cairo-dock-menu.c:1934
@@ -685,7 +685,7 @@ msgstr "Celá obrazovka"
 
 #: ../src/cairo-dock-menu.c:1954 ../src/cairo-dock-menu.c:1956
 msgid "Below other windows"
-msgstr ""
+msgstr "Pod ostatnými oknami"
 
 #: ../src/cairo-dock-menu.c:1964
 msgid "Don't keep above"
@@ -697,11 +697,11 @@ msgstr "Ponechať v popredí"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Viditeľné iba na tejto ploche"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Viditeľné na všetkých plochách"
 
 #: ../src/cairo-dock-menu.c:1976
 msgid "Kill"
@@ -709,7 +709,7 @@ msgstr "Násilne ukončiť"
 
 #: ../src/cairo-dock-menu.c:1991
 msgid "Windows"
-msgstr ""
+msgstr "Okná"
 
 #: ../src/cairo-dock-menu.c:1995 ../src/cairo-dock-menu.c:1997
 #: ../src/cairo-dock-menu.c:2025
@@ -727,7 +727,7 @@ msgstr "Zobraziť všetko"
 
 #: ../src/cairo-dock-menu.c:2019
 msgid "Windows management"
-msgstr ""
+msgstr "Správa okien"
 
 #: ../src/cairo-dock-menu.c:2031
 msgid "Move all to this desktop"
@@ -795,7 +795,7 @@ msgstr "Príslušenstvo"
 
 #: ../src/cairo-dock-widget-plugins.c:241
 msgid "Plug-in"
-msgstr ""
+msgstr "Zásuvný modul"
 
 #: ../src/cairo-dock-widget-plugins.c:247 ../Help/src/applet-tips-dialog.c:305
 msgid "Category"
@@ -854,11 +854,11 @@ msgstr "Vyskúšajte túto tému predtým ako ju ohodnotíte."
 
 #: ../src/cairo-dock-widget-themes.c:423
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "Vzhľad bol odstránený"
 
 #: ../src/cairo-dock-widget-themes.c:453
 msgid "Delete this theme"
-msgstr ""
+msgstr "Odstrániť tento vzhľad"
 
 #: ../src/cairo-dock-widget-themes.c:484
 #: ../src/gldit/cairo-dock-gui-factory.c:2431
@@ -897,25 +897,27 @@ msgstr "Šťastný Nový Rok %d !!!"
 
 #: ../src/cairo-dock.c:345
 msgid "Use Cairo backend."
-msgstr ""
+msgstr "Použiť Cairo pozadie."
 
 #: ../src/cairo-dock.c:348
 msgid "Use OpenGL backend."
-msgstr ""
+msgstr "Použiť OpenGL pozadie."
 
 #: ../src/cairo-dock.c:351
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 msgstr ""
+"Použiť OpenGL pozadie s nepriamym vykresľovaním. Môže byť  použité len veľmi "
+"málo prípadoch."
 
 #: ../src/cairo-dock.c:354
 msgid "Ask again on startup which backend to use."
-msgstr ""
+msgstr "Spýtať sa pri každom spustení, aké má byť pozadie."
 
 #: ../src/cairo-dock.c:357
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr ""
+msgstr "Prinútiť panel, aby použil toto prostredie - používať s opatrnosťou."
 
 #: ../src/cairo-dock.c:360
 msgid ""
@@ -1057,7 +1059,7 @@ msgstr "< Režim údržby >"
 
 #: ../src/cairo-dock.c:719
 msgid "Something went wrong with this applet:"
-msgstr ""
+msgstr "S týmto apletom niečo nie je v poriadku:"
 
 #: ../src/cairo-dock.c:766
 msgid ""
@@ -1105,7 +1107,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-callbacks.c:1530
 msgid "Sorry but the dock is locked"
-msgstr ""
+msgstr "Prepáčte, ale panel je zamknutý"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:924
 msgid "_custom decoration_"
@@ -1180,7 +1182,7 @@ msgstr "_Vlastné ikony_"
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
 msgid "Use all screens"
-msgstr ""
+msgstr "Použiť všetky obrazovky"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1195,7 +1197,7 @@ msgstr "vpravo"
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "middle"
-msgstr ""
+msgstr "stredné"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
@@ -1209,7 +1211,7 @@ msgstr "dole"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
 msgid "Screen"
-msgstr ""
+msgstr "Obrazovka"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1240,7 +1242,7 @@ msgstr "Zachytiť"
 
 #: ../src/gldit/cairo-dock-module-factory.c:856
 msgid "by"
-msgstr ""
+msgstr "od"
 
 #: ../src/gldit/cairo-dock-struct.h:441 ../data/messages:1043
 #: ../data/messages:1051
@@ -1258,7 +1260,7 @@ msgstr "Posledná úprava:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:321
 msgid "Your theme should now be available in your 'Home' directory."
-msgstr ""
+msgstr "Vaša téma by mala byť teraz k dispozícii vo vašom \"Home\" adresári."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:346
 #, c-format
@@ -2677,23 +2679,23 @@ msgstr ""
 
 #: ../data/messages:99
 msgid "Evaporate"
-msgstr ""
+msgstr "Vyparovanie"
 
 #: ../data/messages:103
 msgid "Explode"
-msgstr ""
+msgstr "Explózia"
 
 #: ../data/messages:105
 msgid "Break"
-msgstr ""
+msgstr "Prerušiť"
 
 #: ../data/messages:107
 msgid "Black Hole"
-msgstr ""
+msgstr "Čierna diera"
 
 #: ../data/messages:109
 msgid "Random"
-msgstr ""
+msgstr "Náhodne"
 
 #: ../data/messages:115
 msgid "Choose a theme of icons :"
@@ -2762,7 +2764,7 @@ msgstr "Pomerné zarovnanie :"
 
 #: ../data/messages:163 ../data/messages:891
 msgid "Multi-screens"
-msgstr ""
+msgstr "Viac obrazoviek"
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -2913,7 +2915,7 @@ msgstr "Zobraziť iba ikony minimalizovaných okien ?"
 
 #: ../data/messages:291
 msgid "Automatically add a separator"
-msgstr ""
+msgstr "Automaticky pridať oddeľovač"
 
 #: ../data/messages:293
 msgid ""
@@ -3131,11 +3133,11 @@ msgstr ""
 
 #: ../data/messages:413
 msgid "Animation frequency for the OpenGL backend:"
-msgstr ""
+msgstr "Animovaná frekvencia pre pozadie OpenGL:"
 
 #: ../data/messages:417
 msgid "Animation frequency for the Cairo backend:"
-msgstr ""
+msgstr "Animovaná frekvencia pre pozadie Cairo:"
 
 #: ../data/messages:419
 msgid ""
@@ -3855,23 +3857,23 @@ msgstr "Priblížiť indikátor s jeho ikonou ?"
 
 #: ../data/messages:801
 msgid "Progress bars"
-msgstr ""
+msgstr "Ukazovateľ"
 
 #: ../data/messages:803
 msgid "Start color"
-msgstr ""
+msgstr "Farba začiatku"
 
 #: ../data/messages:805
 msgid "End color"
-msgstr ""
+msgstr "Posledná farba"
 
 #: ../data/messages:807
 msgid "Draw outline"
-msgstr ""
+msgstr "Vykresliť obrys"
 
 #: ../data/messages:809
 msgid "Outline color"
-msgstr ""
+msgstr "Farba obrysu"
 
 #: ../data/messages:811
 msgid "Bar thickness"
@@ -4015,7 +4017,7 @@ msgstr "Vybrať vzhľad pre tento panel :/"
 
 #: ../data/messages:969
 msgid "Load theme"
-msgstr ""
+msgstr "Načítať vzhľad"
 
 #: ../data/messages:971
 msgid "You can even paste an internet URL."
@@ -4027,7 +4029,7 @@ msgstr "... alebo chytiť a vložiť balík s témami vzhľadu sem :"
 
 #: ../data/messages:975
 msgid "Theme loading options"
-msgstr ""
+msgstr "Nastavenie spustenia vzhľadu"
 
 #: ../data/messages:977
 msgid ""
@@ -4090,43 +4092,43 @@ msgstr "Vstup na plochu"
 
 #: ../data/messages:1007 ../data/messages:1039 ../data/messages:1075
 msgid "Name of the container it belongs to:"
-msgstr ""
+msgstr "Názov kontajnéra, do ktorého patria:"
 
 #: ../data/messages:1009
 msgid "Sub-dock's name:"
-msgstr ""
+msgstr "Názov pod-panela"
 
 #: ../data/messages:1011
 msgid "New sub-dock"
-msgstr ""
+msgstr "Nový pod-panel"
 
 #: ../data/messages:1013
 msgid "How to render the icon:"
-msgstr ""
+msgstr "Ako vykreslliť ikonu:"
 
 #: ../data/messages:1015
 msgid "Use an image"
-msgstr ""
+msgstr "Použiť obrázok"
 
 #: ../data/messages:1017
 msgid "Draw sub-dock's content as emblems"
-msgstr ""
+msgstr "Vykresliť obsah sub-dokov ako emblémy"
 
 #: ../data/messages:1019
 msgid "Draw sub-dock's content as stack"
-msgstr ""
+msgstr "Vykresliť obsah sub-dokov ako zásobník"
 
 #: ../data/messages:1021
 msgid "Draw sub-dock's content inside a box"
-msgstr ""
+msgstr "Vykresliť obsah pod-panelov vnútri boxu"
 
 #: ../data/messages:1023 ../data/messages:1045
 msgid "Image's name or path:"
-msgstr ""
+msgstr "Názov obrázku alebo cesta:"
 
 #: ../data/messages:1025 ../data/messages:1053 ../data/messages:1079
 msgid "Extra parameters"
-msgstr ""
+msgstr "Extra parametre"
 
 #: ../data/messages:1027
 msgid "Name of the view used for the sub-dock:"
@@ -4142,21 +4144,23 @@ msgstr ""
 
 #: ../data/messages:1033 ../data/messages:1069 ../data/messages:1081
 msgid "Order you want for this launcher among the others:"
-msgstr ""
+msgstr "Určiť či chcete pre tento spúšťač medzi ostatnými:"
 
 #: ../data/messages:1041
 msgid "Launcher's name:"
-msgstr ""
+msgstr "Názov spúšťača:"
 
 #: ../data/messages:1047
 msgid ""
 "Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
 "e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
+"Príklad: nautilus --no-desktop, gedit, atď Môžete dokonca zadávať skratky, "
+"ako <Alt> F1, <Ctrl> c, <Ctrl> v, atď"
 
 #: ../data/messages:1049
 msgid "Command to launch on click:"
-msgstr ""
+msgstr "Príkaz spustený kliknutím:"
 
 #: ../data/messages:1055
 msgid ""
@@ -4180,11 +4184,11 @@ msgstr ""
 
 #: ../data/messages:1061
 msgid "Class of the program:"
-msgstr ""
+msgstr "Trieda programu:"
 
 #: ../data/messages:1063
 msgid "Run in a terminal?"
-msgstr ""
+msgstr "Spustiť v termináli?"
 
 #: ../data/messages:1065
 msgid "If '0' the launcher will be displayed on every viewport."
@@ -4192,13 +4196,15 @@ msgstr ""
 
 #: ../data/messages:1077
 msgid "Separators' appearance is defined in the global configuration."
-msgstr ""
+msgstr "Vzhľad oddeľovačov \"je definovaný v konfigurácii."
 
 #: ../data/messages:1084
 msgid ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
 msgstr ""
+"<b> Základný 2D vzhľad Cairo-Dock </b>\n"
+"Perfektné, ak chcete, aby sa dock vyzeral ako panel."
 
 #: ../data/messages:1085
 msgid ""

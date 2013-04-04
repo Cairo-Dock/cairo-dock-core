@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2013-03-04 15:51+0000\n"
-"PO-Revision-Date: 2013-03-06 22:27+0000\n"
+"PO-Revision-Date: 2013-03-22 21:20+0000\n"
 "Last-Translator: Саша Петровић <salepetronije@gmail.com>\n"
 "Language-Team: српски <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-07 04:33+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-03-23 04:37+0000\n"
+"X-Generator: Launchpad (build 16540)\n"
 "Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:126 ../data/messages:263
@@ -602,7 +602,7 @@ msgstr "Врати у док"
 
 #: ../src/cairo-dock-menu.c:1258
 msgid "Duplicate"
-msgstr "Удвоји"
+msgstr "Удвостручи"
 
 #: ../src/cairo-dock-menu.c:1437
 #, c-format
@@ -1460,8 +1460,8 @@ msgstr ""
 "Каиро-док има доста програмчића. Програмчићи су мали програми који живе у "
 "доку, на пример сат, или дугме одјаве.\n"
 "Да би омогућили нове програмчиће, отворите поставке (десни клик -> Каиро-док "
-"-> Подеси) идите до „Додаци“, и означите програмче које желите.\n"
-"Још програмчића могу бити уграђени лако: у прозору поставки, кликните на "
+"-> Подесите) идите до „Додаци“, и означите програмче које желите.\n"
+"Још програмчића може бити уграђено лако: у прозору поставки, кликните на "
 "дугме „Још програмчића“ (које ће вас одвести до веб стране програмчића) и "
 "онда само превуците и спустите везу програмчића на ваш док."
 
@@ -1483,7 +1483,7 @@ msgstr ""
 
 #: ../Help/data/messages:17
 msgid "Removing a launcher"
-msgstr "Уклањам покретач"
+msgstr "Уклањање покретача"
 
 #: ../Help/data/messages:19
 msgid ""
@@ -1529,7 +1529,7 @@ msgstr ""
 
 #: ../Help/data/messages:29
 msgid "Changing an icon's image"
-msgstr "Мењање изгледа икона"
+msgstr "Промена изгледа икона"
 
 #: ../Help/data/messages:31
 msgid ""
@@ -1557,7 +1557,7 @@ msgstr ""
 
 #: ../Help/data/messages:33
 msgid "Resizing icons"
-msgstr "Мењање димензије икона"
+msgstr "Промена величина икона"
 
 #: ../Help/data/messages:35
 msgid ""
@@ -1684,7 +1684,7 @@ msgstr "Постављање прилагођене иконе за програ
 
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr "Видите „Мења изгледа икона\" у категорији \"Иконе\"."
+msgstr "Видите „Промена изгледа икона\" у категорији \"Иконе\"."
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
@@ -1727,10 +1727,10 @@ msgid ""
 "dock, and then select the position you want."
 msgstr ""
 "Док може бити постављен било где на екрану.\n"
-"У случају главног дока, десни клик -> Каиро-док -> уреди, и одредите положај "
-"који желите.\n"
-"у случају другог и трећег дока, десни клик -> Каиро-док -> уреди овај док, и "
-"онда одредите положај који желите."
+"У случају главног дока, десни клик -> Каиро-док -> Подесите, и одредите "
+"положај који желите.\n"
+"у случају другог и трећег дока, десни клик -> Каиро-док -> Подесите овај "
+"док, и онда одредите положај који желите."
 
 #: ../Help/data/messages:85
 msgid "Hiding the dock to use all the screen"
@@ -1747,7 +1747,7 @@ msgid ""
 msgstr ""
 "Док се може прикривати лево од екрана за програме. Али, може бити такође "
 "увек видљив као плоча.\n"
-"Да би то изменили, десни клик -> Каиро-док -> уреди овај док, и онда "
+"Да би то изменили, десни клик -> Каиро-док -> Подесите овај док, и онда "
 "одредите видљивост коју желите."
 
 #: ../Help/data/messages:91
