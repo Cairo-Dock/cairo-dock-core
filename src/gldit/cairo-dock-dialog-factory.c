@@ -270,7 +270,7 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 	return TRUE;  // stops other handlers from being invoked for the event.
 }
 
-static gboolean on_map_dialog (GtkWidget* pWidget,
+static gboolean on_map_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	G_GNUC_UNUSED GdkEvent *pEvent,
 	CairoDialog *pDialog)
 {
