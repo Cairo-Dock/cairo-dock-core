@@ -899,6 +899,21 @@ void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
 	g_list_foreach (s_pRootDockList, (GFunc)_cairo_dock_redraw_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
 }
 
+gboolean cairo_dock_is_dock_contains_subdock (CairoDock *pCurrentDock, CairoDock *pSubDock)
+{
+	GList *pIconsList;
+	Icon *pIcon;
+	// check all icons of this dock (recursively)
+	for (pIconsList = pCurrentDock->icons; pIconsList != NULL; pIconsList = pIconsList->next)
+	{
+		pIcon = pIconsList->data;
+		if (pIcon->pSubDock != NULL && (pIcon->pSubDock == pSubDock
+			|| cairo_dock_is_dock_contains_subdock (pIcon->pSubDock, pSubDock)))
+			return TRUE;
+	}
+	return FALSE;
+}
+
 static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
