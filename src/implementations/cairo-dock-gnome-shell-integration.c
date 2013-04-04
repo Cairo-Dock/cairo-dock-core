@@ -25,17 +25,46 @@
 #include "cairo-dock-gnome-shell-integration.h"
 
 static DBusGProxy *s_pGSProxy = NULL;
+static gboolean s_DashIsVisible = FALSE;
+static gint s_iSidShowDash = 0;
 
 #define CD_GS_BUS "org.gnome.Shell"
 #define CD_GS_OBJECT "/org/gnome/Shell"
 #define CD_GS_INTERFACE "org.gnome.Shell"
 
 
+static gboolean _show_dash (G_GNUC_UNUSED gpointer data)
+{
+	dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
+		G_TYPE_STRING, "Main.overview._dash.actor.show();",
+		G_TYPE_INVALID,
+		G_TYPE_INVALID);
+	s_iSidShowDash = 0;
+	return FALSE;
+}
+static void _hide_dash (void)
+{
+	dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
+		G_TYPE_STRING, "Main.overview._dash.actor.hide();",
+		G_TYPE_INVALID,
+		G_TYPE_INVALID);  // hide the dash, since it's completely redundant with the dock ("Main.panel.actor.hide()" to hide the top panel)
+	if (s_iSidShowDash != 0)
+	{
+		g_source_remove (s_iSidShowDash);
+		s_iSidShowDash = 0;
+	}
+	
+	if (s_DashIsVisible)
+		s_iSidShowDash = g_timeout_add_seconds (8, _show_dash, NULL);
+}
+
 static gboolean present_overview (void)
 {
 	gboolean bSuccess = FALSE;
 	if (s_pGSProxy != NULL)
 	{
+		_hide_dash ();
+		
 		dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
 			G_TYPE_STRING, "Main.overview.toggle();",
 			G_TYPE_INVALID,
@@ -44,7 +73,6 @@ static gboolean present_overview (void)
 	}
 	return bSuccess;
 }
-
 
 static gboolean present_class (const gchar *cClass)
 {
@@ -56,6 +84,8 @@ static gboolean present_class (const gchar *cClass)
 	gboolean bSuccess = FALSE;
 	if (s_pGSProxy != NULL)
 	{
+		_hide_dash ();
+		
 		const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
 		int iNumDesktop, iViewPortX, iViewPortY;
 		cairo_dock_get_current_desktop_and_viewport (&iNumDesktop, &iViewPortX, &iViewPortY);
@@ -115,11 +145,15 @@ static void _on_gs_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOw
 			CD_GS_OBJECT,
 			CD_GS_INTERFACE);
 		
-		if (myTaskbarParam.bShowAppli)
-			dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
-				G_TYPE_STRING, "Main.overview._dash.actor.hide();",
-				G_TYPE_INVALID,
-				G_TYPE_INVALID);  // hide the dash, since it's completely redundant with the dock ("Main.panel.actor.hide()" to hide the top panel)
+		gchar *cResult = NULL;
+		gboolean bSuccess = FALSE;
+		dbus_g_proxy_call (s_pGSProxy, "Eval", NULL,
+			G_TYPE_STRING, "Main.overview._dash.actor.visible;",
+			G_TYPE_INVALID,
+			G_TYPE_BOOLEAN, &bSuccess,
+			G_TYPE_STRING, &cResult,
+			G_TYPE_INVALID);
+		s_DashIsVisible = (!cResult || strcmp (cResult, "true") == 0);
 		
 		_register_gs_backend ();
 	}

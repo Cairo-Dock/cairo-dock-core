@@ -14,7 +14,7 @@ add_library(${PACKAGE_HELP} SHARED ${MODULE_SRCS})
 
 ########### compil ###############
 add_definitions (-DMY_APPLET_SHARE_DATA_DIR="${helpdatadir}")
-add_definitions (-DMY_APPLET_PREVIEW_FILE="preview.jpg")
+add_definitions (-DMY_APPLET_PREVIEW_FILE="icon.svg")
 add_definitions (-DMY_APPLET_CONF_FILE="Help.conf")
 add_definitions (-DMY_APPLET_USER_DATA_DIR="Help")
 add_definitions (-DMY_APPLET_VERSION="${VERSION_HELP}")
