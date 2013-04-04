@@ -270,6 +270,17 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 	return TRUE;  // stops other handlers from being invoked for the event.
 }
 
+static gboolean on_map_dialog (GtkWidget* pWidget,
+	G_GNUC_UNUSED GdkEvent *pEvent,
+	CairoDialog *pDialog)
+{
+	if (pDialog->pInteractiveWidget)
+	{
+		cairo_dock_show_xwindow (gldi_container_get_Xid(CAIRO_CONTAINER (pDialog)));  // gtk_window_present doesn't work as expected...
+	}
+	return FALSE;
+}
+
 static GtkWidget *_cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize)
 {
 	GtkWidget *pBox = _gtk_hbox_new (0);
@@ -591,7 +602,6 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 			FALSE,
 			FALSE,
 			0);
-		cd_debug ("grab focus");
 		gtk_window_present (GTK_WINDOW (pDialog->container.pWidget));
 		gtk_widget_grab_focus (pDialog->pInteractiveWidget);
 	}
@@ -627,6 +637,10 @@ CairoDialog *cairo_dock_new_dialog (CairoDialogAttribute *pAttribute, Icon *pIco
 		"unmap-event",
 		G_CALLBACK (on_unmap_dialog),
 		pDialog);
+	g_signal_connect (G_OBJECT (pDialog->container.pWidget),
+		"map-event",
+		G_CALLBACK (on_map_dialog),
+		pDialog);  // some WM (like GS) prevent the focus to be taken, so we have to force it whenever the dialog is shown (creation or unhide).
 	if (pDialog->pInteractiveWidget != NULL && pDialog->pButtons == NULL)  // the dialog has no button to be closed, so it can be closed by clicking on it. But some widget (like the GTK calendar) let pass the click to their parent (= the dialog), which then close it. To prevent this, we memorize the last click on the widget.
 		g_signal_connect (G_OBJECT (pDialog->pInteractiveWidget),
 			"button-press-event",
