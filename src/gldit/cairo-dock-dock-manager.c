@@ -907,8 +907,9 @@ gboolean cairo_dock_is_dock_contains_subdock (CairoDock *pCurrentDock, CairoDock
 	for (pIconsList = pCurrentDock->icons; pIconsList != NULL; pIconsList = pIconsList->next)
 	{
 		pIcon = pIconsList->data;
-		if (pIcon->pSubDock != NULL && (pIcon->pSubDock == pSubDock
-			|| cairo_dock_is_dock_contains_subdock (pIcon->pSubDock, pSubDock)))
+		if (pIcon->pSubDock != NULL && pIcon->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER // only subdock...
+			&& (pIcon->pSubDock == pSubDock // this subdock is inside the current dock!
+			|| cairo_dock_is_dock_contains_subdock (pIcon->pSubDock, pSubDock))) // check recursively
 			return TRUE;
 	}
 	return FALSE;
