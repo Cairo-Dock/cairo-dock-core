@@ -1512,12 +1512,11 @@ static Icon * cairo_dock_create_icon_from_xwindow (Window Xid)
 	if (myTaskbarParam.bShowAppli)
 	{
 		#ifdef HAVE_XEXTEND
-		if (myTaskbarParam.iMinimizedWindowRenderType == 1 && ! icon->bIsHidden)
+		if (myTaskbarParam.iMinimizedWindowRenderType == 1/** && ! icon->bIsHidden*/)
 		{
 			//Display *display = gdk_x11_get_default_xdisplay ();
+			XCompositeRedirectWindow (s_XDisplay, Xid, CompositeRedirectAutomatic);  // redirect the window content to the backing pixmap (the WM may or may not already do this).
 			icon->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
-			if (icon->iBackingPixmap != 0)
-				XCompositeRedirectWindow (s_XDisplay, Xid, 0);  // redirect the window content to the backing pixmap (the WM may or may not already do this).
 			/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
 			cd_debug ("backing pixmap : %d ; iDamageHandle : %d", icon->iBackingPixmap, icon->iDamageHandle);*/
 		}
