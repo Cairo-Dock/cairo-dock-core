@@ -287,9 +287,6 @@ gboolean cairo_dock_entrance_is_allowed (CairoDock *pDock);
 void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock);
 void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock);
 #define cairo_dock_is_temporary_hidden(pDock) (pDock)->bTemporaryHidden
-
-gboolean cairo_dock_is_dock_contains_subdock (CairoDock *pCurrentDock, CairoDock *pSubDock);
-
 void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, CairoDock *pDock, gboolean bUpdateDockSize);
 
 void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScreenBorder);

@@ -899,21 +899,6 @@ void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
 	g_list_foreach (s_pRootDockList, (GFunc)_cairo_dock_redraw_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
 }
 
-gboolean cairo_dock_is_dock_contains_subdock (CairoDock *pCurrentDock, CairoDock *pSubDock)
-{
-	GList *pIconsList;
-	Icon *pIcon;
-	// check all icons of this dock (recursively)
-	for (pIconsList = pCurrentDock->icons; pIconsList != NULL; pIconsList = pIconsList->next)
-	{
-		pIcon = pIconsList->data;
-		if (pIcon->pSubDock != NULL && pIcon->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER // only subdock...
-			&& (pIcon->pSubDock == pSubDock // this subdock is inside the current dock!
-			|| cairo_dock_is_dock_contains_subdock (pIcon->pSubDock, pSubDock))) // check recursively
-			return TRUE;
-	}
-	return FALSE;
-}
 
 static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
@@ -952,32 +937,6 @@ void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, Cairo
 	cairo_dock_synchronize_sub_docks_orientation (pSubDock, bUpdateDockSize);
 }
 
-static gboolean _cairo_dock_is_dock_inside_dock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pCurrentDock, gpointer *data)
-{
-	CairoDock *pParentDock = data[0], *pSubDock = data[1];
-	if (pCurrentDock == pParentDock) // skip the current dock...
-		return FALSE;
-
-	GList *pIconsList;
-	Icon *pIcon;
-	for (pIconsList = pCurrentDock->icons; pIconsList != NULL; pIconsList = pIconsList->next)
-	{
-		pIcon = pIconsList->data;
-		if (pIcon->pSubDock == pSubDock // the subdock is already inside another subdock which is not the parent dock!
-			|| pIcon->pSubDock == pParentDock) // loop: (...) 1->2->1->2 (...)
-			return TRUE;
-	}
-	return FALSE;
-}
-
-static gboolean _cairo_dock_check_dock_is_already_in_dock (CairoDock *pParentDock, CairoDock *pSubDock)
-{
-	gpointer data[2] = {pParentDock, pSubDock};
-	gpointer pCurrentDock = g_hash_table_find (s_hDocksTable, (GHRFunc)_cairo_dock_is_dock_inside_dock, data);
-
-	return pCurrentDock != NULL;
-}
-
 static void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bUpdateDockSize)
 {
 	GList* ic;
@@ -987,18 +946,7 @@ static void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboo
 		icon = ic->data;
 		if (icon->pSubDock != NULL)
 		{
-			// subdock into subdock: (...) subdock1->subdock2->subdock1 (...)
-			// or: (...) subdock1->subdock2->subdock3->subdock1 (...)
-			if (_cairo_dock_check_dock_is_already_in_dock (pDock, icon->pSubDock))
-			{
-				cd_warning ("This subdock (%s) is already in another subdock! => Move it to the main dock", icon->cName);
-				// move this icon to the main dock...
-				cairo_dock_update_icon_s_container_name (icon, CAIRO_DOCK_MAIN_DOCK_NAME);
-				cairo_dock_detach_icon_from_dock (icon, pDock);
-				cairo_dock_insert_icon_in_dock (icon, g_pMainDock, FALSE);
-			}
-			else
-				cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, bUpdateDockSize);
+			cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, bUpdateDockSize);  // recursively synchronize all children (no need to check for loops, as it shouldn't occur... if it does, then the problem is to fix upstream).
 		}
 	}
 }

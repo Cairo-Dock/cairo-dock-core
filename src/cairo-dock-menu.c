@@ -713,29 +713,29 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	g_free (cValidDockName);
 }
 
-static void _add_one_dock_to_menu (const gchar *cName, CairoDock *pDock, GtkWidget *pMenu)
+static void _cairo_dock_add_docks_sub_menu (GtkWidget *pMenu, Icon *pIcon)
 {
-	// we get all icons of the user
-	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	if (pPointingIcon && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon)) // only docks and subdocks (not from launchers/apps)
-		return;
-
-	// we remove the current dock.
-	Icon *pIcon = g_object_get_data (G_OBJECT (pMenu), "icon-item");
-	if (strcmp (pIcon->cParentDockName, cName) == 0)
-		return;
-
-	// we remove itself (if it's a subdock).
-	if (pIcon->pSubDock != NULL && (pIcon->pSubDock == pDock
-		|| cairo_dock_is_dock_contains_subdock (pIcon->pSubDock, pDock)))
-		return;
-
-	// get a readable name
-	gchar *cUserName = cairo_dock_get_readable_name_for_fock (pDock);
-	// add the new entry in the menu
-	GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (cUserName ? cUserName : cName, NULL, G_CALLBACK (_cairo_dock_move_launcher_to_dock), pMenu, (gpointer)cName);
+	GtkWidget *pSubMenuDocks = cairo_dock_create_sub_menu (_("Move to another dock"), pMenu, GTK_STOCK_JUMP_TO);
+	g_object_set_data (G_OBJECT (pSubMenuDocks), "icon-item", pIcon);
+	GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("New main dock"), GTK_STOCK_NEW, G_CALLBACK (_cairo_dock_move_launcher_to_dock), pSubMenuDocks, NULL);
 	g_object_set_data (G_OBJECT (pMenuItem), "icon-item", pIcon);
-	g_free (cUserName);
+	
+	GList *pDocks = cairo_dock_get_available_docks_for_icon (pIcon);
+	const gchar *cName;
+	gchar *cUserName;
+	CairoDock *pDock;
+	GList *d;
+	for (d = pDocks; d != NULL; d = d->next)
+	{
+		pDock = d->data;
+		cName = cairo_dock_search_dock_name (pDock);
+		cUserName = cairo_dock_get_readable_name_for_fock (pDock);
+		
+		GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (cUserName ? cUserName : cName, NULL, G_CALLBACK (_cairo_dock_move_launcher_to_dock), pSubMenuDocks, (gpointer)cName);
+		g_object_set_data (G_OBJECT (pMenuItem), "icon-item", pIcon);
+		g_free (cUserName);
+	}
+	g_list_free (pDocks);
 }
 
 static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
@@ -1204,11 +1204,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 				pMenuItem = _add_entry_in_menu (_("Remove"), GTK_STOCK_REMOVE, _cairo_dock_remove_launcher, pItemSubMenu);
 				gtk_widget_set_tooltip_text (pMenuItem, _("You can remove a launcher by dragging it out of the dock with the mouse ."));
 				
-				GtkWidget *pSubMenuDocks = cairo_dock_create_sub_menu (_("Move to another dock"), pItemSubMenu, GTK_STOCK_JUMP_TO);
-				g_object_set_data (G_OBJECT (pSubMenuDocks), "icon-item", pIcon);
-				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("New main dock"), GTK_STOCK_NEW, G_CALLBACK (_cairo_dock_move_launcher_to_dock), pSubMenuDocks, NULL);
-				g_object_set_data (G_OBJECT (pMenuItem), "icon-item", pIcon);
-				cairo_dock_foreach_docks ((GHFunc) _add_one_dock_to_menu, pSubMenuDocks);
+				_cairo_dock_add_docks_sub_menu (pItemSubMenu, pIcon);
 			}
 			else if (CAIRO_DOCK_ICON_TYPE_IS_APPLI (pIcon)
 				|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pIcon))  // appli with no launcher
@@ -1264,11 +1260,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 				
 				if (CAIRO_DOCK_IS_DOCK (pContainer) && pIcon->cParentDockName != NULL)  // sinon bien sur ca n'est pas la peine de presenter l'option (Cairo-Penguin par exemple)
 				{
-					GtkWidget *pSubMenuDocks = cairo_dock_create_sub_menu (_("Move to another dock"), pItemSubMenu, GTK_STOCK_JUMP_TO);
-					g_object_set_data (G_OBJECT (pSubMenuDocks), "icon-item", pIcon);
-					pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (_("New main dock"), GTK_STOCK_NEW, G_CALLBACK (_cairo_dock_move_launcher_to_dock), pSubMenuDocks, NULL);
-					g_object_set_data (G_OBJECT (pMenuItem), "icon-item", pIcon);
-					cairo_dock_foreach_docks ((GHFunc) _add_one_dock_to_menu, pSubMenuDocks);
+					_cairo_dock_add_docks_sub_menu (pItemSubMenu, pIcon);
 				}
 				
 				pMenuItem = gtk_separator_menu_item_new ();
