@@ -1197,7 +1197,7 @@ static void _cairo_dock_add_one_dock_item (const gchar *cName, CairoDock *pDock,
 	if (pDock != NULL)  // peut etre NULL (entree vide)
 	{
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-		if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))  // on evite les sous-docks d'applet et de classe.
+		if (pPointingIcon && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon)) // only main docks and subdocks
 			return ;
 		if (pDock->iRefCount == 0)
 			cUserName = cairo_dock_get_readable_name_for_fock (pDock);
