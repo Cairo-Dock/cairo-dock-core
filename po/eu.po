@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2013-03-04 15:51+0000\n"
-"PO-Revision-Date: 2013-02-06 22:21+0000\n"
-"Last-Translator: Asier Sarasua Garmendia <Unknown>\n"
+"PO-Revision-Date: 2013-04-02 07:58+0000\n"
+"Last-Translator: Ander Elortondo <ander.elor@gmail.com>\n"
 "Language-Team: librezale.org\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-05 04:36+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-04-03 05:08+0000\n"
+"X-Generator: Launchpad (build 16546)\n"
 "Language: eu\n"
 
 #: ../src/cairo-dock-gui-advanced.c:126 ../data/messages:263
@@ -73,9 +73,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
-"Zure dock-a beti ikusgai izatea nahi al duzu,\n"
+"Zure docka beti ikusgai izatea nahi al duzu,\n"
 " ala ahalik eta traba gutxien egin dezan?\n"
-"Konfiguratu nola atzitzen dituzun zure dock eta azpidock-ak!"
+"Konfiguratu nola atzitzen dituzun zure dock eta azpidockak!"
 
 #: ../src/cairo-dock-gui-advanced.c:1501 ../src/cairo-dock-menu.c:2046
 #: ../Help/data/messages:339
@@ -409,7 +409,7 @@ msgstr "Normalean abiarazlea menutik arrastatu eta dockean jaregingo duzu."
 
 #: ../src/cairo-dock-menu.c:605
 msgid "Applet"
-msgstr ""
+msgstr "Appleta"
 
 #: ../src/cairo-dock-menu.c:623
 msgid ""
@@ -440,8 +440,8 @@ msgid ""
 "dock."
 msgstr ""
 "Dock berria sortu da.\n"
-"You can customize it by right-clicking on it -> cairo-dock -> configure this "
-"dock."
+"Hura pertsonalizatzeko, egin klik gainean eskuineko botoiarekin -> cairo-"
+"dock -> konfiguratu dock hau."
 
 #: ../src/cairo-dock-menu.c:793
 msgid ""
@@ -449,7 +449,7 @@ msgid ""
 "Consider dragging and dropping the launcher from the Applications Menu."
 msgstr ""
 "Barkatu, ez da aurkitu hari dagokion deskribapen-fitxategia.\n"
-"Consider dragging and dropping the launcher from the Applications Menu."
+"Aplikazioen menutik arrastatu eta jaregin ahal duzu abiarazlea."
 
 #: ../src/cairo-dock-menu.c:841
 #, c-format
@@ -550,8 +550,8 @@ msgid ""
 "menu entry."
 msgstr ""
 "Cairo-Dock saioa erabiltzen ari zara!\n"
-"It's not advised to quit the dock but you can press Shift to unlock this "
-"menu entry."
+"Ez da gomendagarria docketik irtetea, baina Shift sakatu dezakezu menu-"
+"sarrera hau desblokeatzeko."
 
 #: ../src/cairo-dock-menu.c:1178 ../src/cairo-dock-menu.c:1191
 msgid "Launch a new (Shift+clic)"
@@ -702,11 +702,11 @@ msgstr "Mantendu gainean"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Ikusgai mahaigain honetan soilik"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Ikusgai mahaigain guztietan"
 
 #: ../src/cairo-dock-menu.c:1976
 msgid "Kill"
@@ -1205,7 +1205,7 @@ msgstr "_Ikono pertsonalizatuak_"
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
 msgid "Use all screens"
-msgstr ""
+msgstr "Erabili pantaila guztiak"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1220,7 +1220,7 @@ msgstr "eskuinean"
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "middle"
-msgstr ""
+msgstr "erdian"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
@@ -1234,7 +1234,7 @@ msgstr "behean"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
 msgid "Screen"
-msgstr ""
+msgstr "Pantaila"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1284,7 +1284,7 @@ msgstr "Azken aldaketa:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:321
 msgid "Your theme should now be available in your 'Home' directory."
-msgstr ""
+msgstr "Zure gaia orain karpeta \"Nagusian\" egongo da eskuragarri."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:346
 #, c-format
@@ -2680,7 +2680,7 @@ msgstr "Atzeko planoren gardentasuna:"
 
 #: ../Help/data/messages:371
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr "pixeletan. Use this to adjust the left position of drawings."
+msgstr "pixeletan. Erabili hau marrazkien ezker kokapena zehazteko."
 
 #: ../Help/data/messages:373
 msgid "Left offset:"
@@ -2688,7 +2688,7 @@ msgstr "Ezker desplazamendua:"
 
 #: ../Help/data/messages:375
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr "pixeletan. Use this to adjust the top position of drawings."
+msgstr "pixeletan. Erabili hau marrazkien goiko kokapena zehazteko."
 
 #: ../Help/data/messages:377
 msgid "Top offset:"
@@ -2704,7 +2704,7 @@ msgstr "Eskuin desplazamendua:"
 
 #: ../Help/data/messages:383
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr "pixeletan. Use this to adjust the bottom position of drawings."
+msgstr "pixeletan. Erabili hau marrazkien beheko kokapena zehazteko."
 
 #: ../Help/data/messages:385
 msgid "Bottom offset:"
@@ -2990,7 +2990,7 @@ msgstr "lerrokatze erlatiboa:"
 
 #: ../data/messages:163 ../data/messages:891
 msgid "Multi-screens"
-msgstr ""
+msgstr "Pantaila anitz"
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -3697,7 +3697,7 @@ msgstr "Atzeko planoren gardentasuna:"
 
 #: ../data/messages:601
 msgid "in pixels. Use this to adjust the left position of the drawings."
-msgstr "pixeletan. Use this to adjust the left position of the drawings."
+msgstr "pixeletan. Erabili hau marrazkien ezker kokapena zehazteko."
 
 #: ../data/messages:603
 msgid "Left offset :"
@@ -3705,7 +3705,7 @@ msgstr "Ezker desplazamendua:"
 
 #: ../data/messages:605
 msgid "in pixels. Use this to adjust the top position of the drawings."
-msgstr "pixeletan. Use this to adjust the top position of the drawings."
+msgstr "pixeletan. Erabili hau marrazkien goiko kokapena zehazteko."
 
 #: ../data/messages:607
 msgid "Top offset :"
@@ -3713,7 +3713,7 @@ msgstr "Goiko desplazamendua:"
 
 #: ../data/messages:609
 msgid "in pixels. Use this to adjust the right position of the drawings."
-msgstr "pixeletan. Use this to adjust the right position of the drawings."
+msgstr "pixeletan. Erabili hau marrazkien eskuineko kokapena zehazteko."
 
 #: ../data/messages:611
 msgid "Right offset :"
@@ -3721,7 +3721,7 @@ msgstr "Eskuin desplazamendua:"
 
 #: ../data/messages:613
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
-msgstr "pixeletan. Use this to adjust the bottom position of the drawings."
+msgstr "pixeletan. Erabili hau marrazkien beheko kokapena zehazteko."
 
 #: ../data/messages:615
 msgid "Bottom offset :"
@@ -3809,7 +3809,7 @@ msgstr "Ikonoen zoom maximoa:"
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 msgstr ""
-"pixeletan. Outside of this space (centered on the mouse), there is no zoom."
+"pixeletan. Tarte honetatik kanpora (saguan zentratua), ez dago zoomik."
 
 #: ../data/messages:673
 msgid "Width of the space in which the zoom will be effective :"
@@ -4079,7 +4079,7 @@ msgstr "Marraztu ikur bat"
 
 #: ../data/messages:793
 msgid "Draw the sub-dock's icons as a stack"
-msgstr "Marraztu azpidock ikonoak pilatuta"
+msgstr "Marraztu azpidocken ikonoak pilatuta"
 
 #: ../data/messages:795
 msgid ""
@@ -4380,7 +4380,7 @@ msgstr ""
 
 #: ../data/messages:1031 ../data/messages:1067
 msgid "Only show in this specific viewport:"
-msgstr ""
+msgstr "Ikuspegi zehatz honetan bakarrik erakutsi:"
 
 #: ../data/messages:1033 ../data/messages:1069 ../data/messages:1081
 msgid "Order you want for this launcher among the others:"

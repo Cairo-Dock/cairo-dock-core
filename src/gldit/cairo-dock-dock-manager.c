@@ -899,6 +899,7 @@ void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
 	g_list_foreach (s_pRootDockList, (GFunc)_cairo_dock_redraw_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
 }
 
+
 static void _cairo_dock_reposition_one_root_dock (const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
@@ -944,7 +945,9 @@ static void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboo
 	{
 		icon = ic->data;
 		if (icon->pSubDock != NULL)
-			cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, bUpdateDockSize);
+		{
+			cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, bUpdateDockSize);  // recursively synchronize all children (no need to check for loops, as it shouldn't occur... if it does, then the problem is to fix upstream).
+		}
 	}
 }
 

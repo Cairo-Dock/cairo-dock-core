@@ -1059,6 +1059,49 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 }
 
 
+static gboolean _cairo_dock_dock_is_child (CairoDock *pCurrentDock, CairoDock *pSubDock)
+{
+	GList *pIconsList;
+	Icon *pIcon;
+	// check all icons of this dock (recursively)
+	for (pIconsList = pCurrentDock->icons; pIconsList != NULL; pIconsList = pIconsList->next)
+	{
+		pIcon = pIconsList->data;
+		if (/**CAIRO_DOCK_ICON_TYPE_CONTAINER (pIcon) && */pIcon->pSubDock != NULL  // only subdock...
+		&& (pIcon->pSubDock == pSubDock // this subdock is inside the current dock!
+			|| _cairo_dock_dock_is_child (pIcon->pSubDock, pSubDock))) // check recursively
+			return TRUE;
+	}
+	return FALSE;
+}
+static void _add_one_dock_to_list (G_GNUC_UNUSED const gchar *cName, CairoDock *pDock, gpointer *data)
+{
+	CairoDock *pParentDock = data[0];
+	CairoDock *pSubDock = data[1];
+	
+	// get user docks only
+	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+	if (pPointingIcon && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))  // avoid sub-docks that are not from the theme (applet sub-docks, class sub-docks, etc).
+		return;
+	
+	// ignore the parent dock.
+	if (pDock == pParentDock)
+		return;
+	
+	// ignore any child sub-dock (if it's a subdock).
+	if (pSubDock != NULL
+	&& (pSubDock == pDock || _cairo_dock_dock_is_child (pSubDock, pDock)))
+		return;
+	
+	data[2] = g_list_prepend (data[2], pDock);
+}
+GList *cairo_dock_get_available_docks (CairoDock *pParentDock, CairoDock *pSubDock)  // avoid 'pParentDock', and 'pSubDock' and any of its children
+{
+	gpointer data[3] = {pParentDock, pSubDock, NULL};
+	cairo_dock_foreach_docks ((GHFunc)_add_one_dock_to_list, data);
+	return data[2];
+}
+
 
 static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 {

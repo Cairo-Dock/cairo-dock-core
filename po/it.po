@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: 1.4.5\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2013-03-04 15:51+0000\n"
-"PO-Revision-Date: 2012-12-17 19:08+0000\n"
+"PO-Revision-Date: 2013-03-26 17:37+0000\n"
 "Last-Translator: Wonderfulheart <Unknown>\n"
 "Language-Team: Italian <kde-i18n-it@lists.kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-05 04:37+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-03-27 04:35+0000\n"
+"X-Generator: Launchpad (build 16540)\n"
 "Language: it\n"
 
 #: ../src/cairo-dock-gui-advanced.c:126 ../data/messages:263
@@ -425,7 +425,7 @@ msgstr "Di solito dovresti trascinare un lanciatore dal menu alla dock."
 
 #: ../src/cairo-dock-menu.c:605
 msgid "Applet"
-msgstr ""
+msgstr "Applet"
 
 #: ../src/cairo-dock-menu.c:623
 msgid ""
@@ -719,11 +719,11 @@ msgstr "Tieni al di sopra"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Visibile solo su questo desktop"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Visibile su tutti i desktop"
 
 #: ../src/cairo-dock-menu.c:1976
 msgid "Kill"
@@ -1227,7 +1227,7 @@ msgstr "_Icone personalizzate_"
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
 msgid "Use all screens"
-msgstr ""
+msgstr "Utilizza tutti gli schermi"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1242,7 +1242,7 @@ msgstr "destra"
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "middle"
-msgstr ""
+msgstr "medio"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
@@ -1256,7 +1256,7 @@ msgstr "basso"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
 msgid "Screen"
-msgstr ""
+msgstr "Schermo"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1307,6 +1307,7 @@ msgstr "Ultima modifica su:"
 #: ../src/gldit/cairo-dock-themes-manager.c:321
 msgid "Your theme should now be available in your 'Home' directory."
 msgstr ""
+"Adesso il tuo tema dovrebbe essere disponibile nella directory 'Home'."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:346
 #, c-format
@@ -3021,7 +3022,7 @@ msgstr "Allineamento relativo:"
 
 #: ../data/messages:163 ../data/messages:891
 msgid "Multi-screens"
-msgstr ""
+msgstr "Schermi multipli"
 
 #: ../data/messages:165 ../data/messages:893
 msgid "Offset from the screen's edge"
@@ -4597,3 +4598,14 @@ msgid ""
 " - Countless bug-fixes and improvements\n"
 " - If you like the project, please donate :-)"
 msgstr ""
+"<b>Nuova versione: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
+" - È stato migliorato il supporto per gli schermi multipli\n"
+" - Nuova applet: Screenshot\n"
+" - Nuovo plug-in: Effetti sonori\n"
+" - Aggiunto il supporto a Gnome-Shell \n"
+" - Aggiunto il supporto a GDM per il cambio utente\n"
+" - Aggiunto il supporto a Systemd per la gestione della sessione (Fedora, "
+"Arch, ...)\n"
+" - Aggiunto il supporto per tutti gli indicatori di Unity\n"
+" - Diversi bug-fixes e miglioramenti\n"
+" - Se il progetto ti piace, per favore fai una donazione :-)"

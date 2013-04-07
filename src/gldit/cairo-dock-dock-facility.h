@@ -118,6 +118,19 @@ void cairo_dock_update_input_shape (CairoDock *pDock);
 */
 void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock);
 
+/** Get a list of available docks.
+*@param pParentDock excluding this dock if not NULL
+*@param pSubDock excluding this dock and its children if not NULL
+*@return a list of CairoDock*
+*/
+GList *cairo_dock_get_available_docks (CairoDock *pParentDock, CairoDock *pSubDock);
+
+/** Get a list of available docks where an user icon can be placed. Its current parent dock is excluded, as well as its sub-dock (if any) and its children.
+*@param pIcon the icon
+*@return a list of CairoDock*
+*/
+#define cairo_dock_get_available_docks_for_icon(pIcon) cairo_dock_get_available_docks (CAIRO_DOCK(cairo_dock_get_icon_container(pIcon)), pIcon->pSubDock)
+
 
 /** Calculate the position at rest (when the mouse is outside of the dock and its size is normal) of the icons of a linear dock.
 *@param pIconList a list of icons.
