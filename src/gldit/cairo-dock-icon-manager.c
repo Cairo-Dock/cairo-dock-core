@@ -676,11 +676,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		bLabelForPointedIconOnly = (iShowLabel == 1);
 	}
 	if (! bShow)
-	{
-		g_free (pLabels->iconTextDescription.cFont);
-		pLabels->iconTextDescription.cFont = NULL;
 		pLabels->iconTextDescription.iSize = 0;
-	}
+
 	pLabels->bLabelForPointedIconOnly = bLabelForPointedIconOnly;
 	
 	pLabels->fLabelAlphaThreshold = cairo_dock_get_double_key_value (pKeyFile, "Labels", "alpha threshold", &bFlushConfFileNeeded, 10., "System", NULL);
