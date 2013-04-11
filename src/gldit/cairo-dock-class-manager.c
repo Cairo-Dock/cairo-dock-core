@@ -835,8 +835,8 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 		pFriendIcon = pElement->data;
 		if (pFriendIcon == pIcon)  // skip ourselves
 			continue ;
-		if (pFriendIcon->cParentDockName != NULL && strcmp (pFriendIcon->cParentDockName, pIcon->cClass) != 0)  // inside a dock, but not the class sub-dock
-		//if (pFriendIcon != pIcon && pFriendIcon->cParentDockName != NULL && strcmp (pFriendIcon->cParentDockName, CAIRO_DOCK_MAIN_DOCK_NAME) == 0)  // is inside a dock
+		
+		if (pFriendIcon->cParentDockName != NULL && (pClassAppli->cDockName == NULL || strcmp (pFriendIcon->cParentDockName, pClassAppli->cDockName) != 0))  // inside a dock, but not the class sub-dock
 			return pFriendIcon;
 	}
 	

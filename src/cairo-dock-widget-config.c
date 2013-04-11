@@ -375,6 +375,9 @@ static void _build_config_widget (ConfigWidget *pConfigWidget)
 			&pWidgetList,
 			pDataGarbage,
 			NULL);
+		// force to display this widget... to avoid a blank window?
+		gtk_widget_show_all (pConfigWidget->widget.pWidget);  // due to historical reasons, GtkNotebook refuses to switch to a page unless the child widget is visible.
+		gtk_notebook_set_current_page (GTK_NOTEBOOK (pConfigWidget->widget.pWidget), 0);  // force first Notebook
 	}
 	pConfigWidget->widget.pWidgetList = pWidgetList;
 	pConfigWidget->widget.pDataGarbage = pDataGarbage;
