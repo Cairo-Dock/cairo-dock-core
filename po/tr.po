@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2013-03-04 15:51+0000\n"
-"PO-Revision-Date: 2013-02-10 15:49+0000\n"
-"Last-Translator: kerem korur <keremkorur@sabanciuniv.edu>\n"
+"PO-Revision-Date: 2013-04-04 20:19+0000\n"
+"Last-Translator: Murat ikilik <muratikilik@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-05 04:38+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-04-05 05:15+0000\n"
+"X-Generator: Launchpad (build 16550)\n"
 "Language: tr\n"
 
 #: ../src/cairo-dock-gui-advanced.c:126 ../data/messages:263
@@ -50,7 +50,7 @@ msgstr "Sistem"
 
 #: ../src/cairo-dock-gui-advanced.c:133 ../src/cairo-dock-widget-plugins.c:168
 msgid "Fun"
-msgstr ""
+msgstr "Eğlence"
 
 #: ../src/cairo-dock-gui-advanced.c:134 ../src/cairo-dock-gui-advanced.c:1801
 #: ../src/gldit/cairo-dock-gui-factory.c:779
@@ -285,7 +285,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:271
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "Geliştirici ve katkıda bulunanların listesi"
 
 #: ../src/cairo-dock-menu.c:272
 msgid "Developers"
@@ -305,7 +305,7 @@ msgstr "Gelişim"
 
 #: ../src/cairo-dock-menu.c:291
 msgid "Website"
-msgstr ""
+msgstr "Web Sitesi"
 
 #: ../src/cairo-dock-menu.c:292
 msgid "Beta-testing / Suggestions / Forum animation"
@@ -326,6 +326,7 @@ msgstr ""
 "  Fatih Ekin https://launchpad.net/~f-ekin22\n"
 "  H. Fatih ATASEVER https://launchpad.net/~h-f-atasever\n"
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
+"  Murat ikilik https://launchpad.net/~muratikilik-q\n"
 "  Mustafa Doğan https://launchpad.net/~sahbaz1260\n"
 "  Olcay GÜZEL https://launchpad.net/~olcayguzel-gmail\n"
 "  Serdar Delican https://launchpad.net/~sdelican\n"
@@ -423,7 +424,7 @@ msgstr "Genellikle bir başlatıcıyı menüden sürükleyip rıhtıma bırakır
 
 #: ../src/cairo-dock-menu.c:605
 msgid "Applet"
-msgstr ""
+msgstr "Uygulamacık"
 
 #: ../src/cairo-dock-menu.c:623
 msgid ""
@@ -513,7 +514,7 @@ msgstr "Sunucudan bir şablon seçin ya da geçerli şablonu kayıt edin."
 
 #: ../src/cairo-dock-menu.c:1078
 msgid "Lock icons position"
-msgstr ""
+msgstr "Simgelerin yerlerini sabitleyin"
 
 #: ../src/cairo-dock-menu.c:1082
 msgid "This will (un)lock the position of the icons."
@@ -560,6 +561,9 @@ msgid ""
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
+"Şuanda Cairo-Dock dönemini kullanıyorsunuz!\n"
+"Rıhtımı terketmeniz tavsiye edilmemektedir ama Shift tuşunu kullanarak bu "
+"menüye girişi açabilirsiniz."
 
 #: ../src/cairo-dock-menu.c:1178 ../src/cairo-dock-menu.c:1191
 msgid "Launch a new (Shift+clic)"
@@ -648,7 +652,7 @@ msgstr "%d yüzüne taşı"
 
 #: ../src/cairo-dock-menu.c:1870 ../src/cairo-dock-menu.c:1912
 msgid "Window"
-msgstr ""
+msgstr "Pencere"
 
 #: ../src/cairo-dock-menu.c:1874 ../src/cairo-dock-menu.c:1876
 #: ../src/cairo-dock-menu.c:1932 ../src/cairo-dock-menu.c:1934
@@ -661,7 +665,7 @@ msgstr "Kapat"
 #: ../src/cairo-dock-menu.c:1954 ../src/cairo-dock-menu.c:1995
 #: ../src/cairo-dock-menu.c:2005 ../Help/src/applet-notifications.c:259
 msgid "middle-click"
-msgstr ""
+msgstr "Fare ile Orta Kilik"
 
 #: ../src/cairo-dock-menu.c:1886 ../src/cairo-dock-menu.c:1919
 msgid "Unmaximise"
@@ -710,11 +714,11 @@ msgstr "Üstte tut"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Sadece bu çalışma alanlarında ki uygulamaları göster"
 
 #: ../src/cairo-dock-menu.c:1968
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Tüm çalışma alanlarında ki uygulamaları göster"
 
 #: ../src/cairo-dock-menu.c:1976
 msgid "Kill"
@@ -777,6 +781,9 @@ msgid ""
 "config.\n"
 "It is located in the 'Taskbar' module."
 msgstr ""
+"X ikonlarının açıklaması yapılandırma menüsü içerisinde "
+"etkinleştirilmiştir.\n"
+"Menü görev modülü içerisindedir"
 
 #: ../src/cairo-dock-widget-config.c:327
 msgid "Animation:"
@@ -819,11 +826,11 @@ msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
 msgid "Press the shortkey"
-msgstr ""
+msgstr "kısayola tıklayın"
 
 #: ../src/cairo-dock-widget-shortkeys.c:141
 msgid "Change the shortkey"
-msgstr ""
+msgstr "Kısayolu değiştirin"
 
 #: ../src/cairo-dock-widget-shortkeys.c:228
 msgid "Origin"
@@ -1201,7 +1208,7 @@ msgstr "_Özel simgeler_"
 #: ../src/gldit/cairo-dock-gui-factory.c:1063
 #: ../src/gldit/cairo-dock-gui-factory.c:1108
 msgid "Use all screens"
-msgstr ""
+msgstr "Tüm ekranlarda uygula"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:885
@@ -1216,7 +1223,7 @@ msgstr "sağ"
 #: ../src/gldit/cairo-dock-gui-factory.c:1089
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "middle"
-msgstr ""
+msgstr "Orta"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1095 ../data/messages:9
 #: ../data/messages:149 ../data/messages:881
@@ -1230,7 +1237,7 @@ msgstr "alt"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
 msgid "Screen"
-msgstr ""
+msgstr "Ekran"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1480,6 +1487,8 @@ msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
 msgstr ""
+"Bir başlatıcıyı(launcher) kaldırmak istediğinizde, rıhtımın(dock) dışına "
+"sürükleyerek. Çıkan menü ile silme işlemini onaylaya bilirsiniz."
 
 #: ../Help/data/messages:21
 msgid "Grouping icons into a sub-dock"
@@ -1508,7 +1517,7 @@ msgstr ""
 
 #: ../Help/data/messages:29
 msgid "Changing an icon's image"
-msgstr ""
+msgstr "Simge dosyasını seçin"
 
 #: ../Help/data/messages:31
 msgid ""
@@ -1555,7 +1564,7 @@ msgstr ""
 
 #: ../Help/data/messages:43
 msgid "Using the dock as a taskbar"
-msgstr ""
+msgstr "Rıhtımda görev yöneticisi kullanılması"
 
 #: ../Help/data/messages:45
 msgid ""
@@ -1636,6 +1645,9 @@ msgid ""
 "You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
+"Bu eklentinin(lerin) çalışabilmesi için bazı compiz fonksiyonlarının "
+"etkinleştirilmesi gerekmektedir. Paket yöneticisi ile \"ccsm\" paketini "
+"kurarak, compiz'i özelleştirebilirsiniz."
 
 #: ../Help/data/messages:75 ../Help/data/messages:185
 #: ../Help/data/messages:205 ../Help/data/messages:243

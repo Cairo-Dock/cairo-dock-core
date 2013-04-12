@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: 2.1.0\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2013-03-04 15:51+0000\n"
-"PO-Revision-Date: 2013-03-04 15:54+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"PO-Revision-Date: 2013-04-10 14:58+0000\n"
+"Last-Translator: Hélion du Mas des Bourboux <helion331990@gmail.com>\n"
 "Language-Team: Cairo-Dock <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-05 04:37+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-04-11 05:08+0000\n"
+"X-Generator: Launchpad (build 16550)\n"
 "X-Poedit-Country: France\n"
 "Language: \n"
 "X-Poedit-Language: French\n"
@@ -2383,14 +2383,15 @@ msgstr ""
 
 #: ../Help/data/messages:229
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
-msgstr "L'applet 'netspeed' affiche 0 même quand je télécharge quelque chose"
+msgstr ""
+"L'applet « netspeed » affiche 0 même quand je télécharge quelque chose"
 
 #: ../Help/data/messages:231
 msgid ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
 msgstr ""
-": vous pouvez instancier cette applet plusieurs fois si vous voulez "
+"Astuce : vous pouvez instancier cette applet plusieurs fois si vous voulez "
 "surveiller plusieurs interfaces."
 
 #: ../Help/data/messages:233
@@ -2566,8 +2567,8 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest stable version."
 msgstr ""
-"Si vous êtes sur Ubuntu, vous pouvez ajouter notre dépôt dit 'Stable' en "
-"cliquant sur ce bouton :\n"
+"Si vous êtes sur Ubuntu, vous pouvez ajouter notre dépôt dit « Stable » en "
+"cliquant sur ce bouton :\n"
 " Après ceci, vous pourrez lancer votre gestionnaire de mise à jour afin "
 "d'installer la dernière version stable."
 
@@ -2578,8 +2579,8 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
-"Si vous êtes sur Ubuntu, vous pouvez ajouter notre dépôt 'Weekly' (peut être "
-"instable) en cliquant sur ce bouton :\n"
+"Si vous êtes sur Ubuntu, vous pouvez ajouter notre dépôt « Weekly » (peut "
+"être instable) en cliquant sur ce bouton :\n"
 " Après ceci, vous pourrez lancer votre gestionnaire de mise à jour afin "
 "d'installer la dernière version hebdomadaire."
 
@@ -2594,11 +2595,11 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
-"Si vous êtes sur Debian Stable, vous pouvez ajouter notre dépôt dit 'Stable' "
-"en cliquant sur ce bouton :\n"
-" Après ceci, vous pourrez désinstaller complètement tous les paquets 'cairo-"
-"dock*',\n"
-" mettre à jour votre système et réinstaller le paquet 'cairo-dock'."
+"Si vous êtes sur Debian Stable, vous pouvez ajouter notre dépôt dit "
+"« Stable » en cliquant sur ce bouton :\n"
+" Après ceci, vous pourrez désinstaller complètement tous les paquets « cairo-"
+"dock* »,\n"
+" mettre à jour votre système et réinstaller le paquet « cairo-dock »."
 
 #: ../Help/data/messages:301
 msgid ""
@@ -2608,10 +2609,10 @@ msgid ""
 "system and reinstall 'cairo-dock' package."
 msgstr ""
 "Si vous êtes sur Debian Unstable ou Testing, vous pouvez ajouter notre dépôt "
-"dit 'Stable' en cliquant sur ce bouton :\n"
-" Après ceci, vous pourrez désinstaller complètement tous les paquets 'cairo-"
-"dock*',\n"
-" mettre à jour votre système et réinstaller le paquet 'cairo-dock'."
+"dit « Stable » en cliquant sur ce bouton :\n"
+" Après ceci, vous pourrez désinstaller complètement tous les paquets « cairo-"
+"dock* »,\n"
+" mettre à jour votre système et réinstaller le paquet « cairo-dock »."
 
 #: ../Help/data/messages:303 ../Help/data/messages:305 ../data/messages:1005
 #: ../data/messages:1037 ../data/messages:1073
@@ -2682,7 +2683,7 @@ msgstr ""
 
 #: ../Help/data/messages:333
 msgid "Desklet position (x, y):"
-msgstr "Position du desklet (x ; y) :"
+msgstr "Position du desklet (x ; y) :"
 
 #: ../Help/data/messages:335
 msgid ""
@@ -2732,8 +2733,8 @@ msgstr "Décorations"
 #: ../Help/data/messages:361
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
-"Choisissez 'Décoration personnelle' pour définir votre propre décoration ci-"
-"dessous."
+"Choisissez « Décoration personnelle » pour définir votre propre décoration "
+"ci-dessous."
 
 #: ../Help/data/messages:363
 msgid "Choose a decoration theme for this desklet:"
@@ -3237,11 +3238,12 @@ msgstr ""
 
 #: ../data/messages:295
 msgid "Group windows from the same application in a sub-dock ?"
-msgstr "Grouper les fenêtres de la même application dans un sous-dock ?"
+msgstr "Grouper les fenêtres de la même application dans un sous-dock ?"
 
 #: ../data/messages:297 ../data/messages:307
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
-msgstr "Entrez la classe des applications, séparées par un point-virgule ';'"
+msgstr ""
+"Entrez la classe des applications, séparées par un point-virgule « ; »"
 
 #: ../data/messages:299 ../data/messages:309
 msgid "\t\tExcept the following classes:"
@@ -3263,7 +3265,7 @@ msgstr ""
 
 #: ../data/messages:305
 msgid "Overwrite the X icon with the launchers' icon?"
-msgstr "Ecraser les icônes X avec celles des lanceurs ?"
+msgstr "Ecraser les icônes X avec celles des lanceurs ?"
 
 #: ../data/messages:311
 msgid ""
@@ -3275,7 +3277,7 @@ msgstr ""
 
 #: ../data/messages:313
 msgid "How to draw minimised windows ?"
-msgstr "Comment seront affichées les fenêtres minimisées?"
+msgstr "Comment seront affichées les fenêtres minimisées ?"
 
 #: ../data/messages:315
 msgid "Make the icon transparent"
@@ -3311,7 +3313,7 @@ msgstr ""
 
 #: ../data/messages:329
 msgid "\"...\" will be added at the end if the name is too long."
-msgstr "\"...\" seront ajoutés si le nom est trop long."
+msgstr "« ... » seront ajoutés si le nom est trop long."
 
 #: ../data/messages:331
 msgid "Maximum number of caracters in application name:"
@@ -3469,7 +3471,7 @@ msgstr ""
 
 #: ../data/messages:421
 msgid "Reflections should be calculated in real-time?"
-msgstr "Les reflets devrait être calculés en temps réel ?"
+msgstr "Les reflets devrait être calculés en temps réel ?"
 
 # #################################
 # ########### cairo-dock.conf #############
@@ -3491,7 +3493,7 @@ msgstr ""
 
 #: ../data/messages:427
 msgid "Emulate composition with fake transparency?"
-msgstr "Émuler la composition par de la fausse transparence ?"
+msgstr "Émuler la composition par de la fausse transparence ?"
 
 #: ../data/messages:429
 msgid "Connection to the Internet"
@@ -3529,7 +3531,7 @@ msgstr "Utilisez cette option si vous éprouvez des problèmes de connexion."
 
 #: ../data/messages:441
 msgid "Force IPv4 ?"
-msgstr "Forcer l'IPv4 ?"
+msgstr "Forcer l'IPv4 ?"
 
 #: ../data/messages:443
 msgid "Use this option if you connect to the Internet through a proxy."
@@ -3538,7 +3540,7 @@ msgstr ""
 
 #: ../data/messages:445
 msgid "Are you behind a proxy ?"
-msgstr "Etes-vous derrière un proxy ?"
+msgstr "Êtes-vous derrière un proxy ?"
 
 #: ../data/messages:447
 msgid "Proxy name :"
@@ -3685,11 +3687,11 @@ msgid ""
 "the main docks' icons size"
 msgstr ""
 "Vous pouvez spécifier un ratio de la taille des icônes des sous-docks par "
-"rapport à celles des docks principaux :"
+"rapport à celles des docks principaux :"
 
 #: ../data/messages:541
 msgid "Ratio for the size of the sub-docks' icons :"
-msgstr "Ratio de la taille des icônes des sous-docks :"
+msgstr "Ratio de la taille des icônes des sous-docks :"
 
 #: ../data/messages:543 ../data/messages:777
 msgid "smaller"
@@ -3725,7 +3727,7 @@ msgstr "Sinon la police système par défaut sera utilisée."
 
 #: ../data/messages:559
 msgid "Use a custom font for the text?"
-msgstr "Utiliser une police personnalisée pour le texte ?"
+msgstr "Utiliser une police personnalisée pour le texte ?"
 
 #: ../data/messages:561
 msgid "Text font:"
@@ -3733,7 +3735,7 @@ msgstr "Police du texte :"
 
 #: ../data/messages:563 ../data/messages:839
 msgid "Draw the outline of the text?"
-msgstr "Tracer le contour du texte ?"
+msgstr "Tracer le contour du texte ?"
 
 #: ../data/messages:565 ../data/messages:869
 msgid "Text color:"
@@ -3770,7 +3772,7 @@ msgid ""
 "Choose 'Custom decoration' to define your own decorations below"
 msgstr ""
 "Cela peut être personnalisé pour chaque desklet séparément.\n"
-"Choisissez 'Décoration personnalisée' pour définir votre propre décoration "
+"Choisissez « Décoration personnalisée » pour définir votre propre décoration "
 "ci-dessous."
 
 #: ../data/messages:589
@@ -3854,15 +3856,15 @@ msgstr "Taille des boutons :"
 
 #: ../data/messages:633 ../data/messages:645
 msgid "Name of an image to use for the 'rotate' button :"
-msgstr "Fichier image à utiliser pour le bouton 'rotation' :"
+msgstr "Fichier image à utiliser pour le bouton « rotation » :"
 
 #: ../data/messages:637
 msgid "Name of an image to use for the 'reattach' button :"
-msgstr "Fichier image à utiliser pour le bouton 'rattacher' :"
+msgstr "Fichier image à utiliser pour le bouton « rattacher » :"
 
 #: ../data/messages:641
 msgid "Name of an image to use for the 'depth rotate' button :"
-msgstr "Fichier image à utiliser pour le bouton 'rotation en profondeur' :"
+msgstr "Fichier image à utiliser pour le bouton « rotation en profondeur » :"
 
 #: ../data/messages:649
 msgid "Icons' themes"
@@ -3890,7 +3892,7 @@ msgstr "Taille des icônes"
 
 #: ../data/messages:659
 msgid "Icons' size at rest (width x height) :"
-msgstr "Taille des icônes au repos (largeur x hauteur)"
+msgstr "Taille des icônes au repos (largeur x hauteur) :"
 
 #: ../data/messages:663
 msgid "Space between icons :"
@@ -3931,7 +3933,7 @@ msgstr "Taille des icônes au repos (largeur x hauteur) :"
 
 #: ../data/messages:679
 msgid "Force separator's image size to stay constant?"
-msgstr "Forcer l'image du séparateur à rester de taille constante ?"
+msgstr "Forcer l'image du séparateur à rester de taille constante ?"
 
 #: ../data/messages:681
 msgid ""
@@ -3943,7 +3945,7 @@ msgstr ""
 
 #: ../data/messages:683
 msgid "How to draw the separators?"
-msgstr "Comment représenter les séparateurs ?"
+msgstr "Comment représenter les séparateurs ?"
 
 #: ../data/messages:685
 msgid "Use an image."
@@ -3973,7 +3975,7 @@ msgid ""
 "right?"
 msgstr ""
 "Faire pivoter l'image du séparateur lorsque le dock est en haut/à droite/à "
-"gauche ?"
+"gauche ?"
 
 #: ../data/messages:697
 msgid "Colour of flat separators :"
@@ -4035,7 +4037,7 @@ msgstr ""
 
 #: ../data/messages:719
 msgid "Icons' transparency at rest :"
-msgstr "Transparence des icônes au repos :"
+msgstr "Transparence des icônes au repos :"
 
 #: ../data/messages:725
 msgid "Link the icons with a string"
@@ -4089,7 +4091,7 @@ msgstr "Rayon du coin du cadre autour de la fenêtre active :"
 
 #: ../data/messages:753 ../data/messages:785
 msgid "Draw indicator above the icon?"
-msgstr "Dessiner l'indicateur par-dessus l'icône ?"
+msgstr "Dessiner l'indicateur par-dessus l'icône ?"
 
 #: ../data/messages:755
 msgid "Indicator of active launcher"
@@ -4113,7 +4115,7 @@ msgstr ""
 
 #: ../data/messages:763
 msgid "Display an indicator on application icons too ?"
-msgstr "Afficher un indicateur sur les icônes d'applications aussi ?"
+msgstr "Afficher un indicateur sur les icônes d'applications aussi ?"
 
 #: ../data/messages:765
 msgid ""
@@ -4145,7 +4147,7 @@ msgstr ""
 
 #: ../data/messages:771
 msgid "Link the indicator with its icon?"
-msgstr "Lier les indicateurs avec leur icône ?"
+msgstr "Lier les indicateurs avec leur icône ?"
 
 #: ../data/messages:773
 msgid ""
@@ -4175,7 +4177,7 @@ msgstr ""
 
 #: ../data/messages:783
 msgid "Rotate the indicator with dock?"
-msgstr "Faire tourner l'indicateur avec le dock ?"
+msgstr "Faire tourner l'indicateur avec le dock ?"
 
 #: ../data/messages:787
 msgid "Indicator of grouped windows"
@@ -4331,7 +4333,7 @@ msgstr "Si coché, le motif ira de haut en bas, sinon de gauche à droite."
 
 #: ../data/messages:861
 msgid "Pattern should be vertical?"
-msgstr "Le motif doit être vertical ?"
+msgstr "Le motif doit être vertical ?"
 
 #: ../data/messages:863
 msgid "Quick-info are short information drawn on the icons."
@@ -4344,7 +4346,7 @@ msgstr "Info rapide"
 
 #: ../data/messages:867
 msgid "Use the same look as the labels?"
-msgstr "Utiliser la même apparence que les étiquettes ?"
+msgstr "Utiliser la même apparence que les étiquettes ?"
 
 #: ../data/messages:871
 msgid "Background color:"
@@ -4398,7 +4400,7 @@ msgstr ""
 
 #: ../data/messages:979
 msgid "Use the new theme's launchers?"
-msgstr "Utiliser les lanceurs du nouveau thème ?"
+msgstr "Utiliser les lanceurs du nouveau thème ?"
 
 #: ../data/messages:981
 msgid ""
@@ -4411,7 +4413,7 @@ msgstr ""
 
 #: ../data/messages:983
 msgid "Use the new theme's behaviour?"
-msgstr "Utiliser le comportement du nouveau thème ?"
+msgstr "Utiliser le comportement du nouveau thème ?"
 
 #: ../data/messages:985
 msgid "Save"
@@ -4423,11 +4425,11 @@ msgstr "Vous pourrez ainsi le rouvrir à tout moment."
 
 #: ../data/messages:989
 msgid "Save current behaviour also?"
-msgstr "Enregistrer aussi le comportement actuel ?"
+msgstr "Enregistrer aussi le comportement actuel ?"
 
 #: ../data/messages:991
 msgid "Save current launchers also?"
-msgstr "Enregistrer aussi les lanceurs actuels ?"
+msgstr "Enregistrer aussi les lanceurs actuels ?"
 
 #: ../data/messages:993
 msgid ""
@@ -4492,7 +4494,8 @@ msgstr "Nom de la vue utilisée pour le sous-dock :"
 
 #: ../data/messages:1029
 msgid "If '0' the container will be displayed on every viewport."
-msgstr "Si la valeur est '0', le conténaire sera afficher sur chaque bureau."
+msgstr ""
+"Si la valeur est « 0 », le conténaire sera afficher sur chaque bureau."
 
 #: ../data/messages:1031 ../data/messages:1067
 msgid "Only show in this specific viewport:"
@@ -4554,11 +4557,11 @@ msgstr "Classe du programme :"
 
 #: ../data/messages:1063
 msgid "Run in a terminal?"
-msgstr "Lancer dans un terminal ?"
+msgstr "Lancer dans un terminal ?"
 
 #: ../data/messages:1065
 msgid "If '0' the launcher will be displayed on every viewport."
-msgstr "Si '0', le lanceur sera afficher sur chaque bureau."
+msgstr "Si « 0 », le lanceur sera afficher sur chaque bureau."
 
 #: ../data/messages:1077
 msgid "Separators' appearance is defined in the global configuration."
@@ -4662,10 +4665,10 @@ msgid ""
 " - Countless bug-fixes and improvements\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-"<b>Nouvelle version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
+"<b>Nouvelle version : <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Meilleur support du multi-écrans\n"
-" - Nouvelle applet : Capture d'écran\n"
-" - Nouveau plug-in : Effets sonores\n"
+" - Nouvelle applet : Capture d'écran\n"
+" - Nouveau plug-in : Effets sonores\n"
 " - Ajout du support de Gnome-Shell\n"
 " - Ajout du support de GDM pour le changement d'utilisateur\n"
 " - Ajout du support de Systemd pour la gestion de la session (Fedora, Arch, "
