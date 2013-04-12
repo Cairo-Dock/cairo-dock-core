@@ -817,6 +817,7 @@ int main (int argc, char** argv)
 					}
 					g_free (cSecondDockFile);
 
+					cd_warning ("Indicator-Generic now replaces Print-Menu and Sync-Menu, activate it automatically");
 					cairo_dock_activate_module_and_load (cModuleName); // launch it right now
 				}
 			}
@@ -828,6 +829,7 @@ int main (int argc, char** argv)
 				gint iMinimizedWindowRenderType = g_key_file_get_integer (pKeyFile, "TaskBar", "minimized", NULL);
 				if (iMinimizedWindowRenderType == 1)  // "Show a window's thumbnail", can provoke very annoying bug :-/
 				{
+					cd_warning ("Switch from 'Show a window's thumbnail' to 'Make the icon transparent' option due to a very annoying bug that we can have with some video cards. This bug seems to be fixed when using recent video drivers and this option can be re-enabled from the config panel.");
 					g_key_file_set_integer (pKeyFile, "TaskBar", "minimized", 0);
 					cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
 
