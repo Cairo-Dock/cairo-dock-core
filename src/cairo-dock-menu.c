@@ -1858,40 +1858,52 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			icon->bIsMaximized = pAppli->bIsMaximized;
 			icon->bIsFullScreen = pAppli->bIsFullScreen;
 		}
-		
+
+		gboolean bCanMinimize, bCanMaximize, bCanClose;
+		cairo_dock_xwindow_can_minimize_maximized_close (icon->Xid, &bCanMinimize, &bCanMaximize, &bCanClose);
+
 		//\_________________________ Window Management
 		#if (GTK_MAJOR_VERSION >= 3)
 		GtkWidget *hbox = _add_menu_item_with_buttons (menu);
 		
 		GtkWidget *pLabel = gtk_label_new (_("Window"));
 		gtk_box_pack_start (GTK_BOX (hbox), pLabel, FALSE, FALSE, 0);
-		
-		if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
-			cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
-		else
-			cLabel = g_strdup (_("Close"));
-		_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg",
-			cLabel,
-			G_CALLBACK(_cairo_dock_close_appli),
-			hbox, data);
-		g_free (cLabel);
+
+		if (bCanClose)
+		{
+			if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
+				cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
+			else
+				cLabel = g_strdup (_("Close"));
+			_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg",
+				cLabel,
+				G_CALLBACK(_cairo_dock_close_appli),
+				hbox, data);
+			g_free (cLabel);
+		}
 		
 		if (! icon->bIsHidden)
 		{
-			_add_new_button_to_hbox (icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg",
-				icon->bIsMaximized ? _("Unmaximise") : _("Maximise"),
-				G_CALLBACK(_cairo_dock_maximize_appli),
-				hbox, data);
-			
-			if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
-				cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
-			else
-				cLabel = g_strdup (_("Minimise"));
-			_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg",
-				cLabel,
-				G_CALLBACK(_cairo_dock_minimize_appli),
-				hbox, data);
-			g_free (cLabel);
+			if (bCanMaximize)
+			{
+				_add_new_button_to_hbox (icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg",
+					icon->bIsMaximized ? _("Unmaximise") : _("Maximise"),
+					G_CALLBACK(_cairo_dock_maximize_appli),
+					hbox, data);
+			}
+
+			if (bCanMinimize)
+			{
+				if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
+					cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
+				else
+					cLabel = g_strdup (_("Minimise"));
+				_add_new_button_to_hbox (CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg",
+					cLabel,
+					G_CALLBACK(_cairo_dock_minimize_appli),
+					hbox, data);
+				g_free (cLabel);
+			}
 		}
 		
 		if (pAppli
@@ -1912,24 +1924,35 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			 || !cairo_dock_appli_is_on_current_desktop (pAppli)))
 			_add_entry_in_menu (_("Show"), GTK_STOCK_FIND, _cairo_dock_show_appli, pSubMenuWindowManagement);
 		
-		_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximise") : _("Maximise"), icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg", _cairo_dock_maximize_appli, pSubMenuWindowManagement);
-		
 		if (! icon->bIsHidden)
 		{
-			if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
-				cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
+			if (bCanMaximize)
+			{
+				_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximise") : _("Maximise"),
+					icon->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg",
+					_cairo_dock_maximize_appli, pSubMenuWindowManagement);
+			}
+
+			if (bCanMinimize)
+			{
+				if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
+					cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
+				else
+					cLabel = g_strdup (_("Minimise"));
+				_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_appli, pSubMenuWindowManagement);
+				g_free (cLabel);
+			}
+		}
+
+		if (bCanClose)
+		{
+			if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
+				cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
 			else
-				cLabel = g_strdup (_("Minimise"));
-			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_appli, pSubMenuWindowManagement);
+				cLabel = g_strdup (_("Close"));
+			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_appli, pSubMenuWindowManagement);
 			g_free (cLabel);
 		}
-		
-		if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
-			cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
-		else
-			cLabel = g_strdup (_("Close"));
-		_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_appli, pSubMenuWindowManagement);
-		g_free (cLabel);
 		#endif
 		
 		//\_________________________ Other actions
