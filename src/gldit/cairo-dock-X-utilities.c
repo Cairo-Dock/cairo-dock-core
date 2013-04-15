@@ -76,6 +76,11 @@ static Atom s_aNetWmSkipTaskbar;
 static Atom s_aNetWmMaximizedHoriz;
 static Atom s_aNetWmMaximizedVert;
 static Atom s_aNetWmDemandsAttention;
+static Atom s_aNetWMAllowedActions;
+static Atom s_aNetWMActionMinimize;
+static Atom s_aNetWMActionMaximizeHorz;
+static Atom s_aNetWMActionMaximizeVert;
+static Atom s_aNetWMActionClose;
 static Atom s_aNetWmDesktop;
 static Atom s_aNetWmName;
 static Atom s_aWmName;
@@ -126,6 +131,11 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	s_aNetWmMaximizedHoriz		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
 	s_aNetWmMaximizedVert		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_VERT", False);
 	s_aNetWmDemandsAttention	= XInternAtom (s_XDisplay, "_NET_WM_STATE_DEMANDS_ATTENTION", False);
+	s_aNetWMAllowedActions		= XInternAtom (s_XDisplay, "_NET_WM_ALLOWED_ACTIONS", False);
+	s_aNetWMActionMinimize		= XInternAtom (s_XDisplay, "_NET_WM_ACTION_MINIMIZE", False);
+	s_aNetWMActionMaximizeHorz	= XInternAtom (s_XDisplay, "_NET_WM_ACTION_MAXIMIZE_HORZ", False);
+	s_aNetWMActionMaximizeVert	= XInternAtom (s_XDisplay, "_NET_WM_ACTION_MAXIMIZE_VERT", False);
+	s_aNetWMActionClose		= XInternAtom (s_XDisplay, "_NET_WM_ACTION_CLOSE", False);
 	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
 	s_aNetWmName 			= XInternAtom (s_XDisplay, "_NET_WM_NAME", False);
 	s_aWmName 				= XInternAtom (s_XDisplay, "WM_NAME", False);
@@ -1361,6 +1371,45 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 }  // Note: for stickyness, dont use _NET_WM_STATE_STICKY; prefer "cairo_dock_get_xwindow_desktop (Xid) == -1"
    //  but it doesn't work with compiz and its viewport...
 
+void cairo_dock_xwindow_can_minimize_maximized_close (Window Xid, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose)
+{
+	g_return_if_fail (Xid > 0);
+
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements = 0;
+	gulong *pXStateBuffer = NULL;
+	
+	XGetWindowProperty (s_XDisplay,
+		Xid, s_aNetWMAllowedActions, 0, G_MAXULONG, False, XA_ATOM,
+		&aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pXStateBuffer);
+
+	*bCanMinimize = FALSE;
+	*bCanMaximize = FALSE;
+	*bCanClose = FALSE;
+
+	if (iBufferNbElements > 0)
+	{
+		guint i;
+		for (i = 0; i < iBufferNbElements; i ++)
+		{
+			if (pXStateBuffer[i] == s_aNetWMActionMinimize)
+			{
+				*bCanMinimize = TRUE;
+			}
+			else if (pXStateBuffer[i] == s_aNetWMActionMaximizeHorz || pXStateBuffer[i] == s_aNetWMActionMaximizeVert)
+			{
+				*bCanMaximize = TRUE;
+			}
+			else if (pXStateBuffer[i] == s_aNetWMActionClose)
+			{
+				*bCanClose = TRUE;
+			}
+		}
+	}
+
+	XFree (pXStateBuffer);
+}
 
 static inline gboolean _cairo_dock_window_has_type (int Xid, Atom iType)
 {
