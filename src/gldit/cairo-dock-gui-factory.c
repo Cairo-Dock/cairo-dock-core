@@ -1562,8 +1562,6 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 		// vertical frame.
 		pDescriptionFrame = gtk_frame_new (NULL);
 		gtk_frame_set_shadow_type(GTK_FRAME(pDescriptionFrame), GTK_SHADOW_OUT);
-
-		pPreviewBox = pDescriptionFrame;
 		
 		// title
 		GtkWidget* pTitle = gtk_label_new (NULL);
@@ -1629,8 +1627,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 	}
 	else
 	{
-		pPreviewBox = pTextVBox;
-		gtk_box_pack_start (GTK_BOX (pPreviewBox), pDescriptionLabel, FALSE, FALSE, CAIRO_DOCK_GUI_MARGIN);
+		gtk_box_pack_start (GTK_BOX (pTextVBox), pDescriptionLabel, FALSE, FALSE, CAIRO_DOCK_GUI_MARGIN);
 	}
 	
 	// connect to the widget.
@@ -1659,7 +1656,15 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 	{
 		// FrameHBox will set the frame border full size to the right.
 		GtkWidget *pFrameHBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
-		gtk_container_add (GTK_CONTAINER(pDescriptionFrame), pFrameHBox);
+		if (pDescriptionFrame)
+		{
+			gtk_container_add (GTK_CONTAINER(pDescriptionFrame), pFrameHBox);
+			pPreviewBox = pDescriptionFrame;
+		}
+		else
+		{
+			pPreviewBox = pFrameHBox;
+		}
 		gtk_box_pack_start (GTK_BOX (pFrameHBox), pTextVBox, TRUE, TRUE, 0);
 
 		GtkWidget *pPreviewImageBox = _gtk_vbox_new (CAIRO_DOCK_GUI_MARGIN);
@@ -1673,7 +1678,15 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 	else
 	{
 		// Add TextVBox to the main frame if created. (iAddInfoBar > 0)
-		gtk_container_add (GTK_CONTAINER(pDescriptionFrame), pTextVBox);
+		if (pDescriptionFrame)
+		{
+			gtk_container_add (GTK_CONTAINER(pDescriptionFrame), pTextVBox);
+			pPreviewBox = pDescriptionFrame;
+		}
+		else
+		{
+			pPreviewBox = pTextVBox;
+		}
 		
 		// pPreviewImageBox : center image on x axis.
 		GtkWidget *pPreviewImageBox = _gtk_vbox_new (CAIRO_DOCK_GUI_MARGIN);
