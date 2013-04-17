@@ -790,56 +790,7 @@ int main (int argc, char** argv)
 			G_TYPE_INVALID);
 		g_free (cConfFilePath);
 
-		if (g_str_has_prefix (CAIRO_DOCK_VERSION, "3.2."))
-		{
-			if (g_strcmp0 (g_getenv ("DESKTOP_SESSION"), "cairo-dock") == 0)  // from 3.2, Indicator-generic replaces all the indicator applets, and is very helpful if we are on a cairo-dock session.
-			{
-				const gchar *cModuleName = "Indicator-Generic";
-				CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-				if (pModule && pModule->pInstancesList == NULL) // it exists but it's not activated
-				{
-					/* copy the .conf file mostly to place the new icons on the
-					 * right place (at least on the second dock) but only if we are
-					 * using a second dock
-					 */
-					gchar *cSecondDockFile = g_strdup_printf ("%s/_MainDock_-2.conf", g_cCurrentThemePath);
-					if (g_file_test (cSecondDockFile, G_FILE_TEST_EXISTS))
-					{
-						gchar *cCommand = g_strdup_printf ("cp -r \"%s/%s\" \"%s/plug-ins/\"",
-							CAIRO_DOCK_SHARE_DATA_DIR"/themes/Default-Panel/plug-ins",
-							cModuleName,
-							g_cCurrentThemePath);
-
-						int r = system (cCommand);
-						if (r < 0)
-							cd_warning ("Not able to launch this command: %s", cCommand);
-						g_free (cCommand);
-					}
-					g_free (cSecondDockFile);
-
-					cd_warning ("Indicator-Generic now replaces Print-Menu and Sync-Menu, activate it automatically");
-					cairo_dock_activate_module_and_load (cModuleName); // launch it right now
-				}
-			}
-
-			// Switch from "Show a window's thumbnail" to "Make the icon transparent" by default due to the bug #1127281
-			GKeyFile *pKeyFile = cairo_dock_open_key_file (g_cConfFile);
-			if (pKeyFile)
-			{
-				gint iMinimizedWindowRenderType = g_key_file_get_integer (pKeyFile, "TaskBar", "minimized", NULL);
-				if (iMinimizedWindowRenderType == 1)  // "Show a window's thumbnail", can provoke very annoying bug :-/
-				{
-					cd_warning ("Switch from 'Show a window's thumbnail' to 'Make the icon transparent' option due to a very annoying bug that we can have with some video cards. This bug seems to be fixed when using recent video drivers and this option can be re-enabled from the config panel.");
-					g_key_file_set_integer (pKeyFile, "TaskBar", "minimized", 0);
-					cairo_dock_write_keys_to_file (pKeyFile, g_cConfFile);
-
-					GldiManager *pManager = gldi_get_manager ("Taskbar");
-					gldi_reload_manager_from_keyfile (pManager, pKeyFile);
-				}
-				g_key_file_free (pKeyFile);
-			}
-
-		}
+		/// If any operation must be done on the user theme (like activating a module by default, or disabling an option), it should be done here once (when CAIRO_DOCK_VERSION matches the new version).
 	}
 	
 	//g_print ("bFirstLaunch: %d; bNewVersion: %d\n", bFirstLaunch, bNewVersion);
