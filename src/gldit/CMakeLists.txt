@@ -81,10 +81,7 @@ link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${GTK_LIBRARY_DIRS}
 	${XEXTEND_LIBRARY_DIRS}
-	${XINERAMA_LIBRARY_DIRS}
-	${CMAKE_SOURCE_DIR}/src/gldit
-	${CMAKE_SOURCE_DIR}/src/icon-factory
-	${CMAKE_SOURCE_DIR}/src/implementations)
+	${XINERAMA_LIBRARY_DIRS})
 
 # Define the library
 add_library ("gldi" SHARED ${core_lib_SRCS})
