@@ -14,7 +14,7 @@ project ("cairo-dock")
 set (VERSION "3.2.99.alpha0")
 
 add_definitions (-std=c99 -Wall -Wextra) # -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds) # removed for stable versions: -Wstrict-prototypes #-Wunreachable-code -Wno-unused-parameter -Wall 
-if (NOT ${CMAKE_BUILD_TYPE})
+if (NOT DEFINED CMAKE_BUILD_TYPE)
 	add_definitions (-O3)
 endif()
 add_definitions (-DGL_GLEXT_PROTOTYPES="1")
