@@ -21,17 +21,27 @@
 
 #include "gldi-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-module-factory.h"  // for gldi_extend_manager
+#include "cairo-dock-module-manager.h"  // GldiVisitCard (for gldi_extend_manager)
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-manager.h"
 
-extern CairoContainer *g_pPrimaryContainer;
+extern GldiContainer *g_pPrimaryContainer;
 
 static GList *s_pManagers = NULL;
 
 
-static inline void _gldi_init_manager (GldiManager *pManager)
+static void _gldi_init_manager (GldiManager *pManager)
 {
+	// be sure to init once only
+	if (pManager->bInitIsDone)
+		return;
+	pManager->bInitIsDone = TRUE;
+	
+	// if the manager depends on another, init this one first.
+	if (pManager->object.mgr != NULL)
+		_gldi_init_manager (pManager->object.mgr);
+	
+	// init the manager
 	if (pManager->init)
 		pManager->init ();
 }
@@ -104,7 +114,7 @@ static gboolean gldi_get_manager_config (GldiManager *pManager, GKeyFile *pKeyFi
 }
 
 
-void gldi_extend_manager (CairoDockVisitCard *pVisitCard, const gchar *cManagerName)
+void gldi_extend_manager (GldiVisitCard *pVisitCard, const gchar *cManagerName)
 {
 	GldiManager *pManager = gldi_get_manager (cManagerName);
 	g_return_if_fail (pManager != NULL && pVisitCard->cInternalModule == NULL);
