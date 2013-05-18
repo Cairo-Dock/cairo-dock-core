@@ -17,14 +17,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CAIRO_DOCK_MODULES_MANAGER__
-#define  __CAIRO_DOCK_MODULES_MANAGER__
-
-#include <glib.h>
+#ifndef __GLDI_MODULES_MANAGER__
+#define  __GLDI_MODULES_MANAGER__
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-desklet-factory.h"
-#include "cairo-dock-desklet-manager.h"
+#include "cairo-dock-desklet-factory.h"  // CairoDeskletAttribute
+#include "cairo-dock-manager.h"
 G_BEGIN_DECLS
 
 /**
@@ -35,43 +33,31 @@ G_BEGIN_DECLS
 *  - the interface defines the entry points for init, stop, reload, read config, and reset datas.
 *
 * Modules can be instanciated several times; each time they are, an instance is created.
-* Each instance holds all a set of the data : the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these parameters are optionnal; a module that has an icon is also called an applet.
+* Each instance holds a set of data: the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these data are optionnal; a module that has an icon is also called an applet.
 */
 
-typedef struct _CairoModulesParam CairoModulesParam;
-typedef struct _CairoModulesManager CairoModulesManager;
-typedef struct _CairoModuleInstancesParam CairoModuleInstancesParam;
-typedef struct _CairoModuleInstancesManager CairoModuleInstancesManager;
+typedef struct _GldiModulesParam GldiModulesParam;
+typedef struct _GldiModulesManager GldiModulesManager;
+typedef struct _GldiModuleAttr GldiModuleAttr;
 
 #ifndef _MANAGER_DEF_
-extern CairoModulesParam myModulesParam;
-extern CairoModulesManager myModulesMgr;
-extern CairoModuleInstancesParam myModuleInstancesParam;
-extern CairoModuleInstancesManager myModuleInstancesMgr;
+extern GldiModulesParam myModulesParam;
+extern GldiModulesManager myModulesMgr;
 #endif
 
 // params
-struct _CairoModulesParam {
+struct _GldiModulesParam {
 	gchar **cActiveModuleList;
-	};
-struct _CairoModuleInstancesParam {
-	gint unused;
 	};
 
 // manager
-struct _CairoModulesManager {
+struct _GldiModulesManager {
 	GldiManager mgr;
-	void 			(*foreach_module) 				(GHRFunc pCallback, gpointer user_data);
-	void 			(*foreach_module_in_alphabetical_order) (GCompareFunc pCallback, gpointer user_data);
-	CairoDockModule* (*find_module_from_name) 		(const gchar *cModuleName);
-	int 			(*get_nb_modules) 				(void);
-	const gchar* 	(*get_modules_dir) 				(void);
-	gchar* 			(*list_active_modules) 			(void);
-	void 			(*write_active_modules_cb) 		(void);
 };
 
-struct _CairoModuleInstancesManager {
-	GldiManager mgr;
+struct _GldiModuleAttr {
+	GldiVisitCard *pVisitCard;
+	GldiModuleInterface *pInterface;
 };
 
 // signals
@@ -79,12 +65,165 @@ typedef enum {
 	NOTIFICATION_MODULE_REGISTERED = NB_NOTIFICATIONS_OBJECT,
 	NOTIFICATION_MODULE_ACTIVATED,
 	NB_NOTIFICATIONS_MODULES
-	} CairoModulesNotifications;
+	} GldiModulesNotifications;
+
+
+/// Categories a module can be in.
+typedef enum {
+	CAIRO_DOCK_CATEGORY_BEHAVIOR=0,
+	CAIRO_DOCK_CATEGORY_THEME,
+	CAIRO_DOCK_CATEGORY_APPLET_FILES,
+	CAIRO_DOCK_CATEGORY_APPLET_INTERNET,
+	CAIRO_DOCK_CATEGORY_APPLET_DESKTOP,
+	CAIRO_DOCK_CATEGORY_APPLET_ACCESSORY,
+	CAIRO_DOCK_CATEGORY_APPLET_SYSTEM,
+	CAIRO_DOCK_CATEGORY_APPLET_FUN,
+	CAIRO_DOCK_NB_CATEGORY
+	} GldiModuleCategory;
 
 typedef enum {
-	NOTIFICATION_MODULE_INSTANCE_DETACHED = NB_NOTIFICATIONS_OBJECT,
-	NB_NOTIFICATIONS_MODULE_INSTANCES
-	} CairoModuleInstancesNotifications;
+	CAIRO_DOCK_MODULE_IS_PLUGIN 	= 0,
+	CAIRO_DOCK_MODULE_CAN_DOCK 		= 1<<0,
+	CAIRO_DOCK_MODULE_CAN_DESKLET 	= 1<<1,
+	CAIRO_DOCK_MODULE_CAN_OTHERS 	= 1<<2
+	} GldiModuleContainerType;
+
+/// Definition of the visit card of a module. Contains everything that is statically defined for a module.
+struct _GldiVisitCard {
+	// nom du module qui servira a l'identifier.
+	const gchar *cModuleName;
+	// numero de version majeure de cairo-dock necessaire au bon fonctionnement du module.
+	gint iMajorVersionNeeded;
+	// numero de version mineure de cairo-dock necessaire au bon fonctionnement du module.
+	gint iMinorVersionNeeded;
+	// numero de version micro de cairo-dock necessaire au bon fonctionnement du module.
+	gint iMicroVersionNeeded;
+	// chemin d'une image de previsualisation.
+	const gchar *cPreviewFilePath;
+	// Nom du domaine pour la traduction du module par 'gettext'.
+	const gchar *cGettextDomain;
+	// Version du dock pour laquelle a ete compilee le module.
+	const gchar *cDockVersionOnCompilation;
+	// version courante du module.
+	const gchar *cModuleVersion;
+	// repertoire du plug-in cote utilisateur.
+	const gchar *cUserDataDir;
+	// repertoire d'installation du plug-in.
+	const gchar *cShareDataDir;
+	// nom de son fichier de conf.
+	const gchar *cConfFileName;
+	// categorie de l'applet.
+	GldiModuleCategory iCategory;
+	// chemin d'une image pour l'icone du module dans le panneau de conf du dock.
+	const gchar *cIconFilePath;
+	// taille de la structure contenant la config du module.
+	gint iSizeOfConfig;
+	// taille de la structure contenant les donnees du module.
+	gint iSizeOfData;
+	// VRAI ssi le plug-in peut etre instancie plusiers fois.
+	gboolean bMultiInstance;
+	// description et mode d'emploi succint.
+	const gchar *cDescription;
+	// auteur/pseudo
+	const gchar *cAuthor;
+	// nom d'un module interne auquel ce module se rattache, ou NULL si aucun.
+	const gchar *cInternalModule;
+	// nom du module tel qu'affiche a l'utilisateur.
+	const gchar *cTitle;
+	GldiModuleContainerType iContainerType;
+	gboolean bStaticDeskletSize;
+	// whether to display the applet's name on the icon's label if it's NULL or not.
+	gboolean bAllowEmptyTitle;
+	// if TRUE and the applet inhibites a class, then appli icons will be placed after the applet icon.
+	gboolean bActAsLauncher;
+	gpointer reserved[2];
+};
+
+/// Definition of the interface of a module.
+struct _GldiModuleInterface {
+	void		(* initModule)			(GldiModuleInstance *pInstance, GKeyFile *pKeyFile);
+	void		(* stopModule)			(GldiModuleInstance *pInstance);
+	gboolean	(* reloadModule)		(GldiModuleInstance *pInstance, GldiContainer *pOldContainer, GKeyFile *pKeyFile);
+	gboolean	(* read_conf_file)		(GldiModuleInstance *pInstance, GKeyFile *pKeyFile);
+	void		(* reset_config)		(GldiModuleInstance *pInstance);
+	void		(* reset_data)			(GldiModuleInstance *pInstance);
+	void		(* load_custom_widget)	(GldiModuleInstance *pInstance, GKeyFile *pKeyFile, GSList *pWidgetList);
+	void		(* save_custom_widget)	(GldiModuleInstance *pInstance, GKeyFile *pKeyFile, GSList *pWidgetList);
+};
+
+/// Pre-init function of a module. Fills the visit card and the interface of a module.
+typedef gboolean (* GldiModulePreInit) (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface);
+
+/// Definition of an external module.
+struct _GldiModule {
+	/// object
+	GldiObject object;
+	/// interface of the module.
+	GldiModuleInterface *pInterface;
+	/// visit card of the module.
+	GldiVisitCard *pVisitCard;
+	/// conf file of the module.
+	gchar *cConfFilePath;
+	/// if the module interface is provided by a dynamic library, handle to this library.
+	gpointer handle;
+	/// list of instances of the module.
+	GList *pInstancesList;
+	gpointer reserved[2];
+};
+
+struct _CairoDockMinimalAppletConfig {
+	gint iDesiredIconWidth;
+	gint iDesiredIconHeight;
+	gchar *cLabel;
+	gchar *cIconFileName;
+	gdouble fOrder;
+	gchar *cDockName;
+	gboolean bAlwaysVisible;
+	gdouble *pHiddenBgColor;
+	CairoDeskletAttr deskletAttribute;
+	gboolean bIsDetached;
+};
+
+/** Say if an object is a Module.
+*@param obj the object.
+*@return TRUE if the object is a Module.
+*/
+#define CAIRO_DOCK_IS_MODULE(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myModulesMgr))
+
+  ///////////////////
+ // MODULE LOADER //
+///////////////////
+
+#define gldi_module_is_auto_loaded(pModule) (pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL)
+
+/** Create a new module. The module takes ownership of the 2 arguments, unless an error occured.
+* @param pVisitCard the visit card of the module
+* @param pInterface the interface of the module
+* @return the new module, or NULL if the visit card is invalid.
+*/
+GldiModule *gldi_module_new (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface);
+
+/** Create a new module from a .so file.
+* @param cSoFilePath path to the .so file
+* @return the new module, or NULL if an error occured.
+*/
+GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath);
+
+/** Create new modules from all the .so files contained in the given folder.
+* @param cModuleDirPath path to the folder
+* @param erreur an error
+* @return the new module, or NULL if an error occured.
+*/
+void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erreur);
+
+/** Get the path to the folder containing the config files of a module (one file per instance). The folder is created if needed.
+* If the module is not configurable, or if the folder couldn't be created, NULL is returned.
+* @param pModule the module
+* @return the path to the folder (free it after use).
+*/
+gchar *gldi_module_get_config_dir (GldiModule *pModule);
+
+void cairo_dock_free_visit_card (GldiVisitCard *pVisitCard);
 
 
   /////////////
@@ -95,78 +234,48 @@ typedef enum {
 *@param cModuleName the unique name of the module.
 *@return the module, or NULL if not found.
 */
-CairoDockModule *cairo_dock_find_module_from_name (const gchar *cModuleName);
+GldiModule *gldi_module_get (const gchar *cModuleName);
 
-CairoDockModule *cairo_dock_foreach_module (GHRFunc pCallback, gpointer user_data);
-CairoDockModule *cairo_dock_foreach_module_in_alphabetical_order (GCompareFunc pCallback, gpointer user_data);
+GldiModule *gldi_module_foreach (GHRFunc pCallback, gpointer user_data);
 
-int cairo_dock_get_nb_modules (void);
+GldiModule *gldi_module_foreach_in_alphabetical_order (GCompareFunc pCallback, gpointer user_data);
 
-gchar *cairo_dock_list_active_modules (void);
+int gldi_module_get_nb (void);
+#define cairo_dock_get_nb_modules gldi_module_get_nb
 
-
-  ///////////////////
- // MODULE LOADER //
-///////////////////
-
-gboolean cairo_dock_register_module (CairoDockModule *pModule);
-void cairo_dock_unregister_module (const gchar *cModuleName);
-
-/** Load a module into the table of modules. The module is opened and its visit card and interface are retrieved.
-*@param cSoFilePath path to the .so file.
-*@return the newly allocated module.
-*/
-CairoDockModule * cairo_dock_load_module (const gchar *cSoFilePath);
-
-/** Load all the modules of a given folder. If the path is NULL, plug-ins are taken in the gldi install dir.
-*@param cModuleDirPath path to the a folder containing .so files.
-*@param erreur error set if something bad happens.
-*/
-void cairo_dock_load_modules_in_directory (const gchar *cModuleDirPath, GError **erreur);
-
-  /////////////
- // MODULES //
-/////////////
-
-void cairo_dock_activate_modules_from_list (gchar **cActiveModuleList);
-
-void cairo_dock_deactivate_all_modules (void);
+void gldi_modules_write_active (void);
 
 
   ///////////////////////
  // MODULES HIGH LEVEL//
 ///////////////////////
 
-// activate_module or reload, update_dock, redraw, write
-void cairo_dock_activate_module_and_load (const gchar *cModuleName);
-// deactivate_module_instance_and_unload all instances, write
-void cairo_dock_deactivate_module_and_unload (const gchar *cModuleName);
+/** Create and initialize all the instances of a module.
+*@param module the module to activate.
+*/
+void gldi_module_activate (GldiModule *module);
+
+/** Stop and destroy all the instances of a module.
+*@param module the module to deactivate
+*/
+void gldi_module_deactivate (GldiModule *module);
+
+/** Reload all the instances of a module.
+*@param module the module to reload
+*@param bReloadAppletConf TRUE to reload the config of the instances before reloading them.
+*/
+void gldi_module_reload (GldiModule *module, gboolean bReloadAppletConf);
+
+void gldi_modules_activate_from_list (gchar **cActiveModuleList);
+
+void gldi_modules_deactivate_all (void);
 
 // deactivate_module_instance_and_unload + remove file
-void cairo_dock_remove_module_instance (CairoDockModuleInstance *pInstance);
+void gldi_module_remove_instance (GldiModuleInstance *pInstance);
 // cp file
-gchar *cairo_dock_add_module_conf_file (CairoDockModule *pModule);
-// cp file + instanciate_module + update_dock_size
-void cairo_dock_add_module_instance (CairoDockModule *pModule);
-// update conf file + reload_module_instance
-void cairo_dock_detach_module_instance (CairoDockModuleInstance *pInstance);
-// update conf file + reload_module_instance
-void cairo_dock_detach_module_instance_at_position (CairoDockModuleInstance *pInstance, int iCenterX, int iCenterY);
-
-
-gboolean cairo_dock_reserve_data_slot (CairoDockModuleInstance *pInstance);
-void cairo_dock_release_data_slot (CairoDockModuleInstance *pInstance);
-
-#define cairo_dock_get_icon_data(pIcon, pInstance) ((pIcon)->pDataSlot[pInstance->iSlotID])
-#define cairo_dock_get_container_data(pContainer, pInstance) ((pContainer)->pDataSlot[pInstance->iSlotID])
-
-#define cairo_dock_set_icon_data(pIcon, pInstance, pData) \
-	(pIcon)->pDataSlot[pInstance->iSlotID] = pData
-#define cairo_dock_set_container_data(pContainer, pInstance, pData) \
-	(pContainer)->pDataSlot[pInstance->iSlotID] = pData
-
-
-void cairo_dock_write_active_modules (void);
+gchar *gldi_module_add_conf_file (GldiModule *pModule);
+// cp file + instanciate_module
+void gldi_module_add_instance (GldiModule *pModule);
 
 
 void gldi_register_modules_manager (void);
