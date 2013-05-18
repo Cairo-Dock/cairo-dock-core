@@ -26,37 +26,25 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
+/*
+*@file cairo-dock-application-facility.h A set of utilities for handling appli-icons.
+*/
 
-typedef enum {
-	CAIRO_APPLI_DEMANDS_ATTENTION = 1<<0,
-	CAIRO_APPLI_URGENCY_HINT = 1 << 2
-} CairoAppliAttentionFlag;
+void cairo_dock_appli_demands_attention (Icon *icon);
 
-void cairo_dock_appli_demands_attention (Icon *icon, CairoAppliAttentionFlag flag);
-void cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoAppliAttentionFlag flag);
+void cairo_dock_appli_stops_demanding_attention (Icon *icon);
 
 void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);
 
 
-gboolean cairo_dock_appli_covers_dock (Icon *pIcon, CairoDock *pDock);
-gboolean cairo_dock_window_overlaps_dock (GtkAllocation *pWindowGeometry, gboolean bIsHidden, CairoDock *pDock);
-gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock);
-
-
 CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bAnimate);
+
 CairoDock *cairo_dock_detach_appli (Icon *pIcon);
 
 
 void cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock);
-void cairo_dock_reserve_one_icon_geometry_for_window_manager (Window *Xid, Icon *icon, CairoDock *pMainDock);
 
-
-gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
-gboolean cairo_dock_window_is_on_current_desktop (GtkAllocation *pWindowGeometry, int iWindowDesktopNumber);
-gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon);
-
-void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY);
-void cairo_dock_move_window_to_current_desktop (Icon *pIcon);
+void cairo_dock_reserve_one_icon_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock);
 
 
 const CairoDockImageBuffer *cairo_dock_appli_get_image_buffer (Icon *pIcon);

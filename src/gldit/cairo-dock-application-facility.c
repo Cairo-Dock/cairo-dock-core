@@ -27,44 +27,42 @@
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
 
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_name
-#include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-dialog-factory.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-windows-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-X-utilities.h"  // cairo_dock_set_xicon_geometry
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
 #include "cairo-dock-application-facility.h"
 
 extern CairoDock *g_pMainDock;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
-extern CairoContainer *g_pPrimaryContainer;
+extern GldiContainer *g_pPrimaryContainer;
 
-static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon, CairoAppliAttentionFlag flag)
+static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
 {
 	cd_debug ("%s (%s, force:%d)", __func__, icon->cName, bForceDemand);
 	if (CAIRO_DOCK_IS_APPLET (icon))  // on considere qu'une applet prenant le controle d'une icone d'appli dispose de bien meilleurs moyens pour interagir avec l'appli que la barre des taches.
 		return ;
-	icon->iDemandsAttention |= flag;
 	//\____________________ On montre le dialogue.
 	if (myTaskbarParam.bDemandsAttentionWithDialog)
 	{
 		CairoDialog *pDialog;
 		if (pHiddenIcon == NULL)
 		{
-			pDialog = cairo_dock_show_temporary_dialog_with_icon (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskbarParam.iDialogDuration, "same icon");
+			pDialog = gldi_dialog_show_temporary_with_icon (icon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskbarParam.iDialogDuration, "same icon");
 		}
 		else
 		{
-			pDialog = cairo_dock_show_temporary_dialog (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskbarParam.iDialogDuration); // mieux vaut montrer pas d'icone dans le dialogue que de montrer une icone qui n'a pas de rapport avec l'appli demandant l'attention.
+			pDialog = gldi_dialog_show_temporary (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskbarParam.iDialogDuration); // mieux vaut montrer pas d'icone dans le dialogue que de montrer une icone qui n'a pas de rapport avec l'appli demandant l'attention.
 			g_return_if_fail (pDialog != NULL);
-			cairo_dock_set_new_dialog_icon_surface (pDialog, pHiddenIcon->image.pSurface, pDialog->iIconSize);
+			gldi_dialog_set_icon_surface (pDialog, pHiddenIcon->image.pSurface, pDialog->iIconSize);
 		}
 		if (pDialog && bForceDemand)
 		{
@@ -72,8 +70,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && pDock->bIsBelow)
 				cairo_dock_pop_up (pDock);
 			gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
-			Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDialog));
-			cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
+			gtk_window_set_type_hint (GTK_WINDOW (pDialog->container.pWidget), GDK_WINDOW_TYPE_HINT_DOCK);  // pour passer devant les fenetres plein ecran; depend du WM.
 		}
 	}
 	//\____________________ On montre l'icone avec une animation.
@@ -81,7 +78,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 	{
 		if (pDock->iRefCount == 0)
 		{
-			if (bForceDemand/** && cairo_dock_search_window_covering_dock (pDock, FALSE, TRUE) == NULL*/)
+			if (bForceDemand)
 			{
 				if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && pDock->bIsBelow)
 					cairo_dock_pop_up (pDock);
@@ -98,27 +95,24 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		cairo_dock_request_icon_attention (icon, pDock, myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
 	}
-	
-	// notify everybody
-	cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_ATTENTION_CHANGED, pHiddenIcon?pHiddenIcon:icon, TRUE);
 }
-void cairo_dock_appli_demands_attention (Icon *icon, CairoAppliAttentionFlag flag)
+void cairo_dock_appli_demands_attention (Icon *icon)
 {
-	cd_debug ("%s (%s / %s , %d, %s)", __func__, icon->cName, icon->cLastAttentionDemand, icon->iDemandsAttention, icon->cParentDockName);
-	if (icon->Xid == cairo_dock_get_current_active_window ())  // apparemment ce cas existe, et conduit a ne pas pouvoir stopper l'animation de demande d'attention facilement.
+	cd_debug ("%s (%s, %s)", __func__, icon->cName, icon->cParentDockName);
+	if (icon->pAppli == gldi_windows_get_active())  // apparemment ce cas existe, et conduit a ne pas pouvoir stopper l'animation de demande d'attention facilement.
 	{
 		cd_message ("cette fenetre a deja le focus, elle ne peut demander l'attention en plus.");
 		return ;
 	}
-	if (icon->iDemandsAttention != 0  // already demanding attention
+	/**if (icon->iDemandsAttention  // already demanding attention
 	&& icon->cLastAttentionDemand && icon->cName && strcmp (icon->cLastAttentionDemand, icon->cName) == 0)  // and message has not changed between the 2 demands.
 	{
-		icon->iDemandsAttention |= flag;
+		icon->iDemandsAttention = TRUE;
 		return ;
 	}
-	icon->iDemandsAttention |= flag;
+	icon->iDemandsAttention = TRUE;
 	g_free (icon->cLastAttentionDemand);
-	icon->cLastAttentionDemand = g_strdup (icon->cName);
+	icon->cLastAttentionDemand = g_strdup (icon->cName);*/
 	
 	gboolean bForceDemand = (myTaskbarParam.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskbarParam.cForceDemandsAttention, -1, icon->cClass));
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
@@ -129,17 +123,17 @@ void cairo_dock_appli_demands_attention (Icon *icon, CairoAppliAttentionFlag fla
 		{
 			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 			if (pParentDock != NULL)
-				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, bForceDemand, NULL, flag);
+				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, bForceDemand, NULL);
 		}
 		else if (bForceDemand)  // appli pas affichee, mais on veut tout de meme etre notifie.
 		{
-			Icon *pOneIcon = cairo_dock_get_dialogless_icon ();  // on prend une icone dans le main dock.
+			Icon *pOneIcon = gldi_icons_get_any_without_dialog ();  // on prend une icone dans le main dock.
 			if (pOneIcon != NULL)
-				_cairo_dock_appli_demands_attention (pOneIcon, g_pMainDock, bForceDemand, icon, flag);
+				_cairo_dock_appli_demands_attention (pOneIcon, g_pMainDock, bForceDemand, icon);
 		}
 	}
 	else  // appli dans un dock.
-		_cairo_dock_appli_demands_attention (icon, pParentDock, bForceDemand, NULL, flag);
+		_cairo_dock_appli_demands_attention (icon, pParentDock, bForceDemand, NULL);
 }
 
 static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *pDock)
@@ -147,24 +141,17 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 	if (CAIRO_DOCK_IS_APPLET (icon))  // cf remarque plus haut.
 		return ;
 	if (myTaskbarParam.bDemandsAttentionWithDialog)
-		cairo_dock_remove_dialog_if_any (icon);
+		gldi_dialogs_remove_on_icon (icon);
 	if (myTaskbarParam.cAnimationOnDemandsAttention)
 	{
 		cairo_dock_stop_icon_attention (icon, pDock);  // arrete l'animation precedemment lancee par la demande.
 		gtk_widget_queue_draw (pDock->container.pWidget);  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
 	}
-	icon->iDemandsAttention = 0;
 	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow && ! pDock->container.bInside)
 		cairo_dock_pop_down (pDock);
-	
-	// notify everybody
-	cairo_dock_notify_on_object (&myTaskbarMgr, NOTIFICATION_APPLI_ATTENTION_CHANGED, icon, FALSE);
 }
-void cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoAppliAttentionFlag flag)
+void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 {
-	icon->iDemandsAttention &= (~flag);
-	if (icon->iDemandsAttention != 0)
-		return;
 	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
 	if (pParentDock == NULL)
 	{
@@ -205,78 +192,6 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 			}
 		}
 	}
-}
-
-
-
-gboolean cairo_dock_appli_covers_dock (Icon *pIcon, CairoDock *pDock)
-{
-	GtkAllocation *pWindowGeometry = &pIcon->windowGeometry;
-	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
-	{
-		int iDockX, iDockY, iDockWidth, iDockHeight;
-		if (pDock->container.bIsHorizontal)
-		{
-			iDockX = pDock->container.iWindowPositionX;
-			iDockY = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
-			iDockWidth = pDock->iMinDockWidth;
-			iDockHeight = pDock->iMinDockHeight;
-		}
-		else
-		{
-			iDockX = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
-			iDockY = pDock->container.iWindowPositionX;
-			iDockWidth = pDock->iMinDockHeight;
-			iDockHeight = pDock->iMinDockWidth;
-		}
-		
-		if (! pIcon->bIsHidden && pWindowGeometry->x <= iDockX && pWindowGeometry->x + pWindowGeometry->width >= iDockX + iDockWidth && pWindowGeometry->y <= iDockY && pWindowGeometry->y + pWindowGeometry->height >= iDockY + iDockHeight)
-		{
-			return TRUE;
-		}
-	}
-	else
-	{
-		cd_warning (" unknown window geometry");
-	}
-	return FALSE;
-}
-
-gboolean cairo_dock_window_overlaps_dock (GtkAllocation *pWindowGeometry, gboolean bIsHidden, CairoDock *pDock)
-{
-	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
-	{
-		int iDockX, iDockY, iDockWidth, iDockHeight;
-		if (pDock->container.bIsHorizontal)
-		{
-			iDockWidth = pDock->iMinDockWidth;
-			iDockHeight = pDock->iMinDockHeight;
-			iDockX = pDock->container.iWindowPositionX + (pDock->container.iWidth - iDockWidth)/2;
-			iDockY = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
-		}
-		else
-		{
-			iDockWidth = pDock->iMinDockHeight;
-			iDockHeight = pDock->iMinDockWidth;
-			iDockX = pDock->container.iWindowPositionY + (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
-			iDockY = pDock->container.iWindowPositionX + (pDock->container.iWidth - iDockHeight)/2;
-		}
-		
-		if (! bIsHidden && pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX && pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY)
-		{
-			return TRUE;
-		}
-	}
-	else
-	{
-		cd_warning (" unknown window geometry");
-	}
-	return FALSE;
-}
-
-gboolean cairo_dock_appli_overlaps_dock (Icon *pIcon, CairoDock *pDock)
-{
-	return cairo_dock_window_overlaps_dock (&pIcon->windowGeometry, pIcon->bIsHidden, pDock);
 }
 
 
@@ -339,7 +254,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 	g_free (icon->cParentDockName);
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.bGroupAppliByClass && icon->cClass != NULL && ! cairo_dock_class_is_expanded (icon->cClass))  // if this is a valid appli and we want to group the classes.
 	{
-		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);  // un inhibiteur dans un dock avec Xid ou subdock OU une appli de meme classe dans un dock != class-sub-dock.
+		Icon *pSameClassIcon = cairo_dock_get_classmate (icon);  // un inhibiteur dans un dock avec appli ou subdock OU une appli de meme classe dans un dock != class-sub-dock.
 		if (pSameClassIcon == NULL)  // aucun classmate => elle va dans son class sub-dock ou dans le main dock.
 		{
 			cd_message ("  no classmate for %s", icon->cClass);
@@ -372,11 +287,11 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			//\____________ link this sub-dock to the inhibitor, or to a fake appli icon.
 			if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.
 			{
-				if (pSameClassIcon->Xid != 0)  // actuellement l'inhibiteur inhibe 1 seule appli.
+				if (pSameClassIcon->pAppli != NULL)  // actuellement l'inhibiteur inhibe 1 seule appli.
 				{
 					cd_debug ("actuellement l'inhibiteur inhibe 1 seule appli");
-					Icon *pInhibitedIcon = cairo_dock_get_icon_with_Xid (pSameClassIcon->Xid);
-					pSameClassIcon->Xid = 0;  // on lui laisse par contre l'indicateur.
+					Icon *pInhibitedIcon = cairo_dock_get_appli_icon (pSameClassIcon->pAppli);
+					gldi_icon_unset_appli (pSameClassIcon);  // on lui laisse par contre l'indicateur.
 					if (pSameClassIcon->pSubDock == NULL)
 					{
 						if (pSameClassIcon->cInitialName != NULL)
@@ -439,9 +354,9 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 {
 	if (! myTaskbarParam.bShowAppli)
 		return NULL;
-	cd_message ("%s (%s, %d)", __func__, icon->cName, icon->Xid);
+	cd_message ("%s (%s, %p)", __func__, icon->cName, icon->pAppli);
 	
-	if (myTaskbarParam.bAppliOnCurrentDesktopOnly && ! cairo_dock_appli_is_on_current_desktop (icon))
+	if (myTaskbarParam.bAppliOnCurrentDesktopOnly && ! gldi_window_is_on_current_desktop (icon->pAppli))
 		return NULL;
 	
 	//\_________________ On gere ses eventuels inhibiteurs.
@@ -452,9 +367,9 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	}
 	
 	//\_________________ On gere le filtre 'applis minimisees seulement'.
-	if (!icon->bIsHidden && myTaskbarParam.bHideVisibleApplis)
+	if (!icon->pAppli->bIsHidden && myTaskbarParam.bHideVisibleApplis)
 	{
-		cairo_dock_reserve_one_icon_geometry_for_window_manager (&icon->Xid, icon, pMainDock);  // on reserve la position de l'icone dans le dock pour que l'effet de minimisation puisse viser la bonne position avant que l'icone ne soit effectivement dans le dock.
+		cairo_dock_reserve_one_icon_geometry_for_window_manager (icon->pAppli, icon, pMainDock);  // on reserve la position de l'icone dans le dock pour que l'effet de minimisation puisse viser la bonne position avant que l'icone ne soit effectivement dans le dock.
 		return NULL;
 	}
 	
@@ -502,7 +417,6 @@ CairoDock * cairo_dock_detach_appli (Icon *pIcon)
 		if (bEmptyClassSubDock)  // has been destroyed.
 			return NULL;
 	}
-	///cairo_dock_update_dock_size (pParentDock);
 	return pParentDock;
 }
 
@@ -521,12 +435,12 @@ void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock
 	iHeight = icon->fHeight + 2 * dh;  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 	
 	if (pDock->container.bIsHorizontal)
-		cairo_dock_set_xicon_geometry (icon->Xid, iX, iY - dh, iWidth, iHeight);
+		gldi_window_set_thumbnail_area (icon->pAppli, iX, iY - dh, iWidth, iHeight);
 	else
-		cairo_dock_set_xicon_geometry (icon->Xid, iY - dh, iX, iHeight, iWidth);
+		gldi_window_set_thumbnail_area (icon->pAppli, iY - dh, iX, iHeight, iWidth);
 }
 
-void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Window *Xid, Icon *icon, CairoDock *pMainDock)
+void cairo_dock_reserve_one_icon_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && icon->cParentDockName == NULL)
 	{
@@ -543,7 +457,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Wind
 				x = x_icon_geometry (pClassmate, pClassmateDock);
 				if (cairo_dock_is_hidden (pMainDock))
 				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : gldi_get_desktop_height());
+					y = (pClassmateDock->container.bDirectionUp ? 0 : gldi_desktop_get_height());
 				}
 				else
 				{
@@ -555,7 +469,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Wind
 				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
 				if (cairo_dock_is_hidden (pClassmateDock))
 				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : gldi_get_desktop_height());
+					y = (pClassmateDock->container.bDirectionUp ? 0 : gldi_desktop_get_height());
 				}
 				else
 				{
@@ -605,9 +519,9 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Wind
 			}
 			//g_print (" - %s en (%d;%d)\n", icon->cName, x, y);
 			if (pMainDock->container.bIsHorizontal)
-				cairo_dock_set_xicon_geometry (icon->Xid, x, y, 1, 1);
+				gldi_window_set_minimize_position (pAppli, x, y);
 			else
-				cairo_dock_set_xicon_geometry (icon->Xid, y, x, 1, 1);
+				gldi_window_set_minimize_position (pAppli, y, x);
 		}
 		else
 		{
@@ -615,65 +529,6 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (G_GNUC_UNUSED Wind
 			
 		}
 	}
-}
-
-
-
-gboolean cairo_dock_appli_is_on_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
-{
-	// On calcule les coordonnees en repere absolu.
-	int x = pIcon->windowGeometry.x;  // par rapport au viewport courant.
-	x += g_desktopGeometry.iCurrentViewportX * gldi_get_desktop_width();  // repere absolu
-	if (x < 0)
-		x += g_desktopGeometry.iNbViewportX * gldi_get_desktop_width();
-	int y = pIcon->windowGeometry.y;
-	y += g_desktopGeometry.iCurrentViewportY * gldi_get_desktop_height();
-	if (y < 0)
-		y += g_desktopGeometry.iNbViewportY * gldi_get_desktop_height();
-	int w = pIcon->windowGeometry.width, h = pIcon->windowGeometry.height;
-	
-	// test d'intersection avec le viewport donne.
-	return ((pIcon->iNumDesktop == -1 || pIcon->iNumDesktop == iNumDesktop) &&
-		x + w > iNumViewportX * gldi_get_desktop_width() &&
-		x < (iNumViewportX + 1) * gldi_get_desktop_width() &&
-		y + h > iNumViewportY * gldi_get_desktop_height() &&
-		y < (iNumViewportY + 1) * gldi_get_desktop_height());
-}
-
-gboolean cairo_dock_window_is_on_current_desktop (GtkAllocation *pWindowGeometry, int iWindowDesktopNumber)
-{
-	int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;  // coordonnees du coin haut gauche dans le referentiel du viewport actuel.
-	iGlobalPositionX = pWindowGeometry->x;
-	iGlobalPositionY = pWindowGeometry->y;
-	iWidthExtent = pWindowGeometry->width;
-	iHeightExtent = pWindowGeometry->height;
-	
-	return ( (iWindowDesktopNumber == g_desktopGeometry.iCurrentDesktop || iWindowDesktopNumber == -1) &&
-		iGlobalPositionX + iWidthExtent > 0 &&
-		iGlobalPositionX < gldi_get_desktop_width() &&
-		iGlobalPositionY + iHeightExtent > 0 &&
-		iGlobalPositionY < gldi_get_desktop_height() );  // -1 <=> 0xFFFFFFFF en unsigned.
-}
-
-gboolean cairo_dock_appli_is_on_current_desktop (Icon *pIcon)
-{
-	return cairo_dock_window_is_on_current_desktop (&pIcon->windowGeometry, pIcon->iNumDesktop);
-}
-
-void cairo_dock_move_window_to_desktop (Icon *pIcon, int iNumDesktop, int iNumViewportX, int iNumViewportY)
-{
-	cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid,
-		iNumDesktop,
-		(iNumViewportX - g_desktopGeometry.iCurrentViewportX) * gldi_get_desktop_width(),
-		(iNumViewportY - g_desktopGeometry.iCurrentViewportY) * gldi_get_desktop_height());
-}
-
-void cairo_dock_move_window_to_current_desktop (Icon *pIcon)
-{
-	cairo_dock_move_xwindow_to_nth_desktop (pIcon->Xid,
-		g_desktopGeometry.iCurrentDesktop,
-		0,
-		0);  // on ne veut pas decaler son viewport par rapport a nous.
 }
 
 

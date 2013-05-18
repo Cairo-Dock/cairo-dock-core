@@ -20,16 +20,12 @@
 #ifndef __CAIRO_DOCK_APPLICATION_MANAGER__
 #define  __CAIRO_DOCK_APPLICATION_MANAGER__
 
-#include <X11/Xlib.h>
-
 #include "cairo-dock-struct.h"
-#include "cairo-dock-manager.h"
-#include "cairo-dock-icon-manager.h"  // CairoDockForeachIconFunc
+#include "cairo-dock-icon-manager.h"
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-applications-manager.h This class manages the list of known windows, ie the Taskbar.
-* It also provides convenient functions to act on all the applis icons at once.
+*@file cairo-dock-applications-manager.h This class manages the list of icons representing a window, ie the Taskbar.
 */
 
 typedef struct _CairoTaskbarParam CairoTaskbarParam;
@@ -78,103 +74,41 @@ struct _CairoTaskbarParam {
 // manager
 struct _CairoTaskbarManager {
 	GldiManager mgr;
-	void (*foreach_applis) (CairoDockForeachIconFunc pFunction, gboolean bOutsideDockOnly, gpointer pUserData);
-	void (*start_application_manager) (CairoDock *pDock);
-	void (*stop_application_manager) (void);
-	
-	void (*unregister_appli) (Icon *icon);
-	Icon* (*create_icon_from_xwindow) (Window Xid, CairoDock *pDock);
-	
-	void (*hide_show_launchers_on_other_desktops) (CairoDock *pDock);
-	void (*set_specified_desktop_for_icon) (Icon *pIcon, int iSpecificDesktop);
-	
-	GList* (*get_current_applis_list) (void);
-	Window (*get_current_active_window) (void);
-	Icon* (*get_current_active_icon) (void);
-	Icon* (*get_icon_with_Xid) (Window Xid);
 } ;
 
 // signals
 typedef enum {
-	NOTIFICATION_APPLI_CREATED = NB_NOTIFICATIONS_OBJECT,
-	NOTIFICATION_APPLI_DESTROYED,
-	NOTIFICATION_APPLI_NAME_CHANGED,
-	NOTIFICATION_APPLI_ICON_CHANGED,
-	NOTIFICATION_APPLI_ATTENTION_CHANGED,
-	NOTIFICATION_APPLI_SIZE_POSITION_CHANGED,
-	NOTIFICATION_APPLI_STATE_CHANGED,
-	NB_NOTIFICATIONS_TASKBAR
+	NB_NOTIFICATIONS_TASKBAR = NB_NOTIFICATIONS_OBJECT,
 	} CairoTaskbarNotifications;
 
 
-// Applis manager : core
-void cairo_dock_unregister_appli (Icon *icon);
-
-/** Start the applications manager. It will load all the applis, and keep monitoring them. If enabled, it will insert them into the dock.
+/** Start the applications manager. It will load all the appli-icons, and keep monitoring them. If enabled, it will insert them into the dock.
 *@param pDock the main dock
 */
 void cairo_dock_start_applications_manager (CairoDock *pDock);
 
-///void cairo_dock_reset_applications_manager (void);
 
-
-
-// Applis manager : access
-#define _cairo_dock_appli_is_on_our_way(icon, pDock) (icon != NULL && cairo_dock_appli_is_on_current_desktop (icon) &&  pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && cairo_dock_appli_overlaps_dock (icon, pDock))
-
-void cairo_dock_hide_show_if_current_window_is_on_our_way (CairoDock *pDock);
-void cairo_dock_hide_if_any_window_overlap_or_show (CairoDock *pDock);
-
-
-/** Get the icon of an application whose window covers entirely a dock, or NULL if none. If both parameters are FALSE, check for all windows.
-*@param pDock the dock to test.
-*@param bMaximizedWindow check for maximized windows only.
-*@param bFullScreenWindow check for full screen windows only.
-*@return the icon representing the window, or NULL if none has been found.
-*/
-Icon * cairo_dock_search_window_covering_dock (CairoDock *pDock, gboolean bMaximizedWindow, gboolean bFullScreenWindow);
-
-/** Get the icon of an application whose window overlaps a dock, or NULL if none.
-*@param pDock the dock to test.
-*@return the icon of the window, or NULL if none has been found.
-*/
-Icon *cairo_dock_search_window_overlapping_dock (CairoDock *pDock);
-
-
-/** Get the list of appli's icons currently known by Cairo-Dock, including the icons not currently displayed in the dock. You can then order the list by z-order, name, etc.
-*@return a newly allocated list of applis's icons. You must free the list when you're done with it, but not the icons.
+/** Get the list of appli-icons, including the icons not currently displayed in the dock. You can then order the list by z-order, name, etc.
+*@return a newly allocated list of appli-icons. You must free the list when you're done with it, but not the icons.
 */
 GList *cairo_dock_get_current_applis_list (void);
 
-/** Get the currently active window ID.
-*@return the X id.
-*/
-Window cairo_dock_get_current_active_window (void);
-/** Get the icon of the currently active window.
-*@return the icon (maybe not inside a dock).
+/** Get the icon of the currently active window, if any.
+*@return the icon (maybe not inside a dock, maybe NULL).
 */
 Icon *cairo_dock_get_current_active_icon (void);
-/** Get the icon of a given window. The search is fast.
-*@param Xid the id of the X window.
-*@return the icon (maybe not inside a dock).
+
+/** Get the icon of a given window, if any.
+*@param actor the window actor
+*@return the icon (maybe not inside a dock, maybe NULL).
 */
-Icon *cairo_dock_get_icon_with_Xid (Window Xid);
+Icon *cairo_dock_get_appli_icon (GldiWindowActor *actor);
 
 /** Run a function on all appli's icons.
 *@param pFunction a /ref CairoDockForeachIconFunc function to be called
-*@param bOutsideDockOnly TRUE if you only want to go through icons that are not inside a dock, FALSE to go through all icons.
 *@param pUserData a data passed to the function.
 */
-void cairo_dock_foreach_applis (CairoDockForeachIconFunc pFunction, gboolean bOutsideDockOnly, gpointer pUserData);
-
-/** Run a function on all appli's icons present on a given workspace.
-*@param pFunction a /ref CairoDockForeachIconFunc function to be called
-*@param iNumDesktop number of the desktop
-*@param iNumViewportX number of the horizontal viewport
-*@param iNumViewportY number of the vertical viewport
-*@param pUserData a data passed to the function.
-*/
-void cairo_dock_foreach_applis_on_viewport (CairoDockForeachIconFunc pFunction, int iNumDesktop, int iNumViewportX, int iNumViewportY, gpointer pUserData);
+void cairo_dock_foreach_appli_icon (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
 
