@@ -42,7 +42,6 @@ G_BEGIN_DECLS
 * A dock can be either a main-dock (not linked to any icon) or a sub-dock (linked to an icon of another dock), and there can be as many docks of each sort as you want.
 */
 
-
 typedef enum {
 	CAIRO_DOCK_BOTTOM = 0,
 	CAIRO_DOCK_TOP,
@@ -56,7 +55,7 @@ typedef enum {
 #define CAIRO_DOCK_INSERT_SEPARATOR TRUE
 
 typedef void (*CairoDockComputeSizeFunc) (CairoDock *pDock);
-typedef Icon * (*CairoDockCalculateIconsFunc) (CairoDock *pDock);
+typedef Icon* (*CairoDockCalculateIconsFunc) (CairoDock *pDock);
 typedef void (*CairoDockRenderFunc) (cairo_t *pCairoContext, CairoDock *pDock);
 typedef void (*CairoDockRenderOptimizedFunc) (cairo_t *pCairoContext, CairoDock *pDock, GdkRectangle *pArea);
 typedef void (*CairoDockSetSubDockPositionFunc) (Icon *pPointedIcon, CairoDock *pParentDock);
@@ -120,17 +119,29 @@ typedef enum {
 	CAIRO_DOCK_NB_VISI
 	} CairoDockVisibility;
 
+typedef struct _CairoDockAttr CairoDockAttr;
+struct _CairoDockAttr {
+	// parent attributes
+	GldiContainerAttr cattr;
+	const gchar *cDockName;
+	const gchar *cRendererName;
+	GList *pIconList;
+	gboolean bSubDock;
+	CairoDock *pParentDock;
+};
 
 /// Definition of a Dock, which derives from a Container.
 struct _CairoDock {
 	/// container.
-	CairoContainer container;
+	GldiContainer container;
 	/// the list of icons.
 	GList* icons;
 	/// Set to TRUE for the main dock (the first to be created, and the one containing the taskbar).
 	gboolean bIsMainDock;
 	/// number of icons pointing on the dock (0 means it is a root dock, >0 a sub-dock).
 	gint iRefCount;
+	/// unique name of the dock
+	gchar *cDockName;
 	
 	//\_______________ Config parameters.
 	// position
@@ -283,24 +294,34 @@ struct _CairoDock {
 };
 
 
-/** Say if a Container is a Dock.
-* @param pContainer the container.
-* @return TRUE if the container is a Dock.
+/** Say if an object is a Dock.
+*@param obj the object.
+*@return TRUE if the object is a Dock.
 */
-#define CAIRO_DOCK_IS_DOCK(pContainer) (pContainer != NULL && ((CairoContainer*)pContainer)->iType == CAIRO_DOCK_TYPE_DOCK)
+#define CAIRO_DOCK_IS_DOCK(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myDocksMgr))
 
 /** Cast a Container into a Dock.
 * @param pDock the container to consider as a dock.
 * @return the dock.
 */
-#define CAIRO_DOCK(pDock) ((CairoDock *)pDock)
+#define CAIRO_DOCK(p) ((CairoDock *)p)
 
 
-CairoDock *cairo_dock_new_dock (void);
+/** Create a new root dock.
+*@param cDockName the name that identifies the dock
+*@return the new dock.
+*/
+CairoDock *gldi_dock_new (const gchar *cDockName);
 
-void cairo_dock_free_dock (CairoDock *pDock);
+/** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
+* @param cDockName the name that identifies the dock.
+* @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
+* @param pParentDock the parent dock.
+* @param pIconList a list of icons that will be loaded and inserted into the new dock.
+* @return the new dock.
+*/
+CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList);
 
-void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName);
 
 /** Insert an icon into a dock.
 * Do nothing if the icon already exists inside the dock.

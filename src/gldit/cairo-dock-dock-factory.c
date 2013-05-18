@@ -21,25 +21,23 @@
 #include <gtk/gtk.h>
 
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.bHideVisibleApplis
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-separator-manager.h"  // cairo_dock_insert_automatic_separator_in_dock
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_create_icon_from_desktop_file
 #include "cairo-dock-backends-manager.h"  // myBackendsParam.fSubDockSizeRatio
-#include "cairo-dock-X-utilities.h"  // cairo_dock_set_xicon_geometry
+#include "cairo-dock-windows-manager.h"  // gldi_window_set_thumbnail_area
 #include "cairo-dock-log.h"
 #include "cairo-dock-application-facility.h"  // cairo_dock_detach_appli
-#include "cairo-dock-dialog-manager.h"  // cairo_dock_replace_all_dialogs
+#include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-class-manager.h"   // cairo_dock_get_class_subdock
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-draw-opengl.h"  // for the redirected texture
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
-
 #include "cairo-dock-dock-factory.h"
 
 extern gchar *g_cCurrentLaunchersPath;
@@ -49,655 +47,25 @@ extern CairoDockHidingEffect *g_pHidingBackend;
 extern gboolean g_bUseOpenGL;
 
 
-static gboolean _cairo_dock_grow_up (CairoDock *pDock)
+CairoDock *gldi_dock_new (const gchar *cDockName)
 {
-	//g_print ("%s (%d ; %2f ; bInside:%d)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->container.bInside);
-	
-	pDock->iMagnitudeIndex += myBackendsParam.iGrowUpInterval;
-	if (pDock->iMagnitudeIndex > CAIRO_DOCK_NB_MAX_ITERATIONS)
-		pDock->iMagnitudeIndex = CAIRO_DOCK_NB_MAX_ITERATIONS;
-
-	if (pDock->fFoldingFactor != 0)
-	{
-		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
-		pDock->fFoldingFactor -= (double) iAnimationDeltaT / myBackendsParam.iUnfoldingDuration;
-		if (pDock->fFoldingFactor < 0)
-			pDock->fFoldingFactor = 0;
-	}
-	
-	gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
-	
-	Icon *pLastPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
-	Icon *pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
-	if (! pDock->bIsGrowingUp)
-		return FALSE;
-	
-	if (pLastPointedIcon != pPointedIcon && pDock->container.bInside)
-		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
-
-	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement et de depliage.
-	{
-		/// TODO: check doing this in update_dock_size directly...
-		/**if (pDock->bWMIconsNeedUpdate)
-		{
-			cairo_dock_trigger_set_WM_icons_geometry (pDock);
-			pDock->bWMIconsNeedUpdate = FALSE;
-		}*/
-		
-		cairo_dock_replace_all_dialogs ();
-		return FALSE;
-	}
-	else
-		return TRUE;
+	CairoDockAttr attr;
+	memset (&attr, 0, sizeof (CairoDockAttr));
+	attr.cDockName = cDockName;
+	return (CairoDock*)gldi_object_new (GLDI_MANAGER(&myDocksMgr), &attr);
 }
 
-static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
+CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList)
 {
-	//g_print ("%s (%d, %f, %f)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->fDecorationsOffsetX);
-	//\_________________ On fait decroitre la magnitude du dock.
-	pDock->iMagnitudeIndex -= myBackendsParam.iShrinkDownInterval;
-	if (pDock->iMagnitudeIndex < 0)
-		pDock->iMagnitudeIndex = 0;
-	
-	//\_________________ On replie le dock.
-	if (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)
-	{
-		int iAnimationDeltaT = cairo_dock_get_animation_delta_t (pDock);
-		pDock->fFoldingFactor += (double) iAnimationDeltaT / myBackendsParam.iUnfoldingDuration;
-		if (pDock->fFoldingFactor > 1)
-			pDock->fFoldingFactor = 1;
-	}
-	
-	//\_________________ On remet les decorations a l'equilibre.
-	pDock->fDecorationsOffsetX *= .8;
-	if (fabs (pDock->fDecorationsOffsetX) < 3)
-		pDock->fDecorationsOffsetX = 0.;
-	
-	//\_________________ On recupere la position de la souris manuellement (car a priori on est hors du dock).
-	gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));  // ce n'est pas le motion_notify qui va nous donner des coordonnees en dehors du dock, et donc le fait d'etre dedans va nous faire interrompre le shrink_down et re-grossir, du coup il faut le faire ici. L'inconvenient, c'est que quand on sort par les cotes, il n'y a soudain plus d'icone pointee, et donc le dock devient tout plat subitement au lieu de le faire doucement. Heureusement j'ai trouve une astuce. ^_^
-	
-	//\_________________ On recalcule les icones.
-	///if (iPrevMagnitudeIndex != 0)
-	{
-		cairo_dock_calculate_dock_icons (pDock);
-		if (! pDock->bIsShrinkingDown)
-			return FALSE;
-		
-		///cairo_dock_replace_all_dialogs ();
-	}
-
-	if (pDock->iMagnitudeIndex == 0 && (pDock->fFoldingFactor == 0 || pDock->fFoldingFactor == 1))  // on est arrive en bas.
-	{
-		//g_print ("equilibre atteint (%d)\n", pDock->container.bInside);
-		if (! pDock->container.bInside)  // on peut etre hors des icones sans etre hors de la fenetre.
-		{
-			//g_print ("rideau !\n");
-			
-			//\__________________ On repasse derriere si on etait devant.
-			if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow)
-				cairo_dock_pop_down (pDock);
-			
-			//\__________________ On se redimensionne en taille normale.
-			if (! pDock->bAutoHide && pDock->iRefCount == 0/** && ! pDock->bMenuVisible*/)  // fin de shrink sans auto-hide => taille normale.
-			{
-				//g_print ("taille normale (%x; %d)\n", pDock->pShapeBitmap , pDock->iInputState);
-				if (pDock->pShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_AT_REST)
-				{
-					//g_print ("+++ input shape at rest on end shrinking\n");
-					cairo_dock_set_input_shape_at_rest (pDock);
-					pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
-					///cairo_dock_replace_all_dialogs ();
-				}
-			}
-			
-			//\__________________ On se cache si sous-dock.
-			if (pDock->iRefCount > 0)
-			{
-				//g_print ("on cache ce sous-dock en sortant par lui\n");
-				gtk_widget_hide (pDock->container.pWidget);
-				cairo_dock_hide_parent_dock (pDock);
-			}
-			cairo_dock_hide_after_shortcut ();
-		}
-		else
-		{
-			cairo_dock_calculate_dock_icons (pDock);  // relance le grossissement si on est dedans.
-		}
-		if (!pDock->bIsGrowingUp)
-			cairo_dock_replace_all_dialogs ();
-		return (!pDock->bIsGrowingUp && (pDock->fDecorationsOffsetX != 0 || (pDock->fFoldingFactor != 0 && pDock->fFoldingFactor != 1)));
-	}
-	else
-	{
-		return (!pDock->bIsGrowingUp);
-	}
+	CairoDockAttr attr;
+	memset (&attr, 0, sizeof (CairoDockAttr));
+	attr.bSubDock = TRUE;
+	attr.cDockName = cDockName;
+	attr.cRendererName = cRendererName;
+	attr.pParentDock = pParentDock;
+	attr.pIconList = pIconList;
+	return (CairoDock*)gldi_object_new (GLDI_MANAGER(&myDocksMgr), &attr);
 }
-
-static gboolean _cairo_dock_hide (CairoDock *pDock)
-{
-	//g_print ("%s (%d, %.2f, %.2f)\n", __func__, pDock->iMagnitudeIndex, pDock->fHideOffset, pDock->fPostHideOffset);
-	
-	if (pDock->fHideOffset < 1)  // the hiding animation is running.
-	{
-		pDock->fHideOffset += 1./myBackendsParam.iHideNbSteps;
-		if (pDock->fHideOffset > .99)  // fin d'anim.
-		{
-			pDock->fHideOffset = 1;
-			
-			//g_print ("on arrete le cachage\n");
-			gboolean bVisibleIconsPresent = FALSE;
-			Icon *pIcon;
-			GList *ic;
-			for (ic = pDock->icons; ic != NULL; ic = ic->next)
-			{
-				pIcon = ic->data;
-				if (pIcon->fInsertRemoveFactor != 0)  // on accelere l'animation d'apparition/disparition.
-				{
-					if (pIcon->fInsertRemoveFactor > 0)
-						pIcon->fInsertRemoveFactor = 0.05;
-					else
-						pIcon->fInsertRemoveFactor = - 0.05;
-				}
-				
-				if (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible)
-					cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
-				else
-					bVisibleIconsPresent = TRUE;
-			}
-			
-			pDock->pRenderer->calculate_icons (pDock);
-			///pDock->fFoldingFactor = (myBackendsParam.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
-			cairo_dock_allow_entrance (pDock);
-			
-			cairo_dock_replace_all_dialogs ();
-			
-			if (bVisibleIconsPresent)  // il y'a des icones a montrer progressivement, on reste dans la boucle.
-			{
-				pDock->fPostHideOffset = 0.05;
-				return TRUE;
-			}
-			else
-			{
-				pDock->fPostHideOffset = 1;  // pour que les icones demandant l'attention plus tard soient visibles.
-				return FALSE;
-			}
-		}
-	}
-	else if (pDock->fPostHideOffset > 0 && pDock->fPostHideOffset < 1)  // the post-hiding animation is running.
-	{
-		pDock->fPostHideOffset += 1./myBackendsParam.iHideNbSteps;
-		if (pDock->fPostHideOffset > .99)
-		{
-			pDock->fPostHideOffset = 1.;
-			return FALSE;
-		}
-	}
-	else  // else no hiding animation is running.
-		return FALSE;
-	return TRUE;
-}
-
-static gboolean _cairo_dock_show (CairoDock *pDock)
-{
-	pDock->fHideOffset -= 1./myBackendsParam.iUnhideNbSteps;
-	if (pDock->fHideOffset < 0.01)
-	{
-		pDock->fHideOffset = 0;
-		cairo_dock_allow_entrance (pDock);
-		cairo_dock_replace_all_dialogs ();  // we need it here so that a modal dialog is replaced when the dock unhides (else it would stay behind).
-		return FALSE;
-	}
-	return TRUE;
-}
-
-static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
-{
-	gboolean bRecalculateIcons = FALSE;
-	GList* ic = pDock->icons, *next_ic;
-	Icon *pIcon;
-	while (ic != NULL)
-	{
-		pIcon = ic->data;
-		next_ic = ic->next;
-		if (pIcon->fInsertRemoveFactor == (gdouble)0.05)
-		{
-			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);
-			if (bIsAppli && pIcon->iLastCheckTime != -1)  // c'est une icone d'appli non vieille qui disparait, elle s'est probablement cachee => on la detache juste.
-			{
-				cd_message ("cette (%s) appli est toujours valide, on la detache juste", pIcon->cName);
-				pIcon->fInsertRemoveFactor = 0.;  // on le fait avant le reload, sinon l'icone n'est pas rechargee.
-				if (!pIcon->bIsHidden && myTaskbarParam.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
-					cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
-				pDock = cairo_dock_detach_appli (pIcon);
-				if (pDock == NULL)  // the dock has been destroyed (empty class sub-dock).
-				{
-					cairo_dock_free_icon (pIcon);
-					return FALSE;
-				}
-			}
-			else
-			{
-				cd_message (" - %s va etre supprimee", pIcon->cName);
-				cairo_dock_remove_icon_from_dock (pDock, pIcon);  // enleve le separateur automatique avec; supprime le .desktop et le sous-dock des lanceurs; stoppe les applets; marque le theme.
-				
-				if (pIcon->cClass != NULL && pDock == cairo_dock_get_class_subdock (pIcon->cClass))  // appli icon in its class sub-dock => destroy the class sub-dock if it becomes empty (we don't want an empty sub-dock).
-				{
-					gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pDock, pIcon->cClass);
-					if (bEmptyClassSubDock)
-					{
-						cairo_dock_free_icon (pIcon);
-						return FALSE;
-					}
-				}
-				
-				cairo_dock_free_icon (pIcon);
-			}
-		}
-		else if (pIcon->fInsertRemoveFactor == (gdouble)-0.05)
-		{
-			pIcon->fInsertRemoveFactor = 0;  // cela n'arrete pas l'animation, qui peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
-			bRecalculateIcons = TRUE;
-		}
-		else if (pIcon->fInsertRemoveFactor != 0)
-		{
-			bRecalculateIcons = TRUE;
-		}
-		ic = next_ic;
-	}
-	
-	if (bRecalculateIcons)
-		cairo_dock_calculate_dock_icons (pDock);
-	return TRUE;
-}
-
-static gboolean _cairo_dock_dock_animation_loop (CairoContainer *pContainer)
-{
-	CairoDock *pDock = CAIRO_DOCK (pContainer);
-	gboolean bContinue = FALSE;
-	gboolean bUpdateSlowAnimation = FALSE;
-	pContainer->iAnimationStep ++;
-	if (pContainer->iAnimationStep * pContainer->iAnimationDeltaT >= CAIRO_DOCK_MIN_SLOW_DELTA_T)
-	{
-		bUpdateSlowAnimation = TRUE;
-		pContainer->iAnimationStep = 0;
-		pContainer->bKeepSlowAnimation = FALSE;
-	}
-	
-	if (pDock->bIsShrinkingDown)
-	{
-		pDock->bIsShrinkingDown = _cairo_dock_shrink_down (pDock);
-		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		bContinue |= pDock->bIsShrinkingDown;
-	}
-	if (pDock->bIsGrowingUp)
-	{
-		pDock->bIsGrowingUp = _cairo_dock_grow_up (pDock);
-		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		bContinue |= pDock->bIsGrowingUp;
-	}
-	if (pDock->bIsHiding)
-	{
-		//g_print ("le dock se cache\n");
-		pDock->bIsHiding = _cairo_dock_hide (pDock);
-		gtk_widget_queue_draw (pContainer->pWidget);  // on n'utilise pas cairo_dock_redraw_container, sinon a la derniere iteration, le dock etant cache, la fonction ne le redessine pas.
-		bContinue |= pDock->bIsHiding;
-	}
-	if (pDock->bIsShowing)
-	{
-		pDock->bIsShowing = _cairo_dock_show (pDock);
-		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-		bContinue |= pDock->bIsShowing;
-	}
-	//g_print (" => %d, %d\n", pDock->bIsShrinkingDown, pDock->bIsGrowingUp);
-	
-	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
-	gboolean bIconIsAnimating;
-	gboolean bNoMoreDemandingAttention = FALSE;
-	Icon *icon;
-	GList *ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		
-		icon->fDeltaYReflection = 0;
-		if (myIconsParam.fAlphaAtRest != 1)
-			icon->fAlpha = fDockMagnitude + myIconsParam.fAlphaAtRest * (1 - fDockMagnitude);
-		
-		bIconIsAnimating = FALSE;
-		if (bUpdateSlowAnimation)
-		{
-			cairo_dock_notify_on_object (icon, NOTIFICATION_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
-			pContainer->bKeepSlowAnimation |= bIconIsAnimating;
-		}
-		cairo_dock_notify_on_object (icon, NOTIFICATION_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
-		
-		if ((icon->bIsDemandingAttention || icon->bAlwaysVisible) && cairo_dock_is_hidden (pDock))  // animation d'une icone demandant l'attention dans un dock cache => on force le dessin qui normalement ne se fait pas.
-		{
-			gtk_widget_queue_draw (pContainer->pWidget);
-		}
-		
-		bContinue |= bIconIsAnimating;
-		if (! bIconIsAnimating)
-		{
-			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
-			if (icon->bIsDemandingAttention)
-			{
-				icon->bIsDemandingAttention = FALSE;  // the attention animation has finished by itself after the time it was planned for.
-				bNoMoreDemandingAttention = TRUE;
-			}
-		}
-	}
-	bContinue |= pContainer->bKeepSlowAnimation;
-	
-	if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && bNoMoreDemandingAttention && ! pDock->bIsBelow && ! pContainer->bInside)
-	{
-		//g_print ("plus de raison d'etre devant\n");
-		cairo_dock_pop_down (pDock);
-	}
-	
-	if (! _cairo_dock_handle_inserting_removing_icons (pDock))
-	{
-		cd_debug ("ce dock n'a plus de raison d'etre");
-		return FALSE;
-	}
-	
-	if (bUpdateSlowAnimation)
-	{
-		cairo_dock_notify_on_object (pDock, NOTIFICATION_UPDATE_SLOW, pDock, &pContainer->bKeepSlowAnimation);
-	}
-	cairo_dock_notify_on_object (pDock, NOTIFICATION_UPDATE, pDock, &bContinue);
-	
-	if (! bContinue && ! pContainer->bKeepSlowAnimation)
-	{
-		pContainer->iSidGLAnimation = 0;
-		return FALSE;
-	}
-	else
-		return TRUE;
-}
-
-static gboolean _on_dock_destroyed (GtkWidget *menu, CairoContainer *pContainer);
-static void _on_menu_deactivated (G_GNUC_UNUSED GtkMenuShell *menu, CairoDock *pDock)
-{
-	//g_print ("\n+++ %s ()\n\n", __func__);
-	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
-	if (pDock->bHasModalWindow)  // don't send the signal if the menu was already deactivated.
-	{
-		pDock->bHasModalWindow = FALSE;
-		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
-	}
-}
-static void _on_menu_destroyed (GtkWidget *menu, CairoDock *pDock)
-{
-	//g_print ("\n+++ %s ()\n\n", __func__);
-	cairo_dock_remove_notification_func_on_object (pDock,
-		NOTIFICATION_DESTROY,
-		(CairoDockNotificationFunc) _on_dock_destroyed,
-		menu);
-}
-static gboolean _on_dock_destroyed (GtkWidget *menu, CairoContainer *pContainer)
-{
-	//g_print ("\n+++ %s ()\n\n", __func__);
-	g_signal_handlers_disconnect_matched
-		(menu,
-		G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-		0,
-		0,
-		NULL,
-		_on_menu_deactivated,
-		pContainer);
-	g_signal_handlers_disconnect_matched
-		(menu,
-		G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-		0,
-		0,
-		NULL,
-		_on_menu_destroyed,
-		pContainer);
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
-}
-static void _setup_menu (CairoContainer *pContainer, G_GNUC_UNUSED Icon *pIcon, GtkWidget *pMenu)
-{
-	// keep the dock visible
-	CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
-	
-	// connect signals
-	if (g_signal_handler_find (pMenu,
-		G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-		0,
-		0,
-		NULL,
-		_on_menu_deactivated,
-		pContainer) == 0)  // on evite de connecter 2 fois ce signal, donc la fonction est appelable plusieurs fois sur un meme menu.
-	{
-		// when the menu is deactivated, hide the dock back if necessary.
-		g_signal_connect (G_OBJECT (pMenu),
-			"deactivate",
-			G_CALLBACK (_on_menu_deactivated),
-			pContainer);
-		// when the menu is destroyed, remove the 'destroyed' notification on the dock.
-		g_signal_connect (G_OBJECT (pMenu),
-			"destroy",
-			G_CALLBACK (_on_menu_destroyed),
-			pContainer);
-		// when the dock is destroyed, remove the 2 signals on the menu.
-		cairo_dock_register_notification_on_object (pContainer,
-			NOTIFICATION_DESTROY,
-			(CairoDockNotificationFunc) _on_dock_destroyed,
-			CAIRO_DOCK_RUN_AFTER, pMenu);  // the menu can stay alive even if the container disappear, so we need to ensure we won't call the callbacks then.
-	}
-}
-
-
-CairoDock *cairo_dock_new_dock (void)
-{
-	//\__________________ create a dock.
-	CairoDock * pDock = gldi_container_new (CairoDock, &myDocksMgr, CAIRO_DOCK_TYPE_DOCK);
-	
-	//\__________________ initialize its parameters (it's a root dock by default)
-	pDock->container.iface.animation_loop = _cairo_dock_dock_animation_loop;
-	pDock->container.iface.setup_menu = _setup_menu;
-	
-	pDock->iAvoidingMouseIconType = -1;
-	pDock->fFlatDockWidth = - myIconsParam.iIconGap;
-	pDock->fMagnitudeMax = 1.;
-	pDock->fPostHideOffset = 1.;
-	pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;  // le dock est cree au repos. La zone d'input sera mis en place lors du configure.
-	
-	//\__________________ set up its window
-	GtkWidget *pWindow = pDock->container.pWidget;
-	gtk_container_set_border_width (GTK_CONTAINER (pWindow), 0);
-	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
-	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
-	gtk_window_set_title (GTK_WINDOW (pWindow), "cairo-dock");
-	
-	cairo_dock_register_notification_on_object (pDock,
-		NOTIFICATION_RENDER,
-		(CairoDockNotificationFunc) cairo_dock_render_dock_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	
-	//\__________________ connect to events.
-	gtk_widget_add_events (pWindow,
-		GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK |
-		GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-		GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
-	
-	g_signal_connect (G_OBJECT (pWindow),
-		#if (GTK_MAJOR_VERSION < 3)
-		"expose-event",
-		#else
-		"draw",
-		#endif
-		G_CALLBACK (cairo_dock_on_expose),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"configure-event",
-		G_CALLBACK (cairo_dock_on_configure),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"key-release-event",
-		G_CALLBACK (cairo_dock_on_key_release),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"key-press-event",
-		G_CALLBACK (cairo_dock_on_key_release),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"button-press-event",
-		G_CALLBACK (cairo_dock_on_button_press),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"button-release-event",
-		G_CALLBACK (cairo_dock_on_button_press),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"scroll-event",
-		G_CALLBACK (cairo_dock_on_scroll),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"motion-notify-event",
-		G_CALLBACK (cairo_dock_on_motion_notify),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"enter-notify-event",
-		G_CALLBACK (cairo_dock_on_enter_notify),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"leave-notify-event",
-		G_CALLBACK (cairo_dock_on_leave_notify),
-		pDock);
-	gldi_container_enable_drop (CAIRO_CONTAINER (pDock),
-		G_CALLBACK (cairo_dock_on_drag_data_received),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"drag-motion",
-		G_CALLBACK (cairo_dock_on_drag_motion),
-		pDock);
-	g_signal_connect (G_OBJECT (pWindow),
-		"drag-leave",
-		G_CALLBACK (cairo_dock_on_drag_leave),
-		pDock);
-	/*g_signal_connect (G_OBJECT (pWindow),
-		"drag-drop",
-		G_CALLBACK (cairo_dock_on_drag_drop),
-		pDock);*/
-
-	gtk_window_get_size (GTK_WINDOW (pWindow), &pDock->container.iWidth, &pDock->container.iHeight);  // ca n'est que la taille initiale allouee par GTK.
-	gtk_widget_show_all (pWindow);
-	#if (GTK_MAJOR_VERSION < 3)
-	gdk_window_set_back_pixmap (pWindow->window, NULL, FALSE);
-	#else
-	gdk_window_set_background_pattern (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), NULL);
-	#endif
-	return pDock;
-}
-
-void cairo_dock_free_dock (CairoDock *pDock)
-{
-	if (pDock->iSidUnhideDelayed != 0)
-		g_source_remove (pDock->iSidUnhideDelayed);
-	if (pDock->iSidHideBack != 0)
-		g_source_remove (pDock->iSidHideBack);
-	if (pDock->iSidMoveResize != 0)
-		g_source_remove (pDock->iSidMoveResize);
-	if (pDock->iSidLeaveDemand != 0)
-		g_source_remove (pDock->iSidLeaveDemand);
-	if (pDock->iSidUpdateWMIcons != 0)
-		g_source_remove (pDock->iSidUpdateWMIcons);
-	if (pDock->iSidLoadBg != 0)
-		g_source_remove (pDock->iSidLoadBg);
-	if (pDock->iSidDestroyEmptyDock != 0)
-		g_source_remove (pDock->iSidDestroyEmptyDock);
-	if (pDock->iSidTestMouseOutside != 0)
-		g_source_remove (pDock->iSidTestMouseOutside);
-	if (pDock->iSidUpdateDockSize != 0)
-		g_source_remove (pDock->iSidUpdateDockSize);
-	
-	GList *icons = pDock->icons;
-	pDock->icons = NULL;  // remove the icons first, to avoid any use of 'icons' in the 'destroy' callbacks.
-	g_list_foreach (icons, (GFunc) cairo_dock_free_icon, NULL);
-	g_list_free (icons);
-	
-	if (pDock->pShapeBitmap != NULL)
-		gldi_shape_destroy (pDock->pShapeBitmap);
-	
-	if (pDock->pHiddenShapeBitmap != NULL)
-		gldi_shape_destroy (pDock->pHiddenShapeBitmap);
-	
-	if (pDock->pActiveShapeBitmap != NULL)
-		gldi_shape_destroy (pDock->pActiveShapeBitmap);
-	
-	if (pDock->pRenderer != NULL && pDock->pRenderer->free_data != NULL)
-	{
-		pDock->pRenderer->free_data (pDock);
-	}
-	
-	g_free (pDock->cRendererName);
-	
-	g_free (pDock->cBgImagePath);
-	cairo_dock_unload_image_buffer (&pDock->backgroundBuffer);
-	
-	if (pDock->iFboId != 0)
-		glDeleteFramebuffersEXT (1, &pDock->iFboId);
-	if (pDock->iRedirectedTexture != 0)
-		_cairo_dock_delete_texture (pDock->iRedirectedTexture);
-	
-	cairo_dock_finish_container (CAIRO_CONTAINER (pDock));  // -> NOTIFICATION_DESTROY
-	
-	g_free (pDock);
-}
-
-void cairo_dock_make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName)
-{
-	//\__________________ set sub-dock flag
-	pDock->iRefCount = 1;
-	gtk_window_set_title (GTK_WINDOW (pDock->container.pWidget), "cairo-dock-sub");
-	
-	//\__________________ set the orientation relatively to the parent dock
-	pDock->container.bIsHorizontal = pParentDock->container.bIsHorizontal;
-	pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
-	pDock->iNumScreen = pParentDock->iNumScreen;
-	
-	//\__________________ set a renderer
-	cairo_dock_set_renderer (pDock, cRendererName);
-	
-	//\__________________ update the icons size and the ratio.
-	double fPrevRatio = pDock->container.fRatio;
-	pDock->container.fRatio = MIN (pDock->container.fRatio, myBackendsParam.fSubDockSizeRatio);
-	pDock->iIconSize = pParentDock->iIconSize;
-	
-	Icon *icon;
-	GList *ic;
-	pDock->fFlatDockWidth = - myIconsParam.iIconGap;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		cairo_dock_icon_set_requested_size (icon, 0, 0);  // no request
-		icon->fWidth = icon->fHeight = 0;  /// useful ?...
-		cairo_dock_set_icon_size_in_dock (pDock, icon);
-		pDock->fFlatDockWidth += icon->fWidth + myIconsParam.iIconGap;
-	}
-	pDock->iMaxIconHeight *= pDock->container.fRatio / fPrevRatio;
-	
-	//\__________________ remove any input shape
-	if (pDock->pShapeBitmap != NULL)
-	{
-		gldi_shape_destroy (pDock->pShapeBitmap);
-		pDock->pShapeBitmap = NULL;
-		if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
-		{
-			cairo_dock_set_input_shape_active (pDock);
-			pDock->iInputState = CAIRO_DOCK_INPUT_ACTIVE;
-		}
-	}
-	
-	//\__________________ hide the dock
-	pDock->bAutoHide = FALSE;
-	gtk_widget_hide (pDock->container.pWidget);
-	
-	///cairo_dock_update_dock_size (pDock);
-}
-
 
 void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc)
 {
@@ -802,22 +170,19 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 		cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
 	
 	//\______________ Notify everybody.
-	cairo_dock_notify_on_object (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);
+	gldi_object_notify (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);
 }
 
 
 static gboolean _destroy_empty_dock (CairoDock *pDock)
 {
-	const gchar *cDockName = cairo_dock_search_dock_name (pDock);  // safe meme si le dock n'existe plus.
-	g_return_val_if_fail (cDockName != NULL, FALSE);  // si NULL, cela signifie que le dock n'existe plus, donc on n'y touche pas. Ce cas ne devrait jamais arriver, c'est de la pure parano.
-	
-	if (pDock->bIconIsFlyingAway)
+	if (pDock->bIconIsFlyingAway)  // keep the dock alive for now, in case the user re-inserts the flying icon in it.
 		return TRUE;
 	pDock->iSidDestroyEmptyDock = 0;
 	if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // le dock est toujours a detruire.
 	{
-		cd_debug ("The dock '%s' is empty. No icon, no dock.", cDockName);
-		cairo_dock_destroy_dock (pDock, cDockName);
+		cd_debug ("The dock '%s' is empty. No icon, no dock.", pDock->cDockName);
+		gldi_object_unref (GLDI_OBJECT(pDock));
 	}
 	return FALSE;
 }
@@ -855,10 +220,10 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 	cairo_dock_stop_icon_animation (icon);
 	
 	//\___________________ On desactive sa miniature.
-	if (icon->Xid != 0)
+	if (icon->pAppli != NULL)
 	{
 		//cd_debug ("on desactive la miniature de %s (Xid : %lx)", icon->cName, icon->Xid);
-		cairo_dock_set_xicon_geometry (icon->Xid, 0, 0, 0, 0);
+		gldi_window_set_thumbnail_area (icon->pAppli, 0, 0, 0, 0);
 	}
 	
 	//\___________________ On l'enleve de la liste.
@@ -927,7 +292,7 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 	
 	//\___________________ Notify everybody.
 	icon->fInsertRemoveFactor = 0.;
-	cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, icon, pDock);
+	gldi_object_notify (pDock, NOTIFICATION_REMOVE_ICON, icon, pDock);
 	
 	//\___________________ unset the container, now that it's completely detached from it.
 	g_free (icon->cParentDockName);
@@ -936,6 +301,7 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 	
 	return TRUE;
 }
+
 void cairo_dock_remove_icon_from_dock_full (CairoDock *pDock, Icon *icon, gboolean bCheckUnusedSeparator)
 {
 	g_return_if_fail (icon != NULL);
@@ -1082,7 +448,7 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 			{
 				icon->pModuleInstance->pContainer = CAIRO_CONTAINER (pReceivingDock);  // astuce pour ne pas avoir a recharger le fichier de conf ^_^
 				icon->pModuleInstance->pDock = pReceivingDock;
-				cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
+				gldi_module_instance_reload (icon->pModuleInstance, FALSE);
 			}
 			else if (cairo_dock_get_icon_data_renderer (icon) != NULL)
 				cairo_dock_reload_data_renderer_on_icon (icon, CAIRO_CONTAINER (pReceivingDock));
@@ -1108,7 +474,7 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 		
 		if (CAIRO_DOCK_IS_APPLET (icon))  // for an applet, we need to let the module know that the size or the theme has changed, so that it can reload its private buffers.
 		{
-			cairo_dock_reload_module_instance (icon->pModuleInstance, FALSE);
+			gldi_module_instance_reload (icon->pModuleInstance, FALSE);
 		}
 		else
 		{

@@ -27,11 +27,10 @@
 #include "cairo-dock-X-utilities.h" // cairo_dock_set_strut_partial
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-dialog-manager.h"  // cairo_dock_replace_all_dialogs
-#include "cairo-dock-notifications.h"
+#include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-animations.h"
-#include "cairo-dock-X-manager.h"  // cairo_dock_get_screen_*
+#include "cairo-dock-desktop-manager.h"  // gldi_desktop_get*
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
 #include "cairo-dock-opengl.h"  // gldi_glx_begin_draw_container_full
 
@@ -1053,9 +1052,9 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 		pSubDock->fFoldingFactor = 0;
 		///gtk_widget_queue_draw (pSubDock->container.pWidget);
 	}
-	cairo_dock_notify_on_object (pPointedIcon, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
+	gldi_object_notify (pPointedIcon, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
 	
-	cairo_dock_replace_all_dialogs ();
+	gldi_dialogs_replace_all ();
 }
 
 

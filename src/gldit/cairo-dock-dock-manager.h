@@ -114,8 +114,6 @@ struct _CairoDocksParam {
 // manager
 struct _CairoDocksManager {
 	GldiManager mgr;
-	CairoDock *(*cairo_dock_create_dock) (const gchar *cDockName);
-	void (*destroy_dock) (CairoDock *pDock, const gchar *cDockName);
 	} ;
 
 /// signals
@@ -124,7 +122,6 @@ typedef enum {
 	NOTIFICATION_ENTER_DOCK = NB_NOTIFICATIONS_CONTAINER,
 	/// notification called when the mouse leave a dock.
 	NOTIFICATION_LEAVE_DOCK,
-	NOTIFICATION_STOP_DOCK_DEPRECATED,
 	/// notification called when an icon has just been inserted into a dock. data : {Icon, CairoDock}
 	NOTIFICATION_INSERT_ICON,
 	/// notification called when an icon is going to be removed from a dock. data : {Icon, CairoDock}
@@ -140,29 +137,9 @@ void cairo_dock_force_docks_above (void);
 
 void cairo_dock_reset_docks_table (void);
 
-/** Create a new root dock.
-* @param cDockName name (= ID) of the dock. If the name is already used, the corresponding dock is returned.
-* @return the dock, to destroy with #cairo_dock_destroy_dock
-*/
-CairoDock *cairo_dock_create_dock (const gchar *cDockName);
 
-/** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
-* @param cDockName desired name for the new dock.
-* @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
-* @param pParentDock the parent dock.
-* @param pIconList a list of icons that will be loaded and inserted into the new dock.
-* @return the newly allocated dock.
-*/
-CairoDock *cairo_dock_create_subdock (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList);
+void gldi_dock_make_subdock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName);
 
-void cairo_dock_main_dock_to_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName);
-
-
-/** Destroy a dock and its icons.
-* @param pDock the dock.
-* @param cDockName name for the dock.
-*/
-void cairo_dock_destroy_dock (CairoDock *pDock, const gchar *cDockName);
 
 
 /** Search the name of a Dock. It does a linear search in the table of Docks.
@@ -248,15 +225,14 @@ int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s, double *fMaxScal
 GldiIconSizeEnum cairo_dock_convert_icon_size_to_enum (int iIconSize);
 
 /** Reload the config of a root dock and update it accordingly.
-*@param cDockName name of the dock.
 *@param pDock the dock.
 */
-void cairo_dock_reload_one_root_dock (const gchar *cDockName, CairoDock *pDock);
+void gldi_dock_reload (CairoDock *pDock);
 
-/** Delete the config of a root dock. Doesn't delete the dock (use \ref cairo_dock_destroy_dock for that), but if it was empty, it won't be created the next time you restart Cairo-Dock.
+/* Delete the config of a root dock. Doesn't delete the dock (use \ref cairo_dock_destroy_dock for that), but if it was empty, it won't be created the next time you restart Cairo-Dock.
 *@param cDockName name of the dock.
 */
-void cairo_dock_remove_root_dock_config (const gchar *cDockName);
+//void cairo_dock_remove_root_dock_config (const gchar *cDockName);
 
 /** Add a config file for a root dock. Does not create the dock (use \ref cairo_dock_create_dock for that). If the config file already exists, it is overwritten (use \ref cairo_dock_search_dock_from_name to check if the dock already exists).
 *@param cDockName name of the dock.
