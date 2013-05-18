@@ -32,6 +32,10 @@
 #endif
 
 #include "cairo-dock-log.h"
+#include "cairo-dock-surface-factory.h"  // cairo_dock_create_surface_from_xicon_buffer
+#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-opengl.h"
+#include "cairo-dock-class-manager.h"  // cairo_dock_remove_version_from_string
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-X-utilities.h"
 
@@ -41,6 +45,8 @@
 #include <gdk/gdkx.h>
 #endif
 
+extern gboolean g_bEasterEggs;
+extern CairoDockGLConfig g_openglConfig;
 
 static gboolean s_bUseXComposite = TRUE;
 static gboolean s_bUseXTest = TRUE;
@@ -53,7 +59,7 @@ static Display *s_XDisplay = NULL;
 // Atoms pour le bureau
 static Atom s_aNetWmWindowType;
 static Atom s_aNetWmWindowTypeNormal;
-static Atom s_aNetWmWindowTypeUtility;
+static Atom s_aNetWmWindowTypeDialog;
 static Atom s_aNetWmWindowTypeDock;
 static Atom s_aNetWmIconGeometry;
 static Atom s_aNetCurrentDesktop;
@@ -82,12 +88,24 @@ static Atom s_aNetWMActionMaximizeHorz;
 static Atom s_aNetWMActionMaximizeVert;
 static Atom s_aNetWMActionClose;
 static Atom s_aNetWmDesktop;
+static Atom s_aNetWmIcon;
 static Atom s_aNetWmName;
 static Atom s_aWmName;
 static Atom s_aUtf8String;
 static Atom s_aString;
 
 static GtkAllocation *_get_screens_geometry (int *pNbScreens);
+
+typedef struct {
+    unsigned long flags;
+    unsigned long functions;
+    unsigned long decorations;
+    long input_mode;
+    unsigned long status;
+} MotifWmHints, MwmHints;
+#define MWM_HINTS_DECORATIONS   (1L << 1)
+#define PROP_MOTIF_WM_HINTS_ELEMENTS 5
+#define PROP_MWM_HINTS_ELEMENTS PROP_MOTIF_WM_HINTS_ELEMENTS
 
 
 static int _cairo_dock_xerror_handler (G_GNUC_UNUSED Display * pDisplay, XErrorEvent *pXError)
@@ -108,7 +126,7 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	
 	s_aNetWmWindowType		= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
 	s_aNetWmWindowTypeNormal	= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
-	s_aNetWmWindowTypeUtility	= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_UTILITY", False);
+	s_aNetWmWindowTypeDialog	= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DIALOG", False);
 	s_aNetWmWindowTypeDock		= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DOCK", False);
 	s_aNetWmIconGeometry		= XInternAtom (s_XDisplay, "_NET_WM_ICON_GEOMETRY", False);
 	s_aNetCurrentDesktop		= XInternAtom (s_XDisplay, "_NET_CURRENT_DESKTOP", False);
@@ -137,6 +155,7 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	s_aNetWMActionMaximizeVert	= XInternAtom (s_XDisplay, "_NET_WM_ACTION_MAXIMIZE_VERT", False);
 	s_aNetWMActionClose		= XInternAtom (s_XDisplay, "_NET_WM_ACTION_CLOSE", False);
 	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
+	s_aNetWmIcon 			= XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
 	s_aNetWmName 			= XInternAtom (s_XDisplay, "_NET_WM_NAME", False);
 	s_aWmName 				= XInternAtom (s_XDisplay, "WM_NAME", False);
 	s_aUtf8String 			= XInternAtom (s_XDisplay, "UTF8_STRING", False);
@@ -878,7 +897,7 @@ void cairo_dock_set_xwindow_mask (Window Xid, long iMask)
 	XSelectInput (s_XDisplay, Xid, iMask);  // c'est le 'event_mask' d'un XSetWindowAttributes.
 }
 
-void cairo_dock_set_xwindow_type_hint (int Xid, const gchar *cWindowTypeName)
+/*void cairo_dock_set_xwindow_type_hint (int Xid, const gchar *cWindowTypeName)
 {
 	g_return_if_fail (Xid > 0);
 	
@@ -890,7 +909,7 @@ void cairo_dock_set_xwindow_type_hint (int Xid, const gchar *cWindowTypeName)
 		s_aNetWmWindowType,
 		XA_ATOM, 32, PropModeReplace,
 		(guchar *) &iWindowType, 1);
-}
+}*/
 
 
 void cairo_dock_set_xicon_geometry (int Xid, int iX, int iY, int iWidth, int iHeight)
@@ -1101,6 +1120,19 @@ void cairo_dock_move_xwindow_to_nth_desktop (Window Xid, int iDesktopNumber, int
 	cairo_dock_move_xwindow_to_absolute_position (Xid, iDesktopNumber, iDesktopViewportX + iRelativePositionX, iDesktopViewportY + iRelativePositionY);
 }
 
+void cairo_dock_set_xwindow_border (Window Xid, gboolean bWithBorder)
+{
+	MwmHints mwmhints;
+	Atom prop;
+	memset(&mwmhints, 0, sizeof(mwmhints));
+	prop = XInternAtom(s_XDisplay, "_MOTIF_WM_HINTS", False);
+	mwmhints.flags = MWM_HINTS_DECORATIONS;
+	mwmhints.decorations = bWithBorder;
+	XChangeProperty (s_XDisplay, Xid, prop,
+		prop, 32, PropModeReplace,
+		(unsigned char *) &mwmhints,
+		PROP_MWM_HINTS_ELEMENTS);
+}
 
 
 gulong cairo_dock_get_xwindow_timestamp (Window Xid)
@@ -1136,31 +1168,6 @@ gchar *cairo_dock_get_xwindow_name (Window Xid, gboolean bSearchWmName)
 		XFree (pNameBuffer);
 	}
 	return cName;
-}
-
-gboolean cairo_dock_remove_version_from_string (gchar *cString)
-{
-	if (cString == NULL)
-		return FALSE;
-	int n = strlen (cString);
-	gchar *str = cString + n - 1;
-	do
-	{
-		if (g_ascii_isdigit(*str) || *str == '.')
-		{
-			str --;
-			continue;
-		}
-		if (*str == '-' || *str == ' ')  // 'Glade-2', 'OpenOffice 3.1'
-		{
-			*str = '\0';
-			return TRUE;
-		}
-		else
-			return FALSE;
-	}
-	while (str != cString);
-	return FALSE;
 }
 
 gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
@@ -1411,34 +1418,6 @@ void cairo_dock_xwindow_can_minimize_maximized_close (Window Xid, gboolean *bCan
 	XFree (pXStateBuffer);
 }
 
-static inline gboolean _cairo_dock_window_has_type (int Xid, Atom iType)
-{
-	g_return_val_if_fail (Xid > 0, FALSE);
-	
-	gboolean bIsType;
-	Atom aReturnedType = 0;
-	int aReturnedFormat = 0;
-	unsigned long iLeftBytes, iBufferNbElements;
-	gulong *pTypeBuffer = NULL;
-	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmWindowType, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pTypeBuffer);
-	if (iBufferNbElements != 0)
-	{
-		bIsType = (*pTypeBuffer == iType);
-		XFree (pTypeBuffer);
-	}
-	else
-		bIsType = FALSE;
-	return bIsType;
-}
-gboolean cairo_dock_window_is_utility (int Xid)
-{
-	return _cairo_dock_window_has_type (Xid, s_aNetWmWindowTypeUtility);
-}
-
-gboolean cairo_dock_window_is_dock (int Xid)
-{
-	return _cairo_dock_window_has_type (Xid, s_aNetWmWindowTypeDock);
-}
 
 int cairo_dock_get_xwindow_desktop (Window Xid)
 {
@@ -1460,21 +1439,26 @@ int cairo_dock_get_xwindow_desktop (Window Xid)
 void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLocalPositionY, int *iWidthExtent, int *iHeightExtent)  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel. // sous KDE, x et y sont toujours nuls ! (meme avec XGetWindowAttributes).
 {
 	// get the geometry from X.
-	Window root_return;
-	int x_return=1, y_return=1;
-	unsigned int width_return, height_return, border_width_return, depth_return;
-	XGetGeometry (s_XDisplay, Xid,
-		&root_return,
-		&x_return, &y_return,
-		&width_return, &height_return,
-		&border_width_return, &depth_return);  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel.
+	unsigned int width_return=0, height_return=0;
+	if (*iWidthExtent == 0 || *iHeightExtent == 0)  // if the size is already set, don't update it.
+	{
+		Window root_return;
+		int x_return=1, y_return=1;
+		unsigned int border_width_return, depth_return;
+		XGetGeometry (s_XDisplay, Xid,
+			&root_return,
+			&x_return, &y_return,
+			&width_return, &height_return,
+			&border_width_return, &depth_return);  // renvoie les coordonnees du coin haut gauche dans le referentiel du viewport actuel.
+		*iWidthExtent = width_return;
+		*iHeightExtent = height_return;
+	}
 	
 	// make another round trip to the server to query the coordinates of the window relatively to the root window (which basically gives us the (x,y) of the window); we need to do this to workaround a strange X bug: x_return and y_return are wrong (0,0, modulo the borders) (on Ubuntu 11.10 + Compiz 0.9/Metacity, not on Debian 6 + Compiz 0.8).
+	Window root = DefaultRootWindow (s_XDisplay);
 	int dest_x_return, dest_y_return;
 	Window child_return;
-	XTranslateCoordinates (s_XDisplay, Xid, root_return, 0, 0, &dest_x_return, &dest_y_return, &child_return);  // translate into the coordinate space of the root window. we need to do this, because (x_return,;y_return) is always (0;0)
-	//g_print (" %d;%d %dx%d\n", x_return, y_return, width_return, height_return);
-	//g_print (" -> %d;%d\n", dest_x_return, dest_y_return);
+	XTranslateCoordinates (s_XDisplay, Xid, root, 0, 0, &dest_x_return, &dest_y_return, &child_return);  // translate into the coordinate space of the root window. we need to do this, because (x_return,;y_return) is always (0;0)
 	
 	// take into account the window borders
 	int left=0, right=0, top=0, bottom=0;
@@ -1492,13 +1476,13 @@ void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLo
 	
 	*iLocalPositionX = dest_x_return - left;
 	*iLocalPositionY = dest_y_return - top;
-	*iWidthExtent = width_return + left + right;  // unfortunately border_width_return is always 0, so we can't use it here :-/
-	*iHeightExtent = height_return + top + bottom;
+	*iWidthExtent += left + right;
+	*iHeightExtent += top + bottom;
 }
 
 void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY)
 {
-	int iLocalPositionX, iLocalPositionY, iWidthExtent, iHeightExtent;
+	int iLocalPositionX, iLocalPositionY, iWidthExtent=1, iHeightExtent=1;  // we don't care wbout the size
 	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
 	
 	while (iLocalPositionX < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
@@ -1541,3 +1525,415 @@ Window cairo_dock_get_active_xwindow (void)
 	XFree (pXBuffer);
 	return xActiveWindow;
 }
+
+
+
+cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, int iWidth, int iHeight)
+{
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements = 0;
+	gulong *pXIconBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmIcon, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pXIconBuffer);
+
+	if (iBufferNbElements > 2)
+	{
+		cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_xicon_buffer (pXIconBuffer,
+			iBufferNbElements,
+			iWidth,
+			iHeight);
+		XFree (pXIconBuffer);
+		return pNewSurface;
+	}
+	else  // sinon on tente avec l'icone eventuellement presente dans les WMHints.
+	{
+		XWMHints *pWMHints = XGetWMHints (s_XDisplay, Xid);
+		if (pWMHints == NULL)
+		{
+			cd_debug ("  aucun WMHints");
+			return NULL;
+		}
+		//\__________________ On recupere les donnees dans un  pixbuf.
+		GdkPixbuf *pIconPixbuf = NULL;
+		if (pWMHints->flags & IconWindowHint)
+		{
+			Window XIconID = pWMHints->icon_window;
+			cd_debug ("  pas de _NET_WM_ICON, mais une fenetre (ID:%d)", XIconID);
+			Pixmap iPixmap = cairo_dock_get_window_background_pixmap (XIconID);
+			pIconPixbuf = cairo_dock_get_pixbuf_from_pixmap (iPixmap, TRUE);  /// A valider ...
+		}
+		else if (pWMHints->flags & IconPixmapHint)
+		{
+			cd_debug ("  pas de _NET_WM_ICON, mais un pixmap");
+			Pixmap XPixmapID = pWMHints->icon_pixmap;
+			pIconPixbuf = cairo_dock_get_pixbuf_from_pixmap (XPixmapID, TRUE);
+
+			//\____________________ On lui applique le masque de transparence s'il existe.
+			if (pWMHints->flags & IconMaskHint)
+			{
+				Pixmap XPixmapMaskID = pWMHints->icon_mask;
+				GdkPixbuf *pMaskPixbuf = cairo_dock_get_pixbuf_from_pixmap (XPixmapMaskID, FALSE);
+
+				int iNbChannels = gdk_pixbuf_get_n_channels (pIconPixbuf);
+				int iRowstride = gdk_pixbuf_get_rowstride (pIconPixbuf);
+				guchar *p, *pixels = gdk_pixbuf_get_pixels (pIconPixbuf);
+
+				int iNbChannelsMask = gdk_pixbuf_get_n_channels (pMaskPixbuf);
+				int iRowstrideMask = gdk_pixbuf_get_rowstride (pMaskPixbuf);
+				guchar *q, *pixelsMask = gdk_pixbuf_get_pixels (pMaskPixbuf);
+
+				int w = MIN (gdk_pixbuf_get_width (pIconPixbuf), gdk_pixbuf_get_width (pMaskPixbuf));
+				int h = MIN (gdk_pixbuf_get_height (pIconPixbuf), gdk_pixbuf_get_height (pMaskPixbuf));
+				int x, y;
+				for (y = 0; y < h; y ++)
+				{
+					for (x = 0; x < w; x ++)
+					{
+						p = pixels + y * iRowstride + x * iNbChannels;
+						q = pixelsMask + y * iRowstrideMask + x * iNbChannelsMask;
+						if (q[0] == 0)
+							p[3] = 0;
+						else
+							p[3] = 255;
+					}
+				}
+
+				g_object_unref (pMaskPixbuf);
+			}
+		}
+		XFree (pWMHints);
+
+		//\____________________ On cree la surface.
+		if (pIconPixbuf != NULL)
+		{
+			double fWidth, fHeight;
+			cairo_surface_t *pNewSurface = cairo_dock_create_surface_from_pixbuf (pIconPixbuf,
+				1.,
+				iWidth,
+				iHeight,
+				CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,
+				&fWidth,
+				&fHeight,
+				NULL, NULL);
+
+			g_object_unref (pIconPixbuf);
+			return pNewSurface;
+		}
+		return NULL;
+	}
+}
+
+cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth, int iHeight)
+{
+	g_return_val_if_fail (Xid > 0, NULL);
+	GdkPixbuf *pPixbuf = cairo_dock_get_pixbuf_from_pixmap (Xid, TRUE);
+	if (pPixbuf == NULL)
+	{
+		cd_warning ("No thumbnail available.\nEither the WM doesn't support this functionnality, or the window was minimized when the dock has been launched.");
+		return NULL;
+	}
+	
+	cd_debug ("window pixmap : %dx%d", gdk_pixbuf_get_width (pPixbuf), gdk_pixbuf_get_height (pPixbuf));
+	double fWidth, fHeight;
+	cairo_surface_t *pSurface = cairo_dock_create_surface_from_pixbuf (pPixbuf,
+		1.,
+		iWidth, iHeight,
+		CAIRO_DOCK_KEEP_RATIO | CAIRO_DOCK_FILL_SPACE,  // on conserve le ratio de la fenetre, tout en gardant la taille habituelle des icones d'appli.
+		&fWidth, &fHeight,
+		NULL, NULL);
+	g_object_unref (pPixbuf);
+	return pSurface;
+}
+
+//typedef void (*GLXBindTexImageProc) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
+//typedef void (*GLXReleaseTexImageProc) (Display *display, GLXDrawable drawable, int buffer);
+
+// Bind redirected window to texture:
+GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
+{
+	if (!g_bEasterEggs)
+		return 0;  /// works for some windows (gnome-terminal) but not for all ... still need to figure why.
+	
+	if (!iBackingPixmap || ! g_openglConfig.bTextureFromPixmapAvailable)
+		return 0;
+	
+	Display *display = s_XDisplay;
+	XWindowAttributes attrib;
+	XGetWindowAttributes (display, Xid, &attrib);
+	
+	VisualID visualid = XVisualIDFromVisual (attrib.visual);
+	
+	int nfbconfigs;
+	int screen = 0;
+	GLXFBConfig *fbconfigs = glXGetFBConfigs (display, screen, &nfbconfigs);
+	
+	GLfloat top=0., bottom=0.;
+	XVisualInfo *visinfo;
+	int value;
+	int i;
+	for (i = 0; i < nfbconfigs; i++)
+	{
+		visinfo = glXGetVisualFromFBConfig (display, fbconfigs[i]);
+		if (!visinfo || visinfo->visualid != visualid)
+			continue;
+	
+		glXGetFBConfigAttrib (display, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
+		if (!(value & GLX_PIXMAP_BIT))
+			continue;
+	
+		glXGetFBConfigAttrib (display, fbconfigs[i],
+			GLX_BIND_TO_TEXTURE_TARGETS_EXT,
+			&value);
+		if (!(value & GLX_TEXTURE_2D_BIT_EXT))
+			continue;
+		
+		glXGetFBConfigAttrib (display, fbconfigs[i],
+			GLX_BIND_TO_TEXTURE_RGBA_EXT,
+			&value);
+		if (value == FALSE)
+		{
+			glXGetFBConfigAttrib (display, fbconfigs[i],
+				GLX_BIND_TO_TEXTURE_RGB_EXT,
+				&value);
+			if (value == FALSE)
+				continue;
+		}
+		
+		glXGetFBConfigAttrib (display, fbconfigs[i],
+			GLX_Y_INVERTED_EXT,
+			&value);
+		if (value == TRUE)
+		{
+			top = 0.0f;
+			bottom = 1.0f;
+		}
+		else
+		{
+			top = 1.0f;
+			bottom = 0.0f;
+		}
+		
+		break;
+	}
+	
+	if (i == nfbconfigs)
+	{
+		cd_warning ("No FB Config found");
+		return 0;
+	}
+	
+	int pixmapAttribs[5] = { GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
+		GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
+		None };
+	GLXPixmap glxpixmap = glXCreatePixmap (display, fbconfigs[i], iBackingPixmap, pixmapAttribs);
+	g_return_val_if_fail (glxpixmap != 0, 0);
+	
+	GLuint texture;
+	glEnable (GL_TEXTURE_2D);
+	glGenTextures (1, &texture);
+	glBindTexture (GL_TEXTURE_2D, texture);
+	
+	g_openglConfig.bindTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT, NULL);
+	
+	glTexParameteri (GL_TEXTURE_2D,
+		GL_TEXTURE_MIN_FILTER,
+		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+	if (g_bEasterEggs)
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+	// draw using iBackingPixmap as texture
+	glBegin (GL_QUADS);
+	
+	glTexCoord2d (0.0f, bottom);
+	glVertex2d (0.0f, 0.0f);
+	
+	glTexCoord2d (0.0f, top);
+	glVertex2d (0.0f, attrib.height);
+	
+	glTexCoord2d (1.0f, top);
+	glVertex2d (attrib.width, attrib.height);
+	
+	glTexCoord2d (1.0f, bottom);
+	glVertex2d (attrib.width, 0.0f);
+	
+	glEnd ();
+	glDisable (GL_TEXTURE_2D);
+	
+	g_openglConfig.releaseTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT);
+	glXDestroyGLXPixmap (display, glxpixmap);
+	return texture;
+}
+
+
+
+/*static gchar *_cairo_dock_get_appli_command (Window Xid)
+{
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements = 0;
+	gulong *pPidBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, XInternAtom (s_XDisplay, "_NET_WM_PID", False), 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pPidBuffer);
+	
+	gchar *cCommand = NULL;
+	if (iBufferNbElements > 0)
+	{
+		guint iPid = *pPidBuffer;
+		gchar *cFilePath = g_strdup_printf ("/proc/%d/cmdline", iPid);  // utiliser /proc/%d/stat pour avoir le nom de fichier de l'executable
+		gsize length = 0;
+		gchar *cContent = NULL;
+		g_file_get_contents (cFilePath,
+			&cCommand,  // contient des '\0' entre les arguments.
+			&length,
+			NULL);
+		g_free (cFilePath);
+	}
+	if (pPidBuffer != NULL)
+		XFree (pPidBuffer);
+	return cCommand;
+}*/
+
+gboolean cairo_dock_get_xwindow_type (Window Xid, Window *pTransientFor)
+{
+	gboolean bKeep = FALSE;  // we only want to know if we can display this window in the dock or not, so a boolean is enough.
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements;
+	gulong *pTypeBuffer = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmWindowType, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pTypeBuffer);
+	if (iBufferNbElements != 0)
+	{
+		guint i;
+		for (i = 0; i < iBufferNbElements; i ++)  // The Client SHOULD specify window types in order of preference (the first being most preferable) but MUST include at least one of the basic window type atoms.
+		{
+			if (pTypeBuffer[i] == s_aNetWmWindowTypeNormal)  // normal window -> take it
+			{
+				bKeep = TRUE;
+				break;
+			}
+			if (pTypeBuffer[i] == s_aNetWmWindowTypeDialog)  // dialog -> skip modal dialog, because we can't act on it independantly from the parent window (it's most probably a dialog box like an open/save dialog)
+			{
+				XGetTransientForHint (s_XDisplay, Xid, pTransientFor);  // maybe we should also get the _NET_WM_STATE_MODAL property, although if a dialog is set modal but not transient, that would probably be an error from the application.
+				if (*pTransientFor == None)
+				{
+					bKeep = TRUE;
+					break;
+				}  // else it's a transient dialog, don't keep it, unless it also has the "normal" type further in the buffer.
+			}  // skip any other type (dock, menu, etc)
+			else if (pTypeBuffer[i] == s_aNetWmWindowTypeDock)  // workaround for the Unity-panel: if the type 'dock' is present, don't look further (as they add the 'normal' type too, which is non-sense).
+			{
+				break;
+			}
+		}
+		XFree (pTypeBuffer);
+	}
+	else  // no type, take it by default, unless it's transient.
+	{
+		XGetTransientForHint (s_XDisplay, Xid, pTransientFor);
+	}
+	return bKeep;
+}
+/*
+void gldi_x_window_actor_init (gpointer _xactor, Window Xid)
+{
+	GldiXWindowActor *xactor = (GldiXWindowActor*)_xactor;
+	GldiWindowActor *actor = (GldiWindowActor *)xactor;
+	xactor->Xid = Xid;
+	xactor->bIgnored = TRUE;
+	
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements;
+	
+	//\__________________ see if we should skip it
+	gboolean bShowInTaskbar = FALSE, bIsHidden = FALSE, bIsFullScreen = FALSE, bIsMaximized = FALSE, bDemandsAttention = FALSE;
+	bShowInTaskbar = cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
+	if (!bShowInTaskbar)
+	{
+		cd_debug ("  cette fenetre est timide");
+		return;
+	}
+
+	//\__________________ filter from its type (only take normal windows, and dialogs that are not transient)
+	/// TODO: consider keeping dialogs and utilities/toolbox, with displayed=false, for dock visibility...
+	gulong *pTypeBuffer = NULL;
+	cd_debug (" + nouvelle icone d'appli (%d)", Xid);
+	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmWindowType, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pTypeBuffer);
+	if (iBufferNbElements != 0)
+	{
+		gboolean bKeep = FALSE;
+		guint i;
+		for (i = 0; i < iBufferNbElements; i ++)  // The Client SHOULD specify window types in order of preference (the first being most preferable) but MUST include at least one of the basic window type atoms.
+		{
+			if (pTypeBuffer[i] == s_aNetWmWindowTypeNormal)  // normal window -> take it
+			{
+				bKeep = TRUE;
+				break;
+			}
+			if (pTypeBuffer[i] == s_aNetWmWindowTypeDialog)  // dialog -> skip modal dialog, because it's most probably a dialog box (like an open/save dialog)
+			{
+				XGetTransientForHint (s_XDisplay, Xid, &xactor->XTransientFor);  // maybe we should also get the _NET_WM_STATE_MODAL property, although if a dialog is set modal but not transient, that would probably be an error from the application.
+				if (xactor->XTransientFor == None)
+				{
+					bKeep = TRUE;
+					break;
+				}  // else it's a transient dialog, don't keep it, unless it also has the "normal" type further in the buffer.
+			}  // skip any other type (dock, menu, etc)
+			else if (pTypeBuffer[i] == s_aNetWmWindowTypeDock)  // workaround for the Unity-panel: if the type 'dock' is present, don't look further (as they add the 'normal' type too, which is non-sense).
+			{
+				break;
+			}
+		}
+		XFree (pTypeBuffer);
+		if (! bKeep)
+		{
+			cd_debug ("ignore this window");
+			return;
+		}
+	}
+	else  // no type, take it by default, unless it's transient.
+	{
+		XGetTransientForHint (s_XDisplay, Xid, &xactor->XTransientFor);
+		if (xactor->XTransientFor != None)
+		{
+			cd_debug ("  transient window => skip it");
+			return;
+		}
+	}
+	
+	//\__________________ get its name and class
+	gchar *cName = cairo_dock_get_xwindow_name (Xid, TRUE);
+	
+	gchar *cClass, *cWmClass = NULL;
+	cClass = cairo_dock_get_xwindow_class (Xid, &cWmClass);
+	if (cClass == NULL)
+	{
+		cd_warning ("this window (%s, %ld) doesn't belong to any class, skip it.\nPlease report this bug to the application's devs.", cName, Xid);
+		return;
+	}
+	
+	//\__________________ from now, the window is interesting for us -> fill its properties
+	cd_debug (" retrieving '%s' (id: %ld, class: %s, hidden: %d)...", cName, Xid, cClass, bIsHidden);
+	xactor->bIgnored = FALSE;
+	actor->cName = (cName ? cName : g_strdup (cClass));
+	actor->cClass = cClass;  // we'll register the class during the loading of the icon, since it can take some time, and we don't really need the class params right now.
+	actor->cWmClass = cWmClass;
+	actor->bIsHidden = bIsHidden;
+	actor->bIsMaximized = bIsMaximized;
+	actor->bIsFullScreen = bIsFullScreen;
+	actor->bDemandsAttention = bDemandsAttention;
+	
+	actor->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
+	
+	int iLocalPositionX=0, iLocalPositionY=0, iWidthExtent=0, iHeightExtent=0;
+	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
+	
+	actor->iViewPortX = iLocalPositionX / g_desktopGeometry.Xscreen.width + g_desktopGeometry.iCurrentViewportX;
+	actor->iViewPortY = iLocalPositionY / g_desktopGeometry.Xscreen.height + g_desktopGeometry.iCurrentViewportY;
+	
+	actor->windowGeometry.x = iLocalPositionX;
+	actor->windowGeometry.y = iLocalPositionY;
+	actor->windowGeometry.width = iWidthExtent;
+	actor->windowGeometry.height = iHeightExtent;
+	actor->bIsTransientFor = (xactor->XTransientFor != None);
+}*/
