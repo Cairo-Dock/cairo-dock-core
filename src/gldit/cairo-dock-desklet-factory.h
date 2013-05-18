@@ -69,8 +69,12 @@ struct _CairoDeskletDecoration {
 	gint iBottomMargin;
 	};
 
+typedef struct _CairoDeskletAttr CairoDeskletAttr;
+
 /// Configuration attributes of a Desklet.
-struct _CairoDeskletAttribute {
+struct _CairoDeskletAttr {
+	// parent attributes
+	GldiContainerAttr cattr;
 	gboolean bDeskletUseSize;
 	gint iDeskletWidth;
 	gint iDeskletHeight;
@@ -86,6 +90,7 @@ struct _CairoDeskletAttribute {
 	gboolean bOnAllDesktops;
 	gint iNumDesktop;
 	gboolean bNoInput;
+	Icon *pIcon;
 } ;
 
 typedef gpointer CairoDeskletRendererDataParameter;
@@ -130,14 +135,14 @@ struct _CairoDeskletRenderer {
 struct _CairoDesklet {
 	//\________________ Core
 	// container
-	CairoContainer container;
-	// L'icone de l'applet.
+	GldiContainer container;
+	// Main icon (usually an applet)
 	Icon *pIcon;
-	// Liste eventuelle d'icones placees sur le desklet, et susceptibles de recevoir des clics.
+	// List of sub-icons (possibly NULL)
 	GList *icons;
-	// le moteur de rendu utilise pour dessiner le desklet.
+	// Renderer used to draw the desklet
 	CairoDeskletRenderer *pRenderer;
-	// donnees pouvant etre utilisees par le moteur de rendu.
+	// data used by the renderer
 	gpointer pRendererData;
 	// The following function outclasses the corresponding function of the renderer. This is useful if you don't want to pick icons but some elements that you draw yourself on the desklet.
 	CairoDeskletGLRenderFunc render_bounding_box;
@@ -192,11 +197,12 @@ struct _CairoDesklet {
 	gpointer reserved[4];
 };
 
-/** Say if a Container is a Desklet.
-*@param pContainer the container.
-*@return TRUE if the container is a desklet.
+/** Say if an object is a Desklet.
+*@param obj the object.
+*@return TRUE if the object is a Desklet.
 */
-#define CAIRO_DOCK_IS_DESKLET(pContainer) (pContainer != NULL && CAIRO_CONTAINER(pContainer)->iType == CAIRO_DOCK_TYPE_DESKLET)
+#define CAIRO_DOCK_IS_DESKLET(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myDeskletsMgr))
+
 /** Cast a Container into a Desklet.
 *@param pContainer the container.
 *@return the desklet.
@@ -205,31 +211,28 @@ struct _CairoDesklet {
 
 #define cairo_dock_desklet_is_free(pDesklet) (! (pDesklet->bPositionLocked || pDesklet->bFixedAttitude))
 
-
-/** Create a simple desklet container. This function should NOT be used directly.
-*@return the newly allocated desklet.
+/** Create a new desklet.
+*@param attr the attributes of the desklet
+*@return the desklet.
 */
-CairoDesklet *cairo_dock_new_desklet (void);
+CairoDesklet *gldi_desklet_new (CairoDeskletAttr *attr);
 
-/** Destroy a desklet, and free all the allocated ressources. The interactive widget is removed before, and can be inserted anywhere after that. This function should NOT be used directly.
-*@param pDesklet the desklet to destroy.
-*/
-void cairo_dock_free_desklet (CairoDesklet *pDesklet);
+void gldi_desklet_init_internals (CairoDesklet *pDesklet);
 
-/** Configure a un desklet.
-* It places it, resizes it, sets up its accessibility, locks its position, and sets up its decorations.
+/* Apply its settings on a desklet:
+* it places it, resizes it, sets up its accessibility, locks its position, and sets up its decorations.
 *@param pDesklet the desklet.
 *@param pAttribute the attributes to configure the desklet.
 */
-void cairo_dock_configure_desklet (CairoDesklet *pDesklet, CairoDeskletAttribute *pAttribute);
+void gldi_desklet_configure (CairoDesklet *pDesklet, CairoDeskletAttr *pAttribute);
 
-#define cairo_dock_set_static_desklet(pDesklet) (pDesklet)->bFixedAttitude = TRUE
+#define gldi_desklet_set_static(pDesklet) (pDesklet)->bFixedAttitude = TRUE
 
-#define cairo_dock_allow_no_clickable_desklet(pDesklet) (pDesklet)->bAllowNoClickable = TRUE
+#define gldi_desklet_allow_no_clickable(pDesklet) (pDesklet)->bAllowNoClickable = TRUE
 
-void cairo_dock_load_desklet_decorations (CairoDesklet *pDesklet);
+void gldi_desklet_load_desklet_decorations (CairoDesklet *pDesklet);
 
-void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
+void gldi_desklet_decoration_free (CairoDeskletDecoration *pDecoration);
 
 
 /** Add a GtkWidget to a desklet. Only 1 widget is allowed per desklet, if you need more, you can just use a GtkContainer, and place as many widget as you want inside.
@@ -237,66 +240,58 @@ void cairo_dock_free_desklet_decoration (CairoDeskletDecoration *pDecoration);
 *@param pDesklet the desklet.
 *@param iRightMargin right margin, in pixels, useful to keep a clickable zone on the desklet, or 0 if you don't want a margin.
 */
-void cairo_dock_add_interactive_widget_to_desklet_full (GtkWidget *pInteractiveWidget, CairoDesklet *pDesklet, int iRightMargin);
+void gldi_desklet_add_interactive_widget_with_margin (CairoDesklet *pDesklet, GtkWidget *pInteractiveWidget, int iRightMargin);
 /** Add a GtkWidget to a desklet. Only 1 widget is allowed per desklet, if you need more, you can just use a GtkContainer, and place as many widget as you want inside.
 *@param pInteractiveWidget the widget to add.
 *@param pDesklet the desklet.
 */
-#define cairo_dock_add_interactive_widget_to_desklet(pInteractiveWidget, pDesklet) cairo_dock_add_interactive_widget_to_desklet_full (pInteractiveWidget, pDesklet, 0)
-/** Sezt the right margin of a desklet. This is useful to keep a clickable zone on the desklet when you put a GTK widget inside.
+#define gldi_desklet_add_interactive_widget(pDesklet, pInteractiveWidget) gldi_desklet_add_interactive_widget_with_margin (pDesklet, pInteractiveWidget, 0)
+/** Set the right margin of a desklet. This is useful to keep a clickable zone on the desklet when you put a GTK widget inside.
 *@param pDesklet the desklet.
 *@param iRightMargin right margin, in pixels.
 */
-void cairo_dock_set_desklet_margin (CairoDesklet *pDesklet, int iRightMargin);
+void gldi_desklet_set_margin (CairoDesklet *pDesklet, int iRightMargin);
 /** Detach the interactive widget from a desklet. The widget can then be placed anywhere after that. You have to unref it after you placed it into a container, or to destroy it.
 *@param pDesklet the desklet with an interactive widget.
 *@return the widget.
 */
-GtkWidget *cairo_dock_steal_interactive_widget_from_desklet (CairoDesklet *pDesklet);
+GtkWidget *gldi_desklet_steal_interactive_widget (CairoDesklet *pDesklet);
 
 
 /** Hide a desklet.
 *@param pDesklet the desklet.
 */
-void cairo_dock_hide_desklet (CairoDesklet *pDesklet);
+void gldi_desklet_hide (CairoDesklet *pDesklet);
 /** Show a desklet, and give it the focus.
 *@param pDesklet the desklet.
 */
-void cairo_dock_show_desklet (CairoDesklet *pDesklet);
-
-/** Launch a "zoom out" animation on a desklet.
-*@param pDesklet the desklet.
-*/
-void cairo_dock_zoom_out_desklet (CairoDesklet *pDesklet);
-
+void gldi_desklet_show (CairoDesklet *pDesklet);
 
 /** Set a desklet's accessibility. For Widget Layer, the WM must support it and the correct rule must be set up in the WM (for instance for Compiz : class=Cairo-dock & type=utility). The function automatically sets up the rule for Compiz (if Dbus is activated).
 *@param pDesklet the desklet.
 *@param iVisibility the new accessibility.
 *@param bSaveState whether to save the new state in the conf file.
 */
-void cairo_dock_set_desklet_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibility iVisibility, gboolean bSaveState);
+void gldi_desklet_set_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibility iVisibility, gboolean bSaveState);
 
 /** Set a desklet sticky (i.e. visible on all desktops), or not. In case the desklet is set unsticky, its current desktop/viewport is saved.
 *@param pDesklet the desklet.
 *@param bSticky whether the desklet should be sticky or not.
 */
-void cairo_dock_set_desklet_sticky (CairoDesklet *pDesklet, gboolean bSticky);
+void gldi_desklet_set_sticky (CairoDesklet *pDesklet, gboolean bSticky);
 
-gboolean cairo_dock_desklet_is_sticky (CairoDesklet *pDesklet);
+gboolean gldi_desklet_is_sticky (CairoDesklet *pDesklet);
 
 /** Lock the position of a desklet. This makes the desklet impossible to rotate, drag with the mouse, or retach to the dock. The new state is saved in conf.
 *@param pDesklet the desklet.
 *@param bPositionLocked whether the position should be locked or not.
 */
-void cairo_dock_lock_desklet_position (CairoDesklet *pDesklet, gboolean bPositionLocked);
+void gldi_desklet_lock_position (CairoDesklet *pDesklet, gboolean bPositionLocked);
 
 
-void cairo_dock_update_desklet_icons (CairoDesklet *pDesklet);
+void gldi_desklet_insert_icon (Icon *icon, CairoDesklet *pDesklet);
 
-void cairo_dock_insert_icon_in_desklet (Icon *icon, CairoDesklet *pDesklet);
-
-gboolean cairo_dock_detach_icon_from_desklet (Icon *icon, CairoDesklet *pDesklet);
+gboolean gldi_desklet_detach_icon (Icon *icon, CairoDesklet *pDesklet);
 
 G_END_DECLS
 
