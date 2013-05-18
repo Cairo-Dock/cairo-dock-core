@@ -29,8 +29,9 @@
 
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-notifications.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-dialog-manager.h"  // gldi_dialogs_foreach
+#include "cairo-dock-dialog-factory.h"
+#include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-indicator-manager.h"
@@ -47,6 +48,21 @@ extern CairoDockHidingEffect *g_pHidingBackend;
 
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
+
+void gldi_icon_set_appli (Icon *pIcon, GldiWindowActor *pAppli)
+{
+	if (pIcon->pAppli == pAppli)  // nothing to do
+		return;
+	
+	// unset the current appli if any
+	if (pIcon->pAppli != NULL)
+		gldi_object_unref (GLDI_OBJECT (pAppli));
+	
+	// set the appli
+	if (pAppli)
+		gldi_object_ref (GLDI_OBJECT (pAppli));
+	pIcon->pAppli = pAppli;
+}
 
 CairoDockIconGroup cairo_dock_get_icon_type (Icon *icon)
 {
@@ -347,17 +363,43 @@ Icon *cairo_dock_get_icon_with_subdock (GList *pIconList, CairoDock *pSubDock)
 	return NULL;
 }
 
-Icon *cairo_dock_get_icon_with_module (GList *pIconList, CairoDockModule *pModule)
+static gboolean _has_dialog (CairoDialog *pDialog, Icon *pIcon)
 {
-	GList* ic;
-	Icon *icon;
+	return (pDialog->pIcon == pIcon);
+}
+gboolean gldi_icon_has_dialog (Icon *pIcon)
+{
+	CairoDialog *pDialog = gldi_dialogs_foreach ((GCompareFunc)_has_dialog, pIcon);
+	return (pDialog != NULL);
+}
+
+Icon *gldi_icons_get_without_dialog (GList *pIconList)
+{
+	if (pIconList == NULL)
+		return NULL;
+
+	Icon *pIcon = cairo_dock_get_first_icon_of_group (pIconList, CAIRO_DOCK_SEPARATOR12);
+	if (pIcon != NULL && ! gldi_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
+		return pIcon;
+	
+	pIcon = cairo_dock_get_first_icon_of_true_type (pIconList, CAIRO_DOCK_ICON_TYPE_SEPARATOR);
+	if (pIcon != NULL && ! gldi_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
+		return pIcon;
+	
+	pIcon = cairo_dock_get_pointed_icon (pIconList);
+	if (pIcon != NULL && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon) && ! gldi_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
+		return pIcon;
+
+	GList *ic;
 	for (ic = pIconList; ic != NULL; ic = ic->next)
 	{
-		icon = ic->data;
-		if (icon->pModuleInstance->pModule == pModule)
-			return icon;
+		pIcon = ic->data;
+		if (! gldi_icon_has_dialog (pIcon) && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
+			return pIcon;
 	}
-	return NULL;
+	
+	pIcon = cairo_dock_get_first_icon (pIconList);
+	return pIcon;
 }
 
 void cairo_dock_get_icon_extent (Icon *pIcon, int *iWidth, int *iHeight)
@@ -366,7 +408,7 @@ void cairo_dock_get_icon_extent (Icon *pIcon, int *iWidth, int *iHeight)
 	*iHeight = pIcon->image.iHeight;
 }
 
-void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY)
+void cairo_dock_get_current_icon_size (Icon *pIcon, GldiContainer *pContainer, double *fSizeX, double *fSizeY)
 {
 	if (pContainer->bIsHorizontal)
 	{
@@ -396,7 +438,7 @@ void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, 
 	}
 }
 
-void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRectangle *pArea)
+void cairo_dock_compute_icon_area (Icon *icon, GldiContainer *pContainer, GdkRectangle *pArea)
 {
 	double fReflectSize = 0;
 	if (pContainer->bUseReflect)
@@ -528,7 +570,7 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 		cairo_dock_normalize_icons_order (pDock->icons, icon1->iGroup);
 	
 	//\_________________ Notify everybody.
-	cairo_dock_notify_on_object (pDock, NOTIFICATION_ICON_MOVED, icon1, pDock);
+	gldi_object_notify (pDock, NOTIFICATION_ICON_MOVED, icon1, pDock);
 }
 
 
@@ -542,7 +584,7 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 }
 
 
-void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer_useless)  // fonction proposee par Necropotame.
+void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer_useless)  // fonction proposee par Necropotame.
 {
 	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
 	gchar *cUniqueName = NULL;
@@ -567,7 +609,7 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSE
 		cairo_dock_redraw_container (pIcon->pContainer);  // this is not really optimized, ideally the view should provide a way to redraw the label area only...
 }
 
-void cairo_dock_set_icon_name_printf (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer_useless, const gchar *cIconNameFormat, ...)
+void cairo_dock_set_icon_name_printf (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer_useless, const gchar *cIconNameFormat, ...)
 {
 	va_list args;
 	va_start (args, cIconNameFormat);
@@ -577,7 +619,7 @@ void cairo_dock_set_icon_name_printf (Icon *pIcon, G_GNUC_UNUSED CairoContainer 
 	va_end (args);
 }
 
-void cairo_dock_set_quick_info (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer_useless, const gchar *cQuickInfo)
+void cairo_dock_set_quick_info (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer_useless, const gchar *cQuickInfo)
 {
 	g_return_if_fail (pIcon != NULL);
 	
@@ -592,7 +634,7 @@ void cairo_dock_set_quick_info (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pCont
 	cairo_dock_load_icon_quickinfo (pIcon);
 }
 
-void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer_useless, const gchar *cQuickInfoFormat, ...)
+void cairo_dock_set_quick_info_printf (Icon *pIcon, GldiContainer *pContainer_useless, const gchar *cQuickInfoFormat, ...)
 {
 	va_list args;
 	va_start (args, cQuickInfoFormat);
@@ -714,7 +756,7 @@ void cairo_dock_end_draw_icon_cairo (Icon *pIcon)
 	cairo_dock_end_draw_image_buffer_cairo (&pIcon->image);
 }
 
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, gint iRenderingMode)
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, gint iRenderingMode)
 {
 	gboolean r = cairo_dock_begin_draw_image_buffer_opengl (&pIcon->image, pIcon->pContainer, iRenderingMode);
 	
@@ -739,7 +781,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *
 	return r;
 }
 
-void cairo_dock_end_draw_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
+void cairo_dock_end_draw_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
 {
 	cairo_dock_end_draw_image_buffer_opengl (&pIcon->image, pIcon->pContainer);
 }

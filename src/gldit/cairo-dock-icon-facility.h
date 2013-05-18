@@ -82,6 +82,9 @@ G_BEGIN_DECLS
 #define cairo_dock_icon_get_allocated_height(icon) (icon)->iAllocatedHeight
 
 
+void gldi_icon_set_appli (Icon *pIcon, GldiWindowActor *pAppli);
+#define gldi_icon_unset_appli(pIcon) gldi_icon_set_appli (pIcon, NULL)
+
 /** Get the type of an icon according to its content (launcher, appli, applet). This can be different from its group.
 *@param icon the icon.
 *@return the type of the icon.
@@ -228,12 +231,11 @@ Icon *cairo_dock_get_icon_with_name (GList *pIconList, const gchar *cName);
 */
 Icon *cairo_dock_get_icon_with_subdock (GList *pIconList, CairoDock *pSubDock);
 
-/** Search the icon of a given module in a list of icons.
-*@param pIconList a list of icons.
-*@param pModule the module.
-*@return the first icon which has an instance of the given module, or NULL if no icon matches.
-*/
-Icon *cairo_dock_get_icon_with_module (GList *pIconList, CairoDockModule *pModule);
+Icon *gldi_icons_get_without_dialog (GList *pIconList);
+
+#define gldi_icons_get_any_without_dialog(...) gldi_icons_get_without_dialog (g_pMainDock?g_pMainDock->icons:NULL);
+
+gboolean gldi_icon_has_dialog (Icon *pIcon);
 
 #define cairo_dock_get_first_launcher(pIconList) cairo_dock_get_first_icon_of_group (pIconList, CAIRO_DOCK_LAUNCHER)
 #define cairo_dock_get_last_launcher(pIconList) cairo_dock_get_last_icon_of_group (pIconList, CAIRO_DOCK_LAUNCHER)
@@ -253,14 +255,14 @@ void cairo_dock_get_icon_extent (Icon *pIcon, int *iWidth, int *iHeight);
 @param fSizeX pointer to the X size (horizontal)
 @param fSizeY pointer to the Y size (vertical)
 */
-void cairo_dock_get_current_icon_size (Icon *pIcon, CairoContainer *pContainer, double *fSizeX, double *fSizeY);
+void cairo_dock_get_current_icon_size (Icon *pIcon, GldiContainer *pContainer, double *fSizeX, double *fSizeY);
 
 /** Get the total zone used by an icon on its container (taking into account reflect, gap to reflect, zoom and stretching).
 @param icon the icon
 @param pContainer its container
 @param pArea a rectangle filled with the zone used by the icon on its container.
 */
-void cairo_dock_compute_icon_area (Icon *icon, CairoContainer *pContainer, GdkRectangle *pArea);
+void cairo_dock_compute_icon_area (Icon *icon, GldiContainer *pContainer, GdkRectangle *pArea);
 
 
 
@@ -291,7 +293,7 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
 */
-void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, GldiContainer *pContainer);
 
 /** Same as above, but takes a printf-like format string.
 *@param pIcon the icon.
@@ -299,14 +301,14 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, CairoContain
 *@param cIconNameFormat the new label of the icon, in a 'printf' way.
 *@param ... data to be inserted into the string.
 */
-void cairo_dock_set_icon_name_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cIconNameFormat, ...) G_GNUC_PRINTF (3, 4);
+void cairo_dock_set_icon_name_printf (Icon *pIcon, GldiContainer *pContainer, const gchar *cIconNameFormat, ...) G_GNUC_PRINTF (3, 4);
 
 /** Set the quick-info of an icon. This is a small text (a few characters) that is superimposed on the icon.
 *@param pIcon the icon.
 *@param pContainer the container of the icon.
 *@param cQuickInfo the text of the quick-info.
 */
-void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfo);
+void cairo_dock_set_quick_info (Icon *pIcon, GldiContainer *pContainer, const gchar *cQuickInfo);
 
 /** Same as above, but takes a printf-like format string.
 *@param pIcon the icon.
@@ -314,7 +316,7 @@ void cairo_dock_set_quick_info (Icon *pIcon, CairoContainer *pContainer, const g
 *@param cQuickInfoFormat the text of the quick-info, in a 'printf' way.
 *@param ... data to be inserted into the string.
 */
-void cairo_dock_set_quick_info_printf (Icon *pIcon, CairoContainer *pContainer, const gchar *cQuickInfoFormat, ...) G_GNUC_PRINTF (3, 4);
+void cairo_dock_set_quick_info_printf (Icon *pIcon, GldiContainer *pContainer, const gchar *cQuickInfoFormat, ...) G_GNUC_PRINTF (3, 4);
 
 /** Clear the quick-info of an icon.
 *@param pIcon the icon.
@@ -345,13 +347,13 @@ void cairo_dock_end_draw_icon_cairo (Icon *pIcon);
 *@param iRenderingMode rendering mode. 0:normal, 1:don't clear the current texture, so that the drawing will be superimposed on it, 2:keep the current icon texture unchanged for all the drawing (the drawing is made on another texture).
 *@return TRUE if you can proceed to the drawing, FALSE if an error occured.
 */
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, CairoContainer *pContainer, gint iRenderingMode);
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, GldiContainer *pContainer, gint iRenderingMode);
 /** Finish an OpenGL drawing session on an icon.
 *@param pIcon the icon on which to draw.
 *@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@return TRUE if you can proceed to the drawing, FALSE if an error occured.
 */
-void cairo_dock_end_draw_icon (Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_end_draw_icon (Icon *pIcon, GldiContainer *pContainer);
 
 G_END_DECLS
 #endif

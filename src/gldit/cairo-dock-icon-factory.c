@@ -27,7 +27,7 @@
 #include "cairo-dock-draw.h"  // cairo_dock_erase_cairo_context
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-module-factory.h"  // CairoDockModuleInstance
+#include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-log.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iAppliMaxNameLength
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
@@ -47,38 +47,10 @@ const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est j
 
 inline Icon *cairo_dock_new_icon (void)
 {
-	Icon *_icon = gldi_object_new (Icon, &myIconsMgr);
+	Icon *_icon = (Icon*)gldi_object_new (GLDI_MANAGER (&myIconsMgr), NULL);
 	return _icon;
 }
 
-
-void cairo_dock_free_icon_buffers (Icon *icon)
-{
-	if (icon == NULL)
-		return ;
-	
-	g_free (icon->cDesktopFileName);
-	g_free (icon->cFileName);
-	g_free (icon->cName);
-	g_free (icon->cInitialName);
-	g_free (icon->cCommand);
-	g_free (icon->cWorkingDirectory);
-	g_free (icon->cBaseURI);
-	g_free (icon->cParentDockName);  // on ne liberera pas le sous-dock ici sous peine de se mordre la queue, donc il faut l'avoir fait avant.
-	g_free (icon->cClass);
-	g_free (icon->cWmClass);
-	g_free (icon->cQuickInfo);
-	g_free (icon->cLastAttentionDemand);
-	g_free (icon->pHiddenBgColor);
-	if (icon->pMimeTypes)
-		g_strfreev (icon->pMimeTypes);
-	
-	cairo_dock_unload_image_buffer (&icon->image);
-	
-	cairo_dock_unload_image_buffer (&icon->label);
-	
-	cairo_dock_destroy_icon_overlays (icon);
-}
 
   //////////////
  /// LOADER ///
@@ -100,14 +72,14 @@ gboolean cairo_dock_apply_icon_background_opengl (Icon *icon)
 	return FALSE;
 }
 
-void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED CairoContainer *pContainer)
+void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer)
 {
 	if (icon->pContainer == NULL)
 	{
 		cd_warning ("/!\\ Icon %s is not inside a container !!!", icon->cName);  // it's ok if this happens, but it should be rare, and I'd like to know when, so be noisy.
 		return;
 	}
-	CairoDockModuleInstance *pInstance = icon->pModuleInstance;  // this is the only function where we destroy/create the icon's surface, so we must handle the cairo-context here.
+	GldiModuleInstance *pInstance = icon->pModuleInstance;  // this is the only function where we destroy/create the icon's surface, so we must handle the cairo-context here.
 	if (pInstance && pInstance->pDrawContext != NULL)
 	{
 		cairo_destroy (pInstance->pDrawContext);
@@ -237,7 +209,7 @@ void cairo_dock_load_icon_quickinfo (Icon *icon)
 }
 
 
-void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_load_icon_buffers (Icon *pIcon, GldiContainer *pContainer)
 {
 	gboolean bLoadText = TRUE;
 	if (pIcon->iSidLoadImage != 0)  // if a load was sheduled, cancel it and do it now (we need to load the applets' buffer before initializing the module).
@@ -264,7 +236,7 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 	//g_print ("%s (%s; %dx%d; %.2fx%.2f; %x)\n", __func__, pIcon->cName, pIcon->iAllocatedWidth, pIcon->iAllocatedHeight, pIcon->fWidth, pIcon->fHeight, pIcon->pContainer);
 	pIcon->iSidLoadImage = 0;
 	
-	CairoContainer *pContainer = pIcon->pContainer;
+	GldiContainer *pContainer = pIcon->pContainer;
 	if (pContainer)
 	{
 		cairo_dock_load_icon_image (pIcon, pContainer);

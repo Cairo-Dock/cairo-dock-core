@@ -95,7 +95,7 @@ struct _Icon {
 	CairoDockIconGroup iGroup;
 	/// interface
 	IconInterface iface;
-	CairoContainer *pContainer;  // container where the icon is currently.
+	GldiContainer *pContainer;  // container where the icon is currently.
 	
 	//\____________ properties.
 	// generic.
@@ -124,6 +124,7 @@ struct _Icon {
 	gboolean bHasHiddenBg;
 	gdouble *pHiddenBgColor;  // NULL to use the default color
 	gboolean bIgnoreQuicklist;  // TRUE to not display the Ubuntu's quicklist of the class
+	gboolean bHasIndicator;
 	
 	// Launcher.
 	gchar *cDesktopFileName;  // nom (et non pas chemin) du fichier .desktop
@@ -133,28 +134,14 @@ struct _Icon {
 	gint iVolumeID;
 	gchar **pMimeTypes;
 	gchar *cWmClass;
+	gchar *cInitialName;
 	
 	// Appli.
-	Window Xid;
-	gboolean bIsHidden;
-	gboolean bIsFullScreen;
-	gboolean bIsMaximized;
-	guint iDemandsAttention;  // a mask of CairoAppliAttentionFlag
-	gboolean bHasIndicator;
-	GtkAllocation windowGeometry;
-	gint iNumDesktop;
-	gint iViewPortX, iViewPortY;
-	gint iStackOrder;
-	gint iLastCheckTime;
-	gchar *cInitialName;
-	gchar *cLastAttentionDemand;
-	gint iAge;  // age of the window (a mere growing integer).
-	Pixmap iBackingPixmap;
-	//Damage iDamageHandle;
+	GldiWindowActor *pAppli;
 	
 	// Applet.
-	CairoDockModuleInstance *pModuleInstance;
-	CairoDockModuleInstance *pAppletOwner;
+	GldiModuleInstance *pModuleInstance;
+	GldiModuleInstance *pAppletOwner;
 	
 	//\____________ Buffers.
 	gdouble fWidth, fHeight;  // size at rest in the container (including ratio and orientation).
@@ -209,8 +196,8 @@ struct _Icon {
 
 typedef void (*CairoIconContainerLoadFunc) (void);
 typedef void (*CairoIconContainerUnloadFunc) (void);
-typedef void (*CairoIconContainerRenderFunc) (Icon *pIcon, CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext);
-typedef void (*CairoIconContainerRenderOpenGLFunc) (Icon *pIcon, CairoContainer *pContainer, int w, int h);
+typedef void (*CairoIconContainerRenderFunc) (Icon *pIcon, GldiContainer *pContainer, int w, int h, cairo_t *pCairoContext);
+typedef void (*CairoIconContainerRenderOpenGLFunc) (Icon *pIcon, GldiContainer *pContainer, int w, int h);
 
 /// Definition of an Icon container (= an icon holding a sub-dock) renderer.
 struct _CairoIconContainerRenderer {
@@ -220,6 +207,11 @@ struct _CairoIconContainerRenderer {
 	CairoIconContainerRenderOpenGLFunc render_opengl;
 };
 
+/** Say if an object is an Icon.
+*@param obj the object.
+*@return TRUE if the object is an icon.
+*/
+#define CAIRO_DOCK_IS_ICON(obj) gldi_object_is_manager_child (obj, GLDI_MANAGER(&myIconsMgr))
 
 #define CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_LAUNCHER)
 #define CAIRO_DOCK_ICON_TYPE_IS_CONTAINER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER)
@@ -231,7 +223,7 @@ struct _CairoIconContainerRenderer {
 /** TRUE if the icon holds a window.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_APPLI(icon) (icon != NULL && (icon)->Xid != 0)
+#define CAIRO_DOCK_IS_APPLI(icon) (icon != NULL && (icon)->pAppli != NULL)
 
 /** TRUE if the icon holds an instance of a module.
 *@param icon an icon.
@@ -265,7 +257,7 @@ struct _CairoIconContainerRenderer {
 *TRUE if the icon is an icon d'applet detachable en desklet.
 *@param icon an icon.
 */
-#define CAIRO_DOCK_IS_DETACHABLE_APPLET(icon) (CAIRO_DOCK_IS_APPLET (icon) && (icon)->pModuleInstance->bCanDetach)
+#define CAIRO_DOCK_IS_DETACHABLE_APPLET(icon) (CAIRO_DOCK_IS_APPLET (icon) && ((icon)->pModuleInstance->pModule->pVisitCard->iContainerType & CAIRO_DOCK_MODULE_CAN_DESKLET))
 
 
 /** Create an empty icon.
@@ -273,14 +265,12 @@ struct _CairoIconContainerRenderer {
 */
 Icon *cairo_dock_new_icon (void);
 
-void cairo_dock_free_icon_buffers (Icon *icon);
-
 
 /* Cree la surface de reflection d'une icone (pour cairo).
 *@param pIcon l'icone.
 *@param pContainer le container de l'icone.
 */
-void cairo_dock_add_reflection_to_icon (Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_add_reflection_to_icon (Icon *pIcon, GldiContainer *pContainer);
 
 
 gboolean cairo_dock_apply_icon_background_opengl (Icon *icon);
@@ -289,7 +279,7 @@ gboolean cairo_dock_apply_icon_background_opengl (Icon *icon);
 *@param icon the icon.
 *@param pContainer its container.
 */
-void cairo_dock_load_icon_image (Icon *icon, CairoContainer *pContainer);
+void cairo_dock_load_icon_image (Icon *icon, GldiContainer *pContainer);
 #define cairo_dock_reload_icon_image cairo_dock_load_icon_image
 
 /**Fill the label buffer (surface & texture) of a given icon, according to a text description.
@@ -306,7 +296,7 @@ void cairo_dock_load_icon_quickinfo (Icon *icon);
 *@param pIcon the icon.
 *@param pContainer its container.
 */
-void cairo_dock_load_icon_buffers (Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_load_icon_buffers (Icon *pIcon, GldiContainer *pContainer);
 
 void cairo_dock_trigger_load_icon_buffers (Icon *pIcon);
 

@@ -24,9 +24,9 @@
 #include <gtk/gtk.h>
 
 #include "gldi-config.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-icon-factory.h"
-#include "cairo-dock-module-factory.h"  // cairo_dock_deinstanciate_module
+#include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload
+#include "cairo-dock-desklet-manager.h"  // gldi_desklets_foreach_icons
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-class-manager.h"  // cairo_dock_deinhibite_class
@@ -42,8 +42,7 @@
 #include "cairo-dock-icon-facility.h"  // cairo_dock_foreach_icons_of_type
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
 #include "cairo-dock-indicator-manager.h"  // cairo_dock_unload_indicator_textures
-#include "cairo-dock-X-manager.h"  // cairo_dock_get_current_desktop_and_viewport
-#include "cairo-dock-applications-manager.h"  // cairo_dock_unregister_appli
+#include "cairo-dock-desktop-manager.h"  // cairo_dock_get_current_desktop_and_viewport
 #include "cairo-dock-backends-manager.h"  // cairo_dock_foreach_icon_container_renderer
 #define _MANAGER_DEF_
 #include "cairo-dock-icon-manager.h"
@@ -75,39 +74,7 @@ static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data);
 
 void cairo_dock_free_icon (Icon *icon)
 {
-	if (icon == NULL)
-		return ;
-	cd_debug ("%s (%s , %s)", __func__, icon->cName, icon->cClass);
-	
-	cairo_dock_remove_dialog_if_any (icon);
-	if (icon->iSidRedrawSubdockContent != 0)
-		g_source_remove (icon->iSidRedrawSubdockContent);
-	if (icon->iSidLoadImage != 0)
-		g_source_remove (icon->iSidLoadImage);
-	if (icon->iSidDoubleClickDelay != 0)
-		g_source_remove (icon->iSidDoubleClickDelay);
-	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
-		cairo_dock_unregister_appli (icon);
-	else if (icon->cClass != NULL)  // c'est un inhibiteur.
-		cairo_dock_deinhibite_class (icon->cClass, icon);
-	if (icon->pModuleInstance != NULL)
-		cairo_dock_deinstanciate_module (icon->pModuleInstance);
-	cairo_dock_notify_on_object (icon, NOTIFICATION_STOP_ICON, icon);
-	cairo_dock_notify_on_object (icon, NOTIFICATION_DESTROY, icon);
-	cairo_dock_remove_transition_on_icon (icon);
-	cairo_dock_remove_data_renderer_on_icon (icon);
-	
-	if (icon->iSpecificDesktop != 0)
-	{
-		s_iNbNonStickyLaunchers --;
-		s_pFloatingIconsList = g_list_remove(s_pFloatingIconsList, icon);
-	}
-	
-	cairo_dock_clear_notifications_on_object (icon);
-	
-	cairo_dock_free_icon_buffers (icon);
-	cd_debug ("icon freeed");
-	g_free (icon);
+	gldi_object_unref (GLDI_OBJECT (icon));
 }
 
 
@@ -122,7 +89,7 @@ void cairo_dock_delete_icon_from_current_theme (Icon *icon)
 void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData)
 {
 	cairo_dock_foreach_icons_in_docks (pFunction, pUserData);
-	cairo_dock_foreach_icons_in_desklets (pFunction, pUserData);
+	gldi_desklets_foreach_icons (pFunction, pUserData);
 }
 
   /////////////////////////
@@ -153,7 +120,7 @@ static void _hide_launcher_on_other_desktops (Icon *icon, int index)
 		}
 	}
 }
-static void _hide_icon_on_other_desktops (Icon *icon, G_GNUC_UNUSED CairoContainer *pContainer, gpointer data)
+static void _hide_icon_on_other_desktops (Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer, gpointer data)
 {
 	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
 	{
@@ -209,7 +176,7 @@ void cairo_dock_hide_show_launchers_on_other_desktops (void )
 static gboolean _on_change_current_desktop_viewport_notification (G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_hide_show_launchers_on_other_desktops ();
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 static void _cairo_dock_delete_floating_icons (void)
@@ -739,13 +706,13 @@ static void _reload_in_desklet (CairoDesklet *pDesklet, G_GNUC_UNUSED gpointer d
 {
 	if (CAIRO_DOCK_IS_APPLET (pDesklet->pIcon))
 	{
-		cairo_dock_reload_module_instance (pDesklet->pIcon->pModuleInstance, FALSE);
+		gldi_module_instance_reload (pDesklet->pIcon->pModuleInstance, FALSE);
 	}
 }
 static gboolean _on_icon_theme_changed_idle (G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("");
-	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _reload_in_desklet, NULL);
+	gldi_desklets_foreach ((GldiDeskletForeachFunc) _reload_in_desklet, NULL);
 	cairo_dock_reload_buffers_in_all_docks (FALSE);
 	s_iSidReloadTheme = 0;
 	return FALSE;
@@ -814,7 +781,7 @@ static void _calculate_icons (G_GNUC_UNUSED const gchar *cDockName, CairoDock *p
 	cairo_dock_calculate_dock_icons (pDock);
 }
 
-static void _reload_one_label (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, G_GNUC_UNUSED CairoIconsParam *pLabels)
+static void _reload_one_label (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, G_GNUC_UNUSED CairoIconsParam *pLabels)
 {
 	cairo_dock_load_icon_text (pIcon);
 	cairo_dock_load_icon_quickinfo (pIcon);
@@ -956,15 +923,70 @@ static void unload (void)
 
 static void init (void)
 {
-	cairo_dock_register_notification_on_object (&myDesktopMgr,
+	gldi_object_register_notification (&myDesktopMgr,
 		NOTIFICATION_DESKTOP_CHANGED,
-		(CairoDockNotificationFunc) _on_change_current_desktop_viewport_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myIconsMgr,
+		(GldiNotificationFunc) _on_change_current_desktop_viewport_notification,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myIconsMgr,
 		NOTIFICATION_RENDER_ICON,
-		(CairoDockNotificationFunc) cairo_dock_render_icon_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
+		(GldiNotificationFunc) cairo_dock_render_icon_notification,
+		GLDI_RUN_FIRST, NULL);
 	
+}
+
+static void reset_object (GldiObject *obj)
+{
+	Icon *icon = (Icon*)obj;
+	cd_debug ("%s (%s , %s)", __func__, icon->cName, icon->cClass);
+	
+	if (icon->iSidRedrawSubdockContent != 0)
+		g_source_remove (icon->iSidRedrawSubdockContent);
+	if (icon->iSidLoadImage != 0)
+		g_source_remove (icon->iSidLoadImage);
+	if (icon->iSidDoubleClickDelay != 0)
+		g_source_remove (icon->iSidDoubleClickDelay);
+	
+	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
+	{
+		///cairo_dock_unregister_appli (icon);
+	}
+	else if (icon->cClass != NULL)  // c'est un inhibiteur.
+		cairo_dock_deinhibite_class (icon->cClass, icon);  // unset the appli if it had any
+	//if (icon->pModuleInstance != NULL)
+	//	gldi_object_unref (GLDI_OBJECT(icon->pModuleInstance));
+	
+	gldi_object_notify (icon, NOTIFICATION_STOP_ICON, icon);
+	cairo_dock_remove_transition_on_icon (icon);
+	cairo_dock_remove_data_renderer_on_icon (icon);
+	
+	if (icon->iSpecificDesktop != 0)
+	{
+		s_iNbNonStickyLaunchers --;
+		s_pFloatingIconsList = g_list_remove(s_pFloatingIconsList, icon);
+	}
+	
+	// free data
+	g_free (icon->cDesktopFileName);
+	g_free (icon->cFileName);
+	g_free (icon->cName);
+	g_free (icon->cInitialName);
+	g_free (icon->cCommand);
+	g_free (icon->cWorkingDirectory);
+	g_free (icon->cBaseURI);
+	g_free (icon->cParentDockName);  // on ne liberera pas le sous-dock ici sous peine de se mordre la queue, donc il faut l'avoir fait avant.
+	g_free (icon->cClass);
+	g_free (icon->cWmClass);
+	g_free (icon->cQuickInfo);
+	///g_free (icon->cLastAttentionDemand);
+	g_free (icon->pHiddenBgColor);
+	if (icon->pMimeTypes)
+		g_strfreev (icon->pMimeTypes);
+	
+	cairo_dock_unload_image_buffer (&icon->image);
+	
+	cairo_dock_unload_image_buffer (&icon->label);
+	
+	cairo_dock_destroy_icon_overlays (icon);
 }
 
 
@@ -976,13 +998,16 @@ void gldi_register_icons_manager (void)
 {
 	// Manager
 	memset (&myIconsMgr, 0, sizeof (CairoIconsManager));
-	myIconsMgr.mgr.cModuleName 	= "Icons";
-	myIconsMgr.mgr.init 		= init;
-	myIconsMgr.mgr.load 		= load;
-	myIconsMgr.mgr.unload 		= unload;
-	myIconsMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
-	myIconsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	myIconsMgr.mgr.cModuleName  = "Icons";
+	myIconsMgr.mgr.init         = init;
+	myIconsMgr.mgr.load         = load;
+	myIconsMgr.mgr.unload       = unload;
+	myIconsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
+	myIconsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
 	myIconsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	myIconsMgr.mgr.init_object  = NULL;  // nothing to do
+	myIconsMgr.mgr.reset_object = reset_object;
+	myIconsMgr.mgr.iObjectSize  = sizeof (Icon);
 	// Config
 	memset (&myIconsParam, 0, sizeof (CairoIconsParam));
 	myIconsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myIconsParam;
@@ -992,7 +1017,7 @@ void gldi_register_icons_manager (void)
 	myIconsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myIconsMgr.mgr.iSizeOfData = 0;
 	// signals
-	cairo_dock_install_notifications_on_object (&myIconsMgr, NB_NOTIFICATIONS_ICON);
+	gldi_object_install_notifications (&myIconsMgr, NB_NOTIFICATIONS_ICON);
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myIconsMgr));
 }
