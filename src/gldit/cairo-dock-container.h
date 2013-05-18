@@ -21,6 +21,7 @@
 #define  __CAIRO_DOCK_CONTAINER__
 
 #include <glib.h>
+#include <GL/glx.h>  // GLXContext
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
@@ -34,37 +35,41 @@ G_BEGIN_DECLS
 *
 * Docks, Desklets, Dialogs, and Flying-containers all derive from Containers.
 *
-* If you write a new type of container, you must call \ref cairo_dock_init_container when you create it and \ref cairo_dock_finish_container when you destroy it.
 */
 
-typedef struct _CairoContainersParam CairoContainersParam;
-typedef struct _CairoContainersManager CairoContainersManager;
+typedef struct _GldiContainersParam GldiContainersParam;
+typedef struct _GldiContainersManager GldiContainersManager;
+typedef struct _GldiContainerAttr GldiContainerAttr;
 
 #ifndef _MANAGER_DEF_
-extern CairoContainersParam myContainersParam;
-extern CairoContainersManager myContainersMgr;
+extern GldiContainersParam myContainersParam;
+extern GldiContainersManager myContainersMgr;
 #endif
 
 #define CD_DOUBLE_CLICK_DELAY 250  // ms
 
 
 // params
-struct _CairoContainersParam{
+struct _GldiContainersParam{
 	//gboolean bUseFakeTransparency;
 	gint iGLAnimationDeltaT;
 	gint iCairoAnimationDeltaT;
 	};
 
 // manager
-struct _CairoContainersManager {
+struct _GldiContainersManager {
 	GldiManager mgr;
-	} ;
+};
+
+struct _GldiContainerAttr {
+	gboolean bNoOpengl;
+};
 
 /// signals
 typedef enum {
-	/// notification called when the menu is being built on a container. data : {Icon, CairoContainer, GtkMenu, gboolean*}
+	/// notification called when the menu is being built on a container. data : {Icon, GldiContainer, GtkMenu, gboolean*}
 	NOTIFICATION_BUILD_CONTAINER_MENU = NB_NOTIFICATIONS_OBJECT,
-	/// notification called when the menu is being built on an icon (possibly NULL). data : {Icon, CairoContainer, GtkMenu}
+	/// notification called when the menu is being built on an icon (possibly NULL). data : {Icon, GldiContainer, GtkMenu}
 	NOTIFICATION_BUILD_ICON_MENU,
 	/// notification called when use clicks on an icon data : {Icon, CairoDock, int}
 	NOTIFICATION_CLICK_ICON,
@@ -91,7 +96,7 @@ typedef enum {
 	/// notification called when a container is rendered.
 	NOTIFICATION_RENDER,
 	NB_NOTIFICATIONS_CONTAINER
-	} CairoContainerNotifications;
+	} GldiContainerNotifications;
 
 
 // factory
@@ -110,13 +115,13 @@ typedef enum {
 	CAIRO_DOCK_NB_CONTAINER_TYPES
 	} CairoDockTypeContainer;
 
-struct _CairoContainerInterface {
-	gboolean (*animation_loop) (CairoContainer *pContainer);
-	void (*setup_menu) (CairoContainer *pContainer, Icon *pIcon, GtkWidget *pMenu);
+struct _GldiContainerInterface {
+	gboolean (*animation_loop) (GldiContainer *pContainer);
+	void (*setup_menu) (GldiContainer *pContainer, Icon *pIcon, GtkWidget *pMenu);
 	};
 
 /// Definition of a Container, whom derive Dock, Desklet, Dialog and FlyingContainer. 
-struct _CairoContainer {
+struct _GldiContainer {
 	/// object.
 	GldiObject object;
 	/// External data.
@@ -155,51 +160,29 @@ struct _CairoContainer {
 	gboolean bKeepSlowAnimation;
 	/// counter for the animation loop.
 	gint iAnimationStep;
-	CairoContainerInterface iface;
+	GldiContainerInterface iface;
 	
 	gboolean bIgnoreNextReleaseEvent;
 	gpointer reserved[4];
 };
 
 /// Get the Container part of a pointer.
-#define CAIRO_CONTAINER(p) ((CairoContainer *) (p))
+#define CAIRO_CONTAINER(p) ((GldiContainer *) (p))
 
+/** Say if an object is a Container.
+*@param obj the object.
+*@return TRUE if the object is a Container.
+*/
+#define CAIRO_DOCK_IS_CONTAINER(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myContainersMgr))
 
   /////////////
  // WINDOW //
 ///////////
 
-#define gldi_container_new_full(Type, mgr, type, bOpenGLWindow) \
-__extension__ ({ \
-	Type *obj = gldi_object_new (Type, mgr); \
-	CAIRO_CONTAINER(obj)->iType = type; \
-	cairo_dock_init_container_full (CAIRO_CONTAINER (obj), bOpenGLWindow); \
-	obj; })
-
-#define gldi_container_new(Type, iType, mgr) gldi_container_new_full (Type, iType, mgr, TRUE)
 
 void cairo_dock_set_containers_non_sticky (void);
 
 void cairo_dock_disable_containers_opacity (void);
-
-GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow);
-
-/** Initialize a Container : create a GTK window with transparency and OpenGL support. To be called when you create a new container.
-*@param pContainer a Container.
-*@return the newly allocated GTK window.
-*/
-#define cairo_dock_init_container(pContainer) cairo_dock_init_container_full (pContainer, TRUE)
-
-/** Same as above, but with no OpenGL support.
-*@param pContainer a Container.
-*/
-#define cairo_dock_init_container_no_opengl(pContainer) cairo_dock_init_container_full (pContainer, FALSE)
-
-/** Finish a Container. To be called before you free it.
-*@param pContainer a Container.
-*/
-void cairo_dock_finish_container (CairoContainer *pContainer);
-
 
 #if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 14)
 #define gldi_container_get_gdk_window(pContainer) (pContainer)->pWidget->window
@@ -247,9 +230,9 @@ void cairo_dock_finish_container (CairoContainer *pContainer);
 		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL); } while (0)
 #endif
 
-gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const gchar *cSignal);
-gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer);
-gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer);
+gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal);
+gboolean cairo_dock_emit_leave_signal (GldiContainer *pContainer);
+gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer);
 
 
   ////////////
@@ -259,27 +242,19 @@ gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer);
 /** Clear and trigger the redraw of a Container.
 *@param pContainer the Container to redraw.
 */
-void cairo_dock_redraw_container (CairoContainer *pContainer);
+void cairo_dock_redraw_container (GldiContainer *pContainer);
 
 /** Clear and trigger the redraw of a part of a container.
 *@param pContainer the Container to redraw.
 *@param pArea the zone to redraw.
 */
-void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea);
+void cairo_dock_redraw_container_area (GldiContainer *pContainer, GdkRectangle *pArea);
 
 /** Clear and trigger the redraw of an Icon. The drawing is not done immediately, but when the expose event is received.
 *@param icon l'icone a retracer.
 *@param pContainer le container de l'icone.
 */
-void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer);
-
-
-
-/** Search for the Container of a given Icon (dock or desklet in the case of an applet).
-* @param icon the icon.
-* @return the container contening this icon, or NULL if the icon is nowhere.
-*/
-CairoContainer *cairo_dock_search_container_from_icon (Icon *icon);
+void cairo_dock_redraw_icon (Icon *icon, GldiContainer *pContainer);
 
 
 void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data);
@@ -291,7 +266,7 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 */
 #define gldi_container_enable_drop(pContainer, pCallBack, data) cairo_dock_allow_widget_to_receive_data (pContainer->pWidget, pCallBack, data)
 
-void gldi_container_disable_drop (CairoContainer *pContainer);
+void gldi_container_disable_drop (GldiContainer *pContainer);
 
 /** Say if a string is an adress (file://xxx, http://xxx, ftp://xxx, etc).
 * @param cString a string.
@@ -305,7 +280,7 @@ gboolean cairo_dock_string_is_adress (const gchar *cString);
 * @param fOrder the order of the icon if the drop occured on it, or LAST_ORDER if the drop occured between 2 icons.
 * @param pContainer the container of the icon
 */
-void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, CairoContainer *pContainer);
+void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, GldiContainer *pContainer);
 
 
   //////////
@@ -317,7 +292,7 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 *@param pIcon the icon, or NULL.
 *@param pContainer the container that was clicked.
 */
-void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pContainer);
 
 /** Pop-up a menu on a container. In the case of a dock, it prevents this one from shrinking down.
 *@param menu the menu.
@@ -349,7 +324,7 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 *@param pContainer the container that was left-clicked.
 *@return the menu.
 */
-GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
+GtkWidget *cairo_dock_build_menu (Icon *icon, GldiContainer *pContainer);
 
 #if (GTK_MAJOR_VERSION < 3)
 #define _gtk_hbox_new(m) gtk_hbox_new (FALSE, m)
@@ -373,7 +348,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer);
  // INPUT SHAPE //
 /////////////////
 
-GldiShape *gldi_container_create_input_shape (CairoContainer *pContainer, int x, int y, int w, int h);
+GldiShape *gldi_container_create_input_shape (GldiContainer *pContainer, int x, int y, int w, int h);
 
 #if (GTK_MAJOR_VERSION < 3)
 #define gldi_container_set_input_shape(pContainer, pShape) \

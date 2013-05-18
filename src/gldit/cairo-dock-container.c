@@ -13,7 +13,7 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
-* You should have received a copy of the GNU General Public License
+	* You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -27,27 +27,23 @@
 
 #include <GL/gl.h> 
 
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area
 #include "cairo-dock-dock-facility.h"  // cairo_dock_is_hidden
-#include "cairo-dock-module-factory.h"  // cairo_dock_search_container_from_icon
 #include "cairo-dock-dock-manager.h"  // cairo_dock_search_dock_from_name
-#include "cairo-dock-desklet-factory.h"  // cairo_dock_search_container_from_icon
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-opengl.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
-#include "cairo-dock-X-manager.h"  // gldi_get_desktop_width
+#include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #define _MANAGER_DEF_
 #include "cairo-dock-container.h"
 
 // public (manager, config, data)
-CairoContainersParam myContainersParam;
-CairoContainersManager myContainersMgr;
-CairoContainer *g_pPrimaryContainer = NULL;
-CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
+GldiContainersParam myContainersParam;
+GldiContainersManager myContainersMgr;
+GldiContainer *g_pPrimaryContainer = NULL;
+GldiDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 
 // dependancies
 extern CairoDockGLConfig g_openglConfig;
@@ -58,6 +54,7 @@ extern CairoDock *g_pMainDock;
 // private
 static gboolean s_bSticky = TRUE;
 static gboolean s_bInitialOpacity0 = TRUE;  // set initial window opacity to 0, to avoid grey rectangles.
+static gboolean s_bNoComposite = FALSE;
 
 
 void cairo_dock_set_containers_non_sticky (void)
@@ -106,7 +103,7 @@ static void cairo_dock_set_default_rgba_visual (GtkWidget *pWidget)
 	#endif
 }
 
-static gboolean _cairo_default_container_animation_loop (CairoContainer *pContainer)
+static gboolean _cairo_default_container_animation_loop (GldiContainer *pContainer)
 {
 	gboolean bContinue = FALSE;
 	
@@ -121,10 +118,10 @@ static gboolean _cairo_default_container_animation_loop (CairoContainer *pContai
 	
 	if (bUpdateSlowAnimation)
 	{
-		cairo_dock_notify_on_object (pContainer, NOTIFICATION_UPDATE_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
+		gldi_object_notify (pContainer, NOTIFICATION_UPDATE_SLOW, pContainer, &pContainer->bKeepSlowAnimation);
 	}
 	
-	cairo_dock_notify_on_object (pContainer, NOTIFICATION_UPDATE, pContainer, &bContinue);
+	gldi_object_notify (pContainer, NOTIFICATION_UPDATE, pContainer, &bContinue);
 	
 	if (! bContinue && ! pContainer->bKeepSlowAnimation)
 	{
@@ -141,7 +138,7 @@ static gboolean _set_opacity (GtkWidget *pWidget,
 #else
 	G_GNUC_UNUSED cairo_t *ctx,
 #endif
-	CairoContainer *pContainer)
+	GldiContainer *pContainer)
 {
 	if (pContainer->iWidth != 1 ||pContainer->iHeight != 1)
 	{
@@ -151,91 +148,9 @@ static gboolean _set_opacity (GtkWidget *pWidget,
 	}
 	return FALSE ;
 }
-GtkWidget *cairo_dock_init_container_full (CairoContainer *pContainer, gboolean bOpenGLWindow)
-{
-	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	pContainer->pWidget = pWindow;
-	
-	if (!pContainer->iface.animation_loop)
-		pContainer->iface.animation_loop = _cairo_default_container_animation_loop;
-	
-	if (g_bUseOpenGL && bOpenGLWindow)
-	{
-		gldi_glx_init_container (pContainer);
-		pContainer->iAnimationDeltaT = myContainersParam.iGLAnimationDeltaT;
-	}
-	else
-	{
-		cairo_dock_set_default_rgba_visual (pWindow);
-		pContainer->iAnimationDeltaT = myContainersParam.iCairoAnimationDeltaT;
-	}
-	if (pContainer->iAnimationDeltaT == 0)
-		pContainer->iAnimationDeltaT = 30;
-	pContainer->fRatio = 1;
-	
-	g_signal_connect (G_OBJECT (pWindow),
-		"delete-event",
-		G_CALLBACK (_prevent_delete),
-		NULL);
-	
-	gtk_window_set_default_size (GTK_WINDOW (pWindow), 1, 1);  // this should prevent having grey rectangles during the loading, when the window is mapped and rendered by the WM but not yet by us.
-	gtk_window_resize (GTK_WINDOW (pWindow), 1, 1);
-	gtk_widget_set_app_paintable (pWindow, TRUE);
-	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
-	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
-	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
-	if (s_bSticky)
-		gtk_window_stick (GTK_WINDOW (pWindow));
-	// set the opacity to 0 to avoid seeing grey rectangles until the window is ready to be painted by us.
-	if (s_bInitialOpacity0)
-	{
-		gtk_window_set_opacity (GTK_WINDOW (pWindow), 0.);
-		g_signal_connect (G_OBJECT (pWindow),
-			#if (GTK_MAJOR_VERSION < 3)
-			"expose-event",
-			#else
-			"draw",
-			#endif
-			G_CALLBACK (_set_opacity),
-			pContainer);  // the callback will be removed once it has done its job.
-	}
-	
-	// needed since gtk+-3.0 but it's possible that this resize grip has been backported to gtk+-2.0 (e.g. in Ubuntu Natty...)
-	#if (GTK_MAJOR_VERSION >= 3 || ENABLE_GTK_GRIP == 1)
-	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
-	#endif
-	
-	if (GLDI_OBJECT (pContainer)->mgr == NULL)
-		gldi_object_set_manager (GLDI_OBJECT (pContainer), GLDI_MANAGER (&myContainersMgr));  // the implementation of the container will set its manager on top of this one.
-	
-	if (g_pPrimaryContainer == NULL)
-	{
-		g_pPrimaryContainer = pContainer;
-	}
-	return pWindow;
-}
 
 
-void cairo_dock_finish_container (CairoContainer *pContainer)
-{
-	gldi_glx_finish_container (pContainer);
-	
-	gtk_widget_destroy (pContainer->pWidget);  // enleve les signaux.
-	pContainer->pWidget = NULL;
-	if (pContainer->iSidGLAnimation != 0)
-	{
-		g_source_remove (pContainer->iSidGLAnimation);
-		pContainer->iSidGLAnimation = 0;
-	}
-	cairo_dock_notify_on_object (pContainer, NOTIFICATION_DESTROY, pContainer);
-	cairo_dock_clear_notifications_on_object (pContainer);
-	
-	if (g_pPrimaryContainer == pContainer)
-		g_pPrimaryContainer = NULL;
-}
-
-
-void cairo_dock_redraw_container (CairoContainer *pContainer)
+void cairo_dock_redraw_container (GldiContainer *pContainer)
 {
 	g_return_if_fail (pContainer != NULL);
 	GdkRectangle rect = {0, 0, pContainer->iWidth, pContainer->iHeight};
@@ -247,7 +162,7 @@ void cairo_dock_redraw_container (CairoContainer *pContainer)
 	cairo_dock_redraw_container_area (pContainer, &rect);
 }
 
-static inline void _redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea)
+static inline void _redraw_container_area (GldiContainer *pContainer, GdkRectangle *pArea)
 {
 	g_return_if_fail (pContainer != NULL);
 	if (! gldi_container_is_visible (pContainer))
@@ -264,14 +179,14 @@ static inline void _redraw_container_area (CairoContainer *pContainer, GdkRectan
 		gdk_window_invalidate_rect (gldi_container_get_gdk_window (pContainer), pArea, FALSE);
 }
 
-void cairo_dock_redraw_container_area (CairoContainer *pContainer, GdkRectangle *pArea)
+void cairo_dock_redraw_container_area (GldiContainer *pContainer, GdkRectangle *pArea)
 {
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && ! cairo_dock_animation_will_be_visible (CAIRO_DOCK (pContainer)))  // inutile de redessiner.
 		return ;
 	_redraw_container_area (pContainer, pArea);
 }
 
-void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
+void cairo_dock_redraw_icon (Icon *icon, GldiContainer *pContainer)
 {
 	g_return_if_fail (icon != NULL && pContainer != NULL);
 	GdkRectangle rect;
@@ -282,40 +197,6 @@ void cairo_dock_redraw_icon (Icon *icon, CairoContainer *pContainer)
 		|| (CAIRO_DOCK (pContainer)->iRefCount != 0 && ! gldi_container_is_visible (pContainer)) ) )  // inutile de redessiner.
 		return ;
 	_redraw_container_area (pContainer, &rect);
-}
-
-
-static gboolean _cairo_dock_search_icon_in_desklet (CairoDesklet *pDesklet, Icon *icon)
-{
-	if (pDesklet->icons != NULL)
-	{
-		Icon *pIcon;
-		GList *ic;
-		for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
-		{
-			pIcon = ic->data;
-			if (pIcon == icon)
-				return TRUE;
-		}
-	}
-	return FALSE;
-}
-CairoContainer *cairo_dock_search_container_from_icon (Icon *icon)
-{
-	g_return_val_if_fail (icon != NULL, NULL);
-	if (CAIRO_DOCK_IS_APPLET (icon))
-	{
-		return icon->pModuleInstance->pContainer;
-	}
-	else if (icon->cParentDockName != NULL)
-	{
-		return CAIRO_CONTAINER (cairo_dock_search_dock_from_name (icon->cParentDockName));
-	}
-	else
-	{
-		CairoDesklet *pDesklet = cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc)_cairo_dock_search_icon_in_desklet, icon);
-		return CAIRO_CONTAINER (pDesklet);
-	}
 }
 
 
@@ -349,7 +230,7 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 		data);
 }
 
-void gldi_container_disable_drop (CairoContainer *pContainer)
+void gldi_container_disable_drop (GldiContainer *pContainer)
 {
 	gtk_drag_dest_set_target_list (pContainer->pWidget, NULL);
 }
@@ -376,7 +257,7 @@ gboolean cairo_dock_string_is_adress (const gchar *cString)
 	return TRUE;
 }
 
-void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, CairoContainer *pContainer)
+void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, GldiContainer *pContainer)
 {
 	g_return_if_fail (cReceivedData != NULL);
 	gchar *cData = NULL;
@@ -413,7 +294,7 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 		
 		cData = sArg->str;
 		cd_debug (" notification de drop '%s'", cData);
-		cairo_dock_notify_on_object (pContainer, NOTIFICATION_DROP_DATA, cData, pPointedIcon, fOrder, pContainer);
+		gldi_object_notify (pContainer, NOTIFICATION_DROP_DATA, cData, pPointedIcon, fOrder, pContainer);
 	}
 	
 	g_strfreev (cStringList);
@@ -421,19 +302,19 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 }
 
 
-gboolean cairo_dock_emit_signal_on_container (CairoContainer *pContainer, const gchar *cSignal)
+gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal)
 {
 	static gboolean bReturn;
 	g_signal_emit_by_name (pContainer->pWidget, cSignal, NULL, &bReturn);
 	return FALSE;
 }
-gboolean cairo_dock_emit_leave_signal (CairoContainer *pContainer)
+gboolean cairo_dock_emit_leave_signal (GldiContainer *pContainer)
 {
 	// actualize the coordinates of the pointer, since they are most probably out-dated (because the mouse has left the dock, or because a right-click generates an event with (0;0) coordinates)
 	gldi_container_update_mouse_position (pContainer);
 	return cairo_dock_emit_signal_on_container (pContainer, "leave-notify-event");
 }
-gboolean cairo_dock_emit_enter_signal (CairoContainer *pContainer)
+gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer)
 {
 	return cairo_dock_emit_signal_on_container (pContainer, "enter-notify-event");
 }
@@ -443,7 +324,7 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 {
 	*push_in = FALSE;
 	Icon *pIcon = data[0];
-	CairoContainer *pContainer = data[1];
+	GldiContainer *pContainer = data[1];
 	int x0 = pContainer->iWindowPositionX + pIcon->fDrawX;
 	int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
 	
@@ -457,7 +338,7 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	w = requisition.width;
 	h = requisition.height;
 	
-	int Hs = (pContainer->bIsHorizontal ? gldi_get_desktop_height() : gldi_get_desktop_width());
+	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
 	//g_print ("%d;%d %dx%d\n", x0, y0, w, h);
 	if (pContainer->bIsHorizontal)
 	{
@@ -469,14 +350,14 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	}
 	else
 	{
-		*y = MIN (x0, gldi_get_desktop_height() - h);
+		*y = MIN (x0, gldi_desktop_get_height() - h);
 		if (y0 > Hs/2)  // pContainer->bDirectionUp
 			*x = y0 - w;
 		else
 			*x = y0 + pIcon->fHeight * pIcon->fScale;
 	}
 }
-void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pContainer)
 {
 	static gpointer data[2];  // 1 seul menu a la fois, donc on peut la faire statique.
 	
@@ -558,7 +439,7 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 
 
 static GtkWidget *s_pMenu = NULL;  // right-click menu
-GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
+GtkWidget *cairo_dock_build_menu (Icon *icon, GldiContainer *pContainer)
 {
 	if (s_pMenu != NULL)
 	{
@@ -572,14 +453,14 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 	
 	//\_________________________ On passe la main a ceux qui veulent y rajouter des choses.
 	gboolean bDiscardMenu = FALSE;
-	cairo_dock_notify_on_object (pContainer, NOTIFICATION_BUILD_CONTAINER_MENU, icon, pContainer, menu, &bDiscardMenu);
+	gldi_object_notify (pContainer, NOTIFICATION_BUILD_CONTAINER_MENU, icon, pContainer, menu, &bDiscardMenu);
 	if (bDiscardMenu)
 	{
 		gtk_widget_destroy (menu);
 		return NULL;
 	}
 	
-	cairo_dock_notify_on_object (pContainer, NOTIFICATION_BUILD_ICON_MENU, icon, pContainer, menu);
+	gldi_object_notify (pContainer, NOTIFICATION_BUILD_ICON_MENU, icon, pContainer, menu);
 	
 	s_pMenu = menu;
 	g_object_add_weak_pointer (G_OBJECT (menu), (gpointer*)&s_pMenu);  // will nullify 's_pMenu' as soon as the menu is destroyed.
@@ -587,7 +468,7 @@ GtkWidget *cairo_dock_build_menu (Icon *icon, CairoContainer *pContainer)
 }
 
 
-GldiShape *gldi_container_create_input_shape (CairoContainer *pContainer, int x, int y, int w, int h)
+GldiShape *gldi_container_create_input_shape (GldiContainer *pContainer, int x, int y, int w, int h)
 {
 	if (pContainer->iWidth == 0 || pContainer->iHeight == 0)  // very unlikely to happen, but anyway avoid this case.
 		return NULL;
@@ -631,12 +512,11 @@ GldiShape *gldi_container_create_input_shape (CairoContainer *pContainer, int x,
 }
 
 
-
   ////////////
  /// INIT ///
 ////////////
 
-static void _set_below (CairoDock *pDock, gpointer data)
+static void _set_visibility (CairoDock *pDock, gpointer data)
 {
 	cairo_dock_set_dock_visibility (pDock, GPOINTER_TO_INT (data));
 }
@@ -645,16 +525,18 @@ static void _on_composited_changed (GdkScreen *pScreen, G_GNUC_UNUSED gpointer d
 	static CairoDockVisibility s_iPrevVisibility = CAIRO_DOCK_NB_VISI;
 	if (!gdk_screen_is_composited (pScreen) || (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable))
 	{
-		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
+		g_pFakeTransparencyDesktopBg = gldi_desktop_background_get (g_bUseOpenGL);
+		s_bNoComposite = TRUE;
 		s_iPrevVisibility = g_pMainDock->iVisibility;
-		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (CAIRO_DOCK_VISI_KEEP_BELOW));  // set the visibility to 'keep below'; that's the best compromise between accessibility and visual annoyance.
+		cairo_dock_foreach_root_docks ((GFunc)_set_visibility, GINT_TO_POINTER (CAIRO_DOCK_VISI_KEEP_BELOW));  // set the visibility to 'keep below'; that's the best compromise between accessibility and visual annoyance.
 	}
 	else
 	{
-		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
+		gldi_desktop_background_destroy (g_pFakeTransparencyDesktopBg);
+		s_bNoComposite = FALSE;
 		g_pFakeTransparencyDesktopBg = NULL;
 		if (s_iPrevVisibility < CAIRO_DOCK_NB_VISI)
-			cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (s_iPrevVisibility));  // restore the previous visibility.
+			cairo_dock_foreach_root_docks ((GFunc)_set_visibility, GINT_TO_POINTER (s_iPrevVisibility));  // restore the previous visibility.
 	}
 }
 static gboolean _check_composite_delayed (G_GNUC_UNUSED gpointer data)
@@ -663,7 +545,8 @@ static gboolean _check_composite_delayed (G_GNUC_UNUSED gpointer data)
 	if (!gdk_screen_is_composited (pScreen) || (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable))  // no composite available -> load the desktop background
 	{
 		cd_message ("Composite is not available");
-		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);  // we don't modify the visibility on startup; if it's the first launch, the user has to notice the problem. and if it's not, just respect his configuration.
+		g_pFakeTransparencyDesktopBg = gldi_desktop_background_get (g_bUseOpenGL);  // we don't modify the visibility on startup; if it's the first launch, the user has to notice the problem. and if it's not, just respect his configuration.
+		s_bNoComposite = TRUE;
 	}
 	g_signal_connect (pScreen, "composited-changed", G_CALLBACK (_on_composited_changed), NULL);
 	return FALSE;
@@ -673,65 +556,34 @@ static void init (void)
 	g_timeout_add_seconds (4, _check_composite_delayed, NULL);  // we don't want to be annoyed by the activation of the composite on startup
 }
 
-
   //////////////////
  /// GET CONFIG ///
 //////////////////
 
-static gboolean get_config (GKeyFile *pKeyFile, CairoContainersParam *pContainersParam)
+static gboolean get_config (GKeyFile *pKeyFile, GldiContainersParam *pContainersParam)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
-	/**pContainersParam->bUseFakeTransparency = cairo_dock_get_boolean_key_value (pKeyFile, "System", "fake transparency", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-	if (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable)
-		pContainersParam->bUseFakeTransparency = TRUE;*/
 	
 	int iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "opengl anim freq", &bFlushConfFileNeeded, 33, NULL, NULL);
 	pContainersParam->iGLAnimationDeltaT = 1000. / iRefreshFrequency;
+	
 	iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "cairo anim freq", &bFlushConfFileNeeded, 25, NULL, NULL);
 	pContainersParam->iCairoAnimationDeltaT = 1000. / iRefreshFrequency;
-	//g_print ("iGLAnimationDeltaT: %d\n", pContainersParam->iGLAnimationDeltaT);
 	
 	return bFlushConfFileNeeded;
 }
-
 
   ////////////
  /// LOAD ///
 ////////////
 
-/**static void load (void)
+static void load (void)
 {
-	if (myContainersParam.bUseFakeTransparency)
+	if (s_bNoComposite)
 	{
 		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
 	}
-}*/
-
-
-  //////////////
- /// RELOAD ///
-//////////////
-
-/*static void _set_below (CairoDock *pDock, gpointer data)
-{
-	gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), GPOINTER_TO_INT (data));
 }
-static void reload (CairoContainersParam *pPrevContainers, CairoContainersParam *pContainers)
-{
-	//\_______________ Fake Transparency.
-	if (pContainers->bUseFakeTransparency && ! pPrevContainers->bUseFakeTransparency)
-	{
-		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (TRUE));
-		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
-	}
-	else if (! pContainers->bUseFakeTransparency && pPrevContainers->bUseFakeTransparency)
-	{
-		cairo_dock_foreach_root_docks ((GFunc)_set_below, GINT_TO_POINTER (FALSE));
-		cairo_dock_destroy_desktop_background (g_pFakeTransparencyDesktopBg);
-		g_pFakeTransparencyDesktopBg = NULL;
-	}
-}*/
-
 
   //////////////
  /// UNLOAD ///
@@ -739,33 +591,128 @@ static void reload (CairoContainersParam *pPrevContainers, CairoContainersParam 
 
 static void unload (void)
 {
-	g_pFakeTransparencyDesktopBg = NULL;  // no need to unref it, since everything is going to be unloaded, including the desktop_bg.
+	gldi_desktop_background_destroy (g_pFakeTransparencyDesktopBg);  // destroy it, since it will be unloaded anyway by the desktop-manager
+	g_pFakeTransparencyDesktopBg = NULL;
 }
-
 
   ///////////////
  /// MANAGER ///
 ///////////////
 
+static void init_object (GldiObject *obj, gpointer attr)
+{
+	GldiContainer *pContainer = (GldiContainer*)obj;
+	GldiContainerAttr *cattr = (GldiContainerAttr*)attr;
+	
+	pContainer->iface.animation_loop = _cairo_default_container_animation_loop;
+	pContainer->fRatio = 1;
+	pContainer->bIsHorizontal = TRUE;
+	pContainer->bDirectionUp = TRUE;
+	
+	// create a window
+	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	pContainer->pWidget = pWindow;
+	gtk_window_set_default_size (GTK_WINDOW (pWindow), 1, 1);  // this should prevent having grey rectangles during the loading, when the window is mapped and rendered by the WM but not yet by us.
+	gtk_window_resize (GTK_WINDOW (pWindow), 1, 1);
+	gtk_widget_set_app_paintable (pWindow, TRUE);
+	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
+	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
+	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
+	if (s_bSticky)
+		gtk_window_stick (GTK_WINDOW (pWindow));
+	g_signal_connect (G_OBJECT (pWindow),
+		"delete-event",
+		G_CALLBACK (_prevent_delete),
+		NULL);
+	gtk_window_get_size (GTK_WINDOW (pWindow), &pContainer->iWidth, &pContainer->iHeight);  // it's only the initial size allocated by GTK.
+	
+	// set an RGBA visual for cairo or opengl
+	if (g_bUseOpenGL && ! cattr->bNoOpengl)
+	{
+		gldi_glx_init_container (pContainer);
+		pContainer->iAnimationDeltaT = myContainersParam.iGLAnimationDeltaT;
+	}
+	else
+	{
+		cairo_dock_set_default_rgba_visual (pWindow);
+		pContainer->iAnimationDeltaT = myContainersParam.iCairoAnimationDeltaT;
+	}
+	if (pContainer->iAnimationDeltaT == 0)
+		pContainer->iAnimationDeltaT = 30;
+	#if (GTK_MAJOR_VERSION < 3)
+	gdk_window_set_back_pixmap (gldi_container_get_gdk_window (pContainer), NULL, FALSE);
+	#else
+	gdk_window_set_background_pattern (gldi_container_get_gdk_window (pContainer), NULL);
+	#endif
+	
+	// set the opacity to 0 to avoid seeing grey rectangles until the window is ready to be painted by us.
+	if (s_bInitialOpacity0)
+	{
+		gtk_window_set_opacity (GTK_WINDOW (pWindow), 0.);
+		g_signal_connect (G_OBJECT (pWindow),
+			#if (GTK_MAJOR_VERSION < 3)
+			"expose-event",
+			#else
+			"draw",
+			#endif
+			G_CALLBACK (_set_opacity),
+			pContainer);  // the callback will be removed once it has done its job.
+	}
+	
+	// remove the resize grip added by gtk3 (it's also possible that this grip has been backported to gtk+-2.0 (e.g. in Ubuntu Natty...))
+	#if (GTK_MAJOR_VERSION >= 3 || ENABLE_GTK_GRIP == 1)
+	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
+	#endif
+	
+	// make it the primary container if it's the first
+	if (g_pPrimaryContainer == NULL)
+		g_pPrimaryContainer = pContainer;
+}
+
+static void reset_object (GldiObject *obj)
+{
+	GldiContainer *pContainer = (GldiContainer*)obj;
+	
+	// destroy the opengl context
+	gldi_glx_finish_container (pContainer);
+	
+	// destroy the window (will remove all signals)
+	gtk_widget_destroy (pContainer->pWidget);
+	pContainer->pWidget = NULL;
+	
+	// stop the animation loop
+	if (pContainer->iSidGLAnimation != 0)
+	{
+		g_source_remove (pContainer->iSidGLAnimation);
+		pContainer->iSidGLAnimation = 0;
+	}
+	
+	if (g_pPrimaryContainer == pContainer)
+		g_pPrimaryContainer = NULL;
+}
+
 void gldi_register_containers_manager (void)
 {
 	// Manager
-	memset (&myContainersMgr, 0, sizeof (CairoContainersManager));
-	myContainersMgr.mgr.cModuleName 	= "Containers";
-	myContainersMgr.mgr.init 		= init;
-	myContainersMgr.mgr.load 		= NULL;
-	myContainersMgr.mgr.unload 		= unload;
-	myContainersMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
-	myContainersMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	memset (&myContainersMgr, 0, sizeof (GldiContainersManager));
+	myContainersMgr.mgr.cModuleName  = "Containers";
+	myContainersMgr.mgr.init         = init;
+	myContainersMgr.mgr.load         = load;
+	myContainersMgr.mgr.unload       = unload;
+	myContainersMgr.mgr.reload       = (GldiManagerReloadFunc)NULL;
+	myContainersMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
 	myContainersMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	myContainersMgr.mgr.init_object  = init_object;
+	myContainersMgr.mgr.reset_object = reset_object;
+	myContainersMgr.mgr.iObjectSize  = sizeof (GldiContainer);
 	// Config
 	myContainersMgr.mgr.pConfig = (GldiManagerConfigPtr)&myContainersParam;
-	myContainersMgr.mgr.iSizeOfConfig = sizeof (CairoContainersParam);
+	myContainersMgr.mgr.iSizeOfConfig = sizeof (GldiContainersParam);
 	// data
 	myContainersMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myContainersMgr.mgr.iSizeOfData = 0;
 	// signals
-	cairo_dock_install_notifications_on_object (&myContainersMgr, NB_NOTIFICATIONS_CONTAINER);
+	gldi_object_install_notifications (&myContainersMgr, NB_NOTIFICATIONS_CONTAINER);
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myContainersMgr));
 }
