@@ -29,7 +29,7 @@ G_BEGIN_DECLS
  *@file cairo-dock-overlay.h This class defines Overlays, that are small images superimposed on the icon at a given position.
  * 
  * To add an overlay to an icon, use \ref cairo_dock_add_overlay_from_image or \ref cairo_dock_add_overlay_from_surface.
- * The overlay can then be removed from the icon by simply destroying it with \ref cairo_dock_destroy_overlay
+ * The overlay can then be removed from the icon by simply destroying it with \ref gldi_object_unref
  * 
  * A common feature is to have only 1 overlay at a given position. This can be achieved by passing a non-NULL data to the creation functions. This data will identify all of your overlays.
  * You can then remove an overlay simply from its position with \ref cairo_dock_remove_overlay_at_position, and adding an overlay at a position will automatically remove any previous overlay at this position with the same data.
@@ -39,6 +39,18 @@ G_BEGIN_DECLS
  * Overlays are drawn at 1/2 of the icon size by default, but this can be set up with \ref cairo_dock_set_overlay_scale.
  * If you need to modify an overlay directly, you can get its image buffer with \ref cairo_dock_get_overlay_image_buffer.
  */
+
+typedef struct _CairoOverlaysManager CairoOverlaysManager;
+typedef struct _CairoOverlayAttr CairoOverlayAttr;
+
+#ifndef _MANAGER_DEF_
+extern CairoOverlaysManager myOverlaysMgr;
+#endif
+
+// manager
+struct _CairoOverlaysManager {
+	GldiManager mgr;
+	};
 
 /// Available position of an overlay on an icon.
 typedef enum {
@@ -53,6 +65,22 @@ typedef enum {
 	CAIRO_OVERLAY_LEFT,
 	CAIRO_OVERLAY_NB_POSITIONS,
 } CairoOverlayPosition;
+
+struct _CairoOverlayAttr {
+	CairoOverlayPosition iPosition;
+	Icon *pIcon;
+	gpointer data;
+	const gchar *cImageFile;
+	cairo_surface_t *pSurface;
+	int iWidth, iHeight;
+	GLuint iTexture;
+};
+
+// signals
+typedef enum {
+	NB_NOTIFICATIONS_OVERLAYS = NB_NOTIFICATIONS_OBJECT
+	} CairoOverlayssNotifications;
+
 
 
 /// Definition of an Icon Overlay.
@@ -118,11 +146,6 @@ CairoOverlay *cairo_dock_add_overlay_from_texture (Icon *pIcon, GLuint iTexture,
 #define cairo_dock_get_overlay_image_buffer(pOverlay) (&(pOverlay)->image)
 
 
-/** Destroy an overlay (it is removed from its icon).
- *@param pOverlay the overlay
- */
-void cairo_dock_destroy_overlay (CairoOverlay *pOverlay);
-
 /** Remove an overlay from an icon, given its position and data.
  *@param pIcon the icon
  *@param iPosition the position of the overlay
@@ -153,7 +176,7 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio);
  *@param iPosition position where to display the overlay
  *@return TRUE if the overlay has been successfuly printed.
  */
-gboolean cairo_dock_print_overlay_on_icon_from_image (Icon *pIcon, CairoContainer *pContainer, const gchar *cImageFile, CairoOverlayPosition iPosition);
+gboolean cairo_dock_print_overlay_on_icon_from_image (Icon *pIcon, GldiContainer *pContainer, const gchar *cImageFile, CairoOverlayPosition iPosition);
 
 /** Print an overlay onto an icon from a surface at a given position. You can't remove/modify the overlay then. The overlay will be displayed until you modify the icon directly (for instance by setting a new image).
  *@param pIcon the icon
@@ -164,10 +187,12 @@ gboolean cairo_dock_print_overlay_on_icon_from_image (Icon *pIcon, CairoContaine
  *@param iPosition position where to display the overlay
  *@return TRUE if the overlay has been successfuly printed.
  */
-void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, CairoContainer *pContainer, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition);
+void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, GldiContainer *pContainer, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition);
 
-void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, CairoContainer *pContainer, GLuint iTexture, CairoOverlayPosition iPosition);
+void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, GldiContainer *pContainer, GLuint iTexture, CairoOverlayPosition iPosition);
 
+
+void gldi_register_overlays_manager (void);
 
 G_END_DECLS
 #endif
