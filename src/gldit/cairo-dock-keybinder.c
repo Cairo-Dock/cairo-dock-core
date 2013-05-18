@@ -41,12 +41,10 @@
 #include "eggaccelerators.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-keybinder.h"
 
-
 // public (manager, config, data)
-CairoShortkeysManager myShortkeysMgr;
+GldiShortkeysManager myShortkeysMgr;
 
 // dependancies
 
@@ -75,7 +73,7 @@ lookup_ignorable_modifiers (GdkKeymap *keymap)
 
 static void
 grab_ungrab_with_ignorable_modifiers (GdkWindow *rootwin,
-				      CairoKeyBinding   *binding,
+				      GldiShortkey   *binding,
 				      gboolean   grab)
 {
 	guint mod_masks [] = {
@@ -109,7 +107,7 @@ grab_ungrab_with_ignorable_modifiers (GdkWindow *rootwin,
 }
 
 static gboolean
-do_grab_key (CairoKeyBinding *binding)
+do_grab_key (GldiShortkey *binding)
 {
 	GdkKeymap *keymap = gdk_keymap_get_default ();
 	GdkWindow *rootwin = gdk_get_default_root_window ();
@@ -121,51 +119,50 @@ do_grab_key (CairoKeyBinding *binding)
 		return FALSE;
 
 	if (!egg_accelerator_parse_virtual (binding->keystring,
-					    &keysym,
-					    &virtual_mods))
+			&keysym,
+			&virtual_mods))
 		return FALSE;
 
 	cd_debug ("Got accel %d, %d", keysym, virtual_mods);
 
-	binding->keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (rootwin),
-					     keysym);
+	binding->keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (rootwin), keysym);
 	if (binding->keycode == 0)
 		return FALSE;
 
 	cd_debug ("Got keycode %d", binding->keycode);
 
 	egg_keymap_resolve_virtual_modifiers (keymap,
-					      virtual_mods,
-					      &binding->modifiers);
+		virtual_mods,
+		&binding->modifiers);
 
 	cd_debug ("Got modmask %d", binding->modifiers);
 
 	gdk_error_trap_push ();
 
 	grab_ungrab_with_ignorable_modifiers (rootwin,
-					      binding,
-					      TRUE /* grab */);
+		binding,
+		TRUE /* grab */);
 
 	gdk_flush ();
 
-	if (gdk_error_trap_pop ()) {
-	   g_warning ("CairoKeyBinding '%s' failed!", binding->keystring);
-	   return FALSE;
+	if (gdk_error_trap_pop ())
+	{
+		g_warning ("GldiShortkey '%s' failed!", binding->keystring);
+		return FALSE;
 	}
 
 	return TRUE;
 }
 
 static gboolean
-do_ungrab_key (CairoKeyBinding *binding)
+do_ungrab_key (GldiShortkey *binding)
 {
 	GdkWindow *rootwin = gdk_get_default_root_window ();
-
 	cd_debug ("Removing grab for '%s'", binding->keystring);
 
 	grab_ungrab_with_ignorable_modifiers (rootwin,
-					      binding,
-					      FALSE /* ungrab */);
+		binding,
+		FALSE /* ungrab */);
 
 	return TRUE;
 }
@@ -180,41 +177,33 @@ filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, G_GNUC_UNUSED gpointer data
 
 	cd_debug ("Got Event! %d, %d", xevent->type, event->type);
 
-	switch (xevent->type) {
-	case KeyPress:
-		cd_debug ("Got KeyPress! keycode: %d, modifiers: %d",
-				xevent->xkey.keycode,
-				xevent->xkey.state);
+	switch (xevent->type)
+	{
+		case KeyPress:
+			cd_debug ("Got KeyPress! keycode: %d, modifiers: %d", xevent->xkey.keycode, xevent->xkey.state);
+			/*
+			 * Set the last event time for use when showing
+			 * windows to avoid anti-focus-stealing code.
+			 */
+			///processing_event = TRUE;
+			///last_event_time = xevent->xkey.time;
 
-		/*
-		 * Set the last event time for use when showing
-		 * windows to avoid anti-focus-stealing code.
-		 */
-		///processing_event = TRUE;
-		///last_event_time = xevent->xkey.time;
+			event_mods = xevent->xkey.state & ~(num_lock_mask | caps_lock_mask | scroll_lock_mask);
 
-		event_mods = xevent->xkey.state & ~(num_lock_mask  |
-						    caps_lock_mask |
-						    scroll_lock_mask);
+			for (iter = s_pKeyBindings; iter != NULL; iter = iter->next) {
+				GldiShortkey *binding = (GldiShortkey *) iter->data;
 
-		for (iter = s_pKeyBindings; iter != NULL; iter = iter->next) {
-			CairoKeyBinding *binding = (CairoKeyBinding *) iter->data;
-
-			if (binding->keycode == xevent->xkey.keycode &&
-			    binding->modifiers == event_mods) {
-
-				cd_debug ("Calling handler for '%s'...",
-						binding->keystring);
-
-				(binding->handler) (binding->keystring,
-						    binding->user_data);
+				if (binding->keycode == xevent->xkey.keycode
+				&& binding->modifiers == event_mods)
+				{
+					cd_debug ("Calling handler for '%s'...", binding->keystring);
+					(binding->handler) (binding->keystring, binding->user_data);
+				}
 			}
-		}
-
-		///processing_event = FALSE;
+			///processing_event = FALSE;
 		break;
-	case KeyRelease:
-		cd_debug ("Got KeyRelease! ");
+		case KeyRelease:
+			cd_debug ("Got KeyRelease! ");
 		break;
 	}
 
@@ -229,22 +218,23 @@ on_keymap_changed (G_GNUC_UNUSED GdkKeymap *map)
 
 	cd_debug ("Keymap changed! Regrabbing keys...");
 
-	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next) {
-		CairoKeyBinding *binding = (CairoKeyBinding *) iter->data;
+	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
+	{
+		GldiShortkey *binding = (GldiShortkey *) iter->data;
 		do_ungrab_key (binding);
 	}
 
 	lookup_ignorable_modifiers (keymap);
 
-	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next) {
-		CairoKeyBinding *binding = (CairoKeyBinding *) iter->data;
+	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
+	{
+		GldiShortkey *binding = (GldiShortkey *) iter->data;
 		do_grab_key (binding);
 	}
 }
 
 
-CairoKeyBinding *
-cd_keybinder_bind (const gchar *keystring,
+GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 	const gchar *cDemander,
 	const gchar *cDescription,
 	const gchar *cIconFilePath,
@@ -254,79 +244,21 @@ cd_keybinder_bind (const gchar *keystring,
 	CDBindkeyHandler handler,
 	gpointer user_data)
 {
-	CairoKeyBinding *binding;
-	cd_debug ("%s (%s)", __func__, keystring);
-	
-	// register the new shortkey
-	binding = g_new0 (CairoKeyBinding, 1);
-	
-	binding->keystring = g_strdup (keystring);
-	binding->cDemander = g_strdup (cDemander);
-	binding->cDescription = g_strdup (cDescription);
-	binding->cIconFilePath = g_strdup (cIconFilePath);
-	binding->cConfFilePath = g_strdup (cConfFilePath);
-	binding->cGroupName = g_strdup (cGroupName);
-	binding->cKeyName = g_strdup (cKeyName);
-	binding->handler = handler;
-	binding->user_data = user_data;
-	
-	s_pKeyBindings = g_slist_prepend (s_pKeyBindings, binding);
-	
-	// try to grab the key
-	if (keystring != NULL)
-	{
-		binding->bSuccess = do_grab_key (binding);
-		
-		if (! binding->bSuccess)
-		{
-			cd_warning ("Couldn't bind '%s' (%s: %s)\n This shortkey is probably already used by another applet or another application", keystring, cDemander, cDescription);
-		}
-	}
-	
-	cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_ADDED, binding);
-	
-	return binding;
+	GldiShortkeyAttr attr;
+	attr.keystring = keystring;
+	attr.cDemander = cDemander;
+	attr.cDescription = cDescription;
+	attr.cIconFilePath = cIconFilePath;
+	attr.cConfFilePath = cConfFilePath;
+	attr.cGroupName = cGroupName;
+	attr.cKeyName = cKeyName;
+	attr.handler = handler;
+	attr.user_data = user_data;
+	return (GldiShortkey*)gldi_object_new (GLDI_MANAGER(&myShortkeysMgr), &attr);
 }
 
 
-static void _free_binding (CairoKeyBinding *binding)
-{
-	g_free (binding->keystring);
-	g_free (binding->cDemander);
-	g_free (binding->cDescription);
-	g_free (binding->cIconFilePath);
-	g_free (binding->cConfFilePath);
-	g_free (binding->cGroupName);
-	g_free (binding->cKeyName);
-	g_free (binding);
-}
-
-void
-cd_keybinder_unbind (CairoKeyBinding *binding)
-{
-	if (binding == NULL)
-		return;
-	//g_print ("%s (%s)\n", __func__, binding->keystring);
-	
-	// ensure it's a registerd binding
-	GSList *iter = g_slist_find (s_pKeyBindings, binding);
-	g_return_if_fail (iter != NULL);
-	
-	// unbind the shortkey
-	if (binding->bSuccess)
-		do_ungrab_key (binding);
-	
-	// remove it from the list and destroy it
-	cd_debug (" --- remove key binding '%s'", binding->keystring);
-	s_pKeyBindings = g_slist_delete_link (s_pKeyBindings, iter);
-	
-	cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_REMOVED, binding);
-	
-	_free_binding (binding);
-}
-
-
-gboolean cd_keybinder_rebind (CairoKeyBinding *binding,
+gboolean gldi_shortkey_rebind (GldiShortkey *binding,
 	const gchar *cNewKeyString,
 	const gchar *cNewDescription)
 {
@@ -361,13 +293,13 @@ gboolean cd_keybinder_rebind (CairoKeyBinding *binding,
 	
 	binding->bSuccess = do_grab_key (binding);
 	
-	cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_CHANGED, binding);
+	gldi_object_notify (binding, NOTIFICATION_SHORTKEY_CHANGED, binding);
 	
 	return binding->bSuccess;
 }
 
 
-void cd_keybinder_foreach (GFunc pCallback, gpointer data)
+void gldi_shortkeys_foreach (GFunc pCallback, gpointer data)
 {
 	g_slist_foreach (s_pKeyBindings, pCallback, data);
 }
@@ -436,7 +368,7 @@ static void init (void)
 	GSList *iter;
 	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
 	{
-		CairoKeyBinding *binding = (CairoKeyBinding *) iter->data;
+		GldiShortkey *binding = (GldiShortkey *) iter->data;
 		
 		cd_debug (" --- remove key binding '%s'", binding->keystring);
 		if (binding->bSuccess)
@@ -444,7 +376,7 @@ static void init (void)
 			do_ungrab_key (binding);
 			binding->bSuccess = FALSE;
 		}
-		cairo_dock_notify_on_object (&myShortkeysMgr, NOTIFICATION_SHORTKEY_REMOVED, binding);
+		gldi_object_notify (&myShortkeysMgr, NOTIFICATION_SHORTKEY_REMOVED, binding);
 		
 		_free_binding (binding);
 	}
@@ -456,17 +388,73 @@ static void init (void)
  /// MANAGER ///
 ///////////////
 
+static void init_object (GldiObject *obj, gpointer attr)
+{
+	GldiShortkey *pShortkey = (GldiShortkey*)obj;
+	GldiShortkeyAttr *sattr = (GldiShortkeyAttr*)attr;
+	
+	// store the info
+	pShortkey->keystring = g_strdup (sattr->keystring);
+	pShortkey->cDemander = g_strdup (sattr->cDemander);
+	pShortkey->cDescription = g_strdup (sattr->cDescription);
+	pShortkey->cIconFilePath = g_strdup (sattr->cIconFilePath);
+	pShortkey->cConfFilePath = g_strdup (sattr->cConfFilePath);
+	pShortkey->cGroupName = g_strdup (sattr->cGroupName);
+	pShortkey->cKeyName = g_strdup (sattr->cKeyName);
+	pShortkey->handler = sattr->handler;
+	pShortkey->user_data = sattr->user_data;
+	
+	// register the new shortkey
+	s_pKeyBindings = g_slist_prepend (s_pKeyBindings, pShortkey);
+	
+	// try to grab the key
+	if (pShortkey->keystring != NULL)
+	{
+		pShortkey->bSuccess = do_grab_key (pShortkey);
+		
+		if (! pShortkey->bSuccess)
+		{
+			cd_warning ("Couldn't bind '%s' (%s: %s)\n This shortkey is probably already used by another applet or another application", pShortkey->keystring, pShortkey->cDemander, pShortkey->cDescription);
+		}
+	}
+}
+
+static void reset_object (GldiObject *obj)
+{
+	GldiShortkey *pShortkey = (GldiShortkey*)obj;
+	
+	// unbind the shortkey
+	if (pShortkey->bSuccess)
+		do_ungrab_key (pShortkey);
+	
+	// remove it from the list
+	cd_debug (" --- remove key binding '%s'", pShortkey->keystring);
+	s_pKeyBindings = g_slist_remove (s_pKeyBindings, pShortkey);
+	
+	// free data
+	g_free (pShortkey->keystring);
+	g_free (pShortkey->cDemander);
+	g_free (pShortkey->cDescription);
+	g_free (pShortkey->cIconFilePath);
+	g_free (pShortkey->cConfFilePath);
+	g_free (pShortkey->cGroupName);
+	g_free (pShortkey->cKeyName);
+}
+
 void gldi_register_shortkeys_manager (void)
 {
 	// Manager
-	memset (&myShortkeysMgr, 0, sizeof (CairoShortkeysManager));
-	myShortkeysMgr.mgr.cModuleName 	= "Shortkeys";
-	myShortkeysMgr.mgr.init 		= init;
-	myShortkeysMgr.mgr.load 		= NULL;
-	myShortkeysMgr.mgr.unload 		= NULL;  /// unload
-	myShortkeysMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
-	myShortkeysMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
+	memset (&myShortkeysMgr, 0, sizeof (GldiShortkeysManager));
+	myShortkeysMgr.mgr.cModuleName = "Shortkeys";
+	myShortkeysMgr.mgr.init         = init;
+	myShortkeysMgr.mgr.load         = NULL;
+	myShortkeysMgr.mgr.unload       = NULL;  /// unload
+	myShortkeysMgr.mgr.reload       = (GldiManagerReloadFunc)NULL;
+	myShortkeysMgr.mgr.get_config   = (GldiManagerGetConfigFunc)NULL;
 	myShortkeysMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	myShortkeysMgr.mgr.init_object  = init_object;
+	myShortkeysMgr.mgr.reset_object = reset_object;
+	myShortkeysMgr.mgr.iObjectSize  = sizeof (GldiShortkey);
 	// Config
 	myShortkeysMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
 	myShortkeysMgr.mgr.iSizeOfConfig = 0;
@@ -474,7 +462,7 @@ void gldi_register_shortkeys_manager (void)
 	myShortkeysMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myShortkeysMgr.mgr.iSizeOfData = 0;
 	// signals
-	cairo_dock_install_notifications_on_object (&myShortkeysMgr, NB_NOTIFICATIONS_SHORTKEYS);
+	gldi_object_install_notifications (&myShortkeysMgr, NB_NOTIFICATIONS_SHORTKEYS);
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myShortkeysMgr));
 }
