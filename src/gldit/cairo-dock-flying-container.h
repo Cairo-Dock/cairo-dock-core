@@ -26,6 +26,7 @@
 G_BEGIN_DECLS
 
 typedef struct _CairoFlyingManager CairoFlyingManager;
+typedef struct _CairoFlyingAttr CairoFlyingAttr;
 
 #ifndef _MANAGER_DEF_
 extern CairoFlyingManager myFlyingsMgr;
@@ -36,6 +37,12 @@ struct _CairoFlyingManager {
 	GldiManager mgr;
 	} ;
 
+struct _CairoFlyingAttr {
+	GldiContainerAttr cattr;
+	Icon *pIcon;
+	CairoDock *pOriginDock;
+	} ;
+
 // signals
 typedef enum {
 	NB_NOTIFICATIONS_FLYING_CONTAINER = NB_NOTIFICATIONS_CONTAINER
@@ -44,33 +51,31 @@ typedef enum {
 // factory
 struct _CairoFlyingContainer {
 	/// container
-	CairoContainer container;
+	GldiContainer container;
 	/// the flying icon
 	Icon *pIcon;
 	/// time the container was created.
 	double fCreationTime;  // see callbacks.c for the usage of this.
 };
 
-/** Cast a Container into a FlyingIconff .
+/** Cast a Container into a FlyingContainer .
 *@param pContainer the container.
-*@return the desklet.
+*@return the FlyingContainer.
 */
 #define CAIRO_FLYING_CONTAINER(pContainer) ((CairoFlyingContainer *)pContainer)
 
-void cairo_dock_unload_flying_container_textures (void);  // merge with unload
+/** Say if an object is a FlyingContainer.
+*@param obj the object.
+*@return TRUE if the object is a FlyingContainer.
+*/
+#define CAIRO_DOCK_IS_FLYING_CONTAINER(obj) gldi_object_is_manager_child (obj, &myFlyingsMgr)
 
-//gboolean cairo_dock_update_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation);
 
-//gboolean cairo_dock_render_flying_container_notification (gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext);
+CairoFlyingContainer *gldi_flying_container_new (Icon *pFlyingIcon, CairoDock *pOriginDock);
 
+void gldi_flying_container_drag (CairoFlyingContainer *pFlyingContainer, CairoDock *pOriginDock);
 
-CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock);
-
-void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, CairoDock *pOriginDock);
-
-void cairo_dock_free_flying_container (CairoFlyingContainer *pFlyingContainer);
-
-void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContainer);
+void gldi_flying_container_terminate (CairoFlyingContainer *pFlyingContainer);
 
 
 void gldi_register_flying_manager (void);

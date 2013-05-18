@@ -26,13 +26,12 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_detach_at_position
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
 #define _MANAGER_DEF_
@@ -46,19 +45,21 @@
 | |    |
 | |    |
 |_|____|
-
 */
 
+// public (manager, config, data)
 CairoFlyingManager myFlyingsMgr;
 
-extern CairoContainer *g_pPrimaryContainer;
+// dependancies
+extern GldiContainer *g_pPrimaryContainer;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 
+// private
 static CairoDockImageBuffer *s_pExplosion = NULL;
 static CairoDockImageBuffer *s_pEmblem = NULL;
 
-static void _cairo_dock_load_emblem (Icon *pIcon)
+static void _load_emblem (Icon *pIcon)
 {
 	const gchar *cImage = NULL;
 	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
@@ -77,7 +78,7 @@ static void _cairo_dock_load_emblem (Icon *pIcon)
 	s_pEmblem = cairo_dock_create_image_buffer (cIcon, iWidth/2, iHeight/2, 0);
 	g_free (cIcon);
 }
-static void _cairo_dock_load_explosion_image (int iWidth)
+static void _load_explosion_image (int iWidth)
 {
 	cairo_dock_free_image_buffer (s_pExplosion);
 	gchar *cExplosionFile = cairo_dock_search_image_s_path ("explosion.png");
@@ -87,26 +88,26 @@ static void _cairo_dock_load_explosion_image (int iWidth)
 }
 
 
-static gboolean _cairo_dock_update_flying_container_notification (G_GNUC_UNUSED gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
+static gboolean _on_update_flying_container_notification (G_GNUC_UNUSED gpointer pUserData, CairoFlyingContainer *pFlyingContainer, gboolean *bContinueAnimation)
 {
 	if (! cairo_dock_image_buffer_is_animated (s_pExplosion))	
 	{
 		*bContinueAnimation = FALSE;  // cancel any other update
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;  // and intercept the notification
+		return GLDI_NOTIFICATION_INTERCEPT;  // and intercept the notification
 	}
 	gboolean bLastFrame = cairo_dock_image_buffer_next_frame_no_loop (s_pExplosion);
 	if (bLastFrame)  // last frame reached -> stop here
 	{
 		*bContinueAnimation = FALSE;  // cancel any other update
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;  // and intercept the notification
+		return GLDI_NOTIFICATION_INTERCEPT;  // and intercept the notification
 	}
 	gtk_widget_queue_draw (pFlyingContainer->container.pWidget);
 	
 	*bContinueAnimation = TRUE;
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
-static gboolean _cairo_dock_render_flying_container_notification (G_GNUC_UNUSED gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext)
+static gboolean _on_render_flying_container_notification (G_GNUC_UNUSED gpointer pUserData, CairoFlyingContainer *pFlyingContainer, cairo_t *pCairoContext)
 {
 	Icon *pIcon = pFlyingContainer->pIcon;
 	if (pCairoContext != NULL)
@@ -179,7 +180,7 @@ static gboolean _cairo_dock_render_flying_container_notification (G_GNUC_UNUSED 
 			_cairo_dock_disable_texture ();
 		}
 	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 
@@ -196,7 +197,7 @@ static gboolean on_expose_flying_icon (G_GNUC_UNUSED GtkWidget *pWidget,
 		if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pFlyingContainer)))
 			return FALSE;
 		
-		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER, pFlyingContainer, NULL);
+		gldi_object_notify (pFlyingContainer, NOTIFICATION_RENDER, pFlyingContainer, NULL);
 		
 		gldi_glx_end_draw_container (CAIRO_CONTAINER (pFlyingContainer));
 	}
@@ -204,7 +205,7 @@ static gboolean on_expose_flying_icon (G_GNUC_UNUSED GtkWidget *pWidget,
 	{
 		cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pFlyingContainer));
 		
-		cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_RENDER, pFlyingContainer, pCairoContext);
+		gldi_object_notify (pFlyingContainer, NOTIFICATION_RENDER, pFlyingContainer, pCairoContext);
 		
 		cairo_destroy (pCairoContext);
 	}
@@ -235,7 +236,7 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 	return FALSE;
 }
 
-static gboolean _cairo_flying_container_animation_loop (CairoContainer *pContainer)
+static gboolean _animation_loop (GldiContainer *pContainer)
 {
 	CairoFlyingContainer *pFlyingContainer = CAIRO_FLYING_CONTAINER (pContainer);
 	gboolean bContinue = FALSE;
@@ -244,35 +245,123 @@ static gboolean _cairo_flying_container_animation_loop (CairoContainer *pContain
 	{
 		gboolean bIconIsAnimating = FALSE;
 		
-		cairo_dock_notify_on_object (pFlyingContainer->pIcon, NOTIFICATION_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
+		gldi_object_notify (pFlyingContainer->pIcon, NOTIFICATION_UPDATE_ICON, pFlyingContainer->pIcon, pFlyingContainer, &bIconIsAnimating);
 		if (! bIconIsAnimating)
 			pFlyingContainer->pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
 		else
 			bContinue = TRUE;
 	}
 	
-	cairo_dock_notify_on_object (pFlyingContainer, NOTIFICATION_UPDATE, pFlyingContainer, &bContinue);
+	gldi_object_notify (pFlyingContainer, NOTIFICATION_UPDATE, pFlyingContainer, &bContinue);
 	
-	if (! bContinue)
+	if (! bContinue)  // end of the explosion animation, destroy the container.
 	{
-		cairo_dock_free_flying_container (pFlyingContainer);
+		gldi_object_unref (GLDI_OBJECT(pFlyingContainer));
 		return FALSE;
 	}
 	else
 		return TRUE;
 }
 
-CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, CairoDock *pOriginDock)
+CairoFlyingContainer *gldi_flying_container_new (Icon *pFlyingIcon, CairoDock *pOriginDock)
 {
 	g_return_val_if_fail (pFlyingIcon != NULL, NULL);
-	// create a flying-container
-	CairoFlyingContainer * pFlyingContainer = gldi_container_new (CairoFlyingContainer, &myFlyingsMgr, CAIRO_DOCK_TYPE_FLYING_CONTAINER);
+	CairoFlyingAttr attr;
+	memset (&attr, 0, sizeof (CairoFlyingAttr));
+	attr.pIcon = pFlyingIcon;
+	attr.pOriginDock = pOriginDock;
+	return (CairoFlyingContainer*)gldi_object_new (GLDI_MANAGER(&myFlyingsMgr), &attr);
+}
+
+void gldi_flying_container_drag (CairoFlyingContainer *pFlyingContainer, CairoDock *pOriginDock)
+{
+	if (pOriginDock->container.bIsHorizontal)
+	{
+		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
+		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
+	}
+	else
+	{
+		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
+		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
+	}
+	//g_print ("  on tire l'icone volante en (%d;%d)\n", pFlyingContainer->container.iWindowPositionX, pFlyingContainer->container.iWindowPositionY);
+	gtk_window_move (GTK_WINDOW (pFlyingContainer->container.pWidget),
+		pFlyingContainer->container.iWindowPositionX,
+		pFlyingContainer->container.iWindowPositionY);
+}
+
+void gldi_flying_container_terminate (CairoFlyingContainer *pFlyingContainer)
+{
+	// detach the icon from the container
+	Icon *pIcon = pFlyingContainer->pIcon;
+	pFlyingContainer->pIcon = NULL;
+	cairo_dock_set_icon_container (pIcon, NULL);
 	
-	pFlyingContainer->container.bIsHorizontal = TRUE;
-	pFlyingContainer->container.bDirectionUp = TRUE;
-	pFlyingContainer->container.fRatio = 1.;
-	pFlyingContainer->container.bUseReflect = FALSE;
-	pFlyingContainer->container.iface.animation_loop = _cairo_flying_container_animation_loop;
+	// destroy it, or place it in a desklet.
+	if (pIcon->cDesktopFileName != NULL)  // a launcher/sub-dock/separator, that is part of the theme
+	{
+		cairo_dock_delete_icon_from_current_theme (pIcon);
+		gldi_object_unref (GLDI_OBJECT(pIcon));
+	}
+	else if (CAIRO_DOCK_IS_APPLET(pIcon))  /// faire une fonction dans la factory ...
+	{
+		cd_debug ("le module %s devient un desklet", pIcon->pModuleInstance->cConfFilePath);
+		gldi_module_instance_detach_at_position (pIcon->pModuleInstance,
+			pFlyingContainer->container.iWindowPositionX + pFlyingContainer->container.iWidth/2,
+			pFlyingContainer->container.iWindowPositionY + pFlyingContainer->container.iHeight/2);
+	}
+	
+	// start the explosion animation
+	cairo_dock_launch_animation (CAIRO_CONTAINER (pFlyingContainer));
+}
+
+  //////////////
+ /// UNLOAD ///
+//////////////
+
+static void unload (void)
+{
+	if (s_pExplosion != NULL)
+	{
+		cairo_dock_free_image_buffer (s_pExplosion);
+		s_pExplosion = NULL;
+	}
+	if (s_pEmblem != NULL)
+	{
+		cairo_dock_free_image_buffer (s_pEmblem);
+		s_pEmblem = NULL;
+	}
+}
+
+  ////////////
+ /// INIT ///
+////////////
+
+static void init (void)
+{
+	gldi_object_register_notification (&myFlyingsMgr,
+		NOTIFICATION_UPDATE,
+		(GldiNotificationFunc) _on_update_flying_container_notification,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myFlyingsMgr,
+		NOTIFICATION_RENDER,
+		(GldiNotificationFunc) _on_render_flying_container_notification,
+		GLDI_RUN_AFTER, NULL);
+}
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+static void init_object (GldiObject *obj, gpointer attr)
+{
+	CairoFlyingContainer *pFlyingContainer = (CairoFlyingContainer*)obj;
+	CairoFlyingAttr *pAttribute = (CairoFlyingAttr*)attr;
+	Icon *pFlyingIcon = pAttribute->pIcon;
+	CairoDock *pOriginDock = pAttribute->pOriginDock;  // since the icon is already detached, we need its origin dock in the attributes
+	
+	pFlyingContainer->container.iface.animation_loop = _animation_loop;
 	
 	// insert the icon inside
 	pFlyingContainer->pIcon = pFlyingIcon;
@@ -327,115 +416,25 @@ CairoFlyingContainer *cairo_dock_create_flying_container (Icon *pFlyingIcon, Cai
 		iHeight);
 	
 	// load the images
-	_cairo_dock_load_emblem (pFlyingIcon);
-	_cairo_dock_load_explosion_image (iWidth);
+	_load_emblem (pFlyingIcon);
+	_load_explosion_image (iWidth);
 	
 	struct timeval tv;
 	int r = gettimeofday (&tv, NULL);
 	if (r == 0)
 		pFlyingContainer->fCreationTime = tv.tv_sec + tv.tv_usec * 1e-6;
-	
-	return pFlyingContainer;
 }
 
-void cairo_dock_drag_flying_container (CairoFlyingContainer *pFlyingContainer, CairoDock *pOriginDock)
+static void reset_object (GldiObject *obj)
 {
-	if (pOriginDock->container.bIsHorizontal)
-	{
-		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
-		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
-	}
-	else
-	{
-		pFlyingContainer->container.iWindowPositionY = pOriginDock->container.iWindowPositionX + pOriginDock->container.iMouseX - pFlyingContainer->container.iWidth/2;
-		pFlyingContainer->container.iWindowPositionX = pOriginDock->container.iWindowPositionY + pOriginDock->container.iMouseY - pFlyingContainer->container.iHeight/2;
-	}
-	//g_print ("  on tire l'icone volante en (%d;%d)\n", pFlyingContainer->container.iWindowPositionX, pFlyingContainer->container.iWindowPositionY);
-	gtk_window_move (GTK_WINDOW (pFlyingContainer->container.pWidget),
-		pFlyingContainer->container.iWindowPositionX,
-		pFlyingContainer->container.iWindowPositionY);
-}
-
-void cairo_dock_free_flying_container (CairoFlyingContainer *pFlyingContainer)
-{
-	cd_debug ("%s ()", __func__);
+	CairoFlyingContainer *pFlyingContainer = (CairoFlyingContainer*)obj;
 	// detach the icon
 	if (pFlyingContainer->pIcon != NULL)
 		cairo_dock_set_icon_container (pFlyingContainer->pIcon, NULL);
-	// free the container
-	cairo_dock_finish_container (CAIRO_CONTAINER (pFlyingContainer));
-	g_free (pFlyingContainer);
+	// free data
 	cairo_dock_free_image_buffer (s_pEmblem);
 	s_pEmblem = NULL;
 }
-
-void cairo_dock_terminate_flying_container (CairoFlyingContainer *pFlyingContainer)
-{
-	// detach the icon from the container
-	Icon *pIcon = pFlyingContainer->pIcon;
-	pFlyingContainer->pIcon = NULL;
-	cairo_dock_set_icon_container (pIcon, NULL);
-	
-	// destroy it, or place it in a desklet.
-	if (pIcon->cDesktopFileName != NULL)  // a launcher/sub-dock/separator, that is part of the theme
-	{
-		cairo_dock_delete_icon_from_current_theme (pIcon);
-		cairo_dock_free_icon (pIcon);
-	}
-	else if (CAIRO_DOCK_IS_APPLET(pIcon))  /// faire une fonction dans la factory ...
-	{
-		cd_debug ("le module %s devient un desklet", pIcon->pModuleInstance->cConfFilePath);
-		cairo_dock_stop_icon_animation (pIcon);
-		
-		cairo_dock_detach_module_instance_at_position (pIcon->pModuleInstance,
-			pFlyingContainer->container.iWindowPositionX + pFlyingContainer->container.iWidth/2,
-			pFlyingContainer->container.iWindowPositionY + pFlyingContainer->container.iHeight/2);
-	}
-	
-	// start the explosion animation
-	cairo_dock_launch_animation (CAIRO_CONTAINER (pFlyingContainer));
-}
-
-
-  //////////////
- /// UNLOAD ///
-//////////////
-
-static void unload (void)
-{
-	if (s_pExplosion != NULL)
-	{
-		cairo_dock_free_image_buffer (s_pExplosion);
-		s_pExplosion = NULL;
-	}
-	if (s_pEmblem != NULL)
-	{
-		cairo_dock_free_image_buffer (s_pEmblem);
-		s_pEmblem = NULL;
-	}
-}
-
-
-  ////////////
- /// INIT ///
-////////////
-
-static void init (void)
-{
-	cairo_dock_register_notification_on_object (&myFlyingsMgr,
-		NOTIFICATION_UPDATE,
-		(CairoDockNotificationFunc) _cairo_dock_update_flying_container_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myFlyingsMgr,
-		NOTIFICATION_RENDER,
-		(CairoDockNotificationFunc) _cairo_dock_render_flying_container_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-}
-
-
-  ///////////////
- /// MANAGER ///
-///////////////
 
 void gldi_register_flying_manager (void)
 {
@@ -448,6 +447,9 @@ void gldi_register_flying_manager (void)
 	myFlyingsMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
 	myFlyingsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
 	myFlyingsMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)NULL;
+	myFlyingsMgr.mgr.init_object    = init_object;
+	myFlyingsMgr.mgr.reset_object   = reset_object;
+	myFlyingsMgr.mgr.iObjectSize    = sizeof (CairoFlyingContainer);
 	// Config
 	myFlyingsMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
 	myFlyingsMgr.mgr.iSizeOfConfig = 0;
@@ -455,7 +457,7 @@ void gldi_register_flying_manager (void)
 	myFlyingsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myFlyingsMgr.mgr.iSizeOfData = 0;
 	// signals
-	cairo_dock_install_notifications_on_object (&myFlyingsMgr, NB_NOTIFICATIONS_FLYING_CONTAINER);
+	gldi_object_install_notifications (&myFlyingsMgr, NB_NOTIFICATIONS_FLYING_CONTAINER);
 	gldi_object_set_manager (GLDI_OBJECT (&myFlyingsMgr), GLDI_MANAGER (&myContainersMgr));
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myFlyingsMgr));
