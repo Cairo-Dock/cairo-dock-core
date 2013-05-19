@@ -56,7 +56,7 @@ void gldi_icon_set_appli (Icon *pIcon, GldiWindowActor *pAppli)
 	
 	// unset the current appli if any
 	if (pIcon->pAppli != NULL)
-		gldi_object_unref (GLDI_OBJECT (pAppli));
+		gldi_object_unref (GLDI_OBJECT (pIcon->pAppli));
 	
 	// set the appli
 	if (pAppli)
